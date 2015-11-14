@@ -1,0 +1,180 @@
+<?php namespace App\Exceptions;
+
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Session\TokenMismatchException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Xpressengine\Plugin\Exceptions\NotFoundPluginFileException;
+use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
+use Xpressengine\Support\Exceptions\HttpXpressengineException;
+use Xpressengine\Support\Exceptions\XpressengineException;
+
+class Handler extends ExceptionHandler
+{
+    /**
+     * A list of the exception types that should not be reported.
+     *
+     * @var array
+     */
+    protected $dontReport = [
+        HttpException::class,
+        ModelNotFoundException::class,
+    ];
+
+    /**
+     * Report or log an exception.
+     *
+     * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
+     *
+     * @param  \Exception $e
+     *
+     * @return void
+     */
+    public function report(Exception $e)
+    {
+        return parent::report($e);
+    }
+
+    /**
+     * exception filter
+     *
+     * @param \Exception $e exception
+     *
+     * @return \Exception
+     */
+    private function filter(Exception $e)
+    {
+        $responseException = null;
+
+
+        /*
+         * make responseException
+        */
+        // token mismatch
+        if ($e instanceof TokenMismatchException) {
+            $responseException = new HttpXpressengineException(Response::HTTP_FORBIDDEN);
+            $responseException->setMessage(xe_trans('xe::tokenMismatch'));
+        } // not found
+        elseif ($e instanceof NotFoundHttpException) {
+            $responseException = new HttpXpressengineException(Response::HTTP_NOT_FOUND);
+            $responseException->setMessage(xe_trans('xe::pageNotFound'));
+        } // access denied
+        elseif ($e instanceof AccessDeniedHttpException) {
+            // Redirect is not returned(redirection is not executed). only set current uri to session
+            $e->setMessage(xe_trans('xe::accessDenied'));
+            $responseException = $e;
+        } // http exception
+        elseif ($e instanceof HttpExceptionInterface) {
+            // 인터페이스가...
+            $e->setMessage(xe_trans($e->getMessage(), $e->getArgs()));
+            $responseException = $e;
+        } // xpressengine exception
+        elseif ($e instanceof XpressengineException) {
+            // plugin cache 삭제
+            if ($e instanceof NotFoundPluginFileException) {
+                $cache = app('cache');
+                Event::fire('cache:clearing', ['plugins']);
+                $cache->store('plugins')->flush();
+                Event::fire('cache:cleared', ['plugins']);
+            }
+            $responseException = new HttpXpressengineException(Response::HTTP_INTERNAL_SERVER_ERROR);
+            $message = xe_trans($e->getMessage(), $e->getArgs());
+            if ('' === $message) {
+                $message = get_class($e);
+            } elseif ($message == $e->getMessage()) {
+                $message = $e->getMessage();
+            }
+            $responseException->setMessage($message);
+        } // no http exception
+        elseif ($e instanceof ModelNotFoundException) {
+            $responseException = new NotFoundHttpException($e->getMessage(), $e);
+        } else {
+            $responseException = new HttpXpressengineException(Response::HTTP_INTERNAL_SERVER_ERROR);
+            $responseException->setMessage(xe_trans('xe::systemError'));
+        }
+
+        if ($responseException->getMessage() == '') {
+            $responseException->setMessage(xe_trans('xe::systemError'));
+        }
+
+        return $responseException;
+    }
+
+    /**
+     * Render an exception into an HTTP response.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Exception               $e
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function render($request, Exception $e)
+    {
+        $responseException = $this->filter($e);
+
+        // debugging mode
+        if (config('app.debug') && $e instanceof AccessDeniedHttpException === false) {
+            return $this->renderDebugMode($request, $e, $responseException);
+        }
+
+        // post request
+        if ($request->isMethod('post') && !$request->ajax() && !$request->wantsJson()) {
+            return redirect()->back()->with(
+                'alert',
+                [
+                    'type' => 'danger',
+                    'statusCode' => $responseException->getStatusCode(),
+                    'message' => $responseException->getMessage()
+                ]
+            )->withInput();
+        }
+
+        $view = null;
+
+        // ajax request
+        if ($request->ajax() || $request->wantsJson()) {
+            $view = \Presenter::makeApi(
+                ['message' => $responseException->getMessage()]
+            );
+        } else {
+            \Presenter::setSkin('error');
+            \Theme::selectBlankTheme();
+            $view = \Presenter::make(
+                'error',
+                ['type' => 'danger', 'exception' => $responseException, 'message' => $responseException->getMessage()]
+            );
+        }
+
+        return response($view, $responseException->getStatusCode());
+    }
+
+    /**
+     * renderDebugMode
+     *
+     * @param Request   $request
+     * @param Exception $e
+     * @param Exception $responseException
+     *
+     * @return \Illuminate\Http\RedirectResponse|Response
+     */
+    private function renderDebugMode($request, $e, $responseException)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            return response(
+                [
+                    'exception' => get_class($responseException),
+                    'occurredException' => get_class($e),
+                    'message' => $responseException->getMessage(),
+                    'trace' => explode('#', $e->getTraceAsString()),
+                ],
+                $responseException->getStatusCode()
+            );
+        }
+        return $this->toIlluminateResponse($this->convertExceptionToResponse($e), $e);
+    }
+}

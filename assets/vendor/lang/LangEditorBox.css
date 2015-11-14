@@ -1,0 +1,62 @@
+.lang-editor {
+    width: 100%;
+    border: 0px solid;
+}
+/*.lang-editor ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    overflow: hidden;
+}
+.lang-editor ul.sub {
+    height: 0;
+}
+.lang-editor .text .item {
+    height: 38px;
+}
+.lang-editor .img {
+    width: 30px;
+    height: 38px;
+    float: left;
+}
+.lang-editor .img img {
+    width: 20px;
+    height: 11px;
+}
+.lang-editor .text .txt {
+    width: auto;
+    height: 38px;
+    overflow: hidden;
+}
+.lang-editor .textarea .txt {
+    width: auto;
+    overflow: hidden;
+}
+.lang-editor .txt input {
+    width: 100%;
+    height: 100%;
+    -webkit-box-sizing:border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.lang-editor .txt textarea {
+    width: 100%;
+    -webkit-box-sizing:border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}*/
+
+.lang-editor .sub {display: none;}
+.lang-editor .inpt_bd{position:relative;margin-bottom:4px;}
+.lang-editor .inpt_txt{width:100%, height:38px; line-height: 30px}
+.lang-editor .inpt_bd textarea,
+.lang-editor .inpt_bd .inpt_txt {
+    width: 100%;
+    border: 1px solid #DADBDE;
+    outline: none;
+    padding: 5px 55px 5px 15px;
+    border-radius: 2px;
+    font-size: 14px;
+    color: #2c2e37;
+}
+.lang-editor .inpt_bd .flag_code {position:absolute;top:10px;right:15px}

@@ -1,0 +1,186 @@
+<?php
+/**
+ * This file is unique key generate class
+ *
+ * PHP version 5
+ *
+ * @category    Keygen
+ * @package     Xpressengine\Keygen
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ * @mainpage
+ * ### configure
+ * ```
+ * return ['version' => 4, 'namespace' => 'xe-core'];
+ * ```
+ * > `namespace`는 version 3, 5에서만 필요
+ *
+ * ### install
+ * * composer.json
+ * ```
+ * "require": {
+ *      "xpressengine/keygen": "dev-master"
+ * }
+ * ```
+ *
+ * ### usage
+ * ```
+ * $generator = Xpressengine\Keygenn\Keygen($config);
+ * $id = $generator->generate();  // 25769c6c-d34d-4bfe-ba98-e0ee856f3e7a
+ * ```
+ */
+namespace Xpressengine\Keygen;
+
+use Rhumsaa\Uuid\Uuid;
+use Rhumsaa\Uuid\Exception\UnsatisfiedDependencyException;
+
+/**
+ * # Keygen
+ * 이 클래스는 unique id를 생성하는 라이브러리를 wrapping 하여
+ * DI를 가능하게 하고 생성방식 변경시 수정 요소를 최소화 할 수 있도록 함.
+ *
+ * ### app binding : xe.keygen 으로 바인딩 되어 있음
+ *
+ * ### 사용
+ * ```php
+ * $keygen = App::make('xe.keygen');
+ * $uuid = $keygen->generate();
+ * ```
+ *
+ * 생성된 id 는 `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` 형식을 가짐
+ *
+ * @category    Keygen
+ * @package     Xpressengine\Keygen
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
+class Keygen
+{
+    /**
+     * config array
+     *
+     * @var array
+     */
+    protected $config;
+
+    /**
+     * used version
+     *
+     * @var int
+     */
+    protected $version;
+
+    /**
+     * default config
+     *
+     * @var array
+     */
+    protected $default = ['version' => 4, 'namespace' => 'xpressengine'];
+
+    /**
+     * constructor
+     *
+     * @param array $config config array
+     */
+    public function __construct(array $config = [])
+    {
+        $this->config = empty($config) === false ? $config : $this->default;
+    }
+
+    /**
+     * unique key generator
+     *
+     * @return string
+     * @throws UnknownGeneratorException
+     */
+    public function generate()
+    {
+        $version = $this->getMode();
+        $method = 'createIdVersion' . $version;
+
+        if (!method_exists($this, $method)) {
+            throw new UnknownGeneratorException("Unknown version [#{$version}]");
+        }
+
+        try {
+            if (in_array($version, [3, 5])) {
+                return $this->$method($this->config['namespace']);
+            }
+
+            return $this->$method();
+        } catch (UnsatisfiedDependencyException $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     * mode setter
+     *
+     * @param int $version uuid version. 1, 3, 4 and 5
+     * @return void
+     */
+    public function setMode($version)
+    {
+        $this->version = $version;
+    }
+
+    /**
+     * mode getter
+     *
+     * @return int
+     */
+    public function getMode()
+    {
+        if (!$this->version) {
+            $this->version = $this->config['version'];
+        }
+
+        return $this->version;
+    }
+
+    /**
+     * generate time base uuid
+     *
+     * @return string
+     */
+    protected function createIdVersion1()
+    {
+        return Uuid::uuid1()->toString();
+    }
+
+    /**
+     * generate name base and hashed md5 uuid
+     *
+     * @param string $namespace base name
+     * @return string
+     */
+    protected function createIdVersion3($namespace)
+    {
+        return Uuid::uuid3(Uuid::NAMESPACE_DNS, $namespace)->toString();
+    }
+
+    /**
+     * generate random string base uuid
+     *
+     * @return string
+     */
+    protected function createIdVersion4()
+    {
+        return Uuid::uuid4()->toString();
+    }
+
+    /**
+     * generate name base and hashed sha1 uuid
+     *
+     * @param string $namespace base name
+     * @return string
+     */
+    protected function createIdVersion5($namespace)
+    {
+        return Uuid::uuid5(Uuid::NAMESPACE_DNS, $namespace)->toString();
+    }
+}

@@ -1,0 +1,13 @@
+/* FONT PATH
+ * -------------------------- */
+
+@font-face {
+  font-family: 'xeicon';
+  src: url('#{$xi-font-path}/xeicon.eot?v=#{$xi-version}');
+  src: url('#{$xi-font-path}/xeicon.eot?#iefix&v=#{$xi-version}') format('embedded-opentype'),
+    url('#{$xi-font-path}/xeicon.woff?v=#{$xi-version}') format('woff'),
+    url('#{$xi-font-path}/xeicon.ttf?v=#{$xi-version}') format('truetype'),
+    url('#{$xi-font-path}/xeicon.svg?v=#{$xi-version}#xeicon') format('svg');
+    font-weight: normal;
+  font-style: normal;
+}

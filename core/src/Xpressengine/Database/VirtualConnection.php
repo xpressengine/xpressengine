@@ -1,0 +1,592 @@
+<?php
+/**
+ * VirtualConnection
+ *
+ * PHP version 5
+ *
+ * @category    Database
+ * @package     Xpressengine\Database
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
+namespace Xpressengine\Database;
+
+use Illuminate\Database\Connection;
+use PDO;
+use Closure;
+
+/**
+ * # VirtualConnection
+ * * config/xe.php 의 설정에 따라 Illuminate\Database\Connection 관리
+ * * select query 할 경우 slave 설정의 connection 반환
+ * * Illuminate\Database\Connection 의 wrapper class
+ * * Database 의 Proxy 를 처리하기위해 DynamicQuery 사용
+ *
+ * ## 사용
+ *
+ * ### Database Connection
+ * ```php
+ * $connector = app('xe.db');
+ * $connection = $connector->master();
+ * $connection = $connector->slave();
+ * ```
+ *
+ * ### Query
+ *
+ * ```php
+ * $connector = app('xe.db');
+ * $query = $connector->table('user');
+ * $result = $connector->table('user')->first();
+ *
+ * $proxyConfig = [... config for proxy ...];
+ * $query = $connector->dynamic('tableName', $proxyConfig);
+ * ```
+ *
+ * @category    Database
+ * @package     Xpressengine\Database
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
+class VirtualConnection implements VirtualConnectionInterface
+{
+
+    /**
+     * master type key name
+     */
+    const TYPE_MASTER = 'master';
+
+    /**
+     * slave type key name
+     */
+    const TYPE_SLAVE = 'slave';
+
+    /**
+     * default database connection neme (config/database.php 의 기본 connection 설정 이름)
+     */
+    const DEFAULT_CONNECTION_NAME = 'default';
+
+    /**
+     * @var DatabaseCoupler
+     */
+    protected $coupler;
+
+    /**
+     * @var DynamicQuery
+     */
+    protected $queryBuilder;
+
+    /**
+     * connector name
+     *
+     * @var string
+     */
+    protected $name;
+
+    /**
+     * config/database.php config name for create master connection instance
+     *
+     * @var string
+     */
+    protected $master;
+
+    /**
+     * config/database.php config name for create slave connection instance
+     *
+     * @var string
+     */
+    protected $slave;
+
+    /**
+     * @var string $tablePrefix
+     */
+    protected $tablePrefix;
+
+    /**
+     * connections list
+     * * config/xe.php database key 에 따라 master, slave 로 구분해서
+     * /Illuminate/Database/Connection 을 갖는다.
+     * ```php
+     *      $connections = [
+     *          'master' => /Illuminate/Database/Connection,
+     *           'slave' => /Illuminate/Database/Connection,
+     *      ]
+     * ```
+     *
+     * @var array
+     */
+    protected $connections;
+
+    /**
+     * The default fetch mode of the connection.
+     *
+     * @var int
+     */
+    protected $fetchMode = PDO::FETCH_ASSOC;
+
+    /**
+     * Create instance
+     *
+     * @param DatabaseCoupler $coupler database coupler
+     * @param string          $name    connector name
+     * @param array           $config  database config (xe.php file 의 database 설정)
+     */
+    public function __construct(DatabaseCoupler $coupler, $name, array $config)
+    {
+        $this->coupler = $coupler;
+        $this->name = $name;
+        $this->setNames($config);
+    }
+
+    /**
+     * Get the default fetch mode for the connection.
+     *
+     * @return int
+     */
+    public function getFetchMode()
+    {
+        return $this->fetchMode;
+    }
+
+    /**
+     * Set the default fetch mode for the connection.
+     *
+     * @param  int $fetchMode fetch mode
+     * @return int
+     * @see PDO fetch method
+     */
+    public function setFetchMode($fetchMode)
+    {
+        $this->fetchMode = $fetchMode;
+    }
+
+    /**
+     * get name for connector
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * DynamicQuery 에서 사용
+     * \Illuminate\Database\Query\Builder 를 만들 때 Connection 이 필요함.
+     *
+     * @return Connection
+     */
+    public function getDefaultConnection()
+    {
+        return $this->coupler->connect();
+    }
+
+    /**
+     * Get a schema builder instance for the connection.
+     *
+     * @return \Illuminate\Database\Schema\Builder
+     */
+    public function getSchemaBuilder()
+    {
+        return $this->getDefaultConnection()->getSchemaBuilder();
+    }
+
+    /**
+     * Get table prefix name.
+     *
+     * @return string
+     */
+    public function getTablePrefix()
+    {
+        return $this->getDefaultConnection()->getTablePrefix();
+    }
+
+    /**
+     * set connection name.
+     * 설정된 master, slave 이름들에서 사용 할 이름을 선택.
+     *
+     * @param array $config database config
+     * @return void
+     */
+    private function setNames(array $config)
+    {
+        foreach ($this->fixConfig($config) as $type => $names) {
+            $this->{$type} = $this->connectionName($names);
+        }
+    }
+
+    /**
+     * 설정 정보 확인
+     * master, slave 설정이 없을 경우 기본 설정을 넣어 줌
+     *
+     * @param array $config database config
+     * @return mixed
+     */
+    private function fixConfig(array $config)
+    {
+        if (isset($config[self::TYPE_MASTER]) === false) {
+            $config[self::TYPE_MASTER] = [self::DEFAULT_CONNECTION_NAME];
+        }
+
+        if (isset($config[self::TYPE_SLAVE]) === false) {
+            $config[self::TYPE_SLAVE] = [self::DEFAULT_CONNECTION_NAME];
+        }
+
+        return $config;
+    }
+
+    /**
+     * $type 에서 사용 될 connection name 결정.
+     *
+     * @param array $names connection 이름
+     * @return \Illuminate\Database\Connection
+     */
+    private function connectionName($names)
+    {
+        $index = $_SERVER['REQUEST_TIME'] % count($names);
+        return $names[$index];
+    }
+
+    /**
+     * get ProxyManager.
+     * DynamicQuery 에서 VirtualConnection 를 주입 받아 사용.
+     *
+     * @return ProxyManager
+     */
+    public function getProxyManager()
+    {
+        return $this->coupler->getProxy();
+    }
+
+    /**
+     * get connection
+     *
+     * @param string $type master or slave
+     * @return \Illuminate\Database\Connection
+     */
+    public function connection($type)
+    {
+        $connection = ($this->connections[$type] === null) ?
+            $this->coupler->connect($this->{$type}) :
+            $this->connections[$type];
+        $connection->setFetchMode($this->fetchMode);
+        return $connection;
+    }
+
+    /**
+     * get master connection
+     *
+     * @return \Illuminate\Database\Connection
+     */
+    public function master()
+    {
+        return $this->connection(self::TYPE_MASTER);
+    }
+
+    /**
+     * get slave connection
+     *
+     * @return \Illuminate\Database\Connection
+     */
+    public function slave()
+    {
+        return $this->connection(self::TYPE_SLAVE);
+    }
+
+    /**
+     * get connection by $queryType.
+     * 'select' 쿼리일 경우 $slaveConnection 을 넘겨주고 그렇지 않을 경우 $masterConnection 을 반환.
+     * database 를 쿼리 실행 시 연결.
+     *
+     * @param string $queryType query type
+     * @return \Illuminate\Database\ConnectionInterface
+     */
+    public function getConnection($queryType = 'select')
+    {
+        if ($queryType === 'select') {
+            return $this->connection(self::TYPE_SLAVE);
+        } else {
+            return $this->connection(self::TYPE_MASTER);
+        }
+    }
+
+    /**
+     * Begin a fluent query against a database table.
+     * ProxyManager 를 통한 처리를 하지 않음.
+     *
+     * @param string $table table name
+     * @return DynamicQuery
+     */
+    public function table($table)
+    {
+        return (new DynamicQuery($this, $table, false))->useProxy(false);
+    }
+
+    /**
+     * DynamicField 를 이용해 처리.
+     * ProxyManager 에 register 된 Proxy 들을 처리.
+     *
+     * @param string $table   table name
+     * @param array  $options proxy options
+     * @param bool   $proxy   use proxy
+     * @return DynamicQuery
+     */
+    public function dynamic($table, array $options = [], $proxy = true)
+    {
+        if (empty($options['table'])) {
+            $options['table'] = $table;
+        }
+
+        return (new DynamicQuery($this, $table, true))->setProxyOption($options)->useProxy($proxy);
+    }
+
+    /**
+     * Get a new raw query expression.
+     *
+     * @param mixed $value value
+     * @return \Illuminate\Database\Query\Expression
+     */
+    public function raw($value)
+    {
+        return $this->getConnection()->raw($value);
+    }
+
+    /**
+     * Run a select statement and return a single result.
+     *
+     * @param string $query    query
+     * @param array  $bindings bindings
+     * @return mixed
+     */
+    public function selectOne($query, $bindings = array())
+    {
+        return $this->getConnection()->selectOne($query, $bindings);
+    }
+
+    /**
+     * Run a select statement against the database.
+     *
+     * @param string $query    query
+     * @param array  $bindings bindings
+     * @return array
+     */
+    public function select($query, $bindings = array())
+    {
+        return $this->getConnection()->select($query, $bindings);
+    }
+
+    /**
+     * Run an insert statement against the database.
+     *
+     * @param string $query    query
+     * @param array  $bindings bindings
+     * @return bool
+     */
+    public function insert($query, $bindings = array())
+    {
+        return $this->getConnection('insert')->insert($query, $bindings);
+    }
+
+    /**
+     * Run an update statement against the database.
+     *
+     * @param string $query    query
+     * @param array  $bindings bindings
+     * @return int
+     */
+    public function update($query, $bindings = array())
+    {
+        return $this->getConnection('update')->update($query, $bindings);
+    }
+
+    /**
+     * Run a delete statement against the database.
+     *
+     * @param string $query    query
+     * @param array  $bindings bindings
+     * @return int
+     */
+    public function delete($query, $bindings = array())
+    {
+        return $this->getConnection('delete')->delete($query, $bindings);
+    }
+
+    /**
+     * Execute an SQL statement and return the boolean result.
+     *
+     * @param string $query    query
+     * @param array  $bindings bindings
+     * @return bool
+     */
+    public function statement($query, $bindings = array())
+    {
+        return $this->getConnection()->statement($query, $bindings);
+    }
+
+    /**
+     * Run an SQL statement and get the number of rows affected.
+     *
+     * @param string $query    query
+     * @param array  $bindings bindings
+     * @return int
+     */
+    public function affectingStatement($query, $bindings = array())
+    {
+        return $this->getConnection()->affectingStatement($query, $bindings);
+    }
+
+    /**
+     * Run a raw, unprepared query against the PDO connection.
+     *
+     * @param string $query query
+     * @return bool
+     */
+    public function unprepared($query)
+    {
+        return $this->getConnection()->unprepared($query);
+    }
+
+    /**
+     * Prepare the query bindings for execution.
+     *
+     * @param array $bindings bindings
+     * @return array
+     */
+    public function prepareBindings(array $bindings)
+    {
+        return $this->getConnection()->prepareBindings($bindings);
+    }
+
+    /**
+     * Execute a Closure within a transaction.
+     *
+     * @param \Closure $callback closure
+     * @return mixed
+     * @throws \Exception
+     */
+    public function transaction(Closure $callback)
+    {
+        return $this->getConnection('transaction')->transaction($callback);
+    }
+
+    /**
+     * get TransactionHandler
+     *
+     * @return TransactionHandler
+     */
+    public function transactionHandler()
+    {
+        return $this->coupler->getTransaction();
+    }
+    /**
+     * Start a new database transaction.
+     * DatabaseHandler 를 통해서 transaction 관리.
+     *
+     * @return void
+     */
+    public function beginTransaction()
+    {
+        $this->transactionHandler()->beginTransaction($this->coupler);
+    }
+
+    /**
+     * Commit the active database transaction.
+     * DatabaseHandler 를 통해서 commit.
+     *
+     * @return void
+     */
+    public function commit()
+    {
+        $this->transactionHandler()->commit($this->coupler);
+    }
+
+    /**
+     * Rollback the active database transaction.
+     *
+     * @return void
+     */
+    public function rollBack()
+    {
+        $this->transactionHandler()->rollBack($this->coupler);
+    }
+
+    /**
+     * Get the number of active transactions.
+     *
+     * @return int
+     */
+    public function transactionLevel()
+    {
+        return $this->transactionHandler()->transactionLevel();
+    }
+
+    /**
+     * Execute the given callback in "dry run" mode.
+     *
+     * @param Closure $callback closure
+     * @return array
+     */
+    public function pretend(Closure $callback)
+    {
+        return $this->getConnection()->pretend($callback);
+    }
+
+    /**
+     * return database table schema
+     *
+     * @param string $table table name
+     * @return array
+     */
+    public function getSchema($table)
+    {
+        $cache = $this->coupler->getCache();
+
+        if ($cache->has($table) === false) {
+            $this->setSchemaCache($table);
+        }
+
+        $schema = $cache->get($table);
+
+        return $schema;
+    }
+
+    /**
+     * set database table schema
+     *
+     * @param string $table table name
+     * @param bool   $force force
+     * @return bool
+     */
+    public function setSchemaCache($table, $force = false)
+    {
+        $cache = $this->coupler->getCache();
+
+        if ($force === true) {
+            $cache->forget($table);
+        }
+
+        $schema = $this->getSchemaBuilder()->getColumnListing($table);
+        if (count($schema) === 0) {
+            return false;
+        }
+
+        $cache->put($table, $schema);
+        return true;
+    }
+
+    /**
+     * 인터페이스에 정의되지 않은 기능을 수행 하기 위함.
+     * Illuminate\Database\Connection 의 method 실행.
+     *
+     * @param string $method     method name
+     * @param array  $parameters parameters
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+        return call_user_func_array(array($this->getConnection('master'), $method), $parameters);
+    }
+}

@@ -1,0 +1,263 @@
+<?php
+/**
+ *  This file is part of the Xpressengine package.
+ *
+ * PHP version 5
+ *
+ * @category    Skin
+ * @package     Xpressengine\Skin
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
+namespace Xpressengine\Skin;
+
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Contracts\Support\Renderable;
+
+/**
+ * SkinEntity는 하나의 스킨에 대한 정보를 가지고 있는 클래스이다.
+ * SkinaHandler는 등록된 스킨들의 정보를 처리할 때, SkinEntity로 생성하여 사용한다.
+ *
+ * @category    Skin
+ * @package     Xpressengine\Skin
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ * @method AbstractSkin setData($data)
+ * @method AbstractSkin setView($view)
+ */
+class SkinEntity implements Arrayable, Jsonable
+{
+
+    /**
+     * @var string skin id
+     */
+    protected $id;
+
+    /**
+     * @var AbstractSkin class name of skin
+     */
+    protected $class;
+
+    /**
+     * @var AbstractSkin object of skin
+     */
+    protected $object;
+
+    /**
+     * @var array
+     */
+    private $config;
+
+    /**
+     * SkinEntity constructor.
+     *
+     * @param string $id     skin id
+     * @param string $class  skin class name
+     * @param array  $config skin config data
+     */
+    public function __construct($id, $class, array $config = null)
+    {
+        $this->id = $id;
+        $this->class = $class;
+        $this->config = $config;
+    }
+
+    /**
+     * get skin id
+     *
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * get class name of skin
+     *
+     * @return string
+     */
+    public function getClass()
+    {
+        return $this->class;
+    }
+
+    /**
+     * get skin title
+     *
+     * @return mixed
+     */
+    public function getTitle()
+    {
+        $class = $this->class;
+        return $class::getTitle();
+    }
+
+    /**
+     * get skin's description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        $class = $this->class;
+        return $class::getDescription();
+    }
+
+    /**
+     * get screenshot of skin
+     *
+     * @return mixed
+     */
+    public function getScreenshot()
+    {
+        $class = $this->class;
+        return $class::getScreenshot();
+    }
+
+    /**
+     * get skin setting view
+     *
+     * @param array $config skin config
+     *
+     * @return string|Renderable
+     */
+    public function getSettingView($config = [])
+    {
+        $class = $this->class;
+        return $class::getSettingView($config);
+    }
+
+    /**
+     * get skin's config data
+     *
+     * @return array
+     */
+    public function getConfig()
+    {
+        if ($this->object !== null) {
+            return $this->object->getConfig();
+        }
+        if ($this->config !== null) {
+            return $this->config;
+        }
+        return [];
+    }
+
+    /**
+     * set skin's config data
+     *
+     * @param array $config config data
+     *
+     * @return void
+     */
+    public function setConfig($config)
+    {
+        $this->config = $config;
+    }
+
+    /**
+     * 스킨이 desktop 버전을 지원하는지 조사한다.
+     *
+     * @return bool desktop 버전을 지원할 경우 true
+     */
+    public function supportDesktop()
+    {
+        $class = $this->class;
+        return $class::supportDesktop();
+    }
+
+    /**
+     * 스킨이 desktop 버전만을 지원하는지 조사한다.
+     *
+     * @return bool desktop 버전만을 지원할 경우 true
+     */
+    public function supportDesktopOnly()
+    {
+        $class = $this->class;
+        return $class::supportDesktopOnly();
+    }
+
+    /**
+     * 스킨이 mobile 버전을 지원하는지 조사한다.
+     *
+     * @return bool mobile 버전을 지원할 경우 true
+     */
+    public function supportMobile()
+    {
+        $class = $this->class;
+        return $class::supportMobile();
+    }
+
+    /**
+     * 스킨이 mobile 버전만을 지원하는지 조사한다.
+     *
+     * @return bool mobile 버전만을 지원할 경우 true
+     */
+    public function supportMobileOnly()
+    {
+        $class = $this->class;
+        return $class::supportMobileOnly();
+    }
+
+
+    /**
+     * get object of skin
+     *
+     * @return AbstractSkin
+     */
+    public function getObject()
+    {
+        if (isset($this->object) && is_a($this->object, 'Xpressengine\Skin\AbstractSkin')) {
+            return $this->object;
+        } else {
+            $this->object = new $this->class($this->config);
+            return $this->object;
+        }
+    }
+
+    /**
+     * SkinEntity에서 제공하지 않는 메소드일 경우 이 entity가 저장하고 있는 skin의 method를 호출한다.
+     *
+     * @param string $method    method name
+     * @param array  $arguments argument list
+     *
+     * @return mixed
+     */
+    public function __call($method, $arguments)
+    {
+        return call_user_func_array(array($this->getObject($this->config), $method), $arguments);
+    }
+
+    /**
+     * Convert the object to its JSON representation.
+     *
+     * @param int $options json_encode option
+     *
+     * @return string
+     */
+    public function toJson($options = 0)
+    {
+        return json_encode($this->toArray(), $options);
+    }
+
+    /**
+     * Get the instance as an array.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->getTitle(),
+            'class' => $this->class,
+            'description' => $this->getDescription(),
+            'screenshot' => $this->getScreenshot()
+        ];
+    }
+}

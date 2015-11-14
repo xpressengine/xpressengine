@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>jquery.zeroclipboard Test Suite</title>
+  <!-- Load local jQuery. This can be overridden with a ?jquery=___ param. -->
+  <script src="../libs/jquery-loader.js"></script>
+  <!-- Load local QUnit. -->
+  <link rel="stylesheet" href="../node_modules/qunitjs/qunit/qunit.css" media="screen" />
+  <script src="../node_modules/qunitjs/qunit/qunit.js"></script>
+  <script>
+    // Polyfill in future functionality: https://github.com/jquery/qunit/issues/490
+    if (!QUnit.assert.expect) {
+      QUnit.assert.expect = QUnit.expect;
+    }
+
+    // Require `expect` calls
+    QUnit.config.requireExpects = true;
+  </script>
+  <!-- Load local lib and tests. -->
+  <script src="../node_modules/zeroclipboard/dist/ZeroClipboard.js"></script>
+  <script src="../src/jquery.zeroclipboard.js"></script>
+  <script src="jquery.zeroclipboard_tests.js"></script>
+  <!-- Removing access to jQuery and $. But it'll still be available as _$, if
+       you REALLY want to mess around with jQuery in the console. REMEMBER WE
+       ARE TESTING A PLUGIN HERE, THIS HELPS ENSURE BEST PRACTICES. REALLY. -->
+  <script>window._$ = jQuery.noConflict(true);</script>
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture">
+    <div id="d_clip_button">Copy Button</div>
+  </div>
+</body>
+</html>

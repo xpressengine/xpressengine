@@ -1,0 +1,58 @@
+<?php
+namespace Xpressengine\Tests\Config;
+
+use Mockery as m;
+use Xpressengine\Config\Validator;
+
+class ValidatorTest extends \PHPUnit_Framework_TestCase
+{
+    public function tearDown()
+    {
+        m::close();
+    }
+
+    public function testValidateReturnsIlluminateValidator()
+    {
+        $instance = $this->getValidator();
+
+        $config = m::mock('Xpressengine\Config\ConfigEntity');
+        $config->name = 'board.instance';
+
+        $mockValidator = m::mock('Illuminate\Validation\Validator');
+
+        $instance->getFactory()->shouldReceive('make')->once()
+            ->with(
+                [
+                    'name' => 'board.instance',
+                    'object' => $config
+                ],
+                [
+                    'name' => 'required|min:3|max:255',
+                    'object' => 'has_parent'
+                ],
+                [
+                    'has_parent' => 'The :attribute must be has parent'
+                ]
+            )->andReturn($mockValidator);
+
+        $validator = $instance->validate($config);
+
+        $this->assertInstanceOf('Illuminate\Validation\Validator', $validator);
+    }
+
+    private function getValidator()
+    {
+        list($factory) = $this->getMocks();
+
+        $factory->shouldReceive('extend')->once()->withAnyArgs()->andReturnNull();
+
+        return new Validator($factory);
+    }
+
+    private function getMocks()
+    {
+        return [
+            m::mock('Illuminate\Validation\Factory')
+        ];
+    }
+}

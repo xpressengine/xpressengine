@@ -1,0 +1,118 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Presenter;
+use XeLang;
+use XeDB;
+use Frontend;
+
+class LangController extends Controller
+{
+    public function setLocale(Request $request, $locale)
+    {
+        $request->session()->put('locale', $locale);
+        return Redirect::back();
+    }
+
+    /**
+     * 다국어 manage 페이지
+     */
+    public function index($namespace = 'äll', $keyword = '')
+    {
+        Frontend::translation([
+            'lang::admin.editor.saved', 'lang::admin.editor.failed'
+        ]);
+
+        if ( strtolower($namespace) == 'äll' ) {
+            $namespace = '';
+        }
+
+        $conditions = [];
+        if ( $namespace ) {
+            $conditions['namespace'] = $namespace;
+        }
+        if ( $keyword ) {
+            $conditions['value'] = $keyword;
+        }
+
+        $pagination = $this->search($conditions)->groupBy('item')->groupBy('namespace')->paginate(10);
+        $searchList = $pagination->toArray()['data'];
+        $this->withLines($searchList);
+
+        $namespaces = $this->search()->groupBy('namespace')->lists('namespace');
+
+        return Presenter::make('lang.index', [
+            'selected_namespace' => $namespace,
+            'selected_keyword' => $keyword,
+            'namespaces' => $namespaces,
+            'searchList' => $searchList,
+            'pagination' => $pagination
+        ]);
+    }
+
+    /**
+     * 다국어 에디터에서 다국어 추천 리스트를 얻을 때 실행
+     */
+    public function searchKeyword(Request $request, $locale)
+    {
+        $term = $request->input('term');
+        $searchList = $this->search(['locale' => $locale, 'value' => $term])->get();
+        $this->withLines($searchList);
+        return Presenter::makeApi($searchList);
+    }
+
+    /**
+     * 다국어 에디터가 ajax로 값을 읽은 경우 실행
+     */
+    public function getLinesWithKey($key)
+    {
+        list($namespace, $item) = XeLang::parseKey($key);
+        $lines = $this->search(['namespace' => $namespace, 'item' => $item])->get();
+        return Presenter::makeApi($lines);
+    }
+
+    /**
+     * 다국어 편집 에디터에서 저장시 실행
+     *
+     * 미들웨어 수준에서 미리 저장되기 때문에 별다른 작업 없음
+     */
+    public function save()
+    {
+        return Presenter::makeApi([]);
+    }
+
+    private function search($conditions = [])
+    {
+        $query = XeDB::table('translation');
+        $query->orderBy('namespace', 'asc');
+        $query->orderBy('item', 'asc');
+        $query->orderBy('id', 'desc');
+
+        if ( isset($conditions['namespace']) ) {
+            $query->where('namespace', $conditions['namespace']);
+        }
+        if ( isset($conditions['item']) ) {
+            $query->where('item', $conditions['item']);
+        }
+        if ( isset($conditions['locale']) ) {
+            $query->where('locale', $conditions['locale']);
+        }
+        if ( isset($conditions['value']) ) {
+            $query->where('value', 'LIKE', '%'.$conditions['value'].'%');
+        }
+
+        return $query;
+    }
+
+    private function withLines(&$searchList)
+    {
+        foreach ( $searchList as &$search ) {
+            $namespace = $search['namespace'];
+            $item = $search['item'];
+            $search['lines'] = $this->search(['namespace' => $namespace, 'item' => $item])->get();
+        }
+    }
+}

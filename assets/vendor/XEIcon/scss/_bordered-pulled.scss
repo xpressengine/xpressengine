@@ -1,0 +1,11 @@
+// Bordered & Pulled
+// -------------------------
+
+.#{$xi-css-prefix}-border {
+  padding: .2em .25em .15em;
+  border: solid .08em $xi-border-color;
+  border-radius: .1em;
+}
+
+.pull-right { float: right; margin-right: .3em;}
+.pull-left { float: left; margin-right: .3em;}

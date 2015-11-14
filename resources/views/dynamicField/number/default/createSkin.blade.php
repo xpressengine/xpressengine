@@ -1,0 +1,1 @@
+<input type="text" name="skinDescription" placeholder="skin description" value="{{$config != null ? $config->get('skinDescription') : ''}}" />
