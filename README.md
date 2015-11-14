@@ -24,7 +24,7 @@ Laravel 은 가장 모던한 php 프레임워크중 하나로 전세계 php 프�
 
 ## Installing XE3
 
-XE3을 설치하기 위해서는 다음의 가이드를 참고하십시오. [인스톨 가이드](http://xpressengine.io/docs/install)
+XE3을 설치하기 위해서는 다음의 가이드를 참고하십시오. [인스톨 가이드](http://xpressengine.io/docs/3.0/install)
 
 ## Maintainers
 @akasima @bnu @findstar @jhyeon1010 @khongchi @ngleader
@@ -37,7 +37,7 @@ http://xpressengine.io/contributors
 
 ## Support
 * Official site (Korean) : http://xpressengine.io/
-* Official Forum : http://xpressengine.io/support/
+* Official Forum : http://xpressengine.io/qna/
 * Slack : https://xpressengine-forum-invite.herokuapp.com/
 
 ## License
