@@ -27,9 +27,18 @@ class ThemeSelect extends AbstractUIObject
             $selectedThemeId = array_get($args, 'selectedTheme');
         }
 
+        $previewLink = array_get($args, 'preview', '/');
+
+        if (strpos($previewLink, '?') === false) {
+            $previewLink .= '?';
+        } else {
+            $previewLink .= '&';
+        }
+
+
         $this->loadFiles();
 
-        $this->template = view($this->view, compact('themes', 'selectedThemeId', 'prefix'))->render();
+        $this->template = view($this->view, compact('themes', 'selectedThemeId', 'prefix', 'previewLink'))->render();
 
         return parent::render();
     }

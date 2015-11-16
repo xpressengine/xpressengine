@@ -41,7 +41,7 @@
                     <col>
                 </colgroup>
                 <tbody><tr>
-                    <td><a href="#">Preview</a></td>
+                    <td><a target="_blank" href="{{ url($previewLink.'preview_theme='.$theme->getId()) }}">Preview</a></td>
                     <td><a target="_blank" href="{{ $theme->getSettingsURI() }}">Setting</a></td>
                     <td><a target="_blank" href="{{ route('settings.theme.edit', ['theme'=>$theme->getId()]) }}">Edit</a></td>
                 </tr>

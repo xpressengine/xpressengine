@@ -19,7 +19,10 @@ class ThemeList extends AbstractUIObject
 
         $selectedThemeId = array_get($args, 'selectedTheme', $siteThemes);
 
-        $this->template = view('uiobjects.theme.themeList', compact('themes', 'selectedThemeId', 'prefix'))->render();
+        $this->template = view(
+            'uiobjects.theme.themeList',
+            compact('themes', 'selectedThemeId', 'prefix')
+        )->render();
 
         return parent::render();
     }

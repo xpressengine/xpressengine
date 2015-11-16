@@ -3,6 +3,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Plugin\PluginRegister;
+use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
 use Xpressengine\Theme\AbstractTheme;
 use Xpressengine\Theme\ThemeHandler;
 use Xpressengine\UIObjects\Theme\ThemeList;
@@ -86,6 +87,10 @@ class ThemeServiceProvider extends ServiceProvider
                 'Theme@getSelectedTheme',
                 'preview_theme',
                 function ($target) use ($preview_theme) {
+                    if (!auth()->user()->isAdmin()) {
+                        throw new AccessDeniedHttpException();
+                    }
+
                     /** @var ThemeHandler $themeHandler */
                     $themeHandler = $target->getTargetObject();
                     $themeHandler->selectTheme($preview_theme);
