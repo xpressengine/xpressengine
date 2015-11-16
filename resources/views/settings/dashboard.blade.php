@@ -10,7 +10,7 @@
         {!! widget('widget/xpressengine@systemInfo', []) !!}
     </div>
     <div class="col-md-6 _card" data-card-id="2">
-        {!! widget('widget/xpressengine@storagespace', array (
+        {!! widget('widget/xpressengine@storageSpace', array (
             'limit' => '10'
         )) !!}
     </div>

@@ -18,7 +18,7 @@ use View;
  */
 class StorageSpace extends AbstractWidget
 {
-    protected static $id = 'widget/xpressengine@storagespace';
+    protected static $id = 'widget/xpressengine@storageSpace';
 
     protected function init()
     {
@@ -62,7 +62,7 @@ class StorageSpace extends AbstractWidget
             ]);
         }
 
-        return View::make('widget.widgets.storage.space', [
+        return View::make('widget.widgets.storageSpace.show', [
             'list' => array_filter($list, function ($item) {
                 return !empty($item['bytes']);
             }),
