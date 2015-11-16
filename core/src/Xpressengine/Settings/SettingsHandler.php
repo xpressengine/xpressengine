@@ -292,7 +292,6 @@ class SettingsHandler
      */
     protected function makeMenuList(Router $router, $isSuper)
     {
-
         // 등록된 menu list를 가져온다.
         $menus = $this->getRegisteredMenus();
 
@@ -321,6 +320,7 @@ class SettingsHandler
                 $visible = true;
             }
 
+            // 메뉴에 route 지정,
             foreach ((array) $menuIds as $menuId) {
                 $menu = $this->menuList[$menuId];
                 $menu->route = $route;

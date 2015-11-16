@@ -31,28 +31,41 @@
         <p class="lst_tit">MAIN MENU</p>
         <ul class="snb_lst">
 
+            {{-- main menu --}}
             @foreach($menu as $topId => $top)
                 @if(data_get($top, 'display', true))
-                    <li class="@if($top->hasChild())sub_depth @endif {{$topId}} @if($top->isSelected() && $top->hasChild())open @endif @if($top->isSelected() && !$top->hasChild())on @endif">
+
+                    {{-- depth 1--}}
+                    <li class="{{$topId}}
+                        @if($top->hasVisibleChild())sub_depth @endif
+                        @if($top->isSelected() && $top->hasVisibleChild())open @endif
+                        @if($top->isSelected() && !$top->hasVisibleChild())on @endif"
+                    >
                         <a href="{{ $top->link() }}">
                             <i class="{{data_get($top, 'icon', 'xi-stack-paper')}}"></i>
                             {{$top->title}}
                         </a>
-                        @if($top->hasChild())
+                        @if($top->hasVisibleChild())
                             <ul class="sub_depth_lst">
+
                                 {{--loop for middle--}}
                                 @foreach($top->getChildren() as $midId => $middle)
                                     @if(data_get($middle, 'display', true))
-                                        <li class="@if($middle->hasChild())sub_depth @endif @if($middle->isSelected() && $middle->hasChild())open @endif @if($middle->isSelected() && !$middle->hasChild())on @endif">
+
+                                        {{-- depth 2 --}}
+                                        <li class="@if($middle->hasVisibleChild())sub_depth @endif @if($middle->isSelected() && $middle->hasVisibleChild())open @endif @if($middle->isSelected() && !$middle->hasVisibleChild())on @endif">
                                             <a href="{{ $middle->link() }}">
                                                 {{$middle->title}}
-                                                {{--<div class="xo-badge floating red">55</div>--}}
                                             </a>
-                                            @if($middle->hasChild())
+                                            @if($middle->hasVisibleChild())
                                                 <ul class="sub_depth_lst">
+
+
                                                     {{--loop for bottom--}}
                                                     @foreach($middle->getChildren() as $bottomId => $bottom)
                                                         @if(data_get($bottom, 'display', true))
+
+                                                            {{-- depth 3 --}}
                                                             <li @if($bottom->isSelected())class="on" @endif>
                                                                 <a href="{{ $bottom->link() }}">
                                                                     {{$bottom->title}}
@@ -60,12 +73,14 @@
                                                             </li>
                                                         @endif
                                                     @endforeach
+
+
                                                 </ul>
                                             @endif
                                         </li>
-
                                     @endif
                                 @endforeach
+
                             </ul>
                         @endif
                     </li>

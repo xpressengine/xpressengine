@@ -206,6 +206,7 @@ aside .snb_lst li.sub_depth.open > a:after {
 }
 aside .snb_lst>li a i{margin-right:16px;}
 aside .snb_lst li ul.sub_depth_lst{display:none}
+aside .snb_lst li.open>ul.sub_depth_lst{display:block;}
 aside .snb_lst>li>ul.sub_depth_lst li a{padding-left:54px}
 aside .snb_lst>li>ul.sub_depth_lst li ul.sub_depth_lst a{padding-left:70px}
 aside .snb_lst li ul.sub_depth_lst a{height:40px;line-height:40px}
