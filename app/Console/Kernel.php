@@ -14,7 +14,6 @@ class Kernel extends ConsoleKernel
 	 */
 	protected $commands = [
 		\App\Console\Commands\Inspire::class,
-		/*\App\Console\Commands\AOPParser::class,*/
 		\App\Console\Commands\Trash::class,
 		\App\Console\Commands\Schema::class,
 		\App\Console\Commands\PutTranslation::class,
