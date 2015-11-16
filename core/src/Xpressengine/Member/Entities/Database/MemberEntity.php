@@ -259,12 +259,24 @@ class MemberEntity extends Entity implements MemberEntityInterface
     /**
      * Finds whether member has super rating.
      *
+     * @deprecated use isAdmin
      * @return boolean
      */
     public function isSuperAdmin()
     {
         return $this->getRating() === Rating::SUPER;
     }
+
+    /**
+     * Finds whether member has super rating.
+     *
+     * @return boolean
+     */
+    public function isAdmin()
+    {
+        return $this->getRating() === Rating::SUPER;
+    }
+
 
     /**
      * Finds whether member has manager or super rating.

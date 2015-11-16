@@ -234,9 +234,20 @@ class Guest implements MemberEntityInterface
     /**
      * Finds whether member has super rating.
      *
+     * @deprecated
      * @return boolean
      */
     public function isSuperAdmin()
+    {
+        return false;
+    }
+
+    /**
+     * Finds whether member has super rating.
+     *
+     * @return boolean
+     */
+    public function isAdmin()
     {
         return false;
     }
