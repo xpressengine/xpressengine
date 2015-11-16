@@ -326,7 +326,7 @@ class PluginEntity implements Arrayable, Jsonable
         $metaData = $this->getMetaData();
 
         if ($field === null) {
-            return $metaData['support'];
+            return empty($metaData['support']) ? '': $metaData['support'];
         } else {
             return $metaData['support'][$field];
         }
