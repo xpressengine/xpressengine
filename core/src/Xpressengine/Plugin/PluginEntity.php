@@ -110,7 +110,7 @@ class PluginEntity implements Arrayable, Jsonable
         $this->metaData = $metaData;
         $this->object = $object;
 
-        $this->status = Plugin::STATUS_UPLOADED;
+        $this->status = Plugin::STATUS_DEACTIVATED;
     }
 
     /**

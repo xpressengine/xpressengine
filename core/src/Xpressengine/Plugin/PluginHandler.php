@@ -42,14 +42,9 @@ class PluginHandler
     const STATUS_ACTIVATED = 'activated';
 
     /**
-     * 비활성화 된 상태, 이미 한번 활성화 된 적이 있는 상태
+     * 비활성화 된 상태
      */
     const STATUS_DEACTIVATED = 'deactivated';
-
-    /**
-     * 단순히 플러그인이 플러그인 디렉토리에 존재하는 상태, 한번도 활성화된 적이 없는 상태.
-     */
-    const STATUS_UPLOADED = 'uploaded';
 
     /**
      * 플러그인이 package name에 지정해야 하는 vendor
