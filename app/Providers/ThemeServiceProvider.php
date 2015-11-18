@@ -107,7 +107,7 @@ class ThemeServiceProvider extends ServiceProvider
      */
     protected function registerBlankTheme()
     {
-        /** @var PluginRegistryManager $registryManager */
+        /** @var PluginRegister $registryManager */
         $registryManager = $this->app['xe.pluginRegister'];
         $blankThemeClass = $this->app['config']->get('xe.theme.blank');
         $registryManager->add($blankThemeClass);
@@ -115,7 +115,7 @@ class ThemeServiceProvider extends ServiceProvider
 
     private function registerThemeListUIObject()
     {
-        /** @var PluginRegistryManager $registryManager */
+        /** @var PluginRegister $registryManager */
         $registryManager = $this->app['xe.pluginRegister'];
         $registryManager->add(ThemeList::class);
         $registryManager->add(ThemeSelect::class);

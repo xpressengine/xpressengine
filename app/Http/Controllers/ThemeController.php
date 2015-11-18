@@ -3,7 +3,6 @@ namespace App\Http\Controllers;
 
 use Xpressengine\Http\Request;
 use Xpressengine\Support\Exceptions\FileAccessDeniedHttpException;
-use Xpressengine\Support\Exceptions\HttpXpressengineException;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
 use Xpressengine\Theme\ThemeEntity;
 
@@ -33,7 +32,12 @@ class ThemeController extends Controller
         }
 
         if (!is_writable($files[$type][$fileName])) {
-            \Session::flash('alert', ['type' => 'danger', 'message' => '파일을 수정할 권한이 없습니다.']);
+            \Session::flash('alert',
+                            [
+                                'type' => 'danger',
+                                'message' => '파일을 수정할 권한이 없습니다. 웹서버의 계정이 편집할 파일의 쓰기(w)권한을 가지고 있어야 합니다.'
+                            ]
+            );
         }
 
         $fileContent = file_get_contents($files[$type][$fileName]);
