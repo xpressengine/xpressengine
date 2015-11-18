@@ -174,6 +174,10 @@ class Translator extends NamespacedItemResolver implements TranslatorInterface
      */
     protected function makeUnknownSentence($id)
     {
+        if (strpos($id, '::') === false) {
+            return $id;
+        }
+
         $userKeyHead = $this->userKeyPrefix . '::';
         if (substr($id, 0, strlen($userKeyHead)) == $userKeyHead) {
             return '';
