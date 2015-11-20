@@ -41,13 +41,7 @@ class PluginSettingsSkin extends BladeSkin
      */
     protected function index()
     {
-        app('xe.frontend')->html('plugins.loadTooltip')->content("<script>
-            $(function () {
-              $('[data-toggle=tooltip]').tooltip()
-            })
-        </script>")->load();
-
-        $this->addComponentColor();
+        $this->loadDefault();
         return $this->renderBlade();
     }
 
@@ -58,12 +52,28 @@ class PluginSettingsSkin extends BladeSkin
      */
     protected function show()
     {
-        $this->addComponentColor();
+        $this->loadDefault();
+
+        app('xe.frontend')->js([
+           'assets/vendor/swiper2/swiper2.js',
+           'assets/plugin/js/plugin.js'
+        ])->before('assets/vendor/bootstrap/js/bootstrap.min.js')->appendTo('head')->load();
+        app('xe.frontend')->css('assets/vendor/swiper2/swiper2.css')
+            ->before('assets/settings/css/admin.css')->load();
+
         return $this->renderBlade();
     }
 
-    protected function addComponentColor()
+    protected function loadDefault()
     {
+        app('xe.frontend')->html('plugins.loadTooltip')->content("<script>
+            $(function () {
+              $('[data-toggle=tooltip]').tooltip()
+            })
+        </script>")->load();
+
+
+
         array_set($this->data, 'color', [
             'theme' => 'success',
             'skin' => 'info',

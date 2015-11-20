@@ -110,7 +110,7 @@ class PluginEntity implements Arrayable, Jsonable
         $this->metaData = $metaData;
         $this->object = $object;
 
-        $this->status = Plugin::STATUS_UPLOADED;
+        $this->status = Plugin::STATUS_DEACTIVATED;
     }
 
     /**
@@ -157,13 +157,17 @@ class PluginEntity implements Arrayable, Jsonable
     }
 
     /**
-     * 플러그인의 경로를 반환한다
+     * 해당 플러그인의 설치 경로를 반환한다.
+     * path가 주어질 경우, 주어진 path정보를 추가하여 반환한다.
+     *
+     * @param string $path path
      *
      * @return string
      */
-    public function getPath()
+    public function getPath($path = '')
     {
-        return $this->path;
+        $class = $this->class;
+        return $class::getPath($path);
     }
 
     /**
@@ -206,6 +210,62 @@ class PluginEntity implements Arrayable, Jsonable
     public function setStatus($status)
     {
         $this->status = $status;
+    }
+
+    /**
+     * 플러그인의 아이콘 url을 반환한다.
+     *
+     * @return string
+     */
+    public function getIcon()
+    {
+        $icon = $this->getMetaData('extra.xpressengine.icon');
+
+        if ($icon === null) {
+            return null;
+        }
+
+        $path = $this->getPath($icon);
+
+        if (realpath($path) !== false) {
+            $class = $this->class;
+            $file = $class::asset($icon);
+            return $file;
+        }
+        if (realpath(base_path($icon)) !== false) {
+            return asset($icon);
+        }
+
+        return null;
+    }
+
+    /**
+     * 플러그인의 아이콘 url을 반환한다.
+     *
+     * @return string
+     */
+    public function getScreenshots()
+    {
+        $screenshots = $this->getMetaData('extra.xpressengine.screenshots');
+
+        if ($screenshots === null || empty($screenshots)) {
+            return [];
+        }
+
+        $resolved = [];
+        foreach ($screenshots as $screenshot) {
+            $path = $this->getPath($screenshot);
+
+            if (realpath($path) !== false) {
+                $class = $this->class;
+                $file = $class::asset($screenshot);
+                $resolved[] = $file;
+            }
+            if (realpath(base_path($screenshot)) !== false) {
+                $resolved[] = asset($screenshot);
+            }
+        }
+        return $resolved;
     }
 
     /**
@@ -325,10 +385,52 @@ class PluginEntity implements Arrayable, Jsonable
     {
         $metaData = $this->getMetaData();
 
+        $support = array_get($metaData, 'support');
+
+        if ($support === null) {
+            if ($field === null) {
+                return [];
+            } else {
+                return null;
+            }
+        }
+
         if ($field === null) {
-            return empty($metaData['support']) ? '': $metaData['support'];
+            return $support;
         } else {
-            return $metaData['support'][$field];
+            return array_get($support, $field, null);
+        }
+    }
+
+    /**
+     * 플러그인의 readme 파일 내용을 반환한다.
+     *
+     * @return string
+     */
+    public function getReadMe()
+    {
+        $file = $this->getPath('README.md');
+
+        if (!file_exists($file)) {
+            return '';
+        } else {
+            return file_get_contents($file);
+        }
+    }
+
+    /**
+     * 플러그인의 change log 파일 내용을 반환한다.
+     *
+     * @return string
+     */
+    public function getChangeLog()
+    {
+        $file = $this->getPath('CHANGELOG.md');
+
+        if (!file_exists($file)) {
+            return '';
+        } else {
+            return file_get_contents($file);
         }
     }
 
@@ -353,7 +455,7 @@ class PluginEntity implements Arrayable, Jsonable
     }
 
     /**
-     * 플러그인 개발자 정보를 조회한다.
+     * 플러그인 제작자 정보를 조회한다.
      *
      * @return array
      */
@@ -365,6 +467,22 @@ class PluginEntity implements Arrayable, Jsonable
         }
 
         return $authors;
+    }
+
+    /**
+     * 플러그인 제작자 정보를 조회한다. 제작자가 여러명일 경우 첫번째 제작자만 반환한다.
+     *
+     * @return array
+     */
+    public function getAuthor()
+    {
+        $authors = $this->getAuthors();
+
+        if (empty($authors)) {
+            return null;
+        }
+
+        return array_shift($authors);
     }
 
     /**

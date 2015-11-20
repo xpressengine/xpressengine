@@ -40,7 +40,6 @@ class ThemeMigration implements Migration
             "slide_img1Path" => '/plugins/alice/assets/img/pexels-photo2.jpg',
             "slide_img2Path" => '/plugins/alice/assets/img/pexels-photo3.jpg',
             "slide_img3Path" => '/plugins/alice/assets/img/bg_notebook.jpg',
-            "slide_videoPath" => '/plugins/alice/assets/img/notebook.mp4',
             "sub_bgPath" => '/plugins/alice/assets/img/bg_sub.jpg',
             "sidemenu_title" => "Sub",
             "mode" => "",

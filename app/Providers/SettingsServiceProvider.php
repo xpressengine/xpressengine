@@ -89,9 +89,6 @@ class SettingsServiceProvider extends ServiceProvider
      */
     protected function registerDefaultTheme()
     {
-
-        $this->app['xe.pluginRegister']->add(DefaultSettings::class);
-        DefaultSettings::boot();
         $this->app['xe.pluginRegister']->add(SettingsTheme::class);
         SettingsTheme::boot();
     }

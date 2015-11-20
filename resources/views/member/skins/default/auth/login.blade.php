@@ -28,6 +28,9 @@
             </div>
 
             {{-- recaptcha--}}
+            @if($config['useCaptcha'] === true)
+                {!! uio('captcha') !!}
+            @endif
 
             <button type="submit" class="btn btn_blue">로그인</button>
         </fieldset>

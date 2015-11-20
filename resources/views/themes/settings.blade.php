@@ -42,7 +42,7 @@
                         @if($top->isSelected() && !$top->hasVisibleChild())on @endif"
                     >
                         <a href="{{ $top->link() }}">
-                            <i class="{{data_get($top, 'icon', 'xi-stack-paper')}}"></i>
+                            <i class="{{data_get($top, 'icon', 'xi-paper-stack-o')}}"></i>
                             {{$top->title}}
                         </a>
                         @if($top->hasVisibleChild())

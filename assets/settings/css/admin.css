@@ -328,6 +328,12 @@ aside.open{left:0}
   color: #2c2e37
 }
 
+/* tab 사용시 깨지지 않도록 아래 스타일을 추가 */
+.plugin_detail .tab-content .tab-pane { min-height: 400px; }
+.plugin_detail .tab-content>.list-group { margin-bottom: 0px; }
+.plugin_detail .tab-content>.list-group .list-group-item{border-width:1px 0 1px 2px}
+.plugin_detail .tab-content>.list-group .list-group-item:last-child{border-bottom:none}
+
 .plugin_summary .img_thmb {
   float: left;
   overflow: hidden;

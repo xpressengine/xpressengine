@@ -20,6 +20,8 @@ use Cfg;
 use Config;
 use Input;
 use Presenter;
+use Xpressengine\Captcha\ConfigurationNotExistsException;
+use Xpressengine\Http\Request;
 
 /**
  * @category
@@ -67,18 +69,25 @@ class SettingController extends Controller
         );
     }
 
-    public function postCommonSetting()
+    public function postCommonSetting(Request $request)
     {
-        $inputs = Input::except('_token');
+        $inputs = $request->only(['useCaptcha', 'webmasterName', 'webmasterEmail']);
+
+        if ($inputs['useCaptcha'] === 'true') {
+            if (config('captcha.apis.google.siteKey') === null) {
+                throw new ConfigurationNotExistsException();
+            }
+        }
 
         app('xe.config')->put('member.common', $inputs);
+
+
 
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => '저장되었습니다.']);
     }
 
     public function getJoinSetting()
     {
-
         $config = app('xe.config')->get('member.join');
 
         return Presenter::make(

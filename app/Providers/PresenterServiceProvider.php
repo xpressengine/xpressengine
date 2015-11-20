@@ -172,7 +172,7 @@ class PresenterServiceProvider extends ServiceProvider
             'assets/common/css/normalize.css',
             'assets/vendor/core/css/xe.css',
             'assets/common/css/alert.css',
-            'http://cdn.jsdelivr.net/xeicon/2.0.0/xeicon.min.css',
+            '//cdn.jsdelivr.net/xeicon/2.0.0/xeicon.min.css',
         ])->before('assets/vendor/bootstrap/css/bootstrap.css')->load();
     }
 
