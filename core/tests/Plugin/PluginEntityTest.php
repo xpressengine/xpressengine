@@ -146,15 +146,13 @@ class PluginEntityTest extends \PHPUnit_Framework_TestCase
     public function testGetters($entity)
     {
         $this->assertEquals('title',$entity->getTitle());
-        $this->assertEquals(__DIR__.'/plugins/plugin_sample/plugin.php',$entity->getPath());
+        $this->assertEquals(__DIR__.'/plugins/plugin_sample',$entity->getPath());
         $this->assertEquals('khongchi plugin.', $entity->getDescription());
         $this->assertCount(6, $entity->getSupport());
         $this->assertEquals('khongchi/plugin_sample', $entity->getName());
         $this->assertEquals(['xpressengine', 'board'], $entity->getKeywords());
         $this->assertEquals('khongchi',$entity->getAuthors()[0]['name']);
         $this->assertEquals('LGPL-2.0',$entity->getLicense());
-
-
     }
 
     private function getMetaData()
