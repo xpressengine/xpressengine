@@ -4,6 +4,13 @@
     <div class="tit_btn_area">
         <button type="button" class="btn_lst_toggle visible-xs pull-right"><i class="xi-ellipsis-v"></i></button>
         <ul class="btn_lst">
+            @if( $menuType !== null && $menuType::isRouteAble())
+            <li><a href="/{{$item->url}}" class="ico_gray">
+            @else
+            <li><a href="{{$item->url}}" class="ico_gray">
+            @endif
+                   <i class="xi-external-link"></i><span
+                            class="visible-xs-inline">페이지로 이동하</span></a></li>
             <li><a href="{{route('settings.menu.select.types', [$menu->id, 'parent' => $item->id])}}"
                    class="ico_gray"><i
                             class="xi-plus"></i><span
