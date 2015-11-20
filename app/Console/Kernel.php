@@ -45,13 +45,18 @@ class Kernel extends ConsoleKernel
         $args = func_get_args();
         $withXE = array_shift($args);
 
-        if (!file_exists($this->app->storagePath() . '/app/installed') && $withXE !== true) {
+        if (!$this->isInstalled() && $withXE !== true) {
             $this->resetForFramework();
         } else {
             $this->setCommandAfterInstall();
         }
 
         parent::bootstrap();
+    }
+
+    protected function isInstalled()
+    {
+        return file_exists($this->app->storagePath() . '/app/installed');
     }
 
     /**
