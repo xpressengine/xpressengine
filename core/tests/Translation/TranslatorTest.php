@@ -84,7 +84,7 @@ class TranslatorTest extends TranslationTestCase
 
     public function testTrans()
     {
-        $this->assertEquals('test::unknown', $this->t->trans('test::unknown'));
+        $this->assertEquals('unknown', $this->t->trans('test::unknown'));
         $this->assertEquals('Welcome, :name!', $this->t->trans('test::welcome'));
         $this->assertEquals('Welcome, XE3!', $this->t->trans('test::welcome', ['name' => 'XE3']));
         $this->assertEquals('msg! message!', $this->t->trans('test::replacements', ['long' => 'msg', 'longer' => 'message']));
@@ -143,7 +143,7 @@ class TranslatorTest extends TranslationTestCase
 
     public function testSave()
     {
-        $this->assertEquals('temp::message', $this->t->trans('temp::message'));
+        $this->assertEquals('message', $this->t->trans('temp::message'));
         $this->t->save('temp::message', 'en', 'A temp message~!');
         $this->assertEquals('A temp message~!', $this->t->trans('temp::message'));
 
