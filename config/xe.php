@@ -1,7 +1,5 @@
 <?php
 
-use Xpressengine\Member\Entities\MemberEntityInterface;
-
 return [
     'routing' => [
         'settingsPrefix' => 'settings',
@@ -282,35 +280,11 @@ return [
     'group' => [
         'virtualGroup' => [
             'all' => function () {
-
-                $groupInfos = [
-                    'facebook' => [
-                        'title' => '페북계정소유그룹'
-                    ],
-                    'naver' => [
-                        'title' => '네이버계정소유그룹'
-                    ],
-                    'github' => [
-                        'title' => '깃헙계정소유그룹'
-                    ],
-                ];
-
-                return $groupInfos;
+                return [];
             },
-            'getByMember' => function (MemberEntityInterface $member) {
+            'getByMember' => function () {
 
-                $providers = [];
-                if ($member->getAccountByProvider('facebook')) {
-                    $providers[] = 'facebook';
-                }
-                if ($member->getAccountByProvider('naver')) {
-                    $providers[] = 'naver';
-                }
-                if ($member->getAccountByProvider('github')) {
-                    $providers[] = 'github';
-                }
-
-                return $providers;
+                return [];
             }
         ]
     ],
