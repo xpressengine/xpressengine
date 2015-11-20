@@ -199,32 +199,10 @@ class InstallCommand extends Command
         // change directory permissions
         $this->setStorageDirectoryPermission($input, $output);
 
+
+        $this->markInstalled();
+
         $output->writeln("Install was completed successfully.".PHP_EOL);
-    }
-
-    /**
-     * bootInstallFramework
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return mixed
-     * @throws Exception
-     */
-    private function bootInstallFramework(InputInterface $input, OutputInterface $output)
-    {
-        require $this->installPath('vendor/autoload.php');
-
-        $appFile = $this->installPath('bootstrap/app.php');
-        if (!file_exists($appFile)) {
-            throw new Exception('Unable to find app loader: ~/bootstrap/app.php');
-        }
-
-        $app = include($appFile);
-        $kernel = $app->make(Kernel::class);
-        $kernel->bootstrap();
-
-        return $app;
     }
 
     /**
@@ -236,7 +214,7 @@ class InstallCommand extends Command
      * @return mixed
      * @throws Exception
      */
-    private function bootFramework(InputInterface $input, OutputInterface $output)
+    private function bootFramework(InputInterface $input, OutputInterface $output, $withXE = false)
     {
         require $this->installPath('vendor/autoload.php');
 
@@ -247,7 +225,11 @@ class InstallCommand extends Command
 
         $app = include($appFile);
         $kernel = $app->make('Illuminate\Contracts\Console\Kernel');
-        $kernel->bootstrap();
+        if ($withXE) {
+            $kernel->bootstrap(true);
+        } else {
+            $kernel->bootstrap();
+        }
 
         return $app;
     }
@@ -319,23 +301,24 @@ class InstallCommand extends Command
         $output->writeln("Base Framework is loading...");
 
         $this->writeEnvFile();
-
-        // boot framework on install mode
-        $app = $this->app = $this->bootInstallFramework($input, $output);
+        // reboot for load env file
+        $this->app = $this->bootFramework($input, $output);
 
         // migration
         // 각 패키지마다 필요한 database table을 생성하고, seeding
         // 필요한 directory와 file을 생성한다.
         $this->migrateCore();
 
+        // plugin 설치를 위해 core service 를 load 하기 위한 reboot
         // booting framework with xpressengine service providers
-        $app = $this->app = $this->bootFramework($input, $output);
+        $this->app = $this->bootFramework($input, $output, true);
 
         // install and activate default plugins
         $this->installBasePlugins();
 
+        // plugin 의 menu 생성 작업을 위한 reboot
         // booting framework with xpressengine service providers
-        $app = $this->app = $this->bootFramework($input, $output);
+        $this->app = $this->bootFramework($input, $output, true);
 
         // composer의 post script를 run한다.
         // script - optimizing & key generation
@@ -560,7 +543,8 @@ class InstallCommand extends Command
     private function migrateCore()
     {
         /** @var Filesystem $filesystem */
-        $filesystem = app('files');
+//        $filesystem = app('files');
+        $filesystem = $this->app['files'];
         $files = $filesystem->files(base_path('migrations'));
 
         foreach ($files as $file) {
@@ -830,5 +814,11 @@ MAIL_ENCRYPTION=null";
 
         $this->setEnv('APP_DEBUG', 'false', 'true');
         $this->writeEnvFile();
+    }
+
+    private function markInstalled()
+    {
+        $markFile = $path = $this->installPath('storage/app/installed');
+        touch($markFile);
     }
 }
