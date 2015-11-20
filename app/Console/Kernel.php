@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
 	 */
 	protected $commands = [
 		\App\Console\Commands\Inspire::class,
+        \App\Console\Commands\XeInstall::class,
 		\App\Console\Commands\Trash::class,
 		\App\Console\Commands\Schema::class,
 		\App\Console\Commands\PutTranslation::class,
@@ -31,7 +32,78 @@ class Kernel extends ConsoleKernel
 	 */
 	protected function schedule(Schedule $schedule)
 	{
-		$schedule->command('inspire')
-			->hourly();
+		$schedule->command('inspire')->hourly();
 	}
+
+    /**
+     * Bootstrap the application for artisan commands.
+     *
+     * @return void
+     */
+    public function bootstrap()
+    {
+        $args = func_get_args();
+        $withXE = array_shift($args);
+
+        if (!file_exists($this->app->storagePath() . '/app/installed') && $withXE !== true) {
+            $this->resetForFramework();
+        } else {
+            $this->setCommandAfterInstall();
+        }
+
+        parent::bootstrap();
+    }
+
+    /**
+     * Redefine providers and command for framework activation.
+     *
+     * @return void
+     */
+    protected function resetForFramework()
+	{
+		$this->resetProviders();
+		$this->setCommandBeforeInstall();
+	}
+
+    /**
+     * Define for providers of framework.
+     *
+     * @return void
+     */
+	protected function resetProviders()
+	{
+        $this->app['events']->listen('bootstrapped: Illuminate\Foundation\Bootstrap\LoadConfiguration', function ($app) {
+            $config = $app['config'];
+
+            $providers = $config['app.providers'];
+            $providers = array_filter($providers, function ($p) {
+                return substr($p, 0, strlen('Illuminate')) == 'Illuminate';
+            });
+
+            $config->set('app.providers', $providers);
+        });
+	}
+
+    /**
+     * Define commands for previously installation
+     *
+     * @return void
+     */
+	protected function setCommandBeforeInstall()
+	{
+		$this->commands = array_intersect($this->commands, [
+            \App\Console\Commands\Inspire::class,
+            \App\Console\Commands\XeInstall::class
+        ]);
+	}
+
+    /**
+     * Define commands for after installation
+     *
+     * @return void
+     */
+    protected function setCommandAfterInstall()
+    {
+        $this->commands = array_diff($this->commands, [\App\Console\Commands\XeInstall::class]);
+    }
 }
