@@ -82,14 +82,14 @@ define(function(XE) {
             $('body').append(container);
 
             container.on('click', 'button.__xe_close', function (e) {
-                Griper.toast.fn.destroy($(this).parents('.alert'));
+                Griper.toast.fn.destroy($(this).parents('.xo-alert'));
                 e.preventDefault();
             });
 
             setInterval(function() {
                 var time = parseInt(new Date().getTime() / 1000);
                 toast_box
-                    .find('div.alert')
+                    .find('div.xo-alert')
                     .each(function() {
                         var expireTime = parseInt($(this).data('expire-time'));
                         if (expireTime != 0 && time > expireTime) {
