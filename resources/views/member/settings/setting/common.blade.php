@@ -1,6 +1,6 @@
 <div class="panel">
     <div class="panel-body">
-        <form id="fSetting" method="post" action="{{ route('manage.member.setting') }}">
+        <form id="fSetting" method="post" action="{{ route('settings.member.setting') }}">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
             <div class="form-group">

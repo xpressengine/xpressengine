@@ -25,13 +25,13 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $auth->shouldReceive('user')->andReturn($mockUser);
         $auth->shouldReceive('guest')->andReturn(false);
 
-        $routes->shouldReceive('getByName')->once()->with('manage.member')->andReturn($mockRoute);
+        $routes->shouldReceive('getByName')->once()->with('settings.member')->andReturn($mockRoute);
 
-        $repo->shouldReceive('findByTypeAndName')->once()->with('default', 'route', 'manage.member')->andReturn($mockRegistered);
+        $repo->shouldReceive('findByTypeAndName')->once()->with('default', 'route', 'settings.member')->andReturn($mockRegistered);
         $repo->shouldReceive('fetchAncestor')->once()->with($mockRegistered)->andReturn([]);
 
         $instance = new Factory($auth, $routes, $repo);
-        $permission = $instance->make('route', 'manage.member');
+        $permission = $instance->make('route', 'settings.member');
 
         $this->assertInstanceOf('Xpressengine\Permission\Permissions\RoutePermission', $permission);
     }

@@ -10,7 +10,7 @@
 
 <div class="panel">
     <div class="panel-body">
-        <form class="form" name="fMemberEdit" method="post" action="{{ route('manage.member.edit', [$member->id]) }}" enctype="multipart/form-data">
+        <form class="form" name="fMemberEdit" method="post" action="{{ route('settings.member.edit', [$member->id]) }}" enctype="multipart/form-data">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
             <div class="row">
@@ -99,9 +99,9 @@
 
         var url = {
             'mail': {
-                'list': "{{ route('manage.member.mail.list') }}",
-                'add': "{{ route('manage.member.mail.add') }}",
-                'delete': "{{ route('manage.member.mail.delete') }}"
+                'list': "{{ route('settings.member.mail.list') }}",
+                'add': "{{ route('settings.member.mail.add') }}",
+                'delete': "{{ route('settings.member.mail.delete') }}"
             }
         };
 

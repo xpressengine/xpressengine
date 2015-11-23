@@ -118,7 +118,7 @@ class MemberController extends Controller
         return Presenter::make('member.settings.member.index', compact('members', 'groups', 'selectedGroup'));
     }
 
-    public function getCreate()
+    public function create()
     {
         $ratings = Rating::getUsableAll();
         $ratingNames = [
@@ -155,7 +155,7 @@ class MemberController extends Controller
         return Presenter::make('member.settings.member.create', compact('ratings', 'groups', 'status', 'fieldTypes'));
     }
 
-    public function postCreate(Request $request)
+    public function store(Request $request)
     {
 
         $this->validate(
@@ -179,10 +179,10 @@ class MemberController extends Controller
         }
         XeDB::commit();
 
-        return redirect()->route('manage.member.index')->with('alert', ['type' => 'success', 'message' => '추가되었습니다.']);
+        return redirect()->route('settings.member.index')->with('alert', ['type' => 'success', 'message' => '추가되었습니다.']);
     }
 
-    public function getEdit($id)
+    public function edit($id)
     {
         $member = $this->members->find($id, ['groups', 'mails', 'accounts']);
 
@@ -258,7 +258,7 @@ class MemberController extends Controller
         );
     }
 
-    public function postEdit($id, Request $request)
+    public function update($id, Request $request)
     {
         /** @var MemberEntityInterface $member */
         $member = $this->members->find($id, ['mails', 'groups']);

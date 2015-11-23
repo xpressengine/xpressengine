@@ -1,6 +1,6 @@
 
 @section('page_setting_menu')
-<a href="{{ route('manage.member.create') }}" class="btn btn_blue v2 pull-right">{{ xe_trans('xe::addMember') }}</a>
+<a href="{{ route('settings.member.create') }}" class="btn btn_blue v2 pull-right">{{ xe_trans('xe::addMember') }}</a>
 @endsection
 
         <!--[DD] panel-default와 같이 서브속성이 지정되어야 기본 bs환경에서 제대로 출력됨 -->
@@ -26,9 +26,9 @@
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a href="{{ route('manage.member.index', Input::except('status') ) }}" @if(! Input::has('status')) active @endif">전체</a></li>
-                                <li><a href="{{ route('manage.member.index', array_merge(Input::all(), ['status'=> \Member::STATUS_ACTIVATED] )) }}" @if(Input::get('status') === \Member::STATUS_ACTIVATED) active @endif">승인됨</a></li>
-                                <li><a href="{{ route('manage.member.index', array_merge(Input::all(), ['status'=> \Member::STATUS_DENIED] )) }}" @if(Input::get('status') === \Member::STATUS_DENIED) active @endif">거부됨</a></li>
+                                <li><a href="{{ route('settings.member.index', Input::except('status') ) }}" @if(! Input::has('status')) active @endif">전체</a></li>
+                                <li><a href="{{ route('settings.member.index', array_merge(Input::all(), ['status'=> \Member::STATUS_ACTIVATED] )) }}" @if(Input::get('status') === \Member::STATUS_ACTIVATED) active @endif">승인됨</a></li>
+                                <li><a href="{{ route('settings.member.index', array_merge(Input::all(), ['status'=> \Member::STATUS_DENIED] )) }}" @if(Input::get('status') === \Member::STATUS_DENIED) active @endif">거부됨</a></li>
                             </ul>
                         </div>
                         {{-- groups --}}
@@ -39,11 +39,11 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="{{ route('manage.member.index', Input::except(['group'])) }}"><span>전체 그룹</span></a>
+                                    <a href="{{ route('settings.member.index', Input::except(['group'])) }}"><span>전체 그룹</span></a>
                                 </li>
                                 @foreach($groups as $key => $group)
                                     <li>
-                                        <a href="{{ route('manage.member.index', array_merge( Input::all(), ['group'=> $group->id] )) }}"><span @if(Input::get('group') === $group->id)class="text-muted"@endif >{{ $group->name }}</span></a>
+                                        <a href="{{ route('settings.member.index', array_merge( Input::all(), ['group'=> $group->id] )) }}"><span @if(Input::get('group') === $group->id)class="text-muted"@endif >{{ $group->name }}</span></a>
                                     </li>
                                 @endforeach
                             </ul>
@@ -52,7 +52,7 @@
                     </div>
                     {{-- search --}}
                     <div class="col-sm-12 col-md-6 text-right">
-                        <form method="GET" class="form-inline" action="{{ route('manage.member.index') }}" accept-charset="UTF-8" role="form" id="_search-form">
+                        <form method="GET" class="form-inline" action="{{ route('settings.member.index') }}" accept-charset="UTF-8" role="form" id="_search-form">
 
                             <div class="input-group">
                                 <div class="input-group-btn">
@@ -68,7 +68,7 @@
                                 <input type="text" name="keyword" class="form-control" value="{{ Input::get('keyword') }}">
                                 <div class="input-group-btn">
                                     <button type="submit" class="btn btn-default">검색</button>
-                                    <a class="btn btn-default" href="{{ route('manage.member.index', Input::except('keyfield','keyword')) }}">취소</a>
+                                    <a class="btn btn-default" href="{{ route('settings.member.index', Input::except('keyfield','keyword')) }}">취소</a>
                                 </div>
                             </div>
                         </form>
@@ -117,7 +117,7 @@
                                         {{ implode(', ', array_pluck($member->groups, 'name')) }}
                                     @endif
                                 </td>
-                                <td><a href="{{ route('manage.member.edit', ['id' => $member->getId()]) }}" class="btn btn-default btn-sm">관리</a></td>
+                                <td><a href="{{ route('settings.member.edit', ['id' => $member->getId()]) }}" class="btn btn-default btn-sm">관리</a></td>
                             </tr>
                         @endforeach
                         </tbody>
@@ -155,7 +155,7 @@
                 return false;
             }
             var $f = $('#__xe_fList');
-            $f.attr('action', "{{ route('manage.member.destroy') }}");
+            $f.attr('action', "{{ route('settings.member.destroy') }}");
             $('<input type="hidden" name="_method" value="DELETE">').prependTo($f);
             $f.submit();
         });
