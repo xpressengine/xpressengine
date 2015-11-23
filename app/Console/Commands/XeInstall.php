@@ -18,9 +18,7 @@ class XeInstall extends Command
      *
      * @var string
      */
-    protected $signature = 'xe:install
-                            {--config= : Prepared file for configure}
-                            {--base-path= : Application root path}';
+    protected $signature = 'xe:install {--config= : Prepared file for configure}';
 
     /**
      * The console command description.
@@ -28,11 +26,6 @@ class XeInstall extends Command
      * @var string
      */
     protected $description = 'Xpressengine installation';
-
-    /**
-     * @var string path for install
-     */
-    protected $installPath;
 
     /**
      * @var \Illuminate\Contracts\Foundation\Application
@@ -116,12 +109,8 @@ class XeInstall extends Command
      */
     public function handle()
     {
-        // todo: base-path 제거
-        $installDir = $this->option('base-path') ?: getcwd();
         $noInteraction = $this->option('no-interaction');
         $configFile = $this->option('config');
-
-        $this->installPath = $installDir;
 
         if ($configFile !== null && realpath($configFile) !== false) {
             $this->configFile = realpath($configFile);
@@ -476,20 +465,20 @@ MAIL_ENCRYPTION=null";
      */
     private function writeEnvFile()
     {
-        $path = $this->installPath('.env');
+        $path = $this->getBasePath('.env');
         file_put_contents($path, $this->env);
     }
 
     /**
-     * installPath
+     * basePath
      *
      * @param null $path
      *
      * @return string
      */
-    private function installPath($path = null)
+    private function getBasePath($path = null)
     {
-        return $this->installPath.($path ? DIRECTORY_SEPARATOR . $path : $path);
+        return base_path($path);
     }
 
     /**
@@ -502,9 +491,9 @@ MAIL_ENCRYPTION=null";
      */
     private function bootFramework($withXE = false)
     {
-        require $this->installPath('vendor/autoload.php');
+        require $this->getBasePath('vendor/autoload.php');
 
-        $appFile = $this->installPath('bootstrap/app.php');
+        $appFile = $this->getBasePath('bootstrap/app.php');
         if (!file_exists($appFile)) {
             throw new \Exception('Unable to find app loader: ~/bootstrap/app.php');
         }
@@ -575,7 +564,7 @@ MAIL_ENCRYPTION=null";
             $composer.' run-script post-create-project-cmd',
         ];
 
-        $process = new Process(implode(' && ', $commands), $this->installPath(), null, null, null);
+        $process = new Process(implode(' && ', $commands), $this->getBasePath(), null, null, null);
 
         $process->run(
             function ($type, $line) {
@@ -684,7 +673,7 @@ MAIL_ENCRYPTION=null";
     private function disableDebugMode()
     {
         // for sync APP_KEY
-        $this->env = file_get_contents($this->installPath('.env'));
+        $this->env = file_get_contents($this->getBasePath('.env'));
 
         $this->setEnv('APP_DEBUG', 'false', 'true');
         $this->writeEnvFile();
@@ -713,7 +702,7 @@ MAIL_ENCRYPTION=null";
     {
         $this->info('[Setup Directory Permission]');
 
-        $path = $this->installPath('storage');
+        $path = $this->getBasePath('storage');
         $permission = '0707';
 
         if (!$this->noInteraction) {
@@ -735,7 +724,7 @@ MAIL_ENCRYPTION=null";
 
     private function markInstalled()
     {
-        $markFile = $path = $this->installPath('storage/app/installed');
+        $markFile = $path = $this->getBasePath('storage/app/installed');
         touch($markFile);
     }
 }
