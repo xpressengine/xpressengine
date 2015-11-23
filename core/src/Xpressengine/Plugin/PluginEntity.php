@@ -50,7 +50,7 @@ class PluginEntity implements Arrayable, Jsonable
      *
      * @var string
      */
-    protected $path;
+    protected $pluginFile;
 
     /**
      * 플러그인의 클래스명(네임스페이스 포함)
@@ -105,7 +105,7 @@ class PluginEntity implements Arrayable, Jsonable
     public function __construct($id, $path, $class, $metaData, $object = null)
     {
         $this->id = $id;
-        $this->path = $path;
+        $this->pluginFile = $path;
         $this->class = $class;
         $this->metaData = $metaData;
         $this->object = $object;
@@ -143,10 +143,10 @@ class PluginEntity implements Arrayable, Jsonable
         if (isset($this->object) && is_a($this->object, 'Xpressengine\Plugin\AbstractPlugin')) {
             return $this->object;
         } else {
-            if (file_exists($this->path) === false) {
-                throw new NotFoundPluginFileException(['path' => str_replace(base_path(), '', $this->path)]);
+            if (file_exists($this->pluginFile) === false) {
+                throw new NotFoundPluginFileException(['path' => str_replace(base_path(), '', $this->pluginFile)]);
             }
-            require_once($this->path);
+            require_once($this->pluginFile);
 
             // reigster each plugin's autoload if autoload.php exist
             $this->registerPluginAutoload();
@@ -166,8 +166,8 @@ class PluginEntity implements Arrayable, Jsonable
      */
     public function getPath($path = '')
     {
-        $class = $this->class;
-        return $class::getPath($path);
+        $pluginObj = $this->getObject();
+        return $pluginObj->getPath($path);
     }
 
     /**
@@ -601,7 +601,7 @@ class PluginEntity implements Arrayable, Jsonable
     {
         return [
             'id' => $this->id,
-            'path' => $this->path,
+            'path' => $this->pluginFile,
             'class' => $this->class,
             'status' => $this->getStatus(),
             'metaData' => $this->metaData
@@ -663,7 +663,7 @@ class PluginEntity implements Arrayable, Jsonable
      */
     protected function registerPluginAutoload()
     {
-        $autoloadFile = dirname($this->getPath()).'/vendor/autoload.php';
+        $autoloadFile = dirname($this->pluginFile).'/vendor/autoload.php';
         if (file_exists($autoloadFile)) {
             require $autoloadFile;
         }
