@@ -33,14 +33,65 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         return $container;
     }
 
-
     /**
+     * testHas
      *
      * @depends testPush
      */
     public function testHas($container)
     {
         $this->assertTrue($container->has('module/board/skin'));
+    }
+
+    public function testPrepend()
+    {
+        $container = new Container('\Illuminate\Support\Arr');
+
+        $container->prepend('a/b', 'B');
+
+        $items = $this->getRepoProperty($container);
+
+        $this->assertEquals(['a/b'=>['B']], $items);
+
+        $container->prepend('a/b', 'C');
+
+        $items = $this->getRepoProperty($container);
+
+        $this->assertEquals(['a/b'=>['C', 'B']], $items);
+    }
+
+    public function testSet()
+    {
+        $container = new Container('\Illuminate\Support\Arr');
+
+        $container->set('a/b', 'B');
+
+        $items = $this->getRepoProperty($container);
+
+        $this->assertEquals(['a/b'=>'B'], $items);
+
+        $container->set('a/b', 'C');
+
+        $items = $this->getRepoProperty($container);
+
+        $this->assertEquals(['a/b'=>'C'], $items);
+    }
+
+    public function testAdd()
+    {
+        $container = new Container('\Illuminate\Support\Arr');
+
+        $container->add('a/b', 'B');
+
+        $items = $this->getRepoProperty($container);
+
+        $this->assertEquals(['a/b'=>'B'], $items);
+
+        $container->add('a/b', 'C');
+
+        $items = $this->getRepoProperty($container);
+
+        $this->assertEquals(['a/b'=>'B'], $items);
     }
 
     public function testPushOnlyValue()
@@ -57,17 +108,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         );
 
         return $container;
-    }
-
-    public function testAdd()
-    {
-        $container = new Container('\Illuminate\Support\Arr');
-
-        $key = 'uiobject/xpressengine@select';
-
-        $container->add($key, 'My\\Class\\Select');
-
-        $this->assertEquals('My\\Class\\Select', $container->get($key));
     }
 
     public function testAll()

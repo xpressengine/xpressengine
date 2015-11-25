@@ -47,8 +47,6 @@ interface RegisterInterface extends ArrayAccess
 
     /**
      * Set a given configuration value.
-     * 키가 이미 등록되어 있다면 등록 할 수 없음
-     * 새로 생성
      *
      * @param  array|string $key   key
      * @param  mixed        $value value for setting
@@ -68,17 +66,6 @@ interface RegisterInterface extends ArrayAccess
      * @return void
      */
     public function add($key, $value);
-
-    /**
-     * put item
-     * 키가 있으면 수정
-     *
-     * @param  array|string $key   key
-     * @param  mixed        $value value for putting
-     *
-     * @return void
-     */
-    public function put($key, $value);
 
     /**
      * Prepend a value onto an array configuration value.

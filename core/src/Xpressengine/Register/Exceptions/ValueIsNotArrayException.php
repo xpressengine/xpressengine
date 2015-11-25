@@ -11,7 +11,7 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Register;
+namespace Xpressengine\Register\Exceptions;
 
 use Xpressengine\Support\Exceptions\XpressengineException;
 
@@ -24,7 +24,7 @@ use Xpressengine\Support\Exceptions\XpressengineException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class InvalidIDException extends XpressengineException
+class ValueIsNotArrayException extends XpressengineException
 {
-    protected $message = 'ID(:id) 형식이 잘못되었습니다.';
+    protected $message = '지정된 키의 값이 배열형식이 아닙니다.';
 }

@@ -23,11 +23,11 @@ class PluginRegisterTest extends \PHPUnit_Framework_TestCase
     public function testAdd()
     {
         $container = $this->makeContainer();
-        $container->shouldReceive('add')
+        $container->shouldReceive('set')
             ->with('module/pluginName@component', TestComponent::class)
             ->once()
             ->andReturnNull();
-        $container->shouldReceive('add')
+        $container->shouldReceive('set')
             ->with('module.module/pluginName@component', TestComponent::class)
             ->once()
             ->andReturnNull();

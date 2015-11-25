@@ -13,6 +13,8 @@
  */
 namespace Xpressengine\Register;
 
+use Xpressengine\Register\Exceptions\ValueIsNotArrayException;
+
 /**
  * 이 클래스는 Key Value 의 저장소를 제공합니다.
  * 인터페이스 구성은 Illuminate\Config\Repository 와 유사합니다.
@@ -66,7 +68,6 @@ class Container implements RegisterInterface
     /**
      * Register 에서 array 를 처리하기 위한 class 이름
      * 기본으로 Illuminate\Support\Arr 을 사용한다.
-     * 변경할 이유는 없을 것같고.. DI 하기 위한 처리
      *
      * @var \Illuminate\Support\Arr
      */
@@ -113,9 +114,7 @@ class Container implements RegisterInterface
     }
 
     /**
-     * Set a given configuration value.
-     * 키가 이미 등록되어 있다면 등록 할 수 없음
-     * 새로 생성
+     * 주어진 key에 value를 지정한다. 이미 지정된 value가 있다면 덮어씌운다.
      *
      * @param  array|string $key   key
      * @param  mixed        $value value for setting
@@ -128,23 +127,21 @@ class Container implements RegisterInterface
 
         if (is_array($key)) {
             foreach ($key as $innerKey => $innerValue) {
-                $class::add($this->items, $innerKey, $innerValue);
+                $class::set($this->items, $innerKey, $innerValue);
             }
         } else {
-            $class::add($this->items, $key, $value);
+            $class::set($this->items, $key, $value);
         }
     }
 
     /**
-     * add item
-     * 키가 없으면 등록할 수 없음 - Arr class spec
-     * 있는거을 덮어 씀
+     * 주어진 key에 value를 추가한다.
+     * 만약 해당 key에 지정된 value가 이미 있을 경우, 아무 행동도 하지 않는다.
      *
      * @param  array|string $key   key
      * @param  mixed        $value value for adding
      *
      * @return void
-     * @todo   add , set 을 Arr, Repository 의 것을 가져와 놨는데.. 우리 요구사항은 한번 더 체크해 봐야함
      */
     public function add($key, $value)
     {
@@ -153,24 +150,8 @@ class Container implements RegisterInterface
     }
 
     /**
- * put item
- * 키가 있으면 수정
- *
- * @param  array|string $key   key
- * @param  mixed        $value value for putting
- *
- * @return void
- */
-    public function put($key, $value)
-    {
-        $class = $this->arrClass;
-        if ($class::has($this->items, $key)) {
-            $this->items = $class::set($this->items, $key, $value);
-        }
-    }
-
-    /**
-     * Prepend a value onto an array configuration value.
+     * 주어진 키에 해당하는 array의 제일 앞에 value를 추가한다.
+     * 만약 주어진 키에 해당하는 array가 없다면 array를 생성후 추가한다.
      *
      * @param  string $key   key
      * @param  mixed  $value value for prepend
@@ -179,7 +160,11 @@ class Container implements RegisterInterface
      */
     public function prepend($key, $value)
     {
-        $array = $this->get($key);
+        $array = $this->get($key, []);
+
+        if (!is_array($array)) {
+            throw new ValueIsNotArrayException();
+        }
 
         array_unshift($array, $value);
 
@@ -187,6 +172,12 @@ class Container implements RegisterInterface
     }
 
     /**
+     * 주어진 키에 해당하는 array의 제일 뒤에 value를 추가한다.
+     * 만약 주어진 키에 해당하는 array가 없다면 array를 생성후 추가한다.
+     *
+     *
+     *
+     *
      * Push a value onto an array configuration value.
      *
      * @param  string $key   key
@@ -198,6 +189,10 @@ class Container implements RegisterInterface
     public function push($key, $id, $value = null)
     {
         $array = $this->get($key, []);
+
+        if (!is_array($array)) {
+            throw new ValueIsNotArrayException();
+        }
 
         if ($value === null) {
             $value = $id;
@@ -211,6 +206,8 @@ class Container implements RegisterInterface
     }
 
     /**
+     * 등록된 모든 아이템을 조회한다.
+     *
      * Get all of the configuration items for the application.
      *
      * @return array

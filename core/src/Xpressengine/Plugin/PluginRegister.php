@@ -84,7 +84,7 @@ class PluginRegister
     public function add($component)
     {
         $id = $component::getId();
-        $this->register->add($id, $component);
+        $this->register->set($id, $component);
 
         $parts = $this->split($id);
 
@@ -106,7 +106,7 @@ class PluginRegister
         switch ($key) {
             case 'module':
             case 'skin':
-            case 'settignsSkin':
+            case 'settingsSkin':
             case 'theme':
             case 'settingsTheme':
             case 'widget':
@@ -117,7 +117,7 @@ class PluginRegister
                 if ($parts['target'] != '') {
                     $key = $target = $parts['target'].self::KEY_DELIMITER.$parts['type'];
                 }
-                $this->register->add($key.'.'.$component::getId(), $component);
+                $this->register->set($key.'.'.$component::getId(), $component);
         }
     }
 
