@@ -1,7 +1,7 @@
 <div class="member find_pass">
     <h1>이메일 인증</h1>
 
-    <p class="sub_txt">회원가입을 완료하려면 이메일 주소를 인증해야 합니다. <em>{{ Input::get('email') }}</em>을 확인하신후, 인증 코드를 입력해주세요.</p>
+    <p class="sub_txt">회원가입을 완료하려면 이메일 인증을 해야 합니다. <em>{{ Input::get('email') }}</em>을 확인하신후, 인증 코드를 입력해주세요.</p>
 
     <form action="{{ route('auth.confirm') }}" method="get">
         <fieldset>
