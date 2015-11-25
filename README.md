@@ -1,7 +1,7 @@
 XpressEngine 3
 ==============
 
-[![License](http://img.shields.io/badge/license-GNU%20LGPL-brightgreen.svg)](http://www.gnu.org/licenses/gpl.html)
+[![License](http://img.shields.io/badge/license-GNU%20LGPL-brightgreen.svg)](http://www.gnu.org/licenses/gpl.html) [![Build Status](https://scrutinizer-ci.com/g/xpressengine/xpressengine/badges/build.png?b=master)](https://scrutinizer-ci.com/g/xpressengine/xpressengine/build-status/master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/xpressengine/xpressengine/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/xpressengine/xpressengine/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/xpressengine/xpressengine/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/xpressengine/xpressengine/?branch=master)
 
 XpressEngine3(XE3)은 Laravel framework 기반의 서비스 친화적인 CMS(Content Management System)입니다. 다양한 번들 시스템으로 손쉽게 사용할 수 있으며, 사용자들을 위한 빠른 피드백을 제공하고 유연한 확장성을 가지고 있습니다. 지금 XE3와 함께 웹의 미래를 만들어가세요.
 
