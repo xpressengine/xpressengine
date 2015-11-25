@@ -82,9 +82,14 @@ class SettingsMenu extends MenuItem
         throw new LinkNotFoundException('admin 메뉴가 지정된 route는 name(as)이 지정되어 있거나 Controller action이어야 합니다.');
     }
 
+    /**
+     * 메뉴의 자식 메뉴중 visible 상태인 메뉴가 있는지 조회한다.
+     *
+     * @return bool
+     */
     public function hasVisibleChild()
     {
-        if (sizeof($this->childItems) <= 0) {
+        if (count($this->childItems) <= 0) {
             return false;
         }
 
