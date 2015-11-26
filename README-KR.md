@@ -22,7 +22,7 @@ Laravel 은 가장 모던한 php 프레임워크중 하나로 전세계 php 프�
 * Mbstring PHP Extension
 * Tokenizer PHP Extension
 
-## XE3 설치하기
+## 시작하기
 
 XE3을 설치하기 위해서는 다음의 가이드를 참고하십시오. [인스톨 가이드](http://xpressengine.io/docs/3.0/install)
 
