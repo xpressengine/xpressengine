@@ -58,6 +58,11 @@ abstract class AbstractUIObject implements Renderable, ComponentInterface
      */
     protected $markup;
 
+    /**
+     * get sequence number
+     *
+     * @return int
+     */
     public static function seq()
     {
         return ++self::$sequence;

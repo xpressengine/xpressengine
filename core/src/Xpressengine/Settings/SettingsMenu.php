@@ -82,6 +82,11 @@ class SettingsMenu extends MenuItem
         throw new LinkNotFoundException('admin 메뉴가 지정된 route는 name(as)이 지정되어 있거나 Controller action이어야 합니다.');
     }
 
+    /**
+     * has visible child menu
+     *
+     * @return bool
+     */
     public function hasVisibleChild()
     {
         if (sizeof($this->childItems) <= 0) {

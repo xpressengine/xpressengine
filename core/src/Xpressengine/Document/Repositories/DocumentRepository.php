@@ -231,14 +231,14 @@ class DocumentRepository
         }
 
         if (isset($wheres['title_content'])) {
-            $query = $query->whereNested(function($query) use ($wheres) {
+            $query = $query->whereNested(function ($query) use ($wheres) {
                 $query->where('title', 'like', sprintf('%%%s%%', $wheres['title_content']))
                 ->orWhere('content', 'like', sprintf('%%%s%%', $wheres['title_content']));
             });
         }
 
         if (isset($wheres['title_pureContent'])) {
-            $query = $query->whereNested(function($query) use ($wheres) {
+            $query = $query->whereNested(function ($query) use ($wheres) {
                 $query->where('title', 'like', sprintf('%%%s%%', $wheres['title_pureContent']))
                     ->orWhere('pureContent', 'like', sprintf('%%%s%%', $wheres['title_pureContent']));
             });

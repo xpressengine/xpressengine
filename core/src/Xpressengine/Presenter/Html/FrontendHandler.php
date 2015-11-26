@@ -56,8 +56,8 @@ namespace Xpressengine\Presenter\Html;
  * ```php
  * // bootstrap.js이 로드된 이후에 xe.js파일이 로드되도록 우선순위 지정
  * Frontend::js('assets/common/js/xe.js')
- * 	->before('assets/vendor/bootstrap/js/bootstrap.js')
- * 	->appendTo('body')->load();
+ * ->before('assets/vendor/bootstrap/js/bootstrap.js')
+ * ->appendTo('body')->load();
  * ```
  *
  * ### 언로드
@@ -88,7 +88,7 @@ namespace Xpressengine\Presenter\Html;
  * $alias = 'my.viewport';
  *
  * Frontend::meta($alias)->name('viewport')
- * 	->content('width=device-width, initial-scale=1.0')->load();
+ * ->content('width=device-width, initial-scale=1.0')->load();
  * ```
  *
  * > `alias`는 다른 곳에서 내가 입력한 meta 태그를 언로드할 때 key로 사용합니다.
@@ -102,11 +102,11 @@ namespace Xpressengine\Presenter\Html;
  *
  * // script 코드를 `<body>` 하단에 추가
  * Frontend::html($alias)->content('
- * 	<script>
- * 		$(function () {
- * 		  $('[data-toggle="tooltip"]').tooltip()
- * 		})
- * 	</script>
+ * <script>
+ *     $(function () {
+ *         $('[data-toggle="tooltip"]').tooltip()
+ *     })
+ * </script>
  * ')->appendTo('body')->load();
  * ```
  *
