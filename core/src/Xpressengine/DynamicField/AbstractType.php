@@ -328,7 +328,7 @@ abstract class AbstractType implements ComponentInterface
         }
         $this->handler->connection()->getSchemaBuilder()->table(
             $tableName,
-            function(Blueprint $table) use ($self) {
+            function (Blueprint $table) use ($self) {
                 /**
                  * @var ColumnEntity $column
                  */
@@ -365,7 +365,7 @@ abstract class AbstractType implements ComponentInterface
             }
             $this->handler->connection()->getSchemaBuilder()->table(
                 $tableName,
-                function(Blueprint $table) use ($self) {
+                function (Blueprint $table) use ($self) {
                     /**
                      * @var ColumnEntity $column
                      */
@@ -442,7 +442,7 @@ abstract class AbstractType implements ComponentInterface
         }
         $this->handler->connection()->getSchemaBuilder()->table(
             $tableName,
-            function(Blueprint $table) use ($self) {
+            function (Blueprint $table) use ($self) {
                 /**
                  * @var ColumnEntity $column
                  */
@@ -465,7 +465,7 @@ abstract class AbstractType implements ComponentInterface
             }
             $this->handler->connection()->getSchemaBuilder()->table(
                 $tableName,
-                function(Blueprint $table) use ($self) {
+                function (Blueprint $table) use ($self) {
                     /**
                      * @var ColumnEntity $column
                      */
@@ -568,8 +568,7 @@ abstract class AbstractType implements ComponentInterface
         }
 
         if (count($updateParam) > 0) {
-            if (
-                $this->handler->connection()->table($this->handler->getConfigHandler()->getTableName($config))
+            if ($this->handler->connection()->table($this->handler->getConfigHandler()->getTableName($config))
                     ->where('dynamicFieldTargetId', '=', $where['id'])->first() != null
             ) {
                 $this->handler->connection()->table($this->handler->getConfigHandler()->getTableName($config))

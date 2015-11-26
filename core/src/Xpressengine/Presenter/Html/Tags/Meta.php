@@ -93,6 +93,11 @@ class Meta
         static::$unloaded = [];
     }
 
+    /**
+     * Meta constructor.
+     *
+     * @param string|null $alias alias
+     */
     public function __construct($alias = null)
     {
         if ($alias === null) {

@@ -167,7 +167,7 @@ class DocumentEntity implements AssociateInterface
     public function __construct(array $attributes = [])
     {
         // DocumentEntity 는 array, object 를 attribute 로 갖지 않는다.
-        $attributes = array_filter($attributes, function($item) {
+        $attributes = array_filter($attributes, function ($item) {
             if (!is_array($item) && !is_object($item)) {
                 return true;
             }
@@ -208,7 +208,7 @@ class DocumentEntity implements AssociateInterface
             $this->setContentMode($contentMode);
         }
 
-        switch($this->contentMode) {
+        switch ($this->contentMode) {
             case self::CONTENT_NO_HTML:
                 return $this->contentNoHtml();
             case self::CONTENT_HTML:
