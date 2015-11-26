@@ -16,7 +16,7 @@ Laravel 은 가장 모던한 php 프레임워크중 하나로 전세계 php 프�
 * [Laravel Documentation (Korean)](http://xpressengine.github.io/laravel-korean-docs/)
 
 ## 서버 필요사항
-* PHP version 5.5.9 greater 
+* PHP version 5.5.9 이상 
 * OpenSSL PHP Extension
 * PDO PHP Extension
 * Mbstring PHP Extension
@@ -32,13 +32,13 @@ XE3을 설치하기 위해서는 다음의 가이드를 참고하십시오. [인
 ## 기여자
 http://xpressengine.io/contributors
 
-## 매뉴얼
-* Documentation Site (Korean) : http://xpressengine.io/docs/
+## 매뉴얼                                                                   
+* 한글 매뉴얼 : http://xpressengine.io/docs/
 
 ## 지원
-* Official site (Korean) : http://xpressengine.io/
-* Official Forum : http://xpressengine.io/qna/
-* Slack : https://xpressengine-forum-invite.herokuapp.com/
+* 공식 사이트 : http://xpressengine.io/
+* 공식 포럼 : http://xpressengine.io/qna/
+* 슬랙 : https://xpressengine-forum-invite.herokuapp.com/
 
 ## 라이센스
 Copyright 2015 NAVER Corp. <http://www.navercorp.com>
