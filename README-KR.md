@@ -3,44 +3,44 @@ XpressEngine 3
 
 [![License](http://img.shields.io/badge/license-GNU%20LGPL-brightgreen.svg)](http://www.gnu.org/licenses/gpl.html) [![Build Status](https://scrutinizer-ci.com/g/xpressengine/xpressengine/badges/build.png?b=master)](https://scrutinizer-ci.com/g/xpressengine/xpressengine/build-status/master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/xpressengine/xpressengine/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/xpressengine/xpressengine/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/xpressengine/xpressengine/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/xpressengine/xpressengine/?branch=master)
 
-XpressEngine3(XE3) is a service friendly CMS based on a Laravel framework. It provides quick feedback and flexible expansion through various bundle systems. With XE3, you can create the future of the web. 
+XpressEngine3(XE3)은 Laravel framework 기반의 서비스 친화적인 CMS(Content Management System)입니다. 다양한 번들 시스템으로 손쉽게 사용할 수 있으며, 사용자들을 위한 빠른 피드백을 제공하고 유연한 확장성을 가지고 있습니다. 지금 XE3와 함께 웹의 미래를 만들어가세요.
 
-## Based on ModernPHP
-XE3 is based on a modern PHP including Composer. It provides autoloading through PSR and a well tested code base. For more information, please refer to the manual. 
+## ModernPHP 를 지향 합니다
+XE3 은 Composer를 비롯한 Modern 한 PHP를 기반으로 하고 있습니다. PSR을 통한 Autoloading 과 잘 테스팅된 코드 베이스를 지니고 있습니다. Composer 에 대한 보다 자세한 사항은 한글 메뉴얼을 참고하시면 도움이 됩니다. 
 
 * [Composer Documentation (Korean)](http://xpressengine.github.io/Composer-korean-docs/)
 
-## Top of Laravel Framework
-Laravel is one of the most modern PHP frameworks and the most popular among them. It has a flexible structure as well as an abundance of verified sources. Basing itself on the Laravel framework, XE3 provides all Laravel functions along with independent CMS functions. For more information, please refer to the manual. 
+## Laravel Framework 를 기반으로 합니다.
+Laravel 은 가장 모던한 php 프레임워크중 하나로 전세계 php 프레임워크 중에 가장 인기있는 프레임워크입니다. 유연한 구조와, 검증된 소스들이 많이 있습니다. Laravel 프레임워크를 기반으로한 XE3 에서는 라라벨의 모든 기능과 자체적인 CMS 기능 모두가 활용 가능합니다. Laravel 에 대한 보다 자세한 사항은 한글 메뉴얼을 참고하시면 도움이 됩니다. 
 
 * [Laravel Documentation (Korean)](http://xpressengine.github.io/laravel-korean-docs/)
 
-## Server Requirements
+## 서버 필요사항
 * PHP version 5.5.9 greater 
 * OpenSSL PHP Extension
 * PDO PHP Extension
 * Mbstring PHP Extension
 * Tokenizer PHP Extension
 
-## Getting Started
+## XE3 설치하기
 
-To install XE3, refer to the following guide. [Install guide](http://xpressengine.io/docs/3.0/install)
+XE3을 설치하기 위해서는 다음의 가이드를 참고하십시오. [인스톨 가이드](http://xpressengine.io/docs/3.0/install)
 
-## Maintainers
+## Xehub 커뮤니티 개발자
 @akasima @bnu @findstar @jhyeon1010 @khongchi @ngleader
 
-## Contributors
+## 기여자
 http://xpressengine.io/contributors
 
-## Documentation
+## 매뉴얼
 * Documentation Site (Korean) : http://xpressengine.io/docs/
 
-## Support
+## 지원
 * Official site (Korean) : http://xpressengine.io/
 * Official Forum : http://xpressengine.io/qna/
 * Slack : https://xpressengine-forum-invite.herokuapp.com/
 
-## License
+## 라이센스
 Copyright 2015 NAVER Corp. <http://www.navercorp.com>
 
 This program is free software; you can redistribute it and/or
@@ -57,5 +57,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  usage
 
-## Powered By
+## Powered By 
 * Naver D2 : http://d2.naver.com/
