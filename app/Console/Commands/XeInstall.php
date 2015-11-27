@@ -662,6 +662,8 @@ MAIL_FROM_NAME=null";
         $memberHandler = app('xe.member');
         $admin = $memberHandler->create($config);
 
+        $this->env = file_get_contents($this->getBasePath('.env'));
+
         $this->setEnv('MAIL_FROM_ADDRESS', $config['email'], 'null');
         $this->setEnv('MAIL_FROM_NAME', $config['displayName'], 'null');
         $this->writeEnvFile();
