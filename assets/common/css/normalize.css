@@ -429,6 +429,7 @@ th {
 body,div,p,h1,h2,h3,h4,h5,h6,ul,ol,li,dl,dt,dd,table,th,td,form,fieldset,legend,input,textare,a,button,select{margin:0;padding:0;-webkit-text-size-adjust:none;}
 img{vertical-align: top}
 em{font-style: normal}
+.__xe_contents_compiler em{font-style: italic}
 a{text-decoration:none;color:#2c8beb}
 a:hover,a:active,a:focus{color:#085daa;text-decoration:none;outline:none}
 .skip > a{position:relative;overflow:hidden;display:block;height:0;line-height:28px;background-color:#fff;text-align:center;z-index:1000}
