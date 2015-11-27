@@ -190,7 +190,10 @@ MAIL_HOST=mailtrap.io
 MAIL_PORT=2525
 MAIL_USERNAME=null
 MAIL_PASSWORD=null
-MAIL_ENCRYPTION=null";
+MAIL_ENCRYPTION=null
+
+MAIL_FROM_ADDRESS=null
+MAIL_FROM_NAME=null";
     }
 
     /**
@@ -658,6 +661,10 @@ MAIL_ENCRYPTION=null";
         /** @var MemberHandler $memberHandler */
         $memberHandler = app('xe.member');
         $admin = $memberHandler->create($config);
+
+        $this->setEnv('MAIL_FROM_ADDRESS', $config['email'], 'null');
+        $this->setEnv('MAIL_FROM_NAME', $config['displayName'], 'null');
+        $this->writeEnvFile();
 
         // login admin
         /** @var Guard $auth */
