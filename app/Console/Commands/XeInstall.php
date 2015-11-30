@@ -5,7 +5,9 @@ use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Symfony\Component\Console\Question\Question;
 use PDO;
+use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
+use Symfony\Component\Process\ProcessUtils;
 use Xpressengine\Member\MemberHandler;
 use Illuminate\Contracts\Auth\Guard;
 use Xpressengine\Support\Migration;
@@ -577,17 +579,25 @@ MAIL_FROM_NAME=null";
     }
 
     /**
-     * findComposer
+     * Illuminate\Foundation\Composer
+     *
+     * Get the composer command for the environment.
      *
      * @return string
      */
     protected function findComposer()
     {
-        if (file_exists(getcwd().'/composer.phar')) {
-            return '"'.PHP_BINARY.'" composer.phar';
+        if (!file_exists($this->getBasePath('composer.phar'))) {
+            return 'composer';
         }
 
-        return 'composer';
+        $binary = ProcessUtils::escapeArgument((new PhpExecutableFinder)->find(false));
+
+        if (defined('HHVM_VERSION')) {
+            $binary .= ' --php';
+        }
+
+        return "{$binary} composer.phar";
     }
 
     /**
