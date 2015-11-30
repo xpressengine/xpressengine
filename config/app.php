@@ -107,7 +107,90 @@ return [
     | this array to grant expanded functionality to your applications.
     |
     */
-    'providers' => include(__DIR__.'/providers.php'),
+    'providers' => [
+        /*
+         * Laravel Framework Service Providers...
+         */
+        Illuminate\Foundation\Providers\ArtisanServiceProvider::class,
+        Illuminate\Auth\AuthServiceProvider::class,
+        Illuminate\Broadcasting\BroadcastServiceProvider::class,
+        Illuminate\Bus\BusServiceProvider::class,
+        Illuminate\Cache\CacheServiceProvider::class,
+        Illuminate\Foundation\Providers\ConsoleSupportServiceProvider::class,
+        Illuminate\Routing\ControllerServiceProvider::class,
+        Illuminate\Cookie\CookieServiceProvider::class,
+        Illuminate\Database\DatabaseServiceProvider::class,
+        Illuminate\Encryption\EncryptionServiceProvider::class,
+        Illuminate\Filesystem\FilesystemServiceProvider::class,
+        Illuminate\Foundation\Providers\FoundationServiceProvider::class,
+        Illuminate\Hashing\HashServiceProvider::class,
+        Illuminate\Mail\MailServiceProvider::class,
+        Illuminate\Pagination\PaginationServiceProvider::class,
+        Illuminate\Pipeline\PipelineServiceProvider::class,
+        Illuminate\Queue\QueueServiceProvider::class,
+        Illuminate\Redis\RedisServiceProvider::class,
+        Illuminate\Session\SessionServiceProvider::class,
+        Illuminate\Translation\TranslationServiceProvider::class,
+        Illuminate\Validation\ValidationServiceProvider::class,
+        Illuminate\View\ViewServiceProvider::class,
+
+        Jenssegers\Agent\AgentServiceProvider::class,
+
+        /*
+         * Application Service Providers...
+         */
+        App\Providers\AppServiceProvider::class,
+        App\Providers\AuthServiceProvider::class,
+        App\Providers\EventServiceProvider::class,
+        App\Providers\RouteServiceProvider::class,
+        App\Providers\MobileServiceProvider::class,
+        App\Providers\HttpServiceProvider::class,
+
+        App\Providers\InterceptionServiceProvider::class,
+        App\Providers\PluginServiceProvider::class,
+        App\Providers\UIObjectServiceProvider::class,
+        App\Providers\ThemeServiceProvider::class,
+        App\Providers\SkinServiceProvider::class,
+        App\Providers\SettingsServiceProvider::class,
+        App\Providers\RegisterServiceProvider::class,
+
+        App\Providers\RoutingServiceProvider::class,
+        App\Providers\MenuServiceProvider::class,
+        App\Providers\ModuleServiceProvider::class,
+        App\Providers\ConfigServiceProvider::class,
+        App\Providers\DocumentServiceProvider::class,
+        App\Providers\DatabaseServiceProvider::class,
+        App\Providers\DynamicFieldServiceProvider::class,
+        App\Providers\KeygenServiceProvider::class,
+
+        App\Providers\MemberServiceProvider::class,
+        App\Providers\StorageServiceProvider::class,
+        App\Providers\MediaServiceProvider::class,
+        App\Providers\PermissionServiceProvider::class,
+        App\Providers\CommentServiceProvider::class,
+
+        App\Providers\PresenterServiceProvider::class,
+
+        App\Providers\CategoryServiceProvider::class,
+        App\Providers\CaptchaServiceProvider::class,
+        App\Providers\WidgetServiceProvider::class,
+
+        App\Providers\CounterServiceProvider::class,
+        App\Providers\TagServiceProvider::class,
+
+        App\Providers\ToggleMenuServiceProvider::class,
+        App\Providers\TemporaryServiceProvider::class,
+
+        App\Providers\TrashServiceProvider::class,
+
+        App\Providers\TranslationServiceProvider::class,
+
+        App\Providers\SeoServiceProvider::class,
+
+        App\Providers\SiteServiceProvider::class,
+
+        App\Providers\PurifierServiceProvider::class,
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -120,5 +203,76 @@ return [
     |
     */
 
-    'aliases' => include(__DIR__.'/aliases.php'),
+    'aliases' => [
+        'App'       => Illuminate\Support\Facades\App::class,
+        'Artisan'   => Illuminate\Support\Facades\Artisan::class,
+        'Auth'      => Illuminate\Support\Facades\Auth::class,
+        'Blade'     => Illuminate\Support\Facades\Blade::class,
+        'Bus'       => Illuminate\Support\Facades\Bus::class,
+        'Cache'     => Illuminate\Support\Facades\Cache::class,
+        'Config'    => Illuminate\Support\Facades\Config::class,
+        'Cookie'    => Illuminate\Support\Facades\Cookie::class,
+        'Crypt'     => Illuminate\Support\Facades\Crypt::class,
+        'DB'        => Illuminate\Support\Facades\DB::class,
+        'Eloquent'  => Illuminate\Database\Eloquent\Model::class,
+        'Event'     => Illuminate\Support\Facades\Event::class,
+        'File'      => Illuminate\Support\Facades\File::class,
+        'Gate'      => Illuminate\Support\Facades\Gate::class,
+        'Hash'      => Illuminate\Support\Facades\Hash::class,
+        'Input'     => Illuminate\Support\Facades\Input::class,
+        'Inspiring' => Illuminate\Foundation\Inspiring::class,
+        'Lang'      => Illuminate\Support\Facades\Lang::class,
+        'Log'       => Illuminate\Support\Facades\Log::class,
+        'Mail'      => Illuminate\Support\Facades\Mail::class,
+        'Password'  => Illuminate\Support\Facades\Password::class,
+        'Queue'     => Illuminate\Support\Facades\Queue::class,
+        'Redirect'  => Illuminate\Support\Facades\Redirect::class,
+        'Redis'     => Illuminate\Support\Facades\Redis::class,
+        'Request'   => Illuminate\Support\Facades\Request::class,
+        'Response'  => Illuminate\Support\Facades\Response::class,
+        'Route'     => Illuminate\Support\Facades\Route::class,
+        'Schema'    => Illuminate\Support\Facades\Schema::class,
+        'Session'   => Illuminate\Support\Facades\Session::class,
+        //'Storage'   => Illuminate\Support\Facades\Storage::class,
+        'URL'       => Illuminate\Support\Facades\URL::class,
+        'Validator' => Illuminate\Support\Facades\Validator::class,
+        'View'      => Illuminate\Support\Facades\View::class,
+
+        'Agent' => Jenssegers\Agent\Facades\Agent::class,
+
+        'Member' => App\Facades\Member::class,
+        'Group' => App\Facades\Group::class,
+        'Plugin' => App\Facades\Plugin::class,
+        'Interception' => App\Facades\Interception::class,
+        'UI' => App\Facades\UI::class,
+        'Theme' => App\Facades\Theme::class,
+        'Skin' => App\Facades\Skin::class,
+        'Register' => App\Facades\Register::class,
+        'Settings' => App\Facades\Settings::class,
+        'Menu' => App\Facades\Menu::class,
+        'Module' => App\Facades\Module::class,
+        'Cfg' => App\Facades\Config::class,
+        'Storage' => App\Facades\Storage::class,
+        'Site'      => App\Facades\Site::class,
+
+        'Presenter' => App\Facades\Presenter::class,
+        'Frontend' => App\Facades\Frontend::class,
+        'DynamicField' => App\Facades\DynamicField::class,
+        'XeDB' => App\Facades\XeDB::class,
+        'Document' => App\Facades\Document::class,
+
+        'Comment' => App\Facades\Comment::class,
+        'Category' => App\Facades\Category::class,
+        'Widget' => App\Facades\Widget::class,
+        'Counter' => App\Facades\Counter::class,
+        'Tag' => App\Facades\Tag::class,
+        'ToggleMenu' => App\Facades\ToggleMenu::class,
+        'Temporary' => App\Facades\Temporary::class,
+        'Trash' => App\Facades\Trash::class,
+        'Permission' => App\Facades\Permission::class,
+        'Media' => App\Facades\Media::class,
+
+        'XeLang' => App\Facades\Lang::class,
+        'SEO' => App\Facades\SEO::class,
+    ],
 ];

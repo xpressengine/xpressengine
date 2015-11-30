@@ -7,6 +7,23 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
+
+	/**
+	 * The bootstrap classes for the application.
+	 *
+	 * @var array
+	 */
+	protected $bootstrappers = [
+			'Illuminate\Foundation\Bootstrap\DetectEnvironment',
+			'App\Bootstrappers\LoadConfiguration',
+			'Illuminate\Foundation\Bootstrap\ConfigureLogging',
+			'Illuminate\Foundation\Bootstrap\HandleExceptions',
+			'Illuminate\Foundation\Bootstrap\RegisterFacades',
+			'Illuminate\Foundation\Bootstrap\SetRequestForConsole',
+			'Illuminate\Foundation\Bootstrap\RegisterProviders',
+			'Illuminate\Foundation\Bootstrap\BootProviders',
+	];
+
 	/**
 	 * The Artisan commands provided by your application.
 	 *
