@@ -94,7 +94,7 @@ class Kernel extends ConsoleKernel
      */
 	protected function resetProviders()
 	{
-        $this->app['events']->listen('bootstrapped: Illuminate\Foundation\Bootstrap\LoadConfiguration', function ($app) {
+        $this->app['events']->listen('bootstrapped: App\Bootstrappers\LoadConfiguration', function ($app) {
             $config = $app['config'];
 
             $providers = $config['app.providers'];
