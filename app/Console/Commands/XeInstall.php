@@ -2,7 +2,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Filesystem\Filesystem;
 use Symfony\Component\Console\Question\Question;
 use PDO;
 use Symfony\Component\Process\PhpExecutableFinder;
@@ -171,31 +171,9 @@ class XeInstall extends Command
      */
     protected function getDefaultEnv()
     {
-        return "APP_ENV=local
+        return "APP_ENV=cms
 APP_DEBUG=true
-APP_KEY=SomeRandomString
-APP_URL=http://localhost
-APP_TIMEZONE=Asia/Seoul
-
-DB_HOST=localhost
-DB_DATABASE=homestead
-DB_USERNAME=homestead
-DB_PASSWORD=secret
-DB_PORT=3306
-
-CACHE_DRIVER=file
-SESSION_DRIVER=file
-QUEUE_DRIVER=sync
-
-MAIL_DRIVER=smtp
-MAIL_HOST=mailtrap.io
-MAIL_PORT=2525
-MAIL_USERNAME=null
-MAIL_PASSWORD=null
-MAIL_ENCRYPTION=null
-
-MAIL_FROM_ADDRESS=null
-MAIL_FROM_NAME=null";
+APP_KEY=SomeRandomString";
     }
 
     /**
@@ -339,27 +317,74 @@ MAIL_FROM_NAME=null";
      */
     private function setDBInfo($dbInfo)
     {
-
-        $defaults = [
-            'DB_HOST' => 'localhost',
-            'DB_PORT' => '3306',
-            'DB_DATABASE' => 'homestead',
-            'DB_USERNAME' => 'homestead',
-            'DB_PASSWORD' => 'secret',
+        $info = [
+            'connections' => [
+                'mysql' => [
+                    'driver'    => 'mysql',
+                    'host'      => $dbInfo['host'],
+                    'database'  => $dbInfo['dbname'],
+                    'username'  => $dbInfo['username'],
+                    'password'  => $dbInfo['password'],
+                    'port'      => $dbInfo['port'],
+                    'charset'   => 'utf8',
+                    'collation' => 'utf8_unicode_ci',
+                    'prefix' => 'xe_',
+                    'strict'    => false,
+                ],
+            ]
         ];
 
-        $values = [
-            'DB_HOST' => $dbInfo['host'],
-            'DB_PORT' => $dbInfo['port'],
-            'DB_DATABASE' => $dbInfo['dbname'],
-            'DB_USERNAME' => $dbInfo['username'],
-            'DB_PASSWORD' => $dbInfo['password'],
-        ];
-
-        foreach ($values as $key => $value) {
-            $this->setEnv($key, $value, $defaults[$key]);
-        }
+        $this->configFileGenerate('database', $info);
     }
+
+    private function configFileGenerate($key, array $data)
+    {
+        $dir = config_path() . '/cms';
+        $this->makeDir($dir);
+
+        $data = $this->encodeArr2Str($data);
+
+        $file = $dir . "/{$key}.php";
+        file_put_contents($file, '<?php' . str_repeat(PHP_EOL, 2) . 'return [' . PHP_EOL . $data . '];' . PHP_EOL);
+    }
+
+    private function makeDir($dir)
+    {
+        /** @var Filesystem $filesystem */
+        $filesystem = app('files');
+        if (!$filesystem->isDirectory($dir)) {
+            return $filesystem->makeDirectory($dir);
+        }
+
+        return true;
+    }
+
+    private function encodeArr2Str(array $arr, $depth = 0)
+    {
+        $output = '';
+
+        foreach ($arr as $key => $val) {
+            if (is_array($val)) {
+                $output .= $this->getIndent($depth) . "'{$key}' => " . '[' . PHP_EOL . $this->encodeArr2Str($val, $depth + 1) . $this->getIndent($depth) . '],' . PHP_EOL;
+            } else {
+                $output .= $this->getIndent($depth) . "'{$key}' => " . (is_int($val) ? $val : "'{$val}'") .',' . PHP_EOL;
+            }
+        }
+
+        return $output;
+    }
+
+    private function getIndent($depth)
+    {
+        $indent = '';
+        for ($a = 0; $a <= $depth; $a++) {
+            $indent .= str_repeat(' ', 4);
+        }
+
+        return $indent;
+    }
+
+
 
     /**
      * setEnv
@@ -422,8 +447,12 @@ MAIL_FROM_NAME=null";
      */
     private function setSiteInfo($siteInfo)
     {
-        $this->setEnv('APP_URL', $siteInfo['url'], 'http://localhost');
-        $this->setEnv('APP_TIMEZONE', $siteInfo['timezone'], 'Asia/Seoul');
+        $info = [
+            'url' => $siteInfo['url'],
+            'timezone' => $siteInfo['timezone'],
+        ];
+
+        $this->configFileGenerate('app', $info);
     }
 
     /**
@@ -672,11 +701,14 @@ MAIL_FROM_NAME=null";
         $memberHandler = app('xe.member');
         $admin = $memberHandler->create($config);
 
-        $this->env = file_get_contents($this->getBasePath('.env'));
-
-        $this->setEnv('MAIL_FROM_ADDRESS', $config['email'], 'null');
-        $this->setEnv('MAIL_FROM_NAME', $config['displayName'], 'null');
-        $this->writeEnvFile();
+        // create mail config
+        $info = [
+            'from' => [
+                'address' => $config['email'],
+                'name' => $config['displayName']
+            ],
+        ];
+        $this->configFileGenerate('mail', $info);
 
         // login admin
         /** @var Guard $auth */
