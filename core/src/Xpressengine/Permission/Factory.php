@@ -17,10 +17,11 @@ use Closure;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Routing\RouteCollection;
 use Xpressengine\Member\Entities\MemberEntityInterface;
+use Xpressengine\Permission\Exceptions\NoParentException;
 use Xpressengine\Permission\Permissions\RoutePermission;
 use Xpressengine\Permission\Permissions\InstancePermission;
 use Xpressengine\Permission\Exceptions\InvalidArgumentException;
-use Xpressengine\Permission\Exceptions\NotMatchedInstanceException;
+use Xpressengine\Permission\Exceptions\WrongInstanceException;
 
 /**
  * # Factory
@@ -131,14 +132,14 @@ class Factory
      * @param MemberEntityInterface $user    user instance
      * @param string                $siteKey site key
      * @return Permission
-     * @throws NotMatchedInstanceException
+     * @throws WrongInstanceException
      */
     public function make($type, $target, MemberEntityInterface $user = null, $siteKey = 'default')
     {
         $permission = $this->resolve($type, $target, $user, $siteKey);
 
         if ($permission instanceof Permission === false) {
-            throw new NotMatchedInstanceException(['type' => $type]);
+            throw new WrongInstanceException();
         }
 
         return $permission;
@@ -178,7 +179,7 @@ class Factory
                 break;
         }
 
-        throw new InvalidArgumentException(['name' => 'type', 'value' => $type]);
+        throw new InvalidArgumentException(['arg' => $type]);
     }
 
     /**
@@ -188,7 +189,7 @@ class Factory
      * @param MemberEntityInterface $user    user instance
      * @param string                $siteKey site key
      * @return Permission[]
-     * @throws NotMatchedInstanceException
+     * @throws WrongInstanceException
      */
     public function makesByType($type, MemberEntityInterface $user = null, $siteKey = 'default')
     {
@@ -224,7 +225,7 @@ class Factory
             if (isset($this->extends[$type]) === true) {
                 $permission = $this->extends[$type]($registered->name, $user, $registered);
                 if ($permission instanceof Permission === false) {
-                    throw new NotMatchedInstanceException(['type' => $type]);
+                    throw new WrongInstanceException();
                 }
                 $permissions[$registered->name] = $permission;
             } else {
@@ -394,6 +395,7 @@ class Factory
      *
      * @return void
      * @throws InvalidArgumentException
+     * @throws NoParentException
      */
     public function move(Registered $registered, $to = null)
     {
@@ -401,14 +403,14 @@ class Factory
 
         if (($to !== null && $toParent === null)
             || ($toParent !== null && $registered->type != $toParent->type)) {
-            throw new InvalidArgumentException();
+            throw new InvalidArgumentException(['arg' => $to]);
         }
 
         $parent = $registered->getParent();
 
         if ($parent === null) {
             if ($registered->getDepth() !== 1) {
-                throw new InvalidArgumentException();
+                throw new NoParentException();
             }
 
             $this->repo->affiliate($registered, $to);

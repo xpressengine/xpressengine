@@ -27,5 +27,5 @@ use Xpressengine\Config\Exception;
  */
 class ValidationException extends Exception
 {
-
+    protected $message = '유효성 검사 실패 [:message]';
 }

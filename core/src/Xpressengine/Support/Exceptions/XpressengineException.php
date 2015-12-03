@@ -46,7 +46,10 @@ class XpressengineException extends RuntimeException
     public function __construct(array $args = [], $code = 0, Exception $previous = null)
     {
         $this->args = $args;
-        parent::__construct($this->message, $code, $previous);
+
+        $message = $this->makeMessage();
+
+        parent::__construct($message, $code, $previous);
     }
 
     /**
@@ -77,5 +80,28 @@ class XpressengineException extends RuntimeException
     public function getArgs()
     {
         return $this->args;
+    }
+
+    /**
+     * 주어진 argument를 기반으로 message를 완성하여 반환한다.
+     *
+     * @return string 완성된 message
+     */
+    protected function makeMessage()
+    {
+        // sort key, longer key is first.
+        krsort($this->args);
+
+        // prepend ":" to each key
+        $keys = array_map(
+            function ($key) {
+                return ':'.$key;
+            },
+            array_keys($this->args)
+        );
+
+        $this->message = str_replace($keys, $this->args, $this->message);
+
+        return $this->message;
     }
 }

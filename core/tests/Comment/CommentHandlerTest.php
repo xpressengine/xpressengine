@@ -35,7 +35,7 @@ class CommentHandlerTest extends \PHPUnit_Framework_TestCase
 
             $this->assertTrue(false);
         } catch (\Exception $e) {
-            $this->assertInstanceOf('Xpressengine\Comment\Exceptions\NotConfigurationException', $e);
+            $this->assertInstanceOf('Xpressengine\Comment\Exceptions\NotConfiguredException', $e);
         }
     }
 
@@ -264,7 +264,7 @@ class CommentHandlerTest extends \PHPUnit_Framework_TestCase
 
             $this->assertTrue(false);
         } catch (\Exception $e) {
-            $this->assertInstanceOf('Xpressengine\Comment\Exceptions\UnknownIdentifierException', $e);
+            $this->assertInstanceOf('Xpressengine\Comment\Exceptions\InvalidObjectException', $e);
         }
     }
 
@@ -435,7 +435,7 @@ class CommentHandlerTest extends \PHPUnit_Framework_TestCase
 
             $this->assertTrue(false);
         } catch (\Exception $e) {
-            $this->assertInstanceOf('Xpressengine\Comment\Exceptions\NotConfigurationException', $e);
+            $this->assertInstanceOf('Xpressengine\Comment\Exceptions\NotConfiguredException', $e);
         }
     }
 

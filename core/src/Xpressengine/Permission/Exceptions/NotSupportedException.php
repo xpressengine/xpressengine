@@ -27,18 +27,5 @@ use Xpressengine\Permission\Exception;
  */
 class NotSupportedException extends Exception
 {
-    /**
-     * constructor
-     *
-     * @param array     $args     arguments
-     * @param string    $message  message string
-     * @param int       $code     error code
-     * @param Exception $previous previous exception
-     */
-    public function __construct($args = [], $message = "", $code = 0, Exception $previous = null)
-    {
-        if (isset($args['action']) === true) {
-            $this->message = sprintf('Not supported action [%s]', $args['action']);
-        }
-    }
+    protected $message = '":name" 은 지원되지 않습니다.';
 }

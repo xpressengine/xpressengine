@@ -27,5 +27,5 @@ use Xpressengine\Media\Exception;
  */
 class NotAvailableException extends Exception
 {
-
+    protected $message = '사용할 수 없는 파일입니다.';
 }

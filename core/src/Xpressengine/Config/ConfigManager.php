@@ -14,7 +14,10 @@
 namespace Xpressengine\Config;
 
 use Closure;
+use Xpressengine\Config\Exceptions\DuplicateException;
 use Xpressengine\Config\Exceptions\InvalidArgumentException;
+use Xpressengine\Config\Exceptions\NoParentException;
+use Xpressengine\Config\Exceptions\NotExistsException;
 use Xpressengine\Config\Exceptions\ValidationException;
 use Xpressengine\Config\Repositories\RepositoryInterface;
 
@@ -130,12 +133,12 @@ class ConfigManager
      * @param array  $collection entity value list
      * @param string $siteKey    site key
      * @return ConfigEntity
-     * @throws InvalidArgumentException
+     * @throws DuplicateException
      */
     public function add($group, array $collection, $siteKey = 'default')
     {
         if ($this->repo->find($siteKey, $group) !== null) {
-            throw new InvalidArgumentException("'{$group}' is already exists");
+            throw new DuplicateException(['name' => $group]);
         }
 
         $config = new ConfigEntity();
@@ -291,12 +294,12 @@ class ConfigManager
      * @param callable $filter     filter function
      * @param string   $siteKey    site key
      * @return ConfigEntity
-     * @throws InvalidArgumentException
+     * @throws NotExistsException
      */
     public function put($group, array $collection, $toDesc = false, callable $filter = null, $siteKey = 'default')
     {
         if (!$config = $this->get($group, false, $siteKey)) {
-            throw new InvalidArgumentException("Configure '{$group}' is not exists");
+            throw new NotExistsException(['name' => $group]);
         }
 
         $config->clear();
@@ -318,12 +321,12 @@ class ConfigManager
      *
      * @param ConfigEntity $config config entity instance
      * @return ConfigEntity
-     * @throws InvalidArgumentException
+     * @throws NotExistsException
      */
     public function modify(ConfigEntity $config)
     {
         if ($this->get($config->name, false, $config->siteKey) === null) {
-            throw new InvalidArgumentException(sprintf('Config [%s] not exists', $config->name));
+            throw new NotExistsException(['name' => $config->name]);
         }
 
         return $this->build($this->repo->save($config));
@@ -479,7 +482,7 @@ class ConfigManager
         $group = implode('.', $depths);
 
         if (empty($item) || empty($group)) {
-            throw new InvalidArgumentException("'{$key}' is Wrong Argument");
+            throw new InvalidArgumentException(['arg' => $key]);
         }
 
         return [$group, $item];
@@ -518,7 +521,7 @@ class ConfigManager
         $validator = $this->validator->validate($config);
 
         if ($validator->fails()) {
-            throw new ValidationException($validator->messages()->first());
+            throw new ValidationException(['message' => $validator->messages()->first()]);
         }
     }
 
@@ -556,18 +559,19 @@ class ConfigManager
      * @param string|null  $to     parent name
      * @return ConfigEntity
      * @throws InvalidArgumentException
+     * @throws NoParentException
      */
     public function move(ConfigEntity $config, $to = null)
     {
         if ($to !== null && $this->repo->find($config->siteKey, $to) === null) {
-            throw new InvalidArgumentException();
+            throw new InvalidArgumentException(['arg' => $to]);
         }
 
         $parent = $config->getParent();
 
         if ($parent === null) {
             if ($config->getDepth() !== 1) {
-                throw new InvalidArgumentException();
+                throw new NoParentException();
             }
 
             $this->repo->affiliate($config, $to);

@@ -16,7 +16,7 @@ namespace Xpressengine\Storage;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Xpressengine\Member\GuardInterface as Authenticator;
 use Xpressengine\Storage\Exceptions\InvalidFileException;
-use Xpressengine\Storage\Exceptions\NotExistsException;
+use Xpressengine\Storage\Exceptions\FileDoesNotExistException;
 use Xpressengine\Keygen\Keygen;
 
 /**
@@ -166,7 +166,7 @@ class Storage
     public function upload(UploadedFile $uploaded, $path, $name = null, $disk = null)
     {
         if ($uploaded->isValid() === false) {
-            throw new InvalidFileException('Not uploading possible file [' . $uploaded->getClientOriginalName() . ']');
+            throw new InvalidFileException();
         }
 
         $name = $name ?: $this->makeFilename($uploaded->getClientOriginalName());
@@ -217,12 +217,12 @@ class Storage
      * @param File        $file file instance
      * @param string|null $name name of be downloaded file
      * @return void
-     * @throws NotExistsException
+     * @throws FileDoesNotExistException
      */
     public function download(File $file, $name = null)
     {
         if ($this->files->exists($file) === false) {
-            throw new NotExistsException(sprintf("Not exists file '%s'[%s]", $file->clientname, $file->id));
+            throw new FileDoesNotExistException();
         }
 
         $file->downloadCount++;

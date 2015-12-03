@@ -42,6 +42,6 @@ class CommandFactory
             return new $class();
         }
 
-        throw new UnknownCommandException();
+        throw new UnknownCommandException(['name' => $type]);
     }
 }

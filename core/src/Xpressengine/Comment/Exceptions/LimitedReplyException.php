@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is already division table exists exception
+ * This file is reply limitation exception
  *
  * PHP version 5
  *
@@ -16,7 +16,7 @@ namespace Xpressengine\Comment\Exceptions;
 use Xpressengine\Comment\Exception;
 
 /**
- * 생성하려는 division table 이 이미 존재할 경우 발생
+ * 자식노드가 더이상 생성될수 없는 경우
  *
  * @category    Comment
  * @package     Xpressengine\Comment
@@ -25,18 +25,7 @@ use Xpressengine\Comment\Exception;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class AlreadyExistsTableException extends Exception
+class LimitedReplyException extends Exception
 {
-    /**
-     * constructor
-     *
-     * @param string    $table    table name
-     * @param string    $message  error message
-     * @param int       $code     error code
-     * @param Exception $previous previous exception
-     */
-    public function __construct($table, $message = "", $code = 0, Exception $previous = null)
-    {
-        // todo.
-    }
+    protected $message = '자식 객채를 더이상 생성할 수 없습니다.';
 }

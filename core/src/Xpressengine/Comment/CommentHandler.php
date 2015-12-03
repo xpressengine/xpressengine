@@ -14,19 +14,14 @@
 namespace Xpressengine\Comment;
 
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Collection;
 use Xpressengine\Comment\Exceptions\InvalidParentException;
-use Xpressengine\Comment\Exceptions\NotConfigurationException;
-use Xpressengine\Comment\Exceptions\ReplyLimitationException;
-use Xpressengine\Comment\Exceptions\UnknownIdentifierException;
+use Xpressengine\Comment\Exceptions\NotConfiguredException;
+use Xpressengine\Comment\Exceptions\LimitedReplyException;
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Member\GuardInterface as Authenticator;
 use Xpressengine\Member\MemberHandler;
 use Xpressengine\Member\Entities\MemberEntityInterface;
-use Xpressengine\Comment\Exceptions\InvalidArgumentException;
-use Illuminate\Session\Store as SessionStore;
-use Xpressengine\Member\Entities\Guest;
-use Xpressengine\Counter\Counter;
+use Xpressengine\Comment\Exceptions\InvalidObjectException;
 
 /**
  * # CommentHandler
@@ -152,14 +147,14 @@ class CommentHandler
      * @param string $instanceId  instance identifier
      * @param array  $information config information
      * @return void
-     * @throws NotConfigurationException
+     * @throws NotConfiguredException
      */
     public function configure($instanceId, array $information)
     {
         $key = $this->getConfigKey($instanceId);
 
         if (!$config = $this->configs->get($key)) {
-            throw new NotConfigurationException();
+            throw new NotConfiguredException();
         }
 
         $information = array_merge($this->defaultConfig, $information);
@@ -420,13 +415,12 @@ class CommentHandler
      * @param CommentEntity              $comment comment object
      * @param MemberEntityInterface|null $user    user instance
      * @return CommentEntity
-     * @throws InvalidArgumentException
-     * @throws UnknownIdentifierException
+     * @throws InvalidObjectException
      */
     public function add(CommentEntity $comment, MemberEntityInterface $user = null)
     {
         if ($comment->instanceId === null || $comment->targetId === null) {
-            throw new InvalidArgumentException;
+            throw new InvalidObjectException;
         }
 
         if (isset($comment->targetAuthorId)) {
@@ -450,7 +444,7 @@ class CommentHandler
         // for 계층 모델
         if (isset($comment->parentId) === true) {
             if (!$parent = $this->get($comment->parentId)) {
-                throw new UnknownIdentifierException;
+                throw new InvalidObjectException;
             }
 
             $this->setReply($comment, $parent);
@@ -467,7 +461,7 @@ class CommentHandler
      * @param CommentEntity $comment new comment object
      * @param CommentEntity $parent  parent comment object
      * @return void
-     * @throws ReplyLimitationException
+     * @throws LimitedReplyException
      */
     protected function setReply(CommentEntity &$comment, CommentEntity $parent)
     {
@@ -500,7 +494,7 @@ class CommentHandler
      *
      * @param string $prevChars previous child reply code character
      * @return string
-     * @throws ReplyLimitationException
+     * @throws LimitedReplyException
      */
     protected function makeReplyChar($prevChars = null)
     {
@@ -513,7 +507,7 @@ class CommentHandler
 
         if ($prevChars[strlen($prevChars)-1] == end($std)) {
             if (strlen($prevChars) < 2) {
-                throw new ReplyLimitationException;
+                throw new LimitedReplyException;
             }
             reset($std);
             $new = $this->makeReplyChar(substr($prevChars, 0, strlen($prevChars)-1)) . current($std);
@@ -567,7 +561,7 @@ class CommentHandler
      *
      * @param CommentEntity $comment comment instance
      * @return int
-     * @throws NotConfigurationException
+     * @throws NotConfiguredException
      */
     public function trash(CommentEntity $comment)
     {
@@ -588,7 +582,7 @@ class CommentHandler
         } elseif ($config->get('removeType') == 'blind') {
             return $this->repo->softDelete($comment, ['status' => 'trash', 'display' => 'blind']);
         } else {
-            throw new NotConfigurationException();
+            throw new NotConfiguredException();
         }
     }
 

@@ -1,31 +1,31 @@
 <?php
 /**
- * This file is not configuration exception
+ * This file is the exception of not exists item.
  *
  * PHP version 5
  *
- * @category    Comment
- * @package     Xpressengine\Comment
+ * @category    Config
+ * @package     Xpressengine\Config
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Comment\Exceptions;
+namespace Xpressengine\Config\Exceptions;
 
-use Xpressengine\Comment\Exception;
+use Xpressengine\Config\Exception;
 
 /**
- * 설정이 되지 않은 상태에서 사용하려고 하는 경우
+ * 대상이 존재하지 않는 경우
  *
- * @category    Comment
- * @package     Xpressengine\Comment
+ * @category    Config
+ * @package     Xpressengine\Config
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class NotConfigurationException extends Exception
+class NotExistsException extends Exception
 {
-
+    protected $message = '":name" 은 존재하지 않습니다.';
 }

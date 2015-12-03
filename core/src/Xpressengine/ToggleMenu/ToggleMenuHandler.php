@@ -15,7 +15,7 @@ namespace Xpressengine\ToggleMenu;
 
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Plugin\PluginRegister;
-use Xpressengine\ToggleMenu\Exceptions\InvalidClassException;
+use Xpressengine\ToggleMenu\Exceptions\WrongInstanceException;
 
 /**
  * # ToggleMenuHandler
@@ -91,7 +91,7 @@ class ToggleMenuHandler
      * @param string $instanceId instance id
      * @param string $identifier target identifier
      * @return ItemInterface[]
-     * @throws InvalidClassException
+     * @throws WrongInstanceException
      */
     public function getItems($id, $instanceId = null, $identifier = null)
     {
@@ -101,7 +101,7 @@ class ToggleMenuHandler
             $item = new $item($id, $identifier);
 
             if (!$item instanceof ItemInterface) {
-                throw new InvalidClassException();
+                throw new WrongInstanceException();
             }
         }
 

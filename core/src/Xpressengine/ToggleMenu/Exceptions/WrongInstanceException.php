@@ -1,29 +1,31 @@
 <?php
 /**
- * This file is exception for unknown generator call
+ * This file is exception of wrong instance.
  *
  * PHP version 5
  *
- * @category    Keygen
- * @package     Xpressengine\Keygen
+ * @category    ToggleMenu
+ * @package     Xpressengine\ToggleMenu
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Keygen;
+namespace Xpressengine\ToggleMenu\Exceptions;
+
+use Xpressengine\ToggleMenu\Exception;
 
 /**
- * 잘못된 생성자 호출시 발생되는 예외
+ * 메뉴아이템 instance 가 유효하지 않은 경우
  *
- * @category    Keygen
- * @package     Xpressengine\Keygen
+ * @category    ToggleMenu
+ * @package     Xpressengine\ToggleMenu
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class UnknownGeneratorException extends \Exception
+class WrongInstanceException extends Exception
 {
-
+    protected $message = '잘못된 instance 입니다.';
 }

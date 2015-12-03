@@ -1,31 +1,31 @@
 <?php
 /**
- * This file is unknown identifier exception
+ * This file is a exception to file not exists
  *
  * PHP version 5
  *
- * @category    Comment
- * @package     Xpressengine\Comment
+ * @category    Storage
+ * @package     Xpressengine\Storage
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Comment\Exceptions;
+namespace Xpressengine\Storage\Exceptions;
 
-use Xpressengine\Comment\Exception;
+use Xpressengine\Storage\Exception;
 
 /**
- * 알수 없는 id 값이 전달 되어졌을
+ * 파일이 존재하지 않는 경우 발생하는 예외
  *
- * @category    Comment
- * @package     Xpressengine\Comment
+ * @category    Storage
+ * @package     Xpressengine\Storage
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class UnknownIdentifierException extends Exception
+class FileDoesNotExistException extends Exception
 {
-
+    protected $message = '파일이 존재하지 않습니다.';
 }

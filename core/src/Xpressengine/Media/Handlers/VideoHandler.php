@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Media\Handlers;
 
-use Xpressengine\Media\Exceptions\InstanceNotMatchException;
+use Xpressengine\Media\Exceptions\WrongInstanceException;
 use Xpressengine\Media\Exceptions\NotAvailableException;
 use Xpressengine\Media\Extensions\ExtensionInterface;
 use Xpressengine\Media\Meta;
@@ -111,12 +111,12 @@ class VideoHandler extends AbstractHandler
      *
      * @param Media $media media instance
      * @return null|string 이미지 content
-     * @throws InstanceNotMatchException
+     * @throws WrongInstanceException
      */
     public function getPicture(Media $media)
     {
         if (!$media instanceof Video) {
-            throw new InstanceNotMatchException();
+            throw new WrongInstanceException();
         }
 
         // todo: 추출할 시간 정보를 별도로 입력받도록 처리할지?

@@ -95,7 +95,7 @@ class Keygen
      * unique key generator
      *
      * @return string
-     * @throws UnknownGeneratorException
+     * @throws UnknownGeneratorVersionException
      */
     public function generate()
     {
@@ -103,7 +103,7 @@ class Keygen
         $method = 'createIdVersion' . $version;
 
         if (!method_exists($this, $method)) {
-            throw new UnknownGeneratorException("Unknown version [#{$version}]");
+            throw new UnknownGeneratorVersionException(['version' => $version]);
         }
 
         try {

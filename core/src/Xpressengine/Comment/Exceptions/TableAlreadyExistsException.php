@@ -1,31 +1,31 @@
 <?php
 /**
- * This file is invalid menu item class exception.
+ * This file is already division table exists exception
  *
  * PHP version 5
  *
- * @category    ToggleMenu
- * @package     Xpressengine\ToggleMenu
+ * @category    Comment
+ * @package     Xpressengine\Comment
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\ToggleMenu\Exceptions;
+namespace Xpressengine\Comment\Exceptions;
 
-use Xpressengine\ToggleMenu\Exception;
+use Xpressengine\Comment\Exception;
 
 /**
- * 메뉴아이템 class 가 유효하지 않은 경우
+ * 생성하려는 division table 이 이미 존재할 경우 발생
  *
- * @category    ToggleMenu
- * @package     Xpressengine\ToggleMenu
+ * @category    Comment
+ * @package     Xpressengine\Comment
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class InvalidClassException extends Exception
+class TableAlreadyExistsException extends Exception
 {
-
+    protected $message = ':name 은 이미 존재합니다.';
 }

@@ -1,31 +1,31 @@
 <?php
 /**
- * This file is property not exists exception
+ * This file is not configuration exception
  *
  * PHP version 5
  *
- * @category    Media
- * @package     Xpressengine\Media
+ * @category    Comment
+ * @package     Xpressengine\Comment
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Media\Exceptions;
+namespace Xpressengine\Comment\Exceptions;
 
-use Xpressengine\Media\Exception;
+use Xpressengine\Comment\Exception;
 
 /**
- * 필수 property 가 존재하지 않는 경우
+ * 설정이 되지 않은 상태에서 사용하려고 하는 경우
  *
- * @category    Media
- * @package     Xpressengine\Media
+ * @category    Comment
+ * @package     Xpressengine\Comment
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class PropertyNotExistsException extends Exception
+class NotConfiguredException extends Exception
 {
-
+    protected $message = '설정 정보가 없습니다.';
 }

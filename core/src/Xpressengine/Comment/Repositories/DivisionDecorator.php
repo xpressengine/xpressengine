@@ -18,7 +18,7 @@ use Illuminate\Database\Schema\Builder as SchemaBuilder;
 use Xpressengine\Comment\CommentEntity;
 use Xpressengine\Comment\CommentHandler;
 use Xpressengine\Comment\Exception;
-use Xpressengine\Comment\Exceptions\AlreadyExistsTableException;
+use Xpressengine\Comment\Exceptions\TableAlreadyExistsException;
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Comment\Repository;
 use Xpressengine\Database\VirtualConnectionInterface;
@@ -362,13 +362,13 @@ class DivisionDecorator implements Repository
      *
      * @param string $instanceId instance identifier
      * @return void
-     * @throws AlreadyExistsTableException
+     * @throws TableAlreadyExistsException
      */
     public function createInstance($instanceId)
     {
         if ($this->isEnable($instanceId) === true) {
             if ($this->schema->hasTable($this->getTable($instanceId)) === true) {
-                throw new AlreadyExistsTableException(['table' => $this->getTable($instanceId)]);
+                throw new TableAlreadyExistsException(['name' => $this->getTable($instanceId)]);
             }
 
             $this->createTable($instanceId);

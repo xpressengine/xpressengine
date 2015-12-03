@@ -369,7 +369,6 @@ class Translator extends NamespacedItemResolver implements TranslatorInterface
      * 사용자 정의 다국어로 사용될 수 있는 키를 생성합니다
      *
      * @return string
-     * @throws \Xpressengine\Keygen\UnknownGeneratorException
      */
     public function genUserKey()
     {

@@ -27,5 +27,5 @@ use Xpressengine\Comment\Exception;
  */
 class InvalidParentException extends Exception
 {
-
+    protected $message = '부모객채가 유효하지 않습니다.';
 }

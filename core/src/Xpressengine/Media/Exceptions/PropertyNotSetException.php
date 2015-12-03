@@ -1,31 +1,31 @@
 <?php
 /**
- * This file is invalid argument exception
+ * This file is property not exists exception
  *
  * PHP version 5
  *
- * @category    Comment
- * @package     Xpressengine\Comment
+ * @category    Media
+ * @package     Xpressengine\Media
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Comment\Exceptions;
+namespace Xpressengine\Media\Exceptions;
 
-use Xpressengine\Comment\Exception;
+use Xpressengine\Media\Exception;
 
 /**
- * 유효하지 않은 인자가 전달된 경우 발생
+ * property 가 설정 되지 않은 경우
  *
- * @category    Comment
- * @package     Xpressengine\Comment
+ * @category    Media
+ * @package     Xpressengine\Media
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class InvalidArgumentException extends Exception
+class PropertyNotSetException extends Exception
 {
-
+    protected $message = 'property 가 설정되지 않았습니다.';
 }

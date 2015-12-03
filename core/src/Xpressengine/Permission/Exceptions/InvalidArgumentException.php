@@ -27,18 +27,5 @@ use Xpressengine\Permission\Exception;
  */
 class InvalidArgumentException extends Exception
 {
-    /**
-     * constructor
-     *
-     * @param array     $args     arguments
-     * @param string    $message  message string
-     * @param int       $code     error code
-     * @param Exception $previous previous exception
-     */
-    public function __construct($args = [], $message = "", $code = 0, Exception $previous = null)
-    {
-        if (isset($args['name']) === true && isset($args['value']) === true) {
-            $this->message = sprintf('Unknown argument [%s: $s]', $args['name'], $args['value']);
-        }
-    }
+    protected $message = '":arg" 는 유효한 값이 아닙니다.';
 }

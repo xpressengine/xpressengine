@@ -24,7 +24,7 @@ class KeygenTest extends \PHPUnit_Framework_TestCase
             $generator->generate();
             $this->assertTrue(false);
         } catch (\Exception $e) {
-            $this->assertInstanceOf('Xpressengine\Keygen\UnknownGeneratorException', $e);
+            $this->assertInstanceOf('Xpressengine\Keygen\UnknownGeneratorVersionException', $e);
         }
     }
 

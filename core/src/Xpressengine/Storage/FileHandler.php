@@ -15,7 +15,6 @@ namespace Xpressengine\Storage;
 
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Contracts\Filesystem\Filesystem;
-use Xpressengine\Storage\Exceptions\UnknownDiskException;
 
 /**
  * 파일을 각 저장소에 저장하고 가져오는 역할을 수행
@@ -60,7 +59,6 @@ class FileHandler // filesystem 으로 이름 바꿔?
      *
      * @param string $name disk name
      * @return Filesystem
-     * @throws UnknownDiskException
      */
     protected function getDisk($name)
     {
@@ -106,7 +104,6 @@ class FileHandler // filesystem 으로 이름 바꿔?
      * @param File   $file    file instance
      * @param string $content new file content
      * @return File
-     * @throws UnknownDiskException
      */
     public function change(File $file, $content)
     {

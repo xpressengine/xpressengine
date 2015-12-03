@@ -27,5 +27,5 @@ use Xpressengine\Storage\Exception;
  */
 class InvalidFileException extends Exception
 {
-
+    protected $message = '유효한 파일이 아닙니다.';
 }

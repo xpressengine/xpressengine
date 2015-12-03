@@ -114,7 +114,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
             $this->assertTrue(false);
         } catch (\Exception $e) {
-            $this->assertInstanceOf('Xpressengine\Permission\Exceptions\NotMatchedInstanceException', $e);
+            $this->assertInstanceOf('Xpressengine\Permission\Exceptions\WrongInstanceException', $e);
         }
     }
 
@@ -205,7 +205,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
             $this->assertTrue(false);
         } catch (\Exception $e) {
-            $this->assertInstanceOf('Xpressengine\Permission\Exceptions\InvalidArgumentException', $e);
+            $this->assertInstanceOf('Xpressengine\Permission\Exceptions\NoParentException', $e);
         }
     }
 

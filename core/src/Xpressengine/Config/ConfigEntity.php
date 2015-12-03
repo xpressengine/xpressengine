@@ -18,7 +18,7 @@ use IteratorAggregate;
 use ArrayIterator;
 use Xpressengine\Support\EntityTrait;
 use Xpressengine\Support\Caster;
-use Xpressengine\Config\Exceptions\NotHasParentException;
+use Xpressengine\Config\Exceptions\NoParentException;
 
 /**
  * 대상의 설정을 가지고 제공해주는 클래스
@@ -170,7 +170,7 @@ class ConfigEntity implements ArrayAccess, IteratorAggregate
      *
      * @param ConfigEntity $ancestor config object
      * @return void
-     * @throws NotHasParentException
+     * @throws NoParentException
      */
     public function setParent(ConfigEntity $ancestor)
     {
@@ -178,7 +178,7 @@ class ConfigEntity implements ArrayAccess, IteratorAggregate
             $this->parent = $ancestor;
         } else {
             if (is_null($this->parent)) {
-                throw new NotHasParentException('Parent is not exists');
+                throw new NoParentException('Parent is not exists');
             }
             $this->parent->setParent($ancestor);
         }

@@ -249,7 +249,7 @@ class MenuPermissionHandler
      * @param MenuEntity $menu to get access permission
      *
      * @return \Xpressengine\Permission\Permission
-     * @throws \Xpressengine\Permission\Exceptions\NotMatchedInstanceException
+     * @throws \Xpressengine\Permission\Exceptions\WrongInstanceException
      */
     public function getMenuAccessPermission(MenuEntity $menu)
     {
@@ -275,7 +275,7 @@ class MenuPermissionHandler
      * @param MenuEntity $menu to get visible permission
      *
      * @return \Xpressengine\Permission\Permission
-     * @throws \Xpressengine\Permission\Exceptions\NotMatchedInstanceException
+     * @throws \Xpressengine\Permission\Exceptions\WrongInstanceException
      */
     public function getMenuVisiblePermission(MenuEntity $menu)
     {
@@ -326,7 +326,7 @@ class MenuPermissionHandler
      * @param MenuItem $item to find permission target item object
      *
      * @return \Xpressengine\Permission\Permission
-     * @throws \Xpressengine\Permission\Exceptions\NotMatchedInstanceException
+     * @throws \Xpressengine\Permission\Exceptions\WrongInstanceException
      */
     public function getItemAccessPermission(MenuItem $item)
     {
@@ -490,7 +490,7 @@ class MenuPermissionHandler
      * getMenuPermissions
      *
      * @return MenuPermission[]
-     * @throws \Xpressengine\Permission\Exceptions\NotMatchedInstanceException
+     * @throws \Xpressengine\Permission\Exceptions\WrongInstanceException
      */
     public function getMenuPermissions()
     {

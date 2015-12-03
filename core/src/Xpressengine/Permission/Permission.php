@@ -61,7 +61,7 @@ abstract class Permission
     public function ables($action, callable $callable = null)
     {
         if ($this->support($action) === false) {
-            throw new NotSupportedException(['action' => $action]);
+            throw new NotSupportedException(['name' => $action]);
         }
 
         if (is_callable($callable) && call_user_func_array($callable, [$this->target, $this->user]) === true) {

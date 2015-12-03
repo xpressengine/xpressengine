@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Category;
 
-use Exception as PHPException;
+use Xpressengine\Support\Exceptions\XpressengineException;
 
 /**
  * 카테고리 메인 예외 클래스.
@@ -25,7 +25,7 @@ use Exception as PHPException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class Exception extends PHPException
+class Exception extends XpressengineException
 {
 
 }

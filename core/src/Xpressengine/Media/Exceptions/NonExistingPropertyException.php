@@ -1,31 +1,31 @@
 <?php
 /**
- * This file is the exception of object has not parent.
+ * This file is property not exists exception
  *
  * PHP version 5
  *
- * @category    Config
- * @package     Xpressengine\Config
+ * @category    Media
+ * @package     Xpressengine\Media
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Config\Exceptions;
+namespace Xpressengine\Media\Exceptions;
 
-use Xpressengine\Config\Exception;
+use Xpressengine\Media\Exception;
 
 /**
- * 설정에 부모 객체가 없는 경우 발생되는 예외
+ * 필수 property 가 존재하지 않는 경우
  *
- * @category    Config
- * @package     Xpressengine\Config
+ * @category    Media
+ * @package     Xpressengine\Media
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class NotHasParentException extends Exception
+class NonExistingPropertyException extends Exception
 {
-
+    protected $message = '":name" property 가 존재하지 않습니다.';
 }

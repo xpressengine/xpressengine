@@ -14,7 +14,7 @@
 namespace Xpressengine\Media\Handlers;
 
 use Xpressengine\Media\Commands\CommandInterface;
-use Xpressengine\Media\Exceptions\InstanceNotMatchException;
+use Xpressengine\Media\Exceptions\WrongInstanceException;
 use Xpressengine\Media\Exceptions\NotAvailableException;
 use Xpressengine\Media\Meta;
 use Xpressengine\Media\Repositories\ImageRepository;
@@ -134,12 +134,12 @@ class ImageHandler extends AbstractHandler
      *
      * @param Media $media image instance
      * @return string 이미지 content
-     * @throws InstanceNotMatchException
+     * @throws WrongInstanceException
      */
     public function getPicture(Media $media)
     {
         if (!$media instanceof Image) {
-            throw new InstanceNotMatchException();
+            throw new WrongInstanceException();
         }
 
         return $this->storage->read($media->getFile());

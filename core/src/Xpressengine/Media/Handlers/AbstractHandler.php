@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Media\Handlers;
 
-use Xpressengine\Media\Exceptions\PropertyNotExistsException;
+use Xpressengine\Media\Exceptions\NonExistingPropertyException;
 use Xpressengine\Media\Spec\Media;
 use Xpressengine\Media\Spec\Image;
 use Xpressengine\Storage\File;
@@ -35,12 +35,12 @@ abstract class AbstractHandler
      *
      * @param string $mime mime type
      * @return bool
-     * @throws PropertyNotExistsException
+     * @throws NonExistingPropertyException
      */
     public function isAvailable($mime)
     {
         if (property_exists($this, 'mimes') !== true) {
-            throw new PropertyNotExistsException();
+            throw new NonExistingPropertyException(['name' => 'mimes']);
         }
 
         return in_array($mime, $this->{'mimes'});

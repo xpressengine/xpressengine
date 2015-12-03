@@ -15,7 +15,7 @@ namespace Xpressengine\Media;
 
 use Intervention\Image\ImageManager;
 use Xpressengine\Media\Commands\CommandInterface;
-use Xpressengine\Media\Exceptions\PropertyNotSetsException;
+use Xpressengine\Media\Exceptions\PropertyNotSetException;
 use Xpressengine\Media\Coordinators\Dimension;
 
 /**
@@ -110,12 +110,12 @@ class Thumbnailer
      * Generate thumbnail image
      *
      * @return string image content
-     * @throws PropertyNotSetsException
+     * @throws PropertyNotSetException
      */
     public function generate()
     {
         if (count($this->commands) < 1 || $this->image === null) {
-            throw new PropertyNotSetsException();
+            throw new PropertyNotSetException();
         }
 
         $info = getimagesizefromstring($this->image);

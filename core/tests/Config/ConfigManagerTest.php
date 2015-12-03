@@ -50,7 +50,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
 
             $this->assertTrue(false);
         } catch (\Exception $e) {
-            $this->assertInstanceOf('Xpressengine\Config\Exceptions\InvalidArgumentException', $e);
+            $this->assertInstanceOf('Xpressengine\Config\Exceptions\DuplicateException', $e);
         }
 
     }
@@ -311,7 +311,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
             $instance->put('board.notice', ['listCount' => 20, 'downloadable' => true]);
             $this->assertTrue(false);
         } catch (\Exception $e) {
-            $this->assertInstanceOf('Xpressengine\Config\Exceptions\InvalidArgumentException', $e);
+            $this->assertInstanceOf('Xpressengine\Config\Exceptions\NotExistsException', $e);
         }
 
     }
@@ -375,7 +375,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
 
             $this->assertTrue(false);
         } catch (\Exception $e) {
-            $this->assertInstanceOf('Xpressengine\Config\Exceptions\InvalidArgumentException', $e);
+            $this->assertInstanceOf('Xpressengine\Config\Exceptions\NotExistsException', $e);
         }
     }
 
@@ -548,7 +548,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
 
             $this->assertTrue(false);
         } catch (\Exception $e) {
-            $this->assertInstanceOf('Xpressengine\Config\Exceptions\InvalidArgumentException', $e);
+            $this->assertInstanceOf('Xpressengine\Config\Exceptions\NoParentException', $e);
         }
     }
 

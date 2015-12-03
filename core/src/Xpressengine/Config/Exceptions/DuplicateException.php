@@ -1,31 +1,31 @@
 <?php
 /**
- * This file is property not exists exception
+ * This file is the exception of duplicate.
  *
  * PHP version 5
  *
- * @category    Media
- * @package     Xpressengine\Media
+ * @category    Config
+ * @package     Xpressengine\Config
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Media\Exceptions;
+namespace Xpressengine\Config\Exceptions;
 
-use Xpressengine\Media\Exception;
+use Xpressengine\Config\Exception;
 
 /**
- * property 가 설정 되지 않은 경우
+ * 중복된 이름이 전달된 경우
  *
- * @category    Media
- * @package     Xpressengine\Media
+ * @category    Config
+ * @package     Xpressengine\Config
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class PropertyNotSetsException extends Exception
+class DuplicateException extends Exception
 {
-
+    protected $message = '":name" 은 중복된 값입니다.';
 }

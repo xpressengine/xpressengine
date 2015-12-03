@@ -1,31 +1,33 @@
 <?php
 /**
- * This file is a exception to unknown disk
+ * This file is exception of no parent.
  *
  * PHP version 5
  *
- * @category    Storage
- * @package     Xpressengine\Storage
+ * @category    Permission
+ * @package     Xpressengine\Permission
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Storage\Exceptions;
+namespace Xpressengine\Permission\Exceptions;
 
-use Xpressengine\Storage\Exception;
+use Xpressengine\Permission\Exception;
 
 /**
- * 알수 없는 저장소가 지정되었을때 발생되는 예외
+ * This file is exception of invalid argument.
  *
- * @category    Storage
- * @package     Xpressengine\Storage
+ * PHP version 5
+ *
+ * @category    Permission
+ * @package     Xpressengine\Permission
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class UnknownDiskException extends Exception
+class NoParentException extends Exception
 {
-
+    protected $message = '부모 객체가 존재 하지 않습니다.';
 }

@@ -23,7 +23,7 @@ class VideoHandlerTest extends \PHPUnit_Framework_TestCase
 
             $this->assertTrue(false);
         } catch (\Exception $e) {
-            $this->assertInstanceOf('Xpressengine\Media\Exceptions\InstanceNotMatchException', $e);
+            $this->assertInstanceOf('Xpressengine\Media\Exceptions\WrongInstanceException', $e);
         }
     }
 

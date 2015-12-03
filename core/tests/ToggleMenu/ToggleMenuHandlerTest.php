@@ -74,7 +74,7 @@ class ToggleMenuHandlerTest extends \PHPUnit_Framework_TestCase
 
             $this->assertTrue(false);
         } catch (\Exception $e) {
-            $this->assertInstanceOf('Xpressengine\ToggleMenu\Exceptions\InvalidClassException', $e);
+            $this->assertInstanceOf('Xpressengine\ToggleMenu\Exceptions\WrongInstanceException', $e);
         }
     }
 

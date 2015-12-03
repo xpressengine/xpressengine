@@ -23,7 +23,7 @@ class ThumbnailerTest extends \PHPUnit_Framework_TestCase
 
             $this->assertTrue(false);
         } catch (\Exception $e) {
-            $this->assertInstanceOf('Xpressengine\Media\Exceptions\PropertyNotSetsException', $e);
+            $this->assertInstanceOf('Xpressengine\Media\Exceptions\PropertyNotSetException', $e);
         }
     }
 

@@ -1,31 +1,31 @@
 <?php
 /**
- * This file is a exception to file not exists
+ * This file is invalid argument exception
  *
  * PHP version 5
  *
- * @category    Storage
- * @package     Xpressengine\Storage
+ * @category    Comment
+ * @package     Xpressengine\Comment
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Storage\Exceptions;
+namespace Xpressengine\Comment\Exceptions;
 
-use Xpressengine\Storage\Exception;
+use Xpressengine\Comment\Exception;
 
 /**
- * 파일이 존재하지 않는 경우 발생하는 예외
+ * 유효하지 않은 인자가 전달된 경우 발생
  *
- * @category    Storage
- * @package     Xpressengine\Storage
+ * @category    Comment
+ * @package     Xpressengine\Comment
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class NotExistsException extends Exception
+class InvalidObjectException extends Exception
 {
-
+    protected $message = '유효하지 않은 객체 입니다.';
 }
