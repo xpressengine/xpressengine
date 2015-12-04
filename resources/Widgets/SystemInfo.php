@@ -52,12 +52,14 @@ class SystemInfo extends AbstractWidget
     public function render(array $args)
     {
 
+        $request = app('request');
+
         $viewData = [
-            'serverSoftware' => $_SERVER["SERVER_SOFTWARE"],
+            'serverSoftware' => $request->server("SERVER_SOFTWARE"),
             'phpVersion' => phpversion(),
-            'debugMode' => $_SERVER["APP_DEBUG"],
-            'cacheDriver' => $_SERVER["CACHE_DRIVER"],
-            'documentRoot' => $_SERVER["DOCUMENT_ROOT"],
+            'debugMode' => $request->server("APP_DEBUG"),
+            'cacheDriver' => config('cache.default'),
+            'documentRoot' => $request->server("DOCUMENT_ROOT"),
             'maintenanceMode' => app()->isDownForMaintenance(),
             'timeZone' => Config::get('app.timezone')
         ];
