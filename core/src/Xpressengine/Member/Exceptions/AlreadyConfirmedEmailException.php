@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Member\Exceptions;
 
-use Xpressengine\Support\Exceptions\XpressengineException;
+use Xpressengine\Member\MemberException;
 
 /**
  * 이미 인증처리된 이메일을 다시 인증시도할 경우 발생하는 Exception
@@ -24,7 +24,7 @@ use Xpressengine\Support\Exceptions\XpressengineException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class AlreadyConfirmedEmailException extends XpressengineException
+class AlreadyConfirmedEmailException extends MemberException
 {
     protected $message = '이미 인증된 이메일입니다.';
 }

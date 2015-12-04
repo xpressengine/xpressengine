@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Skin\Exceptions;
 
-use Xpressengine\Support\Exceptions\XpressengineException;
+use Xpressengine\Skin\SkinException;
 
 /**
  * Blade 스킨 사용시 blade 파일을 찾지 못할 경우 발생되는 예외이다.
@@ -24,6 +24,7 @@ use Xpressengine\Support\Exceptions\XpressengineException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class PathNotAssignedException extends XpressengineException
+class PathNotAssignedException extends SkinException
 {
+
 }

@@ -35,6 +35,7 @@ namespace Xpressengine\Keygen;
 
 use Rhumsaa\Uuid\Uuid;
 use Rhumsaa\Uuid\Exception\UnsatisfiedDependencyException;
+use Xpressengine\Keygen\Exceptions\UnknownGeneratorVersionException;
 
 /**
  * # Keygen

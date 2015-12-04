@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Config\Exceptions;
 
-use Xpressengine\Config\Exception;
+use Xpressengine\Config\ConfigException;
 
 /**
  * 대상이 존재하지 않는 경우
@@ -25,7 +25,7 @@ use Xpressengine\Config\Exception;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class NotExistsException extends Exception
+class NotExistsException extends ConfigException
 {
     protected $message = '":name" 은 존재하지 않습니다.';
 }

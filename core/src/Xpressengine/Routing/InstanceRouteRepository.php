@@ -96,7 +96,7 @@ class InstanceRouteRepository
             ->first();
 
         if ($row === null) {
-            throw new NotFoundInstanceRouteException($instanceId);
+            throw new NotFoundInstanceRouteException(['id' => $instanceId]);
         }
 
         $instanceRoute = $this->createModel($row);
@@ -119,7 +119,7 @@ class InstanceRouteRepository
             ->first();
 
         if ($row === null) {
-            throw new NotFoundInstanceRouteException($url);
+            throw new NotFoundInstanceRouteException(['url' => $url]);
         }
 
         $instanceRoute = $this->createModel($row);

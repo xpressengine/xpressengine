@@ -14,7 +14,7 @@
 
 namespace Xpressengine\Menu\Exceptions;
 
-use Xpressengine\Support\Exceptions\XpressengineException;
+use Xpressengine\Menu\MenuException;
 
 /**
  * CanNotCreateItemException
@@ -25,7 +25,7 @@ use Xpressengine\Support\Exceptions\XpressengineException;
  * @license  http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link     http://www.xpressengine.com
  */
-class CanNotCreateItemException extends XpressengineException
+class CanNotCreateItemException extends MenuException
 {
 
 }

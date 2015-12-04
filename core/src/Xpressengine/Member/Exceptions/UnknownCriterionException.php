@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Member\Exceptions;
 
-use Xpressengine\Member\Exception;
+use Xpressengine\Member\MemberException;
 
 /**
  * 비교대상 등급 문자가 정의 되지 않은 문자인 경우 발생하는 Exception
@@ -25,7 +25,7 @@ use Xpressengine\Member\Exception;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class UnknownCriterionException extends Exception
+class UnknownCriterionException extends MemberException
 {
     /**
      * constructor

@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Comment\Exceptions;
 
-use Xpressengine\Comment\Exception;
+use Xpressengine\Comment\CommentException;
 
 /**
  * 자식노드가 더이상 생성될수 없는 경우
@@ -25,7 +25,7 @@ use Xpressengine\Comment\Exception;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class LimitedReplyException extends Exception
+class LimitedReplyException extends CommentException
 {
     protected $message = '자식 객채를 더이상 생성할 수 없습니다.';
 }

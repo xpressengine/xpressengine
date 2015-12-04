@@ -11,10 +11,9 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-
 namespace Xpressengine\Site\Exceptions;
 
-use RuntimeException;
+use Xpressengine\Site\SiteException;
 
 /**
  * Class CanNotUseDomainException
@@ -27,7 +26,7 @@ use RuntimeException;
  * @link        http://www.xpressengine.com
  */
 
-class CanNotUseDomainException extends RuntimeException
+class CanNotUseDomainException extends SiteException
 {
 
     /**

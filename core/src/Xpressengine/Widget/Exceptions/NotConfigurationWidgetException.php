@@ -14,7 +14,7 @@
 namespace Xpressengine\Widget\Exceptions;
 
 use Exception;
-use Xpressengine\Support\Exceptions\XpressengineException;
+use Xpressengine\Widget\WidgetException;
 
 /**
  * NotConfigurationWidgetException
@@ -28,7 +28,7 @@ use Xpressengine\Support\Exceptions\XpressengineException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class NotConfigurationWidgetException extends XpressengineException
+class NotConfigurationWidgetException extends WidgetException
 {
     //protected $message = '위젯이 설정되지 않았습니다 ';
     /**

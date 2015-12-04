@@ -14,6 +14,8 @@
 
 namespace Xpressengine\Menu\Exceptions;
 
+use Xpressengine\Menu\MenuException;
+
 /**
  * Menu RuntimeException
  *
@@ -24,7 +26,7 @@ namespace Xpressengine\Menu\Exceptions;
  * @link     http://www.xpressengine.com
  */
 
-class CanNotDeleteMenuEntityHaveChildException extends \RuntimeException
+class CanNotDeleteMenuEntityHaveChildException extends MenuException
 {
 
     // When MenuEntity Delete Action

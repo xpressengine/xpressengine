@@ -11,8 +11,9 @@
  * @license   http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link      http://www.xpressengine.com
  */
-
 namespace Xpressengine\Menu\Exceptions;
+
+use Xpressengine\Menu\MenuException;
 
 /**
  * Menu RuntimeException
@@ -24,7 +25,7 @@ namespace Xpressengine\Menu\Exceptions;
  * @link     http://www.xpressengine.com
  */
 
-class NotFoundMenuException extends \RuntimeException
+class NotFoundMenuException extends MenuException
 {
 
 }

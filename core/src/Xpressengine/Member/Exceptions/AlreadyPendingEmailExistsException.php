@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Member\Exceptions;
 
-use Xpressengine\Support\Exceptions\XpressengineException;
+use Xpressengine\Member\MemberException;
 
 /**
  * 이미 인증 요청중인 이메일의 인증을 요청할 때 발생하는 Exception
@@ -24,7 +24,7 @@ use Xpressengine\Support\Exceptions\XpressengineException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class AlreadyPendingEmailExistsException extends XpressengineException
+class AlreadyPendingEmailExistsException extends MemberException
 {
     protected $message = '이미 인증 요청중인 이메일입니다.';
 }

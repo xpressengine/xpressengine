@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Member\Exceptions;
 
-use Xpressengine\Member\Exception;
+use Xpressengine\Member\MemberException;
 
 /**
  * 최고관리자를 삭제하려고 할 때 발생하는 Exception
@@ -24,7 +24,7 @@ use Xpressengine\Member\Exception;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class CannotDeleteSuperMemberException extends Exception
+class CannotDeleteSuperMemberException extends MemberException
 {
     protected $message = '최고 권한을 가진 회원은 삭제할 수 없습니다.';
 }

@@ -11,9 +11,9 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Captcha;
+namespace Xpressengine\Captcha\Exceptions;
 
-use Xpressengine\Support\Exceptions\XpressengineException;
+use Xpressengine\Captcha\CaptchaException;
 
 /**
  * 캡차 설정이 되어있지 않은 경우 발생하는 예외
@@ -24,7 +24,7 @@ use Xpressengine\Support\Exceptions\XpressengineException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class ConfigurationNotExistsException extends XpressengineException
+class ConfigurationNotExistsException extends CaptchaException
 {
     protected $message = '캡차 설정이 되어있지 않습니다. 설정파일(config/captcha.php)을 확인하십시오.';
 }

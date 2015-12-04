@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Category\Exceptions;
 
-use Xpressengine\Category\Exception;
+use Xpressengine\Category\CategoryException;
 
 /**
  * 자신으로 이동 불가 예외 클래스
@@ -25,7 +25,7 @@ use Xpressengine\Category\Exception;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class UnableMoveToSelfException extends Exception
+class UnableMoveToSelfException extends CategoryException
 {
     protected $message = '자기 자신으로 이동할 수 없습니다.';
 }

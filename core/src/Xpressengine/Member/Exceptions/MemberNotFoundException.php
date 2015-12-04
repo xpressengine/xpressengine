@@ -11,7 +11,9 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Member;
+namespace Xpressengine\Member\Exceptions;
+
+use Xpressengine\Member\MemberException;
 
 /**
  * @category    Member
@@ -20,7 +22,7 @@ namespace Xpressengine\Member;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class MemberNotFoundException extends Exception
+class MemberNotFoundException extends MemberException
 {
     protected $message = '해당 회원을 찾을 수 없습니다.';
 }

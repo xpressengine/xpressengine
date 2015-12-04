@@ -20,7 +20,7 @@ use Cfg;
 use Config;
 use Input;
 use Presenter;
-use Xpressengine\Captcha\ConfigurationNotExistsException;
+use Xpressengine\Captcha\Exceptions\ConfigurationNotExistsException;
 use Xpressengine\Http\Request;
 
 /**

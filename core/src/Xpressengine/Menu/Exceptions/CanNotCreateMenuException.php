@@ -11,10 +11,9 @@
  * @license   http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link      http://www.xpressengine.com
  */
-
 namespace Xpressengine\Menu\Exceptions;
 
-use Xpressengine\Support\Exceptions\XpressengineException;
+use Xpressengine\Menu\MenuException;
 
 /**
  * CanNotCreateMenuException
@@ -25,7 +24,7 @@ use Xpressengine\Support\Exceptions\XpressengineException;
  * @license  http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link     http://www.xpressengine.com
  */
-class CanNotCreateMenuException extends XpressengineException
+class CanNotCreateMenuException extends MenuException
 {
 
 }

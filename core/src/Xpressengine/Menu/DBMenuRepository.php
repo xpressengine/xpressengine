@@ -69,7 +69,7 @@ class DBMenuRepository implements MenuRepositoryInterface
     {
         $menuRow = $this->getMenuRow($menuId);
         if ($menuRow === null) {
-            throw new NotFoundMenuException($menuId);
+            throw new NotFoundMenuException(['id' => $menuId]);
         }
         $treeCollection = $this->fetchTree(new MenuItem(['id' => $menuId]));
         $menu = $this->createTreeModel($menuRow, $treeCollection);
@@ -132,7 +132,7 @@ class DBMenuRepository implements MenuRepositoryInterface
             ->first();
 
         if ($row === null) {
-            throw new NotFoundMenuItemException($itemId);
+            throw new NotFoundMenuItemException(['id' => $itemId]);
         }
 
         $node = $this->createNodeModel(array_diff_key($row, array_flip(['depth', 'breadcrumbs'])));
@@ -400,7 +400,7 @@ class DBMenuRepository implements MenuRepositoryInterface
             ->first();
 
         if ($menuRow === null) {
-            throw new NotFoundMenuException($itemId);
+            throw new NotFoundMenuException(['id' => $itemId]);
         }
 
         return $menuRow['ancestor'];

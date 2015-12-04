@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Member\Exceptions;
 
-use Xpressengine\Member\Exception;
+use Xpressengine\Member\MemberException;
 
 /**
  * 이미 존재하는 이메일을 추가하려고 할 때 발생하는 Exception
@@ -25,7 +25,7 @@ use Xpressengine\Member\Exception;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class MailAlreadyExistsException extends Exception
+class MailAlreadyExistsException extends MemberException
 {
     protected $message = '이미 존재하는 이메일입니다';
 }

@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Member\Exceptions;
 
-use Xpressengine\Member\Exception;
+use Xpressengine\Member\MemberException;
 
 /**
  * 비밀번호가 룰에 맞지 않는 경우 발생하는 Exception
@@ -25,7 +25,7 @@ use Xpressengine\Member\Exception;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class InvalidPasswordException extends Exception
+class InvalidPasswordException extends MemberException
 {
 
 }

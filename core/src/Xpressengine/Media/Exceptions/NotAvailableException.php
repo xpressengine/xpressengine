@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Media\Exceptions;
 
-use Xpressengine\Media\Exception;
+use Xpressengine\Media\MediaException;
 
 /**
  * 이용가능하지 않은 경우
@@ -25,7 +25,7 @@ use Xpressengine\Media\Exception;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class NotAvailableException extends Exception
+class NotAvailableException extends MediaException
 {
     protected $message = '사용할 수 없는 파일입니다.';
 }

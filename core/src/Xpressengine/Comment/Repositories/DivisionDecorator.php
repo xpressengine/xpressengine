@@ -17,8 +17,8 @@ use Closure;
 use Illuminate\Database\Schema\Builder as SchemaBuilder;
 use Xpressengine\Comment\CommentEntity;
 use Xpressengine\Comment\CommentHandler;
-use Xpressengine\Comment\Exception;
-use Xpressengine\Comment\Exceptions\TableAlreadyExistsException;
+use Xpressengine\Comment\CommentException;
+use Xpressengine\Comment\Exceptions\TableAlreadyExistsCommentException;
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Comment\Repository;
 use Xpressengine\Database\VirtualConnectionInterface;
@@ -308,7 +308,7 @@ class DivisionDecorator implements Repository
      * @param CommentEntity $comment    comment object
      * @param string        $instanceId 이동할 instance identifier
      * @return CommentEntity
-     * @throws Exception
+     * @throws CommentException
      */
     public function moveTo(CommentEntity $comment, $instanceId)
     {
@@ -334,7 +334,7 @@ class DivisionDecorator implements Repository
         } catch (\Exception $e) {
             $this->getConnection()->rollBack();
 
-            throw new Exception($e->getMessage(), $e->getCode(), $e);
+            throw new CommentException($e->getMessage(), $e->getCode(), $e);
         }
 
         $this->getConnection()->commit();
@@ -362,13 +362,13 @@ class DivisionDecorator implements Repository
      *
      * @param string $instanceId instance identifier
      * @return void
-     * @throws TableAlreadyExistsException
+     * @throws TableAlreadyExistsCommentException
      */
     public function createInstance($instanceId)
     {
         if ($this->isEnable($instanceId) === true) {
             if ($this->schema->hasTable($this->getTable($instanceId)) === true) {
-                throw new TableAlreadyExistsException(['name' => $this->getTable($instanceId)]);
+                throw new TableAlreadyExistsCommentException(['name' => $this->getTable($instanceId)]);
             }
 
             $this->createTable($instanceId);

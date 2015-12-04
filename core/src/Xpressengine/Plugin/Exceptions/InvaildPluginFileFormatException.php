@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Plugin\Exceptions;
 
-use Xpressengine\Support\Exceptions\XpressengineException;
+use Xpressengine\Plugin\PluginException;
 
 /**
  * InvaildPluginFileFormatException Class
@@ -24,7 +24,7 @@ use Xpressengine\Support\Exceptions\XpressengineException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class InvaildPluginFileFormatException extends XpressengineException
+class InvaildPluginFileFormatException extends PluginException
 {
     protected $message = '플러그인 파일(:path) 형식이 잘못되었습니다.';
 }

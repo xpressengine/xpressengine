@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Storage\Exceptions;
 
-use Xpressengine\Storage\Exception;
+use Xpressengine\Storage\StorageException;
 
 /**
  * 업로드된 파일이 유요하지 않은 경우 발생되는 예외
@@ -25,7 +25,7 @@ use Xpressengine\Storage\Exception;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class InvalidFileException extends Exception
+class InvalidFileException extends StorageException
 {
     protected $message = '유효한 파일이 아닙니다.';
 }

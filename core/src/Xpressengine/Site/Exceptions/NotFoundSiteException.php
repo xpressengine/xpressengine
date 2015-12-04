@@ -11,8 +11,9 @@
  * @license   http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link      http://www.xpressengine.com
  */
-
 namespace Xpressengine\Site\Exceptions;
+
+use Xpressengine\Site\SiteException;
 
 /**
  * NotFoundSiteException
@@ -23,7 +24,7 @@ namespace Xpressengine\Site\Exceptions;
  * @license  http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link     http://www.xpressengine.com
  */
-class NotFoundSiteException extends \RuntimeException
+class NotFoundSiteException extends SiteException
 {
-
+    protected $message = 'Can not find Site';
 }

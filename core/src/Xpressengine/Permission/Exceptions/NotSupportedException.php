@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Permission\Exceptions;
 
-use Xpressengine\Permission\Exception;
+use Xpressengine\Permission\PermissionException;
 
 /**
  * 지원되지 않는 case 에 대한 exception
@@ -25,7 +25,7 @@ use Xpressengine\Permission\Exception;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class NotSupportedException extends Exception
+class NotSupportedException extends PermissionException
 {
     protected $message = '":name" 은 지원되지 않습니다.';
 }

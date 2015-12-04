@@ -11,8 +11,9 @@
  * @license   http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link      http://www.xpressengine.com
  */
-
 namespace Xpressengine\Module\Exceptions;
+
+use Xpressengine\Module\ModuleException;
 
 /**
  * NotFoundModuleException RuntimeException
@@ -23,7 +24,7 @@ namespace Xpressengine\Module\Exceptions;
  * @license  http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link     http://www.xpressengine.com
  */
-class NotFoundModuleException extends \RuntimeException
+class NotFoundModuleException extends ModuleException
 {
 
 }

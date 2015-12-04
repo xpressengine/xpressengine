@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Media\Exceptions;
 
-use Xpressengine\Media\Exception;
+use Xpressengine\Media\MediaException;
 
 /**
  * type 을 알 수 없는 경우
@@ -25,7 +25,7 @@ use Xpressengine\Media\Exception;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class UnknownTypeException extends Exception
+class UnknownTypeException extends MediaException
 {
     protected $message = 'type 을 알 수 없습니다.';
 }

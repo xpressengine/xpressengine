@@ -15,6 +15,7 @@ namespace Xpressengine\UIObject;
 
 use ReflectionClass;
 use Xpressengine\Plugin\PluginRegister;
+use Xpressengine\UIObject\Exceptions\UIObjectNotFoundException;
 
 /**
  * 이 클래스는 Xpressengine에서 UIObject를 관리하는 클래스이다.

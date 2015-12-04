@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Member\Exceptions;
 
-use Xpressengine\Support\Exceptions\XpressengineException;
+use Xpressengine\Member\MemberException;
 
 /**
  * Guest 계정이 제공하지 않는 기능을 사용하려고 할 경우 발생하는 Exception
@@ -24,7 +24,7 @@ use Xpressengine\Support\Exceptions\XpressengineException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class NotSupportedByGuestMemberException extends XpressengineException
+class NotSupportedByGuestMemberException extends MemberException
 {
     protected $message = 'Guest 회원은 해당 기능을 제공하지 않습니다.';
 }

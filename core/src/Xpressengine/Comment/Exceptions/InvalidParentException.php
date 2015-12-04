@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Comment\Exceptions;
 
-use Xpressengine\Comment\Exception;
+use Xpressengine\Comment\CommentException;
 
 /**
  * 부모에 해당하는 글이 유효하지 않은 경우
@@ -25,7 +25,7 @@ use Xpressengine\Comment\Exception;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class InvalidParentException extends Exception
+class InvalidParentException extends CommentException
 {
     protected $message = '부모객채가 유효하지 않습니다.';
 }

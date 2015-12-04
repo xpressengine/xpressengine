@@ -13,6 +13,7 @@
  */
 namespace Xpressengine\Interception;
 
+use Xpressengine\Interception\Exceptions\DuplicateAdvisorNameException;
 use Xpressengine\Support\Sorter;
 
 /**

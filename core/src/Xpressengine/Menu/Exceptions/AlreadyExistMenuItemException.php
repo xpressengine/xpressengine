@@ -13,6 +13,8 @@
  */
 namespace Xpressengine\Menu\Exceptions;
 
+use Xpressengine\Menu\MenuException;
+
 /**
  * Menu RuntimeException
  *
@@ -22,7 +24,7 @@ namespace Xpressengine\Menu\Exceptions;
  * @license  http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link     http://www.xpressengine.com
  */
-class AlreadyExistMenuItemException extends \RuntimeException
+class AlreadyExistMenuItemException extends MenuException
 {
     /**
      * @param string $id menu unique id

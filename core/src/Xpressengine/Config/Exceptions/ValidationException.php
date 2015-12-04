@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Config\Exceptions;
 
-use Xpressengine\Config\Exception;
+use Xpressengine\Config\ConfigException;
 
 /**
  * 설정이 유효하지 않을때 발생되는 예외
@@ -25,7 +25,7 @@ use Xpressengine\Config\Exception;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class ValidationException extends Exception
+class ValidationException extends ConfigException
 {
     protected $message = '유효성 검사 실패 [:message]';
 }

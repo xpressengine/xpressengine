@@ -20,6 +20,7 @@ use Xpressengine\Config\ConfigManager;
 use Xpressengine\Permission\Action;
 use Xpressengine\Permission\Factory;
 use Xpressengine\Register\Container;
+use Xpressengine\Settings\Exceptions\IDNotFoundException;
 use Xpressengine\Support\Tree\TreeCollection;
 
 /**

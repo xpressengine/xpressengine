@@ -1,31 +1,30 @@
 <?php
 /**
- * This file is Member package exception.
+ * IDNotFoundException class
  *
  * PHP version 5
  *
- * @category    Member
- * @package     Xpressengine\Member
+ * @category    Settings
+ * @package     Xpressengine\Settings
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Member;
+namespace Xpressengine\Settings\Exceptions;
 
-use Xpressengine\Support\Exceptions\XpressengineException;
+use Xpressengine\Settings\SettingsException;
 
 /**
- * Xpressengine Member 패키지의 메인 exception
+ * 관리권한의 아이디를 찾을수 없을 경우 발생하는 예외
  *
- * @category    Member
- * @package     Xpressengine\Member
+ * @category    Settings
+ * @package     Xpressengine\Settings
  * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class Exception extends XpressengineException
+class IDNotFoundException extends SettingsException
 {
 
 }

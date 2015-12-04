@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Config\Exceptions;
 
-use Xpressengine\Config\Exception;
+use Xpressengine\Config\ConfigException;
 
 /**
  * 잘못된 인자값이 전달되었을때 발생하는 예외
@@ -25,7 +25,7 @@ use Xpressengine\Config\Exception;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class InvalidArgumentException extends Exception
+class InvalidArgumentException extends ConfigException
 {
     protected $message = '":arg" 는 유효한 값이 아닙니다.';
 }

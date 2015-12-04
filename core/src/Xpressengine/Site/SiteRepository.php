@@ -67,7 +67,7 @@ class SiteRepository
             ->first();
 
         if (is_null($row)) {
-            throw new NotFoundSiteException('Can not find Site');
+            throw new NotFoundSiteException();
         }
 
         return $this->createModel((array)$row);
@@ -90,7 +90,7 @@ class SiteRepository
             ->first();
 
         if (is_null($row)) {
-            throw new NotFoundSiteException('Can not find Site');
+            throw new NotFoundSiteException();
         }
 
         return $this->createModel((array)$row);

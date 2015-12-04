@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Permission\Exceptions;
 
-use Xpressengine\Permission\Exception;
+use Xpressengine\Permission\PermissionException;
 
 /**
  * 엉뚱한 instance 인 경우 exception
@@ -25,7 +25,7 @@ use Xpressengine\Permission\Exception;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class WrongInstanceException extends Exception
+class WrongInstanceException extends PermissionException
 {
     protected $message = '잘못된 instance 입니다.';
 }

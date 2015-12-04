@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Skin\Exceptions;
 
-use Xpressengine\Support\Exceptions\XpressengineException;
+use Xpressengine\Skin\SkinException;
 
 /**
  * 스킨을 찾을 수 없을 경우 발생하는 예외이다.
@@ -24,7 +24,7 @@ use Xpressengine\Support\Exceptions\XpressengineException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class SkinNotFoundException extends XpressengineException
+class SkinNotFoundException extends SkinException
 {
     protected $message = 'Skin을 찾을 수 없습니다';
 }

@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Config\Exceptions;
 
-use Xpressengine\Config\Exception;
+use Xpressengine\Config\ConfigException;
 
 /**
  * 중복된 이름이 전달된 경우
@@ -25,7 +25,7 @@ use Xpressengine\Config\Exception;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class DuplicateException extends Exception
+class DuplicateException extends ConfigException
 {
     protected $message = '":name" 은 중복된 값입니다.';
 }

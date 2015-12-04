@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Member\Exceptions;
 
-use Xpressengine\Member\Exception;
+use Xpressengine\Member\MemberException;
 
 /**
  * 회원가입을 할 수 없을 때 발생하는 Exception
@@ -25,7 +25,7 @@ use Xpressengine\Member\Exception;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class JoinNotAllowedException extends Exception
+class JoinNotAllowedException extends MemberException
 {
     protected $message = '관리자가 회원가입을 허용하지 않습니다.';
 }

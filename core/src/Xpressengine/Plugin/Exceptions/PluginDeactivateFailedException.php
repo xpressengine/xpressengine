@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Plugin\Exceptions;
 
-use Xpressengine\Support\Exceptions\XpressengineException;
+use Xpressengine\Plugin\PluginException;
 
 /**
  * @category    Plugin
@@ -22,7 +22,7 @@ use Xpressengine\Support\Exceptions\XpressengineException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class PluginDeactivateFailedException extends XpressengineException
+class PluginDeactivateFailedException extends PluginException
 {
     protected $message = '플러그인을 비활성화하는데에 실패하였습니다.';
 }

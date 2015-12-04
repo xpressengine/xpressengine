@@ -13,6 +13,8 @@
  */
 namespace Xpressengine\Routing\Exceptions;
 
+use Xpressengine\Routing\RoutingException;
+
 /**
  * Routing RuntimeException
  *
@@ -22,7 +24,7 @@ namespace Xpressengine\Routing\Exceptions;
  * @license  http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link     http://www.xpressengine.com
  */
-class NotFoundInstanceRouteException extends \RuntimeException
+class NotFoundInstanceRouteException extends RoutingException
 {
 
 }

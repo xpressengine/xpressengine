@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Permission\Exceptions;
 
-use Xpressengine\Permission\Exception;
+use Xpressengine\Permission\PermissionException;
 
 /**
  * 유효하지 않은 인자가 전달될 경우 exception
@@ -25,7 +25,7 @@ use Xpressengine\Permission\Exception;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class InvalidArgumentException extends Exception
+class InvalidArgumentException extends PermissionException
 {
     protected $message = '":arg" 는 유효한 값이 아닙니다.';
 }

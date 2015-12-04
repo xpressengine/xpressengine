@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Member\Exceptions;
 
-use Xpressengine\Member\Exception;
+use Xpressengine\Member\MemberException;
 
 /**
  * 존재하지 않는 등록 대기 이메일을 조회할 경우 발생하는 Exception
@@ -24,7 +24,7 @@ use Xpressengine\Member\Exception;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class PendingEmailNotExistsException extends Exception
+class PendingEmailNotExistsException extends MemberException
 {
     protected $message = '인증 요청중인 이메일이 없습니다.';
 }

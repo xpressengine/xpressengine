@@ -14,7 +14,7 @@
 namespace Xpressengine\Widget\Exceptions;
 
 use Exception;
-use Xpressengine\Support\Exceptions\XpressengineException;
+use Xpressengine\Widget\WidgetException;
 
 /**
  * NotFoundWidgetException
@@ -28,7 +28,7 @@ use Xpressengine\Support\Exceptions\XpressengineException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class NotFoundWidgetException extends XpressengineException
+class NotFoundWidgetException extends WidgetException
 {
     //protected $message = '위젯을 찾을 수 없습니다.';
     /**

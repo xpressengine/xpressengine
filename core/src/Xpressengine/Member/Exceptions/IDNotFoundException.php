@@ -13,8 +13,7 @@
  */
 namespace Xpressengine\Member\Exceptions;
 
-use RuntimeException;
-use Xpressengine\Member\Exception;
+use Xpressengine\Member\MemberException;
 
 /**
  * 등록하려는 메일 주소가 이미 존재할 경우 사용되는 Exception
@@ -26,7 +25,7 @@ use Xpressengine\Member\Exception;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class IDNotFoundException extends RuntimeException
+class IDNotFoundException extends MemberException
 {
     protected $message = '해당 엔터티의 ID필드가 지정되지 않았습니다.';
 }

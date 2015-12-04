@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Storage\Exceptions;
 
-use Xpressengine\Storage\Exception;
+use Xpressengine\Storage\StorageException;
 
 /**
  * 파일이 존재하지 않는 경우 발생하는 예외
@@ -25,7 +25,7 @@ use Xpressengine\Storage\Exception;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class FileDoesNotExistException extends Exception
+class FileDoesNotExistException extends StorageException
 {
     protected $message = '파일이 존재하지 않습니다.';
 }

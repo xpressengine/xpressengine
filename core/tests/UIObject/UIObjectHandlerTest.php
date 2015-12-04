@@ -64,7 +64,7 @@ class UIObjectHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @depends testGetAll
-     * @expectedException \Xpressengine\UIObject\UIObjectNotFoundException
+     * @expectedException \Xpressengine\UIObject\Exceptions\UIObjectNotFoundException
      */
     public function testCallNotExists(UIObjectHandler $handler)
     {

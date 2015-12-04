@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Comment\Exceptions;
 
-use Xpressengine\Comment\Exception;
+use Xpressengine\Comment\CommentException;
 
 /**
  * 유효하지 않은 인자가 전달된 경우 발생
@@ -25,7 +25,7 @@ use Xpressengine\Comment\Exception;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class InvalidObjectException extends Exception
+class InvalidObjectException extends CommentException
 {
     protected $message = '유효하지 않은 객체 입니다.';
 }

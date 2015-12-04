@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Media\Exceptions;
 
-use Xpressengine\Media\Exception;
+use Xpressengine\Media\MediaException;
 
 /**
  * 알 수 없는 command 를 사용하려고 하는 경우
@@ -25,7 +25,7 @@ use Xpressengine\Media\Exception;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class UnknownCommandException extends Exception
+class UnknownCommandException extends MediaException
 {
     protected $message = '":name" 은 알 수 없는 command 입니다.';
 }

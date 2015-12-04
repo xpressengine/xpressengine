@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\ToggleMenu\Exceptions;
 
-use Xpressengine\ToggleMenu\Exception;
+use Xpressengine\ToggleMenu\ToggleMenuException;
 
 /**
  * 메뉴아이템 instance 가 유효하지 않은 경우
@@ -25,7 +25,7 @@ use Xpressengine\ToggleMenu\Exception;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class WrongInstanceException extends Exception
+class WrongInstanceException extends ToggleMenuException
 {
     protected $message = '잘못된 instance 입니다.';
 }

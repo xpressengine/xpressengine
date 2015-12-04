@@ -149,7 +149,7 @@ class MenuEntity implements JsonSerializable
         if ($this->treeCollection->offsetExists($itemId)) {
             return $this->treeCollection->offsetGet($itemId);
         } else {
-            throw new NotFoundMenuItemException($itemId);
+            throw new NotFoundMenuItemException(['id' => $itemId]);
         }
     }
 

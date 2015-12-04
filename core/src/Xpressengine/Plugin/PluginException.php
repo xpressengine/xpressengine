@@ -1,29 +1,31 @@
 <?php
 /**
- * UIObjectNotFoundException
+ *  This file is part of the Xpressengine package.
  *
  * PHP version 5
  *
- * @category    UIObject
- * @package     Xpressengine\UIObject
+ * @category    Plugin
+ * @package     Xpressengine\Plugin
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\UIObject;
+namespace Xpressengine\Plugin;
+
+use Xpressengine\Support\Exceptions\XpressengineException;
 
 /**
- * Class UIObjectNotFoundException
+ * 패키지 메인 exception
  *
- * @category    UIObject
- * @package     Xpressengine\UIObject
- * @author      XE Team (develop) <developers@xpressengine.com>
+ * @category    Plugin
+ * @package     Xpressengine\Plugin
+ * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class UIObjectNotFoundException extends \RuntimeException
+class PluginException extends XpressengineException
 {
 
 }

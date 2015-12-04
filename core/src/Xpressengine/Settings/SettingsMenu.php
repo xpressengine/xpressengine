@@ -16,6 +16,7 @@ namespace Xpressengine\Settings;
 use Closure;
 use Illuminate\Routing\Route;
 use Xpressengine\Menu\MenuItem;
+use Xpressengine\Settings\Exceptions\LinkNotFoundException;
 
 /**
  * 관리메뉴를 표현하는 클래스
@@ -79,7 +80,7 @@ class SettingsMenu extends MenuItem
                 return action($action);
             }
         }
-        throw new LinkNotFoundException('admin 메뉴가 지정된 route는 name(as)이 지정되어 있거나 Controller action이어야 합니다.');
+        throw new LinkNotFoundException();
     }
 
     /**

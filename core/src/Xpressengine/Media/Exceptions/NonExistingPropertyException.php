@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Media\Exceptions;
 
-use Xpressengine\Media\Exception;
+use Xpressengine\Media\MediaException;
 
 /**
  * 필수 property 가 존재하지 않는 경우
@@ -25,7 +25,7 @@ use Xpressengine\Media\Exception;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class NonExistingPropertyException extends Exception
+class NonExistingPropertyException extends MediaException
 {
     protected $message = '":name" property 가 존재하지 않습니다.';
 }

@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Permission\Exceptions;
 
-use Xpressengine\Permission\Exception;
+use Xpressengine\Permission\PermissionException;
 
 /**
  * This file is exception of invalid argument.
@@ -27,7 +27,7 @@ use Xpressengine\Permission\Exception;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class NoParentException extends Exception
+class NoParentException extends PermissionException
 {
     protected $message = '부모 객체가 존재 하지 않습니다.';
 }
