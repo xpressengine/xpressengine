@@ -18,6 +18,7 @@ use Illuminate\Support\Collection;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Translation\MessageSelector;
 use Xpressengine\Keygen\Keygen;
+use Xpressengine\Translation\Exceptions\EmptyLocaleException;
 use Xpressengine\Translation\Loaders\LoaderInterface;
 
 /**
@@ -75,13 +76,13 @@ class Translator extends NamespacedItemResolver implements TranslatorInterface
      *
      * @param array $locales 로케일 배열
      * @return void
-     * @throws \Exception
+     * @throws EmptyLocaleException
      */
     public function setLocales(array $locales)
     {
         $this->locales = array_values(array_filter(array_unique($locales)));
         if (count($this->locales) == 0) {
-            throw new \Exception();
+            throw new EmptyLocaleException();
         }
     }
 
