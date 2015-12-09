@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Interception;
 
-use Xpressengine\Interception\Exceptions\DuplicateAdvisorNameException;
+use Xpressengine\Interception\Exceptions\AdvisorNameAlreadyExistsException;
 use Xpressengine\Support\Sorter;
 
 /**
@@ -77,7 +77,7 @@ class AdvisorCollection
 
         // add advisor
         if (array_key_exists($name, $this->advisorArr)) {
-            throw new DuplicateAdvisorNameException();
+            throw new AdvisorNameAlreadyExistsException(['name' => $name]);
         }
 
         $this->advisorArr[$name] = $advisor;
