@@ -213,7 +213,7 @@ APP_KEY=SomeRandomString";
         $this->disableDebugMode();
 
         // change directory permissions
-        $this->setStorageDirectoryPermission();
+        $this->setDirectoryPermission();
 
         $this->markInstalled();
 
@@ -745,26 +745,36 @@ APP_KEY=SomeRandomString";
     }
 
     /**
-     * setStorageDirectoryPermission
+     * setDirectoryPermission
      *
      * @return void
      */
-    private function setStorageDirectoryPermission()
+    private function setDirectoryPermission()
     {
         $this->info('[Setup Directory Permission]');
 
-        $path = $this->getBasePath('storage');
-        $permission = '0707';
+        $storagePath = $this->getBasePath('storage');
+        $bootCachePath = $this->getBasePath('bootstrap/cache');
+        $storagePerm = $bootCachePerm = '0707';
 
         if (!$this->noInteraction) {
             $this->line('Input directory permission for storage.');
 
-            $permission = $this->ask('./storage directory permission', '0707');
+            $storagePerm = $this->ask('./storage directory permission', '0707');
+            $bootCachePerm = $this->ask('./bootstrap/cache directory permission', '0707');
         } else {
             $this->line("passed");
         }
 
-        $process = new Process("chmod -R $permission $path");
+        $process = new Process("chmod -R $storagePerm $storagePath");
+        $process->run();
+
+        // executes after the command finishes
+        if (!$process->isSuccessful()) {
+            throw new \RuntimeException($process->getErrorOutput());
+        }
+
+        $process = new Process("chmod -R $bootCachePerm $bootCachePath");
         $process->run();
 
         // executes after the command finishes
@@ -773,6 +783,11 @@ APP_KEY=SomeRandomString";
         }
     }
 
+    /**
+     * markInstalled
+     *
+     * @return void
+     */
     private function markInstalled()
     {
         $markFile = $path = $this->getBasePath('storage/app/installed');
