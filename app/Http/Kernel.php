@@ -34,7 +34,6 @@ class Kernel extends HttpKernel
         //\App\Http\Middleware\VerifyCsrfToken::class,
         \App\Http\Middleware\ExceptAppendableVerifyCsrfToken::class,
         \App\Http\Middleware\LangPreprocessor::class,
-        \App\Http\Middleware\SiteIdentify::class,
         \App\Http\Middleware\Purifying::class,
         \App\Http\Middleware\FreezeSEO::class,
     ];

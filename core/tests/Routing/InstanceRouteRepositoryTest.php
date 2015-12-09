@@ -5,9 +5,6 @@ use Mockery as m;
 use Illuminate\Support\Collection;
 use PHPUnit_Framework_TestCase;
 use \Xpressengine\Routing\InstanceRoute;
-use \Xpressengine\Routing\Exceptions\NotFoundInstanceRouteException;
-use \Xpressengine\Routing\Exceptions\UnusableUrlException;
-use \Xpressengine\Routing\Exceptions\UnusableInstanceIdException;
 use \Xpressengine\Routing\InstanceRouteRepository;
 
 /**

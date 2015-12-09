@@ -14,8 +14,6 @@
 namespace Xpressengine\Routing;
 
 use Xpressengine\Database\VirtualConnectionInterface;
-use Xpressengine\Routing\Exceptions\UnusableInstanceIdException;
-use Xpressengine\Routing\Exceptions\UnusableUrlException;
 use Xpressengine\Routing\Exceptions\NotFoundInstanceRouteException;
 
 /**

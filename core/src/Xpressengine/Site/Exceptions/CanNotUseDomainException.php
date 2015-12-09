@@ -28,14 +28,5 @@ use Xpressengine\Site\SiteException;
 
 class CanNotUseDomainException extends SiteException
 {
-
-    /**
-     * CanNotUseDomainException constructor.
-     *
-     * @param string $domain site domain
-     */
-    public function __construct($domain)
-    {
-
-    }
+    protected $message = '":host" 은 사용할 수 없습니다.';
 }
