@@ -13,7 +13,7 @@ use Theme;
 use XeDB;
 use Xpressengine\Member\EmailBrokerInterface;
 use Xpressengine\Member\Exceptions\JoinNotAllowedException;
-use Xpressengine\Member\Exceptions\NotFoundEmailException;
+use Xpressengine\Member\Exceptions\EmailNotFoundException;
 use Xpressengine\Member\MemberHandler;
 use Xpressengine\Member\Rating;
 use Xpressengine\Support\Exceptions\HttpXpressengineException;
@@ -240,7 +240,7 @@ class AuthController extends Controller
                 $this->redirectPath = $request->get('redirectUrl');
                 return redirect()->intended($this->redirectPath());
             }
-        } catch (NotFoundEmailException $e) {
+        } catch (EmailNotFoundException $e) {
             // by pass
         } catch (\Exception $e) {
             throw $e;

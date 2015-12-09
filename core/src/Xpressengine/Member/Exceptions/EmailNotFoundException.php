@@ -25,7 +25,7 @@ use Xpressengine\Member\MemberException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class NotFoundEmailException extends MemberException
+class EmailNotFoundException extends MemberException
 {
     protected $message = '존재하지 않는 이메일입니다';
 }

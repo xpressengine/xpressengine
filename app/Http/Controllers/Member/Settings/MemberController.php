@@ -16,7 +16,7 @@ use Xpressengine\Media\Thumbnailer;
 use Xpressengine\Member\Entities\Database\MailEntity;
 use Xpressengine\Member\Entities\MemberEntityInterface;
 use Xpressengine\Member\Exceptions\MailAlreadyExistsException;
-use Xpressengine\Member\Exceptions\NotFoundEmailException;
+use Xpressengine\Member\Exceptions\EmailNotFoundException;
 use Xpressengine\Member\MemberHandler;
 use Xpressengine\Member\MemberImageHandler;
 use Xpressengine\Member\Rating;
@@ -425,7 +425,7 @@ class MemberController extends Controller
         $mail = $this->handler->findMailByAddress($address);
 
         if($mail === null) {
-            throw new NotFoundEmailException();
+            throw new EmailNotFoundException();
         }
 
         $result = $this->handler->deleteMail($mail);

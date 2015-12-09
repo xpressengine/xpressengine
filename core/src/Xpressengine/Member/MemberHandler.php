@@ -24,8 +24,8 @@ use Xpressengine\Member\Entities\Database\PendingMailEntity;
 use Xpressengine\Member\Entities\Guest;
 use Xpressengine\Member\Entities\MemberEntityInterface;
 use Xpressengine\Member\Exceptions\AccountAlreadyExistsException;
-use Xpressengine\Member\Exceptions\CannotDeleteSuperMemberException;
-use Xpressengine\Member\Exceptions\DuplicateDisplayNameException;
+use Xpressengine\Member\Exceptions\CannotDeleteMemberHavingSuperRatingException;
+use Xpressengine\Member\Exceptions\DisplayNameAlreadyExistsException;
 use Xpressengine\Member\Exceptions\MailAlreadyExistsException;
 use Xpressengine\Member\Repositories\AccountRepositoryInterface;
 use Xpressengine\Member\Repositories\GroupRepositoryInterface;
@@ -593,7 +593,7 @@ class MemberHandler
 
         $ratings = array_pluck($members, 'rating');
         if (in_array(Rating::SUPER, $ratings)) {
-            throw new CannotDeleteSuperMemberException();
+            throw new CannotDeleteMemberHavingSuperRatingException();
         }
 
         foreach ($members as $member) {
@@ -690,7 +690,7 @@ class MemberHandler
         }
 
         if ($this->members->fetchOne(['displayName' => $name]) !== null) {
-            throw new DuplicateDisplayNameException();
+            throw new DisplayNameAlreadyExistsException();
         }
 
         return true;

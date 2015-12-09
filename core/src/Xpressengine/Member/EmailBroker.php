@@ -19,7 +19,7 @@ use Illuminate\Contracts\Mail\Mailer;
 use Xpressengine\Member\Entities\Database\MailEntity;
 use Xpressengine\Member\Entities\PendingMailEntityInterface;
 use Xpressengine\Member\Exceptions\InvalidConfirmationCodeException;
-use Xpressengine\Member\Exceptions\NotFoundEmailException;
+use Xpressengine\Member\Exceptions\EmailNotFoundException;
 use Xpressengine\Member\Exceptions\PendingEmailNotExistsException;
 use Xpressengine\Member\Repositories\MailRepositoryInterface;
 use Xpressengine\Member\Repositories\PendingMailRepositoryInterface;
@@ -177,7 +177,7 @@ class EmailBroker implements EmailBrokerInterface
         $mail = $this->mails->findByAddress($email);
 
         if ($mail === null) {
-            throw new NotFoundEmailException();
+            throw new EmailNotFoundException();
         }
 
         return true;

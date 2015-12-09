@@ -24,7 +24,7 @@ use Xpressengine\Member\MemberException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class NotSupportedByGuestMemberException extends MemberException
+class UnsupportedOperationByGuestMemberException extends MemberException
 {
     protected $message = 'Guest 회원은 해당 기능을 제공하지 않습니다.';
 }

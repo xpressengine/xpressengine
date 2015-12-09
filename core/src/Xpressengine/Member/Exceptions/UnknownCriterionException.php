@@ -27,18 +27,5 @@ use Xpressengine\Member\MemberException;
  */
 class UnknownCriterionException extends MemberException
 {
-    /**
-     * constructor
-     *
-     * @param array     $args     arguments
-     * @param int       $code     error code
-     * @param Exception $previous previous exception
-     */
-    public function __construct($args = [], $code = 0, Exception $previous = null)
-    {
-        parent::__construct($args, $code, $previous);
-        if (isset($args['criterion'])) {
-            $this->message = sprintf('Unknown criterion [%s]', $args['criterion']);
-        }
-    }
+    protected $message = 'Unknown criterion [:criterion]';
 }
