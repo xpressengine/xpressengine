@@ -200,7 +200,7 @@ class MemberHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Xpressengine\Member\Exceptions\DuplicateDisplayNameException
+     * @expectedException \Xpressengine\Member\Exceptions\DisplayNameAlreadyExistsException
      */
     public function testValidateForCreateWithExistingDisplayName()
     {

@@ -1,28 +1,30 @@
 <?php
 /**
- *  This file is part of the Xpressengine package.
+ * PermissionIDNotFoundException class
  *
  * PHP version 5
  *
- * @category    Plugin
- * @package     Xpressengine\Plugin
+ * @category    Settings
+ * @package     Xpressengine\Settings
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Plugin\Exceptions;
+namespace Xpressengine\Settings\Exceptions;
 
-use Xpressengine\Plugin\PluginException;
+use Xpressengine\Settings\SettingsException;
 
 /**
- * @category    Plugin
- * @package     Xpressengine\Plugin
+ * 관리권한의 아이디를 찾을수 없을 경우 발생하는 예외
+ *
+ * @category    Settings
+ * @package     Xpressengine\Settings
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class CannotDeletePluginInstalledByComposerException extends PluginException
+class PermissionIDNotFoundException extends SettingsException
 {
-    protected $message = 'Composer를 통해 설치된 플러그인은 Composer를 이용하여 제거해야 합니다.';
+
 }

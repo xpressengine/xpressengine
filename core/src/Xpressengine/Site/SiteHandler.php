@@ -326,7 +326,7 @@ class SiteHandler
     protected function checkUsableDomain($host)
     {
         if ($this->repository->count($host) > 0) {
-            throw new CanNotUseDomainException($host);
+            throw new CanNotUseDomainException(['host' => $host]);
         }
     }
 }

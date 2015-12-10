@@ -16,7 +16,7 @@ namespace Xpressengine\Member\Exceptions;
 use Xpressengine\Member\MemberException;
 
 /**
- * 등록하려는 메일 주소가 이미 존재할 경우 사용되는 Exception
+ * ID 필드가 존재하지 않는 엔터티를 수정하거나 삭제하려고 할 때 발생하는 예외 클래스
  *
  * @category    Member
  * @package     Xpressengine\Member
@@ -27,5 +27,5 @@ use Xpressengine\Member\MemberException;
  */
 class IDNotFoundException extends MemberException
 {
-    protected $message = '해당 엔터티의 ID필드가 지정되지 않았습니다.';
+    protected $message = 'ID필드가 지정되어 있지 않습니다.';
 }

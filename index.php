@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Laravel - A PHP Framework For Web Artisans
+ * Xpressengine - The PHP CMS Application
  *
- * @package  Laravel
- * @author   Taylor Otwell <taylorotwell@gmail.com>
+ * @package  Xpressengine
+ * @author   XE Team (developers) <developers@xpressengine.com>
  */
 
 /*
@@ -50,7 +50,7 @@ $app = require_once __DIR__.'/bootstrap/app.php';
 $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 
 $response = $kernel->handle(
-	$request = \Xpressengine\Http\Request::capture()
+    $request = \Xpressengine\Http\Request::capture()
 );
 
 $response->send();

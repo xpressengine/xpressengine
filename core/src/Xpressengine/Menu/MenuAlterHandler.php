@@ -459,7 +459,7 @@ class MenuAlterHandler
 
         if ($menuTypeObj::isRouteAble()) {
             if (!$this->routeHandler->usableUrl($itemParams['siteKey'], $itemParams['itemUrl'])) {
-                throw new UnusableUrlException("Unusable url '{$itemParams['itemUrl']}'");
+                throw new UnusableUrlException(['url' => $itemParams['itemUrl']]);
             }
 
             $newRoute = new InstanceRoute(

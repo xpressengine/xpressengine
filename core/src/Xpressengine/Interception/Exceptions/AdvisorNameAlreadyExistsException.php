@@ -24,7 +24,7 @@ use Xpressengine\Interception\InterceptionException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class DuplicateAdvisorNameException extends InterceptionException
+class AdvisorNameAlreadyExistsException extends InterceptionException
 {
-
+    protected $message = 'Advisor[:name] already exists.';
 }

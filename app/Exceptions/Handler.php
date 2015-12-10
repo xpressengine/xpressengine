@@ -9,7 +9,7 @@ use Illuminate\Session\TokenMismatchException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Xpressengine\Plugin\Exceptions\NotFoundPluginFileException;
+use Xpressengine\Plugin\Exceptions\PluginFileNotFoundException;
 use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
 use Xpressengine\Support\Exceptions\HttpXpressengineException;
 use Xpressengine\Support\Exceptions\XpressengineException;
@@ -76,7 +76,7 @@ class Handler extends ExceptionHandler
         } // xpressengine exception
         elseif ($e instanceof XpressengineException) {
             // plugin cache 삭제
-            if ($e instanceof NotFoundPluginFileException) {
+            if ($e instanceof PluginFileNotFoundException) {
                 $cache = app('cache');
                 Event::fire('cache:clearing', ['plugins']);
                 $cache->store('plugins')->flush();

@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is already exists input mail address exception.
+ *  This file is part of the Xpressengine package.
  *
  * PHP version 5
  *
@@ -16,16 +16,15 @@ namespace Xpressengine\Member\Exceptions;
 use Xpressengine\Member\MemberException;
 
 /**
- * 존재하지 않는 이메일을 사용하려고 할 경우 발생하는 Exception
+ * 최고관리자를 삭제하려고 할 때 발생하는 Exception
  *
  * @category    Member
  * @package     Xpressengine\Member
  * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class NotFoundEmailException extends MemberException
+class CannotDeleteMemberHavingSuperRatingException extends MemberException
 {
-    protected $message = '존재하지 않는 이메일입니다';
+    protected $message = '최고 권한을 가진 회원은 삭제할 수 없습니다.';
 }

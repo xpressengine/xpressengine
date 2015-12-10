@@ -17,8 +17,8 @@ use Exception;
 use RuntimeException;
 
 /**
- * 이 Exception 클래스는 Xpressengine 에서 범용적으로 사용되는 Exception 이다.
- * Xpressengine 에서 사용되는 Exception 은 모두 이 Exception 을 상속받아 사용해야 한다.
+ * 이 Exception 클래스는 Xpressengine에서 범용적으로 사용되는 Exception이다.
+ * Xpressengine에서 사용되는 Exception은 모두 이 Exception을 상속받아 사용해야 한다.
  *
  * @category    Exceptions
  * @package     Xpressengine\Support\Exceptions
@@ -34,12 +34,10 @@ class XpressengineException extends RuntimeException
     protected $args;
 
     /**
-     * 생성자에서는 message 대신 message를 생성시 필요한 argument 목록을 입력받는다.
-     * Message 는 \Xpressengine\Translation\Translator 로 변환되어 처리된다.
+     * 생성자에서는 message 대신 message에서 사용되는 변수 목록을 입력받는다.
+     * message는 이 클래스를 상속받는 클래스를 정의할 때 $message 필드에 지정해야 한다
      *
-     * Message 변환은 \App\Exceptions\Handler 에 서 처리된다.
-     *
-     * @param array     $args     message 변환 시 사용될 argument 목록
+     * @param array     $args     message 변환시 사용될 변수 목록
      * @param int       $code     The Exception code.
      * @param Exception $previous The previous exception used for the exception chaining. Since 5.3.0
      */
@@ -65,7 +63,7 @@ class XpressengineException extends RuntimeException
     }
 
     /**
-     * string 타입으로 캐스팅될 때, Exception 의 message 를 출력한다.
+     * string 타입으로 캐스팅될 때, Exception의 message를 출력한다.
      *
      * @return string
      */

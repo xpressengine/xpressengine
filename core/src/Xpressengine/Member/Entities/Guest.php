@@ -14,7 +14,7 @@
 namespace Xpressengine\Member\Entities;
 
 use Xpressengine\Member\Entities\Database\AccountEntity;
-use Xpressengine\Member\Exceptions\NotSupportedByGuestMemberException;
+use Xpressengine\Member\Exceptions\UnsupportedOperationByGuestMemberException;
 use Xpressengine\Member\Rating;
 
 /**
@@ -206,7 +206,7 @@ class Guest implements MemberEntityInterface
      */
     private function throwNotSupportedException()
     {
-        throw new NotSupportedByGuestMemberException();
+        throw new UnsupportedOperationByGuestMemberException();
     }
 
     /**

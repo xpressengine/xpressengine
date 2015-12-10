@@ -16,7 +16,7 @@ namespace Xpressengine\Member\Exceptions;
 use Xpressengine\Member\MemberException;
 
 /**
- * 이미 존재하는 표시이름을 사용하려고 할 경우 발생하는 Exception
+ * 존재하지 않는 이메일을 사용하려고 할 경우 발생하는 Exception
  *
  * @category    Member
  * @package     Xpressengine\Member
@@ -25,7 +25,7 @@ use Xpressengine\Member\MemberException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class DuplicateDisplayNameException extends MemberException
+class EmailNotFoundException extends MemberException
 {
-    protected $message = '이미 사용중인 이름입니다.';
+    protected $message = '존재하지 않는 이메일입니다';
 }

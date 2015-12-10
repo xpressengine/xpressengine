@@ -20,7 +20,7 @@ use Xpressengine\Config\ConfigManager;
 use Xpressengine\Permission\Action;
 use Xpressengine\Permission\Factory;
 use Xpressengine\Register\Container;
-use Xpressengine\Settings\Exceptions\IDNotFoundException;
+use Xpressengine\Settings\Exceptions\PermissionIDNotFoundException;
 use Xpressengine\Support\Tree\TreeCollection;
 
 /**
@@ -185,7 +185,7 @@ class SettingsHandler
      * @param bool $groupByTab tab별로 group by할지의 여부
      *
      * @return array
-     * @throws IDNotFoundException
+     * @throws PermissionIDNotFoundException
      */
     public function getPermissionList($groupByTab = true)
     {
@@ -204,7 +204,7 @@ class SettingsHandler
             // resolve id
             if (!isset($permission['id'])) {
                 if (!is_string($id)) {
-                    throw new IDNotFoundException();
+                    throw new PermissionIDNotFoundException();
                 } else {
                     $permission['id'] = $id;
                 }

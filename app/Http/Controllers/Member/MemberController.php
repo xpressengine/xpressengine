@@ -14,8 +14,8 @@ use Xpressengine\Member\EmailBroker;
 use Xpressengine\Member\Entities\Database\MailEntity;
 use Xpressengine\Member\Entities\Database\PendingMailEntity;
 use Xpressengine\Member\Entities\MemberEntityInterface;
-use Xpressengine\Member\Exceptions\AlreadyPendingEmailExistsException;
-use Xpressengine\Member\Exceptions\DuplicateDisplayNameException;
+use Xpressengine\Member\Exceptions\PendingEmailAlreadyExistsException;
+use Xpressengine\Member\Exceptions\DisplayNameAlreadyExistsException;
 use Xpressengine\Member\Exceptions\InvalidConfirmationCodeException;
 use Xpressengine\Member\Exceptions\MailAlreadyExistsException;
 use Xpressengine\Member\Exceptions\PendingEmailNotExistsException;
@@ -143,7 +143,7 @@ class MemberController extends Controller
         try {
             $this->handler->validateDisplayName($name);
             $message = '사용 가능한 이름입니다.';
-        } catch (DuplicateDisplayNameException $e) {
+        } catch (DisplayNameAlreadyExistsException $e) {
             $valid = false;
             $message = $e->getMessage();
         } catch (InvalidArgumentException $e) {
@@ -362,7 +362,7 @@ class MemberController extends Controller
         $useEmailConfirm = $this->handler->usingEmailConfirm();
         if ($useEmailConfirm) {
             if ($this->member->getPendingEmail() !== null) {
-                throw new AlreadyPendingEmailExistsException();
+                throw new PendingEmailAlreadyExistsException();
             }
         }
 

@@ -15,7 +15,7 @@ namespace Xpressengine\Plugin;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
-use Xpressengine\Plugin\Exceptions\NotFoundPluginFileException;
+use Xpressengine\Plugin\Exceptions\PluginFileNotFoundException;
 use Xpressengine\Plugin\PluginHandler as Plugin;
 
 /**
@@ -144,7 +144,7 @@ class PluginEntity implements Arrayable, Jsonable
             return $this->object;
         } else {
             if (file_exists($this->pluginFile) === false) {
-                throw new NotFoundPluginFileException(['path' => str_replace(base_path(), '', $this->pluginFile)]);
+                throw new PluginFileNotFoundException(['path' => str_replace(base_path(), '', $this->pluginFile)]);
             }
             require_once($this->pluginFile);
 

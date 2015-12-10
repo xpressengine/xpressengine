@@ -1,30 +1,30 @@
 <?php
 /**
- * IDNotFoundException class
+ *  This file is part of the Xpressengine package.
  *
  * PHP version 5
  *
- * @category    Settings
- * @package     Xpressengine\Settings
+ * @category    Member
+ * @package     Xpressengine\Member
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Settings\Exceptions;
+namespace Xpressengine\Member\Exceptions;
 
-use Xpressengine\Settings\SettingsException;
+use Xpressengine\Member\MemberException;
 
 /**
- * 관리권한의 아이디를 찾을수 없을 경우 발생하는 예외
+ * 이미 인증 요청중인 이메일의 인증을 요청할 때 발생하는 Exception
  *
- * @category    Settings
- * @package     Xpressengine\Settings
+*@category    Member
+ * @package     Xpressengine\Member
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class IDNotFoundException extends SettingsException
+class PendingEmailAlreadyExistsException extends MemberException
 {
-
+    protected $message = '이미 인증 요청중인 이메일이 있습니다.';
 }

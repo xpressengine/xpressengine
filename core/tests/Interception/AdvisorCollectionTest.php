@@ -28,7 +28,7 @@ class AdvisorCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      *
-     * @expectedException \Xpressengine\Interception\Exceptions\DuplicateAdvisorNameException
+     * @expectedException \Xpressengine\Interception\Exceptions\AdvisorNameAlreadyExistsException
      */
     public function testPutDuplicateAdvisorName()
     {

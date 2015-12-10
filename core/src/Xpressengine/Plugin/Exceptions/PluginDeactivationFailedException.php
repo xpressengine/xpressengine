@@ -4,27 +4,25 @@
  *
  * PHP version 5
  *
- * @category    Member
- * @package     Xpressengine\Member
+ * @category    Plugin
+ * @package     Xpressengine\Plugin
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Member\Exceptions;
+namespace Xpressengine\Plugin\Exceptions;
 
-use Xpressengine\Member\MemberException;
+use Xpressengine\Plugin\PluginException;
 
 /**
- * 최고관리자를 삭제하려고 할 때 발생하는 Exception
- *
- * @category    Member
- * @package     Xpressengine\Member
+ * @category    Plugin
+ * @package     Xpressengine\Plugin
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class CannotDeleteSuperMemberException extends MemberException
+class PluginDeactivationFailedException extends PluginException
 {
-    protected $message = '최고 권한을 가진 회원은 삭제할 수 없습니다.';
+    protected $message = '플러그인을 비활성화하는데에 실패하였습니다.';
 }

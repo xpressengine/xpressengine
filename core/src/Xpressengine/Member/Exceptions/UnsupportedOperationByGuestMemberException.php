@@ -4,27 +4,27 @@
  *
  * PHP version 5
  *
- * @category    Plugin
- * @package     Xpressengine\Plugin
+ * @category    Member
+ * @package     Xpressengine\Member
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Plugin\Exceptions;
+namespace Xpressengine\Member\Exceptions;
 
-use Xpressengine\Plugin\PluginException;
+use Xpressengine\Member\MemberException;
 
 /**
- * NotFoundPluginFileException Class
+ * Guest 계정이 제공하지 않는 기능을 사용하려고 할 경우 발생하는 Exception
  *
- * @category    Plugin
- * @package     Xpressengine\Plugin
+ * @category    Member
+ * @package     Xpressengine\Member
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class NotFoundPluginFileException extends PluginException
+class UnsupportedOperationByGuestMemberException extends MemberException
 {
-    protected $message = 'xe::pluginNotFound';
+    protected $message = 'Guest 회원은 해당 기능을 제공하지 않습니다.';
 }

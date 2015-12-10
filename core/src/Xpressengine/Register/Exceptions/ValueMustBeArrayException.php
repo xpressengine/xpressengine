@@ -1,6 +1,6 @@
 <?php
 /**
- * NotFoundKeyException Exception class. This file is part of the Xpressengine package.
+ * InvalidIDException class. This file is part of the Xpressengine package.
  *
  * PHP version 5
  *
@@ -13,18 +13,18 @@
  */
 namespace Xpressengine\Register\Exceptions;
 
-use Xpressengine\Register\RegisterException;
+use Xpressengine\Support\Exceptions\XpressengineException;
 
 /**
- * 존재하지 않는 register key를 조회할 때 출력되는 예외 클래스
+ * register에 등록될 data의 id의 형식이 잘못됐을 경우 발생하는 예외
  *
-*@category    Register
+ * @category    Register
  * @package     Xpressengine\Register
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class NotFoundKeyException extends RegisterException
+class ValueMustBeArrayException extends XpressengineException
 {
-    protected $message = 'xe::notFoundRegisterKey';
+    protected $message = '지정된 키의 값이 배열형식이 아닙니다.';
 }
