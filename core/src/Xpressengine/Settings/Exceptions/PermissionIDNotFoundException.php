@@ -1,6 +1,6 @@
 <?php
 /**
- * IDNotFoundException class
+ * PermissionIDNotFoundException class
  *
  * PHP version 5
  *
@@ -24,7 +24,7 @@ use Xpressengine\Settings\SettingsException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class IDNotFoundException extends SettingsException
+class PermissionIDNotFoundException extends SettingsException
 {
 
 }
