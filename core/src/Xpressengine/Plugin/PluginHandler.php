@@ -17,10 +17,10 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Application;
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Plugin\Exceptions\CannotDeleteActivatedPluginException;
-use Xpressengine\Plugin\Exceptions\PluginActivateFailedException;
+use Xpressengine\Plugin\Exceptions\PluginActivationFailedException;
 use Xpressengine\Plugin\Exceptions\PluginAlreadyActivatedException;
 use Xpressengine\Plugin\Exceptions\PluginAlreadyDeactivatedException;
-use Xpressengine\Plugin\Exceptions\PluginDeactivateFailedException;
+use Xpressengine\Plugin\Exceptions\PluginDeactivationFailedException;
 use Xpressengine\Plugin\Exceptions\PluginDependencyException;
 use Xpressengine\Plugin\Exceptions\PluginNotFoundException;
 
@@ -217,7 +217,7 @@ class PluginHandler
         try {
             $plugin->activate($installedVersion);
         } catch (\Exception $e) {
-            throw new PluginActivateFailedException();
+            throw new PluginActivationFailedException();
         }
 
         $entity->setStatus(static::STATUS_ACTIVATED);
@@ -269,7 +269,7 @@ class PluginHandler
         try {
             $plugin->deactivate($installedVersion);
         } catch (\Exception $e) {
-            throw new PluginDeactivateFailedException();
+            throw new PluginDeactivationFailedException();
         }
 
         $entity->setStatus(static::STATUS_DEACTIVATED);

@@ -16,13 +16,15 @@ namespace Xpressengine\Plugin\Exceptions;
 use Xpressengine\Plugin\PluginException;
 
 /**
+ * PluginFileNotFoundException Class
+ *
  * @category    Plugin
  * @package     Xpressengine\Plugin
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class CannotDeletePluginInstalledByComposerException extends PluginException
+class PluginFileNotFoundException extends PluginException
 {
-    protected $message = 'Composer를 통해 설치된 플러그인은 Composer를 이용하여 제거해야 합니다.';
+    protected $message = 'xe::pluginNotFound';
 }

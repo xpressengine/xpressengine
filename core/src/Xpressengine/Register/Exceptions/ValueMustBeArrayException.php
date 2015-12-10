@@ -24,7 +24,7 @@ use Xpressengine\Support\Exceptions\XpressengineException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class ValueIsNotArrayException extends XpressengineException
+class ValueMustBeArrayException extends XpressengineException
 {
     protected $message = '지정된 키의 값이 배열형식이 아닙니다.';
 }

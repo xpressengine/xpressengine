@@ -22,7 +22,7 @@ use Xpressengine\Plugin\PluginException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class PluginActivateFailedException extends PluginException
+class PluginActivationFailedException extends PluginException
 {
     protected $message = '플러그인을 활성화하는데에 실패하였습니다.';
 }

@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Register;
 
-use Xpressengine\Register\Exceptions\ValueIsNotArrayException;
+use Xpressengine\Register\Exceptions\ValueMustBeArrayException;
 
 /**
  * 이 클래스는 Key Value 의 저장소를 제공합니다.
@@ -163,7 +163,7 @@ class Container implements RegisterInterface
         $array = $this->get($key, []);
 
         if (!is_array($array)) {
-            throw new ValueIsNotArrayException();
+            throw new ValueMustBeArrayException();
         }
 
         array_unshift($array, $value);
@@ -191,7 +191,7 @@ class Container implements RegisterInterface
         $array = $this->get($key, []);
 
         if (!is_array($array)) {
-            throw new ValueIsNotArrayException();
+            throw new ValueMustBeArrayException();
         }
 
         if ($value === null) {
