@@ -80,6 +80,11 @@
             "core/src/Xpressengine/Support/helpers.php"
         ]
     },
+    "autoload-dev": {
+        "classmap": [
+            "tests/TestCase.php"
+        ]
+    },
     "scripts": {
         "post-install-cmd": [
             "php artisan clear-compiled",
