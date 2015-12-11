@@ -34,6 +34,10 @@ abstract class DynamicModel extends Model
 
     protected $proxyOptions = [];
 
+    const CREATED_AT = 'createdAt';
+
+    const UPDATED_AT = 'updatedAt';
+
     /**
      * dynamic query 사용하도록 설정
      *
@@ -90,10 +94,12 @@ abstract class DynamicModel extends Model
         /** @var \Xpressengine\Database\VirtualConnection $conn */
         $conn = $this->getConnection();
 
+        $table = parent::getTable();
+
         if ($this->dynamic === true) {
-            return $conn->dynamic('', $this->getProxyOptions());
+            return $conn->dynamic($table, $this->getProxyOptions());
         } else {
-            return $conn->table('');
+            return $conn->table($table);
         }
     }
 }
