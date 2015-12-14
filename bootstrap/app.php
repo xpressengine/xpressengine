@@ -1,11 +1,33 @@
 <?php
 
+use Xpressengine\Http\Request;
+
 /*
  * Define Xpressengine Version
  */
 if (!defined('__XE_VERSION__')) {
-	define('__XE_VERSION__', '3.0.0-dev1');
+    define('__XE_VERSION__', '3.0.0-dev1');
 }
+
+
+/*
+ * Set RequestFactory so that make all of generated request to Xpressengine's request
+ * Request에 RequestFactory를 지정한다.
+ * XE에서 새로운 request가 생성될 때에는 이 ReqeustFactory는 사용되어 항상 Xpressengine\Http\Request를 생성하도록 한다
+ */
+Request::setFactory(
+    function (
+        $query,
+        $request,
+        $attributes,
+        $cookies,
+        $files,
+        $server,
+        $content
+    ) {
+        return new Request($query, $request, $attributes, $cookies, $files, $server, $content);
+    }
+);
 
 /*
 |--------------------------------------------------------------------------
@@ -19,7 +41,7 @@ if (!defined('__XE_VERSION__')) {
 */
 
 $app = new Illuminate\Foundation\Application(
-	realpath(__DIR__.'/../')
+    realpath(__DIR__.'/../')
 );
 
 /*
@@ -34,18 +56,18 @@ $app = new Illuminate\Foundation\Application(
 */
 
 $app->singleton(
-	Illuminate\Contracts\Http\Kernel::class,
-	App\Http\Kernel::class
+    Illuminate\Contracts\Http\Kernel::class,
+    App\Http\Kernel::class
 );
 
 $app->singleton(
-	Illuminate\Contracts\Console\Kernel::class,
-	App\Console\Kernel::class
+    Illuminate\Contracts\Console\Kernel::class,
+    App\Console\Kernel::class
 );
 
 $app->singleton(
-	Illuminate\Contracts\Debug\ExceptionHandler::class,
-	App\Exceptions\Handler::class
+    Illuminate\Contracts\Debug\ExceptionHandler::class,
+    App\Exceptions\Handler::class
 );
 
 /*
@@ -59,8 +81,11 @@ $app->singleton(
 |
 */
 
-$app->bind('path.public', function(){
-    return base_path();
-});
+$app->bind(
+    'path.public',
+    function () {
+        return base_path();
+    }
+);
 
 return $app;

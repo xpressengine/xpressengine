@@ -12,7 +12,6 @@ class HttpServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // if (!$this->app->runningInConsole());
         $this->app['request']->setConfig($this->app['config']);
     }
 
@@ -23,11 +22,15 @@ class HttpServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        /** @var \Illuminate\Http\Request $request */
-        $request = $this->app['request'];
+        // bind Request
+        $this->app->bind(\Xpressengine\Http\Request::class, 'request');
 
-        if (!$request instanceof \Xpressengine\Http\Request) {
-            $this->app->instance('request', \Xpressengine\Http\Request::createFromBase($request));
-        }
+        // set config to request when rebind request
+        $this->app->rebinding(
+            'request',
+            function ($app, $request) {
+                return $request->setConfig($app['config']);
+            }
+        );
     }
 }
