@@ -23,6 +23,8 @@ use Xpressengine\DynamicField\RegisterHandler;
 use Xpressengine\DynamicField\RevisionManager;
 use Xpressengine\FieldTypes\Category;
 use Xpressengine\FieldTypes\Number;
+use Xpressengine\FieldTypes\Text;
+use Xpressengine\FieldTypes\Boolean;
 
 /**
  * laravel service provider
@@ -58,7 +60,9 @@ class DynamicFieldServiceProvider extends ServiceProvider
 
         $registerHandler->add(Category::class);
         $registerHandler->add(Number::class);
-        //$registerHandler->add(\Xpressengine\FieldTypes\Text\FieldType::class);
+
+        $registerHandler->add(Text::class);
+        $registerHandler->add(Boolean::class);
     }
 
     /**

@@ -251,7 +251,7 @@ APP_KEY=SomeRandomString";
         $dbInfo['username'] = $this->ask("UserID", $dbInfo['username']);
 
         // password
-        $default = '';
+        $default = false;
         if (isset($dbInfo['password']) && $dbInfo['password'] !== null) {
             $default = 'imported from config file';
         }
