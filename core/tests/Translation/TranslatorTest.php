@@ -1,4 +1,5 @@
 <?php
+namespace Xpressengine\Tests\Translation;
 
 include "TranslationTestCase.php";
 

@@ -1,6 +1,8 @@
 <?php
+namespace Xpressengine\Tests\Translation;
 
 use Mockery as m;
+use PHPUnit_Framework_TestCase;
 use Xpressengine\Translation\TransCache;
 
 class TransCacheTest extends PHPUnit_Framework_TestCase
