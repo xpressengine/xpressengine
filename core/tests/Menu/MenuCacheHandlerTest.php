@@ -12,7 +12,7 @@
  * @link      http://www.xpressengine.com
  */
 
-namespace Xpressengine\tests\Menu;
+namespace Xpressengine\Tests\Menu;
 
 use Mockery\MockInterface;
 use PHPUnit_Framework_TestCase;
