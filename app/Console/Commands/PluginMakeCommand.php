@@ -65,25 +65,30 @@ class PluginMakeCommand extends Command
         $title = $this->getTitleInput();
         $path = app('xe.plugin')->getPluginsDir().'/'.$name;
 
-        if ($this->files->exists($path)) {
-            $this->error($this->type.' already exists!');
+        if($this->checkEnv($path, $name, $namespace, $title) === false) {
             return false;
         }
 
-        // plugin.php 파일 생성
-        $this->makePluginClass($path, $name, $namespace, $title);
+        try {
+            // plugin.php 파일 생성
+            $this->makePluginClass($path, $name, $namespace, $title);
 
-        // composer.json 파일 생성
-        $this->makeComposerJson($path, $name, $namespace, $title);
+            // composer.json 파일 생성
+            $this->makeComposerJson($path, $name, $namespace, $title);
 
-        // directory structure 생성
-        $this->makeDirectoryStructure($path);
+            // directory structure 생성
+            $this->makeDirectoryStructure($path);
 
-        // composer update
-        $this->runComposerUpdate($path);
+            // composer update
+            $this->runComposerUpdate($path);
 
-        // plugin activate
-        $this->activatePlugin($name);
+            // plugin activate
+            $this->activatePlugin($name);
+        } catch (\Exception $e) {
+            $this->files->deleteDirectory($path);
+            throw $e;
+        }
+
 
         // print info
         $url = trim(config('app.url'), '/').'/'.config('xe.routing.fixedPrefix').'/'.$name;
@@ -93,7 +98,22 @@ class PluginMakeCommand extends Command
         $this->info("See ./plugins/$name directory. And open $url in your browser.");
 
         $this->info("Input and modify your plugin information in ./plugins/$name/composer.json file.");
+    }
 
+    protected function checkEnv($path, $name, $namespace, $title)
+    {
+        // check directory exists
+        if ($this->files->exists($path)) {
+            $this->error($this->type.' already exists!');
+            return false;
+        }
+
+        // check permission
+        $pluginsDir = app('xe.plugin')->getPluginsDir();
+        if (!$this->files->isWritable($pluginsDir)) {
+            $this->error("Permission denied. Can not create plugin directory($path).");
+            return false;
+        }
     }
 
     /**
@@ -164,6 +184,7 @@ class PluginMakeCommand extends Command
         return $stub;
     }
 
+
     /**
      * makeComposerJson
      *
@@ -183,7 +204,6 @@ class PluginMakeCommand extends Command
 
         $this->files->put($path.'/'.$filename, $code);
     }
-
 
     /**
      * buildComposerCode
@@ -243,6 +263,7 @@ class PluginMakeCommand extends Command
         return $this;
     }
 
+
     /**
      * replacePackageName
      *
@@ -280,7 +301,6 @@ class PluginMakeCommand extends Command
         return $this;
     }
 
-
     /**
      * Replace the class name for the given stub.
      *
@@ -308,6 +328,7 @@ class PluginMakeCommand extends Command
         return trim($this->getNamespaceInput(), '\\');
     }
 
+
     /**
      * getPluginName
      *
@@ -317,7 +338,6 @@ class PluginMakeCommand extends Command
     {
         return $this->argument('name');
     }
-
 
     /**
      * Get the stub file for the generator.
@@ -414,7 +434,7 @@ class PluginMakeCommand extends Command
         $handler->getAllPlugins(true);
 
         if ($handler->isActivated($name) === false) {
-            $handler->activatePlugin($name);
+            $handler->activatePlugin($name, true);
         }
     }
 

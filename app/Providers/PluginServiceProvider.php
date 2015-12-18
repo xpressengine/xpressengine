@@ -28,11 +28,11 @@ class PluginServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->registerPluginRegistryManager();
+        $this->registerPluginRegisterManager();
         $this->registerPluginHandler();
     }
 
-    protected function registerPluginRegistryManager()
+    protected function registerPluginRegisterManager()
     {
         $this->app->singleton(
             'xe.pluginRegister',
@@ -63,7 +63,8 @@ class PluginServiceProvider extends ServiceProvider
 
                 $pluginStatus = $app['xe.config']->getVal('plugin.list', []);
 
-                if ($app['config']->get('app.debug') === true) {
+                $cachePath = $app['config']->get('cache.stores.plugins.path');
+                if ($app['config']->get('app.debug') === true || !is_writable($cachePath)) {
                     $cache = new ArrayPluginCache();
                     $app->terminating(
                         function () {
