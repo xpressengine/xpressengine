@@ -73,7 +73,7 @@ class XeInstall extends Command
      */
     protected $defaultInfos = [
         'site' => [
-            'url' => 'http://localhost',
+            'url' => 'http://mysite.com',
             'timezone' => 'Asia/Seoul',
         ],
         'admin' => [
