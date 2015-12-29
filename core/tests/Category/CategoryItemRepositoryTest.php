@@ -227,6 +227,34 @@ class CategoryItemRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, count($items));
     }
 
+    public function testFetchTargetIdsByIds()
+    {
+        list($conn, $query) = $this->getMocks();
+        $instance = new CategoryItemRepository($conn);
+
+        $conn->shouldReceive('table')->andReturn($query);
+        $query->shouldReceive('whereIn')->once()->with('itemId', [1, 2, 3])->andReturnSelf();
+        $query->shouldReceive('get')->once()->andReturn([
+            (object)['targetId' => 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxa'],
+            (object)['targetId' => 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxb'],
+            (object)['targetId' => 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxc'],
+            (object)['targetId' => 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxd'],
+            (object)['targetId' => 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxe'],
+            (object)['targetId' => 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxf'],
+        ]);
+
+        $targetIds = $instance->fetchTargetIdsByIds([1, 2, 3]);
+
+        $this->assertEquals([
+            'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxa',
+            'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxb',
+            'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxc',
+            'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxd',
+            'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxe',
+            'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxf',
+        ], $targetIds);
+    }
+
     private function getMocks()
     {
         return [

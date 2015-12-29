@@ -345,6 +345,42 @@ class CategoryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(7, $count);
     }
+
+    public function testGetTargetIds()
+    {
+        list($repo, $itemRepo) = $this->getMocks();
+        $instance = new CategoryHandler($repo, $itemRepo);
+
+        $mockItemEntity1 = m::mock('Xpressengine\Category\CategoryItemEntity');
+        $mockItemEntity1->id = 1;
+        $mockItemEntity2 = m::mock('Xpressengine\Category\CategoryItemEntity');
+        $mockItemEntity2->id = 2;
+        $mockItemEntity3 = m::mock('Xpressengine\Category\CategoryItemEntity');
+        $mockItemEntity3->id = 3;
+
+        $itemRepo->shouldReceive('fetchDesc')->once()->with($mockItemEntity1, 0, false)->andReturn([
+            $mockItemEntity1, $mockItemEntity2, $mockItemEntity3
+        ]);
+        $itemRepo->shouldReceive('fetchTargetIdsByIds')->once()->with([1, 2, 3])->andReturn([
+            'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxa',
+            'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxb',
+            'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxc',
+            'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxd',
+            'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxe',
+            'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxf',
+        ]);
+
+        $targetIds = $instance->getTargetIds($mockItemEntity1);
+
+        $this->assertEquals([
+            'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxa',
+            'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxb',
+            'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxc',
+            'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxd',
+            'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxe',
+            'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxf',
+        ], $targetIds);
+    }
     
     private function getMocks()
     {
