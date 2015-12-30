@@ -491,4 +491,21 @@ class CategoryHandler
 
         return $count + count($progenitors);
     }
+
+    /**
+     * 카테고리 아이템에 속하는 대상 아이디 목록을 반환
+     *
+     * @param CategoryItemEntity $item item object
+     * @return array
+     */
+    public function getTargetIds(CategoryItemEntity $item)
+    {
+        $items = $this->itemRepo->fetchDesc($item, 0, false);
+        $ids = [];
+        foreach ($items as $item) {
+            $ids[] = $item->id;
+        }
+
+        return $this->itemRepo->fetchTargetIdsByIds($ids);
+    }
 }

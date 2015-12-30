@@ -257,6 +257,25 @@ class CategoryItemRepository
     }
 
     /**
+     * Returns target id list by item id list
+     *
+     * @param array $ids item ids
+     * @return array
+     */
+    public function fetchTargetIdsByIds(array $ids)
+    {
+        $rows = $this->conn->table($this->usedTable)->whereIn('itemId', $ids)->get();
+
+        $targetIds = [];
+        foreach ($rows as $row) {
+            $row = (array)$row;
+            $targetIds[] = $row['targetId'];
+        }
+
+        return $targetIds;
+    }
+
+    /**
      * Create item object from attributes
      *
      * @param array $attributes object attributes
