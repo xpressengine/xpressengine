@@ -370,7 +370,7 @@ class DocumentHandler
      * @param string $instanceId instance id
      * @return DocumentEntity
      */
-    public function get($id, $instanceId)
+    public function get($id, $instanceId, $locale = null)
     {
         if ($this->hasCache($id) === true) {
             return $this->getCache($id);
@@ -381,7 +381,7 @@ class DocumentHandler
             throw new Exceptions\ConfigNotExistsException;
         }
 
-        $row = $this->repo->find($id, $config);
+        $row = $this->repo->find($id, $config, $locale);
         if ($row == null) {
             throw new Exceptions\DocumentNotExistsException;
         }

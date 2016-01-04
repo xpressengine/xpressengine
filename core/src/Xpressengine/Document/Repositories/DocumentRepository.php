@@ -316,15 +316,21 @@ class DocumentRepository
      *
      * @param string       $id      document id
      * @param ConfigEntity $config  config entity
+     * @param string       $locale  locale
      * @param array        $columns get columns list
      * @return array
      */
-    public function find($id, ConfigEntity $config, array $columns = ['*'])
+    public function find($id, ConfigEntity $config, $locale = null, array $columns = ['*'])
     {
         $table = $this->divisionTable($config);
         $options = $this->proxyOption($config);
 
-        return $this->connection->dynamic($table, $options)->where('id', $id)->first($columns);
+        $query = $this->connection->dynamic($table, $options);
+        $query->where('id', $id);
+        if ($locale !== null) {
+            $query->where('locale', $locale);
+        }
+        return $query->first($columns);
     }
 
     /**

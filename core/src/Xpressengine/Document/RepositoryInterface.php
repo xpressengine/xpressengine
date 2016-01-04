@@ -73,10 +73,11 @@ interface RepositoryInterface
      *
      * @param string       $id      document id
      * @param ConfigEntity $config  config entity
+     * @param string       $locale  locale
      * @param array        $columns get columns
      * @return array
      */
-    public function find($id, ConfigEntity $config, array $columns = ['*']);
+    public function find($id, ConfigEntity $config, $locale = null, array $columns = ['*']);
 
     /**
      * instanceId 없이 조회

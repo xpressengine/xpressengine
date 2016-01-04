@@ -247,12 +247,13 @@ class RepositoryHandler implements RepositoryInterface
      *
      * @param string       $id      document id
      * @param ConfigEntity $config  config entity
+     * @param string       $locale  locale
      * @param array        $columns get columns
      * @return array
      */
-    public function find($id, ConfigEntity $config, array $columns = ['*'])
+    public function find($id, ConfigEntity $config, $locale = null, array $columns = ['*'])
     {
-        return $this->document->find($id, $config, $columns);
+        return $this->document->find($id, $config, $locale, $columns);
     }
 
     /**
