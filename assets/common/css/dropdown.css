@@ -10,20 +10,22 @@
 .dropdown.open>.btn{border-radius: 2px 2px 0 0;}
 .dropdown>.btn:hover,.dropup>.btn:hover{border-color:#B5B7BD}
 .dropdown>.btn:after,.dropup>.btn:after{display:inline-block;position: absolute;right: 16px;top: 50%;width:0;height:0;margin-top: -2px; border-style:solid; border-width:3px;border-color:#8E8E93 transparent transparent transparent;content:"";}
-.dropdown-menu{position: absolute;left:0;top:100%;margin-top:-1px;padding: 0;border:1px solid #DADBDE;border-width:0 1px 1px 1px;border-radius: 0 0 2px 2px;background-color:#fff;z-index: 10;}
+.dropdown-menu{position: absolute;left:0;right: 0;top:100%;margin-top:-1px;padding: 0;border:1px solid #DADBDE;border-width:0 1px 1px 1px;border-radius: 0 0 2px 2px;background-color:#fff;z-index: 10;}
 .dropdown.v2 .dropdown-menu,.dropup.v2 .dropdown-menu{padding:8px 0;border-width: 0;box-shadow: 0 0px 2px rgba(0, 0, 0, .3);-webkit-box-shadow: 0 0px 2px 0 rgba(0, 0, 0, 0.3);}
 .dropup .dropdown-menu{top:auto;bottom:100%}
 .dropup.v2 .dropdown-menu{border-radius:2px}
 .dropdown.open>.btn,.dropdown.open .dropdown-menu,.dropup.open>.btn,.dropup.open .dropdown-menu{border-color:#2389EE}
-.dropdown .dropdown-menu,.dropup .dropdown-menu{display:none;-webkit-box-shadow: none;      box-shadow: none;}
+.dropdown .dropdown-menu,.dropup .dropdown-menu{display:none;-webkit-box-shadow: none;box-shadow: none;}
 .dropdown.open .dropdown-menu,.dropup.open .dropdown-menu{display:block}
 .dropdown-menu li>a{display:block;position:relative;color:#2c2e37;}
 .dropdown-menu li>a:hover{background-color:#2389EE;color: #fff !important;}
 .dropdown-menu li{list-style:none}
 .dropdown-menu li.on a{color:#2c8beb}
-.dropdown-menu li.on a:after{display:inline-block;position: absolute;right: 16px;top: 50%;margin-top: -9px;font-family: xeicon;speak: none;font-style:normal;font-weight: 400;font-variant: normal;text-transform: none;line-height: 1;-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;content:"\e6e0";color: #b5b7bd;font-size: 18px;}
-.dropdown-menu li.on a:hover:after{color:#fff}
+.dropdown-menu li.on a:after{display:inline-block;position: absolute;right: 16px;top: 50%;margin-top: -9px;font-family: xeicon;speak: none;font-style:normal;font-weight: 400;font-variant: normal;text-transform: none;line-height: 1;-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;content:"\e92a";color: #b5b7bd;font-size: 18px;}
+.dropdown.v2 .dropdown-menu li.on a,.dropup.v2 .dropdown-menu li.on a{padding-right: 16px}
+.dropdown.v2 .dropdown-menu li.on a:after,.dropup.v2 .dropdown-menu li.on a:after{display: none}
 .dropdown>.btn,.dropup>.btn,.dropdown-menu{min-width:auto;width:168px}
+.dropdown.v2>.btn,.dropup.v22>.btn,.dropdown-menu{width:auto}
 .dropdown.small>.btn,.dropup.small>.btn,.dropdown.small .dropdown-menu,.dropup.small .dropdown-menu{width:112px}
 .dropdown.wide>.btn,.dropup.wide>.btn,.dropdown.wide .dropdown-menu,.dropup.wide .dropdown-menu{width:224px}
 .dropdown.very-wide>.btn,.dropup.very-wide>.btn,.dropdown.very-wide .dropdown-menu,.dropup.very-wide .dropdown-menu{width:280px}

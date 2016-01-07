@@ -23,7 +23,7 @@
     <!-- JS at head.prepend -->
     {!! Frontend::output('js', 'head.prepend') !!}
 
-    <!-- JS at head.prepend -->
+    <!-- JS at head.append -->
     {!! Frontend::output('js', 'head.append') !!}
 
     <!-- Translation -->
