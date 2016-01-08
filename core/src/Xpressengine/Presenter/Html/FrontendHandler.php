@@ -132,6 +132,7 @@ namespace Xpressengine\Presenter\Html;
  * @method \Xpressengine\Presenter\Html\Tags\JSFile js($files) js 파일을 추가한다.
  * @method \Xpressengine\Presenter\Html\Tags\BodyClass bodyClass($class) body 태그에 class를 추가한다.
  * @method \Xpressengine\Presenter\Html\Tags\Html html($alias) custom html tag를 추가한다.
+ * @method \Xpressengine\Presenter\Html\Tags\Package package($name) custom package tag를 추가한다.
  * @method \Xpressengine\Presenter\Html\Tags\Rule rule($ruleName, $rules) validation rule을 추가한다.
  * @method \Xpressengine\Presenter\Html\Tags\Translation translation($keys) javascript에서 사용할 다국어를 추가한다.
  */
@@ -178,7 +179,6 @@ class FrontendHandler
      */
     public function output()
     {
-
         $args = func_get_args();
         $name = array_shift($args);
 
@@ -201,6 +201,7 @@ class FrontendHandler
      */
     public function __call($name, array $arguments)
     {
+
         if (!isset($this->tags[$name])) {
             throw new \BadMethodCallException();
         }
