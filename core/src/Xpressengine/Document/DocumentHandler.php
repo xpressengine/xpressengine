@@ -14,6 +14,9 @@
 namespace Xpressengine\Document;
 
 use Illuminate\Http\Request;
+use Xpressengine\Document\Exceptions\NotFoundDocumentException;
+use Xpressengine\Document\Exceptions\RequiredValueException;
+use Xpressengine\Document\Model\Document;
 use Xpressengine\Member\Entities\Guest;
 use Xpressengine\Member\GuardInterface as Authenticator;
 use Xpressengine\Member\Repositories\MemberRepositoryInterface as Member;
@@ -116,6 +119,11 @@ class DocumentHandler
     protected $conn;
 
     /**
+     * @var RevisionHandler
+     */
+    protected $revision;
+
+    /**
      * @var RepositoryInterface
      */
     protected $repo;
@@ -144,20 +152,17 @@ class DocumentHandler
 
     /**
      * @param VirtualConnection   $conn            database connection
-     * @param RepositoryInterface $repo            repository interface
      * @param ConfigHandler       $configHandler   config handler
      * @param InstanceManager     $instanceManager instance manager
      * @param Request             $request         Request
      */
     public function __construct(
         VirtualConnection $conn,
-        RepositoryInterface $repo,
         ConfigHandler $configHandler,
         InstanceManager $instanceManager,
         Request $request
     ) {
         $this->conn = $conn;
-        $this->repo = $repo;
         $this->configHandler = $configHandler;
         $this->instanceManager = $instanceManager;
         $this->request = $request;
@@ -221,38 +226,57 @@ class DocumentHandler
     }
 
     /**
-     * 일반 글쓰기
+     * get database proxy options
      *
-     * @param DocumentEntity $doc Docuemnt entity
-     * @return DocumentEntity
+     * @param ConfigEntity $config config entity
+     * @return array
      */
-    public function add(DocumentEntity $doc)
+    protected function proxyOption(ConfigEntity $config = null)
     {
-        $doc->setPureContent();
-
-        if ($doc->userType == null || $doc->userType == $doc::USER_TYPE_USER) {
-            $doc->userId = $doc->getAuthor()->getId();
-            $doc->writer = $doc->getAuthor()->getDisplayName();
+        $options = [];
+        if ($config != null) {
+            $options['id'] = $config->get('instanceId');
         }
 
-        if ($doc->writer === null) {
-            throw new Exceptions\RequiredValueException;
-        }
+        return $options;
+    }
 
-        if ($doc->instanceId === null) {
-            throw new Exceptions\RequiredValueException;
-        }
+    /**
+     * add document
+     *
+     * @param array $attributes document attributes
+     * @return Document
+     */
+    public function add(array $attributes)
+    {
+        $doc = new Document($attributes);
+        $this->conn->beginTransaction();
 
-        $config = $this->configHandler->get($doc->instanceId);
-        if ($config === null) {
-            $config = $this->configHandler->getDefault();
-        }
-
+        $doc->fixedAttributes();
         if ($doc->ipaddress == null) {
             $doc->ipaddress = $this->request->ip();
         }
 
-        $doc = $this->repo->insert($doc, $config);
+        $doc->checkRequired();
+
+        $config = $this->configHandler->getOrDefault($doc->instanceId);
+        $doc->setProxyOptions($this->proxyOption($config));
+        $doc->setReply();
+
+        // insert to original documents database table
+        $doc->save();
+
+        // insert to division documents database table
+        if ($config->get('division') == true) {
+            $divisionDoc = new Document($doc->toArray());
+            $divisionDoc->setDivision()->save();
+        }
+
+        // insert to revision database table
+        $this->revision->add($doc->toArray());
+
+        $this->conn->commit();
+
         $this->removeCache($doc);
 
         return $doc;
@@ -261,132 +285,125 @@ class DocumentHandler
     /**
      * update document
      *
-     * @param DocumentEntity $doc document entity
-     * @return DocumentEntity
+     * @param Document $doc document model
+     * @return Document
      */
-    public function put(DocumentEntity $doc)
+    public function put(Document $doc)
     {
+        $this->conn->beginTransaction();
+
         $doc->setPureContent();
+        $doc->checkRequired();
 
-        if ($doc->getAuthor() != null && $doc->getAuthor() instanceof Guest === false) {
-            $doc->userId = $doc->getAuthor()->getId();
-            $doc->writer = $doc->getAuthor()->getDisplayName();
+        $config = $this->configHandler->getOrDefault($doc->instanceId);
+        $doc->setProxyOptions($this->proxyOption($config));
+
+        // update to original documents database table
+        $doc->save();
+
+        // update to division documents database table
+        if ($config->get('division') == true) {
+            $divisionDoc = new Document($doc->toArray());
+            $divisionDoc->setDivision()->save();
         }
 
-        $doc->updatedAt = date('Y-m-d H:i:s');
+        $this->removeDivision($doc);
 
-        if ($doc->userId === null) {
-            throw new Exceptions\RequiredValueException;
-        }
+        // insert to revision database table
+        $this->revision->add($doc);
 
-        if ($doc->instanceId === null) {
-            throw new Exceptions\RequiredValueException;
-        }
+        $this->conn->commit();
 
-        $doc = $this->rawPut($doc);
         $this->removeCache($doc);
         return $doc;
     }
 
     /**
-     * update document raw
+     * 인스턴스 아이디가 변경된 경우 이전 인스턴스의 디비전 테이블 데이터 삭제
      *
-     * @param DocumentEntity $doc document entity
-     * @return DocumentEntity
+     * @param Document $doc document model
+     * @return void
      */
-    public function rawPut(DocumentEntity $doc)
+    protected function removeDivision(Document $doc)
     {
-        $config = $this->configHandler->get($doc->instanceId);
-        if ($config === null) {
-            $config = $this->configHandler->getDefault();
+        $originConfig = null;
+        /** @var Document $originDoc */
+        $originDoc = Document::find($doc->id);
+        if ($originDoc->instanceId != $doc->instanceId) {
+            $originConfig = $this->configHandler->getOrDefault($originDoc->instanceId);
         }
-        $originConfig = $this->configHandler->get($doc->getOriginal()['instanceId']);
 
-        $doc = $this->repo->update($doc, $config, $originConfig);
-        $this->removeCache($doc);
-        return $doc;
+        if ($originConfig != null && $originConfig->get('division') === true) {
+            $diff = $doc->diff();
+            if (isset($diff['instanceId'])) {
+                $originDoc->setDivision()->delete();
+            }
+        }
     }
 
     /**
      * delete document
      *
-     * @param DocumentEntity $doc document entity
+     * @param Document $doc document model
      * @return int
+     * @todo return 을 integer 로 줄 필요 없을 듯
      */
-    public function remove(DocumentEntity $doc)
+    public function remove(Document $doc)
     {
-        $config = $this->configHandler->get($doc->instanceId);
-        if ($config === null) {
-            $config = $this->configHandler->getDefault();
+        $this->conn->beginTransaction();
+
+        $config = $this->configHandler->getOrDefault($doc->instanceId);
+
+        if ($config->get('division') == true) {
+            /** @var Document $divisionDoc */
+            $divisionDoc = Document::where('id', $doc->id);
+            $divisionDoc->setDivision($config)->delete();
         }
 
+        $doc->setProxyOptions($this->proxyOption($config));
+        $doc->delete();
+
+
+        $this->conn->commit();
+
         $this->removeCache($doc);
-        return $this->repo->delete($doc, $config);
+        return 1;
     }
 
     /**
-     * move to trash
+     * Proxy, Division 관련 설정이 된 Document model 반환
      *
-     * @param DocumentEntity $doc document entity
-     * @return DocumentEntity
+     * @param string $instanceId document instance id
+     * @return Document
      */
-    public function trash(DocumentEntity $doc)
+    public function getModel($instanceId)
     {
-        $doc->trash();
-        $config = $this->configHandler->get($doc->instanceId);
-        if ($config === null) {
-            throw new Exceptions\ConfigNotExistsException;
-        }
-
-        $doc = $this->repo->update($doc, $config);
-        $this->removeCache($doc);
-        return $doc;
-    }
-
-    /**
-     * restore from trash
-     *
-     * @param DocumentEntity $doc document entity
-     * @return DocumentEntity
-     */
-    public function restore(DocumentEntity $doc)
-    {
-        $doc->restore();
-        $config = $this->configHandler->get($doc->instanceId);
-
-        if ($config === null) {
-            throw new Exceptions\ConfigNotExistsException;
-        }
-
-        $doc = $this->repo->update($doc, $config);
-        $this->removeCache($doc);
+        $config = $this->configHandler->getOrDefault($instanceId);
+        $doc = new Document;
+        $doc->setDivision($config);
+        $doc->setProxyOptions($this->proxyOption($config));
         return $doc;
     }
 
     /**
      * get document
      *
-     * @param string $id         document id
-     * @param string $instanceId instance id
-     * @return DocumentEntity
+     * @param string $id document id
+     * @return Document
      */
-    public function get($id, $instanceId, $locale = null)
+    public function get($id)
     {
         if ($this->hasCache($id) === true) {
             return $this->getCache($id);
         }
 
-        $config = $this->configHandler->get($instanceId);
-        if ($config === null) {
-            throw new Exceptions\ConfigNotExistsException;
+        /** @var Document $doc */
+        $doc = Document::find($id);
+        $doc = $this->getModel($doc->instanceId)->find($id);
+        if ($doc == null) {
+            throw new NotFoundDocumentException;
         }
 
-        $row = $this->repo->find($id, $config, $locale);
-        if ($row == null) {
-            throw new Exceptions\DocumentNotExistsException;
-        }
-
-        $doc = new DocumentEntity($row);
         $this->putCache($doc);
         return $doc;
     }
@@ -396,6 +413,7 @@ class DocumentHandler
      *
      * @param string $id document id
      * @return DocumentEntity
+     * @deprecated
      */
     public function getById($id)
     {
@@ -414,6 +432,7 @@ class DocumentHandler
      *
      * @param array $ids document ids
      * @return DocumentEntity
+     * @deprecated
      */
     public function getsByIds(array $ids)
     {
@@ -433,6 +452,7 @@ class DocumentHandler
      * @param array $orders make order query list
      * @param int   $limit  number of list
      * @return DocumentEntity[]
+     * @deprecated
      */
     public function gets(array $wheres, array $orders, $limit = null)
     {
@@ -457,6 +477,7 @@ class DocumentHandler
      * @param int     $perPage  number of list
      * @param Closure $callback call back
      * @return LengthAwarePaginator
+     * @deprecated
      */
     public function paginate(
         array $wheres,
@@ -486,6 +507,7 @@ class DocumentHandler
      *
      * @param array $wheres make where query list
      * @return int
+     * @deprecated
      */
     public function count(array $wheres = [])
     {
@@ -503,6 +525,7 @@ class DocumentHandler
      *
      * @param string $instanceId instance id
      * @return int
+     * @deprecated
      */
     public function countByInstanceId($instanceId)
     {
@@ -517,6 +540,7 @@ class DocumentHandler
      * @param array  $orders  make order query list
      * @param array  $columns get columns list
      * @return array
+     * @deprecated
      */
     public function getsByUser(
         $userId,
@@ -535,6 +559,7 @@ class DocumentHandler
      *
      * @param string $revisionId revision id
      * @return DocumentEntity
+     * @deprecated
      */
     public function getRevision($revisionId)
     {
@@ -547,6 +572,7 @@ class DocumentHandler
      *
      * @param string $id document id
      * @return array
+     * @deprecated
      */
     public function getRevisions($id)
     {
@@ -563,23 +589,12 @@ class DocumentHandler
     }
 
     /**
-     * 덧글의 depth 반환
-     *
-     * @param DocumentEntity $doc document entity
-     * @return float
-     */
-    public function getDepth(DocumentEntity $doc)
-    {
-        return strlen($doc->reply) / $this->repo->getReplyHelper()->getReplyCharLen();
-    }
-
-    /**
      * add memory cache
      *
-     * @param DocumentEntity $doc document entity
+     * @param Document $doc document model
      * @return void
      */
-    private function putCache(DocumentEntity $doc)
+    private function putCache(Document $doc)
     {
         $this->docs[$doc->id] = $doc;
     }
@@ -587,10 +602,10 @@ class DocumentHandler
     /**
      * remove memory cache
      *
-     * @param DocumentEntity $doc document entity
+     * @param Document $doc document model
      * @return void
      */
-    private function removeCache(DocumentEntity $doc)
+    private function removeCache(Document $doc)
     {
         if ($this->getCache($doc->id) !== null) {
             unset($this->docs[$doc->id]);

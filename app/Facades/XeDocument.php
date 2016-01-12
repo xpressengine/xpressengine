@@ -1,6 +1,6 @@
 <?php
 /**
- * DivisionExistsException
+ * Document class for Facade
  *
  * PHP version 5
  *
@@ -11,12 +11,12 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Document\Exceptions;
+namespace App\Facades;
 
-use Xpressengine\Document\DocumentException;
+use Illuminate\Support\Facades\Facade;
 
 /**
- * DivisionExistsException
+ * facade 로 이용 하기위해 선언되어진 클래스
  *
  * @category    Document
  * @package     Xpressengine\Document
@@ -25,7 +25,16 @@ use Xpressengine\Document\DocumentException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class DivisionExistsException extends DocumentException
+class XeDocument  extends Facade
 {
-    protected $message = 'Divided table cannot be found.';
+
+    /**
+     * facade access keyword
+     *
+     * @return string
+     */
+    protected static function getFacadeAccessor()
+    {
+        return 'xe.document';
+    }
 }

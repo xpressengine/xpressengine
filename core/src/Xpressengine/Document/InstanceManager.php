@@ -15,8 +15,10 @@
  */
 namespace Xpressengine\Document;
 
+use Xpressengine\Database\VirtualConnectionInterface as VirtualConnection;
 use Illuminate\Contracts\Hashing\Hasher;
 use Xpressengine\Config\ConfigEntity;
+use Xpressengine\Document\Model\Document;
 
 /**
  * InstanceManager
@@ -58,9 +60,9 @@ class InstanceManager
 {
 
     /**
-     * @var RepositoryInterface
+     * @var VirtualConnection
      */
-    protected $repo;
+    protected $connection;
 
 
     /**
@@ -72,12 +74,12 @@ class InstanceManager
     /**
      * create instance
      *
-     * @param RepositoryInterface $repo          repository
-     * @param ConfigHandler       $configHandler config handler
+     * @param VirtualConnection $connection database connection
+     * @param ConfigHandler     $configHandler config handler
      */
-    public function __construct(RepositoryInterface $repo, ConfigHandler $configHandler)
+    public function __construct(VirtualConnection $connection, ConfigHandler $configHandler)
     {
-        $this->repo = $repo;
+        $this->connection = $connection;
         $this->configHandler = $configHandler;
     }
 
@@ -92,12 +94,49 @@ class InstanceManager
      */
     public function add(ConfigEntity $config)
     {
-        $this->repo->connection()->beginTransaction();
+        $this->connection->beginTransaction();
 
         $this->configHandler->add($config);
-        $this->repo->createDivisionTable($config);
+        $this->createDivisionTable($config);
 
-        $this->repo->connection()->commit();
+        $this->connection->commit();
+    }
+
+    /**
+     * create division table
+     *
+     * @param ConfigEntity $config document's instance config
+     * @return void
+     */
+    protected function createDivisionTable(ConfigEntity $config)
+    {
+        if ($config->get('division') === true) {
+            $document = new Document;
+
+            $row = $this->connection->select(
+                sprintf('show create table %sdocuments', $this->connection->getTablePrefix())
+            );
+            $createTable = $row[0]['Create Table'];
+
+            $tables = $this->connection->select(sprintf(
+                "SHOW TABLES like '%sdocuments_%s'",
+                $this->connection->getTablePrefix(),
+                $config->get('instanceId')
+            ));
+            if (empty($tables) === false) {
+                throw new Exceptions\DivisionExistsException;
+            }
+
+            $this->connection->insert(str_replace(
+                sprintf('CREATE TABLE `%sdocuments`', $this->connection->getTablePrefix()),
+                sprintf(
+                    'CREATE TABLE `%s%s`',
+                    $this->connection->getTablePrefix(),
+                    $document->divisionTable($config)
+                ),
+                $createTable
+            ));
+        }
     }
 
     /**
@@ -120,11 +159,11 @@ class InstanceManager
      */
     public function remove(ConfigEntity $config, $fetchCount = 10)
     {
-        $this->repo->connection()->beginTransaction();
-
-        $this->repo->dropDivisionTable($config);
+        $this->connection->beginTransaction();
 
         $this->configHandler->remove($config);
+
+        $this->dropDivisionTable($config);
 
         // division table 은 drop 했으므로 처리하지 않는다.
         $config->set('division', false);
@@ -134,7 +173,26 @@ class InstanceManager
             }
         }
 
-        $this->repo->connection()->commit();
+        $this->connection->commit();
+    }
 
+    /**
+     * drop document instance
+     * * ex) 게시판 삭제
+     *
+     * @param ConfigEntity $config 현제 설정 되어 있는 config
+     * @return void
+     */
+    protected function dropDivisionTable(ConfigEntity $config)
+    {
+        if ($config->get('division') === true) {
+            $document = new Document;
+
+            $this->connection->delete(sprintf(
+                "DROP TABLE `%s%s`",
+                $this->connection->getTablePrefix(),
+                $document->divisionTable($config)
+            ));
+        }
     }
 }

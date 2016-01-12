@@ -27,4 +27,5 @@ use Xpressengine\Document\DocumentException;
  */
 class NotFoundDocumentException extends DocumentException
 {
+    protected $message = 'Document cannot be found.';
 }

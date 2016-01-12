@@ -24,7 +24,9 @@ use Xpressengine\Document\DocumentException;
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
+ * @deprecated
  */
 class DocumentNotExistsException extends DocumentException
 {
+    protected $message = 'Document cannot be found';
 }

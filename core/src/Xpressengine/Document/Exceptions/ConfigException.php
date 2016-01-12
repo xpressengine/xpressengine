@@ -27,4 +27,5 @@ use Xpressengine\Document\DocumentException;
  */
 class ConfigException extends DocumentException
 {
+    protected $message = 'There is an error in document configuration.';
 }

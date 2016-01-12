@@ -1,6 +1,6 @@
 <?php
 /**
- * DocumentEntity
+ * Document
  *
  * PHP version 5
  *
@@ -11,18 +11,19 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Document;
+namespace Xpressengine\Document\Model;
 
-use Xpressengine\Member\AssociateInterface;
-use Xpressengine\Support\EntityTrait;
-use Xpressengine\Member\Entities\MemberEntityInterface;
-use Xpressengine\Member\Entities\Guest;
+use Xpressengine\Config\ConfigEntity;
+use Xpressengine\Database\Eloquent\DynamicModel;
+use Xpressengine\Document\Exceptions\NotAllowedTypeException;
+use Xpressengine\Document\Exceptions\NotFoundDocumentException;
+use Xpressengine\Document\Exceptions\ReplyLimitationException;
+use Xpressengine\Document\Exceptions\RequiredValueException;
 
 /**
- * DocumentEntity
+ * Document
  *
- * property string id
- *
+ * @property string id
  * @property string parentId
  * @property string instanceId
  * @property string userId
@@ -57,14 +58,10 @@ use Xpressengine\Member\Entities\Guest;
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
- *
  */
-class DocumentEntity implements AssociateInterface
+class Document extends DynamicModel
 {
-
-    use EntityTrait {
-        __construct as traitConstruct;
-    }
+    protected static $replyCharLen = 3;
 
     // status
     const STATUS_PUBLIC = 'public';
@@ -95,25 +92,12 @@ class DocumentEntity implements AssociateInterface
     const USER_TYPE_GUEST = 'guest';
 
     /**
-     * content 반환 모드
+     * The connection name for the model.
+     * Virtual connection name.
      *
      * @var string
      */
-    const CONTENT_HTML = 'origin';
-
-    /**
-     * content 반환 모드
-     *
-     * @var string
-     */
-    const CONTENT_NO_HTML = 'noHtml';
-
-    /**
-     * writer's user entity
-     *
-     * @var MemberEntityInterface
-     */
-    protected $author;
+    protected $connection = 'document';
 
     /**
      * @var array
@@ -153,66 +137,84 @@ class DocumentEntity implements AssociateInterface
         self::PUBLISHED_WAITING,
         self::PUBLISHED_REJECTED,
     ];
-
+    
     /**
-     * @var string
-     */
-    protected $contentMode = self::CONTENT_HTML;
-
-    /**
-     * constructor
+     * division table 이름 반환
      *
-     * @param array $attributes attributes in object
-     */
-    public function __construct(array $attributes = [])
-    {
-        // DocumentEntity 는 array, object 를 attribute 로 갖지 않는다.
-        $attributes = array_filter($attributes, function ($item) {
-            if (!is_array($item) && !is_object($item)) {
-                return true;
-            }
-        });
-        $this->traitConstruct($attributes);
-    }
-
-    /**
-     * get content return mode
-     *
+     * @param ConfigEntity $config config entity
      * @return string
      */
-    public function getContentMode()
+    public function divisionTable(ConfigEntity $config = null)
     {
-        return $this->contentMode;
-    }
-
-    /**
-     * content 반환 모드
-     *
-     * @param string $contentMode output content mode
-     * @return void
-     */
-    public function setContentMode($contentMode)
-    {
-        $this->contentMode = $contentMode;
-    }
-
-    /**
-     * content 반환
-     *
-     * @param string|null $contentMode output content mode
-     * @return string
-     */
-    public function content($contentMode = null)
-    {
-        if ($contentMode != null) {
-            $this->setContentMode($contentMode);
+        $table = $this->table;
+        if ($config != null && $config->get('division') === true) {
+            $table = sprintf('%s_division_%s', $this->table, $config->get('instanceId'));
         }
 
-        switch ($this->contentMode) {
-            case self::CONTENT_NO_HTML:
-                return $this->contentNoHtml();
-            case self::CONTENT_HTML:
-                return $this->contentOrigin();
+        return $table;
+    }
+
+    /**
+     * set model to division table name
+     *
+     * @param ConfigEntity|null $config config entity
+     * @return $this
+     */
+    public function setDivision(ConfigEntity $config = null)
+    {
+        $this->setTable($this->divisionTable($config));
+        return $this;
+    }
+
+    /**
+     * Check required attributes
+     *
+     * @return void
+     */
+    public function checkRequired()
+    {
+        if ($this->userId === null) {
+            throw new RequiredValueException;
+        }
+
+        if ($this->writer === null) {
+            throw new RequiredValueException;
+        }
+
+        if ($this->instanceId === null) {
+            throw new RequiredValueException;
+        }
+    }
+
+    /**
+     * Set default value to attributes
+     *
+     * @return void
+     */
+    public function fixedAttributes()
+    {
+        $this->setPureContent();
+
+        if ($this->userType == null) {
+            $this->userType = $this::USER_TYPE_USER;
+        }
+        if ($this->approved == null) {
+            $this->approved = $this::APPROVED_APPROVED;
+        }
+        if ($this->published == null) {
+            $this->published = $this::PUBLISHED_PUBLISHED;
+        }
+        if ($this->status == null) {
+            $this->status = $this::STATUS_PUBLIC;
+        }
+        if ($this->display == null) {
+            $this->display = $this::DISPLAY_VISIBLE;
+        }
+        if ($this->published == 'published' && $this->publishedAt == null) {
+            $this->publishedAt = $this->freshTimestamp();
+        }
+        if ($this->locale == null) {
+            $this->locale = 'default';
         }
     }
 
@@ -230,142 +232,106 @@ class DocumentEntity implements AssociateInterface
     }
 
     /**
-     * pure content 반환
-     * HTML 코드를 제거한 content
+     * Set reply code
      *
+     * @return void
+     */
+    public function setReply()
+    {
+        $timestamp = time();
+        if ($this->parentId == null || $this->parentId == '') {
+            $this->head = $timestamp . '-' . $this->id;
+        } elseif ($this->parentId !== $this->id) {
+            $parent = self::find($this->parentId);
+            if ($parent === null) {
+                throw new NotFoundDocumentException;
+            }
+
+            $this->reply = $this->getReplyChar($parent);
+            $this->head = $parent->head;
+        }
+        $this->listOrder = $this->head . (isset($this->reply) ? $this->reply : '');
+    }
+
+    /**
+     * Set reply character length
+     *
+     * @param int $len reply character length
+     * @return void
+     */
+    public static function setReplyCharLen($len)
+    {
+        self::$replyCharLen = $len;
+    }
+
+    /**
+     * Reply character length
+     *
+     * @return int
+     */
+    public static function getReplyCharLen()
+    {
+        return self::$replyCharLen;
+    }
+
+    /**
+     * get reply code
+     *
+     * @param Document $parent Parent document model
      * @return string
      */
-    public function getPureContent()
+    protected function getReplyChar(Document $parent)
     {
-        if (empty($this->pureContent) === true) {
-            $this->setPureContent();
+        $lastReply = self::where('head', $parent->head)
+            ->where('replay', 'like', $parent->reply . str_repeat('_', self::$replyCharLen))
+            ->max('reply');
+
+        $lastChar = null;
+        if ($lastReply !== null) {
+            $lastChar = substr($lastReply, -1 * self::getReplyCharLen());
         }
 
-        return $this->pureContent;
+        return $parent->reply . $this->makeReplyChar($lastChar);
     }
 
     /**
-     * 원래의 content 를 반환.
+     * Make next reply code characters
      *
+     * @param string $prevChars previous child reply code character
      * @return string
+     * @throws ReplyLimitationException
      */
-    private function contentOrigin()
+    protected function makeReplyChar($prevChars = null)
     {
-        return $this->__get('content');
-    }
+        $std = '0123456789abcdefghijklmnopqrstuvwxyz';
+        $std = str_split($std, 1);
 
-    /**
-     * content 에서 html 태그를 제거한 결과 반환
-     *
-     * @return string
-     * @todo 코드 구현해야 함
-     */
-    private function contentNoHtml()
-    {
-        return $this->__get('content');
-    }
-
-    /**
-     * set user type
-     *
-     * @param string $userType set user type (USER, ANONYMITY, GUEST)
-     * @return void
-     */
-    public function setUserType($userType)
-    {
-        $this->__set('userType', $userType);
-    }
-
-    /**
-     * Set document author
-     *
-     * @param MemberEntityInterface $author user instance (User or Guest)
-     * @return void
-     */
-    public function setAuthor(MemberEntityInterface $author)
-    {
-        $this->author = $author;
-    }
-
-    /**
-     * 익명 글 설정
-     *
-     * @param string $anonymityWriter 익명으로 대체할 이름
-     * @return void
-     */
-    public function anonymity($anonymityWriter = 'Anonymity')
-    {
-        $this->__set('writer', $anonymityWriter);
-
-        $this->setUserType(self::USER_TYPE_ANONYMITY);
-    }
-
-    /**
-     * 비회원 글 작성
-     *
-     * @return void
-     */
-    public function guest()
-    {
-        if ($this->certifyKey === null) {
-            throw new Exceptions\DocumentEntityException;
+        if ($prevChars === null) {
+            return str_repeat($std[0], self::getReplyCharLen());
         }
 
-        $this->setUserType(self::USER_TYPE_GUEST);
+        if ($prevChars[strlen($prevChars)-1] == end($std)) {
+            if (strlen($prevChars) < 2) {
+                throw new ReplyLimitationException;
+            }
+            reset($std);
+            $new = $this->makeReplyChar(substr($prevChars, 0, strlen($prevChars)-1)) . current($std);
+        } else {
+            $key = array_search($prevChars[strlen($prevChars)-1], $std);
+            $new = substr($prevChars, 0, strlen($prevChars)-1) . $std[$key + 1];
+        }
+
+        return $new;
     }
 
     /**
-     * 비회원이 작성 글 여부 반환
+     * 덧글의 depth 반환
      *
-     * @return bool
+     * @return float
      */
-    public function isGuest()
+    public function getDepth()
     {
-        return $this->__get('userType') == self::USER_TYPE_GUEST;
-    }
-
-    /**
-     * 수정 권한 확인
-     *
-     * @param MemberEntityInterface $author 로그인 사용자 정보
-     * @return bool
-     */
-    public function alterPerm(MemberEntityInterface $author)
-    {
-        if ($this->isGuest() === true) {
-            return true;
-        }
-
-        if ($author instanceof Guest == true) {
-            return false;
-        }
-
-        if ($this->__get('userId') != $author->getId()) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * 삭제 권한 확인
-     *
-     * @param MemberEntityInterface $author 로그인 사용자 정보
-     * @return bool
-     */
-    public function deletePerm(MemberEntityInterface $author)
-    {
-        if ($this->isGuest() === true) {
-            return true;
-        }
-
-        if ($author instanceof Guest == true) {
-            return false;
-        }
-
-        if ($this->__get('userId') != $author->getId()) {
-            return false;
-        }
-        return true;
+        return strlen($this->reply) / $this->getReplyCharLen();
     }
 
     /**
@@ -378,7 +344,7 @@ class DocumentEntity implements AssociateInterface
     {
         $approved = strtolower($approved);
         if (in_array($approved, $this->approved) === false) {
-            throw new Exceptions\DocumentEntityException;
+            throw new NotAllowedTypeException(['type' => $approved, 'to' => 'Approved']);
         }
         $this->__set('approved', $approved);
     }
@@ -393,7 +359,7 @@ class DocumentEntity implements AssociateInterface
     {
         $display = strtolower($display);
         if (in_array($display, $this->display) === false) {
-            throw new Exceptions\DocumentEntityException;
+            throw new NotAllowedTypeException(['type' => $display, 'to' => 'Display']);
         }
         $this->__set('display', $display);
     }
@@ -408,7 +374,7 @@ class DocumentEntity implements AssociateInterface
     {
         $status = strtolower($status);
         if (in_array($status, $this->status) === false) {
-            throw new Exceptions\DocumentEntityException;
+            throw new NotAllowedTypeException(['type' => $status, 'to' => 'Status']);
         }
         $this->__set('status', $status);
     }
@@ -424,14 +390,15 @@ class DocumentEntity implements AssociateInterface
     {
         $published = strtolower($published);
         if (in_array($published, $this->published) === false) {
-            throw new Exceptions\DocumentEntityException;
+            throw new NotAllowedTypeException(['type' => $published, 'to' => 'Published']);
         }
         $this->__set('published', $published);
     }
+
     /**
      * 승인
      *
-     * @return DocumentEntity
+     * @return $this
      */
     public function approve()
     {
@@ -443,7 +410,7 @@ class DocumentEntity implements AssociateInterface
     /**
      * 승인 신청 거절
      *
-     * @return DocumentEntity
+     * @return $this
      */
     public function reject()
     {
@@ -455,7 +422,7 @@ class DocumentEntity implements AssociateInterface
     /**
      * 승인 대기
      *
-     * @return DocumentEntity
+     * @return $this
      */
     public function approveWait()
     {
@@ -467,7 +434,7 @@ class DocumentEntity implements AssociateInterface
     /**
      * 발행
      *
-     * @return DocumentEntity
+     * @return $this
      */
     public function publish()
     {
@@ -479,7 +446,7 @@ class DocumentEntity implements AssociateInterface
     /**
      * 발행 예약
      *
-     * @return DocumentEntity
+     * @return $this
      */
     public function reserve()
     {
@@ -491,34 +458,32 @@ class DocumentEntity implements AssociateInterface
     /**
      * 휴지통
      *
-     * @return DocumentEntity
+     * @return $this
      */
     public function trash()
     {
         $this->setStatus(self::STATUS_TRASH);
         // 문서를 안보이게 할 필요는 없는듯
         $this->setDisplay(self::DISPLAY_HIDDEN);
-        $this->__set('deletedAt', date('Y-m-d H:i:s'));
         return $this;
     }
 
     /**
      * 휴지통 문서 복구
      *
-     * @return DocumentEntity
+     * @return $this
      */
     public function restore()
     {
         $this->setStatus(self::STATUS_PUBLIC);
         $this->setDisplay(self::DISPLAY_VISIBLE);
-        $this->__set('deletedAt', '');
         return $this;
     }
 
     /**
      * 임시저장
      *
-     * @return DocumentEntity
+     * @return $this
      */
     public function temporary()
     {
@@ -531,91 +496,15 @@ class DocumentEntity implements AssociateInterface
      * 공지 상태로 변경
      *
      * @param bool $notice is notice
-     * @return DocumentEntity
+     * @return $this
      */
     public function notice($notice = true)
     {
         if ($notice === true) {
-            $this->__set('status', self::STATUS_NOTICE);
+            $this->setStatus(self::STATUS_NOTICE);
         } else {
-            $this->__set('status', self::STATUS_PUBLIC);
+            $this->setStatus(self::STATUS_PUBLIC);
         }
         return $this;
-    }
-
-
-    /**
-     * Returns unique identifier
-     *
-     * @return string
-     */
-    public function getUid()
-    {
-        return $this->__get('id');
-    }
-
-    /**
-     * Returns instance identifier
-     *
-     * @return string
-     */
-    public function getInstanceId()
-    {
-        return $this->__get('instanceId');
-    }
-
-    /**
-     * Returns author
-     *
-     * @return MemberEntityInterface
-     */
-    public function getAuthor()
-    {
-        return $this->author;
-    }
-
-    /**
-     * get user id
-     *
-     * @return string
-     */
-    public function getUserId()
-    {
-        if ($this->__get('userType') == self::USER_TYPE_ANONYMITY) {
-            return '';
-        }
-        return $this->__get('userId');
-    }
-
-    /**
-     * get writer
-     *
-     * @return string
-     */
-    public function getWriter()
-    {
-        return $this->__get('writer');
-    }
-
-
-    /**
-     * get member's origin id
-     *
-     * @return mixed
-     */
-    public function getMemberOriginId()
-    {
-        return $this->userId;
-    }
-
-    /**
-     * set member entity
-     *
-     * @param MemberEntityInterface $entity member entity
-     * @return void
-     */
-    public function setMemberEntity(MemberEntityInterface $entity)
-    {
-        $this->author = $entity;
     }
 }

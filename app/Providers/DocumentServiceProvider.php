@@ -20,11 +20,13 @@ use Xpressengine\Database\VirtualConnection;
 use Xpressengine\Document\ConfigHandler;
 use Xpressengine\Document\DocumentHandler;
 use Xpressengine\Document\InstanceManager;
+use Xpressengine\Document\Model\Document;
 use Xpressengine\Document\Repositories\DocumentRepository;
 use Xpressengine\Document\Repositories\RevisionRepository;
 use Xpressengine\Document\Repositories\SlugRepository;
 use Xpressengine\Document\Repositories\ReplyHelper;
 use Xpressengine\Document\RepositoryHandler;
+use Xpressengine\Document\RevisionHandler;
 use Xpressengine\Keygen\Keygen;
 use Xpressengine\Member\Entities\MemberEntityInterface;
 
@@ -49,38 +51,32 @@ class DocumentServiceProvider extends ServiceProvider
     {
         $app = $this->app;
 
-        $app->singleton('xe.document', function ($app) {
-            $configHandler = new ConfigHandler($app['xe.config']);
+        // set reply code length config to Document model
+        Document::setReplyCharLen($app['config']['xe.documentReplyCodeLen']);
 
-            $connection = $app['xe.db']->connection('document');
-
-            // set revision
-            $revisionRepository = new RevisionRepository($connection, $app['xe.dynamicField.revision'], new Keygen);
-
-            // set repository
-            $documentRepository = new DocumentRepository($connection);
-
-            // set repository handler
-            $repositoryHandler = new RepositoryHandler(
-                $connection,
-                $documentRepository,
-                $revisionRepository,
-                new ReplyHelper($app['config']['xe.documentReplyCodeLen'])
+        $app->singleton('xe.document.config', function ($app) {
+            return new ConfigHandler($app['xe.config']);
+        });
+        $app->singleton('xe.document.revision', function ($app) {
+            $revisionHandlerClass = $app['xe.interception']->proxy(RevisionHandler::class, 'DocumentRevisionHandler');
+            return new $revisionHandlerClass(
+                $app['xe.document.config'],
+                $app['xe.dynamicField']
             );
-
+        });
+        $app->singleton('xe.document.instance', function ($app) {
             $instanceManagerClass = $app['xe.interception']->proxy(InstanceManager::class, 'DocumentInstanceManager');
-
-            $instanceManager = new $instanceManagerClass(
-                $repositoryHandler,
-                $configHandler
+            return new $instanceManagerClass(
+                $app['xe.db']->connection('document'),
+                $app['xe.document.config']
             );
-
+        });
+        $app->singleton('xe.document', function ($app) {
             $documentHandlerClass = $app['xe.interception']->proxy(DocumentHandler::class, 'Document');
             $document = new $documentHandlerClass(
-                $connection,
-                $repositoryHandler,
-                $configHandler,
-                $instanceManager,
+                $app['xe.db']->connection('document'),
+                $app['xe.document.config'],
+                $app['xe.document.instance'],
                 $app['request']
             );
 

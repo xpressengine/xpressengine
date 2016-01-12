@@ -53,6 +53,11 @@ class DatabaseProxy implements ProxyInterface
     protected $group;
 
     /**
+     * @var bool
+     */
+    protected $revision = false;
+
+    /**
      * create instance
      *
      * @param DynamicFieldHandler $handler dynamic field handler
@@ -122,6 +127,10 @@ class DatabaseProxy implements ProxyInterface
         if (isset($this->options['group'])) {
             $this->group = $this->options['group'];
         }
+
+        if (isset($this->options['revision'])) {
+            $this->revision = $this->options['revision'];
+        }
     }
 
     /**
@@ -139,7 +148,12 @@ class DatabaseProxy implements ProxyInterface
             if ($config->get('use') === true) {
                 $type = $this->getType($config->get('typeId'));
                 $type->setConfig($config);
-                $type->insert($args);
+                if ($this->revision == true) {
+                    $type->insertRevision($args);
+                } else {
+                    $type->insert($args);
+                }
+
             }
         }
     }
@@ -198,7 +212,12 @@ class DatabaseProxy implements ProxyInterface
             if ($this->isTableMethodCreate($config)) {
                 $type = $this->getType($config->get('typeId'));
                 $type->setConfig($config);
-                $type->get($query);
+                if ($this->revision == true) {
+                    $query = $type->joinRevision($query);
+                } else {
+                    $type->get($query);
+                }
+
             } else {
                 // is alter table
             }
@@ -222,7 +241,12 @@ class DatabaseProxy implements ProxyInterface
             if ($this->isTableMethodCreate($config)) {
                 $type = $this->getType($config->get('typeId'));
                 $type->setConfig($config);
-                $query = $type->first($query);
+                if ($this->revision == true) {
+                    $query = $type->joinRevision($query);
+                } else {
+                    $query = $type->first($query);
+                }
+
             } else {
                 // is alter table
             }
@@ -240,6 +264,7 @@ class DatabaseProxy implements ProxyInterface
      */
     public function wheres(Builder $query, array $wheres)
     {
+        var_dump($this->getConfigs());
         /**
          * @var ConfigEntity $config
          */

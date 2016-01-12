@@ -18,13 +18,14 @@ use Illuminate\Support\Str;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Builder as OriginBuilder;
 use Xpressengine\Database\DynamicQuery;
+use Xpressengine\Database\ProxyManager;
 
 /**
  * Builder
  *
  * * Illuminate\Database\Eloquent\Builder wrapping class
  *
-*@category    Database
+ * @category    Database
  * @package     Xpressengine\Database
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
@@ -41,5 +42,15 @@ class Builder extends OriginBuilder
     public function __construct(DynamicQuery $query)
     {
         $this->query = $query;
+    }
+
+    /**
+     * get proxy manager
+     *
+     * @return ProxyManager|null
+     */
+    public function getProxyManager()
+    {
+        return $this->query->getProxyManager();
     }
 }

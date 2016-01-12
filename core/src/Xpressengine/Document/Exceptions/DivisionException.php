@@ -27,4 +27,5 @@ use Xpressengine\Document\DocumentException;
  */
 class DivisionException extends DocumentException
 {
+    protected $message = 'Table division error';
 }

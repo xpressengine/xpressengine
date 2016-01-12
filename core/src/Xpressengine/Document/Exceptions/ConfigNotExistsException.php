@@ -27,4 +27,5 @@ use Xpressengine\Document\DocumentException;
  */
 class ConfigNotExistsException extends DocumentException
 {
+    protected $message = 'Configuration does not exist.';
 }

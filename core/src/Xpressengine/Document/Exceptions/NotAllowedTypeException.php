@@ -1,6 +1,6 @@
 <?php
 /**
- * DivisionExistsException
+ * DivisionException
  *
  * PHP version 5
  *
@@ -16,7 +16,7 @@ namespace Xpressengine\Document\Exceptions;
 use Xpressengine\Document\DocumentException;
 
 /**
- * DivisionExistsException
+ * DivisionException
  *
  * @category    Document
  * @package     Xpressengine\Document
@@ -25,7 +25,7 @@ use Xpressengine\Document\DocumentException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class DivisionExistsException extends DocumentException
+class NotAllowedTypeException extends DocumentException
 {
-    protected $message = 'Divided table cannot be found.';
+    protected $message = '":type" type not allowed to ":to"';
 }

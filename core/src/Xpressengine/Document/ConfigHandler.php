@@ -137,6 +137,21 @@ class ConfigHandler
     }
 
     /**
+     * Return default config when cannot found config
+     *
+     * @param $instanceId
+     * @return ConfigEntity
+     */
+    public function getOrDefault($instanceId)
+    {
+        $config = $this->get($instanceId);
+        if ($config === null) {
+            $config = $this->getDefault();
+        }
+        return $config;
+    }
+
+    /**
      * config entity list 반환
      * list of ConfigEntity
      *

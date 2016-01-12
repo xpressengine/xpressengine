@@ -1,40 +1,31 @@
 <?php
 /**
- * Document class for Facade
+ * NotSetKeyGeneratorException
  *
  * PHP version 5
  *
- * @category    Document
- * @package     Xpressengine\Document
+ * @category    Database
+ * @package     Xpressengine\Database
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace App\Facades;
+namespace Xpressengine\Database\Exceptions;
 
-use Illuminate\Support\Facades\Facade;
+use Xpressengine\Database\DatabaseException;
 
 /**
- * facade 로 이용 하기위해 선언되어진 클래스
+ * NotSetKeyGeneratorException
  *
- * @category    Document
- * @package     Xpressengine\Document
+ * @category    Database
+ * @package     Xpressengine\Database
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class Document  extends Facade
+class KeyGeneratorNotFoundException extends DatabaseException
 {
-
-    /**
-     * facade access keyword
-     *
-     * @return string
-     */
-    protected static function getFacadeAccessor()
-    {
-        return 'xe.document';
-    }
+    protected $message = 'Dynamic model\'s KeyGenerator cannot be found.';
 }

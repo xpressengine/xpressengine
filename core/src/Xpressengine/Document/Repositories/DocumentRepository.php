@@ -328,7 +328,7 @@ class DocumentRepository
         $query = $this->connection->dynamic($table, $options);
         $query->where('id', $id);
         if ($locale !== null) {
-            $query->where('locale', $locale);
+            $query->where('id', $id);
         }
         return $query->first($columns);
     }

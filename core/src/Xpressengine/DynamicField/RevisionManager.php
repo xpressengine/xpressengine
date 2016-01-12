@@ -26,6 +26,7 @@ use \Illuminate\Database\Query\Builder;
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
+ * @deprecated  proxy option 으로 처리할 수 있도록 기능 수정
  */
 class RevisionManager
 {

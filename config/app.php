@@ -259,7 +259,7 @@ return [
         'Frontend' => App\Facades\Frontend::class,
         'DynamicField' => App\Facades\DynamicField::class,
         'XeDB' => App\Facades\XeDB::class,
-        'Document' => App\Facades\Document::class,
+        'XeDocument' => App\Facades\XeDocument::class,
 
         'Comment' => App\Facades\Comment::class,
         'Category' => App\Facades\Category::class,
