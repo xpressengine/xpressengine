@@ -264,7 +264,6 @@ class DatabaseProxy implements ProxyInterface
      */
     public function wheres(Builder $query, array $wheres)
     {
-        var_dump($this->getConfigs());
         /**
          * @var ConfigEntity $config
          */
