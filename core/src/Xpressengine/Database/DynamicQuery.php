@@ -221,12 +221,12 @@ class DynamicQuery extends Builder
     public function insertGetId(array $args, $sequence = null)
     {
         if ($this->dynamic === false) {
-            parent::insertGetId($args, $sequence);
+            return parent::insertGetId($args, $sequence);
         }
 
         $result = 0;
         if (count($insert = $this->filter($args, $this->schema())) > 0) {
-            parent::insertGetId($args, $sequence);
+            $result = parent::insertGetId($args, $sequence);
         }
 
         if ($this->proxy === true) {
