@@ -262,7 +262,7 @@ return [
         'XeDocument' => App\Facades\XeDocument::class,
 
         'Comment' => App\Facades\Comment::class,
-        'Category' => App\Facades\Category::class,
+        'XeCategory' => App\Facades\XeCategory::class,
         'Widget' => App\Facades\Widget::class,
         'Counter' => App\Facades\Counter::class,
         'Tag' => App\Facades\Tag::class,

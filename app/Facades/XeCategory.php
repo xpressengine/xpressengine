@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is category entity class.
+ * This file is category facade class.
  *
  * PHP version 5
  *
@@ -11,12 +11,12 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Category;
+namespace App\Facades;
 
-use Xpressengine\Support\EntityTrait;
+use Illuminate\Support\Facades\Facade;
 
 /**
- * 여러 단어들로 구성된 카테고리 객체 클래스.
+ * facade 로 사용하기 위한 연결
  *
  * @category    Category
  * @package     Xpressengine\Category
@@ -25,7 +25,16 @@ use Xpressengine\Support\EntityTrait;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class CategoryEntity
+class XeCategory extends Facade
 {
-    use EntityTrait;
+
+    /**
+     * Get the registered name of the component.
+     *
+     * @return string
+     */
+    protected static function getFacadeAccessor()
+    {
+        return 'xe.category';
+    }
 }
