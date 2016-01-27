@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is tag entity class
+ * This file is tag used for facade
  *
  * PHP version 5
  *
@@ -11,12 +11,12 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Tag;
+namespace App\Facades;
 
-use Xpressengine\Support\EntityTrait;
+use Illuminate\Support\Facades\Facade;
 
 /**
- * 개별 태그의 정보를 담고 있는 객체
+ * facade 사용을 위한 클래스
  *
  * @category    Tag
  * @package     Xpressengine\Tag
@@ -25,7 +25,16 @@ use Xpressengine\Support\EntityTrait;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class TagEntity
+class XeTag extends Facade
 {
-    use EntityTrait;
+
+    /**
+     * Get the registered name of the component.
+     *
+     * @return string
+     */
+    protected static function getFacadeAccessor()
+    {
+        return 'xe.tag';
+    }
 }

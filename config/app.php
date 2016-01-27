@@ -265,7 +265,7 @@ return [
         'XeCategory' => App\Facades\XeCategory::class,
         'Widget' => App\Facades\Widget::class,
         'Counter' => App\Facades\Counter::class,
-        'Tag' => App\Facades\Tag::class,
+        'XeTag' => App\Facades\XeTag::class,
         'ToggleMenu' => App\Facades\ToggleMenu::class,
         'Temporary' => App\Facades\Temporary::class,
         'Trash' => App\Facades\Trash::class,

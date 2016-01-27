@@ -9,29 +9,29 @@ class TagMigration implements Migration {
 
     public function install()
     {
-        Schema::create('tag_item', function (Blueprint $table) {
+        Schema::create('tags', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
             $table->increments('id');
-            $table->string('instanceId');
+            $table->string('instanceId')->nullable();
             $table->string('word', 100);
             $table->string('decomposed');
             $table->integer('count');
-            $table->timestamp('createdAt');
 
             $table->index('instanceId');
             $table->index('decomposed');
         });
 
-        Schema::create('tag_item_used', function (Blueprint $table) {
+        Schema::create('taggables', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
             $table->increments('id');
-            $table->string('targetId', 36);
-            $table->integer('itemId');
+            $table->integer('tagId');
+            $table->string('taggableId', 36);
+            $table->integer('position');
             $table->timestamp('createdAt');
 
-            $table->unique(['targetId', 'itemId']);
+            $table->unique(['tagId', 'taggableId']);
         });
     }
 
