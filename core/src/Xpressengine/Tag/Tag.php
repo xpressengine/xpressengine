@@ -64,7 +64,7 @@ class Tag extends DynamicModel
      * @param string $taggableId taggable id
      * @return Collection|static[]
      */
-    public static function getTagByTaggable($taggableId)
+    public static function getByTaggable($taggableId)
     {
         $model = new static;
 

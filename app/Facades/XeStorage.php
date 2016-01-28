@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Facade;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class Storage  extends Facade
+class XeStorage  extends Facade
 {
     /**
      * facade access keyword
