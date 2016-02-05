@@ -53,7 +53,6 @@ interface MemberEntityInterface extends Authenticatable, CanResetPassword
     /**
      * Finds whether member has super rating.
      *
-     * @deprecated use isAdmin.
      * @return boolean
      */
     public function isAdmin();

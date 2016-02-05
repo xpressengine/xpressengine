@@ -113,19 +113,23 @@ class PresenterServiceProvider extends ServiceProvider
     {
         $this->app->singleton('xe.frontend', function ($app) {
             $tags = [
-                'title' => '\Xpressengine\Presenter\Html\Tags\Title',
-                'meta' => '\Xpressengine\Presenter\Html\Tags\Meta',
-                'icon' => '\Xpressengine\Presenter\Html\Tags\IconFile',
-                'css' => '\Xpressengine\Presenter\Html\Tags\CSSFile',
-                'js' => '\Xpressengine\Presenter\Html\Tags\JSFile',
-                'bodyClass' => '\Xpressengine\Presenter\Html\Tags\BodyClass',
-                'html' => '\Xpressengine\Presenter\Html\Tags\Html',
-                'rule' => '\Xpressengine\Presenter\Html\Tags\Rule',
-                'translation' => '\Xpressengine\Presenter\Html\Tags\Translation',
+                'title' => \Xpressengine\Presenter\Html\Tags\Title::class,
+                'meta' => \Xpressengine\Presenter\Html\Tags\Meta::class,
+                'icon' => \Xpressengine\Presenter\Html\Tags\IconFile::class,
+                'css' => \Xpressengine\Presenter\Html\Tags\CSSFile::class,
+                'js' => \Xpressengine\Presenter\Html\Tags\JSFile::class,
+                'bodyClass' => \Xpressengine\Presenter\Html\Tags\BodyClass::class,
+                'html' => \Xpressengine\Presenter\Html\Tags\Html::class,
+                'rule' => \Xpressengine\Presenter\Html\Tags\Rule::class,
+                'translation' => \Xpressengine\Presenter\Html\Tags\Translation::class,
+                'package' => \Xpressengine\Presenter\Html\Tags\Package::class
             ];
 
             $frontendHandler = $app['xe.interception']->proxy(FrontendHandler::class, 'Frontend');
             $frontendHandler = new $frontendHandler($tags);
+
+            // inject frontend handler to Package
+            \Xpressengine\Presenter\Html\Tags\Package::setHandler($frontendHandler);
 
             return $frontendHandler;
         });
@@ -206,4 +210,5 @@ class PresenterServiceProvider extends ServiceProvider
             }
         }
     }
+
 }
