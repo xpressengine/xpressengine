@@ -11,7 +11,9 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Media\Spec;
+namespace Xpressengine\Media\Models;
+
+use Xpressengine\Media\Models\Meta\AudioMeta;
 
 /**
  * audio 객체
@@ -22,15 +24,40 @@ namespace Xpressengine\Media\Spec;
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
+ *
+ * @property int $id
+ * @property string $fileId
+ * @property array $audio
+ * @property int $playtime
+ * @property int $bitrate
  */
 class Audio extends Media
 {
     /**
-     * Json type meta data name list
+     * The attributes that should be casted to native types.
      *
      * @var array
      */
-    protected static $jsonType = ['audio'];
+    protected $casts = [
+        'audio' => 'array',
+    ];
+
+    /**
+     * Available mime type
+     *
+     * @var array
+     */
+    protected static $mimes = ['audio/mpeg', 'audio/ogg', 'audio/wav'];
+
+    /**
+     * Returns meta data model for current model
+     *
+     * @return string
+     */
+    public function getMetaModel()
+    {
+        return AudioMeta::class;
+    }
 
     /**
      * Rendered media

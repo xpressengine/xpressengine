@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is temporary storage class
+ * This file is MimeTypeFilter trait
  *
  * PHP version 5
  *
@@ -14,7 +14,7 @@
 namespace Xpressengine\Media;
 
 /**
- * 파일 처리를 위한 임시 저장 처리
+ * Trait MimeTypeFilter
  *
  * @category    Media
  * @package     Xpressengine\Media
@@ -23,40 +23,36 @@ namespace Xpressengine\Media;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class TempStorage
+trait MimeTypeFilter
 {
     /**
-     * 임시 경로 이름 반환
+     * MimeTypeScope instance
      *
-     * @return string
+     * @var MimeTypeScope
      */
-    public function getTempPathname()
+    protected static $mimeTypeScope;
+
+    /**
+     * Boot the mime type filter trait for a model.
+     *
+     * @return void
+     */
+    public static function bootMimeTypeFilter()
     {
-        return tempnam(sys_get_temp_dir(), 'MediaTemp');
+        static::addGlobalScope(static::getMimeTypeScope());
     }
 
     /**
-     * 임시경로에 파일 생성
+     * Returns the mime type filter scope
      *
-     * @param string $pathname file pathname
-     * @param string $content  file content
-     * @return void
+     * @return MimeTypeScope
      */
-    public function createFile($pathname, $content)
+    public static function getMimeTypeScope()
     {
-        $fp = fopen($pathname, 'wb');
-        fwrite($fp, $content);
-        fclose($fp);
-    }
+        if (!static::$mimeTypeScope) {
+            static::$mimeTypeScope = new MimeTypeScope;
+        }
 
-    /**
-     * 임시 파일 삭제
-     *
-     * @param string $pathname file pathname
-     * @return void
-     */
-    public function remove($pathname)
-    {
-        unlink($pathname);
+        return static::$mimeTypeScope;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is interface of Distributor
+ * This file is temporary file class
  *
  * PHP version 5
  *
@@ -16,7 +16,7 @@ namespace Xpressengine\Storage;
 use Symfony\Component\HttpFoundation\File\File as SymfonyFile;
 
 /**
- * Interface Distributor
+ * Class TempFile
  *
  * @category    Storage
  * @package     Xpressengine\Storage
@@ -25,13 +25,27 @@ use Symfony\Component\HttpFoundation\File\File as SymfonyFile;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-interface Distributor
+class TempFile extends SymfonyFile
 {
     /**
-     * allot storage disk
+     * Destroy the file from temporary disk
      *
-     * @param SymfonyFile $file file object
-     * @return string
+     * @return void
      */
-    public function allot(SymfonyFile $file);
+    public function destroy()
+    {
+        if ($this->isFile()) {
+            @unlink($this->getPathname());
+        }
+    }
+
+    /**
+     * Destructor
+     *
+     * @return void
+     */
+    public function __destruct()
+    {
+        $this->destroy();
+    }
 }

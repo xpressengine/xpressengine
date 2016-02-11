@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is interface of Distributor
+ * This file is a exception to file store fail
  *
  * PHP version 5
  *
@@ -11,12 +11,12 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Storage;
+namespace Xpressengine\Storage\Exceptions;
 
-use Symfony\Component\HttpFoundation\File\File as SymfonyFile;
+use Xpressengine\Storage\StorageException;
 
 /**
- * Interface Distributor
+ * Class StoreFailException
  *
  * @category    Storage
  * @package     Xpressengine\Storage
@@ -25,13 +25,7 @@ use Symfony\Component\HttpFoundation\File\File as SymfonyFile;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-interface Distributor
+class WritingFailException extends StorageException
 {
-    /**
-     * allot storage disk
-     *
-     * @param SymfonyFile $file file object
-     * @return string
-     */
-    public function allot(SymfonyFile $file);
+    protected $message = 'file store fail';
 }

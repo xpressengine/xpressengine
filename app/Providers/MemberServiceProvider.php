@@ -18,7 +18,7 @@ use Illuminate\Auth\Passwords\DatabaseTokenRepository;
 use Illuminate\Auth\Passwords\PasswordBroker;
 use Illuminate\Contracts\Validation\Factory as Validator;
 use Illuminate\Support\ServiceProvider;
-use Xpressengine\Media\MediaManager;
+use Xpressengine\Media\Models\Image;
 use Xpressengine\Media\Thumbnailer;
 use Xpressengine\Member\EmailBroker;
 use Xpressengine\Member\Entities\Database\MemberEntity;
@@ -40,7 +40,6 @@ use Xpressengine\Member\Repositories\MemberRepositoryInterface;
 use Xpressengine\Member\Repositories\PendingMailRepositoryInterface;
 use Xpressengine\Member\Repositories\VirtualGroupRepository;
 use Xpressengine\Member\Repositories\VirtualGroupRepositoryInterface;
-use Xpressengine\Storage\Storage;
 use Xpressengine\ToggleMenus\Member\LinkItem;
 use Xpressengine\ToggleMenus\Member\RawItem;
 
@@ -534,21 +533,15 @@ class MemberServiceProvider extends ServiceProvider
     private function setProfileImageResolverOfMember()
     {
         $default = $this->app['config']['xe.member.profileImage.default'];
-        $storage = $this->app['xe.storage'];
-        $media = $this->app['xe.media'];
+
         MemberEntity::setProfileImageResolver(
-            function ($imageId) use ($default, $storage, $media) {
-
-                /** @var Storage $storage */
-                $file = $storage->get($imageId);
-
-                if ($file !== null) {
-                    /** @var MediaManager $media */
-                    $mediaFile = $media->make($file);
-                    return asset($mediaFile->url());
+            function ($imageId) use ($default) {
+                /** @var Image $image */
+                if (!$image = Image::find($imageId)) {
+                    return asset($default);
                 }
 
-                return asset($default);
+                return asset($image->url());
             }
         );
     }

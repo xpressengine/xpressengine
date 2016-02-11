@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is property not exists exception
+ * This file is ImageMeta class
  *
  * PHP version 5
  *
@@ -11,12 +11,10 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Media\Exceptions;
-
-use Xpressengine\Media\MediaException;
+namespace Xpressengine\Media\Models\Meta;
 
 /**
- * 필수 property 가 존재하지 않는 경우
+ * Class ImageMeta
  *
  * @category    Media
  * @package     Xpressengine\Media
@@ -25,7 +23,26 @@ use Xpressengine\Media\MediaException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class NonExistingPropertyException extends MediaException
+class ImageMeta extends Meta
 {
-    protected $message = '":name" property 가 존재하지 않습니다.';
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'files_image';
+
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = ['id', 'fileId'];
+
+    /**
+     * The foreign key name for the model.
+     *
+     * @var string
+     */
+    protected $foreignKey = 'fileId';
 }

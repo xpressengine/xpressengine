@@ -618,10 +618,7 @@ Route::group(['prefix' => 'tag'], function () {
 });
 
 Route::get('file/{id}', ['as' => 'file.path', 'uses' => 'StorageController@file'])->where('id', '[0-9a-z\-]+');
-Route::settings('storage', function () {
-    Route::get('/', ['as' => 'manage.storage.index', 'uses' => 'StorageController@index']);
-    Route::post('destroy', ['as' => 'manage.storage.destroy', 'uses' => 'StorageController@destroy']);
-});
+
 
 Route::settings('dynamicField', function () {
     Route::get('/', ['as' => 'manage.dynamicField.index', 'uses' => 'DynamicFieldController@index']);

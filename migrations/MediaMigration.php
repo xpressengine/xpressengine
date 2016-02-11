@@ -12,42 +12,39 @@ class MediaMigration implements Migration {
         Schema::create('files_image', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
-            $table->string('id', 36);
-            $table->string('originId', 36)->nullable();
+            $table->increments('id');
+            $table->string('fileId', 36);
             $table->string('type', 20)->nullable();
             $table->string('code', 20)->nullable();
             $table->integer('width');
             $table->integer('height');
 
-            $table->primary('id');
-            $table->index('originId');
+            $table->index('fileId');
         });
 
         Schema::create('files_video', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
-            $table->string('id', 36);
-            $table->string('originId', 36)->nullable();
+            $table->increments('id');
+            $table->string('fileId', 36);
             $table->string('audio');
             $table->string('video');
             $table->integer('playtime');
             $table->integer('bitrate');
 
-            $table->primary('id');
-            $table->index('originId');
+            $table->index('fileId');
         });
 
         Schema::create('files_audio', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
-            $table->string('id', 36);
-            $table->string('originId', 36)->nullable();
+            $table->increments('id');
+            $table->string('fileId', 36);
             $table->string('audio');
             $table->integer('playtime');
             $table->integer('bitrate');
 
-            $table->primary('id');
-            $table->index('originId');
+            $table->index('fileId');
         });
     }
 

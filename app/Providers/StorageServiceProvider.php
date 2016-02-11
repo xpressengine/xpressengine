@@ -14,12 +14,11 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use League\Flysystem\Filesystem as Flysystem;
-use League\Flysystem\Adapter\Ftp as FtpAdapter;
-use Xpressengine\Storage\DatabaseFileRepository;
-use Xpressengine\Storage\FileHandler;
+use Xpressengine\Storage\File;
+use Xpressengine\Storage\FilesystemHandler;
 use Xpressengine\Storage\RoundRobinDistributor;
 use Xpressengine\Storage\Storage;
+use Xpressengine\Storage\TempFileCreator;
 use Xpressengine\Storage\UrlMaker;
 
 /**
@@ -48,12 +47,8 @@ class StorageServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        /**
-         * @deprecated laravel 버전업되면서 ftp 가 기본으로 포함된 듯
-         */
-        $this->app['filesystem']->extend('ftp', function ($app, $config) {
-            return new Flysystem(new FtpAdapter($config));
-        });
+        File::setContentReader($this->app['xe.storage']->getFilesystemHandler());
+        File::setUrlMaker($this->app['xe.storage.url']);
     }
 
     /**
@@ -63,15 +58,21 @@ class StorageServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->bind('xe.storage.temp', function ($app) {
+            return new TempFileCreator();
+        }, true);
+
         $this->app->bind('xe.storage', function ($app) {
             $distributor = new RoundRobinDistributor($app['config']['filesystems'], $app['xe.db']->connection());
 
-            $proxyClass = $app['xe.interception']->proxy(Storage::class, 'Storage');
+            $proxyClass = $app['xe.interception']->proxy(Storage::class, 'XeStorage');
+
             return new $proxyClass(
-                new FileHandler($app['filesystem'], $distributor),
-                new DatabaseFileRepository($app['xe.db']->connection()),
+                new FilesystemHandler($app['filesystem'], $distributor),
                 $app['xe.auth'],
-                $app['xe.keygen']
+                $app['xe.keygen'],
+                $distributor,
+                $app['xe.storage.temp']
             );
         }, true);
 
@@ -107,6 +108,6 @@ class StorageServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return ['xe.storage', 'xe.storage.url'];
+        return ['xe.storage', 'xe.storage.temp', 'xe.storage.url'];
     }
 }

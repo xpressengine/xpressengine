@@ -13,13 +13,15 @@
  */
 namespace Xpressengine\Media;
 
+use Illuminate\Database\Eloquent\Collection;
 use Xpressengine\Media\Coordinators\Dimension;
 use Xpressengine\Media\Exceptions\NotAvailableException;
 use Xpressengine\Media\Exceptions\UnknownTypeException;
-use Xpressengine\Media\Spec\Media;
-use Xpressengine\Media\Spec\Image;
+use Xpressengine\Media\Models\Media;
+use Xpressengine\Media\Models\Image;
 use Xpressengine\Storage\File;
 use Xpressengine\Media\Handlers\AbstractHandler;
+use Xpressengine\Storage\Storage;
 
 /**
  * # MediaManager
@@ -27,12 +29,12 @@ use Xpressengine\Media\Handlers\AbstractHandler;
  * 섬네일 생성 및 제공 등의 역할을 수행 함
  *
  * ### app binding : xe.media 으로 바인딩 되어 있음
- * `Media` Facade 로 접근이 가능
+ * `XeMedia` Facade 로 접근이 가능
  *
  * ### 미디어 파일 확인 및 캐스팅
  * ```php
- * if (Media::is($file)) {
- *      $media = Media::make($file);
+ * if (XeMedia::is($file)) {
+ *      $media = XeMedia::make($file);
  * }
  * ```
  *
@@ -47,7 +49,7 @@ use Xpressengine\Media\Handlers\AbstractHandler;
  *  - `crop` : 지정된 좌표로부터 지정된 사이즈만큼 잘라냄
  *
  * ```php
- * $thumbnails = Media::createThumbnails($file, 'letter');
+ * $thumbnails = XeMedia::createThumbnails($file, 'letter');
  * ```
  *
  * 두번째 인자로 타입을 전달하지 않으면
@@ -57,15 +59,8 @@ use Xpressengine\Media\Handlers\AbstractHandler;
  *
  * ### 원본 미디어를 통한 섬네일 반환
  * ```php
- * $thumbnails = Media::getThumbnails($media);
+ * $thumbnails = Image::getThumbnails($media);
  * ```
- *
- * ### 미디어의 url
- * 미디어 객채의 url 은 Storage 의 UrlMaker 를 통해 제공됨
- * 이때 filesystem config 의 각 저장소별 설정에서 url 항목이
- * 작성되어진 경우 해당 항목을 이용해 직접 저장소의 파일에 접근할 수
- * 있는 url 을 제공하고 그렇지 않은경우 내부 시스템을 통해 제공되는
- * url 을 제공함
  *
  * @category    Media
  * @package     Xpressengine\Media
@@ -76,6 +71,13 @@ use Xpressengine\Media\Handlers\AbstractHandler;
  */
 class MediaManager
 {
+    /**
+     * Storage instance
+     *
+     * @var Storage
+     */
+    protected $storage;
+
     /**
      * CommandFactory instance
      *
@@ -100,11 +102,13 @@ class MediaManager
     /**
      * Constructor
      *
+     * @param Storage        $storage Storage instance
      * @param CommandFactory $factory CommandFactory instance
      * @param array          $config  config data
      */
-    public function __construct(CommandFactory $factory, array $config)
+    public function __construct(Storage $storage, CommandFactory $factory, array $config)
     {
+        $this->storage = $storage;
         $this->factory = $factory;
         $this->config = $config;
     }
@@ -150,7 +154,7 @@ class MediaManager
     public function getFileType(File $file)
     {
         foreach ($this->handlers as $type => $handler) {
-            if ($handler->isAvailable($file->getMime()) === true) {
+            if ($handler->isAvailable($file->mime) === true) {
                 return $type;
             }
         }
@@ -179,7 +183,7 @@ class MediaManager
     public function make(File $file)
     {
         foreach ($this->handlers as $handler) {
-            if ($handler->isAvailable($file->getMime()) === true) {
+            if ($handler->isAvailable($file->mime) === true) {
                 return $handler->make($file);
             }
         }
@@ -196,7 +200,7 @@ class MediaManager
     public function is(File $file)
     {
         foreach ($this->handlers as $type => $handler) {
-            if ($handler->isAvailable($file->getMime()) === true) {
+            if ($handler->isAvailable($file->mime) === true) {
                 return true;
             }
         }
@@ -208,11 +212,26 @@ class MediaManager
      * 미디어 삭제
      *
      * @param Media $media media instance
-     * @return void
+     * @return bool
      */
     public function remove(Media $media)
     {
-        $this->getHandlerByMedia($media)->remove($media);
+        $this->metaRemove($media);
+
+        return $this->storage->remove($media);
+    }
+
+    /**
+     * Meta data 삭제
+     *
+     * @param Media $media media instance
+     * @return void
+     */
+    public function metaRemove(Media $media)
+    {
+        if ($media->meta) {
+            $media->meta->delete();
+        }
     }
 
     /**
@@ -220,7 +239,7 @@ class MediaManager
      *
      * @param Media       $media media instance
      * @param string|null $type  섬네일 생성 방식
-     * @return Image[]
+     * @return Collection|Image[]
      */
     public function createThumbnails(Media $media, $type = null)
     {
@@ -243,42 +262,36 @@ class MediaManager
                     $code,
                     $this->config['disk'],
                     $this->config['path'],
-                    $media->getFile()->getOriginId()
+                    $media->getOriginKey()
                 );
 
         }
 
-        return $thumbnails;
+        return new Collection($thumbnails);
     }
 
     /**
-     * Get a thumbnail image
+     * 동적으로 생성된 미디어 파일 반환
      *
-     * @param Media  $media       media instance
-     * @param string $type        thumbnail make type
-     * @param string $dimension   dimension code
-     * @param bool   $defaultSelf if set true, returns self when thumbnail not exists
-     * @return null|Image|Media
+     * @param Media $media media instance
+     * @return Collection|Media[]
      */
-    public function getThumbnail(Media $media, $type, $dimension, $defaultSelf = true)
+    public function getDerives(Media $media)
     {
-        return $this->getHandler(Media::TYPE_IMAGE)->getThumbnail($media, $type, $dimension, $defaultSelf);
-    }
+        $files = $media->getRawDerives();
 
-    /**
-     * Get thumbnails
-     *
-     * @param Media       $media media instance
-     * @param null|string $type  thumbnail make type
-     * @return Image[]
-     */
-    public function getThumbnails(Media $media, $type = null)
-    {
-        return $this->getHandler(Media::TYPE_IMAGE)->getThumbnails($media, $type);
+        foreach ($files as $key => $file) {
+            $files[$key] = $this->is($file) ? $this->make($file) : null;
+        }
+
+        return $files->filter();
     }
 
     /**
      * 미디어 핸들러를 추가, 변경하여 기능 확장
+     *
+     * is() method 를 통해 파일이 미디어 인지 판별할 수 있어야 하므로
+     * 각각의 handler 들은 활성화된 상태로 전달 받도록 함
      *
      * @param string          $type    media type
      * @param AbstractHandler $handler media handler
