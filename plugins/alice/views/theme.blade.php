@@ -35,7 +35,7 @@
                             <ul>
                                 {{-- loop 1--}}
                                 @foreach($mainMenu as $menuItem)
-                                @if($menuItem->activated === 1 && $menuItem->checkVisiblePermission(Auth::user()))
+                                @if($menuItem->activated == 1 && $menuItem->checkVisiblePermission(Auth::user()))
 
                                 <!--[D] 메뉴 선택 시 li.on -->
                                 <li class="@if($menuItem->isSelected())on @endif @if($menuItem->hasChild()) @endif">
@@ -50,7 +50,7 @@
                                             <ul>
                                                 {{-- loop 2--}}
                                                 @foreach($menuItem->getChildren() as $menuItem2Depth)
-                                                    @if($menuItem2Depth->activated === 1 && $menuItem2Depth->checkVisiblePermission(Auth::user()))
+                                                    @if($menuItem2Depth->activated == 1 && $menuItem2Depth->checkVisiblePermission(Auth::user()))
 
                                                         <li class="@if($menuItem2Depth->isSelected())on @endif">
 
@@ -105,7 +105,7 @@
                 <h5 class="white-text">{{ $subMenuTitle }}</h5>
                 <ul>
                 @foreach($subMenu as $menuItem)
-                @if($menuItem->activated === 1 && $menuItem->checkVisiblePermission(Auth::user()))
+                @if($menuItem->activated == 1 && $menuItem->checkVisiblePermission(Auth::user()))
                     <!--[D] 메뉴 선택 시 li.on -->
                     <li>
                         <a href="{{ url($menuItem->url) }}" class="white-text">{{ xe_trans($menuItem->title) }}</a>
