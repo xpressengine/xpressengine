@@ -74,6 +74,10 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
         $resource = file_get_contents(__DIR__ . '/sample.png');
 
+        $mockGuest = m::mock('Xpressengine\Member\Entities\Guest');
+        $mockGuest->shouldReceive('getId')->andReturnNull();
+        $auth->shouldReceive('user')->andReturn($mockGuest);
+
         $uploaded = m::mock('Symfony\Component\HttpFoundation\File\UploadedFile');
         $uploaded->shouldReceive('isValid')->andReturn(true);
         $uploaded->shouldReceive('getClientOriginalName')->andReturn('foo.jpg');
@@ -104,6 +108,10 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $mockFile = m::mock('stdClass');
 
         $instance->expects($this->once())->method('createModel')->willReturn($mockFile);
+
+        $mockGuest = m::mock('Xpressengine\Member\Entities\Guest');
+        $mockGuest->shouldReceive('getId')->andReturnNull();
+        $auth->shouldReceive('user')->andReturn($mockGuest);
 
         $mockTempFile = m::mock('Symfony\Component\HttpFoundation\File\File');
         $mockTempFile->shouldReceive('getMimeType')->andReturn('image/png');
@@ -143,35 +151,6 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         } catch (\Exception $e) {
             $this->assertInstanceOf('Xpressengine\Storage\Exceptions\FileDoesNotExistException', $e);
         }
-    }
-
-    public function testModifyContent()
-    {
-        list($handler, $auth, $keygen, $distributor, $temps) = $this->getMocks();
-        $instance = new Storage($handler, $auth, $keygen, $distributor, $temps);
-
-        $mockFile = m::mock('Xpressengine\Storage\File');
-        $mockFile->shouldReceive('getPathname')->andReturn('path/to');
-        $mockFile->shouldReceive('getAttribute')->with('disk')->andReturn('local');
-
-        $handler->shouldReceive('store')->once()->with('new file content', 'path/to', 'local')->andReturn(true);
-
-        $mockTempFile = m::mock('Symfony\Component\HttpFoundation\File\File');
-        $mockTempFile->shouldReceive('getMimeType')->andReturn('image/png');
-        $mockTempFile->shouldReceive('getSize')->andReturn(123456);
-
-        $temps->shouldReceive('create')->once()->with('new file content')->andReturn($mockTempFile);
-
-        $mockFile->shouldReceive('setAttribute')->with('mime', 'image/png')->andSet('mime', 'image/png');
-        $mockFile->shouldReceive('setAttribute')->with('size', '123456')->andSet('size', '123456');
-
-        $mockFile->shouldReceive('save')->andReturn(true);
-        $mockTempFile->shouldReceive('destroy')->andReturnNull();
-
-        $file = $instance->modifyContent($mockFile, 'new file content');
-
-        $this->assertEquals('image/png', $file->mime);
-        $this->assertEquals(123456, $file->size);
     }
 
     public function testRemove()

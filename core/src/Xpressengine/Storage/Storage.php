@@ -15,6 +15,7 @@ namespace Xpressengine\Storage;
 
 use Illuminate\Database\Query\Expression;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Xpressengine\Member\Entities\MemberEntityInterface;
 use Xpressengine\Member\GuardInterface as Authenticator;
 use Xpressengine\Storage\Exceptions\InvalidFileException;
 use Xpressengine\Storage\Exceptions\FileDoesNotExistException;
@@ -180,14 +181,20 @@ class Storage
     /**
      * file upload to storage
      *
-     * @param UploadedFile $uploaded uploaded file instance
-     * @param string       $path     be saved path
-     * @param string|null  $name     be saved file name
-     * @param string|null  $disk     disk name (ex. local, ftp, s3 ...)
+     * @param UploadedFile          $uploaded uploaded file instance
+     * @param string                $path     be saved path
+     * @param string|null           $name     be saved file name
+     * @param string|null           $disk     disk name (ex. local, ftp, s3 ...)
+     * @param MemberEntityInterface $user user instance
      * @return File
      */
-    public function upload(UploadedFile $uploaded, $path, $name = null, $disk = null)
-    {
+    public function upload(
+        UploadedFile $uploaded,
+        $path,
+        $name = null,
+        $disk = null,
+        MemberEntityInterface $user = null
+    ) {
         if ($uploaded->isValid() === false) {
             throw new InvalidFileException();
         }
@@ -197,6 +204,7 @@ class Storage
         $path = $this->makePath($id, $path);
 
         $disk = $disk ?: $this->distributor->allot($uploaded);
+        $user = $user ?: $this->auth->user();
 
         if (!$this->files->store(file_get_contents($uploaded->getPathname()), $path . '/' . $name, $disk)) {
             throw new WritingFailException;
@@ -204,7 +212,7 @@ class Storage
 
         $file = $this->createModel();
         $file->id = $id;
-        $file->userId = $this->auth->user()->getId();
+        $file->userId = $user->getId();
         $file->disk = $disk;
         $file->path = $path;
         $file->filename = $name;
@@ -220,20 +228,22 @@ class Storage
     /**
      * create file
      *
-     * @param string      $content  file content
-     * @param string      $path     directory for saved
-     * @param string      $name     saved name
-     * @param string|null $disk     disk for saved
-     * @param string|null $originId original file id
+     * @param string                $content  file content
+     * @param string                $path     directory for saved
+     * @param string                $name     saved name
+     * @param string|null           $disk     disk for saved
+     * @param string|null           $originId original file id
+     * @param MemberEntityInterface $user user instance
      * @return File
      */
-    public function create($content, $path, $name, $disk = null, $originId = null)
+    public function create($content, $path, $name, $disk = null, $originId = null, MemberEntityInterface $user = null)
     {
         $id = $this->keygen->generate();
         $path = $this->makePath($id, $path);
 
         $tempFile = $this->tempFiles->create($content);
         $disk = $disk ?: $this->distributor->allot($tempFile);
+        $user = $user ?: $this->auth->user();
 
         if (!$this->files->store($content, $path . '/' . $name, $disk)) {
             throw new WritingFailException;
@@ -241,7 +251,7 @@ class Storage
 
         $file = $this->createModel();
         $file->id = $id;
-//        $file->userId = $this->auth->user()->getId();
+        $file->userId = $user->getId();
         $file->disk = $disk;
         $file->path = $path;
         $file->filename = $name;
@@ -287,29 +297,6 @@ class Storage
         header('Content-Length: ' . $file->size);
 
         file_put_contents('php://output', $file->getContent());
-    }
-
-    /**
-     * modify file content
-     *
-     * @param File   $file    file instance
-     * @param string $content new file content
-     * @return File
-     */
-    public function modifyContent(File $file, $content)
-    {
-        if (!$this->files->store($content, $file->getPathname(), $file->disk)) {
-            throw new WritingFailException;
-        }
-
-        $new = $this->tempFiles->create($content);
-        $file->mime = $new->getMimeType();
-        $file->size = $new->getSize();
-
-        $file->save();
-        $new->destroy();
-
-        return $file;
     }
 
     /**
