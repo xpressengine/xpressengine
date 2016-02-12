@@ -267,7 +267,7 @@ return [
         'Counter' => App\Facades\Counter::class,
         'XeTag' => App\Facades\XeTag::class,
         'ToggleMenu' => App\Facades\ToggleMenu::class,
-        'Temporary' => App\Facades\Temporary::class,
+        'XeTemporary' => App\Facades\XeTemporary::class,
         'Trash' => App\Facades\Trash::class,
         'Permission' => App\Facades\Permission::class,
         'XeMedia' => App\Facades\XeMedia::class,

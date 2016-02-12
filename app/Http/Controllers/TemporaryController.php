@@ -3,7 +3,7 @@ namespace App\Http\Controllers;
 
 use Auth;
 use Input;
-use Temporary;
+use XeTemporary;
 use Presenter;
 
 class TemporaryController extends Controller
@@ -11,7 +11,7 @@ class TemporaryController extends Controller
     public function index()
     {
         if (Auth::guest() !== true) {
-            $temporaries = Temporary::get(Input::get('key'));
+            $temporaries = XeTemporary::get(Input::get('key'));
 
             if (!empty($temporaries)) {
                 uasort($temporaries, function ($a, $b) {
@@ -31,7 +31,7 @@ class TemporaryController extends Controller
         if (Auth::guest() !== true) {
             try {
                 $etc = Input::except(['_token', 'key', 'rep']);
-                $temporary = Temporary::set(Input::get('key'), Input::get(Input::get('rep')), $etc);
+                $temporary = XeTemporary::set(Input::get('key'), Input::get(Input::get('rep')), $etc);
             } catch (\Exception $e) {
                 echo $e->getMessage() . '|' . $e->getFile() . '|' . $e->getLine();
 
@@ -47,9 +47,9 @@ class TemporaryController extends Controller
     public function update($temporaryId)
     {
         if (Auth::guest() !== true) {
-            if (($old = Temporary::getById($temporaryId)) && $old->userId == Auth::user()->getId()) {
+            if (($old = XeTemporary::getById($temporaryId)) && $old->userId == Auth::user()->getId()) {
                 $etc = Input::except(['_token', 'rep']);
-                $temporary = Temporary::put($temporaryId, Input::get(Input::get('rep')), $etc);
+                $temporary = XeTemporary::put($temporaryId, Input::get(Input::get('rep')), $etc);
 
                 return Presenter::makeApi(['temporaryId' => $temporary->id]);
             }
@@ -61,9 +61,9 @@ class TemporaryController extends Controller
     public function destroy($temporaryId)
     {
         if (Auth::guest() !== true) {
-            if ($temporary = Temporary::getById($temporaryId)) {
+            if ($temporary = XeTemporary::getById($temporaryId)) {
                 if (Auth::user()->getId() == $temporary->userId) {
-                    Temporary::remove($temporary);
+                    XeTemporary::remove($temporary);
                 }
             }
         }
@@ -79,10 +79,10 @@ class TemporaryController extends Controller
 
         $etc = Input::except(['_token', 'key', 'rep']);
 
-        if ($temporary = Temporary::getAuto(Input::get('key'))) {
-            Temporary::put($temporary->id, Input::get(Input::get('rep')), $etc);
+        if ($temporary = XeTemporary::getAuto(Input::get('key'))) {
+            XeTemporary::put($temporary->id, Input::get(Input::get('rep')), $etc);
         } else {
-            Temporary::set(Input::get('key'), Input::get(Input::get('rep')), $etc, true);
+            XeTemporary::set(Input::get('key'), Input::get(Input::get('rep')), $etc, true);
         }
     }
 
@@ -92,8 +92,8 @@ class TemporaryController extends Controller
             return null;
         }
 
-        if ($temporary = Temporary::getAuto(Input::get('key'))) {
-            Temporary::remove($temporary);
+        if ($temporary = XeTemporary::getAuto(Input::get('key'))) {
+            XeTemporary::remove($temporary);
         }
     }
 }
