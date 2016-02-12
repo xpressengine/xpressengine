@@ -7,7 +7,7 @@
     <nav class="main-navigation" role="navigation">
         <div class="container">
             <div class="nav-wrapper">
-                <a class="brand-logo" href="{{ url('/') }}">{{ $config['title'] }}</a>
+                <a class="brand-logo" href="{{ url('/') }}">{{ $config['title'] }}1sam</a>
 
                 {{-- menu --}}
                 <div class="menu-menu-1-container">
@@ -33,12 +33,14 @@
                         </div>
                         <div class="lst menu_lst">
                             <ul>
+                                
                                 {{-- loop 1--}}
                                 @foreach($mainMenu as $menuItem)
-                                @if($menuItem->activated === 1 && $menuItem->checkVisiblePermission(Auth::user()))
+
+                                @if($menuItem->activated == 1 && $menuItem->checkVisiblePermission(Auth::user()))
 
                                 <!--[D] 메뉴 선택 시 li.on -->
-                                <li class="@if($menuItem->isSelected())on @endif @if($menuItem->hasChild()) @endif">
+                                <li class="@if($menuItem->isSelected())on @endif @if($menuItem->hasChild())on @endif">
 
                                     @if($menuItem->hasChild() === false)
                                         <a href="{{ url($menuItem->url) }}"><span>{{ xe_trans($menuItem->title) }}</span></a>
