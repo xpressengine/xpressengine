@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is accessor for use media by facade
+ * This file is VideoMeta class
  *
  * PHP version 5
  *
@@ -11,12 +11,10 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace App\Facades;
-
-use Illuminate\Support\Facades\Facade;
+namespace Xpressengine\Media\Models\Meta;
 
 /**
- * for facade
+ * Class VideoMeta
  *
  * @category    Media
  * @package     Xpressengine\Media
@@ -25,15 +23,26 @@ use Illuminate\Support\Facades\Facade;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class Media extends Facade
+class VideoMeta extends Meta
 {
     /**
-     * facade access keyword
+     * The table associated with the model.
      *
-     * @return string
+     * @var string
      */
-    protected static function getFacadeAccessor()
-    {
-        return 'xe.media';
-    }
+    protected $table = 'files_video';
+
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = ['id', 'fileId'];
+
+    /**
+     * The foreign key name for the model.
+     *
+     * @var string
+     */
+    protected $foreignKey = 'fileId';
 }

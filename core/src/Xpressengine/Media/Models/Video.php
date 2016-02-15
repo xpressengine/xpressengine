@@ -11,7 +11,9 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Media\Spec;
+namespace Xpressengine\Media\Models;
+
+use Xpressengine\Media\Models\Meta\VideoMeta;
 
 /**
  * video 객체
@@ -22,15 +24,46 @@ namespace Xpressengine\Media\Spec;
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
+ *
+ * @property int $id
+ * @property string $fileId
+ * @property array $audio
+ * @property array $video
+ * @property int $playtime
+ * @property int $bitrate
  */
 class Video extends Media
 {
     /**
-     * Json type meta data name list
+     * The attributes that should be casted to native types.
      *
      * @var array
      */
-    protected static $jsonType = ['audio', 'video'];
+    protected $casts = [
+        'audio' => 'array',
+        'video' => 'array',
+    ];
+
+    /**
+     * Available mime type
+     *
+     * @var array
+     */
+    protected static $mimes = [
+        'video/x-flv', 'video/mp4', 'application/x-mpegURL', 'video/MP2T',
+        'video/3gpp', 'video/quicktime', 'video/x-msvideo', 'video/x-ms-wmv',
+        'video/ogg', 'video/webm'
+    ];
+
+    /**
+     * Returns meta data model for current model
+     *
+     * @return string
+     */
+    public function getMetaModel()
+    {
+        return VideoMeta::class;
+    }
 
     /**
      * Rendered media

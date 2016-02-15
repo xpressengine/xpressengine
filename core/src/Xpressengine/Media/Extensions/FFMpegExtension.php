@@ -15,7 +15,7 @@ namespace Xpressengine\Media\Extensions;
 
 use FFMpeg\FFMpeg;
 use FFMpeg\Coordinate\TimeCode;
-use Xpressengine\Media\TempStorage;
+use Xpressengine\Storage\TempFileCreator;
 
 /**
  * FFMpeg extension 기능을 이용
@@ -37,19 +37,19 @@ class FFMpegExtension implements ExtensionInterface
     protected $ffmpeg;
 
     /**
-     * TempStorage instance
+     * TempFileCreator instance
      *
-     * @var TempStorage
+     * @var TempFileCreator
      */
     protected $temp;
 
     /**
      * Constructor
      *
-     * @param FFMpeg      $ffmpeg FFMpeg instance
-     * @param TempStorage $temp   TempStorage instance
+     * @param FFMpeg          $ffmpeg FFMpeg instance
+     * @param TempFileCreator $temp   TempFileCreator instance
      */
-    public function __construct(FFMpeg $ffmpeg, TempStorage $temp)
+    public function __construct(FFMpeg $ffmpeg, TempFileCreator $temp)
     {
         $this->ffmpeg = $ffmpeg;
         $this->temp = $temp;
@@ -64,18 +64,16 @@ class FFMpegExtension implements ExtensionInterface
      */
     public function getSnapshot($content, $fromSecond = 10)
     {
-        $tmpPathname = $this->temp->getTempPathname();
-        $tmpImgPathname = $this->temp->getTempPathname();
+        $videoFile = $this->temp->create($content);
+        $imgPathname = $this->temp->getTempPathname();
 
-        $this->temp->createFile($tmpPathname, $content);
+        $video = $this->ffmpeg->open($videoFile->getPathname());
+        $video->frame(TimeCode::fromSeconds($fromSecond))->save($imgPathname);
 
-        $video = $this->ffmpeg->open($tmpPathname);
-        $video->frame(TimeCode::fromSeconds($fromSecond))->save($tmpImgPathname);
+        $imageContent = file_get_contents($imgPathname);
 
-        $imageContent = file_get_contents($tmpImgPathname);
-
-        $this->temp->remove($tmpPathname);
-        $this->temp->remove($tmpImgPathname);
+        $videoFile->destroy();
+        @unlink($imgPathname);
 
         return $imageContent;
     }

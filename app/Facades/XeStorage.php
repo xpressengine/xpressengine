@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is interface of Distributor
+ * This file is accessor for use storage by facade
  *
  * PHP version 5
  *
@@ -11,12 +11,12 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Storage;
+namespace App\Facades;
 
-use Symfony\Component\HttpFoundation\File\File as SymfonyFile;
+use Illuminate\Support\Facades\Facade;
 
 /**
- * Interface Distributor
+ * storage 사용을 위한 facade 연결
  *
  * @category    Storage
  * @package     Xpressengine\Storage
@@ -25,13 +25,15 @@ use Symfony\Component\HttpFoundation\File\File as SymfonyFile;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-interface Distributor
+class XeStorage  extends Facade
 {
     /**
-     * allot storage disk
+     * facade access keyword
      *
-     * @param SymfonyFile $file file object
      * @return string
      */
-    public function allot(SymfonyFile $file);
+    protected static function getFacadeAccessor()
+    {
+        return 'xe.storage';
+    }
 }

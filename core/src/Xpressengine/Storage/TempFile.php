@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is accessor for use storage by facade
+ * This file is temporary file class
  *
  * PHP version 5
  *
@@ -11,12 +11,12 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace App\Facades;
+namespace Xpressengine\Storage;
 
-use Illuminate\Support\Facades\Facade;
+use Symfony\Component\HttpFoundation\File\File as SymfonyFile;
 
 /**
- * storage 사용을 위한 facade 연결
+ * Class TempFile
  *
  * @category    Storage
  * @package     Xpressengine\Storage
@@ -25,15 +25,27 @@ use Illuminate\Support\Facades\Facade;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class Storage  extends Facade
+class TempFile extends SymfonyFile
 {
     /**
-     * facade access keyword
+     * Destroy the file from temporary disk
      *
-     * @return string
+     * @return void
      */
-    protected static function getFacadeAccessor()
+    public function destroy()
     {
-        return 'xe.storage';
+        if ($this->isFile()) {
+            @unlink($this->getPathname());
+        }
+    }
+
+    /**
+     * Destructor
+     *
+     * @return void
+     */
+    public function __destruct()
+    {
+        $this->destroy();
     }
 }

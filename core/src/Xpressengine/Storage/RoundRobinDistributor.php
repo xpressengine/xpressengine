@@ -14,6 +14,7 @@
 namespace Xpressengine\Storage;
 
 use Xpressengine\Database\VirtualConnectionInterface;
+use Symfony\Component\HttpFoundation\File\File as SymfonyFile;
 
 /**
  * 순차적으로 지정된 저장소마다 돌아가면서 저장시키는 방식으로 저장소를 지정
@@ -63,10 +64,10 @@ class RoundRobinDistributor implements Distributor
     /**
      * allot storage disk
      *
-     * @param string $content file content
+     * @param SymfonyFile $file file object
      * @return string
      */
-    public function allot($content)
+    public function allot(SymfonyFile $file)
     {
         if ($this->config['division']['enable'] === true) {
             $row = $this->lastRecord();

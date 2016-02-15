@@ -13,11 +13,11 @@ class AudioHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testMakeThrownExceptionWhenNotAvailable()
     {
-        list($storage, $repo, $reader, $temp) = $this->getMocks();
-        $instance = new AudioHandler($storage, $repo, $reader, $temp);
+        list($storage, $reader, $temp) = $this->getMocks();
+        $instance = new AudioHandler($storage, $reader, $temp);
 
         $mockFile = m::mock('Xpressengine\Storage\File');
-        $mockFile->shouldReceive('getMime')->once()->andReturn('image/jpeg');
+        $mockFile->shouldReceive('getAttribute')->with('mime')->andReturn('image/jpeg');
 
         try {
             $instance->make($mockFile);
@@ -30,45 +30,54 @@ class AudioHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testMake()
     {
-        list($storage, $repo, $reader, $temp) = $this->getMocks();
-        $instance = m::mock(AudioHandler::class, [$storage, $repo, $reader, $temp])
+        list($storage, $reader, $temp) = $this->getMocks();
+        $instance = m::mock(AudioHandler::class, [$storage, $reader, $temp])
             ->shouldAllowMockingProtectedMethods()
             ->makePartial();
 
-        $id = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx';
-
         $mockFile = m::mock('Xpressengine\Storage\File');
-        $mockFile->shouldReceive('getMime');
-        $mockFile->shouldReceive('getId')->andReturn($id);
+        $mockFile->shouldReceive('getAttribute')->with('mime')->andReturn('audio/wav');
 
-        $mockMeta = m::mock('Xpressengine\Media\Meta');
-        $mockMeta->shouldReceive('dataEncode');
+        $mockRelate = m::mock('stdClass');
+        $mockRelate->shouldReceive('create')->once()->with([
+            'audio' => [
+                'streams' => 'some val',
+                'another' => 'another val'
+            ],
+            'playtime' => 100,
+            'bitrate' => 12345,
+        ])->andReturnSelf();
+
+        $mockAudio = m::mock('Xpressengine\Media\Models\Audio');
+        $mockAudio->shouldReceive('getAttribute')->with('meta')->andReturnNull();
+        $mockAudio->shouldReceive('meta')->andReturn($mockRelate);
+        $mockAudio->shouldReceive('setRelation')->once()->with('meta', $mockRelate)->andReturnSelf();
 
         $instance->shouldReceive('isAvailable')->once()->andReturn(true);
-        $repo->shouldReceive('find')->once()->with($id)->andReturnNull();
-        $instance->shouldReceive('extractInformation')->once()->with($mockFile)->andReturn($mockMeta);
-        $repo->shouldReceive('insert')->once()->with($mockMeta)->andReturn($mockMeta);
-
+        $instance->shouldReceive('createModel')->once()->with($mockFile)->andReturn($mockAudio);
+        $instance->shouldReceive('extractInformation')->once()->with($mockAudio)->andReturn([
+            ['streams' => 'some val', 'another' => 'another val'], 100, 12345
+        ]);
 
         $audio = $instance->make($mockFile);
 
-        $this->assertInstanceOf('Xpressengine\Media\Spec\Audio', $audio);
+        $this->assertInstanceOf('Xpressengine\Media\Models\Audio', $audio);
     }
 
     public function testExtractInformation()
     {
-        list($storage, $repo, $reader, $temp) = $this->getMocks();
-        $instance = new AudioHandler($storage, $repo, $reader, $temp);
+        list($storage, $reader, $temp) = $this->getMocks();
+        $instance = new AudioHandler($storage, $reader, $temp);
 
         $id = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx';
 
-        $mockFile = m::mock('Xpressengine\Storage\File');
-        $mockFile->shouldReceive('getId')->andReturn($id);
-        $mockFile->shouldReceive('getOriginId')->andReturnNull();
+        $mockAudio = m::mock('Xpressengine\Media\Models\Audio');
+        $mockAudio->shouldReceive('getContent')->andReturn('content');
 
-        $temp->shouldReceive('getTempPathname')->once()->andReturn('/tmp/pathname');
-        $storage->shouldReceive('read')->once()->with($mockFile)->andReturn('file content');
-        $temp->shouldReceive('createFile')->once()->with('/tmp/pathname', 'file content');
+        $mockTmpFile = m::mock('stdClass');
+        $mockTmpFile->shouldReceive('getPathname')->andReturn('/tmp/pathname');
+        $mockTmpFile->shouldReceive('destroy')->andReturnNull();
+        $temp->shouldReceive('create')->once()->with('content')->andReturn($mockTmpFile);
 
         $reader->shouldReceive('analyze')->once()->with('/tmp/pathname')->andReturn([
             'audio' => [
@@ -79,28 +88,11 @@ class AudioHandlerTest extends \PHPUnit_Framework_TestCase
             'bitrate' => 12345
         ]);
 
-        $temp->shouldReceive('remove')->once()->with('/tmp/pathname');
+        $info = $this->invokeMethod($instance, 'extractInformation', [$mockAudio]);
 
-        $meta = $this->invokeMethod($instance, 'extractInformation', [$mockFile]);
-
-        $this->assertEquals(['another' => 'another val'], $meta->audio);
-        $this->assertEquals(100, $meta->playtime);
-        $this->assertEquals(12345, $meta->bitrate);
-    }
-
-    public function testRemove()
-    {
-        list($storage, $repo, $reader, $temp) = $this->getMocks();
-        $instance = new AudioHandler($storage, $repo, $reader, $temp);
-
-        $mockMeta = m::mock('Xpressengine\Media\Meta');
-
-        $mockMedia = m::mock('Xpressengine\Media\Spec\Media');
-        $mockMedia->shouldReceive('getMeta')->andReturn($mockMeta);
-
-        $repo->shouldReceive('delete')->once()->with($mockMeta);
-
-        $instance->remove($mockMedia);
+        $this->assertEquals(['another' => 'another val'], $info[0]);
+        $this->assertEquals(100, $info[1]);
+        $this->assertEquals(12345, $info[2]);
     }
 
     private function invokeMethod(&$object, $methodName, array $parameters = array())
@@ -116,9 +108,8 @@ class AudioHandlerTest extends \PHPUnit_Framework_TestCase
     {
         return [
             m::mock('Xpressengine\Storage\Storage'),
-            m::mock('Xpressengine\Media\Repositories\AudioRepository'),
             m::mock('getID3'),
-            m::mock('Xpressengine\Media\TempStorage'),
+            m::mock('Xpressengine\Storage\TempFileCreator'),
         ];
     }
 }

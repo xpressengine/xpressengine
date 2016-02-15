@@ -20,7 +20,7 @@ use Illuminate\Auth\AuthManager;
  * 임시저장 데이터를 관리
  *
  * ### app binding : xe.temporary 로 바인딩 되어 있음
- * Temporary Facade 로 접근이 가능
+ * XeTemporary Facade 로 접근이 가능
  *
  * ### Usage
  * 임시저장될 데이터는 key, value 형태로 등록되어집니다.
@@ -29,7 +29,7 @@ use Illuminate\Auth\AuthManager;
  * 배열로 함께 전달해야 합니다.
  *
  * ```php
- * Temporary::set('key string', 'it is test content', ['foo' => 'bar', 'baz' => 'qux']);
+ * XeTemporary::set('key string', 'it is test content', ['foo' => 'bar', 'baz' => 'qux']);
  * ```
  *
  * 임시저장된 데이터를 가져올때는 등록시 사용했던 key 를 통해서 같은 키를 가지는
@@ -38,10 +38,10 @@ use Illuminate\Auth\AuthManager;
  *
  * ```php
  * // list
- * $dataList = Temporary::get('key string');
+ * $dataList = XeTemporary::get('key string');
  *
  * // one
- * $data = Temporary::getById('id');
+ * $data = XeTemporary::getById('id');
  * ```
  *
  * @category    Temporary

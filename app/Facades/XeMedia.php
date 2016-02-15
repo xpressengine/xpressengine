@@ -1,37 +1,39 @@
 <?php
 /**
- * This file is interface of Distributor
+ * This file is accessor for use media by facade
  *
  * PHP version 5
  *
- * @category    Storage
- * @package     Xpressengine\Storage
+ * @category    Media
+ * @package     Xpressengine\Media
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Storage;
+namespace App\Facades;
 
-use Symfony\Component\HttpFoundation\File\File as SymfonyFile;
+use Illuminate\Support\Facades\Facade;
 
 /**
- * Interface Distributor
+ * for facade
  *
- * @category    Storage
- * @package     Xpressengine\Storage
+ * @category    Media
+ * @package     Xpressengine\Media
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-interface Distributor
+class XeMedia extends Facade
 {
     /**
-     * allot storage disk
+     * facade access keyword
      *
-     * @param SymfonyFile $file file object
      * @return string
      */
-    public function allot(SymfonyFile $file);
+    protected static function getFacadeAccessor()
+    {
+        return 'xe.media';
+    }
 }

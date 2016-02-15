@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is interface of Distributor
+ * This file is file content reader interface
  *
  * PHP version 5
  *
@@ -13,10 +13,8 @@
  */
 namespace Xpressengine\Storage;
 
-use Symfony\Component\HttpFoundation\File\File as SymfonyFile;
-
 /**
- * Interface Distributor
+ * Interface ContentReaderInterface
  *
  * @category    Storage
  * @package     Xpressengine\Storage
@@ -25,13 +23,13 @@ use Symfony\Component\HttpFoundation\File\File as SymfonyFile;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-interface Distributor
+interface ContentReaderInterface
 {
     /**
-     * allot storage disk
+     * Returns file content by the file model
      *
-     * @param SymfonyFile $file file object
+     * @param File $file file instance
      * @return string
      */
-    public function allot(SymfonyFile $file);
+    public function read(File $file);
 }

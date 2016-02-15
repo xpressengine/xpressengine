@@ -66,7 +66,7 @@ class TagHandlerTest extends \PHPUnit_Framework_TestCase
             new Collection([$mockTagOld1, $mockTagOld2])
         )->will($this->returnValue(null));
 
-        $mockModel->shouldReceive('getTagByTaggable')->once()->with('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx')->andReturn(
+        $mockModel->shouldReceive('getByTaggable')->once()->with('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx')->andReturn(
             new Collection([$mockTagExists1, $mockTagExists2, $mockTagOld1, $mockTagOld2])
         );
 

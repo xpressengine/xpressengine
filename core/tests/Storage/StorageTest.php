@@ -13,7 +13,64 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
     public function testUploadReturnsFileInstanceWhenFileIsValid()
     {
-        list($handler, $repo, $auth, $keygen) = $this->getMocks();
+        list($handler, $auth, $keygen, $distributor, $temps) = $this->getMocks();
+        $instance = $this->getMock(Storage::class, ['createModel'], [$handler, $auth, $keygen, $distributor, $temps]);
+
+        $mockFile = m::mock('stdClass');
+
+        $instance->expects($this->once())->method('createModel')->willReturn($mockFile);
+        $resource = file_get_contents(__DIR__ . '/sample.png');
+
+        $mockGuest = m::mock('Xpressengine\Member\Entities\Guest');
+        $mockGuest->shouldReceive('getId')->andReturnNull();
+        $auth->shouldReceive('user')->andReturn($mockGuest);
+
+        $uploaded = m::mock('Symfony\Component\HttpFoundation\File\UploadedFile');
+        $uploaded->shouldReceive('isValid')->andReturn(true);
+        $uploaded->shouldReceive('getClientOriginalName')->andReturn('foo.jpg');
+        $uploaded->shouldReceive('getPathname')->andReturn(__DIR__ . '/sample.png');
+        $uploaded->shouldReceive('getMimeType')->andReturn('image/png');
+        $uploaded->shouldReceive('getSize')->andReturn(123456);
+
+        $distributor->shouldReceive('allot')->once()->with($uploaded)->andReturn('local');
+
+        $keygen->shouldReceive('generate')->once()->andReturn('made-key');
+
+        $handler->shouldReceive('store')
+            ->once()
+            ->with($resource, m::on(function () { return true; }), 'local')
+            ->andReturn(true);
+
+        $mockFile->shouldReceive('save')->andReturn(true);
+
+        $file = $instance->upload($uploaded, 'attached');
+
+        $this->assertEquals('local', $file->disk);
+        $this->assertEquals('foo.jpg', $file->clientname);
+        $this->assertEquals('image/png', $file->mime);
+        $this->assertEquals(123456, $file->size);
+    }
+
+    public function testUploadThrownExceptionWhenFileIsInvalid()
+    {
+        list($handler, $auth, $keygen, $distributor, $temps) = $this->getMocks();
+        $instance = new Storage($handler, $auth, $keygen, $distributor, $temps);
+
+        $uploaded = m::mock('Symfony\Component\HttpFoundation\File\UploadedFile');
+        $uploaded->shouldReceive('isValid')->andReturn(false);
+
+        try {
+            $instance->upload($uploaded, 'attached');
+            $this->assertTrue(false);
+        } catch (\Exception $e) {
+            $this->assertInstanceOf('Xpressengine\Storage\Exceptions\InvalidFileException', $e);
+        }
+    }
+
+    public function testUploadThrownExceptionWhenWritingFail()
+    {
+        list($handler, $auth, $keygen, $distributor, $temps) = $this->getMocks();
+        $instance = new Storage($handler, $auth, $keygen, $distributor, $temps);
 
         $resource = file_get_contents(__DIR__ . '/sample.png');
 
@@ -28,70 +85,65 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
         $keygen->shouldReceive('generate')->once()->andReturn('made-key');
 
-        $mockFile = m::mock('Xpressengine\Storage\File');
-        $mockFile->mime = 'image/jpeg';
+        $distributor->shouldReceive('allot')->once()->with($uploaded)->andReturn('local');
 
-//        $makedFilename = date('YmdHis') . hash('sha1', 'foo.jpg');
         $handler->shouldReceive('store')
             ->once()
-            ->with($resource, m::on(function () { return true; }), null)
-            ->andReturn($mockFile);
-
-        $repo->shouldReceive('insert')->once()->with($mockFile)->andReturn($mockFile);
-
-        $instance = new Storage($handler, $repo, $auth, $keygen);
-        $file = $instance->upload($uploaded, 'attached');
-
-        $this->assertInstanceOf('Xpressengine\Storage\File', $file);
-    }
-
-    public function testUploadThrownExceptionWhenFileIsInvalid()
-    {
-        list($handler, $repo, $auth, $keygen) = $this->getMocks();
-
-        $uploaded = m::mock('Symfony\Component\HttpFoundation\File\UploadedFile');
-        $uploaded->shouldReceive('isValid')->andReturn(false);
-        $uploaded->shouldReceive('getClientOriginalName')->andReturn('foo.jpg');
-
-        $instance = new Storage($handler, $repo, $auth, $keygen);
+            ->with($resource, m::on(function () { return true; }), 'local')
+            ->andReturn(false);
 
         try {
             $instance->upload($uploaded, 'attached');
             $this->assertTrue(false);
         } catch (\Exception $e) {
-            $this->assertInstanceOf('Xpressengine\Storage\Exceptions\InvalidFileException', $e);
+            $this->assertInstanceOf('Xpressengine\Storage\Exceptions\WritingFailException', $e);
         }
     }
 
     public function testCreate()
     {
-        list($handler, $repo, $auth, $keygen) = $this->getMocks();
-        $instance = new Storage($handler, $repo, $auth, $keygen);
+        list($handler, $auth, $keygen, $distributor, $temps) = $this->getMocks();
+        $instance = $this->getMock(Storage::class, ['createModel'], [$handler, $auth, $keygen, $distributor, $temps]);
 
-        $mockFile = m::mock('Xpressengine\Storage\File');
-        $keygen->shouldReceive('generate')->andReturn('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx');
-        $handler->shouldReceive('store')->once()->with(m::on(function () {
+        $mockFile = m::mock('stdClass');
+
+        $instance->expects($this->once())->method('createModel')->willReturn($mockFile);
+
+        $mockGuest = m::mock('Xpressengine\Member\Entities\Guest');
+        $mockGuest->shouldReceive('getId')->andReturnNull();
+        $auth->shouldReceive('user')->andReturn($mockGuest);
+
+        $mockTempFile = m::mock('Symfony\Component\HttpFoundation\File\File');
+        $mockTempFile->shouldReceive('getMimeType')->andReturn('image/png');
+        $mockTempFile->shouldReceive('getSize')->andReturn(123456);
+
+        $keygen->shouldReceive('generate')->andReturn('made-key');
+        $temps->shouldReceive('create')->once()->with('file_get_content')->andReturn($mockTempFile);
+
+        $handler->shouldReceive('store')->once()->with('file_get_content', m::on(function () {
             return true;
-        }), m::on(function () {
-            return true;
-        }), 'local')->andReturn($mockFile);
+        }), 'local')->andReturn(true);
 
-        $repo->shouldReceive('insert')->once()->with($mockFile)->andReturn($mockFile);
+        $mockFile->shouldReceive('save')->andReturn(true);
+        $mockTempFile->shouldReceive('destroy')->andReturnNull();
 
-        $file = $instance->create('file_get_content', 'path/to', 'filename', 'local', 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxy');
+        $file = $instance->create('file_get_content', 'path/to', 'filename', 'local', 'origin-key');
 
-        $this->assertInstanceOf('Xpressengine\Storage\File', $file);
+        $this->assertEquals('local', $file->disk);
+        $this->assertEquals('filename', $file->clientname);
+        $this->assertEquals('image/png', $file->mime);
+        $this->assertEquals(123456, $file->size);
+        $this->assertEquals('origin-key', $file->originId);
     }
 
     public function testDownloadThrownExceptionWhenFileNotExists()
     {
-        list($handler, $repo, $auth, $keygen) = $this->getMocks();
+        list($handler, $auth, $keygen, $distributor, $temps) = $this->getMocks();
+        $instance = new Storage($handler, $auth, $keygen, $distributor, $temps);
 
         $mockFile = m::mock('Xpressengine\Storage\File');
 
         $handler->shouldReceive('exists')->once()->with($mockFile)->andReturn(false);
-
-        $instance = new Storage($handler, $repo, $auth, $keygen);
 
         try {
             $instance->download($mockFile);
@@ -101,244 +153,123 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testRead()
-    {
-        list($handler, $repo, $auth, $keygen) = $this->getMocks();
-
-        $resource = file_get_contents(__DIR__ . '/sample.png');
-
-        $mockFile = m::mock('Xpressengine\Storage\File');
-
-        $handler->shouldReceive('content')->once()->with($mockFile)->andReturn($resource);
-
-        $instance = new Storage($handler, $repo, $auth, $keygen);
-
-        $this->assertEquals($resource, $instance->read($mockFile));
-    }
-
-    public function testGet()
-    {
-        list($handler, $repo, $auth, $keygen) = $this->getMocks();
-
-        $mockFile = m::mock('Xpressengine\Storage\File');
-
-        $repo->shouldReceive('find')->once()->with('fileidstring')->andReturn($mockFile);
-
-        $instance = new Storage($handler, $repo, $auth, $keygen);
-
-        $file = $instance->get('fileidstring');
-
-        $this->assertInstanceOf('Xpressengine\Storage\File', $file);
-    }
-
-    public function testGetsIn()
-    {
-        list($handler, $repo, $auth, $keygen) = $this->getMocks();
-        $instance = new Storage($handler, $repo, $auth, $keygen);
-
-        $mockFile1 = m::mock('Xpressengine\Storage\File');
-        $mockFile2 = m::mock('Xpressengine\Storage\File');
-
-        $repo->shouldReceive('fetchIn')->once()->with(['id_1', 'id_2'])->andReturn([$mockFile1, $mockFile2]);
-
-        $files = $instance->getsIn(['id_1', 'id_2']);
-
-        $this->assertEquals(2, count($files));
-    }
-    
-    public function testGetsByTargetId()
-    {
-        list($handler, $repo, $auth, $keygen) = $this->getMocks();
-
-        $mockFile1 = m::mock('Xpressengine\Storage\File');
-        $mockFile2 = m::mock('Xpressengine\Storage\File');
-
-        $repo->shouldReceive('fetchByTargetId')->once()->with('targetidstring')->andReturn([$mockFile1, $mockFile2]);
-
-        $instance = new Storage($handler, $repo, $auth, $keygen);
-
-        $files = $instance->getsByTargetId('targetidstring');
-
-        $this->assertEquals(2, count($files));
-    }
-
-    public function testPaginate()
-    {
-        list($handler, $repo, $auth, $keygen) = $this->getMocks();
-        $instance = new Storage($handler, $repo, $auth, $keygen);
-
-        $paginator = m::mock('Illuminate\Contracts\Pagination\LengthAwarePaginator');
-        $repo->shouldReceive('paginate')->once()->with(['var' => 'foo'], 10)->andReturn($paginator);
-
-        $files = $instance->paginate(['var' => 'foo'], 10);
-
-        $this->assertInstanceOf('Illuminate\Contracts\Pagination\LengthAwarePaginator', $files);
-    }
-
-    public function testModify()
-    {
-        list($handler, $repo, $auth, $keygen) = $this->getMocks();
-
-        $mockFile = m::mock('Xpressengine\Storage\File');
-
-        $repo->shouldReceive('update')->once()->with($mockFile)->andReturn($mockFile);
-
-        $instance = new Storage($handler, $repo, $auth, $keygen);
-
-        $file = $instance->modify($mockFile);
-
-        $this->assertInstanceOf('Xpressengine\Storage\File', $file);
-    }
-
-    public function testModifyContent()
-    {
-        list($handler, $repo, $auth, $keygen) = $this->getMocks();
-        $instance = new Storage($handler, $repo, $auth, $keygen);
-
-        $content = 'new file content';
-        $mockFile = m::mock('Xpressengine\Storage\File');
-
-        $handler->shouldReceive('change')->once()->with($mockFile, $content)->andReturn($mockFile);
-        $repo->shouldReceive('update')->once()->with($mockFile)->andReturn($mockFile);
-
-        $file = $instance->modifyContent($mockFile, $content);
-
-        $this->assertInstanceOf('Xpressengine\Storage\File', $file);
-    }
-    
     public function testRemove()
     {
-        list($handler, $repo, $auth, $keygen) = $this->getMocks();
+        list($handler, $auth, $keygen, $distributor, $temps) = $this->getMocks();
+        $instance = new Storage($handler, $auth, $keygen, $distributor, $temps);
 
         $mockFile = m::mock('Xpressengine\Storage\File');
-        $mockFile->id = 'fileidentifier';
+        $mockFile->shouldReceive('getAttribute')->with('originId')->andReturnNull();
 
         $mockChild = m::mock('Xpressengine\Storage\File');
-        $mockChild->id = 'filechildidentifier';
-        $mockChild->parentId = 'fileidentifier';
+        $mockChild->shouldReceive('getAttribute')->with('originId')->andReturn('origin-id');
 
-        $repo->shouldReceive('fetch')->once()->with(['parentId' => 'fileidentifier'])->andReturn([$mockChild]);
+        $mockFile->shouldReceive('getRawDerives')->andReturn([$mockChild]);
 
         $handler->shouldReceive('delete')->once()->with($mockChild)->andReturnNull();
-        $repo->shouldReceive('delete')->once()->with($mockChild)->andReturnNull();
-
         $handler->shouldReceive('delete')->once()->with($mockFile)->andReturnNull();
-        $repo->shouldReceive('delete')->once()->with($mockFile)->andReturnNull();
 
-        $instance = new Storage($handler, $repo, $auth, $keygen);
+        $mockFile->shouldReceive('delete')->once()->andReturn(true);
+        $mockChild->shouldReceive('delete')->once()->andReturn(true);
 
-        $instance->remove($mockFile);
-    }
+        $result = $instance->remove($mockFile);
 
-    public function testRemoveAll()
-    {
-        list($handler, $repo, $auth, $keygen) = $this->getMocks();
-
-        $mockFile1 = m::mock('Xpressengine\Storage\File');
-        $mockFile1->id = 'fileidstring1';
-        $mockFile1->use_count = 2;
-        $mockFile2 = m::mock('Xpressengine\Storage\File');
-        $mockFile2->id = 'fileidstring2';
-        $mockFile2->use_count = 2;
-
-        $repo->shouldReceive('fetchByTargetId')->once()->with('targetidstring')->andReturn([$mockFile1, $mockFile2]);
-
-        $repo->shouldReceive('unRelating')->once()->with('targetidstring', 'fileidstring1')->andReturnNull();
-        $repo->shouldReceive('unRelating')->once()->with('targetidstring', 'fileidstring2')->andReturnNull();
-
-        $repo->shouldReceive('fetch')->once()->with(['parentId' => 'fileidstring1'])->andReturn([]);
-        $repo->shouldReceive('fetch')->once()->with(['parentId' => 'fileidstring2'])->andReturn([]);
-
-        $repo->shouldReceive('delete')->once()->with($mockFile1)->andReturnNull();
-        $repo->shouldReceive('delete')->once()->with($mockFile2)->andReturnNull();
-
-        $handler->shouldReceive('delete')->once()->with($mockFile1)->andReturnNull();
-        $handler->shouldReceive('delete')->once()->with($mockFile2)->andReturnNull();
-
-        $instance = new Storage($handler, $repo, $auth, $keygen);
-
-        $instance->removeAll('targetidstring');
+        $this->assertTrue($result);
     }
 
     public function testBind()
     {
-        list($handler, $repo, $auth, $keygen) = $this->getMocks();
+        list($handler, $auth, $keygen, $distributor, $temps) = $this->getMocks();
+        $instance = new Storage($handler, $auth, $keygen, $distributor, $temps);
 
-        $mockFile = m::mock('Xpressengine\Storage\File');
-        $mockFile->id = 'fileidstring';
+        $mockFile = m::mock('Xpressengine\Storage\File')->shouldAllowMockingProtectedMethods();
+        $mockConn = m::mock('stdClass');
 
-        $repo->shouldReceive('relating')->once()->with('targetidstring', 'fileidstring')->andReturnNull();
+        $mockFile->shouldReceive('getConnection')->andReturn($mockConn);
+        $mockFile->shouldReceive('getFileableTable')->andReturn('fileable_table');
+        $mockFile->shouldReceive('getKey')->andReturn('file-id');
 
-        $instance = new Storage($handler, $repo, $auth, $keygen);
+        $mockConn->shouldReceive('table')->once()->with('fileable_table')->andReturnSelf();
+        $mockConn->shouldReceive('insert')->once()->with(m::on(function ($args) {
+            return $args['fileId'] == 'file-id' && $args['fileableId'] == 'fileable-id';
+        }))->andReturnSelf();
 
-        $instance->bind('targetidstring', $mockFile);
+        $mockFile->shouldReceive('increment')->andReturn(true);
+
+
+        $instance->bind('fileable-id', $mockFile);
     }
 
     public function testUnBindNotRemovedFileWhenFlagFalse()
     {
-        list($handler, $repo, $auth, $keygen) = $this->getMocks();
+        list($handler, $auth, $keygen, $distributor, $temps) = $this->getMocks();
+        $instance = new Storage($handler, $auth, $keygen, $distributor, $temps);
 
         $mockFile = m::mock('Xpressengine\Storage\File');
-        $mockFile->id = 'fileidstring';
+        $mockConn = m::mock('stdClass');
 
-        $repo->shouldReceive('unRelating')->once()->with('targetidstring', 'fileidstring')->andReturnNull();
+        $mockFile->shouldReceive('getConnection')->andReturn($mockConn);
+        $mockFile->shouldReceive('getFileableTable')->andReturn('fileable_table');
+        $mockFile->shouldReceive('getKey')->andReturn('file-id');
 
-        $instance = new Storage($handler, $repo, $auth, $keygen);
+        $mockConn->shouldReceive('table')->once()->with('fileable_table')->andReturnSelf();
+        $mockConn->shouldReceive('where')->once()->with('fileId', 'file-id')->andReturnSelf();
+        $mockConn->shouldReceive('where')->once()->with('fileableId', 'fileable-id')->andReturnSelf();
+        $mockConn->shouldReceive('delete')->once()->andReturn(1);
 
-        $instance->unBind('targetidstring', $mockFile);
+        $mockFile->shouldReceive('getAttribute')->with('useCount')->andReturn(1);
+        $mockFile->shouldReceive('setAttribute')->once()->with('useCount', 0)->andSet('useCount', 0);
+        $mockFile->shouldReceive('save')->andReturn(true);
+
+
+        $instance->unBind('fileable-id', $mockFile);
     }
 
-    public function testChildren()
+    public function testUnBindWillRemovedFileWhenFlagTrue()
     {
-        list($handler, $repo, $auth, $keygen) = $this->getMocks();
+        list($handler, $auth, $keygen, $distributor, $temps) = $this->getMocks();
+        $instance = $this->getMock(Storage::class, ['remove'], [$handler, $auth, $keygen, $distributor, $temps]);
 
         $mockFile = m::mock('Xpressengine\Storage\File');
-        $mockFile->id = 'fileidstring';
+        $mockConn = m::mock('stdClass');
 
-        $mockChild1 = m::mock('Xpressengine\Storage\File');
-        $mockChild2 = m::mock('Xpressengine\Storage\File');
+        $mockFile->shouldReceive('getConnection')->andReturn($mockConn);
+        $mockFile->shouldReceive('getFileableTable')->andReturn('fileable_table');
+        $mockFile->shouldReceive('getKey')->andReturn('file-id');
 
-        $repo->shouldReceive('fetch')
-            ->once()
-            ->with(['parentId' => 'fileidstring'])
-            ->andReturn([$mockChild1, $mockChild2]);
+        $mockConn->shouldReceive('table')->once()->with('fileable_table')->andReturnSelf();
+        $mockConn->shouldReceive('where')->once()->with('fileId', 'file-id')->andReturnSelf();
+        $mockConn->shouldReceive('where')->once()->with('fileableId', 'fileable-id')->andReturnSelf();
+        $mockConn->shouldReceive('delete')->once()->andReturn(1);
 
-        $instance = new Storage($handler, $repo, $auth, $keygen);
+        $mockFile->shouldReceive('getAttribute')->with('useCount')->andReturn(1);
+        $mockFile->shouldReceive('setAttribute')->once()->with('useCount', 0)->andSet('useCount', 0);
 
-        $children = $instance->children($mockFile);
+        $instance->expects($this->once())->method('remove')->with($mockFile)->willReturn(true);
 
-        $this->assertEquals(2, count($children));
-    }
-
-    public function testBytes()
-    {
-        list($handler, $repo, $auth, $keygen) = $this->getMocks();
-        $instance = new Storage($handler, $repo, $auth, $keygen);
-
-        $repo->shouldReceive('sum')->twice()->andReturn(15116107);
-
-        $bytes = $instance->bytes([], false);
-
-        $this->assertEquals(15116107, $bytes);
-
-        $bytes = $instance->bytes();
-
-        $this->assertEquals(15116107, $bytes);
+        $instance->unBind('fileable-id', $mockFile, true);
     }
 
     public function testBytesByMime()
     {
-        list($handler, $repo, $auth, $keygen) = $this->getMocks();
-        $instance = new Storage($handler, $repo, $auth, $keygen);
+        list($handler, $auth, $keygen, $distributor, $temps) = $this->getMocks();
+        $instance = $this->getMock(Storage::class, ['createModel'], [$handler, $auth, $keygen, $distributor, $temps]);
 
-        $repo->shouldReceive('sumGroupBy')->twice()->andReturn([
-            'image/jpeg' => 15116107,
-            'image/gif' => 14008053
+        $mockModel = m::mock('stdClass');
+        $mockConn = m::mock('stdClass');
+
+        $instance->expects($this->once())->method('createModel')->willReturn($mockModel);
+
+        $mockModel->shouldReceive('getConnection')->andReturn($mockConn);
+        $mockModel->shouldReceive('getTable')->andReturn('file_table');
+
+        $mockConn->shouldReceive('table')->once()->with('file_table')->andReturnSelf();
+        $mockConn->shouldReceive('groupBy')->andReturnSelf();
+        $mockConn->shouldReceive('select')->andReturnSelf();
+        $mockConn->shouldReceive('get')->andReturn([
+            ['mime' => 'image/jpeg', 'amount' => 15116107],
+            ['mime' => 'image/png', 'amount' => 14008053]
         ]);
-
-        $data = $instance->bytesByMime([], false);
-
-        $this->assertEquals(15116107 + 14008053, array_sum($data));
 
         $data = $instance->bytesByMime();
 
@@ -346,33 +277,41 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(14008053, next($data));
     }
 
-    public function testCount()
-    {
-        list($handler, $repo, $auth, $keygen) = $this->getMocks();
-        $instance = new Storage($handler, $repo, $auth, $keygen);
-
-        $repo->shouldReceive('count')->andReturn(10);
-
-        $this->assertEquals(10, $instance->count());
-    }
-
     public function testCountByMime()
     {
-        list($handler, $repo, $auth, $keygen) = $this->getMocks();
-        $instance = new Storage($handler, $repo, $auth, $keygen);
+        list($handler, $auth, $keygen, $distributor, $temps) = $this->getMocks();
+        $instance = $this->getMock(Storage::class, ['createModel'], [$handler, $auth, $keygen, $distributor, $temps]);
 
-        $repo->shouldReceive('countGroupBy')->andReturn(10);
+        $mockModel = m::mock('stdClass');
+        $mockConn = m::mock('stdClass');
 
-        $this->assertEquals(10, $instance->countByMime());
+        $instance->expects($this->once())->method('createModel')->willReturn($mockModel);
+
+        $mockModel->shouldReceive('getConnection')->andReturn($mockConn);
+        $mockModel->shouldReceive('getTable')->andReturn('file_table');
+
+        $mockConn->shouldReceive('table')->once()->with('file_table')->andReturnSelf();
+        $mockConn->shouldReceive('groupBy')->andReturnSelf();
+        $mockConn->shouldReceive('select')->andReturnSelf();
+        $mockConn->shouldReceive('get')->andReturn([
+            ['mime' => 'image/jpeg', 'cnt' => 5],
+            ['mime' => 'image/png', 'cnt' => 4]
+        ]);
+
+        $data = $instance->countByMime();
+
+        $this->assertEquals(5, reset($data));
+        $this->assertEquals(4, next($data));
     }
 
     public function getMocks()
     {
         return [
-            m::mock('Xpressengine\Storage\FileHandler'),
-            m::mock('Xpressengine\Storage\FileRepository'),
+            m::mock('Xpressengine\Storage\FilesystemHandler'),
             m::mock('Xpressengine\Member\GuardInterface'),
-            m::mock('Xpressengine\Keygen\Keygen')
+            m::mock('Xpressengine\Keygen\Keygen'),
+            m::mock('Xpressengine\Storage\Distributor'),
+            m::mock('Xpressengine\Storage\TempFileCreator'),
         ];
     }
 }

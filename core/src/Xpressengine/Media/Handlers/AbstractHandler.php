@@ -13,13 +13,11 @@
  */
 namespace Xpressengine\Media\Handlers;
 
-use Xpressengine\Media\Exceptions\NonExistingPropertyException;
-use Xpressengine\Media\Spec\Media;
-use Xpressengine\Media\Spec\Image;
+use Xpressengine\Media\Models\Media;
 use Xpressengine\Storage\File;
 
 /**
- * media 핸들러
+ * Abstract class AbstractHandler
  *
  * @category    Media
  * @package     Xpressengine\Media
@@ -35,16 +33,18 @@ abstract class AbstractHandler
      *
      * @param string $mime mime type
      * @return bool
-     * @throws NonExistingPropertyException
      */
     public function isAvailable($mime)
     {
-        if (property_exists($this, 'mimes') !== true) {
-            throw new NonExistingPropertyException(['name' => 'mimes']);
-        }
-
-        return in_array($mime, $this->{'mimes'});
+        return in_array($mime, $this->getAvailableMimes());
     }
+
+    /**
+     * 각 미디어 타입에서 사용가능한 확장자 반환
+     *
+     * @return array
+     */
+    abstract public function getAvailableMimes();
 
     /**
      * media 객체로 반환
@@ -61,12 +61,4 @@ abstract class AbstractHandler
      * @return string 이미지 content
      */
     abstract public function getPicture(Media $media);
-
-    /**
-     * media 정보 삭제
-     *
-     * @param Media $media media instance
-     * @return void
-     */
-    abstract public function remove(Media $media);
 }

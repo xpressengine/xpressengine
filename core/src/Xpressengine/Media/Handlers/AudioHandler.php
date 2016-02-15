@@ -14,16 +14,14 @@
 namespace Xpressengine\Media\Handlers;
 
 use Xpressengine\Media\Exceptions\NotAvailableException;
-use Xpressengine\Media\Meta;
-use Xpressengine\Media\Repositories\AudioRepository;
-use Xpressengine\Media\Spec\Media;
-use Xpressengine\Media\Spec\Audio;
-use Xpressengine\Media\TempStorage;
+use Xpressengine\Media\Models\Media;
+use Xpressengine\Media\Models\Audio;
+use Xpressengine\Storage\TempFileCreator;
 use Xpressengine\Storage\File;
 use Xpressengine\Storage\Storage;
 
 /**
- * audio handler
+ * Class AudioHandler
  *
  * @category    Media
  * @package     Xpressengine\Media
@@ -42,13 +40,6 @@ class AudioHandler extends AbstractHandler
     protected $storage;
 
     /**
-     * Repository instance
-     *
-     * @var AudioRepository
-     */
-    protected $repo;
-
-    /**
      * Media reader instance
      *
      * @var \getID3
@@ -56,31 +47,22 @@ class AudioHandler extends AbstractHandler
     protected $reader;
 
     /**
-     * TempStorage instance
+     * TempFileCreator instance
      *
-     * @var TempStorage
+     * @var TempFileCreator
      */
     protected $temp;
-
-    /**
-     * Available mime type
-     *
-     * @var array
-     */
-    protected $mimes = ['audio/mpeg', 'audio/ogg', 'audio/wav'];
 
     /**
      * Constructor
      *
      * @param Storage         $storage Storage instance
-     * @param AudioRepository $repo    Repository instance
      * @param \getID3         $reader  Media reader instance
-     * @param TempStorage     $temp    TempStorage instance
+     * @param TempFileCreator $temp    TempFileCreator instance
      */
-    public function __construct(Storage $storage, AudioRepository $repo, \getID3 $reader, TempStorage $temp)
+    public function __construct(Storage $storage, \getID3 $reader, TempFileCreator $temp)
     {
         $this->storage = $storage;
-        $this->repo = $repo;
         $this->reader = $reader;
         $this->temp = $temp;
     }
@@ -97,6 +79,18 @@ class AudioHandler extends AbstractHandler
     }
 
     /**
+     * 각 미디어 타입에서 사용가능한 확장자 반환
+     *
+     * @return array
+     */
+    public function getAvailableMimes()
+    {
+        $class = $this->getModel();
+
+        return $class::getMimes();
+    }
+
+    /**
      * media 객체로 반환
      *
      * @param File $file file instance
@@ -105,70 +99,67 @@ class AudioHandler extends AbstractHandler
      */
     public function make(File $file)
     {
-        if ($this->isAvailable($file->getMime()) !== true) {
+        if ($this->isAvailable($file->mime) !== true) {
             throw new NotAvailableException();
         }
 
-        if (!$meta = $this->repo->find($file->getId())) {
-            $meta = $this->extractInformation($file);
-            $meta->dataEncode(Audio::getJsonType());
+        $audio = $this->createModel($file);
+        if (!$audio->meta) {
+            list($audioData, $playtime, $bitrate) = $this->extractInformation($audio);
 
-            $meta = $this->repo->insert($meta);
+            $meta = $audio->meta()->create([
+                'audio' => $audioData,
+                'playtime' => $playtime,
+                'bitrate' => $bitrate,
+            ]);
+
+            $audio->setRelation('meta', $meta);
         }
 
-        return $this->createModel($file, $meta);
+        return $audio;
     }
 
     /**
      * Extract file meta data
      *
-     * @param File $file file instance
-     * @return Meta
+     * @param Audio $audio audio file instance
+     * @return array
      */
-    protected function extractInformation(File $file)
+    protected function extractInformation(Audio $audio)
     {
-        $meta = new Meta();
-        $meta->id = $file->getId();
-        $meta->originId = $file->getOriginId(false);
+        $tmpFile = $this->temp->create($audio->getContent());
 
-        $tmpPathname = $this->temp->getTempPathname();
-        $this->temp->createFile($tmpPathname, $this->storage->read($file));
+        $info = $this->reader->analyze($tmpFile->getPathname());
 
-        $info = $this->reader->analyze($tmpPathname);
-
-        $this->temp->remove($tmpPathname);
+        $tmpFile->destroy();
 
         if (isset($info['audio']['streams'])) {
             unset($info['audio']['streams']);
         }
 
-        $meta->audio = $info['audio'];
-        $meta->playtime = $info['playtime_seconds'];
-        $meta->bitrate = $info['bitrate'];
-
-        return $meta;
+        return [$info['audio'], $info['playtime_seconds'], $info['bitrate']];
     }
 
     /**
-     * 미디어 삭제
+     * Returns model class
      *
-     * @param Media $media media instance
-     * @return void
+     * @return string
      */
-    public function remove(Media $media)
+    public function getModel()
     {
-        $this->repo->delete($media->getMeta());
+        return Audio::class;
     }
 
     /**
      * Create model
      *
      * @param File $file file instance
-     * @param Meta $meta meta instance
      * @return Audio
      */
-    protected function createModel(File $file, Meta $meta)
+    public function createModel(File $file)
     {
-        return new Audio($file, $meta);
+        $class = $this->getModel();
+
+        return $class::make($file);
     }
 }
