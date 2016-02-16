@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Routing;
 
-use Xpressengine\Support\EntityTrait;
+use Xpressengine\Support\Entity;
 
 /**
  * Instance Route
@@ -30,7 +30,7 @@ use Xpressengine\Support\EntityTrait;
  * @property string $menuId     menu id
  * @property string $site       site key
  */
-class InstanceRoute
+class InstanceRoute extends Entity
 {
-    use EntityTrait;
+
 }

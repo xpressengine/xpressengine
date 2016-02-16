@@ -14,7 +14,7 @@
 
 namespace Xpressengine\Site;
 
-use Xpressengine\Support\EntityTrait;
+use Xpressengine\Support\Entity;
 
 /**
  * Site
@@ -32,7 +32,7 @@ use Xpressengine\Support\EntityTrait;
  * @property string $siteKey        고유한 식별자
  */
 
-class Site
+class Site extends Entity
 {
-    use EntityTrait;
+
 }

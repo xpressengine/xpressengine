@@ -13,11 +13,10 @@
  */
 namespace Xpressengine\Menu;
 
-use JsonSerializable;
 use Xpressengine\Member\Entities\MemberEntityInterface;
 use Xpressengine\Menu\Permission\MenuPermission;
 use Xpressengine\Permission\Action;
-use Xpressengine\Support\EntityTrait;
+use Xpressengine\Support\Entity;
 use Xpressengine\Support\Tree\NodeInterface;
 
 /**
@@ -42,10 +41,8 @@ use Xpressengine\Support\Tree\NodeInterface;
  * @property string $type        해당 메뉴의 type
  * @property int    $ordering    정렬을 위한 순서
  */
-class MenuItem implements NodeInterface, JsonSerializable
+class MenuItem extends Entity implements NodeInterface
 {
-    use EntityTrait;
-
     /**
      * @var null|MenuItem 상위 Item 인스턴스 이거나 null
      */

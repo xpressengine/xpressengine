@@ -97,9 +97,7 @@ class TemporaryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $mockEntity = m::mock('Xpressengine\Temporary\TemporaryEntity');
         $repo->shouldReceive('find')->once()->with('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx')->andReturn($mockEntity);
-        $repo->shouldReceive('update')->once()->with(m::on(function ($entity) {
-            return $entity->val == 'foo' && $entity->etc == serialize(['baz' => 'qux']);
-        }));
+        $repo->shouldReceive('update')->once()->with($mockEntity)->andReturn($mockEntity);
 
         $instance->put('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 'foo', ['baz' => 'qux']);
     }

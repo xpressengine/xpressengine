@@ -13,10 +13,9 @@
  */
 namespace Xpressengine\Config;
 
-use ArrayAccess;
 use IteratorAggregate;
 use ArrayIterator;
-use Xpressengine\Support\EntityTrait;
+use Xpressengine\Support\Entity;
 use Xpressengine\Support\Caster;
 use Xpressengine\Config\Exceptions\NoParentException;
 
@@ -30,10 +29,8 @@ use Xpressengine\Config\Exceptions\NoParentException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class ConfigEntity implements ArrayAccess, IteratorAggregate
+class ConfigEntity extends Entity implements IteratorAggregate
 {
-    use EntityTrait;
-
     /**
      * config value object
      *
@@ -49,7 +46,7 @@ class ConfigEntity implements ArrayAccess, IteratorAggregate
     protected $parent;
 
     /**
-     * protected property when update
+     * The attributes that aren't mass assignable.
      *
      * @var array
      */
@@ -62,7 +59,7 @@ class ConfigEntity implements ArrayAccess, IteratorAggregate
      */
     public function __construct(array $attributes = [])
     {
-        $this->original = $this->attributes = $attributes;
+        parent::__construct($attributes);
 
         $this->setValueObject($attributes);
     }
@@ -88,13 +85,11 @@ class ConfigEntity implements ArrayAccess, IteratorAggregate
      */
     public function fill(array $attributes)
     {
-        if (property_exists($this, 'fillable')) {
-            $attributes = array_intersect_key($attributes, array_flip($this->{'fillable'}));
+        parent::fill($attributes);
+
+        if (isset($attributes['vars'])) {
+            $this->setValueObject($attributes);
         }
-
-        $this->attributes = $attributes;
-
-        $this->setValueObject($attributes);
     }
 
     /**
@@ -136,7 +131,7 @@ class ConfigEntity implements ArrayAccess, IteratorAggregate
      */
     public function getPure($name, $default = null)
     {
-        return $this->vo->$name !== null ? $this->vo->$name : $default;
+        return $this->vo->{$name} !== null ? $this->vo->{$name} : $default;
     }
 
     /**
@@ -149,9 +144,9 @@ class ConfigEntity implements ArrayAccess, IteratorAggregate
     public function set($name, $value)
     {
         if ($value === null) {
-            unset($this->vo->$name);
+            unset($this->vo->{$name});
         } else {
-            $this->vo->$name = Caster::cast($value);
+            $this->vo->{$name} = Caster::cast($value);
         }
     }
 
@@ -258,7 +253,7 @@ class ConfigEntity implements ArrayAccess, IteratorAggregate
      */
     public function offsetUnset($offset)
     {
-        unset($this->vo->$offset);
+        unset($this->vo->{$offset});
     }
 
     /**
@@ -283,5 +278,16 @@ class ConfigEntity implements ArrayAccess, IteratorAggregate
         $this->attributes['vars'] = json_encode($this->vo);
 
         return $this->attributes;
+    }
+
+    /**
+     * Dynamically retrieve the value of an attribute.
+     *
+     * @param string $key
+     * @return mixed
+     */
+    public function __get($key)
+    {
+        return parent::get($key);
     }
 }

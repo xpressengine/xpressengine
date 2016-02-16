@@ -121,7 +121,7 @@ class SiteRepository
      */
     public function update(Site $site)
     {
-        $diff = $site->diff();
+        $diff = $site->getDirty();
 
         if (count($diff) > 0) {
             $this->conn->table($this->table)->where('siteKey', $site->siteKey)->update($diff);

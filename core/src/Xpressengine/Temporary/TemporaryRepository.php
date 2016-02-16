@@ -126,7 +126,7 @@ class TemporaryRepository
      */
     public function update(TemporaryEntity $temporary)
     {
-        $diff = array_merge($temporary->diff(), ['createdAt' => date('Y-m-d H:i:s')]);
+        $diff = array_merge($temporary->getDirty(), ['createdAt' => date('Y-m-d H:i:s')]);
 
         $this->conn->table($this->table)->where('id', $temporary->id)->update($diff);
 
