@@ -21,6 +21,8 @@ use Illuminate\Support\ServiceProvider;
 use Xpressengine\Media\MediaManager;
 use Xpressengine\Media\Thumbnailer;
 use Xpressengine\Storage\Storage;
+use Xpressengine\ToggleMenus\Member\LinkItem;
+use Xpressengine\ToggleMenus\Member\RawItem;
 use Xpressengine\User\EmailBroker;
 use Xpressengine\User\Guard;
 use Xpressengine\User\GuardInterface;
@@ -208,8 +210,6 @@ class UserServiceProvider extends ServiceProvider
         Guest::setDefaultProfileImage($this->app['config']['xe.member.profileImage.default']);
 
         $this->setProfileImageResolverOfUser();
-
-        $this->addRelationship();
 
         // extend xe auth
         $this->extendAuth();
