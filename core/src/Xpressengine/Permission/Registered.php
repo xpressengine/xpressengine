@@ -13,10 +13,9 @@
  */
 namespace Xpressengine\Permission;
 
-use ArrayAccess;
 use IteratorAggregate;
 use ArrayIterator;
-use Xpressengine\Support\EntityTrait;
+use Xpressengine\Support\Entity;
 
 /**
  * register 된 정보를 가지는 클래스
@@ -28,10 +27,8 @@ use Xpressengine\Support\EntityTrait;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class Registered implements ArrayAccess, IteratorAggregate
+class Registered extends Entity implements IteratorAggregate
 {
-    use EntityTrait;
-
     /**
      * Parent Registered instance
      *
@@ -47,7 +44,7 @@ class Registered implements ArrayAccess, IteratorAggregate
     protected $grant;
 
     /**
-     * protected property when update
+     * The attributes that aren't mass assignable.
      *
      * @var array
      */
@@ -60,7 +57,7 @@ class Registered implements ArrayAccess, IteratorAggregate
      */
     public function __construct(array $attributes = [])
     {
-        $this->original = $this->attributes = $attributes;
+        parent::__construct($attributes);
 
         $grantInfo = isset($attributes['grants']) ? json_decode($attributes['grants'], true) : [];
         $this->grant = new Grant($grantInfo);
@@ -113,7 +110,7 @@ class Registered implements ArrayAccess, IteratorAggregate
      */
     public function pure($key)
     {
-        return isset($this->grant->$key) ? $this->grant->$key : null;
+        return isset($this->grant->{$key}) ? $this->grant->{$key} : null;
     }
 
     /**
@@ -158,7 +155,7 @@ class Registered implements ArrayAccess, IteratorAggregate
      */
     public function offsetExists($offset)
     {
-        return isset($this->grant->$offset);
+        return isset($this->grant->{$offset});
     }
 
     /**
@@ -169,7 +166,7 @@ class Registered implements ArrayAccess, IteratorAggregate
      */
     public function offsetGet($offset)
     {
-        return isset($this->grant->$offset) ? $this->grant->$offset
+        return isset($this->grant->{$offset}) ? $this->grant->{$offset}
                                             : ($this->parent !== null ? $this->parent[$offset] : null);
     }
 

@@ -610,9 +610,9 @@ class MenuRepositoryTest extends PHPUnit_Framework_TestCase
         $query->shouldReceive('update')->andReturn(1);
 
         $menuEntity = m::mock('Xpressengine\Menu\MenuEntity');
-        $menuEntity->shouldReceive('__get')->with('id')->andReturn('main');
-        $menuEntity->shouldReceive('__get')->with('title')->andReturn('main');
-        $menuEntity->shouldReceive('__get')->with('description')->andReturn('main');
+        $menuEntity->shouldReceive('get')->with('id')->andReturn('main');
+        $menuEntity->shouldReceive('get')->with('title')->andReturn('main');
+        $menuEntity->shouldReceive('get')->with('description')->andReturn('main');
 
         $affectedRow = $repoInstance->updateMenu($menuEntity);
 

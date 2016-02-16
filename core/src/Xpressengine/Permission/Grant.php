@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Permission;
 
-use Xpressengine\Support\EntityTrait;
+use Illuminate\Support\Fluent;
 use Xpressengine\Permission\Exceptions\InvalidArgumentException;
 
 /**
@@ -26,10 +26,8 @@ use Xpressengine\Permission\Exceptions\InvalidArgumentException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class Grant
+class Grant extends Fluent
 {
-    use EntityTrait;
-
     const RATING_TYPE = 'rating';
 
     const GROUP_TYPE = 'group';

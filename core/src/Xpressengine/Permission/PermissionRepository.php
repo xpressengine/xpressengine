@@ -106,7 +106,7 @@ class PermissionRepository
      */
     public function update(Registered $item)
     {
-        $diff = $item->diff();
+        $diff = $item->getDirty();
 
         $dates = [];
         if (count($diff) > 0) {

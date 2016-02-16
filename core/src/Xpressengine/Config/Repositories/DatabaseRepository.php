@@ -199,7 +199,7 @@ class DatabaseRepository implements RepositoryInterface
      */
     protected function update(ConfigEntity $config)
     {
-        $diff = $config->diff();
+        $diff = $config->getDirty();
 
         if (count($diff) > 0) {
             $this->conn->table($this->table)

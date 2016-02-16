@@ -94,14 +94,14 @@ class TemporaryRepositoryTest extends \PHPUnit_Framework_TestCase
         $instance = new TemporaryRepository($conn, $keygen);
 
         $mockEntity = m::mock('Xpressengine\Temporary\TemporaryEntity');
-        $mockEntity->shouldReceive('diff')->andReturn(['val' => 'qux', 'etc' => 'a:1:{s:3:"foo";s:3:"baz";}']);
+        $mockEntity->shouldReceive('getDirty')->andReturn(['val' => 'qux', 'etc' => 'a:1:{s:3:"foo";s:3:"baz";}']);
         $mockEntity->shouldReceive('getOriginal')->andReturn([
             'id' => 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
             'key' => 'someKey',
             'val' => 'baz',
             'etc' => 'a:1:{s:3:"foo";s:3:"bar";}'
         ]);
-        $mockEntity->id = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx';
+        $mockEntity->shouldReceive('get')->with('id')->andReturn('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx');
 
         $conn->shouldReceive('table')->andReturn($query);
         $query->shouldReceive('where')->once()->with('id', 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx')->andReturnSelf();
@@ -122,7 +122,7 @@ class TemporaryRepositoryTest extends \PHPUnit_Framework_TestCase
         $instance = new TemporaryRepository($conn, $keygen);
 
         $mockEntity = m::mock('Xpressengine\Temporary\TemporaryEntity');
-        $mockEntity->id = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx';
+        $mockEntity->shouldReceive('get')->with('id')->andReturn('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx');
 
         $conn->shouldReceive('table')->andReturn($query);
         $query->shouldReceive('where')->once()->with('id', 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx')->andReturnSelf();

@@ -124,7 +124,7 @@ class DatabaseRepositoryTest extends \PHPUnit_Framework_TestCase
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
         $mockConfig->siteKey = 'default';
         $mockConfig->name = 'board.instance1';
-        $mockConfig->shouldReceive('diff')->andReturn([
+        $mockConfig->shouldReceive('getDirty')->andReturn([
             'vars' => '{"limit":25,"perPage":5}'
         ]);
         $mockConfig->shouldReceive('getOriginal')->andReturn([
