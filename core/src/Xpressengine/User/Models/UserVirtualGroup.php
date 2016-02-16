@@ -1,6 +1,6 @@
 <?php
 /**
- * UserVgroup
+ * UserVirtualGroup
  *
  * PHP version 5
  *
@@ -21,7 +21,7 @@ namespace Xpressengine\User\Models;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class UserVgroup
+class UserVirtualGroup
 {
 
 

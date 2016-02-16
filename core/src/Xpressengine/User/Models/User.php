@@ -300,4 +300,16 @@ class User extends DynamicModel implements UserInterface
 
         return null;
     }
+
+    /**
+     * add this user to groups
+     *
+     * @param UserGroup[] $groups
+     *
+     * @return void
+     */
+    public function joinGroups(array $groups)
+    {
+        $this->groups()->saveMany($groups);
+    }
 }

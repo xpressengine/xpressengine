@@ -43,4 +43,15 @@ class UserAccount extends DynamicModel
         return $this->belongsTo(User::class, 'userId');
     }
 
+    /**
+     * 주어진 회원이 소유한 계정을 삭제한다.
+     *
+     * @param string $userIds 삭제할 이메일을 소유한 회원의 id
+     *
+     * @return integer
+     */
+    public function deleteByMemberIds($userIds)
+    {
+        return static::whereIn('userId', $userIds)->delete();
+    }
 }

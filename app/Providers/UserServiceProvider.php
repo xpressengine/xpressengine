@@ -4,8 +4,8 @@
  *
  * PHP version 5
  *
- * @category    Member
- * @package     Xpressengine\Member
+ * @category    User
+ * @package     Xpressengine\User
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
@@ -13,7 +13,26 @@
  */
 namespace App\Providers;
 
+use Closure;
+use Illuminate\Auth\Passwords\DatabaseTokenRepository;
+use Illuminate\Auth\Passwords\PasswordBroker;
+use Illuminate\Contracts\Validation\Factory as Validator;
 use Illuminate\Support\ServiceProvider;
+use Xpressengine\Media\MediaManager;
+use Xpressengine\Media\Thumbnailer;
+use Xpressengine\Storage\Storage;
+use Xpressengine\User\EmailBroker;
+use Xpressengine\User\Guard;
+use Xpressengine\User\GuardInterface;
+use Xpressengine\User\Models\Guest;
+use Xpressengine\User\Models\PendingEmail;
+use Xpressengine\User\Models\User;
+use Xpressengine\User\Models\UserAccount;
+use Xpressengine\User\Models\UserEmail;
+use Xpressengine\User\Models\UserGroup;
+use Xpressengine\User\UserHandler;
+use Xpressengine\User\UserImageHandler;
+use Xpressengine\User\UserProvider;
 
 /**
  * laravel 에서 사용하기위해 등록처리를 하는 class
@@ -41,126 +60,15 @@ class UserServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->registerAuth();
         $this->registerHandler();
 
-        $this->registerRepositories();
-        $this->registerTokenRepository();
-
-        $this->registerEmailBroker();
-        $this->registerPasswordBroker();
+        // member package 제거후 주석 해제
+        // $this->registerAuth();
+        // $this->registerTokenRepository();
+        // $this->registerEmailBroker();
+        // $this->registerPasswordBroker();
 
         $this->registerImageHandler();
-    }
-
-    /**
-     * register Repositories
-     *
-     * @return void
-     */
-    protected function registerRepositories()
-    {
-        $this->registerMemberRepository();
-        $this->registerAccoutRepository();
-        $this->registerGroupRepository();
-        $this->registerVirtualGroupRepository();
-        $this->registerMailRepository();
-    }
-
-    /**
-     * register Member Repository
-     *
-     * @return void
-     */
-    protected function registerMemberRepository()
-    {
-        $this->app->singleton(
-            'xe.members',
-            function ($app) {
-                $generator = $app['xe.keygen'];
-                $conn = $app['xe.db']->connection('member');
-
-                return new MemberRepository($conn, $generator);
-            }
-        );
-        $this->app->bind(MemberRepositoryInterface::class, 'xe.members');
-    }
-
-    /**
-     * register Accout Repository
-     *
-     * @return void
-     */
-    private function registerAccoutRepository()
-    {
-        $this->app->singleton(
-            'xe.member.accounts',
-            function ($app) {
-                $generator = $app['xe.keygen'];
-                $conn = $app['xe.db']->connection('member');
-
-                return new AccountRepository($conn, $generator);
-            }
-        );
-        $this->app->bind(AccountRepositoryInterface::class, 'xe.member.accounts');
-    }
-
-    /**
-     * register Group Repository
-     *
-     * @return void
-     */
-    protected function registerGroupRepository()
-    {
-        $this->app->singleton(
-            'xe.member.groups',
-            function ($app) {
-                $generator = $app['xe.keygen'];
-                $conn = $app['xe.db']->connection('member');
-                return new GroupRepository($conn, $generator);
-            }
-        );
-        $this->app->bind(GroupRepositoryInterface::class, 'xe.member.groups');
-    }
-
-    /**
-     * register Virtual Group Repository
-     *
-     * @return void
-     */
-    protected function registerVirtualGroupRepository()
-    {
-        $this->app->singleton(
-            'xe.member.virtualGroups',
-            function ($app) {
-                /** @var Closure $vGroups */
-                $vGroups = $app['config']->get('xe.group.virtualGroup.all');
-                $getter = $app['config']->get('xe.group.virtualGroup.getByMember');
-                return new VirtualGroupRepository($app['xe.members'], $vGroups(), $getter);
-            }
-        );
-        $this->app->bind(VirtualGroupRepositoryInterface::class, 'xe.member.virtualGroups');
-    }
-
-    private function registerMailRepository()
-    {
-        $this->app->singleton(
-            'xe.member.mails',
-            function ($app) {
-                $conn = $app['xe.db']->connection('member');
-                return new MailRepository($conn);
-            }
-        );
-        $this->app->bind(MailRepositoryInterface::class, 'xe.member.mails');
-
-        $this->app->singleton(
-            'xe.member.pendingMails',
-            function ($app) {
-                $conn = $app['xe.db']->connection('member');
-                return new PendingMailRepository($conn);
-            }
-        );
-        $this->app->bind(PendingMailRepositoryInterface::class, 'xe.member.pendingMails');
     }
 
     /**
@@ -176,7 +84,7 @@ class UserServiceProvider extends ServiceProvider
 
                 $proxyClass = $app['xe.interception']->proxy(Guard::class, 'Auth');
                 return new $proxyClass(
-                    new Provider($app['xe.members'], $app['hash']), $app['session.store'], $app['request']
+                    new UserProvider($app['xe.members'], $app['hash']), $app['session.store'], $app['request']
                 );
             }
         );
@@ -208,16 +116,17 @@ class UserServiceProvider extends ServiceProvider
                 $broker = new PasswordBroker($tokens, $users, $app['mailer'], $view);
 
                 // register validator for password
-                $broker->validator(function($credentials){
-                    try {
-                        return app('xe.member')->validatePassword($credentials['password']);
-                    } catch (\Exception $e) {
-                        return false;
+                $broker->validator(
+                    function ($credentials) {
+                        try {
+                            return app('xe.user')->validatePassword($credentials['password']);
+                        } catch (\Exception $e) {
+                            return false;
+                        }
                     }
-                });
+                );
 
                 return $broker;
-
             }
         );
     }
@@ -237,7 +146,7 @@ class UserServiceProvider extends ServiceProvider
                 // The password broker uses a token repository to validate tokens and send user
                 // password e-mails, as well as validating that password reset process as an
                 // aggregate service of sorts providing a convenient interface for resets.
-                return new EmailBroker($app['xe.member.mails'], $app['xe.member.pendingMails'], $app['mailer'], $view);
+                return new EmailBroker($app['mailer'], $view);
             }
         );
     }
@@ -245,18 +154,15 @@ class UserServiceProvider extends ServiceProvider
     private function registerImageHandler()
     {
         $this->app->singleton(
-            'xe.member.image',
+            'xe.user.image',
             function ($app) {
 
                 $profileImgConfig = config('xe.member.profileImage');
 
-                return new MemberImageHandler(
-                    $app['xe.storage'],
-                    $app['xe.media'],
-                    function() {
-                        return Thumbnailer::getManager();
-                    },
-                    $profileImgConfig
+                return new UserImageHandler(
+                    $app['xe.storage'], $app['xe.media'], function () {
+                    return Thumbnailer::getManager();
+                }, $profileImgConfig
                 );
             }
         );
@@ -301,7 +207,7 @@ class UserServiceProvider extends ServiceProvider
         // set member entity's default profile image
         Guest::setDefaultProfileImage($this->app['config']['xe.member.profileImage.default']);
 
-        $this->setProfileImageResolverOfMember();
+        $this->setProfileImageResolverOfUser();
 
         $this->addRelationship();
 
@@ -339,26 +245,24 @@ class UserServiceProvider extends ServiceProvider
     private function registerHandler()
     {
         $this->app->singleton(
-            'xe.member',
+            'xe.user',
             function ($app) {
-                $proxyClass = $app['xe.interception']->proxy(MemberHandler::class, 'Member');
-                $memberHandler = new $proxyClass(
-                    $app['xe.members'],
-                    $app['xe.member.accounts'],
-                    $app['xe.member.groups'],
-                    $app['xe.member.virtualGroups'],
-                    $app['xe.member.mails'],
-                    $app['xe.member.pendingMails'],
+                $proxyClass = $app['xe.interception']->proxy(UserHandler::class, 'XeUser');
+                $userHandler = new $proxyClass(
+                    new User(),
+                    new UserAccount(),
+                    new UserGroup(),
+                    new UserEmail(),
+                    new PendingEmail(),
                     $app['hash'],
                     $app['validator'],
                     $app['xe.register'],
-                    $app['xe.config']->getVal('member.join.useMailCertify', 'true')
-
+                    $app['xe.config']->getVal('user.join.useMailCertify', 'true')
                 );
-                return $memberHandler;
+                return $userHandler;
             }
         );
-        $this->app->bind(MemberHandler::class, 'xe.member');
+        $this->app->bind(UserHandler::class, 'xe.user');
     }
 
     /**
@@ -373,13 +277,7 @@ class UserServiceProvider extends ServiceProvider
             'xe.auth.password',
             'xe.auth.email',
             'xe.auth.tokens',
-            'xe.members', // ....
-            'xe.member.accounts',
-            'xe.member.groups',
-            'xe.member.virtualGroups',
-            'xe.member.mails',
-            'xe.member.pendingMails',
-            'xe.member.image'
+            'xe.user', // ....
         ];
     }
 
@@ -421,7 +319,7 @@ class UserServiceProvider extends ServiceProvider
 
         // 표시이름 validation 추가
         /** @var Closure $displayNameValidate */
-        $displayNameValidate = app('config')->get('xe.member.displayName.validate');
+        $displayNameValidate = app('config')->get('xe.user.displayName.validate');
         $validator->extend(
             'display_name',
             function ($attribute, $value, $parameters) use ($displayNameValidate) {
@@ -429,7 +327,7 @@ class UserServiceProvider extends ServiceProvider
             }
         );
 
-        $passwordConfig = app('config')->get('xe.member.password');
+        $passwordConfig = app('config')->get('xe.user.password');
         $levels = $passwordConfig['levels'];
         $level = $levels[$passwordConfig['default']];
         $validate = $level['validate'];
@@ -444,7 +342,7 @@ class UserServiceProvider extends ServiceProvider
     }
 
     /**
-     * registerDefulteSkins
+     * registerDefaultSkins
      *
      * @return void
      */
@@ -459,15 +357,15 @@ class UserServiceProvider extends ServiceProvider
     private function registerSettingsPermissions()
     {
         $permissions = [
-            'member.list' => [
+            'user.list' => [
                 'title' => '회원정보보기',
                 'tab' => '회원관리'
             ],
-            'member.edit' => [
+            'user.edit' => [
                 'title' => '회원정보수정',
                 'tab' => '회원관리'
             ],
-            'member.setting' => [
+            'user.setting' => [
                 'title' => '회원설정',
                 'tab' => '회원관리'
             ],
@@ -478,36 +376,12 @@ class UserServiceProvider extends ServiceProvider
         }
     }
 
-    private function addRelationship()
+    private function setProfileImageResolverOfUser()
     {
-
-        /** @var MemberRepository $memberRepo */
-        $memberRepo = $this->app['xe.members'];
-
-        /** @var VirtualGroupRepository $vGroupRepo */
-        $vGroupRepo = $this->app['xe.member.virtualGroups'];
-
-        // add virtual_groups to MemberRepository
-        $memberRepo->addRelation(
-            'virtual_groups',
-            function ($memberIds) use ($vGroupRepo) {
-                $members = [];
-                foreach ($memberIds as $memberId) {
-                    $groups = $vGroupRepo->fetchAllByMember($memberId);
-                    $members[$memberId] = $groups;
-                }
-                return $members;
-            },
-            null
-        );
-    }
-
-    private function setProfileImageResolverOfMember()
-    {
-        $default = $this->app['config']['xe.member.profileImage.default'];
+        $default = $this->app['config']['xe.user.profileImage.default'];
         $storage = $this->app['xe.storage'];
         $media = $this->app['xe.media'];
-        MemberEntity::setProfileImageResolver(
+        User::setProfileImageResolver(
             function ($imageId) use ($default, $storage, $media) {
 
                 /** @var Storage $storage */

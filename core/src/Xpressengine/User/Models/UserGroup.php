@@ -43,4 +43,16 @@ class UserGroup extends DynamicModel
         return $this->belongsToMany(User::class, 'user_group_user', 'groupId', 'userId');
     }
 
+    /**
+     * add User to this group
+     *
+     * @param User $user
+     *
+     * @return void
+     */
+    public function addUser(User $user)
+    {
+        $this->users()->save($user);
+    }
+
 }

@@ -30,10 +30,6 @@ use Xpressengine\Member\Repositories\MemberRepositoryInterface;
  */
 class UserProvider implements BaseProvider
 {
-    /**
-     * @var MemberRepositoryInterface 회원정보 저장소
-     */
-    protected $repo;
 
     /**
      * @var Hasher 비밀번호의 유효성검사를 위해 사용한다.
@@ -46,9 +42,8 @@ class UserProvider implements BaseProvider
      * @param MemberRepositoryInterface $memberRepo 회원정보 저장소
      * @param Hasher                    $hasher     해시코드 생성기, 비밀번호 유효성 검사를 위해 사용됨
      */
-    public function __construct(MemberRepositoryInterface $memberRepo, Hasher $hasher)
+    public function __construct(Hasher $hasher)
     {
-        $this->repo = $memberRepo;
         $this->hasher = $hasher;
     }
 
