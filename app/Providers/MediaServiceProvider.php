@@ -22,13 +22,8 @@ use Xpressengine\Media\Handlers\AudioHandler;
 use Xpressengine\Media\Handlers\ImageHandler;
 use Xpressengine\Media\Handlers\VideoHandler;
 use Xpressengine\Media\MediaManager;
-use Xpressengine\Media\Repositories\AudioRepository;
-use Xpressengine\Media\Repositories\ImageRepository;
 use Intervention\Image\ImageManager;
-use Xpressengine\Media\Repositories\VideoRepository;
-use Xpressengine\Media\Spec\Media;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Xpressengine\Media\TempStorage;
+use Xpressengine\Media\Models\Media;
 use Xpressengine\Media\Thumbnailer;
 
 /**
@@ -57,7 +52,6 @@ class MediaServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Media::setUrlMaker($this->app['xe.storage.url']);
         Thumbnailer::setManager(new ImageManager());
     }
 
@@ -70,14 +64,10 @@ class MediaServiceProvider extends ServiceProvider
     {
         $this->app->bind('xe.media', function ($app) {
             $config = $app['config']['xe.media'];
-            $proxyClass = $app['xe.interception']->proxy(MediaManager::class, 'Media');
-            $mediaManager = new $proxyClass(new CommandFactory(), $config['thumbnail']);
+            $proxyClass = $app['xe.interception']->proxy(MediaManager::class, 'XeMedia');
+            $mediaManager = new $proxyClass($app['xe.storage'], new CommandFactory(), $config['thumbnail']);
 
-            $image = new ImageHandler(
-                $app['xe.storage'],
-                new ImageRepository($app['xe.db']->connection())
-            );
-            $mediaManager->extend(Media::TYPE_IMAGE, $image);
+            $mediaManager->extend(Media::TYPE_IMAGE, new ImageHandler($app['xe.storage']));
 
             $extensionName = isset($config['videoExtensionDefault']) ? $config['videoExtensionDefault'] : 'dummy';
             $method = 'create' . ucfirst($extensionName) . 'Extension';
@@ -87,42 +77,25 @@ class MediaServiceProvider extends ServiceProvider
                 );
             }
             $extension = $this->{$method}($config);
-            $video = new VideoHandler(
+            $mediaManager->extend(Media::TYPE_VIDEO, new VideoHandler(
                 $app['xe.storage'],
-                new VideoRepository($app['xe.db']->connection()),
                 new \getID3(),
-                new TempStorage(),
-                $extension
-            );
-            $mediaManager->extend(Media::TYPE_VIDEO, $video);
+                $app['xe.storage.temp'],
+                $extension,
+                isset($config['videoSnapshotFromSec']) ?: null
+            ));
 
-            $audio = new AudioHandler(
+            $mediaManager->extend(Media::TYPE_AUDIO, new AudioHandler(
                 $app['xe.storage'],
-                new AudioRepository($app['xe.db']->connection()),
                 new \getID3(),
-                new TempStorage()
-            );
-            $mediaManager->extend(Media::TYPE_AUDIO, $audio);
+                $app['xe.storage.temp']
+            ));
 
             return $mediaManager;
         }, true);
 
-        $app = $this->app;
-        intercept('Storage@remove', 'media.remove', function ($target, $file) use ($app) {
 
-            /** @var MediaManager $manager */
-            $manager = $app['xe.media'];
-            if ($manager->is($file)) {
-                $media = $manager->make($file);
-                if ($media->originId === null) {
-                    $manager->getHandler(Media::TYPE_IMAGE)->removeThumbnails($media);
-                }
-
-                $manager->remove($media);
-            }
-
-            return $target($file);
-        });
+        $this->registerEvent();
     }
 
     /**
@@ -144,7 +117,25 @@ class MediaServiceProvider extends ServiceProvider
      */
     private function createFfmpegExtension($config)
     {
-        return new FFMpegExtension(FFMpeg::create($config['videoExtensions']['ffmpeg']), new TempStorage());
+        return new FFMpegExtension(FFMpeg::create($config['videoExtensions']['ffmpeg']), $this->app['xe.storage.temp']);
+    }
+
+    private function registerEvent()
+    {
+        intercept('XeStorage@remove', 'media.remove', function ($target, $file) {
+
+            /** @var MediaManager $manager */
+            $manager = $this->app['xe.media'];
+            if ($manager->is($file)) {
+                if (!$file instanceof Media) {
+                    $file = $manager->make($file);
+                }
+
+                $manager->metaRemove($file);
+            }
+
+            return $target($file);
+        });
     }
 
     /**

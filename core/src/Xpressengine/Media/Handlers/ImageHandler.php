@@ -16,16 +16,14 @@ namespace Xpressengine\Media\Handlers;
 use Xpressengine\Media\Commands\CommandInterface;
 use Xpressengine\Media\Exceptions\WrongInstanceException;
 use Xpressengine\Media\Exceptions\NotAvailableException;
-use Xpressengine\Media\Meta;
-use Xpressengine\Media\Repositories\ImageRepository;
-use Xpressengine\Media\Spec\Image;
-use Xpressengine\Media\Spec\Media;
+use Xpressengine\Media\Models\Image;
+use Xpressengine\Media\Models\Media;
 use Xpressengine\Media\Thumbnailer;
 use Xpressengine\Storage\File;
 use Xpressengine\Storage\Storage;
 
 /**
- * image handler
+ * Class ImageHandler
  *
  * @category    Media
  * @package     Xpressengine\Media
@@ -44,89 +42,13 @@ class ImageHandler extends AbstractHandler
     protected $storage;
 
     /**
-     * Repository instance
-     *
-     * @var ImageRepository
-     */
-    protected $repo;
-
-    /**
-     * Available mime type
-     *
-     * @var array
-     */
-    protected $mimes = ['image/jpeg', 'image/png', 'image/gif', 'image/vnd.microsoft.icon', 'image/x-icon'];
-
-    /**
      * Constructor
      *
-     * @param Storage         $storage Storage instance
-     * @param ImageRepository $repo    Repository instance
+     * @param Storage $storage Storage instance
      */
-    public function __construct(Storage $storage, ImageRepository $repo)
+    public function __construct(Storage $storage)
     {
         $this->storage = $storage;
-        $this->repo = $repo;
-    }
-
-    /**
-     * Get a thumbnail image
-     *
-     * @param Media  $media       media instance
-     * @param string $type        thumbnail make type
-     * @param string $dimension   dimension code
-     * @param bool   $defaultSelf if set true, returns self when thumbnail not exists
-     * @return null|Image|Media
-     */
-    public function getThumbnail(Media $media, $type, $dimension, $defaultSelf = true)
-    {
-        $meta = $this->repo->findByOption([
-            'originId' => $media->getFile()->getId(),
-            'type' => $type,
-            'code' => $dimension
-        ]);
-
-        if ($meta !== null) {
-            $file = $this->storage->get($meta->id);
-
-            return $this->createModel($file, $meta);
-        }
-
-        return $defaultSelf === true ? $media : null;
-    }
-
-    /**
-     * Get thumbnails
-     *
-     * @param Media       $media media instance
-     * @param null|string $type  thumbnail make type
-     * @return Image[]
-     */
-    public function getThumbnails(Media $media, $type = null)
-    {
-        $wheres = ['originId' => $media->getFile()->getId()];
-        if ($type !== null) {
-            $wheres = array_merge($wheres, ['type' => $type]);
-        }
-
-        $metas = $this->repo->fetch($wheres);
-
-        $tmp = [];
-        foreach ($metas as $meta) {
-            $tmp[$meta->id] = $meta;
-        }
-        $metas = $tmp;
-
-        $files = $this->storage->children($media->getFile());
-
-        $result = [];
-        foreach ($files as $file) {
-            if (isset($metas[$file->getId()]) === true) {
-                $result[] = $this->createModel($file, $metas[$file->getId()]);
-            }
-        }
-
-        return $result;
     }
 
     /**
@@ -142,7 +64,7 @@ class ImageHandler extends AbstractHandler
             throw new WrongInstanceException();
         }
 
-        return $this->storage->read($media->getFile());
+        return $media->getContent();
     }
 
     /**
@@ -183,14 +105,15 @@ class ImageHandler extends AbstractHandler
     }
 
     /**
-     * 섬네일 삭제
+     * 각 미디어 타입에서 사용가능한 확장자 반환
      *
-     * @param Media $media media instance
-     * @return int
+     * @return array
      */
-    public function removeThumbnails(Media $media)
+    public function getAvailableMimes()
     {
-        return $this->repo->deleteByOriginId($media->id);
+        $class = $this->getModel();
+
+        return $class::getMimes();
     }
 
     /**
@@ -203,40 +126,34 @@ class ImageHandler extends AbstractHandler
      */
     public function make(File $file, array $addInfo = [])
     {
-        if ($this->isAvailable($file->getMime()) !== true) {
+        if ($this->isAvailable($file->mime) !== true) {
             throw new NotAvailableException();
         }
 
-        if (!$meta = $this->repo->find($file->getId())) {
-            $meta = $this->extractInformation($file);
-            foreach ($addInfo as $key => $value) {
-                $meta->{$key} = $value;
-            }
+        $image = $this->createModel($file);
+        if (!$image->meta) {
+            list($width, $height) = $this->extractDimension($image);
 
-            $meta = $this->repo->insert($meta);
+            $meta = $image->meta()->create(array_merge([
+                'width' => $width,
+                'height' => $height,
+            ], $addInfo));
+
+            $image->setRelation('meta', $meta);
         }
 
-        return $this->createModel($file, $meta);
+        return $image;
     }
 
     /**
      * Extract file meta data
      *
-     * @param File $file file instance
-     * @return Meta
+     * @param Image $image file instance
+     * @return array
      */
-    protected function extractInformation(File $file)
+    protected function extractDimension(Image $image)
     {
-        $content = $this->storage->read($file);
-        list($realWidth, $realHeight) = getimagesizefromstring($content);
-
-        $meta = new Meta();
-        $meta->id = $file->getId();
-        $meta->originId = $file->getOriginId(false);
-        $meta->width = $realWidth;
-        $meta->height = $realHeight;
-
-        return $meta;
+        return getimagesizefromstring($image->getContent());
     }
 
     /**
@@ -250,25 +167,25 @@ class ImageHandler extends AbstractHandler
     }
 
     /**
-     * 미디어 삭제
+     * Returns model class
      *
-     * @param Media $media media instance
-     * @return void
+     * @return string
      */
-    public function remove(Media $media)
+    public function getModel()
     {
-        $this->repo->delete($media->getMeta());
+        return Image::class;
     }
 
     /**
      * Create model
      *
      * @param File $file file instance
-     * @param Meta $meta meta instance
      * @return Image
      */
-    protected function createModel(File $file, Meta $meta)
+    public function createModel(File $file)
     {
-        return new Image($file, $meta);
+        $class = $this->getModel();
+
+        return $class::make($file);
     }
 }

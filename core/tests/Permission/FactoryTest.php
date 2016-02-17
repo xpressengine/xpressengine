@@ -43,9 +43,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $mockRegistered = m::mock('Xpressengine\Permission\Registered');
 
         $mockRegisteredAsc1 = m::mock('Xpressengine\Permission\Registered');
-        $mockRegisteredAsc1->name = 'plugin.board';
+        $mockRegisteredAsc1->shouldReceive('get')->with('name')->andReturn('plugin.board');
         $mockRegisteredAsc2 = m::mock('Xpressengine\Permission\Registered');
-        $mockRegisteredAsc2->name = 'plugin';
+        $mockRegisteredAsc2->shouldReceive('get')->with('name')->andReturn('plugin');
 
         $mockRegistered->shouldReceive('addParent')->once()->with($mockRegisteredAsc1)->andReturnNull();
         $mockRegistered->shouldReceive('addParent')->once()->with($mockRegisteredAsc2)->andReturnNull();
@@ -74,9 +74,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $auth->shouldReceive('user')->andReturn($mockUser);
 
         $mockRegistered1 = m::mock('Xpressengine\Permission\Registered');
-        $mockRegistered1->name = 'plugin';
+        $mockRegistered1->shouldReceive('get')->with('name')->andReturn('plugin');
         $mockRegistered2 = m::mock('Xpressengine\Permission\Registered');
-        $mockRegistered2->name = 'plugin.board';
+        $mockRegistered2->shouldReceive('get')->with('name')->andReturn('plugin.board');
         $mockRegistered2->shouldReceive('addParent');
         $repo->shouldReceive('fetchByType')->once()->with('default', 'route')->andReturn([$mockRegistered1, $mockRegistered2]);
 
@@ -103,9 +103,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $auth->shouldReceive('user')->andReturn($mockUser);
 
         $mockRegistered1 = m::mock('Xpressengine\Permission\Registered');
-        $mockRegistered1->name = 'plugin';
+        $mockRegistered1->shouldReceive('get')->with('name')->andReturn('plugin');
         $mockRegistered2 = m::mock('Xpressengine\Permission\Registered');
-        $mockRegistered2->name = 'plugin.board';
+        $mockRegistered2->shouldReceive('get')->with('name')->andReturn('plugin.board');
         $mockRegistered2->shouldReceive('addParent');
         $repo->shouldReceive('fetchByType')->once()->with('default', 'custom')->andReturn([$mockRegistered1, $mockRegistered2]);
 
@@ -128,6 +128,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
         $mockRegistered = m::mock('Xpressengine\Permission\Registered');
         $mockParent = m::mock('Xpressengine\Permission\Registered');
+        $mockParent->shouldReceive('get')->with('name')->andReturn('plugin');
 
         $repo->shouldReceive('findByTypeAndName')->once()->with('default', 'instance', 'plugin.dummy')->andReturnNull();
         $repo->shouldReceive('fetchAncestor')->once()->andReturn([$mockParent]);
@@ -176,8 +177,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $instance = new Factory($auth, $routes, $repo);
 
         $mockRegistered = m::mock('Xpressengine\Permission\Registered');
-        $mockRegistered->siteKey = 'default';
-        $mockRegistered->type = 'instance';
+        $mockRegistered->shouldReceive('get')->with('siteKey')->andReturn('default');
+        $mockRegistered->shouldReceive('get')->with('type')->andReturn('instance');
 
         $repo->shouldReceive('findByTypeAndName')->once()->with('default', 'instance', 'invalid.to')->andReturnNull();
 
@@ -215,13 +216,13 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $instance = new Factory($auth, $routes, $repo);
 
         $mockRegistered = m::mock('Xpressengine\Permission\Registered');
-        $mockRegistered->siteKey = 'default';
-        $mockRegistered->type = 'instance';
+        $mockRegistered->shouldReceive('get')->with('siteKey')->andReturn('default');
+        $mockRegistered->shouldReceive('get')->with('type')->andReturn('instance');
         $mockRegistered->shouldReceive('getParent')->andReturnNull();
         $mockRegistered->shouldReceive('getDepth')->andReturn(1);
 
         $mockToRegistered = m::mock('Xpressengine\Permission\Registered');
-        $mockToRegistered->type = 'instance';
+        $mockToRegistered->shouldReceive('get')->with('type')->andReturn('instance');
 
         $repo->shouldReceive('findByTypeAndName')->once()->with('default', 'instance', 'valid.to')->andReturn($mockToRegistered);
         $repo->shouldReceive('affiliate')->once()->with($mockRegistered, 'valid.to');
@@ -254,12 +255,12 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $mockParent = m::mock('Xpressengine\Permission\Registered');
 
         $mockRegistered = m::mock('Xpressengine\Permission\Registered');
-        $mockRegistered->siteKey = 'default';
-        $mockRegistered->type = 'instance';
+        $mockRegistered->shouldReceive('get')->with('siteKey')->andReturn('default');
+        $mockRegistered->shouldReceive('get')->with('type')->andReturn('instance');
         $mockRegistered->shouldReceive('getParent')->andReturn($mockParent);
 
         $mockToRegistered = m::mock('Xpressengine\Permission\Registered');
-        $mockToRegistered->type = 'instance';
+        $mockToRegistered->shouldReceive('get')->with('type')->andReturn('instance');
 
         $repo->shouldReceive('findByTypeAndName')->once()->with('default', 'instance', 'valid.to')->andReturn($mockToRegistered);
         $repo->shouldReceive('foster')->once()->with($mockRegistered, 'valid.to');

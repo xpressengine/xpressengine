@@ -3,7 +3,7 @@ namespace Xpressengine\Widgets;
 
 use Xpressengine\Widget\AbstractWidget;
 use Config;
-use Storage;
+use XeStorage;
 use View;
 
 /**
@@ -40,8 +40,11 @@ class StorageSpace extends AbstractWidget
         $list = [];
         $total = [];
         foreach ($disks as $disk => $setting) {
-            $bytes = Storage::bytesByMime(['disk' => $disk]);
-            $counts = Storage::countByMime(['disk' => $disk]);
+            $scope = function ($query) use ($disk) {
+                $query->where('disk', $disk);
+            };
+            $bytes = XeStorage::bytesByMime($scope);
+            $counts = XeStorage::countByMime($scope);
             arsort($bytes);
 
             $list[$disk] = [

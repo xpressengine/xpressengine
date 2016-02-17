@@ -4,7 +4,7 @@ namespace Xpressengine\Tests\Media;
 use Mockery as m;
 use Xpressengine\Media\Coordinators\Dimension;
 use Xpressengine\Media\MediaManager;
-use Xpressengine\Media\Spec\Media;
+use Xpressengine\Media\Models\Media;
 
 class MediaManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,8 +29,8 @@ class MediaManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetHandlerThrownExceptionWhenGivenUnknownType()
     {
-        list($factory, $config) = $this->getMocks();
-        $instance = new MediaManager($factory, $config);
+        list($storage, $factory, $config) = $this->getMocks();
+        $instance = new MediaManager($storage, $factory, $config);
         $this->beforeSetUp($instance);
 
         try {
@@ -44,8 +44,8 @@ class MediaManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetHandler()
     {
-        list($factory, $config) = $this->getMocks();
-        $instance = new MediaManager($factory, $config);
+        list($storage, $factory, $config) = $this->getMocks();
+        $instance = new MediaManager($storage, $factory, $config);
         $this->beforeSetUp($instance);
 
         $handler = $instance->getHandler(Media::TYPE_IMAGE);
@@ -55,8 +55,8 @@ class MediaManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetHandlerByFileThrownExceptionWhenGivenFileTypeIsUnknown()
     {
-        list($factory, $config) = $this->getMocks();
-        $instance = m::mock(MediaManager::class, [$factory, $config])
+        list($storage, $factory, $config) = $this->getMocks();
+        $instance = m::mock(MediaManager::class, [$storage, $factory, $config])
             ->shouldAllowMockingProtectedMethods()
             ->makePartial();
         $this->beforeSetUp($instance);
@@ -75,8 +75,8 @@ class MediaManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetHandlerByFile()
     {
-        list($factory, $config) = $this->getMocks();
-        $instance = m::mock(MediaManager::class, [$factory, $config])
+        list($storage, $factory, $config) = $this->getMocks();
+        $instance = m::mock(MediaManager::class, [$storage, $factory, $config])
             ->shouldAllowMockingProtectedMethods()
             ->makePartial();
         $this->beforeSetUp($instance);
@@ -90,19 +90,19 @@ class MediaManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFileType()
     {
-        list($factory, $config) = $this->getMocks();
-        $instance = new MediaManager($factory, $config);
+        list($storage, $factory, $config) = $this->getMocks();
+        $instance = new MediaManager($storage, $factory, $config);
         $this->beforeSetUp($instance);
 
         $mockFile1 = m::mock('Xpressengine\Storage\File');
-        $mockFile1->shouldReceive('getMime')->andReturn('image/jpeg');
+        $mockFile1->shouldReceive('getAttribute')->once()->with('mime')->andReturn('image/jpeg');
 
         $this->handler->shouldReceive('isAvailable')->once()->with('image/jpeg')->andReturn(true);
 
         $this->assertEquals(Media::TYPE_IMAGE, $instance->getFileType($mockFile1));
 
         $mockFile2 = m::mock('Xpressengine\Storage\File');
-        $mockFile2->shouldReceive('getMime')->andReturn('text/plain');
+        $mockFile2->shouldReceive('getAttribute')->once()->with('mime')->andReturn('text/plain');
 
         $this->handler->shouldReceive('isAvailable')->once()->with('text/plain')->andReturn(false);
 
@@ -111,12 +111,12 @@ class MediaManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testMakeThrownExceptionWhenGivenFileIsNotAvailable()
     {
-        list($factory, $config) = $this->getMocks();
-        $instance = new MediaManager($factory, $config);
+        list($storage, $factory, $config) = $this->getMocks();
+        $instance = new MediaManager($storage, $factory, $config);
         $this->beforeSetUp($instance);
 
         $mockFile = m::mock('Xpressengine\Storage\File');
-        $mockFile->shouldReceive('getMime')->andReturn('text/plain');
+        $mockFile->shouldReceive('getAttribute')->once()->with('mime')->andReturn('text/plain');
 
         $this->handler->shouldReceive('isAvailable')->once()->with('text/plain')->andReturn(false);
 
@@ -131,12 +131,12 @@ class MediaManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testMake()
     {
-        list($factory, $config) = $this->getMocks();
-        $instance = new MediaManager($factory, $config);
+        list($storage, $factory, $config) = $this->getMocks();
+        $instance = new MediaManager($storage, $factory, $config);
         $this->beforeSetUp($instance);
 
         $mockFile = m::mock('Xpressengine\Storage\File');
-        $mockFile->shouldReceive('getMime')->andReturn('image/jpeg');
+        $mockFile->shouldReceive('getAttribute')->once()->with('mime')->andReturn('image/jpeg');
 
         $this->handler->shouldReceive('isAvailable')->once()->with('image/jpeg')->andReturn(true);
         $this->handler->shouldReceive('make')->once()->with($mockFile);
@@ -146,19 +146,19 @@ class MediaManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testIs()
     {
-        list($factory, $config) = $this->getMocks();
-        $instance = new MediaManager($factory, $config);
+        list($storage, $factory, $config) = $this->getMocks();
+        $instance = new MediaManager($storage, $factory, $config);
         $this->beforeSetUp($instance);
 
         $mockFile1 = m::mock('Xpressengine\Storage\File');
-        $mockFile1->shouldReceive('getMime')->andReturn('image/jpeg');
+        $mockFile1->shouldReceive('getAttribute')->once()->with('mime')->andReturn('image/jpeg');
 
         $this->handler->shouldReceive('isAvailable')->once()->with('image/jpeg')->andReturn(true);
 
         $this->assertTrue($instance->is($mockFile1));
 
         $mockFile2 = m::mock('Xpressengine\Storage\File');
-        $mockFile2->shouldReceive('getMime')->andReturn('text/plain');
+        $mockFile2->shouldReceive('getAttribute')->once()->with('mime')->andReturn('text/plain');
 
         $this->handler->shouldReceive('isAvailable')->once()->with('text/plain')->andReturn(false);
 
@@ -167,13 +167,13 @@ class MediaManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateThumbnailsReturnsEmptyArrayWhenMediaHasNotPicture()
     {
-        list($factory, $config) = $this->getMocks();
-        $instance = m::mock(MediaManager::class, [$factory, $config])
+        list($storage, $factory, $config) = $this->getMocks();
+        $instance = m::mock(MediaManager::class, [$storage, $factory, $config])
             ->shouldAllowMockingProtectedMethods()
             ->makePartial();
         $this->beforeSetUp($instance);
 
-        $mockMedia = m::mock('Xpressengine\Media\Spec\Media');
+        $mockMedia = m::mock('Xpressengine\Media\Models\Media');
         $instance->shouldReceive('getHandlerByMedia')->once()->with($mockMedia)->andReturn($this->handler);
 
         $this->handler->shouldReceive('getPicture')->once()->with($mockMedia)->andReturnNull();
@@ -183,23 +183,20 @@ class MediaManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateThumbnails()
     {
-        list($factory, $config) = $this->getMocks();
-        $instance = m::mock(MediaManager::class, [$factory, $config])
+        list($storage, $factory, $config) = $this->getMocks();
+        $instance = m::mock(MediaManager::class, [$storage, $factory, $config])
             ->shouldAllowMockingProtectedMethods()
             ->makePartial();
         $this->beforeSetUp($instance);
 
         $originId = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx';
 
-        $mockFile = m::mock('Xpressengine\Storage\File');
-        $mockFile->shouldReceive('getOriginId')->andReturn($originId);
-        $mockMedia = m::mock('Xpressengine\Media\Spec\Media');
-        $mockMedia->shouldReceive('getFile')->andReturn($mockFile);
-
+        $mockMedia = m::mock('Xpressengine\Media\Models\Media');
+        $mockMedia->shouldReceive('getOriginKey')->andReturn($originId);
 
         $instance->shouldReceive('getHandlerByMedia')->once()->with($mockMedia)->andReturn($this->handler);
 
-        $mockImage = m::mock('Xpressengine\Media\Spec\Image');
+        $mockImage = m::mock('Xpressengine\Media\Models\Image');
         $this->handler->shouldReceive('getPicture')->once()->with($mockMedia)->andReturn($mockImage);
 
         $mockCommand = m::mock('Xpressengine\Media\Commands\AbstractCommand');
@@ -224,6 +221,7 @@ class MediaManagerTest extends \PHPUnit_Framework_TestCase
     private function getMocks()
     {
         return [
+            m::mock('Xpressengine\Storage\Storage'),
             m::mock('Xpressengine\Media\CommandFactory'),
             [
                 'disk' => 'local',

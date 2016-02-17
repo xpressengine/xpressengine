@@ -13,10 +13,10 @@
  */
 namespace Xpressengine\Storage;
 
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\File\File as SymfonyFile;
 
 /**
- * 저장소를 분배하기위한 인터페이스를 제공
+ * Interface Distributor
  *
  * @category    Storage
  * @package     Xpressengine\Storage
@@ -30,8 +30,8 @@ interface Distributor
     /**
      * allot storage disk
      *
-     * @param string $content file content
+     * @param SymfonyFile $file file object
      * @return string
      */
-    public function allot($content);
+    public function allot(SymfonyFile $file);
 }

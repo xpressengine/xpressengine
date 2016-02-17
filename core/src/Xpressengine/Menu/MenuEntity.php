@@ -13,11 +13,10 @@
  */
 namespace Xpressengine\Menu;
 
-use JsonSerializable;
 use Xpressengine\Member\Entities\MemberEntityInterface;
 use Xpressengine\Menu\Exceptions\NotFoundMenuItemException;
 use Xpressengine\Menu\Permission\MenuPermission;
-use Xpressengine\Support\EntityTrait;
+use Xpressengine\Support\Entity;
 use Xpressengine\Support\Tree\TreeCollection;
 
 /**
@@ -41,10 +40,8 @@ use Xpressengine\Support\Tree\TreeCollection;
  * @property string $site        사이트 식별
  *
  */
-class MenuEntity implements JsonSerializable
+class MenuEntity extends Entity
 {
-    use EntityTrait;
-
     /**
      * @var TreeCollection MenuItem 들을 Tree 형태로 가지고 있는 Collection 객체
      */
@@ -64,7 +61,8 @@ class MenuEntity implements JsonSerializable
      */
     public function __construct(array $attributes, TreeCollection $treeCollection)
     {
-        $this->original = $this->attributes = $attributes;
+        parent::__construct($attributes);
+
         $this->treeCollection = $treeCollection;
     }
 

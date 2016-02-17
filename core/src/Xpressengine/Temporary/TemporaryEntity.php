@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Temporary;
 
-use Xpressengine\Support\EntityTrait;
+use Xpressengine\Support\Entity;
 
 /**
  * 임시저장 데이터 객체
@@ -25,11 +25,9 @@ use Xpressengine\Support\EntityTrait;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class TemporaryEntity implements \JsonSerializable
+class TemporaryEntity extends Entity
 {
-    use EntityTrait;
-
-    protected $guarded = ['id', 'key'];
+    protected $guarded = ['id'];
 
     /**
      * json 으로 인코딩시 변환될 속성 값들을 반환

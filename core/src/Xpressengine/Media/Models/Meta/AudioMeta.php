@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is Image model class
+ * This file is AudioMeta class
  *
  * PHP version 5
  *
@@ -11,10 +11,10 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Media\Spec;
+namespace Xpressengine\Media\Models\Meta;
 
 /**
- * image 객체
+ * Class AudioMeta
  *
  * @category    Media
  * @package     Xpressengine\Media
@@ -23,30 +23,26 @@ namespace Xpressengine\Media\Spec;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class Image extends Media
+class AudioMeta extends Meta
 {
     /**
-     * Rendered media
+     * The table associated with the model.
      *
-     * @param array $option rendering option
-     * @return string
+     * @var string
      */
-    public function render(array $option = [])
-    {
-        if (isset($option['responsive']) && $option['responsive'] === true) {
-            return '<img src="' . $this->url() . '" style="max-width: 100%" />';
-        }
-
-        return '<img src="' . $this->url() . '" width="' . $this->width . '" height="' . $this->height . '" />';
-    }
+    protected $table = 'files_audio';
 
     /**
-     * Returns media type
+     * The attributes that aren't mass assignable.
      *
-     * @return string
+     * @var array
      */
-    public function getType()
-    {
-        return Media::TYPE_IMAGE;
-    }
+    protected $guarded = ['id', 'fileId'];
+
+    /**
+     * The foreign key name for the model.
+     *
+     * @var string
+     */
+    protected $foreignKey = 'fileId';
 }

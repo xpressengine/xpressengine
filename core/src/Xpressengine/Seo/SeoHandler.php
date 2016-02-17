@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Seo;
 
-use Xpressengine\Media\Spec\Media;
+use Xpressengine\Media\Models\Media;
 use Xpressengine\Member\Entities\MemberEntityInterface;
 use Xpressengine\Seo\Importers\AbstractImporter;
 use Xpressengine\Translation\Translator;

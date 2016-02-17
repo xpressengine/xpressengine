@@ -14,7 +14,7 @@
 namespace Xpressengine\Config;
 
 use Closure;
-use Xpressengine\Support\EntityTrait;
+use Illuminate\Support\Fluent;
 
 /**
  * 특정 대상이 가지는 여러 값을 가지는 entity 클래스
@@ -26,10 +26,8 @@ use Xpressengine\Support\EntityTrait;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class ConfigVO implements \JsonSerializable
+class ConfigVO extends Fluent
 {
-    use EntityTrait;
-
     /**
      * except closure values
      *

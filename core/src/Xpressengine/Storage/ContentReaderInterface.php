@@ -1,38 +1,35 @@
 <?php
 /**
- * Site
+ * This file is file content reader interface
  *
  * PHP version 5
  *
- * @category    Site
- * @package     Xpressengine\Site
+ * @category    Storage
+ * @package     Xpressengine\Storage
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-
-namespace Xpressengine\Site;
-
-use Xpressengine\Support\Entity;
+namespace Xpressengine\Storage;
 
 /**
- * Site
+ * Interface ContentReaderInterface
  *
- * PHP version 5
- *
- * @category    Site
- * @package     Xpressengine\Site
+ * @category    Storage
+ * @package     Xpressengine\Storage
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
- *
- * @property string $host           지정된 도메인
- * @property string $siteKey        고유한 식별자
  */
-
-class Site extends Entity
+interface ContentReaderInterface
 {
-
+    /**
+     * Returns file content by the file model
+     *
+     * @param File $file file instance
+     * @return string
+     */
+    public function read(File $file);
 }

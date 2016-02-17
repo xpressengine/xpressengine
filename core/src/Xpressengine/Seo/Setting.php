@@ -17,7 +17,7 @@ use Xpressengine\Config\ConfigManager;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Keygen\Keygen;
 use Xpressengine\Media\MediaManager;
-use Xpressengine\Media\Spec\Image;
+use Xpressengine\Media\Models\Image;
 use Xpressengine\Storage\Storage;
 
 /**

@@ -170,6 +170,7 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
 
         $column = m::mock('Xpressengine\DynamicField\ColumnEntity');
         $column->shouldReceive('add');
+        $column->shouldReceive('get')->with('name')->andReturn('id');
 
         $configHandler = m::mock('Xpressengine\DynamicField\ConfigHandler');
         $configHandler->shouldReceive('isTableMethodCreate')->once()->andReturn(true);
@@ -220,6 +221,7 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
 
         $addColumn = m::mock('Xpressengine\DynamicField\ColumnEntity');
         $addColumn->shouldReceive('add');
+        $addColumn->shouldReceive('get')->with('name');
 
         $reflection = new \ReflectionClass(get_class($typeInstance));
         $property = $reflection->getProperty('columns');
@@ -380,8 +382,8 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
             ->shouldAllowMockingProtectedMethods()->makePartial();
 
         $addColumn = m::mock('Xpressengine\DynamicField\ColumnEntity');
-        $addColumn->name = 'add1';
         $addColumn->shouldReceive('add');
+        $addColumn->shouldReceive('get')->with('name')->andReturn('add1');
 
         $reflection = new \ReflectionClass(get_class($typeInstance));
         $property = $reflection->getProperty('columns');
@@ -427,8 +429,8 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
             ->shouldAllowMockingProtectedMethods()->makePartial();
 
         $addColumn = m::mock('Xpressengine\DynamicField\ColumnEntity');
-        $addColumn->name = 'add1';
         $addColumn->shouldReceive('add');
+        $addColumn->shouldReceive('get')->with('name')->andReturn('add1');
 
         $reflection = new \ReflectionClass(get_class($typeInstance));
         $property = $reflection->getProperty('columns');
@@ -572,8 +574,8 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
             ->shouldAllowMockingProtectedMethods()->makePartial();
 
         $addColumn = m::mock('Xpressengine\DynamicField\ColumnEntity');
-        $addColumn->name = 'add1';
         $addColumn->shouldReceive('add');
+        $addColumn->shouldReceive('get')->with('name')->andReturn('add1');
 
         $reflection = new \ReflectionClass(get_class($typeInstance));
         $property = $reflection->getProperty('columns');
@@ -610,7 +612,7 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
             ->shouldAllowMockingProtectedMethods()->makePartial();
 
         $addColumn = m::mock('Xpressengine\DynamicField\ColumnEntity');
-        $addColumn->name = 'add1';
+        $addColumn->shouldReceive('get')->with('name')->andReturn('add1');
         $addColumn->shouldReceive('add');
 
         $reflection = new \ReflectionClass(get_class($typeInstance));
@@ -647,7 +649,7 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
             ->shouldAllowMockingProtectedMethods()->makePartial();
 
         $addColumn = m::mock('Xpressengine\DynamicField\ColumnEntity');
-        $addColumn->name = 'add1';
+        $addColumn->shouldReceive('get')->with('name')->andReturn('add1');
         $addColumn->shouldReceive('add');
 
         $reflection = new \ReflectionClass(get_class($typeInstance));

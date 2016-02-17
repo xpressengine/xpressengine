@@ -31,7 +31,7 @@ use Illuminate\Database\Eloquent\Collection;
  *  // 각각의 인스턴스를 구분하고자 하는 경우 위해 대상의 인스턴스 아이디를 전달하면 됩니다.
  *  XeTag::set('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', ['word1', 'word2', 'word3'], '인스턴스 아이디');
  *  // 반환
- *  $tags = Tag::getTagByTaggable('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx');
+ *  $tags = Tag::getByTaggable('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx');
  * ```
  *
  * ### 자동 완성
@@ -116,7 +116,7 @@ class TagHandler
 
         // 이전에 대상 아이디에 연결된 태그중
         // 전달된 단어 해당하는 태그가 없는경우 연결 해제 처리
-        $olds = $model::getTagByTaggable($taggableId);
+        $olds = $model::getByTaggable($taggableId);
         $removes = $olds->diff($tags);
 
         $this->unrelate($taggableId, $removes);

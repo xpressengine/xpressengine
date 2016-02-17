@@ -317,7 +317,8 @@ return [
                 'timeout' => 3600, // The timeout for the underlying process
                 'ffmpeg.threads' => 4,   // The number of threads that FFMpeg should use
             ]
-        ]
+        ],
+        'videoSnapshotFromSec' => 10
     ],
 
     'security' => [
