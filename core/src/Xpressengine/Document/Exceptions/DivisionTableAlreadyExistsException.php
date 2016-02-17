@@ -25,7 +25,7 @@ use Xpressengine\Document\DocumentException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class DivisionExistsException extends DocumentException
+class DivisionTableAlreadyExistsException extends DocumentException
 {
-    protected $message = 'Divided table cannot be found.';
+    protected $message = 'Divided table already exists.';
 }

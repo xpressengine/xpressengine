@@ -1,6 +1,6 @@
 <?php
 /**
- * ConfigException
+ * NotFoundDocumentException
  *
  * PHP version 5
  *
@@ -16,7 +16,7 @@ namespace Xpressengine\Document\Exceptions;
 use Xpressengine\Document\DocumentException;
 
 /**
- * ConfigException
+ * NotFoundDocumentException
  *
  * @category    Document
  * @package     Xpressengine\Document
@@ -25,7 +25,7 @@ use Xpressengine\Document\DocumentException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class ConfigException extends DocumentException
+class DocumentNotFoundException extends DocumentException
 {
-    protected $message = 'There is an error in document configuration.';
+    protected $message = 'Document cannot be found.';
 }

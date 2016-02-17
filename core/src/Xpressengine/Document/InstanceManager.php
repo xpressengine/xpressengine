@@ -15,10 +15,12 @@
  */
 namespace Xpressengine\Document;
 
+use Illuminate\Database\Schema\Blueprint;
 use Xpressengine\Database\VirtualConnectionInterface as VirtualConnection;
 use Illuminate\Contracts\Hashing\Hasher;
 use Xpressengine\Config\ConfigEntity;
-use Xpressengine\Document\Model\Document;
+use Xpressengine\Document\Models\Document;
+use Xpressengine\Migrations\DocumentMigration;
 
 /**
  * InstanceManager
@@ -97,7 +99,9 @@ class InstanceManager
         $this->connection->beginTransaction();
 
         $this->configHandler->add($config);
-        $this->createDivisionTable($config);
+        if ($config->get('division') === true) {
+            $this->createDivisionTable($config);
+        }
 
         $this->connection->commit();
     }
@@ -110,33 +114,14 @@ class InstanceManager
      */
     protected function createDivisionTable(ConfigEntity $config)
     {
-        if ($config->get('division') === true) {
-            $document = new Document;
-
-            $row = $this->connection->select(
-                sprintf('show create table %sdocuments', $this->connection->getTablePrefix())
-            );
-            $createTable = $row[0]['Create Table'];
-
-            $tables = $this->connection->select(sprintf(
-                "SHOW TABLES like '%sdocuments_%s'",
-                $this->connection->getTablePrefix(),
-                $config->get('instanceId')
-            ));
-            if (empty($tables) === false) {
-                throw new Exceptions\DivisionExistsException;
-            }
-
-            $this->connection->insert(str_replace(
-                sprintf('CREATE TABLE `%sdocuments`', $this->connection->getTablePrefix()),
-                sprintf(
-                    'CREATE TABLE `%s%s`',
-                    $this->connection->getTablePrefix(),
-                    $document->divisionTable($config)
-                ),
-                $createTable
-            ));
+        $table = sprintf('%sdocuments_%s', $this->connection->getTablePrefix(), $config->get('instanceId'));
+        $schema = $this->connection->getSchemaBuilder();
+        if ($schema->has($table)) {
+            throw new Exceptions\DivisionTableAlreadyExistsException;
         }
+
+        $migration = new DocumentMigration();
+        $migration->createDivision($schema, $table);
     }
 
     /**

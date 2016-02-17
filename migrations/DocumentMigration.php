@@ -2,6 +2,7 @@
 namespace Xpressengine\Migrations;
 
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Schema\Builder;
 use Schema;
 use DB;
 use Xpressengine\Support\Migration;
@@ -15,29 +16,51 @@ class DocumentMigration implements Migration
      */
     public function install()
     {
+        $this->create('documents', 'documents_revision');
+    }
+
+    public function create($table, $revision = '')
+    {
         // create documents table
-        Schema::create('documents', function (Blueprint $table) {
+        Schema::create($table, function (Blueprint $table) {
             $table->engine = "InnoDB";
 
             $table->string('id', 255);
-            $table = $this->documentSchema($table);
+            $table = $this->setColumns($table);
 
             $table->primary(array('id'));
         });
 
-        // create revision table
-        Schema::create('documents_revision', function (Blueprint $table) {
+        if ($revision != '') {
+            // create revision table
+            Schema::create($revision, function (Blueprint $table) {
+                $table->engine = "InnoDB";
+
+                $table->string('revisionId', 255);
+                $table->integer('revisionNo')->default(0);
+
+                $table->string('id', 255);
+                $table = $this->setColumns($table);
+
+                $table->primary(array('revisionId'));
+                $table->index(array('id', 'revisionNo'));
+                $table->dropUnique('documents_revision_head_reply_unique');
+            });
+        }
+    }
+
+    /**
+     *
+     */
+    public function createDivision(Builder $schema, $table)
+    {
+        $schema->create($table, function (Blueprint $table) {
             $table->engine = "InnoDB";
 
-            $table->string('revisionId', 255);
-            $table->integer('revisionNo')->default(0);
-
             $table->string('id', 255);
-            $table = $this->documentSchema($table);
+            $table = $this->setColumns($table);
 
-            $table->primary(array('revisionId'));
-            $table->index(array('id', 'revisionNo'));
-            $table->dropUnique('documents_revision_head_reply_unique');
+            $table->primary(array('id'));
         });
     }
 
@@ -45,7 +68,7 @@ class DocumentMigration implements Migration
      * @param Blueprint $table table
      * @return Blueprint
      */
-    private function documentSchema(Blueprint $table)
+    private function setColumns(Blueprint $table)
     {
         $table->string('parentId', 255)->default('');
 
@@ -71,7 +94,6 @@ class DocumentMigration implements Migration
         $table->enum('published', array(
             'published', 'waiting', 'reserved', 'rejected',
         ))->default('published');
-        // temp 대신 draft가 어떨까?
         $table->enum('status', array(
             'public', 'temp', 'trash', 'private', 'notice',
         ))->default('public');
@@ -80,7 +102,7 @@ class DocumentMigration implements Migration
         ))->default('visible');
 
         // search
-        $table->string('locale', 255)->default('');	// multi-language support. ko, en, jp, ...
+        $table->string('locale', 255)->default('');
 
         $table->string('title', 255);
         $table->text('content');
@@ -91,10 +113,9 @@ class DocumentMigration implements Migration
         $table->timestamp('updatedAt');
         $table->timestamp('deletedAt')->nullable();
 
-        // 대댓글 처리를 위한 트리용 컬럼 추가 ex.) head, parent, depth
         $table->string('head', 50);    // timestamp + uuid (ex. 1430369257-bd1fc797-474f-47a6-bedb-867a376490f2)
-        $table->string('reply', 200)->nullable();
-        $table->string('listOrder', 250);
+        $table->string('reply', 200);
+        //$table->string('listOrder', 250);
         $table->string('ipaddress', 16);
 
         $table->index('createdAt');
