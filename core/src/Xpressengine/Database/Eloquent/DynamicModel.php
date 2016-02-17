@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Model;
 use Xpressengine\Database\DynamicQuery;
 use Illuminate\Database\ConnectionResolverInterface as Resolver;
 use Xpressengine\Database\Exceptions\KeyGeneratorNotFoundException;
+use Xpressengine\Database\Exceptions\ModelNotSupportDynamicModeException;
 use Xpressengine\Keygen\Keygen;
 
 /**
@@ -59,6 +60,63 @@ abstract class DynamicModel extends Model
 
     const UPDATED_AT = 'updatedAt';
 
+    public function __construct(array $attributes = [])
+    {
+        if ($this->dynamic === true) {
+            $this->bootIfNotBooted();
+            $this->syncOriginal();
+            $this->dynamicFill($attributes);
+        } else {
+            parent::__construct($attributes);
+        }
+
+    }
+
+    public function dynamicFill(array $attributes= [])
+    {
+        if ($this->dynamic === false) {
+            throw new ModelNotSupportDynamicModeException;
+        }
+
+        $attributes = $this->filter($attributes, $this->schema());
+
+        foreach ($this->fillableFromArray($attributes) as $key => $value) {
+            $this->setAttribute($key, $value);
+        }
+    }
+
+    /**
+     * $args 로 넘어온 데이터와 $columns 를 비교해서 $args 값을 거른다.
+     * 처리중인 $columns 와 같은 이름을 데이터만 리턴됨
+     * 이 처리는 dynamic 을 통해 proxy 를 처리 할 경우에 대해서 동작됨
+     *
+     * @param array $args    insert, update data
+     * @param array $columns table columns
+     * @return array
+     */
+    private function filter(array $args, array $columns)
+    {
+        $pure = [];
+        foreach ($args as $column => $value) {
+            // 컬럼 이름은 문자열만 가능.
+            if (is_string($column) && in_array($column, $columns)) {
+                $pure[$column] = $args[$column];
+            }
+        }
+
+        return $pure;
+    }
+
+    /**
+     * get table schema
+     *
+     * @return array
+     */
+    private function schema()
+    {
+        return $this->getConnection()->getSchema($this->getTable());
+    }
+
     /**
      * get key generator
      *
@@ -83,7 +141,7 @@ abstract class DynamicModel extends Model
         static::$keyGenerator = $keyGenerator;
         self::creating(function(DynamicModel $model) {
             if ($model->incrementing !== true && is_null($model->{$model->getKeyName()}) === true) {
-                $model->{$model->getKeyName()} =$model->getKeyGenerator()->generate();
+                $model->{$model ->getKeyName()} =$model->getKeyGenerator()->generate();
             }
         });
     }
