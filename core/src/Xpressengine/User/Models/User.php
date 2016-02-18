@@ -31,6 +31,8 @@ class User extends DynamicModel implements UserInterface
 
     protected $table = 'user';
 
+    public $incrementing = false;
+
     /**
      * @var bool use dynamic query
      */
@@ -308,7 +310,7 @@ class User extends DynamicModel implements UserInterface
      *
      * @return void
      */
-    public function joinGroups(array $groups)
+    public function joinGroups($groups)
     {
         $this->groups()->saveMany($groups);
     }
