@@ -51,6 +51,7 @@ class DatabaseServiceProvider extends ServiceProvider
                 $monoLog->info($query, compact('bindings', 'time'));
             });
         }
+        DynamicModel::setKeyGen(app('xe.keygen'));
         DynamicModel::setConnectionResolver($this->app['xe.db']);
         DynamicModel::setEventDispatcher($this->app['events']);
     }
