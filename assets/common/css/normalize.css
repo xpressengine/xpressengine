@@ -422,20 +422,3 @@ td,
 th {
   padding: 0;
 }
-
-/*custom*/
-* {-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;}
-.blind,legend{visibility:hidden;overflow:hidden;position:absolute;top:0;left:0;width:0;height:0;font-size:0;line-height:0}
-body,div,p,h1,h2,h3,h4,h5,h6,ul,ol,li,dl,dt,dd,table,th,td,form,fieldset,legend,input,textare,a,button,select{margin:0;padding:0;-webkit-text-size-adjust:none;}
-img{vertical-align: top}
-em{font-style: normal}
-.__xe_contents_compiler em{font-style: italic}
-a{text-decoration:none;color:#2c8beb}
-a:hover,a:active,a:focus{color:#085daa;text-decoration:none;outline:none}
-.skip > a{position:relative;overflow:hidden;display:block;height:0;line-height:28px;background-color:#fff;text-align:center;z-index:1000}
-.skip > a:focus{height:auto}
-.txt_blue{color:#2c8beb !important}
-.txt_red{color:#db2828 !important}
-.dim{display:none;position:fixed;top:0;right:0;left:0;bottom:0;z-index: 1000;background:#010101;opacity:0.5;cursor:default}
-.one_line{text-overflow:ellipsis;white-space:nowrap;word-wrap:normal;overflow:hidden}
-.no_space{padding:0 !important}

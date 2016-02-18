@@ -164,6 +164,8 @@ return [
         App\Providers\KeygenServiceProvider::class,
 
         App\Providers\MemberServiceProvider::class,
+        App\Providers\UserServiceProvider::class,
+
         App\Providers\StorageServiceProvider::class,
         App\Providers\MediaServiceProvider::class,
         App\Providers\PermissionServiceProvider::class,
@@ -241,6 +243,8 @@ return [
         'Agent' => Jenssegers\Agent\Facades\Agent::class,
 
         'Member' => App\Facades\Member::class,
+        'XeUser' => App\Facades\XeUser::class,
+
         'Group' => App\Facades\Group::class,
         'Plugin' => App\Facades\Plugin::class,
         'Interception' => App\Facades\Interception::class,

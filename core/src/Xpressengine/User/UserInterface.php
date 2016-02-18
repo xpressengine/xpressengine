@@ -1,33 +1,33 @@
 <?php
 /**
- * This file is member interface
+ * This file is user interface
  *
  * PHP version 5
  *
- * @category    Member
- * @package     Xpressengine\Member
+ * @category    User
+ * @package     Xpressengine\User
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Member\Entities;
+namespace Xpressengine\User;
 
 use Illuminate\Contracts\Auth\CanResetPassword;
-use Xpressengine\Member\Authenticatable;
-use Xpressengine\Member\Entities\Database\AccountEntity;
+use Xpressengine\User\Models\UserAccount;
+use Xpressengine\User\Models\PendingEmail;
 
 /**
  * 회원 정보를 저장하는 클래스가 구현해야 하는 인터페이스
  *
- * @category    Member
- * @package     Xpressengine\Member
+ * @category    User
+ * @package     Xpressengine\User
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-interface MemberEntityInterface extends Authenticatable, CanResetPassword
+interface UserInterface extends Authenticatable, CanResetPassword
 {
     /**
      * Get the unique identifier
@@ -44,35 +44,35 @@ interface MemberEntityInterface extends Authenticatable, CanResetPassword
     public function getDisplayName();
 
     /**
-     * Get the rating of member
+     * Get the rating of user
      *
      * @return string
      */
     public function getRating();
 
     /**
-     * Finds whether member has super rating.
+     * Finds whether user has super rating.
      *
      * @return boolean
      */
     public function isAdmin();
 
     /**
-     * Finds whether member has manager or super rating.
+     * Finds whether user has manager or super rating.
      *
      * @return boolean
      */
     public function isManager();
 
     /**
-     * Get the status of member
+     * Get the status of user
      *
      * @return string
      */
     public function getStatus();
 
     /**
-     * Get profile image URL of member
+     * Get profile image URL of user
      *
      * @return string
      */
@@ -86,9 +86,9 @@ interface MemberEntityInterface extends Authenticatable, CanResetPassword
     public function getGroups();
 
     /**
-     * Get Pending Email of current member
+     * Get Pending Email of current user
      *
-     * @return PendingMailEntityInterface
+     * @return PendingEmail
      */
     public function getPendingEmail();
 
@@ -97,7 +97,7 @@ interface MemberEntityInterface extends Authenticatable, CanResetPassword
      *
      * @param string $provider provider
      *
-     * @return AccountEntity
+     * @return UserAccount
      */
     public function getAccountByProvider($provider);
 }
