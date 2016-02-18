@@ -66,6 +66,13 @@ class Document extends DynamicModel
 
     public $incrementing = false;
 
+    protected $fillable = [
+        'parentId', 'instanceId', 'userId', 'writer', 'approved',
+        'published', 'status', 'display', 'locale', 'title',
+        'content', 'pureContent', 'createdAt', 'publishedAt', 'head', 'reply',
+        'listOrder', 'ipaddress',
+    ];
+
     /**
      * @var bool use dynamic query
      */
@@ -413,7 +420,7 @@ class Document extends DynamicModel
      *
      * @return $this
      */
-    public function approve()
+    public function setApprove()
     {
         $this->setApproved(self::APPROVED_APPROVED);
         $this->setDisplay(self::DISPLAY_VISIBLE);
@@ -425,7 +432,7 @@ class Document extends DynamicModel
      *
      * @return $this
      */
-    public function reject()
+    public function setReject()
     {
         $this->setApproved(self::APPROVED_REJECTED);
         $this->setDisplay(self::DISPLAY_HIDDEN);
@@ -437,7 +444,7 @@ class Document extends DynamicModel
      *
      * @return $this
      */
-    public function approveWait()
+    public function setApproveWait()
     {
         $this->setApproved(self::APPROVED_WAITING);
         $this->setDisplay(self::DISPLAY_HIDDEN);
@@ -449,7 +456,7 @@ class Document extends DynamicModel
      *
      * @return $this
      */
-    public function publish()
+    public function setPublish()
     {
         $this->setPublished(self::PUBLISHED_PUBLISHED);
         $this->setDisplay(self::DISPLAY_VISIBLE);
@@ -461,7 +468,7 @@ class Document extends DynamicModel
      *
      * @return $this
      */
-    public function reserve()
+    public function setReserve()
     {
         $this->setPublished(self::PUBLISHED_RESERVED);
         $this->setDisplay(self::DISPLAY_HIDDEN);
@@ -473,7 +480,7 @@ class Document extends DynamicModel
      *
      * @return $this
      */
-    public function trash()
+    public function setTrash()
     {
         $this->setStatus(self::STATUS_TRASH);
         // 문서를 안보이게 할 필요는 없는듯
@@ -486,7 +493,7 @@ class Document extends DynamicModel
      *
      * @return $this
      */
-    public function restore()
+    public function setRestore()
     {
         $this->setStatus(self::STATUS_PUBLIC);
         $this->setDisplay(self::DISPLAY_VISIBLE);
@@ -498,7 +505,7 @@ class Document extends DynamicModel
      *
      * @return $this
      */
-    public function temporary()
+    public function setTemporary()
     {
         $this->setStatus('temp');
         $this->setDisplay('hidden');
@@ -511,7 +518,7 @@ class Document extends DynamicModel
      * @param bool $notice is notice
      * @return $this
      */
-    public function notice($notice = true)
+    public function setNotice($notice = true)
     {
         if ($notice === true) {
             $this->setStatus(self::STATUS_NOTICE);

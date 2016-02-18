@@ -230,6 +230,8 @@ class DocumentHandler
      */
     public function add(array $attributes)
     {
+        //Document::getConnectionResolver()->beginTransaction();
+
         $model = new Document;
 
         $model->getConnection()->beginTransaction();
@@ -260,6 +262,8 @@ class DocumentHandler
         $revisionDoc->create($model->toArray());
 
         $model->getConnection()->commit();
+
+       // Document::getConnectionResolver()->commit();
 
         return $model;
     }

@@ -20,12 +20,8 @@ use Xpressengine\Database\VirtualConnection;
 use Xpressengine\Document\ConfigHandler;
 use Xpressengine\Document\DocumentHandler;
 use Xpressengine\Document\InstanceManager;
-use Xpressengine\Document\Model\Document;
-use Xpressengine\Document\Repositories\DocumentRepository;
-use Xpressengine\Document\Repositories\RevisionRepository;
-use Xpressengine\Document\Repositories\SlugRepository;
-use Xpressengine\Document\Repositories\ReplyHelper;
-use Xpressengine\Document\RepositoryHandler;
+use Xpressengine\Document\Models\Document;
+use Xpressengine\Document\Models\Revision;
 use Xpressengine\Document\RevisionHandler;
 use Xpressengine\Keygen\Keygen;
 use Xpressengine\Member\Entities\MemberEntityInterface;
@@ -42,6 +38,13 @@ use Xpressengine\Member\Entities\MemberEntityInterface;
  */
 class DocumentServiceProvider extends ServiceProvider
 {
+    public function boot()
+    {
+        Document::creating(function(Document $model) {
+            $model->setReply();
+        });
+    }
+
     /**
      * Register the service provider.
      *
