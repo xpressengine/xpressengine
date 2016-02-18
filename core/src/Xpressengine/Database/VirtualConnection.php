@@ -267,7 +267,7 @@ class VirtualConnection implements VirtualConnectionInterface
      * @param string $type master or slave
      * @return \Illuminate\Database\Connection
      */
-    public function connection($type)
+    public function connection($type = self::DEFAULT_CONNECTION_NAME)
     {
         $connection = ($this->connections[$type] === null) ?
             $this->coupler->connect($this->{$type}) :
