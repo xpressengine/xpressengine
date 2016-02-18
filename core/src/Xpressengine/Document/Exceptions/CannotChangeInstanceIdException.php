@@ -1,6 +1,6 @@
 <?php
 /**
- * NotFoundDocumentException
+ * Instance ID cannot be changed
  *
  * PHP version 5
  *
@@ -16,7 +16,7 @@ namespace Xpressengine\Document\Exceptions;
 use Xpressengine\Document\DocumentException;
 
 /**
- * NotFoundDocumentException
+ * Instance ID cannot be changed
  *
  * @category    Document
  * @package     Xpressengine\Document
@@ -25,7 +25,7 @@ use Xpressengine\Document\DocumentException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class NotFoundDocumentException extends DocumentException
+class CannotChangeInstanceIdException extends DocumentException
 {
-    protected $message = 'Document cannot be found.';
+    protected $message = 'Instance ID cannot be changed.';
 }
