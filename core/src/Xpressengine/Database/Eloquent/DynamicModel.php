@@ -56,20 +56,38 @@ abstract class DynamicModel extends Model
      */
     protected $proxyOptions = [];
 
+    /**
+     * dynamic mode 애서 사용될 attributes
+     *
+     * @var array
+     */
+    protected $dynamicAttributes = [];
+
     const CREATED_AT = 'createdAt';
 
     const UPDATED_AT = 'updatedAt';
 
     public function __construct(array $attributes = [])
     {
+
+        //$this->setDynamicAttribute($attributes);
         if ($this->dynamic === true) {
+
             $this->bootIfNotBooted();
             $this->syncOriginal();
             $this->dynamicFill($attributes);
         } else {
-            parent::__construct($attributes);
+
         }
 
+        parent::__construct($attributes);
+
+    }
+
+    public function setDynamicAttribute($key, $value)
+    {
+        $this->dynamicAttributes[$key] = $value;
+        return $this;
     }
 
     public function dynamicFill(array $attributes= [])
@@ -141,7 +159,7 @@ abstract class DynamicModel extends Model
         static::$keyGenerator = $keyGenerator;
         self::creating(function(DynamicModel $model) {
             if ($model->incrementing !== true && is_null($model->{$model->getKeyName()}) === true) {
-                $model->{$model ->getKeyName()} =$model->getKeyGenerator()->generate();
+                $model->{$model->getKeyName()} = $model->getKeyGenerator()->generate();
             }
         });
     }
