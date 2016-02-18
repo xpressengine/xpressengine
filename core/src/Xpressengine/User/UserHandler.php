@@ -238,7 +238,7 @@ class UserHandler
         $groupIds = array_get($data, 'groupId', []);
         if (count($groupIds) > 0) {
             $groups = $this->groups->whereIn('id', $groupIds)->get();
-            $user->joinGroups($groups);
+            $user->joinGroups($groups->all());
         }
 
         // insert accounts
@@ -367,7 +367,7 @@ class UserHandler
             throw $e;
         }
 
-        if ($this->users->where(['displayName' => $name]) !== null) {
+        if ($this->users->where(['displayName' => $name])->first() !== null) {
             throw new DisplayNameAlreadyExistsException();
         }
 
