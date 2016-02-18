@@ -164,6 +164,8 @@ return [
         App\Providers\KeygenServiceProvider::class,
 
         App\Providers\MemberServiceProvider::class,
+        App\Providers\UserServiceProvider::class,
+
         App\Providers\StorageServiceProvider::class,
         App\Providers\MediaServiceProvider::class,
         App\Providers\PermissionServiceProvider::class,
