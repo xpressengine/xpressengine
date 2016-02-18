@@ -385,13 +385,13 @@ class UserServiceProvider extends ServiceProvider
             function ($imageId) use ($default, $storage, $media) {
 
                 /** @var Storage $storage */
-                $file = $storage->get($imageId);
-
-                if ($file !== null) {
-                    /** @var MediaManager $media */
-                    $mediaFile = $media->make($file);
-                    return asset($mediaFile->url());
-                }
+                //$file = $storage->get($imageId);
+                //
+                //if ($file !== null) {
+                //    /** @var MediaManager $media */
+                //    $mediaFile = $media->make($file);
+                //    return asset($mediaFile->url());
+                //}
 
                 return asset($default);
             }

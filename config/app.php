@@ -241,6 +241,8 @@ return [
         'Agent' => Jenssegers\Agent\Facades\Agent::class,
 
         'Member' => App\Facades\Member::class,
+        'XeUser' => App\Facades\XeUser::class,
+
         'Group' => App\Facades\Group::class,
         'Plugin' => App\Facades\Plugin::class,
         'Interception' => App\Facades\Interception::class,
