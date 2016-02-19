@@ -67,10 +67,7 @@ class MenuRetrieveHandler
      * @var ModuleHandler
      */
     protected $typeHandler;
-    /**
-     * @var MenuPermissionHandler
-     */
-    protected $menuPermission;
+
     /**
      * @var MenuCacheHandler $cache
      */
@@ -79,18 +76,15 @@ class MenuRetrieveHandler
     /**
      * @param MenuRepositoryInterface $menuRepository menu repository
      * @param ModuleHandler           $typeHandler    type handler
-     * @param MenuPermissionHandler   $menuPermission menu permission
      * @param MenuCacheHandler        $cacheHandler   menu cache handler
      */
     public function __construct(
         MenuRepositoryInterface $menuRepository,
         ModuleHandler $typeHandler,
-        MenuPermissionHandler $menuPermission,
         MenuCacheHandler $cacheHandler
     ) {
         $this->menuRepository = $menuRepository;
         $this->typeHandler = $typeHandler;
-        $this->menuPermission = $menuPermission;
         $this->cache = $cacheHandler;
     }
 
@@ -110,7 +104,7 @@ class MenuRetrieveHandler
                 $menu = $this->cache->getCachedMenu($menuId);
             } else {
                 $menu = $this->menuRepository->findMenu($menuId);
-                $this->applyMenuPermission($menu);
+//                $this->applyMenuPermission($menu);
                 $this->cache->setCachedMenu($menu);
             }
             $menus[$menu->id] = $menu;
@@ -131,7 +125,7 @@ class MenuRetrieveHandler
             return $this->cache->getCachedMenu($menuId);
         } else {
             $menu = $this->menuRepository->findMenu($menuId);
-            $this->applyMenuPermission($menu);
+//            $this->applyMenuPermission($menu);
             $this->cache->setCachedMenu($menu);
             return $menu;
         }
@@ -166,19 +160,6 @@ class MenuRetrieveHandler
         $item = $menu->getItem($itemId);
         $item->setSelected($selected, $parentSelect);
         return $item;
-    }
-
-    /**
-     * applyMenuPermission
-     *
-     * @param object $target menu entity or menu item object
-     *
-     * @return void
-     */
-    protected function applyMenuPermission($target)
-    {
-        $permissions = $this->menuPermission->getMenuPermissions();
-        $target->applyPermission($permissions);
     }
 
     /**

@@ -269,7 +269,6 @@ return [
         'ToggleMenu' => App\Facades\ToggleMenu::class,
         'XeTemporary' => App\Facades\XeTemporary::class,
         'Trash' => App\Facades\Trash::class,
-        'Permission' => App\Facades\Permission::class,
         'XeMedia' => App\Facades\XeMedia::class,
 
         'XeLang' => App\Facades\Lang::class,

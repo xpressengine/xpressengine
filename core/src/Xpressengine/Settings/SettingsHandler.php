@@ -19,6 +19,8 @@ use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Permission\Action;
 use Xpressengine\Permission\Factory;
+use Xpressengine\Permission\Instance;
+use Xpressengine\Permission\PermissionHandler;
 use Xpressengine\Register\Container;
 use Xpressengine\Settings\Exceptions\PermissionIDNotFoundException;
 use Xpressengine\Support\Tree\TreeCollection;
@@ -154,7 +156,7 @@ class SettingsHandler
     private $configManager;
 
     /**
-     * @var Factory
+     * @var PermissionHandler
      */
     private $permissions;
 
@@ -165,13 +167,13 @@ class SettingsHandler
      * @param Container     $container    XpressEngine Register 등록된 관리메뉴와 관리권한을 조회할 때 사용한다.
      * @param Router        $router       router
      * @param ConfigManager $configManger 관리페이지 관련 설정 정보를 조회/저장할 때 사용한다.
-     * @param Factory       $permissions  관리페이지 권한 정보를 조회/저장할 때 사용한다.
+     * @param PermissionHandler       $permissions  관리페이지 권한 정보를 조회/저장할 때 사용한다.
      */
     public function __construct(
         Container $container,
         Router $router,
         ConfigManager $configManger,
-        Factory $permissions
+        PermissionHandler $permissions
     ) {
         $this->container = $container;
         $this->router = $router;
@@ -312,10 +314,11 @@ class SettingsHandler
             $visible = false;
             if (!$isSuper) {
                 foreach ((array) $permissions as $permissionId) {
-                    $registered = $this->permissions->make('settings', $permissionId);
-                    if ($registered->ables(Action::ACCESS) === true) {
-                        $visible = true;
-                    }
+                    // todo: implementing
+//                    $registered = $this->permissions->make('settings', $permissionId);
+//                    if ($registered->ables(Action::ACCESS) === true) {
+//                        $visible = true;
+//                    }
                 }
             } else {
                 $visible = true;

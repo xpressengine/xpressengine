@@ -18,18 +18,16 @@ class PermissionRepositoryTest extends \PHPUnit_Framework_TestCase
         $conn->shouldReceive('table')->andReturn($query);
         $query->shouldReceive('where')->once()->with('siteKey', 'default')->andReturn($query);
         $query->shouldReceive('where')->once()->with('name', 'board.notice')->andReturn($query);
-        $query->shouldReceive('where')->once()->with('type', 'instance')->andReturn($query);
         $query->shouldReceive('first')->once()->withNoArgs()->andReturn((object)[
             'id' => 1,
-            'type' => 'instance',
             'name' => 'board.notice',
             'grants' => '{"access":{"type":"power","value":"guest"},"create":{"type":"power","value":"member"},"read":{"type":"power","value":"guest"},"update":{"type":"group","value":["group_id_1","group_id_2"]},"delete":{"type":"group","value":["group_id_1","group_id_2"]}}',
         ]);
 
         $instance = new PermissionRepository($conn);
-        $registered = $instance->findByTypeAndName('default', 'instance', 'board.notice');
+        $registered = $instance->findByName('default', 'board.notice');
 
-        $this->assertInstanceOf('Xpressengine\Permission\Registered', $registered);
+        $this->assertInstanceOf('Xpressengine\Permission\Permission', $registered);
         $this->assertEquals(['type' => 'power', 'value' => 'guest'], $registered['access']);
         $this->assertEquals('board.notice', $registered->name);
         $this->assertTrue(isset($registered['create']));
@@ -48,18 +46,16 @@ class PermissionRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         list($conn, $query) = $this->getMocks();
 
-        $mockRegistered = m::mock('Xpressengine\Permission\Registered');
+        $mockRegistered = m::mock('Xpressengine\Permission\Permission');
         $mockRegistered->shouldReceive('getOriginal')->andReturn([]);
         $mockRegistered->shouldReceive('getAttributes')->andReturn([
-            'type' => 'instance',
             'name' => 'board.notice',
             'grants' => '{"access":{"type":"power","value":"guest"},"create":{"type":"power","value":"member"}}',
         ]);
 
         $conn->shouldReceive('table')->andReturn($query);
         $query->shouldReceive('insertGetId')->once()->with(m::on(function ($array) {
-            return $array['type'] === 'instance'
-            && $array['name'] === 'board.notice'
+            return $array['name'] === 'board.notice'
             && $array['grants'] === '{"access":{"type":"power","value":"guest"},"create":{"type":"power","value":"member"}}';
         }))->andReturn(1);
 
@@ -69,14 +65,13 @@ class PermissionRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $registered->id);
         $this->assertEquals(['type' => 'power', 'value' => 'guest'], $registered['access']);
         $this->assertEquals('board.notice', $registered->name);
-        $this->assertEquals('instance', $registered->type);
     }
 
     public function testUpdate()
     {
         list($conn, $query) = $this->getMocks();
 
-        $mockRegistered = m::mock('Xpressengine\Permission\Registered');
+        $mockRegistered = m::mock('Xpressengine\Permission\Permission');
         $mockRegistered->shouldReceive('get')->with('id')->andReturn(1);
         $mockRegistered->shouldReceive('getOriginal')->andReturn([
             'id' => 1,
@@ -108,7 +103,7 @@ class PermissionRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         list($conn, $query) = $this->getMocks();
 
-        $mockRegistered = m::mock('Xpressengine\Permission\Registered');
+        $mockRegistered = m::mock('Xpressengine\Permission\Permission');
         $mockRegistered->shouldReceive('get')->with('id')->andReturn(1);
 
         $conn->shouldReceive('table')->andReturn($query);
@@ -123,14 +118,12 @@ class PermissionRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         list($conn, $query) = $this->getMocks();
 
-        $mockRegistered = m::mock('Xpressengine\Permission\Registered');
+        $mockRegistered = m::mock('Xpressengine\Permission\Permission');
         $mockRegistered->shouldReceive('get')->with('siteKey')->andReturn('default');
-        $mockRegistered->shouldReceive('get')->with('type')->andReturn('instance');
         $mockRegistered->shouldReceive('get')->with('name')->andReturn('board.notice.b1');
 
         $conn->shouldReceive('table')->andReturn($query);
         $query->shouldReceive('where')->once()->with('siteKey', 'default')->andReturn($query);
-        $query->shouldReceive('where')->once()->with('type', 'instance')->andReturn($query);
         $query->shouldReceive('whereRaw')->once()->with("'board.notice.b1' like concat(`name`, '.', '%')")->andReturn($query);
         $query->shouldReceive('where')->once()->with('name', '<>', 'board.notice.b1')->andReturn($query);
         $query->shouldReceive('get')->once()->withNoArgs()->andReturn((object)[
@@ -165,14 +158,12 @@ class PermissionRepositoryTest extends \PHPUnit_Framework_TestCase
         list($conn, $query) = $this->getMocks();
         $instance = new PermissionRepository($conn);
 
-        $mockRegistered = m::mock('Xpressengine\Permission\Registered');
+        $mockRegistered = m::mock('Xpressengine\Permission\Permission');
         $mockRegistered->shouldReceive('get')->with('siteKey')->andReturn('default');
-        $mockRegistered->shouldReceive('get')->with('type')->andReturn('instance');
         $mockRegistered->shouldReceive('get')->with('name')->andReturn('prev.from');
 
         $conn->shouldReceive('table')->andReturn($query);
         $query->shouldReceive('where')->twice()->with('siteKey', 'default')->andReturnSelf();
-        $query->shouldReceive('where')->twice()->with('type', 'instance')->andReturnSelf();
         $query->shouldReceive('where')->twice()->with(m::on(function ($closure) use ($query) {
             $query->shouldReceive('where')->once()->with('name', 'prev.from')->andReturnSelf();
             $query->shouldReceive('orWhere')->once()->with('name', 'like', 'prev.from.%')->andReturnSelf();
@@ -199,14 +190,12 @@ class PermissionRepositoryTest extends \PHPUnit_Framework_TestCase
         list($conn, $query) = $this->getMocks();
         $instance = new PermissionRepository($conn);
 
-        $mockRegistered = m::mock('Xpressengine\Permission\Registered');
+        $mockRegistered = m::mock('Xpressengine\Permission\Permission');
         $mockRegistered->shouldReceive('get')->with('siteKey')->andReturn('default');
-        $mockRegistered->shouldReceive('get')->with('type')->andReturn('instance');
         $mockRegistered->shouldReceive('get')->with('name')->andReturn('prev.from');
 
         $conn->shouldReceive('table')->andReturn($query);
         $query->shouldReceive('where')->once()->with('siteKey', 'default')->andReturnSelf();
-        $query->shouldReceive('where')->once()->with('type', 'instance')->andReturnSelf();
         $query->shouldReceive('where')->once()->with(m::on(function ($closure) use ($query) {
             $query->shouldReceive('where')->once()->with('name', 'prev.from')->andReturnSelf();
             $query->shouldReceive('orWhere')->once()->with('name', 'like', 'prev.from.%')->andReturnSelf();

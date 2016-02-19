@@ -14,24 +14,21 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Xpressengine\Member\Entities\MemberEntityInterface;
 use Xpressengine\Menu\DBMenuRepository;
 use Xpressengine\Menu\MenuAlterHandler;
 use Xpressengine\Menu\MenuCacheHandler;
 use Xpressengine\Menu\MenuConfigHandler;
+use Xpressengine\Menu\MenuItem;
+use Xpressengine\Menu\MenuItemPolicy;
 use Xpressengine\Menu\MenuPermissionHandler;
 use Xpressengine\Menu\MenuRetrieveHandler;
-use Xpressengine\Module\ModuleHandler;
-use Xpressengine\Menu\Permission\MenuPermission;
-use Xpressengine\Permission\Registered;
-
 use Xpressengine\UIObjects\Menu\MenuList;
 use Xpressengine\UIObjects\Menu\MenuType;
 use Xpressengine\UIObjects\Menu\MenuThemeList;
 use Xpressengine\UIObjects\Menu\MenuSelector;
-
 use Xpressengine\Menu\MenuType\DirectLink;
 use Xpressengine\UIObjects\Menu\TypeSelect;
+use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 
 /**
  * Menu Service Provider
@@ -44,16 +41,18 @@ use Xpressengine\UIObjects\Menu\TypeSelect;
  */
 class MenuServiceProvider extends ServiceProvider
 {
+    protected $policies = [
+        MenuItem::class => MenuItemPolicy::class
+    ];
 
     /**
      * Service Provider Boot
      *
      * @return void
      */
-    public function boot()
+    public function boot(GateContract $gate)
     {
         $pluginRegister = $this->app['xe.pluginRegister'];
-        $permissionHandler = $this->app['xe.permission'];
 
         $pluginRegister->add(MenuList::class);
         $pluginRegister->add(MenuType::class);
@@ -62,14 +61,9 @@ class MenuServiceProvider extends ServiceProvider
         $pluginRegister->add(MenuThemeList::class);
         $pluginRegister->add(DirectLink::class);
 
-        $permissionHandler->extend('menu', function (
-            $itemKey,
-            MemberEntityInterface $user,
-            Registered $registered
-        ) {
-            return new MenuPermission($user, $registered);
-        });
-
+        foreach ($this->policies as $class => $policy) {
+            $gate->policy($class, $policy);
+        }
     }
 
     /**
@@ -105,10 +99,9 @@ class MenuServiceProvider extends ServiceProvider
                 $conn = $app['xe.db']->connection();
                 $keygen = $app['xe.keygen'];
                 $type = $app['xe.module'];
-                $permission = $app['xe.menu.permission'];
                 $cacheHandler = $app['xe.menu.cache'];
                 $proxyClass = $app['xe.interception']->proxy(MenuRetrieveHandler::class, 'Menu');
-                return new $proxyClass(new DBMenuRepository($conn, $keygen), $type, $permission, $cacheHandler);
+                return new $proxyClass(new DBMenuRepository($conn, $keygen), $type, $cacheHandler);
             }
         );
 

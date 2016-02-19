@@ -14,10 +14,12 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Xpressengine\Permission\Factory;
 use Xpressengine\Permission\PermissionRepository;
-use Xpressengine\Permission\Permissions\AbstractRegisteredPermission;
+use Xpressengine\Permission\PermissionHandler;
 use Xpressengine\UIObjects\Permission\Permission as PermissionUIObject;
+use Illuminate\Contracts\Auth\Access\Gate as GateContract;
+use Xpressengine\Permission\Instance;
+use Xpressengine\Permission\InstancePolicy;
 
 /**
  * laravel 에서의 구동을 위해 현재 패키지를 등록
@@ -31,6 +33,10 @@ use Xpressengine\UIObjects\Permission\Permission as PermissionUIObject;
  */
 class PermissionServiceProvider extends ServiceProvider
 {
+    protected $policies = [
+        Instance::class => InstancePolicy::class
+    ];
+
     /**
      * Indicates if loading of the provider is deferred.
      *
@@ -43,11 +49,13 @@ class PermissionServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(GateContract $gate)
     {
         $this->app['xe.pluginRegister']->add(PermissionUIObject::class);
 
-        AbstractRegisteredPermission::setVirtualGroupRepository($this->app['xe.member.virtualGroups']);
+        foreach ($this->policies as $class => $policy) {
+            $gate->policy($class, $policy);
+        }
     }
 
     /**
@@ -57,19 +65,9 @@ class PermissionServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('xe.permission', function ($app) {
-            $proxyClass = $app['xe.interception']->proxy(Factory::class, 'Permission');
-            return new $proxyClass(
-                $app['auth'],
-                $app['router']->getRoutes(),
-                new PermissionRepository($app['xe.db']->connection())
-            );
-        }, true);
-
-        $this->app->bind(
-            'Xpressengine\Permission\Factory',
-            'xe.permission'
-        );
+        $this->app->singleton([PermissionHandler::class => 'xe.permission'], function ($app) {
+            return new PermissionHandler(new PermissionRepository($app['xe.db']->connection()));
+        });
     }
 
     /**

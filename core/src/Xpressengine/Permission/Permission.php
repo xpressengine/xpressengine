@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is a standard permission.
+ * This file is a registered information.
  *
  * PHP version 5
  *
@@ -13,12 +13,12 @@
  */
 namespace Xpressengine\Permission;
 
-use Xpressengine\Member\Entities\MemberEntityInterface;
-use Xpressengine\Member\Entities\Guest;
-use Xpressengine\Permission\Exceptions\NotSupportedException;
+use IteratorAggregate;
+use ArrayIterator;
+use Xpressengine\Support\Entity;
 
 /**
- * permission 의 기본이 되는 추상 클래스
+ * Class Permission
  *
  * @category    Permission
  * @package     Xpressengine\Permission
@@ -26,110 +26,176 @@ use Xpressengine\Permission\Exceptions\NotSupportedException;
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
+ *
+ * @property int $id
+ * @property string $siteKey
+ * @property string $name
  */
-abstract class Permission
+class Permission extends Entity implements IteratorAggregate
 {
     /**
-     * Target of permission checked
+     * Parent Registered instance
      *
-     * @var mixed
+     * @var Permission
      */
-    protected $target;
+    protected $parent;
 
     /**
-     * User instance
+     * Grant object
      *
-     * @var MemberEntityInterface
+     * @var Grant
      */
-    protected $user;
+    protected $grant;
 
     /**
-     * Supported action keyword of current permission
+     * constructor
      *
-     * @var array
+     * @param array $attributes attributes array
      */
-    protected $actions = [];
-
-    /**
-     * 요청한 action 을 처리할 수 있는 권한이 있는지 확인 함.
-     *
-     * @param string   $action   action keyword
-     * @param callable $callable side checker
-     * @return bool
-     * @throws NotSupportedException
-     */
-    public function ables($action, callable $callable = null)
+    public function __construct(array $attributes = [])
     {
-        if ($this->support($action) === false) {
-            throw new NotSupportedException(['name' => $action]);
-        }
+        parent::__construct($attributes);
 
-        if (is_callable($callable) && call_user_func_array($callable, [$this->target, $this->user]) === true) {
-            return true;
-        }
-
-        return $this->judge($action);
+        $grantInfo = isset($attributes['grants']) ? json_decode($attributes['grants'], true) : [];
+        $this->grant = new Grant($grantInfo);
     }
 
     /**
-     * 권한 유무 판별
+     * Add parent to ancestor
      *
-     * @param string $action action keyword
-     * @return bool
+     * @param Permission $parent parent instance
+     * @return void
      */
-    abstract protected function judge($action);
-
-    /**
-     * 'ables' 반대 기능
-     *
-     * @param string   $action   action keyword
-     * @param callable $callable side checker
-     * @return bool
-     */
-    public function unables($action, callable $callable = null)
+    public function addParent(Permission $parent)
     {
-        return $this->ables($action, $callable) === false;
+        if ($this->isParent($parent) === true) {
+            $this->parent = $parent;
+        } elseif ($this->parent !== null) {
+            $this->parent->addParent($parent);
+        }
     }
 
     /**
-     * 현재 객체가 판별할 수 있는 action 목록
+     * Check parent of current at a given.
+     *
+     * @param Permission $parent parent instance
+     * @return bool
+     */
+    protected function isParent(Permission $parent)
+    {
+        $aLen = count(explode('.', $this->name));
+        $bLen = count(explode('.', $parent->name));
+
+        return $aLen - 1 == $bLen ?: false;
+    }
+
+    /**
+     * Returns parent registered
+     *
+     * @return Permission
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * Get value of without inherit
+     *
+     * @param string $key grant action name
+     * @return mixed|null
+     */
+    public function pure($key)
+    {
+        return isset($this->grant->{$key}) ? $this->grant->{$key} : null;
+    }
+
+    /**
+     * Set the grant
+     *
+     * @param Grant $grant grant object
+     * @return void
+     */
+    public function setGrant(Grant $grant)
+    {
+        $this->grant = $grant;
+    }
+
+    /**
+     * Set the item at a given offset.
+     *
+     * @param mixed $offset array offset
+     * @param mixed $value  array value
+     * @return void
+     */
+    public function offsetSet($offset, $value)
+    {
+        // nothing to do
+    }
+
+    /**
+     * Unset the item at a given offset.
+     *
+     * @param string $offset array offset
+     * @return void
+     */
+    public function offsetUnset($offset)
+    {
+        // nothing to do
+    }
+
+    /**
+     * Determine if an item exists at an offset.
+     *
+     * @param mixed $offset array offset
+     * @return bool
+     */
+    public function offsetExists($offset)
+    {
+        return isset($this->grant->{$offset});
+    }
+
+    /**
+     * Get an item at a given offset.
+     *
+     * @param mixed $offset array offset
+     * @return mixed
+     */
+    public function offsetGet($offset)
+    {
+        return isset($this->grant->{$offset}) ? $this->grant->{$offset}
+                                            : ($this->parent !== null ? $this->parent[$offset] : null);
+    }
+
+    /**
+     * Get an iterator for the items.
+     *
+     * @return ArrayIterator
+     */
+    public function getIterator()
+    {
+        return new ArrayIterator($this->grant->getAttributes());
+    }
+
+    /**
+     * returns current attributes
      *
      * @return array
      */
-    public function getActions()
+    public function getAttributes()
     {
-        return $this->actions;
+        $this->attributes['grants'] = json_encode($this->grant->getAttributes());
+
+        return $this->attributes;
     }
 
     /**
-     * 요청한 action 을 현재 permission 에서 체크 가능한지 여부 판별
+     * Returns depth
      *
-     * @param string $action action keyword
-     * @return bool
+     * @return int
      */
-    protected function support($action)
+    public function getDepth()
     {
-        return array_search($action, array_merge($this->actions, Action::all())) !== false;
-    }
-
-    /**
-     * 전달된 사용자가 guest 인지 확인
-     *
-     * @return bool
-     */
-    protected function isGuest()
-    {
-        return $this->user instanceof Guest;
-    }
-
-    /**
-     * 권한체크할 대상 사용자를 지정
-     *
-     * @param MemberEntityInterface $user user instance
-     * @return void
-     */
-    public function setUser(MemberEntityInterface $user)
-    {
-        $this->user = $user;
+        return count(explode('.', $this->name));
     }
 }
