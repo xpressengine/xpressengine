@@ -1,14 +1,21 @@
 @charset "utf-8";
 /* CSS Document */
 
-.container {
+/*reset css*/
+.blind,legend {position: absolute;clip: rect(0 0 0 0);width: 1px;height: 1px;margin: -1px; overflow: hidden;}
+.member em{font-style: normal}
+.member a{color:#2c8beb;text-decoration: none}
+.member a:hover{color: #085daa;}
+.member ul,.member h1,.member form,.member fieldset,.member .hr .txt_hr,.member .auth_txt{margin:0;padding:0}
+    
+.xo-container {
   padding-right:4px;
   padding-left: 4px;
   margin-right: auto;
   margin-left: auto;
 }
 
-.container-fluid {
+.xo-container-fluid {
     padding-right: 4px;
     padding-left: 4px;
     margin-right: auto;
@@ -16,7 +23,7 @@
 }
 
 
-.row{margin-right:-4px;margin-left:-4px}
+.xo-row{margin-right:-4px;margin-left:-4px}
 .pull-r{float:none}
 
 hr {
@@ -89,6 +96,6 @@ hr {
 .member .auth_group.option{background-color:#F6F7F8;color:#2c2e37}
 
 .info{margin-bottom:16px;border-bottom:1px solid #e4e4e4}
-.info p{margin-bottom:24px;color:#696e7a}
+.info p{margin:0 0 24px;color:#696e7a}
 .info em,.member .sub_txt em{font-weight: 600;color:#2c2e37}
 .info em.info_tit{display: inline-block;margin-bottom:8px}
