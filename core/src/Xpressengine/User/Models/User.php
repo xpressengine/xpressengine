@@ -36,7 +36,7 @@ class User extends DynamicModel implements UserInterface
     /**
      * @var bool use dynamic query
      */
-    protected $dynamic = true;
+    protected $dynamic = false;
 
     protected $dates = [
         'passwordUpdatedAt'
@@ -306,12 +306,26 @@ class User extends DynamicModel implements UserInterface
     /**
      * add this user to groups
      *
-     * @param UserGroup[] $groups
+     * @param array $groups
      *
-     * @return void
+     * @return static
      */
-    public function joinGroups($groups)
+    public function joinGroups(array $groups)
     {
-        $this->groups()->saveMany($groups);
+        $this->groups()->attach($groups);
+        return $this;
+    }
+
+    /**
+     * leave groups
+     *
+     * @param array $groups
+     *
+     * @return static
+     */
+    public function leaveGroups(array $groups)
+    {
+        $this->groups()->detach($groups);
+        return $this;
     }
 }

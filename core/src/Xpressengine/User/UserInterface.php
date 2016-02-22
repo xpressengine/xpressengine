@@ -100,4 +100,22 @@ interface UserInterface extends Authenticatable, CanResetPassword
      * @return UserAccount
      */
     public function getAccountByProvider($provider);
+
+    /**
+     * add this user to groups
+     *
+     * @param array $groups
+     *
+     * @return static
+     */
+    public function joinGroups(array $groups);
+
+    /**
+     * leave groups
+     *
+     * @param array $groups
+     *
+     * @return static
+     */
+    public function leaveGroups(array $groups);
 }

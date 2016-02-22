@@ -40,4 +40,12 @@ interface EmailInterface
      * @return string
      */
     public function getMemberId();
+
+    /**
+     * 메일의 인증코드를 반환한다.
+     *
+     * @return bool
+     */
+    public function getConfirmationCode();
+
 }

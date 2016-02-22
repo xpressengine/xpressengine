@@ -20,7 +20,7 @@ use Xpressengine\Database\VirtualConnection;
 use Xpressengine\Document\ConfigHandler;
 use Xpressengine\Document\DocumentHandler;
 use Xpressengine\Document\InstanceManager;
-use Xpressengine\Document\Model\Document;
+use Xpressengine\Document\Models\Document;
 use Xpressengine\Document\Repositories\DocumentRepository;
 use Xpressengine\Document\Repositories\RevisionRepository;
 use Xpressengine\Document\Repositories\SlugRepository;

@@ -14,6 +14,7 @@
 namespace Xpressengine\User;
 
 use BadMethodCallException;
+use Exception;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Validation\Factory as Validator;
 use Illuminate\Support\Collection;
@@ -238,7 +239,7 @@ class UserHandler
         $groupIds = array_get($data, 'groupId', []);
         if (count($groupIds) > 0) {
             $groups = $this->groups->whereIn('id', $groupIds)->get();
-            $user->joinGroups($groups->all());
+            $user->joinGroups($groupIds);
         }
 
         // insert accounts
@@ -255,6 +256,55 @@ class UserHandler
                 ]
             );
             $user->accounts()->save($account);
+        }
+
+        return $user;
+    }
+
+    /**
+     * 회원정보를 업데이트 한다.
+     * 필드: email, displayName, password, status, introduction, profileImgFile, groupId
+     *
+     * @param UserInterface $user
+     * @param null          $data
+     *
+     * @return UserInterface|static
+     */
+    public function update(UserInterface $user, $userData)
+    {
+
+        $this->validateForUpdate($user, $userData);
+
+        // encrypt password
+        if (!empty($userData['password'])) {
+            $userData['password'] = Hash::make($userData['password']);
+        } else {
+            unset($userData['password']);
+        }
+
+        // resolve profileImage
+        // todo: this!!
+        //if ($profileFile = $userData['profileImgFile'])) {
+        //    /** @var MemberImageHandler $imageHandler */
+        //    $imageHandler = app('xe.member.image');
+        //    $userData['profileImageId'] = $imageHandler->updateMemberProfileImage($user, $profileFile);
+        //}
+
+        // resolve group
+        $groups = array_get($userData, 'groupId', []);
+
+        // email, displayName, introduction, password, status, rating
+        $userData = array_except($userData, ['groupId', 'profileImgFile']);
+
+        foreach($userData as $key => $value) {
+            $user->{$key} = $value;
+        }
+
+        $user->save();
+
+        // join new group
+        if (count($groups) > 0) {
+            $user->groups()->sync($groups);
         }
 
         return $user;
@@ -402,61 +452,28 @@ class UserHandler
     }
 
     /**
-     * MemberHandler는 알지 못하는 메소드가 호출될 경우, 호출된 메소드를 파악하여 담당 Repository를 찾고,
-     * 담당 Repository의 해당 메소드를 호출하는 Proxy 역할을 한다.
-     * 이를 사용하면, 서드파티 개발자들은 특정 Repository를 직접 사용하지 않고 MemberHandler를 사용하여 원하는 기능을 실행할 수 있다.
+     * 회원의 정보를 업데이트할 때 필요한 유효성 검사를 한다.
      *
-     * @param string $method    호출된 method 명
-     * @param array  $arguments 파라메터 목록
+     * @param UserInterface $user
+     * @param array         $data
      *
-     * @return mixed
+     * @return bool 유효성검사 결과, 통과할 경우 true, 실패할 경우 false
      */
-    public function __call($method, $arguments)
+    public function validateForUpdate(UserInterface $user, array $data)
     {
-        $prefixes = get_class_methods(RepositoryInterface::class);
+        if(!empty($data['password'])) {
+            $this->validatePassword($data['password']);
+        }
 
-        $repositories = [
-            'Member',
-            'Group',
-            'Account',
-            'Mail',
-            'PendingMail',
-        ];
-
-        $prefix = null;
-        $postfix = null;
-        foreach ($prefixes as $needle) {
-            if ($needle != '' && strpos($method, $needle) === 0) {
-                if ($prefix === null || strlen($prefix) < strlen($needle)) {
-                    $prefix = $needle; // has
-                    $postfix = substr($method, strlen($prefix)); // Member
-                }
+        if(array_get($data, 'displayName') !== null) {
+            if($user->displayName !== $data['displayName']) {
+                $this->validateDisplayName($data['displayName']);
             }
         }
 
-        if ($prefix === null) {
-            throw new BadMethodCallException("Call to undefined method {get_class($this)}::{$method}()");
-        }
-
-        $repoName = 'Member';
-        foreach ($repositories as $needle) {
-            if ($needle != '' && strpos($postfix, $needle) === 0) {
-                $repoName = $needle; // Member
-                $postfix = substr($postfix, strlen($repoName)) ?: '';
-                break;
-            }
-        }
-
-        $repository = $this->{'get'.$repoName.'Repository'}();
-        $methodName = $prefix.$postfix;
-
-        if (method_exists($repository, $methodName)) {
-            return call_user_func_array([$repository, $methodName], $arguments);
-        }
-
-        throw new BadMethodCallException("Call to undefined method {get_class($repository)}::{$method}()");
+        return true;
     }
-
+    
     /**
      * 이메일 인증의 사용 여부를 반환한다.
      *
