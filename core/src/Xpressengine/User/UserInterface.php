@@ -27,7 +27,7 @@ use Xpressengine\User\Models\PendingEmail;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-interface UserInterface extends Authenticatable, CanResetPassword
+interface UserInterface extends Authenticatable, CanResetPassword, \Xpressengine\Member\Entities\MemberEntityInterface
 {
     /**
      * Get the unique identifier

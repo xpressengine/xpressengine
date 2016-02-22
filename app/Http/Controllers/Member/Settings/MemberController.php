@@ -3,18 +3,14 @@ namespace App\Http\Controllers\Member\Settings;
 
 use App\Http\Controllers\Controller;
 use Exception;
-use Hash;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Input;
 use Member;
 use Presenter;
-use Validator;
 use XeDB;
-use Xpressengine\Member\Entities\Database\MailEntity;
 use Xpressengine\Member\Exceptions\EmailNotFoundException;
 use Xpressengine\Member\Exceptions\MailAlreadyExistsException;
-use Xpressengine\Member\MemberImageHandler;
 use Xpressengine\Member\Rating;
 use Xpressengine\Member\Repositories\MemberRepositoryInterface;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
