@@ -4,20 +4,20 @@
 .inpt_group .btn_txt{font-size: 15px;margin: 0;}
 .inpt_group .dot{margin: 0 4px;font-size:10px}
 .inpt_group>input[type="checkbox"],.inpt_group>input[type="radio"] { position:relative; top:-1px; vertical-align:middle; }
-.inpt_group:not(#cross)>input[type="checkbox"],.inpt_group:not(#cross)>input[type="radio"]{overflow:hidden;position:absolute;width:0;height:0;border:0;font-size:0;line-height:0;top:-9999px;*position:static;*width:auto;*height:auto;*top:auto}
-.inpt_group:not(#cross)>input[type="checkbox"] + label,.inpt_group:not(#cross)>input[type="radio"] + label{display:inline-block;margin:0 0 0 0; padding: 0 10px 2px 25px;background:url(../img/spr_inpt.png) no-repeat 0 0;background-size:18px 252px;height:22px;color:#434a53;font-weight: normal;}
+.inpt_group:not(#cross)>input[type="checkbox"],.inpt_group:not(#cross)>input[type="radio"]{overflow:hidden;position:absolute;width:0;height:0;border:0;font-size:0;line-height:0;left:-9999px;*position:static;*width:auto;*height:auto;*top:auto}
+.inpt_group:not(#cross)>input[type="checkbox"] + label,.inpt_group:not(#cross)>input[type="radio"] + label{display:inline-block;margin:0 0 0 0; padding: 0 10px 2px 25px;background:url(../img/spr_inpt.png) no-repeat 0 0;background-size:18px 252px;height:22px;color:#434a53;font-weight: normal;cursor: pointer}
 .inpt_group:not(#cross)>input[type="checkbox"] + label:hover{background-position:0 -26px}
 .inpt_group:not(#cross)>input[type="checkbox"]:checked + label{background-position:0 -52px}
-.inpt_group:not(#cross)>input[type="checkbox"]:disabled + label { background-position:0 -78px}
+.inpt_group:not(#cross)>input[type="checkbox"]:disabled + label { background-position:0 -78px;color: #b5b7bd;}
 .inpt_group:not(#cross)>input[type="checkbox"]:disabled:checked + label { background-position:0 -103px}
 
 .inpt_group:not(#cross)>input[type="radio"] + label{background-position:0 -130px}
 .inpt_group:not(#cross)>input[type="radio"] + label:hover{background-position:0 -156px}
 .inpt_group:not(#cross)>input[type="radio"]:checked + label{background-position:0 -182px}
-.inpt_group:not(#cross)>input[type="radio"]:disabled + label { background-position:left -208px}
+.inpt_group:not(#cross)>input[type="radio"]:disabled + label { background-position:left -208px;color: #b5b7bd;}
 .inpt_group:not(#cross)>input[type="radio"]:disabled:checked + label { background-position:0 -234px}
 
-.btn{display:inline-block;padding:0.7143em 0.8571em;margin-bottom:0;font-size:14px;font-weight: 400;line-height: 1;text-align: center;white-space: nowrap;vertical-align: middle;-ms-touch-action: manipulation;touch-action: manipulation;cursor: pointer;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;background-image: none;border-radius: 2px;outline: none;border: 1px solid transparent;}
+.btn{display:inline-block;padding:0.7143em 0.8571em;margin-bottom:0;font-size:14px;font-weight: 400;line-height: 1;text-align: center;white-space: nowrap;vertical-align: middle;-ms-touch-action: manipulation;touch-action: manipulation;cursor: pointer;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;background-image: none;border-radius: 2px;outline: none;border: 1px solid transparent;-webkit-transition: all 0.2s ease;      transition: all 0.2s ease;}
 .btn.btn-default{color:#8e8e93;border-color:#DADBDE;background-color: transparent;}
 .btn:active,.btn:focus,.btn:active:focus{-webkit-box-shadow:none;box-shadow:none;outline:none}
 .btn:focus{color:#fff}
@@ -44,16 +44,16 @@
 .btn.btn_gray:active{background-color:#8e8e93;color:#2c2e37}
 .btn_group_all{margin:24px auto}
 
-.btn-danger {background-color: #DB2828;border-color: #DB2828;color:#fff}
-.btn-warning {background-color: #F2711C;border-color: #F2711C;color:#fff}
+.btn-danger.v2 {background-color:transparent;border-color: #DB2828;color:#DB2828}
+.btn-danger.v2:hover {background-color:#DB2828;color:#fff}
 
-.inpt_txt,.form-control{width: 100%;height: 36px;margin: 0 4px 4px 0;padding:5px 12px;border:1px solid #DADBDE;border-radius:2px;line-height:1.42857143;font-size: 14px;color:#2c2e37;outline:none;-webkit-appearance:none;background-color:transparent;-webkit-box-shadow: none;box-shadow: none;}
+.inpt_txt,.form-control{width: 100%;height: 36px;margin: 0 4px 4px 0;padding:5px 12px;border:1px solid #DADBDE;border-radius:2px;line-height:1.42857143;font-size: 14px;color:#2c2e37;outline:none;-webkit-appearance:none;background-color: #fff;-webkit-box-shadow: none;box-shadow: none;transition: 0.1s ease;-webkit-transition: 0.1s ease;}
 textarea{padding: 10px 12px}
 .form-control.srch{padding-right:30px}
 .inpt_txt.readonly{height:40px;background-color:#F6F6F6;border-color:#F6F6F6;color:#cbcbcb;font-size:15px}
 .wrong .inpt_txt{border-color: #DD251E !important;color:#db2828}
 .success .inpt_txt{border-color:#2c8beb !important}
-.inpt_txt:focus,.inpt_bd textarea:focus,.inpt_bd .inpt_txt:focus,.form-control:focus{border-color:#2389EE;color:#2c2e37;-webkit-box-shadow:none;box-shadow:none;transition:none}
+.inpt_txt:focus,.inpt_bd textarea:focus,.inpt_bd .inpt_txt:focus,.form-control:focus{border-color:#2389EE;color:#2c2e37;-webkit-box-shadow:none;box-shadow:none;transition: 0.1s ease;-webkit-transition: 0.1s ease;}
 .label_txt{color:#8e8e93;font-size:14px;line-height: 36px;}
 
 .txt_message{display: block;margin: 5px 0 0;font-size:13px;color: #2c8beb;}
@@ -76,8 +76,8 @@ button i+span,.btn i+span{margin-left:3px}
 button.btn_blue,a.btn_blue{display:inline-block; background-color:#2C8BEB;border-color: transparent;color:#fff;}
 button.btn_blue:hover,a.btn_blue:hover{background-color: #1677cb;border-radius:2px;color:#fff}
 button.btn_blue:active,a.btn_blue:active{background-color: #085DAA;color:#fff}
-button.ico_gray,a.ico_gray{display:inline-block;width: 40px;height: 40px;padding: 0;background-color:transparent;border-color: transparent;color: #2c2e37;font-size: 20px;}
-button.ico_gray:hover,a.ico_gray:hover{background-color:#DADBDE;color:#000}
+button.ico_gray,a.ico_gray{display:inline-block;width: 40px;height: 40px;padding: 0;background-color:transparent;border-color: transparent;color: #8e8e93;font-size: 20px;}
+button.ico_gray:hover,a.ico_gray:hover{color: #434a53;}
 
 .select-style {display:inline-block;position:relative;margin: 0;border: 1px solid #e4e4e4;border-radius:2px;overflow: hidden}
 .select-style em.ico{display: inline-block;position:absolute;right:11px;top:50%;width:0;height:0;margin-top:-2px;border-style:solid;border-width:3px;border-color: #8E8E93 transparent transparent transparent;font-size:13px;}
@@ -99,7 +99,7 @@ button.ico_gray:hover,a.ico_gray:hover{background-color:#DADBDE;color:#000}
 .srch_group.bd_on label{color:#929297}
 
 @media \0screen\,screen\9 {
-.togglebutton input[type=checkbox]{width:auto;height:auto}
-.togglebutton .toggle{display:none}
+	.togglebutton input[type=checkbox]{width:auto;height:auto}
+	.togglebutton .toggle{display:none}
 }
 

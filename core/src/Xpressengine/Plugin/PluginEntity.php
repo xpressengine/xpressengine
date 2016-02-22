@@ -582,7 +582,7 @@ class PluginEntity implements Arrayable, Jsonable
      *
      * @return string
      */
-    private function getComponentType($id)
+    public static function getComponentType($id)
     {
         $keyArr = explode('/', $id);
 

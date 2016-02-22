@@ -1,6 +1,6 @@
 <?php
 /**
- * DocumentNotExistsException
+ * ValueRequiredException
  *
  * PHP version 5
  *
@@ -16,7 +16,7 @@ namespace Xpressengine\Document\Exceptions;
 use Xpressengine\Document\DocumentException;
 
 /**
- * DocumentNotExistsException
+ * ValueRequiredException
  *
  * @category    Document
  * @package     Xpressengine\Document
@@ -24,9 +24,8 @@ use Xpressengine\Document\DocumentException;
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
- * @deprecated
  */
-class DocumentNotExistsException extends DocumentException
+class ValueRequiredException extends DocumentException
 {
-    protected $message = 'Document cannot be found';
+    protected $message = '":name" value is required';
 }

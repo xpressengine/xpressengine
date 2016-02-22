@@ -169,7 +169,7 @@ class ConfigHandler
      * @param array  $params     parameters
      * @return ConfigEntity
      */
-    public function makeEntity($instanceId, array $params)
+    public function make($instanceId, array $params)
     {
         $config = [
             'instanceId' => $instanceId,
@@ -185,7 +185,6 @@ class ConfigHandler
             $config[$name] = $value;
         }
 
-        // array 로 ConfigEntity 를 만들고 싶다!!
         $configEntity = new ConfigEntity();
         foreach ($config as $name => $value) {
             $configEntity->set($name, $value);
@@ -195,7 +194,6 @@ class ConfigHandler
 
     /**
      * create document instance
-     * * ex) 게시판 생성
      *
      * @param ConfigEntity $config document instance config
      * @return ConfigEntity
@@ -212,8 +210,7 @@ class ConfigHandler
 
     /**
      * update document instance config
-     * * division, revision 설정 변경 불가.
-     *      - 이 설정에 대한 변경은 core 에서 제공 안함.
+     * * Cannot changed 'division', 'revision' configure.
      *
      * @param ConfigEntity $config document instance config
      * @return ConfigEntity
@@ -221,12 +218,12 @@ class ConfigHandler
     public function put(ConfigEntity $config)
     {
         if ($this->get($config->get('instanceId')) === null) {
-            throw new Exceptions\ConfigException;
+            throw new Exceptions\ConfigNotFoundException;
         }
 
         $diff = $config->diff();
-        if (isset($diff['instanceId']) === null) {
-            throw new Exceptions\ConfigException;
+        if (isset($diff['instanceId']) === true) {
+            throw new Exceptions\CannotChangeInstanceIdException;
         }
 
         $this->configManager->put(
@@ -239,7 +236,6 @@ class ConfigHandler
 
     /**
      * drop document instance
-     * * ex) 게시판 삭제
      *
      * @param ConfigEntity $config config
      * @return void

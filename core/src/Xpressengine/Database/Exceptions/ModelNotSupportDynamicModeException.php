@@ -1,31 +1,32 @@
 <?php
 /**
- * DivisionException
+ * ModelNotSupportDynamicModeException
  *
  * PHP version 5
  *
- * @category    Document
- * @package     Xpressengine\Document
+ * @category    Database
+ * @package     Xpressengine\Database
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Document\Exceptions;
+namespace Xpressengine\Database\Exceptions;
 
-use Xpressengine\Document\DocumentException;
+use Xpressengine\Database\DatabaseException;
 
 /**
- * DivisionException
+ * ModelNotSupportDynamicModeException
  *
- * @category    Document
- * @package     Xpressengine\Document
+ * @category    Database
+ * @package     Xpressengine\Database
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class DivisionException extends DocumentException
+class ModelNotSupportDynamicModeException extends DatabaseException
 {
-    protected $message = 'Table division error';
+    protected $message = 'This Model is not supported "dynamic" mode.';
+
 }

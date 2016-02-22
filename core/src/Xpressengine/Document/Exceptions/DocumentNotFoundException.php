@@ -1,6 +1,6 @@
 <?php
 /**
- * RepositoryException
+ * NotFoundDocumentException
  *
  * PHP version 5
  *
@@ -16,7 +16,7 @@ namespace Xpressengine\Document\Exceptions;
 use Xpressengine\Document\DocumentException;
 
 /**
- * RepositoryException
+ * NotFoundDocumentException
  *
  * @category    Document
  * @package     Xpressengine\Document
@@ -25,6 +25,7 @@ use Xpressengine\Document\DocumentException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class RepositoryException extends DocumentException
+class DocumentNotFoundException extends DocumentException
 {
+    protected $message = 'Document cannot be found.';
 }

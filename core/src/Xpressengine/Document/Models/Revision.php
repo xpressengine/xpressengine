@@ -11,7 +11,7 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Document\Model;
+namespace Xpressengine\Document\Models;
 
 use Xpressengine\Database\Eloquent\DynamicModel;
 
@@ -59,6 +59,8 @@ use Xpressengine\Database\Eloquent\DynamicModel;
  */
 class Revision extends DynamicModel
 {
+    public $table = 'documents_revision';
+
     /**
      * The connection name for the model.
      * Virtual connection name.
@@ -66,4 +68,10 @@ class Revision extends DynamicModel
      * @var string
      */
     protected $connection = 'document';
+
+    public $incrementing = false;
+
+    protected $dynamic = true;
+
+    protected $primaryKey = 'revisionId';
 }

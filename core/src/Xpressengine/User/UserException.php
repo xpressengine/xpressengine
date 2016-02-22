@@ -1,31 +1,31 @@
 <?php
 /**
- * ConfigNotExistsException
+ * This file is User package exception.
  *
  * PHP version 5
  *
- * @category    Document
- * @package     Xpressengine\Document
+ * @category    User
+ * @package     Xpressengine\User
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Document\Exceptions;
+namespace Xpressengine\User;
 
-use Xpressengine\Document\DocumentException;
+use Xpressengine\Support\Exceptions\XpressengineException;
 
 /**
- * ConfigNotExistsException
+ * Xpressengine User 패키지의 메인 exception
  *
- * @category    Document
- * @package     Xpressengine\Document
+ * @category    User
+ * @package     Xpressengine\User
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class ConfigNotExistsException extends DocumentException
+class UserException extends XpressengineException
 {
-    protected $message = 'Configuration does not exist.';
+
 }

@@ -14,9 +14,9 @@
 namespace Xpressengine\Document;
 
 use Illuminate\Http\Request;
-use Xpressengine\Document\Exceptions\NotFoundDocumentException;
-use Xpressengine\Document\Exceptions\RequiredValueException;
-use Xpressengine\Document\Model\Document;
+use Xpressengine\Document\Exceptions\DocumentNotFoundException;
+use Xpressengine\Document\Models\Document;
+use Xpressengine\Document\Models\Revision;
 use Xpressengine\Member\Entities\Guest;
 use Xpressengine\Member\GuardInterface as Authenticator;
 use Xpressengine\Member\Repositories\MemberRepositoryInterface as Member;
@@ -29,9 +29,8 @@ use Xpressengine\Database\VirtualConnectionInterface as VirtualConnection;
 
 /**
  * DocumentHandler
- * Document 는 Instance 단위로 설정됨
- * Instance 생성 시 등록 한 설정에 따라 테이블 분리(division), 변경 이력 관리(revision) 지원
- * Document 를 사용하기 위해서 InstanceManager 로 생성 후 사용해야 함
+ * Document를 Instance에 따라 관리합니다.
+ * 이 Handler는 Instance 생성할 때 등록 한 설정에 따라 테이블 분리(division), 변경 이력 관리(revision)를 지원합니다.
  *
  * ## app binding
  * * xe.document 로 바인딩 되어 있음
@@ -41,10 +40,7 @@ use Xpressengine\Database\VirtualConnectionInterface as VirtualConnection;
  *
  * ### Instance 생성
  * ```php
- * $documentHandler = app('xe.document');
- *
- * $configEntity = $documentHandler->createInstance('newInstanceId');
- * $instanceManager->add($configEntity);
+ * Document::createInstance('newInstanceId');
  * ```
  *
  * ### 문서 등록
@@ -124,11 +120,6 @@ class DocumentHandler
     protected $revision;
 
     /**
-     * @var RepositoryInterface
-     */
-    protected $repo;
-
-    /**
      * @var ConfigHandler
      */
     protected $configHandler;
@@ -181,16 +172,6 @@ class DocumentHandler
     /**
      * get repository
      *
-     * @return RepositoryInterface
-     */
-    public function getRepository()
-    {
-        return $this->repo;
-    }
-
-    /**
-     * get repository
-     *
      * @return InstanceManager
      */
     public function getInstanceManager()
@@ -207,7 +188,7 @@ class DocumentHandler
      */
     public function createInstance($instanceId, $params = [])
     {
-        $documentConfig = $this->configHandler->makeEntity($instanceId, $params);
+        $documentConfig = $this->configHandler->make($instanceId, $params);
         $this->instanceManager->add($documentConfig);
 
         return $documentConfig;
@@ -231,7 +212,7 @@ class DocumentHandler
      * @param ConfigEntity $config config entity
      * @return array
      */
-    protected function proxyOption(ConfigEntity $config = null)
+    public function proxyOption(ConfigEntity $config = null)
     {
         $options = [];
         if ($config != null) {
@@ -249,37 +230,38 @@ class DocumentHandler
      */
     public function add(array $attributes)
     {
-        $doc = new Document($attributes);
-        $this->conn->beginTransaction();
+        $model = new Document;
 
-        $doc->fixedAttributes();
-        if ($doc->ipaddress == null) {
-            $doc->ipaddress = $this->request->ip();
+        $model->getConnection()->beginTransaction();
+
+        $attributes = $model->fixedAttributes($attributes);
+
+        if (empty($attributes['ipaddress']) === true) {
+            $attributes['ipaddress'] = $this->request->ip();
         }
 
-        $doc->checkRequired();
+        $model->checkRequired($attributes);
 
-        $config = $this->configHandler->getOrDefault($doc->instanceId);
-        $doc->setProxyOptions($this->proxyOption($config));
-        $doc->setReply();
+        $config = $this->configHandler->getOrDefault($attributes['instanceId']);
 
+        $model->setProxyOptions($this->proxyOption($config));
+        //$model->dynamicFill($attributes);
         // insert to original documents database table
-        $doc->save();
+        $model = $model->create($attributes);
 
         // insert to division documents database table
         if ($config->get('division') == true) {
-            $divisionDoc = new Document($doc->toArray());
-            $divisionDoc->setDivision()->save();
+            $divisionDoc = new Document;
+            $divisionDoc->setDivision($config)->create($model->toArray());
         }
 
         // insert to revision database table
-        $this->revision->add($doc->toArray());
+        $revisionDoc = new Revision;
+        $revisionDoc->create($model->toArray());
 
-        $this->conn->commit();
+        $model->getConnection()->commit();
 
-        $this->removeCache($doc);
-
-        return $doc;
+        return $model;
     }
 
     /**
@@ -314,7 +296,6 @@ class DocumentHandler
 
         $this->conn->commit();
 
-        $this->removeCache($doc);
         return $doc;
     }
 
@@ -345,8 +326,7 @@ class DocumentHandler
      * delete document
      *
      * @param Document $doc document model
-     * @return int
-     * @todo return 을 integer 로 줄 필요 없을 듯
+     * @return bool
      */
     public function remove(Document $doc)
     {
@@ -361,13 +341,11 @@ class DocumentHandler
         }
 
         $doc->setProxyOptions($this->proxyOption($config));
-        $doc->delete();
-
+        $result = $doc->delete();
 
         $this->conn->commit();
 
-        $this->removeCache($doc);
-        return 1;
+        return $result;
     }
 
     /**
@@ -376,7 +354,7 @@ class DocumentHandler
      * @param string $instanceId document instance id
      * @return Document
      */
-    public function getModel($instanceId)
+    public function getModel($instanceId = null)
     {
         $config = $this->configHandler->getOrDefault($instanceId);
         $doc = new Document;
@@ -388,249 +366,17 @@ class DocumentHandler
     /**
      * get document
      *
-     * @param string $id document id
+     * @param string $id         document id
+     * @param string $instanceId instance id
      * @return Document
      */
-    public function get($id)
+    public function get($id, $instanceId = null)
     {
-        if ($this->hasCache($id) === true) {
-            return $this->getCache($id);
-        }
-
         /** @var Document $doc */
-        $doc = Document::find($id);
-        $doc = $this->getModel($doc->instanceId)->find($id);
+        $doc = $this->getModel($instanceId)->find($id);
         if ($doc == null) {
-            throw new NotFoundDocumentException;
+            throw new DocumentNotFoundException;
         }
-
-        $this->putCache($doc);
         return $doc;
-    }
-
-    /**
-     * get document by id
-     *
-     * @param string $id document id
-     * @return DocumentEntity
-     * @deprecated
-     */
-    public function getById($id)
-    {
-        if ($this->hasCache($id) === true) {
-            return $this->getCache($id);
-        }
-
-        $row = $this->repo->findById($id);
-
-        return $this->get($row['id'], $row['instanceId']);
-    }
-
-    /**
-     * get document
-     * Config 정보가 없기 때문에 DynamicField 관련 데이터는 없이 반환
-     *
-     * @param array $ids document ids
-     * @return DocumentEntity
-     * @deprecated
-     */
-    public function getsByIds(array $ids)
-    {
-        $rows = $this->repo->fetchByIds($ids);
-
-        $docs = [];
-        foreach ($rows as $row) {
-            $docs[] = new DocumentEntity($row);
-        }
-        return $docs;
-    }
-
-    /**
-     * get document list
-     *
-     * @param array $wheres make where query list
-     * @param array $orders make order query list
-     * @param int   $limit  number of list
-     * @return DocumentEntity[]
-     * @deprecated
-     */
-    public function gets(array $wheres, array $orders, $limit = null)
-    {
-        $config = null;
-        if (isset($wheres['instanceId'])) {
-            $config = $this->configHandler->get($wheres['instanceId']);
-        }
-
-        $docs = $this->repo->fetch($wheres, $orders, $config, $limit);
-        foreach ($docs as $key => $row) {
-            $docs[$key] = new DocumentEntity($row);
-        }
-
-        return $docs;
-    }
-
-    /**
-     * get document list
-     *
-     * @param array   $wheres   make where query list
-     * @param array   $orders   make order query list
-     * @param int     $perPage  number of list
-     * @param Closure $callback call back
-     * @return LengthAwarePaginator
-     * @deprecated
-     */
-    public function paginate(
-        array $wheres,
-        array $orders,
-        $perPage = 10,
-        Closure $callback = null
-    ) {
-        $config = null;
-        if (isset($wheres['instanceId'])) {
-            $config = $this->configHandler->get($wheres['instanceId']);
-        }
-
-        $paginator = $this->repo->paginate($wheres, $orders, $config, $perPage);
-        foreach ($paginator as $key => $row) {
-            $doc = new DocumentEntity($row);
-            if ($callback !== null) {
-                call_user_func_array($callback, [&$doc]);
-            }
-            $paginator[$key] = $doc;
-        }
-
-        return $paginator;
-    }
-
-    /**
-     * get list count
-     *
-     * @param array $wheres make where query list
-     * @return int
-     * @deprecated
-     */
-    public function count(array $wheres = [])
-    {
-        $config = null;
-        if (isset($wheres['instanceId'])) {
-            $config = $this->configHandler->get($wheres['instanceId']);
-        }
-
-        return $this->repo->count($wheres, $config);
-    }
-
-    /**
-     * get document count
-     * 문서 수 반환
-     *
-     * @param string $instanceId instance id
-     * @return int
-     * @deprecated
-     */
-    public function countByInstanceId($instanceId)
-    {
-        return $this->repo->countByInstanceId($instanceId);
-    }
-
-    /**
-     * get document list by user id
-     *
-     * @param string $userId  user's id
-     * @param array  $wheres  make where query list
-     * @param array  $orders  make order query list
-     * @param array  $columns get columns list
-     * @return array
-     * @deprecated
-     */
-    public function getsByUser(
-        $userId,
-        array $wheres = [],
-        array $orders = [],
-        array $columns = ['*']
-    ) {
-        $wheres['userId'] = $userId;
-
-        return $this->gets($wheres, $orders, null, $columns);
-    }
-
-    /**
-     * get revision
-     * 다이나믹 필드 정보 없이 가져옴
-     *
-     * @param string $revisionId revision id
-     * @return DocumentEntity
-     * @deprecated
-     */
-    public function getRevision($revisionId)
-    {
-        $doc = $this->repo->fetchRevision($revisionId);
-        return new DocumentEntity($doc);
-    }
-
-    /**
-     * get revision list
-     *
-     * @param string $id document id
-     * @return array
-     * @deprecated
-     */
-    public function getRevisions($id)
-    {
-        $origin = $this->repo->findById($id);
-        $config = $this->configHandler->get($origin['instanceId']);
-
-        $docs = $this->repo->getsRevision($id, $config);
-        foreach ($docs as $key => $row) {
-            $doc = new DocumentEntity($row);
-            $docs[$key] = $doc;
-        }
-
-        return $docs;
-    }
-
-    /**
-     * add memory cache
-     *
-     * @param Document $doc document model
-     * @return void
-     */
-    private function putCache(Document $doc)
-    {
-        $this->docs[$doc->id] = $doc;
-    }
-
-    /**
-     * remove memory cache
-     *
-     * @param Document $doc document model
-     * @return void
-     */
-    private function removeCache(Document $doc)
-    {
-        if ($this->getCache($doc->id) !== null) {
-            unset($this->docs[$doc->id]);
-        }
-    }
-
-    /**
-     * get memory cache
-     *
-     * @param string $id document id
-     * @return DocumentEntity|null
-     */
-    private function getCache($id)
-    {
-        return $this->hasCache($id) === true ? $this->docs[$id] : null;
-    }
-
-    /**
-     * has memory cache
-     *
-     * @param string $id document id
-     * @return bool
-     */
-    private function hasCache($id)
-    {
-        return empty($this->docs[$id]) === false ? true : false;
     }
 }

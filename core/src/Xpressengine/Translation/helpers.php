@@ -26,7 +26,11 @@ if (! function_exists('xe_trans')) {
             return app('xe.translator');
         }
 
-        return app('xe.translator')->trans($id, $parameters, $domain, $locale);
+        try {
+            return app('xe.translator')->trans($id, $parameters, $domain, $locale);
+        } catch (Exception $e){
+            return $id;
+        }
     }
 }
 
