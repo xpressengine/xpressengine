@@ -25,8 +25,9 @@ use Xpressengine\Database\Eloquent\DynamicModel;
  */
 class UserGroup extends DynamicModel
 {
-
     protected $table = 'user_group';
+
+    public $incrementing = false;
 
     /**
      * @var bool use dynamic query

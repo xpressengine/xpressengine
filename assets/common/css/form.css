@@ -99,7 +99,7 @@ button.ico_gray:hover,a.ico_gray:hover{color: #434a53;}
 .srch_group.bd_on label{color:#929297}
 
 @media \0screen\,screen\9 {
-	.togglebutton input[type=checkbox]{width:auto;height:auto}
-	.togglebutton .toggle{display:none}
+.togglebutton input[type=checkbox]{width:auto;height:auto}
+.togglebutton .toggle{display:none}
 }
 

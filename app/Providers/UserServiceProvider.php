@@ -319,7 +319,7 @@ class UserServiceProvider extends ServiceProvider
 
         // 표시이름 validation 추가
         /** @var Closure $displayNameValidate */
-        $displayNameValidate = app('config')->get('xe.user.displayName.validate');
+        $displayNameValidate = app('config')->get('xe.member.displayName.validate');
         $validator->extend(
             'display_name',
             function ($attribute, $value, $parameters) use ($displayNameValidate) {

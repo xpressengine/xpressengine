@@ -250,4 +250,29 @@ class Guest implements UserInterface
     {
         return false;
     }
+
+
+    /**
+     * add this user to groups
+     *
+     * @param array $groups
+     *
+     * @return static
+     */
+    public function joinGroups(array $groups)
+    {
+        throw new UnsupportedOperationByGuestMemberException();
+    }
+
+    /**
+     * leave groups
+     *
+     * @param array $groups
+     *
+     * @return static
+     */
+    public function leaveGroups(array $groups)
+    {
+        throw new UnsupportedOperationByGuestMemberException();
+    }
 }
