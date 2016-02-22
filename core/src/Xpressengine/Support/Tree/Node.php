@@ -33,6 +33,7 @@ use Illuminate\Database\Eloquent\Builder;
  */
 abstract class Node extends DynamicModel
 {
+    protected $parent;
     /**
      * children collection of model
      *
@@ -85,9 +86,18 @@ abstract class Node extends DynamicModel
      */
     public function getParent()
     {
-        return $this->ancestors->first(function ($i, $model) {
-            return $model->pivot->{$this->getDepthName()} == 1;
-        });
+        if (!$this->parent) {
+            $this->parent = $this->ancestors->first(function ($i, $model) {
+                return $model->pivot->{$this->getDepthName()} == 1;
+            });
+        }
+
+        return $this->parent;
+    }
+
+    public function setParent(Node $node)
+    {
+        $this->parent = $node;
     }
 
     /**

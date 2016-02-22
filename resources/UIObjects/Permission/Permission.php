@@ -1,9 +1,6 @@
 <?php namespace Xpressengine\UIObjects\Permission;
 
 use Frontend;
-use Illuminate\Support\Collection;
-use Xpressengine\Permission\Grant;
-use Xpressengine\Permission\Permission;
 use Xpressengine\UIObject\AbstractUIObject;
 
 /**
