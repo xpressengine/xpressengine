@@ -50,10 +50,6 @@ class MenuEntity extends Entity
      * @var bool 주로 UI 상에서 표현을 위한 선택되어진 유무를 가지고 있음
      */
     protected $selected = false;
-    /**
-     * @var MenuPermission $permission 해당 메뉴의 권한. 하위의 item 들이 참조할 때 사용됨
-     */
-    protected $permission;
 
     /**
      * @param array          $attributes     to menu entity instance attributes
@@ -64,27 +60,6 @@ class MenuEntity extends Entity
         parent::__construct($attributes);
 
         $this->treeCollection = $treeCollection;
-    }
-
-    /**
-     * applyPermission
-     *
-     * @param MenuPermission[] $permissions menu permissions to apply self and children items
-     *
-     * @return void
-     */
-    public function applyPermission(array $permissions)
-    {
-        $this->permission = $permissions[$this->id];
-
-        /**
-         * @var MenuItem[] $items
-         */
-        $items = $this->treeCollection->getNodes();
-
-        foreach ($items as $item) {
-            $item->setPermission($permissions[$item->getBreadCrumbsKeyString()]);
-        }
     }
 
     /**
@@ -201,36 +176,6 @@ class MenuEntity extends Entity
     public function isSelected()
     {
         return $this->selected;
-    }
-
-    /**
-     * checkAccessPermission
-     *
-     * @param MemberEntityInterface $user to check permission user
-     *
-     * @return mixed
-     */
-    public function checkAccessPermission(MemberEntityInterface $user = null)
-    {
-        if ($user !== null) {
-            $this->permission->setUser($user);
-        }
-        return $this->permission->ables('access');
-    }
-
-    /**
-     * checkVisiblePermission
-     *
-     * @param MemberEntityInterface $user to check permission user
-     *
-     * @return mixed
-     */
-    public function checkVisiblePermission(MemberEntityInterface $user = null)
-    {
-        if ($user !== null) {
-            $this->permission->setUser($user);
-        }
-        return $this->permission->ables('visible');
     }
 
     /**

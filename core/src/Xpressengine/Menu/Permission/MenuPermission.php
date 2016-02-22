@@ -17,7 +17,7 @@ namespace Xpressengine\Menu\Permission;
 use Xpressengine\Member\Entities\MemberEntityInterface;
 use Xpressengine\Permission\Action;
 use Xpressengine\Permission\Permissions\AbstractRegisteredPermission;
-use Xpressengine\Permission\Registered;
+use Xpressengine\Permission\Permission;
 
 /**
  * MenuPermission
@@ -28,6 +28,7 @@ use Xpressengine\Permission\Registered;
  * @license  http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link     http://www.xpressengine.com
  *
+ * @deprecated
  */
 class MenuPermission extends AbstractRegisteredPermission
 {
@@ -42,10 +43,10 @@ class MenuPermission extends AbstractRegisteredPermission
      * Constructor
      *
      * @param MemberEntityInterface $user       User instance
-     * @param Registered            $registered Registered instance
+     * @param Permission            $registered Registered instance
      *
      */
-    public function __construct(MemberEntityInterface $user = null, Registered $registered = null)
+    public function __construct(MemberEntityInterface $user = null, Permission $registered = null)
     {
         $this->user = $user;
 

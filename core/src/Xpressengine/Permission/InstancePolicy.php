@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is permission facade class.
+ * This file is a policy for instance class.
  *
  * PHP version 5
  *
@@ -11,12 +11,10 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace App\Facades;
-
-use Illuminate\Support\Facades\Facade;
+namespace Xpressengine\Permission;
 
 /**
- * facade 사용을 위한 연결 클래스.
+ * Class InstancePolicy
  *
  * @category    Permission
  * @package     Xpressengine\Permission
@@ -24,18 +22,24 @@ use Illuminate\Support\Facades\Facade;
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
- *
- * @deprecated
  */
-class Permission extends Facade
+class InstancePolicy extends Policy
 {
     /**
-     * Get the registered name of the component.
+     * Handle dynamic method calls into the policy.
      *
-     * @return string
+     * @param string $name      method name
+     * @param array  $arguments argument for dynamic method
+     * @return bool
      */
-    protected static function getFacadeAccessor()
+    public function __call($name, $arguments)
     {
-        return 'xe.permission';
+        /**
+         * @var $user
+         * @var Instance $instance
+         */
+        list ($user, $instance) = $arguments;
+
+        return $this->check($user, $this->get($instance->getName(), $instance->getSiteKey()), $name);
     }
 }

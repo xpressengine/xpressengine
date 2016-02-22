@@ -35,6 +35,13 @@ abstract class Entity extends Fluent
     protected $guarded = ['*'];
 
     /**
+     * Indicates if the entity exists.
+     *
+     * @var bool
+     */
+    public $exists = false;
+
+    /**
      * Constructor
      *
      * @param array $attributes

@@ -14,13 +14,10 @@
 
 namespace Xpressengine\Menu;
 
-use Illuminate\Contracts\Foundation\Application;
 use Xpressengine\Member\Repositories\GroupRepositoryInterface;
 use Xpressengine\Member\Repositories\MemberRepositoryInterface;
-use Xpressengine\Menu\Permission\MenuPermission;
-use Xpressengine\Permission\Action;
-use Xpressengine\Permission\Factory;
 use Xpressengine\Permission\Grant;
+use Xpressengine\Permission\PermissionHandler;
 
 /**
  * MenuPermission
@@ -155,23 +152,9 @@ use Xpressengine\Permission\Grant;
 class MenuPermissionHandler
 {
     /**
-     * @var array
-     */
-    protected static $permissions = [];
-
-    /**
-     * @var Application $app
-     */
-    protected $app;
-    /**
-     * @var Factory $permission
+     * @var PermissionHandler $permission
      */
     protected $permission;
-
-    /**
-     * @var string $permissionType
-     */
-    protected $permissionType = 'menu';
 
     /**
      * @var array
@@ -202,17 +185,21 @@ class MenuPermissionHandler
      * @var MemberRepositoryInterface $memberRepo ;
      */
     protected $memberRepo;
+    
+    const ACCESS = 'access';
+    
+    const VISIBLE = 'visible';
 
     /**
      * Construct
      *
-     * @param Factory                   $permission permission factory
+     * @param PermissionHandler                   $permission permission factory
      * @param GroupRepositoryInterface  $groupRepo  group repository
      * @param MemberRepositoryInterface $memberRepo member repository
      *
      */
     public function __construct(
-        Factory $permission,
+        PermissionHandler $permission,
         GroupRepositoryInterface $groupRepo,
         MemberRepositoryInterface $memberRepo
     ) {
@@ -230,15 +217,15 @@ class MenuPermissionHandler
     {
         $grant = new Grant();
 
-        $grant->add(Action::ACCESS, 'rating', 'guest');
-        $grant->add(Action::ACCESS, 'group', []);
-        $grant->add(Action::ACCESS, 'user', []);
-        $grant->add(Action::ACCESS, 'except', []);
+        $grant->add(static::ACCESS, 'rating', 'guest');
+        $grant->add(static::ACCESS, 'group', []);
+        $grant->add(static::ACCESS, 'user', []);
+        $grant->add(static::ACCESS, 'except', []);
 
-        $grant->add(Action::VISIBLE, 'rating', 'guest');
-        $grant->add(Action::VISIBLE, 'group', []);
-        $grant->add(Action::VISIBLE, 'user', []);
-        $grant->add(Action::VISIBLE, 'except', []);
+        $grant->add(static::VISIBLE, 'rating', 'guest');
+        $grant->add(static::VISIBLE, 'group', []);
+        $grant->add(static::VISIBLE, 'user', []);
+        $grant->add(static::VISIBLE, 'except', []);
 
         return $grant;
     }
@@ -253,9 +240,9 @@ class MenuPermissionHandler
      */
     public function getMenuAccessPermission(MenuEntity $menu)
     {
-        $registered = $this->permission->findRegistered($this->permissionType, $menu->id);
+        $registered = $this->permission->find($menu->id, 'default');
 
-        $menuAccessGrant = $registered->offsetGet(Action::ACCESS);
+        $menuAccessGrant = $registered[static::ACCESS];
 
         $groups = $this->groupRepo->findAll($menuAccessGrant['group']);
         $users = $this->memberRepo->findAll($menuAccessGrant['user']);
@@ -279,9 +266,9 @@ class MenuPermissionHandler
      */
     public function getMenuVisiblePermission(MenuEntity $menu)
     {
-        $registered = $this->permission->findRegistered($this->permissionType, $menu->id);
+        $registered = $this->permission->find($menu->id, 'default');
 
-        $menuVisibleGrant = $registered->offsetGet(Action::VISIBLE);
+        $menuVisibleGrant = $registered[static::VISIBLE];
 
         $groups = $this->groupRepo->findAll($menuVisibleGrant['group']);
         $users = $this->memberRepo->findAll($menuVisibleGrant['user']);
@@ -305,7 +292,7 @@ class MenuPermissionHandler
      */
     public function registerMenuPermission(MenuEntity $menu, Grant $grant)
     {
-        $this->permission->register($this->permissionType, $menu->id, $grant);
+        $this->permission->register($menu->id, $grant, 'default');
     }
 
     /**
@@ -317,7 +304,7 @@ class MenuPermissionHandler
      */
     public function deleteMenuPermission(MenuEntity $menu)
     {
-        $this->permission->removeRegistered($this->permissionType, $menu->id);
+        $this->permission->destroy($menu->id, 'default');
     }
 
     /**
@@ -330,11 +317,11 @@ class MenuPermissionHandler
      */
     public function getItemAccessPermission(MenuItem $item)
     {
-        $registered = $this->permission->findRegistered($this->permissionType, $item->getBreadCrumbsKeyString());
+        $registered = $this->permission->find($item->getBreadCrumbsKeyString(), 'default');
 
-        $pureGrant = $registered->pure(Action::ACCESS);
+        $pureGrant = $registered->pure(static::ACCESS);
         $mode = ($pureGrant === null) ? "inherit" : "manual";
-        $menuAccessGrant = $registered->offsetGet(Action::ACCESS);
+        $menuAccessGrant = $registered->offsetGet(static::ACCESS);
 
         $groups = $this->groupRepo->findAll($menuAccessGrant['group']);
         $users = $this->memberRepo->findAll($menuAccessGrant['user']);
@@ -356,11 +343,11 @@ class MenuPermissionHandler
      * @param MenuItem $item  item has menu permission
      * @param Grant    $grant item's permission grant
      *
-     * @return \Xpressengine\Permission\Registered
+     * @return \Xpressengine\Permission\Permission
      */
     public function registerItemPermission(MenuItem $item, Grant $grant)
     {
-        return $this->permission->register($this->permissionType, $item->getBreadCrumbsKeyString(), $grant);
+        return $this->permission->register($item->getBreadCrumbsKeyString(), $grant, 'default');
     }
 
     /**
@@ -372,7 +359,7 @@ class MenuPermissionHandler
      */
     public function deleteItemPermission(MenuItem $item)
     {
-        $this->permission->removeRegistered($this->permissionType, $item->getBreadCrumbsKeyString());
+        $this->permission->destroy($item->getBreadCrumbsKeyString(), 'default');
     }
 
     /**
@@ -384,11 +371,11 @@ class MenuPermissionHandler
      */
     public function getItemVisiblePermission(MenuItem $item)
     {
-        $registered = $this->permission->findRegistered($this->permissionType, $item->getBreadCrumbsKeyString());
+        $registered = $this->permission->find($item->getBreadCrumbsKeyString(), 'default');
 
-        $pureGrant = $registered->pure(Action::VISIBLE);
+        $pureGrant = $registered->pure(static::VISIBLE);
         $mode = ($pureGrant === null) ? "inherit" : "manual";
-        $menuVisibleGrant = $registered->offsetGet(Action::VISIBLE);
+        $menuVisibleGrant = $registered->offsetGet(static::VISIBLE);
 
         return [
             'mode' => $mode,
@@ -425,10 +412,10 @@ class MenuPermissionHandler
         $user = $this->innerParamParsing($inputs['accessUser']);
         $except = $this->innerParamParsing($inputs['accessExcept']);
 
-        $grant->add(Action::ACCESS, 'rating', $rating);
-        $grant->add(Action::ACCESS, 'group', $group);
-        $grant->add(Action::ACCESS, 'user', $user);
-        $grant->add(Action::ACCESS, 'except', $except);
+        $grant->add(static::ACCESS, 'rating', $rating);
+        $grant->add(static::ACCESS, 'group', $group);
+        $grant->add(static::ACCESS, 'user', $user);
+        $grant->add(static::ACCESS, 'except', $except);
 
         return $grant;
 
@@ -458,10 +445,10 @@ class MenuPermissionHandler
         $user = $this->innerParamParsing($inputs['visibleUser']);
         $except = $this->innerParamParsing($inputs['visibleExcept']);
 
-        $grant->add(Action::VISIBLE, 'rating', $rating);
-        $grant->add(Action::VISIBLE, 'group', $group);
-        $grant->add(Action::VISIBLE, 'user', $user);
-        $grant->add(Action::VISIBLE, 'except', $except);
+        $grant->add(static::VISIBLE, 'rating', $rating);
+        $grant->add(static::VISIBLE, 'group', $group);
+        $grant->add(static::VISIBLE, 'user', $user);
+        $grant->add(static::VISIBLE, 'except', $except);
 
         return $grant;
 
@@ -477,28 +464,10 @@ class MenuPermissionHandler
      */
     public function moveItemPermission(MenuItem $fromItem, MenuItem $movedItem)
     {
-        $registered = $this->permission->findRegistered(
-            $this->permissionType,
-            $fromItem->getBreadCrumbsKeyString()
-        );
+        $registered = $this->permission->find($fromItem->getBreadCrumbsKeyString(), 'default');
 
         $this->permission->move($registered, $movedItem->getBreadCrumbsKeyString());
 
-    }
-
-    /**
-     * getMenuPermissions
-     *
-     * @return MenuPermission[]
-     * @throws \Xpressengine\Permission\Exceptions\WrongInstanceException
-     */
-    public function getMenuPermissions()
-    {
-        if (count(static::$permissions) == 0) {
-            static::$permissions = $this->permission->makesByType('menu');
-        }
-
-        return static::$permissions;
     }
 
     /**
@@ -515,6 +484,7 @@ class MenuPermissionHandler
         }
 
         $ret = explode(',', $param);
-        return array_except($ret, [""]);
+
+        return array_filter($ret);
     }
 }

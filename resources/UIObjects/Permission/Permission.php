@@ -3,7 +3,7 @@
 use Frontend;
 use Illuminate\Support\Collection;
 use Xpressengine\Permission\Grant;
-use Xpressengine\Permission\Registered;
+use Xpressengine\Permission\Permission;
 use Xpressengine\UIObject\AbstractUIObject;
 
 /**

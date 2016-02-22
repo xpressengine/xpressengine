@@ -14,13 +14,14 @@ class PermissionMigration implements Migration {
 
             $table->increments('id');
             $table->string('siteKey', 50)->default('default');
-            $table->string('type', 20);
+//            $table->string('type', 20);
             $table->string('name');
             $table->text('grants');
             $table->timestamp('createdAt');
             $table->timestamp('updatedAt');
 
-            $table->unique(['siteKey', 'type', 'name']);
+//            $table->unique(['siteKey', 'type', 'name']);
+            $table->unique(['siteKey', 'name']);
         });
     }
 

@@ -2,7 +2,7 @@
 
 use Xpressengine\Permission\Factory;
 use Xpressengine\Permission\Grant;
-use Xpressengine\Permission\Registered;
+use Xpressengine\Permission\Permission;
 use Xpressengine\UIObject\AbstractUIObject;
 
 class SettingsPermission extends AbstractUIObject
@@ -56,7 +56,7 @@ class SettingsPermission extends AbstractUIObject
     {
     }
 
-    protected function getGrant(Registered $registered, $action)
+    protected function getGrant(Permission $registered, $action)
     {
         $defaultPerm = [
             Grant::RATING_TYPE => '',

@@ -13,9 +13,6 @@
  */
 namespace Xpressengine\Menu;
 
-use Xpressengine\Member\Entities\MemberEntityInterface;
-use Xpressengine\Menu\Permission\MenuPermission;
-use Xpressengine\Permission\Action;
 use Xpressengine\Support\Entity;
 use Xpressengine\Support\Tree\NodeInterface;
 
@@ -63,10 +60,8 @@ class MenuItem extends Entity implements NodeInterface
      * @var array 이 Item 의 빵조각 정보를 담고 있는 배열 Menu 의 Id 부터 시작
      */
     protected $breadCrumbs = [];
-    /**
-     * @var MenuPermission
-     */
-    protected $permission;
+
+    protected static $gate;
 
     /**
      * setParent
@@ -246,74 +241,6 @@ class MenuItem extends Entity implements NodeInterface
         $this->breadCrumbs = $breadCrumbs;
         $this->attributes['menuId'] = $breadCrumbs[0];
         $this->attributes['parentId'] = $breadCrumbs[(sizeof($breadCrumbs) -2)];
-    }
-
-    /**
-     * setPermission
-     *
-     * @param MenuPermission $permission menu's access and visible permission
-     *
-     * @return void
-     */
-    public function setPermission(MenuPermission $permission)
-    {
-        $this->permission = $permission;
-    }
-
-    /**
-     * getPermission
-     *
-     * @return mixed
-     */
-    public function getPermission()
-    {
-        return $this->permission;
-    }
-
-    /**
-     * applyPermission
-     *
-     * @param MenuPermission[] $permissions menu permission array
-     *
-     * @return void
-     */
-    public function applyPermission($permissions)
-    {
-        $this->permission = $permissions[$this->getBreadCrumbsKeyString()];
-
-        if ($this->hasChild()) {
-            foreach ($this->childItems as $item) {
-                $item->applyPermission($permissions);
-            }
-        }
-
-    }
-
-    /**
-     * checkAccessPermission
-     *
-     * @param MemberEntityInterface $user if user param is not null check permission for user param
-     *
-     * @return mixed
-     */
-    public function checkAccessPermission($user)
-    {
-        $this->permission->setUser($user);
-        $able = $this->permission->ables(ACTION::ACCESS);
-        return $able;
-    }
-
-    /**
-     * checkVisiblePermission
-     *
-     * @param MemberEntityInterface $user if user param is not null check permission for user param
-     *
-     * @return mixed
-     */
-    public function checkVisiblePermission($user)
-    {
-        $this->permission->setUser($user);
-        return $this->permission->ables(ACTION::VISIBLE);
     }
 
     /**
