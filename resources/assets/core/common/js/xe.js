@@ -273,7 +273,7 @@ XE.Progress = (function(XE, $) {
     Progress.cssLoad = function() {
         if (cssLoaded === false) {
             cssLoaded = true;
-            XE.cssLoad('/assets/vendor/core/css/progress.css');
+            XE.cssLoad('/assets/core/common/css/progress.css');
         }
     };
 

@@ -164,18 +164,18 @@ class PresenterServiceProvider extends ServiceProvider
                 'assets/vendor/jQuery-File-Upload/js/jquery.fileupload.js',
                 'assets/vendor/react/react-with-addons.js',
                 'assets/vendor/react/JSXTransformer.js',
-                'assets/vendor/core/js/translator.js',
-                'assets/vendor/core/js/xe.js',
-                'assets/vendor/core/js/helpers.js',
-                'assets/vendor/core/js/toggleMenu.js',
+                'assets/core/common/js/translator.js',
+                'assets/core/common/js/xe.js',
+                'assets/core/common/js/helpers.js',
+                'assets/core/common/js/toggleMenu.js',
             ]
         )->appendTo('head')->load();
 
 
         $frontendHandler->css([
-            'assets/common/css/normalize.css',
-            'assets/vendor/core/css/xe.css',
-            'assets/common/css/alert.css',
+            'assets/core/common/css/normalize.css',
+            'assets/core/common/css/xe.css',
+            'assets/core/common/css/alert.css',
             '//cdn.jsdelivr.net/xeicon/2.0.0/xeicon.min.css',
         ])->before('assets/vendor/bootstrap/css/bootstrap.css')->load();
     }

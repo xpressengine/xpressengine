@@ -1,11 +1,11 @@
 
 {{ Frontend::css('/assets/vendor/jqueryui/jquery-ui.css')->load() }}
 
-{{ Frontend::css('/assets/vendor/core/category/style.css')->load() }}
+{{ Frontend::css('/assets/core/common/category/style.css')->load() }}
 
 {{ Frontend::js('/assets/vendor/jqueryui/jquery-ui.js')->appendTo('head')->load() }}
 {{ Frontend::js('/assets/vendor/nestedSortable/jquery.mjs.nestedSortable.js')->appendTo('head')->load() }}
-{{ Frontend::js('/assets/vendor/core/category/tree.js')->appendTo('head')->load() }}
+{{ Frontend::js('/assets/core/common/category/tree.js')->appendTo('head')->load() }}
 
 {{ Frontend::translation([
     'xe::required',

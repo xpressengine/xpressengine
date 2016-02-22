@@ -68,13 +68,13 @@ class ProfileSkin extends BladeSkin
         $frontend = app('xe.frontend');
 
         if($this->data['grant']['modify']) {
-            $frontend->js('assets/member/profile.js')->load();
+            $frontend->js('assets/core/member/profile.js')->load();
         }
 
         $frontend->css([
-            'assets/common/css/webfont.css',
-            'assets/common/css/grid.css',
-            'assets/member/profile.css'
+            'assets/core/common/css/webfont.css',
+            'assets/core/common/css/grid.css',
+            'assets/core/member/profile.css'
         ])->load();
     }
 

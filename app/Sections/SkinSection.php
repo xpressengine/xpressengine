@@ -76,7 +76,7 @@ class SkinSection
 
         $skins = $skins($skinList, $selectedSkin);
 
-        \Frontend::js('assets/skin/section.js')->load();
+        \Frontend::js('assets/core/skin/section.js')->load();
 
         $url = route('settings.skin.section.setting');
         \Frontend::html('skin.loadSkinSetting')->content(

@@ -29,14 +29,14 @@ class Permission extends AbstractUIObject
      */
     public function render()
     {
-        Frontend::js('/assets/vendor/core/lodash.min.js')->appendTo('head')->load();
-        Frontend::js('/assets/vendor/permission/PermissionTag.js')->type('text/jsx')->appendTo('head')->load();
-        Frontend::js('/assets/vendor/permission/PermissionTagSuggestion.js')->type('text/jsx')->appendTo('head')->load(
+        Frontend::js('/assets/core/lodash.min.js')->appendTo('head')->load();
+        Frontend::js('/assets/core/permission/PermissionTag.js')->type('text/jsx')->appendTo('head')->load();
+        Frontend::js('/assets/core/permission/PermissionTagSuggestion.js')->type('text/jsx')->appendTo('head')->load(
         );
-        Frontend::js('/assets/vendor/permission/PermissionInclude.js')->type('text/jsx')->appendTo('head')->load();
-        Frontend::js('/assets/vendor/permission/PermissionExclude.js')->type('text/jsx')->appendTo('head')->load();
-        Frontend::js('/assets/vendor/permission/Permission.js')->type('text/jsx')->appendTo('head')->load();
-        Frontend::css('/assets/vendor/permission/permission.css')->load();
+        Frontend::js('/assets/core/permission/PermissionInclude.js')->type('text/jsx')->appendTo('head')->load();
+        Frontend::js('/assets/core/permission/PermissionExclude.js')->type('text/jsx')->appendTo('head')->load();
+        Frontend::js('/assets/core/permission/Permission.js')->type('text/jsx')->appendTo('head')->load();
+        Frontend::css('/assets/core/permission/permission.css')->load();
 
         $permissioinScriptString = [];
 

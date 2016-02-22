@@ -1,5 +1,5 @@
-{{ Frontend::css('/assets/settings/css/admin_menu.css')->load() }}
-{{ Frontend::js('/assets/vendor/core/lodash.min.js')->appendTo('head')->load() }}
+{{ Frontend::css('/assets/core/settings/css/admin_menu.css')->load() }}
+{{ Frontend::js('/assets/core/lodash.min.js')->appendTo('head')->load() }}
 {{ Frontend::js('/assets/vendor/menu/Tree.js')->appendTo('head')->load() }}
 {{ Frontend::js('/assets/vendor/menu/classnames.js')->appendTo('head')->load() }}
 {{ Frontend::js('/assets/vendor/menu/menu.js')->appendTo('head')->load() }}

@@ -45,13 +45,13 @@ class SettingsTheme extends AbstractTheme
         $frontendHandler->css('assets/vendor/bootstrap/css/bootstrap.css')->load();
 
         $frontendHandler->css([
-            'assets/common/css/form.css',
-            'assets/common/css/dropdown.css',
-            'assets/common/css/flag.css',
-            'assets/common/css/badge.css',
-            'assets/common/css/modal.css',
-            'assets/settings/css/admin.css',
-        ])->before(['assets/vendor/bootstrap/css/bootstrap.css', 'assets/common/css/normalize.css'])->load();
+            'assets/core/common/css/form.css',
+            'assets/core/common/css/dropdown.css',
+            'assets/core/common/css/flag.css',
+            'assets/core/common/css/badge.css',
+            'assets/core/common/css/modal.css',
+            'assets/core/settings/css/admin.css',
+        ])->before(['assets/vendor/bootstrap/css/bootstrap.css', 'assets/core/common/css/normalize.css'])->load();
 
         $frontendHandler->js(
             [
@@ -61,7 +61,7 @@ class SettingsTheme extends AbstractTheme
             ]
         )->appendTo('head')->target('lt IE 9')->load();
 
-        $frontendHandler->js('assets/settings/js/admin.js')
+        $frontendHandler->js('assets/core/settings/js/admin.js')
             ->before('assets/vendor/bootstrap/js/bootstrap.min.js')->load();
 
     }

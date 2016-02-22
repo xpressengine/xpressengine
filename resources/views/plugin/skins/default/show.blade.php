@@ -12,7 +12,7 @@
                     <div class="plugin_summary">
                         <div class="img_thmb">
                             @if($plugin->getIcon() === null)
-                                <img src="{{ asset('assets/plugin/img/noicon.png') }}" width="100" height="100" alt="{{$plugin->getTitle()}}">
+                                <img src="{{ asset('assets/core/plugin/img/noicon.png') }}" width="100" height="100" alt="{{$plugin->getTitle()}}">
                             @else
                                 <img src="{{$plugin->getIcon()}}" width="100" height="100" alt="{{$plugin->getTitle()}}">
                             @endif

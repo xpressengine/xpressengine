@@ -43,7 +43,7 @@ class RawItem extends AbstractToggleMenuItem
 
     public function getScript()
     {
-        return asset('assets/sample.js');
+        return asset('assets/core/sample.js');
     }
     public function getIcon()
     {

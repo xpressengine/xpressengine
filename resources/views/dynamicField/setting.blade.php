@@ -109,7 +109,7 @@
 </div>
 
 <script>
-    require(['core/js/modules/dynamicField'], function(dynamicField) {
+    require(['../core/common/js/modules/dynamicField'], function(dynamicField) {
         var instance = new dynamicField();
 
         instance.init("{{$group}}", "{{$databaseName}}", {

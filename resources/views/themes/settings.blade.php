@@ -26,7 +26,7 @@
     </header>
     <aside class="trasition">
         <div class="logo_area trasition">
-            <h1><a href="{{ route('settings') }}"><img src="{{ asset('assets/settings/img/logo.png') }}" width="28" height="28" alt="admin logo">{{ $siteTitle or 'XpressEngine3' }}</a></h1>
+            <h1><a href="{{ route('settings') }}"><img src="{{ asset('assets/core/settings/img/logo.png') }}" width="28" height="28" alt="admin logo">{{ $siteTitle or 'XpressEngine3' }}</a></h1>
         </div>
         <p class="lst_tit">MAIN MENU</p>
         <ul class="snb_lst">

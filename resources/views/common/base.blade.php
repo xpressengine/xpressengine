@@ -43,8 +43,8 @@
         require.config({
             baseUrl: '/assets/vendor/',
             paths: {
-                griper: 'core/js/modules/griper/griper',
-                validator: 'core/js/modules/validator'
+                griper: '../core/common/js/modules/griper/griper',
+                validator: '../core/common/js/modules/validator'
             }
         });
 

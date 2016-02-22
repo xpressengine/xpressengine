@@ -1,7 +1,8 @@
-var gulp = require("gulp");
+var gulp = require("gulp"),
+  $ = require('gulp-load-plugins')();
 var elixir = require('laravel-elixir');
-var react = require('gulp-react');
 var _ = require('lodash');
+
 /*
  |--------------------------------------------------------------------------
  | Elixir Asset Management
@@ -14,6 +15,10 @@ var _ = require('lodash');
  */
 
 elixir(function (mix) {
+  mix.browserify('../core/menu/MenuTree.jsx', 'assets/vendor/menu/menu.js');
+});
 
-    mix.browserify('menu/MenuTree.jsx', 'assets/vendor/menu/menu.js');
+// assets 재구성을 위한 임시 task
+elixir(function(mix) {
+  mix.copy('resources/assets/core', 'assets/core');
 });
