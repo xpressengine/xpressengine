@@ -1,10 +1,13 @@
 @charset "utf-8";
 /* CSS Document */
 
+/*reset css*/
+.profile_wrap dl,.profile_wrap dt,.profile_wrap dd,.card_wrap .profile_card .card_tit h2,.right_menu.long_txt ul{margin:0;padding:0}
+.profile_wrap .card_profile_info .profile_thmb em{font-style: normal}
+
 .profile>.xo-container{max-width:none !important;padding-bottom:0 !important}
 .profile_wrap .xo-row,.profile_wrap .xo-row .xo-col-sm-6:first-child{margin-bottom:24px}
 .profile_wrap .xo-col-sm-6,.profile_wrap .xo-col-sm-12{padding-left:10px;padding-right:10px}
-.ct.profile+.footer{/* background-color:#fff; *//* border-top:1px solid #e4e4e4 */}
 
 .profile_wrap h1{margin-bottom:40px;font-size:32px;color:#2c2e37;line-height:40px;font-weight:bold}
 .xo-profile{max-width: 560px;margin: 0 auto 40px;padding:0 5%;text-align:center}

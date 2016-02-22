@@ -1,5 +1,8 @@
 @charset "utf-8";
 /* CSS Document */
+/*reset css*/
+.dropdown-menu ul{margin: 0;padding:0}
+.dropdown-menu li>a{text-decoration: none}
 
 /*dropdown*/
 .dropdown,.dropup{display:inline-block;position:relative;margin-bottom: 4px;font-size:14px}
@@ -30,3 +33,8 @@
 .dropdown.wide>.btn,.dropup.wide>.btn,.dropdown.wide .dropdown-menu,.dropup.wide .dropdown-menu{width:224px}
 .dropdown.very-wide>.btn,.dropup.very-wide>.btn,.dropdown.very-wide .dropdown-menu,.dropup.very-wide .dropdown-menu{width:280px}
 .dropdown.max-wide>.btn,.dropup.max-wide>.btn,.dropdown.max-wide .dropdown-menu,.dropup.max-wide .dropdown-menu{width:336px}
+
+.select-box {position: relative;width: 140px;height: 30px;border:1px solid #e4e4e4;border-radius: 2px;background-color: #fff}
+.select-box:after {display: inline-block;position: absolute;right: 16px;top: 50%;width: 0;height: 0;margin-top: -2px;border-style: solid;border-width: 3px;border-color: #8E8E93 transparent transparent transparent;content: "";}
+.select-box label {position: absolute;font-size: 14px;color: #696e7a;top: 4px;left: 12px;letter-spacing: 1px;}
+.select-box select{width: 100%;height: 30px;font-size:14px;line-height: 30px;padding: 0 10px;opacity: 0;filter: alpha(opacity=0);-webkit-appearance: menulist-button;}
