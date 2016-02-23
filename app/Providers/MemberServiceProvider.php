@@ -69,16 +69,16 @@ class MemberServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->registerAuth();
+        // $this->registerAuth();
         $this->registerHandler();
 
         $this->registerRepositories();
         $this->registerTokenRepository();
 
-        $this->registerEmailBroker();
-        $this->registerPasswordBroker();
+        // $this->registerEmailBroker();
+        // $this->registerPasswordBroker();
 
-        $this->registerImageHandler();
+        // $this->registerImageHandler();
     }
 
     /**

@@ -13,6 +13,7 @@
  */
 namespace Xpressengine\User;
 
+use Xpressengine\Member\GuardInterface as BaseInterface;
 use Illuminate\Contracts\Auth\Guard as GuardContract;
 use Xpressengine\User\Models\Guest;
 
@@ -26,7 +27,7 @@ use Xpressengine\User\Models\Guest;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-interface GuardInterface extends GuardContract
+interface GuardInterface extends GuardContract, BaseInterface
 {
     /**
      * Guest 회원 인스턴스를 생성하여 반환한다.
