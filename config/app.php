@@ -253,7 +253,7 @@ return [
         'Skin' => App\Facades\Skin::class,
         'Register' => App\Facades\Register::class,
         'Settings' => App\Facades\Settings::class,
-        'Menu' => App\Facades\Menu::class,
+        'Menu' => App\Facades\XeMenu::class,
         'Module' => App\Facades\Module::class,
         'Cfg' => App\Facades\Config::class,
         'XeStorage' => App\Facades\XeStorage::class,
@@ -273,7 +273,6 @@ return [
         'ToggleMenu' => App\Facades\ToggleMenu::class,
         'XeTemporary' => App\Facades\XeTemporary::class,
         'Trash' => App\Facades\Trash::class,
-        'Permission' => App\Facades\Permission::class,
         'XeMedia' => App\Facades\XeMedia::class,
 
         'XeLang' => App\Facades\Lang::class,

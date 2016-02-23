@@ -1,8 +1,6 @@
 <?php
 namespace Xpressengine\ToggleMenus\Member;
 
-use Xpressengine\Member\Entities\Database\MemberEntity;
-
 class RawItem extends AbstractToggleMenuItem
 {
     protected static $id = 'membermenu/xpressengine@raw';

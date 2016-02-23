@@ -64,11 +64,11 @@ class UserServiceProvider extends ServiceProvider
     {
         $this->registerHandler();
 
-        // member package 제거후 주석 해제
-        // $this->registerAuth();
+        // user package 제거후 주석 해제
+        $this->registerAuth();
         // $this->registerTokenRepository();
-        // $this->registerEmailBroker();
-        // $this->registerPasswordBroker();
+        $this->registerEmailBroker();
+        $this->registerPasswordBroker();
 
         $this->registerImageHandler();
     }
@@ -83,10 +83,9 @@ class UserServiceProvider extends ServiceProvider
         $this->app->singleton(
             'xe.auth',
             function ($app) {
-
                 $proxyClass = $app['xe.interception']->proxy(Guard::class, 'Auth');
                 return new $proxyClass(
-                    new UserProvider($app['xe.members'], $app['hash']), $app['session.store'], $app['request']
+                    new UserProvider($app['hash'], User::class), $app['session.store'], $app['request']
                 );
             }
         );
@@ -159,7 +158,7 @@ class UserServiceProvider extends ServiceProvider
             'xe.user.image',
             function ($app) {
 
-                $profileImgConfig = config('xe.member.profileImage');
+                $profileImgConfig = config('xe.user.profileImage');
 
                 return new UserImageHandler(
                     $app['xe.storage'], $app['xe.media'], function () {
@@ -204,10 +203,10 @@ class UserServiceProvider extends ServiceProvider
     public function boot()
     {
         // set guest's display name
-        Guest::setName($this->app['config']['xe.member.guest.name']);
+        Guest::setName($this->app['config']['xe.user.guest.name']);
 
-        // set member entity's default profile image
-        Guest::setDefaultProfileImage($this->app['config']['xe.member.profileImage.default']);
+        // set user entity's default profile image
+        Guest::setDefaultProfileImage($this->app['config']['xe.user.profileImage.default']);
 
         $this->setProfileImageResolverOfUser();
 
@@ -217,7 +216,7 @@ class UserServiceProvider extends ServiceProvider
         // register validation extension for email prefix
         $this->extendValidator();
 
-        // register default member skin
+        // register default user skin
         $this->registerDefaultSkins();
 
         $this->registerSettingsPermissions();
@@ -249,11 +248,11 @@ class UserServiceProvider extends ServiceProvider
             function ($app) {
                 $proxyClass = $app['xe.interception']->proxy(UserHandler::class, 'XeUser');
                 $userHandler = new $proxyClass(
-                    new User(),
-                    new UserAccount(),
-                    new UserGroup(),
-                    new UserEmail(),
-                    new PendingEmail(),
+                    User::class,
+                    UserAccount::class,
+                    UserGroup::class,
+                    UserEmail::class,
+                    PendingEmail::class,
                     $app['hash'],
                     $app['validator'],
                     $app['xe.register'],

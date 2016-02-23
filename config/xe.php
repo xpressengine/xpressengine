@@ -197,7 +197,7 @@ return [
         'version' => 4,
         'namespace' => 'xe',
     ],
-    'member' => [
+    'user' => [
         'guest' => [
             'name' => 'Guest'
         ],

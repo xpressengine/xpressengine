@@ -13,10 +13,8 @@
  */
 namespace Xpressengine\User;
 
-use BadMethodCallException;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Validation\Factory as Validator;
-use Illuminate\Support\Collection;
 use Xpressengine\Member\Exceptions\AccountAlreadyExistsException;
 use Xpressengine\Member\Exceptions\CannotDeleteMemberHavingSuperRatingException;
 use Xpressengine\Member\Exceptions\DisplayNameAlreadyExistsException;
@@ -60,27 +58,27 @@ class UserHandler
     ];
 
     /**
-     * @var User 회원 저장소
+     * @var string User model
      */
     protected $users;
 
     /**
-     * @var UserAccount 회원계정 저장소
+     * @var string UserAccount model
      */
     protected $accounts;
 
     /**
-     * @var UserGroup 그룹 저장소
+     * @var string UserGroup model
      */
     protected $groups;
 
     /**
-     * @var UserEmail 회원 이메일 저장소
+     * @var string UserEmail model
      */
     protected $emails;
 
     /**
-     * @var PendingEmail 회원 등록대기 이메일 저장소
+     * @var string PendingEmail model
      */
     private $pendingEmails;
 
@@ -112,22 +110,22 @@ class UserHandler
     /**
      * constructor.
      *
-     * @param User             $users           User 회원 저장소
-     * @param UserAccount      $accounts        UserAccount 회원계정 저장소
-     * @param UserGroup        $groups          UserGroup 그룹 저장소
-     * @param UserEmail        $mails           회원 이메일 저장소
-     * @param PendingEmail     $pendingEmails   회원 등록대기 이메일 저장소
-     * @param Hasher           $hasher          해시코드 생성기, 비밀번호 해싱을 위해 사용됨
-     * @param Validator        $validator       유효성 검사기. 비밀번호 및 표시이름(dispalyName)의 유효성 검사를 위해 사용됨
-     * @param Container        $container       Xpressengine 레지스터
-     * @param boolean          $useEmailConfirm 이메일 인증의 사용여부
+     * @param string    $users           User 회원 저장소
+     * @param string    $accounts        UserAccount 회원계정 저장소
+     * @param string    $groups          UserGroup 그룹 저장소
+     * @param string    $mails           회원 이메일 저장소
+     * @param string    $pendingEmails   회원 등록대기 이메일 저장소
+     * @param Hasher    $hasher          해시코드 생성기, 비밀번호 해싱을 위해 사용됨
+     * @param Validator $validator       유효성 검사기. 비밀번호 및 표시이름(dispalyName)의 유효성 검사를 위해 사용됨
+     * @param Container $container       Xpressengine 레지스터
+     * @param boolean   $useEmailConfirm 이메일 인증의 사용여부
      */
     public function __construct(
-        User $users,
-        UserAccount $accounts,
-        UserGroup $groups,
-        UserEmail $mails,
-        PendingEmail $pendingEmails,
+        $users,
+        $accounts,
+        $groups,
+        $mails,
+        $pendingEmails,
         Hasher $hasher,
         Validator $validator,
         Container $container,
@@ -144,7 +142,6 @@ class UserHandler
         $this->useEmailConfirm = $useEmailConfirm;
     }
 
-
     /**
      * User 회원 저장소를 반환한다.
      *
@@ -152,7 +149,7 @@ class UserHandler
      */
     public function users()
     {
-        return $this->users;
+        return $this->createModel($this->users);
     }
 
     /**
@@ -162,7 +159,7 @@ class UserHandler
      */
     public function accounts()
     {
-        return $this->accounts;
+        return $this->createModel($this->accounts);
     }
 
     /**
@@ -172,7 +169,7 @@ class UserHandler
      */
     public function groups()
     {
-        return $this->groups;
+        return $this->createModel($this->groups);
     }
 
     /**
@@ -182,7 +179,7 @@ class UserHandler
      */
     public function emails()
     {
-        return $this->emails;
+        return $this->createModel($this->emails);
     }
 
     /**
@@ -192,7 +189,7 @@ class UserHandler
      */
     public function pendingEmails()
     {
-        return $this->pendingEmails;
+        return $this->createModel($this->pendingEmails);
     }
 
     /**
@@ -217,7 +214,7 @@ class UserHandler
         if (array_has($userData, 'password')) {
             $userData['password'] = $this->hasher->make($userData['password']);
         }
-        $user = $this->users->create($userData);
+        $user = $this->users()->create($userData);
 
         // insert mail
         if (isset($userData['email'])) {
@@ -226,10 +223,10 @@ class UserHandler
                 'address' => $user->email,
             ];
             if ($this->useEmailConfirm === false || array_get($data, 'emailConfirmed', false)) {
-                $mail = $this->emails->create($mailData);
+                $mail = $this->emails()->create($mailData);
                 $user->emails = [$mail];
             } else {
-                $mail = $this->pendingEmails->create($mailData);
+                $mail = $this->pendingEmails()->create($mailData);
                 $user->pending_emails = [$mail];
             }
         }
@@ -237,8 +234,8 @@ class UserHandler
         // join group
         $groupIds = array_get($data, 'groupId', []);
         if (count($groupIds) > 0) {
-            $groups = $this->groups->whereIn('id', $groupIds)->get();
-            $user->joinGroups($groups);
+            $groups = $this->groups()->whereIn('id', $groupIds)->get();
+            $user->joinGroups($groupIds);
         }
 
         // insert accounts
@@ -261,6 +258,55 @@ class UserHandler
     }
 
     /**
+     * 회원정보를 업데이트 한다.
+     * 필드: email, displayName, password, status, introduction, profileImgFile, groupId
+     *
+     * @param UserInterface $user
+     * @param null          $data
+     *
+     * @return UserInterface|static
+     */
+    public function update(UserInterface $user, $userData)
+    {
+
+        $this->validateForUpdate($user, $userData);
+
+        // encrypt password
+        if (!empty($userData['password'])) {
+            $userData['password'] = $this->hasher->make($userData['password']);
+        } else {
+            unset($userData['password']);
+        }
+
+        // resolve profileImage
+        // todo: this!!
+        //if ($profileFile = $userData['profileImgFile'])) {
+        //    /** @var MemberImageHandler $imageHandler */
+        //    $imageHandler = app('xe.member.image');
+        //    $userData['profileImageId'] = $imageHandler->updateMemberProfileImage($user, $profileFile);
+        //}
+
+        // resolve group
+        $groups = array_get($userData, 'groupId', []);
+
+        // email, displayName, introduction, password, status, rating
+        $userData = array_except($userData, ['groupId', 'profileImgFile']);
+
+        foreach ($userData as $key => $value) {
+            $user->{$key} = $value;
+        }
+
+        $user->save();
+
+        // join new group
+        if (count($groups) > 0) {
+            $user->groups()->sync($groups);
+        }
+
+        return $user;
+    }
+
+    /**
      * 회원탈퇴 처리를 한다. 회원관련 정보(그룹, 이메일, 등록대기 이메일, 계정)도 동시에 삭제한다.
      *
      * @param string|string[] $userIds 탈퇴할 회원의 회원아이디 목록
@@ -271,7 +317,7 @@ class UserHandler
     {
 
         /** @var User[] $users */
-        $users = $this->users->whereIn('id', $userIds)->with(['groups', 'emails'])->get();
+        $users = $this->users()->whereIn('id', $userIds)->with(['groups', 'emails'])->get();
 
         $ratings = array_pluck($users, 'rating');
         if (in_array(Rating::SUPER, $ratings)) {
@@ -285,11 +331,11 @@ class UserHandler
         }
 
         // delete user's mails
-        $this->emails->deleteByMemberIds($userIds);
-        $this->pendingEmails->deleteByMemberIds($userIds);
+        $this->emails()->deleteByMemberIds($userIds);
+        $this->pendingEmails()->deleteByMemberIds($userIds);
 
         // delete user's accounts
-        $this->accounts->deleteByMemberIds($userIds);
+        $this->accounts()->deleteByMemberIds($userIds);
     }
 
 
@@ -316,7 +362,7 @@ class UserHandler
 
         // email, displayName 중복검사
         if (isset($data['email'])) {
-            if ($this->emails->findByAddress($data['email']) !== null) {
+            if ($this->emails()->findByAddress($data['email']) !== null) {
                 throw new MailAlreadyExistsException();
             }
         }
@@ -333,7 +379,7 @@ class UserHandler
                 throw $e;
             }
 
-            if ($this->accounts->where(array_only($account, ['accountId', 'providor'])) !== null) {
+            if ($this->accounts()->where(array_only($account, ['accountId', 'providor'])) !== null) {
                 throw new AccountAlreadyExistsException();
             }
         }
@@ -367,7 +413,7 @@ class UserHandler
             throw $e;
         }
 
-        if ($this->users->where(['displayName' => $name]) !== null) {
+        if ($this->users()->where(['displayName' => $name])->first() !== null) {
             throw new DisplayNameAlreadyExistsException();
         }
 
@@ -402,59 +448,26 @@ class UserHandler
     }
 
     /**
-     * MemberHandler는 알지 못하는 메소드가 호출될 경우, 호출된 메소드를 파악하여 담당 Repository를 찾고,
-     * 담당 Repository의 해당 메소드를 호출하는 Proxy 역할을 한다.
-     * 이를 사용하면, 서드파티 개발자들은 특정 Repository를 직접 사용하지 않고 MemberHandler를 사용하여 원하는 기능을 실행할 수 있다.
+     * 회원의 정보를 업데이트할 때 필요한 유효성 검사를 한다.
      *
-     * @param string $method    호출된 method 명
-     * @param array  $arguments 파라메터 목록
+     * @param UserInterface $user
+     * @param array         $data
      *
-     * @return mixed
+     * @return bool 유효성검사 결과, 통과할 경우 true, 실패할 경우 false
      */
-    public function __call($method, $arguments)
+    public function validateForUpdate(UserInterface $user, array $data)
     {
-        $prefixes = get_class_methods(RepositoryInterface::class);
+        if (!empty($data['password'])) {
+            $this->validatePassword($data['password']);
+        }
 
-        $repositories = [
-            'Member',
-            'Group',
-            'Account',
-            'Mail',
-            'PendingMail',
-        ];
-
-        $prefix = null;
-        $postfix = null;
-        foreach ($prefixes as $needle) {
-            if ($needle != '' && strpos($method, $needle) === 0) {
-                if ($prefix === null || strlen($prefix) < strlen($needle)) {
-                    $prefix = $needle; // has
-                    $postfix = substr($method, strlen($prefix)); // Member
-                }
+        if (array_get($data, 'displayName') !== null) {
+            if ($user->displayName !== $data['displayName']) {
+                $this->validateDisplayName($data['displayName']);
             }
         }
 
-        if ($prefix === null) {
-            throw new BadMethodCallException("Call to undefined method {get_class($this)}::{$method}()");
-        }
-
-        $repoName = 'Member';
-        foreach ($repositories as $needle) {
-            if ($needle != '' && strpos($postfix, $needle) === 0) {
-                $repoName = $needle; // Member
-                $postfix = substr($postfix, strlen($repoName)) ?: '';
-                break;
-            }
-        }
-
-        $repository = $this->{'get'.$repoName.'Repository'}();
-        $methodName = $prefix.$postfix;
-
-        if (method_exists($repository, $methodName)) {
-            return call_user_func_array([$repository, $methodName], $arguments);
-        }
-
-        throw new BadMethodCallException("Call to undefined method {get_class($repository)}::{$method}()");
+        return true;
     }
 
     /**
@@ -479,5 +492,17 @@ class UserHandler
     {
         $menus = $this->container->get('user/settings/section');
         return array_merge($this->settingsSections, $menus ?: []);
+    }
+
+    /**
+     * Create a new instance of the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function createModel($model)
+    {
+        $class = '\\'.ltrim($model, '\\');
+
+        return new $class;
     }
 }

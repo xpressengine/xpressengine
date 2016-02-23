@@ -1,7 +1,7 @@
 {{ Frontend::js('assets/vendor/react/JSXTransformer.js')->before('assets/vendor/react/react.js')->appendTo('head')->load() }}
 
 @section('page_title')
-    <h2>회원 수정 - {{ $member->getDisplayName()  }}</h2>
+    <h2>회원 수정 - {{ $user->getDisplayName()  }}</h2>
 @endsection
 
 @section('page_description')
@@ -10,7 +10,7 @@
 
 <div class="panel">
     <div class="panel-body">
-        <form class="form" name="fMemberEdit" method="post" action="{{ route('settings.member.edit', [$member->id]) }}" enctype="multipart/form-data">
+        <form class="form" name="fMemberEdit" method="post" action="{{ route('settings.member.edit', [$user->id]) }}" enctype="multipart/form-data">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
             <div class="row">
@@ -30,11 +30,11 @@
                                 </div>
                                 <div class="col-md-12">
                                     {{-- displayName --}}
-                                    {!! uio('formText', ['id'=>'__xe_displayName', 'label'=>'표시이름', 'placeholder'=>'표시이름을 입력하세요', 'value'=> $member->displayName, 'name'=>'displayName']) !!}
+                                    {!! uio('formText', ['id'=>'__xe_displayName', 'label'=>'표시이름', 'placeholder'=>'표시이름을 입력하세요', 'value'=> $user->displayName, 'name'=>'displayName']) !!}
                                 </div>
                                 <div class="col-md-12">
                                     {{-- introduction --}}
-                                    {!! uio('formTextarea', ['id'=>'__xe_introduction', 'label'=>'소개글', 'placeholder'=>'소개글을 입력하세요', 'value'=> $member->introduction, 'name'=>'introduction']) !!}
+                                    {!! uio('formTextarea', ['id'=>'__xe_introduction', 'label'=>'소개글', 'placeholder'=>'소개글을 입력하세요', 'value'=> $user->introduction, 'name'=>'introduction']) !!}
                                 </div>
                             </div>
                         </div>
@@ -43,7 +43,7 @@
                             [
                             'name' => 'profileImgFile',
                             'label' => "프로필사진 (".$profileImgSize['width']."x".$profileImgSize['height'].")",
-                            'image' => $member->getProfileImage(),
+                            'image' => $user->getProfileImage(),
                             'width' => $profileImgSize['width'],
                             'height' => $profileImgSize['height']
                             ]
@@ -72,7 +72,7 @@
 
             @foreach($fieldTypes as $fieldType)
                 <div class="form-group has-feedback">
-                    {!! $fieldType->getSkin()->edit($member->toArray()) !!}
+                    {!! $fieldType->getSkin()->edit($user->toArray()) !!}
                 </div>
             @endforeach
 
@@ -117,7 +117,7 @@
                     url: this.props.url.mail.list,
                     type: 'get',
                     dataType: 'json',
-                    data: {memberId: this.props.memberId},
+                    data: {userId: this.props.userId},
                     context: this,
                     success: function (result) {
                         this.setState({mails: result.mails});
@@ -135,7 +135,7 @@
                     url: this.props.url.mail.add,
                     type: 'post',
                     dataType: 'json',
-                    data: {memberId: this.props.memberId, address: email.address},
+                    data: {userId: this.props.userId, address: email.address},
                     context: this,
                     success: function (result) {
                         var mails = this.state.mails;
@@ -154,7 +154,7 @@
                     url: this.props.url.mail.delete,
                     type: 'post',
                     dataType: 'json',
-                    data: {memberId: this.props.memberId, address: email.address},
+                    data: {userId: this.props.userId, address: email.address},
                     context: this,
                     success: function (result) {
                         var i = this.state.mails.indexOf(email);
@@ -285,7 +285,7 @@
         });
 
         React.render(
-            <EmailBox url={url} memberId="{{ $member->id }}" email="{{ $member->email }}"/>,
+            <EmailBox url={url} userId="{{ $user->id }}" email="{{ $user->email }}"/>,
             document.getElementById('__xe_emailSetting')
         );
 

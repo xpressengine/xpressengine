@@ -51,7 +51,7 @@ class SettingsServiceProvider extends ServiceProvider
         $this->registerSettingsMenus();
 
         // register settings permission type
-        $this->registerSettingsPermissionType();
+//        $this->registerSettingsPermissionType();
         $this->registerPermissionUIObject();
     }
 
@@ -65,17 +65,17 @@ class SettingsServiceProvider extends ServiceProvider
         return ['xe.settings'];
     }
 
-    private function registerSettingsPermissionType()
-    {
-        /** @var PermissionFactory $permissionFactory */
-        $permissionFactory = $this->app['xe.permission'];
-        $permissionFactory->extend(
-            'settings',
-            function ($target, $user, $registered) {
-                return new SettingsMenuPermission($user, $registered);
-            }
-        );
-    }
+//    private function registerSettingsPermissionType()
+//    {
+//        /** @var PermissionFactory $permissionFactory */
+//        $permissionFactory = $this->app['xe.permission'];
+//        $permissionFactory->extend(
+//            'settings',
+//            function ($target, $user, $registered) {
+//                return new SettingsMenuPermission($user, $registered);
+//            }
+//        );
+//    }
 
     private function registerPermissionUIObject()
     {

@@ -28,6 +28,13 @@ class UserAccount extends DynamicModel
 
     protected $table = 'user_account';
 
+    public $incrementing = false;
+
+    protected $fillable = [
+        'userId',
+        'address'
+    ];
+
     /**
      * @var bool use dynamic query
      */

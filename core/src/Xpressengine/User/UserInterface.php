@@ -27,7 +27,7 @@ use Xpressengine\User\Models\PendingEmail;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-interface UserInterface extends Authenticatable, CanResetPassword
+interface UserInterface extends Authenticatable, CanResetPassword, \Xpressengine\Member\Entities\MemberEntityInterface
 {
     /**
      * Get the unique identifier
@@ -100,4 +100,22 @@ interface UserInterface extends Authenticatable, CanResetPassword
      * @return UserAccount
      */
     public function getAccountByProvider($provider);
+
+    /**
+     * add this user to groups
+     *
+     * @param array $groups
+     *
+     * @return static
+     */
+    public function joinGroups(array $groups);
+
+    /**
+     * leave groups
+     *
+     * @param array $groups
+     *
+     * @return static
+     */
+    public function leaveGroups(array $groups);
 }

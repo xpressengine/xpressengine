@@ -16,7 +16,7 @@ namespace Xpressengine\Settings;
 use Closure;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\Request;
-use Xpressengine\Member\Entities\Guest;
+use Xpressengine\User\Models\Guest;
 use Xpressengine\Member\Rating;
 use Xpressengine\Permission\Action;
 use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
@@ -95,10 +95,11 @@ class SettingsMiddleware
             throw new AccessDeniedHttpException();
         }
 
-        $registered = \Permission::make('settings', $permissionId);
+        // todo: resolve Permission
+        /*$registered = \Permission::make('settings', $permissionId);
         if ($registered->ables(Action::ACCESS) === false) {
             throw new AccessDeniedHttpException();
-        }
+        }*/
     }
 
     /**

@@ -13,10 +13,11 @@
  */
 namespace Xpressengine\User;
 
+use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Contracts\Auth\Authenticatable as BaseAuthenticatable;
 use Illuminate\Contracts\Auth\UserProvider as BaseProvider;
 use Illuminate\Contracts\Hashing\Hasher;
-use Xpressengine\Member\Repositories\MemberRepositoryInterface;
+use Xpressengine\User\Models\User;
 
 /**
  * 이 클래스는 Auth(Guard)에 회원정보를 제공하는 역할을 한다.
@@ -28,68 +29,8 @@ use Xpressengine\Member\Repositories\MemberRepositoryInterface;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class UserProvider implements BaseProvider
+class UserProvider extends EloquentUserProvider
 {
-
-    /**
-     * @var Hasher 비밀번호의 유효성검사를 위해 사용한다.
-     */
-    private $hasher;
-
-    /**
-     * 생성자
-     *
-     * @param MemberRepositoryInterface $memberRepo 회원정보 저장소
-     * @param Hasher                    $hasher     해시코드 생성기, 비밀번호 유효성 검사를 위해 사용됨
-     */
-    public function __construct(Hasher $hasher)
-    {
-        $this->hasher = $hasher;
-    }
-
-    /**
-     * Retrieve a user by their unique identifier.
-     *
-     * @param  mixed $identifier member's id
-     *
-     * @return Authenticatable|null member entity
-     */
-    public function retrieveById($identifier)
-    {
-        return $this->repo->find($identifier, ['groups', 'mails', 'pending_mails', 'accounts']);
-    }
-
-    /**
-     * Retrieve a user by by their unique identifier and "remember me" token.
-     *
-     * @param  mixed  $identifier member's id
-     * @param  string $token      remember token
-     *
-     * @return Authenticatable|null member entity
-     */
-    public function retrieveByToken($identifier, $token)
-    {
-        return $this->repo->fetchOne(
-            ['id' => $identifier, 'rememberToken' => $token],
-            ['groups', 'mails', 'pending_mails', 'accounts']
-        );
-    }
-
-    /**
-     * Update the "remember me" token for the given user in storage.
-     *
-     * @param  BaseAuthenticatable $member member entity
-     * @param  string              $token  token for update
-     *
-     * @return void
-     */
-    public function updateRememberToken(BaseAuthenticatable $member, $token)
-    {
-        $member->setRememberToken($token);
-
-        $this->repo->update($member);
-    }
-
     /**
      * Retrieve a user by the given credentials.
      *
@@ -99,6 +40,9 @@ class UserProvider implements BaseProvider
      */
     public function retrieveByCredentials(array $credentials)
     {
+
+        $query = $this->createModel()->newQuery();
+
         $where = [];
         foreach ($credentials as $key => $value) {
             if (!str_contains($key, 'password')) {
@@ -106,63 +50,66 @@ class UserProvider implements BaseProvider
             }
         }
 
-        $member = null;
+        $user = null;
         $emailPrefix = null;
 
         // retrieve by email
         if (isset($where['email'])) {
+
+            $email = $where['email'];
+
             // only prefix given
-            if (!str_contains($where['email'], '@')) {
-                $emailPrefix = $where['email'];
-                $members = $this->repo->searchByEmailPrefix(
-                    $emailPrefix,
-                    ['groups', 'mails', 'pending_mails', 'accounts']
-                );
-                if (count($members) === 1) {
-                    $member = $members[0];
+            if (!str_contains($email, '@')) {
+                $emailPrefix = $email;
+
+                $query = $query->whereHas('emails', function($q) use($emailPrefix) {
+                    $q->where('address', 'like', $emailPrefix.'@%');
+                })->get();
+
+                if (count($query) === 1) {
+                    $user = $query->first();
                 } else {
                     return null;
                 }
             } else {
-                $member = $this->repo->findByEmail($where['email'], ['groups', 'mails', 'pending_mails', 'accounts']);
+                $user = $query->whereHas('emails', function($q) use($email) {
+                    $q->where('address', $email);
+                })->first();
             }
 
             unset($where['email']);
 
-            if ($member === null) {
+            // when no user having email
+            if ($user === null) {
                 return null;
             }
+
+            // check other fields
             foreach ($where as $key => $value) {
-                if ($member->$key !== $value) {
+                if ($user->$key !== $value) {
                     return null;
+                }
+            }
+
+            // password reset을 위한 요청일 때를 위하여 필요한 email 필드를 지정해 줌
+            if ($user instanceof \Xpressengine\Member\Authenticatable) {
+                if ($emailPrefix === null) {
+                    $user->setEmailForPasswordReset($credentials['email']);
                 }
             }
         }
 
-        if ($member === null) {
-            $member = $this->repo->fetchOne($where, ['groups', 'mails', 'pending_mails', 'accounts']);
-        }
-
-        if ($member instanceof \Xpressengine\Member\Authenticatable and isset($credentials['email'])) {
-            if ($emailPrefix === null) {
-                $member->setEmailForPasswordReset($credentials['email']);
+        if($user === null) {
+            // retrieve user without email
+            foreach ($where as $key => $value) {
+                if (strpos($key, 'password') === false) {
+                    $query->where($key, $value);
+                }
             }
+            $user = $query->first();
         }
 
-        return $member;
+        return $user;
     }
 
-    /**
-     * Validate a user against the given credentials.
-     *
-     * @param  BaseAuthenticatable $member      member entity
-     * @param  array               $credentials credentials for validating
-     *
-     * @return bool result of validation
-     */
-    public function validateCredentials(BaseAuthenticatable $member, array $credentials)
-    {
-        $plain = $credentials['password'];
-        return $this->hasher->check($plain, $member->getAuthPassword());
-    }
 }

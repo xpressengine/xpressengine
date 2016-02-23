@@ -1,11 +1,11 @@
 <?php
 /**
- * This file is permission facade class.
+ * This file is accessor for use member by facade
  *
  * PHP version 5
  *
- * @category    Permission
- * @package     Xpressengine\Permission
+ * @category    Member
+ * @package     Xpressengine\Member
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
@@ -16,26 +16,34 @@ namespace App\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * facade 사용을 위한 연결 클래스.
+ * 그룹처리기능을 facade를 이용하여 할 수 있게 하기 위함.
  *
- * @category    Permission
- * @package     Xpressengine\Permission
+ * @category    User
+ * @package     Xpressengine\User
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
- *
- * @deprecated
  */
-class Permission extends Facade
+class XeUser extends Facade
 {
+    const PROVIDER_DEFAULT = 'default';
+
+    const STATUS_DENIED = 'denied';
+    const STATUS_ACTIVATED = 'activated';
+
+    public static $status = [
+        self::STATUS_DENIED,
+        self::STATUS_ACTIVATED
+    ];
+
     /**
-     * Get the registered name of the component.
+     * facade access keyword
      *
      * @return string
      */
     protected static function getFacadeAccessor()
     {
-        return 'xe.permission';
+        return 'xe.user';
     }
 }

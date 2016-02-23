@@ -49,10 +49,6 @@ class Grant extends Fluent
      */
     public function set($action, $type, $value = null)
     {
-        if (array_key_exists($action, Action::all()) === false) {
-            throw new InvalidArgumentException(['arg' => $action]);
-        }
-
         $this->attributes[$action] = $this->makeValue($type, $value);
 
         return $this;

@@ -62,7 +62,10 @@ class Image extends Media
      */
     public static function getThumbnail(Media $media, $type, $dimension, $defaultSelf = true)
     {
-        $image = static::derives($media)->where('type', $type)->where('code', $dimension)->first();
+        $image = static::derives($media) //->where('type', $type)->where('code', $dimension)->first();
+            ->whereHas('meta', function ($query) use ($type, $dimension) {
+                $query->where('type', $type)->where('code', $dimension);
+            })->with('meta')->get();
 
         return (!$image && $defaultSelf) ? $media : $image;
     }
