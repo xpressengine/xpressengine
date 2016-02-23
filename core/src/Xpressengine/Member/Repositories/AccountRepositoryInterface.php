@@ -23,24 +23,24 @@ namespace Xpressengine\Member\Repositories;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-interface AccountRepositoryInterface extends RepositoryInterface
+interface AccountRepositoryInterface
 {
 
     /**
      * 회원 아이디로 계정정보를 조회한다.
      *
-     * @param string $memberId member id
+     * @param string $userId member id
      *
      * @return array
      */
-    public function fetchAllByMember($memberId);
+    public function fetchAllByMember($userId);
 
     /**
      * 회원 아이디에 해당하는 계정정보를 모두 삭제한다.
      *
-     * @param array $memberIds 회원 아이디 목록
+     * @param array $userIds 회원 아이디 목록
      *
      * @return mixed
      */
-    public function deleteByMemberIds($memberIds);
+    public function deleteByUserIds($userIds);
 }

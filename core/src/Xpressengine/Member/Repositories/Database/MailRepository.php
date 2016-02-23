@@ -81,27 +81,41 @@ class MailRepository implements MailRepositoryInterface
     /**
      * 주어진 회원이 소유한 이메일 목록을 조회한다.
      *
-     * @param string        $memberId member id
-     * @param string[]|null $with     entity와 함께 반환할 relation 정보
+     * @param string        $userId member id
+     * @param string[]|null $with   entity와 함께 반환할 relation 정보
      *
      * @return MailEntityInterface[]
      */
-    public function fetchAllByMember($memberId, $with = null)
+    public function fetchAllByUser($userId)
     {
-        $query = $this->table()->whereIn('memberId', (array) $memberId);
-        $entities = $this->getEntities($query, $with);
+        $query = $this->table()->whereIn('memberId', (array) $userId);
+        $entities = $this->getEntities($query);
         return $entities;
     }
 
     /**
      * 주어진 회원이 소유한 이메일을 삭제한다.
      *
-     * @param string $memberIds 삭제할 이메일을 소유한 회원의 id
+     * @param string $userIds 삭제할 이메일을 소유한 회원의 id
      *
      * @return integer
      */
-    public function deleteByMemberIds($memberIds)
+    public function deleteByUserIds($userIds)
     {
-        return $this->table()->whereIn('memberId', (array) $memberIds)->delete();
+        return $this->table()->whereIn('memberId', (array) $userIds)->delete();
+    }
+
+    /**
+     * 회원 아이디로 이메일을 조회하여 반환한다.
+     *
+     * @param $userId
+     *
+     * @return mixed
+     */
+    public function findByUserId($userId)
+    {
+        $query = $this->table()->whereIn('memberId', (array) $userId);
+        $entities = $this->getEntity($query);
+        return $entities;
     }
 }

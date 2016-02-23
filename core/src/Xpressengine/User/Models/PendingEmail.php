@@ -25,7 +25,7 @@ use Xpressengine\User\EmailProviderInterface;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class PendingEmail extends DynamicModel implements EmailInterface, EmailProviderInterface
+class PendingEmail extends DynamicModel implements EmailInterface
 {
 
     protected $table = 'user_pending_email';
@@ -62,7 +62,7 @@ class PendingEmail extends DynamicModel implements EmailInterface, EmailProvider
      *
      * @return string
      */
-    public function getMemberId()
+    public function getUserId()
     {
         $user = $this->getAttribute('user');
         return $user->getId();
@@ -78,56 +78,14 @@ class PendingEmail extends DynamicModel implements EmailInterface, EmailProvider
         return $this->getAttribute('confirmationCode');
     }
 
-    /**
-     * 이메일 주소로 등록대기 이메일 정보를 조회한다.
-     *
-     * @param string        $address 조회할 이메일 주소
-     * @param string[]|null $with    entity와 함께 반환할 relation 정보
-     *
-     * @return PendingEmail
-     */
-    public function findByAddress($address, $with = null)
-    {
-        return static::where('address', $address)->with($with)->get();
-    }
 
     /**
-     * 주어진 회원이 소유한 이메일 목록을 조회한다.
+     * 인증된 메일인지 확인한다
      *
-     * @param string        $userId user id
-     * @param string[]|null $with     entity와 함께 반환할 relation 정보
-     *
-     * @return PendingEmail[]
+     * @return bool
      */
-    public function findByMember($userId, $with = null)
+    public function isConfirmed()
     {
-        return static::where('userId', $userId)->with($with)->get();
+        return false;
     }
-
-    /**
-     * 주어진 회원이 소유한 등록대기 이메일의 인증 코드를 반환한다.
-     *
-     * @param string        $userId user id
-     * @param string        $code     mail confirmation code
-     * @param string[]|null $with     entity와 함께 반환할 relation 정보
-     *
-     * @return PendingEmail
-     */
-    public function findByConfirmationCode($userId, $code, $with = null)
-    {
-        return static::where('userId', $userId)->where('confirmationCode', $code)->with($with)->get();
-    }
-
-    /**
-     * 주어진 회원이 소유한 등록대기 이메일을 삭제한다.
-     *
-     * @param string $userIds 삭제할 이메일을 소유한 회원의 id
-     *
-     * @return integer
-     */
-    public function deleteByMemberIds($userIds)
-    {
-        return static::whereIn('userId', $userIds)->delete();
-    }
-
 }

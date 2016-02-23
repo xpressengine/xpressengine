@@ -13,6 +13,8 @@
  */
 namespace Xpressengine\User;
 
+use Xpressengine\Member\Entities\MailEntityInterface;
+
 /**
  * 회원의 메일 정보를 저장하는 클래스가 구현해야 하는 인터페이스
  *
@@ -23,7 +25,7 @@ namespace Xpressengine\User;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-interface EmailInterface
+interface EmailInterface extends MailEntityInterface
 {
     /**
      * 이메일 주소를 반환한다.
@@ -39,7 +41,7 @@ interface EmailInterface
      *
      * @return string
      */
-    public function getMemberId();
+    public function getUserId();
 
     /**
      * 메일의 인증코드를 반환한다.
@@ -47,5 +49,12 @@ interface EmailInterface
      * @return bool
      */
     public function getConfirmationCode();
+
+    /**
+     * 인증된 메일인지 확인한다
+     *
+     * @return bool
+     */
+    public function isConfirmed();
 
 }

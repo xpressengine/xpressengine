@@ -23,21 +23,6 @@ namespace Xpressengine\Member\Entities;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-interface MailEntityInterface
+interface GroupEntityInterface
 {
-    /**
-     * 이메일 주소를 반환한다.
-     *
-     * @param bool $onlyEmailId true일 경우, 이메일의 `@`와 도메인을 제외한 앞부분만 반환한다.
-     *
-     * @return mixed
-     */
-    public function getAddress($onlyEmailId = false);
-
-    /**
-     * 이메일을 소유한 회원의 아이디를 반환한다.
-     *
-     * @return string
-     */
-    public function getUserId();
 }

@@ -103,7 +103,7 @@ class PendingMailRepository implements PendingMailRepositoryInterface
      *
      * @return PendingMailEntityInterface[]
      */
-    public function findByMember($memberId, $with = null)
+    public function findByUserId($memberId, $with = null)
     {
         $query = $this->table()->whereIn('memberId', (array) $memberId);
         $entities = $this->getEntities($query, $with);
@@ -117,7 +117,7 @@ class PendingMailRepository implements PendingMailRepositoryInterface
      *
      * @return integer
      */
-    public function deleteByMemberIds($memberIds)
+    public function deleteByUserIds($memberIds)
     {
         return $this->table()->whereIn('memberId', (array) $memberIds)->delete();
     }
