@@ -1,6 +1,6 @@
 <?php
 /**
- * InvokedException
+ * InvalidOptionException
  *
  * PHP version 5
  *
@@ -16,7 +16,7 @@ namespace Xpressengine\Counter\Exceptions;
 use Xpressengine\Counter\CounterException;
 
 /**
- * InvokedException
+ * InvalidOptionException
  *
  * @category    Counter
  * @package     Xpressengine\Counter
@@ -25,6 +25,6 @@ use Xpressengine\Counter\CounterException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class InvokedException extends CounterException
+class InvalidOptionException extends CounterException
 {
 }
