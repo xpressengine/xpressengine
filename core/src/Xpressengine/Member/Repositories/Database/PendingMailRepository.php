@@ -42,7 +42,7 @@ class PendingMailRepository implements PendingMailRepositoryInterface
     {
         $this->connection = $connection;
         $this->isDynamic = false;
-        $this->mainTable = $mainTable = 'member_pending_mails';
+        $this->mainTable = $mainTable = 'user_pending_email';
         $this->entityClass = PendingMailEntity::class;
     }
 
@@ -90,7 +90,7 @@ class PendingMailRepository implements PendingMailRepositoryInterface
      */
     public function findByConfirmationCode($memberId, $code, $with = null)
     {
-        $query = $this->table()->where('memberId', $memberId)->where('confirmationCode', $code);
+        $query = $this->table()->where('userId', $memberId)->where('confirmationCode', $code);
         $entities = $this->getEntities($query, $with);
         return current($entities);
     }
@@ -103,9 +103,9 @@ class PendingMailRepository implements PendingMailRepositoryInterface
      *
      * @return PendingMailEntityInterface[]
      */
-    public function findByMember($memberId, $with = null)
+    public function findByUserId($memberId, $with = null)
     {
-        $query = $this->table()->whereIn('memberId', (array) $memberId);
+        $query = $this->table()->whereIn('userId', (array) $memberId);
         $entities = $this->getEntities($query, $with);
         return $entities;
     }
@@ -117,8 +117,8 @@ class PendingMailRepository implements PendingMailRepositoryInterface
      *
      * @return integer
      */
-    public function deleteByMemberIds($memberIds)
+    public function deleteByUserIds($memberIds)
     {
-        return $this->table()->whereIn('memberId', (array) $memberIds)->delete();
+        return $this->table()->whereIn('userId', (array) $memberIds)->delete();
     }
 }

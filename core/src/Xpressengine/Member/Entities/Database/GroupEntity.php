@@ -14,6 +14,7 @@
 namespace Xpressengine\Member\Entities\Database;
 
 use Xpressengine\Member\Entities\Entity;
+use Xpressengine\Member\Entities\GroupEntityInterface;
 
 /**
  * 회원 그룹 정보를 가지는 클래스
@@ -25,6 +26,6 @@ use Xpressengine\Member\Entities\Entity;
  * @link        http://www.xpressengine.com
  * @codeCoverageIgnore
  */
-class GroupEntity extends Entity
+class GroupEntity extends Entity implements GroupEntityInterface
 {
 }

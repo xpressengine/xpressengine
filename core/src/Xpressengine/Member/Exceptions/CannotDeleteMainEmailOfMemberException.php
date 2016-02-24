@@ -11,33 +11,20 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Member\Entities;
+namespace Xpressengine\Member\Exceptions;
+
+use Xpressengine\Member\MemberException;
 
 /**
- * 회원의 메일 정보를 저장하는 클래스가 구현해야 하는 인터페이스
+ * 최고관리자를 삭제하려고 할 때 발생하는 Exception
  *
  * @category    Member
  * @package     Xpressengine\Member
  * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-interface MailEntityInterface
+class CannotDeleteMainEmailOfMemberException extends MemberException
 {
-    /**
-     * 이메일 주소를 반환한다.
-     *
-     * @param bool $onlyEmailId true일 경우, 이메일의 `@`와 도메인을 제외한 앞부분만 반환한다.
-     *
-     * @return mixed
-     */
-    public function getAddress($onlyEmailId = false);
-
-    /**
-     * 이메일을 소유한 회원의 아이디를 반환한다.
-     *
-     * @return string
-     */
-    public function getUserId();
+    protected $message = '대표이메일은 삭제할 수 없습니다.';
 }

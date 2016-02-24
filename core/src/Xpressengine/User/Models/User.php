@@ -42,6 +42,14 @@ class User extends DynamicModel implements UserInterface
         'passwordUpdatedAt'
     ];
 
+    protected $fillable = [
+        'email',
+        'displayName',
+        'password',
+        'rating',
+        'status',
+    ];
+
     protected $hidden = ['password'];
 
     /**
@@ -103,11 +111,11 @@ class User extends DynamicModel implements UserInterface
     }
 
     /**
-     * set relationship with pendingEmails
+     * set relationship with pendingEmail
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function pendingEmails()
+    public function pendingEmail()
     {
         return $this->hasOne(PendingEmail::class, 'userId');
     }
@@ -312,6 +320,7 @@ class User extends DynamicModel implements UserInterface
      */
     public function joinGroups(array $groups)
     {
+        // todo: increment group's count!!
         $this->groups()->attach($groups);
         return $this;
     }
@@ -325,6 +334,7 @@ class User extends DynamicModel implements UserInterface
      */
     public function leaveGroups(array $groups)
     {
+        // todo: decrement group's count!!
         $this->groups()->detach($groups);
         return $this;
     }

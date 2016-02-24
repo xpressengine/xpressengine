@@ -555,7 +555,7 @@ class MemberHandler
         if (count($groupIds) > 0) {
             $groups = $this->groups->findAll($groupIds);
             foreach ($groups as $group) {
-                $this->groups->addMember($group, $member);
+                $this->groups->addUser($group, $member);
             }
             $member->groups = $groups;
         }
@@ -600,7 +600,7 @@ class MemberHandler
             // except from member's groups
             if (isset($member->groups)) {
                 foreach ($member->groups as $group) {
-                    $this->groups->exceptMember($group, $member);
+                    $this->groups->exceptUser($group, $member);
                 }
             }
             // delete member
@@ -608,11 +608,11 @@ class MemberHandler
         }
 
         // delete member's mails
-        $this->mails->deleteByMemberIds($memberIds);
+        $this->mails->deleteByUserIds($memberIds);
         $this->pendingMails->deleteByMemberIds($memberIds);
 
         // delete member's accounts
-        $this->accounts->deleteByMemberIds($memberIds);
+        $this->accounts->deleteByUserIds($memberIds);
     }
 
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * UserAccount
+ * This file is account interface
  *
  * PHP version 5
  *
@@ -11,12 +11,11 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\User\Models;
-
-use Xpressengine\Database\Eloquent\DynamicModel;
-use Xpressengine\User\AccountInterface;
+namespace Xpressengine\User;
 
 /**
+ * 회원 계정 정보를 저장하는 클래스가 구현해야 하는 인터페이스
+ *
  * @category    User
  * @package     Xpressengine\User
  * @author      XE Team (developers) <developers@xpressengine.com>
@@ -24,60 +23,27 @@ use Xpressengine\User\AccountInterface;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class UserAccount extends DynamicModel implements AccountInterface
+interface AccountInterface
 {
-
-    protected $table = 'user_account';
-
-    public $incrementing = false;
-
-    protected $fillable = [
-        'userId',
-        'address'
-    ];
-
-    /**
-     * @var bool use dynamic query
-     */
-    protected $dynamic = false;
-
-    /**
-     * set relationship with user
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'userId');
-    }
-
     /**
      * 계정을 소유한 회원의 아이디를 반환한다.
      *
      * @return string
      */
-    public function getUserId()
-    {
-        return $this->getAttribute('userId');
-    }
+    public function getUserId();
 
     /**
      * 계정의 밴더를 반환한다.
      *
      * @return string
      */
-    public function getProvider()
-    {
-        return $this->getAttribute('provider');
-    }
+    public function getProvider();
 
     /**
      * 계정에 할당된 이메일 주소를 반환한다.
      *
      * @return string|null
      */
-    public function getEmailAddress()
-    {
-        return $this->getAttribute('email');
-    }
+    public function getEmailAddress();
+
 }

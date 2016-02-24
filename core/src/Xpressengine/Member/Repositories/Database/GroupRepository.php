@@ -16,6 +16,7 @@ namespace Xpressengine\Member\Repositories\Database;
 use Xpressengine\Database\VirtualConnectionInterface;
 use Xpressengine\Keygen\Keygen;
 use Xpressengine\Member\Entities\Database\GroupEntity;
+use Xpressengine\Member\Entities\GroupEntityInterface;
 use Xpressengine\Member\Entities\MemberEntityInterface;
 use Xpressengine\Member\Repositories\DatabaseRepositoryTrait;
 use Xpressengine\Member\Repositories\GroupRepositoryInterface;
@@ -46,27 +47,27 @@ class GroupRepository implements GroupRepositoryInterface
         $this->connection = $connection;
         $this->generator = $generator;
         $this->isDynamic = false;
-        $this->mainTable = 'member_group';
+        $this->mainTable = 'user_group';
         $this->entityClass = GroupEntity::class;
     }
 
     /**
      * 주어진 회원이 소속된 그룹 목록을 반환한다.
      *
-     * @param MemberEntityInterface $member 조회할 회원
-     * @param string[]|null         $with   함께 반환할 relation 정보
+     * @param MemberEntityInterface $user 조회할 회원
+     * @param string[]|null         $with 함께 반환할 relation 정보
      *
      * @return mixed
      */
-    public function fetchAllByMember(MemberEntityInterface $member, $with = null)
+    public function fetchAllByUser(MemberEntityInterface $user, $with = null)
     {
-        $id = $member->id;
-        $query = $this->table('member_group')->leftJoin(
-            'member_group_member as map',
-            'member_group.id',
+        $id = $user->id;
+        $query = $this->table('user_group')->leftJoin(
+            'user_group_user as map',
+            'user_group.id',
             '=',
             'map.groupId'
-        )->whereIn('map.memberId', (array) $id);
+        )->whereIn('map.userId', (array) $id);
         $groups = $this->getEntities($query, $with);
         return $groups;
     }
@@ -80,24 +81,24 @@ class GroupRepository implements GroupRepositoryInterface
      */
     public function delete($entity)
     {
-        $this->table('member_group_member')->where('groupId', $entity->id)->delete();
+        $this->table('user_group_user')->where('groupId', $entity->id)->delete();
         $this->traitDelete($entity);
     }
 
     /**
      * 주어진 그룹에 주어진 회원을 추가한다.
      *
-     * @param GroupEntity           $group  대상 그룹
-     * @param MemberEntityInterface $member 추가할 회원
+     * @param GroupEntityInterface           $group 대상 그룹
+     * @param MemberEntityInterface $user  추가할 회원
      *
      * @return mixed
      */
-    public function addMember(GroupEntity $group, MemberEntityInterface $member)
+    public function addUser(GroupEntityInterface $group, MemberEntityInterface $user)
     {
-        $this->table('member_group_member')->insert(
+        $this->table('user_group_user')->insert(
             [
                 'groupId' => $group->id,
-                'memberId' => $member->id,
+                'userId' => $user->id,
                 'createdAt' => $this->getCurrentTime()
             ]
         );
@@ -109,14 +110,14 @@ class GroupRepository implements GroupRepositoryInterface
     /**
      * 주어진 회원을 그룹에서 제외시킨다.
      *
-     * @param GroupEntity           $group  대상 그룹
-     * @param MemberEntityInterface $member 제외시킬 회원
+     * @param GroupEntityInterface           $group 대상 그룹
+     * @param MemberEntityInterface $user  제외시킬 회원
      *
      * @return void
      */
-    public function exceptMember(GroupEntity $group, MemberEntityInterface $member)
+    public function exceptUser(GroupEntityInterface $group, MemberEntityInterface $user)
     {
-        $this->table('member_group_member')->where('groupId', $group->id)->where('memberId', $member->id)->delete();
+        $this->table('user_group_user')->where('groupId', $group->id)->where('userId', $user->id)->delete();
         $this->table()->where('id', $group->id)->decrement('count');
     }
 }

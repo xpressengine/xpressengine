@@ -15,17 +15,26 @@ namespace Xpressengine\User;
 
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Validation\Factory as Validator;
+use Xpressengine\Database\Eloquent\DynamicModel;
 use Xpressengine\Member\Exceptions\AccountAlreadyExistsException;
+use Xpressengine\Member\Exceptions\CannotDeleteMainEmailOfMemberException;
 use Xpressengine\Member\Exceptions\CannotDeleteMemberHavingSuperRatingException;
 use Xpressengine\Member\Exceptions\DisplayNameAlreadyExistsException;
 use Xpressengine\Member\Exceptions\MailAlreadyExistsException;
+use Xpressengine\Member\Repositories\AccountRepositoryInterface;
+use Xpressengine\Member\Repositories\GroupRepositoryInterface;
+use Xpressengine\Member\Repositories\MailRepositoryInterface;
+use Xpressengine\Member\Repositories\MemberRepositoryInterface;
+use Xpressengine\Member\Repositories\PendingMailRepositoryInterface;
 use Xpressengine\Register\Container;
 use Xpressengine\Support\Exceptions\InvalidArgumentException;
-use Xpressengine\User\Models\PendingEmail;
 use Xpressengine\User\Models\User;
-use Xpressengine\User\Models\UserAccount;
-use Xpressengine\User\Models\UserEmail;
 use Xpressengine\User\Models\UserGroup;
+use Xpressengine\User\Repositories\PendingEmailRepository;
+use Xpressengine\User\Repositories\UserAccountRepository;
+use Xpressengine\User\Repositories\UserEmailRepository;
+use Xpressengine\User\Repositories\UserGroupRepository;
+use Xpressengine\User\Repositories\UserRepository;
 
 /**
  * 회원 및 회원과 관련된 데이터(그룹정보, 계정정보, 이메일 정보 등)를 조회하거나 처리할 때에 UserHandler를 사용할 수 있습니다.
@@ -58,27 +67,27 @@ class UserHandler
     ];
 
     /**
-     * @var string User model
+     * @var MemberRepositoryInterface User Repository
      */
     protected $users;
 
     /**
-     * @var string UserAccount model
+     * @var AccountRepositoryInterface UserAccount Repository
      */
     protected $accounts;
 
     /**
-     * @var string UserGroup model
+     * @var GroupRepositoryInterface UserGroup Repository
      */
     protected $groups;
 
     /**
-     * @var string UserEmail model
+     * @var MailRepositoryInterface UserEmail Repository
      */
     protected $emails;
 
     /**
-     * @var string PendingEmail model
+     * @var PendingMailRepositoryInterface PendingEmail Repository
      */
     private $pendingEmails;
 
@@ -110,22 +119,22 @@ class UserHandler
     /**
      * constructor.
      *
-     * @param string    $users           User 회원 저장소
-     * @param string    $accounts        UserAccount 회원계정 저장소
-     * @param string    $groups          UserGroup 그룹 저장소
-     * @param string    $mails           회원 이메일 저장소
-     * @param string    $pendingEmails   회원 등록대기 이메일 저장소
+     * @param UserRepository    $users           User 회원 저장소
+     * @param UserAccountRepository    $accounts        UserAccount 회원계정 저장소
+     * @param UserGroupRepository    $groups          UserGroup 그룹 저장소
+     * @param UserEmailRepository    $mails           회원 이메일 저장소
+     * @param PendingEmailRepository    $pendingEmails   회원 등록대기 이메일 저장소
      * @param Hasher    $hasher          해시코드 생성기, 비밀번호 해싱을 위해 사용됨
      * @param Validator $validator       유효성 검사기. 비밀번호 및 표시이름(dispalyName)의 유효성 검사를 위해 사용됨
      * @param Container $container       Xpressengine 레지스터
      * @param boolean   $useEmailConfirm 이메일 인증의 사용여부
      */
     public function __construct(
-        $users,
-        $accounts,
-        $groups,
-        $mails,
-        $pendingEmails,
+        UserRepository $users,
+        UserAccountRepository $accounts,
+        UserGroupRepository $groups,
+        UserEmailRepository $mails,
+        PendingEmailRepository $pendingEmails,
         Hasher $hasher,
         Validator $validator,
         Container $container,
@@ -145,51 +154,51 @@ class UserHandler
     /**
      * User 회원 저장소를 반환한다.
      *
-     * @return User
+     * @return UserRepository
      */
     public function users()
     {
-        return $this->createModel($this->users);
+        return $this->users;
     }
 
     /**
      * UserAccount 회원계정 저장소를 반환한다.
      *
-     * @return UserAccount
+     * @return UserAccountRepository
      */
     public function accounts()
     {
-        return $this->createModel($this->accounts);
+        return $this->accounts;
     }
 
     /**
      * UserGroup 그룹 저장소를 반환한다.
      *
-     * @return UserGroup
+     * @return UserGroupRepository
      */
     public function groups()
     {
-        return $this->createModel($this->groups);
+        return $this->groups;
     }
 
     /**
      * 회원 이메일 저장소를 반환한다.
      *
-     * @return UserEmail
+     * @return UserEmailRepository
      */
     public function emails()
     {
-        return $this->createModel($this->emails);
+        return $this->emails;
     }
 
     /**
      * 회원 등록대기 이메일 저장소를 반환한다.
      *
-     * @return PendingEmail
+     * @return PendingEmailRepository
      */
     public function pendingEmails()
     {
-        return $this->createModel($this->pendingEmails);
+        return $this->pendingEmails;
     }
 
     /**
@@ -223,10 +232,10 @@ class UserHandler
                 'address' => $user->email,
             ];
             if ($this->useEmailConfirm === false || array_get($data, 'emailConfirmed', false)) {
-                $mail = $this->emails()->create($mailData);
+                $mail = $this->emails()->create($user, $mailData);
                 $user->emails = [$mail];
             } else {
-                $mail = $this->pendingEmails()->create($mailData);
+                $mail = $this->pendingEmails()->create($user, $mailData);
                 $user->pending_emails = [$mail];
             }
         }
@@ -268,7 +277,6 @@ class UserHandler
      */
     public function update(UserInterface $user, $userData)
     {
-
         $this->validateForUpdate($user, $userData);
 
         // encrypt password
@@ -299,8 +307,15 @@ class UserHandler
         $user->save();
 
         // join new group
-        if (count($groups) > 0) {
-            $user->groups()->sync($groups);
+        $changes = $user->groups()->sync($groups);
+
+        $attachedList = $this->groups()->findMany($changes['attached']);
+        foreach ($attachedList as $attached) {
+            $attached->increment('count');
+        }
+        $detachedList = $this->groups()->findMany($changes['detached']);
+        foreach ($detachedList as $detached) {
+            $detached->decrement('count');
         }
 
         return $user;
@@ -331,13 +346,14 @@ class UserHandler
         }
 
         // delete user's mails
-        $this->emails()->deleteByMemberIds($userIds);
-        $this->pendingEmails()->deleteByMemberIds($userIds);
+        $this->emails()->deleteByUserIds($userIds);
+        $this->pendingEmails()->deleteByUserIds($userIds);
+
+        // todo: remove profile image
 
         // delete user's accounts
-        $this->accounts()->deleteByMemberIds($userIds);
+        $this->accounts()->whereIn('userId', $userIds)->delete();
     }
-
 
     /**
      * 신규회원의 정보를 유효성 검사한다.
@@ -471,6 +487,137 @@ class UserHandler
     }
 
     /**
+     * 새로운 그룹을 추가한다.
+     *
+     * @param array $data
+     *
+     * @return UserGroup
+     */
+    public function createGroup(array $data)
+    {
+        $group = $this->groups()->create($data);
+        return $group;
+    }
+
+    /**
+     * 그룹을 수정한다
+     *
+     * @param $group
+     * @param $data
+     *
+     * @return UserGroup
+     */
+    public function updateGroup(UserGroup $group, array $data = [])
+    {
+        $this->groups()->update($group, $data);
+        return $group;
+    }
+
+    /**
+     * 그룹을 삭제한다
+     *
+     * @param UserGroup $group
+     *
+     * @return bool
+     */
+    public function deleteGroup(UserGroup $group)
+    {
+        return $this->groups()->delete($group);
+    }
+
+    /**
+     * 새로운 이메일을 생성한다
+     *
+     * @param UserInterface  $user
+     * @param array $data
+     * @param bool  $confirmed
+     *
+     * @return EmailInterface
+     */
+    public function createEmail(UserInterface $user, array $data, $confirmed = true)
+    {
+        if ($confirmed === true) {
+            $email = $this->emails()->create($user, $data);
+        } else {
+            $email = $this->pendingEmails()->create($user, $data);
+        }
+        return $email;
+    }
+
+    /**
+     * 이메일을 수정한다
+     *
+     * @param EmailInterface $email
+     * @param array $data
+     *
+     * @return EmailInterface
+     */
+    public function updateEmail(EmailInterface $email, array $data = [])
+    {
+        if($email->isConfirmed()) {
+            $this->emails()->update($email, $data);
+        } else {
+            $this->pendingEmails()->update($email, $data);
+        }
+        return $email;
+    }
+
+    /**
+     * 이메일을 삭제한다
+     *
+     * @param EmailInterface $email
+     *
+     * @return bool
+     */
+    public function deleteEmail(EmailInterface $email)
+    {
+        if($email->isConfirmed()) {
+            return $this->emails()->delete($email);
+        } else {
+            return $this->pendingEmails()->delete($email);
+        }
+    }
+
+    /**
+     * 새로운 계정을 추가한다.
+     *
+     * @param UserInterface $user
+     * @param array $data
+     *
+     * @return void
+     */
+    public function createAccount(UserInterface $user, array $data)
+    {
+        $this->accounts()->create($user, $data);
+    }
+
+    /**
+     * 계정을 수정한다
+     *
+     * @param AccountInterface $account
+     * @param $data
+     *
+     * @return AccountInterface
+     */
+    public function updateAccount(AccountInterface $account, array $data = [])
+    {
+        $this->accounts()->update($account, $data);
+        return $account;
+    }
+
+    /**
+     * 계정을 삭제한다
+     *
+     * @param $account
+     *
+     * @return void
+     */
+    public function deleteAccount($account)
+    {
+        $this->accounts()->delete($account);
+    }
+
+    /**
      * 이메일 인증의 사용 여부를 반환한다.
      *
      * @return bool 이메일 인증 사용 여부
@@ -492,17 +639,5 @@ class UserHandler
     {
         $menus = $this->container->get('user/settings/section');
         return array_merge($this->settingsSections, $menus ?: []);
-    }
-
-    /**
-     * Create a new instance of the model.
-     *
-     * @return \Illuminate\Database\Eloquent\Model
-     */
-    public function createModel($model)
-    {
-        $class = '\\'.ltrim($model, '\\');
-
-        return new $class;
     }
 }

@@ -1,16 +1,11 @@
 <?php
 namespace App\Http\Controllers\Member\Settings;
 
-use App;
 use App\Http\Controllers\Controller;
 use Exception;
-use Input;
 use Presenter;
-use Validator;
 use XeDB;
-use Xpressengine\Member\Entities\Database\GroupEntity;
-use Xpressengine\Member\Repositories\GroupRepositoryInterface;
-use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
+use Xpressengine\Http\Request;
 
 class GroupController extends Controller
 {
@@ -19,11 +14,19 @@ class GroupController extends Controller
      */
     protected $groups;
 
+    /**
+     * GroupController constructor.
+     */
     public function __construct()
     {
-        $this->groups = app('xe.member.groups');
+        $this->groups = app('xe.user.groups');
     }
 
+    /**
+     * show group list
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     */
     public function index()
     {
         // todo: validate inputs!!
@@ -32,27 +35,33 @@ class GroupController extends Controller
         return Presenter::make('member.settings.group.index', compact('groups'));
     }
 
-    public function getCreate()
+    /**
+     * show group creation page
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     */
+    public function create()
     {
         return Presenter::make('member.settings.group.create');
     }
 
-    public function postCreate()
+    /**
+     * store group
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws Exception
+     */
+    public function store(Request $request)
     {
-        $input = Input::only(['name', 'description']);
+        $input = $request->only(['name', 'description']);
 
-        $validator = Validator::make($input, ['name' => 'Required']);
-
-        if ($validator->fails()) {
-            $e = new InvalidArgumentHttpException();
-            $e->setMessage($validator->errors()->first());
-            throw $e;
-        }
+        $this->validate($request, ['name' => 'Required']);
 
         XeDB::beginTransaction();
         try {
-            $group = new GroupEntity($input);
-            $this->groups->insert($group);
+            $this->groups->create($input);
         } catch (Exception $e) {
             XeDB::rollBack();
             throw $e;
@@ -62,29 +71,39 @@ class GroupController extends Controller
         return redirect()->route('manage.group.index')->with('alert', ['type' => 'success', 'message' => '추가되었습니다.']);
     }
 
-    public function getEdit($id)
+    /**
+     * show group editing page
+     *
+     * @param $id
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     */
+    public function edit($id)
     {
         $group = $this->groups->find($id);
         return Presenter::make('member.settings.group.edit', compact('group'));
     }
 
-    public function postEdit($id)
+    /**
+     * postEdit
+     *
+     * @param Request $request
+     * @param         $id
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws Exception
+     */
+    public function update(Request $request, $id)
     {
-        $input = Input::only(['name', 'description']);
+        $input = $request->only(['name', 'description']);
 
-        $validator = Validator::make($input, ['name' => 'Required']);
+        $this->validate($request, ['name' => 'Required']);
 
-        if ($validator->fails()) {
-            $e = new InvalidArgumentHttpException();
-            $e->setMessage($validator->errors()->first());
-            throw $e;
-        }
+        $group = $this->groups->find($id);
 
         XeDB::beginTransaction();
         try {
-            $group = $this->groups->find($id);
-            $group->fill($input);
-            $this->groups->update($group);
+            $this->groups->update($group, $input);
         } catch (Exception $e) {
             XeDB::rollBack();
             throw $e;
@@ -94,10 +113,19 @@ class GroupController extends Controller
         return redirect()->route('manage.group.index')->with('alert', ['type' => 'success', 'message' => '수정되었습니다.']);
     }
 
-    public function deleteGroup()
+    /**
+     * delete group
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws Exception
+     */
+    public function destroy(Request $request)
     {
-        $groupIds = Input::get('id');
-        $groups   = $this->groups->findAll($groupIds);
+        $groupIds = $request->get('id');
+
+        $groups = $this->groups->query()->whereIn('id', $groupIds)->get();
 
         XeDB::beginTransaction();
         try {
@@ -114,21 +142,19 @@ class GroupController extends Controller
     }
 
     /**
-     * searchGroup
+     * search Group
      *
-     * @param GroupRepositoryInterface $groupRepo
-     * @param null                     $keyword
+     * @param null $keyword
      *
      * @return \Xpressengine\Presenter\RendererInterface
      */
-    public function searchGroup(GroupRepositoryInterface $groupRepo, $keyword = null)
+    public function search($keyword = null)
     {
-
         if ($keyword === null) {
-            return Presenter::makeApi($groupRepo->all());
+            return Presenter::makeApi($this->groups->paginate());
         }
 
-        $matchedGroupList = $groupRepo->search(['name' => $keyword])->items();
-        return Presenter::makeApi($matchedGroupList);
+        $matched = $this->groups->where('name', 'like', '%'.$keyword.'%')->items();
+        return Presenter::makeApi($matched);
     }
 }

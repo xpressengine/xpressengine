@@ -16,7 +16,6 @@ namespace Xpressengine\User\Models;
 use Xpressengine\Database\Eloquent\DynamicModel;
 use Xpressengine\Member\Exceptions\AlreadyConfirmedEmailException;
 use Xpressengine\User\EmailInterface;
-use Xpressengine\User\EmailProviderInterface;
 
 /**
  * @category    User
@@ -26,7 +25,7 @@ use Xpressengine\User\EmailProviderInterface;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class UserEmail extends DynamicModel implements EmailInterface, EmailProviderInterface
+class UserEmail extends DynamicModel implements EmailInterface
 {
     protected $table = 'user_email';
 
@@ -64,7 +63,7 @@ class UserEmail extends DynamicModel implements EmailInterface, EmailProviderInt
      *
      * @return string
      */
-    public function getMemberId()
+    public function getUserId()
     {
         $user = $this->getAttribute('user');
         return $user->getId();
@@ -131,5 +130,15 @@ class UserEmail extends DynamicModel implements EmailInterface, EmailProviderInt
     public function findByConfirmationCode($memberId, $code, $with = null)
     {
         throw new AlreadyConfirmedEmailException();
+    }
+
+    /**
+     * 인증된 메일인지 확인한다
+     *
+     * @return bool
+     */
+    public function isConfirmed()
+    {
+        return true;
     }
 }

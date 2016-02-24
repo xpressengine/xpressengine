@@ -1,50 +1,61 @@
 <?php
 /**
- * This file is member mail repository.
+ * This file is member email repository.
  *
  * PHP version 5
  *
- * @category    Member
- * @package     Xpressengine\Member
+ * @category    User
+ * @package     Xpressengine\User
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Member\Repositories\Database;
+namespace Xpressengine\User\Repositories;
 
-use Xpressengine\Database\VirtualConnectionInterface;
-use Xpressengine\Keygen\Keygen;
-use Xpressengine\Member\Entities\Database\AccountEntity;
 use Xpressengine\Member\Repositories\AccountRepositoryInterface;
-use Xpressengine\Member\Repositories\DatabaseRepositoryTrait;
+use Xpressengine\User\AccountInterface;
+use Xpressengine\User\Models\UserAccount;
+use Xpressengine\User\Repositories\RepositoryTrait;
+use Xpressengine\User\UserInterface;
 
 /**
  * 회원의 계정 정보를 저장하는 Repository
  *
- * @category    Member
- * @package     Xpressengine\Member
+ * @category    User
+ * @package     Xpressengine\User
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class AccountRepository implements AccountRepositoryInterface
+class UserAccountRepository implements AccountRepositoryInterface
 {
-    use DatabaseRepositoryTrait;
+    use RepositoryTrait;
 
     /**
-     * AccountRepository constructor.
+     * UserAccountRepository constructor.
      *
-     * @param VirtualConnectionInterface $connection db connection
-     * @param Keygen                     $generator  key generator
+     * @param $model
      */
-    public function __construct(VirtualConnectionInterface $connection, Keygen $generator)
+    public function __construct($model)
     {
-        $this->connection = $connection;
-        $this->generator = $generator;
-        $this->mainTable = $mainTable = 'user_account';
-        $this->entityClass = AccountEntity::class;
+        $this->setModel($model);
+    }
+
+    /**
+     * create
+     *
+     * @param UserInterface $user
+     * @param array         $data
+     *
+     * @return UserAccount
+     */
+    public function create(UserInterface $user, array $data)
+    {
+        $account = $this->newModel()->create($data);
+        $user->accounts()->save($account);
+        return $account;
     }
 
     /**
@@ -56,8 +67,8 @@ class AccountRepository implements AccountRepositoryInterface
      */
     public function fetchAllByMember($userId)
     {
-        $query = $this->table()->whereIn('userId', (array) $userId);
-        return $this->getEntities($query);
+        $accounts = $this->query()->whereIn('userId', (array) $userId)->get();
+        return $accounts;
     }
 
     /**
@@ -69,6 +80,6 @@ class AccountRepository implements AccountRepositoryInterface
      */
     public function deleteByUserIds($userIds)
     {
-        return $this->table()->whereIn('userId', (array) $userIds)->delete();
+        return $this->query()->whereIn('userId', (array) $userIds)->delete();
     }
 }

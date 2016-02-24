@@ -59,8 +59,8 @@ class MailEntity extends Entity implements MailEntityInterface
      *
      * @return string
      */
-    public function getMemberId()
+    public function getUserId()
     {
-        return $this->getAttribute('memberId');
+        return $this->getAttribute('userId');
     }
 }

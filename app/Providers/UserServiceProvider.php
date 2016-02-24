@@ -20,6 +20,11 @@ use Illuminate\Contracts\Validation\Factory as Validator;
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Media\MediaManager;
 use Xpressengine\Media\Thumbnailer;
+use Xpressengine\Member\Repositories\AccountRepositoryInterface;
+use Xpressengine\Member\Repositories\GroupRepositoryInterface;
+use Xpressengine\Member\Repositories\MailRepositoryInterface;
+use Xpressengine\Member\Repositories\MemberRepositoryInterface;
+use Xpressengine\Member\Repositories\PendingMailRepositoryInterface;
 use Xpressengine\Storage\Storage;
 use Xpressengine\ToggleMenus\Member\LinkItem;
 use Xpressengine\ToggleMenus\Member\RawItem;
@@ -32,6 +37,11 @@ use Xpressengine\User\Models\User;
 use Xpressengine\User\Models\UserAccount;
 use Xpressengine\User\Models\UserEmail;
 use Xpressengine\User\Models\UserGroup;
+use Xpressengine\User\Repositories\PendingEmailRepository;
+use Xpressengine\User\Repositories\UserAccountRepository;
+use Xpressengine\User\Repositories\UserEmailRepository;
+use Xpressengine\User\Repositories\UserGroupRepository;
+use Xpressengine\User\Repositories\UserRepository;
 use Xpressengine\User\UserHandler;
 use Xpressengine\User\UserImageHandler;
 use Xpressengine\User\UserProvider;
@@ -63,10 +73,11 @@ class UserServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerHandler();
+        $this->registerRepositories();
 
         // user package 제거후 주석 해제
         $this->registerAuth();
-        // $this->registerTokenRepository();
+        $this->registerTokenRepository();
         $this->registerEmailBroker();
         $this->registerPasswordBroker();
 
@@ -147,7 +158,7 @@ class UserServiceProvider extends ServiceProvider
                 // The password broker uses a token repository to validate tokens and send user
                 // password e-mails, as well as validating that password reset process as an
                 // aggregate service of sorts providing a convenient interface for resets.
-                return new EmailBroker($app['mailer'], $view);
+                return new EmailBroker($app['xe.user.emails'], $app['mailer'], $view);
             }
         );
     }
@@ -248,20 +259,115 @@ class UserServiceProvider extends ServiceProvider
             function ($app) {
                 $proxyClass = $app['xe.interception']->proxy(UserHandler::class, 'XeUser');
                 $userHandler = new $proxyClass(
-                    User::class,
-                    UserAccount::class,
-                    UserGroup::class,
-                    UserEmail::class,
-                    PendingEmail::class,
+                    $app['xe.users'],
+                    $app['xe.user.accounts'],
+                    $app['xe.user.groups'],
+                    $app['xe.user.emails'],
+                    $app['xe.user.pendingEmails'],
                     $app['hash'],
                     $app['validator'],
                     $app['xe.register'],
-                    $app['xe.config']->getVal('user.join.useMailCertify', 'true')
+                    $app['xe.config']->getVal('user.join.useMailCertify', false)
                 );
                 return $userHandler;
             }
         );
         $this->app->bind(UserHandler::class, 'xe.user');
+    }
+
+    /**
+     * register Repositories
+     *
+     * @return void
+     */
+    protected function registerRepositories()
+    {
+        $this->registerUserRepository();
+        $this->registerAccoutRepository();
+        $this->registerGroupRepository();
+        // $this->registerVirtualGroupRepository();
+        $this->registerMailRepository();
+    }
+
+    protected function registerUserRepository()
+    {
+        $this->app->singleton(
+            'xe.users',
+            function ($app) {
+                return new UserRepository(User::class);
+            }
+        );
+        $this->app->bind(MemberRepositoryInterface::class, 'xe.users');
+    }
+
+    /**
+     * register Accout Repository
+     *
+     * @return void
+     */
+    private function registerAccoutRepository()
+    {
+        $this->app->singleton(
+            'xe.user.accounts',
+            function ($app) {
+                return new UserAccountRepository(UserAccount::class);
+            }
+        );
+        $this->app->bind(AccountRepositoryInterface::class, 'xe.user.accounts');
+    }
+
+    /**
+     * register Group Repository
+     *
+     * @return void
+     */
+    protected function registerGroupRepository()
+    {
+        $this->app->singleton(
+            'xe.user.groups',
+            function ($app) {
+                return new UserGroupRepository(UserGroup::class);
+            }
+        );
+        $this->app->bind(GroupRepositoryInterface::class, 'xe.user.groups');
+    }
+
+    /**
+     * register Virtual Group Repository
+     *
+     * @return void
+     */
+    protected function registerVirtualGroupRepository()
+    {
+        $this->app->singleton(
+            'xe.member.virtualGroups',
+            function ($app) {
+                /** @var Closure $vGroups */
+                $vGroups = $app['config']->get('xe.group.virtualGroup.all');
+                $getter = $app['config']->get('xe.group.virtualGroup.getByMember');
+                return new VirtualGroupRepository($app['xe.members'], $vGroups(), $getter);
+            }
+        );
+        $this->app->bind(VirtualGroupRepositoryInterface::class, 'xe.member.virtualGroups');
+    }
+
+    private function registerMailRepository()
+    {
+        $this->app->singleton(
+            'xe.user.emails',
+            function ($app) {
+                return new UserEmailRepository(UserEmail::class);
+            }
+        );
+        $this->app->bind(MailRepositoryInterface::class, 'xe.user.emails');
+
+        $this->app->singleton(
+            'xe.user.pendingEmails',
+            function ($app) {
+                return new PendingEmailRepository(PendingEmail::class);
+            }
+        );
+        $this->app->bind(PendingMailRepositoryInterface::class, 'xe.user.pendingEmails');
     }
 
     /**

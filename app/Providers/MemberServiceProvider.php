@@ -33,6 +33,7 @@ use Xpressengine\Member\Repositories\Database\AccountRepository;
 use Xpressengine\Member\Repositories\Database\GroupRepository;
 use Xpressengine\Member\Repositories\Database\MailRepository;
 use Xpressengine\Member\Repositories\Database\MemberRepository;
+use Xpressengine\Member\Repositories\Database\UserRepository;
 use Xpressengine\Member\Repositories\Database\PendingMailRepository;
 use Xpressengine\Member\Repositories\GroupRepositoryInterface;
 use Xpressengine\Member\Repositories\MailRepositoryInterface;

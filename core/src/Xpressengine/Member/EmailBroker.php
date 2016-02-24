@@ -143,7 +143,7 @@ class EmailBroker implements EmailBrokerInterface
 
         $info = [
             'address' => $pendingMail->getAddress(),
-            'memberId' => $pendingMail->getMemberId()
+            'memberId' => $pendingMail->getUserId()
         ];
 
         $mail = new MailEntity($info);

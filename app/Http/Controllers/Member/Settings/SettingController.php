@@ -33,17 +33,24 @@ use Xpressengine\Http\Request;
 class SettingController extends Controller
 {
 
-    protected $members;
+    protected $users;
 
+    /**
+     * SettingController constructor.
+     */
     public function __construct()
     {
-        $this->members = app('xe.members');
+        $this->users = app('xe.users');
     }
 
-    public function getCommonSetting()
+    /**
+     * get Common setting
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     */
+    public function editCommon()
     {
-        $secureLevels = app('config')->get('xe.member.password');
-        $config = Cfg::get('member.common');
+        $config = app('xe.config')->get('member.common');
 
         return Presenter::make(
             'member.settings.setting.common',
@@ -53,7 +60,12 @@ class SettingController extends Controller
         );
     }
 
-    public function getSkinSetting()
+    /**
+     * edit Skin setting
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     */
+    public function editSkin()
     {
         $authSkinSection = (new \App\Sections\SkinSection())->setting('member/auth', null);
 
@@ -69,7 +81,14 @@ class SettingController extends Controller
         );
     }
 
-    public function postCommonSetting(Request $request)
+    /**
+     * update Common setting
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateCommon(Request $request)
     {
         $inputs = $request->only(['useCaptcha', 'webmasterName', 'webmasterEmail']);
 
@@ -79,16 +98,19 @@ class SettingController extends Controller
             }
         }
 
-        app('xe.config')->put('member.common', $inputs);
-
-
+        app('xe.config')->put('user.common', $inputs);
 
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => '저장되었습니다.']);
     }
 
-    public function getJoinSetting()
+    /**
+     * edit Join setting
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     */
+    public function editJoin()
     {
-        $config = app('xe.config')->get('member.join');
+        $config = app('xe.config')->get('user.join');
 
         return Presenter::make(
             'member.settings.setting.join',
@@ -98,23 +120,30 @@ class SettingController extends Controller
         );
     }
 
-    public function postJoinSetting()
+    /**
+     * update Join setting
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateJoin()
     {
         $inputs = Input::except('_token');
         //$inputs['fields'] = json_decode($inputs['fields'], true);
 
-        app('xe.config')->put('member.join', $inputs);
+        app('xe.config')->put('user.join', $inputs);
 
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => '저장되었습니다.']);
     }
 
-    public function getFieldSetting()
+    /**
+     * edit Field setting
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     */
+    public function editField()
     {
-
-        $config = app('xe.config')->get('member.join');
-
         $dynamicFieldSection = new DynamicFieldSection('member');
-        $connection = $this->members->getConnection();
+        $connection = $this->users->getConnection();
         $dynamicFieldSection = $dynamicFieldSection->setting($connection, false);
 
         return Presenter::make(
@@ -125,7 +154,12 @@ class SettingController extends Controller
         );
     }
 
-    public function getToggleMenuSetting()
+    /**
+     * edit ToggleMenu setting
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     */
+    public function editToggleMenu()
     {
         $toggleMenuSection = (new ToggleMenuSection())->setting('member');
 

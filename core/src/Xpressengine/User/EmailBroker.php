@@ -18,6 +18,7 @@ use Closure;
 use Illuminate\Contracts\Mail\Mailer;
 use Xpressengine\Member\Exceptions\InvalidConfirmationCodeException;
 use Xpressengine\Member\Exceptions\PendingEmailNotExistsException;
+use Xpressengine\Member\Repositories\MailRepositoryInterface;
 use Xpressengine\User\Models\PendingEmail;
 use Xpressengine\User\Models\UserEmail;
 
@@ -32,6 +33,13 @@ use Xpressengine\User\Models\UserEmail;
  */
 class EmailBroker implements EmailBrokerInterface
 {
+    /**
+     * 회원 이메일 저장소
+     *
+     * @var MailRepositoryInterface
+     */
+    protected $mails;
+
     /**
      * 이메일 전송기
      *
@@ -53,6 +61,7 @@ class EmailBroker implements EmailBrokerInterface
      * @param string $view   mail 전송시 사용할 view 파일
      */
     public function __construct(
+        MailRepositoryInterface $mails,
         Mailer $mailer,
         $view
     ) {
@@ -117,11 +126,10 @@ class EmailBroker implements EmailBrokerInterface
 
         $info = [
             'address' => $email->getAddress(),
-            'memberId' => $email->getMemberId()
+            'memberId' => $email->getUserId()
         ];
 
-        $userEmail = new UserEmail($info);
-        $userEmail->save();
+        $userEmail = $this->mails->create($info);
 
         /** @var PendingEmail $email */
         $email->delete();
