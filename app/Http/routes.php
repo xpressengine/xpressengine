@@ -221,10 +221,10 @@ Route::group(
 );
 
 /*
- * member/manage
+ * settings/user
  * */
 Route::settings(
-    'member',
+    'user',
     function () {
 
         Route::get(
@@ -236,7 +236,7 @@ Route::settings(
             '/',
             [
                 'as' => 'settings.member.index',
-                'uses' => 'Member\Settings\MemberController@index',
+                'uses' => 'Member\Settings\UserController@index',
                 'settings_menu' => 'member.list',
                 'permission' => 'member.list'
             ]
@@ -246,51 +246,51 @@ Route::settings(
         Route::get('create',
                    [
                        'as' => 'settings.member.create',
-                       'uses' => 'Member\Settings\MemberController@create',
+                       'uses' => 'Member\Settings\UserController@create',
                        'settings_menu' => 'member.create'
                    ]
         );
         Route::post(
             'store',
-            ['as' => 'settings.member.store', 'uses' => 'Member\Settings\MemberController@store']
+            ['as' => 'settings.member.store', 'uses' => 'Member\Settings\UserController@store']
         );
 
         Route::get(
             '{id}/edit',
             [
                 'as' => 'settings.member.edit',
-                'uses' => 'Member\Settings\MemberController@edit',
+                'uses' => 'Member\Settings\UserController@edit',
                 'settings_menu' => 'member.edit',
                 'permission' => 'member.edit',
 
             ]
         )->where('id', '[0-9a-z\-]+');
 
-        Route::post('{id}/edit', ['as' => 'settings.member.edit', 'uses' => 'Member\Settings\MemberController@update'])
+        Route::post('{id}/edit', ['as' => 'settings.member.edit', 'uses' => 'Member\Settings\UserController@update'])
             ->where('id', '[0-9a-z\-]+');
 
         // mail action at edit
         Route::get(
             'mail/list',
-            ['as' => 'settings.member.mail.list', 'uses' => 'Member\Settings\MemberController@getMailList']
+            ['as' => 'settings.member.mail.list', 'uses' => 'Member\Settings\UserController@getMailList']
         );
         Route::post(
             'mail/add',
-            ['as' => 'settings.member.mail.add', 'uses' => 'Member\Settings\MemberController@postAddMail']
+            ['as' => 'settings.member.mail.add', 'uses' => 'Member\Settings\UserController@postAddMail']
         );
         Route::post(
             'mail/delete',
-            ['as' => 'settings.member.mail.delete', 'uses' => 'Member\Settings\MemberController@postDeleteMail']
+            ['as' => 'settings.member.mail.delete', 'uses' => 'Member\Settings\UserController@postDeleteMail']
         );
         Route::post(
             'mail/confirm',
-            ['as' => 'settings.member.mail.confirm', 'uses' => 'Member\Settings\MemberController@postConfirmMail']
+            ['as' => 'settings.member.mail.confirm', 'uses' => 'Member\Settings\UserController@postConfirmMail']
         );
 
         // delete
         Route::delete(
             'destroy',
-            ['as' => 'settings.member.destroy', 'uses' => 'Member\Settings\MemberController@deleteMember']
+            ['as' => 'settings.member.destroy', 'uses' => 'Member\Settings\UserController@deleteMember']
         );
 
         // setting

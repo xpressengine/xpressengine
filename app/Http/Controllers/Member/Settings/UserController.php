@@ -18,7 +18,7 @@ use Xpressengine\User\Models\UserEmail;
 use Xpressengine\User\UserHandler;
 use Xpressengine\User\UserInterface;
 
-class MemberController extends Controller
+class UserController extends Controller
 {
     /**
      * @var UserHandler
