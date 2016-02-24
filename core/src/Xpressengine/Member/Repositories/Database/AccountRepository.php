@@ -43,7 +43,7 @@ class AccountRepository implements AccountRepositoryInterface
     {
         $this->connection = $connection;
         $this->generator = $generator;
-        $this->mainTable = $mainTable = 'member_account';
+        $this->mainTable = $mainTable = 'user_account';
         $this->entityClass = AccountEntity::class;
     }
 
@@ -56,7 +56,7 @@ class AccountRepository implements AccountRepositoryInterface
      */
     public function fetchAllByMember($userId)
     {
-        $query = $this->table()->whereIn('memberId', (array) $userId);
+        $query = $this->table()->whereIn('userId', (array) $userId);
         return $this->getEntities($query);
     }
 
@@ -69,6 +69,6 @@ class AccountRepository implements AccountRepositoryInterface
      */
     public function deleteByUserIds($userIds)
     {
-        return $this->table()->whereIn('memberId', (array) $userIds)->delete();
+        return $this->table()->whereIn('userId', (array) $userIds)->delete();
     }
 }

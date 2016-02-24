@@ -47,7 +47,7 @@ class GroupRepository implements GroupRepositoryInterface
         $this->connection = $connection;
         $this->generator = $generator;
         $this->isDynamic = false;
-        $this->mainTable = 'member_group';
+        $this->mainTable = 'user_group';
         $this->entityClass = GroupEntity::class;
     }
 
@@ -62,12 +62,12 @@ class GroupRepository implements GroupRepositoryInterface
     public function fetchAllByUser(MemberEntityInterface $user, $with = null)
     {
         $id = $user->id;
-        $query = $this->table('member_group')->leftJoin(
-            'member_group_member as map',
-            'member_group.id',
+        $query = $this->table('user_group')->leftJoin(
+            'user_group_user as map',
+            'user_group.id',
             '=',
             'map.groupId'
-        )->whereIn('map.memberId', (array) $id);
+        )->whereIn('map.userId', (array) $id);
         $groups = $this->getEntities($query, $with);
         return $groups;
     }
@@ -81,7 +81,7 @@ class GroupRepository implements GroupRepositoryInterface
      */
     public function delete($entity)
     {
-        $this->table('member_group_member')->where('groupId', $entity->id)->delete();
+        $this->table('user_group_user')->where('groupId', $entity->id)->delete();
         $this->traitDelete($entity);
     }
 
@@ -95,10 +95,10 @@ class GroupRepository implements GroupRepositoryInterface
      */
     public function addUser(GroupEntityInterface $group, MemberEntityInterface $user)
     {
-        $this->table('member_group_member')->insert(
+        $this->table('user_group_user')->insert(
             [
                 'groupId' => $group->id,
-                'memberId' => $user->id,
+                'userId' => $user->id,
                 'createdAt' => $this->getCurrentTime()
             ]
         );
@@ -117,7 +117,7 @@ class GroupRepository implements GroupRepositoryInterface
      */
     public function exceptUser(GroupEntityInterface $group, MemberEntityInterface $user)
     {
-        $this->table('member_group_member')->where('groupId', $group->id)->where('memberId', $user->id)->delete();
+        $this->table('user_group_user')->where('groupId', $group->id)->where('userId', $user->id)->delete();
         $this->table()->where('id', $group->id)->decrement('count');
     }
 }

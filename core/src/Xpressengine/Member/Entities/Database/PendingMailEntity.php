@@ -72,6 +72,6 @@ class PendingMailEntity extends Entity implements PendingMailEntityInterface
      */
     public function getUserId()
     {
-        return $this->getAttribute('memberId');
+        return $this->getAttribute('userId');
     }
 }
