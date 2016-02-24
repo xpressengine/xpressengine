@@ -441,7 +441,7 @@ class UserController extends Controller
         $users = $this->handler->users();
 
         if ($keyword === null) {
-            return Presenter::makeApi($users->all());
+            return Presenter::makeApi($users->paginate());
         }
 
         $matchedMemberList = $users->search(['displayName' => $keyword])->items();
@@ -451,14 +451,14 @@ class UserController extends Controller
     /**
      * getGroupInfo
      *
-     * @param $groupEntities
+     * @param $groupList
      *
      * @return array
      */
-    protected function getGroupInfo($groupEntities)
+    protected function getGroupInfo($groupList)
     {
         $groups = [];
-        foreach ($groupEntities as $key => $group) {
+        foreach ($groupList as $key => $group) {
             $groups[$group->id] = [
                 'value' => $group->id,
                 'text' => $group->name,

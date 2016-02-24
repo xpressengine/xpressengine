@@ -4,11 +4,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use InvalidArgumentException;
 use Presenter;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Theme;
+use Xpressengine\User\UserHandler;
 
 class PasswordController extends Controller {
 
@@ -39,7 +41,7 @@ class PasswordController extends Controller {
     protected $passwords;
 
     /**
-     * @var \Xpressengine\Member\MemberHandler
+     * @var UserHandler
      */
     protected $handler;
 
@@ -54,7 +56,7 @@ class PasswordController extends Controller {
     {
         $this->auth = $auth;
         $this->passwords = $passwords;
-        $this->handler = app('xe.member');
+        $this->handler = app('xe.user');
 
         Theme::selectSiteTheme();
         Presenter::setSkin('member/auth');
@@ -83,18 +85,12 @@ class PasswordController extends Controller {
     public function postReset(Request $request)
     {
 
-        $validate = \Validator::make(
-            $request->all(),
+        $this->validate(
+            $request,
             [
                 'email' => 'required|email',
             ]
         );
-
-        if ($validate->fails()) {
-            $e = new InvalidArgumentException();
-            $e->setMessage($validate->errors()->first());
-            throw $e;
-        }
 
         $response = $this->passwords->sendResetLink(
             $request->only('email'),
@@ -164,9 +160,9 @@ class PasswordController extends Controller {
         $response = $this->passwords->reset(
             $credentials,
             function ($user, $password) {
-                $user->password = bcrypt($password);
+                $password = bcrypt($password);
 
-                $this->handler->update($user);
+                $this->handler->update($user, compact('password'));
 
                 $this->auth->login($user);
             }
@@ -179,7 +175,7 @@ class PasswordController extends Controller {
 
             default:
                 // password configuration
-                $passwordConfig = app('config')->get('xe.member.password');
+                $passwordConfig = app('config')->get('xe.user.password');
                 $passwordLevel = array_get($passwordConfig['levels'], $passwordConfig['default']);
                 return redirect()->back()
                                  ->withInput($request->only('email'))
