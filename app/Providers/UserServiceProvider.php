@@ -77,7 +77,7 @@ class UserServiceProvider extends ServiceProvider
 
         // user package 제거후 주석 해제
         $this->registerAuth();
-        // $this->registerTokenRepository();
+        $this->registerTokenRepository();
         $this->registerEmailBroker();
         $this->registerPasswordBroker();
 

@@ -232,10 +232,10 @@ class UserHandler
                 'address' => $user->email,
             ];
             if ($this->useEmailConfirm === false || array_get($data, 'emailConfirmed', false)) {
-                $mail = $this->emails()->create($mailData);
+                $mail = $this->emails()->create($user, $mailData);
                 $user->emails = [$mail];
             } else {
-                $mail = $this->pendingEmails()->create($mailData);
+                $mail = $this->pendingEmails()->create($user, $mailData);
                 $user->pending_emails = [$mail];
             }
         }

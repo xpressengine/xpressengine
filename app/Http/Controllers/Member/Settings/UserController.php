@@ -25,11 +25,23 @@ class UserController extends Controller
      */
     protected $handler;
 
+    /**
+     * UserController constructor.
+     *
+     * @param UserHandler $handler
+     */
     public function __construct(UserHandler $handler)
     {
         $this->handler = $handler;
     }
 
+    /**
+     * index. show user list
+     *
+     * @param Request $request
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     */
     public function index(Request $request)
     {
         $query = $this->handler->users()->query();
@@ -71,6 +83,11 @@ class UserController extends Controller
         return Presenter::make('member.settings.member.index', compact('users', 'groups', 'selectedGroup'));
     }
 
+    /**
+     * show user creation page
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     */
     public function create()
     {
         $ratings = Rating::getUsableAll();
@@ -102,6 +119,14 @@ class UserController extends Controller
         return Presenter::make('member.settings.member.create', compact('ratings', 'groups', 'status', 'fieldTypes'));
     }
 
+    /**
+     * store user
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws Exception
+     */
     public function store(Request $request)
     {
 
@@ -129,6 +154,13 @@ class UserController extends Controller
         return redirect()->route('settings.member.index')->with('alert', ['type' => 'success', 'message' => '추가되었습니다.']);
     }
 
+    /**
+     * show user editing page
+     *
+     * @param $id
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     */
     public function edit($id)
     {
 
@@ -200,7 +232,7 @@ class UserController extends Controller
     }
 
     /**
-     * update
+     * update user
      *
      * @param         $id
      * @param Request $request
@@ -244,6 +276,11 @@ class UserController extends Controller
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => '수정되었습니다.']);
     }
 
+    /**
+     * response user's email list
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     */
     public function getMailList()
     {
         $id = Input::get('userId');
@@ -258,9 +295,15 @@ class UserController extends Controller
         return Presenter::makeApi(['mails' => $mails]);
     }
 
+    /**
+     * add email
+     *
+     * @param Request $request
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     */
     public function postAddMail(Request $request)
     {
-
         $this->validate(
             $request,
             [
@@ -269,18 +312,35 @@ class UserController extends Controller
             ]
         );
 
+        $userId = $request->get('userId');
         $address = $request->get('address');
 
         if($this->handler->emails()->findByAddress($address)) {
             throw new MailAlreadyExistsException();
         }
 
-        $mail = new UserEmail($request->only('address', 'userId'));
-        $mail->save();
+        $user = $this->handler->users()->find($userId);
 
-        return Presenter::makeApi(['mail' => $mail]);
+        XeDB::beginTransaction();
+        try {
+            $email = $this->handler->emails()->create($user, $request->only('address', 'userId'));
+        } catch (Exception $e) {
+            XeDB::rollBack();
+            throw $e;
+        }
+        XeDB::commit();
+
+
+        return Presenter::makeApi(['mail' => $email]);
     }
 
+    /**
+     * confirm email
+     *
+     * @param Request $request
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     */
     public function postConfirmMail(Request $request)
     {
         $pendingEmail = $this->handler->pendingEmails()->find($request->get('id'));
@@ -291,22 +351,38 @@ class UserController extends Controller
             throw $e;
         }
 
-        $newEmail = new UserEmail();
-        $newEmail->address = $pendingEmail->address;
-        $newEmail->userId = $pendingEmail->userId;
-        $newEmail->save();
+        $user = $pendingEmail->user;
+        $address = $pendingEmail->address;
 
-        $pendingEmail->delete();
+        XeDB::beginTransaction();
+        try {
+            // create pending email
+            $email = $this->handler->emails()->create($user, compact('address'));
 
-        return Presenter::makeApi(['mail' => $newEmail]);
+            // remove pending email
+            $this->handler->pendingEmails()->delete($pendingEmail);
+        } catch (Exception $e) {
+            XeDB::rollBack();
+            throw $e;
+        }
+        XeDB::commit();
+
+        return Presenter::makeApi(['mail' => $email]);
     }
 
+    /**
+     * postDeleteMail
+     *
+     * @param Request $request
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     */
     public function postDeleteMail(Request $request)
     {
         $this->validate(
             $request,
             [
-                'memberId' => 'required',
+                'userId' => 'required',
                 'address' => 'required'
             ]
         );
@@ -319,18 +395,31 @@ class UserController extends Controller
             throw new EmailNotFoundException();
         }
 
-        $mail->delete();
+        XeDB::beginTransaction();
+        try {
+            $this->handler->emails()->delete($mail);
+        } catch (Exception $e) {
+            XeDB::rollBack();
+            throw $e;
+        }
+        XeDB::commit();
 
         return Presenter::makeApi(['type' => 'success', 'address' => $address]);
     }
 
+    /**
+     * delete user
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws Exception
+     */
     public function deleteMember()
     {
-        $memberIds = Input::get('id', []);
+        $userIds = Input::get('id', []);
 
         XeDB::beginTransaction();
         try {
-            $this->handler->leave($memberIds);
+            $this->handler->leave($userIds);
         } catch (Exception $e) {
             XeDB::rollBack();
             throw $e;
@@ -343,19 +432,19 @@ class UserController extends Controller
     /**
      * searchMember
      *
-     * @param MemberRepositoryInterface $memberRepo
      * @param null                      $keyword
      *
      * @return \Xpressengine\Presenter\RendererInterface
      */
-    public function searchMember(MemberRepositoryInterface $memberRepo, $keyword = null)
+    public function searchMember($keyword = null)
     {
+        $users = $this->handler->users();
 
         if ($keyword === null) {
-            return Presenter::makeApi($memberRepo->all());
+            return Presenter::makeApi($users->all());
         }
 
-        $matchedMemberList = $memberRepo->search(['displayName' => $keyword])->items();
+        $matchedMemberList = $users->search(['displayName' => $keyword])->items();
         return Presenter::makeApi($matchedMemberList);
     }
 

@@ -14,10 +14,10 @@ use XeDB;
 use Xpressengine\Member\EmailBrokerInterface;
 use Xpressengine\Member\Exceptions\JoinNotAllowedException;
 use Xpressengine\Member\Exceptions\EmailNotFoundException;
-use Xpressengine\Member\MemberHandler;
 use Xpressengine\Member\Rating;
 use Xpressengine\Support\Exceptions\HttpXpressengineException;
 use Xpressengine\Support\Exceptions\InvalidArgumentException;
+use Xpressengine\User\UserHandler;
 
 class AuthController extends Controller
 {
@@ -42,7 +42,7 @@ class AuthController extends Controller
     protected $auth;
 
     /**
-     * @var MemberHandler
+     * @var UserHandler
      */
     protected $handler;
 
@@ -54,7 +54,7 @@ class AuthController extends Controller
     public function __construct()
     {
         $this->auth = app('auth');
-        $this->handler = app('xe.member');
+        $this->handler = app('xe.user');
         $this->emailBroker = app('xe.auth.email');
 
         Theme::selectSiteTheme();
@@ -115,7 +115,7 @@ class AuthController extends Controller
         }
 
         // resolve data
-        $memberData = $request->except('_token');
+        $memberData = $request->except('_token', 'agree');
         $memberData['rating'] = Rating::MEMBER;
         $memberData['status'] = Member::STATUS_ACTIVATED;
         unset($memberData['password_confirmation']);

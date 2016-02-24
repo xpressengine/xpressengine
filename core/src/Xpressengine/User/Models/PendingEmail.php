@@ -35,6 +35,11 @@ class PendingEmail extends DynamicModel implements EmailInterface
      */
     protected $dynamic = false;
 
+    protected $fillable = [
+        'userId',
+        'address'
+    ];
+
     /**
      * set relationship with user
      *
