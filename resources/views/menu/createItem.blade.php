@@ -69,8 +69,7 @@
                                     <option value="{{$menu->id}}" @if($parent == $menu->id) selected @endif>
                                         {{$menu->title}}
                                     </option>
-                                    @include('menu.partial.itemOption', ['items' => $menu->getItems(), 'maxDepth' => $maxDepth])
-                                    ;
+                                    @include('menu.partial.itemOption', ['items' => $menu->items, 'maxDepth' => $maxDepth])
                                 </select>
                             </div>
                             <div class="col-sm-5">

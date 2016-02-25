@@ -18,8 +18,9 @@ use Xpressengine\Menu\DBMenuRepository;
 use Xpressengine\Menu\MenuAlterHandler;
 use Xpressengine\Menu\MenuCacheHandler;
 use Xpressengine\Menu\MenuConfigHandler;
-use Xpressengine\Menu\MenuItem;
+use Xpressengine\Menu\MenuHandler;
 use Xpressengine\Menu\MenuItemPolicy;
+use Xpressengine\Menu\Models\MenuItem;
 use Xpressengine\Menu\MenuPermissionHandler;
 use Xpressengine\Menu\MenuRetrieveHandler;
 use Xpressengine\UIObjects\Menu\MenuList;
@@ -151,5 +152,13 @@ class MenuServiceProvider extends ServiceProvider
             'Xpressengine\Menu\MenuPermissionHandler',
             'xe.menu.permission'
         );
+
+        $this->app->singleton([MenuHandler::class => 'xe.menu2'], function ($app) {
+            return new MenuHandler(
+                $app['xe.keygen'],
+                $app['xe.config'],
+                $app['xe.permission']
+            );
+        });
     }
 }

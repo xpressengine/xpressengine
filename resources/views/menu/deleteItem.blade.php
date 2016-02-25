@@ -2,7 +2,7 @@
 @include('menu.partial.menuPageHeader')
 @extends('menu.layout')
 @section('menuContent')
-    <form action="{{ route('settings.menu.delete.item', [$menu->id, $item->id]) }}" method="post">
+    <form action="{{ route('settings.menu.delete.item', [$menu->getKey(), $item->getKey()]) }}" method="post">
     <input type="hidden" name="_token" value="{{ Session::token() }}" />
     <input type="hidden" name="_method" value="delete" />
 
@@ -10,7 +10,7 @@
             <div class="panel menu_detail">
                 <div class="panel-heading">
                     <div class="row">
-                        <p class="txt_tit">{{xe_trans('xe::deleteItemConfirm', ['title' => $item->title])}}</p>
+                        <p class="txt_tit">{{xe_trans('xe::deleteItemConfirm', ['title' => xe_trans($item->title)])}}</p>
                     </div>
                 </div>
                 <div class="panel-body">
@@ -18,8 +18,8 @@
                         <div class="row">
                             <div class="col-sm-5">
                                 <div class="inpt_bd">
-                                    @if($item->countSubItems() == 0)
-                                        {{$menuType->summary($item->id)}}
+                                    @if($item->getDescendantCount() == 0)
+                                        {{$menuType->summary($item->getKey())}}
                                         <br/>
                                         메뉴 아이템을삭제하면 다시 복구할 수 없습니다.
                                     @else
@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div class="btn_group_all">
-                @if($item->countSubItems() == 0)
+                @if($item->getDescendantCount() == 0)
                     <button type="submit" class="btn btn_red">{{xe_trans('xe::delete')}}</button>
                 @endif
                 <a href="{{ route('settings.menu.index')}}" class="btn btn_gray">{{xe_trans('xe::cancel')}}</a>
