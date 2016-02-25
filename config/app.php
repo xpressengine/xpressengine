@@ -257,7 +257,7 @@ return [
         'Module' => App\Facades\Module::class,
         'Cfg' => App\Facades\Config::class,
         'XeStorage' => App\Facades\XeStorage::class,
-        'Site'      => App\Facades\Site::class,
+        'XeSite'      => App\Facades\XeSite::class,
 
         'Presenter' => App\Facades\Presenter::class,
         'Frontend' => App\Facades\Frontend::class,
