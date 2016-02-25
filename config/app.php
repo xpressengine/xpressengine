@@ -253,7 +253,7 @@ return [
         'Skin' => App\Facades\Skin::class,
         'Register' => App\Facades\Register::class,
         'Settings' => App\Facades\Settings::class,
-        'Menu' => App\Facades\XeMenu::class,
+        'XeMenu' => App\Facades\XeMenu::class,
         'Module' => App\Facades\Module::class,
         'Cfg' => App\Facades\Config::class,
         'XeStorage' => App\Facades\XeStorage::class,

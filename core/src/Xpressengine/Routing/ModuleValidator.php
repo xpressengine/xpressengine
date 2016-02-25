@@ -19,8 +19,8 @@ use Xpressengine\Http\Request as XeRequest;
 use Illuminate\Routing\Route;
 use Illuminate\Routing\Matching\ValidatorInterface;
 use Xpressengine\Menu\MenuConfigHandler;
-use Xpressengine\Menu\MenuItem;
-use Xpressengine\Menu\MenuRetrieveHandler;
+use Xpressengine\Menu\MenuHandler;
+use Xpressengine\Menu\Models\MenuItem;
 use Xpressengine\Site\SiteHandler;
 use Xpressengine\Theme\ThemeHandler;
 
@@ -41,12 +41,9 @@ class ModuleValidator implements ValidatorInterface
      * @var null
      */
     private static $homeInstanceRoute = null;
+
     /**
-     * @var MenuConfigHandler
-     */
-    private $menuConfigHandler;
-    /**
-     * @var MenuRetrieveHandler
+     * @var MenuHandler
      */
     private $menuHandler;
     /**
@@ -79,7 +76,7 @@ class ModuleValidator implements ValidatorInterface
      * boot
      *
      * @param InstanceRouteHandler $routeHandler      route handler
-     * @param MenuRetrieveHandler  $menuHandler       menu handler
+     * @param MenuHandler  $menuHandler       menu handler
      * @param MenuConfigHandler    $menuConfigHandler menu config handler
      * @param ThemeHandler         $themeHandler      theme handler
      * @param SiteHandler          $siteHandler       site handler
@@ -88,12 +85,10 @@ class ModuleValidator implements ValidatorInterface
      */
     public function boot(
         InstanceRouteHandler $routeHandler,
-        MenuRetrieveHandler $menuHandler,
-        MenuConfigHandler $menuConfigHandler,
+        MenuHandler $menuHandler,
         ThemeHandler $themeHandler,
         SiteHandler $siteHandler
     ) {
-        $this->menuConfigHandler = $menuConfigHandler;
         $this->menuHandler = $menuHandler;
         $this->routeHandler = $routeHandler;
         $this->themeHandler = $themeHandler;
@@ -209,11 +204,10 @@ class ModuleValidator implements ValidatorInterface
      */
     private function setInstanceConfig(InstanceRoute $instanceRoute, XeRequest $request, Route $route)
     {
-        $menuHandler = $this->menuHandler;
-        $menuConfigHandler = $this->menuConfigHandler;
-
-        $item = $menuHandler->getItem($instanceRoute->instanceId);
-        $menuConfig = $menuConfigHandler->getMenuItemTheme($item);
+        $menuModel = $this->menuHandler->getModel();
+        $itemModel = $menuModel::getItemModel();
+        $item = $itemModel::find($instanceRoute->instanceId);
+        $menuConfig = $this->menuHandler->getMenuItemTheme($item);
         if ($request->isMobile()) {
             $theme = $menuConfig->get('mobileTheme');
         } else {

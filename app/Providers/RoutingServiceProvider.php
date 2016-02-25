@@ -50,7 +50,6 @@ class RoutingServiceProvider extends ServiceProvider
         $routeValidator['module']->boot(
             app('xe.router'),
             app('xe.menu'),
-            app('xe.menu.config'),
             app('xe.theme'),
             app('xe.site')
         );

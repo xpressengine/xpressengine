@@ -39,6 +39,7 @@ use Xpressengine\Support\Tree\TreeCollection;
  * @property string $description 설명
  * @property string $site        사이트 식별
  *
+ * @deprecated
  */
 class MenuEntity extends Entity
 {
