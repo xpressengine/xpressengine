@@ -19,17 +19,18 @@ use Xpressengine\Member\Exceptions\DisplayNameAlreadyExistsException;
 use Xpressengine\Member\Exceptions\InvalidConfirmationCodeException;
 use Xpressengine\Member\Exceptions\MailAlreadyExistsException;
 use Xpressengine\Member\Exceptions\PendingEmailNotExistsException;
-use Xpressengine\Member\MemberHandler;
 use Xpressengine\Member\Repositories\MailRepositoryInterface;
 use Xpressengine\Skin\SkinHandler;
+use Xpressengine\Support\Exceptions\HttpXpressengineException;
 use Xpressengine\Support\Exceptions\InvalidArgumentException;
+use Xpressengine\User\UserHandler;
 
-class MemberController extends Controller
+class UserController extends Controller
 {
     /**
      * @var \Xpressengine\Member\Repositories\MemberRepositoryInterface
      */
-    protected $members;
+    protected $users;
 
     /**
      * @var \Xpressengine\Member\Repositories\GroupRepositoryInterface
@@ -42,31 +43,52 @@ class MemberController extends Controller
     protected $mails;
 
     /**
-     * @var MemberHandler
+     * @var UserHandler
      */
     protected $handler;
 
     /**
-     * @var MemberEntityInterface
+     * @var MemberEntityInterface logged user
      */
-    protected $member;
+    protected $user;
 
+    /**
+     * @var \Xpressengine\User\Repositories\PendingEmailRepository
+     */
+    protected $pendingMails;
+
+    /**
+     * @var \Xpressengine\User\Repositories\UserAccountRepository
+     */
+    protected $accounts;
+
+    /**
+     * UserController constructor.
+     */
     public function __construct()
     {
-        $this->handler = app('xe.member');
-        $this->members = app('xe.members');
-        $this->groups = app('xe.member.groups');
-        $this->mails = app('xe.member.mails');
-        $this->pendingMails = app('xe.member.pendingMails');
-        $this->accounts = app('xe.member.accounts');
+        $this->handler = app('xe.user');
+        $this->users = app('xe.users');
+        $this->groups = app('xe.user.groups');
+        $this->mails = app('xe.user.emails');
+        $this->pendingMails = app('xe.user.pendingEmails');
+        $this->accounts = app('xe.user.accounts');
 
-        $this->member = app('auth')->user();
+        $this->user = app('auth')->user();
 
         Theme::selectSiteTheme();
         Presenter::setSkin('member/settings');
         $this->middleware('auth');
     }
 
+    /**
+     * show
+     *
+     * @param Request $request
+     * @param string  $section
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     */
     public function show(Request $request, $section = 'settings')
     {
         // remove & move code
@@ -95,10 +117,10 @@ class MemberController extends Controller
         }
 
         // get current member
-        $member = $this->member;
+        $user = $this->user;
 
         $content = $selectedSection['content'];
-        $tabContent = $content instanceof \Closure ? $content($member) : $content;
+        $tabContent = $content instanceof \Closure ? $content($user) : $content;
 
         app('xe.frontend')->css(
             [
@@ -111,29 +133,47 @@ class MemberController extends Controller
 
         app('xe.frontend')->js('assets/member/snb.js')->load();
 
-        return Presenter::make('index', compact('member', 'menus', 'tabContent'));
+        return Presenter::make('index', compact('user', 'menus', 'tabContent'));
     }
 
 
+    /**
+     * update DisplayName
+     *
+     * @param Request $request
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     */
     public function updateDisplayName(Request $request)
     {
-        $name = $request->get('name');
-        $name = str_replace('  ', ' ', trim($name));
+        $displayName = $request->get('name');
+        $displayName = str_replace('  ', ' ', trim($displayName));
 
-        $this->handler->validateDisplayName($name);
+        $user = $this->user;
 
-        $member = $request->user();
-
-        $member->displayName = $name;
-
-        $this->members->update($member);
+        XeDB::beginTransaction();
+        try {
+            $user = $this->handler->update($user, compact('displayName'));
+        } catch (\Exception $e) {
+            XeDB::rollback();
+            throw $e;
+        }
+        XeDB::commit();
 
         return Presenter::makeApi(
-            ['type' => 'success', 'message' => 'success', 'displayName' => $name]
+            ['type' => 'success', 'message' => 'success', 'displayName' => $displayName]
         );
     }
 
 
+    /**
+     * validate DisplayName
+     *
+     * @param Request $request
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     * @throws Exception
+     */
     public function validateDisplayName(Request $request)
     {
         $name = $request->get('name');
@@ -158,11 +198,18 @@ class MemberController extends Controller
         );
     }
 
+    /**
+     * update Password
+     *
+     * @param Request $request
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     */
     public function updatePassword(Request $request)
     {
 
-        $validate = \Validator::make(
-            $request->all(),
+        $this->validate(
+            $request,
             ['password' => 'required|confirmed']
         );
 
@@ -170,15 +217,10 @@ class MemberController extends Controller
         $message = 'success';
         $target = null;
 
-        if ($validate->fails()) {
-            $target = 'password';
-            $result = false;
-        }
-
-        if($this->member->getAuthPassword() !== "") {
+        if($this->user->getAuthPassword() !== "") {
 
             $credentials = [
-                'id' => $this->member->getId(),
+                'id' => $this->user->getId(),
                 'password' => $request->get('current_password')
             ];
 
@@ -189,15 +231,40 @@ class MemberController extends Controller
             }
         }
 
-        // save password
-        $this->member->password = \Hash::make($request->get('password'));
-        $this->members->update($this->member);
+        $password = $request->get('password');
+
+        try {
+            $this->handler->validatePassword($password);
+        } catch(Exception $e) {
+            $e = new HttpXpressengineException();
+            $e->setMessage('비밀번호 보안수준을 만족하지 못했습니다.');
+            throw $e;
+        }
+
+        XeDB::beginTransaction();
+        try {
+            // save password
+            $password = \Hash::make($password);
+            $this->users->update($this->user, compact('password'));
+        } catch (\Exception $e) {
+            XeDB::rollback();
+            throw $e;
+        }
+        XeDB::commit();
+
 
         return Presenter::makeApi(
             ['type' => 'success', 'result' => $result, 'message' => $message, 'target' => $target]
         );
     }
 
+    /**
+     * validate Password
+     *
+     * @param Request $request
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     */
     public function validatePassword(Request $request)
     {
         $password = $request->get('password');
@@ -206,7 +273,7 @@ class MemberController extends Controller
         try {
             $secure = '';
             if ($this->handler->validatePassword($password)) {
-                $levels = app('config')->get('xe.member.password.levels');
+                $levels = app('config')->get('xe.user.password.levels');
 
                 foreach ($levels as $key => $level) {
                     $validate = $level['validate'];
@@ -225,83 +292,25 @@ class MemberController extends Controller
         }
     }
 
-
-    /*public function getEdit()
-    {
-        $member = $this->member;
-
-        // dynamic field
-        $dynamicField = app('xe.dynamicField');
-        $fieldTypes = $dynamicField->gets('member');
-        return Presenter::make('edit', compact('member', 'fieldTypes'));
-    }*/
-
-    /*public function postEdit(Request $request)
-    {
-        $member = $this->member;
-
-        $input = $request->except(
-            'email',
-            'displayName',
-            'currentPassword',
-            'password',
-            'password_confirmation',
-            '_token'
-        );
-
-        $rules = ['password' => 'confirmed'];
-
-        // displayName
-        if (!empty($request->get('displayName')) && $request->get('displayName') !== $member->displayName) {
-            $input['displayName'] = $request->get('displayName');
-            $rules['displayName'] = 'unique:member';
-        }
-
-        // email
-        if ($request->get('email') !== $member->email) {
-            $input['email'] = $request->get('email');
-            $rules['email'] = 'email';
-        }
-
-        $this->validate($request, $rules);
-
-        // password
-        if (!empty($input['password'])) {
-            if (Auth::validate(['id' => $member->getId(), 'password' => $request->get('currentPassword')]) !== true) {
-                $e = new InvalidArgumentHttpException();
-                $e->setMessage('현재 비밀번호가 일치하지 않습니다');
-                throw $e;
-            }
-            $input['password'] = Hash::make($input['password']);
-        }
-
-        XeDB::beginTransaction();
-
-        try {
-            $member->fill(array_only($input, ['displayName', 'email', 'password']));
-            $member = $this->members->update($member);
-        } catch (Exception $e) {
-            XeDB::rollBack();
-            throw $e;
-        }
-
-        XeDB::commit();
-
-        return redirect()->back()->with('alert', ['type' => 'success', 'message' => '수정되었습니다.']);
-    }*/
-
+    /**
+     * update user's main email address
+     *
+     * @param Request $request
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     */
     public function updateMainMail(Request $request)
     {
         $address = $request->get('address');
 
-        if ($this->member->email === $address) {
+        if ($this->user->email === $address) {
             $e = new InvalidArgumentException();
             $e->setMessage('기존 대표 이메일과 동일합니다.');
             throw $e;
         }
 
         $selected = null;
-        foreach ($this->member->mails as $mail) {
+        foreach ($this->user->emails as $mail) {
             if ($mail->address === $address) {
                 $selected = $mail;
                 break;
@@ -315,11 +324,11 @@ class MemberController extends Controller
             throw $e;
         }
 
-        $this->member->email = $address;
+        $this->user->email = $address;
 
         XeDB::beginTransaction();
         try {
-            $this->members->update($this->member);
+            $this->users->update($this->user);
         } catch (\Exception $e) {
             XeDB::rollback();
         }
@@ -331,60 +340,58 @@ class MemberController extends Controller
 
     public function getMailList()
     {
-        $member = $this->member;
-        $mails = $member->mails;
+        $user = $this->user;
+        $mails = $user->mails;
         if ($mails === null) {
-            $mails = $this->mails->fetchAll(['memberId' => $member->getId()]);
+            $mails = $this->mails->fetchAll(['memberId' => $user->getId()]);
         } else {
             $mails = array_values($mails);
         }
         return Presenter::makeApi(['mails' => $mails]);
     }
 
+    /**
+     * add email
+     *
+     * @param Request $request
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     * @throws Exception
+     */
     public function addMail(Request $request)
     {
         $input = $request->only('address');
 
         // validation
-        $validate = \Validator::make(
-            $request->all(),
+        $this->validate(
+            $request,
             [
                 'address' => 'email|required'
             ]
         );
-        if ($validate->fails()) {
-            $e = new InvalidArgumentException();
-            $e->setMessage('이메일 형식이 잘못되었습니다.');
-            throw $e;
-        }
 
         // 이미 인증 요청중인 이메일이 있는지 확인한다.
         $useEmailConfirm = $this->handler->usingEmailConfirm();
         if ($useEmailConfirm) {
-            if ($this->member->getPendingEmail() !== null) {
+            if ($this->user->getPendingEmail() !== null) {
                 throw new PendingEmailAlreadyExistsException();
             }
         }
 
         // 이미 존재하는 이메일이 있는지 확인한다.
-        $exists = $this->mails->findByAddress($input['address']);
-        if ($exists !== null) {
+        if($this->mails->findByAddress($input['address'])) {
             throw new MailAlreadyExistsException();
         }
 
-        array_set($input, 'memberId', $this->member->getId());
+        //array_set($input, 'userId', $this->user->getId());
         XeDB::beginTransaction();
         try {
-            if ($useEmailConfirm) {
-                $mail = new PendingMailEntity($input);
-                $mail = $this->pendingMails->insert($mail);
+            $mail = $this->handler->createEmail($this->user, $input, !$useEmailConfirm);
 
+            if ($useEmailConfirm) {
                 /** @var EmailBroker $broker */
                 $broker = app('xe.auth.email');
                 $broker->sendEmailForConfirmation($mail);
-            } else {
-                $mail = new MailEntity($input);
-                $mail = $this->mails->insert($mail);
             }
         } catch (\Exception $e) {
             XeDB::rollback();
@@ -396,10 +403,18 @@ class MemberController extends Controller
         return Presenter::makeApi(['message' => '추가되었습니다']);
     }
 
+    /**
+     * confirm email
+     *
+     * @param Request $request
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     * @throws Exception
+     */
     public function confirmMail(Request $request)
     {
-        $input = $request->get('code');
-        $pendingMail = $this->member->getPendingEmail();
+        $code = $request->get('code');
+        $pendingMail = $this->user->getPendingEmail();
 
         if ($pendingMail === null) {
             throw new PendingEmailNotExistsException();
@@ -407,7 +422,7 @@ class MemberController extends Controller
 
         XeDB::beginTransaction();
         try {
-            app('xe.auth.email')->confirmEmail($pendingMail->getAddress(), $input);
+            app('xe.auth.email')->confirmEmail($pendingMail, $code);
         } catch (InvalidConfirmationCodeException $e) {
             $e = new InvalidArgumentException();
             $e->setMessage('잘못된 인증 코드입니다. 인증 코드를 확인하시고 다시 입력해주세요.');
@@ -422,9 +437,16 @@ class MemberController extends Controller
         return Presenter::makeApi(['message' => '인증되었습니다.']);
     }
 
+    /**
+     * resend pending email
+     *
+     * @param Request $request
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     */
     public function resendPendingMail(Request $request)
     {
-        $pendingMail = $this->member->getPendingEmail();
+        $pendingMail = $this->user->getPendingEmail();
 
         if ($pendingMail === null) {
             throw new PendingEmailNotExistsException();
@@ -437,16 +459,30 @@ class MemberController extends Controller
         return Presenter::makeApi(['message' => '재전송하였습니다.']);
     }
 
+    /**
+     * delete email
+     *
+     * @param Request $request
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     * @throws Exception
+     */
     public function deleteMail(Request $request)
     {
-        $input = $request->get('address');
+        $address = $request->get('address');
 
         // 해당회원이 가진 이메일을 찾는다.
         $selected = null;
-        foreach ($this->member->mails as $mail) {
-            if ($mail->address === $input) {
-                $selected = $mail;
-                break;
+
+        $pendingEmail = $this->user->getPendingEmail();
+        if($pendingEmail !== null && $pendingEmail->getAddress() === $address) {
+            $selected = $pendingEmail;
+        } else {
+            foreach ($this->user->emails as $mail) {
+                if ($mail->address === $address) {
+                    $selected = $mail;
+                    break;
+                }
             }
         }
 
@@ -459,7 +495,7 @@ class MemberController extends Controller
 
         XeDB::beginTransaction();
         try {
-            $this->mails->delete($selected);
+            $this->handler->deleteEmail($selected);
         } catch (\Exception $e) {
             XeDB::rollback();
             throw $e;
@@ -469,39 +505,27 @@ class MemberController extends Controller
         return Presenter::makeApi(['message' => '삭제되었습니다.']);
     }
 
+    /**
+     * delete user's pending email
+     *
+     * @param Request $request
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     * @throws Exception
+     */
     public function deletePendingMail(Request $request)
     {
-        $input = $request->get('address');
-
-        // 해당회원이 가진 이메일을 찾는다.
-        $selected = $this->member->getPendingEmail();
-
-
-        // 해당회원이 가진 이메일이 아닐 경우 예외처리한다.
-        if ($selected === null) {
-            $e = new InvalidArgumentException();
-            $e->setMessage('존재하지 않는 이메일입니다.');
-            throw $e;
-        }
-
-        XeDB::beginTransaction();
-        try {
-            $this->pendingMails->delete($selected);
-        } catch (\Exception $e) {
-            XeDB::rollback();
-            throw $e;
-        }
-        XeDB::commit();
-
-        return Presenter::makeApi(['message' => '삭제되었습니다.']);
+        return $this->deleteMail($request);
     }
 
-    /*public function getLeave()
-    {
-        $member = $this->member;
-        return \Presenter::make('leave', compact('member'));
-    }*/
-
+    /**
+     * leave
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws Exception
+     */
     public function leave(Request $request)
     {
         $confirm = $request->get('confirm_leave');
@@ -512,7 +536,7 @@ class MemberController extends Controller
             throw $e;
         }
 
-        $id = $this->member->getId();
+        $id = $this->user->getId();
 
         XeDB::beginTransaction();
         try {
@@ -528,7 +552,14 @@ class MemberController extends Controller
         return redirect()->to('/');
     }
 
-    private function memberEditView(MemberEntityInterface $member)
+    /**
+     * show user info page
+     *
+     * @param MemberEntityInterface $user
+     *
+     * @return $this
+     */
+    private function memberEditView(MemberEntityInterface $user)
     {
 
         // dynamic field
@@ -536,7 +567,7 @@ class MemberController extends Controller
         $fieldTypes = $dynamicField->gets('member');
 
         // password configuration
-        $passwordConfig = app('config')->get('xe.member.password');
+        $passwordConfig = app('config')->get('xe.user.password');
         $passwordLevel = array_get($passwordConfig['levels'], $passwordConfig['default']);
 
         $useEmailConfirm = $this->handler->usingEmailConfirm();
@@ -573,6 +604,6 @@ class MemberController extends Controller
         /** @var SkinHandler $skinHandler */
         $skinHandler = app('xe.skin');
         $skin = $skinHandler->getAssigned('member/settings');
-        return $skin->setView('edit')->setData(compact('member', 'fieldTypes', 'passwordLevel'));
+        return $skin->setView('edit')->setData(compact('user', 'fieldTypes', 'passwordLevel'));
     }
 }

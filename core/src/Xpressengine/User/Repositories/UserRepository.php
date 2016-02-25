@@ -15,6 +15,7 @@ namespace Xpressengine\User\Repositories;
 
 use Xpressengine\Member\Entities\MemberEntityInterface;
 use Xpressengine\Member\Repositories\MemberRepositoryInterface;
+use Xpressengine\User\UserInterface;
 
 /**
  * 회원정보를 저장하는 Repository
@@ -39,6 +40,45 @@ class UserRepository implements MemberRepositoryInterface
         $this->setModel($model);
     }
 
+
+    /**
+     * create
+     *
+     * @param array $data
+     *
+     * @return MemberEntityInterface
+     */
+    public function create(array $data)
+    {
+        $model = $this->newModel();
+        if (array_has($data, 'password')) {
+            $data['passwordUpdatedAt'] = $model->freshTimestamp();
+        }
+        $user = $model->create($data);
+        return $user;
+    }
+
+    /**
+     * update
+     *
+     * @param UserInterface $user
+     * @param array         $data
+     *
+     * @return UserInterface
+     */
+    public function update(UserInterface $user, array $data = [])
+    {
+
+        if ($user->isDirty('password') || (!empty($data['password']) && $user->password !== $data['password'])) {
+            $model = $this->newModel();
+            $data['passwordUpdatedAt'] = $model->freshTimestamp();
+        }
+
+        $user->update($data);
+
+        return $user;
+    }
+
     /**
      * 이메일 주소를 소유한 회원을 조회한다.
      *
@@ -49,9 +89,12 @@ class UserRepository implements MemberRepositoryInterface
      */
     public function findByEmail($address, $with = null)
     {
-        $user = $this->query()->whereHas('emails', function($q) use($address) {
-            $q->where('address', $address);
-        })->first();
+        $user = $this->query()->whereHas(
+            'emails',
+            function ($q) use ($address) {
+                $q->where('address', $address);
+            }
+        )->first();
 
         return $user;
     }
@@ -66,9 +109,12 @@ class UserRepository implements MemberRepositoryInterface
      */
     public function searchByEmailPrefix($emailPrefix, $with = null)
     {
-        $users = $this->query()->whereHas('emails', function($q) use($emailPrefix) {
-            $q->where('address', 'like', $emailPrefix.'@%');
-        })->get();
+        $users = $this->query()->whereHas(
+            'emails',
+            function ($q) use ($emailPrefix) {
+                $q->where('address', 'like', $emailPrefix.'@%');
+            }
+        )->get();
 
         return $users;
     }

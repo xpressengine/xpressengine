@@ -118,27 +118,30 @@ class AuthController extends Controller
         XeDB::beginTransaction();
         try {
             $member = $this->handler->create($userData);
+
+            // if email confirmation enabled, send email for confirm
+            if ($this->useEmailConfirm() !== false) {
+                $mail = $member->getPendingEmail();
+                try {
+                    /** @var EmailBrokerInterface $broker */
+                    $this->emailBroker->sendEmailForConfirmation($mail);
+                } catch (Exception $e) {
+                    throw $e;
+                }
+
+                XeDB::commit();
+                // redirect to email confirm info page
+                return redirect()
+                    ->route('auth.confirm', ['email' => $member->email])
+                    ->with('alert', ['type' => 'info', 'message' => '회원가입이 정상적으로 처리되었습니다. 회원계정을 활성화하려면 이메일 인증을 하셔야 합니다.']);
+            }
+
         } catch (\Exception $e) {
             XeDB::rollback();
             throw $e;
         }
         XeDB::commit();
 
-        // if email confirmation enabled, send email for confirm
-        if ($this->useEmailConfirm() !== false) {
-            $mail = $member->getPendingEmail();
-            try {
-                /** @var EmailBrokerInterface $broker */
-                $this->emailBroker->sendEmailForConfirmation($mail);
-            } catch (Exception $e) {
-                throw $e;
-            }
-
-            // redirect to email confirm info page
-            return redirect()
-                ->route('auth.confirm', ['email' => $member->email])
-                ->with('alert', ['type' => 'info', 'message' => '회원가입이 정상적으로 처리되었습니다. 회원계정을 활성화하려면 이메일 인증을 하셔야 합니다.']);
-        }
 
         // login and redirect
         $this->auth->login($member);
@@ -155,13 +158,15 @@ class AuthController extends Controller
             ]
         );
 
-        $email = $request->get('email');
+        $address = $request->get('email');
         $code = $request->get('code');
 
         // code가 없을 경우 인증 페이지 출력
         if ($code === null) {
             return \Presenter::make('register_confirm');
         }
+
+        $email = $this->handler->pendingEmails()->findByAddress($address);
 
         XeDB::beginTransaction();
         try {
