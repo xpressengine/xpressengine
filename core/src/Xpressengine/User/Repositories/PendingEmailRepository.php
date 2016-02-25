@@ -53,6 +53,9 @@ class PendingEmailRepository implements PendingMailRepositoryInterface
      */
     public function create(UserInterface $user, array $data)
     {
+        if(empty($data['confirmationCode'])) {
+            $data['confirmationCode'] = str_random();
+        }
         $email = $this->newModel()->create($data);
         $user->pendingEmail()->save($email);
         return $email;
@@ -70,9 +73,6 @@ class PendingEmailRepository implements PendingMailRepositoryInterface
     public function delete(EmailInterface $email)
     {
         $user = $email->user;
-        if($user->email === $email->getAddress()) {
-            throw new CannotDeleteMainEmailOfMemberException();
-        }
         return $email->delete();
     }
 

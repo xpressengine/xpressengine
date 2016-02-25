@@ -43,9 +43,7 @@ trait RepositoryTrait
      */
     public function update(Model $item, array $data = [])
     {
-        if($data === null) {
-            $item->update($data);
-        }
+        $item->update($data);
         return $item;
     }
 

@@ -48,6 +48,7 @@ class User extends DynamicModel implements UserInterface
         'password',
         'rating',
         'status',
+        'passwordUpdatedAt'
     ];
 
     protected $hidden = ['password'];
@@ -284,13 +285,7 @@ class User extends DynamicModel implements UserInterface
      */
     public function getPendingEmail()
     {
-        $mails = $this->getAttribute('pending_mails');
-        if ($mails === null) {
-            return null;
-        }
-        if (is_array($mails) && !empty($mails)) {
-            return reset($mails);
-        }
+        return $this->pendingEmail;
     }
 
     /**

@@ -69,21 +69,21 @@ class WidgetServiceProvider extends ServiceProvider
             'xe.widget.parser'
         );
 
-        intercept(
-            'HtmlRenderer@render',
-            'widget.replace',
-            function ($target) {
-                $htmlResponseString = $target();
-
-                /**
-                 * @var WidgetParser $parser
-                 */
-                $parser = app('xe.widget.parser');
-
-                $htmlResponseString = $parser->parseXml($htmlResponseString);
-                return $htmlResponseString;
-            }
-        );
+        //intercept(
+        //    'HtmlRenderer@render',
+        //    'widget.replace',
+        //    function ($target) {
+        //        $htmlResponseString = $target();
+        //
+        //        /**
+        //         * @var WidgetParser $parser
+        //         */
+        //        $parser = app('xe.widget.parser');
+        //
+        //        $htmlResponseString = $parser->parseXml($htmlResponseString);
+        //        return $htmlResponseString;
+        //    }
+        //);
     }
 
     /**

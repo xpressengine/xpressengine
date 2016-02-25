@@ -19,8 +19,10 @@ use Illuminate\Contracts\Mail\Mailer;
 use Xpressengine\Member\Exceptions\InvalidConfirmationCodeException;
 use Xpressengine\Member\Exceptions\PendingEmailNotExistsException;
 use Xpressengine\Member\Repositories\MailRepositoryInterface;
+use Xpressengine\Member\Repositories\PendingMailRepositoryInterface;
 use Xpressengine\User\Models\PendingEmail;
 use Xpressengine\User\Models\UserEmail;
+use Xpressengine\User\Repositories\PendingEmailRepository;
 
 /**
  * 이 클래스는 Xpressengine에서 이메일 인증 처리를 수행하는 클래스이다.
@@ -33,12 +35,6 @@ use Xpressengine\User\Models\UserEmail;
  */
 class EmailBroker implements EmailBrokerInterface
 {
-    /**
-     * 회원 이메일 저장소
-     *
-     * @var MailRepositoryInterface
-     */
-    protected $mails;
 
     /**
      * 이메일 전송기
@@ -55,18 +51,25 @@ class EmailBroker implements EmailBrokerInterface
     protected $view;
 
     /**
+     * @var UserHandler
+     */
+    private $handler;
+
+    /**
      * 생성자.
      *
-     * @param Mailer $mailer mail sender
-     * @param string $view   mail 전송시 사용할 view 파일
+     * @param UserHandler $handler
+     * @param Mailer      $mailer mail sender
+     * @param string      $view   mail 전송시 사용할 view 파일
      */
     public function __construct(
-        MailRepositoryInterface $mails,
+        UserHandler $handler,
         Mailer $mailer,
         $view
     ) {
         $this->mailer = $mailer;
         $this->view = $view;
+        $this->handler = $handler;
     }
 
     /**
@@ -126,14 +129,11 @@ class EmailBroker implements EmailBrokerInterface
 
         $info = [
             'address' => $email->getAddress(),
-            'memberId' => $email->getUserId()
         ];
 
-        $userEmail = $this->mails->create($info);
-
-        /** @var PendingEmail $email */
-        $email->delete();
-
+        // remove pending email & create confirmed email
+        $this->handler->createEmail($email->user, $info, true);
+        $this->handler->deleteEmail($email);
         return true;
     }
 }

@@ -158,7 +158,7 @@ class UserServiceProvider extends ServiceProvider
                 // The password broker uses a token repository to validate tokens and send user
                 // password e-mails, as well as validating that password reset process as an
                 // aggregate service of sorts providing a convenient interface for resets.
-                return new EmailBroker($app['xe.user.emails'], $app['mailer'], $view);
+                return new EmailBroker($app['xe.user'], $app['mailer'], $view);
             }
         );
     }
@@ -258,6 +258,7 @@ class UserServiceProvider extends ServiceProvider
             'xe.user',
             function ($app) {
                 $proxyClass = $app['xe.interception']->proxy(UserHandler::class, 'XeUser');
+
                 $userHandler = new $proxyClass(
                     $app['xe.users'],
                     $app['xe.user.accounts'],
