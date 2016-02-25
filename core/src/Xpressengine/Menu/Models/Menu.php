@@ -15,6 +15,7 @@ namespace Xpressengine\Menu\Models;
 
 use Illuminate\Database\Eloquent\Collection;
 use Xpressengine\Database\Eloquent\DynamicModel;
+use Xpressengine\Site\Site;
 use Xpressengine\Support\Tree\Tree;
 use Xpressengine\Support\Tree\TreeMakerTrait;
 
@@ -78,6 +79,16 @@ class Menu extends DynamicModel
      * @var string
      */
     protected static $itemModel = MenuItem::class;
+
+    /**
+     * Relation of site
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function site()
+    {
+        return $this->belongsTo(Site::class, 'siteKey', 'siteKey');
+    }
 
     /**
      * Relation of items
