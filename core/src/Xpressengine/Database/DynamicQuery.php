@@ -255,7 +255,7 @@ class DynamicQuery extends Builder
         }
 
         if ($this->proxy === true) {
-            $wheres = parent::wheres === null ? [] : parent::wheres;
+            $wheres = $this->wheres === null ? [] : $this->wheres;
             $this->getProxyManager()->update($args, $wheres);
         }
         return $result;
@@ -275,7 +275,7 @@ class DynamicQuery extends Builder
         $result = parent::delete($id);
 
         if ($this->proxy === true) {
-            $wheres = parent::wheres === null ? [] : parent::wheres;
+            $wheres = $this->wheres === null ? [] : $this->wheres;
             $this->getProxyManager()->delete($wheres);
         }
 

@@ -70,8 +70,10 @@ abstract class DynamicModel extends Model
 
     public function __construct(array $attributes = [])
     {
-        $this->dynamicAttributes = $attributes;
-        $attributes = $this->filter($attributes, $this->schema());
+        if ($this->dynamic === true) {
+            $this->dynamicAttributes = $attributes;
+            $attributes = $this->filter($attributes, $this->schema());
+        }
 
         parent::__construct($attributes);
     }
