@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Menu;
 
-use Xpressengine\Member\Entities\MemberEntityInterface;
+use Xpressengine\User\UserInterface;
 use Xpressengine\Menu\Models\Menu;
 use Xpressengine\Permission\Policy;
 use Xpressengine\Menu\Models\MenuItem;
@@ -33,12 +33,12 @@ class MenuItemPolicy extends Policy
     /**
      * Check access allows
      *
-     * @param MemberEntityInterface $user user instance
-     * @param MenuItem              $item menu item instance
-     * @param Menu|null             $menu menu instance
+     * @param UserInterface $user user instance
+     * @param MenuItem      $item menu item instance
+     * @param Menu|null     $menu menu instance
      * @return bool
      */
-    public function access($user, MenuItem $item, Menu $menu = null)
+    public function access(UserInterface $user, MenuItem $item, Menu $menu = null)
     {
         $breadcrumbs = $this->getItemBreadcrumbs($item, $menu);
 
@@ -48,12 +48,12 @@ class MenuItemPolicy extends Policy
     /**
      * Check visible allows
      *
-     * @param MemberEntityInterface $user user instance
-     * @param MenuItem              $item menu item instance
-     * @param Menu|null             $menu menu instance
+     * @param UserInterface $user user instance
+     * @param MenuItem      $item menu item instance
+     * @param Menu|null     $menu menu instance
      * @return bool
      */
-    public function visible($user, MenuItem $item, Menu $menu = null)
+    public function visible(UserInterface $user, MenuItem $item, Menu $menu = null)
     {
         $breadcrumbs = $this->getItemBreadcrumbs($item, $menu);
 

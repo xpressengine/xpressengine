@@ -13,10 +13,10 @@
  */
 namespace Xpressengine\Permission;
 
-use Xpressengine\Member\Entities\Guest;
-use Xpressengine\Member\Entities\MemberEntityInterface;
-use Xpressengine\Member\Rating;
+use Xpressengine\User\Models\Guest;
+use Xpressengine\User\Rating;
 use Xpressengine\Member\Repositories\VirtualGroupRepositoryInterface;
+use Xpressengine\User\UserInterface;
 
 /**
  * Abstract class Policy
@@ -70,12 +70,12 @@ abstract class Policy
     /**
      * Check allows
      *
-     * @param MemberEntityInterface $user       user instance
-     * @param Permission            $permission permission instance
-     * @param string                $action     action keyword
+     * @param UserInterface $user       user instance
+     * @param Permission    $permission permission instance
+     * @param string        $action     action keyword
      * @return bool
      */
-    protected function check(MemberEntityInterface $user, Permission $permission, $action)
+    protected function check(UserInterface $user, Permission $permission, $action)
     {
         $grants = $permission[$action] ?: [];
 
@@ -118,11 +118,11 @@ abstract class Policy
     /**
      * Check except user
      *
-     * @param MemberEntityInterface $user    user instance
-     * @param array                 $userIds except target identifiers
+     * @param UserInterface $user    user instance
+     * @param array         $userIds except target identifiers
      * @return bool
      */
-    protected function isExcepted($user, array $userIds = [])
+    protected function isExcepted(UserInterface $user, array $userIds = [])
     {
         if (empty($userIds) === true || $this->isGuest($user)) {
             return false;
@@ -134,12 +134,12 @@ abstract class Policy
     /**
      * 타입에 맞는 권한 판별 메서드를 호출 함.
      *
-     * @param MemberEntityInterface $user  user instance
-     * @param string                $type  check type
-     * @param mixed                 $value given value
+     * @param UserInterface $user  user instance
+     * @param string        $type  check type
+     * @param mixed         $value given value
      * @return bool
      */
-    protected function checker($user, $type, $value)
+    protected function checker(UserInterface $user, $type, $value)
     {
         $inspectMethod = $type . 'Inspect';
 
@@ -149,11 +149,11 @@ abstract class Policy
     /**
      * User 가 속한 그룹이 권한이 있는지 판별.
      *
-     * @param MemberEntityInterface $user      user instance
-     * @param array                 $criterion criterion group ids
+     * @param UserInterface $user      user instance
+     * @param array         $criterion criterion group ids
      * @return bool
      */
-    protected function groupInspect($user, $criterion)
+    protected function groupInspect(UserInterface $user, $criterion)
     {
         $groups = $user->getGroups();
         foreach ($groups as $group) {
@@ -168,11 +168,11 @@ abstract class Policy
     /**
      * User 가 속한 가상그룹이 권한이 있는지 판별.
      *
-     * @param MemberEntityInterface $user      user instance
-     * @param array                 $criterion criterion vgroup ids
+     * @param UserInterface $user      user instance
+     * @param array         $criterion criterion vgroup ids
      * @return bool
      */
-    protected function vgroupInspect($user, $criterion)
+    protected function vgroupInspect(UserInterface $user, $criterion)
     {
         if ($this->isGuest($user)) {
             return false;
@@ -191,11 +191,11 @@ abstract class Policy
     /**
      * User 가 권한이 있는 대상으로 지정되어 있는지 판별
      *
-     * @param MemberEntityInterface $user      user instance
-     * @param array                 $criterion criterion user ids
+     * @param UserInterface $user      user instance
+     * @param array         $criterion criterion user ids
      * @return bool
      */
-    protected function userInspect($user, $criterion)
+    protected function userInspect(UserInterface $user, $criterion)
     {
         if (!$this->isGuest($user) && in_array($user->getId(), $criterion)) {
             return true;
@@ -207,11 +207,11 @@ abstract class Policy
     /**
      * User 가 권한이 있는 등급인지 판별
      *
-     * @param MemberEntityInterface $user      user instance
-     * @param string                $criterion user rating keyword
+     * @param UserInterface $user      user instance
+     * @param string        $criterion user rating keyword
      * @return bool
      */
-    protected function ratingInspect($user, $criterion)
+    protected function ratingInspect(UserInterface $user, $criterion)
     {
         if (Rating::compare($this->userRating($user), $criterion) == -1) {
             return false;
@@ -223,10 +223,10 @@ abstract class Policy
     /**
      * Get a User's rating keyword
      *
-     * @param MemberEntityInterface $user user instance
+     * @param UserInterface $user user instance
      * @return string
      */
-    protected function userRating($user)
+    protected function userRating(UserInterface $user)
     {
         if ($this->isGuest($user) === true) {
             return Rating::GUEST;
@@ -238,10 +238,10 @@ abstract class Policy
     /**
      * 전달된 사용자가 guest 인지 확인
      *
-     * @param MemberEntityInterface $user user instance
+     * @param UserInterface $user user instance
      * @return bool
      */
-    protected function isGuest($user)
+    protected function isGuest(UserInterface $user)
     {
         return $user instanceof Guest;
     }
