@@ -69,6 +69,11 @@ class Counter
         }
     }
 
+    public function hasByName($targetId, MemberEntityInterface $user = null)
+    {
+        return $this->getByName($targetId, $user) !== null;
+    }
+
     /**
      * has log
      *
@@ -79,7 +84,7 @@ class Counter
      */
     public function has($targetId, MemberEntityInterface $user = null, $option = '')
     {
-        return $this->get($targetId, $user, $option) === null;
+        return $this->get($targetId, $user, $option) !== null;
     }
 
     /**
@@ -145,11 +150,37 @@ class Counter
 
         if ($user == null || $user instanceof Guest) {
             return CounterLog::where('targetId', $targetId)->where('ipaddress', $this->request->ip())
-                ->where('counterName', $this->name)->where('counterOption', $option)->get();
+                ->where('counterName', $this->name)->where('counterOption', $option)->first();
         } else {
             return CounterLog::where('targetId', $targetId)->where('userId', $user->id)
-                ->where('counterName', $this->name)->where('counterOption', $option)->get();
+                ->where('counterName', $this->name)->where('counterOption', $option)->first();
         }
+    }
+
+    public function getByName($targetId, MemberEntityInterface $user = null)
+    {
+        if ($user == null || $user instanceof Guest) {
+            return CounterLog::where('targetId', $targetId)->where('ipaddress', $this->request->ip())
+                ->where('counterName', $this->name)->first();
+        } else {
+            return CounterLog::where('targetId', $targetId)->where('userId', $user->id)
+                ->where('counterName', $this->name)->first();
+        }
+    }
+
+    /**
+     * get point sum
+     *
+     * @param string $targetId target id
+     * @param string $option   counter option
+     * @return mixed
+     */
+    public function getPoint($targetId, $option = '')
+    {
+        $this->checkOption($option);
+
+        return CounterLog::where('targetId', $targetId)
+            ->where('counterName', $this->name)->where('counterOption', $option)->sum('point');
     }
 
     /**
@@ -164,6 +195,6 @@ class Counter
         $this->checkOption($option);
 
         return CounterLog::where('targetId', $targetId)
-            ->where('counterName', $this->name)->where('option', $option)->users;
+            ->where('counterName', $this->name)->where('counterOption', $option)->users;
     }
 }
