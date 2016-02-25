@@ -16,7 +16,7 @@
                     <label for="__xe_index_instance">{{ xe_trans('xe::selectHomeMenu') }}</label>
                     <select class="form-control" name="indexInstance" id="indexInstance">
                         @foreach($menus as $menu)
-                            @foreach($menu->getRawItems() as $item)
+                            @foreach($menu->items as $item)
                                 <option value="{{$item->id}}" {{ ($item->id == $indexInstance)?"selected":"" }}>{{xe_trans($item->title)}}</option>
                             @endforeach
                         @endforeach
