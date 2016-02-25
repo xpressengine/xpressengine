@@ -23,7 +23,7 @@ class MenuMigration implements Migration {
 
             $table->string('id', 8);
             $table->string('title');
-            $table->string('site');
+            $table->string('siteKey');
             $table->text('description')->nullable();
 
             $table->primary('id');

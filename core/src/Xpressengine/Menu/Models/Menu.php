@@ -30,7 +30,7 @@ use Xpressengine\Support\Tree\TreeMakerTrait;
  *
  * @property string $id
  * @property string $title
- * @property string $site
+ * @property string $siteKey
  * @property string $description
  */
 class Menu extends DynamicModel

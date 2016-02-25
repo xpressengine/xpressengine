@@ -61,7 +61,7 @@ class MenuController extends Controller
     public function index(IlluminateConfig $config, SiteHandler $siteHandler)
     {
         $siteKey = $siteHandler->getCurrentSiteKey();
-        $menus = Menu::where('site', $siteKey)->get()->getDictionary();
+        $menus = Menu::where('siteKey', $siteKey)->get()->getDictionary();
         $homeMenuId = $siteHandler->getHomeInstanceId();
         $menuMaxDepth = $config->get('xe.menu.maxDepth');
 
@@ -130,7 +130,7 @@ class MenuController extends Controller
             $menu = $handler->create([
                 'title' => Request::get('menuTitle'),
                 'description' => Request::get('menuDescription'),
-                'site' => Request::get('siteKey')
+                'siteKey' => Request::get('siteKey')
             ]);
 
             $handler->setMenuTheme($menu, $desktopTheme, $mobileTheme);

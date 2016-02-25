@@ -568,7 +568,7 @@ class MenuHandler
      */
     public function registerMenuPermission(Menu $menu, Grant $grant)
     {
-        $this->permissions->register($menu->getKey(), $grant, $menu->site);
+        $this->permissions->register($menu->getKey(), $grant, $menu->siteKey);
     }
 
     /**
@@ -579,7 +579,7 @@ class MenuHandler
      */
     public function getPermission(Menu $menu)
     {
-        return $this->permissions->find($menu->getKey(), $menu->site);
+        return $this->permissions->find($menu->getKey(), $menu->siteKey);
     }
 
     /**
@@ -590,7 +590,7 @@ class MenuHandler
      */
     public function deleteMenuPermission(Menu $menu)
     {
-        $this->permissions->destroy($menu->getKey(), $menu->site);
+        $this->permissions->destroy($menu->getKey(), $menu->siteKey);
     }
 
     /**
@@ -602,7 +602,7 @@ class MenuHandler
      */
     public function registerItemPermission(MenuItem $item, Grant $grant)
     {
-        return $this->permissions->register($this->permKeyString($item), $grant, $item->menu->site);
+        return $this->permissions->register($this->permKeyString($item), $grant, $item->menu->siteKey);
     }
 
     /**
@@ -613,7 +613,7 @@ class MenuHandler
      */
     public function getItemPermission(MenuItem $item)
     {
-        return $this->permissions->find($this->permKeyString($item), $item->menu->site);
+        return $this->permissions->find($this->permKeyString($item), $item->menu->siteKey);
     }
 
     /**
@@ -624,7 +624,7 @@ class MenuHandler
      */
     public function deleteItemPermission(MenuItem $item)
     {
-        $this->permissions->destroy($this->permKeyString($item), $item->menu->site);
+        $this->permissions->destroy($this->permKeyString($item), $item->menu->siteKey);
     }
 
     /**
@@ -636,7 +636,7 @@ class MenuHandler
      */
     public function moveItemPermission(MenuItem $fromItem, MenuItem $movedItem)
     {
-        $permission = $this->permissions->find($this->permKeyString($fromItem), $fromItem->menu->site);
+        $permission = $this->permissions->find($this->permKeyString($fromItem), $fromItem->menu->siteKey);
         $to = $this->permKeyString($movedItem);
         $this->permissions->move($permission, substr($to, 0, strrpos($to, '.')));
     }
