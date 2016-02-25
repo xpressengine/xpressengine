@@ -30,10 +30,10 @@ use Xpressengine\Document\Exceptions\ValueRequiredException;
  * @property string writer
  * @property string email
  * @property string certifyKey
- * @property string readCount
- * @property string commentCount
- * @property string assentCount
- * @property string dissentCount
+ * @property integer readCount
+ * @property integer commentCount
+ * @property integer assentCount
+ * @property integer dissentCount
  * @property string approved
  * @property string published
  * @property string status
