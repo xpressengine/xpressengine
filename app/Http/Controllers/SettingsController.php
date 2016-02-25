@@ -2,25 +2,27 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests;
-use Storage;
+use XeStorage;
 use Xpressengine\Http\Request;
-use Xpressengine\Menu\MenuRetrieveHandler;
-use Xpressengine\Permission\Action;
+use Xpressengine\Menu\Models\Menu;
 use Xpressengine\Permission\Grant;
+use Xpressengine\Permission\PermissionHandler;
 use Xpressengine\Settings\SettingsHandler;
 use Xpressengine\Site\SiteHandler;
+use Xpressengine\Storage\File;
 use Xpressengine\Theme\ThemeHandler;
 
 class SettingsController extends Controller
 {
 
-    public function editSetting(MenuRetrieveHandler $menuHandler, SiteHandler $siteHandler, ThemeHandler $themeHandler)
+    public function editSetting(SiteHandler $siteHandler, ThemeHandler $themeHandler)
     {
         $config = app('xe.site')->getSiteConfig();
 
         $siteKey = $siteHandler->getCurrentSiteKey();
         $indexInstance = $siteHandler->getHomeInstanceId();
-        $menus = $menuHandler->getAllMenu($siteKey);
+
+        $menus = Menu::with('items')->where('siteKey', $siteKey)->get();
         $selectedTheme = $themeHandler->getSiteThemeId();
 
         return \Presenter::make(
@@ -34,13 +36,10 @@ class SettingsController extends Controller
         );
     }
 
-    public function updateSetting(Request $request)
+    public function updateSetting(SiteHandler $siteHandler, ThemeHandler $themeHandler, Request $request)
     {
-        $themeHandler = app('xe.theme');
-        $siteHandler = app('xe.site');
-
         $newConfig = $request->only(['site_title', 'favicon']);
-        $config = app('xe.site')->getSiteConfig();
+        $config = $siteHandler->getSiteConfig();
 
         // resolve site_title
         $config['site_title'] = $newConfig['site_title'];
@@ -51,10 +50,10 @@ class SettingsController extends Controller
             // remove old favicon file
             if (isset($config['favicon'])) {
                 $oldLogoFileId = $config['favicon'];
-                $oldLogoFile = Storage::get($oldLogoFileId);
-                Storage::remove($oldLogoFile);
+                $oldLogoFile = File::find($oldLogoFileId);
+                XeStorage::remove($oldLogoFile);
             }
-            $favicon = Storage::upload($uploadedFavicon, 'filebox');
+            $favicon = XeStorage::upload($uploadedFavicon, 'filebox');
             $config['favicon'] = $favicon->id;
         }
         $siteHandler->putSiteConfig($config);
@@ -81,11 +80,12 @@ class SettingsController extends Controller
         return \Presenter::make('settings.permissions', compact('permissionGroups'));
     }
 
-    public function updatePermission(Request $request, $permissionId)
+    public function updatePermission(PermissionHandler $permissionHandler, Request $request, $permissionId)
     {
-        \Permission::register('settings', $permissionId, $this->createAccessGrant($request->only([
+        $permissionHandler->register($permissionId,$this->createAccessGrant($request->only([
             'accessRating', 'accessGroup', 'accessUser', 'accessExcept'
         ])));
+
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => '저장되었습니다.']);
     }
 
@@ -93,7 +93,6 @@ class SettingsController extends Controller
      * createAccessGrant
      *
      * @param array $inputs to create grant params array
-     * @param Grant $grant  if need to add already exist grant this param is not null
      *
      * @return Grant
      *
@@ -107,10 +106,10 @@ class SettingsController extends Controller
         $user = $this->innerParamParsing($inputs['accessUser']);
         $except = $this->innerParamParsing($inputs['accessExcept']);
 
-        $grant->add(Action::ACCESS, 'rating', $rating);
-        $grant->add(Action::ACCESS, 'group', $group);
-        $grant->add(Action::ACCESS, 'user', $user);
-        $grant->add(Action::ACCESS, 'except', $except);
+        $grant->add('access', 'rating', $rating);
+        $grant->add('access', 'group', $group);
+        $grant->add('access', 'user', $user);
+        $grant->add('access', 'except', $except);
 
         return $grant;
     }
@@ -122,7 +121,7 @@ class SettingsController extends Controller
         }
 
         $ret = explode(',', $param);
-        return array_except($ret, [""]);
+        return array_filter($ret);
     }
 
 }

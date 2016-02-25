@@ -49,7 +49,9 @@ class Grant extends Fluent
      */
     public function set($action, $type, $value = null)
     {
-        $this->attributes[$action] = $this->makeValue($type, $value);
+        $value = $this->makeValue($type, $value);
+        $this->attributes[$action] = $this->valueFilter($value);
+        $this->attributes = array_filter($this->attributes);
 
         return $this;
     }
@@ -68,7 +70,10 @@ class Grant extends Fluent
             return $this->set($action, $type, $value);
         }
 
-        $this->attributes[$action] = array_merge($this->attributes[$action], $this->makeValue($type, $value));
+        $value = $this->makeValue($type, $value);
+        $this->attributes[$action] = array_merge($this->attributes[$action], $this->valueFilter($value));
+        $this->attributes = array_filter($this->attributes);
+
         return $this;
     }
 
@@ -112,5 +117,24 @@ class Grant extends Fluent
         }
 
         return $value;
+    }
+
+    protected function valueFilter(array $value)
+    {
+        $unknown = [];
+        foreach (array_keys($value) as $type) {
+            if (!$this->isAllowType($type)) {
+                $unknown[] = $type;
+            }
+        }
+
+        return array_except($value, $unknown);
+    }
+
+    protected function isAllowType($type)
+    {
+        $constName = __CLASS__ . '::' . strtoupper($type) . '_TYPE';
+
+        return defined($constName);
     }
 }

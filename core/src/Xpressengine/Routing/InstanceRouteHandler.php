@@ -115,6 +115,7 @@ class InstanceRouteHandler
 
     /**
      * @var SiteHandler
+     * @deprecated not used
      */
     protected $siteHandler;
     /**

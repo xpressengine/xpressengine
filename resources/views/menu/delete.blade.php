@@ -19,8 +19,8 @@
                         <div class="row">
                             <div class="col-sm-5">
                                 <div class="inpt_bd">
-                                    @if($menu->countItem() != 0)
-                                        이 메뉴는 {{$menu->countItem()}} 개의 메뉴 아이템을 가지고 있습니다.
+                                    @if($menu->items->count() != 0)
+                                        이 메뉴는 {{$menu->items->count()}} 개의 메뉴 아이템을 가지고 있습니다.
                                         <br/>메뉴 아이템을 삭제한 뒤 삭제를 다시 시도하십시오.
                                     @else
                                         메뉴 삭제하면 다시 복구할 수 없습니다.
@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div class="btn_group_all">
-                @if($menu->countItem() == 0)
+                @if($menu->items->count() == 0)
                     <button type="submit" class="btn btn_red">{{xe_trans('xe::delete')}}</button>
                 @endif
                 <a href="{{ route('settings.menu.index')}}" class="btn btn_gray">{{xe_trans('xe::cancel')}}</a>

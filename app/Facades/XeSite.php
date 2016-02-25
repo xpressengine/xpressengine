@@ -1,30 +1,42 @@
 <?php
 /**
- * NameNotExistsException
+ * Site.php
  *
  * PHP version 5
  *
- * @category    Document
- * @package     Xpressengine\Document
+ * @category    App
+ * @package     App\Facades
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Counter\Exceptions;
 
-use Xpressengine\Counter\CounterException;
+namespace App\Facades;
+
+use Illuminate\Support\Facades\Facade;
 
 /**
- * NameNotExistsException
+ * Class Site
  *
- * @category    Counter
- * @package     Xpressengine\Counter
+ * @category    App
+ * @package     App\Facades
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class NameNotExistsException extends CounterException
+
+class XeSite extends Facade
 {
+
+    /**
+     * Get the registered name of the component.
+     *
+     * @return string
+     */
+    protected static function getFacadeAccessor()
+    {
+        return 'xe.site';
+    }
 }

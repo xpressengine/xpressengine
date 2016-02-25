@@ -11,7 +11,7 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Category\Models;
+namespace Xpressengine\Support\Tree;
 
 use Illuminate\Database\Eloquent\Collection;
 use Xpressengine\Database\Eloquent\DynamicModel;
@@ -33,6 +33,8 @@ use Illuminate\Database\Eloquent\Builder;
  */
 abstract class Node extends DynamicModel
 {
+    use TreeMakerTrait;
+
     protected $parent;
     /**
      * children collection of model
@@ -86,7 +88,7 @@ abstract class Node extends DynamicModel
      */
     public function getParent()
     {
-        if (!$this->parent) {
+        if (!$this->parent && $this->ancestors->count() > 0) {
             $this->parent = $this->ancestors->first(function ($i, $model) {
                 return $model->pivot->{$this->getDepthName()} == 1;
             });
@@ -107,12 +109,47 @@ abstract class Node extends DynamicModel
      */
     public function getChildren()
     {
-        if (array_key_exists($this->getTreeRelationName(), $this->getRelations())) {
-            return $this->getRelation($this->getTreeRelationName());
-        }
+//        if (array_key_exists($this->getTreeRelationName(), $this->getRelations())) {
+//            return $this->getRelation($this->getTreeRelationName());
+//        }
 
         if (!$this->children) {
-            $this->children = $this->where($this->getParentIdName(), $this->id)->get()->sort([$this, 'orderSort']);
+//            $this->children = $this->where($this->getParentIdName(), $this->id)->get()->sort([$this, 'orderSort']);
+
+            $this->getDescendantTree(true);
+        }
+
+        return $this->children;
+    }
+
+    public function setChildren($children = [])
+    {
+        $this->children()->merge($children);
+
+        return $this;
+    }
+
+    public function setRawChildren($children = [])
+    {
+        $this->children = Collection::make($children);
+
+        return $this;
+    }
+
+    public function addChild(Node $node)
+    {
+        $this->children()->put($node->getKey(), $node);
+    }
+
+    public function hasChild()
+    {
+        return $this->children()->count() > 0;
+    }
+
+    protected function children()
+    {
+        if (!$this->children) {
+            $this->children = new Collection();
         }
 
         return $this->children;
@@ -137,44 +174,54 @@ abstract class Node extends DynamicModel
         return $aOrdering < $bOrdering ? -1 : 1;
     }
 
-    /**
-     * Get a descendant tree collection of model
-     *
-     * @param bool $withSelf flag for descendant tree with self
-     * @return Collection
-     */
+//    /**
+//     * Get a descendant tree collection of model
+//     *
+//     * @param bool $withSelf flag for descendant tree with self
+//     * @return Collection
+//     */
+//    public function getDescendantTree($withSelf = false)
+//    {
+//        $bag = [];
+//        $collection = new Collection();
+//
+//        if ($withSelf && $this->relationLoaded($this->getTreeRelationName())) {
+//            return $collection->put($this->getKey(), $this);
+//        }
+//
+//        $items = $this->descendants->sort([$this, 'orderSort']);
+//
+//        /** @var Node $item */
+//        foreach ($items as $item) {
+//            $bag[$item->getKey()] = $item;
+//        }
+//
+//        foreach ($items as $item) {
+//            $parentId = $item->{$this->getParentIdName()};
+//            if (array_key_exists($parentId, $bag)) {
+//                $bag[$parentId]->addRelation($item->getTreeRelationName(), $item);
+//            } else {
+//                $collection->put($item->getKey(), $item);
+//            }
+//        }
+//
+//        if ($withSelf) {
+//            $this->setRelation($this->getTreeRelationName(), $collection);
+//
+//            return new Collection([$this->getKey() => $this]);
+//        }
+//
+//        return $collection;
+//    }
+
     public function getDescendantTree($withSelf = false)
     {
-        $bag = [];
-        $collection = new Collection();
-
-        if ($withSelf && $this->relationLoaded($this->getTreeRelationName())) {
-            return $collection->put($this->getKey(), $this);
-        }
-
-        $items = $this->descendants->sort([$this, 'orderSort']);
-
-        /** @var Node $item */
-        foreach ($items as $item) {
-            $bag[$item->getKey()] = $item;
-        }
-
-        foreach ($items as $item) {
-            $parentId = $item->{$this->getParentIdName()};
-            if (array_key_exists($parentId, $bag)) {
-                $bag[$parentId]->addRelation($item->getTreeRelationName(), $item);
-            } else {
-                $collection->put($item->getKey(), $item);
-            }
-        }
-
+        $nodes = $this->descendants->all();
         if ($withSelf) {
-            $this->setRelation($this->getTreeRelationName(), $collection);
-
-            return new Collection([$this->getKey() => $this]);
+            $nodes = array_merge($nodes, [$this]);
         }
 
-        return $collection;
+        return $this->makeTree($nodes);
     }
 
     /**
@@ -227,6 +274,10 @@ abstract class Node extends DynamicModel
      */
     public function getBreadcrumbs()
     {
+        if ($this->parent) {
+            return array_merge($this->parent->getBreadcrumbs(), [$this->getKey()]);
+        }
+
         return $this->ancestors->sort(function ($a, $b) {
             $aDepth = $a->pivot->{$this->getDepthName()};
             $bDepth = $b->pivot->{$this->getDepthName()};
@@ -292,13 +343,13 @@ abstract class Node extends DynamicModel
      */
     abstract public function getOrderKeyName();
 
-    /**
-     * Get the relation name for tree relation
-     *
-     * @return string
-     */
-    public function getTreeRelationName()
-    {
-        return 'leaves';
-    }
+//    /**
+//     * Get the relation name for tree relation
+//     *
+//     * @return string
+//     */
+//    public function getTreeRelationName()
+//    {
+//        return 'leaves';
+//    }
 }

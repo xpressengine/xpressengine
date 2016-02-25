@@ -32,6 +32,8 @@ use Xpressengine\Support\Tree\TreeCollection;
  * @author   XE Team (developers) <developers@xpressengine.com>
  * @license  http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link     http://www.xpressengine.com
+ *
+ * @deprecated
  */
 class DBMenuRepository implements MenuRepositoryInterface
 {

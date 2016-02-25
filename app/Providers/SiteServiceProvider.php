@@ -14,8 +14,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Xpressengine\Site\Site;
 use Xpressengine\Site\SiteHandler;
-use Xpressengine\Site\SiteRepository;
 
 /**
  * Site Service Provider
@@ -40,7 +40,7 @@ class SiteServiceProvider extends ServiceProvider
             $request = app('request');
             $host = $request->getHost();
 
-            $site = app('xe.site')->get($host);
+            $site = Site::where('host', $host)->first();
             app('xe.site')->setCurrentSite($site);
         }
     }
@@ -53,18 +53,12 @@ class SiteServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(
-            'xe.site',
+            ['Xpressengine\Site\SiteHandler' => 'xe.site'],
             function ($app) {
-                $conn = $app['xe.db']->connection();
                 $config = $app['xe.config'];
-                $proxyClass = $app['xe.interception']->proxy(SiteHandler::class, 'site');
-                return new $proxyClass(new SiteRepository($conn), $config);
+                $proxyClass = $app['xe.interception']->proxy(SiteHandler::class, 'XeSite');
+                return new $proxyClass($config);
             }
-        );
-
-        $this->app->bind(
-            'Xpressengine\Site\SiteHandler',
-            'xe.site'
         );
     }
 }
