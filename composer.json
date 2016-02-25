@@ -77,7 +77,8 @@
             "core/src/Xpressengine/Menu/helpers.php",
             "core/src/Xpressengine/Module/helpers.php",
             "core/src/Xpressengine/Widget/helpers.php",
-            "core/src/Xpressengine/Support/helpers.php"
+            "core/src/Xpressengine/Support/helpers.php",
+            "core/src/Xpressengine/DynamicField/helpers.php"
         ]
     },
     "autoload-dev": {

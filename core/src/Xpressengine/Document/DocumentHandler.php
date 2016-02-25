@@ -230,6 +230,8 @@ class DocumentHandler
      */
     public function add(array $attributes)
     {
+        //Document::getConnectionResolver()->beginTransaction();
+
         $model = new Document;
 
         $model->getConnection()->beginTransaction();
@@ -243,10 +245,7 @@ class DocumentHandler
         $model->checkRequired($attributes);
 
         $config = $this->configHandler->getOrDefault($attributes['instanceId']);
-
         $model->setProxyOptions($this->proxyOption($config));
-        //$model->dynamicFill($attributes);
-        // insert to original documents database table
         $model = $model->create($attributes);
 
         // insert to division documents database table
@@ -261,6 +260,8 @@ class DocumentHandler
 
         $model->getConnection()->commit();
 
+       // Document::getConnectionResolver()->commit();
+
         return $model;
     }
 
@@ -272,29 +273,28 @@ class DocumentHandler
      */
     public function put(Document $doc)
     {
-        $this->conn->beginTransaction();
+        $doc->getConnection()->beginTransaction();
 
-        $doc->setPureContent();
-        $doc->checkRequired();
+        $doc->pureContent = $doc->getPureContent($doc->content);
+        $doc->checkRequired($doc->toArray());
 
         $config = $this->configHandler->getOrDefault($doc->instanceId);
         $doc->setProxyOptions($this->proxyOption($config));
-
-        // update to original documents database table
         $doc->save();
 
         // update to division documents database table
         if ($config->get('division') == true) {
             $divisionDoc = new Document($doc->toArray());
-            $divisionDoc->setDivision()->save();
+            $divisionDoc->setDivision($config)->save();
         }
 
         $this->removeDivision($doc);
 
         // insert to revision database table
-        $this->revision->add($doc);
+        $revisionDoc = new Revision;
+        $revisionDoc->create($doc->toArray());
 
-        $this->conn->commit();
+        $doc->getConnection()->commit();
 
         return $doc;
     }

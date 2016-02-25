@@ -71,6 +71,13 @@ class Revision extends DynamicModel
 
     public $incrementing = false;
 
+    protected $fillable = [
+        'revisionNo', 'id', 'parentId', 'instanceId', 'userId', 'writer', 'approved',
+        'published', 'status', 'display', 'locale', 'title',
+        'content', 'pureContent', 'createdAt', 'publishedAt', 'head', 'reply',
+        'listOrder', 'ipaddress',
+    ];
+
     protected $dynamic = true;
 
     protected $primaryKey = 'revisionId';

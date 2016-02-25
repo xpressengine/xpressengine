@@ -42,6 +42,14 @@ class User extends DynamicModel implements UserInterface
         'passwordUpdatedAt'
     ];
 
+    protected $fillable = [
+        'email',
+        'displayName',
+        'password',
+        'rating',
+        'status',
+    ];
+
     protected $hidden = ['password'];
 
     /**

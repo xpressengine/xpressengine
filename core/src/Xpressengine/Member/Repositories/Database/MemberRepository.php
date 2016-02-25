@@ -55,7 +55,7 @@ class MemberRepository implements MemberRepositoryInterface
 
         // Repository Configuration
         $this->isDynamic = true;
-        $this->mainTable = $mainTable = 'member';
+        $this->mainTable = $mainTable = 'user';
         $this->entityClass = MemberEntity::class;
         $this->defaultSort = 'createdAt';
         $this->defaultOrder = 'desc';
@@ -66,10 +66,10 @@ class MemberRepository implements MemberRepositoryInterface
                 return $this->mapGroups($memberIds);
             },
             'where' => function ($query, $groupIds) {
-                $members = $this->table('member_group_member', false)->whereIn('groupId', (array) $groupIds)->get(
-                    ['memberId']
+                $members = $this->table('user_group_user', false)->whereIn('groupId', (array) $groupIds)->get(
+                    ['userId']
                 );
-                $memberIds = array_pluck($members, 'memberId');
+                $memberIds = array_pluck($members, 'userId');
                 return $query->whereIn('id', $memberIds);
             }
         ];
@@ -78,8 +78,8 @@ class MemberRepository implements MemberRepositoryInterface
                 return $this->mapMails($memberIds);
             },
             'where' => function ($query, $mailIds) {
-                $members = $this->table('member_mails', false)->whereIn('map.id', (array) $mailIds)->get(['memberId']);
-                $memberIds = array_pluck($members, 'memberId');
+                $members = $this->table('member_mails', false)->whereIn('map.id', (array) $mailIds)->get(['userId']);
+                $memberIds = array_pluck($members, 'userId');
                 return $query->whereIn('id', $memberIds);
             }
         ];
@@ -89,9 +89,9 @@ class MemberRepository implements MemberRepositoryInterface
             },
             'where' => function ($query, $mailIds) {
                 $members = $this->table('member_pending_mails', false)->whereIn('map.id', (array) $mailIds)->get(
-                    ['memberId']
+                    ['userId']
                 );
-                $memberIds = array_pluck($members, 'memberId');
+                $memberIds = array_pluck($members, 'userId');
                 return $query->whereIn('id', $memberIds);
             }
         ];
@@ -100,7 +100,7 @@ class MemberRepository implements MemberRepositoryInterface
                 return $this->mapAccounts($memberIds);
             },
             'where' => function ($query, $accountIds) {
-                return $query->leftJoin('member_account as map', 'map.memberId', '=', 'member.id')->whereIn(
+                return $query->leftJoin('member_account as map', 'map.userId', '=', 'member.id')->whereIn(
                     'map.accountId',
                     (array) $accountIds
                 );
@@ -154,12 +154,12 @@ class MemberRepository implements MemberRepositoryInterface
      */
     private function mapGroups($memberIds)
     {
-        $rows = $this->table('member_group_member as map', false)->leftJoin(
-            'member_group as g',
+        $rows = $this->table('user_group_user as map', false)->leftJoin(
+            'user_group as g',
             'map.groupId',
             '=',
             'g.id'
-        )->whereIn('map.memberId', $memberIds)->get(['map.memberId', 'g.*']);
+        )->whereIn('map.userId', $memberIds)->get(['map.userId', 'g.*']);
 
         $members = [];
 
@@ -170,7 +170,7 @@ class MemberRepository implements MemberRepositoryInterface
         $groupEntities = [];
 
         foreach ($rows as $group) {
-            $memberId = $group['memberId'];
+            $memberId = $group['userId'];
             $groupId = $group['id'];
             if (!isset($groupEntities[$groupId])) {
                 $groupEntities[$groupId] = new GroupEntity($group);
@@ -189,7 +189,7 @@ class MemberRepository implements MemberRepositoryInterface
      */
     private function mapMails($memberIds)
     {
-        $rows = $this->table('member_mails', false)->whereIn('memberId', $memberIds)->get();
+        $rows = $this->table('member_mails', false)->whereIn('userId', $memberIds)->get();
 
         $members = [];
 
@@ -199,7 +199,7 @@ class MemberRepository implements MemberRepositoryInterface
 
         $mailEntities = [];
         foreach ($rows as $mail) {
-            $memberId = $mail['memberId'];
+            $memberId = $mail['userId'];
             $mailId = $mail['id'];
             if (!isset($mailEntities[$mailId])) {
                 $mailEntities[$mailId] = new MailEntity($mail);
@@ -218,7 +218,7 @@ class MemberRepository implements MemberRepositoryInterface
      */
     private function mapPendingMails($memberIds)
     {
-        $rows = $this->table('member_pending_mails', false)->whereIn('memberId', $memberIds)->get();
+        $rows = $this->table('member_pending_mails', false)->whereIn('userId', $memberIds)->get();
 
         $members = [];
 
@@ -228,7 +228,7 @@ class MemberRepository implements MemberRepositoryInterface
 
         $mailEntities = [];
         foreach ($rows as $mail) {
-            $memberId = $mail['memberId'];
+            $memberId = $mail['userId'];
             $mailId = $mail['id'];
             if (!isset($mailEntities[$mailId])) {
                 $mailEntities[$mailId] = new PendingMailEntity($mail);
@@ -247,7 +247,7 @@ class MemberRepository implements MemberRepositoryInterface
      */
     private function mapAccounts($memberIds)
     {
-        $rows = $this->table('member_account', false)->whereIn('memberId', $memberIds)->get();
+        $rows = $this->table('member_account', false)->whereIn('userId', $memberIds)->get();
 
         $members = [];
 
@@ -258,7 +258,7 @@ class MemberRepository implements MemberRepositoryInterface
         $accountEntities = [];
 
         foreach ($rows as $account) {
-            $memberId = $account['memberId'];
+            $memberId = $account['userId'];
             $accountId = $account['id'];
             if (!isset($accountEntities[$accountId])) {
                 $accountEntities[$accountId] = new AccountEntity($account);
@@ -278,11 +278,11 @@ class MemberRepository implements MemberRepositoryInterface
      */
     public function findByEmail($address, $with = null)
     {
-        $mail = $this->table('member_mails', false)->where('address', $address)->first(['memberId']);
+        $mail = $this->table('member_mails', false)->where('address', $address)->first(['userId']);
         if ($mail === null) {
             return null;
         }
-        return $this->find($mail['memberId'], $with);
+        return $this->find($mail['userId'], $with);
     }
 
     /**
@@ -299,7 +299,7 @@ class MemberRepository implements MemberRepositoryInterface
         $account = $this->table('member_account', false)->where('accountId', $accountId)->where(
             'accounts.default',
             Member::PROVIDER_DEFAULT
-        )->first(['memberId']);
+        )->first(['userId']);
         return $this->find($account->memberId, $with);
     }
 
@@ -313,8 +313,8 @@ class MemberRepository implements MemberRepositoryInterface
      */
     public function searchByEmailPrefix($emailPrefix, $with = null)
     {
-        $members = $this->table('member_mails', false)->where('address', 'like', $emailPrefix.'@%')->get(['memberId']);
-        $memberIds = array_pluck($members, 'memberId');
+        $members = $this->table('member_mails', false)->where('address', 'like', $emailPrefix.'@%')->get(['userId']);
+        $memberIds = array_pluck($members, 'userId');
 
         $query = $this->table('member')->whereIn('id', $memberIds);
         return $this->getEntities($query, $with);

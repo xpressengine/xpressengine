@@ -42,7 +42,7 @@ class MailRepository implements MailRepositoryInterface
     {
         $this->connection = $connection;
         $this->isDynamic = false;
-        $this->mainTable = $mainTable = 'member_mails';
+        $this->mainTable = $mainTable = 'user_email';
         $this->entityClass = MailEntity::class;
     }
 
@@ -88,7 +88,7 @@ class MailRepository implements MailRepositoryInterface
      */
     public function fetchAllByUser($userId)
     {
-        $query = $this->table()->whereIn('memberId', (array) $userId);
+        $query = $this->table()->whereIn('userId', (array) $userId);
         $entities = $this->getEntities($query);
         return $entities;
     }
@@ -102,7 +102,7 @@ class MailRepository implements MailRepositoryInterface
      */
     public function deleteByUserIds($userIds)
     {
-        return $this->table()->whereIn('memberId', (array) $userIds)->delete();
+        return $this->table()->whereIn('userId', (array) $userIds)->delete();
     }
 
     /**
@@ -114,7 +114,7 @@ class MailRepository implements MailRepositoryInterface
      */
     public function findByUserId($userId)
     {
-        $query = $this->table()->whereIn('memberId', (array) $userId);
+        $query = $this->table()->whereIn('userId', (array) $userId);
         $entities = $this->getEntity($query);
         return $entities;
     }
