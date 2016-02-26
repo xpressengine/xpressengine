@@ -47,11 +47,11 @@ interface VirtualGroupRepositoryInterface
     /**
      * 회원이 소속된 가상그룹 목록을 조회한다.
      *
-     * @param string $memberId 회원아이디
+     * @param string $userId 회원아이디
      *
      * @return array
      */
-    public function fetchAllByMember($memberId);
+    public function findByUserId($userId);
 
     ///**
     // * 주어진 회원이 소속된 가상그룹 목록을 조회한다.

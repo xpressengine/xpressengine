@@ -282,10 +282,43 @@ return [
             'all' => function () {
                 return [];
             },
-            'getByMember' => function () {
-
+            'getByUser' => function (Xpressengine\Member\Entities\MemberEntityInterface $user) {
                 return [];
-            }
+            },
+
+            // sample code
+            //'all' => function () {
+            //
+            //    $groupInfos = [
+            //        'facebook' => [
+            //            'title' => '페북계정소유그룹'
+            //        ],
+            //        'naver' => [
+            //            'title' => '네이버계정소유그룹'
+            //        ],
+            //        'github' => [
+            //            'title' => '깃헙계정소유그룹'
+            //        ],
+            //    ];
+            //
+            //    return $groupInfos;
+            //},
+            //'getByUser' => function (Xpressengine\Member\Entities\MemberEntityInterface $user) {
+            //
+            //    $providers = [];
+            //    if ($user->getAccountByProvider('facebook')) {
+            //        $providers[] = 'facebook';
+            //    }
+            //    if ($user->getAccountByProvider('naver')) {
+            //        $providers[] = 'naver';
+            //    }
+            //    if ($user->getAccountByProvider('github')) {
+            //        $providers[] = 'github';
+            //    }
+            //
+            //    return $providers;
+            //}
+
         ]
     ],
 

@@ -20,6 +20,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Xpressengine\Site\Exceptions\NotFoundSiteException;
 use Xpressengine\Site\SiteHandler;
+use Xpressengine\Site\Site as SiteModel;
 
 /**
  * Class Site
@@ -75,7 +76,8 @@ class Site extends Command
         try {
             $host = $this->validateHost($host);
 
-            $site = $handler->getBySiteKey($siteKey);
+            /** @var SiteModel $site */
+            $site = SiteModel::find($siteKey);
             $site->host = $host;
 
             $handler->put($site);

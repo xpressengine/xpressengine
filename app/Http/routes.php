@@ -103,10 +103,10 @@ Route::group(
  * member settings
  * */
 Route::group(
-    ['prefix' => 'member'],
+    ['prefix' => 'user'],
     function () {
 
-        Route::get('/{section?}', ['as' => 'member.settings', 'uses' => 'Member\MemberController@show']);
+        Route::get('/{section?}', ['as' => 'member.settings', 'uses' => 'Member\UserController@show']);
 
         // settings secton
         Route::group(
@@ -119,7 +119,7 @@ Route::group(
                         '/',
                             [
                                 'as' => 'member.settings.name.update',
-                                'uses' => 'Member\MemberController@updateDisplayName'
+                                'uses' => 'Member\UserController@updateDisplayName'
                             ]
                         );
 
@@ -128,7 +128,7 @@ Route::group(
                             'check',
                             [
                                 'as' => 'member.settings.name.check',
-                                'uses' => 'Member\MemberController@validateDisplayName'
+                                'uses' => 'Member\UserController@validateDisplayName'
                             ]
                         );
                     }
@@ -141,7 +141,7 @@ Route::group(
                             '/',
                             [
                                 'as' => 'member.settings.password.update',
-                                'uses' => 'Member\MemberController@updatePassword'
+                                'uses' => 'Member\UserController@updatePassword'
                             ]
                         );
                         // check password is valid
@@ -149,7 +149,7 @@ Route::group(
                             'check',
                             [
                                 'as' => 'member.settings.password.check',
-                                'uses' => 'Member\MemberController@validatePassword'
+                                'uses' => 'Member\UserController@validatePassword'
                             ]
                         );
                     }
@@ -161,23 +161,23 @@ Route::group(
                     function () {
                         Route::get(
                             'list',
-                            ['as' => 'member.settings.mail.list', 'uses' => 'Member\MemberController@getMailList']
+                            ['as' => 'member.settings.mail.list', 'uses' => 'Member\UserController@getMailList']
                         );
                         Route::post(
                             'add',
-                            ['as' => 'member.settings.mail.add', 'uses' => 'Member\MemberController@addMail']
+                            ['as' => 'member.settings.mail.add', 'uses' => 'Member\UserController@addMail']
                         );
                         Route::post(
                             'update',
-                            ['as' => 'member.settings.mail.update', 'uses' => 'Member\MemberController@updateMainMail']
+                            ['as' => 'member.settings.mail.update', 'uses' => 'Member\UserController@updateMainMail']
                         );
                         Route::post(
                             'confirm',
-                            ['as' => 'member.settings.mail.confirm', 'uses' => 'Member\MemberController@confirmMail']
+                            ['as' => 'member.settings.mail.confirm', 'uses' => 'Member\UserController@confirmMail']
                         );
                         Route::post(
                             'delete',
-                            ['as' => 'member.settings.mail.delete', 'uses' => 'Member\MemberController@deleteMail']
+                            ['as' => 'member.settings.mail.delete', 'uses' => 'Member\UserController@deleteMail']
                         );
                     }
                 );
@@ -189,14 +189,14 @@ Route::group(
                             'delete',
                             [
                                 'as' => 'member.settings.pending_mail.delete',
-                                'uses' => 'Member\MemberController@deletePendingMail'
+                                'uses' => 'Member\UserController@deletePendingMail'
                             ]
                         );
                         Route::post(
                             'resend',
                             [
                                 'as' => 'member.settings.pending_mail.resend',
-                                'uses' => 'Member\MemberController@resendPendingMail'
+                                'uses' => 'Member\UserController@resendPendingMail'
                             ]
                         );
                     }
@@ -209,7 +209,7 @@ Route::group(
                             '/',
                             [
                                 'as' => 'member.settings.leave',
-                                'uses' => 'Member\MemberController@leave'
+                                'uses' => 'Member\UserController@leave'
                             ]
                         );
                     }
@@ -229,7 +229,7 @@ Route::settings(
 
         Route::get(
             'searchMember/{keyword?}',
-            ['as' => 'settings.member.search', 'uses' => 'Member\Settings\MemberController@searchMember']
+            ['as' => 'settings.member.search', 'uses' => 'Member\Settings\UserController@searchMember']
         );
         // index
         Route::get(

@@ -4,25 +4,26 @@
  *
  * PHP version 5
  *
- * @category    Member
- * @package     Xpressengine\Member
+ * @category    User
+ * @package     Xpressengine\User
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Member\Repositories;
+namespace Xpressengine\User\Repositories;
 
 use Closure;
 use Illuminate\Support\Collection;
-use Xpressengine\Member\Entities\MemberEntityInterface;
-use Xpressengine\Member\Entities\VirtualGroupEntity;
+use Xpressengine\Member\Repositories\MemberRepositoryInterface;
+use Xpressengine\Member\Repositories\VirtualGroupRepositoryInterface;
+use Xpressengine\User\Models\UserVirtualGroup;
 
 /**
  * 가상 그룹 정보를 저장하는 Repository
  *
- * @category    Member
- * @package     Xpressengine\Member\Repositories
+ * @category    User
+ * @package     Xpressengine\User
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
@@ -33,12 +34,12 @@ class VirtualGroupRepository implements VirtualGroupRepositoryInterface
     /**
      * @var array 가상그룹 리스트
      */
-    protected $entities;
+    protected $vgroups;
 
     /**
      * @var MemberRepositoryInterface Member Repository
      */
-    private $memberRepo;
+    private $users;
 
     /**
      * @var Closure
@@ -48,18 +49,18 @@ class VirtualGroupRepository implements VirtualGroupRepositoryInterface
     /**
      * VirtualGroupRepository constructor.
      *
-     * @param MemberRepositoryInterface $memberRepo  member repository
-     * @param array                     $entityInfos list of virtual group infos
-     * @param Closure                   $getter      Closure for retrieve virtual group list by member id
+     * @param MemberRepositoryInterface $users       user repository
+     * @param array                     $vGroupInfos list of virtual group infos
+     * @param Closure                   $getter      Closure for retrieve virtual group list by user id
      */
-    public function __construct(MemberRepositoryInterface $memberRepo, array $entityInfos, Closure $getter)
+    public function __construct(MemberRepositoryInterface $users, array $vGroupInfos, Closure $getter)
     {
-        $this->memberRepo = $memberRepo;
+        $this->users = $users;
 
-        $this->entities = [];
+        $this->vgroups = [];
         /** @var array $entityInfo */
-        foreach ($entityInfos as $id => $entityInfo) {
-            $this->entities[$id] = $this->resolveEntity($id, $entityInfo);
+        foreach ($vGroupInfos as $id => $entityInfo) {
+            $this->vgroups[$id] = $this->resolveEntity($id, $entityInfo);
         }
 
         $this->getter = $getter;
@@ -70,11 +71,11 @@ class VirtualGroupRepository implements VirtualGroupRepositoryInterface
      *
      * @param string $id 조회할 가상그룹 id
      *
-     * @return VirtualGroupEntity
+     * @return UserVirtualGroup
      */
     public function find($id)
     {
-        return $this->entities->get($id);
+        return array_get($this->vgroups, $id);
     }
 
     /**
@@ -82,11 +83,11 @@ class VirtualGroupRepository implements VirtualGroupRepositoryInterface
      *
      * @param string $title 가상그룹 이름
      *
-     * @return VirtualGroupEntity|null
+     * @return UserVirtualGroup|null
      */
     public function findByTitle($title)
     {
-        foreach ($this->entities as $entity) {
+        foreach ($this->vgroups as $entity) {
             if ($entity->title == $title) {
                 return $entity;
             }
@@ -102,23 +103,13 @@ class VirtualGroupRepository implements VirtualGroupRepositoryInterface
      */
     public function findByUserId($userId)
     {
-        $getByMember = $this->getter;
-        $member = $this->memberRepo->find($userId, ['groups', 'accounts', 'mails', 'pending_mails']);
+        $getByUser = $this->getter;
+        $user = $this->users->find($userId, ['groups', 'accounts', 'mails', 'pending_mails']);
 
-        $groupIds = $getByMember($member);
+        $groupIds = $getByUser($user);
 
-        return array_only($this->entities, $groupIds);
+        return array_only($this->vgroups, $groupIds);
     }
-    ///**
-    // * 가상 그룹 목록을 조회한다. pagination된 목록을 반환한다.
-    // *
-    // * @return Collection
-    // */
-    //public function paginate($page = 1, $perPage = 10)
-    //{
-    //    return $this->entities->forPage($page, $perPage);
-
-    //}
 
     /**
      * 모든 가상그룹 목록을 반환한다.
@@ -127,7 +118,7 @@ class VirtualGroupRepository implements VirtualGroupRepositoryInterface
      */
     public function all()
     {
-        return $this->entities;
+        return $this->vgroups;
     }
 
     /**
@@ -139,7 +130,7 @@ class VirtualGroupRepository implements VirtualGroupRepositoryInterface
      */
     public function has($id)
     {
-        return isset($this->entities[$id]);
+        return isset($this->vgroups[$id]);
     }
 
     /**
@@ -148,12 +139,12 @@ class VirtualGroupRepository implements VirtualGroupRepositoryInterface
      * @param string $id         생성할  가상 그룹 id
      * @param array  $entityInfo 생성할 가상그룹 정보
      *
-     * @return VirtualGroupEntity
+     * @return UserVirtualGroup
      */
     private function resolveEntity($id, $entityInfo)
     {
         //return new VirtualGroupEntity($this->memberRepo, $id, $entityInfo);
         $entityInfo['id'] = $id;
-        return new VirtualGroupEntity($entityInfo);
+        return new UserVirtualGroup($entityInfo);
     }
 }

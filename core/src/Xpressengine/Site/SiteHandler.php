@@ -79,28 +79,24 @@ use Xpressengine\Site\Exceptions\CanNotUseDomainException;
 class SiteHandler
 {
     /**
-     * @var SiteRepository
+     * @var Config
      */
-    protected $repository;
+    protected $config;
+
+    protected $model = Site::class;
 
     /**
      * @var Site
      */
     protected $currentSite;
-    /**
-     * @var Config
-     */
-    protected $config;
 
     /**
      * SiteHandler constructor.
      *
-     * @param SiteRepository $repository site repository
      * @param Config         $config     xpressengine config manager
      */
-    public function __construct(SiteRepository $repository, Config $config)
+    public function __construct(Config $config)
     {
-        $this->repository = $repository;
         $this->config = $config;
     }
 
@@ -245,30 +241,6 @@ class SiteHandler
     }
 
     /**
-     * get
-     *
-     * @param string $host not included 'http' or 'https' string
-     *
-     * @return Site
-     */
-    public function get($host)
-    {
-        return $this->repository->find($host);
-    }
-
-    /**
-     * getBySiteKey
-     *
-     * @param string $siteKey site key string
-     *
-     * @return Site
-     */
-    public function getBySiteKey($siteKey)
-    {
-        return $this->repository->findBySiteKey($siteKey);
-    }
-
-    /**
      * add
      *
      * @param array $inputs input array
@@ -277,14 +249,14 @@ class SiteHandler
      */
     public function add(array $inputs)
     {
-        $host = $inputs['host'];
-        $siteKey = $inputs['siteKey'];
-        $this->checkUsableDomain($host);
+        $this->checkUsableDomain($inputs['host']);
 
-        $site = new Site(
-            ['host' => $host, 'siteKey' => $siteKey]
-        );
-        $this->repository->insert($site);
+        $class = $this->getModel();
+        /** @var Site $site */
+        $site = new $class;
+        $site->siteKey = $inputs['siteKey'];
+        $site->host = $inputs['host'];
+        $site->save();
 
         return $site;
     }
@@ -298,7 +270,10 @@ class SiteHandler
      */
     public function put(Site $site)
     {
-        $this->repository->update($site);
+        if ($site->isDirty()) {
+            $site->save();
+        }
+
         return $site;
     }
 
@@ -311,8 +286,11 @@ class SiteHandler
      */
     public function remove($host)
     {
-        $site = $this->repository->find($host);
-        $this->repository->delete($site);
+        $class = $this->getModel();
+        /** @var Site $site */
+        if ($site = $class::where('host', $host)->get()) {
+            $site->delete();
+        }
     }
 
     /**
@@ -325,8 +303,30 @@ class SiteHandler
      */
     protected function checkUsableDomain($host)
     {
-        if ($this->repository->count($host) > 0) {
+        $class = $this->getModel();
+        if ($class::where('host', $host)->exists()) {
             throw new CanNotUseDomainException(['host' => $host]);
         }
+    }
+
+    /**
+     * Get site model
+     *
+     * @return string
+     */
+    public function getModel()
+    {
+        return $this->model;
+    }
+
+    /**
+     * Set site model
+     *
+     * @param string $model model class
+     * @return void
+     */
+    public function setModel($model)
+    {
+        $this->model = '\\' . ltrim($model, '\\');
     }
 }

@@ -190,6 +190,7 @@ XE.$(function () {
                 if (!this.beforeCheck()) {
                     return;
                 }
+              var self = this;
                 $.ajax(
                     {
                         url: this.options.checkUrl,
@@ -197,12 +198,14 @@ XE.$(function () {
                         dataType: 'json',
                         data: {name: input},
                         success: function (data, textStatus, jqXHR) {
-                            if (callback != undefined) {
+                            if(self.checkedName == input) {
+                              if (callback != undefined) {
                                 if (data.valid) {
-                                    callback(true, data);
+                                  callback(true, data);
                                 } else {
-                                    callback(false, data);
+                                  callback(false, data);
                                 }
+                              }
                             }
                         },
                     }

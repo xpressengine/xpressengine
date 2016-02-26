@@ -233,10 +233,8 @@ class UserHandler
             ];
             if ($this->useEmailConfirm === false || array_get($data, 'emailConfirmed', false)) {
                 $mail = $this->emails()->create($user, $mailData);
-                $user->emails = [$mail];
             } else {
                 $mail = $this->pendingEmails()->create($user, $mailData);
-                $user->pending_emails = [$mail];
             }
         }
 
@@ -250,7 +248,7 @@ class UserHandler
         // insert accounts
         if (isset($data['account'])) {
             $accountData = $data['account'];
-            $account = $this->accounts()->create(
+            $account = $this->accounts()->create($user,
                 [
                     'userId' => $user->id,
                     'accountId' => array_get($accountData, 'accountId'),
@@ -332,27 +330,29 @@ class UserHandler
     {
 
         /** @var User[] $users */
-        $users = $this->users()->whereIn('id', $userIds)->with(['groups', 'emails'])->get();
+        $users = $this->users()->whereIn('id', (array) $userIds)->with(['groups', 'emails'])->get();
 
         $ratings = array_pluck($users, 'rating');
         if (in_array(Rating::SUPER, $ratings)) {
             throw new CannotDeleteMemberHavingSuperRatingException();
         }
 
+        // resolve group
         foreach ($users as $user) {
             // except user from user's groups
             $user->groups()->detach();
-            $user->delete();
         }
 
-        // delete user's mails
+        // delete user's emails
         $this->emails()->deleteByUserIds($userIds);
         $this->pendingEmails()->deleteByUserIds($userIds);
 
-        // todo: remove profile image
-
         // delete user's accounts
-        $this->accounts()->whereIn('userId', $userIds)->delete();
+        $this->accounts()->deleteByUserIds($userIds);
+
+        $user->delete();
+
+        // todo: remove profile image
     }
 
     /**

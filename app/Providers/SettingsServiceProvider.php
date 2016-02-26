@@ -29,11 +29,13 @@ class SettingsServiceProvider extends ServiceProvider
         $this->app->singleton(
             'xe.settings',
             function ($app) {
-
-                $menu = $app['config']->get('xe.settings.menu');
-
                 $handler = $app['xe.interception']->proxy(SettingsHandler::class, 'Settings');
-                $handler = new $handler($app['xe.register'], $app['router'], $app['xe.config'], $app['xe.permission']);
+                $handler = new $handler(
+                    $app['xe.register'],
+                    $app['router'],
+                    $app['xe.config'],
+                    $app['Illuminate\Contracts\Auth\Access\Gate']
+                );
 
                 return $handler;
             }

@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Facade;
  * @link        http://www.xpressengine.com
  */
 
-class Site extends Facade
+class XeSite extends Facade
 {
 
     /**

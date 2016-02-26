@@ -37,7 +37,8 @@ class PendingEmail extends DynamicModel implements EmailInterface
 
     protected $fillable = [
         'userId',
-        'address'
+        'address',
+        'confirmationCode'
     ];
 
     /**
