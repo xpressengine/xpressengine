@@ -15,8 +15,8 @@ namespace Xpressengine\Storage;
 
 use Illuminate\Database\Query\Expression;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Xpressengine\Member\Entities\MemberEntityInterface;
-use Xpressengine\Member\GuardInterface as Authenticator;
+use Xpressengine\User\UserInterface;
+use Xpressengine\User\GuardInterface as Authenticator;
 use Xpressengine\Storage\Exceptions\InvalidFileException;
 use Xpressengine\Storage\Exceptions\FileDoesNotExistException;
 use Xpressengine\Keygen\Keygen;
@@ -181,11 +181,11 @@ class Storage
     /**
      * file upload to storage
      *
-     * @param UploadedFile          $uploaded uploaded file instance
-     * @param string                $path     be saved path
-     * @param string|null           $name     be saved file name
-     * @param string|null           $disk     disk name (ex. local, ftp, s3 ...)
-     * @param MemberEntityInterface $user user instance
+     * @param UploadedFile  $uploaded uploaded file instance
+     * @param string        $path     be saved path
+     * @param string|null   $name     be saved file name
+     * @param string|null   $disk     disk name (ex. local, ftp, s3 ...)
+     * @param UserInterface $user user instance
      * @return File
      */
     public function upload(
@@ -193,7 +193,7 @@ class Storage
         $path,
         $name = null,
         $disk = null,
-        MemberEntityInterface $user = null
+        UserInterface $user = null
     ) {
         if ($uploaded->isValid() === false) {
             throw new InvalidFileException();
@@ -228,15 +228,15 @@ class Storage
     /**
      * create file
      *
-     * @param string                $content  file content
-     * @param string                $path     directory for saved
-     * @param string                $name     saved name
-     * @param string|null           $disk     disk for saved
-     * @param string|null           $originId original file id
-     * @param MemberEntityInterface $user user instance
+     * @param string        $content  file content
+     * @param string        $path     directory for saved
+     * @param string        $name     saved name
+     * @param string|null   $disk     disk for saved
+     * @param string|null   $originId original file id
+     * @param UserInterface $user user instance
      * @return File
      */
-    public function create($content, $path, $name, $disk = null, $originId = null, MemberEntityInterface $user = null)
+    public function create($content, $path, $name, $disk = null, $originId = null, UserInterface $user = null)
     {
         $id = $this->keygen->generate();
         $path = $this->makePath($id, $path);

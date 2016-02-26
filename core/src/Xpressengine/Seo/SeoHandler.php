@@ -14,7 +14,7 @@
 namespace Xpressengine\Seo;
 
 use Xpressengine\Media\Models\Media;
-use Xpressengine\Member\Entities\MemberEntityInterface;
+use Xpressengine\User\UserInterface;
 use Xpressengine\Seo\Importers\AbstractImporter;
 use Xpressengine\Translation\Translator;
 
@@ -175,7 +175,7 @@ class SeoHandler
             $data['keywords'] = implode(',', $data['keywords']);
         }
 
-        if ($data['author'] instanceof MemberEntityInterface) {
+        if ($data['author'] instanceof UserInterface) {
             $data['author'] = $data['author']->getDisplayName();
         }
 
