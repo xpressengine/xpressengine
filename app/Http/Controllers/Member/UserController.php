@@ -561,7 +561,6 @@ class UserController extends Controller
      */
     private function memberEditView(MemberEntityInterface $user)
     {
-
         // dynamic field
         $dynamicField = app('xe.dynamicField');
         $fieldTypes = $dynamicField->gets('member');

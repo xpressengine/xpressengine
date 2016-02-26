@@ -18,13 +18,13 @@ use Illuminate\Auth\Passwords\DatabaseTokenRepository;
 use Illuminate\Auth\Passwords\PasswordBroker;
 use Illuminate\Contracts\Validation\Factory as Validator;
 use Illuminate\Support\ServiceProvider;
-use Xpressengine\Media\MediaManager;
 use Xpressengine\Media\Thumbnailer;
 use Xpressengine\Member\Repositories\AccountRepositoryInterface;
 use Xpressengine\Member\Repositories\GroupRepositoryInterface;
 use Xpressengine\Member\Repositories\MailRepositoryInterface;
 use Xpressengine\Member\Repositories\MemberRepositoryInterface;
 use Xpressengine\Member\Repositories\PendingMailRepositoryInterface;
+use Xpressengine\Member\Repositories\VirtualGroupRepositoryInterface;
 use Xpressengine\Storage\Storage;
 use Xpressengine\ToggleMenus\Member\LinkItem;
 use Xpressengine\ToggleMenus\Member\RawItem;
@@ -42,6 +42,7 @@ use Xpressengine\User\Repositories\UserAccountRepository;
 use Xpressengine\User\Repositories\UserEmailRepository;
 use Xpressengine\User\Repositories\UserGroupRepository;
 use Xpressengine\User\Repositories\UserRepository;
+use Xpressengine\User\Repositories\VirtualGroupRepository;
 use Xpressengine\User\UserHandler;
 use Xpressengine\User\UserImageHandler;
 use Xpressengine\User\UserProvider;
@@ -286,7 +287,7 @@ class UserServiceProvider extends ServiceProvider
         $this->registerUserRepository();
         $this->registerAccoutRepository();
         $this->registerGroupRepository();
-        // $this->registerVirtualGroupRepository();
+        $this->registerVirtualGroupRepository();
         $this->registerMailRepository();
     }
 
@@ -341,15 +342,16 @@ class UserServiceProvider extends ServiceProvider
     protected function registerVirtualGroupRepository()
     {
         $this->app->singleton(
-            'xe.member.virtualGroups',
+            'xe.user.virtualGroups',
             function ($app) {
                 /** @var Closure $vGroups */
                 $vGroups = $app['config']->get('xe.group.virtualGroup.all');
-                $getter = $app['config']->get('xe.group.virtualGroup.getByMember');
-                return new VirtualGroupRepository($app['xe.members'], $vGroups(), $getter);
+                /** @var Closure $getter */
+                $getter = $app['config']->get('xe.group.virtualGroup.getByUser');
+                return new VirtualGroupRepository($app['xe.users'], $vGroups(), $getter);
             }
         );
-        $this->app->bind(VirtualGroupRepositoryInterface::class, 'xe.member.virtualGroups');
+        $this->app->bind(VirtualGroupRepositoryInterface::class, 'xe.user.virtualGroups');
     }
 
     private function registerMailRepository()

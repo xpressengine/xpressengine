@@ -522,7 +522,7 @@ class MemberServiceProvider extends ServiceProvider
             function ($memberIds) use ($vGroupRepo) {
                 $members = [];
                 foreach ($memberIds as $memberId) {
-                    $groups = $vGroupRepo->fetchAllByMember($memberId);
+                    $groups = $vGroupRepo->findByUserId($memberId);
                     $members[$memberId] = $groups;
                 }
                 return $members;
