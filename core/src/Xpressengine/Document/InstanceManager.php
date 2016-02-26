@@ -114,9 +114,9 @@ class InstanceManager
      */
     protected function createDivisionTable(ConfigEntity $config)
     {
-        $table = sprintf('%sdocuments_%s', $this->connection->getTablePrefix(), $config->get('instanceId'));
+        $table = sprintf('documents_%s', $config->get('instanceId'));
         $schema = $this->connection->getSchemaBuilder();
-        if ($schema->has($table)) {
+        if ($schema->hasTable($table)) {
             throw new Exceptions\DivisionTableAlreadyExistsException;
         }
 
