@@ -18,6 +18,7 @@ use Illuminate\Auth\Passwords\DatabaseTokenRepository;
 use Illuminate\Auth\Passwords\PasswordBroker;
 use Illuminate\Contracts\Validation\Factory as Validator;
 use Illuminate\Support\ServiceProvider;
+use Xpressengine\Media\MediaManager;
 use Xpressengine\Media\Thumbnailer;
 use Xpressengine\Member\Repositories\AccountRepositoryInterface;
 use Xpressengine\Member\Repositories\GroupRepositoryInterface;
@@ -25,6 +26,7 @@ use Xpressengine\Member\Repositories\MailRepositoryInterface;
 use Xpressengine\Member\Repositories\MemberRepositoryInterface;
 use Xpressengine\Member\Repositories\PendingMailRepositoryInterface;
 use Xpressengine\Member\Repositories\VirtualGroupRepositoryInterface;
+use Xpressengine\Storage\File;
 use Xpressengine\Storage\Storage;
 use Xpressengine\ToggleMenus\Member\LinkItem;
 use Xpressengine\ToggleMenus\Member\RawItem;
@@ -491,15 +493,19 @@ class UserServiceProvider extends ServiceProvider
         $media = $this->app['xe.media'];
         User::setProfileImageResolver(
             function ($imageId) use ($default, $storage, $media) {
+                try {
+                    if($imageId !== null) {
+                        /** @var Storage $storage */
+                        $file = File::find($imageId);
 
-                /** @var Storage $storage */
-                //$file = $storage->get($imageId);
-                //
-                //if ($file !== null) {
-                //    /** @var MediaManager $media */
-                //    $mediaFile = $media->make($file);
-                //    return asset($mediaFile->url());
-                //}
+                        if ($file !== null) {
+                            /** @var MediaManager $media */
+                            $mediaFile = $media->make($file);
+                            return asset($mediaFile->url());
+                        }
+                    }
+                } catch(\Exception $e) {
+                }
 
                 return asset($default);
             }

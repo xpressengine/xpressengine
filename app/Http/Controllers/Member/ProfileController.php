@@ -83,8 +83,8 @@ class ProfileController extends Controller
             // resolve profile file
             if ($profileFile = $request->file('profileImgFile')) {
                 /** @var MemberImageHandler $imageHandler */
-                $imageHandler = app('xe.member.image');
-                $user->profileImageId = $imageHandler->updateMemberProfileImage($user, $profileFile);
+                $imageHandler = app('xe.user.image');
+                $user->profileImageId = $imageHandler->updateUserProfileImage($user, $profileFile);
             }
 
             $this->handler->update($user, compact('displayName', 'introduction'));
