@@ -13,7 +13,6 @@
  */
 namespace Xpressengine\User\Repositories;
 
-use Xpressengine\Member\Entities\MemberEntityInterface;
 use Xpressengine\User\UserInterface;
 
 /**
@@ -45,7 +44,7 @@ class UserRepository implements UserRepositoryInterface
      *
      * @param array $data
      *
-     * @return MemberEntityInterface
+     * @return UserInterface
      */
     public function create(array $data)
     {
@@ -84,7 +83,7 @@ class UserRepository implements UserRepositoryInterface
      * @param string        $address 이메일 주소
      * @param string[]|null $with    함께 반환할 relation 정보
      *
-     * @return MemberEntityInterface
+     * @return UserInterface
      */
     public function findByEmail($address, $with = null)
     {
@@ -104,7 +103,7 @@ class UserRepository implements UserRepositoryInterface
      * @param string        $emailPrefix 조회할 이메일의 이름영역
      * @param string[]|null $with        함께 반환할 relation 정보
      *
-     * @return MemberEntityInterface[]
+     * @return UserInterface[]
      */
     public function searchByEmailPrefix($emailPrefix, $with = null)
     {

@@ -13,11 +13,10 @@
  */
 namespace Xpressengine\User;
 
-use Intervention\Image\ImageManager;
 use Closure;
+use Intervention\Image\ImageManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Xpressengine\Media\MediaManager;
-use Xpressengine\Member\Entities\MemberEntityInterface;
 use Xpressengine\Storage\File;
 use Xpressengine\Storage\Storage;
 use Xpressengine\User\Models\User;

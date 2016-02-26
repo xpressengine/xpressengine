@@ -11,10 +11,8 @@ use Presenter;
 use XeDB;
 use Xpressengine\Member\Exceptions\EmailNotFoundException;
 use Xpressengine\Member\Exceptions\MailAlreadyExistsException;
-use Xpressengine\Member\Rating;
-use Xpressengine\Member\Repositories\MemberRepositoryInterface;
+use Xpressengine\User\Rating;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
-use Xpressengine\User\Models\UserEmail;
 use Xpressengine\User\UserHandler;
 use Xpressengine\User\UserInterface;
 

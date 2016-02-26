@@ -7,30 +7,29 @@ use Auth;
 use Illuminate\Http\Request;
 use Presenter;
 use Theme;
-use Validator;
 use XeDB;
 use Xpressengine\Member\Exceptions\MemberNotFoundException;
-use Xpressengine\Member\MemberHandler;
-use Xpressengine\Member\MemberImageHandler;
-use Xpressengine\Member\Rating;
-use Xpressengine\Member\Repositories\GroupRepositoryInterface;
-use Xpressengine\Member\Repositories\MailRepositoryInterface;
+use Xpressengine\User\Rating;
+use Xpressengine\User\Repositories\UserEmailRepositoryInterface;
+use Xpressengine\User\Repositories\UserGroupRepositoryInterface;
+use Xpressengine\User\UserHandler;
+use Xpressengine\User\UserImageHandler;
 use Xpressengine\User\UserInterface;
 
 class ProfileController extends Controller
 {
     /**
-     * @var MemberHandler
+     * @var UserHandler
      */
     protected $handler;
 
     /**
-     * @var GroupRepositoryInterface
+     * @var UserGroupRepositoryInterface
      */
     protected $groups;
 
     /**
-     * @var MailRepositoryInterface
+     * @var UserEmailRepositoryInterface
      */
     protected $mails;
 
@@ -82,7 +81,7 @@ class ProfileController extends Controller
         try {
             // resolve profile file
             if ($profileFile = $request->file('profileImgFile')) {
-                /** @var MemberImageHandler $imageHandler */
+                /** @var UserImageHandler $imageHandler */
                 $imageHandler = app('xe.user.image');
                 $user->profileImageId = $imageHandler->updateUserProfileImage($user, $profileFile);
             }
@@ -119,7 +118,7 @@ class ProfileController extends Controller
         }
 
         if ($member === null) {
-            throw MemberNotFoundException();
+            throw new MemberNotFoundException();
         }
 
         return $member;

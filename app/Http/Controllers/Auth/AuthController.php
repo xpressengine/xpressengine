@@ -11,13 +11,11 @@ use Member;
 use Presenter;
 use Theme;
 use XeDB;
-use Xpressengine\Member\EmailBrokerInterface;
 use Xpressengine\Member\Exceptions\JoinNotAllowedException;
-use Xpressengine\Member\Exceptions\EmailNotFoundException;
 use Xpressengine\Member\Exceptions\PendingEmailNotExistsException;
-use Xpressengine\Member\Rating;
+use Xpressengine\User\Rating;
 use Xpressengine\Support\Exceptions\HttpXpressengineException;
-use Xpressengine\Support\Exceptions\InvalidArgumentException;
+use Xpressengine\User\EmailBrokerInterface;
 use Xpressengine\User\UserHandler;
 
 class AuthController extends Controller
