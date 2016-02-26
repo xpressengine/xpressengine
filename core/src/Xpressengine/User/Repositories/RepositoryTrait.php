@@ -4,8 +4,8 @@
  *
  * PHP version 5
  *
- * @category
- * @package     Xpressengine\
+ * @category    User
+ * @package     Xpressengine\User
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
@@ -16,15 +16,12 @@ namespace Xpressengine\User\Repositories;
 use Xpressengine\Database\Eloquent\DynamicModel as Model;
 
 /**
- * @category
+ * @category    User
  * @package     Xpressengine\User
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
- * @method      create(array $attributes = [])
- * @method      where($column, $operator = null, $value = null, $boolean = 'and') Illuminate\Database\Query\Builder
- * @method      whereIn($column, $values, $boolean = 'and', $not = false) Illuminate\Database\Query\Builder
  */
 trait RepositoryTrait
 {

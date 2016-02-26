@@ -14,7 +14,6 @@
 namespace Xpressengine\User\Repositories;
 
 use Xpressengine\Member\Entities\MemberEntityInterface;
-use Xpressengine\Member\Repositories\MemberRepositoryInterface;
 use Xpressengine\User\UserInterface;
 
 /**
@@ -26,9 +25,9 @@ use Xpressengine\User\UserInterface;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class UserRepository implements MemberRepositoryInterface
+class UserRepository implements UserRepositoryInterface
 {
-    use \Xpressengine\User\Repositories\RepositoryTrait;
+    use RepositoryTrait;
 
     /**
      * UserRepository constructor.

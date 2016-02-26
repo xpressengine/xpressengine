@@ -15,8 +15,6 @@ namespace Xpressengine\User\Repositories;
 
 use Closure;
 use Illuminate\Support\Collection;
-use Xpressengine\Member\Repositories\MemberRepositoryInterface;
-use Xpressengine\Member\Repositories\VirtualGroupRepositoryInterface;
 use Xpressengine\User\Models\UserVirtualGroup;
 
 /**
@@ -37,7 +35,7 @@ class VirtualGroupRepository implements VirtualGroupRepositoryInterface
     protected $vgroups;
 
     /**
-     * @var MemberRepositoryInterface Member Repository
+     * @var UserRepositoryInterface User Repository
      */
     private $users;
 
@@ -49,11 +47,11 @@ class VirtualGroupRepository implements VirtualGroupRepositoryInterface
     /**
      * VirtualGroupRepository constructor.
      *
-     * @param MemberRepositoryInterface $users       user repository
-     * @param array                     $vGroupInfos list of virtual group infos
-     * @param Closure                   $getter      Closure for retrieve virtual group list by user id
+     * @param UserRepositoryInterface $users       user repository
+     * @param array                   $vGroupInfos list of virtual group infos
+     * @param Closure                 $getter      Closure for retrieve virtual group list by user id
      */
-    public function __construct(MemberRepositoryInterface $users, array $vGroupInfos, Closure $getter)
+    public function __construct(UserRepositoryInterface $users, array $vGroupInfos, Closure $getter)
     {
         $this->users = $users;
 

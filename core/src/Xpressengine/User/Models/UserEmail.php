@@ -79,59 +79,6 @@ class UserEmail extends DynamicModel implements EmailInterface
         throw new AlreadyConfirmedEmailException();
     }
 
-
-    /**
-     * 이메일 주소로 등록대기 이메일 정보를 조회한다.
-     *
-     * @param string   $address 조회할 이메일 주소
-     * @param string[] $with    entity와 함께 반환할 relation 정보
-     *
-     * @return UserEmail
-     */
-    public function findByAddress($address, $with = [])
-    {
-        return static::where('address', $address)->with($with)->first();
-    }
-
-    /**
-     * 주어진 회원이 소유한 이메일 목록을 조회한다.
-     *
-     * @param string        $userId user id
-     * @param string[]|null $with   entity와 함께 반환할 relation 정보
-     *
-     * @return PendingEmail[]
-     */
-    public function findByMember($userId, $with = null)
-    {
-        return static::where('userId', $userId)->with($with)->get();
-    }
-
-    /**
-     * 주어진 회원이 소유한 이메일을 삭제한다.
-     *
-     * @param string $userIds 삭제할 이메일을 소유한 회원의 id
-     *
-     * @return integer
-     */
-    public function deleteByMemberIds($userIds)
-    {
-        return static::whereIn('userId', $userIds)->delete();
-    }
-
-    /**
-     * 주어진 회원이 소유한 이메일의 인증 코드를 반환한다.
-     *
-     * @param string        $memberId member id
-     * @param string        $code     mail confirmation code
-     * @param string[]|null $with     entity와 함께 반환할 relation 정보
-     *
-     * @return EmailInterface
-     */
-    public function findByConfirmationCode($memberId, $code, $with = null)
-    {
-        throw new AlreadyConfirmedEmailException();
-    }
-
     /**
      * 인증된 메일인지 확인한다
      *
