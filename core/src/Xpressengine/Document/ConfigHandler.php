@@ -221,11 +221,6 @@ class ConfigHandler
             throw new Exceptions\ConfigNotFoundException;
         }
 
-        $diff = $config->diff();
-        if (isset($diff['instanceId']) === true) {
-            throw new Exceptions\CannotChangeInstanceIdException;
-        }
-
         $this->configManager->put(
             sprintf('%s.%s', self::CONFIG_NAME, $config->get('instanceId')),
             $config->getPureAll()
