@@ -165,7 +165,7 @@ class Document extends DynamicModel
     {
         $table = $this->table;
         if ($config != null && $config->get('division') === true) {
-            $table = sprintf('%s_division_%s', $this->table, $config->get('instanceId'));
+            $table = sprintf('%s_%s', $this->table, $config->get('instanceId'));
         }
 
         return $table;

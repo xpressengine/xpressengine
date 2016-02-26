@@ -178,7 +178,7 @@ abstract class Policy
             return false;
         }
 
-        $groups = $this->vgroups->fetchAllByMember($user->getId());
+        $groups = $this->vgroups->findByUserId($user->getId());
         $groups = array_map(function ($group) {
             return $group->id;
         }, $groups);
