@@ -14,6 +14,7 @@ use XeDB;
 use Xpressengine\Member\EmailBrokerInterface;
 use Xpressengine\Member\Exceptions\JoinNotAllowedException;
 use Xpressengine\Member\Exceptions\EmailNotFoundException;
+use Xpressengine\Member\Exceptions\PendingEmailNotExistsException;
 use Xpressengine\Member\Rating;
 use Xpressengine\Support\Exceptions\HttpXpressengineException;
 use Xpressengine\Support\Exceptions\InvalidArgumentException;
@@ -167,6 +168,11 @@ class AuthController extends Controller
         }
 
         $email = $this->handler->pendingEmails()->findByAddress($address);
+
+        if($email === null) {
+            // todo: change exception to http exception
+            throw new PendingEmailNotExistsException();
+        }
 
         XeDB::beginTransaction();
         try {

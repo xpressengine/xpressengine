@@ -37,14 +37,14 @@ class ProfileSkin extends BladeSkin
     {
         $this->loadAssets();
 
-        $member = $this->data['member'];
+        $user = $this->data['user'];
 
         if ($this->data['grant']['modify']) {
             $this->data['profileImageHtml'] = uio(
                 'xpressengine@profileImage',
                 [
                     'name' => 'profileImgFile',
-                    'image' => $member->getProfileImage(),
+                    'image' => $user->getProfileImage(),
                     'width' => 120,
                     'height' => 120
                 ]
@@ -53,7 +53,7 @@ class ProfileSkin extends BladeSkin
                 'xpressengine@profileBgImage',
                 [
                     'name' => 'bgImgFile',
-                    'image' => $member->getProfileImage(),
+                    'image' => $user->getProfileImage(),
                     'width' => 2048,
                     'height' => 2048
                 ]
