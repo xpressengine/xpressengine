@@ -164,7 +164,7 @@ class MemberServiceProvider extends ServiceProvider
             function ($app) {
                 /** @var Closure $vGroups */
                 $vGroups = $app['config']->get('xe.group.virtualGroup.all');
-                $getter = $app['config']->get('xe.group.virtualGroup.getByMember');
+                $getter = $app['config']->get('xe.group.virtualGroup.getByUser');
                 return new VirtualGroupRepository($app['xe.members'], $vGroups(), $getter);
             }
         );
