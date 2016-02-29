@@ -20,11 +20,12 @@ use Illuminate\Routing\Matching\SchemeValidator;
 use Illuminate\Routing\Route;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
-use Xpressengine\Routing\InstanceRouteCacheHandler;
-use Xpressengine\Routing\InstanceRouteHandler;
-use Xpressengine\Routing\InstanceRouteRepository;
+use Xpressengine\Routing\InstanceRoute;
 use Xpressengine\Routing\ModuleValidator;
+use Xpressengine\Routing\Repositories\DatabaseRouteRepository;
+use Xpressengine\Routing\Repositories\MemoryDecorator;
 use Xpressengine\Routing\RouteCollection;
+use Xpressengine\Routing\RouteRepository;
 use Xpressengine\Routing\UriValidator;
 
 /**
@@ -63,41 +64,15 @@ class RoutingServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(
-            'xe.router.cache',
-            /**
-             * @param $app
-             *
-             * @return InstanceRouteHandler
-             */
+            [RouteRepository::class => 'xe.router'],
             function ($app) {
-                $cache = $app['cache'];
-                $debugMode = env('APP_DEBUG', false);
+                $repo = new DatabaseRouteRepository($app['config'], InstanceRoute::class);
 
-                return new InstanceRouteCacheHandler($cache, $debugMode);
+                // todo: cache layer 추가
+
+                return new MemoryDecorator($repo);
             }
         );
-
-        $this->app->singleton(
-            'xe.router',
-            /**
-             * @param $app
-             *
-             * @return InstanceRouteHandler
-             */
-            function ($app) {
-                $conn = $app['xe.db']->connection();
-                $cache = $app['xe.router.cache'];
-                $illuminateConfig = $app['config'];
-                $proxyClass = $app['xe.interception']->proxy(InstanceRouteHandler::class);
-                return new $proxyClass(
-                    new InstanceRouteRepository($conn),
-                    $cache,
-                    $illuminateConfig
-                );
-            }
-        );
-
-        $this->app->bind('Xpressengine\Routing\InstanceRouteHandler', 'xe.router');
 
         $this->setNewRouteValidator();
         $this->registerMacro($this->app['router']);

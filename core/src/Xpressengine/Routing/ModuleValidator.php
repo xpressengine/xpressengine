@@ -36,24 +36,26 @@ use Xpressengine\Theme\ThemeHandler;
  */
 class ModuleValidator implements ValidatorInterface
 {
-
     /**
      * @var null
      */
     private static $homeInstanceRoute = null;
 
     /**
+     * @var RouteRepository
+     */
+    private $routeRepo;
+
+    /**
      * @var MenuHandler
      */
     private $menuHandler;
-    /**
-     * @var InstanceRouteHandler
-     */
-    private $routeHandler;
+
     /**
      * @var ThemeHandler
      */
     private $themeHandler;
+
     /**
      * @var SiteHandler
      */
@@ -75,22 +77,21 @@ class ModuleValidator implements ValidatorInterface
     /**
      * boot
      *
-     * @param InstanceRouteHandler $routeHandler      route handler
-     * @param MenuHandler  $menuHandler       menu handler
-     * @param MenuConfigHandler    $menuConfigHandler menu config handler
-     * @param ThemeHandler         $themeHandler      theme handler
-     * @param SiteHandler          $siteHandler       site handler
+     * @param RouteRepository $routeRepo route handler
+     * @param MenuHandler     $menuHandler  menu handler
+     * @param ThemeHandler    $themeHandler theme handler
+     * @param SiteHandler     $siteHandler  site handler
      *
      * @return void
      */
     public function boot(
-        InstanceRouteHandler $routeHandler,
+        RouteRepository $routeRepo,
         MenuHandler $menuHandler,
         ThemeHandler $themeHandler,
         SiteHandler $siteHandler
     ) {
+        $this->routeRepo = $routeRepo;
         $this->menuHandler = $menuHandler;
-        $this->routeHandler = $routeHandler;
         $this->themeHandler = $themeHandler;
         $this->siteHandler = $siteHandler;
     }
@@ -171,8 +172,7 @@ class ModuleValidator implements ValidatorInterface
         if ($firstSegment === null) {
             $instanceRoute = $this->getHomeInstanceRoute();
         } else {
-            $instanceRouter = $this->routeHandler;
-            $instanceRoute = $instanceRouter->getByUrl($siteKey, $firstSegment);
+            $instanceRoute = $this->routeRepo->findByUrlAndSiteKey($firstSegment, $siteKey);
         }
 
         return $instanceRoute;
@@ -252,13 +252,9 @@ class ModuleValidator implements ValidatorInterface
      */
     private function getHomeInstanceRoute()
     {
-        /**
-         * @var $instanceRouter InstanceRouteHandler
-         **/
         if (static::$homeInstanceRoute === null) {
-            $instanceRouter = $this->routeHandler;
             $homeInstanceId = $this->siteHandler->getHomeInstanceId();
-            $instanceRoute = $instanceRouter->getByInstanceId($homeInstanceId);
+            $instanceRoute = $this->routeRepo->findByInstanceId($homeInstanceId);
 
             static::$homeInstanceRoute = $instanceRoute;
 
