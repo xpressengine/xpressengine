@@ -30,8 +30,7 @@ use Xpressengine\Module\Exceptions\NotFoundModuleException;
 use Xpressengine\Module\ModuleHandler;
 use Xpressengine\Permission\Grant;
 use Xpressengine\Presenter\RendererInterface;
-use Xpressengine\Routing\InstanceRoute;
-use Xpressengine\Routing\InstanceRouteHandler;
+use Xpressengine\Routing\RouteRepository;
 use Xpressengine\Site\SiteHandler;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
 use Xpressengine\User\Models\User;
@@ -433,15 +432,15 @@ class MenuController extends Controller
     /**
      * storeItem
      *
-     * @param MenuHandler          $handler menu handler
-     * @param ModuleHandler        $modules store item handler
-     * @param InstanceRouteHandler $routes  store item config handler
-     * @param string               $menuId  where to store
+     * @param MenuHandler     $handler menu handler
+     * @param ModuleHandler   $modules store item handler
+     * @param RouteRepository $routes  store item config handler
+     * @param string          $menuId  where to store
      *
      * @return $this|RedirectResponse
      * @throws Exception
      */
-    public function storeItem(MenuHandler $handler, ModuleHandler $modules, InstanceRouteHandler $routes, $menuId)
+    public function storeItem(MenuHandler $handler, ModuleHandler $modules, RouteRepository $routes, $menuId)
     {
         XeDB::beginTransaction();
 
@@ -477,24 +476,13 @@ class MenuController extends Controller
 
             // 메뉴 타입이 route 를 사용하는 경우 instance route 를 추가해 줌
             if ($menuTypeObj::isRouteAble()) {
-                if (!$routes->usableUrl($itemInput['siteKey'], $itemInput['itemUrl'])) {
-//                    throw new UnusableUrlException(['url' => $itemInput['itemUrl']]);
-                    $e = new InvalidArgumentHttpException(400, ['url' => $itemInput['itemUrl']]);
-                    $e->setMessage('":url" 은 사용할 수 없습니다.');
-
-                    throw $e;
-                }
-
-                $newRoute = new InstanceRoute(
-                    [
-                        'url' => $itemInput['itemUrl'],
-                        'module' => $menuTypeObj::getId(),
-                        'instanceId' => $itemInput['itemId'],
-                        'menuId' => $item->menuId,
-                        'site' => $itemInput['siteKey']
-                    ]
-                );
-                $routes->add($newRoute);
+                $routes->create([
+                    'url' => $itemInput['itemUrl'],
+                    'module' => $menuTypeObj::getId(),
+                    'instanceId' => $itemInput['itemId'],
+                    'menuId' => $item->menuId,
+                    'siteKey' => $itemInput['siteKey']
+                ]);
             }
 
             $handler->setMenuItemTheme($item, $desktopTheme, $mobileTheme);
@@ -593,11 +581,11 @@ class MenuController extends Controller
      * updateItem
      * 메뉴 아이템 수정 처리 메소드
      *
-     * @param MenuHandler          $handler menu handler
-     * @param ModuleHandler        $modules menu change handler
-     * @param InstanceRouteHandler $routes  menu config handler
-     * @param string               $menuId  menu id
-     * @param string               $itemId  item id
+     * @param MenuHandler     $handler menu handler
+     * @param ModuleHandler   $modules menu change handler
+     * @param RouteRepository $routes  menu config handler
+     * @param string          $menuId  menu id
+     * @param string          $itemId  item id
      *
      * @return RedirectResponse
      * @throws Exception
@@ -605,7 +593,7 @@ class MenuController extends Controller
     public function updateItem(
         MenuHandler $handler,
         ModuleHandler $modules,
-        InstanceRouteHandler $routes,
+        RouteRepository $routes,
         $menuId,
         $itemId
     ) {
@@ -649,7 +637,7 @@ class MenuController extends Controller
             $menuTypeObj->updateMenu($item->getKey(), $menuTypeInput, $itemInput);
 
             if ($menuTypeObj::isRouteAble()) {
-                $instanceRoute = $routes->getByInstanceId($item->getKey());
+                $instanceRoute = $routes->findByInstanceId($item->getKey());
                 $instanceRoute->url = $itemInput['itemUrl'];
 
                 $routes->put($instanceRoute);
@@ -703,11 +691,11 @@ class MenuController extends Controller
      * destroyItem
      * 메뉴 아이템 삭제 처리 메소드
      *
-     * @param MenuHandler          $handler menu handler
-     * @param ModuleHandler        $modules menu alter handler
-     * @param InstanceRouteHandler $routes  menu config handler
-     * @param string               $menuId  menu id
-     * @param string               $itemId  item id
+     * @param MenuHandler     $handler menu handler
+     * @param ModuleHandler   $modules menu alter handler
+     * @param RouteRepository $routes  menu config handler
+     * @param string          $menuId  menu id
+     * @param string          $itemId  item id
      *
      * @return RedirectResponse
      * @throws Exception
@@ -715,7 +703,7 @@ class MenuController extends Controller
     public function destroyItem(
         MenuHandler $handler,
         ModuleHandler $modules,
-        InstanceRouteHandler $routes,
+        RouteRepository $routes,
         $menuId,
         $itemId
     ) {
@@ -734,10 +722,9 @@ class MenuController extends Controller
             $menuTypeObj->deleteMenu($item->getKey());
 
             if ($menuTypeObj::isRouteAble()) {
-                $instanceRoute = $routes->getByInstanceId($item->getKey());
-                $routes->remove($instanceRoute);
+                $instanceRoute = $routes->findByInstanceId($item->getKey());
+                $routes->delete($instanceRoute);
             }
-//            $this->cache->deleteCachedMenu($item->menuId);
 
             $handler->deleteMenuItemTheme($item);
 

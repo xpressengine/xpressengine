@@ -13,7 +13,8 @@
  */
 namespace Xpressengine\Routing;
 
-use Xpressengine\Support\Entity;
+use Xpressengine\Database\Eloquent\DynamicModel;
+use Xpressengine\Site\Site;
 
 /**
  * Instance Route
@@ -28,9 +29,36 @@ use Xpressengine\Support\Entity;
  * @property string $module     module id
  * @property string $instanceId instance Id
  * @property string $menuId     menu id
- * @property string $site       site key
+ * @property string $siteKey    site key
  */
-class InstanceRoute extends Entity
+class InstanceRoute extends DynamicModel
 {
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'instanceRoute';
 
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = ['id'];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function site()
+    {
+        return $this->belongsTo(Site::class, 'siteKey', 'siteKey');
+    }
 }

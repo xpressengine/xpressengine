@@ -86,6 +86,8 @@ use Xpressengine\Site\SiteHandler;
  * @author   XE Team (developers) <developers@xpressengine.com>
  * @license  http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link     http://www.xpressengine.com
+ *
+ * @deprecated
  */
 class InstanceRouteHandler
 {
@@ -115,7 +117,6 @@ class InstanceRouteHandler
 
     /**
      * @var SiteHandler
-     * @deprecated not used
      */
     protected $siteHandler;
     /**
