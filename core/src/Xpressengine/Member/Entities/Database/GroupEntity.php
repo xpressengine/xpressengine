@@ -25,6 +25,7 @@ use Xpressengine\Member\Entities\GroupEntityInterface;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  * @codeCoverageIgnore
+ * @deprecated
  */
 class GroupEntity extends Entity implements GroupEntityInterface
 {

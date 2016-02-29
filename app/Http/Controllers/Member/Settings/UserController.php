@@ -201,7 +201,7 @@ class UserController extends Controller
         $status[$user->status]['selected'] = 'selected';
 
         // profileImage config
-        $profileImgSize = config('xe.member.profileImage.size');
+        $profileImgSize = config('xe.user.profileImage.size');
 
         // dynamic field
         $dynamicField = app('xe.dynamicField');

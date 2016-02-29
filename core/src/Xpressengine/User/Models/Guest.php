@@ -13,9 +13,9 @@
  */
 namespace Xpressengine\User\Models;
 
-use Xpressengine\Member\Entities\Database\AccountEntity;
 use Xpressengine\Member\Exceptions\UnsupportedOperationByGuestMemberException;
 use Xpressengine\User\Rating;
+use Xpressengine\User\UserHandler;
 use Xpressengine\User\UserInterface;
 
 /**
@@ -122,7 +122,7 @@ class Guest implements UserInterface
      */
     public function getStatus()
     {
-        return Member::STATUS_ACTIVATED;
+        return UserHandler::STATUS_ACTIVATED;
     }
 
     /**

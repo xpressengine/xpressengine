@@ -33,7 +33,7 @@ class UserController extends Controller
     protected $users;
 
     /**
-     * @var \Xpressengine\Member\Repositories\GroupRepositoryInterface
+     * @var \Xpressengine\User\Repositories\UserGroupRepositoryInterface
      */
     protected $groups;
 

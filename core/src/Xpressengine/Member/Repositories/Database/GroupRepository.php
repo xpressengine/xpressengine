@@ -29,6 +29,7 @@ use Xpressengine\Member\Repositories\GroupRepositoryInterface;
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
+ * @deprecated
  */
 class GroupRepository implements GroupRepositoryInterface
 {
@@ -97,7 +98,7 @@ class GroupRepository implements GroupRepositoryInterface
     {
         $this->table('user_group_user')->insert(
             [
-                'groupId' => $group->id,
+            'groupId' => $group->id,
                 'userId' => $user->id,
                 'createdAt' => $this->getCurrentTime()
             ]
