@@ -13,8 +13,8 @@
  */
 namespace Xpressengine\User\Repositories;
 
-use Xpressengine\Member\Exceptions\CannotDeleteMainEmailOfMemberException;
 use Xpressengine\User\EmailInterface;
+use Xpressengine\User\Exceptions\CannotDeleteMainEmailOfMemberException;
 use Xpressengine\User\UserInterface;
 
 /**

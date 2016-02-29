@@ -15,12 +15,12 @@ namespace Xpressengine\User;
 
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Validation\Factory as Validator;
-use Xpressengine\Member\Exceptions\AccountAlreadyExistsException;
-use Xpressengine\Member\Exceptions\CannotDeleteMemberHavingSuperRatingException;
-use Xpressengine\Member\Exceptions\DisplayNameAlreadyExistsException;
-use Xpressengine\Member\Exceptions\MailAlreadyExistsException;
 use Xpressengine\Register\Container;
 use Xpressengine\Support\Exceptions\InvalidArgumentException;
+use Xpressengine\User\Exceptions\AccountAlreadyExistsException;
+use Xpressengine\User\Exceptions\CannotDeleteMemberHavingSuperRatingException;
+use Xpressengine\User\Exceptions\DisplayNameAlreadyExistsException;
+use Xpressengine\User\Exceptions\MailAlreadyExistsException;
 use Xpressengine\User\Repositories\PendingEmailRepositoryInterface;
 use Xpressengine\User\Repositories\UserAccountRepositoryInterface;
 use Xpressengine\User\Repositories\UserEmailRepositoryInterface;

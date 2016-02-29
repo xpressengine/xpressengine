@@ -23,10 +23,6 @@ use Xpressengine\Member\Entities\Database\MemberEntity;
 use Xpressengine\Member\Entities\Database\PendingMailEntity;
 use Xpressengine\Member\Entities\Guest;
 use Xpressengine\Member\Entities\MemberEntityInterface;
-use Xpressengine\Member\Exceptions\AccountAlreadyExistsException;
-use Xpressengine\Member\Exceptions\CannotDeleteMemberHavingSuperRatingException;
-use Xpressengine\Member\Exceptions\DisplayNameAlreadyExistsException;
-use Xpressengine\Member\Exceptions\MailAlreadyExistsException;
 use Xpressengine\Member\Repositories\AccountRepositoryInterface;
 use Xpressengine\Member\Repositories\GroupRepositoryInterface;
 use Xpressengine\Member\Repositories\MailRepositoryInterface;
@@ -36,6 +32,10 @@ use Xpressengine\Member\Repositories\RepositoryInterface;
 use Xpressengine\Member\Repositories\VirtualGroupRepositoryInterface;
 use Xpressengine\Register\Container;
 use Xpressengine\Support\Exceptions\InvalidArgumentException;
+use Xpressengine\User\Exceptions\AccountAlreadyExistsException;
+use Xpressengine\User\Exceptions\CannotDeleteMemberHavingSuperRatingException;
+use Xpressengine\User\Exceptions\DisplayNameAlreadyExistsException;
+use Xpressengine\User\Exceptions\MailAlreadyExistsException;
 
 /**
  *

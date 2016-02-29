@@ -16,8 +16,8 @@ namespace Xpressengine\User;
 
 use Closure;
 use Illuminate\Contracts\Mail\Mailer;
-use Xpressengine\Member\Exceptions\InvalidConfirmationCodeException;
-use Xpressengine\Member\Exceptions\PendingEmailNotExistsException;
+use Xpressengine\User\Exceptions\InvalidConfirmationCodeException;
+use Xpressengine\User\Exceptions\PendingEmailNotExistsException;
 
 /**
  * 이 클래스는 Xpressengine에서 이메일 인증 처리를 수행하는 클래스이다.

@@ -10,11 +10,11 @@ use Illuminate\Routing\UrlGenerator;
 use Presenter;
 use Theme;
 use XeDB;
-use Xpressengine\Member\Exceptions\JoinNotAllowedException;
-use Xpressengine\Member\Exceptions\PendingEmailNotExistsException;
-use Xpressengine\User\Rating;
 use Xpressengine\Support\Exceptions\HttpXpressengineException;
 use Xpressengine\User\EmailBrokerInterface;
+use Xpressengine\User\Exceptions\JoinNotAllowedException;
+use Xpressengine\User\Exceptions\PendingEmailNotExistsException;
+use Xpressengine\User\Rating;
 use Xpressengine\User\UserHandler;
 
 class AuthController extends Controller

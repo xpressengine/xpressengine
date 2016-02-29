@@ -21,6 +21,18 @@
         {
             "type": "composer",
             "url": "http://packagist.xpressengine.io"
+        },
+        {
+            "type": "vcs",
+            "url": "http://yobi.xehub.io:8888/xe3_official_plugins/manual"
+        },
+        {
+            "type": "vcs",
+            "url": "http://yobi.xehub.io:8888/xe3_official_plugins/official_homepage"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/khongchi/xpressengine-ide-helper.git"
         }
     ],
     "require": {
@@ -46,12 +58,15 @@
         "xpressengine-plugin/claim": "*@dev",
         "xpressengine-plugin/short_id_generator": "*@dev",
         "xpressengine-plugin/external_page": "*@dev",
-        "xpressengine-plugin/social_login": "*@dev"
+        "xpressengine-plugin/social_login": "*@dev",
+        "xpressengine-plugin/manual": "*@dev",
+        "xpressengine-plugin/official_homepage": "*@dev"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
         "phpunit/phpunit": "~4.0",
-        "mockery/mockery": "0.9.*"
+        "mockery/mockery": "0.9.*",
+        "khongchi/xpressengine-ide-helper": "dev-master"
     },
     "autoload": {
         "classmap": [

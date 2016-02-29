@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is invalid credentials exception.
+ * This file is already exists input mail address exception.
  *
  * PHP version 5
  *
@@ -11,12 +11,12 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Member\Exceptions;
+namespace Xpressengine\User\Exceptions;
 
-use Xpressengine\Member\MemberException;
+use Xpressengine\User\UserException;
 
 /**
- * 로그인을 위한 계정정보가 유효하지 않을 때 발생하는 Exception
+ * ID 필드가 존재하지 않는 엔터티를 수정하거나 삭제하려고 할 때 발생하는 예외 클래스
  *
  * @category    Member
  * @package     Xpressengine\Member
@@ -25,7 +25,7 @@ use Xpressengine\Member\MemberException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class InvalidCredentialsException extends MemberException
+class IDNotFoundException extends UserException
 {
-
+    protected $message = 'ID필드가 지정되어 있지 않습니다.';
 }

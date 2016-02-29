@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\User\Models;
 
-use Xpressengine\Member\Exceptions\UnsupportedOperationByGuestMemberException;
+use Xpressengine\User\Exceptions\UnsupportedOperationByGuestMemberException;
 use Xpressengine\User\Rating;
 use Xpressengine\User\UserHandler;
 use Xpressengine\User\UserInterface;

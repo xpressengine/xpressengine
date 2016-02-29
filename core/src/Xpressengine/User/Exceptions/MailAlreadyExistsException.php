@@ -11,12 +11,12 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Member\Exceptions;
+namespace Xpressengine\User\Exceptions;
 
-use Xpressengine\Member\MemberException;
+use Xpressengine\User\UserException;
 
 /**
- * 이미 존재하는 표시이름을 사용하려고 할 경우 발생하는 Exception
+ * 이미 존재하는 이메일을 추가하려고 할 때 발생하는 Exception
  *
  * @category    Member
  * @package     Xpressengine\Member
@@ -25,7 +25,7 @@ use Xpressengine\Member\MemberException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class DisplayNameAlreadyExistsException extends MemberException
+class MailAlreadyExistsException extends UserException
 {
-    protected $message = '이미 사용중인 회원 이름입니다.';
+    protected $message = '이미 존재하는 이메일입니다';
 }

@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Presenter;
 use Theme;
 use XeDB;
-use Xpressengine\Member\Exceptions\MemberNotFoundException;
+use Xpressengine\User\Exceptions\MemberNotFoundException;
 use Xpressengine\User\Rating;
 use Xpressengine\User\Repositories\UserEmailRepositoryInterface;
 use Xpressengine\User\Repositories\UserGroupRepositoryInterface;

@@ -14,8 +14,8 @@
 namespace Xpressengine\Member\Entities;
 
 use Xpressengine\Member\Entities\Database\AccountEntity;
-use Xpressengine\Member\Exceptions\UnsupportedOperationByGuestMemberException;
 use Xpressengine\Member\Rating;
+use Xpressengine\User\Exceptions\UnsupportedOperationByGuestMemberException;
 
 /**
  * 비로그인 상태의 회원 객체 클래스

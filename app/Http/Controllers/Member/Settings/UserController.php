@@ -8,10 +8,10 @@ use Illuminate\Http\Request;
 use Input;
 use Presenter;
 use XeDB;
-use Xpressengine\Member\Exceptions\EmailNotFoundException;
-use Xpressengine\Member\Exceptions\MailAlreadyExistsException;
-use Xpressengine\User\Rating;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
+use Xpressengine\User\Exceptions\EmailNotFoundException;
+use Xpressengine\User\Exceptions\MailAlreadyExistsException;
+use Xpressengine\User\Rating;
 use Xpressengine\User\UserHandler;
 use Xpressengine\User\UserInterface;
 

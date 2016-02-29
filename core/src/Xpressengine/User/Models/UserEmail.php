@@ -14,8 +14,8 @@
 namespace Xpressengine\User\Models;
 
 use Xpressengine\Database\Eloquent\DynamicModel;
-use Xpressengine\Member\Exceptions\AlreadyConfirmedEmailException;
 use Xpressengine\User\EmailInterface;
+use Xpressengine\User\Exceptions\AlreadyConfirmedEmailException;
 
 /**
  * @category    User

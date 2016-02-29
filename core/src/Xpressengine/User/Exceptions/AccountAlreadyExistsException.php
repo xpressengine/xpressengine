@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is Member package exception.
+ * This file is already exists input mail address exception.
  *
  * PHP version 5
  *
@@ -11,12 +11,12 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Member;
+namespace Xpressengine\User\Exceptions;
 
-use Xpressengine\Support\Exceptions\XpressengineException;
+use Xpressengine\User\UserException;
 
 /**
- * Xpressengine Member 패키지의 메인 exception
+ * 등록하려는 메일 주소가 이미 존재할 경우 사용되는 Exception
  *
  * @category    Member
  * @package     Xpressengine\Member
@@ -25,7 +25,7 @@ use Xpressengine\Support\Exceptions\XpressengineException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class MemberException extends XpressengineException
+class AccountAlreadyExistsException extends UserException
 {
 
 }
