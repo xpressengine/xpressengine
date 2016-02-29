@@ -6,7 +6,6 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Input;
-use Member;
 use Presenter;
 use XeDB;
 use Xpressengine\Member\Exceptions\EmailNotFoundException;
@@ -210,7 +209,7 @@ class UserController extends Controller
         $defaultAccount = null;
         if (isset($user->accounts)) {
             foreach ($user->accounts as $account) {
-                if ($account->provider === Member::PROVIDER_DEFAULT) {
+                if ($account->provider === \XeUser::PROVIDER_DEFAULT) {
                     $defaultAccount = $account;
                 }
             }

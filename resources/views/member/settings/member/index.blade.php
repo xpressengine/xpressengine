@@ -16,9 +16,9 @@
                         {{-- status --}}
                         <div class="btn-group pull-right">
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                @if(Input::get('status') === \Member::STATUS_ACTIVATED)
+                                @if(Input::get('status') === \XeUser::STATUS_ACTIVATED)
                                     승인됨
-                                @elseif(Input::get('status') === \Member::STATUS_DENIED)
+                                @elseif(Input::get('status') === \XeUser::STATUS_DENIED)
                                     거부됨
                                 @else
                                     승인/거부
@@ -27,8 +27,8 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a href="{{ route('settings.member.index', Input::except('status') ) }}" @if(! Input::has('status')) active @endif">전체</a></li>
-                                <li><a href="{{ route('settings.member.index', array_merge(Input::all(), ['status'=> \Member::STATUS_ACTIVATED] )) }}" @if(Input::get('status') === \Member::STATUS_ACTIVATED) active @endif">승인됨</a></li>
-                                <li><a href="{{ route('settings.member.index', array_merge(Input::all(), ['status'=> \Member::STATUS_DENIED] )) }}" @if(Input::get('status') === \Member::STATUS_DENIED) active @endif">거부됨</a></li>
+                                <li><a href="{{ route('settings.member.index', array_merge(Input::all(), ['status'=> \XeUser::STATUS_ACTIVATED] )) }}" @if(Input::get('status') === \XeUser::STATUS_ACTIVATED) active @endif">승인됨</a></li>
+                                <li><a href="{{ route('settings.member.index', array_merge(Input::all(), ['status'=> \XeUser::STATUS_DENIED] )) }}" @if(Input::get('status') === \XeUser::STATUS_DENIED) active @endif">거부됨</a></li>
                             </ul>
                         </div>
                         {{-- groups --}}

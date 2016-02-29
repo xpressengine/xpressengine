@@ -7,7 +7,6 @@ use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Http\Request;
 use Illuminate\Routing\UrlGenerator;
-use Member;
 use Presenter;
 use Theme;
 use XeDB;
@@ -111,7 +110,7 @@ class AuthController extends Controller
         // resolve data
         $userData = $request->except('_token', 'agree');
         $userData['rating'] = Rating::MEMBER;
-        $userData['status'] = Member::STATUS_ACTIVATED;
+        $userData['status'] = \XeUser::STATUS_ACTIVATED;
         unset($userData['password_confirmation']);
 
         XeDB::beginTransaction();
@@ -226,7 +225,7 @@ class AuthController extends Controller
         $this->checkCaptcha('login');
 
         $credentials = $request->only('email', 'password');
-        $credentials['status'] = Member::STATUS_ACTIVATED;
+        $credentials['status'] = \XeUser::STATUS_ACTIVATED;
 
         try {
             if ($this->auth->attempt($credentials, $request->has('remember'))) {

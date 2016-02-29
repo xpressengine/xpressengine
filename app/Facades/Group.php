@@ -34,6 +34,6 @@ class Group  extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'xe.member.groups';
+        return 'xe.user.groups';
     }
 }

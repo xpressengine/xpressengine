@@ -279,7 +279,7 @@ class UserHandler
         // todo: this!!
         //if ($profileFile = $userData['profileImgFile'])) {
         //    /** @var MemberImageHandler $imageHandler */
-        //    $imageHandler = app('xe.member.image');
+        //    $imageHandler = app('xe.user.image');
         //    $userData['profileImageId'] = $imageHandler->updateMemberProfileImage($user, $profileFile);
         //}
 

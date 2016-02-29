@@ -25,7 +25,7 @@ class SettingsPermission extends AbstractUIObject
         $actions = $permission->getActions();
         $registered = $permission->getRegistered();
 
-        $groups = app('xe.member.groups')->all();
+        $groups = app('xe.user.groups')->all();
 
         $settings = [];
         $content = [];
