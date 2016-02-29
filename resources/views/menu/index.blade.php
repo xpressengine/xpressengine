@@ -1,4 +1,4 @@
-{{ Frontend::css('/assets/settings/css/admin_menu.css')->load() }}
+{{ Frontend::css('/assets/settings/css/admin_menu.css')->before('/assets/settings/css/admin.css')->load() }}
 {{ Frontend::js('/assets/vendor/core/lodash.min.js')->appendTo('head')->load() }}
 {{ Frontend::js('/assets/vendor/menu/Tree.js')->appendTo('head')->load() }}
 {{ Frontend::js('/assets/vendor/menu/classnames.js')->appendTo('head')->load() }}
