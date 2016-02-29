@@ -268,6 +268,7 @@ class UserServiceProvider extends ServiceProvider
                     $app['xe.user.groups'],
                     $app['xe.user.emails'],
                     $app['xe.user.pendingEmails'],
+                    $app['xe.user.image'],
                     $app['hash'],
                     $app['validator'],
                     $app['xe.register'],

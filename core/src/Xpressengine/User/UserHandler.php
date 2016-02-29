@@ -106,19 +106,24 @@ class UserHandler
      * @var bool 이메일 인증의 사용여부
      */
     private $useEmailConfirm;
+    /**
+     * @var UserImageHandler
+     */
+    private $imageHandler;
 
     /**
      * constructor.
      *
-     * @param UserRepositoryInterface    $users           User 회원 저장소
-     * @param UserAccountRepositoryInterface    $accounts        UserAccount 회원계정 저장소
+     * @param UserRepositoryInterface         $users           User 회원 저장소
+     * @param UserAccountRepositoryInterface  $accounts        UserAccount 회원계정 저장소
      * @param UserGroupRepositoryInterface    $groups          UserGroup 그룹 저장소
      * @param UserEmailRepositoryInterface    $mails           회원 이메일 저장소
-     * @param PendingEmailRepositoryInterface    $pendingEmails   회원 등록대기 이메일 저장소
-     * @param Hasher    $hasher          해시코드 생성기, 비밀번호 해싱을 위해 사용됨
-     * @param Validator $validator       유효성 검사기. 비밀번호 및 표시이름(dispalyName)의 유효성 검사를 위해 사용됨
-     * @param Container $container       Xpressengine 레지스터
-     * @param boolean   $useEmailConfirm 이메일 인증의 사용여부
+     * @param PendingEmailRepositoryInterface $pendingEmails   회원 등록대기 이메일 저장소
+     * @param UserImageHandler                $imageHandler
+     * @param Hasher                          $hasher          해시코드 생성기, 비밀번호 해싱을 위해 사용됨
+     * @param Validator                       $validator       유효성 검사기. 비밀번호 및 표시이름(dispalyName)의 유효성 검사를 위해 사용됨
+     * @param Container                       $container       Xpressengine 레지스터
+     * @param boolean                         $useEmailConfirm 이메일 인증의 사용여부
      */
     public function __construct(
         UserRepositoryInterface $users,
@@ -126,6 +131,7 @@ class UserHandler
         UserGroupRepositoryInterface $groups,
         UserEmailRepositoryInterface $mails,
         PendingEmailRepositoryInterface $pendingEmails,
+        UserImageHandler $imageHandler,
         Hasher $hasher,
         Validator $validator,
         Container $container,
@@ -140,6 +146,7 @@ class UserHandler
         $this->container = $container;
         $this->pendingEmails = $pendingEmails;
         $this->useEmailConfirm = $useEmailConfirm;
+        $this->imageHandler = $imageHandler;
     }
 
     /**
@@ -277,11 +284,10 @@ class UserHandler
 
         // resolve profileImage
         // todo: this!!
-        //if ($profileFile = $userData['profileImgFile'])) {
-        //    /** @var MemberImageHandler $imageHandler */
-        //    $imageHandler = app('xe.user.image');
-        //    $userData['profileImageId'] = $imageHandler->updateMemberProfileImage($user, $profileFile);
-        //}
+        if (!empty($userData['profileImgFile'])) {
+            $profileFile = $userData['profileImgFile'];
+            $userData['profileImageId'] = $this->imageHandler->updateUserProfileImage($user, $profileFile);
+        }
 
         // resolve group
         $groups = array_get($userData, 'groupId', []);

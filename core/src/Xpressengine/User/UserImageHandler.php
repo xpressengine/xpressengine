@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Xpressengine\Media\MediaManager;
 use Xpressengine\Storage\File;
 use Xpressengine\Storage\Storage;
-use Xpressengine\User\Models\User;
 
 /**
  * 회원의 프로필 이미지 및 프로필 배경이미지를 저장하고, 조회하는 역할을 담당하는 클래스
@@ -74,12 +73,12 @@ class UserImageHandler
     /**
      * 회원의 프로필 이미지를 등록한다.
      *
-     * @param User         $user        프로필 이미지를 등록할 회원
-     * @param UploadedFile $profileFile 프로필 이미지 파일
+     * @param UserInterface $user        프로필 이미지를 등록할 회원
+     * @param UploadedFile  $profileFile 프로필 이미지 파일
      *
      * @return string 등록한 프로필이미지 ID
      */
-    public function updateUserProfileImage(User $user, UploadedFile $profileFile)
+    public function updateUserProfileImage(UserInterface $user, UploadedFile $profileFile)
     {
         $disk = array_get($this->profileImgConfig, 'storage.disk');
         $path = array_get($this->profileImgConfig, 'storage.path');
@@ -94,7 +93,7 @@ class UserImageHandler
         // remove old profile image
         if (!empty($user->profileImageId)) {
             $file = File::find($user->profileImageId);
-            if($file !== null) {
+            if ($file !== null) {
                 $this->storage->remove($file);
             }
         }
