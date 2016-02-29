@@ -4,27 +4,25 @@
  *
  * PHP version 5
  *
- * @category    Member
- * @package     Xpressengine\Member
+ * @category    User
+ * @package     Xpressengine\User
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Member\Repositories;
+namespace Xpressengine\User\Repositories;
 
-use Illuminate\Support\Collection;
-use Xpressengine\Member\Entities\VirtualGroupEntity;
+use Xpressengine\User\Models\UserVirtualGroup;
 
 /**
- * @category    Member
- * @package     Xpressengine\Member\Repositories
+ * @category    User
+ * @package     Xpressengine\User
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
- * @deprecated
  */
-interface VirtualGroupRepositoryInterface
+interface VirtualGroupRepositoryInterface extends \Xpressengine\Member\Repositories\VirtualGroupRepositoryInterface
 {
 
     /**
@@ -32,7 +30,7 @@ interface VirtualGroupRepositoryInterface
      *
      * @param string $id 조회할 가상그룹 id
      *
-     * @return VirtualGroupEntity
+     * @return UserVirtualGroup
      */
     public function find($id);
 
@@ -41,7 +39,7 @@ interface VirtualGroupRepositoryInterface
      *
      * @param string $title 가상그룹 이름
      *
-     * @return VirtualGroupEntity|null
+     * @return UserVirtualGroup|null
      */
     public function findByTitle($title);
 
@@ -54,26 +52,10 @@ interface VirtualGroupRepositoryInterface
      */
     public function findByUserId($userId);
 
-    ///**
-    // * 주어진 회원이 소속된 가상그룹 목록을 조회한다.
-    // *
-    // * @param MemberEntityInterface $member 조회할 member
-    // *
-    // * @return VirtualGroupEntity[]
-    // */
-    //public function fetchAllByMember(MemberEntityInterface $member);
-    //
-    ///**
-    // * 가상 그룹 목록을 조회한다. pagination된 목록을 반환한다.
-    // *
-    // * @return Collection
-    // */
-    //public function paginate($page = 1, $perPage = 10);
-
     /**
      * 모든 가상그룹 목록을 반환한다.
      *
-     * @return Collection
+     * @return array
      */
     public function all();
 

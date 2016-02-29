@@ -36,7 +36,7 @@
             loadedTime: {{ time() }},
             'X-CSRF-TOKEN': '{!! csrf_token() !!}'
         });
-        @if (in_array(Auth::user()->getRating(), [\Xpressengine\Member\Rating::SUPER, \Xpressengine\Member\Rating::MANAGER]))
+        @if (in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER]))
         XE.configure({managePrefix: '{{ app('config')['xe.routing.settingsPrefix'] }}'});
         @endif
 

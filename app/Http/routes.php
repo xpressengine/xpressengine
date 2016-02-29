@@ -238,7 +238,7 @@ Route::settings(
                 'as' => 'settings.member.index',
                 'uses' => 'Member\Settings\UserController@index',
                 'settings_menu' => 'member.list',
-                'permission' => 'member.list'
+                'permission' => 'user.list'
             ]
         );
 
@@ -261,7 +261,7 @@ Route::settings(
                 'as' => 'settings.member.edit',
                 'uses' => 'Member\Settings\UserController@edit',
                 'settings_menu' => 'member.edit',
-                'permission' => 'member.edit',
+                'permission' => 'user.edit',
 
             ]
         )->where('id', '[0-9a-z\-]+');
@@ -304,7 +304,7 @@ Route::settings(
                         'as' => 'settings.member.setting',
                         'uses' => 'Member\Settings\SettingController@editCommon',
                         'settings_menu' => 'member.setting.default',
-                        'permission' => 'member.setting'
+                        'permission' => 'user.setting'
                     ]
                 );
                 Route::post(
@@ -318,7 +318,7 @@ Route::settings(
                         'as' => 'settings.member.setting.join',
                         'uses' => 'Member\Settings\SettingController@editJoin',
                         'settings_menu' => 'member.setting.join',
-                        'permission' => 'member.setting'
+                        'permission' => 'user.setting'
                     ]
                 );
 
@@ -336,7 +336,7 @@ Route::settings(
                         'as' => 'settings.member.setting.skin',
                         'uses' => 'Member\Settings\SettingController@editSkin',
                         'settings_menu' => 'member.setting.skin',
-                        'permission' => 'member.setting'
+                        'permission' => 'user.setting'
                     ]
                 );
 
@@ -346,7 +346,7 @@ Route::settings(
                         'as' => 'settings.member.setting.field',
                         'uses' => 'Member\Settings\SettingController@editField',
                         'settings_menu' => 'member.setting.field',
-                        'permission' => 'member.setting'
+                        'permission' => 'user.setting'
                     ]
                 );
 
@@ -355,7 +355,7 @@ Route::settings(
                     [
                         'as' => 'settings.member.setting.togglemenu',
                         'uses' => 'Member\Settings\SettingController@editToggleMenu',
-                        'permission' => 'member.setting'
+                        'permission' => 'user.setting'
                     ]
                 );
 

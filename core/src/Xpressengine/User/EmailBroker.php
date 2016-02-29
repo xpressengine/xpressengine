@@ -18,11 +18,6 @@ use Closure;
 use Illuminate\Contracts\Mail\Mailer;
 use Xpressengine\Member\Exceptions\InvalidConfirmationCodeException;
 use Xpressengine\Member\Exceptions\PendingEmailNotExistsException;
-use Xpressengine\Member\Repositories\MailRepositoryInterface;
-use Xpressengine\Member\Repositories\PendingMailRepositoryInterface;
-use Xpressengine\User\Models\PendingEmail;
-use Xpressengine\User\Models\UserEmail;
-use Xpressengine\User\Repositories\PendingEmailRepository;
 
 /**
  * 이 클래스는 Xpressengine에서 이메일 인증 처리를 수행하는 클래스이다.

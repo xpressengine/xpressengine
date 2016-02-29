@@ -94,7 +94,7 @@
                         <tbody>
                         @foreach($users as $user)
                             <tr>
-                                <td><input type="checkbox" name="id[]" class="__xe_checkbox" value="{{ $user->getId() }}" @if($user->rating === \Xpressengine\Member\Rating::SUPER) disabled @endif /></td>
+                                <td><input type="checkbox" name="id[]" class="__xe_checkbox" value="{{ $user->getId() }}" @if($user->rating === \Xpressengine\User\Rating::SUPER) disabled @endif /></td>
                                 <td>
                                     <img class="__xe_member" data-id="{{ $user->getId() }}" src="{{ $user->getProfileImage() }}" style="height: 20px;">
                                     <span role="button" class="__xe_member" data-id="{{ $user->getId() }}" data-text="{{ $user->getDisplayName() }}">{{ $user->getDisplayName() }}</span>

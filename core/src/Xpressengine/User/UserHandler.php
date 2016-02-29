@@ -15,26 +15,17 @@ namespace Xpressengine\User;
 
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Validation\Factory as Validator;
-use Xpressengine\Database\Eloquent\DynamicModel;
 use Xpressengine\Member\Exceptions\AccountAlreadyExistsException;
-use Xpressengine\Member\Exceptions\CannotDeleteMainEmailOfMemberException;
 use Xpressengine\Member\Exceptions\CannotDeleteMemberHavingSuperRatingException;
 use Xpressengine\Member\Exceptions\DisplayNameAlreadyExistsException;
 use Xpressengine\Member\Exceptions\MailAlreadyExistsException;
-use Xpressengine\Member\Repositories\AccountRepositoryInterface;
-use Xpressengine\Member\Repositories\GroupRepositoryInterface;
-use Xpressengine\Member\Repositories\MailRepositoryInterface;
-use Xpressengine\Member\Repositories\MemberRepositoryInterface;
-use Xpressengine\Member\Repositories\PendingMailRepositoryInterface;
 use Xpressengine\Register\Container;
 use Xpressengine\Support\Exceptions\InvalidArgumentException;
-use Xpressengine\User\Models\User;
-use Xpressengine\User\Models\UserGroup;
-use Xpressengine\User\Repositories\PendingEmailRepository;
-use Xpressengine\User\Repositories\UserAccountRepository;
-use Xpressengine\User\Repositories\UserEmailRepository;
-use Xpressengine\User\Repositories\UserGroupRepository;
-use Xpressengine\User\Repositories\UserRepository;
+use Xpressengine\User\Repositories\PendingEmailRepositoryInterface;
+use Xpressengine\User\Repositories\UserAccountRepositoryInterface;
+use Xpressengine\User\Repositories\UserEmailRepositoryInterface;
+use Xpressengine\User\Repositories\UserGroupRepositoryInterface;
+use Xpressengine\User\Repositories\UserRepositoryInterface;
 
 /**
  * 회원 및 회원과 관련된 데이터(그룹정보, 계정정보, 이메일 정보 등)를 조회하거나 처리할 때에 UserHandler를 사용할 수 있습니다.
@@ -67,27 +58,27 @@ class UserHandler
     ];
 
     /**
-     * @var MemberRepositoryInterface User Repository
+     * @var UserRepositoryInterface User Repository
      */
     protected $users;
 
     /**
-     * @var AccountRepositoryInterface UserAccount Repository
+     * @var UserAccountRepositoryInterface UserAccount Repository
      */
     protected $accounts;
 
     /**
-     * @var GroupRepositoryInterface UserGroup Repository
+     * @var UserGroupRepositoryInterface UserGroup Repository
      */
     protected $groups;
 
     /**
-     * @var MailRepositoryInterface UserEmail Repository
+     * @var UserEmailRepositoryInterface UserEmail Repository
      */
     protected $emails;
 
     /**
-     * @var PendingMailRepositoryInterface PendingEmail Repository
+     * @var PendingEmailRepositoryInterface PendingEmail Repository
      */
     private $pendingEmails;
 
@@ -119,22 +110,22 @@ class UserHandler
     /**
      * constructor.
      *
-     * @param UserRepository    $users           User 회원 저장소
-     * @param UserAccountRepository    $accounts        UserAccount 회원계정 저장소
-     * @param UserGroupRepository    $groups          UserGroup 그룹 저장소
-     * @param UserEmailRepository    $mails           회원 이메일 저장소
-     * @param PendingEmailRepository    $pendingEmails   회원 등록대기 이메일 저장소
+     * @param UserRepositoryInterface    $users           User 회원 저장소
+     * @param UserAccountRepositoryInterface    $accounts        UserAccount 회원계정 저장소
+     * @param UserGroupRepositoryInterface    $groups          UserGroup 그룹 저장소
+     * @param UserEmailRepositoryInterface    $mails           회원 이메일 저장소
+     * @param PendingEmailRepositoryInterface    $pendingEmails   회원 등록대기 이메일 저장소
      * @param Hasher    $hasher          해시코드 생성기, 비밀번호 해싱을 위해 사용됨
      * @param Validator $validator       유효성 검사기. 비밀번호 및 표시이름(dispalyName)의 유효성 검사를 위해 사용됨
      * @param Container $container       Xpressengine 레지스터
      * @param boolean   $useEmailConfirm 이메일 인증의 사용여부
      */
     public function __construct(
-        UserRepository $users,
-        UserAccountRepository $accounts,
-        UserGroupRepository $groups,
-        UserEmailRepository $mails,
-        PendingEmailRepository $pendingEmails,
+        UserRepositoryInterface $users,
+        UserAccountRepositoryInterface $accounts,
+        UserGroupRepositoryInterface $groups,
+        UserEmailRepositoryInterface $mails,
+        PendingEmailRepositoryInterface $pendingEmails,
         Hasher $hasher,
         Validator $validator,
         Container $container,
@@ -154,7 +145,7 @@ class UserHandler
     /**
      * User 회원 저장소를 반환한다.
      *
-     * @return UserRepository
+     * @return UserRepositoryInterface
      */
     public function users()
     {
@@ -164,7 +155,7 @@ class UserHandler
     /**
      * UserAccount 회원계정 저장소를 반환한다.
      *
-     * @return UserAccountRepository
+     * @return UserAccountRepositoryInterface
      */
     public function accounts()
     {
@@ -174,7 +165,7 @@ class UserHandler
     /**
      * UserGroup 그룹 저장소를 반환한다.
      *
-     * @return UserGroupRepository
+     * @return UserGroupRepositoryInterface
      */
     public function groups()
     {
@@ -184,7 +175,7 @@ class UserHandler
     /**
      * 회원 이메일 저장소를 반환한다.
      *
-     * @return UserEmailRepository
+     * @return UserEmailRepositoryInterface
      */
     public function emails()
     {
@@ -194,7 +185,7 @@ class UserHandler
     /**
      * 회원 등록대기 이메일 저장소를 반환한다.
      *
-     * @return PendingEmailRepository
+     * @return PendingEmailRepositoryInterface
      */
     public function pendingEmails()
     {
@@ -206,7 +197,7 @@ class UserHandler
      *
      * @param array $data 신규회원 정보
      *
-     * @return User 신규 등록된 회원정보
+     * @return UserInterface 신규 등록된 회원정보
      */
     public function create(array $data)
     {
@@ -329,7 +320,7 @@ class UserHandler
     public function leave($userIds)
     {
 
-        /** @var User[] $users */
+        /** @var UserInterface[] $users */
         $users = $this->users()->whereIn('id', (array) $userIds)->with(['groups', 'emails'])->get();
 
         $ratings = array_pluck($users, 'rating');
@@ -491,7 +482,7 @@ class UserHandler
      *
      * @param array $data
      *
-     * @return UserGroup
+     * @return GroupInterface
      */
     public function createGroup(array $data)
     {
@@ -505,9 +496,9 @@ class UserHandler
      * @param $group
      * @param $data
      *
-     * @return UserGroup
+     * @return GroupInterface
      */
-    public function updateGroup(UserGroup $group, array $data = [])
+    public function updateGroup(GroupInterface $group, array $data = [])
     {
         $this->groups()->update($group, $data);
         return $group;
@@ -516,11 +507,11 @@ class UserHandler
     /**
      * 그룹을 삭제한다
      *
-     * @param UserGroup $group
+     * @param GroupInterface $group
      *
      * @return bool
      */
-    public function deleteGroup(UserGroup $group)
+    public function deleteGroup(GroupInterface $group)
     {
         return $this->groups()->delete($group);
     }

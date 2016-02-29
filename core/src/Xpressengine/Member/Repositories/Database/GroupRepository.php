@@ -93,7 +93,7 @@ class GroupRepository implements GroupRepositoryInterface
      *
      * @return mixed
      */
-    public function addUser(GroupEntityInterface $group, MemberEntityInterface $user)
+    public function addUser($group, $user)
     {
         $this->table('user_group_user')->insert(
             [
@@ -115,7 +115,7 @@ class GroupRepository implements GroupRepositoryInterface
      *
      * @return void
      */
-    public function exceptUser(GroupEntityInterface $group, MemberEntityInterface $user)
+    public function exceptUser($group, $user)
     {
         $this->table('user_group_user')->where('groupId', $group->id)->where('userId', $user->id)->delete();
         $this->table()->where('id', $group->id)->decrement('count');

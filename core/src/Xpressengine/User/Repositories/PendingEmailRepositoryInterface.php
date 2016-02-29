@@ -4,37 +4,35 @@
  *
  * PHP version 5
  *
- * @category    Member
- * @package     Xpressengine\Member
+ * @category    User
+ * @package     Xpressengine\User
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Member\Repositories;
+namespace Xpressengine\User\Repositories;
 
-use Xpressengine\Member\Entities\MailEntityInterface;
-use Xpressengine\Member\Mail;
+use Xpressengine\User\EmailInterface;
 
 /**
  * 이 인터페이스는 회원의 이메일정보 저장소가 구현해야 하는 인터페이스이다.
  *
- * @category    Member
- * @package     Xpressengine\Member
+ * @category    User
+ * @package     Xpressengine\User
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
- * @deprecated
  */
-interface MailRepositoryInterface
+interface PendingEmailRepositoryInterface extends UserEmailRepositoryInterface
 {
     /**
      * 이메일 주소로 이메일 정보를 조회한다.
      *
      * @param string        $address 조회할 이메일 주소
      *
-     * @return MailEntityInterface
+     * @return EmailInterface
      */
     public function findByAddress($address);
 
@@ -44,7 +42,7 @@ interface MailRepositoryInterface
      *
      * @param $userId
      *
-     * @return mixed
+     * @return EmailInterface
      */
     public function findByUserId($userId);
 

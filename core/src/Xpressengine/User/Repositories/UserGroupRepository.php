@@ -13,10 +13,8 @@
  */
 namespace Xpressengine\User\Repositories;
 
-use Xpressengine\Member\Entities\GroupEntityInterface;
-use Xpressengine\Member\Entities\MemberEntityInterface;
-use Xpressengine\Member\Repositories\GroupRepositoryInterface;
-use Xpressengine\User\Repositories\RepositoryTrait;
+use Xpressengine\User\GroupInterface;
+use Xpressengine\User\UserInterface;
 
 /**
  * 회원 그룹 정보를 저장하는 Repository
@@ -27,7 +25,7 @@ use Xpressengine\User\Repositories\RepositoryTrait;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class UserGroupRepository implements GroupRepositoryInterface
+class UserGroupRepository implements UserGroupRepositoryInterface
 {
     use RepositoryTrait;
 
@@ -59,12 +57,12 @@ class UserGroupRepository implements GroupRepositoryInterface
     /**
      * 주어진 그룹에 주어진 회원을 추가한다.
      *
-     * @param GroupEntityInterface  $group 대상 그룹
-     * @param MemberEntityInterface $user  추가할 회원
+     * @param GroupInterface $group 대상 그룹
+     * @param UserInterface  $user  추가할 회원
      *
      * @return mixed
      */
-    public function addUser(GroupEntityInterface $group, MemberEntityInterface $user)
+    public function addUser($group, $user)
     {
         return $group->addUser($user);
     }
@@ -73,12 +71,12 @@ class UserGroupRepository implements GroupRepositoryInterface
     /**
      * 주어진 회원을 그룹에서 제외시킨다.
      *
-     * @param GroupEntityInterface  $group 대상 그룹
-     * @param MemberEntityInterface $user  제외시킬 회원
+     * @param GroupInterface $group 대상 그룹
+     * @param UserInterface  $user  제외시킬 회원
      *
      * @return void
      */
-    public function exceptUser(GroupEntityInterface $group, MemberEntityInterface $user)
+    public function exceptUser($group, $user)
     {
         return $group->exceptUser($user);
     }

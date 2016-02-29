@@ -18,13 +18,9 @@ use Illuminate\Auth\Passwords\DatabaseTokenRepository;
 use Illuminate\Auth\Passwords\PasswordBroker;
 use Illuminate\Contracts\Validation\Factory as Validator;
 use Illuminate\Support\ServiceProvider;
+use Xpressengine\Media\MediaManager;
 use Xpressengine\Media\Thumbnailer;
-use Xpressengine\Member\Repositories\AccountRepositoryInterface;
-use Xpressengine\Member\Repositories\GroupRepositoryInterface;
-use Xpressengine\Member\Repositories\MailRepositoryInterface;
-use Xpressengine\Member\Repositories\MemberRepositoryInterface;
-use Xpressengine\Member\Repositories\PendingMailRepositoryInterface;
-use Xpressengine\Member\Repositories\VirtualGroupRepositoryInterface;
+use Xpressengine\Storage\File;
 use Xpressengine\Storage\Storage;
 use Xpressengine\ToggleMenus\Member\LinkItem;
 use Xpressengine\ToggleMenus\Member\RawItem;
@@ -38,11 +34,17 @@ use Xpressengine\User\Models\UserAccount;
 use Xpressengine\User\Models\UserEmail;
 use Xpressengine\User\Models\UserGroup;
 use Xpressengine\User\Repositories\PendingEmailRepository;
+use Xpressengine\User\Repositories\PendingEmailRepositoryInterface;
 use Xpressengine\User\Repositories\UserAccountRepository;
+use Xpressengine\User\Repositories\UserAccountRepositoryInterface;
 use Xpressengine\User\Repositories\UserEmailRepository;
+use Xpressengine\User\Repositories\UserEmailRepositoryInterface;
 use Xpressengine\User\Repositories\UserGroupRepository;
+use Xpressengine\User\Repositories\UserGroupRepositoryInterface;
 use Xpressengine\User\Repositories\UserRepository;
+use Xpressengine\User\Repositories\UserRepositoryInterface;
 use Xpressengine\User\Repositories\VirtualGroupRepository;
+use Xpressengine\User\Repositories\VirtualGroupRepositoryInterface;
 use Xpressengine\User\UserHandler;
 use Xpressengine\User\UserImageHandler;
 use Xpressengine\User\UserProvider;
@@ -299,7 +301,7 @@ class UserServiceProvider extends ServiceProvider
                 return new UserRepository(User::class);
             }
         );
-        $this->app->bind(MemberRepositoryInterface::class, 'xe.users');
+        $this->app->bind(UserRepositoryInterface::class, 'xe.users');
     }
 
     /**
@@ -315,7 +317,7 @@ class UserServiceProvider extends ServiceProvider
                 return new UserAccountRepository(UserAccount::class);
             }
         );
-        $this->app->bind(AccountRepositoryInterface::class, 'xe.user.accounts');
+        $this->app->bind(UserAccountRepositoryInterface::class, 'xe.user.accounts');
     }
 
     /**
@@ -331,7 +333,7 @@ class UserServiceProvider extends ServiceProvider
                 return new UserGroupRepository(UserGroup::class);
             }
         );
-        $this->app->bind(GroupRepositoryInterface::class, 'xe.user.groups');
+        $this->app->bind(UserGroupRepositoryInterface::class, 'xe.user.groups');
     }
 
     /**
@@ -362,7 +364,7 @@ class UserServiceProvider extends ServiceProvider
                 return new UserEmailRepository(UserEmail::class);
             }
         );
-        $this->app->bind(MailRepositoryInterface::class, 'xe.user.emails');
+        $this->app->bind(UserEmailRepositoryInterface::class, 'xe.user.emails');
 
         $this->app->singleton(
             'xe.user.pendingEmails',
@@ -370,7 +372,7 @@ class UserServiceProvider extends ServiceProvider
                 return new PendingEmailRepository(PendingEmail::class);
             }
         );
-        $this->app->bind(PendingMailRepositoryInterface::class, 'xe.user.pendingEmails');
+        $this->app->bind(PendingEmailRepositoryInterface::class, 'xe.user.pendingEmails');
     }
 
     /**
@@ -491,15 +493,19 @@ class UserServiceProvider extends ServiceProvider
         $media = $this->app['xe.media'];
         User::setProfileImageResolver(
             function ($imageId) use ($default, $storage, $media) {
+                try {
+                    if($imageId !== null) {
+                        /** @var Storage $storage */
+                        $file = File::find($imageId);
 
-                /** @var Storage $storage */
-                //$file = $storage->get($imageId);
-                //
-                //if ($file !== null) {
-                //    /** @var MediaManager $media */
-                //    $mediaFile = $media->make($file);
-                //    return asset($mediaFile->url());
-                //}
+                        if ($file !== null) {
+                            /** @var MediaManager $media */
+                            $mediaFile = $media->make($file);
+                            return asset($mediaFile->url());
+                        }
+                    }
+                } catch(\Exception $e) {
+                }
 
                 return asset($default);
             }
