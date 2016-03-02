@@ -14,7 +14,8 @@
 namespace Xpressengine\User\Models;
 
 use Xpressengine\Database\Eloquent\DynamicModel;
-use Xpressengine\Member\Entities\GroupEntityInterface;
+use Xpressengine\User\GroupInterface;
+use Xpressengine\User\UserInterface;
 
 /**
  * @category    User
@@ -24,7 +25,7 @@ use Xpressengine\Member\Entities\GroupEntityInterface;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class UserGroup extends DynamicModel implements GroupEntityInterface
+class UserGroup extends DynamicModel implements GroupInterface
 {
     protected $table = 'user_group';
 
@@ -55,11 +56,11 @@ class UserGroup extends DynamicModel implements GroupEntityInterface
     /**
      * add User to this group
      *
-     * @param User $user
+     * @param UserInterface $user
      *
      * @return static
      */
-    public function addUser(User $user)
+    public function addUser(UserInterface $user)
     {
         $this->users()->save($user);
         $this->increment('count');
@@ -69,11 +70,11 @@ class UserGroup extends DynamicModel implements GroupEntityInterface
     /**
      * except User
      *
-     * @param User $user
+     * @param UserInterface $user
      *
      * @return static
      */
-    public function exceptUser(User $user)
+    public function exceptUser(UserInterface $user)
     {
         $this->users()->detach($user->getId());
         $this->decrement('count');

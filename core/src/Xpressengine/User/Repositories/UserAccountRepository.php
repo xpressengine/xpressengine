@@ -13,10 +13,7 @@
  */
 namespace Xpressengine\User\Repositories;
 
-use Xpressengine\Member\Repositories\AccountRepositoryInterface;
 use Xpressengine\User\AccountInterface;
-use Xpressengine\User\Models\UserAccount;
-use Xpressengine\User\Repositories\RepositoryTrait;
 use Xpressengine\User\UserInterface;
 
 /**
@@ -29,7 +26,7 @@ use Xpressengine\User\UserInterface;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class UserAccountRepository implements AccountRepositoryInterface
+class UserAccountRepository implements UserAccountRepositoryInterface
 {
     use RepositoryTrait;
 
@@ -49,7 +46,7 @@ class UserAccountRepository implements AccountRepositoryInterface
      * @param UserInterface $user
      * @param array         $data
      *
-     * @return UserAccount
+     * @return AccountInterface
      */
     public function create(UserInterface $user, array $data)
     {
@@ -61,7 +58,7 @@ class UserAccountRepository implements AccountRepositoryInterface
     /**
      * 회원 아이디로 계정정보를 조회한다.
      *
-     * @param string $userId member id
+     * @param string $userId user id
      *
      * @return array
      */
@@ -76,7 +73,7 @@ class UserAccountRepository implements AccountRepositoryInterface
      *
      * @param array $userIds 회원 아이디 목록
      *
-     * @return mixed
+     * @return int
      */
     public function deleteByUserIds($userIds)
     {

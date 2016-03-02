@@ -1,6 +1,6 @@
 <?php
 /**
- *  This file is part of the Xpressengine package.
+ * This file is invalid password exception.
  *
  * PHP version 5
  *
@@ -11,20 +11,21 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Member\Exceptions;
+namespace Xpressengine\User\Exceptions;
 
-use Xpressengine\Member\MemberException;
+use Xpressengine\User\UserException;
 
 /**
- * 이미 인증처리된 이메일을 다시 인증시도할 경우 발생하는 Exception
+ * 비밀번호가 룰에 맞지 않는 경우 발생하는 Exception
  *
  * @category    Member
  * @package     Xpressengine\Member
  * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class AlreadyConfirmedEmailException extends MemberException
+class InvalidPasswordException extends UserException
 {
-    protected $message = '이미 인증된 이메일입니다.';
+
 }

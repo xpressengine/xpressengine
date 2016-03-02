@@ -7,16 +7,14 @@ use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Http\Request;
 use Illuminate\Routing\UrlGenerator;
-use Member;
 use Presenter;
 use Theme;
 use XeDB;
-use Xpressengine\Member\EmailBrokerInterface;
-use Xpressengine\Member\Exceptions\JoinNotAllowedException;
-use Xpressengine\Member\Exceptions\EmailNotFoundException;
-use Xpressengine\Member\Rating;
 use Xpressengine\Support\Exceptions\HttpXpressengineException;
-use Xpressengine\Support\Exceptions\InvalidArgumentException;
+use Xpressengine\User\EmailBrokerInterface;
+use Xpressengine\User\Exceptions\JoinNotAllowedException;
+use Xpressengine\User\Exceptions\PendingEmailNotExistsException;
+use Xpressengine\User\Rating;
 use Xpressengine\User\UserHandler;
 
 class AuthController extends Controller
@@ -112,7 +110,7 @@ class AuthController extends Controller
         // resolve data
         $userData = $request->except('_token', 'agree');
         $userData['rating'] = Rating::MEMBER;
-        $userData['status'] = Member::STATUS_ACTIVATED;
+        $userData['status'] = \XeUser::STATUS_ACTIVATED;
         unset($userData['password_confirmation']);
 
         XeDB::beginTransaction();
@@ -168,6 +166,11 @@ class AuthController extends Controller
 
         $email = $this->handler->pendingEmails()->findByAddress($address);
 
+        if($email === null) {
+            // todo: change exception to http exception
+            throw new PendingEmailNotExistsException();
+        }
+
         XeDB::beginTransaction();
         try {
             $this->emailBroker->confirmEmail($email, $code);
@@ -222,7 +225,7 @@ class AuthController extends Controller
         $this->checkCaptcha('login');
 
         $credentials = $request->only('email', 'password');
-        $credentials['status'] = Member::STATUS_ACTIVATED;
+        $credentials['status'] = \XeUser::STATUS_ACTIVATED;
 
         try {
             if ($this->auth->attempt($credentials, $request->has('remember'))) {

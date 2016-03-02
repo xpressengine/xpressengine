@@ -1,7 +1,7 @@
 <?php
 namespace Xpressengine\Themes;
 
-use Xpressengine\Member\Rating;
+use Xpressengine\User\Rating;
 use Xpressengine\Theme\AbstractTheme;
 
 class SettingsTheme extends AbstractTheme

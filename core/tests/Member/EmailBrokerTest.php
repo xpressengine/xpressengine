@@ -53,7 +53,7 @@ class EmailBrokerTest extends \PHPUnit_Framework_TestCase
     /**
      * testConfirmEmailFailIfAlreadyEmailConfirmed
      *
-     * @expectedException \Xpressengine\Member\Exceptions\PendingEmailNotExistsException
+     * @expectedException \Xpressengine\User\Exceptions\PendingEmailNotExistsException
      */
     public function testConfirmEmailFailIfEmailNotExists()
     {
@@ -72,7 +72,7 @@ class EmailBrokerTest extends \PHPUnit_Framework_TestCase
     /**
      * testConfirmEmailFailIfAlreadyEmailConfirmed
      *
-     * @expectedException \Xpressengine\Member\Exceptions\InvalidConfirmationCodeException
+     * @expectedException \Xpressengine\User\Exceptions\InvalidConfirmationCodeException
      */
     public function testConfirmEmailFailIfCodeIsInvalid()
     {

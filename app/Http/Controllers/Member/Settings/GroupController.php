@@ -6,11 +6,12 @@ use Exception;
 use Presenter;
 use XeDB;
 use Xpressengine\Http\Request;
+use Xpressengine\User\Repositories\UserGroupRepositoryInterface;
 
 class GroupController extends Controller
 {
     /**
-     * @var \Xpressengine\Member\Repositories\GroupRepositoryInterface
+     * @var UserGroupRepositoryInterface
      */
     protected $groups;
 

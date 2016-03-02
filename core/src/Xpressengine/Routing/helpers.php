@@ -14,7 +14,7 @@
  */
 
 use Xpressengine\Routing\InstanceConfig;
-use Xpressengine\Routing\InstanceRouteHandler;
+use Xpressengine\Routing\RouteRepository;
 
 if (!function_exists('instanceRoute')) {
     /**
@@ -40,10 +40,10 @@ if (!function_exists('instanceRoute')) {
             $url = $instanceConfig->getUrl();
         } else {
             /**
-             * @var $instanceRouter InstanceRouteHandler
+             * @var RouteRepository $instanceRouter
              */
             $instanceRouter = app('xe.router');
-            $instanceRoute = $instanceRouter->getByInstanceId($instanceId);
+            $instanceRoute = $instanceRouter->findByInstanceId($instanceId);
             $url = $instanceRoute->url;
             $module = $instanceRoute->module;
         }

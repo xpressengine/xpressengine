@@ -1,6 +1,6 @@
 <?php
 /**
- *  This file is part of the Xpressengine package.
+ * This file is invalid credentials exception.
  *
  * PHP version 5
  *
@@ -11,20 +11,21 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Member\Exceptions;
+namespace Xpressengine\User\Exceptions;
 
-use Xpressengine\Member\MemberException;
+use Xpressengine\User\UserException;
 
 /**
- * 최고관리자를 삭제하려고 할 때 발생하는 Exception
+ * 로그인을 위한 계정정보가 유효하지 않을 때 발생하는 Exception
  *
  * @category    Member
  * @package     Xpressengine\Member
  * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class CannotDeleteMemberHavingSuperRatingException extends MemberException
+class InvalidCredentialsException extends UserException
 {
-    protected $message = '최고 권한을 가진 회원은 삭제할 수 없습니다.';
+
 }

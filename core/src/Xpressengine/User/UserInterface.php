@@ -14,8 +14,6 @@
 namespace Xpressengine\User;
 
 use Illuminate\Contracts\Auth\CanResetPassword;
-use Xpressengine\User\Models\UserAccount;
-use Xpressengine\User\Models\PendingEmail;
 
 /**
  * 회원 정보를 저장하는 클래스가 구현해야 하는 인터페이스
@@ -88,7 +86,7 @@ interface UserInterface extends Authenticatable, CanResetPassword, \Xpressengine
     /**
      * Get Pending Email of current user
      *
-     * @return PendingEmail
+     * @return EmailInterface
      */
     public function getPendingEmail();
 
@@ -97,7 +95,7 @@ interface UserInterface extends Authenticatable, CanResetPassword, \Xpressengine
      *
      * @param string $provider provider
      *
-     * @return UserAccount
+     * @return AccountInterface
      */
     public function getAccountByProvider($provider);
 

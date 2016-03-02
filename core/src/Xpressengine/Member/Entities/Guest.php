@@ -14,8 +14,8 @@
 namespace Xpressengine\Member\Entities;
 
 use Xpressengine\Member\Entities\Database\AccountEntity;
-use Xpressengine\Member\Exceptions\UnsupportedOperationByGuestMemberException;
 use Xpressengine\Member\Rating;
+use Xpressengine\User\Exceptions\UnsupportedOperationByGuestMemberException;
 
 /**
  * 비로그인 상태의 회원 객체 클래스
@@ -26,6 +26,7 @@ use Xpressengine\Member\Rating;
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
+ * @deprecated
  */
 class Guest implements MemberEntityInterface
 {

@@ -29,6 +29,7 @@ use Xpressengine\Member\Repositories\GroupRepositoryInterface;
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
+ * @deprecated
  */
 class GroupRepository implements GroupRepositoryInterface
 {
@@ -93,11 +94,11 @@ class GroupRepository implements GroupRepositoryInterface
      *
      * @return mixed
      */
-    public function addUser(GroupEntityInterface $group, MemberEntityInterface $user)
+    public function addUser($group, $user)
     {
         $this->table('user_group_user')->insert(
             [
-                'groupId' => $group->id,
+            'groupId' => $group->id,
                 'userId' => $user->id,
                 'createdAt' => $this->getCurrentTime()
             ]
@@ -115,7 +116,7 @@ class GroupRepository implements GroupRepositoryInterface
      *
      * @return void
      */
-    public function exceptUser(GroupEntityInterface $group, MemberEntityInterface $user)
+    public function exceptUser($group, $user)
     {
         $this->table('user_group_user')->where('groupId', $group->id)->where('userId', $user->id)->delete();
         $this->table()->where('id', $group->id)->decrement('count');

@@ -13,8 +13,6 @@
  */
 namespace Xpressengine\User\Repositories;
 
-use Xpressengine\Member\Entities\MemberEntityInterface;
-use Xpressengine\Member\Repositories\MemberRepositoryInterface;
 use Xpressengine\User\UserInterface;
 
 /**
@@ -26,9 +24,9 @@ use Xpressengine\User\UserInterface;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class UserRepository implements MemberRepositoryInterface
+class UserRepository implements UserRepositoryInterface
 {
-    use \Xpressengine\User\Repositories\RepositoryTrait;
+    use RepositoryTrait;
 
     /**
      * UserRepository constructor.
@@ -46,7 +44,7 @@ class UserRepository implements MemberRepositoryInterface
      *
      * @param array $data
      *
-     * @return MemberEntityInterface
+     * @return UserInterface
      */
     public function create(array $data)
     {
@@ -85,7 +83,7 @@ class UserRepository implements MemberRepositoryInterface
      * @param string        $address 이메일 주소
      * @param string[]|null $with    함께 반환할 relation 정보
      *
-     * @return MemberEntityInterface
+     * @return UserInterface
      */
     public function findByEmail($address, $with = null)
     {
@@ -105,7 +103,7 @@ class UserRepository implements MemberRepositoryInterface
      * @param string        $emailPrefix 조회할 이메일의 이름영역
      * @param string[]|null $with        함께 반환할 relation 정보
      *
-     * @return MemberEntityInterface[]
+     * @return UserInterface[]
      */
     public function searchByEmailPrefix($emailPrefix, $with = null)
     {

@@ -13,7 +13,7 @@ class RatingTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Xpressengine\Member\Exceptions\UnknownCriterionException
+     * @expectedException \Xpressengine\User\Exceptions\UnknownCriterionException
      */
     public function testCampareThrowException()
     {

@@ -6,7 +6,7 @@ use Auth;
 use Route;
 use XeLang;
 use Closure;
-use Xpressengine\Member\Rating;
+use Xpressengine\User\Rating;
 
 class LangPreprocessor
 {

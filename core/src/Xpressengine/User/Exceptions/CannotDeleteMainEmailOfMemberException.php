@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is blocked joining system exception.
+ *  This file is part of the Xpressengine package.
  *
  * PHP version 5
  *
@@ -11,21 +11,20 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Member\Exceptions;
+namespace Xpressengine\User\Exceptions;
 
-use Xpressengine\Member\MemberException;
+use Xpressengine\User\UserException;
 
 /**
- * 회원가입을 할 수 없을 때 발생하는 Exception
+ * 최고관리자를 삭제하려고 할 때 발생하는 Exception
  *
  * @category    Member
  * @package     Xpressengine\Member
  * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class JoinNotAllowedException extends MemberException
+class CannotDeleteMainEmailOfMemberException extends UserException
 {
-    protected $message = '관리자가 회원가입을 허용하지 않습니다.';
+    protected $message = '대표이메일은 삭제할 수 없습니다.';
 }

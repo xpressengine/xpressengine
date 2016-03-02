@@ -282,7 +282,7 @@ return [
             'all' => function () {
                 return [];
             },
-            'getByUser' => function (Xpressengine\Member\Entities\MemberEntityInterface $user) {
+            'getByUser' => function (\Xpressengine\User\UserInterface $user) {
                 return [];
             },
 

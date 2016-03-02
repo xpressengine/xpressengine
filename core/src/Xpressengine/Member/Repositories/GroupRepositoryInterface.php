@@ -24,6 +24,7 @@ use Xpressengine\Member\Entities\MemberEntityInterface;
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
+ * @deprecated
  */
 interface GroupRepositoryInterface
 {
@@ -36,7 +37,7 @@ interface GroupRepositoryInterface
      *
      * @return mixed
      */
-    public function addUser(GroupEntityInterface $group, MemberEntityInterface $user);
+    public function addUser($group, $user);
 
     /**
      * 주어진 회원을 그룹에서 제외시킨다.
@@ -46,5 +47,5 @@ interface GroupRepositoryInterface
      *
      * @return void
      */
-    public function exceptUser(GroupEntityInterface $group, MemberEntityInterface $user);
+    public function exceptUser($group, $user);
 }

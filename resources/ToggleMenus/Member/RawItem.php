@@ -31,7 +31,7 @@ class RawItem extends AbstractToggleMenuItem
 
     public function getAction()
     {
-        $member = app('xe.members')->find($this->mid);
+        $member = app('xe.users')->find($this->mid);
 
         $checked = $member->status === 'activated' ? 'checked' : '';
         $image = "<img src=\"$member->profileImage()\" width=\"96\" height=\"96\"><br>";

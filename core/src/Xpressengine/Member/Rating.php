@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Member;
 
-use Xpressengine\Member\Exceptions\UnknownCriterionException;
+use Xpressengine\User\Exceptions\UnknownCriterionException;
 
 /**
  * 회원의 등급을 나타내는 클래스
@@ -25,6 +25,7 @@ use Xpressengine\Member\Exceptions\UnknownCriterionException;
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
+ * @deprecated
  */
 class Rating
 {

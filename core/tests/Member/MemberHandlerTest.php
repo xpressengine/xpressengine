@@ -118,7 +118,7 @@ class MemberHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Xpressengine\Member\Exceptions\MailAlreadyExistsException
+     * @expectedException \Xpressengine\User\Exceptions\MailAlreadyExistsException
      */
     public function testValidateForCreateWithExistingEmail()
     {
@@ -200,7 +200,7 @@ class MemberHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Xpressengine\Member\Exceptions\DisplayNameAlreadyExistsException
+     * @expectedException \Xpressengine\User\Exceptions\DisplayNameAlreadyExistsException
      */
     public function testValidateForCreateWithExistingDisplayName()
     {
@@ -303,7 +303,7 @@ class MemberHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Xpressengine\Member\Exceptions\AccountAlreadyExistsException
+     * @expectedException \Xpressengine\User\Exceptions\AccountAlreadyExistsException
      */
     public function _testValidateForCreateWithExistingAccount()
     {

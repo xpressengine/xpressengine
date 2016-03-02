@@ -6,15 +6,12 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Input;
-use Member;
 use Presenter;
 use XeDB;
-use Xpressengine\Member\Exceptions\EmailNotFoundException;
-use Xpressengine\Member\Exceptions\MailAlreadyExistsException;
-use Xpressengine\Member\Rating;
-use Xpressengine\Member\Repositories\MemberRepositoryInterface;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
-use Xpressengine\User\Models\UserEmail;
+use Xpressengine\User\Exceptions\EmailNotFoundException;
+use Xpressengine\User\Exceptions\MailAlreadyExistsException;
+use Xpressengine\User\Rating;
 use Xpressengine\User\UserHandler;
 use Xpressengine\User\UserInterface;
 
@@ -203,7 +200,7 @@ class UserController extends Controller
         $status[$user->status]['selected'] = 'selected';
 
         // profileImage config
-        $profileImgSize = config('xe.member.profileImage.size');
+        $profileImgSize = config('xe.user.profileImage.size');
 
         // dynamic field
         $dynamicField = app('xe.dynamicField');
@@ -212,7 +209,7 @@ class UserController extends Controller
         $defaultAccount = null;
         if (isset($user->accounts)) {
             foreach ($user->accounts as $account) {
-                if ($account->provider === Member::PROVIDER_DEFAULT) {
+                if ($account->provider === \XeUser::PROVIDER_DEFAULT) {
                     $defaultAccount = $account;
                 }
             }

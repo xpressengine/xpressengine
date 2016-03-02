@@ -13,25 +13,21 @@
  */
 namespace Xpressengine\User\Repositories;
 
-use Xpressengine\Member\Entities\MailEntityInterface;
-use Xpressengine\Member\Exceptions\CannotDeleteMainEmailOfMemberException;
-use Xpressengine\Member\Repositories\MailRepositoryInterface;
 use Xpressengine\User\EmailInterface;
-use Xpressengine\User\Models\UserEmail;
-use Xpressengine\User\Repositories\RepositoryTrait;
+use Xpressengine\User\Exceptions\CannotDeleteMainEmailOfMemberException;
 use Xpressengine\User\UserInterface;
 
 /**
  * 회원의 이메일 정보를 저장하는 Repository
  *
- * @category    Member
- * @package     Xpressengine\Member
+ * @category    User
+ * @package     Xpressengine\User
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class UserEmailRepository implements MailRepositoryInterface
+class UserEmailRepository implements UserEmailRepositoryInterface
 {
     use RepositoryTrait;
 
@@ -51,7 +47,7 @@ class UserEmailRepository implements MailRepositoryInterface
      * @param UserInterface $user
      * @param array         $data
      *
-     * @return UserEmail
+     * @return EmailInterface
      */
     public function create(UserInterface $user, array $data)
     {
@@ -65,7 +61,7 @@ class UserEmailRepository implements MailRepositoryInterface
      *
      * @param EmailInterface $email
      *
-     * @return mixed
+     * @return bool|null
      * @throws CannotDeleteMainEmailOfMemberException
      */
     public function delete(EmailInterface $email)
@@ -82,7 +78,7 @@ class UserEmailRepository implements MailRepositoryInterface
      *
      * @param string        $address 조회할 이메일 주소
      *
-     * @return MailEntityInterface
+     * @return EmailInterface
      */
     public function findByAddress($address)
     {
@@ -95,7 +91,7 @@ class UserEmailRepository implements MailRepositoryInterface
      *
      * @param $userId
      *
-     * @return mixed
+     * @return EmailInterface
      */
     public function findByUserId($userId)
     {

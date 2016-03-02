@@ -18,11 +18,11 @@ use Closure;
 use Illuminate\Contracts\Mail\Mailer;
 use Xpressengine\Member\Entities\Database\MailEntity;
 use Xpressengine\Member\Entities\PendingMailEntityInterface;
-use Xpressengine\Member\Exceptions\InvalidConfirmationCodeException;
-use Xpressengine\Member\Exceptions\EmailNotFoundException;
-use Xpressengine\Member\Exceptions\PendingEmailNotExistsException;
 use Xpressengine\Member\Repositories\MailRepositoryInterface;
 use Xpressengine\Member\Repositories\PendingMailRepositoryInterface;
+use Xpressengine\User\Exceptions\EmailNotFoundException;
+use Xpressengine\User\Exceptions\InvalidConfirmationCodeException;
+use Xpressengine\User\Exceptions\PendingEmailNotExistsException;
 
 /**
  * 이 클래스는 Xpressengine에서 이메일 인증 처리를 수행하는 클래스이다.
@@ -32,6 +32,7 @@ use Xpressengine\Member\Repositories\PendingMailRepositoryInterface;
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
+ * @deprecated
  */
 class EmailBroker implements EmailBrokerInterface
 {

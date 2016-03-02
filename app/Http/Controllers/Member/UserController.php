@@ -10,35 +10,35 @@ use Presenter;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Theme;
 use XeDB;
-use Xpressengine\Member\EmailBroker;
-use Xpressengine\Member\Entities\Database\MailEntity;
-use Xpressengine\Member\Entities\Database\PendingMailEntity;
-use Xpressengine\Member\Entities\MemberEntityInterface;
-use Xpressengine\Member\Exceptions\PendingEmailAlreadyExistsException;
-use Xpressengine\Member\Exceptions\DisplayNameAlreadyExistsException;
-use Xpressengine\Member\Exceptions\InvalidConfirmationCodeException;
-use Xpressengine\Member\Exceptions\MailAlreadyExistsException;
-use Xpressengine\Member\Exceptions\PendingEmailNotExistsException;
-use Xpressengine\Member\Repositories\MailRepositoryInterface;
 use Xpressengine\Skin\SkinHandler;
 use Xpressengine\Support\Exceptions\HttpXpressengineException;
 use Xpressengine\Support\Exceptions\InvalidArgumentException;
+use Xpressengine\User\EmailBroker;
+use Xpressengine\User\Exceptions\DisplayNameAlreadyExistsException;
+use Xpressengine\User\Exceptions\InvalidConfirmationCodeException;
+use Xpressengine\User\Exceptions\MailAlreadyExistsException;
+use Xpressengine\User\Exceptions\PendingEmailAlreadyExistsException;
+use Xpressengine\User\Exceptions\PendingEmailNotExistsException;
+use Xpressengine\User\Repositories\PendingEmailRepositoryInterface;
+use Xpressengine\User\Repositories\UserAccountRepositoryInterface;
+use Xpressengine\User\Repositories\UserEmailRepositoryInterface;
 use Xpressengine\User\UserHandler;
+use Xpressengine\User\UserInterface;
 
 class UserController extends Controller
 {
     /**
-     * @var \Xpressengine\Member\Repositories\MemberRepositoryInterface
+     * @var \Xpressengine\User\Repositories\UserRepositoryInterface
      */
     protected $users;
 
     /**
-     * @var \Xpressengine\Member\Repositories\GroupRepositoryInterface
+     * @var \Xpressengine\User\Repositories\UserGroupRepositoryInterface
      */
     protected $groups;
 
     /**
-     * @var MailRepositoryInterface
+     * @var UserEmailRepositoryInterface
      */
     protected $mails;
 
@@ -48,17 +48,17 @@ class UserController extends Controller
     protected $handler;
 
     /**
-     * @var MemberEntityInterface logged user
+     * @var UserInterface logged user
      */
     protected $user;
 
     /**
-     * @var \Xpressengine\User\Repositories\PendingEmailRepository
+     * @var PendingEmailRepositoryInterface
      */
     protected $pendingMails;
 
     /**
-     * @var \Xpressengine\User\Repositories\UserAccountRepository
+     * @var UserAccountRepositoryInterface
      */
     protected $accounts;
 
@@ -555,11 +555,11 @@ class UserController extends Controller
     /**
      * show user info page
      *
-     * @param MemberEntityInterface $user
+     * @param UserInterface $user
      *
      * @return $this
      */
-    private function memberEditView(MemberEntityInterface $user)
+    private function memberEditView(UserInterface $user)
     {
         // dynamic field
         $dynamicField = app('xe.dynamicField');

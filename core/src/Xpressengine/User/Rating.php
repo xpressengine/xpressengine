@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\User;
 
-use Xpressengine\Member\Exceptions\UnknownCriterionException;
+use Xpressengine\User\Exceptions\UnknownCriterionException;
 
 /**
  * 회원의 등급을 나타내는 클래스

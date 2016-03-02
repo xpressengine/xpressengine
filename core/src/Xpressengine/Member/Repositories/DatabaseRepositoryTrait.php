@@ -18,7 +18,7 @@ use Illuminate\Database\Query\Builder;
 use MyProject\Proxies\__CG__\OtherProject\Proxies\__CG__\stdClass;
 use Xpressengine\Keygen\Keygen;
 use Xpressengine\Member\Entities\Entity;
-use Xpressengine\Member\Exceptions\IDNotFoundException;
+use Xpressengine\User\Exceptions\IDNotFoundException;
 
 /**
  * 이 Trait는 Xpressengine의 Member Package에서 Database를 사용하는 Repository를 구현할 때 사용하는 Trait이다.
@@ -28,6 +28,7 @@ use Xpressengine\Member\Exceptions\IDNotFoundException;
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
+ * @deprecated
  */
 trait DatabaseRepositoryTrait
 {

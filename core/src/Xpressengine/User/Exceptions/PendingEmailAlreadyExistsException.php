@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is already exists input mail address exception.
+ *  This file is part of the Xpressengine package.
  *
  * PHP version 5
  *
@@ -11,21 +11,20 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Member\Exceptions;
+namespace Xpressengine\User\Exceptions;
 
-use Xpressengine\Member\MemberException;
+use Xpressengine\User\UserException;
 
 /**
- * 이미 존재하는 이메일을 추가하려고 할 때 발생하는 Exception
+ * 이미 인증 요청중인 이메일의 인증을 요청할 때 발생하는 Exception
  *
- * @category    Member
+*@category    Member
  * @package     Xpressengine\Member
  * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class MailAlreadyExistsException extends MemberException
+class PendingEmailAlreadyExistsException extends UserException
 {
-    protected $message = '이미 존재하는 이메일입니다';
+    protected $message = '이미 인증 요청중인 이메일이 있습니다.';
 }

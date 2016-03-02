@@ -13,10 +13,10 @@
  */
 namespace Xpressengine\Settings;
 
-use Xpressengine\Member\Entities\MemberEntityInterface;
 use Xpressengine\Permission\Action;
 use Xpressengine\Permission\Permissions\AbstractRegisteredPermission;
 use Xpressengine\Permission\Permission;
+use Xpressengine\User\UserInterface;
 
 /**
  * 관리권한을 표현하는 클래스이다. 이 클래스는 Xpressengine Permission을 확장하기 위해 사용된다.
@@ -41,10 +41,10 @@ class SettingsMenuPermission extends AbstractRegisteredPermission
     /**
      * Constructor
      *
-     * @param MemberEntityInterface $user       current user
+     * @param UserInterface $user       current user
      * @param Permission            $registered Registered instance
      */
-    public function __construct(MemberEntityInterface $user = null, Permission $registered = null)
+    public function __construct(UserInterface $user = null, Permission $registered = null)
     {
         $this->user = $user;
 
