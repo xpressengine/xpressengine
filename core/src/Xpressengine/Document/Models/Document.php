@@ -345,7 +345,7 @@ class Document extends DynamicModel
     protected function getReplyChar(Document $parent)
     {
         $lastReply = self::where('head', $parent->head)
-            ->where('replay', 'like', $parent->reply . str_repeat('_', self::$replyCharLen))
+            ->where('reply', 'like', $parent->reply . str_repeat('_', self::$replyCharLen))
             ->max('reply');
 
         $lastChar = null;
