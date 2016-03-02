@@ -218,7 +218,7 @@ class Counter
      * @param string $option   counter option
      * @return mixed
      */
-    public function getUsers($targetId, $perPage, $option = '')
+    public function getUsers($targetId, $perPage = 10, $option = '')
     {
         $this->checkOption($option);
 
