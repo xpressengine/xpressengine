@@ -230,39 +230,25 @@ class DocumentHandler
      */
     public function add(array $attributes)
     {
-        //Document::getConnectionResolver()->beginTransaction();
+        $doc = $this->getModel($attributes['instanceId']);
 
-        $model = new Document;
+        $doc->getConnection()->beginTransaction();
 
-        $model->getConnection()->beginTransaction();
-
-        $attributes = $model->fixedAttributes($attributes);
+        $attributes = $doc->fixedAttributes($attributes);
 
         if (empty($attributes['ipaddress']) === true) {
             $attributes['ipaddress'] = $this->request->ip();
         }
 
-        $model->checkRequired($attributes);
+        $doc->checkRequired($attributes);
+        $doc->fill($doc->filter($attributes));
+        $result = $doc->save();
 
-        $config = $this->configHandler->getOrDefault($attributes['instanceId']);
-        $model->setProxyOptions($this->proxyOption($config));
-        $model = $model->create($attributes);
+        $this->addRevision($doc->toArray());
 
-        // insert to division documents database table
-        if ($config->get('division') == true) {
-            $divisionDoc = new Document;
-            $divisionDoc->setDivision($config)->create($model->toArray());
-        }
+        $doc->getConnection()->commit();
 
-        // insert to revision database table
-        $revisionDoc = new Revision;
-        $revisionDoc->create($model->toArray());
-
-        $model->getConnection()->commit();
-
-       // Document::getConnectionResolver()->commit();
-
-        return $model;
+        return $doc;
     }
 
     /**
@@ -277,26 +263,23 @@ class DocumentHandler
 
         $doc->pureContent = $doc->getPureContent($doc->content);
         $doc->checkRequired($doc->toArray());
-
-        $config = $this->configHandler->getOrDefault($doc->instanceId);
-        $doc->setProxyOptions($this->proxyOption($config));
         $doc->save();
 
-        // update to division documents database table
-        if ($config->get('division') == true) {
-            $divisionDoc = new Document($doc->toArray());
-            $divisionDoc->setDivision($config)->save();
-        }
-
+        // 검증해야함
         $this->removeDivision($doc);
 
-        // insert to revision database table
-        $revisionDoc = new Revision;
-        $revisionDoc->create($doc->toArray());
+        $this->addRevision($doc->toArray());
 
         $doc->getConnection()->commit();
 
         return $doc;
+    }
+
+    public function addRevision(array $args)
+    {
+        // insert to revision database table
+        $revisionDoc = new Revision($args);
+        $revisionDoc->save();
     }
 
     /**
@@ -317,7 +300,7 @@ class DocumentHandler
         if ($originConfig != null && $originConfig->get('division') === true) {
             $diff = $doc->diff();
             if (isset($diff['instanceId'])) {
-                $originDoc->setDivision()->delete();
+                //$originDoc->setDivision()->delete();
             }
         }
     }
@@ -336,8 +319,8 @@ class DocumentHandler
 
         if ($config->get('division') == true) {
             /** @var Document $divisionDoc */
-            $divisionDoc = Document::where('id', $doc->id);
-            $divisionDoc->setDivision($config)->delete();
+            //$divisionDoc = Document::where('id', $doc->id);
+            //$divisionDoc->setDivision($config)->delete();
         }
 
         $doc->setProxyOptions($this->proxyOption($config));
@@ -349,6 +332,28 @@ class DocumentHandler
     }
 
     /**
+     * get document config
+     *
+     * @param string $instanceId instance id
+     * @return ConfigEntity
+     */
+    public function getConfig($instanceId)
+    {
+        return $this->configHandler->getOrDefault($instanceId);
+    }
+
+    /**
+     * get division table name
+     *
+     * @param string $instanceId instance id
+     * @return string
+     */
+    public function getDivisionTableName($instanceId)
+    {
+        return $this->instanceManager->getDivisionTableName($instanceId);
+    }
+
+    /**
      * Proxy, Division 관련 설정이 된 Document model 반환
      *
      * @param string $instanceId document instance id
@@ -356,10 +361,23 @@ class DocumentHandler
      */
     public function getModel($instanceId = null)
     {
-        $config = $this->configHandler->getOrDefault($instanceId);
+        $config = $this->getConfig($instanceId);
         $doc = new Document;
-        $doc->setDivision($config);
-        $doc->setProxyOptions($this->proxyOption($config));
+        $doc->setConfig($config, $this->getDivisionTableName($instanceId));
+        return $doc;
+    }
+
+    /**
+     * set model's config
+     *
+     * @param Document $doc document model
+     * @param string $instanceId document instance id
+     * @return Document
+     */
+    public function setModelConfig(Document $doc, $instanceId)
+    {
+        $config = $this->getConfig($instanceId);
+        $doc->setConfig($config, $this->getDivisionTableName($instanceId));
         return $doc;
     }
 
