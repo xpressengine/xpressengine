@@ -28,7 +28,239 @@ use Xpressengine\User\Repositories\UserGroupRepositoryInterface;
 use Xpressengine\User\Repositories\UserRepositoryInterface;
 
 /**
- * 회원 및 회원과 관련된 데이터(그룹정보, 계정정보, 이메일 정보 등)를 조회하거나 처리할 때에 UserHandler를 사용할 수 있습니다.
+ * 회원 및 회원과 관련된 데이터(그룹정보, 계정정보, 이메일 정보 등)를 조회하거나 처리할 때에 UserHandler를 사용할 수 있습니다. UserHandler는 `XeUser` 파사드를 통해 쉽게 사용할 수 있습니다.
+ *
+ * ## 회원 조회
+ *
+ * 회원 정보를 조회할 때에는 `UserRepository`를 사용하십시오. `UserRepository`는 UserHandler를 통하여 가져올 수 있습니다.
+ *
+ * ```
+ * $userRepository = XeUser::users();
+ * ```
+ *
+ * > UserRepository는 laravel의 Eloquent 모델의 사용법을 대부분 그대로 사용할 수 있습니다. laravel Eloquent 모델의 사용법은 [라라벨 문서](https://laravel.com/docs/5.2/eloquent)를 참조하십시오.
+ *
+ * ### 회원아이디로 회원조회
+ *
+ * 회원 아이디로 회원 조회할 때에는 `find` 메소드를 사용하십시오.
+ *
+ * ```php
+ * $user = XeUser::users()->find($id);
+ * $username = $user->getDisplayName();
+ * ```
+ *
+ * 여러 회원을 조회할 수도 있습니다.
+ *
+ * ```php
+ * $ids = [1,2,3];
+ * $members = XeUser::users()->find($ids);
+ *
+ * foreach($members as $member) {
+ * ...
+ * }
+ * ```
+ *
+ * ### 회원 정보로 회원조회
+ *
+ * 다양하고 복잡한 조건으로 회원을 조회할 수도 있습니다. 자세한 사용법은 [라라벨 문서](https://laravel.com/docs/5.2/eloquent)를 참조하십시오.
+ *
+ * ```php
+ * // displayName이 foo인 회원 조회
+ * $user = XeUser::users()->where('displayName', 'foo')->first();
+ * ```
+ *
+ * ```php
+ * // displayName이 foo로 시작하는 모든 회원 조회
+ * $user = XeUser::users()->where('displayName', 'like', '%foo')->get();
+ * ```
+ *
+ *
+ * ## 신규 회원 추가
+ *
+ * UserHandler는 복잡한 회원 생성 과정을 한번에 처리해주는 `create` 메소드를 제공합니다. `create` 메소드는 입력한 신규회원 정보에 대한 유효성 검사후 신규회원을 생성합니다. 또한 회원의  계정(account), 이메일(email) 정보도 자동으로 추가되며, 소솔될 그룹에 대한 정보가 전달되었을 경우, 그룹에 추가시켜주기도 합니다.
+ *
+ * ```php
+ * $data = [
+ * 'displayName' => 'foo',
+ * 'email' => 'foo@email.com',
+ * //...
+ * ];
+ *
+ * $newUser = XeUser::create($data);
+ * ```
+ *
+ * 신규 회원의 계정(account) 정보를 같이 등록할 수도 있습니다.
+ *
+ * ```php
+ * $data = [
+ * 'displayName' => 'foo',
+ * 'email' => 'foo@email.com',
+ * //...
+ * ]
+ *
+ * $data['account'] = [
+ * 'provider' => 'facebook',
+ * 'token' => '3DIfdkwwfdsie...',
+ * 'id' => 'id of facebook user',
+ * 'data' => '...'
+ * ]
+ *
+ * $newUser = XeUser::create($data);
+ * ```
+ *
+ * 신규회원이 소속될 회원그룹을 지정할 수도 있습니다.
+ *
+ * ```php
+ * $data = [
+ * 'displayName' => 'foo',
+ * 'email' => 'foo@email.com',
+ * 'groupId' => [21,23] // 그룹아이디가 21, 23인 그룹에 회원을 소속시킴
+ * ]
+ *
+ * $newUser = XeUser::create($data);
+ * ```
+ *
+ * 만약 유효성검사 및 관련 정보(account, email, group) 등록을 하지않고 신규회원 정보만 추가하고싶다면 UserRepository를 사용하십시오.
+ *
+ * ```php
+ * $data = [
+ * 'displayName' => 'foo',
+ * 'email' => 'foo@email.com',
+ * 'password' => '...'
+ * ]
+ *
+ * $newUser = XeUser::users()->create($data);
+ * ```
+ *
+ * > `주의!` UserRepository의 `create` 메소드는 `password`를 암호화하지 않고 바로 저장합니다. 먼저 `password` 필드를 직접 암호화하십시오.
+ *
+ *
+ * ## 회원정보 수정
+ *
+ * `update` 메소드를 사용하면 회원정보를 변경할 수 있습니다. 유효성 검사 및 프로필 이미지 처리, 소속그룹 변경도 동시에 처리합니다.
+ *
+ * ```
+ * $user = XeUser::find(20);
+ * XeUser::update($user, ['displayName' => 'bar']);
+ * ```
+ *
+ * ## 회원삭제
+ *
+ * `leave` 메소드를 사용하면 특정 회원을 탈퇴시킬 수 있습니다. `leave` 메소드를 사용하면
+ * 탈퇴시킬 회원의 관련정보(account, email)도 같이 삭제됩니다.
+ *
+ * ```php
+ * $ids = [12,23,34];
+ * XeUser::leave($ids); // 3명의 회원을 탈퇴시킴
+ * ```
+ *
+ * UserRepository의 `delete` 메소드를 사용하여 회원을 삭제할 수도 있습니다. 단, 이 메소드를 사용하면 삭제될 회원과 관련된 정보는 함께 삭제되지 않습니다.
+ *
+ * ```php
+ * $user = XeUser::find(12);
+ * XeUser::delete($user);
+ * ```
+ *
+ * ## 회원과 관련된 정보의 조회 및 처리
+ *
+ * 회원계정(account), 회원이메일(email), 회원 승인대기 이메일(pending email), 회원그룹(group)과 같은 회원과 관련된 정보도 UserHandler를 사용하여 조회하고 처리할 수 있습니다.
+ *
+ * 회원과 관련된 정보에 대한 생성(create), 삭제(delete), 업데이트(update) 기능은 UserHandler에서 직접 제공합니다. 단, 회원과 관련된 정보에 대한 조회(retrieve) 기능은 각각의 Repository를 통해 실행해야 합니다.
+ *
+ * UserHandler에서 제공하는 생성(create), 삭제(delete), 업데이트(update) 기능은 아래 코드를 참고하십시오.
+ *
+ * ```php
+ *
+ * // 그룹정보 생성/수정/삭제
+ * $groupData = [
+ * 'name' => '정회원',
+ * 'description' => '기본회원',
+ * ];
+ *
+ * $group = XeUser::createGroup($groupData);
+ * XeUser::updateGroup($group, ['name' => '기본회원']);
+ * XeUser::deleteGroup($group);
+ *
+ * // 이메일정보 생성/수정/삭제
+ * $user = XeUser::find('123');
+ * $data = [
+ * 'address' => 'foo@email.com'
+ * ];
+ * $confirmed = true; // 승인|승인대기 이메일 구분
+ *
+ * $email = XeUser::createEmail($user, $data, $confirmed);
+ * XeUser::updateEmail($email, ['address' => 'bar@email.com']);
+ * XeUser::deleteEmail($email);
+ *
+ * // 계정정보 생성/수정/삭제
+ * $data = [
+ * 'provider' => 'facebook',
+ * // ....
+ * ]
+ *
+ * $account = XeUser::createAccount($user, array $data);
+ * XeUser::updateAccount($account, ['data'=>'...']);
+ * XeUser::deleteAccount($account);
+ * ```
+ *
+ * ### 회원계정(account)
+ *
+ * XE에서 각각의 회원(user)는 여러개의 외부 계정을 가질 수 있습니다. 만약 한 회원이 facebook, google, naver 등 여러개의 외부 계정을 소유하고 있다면, 소유한 계정중 하나를 이용하여 로그인할 수 있습니다.
+ *
+ * 회원계정을 조회할 때에는 UserAccountRepository를 사용하십시오. UserAccountRepository는 UserHandler를 통하여 가져올 수 있습니다.
+ *
+ * ```php
+ * $accountRepository = XeUser::accounts();
+ * ```
+ *
+ * 한 회원이 소유한 계정 목록을 조회할 수 있습니다.
+ *
+ * ```php
+ * // 회원계정아이디로 회원계정정보 조회
+ * $userId = '123';
+ * $accounts = XeUser::accounts()->findByUserId($accountId);
+ * ```
+ *
+ * 위 코드는 아래 코드로 대체할 수도 있습니다.
+ *
+ * ```php
+ * $user = XeUser::users()->find('123');
+ * $accounts = $user->accounts;
+ * ```
+ *
+ * > UserAccountRepository는 laravel의 Eloquent 모델의 사용법을 대부분 그대로 사용할 수 있습니다. laravel Eloquent 모델의 사용법은 [라라벨 문서](https://laravel.com/docs/5.2/eloquent)를 참조하십시오.
+ *
+ * ### 회원 이메일(email)
+ *
+ * XE에서 각각의 회원은 여러개의 이메일을 가질 수 있습니다. 만약 한 회원이 여러개의 이메일을 소유하고 있다면, 소유한 이메일 중 하나와 비밀번호를 사용하여 로그인 할 수 있습니다.
+ *
+ * 회원의 이메일을 조회할 때에는 UserEmailRepository를 사용하십시오. UserEmailRepository는 UserHandler를 통하여 가져올 수 있습니다.
+ *
+ * ```php
+ * $emailRepository = XeUser::emails();
+ * ```
+ *
+ * 이메일 주소를 사용하여 이메일정보 조회할 수 있습니다.
+ *
+ * ```php
+ * $email = XeUser::emails()->findByAddress('myaddress@xpressengine.com');
+ * ```
+ *
+ * ### 승인 대기중인 이메일(pending email)
+ *
+ * 회원이 소유한 이메일은 승인된 이메일과 승인 대기중인 이메일로 구분됩니다. 승인된 이메일(email)과 승인대기 이메일(pendingEmail)은 별도의 테이블에 저장됩니다. 승인된 이메일은 한 회원이 여러개 가질 수 있지만, 승인대기 이메일은 한 회원당 하나만 가질 수 있습니다.
+ *
+ * 승인대기 이메일 주소로는 로그인을 할 수 없습니다.
+ *
+ * 회원의 승인대기 이메일을 조회할 때에는 PendingEmailRepository를 사용하십시오. PendingEmailRepository는 UserHandler를 통하여 가져올 수 있습니다.
+ *
+ * ```php
+ * $pendingEmailRepository = XeUser::pendingEmails();
+ * ```
+ *
+ * ```php
+ * $pendingEmail = XeUser::pendingEmails()->findByUserId('123');
+ * ```
  *
  * @category    User
  * @package     Xpressengine\User
@@ -283,7 +515,6 @@ class UserHandler
         }
 
         // resolve profileImage
-        // todo: this!!
         if (!empty($userData['profileImgFile'])) {
             $profileFile = $userData['profileImgFile'];
             $userData['profileImageId'] = $this->imageHandler->updateUserProfileImage($user, $profileFile);

@@ -93,12 +93,12 @@ class PendingEmailRepository implements PendingEmailRepositoryInterface
      *
      * @param $userId
      *
-     * @return mixed
+     * @return EmailInterface
      */
     public function findByUserId($userId)
     {
-        $emails = $this->query()->where('userId', $userId)->get();
-        return $emails;
+        $email = $this->query()->where('userId', $userId)->first();
+        return $email;
     }
 
     /**

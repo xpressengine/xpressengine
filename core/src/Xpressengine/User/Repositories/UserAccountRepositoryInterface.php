@@ -31,11 +31,11 @@ interface UserAccountRepositoryInterface extends AccountRepositoryInterface
     /**
      * 회원 아이디로 계정정보를 조회한다.
      *
-     * @param string $userId member id
+     * @param string $userId user id
      *
      * @return array
      */
-    public function fetchAllByMember($userId);
+    public function findByUserId($userId);
 
     /**
      * 회원 아이디에 해당하는 계정정보를 모두 삭제한다.

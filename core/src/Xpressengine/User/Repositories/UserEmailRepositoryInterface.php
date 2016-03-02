@@ -43,7 +43,7 @@ interface UserEmailRepositoryInterface extends MailRepositoryInterface
      *
      * @param $userId
      *
-     * @return EmailInterface
+     * @return EmailInterface[]
      */
     public function findByUserId($userId);
 

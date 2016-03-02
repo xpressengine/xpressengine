@@ -62,7 +62,7 @@ class UserAccountRepository implements UserAccountRepositoryInterface
      *
      * @return array
      */
-    public function fetchAllByMember($userId)
+    public function findByUserId($userId)
     {
         $accounts = $this->query()->whereIn('userId', (array) $userId)->get();
         return $accounts;

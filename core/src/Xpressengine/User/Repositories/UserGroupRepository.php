@@ -67,7 +67,6 @@ class UserGroupRepository implements UserGroupRepositoryInterface
         return $group->addUser($user);
     }
 
-
     /**
      * 주어진 회원을 그룹에서 제외시킨다.
      *
