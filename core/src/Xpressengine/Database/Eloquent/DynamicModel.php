@@ -48,14 +48,15 @@ abstract class DynamicModel extends Model
     protected static $resolver;
 
     /**
+     * @var array proxy options for database proxy
+     */
+    protected $proxyOptions = [];
+
+    /**
      * @var bool use dynamic query
      */
     protected $dynamic = false;
 
-    /**
-     * @var array proxy options for database proxy
-     */
-    protected $proxyOptions = [];
 
     /**
      * dynamic mode 애서 사용될 attributes
@@ -72,7 +73,7 @@ abstract class DynamicModel extends Model
     {
         if ($this->dynamic === true) {
             $this->dynamicAttributes = $attributes;
-            $attributes = $this->filter($attributes, $this->schema());
+            $attributes = $this->filter($attributes);
         }
 
         parent::__construct($attributes);
@@ -87,8 +88,11 @@ abstract class DynamicModel extends Model
      * @param array $columns table columns
      * @return array
      */
-    private function filter(array $args, array $columns)
+    public function filter(array $args, array $columns = [])
     {
+        if (count($columns) === 0) {
+            $columns = $this->schema();
+        }
         $pure = [];
         foreach ($args as $column => $value) {
             // 컬럼 이름은 문자열만 가능.
@@ -185,7 +189,6 @@ abstract class DynamicModel extends Model
     public function setDynamic($use)
     {
         $this->dynamic = $use;
-        return $this;
     }
 
     /**
@@ -196,12 +199,8 @@ abstract class DynamicModel extends Model
      */
     public function setProxyOptions(array $options)
     {
-        if (empty($options['table'])) {
-            $options['table'] = $this->getTable();
-        }
         $this->proxyOptions = $options;
         $this->setDynamic(true);
-        return $this;
     }
 
     /**

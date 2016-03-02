@@ -114,7 +114,7 @@ class InstanceManager
      */
     protected function createDivisionTable(ConfigEntity $config)
     {
-        $table = sprintf('documents_%s', $config->get('instanceId'));
+        $table = $this->getDivisionTableName($config);
         $schema = $this->connection->getSchemaBuilder();
         if ($schema->hasTable($table)) {
             throw new Exceptions\DivisionTableAlreadyExistsException;
@@ -122,6 +122,20 @@ class InstanceManager
 
         $migration = new DocumentMigration();
         $migration->createDivision($schema, $table);
+    }
+
+    public function getDivisionTableName(ConfigEntity $config)
+    {
+        if ($config->get('division') === false) {
+            return Document::TABLE_NAME;
+        }
+
+        $instanceId = $config->get('instanceId');
+        if ($instanceId === null || $instanceId === '') {
+            return Document::TABLE_NAME;
+        }
+
+        return sprintf('%s_%s', Document::TABLE_NAME, $instanceId);
     }
 
     /**
@@ -171,13 +185,13 @@ class InstanceManager
     protected function dropDivisionTable(ConfigEntity $config)
     {
         if ($config->get('division') === true) {
-            $document = new Document;
-
-            $this->connection->delete(sprintf(
-                "DROP TABLE `%s%s`",
-                $this->connection->getTablePrefix(),
-                $document->divisionTable($config)
-            ));
+            $this->connection->getSchemaBuilder()->drop(
+                sprintf(
+                    "%s%s",
+                    $this->connection->getTablePrefix(),
+                    $this->getDivisionTableName($config)
+                )
+            );
         }
     }
 }

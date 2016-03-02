@@ -19,9 +19,13 @@ use Xpressengine\Document\Exceptions\NotAllowedTypeException;
 use Xpressengine\Document\Exceptions\DocumentNotFoundException;
 use Xpressengine\Document\Exceptions\ReplyLimitationException;
 use Xpressengine\Document\Exceptions\ValueRequiredException;
+use Illuminate\Database\Eloquent\Builder as OriginBuilder;
 
 /**
  * Document
+ *
+ * Config를 설정할 때 division 을 사용하는 경우에는 이 모델의 table 이름을
+ * division table 이름으로 변경합니다.
  *
  * @property string id
  * @property string parentId
@@ -62,7 +66,9 @@ use Xpressengine\Document\Exceptions\ValueRequiredException;
 class Document extends DynamicModel
 {
 
-    public $table = 'documents';
+    const TABLE_NAME = 'documents';
+
+    public $table = self::TABLE_NAME;
 
     public $incrementing = false;
 
@@ -77,6 +83,8 @@ class Document extends DynamicModel
      * @var bool use dynamic query
      */
     protected $dynamic = true;
+    protected $division = false;
+    protected $config;
 
     /**
      * The connection name for the model.
@@ -154,33 +162,67 @@ class Document extends DynamicModel
         self::PUBLISHED_WAITING,
         self::PUBLISHED_REJECTED,
     ];
-    
-    /**
-     * division table 이름 반환
-     *
-     * @param ConfigEntity $config config entity
-     * @return string
-     */
-    public function divisionTable(ConfigEntity $config = null)
-    {
-        $table = $this->table;
-        if ($config != null && $config->get('division') === true) {
-            $table = sprintf('%s_%s', $this->table, $config->get('instanceId'));
-        }
 
-        return $table;
+    /**
+     * @param ConfigEntity $config
+     * @param null $table
+     */
+    public function setConfig(ConfigEntity $config, $table = null)
+    {
+        $this->config = $config;
+        $this->division = $config->get('division');
+        $this->setProxyOptions([
+            'id' => $config->get('instanceId')
+        ]);
+        if ($table !== null) {
+            $this->table = $table;
+        }
     }
 
     /**
-     * set model to division table name
-     *
-     * @param ConfigEntity|null $config config entity
-     * @return $this
+     * @param OriginBuilder $query   Illuminate database eloquent buildere
+     * @param array         $options options
+     * @return bool
      */
-    public function setDivision(ConfigEntity $config = null)
+    protected function performInsert(OriginBuilder $query, array $options = [])
     {
-        $this->setTable($this->divisionTable($config));
-        return $this;
+        $result = parent::performInsert($query, $options);
+
+        if ($this->division === true) {
+            $clone = clone $query;
+            $clone->getQuery()->from = self::TABLE_NAME;
+            $clone->insert($this->attributes);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Perform a model update operation.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  array  $options
+     * @return bool
+     */
+    protected function performUpdate(OriginBuilder $query, array $options = [])
+    {
+        $result = parent::performUpdate($query, $options);
+
+        if ($this->division === true) {
+            $clone = clone $query;
+            $clone->getQuery()->from = self::TABLE_NAME;
+            $dirty = $this->getDirty();
+            if (count($dirty) > 0) {
+                $numRows = $clone->update($dirty);
+            }
+        }
+
+        return $result;
+    }
+
+    protected function performDeleteOnModel()
+    {
+        parent::performDeleteOnModel();
     }
 
     /**
@@ -303,7 +345,7 @@ class Document extends DynamicModel
     protected function getReplyChar(Document $parent)
     {
         $lastReply = self::where('head', $parent->head)
-            ->where('replay', 'like', $parent->reply . str_repeat('_', self::$replyCharLen))
+            ->where('reply', 'like', $parent->reply . str_repeat('_', self::$replyCharLen))
             ->max('reply');
 
         $lastChar = null;

@@ -13,6 +13,7 @@
  */
 namespace Xpressengine\Counter;
 
+use Xpressengine\Counter\Exceptions\GuestNotSupportException;
 use Xpressengine\Counter\Exceptions\InvalidOptionException;
 use Xpressengine\Counter\Models\CounterLog;
 use Xpressengine\Http\Request;
@@ -41,6 +42,13 @@ class Counter
     protected $options = [];
 
     /**
+     * guest type user support
+     *
+     * @var bool
+     */
+    protected $guest = false;
+
+    /**
      * Counter constructor.
      *
      * @param Request $request request
@@ -55,6 +63,21 @@ class Counter
     }
 
     /**
+     * set guest support option
+     *
+     * @param $use
+     */
+    public function setGuest($use = true)
+    {
+        $this->guest = $use;
+    }
+
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
      * check option
      *
      * @param string $option counter option
@@ -63,9 +86,9 @@ class Counter
     protected function checkOption($option)
     {
         if (count($this->options) === 0 && $option !== '') {
-            throw new InvalidOptionException;
+            throw new InvalidOptionException(['name' => $this->name, 'option' => $option]);
         } elseif (count($this->options) > 0 && in_array($option, $this->options) === false) {
-            throw new InvalidOptionException;
+            throw new InvalidOptionException(['name' => $this->name, 'option' => $option]);
         }
     }
 
@@ -99,6 +122,10 @@ class Counter
     {
         $this->checkOption($option);
 
+        if ($this->guest == false && ($user == null || $user instanceof Guest)) {
+            throw new GuestNotSupportException(['name' => $this->name]);
+        }
+
         $counterLog = new CounterLog;
         $counterLog->counterName = $this->name;
         $counterLog->counterOption = $option;
@@ -106,7 +133,7 @@ class Counter
         if ($user == null || $user instanceof Guest) {
             $counterLog->userId = '';
         } else {
-            $counterLog->userId = $user->id;
+            $counterLog->userId = $user->getId();
         }
 
         $counterLog->point = $point;
@@ -127,11 +154,11 @@ class Counter
     {
         $this->checkOption($option);
 
-        if ($user == null || $user instanceof Guest) {
+        if ($this->guest == true && ($user == null || $user instanceof Guest)) {
             CounterLog::where('targetId', $targetId)->where('ipaddress', $this->request->ip())
                 ->where('counterName', $this->name)->where('counterOption', $option)->delete();
         } else {
-            return CounterLog::where('targetId', $targetId)->where('userId', $user->id)
+            return CounterLog::where('targetId', $targetId)->where('userId', $user->getId())
                 ->where('counterName', $this->name)->where('counterOption', $option)->delete();
         }
     }
@@ -148,22 +175,22 @@ class Counter
     {
         $this->checkOption($option);
 
-        if ($user == null || $user instanceof Guest) {
+        if ($this->guest == true && ($user == null || $user instanceof Guest)) {
             return CounterLog::where('targetId', $targetId)->where('ipaddress', $this->request->ip())
                 ->where('counterName', $this->name)->where('counterOption', $option)->first();
         } else {
-            return CounterLog::where('targetId', $targetId)->where('userId', $user->id)
+            return CounterLog::where('targetId', $targetId)->where('userId', $user->getId())
                 ->where('counterName', $this->name)->where('counterOption', $option)->first();
         }
     }
 
     public function getByName($targetId, MemberEntityInterface $user = null)
     {
-        if ($user == null || $user instanceof Guest) {
+        if ($this->guest == true && ($user == null || $user instanceof Guest)) {
             return CounterLog::where('targetId', $targetId)->where('ipaddress', $this->request->ip())
                 ->where('counterName', $this->name)->first();
         } else {
-            return CounterLog::where('targetId', $targetId)->where('userId', $user->id)
+            return CounterLog::where('targetId', $targetId)->where('userId', $user->getId())
                 ->where('counterName', $this->name)->first();
         }
     }

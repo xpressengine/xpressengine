@@ -27,4 +27,5 @@ use Xpressengine\Counter\CounterException;
  */
 class InvalidOptionException extends CounterException
 {
+    protected $message = 'Invalid counter option. ":name" counter has no ":option" option';
 }

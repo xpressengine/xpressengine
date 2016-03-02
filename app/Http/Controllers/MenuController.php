@@ -479,7 +479,7 @@ class MenuController extends Controller
                 $routes->create([
                     'url' => $itemInput['itemUrl'],
                     'module' => $menuTypeObj::getId(),
-                    'instanceId' => $itemInput['itemId'],
+                    'instanceId' => $item->id,
                     'menuId' => $item->menuId,
                     'siteKey' => $itemInput['siteKey']
                 ]);

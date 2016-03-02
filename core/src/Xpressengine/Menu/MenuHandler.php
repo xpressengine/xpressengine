@@ -682,6 +682,10 @@ class MenuHandler
     {
         $newId = substr($this->keygen->generate(), 0, 8);
 
+        if (is_int($newId)) {
+            $newId = $this->generateNewId();
+        }
+
         return $newId;
     }
 }

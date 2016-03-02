@@ -1,23 +1,22 @@
 <?php
 /**
- * CounterHandler
+ * GuestNotSupportException
  *
  * PHP version 5
  *
- * @category    Counter
- * @package     Xpressengine\Counter
+ * @category    Document
+ * @package     Xpressengine\Document
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Counter;
+namespace Xpressengine\Counter\Exceptions;
 
-use Xpressengine\Http\Request;
-use Xpressengine\Interception\InterceptionHandler;
+use Xpressengine\Counter\CounterException;
 
 /**
- * CounterHandler
+ * GuestNotSupportException
  *
  * @category    Counter
  * @package     Xpressengine\Counter
@@ -26,17 +25,7 @@ use Xpressengine\Interception\InterceptionHandler;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class Factory
+class GuestNotSupportException extends CounterException
 {
-    protected $proxy;
-
-    public function __construct(InterceptionHandler $interception)
-    {
-        $this->proxy = $interception->proxy(Counter::class, 'Counter');
-    }
-
-    public function make(Request $request, $name, $options = [])
-    {
-        return new $this->proxy($request, $name, $options);
-    }
+    protected $message = '":name" counter not support "Guest"';
 }
