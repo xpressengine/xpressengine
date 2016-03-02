@@ -38,7 +38,7 @@ class CounterLog extends DynamicModel
 {
     protected $table = 'counter_log';
 
-    public function users()
+    public function user()
     {
         return $this->hasOne('Xpressengine\User\Models\User', 'id', 'userId');
     }
