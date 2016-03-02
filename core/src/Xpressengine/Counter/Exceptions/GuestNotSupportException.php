@@ -1,6 +1,6 @@
 <?php
 /**
- * InvalidOptionException
+ * GuestNotSupportException
  *
  * PHP version 5
  *
@@ -16,7 +16,7 @@ namespace Xpressengine\Counter\Exceptions;
 use Xpressengine\Counter\CounterException;
 
 /**
- * InvalidOptionException
+ * GuestNotSupportException
  *
  * @category    Counter
  * @package     Xpressengine\Counter
@@ -25,7 +25,7 @@ use Xpressengine\Counter\CounterException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class InvalidOptionException extends CounterException
+class GuestNotSupportException extends CounterException
 {
-    protected $message = 'Invalid counter option. ":name" counter has no ":option" option';
+    protected $message = '":name" counter not support "Guest"';
 }
