@@ -91,7 +91,7 @@ class UserEmailRepository implements UserEmailRepositoryInterface
      *
      * @param $userId
      *
-     * @return EmailInterface
+     * @return EmailInterface[]
      */
     public function findByUserId($userId)
     {
