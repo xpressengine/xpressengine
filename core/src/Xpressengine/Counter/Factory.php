@@ -13,11 +13,8 @@
  */
 namespace Xpressengine\Counter;
 
-use Illuminate\Http\Request;
-use Xpressengine\Counter\Exceptions\SessionCounterNotSupportedException;
+use Xpressengine\Http\Request;
 use Xpressengine\Interception\InterceptionHandler;
-use Xpressengine\Member\Entities\Guest;
-use Xpressengine\Member\Entities\MemberEntityInterface;
 
 /**
  * CounterHandler
@@ -38,8 +35,8 @@ class Factory
         $this->proxy = $interception->proxy(Counter::class, 'Counter');
     }
 
-    public function make($name, $options = [])
+    public function make(Request $request, $name, $options = [])
     {
-        return new $this->proxy($name, $options);
+        return new $this->proxy($request, $name, $options);
     }
 }

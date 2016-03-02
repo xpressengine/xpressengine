@@ -54,6 +54,11 @@ class Counter
         $this->options = $options;
     }
 
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
     /**
      * check option
      *
