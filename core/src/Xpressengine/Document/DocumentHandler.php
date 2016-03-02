@@ -17,10 +17,6 @@ use Illuminate\Http\Request;
 use Xpressengine\Document\Exceptions\DocumentNotFoundException;
 use Xpressengine\Document\Models\Document;
 use Xpressengine\Document\Models\Revision;
-use Xpressengine\Member\Entities\Guest;
-use Xpressengine\Member\GuardInterface as Authenticator;
-use Xpressengine\Member\Repositories\MemberRepositoryInterface as Member;
-use Xpressengine\Member\Entities\MemberEntityInterface;
 use Xpressengine\Config\ConfigEntity;
 use Closure;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -345,12 +341,12 @@ class DocumentHandler
     /**
      * get division table name
      *
-     * @param string $instanceId instance id
+     * @param ConfigEntity $config config entity
      * @return string
      */
-    public function getDivisionTableName($instanceId)
+    public function getDivisionTableName(ConfigEntity $config)
     {
-        return $this->instanceManager->getDivisionTableName($instanceId);
+        return $this->instanceManager->getDivisionTableName($config);
     }
 
     /**
@@ -363,7 +359,7 @@ class DocumentHandler
     {
         $config = $this->getConfig($instanceId);
         $doc = new Document;
-        $doc->setConfig($config, $this->getDivisionTableName($instanceId));
+        $doc->setConfig($config, $this->getDivisionTableName($config));
         return $doc;
     }
 
@@ -377,7 +373,7 @@ class DocumentHandler
     public function setModelConfig(Document $doc, $instanceId)
     {
         $config = $this->getConfig($instanceId);
-        $doc->setConfig($config, $this->getDivisionTableName($instanceId));
+        $doc->setConfig($config, $this->getDivisionTableName($config));
         return $doc;
     }
 
