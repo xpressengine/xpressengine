@@ -214,19 +214,20 @@ class Counter
      * get users
      *
      * @param string $targetId target id
+     * @param int    $perPage  number of page items
      * @param string $option   counter option
      * @return mixed
      */
-    public function getUsers($targetId, $option = '')
+    public function getUsers($targetId, $perPage, $option = '')
     {
         $this->checkOption($option);
 
         $logs = CounterLog::where('targetId', $targetId)
-            ->where('counterName', $this->name)->where('counterOption', $option)->with('users')->get();
+            ->where('counterName', $this->name)->where('counterOption', $option)->with('user')->paginate($perPage);
 
         $users = [];
         foreach ($logs as $log) {
-            $users[] = $log->users;
+            $users[] = $log->user;
         }
 
         return array_filter($users);
