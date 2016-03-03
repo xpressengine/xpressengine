@@ -37,6 +37,8 @@ class StorageMigration implements Migration {
             $table->string('fileId', 36);
             $table->string('fileableId', 36);
             $table->timestamp('createdAt');
+
+            $table->unique(['fileId', 'fileableId']);
         });
     }
 
