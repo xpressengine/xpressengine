@@ -102,7 +102,7 @@ abstract class AbstractPlugin
      *
      * @return boolean 플러그인의 설치 유무
      */
-    public function checkInstall($installedVersion = null)
+    public function checkInstalled($installedVersion = null)
     {
         return true;
     }
@@ -126,7 +126,7 @@ abstract class AbstractPlugin
      *
      * @return boolean 플러그인의 설치 유무,
      */
-    public function checkUpdate($currentVersion = null)
+    public function checkUpdated($currentVersion = null)
     {
         return true;
     }
