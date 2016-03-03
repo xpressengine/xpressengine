@@ -6,6 +6,8 @@ define([], function(XE) {
 
     Validator.rules = {};
 
+    Validator.alertType = 'form';
+
     Validator.setRules = function(ruleName, rules) {
         if (this.rules[ruleName] != undefined) {
             this.rules[ruleName] = $.extend(rules, this.rules[ruleName]);
@@ -36,7 +38,14 @@ define([], function(XE) {
     Validator.check = function($frm) {
         var ruleName = this.getRuleName($frm),
             rules = this.rules[ruleName],
-            self = this;
+            self = this,
+            alertType = $frm.data('rule-alert-type');
+
+
+        if (alertType == undefined) {
+            alertType = 'form';
+        }
+        self.alertType = alertType;
 
         $.each(rules, function(name, rule) {
             self.validate($frm, name, rule);
@@ -62,6 +71,7 @@ define([], function(XE) {
     Validator.validate = function($frm, name, rule) {
         var parts = rule.split('|'),
             self = this;
+
 
         $.each(parts, function(index, part) {
             var res = part.split(':'),
@@ -92,9 +102,19 @@ define([], function(XE) {
     };
 
     Validator.error = function($element, message) {
-        require(['griper'], function(griper) {
-            griper.form($element, message);
-        });
+        console.log(this.alertType + '222');
+        if (this.alertType == 'form') {
+            require(['griper'], function(griper) {
+                griper.form($element, message);
+            });
+        } else if (this.alertType == 'toast') {
+            require(['griper'], function(griper) {
+                console.log($element);
+                message = '[' + $element.attr('placeholder') + '] ' + message;
+                griper.toast($element, message);
+            });
+        }
+
     };
 
 
