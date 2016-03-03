@@ -76,7 +76,7 @@ class Document extends DynamicModel
         'parentId', 'instanceId', 'userId', 'writer', 'approved',
         'published', 'status', 'display', 'locale', 'title',
         'content', 'pureContent', 'createdAt', 'publishedAt', 'head', 'reply',
-        'listOrder', 'ipaddress',
+        'listOrder', 'ipaddress', 'userType', 'certifyKey', 'email',
     ];
 
     /**
@@ -120,6 +120,7 @@ class Document extends DynamicModel
     const DISPLAY_HIDDEN = 'hidden';
 
     // user type
+    const USER_TYPE_NORMAL = 'normal';
     const USER_TYPE_USER = 'user';
     const USER_TYPE_ANONYMITY = 'anonymity';
     const USER_TYPE_GUEST = 'guest';
