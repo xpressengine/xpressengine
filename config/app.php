@@ -169,7 +169,6 @@ return [
         App\Providers\StorageServiceProvider::class,
         App\Providers\MediaServiceProvider::class,
         App\Providers\PermissionServiceProvider::class,
-        App\Providers\CommentServiceProvider::class,
 
         App\Providers\PresenterServiceProvider::class,
 
@@ -265,7 +264,6 @@ return [
         'XeDB' => App\Facades\XeDB::class,
         'XeDocument' => App\Facades\XeDocument::class,
 
-        'Comment' => App\Facades\Comment::class,
         'XeCategory' => App\Facades\XeCategory::class,
         'Widget' => App\Facades\Widget::class,
         'Counter' => App\Facades\Counter::class,
