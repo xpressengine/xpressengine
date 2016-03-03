@@ -15,7 +15,7 @@ namespace Xpressengine\Permission;
 
 use Xpressengine\User\Models\Guest;
 use Xpressengine\User\Rating;
-use Xpressengine\Member\Repositories\VirtualGroupRepositoryInterface;
+use Xpressengine\User\Repositories\VirtualGroupRepositoryInterface;
 use Xpressengine\User\UserInterface;
 
 /**

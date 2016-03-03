@@ -1,11 +1,11 @@
 <?php
 /**
- * This file is guest member
+ * This file is guest user
  *
  * PHP version 5
  *
- * @category    Member
- * @package     Xpressengine\Member
+ * @category    User
+ * @package     Xpressengine\User
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\User\Models;
 
-use Xpressengine\User\Exceptions\UnsupportedOperationByGuestMemberException;
+use Xpressengine\User\Exceptions\UnsupportedOperationByGuestUserException;
 use Xpressengine\User\Rating;
 use Xpressengine\User\UserHandler;
 use Xpressengine\User\UserInterface;
@@ -106,7 +106,7 @@ class Guest implements UserInterface
     }
 
     /**
-     * Get groups a member belongs
+     * Get groups a user belongs
      *
      * @return array
      */
@@ -126,7 +126,7 @@ class Guest implements UserInterface
     }
 
     /**
-     * Get the unique identifier for the member.
+     * Get the unique identifier for the user.
      *
      * @return mixed
      */
@@ -136,7 +136,7 @@ class Guest implements UserInterface
     }
 
     /**
-     * Get the password for the member.
+     * Get the password for the user.
      *
      * @return string
      */
@@ -206,7 +206,7 @@ class Guest implements UserInterface
      */
     private function throwNotSupportedException()
     {
-        throw new UnsupportedOperationByGuestMemberException();
+        throw new UnsupportedOperationByGuestUserException();
     }
 
     /**
@@ -232,7 +232,7 @@ class Guest implements UserInterface
     }
 
     /**
-     * Finds whether member has super rating.
+     * Finds whether user has super rating.
      *
      * @return boolean
      */
@@ -242,7 +242,7 @@ class Guest implements UserInterface
     }
 
     /**
-     * Finds whether member has manager or super rating.
+     * Finds whether user has manager or super rating.
      *
      * @return boolean
      */
@@ -261,7 +261,7 @@ class Guest implements UserInterface
      */
     public function joinGroups(array $groups)
     {
-        throw new UnsupportedOperationByGuestMemberException();
+        throw new UnsupportedOperationByGuestUserException();
     }
 
     /**
@@ -273,6 +273,6 @@ class Guest implements UserInterface
      */
     public function leaveGroups(array $groups)
     {
-        throw new UnsupportedOperationByGuestMemberException();
+        throw new UnsupportedOperationByGuestUserException();
     }
 }

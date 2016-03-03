@@ -13,7 +13,6 @@
  */
 namespace Xpressengine\User\Repositories;
 
-use Xpressengine\Member\Repositories\GroupRepositoryInterface;
 use Xpressengine\User\GroupInterface;
 use Xpressengine\User\UserInterface;
 
@@ -26,7 +25,7 @@ use Xpressengine\User\UserInterface;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-interface UserGroupRepositoryInterface extends GroupRepositoryInterface
+interface UserGroupRepositoryInterface
 {
 
     /**

@@ -14,14 +14,14 @@
 namespace Xpressengine\User\Repositories;
 
 use Xpressengine\User\EmailInterface;
-use Xpressengine\User\Exceptions\CannotDeleteMainEmailOfMemberException;
+use Xpressengine\User\Exceptions\CannotDeleteMainEmailOfUserException;
 use Xpressengine\User\UserInterface;
 
 /**
  * 회원의 등록 대기 이메일 정보를 저장하는 Repository
  *
- * @category    Member
- * @package     Xpressengine\Member
+ * @category    User
+ * @package     Xpressengine\User
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
@@ -66,7 +66,7 @@ class PendingEmailRepository implements PendingEmailRepositoryInterface
      * @param EmailInterface $email
      *
      * @return mixed
-     * @throws CannotDeleteMainEmailOfMemberException
+     * @throws CannotDeleteMainEmailOfUserException
      */
     public function delete(EmailInterface $email)
     {

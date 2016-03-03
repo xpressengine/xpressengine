@@ -13,8 +13,6 @@
  */
 namespace Xpressengine\User\Repositories;
 
-use Xpressengine\Member\Repositories\AccountRepositoryInterface;
-
 /**
  * 회원 계정 정보 저장소(AccountRepository)가 구현해야 하는 인터페이스
  *
@@ -25,7 +23,7 @@ use Xpressengine\Member\Repositories\AccountRepositoryInterface;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-interface UserAccountRepositoryInterface extends AccountRepositoryInterface
+interface UserAccountRepositoryInterface
 {
 
     /**

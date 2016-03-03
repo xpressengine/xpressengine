@@ -18,7 +18,7 @@ use Exception;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Contracts\View\Factory;
 use Xpressengine\Plugin\PluginRegister;
-use Xpressengine\Member\GuardInterface;
+use Xpressengine\User\GuardInterface;
 use Xpressengine\Widget\Exceptions\NotFoundWidgetException;
 
 /**

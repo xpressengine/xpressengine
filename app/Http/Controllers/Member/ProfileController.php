@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Presenter;
 use Theme;
 use XeDB;
-use Xpressengine\User\Exceptions\MemberNotFoundException;
+use Xpressengine\User\Exceptions\UserNotFoundException;
 use Xpressengine\User\Rating;
 use Xpressengine\User\Repositories\UserEmailRepositoryInterface;
 use Xpressengine\User\Repositories\UserGroupRepositoryInterface;
@@ -66,7 +66,7 @@ class ProfileController extends Controller
         /** @var UserInterface $user */
         $user = $this->handler->users()->find($userId);
         if ($user === null) {
-            throw new MemberNotFoundException();
+            throw new UserNotFoundException();
         }
 
         $displayName = $request->get('displayName');
@@ -118,7 +118,7 @@ class ProfileController extends Controller
         }
 
         if ($member === null) {
-            throw new MemberNotFoundException();
+            throw new UserNotFoundException();
         }
 
         return $member;

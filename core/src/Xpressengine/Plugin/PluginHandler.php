@@ -187,7 +187,7 @@ class PluginHandler
         }
 
         // 플러그인이 설치되어 있는지 검사한다.
-        if ($entity->checkInstall() === false) {
+        if ($entity->checkInstalled() === false) {
             $entity->install();
         }
 
@@ -195,7 +195,7 @@ class PluginHandler
         $installedVersion = $entity->getInstalledVersion();
 
         // 플러그인이 최신업데이트 상태인지 검사하고, 업데이트가 필요하면 업데이트 한다.
-        if ($entity->checkUpdate() === false) {
+        if ($entity->checkUpdated() === false) {
             $entity->update($installedVersion);
         }
 

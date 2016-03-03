@@ -15,7 +15,6 @@ namespace Xpressengine\User\Models;
 
 use Xpressengine\Database\Eloquent\DynamicModel;
 use Xpressengine\User\EmailInterface;
-use Xpressengine\User\EmailProviderInterface;
 
 /**
  * @category    User

@@ -110,8 +110,8 @@ class Permission extends AbstractUIObject
             $permissionValueArray['mode'] = $inheritMode;
         }
 
-        $groupRepo = app('xe.member.groups');
-        $memberRepo = app('xe.members');
+        $groupRepo = app('xe.user.groups');
+        $memberRepo = app('xe.users');
 
         $groups = array_map(
             function($group) {
@@ -151,7 +151,7 @@ class Permission extends AbstractUIObject
 
         $memberSearchUrl = route('settings.member.search');
         $groupSearchUrl = route('manage.group.search');
-        $vgroupAll = app('xe.member.virtualGroups')->all();
+        $vgroupAll = app('xe.user.virtualGroups')->all();
 
         $uibojectKey = "__xe__permission_{$title}_uiobject_data";
 

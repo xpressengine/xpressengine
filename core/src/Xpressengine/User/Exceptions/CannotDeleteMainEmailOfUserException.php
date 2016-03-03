@@ -4,29 +4,27 @@
  *
  * PHP version 5
  *
- * @category    Member
- * @package     Xpressengine\Member
+ * @category    User
+ * @package     Xpressengine\User
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Member\Entities\Database;
+namespace Xpressengine\User\Exceptions;
 
-use Xpressengine\Member\Entities\Entity;
-use Xpressengine\Member\Entities\GroupEntityInterface;
+use Xpressengine\User\UserException;
 
 /**
- * 회원 그룹 정보를 가지는 클래스
+ * 최고관리자를 삭제하려고 할 때 발생하는 Exception
  *
- * @category    Member
- * @package     Xpressengine\Member
+ * @category    User
+ * @package     Xpressengine\User
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
- * @codeCoverageIgnore
- * @deprecated
  */
-class GroupEntity extends Entity implements GroupEntityInterface
+class CannotDeleteMainEmailOfUserException extends UserException
 {
+    protected $message = '대표이메일은 삭제할 수 없습니다.';
 }

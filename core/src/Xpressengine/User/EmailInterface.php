@@ -13,8 +13,6 @@
  */
 namespace Xpressengine\User;
 
-use Xpressengine\Member\Entities\MailEntityInterface;
-
 /**
  * 회원의 메일 정보를 저장하는 클래스가 구현해야 하는 인터페이스
  *
@@ -25,7 +23,7 @@ use Xpressengine\Member\Entities\MailEntityInterface;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-interface EmailInterface extends MailEntityInterface
+interface EmailInterface
 {
     /**
      * 이메일 주소를 반환한다.

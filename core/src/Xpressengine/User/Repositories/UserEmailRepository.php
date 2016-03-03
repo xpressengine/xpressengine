@@ -14,7 +14,7 @@
 namespace Xpressengine\User\Repositories;
 
 use Xpressengine\User\EmailInterface;
-use Xpressengine\User\Exceptions\CannotDeleteMainEmailOfMemberException;
+use Xpressengine\User\Exceptions\CannotDeleteMainEmailOfUserException;
 use Xpressengine\User\UserInterface;
 
 /**
@@ -62,13 +62,13 @@ class UserEmailRepository implements UserEmailRepositoryInterface
      * @param EmailInterface $email
      *
      * @return bool|null
-     * @throws CannotDeleteMainEmailOfMemberException
+     * @throws CannotDeleteMainEmailOfUserException
      */
     public function delete(EmailInterface $email)
     {
         $user = $email->user;
         if($user->email === $email->getAddress()) {
-            throw new CannotDeleteMainEmailOfMemberException();
+            throw new CannotDeleteMainEmailOfUserException();
         }
         return $email->delete();
     }

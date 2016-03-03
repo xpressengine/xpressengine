@@ -13,7 +13,6 @@
  */
 namespace Xpressengine\User\Repositories;
 
-use Xpressengine\Member\Repositories\MailRepositoryInterface;
 use Xpressengine\User\EmailInterface;
 
 /**
@@ -26,12 +25,12 @@ use Xpressengine\User\EmailInterface;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-interface UserEmailRepositoryInterface extends MailRepositoryInterface
+interface UserEmailRepositoryInterface
 {
     /**
      * 이메일 주소로 이메일 정보를 조회한다.
      *
-     * @param string        $address 조회할 이메일 주소
+     * @param string $address 조회할 이메일 주소
      *
      * @return EmailInterface
      */

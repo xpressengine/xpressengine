@@ -22,7 +22,7 @@ use Xpressengine\User\Models\UserVirtualGroup;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-interface VirtualGroupRepositoryInterface extends \Xpressengine\Member\Repositories\VirtualGroupRepositoryInterface
+interface VirtualGroupRepositoryInterface
 {
 
     /**

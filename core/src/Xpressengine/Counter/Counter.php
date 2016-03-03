@@ -17,8 +17,8 @@ use Xpressengine\Counter\Exceptions\GuestNotSupportException;
 use Xpressengine\Counter\Exceptions\InvalidOptionException;
 use Xpressengine\Counter\Models\CounterLog;
 use Xpressengine\Http\Request;
-use Xpressengine\Member\Entities\MemberEntityInterface;
 use Xpressengine\User\Models\Guest;
+use Xpressengine\User\UserInterface;
 
 /**
  * Counter
@@ -92,7 +92,7 @@ class Counter
         }
     }
 
-    public function hasByName($targetId, MemberEntityInterface $user = null)
+    public function hasByName($targetId, UserInterface $user = null)
     {
         return $this->getByName($targetId, $user) !== null;
     }
@@ -101,11 +101,11 @@ class Counter
      * has log
      *
      * @param string                     $targetId target id
-     * @param MemberEntityInterface|null $user
+     * @param UserInterface|null $user
      * @param string                     $option counter option
      * @return bool
      */
-    public function has($targetId, MemberEntityInterface $user = null, $option = '')
+    public function has($targetId, UserInterface $user = null, $option = '')
     {
         return $this->get($targetId, $user, $option) !== null;
     }
@@ -114,11 +114,11 @@ class Counter
      * add log
      *
      * @param string                     $targetId target id
-     * @param MemberEntityInterface|null $user
+     * @param UserInterface|null $user
      * @param string                     $option counter option
      * @param int $point
      */
-    public function add($targetId, MemberEntityInterface $user = null, $option = '', $point = 1)
+    public function add($targetId, UserInterface $user = null, $option = '', $point = 1)
     {
         $this->checkOption($option);
 
@@ -146,11 +146,11 @@ class Counter
      * remove log
      *
      * @param string                     $targetId target id
-     * @param MemberEntityInterface|null $user
+     * @param UserInterface|null $user
      * @param string                     $option counter option
      * @return mixed
      */
-    public function remove($targetId, MemberEntityInterface $user = null, $option = '')
+    public function remove($targetId, UserInterface $user = null, $option = '')
     {
         $this->checkOption($option);
 
@@ -167,11 +167,11 @@ class Counter
      * get log
      *
      * @param string                     $targetId target id
-     * @param MemberEntityInterface|null $user
+     * @param UserInterface|null $user
      * @param string                     $option counter option
      * @return mixed
      */
-    public function get($targetId, MemberEntityInterface $user = null, $option = '')
+    public function get($targetId, UserInterface $user = null, $option = '')
     {
         $this->checkOption($option);
 
@@ -184,7 +184,7 @@ class Counter
         }
     }
 
-    public function getByName($targetId, MemberEntityInterface $user = null)
+    public function getByName($targetId, UserInterface $user = null)
     {
         if ($this->guest == true && ($user == null || $user instanceof Guest)) {
             return CounterLog::where('targetId', $targetId)->where('ipaddress', $this->request->ip())
@@ -214,22 +214,14 @@ class Counter
      * get users
      *
      * @param string $targetId target id
-     * @param int    $perPage  number of page items
      * @param string $option   counter option
      * @return mixed
      */
-    public function getUsers($targetId, $perPage = 10, $option = '')
+    public function getUsers($targetId, $option = '')
     {
         $this->checkOption($option);
 
-        $logs = CounterLog::where('targetId', $targetId)
-            ->where('counterName', $this->name)->where('counterOption', $option)->with('user')->paginate($perPage);
-
-        $users = [];
-        foreach ($logs as $log) {
-            $users[] = $log->user;
-        }
-
-        return array_filter($users);
+        return CounterLog::where('targetId', $targetId)
+            ->where('counterName', $this->name)->where('counterOption', $option)->users;
     }
 }

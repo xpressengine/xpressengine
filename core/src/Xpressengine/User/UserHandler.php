@@ -18,7 +18,7 @@ use Illuminate\Contracts\Validation\Factory as Validator;
 use Xpressengine\Register\Container;
 use Xpressengine\Support\Exceptions\InvalidArgumentException;
 use Xpressengine\User\Exceptions\AccountAlreadyExistsException;
-use Xpressengine\User\Exceptions\CannotDeleteMemberHavingSuperRatingException;
+use Xpressengine\User\Exceptions\CannotDeleteUserHavingSuperRatingException;
 use Xpressengine\User\Exceptions\DisplayNameAlreadyExistsException;
 use Xpressengine\User\Exceptions\MailAlreadyExistsException;
 use Xpressengine\User\Repositories\PendingEmailRepositoryInterface;
@@ -53,9 +53,9 @@ use Xpressengine\User\Repositories\UserRepositoryInterface;
  *
  * ```php
  * $ids = [1,2,3];
- * $members = XeUser::users()->find($ids);
+ * $users = XeUser::users()->find($ids);
  *
- * foreach($members as $member) {
+ * foreach($users as $user) {
  * ...
  * }
  * ```
@@ -562,7 +562,7 @@ class UserHandler
 
         $ratings = array_pluck($users, 'rating');
         if (in_array(Rating::SUPER, $ratings)) {
-            throw new CannotDeleteMemberHavingSuperRatingException();
+            throw new CannotDeleteUserHavingSuperRatingException();
         }
 
         // resolve group
