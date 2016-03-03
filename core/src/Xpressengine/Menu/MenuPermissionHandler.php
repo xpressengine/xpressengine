@@ -14,10 +14,10 @@
 
 namespace Xpressengine\Menu;
 
-use Xpressengine\Member\Repositories\GroupRepositoryInterface;
-use Xpressengine\Member\Repositories\MemberRepositoryInterface;
 use Xpressengine\Permission\Grant;
 use Xpressengine\Permission\PermissionHandler;
+use Xpressengine\User\Repositories\UserGroupRepositoryInterface;
+use Xpressengine\User\Repositories\UserRepositoryInterface;
 
 /**
  * MenuPermission
@@ -29,8 +29,8 @@ use Xpressengine\Permission\PermissionHandler;
  *
  * ## 생성자에서 필요한 항목들
  * * Factory $permission - Permission 패키지의 고유 factory
- * * GroupRepositoryInterface $groupRepo - 그룹 조회를 위한 group repository
- * * MemberRepositoryInterface $memberRepo - 멤버 조회를 위한 member repository
+ * * UserGroupRepositoryInterface $groupRepo - 그룹 조회를 위한 group repository
+ * * UserRepositoryInterface $memberRepo - 멤버 조회를 위한 member repository
  *
  * ## 사용법
  *
@@ -179,31 +179,31 @@ class MenuPermissionHandler
     ];
 
     /**
-     * @var GroupRepositoryInterface $groupRepo
+     * @var UserGroupRepositoryInterface $groupRepo
      */
     protected $groupRepo;
 
     /**
-     * @var MemberRepositoryInterface $memberRepo ;
+     * @var UserRepositoryInterface $memberRepo ;
      */
     protected $memberRepo;
-    
+
     const ACCESS = 'access';
-    
+
     const VISIBLE = 'visible';
 
     /**
      * Construct
      *
      * @param PermissionHandler                   $permission permission factory
-     * @param GroupRepositoryInterface  $groupRepo  group repository
-     * @param MemberRepositoryInterface $memberRepo member repository
+     * @param UserGroupRepositoryInterface  $groupRepo  group repository
+     * @param UserRepositoryInterface $memberRepo member repository
      *
      */
     public function __construct(
         PermissionHandler $permission,
-        GroupRepositoryInterface $groupRepo,
-        MemberRepositoryInterface $memberRepo
+        UserGroupRepositoryInterface $groupRepo,
+        UserRepositoryInterface $memberRepo
     ) {
         $this->permission = $permission;
         $this->groupRepo = $groupRepo;
@@ -246,7 +246,7 @@ class MenuPermissionHandler
 
         $menuAccessGrant = $registered[static::ACCESS];
 
-        $groups = $this->groupRepo->findAll($menuAccessGrant['group']);
+        $groups = $this->groupRepo->find($menuAccessGrant['group']);
         $users = $this->memberRepo->findAll($menuAccessGrant['user']);
         $excepts = $this->memberRepo->findAll($menuAccessGrant['except']);
 
@@ -272,7 +272,7 @@ class MenuPermissionHandler
 
         $menuVisibleGrant = $registered[static::VISIBLE];
 
-        $groups = $this->groupRepo->findAll($menuVisibleGrant['group']);
+        $groups = $this->groupRepo->find($menuVisibleGrant['group']);
         $users = $this->memberRepo->findAll($menuVisibleGrant['user']);
         $excepts = $this->memberRepo->findAll($menuVisibleGrant['except']);
 
@@ -325,9 +325,9 @@ class MenuPermissionHandler
         $mode = ($pureGrant === null) ? "inherit" : "manual";
         $menuAccessGrant = $registered->offsetGet(static::ACCESS);
 
-        $groups = $this->groupRepo->findAll($menuAccessGrant['group']);
-        $users = $this->memberRepo->findAll($menuAccessGrant['user']);
-        $excepts = $this->memberRepo->findAll($menuAccessGrant['except']);
+        $groups = $this->groupRepo->find($menuAccessGrant['group']);
+        $users = $this->memberRepo->find($menuAccessGrant['user']);
+        $excepts = $this->memberRepo->find($menuAccessGrant['except']);
 
         return [
             'mode' => $mode,

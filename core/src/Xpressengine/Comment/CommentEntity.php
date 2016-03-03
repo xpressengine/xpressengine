@@ -13,9 +13,8 @@
  */
 namespace Xpressengine\Comment;
 
-use Xpressengine\Member\AssociateInterface;
-use Xpressengine\Member\Entities\MemberEntityInterface;
 use Xpressengine\Support\EntityTrait;
+use Xpressengine\User\UserInterface;
 
 /**
  * comment 객체
@@ -27,14 +26,14 @@ use Xpressengine\Support\EntityTrait;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class CommentEntity implements AssociateInterface
+class CommentEntity
 {
     use EntityTrait;
 
     /**
      * comment author
      *
-     * @var MemberEntityInterface
+     * @var UserInterface
      */
     protected $author;
 
@@ -62,7 +61,7 @@ class CommentEntity implements AssociateInterface
     /**
      * Returns author
      *
-     * @return MemberEntityInterface
+     * @return UserInterface
      */
     public function getAuthor()
     {
@@ -142,10 +141,10 @@ class CommentEntity implements AssociateInterface
     /**
      * set member entity
      *
-     * @param MemberEntityInterface $entity member entity
+     * @param UserInterface $entity user entity
      * @return void
      */
-    public function setMemberEntity(MemberEntityInterface $entity)
+    public function setMemberEntity(UserInterface $entity)
     {
         $this->author = $entity;
     }

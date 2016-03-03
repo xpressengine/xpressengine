@@ -163,7 +163,6 @@ return [
         App\Providers\DynamicFieldServiceProvider::class,
         App\Providers\KeygenServiceProvider::class,
 
-        App\Providers\MemberServiceProvider::class,
         App\Providers\UserServiceProvider::class,
 
         App\Providers\StorageServiceProvider::class,
@@ -242,10 +241,9 @@ return [
 
         'Agent' => Jenssegers\Agent\Facades\Agent::class,
 
-        'Member' => App\Facades\Member::class,
         'XeUser' => App\Facades\XeUser::class,
+        'XeGroup' => App\Facades\Group::class,
 
-        'Group' => App\Facades\Group::class,
         'Plugin' => App\Facades\Plugin::class,
         'Interception' => App\Facades\Interception::class,
         'UI' => App\Facades\UI::class,

@@ -51,7 +51,7 @@ class UserImageHandler
     private $profileImgConfig;
 
     /**
-     * MemberImageHandler constructor.
+     * UserImageHandler constructor.
      *
      * @param Storage      $storage              Storage
      * @param MediaManager $mediaManager         Media

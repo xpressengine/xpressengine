@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is member email repository.
+ * This file is user email repository.
  *
  * PHP version 5
  *
@@ -79,4 +79,5 @@ class UserAccountRepository implements UserAccountRepositoryInterface
     {
         return $this->query()->whereIn('userId', (array) $userIds)->delete();
     }
+
 }

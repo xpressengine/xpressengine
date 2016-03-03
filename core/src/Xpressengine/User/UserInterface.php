@@ -25,7 +25,7 @@ use Illuminate\Contracts\Auth\CanResetPassword;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-interface UserInterface extends Authenticatable, CanResetPassword, \Xpressengine\Member\Entities\MemberEntityInterface
+interface UserInterface extends Authenticatable, CanResetPassword
 {
     /**
      * Get the unique identifier

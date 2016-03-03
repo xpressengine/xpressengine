@@ -14,10 +14,10 @@
 
 namespace Xpressengine\Menu\Permission;
 
-use Xpressengine\Member\Entities\MemberEntityInterface;
 use Xpressengine\Permission\Action;
 use Xpressengine\Permission\Permissions\AbstractRegisteredPermission;
 use Xpressengine\Permission\Permission;
+use Xpressengine\User\UserInterface;
 
 /**
  * MenuPermission
@@ -42,11 +42,11 @@ class MenuPermission extends AbstractRegisteredPermission
     /**
      * Constructor
      *
-     * @param MemberEntityInterface $user       User instance
+     * @param UserInterface $user       User instance
      * @param Permission            $registered Registered instance
      *
      */
-    public function __construct(MemberEntityInterface $user = null, Permission $registered = null)
+    public function __construct(UserInterface $user = null, Permission $registered = null)
     {
         $this->user = $user;
 

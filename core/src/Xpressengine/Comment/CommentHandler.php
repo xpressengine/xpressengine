@@ -18,10 +18,10 @@ use Xpressengine\Comment\Exceptions\InvalidParentException;
 use Xpressengine\Comment\Exceptions\NotConfiguredException;
 use Xpressengine\Comment\Exceptions\LimitedReplyException;
 use Xpressengine\Config\ConfigManager;
-use Xpressengine\Member\GuardInterface as Authenticator;
-use Xpressengine\Member\MemberHandler;
-use Xpressengine\Member\Entities\MemberEntityInterface;
+use Xpressengine\User\GuardInterface as Authenticator;
 use Xpressengine\Comment\Exceptions\InvalidObjectException;
+use Xpressengine\User\UserHandler;
+use Xpressengine\User\UserInterface;
 
 /**
  * # CommentHandler
@@ -81,9 +81,9 @@ class CommentHandler
     /**
      * Member instance
      *
-     * @var MemberHandler
+     * @var UserHandler
      */
-    protected $member;
+    protected $user;
 
     /**
      * Authenticator instance
@@ -124,18 +124,18 @@ class CommentHandler
     /**
      * constructor
      *
-     * @param MemberHandler $member  Member instance
+     * @param UserHandler   $user    Member instance
      * @param Authenticator $auth    Authenticator instance
      * @param Repository    $repo    Repository instance
      * @param ConfigManager $configs ConfigManager instance
      */
     public function __construct(
-        MemberHandler $member,
+        UserHandler $user,
         Authenticator $auth,
         Repository $repo,
         ConfigManager $configs
     ) {
-        $this->member = $member;
+        $this->user = $user;
         $this->auth = $auth;
         $this->repo = $repo;
         $this->configs = $configs;
@@ -256,7 +256,7 @@ class CommentHandler
     {
         $comment = $this->repo->find($id);
 
-        return $comment ? $this->member->associate($comment) : null;
+        return $comment;
     }
 
     /**
@@ -270,7 +270,7 @@ class CommentHandler
     {
         $comment = $this->repo->findBaseInstanceId($instanceId, $id);
 
-        return $comment ? $this->member->associate($comment) : null;
+        return $comment ? $this->user->associate($comment) : null;
     }
 
     /**
@@ -327,7 +327,7 @@ class CommentHandler
             ]
         );
 
-        $comments = $this->member->associates($comments);
+        $comments = $this->user->associates($comments);
 
         $paginator = new Paginator($comments, $take, null, ['totalCount' => $totalCount]);
 
@@ -396,10 +396,10 @@ class CommentHandler
      * comment 를 생성
      *
      * @param array                      $inputs input information
-     * @param MemberEntityInterface|null $user   user instance
+     * @param UserInterface|null $user   user instance
      * @return CommentEntity
      */
-    public function create(array $inputs, MemberEntityInterface $user = null)
+    public function create(array $inputs, UserInterface $user = null)
     {
         $comment = new CommentEntity();
         foreach ($inputs as $key => $value) {
@@ -413,11 +413,11 @@ class CommentHandler
      * Add new comment
      *
      * @param CommentEntity              $comment comment object
-     * @param MemberEntityInterface|null $user    user instance
+     * @param UserInterface|null $user    user instance
      * @return CommentEntity
      * @throws InvalidObjectException
      */
-    public function add(CommentEntity $comment, MemberEntityInterface $user = null)
+    public function add(CommentEntity $comment, UserInterface $user = null)
     {
         if ($comment->instanceId === null || $comment->targetId === null) {
             throw new InvalidObjectException;
@@ -427,7 +427,7 @@ class CommentHandler
             unset($comment->targetAuthorId);
         }
 
-        /** @var MemberEntityInterface $user */
+        /** @var UserInterface $user */
         $user = $user ?: $this->auth->user();
 
         $comment->userId = $user->getId();
@@ -452,7 +452,7 @@ class CommentHandler
 
         $added = $this->repo->insert($comment);
 
-        return $this->member->associate($added);
+        return $this->user->associate($added);
     }
 
     /**
@@ -534,7 +534,7 @@ class CommentHandler
 
         $updated = $this->repo->update($comment);
 
-        return $this->member->associate($updated);
+        return $this->user->associate($updated);
     }
 
     /**

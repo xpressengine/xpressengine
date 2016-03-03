@@ -141,7 +141,6 @@ class VirtualGroupRepository implements VirtualGroupRepositoryInterface
      */
     private function resolveEntity($id, $entityInfo)
     {
-        //return new VirtualGroupEntity($this->memberRepo, $id, $entityInfo);
         $entityInfo['id'] = $id;
         return new UserVirtualGroup($entityInfo);
     }

@@ -4,8 +4,8 @@
  *
  * PHP version 5
  *
- * @category    Member
- * @package     Xpressengine\Member
+ * @category    User
+ * @package     Xpressengine\User
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
@@ -16,13 +16,15 @@ namespace Xpressengine\User\Exceptions;
 use Xpressengine\User\UserException;
 
 /**
- * @category    Member
- * @package     Xpressengine\Member
+ * Guest 계정이 제공하지 않는 기능을 사용하려고 할 경우 발생하는 Exception
+ *
+ * @category    User
+ * @package     Xpressengine\User
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class MemberNotFoundException extends UserException
+class UnsupportedOperationByGuestUserException extends UserException
 {
-    protected $message = '해당 회원을 찾을 수 없습니다.';
+    protected $message = 'Guest 회원은 해당 기능을 제공하지 않습니다.';
 }

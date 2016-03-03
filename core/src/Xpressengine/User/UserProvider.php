@@ -14,14 +14,10 @@
 namespace Xpressengine\User;
 
 use Illuminate\Auth\EloquentUserProvider;
-use Illuminate\Contracts\Auth\Authenticatable as BaseAuthenticatable;
-use Illuminate\Contracts\Auth\UserProvider as BaseProvider;
-use Illuminate\Contracts\Hashing\Hasher;
-use Xpressengine\User\Models\User;
+use Xpressengine\User\Authenticatable;
 
 /**
  * 이 클래스는 Auth(Guard)에 회원정보를 제공하는 역할을 한다.
- * 내부적으로는 MemberRepositoryInterface를 주입받아 회원정보를 조회할 때 사용한다.
  *
  * @category    User
  * @package     Xpressengine\User
@@ -36,7 +32,7 @@ class UserProvider extends EloquentUserProvider
      *
      * @param  array $credentials credentials for retrieving
      *
-     * @return Authenticatable|null member entity
+     * @return Authenticatable|null user entity
      */
     public function retrieveByCredentials(array $credentials)
     {
@@ -92,7 +88,7 @@ class UserProvider extends EloquentUserProvider
             }
 
             // password reset을 위한 요청일 때를 위하여 필요한 email 필드를 지정해 줌
-            if ($user instanceof \Xpressengine\Member\Authenticatable) {
+            if ($user instanceof Authenticatable) {
                 if ($emailPrefix === null) {
                     $user->setEmailForPasswordReset($credentials['email']);
                 }

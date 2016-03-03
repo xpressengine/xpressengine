@@ -18,7 +18,6 @@ use Xpressengine\Comment\CommentEntity;
 use Xpressengine\Comment\CommentHandler;
 use Xpressengine\Comment\Repositories\CommentRepository;
 use Xpressengine\Comment\Repositories\DivisionDecorator;
-use Xpressengine\Member\Entities\MemberEntityInterface;
 
 /**
  * laravel 에서의 사용을 위한 등록 처리
@@ -76,7 +75,7 @@ class CommentServiceProvider extends ServiceProvider
 
             $proxyClass = $app['xe.interception']->proxy(CommentHandler::class, 'Comment');
             $comment = new $proxyClass(
-                $app['xe.member'],
+                $app['xe.user'],
                 $app['xe.auth'],
                 $decorator,
                 $app['xe.config'],

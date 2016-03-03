@@ -88,8 +88,8 @@ class MenuServiceProvider extends ServiceProvider
 //            'xe.menu.permission',
 //            function ($app) {
 //                $permission = $app['xe.permission'];
-//                $groups = $app['xe.member.groups'];
-//                $members = $app['xe.members'];
+//                $groups = $app['xe.user.groups'];
+//                $members = $app['xe.users'];
 //                return new MenuPermissionHandler($permission, $groups, $members);
 //            }
 //        );

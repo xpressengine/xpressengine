@@ -24,7 +24,7 @@ use Xpressengine\Document\Models\Document;
 use Xpressengine\Document\Models\Revision;
 use Xpressengine\Document\RevisionHandler;
 use Xpressengine\Keygen\Keygen;
-use Xpressengine\Member\Entities\MemberEntityInterface;
+use Xpressengine\User\UserInterface;
 
 /**
  * laravel service provider
@@ -107,7 +107,7 @@ class DocumentServiceProvider extends ServiceProvider
         intercept(
             'Comment@add',
             'DocumentCommentCountIncrease',
-            function($method, CommentEntity $comment, MemberEntityInterface $user = null) use ($app) {
+            function($method, CommentEntity $comment, UserInterface $user = null) use ($app) {
                 /** @var VirtualConnection $conn */
                 $conn = $app['xe.db']->connection('document');
                 $conn->beginTransaction();

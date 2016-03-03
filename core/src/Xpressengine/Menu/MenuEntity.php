@@ -13,7 +13,6 @@
  */
 namespace Xpressengine\Menu;
 
-use Xpressengine\Member\Entities\MemberEntityInterface;
 use Xpressengine\Menu\Exceptions\NotFoundMenuItemException;
 use Xpressengine\Menu\Permission\MenuPermission;
 use Xpressengine\Support\Entity;

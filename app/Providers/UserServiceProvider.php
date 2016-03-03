@@ -388,7 +388,13 @@ class UserServiceProvider extends ServiceProvider
             'xe.auth.password',
             'xe.auth.email',
             'xe.auth.tokens',
-            'xe.user', // ....
+            'xe.user',
+            'xe.users',
+            'xe.user.groups',
+            'xe.user.virtualGroups',
+            'xe.user.emails',
+            'xe.user.pendingEmails',
+            'xe.user.accounts'
         ];
     }
 
