@@ -65,7 +65,7 @@ class Image extends Media
         $image = static::derives($media) //->where('type', $type)->where('code', $dimension)->first();
             ->whereHas('meta', function ($query) use ($type, $dimension) {
                 $query->where('type', $type)->where('code', $dimension);
-            })->with('meta')->get();
+            })->with('meta')->first();
 
         return (!$image && $defaultSelf) ? $media : $image;
     }
