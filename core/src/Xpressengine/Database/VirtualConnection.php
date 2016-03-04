@@ -343,6 +343,7 @@ class VirtualConnection implements VirtualConnectionInterface
         }
         $query = $this->query();
         $query->setProxyOption($options);
+        $query->useDynamic(true);
         $query->useProxy($proxy);
         return $query->from($table);
 

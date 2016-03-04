@@ -98,6 +98,25 @@ class DynamicQuery extends Builder
     protected $schemas = [];
 
     /**
+     * dynamic query 사용하면서 join 된 테이블 정보
+     * 
+     * @var array
+     */
+    protected $dynamicTables = [];
+
+    /**
+     * dynamic filter 처리 유무
+     *
+     * @param bool $use
+     * @return bool
+     */
+    public function useDynamic($use = true)
+    {
+        $this->dynamic = $use;
+        return true;
+    }
+
+    /**
      * 프록시 처리 유무 설정
      *
      * @param bool $use proxy use
@@ -106,7 +125,6 @@ class DynamicQuery extends Builder
     public function useProxy($use = true)
     {
         $this->proxy = $use;
-        $this->dynamic = $use;
         return $this;
     }
     /**
@@ -145,6 +163,41 @@ class DynamicQuery extends Builder
     private function schema()
     {
         return $this->connection->getSchema($this->from);
+    }
+
+    /**
+     * set dynamic join table information
+     *
+     * @param string $table table name
+     * @return $this
+     */
+    public function setDynamicTable($table)
+    {
+        if ($this->hasDynamicTable($table) === false) {
+            $this->dynamicTables[] = $table;
+        }
+        return $this;
+    }
+
+    /**
+     * has dynamic join table
+     *
+     * @param string $table table name
+     * @return bool
+     */
+    public function hasDynamicTable($table)
+    {
+        return !in_array($table, $this->dynamicTables);
+    }
+
+    /**
+     * get dynamic join table
+     *
+     * @return array
+     */
+    public function getDynamicTables()
+    {
+        return $this->dynamicTables;
     }
 
     /**

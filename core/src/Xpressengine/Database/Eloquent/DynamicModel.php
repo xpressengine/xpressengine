@@ -69,16 +69,6 @@ abstract class DynamicModel extends Model
 
     const UPDATED_AT = 'updatedAt';
 
-    public function __construct(array $attributes = [])
-    {
-        if ($this->dynamic === true) {
-            $this->dynamicAttributes = $attributes;
-            $attributes = $this->filter($attributes);
-        }
-
-        parent::__construct($attributes);
-    }
-
     /**
      * $args 로 넘어온 데이터와 $columns 를 비교해서 $args 값을 거른다.
      * 처리중인 $columns 와 같은 이름을 데이터만 리턴됨
@@ -112,6 +102,16 @@ abstract class DynamicModel extends Model
     private function schema()
     {
         return $this->getConnection()->getSchema($this->getTable());
+    }
+
+    public function fill(array $attributes)
+    {
+        if ($this->dynamic === true) {
+            $this->dynamicAttributes = $attributes;
+            $attributes = $this->filter($attributes);
+        }
+
+        parent::fill($attributes);
     }
 
     /**
@@ -213,6 +213,11 @@ abstract class DynamicModel extends Model
         return $this->proxyOptions;
     }
 
+    public function getDynamicAttributes()
+    {
+        return $this->dynamicAttributes;
+    }
+
     /**
      * Create a new Eloquent query builder for the model.
      * Xpressengine\Database\Eloquent\Builder 울 사용하도록 변경
@@ -269,6 +274,7 @@ abstract class DynamicModel extends Model
         if ($this->dynamic === true) {
             $this->attributes = array_merge($this->dynamicAttributes, $this->attributes);
         }
+
         return parent::save($options);
     }
 }
