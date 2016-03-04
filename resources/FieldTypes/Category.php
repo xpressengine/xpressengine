@@ -4,6 +4,7 @@
  */
 namespace Xpressengine\FieldTypes;
 
+use Xpressengine\Database\DynamicQuery;
 use Xpressengine\DynamicField\DynamicFieldHandler;
 use Xpressengine\DynamicField\AbstractType;
 use Xpressengine\DynamicField\ColumnEntity;
@@ -104,7 +105,7 @@ class Category extends AbstractType
      * @param Builder $query query builder
      * @return Builder
      */
-    public function get(Builder $query)
+    public function get(DynamicQuery $query)
     {
         $config = $this->config;
 
