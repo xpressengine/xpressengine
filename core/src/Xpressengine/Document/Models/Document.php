@@ -164,6 +164,11 @@ class Document extends DynamicModel
         self::PUBLISHED_REJECTED,
     ];
 
+    public function user()
+    {
+        return $this->hasOne('Xpressengine\User\Models\User', 'id', 'userId');
+    }
+
     /**
      * @param ConfigEntity $config
      * @param null $table
