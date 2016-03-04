@@ -117,20 +117,20 @@ class Permission extends AbstractUIObject
             function($group) {
                 return array_only($group->toArray(), ['id','name']);
             },
-            $groupRepo->findAll($grant['group'])
+            $groupRepo->find($grant['group'])->toArray()
         );
         $users = array_map(
             function($user) {
                 return array_only($user->toArray(), ['id','displayName']);
             },
-            $memberRepo->findAll($grant['user'])
+            $memberRepo->find($grant['user'])->toArray()
         );
 
         $excepts = array_map(
             function($except) {
                 return array_only($except->toArray(), ['id','displayName']);
             },
-            $memberRepo->findAll($grant['except'])
+            $memberRepo->find($grant['except'])->toArray()
         );
 
         $permissionValueArray['rating'] = $grant['rating'];
