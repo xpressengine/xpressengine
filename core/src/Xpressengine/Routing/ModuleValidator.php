@@ -18,9 +18,7 @@ use Illuminate\Http\Request;
 use Xpressengine\Http\Request as XeRequest;
 use Illuminate\Routing\Route;
 use Illuminate\Routing\Matching\ValidatorInterface;
-use Xpressengine\Menu\MenuConfigHandler;
 use Xpressengine\Menu\MenuHandler;
-use Xpressengine\Menu\Models\MenuItem;
 use Xpressengine\Site\SiteHandler;
 use Xpressengine\Theme\ThemeHandler;
 
@@ -120,7 +118,7 @@ class ModuleValidator implements ValidatorInterface
                 /**
                  * @var XeRequest $request
                  */
-                $this->setInstanceConfig($instanceRoute, $request, $route);
+                $this->setInstanceConfig($instanceRoute, $request);
 
                 return static::INSTANCE_ROUTE_MATCHED;
             }
@@ -202,7 +200,7 @@ class ModuleValidator implements ValidatorInterface
      *
      * @return void
      */
-    private function setInstanceConfig(InstanceRoute $instanceRoute, XeRequest $request, Route $route)
+    private function setInstanceConfig(InstanceRoute $instanceRoute, XeRequest $request)
     {
         $menuModel = $this->menuHandler->getModel();
         $itemModel = $menuModel::getItemModel();
@@ -225,24 +223,6 @@ class ModuleValidator implements ValidatorInterface
 
         $themeHandler = $this->themeHandler;
         $themeHandler->selectTheme($theme);
-
-        $this->replaceRouteUri($route, $item);
-    }
-
-    /**
-     * Replace route's uri first segment
-     *
-     * @param Route    $route route
-     * @param MenuItem $item  menu item
-     *
-     * @return void
-     */
-    private function replaceRouteUri(Route $route, MenuItem $item)
-    {
-        $action = $route->getAction();
-        $route->setUri(str_replace($action['prefix'], $item->url, $route->getUri()));
-        $action['prefix'] = $item->url;
-        $route->setAction($action);
     }
 
     /**
