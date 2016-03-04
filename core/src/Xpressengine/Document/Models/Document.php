@@ -166,7 +166,7 @@ class Document extends DynamicModel
 
     public function user()
     {
-        return $this->hasOne('Xpressengine\User\Models\User', 'id', 'userId');
+        return $this->belongsTo('Xpressengine\User\Models\User', 'userId');
     }
 
     /**
