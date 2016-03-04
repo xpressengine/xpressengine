@@ -164,14 +164,6 @@ class InstanceManager
 
         $this->dropDivisionTable($config);
 
-        // division table 은 drop 했으므로 처리하지 않는다.
-        $config->set('division', false);
-        while ($docs = $this->repo->fetch(['instanceId' => $config->get('instanceId')], null, $config, $fetchCount)) {
-            foreach ($docs as $doc) {
-                $this->repo->delete(new DocumentEntity($doc), $config);
-            }
-        }
-
         $this->connection->commit();
     }
 

@@ -2,12 +2,12 @@
 namespace App\Http\Controllers;
 
 use App;
-use Input;
 use Presenter;
 use Validator;
 use Hash;
 use Auth;
 use Xpressengine\Config\ConfigEntity;
+use Xpressengine\Http\Request;
 use Xpressengine\Permission\Action;
 use Xpressengine\Support\Exceptions\HttpXpressengineException;
 use Document;
@@ -27,9 +27,9 @@ class DynamicFieldController extends Controller
     /**
      * create instance
      */
-    public function __construct()
+    public function __construct(Request $request)
     {
-        $this->targetName = Input::get('targetName');
+        $this->targetName = $request->get('targetName');
         $this->section = new DynamicFieldSection($this->targetName);
     }
 
@@ -38,7 +38,7 @@ class DynamicFieldController extends Controller
      *
      * @return \Xpressengine\Presenter\RendererInterface
      */
-    public function index()
+    public function index(Request $request)
     {
         /**
          * @var \Xpressengine\DynamicField\DynamicFieldHandler $dynamicField
@@ -46,7 +46,7 @@ class DynamicFieldController extends Controller
         $dynamicField = app('xe.dynamicField');
 
         $list = [];
-        $configs = $dynamicField->getConfigHandler()->gets(Input::get('group'));
+        $configs = $dynamicField->getConfigHandler()->gets($request->get('group'));
         /**
          * @var ConfigEntity $config
          */
@@ -72,7 +72,7 @@ class DynamicFieldController extends Controller
      *
      * @return \Xpressengine\Presenter\RendererInterface
      */
-    public function getSkinOption()
+    public function getSkinOption(Request $request)
     {
         /**
          * @var \Xpressengine\DynamicField\DynamicFieldHandler $dynamicField
@@ -84,7 +84,10 @@ class DynamicFieldController extends Controller
          */
         $configHandler = $dynamicField->getConfigHandler();
         $skinId = '';
-        if (Input::get('id') != null && $config = $configHandler->get(Input::get('group'), Input::get('id'))) {
+        if (
+            $request->get('id') != null &&
+            $config = $configHandler->get($request->get('group'), $request->get('id'))
+        ) {
             $skinId = $config->skinId;
         }
 
@@ -98,7 +101,7 @@ class DynamicFieldController extends Controller
          * @var \Generator $skins
          */
         $skins = [];
-        foreach ($registerHandler->getSkinsByType($dynamicField, Input::get('typeId')) as $skin) {
+        foreach ($registerHandler->getSkinsByType($dynamicField, $request->get('typeId')) as $skin) {
             $skins[$skin->getId()] = $skin->name();
         }
 
@@ -113,7 +116,7 @@ class DynamicFieldController extends Controller
      *
      * @return \Xpressengine\Presenter\RendererInterface
      */
-    public function getAdditionalConfigure()
+    public function getAdditionalConfigure(Request $request)
     {
         /**
          * @var \Xpressengine\DynamicField\DynamicFieldHandler $dynamicField
@@ -122,12 +125,12 @@ class DynamicFieldController extends Controller
 
         $configHandler = $dynamicField->getConfigHandler();
 
-        $config = $configHandler->get(Input::get('group'), Input::get('id'));
+        $config = $configHandler->get($request->get('group'), $request->get('id'));
 
         $registerHandler = $dynamicField->getRegisterHandler();
 
-        $fieldType = $registerHandler->getType($dynamicField, Input::get('typeId'));
-        $fieldSkin = $registerHandler->getSkin($dynamicField, Input::get('skinId'));
+        $fieldType = $registerHandler->getType($dynamicField, $request->get('typeId'));
+        $fieldSkin = $registerHandler->getSkin($dynamicField, $request->get('skinId'));
 
         return Presenter::makeApi([
             'configure' => $fieldType->getSettingsView($config) . $fieldSkin->settings($config),
@@ -139,14 +142,14 @@ class DynamicFieldController extends Controller
      *
      * @return \Xpressengine\Presenter\RendererInterface
      */
-    public function store()
+    public function store(Request $request)
     {
         /**
          * @var \Xpressengine\DynamicField\DynamicFieldHandler $dynamicField
          */
         $dynamicField = app('xe.dynamicField');
 
-        $inputs = Input::all();
+        $inputs = $request->all();
         unset($inputs['databaseName']);
 
         /**
@@ -159,7 +162,7 @@ class DynamicFieldController extends Controller
         $fieldSkin = $registerHandler->getSkin($dynamicField, $inputs['skinId']);
         $rules = array_merge($rules, $fieldType->getSettingsRules(), $fieldSkin->getSettingRules());
 
-        $this->validate(Input::instance(), $rules);
+        $this->validate($request->instance(), $rules);
 
         $configHandler = $dynamicField->getConfigHandler();
 
@@ -168,7 +171,7 @@ class DynamicFieldController extends Controller
             $config->set($name, $value);
         }
 
-        $dynamicField->setConnection(XeDB::connection(Input::get('databaseName')));
+        $dynamicField->setConnection(XeDB::connection($request->get('databaseName')));
         $dynamicField->create($config);
 
 
@@ -193,7 +196,7 @@ class DynamicFieldController extends Controller
          */
         $dynamicField = app('xe.dynamicField');
 
-        $inputs = Input::all();
+        $inputs = $request->all();
         unset($inputs['databaseName']);
 
         /**
@@ -213,7 +216,7 @@ class DynamicFieldController extends Controller
             $config->set($name, $value);
         }
 
-        $dynamicField->setConnection(XeDB::connection(Input::get('databaseName')));
+        $dynamicField->setConnection(XeDB::connection($request->get('databaseName')));
         $dynamicField->put($config);
 
         $row = $config->getPureAll();
@@ -241,7 +244,7 @@ class DynamicFieldController extends Controller
          * @var \Xpressengine\DynamicField\ConfigHandler $configHandler
          */
         $configHandler = $dynamicField->getConfigHandler();
-        $config = $configHandler->get(Input::get('group'), Input::get('id'));
+        $config = $configHandler->get($request->get('group'), $request->get('id'));
 
         return Presenter::makeApi([
             'config' => $config->getPureAll(),
@@ -265,13 +268,13 @@ class DynamicFieldController extends Controller
          */
         $configHandler = $dynamicField->getConfigHandler();
 
-        $config = $configHandler->get(Input::get('group'), Input::get('id'));
+        $config = $configHandler->get($request->get('group'), $request->get('id'));
 
-        $dynamicField->setConnection(XeDB::connection(Input::get('databaseName')));
+        $dynamicField->setConnection(XeDB::connection($request->get('databaseName')));
         $dynamicField->drop($config);
 
         return Presenter::makeApi([
-            'id' => Input::get('id'),
+            'id' => $request->get('id'),
         ]);
     }
 }

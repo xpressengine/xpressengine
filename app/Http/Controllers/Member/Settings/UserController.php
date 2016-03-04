@@ -12,6 +12,7 @@ use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
 use Xpressengine\User\Exceptions\EmailNotFoundException;
 use Xpressengine\User\Exceptions\MailAlreadyExistsException;
 use Xpressengine\User\Rating;
+use Xpressengine\User\Repositories\UserRepository;
 use Xpressengine\User\UserHandler;
 use Xpressengine\User\UserInterface;
 
@@ -45,9 +46,12 @@ class UserController extends Controller
 
         // resolve group
         if ($group = $request->get('group')) {
-            $query = $query->whereHas('groups', function(Builder $q) use ($group) {
-                $q->where('id', $group);
-            });
+            $query = $query->whereHas(
+                'groups',
+                function (Builder $q) use ($group) {
+                    $q->where('id', $group);
+                }
+            );
         }
 
         // resolve status
@@ -61,11 +65,13 @@ class UserController extends Controller
         $field = ($field === '') ? 'email,displayName' : $field;
 
         if ($keyword = $request->get('keyword')) {
-            $query = $query->where(function(Builder $q) use ($field, $keyword) {
-                foreach(explode(',',$field) as $f) {
-                    $q->orWhere($f, 'like', '%'.$keyword.'%');
-                };
-            });
+            $query = $query->where(
+                function (Builder $q) use ($field, $keyword) {
+                    foreach (explode(',', $field) as $f) {
+                        $q->orWhere($f, 'like', '%'.$keyword.'%');
+                    };
+                }
+            );
         }
 
         $users = $query->paginate();
@@ -148,7 +154,10 @@ class UserController extends Controller
         }
         XeDB::commit();
 
-        return redirect()->route('settings.member.index')->with('alert', ['type' => 'success', 'message' => '추가되었습니다.']);
+        return redirect()->route('settings.member.index')->with(
+            'alert',
+            ['type' => 'success', 'message' => '추가되었습니다.']
+        );
     }
 
     /**
@@ -188,7 +197,7 @@ class UserController extends Controller
         $groupList = $this->handler->groups()->all();
         $groups = $this->getGroupInfo($groupList);
 
-        foreach($user->groups as $group) {
+        foreach ($user->groups as $group) {
             $groups[$group->id]['checked'] = 'checked';
         }
 
@@ -312,7 +321,7 @@ class UserController extends Controller
         $userId = $request->get('userId');
         $address = $request->get('address');
 
-        if($this->handler->emails()->findByAddress($address)) {
+        if ($this->handler->emails()->findByAddress($address)) {
             throw new MailAlreadyExistsException();
         }
 
@@ -388,7 +397,7 @@ class UserController extends Controller
 
         $mail = $this->handler->emails()->findByAddress($address);
 
-        if($mail === null) {
+        if ($mail === null) {
             throw new EmailNotFoundException();
         }
 
@@ -429,19 +438,23 @@ class UserController extends Controller
     /**
      * searchMember
      *
-     * @param null                      $keyword
+     * @param null $keyword
      *
      * @return \Xpressengine\Presenter\RendererInterface
      */
     public function searchMember($keyword = null)
     {
+        /** @var UserRepository $users */
         $users = $this->handler->users();
 
         if ($keyword === null) {
             return Presenter::makeApi($users->paginate());
         }
 
-        $matchedMemberList = $users->search(['displayName' => $keyword])->items();
+        $matchedMemberList = (array) $users->query()->where('displayName', 'like', '%'.$keyword.'%')->get(
+            ['id', 'displayName', 'email']
+        );
+
         return Presenter::makeApi($matchedMemberList);
     }
 
@@ -462,6 +475,5 @@ class UserController extends Controller
             ];
         }
         return $groups;
-
-}
+    }
 }

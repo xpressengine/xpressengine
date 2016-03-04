@@ -84,7 +84,7 @@ interface MenuTypeInterface
     public function updateMenu($instanceId, $menuTypeParams, $itemParams);
 
     /**
-     * summary
+     * displayed message when menu is deleted.
      *
      * @param string $instanceId to summary before deletion instance id
      *
