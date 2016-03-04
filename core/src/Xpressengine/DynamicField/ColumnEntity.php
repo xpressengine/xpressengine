@@ -136,15 +136,14 @@ class ColumnEntity extends Entity
 
         $column = call_user_func_array(array($table, $this->{'dataType'}), $params);
 
-        if ($this->{'nullAble'} != null) {
-            $column->nullable($this->{'nullAble'});
+        if ($this->get('nullAble') != null) {
+            $column->nullable($this->get('nullAble'));
         }
-
-        if ($this->{'unsigned'} != null) {
-            $column->unsigned($this->{'unsigned'});
+        if ($this->get('unsigned') != null) {
+            $column->unsigned($this->get('unsigned'));
         }
-        if ($this->{'default'} != null) {
-            $column->default($this->{'default'});
+        if ($this->get('default') != null) {
+            $column->default($this->get('default'));
         }
     }
 
