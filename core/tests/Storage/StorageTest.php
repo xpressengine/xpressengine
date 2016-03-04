@@ -308,7 +308,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     {
         return [
             m::mock('Xpressengine\Storage\FilesystemHandler'),
-            m::mock('Xpressengine\Member\GuardInterface'),
+            m::mock('Xpressengine\User\GuardInterface'),
             m::mock('Xpressengine\Keygen\Keygen'),
             m::mock('Xpressengine\Storage\Distributor'),
             m::mock('Xpressengine\Storage\TempFileCreator'),

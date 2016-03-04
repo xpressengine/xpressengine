@@ -3,6 +3,7 @@ namespace Xpressengine\Tests\Seo;
 
 use Mockery as m;
 use Xpressengine\Seo\Setting;
+use Xpressengine\Storage\File;
 
 class SettingTest extends \PHPUnit_Framework_TestCase
 {
@@ -83,14 +84,16 @@ class SettingTest extends \PHPUnit_Framework_TestCase
         $instance->shouldReceive('get')->with('uuid')->andReturn($id);
 
         $mockFile = m::mock('Xpressengine\Storage\File');
-        $mockImage = m::mock('Xpressengine\Media\Spec\Image');
+        $mockImage = m::mock('Xpressengine\Media\Models\Image');
 
-        $storage->shouldReceive('getsByTargetId')->once()->with($id)->andReturn([$mockFile]);
+        $mockFile->shouldReceive('getByFileable')->with($id)->andReturn([$mockFile]);
+
+        $storage->shouldReceive('createModel')->andReturn($mockFile);
         $media->shouldReceive('make')->once()->with($mockFile)->andReturn($mockImage);
 
         $image = $instance->getSiteImage();
 
-        $this->assertInstanceOf('Xpressengine\Media\Spec\Image', $image);
+        $this->assertInstanceOf('Xpressengine\Media\Models\Image', $image);
     }
 
     public function testSetSiteImage()
@@ -102,14 +105,12 @@ class SettingTest extends \PHPUnit_Framework_TestCase
 
         $id = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx';
 
-        $mockFile = m::mock('Xpressengine\Storage\File');
-        $mockImage = m::mock('Xpressengine\Media\Spec\Image');
-        $mockImage->shouldReceive('getFile')->andReturn($mockFile);
+        $mockImage = m::mock('Xpressengine\Media\Models\Image');
 
         $instance->shouldReceive('get')->with('uuid')->andReturn($id);
 
-        $storage->shouldReceive('removeAll')->once()->with($id);
-        $storage->shouldReceive('bind')->once()->with($id, $mockFile);
+        $storage->shouldReceive('unBindAll')->once()->with($id);
+        $storage->shouldReceive('bind')->once()->with($id, $mockImage);
 
         $instance->setSiteImage($mockImage);
     }
