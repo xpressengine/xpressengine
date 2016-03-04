@@ -36,6 +36,8 @@ class Category extends DynamicModel
      */
     protected $table = 'category_group';
 
+    protected $guarded = ['id'];
+
     /**
      * Category item model
      *
