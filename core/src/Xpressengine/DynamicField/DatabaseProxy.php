@@ -130,6 +130,8 @@ class DatabaseProxy implements ProxyInterface
 
         if (isset($this->options['revision'])) {
             $this->revision = $this->options['revision'];
+        } else {
+            $this->revision = false;
         }
     }
 
@@ -153,7 +155,6 @@ class DatabaseProxy implements ProxyInterface
                 } else {
                     $type->insert($args);
                 }
-
             }
         }
     }
