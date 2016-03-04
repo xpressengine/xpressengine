@@ -61,7 +61,7 @@ class SeoHandlerTest extends \PHPUnit_Framework_TestCase
 
         $translator->shouldReceive('trans')->once()->with('site name')->andReturn('site name');
 
-        $mockImage = m::mock('Xpressengine\Media\Spec\Image');
+        $mockImage = m::mock('Xpressengine\Media\Models\Image');
         $mockImage->shouldReceive('url')->once()->andReturn('/path/to/image');
         $setting->shouldReceive('getSiteImage')->once()->andReturn($mockImage);
 

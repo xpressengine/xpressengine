@@ -32,7 +32,7 @@ class PolicyTest extends \PHPUnit_Framework_TestCase
         $mockPermission->shouldReceive('offsetGet')->with('update')->andReturn($updateGrant);
         $mockPermission->shouldReceive('offsetGet')->with('read')->andReturn($readGrant);
 
-        $mockUser = m::mock('Xpressengine\Member\Entities\Guest');
+        $mockUser = m::mock('Xpressengine\User\Models\Guest');
         $mockUser->shouldReceive('getId')->andReturnNull();
         $mockUser->shouldReceive('getGroups')->andReturn([]);
 
@@ -50,7 +50,7 @@ class PolicyTest extends \PHPUnit_Framework_TestCase
     {
         return [
             m::mock('Xpressengine\Permission\PermissionHandler'),
-            m::mock('Xpressengine\Member\Repositories\VirtualGroupRepositoryInterface'),
+            m::mock('Xpressengine\User\Repositories\VirtualGroupRepositoryInterface'),
         ];
     }
 }

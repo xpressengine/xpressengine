@@ -116,9 +116,7 @@ class MenuHandler
      */
     public function create(array $inputs)
     {
-        $class = $this->getModel();
-        /** @var Menu $menu */
-        $menu = new $class;
+        $menu = $this->createModel();
         $menu->fill($inputs);
 
         $cnt = 0;
@@ -181,9 +179,7 @@ class MenuHandler
      */
     public function createItem(Menu $menu, array $inputs)
     {
-        $class = $menu->getItemModel();
-        /** @var MenuItem $item */
-        $item = new $class;
+        $item = $this->createItemModel($menu);
         $item->fill($inputs);
         $item->menuId = $menu->getKey();
 
@@ -204,7 +200,7 @@ class MenuHandler
         $item->ancestors()->attach($item->getKey(), [$item->getDepthName() => 0]);
         if ($item->{$item->getParentIdName()}) {
             /** @var MenuItem $parent */
-            $parent = $class::find($item->{$item->getParentIdName()});
+            $parent = $item->newQuery()->find($item->{$item->getParentIdName()});
             $ascIds = array_reverse($parent->getBreadcrumbs());
 
             foreach ($ascIds as $idx => $ascId) {
@@ -295,13 +291,12 @@ class MenuHandler
     public function moveItem(Menu $menu, MenuItem $item, MenuItem $parent = null)
     {
         if ($parent && $menu->getKey() != $parent->menu->getKey()) {
-            // todo: exception 수정
-            throw new InvalidArgumentException;
+            throw new InvalidArgumentException(['name' => 'parent object']);
         }
 
         if ($item->{$item->getParentIdName()}) {
-            $class = $menu->getItemModel();
-            $oldParent = $class::find($item->{$item->getParentIdName()});
+            $model = $this->createItemModel($menu);
+            $oldParent = $model->newQuery()->find($item->{$item->getParentIdName()});
             $this->unlinkHierarchy($item, $oldParent);
             $item->{$item->getParentIdName()} = null;
         }
@@ -653,6 +648,18 @@ class MenuHandler
     }
 
     /**
+     * Create new menu model
+     *
+     * @return Menu
+     */
+    public function createModel()
+    {
+        $class = $this->getModel();
+
+        return new $class;
+    }
+
+    /**
      * Get menu model
      *
      * @return string
@@ -671,6 +678,19 @@ class MenuHandler
     public function setModel($model)
     {
         $this->model = '\\' . ltrim($model, '\\');
+    }
+
+    /**
+     * Create new menu item model
+     *
+     * @param Menu $menu menu instance
+     * @return mixed
+     */
+    public function createItemModel(Menu $menu)
+    {
+        $class = $menu->getItemModel();
+
+        return new $class;
     }
 
     /**
