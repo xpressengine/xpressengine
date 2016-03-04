@@ -13,6 +13,7 @@
  */
 namespace Xpressengine\Document\Models;
 
+use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Database\Eloquent\DynamicModel;
 
 /**
@@ -75,10 +76,15 @@ class Revision extends DynamicModel
         'revisionNo', 'id', 'parentId', 'instanceId', 'userId', 'writer', 'approved',
         'published', 'status', 'display', 'locale', 'title',
         'content', 'pureContent', 'createdAt', 'publishedAt', 'head', 'reply',
-        'listOrder', 'ipaddress',
+        'listOrder', 'ipaddress', 'userType', 'certifyKey', 'email',
     ];
 
     protected $dynamic = true;
 
     protected $primaryKey = 'revisionId';
+
+    public function user()
+    {
+        return $this->belongsTo('Xpressengine\User\Models\User', 'userId');
+    }
 }

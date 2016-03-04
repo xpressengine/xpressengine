@@ -178,7 +178,8 @@ class Document extends DynamicModel
         $this->config = $config;
         $this->division = $config->get('division');
         $this->setProxyOptions([
-            'id' => $config->get('instanceId')
+            'id' => $config->get('instanceId'),
+            'group' => $config->get('group'),
         ]);
         if ($table !== null) {
             $this->table = $table;
@@ -196,6 +197,7 @@ class Document extends DynamicModel
 
         if ($this->division === true) {
             $clone = clone $query;
+            $clone->useProxy(false);
             $clone->getQuery()->from = self::TABLE_NAME;
             $clone->insert($this->attributes);
         }
@@ -216,6 +218,7 @@ class Document extends DynamicModel
 
         if ($this->division === true) {
             $clone = clone $query;
+            $clone->useProxy(false);
             $clone->getQuery()->from = self::TABLE_NAME;
             $dirty = $this->getDirty();
             if (count($dirty) > 0) {

@@ -244,10 +244,10 @@ class DocumentHandler
         }
 
         $doc->checkRequired($attributes);
-        $doc->fill($doc->filter($attributes));
+        $doc->fill($attributes);
         $result = $doc->save();
 
-        $this->addRevision($doc->toArray());
+        $this->addRevision($doc);
 
         $doc->getConnection()->commit();
 
@@ -271,18 +271,40 @@ class DocumentHandler
         // 검증해야함
         $this->removeDivision($doc);
 
-        $this->addRevision($doc->toArray());
+        $this->addRevision($doc);
 
         $doc->getConnection()->commit();
 
         return $doc;
     }
 
-    public function addRevision(array $args)
+    public function addRevision(Document $doc)
     {
+        $config = $this->getConfig($doc->instanceId);
+        if ($config === null) {
+            return false;
+        }
+        if ($config->get('revision') !== true) {
+            return false;
+        }
+
+        $revisionNo = 0;
+        $lastRevision = Revision::where('id', $doc->id)->max('revisionNo');
+        if ($lastRevision !== null) {
+            $revisionNo = $lastRevision + 1;
+        }
+
         // insert to revision database table
-        $revisionDoc = new Revision($args);
+        $revisionDoc = new Revision(array_merge($doc->getDynamicAttributes(), $doc->getAttributes()));
+        $revisionDoc->setProxyOptions([
+            'id' => $config->get('instanceId'),
+            'group' => $config->get('group'),
+            'revision' => true,
+        ]);
+        $revisionDoc->revisionNo = $revisionNo;
         $revisionDoc->save();
+
+        return true;
     }
 
     /**
