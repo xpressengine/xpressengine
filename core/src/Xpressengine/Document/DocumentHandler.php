@@ -184,10 +184,10 @@ class DocumentHandler
      */
     public function createInstance($instanceId, $params = [])
     {
-        $documentConfig = $this->configHandler->make($instanceId, $params);
-        $this->instanceManager->add($documentConfig);
+        $config = $this->configHandler->make($instanceId, $params);
+        $this->instanceManager->add($config);
 
-        return $documentConfig;
+        return $config;
     }
 
     /**
@@ -198,8 +198,15 @@ class DocumentHandler
      */
     public function destroyInstance($instanceId)
     {
-        $documentConfig = $this->configHandler->get($instanceId);
-        $this->instanceManager->remove($documentConfig);
+        $config = $this->configHandler->get($instanceId);
+        $this->instanceManager->remove($config);
+
+        $documentHandler = $this;
+        Document::where('instanceId', $config->get('instanceId'))->chunk(100, function ($docs) use ($documentHandler) {
+            foreach ($docs as $doc) {
+                $documentHandler->remove($doc);
+            }
+        });
     }
 
     /**
@@ -311,15 +318,6 @@ class DocumentHandler
     {
         $this->conn->beginTransaction();
 
-        $config = $this->configHandler->getOrDefault($doc->instanceId);
-
-        if ($config->get('division') == true) {
-            /** @var Document $divisionDoc */
-            //$divisionDoc = Document::where('id', $doc->id);
-            //$divisionDoc->setDivision($config)->delete();
-        }
-
-        $doc->setProxyOptions($this->proxyOption($config));
         $result = $doc->delete();
 
         $this->conn->commit();
