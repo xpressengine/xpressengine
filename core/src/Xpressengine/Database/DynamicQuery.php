@@ -99,7 +99,7 @@ class DynamicQuery extends Builder
 
     /**
      * dynamic query 사용하면서 join 된 테이블 정보
-     * 
+     *
      * @var array
      */
     protected $dynamicTables = [];
@@ -108,25 +108,26 @@ class DynamicQuery extends Builder
      * dynamic filter 처리 유무
      *
      * @param bool $use
-     * @return bool
+     * @return $this
      */
     public function useDynamic($use = true)
     {
         $this->dynamic = $use;
-        return true;
+        return $this;
     }
 
     /**
      * 프록시 처리 유무 설정
      *
      * @param bool $use proxy use
-     * @return DynamicQuery
+     * @return $this
      */
     public function useProxy($use = true)
     {
         $this->proxy = $use;
         return $this;
     }
+
     /**
      * proxy 를 위한 options 설정
      *
@@ -187,7 +188,7 @@ class DynamicQuery extends Builder
      */
     public function hasDynamicTable($table)
     {
-        return !in_array($table, $this->dynamicTables);
+        return in_array($table, $this->dynamicTables);
     }
 
     /**
@@ -387,6 +388,25 @@ class DynamicQuery extends Builder
             $this->query = $this->getProxyManager()->first($this);
         }
         return parent::first($columns);
+    }
+
+    /**
+     * Execute a query for a single record by ID.
+     *
+     * @param  int    $id
+     * @param  array  $columns
+     * @return mixed|static
+     */
+    public function find($id, $columns = ['*'])
+    {
+        if ($this->dynamic === false) {
+            return parent::find($id, $columns);
+        }
+
+        if ($this->proxy === true) {
+            $this->query = $this->getProxyManager()->first($this);
+        }
+        return parent::find($id, $columns);
     }
 
     /**
