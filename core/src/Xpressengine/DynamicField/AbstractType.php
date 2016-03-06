@@ -636,8 +636,11 @@ abstract class AbstractType implements ComponentInterface
      * @param ConfigEntity $config config entity
      * @return Builder
      */
-    protected function join(DynamicQuery $query, ConfigEntity $config)
+    public function join(DynamicQuery $query, ConfigEntity $config = null)
     {
+        if ($config === null) {
+            $config = $this->config;
+        }
         $baseTable = $query->from;
         $createTableName = $this->handler->getConfigHandler()->getTableName($config);
         if ($query->hasDynamicTable($createTableName)) {
