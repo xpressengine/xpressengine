@@ -48,7 +48,7 @@ class UserRepository implements UserRepositoryInterface
      */
     public function create(array $data)
     {
-        $model = $this->newModel();
+        $model = $this->createModel();
         if (array_has($data, 'password')) {
             $data['passwordUpdatedAt'] = $model->freshTimestamp();
         }
@@ -68,7 +68,7 @@ class UserRepository implements UserRepositoryInterface
     {
 
         if ($user->isDirty('password') || (!empty($data['password']) && $user->password !== $data['password'])) {
-            $model = $this->newModel();
+            $model = $this->createModel();
             $data['passwordUpdatedAt'] = $model->freshTimestamp();
         }
 
