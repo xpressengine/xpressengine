@@ -295,7 +295,7 @@ class AuthController extends Controller
      */
     protected function checkJoinable()
     {
-        $config = app('xe.config')->get('member.join');
+        $config = app('xe.config')->get('user.join');
         if ($config->get('joinable') !== true) {
             throw new JoinNotAllowedException();
         }
