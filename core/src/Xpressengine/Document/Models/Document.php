@@ -232,6 +232,12 @@ class Document extends DynamicModel
     protected function performDeleteOnModel()
     {
         parent::performDeleteOnModel();
+
+        if ($this->division === true) {
+            $clone = clone $this;
+            $clone->table = static::TABLE_NAME;
+            $clone->setKeysForSaveQuery($clone->newQueryWithoutScopes())->delete();
+        }
     }
 
     /**
@@ -280,6 +286,9 @@ class Document extends DynamicModel
         }
         if ($attributes['published'] == 'published' && empty($attributes['publishedAt']) === true) {
             $attributes['publishedAt'] = $this->freshTimestamp();
+        }
+        if (empty($attributes['reply']) === true) {
+            $attributes['reply'] = '';
         }
         if (empty($attributes['locale']) === true) {
             $attributes['locale'] = 'default';
