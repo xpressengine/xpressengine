@@ -23,8 +23,10 @@ use Xpressengine\Menu\Exceptions\CanNotDeleteMenuItemHaveChildException;
 use Xpressengine\Menu\Exceptions\InvalidArgumentException;
 use Xpressengine\Menu\Models\Menu;
 use Xpressengine\Menu\Models\MenuItem;
+use Xpressengine\Module\ModuleHandler;
 use Xpressengine\Permission\Grant;
 use Xpressengine\Permission\PermissionHandler;
+use Xpressengine\Routing\RouteRepository;
 
 /**
  * # MenuHandler
@@ -67,6 +69,20 @@ class MenuHandler
     protected $permissions;
 
     /**
+     * ModuleHandler instance
+     *
+     * @var ModuleHandler
+     */
+    protected $modules;
+
+    /**
+     * RouteRepository instance
+     *
+     * @var RouteRepository
+     */
+    protected $routes;
+
+    /**
      * Menu keyword for config
      *
      * @var string
@@ -100,12 +116,21 @@ class MenuHandler
      * @param Keygen            $keygen      Keygen instance
      * @param ConfigManager     $configs     ConfigManager instance
      * @param PermissionHandler $permissions PermissionHandler instance
+     * @param ModuleHandler     $modules     ModuleHandler instance
+     * @param RouteRepository   $routes      RouteRepository instance
      */
-    public function __construct(Keygen $keygen, ConfigManager $configs, PermissionHandler $permissions)
-    {
+    public function __construct(
+        Keygen $keygen,
+        ConfigManager $configs,
+        PermissionHandler $permissions,
+        ModuleHandler $modules,
+        RouteRepository $routes
+    ) {
         $this->keygen = $keygen;
         $this->configs = $configs;
         $this->permissions = $permissions;
+        $this->modules = $modules;
+        $this->routes = $routes;
     }
 
     /**
@@ -132,6 +157,8 @@ class MenuHandler
                 }
             }
         }
+
+        $this->registerDefaultPermission($menu);
 
         return $menu;
     }
@@ -173,11 +200,12 @@ class MenuHandler
     /**
      * Create new menu item
      *
-     * @param Menu  $menu   menu instance
-     * @param array $inputs item's attributes
+     * @param Menu  $menu          menu instance
+     * @param array $inputs        item's attributes
+     * @param array $menuTypeInput input for menu type module
      * @return MenuItem
      */
-    public function createItem(Menu $menu, array $inputs)
+    public function createItem(Menu $menu, array $inputs, array $menuTypeInput = [])
     {
         $item = $this->createItemModel($menu);
         $item->fill($inputs);
@@ -211,22 +239,71 @@ class MenuHandler
         $this->setOrder($item, $inputs['ordering']);
         $this->registerItemPermission($item, new Grant);
 
+        $this->storeMenuType($item, $menuTypeInput);
+
         return $item;
+    }
+
+    /**
+     * Store menu type associated with the menu item.
+     *
+     * @param MenuItem $item          menu item instance
+     * @param array    $menuTypeInput input for menu type module
+     * @return void
+     */
+    protected function storeMenuType(MenuItem $item, array $menuTypeInput)
+    {
+        $menuTypeObj = $this->modules->getModuleObject($item->type);
+        $menuTypeObj->storeMenu($item->getKey(), $menuTypeInput, $item->getAttributes());
+
+        // 메뉴 타입이 route 를 사용하는 경우 instance route 를 추가해 줌
+        if ($menuTypeObj::isRouteAble()) {
+            $this->routes->create([
+                'url' => $item->url,
+                'module' => $menuTypeObj::getId(),
+                'instanceId' => $item->id,
+                'menuId' => $item->menuId,
+                'siteKey' => $item->menu->siteKey
+            ]);
+        }
     }
 
     /**
      * Update menu item
      *
-     * @param MenuItem $item item instance
+     * @param MenuItem $item          item instance
+     * @param array    $menuTypeInput input for menu type module
      * @return MenuItem
      */
-    public function putItem(MenuItem $item)
+    public function putItem(MenuItem $item, array $menuTypeInput)
     {
         if ($item->isDirty()) {
             $item->save();
         }
 
+        $this->updateMenuType($item, $menuTypeInput);
+
         return $item;
+    }
+
+    /**
+     * Update menu type associated with the menu item.
+     *
+     * @param MenuItem $item          menu item instance
+     * @param array    $menuTypeInput input for menu type module
+     * @return void
+     */
+    protected function updateMenuType(MenuItem $item, array $menuTypeInput)
+    {
+        $menuTypeObj = $this->modules->getModuleObject($item->type);
+        $menuTypeObj->updateMenu($item->getKey(), $menuTypeInput, $item->getAttributes());
+
+        if ($menuTypeObj::isRouteAble()) {
+            $instanceRoute = $this->routes->findByInstanceId($item->getKey());
+            $instanceRoute->url = $item->url;
+
+            $this->routes->put($instanceRoute);
+        }
     }
 
     /**
@@ -245,7 +322,28 @@ class MenuHandler
         $this->deleteItemPermission($item);
         $item->ancestors()->detach($item);
 
-        return $item->delete();
+        $result = $item->delete();
+
+        $this->destroyMenuType($item);
+
+        return $result;
+    }
+
+    /**
+     * Destroy menu type associated with the menu item.
+     *
+     * @param MenuItem $item          menu item instance
+     * @return void
+     */
+    protected function destroyMenuType(MenuItem $item)
+    {
+        $menuTypeObj = $this->modules->getModuleObject($item->type);
+        $menuTypeObj->deleteMenu($item->getKey());
+
+        if ($menuTypeObj::isRouteAble()) {
+            $instanceRoute = $this->routes->findByInstanceId($item->getKey());
+            $this->routes->delete($instanceRoute);
+        }
     }
 
     /**
@@ -537,7 +635,7 @@ class MenuHandler
      * @param Menu $menu menu instance
      * @return void
      */
-    public function registerDefaultPermission(Menu $menu)
+    protected function registerDefaultPermission(Menu $menu)
     {
         $grant = new Grant();
 
@@ -686,8 +784,9 @@ class MenuHandler
      * @param Menu $menu menu instance
      * @return mixed
      */
-    public function createItemModel(Menu $menu)
+    public function createItemModel(Menu $menu = null)
     {
+        $menu = $menu ?: $this->createModel();
         $class = $menu->getItemModel();
 
         return new $class;
@@ -702,7 +801,7 @@ class MenuHandler
     {
         $newId = substr($this->keygen->generate(), 0, 8);
 
-        if (is_int($newId)) {
+        if (!preg_match('/[^0-9]/', $newId)) {
             $newId = $this->generateNewId();
         }
 

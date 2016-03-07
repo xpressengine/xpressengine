@@ -48,7 +48,7 @@ class XeInstall extends Command
         'ckeditor',
         'ckeditor_plugin',
         'claim',
-        'comment_service',
+        'comment',
         'page',
         'short_id_generator',
     ];
