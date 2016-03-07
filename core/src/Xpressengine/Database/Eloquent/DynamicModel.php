@@ -69,6 +69,8 @@ abstract class DynamicModel extends Model
 
     const UPDATED_AT = 'updatedAt';
 
+    const DELETED_AT = 'deletedAt';
+
     /**
      * $args 로 넘어온 데이터와 $columns 를 비교해서 $args 값을 거른다.
      * 처리중인 $columns 와 같은 이름을 데이터만 리턴됨
