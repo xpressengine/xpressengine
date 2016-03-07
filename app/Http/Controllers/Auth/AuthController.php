@@ -76,7 +76,7 @@ class AuthController extends Controller
 
         // dynamic field
         $dynamicField = app('xe.dynamicField');
-        $fieldTypes = $dynamicField->gets('member');
+        $fieldTypes = $dynamicField->gets('user');
 
         // join config
         $config = app('xe.config')->get('user.join');
@@ -100,7 +100,7 @@ class AuthController extends Controller
 
         $this->validate(
             $request, [
-                'email' => 'email|required|unique:member_mails,address',
+                'email' => 'email|required',
                 'displayName' => 'required',
                 'password' => 'required|confirmed|password',
                 'agree' => 'required',
@@ -115,11 +115,11 @@ class AuthController extends Controller
 
         XeDB::beginTransaction();
         try {
-            $member = $this->handler->create($userData);
+            $user = $this->handler->create($userData);
 
             // if email confirmation enabled, send email for confirm
             if ($this->useEmailConfirm() !== false) {
-                $mail = $member->getPendingEmail();
+                $mail = $user->getPendingEmail();
                 try {
                     /** @var EmailBrokerInterface $broker */
                     $this->emailBroker->sendEmailForConfirmation($mail);
@@ -130,7 +130,7 @@ class AuthController extends Controller
                 XeDB::commit();
                 // redirect to email confirm info page
                 return redirect()
-                    ->route('auth.confirm', ['email' => $member->email])
+                    ->route('auth.confirm', ['email' => $user->email])
                     ->with('alert', ['type' => 'info', 'message' => '회원가입이 정상적으로 처리되었습니다. 회원계정을 활성화하려면 이메일 인증을 하셔야 합니다.']);
             }
 
@@ -142,7 +142,7 @@ class AuthController extends Controller
 
 
         // login and redirect
-        $this->auth->login($member);
+        $this->auth->login($user);
         return redirect($this->redirectPath());
     }
 
@@ -295,7 +295,7 @@ class AuthController extends Controller
      */
     protected function checkJoinable()
     {
-        $config = app('xe.config')->get('member.join');
+        $config = app('xe.config')->get('user.join');
         if ($config->get('joinable') !== true) {
             throw new JoinNotAllowedException();
         }
