@@ -17,7 +17,7 @@ class RoutingMigration implements Migration {
             $table->string('module');
             $table->string('instanceId');
             $table->string('menuId');
-            $table->string('site');
+            $table->string('siteKey');
 
             $table->unique('instanceId');
         });
