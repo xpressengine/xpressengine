@@ -338,6 +338,21 @@ class Storage
     }
 
     /**
+     * has
+     *
+     * @param string $fileableId fileable identifier
+     * @param File   $file       file instance
+     * @return bool
+     */
+    public function has($fileableId, File $file)
+    {
+        return $file->getConnection()->table($file->getFileableTable())
+            ->where('fileId', $file->getKey())
+            ->where('fileableId', $fileableId)
+            ->first() === null ? false : true;
+    }
+
+    /**
      * set the target be not have a file
      *
      * @param string $fileableId fileable identifier
