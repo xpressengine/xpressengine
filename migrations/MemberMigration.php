@@ -116,7 +116,7 @@ class MemberMigration implements Migration {
         \DB::table('config')->insert([
                                          ['name' => 'member', 'vars' => '[]'],
                                          ['name' => 'member.common', 'vars' => '{"secureLevel":"low","useCaptcha":false,"webmasterName":"webmaster","webmasterEmail":"webmaster@domain.com"}'],
-                                         ['name' => 'member.join', 'vars' => '{"joinable":true,"useMailCertify":false,"agreement":"","useCaptcha":false}'],
+                                         ['name' => 'member.join', 'vars' => '{"joinable":true,"useEmailCertify":false,"agreement":"","useCaptcha":false}'],
                                          ['name' => 'member.usermenu', 'vars' => '{"activate":[]}'],
                                      ]);
     }
