@@ -27,4 +27,5 @@ use Xpressengine\DynamicField\DynamicFieldException;
  */
 class RequiredDynamicFieldException extends DynamicFieldException
 {
+    protected $message = '":key" dynamic field value required.';
 }
