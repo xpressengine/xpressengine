@@ -17,6 +17,7 @@ use Xpressengine\Config\ConfigEntity;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Database\Schema\Blueprint;
+use Xpressengine\Database\DynamicQuery;
 use Xpressengine\Plugin\ComponentTrait;
 use Xpressengine\Plugin\ComponentInterface;
 
@@ -604,10 +605,10 @@ abstract class AbstractType implements ComponentInterface
     /**
      * $query 에 inner join 된 쿼리를 리턴
      *
-     * @param Builder $query query builder
+     * @param DynamicQuery $query query builder
      * @return Builder
      */
-    public function get(Builder $query)
+    public function get(DynamicQuery $query)
     {
         $config = $this->config;
         if ($config->get('sortable') === false && $config->get('searchable') === false) {
@@ -620,10 +621,10 @@ abstract class AbstractType implements ComponentInterface
     /**
      * $query 에 outer join 된 쿼리를 리턴
      *
-     * @param Builder $query query builder
+     * @param DynamicQuery $query query builder
      * @return Builder
      */
-    public function first(Builder $query)
+    public function first(DynamicQuery $query)
     {
         return $this->join($query, $this->config);
     }
@@ -635,10 +636,17 @@ abstract class AbstractType implements ComponentInterface
      * @param ConfigEntity $config config entity
      * @return Builder
      */
-    protected function join(Builder $query, ConfigEntity $config)
+    public function join(DynamicQuery $query, ConfigEntity $config = null)
     {
+        if ($config === null) {
+            $config = $this->config;
+        }
         $baseTable = $query->from;
         $createTableName = $this->handler->getConfigHandler()->getTableName($config);
+        if ($query->hasDynamicTable($createTableName)) {
+            return $query;
+        }
+
         $query->leftJoin($createTableName, function (JoinClause $join) use ($createTableName, $config, $baseTable) {
             $join->on(
                 sprintf('%s.%s', $baseTable, $config->get('joinColumnName')),
@@ -646,17 +654,19 @@ abstract class AbstractType implements ComponentInterface
                 sprintf('%s.dynamicFieldTargetId', $createTableName)
             );
         });
+        $query->setDynamicTable($createTableName);
+
         return $query;
     }
 
     /**
      * query where 처리
      *
-     * @param Builder $query  query builder
+     * @param DynamicQuery $query  query builder
      * @param array   $params parameters for search
      * @return Builder
      */
-    public function wheres(Builder $query, array $params)
+    public function wheres(DynamicQuery $query, array $params)
     {
         $config = $this->config;
         foreach ($this->columns() as $column) {
@@ -673,11 +683,11 @@ abstract class AbstractType implements ComponentInterface
     /**
      * query order 처리
      *
-     * @param Builder $query  query builder
+     * @param DynamicQuery $query  query builder
      * @param array   $params parameters for search
      * @return Builder
      */
-    public function orders(Builder $query, array $params)
+    public function orders(DynamicQuery $query, array $params)
     {
         $config = $this->config;
         foreach ($this->columns() as $column) {
@@ -727,14 +737,17 @@ abstract class AbstractType implements ComponentInterface
     /**
      * $query 에 join 된 쿼리를 리턴
      *
-     * @param Builder $query query builder
+     * @param DynamicQuery $query query builder
      * @return Builder
      */
-    public function joinRevision(Builder $query)
+    public function joinRevision(DynamicQuery $query)
     {
         $config = $this->config;
         $tableName = $query->from;
         $table = $this->handler->getConfigHandler()->getRevisionTableName($config);
+        if ($query->hasDynamicTable($table)) {
+            return $query;
+        }
 
         $query->leftJoin($table, function (JoinClause $join) use ($tableName, $table, $config) {
             $join->on(
@@ -747,6 +760,8 @@ abstract class AbstractType implements ComponentInterface
                 sprintf('%s.revisionId', $table)
             );
         });
+        $query->setDynamicTable($table);
+
         return $query;
     }
 

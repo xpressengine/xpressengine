@@ -178,7 +178,8 @@ class Document extends DynamicModel
         $this->config = $config;
         $this->division = $config->get('division');
         $this->setProxyOptions([
-            'id' => $config->get('instanceId')
+            'id' => $config->get('instanceId'),
+            'group' => $config->get('group'),
         ]);
         if ($table !== null) {
             $this->table = $table;
@@ -196,6 +197,7 @@ class Document extends DynamicModel
 
         if ($this->division === true) {
             $clone = clone $query;
+            $clone->useProxy(false);
             $clone->getQuery()->from = self::TABLE_NAME;
             $clone->insert($this->attributes);
         }
@@ -216,6 +218,7 @@ class Document extends DynamicModel
 
         if ($this->division === true) {
             $clone = clone $query;
+            $clone->useProxy(false);
             $clone->getQuery()->from = self::TABLE_NAME;
             $dirty = $this->getDirty();
             if (count($dirty) > 0) {
@@ -414,7 +417,7 @@ class Document extends DynamicModel
         if (in_array($approved, $this->approved) === false) {
             throw new NotAllowedTypeException(['type' => $approved, 'to' => 'Approved']);
         }
-        $this->__set('approved', $approved);
+        $this->setAttribute('approved', $approved);
     }
 
     /**
@@ -429,7 +432,7 @@ class Document extends DynamicModel
         if (in_array($display, $this->display) === false) {
             throw new NotAllowedTypeException(['type' => $display, 'to' => 'Display']);
         }
-        $this->__set('display', $display);
+        $this->setAttribute('display', $display);
     }
 
     /**
@@ -444,7 +447,7 @@ class Document extends DynamicModel
         if (in_array($status, $this->status) === false) {
             throw new NotAllowedTypeException(['type' => $status, 'to' => 'Status']);
         }
-        $this->__set('status', $status);
+        $this->setAttribute('status', $status);
     }
 
     /**
@@ -460,7 +463,7 @@ class Document extends DynamicModel
         if (in_array($published, $this->published) === false) {
             throw new NotAllowedTypeException(['type' => $published, 'to' => 'Published']);
         }
-        $this->__set('published', $published);
+        $this->setAttribute('published', $published);
     }
 
     /**
@@ -533,6 +536,7 @@ class Document extends DynamicModel
         $this->setStatus(self::STATUS_TRASH);
         // 문서를 안보이게 할 필요는 없는듯
         $this->setDisplay(self::DISPLAY_HIDDEN);
+        $this->setAttribute(self::DELETED_AT, $this->freshTimestamp());
         return $this;
     }
 

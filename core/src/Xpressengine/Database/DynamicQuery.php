@@ -98,17 +98,36 @@ class DynamicQuery extends Builder
     protected $schemas = [];
 
     /**
+     * dynamic query 사용하면서 join 된 테이블 정보
+     *
+     * @var array
+     */
+    protected $dynamicTables = [];
+
+    /**
+     * dynamic filter 처리 유무
+     *
+     * @param bool $use
+     * @return $this
+     */
+    public function useDynamic($use = true)
+    {
+        $this->dynamic = $use;
+        return $this;
+    }
+
+    /**
      * 프록시 처리 유무 설정
      *
      * @param bool $use proxy use
-     * @return DynamicQuery
+     * @return $this
      */
     public function useProxy($use = true)
     {
         $this->proxy = $use;
-        $this->dynamic = $use;
         return $this;
     }
+
     /**
      * proxy 를 위한 options 설정
      *
@@ -145,6 +164,41 @@ class DynamicQuery extends Builder
     private function schema()
     {
         return $this->connection->getSchema($this->from);
+    }
+
+    /**
+     * set dynamic join table information
+     *
+     * @param string $table table name
+     * @return $this
+     */
+    public function setDynamicTable($table)
+    {
+        if ($this->hasDynamicTable($table) === false) {
+            $this->dynamicTables[] = $table;
+        }
+        return $this;
+    }
+
+    /**
+     * has dynamic join table
+     *
+     * @param string $table table name
+     * @return bool
+     */
+    public function hasDynamicTable($table)
+    {
+        return in_array($table, $this->dynamicTables);
+    }
+
+    /**
+     * get dynamic join table
+     *
+     * @return array
+     */
+    public function getDynamicTables()
+    {
+        return $this->dynamicTables;
     }
 
     /**
@@ -334,6 +388,25 @@ class DynamicQuery extends Builder
             $this->query = $this->getProxyManager()->first($this);
         }
         return parent::first($columns);
+    }
+
+    /**
+     * Execute a query for a single record by ID.
+     *
+     * @param  int    $id
+     * @param  array  $columns
+     * @return mixed|static
+     */
+    public function find($id, $columns = ['*'])
+    {
+        if ($this->dynamic === false) {
+            return parent::find($id, $columns);
+        }
+
+        if ($this->proxy === true) {
+            $this->query = $this->getProxyManager()->first($this);
+        }
+        return parent::find($id, $columns);
     }
 
     /**

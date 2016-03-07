@@ -272,7 +272,7 @@ class UserServiceProvider extends ServiceProvider
                     $app['hash'],
                     $app['validator'],
                     $app['xe.register'],
-                    $app['xe.config']->getVal('user.join.useMailCertify', false)
+                    $app['xe.config']->getVal('user.join.useEmailCertify', false)
                 );
                 return $userHandler;
             }

@@ -317,6 +317,6 @@ class AuthController extends Controller
     private function useEmailConfirm()
     {
         $config = app('xe.config')->get('user.join');
-        return $config->get('useMailCertify', true);
+        return $config->get('useEmailCertify', true);
     }
 }

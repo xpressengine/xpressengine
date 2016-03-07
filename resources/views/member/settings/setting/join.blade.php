@@ -19,10 +19,10 @@
                 <label>이메일 인증 사용</label>
                 <div class="radio mg-reset mg-bottom">
                     <label class="radio-inline">
-                        <input type="radio" name="useMailCertify" value="true" @if($config->get('useMailCertify')) checked="checked" @endif>  사용
+                        <input type="radio" name="useEmailCertify" value="true" @if($config->get('useEmailCertify')) checked="checked" @endif>  사용
                     </label>
                     <label class="radio-inline">
-                        <input type="radio" name="useMailCertify" value="false" @if(!$config->get('useMailCertify')) checked="checked" @endif> 사용 안함
+                        <input type="radio" name="useEmailCertify" value="false" @if(!$config->get('useEmailCertify')) checked="checked" @endif> 사용 안함
                     </label>
                 </div>
             </div>

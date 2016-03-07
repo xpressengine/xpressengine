@@ -1,10 +1,12 @@
 <?php
 namespace Xpressengine\FieldSkins\Category;
 
+use Xpressengine\Category\Models\Category;
+use Xpressengine\Category\Models\CategoryItem;
 use Xpressengine\DynamicField\AbstractSkin;
 use Xpressengine\Config\ConfigEntity;
-use Category;
 use View;
+use XeCategory;
 
 class DefaultSkin extends AbstractSkin
 {
@@ -41,8 +43,8 @@ class DefaultSkin extends AbstractSkin
     public function create(array $inputs, $view = 'dynamicField/category/default/create')
     {
         $config = $this->config;
-        $category = Category::get($config->get('categoryId'));
-        $items = Category::progenitors($category);
+        $category = Category::find($config->get('categoryId'));
+        $items = $category->items;
 
         return View::make($view, [
             'config' => $config,
@@ -58,14 +60,14 @@ class DefaultSkin extends AbstractSkin
     public function edit(array $args, $view = 'dynamicField/category/default/edit')
     {
         $config = $this->config;
-        $category = Category::get($config->get('categoryId'));
-        $items = Category::progenitors($category);
+        $category = Category::find($config->get('categoryId'));
+        $items = $category->items;
 
         $itemId = '';
         $item = '';
         if (isset($args[$config->get('id') . 'ItemId'])) {
             $itemId = $args[$config->get('id') . 'ItemId'];
-            $item = Category::getItem($itemId);
+            $item = CategoryItem::find($itemId);
         }
 
         return View::make($view, [
@@ -87,7 +89,7 @@ class DefaultSkin extends AbstractSkin
         $item = '';
         if (isset($args[$config->get('id') . 'ItemId'])) {
             $itemId = $args[$config->get('id') . 'ItemId'];
-            $item = Category::getItem($itemId);
+            $item = CategoryItem::find($itemId);
         }
 
         return View::make($view, [
@@ -110,8 +112,8 @@ class DefaultSkin extends AbstractSkin
             return '';
         }
 
-        $category = Category::get($config->get('categoryId'));
-        $items = Category::progenitors($category);
+        $category = Category::find($config->get('categoryId'));
+        $items = $category->items;
 
         $key = $config->get('id').'ItemId';
 
@@ -119,7 +121,7 @@ class DefaultSkin extends AbstractSkin
         $item = '';
         if (isset($inputs[$key])) {
             $itemId = $inputs[$key];
-            $item = Category::getItem($itemId);
+            $item = CategoryItem::find($itemId);
         }
 
 
@@ -142,7 +144,7 @@ class DefaultSkin extends AbstractSkin
             return null;
         }
 
-        return Category::getItem($args[$key])->word;
+        return CategoryItem::find($args[$key])->word;
     }
 
     public static function getSettingsURI()
