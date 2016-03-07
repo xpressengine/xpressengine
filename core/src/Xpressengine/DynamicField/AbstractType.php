@@ -721,7 +721,7 @@ abstract class AbstractType implements ComponentInterface
             $key = camel_case($this->config->get('id') . '_' . $column->name);
 
             if ($this->config->get('required') && (isset($args[$key]) === false || $args[$key] === '')) {
-                throw new Exceptions\RequiredDynamicFieldException;
+                throw new Exceptions\RequiredDynamicFieldException(['key' => $key]);
             }
 
             if (isset($args[$key])) {
