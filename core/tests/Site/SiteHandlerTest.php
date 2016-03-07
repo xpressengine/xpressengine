@@ -15,12 +15,9 @@
 
 namespace Xpressengine\Tests\Site;
 
-use Mockery\MockInterface;
 use PHPUnit_Framework_TestCase;
 use Mockery as m;
-use Xpressengine\Site\Site;
 use Xpressengine\Site\SiteHandler;
-use Xpressengine\Site\SiteRepository;
 
 /**
  * Class SiteHandlerTest
@@ -34,19 +31,6 @@ use Xpressengine\Site\SiteRepository;
 class SiteHandlerTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var MockInterface
-     */
-    protected $repo;
-    /**
-     * @var MockInterface
-     */
-    protected $config;
-    /**
-     * @var SiteHandler
-     */
-    protected $siteHandler;
-
-    /**
      * tearDown
      *
      * @return void
@@ -56,205 +40,90 @@ class SiteHandlerTest extends PHPUnit_Framework_TestCase
         m::close();
     }
 
-    /**
-     * testGetsBySite
-     * set & get CurrentSite Test
-     *
-     * @return void
-     */
-    public function testCurrentSite()
-    {
-        $handler = $this->siteHandler;
-
-        $testSite = new Site(['host' => 'test.com', 'siteKey' => 'test']);
-        $handler->setCurrentSite($testSite);
-
-        $site = $handler->getCurrentSite();
-
-        $this->assertEquals('test.com', $site->host);
-        $this->assertEquals('test', $site->siteKey);
-
-        $this->assertEquals('test', $handler->getCurrentSiteKey());
-    }
-
-    /**
-     * testDefaultSiteInfo
-     *
-     * @return void
-     */
-    public function testDefaultSiteInfo()
-    {
-        $config = $this->config;
-
-        $config->shouldReceive('getVal')->with('site.test.defaultMenu')->andReturn('test_menu_id');
-        $config->shouldReceive('getVal')->with('site.test.homeInstance')->andReturn('test_home_id');
-
-        $handler = $this->siteHandler;
-
-        $testSite = new Site(['host' => 'test.com', 'siteKey' => 'test']);
-
-        $handler->setCurrentSite($testSite);
-
-        $defaultMenu = $handler->getDefaultMenuEntityId();
-        $homeInstanceId = $handler->getHomeInstanceId();
-
-        $this->assertEquals('test_menu_id', $defaultMenu);
-        $this->assertEquals('test_home_id', $homeInstanceId);
-    }
-
-    /**
-     * testSetDefaultSiteInfo
-     *
-     * @return void
-     */
-    public function testSetDefaultSiteInfo()
-    {
-        $config = $this->config;
-
-        $config->shouldReceive('setVal')->andReturn();
-
-        $handler = $this->siteHandler;
-        $testSite = new Site(['host' => 'test.com', 'siteKey' => 'test']);
-        $handler->setCurrentSite($testSite);
-
-        $handler->setDefaultMenuEntityId('test_menu_id');
-        $handler->setHomeInstanceId('test_home_id');
-    }
-
-    /**
-     * testGet
-     *
-     * @return void
-     */
-    public function testGet()
-    {
-        $testSite = new Site(['host' => 'test.com', 'siteKey' => 'test']);
-
-        $repo = $this->repo;
-        $repo->shouldReceive('find')->andReturn($testSite);
-
-        $handler = $this->siteHandler;
-
-        $site = $handler->get('test.com');
-
-        $this->assertEquals('test.com', $site->host);
-        $this->assertEquals('test', $site->siteKey);
-    }
-
-    /**
-     * testGetBySiteKey
-     *
-     * @return void
-     */
-    public function testGetBySiteKey()
-    {
-        $testSite = new Site(['host' => 'test.com', 'siteKey' => 'test']);
-
-        $repo = $this->repo;
-        $repo->shouldReceive('findBySiteKey')->andReturn($testSite);
-
-        $handler = $this->siteHandler;
-
-        $site = $handler->getBySiteKey('test');
-
-        $this->assertEquals('test.com', $site->host);
-        $this->assertEquals('test', $site->siteKey);
-    }
-
-    /**
-     * testAdd
-     *
-     * @return void
-     */
     public function testAdd()
     {
-        $repo = $this->repo;
-        $repo->shouldReceive('insert')->andReturn();
-        $repo->shouldReceive('count')->andReturn(0);
+        list($configs) = $this->getMocks();
+        $instance = $this->getMock(SiteHandler::class, ['createModel', 'checkUsableDomain'], [$configs]);
 
-        $handler = $this->siteHandler;
+        $mockSite = m::mock('stdClass');
+        $mockSite->shouldReceive('save')->once();
 
-        $site = $handler->add(['host' => 'test.com', 'siteKey' => 'test']);
+        $instance->expects($this->once())->method('checkUsableDomain')->with('myhost.com');
+        $instance->expects($this->once())->method('createModel')->willReturn($mockSite);
 
-        $this->assertEquals('test.com', $site->host);
-        $this->assertEquals('test', $site->siteKey);
+        $site = $instance->add([
+            'host' => 'myhost.com',
+            'siteKey' => 'default'
+        ]);
+
+        $this->assertEquals('myhost.com', $site->host);
+        $this->assertEquals('default', $site->siteKey);
     }
 
-    /**
-     * testAddWithException
-     *
-     * @return void
-     */
-    public function testAddWithException()
-    {
-        $this->setExpectedException('Xpressengine\Site\Exceptions\CanNotUseDomainException');
-
-        $repo = $this->repo;
-        $repo->shouldReceive('insert')->andReturn();
-        $repo->shouldReceive('count')->andReturn(1);
-
-        $handler = $this->siteHandler;
-
-        $handler->add(['host' => 'test.com', 'siteKey' => 'test']);
-
-
-    }
-
-    /**
-     * testPut
-     *
-     * @return void
-     */
     public function testPut()
     {
-        $testSite = new Site(['host' => 'test.com', 'siteKey' => 'test']);
+        list($configs) = $this->getMocks();
+        $instance = new SiteHandler($configs);
 
-        $repo = $this->repo;
-        $repo->shouldReceive('update')->andReturn();
+        $mockSite = m::mock('Xpressengine\Site\Site');
+        $mockSite->shouldReceive('isDirty')->andReturn(true);
+        $mockSite->shouldReceive('save')->once();
 
-        $handler = $this->siteHandler;
-
-        $site = $handler->put($testSite);
-
-        $this->assertEquals('test.com', $site->host);
-        $this->assertEquals('test', $site->siteKey);
+        $instance->put($mockSite);
     }
 
-    /**
-     * testRemove
-     *
-     * @return void
-     */
     public function testRemove()
     {
-        $testSite = new Site(['host' => 'test.com', 'siteKey' => 'test']);
+        list($configs) = $this->getMocks();
+        $instance = $this->getMock(SiteHandler::class, ['createModel'], [$configs]);
 
-        $repo = $this->repo;
-        $repo->shouldReceive('find')->andReturn($testSite);
-        $repo->shouldReceive('delete')->andReturn();
+        $mockSite = m::mock('stdClass');
+        $mockSite->shouldReceive('delete')->once();
 
-        $handler = $this->siteHandler;
+        $mockModel = m::mock('stdClass');
+        $mockModel->shouldReceive('newQuery')->andReturnSelf();
+        $mockModel->shouldReceive('where')->once()->with('host', 'myhost.com')->andReturnSelf();
+        $mockModel->shouldReceive('get')->once()->andReturn($mockSite);
 
-        $handler->remove('test.com');
+        $instance->expects($this->once())->method('createModel')->willReturn($mockModel);
+
+        $instance->remove('myhost.com');
     }
 
-    /**
-     * setUp
-     *
-     * @return void
-     */
-    protected function setUp()
+    public function testCheckUsableDomain()
     {
-        /**
-         * @var SiteRepository $repo
-         */
-        $repo = m::mock('Xpressengine\Site\SiteRepository');
-        $config = m::mock('Xpressengine\Config\ConfigManager');
+        list($configs) = $this->getMocks();
+        $instance = $this->getMock(SiteHandler::class, ['createModel'], [$configs]);
 
-        $this->repo = $repo;
-        $this->config = $config;
+        $mockModel = m::mock('stdClass');
+        $mockModel->shouldReceive('newQuery')->andReturnSelf();
+        $mockModel->shouldReceive('where')->once()->with('host', 'myhost.com')->andReturnSelf();
+        $mockModel->shouldReceive('exists')->once()->andReturn(true);
 
-        $this->siteHandler = new SiteHandler($repo, $config);
-        parent::setUp();
+        $instance->expects($this->once())->method('createModel')->willReturn($mockModel);
+
+        try {
+            $this->invokedMethod($instance, 'checkUsableDomain', ['myhost.com']);
+
+            $this->assertTrue(false);
+        } catch (\Exception $e) {
+            $this->assertInstanceOf('Xpressengine\Site\Exceptions\CanNotUseDomainException', $e);
+        }
+    }
+
+    private function getMocks()
+    {
+        return [
+            m::mock('Xpressengine\Config\ConfigManager')
+        ];
+    }
+
+    private function invokedMethod($object, $methodName, $parameters = [])
+    {
+        $rfc = new \ReflectionClass($object);
+        $method = $rfc->getMethod($methodName);
+        $method->setAccessible(true);
+
+        return $method->invokeArgs($object, $parameters);
     }
 }

@@ -93,7 +93,7 @@ class SiteHandler
     /**
      * SiteHandler constructor.
      *
-     * @param Config         $config     xpressengine config manager
+     * @param Config $config xpressengine config manager
      */
     public function __construct(Config $config)
     {
@@ -251,9 +251,8 @@ class SiteHandler
     {
         $this->checkUsableDomain($inputs['host']);
 
-        $class = $this->getModel();
         /** @var Site $site */
-        $site = new $class;
+        $site = $this->createModel();
         $site->siteKey = $inputs['siteKey'];
         $site->host = $inputs['host'];
         $site->save();
@@ -286,9 +285,9 @@ class SiteHandler
      */
     public function remove($host)
     {
-        $class = $this->getModel();
+        $model = $this->createModel();
         /** @var Site $site */
-        if ($site = $class::where('host', $host)->get()) {
+        if ($site = $model->newQuery()->where('host', $host)->get()) {
             $site->delete();
         }
     }
@@ -303,10 +302,22 @@ class SiteHandler
      */
     protected function checkUsableDomain($host)
     {
-        $class = $this->getModel();
-        if ($class::where('host', $host)->exists()) {
+        $model = $this->createModel();
+        if ($model->newQuery()->where('host', $host)->exists()) {
             throw new CanNotUseDomainException(['host' => $host]);
         }
+    }
+
+    /**
+     * Create new site model
+     *
+     * @return string
+     */
+    public function createModel()
+    {
+        $class = $this->getModel();
+
+        return new $class;
     }
 
     /**
