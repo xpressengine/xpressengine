@@ -50,7 +50,7 @@ class UserAccountRepository implements UserAccountRepositoryInterface
      */
     public function create(UserInterface $user, array $data)
     {
-        $account = $this->newModel()->create($data);
+        $account = $this->createModel()->create($data);
         $user->accounts()->save($account);
         return $account;
     }
@@ -64,7 +64,7 @@ class UserAccountRepository implements UserAccountRepositoryInterface
      */
     public function findByUserId($userId)
     {
-        $accounts = $this->query()->whereIn('userId', (array) $userId)->get();
+        $accounts = $this->query()->where('userId', $userId)->get();
         return $accounts;
     }
 

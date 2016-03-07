@@ -83,7 +83,7 @@ trait RepositoryTrait
      *
      * @return Model
      */
-    public function newModel()
+    public function createModel()
     {
         $class = $this->getModel();
 
@@ -96,12 +96,12 @@ trait RepositoryTrait
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function query(){
-        return $this->newModel()->newQuery();
+        return $this->createModel()->newQuery();
     }
 
     public function __call($method, $parameters)
     {
-        $model = $this->newModel();
+        $model = $this->createModel();
         return call_user_func_array([$model, $method], $parameters);
     }
 }
