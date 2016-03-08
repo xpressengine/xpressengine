@@ -1,13 +1,13 @@
 
-{{ Frontend::css('/assets/vendor/jqueryui/jquery-ui.css')->load() }}
+{{ XeFrontend::css('/assets/vendor/jqueryui/jquery-ui.css')->load() }}
 
-{{ Frontend::css('/assets/vendor/core/category/style.css')->load() }}
+{{ XeFrontend::css('/assets/vendor/core/category/style.css')->load() }}
 
-{{ Frontend::js('/assets/vendor/jqueryui/jquery-ui.js')->appendTo('head')->load() }}
-{{ Frontend::js('/assets/vendor/nestedSortable/jquery.mjs.nestedSortable.js')->appendTo('head')->load() }}
-{{ Frontend::js('/assets/vendor/core/category/tree.js')->appendTo('head')->load() }}
+{{ XeFrontend::js('/assets/vendor/jqueryui/jquery-ui.js')->appendTo('head')->load() }}
+{{ XeFrontend::js('/assets/vendor/nestedSortable/jquery.mjs.nestedSortable.js')->appendTo('head')->load() }}
+{{ XeFrontend::js('/assets/vendor/core/category/tree.js')->appendTo('head')->load() }}
 
-{{ Frontend::translation([
+{{ XeFrontend::translation([
     'xe::required',
     'xe::addItem',
     'xe::create',

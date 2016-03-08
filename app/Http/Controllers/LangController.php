@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Redirect;
 use Presenter;
 use XeLang;
 use XeDB;
-use Frontend;
+use XeFrontend;
 
 class LangController extends Controller
 {
@@ -22,7 +22,7 @@ class LangController extends Controller
      */
     public function index($namespace = 'äll', $keyword = '')
     {
-        Frontend::translation([
+        XeFrontend::translation([
             'lang::admin.editor.saved', 'lang::admin.editor.failed'
         ]);
 

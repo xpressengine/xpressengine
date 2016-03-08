@@ -3,31 +3,31 @@
 <head>
 
     <!-- CUSTOM TAGS -->
-    {!! Frontend::output('html', 'head.prepend') !!}
+    {!! XeFrontend::output('html', 'head.prepend') !!}
 
     <!-- META -->
     <meta charset="utf-8">
     <meta name="Generator" content="XpressEngine">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    {!! Frontend::output('meta') !!}
+    {!! XeFrontend::output('meta') !!}
 
     <!-- TITLE -->
-    <title>{!! XeLang::trans(Frontend::output('title')) !!}</title>
+    <title>{!! XeLang::trans(XeFrontend::output('title')) !!}</title>
 
     <!-- ICON -->
-    {!! Frontend::output('icon') !!}
+    {!! XeFrontend::output('icon') !!}
 
     <!-- CSS -->
-    {!! Frontend::output('css') !!}
+    {!! XeFrontend::output('css') !!}
 
     <!-- JS at head.prepend -->
-    {!! Frontend::output('js', 'head.prepend') !!}
+    {!! XeFrontend::output('js', 'head.prepend') !!}
 
     <!-- JS at head.append -->
-    {!! Frontend::output('js', 'head.append') !!}
+    {!! XeFrontend::output('js', 'head.append') !!}
 
     <!-- Translation -->
-    {!! Frontend::output('translation') !!}
+    {!! XeFrontend::output('translation') !!}
 
     <script src="/assets/vendor/requirejs/require.js" type="text/javascript"></script>
     <script type="text/javascript">
@@ -52,27 +52,27 @@
 
 
     <!-- CUSTOM TAGS -->
-    {!! Frontend::output('html', 'head.append') !!}
+    {!! XeFrontend::output('html', 'head.append') !!}
 
 </head>
-<body class="{{ Frontend::output('bodyClass') }}">
+<body class="{{ XeFrontend::output('bodyClass') }}">
 
 <!-- JS at body.prepend -->
-{!! Frontend::output('js', 'body.prepend') !!}
+{!! XeFrontend::output('js', 'body.prepend') !!}
 
 <!-- CUSTOM TAGS -->
-{!! Frontend::output('html', 'body.prepend') !!}
+{!! XeFrontend::output('html', 'body.prepend') !!}
 
 {!! $content !!}
 
 <!-- JS at body.append -->
-{!! Frontend::output('js', 'body.append') !!}
+{!! XeFrontend::output('js', 'body.append') !!}
 
 <!-- CUSTOM TAGS -->
-{!! Frontend::output('html', 'body.append') !!}
+{!! XeFrontend::output('html', 'body.append') !!}
 
 <!-- Rule -->
-{!! Frontend::output('rule') !!}
+{!! XeFrontend::output('rule') !!}
 
 @include('common.alert')
 

@@ -22,7 +22,7 @@ namespace Xpressengine\Presenter\Html;
  * `title` 메소드를 사용하십시오.
  *
  * ```php
- * Frontend::title('브라우저 타이틀입니다');
+ * XeFrontend::title('브라우저 타이틀입니다');
  * ```
  * ## body 태그의 class 지정하기
  *
@@ -30,7 +30,7 @@ namespace Xpressengine\Presenter\Html;
  *
  * ```php
  * // body에 'profile' class지정
- * Frontend::bodyClass('profile');
+ * XeFrontend::bodyClass('profile');
  * ```
  *
  * ## js 파일 로드하기
@@ -42,10 +42,10 @@ namespace Xpressengine\Presenter\Html;
  *
  * ```php
  * // xe.js파일을 head의 하단에 로드함.
- * Frontend::js('assets/common/js/xe.js')->appendTo('head')->load();
+ * XeFrontend::js('assets/common/js/xe.js')->appendTo('head')->load();
  *
  * // xe.js파일을 body의 상단에 로드함.
- * Frontend::js('assets/common/js/xe.js')->prependTo('body')->load();
+ * XeFrontend::js('assets/common/js/xe.js')->prependTo('body')->load();
  * ```
  *
  * ### 우선순위 지정
@@ -55,7 +55,7 @@ namespace Xpressengine\Presenter\Html;
  *
  * ```php
  * // bootstrap.js이 로드된 이후에 xe.js파일이 로드되도록 우선순위 지정
- * Frontend::js('assets/common/js/xe.js')
+ * XeFrontend::js('assets/common/js/xe.js')
  * ->before('assets/vendor/bootstrap/js/bootstrap.js')
  * ->appendTo('body')->load();
  * ```
@@ -66,7 +66,7 @@ namespace Xpressengine\Presenter\Html;
  *
  * ```php
  * // 로드된 xe.js파일을 언로드함.
- * Frontend::js('assets/common/js/xe.js')->unload();
+ * XeFrontend::js('assets/common/js/xe.js')->unload();
  * ```
  *
  * ## css 파일 로드하기
@@ -75,7 +75,7 @@ namespace Xpressengine\Presenter\Html;
  *
  * ```php
  * // xe.css파일을 로드함. 반드시 bootstrap.css가 로드된 다음에 로드되도록 우선순위를 지정
- * Frontend::js('assets/common/css/xe.css')->appendTo('body')->before('assets/vendor/bootstrap.css')->load();
+ * XeFrontend::js('assets/common/css/xe.css')->appendTo('body')->before('assets/vendor/bootstrap.css')->load();
  * ```
  *
  * ## meta 태그 추가
@@ -87,7 +87,7 @@ namespace Xpressengine\Presenter\Html;
  * // 등록하려는 meta 태그의 별칭 등록.
  * $alias = 'my.viewport';
  *
- * Frontend::meta($alias)->name('viewport')
+ * XeFrontend::meta($alias)->name('viewport')
  * ->content('width=device-width, initial-scale=1.0')->load();
  * ```
  *
@@ -101,7 +101,7 @@ namespace Xpressengine\Presenter\Html;
  * $alias = 'myscript';
  *
  * // script 코드를 `<body>` 하단에 추가
- * Frontend::html($alias)->content('
+ * XeFrontend::html($alias)->content('
  * <script>
  *     $(function () {
  *         $('[data-toggle="tooltip"]').tooltip()
@@ -117,7 +117,7 @@ namespace Xpressengine\Presenter\Html;
  * `icon` 메소드를 사용할 수 있습니다.
  *
  * ```php
- * Frontend::icon($iconUrl)->load();
+ * XeFrontend::icon($iconUrl)->load();
  * ```
  *
  * @category    Frontend

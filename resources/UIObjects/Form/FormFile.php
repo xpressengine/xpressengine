@@ -1,6 +1,6 @@
 <?php namespace Xpressengine\UIObjects\Form;
 
-use Frontend;
+use XeFrontend;
 use Media;
 use Storage;
 use Xpressengine\UIObject\AbstractUIObject;
@@ -80,7 +80,7 @@ class FormFile extends AbstractUIObject
     protected function loadFiles()
     {
 
-        Frontend::js(
+        XeFrontend::js(
             [
                 'assets/vendor/JavaScript-Canvas-to-Blob-master/js/canvas-to-blob.min.js',
                 'assets/vendor/JavaScript-Load-Image/js/load-image.all.min.js',
@@ -96,7 +96,7 @@ class FormFile extends AbstractUIObject
             ]
         )->appendTo('head')->before('/assets/vendor/requirejs/require.js')->load();
 
-        Frontend::css(
+        XeFrontend::css(
             [
                 'assets/vendor/jQuery-File-Upload/css/jquery.fileupload.css',
                 'assets/vendor/jQuery-File-Upload/css/jquery.fileupload-ui.css',

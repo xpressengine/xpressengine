@@ -196,7 +196,7 @@ class AuthController extends Controller
         $config = app('xe.config')->get('user.common');
 
         $loginRuleName = 'login';
-        \Frontend::rule($loginRuleName, [
+        \XeFrontend::rule($loginRuleName, [
             'email' => 'required|email_prefix',
             'password' => 'required'
         ]);

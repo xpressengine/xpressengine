@@ -1,8 +1,8 @@
-{{ Frontend::js('/assets/vendor/jqueryui/jquery-ui.js')->appendTo('head')->load() }}
-{{ Frontend::css('/assets/vendor/jqueryui/jquery-ui.css')->load() }}
-{{ Frontend::js('/assets/vendor/expanding/expanding.js')->appendTo('head')->load() }}
-{{ Frontend::js('/assets/vendor/lang/LangEditorBox.js')->type('text/jsx')->appendTo('head')->load() }}
-{{ Frontend::css('/assets/vendor/lang/LangEditorBox.css')->load() }}
+{{ XeFrontend::js('/assets/vendor/jqueryui/jquery-ui.js')->appendTo('head')->load() }}
+{{ XeFrontend::css('/assets/vendor/jqueryui/jquery-ui.css')->load() }}
+{{ XeFrontend::js('/assets/vendor/expanding/expanding.js')->appendTo('head')->load() }}
+{{ XeFrontend::js('/assets/vendor/lang/LangEditorBox.js')->type('text/jsx')->appendTo('head')->load() }}
+{{ XeFrontend::css('/assets/vendor/lang/LangEditorBox.css')->load() }}
 <div class="lang-editor-box"
      data-name="{!! isset($name) ? htmlspecialchars($name, ENT_QUOTES, 'UTF-8') : '' !!}"
      data-lang-key="{!! isset($langKey) ? htmlspecialchars($langKey, ENT_QUOTES, 'UTF-8') : '' !!}"

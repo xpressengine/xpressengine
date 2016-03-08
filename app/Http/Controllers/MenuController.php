@@ -14,7 +14,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Facades\Frontend;
+use App\Facades\XeFrontend;
 use Exception;
 use Illuminate\Contracts\Config\Repository as IlluminateConfig;
 use Illuminate\Http\RedirectResponse;
@@ -73,9 +73,9 @@ class MenuController extends Controller
         }
 
         // 메뉴 어드민 트리 뷰에서 필요한 고유 다국어
-        FrontEnd::translation(['xe::addItem', 'xe::goLink', 'xe::setHome']);
+        XeFrontend::translation(['xe::addItem', 'xe::goLink', 'xe::setHome']);
         // 메뉴 타이틀 user 다국어
-        Frontend::translation($transKey);
+        XeFrontend::translation($transKey);
         return Presenter::make('menu.index',
             ['siteKey' => $siteKey, 'menus' => $menus, 'home' => $homeMenuId, 'maxDepth' => $menuMaxDepth]
         );
