@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Auth;
 use Exception;
 use Illuminate\Http\Request;
-use Presenter;
+use XePresenter;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Theme;
 use XeDB;
@@ -77,7 +77,7 @@ class UserController extends Controller
         $this->user = app('auth')->user();
 
         Theme::selectSiteTheme();
-        Presenter::setSkin('member/settings');
+        XePresenter::setSkin('member/settings');
         $this->middleware('auth');
     }
 
@@ -133,7 +133,7 @@ class UserController extends Controller
 
         app('xe.frontend')->js('assets/member/snb.js')->load();
 
-        return Presenter::make('index', compact('user', 'menus', 'tabContent'));
+        return XePresenter::make('index', compact('user', 'menus', 'tabContent'));
     }
 
 
@@ -160,7 +160,7 @@ class UserController extends Controller
         }
         XeDB::commit();
 
-        return Presenter::makeApi(
+        return XePresenter::makeApi(
             ['type' => 'success', 'message' => 'success', 'displayName' => $displayName]
         );
     }
@@ -193,7 +193,7 @@ class UserController extends Controller
             throw $e;
         }
 
-        return Presenter::makeApi(
+        return XePresenter::makeApi(
             ['type' => 'success', 'message' => $message, 'displayName' => $name, 'valid' => $valid]
         );
     }
@@ -253,7 +253,7 @@ class UserController extends Controller
         XeDB::commit();
 
 
-        return Presenter::makeApi(
+        return XePresenter::makeApi(
             ['type' => 'success', 'result' => $result, 'message' => $message, 'target' => $target]
         );
     }
@@ -282,11 +282,11 @@ class UserController extends Controller
                     }
                 }
             }
-            return Presenter::makeApi(
+            return XePresenter::makeApi(
                 ['type' => 'success', 'message' => 'success', 'valid' => true, 'level' => $secure]
             );
         } catch (\Exception $e) {
-            return Presenter::makeApi(
+            return XePresenter::makeApi(
                 ['type' => 'success', 'message' => $e->getMessage(), 'valid' => false]
             );
         }
@@ -335,7 +335,7 @@ class UserController extends Controller
         XeDB::commit();
 
         \Session::flash('alert', ['type' => 'success', 'message' => '수정되었습니다.']);
-        return Presenter::makeApi(['message' => '수정되었습니다']);
+        return XePresenter::makeApi(['message' => '수정되었습니다']);
     }
 
     public function getMailList()
@@ -347,7 +347,7 @@ class UserController extends Controller
         } else {
             $mails = array_values($mails);
         }
-        return Presenter::makeApi(['mails' => $mails]);
+        return XePresenter::makeApi(['mails' => $mails]);
     }
 
     /**
@@ -400,7 +400,7 @@ class UserController extends Controller
         XeDB::commit();
 
         \Session::flash('alert', ['type' => 'success', 'message' => '추가되었습니다.']);
-        return Presenter::makeApi(['message' => '추가되었습니다']);
+        return XePresenter::makeApi(['message' => '추가되었습니다']);
     }
 
     /**
@@ -434,7 +434,7 @@ class UserController extends Controller
         XeDB::commit();
 
         \Session::flash('alert', ['type' => 'success', 'message' => '인증되었습니다.']);
-        return Presenter::makeApi(['message' => '인증되었습니다.']);
+        return XePresenter::makeApi(['message' => '인증되었습니다.']);
     }
 
     /**
@@ -456,7 +456,7 @@ class UserController extends Controller
         $broker = app('xe.auth.email');
         $broker->sendEmailForConfirmation($pendingMail);
 
-        return Presenter::makeApi(['message' => '재전송하였습니다.']);
+        return XePresenter::makeApi(['message' => '재전송하였습니다.']);
     }
 
     /**
@@ -502,7 +502,7 @@ class UserController extends Controller
         }
         XeDB::commit();
 
-        return Presenter::makeApi(['message' => '삭제되었습니다.']);
+        return XePresenter::makeApi(['message' => '삭제되었습니다.']);
     }
 
     /**

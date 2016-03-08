@@ -25,7 +25,7 @@ class SettingsController extends Controller
         $menus = Menu::with('items')->where('siteKey', $siteKey)->get();
         $selectedTheme = $themeHandler->getSiteThemeId();
 
-        return \Presenter::make(
+        return \XePresenter::make(
             'settings.setting',
             compact(
                 'config',
@@ -77,7 +77,7 @@ class SettingsController extends Controller
         $manageHandler = app('xe.settings');
         $permissionGroups = $manageHandler->getPermissionList();
 
-        return \Presenter::make('settings.permissions', compact('permissionGroups'));
+        return \XePresenter::make('settings.permissions', compact('permissionGroups'));
     }
 
     public function updatePermission(PermissionHandler $permissionHandler, Request $request, $permissionId)

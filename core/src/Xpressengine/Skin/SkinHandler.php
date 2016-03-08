@@ -130,8 +130,8 @@ use Xpressengine\Skin\Exceptions\SkinNotFoundException;
  *
  * 요청을 처리하는 메인 Controller에서 스킨을 사용할 경우에는 Presenter를 사용하십시오.
  * ```php
- * Presenter::setSkin('member/profile');
- * return Presenter::make('index', ['member'=>$member]);
+ * XePresenter::setSkin('member/profile');
+ * return XePresenter::make('index', ['member'=>$member]);
  * ```
  *
  *

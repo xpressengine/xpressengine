@@ -255,15 +255,15 @@ return [
         'XeStorage' => App\Facades\XeStorage::class,
         'XeSite'      => App\Facades\XeSite::class,
 
-        'Presenter' => App\Facades\Presenter::class,
+        'XePresenter' => App\Facades\XePresenter::class,
         'XeFrontend' => App\Facades\XeFrontend::class,
-        'DynamicField' => App\Facades\DynamicField::class,
+        'XeDynamicField' => App\Facades\XeDynamicField::class,
         'XeDB' => App\Facades\XeDB::class,
         'XeDocument' => App\Facades\XeDocument::class,
 
         'XeCategory' => App\Facades\XeCategory::class,
         'Widget' => App\Facades\Widget::class,
-        'Counter' => App\Facades\Counter::class,
+        'XeCounter' => App\Facades\XeCounter::class,
         'XeTag' => App\Facades\XeTag::class,
         'XeToggleMenu' => App\Facades\XeToggleMenu::class,
         'XeTemporary' => App\Facades\XeTemporary::class,

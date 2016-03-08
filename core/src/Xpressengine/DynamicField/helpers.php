@@ -19,7 +19,7 @@ if (function_exists('df') === false) {
      */
     function df($group, $columnName)
     {
-        return \DynamicField::get($group, $columnName);
+        return \XeDynamicField::get($group, $columnName);
     }
 }
 

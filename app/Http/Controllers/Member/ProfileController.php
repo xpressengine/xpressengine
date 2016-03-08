@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Member;
 use App\Http\Controllers\Controller;
 use Auth;
 use Illuminate\Http\Request;
-use Presenter;
+use XePresenter;
 use Theme;
 use XeDB;
 use Xpressengine\User\Exceptions\UserNotFoundException;
@@ -40,7 +40,7 @@ class ProfileController extends Controller
         $this->handler = app('xe.user');
 
         Theme::selectSiteTheme();
-        Presenter::setSkin('member/profile');
+        XePresenter::setSkin('member/profile');
     }
 
     // 기본정보 보기
@@ -49,7 +49,7 @@ class ProfileController extends Controller
         $user = $this->retreiveUser($user);
         $grant = $this->getGrant($user);
 
-        return Presenter::make('index', compact('user', 'grant'));
+        return XePresenter::make('index', compact('user', 'grant'));
     }
 
     public function update($userId, Request $request)

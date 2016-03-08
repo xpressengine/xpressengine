@@ -3,7 +3,7 @@ namespace App\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class Counter extends Facade
+class XeCounter extends Facade
 {
 
     /**

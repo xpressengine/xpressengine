@@ -1,11 +1,11 @@
 <?php
 /**
- * DynamicField class for Facade
+ * Presenter class for Facade
  *
  * PHP version 5
  *
- * @category    DynamicField
- * @package     Xpressengine\DynamidField
+ * @category    Presenter
+ * @package     Xpressengine\Presenter
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
@@ -18,23 +18,23 @@ use Illuminate\Support\Facades\Facade;
 /**
  * facade 로 이용 하기위해 선언되어진 클래스
  *
- * @category    DynamicField
- * @package     Xpressengine\DynamicField
+ * @category    Presenter
+ * @package     Xpressengine\Presenter
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class DynamicField  extends Facade
+class XePresenter  extends Facade
 {
 
     /**
-     * facade access keyword
+     * Get the registered name of the component.
      *
-     * @return stirng
+     * @return string
      */
     protected static function getFacadeAccessor()
     {
-        return 'xe.dynamicField';
+        return 'xe.presenter';
     }
 }

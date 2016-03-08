@@ -18,7 +18,7 @@ use App\Sections\DynamicFieldSection;
 use App\Sections\ToggleMenuSection;
 use Config;
 use Input;
-use Presenter;
+use XePresenter;
 use Xpressengine\Captcha\Exceptions\ConfigurationNotExistsException;
 use Xpressengine\Http\Request;
 
@@ -51,7 +51,7 @@ class SettingController extends Controller
     {
         $config = app('xe.config')->get('member.common');
 
-        return Presenter::make(
+        return XePresenter::make(
             'member.settings.setting.common',
             array_merge(
                 compact('config')
@@ -72,7 +72,7 @@ class SettingController extends Controller
 
         $profileSkinSection = (new \App\Sections\SkinSection())->setting('member/profile', null);
 
-        return Presenter::make(
+        return XePresenter::make(
             'member.settings.setting.skin',
             array_merge(
                 compact('authSkinSection', 'settingsSkinSection', 'profileSkinSection')
@@ -111,7 +111,7 @@ class SettingController extends Controller
     {
         $config = app('xe.config')->get('user.join');
 
-        return Presenter::make(
+        return XePresenter::make(
             'member.settings.setting.join',
             array_merge(
                 compact('config')
@@ -145,7 +145,7 @@ class SettingController extends Controller
         $connection = $this->users->getConnection();
         $dynamicFieldSection = $dynamicFieldSection->setting($connection, false);
 
-        return Presenter::make(
+        return XePresenter::make(
             'member.settings.setting.field',
             array_merge(
                 compact('dynamicFieldSection')
@@ -162,7 +162,7 @@ class SettingController extends Controller
     {
         $toggleMenuSection = (new ToggleMenuSection())->setting('member');
 
-        return Presenter::make(
+        return XePresenter::make(
             'member.settings.setting.usermenu',
             array_merge(
                 compact('toggleMenuSection')

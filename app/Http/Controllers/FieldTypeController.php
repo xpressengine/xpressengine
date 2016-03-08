@@ -2,7 +2,7 @@
 namespace App\Http\Controllers;
 
 use App;
-use Presenter;
+use XePresenter;
 use Xpressengine\Category\CategoryHandler;
 use Xpressengine\Http\Request;
 
@@ -20,7 +20,7 @@ class FieldTypeController extends Controller
         ];
         $category = $categoryHandler->create($input);
 
-        return Presenter::makeApi(
+        return XePresenter::makeApi(
             $category->getAttributes()
         );
     }

@@ -3,7 +3,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use Exception;
-use Presenter;
+use XePresenter;
 use XeCategory;
 use Xpressengine\Category\Models\Category;
 use Xpressengine\Category\Models\CategoryItem;
@@ -20,7 +20,7 @@ class CategoryController extends Controller
             throw new InvalidArgumentHttpException;
         }
 
-        return Presenter::make('category.show', compact('category'));
+        return XePresenter::make('category.show', compact('category'));
     }
 
     public function storeItem(Request $request, $id)
@@ -40,7 +40,7 @@ class CategoryController extends Controller
         }
         DB::commit();
 
-        return Presenter::makeApi($item->toArray());
+        return XePresenter::makeApi($item->toArray());
     }
 
     public function updateItem(Request $request, $id)
@@ -56,7 +56,7 @@ class CategoryController extends Controller
 
         XeCategory::putItem($item);
 
-        return Presenter::makeApi($item->toArray());
+        return XePresenter::makeApi($item->toArray());
     }
 
     public function destroyItem(Request $request, $id)
@@ -113,6 +113,6 @@ class CategoryController extends Controller
             $children = $item->getChildren();
         }
 
-        return Presenter::makeApi($children->toArray());
+        return XePresenter::makeApi($children->toArray());
     }
 }

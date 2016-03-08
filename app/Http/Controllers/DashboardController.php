@@ -10,6 +10,6 @@ class DashboardController extends Controller
     {
         \XeFrontend::title('XpressEngine3 Settings');
 
-        return \Presenter::make('settings.dashboard');
+        return \XePresenter::make('settings.dashboard');
     }
 }

@@ -3,7 +3,7 @@ namespace App\Http\Controllers\Member\Settings;
 
 use App\Http\Controllers\Controller;
 use Exception;
-use Presenter;
+use XePresenter;
 use XeDB;
 use Xpressengine\Http\Request;
 use Xpressengine\User\Repositories\UserGroupRepositoryInterface;
@@ -33,7 +33,7 @@ class GroupController extends Controller
         // todo: validate inputs!!
         $groups = $this->groups->paginate();
 
-        return Presenter::make('member.settings.group.index', compact('groups'));
+        return XePresenter::make('member.settings.group.index', compact('groups'));
     }
 
     /**
@@ -43,7 +43,7 @@ class GroupController extends Controller
      */
     public function create()
     {
-        return Presenter::make('member.settings.group.create');
+        return XePresenter::make('member.settings.group.create');
     }
 
     /**
@@ -82,7 +82,7 @@ class GroupController extends Controller
     public function edit($id)
     {
         $group = $this->groups->find($id);
-        return Presenter::make('member.settings.group.edit', compact('group'));
+        return XePresenter::make('member.settings.group.edit', compact('group'));
     }
 
     /**
@@ -152,10 +152,10 @@ class GroupController extends Controller
     public function search($keyword = null)
     {
         if ($keyword === null) {
-            return Presenter::makeApi($this->groups->paginate());
+            return XePresenter::makeApi($this->groups->paginate());
         }
 
         $matched = $this->groups->where('name', 'like', '%'.$keyword.'%')->items();
-        return Presenter::makeApi($matched);
+        return XePresenter::makeApi($matched);
     }
 }

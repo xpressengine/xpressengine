@@ -6,7 +6,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Input;
-use Presenter;
+use XePresenter;
 use XeDB;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
 use Xpressengine\User\Exceptions\EmailNotFoundException;
@@ -84,7 +84,7 @@ class UserController extends Controller
         if ($group !== null) {
             $selectedGroup = $this->handler->groups()->find($group);
         }
-        return Presenter::make('member.settings.member.index', compact('users', 'groups', 'selectedGroup'));
+        return XePresenter::make('member.settings.member.index', compact('users', 'groups', 'selectedGroup'));
     }
 
     /**
@@ -120,7 +120,7 @@ class UserController extends Controller
         $dynamicField = app('xe.dynamicField');
         $fieldTypes = $dynamicField->gets('user');
 
-        return Presenter::make('member.settings.member.create', compact('ratings', 'groups', 'status', 'fieldTypes'));
+        return XePresenter::make('member.settings.member.create', compact('ratings', 'groups', 'status', 'fieldTypes'));
     }
 
     /**
@@ -223,7 +223,7 @@ class UserController extends Controller
                 }
             }
         }
-        return Presenter::make(
+        return XePresenter::make(
             'member.settings.member.edit',
             compact(
                 'user',
@@ -298,7 +298,7 @@ class UserController extends Controller
 
         $mails = $this->handler->emails()->where(['userId' => $id])->get();
 
-        return Presenter::makeApi(['mails' => $mails]);
+        return XePresenter::makeApi(['mails' => $mails]);
     }
 
     /**
@@ -337,7 +337,7 @@ class UserController extends Controller
         XeDB::commit();
 
 
-        return Presenter::makeApi(['mail' => $email]);
+        return XePresenter::makeApi(['mail' => $email]);
     }
 
     /**
@@ -373,7 +373,7 @@ class UserController extends Controller
         }
         XeDB::commit();
 
-        return Presenter::makeApi(['mail' => $email]);
+        return XePresenter::makeApi(['mail' => $email]);
     }
 
     /**
@@ -410,7 +410,7 @@ class UserController extends Controller
         }
         XeDB::commit();
 
-        return Presenter::makeApi(['type' => 'success', 'address' => $address]);
+        return XePresenter::makeApi(['type' => 'success', 'address' => $address]);
     }
 
     /**
@@ -448,14 +448,14 @@ class UserController extends Controller
         $users = $this->handler->users();
 
         if ($keyword === null) {
-            return Presenter::makeApi($users->paginate());
+            return XePresenter::makeApi($users->paginate());
         }
 
         $matchedMemberList = (array) $users->query()->where('displayName', 'like', '%'.$keyword.'%')->get(
             ['id', 'displayName', 'email']
         );
 
-        return Presenter::makeApi($matchedMemberList);
+        return XePresenter::makeApi($matchedMemberList);
     }
 
     /**

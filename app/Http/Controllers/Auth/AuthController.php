@@ -7,7 +7,7 @@ use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Http\Request;
 use Illuminate\Routing\UrlGenerator;
-use Presenter;
+use XePresenter;
 use Theme;
 use XeDB;
 use Xpressengine\Support\Exceptions\HttpXpressengineException;
@@ -56,7 +56,7 @@ class AuthController extends Controller
         $this->emailBroker = app('xe.auth.email');
 
         Theme::selectSiteTheme();
-        Presenter::setSkin('member/auth');
+        XePresenter::setSkin('member/auth');
 
         $this->middleware('guest', ['except' => ['getLogout', 'getConfirm']]);
     }
@@ -81,7 +81,7 @@ class AuthController extends Controller
         // join config
         $config = app('xe.config')->get('user.join');
 
-        return \Presenter::make('register', compact('config', 'fieldTypes', 'passwordLevel'));
+        return \XePresenter::make('register', compact('config', 'fieldTypes', 'passwordLevel'));
     }
 
     /**
@@ -161,7 +161,7 @@ class AuthController extends Controller
 
         // code가 없을 경우 인증 페이지 출력
         if ($code === null) {
-            return \Presenter::make('register_confirm');
+            return \XePresenter::make('register_confirm');
         }
 
         $email = $this->handler->pendingEmails()->findByAddress($address);
@@ -201,7 +201,7 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-        return \Presenter::make('login', compact('config', 'loginRuleName', 'redirectUrl'));
+        return \XePresenter::make('login', compact('config', 'loginRuleName', 'redirectUrl'));
     }
 
     /**

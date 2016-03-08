@@ -18,7 +18,7 @@ use App\Facades\XeFrontend;
 use Exception;
 use Illuminate\Contracts\Config\Repository as IlluminateConfig;
 use Illuminate\Http\RedirectResponse;
-use Presenter;
+use XePresenter;
 use Redirect;
 use Request;
 use Validator;
@@ -76,7 +76,7 @@ class MenuController extends Controller
         XeFrontend::translation(['xe::addItem', 'xe::goLink', 'xe::setHome']);
         // 메뉴 타이틀 user 다국어
         XeFrontend::translation($transKey);
-        return Presenter::make('menu.index',
+        return XePresenter::make('menu.index',
             ['siteKey' => $siteKey, 'menus' => $menus, 'home' => $homeMenuId, 'maxDepth' => $menuMaxDepth]
         );
     }
@@ -93,7 +93,7 @@ class MenuController extends Controller
     {
         $siteKey = $siteHandler->getCurrentSiteKey();
 
-        return Presenter::make(
+        return XePresenter::make(
             'menu.create',
             ['siteKey' => $siteKey]
         );
@@ -161,7 +161,7 @@ class MenuController extends Controller
         $menu = $model->newQuery()->find($menuId);
         $menuConfig = $handler->getMenuTheme($menu);
 
-        return Presenter::make('menu.edit', ['menu' => $menu, 'config' => $menuConfig]);
+        return XePresenter::make('menu.edit', ['menu' => $menu, 'config' => $menuConfig]);
     }
 
     /**
@@ -228,7 +228,7 @@ class MenuController extends Controller
         /** @var Menu $menu */
         $menu = $model->newQuery()->with('items')->find($menuId);
 
-        return Presenter::make(
+        return XePresenter::make(
             'menu.delete',
             ['menu' => $menu]
         );
@@ -296,7 +296,7 @@ class MenuController extends Controller
             'except' => User::whereIn('id', $visibleGrant['except'])->get(),
         ];
 
-        return Presenter::make(
+        return XePresenter::make(
             'menu.permission',
             [
                 'menu' => $menu,
@@ -382,7 +382,7 @@ class MenuController extends Controller
     {
         $parent = Request::get('parent', $menuId);
 
-        return Presenter::make(
+        return XePresenter::make(
             'menu.selectItemType',
             [
                 'menuId' => $menuId,
@@ -426,7 +426,7 @@ class MenuController extends Controller
         $menuTypeObj = $moduleHandler->getModuleObject($selectedMenuType);
         $menuMaxDepth = $config->get('xe.menu.maxDepth');
 
-        return Presenter::make(
+        return XePresenter::make(
             'menu.createItem',
             [
                 'menu' => $menu,
@@ -565,7 +565,7 @@ class MenuController extends Controller
         }
         $parentConfig = $itemConfig->getParent();
 
-        return Presenter::make(
+        return XePresenter::make(
             'menu.editItem',
             [
                 'menu' => $menu,
@@ -665,7 +665,7 @@ class MenuController extends Controller
 
         $menuType = $modules->getModuleObject($item->type);
 
-        return Presenter::make(
+        return XePresenter::make(
             'menu.deleteItem',
             [
                 'menu' => $menu,
@@ -760,7 +760,7 @@ class MenuController extends Controller
             'except' => User::whereIn('id', $visibleGrant['except'])->get(),
         ];
 
-        return Presenter::make(
+        return XePresenter::make(
             'menu.itemPermission',
             [
                 'menu' => $menu,
@@ -869,7 +869,7 @@ class MenuController extends Controller
 
         XeDB::commit();
 
-        return Presenter::makeApi(\Request::all());
+        return XePresenter::makeApi(\Request::all());
     }
 
     /**
@@ -886,6 +886,6 @@ class MenuController extends Controller
 
         $siteHandler->setHomeInstanceId($itemId);
 
-        return Presenter::makeApi([$itemId]);
+        return XePresenter::makeApi([$itemId]);
     }
 }

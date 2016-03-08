@@ -45,7 +45,7 @@ class ThemeController extends Controller
             'content' => $fileContent
         ];
 
-        return \Presenter::make(
+        return \XePresenter::make(
             'theme.edit',
             [
                 'theme' => $theme,
