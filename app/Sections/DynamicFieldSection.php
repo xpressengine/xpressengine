@@ -71,7 +71,7 @@ class DynamicFieldSection
             $fieldTypes[] = $types;
         }
 
-        \Frontend::rule('dynamicFieldSection', $this->getRules());
+        \XeFrontend::rule('dynamicFieldSection', $this->getRules());
 
         return View::make('dynamicField.setting', [
             'databaseName' => $conn->getName(),

@@ -1,7 +1,7 @@
 <?php
 namespace DummyNamespace;
 
-use Frontend;
+use XeFrontend;
 use Presenter;
 use Route;
 use Xpressengine\Http\Request;
@@ -37,10 +37,10 @@ class DummyClass extends AbstractPlugin
                             $title = 'DummyPluginTitle';
 
                             // set browser title
-                            Frontend::title($title);
+                            XeFrontend::title($title);
 
                             // load css file
-                            Frontend::css($this->asset('assets/style.css'))->load();
+                            XeFrontend::css($this->asset('assets/style.css'))->load();
 
                             // output
                             return Presenter::make('DummyPluginName::views.index', ['title' => $title]);

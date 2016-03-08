@@ -76,10 +76,10 @@ class SkinSection
 
         $skins = $skins($skinList, $selectedSkin);
 
-        \Frontend::js('assets/skin/section.js')->load();
+        \XeFrontend::js('assets/skin/section.js')->load();
 
         $url = route('settings.skin.section.setting');
-        \Frontend::html('skin.loadSkinSetting')->content(
+        \XeFrontend::html('skin.loadSkinSetting')->content(
             "<script>
             XE.$(function($){
                 $('.__xe_skinSetting').xeSkinSetting({

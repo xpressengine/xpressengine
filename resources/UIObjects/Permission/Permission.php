@@ -1,6 +1,6 @@
 <?php namespace Xpressengine\UIObjects\Permission;
 
-use Frontend;
+use XeFrontend;
 use Xpressengine\UIObject\AbstractUIObject;
 
 /**
@@ -26,14 +26,14 @@ class Permission extends AbstractUIObject
      */
     public function render()
     {
-        Frontend::js('/assets/vendor/core/lodash.min.js')->appendTo('head')->load();
-        Frontend::js('/assets/vendor/permission/PermissionTag.js')->type('text/jsx')->appendTo('head')->load();
-        Frontend::js('/assets/vendor/permission/PermissionTagSuggestion.js')->type('text/jsx')->appendTo('head')->load(
+        XeFrontend::js('/assets/vendor/core/lodash.min.js')->appendTo('head')->load();
+        XeFrontend::js('/assets/vendor/permission/PermissionTag.js')->type('text/jsx')->appendTo('head')->load();
+        XeFrontend::js('/assets/vendor/permission/PermissionTagSuggestion.js')->type('text/jsx')->appendTo('head')->load(
         );
-        Frontend::js('/assets/vendor/permission/PermissionInclude.js')->type('text/jsx')->appendTo('head')->load();
-        Frontend::js('/assets/vendor/permission/PermissionExclude.js')->type('text/jsx')->appendTo('head')->load();
-        Frontend::js('/assets/vendor/permission/Permission.js')->type('text/jsx')->appendTo('head')->load();
-        Frontend::css('/assets/vendor/permission/permission.css')->load();
+        XeFrontend::js('/assets/vendor/permission/PermissionInclude.js')->type('text/jsx')->appendTo('head')->load();
+        XeFrontend::js('/assets/vendor/permission/PermissionExclude.js')->type('text/jsx')->appendTo('head')->load();
+        XeFrontend::js('/assets/vendor/permission/Permission.js')->type('text/jsx')->appendTo('head')->load();
+        XeFrontend::css('/assets/vendor/permission/permission.css')->load();
 
         $permissioinScriptString = [];
 
@@ -62,7 +62,7 @@ class Permission extends AbstractUIObject
 
         $permissioinScriptString = implode('', $permissioinScriptString);
 
-        Frontend::html('permissionUiobject')->content($permissioinScriptString)->load();
+        XeFrontend::html('permissionUiobject')->content($permissioinScriptString)->load();
 
         $htmlString = [];
         $args = $this->arguments;

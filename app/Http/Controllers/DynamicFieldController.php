@@ -156,7 +156,7 @@ class DynamicFieldController extends Controller
         $rules = $this->section->getRules();
         $fieldType = $registerHandler->getSkin($dynamicField, $inputs['typeId']);
         $fieldSkin = $registerHandler->getSkin($dynamicField, $inputs['skinId']);
-        $rules = array_merge($rules, $fieldType->getSettingsRules(), $fieldSkin->getSettingRules());
+        $rules = array_merge($rules, $fieldType->getSettingsRules(), $fieldSkin->getSettingsRules());
 
         $this->validate($request->instance(), $rules);
 
@@ -185,7 +185,7 @@ class DynamicFieldController extends Controller
      *
      * @return \Xpressengine\Presenter\RendererInterface
      */
-    public function update()
+    public function update(Request $request)
     {
         /**
          * @var \Xpressengine\DynamicField\DynamicFieldHandler $dynamicField
@@ -203,7 +203,9 @@ class DynamicFieldController extends Controller
         $rules = $this->section->getRules();
         $fieldType = $registerHandler->getSkin($dynamicField, $inputs['typeId']);
         $fieldSkin = $registerHandler->getSkin($dynamicField, $inputs['skinId']);
-        $rules = array_merge($rules, $fieldType->getRules(), $fieldSkin->getRules());
+        $rules = array_merge($rules, $fieldType->getSettingsRules(), $fieldSkin->getSettingsRules());
+
+        $this->validate($request->instance(), $rules);
 
         $configHandler = $dynamicField->getConfigHandler();
 
@@ -229,7 +231,7 @@ class DynamicFieldController extends Controller
      *
      * @return \Xpressengine\Presenter\RendererInterface
      */
-    public function getEditInfo()
+    public function getEditInfo(Request $request)
     {
         /**
          * @var \Xpressengine\DynamicField\DynamicFieldHandler $dynamicField
@@ -252,7 +254,7 @@ class DynamicFieldController extends Controller
      *
      * @return \Xpressengine\Presenter\RendererInterface
      */
-    public function destroy()
+    public function destroy(Request $request)
     {
         /**
          * @var \Xpressengine\DynamicField\DynamicFieldHandler $dynamicField
