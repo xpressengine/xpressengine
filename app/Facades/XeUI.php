@@ -3,7 +3,7 @@ namespace App\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class UI extends Facade
+class XeUI extends Facade
 {
 
     /**

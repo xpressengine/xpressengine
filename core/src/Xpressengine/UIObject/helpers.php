@@ -32,6 +32,6 @@ if (function_exists('uio') === false) {
      */
     function uio($id, $args = [], $callback = null)
     {
-        return \UI::create($id, $args, $callback);
+        return \XeUI::create($id, $args, $callback);
     }
 }

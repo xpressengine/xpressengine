@@ -244,7 +244,7 @@ return [
 
         'Plugin' => App\Facades\Plugin::class,
         'Interception' => App\Facades\Interception::class,
-        'UI' => App\Facades\UI::class,
+        'XeUI' => App\Facades\XeUI::class,
         'Theme' => App\Facades\Theme::class,
         'Skin' => App\Facades\Skin::class,
         'Register' => App\Facades\Register::class,
