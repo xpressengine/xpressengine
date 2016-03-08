@@ -18,7 +18,7 @@ use Xpressengine\Plugin\PluginRegister;
 use Xpressengine\Skin\Exceptions\SkinNotFoundException;
 
 /**
- * SkinHandler는 XpressEngine에 등록된 스킨들을 관리하는 역할을 합니다. SkinHandler는 XE에서 `Skin` 파사드를 할당받습니다.
+ * SkinHandler는 XpressEngine에 등록된 스킨들을 관리하는 역할을 합니다. SkinHandler는 XE에서 `XeSkin` 파사드를 할당받습니다.
  *
  * ## 스킨 조회하기
  *
@@ -33,7 +33,7 @@ use Xpressengine\Skin\Exceptions\SkinNotFoundException;
  *
  * ```php
  * $id = 'member/auth/skin/myplugin@myskin';
- * $skin = Skin::get($id);
+ * $skin = XeSkin::get($id);
  * ```
  *
  * ### 스킨 목록 조회
@@ -43,7 +43,7 @@ use Xpressengine\Skin\Exceptions\SkinNotFoundException;
  * ```php
  * // 회원인증(로그인, 로그아웃, 회원가입 페이지 등)에서 사용될 수 있는 스킨 목록 조회
  * $target = 'member/auth';
- * $authSkins = Skin::getList();
+ * $authSkins = XeSkin::getList();
  * ```
  *
  * > `member/auth`를 타겟으로 가지는 스킨은 스킨 아이디를 지정할 때 `member/auth/skin/[스킨고유키]`의 형식(타겟아이디/skin/스킨고유키)을 따라야 합니다.
@@ -52,8 +52,8 @@ use Xpressengine\Skin\Exceptions\SkinNotFoundException;
  *
  * ```php
  * $target = 'member/auth';
- * $mobileSkins = Skin::getListSupportingMobile($target);
- * $desktopSkins = Skin::getListSupportingDesktop($target);
+ * $mobileSkins = XeSkin::getListSupportingMobile($target);
+ * $desktopSkins = XeSkin::getListSupportingDesktop($target);
  * ```
  *
  * ### 설정페이지용 스킨
@@ -65,7 +65,7 @@ use Xpressengine\Skin\Exceptions\SkinNotFoundException;
  *
  * ```php
  * $id = 'member/auth/settingsSkin/myplugin@mysettingSkin';
- * $skin = Skin::get($id);
+ * $skin = XeSkin::get($id);
  * ```
  *
  * #### 설정페이지용 스킨 목록 조회
@@ -74,8 +74,8 @@ use Xpressengine\Skin\Exceptions\SkinNotFoundException;
  * $target = 'member/auth';
  *
  * // 두번째 파라메터로 true를 전달
- * $mobileSkins = Skin::getListSupportingMobile($target, true);
- * $desktopSkins = Skin::getListSupportingDesktop($target, true);
+ * $mobileSkins = XeSkin::getListSupportingMobile($target, true);
+ * $desktopSkins = XeSkin::getListSupportingDesktop($target, true);
  * ```
  *
  * ## 사용할 스킨 지정하기
@@ -88,10 +88,10 @@ use Xpressengine\Skin\Exceptions\SkinNotFoundException;
  *
  * ```php
  * $target = 'member/auth';
- * $skin = Skin::get('member/auth/skin/myplugin@myskin');
+ * $skin = XeSkin::get('member/auth/skin/myplugin@myskin');
  *
  * // 회원인증페이지에서 사용할 스킨으로 'myplugin@myskin'를 지정한다.
- * Skin::assign($target, $skin, 'desktop');
+ * XeSkin::assign($target, $skin, 'desktop');
  * ```
  *
  * ### 저장된 스킨 정보 조회
@@ -102,7 +102,7 @@ use Xpressengine\Skin\Exceptions\SkinNotFoundException;
  * $target = 'member/auth';
  *
  * // 회원인증페이지에서 사용하기로 지정된 스킨 가져오기
- * $skin = Skin::getAssigned($target, 'mobile');
+ * $skin = XeSkin::getAssigned($target, 'mobile');
  * ```
  *
  *
@@ -117,10 +117,10 @@ use Xpressengine\Skin\Exceptions\SkinNotFoundException;
  *
  * // 회원 프로필 페이지에서 사용하기로 지정된 스킨 가져오기
  * target = 'member/profile';
- * $skin = Skin::getAssigned($target, 'mobile');
+ * $skin = XeSkin::getAssigned($target, 'mobile');
  *
  * // 또는 (skin id를 직접 지정)
- * $skin = Skin::get('member/profile/skin/myplugin@myskin');
+ * $skin = XeSkin::get('member/profile/skin/myplugin@myskin');
  *
  * // 스킨 출력
  * $html = $skin->setView('index')->setData(['member'=>$member])->render();

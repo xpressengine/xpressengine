@@ -3,7 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use XePresenter;
-use Skin;
+use XeSkin;
 use Validator;
 use Xpressengine\Skin\SkinHandler;
 use Xpressengine\Support\Exceptions\InvalidArgumentException;

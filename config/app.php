@@ -246,7 +246,7 @@ return [
         'XeInterception' => App\Facades\XeInterception::class,
         'XeUI' => App\Facades\XeUI::class,
         'Theme' => App\Facades\Theme::class,
-        'Skin' => App\Facades\Skin::class,
+        'XeSkin' => App\Facades\XeSkin::class,
         'XeRegister' => App\Facades\XeRegister::class,
         'XeSettings' => App\Facades\XeSettings::class,
         'XeMenu' => App\Facades\XeMenu::class,

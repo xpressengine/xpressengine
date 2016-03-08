@@ -3,7 +3,7 @@ namespace App\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class Skin extends Facade
+class XeSkin extends Facade
 {
 
     /**
