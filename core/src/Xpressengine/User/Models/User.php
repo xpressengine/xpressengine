@@ -14,7 +14,6 @@
 namespace Xpressengine\User\Models;
 
 use Closure;
-use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Database\Eloquent\DynamicModel;
 use Xpressengine\User\Rating;
 use Xpressengine\User\UserInterface;
@@ -37,7 +36,7 @@ class User extends DynamicModel implements UserInterface
     /**
      * @var bool use dynamic query
      */
-    protected $dynamic = false;
+    protected $dynamic = true;
 
     protected $dates = [
         'passwordUpdatedAt'
@@ -70,34 +69,14 @@ class User extends DynamicModel implements UserInterface
     public static $displayField = 'displayName';
 
     /**
-     * @var ConfigEntity
-     */
-    public static $config;
-
-    /**
      * User constructor.
      *
      * @param array $attributes attributes
      */
     public function __construct(array $attributes = [])
     {
+        $this->setProxyOptions(['group' => 'user']);
         parent::__construct($attributes);
-
-        $this->setProxyOptions([
-            'group' => static::$config->get('group'),
-        ]);
-    }
-
-    /**
-     * set user config
-     *
-     * @param ConfigEntity $config config entity
-     *
-     * @return void
-     */
-    public static function setUserConfig(ConfigEntity $config)
-    {
-        static::$config = $config;
     }
 
     /**
@@ -111,7 +90,6 @@ class User extends DynamicModel implements UserInterface
     {
         static::$profileImageResolver = $callback;
     }
-
 
     /**
      * set relationship with user groups

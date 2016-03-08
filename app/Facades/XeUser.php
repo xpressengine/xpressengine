@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is accessor for use member by facade
+ * This file is accessor for use User by facade
  *
  * PHP version 5
  *
