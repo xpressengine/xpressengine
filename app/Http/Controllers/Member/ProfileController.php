@@ -112,26 +112,26 @@ class ProfileController extends Controller
      */
     protected function retreiveUser($id)
     {
-        $member = $this->handler->users()->find($id);
-        if ($member === null) {
-            $member = $this->handler->users()->where(['displayName' => $id]);
+        $user = $this->handler->users()->find($id);
+        if ($user === null) {
+            $user = $this->handler->users()->where(['displayName' => $id]);
         }
 
-        if ($member === null) {
+        if ($user === null) {
             throw new UserNotFoundException();
         }
 
-        return $member;
+        return $user;
     }
 
     /**
      * getGrant
      *
-     * @param $member
+     * @param $user
      *
      * @return array
      */
-    protected function getGrant($member)
+    protected function getGrant($user)
     {
         $logged = Auth::user();
 
@@ -139,7 +139,7 @@ class ProfileController extends Controller
             'modify' => false,
             'manage' => false
         ];
-        if ($logged->getId() === $member->getId()) {
+        if ($logged->getId() === $user->getId()) {
             $grant['modify'] = true;
         }
 
