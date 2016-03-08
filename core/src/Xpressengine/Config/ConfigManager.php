@@ -27,49 +27,49 @@ use Xpressengine\Config\Repositories\RepositoryInterface;
  * 사용 가능한 객체를 생성해 반환해주는 역할을 함
  *
  * ### app binding : xe.config 로 바인딩 되어 있음
- * `Cfg` Facade 로 접근 가능
+ * `XeConfig` Facade 로 접근 가능
  *
  * ### 등록
  * ```php
- *  Cfg::add('head.child', ['key1' => 'val1', 'key2' => 'val2']);
+ *  XeConfig::add('head.child', ['key1' => 'val1', 'key2' => 'val2']);
  *  // 또는
- *  Cfg::set('head.child', ['key1' => 'val1', 'key2' => 'val2']);
+ *  XeConfig::set('head.child', ['key1' => 'val1', 'key2' => 'val2']);
  * ```
  *
  * ### 반환
  * config 정보를 객체의 반환, 특정 키에대한 값의 반환 두가지 를 지원 합니다.
  * ```php
  *  // 객체 반환
- *  $config = Cfg::get('head.child');
+ *  $config = XeConfig::get('head.child');
  *  // 값의 반환
- *  $val = Cfg::getVal('head.child.key1');
+ *  $val = XeConfig::getVal('head.child.key1');
  *  // 특정 키에 값이 설정되어있지 않은경우 반환 받고 싶은 값이 있다면
  *  // 두번째 인자에 포함시키면 됩니다.
- *  $val = Cfg::getVal('head.child.key1', 'default');
+ *  $val = XeConfig::getVal('head.child.key1', 'default');
  * ```
  *
  * 객체 반환시 만일 존재 하지 않는 경우 부모를 참조하는 객체로 반환 받을 수 있습니다.
  * ```php
  *  // 'head.child' 의 값을 참조
- *  $config = Cfg::getOrNew('head.child.unknown');
+ *  $config = XeConfig::getOrNew('head.child.unknown');
  * ```
  *
  * ### 수정
  * 패키지에서는 몇가지 형태의 수정방식을 제공합니다.
  * ```php
  *  // 지정된 키에 해당하는 값만 수정
- *  Cfg::set('head.child', ['key2' => 'new value']);
+ *  XeConfig::set('head.child', ['key2' => 'new value']);
  *  // 전체에 대한 수정 (다음과 같은 경우 'key2' 를 제외한 모든 값이 사라집니다.)
- *  Cfg::put('head.child', ['key2' => 'new value']);
+ *  XeConfig::put('head.child', ['key2' => 'new value']);
  *  // 객체에 의한 수정
- *  Cfg::modify($config);
+ *  XeConfig::modify($config);
  * ```
  *
  * 수정시 자손에 해당 하는 모든 하위 노드의 값도 일괄적으로 수정할 수 있습니다.
  * ```php
- *  Cfg::set('head.child', ['key2' => 'new value'], true);
+ *  XeConfig::set('head.child', ['key2' => 'new value'], true);
  *  // 필터를 작성하면 true 인 경우에 해당하는 자손만 수정 됩니다.
- *  Cfg::set('head.child', ['key2' => 'new value'], true, function ($config) {
+ *  XeConfig::set('head.child', ['key2' => 'new value'], true, function ($config) {
  *      return substr($config->name, 0, 4) != 'desc';
  *  });
  * ```

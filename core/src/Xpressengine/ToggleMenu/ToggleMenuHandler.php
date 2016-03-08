@@ -22,7 +22,7 @@ use Xpressengine\ToggleMenu\Exceptions\WrongInstanceException;
  * toggle 형태의 메뉴에 나타날 아이템들을 관리합니다.
  *
  * ### app binding : xe.toggleMenu 로 바인딩 되어 있음
- * ToggleMenu Facade 로 접근 가능
+ * XeToggleMenu Facade 로 접근 가능
  *
  * ### Usage
  * toggle menu 는 'PluginRegister' 를 통해 추가 됩니다.
@@ -34,12 +34,12 @@ use Xpressengine\ToggleMenu\Exceptions\WrongInstanceException;
  *
  * 등록되어진 후 설정을 통해 활성화된 아이템들을 반환 받아 사용할 수 있게 됩니다.
  * ```php
- *  $menuItems = ToggleMenu::getItems('pluginId');
+ *  $menuItems = XeToggleMenu::getItems('pluginId');
  *  // 인스턴스로 구분되어지는 대상은 해당 인스턴스 아이디가 전달되어야 합니다.
- *  $menuItems = ToggleMenu::getItems('pluginId', 'instanceId');
+ *  $menuItems = XeToggleMenu::getItems('pluginId', 'instanceId');
  *  // action 을 실행할 대상의 고유 아이디가 넘겨지면
  *  // 각 아이템이 사용 가능하도록 객체 생성시 다시 전달 됩니다.
- *  $menuItems = ToggleMenu::getItems('pluginId', 'instanceId', 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx');
+ *  $menuItems = XeToggleMenu::getItems('pluginId', 'instanceId', 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx');
  * ```
  *
  * @category    ToggleMenu

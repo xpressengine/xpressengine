@@ -25,7 +25,7 @@ use Xpressengine\Translation\Translator;
  * 전달하는 역할을 수행
  *
  * ### app binding : xe.seo 로 바인딩 되어 있음
- * `SEO` Facade 로 접근이 가능
+ * `XeSEO` Facade 로 접근이 가능
  *
  * ### Usage
  * SEO 를 사용하기 위해선 `SeoUsable` 인터페이스를 적용하고자하는
@@ -49,7 +49,7 @@ use Xpressengine\Translation\Translator;
  *
  * * Not execution
  * 간혹 어떤 상황에서 html 렌더링이 이루어지더라도 SEO 처리가 되지
- * 않길 원하는 경우 `SEO::notExec()` 를 실행하면 SEO 관련 태그들이
+ * 않길 원하는 경우 `XeSEO::notExec()` 를 실행하면 SEO 관련 태그들이
  * 적용되지 않음
  *
  * @category    Seo

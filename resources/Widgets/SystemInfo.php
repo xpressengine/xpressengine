@@ -1,7 +1,6 @@
 <?php
 namespace Xpressengine\Widgets;
 
-use Cfg;
 use Config;
 use View;
 use Xpressengine\Widget\AbstractWidget;

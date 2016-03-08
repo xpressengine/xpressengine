@@ -252,7 +252,7 @@ return [
         'Settings' => App\Facades\Settings::class,
         'XeMenu' => App\Facades\XeMenu::class,
         'Module' => App\Facades\Module::class,
-        'Cfg' => App\Facades\Config::class,
+        'XeConfig' => App\Facades\XeConfig::class,
         'XeStorage' => App\Facades\XeStorage::class,
         'XeSite'      => App\Facades\XeSite::class,
 
@@ -266,12 +266,12 @@ return [
         'Widget' => App\Facades\Widget::class,
         'Counter' => App\Facades\Counter::class,
         'XeTag' => App\Facades\XeTag::class,
-        'ToggleMenu' => App\Facades\ToggleMenu::class,
+        'XeToggleMenu' => App\Facades\XeToggleMenu::class,
         'XeTemporary' => App\Facades\XeTemporary::class,
         'Trash' => App\Facades\Trash::class,
         'XeMedia' => App\Facades\XeMedia::class,
 
         'XeLang' => App\Facades\Lang::class,
-        'SEO' => App\Facades\SEO::class,
+        'XeSEO' => App\Facades\XeSEO::class,
     ],
 ];

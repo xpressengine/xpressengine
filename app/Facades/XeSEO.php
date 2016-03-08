@@ -1,11 +1,11 @@
 <?php
 /**
- * This file is toggle menu facade
+ * This file is SEO facade class.
  *
  * PHP version 5
  *
- * @category    ToggleMenu
- * @package     Xpressengine\ToggleMenu
+ * @category    Seo
+ * @package     Xpressengine\Seo
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
@@ -16,17 +16,18 @@ namespace App\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * facade 사용을 위한 클래스.
+ * facade 로 사용하기 위한 연결
  *
- * @category    ToggleMenu
- * @package     Xpressengine\ToggleMenu
+ * @category    Seo
+ * @package     Xpressengine\Seo
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class ToggleMenu extends Facade
+class XeSEO extends Facade
 {
+
     /**
      * Get the registered name of the component.
      *
@@ -34,6 +35,6 @@ class ToggleMenu extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'xe.toggleMenu';
+        return 'xe.seo';
     }
 }

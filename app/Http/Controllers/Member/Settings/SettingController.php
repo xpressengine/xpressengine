@@ -16,7 +16,6 @@ namespace App\Http\Controllers\Member\Settings;
 use App\Http\Controllers\Controller;
 use App\Sections\DynamicFieldSection;
 use App\Sections\ToggleMenuSection;
-use Cfg;
 use Config;
 use Input;
 use Presenter;
