@@ -267,7 +267,7 @@ return [
         'XeTag' => App\Facades\XeTag::class,
         'XeToggleMenu' => App\Facades\XeToggleMenu::class,
         'XeTemporary' => App\Facades\XeTemporary::class,
-        'Trash' => App\Facades\Trash::class,
+        'XeTrash' => App\Facades\XeTrash::class,
         'XeMedia' => App\Facades\XeMedia::class,
 
         'XeLang' => App\Facades\Lang::class,
