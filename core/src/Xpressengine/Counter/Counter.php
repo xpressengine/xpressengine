@@ -221,7 +221,12 @@ class Counter
     {
         $this->checkOption($option);
 
-        return CounterLog::where('targetId', $targetId)
-            ->where('counterName', $this->name)->where('counterOption', $option)->users;
+        $logs = CounterLog::where('targetId', $targetId)
+            ->where('counterName', $this->name)->where('counterOption', $option)->get();
+        $users = [];
+        foreach  ($logs as $log) {
+            $users[] = $log->user;
+        }
+        return $users;
     }
 }
