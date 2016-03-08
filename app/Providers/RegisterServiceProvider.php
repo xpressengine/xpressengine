@@ -25,7 +25,7 @@ class RegisterServiceProvider extends ServiceProvider
         $this->app->singleton(
             'xe.register',
             function ($app) {
-                $container = $app['xe.interception']->proxy(Container::class, 'Register');
+                $container = $app['xe.interception']->proxy(Container::class, 'XeRegister');
                 return new $container(Arr::class);
             }
         );

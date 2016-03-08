@@ -3,7 +3,7 @@ namespace App\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class Register extends Facade
+class XeRegister extends Facade
 {
 
     /**

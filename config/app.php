@@ -91,7 +91,7 @@ return [
     | the box, Laravel uses the Monolog PHP logging library. This gives
     | you a variety of powerful log handlers / formatters to utilize.
     |
-    | Available Settings: "single", "daily", "syslog", "errorlog"
+    | Available XeSettings: "single", "daily", "syslog", "errorlog"
     |
     */
 
@@ -247,8 +247,8 @@ return [
         'XeUI' => App\Facades\XeUI::class,
         'Theme' => App\Facades\Theme::class,
         'Skin' => App\Facades\Skin::class,
-        'Register' => App\Facades\Register::class,
-        'Settings' => App\Facades\Settings::class,
+        'XeRegister' => App\Facades\XeRegister::class,
+        'XeSettings' => App\Facades\XeSettings::class,
         'XeMenu' => App\Facades\XeMenu::class,
         'Module' => App\Facades\Module::class,
         'XeConfig' => App\Facades\XeConfig::class,

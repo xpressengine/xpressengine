@@ -86,7 +86,7 @@ class StorageServiceProvider extends ServiceProvider
         }, true);
 
         intercept(
-            'Settings@getManageMenu',
+            'XeSettings@getManageMenu',
             ['storage.managemenu' => ['before' => 'manage.sort']],
             function ($target) {
                 $menu          = $target();

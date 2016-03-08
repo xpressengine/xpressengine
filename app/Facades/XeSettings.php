@@ -3,7 +3,7 @@ namespace App\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class Settings extends Facade
+class XeSettings extends Facade
 {
 
     /**

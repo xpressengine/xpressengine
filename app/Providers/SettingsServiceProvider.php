@@ -29,7 +29,7 @@ class SettingsServiceProvider extends ServiceProvider
         $this->app->singleton(
             'xe.settings',
             function ($app) {
-                $handler = $app['xe.interception']->proxy(SettingsHandler::class, 'Settings');
+                $handler = $app['xe.interception']->proxy(SettingsHandler::class, 'XeSettings');
                 $handler = new $handler(
                     $app['xe.register'],
                     $app['router'],
