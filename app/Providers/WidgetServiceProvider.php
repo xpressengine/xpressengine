@@ -39,7 +39,7 @@ class WidgetServiceProvider extends ServiceProvider
             'xe.widget',
             function ($app) {
 
-                $proxyClass = $app['xe.interception']->proxy(WidgetHandler::class, 'Widget');
+                $proxyClass = $app['xe.interception']->proxy(WidgetHandler::class, 'XeWidget');
                 $widgetHandler = new $proxyClass(
                     $app['xe.pluginRegister'],
                     $app['xe.auth'],

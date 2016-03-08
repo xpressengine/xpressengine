@@ -3,7 +3,7 @@ namespace App\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class Widget extends Facade
+class XeWidget extends Facade
 {
 
     /**

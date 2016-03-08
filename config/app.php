@@ -262,7 +262,7 @@ return [
         'XeDocument' => App\Facades\XeDocument::class,
 
         'XeCategory' => App\Facades\XeCategory::class,
-        'Widget' => App\Facades\Widget::class,
+        'XeWidget' => App\Facades\XeWidget::class,
         'XeCounter' => App\Facades\XeCounter::class,
         'XeTag' => App\Facades\XeTag::class,
         'XeToggleMenu' => App\Facades\XeToggleMenu::class,
