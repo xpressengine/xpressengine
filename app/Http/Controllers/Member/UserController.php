@@ -40,7 +40,7 @@ class UserController extends Controller
     /**
      * @var UserEmailRepositoryInterface
      */
-    protected $mails;
+    protected $emails;
 
     /**
      * @var UserHandler
@@ -70,7 +70,7 @@ class UserController extends Controller
         $this->handler = app('xe.user');
         $this->users = app('xe.users');
         $this->groups = app('xe.user.groups');
-        $this->mails = app('xe.user.emails');
+        $this->emails = app('xe.user.emails');
         $this->pendingMails = app('xe.user.pendingEmails');
         $this->accounts = app('xe.user.accounts');
 
@@ -95,8 +95,8 @@ class UserController extends Controller
         $settingsSection = [
             'settings' => [
                 'title' => xe_trans('xe::defaultSettings'),
-                'content' => function ($member) {
-                    return $this->memberEditView($member);
+                'content' => function ($user) {
+                    return $this->userEditView($user);
                 }
             ]
         ];
@@ -116,7 +116,7 @@ class UserController extends Controller
             $selectedSection = reset($menus);
         }
 
-        // get current member
+        // get current user
         $user = $this->user;
 
         $content = $selectedSection['content'];
@@ -343,7 +343,7 @@ class UserController extends Controller
         $user = $this->user;
         $mails = $user->mails;
         if ($mails === null) {
-            $mails = $this->mails->fetchAll(['memberId' => $user->getId()]);
+            $mails = $this->emails->findByUserId($user->getId());
         } else {
             $mails = array_values($mails);
         }
@@ -379,7 +379,7 @@ class UserController extends Controller
         }
 
         // 이미 존재하는 이메일이 있는지 확인한다.
-        if($this->mails->findByAddress($input['address'])) {
+        if($this->emails->findByAddress($input['address'])) {
             throw new MailAlreadyExistsException();
         }
 
@@ -559,11 +559,11 @@ class UserController extends Controller
      *
      * @return $this
      */
-    private function memberEditView(UserInterface $user)
+    private function userEditView(UserInterface $user)
     {
         // dynamic field
         $dynamicField = app('xe.dynamicField');
-        $fieldTypes = $dynamicField->gets('member');
+        $fieldTypes = $dynamicField->gets('user');
 
         // password configuration
         $passwordConfig = app('config')->get('xe.user.password');

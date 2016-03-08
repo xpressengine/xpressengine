@@ -42,9 +42,7 @@
         "xpressengine-plugin/board": "dev-feature_orm",
         "xpressengine-plugin/comment": "*@dev",
         "xpressengine-plugin/ckeditor": "*@dev",
-        "xpressengine-plugin/ckeditor_plugin": "*@dev",
         "xpressengine-plugin/claim": "*@dev",
-        "xpressengine-plugin/short_id_generator": "*@dev",
         "xpressengine-plugin/external_page": "*@dev",
         "xpressengine-plugin/social_login": "*@dev"
     },

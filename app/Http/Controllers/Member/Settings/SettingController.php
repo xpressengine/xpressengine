@@ -141,7 +141,7 @@ class SettingController extends Controller
      */
     public function editField()
     {
-        $dynamicFieldSection = new DynamicFieldSection('member');
+        $dynamicFieldSection = new DynamicFieldSection('user');
         $connection = $this->users->getConnection();
         $dynamicFieldSection = $dynamicFieldSection->setting($connection, false);
 

@@ -11,6 +11,7 @@ use XeDB;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
 use Xpressengine\User\Exceptions\EmailNotFoundException;
 use Xpressengine\User\Exceptions\MailAlreadyExistsException;
+use Xpressengine\User\Models\User;
 use Xpressengine\User\Rating;
 use Xpressengine\User\Repositories\UserRepository;
 use Xpressengine\User\UserHandler;
@@ -117,7 +118,7 @@ class UserController extends Controller
 
         // dynamic field
         $dynamicField = app('xe.dynamicField');
-        $fieldTypes = $dynamicField->gets('member');
+        $fieldTypes = $dynamicField->gets('user');
 
         return Presenter::make('member.settings.member.create', compact('ratings', 'groups', 'status', 'fieldTypes'));
     }
@@ -169,7 +170,6 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-
         $user = $this->handler->users()->with('groups', 'emails', 'accounts')->find($id);
 
         if ($user === null) {
