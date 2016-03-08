@@ -8,14 +8,10 @@ use Hash;
 use Auth;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Http\Request;
-use Xpressengine\Permission\Action;
-use Xpressengine\Support\Exceptions\HttpXpressengineException;
 use Document;
 use App\Sections\DynamicFieldSection;
 use XeDB;
 use DynamicField;
-use Cfg;
-use Category;
 
 class DynamicFieldController extends Controller
 {

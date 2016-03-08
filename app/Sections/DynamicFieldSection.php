@@ -7,7 +7,7 @@ namespace App\Sections;
 use DynamicField;
 use View;
 use Xpressengine\Database\VirtualConnectionInterface;
-use Cfg;
+use XeConfig;
 use Xpressengine\Config\ConfigEntity;
 
 /**
@@ -53,7 +53,7 @@ class DynamicFieldSection
             /**
              * @var ConfigEntity $config
              */
-            foreach (Cfg::children($parent) as $config) {
+            foreach (XeConfig::children($parent) as $config) {
                 if ($config->get('use') === true) {
                     $configs[$config->get('id')] = $config;
                 }
