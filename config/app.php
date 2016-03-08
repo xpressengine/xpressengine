@@ -243,7 +243,7 @@ return [
         'XeUser' => App\Facades\XeUser::class,
 
         'Plugin' => App\Facades\Plugin::class,
-        'Interception' => App\Facades\Interception::class,
+        'XeInterception' => App\Facades\XeInterception::class,
         'XeUI' => App\Facades\XeUI::class,
         'Theme' => App\Facades\Theme::class,
         'Skin' => App\Facades\Skin::class,

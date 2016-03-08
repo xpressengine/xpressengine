@@ -198,7 +198,7 @@ class InterceptionHandler
      *
      * ```
      * $targetClassName = 'My\Namespace\PostManager';
-     * $proxyClass = Interception::proxy($targetClass, 'Post');
+     * $proxyClass = XeInterception::proxy($targetClass, 'Post');
      *
      * $postManager = new $proxyClass();
      * ```
