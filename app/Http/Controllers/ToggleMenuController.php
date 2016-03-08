@@ -3,7 +3,7 @@ namespace App\Http\Controllers;
 
 use XeToggleMenu;
 use Input;
-use Presenter;
+use XePresenter;
 
 class ToggleMenuController extends Controller
 {
@@ -31,7 +31,7 @@ class ToggleMenuController extends Controller
             ];
         }
 
-        return Presenter::makeApi($data);
+        return XePresenter::makeApi($data);
     }
 
     public function postSetting()

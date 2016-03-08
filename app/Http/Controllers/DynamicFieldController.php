@@ -2,7 +2,7 @@
 namespace App\Http\Controllers;
 
 use App;
-use Presenter;
+use XePresenter;
 use Validator;
 use Hash;
 use Auth;
@@ -58,7 +58,7 @@ class DynamicFieldController extends Controller
             $list[] = $info;
         }
 
-        return Presenter::makeApi([
+        return XePresenter::makeApi([
             'list' => $list,
         ]);
     }
@@ -101,7 +101,7 @@ class DynamicFieldController extends Controller
             $skins[$skin->getId()] = $skin->name();
         }
 
-        return Presenter::makeApi([
+        return XePresenter::makeApi([
             'skins' => $skins,
             'skinId' => $skinId,
         ]);
@@ -128,7 +128,7 @@ class DynamicFieldController extends Controller
         $fieldType = $registerHandler->getType($dynamicField, $request->get('typeId'));
         $fieldSkin = $registerHandler->getSkin($dynamicField, $request->get('skinId'));
 
-        return Presenter::makeApi([
+        return XePresenter::makeApi([
             'configure' => $fieldType->getSettingsView($config) . $fieldSkin->settings($config),
         ]);
     }
@@ -177,7 +177,7 @@ class DynamicFieldController extends Controller
         $row['typeName'] = $fieldType->name();
         $row['skinName'] = $fieldSkin->name();
 
-        return Presenter::makeApi($row);
+        return XePresenter::makeApi($row);
     }
 
     /**
@@ -223,7 +223,7 @@ class DynamicFieldController extends Controller
         $row['typeName'] = $fieldType->name();
         $row['skinName'] = $fieldSkin->name();
 
-        return Presenter::makeApi($row);
+        return XePresenter::makeApi($row);
     }
 
     /**
@@ -244,7 +244,7 @@ class DynamicFieldController extends Controller
         $configHandler = $dynamicField->getConfigHandler();
         $config = $configHandler->get($request->get('group'), $request->get('id'));
 
-        return Presenter::makeApi([
+        return XePresenter::makeApi([
             'config' => $config->getPureAll(),
         ]);
     }
@@ -271,7 +271,7 @@ class DynamicFieldController extends Controller
         $dynamicField->setConnection(XeDB::connection($request->get('databaseName')));
         $dynamicField->drop($config);
 
-        return Presenter::makeApi([
+        return XePresenter::makeApi([
             'id' => $request->get('id'),
         ]);
     }

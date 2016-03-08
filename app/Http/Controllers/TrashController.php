@@ -3,7 +3,7 @@ namespace App\Http\Controllers;
 
 use Trash;
 use Input;
-use Presenter;
+use XePresenter;
 
 class TrashController extends Controller
 {
@@ -11,7 +11,7 @@ class TrashController extends Controller
     {
         $wastes = Trash::gets();
 
-        return Presenter::make('trash.index', [
+        return XePresenter::make('trash.index', [
             'wastes' => $wastes,
         ]);
     }

@@ -1,7 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use Plugin;
-use Presenter;
+use XePresenter;
 use Redirect;
 use Symfony\Component\HttpFoundation\Response;
 use Xpressengine\Http\Request;
@@ -17,7 +17,7 @@ class PluginController extends Controller
      */
     public function __construct()
     {
-        Presenter::setSettingsSkin('plugins');
+        XePresenter::setSettingsSkin('plugins');
     }
 
     public function index(Request $request)
@@ -37,7 +37,7 @@ class PluginController extends Controller
 
         $componentTypes = $this->getComponentTypes();
 
-        return Presenter::make(
+        return XePresenter::make(
             'index',
             [
                 'plugins' => $plugins,
@@ -51,7 +51,7 @@ class PluginController extends Controller
         $componentTypes = $this->getComponentTypes();
 
         $plugin = $handler->getPlugin($pluginId);
-        return Presenter::make('show', compact('plugin', 'componentTypes'));
+        return XePresenter::make('show', compact('plugin', 'componentTypes'));
     }
 
     public function postActivatePlugin($pluginId)

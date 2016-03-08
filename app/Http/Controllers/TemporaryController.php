@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Auth;
 use Input;
 use XeTemporary;
-use Presenter;
+use XePresenter;
 
 class TemporaryController extends Controller
 {
@@ -22,7 +22,7 @@ class TemporaryController extends Controller
                 });
             }
 
-            return Presenter::makeApi($temporaries);
+            return XePresenter::makeApi($temporaries);
         }
     }
 
@@ -38,10 +38,10 @@ class TemporaryController extends Controller
                 throw $e;
             }
 
-            return Presenter::makeApi(['temporaryId' => $temporary->id]);
+            return XePresenter::makeApi(['temporaryId' => $temporary->id]);
         }
 
-        return Presenter::makeApi(['temporaryId' => null]);
+        return XePresenter::makeApi(['temporaryId' => null]);
     }
 
     public function update($temporaryId)
@@ -51,11 +51,11 @@ class TemporaryController extends Controller
                 $etc = Input::except(['_token', 'rep']);
                 $temporary = XeTemporary::put($temporaryId, Input::get(Input::get('rep')), $etc);
 
-                return Presenter::makeApi(['temporaryId' => $temporary->id]);
+                return XePresenter::makeApi(['temporaryId' => $temporary->id]);
             }
         }
 
-        return Presenter::makeApi(['temporaryId' => null]);
+        return XePresenter::makeApi(['temporaryId' => null]);
     }
 
     public function destroy($temporaryId)
@@ -68,7 +68,7 @@ class TemporaryController extends Controller
             }
         }
 
-        return Presenter::makeApi(['result' => true]);
+        return XePresenter::makeApi(['result' => true]);
     }
 
     public function setAuto()

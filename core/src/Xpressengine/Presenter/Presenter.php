@@ -51,7 +51,7 @@ use Closure;
  * public controllerMethodName()
  * {
  *      ... 생략 ...
- *      return Presenter::make('skin.view.name');
+ *      return XePresenter::make('skin.view.name');
  * }
  *
  * ```
@@ -61,7 +61,7 @@ use Closure;
  * public controllerMethodName()
  * {
  *      ... 생략 ...
- *      return Presenter::makeApi(['data']);
+ *      return XePresenter::makeApi(['data']);
  * }
  *
  * ```
@@ -71,7 +71,7 @@ use Closure;
  * public controllerMethodName()
  * {
  *      ... 생략 ...
- *      return Presenter::makeAll('skin.view.name');
+ *      return XePresenter::makeAll('skin.view.name');
  * }
  *
  * ```

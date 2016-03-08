@@ -2,7 +2,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Presenter;
+use XePresenter;
 use Storage;
 use Media;
 use XeFrontend;
@@ -18,7 +18,7 @@ class SeoController extends Controller
 
         XeFrontend::rule($ruleName, $this->getRules());
 
-        return Presenter::make('seo.setting', [
+        return XePresenter::make('seo.setting', [
             'setting' => app('xe.seo')->getSetting(),
             'ruleName' => $ruleName
         ]);

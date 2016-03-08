@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
-use Presenter;
+use XePresenter;
 
 class TagController extends Controller
 {
@@ -21,7 +21,7 @@ class TagController extends Controller
             $words[] = $tagEntity->word;
         }
 
-        return Presenter::makeApi($words);
+        return XePresenter::makeApi($words);
     }
 }
 

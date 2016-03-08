@@ -6,7 +6,7 @@ use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use InvalidArgumentException;
-use Presenter;
+use XePresenter;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Theme;
@@ -59,7 +59,7 @@ class PasswordController extends Controller {
         $this->handler = app('xe.user');
 
         Theme::selectSiteTheme();
-        Presenter::setSkin('member/auth');
+        XePresenter::setSkin('member/auth');
 
         $this->middleware('guest');
     }
@@ -73,7 +73,7 @@ class PasswordController extends Controller {
     {
         $email = Session::get('email');
 
-        return Presenter::make('reset', compact('email'));
+        return XePresenter::make('reset', compact('email'));
     }
 
     /**
@@ -136,7 +136,7 @@ class PasswordController extends Controller {
             throw new NotFoundHttpException;
         }
 
-        return Presenter::make('password', compact('email','token'));
+        return XePresenter::make('password', compact('email','token'));
     }
 
     /**

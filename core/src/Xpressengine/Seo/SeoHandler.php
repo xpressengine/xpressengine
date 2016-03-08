@@ -44,7 +44,7 @@ use Xpressengine\Translation\Translator;
  * 객체로부터 내용을 수집하여 meta tag 등 으로 노출하게 되어짐.
  *
  * ```php
- * Presenter::make('some.view', [$seoUsableObject, $var1, $var2, ...]);
+ * XePresenter::make('some.view', [$seoUsableObject, $var1, $var2, ...]);
  * ```
  *
  * * Not execution

@@ -1,5 +1,6 @@
 <?php namespace App\Exceptions;
 
+use XePresenter;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -138,13 +139,13 @@ class Handler extends ExceptionHandler
 
         // ajax request
         if ($request->ajax() || $request->wantsJson()) {
-            $view = \Presenter::makeApi(
+            $view = XePresenter::makeApi(
                 ['message' => $responseException->getMessage()]
             );
         } else {
-            \Presenter::setSkin('error');
+            XePresenter::setSkin('error');
             \Theme::selectBlankTheme();
-            $view = \Presenter::make(
+            $view = XePresenter::make(
                 'error',
                 ['type' => 'danger', 'exception' => $responseException, 'message' => $responseException->getMessage()]
             );

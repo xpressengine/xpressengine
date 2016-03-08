@@ -68,7 +68,7 @@ use Xpressengine\Support\Tree\TreeCollection;
  *         Route::get('/', [
  *                 'as' => 'social_login::settings',
  *                 'uses' => function () {
- *                     return \Presenter::make('social_login::tpl.setting');
+ *                     return \XePresenter::make('social_login::tpl.setting');
  *                 },
  *                 'settings_menu' => 'member.social_login'
  *         ]);

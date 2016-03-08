@@ -2,7 +2,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Presenter;
+use XePresenter;
 use Skin;
 use Validator;
 use Xpressengine\Skin\SkinHandler;
@@ -34,7 +34,7 @@ class SkinController extends Controller
 
         $view = $skin->getSettingView();
 
-        return Presenter::makeApi(['view' => (string) $view]);
+        return XePresenter::makeApi(['view' => (string) $view]);
     }
 
     public function postSetting(Request $request, SkinHandler $skinHandler)
@@ -58,7 +58,7 @@ class SkinController extends Controller
         $skin = $skinHandler->get($skinId, $config);
         $skinHandler->assign($skinInstanceId, $skin, $mode);
 
-        return Presenter::makeApi(
+        return XePresenter::makeApi(
             ['type' => 'success', 'message' => '저장되었습니다.', 'skinId' => $skinId, 'skinTitle' => $skin->getTitle()]
         );
     }
