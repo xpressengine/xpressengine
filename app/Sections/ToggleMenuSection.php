@@ -1,15 +1,15 @@
 <?php
 namespace App\Sections;
 
-use ToggleMenu;
+use XeToggleMenu;
 use View;
 
 class ToggleMenuSection
 {
     public function setting($type, $instanceId = null)
     {
-        $activated = ToggleMenu::getActivated($type, $instanceId);
-        $deactivated = ToggleMenu::getDeactivated($type, $instanceId);
+        $activated = XeToggleMenu::getActivated($type, $instanceId);
+        $deactivated = XeToggleMenu::getDeactivated($type, $instanceId);
         $items = [];
         foreach ($activated as $key => $item) {
             $items[$key] = ['item' => $item, 'activated' => true];

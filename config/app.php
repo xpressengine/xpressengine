@@ -266,7 +266,7 @@ return [
         'Widget' => App\Facades\Widget::class,
         'Counter' => App\Facades\Counter::class,
         'XeTag' => App\Facades\XeTag::class,
-        'ToggleMenu' => App\Facades\ToggleMenu::class,
+        'XeToggleMenu' => App\Facades\XeToggleMenu::class,
         'XeTemporary' => App\Facades\XeTemporary::class,
         'Trash' => App\Facades\Trash::class,
         'XeMedia' => App\Facades\XeMedia::class,

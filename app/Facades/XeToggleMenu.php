@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Facade;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class ToggleMenu extends Facade
+class XeToggleMenu extends Facade
 {
     /**
      * Get the registered name of the component.
