@@ -272,6 +272,6 @@ return [
         'XeMedia' => App\Facades\XeMedia::class,
 
         'XeLang' => App\Facades\Lang::class,
-        'SEO' => App\Facades\SEO::class,
+        'XeSEO' => App\Facades\XeSEO::class,
     ],
 ];
