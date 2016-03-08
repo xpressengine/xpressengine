@@ -46,11 +46,9 @@ class XeInstall extends Command
         'alice',
         'board',
         'ckeditor',
-        'ckeditor_plugin',
         'claim',
         'comment',
         'page',
-        'short_id_generator',
     ];
 
     /**
