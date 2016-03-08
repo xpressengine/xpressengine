@@ -579,7 +579,7 @@ APP_KEY=SomeRandomString";
         $plugins = $this->basePlugins;
 
         foreach ($plugins as $plugin) {
-            \Plugin::activatePlugin($plugin);
+            \XePlugin::activatePlugin($plugin);
         }
     }
 

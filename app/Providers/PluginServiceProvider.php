@@ -82,7 +82,7 @@ class PluginServiceProvider extends ServiceProvider
 
                 /** @var \Xpressengine\Interception\InterceptionHandler $interception */
                 $interception = $app['xe.interception'];
-                $pluginHandler = $interception->proxy(PluginHandler::class, 'Plugin');
+                $pluginHandler = $interception->proxy(PluginHandler::class, 'XePlugin');
                 $pluginHandler = new $pluginHandler(
                     $pluginDir, $pluginCollection, $app['view'], $app['xe.pluginRegister'], $app
                 );

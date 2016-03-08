@@ -1,6 +1,6 @@
 <?php namespace App\Http\Controllers;
 
-use Plugin;
+use XePlugin;
 use XePresenter;
 use Redirect;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,7 +32,7 @@ class PluginController extends Controller
             $field['keyword'] = null;
         }
 
-        $collection = Plugin::getAllPlugins(true);
+        $collection = XePlugin::getAllPlugins(true);
         $plugins = $collection->fetch($field);
 
         $componentTypes = $this->getComponentTypes();
@@ -57,7 +57,7 @@ class PluginController extends Controller
     public function postActivatePlugin($pluginId)
     {
         try {
-            Plugin::activatePlugin($pluginId);
+            XePlugin::activatePlugin($pluginId);
         } catch (XpressengineException $e) {
             $exception = new HttpXpressengineException('403');
             $exception->setMessage($e->getMessage());
@@ -72,7 +72,7 @@ class PluginController extends Controller
     public function postDeactivatePlugin($pluginId)
     {
         try {
-            Plugin::deactivatePlugin($pluginId);
+            XePlugin::deactivatePlugin($pluginId);
         } catch (XpressengineException $e) {
             $exception = new HttpXpressengineException('403');
             $exception->setMessage($e->getMessage());
@@ -87,7 +87,7 @@ class PluginController extends Controller
     public function postUpdatePlugin($pluginId)
     {
         try {
-            Plugin::updatePlugin($pluginId);
+            XePlugin::updatePlugin($pluginId);
         } catch (XpressengineException $e) {
             $exception = new HttpXpressengineException(Response::HTTP_FORBIDDEN);
             $exception->setMessage($e->getMessage());

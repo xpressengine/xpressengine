@@ -3,7 +3,7 @@ namespace App\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class Plugin extends Facade
+class XePlugin extends Facade
 {
     const STATUS_ACTIVATED = 'activated';
     const STATUS_DEACTIVATED = 'deactivated';

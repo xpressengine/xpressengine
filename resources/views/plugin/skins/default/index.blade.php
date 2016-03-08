@@ -16,8 +16,8 @@
                         <div class="col_left">
                             <div class="btn-group">
                                 <a href="{{ route('settings.plugins', Input::except('status')) }}" class="btn btn-default @if(Input::get('status') === null) on @endif">{{ xe_trans('xe::all') }}</a>
-                                <a href="{{ route('settings.plugins', array_merge(Input::all(), ['status'=> Plugin::STATUS_ACTIVATED] )) }}" class="btn btn-default @if(Input::get('status') === Plugin::STATUS_ACTIVATED) on @endif">{{ xe_trans('xe::enabled') }}</a>
-                                <a href="{{ route('settings.plugins', array_merge(Input::all(), ['status'=> Plugin::STATUS_DEACTIVATED] )) }}" class="btn btn-default @if(Input::get('status') === Plugin::STATUS_DEACTIVATED) on @endif">{{ xe_trans('xe::disabled') }}</a>
+                                <a href="{{ route('settings.plugins', array_merge(Input::all(), ['status'=> XePlugin::STATUS_ACTIVATED] )) }}" class="btn btn-default @if(Input::get('status') === XePlugin::STATUS_ACTIVATED) on @endif">{{ xe_trans('xe::enabled') }}</a>
+                                <a href="{{ route('settings.plugins', array_merge(Input::all(), ['status'=> XePlugin::STATUS_DEACTIVATED] )) }}" class="btn btn-default @if(Input::get('status') === XePlugin::STATUS_DEACTIVATED) on @endif">{{ xe_trans('xe::disabled') }}</a>
                             </div>
                         </div>
                         <div class="col_left">
