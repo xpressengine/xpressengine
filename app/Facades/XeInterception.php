@@ -3,7 +3,7 @@ namespace App\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class Interception extends Facade
+class XeInterception extends Facade
 {
 
     /**
