@@ -1,8 +1,8 @@
-{{ Frontend::css('/assets/settings/css/admin_menu.css')->before('/assets/settings/css/admin.css')->load() }}
-{{ Frontend::js('/assets/vendor/core/lodash.min.js')->appendTo('head')->load() }}
-{{ Frontend::js('/assets/vendor/menu/Tree.js')->appendTo('head')->load() }}
-{{ Frontend::js('/assets/vendor/menu/classnames.js')->appendTo('head')->load() }}
-{{ Frontend::js('/assets/vendor/menu/menu.js')->appendTo('head')->load() }}
+{{ XeFrontend::css('/assets/settings/css/admin_menu.css')->before('/assets/settings/css/admin.css')->load() }}
+{{ XeFrontend::js('/assets/vendor/core/lodash.min.js')->appendTo('head')->load() }}
+{{ XeFrontend::js('/assets/vendor/menu/Tree.js')->appendTo('head')->load() }}
+{{ XeFrontend::js('/assets/vendor/menu/classnames.js')->appendTo('head')->load() }}
+{{ XeFrontend::js('/assets/vendor/menu/menu.js')->appendTo('head')->load() }}
 @section('page_title',"<h2>".xe_trans('xe::siteMap')."</h2>")
 @section('page_description',xe_trans('xe::siteMapDescription'))
 @section('page_setting_menu')

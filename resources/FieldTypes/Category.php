@@ -14,7 +14,7 @@ use Illuminate\Database\Query\Builder;
 use Xpressengine\FieldSkins\Category\AfterTitle;
 use Xpressengine\FieldSkins\Category\BeforeTitle;
 use Xpressengine\FieldSkins\Category\DefaultSkin;
-use Frontend;
+use XeFrontend;
 use View;
 
 /**
@@ -91,7 +91,7 @@ class Category extends AbstractType
             $category = app('xe.category')->get($config->get('categoryId'));
         }
 
-        Frontend::rule('dynamicFieldSection', $this->getSettingsRules());
+        XeFrontend::rule('dynamicFieldSection', $this->getSettingsRules());
 
         return View::make('dynamicField/category/createType', [
             'config' => $config,

@@ -22,8 +22,8 @@ use XeLang;
  * ## 사용법
  *
  * ### front 에 다국어 설정
- * * Frontend::translation([]);
- * * Frontend::output('translation');
+ * * XeFrontend::translation([]);
+ * * XeFrontend::output('translation');
  *
  * @category    Frontend
  * @package     Xpressengine\Presenter

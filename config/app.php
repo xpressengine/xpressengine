@@ -241,7 +241,6 @@ return [
         'Agent' => Jenssegers\Agent\Facades\Agent::class,
 
         'XeUser' => App\Facades\XeUser::class,
-        'XeGroup' => App\Facades\Group::class,
 
         'Plugin' => App\Facades\Plugin::class,
         'Interception' => App\Facades\Interception::class,
@@ -257,7 +256,7 @@ return [
         'XeSite'      => App\Facades\XeSite::class,
 
         'Presenter' => App\Facades\Presenter::class,
-        'Frontend' => App\Facades\Frontend::class,
+        'XeFrontend' => App\Facades\XeFrontend::class,
         'DynamicField' => App\Facades\DynamicField::class,
         'XeDB' => App\Facades\XeDB::class,
         'XeDocument' => App\Facades\XeDocument::class,

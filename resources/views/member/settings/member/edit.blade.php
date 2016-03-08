@@ -1,4 +1,4 @@
-{{ Frontend::js('assets/vendor/react/JSXTransformer.js')->before('assets/vendor/react/react.js')->appendTo('head')->load() }}
+{{ XeFrontend::js('assets/vendor/react/JSXTransformer.js')->before('assets/vendor/react/react.js')->appendTo('head')->load() }}
 
 @section('page_title')
     <h2>회원 수정 - {{ $user->getDisplayName()  }}</h2>
