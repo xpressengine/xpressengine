@@ -31,6 +31,86 @@ use Xpressengine\Routing\RouteRepository;
 /**
  * # MenuHandler
  *
+ * ## app binding
+ * * xe.menu 으로 바인딩 되어 있음
+ * * XeMenu Facade 로 접근이 가능함
+ *
+ * ## 사용법
+ *
+ * ### Menu 등록
+ * ```php
+ *  $menu = XeMenu::create(
+ *      ['title' => 'menu title', 'description' => 'menu description', 'siteKey' => 'default']
+ *  );
+ * ```
+ *
+ * ### Menu 수정
+ * ```php
+ *  $menu->title = 'new title';
+ *  $menu->description = 'new description';
+ *  XeMenu::put($menu);
+ * ```
+ *
+ * ### Menu 삭제
+ * * Menu 에 연결된 MenuItem 이 있는경우 삭제 할 수 없는 제약사항이 있음
+ * ```php
+ *  XeMenu::remove($menu);
+ * ```
+ *
+ * ### MenuItem 생성
+ * * 새로운 MenuItem 을 생성하고자 하는경우 해당 아이템이 소속될 메뉴 객체와 함께
+ * 아이템을 구성할 정보를 배열형태로 전달하도록 함
+ * * 해당 배열을 다음과 같은 항목으로 구성되어야 함
+ * - parentId : 부모에 해당하는 MenuItem ID, 부모가 없는경우 null
+ * - title : 사용자에게 표시될 이름
+ * - description : MenuItem 에 대한 설명
+ * - target : MenuItem 을 클릭했을 때의 링크 옵션 (ex. 새창, 현재창 등)
+ * - type : MenuItem 이 어떤 모듈의 인스턴스인지 판별할 수 있는 키
+ * - ordering : MenuItem 의 정렬 순번
+ * - activated : MenuItem 의 활성화 여부
+ *
+ * * MenuItem 을 생성하는 경우 대상에 해당하는 모듈이 필요로 하는 정보도 함께 전달되어야 함
+ * ```php
+ *  $menuInput = [
+ *      'title' => 'item title',
+ *      'description' => 'item description',
+ *      ...
+ *  ];
+ *  $etcInput = ['foo' => 'bar', 'baz' => 'qux'];
+ *  $menuItem = XeMenu::createItem($menu, $menuInput, $etcInput);
+ * ```
+ *
+ * ### MenuItem 수정
+ * * 수정시에도 등록시와 마찬가지로 아이템에 해당하는 모듈이 필요로하는 정보를 넘겨주어
+ * 함께 갱신되도록 함
+ * ```php
+ * $menuItem->title = 'new item title';
+ * $menuItem->description = 'new item description';
+ * $etcInput = ['foo' => 'new bar', 'baz' => 'new qux'];
+ * XeMenu::putItem($menuItem, $etcInput);
+ * ```
+ *
+ * ### MenuItem 삭제
+ * * MenuItem 을 삭제하고자 할때 자식에 해당하는 다른 MenuItem 이 존재하는 경우
+ * 삭제가 불가능 함
+ * ```php
+ * XeMenu::removeItem($item);
+ * ```
+ *
+ * ### MenuItem 위치 이동
+ * * MenuItem 을 이동하여 다른 아이템의 자식, 또는 다른 메뉴의 속하는 아이템으로 지정 할 수 있음.
+ * 이때 MenuItem 이 다른 자식에 해당하는 아이템이 있는 경우 함께 이동하여 부모 자식 관계를 유지 시킴
+ * ```php
+ *  XeMenu::moveItem($menu, $menuItem, $newParentItem);
+ * ```
+ *
+ * ### MenuItem 의 순서 정렬
+ * * 형제 관계에 존재하는 MenuItem 은 정렬을 통해 표시되는 순서를 결정하게 되고,
+ * 또한 이 순서를 변경할 수 있음
+ * ```php
+ *  XeMenu::setOrder($menuItem, $position = 1);
+ * ```
+ *
  * @category  Menu
  * @package   Xpressengine\Menu
  * @author    XE Team (developers) <developers@xpressengine.com>

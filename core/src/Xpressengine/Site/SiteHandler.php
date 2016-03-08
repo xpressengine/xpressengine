@@ -25,24 +25,20 @@ use Xpressengine\Site\Exceptions\CanNotUseDomainException;
  *
  * ## app binding
  * * xe.site 으로 바인딩 되어 있음
- * * Site Facade 제공
- *
- * ## 생성자에서 필요한 항목들
- * * SiteRepository $repository - 사이트 repository
- * * Config $config - Config manager, 사이트의 설정 정보를 관리
+ * * XeSite Facade 제공
  *
  * ## 사용법
  *
  * ### 현재의 Site 객체를 획득
  *
  * ```php
- * $handler->getCurrentSite()
+ * XeSite::getCurrentSite()
  * ```
  *
  * ### 현재의 Site 객체를 지정
  *
  * ```php
- * $handler->setCurrentSite(Site $site)
+ * XeSite::setCurrentSite(Site $site)
  * ```
  *
  * ### 현재의 SiteKey 획득
@@ -50,7 +46,7 @@ use Xpressengine\Site\Exceptions\CanNotUseDomainException;
  * * 편의를 위해서 제공
  *
  * ```php
- * $handler->getCurrentSiteKey()
+ * XeSite::getCurrentSiteKey()
  * ```
  *
  * ### Site 의 ConfigEntity 획득
@@ -58,16 +54,15 @@ use Xpressengine\Site\Exceptions\CanNotUseDomainException;
  * * siteKey 를 전달하지 않는 경우에는 defaultSiteKey 가 적용됨
  *
  * ```php
- * $handler->getSiteConfig($siteKey = null)
+ * XeSite::getSiteConfig($siteKey = null)
  * ```
  *
  * ### Site 의 ConfigEntity 업데이트
  * * siteKey 에 해당하는 ConfigEntity 수정
  *
  * ```php
- * $handler->putSiteConfig(ConfigEntity $config)
+ * XeSite::putSiteConfig(ConfigEntity $config)
  * ```
- *
  *
  * @category    Site
  * @package     Xpressengine\Site

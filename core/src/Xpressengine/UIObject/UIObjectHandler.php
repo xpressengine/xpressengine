@@ -96,7 +96,7 @@ class UIObjectHandler
      *
      * ```
      * // UI는 이 클래스(UIObjectHandler)의 Facade. 메소드에 지정된 타입의 디폴트 UIObject가 생성되어 반환된다.
-     * $ui = \UI::{alias of uiobject}($args);
+     * $ui = \XeUI::{alias of uiobject}($args);
      * $ui->render();
      * ```
      *
