@@ -102,15 +102,17 @@ define([], function(XE) {
     };
 
     Validator.error = function($element, message) {
-        console.log(this.alertType + '222');
         if (this.alertType == 'form') {
             require(['griper'], function(griper) {
                 griper.form($element, message);
             });
         } else if (this.alertType == 'toast') {
             require(['griper'], function(griper) {
-                console.log($element);
-                message = '[' + $element.attr('placeholder') + '] ' + message;
+                var typeName = $element.attr('placeholder');
+                if (typeName == undefined) {
+                    typeName = $element.attr('name');
+                }
+                message = '[' + typeName + '] ' + message;
                 griper.toast($element, message);
             });
         }

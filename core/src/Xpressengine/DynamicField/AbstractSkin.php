@@ -193,7 +193,7 @@ abstract class AbstractSkin implements ComponentInterface
      *
      * @return array
      */
-    public function getSettingRules()
+    public function getSettingsRules()
     {
         return $this->settingsRules;
     }
