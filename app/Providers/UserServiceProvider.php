@@ -237,6 +237,8 @@ class UserServiceProvider extends ServiceProvider
 
         // register toggle menu
         $this->registerToggleMenu();
+
+        User::setUserConfig($this->app['xe.config']->get('user'));
     }
 
     /**

@@ -14,6 +14,7 @@
 namespace Xpressengine\User\Models;
 
 use Closure;
+use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Database\Eloquent\DynamicModel;
 use Xpressengine\User\Rating;
 use Xpressengine\User\UserInterface;
@@ -67,6 +68,37 @@ class User extends DynamicModel implements UserInterface
      * @var string getDisplayName()메소드가 실행될 때 사용할 필드
      */
     public static $displayField = 'displayName';
+
+    /**
+     * @var ConfigEntity
+     */
+    public static $config;
+
+    /**
+     * User constructor.
+     *
+     * @param array $attributes attributes
+     */
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->setProxyOptions([
+            'group' => static::$config->get('group'),
+        ]);
+    }
+
+    /**
+     * set user config
+     *
+     * @param ConfigEntity $config config entity
+     *
+     * @return void
+     */
+    public static function setUserConfig(ConfigEntity $config)
+    {
+        static::$config = $config;
+    }
 
     /**
      * setProfileImageResolver
