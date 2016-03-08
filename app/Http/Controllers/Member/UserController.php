@@ -8,7 +8,7 @@ use Exception;
 use Illuminate\Http\Request;
 use XePresenter;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Theme;
+use XeTheme;
 use XeDB;
 use Xpressengine\Skin\SkinHandler;
 use Xpressengine\Support\Exceptions\HttpXpressengineException;
@@ -76,7 +76,7 @@ class UserController extends Controller
 
         $this->user = app('auth')->user();
 
-        Theme::selectSiteTheme();
+        XeTheme::selectSiteTheme();
         XePresenter::setSkin('member/settings');
         $this->middleware('auth');
     }

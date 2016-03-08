@@ -144,7 +144,7 @@ class Handler extends ExceptionHandler
             );
         } else {
             XePresenter::setSkin('error');
-            \Theme::selectBlankTheme();
+            \XeTheme::selectBlankTheme();
             $view = XePresenter::make(
                 'error',
                 ['type' => 'danger', 'exception' => $responseException, 'message' => $responseException->getMessage()]

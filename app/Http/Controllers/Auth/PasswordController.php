@@ -9,7 +9,7 @@ use InvalidArgumentException;
 use XePresenter;
 use Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Theme;
+use XeTheme;
 use Xpressengine\User\UserHandler;
 
 class PasswordController extends Controller {
@@ -58,7 +58,7 @@ class PasswordController extends Controller {
         $this->passwords = $passwords;
         $this->handler = app('xe.user');
 
-        Theme::selectSiteTheme();
+        XeTheme::selectSiteTheme();
         XePresenter::setSkin('member/auth');
 
         $this->middleware('guest');

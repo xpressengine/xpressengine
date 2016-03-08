@@ -19,7 +19,7 @@ use Xpressengine\Config\ConfigManager;
 use Xpressengine\Plugin\PluginRegister;
 
 /**
- * ThemeHandler는 XpressEngine에 등록된 테마를 관리하는 역할을 합니다. ThemeHandler는 XE에서 `Theme` 파사드를 할당받습니다.
+ * ThemeHandler는 XpressEngine에 등록된 테마를 관리하는 역할을 합니다. ThemeHandler는 XE에서 `XeTheme` 파사드를 할당받습니다.
  *
  * ## 테마 조회
  *
@@ -29,7 +29,7 @@ use Xpressengine\Plugin\PluginRegister;
  *
  * ```php
  * $id = 'theme/myname@mytheme';
- * $theme = Theme::getTheme($id);
+ * $theme = XeTheme::getTheme($id);
  * ```
  *
  * ### 모든 테마 조회하기
@@ -37,14 +37,14 @@ use Xpressengine\Plugin\PluginRegister;
  * `getAllTheme` 메소드를 사용하여 모든 테마 목록을 조회할 수 있습니다.
  *
  * ```php
- * $themes = Theme::getAllTheme();
+ * $themes = XeTheme::getAllTheme();
  * ```
  *
  * 만약 모바일이나 데스크탑 버전을 지원하는 테마 목록을 조회하려면 `getAllThemeSupportingMobile`,  `getAllThemeSupportingDesktop` 메소드를 사용하십시오.
  *
  * ```php
- * $mobileThemes = Theme::getAllThemeSupportingMobile();
- * $desktopThemes = Theme::getAllThemeSupportingDesktop();
+ * $mobileThemes = XeTheme::getAllThemeSupportingMobile();
+ * $desktopThemes = XeTheme::getAllThemeSupportingDesktop();
  * ```
  *
  * ### 관리페이지용 테마 조회하기
@@ -55,13 +55,13 @@ use Xpressengine\Plugin\PluginRegister;
  *
  * ```php
  * $id = 'settingsTheme/myname@mysettingstheme';
- * $settingsTheme = Theme::getTheme($id)
+ * $settingsTheme = XeTheme::getTheme($id)
  * ```
  *
  * 모든 관리페이지용 테마 목록을 조회할 때에는 `getAllSettingsTheme`를 사용하십시오.
  *
  * ```php
- * $settingsThemes = Theme::getAllSettingsTheme();
+ * $settingsThemes = XeTheme::getAllSettingsTheme();
  * ```
  *
  * ## 사용할 테마 지정하기
@@ -75,7 +75,7 @@ use Xpressengine\Plugin\PluginRegister;
  *
  * ```php
  * $id = 'theme/myname@mytheme';
- * Theme::selectTheme($id);
+ * XeTheme::selectTheme($id);
  * ```
  *
  * ### 사이트 기본 테마 사용하기
@@ -87,7 +87,7 @@ use Xpressengine\Plugin\PluginRegister;
  *
  * ```php
  * // 응답시 사이트 기본 테마가 사용됨
- * Theme::selectSiteTheme();
+ * XeTheme::selectSiteTheme();
  * ```
  *
  * ### 테마 사용 안하기
@@ -96,7 +96,7 @@ use Xpressengine\Plugin\PluginRegister;
  *
  * ```php
  * // 응답시 테마 사용 안함.
- * Theme::selectBlankTheme();
+ * XeTheme::selectBlankTheme();
  * ```
  *
  * ### 지정된 테마 정보 조회
@@ -104,7 +104,7 @@ use Xpressengine\Plugin\PluginRegister;
  * 현재 요청에 대한 응답시 사용하기로 지정된 테마를 조회할 수 있습니다. `getSelectedTheme` 메소드를 사용하십시오.
  *
  * ```php
- * $selected = Theme::getSelectedTheme();
+ * $selected = XeTheme::getSelectedTheme();
  * ```
  *
  * ## 테마 설정
@@ -120,7 +120,7 @@ use Xpressengine\Plugin\PluginRegister;
  *
  * ```php
  * $id = 'theme/myname@mytheme';
- * $configs = Theme::getThemeConfig($id);
+ * $configs = XeTheme::getThemeConfig($id);
  * ```
  *
  * ### 테마 설정정보 저장하기
@@ -134,7 +134,7 @@ use Xpressengine\Plugin\PluginRegister;
  * 'main_menu' => $menuID,
  * ];
  *
- * Theme::setThemeConfig($id, $configs);
+ * XeTheme::setThemeConfig($id, $configs);
  * ```
  *
  * @category    Theme

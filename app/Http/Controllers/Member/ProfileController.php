@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Auth;
 use Illuminate\Http\Request;
 use XePresenter;
-use Theme;
+use XeTheme;
 use XeDB;
 use Xpressengine\User\Exceptions\UserNotFoundException;
 use Xpressengine\User\Rating;
@@ -39,7 +39,7 @@ class ProfileController extends Controller
     {
         $this->handler = app('xe.user');
 
-        Theme::selectSiteTheme();
+        XeTheme::selectSiteTheme();
         XePresenter::setSkin('member/profile');
     }
 

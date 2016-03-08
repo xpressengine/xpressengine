@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Http\Request;
 use Illuminate\Routing\UrlGenerator;
 use XePresenter;
-use Theme;
+use XeTheme;
 use XeDB;
 use Xpressengine\Support\Exceptions\HttpXpressengineException;
 use Xpressengine\User\EmailBrokerInterface;
@@ -55,7 +55,7 @@ class AuthController extends Controller
         $this->handler = app('xe.user');
         $this->emailBroker = app('xe.auth.email');
 
-        Theme::selectSiteTheme();
+        XeTheme::selectSiteTheme();
         XePresenter::setSkin('member/auth');
 
         $this->middleware('guest', ['except' => ['getLogout', 'getConfirm']]);
