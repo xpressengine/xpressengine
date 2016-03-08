@@ -59,6 +59,12 @@ define(['validator'], function(validator) {
                 self.getAdditionalConfigure(frm);
             });
 
+            this.container.on('click', '.__xe_checkbox-config', function(e) {
+                var $target = $(e.target),
+                    frm = $(this).closest('form');
+                frm.find('[name="'+$target.data('name')+'"]').val($target.prop('checked') == true ? 'true' : 'false');
+            });
+
         };
 
         this.getFormContainer = function(frm) {
@@ -116,7 +122,7 @@ define(['validator'], function(validator) {
             row.find('td.__xe_column_label').html(data.label);
             row.find('td.__xe_column_typeName').html(data.typeName);
             row.find('td.__xe_column_skinName').html(data.skinName);
-            row.find('td.__xe_column_use').html(data.use)
+            row.find('td.__xe_column_use').html(data.use == true ? 'True' : 'False')
 
             if (this.container.find('.__xe_tbody').find('.__xe_row_'+data.id).length != 0) {
                 this.container.find('.__xe_tbody').find('.__xe_row_'+data.id).replaceWith(row.show());
@@ -163,10 +169,13 @@ define(['validator'], function(validator) {
                         }
                     });
                     frm.find('[name="label"]').val(response.config.label);
-                    frm.find('[name="use"]').prop('checked', self.checkBox(response.config.use));
-                    frm.find('[name="required"]').prop('checked', self.checkBox(response.config.required));
-                    frm.find('[name="sortable"]').prop('checked', self.checkBox(response.config.sortable));
-                    frm.find('[name="searchable"]').prop('checked', self.checkBox(response.config.searchable));
+                    frm.find('[name="use"]').val(self.checkBox(response.config.use) ? 'true' : 'false');
+                    frm.find('[name="required"]').val(self.checkBox(response.config.required) ? 'true' : 'false');
+                    frm.find('[name="sortable"]').val(self.checkBox(response.config.sortable) ? 'true' : 'false');
+                    frm.find('[name="searchable"]').val(self.checkBox(response.config.searchable) ? 'true' : 'false');
+
+                    frm.find('[data-name="use"]').prop('checked', self.checkBox(response.config.use));
+                    frm.find('[data-name="required"]').prop('checked', self.checkBox(response.config.required));
 
                     self.getSkinOption(frm);
                 }

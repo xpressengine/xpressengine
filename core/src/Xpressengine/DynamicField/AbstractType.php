@@ -641,6 +641,11 @@ abstract class AbstractType implements ComponentInterface
         if ($config === null) {
             $config = $this->config;
         }
+
+        if ($config->get('use') === false) {
+            return $query;
+        }
+
         $baseTable = $query->from;
         $createTableName = $this->handler->getConfigHandler()->getTableName($config);
         if ($query->hasDynamicTable($createTableName)) {
