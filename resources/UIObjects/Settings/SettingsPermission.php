@@ -38,7 +38,7 @@ class SettingsPermission extends AbstractUIObject
                 'title' => $action,
                 'grant' => $this->getGrant($registered, $action),
                 'groups' => $groups
-            ])->render();
+            ]);
         }
         $content = implode('<hr>', $content);
         $settings[] = $this->generateBox($title, $content);
