@@ -16,9 +16,9 @@
                         {{-- status --}}
                         <div class="btn-group pull-right">
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                @if(Input::get('status') === \Member::STATUS_ACTIVATED)
+                                @if(Input::get('status') === \XeUser::STATUS_ACTIVATED)
                                     승인됨
-                                @elseif(Input::get('status') === \Member::STATUS_DENIED)
+                                @elseif(Input::get('status') === \XeUser::STATUS_DENIED)
                                     거부됨
                                 @else
                                     승인/거부
@@ -27,8 +27,8 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a href="{{ route('settings.member.index', Input::except('status') ) }}" @if(! Input::has('status')) active @endif">전체</a></li>
-                                <li><a href="{{ route('settings.member.index', array_merge(Input::all(), ['status'=> \Member::STATUS_ACTIVATED] )) }}" @if(Input::get('status') === \Member::STATUS_ACTIVATED) active @endif">승인됨</a></li>
-                                <li><a href="{{ route('settings.member.index', array_merge(Input::all(), ['status'=> \Member::STATUS_DENIED] )) }}" @if(Input::get('status') === \Member::STATUS_DENIED) active @endif">거부됨</a></li>
+                                <li><a href="{{ route('settings.member.index', array_merge(Input::all(), ['status'=> \XeUser::STATUS_ACTIVATED] )) }}" @if(Input::get('status') === \XeUser::STATUS_ACTIVATED) active @endif">승인됨</a></li>
+                                <li><a href="{{ route('settings.member.index', array_merge(Input::all(), ['status'=> \XeUser::STATUS_DENIED] )) }}" @if(Input::get('status') === \XeUser::STATUS_DENIED) active @endif">거부됨</a></li>
                             </ul>
                         </div>
                         {{-- groups --}}
@@ -92,32 +92,32 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($members as $member)
+                        @foreach($users as $user)
                             <tr>
-                                <td><input type="checkbox" name="id[]" class="__xe_checkbox" value="{{ $member->getId() }}" @if($member->rating === \Xpressengine\Member\Rating::SUPER) disabled @endif /></td>
+                                <td><input type="checkbox" name="id[]" class="__xe_checkbox" value="{{ $user->getId() }}" @if($user->rating === \Xpressengine\User\Rating::SUPER) disabled @endif /></td>
                                 <td>
-                                    <img class="__xe_member" data-id="{{ $member->getId() }}" src="{{ $member->getProfileImage() }}" style="height: 20px;">
-                                    <span role="button" class="__xe_member" data-id="{{ $member->getId() }}" data-text="{{ $member->getDisplayName() }}">{{ $member->getDisplayName() }}</span>
+                                    <img class="__xe_member" data-id="{{ $user->getId() }}" src="{{ $user->getProfileImage() }}" style="height: 20px;">
+                                    <span role="button" class="__xe_member" data-id="{{ $user->getId() }}" data-text="{{ $user->getDisplayName() }}">{{ $user->getDisplayName() }}</span>
                                 </td>
 
                                 <td>
-                                    @if(isset($member->accounts))
-                                        @foreach($member->accounts as $account)
+                                    @if(isset($user->accounts))
+                                        @foreach($user->accounts as $account)
                                             <span class="label label-default">{{ $account->provider }}</span>
                                         @endforeach
                                     @else
                                         <span class="label label-default">default</span>
                                     @endif
                                 </td>
-                                <td>{{ data_get($member, 'email', '없음') }}</td>
-                                <td>{!! $member->createdAt->format('y-m-d') !!}</td>
-                                <td>{!! $member->status==='denied'?'거부됨':'승인됨' !!}</td>
+                                <td>{{ data_get($user, 'email', '없음') }}</td>
+                                <td>{!! $user->createdAt->format('y-m-d') !!}</td>
+                                <td>{!! $user->status==='denied'?'거부됨':'승인됨' !!}</td>
                                 <td>
-                                    @if($member->groups !== null)
-                                        {{ implode(', ', array_pluck($member->groups, 'name')) }}
+                                    @if($user->groups !== null)
+                                        {{ implode(', ', array_pluck($user->groups, 'name')) }}
                                     @endif
                                 </td>
-                                <td><a href="{{ route('settings.member.edit', ['id' => $member->getId()]) }}" class="btn btn-default btn-sm">관리</a></td>
+                                <td><a href="{{ route('settings.member.edit', ['id' => $user->getId()]) }}" class="btn btn-default btn-sm">관리</a></td>
                             </tr>
                         @endforeach
                         </tbody>
@@ -128,7 +128,7 @@
         </div>
 
         {{-- page navigation--}}
-        <nav class="text-center">{!! $members->render() !!}</nav>
+        <nav class="text-center">{!! $users->render() !!}</nav>
 
 
 <script type="text/javascript">

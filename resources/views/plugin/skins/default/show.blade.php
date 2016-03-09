@@ -67,7 +67,7 @@
                             <button class="btn btn-danger v2">끄기</button>
                         </form>
 
-                        @if($plugin->isActivated() && $plugin->checkUpdate())
+                        @if($plugin->isActivated() && $plugin->checkUpdated($plugin->getInstalledVersion()))
                             {{--<button class="btn btn-default blue v2">업데이트</button>--}}
                         @endif
 

@@ -1,5 +1,5 @@
-{{ Frontend::bodyClass('error-page')->load() }}
-{{ Frontend::css('assets/error/style.css')->load() }}
+{{ XeFrontend::bodyClass('error-page')->load() }}
+{{ XeFrontend::css('assets/error/style.css')->load() }}
 
 <div class="error-page-contents">
 

@@ -27,7 +27,7 @@
 @elseif($errors = Session::get('errors'))
     <script type="text/javascript">
         $(function() {
-            XE.toast('{{ $errors['type'] }}', '잘못 입력되었습니다. <ul>@foreach ($errors->all() as $error) <li>{{ $error }}</li>@endforeach</ul>');
+            XE.toast('danger', '잘못된 입력이 있습니다. <ul>@foreach ($errors->all() as $error) <li>{{ $error }}</li>@endforeach</ul>');
         });
     </script>
 @endif

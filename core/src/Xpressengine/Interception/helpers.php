@@ -57,6 +57,6 @@ if (function_exists('intercept') === false) {
      */
     function intercept($pointCut, $name, Closure $advice)
     {
-        \Interception::addAdvisor($pointCut, $name, $advice);
+        \XeInterception::addAdvisor($pointCut, $name, $advice);
     }
 }

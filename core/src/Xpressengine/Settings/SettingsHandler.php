@@ -15,10 +15,10 @@ namespace Xpressengine\Settings;
 
 use Illuminate\Routing\Route;
 use Illuminate\Routing\Router;
+use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Config\ConfigManager;
-use Xpressengine\Permission\Action;
-use Xpressengine\Permission\Factory;
+use Xpressengine\Permission\Instance;
 use Xpressengine\Register\Container;
 use Xpressengine\Settings\Exceptions\PermissionIDNotFoundException;
 use Xpressengine\Support\Tree\TreeCollection;
@@ -68,7 +68,7 @@ use Xpressengine\Support\Tree\TreeCollection;
  *         Route::get('/', [
  *                 'as' => 'social_login::settings',
  *                 'uses' => function () {
- *                     return \Presenter::make('social_login::tpl.setting');
+ *                     return \XePresenter::make('social_login::tpl.setting');
  *                 },
  *                 'settings_menu' => 'member.social_login'
  *         ]);
@@ -108,7 +108,7 @@ use Xpressengine\Support\Tree\TreeCollection;
  *     function () {
  *         Route::get('{id}/edit', [
  *            'as' => 'settings.member.edit',
- *            'uses' => 'Member\Settings\MemberController@getEdit',
+ *            'uses' => 'Member\Settings\UserController@getEdit',
  *            'permission' => 'member.edit',
  *         ]
  *     });
@@ -154,9 +154,9 @@ class SettingsHandler
     private $configManager;
 
     /**
-     * @var Factory
+     * @var GateContract
      */
-    private $permissions;
+    private $gate;
 
     /**
      * constructor
@@ -165,18 +165,18 @@ class SettingsHandler
      * @param Container     $container    XpressEngine Register 등록된 관리메뉴와 관리권한을 조회할 때 사용한다.
      * @param Router        $router       router
      * @param ConfigManager $configManger 관리페이지 관련 설정 정보를 조회/저장할 때 사용한다.
-     * @param Factory       $permissions  관리페이지 권한 정보를 조회/저장할 때 사용한다.
+     * @param GateContract       $permissions  관리페이지 권한 정보를 조회/저장할 때 사용한다.
      */
     public function __construct(
         Container $container,
         Router $router,
         ConfigManager $configManger,
-        Factory $permissions
+        GateContract $gate
     ) {
         $this->container = $container;
         $this->router = $router;
         $this->configManager = $configManger;
-        $this->permissions = $permissions;
+        $this->gate = $gate;
     }
 
     /**
@@ -312,8 +312,9 @@ class SettingsHandler
             $visible = false;
             if (!$isSuper) {
                 foreach ((array) $permissions as $permissionId) {
-                    $registered = $this->permissions->make('settings', $permissionId);
-                    if ($registered->ables(Action::ACCESS) === true) {
+                    // todo: implementing
+                    $instance = new Instance($permissionId);
+                    if ($this->gate->allows('access', $instance)) {
                         $visible = true;
                     }
                 }

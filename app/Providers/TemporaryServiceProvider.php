@@ -56,7 +56,7 @@ class TemporaryServiceProvider extends ServiceProvider
         $this->app->bind(
             'xe.temporary',
             function ($app) {
-                $proxyClass = $app['xe.interception']->proxy(TemporaryHandler::class, 'Temporary');
+                $proxyClass = $app['xe.interception']->proxy(TemporaryHandler::class, 'XeTemporary');
                 return new $proxyClass(
                     new TemporaryRepository($app['xe.db']->connection(), $app['xe.keygen']), $app['auth']
                 );

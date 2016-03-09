@@ -4,6 +4,7 @@
  */
 namespace Xpressengine\FieldTypes;
 
+use Xpressengine\Database\DynamicQuery;
 use Xpressengine\DynamicField\DynamicFieldHandler;
 use Xpressengine\DynamicField\AbstractType;
 use Xpressengine\DynamicField\ColumnEntity;
@@ -13,7 +14,7 @@ use Illuminate\Database\Query\Builder;
 use Xpressengine\FieldSkins\Category\AfterTitle;
 use Xpressengine\FieldSkins\Category\BeforeTitle;
 use Xpressengine\FieldSkins\Category\DefaultSkin;
-use Frontend;
+use XeFrontend;
 use View;
 
 /**
@@ -90,7 +91,7 @@ class Category extends AbstractType
             $category = app('xe.category')->get($config->get('categoryId'));
         }
 
-        Frontend::rule('dynamicFieldSection', $this->getSettingsRules());
+        XeFrontend::rule('dynamicFieldSection', $this->getSettingsRules());
 
         return View::make('dynamicField/category/createType', [
             'config' => $config,
@@ -104,7 +105,7 @@ class Category extends AbstractType
      * @param Builder $query query builder
      * @return Builder
      */
-    public function get(Builder $query)
+    public function get(DynamicQuery $query)
     {
         $config = $this->config;
 

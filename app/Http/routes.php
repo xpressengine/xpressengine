@@ -103,10 +103,10 @@ Route::group(
  * member settings
  * */
 Route::group(
-    ['prefix' => 'member'],
+    ['prefix' => 'user'],
     function () {
 
-        Route::get('/{section?}', ['as' => 'member.settings', 'uses' => 'Member\MemberController@show']);
+        Route::get('/{section?}', ['as' => 'member.settings', 'uses' => 'Member\UserController@show']);
 
         // settings secton
         Route::group(
@@ -119,7 +119,7 @@ Route::group(
                         '/',
                             [
                                 'as' => 'member.settings.name.update',
-                                'uses' => 'Member\MemberController@updateDisplayName'
+                                'uses' => 'Member\UserController@updateDisplayName'
                             ]
                         );
 
@@ -128,7 +128,7 @@ Route::group(
                             'check',
                             [
                                 'as' => 'member.settings.name.check',
-                                'uses' => 'Member\MemberController@validateDisplayName'
+                                'uses' => 'Member\UserController@validateDisplayName'
                             ]
                         );
                     }
@@ -141,7 +141,7 @@ Route::group(
                             '/',
                             [
                                 'as' => 'member.settings.password.update',
-                                'uses' => 'Member\MemberController@updatePassword'
+                                'uses' => 'Member\UserController@updatePassword'
                             ]
                         );
                         // check password is valid
@@ -149,7 +149,7 @@ Route::group(
                             'check',
                             [
                                 'as' => 'member.settings.password.check',
-                                'uses' => 'Member\MemberController@validatePassword'
+                                'uses' => 'Member\UserController@validatePassword'
                             ]
                         );
                     }
@@ -161,23 +161,23 @@ Route::group(
                     function () {
                         Route::get(
                             'list',
-                            ['as' => 'member.settings.mail.list', 'uses' => 'Member\MemberController@getMailList']
+                            ['as' => 'member.settings.mail.list', 'uses' => 'Member\UserController@getMailList']
                         );
                         Route::post(
                             'add',
-                            ['as' => 'member.settings.mail.add', 'uses' => 'Member\MemberController@addMail']
+                            ['as' => 'member.settings.mail.add', 'uses' => 'Member\UserController@addMail']
                         );
                         Route::post(
                             'update',
-                            ['as' => 'member.settings.mail.update', 'uses' => 'Member\MemberController@updateMainMail']
+                            ['as' => 'member.settings.mail.update', 'uses' => 'Member\UserController@updateMainMail']
                         );
                         Route::post(
                             'confirm',
-                            ['as' => 'member.settings.mail.confirm', 'uses' => 'Member\MemberController@confirmMail']
+                            ['as' => 'member.settings.mail.confirm', 'uses' => 'Member\UserController@confirmMail']
                         );
                         Route::post(
                             'delete',
-                            ['as' => 'member.settings.mail.delete', 'uses' => 'Member\MemberController@deleteMail']
+                            ['as' => 'member.settings.mail.delete', 'uses' => 'Member\UserController@deleteMail']
                         );
                     }
                 );
@@ -189,14 +189,14 @@ Route::group(
                             'delete',
                             [
                                 'as' => 'member.settings.pending_mail.delete',
-                                'uses' => 'Member\MemberController@deletePendingMail'
+                                'uses' => 'Member\UserController@deletePendingMail'
                             ]
                         );
                         Route::post(
                             'resend',
                             [
                                 'as' => 'member.settings.pending_mail.resend',
-                                'uses' => 'Member\MemberController@resendPendingMail'
+                                'uses' => 'Member\UserController@resendPendingMail'
                             ]
                         );
                     }
@@ -209,7 +209,7 @@ Route::group(
                             '/',
                             [
                                 'as' => 'member.settings.leave',
-                                'uses' => 'Member\MemberController@leave'
+                                'uses' => 'Member\UserController@leave'
                             ]
                         );
                     }
@@ -221,24 +221,24 @@ Route::group(
 );
 
 /*
- * member/manage
+ * settings/user
  * */
 Route::settings(
-    'member',
+    'user',
     function () {
 
         Route::get(
             'searchMember/{keyword?}',
-            ['as' => 'settings.member.search', 'uses' => 'Member\Settings\MemberController@searchMember']
+            ['as' => 'settings.member.search', 'uses' => 'Member\Settings\UserController@searchMember']
         );
         // index
         Route::get(
             '/',
             [
                 'as' => 'settings.member.index',
-                'uses' => 'Member\Settings\MemberController@index',
+                'uses' => 'Member\Settings\UserController@index',
                 'settings_menu' => 'member.list',
-                'permission' => 'member.list'
+                'permission' => 'user.list'
             ]
         );
 
@@ -246,51 +246,51 @@ Route::settings(
         Route::get('create',
                    [
                        'as' => 'settings.member.create',
-                       'uses' => 'Member\Settings\MemberController@create',
+                       'uses' => 'Member\Settings\UserController@create',
                        'settings_menu' => 'member.create'
                    ]
         );
         Route::post(
             'store',
-            ['as' => 'settings.member.store', 'uses' => 'Member\Settings\MemberController@store']
+            ['as' => 'settings.member.store', 'uses' => 'Member\Settings\UserController@store']
         );
 
         Route::get(
             '{id}/edit',
             [
                 'as' => 'settings.member.edit',
-                'uses' => 'Member\Settings\MemberController@edit',
+                'uses' => 'Member\Settings\UserController@edit',
                 'settings_menu' => 'member.edit',
-                'permission' => 'member.edit',
+                'permission' => 'user.edit',
 
             ]
         )->where('id', '[0-9a-z\-]+');
 
-        Route::post('{id}/edit', ['as' => 'settings.member.edit', 'uses' => 'Member\Settings\MemberController@update'])
+        Route::post('{id}/edit', ['as' => 'settings.member.edit', 'uses' => 'Member\Settings\UserController@update'])
             ->where('id', '[0-9a-z\-]+');
 
         // mail action at edit
         Route::get(
             'mail/list',
-            ['as' => 'settings.member.mail.list', 'uses' => 'Member\Settings\MemberController@getMailList']
+            ['as' => 'settings.member.mail.list', 'uses' => 'Member\Settings\UserController@getMailList']
         );
         Route::post(
             'mail/add',
-            ['as' => 'settings.member.mail.add', 'uses' => 'Member\Settings\MemberController@postAddMail']
+            ['as' => 'settings.member.mail.add', 'uses' => 'Member\Settings\UserController@postAddMail']
         );
         Route::post(
             'mail/delete',
-            ['as' => 'settings.member.mail.delete', 'uses' => 'Member\Settings\MemberController@postDeleteMail']
+            ['as' => 'settings.member.mail.delete', 'uses' => 'Member\Settings\UserController@postDeleteMail']
         );
         Route::post(
             'mail/confirm',
-            ['as' => 'settings.member.mail.confirm', 'uses' => 'Member\Settings\MemberController@postConfirmMail']
+            ['as' => 'settings.member.mail.confirm', 'uses' => 'Member\Settings\UserController@postConfirmMail']
         );
 
         // delete
         Route::delete(
             'destroy',
-            ['as' => 'settings.member.destroy', 'uses' => 'Member\Settings\MemberController@deleteMember']
+            ['as' => 'settings.member.destroy', 'uses' => 'Member\Settings\UserController@deleteMember']
         );
 
         // setting
@@ -302,23 +302,23 @@ Route::settings(
                     '/',
                     [
                         'as' => 'settings.member.setting',
-                        'uses' => 'Member\Settings\SettingController@getCommonSetting',
+                        'uses' => 'Member\Settings\SettingController@editCommon',
                         'settings_menu' => 'member.setting.default',
-                        'permission' => 'member.setting'
+                        'permission' => 'user.setting'
                     ]
                 );
                 Route::post(
                     '/',
-                    ['as' => 'settings.member.setting', 'uses' => 'Member\Settings\SettingController@postCommonSetting']
+                    ['as' => 'settings.member.setting', 'uses' => 'Member\Settings\SettingController@updateCommon']
                 );
 
                 Route::get(
                     'join',
                     [
                         'as' => 'settings.member.setting.join',
-                        'uses' => 'Member\Settings\SettingController@getJoinSetting',
+                        'uses' => 'Member\Settings\SettingController@editJoin',
                         'settings_menu' => 'member.setting.join',
-                        'permission' => 'member.setting'
+                        'permission' => 'user.setting'
                     ]
                 );
 
@@ -326,7 +326,7 @@ Route::settings(
                     'join',
                     [
                         'as' => 'settings.member.setting.join',
-                        'uses' => 'Member\Settings\SettingController@postJoinSetting'
+                        'uses' => 'Member\Settings\SettingController@updateJoin'
                     ]
                 );
 
@@ -334,9 +334,9 @@ Route::settings(
                     'skin',
                     [
                         'as' => 'settings.member.setting.skin',
-                        'uses' => 'Member\Settings\SettingController@getSkinSetting',
+                        'uses' => 'Member\Settings\SettingController@editSkin',
                         'settings_menu' => 'member.setting.skin',
-                        'permission' => 'member.setting'
+                        'permission' => 'user.setting'
                     ]
                 );
 
@@ -344,9 +344,9 @@ Route::settings(
                     'field',
                     [
                         'as' => 'settings.member.setting.field',
-                        'uses' => 'Member\Settings\SettingController@getFieldSetting',
+                        'uses' => 'Member\Settings\SettingController@editField',
                         'settings_menu' => 'member.setting.field',
-                        'permission' => 'member.setting'
+                        'permission' => 'user.setting'
                     ]
                 );
 
@@ -354,18 +354,11 @@ Route::settings(
                     'togglemenu',
                     [
                         'as' => 'settings.member.setting.togglemenu',
-                        'uses' => 'Member\Settings\SettingController@getToggleMenuSetting',
-                        'permission' => 'member.setting'
+                        'uses' => 'Member\Settings\SettingController@editToggleMenu',
+                        'permission' => 'user.setting'
                     ]
                 );
 
-                Route::post(
-                    'togglemenu',
-                    [
-                        'as' => 'settings.member.setting.togglemenu',
-                        'uses' => 'Member\Settings\SettingController@postToggleMenuSetting'
-                    ]
-                );
             }
         );
     }
@@ -380,7 +373,7 @@ Route::settings(
 
         Route::get(
             'searchGroup/{keyword?}',
-            ['as' => 'manage.group.search', 'uses' => 'Member\Settings\GroupController@searchGroup']
+            ['as' => 'manage.group.search', 'uses' => 'Member\Settings\GroupController@search']
         );
 
         // list
@@ -394,24 +387,24 @@ Route::settings(
         );
 
         // create
-        Route::get('create', ['as' => 'manage.group.create', 'uses' => 'Member\Settings\GroupController@getCreate']);
-        Route::post('create', ['as' => 'manage.group.create', 'uses' => 'Member\Settings\GroupController@postCreate']);
+        Route::get('create', ['as' => 'manage.group.create', 'uses' => 'Member\Settings\GroupController@create']);
+        Route::post('create', ['as' => 'manage.group.create', 'uses' => 'Member\Settings\GroupController@store']);
 
         // edit
         Route::get(
             '{id}/edit',
             [
                 'as' => 'manage.group.edit',
-                'uses' => 'Member\Settings\GroupController@getEdit',
+                'uses' => 'Member\Settings\GroupController@edit',
             ]
         )->where('id', '[0-9a-z\-]+');
-        Route::post('{id}/edit', ['as' => 'manage.group.edit', 'uses' => 'Member\Settings\GroupController@postEdit'])
+        Route::post('{id}/edit', ['as' => 'manage.group.edit', 'uses' => 'Member\Settings\GroupController@update'])
             ->where('id', '[0-9a-z\-]+');
 
         // delete
         Route::delete(
             'destroy',
-            ['as' => 'manage.group.destroy', 'uses' => 'Member\Settings\GroupController@deleteGroup']
+            ['as' => 'manage.group.destroy', 'uses' => 'Member\Settings\GroupController@destroy']
         );
     }
 );
@@ -618,10 +611,7 @@ Route::group(['prefix' => 'tag'], function () {
 });
 
 Route::get('file/{id}', ['as' => 'file.path', 'uses' => 'StorageController@file'])->where('id', '[0-9a-z\-]+');
-Route::settings('storage', function () {
-    Route::get('/', ['as' => 'manage.storage.index', 'uses' => 'StorageController@index']);
-    Route::post('destroy', ['as' => 'manage.storage.destroy', 'uses' => 'StorageController@destroy']);
-});
+
 
 Route::settings('dynamicField', function () {
     Route::get('/', ['as' => 'manage.dynamicField.index', 'uses' => 'DynamicFieldController@index']);

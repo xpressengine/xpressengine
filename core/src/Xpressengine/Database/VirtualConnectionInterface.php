@@ -37,14 +37,6 @@ interface VirtualConnectionInterface extends IlluminateConnectionInterface
     /**
      * Begin a fluent query against a database table.
      *
-     * @param string $table table name
-     * @return DynamicQuery
-     */
-    public function table($table);
-
-    /**
-     * Begin a fluent query against a database table.
-     *
      * @param string $table   table name
      * @param array  $options use by proxy fire id
      * @param bool   $proxy   use proxy
@@ -95,10 +87,10 @@ interface VirtualConnectionInterface extends IlluminateConnectionInterface
      * 'select' 쿼리일 경우 $slaveConnection 을 넘겨주고 그렇지 않을 경우 $masterConnection 을 반환.
      * database 를 쿼리 실행 시 연결.
      *
-     * @param string $queryType query type
+     * @param string $type query type
      * @return \Illuminate\Database\ConnectionInterface
      */
-    public function getConnection($queryType);
+    public function getConnection($type);
 
     /**
      * get ProxyManager.

@@ -13,11 +13,12 @@
  */
 namespace Xpressengine\Seo;
 
+use Illuminate\Support\Collection;
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Keygen\Keygen;
 use Xpressengine\Media\MediaManager;
-use Xpressengine\Media\Spec\Image;
+use Xpressengine\Media\Models\Image;
 use Xpressengine\Storage\Storage;
 
 /**
@@ -156,10 +157,11 @@ class Setting
     public function getSiteImage()
     {
         if (!$this->image && $this->get('uuid')) {
-            $files = $this->storage->getsByTargetId($this->get('uuid'));
+            $class = $this->storage->createModel();
+            $files = $class->getByFileable($this->get('uuid'));
 
             if (count($files) > 0) {
-                $file = current($files);
+                $file = $files instanceof Collection ? $files->first() : current($files);
                 $this->image = $this->media->make($file);
             }
         }
@@ -175,8 +177,8 @@ class Setting
      */
     public function setSiteImage(Image $image)
     {
-        $this->storage->removeAll($this->get('uuid'));
-        $this->storage->bind($this->get('uuid'), $image->getFile());
+        $this->storage->unBindAll($this->get('uuid'));
+        $this->storage->bind($this->get('uuid'), $image);
 
         $this->image = $image;
     }

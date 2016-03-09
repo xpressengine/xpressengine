@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Permission;
 
-use Xpressengine\Support\EntityTrait;
+use Illuminate\Support\Fluent;
 use Xpressengine\Permission\Exceptions\InvalidArgumentException;
 
 /**
@@ -26,10 +26,8 @@ use Xpressengine\Permission\Exceptions\InvalidArgumentException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class Grant
+class Grant extends Fluent
 {
-    use EntityTrait;
-
     const RATING_TYPE = 'rating';
 
     const GROUP_TYPE = 'group';
@@ -51,11 +49,9 @@ class Grant
      */
     public function set($action, $type, $value = null)
     {
-        if (array_key_exists($action, Action::all()) === false) {
-            throw new InvalidArgumentException(['arg' => $action]);
-        }
-
-        $this->attributes[$action] = $this->makeValue($type, $value);
+        $value = $this->makeValue($type, $value);
+        $this->attributes[$action] = $this->valueFilter($value);
+        $this->attributes = array_filter($this->attributes);
 
         return $this;
     }
@@ -74,7 +70,10 @@ class Grant
             return $this->set($action, $type, $value);
         }
 
-        $this->attributes[$action] = array_merge($this->attributes[$action], $this->makeValue($type, $value));
+        $value = $this->makeValue($type, $value);
+        $this->attributes[$action] = array_merge($this->attributes[$action], $this->valueFilter($value));
+        $this->attributes = array_filter($this->attributes);
+
         return $this;
     }
 
@@ -118,5 +117,24 @@ class Grant
         }
 
         return $value;
+    }
+
+    protected function valueFilter(array $value)
+    {
+        $unknown = [];
+        foreach (array_keys($value) as $type) {
+            if (!$this->isAllowType($type)) {
+                $unknown[] = $type;
+            }
+        }
+
+        return array_except($value, $unknown);
+    }
+
+    protected function isAllowType($type)
+    {
+        $constName = __CLASS__ . '::' . strtoupper($type) . '_TYPE';
+
+        return defined($constName);
     }
 }

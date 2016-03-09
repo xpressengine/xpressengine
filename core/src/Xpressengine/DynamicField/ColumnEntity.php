@@ -14,7 +14,7 @@
 namespace Xpressengine\DynamicField;
 
 use Illuminate\Database\Schema\Blueprint;
-use Xpressengine\Support\EntityTrait;
+use Xpressengine\Support\Entity;
 
 /**
  * FieldType 에서 table 스키마 를 정의 하기위해 사용.
@@ -27,11 +27,8 @@ use Xpressengine\Support\EntityTrait;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class ColumnEntity
+class ColumnEntity extends Entity
 {
-
-    use EntityTrait;
-
     // default Config
     protected $default = [
         'name' => null,
@@ -51,8 +48,8 @@ class ColumnEntity
      */
     public function __construct($name, $dataType)
     {
-        $this->__set('name', $name);
-        $this->__set('dataType', $dataType);
+        $this->{'name'} = $name;
+        $this->{'dataType'} = $dataType;
     }
 
     /**
@@ -63,7 +60,8 @@ class ColumnEntity
      */
     public function setParams($params)
     {
-        $this->__set('params', $params);
+        $this->{'params'} = $params;
+
         return $this;
     }
 
@@ -74,7 +72,8 @@ class ColumnEntity
      */
     public function setUnsigned()
     {
-        $this->__set('unsigned', true);
+        $this->{'unsigned'} = true;
+
         return $this;
     }
 
@@ -85,7 +84,8 @@ class ColumnEntity
      */
     public function setNullAble()
     {
-        $this->__set('nullAble', true);
+        $this->{'nullAble'} = true;
+
         return $this;
     }
 
@@ -97,7 +97,8 @@ class ColumnEntity
      */
     public function setDefault($default)
     {
-        $this->__set('default', $default);
+        $this->{'default'} = $default;
+
         return $this;
     }
 
@@ -109,7 +110,8 @@ class ColumnEntity
      */
     public function setDescription($description)
     {
-        $this->__set('description', $description);
+        $this->{'description'} = $description;
+
         return $this;
     }
 
@@ -123,26 +125,25 @@ class ColumnEntity
     public function add(Blueprint $table, $prefix = '')
     {
         // make all names to camel case
-        $this->__set('name', camel_case($prefix . $this->__get('name')));
+        $this->{'name'} = camel_case($prefix . $this->{'name'});
 
-        if (method_exists($table, $this->__get('dataType')) === false) {
+        if (method_exists($table, $this->{'dataType'}) === false) {
             throw new Exceptions\InvalidColumnEntityException;
         }
 
-        $params = $this->__get('params') != null ? $this->__get('params') : [];
-        array_unshift($params, $this->__get('name'));
+        $params = $this->{'params'} != null ? $this->{'params'} : [];
+        array_unshift($params, $this->{'name'});
 
-        $column = call_user_func_array(array($table, $this->__get('dataType')), $params);
+        $column = call_user_func_array(array($table, $this->{'dataType'}), $params);
 
-        if ($this->__get('nullAble') != null) {
-            $column->nullable($this->__get('nullAble'));
+        if ($this->get('nullAble') != null) {
+            $column->nullable($this->get('nullAble'));
         }
-
-        if ($this->__get('unsigned') != null) {
-            $column->unsigned($this->__get('unsigned'));
+        if ($this->get('unsigned') != null) {
+            $column->unsigned($this->get('unsigned'));
         }
-        if ($this->__get('default') != null) {
-            $column->default($this->__get('default'));
+        if ($this->get('default') != null) {
+            $column->default($this->get('default'));
         }
     }
 
@@ -155,6 +156,6 @@ class ColumnEntity
      */
     public function drop(Blueprint $table, $prefix = '')
     {
-        $table->dropColumn(camel_case($prefix . $this->__get('name')));
+        $table->dropColumn(camel_case($prefix . $this->{'name'}));
     }
 }

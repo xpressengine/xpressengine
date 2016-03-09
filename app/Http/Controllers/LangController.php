@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
-use Presenter;
+use XePresenter;
 use XeLang;
 use XeDB;
-use Frontend;
+use XeFrontend;
 
 class LangController extends Controller
 {
@@ -22,7 +22,7 @@ class LangController extends Controller
      */
     public function index($namespace = 'äll', $keyword = '')
     {
-        Frontend::translation([
+        XeFrontend::translation([
             'lang::admin.editor.saved', 'lang::admin.editor.failed'
         ]);
 
@@ -44,7 +44,7 @@ class LangController extends Controller
 
         $namespaces = $this->search()->groupBy('namespace')->lists('namespace');
 
-        return Presenter::make('lang.index', [
+        return XePresenter::make('lang.index', [
             'selected_namespace' => $namespace,
             'selected_keyword' => $keyword,
             'namespaces' => $namespaces,
@@ -61,7 +61,7 @@ class LangController extends Controller
         $term = $request->input('term');
         $searchList = $this->search(['locale' => $locale, 'value' => $term])->get();
         $this->withLines($searchList);
-        return Presenter::makeApi($searchList);
+        return XePresenter::makeApi($searchList);
     }
 
     /**
@@ -71,7 +71,7 @@ class LangController extends Controller
     {
         list($namespace, $item) = XeLang::parseKey($key);
         $lines = $this->search(['namespace' => $namespace, 'item' => $item])->get();
-        return Presenter::makeApi($lines);
+        return XePresenter::makeApi($lines);
     }
 
     /**
@@ -81,7 +81,7 @@ class LangController extends Controller
      */
     public function save()
     {
-        return Presenter::makeApi([]);
+        return XePresenter::makeApi([]);
     }
 
     private function search($conditions = [])

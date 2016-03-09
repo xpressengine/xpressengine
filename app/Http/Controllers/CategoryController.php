@@ -1,47 +1,38 @@
 <?php
 namespace App\Http\Controllers;
 
-use Input;
 use DB;
 use Exception;
-use Presenter;
-use Xpressengine\Category\CategoryHandler;
+use XePresenter;
+use XeCategory;
+use Xpressengine\Category\Models\Category;
+use Xpressengine\Category\Models\CategoryItem;
+use Xpressengine\Http\Request;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
 
 class CategoryController extends Controller
 {
-    // 별도로 전체를 관리하는 페이지는 없음
-    // 게시판등에서 개별적으로 생성요청한 후 수정가능한 페이지로 접근
-    public function show(CategoryHandler $handler, $id)
+    public function show($id)
     {
-        $category = $handler->get($id);
+        $category = Category::find($id);
 
         if ($category === null) {
             throw new InvalidArgumentHttpException;
         }
 
-        return Presenter::make('category.show', compact('category'));
+        return XePresenter::make('category.show', compact('category'));
     }
 
-    public function storeItem(CategoryHandler $handler, $categoryId)
+    public function storeItem(Request $request, $id)
     {
-        $category = $handler->get($categoryId);
-
-        $inputs = Input::except('_token');
-
-        $parent = null;
-        if (isset($inputs['parentId'])) {
-            if (empty($inputs['parentId']) === false) {
-                $parent = $handler->getItem($inputs['parentId']);
-            }
-
-            unset($inputs['parentId']);
-        }
+        /** @var Category $category */
+        $category = Category::find($id);
 
         DB::beginTransaction();
 
         try {
-            $item = $handler->createItem($category, $inputs, $parent);
+            /** @var CategoryItem $item */
+            $item = XeCategory::createItem($category, $request->all());
         } catch (Exception $e) {
             DB::rollBack();
 
@@ -49,65 +40,37 @@ class CategoryController extends Controller
         }
         DB::commit();
 
-        return Presenter::makeApi($item->toArray());
+        return XePresenter::makeApi($item->toArray());
     }
 
-    public function updateItem(CategoryHandler $handler, $categoryId)
+    public function updateItem(Request $request, $id)
     {
-        $id = Input::get('id');
-        $inputs = Input::except(['id', '_token']);
-
-        if ($id === null || !$item = $handler->getItem($id)) {
+        /** @var CategoryItem $item */
+        if (!$item = CategoryItem::find($request->get('id'))) {
             throw new InvalidArgumentHttpException;
         }
 
-        foreach ($inputs as $key => $val) {
+        foreach ($request->all() as $key => $val) {
             $item->{$key} = $val;
         }
 
-        $item = $handler->putItem($item);
+        XeCategory::putItem($item);
 
-        return Presenter::makeApi($item->toArray());
+        return XePresenter::makeApi($item->toArray());
     }
 
-    public function destroyItem(CategoryHandler $handler, $categoryId)
+    public function destroyItem(Request $request, $id)
     {
-        $id = Input::get('id');
-
-        if ($id === null || !$item = $handler->getItem($id)) {
+        /** @var CategoryItem $item */
+        if (!$item = CategoryItem::find($request->get('id'))) {
             throw new InvalidArgumentHttpException;
         }
 
         DB::beginTransaction();
 
         try {
-            $handler->removeItem($item);
-        } catch (Exception $e) {
-            DB::rollBack();
+            XeCategory::removeItem($item);
 
-            throw $e;
-        }
-        DB::commit();
-
-    }
-
-    public function moveItem(CategoryHandler $handler, $categoryId)
-    {
-        $id = Input::get('id');
-        $parentId = Input::get('parentId');
-        $ordering = Input::get('ordering');
-
-        if ($id === null || !$item = $handler->getItem($id)) {
-            throw new InvalidArgumentHttpException;
-        }
-
-        $parent = empty($parentId) === false ? $handler->getItem($parentId) : null;
-
-        DB::beginTransaction();
-
-        try {
-            $handler->moveTo($item, $parent);
-            $handler->setOrder($item, $ordering);
         } catch (Exception $e) {
             DB::rollBack();
 
@@ -116,21 +79,40 @@ class CategoryController extends Controller
         DB::commit();
     }
 
-    public function children(CategoryHandler $handler, $categoryId)
+    public function moveItem(Request $request, $id)
     {
-        $parentId = Input::get('id');
+        /** @var CategoryItem $item */
+        if (!$item = CategoryItem::find($request->get('id'))) {
+            throw new InvalidArgumentHttpException;
+        }
 
-        if ($parentId === null) {
-            $category = $handler->get($categoryId);
-            $children = $handler->progenitors($category);
+        $parent = CategoryItem::find($request->get('parentId'));
+
+        DB::beginTransaction();
+
+        try {
+            XeCategory::moveTo($item, $request->get('ordering', 0), $parent);
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            throw $e;
+        }
+        DB::commit();
+    }
+
+    public function children(Request $request, $id)
+    {
+        if ($request->get('id') === null) {
+            $children = Category::find($id)->getProgenitors();
         } else {
-            if (!$parent = $handler->getItem($parentId)) {
+            /** @var CategoryItem $item */
+            if (!$item = CategoryItem::find($request->get('id'))) {
                 throw new InvalidArgumentHttpException;
             }
 
-            $children = $handler->children($parent);
+            $children = $item->getChildren();
         }
 
-        return Presenter::makeApi($children);
+        return XePresenter::makeApi($children->toArray());
     }
 }

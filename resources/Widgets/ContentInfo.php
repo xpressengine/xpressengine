@@ -1,10 +1,9 @@
 <?php
 namespace Xpressengine\Widgets;
 
-use Comment;
-use Document;
-use Member;
 use View;
+use XeUser;
+use Xpressengine\Document\Models\Document;
 use Xpressengine\Widget\AbstractWidget;
 
 /**
@@ -53,9 +52,8 @@ class ContentInfo extends AbstractWidget
     public function render(array $args)
     {
         $viewData = [
-            'totalDocument' => Document::count([]),
-            'totalComment' => Comment::countAll(),
-            'totalMember' => Member::count(),
+            'totalDocument' => Document::count(),
+            'totalMember' => XeUser::users()->count(),
         ];
         return View::make('widget.widgets.contentInfo.show', [
             'viewData' => $viewData,

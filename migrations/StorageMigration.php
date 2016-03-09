@@ -14,7 +14,7 @@ class StorageMigration implements Migration {
             $table->engine = "InnoDB";
 
             $table->string('id', 36);
-            $table->string('parentId', 36)->nullable();
+            $table->string('originId', 36)->nullable();
             $table->string('userId', 36)->nullable();
             $table->string('disk', 20);
             $table->string('path');
@@ -24,20 +24,21 @@ class StorageMigration implements Migration {
             $table->integer('size');
             $table->integer('useCount')->default(0);
             $table->integer('downloadCount')->default(0);
-            $table->string('extra')->nullable();
             $table->timestamp('createdAt');
             $table->timestamp('updatedAt');
 
             $table->primary('id');
             $table->unique(['disk', 'path', 'filename'], 'findKey');
-            $table->index('parentId');
+            $table->index('originId');
         });
 
-        Schema::create('files_relation', function (Blueprint $table) {
+        Schema::create('fileables', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('targetId', 36);
-            $table->string('filesId', 36);
+            $table->string('fileId', 36);
+            $table->string('fileableId', 36);
             $table->timestamp('createdAt');
+
+            $table->unique(['fileId', 'fileableId']);
         });
     }
 

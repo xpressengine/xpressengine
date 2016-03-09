@@ -1,17 +1,17 @@
 <?php
 namespace App\Http\Controllers;
 
-use Trash;
+use XeTrash;
 use Input;
-use Presenter;
+use XePresenter;
 
 class TrashController extends Controller
 {
     public function index()
     {
-        $wastes = Trash::gets();
+        $wastes = XeTrash::gets();
 
-        return Presenter::make('trash.index', [
+        return XePresenter::make('trash.index', [
             'wastes' => $wastes,
         ]);
     }
@@ -26,13 +26,13 @@ class TrashController extends Controller
 
         $baskets = [];
 
-        foreach (Trash::gets() as $basket) {
+        foreach (XeTrash::gets() as $basket) {
             if (in_array($basket, $ids)) {
                 $baskets[] = $basket;
             }
         }
 
-        Trash::clean($baskets);
+        XeTrash::clean($baskets);
 
         if (Input::get('redirect') != null) {
             return redirect(Input::get('redirect'));

@@ -15,8 +15,12 @@
  */
 namespace Xpressengine\Document;
 
+use Illuminate\Database\Schema\Blueprint;
+use Xpressengine\Database\VirtualConnectionInterface as VirtualConnection;
 use Illuminate\Contracts\Hashing\Hasher;
 use Xpressengine\Config\ConfigEntity;
+use Xpressengine\Document\Models\Document;
+use Xpressengine\Migrations\DocumentMigration;
 
 /**
  * InstanceManager
@@ -58,9 +62,9 @@ class InstanceManager
 {
 
     /**
-     * @var RepositoryInterface
+     * @var VirtualConnection
      */
-    protected $repo;
+    protected $connection;
 
 
     /**
@@ -72,12 +76,12 @@ class InstanceManager
     /**
      * create instance
      *
-     * @param RepositoryInterface $repo          repository
-     * @param ConfigHandler       $configHandler config handler
+     * @param VirtualConnection $connection database connection
+     * @param ConfigHandler     $configHandler config handler
      */
-    public function __construct(RepositoryInterface $repo, ConfigHandler $configHandler)
+    public function __construct(VirtualConnection $connection, ConfigHandler $configHandler)
     {
-        $this->repo = $repo;
+        $this->connection = $connection;
         $this->configHandler = $configHandler;
     }
 
@@ -92,12 +96,46 @@ class InstanceManager
      */
     public function add(ConfigEntity $config)
     {
-        $this->repo->connection()->beginTransaction();
+        $this->connection->beginTransaction();
 
         $this->configHandler->add($config);
-        $this->repo->createDivisionTable($config);
+        if ($config->get('division') === true) {
+            $this->createDivisionTable($config);
+        }
 
-        $this->repo->connection()->commit();
+        $this->connection->commit();
+    }
+
+    /**
+     * create division table
+     *
+     * @param ConfigEntity $config document's instance config
+     * @return void
+     */
+    protected function createDivisionTable(ConfigEntity $config)
+    {
+        $table = $this->getDivisionTableName($config);
+        $schema = $this->connection->getSchemaBuilder();
+        if ($schema->hasTable($table)) {
+            throw new Exceptions\DivisionTableAlreadyExistsException;
+        }
+
+        $migration = new DocumentMigration();
+        $migration->createDivision($schema, $table);
+    }
+
+    public function getDivisionTableName(ConfigEntity $config)
+    {
+        if ($config->get('division') === false) {
+            return Document::TABLE_NAME;
+        }
+
+        $instanceId = $config->get('instanceId');
+        if ($instanceId === null || $instanceId === '') {
+            return Document::TABLE_NAME;
+        }
+
+        return sprintf('%s_%s', Document::TABLE_NAME, $instanceId);
     }
 
     /**
@@ -120,21 +158,32 @@ class InstanceManager
      */
     public function remove(ConfigEntity $config, $fetchCount = 10)
     {
-        $this->repo->connection()->beginTransaction();
-
-        $this->repo->dropDivisionTable($config);
+        $this->connection->beginTransaction();
 
         $this->configHandler->remove($config);
 
-        // division table 은 drop 했으므로 처리하지 않는다.
-        $config->set('division', false);
-        while ($docs = $this->repo->fetch(['instanceId' => $config->get('instanceId')], null, $config, $fetchCount)) {
-            foreach ($docs as $doc) {
-                $this->repo->delete(new DocumentEntity($doc), $config);
-            }
+        $this->dropDivisionTable($config);
+
+        $this->connection->commit();
+    }
+
+    /**
+     * drop document instance
+     * * ex) 게시판 삭제
+     *
+     * @param ConfigEntity $config 현제 설정 되어 있는 config
+     * @return void
+     */
+    protected function dropDivisionTable(ConfigEntity $config)
+    {
+        if ($config->get('division') === true) {
+            $this->connection->getSchemaBuilder()->drop(
+                sprintf(
+                    "%s%s",
+                    $this->connection->getTablePrefix(),
+                    $this->getDivisionTableName($config)
+                )
+            );
         }
-
-        $this->repo->connection()->commit();
-
     }
 }

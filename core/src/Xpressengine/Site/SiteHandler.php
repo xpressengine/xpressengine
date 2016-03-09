@@ -25,24 +25,20 @@ use Xpressengine\Site\Exceptions\CanNotUseDomainException;
  *
  * ## app binding
  * * xe.site 으로 바인딩 되어 있음
- * * Site Facade 제공
- *
- * ## 생성자에서 필요한 항목들
- * * SiteRepository $repository - 사이트 repository
- * * Config $config - Config manager, 사이트의 설정 정보를 관리
+ * * XeSite Facade 제공
  *
  * ## 사용법
  *
  * ### 현재의 Site 객체를 획득
  *
  * ```php
- * $handler->getCurrentSite()
+ * XeSite::getCurrentSite()
  * ```
  *
  * ### 현재의 Site 객체를 지정
  *
  * ```php
- * $handler->setCurrentSite(Site $site)
+ * XeSite::setCurrentSite(Site $site)
  * ```
  *
  * ### 현재의 SiteKey 획득
@@ -50,7 +46,7 @@ use Xpressengine\Site\Exceptions\CanNotUseDomainException;
  * * 편의를 위해서 제공
  *
  * ```php
- * $handler->getCurrentSiteKey()
+ * XeSite::getCurrentSiteKey()
  * ```
  *
  * ### Site 의 ConfigEntity 획득
@@ -58,16 +54,15 @@ use Xpressengine\Site\Exceptions\CanNotUseDomainException;
  * * siteKey 를 전달하지 않는 경우에는 defaultSiteKey 가 적용됨
  *
  * ```php
- * $handler->getSiteConfig($siteKey = null)
+ * XeSite::getSiteConfig($siteKey = null)
  * ```
  *
  * ### Site 의 ConfigEntity 업데이트
  * * siteKey 에 해당하는 ConfigEntity 수정
  *
  * ```php
- * $handler->putSiteConfig(ConfigEntity $config)
+ * XeSite::putSiteConfig(ConfigEntity $config)
  * ```
- *
  *
  * @category    Site
  * @package     Xpressengine\Site
@@ -79,28 +74,24 @@ use Xpressengine\Site\Exceptions\CanNotUseDomainException;
 class SiteHandler
 {
     /**
-     * @var SiteRepository
+     * @var Config
      */
-    protected $repository;
+    protected $config;
+
+    protected $model = Site::class;
 
     /**
      * @var Site
      */
     protected $currentSite;
-    /**
-     * @var Config
-     */
-    protected $config;
 
     /**
      * SiteHandler constructor.
      *
-     * @param SiteRepository $repository site repository
-     * @param Config         $config     xpressengine config manager
+     * @param Config $config xpressengine config manager
      */
-    public function __construct(SiteRepository $repository, Config $config)
+    public function __construct(Config $config)
     {
-        $this->repository = $repository;
         $this->config = $config;
     }
 
@@ -245,30 +236,6 @@ class SiteHandler
     }
 
     /**
-     * get
-     *
-     * @param string $host not included 'http' or 'https' string
-     *
-     * @return Site
-     */
-    public function get($host)
-    {
-        return $this->repository->find($host);
-    }
-
-    /**
-     * getBySiteKey
-     *
-     * @param string $siteKey site key string
-     *
-     * @return Site
-     */
-    public function getBySiteKey($siteKey)
-    {
-        return $this->repository->findBySiteKey($siteKey);
-    }
-
-    /**
      * add
      *
      * @param array $inputs input array
@@ -277,14 +244,13 @@ class SiteHandler
      */
     public function add(array $inputs)
     {
-        $host = $inputs['host'];
-        $siteKey = $inputs['siteKey'];
-        $this->checkUsableDomain($host);
+        $this->checkUsableDomain($inputs['host']);
 
-        $site = new Site(
-            ['host' => $host, 'siteKey' => $siteKey]
-        );
-        $this->repository->insert($site);
+        /** @var Site $site */
+        $site = $this->createModel();
+        $site->siteKey = $inputs['siteKey'];
+        $site->host = $inputs['host'];
+        $site->save();
 
         return $site;
     }
@@ -298,7 +264,10 @@ class SiteHandler
      */
     public function put(Site $site)
     {
-        $this->repository->update($site);
+        if ($site->isDirty()) {
+            $site->save();
+        }
+
         return $site;
     }
 
@@ -311,8 +280,11 @@ class SiteHandler
      */
     public function remove($host)
     {
-        $site = $this->repository->find($host);
-        $this->repository->delete($site);
+        $model = $this->createModel();
+        /** @var Site $site */
+        if ($site = $model->newQuery()->where('host', $host)->get()) {
+            $site->delete();
+        }
     }
 
     /**
@@ -325,8 +297,42 @@ class SiteHandler
      */
     protected function checkUsableDomain($host)
     {
-        if ($this->repository->count($host) > 0) {
+        $model = $this->createModel();
+        if ($model->newQuery()->where('host', $host)->exists()) {
             throw new CanNotUseDomainException(['host' => $host]);
         }
+    }
+
+    /**
+     * Create new site model
+     *
+     * @return string
+     */
+    public function createModel()
+    {
+        $class = $this->getModel();
+
+        return new $class;
+    }
+
+    /**
+     * Get site model
+     *
+     * @return string
+     */
+    public function getModel()
+    {
+        return $this->model;
+    }
+
+    /**
+     * Set site model
+     *
+     * @param string $model model class
+     * @return void
+     */
+    public function setModel($model)
+    {
+        $this->model = '\\' . ltrim($model, '\\');
     }
 }

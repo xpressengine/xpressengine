@@ -3,13 +3,13 @@
 <div class="setting_card">
     <h2>{{ xe_trans('xe::defaultSettings') }}</h2>
 
-    <div class="__xe_setting __xe_settingEmail" data-origin-email="{{ $member->email }}">
+    <div class="__xe_setting __xe_settingEmail" data-origin-email="{{ $user->email }}">
         <div class="setting_group">
             <!--[D] a 링크 클릭 시 뒤에 오는 setting_detail block 처리,같은 카드 내 block처리된 부분도 none 처리   -->
             <a href="#" class="__xe_editBtn">
                 <div class="setting_left">
                     <!--[D] 변경내용 저장 후 변경 값으로 저장  -->
-                    <p>{{ xe_trans('xe::emailAddress') }}</p><em class="txt_gray">{{ $member->email }}</em>
+                    <p>{{ xe_trans('xe::emailAddress') }}</p><em class="txt_gray">{{ $user->email }}</em>
                 </div>
             </a>
         </div>
@@ -19,12 +19,12 @@
                 <em class="txt_gray2">{{ xe_trans('xe::canSetupEmails') }}</em>
 
                 <div class="__xe_mailList">
-                    @foreach($member->mails as $mail)
+                    @foreach($user->emails as $mail)
                         <div class="inpt_group __xe_mailItem" data-email="{{ $mail->address }}">
-                            <input type="radio" id="__xe_chk_mail_{{ $mail->id }}" name="email" value="{{ $mail->address }}" {{ $member->email === $mail->address ? 'checked' : '' }} >
+                            <input type="radio" id="__xe_chk_mail_{{ $mail->id }}" name="email" value="{{ $mail->address }}" {{ $user->email === $mail->address ? 'checked' : '' }} >
                             <!--[D] 체크 시 inpt_chk에  on 클래스 추가-->
                             <label for="__xe_chk_mail_{{ $mail->id }}"><span>{{ $mail->address }}</span></label>
-                            @if($member->email !== $mail->address)
+                            @if($user->email !== $mail->address)
                                 <span class="dot"> · </span>
                                 <button class="btn_txt __xe_wantDeleteBtn">{{ xe_trans('xe::delete') }}</button>
                                 <span class="__xe_confirmDelete" style="display: none">
@@ -38,7 +38,7 @@
                 </div>
             </div>
 
-            @if($pending = $member->getPendingEmail())
+            @if($pending = $user->getPendingEmail())
 
                 <!--메일추가 이후 화면,<p>메일 추가하기</p> 텍스트는 유지 됨-->
             <div class="setting_detail_con __xe_confirmEmailBox">
@@ -78,12 +78,12 @@
     </div>
 
 
-    <div class="__xe_setting __xe_settingDisplayName" data-origin-name="{{ $member->getDisplayName() }}" data-init-name="{{ old('name', $member->getDisplayName()) }}">
+    <div class="__xe_setting __xe_settingDisplayName" data-origin-name="{{ $user->getDisplayName() }}" data-init-name="{{ old('name', $user->getDisplayName()) }}">
         <div class="setting_group">
             <a href="#" class="__xe_editBtn">
                 <div class="setting_left">
                     <p>{{ xe_trans('xe::memberName') }}</p>
-                    <em class="__xe_displayName txt_gray">{{ $member->getDisplayName() }}</em>
+                    <em class="__xe_displayName txt_gray">{{ $user->getDisplayName() }}</em>
                 </div>
             </a>
         </div>
@@ -91,7 +91,7 @@
             <div class="setting_detail_con">
                 <p>{{ xe_trans('xe::changeMemberName') }}</p>
                 <em class="txt_gray2">{{ xe_trans('xe::canChangeMemberName') }}</em>
-                <input type="text" class="__xe_nameInput inpt_txt" name="name" value="{{ $member->getDisplayName() }}">
+                <input type="text" class="__xe_nameInput inpt_txt" name="name" value="{{ $user->getDisplayName() }}">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <em class="__xe_message txt_message">{{ xe_trans('xe::isYourCurrentName') }}</em>
             </div>
@@ -108,8 +108,8 @@
                 <div class="setting_left">
                     <p>{{ xe_trans('xe::password') }}</p>
                     <em class="txt_gray">
-                        @if($member->password)
-                            {!! xe_trans('xe::changedAt', ['time' => '<span class="__xe_short_date" title="'.$member->passwordUpdatedAt->format('Y-m-d H:i:s').'" data-timestamp="'.$member->passwordUpdatedAt->timestamp.'">"'.$member->passwordUpdatedAt->timestamp.'"</span>' ]) !!}.
+                        @if($user->password)
+                            {!! xe_trans('xe::changedAt', ['time' => '<span class="__xe_short_date" title="'.$user->passwordUpdatedAt->format('Y-m-d H:i:s').'" data-timestamp="'.$user->passwordUpdatedAt->timestamp.'">"'.$user->passwordUpdatedAt->timestamp.'"</span>' ]) !!}.
                         @else
                             {{ xe_trans('xe::passwordNotRegisterd') }}
                         @endif
@@ -121,7 +121,7 @@
             <div class="setting_detail_con">
                 <p>{{ xe_trans('xe::changePassword') }}</p>
                 <em class="txt_gray2">{{ $passwordLevel['description'] }}</em>
-                <div class="pw_con __xe_currentPassword" @if(!$member->password) style="display: none;" @endif>
+                <div class="pw_con __xe_currentPassword" @if(!$user->password) style="display: none;" @endif>
                     <p class="txt_pw">{{ xe_trans('xe::currentPassword') }}</p>
                     <input type="password" class="inpt_txt" name="current_password">
                     <em class="txt_message">&nbsp;</em>

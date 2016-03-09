@@ -1,6 +1,6 @@
 <?php namespace Xpressengine\UIObjects\Member;
 
-use Frontend;
+use XeFrontend;
 
 class ProfileBgImage extends ProfileImage
 {
@@ -24,7 +24,7 @@ class ProfileBgImage extends ProfileImage
      */
     protected function loadFiles()
     {
-        Frontend::js(
+        XeFrontend::js(
             [
                 'assets/vendor/JavaScript-Canvas-to-Blob-master/js/canvas-to-blob.min.js',
                 'assets/vendor/JavaScript-Load-Image/js/load-image.all.min.js',
@@ -40,7 +40,7 @@ class ProfileBgImage extends ProfileImage
             ]
         )->appendTo('head')->load();
 
-        Frontend::css(
+        XeFrontend::css(
             [
                 'assets/vendor/jQuery-File-Upload/css/jquery.fileupload.css',
                 'assets/vendor/jQuery-File-Upload/css/jquery.fileupload-ui.css',

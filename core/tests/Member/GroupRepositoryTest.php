@@ -39,7 +39,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase {
         $member = Mockery::mock('\Xpressengine\Member\Entities\MemberEntityInterface');
         $member->id = 1;
 
-        $members = $repo->fetchAllByMember($member);
+        $members = $repo->fetchAllByUser($member);
         $this->assertCount(1, $members);
         $this->assertEquals('a', $members[0]->attr);
     }
@@ -60,7 +60,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase {
         $member = Mockery::mock('\Xpressengine\Member\Entities\MemberEntityInterface');
         $member->id = 1;
 
-        $members = $repo->fetchAllByMember($member);
+        $members = $repo->fetchAllByUser($member);
         $this->assertEquals([], $members);
     }
 
@@ -92,7 +92,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase {
         $group = Mockery::mock('\Xpressengine\Member\Entities\Database\GroupEntity');
         $group->shouldReceive('getAttribute')->andReturn(1);
 
-        $repo->addMember($group, $member);
+        $repo->addUser($group, $member);
     }
 
 

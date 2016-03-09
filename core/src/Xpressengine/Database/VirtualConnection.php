@@ -267,7 +267,7 @@ class VirtualConnection implements VirtualConnectionInterface
      * @param string $type master or slave
      * @return \Illuminate\Database\Connection
      */
-    public function connection($type)
+    public function connection($type = self::DEFAULT_CONNECTION_NAME)
     {
         $connection = ($this->connections[$type] === null) ?
             $this->coupler->connect($this->{$type}) :
@@ -301,12 +301,12 @@ class VirtualConnection implements VirtualConnectionInterface
      * 'select' 쿼리일 경우 $slaveConnection 을 넘겨주고 그렇지 않을 경우 $masterConnection 을 반환.
      * database 를 쿼리 실행 시 연결.
      *
-     * @param string $queryType query type
+     * @param string $type query type
      * @return \Illuminate\Database\ConnectionInterface
      */
-    public function getConnection($queryType = 'select')
+    public function getConnection($type = 'select')
     {
-        if ($queryType === 'select') {
+        if ($type === 'select') {
             return $this->connection(self::TYPE_SLAVE);
         } else {
             return $this->connection(self::TYPE_MASTER);
@@ -322,7 +322,9 @@ class VirtualConnection implements VirtualConnectionInterface
      */
     public function table($table)
     {
-        return (new DynamicQuery($this, $table, false))->useProxy(false);
+        return $this->query()->from($table);
+
+        //return (new DynamicQuery($this, $table, false))->useProxy(false);
     }
 
     /**
@@ -339,8 +341,26 @@ class VirtualConnection implements VirtualConnectionInterface
         if (empty($options['table'])) {
             $options['table'] = $table;
         }
+        $query = $this->query();
+        $query->setProxyOption($options);
+        $query->useDynamic(true);
+        $query->useProxy($proxy);
+        return $query->from($table);
 
-        return (new DynamicQuery($this, $table, true))->setProxyOption($options)->useProxy($proxy);
+        //return (new DynamicQuery($this, $table, true))->setProxyOption($options)->useProxy($proxy);
+    }
+
+
+    /**
+     * Get a new query builder instance.
+     *
+     * @return DynamicQuery
+     */
+    public function query()
+    {
+        return new DynamicQuery(
+            $this, $this->getQueryGrammar(), $this->getPostProcessor()
+        );
     }
 
     /**

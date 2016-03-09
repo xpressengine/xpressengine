@@ -13,8 +13,8 @@
  */
 namespace Xpressengine\Seo;
 
-use Xpressengine\Media\Spec\Media;
-use Xpressengine\Member\Entities\MemberEntityInterface;
+use Xpressengine\Media\Models\Media;
+use Xpressengine\User\UserInterface;
 use Xpressengine\Seo\Importers\AbstractImporter;
 use Xpressengine\Translation\Translator;
 
@@ -25,7 +25,7 @@ use Xpressengine\Translation\Translator;
  * 전달하는 역할을 수행
  *
  * ### app binding : xe.seo 로 바인딩 되어 있음
- * `SEO` Facade 로 접근이 가능
+ * `XeSEO` Facade 로 접근이 가능
  *
  * ### Usage
  * SEO 를 사용하기 위해선 `SeoUsable` 인터페이스를 적용하고자하는
@@ -44,12 +44,12 @@ use Xpressengine\Translation\Translator;
  * 객체로부터 내용을 수집하여 meta tag 등 으로 노출하게 되어짐.
  *
  * ```php
- * Presenter::make('some.view', [$seoUsableObject, $var1, $var2, ...]);
+ * XePresenter::make('some.view', [$seoUsableObject, $var1, $var2, ...]);
  * ```
  *
  * * Not execution
  * 간혹 어떤 상황에서 html 렌더링이 이루어지더라도 SEO 처리가 되지
- * 않길 원하는 경우 `SEO::notExec()` 를 실행하면 SEO 관련 태그들이
+ * 않길 원하는 경우 `XeSEO::notExec()` 를 실행하면 SEO 관련 태그들이
  * 적용되지 않음
  *
  * @category    Seo
@@ -175,7 +175,7 @@ class SeoHandler
             $data['keywords'] = implode(',', $data['keywords']);
         }
 
-        if ($data['author'] instanceof MemberEntityInterface) {
+        if ($data['author'] instanceof UserInterface) {
             $data['author'] = $data['author']->getDisplayName();
         }
 

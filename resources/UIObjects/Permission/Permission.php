@@ -1,9 +1,6 @@
 <?php namespace Xpressengine\UIObjects\Permission;
 
-use Frontend;
-use Illuminate\Support\Collection;
-use Xpressengine\Permission\Grant;
-use Xpressengine\Permission\Registered;
+use XeFrontend;
 use Xpressengine\UIObject\AbstractUIObject;
 
 /**
@@ -29,14 +26,14 @@ class Permission extends AbstractUIObject
      */
     public function render()
     {
-        Frontend::js('/assets/core/lodash.min.js')->appendTo('head')->load();
-        Frontend::js('/assets/core/permission/PermissionTag.js')->type('text/jsx')->appendTo('head')->load();
-        Frontend::js('/assets/core/permission/PermissionTagSuggestion.js')->type('text/jsx')->appendTo('head')->load(
+        XeFrontend::js('/assets/core/lodash.min.js')->appendTo('head')->load();
+        XeFrontend::js('/assets/core/permission/PermissionTag.js')->type('text/jsx')->appendTo('head')->load();
+        XeFrontend::js('/assets/core/permission/PermissionTagSuggestion.js')->type('text/jsx')->appendTo('head')->load(
         );
-        Frontend::js('/assets/core/permission/PermissionInclude.js')->type('text/jsx')->appendTo('head')->load();
-        Frontend::js('/assets/core/permission/PermissionExclude.js')->type('text/jsx')->appendTo('head')->load();
-        Frontend::js('/assets/core/permission/Permission.js')->type('text/jsx')->appendTo('head')->load();
-        Frontend::css('/assets/core/permission/permission.css')->load();
+        XeFrontend::js('/assets/core/permission/PermissionInclude.js')->type('text/jsx')->appendTo('head')->load();
+        XeFrontend::js('/assets/core/permission/PermissionExclude.js')->type('text/jsx')->appendTo('head')->load();
+        XeFrontend::js('/assets/core/permission/Permission.js')->type('text/jsx')->appendTo('head')->load();
+        XeFrontend::css('/assets/core/permission/permission.css')->load();
 
         $permissioinScriptString = [];
 
@@ -65,7 +62,7 @@ class Permission extends AbstractUIObject
 
         $permissioinScriptString = implode('', $permissioinScriptString);
 
-        Frontend::html('permissionUiobject')->content($permissioinScriptString)->load();
+        XeXeFrontend::html('permissionUiobject')->content($permissioinScriptString)->load();
 
         $htmlString = [];
         $args = $this->arguments;
@@ -113,28 +110,12 @@ class Permission extends AbstractUIObject
             $permissionValueArray['mode'] = $inheritMode;
         }
 
-        $groupRepo = app('xe.member.groups');
-        $memberRepo = app('xe.members');
+        $groupRepo = app('xe.user.groups');
+        $userRepo = app('xe.users');
 
-        $groups = array_map(
-            function($group) {
-                return array_only($group->toArray(), ['id','name']);
-            },
-            $groupRepo->findAll($grant['group'])
-        );
-        $users = array_map(
-            function($user) {
-                return array_only($user->toArray(), ['id','displayName']);
-            },
-            $memberRepo->findAll($grant['user'])
-        );
-
-        $excepts = array_map(
-            function($except) {
-                return array_only($except->toArray(), ['id','displayName']);
-            },
-            $memberRepo->findAll($grant['except'])
-        );
+        $groups = $groupRepo->find($grant['group']);
+        $users = $userRepo->find($grant['user'], ['id','displayName']);
+        $excepts = $userRepo->find($grant['except'], ['id','displayName']);
 
         $permissionValueArray['rating'] = $grant['rating'];
         $permissionValueArray['group'] = $groups;
@@ -154,7 +135,7 @@ class Permission extends AbstractUIObject
 
         $memberSearchUrl = route('settings.member.search');
         $groupSearchUrl = route('manage.group.search');
-        $vgroupAll = app('xe.member.virtualGroups')->all();
+        $vgroupAll = app('xe.user.virtualGroups')->all();
 
         $uibojectKey = "__xe__permission_{$title}_uiobject_data";
 

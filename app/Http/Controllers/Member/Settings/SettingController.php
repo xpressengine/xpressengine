@@ -16,10 +16,9 @@ namespace App\Http\Controllers\Member\Settings;
 use App\Http\Controllers\Controller;
 use App\Sections\DynamicFieldSection;
 use App\Sections\ToggleMenuSection;
-use Cfg;
 use Config;
 use Input;
-use Presenter;
+use XePresenter;
 use Xpressengine\Captcha\Exceptions\ConfigurationNotExistsException;
 use Xpressengine\Http\Request;
 
@@ -33,19 +32,26 @@ use Xpressengine\Http\Request;
 class SettingController extends Controller
 {
 
-    protected $members;
+    protected $users;
 
+    /**
+     * SettingController constructor.
+     */
     public function __construct()
     {
-        $this->members = app('xe.members');
+        $this->users = app('xe.users');
     }
 
-    public function getCommonSetting()
+    /**
+     * get Common setting
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     */
+    public function editCommon()
     {
-        $secureLevels = app('config')->get('xe.member.password');
-        $config = Cfg::get('member.common');
+        $config = app('xe.config')->get('member.common');
 
-        return Presenter::make(
+        return XePresenter::make(
             'member.settings.setting.common',
             array_merge(
                 compact('config')
@@ -53,7 +59,12 @@ class SettingController extends Controller
         );
     }
 
-    public function getSkinSetting()
+    /**
+     * edit Skin setting
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     */
+    public function editSkin()
     {
         $authSkinSection = (new \App\Sections\SkinSection())->setting('member/auth', null);
 
@@ -61,7 +72,7 @@ class SettingController extends Controller
 
         $profileSkinSection = (new \App\Sections\SkinSection())->setting('member/profile', null);
 
-        return Presenter::make(
+        return XePresenter::make(
             'member.settings.setting.skin',
             array_merge(
                 compact('authSkinSection', 'settingsSkinSection', 'profileSkinSection')
@@ -69,7 +80,14 @@ class SettingController extends Controller
         );
     }
 
-    public function postCommonSetting(Request $request)
+    /**
+     * update Common setting
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateCommon(Request $request)
     {
         $inputs = $request->only(['useCaptcha', 'webmasterName', 'webmasterEmail']);
 
@@ -79,18 +97,21 @@ class SettingController extends Controller
             }
         }
 
-        app('xe.config')->put('member.common', $inputs);
-
-
+        app('xe.config')->put('user.common', $inputs);
 
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => '저장되었습니다.']);
     }
 
-    public function getJoinSetting()
+    /**
+     * edit Join setting
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     */
+    public function editJoin()
     {
-        $config = app('xe.config')->get('member.join');
+        $config = app('xe.config')->get('user.join');
 
-        return Presenter::make(
+        return XePresenter::make(
             'member.settings.setting.join',
             array_merge(
                 compact('config')
@@ -98,26 +119,33 @@ class SettingController extends Controller
         );
     }
 
-    public function postJoinSetting()
+    /**
+     * update Join setting
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateJoin()
     {
         $inputs = Input::except('_token');
         //$inputs['fields'] = json_decode($inputs['fields'], true);
 
-        app('xe.config')->put('member.join', $inputs);
+        app('xe.config')->put('user.join', $inputs);
 
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => '저장되었습니다.']);
     }
 
-    public function getFieldSetting()
+    /**
+     * edit Field setting
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     */
+    public function editField()
     {
-
-        $config = app('xe.config')->get('member.join');
-
-        $dynamicFieldSection = new DynamicFieldSection('member');
-        $connection = $this->members->getConnection();
+        $dynamicFieldSection = new DynamicFieldSection('user');
+        $connection = $this->users->getConnection();
         $dynamicFieldSection = $dynamicFieldSection->setting($connection, false);
 
-        return Presenter::make(
+        return XePresenter::make(
             'member.settings.setting.field',
             array_merge(
                 compact('dynamicFieldSection')
@@ -125,11 +153,16 @@ class SettingController extends Controller
         );
     }
 
-    public function getToggleMenuSetting()
+    /**
+     * edit ToggleMenu setting
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     */
+    public function editToggleMenu()
     {
         $toggleMenuSection = (new ToggleMenuSection())->setting('member');
 
-        return Presenter::make(
+        return XePresenter::make(
             'member.settings.setting.usermenu',
             array_merge(
                 compact('toggleMenuSection')

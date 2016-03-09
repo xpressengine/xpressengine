@@ -5,7 +5,7 @@ use Xpressengine\DynamicField\AbstractType;
 use Xpressengine\DynamicField\ColumnEntity;
 use Xpressengine\DynamicField\ColumnDataType;
 use Xpressengine\Config\ConfigEntity;
-use Register;
+use XeRegister;
 use Xpressengine\DynamicField\DynamicFieldHandler;
 use Xpressengine\FieldSkins\Number\DefaultSkin;
 use View;

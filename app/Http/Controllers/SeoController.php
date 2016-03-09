@@ -2,10 +2,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Presenter;
+use XePresenter;
 use Storage;
 use Media;
-use Frontend;
+use XeFrontend;
 use Symfony\Component\HttpFoundation\Response;
 use Validator;
 use Xpressengine\Support\Exceptions\HttpXpressengineException;
@@ -16,9 +16,9 @@ class SeoController extends Controller
     {
         $ruleName = 'seoSetting';
 
-        Frontend::rule($ruleName, $this->getRules());
+        XeFrontend::rule($ruleName, $this->getRules());
 
-        return Presenter::make('seo.setting', [
+        return XePresenter::make('seo.setting', [
             'setting' => app('xe.seo')->getSetting(),
             'ruleName' => $ruleName
         ]);

@@ -3,12 +3,9 @@ namespace Xpressengine\Migrations;
 
 use Illuminate\Database\Schema\Blueprint;
 use Schema;
-use Xpressengine\Menu\MenuEntity;
-use Xpressengine\Menu\MenuAlterHandler;
-use Xpressengine\Menu\MenuConfigHandler;
-use Xpressengine\Menu\MenuItem;
-use Xpressengine\Menu\MenuPermissionHandler;
-use Xpressengine\Site\SiteHandler;
+use Xpressengine\Menu\MenuHandler;
+use Xpressengine\Menu\Models\Menu;
+use Xpressengine\Menu\Models\MenuItem;
 use Xpressengine\Permission\Grant;
 use Xpressengine\Support\Migration;
 use Xpressengine\Theme\ThemeHandler;
@@ -23,7 +20,7 @@ class MenuMigration implements Migration {
 
             $table->string('id', 8);
             $table->string('title');
-            $table->string('site');
+            $table->string('siteKey');
             $table->text('description')->nullable();
 
             $table->primary('id');
@@ -34,7 +31,7 @@ class MenuMigration implements Migration {
 
             $table->string('id', 8);
             $table->string('menuId');
-            $table->string('parentId');
+            $table->string('parentId')->nullable();
             $table->string('title');
             $table->string('url');
             $table->text('description')->nullable();
@@ -70,29 +67,18 @@ class MenuMigration implements Migration {
     public function init()
     {
         // 기본 메뉴 추가 (main) 추가.
-        /**
-         * @var $menuChanger MenuAlterHandler
-         * @var $configHandler MenuConfigHandler
-         * @var $permissionHandler MenuPermissionHandler
-         */
-        $menuChanger = app('xe.menu.changer');
-        $configHandler = app('xe.menu.config');
-        $permissionHandler = app('xe.menu.permission');
-
-        $defaultMenuAttributes = [
-            'menuTitle' => 'Main Menu',
-            'menuDescription' => 'Main Menu',
-            'siteKey' => 'default'
-        ];
+        /** @var MenuHandler $menuHandler */
+        $menuHandler = app('xe.menu');
 
         // 기본 메뉴 config  설정 (theme)
         $defaultMenuTheme = 'theme/alice@main';
-        $mainMenu = $menuChanger->addMenu($defaultMenuAttributes);
-        $configHandler->setMenuTheme($mainMenu, $defaultMenuTheme, $defaultMenuTheme);
 
-        // 기본 메뉴 권한 설정
-        $defaultMenuPermission = $permissionHandler->getDefaultMenuPermission();
-        $permissionHandler->registerMenuPermission($mainMenu, $defaultMenuPermission);
+        $mainMenu = $menuHandler->create([
+            'title' => 'Main Menu',
+            'description' => 'Main Menu',
+            'siteKey' => 'default'
+        ]);
+        $menuHandler->setMenuTheme($mainMenu, $defaultMenuTheme, $defaultMenuTheme);
 
         $this->pageModuleMenuSetup($mainMenu);
         $this->boardModuleMenuSetup($mainMenu);
@@ -104,7 +90,7 @@ class MenuMigration implements Migration {
     /**
      * pageModuleMenuSetup
      *
-     * @param MenuEntity $mainMenu
+     * @param Menu $mainMenu
      *
      * @return void
      */
@@ -112,32 +98,29 @@ class MenuMigration implements Migration {
     {
 
         // page, menu item 추가.
-        /**
-         * @var $menuChanger MenuAlterHandler
-         * @var $configHandler MenuConfigHandler
-         * @var $permissionHandler MenuPermissionHandler
-         */
-        $menuChanger = app('xe.menu.changer');
-        $configHandler = app('xe.menu.config');
-        $permissionHandler = app('xe.menu.permission');
+        /** @var MenuHandler $menuHandler */
+        $menuHandler = app('xe.menu');
 
         $inputs = [
             'menuId' => $mainMenu->id,
-            'parent' => $mainMenu->id,
-            'itemTitle' => '홈',
-            'itemUrl' => 'home',
-            'itemDescription' => 'home',
-            'itemTarget' => '_blank',
-            'selectedType' => 'module/page@page',
-            'itemOrdering' => '1',
-            'itemActivated' => '1',
+            'parentId' => null,
+            'title' => '홈',
+            'url' => 'home',
+            'description' => 'home',
+            'target' => '_blank',
+            'type' => 'module/page@page',
+            'ordering' => '1',
+            'activated' => '1',
+        ];
+        $menuTypeInput = [
             'pageTitle' => 'Welcome to XpressEngine3',
             'comment' => 'use',
             'siteKey' => 'default'
         ];
-        $item = $menuChanger->addItem($mainMenu, $inputs);
 
-        $configHandler->setMenuItemTheme($item, 'theme/alice@main', 'theme/alice@main');
+        $item = $menuHandler->createItem($mainMenu, $inputs, $menuTypeInput);
+
+        $menuHandler->setMenuItemTheme($item, 'theme/alice@main', 'theme/alice@main');
         /**
          * @var $configManager ConfigManager
          */
@@ -148,49 +131,42 @@ class MenuMigration implements Migration {
 
         $configManager->modify($configEntity);
 
-        $permissionHandler->registerItemPermission($item, new Grant);
-
         $this->registerWelcomPageContent($item);
     }
 
     /**
      * boardModuleMenuSetup
      *
-     * @param MenuEntity $mainMenu
+     * @param Menu $mainMenu
      *
      * @return void
      */
     public function boardModuleMenuSetup($mainMenu)
     {
         // board, menu item 추가.
-        /**
-         * @var $menuChanger MenuAlterHandler
-         * @var $configHandler MenuConfigHandler
-         * @var $permissionHandler MenuPermissionHandler
-         */
-        $menuChanger = app('xe.menu.changer');
-        $configHandler = app('xe.menu.config');
-        $permissionHandler = app('xe.menu.permission');
+        /** @var MenuHandler $menuHandler */
+        $menuHandler = app('xe.menu');
 
         $inputs = [
             'menuId' => $mainMenu->id,
-            'parent' => $mainMenu->id,
-            'itemTitle' => '게시판',
-            'itemUrl' => 'board1',
-            'itemDescription' => 'board1',
-            'itemTarget' => '_blank',
-            'selectedType' => 'module/board@board',
-            'itemOrdering' => '1',
-            'itemActivated' => '1',
+            'parentId' => null,
+            'title' => '게시판',
+            'url' => 'board1',
+            'description' => 'board1',
+            'target' => '_blank',
+            'type' => 'module/board@board',
+            'ordering' => '1',
+            'activated' => '1',
+        ];
+        $menuTypeInput = [
             'pageTitle' => 'XpressEngine3 Board',
             'boardName' => 'Board',
             'siteKey' => 'default'
         ];
-        $item = $menuChanger->addItem($mainMenu, $inputs);
 
-        $configHandler->setMenuItemTheme($item, 'theme/alice@sub', 'theme/alice@sub');
+        $item = $menuHandler->createItem($mainMenu, $inputs, $menuTypeInput);
 
-        $permissionHandler->registerItemPermission($item, new Grant);
+        $menuHandler->setMenuItemTheme($item, 'theme/alice@sub', 'theme/alice@sub');
     }
 
     protected function setThemeConfig($mainMenu)

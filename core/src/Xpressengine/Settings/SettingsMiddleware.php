@@ -16,11 +16,12 @@ namespace Xpressengine\Settings;
 use Closure;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\Request;
-use Xpressengine\Member\Entities\Guest;
-use Xpressengine\Member\Rating;
-use Xpressengine\Permission\Action;
+use Xpressengine\Permission\Instance;
+use Xpressengine\User\Models\Guest;
+use Xpressengine\User\Rating;
 use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
 use Xpressengine\Theme\ThemeHandler;
+use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 
 /**
  * 이 클래스는 Xpressengine에서 route middleware로 작동한다.
@@ -40,13 +41,20 @@ class SettingsMiddleware
     protected $app;
 
     /**
+     * @var GateContract
+     */
+    protected $gate;
+
+    /**
      * 생성자이며, Application을 주입받는다.
      *
-     * @param Application $app Application
+     * @param Application  $app  Application
+     * @param GateContract $gate GateContract
      */
-    public function __construct(Application $app)
+    public function __construct(Application $app, GateContract $gate)
     {
         $this->app = $app;
+        $this->gate = $gate;
     }
 
     /**
@@ -95,8 +103,7 @@ class SettingsMiddleware
             throw new AccessDeniedHttpException();
         }
 
-        $registered = \Permission::make('settings', $permissionId);
-        if ($registered->ables(Action::ACCESS) === false) {
+        if ($this->gate->allows('access', new Instance($permissionId))) {
             throw new AccessDeniedHttpException();
         }
     }

@@ -1,7 +1,7 @@
 <?php
 namespace Xpressengine\Themes;
 
-use Xpressengine\Member\Rating;
+use Xpressengine\User\Rating;
 use Xpressengine\Theme\AbstractTheme;
 
 class SettingsTheme extends AbstractTheme
@@ -21,10 +21,10 @@ class SettingsTheme extends AbstractTheme
         $this->loadFrontend();
         $user = \Auth::user();
         $isSuper = $user->getRating() === Rating::SUPER;
-        $menu = \Settings::getSettingsMenus($isSuper);
+        $menu = \XeSettings::getSettingsMenus($isSuper);
         $siteTitle = app('xe.site')->getSiteConfigValue('site_title');
         $siteTitle = $siteTitle !== null ? xe_trans($siteTitle) : 'XpressEngine';
-        $selectedMenu = \Settings::getSelectedMenu($isSuper);
+        $selectedMenu = \XeSettings::getSelectedMenu($isSuper);
         return \View::make('themes.settings', compact('menu', 'selectedMenu', 'user', 'siteTitle'));
     }
 

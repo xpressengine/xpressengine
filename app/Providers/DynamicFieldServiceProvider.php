@@ -15,7 +15,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use App;
-use Register;
+use XeRegister;
 use Xpressengine\DynamicField\ConfigHandler;
 use Xpressengine\DynamicField\DatabaseProxy;
 use Xpressengine\DynamicField\DynamicFieldHandler;

@@ -2,16 +2,16 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Filesystem\Filesystem;
-use Symfony\Component\Console\Question\Question;
 use PDO;
+use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\ProcessUtils;
-use Xpressengine\Member\MemberHandler;
-use Illuminate\Contracts\Auth\Guard;
-use Xpressengine\Support\Migration;
 use Symfony\Component\Yaml\Yaml;
+use Xpressengine\Support\Migration;
+use Xpressengine\User\UserHandler;
 
 class XeInstall extends Command
 {
@@ -46,11 +46,9 @@ class XeInstall extends Command
         'alice',
         'board',
         'ckeditor',
-        'ckeditor_plugin',
         'claim',
-        'comment_service',
+        'comment',
         'page',
-        'short_id_generator',
     ];
 
     /**
@@ -581,7 +579,7 @@ APP_KEY=SomeRandomString";
         $plugins = $this->basePlugins;
 
         foreach ($plugins as $plugin) {
-            \Plugin::activatePlugin($plugin);
+            \XePlugin::activatePlugin($plugin);
         }
     }
 
@@ -697,9 +695,9 @@ APP_KEY=SomeRandomString";
         $config['emailConfirmed'] = true;
 
         // create admin account
-        /** @var MemberHandler $memberHandler */
-        $memberHandler = app('xe.member');
-        $admin = $memberHandler->create($config);
+        /** @var UserHandler $userHandler */
+        $userHandler = app('xe.user');
+        $admin = $userHandler->create($config);
 
         // create mail config
         $info = [

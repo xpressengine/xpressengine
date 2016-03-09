@@ -16,9 +16,11 @@ namespace Xpressengine\Routing;
 use Auth;
 use Closure;
 use Illuminate\Contracts\Foundation\Application;
-use Xpressengine\Menu\MenuItem;
+//use Xpressengine\Menu\MenuItem;
+use Xpressengine\Menu\Models\MenuItem;
 use Xpressengine\Menu\MenuRetrieveHandler;
 use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
+use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 
 /**
  * 이 클래스 Xpressengine 에서 route middle ware 로 동작한다.
@@ -39,19 +41,22 @@ class AccessMiddleware
      * @var Application
      */
     protected $app;
+
     /**
-     * @var string $permissionType
+     * @var GateContract
      */
-    protected $permissionType = 'menu';
+    protected $gate;
 
     /**
      * 생성자이며, Application 을 주입받는다.
      *
-     * @param Application $app Application
+     * @param Application  $app  Application
+     * @param GateContract $gate GateContract
      */
-    public function __construct(Application $app)
+    public function __construct(Application $app, GateContract $gate)
     {
         $this->app = $app;
+        $this->gate = $gate;
     }
 
     /**
@@ -79,12 +84,9 @@ class AccessMiddleware
         $item = $this->getMenuItem();
         $user = Auth::user();
         $rating = $user->getRating();
-        if ($rating === 'super') {
-            $accessAble = true;
-        } else {
-            $accessAble = $item->checkAccessPermission($user);
-        }
-        if (!$accessAble or !$item->activated) {
+
+        if (!$item->activated
+            || ($rating !== 'super' && $this->gate->denies('access', $item))) {
             throw new AccessDeniedHttpException;
         }
     }
@@ -100,8 +102,11 @@ class AccessMiddleware
          * @var MenuRetrieveHandler $menuHandler
          */
         $instanceConfig = InstanceConfig::instance();
-        $menuHandler = $this->app['xe.menu'];
-        $item = $menuHandler->getItem($instanceConfig->instanceId);
+//        $menuHandler = $this->app['xe.menu'];
+//        $item = $menuHandler->getItem($instanceConfig->instanceId);
+
+        $item = MenuItem::find($instanceConfig->instanceId);
+
         return $item;
     }
 }

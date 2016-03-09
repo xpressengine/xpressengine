@@ -38,8 +38,8 @@
 <div class="form-group __xe_df_category">
 	<input type="hidden" name="categoryId" value="{{ $config != null ? $config->get('categoryId') : '' }}" />
 	@if ($config == null)
-		<button type="button" onclick="storeCategory(this)">카테고리 그룹 생성12</button>
+		<button type="button" onclick="storeCategory(this)">카테고리 그룹 생성</button>
 	@else
-		<a href="{{ route('manage.category.show', ['id' => $config->get('categoryId')]) }}" target="_blank">카테고리 관리</a>
+		<a href="{{ route('manage.category.show', ['id' => '']) }}" target="_blank">카테고리 관리</a>
 	@endif
 </div>

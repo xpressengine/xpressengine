@@ -1,4 +1,3 @@
-{{ Frontend::css('/assets/core/settings/css/admin_menu.css')->load() }}
 <div class="row">
     @yield('menuContent')
 </div>

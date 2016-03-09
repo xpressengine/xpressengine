@@ -14,10 +14,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Xpressengine\Counter\ConfigHandler;
-use Xpressengine\Counter\Counter;
-use Xpressengine\Counter\Repository;
-use Xpressengine\Counter\SessionCounter;
+use Xpressengine\Counter\Factory;
 
 /**
  * laravel service provider
@@ -56,26 +53,14 @@ class CounterServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('xe.counter', function ($app) {
-            $connection = $app['xe.db']->connection();
 
-            $sessionCounter = new SessionCounter(app('session.store'));
-            $repo = new Repository($connection);
-
-            $configHandler = new ConfigHandler($app['xe.config']);
-
-            $proxyClass = $app['xe.interception']->proxy(Counter::class, 'Counter');
-            $factory = new $proxyClass(
-                $repo,
-                $sessionCounter,
-                $configHandler,
-                $app['xe.members'],
-                $app['xe.auth'],
-                $app['request']
-            );
-
-            return $factory;
+            return new Factory($app['xe.interception']);
         });
 
+        $this->app->bind(
+            'Xpressengine\Counter\Factory',
+            'xe.counter'
+        );
     }
 
     /**

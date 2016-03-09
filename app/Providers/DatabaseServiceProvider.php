@@ -14,6 +14,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use Xpressengine\Database\DatabaseCoupler;
 use Xpressengine\Database\DatabaseHandler;
 use Xpressengine\Database\ProxyManager;
@@ -40,8 +42,17 @@ class DatabaseServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        DynamicModel::setConnectionResolver($this->app['xe.db']);
+        if ($this->app['config']->get('app.debug') === true) {
 
+            \DB::listen(function ($query, $bindings, $time) {
+                $logFile = storage_path('logs/query.log');
+                $monoLog = new Logger('log');
+                $monoLog->pushHandler(new StreamHandler($logFile, Logger::INFO));
+                $monoLog->info($query, compact('bindings', 'time'));
+            });
+        }
+        DynamicModel::setKeyGen(app('xe.keygen'));
+        DynamicModel::setConnectionResolver($this->app['xe.db']);
         DynamicModel::setEventDispatcher($this->app['events']);
     }
 

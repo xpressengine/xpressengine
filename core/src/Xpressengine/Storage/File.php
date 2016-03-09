@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is File object
+ * This file is File model
  *
  * PHP version 5
  *
@@ -13,11 +13,13 @@
  */
 namespace Xpressengine\Storage;
 
-use JsonSerializable;
-use Xpressengine\Support\EntityTrait;
+use Closure;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Xpressengine\Database\Eloquent\DynamicModel;
 
 /**
- * 파일의 정보를 담고 있는 객체 클래스
+ * Class File
  *
  * @category    Storage
  * @package     Xpressengine\Storage
@@ -25,112 +27,178 @@ use Xpressengine\Support\EntityTrait;
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
+ *
+ * @property string $id
+ * @property string $originId
+ * @property string $userId
+ * @property string $disk
+ * @property string $path
+ * @property string $filename
+ * @property string $clientname
+ * @property string $mime
+ * @property int $size
+ * @property int $useCount
+ * @property int $downloadCount
  */
-class File implements JsonSerializable
+class File extends DynamicModel
 {
-    use EntityTrait;
-
     /**
-     * protected property when update
+     * The table associated with the model.
      *
-     * @var array
+     * @var string
      */
-    protected $guarded = ['id'];
+    protected $table = 'files';
 
     /**
-     * constructor
+     * The table associated with the model for morph.
      *
-     * @param array $attributes object attributes
+     * @var string
      */
-    public function __construct(array $attributes)
-    {
-        if (isset($attributes['pathname'])) {
-            $attributes['path'] = pathinfo($attributes['pathname'], PATHINFO_DIRNAME);
-            $attributes['filename'] = pathinfo($attributes['pathname'], PATHINFO_BASENAME);
-            unset($attributes['pathname']);
-        }
-
-        $this->original = $this->attributes = $attributes;
-    }
+    protected $fileableTable = 'fileables';
 
     /**
-     * Returns id
+     * Indicates if the IDs are auto-incrementing.
      *
-     * @return string
+     * @var bool
      */
-    public function getId()
-    {
-        return $this->attributes['id'];
-    }
+    public $incrementing = false;
 
     /**
-     * Original file's id
+     * The ContentReader instance
      *
-     * @param bool $defaultSelf returns self id when parent not exists
-     * @return null|string
+     * @var ContentReaderInterface
      */
-    public function getOriginId($defaultSelf = true)
-    {
-        return $this->parentId ?: ($defaultSelf ? $this->getId() : null);
-    }
+    protected static $reader;
 
     /**
-     * Returns mime type
+     * Storage UrlMaker instance
      *
-     * @return string
+     * @var UrlMaker
      */
-    public function getMime()
-    {
-        return $this->attributes['mime'];
-    }
+    protected static $urls;
 
     /**
-     * File path
-     *
-     * @return string
-     */
-    public function getPath()
-    {
-        return $this->attributes['path'];
-    }
-
-    /**
-     * File name
-     *
-     * @return string
-     */
-    public function getFilename()
-    {
-        return $this->attributes['filename'];
-    }
-
-    /**
-     * directory path and file name
+     * Get a path name of file
      *
      * @return string
      */
     public function getPathname()
     {
-        return rtrim($this->attributes['path'], '/') . '/' . $this->attributes['filename'];
+        return rtrim($this->getAttribute('path'), '/') . '/' . $this->getAttribute('filename');
     }
 
     /**
-     * check exists
+     * Get the content of file
      *
-     * @return bool
+     * @return string
      */
-    public function exists()
+    public function getContent()
     {
-//        return file_exists($this->attributes['pathname']);
+        return static::$reader->read($this);
     }
 
     /**
-     * For json encode
+     * Original file's identifier
      *
-     * @return array visible properties
+     * @return string
      */
-    public function jsonSerialize()
+    public function getOriginKey()
     {
-        return $this->getAttributes();
+        return $this->getAttribute('originId') ?: $this->getKey();
+    }
+
+    /**
+     * Get the derive files of current file
+     *
+     * @return Collection|static[]
+     */
+    public function getDerives()
+    {
+        return static::derives($this)->get();
+    }
+
+    /**
+     * Get the derive files of current file with the File type
+     *
+     * @return Collection|static[]
+     */
+    public function getRawDerives()
+    {
+        $class = __CLASS__;
+        $model = new $class;
+
+        return $model->derives($this)->get();
+    }
+
+    /**
+     * Get a file url
+     *
+     * @param Closure $callback callback
+     * @return string
+     */
+    public function url(Closure $callback = null)
+    {
+        return static::$urls->url($this, $callback);
+    }
+
+    /**
+     * Scope for derives
+     *
+     * @param Builder $query query builder instance
+     * @param File    $file  file instance
+     * @return Builder
+     */
+    public function scopeDerives(Builder $query, File $file)
+    {
+        return $query->where('originId', $file->getKey());
+    }
+
+    /**
+     * Get the files for fileable
+     *
+     * @param string $fileableId fileable identifier
+     * @return Collection|static[]
+     */
+    public static function getByFileable($fileableId)
+    {
+        $model = new static;
+
+        return $model->newQuery()
+            ->rightJoin($model->getFileableTable(), $model->getTable().'.id', '=', $model->getFileableTable().'.fileId')
+            ->where('fileableId', $fileableId)
+            ->select([$model->getTable().'.*'])
+            ->get();
+    }
+
+    /**
+     * Set the ContentReader instance
+     *
+     * @param ContentReaderInterface $reader content reader instance
+     * @return void
+     */
+    public static function setContentReader(ContentReaderInterface $reader)
+    {
+        static::$reader = $reader;
+    }
+
+    /**
+     * Set the UrlMaker instance
+     *
+     * @param UrlMaker $urlMaker UrlMaker instance
+     * @return void
+     */
+    public static function setUrlMaker(UrlMaker $urlMaker)
+    {
+        static::$urls = $urlMaker;
+    }
+
+    /**
+     * Get a fileable table name
+     *
+     * @return string
+     */
+    public function getFileableTable()
+    {
+        return $this->fileableTable;
     }
 }

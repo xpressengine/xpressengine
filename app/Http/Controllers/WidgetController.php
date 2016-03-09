@@ -4,7 +4,7 @@ use App\Sections\WidgetSection;
 use Input;
 use View;
 use Xpressengine\Module\ModuleHandler;
-use Xpressengine\Presenter\Facades\Presenter;
+use XePresenter;
 use Xpressengine\Widget\WidgetHandler;
 
 class WidgetController extends Controller {
@@ -20,7 +20,7 @@ class WidgetController extends Controller {
         $widgetSection = new WidgetSection;
         $widgetSectionView = $widgetSection->getSection('__xe_content');
 
-        return Presenter::make('widget.index', [
+        return XePresenter::make('widget.index', [
             'widgetSectionView' => $widgetSectionView
         ]);
     }

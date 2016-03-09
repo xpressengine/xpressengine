@@ -29,11 +29,13 @@ class SettingsServiceProvider extends ServiceProvider
         $this->app->singleton(
             'xe.settings',
             function ($app) {
-
-                $menu = $app['config']->get('xe.settings.menu');
-
-                $handler = $app['xe.interception']->proxy(SettingsHandler::class, 'Settings');
-                $handler = new $handler($app['xe.register'], $app['router'], $app['xe.config'], $app['xe.permission']);
+                $handler = $app['xe.interception']->proxy(SettingsHandler::class, 'XeSettings');
+                $handler = new $handler(
+                    $app['xe.register'],
+                    $app['router'],
+                    $app['xe.config'],
+                    $app['Illuminate\Contracts\Auth\Access\Gate']
+                );
 
                 return $handler;
             }
@@ -51,7 +53,7 @@ class SettingsServiceProvider extends ServiceProvider
         $this->registerSettingsMenus();
 
         // register settings permission type
-        $this->registerSettingsPermissionType();
+//        $this->registerSettingsPermissionType();
         $this->registerPermissionUIObject();
     }
 
@@ -65,17 +67,17 @@ class SettingsServiceProvider extends ServiceProvider
         return ['xe.settings'];
     }
 
-    private function registerSettingsPermissionType()
-    {
-        /** @var PermissionFactory $permissionFactory */
-        $permissionFactory = $this->app['xe.permission'];
-        $permissionFactory->extend(
-            'settings',
-            function ($target, $user, $registered) {
-                return new SettingsMenuPermission($user, $registered);
-            }
-        );
-    }
+//    private function registerSettingsPermissionType()
+//    {
+//        /** @var PermissionFactory $permissionFactory */
+//        $permissionFactory = $this->app['xe.permission'];
+//        $permissionFactory->extend(
+//            'settings',
+//            function ($target, $user, $registered) {
+//                return new SettingsMenuPermission($user, $registered);
+//            }
+//        );
+//    }
 
     private function registerPermissionUIObject()
     {

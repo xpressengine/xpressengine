@@ -2,7 +2,7 @@
 
 namespace Xpressengine\UIObjects\Lang;
 
-use Frontend;
+use XeFrontend;
 use Xpressengine\UIObject\AbstractUIObject;
 
 class LangText extends AbstractUIObject
@@ -13,12 +13,12 @@ class LangText extends AbstractUIObject
     {
         $args = $this->arguments;
 
-        Frontend::js('/assets/vendor/jqueryui/jquery-ui.js')->appendTo('head')->load();
-        Frontend::css('/assets/vendor/jqueryui/jquery-ui.css')->load();
-        Frontend::js('/assets/vendor/expanding/expanding.js')->appendTo('head')->load();
-        Frontend::js('/assets/core/lang/LangEditorBox.js')->type('text/jsx')->appendTo('head')->load();
-        Frontend::css('/assets/core/lang/LangEditorBox.css')->load();
-        Frontend::css('/assets/core/lang/flag.css')->load();
+        XeFrontend::js('/assets/vendor/jqueryui/jquery-ui.js')->appendTo('head')->load();
+        XeFrontend::css('/assets/vendor/jqueryui/jquery-ui.css')->load();
+        XeFrontend::js('/assets/vendor/expanding/expanding.js')->appendTo('head')->load();
+        XeFrontend::js('/assets/core/lang/LangEditorBox.js')->type('text/jsx')->appendTo('head')->load();
+        XeFrontend::css('/assets/core/lang/LangEditorBox.css')->load();
+        XeFrontend::css('/assets/core/lang/flag.css')->load();
 
         $langKey = htmlspecialchars($args['langKey'], ENT_QUOTES, 'UTF-8');
 

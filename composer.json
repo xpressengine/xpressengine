@@ -35,18 +35,16 @@
         "jenssegers/agent": "*",
         "xpressengine/installer": "dev-master",
         "ezyang/htmlpurifier": "~4.7",
-        "xpressengine-plugin/alice": "*@dev",
-        "xpressengine-plugin/google_analytics": "*@dev",
-        "xpressengine-plugin/orientator": "*@dev",
-        "xpressengine-plugin/page": "*@dev",
-        "xpressengine-plugin/board": "*@dev",
-        "xpressengine-plugin/comment_service": "*@dev",
-        "xpressengine-plugin/ckeditor": "*@dev",
-        "xpressengine-plugin/ckeditor_plugin": "*@dev",
-        "xpressengine-plugin/claim": "*@dev",
-        "xpressengine-plugin/short_id_generator": "*@dev",
-        "xpressengine-plugin/external_page": "*@dev",
-        "xpressengine-plugin/social_login": "*@dev"
+        "xpressengine-plugin/alice": "dev-master",
+        "xpressengine-plugin/google_analytics": "dev-master",
+        "xpressengine-plugin/orientator": "dev-master",
+        "xpressengine-plugin/page": "dev-master",
+        "xpressengine-plugin/board": "dev-master",
+        "xpressengine-plugin/comment": "*@dev",
+        "xpressengine-plugin/ckeditor": "dev-master",
+        "xpressengine-plugin/claim": "dev-master",
+        "xpressengine-plugin/external_page": "dev-master",
+        "xpressengine-plugin/social_login": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -77,7 +75,8 @@
             "core/src/Xpressengine/Menu/helpers.php",
             "core/src/Xpressengine/Module/helpers.php",
             "core/src/Xpressengine/Widget/helpers.php",
-            "core/src/Xpressengine/Support/helpers.php"
+            "core/src/Xpressengine/Support/helpers.php",
+            "core/src/Xpressengine/DynamicField/helpers.php"
         ]
     },
     "autoload-dev": {

@@ -39,30 +39,13 @@ use Illuminate\Database\Connection;
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
- * @see         QueryBuilder table() method
- * @method      count
- * @method      DynamicQuery orderBy($column, $direction = 'asc')
- * @method      DynamicQuery groupBy
- * @method      DynamicQuery sum
- * @method      take
- * @method      limit
- * @method      DynamicQuery join($table, $one, $operator = null, $two = null, $type = 'inner', $where = false)
- * @method      DynamicQuery select($columns = ['*'])
- * @method      DynamicQuery whereRaw($sql, array $bindings = [], $boolean = 'and')
- * @method      DynamicQuery whereIn($column, $values, $boolean = 'and', $not = false)
- * @method      DynamicQuery orWhereIn($column, $values)
- * @method      DynamicQuery orWhere($column, $value)
- * @method      DynamicQuery decrement($value)
- * @method      DynamicQuery increment($value)
- * @method      DynamicQuery whereNested($callback)
- * @method      DynamicQuery whereBetween($column, $values)
  */
-class DynamicQuery
+class DynamicQuery extends Builder
 {
     /**
      * @var VirtualConnectionInterface
      */
-    protected $connector;
+    protected $connection;
 
     /**
      * @var string
@@ -98,7 +81,7 @@ class DynamicQuery
      *
      * @var bool
      */
-    protected $proxy = true;
+    protected $proxy = false;
 
     /**
      * dynamic query
@@ -115,47 +98,36 @@ class DynamicQuery
     protected $schemas = [];
 
     /**
-     * Create instance
+     * dynamic query 사용하면서 join 된 테이블 정보
      *
-     * @param VirtualConnectionInterface $connector connector
-     * @param string                     $table     table name
-     * @param bool                       $dynamic   proxy use or disuse
+     * @var array
      */
-    public function __construct(VirtualConnectionInterface $connector, $table, $dynamic = false)
+    protected $dynamicTables = [];
+
+    /**
+     * dynamic filter 처리 유무
+     *
+     * @param bool $use
+     * @return $this
+     */
+    public function useDynamic($use = true)
     {
-        /**
-         * \Illuminate\Database\Query\Builder 를 만들기 위해서 connection 이 필요하다.
-         * Builder 를 미리 생성해야 하는 이슈 때문에 driver 를 혼합해서 사용 할 수 없다.
-         * mysql, mssql 을 같이 사용 할 수 없음.
-         * default connection 으로 사용되는 driver 만 설정이 가능함.
-         */
-        /**
-         * @param Connection $defaultConnection
-         */
-        $defaultConnection = $connector->getDefaultConnection();
-        $processor = $defaultConnection->getPostProcessor();
-
-        $query = new Builder($connector, $defaultConnection->getQueryGrammar(), $processor);
-        $query->from($table);
-
-        $this->connector = $connector;
-        $this->query = $query;
-        $this->table = $table;
-        $this->dynamic = $dynamic;
+        $this->dynamic = $use;
+        return $this;
     }
 
     /**
      * 프록시 처리 유무 설정
      *
      * @param bool $use proxy use
-     * @return DynamicQuery
+     * @return $this
      */
     public function useProxy($use = true)
     {
         $this->proxy = $use;
-        $this->dynamic = $use;
         return $this;
     }
+
     /**
      * proxy 를 위한 options 설정
      *
@@ -191,7 +163,42 @@ class DynamicQuery
      */
     private function schema()
     {
-        return $this->connector->getSchema($this->table);
+        return $this->connection->getSchema($this->from);
+    }
+
+    /**
+     * set dynamic join table information
+     *
+     * @param string $table table name
+     * @return $this
+     */
+    public function setDynamicTable($table)
+    {
+        if ($this->hasDynamicTable($table) === false) {
+            $this->dynamicTables[] = $table;
+        }
+        return $this;
+    }
+
+    /**
+     * has dynamic join table
+     *
+     * @param string $table table name
+     * @return bool
+     */
+    public function hasDynamicTable($table)
+    {
+        return in_array($table, $this->dynamicTables);
+    }
+
+    /**
+     * get dynamic join table
+     *
+     * @return array
+     */
+    public function getDynamicTables()
+    {
+        return $this->dynamicTables;
     }
 
     /**
@@ -227,8 +234,8 @@ class DynamicQuery
             return null;
         }
 
-        $proxyManager = $this->connector->getProxyManager();
-        $proxyManager->set($this->connector, $this->options);
+        $proxyManager = $this->connection->getProxyManager();
+        $proxyManager->set($this->connection, $this->options);
 
         return $proxyManager;
     }
@@ -242,12 +249,12 @@ class DynamicQuery
     public function insert(array $args)
     {
         if ($this->dynamic === false) {
-            return $this->query->insert($args);
+            return parent::insert($args);
         }
 
         $result = true;
         if (count($insert = $this->filter($args, $this->schema())) > 0) {
-            $result = $this->query->insert($insert);
+            $result = parent::insert($insert);
         }
 
         if ($this->proxy === true) {
@@ -268,12 +275,12 @@ class DynamicQuery
     public function insertGetId(array $args, $sequence = null)
     {
         if ($this->dynamic === false) {
-            return $this->query->insertGetId($args, $sequence);
+            return parent::insertGetId($args, $sequence);
         }
 
         $result = 0;
         if (count($insert = $this->filter($args, $this->schema())) > 0) {
-            $result = $this->query->insertGetId($insert, $sequence);
+            $result = parent::insertGetId($args, $sequence);
         }
 
         if ($this->proxy === true) {
@@ -293,16 +300,16 @@ class DynamicQuery
     public function update(array $args)
     {
         if ($this->dynamic === false) {
-            return $this->query->update($args);
+            return parent::update($args);
         }
 
         $result = 0;
         if (count($update = $this->filter($args, $this->schema())) > 0) {
-            $result = $this->query->update($update);
+            $result = parent::update($update);
         }
 
         if ($this->proxy === true) {
-            $wheres = $this->query->wheres === null ? [] : $this->query->wheres;
+            $wheres = $this->wheres === null ? [] : $this->wheres;
             $this->getProxyManager()->update($args, $wheres);
         }
         return $result;
@@ -313,16 +320,16 @@ class DynamicQuery
      *
      * @return int
      */
-    public function delete()
+    public function delete($id = NULL)
     {
         if ($this->dynamic === false) {
-            return $this->query->delete();
+            return parent::delete($id);
         }
 
-        $result = $this->query->delete();
+        $result = parent::delete($id);
 
         if ($this->proxy === true) {
-            $wheres = $this->query->wheres === null ? [] : $this->query->wheres;
+            $wheres = $this->wheres === null ? [] : $this->wheres;
             $this->getProxyManager()->delete($wheres);
         }
 
@@ -335,16 +342,34 @@ class DynamicQuery
      * @param array $columns get columns list
      * @return array|static[]
      */
-    public function get(array $columns = ['*'])
+    public function count($columns = '*')
     {
         if ($this->dynamic === false) {
-            return $this->query->get($columns);
+            return parent::count($columns);
         }
 
         if ($this->proxy === true) {
-            $this->query = $this->getProxyManager()->get($this->query);
+            $this->query = $this->getProxyManager()->get($this);
         }
-        return $this->query->get($columns);
+        return parent::count($columns);
+    }
+
+    /**
+     * get list
+     *
+     * @param array $columns get columns list
+     * @return array|static[]
+     */
+    public function get($columns = ['*'])
+    {
+        if ($this->dynamic === false) {
+            return parent::get($columns);
+        }
+
+        if ($this->proxy === true) {
+            $this->query = $this->getProxyManager()->get($this);
+        }
+        return parent::get($columns);
     }
 
     /**
@@ -353,16 +378,35 @@ class DynamicQuery
      * @param array $columns get columns list
      * @return mixed|static
      */
-    public function first(array $columns = ['*'])
+    public function first($columns = ['*'])
     {
         if ($this->dynamic === false) {
-            return $this->query->first($columns);
+            return parent::first($columns);
         }
 
         if ($this->proxy === true) {
-            $this->query = $this->getProxyManager()->first($this->query);
+            $this->query = $this->getProxyManager()->first($this);
         }
-        return $this->query->first($columns);
+        return parent::first($columns);
+    }
+
+    /**
+     * Execute a query for a single record by ID.
+     *
+     * @param  int    $id
+     * @param  array  $columns
+     * @return mixed|static
+     */
+    public function find($id, $columns = ['*'])
+    {
+        if ($this->dynamic === false) {
+            return parent::find($id, $columns);
+        }
+
+        if ($this->proxy === true) {
+            $this->query = $this->getProxyManager()->first($this);
+        }
+        return parent::find($id, $columns);
     }
 
     /**
@@ -372,17 +416,17 @@ class DynamicQuery
      * @param array $columns get columns
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function paginate($perPage, array $columns = ['*'])
+    public function paginate($perPage = 15, $columns = ['*'], $pageName = 'page', $page = null)
     {
         if ($this->dynamic === false) {
-            $this->query->paginate($perPage, $columns);
+            parent::paginate($perPage, $columns);
         }
 
         if ($this->proxy === true) {
-            $this->query = $this->getProxyManager()->get($this->query);
+            $this->query = $this->getProxyManager()->get($this);
         }
 
-        return $this->query->paginate($perPage, $columns);
+        return parent::paginate($perPage, $columns);
     }
 
     /**
@@ -394,73 +438,16 @@ class DynamicQuery
      * @param array $columns get columns
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function simplePaginate($perPage, array $columns = ['*'])
+    public function simplePaginate($perPage = 15, $columns = ['*'], $pageName = 'page')
     {
         if ($this->dynamic === false) {
-            $this->query->simplePaginate($perPage, $columns);
+            parent::simplePaginate($perPage, $columns);
         }
 
         if ($this->proxy === true) {
-            $this->query = $this->getProxyManager()->get($this->query);
+            $this->query = $this->getProxyManager()->get($this);
         }
 
-        return $this->query->simplePaginate($perPage, $columns);
-    }
-
-    /**
-     * make where query with alias
-     *
-     * @param mixed  $column   column name or Closure
-     * @param string $operator operator
-     * @param mixed  $value    column's value or Closure
-     * @param string $boolean  have 'and', 'or' value
-     * @return DynamicQuery
-     */
-    public function where($column, $operator = null, $value = null, $boolean = 'and')
-    {
-        // add alias name
-        if (gettype($column) === 'string') {
-            $columnInfo = explode('.', $column);
-            if (count($columnInfo)===1) {
-                $column = $columnInfo[0];
-                $alias = $this->table;
-            } else {
-                $alias = $columnInfo[0];
-                $column = $columnInfo[1];
-            }
-            $column = sprintf('%s.%s', $alias, $column);
-        }
-
-        $this->query = $this->query->where($column, $operator, $value, $boolean);
-        return $this;
-    }
-
-    /**
-     * Get the SQL representation of the query.
-     *
-     * @return string
-     */
-    public function toSql()
-    {
-        return $this->query->toSql();
-    }
-
-    /**
-     * \Illuminate\Database\Query\Builder 의 method 호출
-     * return 이 \Illuminate\Database\Query\Builder 일 경우는 \Xpressengine\Database\DynamicQuery 를 return
-     *
-     * @param string $method     method name
-     * @param array  $parameters parameters
-     * @return mixed
-     */
-    public function __call($method, $parameters)
-    {
-        $result = call_user_func_array(array($this->query, $method), $parameters);
-        if (gettype($result) == 'object' && get_class($result) === 'Illuminate\Database\Query\Builder') {
-            $this->query = $result;
-            return $this;
-        } else {
-            return $result;
-        }
+        return parent::simplePaginate($perPage, $columns);
     }
 }

@@ -52,7 +52,7 @@ class AuthSkin extends BladeSkin
      */
     protected function loadAssets()
     {
-        \Frontend::css(
+        \XeFrontend::css(
             [
                 'assets/vendor/bootstrap/css/bootstrap.css',
                 'assets/core/common/css/form.css',
@@ -60,7 +60,7 @@ class AuthSkin extends BladeSkin
             ]
         )->load();
 
-        \Frontend::js('assets/vendor/bootstrap/js/bootstrap.js')
+        \XeFrontend::js('assets/vendor/bootstrap/js/bootstrap.js')
             ->min('assets/vendor/bootstrap/js/bootstrap.min.js')
             ->appendTo('head')
             ->load();

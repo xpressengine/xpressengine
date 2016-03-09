@@ -27,5 +27,5 @@ use Xpressengine\Database\DatabaseException;
  */
 class NotExistsProxyException extends DatabaseException
 {
-
+    protected $message = 'Proxy not exists.';
 }

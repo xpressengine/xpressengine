@@ -15,7 +15,6 @@ namespace Xpressengine\Settings;
 
 use Closure;
 use Illuminate\Routing\Route;
-use Xpressengine\Menu\MenuItem;
 use Xpressengine\Settings\Exceptions\LinkNotFoundException;
 
 /**

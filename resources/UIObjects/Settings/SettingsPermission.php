@@ -2,7 +2,7 @@
 
 use Xpressengine\Permission\Factory;
 use Xpressengine\Permission\Grant;
-use Xpressengine\Permission\Registered;
+use Xpressengine\Permission\Permission;
 use Xpressengine\UIObject\AbstractUIObject;
 
 class SettingsPermission extends AbstractUIObject
@@ -25,7 +25,7 @@ class SettingsPermission extends AbstractUIObject
         $actions = $permission->getActions();
         $registered = $permission->getRegistered();
 
-        $groups = app('xe.member.groups')->all();
+        $groups = app('xe.user.groups')->all();
 
         $settings = [];
         $content = [];
@@ -38,7 +38,7 @@ class SettingsPermission extends AbstractUIObject
                 'title' => $action,
                 'grant' => $this->getGrant($registered, $action),
                 'groups' => $groups
-            ])->render();
+            ]);
         }
         $content = implode('<hr>', $content);
         $settings[] = $this->generateBox($title, $content);
@@ -56,7 +56,7 @@ class SettingsPermission extends AbstractUIObject
     {
     }
 
-    protected function getGrant(Registered $registered, $action)
+    protected function getGrant(Permission $registered, $action)
     {
         $defaultPerm = [
             Grant::RATING_TYPE => '',

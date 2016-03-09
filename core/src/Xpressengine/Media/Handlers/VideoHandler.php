@@ -16,17 +16,14 @@ namespace Xpressengine\Media\Handlers;
 use Xpressengine\Media\Exceptions\WrongInstanceException;
 use Xpressengine\Media\Exceptions\NotAvailableException;
 use Xpressengine\Media\Extensions\ExtensionInterface;
-use Xpressengine\Media\Meta;
-use Xpressengine\Media\Repositories\VideoRepository;
-use Xpressengine\Media\Spec\Media;
-use Xpressengine\Media\Spec\Image;
-use Xpressengine\Media\Spec\Video;
-use Xpressengine\Media\TempStorage;
+use Xpressengine\Media\Models\Media;
+use Xpressengine\Media\Models\Video;
+use Xpressengine\Storage\TempFileCreator;
 use Xpressengine\Storage\File;
 use Xpressengine\Storage\Storage;
 
 /**
- * video handler
+ * Class VideoHandler
  *
  * @category    Media
  * @package     Xpressengine\Media
@@ -45,13 +42,6 @@ class VideoHandler extends AbstractHandler
     protected $storage;
 
     /**
-     * Repository instance
-     *
-     * @var VideoRepository
-     */
-    protected $repo;
-
-    /**
      * Media reader instance
      *
      * @var \getID3
@@ -59,9 +49,9 @@ class VideoHandler extends AbstractHandler
     protected $reader;
 
     /**
-     * TempStorage instance
+     * TempFileCreator instance
      *
-     * @var TempStorage
+     * @var TempFileCreator
      */
     protected $temp;
 
@@ -73,37 +63,33 @@ class VideoHandler extends AbstractHandler
     protected $extension;
 
     /**
-     * Available mime type
+     * The time second for snapshot
      *
-     * @var array
+     * @var int
      */
-    protected $mimes = [
-        'video/x-flv', 'video/mp4', 'application/x-mpegURL', 'video/MP2T',
-        'video/3gpp', 'video/quicktime', 'video/x-msvideo', 'video/x-ms-wmv',
-        'video/ogg', 'video/webm'
-    ];
+    protected $fromSecond;
 
     /**
      * Constructor
      *
-     * @param Storage            $storage   Storage instance
-     * @param VideoRepository    $repo      Repository instance
-     * @param \getID3            $reader    Media reader instance
-     * @param TempStorage        $temp      TempStorage instance
-     * @param ExtensionInterface $extension Extension instance
+     * @param Storage            $storage    Storage instance
+     * @param \getID3            $reader     Media reader instance
+     * @param TempFileCreator    $temp       TempFileCreator instance
+     * @param ExtensionInterface $extension  Extension instance
+     * @param int                $fromSecond time second for snapshot
      */
     public function __construct(
         Storage $storage,
-        VideoRepository $repo,
         \getID3 $reader,
-        TempStorage $temp,
-        ExtensionInterface $extension
+        TempFileCreator $temp,
+        ExtensionInterface $extension,
+        $fromSecond = 10
     ) {
         $this->storage = $storage;
-        $this->repo = $repo;
         $this->reader = $reader;
         $this->temp = $temp;
         $this->extension = $extension;
+        $this->fromSecond = $fromSecond;
     }
 
     /**
@@ -119,10 +105,21 @@ class VideoHandler extends AbstractHandler
             throw new WrongInstanceException();
         }
 
-        // todo: 추출할 시간 정보를 별도로 입력받도록 처리할지?
-        $snapshot = $this->extension->getSnapshot($this->storage->read($media->getFile()));
+        $snapshot = $this->extension->getSnapshot($media->getContent(), $this->fromSecond);
 
         return $snapshot;
+    }
+
+    /**
+     * 각 미디어 타입에서 사용가능한 확장자 반환
+     *
+     * @return array
+     */
+    public function getAvailableMimes()
+    {
+        $class = $this->getModel();
+
+        return $class::getMimes();
     }
 
     /**
@@ -134,72 +131,69 @@ class VideoHandler extends AbstractHandler
      */
     public function make(File $file)
     {
-        if ($this->isAvailable($file->getMime()) !== true) {
+        if ($this->isAvailable($file->mime) !== true) {
             throw new NotAvailableException();
         }
 
-        if (!$meta = $this->repo->find($file->getId())) {
-            $meta = $this->extractInformation($file);
-            $meta->dataEncode(Video::getJsonType());
+        $video = $this->createModel($file);
+        if (!$video->meta) {
+            list($audioData, $videoData, $playtime, $bitrate) = $this->extractInformation($video);
 
-            $meta = $this->repo->insert($meta);
+            $meta = $video->meta()->create([
+                'audio' => $audioData,
+                'video' => $videoData,
+                'playtime' => $playtime,
+                'bitrate' => $bitrate,
+            ]);
+
+            $video->setRelation('meta', $meta);
         }
 
-        return $this->createModel($file, $meta);
+        return $video;
     }
 
     /**
      * Extract file meta data
      *
-     * @param File $file file instance
-     * @return Meta
+     * @param Video $video video file instance
+     * @return array
      */
-    protected function extractInformation(File $file)
+    protected function extractInformation(Video $video)
     {
-        $meta = new Meta();
-        $meta->id = $file->getId();
-        $meta->originId = $file->getOriginId(false);
+        $tmpFile = $this->temp->create($video->getContent());
 
-        $tmpPathname = $this->temp->getTempPathname();
-        $this->temp->createFile($tmpPathname, $this->storage->read($file));
+        $info = $this->reader->analyze($tmpFile->getPathname());
 
-        $info = $this->reader->analyze($tmpPathname);
-
-        $this->temp->remove($tmpPathname);
+        $tmpFile->destroy();
 
         if (isset($info['audio']['streams'])) {
             unset($info['audio']['streams']);
         }
 
-        $meta->audio = $info['audio'];
-        $meta->video = $info['video'];
-        $meta->playtime = $info['playtime_seconds'];
-        $meta->bitrate = $info['bitrate'];
-
-        return $meta;
+        return [$info['audio'], $info['video'], $info['playtime_seconds'], $info['bitrate']];
     }
 
     /**
-     * 미디어 삭제
+     * Returns model class
      *
-     * @param Media $media media instance
-     * @return void
+     * @return string
      */
-    public function remove(Media $media)
+    public function getModel()
     {
-        $this->repo->delete($media->getMeta());
+        return Video::class;
     }
 
     /**
      * Create model
      *
      * @param File $file file instance
-     * @param Meta $meta meta instance
      * @return Video
      */
-    protected function createModel(File $file, Meta $meta)
+    public function createModel(File $file)
     {
-        return new Video($file, $meta);
+        $class = $this->getModel();
+
+        return $class::make($file);
     }
 
     /**

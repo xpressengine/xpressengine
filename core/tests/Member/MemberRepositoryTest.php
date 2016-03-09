@@ -4,7 +4,7 @@ namespace Xpressengine\Tests\Member;
 require_once('TestEntity.php');
 
 use Mockery;
-use Xpressengine\Member\Repositories\Database\MemberRepository as TargetMemberRepository;
+use Xpressengine\Member\Repositories\Database\UserRepository as TargetMemberRepository;
 
 class MemberRepositoryTest extends \PHPUnit_Framework_TestCase
 {

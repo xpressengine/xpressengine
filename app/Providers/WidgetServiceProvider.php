@@ -39,7 +39,7 @@ class WidgetServiceProvider extends ServiceProvider
             'xe.widget',
             function ($app) {
 
-                $proxyClass = $app['xe.interception']->proxy(WidgetHandler::class, 'Widget');
+                $proxyClass = $app['xe.interception']->proxy(WidgetHandler::class, 'XeWidget');
                 $widgetHandler = new $proxyClass(
                     $app['xe.pluginRegister'],
                     $app['xe.auth'],
@@ -69,21 +69,21 @@ class WidgetServiceProvider extends ServiceProvider
             'xe.widget.parser'
         );
 
-        intercept(
-            'HtmlRenderer@render',
-            'widget.replace',
-            function ($target) {
-                $htmlResponseString = $target();
-
-                /**
-                 * @var WidgetParser $parser
-                 */
-                $parser = app('xe.widget.parser');
-
-                $htmlResponseString = $parser->parseXml($htmlResponseString);
-                return $htmlResponseString;
-            }
-        );
+        //intercept(
+        //    'HtmlRenderer@render',
+        //    'widget.replace',
+        //    function ($target) {
+        //        $htmlResponseString = $target();
+        //
+        //        /**
+        //         * @var WidgetParser $parser
+        //         */
+        //        $parser = app('xe.widget.parser');
+        //
+        //        $htmlResponseString = $parser->parseXml($htmlResponseString);
+        //        return $htmlResponseString;
+        //    }
+        //);
     }
 
     /**

@@ -1,7 +1,9 @@
-<?php namespace Xpressengine\UIObjects\Menu;
+<?php
+namespace Xpressengine\UIObjects\Menu;
 
+use XeSite;
 use PhpQuery\PhpQuery;
-use Xpressengine\Menu\MenuEntity;
+use Xpressengine\Menu\Models\Menu as MenuModel;
 use Xpressengine\UIObject\AbstractUIObject;
 
 class MenuSelector extends AbstractUIObject
@@ -37,8 +39,7 @@ class MenuSelector extends AbstractUIObject
             $select->attr('name', $args['name']);
         }
 
-        // options
-        $menus = \Menu::getAllMenu(\Site::getCurrentSiteKey());
+        $menus = MenuModel::where('siteKey', XeSite::getCurrentSiteKey());
         foreach ($menus as $menu) {
             $option = PhpQuery::pq('<option></option>');
             $option->appendTo($select)->attr('value', $menu->id)->html($menu->title);

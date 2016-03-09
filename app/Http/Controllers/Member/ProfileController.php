@@ -5,33 +5,31 @@ namespace App\Http\Controllers\Member;
 use App\Http\Controllers\Controller;
 use Auth;
 use Illuminate\Http\Request;
-use Presenter;
-use Theme;
-use Validator;
+use XePresenter;
+use XeTheme;
 use XeDB;
-use Xpressengine\Member\Entities\MemberEntityInterface;
-use Xpressengine\Member\MemberHandler;
-use Xpressengine\Member\MemberImageHandler;
-use Xpressengine\Member\MemberNotFoundException;
-use Xpressengine\Member\Rating;
-use Xpressengine\Member\Repositories\GroupRepositoryInterface;
-use Xpressengine\Member\Repositories\MailRepositoryInterface;
-use Xpressengine\Support\Exceptions\InvalidArgumentException;
+use Xpressengine\User\Exceptions\UserNotFoundException;
+use Xpressengine\User\Rating;
+use Xpressengine\User\Repositories\UserEmailRepositoryInterface;
+use Xpressengine\User\Repositories\UserGroupRepositoryInterface;
+use Xpressengine\User\UserHandler;
+use Xpressengine\User\UserImageHandler;
+use Xpressengine\User\UserInterface;
 
 class ProfileController extends Controller
 {
     /**
-     * @var MemberHandler
+     * @var UserHandler
      */
     protected $handler;
 
     /**
-     * @var GroupRepositoryInterface
+     * @var UserGroupRepositoryInterface
      */
     protected $groups;
 
     /**
-     * @var MailRepositoryInterface
+     * @var UserEmailRepositoryInterface
      */
     protected $mails;
 
@@ -39,75 +37,64 @@ class ProfileController extends Controller
 
     public function __construct()
     {
-        $this->handler = app('xe.member');
+        $this->handler = app('xe.user');
 
-        Theme::selectSiteTheme();
-        Presenter::setSkin('member/profile');
+        XeTheme::selectSiteTheme();
+        XePresenter::setSkin('member/profile');
     }
 
     // 기본정보 보기
-    public function index($member)
+    public function index($user)
     {
-        $member = $this->retreiveMember($member);
-        $grant = $this->getGrant($member);
+        $user = $this->retreiveUser($user);
+        $grant = $this->getGrant($user);
 
-        return Presenter::make('index', compact('member', 'grant'));
+        return XePresenter::make('index', compact('user', 'grant'));
     }
 
-    public function update($memberId, Request $request)
+    public function update($userId, Request $request)
     {
         // basic validation
-        $validate = Validator::make(
-            $request->all(),
+        $this->validate(
+            $request,
             [
                 'displayName' => 'required',
             ]
         );
-        if ($validate->fails()) {
-            $message = $validate->messages()->first();
-            $e = new InvalidArgumentException();
-            $e->setMessage($message);
-            throw $e;
-        }
 
         // member validation
-        /** @var MemberEntityInterface $member */
-        $member = $this->handler->findMember($memberId);
-        if ($member === null) {
-            throw new MemberNotFoundException();
+        /** @var UserInterface $user */
+        $user = $this->handler->users()->find($userId);
+        if ($user === null) {
+            throw new UserNotFoundException();
         }
 
         $displayName = $request->get('displayName');
         $introduction = $request->get('introduction');
 
         // displayName validation
-        if ($member->getDisplayName() !== trim($displayName)) {
+        if ($user->getDisplayName() !== trim($displayName)) {
             $this->handler->validateDisplayName($displayName);
-        }
-
-        // apply updated
-        $member->displayName = $displayName;
-        if($introduction !== null) {
-            $member->introduction = $introduction;
         }
 
         XeDB::beginTransaction();
         try {
             // resolve profile file
             if ($profileFile = $request->file('profileImgFile')) {
-                /** @var MemberImageHandler $imageHandler */
-                $imageHandler = app('xe.member.image');
-                $member->profileImageId = $imageHandler->updateMemberProfileImage($member, $profileFile);
+                /** @var UserImageHandler $imageHandler */
+                $imageHandler = app('xe.user.image');
+                $user->profileImageId = $imageHandler->updateUserProfileImage($user, $profileFile);
             }
 
-            $this->handler->update($member);
+            $this->handler->update($user, compact('displayName', 'introduction'));
+
         } catch (\Exception $e) {
             XeDB::rollback();
             throw $e;
         }
         XeDB::commit();
 
-        return redirect()->route('member.profile', [$member->getId()])->with(
+        return redirect()->route('member.profile', [$user->getId()])->with(
             'alert',
             [
                 'type' => 'success',
@@ -123,28 +110,28 @@ class ProfileController extends Controller
      *
      * @return mixed
      */
-    protected function retreiveMember($id)
+    protected function retreiveUser($id)
     {
-        $member = $this->handler->find($id, ['groups', 'accounts', 'mails']);
-        if ($member === null) {
-            $member = $this->handler->fetchOneMember(['displayName' => $id], ['groups', 'accounts', 'mails']);
+        $user = $this->handler->users()->find($id);
+        if ($user === null) {
+            $user = $this->handler->users()->where(['displayName' => $id]);
         }
 
-        if ($member === null) {
-            throw MemberNotFoundException();
+        if ($user === null) {
+            throw new UserNotFoundException();
         }
 
-        return $member;
+        return $user;
     }
 
     /**
      * getGrant
      *
-     * @param $member
+     * @param $user
      *
      * @return array
      */
-    protected function getGrant($member)
+    protected function getGrant($user)
     {
         $logged = Auth::user();
 
@@ -152,7 +139,7 @@ class ProfileController extends Controller
             'modify' => false,
             'manage' => false
         ];
-        if ($logged->getId() === $member->getId()) {
+        if ($logged->getId() === $user->getId()) {
             $grant['modify'] = true;
         }
 

@@ -125,7 +125,7 @@ class PresenterServiceProvider extends ServiceProvider
                 'package' => \Xpressengine\Presenter\Html\Tags\Package::class
             ];
 
-            $frontendHandler = $app['xe.interception']->proxy(FrontendHandler::class, 'Frontend');
+            $frontendHandler = $app['xe.interception']->proxy(FrontendHandler::class, 'XeFrontend');
             $frontendHandler = new $frontendHandler($tags);
 
             // inject frontend handler to Package

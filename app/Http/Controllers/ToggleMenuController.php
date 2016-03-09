@@ -1,9 +1,9 @@
 <?php
 namespace App\Http\Controllers;
 
-use ToggleMenu;
+use XeToggleMenu;
 use Input;
-use Presenter;
+use XePresenter;
 
 class ToggleMenuController extends Controller
 {
@@ -21,7 +21,7 @@ class ToggleMenuController extends Controller
         }
 
         $data = [];
-        foreach (ToggleMenu::getItems($type, $instanceId, $id) as $item) {
+        foreach (XeToggleMenu::getItems($type, $instanceId, $id) as $item) {
             $data[] = [
                 'text' => $item->getText(),
                 'type' => $item->getType(),
@@ -31,7 +31,7 @@ class ToggleMenuController extends Controller
             ];
         }
 
-        return Presenter::makeApi($data);
+        return XePresenter::makeApi($data);
     }
 
     public function postSetting()
@@ -42,7 +42,7 @@ class ToggleMenuController extends Controller
         $instanceId = Input::get('instanceId');
         $activates = Input::get('items', []);
 
-        ToggleMenu::setActivates($type, $instanceId, $activates);
+        XeToggleMenu::setActivates($type, $instanceId, $activates);
 
         if (Input::get('redirect') != null) {
             return redirect(Input::get('redirect'));

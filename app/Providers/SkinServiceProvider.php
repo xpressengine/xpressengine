@@ -28,7 +28,7 @@ class SkinServiceProvider extends ServiceProvider
                 $skinInstanceStore = new SkinInstanceStore($app['xe.config']);
                 $defaultSkins = $app['config']->get('xe.skin.defaultSkins');
                 $defaultSettingsSkins = $app['config']->get('xe.skin.defaultSettingsSkins');
-                $skinHandler = $app['xe.interception']->proxy(SkinHandler::class, 'Skin');
+                $skinHandler = $app['xe.interception']->proxy(SkinHandler::class, 'XeSkin');
                 $skinHandler = new $skinHandler(
                     $app['xe.pluginRegister'],
                     $skinInstanceStore,

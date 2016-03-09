@@ -91,7 +91,7 @@ return [
     | the box, Laravel uses the Monolog PHP logging library. This gives
     | you a variety of powerful log handlers / formatters to utilize.
     |
-    | Available Settings: "single", "daily", "syslog", "errorlog"
+    | Available XeSettings: "single", "daily", "syslog", "errorlog"
     |
     */
 
@@ -163,11 +163,11 @@ return [
         App\Providers\DynamicFieldServiceProvider::class,
         App\Providers\KeygenServiceProvider::class,
 
-        App\Providers\MemberServiceProvider::class,
+        App\Providers\UserServiceProvider::class,
+
         App\Providers\StorageServiceProvider::class,
         App\Providers\MediaServiceProvider::class,
         App\Providers\PermissionServiceProvider::class,
-        App\Providers\CommentServiceProvider::class,
 
         App\Providers\PresenterServiceProvider::class,
 
@@ -233,46 +233,44 @@ return [
         'Route'     => Illuminate\Support\Facades\Route::class,
         'Schema'    => Illuminate\Support\Facades\Schema::class,
         'Session'   => Illuminate\Support\Facades\Session::class,
-        //'Storage'   => Illuminate\Support\Facades\Storage::class,
+        'Storage'   => Illuminate\Support\Facades\Storage::class,
         'URL'       => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
 
         'Agent' => Jenssegers\Agent\Facades\Agent::class,
 
-        'Member' => App\Facades\Member::class,
-        'Group' => App\Facades\Group::class,
-        'Plugin' => App\Facades\Plugin::class,
-        'Interception' => App\Facades\Interception::class,
-        'UI' => App\Facades\UI::class,
-        'Theme' => App\Facades\Theme::class,
-        'Skin' => App\Facades\Skin::class,
-        'Register' => App\Facades\Register::class,
-        'Settings' => App\Facades\Settings::class,
-        'Menu' => App\Facades\Menu::class,
+        'XeUser' => App\Facades\XeUser::class,
+
+        'XePlugin' => App\Facades\XePlugin::class,
+        'XeInterception' => App\Facades\XeInterception::class,
+        'XeUI' => App\Facades\XeUI::class,
+        'XeTheme' => App\Facades\XeTheme::class,
+        'XeSkin' => App\Facades\XeSkin::class,
+        'XeRegister' => App\Facades\XeRegister::class,
+        'XeSettings' => App\Facades\XeSettings::class,
+        'XeMenu' => App\Facades\XeMenu::class,
         'Module' => App\Facades\Module::class,
-        'Cfg' => App\Facades\Config::class,
-        'Storage' => App\Facades\Storage::class,
-        'Site'      => App\Facades\Site::class,
+        'XeConfig' => App\Facades\XeConfig::class,
+        'XeStorage' => App\Facades\XeStorage::class,
+        'XeSite'      => App\Facades\XeSite::class,
 
-        'Presenter' => App\Facades\Presenter::class,
-        'Frontend' => App\Facades\Frontend::class,
-        'DynamicField' => App\Facades\DynamicField::class,
+        'XePresenter' => App\Facades\XePresenter::class,
+        'XeFrontend' => App\Facades\XeFrontend::class,
+        'XeDynamicField' => App\Facades\XeDynamicField::class,
         'XeDB' => App\Facades\XeDB::class,
-        'Document' => App\Facades\Document::class,
+        'XeDocument' => App\Facades\XeDocument::class,
 
-        'Comment' => App\Facades\Comment::class,
-        'Category' => App\Facades\Category::class,
-        'Widget' => App\Facades\Widget::class,
-        'Counter' => App\Facades\Counter::class,
-        'Tag' => App\Facades\Tag::class,
-        'ToggleMenu' => App\Facades\ToggleMenu::class,
-        'Temporary' => App\Facades\Temporary::class,
-        'Trash' => App\Facades\Trash::class,
-        'Permission' => App\Facades\Permission::class,
-        'Media' => App\Facades\Media::class,
+        'XeCategory' => App\Facades\XeCategory::class,
+        'XeWidget' => App\Facades\XeWidget::class,
+        'XeCounter' => App\Facades\XeCounter::class,
+        'XeTag' => App\Facades\XeTag::class,
+        'XeToggleMenu' => App\Facades\XeToggleMenu::class,
+        'XeTemporary' => App\Facades\XeTemporary::class,
+        'XeTrash' => App\Facades\XeTrash::class,
+        'XeMedia' => App\Facades\XeMedia::class,
 
         'XeLang' => App\Facades\Lang::class,
-        'SEO' => App\Facades\SEO::class,
+        'XeSEO' => App\Facades\XeSEO::class,
     ],
 ];

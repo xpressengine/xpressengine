@@ -66,7 +66,7 @@ class ConfigServiceProvider extends ServiceProvider
                 );
             }
 
-            $proxyClass = $app['xe.interception']->proxy(ConfigManager::class, 'Cfg');
+            $proxyClass = $app['xe.interception']->proxy(ConfigManager::class, 'XeConfig');
             $configManager = new $proxyClass($repo, new Validator($app['validator']));
             return $configManager;
         }, true);

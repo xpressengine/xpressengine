@@ -22,7 +22,7 @@ class ThemeController extends Controller
             throw $e;
         }
 
-        $theme = \Theme::getTheme($themeId);
+        $theme = \XeTheme::getTheme($themeId);
 
         /** @var ThemeEntity $theme */
         $files = $theme->getEditFiles();
@@ -45,7 +45,7 @@ class ThemeController extends Controller
             'content' => $fileContent
         ];
 
-        return \Presenter::make(
+        return \XePresenter::make(
             'theme.edit',
             [
                 'theme' => $theme,
@@ -64,7 +64,7 @@ class ThemeController extends Controller
 
         $content = \Input::get('content');
 
-        $theme = \Theme::getTheme($themeId);
+        $theme = \XeTheme::getTheme($themeId);
         $files = $theme->getEditFiles();
 
         $filePath = $files[$type][$fileName];

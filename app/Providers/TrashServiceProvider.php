@@ -60,7 +60,7 @@ class TrashServiceProvider extends ServiceProvider
 
         // manage menu 등록
         intercept(
-            'Settings@getManageMenu',
+            'XeSettings@getManageMenu',
             ['trash.managemenu' => ['before' => 'manage.sort']],
             function ($target) {
                 $menu          = $target();

@@ -18,8 +18,7 @@ use Illuminate\Http\Request;
 use Xpressengine\Http\Request as XeRequest;
 use Illuminate\Routing\Route;
 use Illuminate\Routing\Matching\ValidatorInterface;
-use Xpressengine\Menu\MenuConfigHandler;
-use Xpressengine\Menu\MenuRetrieveHandler;
+use Xpressengine\Menu\MenuHandler;
 use Xpressengine\Site\SiteHandler;
 use Xpressengine\Theme\ThemeHandler;
 
@@ -35,27 +34,26 @@ use Xpressengine\Theme\ThemeHandler;
  */
 class ModuleValidator implements ValidatorInterface
 {
-
     /**
      * @var null
      */
     private static $homeInstanceRoute = null;
+
     /**
-     * @var MenuConfigHandler
+     * @var RouteRepository
      */
-    private $menuConfigHandler;
+    private $routeRepo;
+
     /**
-     * @var MenuRetrieveHandler
+     * @var MenuHandler
      */
     private $menuHandler;
-    /**
-     * @var InstanceRouteHandler
-     */
-    private $routeHandler;
+
     /**
      * @var ThemeHandler
      */
     private $themeHandler;
+
     /**
      * @var SiteHandler
      */
@@ -77,24 +75,21 @@ class ModuleValidator implements ValidatorInterface
     /**
      * boot
      *
-     * @param InstanceRouteHandler $routeHandler      route handler
-     * @param MenuRetrieveHandler  $menuHandler       menu handler
-     * @param MenuConfigHandler    $menuConfigHandler menu config handler
-     * @param ThemeHandler         $themeHandler      theme handler
-     * @param SiteHandler          $siteHandler       site handler
+     * @param RouteRepository $routeRepo route handler
+     * @param MenuHandler     $menuHandler  menu handler
+     * @param ThemeHandler    $themeHandler theme handler
+     * @param SiteHandler     $siteHandler  site handler
      *
      * @return void
      */
     public function boot(
-        InstanceRouteHandler $routeHandler,
-        MenuRetrieveHandler $menuHandler,
-        MenuConfigHandler $menuConfigHandler,
+        RouteRepository $routeRepo,
+        MenuHandler $menuHandler,
         ThemeHandler $themeHandler,
         SiteHandler $siteHandler
     ) {
-        $this->menuConfigHandler = $menuConfigHandler;
+        $this->routeRepo = $routeRepo;
         $this->menuHandler = $menuHandler;
-        $this->routeHandler = $routeHandler;
         $this->themeHandler = $themeHandler;
         $this->siteHandler = $siteHandler;
     }
@@ -175,8 +170,7 @@ class ModuleValidator implements ValidatorInterface
         if ($firstSegment === null) {
             $instanceRoute = $this->getHomeInstanceRoute();
         } else {
-            $instanceRouter = $this->routeHandler;
-            $instanceRoute = $instanceRouter->getByUrl($siteKey, $firstSegment);
+            $instanceRoute = $this->routeRepo->findByUrlAndSiteKey($firstSegment, $siteKey);
         }
 
         return $instanceRoute;
@@ -202,16 +196,16 @@ class ModuleValidator implements ValidatorInterface
      *
      * @param InstanceRoute $instanceRoute instance route
      * @param XeRequest     $request       xpressengine request
+     * @param Route         $route         route
      *
      * @return void
      */
     private function setInstanceConfig(InstanceRoute $instanceRoute, XeRequest $request)
     {
-        $menuHandler = $this->menuHandler;
-        $menuConfigHandler = $this->menuConfigHandler;
-
-        $item = $menuHandler->getItem($instanceRoute->instanceId);
-        $menuConfig = $menuConfigHandler->getMenuItemTheme($item);
+        $menuModel = $this->menuHandler->getModel();
+        $itemModel = $menuModel::getItemModel();
+        $item = $itemModel::find($instanceRoute->instanceId);
+        $menuConfig = $this->menuHandler->getMenuItemTheme($item);
         if ($request->isMobile()) {
             $theme = $menuConfig->get('mobileTheme');
         } else {
@@ -238,13 +232,9 @@ class ModuleValidator implements ValidatorInterface
      */
     private function getHomeInstanceRoute()
     {
-        /**
-         * @var $instanceRouter InstanceRouteHandler
-         **/
         if (static::$homeInstanceRoute === null) {
-            $instanceRouter = $this->routeHandler;
             $homeInstanceId = $this->siteHandler->getHomeInstanceId();
-            $instanceRoute = $instanceRouter->getByInstanceId($homeInstanceId);
+            $instanceRoute = $this->routeRepo->findByInstanceId($homeInstanceId);
 
             static::$homeInstanceRoute = $instanceRoute;
 

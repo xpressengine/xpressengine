@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is a registered information repository.
+ * This file is a permission repository.
  *
  * PHP version 5
  *
@@ -13,10 +13,11 @@
  */
 namespace Xpressengine\Permission;
 
+use Carbon\Carbon;
 use Xpressengine\Database\VirtualConnectionInterface;
 
 /**
- * register 된 정보 데이터베이스에 저장, 제공 함.
+ * Class PermissionRepository
  *
  * @category    Permission
  * @package     Xpressengine\Permission
@@ -55,17 +56,15 @@ class PermissionRepository
      * Find a registered by type and name
      *
      * @param string $siteKey site key
-     * @param string $type    permission type
      * @param string $name    target name
      *
-     * @return Registered
+     * @return Permission
      */
-    public function findByTypeAndName($siteKey, $type, $name)
+    public function findByName($siteKey, $name)
     {
         $row = $this->conn->table($this->table)
             ->where('siteKey', $siteKey)
             ->where('name', $name)
-            ->where('type', $type)
             ->first();
 
         if ($row !== null) {
@@ -78,13 +77,13 @@ class PermissionRepository
     /**
      * Insert register information
      *
-     * @param Registered $item registered instance
+     * @param Permission $item permission instance
      *
-     * @return Registered
+     * @return Permission
      */
-    public function insert(Registered $item)
+    public function insert(Permission $item)
     {
-        $now = date('Y-m-d H:i:s');
+        $now = $this->getNow();
         $dates = [
             'createdAt' => $now,
             'updatedAt' => $now,
@@ -100,17 +99,17 @@ class PermissionRepository
     /**
      * Update register information
      *
-     * @param Registered $item registered instance
+     * @param Permission $item permission instance
      *
-     * @return Registered
+     * @return Permission
      */
-    public function update(Registered $item)
+    public function update(Permission $item)
     {
-        $diff = $item->diff();
+        $diff = $item->getDirty();
 
         $dates = [];
         if (count($diff) > 0) {
-            $dates = ['updatedAt' => date('Y-m-d H:i:s')];
+            $dates = ['updatedAt' => $this->getNow()];
             $this->conn->table($this->table)->where('id', $item->id)->update(array_merge($diff, $dates));
         }
 
@@ -120,29 +119,28 @@ class PermissionRepository
     /**
      * Delete register information
      *
-     * @param Registered $item registered instance
+     * @param Permission $item permission instance
      *
      * @return int affecting statement
      */
-    public function delete(Registered $item)
+    public function delete(Permission $item)
     {
         return $this->conn->table($this->table)->where('id', $item->id)->delete();
     }
 
     /**
-     * Returns list of registered
+     * Returns ancestor of item
      *
-     * @param string $siteKey site key
-     * @param string $type    permission type
+     * @param Permission $item permission instance
      *
-     * @return Registered[]
+     * @return array
      */
-    public function fetchByType($siteKey, $type)
+    public function fetchAncestor(Permission $item)
     {
         $rows = $this->conn->table($this->table)
-            ->where('siteKey', $siteKey)
-            ->where('type', $type)
-            ->get();
+            ->where('siteKey', $item->siteKey)
+            ->whereRaw("'" . $item->name . "' like concat(`name`, '.', '%')")
+            ->where('name', '<>', $item->name)->get();
 
         $items = [];
         foreach ($rows as $row) {
@@ -153,18 +151,16 @@ class PermissionRepository
     }
 
     /**
-     * search ancestors getter
+     * Returns descendant of item
      *
-     * @param Registered $item item object
-     *
+     * @param Permission $item permission instance
      * @return array
      */
-    public function fetchAncestor(Registered $item)
+    public function fetchDescendant(Permission $item)
     {
         $rows = $this->conn->table($this->table)
             ->where('siteKey', $item->siteKey)
-            ->where('type', $item->type)
-            ->whereRaw("'" . $item->name . "' like concat(`name`, '.', '%')")
+            ->where('name', 'like', $item->name . '.%')
             ->where('name', '<>', $item->name)->get();
 
         $items = [];
@@ -178,16 +174,15 @@ class PermissionRepository
     /**
      * Parent Changing with descendant
      *
-     * @param Registered $item registered object
-     * @param string     $to   to registered prefix
+     * @param Permission $item permission instance
+     * @param string     $to   parent name
      *
      * @return void
      */
-    public function foster(Registered $item, $to)
+    public function foster(Permission $item, $to)
     {
         $query = $this->conn->table($this->table)
             ->where('siteKey', $item->siteKey)
-            ->where('type', $item->type)
             ->where(function ($query) use ($item) {
                 $query->where('name', $item->name)
                     ->orWhere('name', 'like', $item->name . '.%');
@@ -207,17 +202,16 @@ class PermissionRepository
     /**
      * affiliated to another registered
      *
-     * @param Registered $item registered object
+     * @param Permission $item permission instance
      * @param string     $to   parent name
      *
      * @return void
      */
-    public function affiliate(Registered $item, $to)
+    public function affiliate(Permission $item, $to)
     {
         if ($to !== null) {
             $this->conn->table($this->table)
                 ->where('siteKey', $item->siteKey)
-                ->where('type', $item->type)
                 ->where(function ($query) use ($item) {
                     $query->where('name', $item->name)
                         ->orWhere('name', 'like', $item->name . '.%');
@@ -227,14 +221,27 @@ class PermissionRepository
     }
 
     /**
+     * Now datetime string
+     *
+     * @return string
+     */
+    public function getNow()
+    {
+        return Carbon::now()->format('Y-m-d H:i:s');
+    }
+
+    /**
      * Create a new registered object instance
      *
      * @param array $attributes attributes array
      *
-     * @return Registered
+     * @return Permission
      */
     protected function createItem(array $attributes)
     {
-        return new Registered($attributes);
+        $item = new Permission($attributes);
+        $item->exists = true;
+
+        return $item;
     }
 }
