@@ -21,7 +21,7 @@ use Xpressengine\Config\ConfigManager;
 use Xpressengine\Permission\Instance;
 use Xpressengine\Register\Container;
 use Xpressengine\Settings\Exceptions\PermissionIDNotFoundException;
-use Xpressengine\Support\Tree\TreeCollection;
+use Xpressengine\Support\Tree\Tree;
 
 /**
  * SettingsHandler는 XpressEngine의 관리자 페이지를 관리합니다. 관리자 페이지의 좌측 메뉴와 각 페이지에 대한 접근 권한의 관리를 담당합니다.
@@ -129,7 +129,7 @@ class SettingsHandler
     const SETTING_CONFIG_NAME = 'settings';
 
     /**
-     * @var TreeCollection settings menu list
+     * @var Tree settings menu list
      */
     protected $menuList;
 
@@ -165,7 +165,7 @@ class SettingsHandler
      * @param Container     $container    XpressEngine Register 등록된 관리메뉴와 관리권한을 조회할 때 사용한다.
      * @param Router        $router       router
      * @param ConfigManager $configManger 관리페이지 관련 설정 정보를 조회/저장할 때 사용한다.
-     * @param GateContract       $permissions  관리페이지 권한 정보를 조회/저장할 때 사용한다.
+     * @param GateContract  $gate         관리페이지 권한 정보를 조회/저장할 때 사용한다.
      */
     public function __construct(
         Container $container,
@@ -255,7 +255,7 @@ class SettingsHandler
         if ($this->menuList === null) {
             $this->makeMenuList($this->router, $isSuper);
         }
-        return $this->menuList->getTree();
+        return $this->menuList->getTreeNodes();
     }
 
     /**
@@ -297,7 +297,7 @@ class SettingsHandler
         $menus = $this->getRegisteredMenus();
 
         // menu를 tree로 구성한다.
-        $this->menuList = new TreeCollection($menus);
+        $this->menuList = new Tree($menus);
 
         // menu가 지정된 route 목록을 가져온다.
         $routes = $router->getRoutes()->getSettingsMenuRoutes();

@@ -857,6 +857,9 @@ class MenuController extends Controller
                 $menu = $parent->menu;
             }
             $old = clone $item;
+            // 이동되기 전 상태의 객체를 구성하기 위해 relation 을 사전에 load
+            $old->ancestors;
+
             $item = $handler->moveItem($menu, $item, $parent);
             $handler->setOrder($item, $ordering);
 

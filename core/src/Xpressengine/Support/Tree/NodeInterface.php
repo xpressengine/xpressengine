@@ -28,10 +28,31 @@ namespace Xpressengine\Support\Tree;
  */
 interface NodeInterface
 {
+    /**
+     * Get the unique identifier for the node
+     *
+     * @return string|int
+     */
+    public function getNodeIdentifier();
 
     /**
-     * @param NodeInterface $node parent node
+     * Get the unique identifier name for the node
      *
+     * @return string
+     */
+    public function getNodeIdentifierName();
+
+    /**
+     * Get the parent identifier for the node
+     *
+     * @return string|int
+     */
+    public function getParentNodeIdentifier();
+
+    /**
+     * Set parent node
+     *
+     * @param NodeInterface $node parent node
      * @return void
      */
     public function setParent(NodeInterface $node);
@@ -44,8 +65,9 @@ interface NodeInterface
     public function getParent();
 
     /**
-     * @param NodeInterface $node child node
+     * Add child node
      *
+     * @param NodeInterface $node child node
      * @return void
      */
     public function addChild(NodeInterface $node);
@@ -58,11 +80,12 @@ interface NodeInterface
     public function getChildren();
 
     /**
-     * @param NodeInterface[] $children children node interfaces
+     * Set child nodes
      *
+     * @param NodeInterface[] $children children node interfaces
      * @return void
      */
-    public function setChildren(array $children);
+    public function setChildren($children = []);
 
     /**
      * Check having child and return the boolean result.
@@ -72,31 +95,6 @@ interface NodeInterface
     public function hasChild();
 
     /**
-     * set distance from ancestor
-     *
-     * @param int $depth distance from ancestor
-     *
-     * @return void
-     */
-    public function setDepth($depth);
-
-    /**
-     * get distance from ancestor
-     *
-     * @return int
-     */
-    public function getDepth();
-
-    /**
-     * set breadcrumbs
-     *
-     * @param array $ids term id array
-     *
-     * @return void
-     */
-    public function setBreadcrumbs(array $ids);
-
-    /**
      * get breadcrumbs
      *
      * @return array
@@ -104,11 +102,9 @@ interface NodeInterface
     public function getBreadcrumbs();
 
     /**
-     * setTreeNodePath
+     * Get the order key name for model
      *
-     * @param string $path include tree path - hierarchy
-     *
-     * @return void
+     * @return string
      */
-    public function setTreeNodePath($path);
+    public function getOrderKeyName();
 }
