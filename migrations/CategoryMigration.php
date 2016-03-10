@@ -24,10 +24,9 @@ class CategoryMigration implements Migration {
 
             $table->increments('id');
             $table->integer('categoryId');
-            $table->integer('parentId');
+            $table->integer('parentId')->nullable();
             $table->string('word', 250);
             $table->text('description');
-//            $table->integer('count');     // 사용기록을 보관하지 않으므로 카운팅하지 않음
             $table->timestamp('createdAt');
             $table->timestamp('updatedAt');
             $table->integer('ordering');
@@ -35,17 +34,6 @@ class CategoryMigration implements Migration {
             $table->index('categoryId');
             $table->index('parentId');
         });
-
-//        Schema::create('category_item_used', function (Blueprint $table) {
-//            $table->engine = "InnoDB";
-//
-//            $table->increments('id');
-//            $table->string('targetId', 36);
-//            $table->integer('itemId');
-//            $table->timestamp('createdAt');
-//
-//            $table->unique(['targetId', 'itemId']);
-//        });
 
         Schema::create('category_item_hierarchy', function (Blueprint $table) {
             $table->engine = "InnoDB";
