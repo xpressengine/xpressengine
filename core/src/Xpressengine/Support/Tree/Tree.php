@@ -96,7 +96,7 @@ class Tree implements ArrayAccess, JsonSerializable
         $this->treeNodes = $this->fullSort($root);
     }
 
-    protected function fullSort(array $tree)
+    protected function fullSort($tree = [])
     {
         /** @var Node $item */
         foreach ($tree as $item) {
@@ -115,9 +115,10 @@ class Tree implements ArrayAccess, JsonSerializable
      *
      * @return array
      */
-    protected function sort(array $items)
+    protected function sort($items = [])
     {
-        uasort($items, function (Node $a, Node $b) {
+        $items = Collection::make($items);
+        $items->sort(function (Node $a, Node $b) {
             $orderKey = $a->getOrderKeyName();
             if ($a->{$orderKey} == $b->{$orderKey}) {
                 return 0;

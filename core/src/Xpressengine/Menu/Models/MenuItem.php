@@ -190,4 +190,16 @@ class MenuItem extends Node
     {
         return $this->selected === true;
     }
+
+    /**
+     * Convert the model instance to an array.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return array_merge(parent::toArray(), [
+            'items' => $this->getChildren(),
+        ]);
+    }
 }

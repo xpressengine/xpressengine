@@ -39,7 +39,7 @@ class MenuSelector extends AbstractUIObject
             $select->attr('name', $args['name']);
         }
 
-        $menus = MenuModel::where('siteKey', XeSite::getCurrentSiteKey());
+        $menus = MenuModel::where('siteKey', XeSite::getCurrentSiteKey())->get();
         foreach ($menus as $menu) {
             $option = PhpQuery::pq('<option></option>');
             $option->appendTo($select)->attr('value', $menu->id)->html($menu->title);
