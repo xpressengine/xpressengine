@@ -141,7 +141,7 @@ class Tree implements ArrayAccess, JsonSerializable
             }
         }
 
-        return $this->sort($tree);
+        return $this->sort($items);
     }
 
     /**
