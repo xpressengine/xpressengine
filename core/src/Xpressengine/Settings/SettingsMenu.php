@@ -15,7 +15,10 @@ namespace Xpressengine\Settings;
 
 use Closure;
 use Illuminate\Routing\Route;
+use JsonSerializable;
 use Xpressengine\Settings\Exceptions\LinkNotFoundException;
+use Xpressengine\Support\Entity;
+use Xpressengine\Support\Tree\NodeInterface;
 
 /**
  * 관리메뉴를 표현하는 클래스
@@ -26,8 +29,30 @@ use Xpressengine\Settings\Exceptions\LinkNotFoundException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class SettingsMenu extends MenuItem
+class SettingsMenu extends Entity implements NodeInterface, JsonSerializable
 {
+    /**
+     * @var null|SettingsMenu 상위 Item 인스턴스 이거나 null
+     */
+    protected $parent = null;
+    /**
+     * @var SettingsMenu[] 하위의 Item 들을 나타내는 배열
+     */
+    protected $childItems = [];
+    /**
+     * @var bool 주로 UI 상에서 표현을 위한 선택되어진 유무를 가지고 있음
+     */
+    protected $selected = false;
+    /**
+     * @var int 이 Item 이 Tree 상에서 얼마나 깊이 있는지 표시
+     */
+    protected $depth;
+    /**
+     * @var array 이 Item 의 빵조각 정보를 담고 있는 배열 Menu 의 Id 부터 시작
+     */
+    protected $breadCrumbs = [];
+
+
     /**
      * @var Route
      */
@@ -133,5 +158,143 @@ class SettingsMenu extends MenuItem
             $parent = substr($attributes['id'], 0, $pos);
             $attributes['parentId'] = $parent;
         }
+    }
+
+    /**
+     * Get the unique identifier for the node
+     *
+     * @return string|int
+     */
+    public function getNodeIdentifier()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Get the unique identifier name for the node
+     *
+     * @return string
+     */
+    public function getNodeIdentifierName()
+    {
+        return 'id';
+    }
+
+    /**
+     * Get the parent identifier for the node
+     *
+     * @return string|int
+     */
+    public function getParentNodeIdentifier()
+    {
+        return $this->parentId;
+    }
+
+    /**
+     * setParent
+     *
+     * @param NodeInterface $item parent menu item
+     *
+     * @return void
+     */
+    public function setParent(NodeInterface $item)
+    {
+        $this->parent = $item;
+    }
+    /**
+     * Return the parent node or null
+     *
+     * @return mixed
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+    /**
+     * addChild
+     *
+     * @param NodeInterface $item one child node - menu item
+     *
+     * @return void
+     */
+    public function addChild(NodeInterface $item)
+    {
+        $this->childItems[$item->id] = $item;
+    }
+    /**
+     * hasChild
+     *
+     * @return bool
+     */
+    public function hasChild()
+    {
+        if (sizeof($this->childItems) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    /**
+     * setChildren
+     *
+     * @param NodeInterface[] $children set array of menuItems
+     *
+     * @return void
+     */
+    public function setChildren($children = [])
+    {
+        $this->childItems = $children;
+    }
+    /**
+     * getChildren
+     *
+     * @return NodeInterface[]
+     */
+    public function getChildren()
+    {
+        return $this->childItems;
+    }
+
+    public function getOrderKeyName()
+    {
+        return 'ordering';
+    }
+
+    /**
+     * setIsSelected
+     *
+     * @param bool $selected     menuItem selected flag
+     * @param bool $parentSelect parent menuItem to selected flag
+     *
+     * @return void
+     */
+    public function setSelected($selected, $parentSelect = true)
+    {
+        $this->selected = $selected;
+        if ($parentSelect && !is_null($this->parent)) {
+            $this->parent->setSelected($selected, $parentSelect);
+        }
+    }
+    /**
+     * isSelected
+     *
+     * @return bool
+     */
+    public function isSelected()
+    {
+        return $this->selected;
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.4.0)<br/>
+     * Specify data which should be serialized to JSON
+     *
+     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     *       which is a value of any type other than a resource.
+     */
+    public function jsonSerialize()
+    {
+        return array_merge($this->attributes, ['items' => $this->childItems]);
     }
 }

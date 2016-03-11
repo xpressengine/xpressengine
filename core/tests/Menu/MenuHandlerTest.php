@@ -29,10 +29,6 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
             'title' => 'test title',
             'description' => 'test description'
         ]);
-
-//        $this->assertEquals('test title', $menu->title);
-//        $this->assertEquals('test description', $menu->description);
-//        $this->assertEquals('abcdefg', $menu->id);
     }
 
     public function testPut()
@@ -248,6 +244,9 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
 
         $mockMenuItemNewParent = m::mock('Xpressengine\Menu\Models\MenuItem');
         $mockMenuItemNewParent->shouldReceive('getAttribute')->with('menu')->andReturn($mockMenu);
+        $mockMenuItemNewParent->shouldReceive('getKey')->andReturn('pnid');
+
+        $mockMenuItem->shouldReceive('setAttribute')->with('parentId', 'pnid');
 
         $mockMenuItemOldParent = m::mock('Xpressengine\Menu\Models\MenuItem');
 

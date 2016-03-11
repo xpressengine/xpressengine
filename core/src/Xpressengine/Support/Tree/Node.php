@@ -31,10 +31,13 @@ use Illuminate\Database\Eloquent\Builder;
  * @property Collection $ancestors
  * @property Collection $descendants
  */
-abstract class Node extends DynamicModel
+abstract class Node extends DynamicModel implements NodeInterface
 {
     use TreeMakerTrait;
 
+    /**
+     * @var NodeInterface
+     */
     protected $parent;
     /**
      * children collection of model
@@ -82,6 +85,36 @@ abstract class Node extends DynamicModel
     }
 
     /**
+     * Get the unique identifier for the node
+     *
+     * @return string|int
+     */
+    public function getNodeIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Get the unique identifier name for the node
+     *
+     * @return string
+     */
+    public function getNodeIdentifierName()
+    {
+        return $this->getKeyName();
+    }
+
+    /**
+     * Get the parent identifier for the node
+     *
+     * @return string|int
+     */
+    public function getParentNodeIdentifier()
+    {
+        return $this->{$this->getParentIdName()};
+    }
+
+    /**
      * Get a model's parent node
      *
      * @return Node|static
@@ -97,7 +130,13 @@ abstract class Node extends DynamicModel
         return $this->parent;
     }
 
-    public function setParent(Node $node)
+    /**
+     * Set parent node
+     *
+     * @param NodeInterface $node parent node
+     * @return void
+     */
+    public function setParent(NodeInterface $node)
     {
         $this->parent = $node;
     }
@@ -109,43 +148,50 @@ abstract class Node extends DynamicModel
      */
     public function getChildren()
     {
-//        if (array_key_exists($this->getTreeRelationName(), $this->getRelations())) {
-//            return $this->getRelation($this->getTreeRelationName());
-//        }
-
         if (!$this->children) {
-//            $this->children = $this->where($this->getParentIdName(), $this->id)->get()->sort([$this, 'orderSort']);
-
             $this->getDescendantTree(true);
         }
 
         return $this->children;
     }
 
+    /**
+     * Set child nodes
+     *
+     * @param NodeInterface[] $children children node interfaces
+     * @return void
+     */
     public function setChildren($children = [])
     {
-        $this->children()->merge($children);
-
-        return $this;
-    }
-
-    public function setRawChildren($children = [])
-    {
         $this->children = Collection::make($children);
-
-        return $this;
     }
 
-    public function addChild(Node $node)
+    /**
+     * Add child node
+     *
+     * @param NodeInterface $node child node
+     * @return void
+     */
+    public function addChild(NodeInterface $node)
     {
-        $this->children()->put($node->getKey(), $node);
+        $this->children()->put($node->getNodeIdentifier(), $node);
     }
 
+    /**
+     * Check having child and return the boolean result.
+     *
+     * @return bool
+     */
     public function hasChild()
     {
         return $this->children()->count() > 0;
     }
 
+    /**
+     * Returns children collection
+     *
+     * @return Collection
+     */
     protected function children()
     {
         if (!$this->children) {
@@ -156,64 +202,11 @@ abstract class Node extends DynamicModel
     }
 
     /**
-     * Sort siblings
+     * Get a descendant tree collection of model
      *
-     * @param Node $a item instance
-     * @param Node $b item instance
-     * @return int
+     * @param bool $withSelf flag for descendant tree with self
+     * @return Tree
      */
-    public function orderSort(Node $a, Node $b)
-    {
-        $aOrdering = $a->{$this->getOrderKeyName()};
-        $bOrdering = $b->{$this->getOrderKeyName()};
-
-        if ($aOrdering == $bOrdering) {
-            return 0;
-        }
-
-        return $aOrdering < $bOrdering ? -1 : 1;
-    }
-
-//    /**
-//     * Get a descendant tree collection of model
-//     *
-//     * @param bool $withSelf flag for descendant tree with self
-//     * @return Collection
-//     */
-//    public function getDescendantTree($withSelf = false)
-//    {
-//        $bag = [];
-//        $collection = new Collection();
-//
-//        if ($withSelf && $this->relationLoaded($this->getTreeRelationName())) {
-//            return $collection->put($this->getKey(), $this);
-//        }
-//
-//        $items = $this->descendants->sort([$this, 'orderSort']);
-//
-//        /** @var Node $item */
-//        foreach ($items as $item) {
-//            $bag[$item->getKey()] = $item;
-//        }
-//
-//        foreach ($items as $item) {
-//            $parentId = $item->{$this->getParentIdName()};
-//            if (array_key_exists($parentId, $bag)) {
-//                $bag[$parentId]->addRelation($item->getTreeRelationName(), $item);
-//            } else {
-//                $collection->put($item->getKey(), $item);
-//            }
-//        }
-//
-//        if ($withSelf) {
-//            $this->setRelation($this->getTreeRelationName(), $collection);
-//
-//            return new Collection([$this->getKey() => $this]);
-//        }
-//
-//        return $collection;
-//    }
-
     public function getDescendantTree($withSelf = false)
     {
         $nodes = $this->descendants->all();
@@ -222,22 +215,6 @@ abstract class Node extends DynamicModel
         }
 
         return $this->makeTree($nodes);
-    }
-
-    /**
-     * Add a node item on the model
-     *
-     * @param string $relation relation name
-     * @param Node   $item     item instance
-     * @return void
-     */
-    public function addRelation($relation, Node $item)
-    {
-        if (!$this->relationLoaded($relation)) {
-            $this->setRelation($relation, new Collection([$item->getKey() => $item]));
-        } else {
-            $this->getRelation($relation)->put($item->getKey(), $item);
-        }
     }
 
     /**
@@ -293,7 +270,7 @@ abstract class Node extends DynamicModel
     /**
      * Scope for get node items of root
      *
-     * @param Builder $query     query builder
+     * @param Builder $query query builder
      * @return Builder
      */
     public function scopeRoots(Builder $query)
@@ -335,21 +312,4 @@ abstract class Node extends DynamicModel
      * @return string
      */
     abstract public function getParentIdName();
-
-    /**
-     * Get the order key name for model
-     *
-     * @return string
-     */
-    abstract public function getOrderKeyName();
-
-//    /**
-//     * Get the relation name for tree relation
-//     *
-//     * @return string
-//     */
-//    public function getTreeRelationName()
-//    {
-//        return 'leaves';
-//    }
 }

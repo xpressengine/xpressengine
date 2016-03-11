@@ -90,7 +90,7 @@ class Category extends DynamicModel
     /**
      * Set the category item model
      *
-     * @param $model
+     * @param string $model model name
      * @return void
      */
     public static function setItemModel($model)

@@ -260,7 +260,7 @@ class CategoryHandler
         $depth = $item->getDepthName();
 
         $select = $conn->table($table . ' as a')
-            ->joinWhere($table . ' as d', "d.{$ancestor}", '=',$item->getKey())
+            ->joinWhere($table . ' as d', "d.{$ancestor}", '=', $item->getKey())
             ->where("a.{$descendant}", '=', $parent->getKey())
             ->select([
                 "a.{$ancestor}",
