@@ -32,9 +32,9 @@ use Illuminate\Database\Connection;
  * * VirtualConnection 통해 TransactionHandler 에서 처리
  *
  * ```php
- * app('xe.db')->beginTransaction();
- * app('xe.db')->commit();
- * app('xe.db')->rollBack();
+ * XeDB::beginTransaction();
+ * XeDB::commit();
+ * XeDB::rollBack();
  * ```
  *
  * @category    Database

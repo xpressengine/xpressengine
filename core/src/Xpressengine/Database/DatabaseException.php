@@ -1,6 +1,6 @@
 <?php
 /**
- * Exceptions
+ * DatabaseException
  *
  * PHP version 5
  *
@@ -16,7 +16,7 @@ namespace Xpressengine\Database;
 use Xpressengine\Support\Exceptions\XpressengineException;
 
 /**
- * Repository Exception
+ * DatabaseException
  *
  * @category    Document
  * @package     Xpressengine\Document

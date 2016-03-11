@@ -14,7 +14,6 @@
 namespace Xpressengine\Database;
 
 use Illuminate\Database\Query\Builder;
-use Xpressengine\Database\VirtualConnectionInterface;
 
 /**
  * ProxyInterface
