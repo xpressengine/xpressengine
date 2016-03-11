@@ -16,46 +16,10 @@ namespace Xpressengine\Document;
 
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Config\ConfigManager;
+use Xpressengine\Document\Exceptions\ConfigNotFoundException;
 
 /**
  * ConfigHandler
- *
- * ## 사용법
- *
- * ### Default config 조회
- * ```php
- * $config = $configHandler->getDefault();
- * ```
- *
- * ### Config 조회
- * ```php
- * $config = $configHandler->get('instance-id');
- * ```
- *
- * ### Config 목록 조회
- * ```php
- * $configs = $configHandler->gets();
- * ```
- *
- * ### Config 생성
- * * 인스턴스 생성할 때 Document Config 추가가
- *```php
- * $params = [];
- * $config = $configHandler->makeEntity('instance-id', $params);
- * $config = $configHandler->add($config);
- * ```
- *
- * ### Config 수정
- * ```php
- * $config = $config;
- * $configHandler->put($config);
- * ```
- *
- * ### Config 삭제
- * ```php
- * $config = $config;
- * $configHandler->remove($config);
- * ```
  *
  * @category    Document
  * @package     Xpressengine\Document
@@ -66,7 +30,9 @@ use Xpressengine\Config\ConfigManager;
  */
 class ConfigHandler
 {
-
+    /**
+     * config name
+     */
     const CONFIG_NAME = 'document';
 
     /**
@@ -84,7 +50,6 @@ class ConfigHandler
         'group' => '',
         'division' => false,
         'revision' => false,
-        'comment' => true,
         'assent' => true,
     ];
 
@@ -139,7 +104,7 @@ class ConfigHandler
     /**
      * Return default config when cannot found config
      *
-     * @param $instanceId
+     * @param string $instanceId instance id
      * @return ConfigEntity
      */
     public function getOrDefault($instanceId)
@@ -218,7 +183,7 @@ class ConfigHandler
     public function put(ConfigEntity $config)
     {
         if ($this->get($config->get('instanceId')) === null) {
-            throw new Exceptions\ConfigNotFoundException;
+            throw new ConfigNotFoundException(['instanceId' => $config->get('instanceId')]);
         }
 
         $this->configManager->put(

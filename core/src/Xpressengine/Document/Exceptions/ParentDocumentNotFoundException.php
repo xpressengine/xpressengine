@@ -1,6 +1,6 @@
 <?php
 /**
- * ReplyLimitationException
+ * ParentDocumentNotFoundException
  *
  * PHP version 5
  *
@@ -16,7 +16,7 @@ namespace Xpressengine\Document\Exceptions;
 use Xpressengine\Document\DocumentException;
 
 /**
- * ReplyLimitationException
+ * ParentDocumentNotFoundException
  *
  * @category    Document
  * @package     Xpressengine\Document
@@ -25,7 +25,7 @@ use Xpressengine\Document\DocumentException;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class ReplyLimitationException extends DocumentException
+class ParentDocumentNotFoundException extends DocumentException
 {
-    protected $message = 'Limitation document reply character length.';
+    protected $message = 'Parent document not found.';
 }

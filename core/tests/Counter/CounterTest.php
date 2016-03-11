@@ -15,12 +15,6 @@ use Xpressengine\Counter\Factory;
  */
 class CounterTest extends PHPUnit_Framework_TestCase
 {
-
-    private $repo;
-    private $session;
-    private $configHandler;
-    private $member;
-    private $auth;
     private $request;
 
     /**

@@ -60,6 +60,9 @@ use Xpressengine\Database\Eloquent\DynamicModel;
  */
 class Revision extends DynamicModel
 {
+    /**
+     * @var string
+     */
     public $table = 'documents_revision';
 
     /**
@@ -70,8 +73,14 @@ class Revision extends DynamicModel
      */
     protected $connection = 'document';
 
+    /**
+     * @var bool
+     */
     public $incrementing = false;
 
+    /**
+     * @var array
+     */
     protected $fillable = [
         'revisionNo', 'id', 'parentId', 'instanceId', 'userId', 'writer', 'approved',
         'published', 'status', 'display', 'locale', 'title',
@@ -79,10 +88,21 @@ class Revision extends DynamicModel
         'listOrder', 'ipaddress', 'userType', 'certifyKey', 'email',
     ];
 
+    /**
+     * @var bool
+     */
     protected $dynamic = true;
 
+    /**
+     * @var string
+     */
     protected $primaryKey = 'revisionId';
 
+    /**
+     * user relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function user()
     {
         return $this->belongsTo('Xpressengine\User\Models\User', 'userId');

@@ -16,11 +16,7 @@ use Xpressengine\Document\DocumentHandler;
 class DocumentHandlerTest extends PHPUnit_Framework_TestCase
 {
     protected $conn;
-    protected $auth;
-    protected $member;
-    protected $repo;
     protected $configHandler;
-    protected $hasher;
     protected $instanceManager;
     protected $request;
 
@@ -42,43 +38,50 @@ class DocumentHandlerTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $conn = m::mock('Xpressengine\Database\VirtualConnectionInterface');
-        $auth = m::mock('\Xpressengine\Member\GuardInterface');
-        $member = m::mock('\Xpressengine\Member\Repositories\MemberRepositoryInterface');
-        $repo = m::mock('Xpressengine\Document\RepositoryHandler');
+        $conn->shouldReceive('beginTransaction');
+        $conn->shouldReceive('commit');
+
         $configHandler = m::mock('Xpressengine\Document\ConfigHandler');
-        $hasher = m::mock('Illuminate\Contracts\Hashing\Hasher');
         $instanceManager = m::mock('Xpressengine\Document\InstanceManager');
         $request = m::mock('\Illuminate\Http\Request');
 
         $this->conn = $conn;
-        $this->auth = $auth;
-        $this->member = $member;
-        $this->repo = $repo;
         $this->configHandler = $configHandler;
-        $this->hasher = $hasher;
         $this->instanceManager = $instanceManager;
         $this->request = $request;
     }
 
 
     /**
-     * @return m\MockInterface|\Xpressengine\Document\DocumentEntity
+     * @return m\MockInterface|\Xpressengine\Document\Models\Document
      */
-    private function getDocumentEntity()
+    private function getDocModel()
     {
-        return m::mock('Xpressengine\Document\DocumentEntity');
+        $doc = m::mock('Xpressengine\Document\Models\Document');
+        $doc->shouldReceive('getConnection')->andReturn($this->conn);
+        return $doc;
+    }
+
+    /**
+     * @return m\MockInterface|\Xpressengine\Document\Models\Revision
+     */
+    private function getRevisionModel()
+    {
+        $revision = m::mock('Xpressengine\Document\Models\Revision');
+        $revision->shouldReceive('getConnection')->andReturn($this->conn);
+        return $revision;
     }
 
     /**
      * get User instance
      *
-     * @return m\MockInterface|\Xpressengine\Member\Entities\MemberEntityInterface
+     * @return m\MockInterface|\Xpressengine\User\UserInterface
      */
     private function getUser()
     {
         $user = m::mock(
-            'Xpressengine\Member\Entities\Database\MemberEntity',
-            'Xpressengine\Member\Entities\MemberEntityInterface'
+            'Xpressengine\User\Models\User',
+            'Xpressengine\User\UserInterface'
         );
         return $user;
     }
@@ -112,28 +115,38 @@ class DocumentHandlerTest extends PHPUnit_Framework_TestCase
 
 
     /**
+     * get document handler instance
+     *
+     * return DocumentHandler
+     */
+    private function getHandler()
+    {
+        $conn = $this->conn;
+        $configHandler = $this->configHandler;
+        $instanceManager = $this->instanceManager;
+        $request = $this->request;
+
+        $handler = m::mock('Xpressengine\Document\DocumentHandler', [
+                $conn,
+                $configHandler,
+                $instanceManager,
+                $request
+            ])
+            ->shouldAllowMockingProtectedMethods()
+            ->makePartial();
+
+        return $handler;
+    }
+    /**
      * test get property
      *
      * @return void
      */
     public function testGetProperty()
     {
-        $conn = $this->conn;
-        $repo = $this->repo;
-        $configHandler = $this->configHandler;
-        $instanceManager = $this->instanceManager;
-        $request = $this->request;
-
-        $handler = new DocumentHandler(
-            $conn,
-            $repo,
-            $configHandler,
-            $instanceManager,
-            $request
-        );
+        $handler = $this->getHandler();
 
         $this->assertInstanceOf('Xpressengine\Document\ConfigHandler', $handler->getConfigHandler());
-        $this->assertInstanceOf('Xpressengine\Document\RepositoryInterface', $handler->getRepository());
         $this->assertInstanceOf('Xpressengine\Document\InstanceManager', $handler->getInstanceManager());
     }
 
@@ -144,226 +157,204 @@ class DocumentHandlerTest extends PHPUnit_Framework_TestCase
      */
     public function testAdd()
     {
-        $conn = $this->conn;
-        $repo = $this->repo;
-        $configHandler = $this->configHandler;
-        $instanceManager = $this->instanceManager;
-        $request = $this->request;
+        $docId = 'document-id';
+        $instanceId = 'instance-id';
+        $revision = true;
+        $group = 'document-group';
 
-        $handler = new DocumentHandler(
-            $conn,
-            $repo,
-            $configHandler,
-            $instanceManager,
-            $request
-        );
+        $configEntity = $this->getConfigEntity();
+        $configEntity->shouldReceive('get')->with('revision')->andReturn($revision);
+        $configEntity->shouldReceive('get')->with('instanceId')->andReturn($instanceId);
+        $configEntity->shouldReceive('get')->with('group')->andReturn($group);
+        $this->configHandler->shouldReceive('get')->andReturn(null);
+        $this->configHandler->shouldReceive('getOrDefault')->andReturn($configEntity);
 
-        $user = $this->getUser();
+        $this->request->shouldReceive('ip')->andReturn('127.0.0.1');
 
-        $user->shouldReceive('getId')->andReturn('userId');
-        $user->shouldReceive('getDisplayName')->andReturn('userName');
+        $this->instanceManager->shouldReceive('getDivisionTableName')
+            ->once()->with($configEntity)->andReturn('new-division-table-name');
+        $handler = $this->getHandler();
 
-        $doc = $this->getDocumentEntity();
-        $doc->instanceId = 'instanceId';
-        $doc->shouldReceive('setAuthor');
-        $doc->shouldReceive('getAuthor')->andReturn($user);
-        $doc->shouldReceive('setPureContent');
+        $attributes = [
+            'id' => $docId,
+            'instanceId' => $instanceId,
+        ];
 
-        $configHandler->shouldReceive('get')->andReturn(null);
-        $configHandler->shouldReceive('getDefault')->andReturn($this->getConfigEntity());
+        $docModel = $this->getDocModel();
+        $docModel->shouldReceive('getAttribute')->once()->andReturn($instanceId);
+        $docModel->shouldReceive('setConfig');
+        $docModel->shouldReceive('fixedAttributes')->once()->with($attributes)->andReturn($attributes);
+        $docModel->shouldReceive('getAttribute')->andReturn($attributes);
+        $docModel->shouldReceive('checkRequired');
+        $docModel->shouldReceive('fill');
+        $docModel->shouldReceive('save');
+        $docModel->shouldReceive('getDynamicAttributes')->andReturn([]);
+        $docModel->shouldReceive('getAttributes')->andReturn($attributes);
 
-        $request->shouldReceive('ip')->andReturn('127.0.0.1');
+        $revisionModel = $this->getRevisionModel();
+        $revisionModel->shouldReceive('where')->andReturnSelf();
+        $revisionModel->shouldReceive('max')->andReturn(1);
+        $revisionModel->shouldReceive('setProxyOptions');
+        $revisionModel->shouldReceive('setAttribute');
+        $revisionModel->shouldReceive('save');
 
-        $repo->shouldReceive('insert')->andReturn($doc);
+        $handler->shouldReceive('newModel')->andReturn($docModel);
+        $handler->shouldReceive('getRevisionModel')->andReturn($revisionModel);
+        $handler->shouldReceive('newRevisionModel')->andReturn($revisionModel);
 
-        $result = $handler->add($doc);
+        $result = $handler->add($attributes);
 
-        $this->assertInstanceOf('Xpressengine\Document\DocumentEntity', $result);
-
-        $doc->certifyKey = 'certifyKey';
-
-        $result = $handler->add($doc);
-
-        $this->assertInstanceOf('Xpressengine\Document\DocumentEntity', $result);
+        $this->assertInstanceOf('Xpressengine\Document\Models\Document', $result);
     }
 
     /**
-     * test without writer information
-     *
-     * @expectedException \Xpressengine\Document\Exceptions\RequiredValueException
-     * @return void
-     */
-    public function testAddWithoutWriter()
-    {
-        $conn = $this->conn;
-        $repo = $this->repo;
-        $configHandler = $this->configHandler;
-        $instanceManager = $this->instanceManager;
-        $request = $this->request;
-
-        $handler = new DocumentHandler(
-            $conn,
-            $repo,
-            $configHandler,
-            $instanceManager,
-            $request
-        );
-
-        $user = $this->getUser();
-
-        $user->shouldReceive('getId')->andReturn('userId');
-        $user->shouldReceive('getDisplayName')->andReturn('userName');
-
-        $doc = $this->getDocumentEntity();
-        $doc->instanceId = 'instanceId';
-        $doc->userType = 'something';
-        $doc->shouldReceive('setAuthor');
-        $doc->shouldReceive('getAuthor')->andReturn($user);
-        $doc->shouldReceive('setPureContent');
-
-        $handler->add($doc);
-    }
-
-    /**
-     * test without writer information
-     *
-     * @expectedException \Xpressengine\Document\Exceptions\RequiredValueException
-     * @return void
-     */
-    public function testAddWithoutInstanceId()
-    {
-        $conn = $this->conn;
-        $repo = $this->repo;
-        $configHandler = $this->configHandler;
-        $instanceManager = $this->instanceManager;
-        $request = $this->request;
-
-        $handler = new DocumentHandler(
-            $conn,
-            $repo,
-            $configHandler,
-            $instanceManager,
-            $request
-        );
-
-        $user = $this->getUser();
-
-        $user->shouldReceive('getId')->andReturn('userId');
-        $user->shouldReceive('getDisplayName')->andReturn('userName');
-
-        $doc = $this->getDocumentEntity();
-        $doc->shouldReceive('setAuthor');
-        $doc->shouldReceive('getAuthor')->andReturn($user);
-        $doc->shouldReceive('setPureContent');
-
-        $handler->add($doc);
-    }
-
-    /**
-     * test put
+     * test add document
      *
      * @return void
      */
     public function testPut()
     {
-        $conn = $this->conn;
-        $repo = $this->repo;
-        $configHandler = $this->configHandler;
-        $instanceManager = $this->instanceManager;
-        $request = $this->request;
+        $docId = 'document-id';
+        $instanceId = 'instance-id';
+        $revision = true;
+        $group = 'document-group';
+        $content = 'content';
 
-        $handler = new DocumentHandler(
-            $conn,
-            $repo,
-            $configHandler,
-            $instanceManager,
-            $request
-        );
+        $configEntity = $this->getConfigEntity();
+        $configEntity->shouldReceive('get')->with('revision')->andReturn($revision);
+        $configEntity->shouldReceive('get')->with('instanceId')->andReturn($instanceId);
+        $configEntity->shouldReceive('get')->with('group')->andReturn($group);
+        $this->configHandler->shouldReceive('get')->andReturn(null);
+        $this->configHandler->shouldReceive('getOrDefault')->andReturn($configEntity);
 
-        $user = $this->getUser();
+        $this->request->shouldReceive('ip')->andReturn('127.0.0.1');
 
-        $user->shouldReceive('getId')->andReturn('userId');
-        $user->shouldReceive('getDisplayName')->andReturn('userName');
+        $this->instanceManager->shouldReceive('getDivisionTableName')
+            ->once()->with($configEntity)->andReturn('new-division-table-name');
+        $handler = $this->getHandler();
 
-        $doc = $this->getDocumentEntity();
-        $doc->userId = 'userId';
-        $doc->instanceId = 'instanceId';
-        $doc->shouldReceive('diff')->andReturn(['certifyKey' => 'changedCertifyKey']);
+        $attributes = [
+            'id' => $docId,
+            'instanceId' => $instanceId,
+        ];
 
-        $doc->shouldReceive('setAuthor');
-        $doc->shouldReceive('getAuthor')->andReturn($user);
+        $docModel = $this->getDocModel();
+        $docModel->shouldReceive('getAttribute')->with('id')->andReturn($docId);
+        $docModel->shouldReceive('getAttribute')->with('instanceId')->andReturn($instanceId);
+        $docModel->shouldReceive('getAttribute')->with('content')->andReturn($content);
+        $docModel->shouldReceive('setConfig');
+        $docModel->shouldReceive('fixedAttributes')->with($attributes)->andReturn($attributes);
+        $docModel->shouldReceive('checkRequired');
+        $docModel->shouldReceive('fill');
+        $docModel->shouldReceive('save');
+        $docModel->shouldReceive('getDynamicAttributes')->andReturn([]);
+        $docModel->shouldReceive('getAttributes')->andReturn($attributes);
+        $docModel->shouldReceive('setAttribute');
+        $docModel->shouldReceive('getPureContent')->andReturn($content);
+        $docModel->shouldReceive('setAttribute')->with('pureContent', $content);
+        $docModel->shouldReceive('toArray')->andReturn($attributes);
+        $docModel->shouldReceive('find')->with($docId)->andReturnSelf();
 
-        $doc->shouldReceive('setPureContent');
-        $doc->shouldReceive('getOriginal')->andReturn(['instanceId' => $doc->instanceId]);
+        $revisionModel = $this->getRevisionModel();
+        $revisionModel->shouldReceive('where')->andReturnSelf();
+        $revisionModel->shouldReceive('max')->andReturn(1);
+        $revisionModel->shouldReceive('setProxyOptions');
+        $revisionModel->shouldReceive('setAttribute');
+        $revisionModel->shouldReceive('save');
 
-        $configHandler->shouldReceive('get')->andReturn(null);
-        $configHandler->shouldReceive('getDefault')->andReturn($this->getConfigEntity());
+        $handler->shouldReceive('newModel')->andReturn($docModel);
+        $handler->shouldReceive('getRevisionModel')->andReturn($revisionModel);
+        $handler->shouldReceive('newRevisionModel')->andReturn($revisionModel);
 
-        $repo->shouldReceive('update')->andReturn($doc);
+        $result = $handler->put($docModel);
 
-        $result = $handler->put($doc);
-
-        $this->assertInstanceOf('Xpressengine\Document\DocumentEntity', $result);
+        $this->assertInstanceOf('Xpressengine\Document\Models\Document', $result);
     }
 
     /**
-     * test put without user id
+     * instance id 를 변경해서 수정하는 경우
      *
-     * @expectedException \Xpressengine\Document\Exceptions\RequiredValueException
      * @return void
      */
-    public function testPutWithoutUserId()
+    public function testPutWithDifferentInstanceId()
     {
-        $conn = $this->conn;
-        $repo = $this->repo;
-        $configHandler = $this->configHandler;
-        $instanceManager = $this->instanceManager;
-        $request = $this->request;
+        $originInstanceId = 'origin-instanc-id';
+        $originDivisionTableName = 'origin-division-table-name';
 
-        $handler = new DocumentHandler(
-            $conn,
-            $repo,
-            $configHandler,
-            $instanceManager,
-            $request
-        );
+        $docId = 'document-id';
+        $instanceId = 'instance-id';
+        $revision = true;
+        $division = true;
+        $group = 'document-group';
+        $content = 'content';
 
-        $doc = $this->getDocumentEntity();
-        $doc->instanceId = 'instanceId';
-        $doc->shouldReceive('setPureContent');
-        $doc->shouldReceive('getAuthor')->andReturn(null);
+        $attributes = [
+            'id' => $docId,
+            'instanceId' => $instanceId,
+        ];
 
-        $handler->put($doc);
-    }
+        $configEntity = $this->getConfigEntity();
+        $configEntity->shouldReceive('get')->with('revision')->andReturn($revision);
+        $configEntity->shouldReceive('get')->with('instanceId')->andReturn($instanceId);
+        $configEntity->shouldReceive('get')->with('group')->andReturn($group);
 
-    /**
-     * test put without user id
-     *
-     * @expectedException \Xpressengine\Document\Exceptions\RequiredValueException
-     * @return void
-     */
-    public function testPutWithoutInstanceId()
-    {
-        $conn = $this->conn;
-        $repo = $this->repo;
-        $configHandler = $this->configHandler;
-        $instanceManager = $this->instanceManager;
-        $request = $this->request;
+        $this->configHandler->shouldReceive('get')->with($instanceId)->andReturn($configEntity);
+        $this->configHandler->shouldReceive('getOrDefault')->with($instanceId)->andReturn($configEntity);
 
-        $handler = new DocumentHandler(
-            $conn,
-            $repo,
-            $configHandler,
-            $instanceManager,
-            $request
-        );
+        $originConfigEntity = $this->getConfigEntity();
+        $originConfigEntity->shouldReceive('get')->with('revision')->andReturn($revision);
+        $originConfigEntity->shouldReceive('get')->with('division')->andReturn($division);
+        $originConfigEntity->shouldReceive('get')->with('instanceId')->andReturn($originInstanceId);
+        $originConfigEntity->shouldReceive('get')->with('group')->andReturn($group);
 
-        $doc = $this->getDocumentEntity();
-        $doc->userId = 'userId';
-        $doc->shouldReceive('setPureContent');
-        $doc->shouldReceive('getAuthor')->andReturn(null);
+        $this->configHandler->shouldReceive('get')->with($originInstanceId)->andReturn($originConfigEntity);
+        $this->configHandler->shouldReceive('getOrDefault')->with($originInstanceId)->andReturn($originConfigEntity);
+        $this->configHandler->shouldReceive('getOrDefault')->with(null)->andReturn($originConfigEntity);
 
-        $handler->put($doc);
+        $this->request->shouldReceive('ip')->andReturn('127.0.0.1');
+
+        $this->instanceManager->shouldReceive('getDivisionTableName')
+            ->with($originConfigEntity)->andReturn($originDivisionTableName);
+
+        $handler = $this->getHandler();
+
+        $docModel = $this->getDocModel();
+        $docModel->shouldReceive('getAttribute')->with('id')->andReturn($docId);
+        $docModel->shouldReceive('getAttribute')->with('instanceId')->andReturn($instanceId);
+        $docModel->shouldReceive('getAttribute')->with('content')->andReturn($content);
+        $docModel->shouldReceive('setAttribute')->with('pureContent', $content);
+        $docModel->shouldReceive('getPureContent')->andReturn($content);
+        $docModel->shouldReceive('checkRequired');
+        $docModel->shouldReceive('toArray')->andReturn($attributes);
+        $docModel->shouldReceive('save');
+        $docModel->shouldReceive('getOriginal')->with('instanceId')->andReturn($originInstanceId);
+        $docModel->shouldReceive('getDynamicAttributes')->andReturn([]);
+        $docModel->shouldReceive('getAttributes')->andReturn($attributes);
+
+        $orgModel = $this->getDocModel();
+        $orgModel->shouldReceive('getAttribute')->with('id')->andReturn($docId);
+        $orgModel->shouldReceive('getAttribute')->with('instanceId')->andReturn($originInstanceId);
+
+        $newModel = $this->getDocModel();
+        $newModel->shouldReceive('setConfig');
+        $newModel->shouldReceive('find')->with($docId)->andReturn($orgModel);
+        $newModel->shouldReceive('setTable');
+        $newModel->shouldReceive('delete');
+
+        $revisionModel = $this->getRevisionModel();
+        $revisionModel->shouldReceive('where')->andReturnSelf();
+        $revisionModel->shouldReceive('max')->andReturn(1);
+        $revisionModel->shouldReceive('setProxyOptions');
+        $revisionModel->shouldReceive('setAttribute');
+        $revisionModel->shouldReceive('save');
+
+        $handler->shouldReceive('newModel')->andReturn($newModel);
+        $handler->shouldReceive('getRevisionModel')->andReturn($revisionModel);
+        $handler->shouldReceive('newRevisionModel')->andReturn($revisionModel);
+
+        $result = $handler->put($docModel);
+
+        $this->assertInstanceOf('Xpressengine\Document\Models\Document', $result);
     }
 
     /**
@@ -373,693 +364,52 @@ class DocumentHandlerTest extends PHPUnit_Framework_TestCase
      */
     public function testRemove()
     {
-        $conn = $this->conn;
-        $repo = $this->repo;
-        $configHandler = $this->configHandler;
-        $instanceManager = $this->instanceManager;
-        $request = $this->request;
+        $handler = $this->getHandler();
 
-        $handler = new DocumentHandler(
-            $conn,
-            $repo,
-            $configHandler,
-            $instanceManager,
-            $request
-        );
+        $docModel = $this->getDocModel();
+        $docModel->shouldReceive('delete')->andReturn(1);
 
-        $doc = $this->getDocumentEntity();
-        $doc->instanceId = 'instanceId';
-
-        $configHandler->shouldReceive('get')->andReturn(null);
-        $configHandler->shouldReceive('getDefault')->andReturn($this->getConfigEntity());
-
-        $repo->shouldReceive('delete')->andReturn(1);
-
-        $result = $handler->remove($doc);
-        $this->assertEquals(1, $result);
+        $handler->remove($docModel);
     }
 
     /**
-     * test trash
-     *
-     * @return void
-     */
-    public function testTrash()
-    {
-        $conn = $this->conn;
-        $repo = $this->repo;
-        $configHandler = $this->configHandler;
-        $instanceManager = $this->instanceManager;
-        $request = $this->request;
-
-        $handler = new DocumentHandler(
-            $conn,
-            $repo,
-            $configHandler,
-            $instanceManager,
-            $request
-        );
-
-        $doc = $this->getDocumentEntity();
-        $doc->instanceId = 'instanceId';
-        $doc->shouldReceive('trash');
-
-        $configHandler->shouldReceive('get')->andReturn($this->getConfigEntity());
-
-        $repo->shouldReceive('update')->andReturn($doc);
-
-        $result = $handler->trash($doc);
-
-        $this->assertInstanceOf('Xpressengine\Document\DocumentEntity', $result);
-    }
-
-    /**
-     * test trash without config entity
-     *
-     * @expectedException \Xpressengine\Document\Exceptions\ConfigNotExistsException
-     * @return void
-     */
-    public function testTrashWithoutConfig()
-    {
-        $conn = $this->conn;
-        $repo = $this->repo;
-        $configHandler = $this->configHandler;
-        $instanceManager = $this->instanceManager;
-        $request = $this->request;
-
-        $handler = new DocumentHandler(
-            $conn,
-            $repo,
-            $configHandler,
-            $instanceManager,
-            $request
-        );
-
-        $doc = $this->getDocumentEntity();
-        $doc->shouldReceive('trash');
-
-        $configHandler->shouldReceive('get')->andReturn(null);
-
-        $handler->trash($doc);
-    }
-
-    /**
-     * test restor
-     *
-     * @return void
-     */
-    public function testRestore()
-    {
-        $conn = $this->conn;
-        $repo = $this->repo;
-        $configHandler = $this->configHandler;
-        $instanceManager = $this->instanceManager;
-        $request = $this->request;
-
-        $handler = new DocumentHandler(
-            $conn,
-            $repo,
-            $configHandler,
-            $instanceManager,
-            $request
-        );
-
-        $doc = $this->getDocumentEntity();
-        $doc->instanceId = 'instanceId';
-        $doc->shouldReceive('restore');
-
-        $configHandler->shouldReceive('get')->andReturn($this->getConfigEntity());
-
-        $repo->shouldReceive('update')->andReturn($doc);
-
-        $result = $handler->restore($doc);
-
-        $this->assertInstanceOf('Xpressengine\Document\DocumentEntity', $result);
-    }
-
-    /**
-     * test restore without config entity
-     *
-     * @expectedException \Xpressengine\Document\Exceptions\ConfigNotExistsException
-     * @return void
-     */
-    public function testRestoreWithoutConfig()
-    {
-        $conn = $this->conn;
-        $repo = $this->repo;
-        $configHandler = $this->configHandler;
-        $instanceManager = $this->instanceManager;
-        $request = $this->request;
-
-        $handler = new DocumentHandler(
-            $conn,
-            $repo,
-            $configHandler,
-            $instanceManager,
-            $request
-        );
-
-        $doc = $this->getDocumentEntity();
-        $doc->shouldReceive('restore');
-
-        $configHandler->shouldReceive('get')->andReturn(null);
-
-        $handler->restore($doc);
-    }
-
-    /**
-     * test get document
+     * test get
      *
      * @return void
      */
     public function testGet()
     {
-        $conn = $this->conn;
-        $repo = $this->repo;
-        $configHandler = $this->configHandler;
-        $instanceManager = $this->instanceManager;
-        $request = $this->request;
+        $docId = 'document-id';
+        $instanceId = 'instance-id';
 
-        $handler = new DocumentHandler(
-            $conn,
-            $repo,
-            $configHandler,
-            $instanceManager,
-            $request
-        );
+        $handler = $this->getHandler();
 
-        $instanceId = 'instanceId';
-        $id = 'documentId';
-        $userId = 'userId';
+        $docModel = $this->getDocModel();
+        $docModel->shouldReceive('find')->andReturn($docModel);
+        $handler->shouldReceive('getModel')->andReturn($docModel);
 
-        $configHandler->shouldReceive('get')->andReturn($this->getConfigEntity());
-        $repo->shouldReceive('find')->andReturn([
-            'id' => $id,
-            'instanceId' => $instanceId,
-            'userId' => $userId,
-        ]);
+        $doc = $handler->get($docId, $instanceId);
 
-        $result = $handler->get($id, $instanceId);
-
-        $this->assertInstanceOf('Xpressengine\Document\DocumentEntity', $result);
-
-        // check handler's cache
-        $reflection = new \ReflectionClass(get_class($handler));
-        $property = $reflection->getProperty('docs');
-        $property->setAccessible(true);
-        $docs = $property->getValue($handler);
-
-        $this->assertEquals(1, count($docs));
-        $this->assertInstanceOf('Xpressengine\Document\DocumentEntity', $docs[$id]);
-
-        // get from cache
-        $result = $handler->get($id, $instanceId);
-        $this->assertInstanceOf('Xpressengine\Document\DocumentEntity', $result);
-
-        // cache 가 변하지 않음
-        $this->assertEquals(1, count($docs));
+        $this->assertInstanceOf('\Xpressengine\Document\Models\Document', $doc);
     }
 
+
     /**
-     * test get without config entity
+     * test get
      *
-     * @expectedException \Xpressengine\Document\Exceptions\ConfigNotExistsException
-     * @return void
+     * @expectedException \Xpressengine\Document\Exceptions\DocumentNotFoundException
      */
-    public function testGetWithoutConfig()
+    public function testGetFailDocumentNotFound()
     {
-        $conn = $this->conn;
-        $repo = $this->repo;
-        $configHandler = $this->configHandler;
-        $instanceManager = $this->instanceManager;
-        $request = $this->request;
+        $docId = 'document-id';
+        $instanceId = 'instance-id';
 
-        $handler = new DocumentHandler(
-            $conn,
-            $repo,
-            $configHandler,
-            $instanceManager,
-            $request
-        );
+        $handler = $this->getHandler();
 
-        $instanceId = 'instanceId';
-        $id = 'documentId';
-        $userId = 'userId';
+        $docModel = $this->getDocModel();
+        $docModel->shouldReceive('find')->andReturn(null);
+        $handler->shouldReceive('getModel')->andReturn($docModel);
 
-        $configHandler->shouldReceive('get')->andReturn(null);
-
-        $handler->get($id, $instanceId);
+        $handler->get($docId, $instanceId);
     }
-
-    /**
-     * test get not exist document
-     *
-     * @expectedException \Xpressengine\Document\Exceptions\DocumentNotExistsException
-     * @return void
-     */
-    public function testGetNotExistDocument()
-    {
-        $conn = $this->conn;
-        $repo = $this->repo;
-        $configHandler = $this->configHandler;
-        $instanceManager = $this->instanceManager;
-        $request = $this->request;
-
-        $handler = new DocumentHandler(
-            $conn,
-            $repo,
-            $configHandler,
-            $instanceManager,
-            $request
-        );
-
-        $instanceId = 'instanceId';
-        $id = 'documentId';
-        $userId = 'userId';
-
-        $configHandler->shouldReceive('get')->andReturn($this->getConfigEntity());
-        $repo->shouldReceive('find')->andReturn(null);
-
-        $handler->get($id, $instanceId);
-    }
-
-    /**
-     * test get by document id
-     * @return void
-     */
-    public function testGetById()
-    {
-        $conn = $this->conn;
-        $repo = $this->repo;
-        $configHandler = $this->configHandler;
-        $instanceManager = $this->instanceManager;
-        $request = $this->request;
-
-        $handler = new DocumentHandler(
-            $conn,
-            $repo,
-            $configHandler,
-            $instanceManager,
-            $request
-        );
-
-        $instanceId = 'instanceId';
-        $id = 'documentId';
-        $userId = 'userId';
-
-        $configHandler->shouldReceive('get')->andReturn($this->getConfigEntity());
-        $repo->shouldReceive('findById')->andReturn([
-            'id' => $id,
-            'instanceId' => $instanceId,
-            'userId' => $userId,
-        ]);
-        $repo->shouldReceive('find')->andReturn([
-            'id' => $id,
-            'instanceId' => $instanceId,
-            'userId' => $userId,
-        ]);
-
-        $result = $handler->getById($id);
-
-        $this->assertInstanceOf('Xpressengine\Document\DocumentEntity', $result);
-
-        // check handler's cache
-        $reflection = new \ReflectionClass(get_class($handler));
-        $property = $reflection->getProperty('docs');
-        $property->setAccessible(true);
-        $docs = $property->getValue($handler);
-
-        $this->assertEquals(1, count($docs));
-        $this->assertInstanceOf('Xpressengine\Document\DocumentEntity', $docs[$id]);
-
-        // get from cache
-        $result = $handler->getById($id);
-        $this->assertInstanceOf('Xpressengine\Document\DocumentEntity', $result);
-    }
-
-
-    /**
-     * test get documents by document ids
-     *
-     * @return void
-     */
-    public function testGetsByIds()
-    {
-        $conn = $this->conn;
-        $repo = $this->repo;
-        $configHandler = $this->configHandler;
-        $instanceManager = $this->instanceManager;
-        $request = $this->request;
-
-        $handler = new DocumentHandler(
-            $conn,
-            $repo,
-            $configHandler,
-            $instanceManager,
-            $request
-        );
-
-        $ids = ['id1', 'id2'];
-        $instanceId = 'instanceId';
-        $userId = 'userId';
-
-        $repo->shouldReceive('fetchByIds')->andReturn([
-            [
-                'id' => $ids[0],
-                'instanceId' => $instanceId,
-                'userId' => $userId,
-            ],
-            [
-                'id' => $ids[1],
-                'instanceId' => $instanceId,
-                'userId' => $userId,
-            ]
-        ]);
-
-        $result = $handler->getsByIds($ids);
-
-        $this->assertEquals(2, count($result));
-        $this->assertInstanceOf('Xpressengine\Document\DocumentEntity', $result[0]);
-    }
-
-    /**
-     * test get documents
-     *
-     * @return void
-     */
-    public function testGets()
-    {
-        $conn = $this->conn;
-        $repo = $this->repo;
-        $configHandler = $this->configHandler;
-        $instanceManager = $this->instanceManager;
-        $request = $this->request;
-
-        $handler = new DocumentHandler(
-            $conn,
-            $repo,
-            $configHandler,
-            $instanceManager,
-            $request
-        );
-
-        $ids = ['id1', 'id2'];
-        $instanceId = 'instanceId';
-        $userId = 'userId';
-
-        $repo->shouldReceive('fetch')->andReturn([
-            [
-                'id' => $ids[0],
-                'instanceId' => $instanceId,
-                'userId' => $userId,
-            ],
-            [
-                'id' => $ids[1],
-                'instanceId' => $instanceId,
-                'userId' => $userId,
-            ]
-        ]);
-
-        $wheres = ['instanceId' => $instanceId];
-        $orders = [];
-
-        $configHandler->shouldReceive('get')->andReturn($this->getConfigEntity());
-
-        $result = $handler->gets($wheres, $orders);
-
-        $this->assertEquals(2, count($result));
-        $this->assertInstanceOf('Xpressengine\Document\DocumentEntity', $result[0]);
-    }
-
-    /**
-     * test get documents using paginate
-     *
-     * @return void
-     */
-    public function testPaginate()
-    {
-        $conn = $this->conn;
-        $repo = $this->repo;
-        $configHandler = $this->configHandler;
-        $instanceManager = $this->instanceManager;
-        $request = $this->request;
-
-        $handler = new DocumentHandler(
-            $conn,
-            $repo,
-            $configHandler,
-            $instanceManager,
-            $request
-        );
-
-        $ids = ['id1', 'id2'];
-        $instanceId = 'instanceId';
-        $userId = 'userId';
-
-        $items = [
-            [
-                'id' => $ids[0],
-                'instanceId' => $instanceId,
-                'userId' => $userId,
-            ],
-            [
-                'id' => $ids[1],
-                'instanceId' => $instanceId,
-                'userId' => $userId,
-            ]
-        ];
-
-
-        $repo->shouldReceive('paginate')->andReturn($this->getPaginator($items));
-
-        $wheres = ['instanceId' => $instanceId];
-        $orders = [];
-
-        $configHandler->shouldReceive('get')->andReturn($this->getConfigEntity());
-
-        $result = $handler->paginate($wheres, $orders);
-
-        $this->assertInstanceOf('Illuminate\Pagination\LengthAwarePaginator', $result);
-    }
-
-    /**
-     * test count
-     *
-     * @return void
-     */
-    public function testCount()
-    {
-        $conn = $this->conn;
-        $repo = $this->repo;
-        $configHandler = $this->configHandler;
-        $instanceManager = $this->instanceManager;
-        $request = $this->request;
-
-        $handler = new DocumentHandler(
-            $conn,
-            $repo,
-            $configHandler,
-            $instanceManager,
-            $request
-        );
-
-        $instanceId = 'instanceId';
-
-        $wheres = ['instanceId' => $instanceId];
-
-        $configHandler->shouldReceive('get')->andReturn($this->getConfigEntity());
-
-        $repo->shouldReceive('count')->andReturn(2);
-
-        $result = $handler->count($wheres);
-
-        $this->assertEquals(2, $result);
-    }
-
-    /**
-     * test count by instance id
-     *
-     * @return void
-     */
-    public function testCountByInstanceId()
-    {
-        $conn = $this->conn;
-        $repo = $this->repo;
-        $configHandler = $this->configHandler;
-        $instanceManager = $this->instanceManager;
-        $request = $this->request;
-
-        $handler = new DocumentHandler(
-            $conn,
-            $repo,
-            $configHandler,
-            $instanceManager,
-            $request
-        );
-
-        $instanceId = 'instanceId';
-
-        $repo->shouldReceive('countByInstanceId')->andReturn(2);
-
-        $result = $handler->countByInstanceId($instanceId);
-
-        $this->assertEquals(2, $result);
-    }
-
-    /**
-     * test gets by user
-     *
-     * @eretun void
-     */
-    public function testGetsByUser()
-    {
-        $conn = $this->conn;
-        $repo = $this->repo;
-        $configHandler = $this->configHandler;
-        $instanceManager = $this->instanceManager;
-        $request = $this->request;
-
-        $handler = m::mock('Xpressengine\Document\DocumentHandler', [
-            $conn,
-            $repo,
-            $configHandler,
-            $instanceManager,
-            $request
-        ])->shouldAllowMockingProtectedMethods()->makePartial();
-
-
-        $ids = ['id1', 'id2'];
-        $instanceId = 'instanceId';
-        $userId = 'userId';
-
-        $handler->shouldReceive('gets')->andReturn([
-            [
-                'id' => $ids[0],
-                'instanceId' => $instanceId,
-                'userId' => $userId,
-            ],
-            [
-                'id' => $ids[1],
-                'instanceId' => $instanceId,
-                'userId' => $userId,
-            ]
-        ]);
-
-        $wheres = ['instanceId' => $instanceId];
-        $orders = [];
-
-        $result = $handler->getsByUser($userId, $wheres, $orders);
-
-        $this->assertEquals(2, count($result));
-    }
-
-    /**
-     * test get revision
-     *
-     * @return void
-     */
-    public function testGetRevision()
-    {
-        $conn = $this->conn;
-        $repo = $this->repo;
-        $configHandler = $this->configHandler;
-        $instanceManager = $this->instanceManager;
-        $request = $this->request;
-
-        $handler = new DocumentHandler(
-            $conn,
-            $repo,
-            $configHandler,
-            $instanceManager,
-            $request
-        );
-
-        $repo->shouldReceive('fetchRevision')->andReturn(['id'=>'documentId']);
-
-        $result = $handler->getRevision('revisionId');
-        $this->assertInstanceOf('Xpressengine\Document\DocumentEntity', $result);
-    }
-
-    /**
-     * test get revisions by document id
-     *
-     * @return void
-     */
-    public function testGetRevisions()
-    {
-        $conn = $this->conn;
-        $repo = $this->repo;
-        $configHandler = $this->configHandler;
-        $instanceManager = $this->instanceManager;
-        $request = $this->request;
-
-        $handler = new DocumentHandler(
-            $conn,
-            $repo,
-            $configHandler,
-            $instanceManager,
-            $request
-        );
-
-        $instanceId = 'instanceId';
-        $id = 'documentId';
-        $userId = 'userId';
-
-        $configHandler->shouldReceive('get')->andReturn($this->getConfigEntity());
-        $repo->shouldReceive('findById')->andReturn([
-            'id' => $id,
-            'instanceId' => $instanceId,
-            'userId' => $userId,
-        ]);
-
-        $repo->shouldReceive('getsRevision')->andReturn(
-            [
-                ['id'=>'documentId', 'revisionId' => 'rid1'],
-                ['id'=>'documentId', 'revisionId' => 'rid2'],
-            ]
-        );
-
-        $result = $handler->getRevisions('revisionId');
-        $this->assertInstanceOf('Xpressengine\Document\DocumentEntity', $result[0]);
-    }
-
-    /**
-     * test get depth
-     *
-     * @return void
-     */
-    public function testGetDepth()
-    {
-        $conn = $this->conn;
-        $repo = $this->repo;
-        $configHandler = $this->configHandler;
-        $instanceManager = $this->instanceManager;
-        $request = $this->request;
-
-        $handler = new DocumentHandler(
-            $conn,
-            $repo,
-            $configHandler,
-            $instanceManager,
-            $request
-        );
-
-        $doc = $this->getDocumentEntity();
-        $doc->reply = '';
-
-        $replyHelper = m::mock('Xpressengine\Document\Repositories\ReplyHelper');
-        $replyHelper->shouldReceive('getReplyCharLen')->andReturn(3);
-
-        $repo->shouldReceive('getReplyHelper')->andReturn($replyHelper);
-
-        $result = $handler->getDepth($doc);
-
-        $this->assertEquals(0, $result);
-
-        $doc->reply = 'aaa';
-        $result = $handler->getDepth($doc);
-
-        $this->assertEquals(1, $result);
-    }
-
 }
