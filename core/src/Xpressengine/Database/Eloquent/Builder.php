@@ -13,9 +13,6 @@
  */
 namespace Xpressengine\Database\Eloquent;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-use Illuminate\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Builder as OriginBuilder;
 use Xpressengine\Database\DynamicQuery;
 use Xpressengine\Database\ProxyManager;
@@ -23,7 +20,7 @@ use Xpressengine\Database\ProxyManager;
 /**
  * Builder
  *
- * * Illuminate\Database\Eloquent\Builder wrapping class
+ * * DynamicQuery 인터페이스 지원
  *
  * @category    Database
  * @package     Xpressengine\Database
@@ -35,14 +32,9 @@ use Xpressengine\Database\ProxyManager;
 class Builder extends OriginBuilder
 {
     /**
-     * Create a new Eloquent query builder instance.
-     *
-     * @param DynamicQuery $query dynamic query builder
+     * @var DynamicQuery
      */
-    public function __construct(DynamicQuery $query)
-    {
-        $this->query = $query;
-    }
+    protected $query;
 
     /**
      * get proxy manager

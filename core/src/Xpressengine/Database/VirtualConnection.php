@@ -323,8 +323,6 @@ class VirtualConnection implements VirtualConnectionInterface
     public function table($table)
     {
         return $this->query()->from($table);
-
-        //return (new DynamicQuery($this, $table, false))->useProxy(false);
     }
 
     /**
@@ -358,9 +356,8 @@ class VirtualConnection implements VirtualConnectionInterface
      */
     public function query()
     {
-        return new DynamicQuery(
-            $this, $this->getQueryGrammar(), $this->getPostProcessor()
-        );
+        /** @var VirtualConnection $this */
+        return new DynamicQuery($this, $this->getQueryGrammar(), $this->getPostProcessor());
     }
 
     /**

@@ -43,7 +43,7 @@ class DynamicQueryTest extends PHPUnit_Framework_TestCase
      *
      * @return DynamicQuery
      */
-    private function getInstance($dynamic = false)
+    private function getInstance($proxy = false)
     {
         $processor = m::mock('Illuminate\Database\Query\Processors\Processor');
 
@@ -63,9 +63,14 @@ class DynamicQueryTest extends PHPUnit_Framework_TestCase
         $this->connector = $connector;
 
         /** @var \Xpressengine\Database\VirtualConnection $connector */
-        return m::mock('Xpressengine\Database\DynamicQuery', [$this->connector, 'table', $dynamic])
+        $dynamicQuery = m::mock('Xpressengine\Database\DynamicQuery', [$this->connector, $this->grammar, $this->processor])
             ->shouldAllowMockingProtectedMethods()
             ->makePartial();
+
+        $dynamicQuery->setProxyOption([]);
+        $dynamicQuery->useDynamic(true);
+        $dynamicQuery->useProxy($proxy);
+        return $dynamicQuery->from('table');
     }
 
     /**
@@ -91,6 +96,7 @@ class DynamicQueryTest extends PHPUnit_Framework_TestCase
         $query->useProxy(false);
         $proxy = $propertyProxy->getValue($query);
         $this->assertFalse($proxy);
+        $query->useDynamic(false);
         $dynamic = $propertyDynamic->getValue($query);
         $this->assertFalse($dynamic);
 
@@ -105,19 +111,9 @@ class DynamicQueryTest extends PHPUnit_Framework_TestCase
         $proxyManager = m::mock('Xpressengine\Database\ProxyManager');
         $proxyManager->shouldReceive('set');
         $this->connector->shouldReceive('getProxyManager')->andReturn($proxyManager);
+        $this->assertNull($query->getProxyManager());
+        $query->useDynamic(true);
         $this->assertInstanceOf('Xpressengine\Database\ProxyManager', $query->getProxyManager());
-    }
-
-    /**
-     * test get query
-     *
-     * @return void
-     */
-    public function testGetQuery()
-    {
-        $query = $this->getInstance();
-
-        $this->assertInstanceOf('Illuminate\Database\Query\Builder', $query->getQuery());
     }
 
     /**
@@ -153,7 +149,7 @@ class DynamicQueryTest extends PHPUnit_Framework_TestCase
         $params = ['some'=>'some'];
 
         /** @var \Xpressengine\Database\VirtualConnection $connector */
-        $query = new DynamicQuery($connector, 'table');
+        $query = new DynamicQuery($connector, $grammar, $processor);
         $query->useProxy(false);
         $this->assertEquals(true, $query->insert($params));
         $this->assertEquals(1, $query->insertGetId($params));
@@ -204,7 +200,7 @@ class DynamicQueryTest extends PHPUnit_Framework_TestCase
         $connector->shouldReceive('getSchema')->andReturn($params);
 
         /** @var \Xpressengine\Database\VirtualConnection $connector */
-        $query = new DynamicQuery($connector, 'table', true);
+        $query = new DynamicQuery($connector, $grammar, $processor);
         $query->useProxy(false);
         $this->assertEquals(true, $query->insert($params));
         $this->assertEquals(1, $query->insertGetId($params));
@@ -265,7 +261,7 @@ class DynamicQueryTest extends PHPUnit_Framework_TestCase
         $connector->shouldReceive('getSchema')->andReturn($params);
 
         /** @var \Xpressengine\Database\VirtualConnection $connector */
-        $query = new DynamicQuery($connector, 'table', true);
+        $query = new DynamicQuery($connector, $grammar, $processor);
         $query->useProxy(true);
         $this->assertEquals(true, $query->insert($params));
         $this->assertEquals(1, $query->insertGetId($params));
@@ -274,11 +270,10 @@ class DynamicQueryTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Xpressengine\Database\DynamicQuery', $query->where([]));
 
 
-        $proxyManager->shouldReceive('get')->with($query->getQuery())->andReturn($query->getQuery());
-        $proxyManager->shouldReceive('first')->with($query->getQuery())->andReturn($query->getQuery());
+        $proxyManager->shouldReceive('get');
+        $proxyManager->shouldReceive('first');
 
         $this->assertEquals([['id'=>1]], $query->get());
         $this->assertEquals(['id'=>1], $query->first());
-        //$this->assertEquals([], $query->paginate(10));    // 쉽지않음
     }
 }

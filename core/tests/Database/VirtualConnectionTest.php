@@ -6,6 +6,7 @@ namespace Xpressengine\Tests\Database;
 
 use Mockery as m;
 use PHPUnit_Framework_TestCase;
+use Xpressengine\Database\DatabaseCoupler;
 use Xpressengine\Database\VirtualConnection;
 use PDO;
 
@@ -217,6 +218,7 @@ class VirtualConnectionTest extends PHPUnit_Framework_TestCase
         $defaultConnection->shouldReceive('getPostProcessor')->andReturn(
             m::mock('Illuminate\Database\Query\Processors\Processor')
         );
+        $defaultConnection->shouldReceive('setFetchMode');
         $defaultConnection->shouldReceive('getQueryGrammar')->andReturn(
             m::mock('Illuminate\Database\Query\Grammars\Grammar')
         );

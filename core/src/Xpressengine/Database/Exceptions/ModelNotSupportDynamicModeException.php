@@ -28,5 +28,4 @@ use Xpressengine\Database\DatabaseException;
 class ModelNotSupportDynamicModeException extends DatabaseException
 {
     protected $message = 'This Model is not supported "dynamic" mode.';
-
 }
