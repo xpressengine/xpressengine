@@ -36,17 +36,25 @@ use Xpressengine\Database\Eloquent\DynamicModel;
  */
 class CounterLog extends DynamicModel
 {
+    /**
+     * @var string
+     */
     protected $table = 'counter_log';
 
+    /**
+     * User relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function user()
     {
         return $this->hasOne('Xpressengine\User\Models\User', 'id', 'userId');
     }
 
     /**
-     * Set the value of the "updated at" attribute.
+     * updatedAt column 없음
      *
-     * @param  mixed  $value
+     * @param mixed $value value
      * @return $this
      */
     public function setUpdatedAt($value)
@@ -54,4 +62,3 @@ class CounterLog extends DynamicModel
         return $this;
     }
 }
-

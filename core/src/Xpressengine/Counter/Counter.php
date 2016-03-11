@@ -23,6 +23,12 @@ use Xpressengine\User\UserInterface;
 /**
  * Counter
  *
+ * * Factory 에 의해서 인스턴스 생성
+ * * $name, $options 멤버 변수를 이용해서 등록, 조회, 삭제할 때
+ * counter_logs 테이블의 counterName, counterOption 컬럼에 사용
+ * * $name 에 따라 여러 유형의 Counter 인스턴스를 만들 수 있음
+ * * $options 는 $name 에서 사용할 option 항목
+ *
  * @category    Counter
  * @package     Xpressengine\Counter
  * @author      XE Team (developers) <developers@xpressengine.com>
@@ -33,16 +39,33 @@ use Xpressengine\User\UserInterface;
 class Counter
 {
     /**
+     * model class name
+     *
+     * @var
+     */
+    protected $model = CounterLog::class;
+
+    /**
      * @var Request
      */
     protected $request;
 
+    /**
+     * 카운터 이름
+     *
+     * @var string
+     */
     protected $name;
 
+    /**
+     * 카운터에 사용할 선택 항목
+     *
+     * @var array
+     */
     protected $options = [];
 
     /**
-     * guest type user support
+     * 비회원 지원
      *
      * @var bool
      */
@@ -63,15 +86,31 @@ class Counter
     }
 
     /**
-     * set guest support option
+     * 비회원 지원 설정
      *
-     * @param $use
+     * @param bool $use guest support flag
+     * @return void
      */
     public function setGuest($use = true)
     {
         $this->guest = $use;
     }
 
+    /**
+     * get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * get options
+     *
+     * @return array
+     */
     public function getOptions()
     {
         return $this->options;
@@ -81,6 +120,7 @@ class Counter
      * check option
      *
      * @param string $option counter option
+     * @return void
      * @throws InvalidOptionException
      */
     protected function checkOption($option)
@@ -92,6 +132,27 @@ class Counter
         }
     }
 
+    /**
+     * check support guest
+     *
+     * @param UserInterface|null $user user
+     * @return void
+     * @throws GuestNotSupportException
+     */
+    protected function checkGuest(UserInterface $user = null)
+    {
+        if ($this->guest == false && ($user == null || $user instanceof Guest)) {
+            throw new GuestNotSupportException(['name' => $this->name]);
+        }
+    }
+
+    /**
+     * has by name
+     *
+     * @param string             $targetId targetId
+     * @param UserInterface|null $user     user instance
+     * @return bool
+     */
     public function hasByName($targetId, UserInterface $user = null)
     {
         return $this->getByName($targetId, $user) !== null;
@@ -100,9 +161,9 @@ class Counter
     /**
      * has log
      *
-     * @param string                     $targetId target id
-     * @param UserInterface|null $user
-     * @param string                     $option counter option
+     * @param string             $targetId target id
+     * @param UserInterface|null $user     user instance
+     * @param string             $option   counter option
      * @return bool
      */
     public function has($targetId, UserInterface $user = null, $option = '')
@@ -113,20 +174,18 @@ class Counter
     /**
      * add log
      *
-     * @param string                     $targetId target id
-     * @param UserInterface|null $user
-     * @param string                     $option counter option
-     * @param int $point
+     * @param string             $targetId target id
+     * @param UserInterface|null $user     user instance
+     * @param string             $option   counter option
+     * @param int                $point    point
+     * @return void
      */
     public function add($targetId, UserInterface $user = null, $option = '', $point = 1)
     {
         $this->checkOption($option);
+        $this->checkGuest($user);
 
-        if ($this->guest == false && ($user == null || $user instanceof Guest)) {
-            throw new GuestNotSupportException(['name' => $this->name]);
-        }
-
-        $counterLog = new CounterLog;
+        $counterLog = $this->newModel();
         $counterLog->counterName = $this->name;
         $counterLog->counterOption = $option;
         $counterLog->targetId = $targetId;
@@ -145,20 +204,21 @@ class Counter
     /**
      * remove log
      *
-     * @param string                     $targetId target id
-     * @param UserInterface|null $user
-     * @param string                     $option counter option
-     * @return mixed
+     * @param string             $targetId target id
+     * @param UserInterface|null $user     user instance
+     * @param string             $option   counter option
+     * @return void
      */
     public function remove($targetId, UserInterface $user = null, $option = '')
     {
         $this->checkOption($option);
+        $this->checkGuest($user);
 
         if ($this->guest == true && ($user == null || $user instanceof Guest)) {
-            CounterLog::where('targetId', $targetId)->where('ipaddress', $this->request->ip())
+            $this->newModel()->where('targetId', $targetId)->where('ipaddress', $this->request->ip())
                 ->where('counterName', $this->name)->where('counterOption', $option)->delete();
         } else {
-            return CounterLog::where('targetId', $targetId)->where('userId', $user->getId())
+            $this->newModel()->where('targetId', $targetId)->where('userId', $user->getId())
                 ->where('counterName', $this->name)->where('counterOption', $option)->delete();
         }
     }
@@ -166,31 +226,43 @@ class Counter
     /**
      * get log
      *
-     * @param string                     $targetId target id
-     * @param UserInterface|null $user
-     * @param string                     $option counter option
-     * @return mixed
+     * @param string             $targetId target id
+     * @param UserInterface|null $user     user instance
+     * @param string             $option   counter option
+     * @return CounterLog|null
      */
     public function get($targetId, UserInterface $user = null, $option = '')
     {
         $this->checkOption($option);
+        $this->checkGuest($user);
 
-        if ($this->guest == true && ($user == null || $user instanceof Guest)) {
-            return CounterLog::where('targetId', $targetId)->where('ipaddress', $this->request->ip())
+        if ($this->guest === true && ($user === null || $user instanceof Guest)) {
+            return $this->newModel()->where('targetId', $targetId)->where('ipaddress', $this->request->ip())
                 ->where('counterName', $this->name)->where('counterOption', $option)->first();
         } else {
-            return CounterLog::where('targetId', $targetId)->where('userId', $user->getId())
+            return $this->newModel()->where('targetId', $targetId)->where('userId', $user->getId())
                 ->where('counterName', $this->name)->where('counterOption', $option)->first();
         }
     }
 
+    /**
+     * get log by name
+     * 옵션을 사용하는 Counter 에서 로그를 확인 할 때
+     * 등록된 옵션은 제외하고 확인하려고 할 수 있음
+     *
+     * @param string             $targetId target id
+     * @param UserInterface|null $user     user instance
+     * @return CounterLog|null
+     */
     public function getByName($targetId, UserInterface $user = null)
     {
+        $this->checkGuest($user);
+
         if ($this->guest == true && ($user == null || $user instanceof Guest)) {
-            return CounterLog::where('targetId', $targetId)->where('ipaddress', $this->request->ip())
+            return $this->newModel()->where('targetId', $targetId)->where('ipaddress', $this->request->ip())
                 ->where('counterName', $this->name)->first();
         } else {
-            return CounterLog::where('targetId', $targetId)->where('userId', $user->getId())
+            return $this->newModel()->where('targetId', $targetId)->where('userId', $user->getId())
                 ->where('counterName', $this->name)->first();
         }
     }
@@ -200,13 +272,13 @@ class Counter
      *
      * @param string $targetId target id
      * @param string $option   counter option
-     * @return mixed
+     * @return int
      */
     public function getPoint($targetId, $option = '')
     {
         $this->checkOption($option);
 
-        return CounterLog::where('targetId', $targetId)
+        return $this->newModel()->where('targetId', $targetId)
             ->where('counterName', $this->name)->where('counterOption', $option)->sum('point');
     }
 
@@ -215,18 +287,41 @@ class Counter
      *
      * @param string $targetId target id
      * @param string $option   counter option
-     * @return mixed
+     * @return array
      */
     public function getUsers($targetId, $option = '')
     {
         $this->checkOption($option);
 
-        $logs = CounterLog::where('targetId', $targetId)
+        $logs = $this->newModel()->where('targetId', $targetId)
             ->where('counterName', $this->name)->where('counterOption', $option)->get();
+
         $users = [];
-        foreach  ($logs as $log) {
+        foreach ($logs as $log) {
             $users[] = $log->user;
         }
         return $users;
+    }
+
+    /**
+     * The name of CounterLog model class
+     *
+     * @return string
+     */
+    protected function getModel()
+    {
+        return $this->model;
+    }
+
+    /**
+     * Create model instance
+     *
+     * @return CounterLog
+     */
+    protected function newModel()
+    {
+        $class = $this->getModel();
+
+        return new $class;
     }
 }
