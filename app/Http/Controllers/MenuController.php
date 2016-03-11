@@ -747,17 +747,17 @@ class MenuController extends Controller
         $accessGrant = $permission[MenuHandler::ACCESS];
         $accessParams = [
             'rating' => $accessGrant['rating'],
-            'group' => UserGroup::whereIn('id', $accessGrant['group'])->get(),
-            'user' => User::whereIn('id', $accessGrant['user'])->get(),
-            'except' => User::whereIn('id', $accessGrant['except'])->get(),
+            'group' => UserGroup::whereIn('id', $accessGrant['group'])->get()->toArray(),
+            'user' => User::whereIn('id', $accessGrant['user'])->get()->toArray(),
+            'except' => User::whereIn('id', $accessGrant['except'])->get()->toArray(),
         ];
 
         $visibleGrant = $permission[MenuHandler::VISIBLE];
         $visibleParams = [
             'rating' => $visibleGrant['rating'],
-            'group' => UserGroup::whereIn('id', $visibleGrant['group'])->get(),
-            'user' => User::whereIn('id', $visibleGrant['user'])->get(),
-            'except' => User::whereIn('id', $visibleGrant['except'])->get(),
+            'group' => UserGroup::whereIn('id', $visibleGrant['group'])->get()->toArray(),
+            'user' => User::whereIn('id', $visibleGrant['user'])->get()->toArray(),
+            'except' => User::whereIn('id', $visibleGrant['except'])->get()->toArray(),
         ];
 
         return XePresenter::make(
