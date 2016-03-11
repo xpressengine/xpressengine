@@ -1,13 +1,13 @@
 <?php
 /**
- *  This file is part of the Xpressengine package.
+ *  Package
  *
  * PHP version 5
  *
- * @category
- * @package     Xpressengine\
- * @author      XE Team (khongchi) <khongchi@xpressengine.com>
- * @copyright   2000-2014 Copyright (C) NAVER <http://www.navercorp.com>
+ * @category    Presenter\Html|Tags
+ * @package     Xpressengine\Presenter\Html|Tags
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
@@ -18,9 +18,12 @@ use Xpressengine\Presenter\Exceptions\PackageNotFoundException;
 use Xpressengine\Presenter\Html\FrontendHandler;
 
 /**
- * @category
- * @package     Xpressengine\Presenter\Html\Tags
- * @author      XE Team (khongchi) <khongchi@xpressengine.com>
+ * Package
+ *
+ * @category    Presenter\Html|Tags
+ * @package     Xpressengine\Presenter\Html|Tags
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
@@ -44,7 +47,7 @@ class Package
     /**
      * init
      *
-     * @param array $packages
+     * @param array $packages packages
      *
      * @return void
      */
@@ -58,14 +61,15 @@ class Package
      *
      * @return array
      */
-    public static function packages(){
+    public static function packages()
+    {
         return self::$packages;
     }
 
     /**
      * Package constructor.
      *
-     * @param string $name
+     * @param string $name name
      */
     public function __construct($name)
     {
@@ -73,7 +77,10 @@ class Package
     }
 
     /**
-     * @param FrontendHandler $handler
+     * set handler
+     *
+     * @param FrontendHandler $handler frontend handler
+     * @return void
      */
     public static function setHandler($handler)
     {
@@ -83,7 +90,7 @@ class Package
     /**
      * register package
      *
-     * @param Closure $callback
+     * @param Closure $callback callback
      *
      * @return static $this
      */
@@ -103,13 +110,12 @@ class Package
         /** @var Closure $callback */
         $callback = array_get(self::$packages, $this->name);
 
-        if($callback === null) {
-            throw new PackageNotFoundException();
+        if ($callback === null) {
+            throw new PackageNotFoundException(['name' => $this->name]);
         }
 
         $callback(static::$handler);
 
         return $this;
     }
-
 }

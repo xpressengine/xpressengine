@@ -1,6 +1,6 @@
 <?php
 /**
- * Exceptions
+ * InvalidRendererException
  *
  * PHP version 5
  *
@@ -16,7 +16,7 @@ namespace Xpressengine\Presenter\Exceptions;
 use Xpressengine\Presenter\PresenterException;
 
 /**
- * Class NotFoundSkinException
+ * InvalidRendererException
  *
  * @category    Presenter
  * @package     Xpressengine\Presenter
@@ -27,5 +27,6 @@ use Xpressengine\Presenter\PresenterException;
  */
 class InvalidRendererException extends PresenterException
 {
-
+    protected $message = '":name" renderer invalid.
+    Renderer must follow "Xpressengine\Presenter\RendererInterface" interface';
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Exceptions
+ * NotFoundFormatException
  *
  * PHP version 5
  *
@@ -16,7 +16,7 @@ namespace Xpressengine\Presenter\Exceptions;
 use Xpressengine\Presenter\PresenterException;
 
 /**
- * Class NotFoundFormatException
+ * NotFoundFormatException
  *
  * @category    Presenter
  * @package     Xpressengine\Presenter
@@ -27,5 +27,5 @@ use Xpressengine\Presenter\PresenterException;
  */
 class NotFoundFormatException extends PresenterException
 {
-
+    protected $message = '":name" format not found.';
 }

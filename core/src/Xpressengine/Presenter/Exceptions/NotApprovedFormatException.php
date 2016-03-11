@@ -1,6 +1,6 @@
 <?php
 /**
- * Exceptions
+ * NotApprovedFormatException
  *
  * PHP version 5
  *
@@ -16,7 +16,7 @@ namespace Xpressengine\Presenter\Exceptions;
 use Xpressengine\Presenter\PresenterException;
 
 /**
- * Class NotApprovedFormatException
+ * NotApprovedFormatException
  *
  * @category    Presenter
  * @package     Xpressengine\Presenter
@@ -27,5 +27,5 @@ use Xpressengine\Presenter\PresenterException;
  */
 class NotApprovedFormatException extends PresenterException
 {
-
+    protected $message = '":name" format not approved.';
 }

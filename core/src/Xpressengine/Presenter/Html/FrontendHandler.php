@@ -14,7 +14,10 @@
 namespace Xpressengine\Presenter\Html;
 
 /**
- * FrontendHandler는 html 문서가 출력할 때 필요한 다양한 태그와 js, css파일을 지정된 위치에 추가하고 관리하는 역할을 합니다.
+ * FrontendHandler
+ *
+ * FrontendHandler는 html 문서가 출력할 때 필요한 다양한
+ * 태그와js, css파일을 지정된 위치에 추가하고 관리하는 역할을 합니다.
  * FrontendHandler는 현재 9가지 형태의 태그를 지원합니다.
  *
  * ## 브라우저 타이틀 태그 지정하기
@@ -37,8 +40,10 @@ namespace Xpressengine\Presenter\Html;
  *
  * ### 기본 사용법
  *
- * `js` 메소드를 사용하여 스크립트 파일을 로드할 수 있습니다. 이때, `appendTo`, `prependTo` 메소드를 사용하면, 로드하는 위치를
- * `<head>`, `<body>` 태그 내에 위치시킬 수 있습니다. 반드시 마지막에는 `load` 메소드를 사용해야 합니다.
+ * `js` 메소드를 사용하여 스크립트 파일을 로드할 수 있습니다.
+ * 이때, `appendTo`, `prependTo` 메소드를 사용하면, 로드하는 위치를
+ * `<head>`, `<body>` 태그 내에 위치시킬 수 있습니다.
+ * 반드시 마지막에는 `load` 메소드를 사용해야 합니다.
  *
  * ```php
  * // xe.js파일을 head의 하단에 로드함.
@@ -50,7 +55,8 @@ namespace Xpressengine\Presenter\Html;
  *
  * ### 우선순위 지정
  *
- * 만약 스크립트 파일을 로드할 때, 반드시 먼저 로드돼야 하는 다른 스크립트 파일이 있다면 `before` 메소드를 사용하여 지정할 수 있습니다.
+ * 만약 스크립트 파일을 로드할 때, 반드시 먼저 로드돼야 하는
+ * 다른 스크립트 파일이 있다면 `before` 메소드를 사용하여 지정할 수 있습니다.
  * 반대의 경우, `after` 메소드를 사용하십시오.
  *
  * ```php
@@ -71,7 +77,8 @@ namespace Xpressengine\Presenter\Html;
  *
  * ## css 파일 로드하기
  *
- * css 파일도 js 스크립트 파일과 사용법이 동일합니다. 단 `appendTo`, `prependTo` 메소드를 지원하지 않습니다.
+ * css 파일도 js 스크립트 파일과 사용법이 동일합니다.
+ * 단 `appendTo`, `prependTo` 메소드를 지원하지 않습니다.
  *
  * ```php
  * // xe.css파일을 로드함. 반드시 bootstrap.css가 로드된 다음에 로드되도록 우선순위를 지정
@@ -81,7 +88,8 @@ namespace Xpressengine\Presenter\Html;
  * ## meta 태그 추가
  *
  * `meta` 메소드를 사용하여 meta 태그를 지정할 수 있습니다.
- * meta 태그의 attribute를 지정하기 위해 `name`, `charset`, `property`, `httpEquiv`, `content`를 지원합니다.
+ * meta 태그의 attribute를 지정하기 위해
+ * `name`, `charset`, `property`, `httpEquiv`, `content`를 지원합니다.
  *
  * ```php
  * // 등록하려는 meta 태그의 별칭 등록.
@@ -125,16 +133,16 @@ namespace Xpressengine\Presenter\Html;
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
- * @method \Xpressengine\Presenter\Html\Tags\Title title($title) browser title을 입력한다.
- * @method \Xpressengine\Presenter\Html\Tags\Meta meta() meta tag를 추가한다.
- * @method \Xpressengine\Presenter\Html\Tags\IconFile icon($file) browser icon을 추가한다.
- * @method \Xpressengine\Presenter\Html\Tags\CSSFile css($files) css 파일을 추가한다.
- * @method \Xpressengine\Presenter\Html\Tags\JSFile js($files) js 파일을 추가한다.
- * @method \Xpressengine\Presenter\Html\Tags\BodyClass bodyClass($class) body 태그에 class를 추가한다.
- * @method \Xpressengine\Presenter\Html\Tags\Html html($alias) custom html tag를 추가한다.
- * @method \Xpressengine\Presenter\Html\Tags\Package package($name) custom package tag를 추가한다.
- * @method \Xpressengine\Presenter\Html\Tags\Rule rule($ruleName, $rules) validation rule을 추가한다.
- * @method \Xpressengine\Presenter\Html\Tags\Translation translation($keys) javascript에서 사용할 다국어를 추가한다.
+ * @method Tags\Title title($title) browser title을 입력한다.
+ * @method Tags\Meta meta() meta tag를 추가한다.
+ * @method Tags\IconFile icon($file) browser icon을 추가한다.
+ * @method Tags\CSSFile css($files) css 파일을 추가한다.
+ * @method Tags\JSFile js($files) js 파일을 추가한다.
+ * @method Tags\BodyClass bodyClass($class) body 태그에 class를 추가한다.
+ * @method Tags\Html html($alias) custom html tag를 추가한다.
+ * @method Tags\Package package($name) custom package tag를 추가한다.
+ * @method Tags\Rule rule($ruleName, $rules) validation rule을 추가한다.
+ * @method Tags\Translation translation($keys) javascript에서 사용할 다국어를 추가한다.
  */
 class FrontendHandler
 {
