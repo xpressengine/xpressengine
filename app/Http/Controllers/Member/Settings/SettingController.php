@@ -49,7 +49,7 @@ class SettingController extends Controller
      */
     public function editCommon()
     {
-        $config = app('xe.config')->get('member.common');
+        $config = app('xe.config')->get('user.common');
 
         return XePresenter::make(
             'member.settings.setting.common',
