@@ -233,9 +233,6 @@ class Counter
      */
     public function get($targetId, UserInterface $user = null, $option = '')
     {
-        $this->checkOption($option);
-        $this->checkGuest($user);
-
         if ($this->guest === true && ($user === null || $user instanceof Guest)) {
             return $this->newModel()->where('targetId', $targetId)->where('ipaddress', $this->request->ip())
                 ->where('counterName', $this->name)->where('counterOption', $option)->first();
@@ -256,8 +253,6 @@ class Counter
      */
     public function getByName($targetId, UserInterface $user = null)
     {
-        $this->checkGuest($user);
-
         if ($this->guest == true && ($user == null || $user instanceof Guest)) {
             return $this->newModel()->where('targetId', $targetId)->where('ipaddress', $this->request->ip())
                 ->where('counterName', $this->name)->first();
