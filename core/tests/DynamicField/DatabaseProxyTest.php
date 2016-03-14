@@ -258,9 +258,9 @@ class DatabaseProxyTest extends PHPUnit_Framework_TestCase
         $this->configHandler->shouldReceive('gets')->andReturn([$config]);
         $this->registerHandler->shouldReceive('getType')->andReturn($type);
 
-        $query = m::mock('Illuminate\Database\Query\Builder');
+        $query = m::mock('Xpressengine\Database\DynamicQuery');
         $result = $proxy->get($query);
-        $this->assertInstanceOf('Illuminate\Database\Query\Builder', $result);
+        $this->assertInstanceOf('Xpressengine\Database\DynamicQuery', $result);
     }
 
     /**
@@ -279,7 +279,7 @@ class DatabaseProxyTest extends PHPUnit_Framework_TestCase
         $config->shouldReceive('get')->with('typeId')->andReturn('id');
         $config->shouldReceive('get')->with('use')->andReturn(true);
 
-        $query = m::mock('Illuminate\Database\Query\Builder');
+        $query = m::mock('Xpressengine\Database\DynamicQuery');
 
         $type = m::mock('Type', 'Xpressengine\DynamicField\AbstractType');
         $type->shouldReceive('setConfig');
@@ -290,7 +290,7 @@ class DatabaseProxyTest extends PHPUnit_Framework_TestCase
         $this->registerHandler->shouldReceive('getType')->andReturn($type);
 
         $result = $proxy->first($query);
-        $this->assertInstanceOf('Illuminate\Database\Query\Builder', $result);
+        $this->assertInstanceOf('Xpressengine\Database\DynamicQuery', $result);
     }
 
     /**
@@ -309,7 +309,7 @@ class DatabaseProxyTest extends PHPUnit_Framework_TestCase
         $config->shouldReceive('get')->with('typeId')->andReturn('id');
         $config->shouldReceive('get')->with('use')->andReturn(true);
 
-        $query = m::mock('Illuminate\Database\Query\Builder');
+        $query = m::mock('Xpressengine\Database\DynamicQuery');
 
         $type = m::mock('Type', 'Xpressengine\DynamicField\AbstractType');
         $type->shouldReceive('setConfig');
@@ -319,7 +319,7 @@ class DatabaseProxyTest extends PHPUnit_Framework_TestCase
         $this->registerHandler->shouldReceive('getType')->andReturn($type);
 
         $result = $proxy->wheres($query, []);
-        $this->assertInstanceOf('Illuminate\Database\Query\Builder', $result);
+        $this->assertInstanceOf('Xpressengine\Database\DynamicQuery', $result);
     }
 
     /**
@@ -338,7 +338,7 @@ class DatabaseProxyTest extends PHPUnit_Framework_TestCase
         $config->shouldReceive('get')->with('typeId')->andReturn('id');
         $config->shouldReceive('get')->with('use')->andReturn(true);
 
-        $query = m::mock('Illuminate\Database\Query\Builder');
+        $query = m::mock('Xpressengine\Database\DynamicQuery');
 
         $type = m::mock('Type', 'Xpressengine\DynamicField\AbstractType');
         $type->shouldReceive('setConfig');
@@ -348,205 +348,6 @@ class DatabaseProxyTest extends PHPUnit_Framework_TestCase
         $this->registerHandler->shouldReceive('getType')->andReturn($type);
 
         $result = $proxy->orders($query, []);
-        $this->assertInstanceOf('Illuminate\Database\Query\Builder', $result);
+        $this->assertInstanceOf('Xpressengine\Database\DynamicQuery', $result);
     }
-
-
-//
-//    /**
-//     * test set connection and options
-//     *
-//     * @expectedException \Xpressengine\DynamicField\Exceptions\InvalidOptionException
-//     * @return void
-//     */
-//    public function testSet()
-//    {
-//        $connector = m::mock('Xpressengine\Database\VirtualConnectionInterface');
-//        $handler = m::mock('Xpressengine\DynamicField\DynamicFieldHandler');
-//        $handler->shouldReceive('setConnection');
-//
-//        $proxy = new DatabaseProxy($handler);
-//
-//        $proxy->set($connector, ['table'=>'table']);
-//
-//        $proxy->set($connector, ['table'=>'table', 'id' => 'id']);
-//
-//        $proxy->set($connector, ['table'=>'table', 'group' => 'group']);
-//
-//        $proxy->set($connector, []);
-//    }
-//
-//    /**
-//     * test insert
-//     *
-//     * @return void
-//     */
-//    public function testInsert()
-//    {
-//        $type = m::mock('Xpressengine\DynamicField\TypeInterface');
-//        $type->shouldReceive('insert');
-//
-//        $config = m::mock('Xpressengine\Config\ConfigEntity');
-//        $config->shouldReceive('get')->with('use')->andReturn(true);
-//        $config->shouldReceive('get')->with('typeId')->andReturn('type');
-//
-//        $connector = m::mock('Xpressengine\Database\VirtualConnectionInterface');
-//
-//        $configHandler = m::mock('Xpressengine\DynamicField\ConfigHandler');
-//        $configHandler->shouldReceive('gets')->andReturn([$config]);
-//
-//        $registerHandler = m::mock('Xpressengine\DynamicField\RegisterHandler');
-//        $registerHandler->shouldReceive('getType')->andReturn($type);
-//
-//        $handler = m::mock('Xpressengine\DynamicField\DynamicFieldHandler');
-//        $handler->shouldReceive('getConfigHandler')->andReturn($configHandler);
-//        $handler->shouldReceive('getRegisterHandler')->andReturn($registerHandler);
-//        $handler->shouldReceive('setConnection');
-//
-//        $proxy = new DatabaseProxy($handler);
-//
-//        $proxy->insert(['data'=>'data']);
-//    }
-//
-//    /**
-//     * test update
-//     *
-//     * @return void
-//     */
-//    public function testUpdate()
-//    {
-//        $type = m::mock('Xpressengine\DynamicField\TypeInterface');
-//        $type->shouldReceive('update');
-//
-//        $config = m::mock('Xpressengine\Config\ConfigEntity');
-//        $config->shouldReceive('get')->with('use')->andReturn(true);
-//        $config->shouldReceive('get')->with('typeId')->andReturn('type');
-//
-//        $connector = m::mock('Xpressengine\Database\VirtualConnectionInterface');
-//
-//        $configHandler = m::mock('Xpressengine\DynamicField\ConfigHandler');
-//        $configHandler->shouldReceive('gets')->andReturn([$config]);
-//
-//        $registerHandler = m::mock('Xpressengine\DynamicField\RegisterHandler');
-//        $registerHandler->shouldReceive('getType')->andReturn($type);
-//
-//        $handler = m::mock('Xpressengine\DynamicField\DynamicFieldHandler');
-//        $handler->shouldReceive('getConfigHandler')->andReturn($configHandler);
-//        $handler->shouldReceive('getRegisterHandler')->andReturn($registerHandler);
-//        $handler->shouldReceive('setConnection');
-//
-//        $proxy = new DatabaseProxy($handler);
-//
-//        $proxy->update(['data'=>'data'], []);
-//    }
-//
-//    /**
-//     * test delete
-//     *
-//     * @return void
-//     */
-//    public function testDelete()
-//    {
-//        $type = m::mock('Xpressengine\DynamicField\TypeInterface');
-//        $type->shouldReceive('delete');
-//
-//        $config = m::mock('Xpressengine\Config\ConfigEntity');
-//        $config->shouldReceive('get')->with('use')->andReturn(true);
-//        $config->shouldReceive('get')->with('typeId')->andReturn('type');
-//
-//        $connector = m::mock('Xpressengine\Database\VirtualConnectionInterface');
-//
-//        $configHandler = m::mock('Xpressengine\DynamicField\ConfigHandler');
-//        $configHandler->shouldReceive('gets')->andReturn([$config]);
-//
-//        $registerHandler = m::mock('Xpressengine\DynamicField\RegisterHandler');
-//        $registerHandler->shouldReceive('getType')->andReturn($type);
-//
-//        $handler = m::mock('Xpressengine\DynamicField\DynamicFieldHandler');
-//        $handler->shouldReceive('getConfigHandler')->andReturn($configHandler);
-//        $handler->shouldReceive('getRegisterHandler')->andReturn($registerHandler);
-//        $handler->shouldReceive('setConnection');
-//
-//        $proxy = new DatabaseProxy($handler);
-//
-//        $proxy->delete(['data'=>'data']);
-//    }
-//
-//
-//    /**
-//     * test delete
-//     *
-//     * @return void
-//     */
-//    public function testGet()
-//    {
-//        $query = m::mock('Illuminate\Database\Query\Builder');
-//
-//        $type = m::mock('Xpressengine\DynamicField\TypeInterface');
-//        $type->shouldReceive('get')->andReturn($query);
-//        $type->shouldReceive('first')->andReturn($query);
-//
-//        $config = m::mock('Xpressengine\Config\ConfigEntity');
-//        $config->shouldReceive('get')->with('use')->andReturn(true);
-//        $config->shouldReceive('get')->with('typeId')->andReturn('type');
-//
-//        $connector = m::mock('Xpressengine\Database\VirtualConnectionInterface');
-//
-//        $configHandler = m::mock('Xpressengine\DynamicField\ConfigHandler');
-//        $configHandler->shouldReceive('gets')->andReturn([$config]);
-//        $configHandler->shouldReceive('isTableMethodCreate')->andReturn(true);
-//
-//        $registerHandler = m::mock('Xpressengine\DynamicField\RegisterHandler');
-//        $registerHandler->shouldReceive('getType')->andReturn($type);
-//
-//        $handler = m::mock('Xpressengine\DynamicField\DynamicFieldHandler');
-//        $handler->shouldReceive('getConfigHandler')->andReturn($configHandler);
-//        $handler->shouldReceive('getRegisterHandler')->andReturn($registerHandler);
-//        $handler->shouldReceive('setConnection');
-//
-//        $proxy = new DatabaseProxy($handler);
-//
-//        $this->assertInstanceOf('Illuminate\Database\Query\Builder', $proxy->get($query));
-//        $this->assertInstanceOf('Illuminate\Database\Query\Builder', $proxy->first($query));
-//
-//        $configHandler->shouldReceive('isTableMethodCreate')->andReturn(false);
-//        $this->assertInstanceOf('Illuminate\Database\Query\Builder', $proxy->get($query));
-//        $this->assertInstanceOf('Illuminate\Database\Query\Builder', $proxy->first($query));
-//    }
-//
-//    /**
-//     * test wheres and orders
-//     *
-//     * @return void
-//     */
-//    public function testWheresOrders()
-//    {
-//        $query = m::mock('Illuminate\Database\Query\Builder');
-//
-//        $type = m::mock('Xpressengine\DynamicField\TypeInterface');
-//        $type->shouldReceive('wheres')->andReturn($query);
-//        $type->shouldReceive('orders')->andReturn($query);
-//
-//        $config = m::mock('Xpressengine\Config\ConfigEntity');
-//        $config->shouldReceive('get')->with('use')->andReturn(true);
-//        $config->shouldReceive('get')->with('typeId')->andReturn('type');
-//
-//        $connector = m::mock('Xpressengine\Database\VirtualConnectionInterface');
-//
-//        $configHandler = m::mock('Xpressengine\DynamicField\ConfigHandler');
-//        $configHandler->shouldReceive('gets')->andReturn([$config]);
-//
-//        $registerHandler = m::mock('Xpressengine\DynamicField\RegisterHandler');
-//        $registerHandler->shouldReceive('getType')->andReturn($type);
-//
-//        $handler = m::mock('Xpressengine\DynamicField\DynamicFieldHandler');
-//        $handler->shouldReceive('getConfigHandler')->andReturn($configHandler);
-//        $handler->shouldReceive('getRegisterHandler')->andReturn($registerHandler);
-//        $handler->shouldReceive('setConnection');
-//
-//        $proxy = new DatabaseProxy($handler);
-//
-//        $this->assertInstanceOf('Illuminate\Database\Query\Builder', $proxy->wheres($query, ['data'=>'data']));
-//        $this->assertInstanceOf('Illuminate\Database\Query\Builder', $proxy->orders($query, ['data'=>'data']));
-//    }
 }

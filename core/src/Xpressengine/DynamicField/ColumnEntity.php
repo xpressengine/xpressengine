@@ -1,10 +1,10 @@
 <?php
 /**
- * Column Entity class
+ * ColumnEntity
  *
  * PHP version 5
  *
- * @category    DyanmicField
+ * @category    DynamicField
  * @package     Xpressengine\DynamidField
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
@@ -17,8 +17,10 @@ use Illuminate\Database\Schema\Blueprint;
 use Xpressengine\Support\Entity;
 
 /**
- * FieldType 에서 table 스키마 를 정의 하기위해 사용.
- * AbstractFieldType class 의 columns 멤버 변수의 항목들을 ColumnEntity class 로 구성.
+ * ColumnEntity
+ *
+ * * FieldType 에서 table 스키마 를 정의 하기위해 사용
+ * * AbstractFieldType class 의 columns 멤버 변수의 항목들을 ColumnEntity class 로 구성
  *
  * @category    DynamicField
  * @package     Xpressengine\DynamicField

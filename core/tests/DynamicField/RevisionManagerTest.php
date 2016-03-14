@@ -31,7 +31,7 @@ class RevisionManagerTest extends PHPUnit_Framework_TestCase
      */
     public function testManager()
     {
-        $query = m::mock('Illuminate\Database\Query\Builder');
+        $query = m::mock('Xpressengine\Database\DynamicQuery');
 
         $type = m::mock('Xpressengine\DynamicField\AbstractType');
         $type->shouldReceive('insertRevision');
@@ -57,6 +57,6 @@ class RevisionManagerTest extends PHPUnit_Framework_TestCase
 
         $revision->add($configs, ['data'=>'data']);
 
-        $this->assertInstanceOf('Illuminate\Database\Query\Builder', $revision->join($configs, $query));
+        $this->assertInstanceOf('Xpressengine\Database\DynamicQuery', $revision->join($configs, $query));
     }
 }

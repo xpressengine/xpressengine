@@ -1,10 +1,10 @@
 <?php
 /**
- * Dynamic field skin abstract class
+ * AbstractSkin
  *
  * PHP version 5
  *
- * @category    DyanmicField
+ * @category    DynamicField
  * @package     Xpressengine\DynamidField
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
@@ -18,7 +18,9 @@ use Xpressengine\Plugin\ComponentTrait;
 use Xpressengine\Plugin\ComponentInterface;
 
 /**
- * Class AbstractFieldSkin
+ * AbstractSkin
+ *
+ * * Type 에서 출력할 때 사용할 스킨 필요
  *
  * @category    DynamicField
  * @package     Xpressengine\DynamicField

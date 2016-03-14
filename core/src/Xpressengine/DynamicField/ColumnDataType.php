@@ -1,10 +1,10 @@
 <?php
 /**
- * Column Data Type class
+ * ColumnDataType
  *
  * PHP version 5
  *
- * @category    DyanmicField
+ * @category    DynamicField
  * @package     Xpressengine\DynamidField
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
@@ -14,8 +14,10 @@
 namespace Xpressengine\DynamicField;
 
 /**
- * FieldType에서 table 스키마 를 정의 하기위해 Column Entity를 사용합니다.
- * ColumnEntity class에서 column의 dataType을 정의 할 때 이 사용 가능한 값을 정의합니다.
+ * ColumnDataType
+ *
+ * * Type 에서 table 스키마 를 정의 하기위해 Column Entity 사용
+ * * ColumnEntity class 에서 column 의 dataType 을 정의 할 때 사용 가능한 값 정의
  *
  * @category    DynamicField
  * @package     Xpressengine\DynamicField
@@ -26,7 +28,6 @@ namespace Xpressengine\DynamicField;
  */
 class ColumnDataType
 {
-
     const INTEGER = 'integer';
     const BIGINTEGER = 'bigInterge';
     const MEDIUMINTEGER = 'mediumInteger';

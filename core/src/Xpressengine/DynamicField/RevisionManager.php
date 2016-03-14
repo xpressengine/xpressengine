@@ -14,11 +14,12 @@
 namespace Xpressengine\DynamicField;
 
 use Xpressengine\Config\ConfigEntity;
-use \Illuminate\Database\Query\Builder;
+use Xpressengine\Database\DynamicQuery;
 
 /**
  * RevisionManager
- * > DynamicField 에서 revision 지원
+ *
+ * * DynamicField 에서 revision 지원
  *
  * @category    DynamicField
  * @package     Xpressengine\DynamicField
@@ -79,11 +80,11 @@ class RevisionManager
     /**
      * make join query for revision
      *
-     * @param array   $configs config entity list
-     * @param Builder $query   Illuminate query builder
-     * @return Builder
+     * @param array        $configs config entity list
+     * @param DynamicQuery $query   Illuminate query builder
+     * @return DynamicQuery
      */
-    public function join(array $configs, Builder $query)
+    public function join(array $configs, DynamicQuery $query)
     {
         $register = $this->handler->getRegisterHandler();
         /**

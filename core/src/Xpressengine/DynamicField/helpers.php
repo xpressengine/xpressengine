@@ -13,8 +13,8 @@
  */
 if (function_exists('df') === false) {
     /**
-     * @param $group
-     * @param $columnName
+     * @param string $group      group name
+     * @param string $columnName dynamic field id
      * @return \Xpressengine\DynamicField\AbstractType
      */
     function df($group, $columnName)
@@ -24,6 +24,12 @@ if (function_exists('df') === false) {
 }
 
 if (function_exists('dfCreate') === false) {
+    /**
+     * @param string $group      group name
+     * @param string $columnName dynamic field id
+     * @param array  $args       arguments
+     * @return string
+     */
     function dfCreate($group, $columnName, $args)
     {
         $fieldType = df($group, $columnName);
@@ -36,6 +42,12 @@ if (function_exists('dfCreate') === false) {
 }
 
 if (function_exists('dfEdit') === false) {
+    /**
+     * @param string $group      group name
+     * @param string $columnName dynamic field id
+     * @param array  $args       arguments
+     * @return string
+     */
     function dfEdit($group, $columnName, $args)
     {
         $fieldType = df($group, $columnName);

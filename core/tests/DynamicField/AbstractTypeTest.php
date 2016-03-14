@@ -534,6 +534,7 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
 
         $config = m::mock('Xpressengine\Config\ConfigEntity');
         $config->shouldReceive('get')->with('id')->andReturn('instanceId');
+        $config->shouldReceive('get')->with('use')->andReturn(true);
         $config->shouldReceive('get')->with('required')->andReturn(true);
         $config->shouldReceive('get')->with('sortable')->andReturn(true);
         $config->shouldReceive('get')->with('joinColumnName')->andReturn('id');
@@ -545,7 +546,9 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
 
         $handler->shouldReceive('getConfigHandler')->andReturn($configHandler);
 
-        $query = m::mock('Illuminate\Database\Query\Builder');
+        $query = m::mock('Xpressengine\Database\DynamicQuery');
+        $query->shouldReceive('hasDynamicTable')->andReturn(false);
+        $query->shouldReceive('setDynamicTable');
 
         $join = m::mock('Illuminate\Database\Query\JoinClause');
         $join->shouldReceive('on');
@@ -556,9 +559,9 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
             return true;
         }));
 
-        $this->assertInstanceOf('Illuminate\Database\Query\Builder', $typeInstance->get($query));
+        $this->assertInstanceOf('Xpressengine\Database\DynamicQuery', $typeInstance->get($query));
 
-        $this->assertInstanceOf('Illuminate\Database\Query\Builder', $typeInstance->first($query));
+        $this->assertInstanceOf('Xpressengine\Database\DynamicQuery', $typeInstance->first($query));
     }
 
     /**
@@ -589,14 +592,15 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
 
         $typeInstance->setConfig($config);
 
-        $query = m::mock('Illuminate\Database\Query\Builder');
+        $query = m::mock('Xpressengine\Database\DynamicQuery');
         $query->shouldReceive('where')->andReturnSelf();
 
         $params = [
             'id' => 'id',
             'instanceIdAdd1' => 'value',
         ];
-        $this->assertInstanceOf('Illuminate\Database\Query\Builder', $typeInstance->wheres($query, $params));
+
+        $this->assertInstanceOf('Xpressengine\Database\DynamicQuery', $typeInstance->wheres($query, $params));
     }
 
     /**
@@ -627,13 +631,13 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
 
         $typeInstance->setConfig($config);
 
-        $query = m::mock('Illuminate\Database\Query\Builder');
+        $query = m::mock('Xpressengine\Database\DynamicQuery');
         $query->shouldReceive('orderBy')->andReturnSelf();
 
         $params = [
             'instanceIdAdd1' => 'desc',
         ];
-        $this->assertInstanceOf('Illuminate\Database\Query\Builder', $typeInstance->orders($query, $params));
+        $this->assertInstanceOf('Xpressengine\Database\DynamicQuery', $typeInstance->orders($query, $params));
     }
 
     /**
@@ -710,7 +714,9 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
 
         $handler->shouldReceive('getConfigHandler')->andReturn($configHandler);
 
-        $query = m::mock('Illuminate\Database\Query\Builder');
+        $query = m::mock('Xpressengine\Database\DynamicQuery');
+        $query->shouldReceive('hasDynamicTable')->andReturn(false);
+        $query->shouldReceive('setDynamicTable');
 
         $join = m::mock('Illuminate\Database\Query\JoinClause');
         $join->shouldReceive('on')->andReturnSelf();
@@ -721,7 +727,7 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
             return true;
         }));
 
-        $this->assertInstanceOf('Illuminate\Database\Query\Builder', $typeInstance->joinRevision($query));
+        $this->assertInstanceOf('Xpressengine\Database\DynamicQuery', $typeInstance->joinRevision($query));
     }
 
     /**

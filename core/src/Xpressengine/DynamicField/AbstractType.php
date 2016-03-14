@@ -1,10 +1,10 @@
 <?php
 /**
- * Dynamic field type abstract class
+ * AbstractType
  *
  * PHP version 5
  *
- * @category    DyanmicField
+ * @category    DynamicField
  * @package     Xpressengine\DynamidField
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
@@ -22,7 +22,9 @@ use Xpressengine\Plugin\ComponentTrait;
 use Xpressengine\Plugin\ComponentInterface;
 
 /**
- * Class AbstractFieldType
+ * AbstractType
+ *
+ * * DynamicField 의 타입을 정의할 때 사용되는 추상 클래스
  *
  * @category    DynamicField
  * @package     Xpressengine\DynamicField
@@ -648,7 +650,7 @@ abstract class AbstractType implements ComponentInterface
 
         $baseTable = $query->from;
         $createTableName = $this->handler->getConfigHandler()->getTableName($config);
-        if ($query->hasDynamicTable($createTableName)) {
+        if ($query->hasDynamicTable($createTableName) === true) {
             return $query;
         }
 
@@ -668,7 +670,7 @@ abstract class AbstractType implements ComponentInterface
      * query where 처리
      *
      * @param DynamicQuery $query  query builder
-     * @param array   $params parameters for search
+     * @param array        $params parameters for search
      * @return Builder
      */
     public function wheres(DynamicQuery $query, array $params)
@@ -689,7 +691,7 @@ abstract class AbstractType implements ComponentInterface
      * query order 처리
      *
      * @param DynamicQuery $query  query builder
-     * @param array   $params parameters for search
+     * @param array        $params parameters for search
      * @return Builder
      */
     public function orders(DynamicQuery $query, array $params)

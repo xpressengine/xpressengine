@@ -13,16 +13,16 @@
  */
 namespace Xpressengine\DynamicField;
 
-use Closure;
 use Xpressengine\Database\VirtualConnectionInterface;
-use Illuminate\Database\Query\Builder;
-use Xpressengine\Database\Illuminate;
+use Xpressengine\Database\DynamicQuery;
 use Xpressengine\Database\ProxyInterface;
 use Xpressengine\Config\ConfigEntity;
 
 /**
  * DatabaseProxy
- * * Database ProxyManager 에 register
+ *
+ * * DynamicField 는 XE Database 패키지의 Proxy 기능으로 구현됨
+ * * 이 클래스 인스턴스를 XE Database ProxyManager 에 등록 함
  *
  * @category    DynamicField
  * @package     Xpressengine\DynamicField
@@ -201,10 +201,10 @@ class DatabaseProxy implements ProxyInterface
     /**
      * Builder 에서 get()메소드 실행 시 join 처리
      *
-     * @param Builder $query query builder
-     * @return Builder
+     * @param DynamicQuery $query query builder
+     * @return DynamicQuery
      */
-    public function get(Builder $query)
+    public function get(DynamicQuery $query)
     {
         /**
          * @var ConfigEntity $config
@@ -230,10 +230,10 @@ class DatabaseProxy implements ProxyInterface
     /**
      * Builder 에서 first()메소드 실행 시 join 처리
      *
-     * @param Builder $query query builder
-     * @return Builder
+     * @param DynamicQuery $query query builder
+     * @return DynamicQuery
      */
-    public function first(Builder $query)
+    public function first(DynamicQuery $query)
     {
         /**
          * @var ConfigEntity $config
@@ -259,11 +259,11 @@ class DatabaseProxy implements ProxyInterface
      * DynamicQuery 에서 ProxyManager 를 통해 실행
      * DynamicField 의 where 처리
      *
-     * @param Builder $query  query builder
-     * @param array   $wheres parameters for where
-     * @return Builder
+     * @param DynamicQuery $query  query builder
+     * @param array        $wheres parameters for where
+     * @return DynamicQuery
      */
-    public function wheres(Builder $query, array $wheres)
+    public function wheres(DynamicQuery $query, array $wheres)
     {
         /**
          * @var ConfigEntity $config
@@ -280,11 +280,11 @@ class DatabaseProxy implements ProxyInterface
      * DynamicQuery 에서 ProxyManager 를 통해 실행
      * DynamicField 의 order 처리
      *
-     * @param Builder $query  query builder
-     * @param array   $orders parameters for where
-     * @return Builder
+     * @param DynamicQuery $query  query builder
+     * @param array        $orders parameters for where
+     * @return DynamicQuery
      */
-    public function orders(Builder $query, array $orders)
+    public function orders(DynamicQuery $query, array $orders)
     {
         /**
          * @var ConfigEntity $config

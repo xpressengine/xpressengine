@@ -136,16 +136,16 @@ class ProxyManagerTest extends PHPUnit_Framework_TestCase
         $proxyManager->update([], []);
         $proxyManager->delete([]);
 
-        $query = m::mock('Illuminate\Database\Query\Builder');
+        $query = m::mock('Xpressengine\Database\DynamicQuery');
 
         $proxyInstance->shouldReceive('get')->andReturn($query);
         $proxyInstance->shouldReceive('first')->andReturn($query);
         $proxyInstance->shouldReceive('wheres')->andReturn($query);
         $proxyInstance->shouldReceive('orders')->andReturn($query);
 
-        $this->assertInstanceOf('Illuminate\Database\Query\Builder', $proxyManager->get($query));
-        $this->assertInstanceOf('Illuminate\Database\Query\Builder', $proxyManager->first($query));
-        $this->assertInstanceOf('Illuminate\Database\Query\Builder', $proxyManager->wheres($query, []));
-        $this->assertInstanceOf('Illuminate\Database\Query\Builder', $proxyManager->orders($query, []));
+        $this->assertInstanceOf('Xpressengine\Database\DynamicQuery', $proxyManager->get($query));
+        $this->assertInstanceOf('Xpressengine\Database\DynamicQuery', $proxyManager->first($query));
+        $this->assertInstanceOf('Xpressengine\Database\DynamicQuery', $proxyManager->wheres($query, []));
+        $this->assertInstanceOf('Xpressengine\Database\DynamicQuery', $proxyManager->orders($query, []));
     }
 }
