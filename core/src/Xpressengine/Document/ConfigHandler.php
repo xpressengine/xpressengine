@@ -50,7 +50,6 @@ class ConfigHandler
         'group' => '',
         'division' => false,
         'revision' => false,
-        'assent' => true,
     ];
 
     /**
