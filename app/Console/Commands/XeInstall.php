@@ -418,6 +418,7 @@ APP_KEY=SomeRandomString";
 
         // site url
         $siteInfo['url'] = $this->askValidation('site url', $siteInfo['url'], function ($url) {
+            $url = trim($url, "/");
             if (filter_var($url, FILTER_VALIDATE_URL) === false) {
                 throw new \Exception('Invalid URL Format.');
             }
