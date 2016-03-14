@@ -56,7 +56,7 @@ class AuthController extends Controller
         $this->emailBroker = app('xe.auth.email');
 
         XeTheme::selectSiteTheme();
-        XePresenter::setSkin('member/auth');
+        XePresenter::setSkinTargetId('member/auth');
 
         $this->middleware('guest', ['except' => ['getLogout', 'getConfirm']]);
     }

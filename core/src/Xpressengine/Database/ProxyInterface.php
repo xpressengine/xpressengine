@@ -74,36 +74,36 @@ interface ProxyInterface
      * 리스트 가져올 때 join 처리.
      * 하나의 row 를 처리할 때 join 이 다를 수 있기때문에 joinFirst()로 두가지 제공.
      *
-     * @param Builder $query query builder
-     * @return Builder
+     * @param DynamicQuery $query query builder
+     * @return DynamicQuery
      * @see QueryBuilder::et()
      */
-    public function get(Builder $query);
+    public function get(DynamicQuery $query);
 
     /**
      * DynamicQuery 에서 first() method 실행 시 join 처리
      *
-     * @param Builder $query query builder
-     * @return Builder
+     * @param DynamicQuery $query query builder
+     * @return DynamicQuery
      * @see QueryBuilder::first()
      */
-    public function first(Builder $query);
+    public function first(DynamicQuery $query);
 
     /**
      * 등록된 모든 proxy 의 wheres()를 처리함.
      *
-     * @param Builder $query  query builder
-     * @param array   $wheres parameters for where
+     * @param DynamicQuery $query  query builder
+     * @param array        $wheres parameters for where
      * @return Builder
      */
-    public function wheres(Builder $query, array $wheres);
+    public function wheres(DynamicQuery $query, array $wheres);
 
     /**
      * 등록된 모든 proxy의 orders()를 처리함.
      *
-     * @param Builder $query  query builder
-     * @param array   $orders parameters for order
-     * @return Builder
+     * @param DynamicQuery $query  query builder
+     * @param array        $orders parameters for order
+     * @return DynamicQuery
      */
-    public function orders(Builder $query, array $orders);
+    public function orders(DynamicQuery $query, array $orders);
 }
