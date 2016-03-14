@@ -143,7 +143,7 @@ class Handler extends ExceptionHandler
                 ['message' => $responseException->getMessage()]
             );
         } else {
-            XePresenter::setSkin('error');
+            XePresenter::setModule('error');
             \XeTheme::selectBlankTheme();
             $view = XePresenter::make(
                 'error',

@@ -42,10 +42,10 @@ use Closure;
  * ### 스킨 사용 등록
  * ```php
  * // 사용자 스킨 사용
- * XePresenter::setSkin('parent-key');
+ * XePresenter::setModule('module-id-key');
  *
  * // 관리자 스킨 사용
- * XePresenter::setSettingsSkin('parent-key');
+ * XePresenter::setSettingsModule('module-id-key');
  * ```
  *
  * ### Html 형식만 지원
@@ -128,7 +128,7 @@ class Presenter
      *
      * @var string
      */
-    protected $skinName;
+    protected $moduleName;
 
     /**
      * @var string
@@ -298,23 +298,23 @@ class Presenter
     /**
      * set skin class name
      *
-     * @param string $skinName skin class name
+     * @param string $moduleName skin class name
      * @return void
      */
-    public function setSkin($skinName)
+    public function setModule($moduleName)
     {
-        $this->skinName = $skinName;
+        $this->moduleName = $moduleName;
     }
 
     /**
      * set settings skin class name
      *
-     * @param string $skinName skin class name
+     * @param string $moduleName skin class name
      * @return void
      */
-    public function setSettingsSkin($skinName)
+    public function setSettingsModule($moduleName)
     {
-        $this->skinName = $skinName;
+        $this->moduleName = $moduleName;
         $this->isSettings = true;
     }
 
@@ -467,9 +467,9 @@ class Presenter
      *
      * @return string
      */
-    public function getSkin()
+    public function getModuleName()
     {
-        return $this->skinName;
+        return $this->moduleName;
     }
 
     /**

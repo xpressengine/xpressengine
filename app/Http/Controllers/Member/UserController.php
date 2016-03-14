@@ -77,7 +77,7 @@ class UserController extends Controller
         $this->user = app('auth')->user();
 
         XeTheme::selectSiteTheme();
-        XePresenter::setSkin('member/settings');
+        XePresenter::setModule('member/settings');
         $this->middleware('auth');
     }
 

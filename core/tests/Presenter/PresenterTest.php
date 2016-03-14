@@ -150,11 +150,11 @@ class PresenterTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * test set skin
+     * test set module
      *
      * @return void
      */
-    public function testSetSkin()
+    public function testSetModule()
     {
         $request = $this->request;
         $view = $this->view;
@@ -167,15 +167,15 @@ class PresenterTest extends PHPUnit_Framework_TestCase
             $view, $request, $theme, $skin, $settings, $instanceConfig
         );
 
-        $skinName = 'name';
-        $presenter->setSkin($skinName);
+        $moduleName = 'name';
+        $presenter->setModule($moduleName);
 
         $reflection = new \ReflectionClass(get_class($presenter));
-        $property = $reflection->getProperty('skinName');
+        $property = $reflection->getProperty('moduleName');
         $property->setAccessible(true);
         $result = $property->getValue($presenter);
 
-        $this->assertEquals($skinName, $result);
+        $this->assertEquals($moduleName, $result);
     }
 
     /**
@@ -196,16 +196,16 @@ class PresenterTest extends PHPUnit_Framework_TestCase
             $view, $request, $theme, $skin, $settings, $instanceConfig
         );
 
-        $skinName = 'name';
-        $presenter->setSettingsSkin($skinName);
+        $moduleName = 'name';
+        $presenter->setSettingsModule($moduleName);
 
         $reflection = new \ReflectionClass(get_class($presenter));
-        $property = $reflection->getProperty('skinName');
+        $property = $reflection->getProperty('moduleName');
         $property->setAccessible(true);
         $result = $property->getValue($presenter);
 
-        $this->assertEquals($skinName, $result);
-        $this->assertEquals($skinName, $presenter->getSkin());
+        $this->assertEquals($moduleName, $result);
+        $this->assertEquals($moduleName, $presenter->getModuleName());
 
         $property = $reflection->getProperty('isSettings');
         $property->setAccessible(true);

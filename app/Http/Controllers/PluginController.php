@@ -17,7 +17,7 @@ class PluginController extends Controller
      */
     public function __construct()
     {
-        XePresenter::setSettingsSkin('plugins');
+        XePresenter::setSettingsModule('plugins');
     }
 
     public function index(Request $request)
