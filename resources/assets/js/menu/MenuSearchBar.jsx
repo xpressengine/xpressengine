@@ -1,4 +1,4 @@
-var MenuSearchSuggestion = require('./MenuSearchSuggestion.jsx');
+var MenuSearchSuggestion = require('./MenuSearchSuggestion.jsx!');
 
 var MenuSearchBar = React.createClass({
     displayName: 'MenuSearchBar',

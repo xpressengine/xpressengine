@@ -1,3 +1,5 @@
+import React from 'react';
+
 var TreeNode = React.createClass({
     displayName: 'TreeNode',
 

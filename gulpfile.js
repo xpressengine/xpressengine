@@ -47,7 +47,16 @@ gulp.task('jspm', ['copy-assets'], function(callback){
   runSequence(
     'jspm:admin',
     'jspm:component',
+    'jspm:menu',
     callback);
+});
+
+gulp.task('jspm:menu', function(){
+  return gulp.src('resources/assets/js/menu/MenuTree.jsx')
+    .pipe($.plumber())
+    .pipe($.jspm({selfExecutingBundle: true, plugin: 'jsx'}))
+    .pipe($.rename('menu.js'))
+    .pipe(gulp.dest('assets/core/menu'));
 });
 
 gulp.task('jspm:component', function(){

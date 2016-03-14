@@ -175,7 +175,7 @@ class PresenterServiceProvider extends ServiceProvider
             // 'assets/vendor/jQuery-File-Upload/js/vendor/jquery.ui.widget.js',
             // 'assets/vendor/jQuery-File-Upload/js/jquery.iframe-transport.js',
             // 'assets/vendor/jQuery-File-Upload/js/jquery.fileupload.js',
-            // 'assets/vendor/react/react-with-addons.js',
+            'assets/vendor/react/react-with-addons.js',
             // 'assets/vendor/react/JSXTransformer.js',
             // 'assets/core/common/js/toggleMenu.js',
             'jspm_packages/system.js',
