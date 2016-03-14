@@ -40,7 +40,7 @@ class ProfileController extends Controller
         $this->handler = app('xe.user');
 
         XeTheme::selectSiteTheme();
-        XePresenter::setModule('member/profile');
+        XePresenter::setSkinTargetId('member/profile');
     }
 
     // 기본정보 보기

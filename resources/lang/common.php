@@ -1160,4 +1160,8 @@ return [
         'ko' => '이름',
         'en' => 'Name',
     ],
+    'inheritMode' => [
+        'ko' => '상위 설정에 따름',
+        'en' => 'Inherit Mode',
+    ]
 ];

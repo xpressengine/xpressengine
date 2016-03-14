@@ -68,7 +68,7 @@ class HtmlRendererTest extends PHPUnit_Framework_TestCase
 
         $renderer = new HtmlRenderer($presenter, $seo, $widgetParser);
 
-        $presenter->shouldReceive('getModuleName')->andReturn('moduleName');
+        $presenter->shouldReceive('getSkinTargetId')->andReturn('skinTargetId');
         $presenter->shouldReceive('getId')->andReturn('id');
         $presenter->shouldReceive('getIsSettings')->andReturn(true);
         $presenter->shouldReceive('getRenderType')->andReturn(\Xpressengine\Presenter\Presenter::RENDER_ALL);

@@ -150,11 +150,11 @@ class PresenterTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * test set module
+     * test set skin target id
      *
      * @return void
      */
-    public function testSetModule()
+    public function testSetSkinTargetId()
     {
         $request = $this->request;
         $view = $this->view;
@@ -167,15 +167,15 @@ class PresenterTest extends PHPUnit_Framework_TestCase
             $view, $request, $theme, $skin, $settings, $instanceConfig
         );
 
-        $moduleName = 'name';
-        $presenter->setModule($moduleName);
+        $skinTargetId = 'name';
+        $presenter->setSkinTargetId($skinTargetId);
 
         $reflection = new \ReflectionClass(get_class($presenter));
-        $property = $reflection->getProperty('moduleName');
+        $property = $reflection->getProperty('skinTargetId');
         $property->setAccessible(true);
         $result = $property->getValue($presenter);
 
-        $this->assertEquals($moduleName, $result);
+        $this->assertEquals($skinTargetId, $result);
     }
 
     /**
@@ -196,16 +196,16 @@ class PresenterTest extends PHPUnit_Framework_TestCase
             $view, $request, $theme, $skin, $settings, $instanceConfig
         );
 
-        $moduleName = 'name';
-        $presenter->setSettingsModule($moduleName);
+        $skinTargetId = 'name';
+        $presenter->setSettingsSkinTargetId($skinTargetId);
 
         $reflection = new \ReflectionClass(get_class($presenter));
-        $property = $reflection->getProperty('moduleName');
+        $property = $reflection->getProperty('skinTargetId');
         $property->setAccessible(true);
         $result = $property->getValue($presenter);
 
-        $this->assertEquals($moduleName, $result);
-        $this->assertEquals($moduleName, $presenter->getModuleName());
+        $this->assertEquals($skinTargetId, $result);
+        $this->assertEquals($skinTargetId, $presenter->getSkinTargetId());
 
         $property = $reflection->getProperty('isSettings');
         $property->setAccessible(true);

@@ -213,19 +213,19 @@ class HtmlRenderer implements RendererInterface
 
         $instanceId = $instanceConfig->getInstanceId();
 
-        $moduleName = $this->presenter->getModuleName();
+        $skinTargetId = $this->presenter->getSkinTargetId();
         $id = $this->presenter->getId();
 
         $skinView = null;
 
-        if ($moduleName != null && is_string($moduleName)) {
+        if ($skinTargetId != null && is_string($skinTargetId)) {
             if ($this->presenter->getIsSettings()) {
-                $skin = $skinHandler->getAssignedSettings($moduleName);
+                $skin = $skinHandler->getAssignedSettings($skinTargetId);
             } else {
-                $skin = $skinHandler->getAssigned([$moduleName, $instanceId], $isMobile ? 'mobile' : 'desktop');
+                $skin = $skinHandler->getAssigned([$skinTargetId, $instanceId], $isMobile ? 'mobile' : 'desktop');
             }
             if ($skin === null) {
-                throw new NotFoundSkinException(['name' => $moduleName]);
+                throw new NotFoundSkinException(['name' => $skinTargetId]);
             }
             $skinView = $skin->setView($id)->setData($this->data)->render();
         } else {
