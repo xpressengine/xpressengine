@@ -11,18 +11,18 @@
         <fieldset>
             <legend>비밀번호</legend>
             <div class="auth_group {{--wrong--}}">
-                <label for="email" class="blind">이메일 주소</label>
+                <label for="email" class="sr-only">이메일 주소</label>
                 <input type="text" id="email" class="inpt_txt" placeholder="이메일 주소" name="email" value="{{ $email or old('email') }}">
                 {{--<em class="txt_message">이메일을 입력하세요.</em>--}}
             </div>
             <div class="auth_group {{--wrong--}}">
-                <label for="pwd" class="blind">비밀번호</label>
+                <label for="pwd" class="sr-only">비밀번호</label>
                 <input type="password" id="pwd" class="inpt_txt" placeholder="비밀번호" name="password">
                 <button class="btn_eye on" style="display:none"><i class="xi-eye"></i><i class="xi-eye-slash"></i>
                 </button>
             </div>
             <div class="auth_group {{--wrong--}}">
-                <label for="pwd2" class="blind">비밀번호 다시 입력</label>
+                <label for="pwd2" class="sr-only">비밀번호 다시 입력</label>
                 <input type="password" id="pwd2" class="inpt_txt" placeholder="비밀번호 다시 입력" name="password_confirmation">
                 <button class="btn_eye on"><i class="xi-eye"></i><i class="xi-eye-slash"></i></button>
                 {{--<em class="txt_message">비밀번호가 일치하지 않습니다.</em>--}}

@@ -6,7 +6,7 @@
 
                 <div class="right_btn pull-right" role="button" data-toggle="collapse" data-parent="#accordion" data-target="#authSkinSection">
                     <!-- [D] 메뉴 닫기 시 버튼 클래스에 card_close 추가 및 item_container none/block 처리-->
-                    <button class="btn_clse ico_gray pull-left"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="blind">메뉴닫기</span></button>
+                    <button class="btn_clse ico_gray pull-left"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">메뉴닫기</span></button>
                 </div>
 
             </div>
@@ -28,7 +28,7 @@
 
                 <div class="right_btn pull-right" role="button" data-toggle="collapse" data-parent="#accordion" data-target="#settingsSkinSection">
                     <!-- [D] 메뉴 닫기 시 버튼 클래스에 card_close 추가 및 item_container none/block 처리-->
-                    <button class="btn_clse ico_gray pull-left"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="blind">메뉴닫기</span></button>
+                    <button class="btn_clse ico_gray pull-left"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">메뉴닫기</span></button>
                 </div>
             </div>
         </div>
@@ -50,7 +50,7 @@
 
                 <div class="right_btn pull-right" role="button" data-toggle="collapse" data-parent="#accordion" data-target="#profileSkinSection">
                     <!-- [D] 메뉴 닫기 시 버튼 클래스에 card_close 추가 및 item_container none/block 처리-->
-                    <button class="btn_clse ico_gray pull-left"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="blind">메뉴닫기</span></button>
+                    <button class="btn_clse ico_gray pull-left"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">메뉴닫기</span></button>
                 </div>
             </div>
         </div>

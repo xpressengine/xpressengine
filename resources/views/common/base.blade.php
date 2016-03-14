@@ -29,8 +29,8 @@
     <!-- Translation -->
     {!! XeFrontend::output('translation') !!}
 
-    <script src="/assets/vendor/requirejs/require.js" type="text/javascript"></script>
     <script type="text/javascript">
+        {{--
         XE.setup({
             loginUserId: '{{ Auth::user()->getId() }}',
             loadedTime: {{ time() }},
@@ -47,7 +47,7 @@
                 validator: '../core/common/js/modules/validator'
             }
         });
-
+        --}}
     </script>
 
 

@@ -42,27 +42,14 @@ class SettingsTheme extends AbstractTheme
             'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'
         )->load();
 
-        $frontendHandler->css('assets/vendor/bootstrap/css/bootstrap.css')->load();
-
         $frontendHandler->css([
-            'assets/core/common/css/form.css',
-            'assets/core/common/css/dropdown.css',
-            'assets/core/common/css/flag.css',
-            'assets/core/common/css/badge.css',
-            'assets/core/common/css/modal.css',
+            'assets/vendor/bootstrap/css/bootstrap.css',
             'assets/core/settings/css/admin.css',
-        ])->before(['assets/vendor/bootstrap/css/bootstrap.css', 'assets/core/common/css/normalize.css'])->load();
+        ])->load();
 
-        $frontendHandler->js(
-            [
-                'assets/vendor/html5shiv/dist/html5shiv.min.js',
-                'assets/vendor/respond/dest/respond.min.js',
-                'assets/vendor/bootstrap/js/bootstrap.min.js'
-            ]
-        )->appendTo('head')->target('lt IE 9')->load();
-
-        $frontendHandler->js('assets/core/settings/js/admin.js')
-            ->before('assets/vendor/bootstrap/js/bootstrap.min.js')->load();
-
+        $frontendHandler->js([
+            'assets/vendor/bootstrap/js/bootstrap.min.js',
+            'assets/core/settings/js/admin.bundle.js'
+        ])->appendTo('head')->load();
     }
 }

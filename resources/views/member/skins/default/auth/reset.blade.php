@@ -10,7 +10,7 @@
         <fieldset>
             <legend>비밀번호 찾기</legend>
             <div class="auth_group {{--wrong--}}">
-                <label for="email" class="blind">이메일 주소</label>
+                <label for="email" class="sr-only">이메일 주소</label>
                 <input type="text" id="email" class="inpt_txt" placeholder="이메일 주소" name="email" value="{{ old('email') }}">
                 {{--<em class="txt_message">이메일을 입력하세요.</em>--}}
             </div>

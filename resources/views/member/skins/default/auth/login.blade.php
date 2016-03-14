@@ -7,12 +7,12 @@
         <fieldset>
             <legend>로그인</legend>
             <div class="auth_group {{--wrong--}}">
-                <label for="name" class="blind">이메일 주소 / 사용자 이름</label>
+                <label for="name" class="sr-only">이메일 주소 / 사용자 이름</label>
                 <input name="email" type="text" id="name" class="inpt_txt" value="{{ old('email') }}" placeholder="이메일 주소 / 사용자 이름">
                 {{--<em class="txt_message">잘못된 이메일 주소입니다. 이메일 주소를 확인하시고 다시 입력해주세요.</em>--}}
             </div>
             <div class="auth_group">
-                <label for="pwd" class="blind">비밀번호</label>
+                <label for="pwd" class="sr-only">비밀번호</label>
                 <input name="password" type="password" id="pwd" class="inpt_txt" placeholder="비밀번호">
             </div>
             <div class="inpt_group">

@@ -1,56 +1,67 @@
-$(document).ready(function () {
-
-    $(".dim").on('click', function () {
-        $("aside").removeClass("open");
-        $(".dim").hide()
-        $("body").css("overflow", "");
-		$("html").css("position", "");
+(function (root, factory) {
+    define([
+      'exports',
+      'jquery',
+      "github:twbs/bootstrap-sass@3.3.6/assets/javascripts/bootstrap.js"
+    ], function (exports, jQuery, twbs) {
+      factory((root.commonJsStrictGlobal = exports), jQuery, twbs);
     });
+}(this, function (exports, $, twbs) {
+  $(document).ready(function () {
+    var $sidebar = $('.settings-nav-sidebar');
+    var $dim = $('.dim');
 
-    $(".btn_slide").on('click', function (e) {
-        // mobile
-        if ($(window).innerWidth() < 768) {
-            // close sidebar
-            if ($('aside').hasClass("open")) {
-                $("aside").removeClass("open");
-
-            // open sidebar
-            } else {
-                $("aside").addClass("open");
-                $(".dim").show()
-                $("body").css("overflow", "hidden");
-				$("html").css("position", "fixed");//딤드 밑으로 스크롤이 되지 않도록 설정 함
-                //$(this).off('click');
-            }
-        // desktop
+    /* 사이드바 */
+    $sidebar.on('setting.sidebar.open', function() {
+      $sidebar.addClass('open');
+      $dim.show();
+      $('body').css('overflow', 'hidden');
+      $('html').css('position', 'fixed');
+    }).on('setting.sidebar.close', function() {
+      $sidebar.removeClass('open');
+      $dim.hide();
+      $('body').css('overflow', '');
+      $('html').css('position', '');
+    }).on('setting.sidebar.toggle', function() {
+      if ($(window).innerWidth() < 1068) {
+        $('body').removeClass("sidebar-collapse");
+        if ($sidebar.hasClass("open")) {
+          $sidebar.trigger('setting.sidebar.close');
         } else {
-            $('body').toggleClass("sidebar-collapse");
-			
+          $sidebar.trigger('setting.sidebar.open');
         }
+      } else {
+        $('body').toggleClass("sidebar-collapse");
+      }
+    });
+    $dim.on('click', function() {
+      $sidebar.trigger('setting.sidebar.close');
+    });
+    $(".btn-slide").on('click', function() {
+      console.log('asefsaefasef');
+      $sidebar.trigger('setting.sidebar.toggle');
     });
 
+    /* 사이드바 메뉴 */
     $(document).on('click', function (event) {
+      var $target = $(event.target);
+      var $subdepth = $target.parent('.sub-depth');
+      var $ul = $($target).next('.sub-depth-list');
 
-        var $target = $(event.target);
-        var $sub_depth = $target.parent('.sub_depth');
-        var $ul = $($target).next('.sub_depth_lst');
+      if ($ul.is(':visible')) {
+        $ul.find('.sub-depth-list').slideUp('fast');
+        $ul.find('.sub-depth').removeClass('open');
 
-        if ($ul.is(':visible')) {
-            // 하위 depth 에 열려있는건 닫음
-            $ul.find('.sub_depth_lst').slideUp('fast');
-            $ul.find('.sub_depth').removeClass('open');
+        $ul.slideUp('fast');
+        $subdepth.removeClass('open');
+      } else {
+        var $parent = $subdepth.parent();
+        $parent.find('.sub-depth.open>.sub-depth-list').slideUp('fast');
+        $parent.find('.sub-depth.open').removeClass('open');
 
-            $ul.slideUp('fast');
-            $sub_depth.removeClass('open');
-
-        } else {
-            var $parent = $sub_depth.parent();
-            // 동일 depth 에 열려있는건 닫음
-            $parent.find('.sub_depth.open>.sub_depth_lst').slideUp('fast');
-            $parent.find('.sub_depth.open').removeClass('open');
-
-            $ul.slideDown('fast');
-            $sub_depth.addClass('open');
-        }
+        $ul.slideDown('fast');
+        $subdepth.addClass('open');
+      }
     });
-})
+  });
+}));

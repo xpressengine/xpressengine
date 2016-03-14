@@ -616,7 +616,7 @@ XE.$(function () {
 
     // menu toggle
     $('.xo-menu-toggle').click(function () {
-        $('.snb_lst').toggle();
+        $('.snb-list').toggle();
     });
 
     XE.shortDate();
@@ -625,7 +625,7 @@ XE.$(function () {
 $(window).resize(function () {
     // 모바일 메뉴 노출 상태에서 화면이 커졌을 경우 snb_lst가 정상 노출을 위해 적용
     if ($(window).innerWidth() > 768) {
-        $(".snb_lst").css("display", '');
+        $(".snb-list").css("display", '');
     }
 });
 

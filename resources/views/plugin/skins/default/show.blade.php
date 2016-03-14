@@ -24,7 +24,7 @@
                         @if($author = $plugin->getAuthor())
 
                             {{-- author name --}}
-                            <dt class="blind">{{xe_trans('xe::author')}}</dt>
+                            <dt class="sr-only">{{xe_trans('xe::author')}}</dt>
                             <dd>
                                 <i class="xi-user"></i>
                                 @if($email = array_get($author, 'email'))
@@ -38,7 +38,7 @@
 
                             {{-- author homepage --}}
                             @if($homepage = array_get($author, 'homepage'))
-                            <dt class="blind">{{xe_trans('xe::author')}}</dt>
+                            <dt class="sr-only">{{xe_trans('xe::author')}}</dt>
                             <dd>
                                 <i class="xi-clip"></i>
                                 <a href="{{ $homepage }}">
@@ -51,7 +51,7 @@
 
                             {{-- author source--}}
                             @if($source = $plugin->getSupport('source'))
-                            <dt class="blind">Source</dt>
+                            <dt class="sr-only">Source</dt>
                             <dd><i class="xi-download"></i>
                                 <a href="{{ $source }}" target="_blank">{{ $source }}</a>
                             </dd>

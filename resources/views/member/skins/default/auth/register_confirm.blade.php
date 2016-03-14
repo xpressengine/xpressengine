@@ -7,11 +7,11 @@
         <fieldset>
             <legend>이메일 인증</legend>
             <div class="auth_group {{--wrong--}}">
-                <label for="email" class="blind">이메일 주소</label>
+                <label for="email" class="sr-only">이메일 주소</label>
                 <input type="text" id="email" class="inpt_txt" placeholder="이메일 주소" name="email" value="{{ Input::get('email') }}" readonly>
             </div>
             <div class="auth_group {{--wrong--}}">
-                <label for="code" class="blind">인증 코드</label>
+                <label for="code" class="sr-only">인증 코드</label>
                 <input type="text" id="code" class="inpt_txt" placeholder="인증 코드" name="code">
                 <button class="btn_eye on" style="display:none"><i class="xi-eye"></i><i class="xi-eye-slash"></i>
                 </button>

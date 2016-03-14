@@ -164,31 +164,27 @@ class PresenterServiceProvider extends ServiceProvider
      */
     protected function loadDefaultFiles(FrontendHandler $frontendHandler)
     {
-        $frontendHandler->js('assets/vendor/jquery/jquery.js')
-            ->min('assets/vendor/jquery/jquery.min.js')->appendTo('head')->load();
-        $frontendHandler->js('assets/vendor/bootstrap/js/bootstrap.js')
-            ->min('assets/vendor/bootstrap/js/bootstrap.min.js')->appendTo('head')->load();
-        $frontendHandler->js(
-            [
-                'assets/vendor/jQuery-File-Upload/js/vendor/jquery.ui.widget.js',
-                'assets/vendor/jQuery-File-Upload/js/jquery.iframe-transport.js',
-                'assets/vendor/jQuery-File-Upload/js/jquery.fileupload.js',
-                'assets/vendor/react/react-with-addons.js',
-                'assets/vendor/react/JSXTransformer.js',
-                'assets/core/common/js/translator.js',
-                'assets/core/common/js/xe.js',
-                'assets/core/common/js/helpers.js',
-                'assets/core/common/js/toggleMenu.js',
-            ]
-        )->appendTo('head')->load();
-
-
         $frontendHandler->css([
-            'assets/core/common/css/normalize.css',
-            'assets/core/common/css/xe.css',
-            'assets/core/common/css/alert.css',
+            'assets/core/common/css/xe-common.css',
             '//cdn.jsdelivr.net/xeicon/2.0.0/xeicon.min.css',
-        ])->before('assets/vendor/bootstrap/css/bootstrap.css')->load();
+        ])->load();
+
+        // $frontendHandler->js('assets/vendor/bootstrap/js/bootstrap.js')
+        //     ->min('assets/vendor/bootstrap/js/bootstrap.min.js')->appendTo('head')->load();
+        $frontendHandler->js([
+            // 'assets/vendor/jQuery-File-Upload/js/vendor/jquery.ui.widget.js',
+            // 'assets/vendor/jQuery-File-Upload/js/jquery.iframe-transport.js',
+            // 'assets/vendor/jQuery-File-Upload/js/jquery.fileupload.js',
+            // 'assets/vendor/react/react-with-addons.js',
+            // 'assets/vendor/react/JSXTransformer.js',
+            // 'assets/core/common/js/toggleMenu.js',
+            'jspm_packages/system.js',
+            'systemjs.config.js',
+            'assets/vendor/jquery/jquery.js',
+            'assets/core/common/js/translator.js',
+            'assets/core/common/js/xe.js',
+            // 'assets/core/common/js/helpers.js',
+        ])->appendTo('head.prepend')->load();
     }
 
     /**

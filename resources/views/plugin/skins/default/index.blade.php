@@ -50,7 +50,7 @@
                                     @endforeach
                                     <input type="text" class="form-control srch" placeholder="{{ xe_trans('xe::enterKeyword') }}" name="query" value="{{ Input::get('query') }}">
                                     <button class="btn btn_srch">
-                                        <i class="xi-magnifier"></i><span class="blind">검색</span></button>
+                                        <i class="xi-magnifier"></i><span class="sr-only">검색</span></button>
                                 </form>
                             </div>
                         </div>
@@ -69,9 +69,9 @@
                     <div class="left_group">
                         <a href="{{ route('settings.plugins.show', [$plugin->getId()]) }}" class="plugin_tit">{{ $plugin->getTitle() }}</a>
                         <dl>
-                            <dt class="blind">version</dt>
+                            <dt class="sr-only">version</dt>
                             <dd>Version {{ $plugin->getInstalledVersion() }}</dd>
-                            <dt class="blind">{{ xe_trans('xe::author') }}</dt>
+                            <dt class="sr-only">{{ xe_trans('xe::author') }}</dt>
                             <dd>By
                                 @if($authors = $plugin->getAuthors())
                                     <a href="{{ array_get(reset($authors),'homepage', array_get(reset($authors),'email')) }}">
@@ -79,7 +79,7 @@
                                     </a>
                                 @endif
                             </dd>
-                            <dt class="blind">{{ xe_trans('xe::installPath') }}</dt>
+                            <dt class="sr-only">{{ xe_trans('xe::installPath') }}</dt>
                             <dd>plugins/{{ $plugin->getId() }}</dd>
                         </dl>
                         <p class="one_line">{{ $plugin->getDescription() }}</p>
