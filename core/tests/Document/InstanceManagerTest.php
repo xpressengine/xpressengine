@@ -7,18 +7,14 @@ namespace Xpressengine\Tests\Document;
 use Mockery as M;
 use PHPUnit_Framework_TestCase;
 use Xpressengine\Document\InstanceManager;
+use Xpressengine\Document\Models\Document;
 
 /**
- * Class DocumentHandler
+ * InstanceManagerTest
  * @package Xpressengine\Tests\Document
  */
 class InstanceManagerTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * @var M\MockInterface|\Xpressengine\Document\RepositoryInterface
-     */
-    protected $repo;
-
     /**
      * @var M\MockInterface|\Xpressengine\Document\ConfigHandler
      */
@@ -41,25 +37,16 @@ class InstanceManagerTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $repo = m::mock('Xpressengine\Document\RepositoryInterface');
-        $configHandler = m::mock('Xpressengine\Document\ConfigHandler');
-
-        $this->repo = $repo;
-        $this->configHandler = $configHandler;
-
         $conn = m::mock('Xpressengine\Database\VirtualConnectionInterface');
         $conn->shouldReceive('beginTransaction');
         $conn->shouldReceive('commit');
+        $conn->shouldReceive('getTablePrefix')->andReturn('table-prefix');
 
-        $this->repo->shouldReceive('connection')->andReturn($conn);
-    }
+        $this->conn = $conn;
 
-    /**
-     * @return M\MockInterface|\Xpressengine\Document\DocumentEntity
-     */
-    private function getDocumentEntity()
-    {
-        return m::mock('Xpressengine\Document\DocumentEntity');
+        $configHandler = m::mock('Xpressengine\Document\ConfigHandler');
+        $this->configHandler = $configHandler;
+
     }
 
     /**
@@ -73,20 +60,69 @@ class InstanceManagerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * get schema builder
+     *
+     * @return \Illuminate\Database\Schema\Builder
+     */
+    private function getSchemaBuilder()
+    {
+        $schemaBuilder = m::mock('Illuminate\Database\Schema\Builder');
+        $schemaBuilder->shouldReceive('getColumnListing')->andReturn(['some']);
+        $schemaBuilder->shouldReceive('create');
+        $schemaBuilder->shouldReceive('drop');
+        return $schemaBuilder;
+    }
+
+    /**
      * test add instance
      *
      * @return void
      */
     public function testAdd()
     {
-        $repo = $this->repo;
+        $instanceId = 'instance-id';
+
         $configHandler = $this->configHandler;
 
-        $manager = new InstanceManager($repo, $configHandler);
+        $config = $this->getConfigEntity();
+        $config->shouldReceive('get')->with('division')->andReturn(true);
+        $config->shouldReceive('get')->with('instanceId')->andReturn($instanceId);
+
+        $configHandler->shouldReceive('add');
+
+        $schemaBuilder = $this->getSchemaBuilder();
+        $schemaBuilder->shouldReceive('hasTable')->andReturn(false);
+
+        $this->conn->shouldReceive('getSchemaBuilder')->andReturn($schemaBuilder);
+
+        $manager = new InstanceManager($this->conn, $configHandler);
+
+        $manager->add($config);
+    }
+
+    /**
+     * test add instance
+     *
+     * @expectedException \Xpressengine\Document\Exceptions\DivisionTableAlreadyExistsException
+     */
+    public function testAddFailDivisionTableExist()
+    {
+        $instanceId = 'instance-id';
+
+        $configHandler = $this->configHandler;
 
         $config = $this->getConfigEntity();
+        $config->shouldReceive('get')->with('division')->andReturn(true);
+        $config->shouldReceive('get')->with('instanceId')->andReturn($instanceId);
+
         $configHandler->shouldReceive('add');
-        $repo->shouldReceive('createDivisionTable');
+
+        $schemaBuilder = $this->getSchemaBuilder();
+        $schemaBuilder->shouldReceive('hasTable')->andReturn(true);
+
+        $this->conn->shouldReceive('getSchemaBuilder')->andReturn($schemaBuilder);
+
+        $manager = new InstanceManager($this->conn, $configHandler);
 
         $manager->add($config);
     }
@@ -98,10 +134,10 @@ class InstanceManagerTest extends PHPUnit_Framework_TestCase
      */
     public function testPut()
     {
-        $repo = $this->repo;
         $configHandler = $this->configHandler;
+        $configHandler->shouldReceive('put');
 
-        $manager = new InstanceManager($repo, $configHandler);
+        $manager = new InstanceManager($this->conn, $configHandler);
 
         $config = $this->getConfigEntity();
         $configHandler->shouldReceive('put');
@@ -116,25 +152,62 @@ class InstanceManagerTest extends PHPUnit_Framework_TestCase
      */
     public function testRemove()
     {
-        $repo = $this->repo;
-        $configHandler = $this->configHandler;
+        $instanceId = 'instance-id';
 
-        $manager = new InstanceManager($repo, $configHandler);
+        $configHandler = $this->configHandler;
 
         $config = $this->getConfigEntity();
         $config->shouldReceive('get')->with('division')->andReturn(true);
-        $config->shouldReceive('set');
-        $config->shouldReceive('get')->with('instanceId')->andReturn('instanceId');
-
-        $repo->shouldReceive('dropDivisionTable');
-        $repo->shouldReceive('fetch')->once()->andReturn([
-            ['id' => 'id1'], ['id' => 'id2']
-        ]);
-        $repo->shouldReceive('fetch')->once()->andReturn([]);
-        $repo->shouldReceive('delete');
+        $config->shouldReceive('get')->with('instanceId')->andReturn($instanceId);
 
         $configHandler->shouldReceive('remove');
 
+        $schemaBuilder = $this->getSchemaBuilder();
+        $schemaBuilder->shouldReceive('hasTable')->andReturn(false);
+
+        $this->conn->shouldReceive('getSchemaBuilder')->andReturn($schemaBuilder);
+
+        $manager = new InstanceManager($this->conn, $configHandler);
+
         $manager->remove($config);
+    }
+
+    /**
+     * test remove instance
+     *
+     * @return void
+     */
+    public function testGetDivisionTableName()
+    {
+        $instanceId = 'instance-id';
+
+        $configHandler = $this->configHandler;
+
+        $config = $this->getConfigEntity();
+        $config->shouldReceive('get')->with('division')->andReturn(false);
+        $config->shouldReceive('get')->with('instanceId')->andReturn(null);
+
+        $manager = new InstanceManager($this->conn, $configHandler);
+
+        $this->assertEquals(Document::TABLE_NAME, $manager->getDivisionTableName($config));
+
+        $config = $this->getConfigEntity();
+        $config->shouldReceive('get')->with('division')->andReturn(true);
+        $config->shouldReceive('get')->with('instanceId')->andReturn(null);
+
+        $manager = new InstanceManager($this->conn, $configHandler);
+
+        $this->assertEquals(Document::TABLE_NAME, $manager->getDivisionTableName($config));
+
+        $config = $this->getConfigEntity();
+        $config->shouldReceive('get')->with('division')->andReturn(true);
+        $config->shouldReceive('get')->with('instanceId')->andReturn($instanceId);
+
+        $manager = new InstanceManager($this->conn, $configHandler);
+
+        $this->assertEquals(
+            sprintf('%s_%s', Document::TABLE_NAME, $instanceId),
+            $manager->getDivisionTableName($config)
+        );
     }
 }

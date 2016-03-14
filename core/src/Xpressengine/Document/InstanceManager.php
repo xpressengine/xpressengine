@@ -15,40 +15,30 @@
  */
 namespace Xpressengine\Document;
 
-use Illuminate\Database\Schema\Blueprint;
 use Xpressengine\Database\VirtualConnectionInterface as VirtualConnection;
-use Illuminate\Contracts\Hashing\Hasher;
 use Xpressengine\Config\ConfigEntity;
+use Xpressengine\Document\Exceptions\DivisionTableAlreadyExistsException;
 use Xpressengine\Document\Models\Document;
 use Xpressengine\Migrations\DocumentMigration;
 
 /**
  * InstanceManager
- * Document instance 관리
- * Instance 생성 시 등록 한 설정에 따라 테이블 분리(division), 변경 이력 관리(revision) 지원
+ *
+ * * Document instance 관리
+ * * Instance 생성 시 등록 한 설정에 따라 테이블 분리(division), 변경 이력 관리(revision) 지원
+ * * 게시판, 페이지 같은 플러그인에서 문서를 사용하려 할 때
+ * 각각의 Config 를 사용하기 위해 instance 를 만들고 사용해야 함
  *
  * ## 사용법
  *
  * ### Instance 생성
  * ```php
- * $documentHandler = app('xe.document');
- *
- * $configHandler = $documentHandler->getConfigHandler();
- * $configEntity = $configHandler->create('newInstanceId');
- *
- * $instanceManager = $documentHandler->getInstanceManager();
- * $instanceManager->add($configEntity);
+ * XeDocument::createInstance('newInstanceId');
  * ```
  *
  * ### Instance 삭제
  * ```php
- * $documentHandler = app('xe.document');
- *
- * $configHandler = $documentHandler->getConfigHandler();
- * $configEntity = $configHandler->create('newInstanceId');
- *
- * $instanceManager = $documentHandler->getInstanceManager();
- * $instanceManager->remove($configEntity);
+ * XeDocument::destroyInstance('newInstanceId');
  * ```
  *
  * @category    Document
@@ -76,7 +66,7 @@ class InstanceManager
     /**
      * create instance
      *
-     * @param VirtualConnection $connection database connection
+     * @param VirtualConnection $connection    database connection
      * @param ConfigHandler     $configHandler config handler
      */
     public function __construct(VirtualConnection $connection, ConfigHandler $configHandler)
@@ -117,13 +107,19 @@ class InstanceManager
         $table = $this->getDivisionTableName($config);
         $schema = $this->connection->getSchemaBuilder();
         if ($schema->hasTable($table)) {
-            throw new Exceptions\DivisionTableAlreadyExistsException;
+            throw new DivisionTableAlreadyExistsException;
         }
 
         $migration = new DocumentMigration();
         $migration->createDivision($schema, $table);
     }
 
+    /**
+     * get division table name
+     *
+     * @param ConfigEntity $config document config entity
+     * @return string
+     */
     public function getDivisionTableName(ConfigEntity $config)
     {
         if ($config->get('division') === false) {
@@ -152,11 +148,10 @@ class InstanceManager
     /**
      * drop instance
      *
-     * @param ConfigEntity $config     현재 설정 되어 있는 config
-     * @param int          $fetchCount fetch count
+     * @param ConfigEntity $config 현재 설정 되어 있는 config
      * @return void
      */
-    public function remove(ConfigEntity $config, $fetchCount = 10)
+    public function remove(ConfigEntity $config)
     {
         $this->connection->beginTransaction();
 
@@ -169,7 +164,6 @@ class InstanceManager
 
     /**
      * drop document instance
-     * * ex) 게시판 삭제
      *
      * @param ConfigEntity $config 현제 설정 되어 있는 config
      * @return void

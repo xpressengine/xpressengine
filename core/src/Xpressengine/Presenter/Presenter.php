@@ -14,6 +14,9 @@
 namespace Xpressengine\Presenter;
 
 use Illuminate\Http\Request;
+use Xpressengine\Presenter\Exceptions\InvalidRendererException;
+use Xpressengine\Presenter\Exceptions\NotApprovedFormatException;
+use Xpressengine\Presenter\Exceptions\NotFoundFormatException;
 use Xpressengine\Theme\ThemeHandler;
 use Xpressengine\Skin\SkinHandler;
 use Xpressengine\Settings\SettingsHandler;
@@ -22,28 +25,27 @@ use Illuminate\View\Factory as ViewFactory;
 use Closure;
 
 /**
- * # Presenter
- * * Response 할 때 View 를 대신해서 사용
+ * Presenter
+ *
+ * * Response 할 때 View 대체해서 사용
  * * request 에 따라 response 를 컨트롤
- * * 스킨, 테마, 메뉴 등을 이용해서 출력
+ * * 출력할 때 스킨, 테마, 메뉴 사용
+ * * Controller 에 출력에 대해서 API 지원에 따라 코드를 다시 작성해야하는 문제에 대응,
+ * Presenter 설정에 따라 출력 방식을 결정할 수 있음
  *
  * ## App binding
  * * xe.presenter 로 바인딩 되어 있음
  * * Presenter facade 제공
  *
- * ## Interception
- *
  * ## 사용법
  *
  * ### 스킨 사용 등록
  * ```php
- * $presenter = app('xe.presenter');
- *
  * // 사용자 스킨 사용
- * $presenter->setSkin('parent-key');
+ * XePresenter::setSkin('parent-key');
  *
  * // 관리자 스킨 사용
- * $presenter->setSettingsSkin('parent-key');
+ * XePresenter::setSettingsSkin('parent-key');
  * ```
  *
  * ### Html 형식만 지원
@@ -503,18 +505,18 @@ class Presenter
 
         $format = $this->request->format();
         if ($this->isApproveFormat($format) === false) {
-            throw new Exceptions\NotApprovedFormatException;
+            throw new NotApprovedFormatException(['name' => $format]);
         }
 
         if (isset($this->renderes[$format]) === false) {
-            throw new Exceptions\NotFoundFormatException;
+            throw new NotFoundFormatException(['name' => $format]);
         }
 
         $callback = $this->renderes[$format];
         $renderer = call_user_func_array($callback, [$this]);
 
         if (is_subclass_of($renderer, 'Xpressengine\Presenter\RendererInterface') === false) {
-            throw new Exceptions\InvalidRendererException;
+            throw new InvalidRendererException(['name' => get_class($renderer)]);
         }
 
         return $renderer;

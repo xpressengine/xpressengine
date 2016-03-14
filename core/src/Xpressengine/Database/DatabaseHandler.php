@@ -17,7 +17,8 @@ namespace Xpressengine\Database;
 use Illuminate\Database\ConnectionResolverInterface;
 
 /**
- * # DatabaseHandler
+ * DatabaseHandler
+ *
  * * Illuminate\Database 를 이용해 데이터 연결
  * * 다중 database 연결/Transaction 지원
  * * 각 package, plugin 에서 database connection 을 선택적으로 이용 할 수 있도록 지원
@@ -41,12 +42,12 @@ use Illuminate\Database\ConnectionResolverInterface;
  *
  * ```php
  * // VirtualConnectionInterface
- * $connector = app('xe.db')->connection();
+ * $connector = XeDB::connection();
  * ```
  * * xe.php 의 database config 'configName' 설정으로 되어 있는 database connect
  *
  * ```php
- * $connector = app('xe.db')->connection('configName');
+ * $connector = XeDB::connection('configName');
  * ```
  *
  * ### Transaction
@@ -54,9 +55,9 @@ use Illuminate\Database\ConnectionResolverInterface;
  * * 모든 Connection 에 transaction 처리됨
  *
  * ```php
- * app('xe.db')->beginTransaction();
- * app('xe.db')->commit();
- * app('xe.db')->rollBack();
+ * XeDB::beginTransaction();
+ * XeDB::commit();
+ * XeDB::rollBack();
  * ```
  *
  * ### Query
@@ -67,11 +68,11 @@ use Illuminate\Database\ConnectionResolverInterface;
  *
  * ```php
  * $connector = app('xe.db');
- * $query = $connector->table('user');
- * $result = $connector->table('user')->first();
+ * $query = XeDB::table('user');
+ * $result = XeDB::table('user')->first();
  *
  * $proxyConfig = [... config for proxy ...];
- * $query = $connector->dynamic('tableName', $proxyConfig);
+ * $query = XeDB::dynamic('tableName', $proxyConfig);
  * ```
  *
  * @category    Database

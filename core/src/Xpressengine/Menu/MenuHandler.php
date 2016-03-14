@@ -412,7 +412,7 @@ class MenuHandler
     /**
      * Destroy menu type associated with the menu item.
      *
-     * @param MenuItem $item          menu item instance
+     * @param MenuItem $item menu item instance
      * @return void
      */
     protected function destroyMenuType(MenuItem $item)
@@ -481,6 +481,7 @@ class MenuHandler
 
         if ($parent) {
             $this->linkHierarchy($item, $parent);
+            $item->parentId = $parent->getKey();
         }
 
         $item->menuId = $menu->getKey();

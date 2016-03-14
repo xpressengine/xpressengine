@@ -13,23 +13,17 @@
  */
 namespace Xpressengine\Presenter\Json;
 
+use Illuminate\Contracts\Support\Arrayable;
 use Xpressengine\Presenter\RendererInterface;
 use Xpressengine\Presenter\Presenter;
 use Illuminate\Contracts\Support\Jsonable;
-
 use JsonSerializable;
-use Illuminate\Http\JsonResponse;
-use Xpressengine\Skin\AbstractSkin;
-
-use Illuminate\Contracts\View\View as ViewContract;
-use Illuminate\Http\Request;
-use Illuminate\View\Factory;
-use Illuminate\Routing\Route;
 use Xpressengine\Interception\Proxy as InterceptionProxy;
 
 /**
  * JsonRenderer
- * > Default Presenter for json format
+ *
+ * * API 로 출력할 때 출력방식을 JSON 으로 선택한 경우 동작
  *
  * @category  Presenter
  * @package   Xpressengine\Presenter
@@ -106,13 +100,17 @@ class JsonRenderer implements RendererInterface, Jsonable
     /**
      * get object to array
      *
-     * @param array $data data
+     * @param mixed $data data
      * @return mixed|string
      */
     private function getObjectToArray($data)
     {
         if ($data instanceof JsonSerializable) {
             return $data->jsonSerialize();
+        } elseif ($data instanceof Arrayable) {
+            return $data->toArray();
+        } elseif ($data instanceof Jsonable) {
+            return json_decode($data->toJson(), true);
         } elseif (method_exists($data, 'getAttributes')) {
             return $data->getAttributes();
         } else {
@@ -123,7 +121,7 @@ class JsonRenderer implements RendererInterface, Jsonable
     /**
      * return json format string
      *
-     * @param int $options opitons
+     * @param int $options options
      * @return string
      */
     public function toJson($options = 0)

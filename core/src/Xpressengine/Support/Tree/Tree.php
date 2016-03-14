@@ -1,31 +1,61 @@
 <?php
+/**
+ * This file is tree structure class.
+ *
+ * PHP version 5
+ *
+ * @category    Support
+ * @package     Xpressengine\Support
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 namespace Xpressengine\Support\Tree;
 
 use ArrayAccess;
 use JsonSerializable;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 
+/**
+ * Class Tree
+ *
+ * @category    Support
+ * @package     Xpressengine\Support
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 class Tree implements ArrayAccess, JsonSerializable
 {
     /**
-     * @var Collection $rawNodes Node[]
+     * @var Collection $rawNodes NodeInterface[]
      */
     protected $rawNodes;
     /**
-     * @var Collection $treeNodes Node[]
+     * @var Collection $treeNodes NodeInterface[]
      */
     protected $treeNodes;
 
     /**
-     * @param Node[] $rawNodes nodes
+     * @param NodeInterface[] $rawNodes nodes
      */
-    public function __construct($rawNodes)
+    public function __construct($rawNodes = [])
     {
-        $this->rawNodes = Collection::make($rawNodes)->getDictionary();
+        $nodes = Collection::make($rawNodes);
+        $node = $nodes->first();
+        $this->rawNodes = $nodes->keyBy($node->getNodeIdentifierName());
         $this->arrange();
     }
 
-    public static function make($rawNodes)
+    /**
+     * Make Tree instance
+     *
+     * @param NodeInterface[] $rawNodes nodes
+     * @return static
+     */
+    public static function make($rawNodes = [])
     {
         return new static($rawNodes);
     }
@@ -33,7 +63,7 @@ class Tree implements ArrayAccess, JsonSerializable
     /**
      * getRawNodes
      *
-     * @return Collection Node[]
+     * @return Collection NodeInterface[]
      */
     public function getNodes()
     {
@@ -53,25 +83,24 @@ class Tree implements ArrayAccess, JsonSerializable
     /**
      * Adds a node to this node
      *
-     * @param Node $node nodes
+     * @param NodeInterface $node nodes
      *
      * @return $this
      */
-    public function add(Node $node)
+    public function add(NodeInterface $node)
     {
-        $this->rawNodes[$node->getKey()] = $node;
-        $parentId = $node->{$node->getParentIdName()};
+        $this->rawNodes[$node->getNodeIdentifier()] = $node;
+        $parentId = $node->getParentNodeIdentifier();
         if ($parentId) {
             $parent = $this->rawNodes[$parentId];
             $parent->addChild($node);
-            $parent->setRawChildren($this->sort($parent->getChildren()));
+            $parent->setChildren($this->sort($parent->getChildren()));
             $node->setParent($this->rawNodes[$parentId]);
         } else {
-            $this->treeNodes[$node->getKey()] = $node;
+            $this->treeNodes[$node->getNodeIdentifier()] = $node;
         }
 
         return $this;
-
     }
 
     /**
@@ -84,41 +113,47 @@ class Tree implements ArrayAccess, JsonSerializable
         $root = [];
         $nodes = $this->rawNodes;
 
+        /** @var NodeInterface $node */
         foreach ($nodes as $node) {
-            $parentId = $node->{$node->getParentIdName()};
+            $parentId = $node->getParentNodeIdentifier();
             if (isset($nodes[$parentId])) {
                 $nodes[$parentId]->addChild($node);
                 $node->setParent($nodes[$parentId]);
             } else {
-                $root[$node->getKey()] = $node;
+                $root[$node->getNodeIdentifier()] = $node;
             }
         }
         $this->treeNodes = $this->fullSort($root);
     }
 
-    protected function fullSort($tree = [])
+    /**
+     * sort all nodes
+     *
+     * @param array $items nodes
+     * @return array
+     */
+    protected function fullSort($items = [])
     {
-        /** @var Node $item */
-        foreach ($tree as $item) {
+        /** @var NodeInterface $item */
+        foreach ($items as $item) {
             if ($item->hasChild()) {
-                $item->setRawChildren($this->fullSort($item->getChildren()));
+                $item->setChildren($this->fullSort($item->getChildren()));
             }
         }
 
-        return $this->sort($tree);
+        return $this->sort($items);
     }
 
     /**
      * sort node tree
      *
-     * @param Node[] $items nodes
+     * @param NodeInterface[] $items nodes
      *
      * @return array
      */
     protected function sort($items = [])
     {
-        $items = Collection::make($items);
-        $items->sort(function (Node $a, Node $b) {
+        $items = Collection::make($items)->sort(function (NodeInterface $a, NodeInterface $b) {
             $orderKey = $a->getOrderKeyName();
             if ($a->{$orderKey} == $b->{$orderKey}) {
                 return 0;

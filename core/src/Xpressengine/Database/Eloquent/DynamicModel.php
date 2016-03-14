@@ -17,14 +17,16 @@ use Illuminate\Database\Eloquent\Model;
 use Xpressengine\Database\DynamicQuery;
 use Illuminate\Database\ConnectionResolverInterface as Resolver;
 use Xpressengine\Database\Exceptions\KeyGeneratorNotFoundException;
-use Xpressengine\Database\Exceptions\ModelNotSupportDynamicModeException;
 use Illuminate\Database\Eloquent\Builder as OriginBuilder;
 use Xpressengine\Keygen\Keygen;
 
 /**
  * DynamicModel
  *
- * * Illuminate\Database\Eloquent\Builder wrapping class
+ * * Illuminate\Database\Eloquent\Model extends
+ * * DynamicQuery 를 처리하기 위해 proxy, dynamic 관련 설정 요소 추가
+ * * XE3 에서 Database column 이름을 Camel case 로 사용함에 따른 날짜 column 이름 수정
+ * * 레코드 추가할 때 Xpressengine\Keygen\Keygen 을 이용한 id 자동 생성 기능
  *
  * @category    Database
  * @package     Xpressengine\Database
@@ -65,10 +67,19 @@ abstract class DynamicModel extends Model
      */
     protected $dynamicAttributes = [];
 
+    /**
+     * column nam of created at
+     */
     const CREATED_AT = 'createdAt';
 
+    /**
+     * column nam of updated at
+     */
     const UPDATED_AT = 'updatedAt';
 
+    /**
+     * column nam of deleted at
+     */
     const DELETED_AT = 'deletedAt';
 
     /**
@@ -106,6 +117,12 @@ abstract class DynamicModel extends Model
         return $this->getConnection()->getSchema($this->getTable());
     }
 
+    /**
+     * fill
+     *
+     * @param array $attributes attributes
+     * @return void
+     */
     public function fill(array $attributes)
     {
         if ($this->dynamic === true) {
@@ -143,7 +160,7 @@ abstract class DynamicModel extends Model
     /**
      * Resolve a connection instance.
      *
-     * @param  string|null  $connection
+     * @param string|null $connection connection name
      * @return \Illuminate\Database\Connection
      */
     public static function resolveConnection($connection = null)
@@ -164,7 +181,7 @@ abstract class DynamicModel extends Model
     /**
      * Set the connection resolver instance.
      *
-     * @param  Resolver  $resolver
+     * @param Resolver $resolver resolver
      * @return void
      */
     public static function setConnectionResolver(Resolver $resolver)
@@ -215,6 +232,11 @@ abstract class DynamicModel extends Model
         return $this->proxyOptions;
     }
 
+    /**
+     * get dynamic attributes
+     *
+     * @return array
+     */
     public function getDynamicAttributes()
     {
         return $this->dynamicAttributes;
@@ -268,7 +290,7 @@ abstract class DynamicModel extends Model
     /**
      * Save the model to the database.
      *
-     * @param  array  $options
+     * @param array $options options
      * @return bool
      */
     public function save(array $options = [])

@@ -18,15 +18,18 @@ use Xpressengine\Document\Exceptions\DocumentNotFoundException;
 use Xpressengine\Document\Models\Document;
 use Xpressengine\Document\Models\Revision;
 use Xpressengine\Config\ConfigEntity;
-use Closure;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Contracts\Hashing\Hasher;
 use Xpressengine\Database\VirtualConnectionInterface as VirtualConnection;
 
 /**
  * DocumentHandler
- * Document를 Instance에 따라 관리합니다.
- * 이 Handler는 Instance 생성할 때 등록 한 설정에 따라 테이블 분리(division), 변경 이력 관리(revision)를 지원합니다.
+ *
+ * * 문서 등록, 수정, 삭제 할 때 intercept 할 수 있음
+ * Document Model 자체적으로 CRUD 할 때 intercept 를 제공할 수 없는 문제 해결
+ * * Division 처리 및 DyanmciQuery 관련 작업을 위해 Document Model 에 config 를 설정해야하고
+ * 이 설정을 위해 getModel() setModelConfig() 메소드가 있음
+ * * Division(테이블 분할)은 Document Model 에서 처리됨.
+ * * Document Model 을 이용해 Database CRUD 처리를 직접하는 경우
+ * revision 에 대한 처리를 할 수 없으며 intercept 할 수 없음
  *
  * ## app binding
  * * xe.document 로 바인딩 되어 있음
@@ -36,64 +39,62 @@ use Xpressengine\Database\VirtualConnectionInterface as VirtualConnection;
  *
  * ### Instance 생성
  * ```php
- * Document::createInstance('newInstanceId');
+ * XeDocument::createInstance('newInstanceId');
  * ```
  *
  * ### 문서 등록
  * ```php
- * $id = (new Keygen())->generate();
  * $inputs = ['id'=>$id', 'instanceId'=>'instance-id', 'title'=>'title', 'content'=>'content' ...];
- * $doc = new DocumentEntity($inputs);
- * $documentHandler->add($doc);
+ * XeDocument::add($inputs);
  * ```
  *
  * ### 문서 수정
  * ```php
- * $doc = $documentHandler->get('document-id', 'instance-id');
+ * $model = XeDocument::getModel('instance-id');
+ * $doc = $model->find('document-id');
+ *
  * $doc->title = 'changed title';
  *
- * app('xe.document')->update($doc);
+ * XeDocument::update($doc);
  * ```
  *
  * ### 문서 삭제
  * ```php
- * $doc = $documentHandler->get('document-id', 'instance-id');
+ * $model = XeDocument::getModel('instance-id');
+ * $doc = $model->find('document-id');
  *
- * app('xe.document')->remove($doc);
+ * XeDocument::remove($doc);
  * ```
  *
  * ### 문서 조회
  * ```php
- * // instance id, document id 로 문서 갖고오기
- * $doc = $documentHandler->get('document-id', 'instance-id');
+ * $model = XeDocument::getModel('instance-id');
+ * $doc = $model->find('document-id');
  *
- * // document id 로 문서 조회
- * $doc = $documentHandler->getById('document-id');
+ * $doc = XeDocument::get('document-id', 'instance-id');
+ *
+ * // instance id 를 넘겨주지 않으면 항상 documents table 에서 조회
+ * $doc = XeDocument::get('document-id');
  * ```
  *
  * ### 문서 수 조회
  * ```php
  * // 전체 문서 수 조회회
- * $count = $documentHandler->count();
+ * $count = Document::count();
  *
  * // 인스턴스의 전체 문서 수 조회
- * $count = $documentHandler->countByInstanceId('instance-id');
+ * $model = XeDocument::getModel('instance-id');
+ * $count = $model->count('instance-id');
  * ```
  *
  * ### 문서 목록 조회
  * ```php
- * // $wheres, $orders 는 Repository\DocumentRepository 참고
- * $wheres = [];
- * $orders = [];
- * $docs = $documentHandler->gets($wheres, $orders, 20);
+ * $perPage = 10;
  *
- * $paginate = $documentHandler->paginate($wheres, $orders, 20);
+ * $model = XeDocument::getModel('instance-id');
+ *
+ * $model->paginate($perPage);
  * ```
- *
- * ## 기타
- *
- * ### Interception
- * * Comment count 를 위해 DocumentServiceProvider 에서 Interception 등록
  *
  * @category    Document
  * @package     Xpressengine\Document
@@ -106,14 +107,19 @@ class DocumentHandler
 {
 
     /**
+     * @var document model class
+     */
+    protected $model = Document::class;
+
+    /**
+     * @var revision model class
+     */
+    protected $revisionModel = Revision::class;
+
+    /**
      * @var VirtualConnection
      */
     protected $conn;
-
-    /**
-     * @var RevisionHandler
-     */
-    protected $revision;
 
     /**
      * @var ConfigHandler
@@ -131,17 +137,10 @@ class DocumentHandler
     protected $request;
 
     /**
-     * Memory cache
-     *
-     * @var DocumentEntity[]
-     */
-    protected $docs = [];
-
-    /**
-     * @param VirtualConnection   $conn            database connection
-     * @param ConfigHandler       $configHandler   config handler
-     * @param InstanceManager     $instanceManager instance manager
-     * @param Request             $request         Request
+     * @param VirtualConnection $conn            database connection
+     * @param ConfigHandler     $configHandler   config handler
+     * @param InstanceManager   $instanceManager instance manager
+     * @param Request           $request         Request
      */
     public function __construct(
         VirtualConnection $conn,
@@ -194,19 +193,23 @@ class DocumentHandler
      * destroy document instance
      *
      * @param string $instanceId instance id
+     * @param int    $chunk      chunk count
      * @return void
      */
-    public function destroyInstance($instanceId)
+    public function destroyInstance($instanceId, $chunk = 100)
     {
         $config = $this->configHandler->get($instanceId);
         $this->instanceManager->remove($config);
 
         $documentHandler = $this;
-        Document::where('instanceId', $config->get('instanceId'))->chunk(100, function ($docs) use ($documentHandler) {
-            foreach ($docs as $doc) {
-                $documentHandler->remove($doc);
+        Document::where('instanceId', $config->get('instanceId'))->chunk(
+            $chunk,
+            function ($docs) use ($documentHandler) {
+                foreach ($docs as $doc) {
+                    $documentHandler->remove($doc);
+                }
             }
-        });
+        );
     }
 
     /**
@@ -245,7 +248,7 @@ class DocumentHandler
 
         $doc->checkRequired($attributes);
         $doc->fill($attributes);
-        $result = $doc->save();
+        $doc->save();
 
         $this->addRevision($doc);
 
@@ -268,7 +271,6 @@ class DocumentHandler
         $doc->checkRequired($doc->toArray());
         $doc->save();
 
-        // 검증해야함
         $this->removeDivision($doc);
 
         $this->addRevision($doc);
@@ -278,6 +280,12 @@ class DocumentHandler
         return $doc;
     }
 
+    /**
+     * add revision
+     *
+     * @param Document $doc document model
+     * @return bool
+     */
     public function addRevision(Document $doc)
     {
         $config = $this->getConfig($doc->instanceId);
@@ -289,13 +297,13 @@ class DocumentHandler
         }
 
         $revisionNo = 0;
-        $lastRevision = Revision::where('id', $doc->id)->max('revisionNo');
+        $lastRevision = $this->getRevisionModel()->where('id', $doc->id)->max('revisionNo');
         if ($lastRevision !== null) {
             $revisionNo = $lastRevision + 1;
         }
 
         // insert to revision database table
-        $revisionDoc = new Revision(array_merge($doc->getDynamicAttributes(), $doc->getAttributes()));
+        $revisionDoc = $this->newRevisionModel(array_merge($doc->getDynamicAttributes(), $doc->getAttributes()));
         $revisionDoc->setProxyOptions([
             'id' => $config->get('instanceId'),
             'group' => $config->get('group'),
@@ -317,15 +325,16 @@ class DocumentHandler
     {
         $originConfig = null;
         /** @var Document $originDoc */
-        $originDoc = Document::find($doc->id);
+        $originDoc = $this->getModel()->find($doc->id);
         if ($originDoc->instanceId != $doc->instanceId) {
             $originConfig = $this->configHandler->getOrDefault($originDoc->instanceId);
         }
 
         if ($originConfig != null && $originConfig->get('division') === true) {
-            $diff = $doc->diff();
-            if (isset($diff['instanceId'])) {
-                //$originDoc->setDivision()->delete();
+            if ($doc->getOriginal('instanceId') != $doc->getAttribute('instanceId')) {
+                $division = $this->newModel();
+                $division->setTable($this->getDivisionTableName($originConfig));
+                $division->delete($doc->id);
             }
         }
     }
@@ -371,6 +380,8 @@ class DocumentHandler
 
     /**
      * Proxy, Division 관련 설정이 된 Document model 반환
+     * Document 는 config 를 설정해야 정상 사용 가능함
+     * document model 를 직접 반환하지 않음
      *
      * @param string $instanceId document instance id
      * @return Document
@@ -378,16 +389,48 @@ class DocumentHandler
     public function getModel($instanceId = null)
     {
         $config = $this->getConfig($instanceId);
-        $doc = new Document;
+        $doc = $this->newModel();
         $doc->setConfig($config, $this->getDivisionTableName($config));
         return $doc;
     }
 
     /**
+     * create document model
+     * config 없이 모델을 직접 생성할 경우 문제가 발생하므로 접근을 제한함
+     *
+     * @return Document
+     */
+    protected function newModel()
+    {
+        return new $this->model;
+    }
+
+    /**
+     * get revision model
+     *
+     * @return Revision
+     */
+    protected function getRevisionModel()
+    {
+        return $this->revisionModel;
+    }
+
+    /**
+     * create revision model
+     *
+     * @param array $attributes attributes
+     * @return Revision
+     */
+    protected function newRevisionModel(array $attributes = [])
+    {
+        return new $this->revisionModel($attributes);
+    }
+
+    /**
      * set model's config
      *
-     * @param Document $doc document model
-     * @param string $instanceId document instance id
+     * @param Document $doc        document model
+     * @param string   $instanceId document instance id
      * @return Document
      */
     public function setModelConfig(Document $doc, $instanceId)
@@ -406,7 +449,6 @@ class DocumentHandler
      */
     public function get($id, $instanceId = null)
     {
-        /** @var Document $doc */
         $doc = $this->getModel($instanceId)->find($id);
         if ($doc == null) {
             throw new DocumentNotFoundException;

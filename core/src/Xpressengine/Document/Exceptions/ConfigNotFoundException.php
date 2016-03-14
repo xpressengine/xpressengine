@@ -27,5 +27,5 @@ use Xpressengine\Document\DocumentException;
  */
 class ConfigNotFoundException extends DocumentException
 {
-    protected $message = 'Document configuration cannot be found.';
+    protected $message = '":instanceId" document configuration cannot be found.';
 }

@@ -17,6 +17,7 @@ use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Database\Eloquent\DynamicModel;
 use Xpressengine\Document\Exceptions\NotAllowedTypeException;
 use Xpressengine\Document\Exceptions\DocumentNotFoundException;
+use Xpressengine\Document\Exceptions\ParentDocumentNotFoundException;
 use Xpressengine\Document\Exceptions\ReplyLimitationException;
 use Xpressengine\Document\Exceptions\ValueRequiredException;
 use Illuminate\Database\Eloquent\Builder as OriginBuilder;
@@ -164,14 +165,22 @@ class Document extends DynamicModel
         self::PUBLISHED_REJECTED,
     ];
 
+    /**
+     * user relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function user()
     {
         return $this->belongsTo('Xpressengine\User\Models\User', 'userId');
     }
 
     /**
-     * @param ConfigEntity $config
-     * @param null $table
+     * set config
+     *
+     * @param ConfigEntity $config document config entity
+     * @param string|null  $table  table name
+     * @return void
      */
     public function setConfig(ConfigEntity $config, $table = null)
     {
@@ -187,12 +196,17 @@ class Document extends DynamicModel
     }
 
     /**
-     * @param OriginBuilder $query   Illuminate database eloquent buildere
+     * Perform a model insert operation.
+     *
+     * @param OriginBuilder $query   Illuminate database eloquent builder
      * @param array         $options options
      * @return bool
      */
     protected function performInsert(OriginBuilder $query, array $options = [])
     {
+        // set reply
+        $this->setReply();
+
         $result = parent::performInsert($query, $options);
 
         if ($this->division === true) {
@@ -208,8 +222,8 @@ class Document extends DynamicModel
     /**
      * Perform a model update operation.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  array  $options
+     * @param OriginBuilder $query   Illuminate database eloquent builder
+     * @param array         $options options
      * @return bool
      */
     protected function performUpdate(OriginBuilder $query, array $options = [])
@@ -229,6 +243,11 @@ class Document extends DynamicModel
         return $result;
     }
 
+    /**
+     * Perform a model delete operation.
+     *
+     * @return void
+     */
     protected function performDeleteOnModel()
     {
         parent::performDeleteOnModel();
@@ -243,6 +262,7 @@ class Document extends DynamicModel
     /**
      * Check required attributes
      *
+     * @param array $attributes attributes
      * @return void
      */
     public function checkRequired(array $attributes)
@@ -263,6 +283,7 @@ class Document extends DynamicModel
     /**
      * Set default value to attributes
      *
+     * @param array $attributes attributes
      * @return array
      */
     public function fixedAttributes(array $attributes)
@@ -300,6 +321,7 @@ class Document extends DynamicModel
     /**
      * HTML 코드를 제거한 pureContent 반환
      *
+     * @param string $content content
      * @return string
      * @todo 이미지 제목이나 파일 제목 같은 tag 요소들은 제거하지 않고
      * 내용에 들어갈 수 있도록 해야 좋겠음
@@ -312,7 +334,7 @@ class Document extends DynamicModel
     }
 
     /**
-     * Set reply code
+     * Set reply attributes value
      *
      * @return void
      */
@@ -320,17 +342,16 @@ class Document extends DynamicModel
     {
         $timestamp = time();
         if ($this->parentId == null || $this->parentId == '') {
-            $this->head = $timestamp . '-' . $this->id;
+            $this->setAttribute('head', $timestamp . '-' . $this->id);
         } elseif ($this->parentId !== $this->id) {
-            $parent = self::find($this->parentId);
+            $parent = static::find($this->parentId);
             if ($parent === null) {
-                throw new DocumentException;
+                throw new ParentDocumentNotFoundException;
             }
-
-            $this->reply = $this->getReplyChar($parent);
-            $this->head = $parent->head;
+            $this->setAttribute('reply', $this->getReplyChar($parent));
+            $this->setAttribute('head', $parent->head);
         }
-        $this->listOrder = $this->head . (isset($this->reply) ? $this->reply : '');
+        $this->setAttribute('listOrder', $this->head . (isset($this->reply) ? $this->reply : ''));
     }
 
     /**
@@ -543,7 +564,6 @@ class Document extends DynamicModel
     public function setTrash()
     {
         $this->setStatus(self::STATUS_TRASH);
-        // 문서를 안보이게 할 필요는 없는듯
         $this->setDisplay(self::DISPLAY_HIDDEN);
         $this->setAttribute(self::DELETED_AT, $this->freshTimestamp());
         return $this;

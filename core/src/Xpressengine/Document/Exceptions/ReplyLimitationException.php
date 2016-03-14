@@ -27,4 +27,5 @@ use Xpressengine\Document\DocumentException;
  */
 class ReplyLimitationException extends DocumentException
 {
+    protected $message = 'Limitation document reply character length.';
 }

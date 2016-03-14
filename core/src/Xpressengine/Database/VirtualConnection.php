@@ -18,7 +18,8 @@ use PDO;
 use Closure;
 
 /**
- * # VirtualConnection
+ * VirtualConnection
+ *
  * * config/xe.php 의 설정에 따라 Illuminate\Database\Connection 관리
  * * select query 할 경우 slave 설정의 connection 반환
  * * Illuminate\Database\Connection 의 wrapper class
@@ -323,8 +324,6 @@ class VirtualConnection implements VirtualConnectionInterface
     public function table($table)
     {
         return $this->query()->from($table);
-
-        //return (new DynamicQuery($this, $table, false))->useProxy(false);
     }
 
     /**
@@ -346,8 +345,6 @@ class VirtualConnection implements VirtualConnectionInterface
         $query->useDynamic(true);
         $query->useProxy($proxy);
         return $query->from($table);
-
-        //return (new DynamicQuery($this, $table, true))->setProxyOption($options)->useProxy($proxy);
     }
 
 
@@ -358,9 +355,8 @@ class VirtualConnection implements VirtualConnectionInterface
      */
     public function query()
     {
-        return new DynamicQuery(
-            $this, $this->getQueryGrammar(), $this->getPostProcessor()
-        );
+        /** @var VirtualConnection $this */
+        return new DynamicQuery($this, $this->getQueryGrammar(), $this->getPostProcessor());
     }
 
     /**

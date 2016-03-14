@@ -14,24 +14,14 @@
 namespace Xpressengine\Database;
 
 use Illuminate\Database\Query\Builder;
-use Illuminate\Database\Connection;
 
 /**
  * DynamicQuery
  *
- * * Query 수행할 때 ProxyManage 로 추가 동작을 수행
- * * Illuminate\Database\Query\Builder wrapper
- * * Illuminate\Database\Query\Builder 의 인터페이스를 모두 지원
- *
- * ## 사용법
- *
- * ### query
- * * \Illuminate\Database\Query\Builder 반환
- *
- * ```php
- *  // Illuminate\Database\Query\Builder
- * $query = $queryBuilder->getQuery();
- * ```
+ * * Illuminate\Database\Query\Builder 를 extends 하여 기능 추가
+ * * insert, update, delete, select 동작할 때 dynamic, proxy 사용여부에 따라 추가 기능 사용
+ * * proxy 사용할 때 ProxyManager 에 등록된 Proxy 동작
+ * * dynamic 을 사용하지 않으면 Illuminate Builder 직접 사용
  *
  * @category    Database
  * @package     Xpressengine\Database
@@ -51,11 +41,6 @@ class DynamicQuery extends Builder
      * @var string
      */
     protected $table;
-
-    /**
-     * @var Builder
-     */
-    protected $query;
 
     /**
      * ProxyManager 의 Proxy 에서 사용하기 위한 key
@@ -107,7 +92,7 @@ class DynamicQuery extends Builder
     /**
      * dynamic filter 처리 유무
      *
-     * @param bool $use
+     * @param bool $use use dynamic flag
      * @return $this
      */
     public function useDynamic($use = true)
@@ -133,7 +118,7 @@ class DynamicQuery extends Builder
      *
      * @param array $options proxy option
      * @param bool  $merge   merge options or not
-     * @return DynamicQuery
+     * @return $this
      */
     public function setProxyOption(array $options, $merge = true)
     {
@@ -150,6 +135,7 @@ class DynamicQuery extends Builder
      * get illuminate database query builder
      *
      * @return \Illuminate\Database\Query\Builder
+     * @deprecated
      */
     public function getQuery()
     {
@@ -316,11 +302,12 @@ class DynamicQuery extends Builder
     }
 
     /**
-     * delete data
+     * Delete a record from the database.
      *
+     * @param mixed $id ID
      * @return int
      */
-    public function delete($id = NULL)
+    public function delete($id = null)
     {
         if ($this->dynamic === false) {
             return parent::delete($id);
@@ -339,7 +326,7 @@ class DynamicQuery extends Builder
     /**
      * get list
      *
-     * @param array $columns get columns list
+     * @param string $columns get columns list
      * @return array|static[]
      */
     public function count($columns = '*')
@@ -349,7 +336,7 @@ class DynamicQuery extends Builder
         }
 
         if ($this->proxy === true) {
-            $this->query = $this->getProxyManager()->get($this);
+            $this->getProxyManager()->get($this);
         }
         return parent::count($columns);
     }
@@ -367,7 +354,7 @@ class DynamicQuery extends Builder
         }
 
         if ($this->proxy === true) {
-            $this->query = $this->getProxyManager()->get($this);
+            $this->getProxyManager()->get($this);
         }
         return parent::get($columns);
     }
@@ -385,7 +372,7 @@ class DynamicQuery extends Builder
         }
 
         if ($this->proxy === true) {
-            $this->query = $this->getProxyManager()->first($this);
+            $this->getProxyManager()->first($this);
         }
         return parent::first($columns);
     }
@@ -393,8 +380,8 @@ class DynamicQuery extends Builder
     /**
      * Execute a query for a single record by ID.
      *
-     * @param  int    $id
-     * @param  array  $columns
+     * @param int   $id      ID
+     * @param array $columns get columns
      * @return mixed|static
      */
     public function find($id, $columns = ['*'])
@@ -404,7 +391,7 @@ class DynamicQuery extends Builder
         }
 
         if ($this->proxy === true) {
-            $this->query = $this->getProxyManager()->first($this);
+            $this->getProxyManager()->first($this);
         }
         return parent::find($id, $columns);
     }
@@ -412,8 +399,10 @@ class DynamicQuery extends Builder
     /**
      * Paginate the given query into a simple paginator.
      *
-     * @param int   $perPage count of list
-     * @param array $columns get columns
+     * @param int      $perPage  count of list
+     * @param array    $columns  get columns
+     * @param string   $pageName page parameter name
+     * @param int|null $page     page number
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
     public function paginate($perPage = 15, $columns = ['*'], $pageName = 'page', $page = null)
@@ -423,7 +412,7 @@ class DynamicQuery extends Builder
         }
 
         if ($this->proxy === true) {
-            $this->query = $this->getProxyManager()->get($this);
+            $this->getProxyManager()->get($this);
         }
 
         return parent::paginate($perPage, $columns);
@@ -434,8 +423,9 @@ class DynamicQuery extends Builder
      *
      * This is more efficient on larger data-sets, etc.
      *
-     * @param int   $perPage count of list
-     * @param array $columns get columns
+     * @param int    $perPage  count of list
+     * @param array  $columns  get columns
+     * @param string $pageName page parameter name
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
     public function simplePaginate($perPage = 15, $columns = ['*'], $pageName = 'page')
@@ -445,7 +435,7 @@ class DynamicQuery extends Builder
         }
 
         if ($this->proxy === true) {
-            $this->query = $this->getProxyManager()->get($this);
+            $this->getProxyManager()->get($this);
         }
 
         return parent::simplePaginate($perPage, $columns);

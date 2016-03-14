@@ -12,8 +12,11 @@
  * @link        http://www.xpressengine.com
  */
 namespace Xpressengine\Category\Models;
+
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Xpressengine\Support\Tree\Node;
 
 /**
  * Class CategoryItem
@@ -58,6 +61,31 @@ class CategoryItem extends Node
     public function category()
     {
         return $this->belongsTo(Category::class, 'categoryId');
+    }
+
+    /**
+     * Get a children collection of model
+     *
+     * @return Collection
+     */
+    public function getChildren()
+    {
+        if (!$this->children) {
+            $this->children = $this->where($this->getParentIdName(), $this->getKey())
+                ->get()
+                ->sort(function (Node $a, Node $b) {
+                    $aOrdering = $a->{$a->getOrderKeyName()};
+                    $bOrdering = $b->{$b->getOrderKeyName()};
+
+                    if ($aOrdering == $bOrdering) {
+                        return 0;
+                    }
+
+                    return $aOrdering < $bOrdering ? -1 : 1;
+                });
+        }
+
+        return $this->children;
     }
 
     /**

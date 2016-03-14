@@ -1,6 +1,6 @@
 <?php
 /**
- * Exceptions
+ * NotFoundSkinException
  *
  * PHP version 5
  *
@@ -16,7 +16,7 @@ namespace Xpressengine\Presenter\Exceptions;
 use Xpressengine\Presenter\PresenterException;
 
 /**
- * Class NotFoundSkinException
+ * NotFoundSkinException
  *
  * @category    Presenter
  * @package     Xpressengine\Presenter
@@ -27,5 +27,5 @@ use Xpressengine\Presenter\PresenterException;
  */
 class NotFoundSkinException extends PresenterException
 {
-
+    protected $message = '":name" skin not found.';
 }

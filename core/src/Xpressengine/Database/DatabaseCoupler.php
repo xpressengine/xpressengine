@@ -221,7 +221,6 @@ class DatabaseCoupler
 
         $connection = $this->databaseManager->connection($connectionName);
 
-        // transaction level 처리
         $this->transaction->setCurrent($connection);
 
         return $connection;

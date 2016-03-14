@@ -1,9 +1,31 @@
 <?php
+/**
+ * This file is abstract class for entity.
+ *
+ * PHP version 5
+ *
+ * @category    Support
+ * @package     Xpressengine\Support
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 namespace Xpressengine\Support;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Fluent;
 
+/**
+ * Abstract class Entity
+ *
+ * @category    Support
+ * @package     Xpressengine\Support
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 abstract class Entity extends Fluent
 {
     /**
@@ -44,7 +66,7 @@ abstract class Entity extends Fluent
     /**
      * Constructor
      *
-     * @param array $attributes
+     * @param array $attributes attributes
      */
     public function __construct($attributes = [])
     {
@@ -68,8 +90,8 @@ abstract class Entity extends Fluent
     /**
      * Get the entity's original attribute values.
      *
-     * @param  string|null  $key
-     * @param  mixed  $default
+     * @param string|null $key     key name
+     * @param mixed       $default default value when not exists
      * @return array
      */
     public function getOriginal($key = null, $default = null)
@@ -80,7 +102,7 @@ abstract class Entity extends Fluent
     /**
      * Fill the model with an array of attributes.
      *
-     * @param  array  $attributes
+     * @param array $attributes attributes
      * @return $this
      */
     public function fill(array $attributes)
@@ -97,7 +119,7 @@ abstract class Entity extends Fluent
     /**
      * Determine if the given attribute may be mass assigned.
      *
-     * @param  string  $key
+     * @param string $key key name
      * @return bool
      */
     public function isFillable($key)
@@ -116,7 +138,7 @@ abstract class Entity extends Fluent
     /**
      * Determine if the given key is guarded.
      *
-     * @param  string  $key
+     * @param string $key key name
      * @return bool
      */
     public function isGuarded($key)

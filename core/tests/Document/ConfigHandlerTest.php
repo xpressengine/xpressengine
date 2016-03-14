@@ -99,7 +99,7 @@ class ConfigHandlerTest extends PHPUnit_Framework_TestCase
         $configHandler = new ConfigHandler($configManager);
 
         $params = ['param1'=>'param1'];
-        $config = $configHandler->makeEntity('instance1', $params);
+        $config = $configHandler->make('instance1', $params);
         $this->assertInstanceOf('Xpressengine\Config\ConfigEntity', $config);
 
 
@@ -114,7 +114,7 @@ class ConfigHandlerTest extends PHPUnit_Framework_TestCase
     /**
      * test put exception
      *
-     * @expectedException \Xpressengine\Document\Exceptions\ConfigException
+     * @expectedException \Xpressengine\Document\Exceptions\ConfigNotFoundException
      * @return void
      */
     public function testPutEmptyConfigException()
@@ -135,7 +135,7 @@ class ConfigHandlerTest extends PHPUnit_Framework_TestCase
     /**
      * test put exception
      *
-     * @expectedException \Xpressengine\Document\Exceptions\ConfigException
+     * @expectedException \Xpressengine\Document\Exceptions\ConfigNotFoundException
      * @return void
      */
     public function testPutChangedInstanceIdException()

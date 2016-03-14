@@ -13,6 +13,7 @@
  */
 namespace Xpressengine\Presenter\Html;
 
+use Xpressengine\Http\Request;
 use Xpressengine\Presenter\RendererInterface;
 use Xpressengine\Presenter\Presenter;
 use Xpressengine\Presenter\Exceptions\NotFoundSkinException;
@@ -22,7 +23,10 @@ use Xpressengine\Widget\WidgetParser;
 
 /**
  * HtmlRenderer
- * > Skin 및 Theme를 처리
+ *
+ * * html 으로 출력될 경우 사용
+ * * Skin, Theme 를 출력할 수 있도록 지원
+ *
  *
  * @category  Presenter
  * @package   Xpressengine\Presenter
@@ -198,7 +202,7 @@ class HtmlRenderer implements RendererInterface
     public function renderSkin()
     {
         $request = $this->presenter->getRequest();
-        if ($request instanceof \Xpressengine\Http\Request) {
+        if ($request instanceof Request) {
             $isMobile = $request->isMobile();
         } else {
             $isMobile = false;
@@ -221,7 +225,7 @@ class HtmlRenderer implements RendererInterface
                 $skin = $skinHandler->getAssigned([$skinName, $instanceId], $isMobile ? 'mobile' : 'desktop');
             }
             if ($skin === null) {
-                throw new NotFoundSkinException;
+                throw new NotFoundSkinException(['name' => $skinName]);
             }
             $skinView = $skin->setView($id)->setData($this->data)->render();
         } else {

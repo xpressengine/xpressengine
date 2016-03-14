@@ -1,25 +1,20 @@
 <?php
 /**
- *
+ * CounterTest
  */
 namespace Xpressengine\Tests\Counter;
 
 use Mockery as M;
 use PHPUnit_Framework_TestCase;
 use Xpressengine\Counter\Counter;
+use Xpressengine\Counter\Factory;
 
 /**
- * Class CounterTest
+ * CounterTest
  * @package Xpressengine\Tests\Counter
  */
 class CounterTest extends PHPUnit_Framework_TestCase
 {
-
-    private $repo;
-    private $session;
-    private $configHandler;
-    private $member;
-    private $auth;
     private $request;
 
     /**
@@ -35,56 +30,31 @@ class CounterTest extends PHPUnit_Framework_TestCase
     /**
      * set up
      *
-     * @return void
+     * @reutrn void
      */
     public function setUp()
     {
-        $repo = m::mock('Xpressengine\Counter\Repository');
-        $session = m::mock('Xpressengine\Counter\SessionCounter');
-        $configHandler = m::mock('Xpressengine\Counter\ConfigHandler');
-        $member = m::mock('\Xpressengine\Member\Repositories\MemberRepositoryInterface');
-        $auth = m::mock('\Xpressengine\Member\GuardInterface');
-        $request = m::mock('\Illuminate\Http\Request');
+        $request = m::mock('\Xpressengine\Http\Request');
 
         $request->shouldReceive('ip')->andReturn('127.0.0.1');
 
-        $this->repo = $repo;
-        $this->session = $session;
-        $this->configHandler = $configHandler;
-        $this->member = $member;
-        $this->auth = $auth;
         $this->request = $request;
     }
 
     /**
-     * invoked method
+     * get counter instance
      *
-     * @param mixed  $object     object
-     * @param string $methodName method name
-     * @param array  $parameters parameters
-     * @return mixed
+     * @param string $name    counter name
+     * @param array  $options counter options
+     * @return Counter
      */
-    private function invokeMethod(&$object, $methodName, array $parameters = array())
+    private function getCounter($name, array $options = [])
     {
-        $reflection = new \ReflectionClass(get_class($object));
-        $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
+        $counter = m::mock('Xpressengine\Counter\Counter', [$this->request, $name, $options])
+        ->shouldAllowMockingProtectedMethods()
+        ->makePartial();
 
-        return $method->invokeArgs($object, $parameters);
-    }
-
-    /**
-     * get Guest instance
-     *
-     * @return M\MockInterface
-     */
-    private function getGuest()
-    {
-        $guest = m::mock(
-            'Xpressengine\Member\Entities\Guest',
-            'Xpressengine\Member\Entities\MemberEntityInterface'
-        );
-        return $guest;
+        return $counter ;
     }
 
     /**
@@ -95,562 +65,334 @@ class CounterTest extends PHPUnit_Framework_TestCase
     private function getUser()
     {
         $user = m::mock(
-            'Xpressengine\Member\Entities\Database\MemberEntity',
-            'Xpressengine\Member\Entities\MemberEntityInterface'
+            'Xpressengine\User\Models\User',
+            'Xpressengine\User\UserInterface'
         );
         return $user;
     }
 
     /**
-     * set id type counter
+     * get Guest instance
      *
-     * @param Counter $counter     counter instance
-     * @param string  $counterName counter name
-     * @return void
+     * @return M\MockInterface
      */
-    private function setIdType(Counter $counter, $counterName = 'id-counter')
+    private function getGuest()
     {
-        $this->configHandler->shouldReceive('getType')->with($counterName)->andReturn($counter::TYPE_ID);
+        $guest = m::mock(
+            'Xpressengine\User\Models\Guest',
+            'Xpressengine\User\UserInterface'
+        );
+        return $guest;
     }
 
     /**
-     * set session type counter
+     * get CounterLog instance
      *
-     * @param Counter $counter     counter instance
-     * @param string  $counterName counter name
-     * @return void
+     * @return M\Mock
      */
-    private function setSessionType(Counter $counter, $counterName = 'session-counter')
+    private function getCounterLogModel(array $attributes = [])
     {
-        $this->configHandler->shouldReceive('getType')->with($counterName)->andReturn($counter::TYPE_SESSION);
-    }
-
-    /**
-     * init id type counter
-     *
-     * @param Counter $counter counter instance
-     * @return void
-     */
-    private function setIdTypeInit(Counter $counter)
-    {
-        $this->setIdType($counter);
-        $counter->init('id-counter');
-    }
-
-    /**
-     * init session type counter
-     *
-     * @param Counter $counter counter instance
-     * @return void
-     */
-    private function setSessionTypeInit(Counter $counter)
-    {
-        $this->setSessionType($counter);
-        $this->session->shouldReceive('init')->once();
-        $counter->init('session-counter');
-    }
-
-    /**
-     * test get config handler
-     *
-     * @return void
-     */
-    public function testGetConfigHandler()
-    {
-        $repo = $this->repo;
-        $session = $this->session;
-        $configHandler = $this->configHandler;
-        $member = $this->member;
-        $auth = $this->auth;
-        $request = $this->request;
-
-        $counter = new Counter($repo, $session, $configHandler, $member, $auth, $request);
-
-        $configHandler = $counter->getConfigHandler();
-
-        $this->assertInstanceOf('Xpressengine\Counter\ConfigHandler', $configHandler);
-    }
-
-    /**
-     * test get config handler
-     *
-     * @return void
-     */
-    public function testInit()
-    {
-        $repo = $this->repo;
-        $session = $this->session;
-        $configHandler = $this->configHandler;
-        $member = $this->member;
-        $auth = $this->auth;
-        $request = $this->request;
-
-        $counter = m::mock('Xpressengine\Counter\Counter', [$repo, $session, $configHandler, $member, $auth, $request])
+        return m::mock('Xpressengine\Counter\Models\CounterLog')
             ->shouldAllowMockingProtectedMethods()
             ->makePartial();
-
-        // test id type counter init
-        $this->setIdType($counter);
-        $counter->init('id-counter');
-
-        // test session type counter init
-        $this->setSessionType($counter);
-        $session->shouldReceive('init')->once();
-        $counter->init('session-counter');
     }
 
     /**
-     * init 하지 않고 add 할 때 오류
+     * test Factory make
      *
-     * @expectedException \Xpressengine\Counter\Exceptions\NameNotExistsException
      * @return void
      */
-    public function testNotInitialized()
+    public function testMakeCounter()
     {
-        $repo = $this->repo;
-        $session = $this->session;
-        $configHandler = $this->configHandler;
-        $member = $this->member;
-        $auth = $this->auth;
-        $request = $this->request;
+        $interception = m::mock('Xpressengine\Interception\InterceptionHandler');
+        $interception->shouldReceive('proxy')->andReturn(new Counter($this->request, 'test'));
 
-        $counter = m::mock('Xpressengine\Counter\Counter', [$repo, $session, $configHandler, $member, $auth, $request])
-            ->shouldAllowMockingProtectedMethods()
-            ->makePartial();
+        $factory = new Factory($interception);
+        $counter = $factory->make($this->request, 'test');
 
+        $this->assertInstanceOf('Xpressengine\Counter\Counter', $counter);
+        $this->assertEquals('test', $counter->getName());
+        $this->assertEquals(0, count($counter->getOptions()));
+    }
+
+    /**
+     * test Counter add
+     *
+     * @return void
+     */
+    public function testAdd()
+    {
+        $counter = $this->getCounter('test');
+
+        $counterLogModel = $this->getCounterLogModel();
+        $counterLogModel->shouldReceive('save');
+        $counter->shouldReceive('newModel')->andReturn($counterLogModel);
+
+        $targetId = 'targetId';
+        $user = $this->getUser();
+        $user->shouldReceive('getId')->andReturn('userId');
+
+        $counter->add($targetId, $user);
+
+        $counter->setGuest(true);
         $guest = $this->getGuest();
-        $auth->shouldReceive('user')->andReturn($guest);
         $guest->shouldReceive('getId')->andReturn('');
-
-        $counter->add('targetId', $guest);
+        $counter->add($targetId, $guest);
     }
 
     /**
-     * Guest 가 session type 카운터를 통해 등록
+     * counter 가 guest 에 대한 처리를 지원하지 않을 때
      *
-     * @return void
+     * @expectedException \Xpressengine\Counter\Exceptions\GuestNotSupportException
      */
-    public function testAddByGuestToSessionTypeCounter()
+    public function testAddFailGuestNotAllowed()
     {
-        $repo = $this->repo;
-        $session = $this->session;
-        $configHandler = $this->configHandler;
-        $member = $this->member;
-        $auth = $this->auth;
-        $request = $this->request;
+        $counter = $this->getCounter('test');
 
-        $counter = m::mock('Xpressengine\Counter\Counter', [$repo, $session, $configHandler, $member, $auth, $request])
-            ->shouldAllowMockingProtectedMethods()
-            ->makePartial();
+        $counterLogModel = $this->getCounterLogModel();
+        $counterLogModel->shouldReceive('save');
+        $counter->shouldReceive('newModel')->andReturn($counterLogModel);
 
-        $this->setSessionTypeInit($counter);
-
+        $targetId = 'targetId';
         $guest = $this->getGuest();
-        $auth->shouldReceive('user')->andReturn($guest);
         $guest->shouldReceive('getId')->andReturn('');
-
-        $counter->shouldReceive('invoked')->andReturn(false);
-        $session->shouldReceive('add');
-        $repo->shouldReceive('insert');
-
-        $counter->add('targetId', $guest);
+        $counter->add($targetId, $guest);
     }
 
     /**
-     * Guest 가 session type 카운터를 통해 이미 참여한 카운터에 등록할 때
+     * counter 가 지원하지 않는 option 을 사하여 등록할 때
      *
-     * @expectedException \Xpressengine\Counter\Exceptions\InvokedException
-     * @return void
+     * @expectedException \Xpressengine\Counter\Exceptions\InvalidOptionException
      */
-    public function testAddByGuestToSessionTypeCounterInvoked()
+    public function testCheckOptionWithNotSupportedOption()
     {
-        $repo = $this->repo;
-        $session = $this->session;
-        $configHandler = $this->configHandler;
-        $member = $this->member;
-        $auth = $this->auth;
-        $request = $this->request;
+        $counter = $this->getCounter('test');
 
-        $counter = m::mock('Xpressengine\Counter\Counter', [$repo, $session, $configHandler, $member, $auth, $request])
-            ->shouldAllowMockingProtectedMethods()
-            ->makePartial();
+        $targetId = 'targetId';
+        $user = $this->getUser();
+        $user->shouldReceive('getId')->andReturn('userId');
 
-        $this->setSessionTypeInit($counter);
-
-        $guest = $this->getGuest();
-        $auth->shouldReceive('user')->andReturn($guest);
-        $guest->shouldReceive('getId')->andReturn('');
-
-        $counter->shouldReceive('invoked')->andReturn(true);
-        $session->shouldReceive('add');
-        $repo->shouldReceive('insert');
-
-        $counter->add('targetId', $guest);
+        $counter->add($targetId, $user, 'option');
     }
 
     /**
-     * Guest 가 id type 카운터를 통해 등록할 때 login 오류
+     * counter options 를 잡고 있고, 지원하지 않는 option 을 사하여 등록할 때
      *
-     * @expectedException \Xpressengine\Counter\Exceptions\LoginRequiredException
-     * @return void
+     * @expectedException \Xpressengine\Counter\Exceptions\InvalidOptionException
      */
-    public function testAddByGuestToIdTypeCounter()
+    public function testCheckOptionWithNotSupportedOption2()
     {
-        $repo = $this->repo;
-        $session = $this->session;
-        $configHandler = $this->configHandler;
-        $member = $this->member;
-        $auth = $this->auth;
-        $request = $this->request;
+        $counter = $this->getCounter('test', ['options1', 'option2']);
 
-        $counter = m::mock('Xpressengine\Counter\Counter', [$repo, $session, $configHandler, $member, $auth, $request])
-            ->shouldAllowMockingProtectedMethods()
-            ->makePartial();
+        $targetId = 'targetId';
+        $user = $this->getUser();
+        $user->shouldReceive('getId')->andReturn('userId');
 
-        $this->setIdTypeInit($counter);
-
-        $guest = $this->getGuest();
-        $auth->shouldReceive('user')->andReturn($guest);
-        $guest->shouldReceive('getId')->andReturn('');
-
-        $counter->shouldReceive('invoked')->andReturn(false);
-        $session->shouldReceive('add');
-
-        $counter->add('targetId', $guest);
+        $counter->add($targetId, $user, 'option');
     }
 
     /**
-     * User 가 id type 카운터를 통해 등록
+     * test get
      *
      * @return void
      */
-    public function testAddByUserToIdTypeCounter()
+    public function testGet()
     {
-        $repo = $this->repo;
-        $session = $this->session;
-        $configHandler = $this->configHandler;
-        $member = $this->member;
-        $auth = $this->auth;
-        $request = $this->request;
+        $counter = $this->getCounter('test');
+        $targetId = 'targetId';
+        $userId = 'userId';
 
-        $counter = m::mock('Xpressengine\Counter\Counter', [$repo, $session, $configHandler, $member, $auth, $request])
-            ->shouldAllowMockingProtectedMethods()
-            ->makePartial();
-
-        $this->setIdTypeInit($counter);
+        $counterLogModel = $this->getCounterLogModel();
+        $counterLogModel->shouldReceive('first')->andReturn($counterLogModel);
+        $counterLogModel->shouldReceive('where')->andReturn($counterLogModel);
+        $counter->shouldReceive('newModel')->andReturn($counterLogModel);
 
         $user = $this->getUser();
-        $auth->shouldReceive('user')->andReturn($user);
-        $user->shouldReceive('getId')->andReturn('user');
+        $user->shouldReceive('getId')->andReturn($userId);
 
-        $counter->shouldReceive('invoked')->andReturn(false);
-        $request->shouldReceive('ip')->andReturn('127.0.0.1');
-        $repo->shouldReceive('insert');
+        $result = $counter->get($targetId, $user);
+        $this->assertInstanceOf('Xpressengine\Counter\Models\CounterLog', $result);
 
-        $counter->add('targetId', $user);
-    }
-
-    /**
-     * User 가 id type 카운터를 통해 등록
-     *
-     * @expectedException \Xpressengine\Counter\Exceptions\InvokedException
-     * @return void
-     */
-    public function testAddByUserToIdTypeCounterInvoked()
-    {
-        $repo = $this->repo;
-        $session = $this->session;
-        $configHandler = $this->configHandler;
-        $member = $this->member;
-        $auth = $this->auth;
-        $request = $this->request;
-
-        $counter = m::mock('Xpressengine\Counter\Counter', [$repo, $session, $configHandler, $member, $auth, $request])
-            ->shouldAllowMockingProtectedMethods()
-            ->makePartial();
-
-        $this->setIdTypeInit($counter);
-
-        $user = $this->getUser();
-        $auth->shouldReceive('user')->andReturn($user);
-        $user->shouldReceive('getId')->andReturn('user');
-
-        $counter->shouldReceive('invoked')->andReturn(true);
-
-        $counter->add('targetId', $user);
-    }
-
-    /**
-     * User 가 id type 카운터를 통해 등록
-     *
-     * @return void
-     */
-    public function testAddByUserToSessionTypeCounter()
-    {
-        $repo = $this->repo;
-        $session = $this->session;
-        $configHandler = $this->configHandler;
-        $member = $this->member;
-        $auth = $this->auth;
-        $request = $this->request;
-
-        $counter = m::mock('Xpressengine\Counter\Counter', [$repo, $session, $configHandler, $member, $auth, $request])
-            ->shouldAllowMockingProtectedMethods()
-            ->makePartial();
-
-        $this->setSessionTypeInit($counter);
-
-        $user = $this->getUser();
-        $auth->shouldReceive('user')->andReturn($user);
-        $user->shouldReceive('getId')->andReturn('user');
-
-        $counter->shouldReceive('invoked')->andReturn(false);
-        $request->shouldReceive('ip')->andReturn('127.0.0.1');
-        $repo->shouldReceive('insert');
-        $session->shouldReceive('add');
-
-        $counter->add('targetId', $user);
-    }
-
-    /**
-     * Guest 가 session type 카운터를 통해 로그 삭제
-     *
-     * @return void
-     */
-    public function testRemoveByGuestToSessionTypeCounter()
-    {
-        $repo = $this->repo;
-        $session = $this->session;
-        $configHandler = $this->configHandler;
-        $member = $this->member;
-        $auth = $this->auth;
-        $request = $this->request;
-
-        $counter = m::mock('Xpressengine\Counter\Counter', [$repo, $session, $configHandler, $member, $auth, $request])
-            ->shouldAllowMockingProtectedMethods()
-            ->makePartial();
-
-        $this->setSessionTypeInit($counter);
-
+        $counter->setGuest(true);
         $guest = $this->getGuest();
-        $auth->shouldReceive('user')->andReturn($guest);
         $guest->shouldReceive('getId')->andReturn('');
 
-        $session->shouldReceive('remove');
+        $result = $counter->get($targetId, $guest);
+        $this->assertInstanceOf('Xpressengine\Counter\Models\CounterLog', $result);
 
-        $counter->remove('targetId');
+        $result = $counter->get($targetId);
+        $this->assertInstanceOf('Xpressengine\Counter\Models\CounterLog', $result);
     }
 
     /**
-     * Guest 가 id type 카운터를 통해 로그 삭제
+     * counter 가 guest 에 대한 처리를 지원하지 않을 때
      *
-     * @expectedException \Xpressengine\Counter\Exceptions\LoginRequiredException
-     * @return void
+     * @expectedException \Xpressengine\Counter\Exceptions\GuestNotSupportException
      */
-    public function testRemoveByGuestToIdTypeCounter()
+    public function testGetFailGuestNotAllowed()
     {
-        $repo = $this->repo;
-        $session = $this->session;
-        $configHandler = $this->configHandler;
-        $member = $this->member;
-        $auth = $this->auth;
-        $request = $this->request;
-
-        $counter = m::mock('Xpressengine\Counter\Counter', [$repo, $session, $configHandler, $member, $auth, $request])
-            ->shouldAllowMockingProtectedMethods()
-            ->makePartial();
-
-        $this->setIdTypeInit($counter);
+        $counter = $this->getCounter('test');
+        $targetId = 'targetId';
 
         $guest = $this->getGuest();
-        $auth->shouldReceive('user')->andReturn($guest);
         $guest->shouldReceive('getId')->andReturn('');
 
-        $counter->remove('targetId');
+         $counter->get($targetId, $guest);
     }
 
     /**
-     * User 가 session type 카운터를 통해 로그 삭제
+     * test get by name
      *
      * @return void
      */
-    public function testRemoveByUserToSessionTypeCounter()
+    public function testGetByName()
     {
-        $repo = $this->repo;
-        $session = $this->session;
-        $configHandler = $this->configHandler;
-        $member = $this->member;
-        $auth = $this->auth;
-        $request = $this->request;
+        $counter = $this->getCounter('test');
+        $targetId = 'targetId';
+        $userId = 'userId';
 
-        $counter = m::mock('Xpressengine\Counter\Counter', [$repo, $session, $configHandler, $member, $auth, $request])
-            ->shouldAllowMockingProtectedMethods()
-            ->makePartial();
-
-        $this->setSessionTypeInit($counter);
+        $counterLogModel = $this->getCounterLogModel();
+        $counterLogModel->shouldReceive('first')->andReturn($counterLogModel);
+        $counterLogModel->shouldReceive('where')->andReturnSelf();
+        $counter->shouldReceive('newModel')->andReturn($counterLogModel);
 
         $user = $this->getUser();
-        $auth->shouldReceive('user')->andReturn($user);
-        $user->shouldReceive('getId')->andReturn('user');
+        $user->shouldReceive('getId')->andReturn($userId);
 
-        $session->shouldReceive('remove');
-        $repo->shouldReceive('delete');
+        $result = $counter->getByName($targetId, $user);
+        $this->assertInstanceOf('Xpressengine\Counter\Models\CounterLog', $result);
 
-        $counter->remove('targetId');
+        $counter->setGuest(true);
+        $guest = $this->getGuest();
+        $guest->shouldReceive('getId')->andReturn('');
+
+        $result = $counter->getByName($targetId, $guest);
+        $this->assertInstanceOf('Xpressengine\Counter\Models\CounterLog', $result);
+
+        $result = $counter->getByName($targetId);
+        $this->assertInstanceOf('Xpressengine\Counter\Models\CounterLog', $result);
     }
 
     /**
-     * User 가 id type 카운터를 통해 로그 삭제
+     * counter 가 guest 에 대한 처리를 지원하지 않을 때
      *
-     * @return void
+     * @expectedException \Xpressengine\Counter\Exceptions\GuestNotSupportException
      */
-    public function testRemoveByUserToIdTypeCounter()
+    public function testGetByNameFailGuestNotAllowed()
     {
-        $repo = $this->repo;
-        $session = $this->session;
-        $configHandler = $this->configHandler;
-        $member = $this->member;
-        $auth = $this->auth;
-        $request = $this->request;
-
-        $counter = m::mock('Xpressengine\Counter\Counter', [$repo, $session, $configHandler, $member, $auth, $request])
-            ->shouldAllowMockingProtectedMethods()
-            ->makePartial();
-
-        // test session type counter ini
-        $this->setIdTypeInit($counter);
-
-        $user = $this->getUser();
-        $auth->shouldReceive('user')->andReturn($user);
-        $user->shouldReceive('getId')->andReturn('user');
-
-        $repo->shouldReceive('delete');
-
-        $counter->remove('targetId');
-    }
-
-    /**
-     * Guest 참여 여부
-     *
-     * @expectedException \Xpressengine\Counter\Exceptions\InvalidTypeException
-     * @return void
-     */
-    public function testGuestInvoked()
-    {
-        $repo = $this->repo;
-        $session = $this->session;
-        $configHandler = $this->configHandler;
-        $member = $this->member;
-        $auth = $this->auth;
-        $request = $this->request;
-
-        $counter = m::mock('Xpressengine\Counter\Counter', [$repo, $session, $configHandler, $member, $auth, $request])
-            ->shouldAllowMockingProtectedMethods()
-            ->makePartial();
-
-        $this->setSessionTypeInit($counter);
+        $counter = $this->getCounter('test');
+        $targetId = 'targetId';
 
         $guest = $this->getGuest();
-        $auth->shouldReceive('user')->andReturn($guest);
         $guest->shouldReceive('getId')->andReturn('');
 
-        $session->shouldReceive('invoked')->once()->andReturn(false);
-        $result = $counter->invoked('targetId', $guest);
-        $this->assertFalse($result);
+        $counter->getByName($targetId, $guest);
+    }
 
-        $session->shouldReceive('invoked')->once()->andReturn(true);
-        $result = $counter->invoked('targetId', $guest);
+    /**
+     * test has log
+     *
+     * @return void
+     */
+    public function testHas()
+    {
+        $counter = $this->getCounter('test');
+        $targetId = 'targetId';
+        $userId = 'userId';
+
+        $counterLogModel = $this->getCounterLogModel();
+        $counterLogModel->shouldReceive('first')->andReturn($counterLogModel);
+        $counterLogModel->shouldReceive('where')->andReturnSelf();
+        $counter->shouldReceive('newModel')->andReturn($counterLogModel);
+
+        $user = $this->getUser();
+        $user->shouldReceive('getId')->andReturn($userId);
+
+        $result = $counter->has($targetId, $user);
         $this->assertTrue($result);
 
-        $this->setIdTypeInit($counter);
-        $counter->invoked('targetId', $guest);
-    }
-
-    /**
-     * User 참여 여부
-     *
-     * @return void
-     */
-    public function testUserInvoked()
-    {
-        $repo = $this->repo;
-        $session = $this->session;
-        $configHandler = $this->configHandler;
-        $member = $this->member;
-        $auth = $this->auth;
-        $request = $this->request;
-
-        $counter = m::mock('Xpressengine\Counter\Counter', [$repo, $session, $configHandler, $member, $auth, $request])
-            ->shouldAllowMockingProtectedMethods()
-            ->makePartial();
-
-        $this->setSessionTypeInit($counter);
-
-        $user = $this->getUser();
-        $auth->shouldReceive('user')->andReturn($user);
-        $user->shouldReceive('getId')->andReturn('user');
-
-        $repo->shouldReceive('find')->once()->andReturn(null);
-        $result = $counter->invoked('targetId', $user);
-        $this->assertFalse($result);
-
-        $repo->shouldReceive('find')->once()->andReturn(['targetId' => 'targetId']);
-        $result = $counter->invoked('targetId', $user);
+        $result = $counter->hasByName($targetId, $user);
         $this->assertTrue($result);
     }
 
     /**
-     * 로그 기록
+     * test remove
      *
      * @return void
      */
-    public function testGetLog()
+    public function testRemove()
     {
-        $repo = $this->repo;
-        $session = $this->session;
-        $configHandler = $this->configHandler;
-        $member = $this->member;
-        $auth = $this->auth;
-        $request = $this->request;
+        $counterName = 'test';
+        $counter = $this->getCounter($counterName);
+        $targetId = 'targetId';
+        $userId = 'userId';
 
-        $counter = m::mock('Xpressengine\Counter\Counter', [$repo, $session, $configHandler, $member, $auth, $request])
-            ->shouldAllowMockingProtectedMethods()
-            ->makePartial();
-
-        $repo->shouldReceive('find')->andReturn(['targetId' => 'targetId']);
+        $counterLogModel = $this->getCounterLogModel();
+        $counterLogModel->shouldReceive('delete')->andReturn();
+        $counterLogModel->shouldReceive('where')->andReturnSelf();
+        $counter->shouldReceive('newModel')->andReturn($counterLogModel);
 
         $user = $this->getUser();
-        $user->shouldReceive('getId')->andReturn('user');
-        $result = $counter->get('targetId', $user);
+        $user->shouldReceive('getId')->andReturn($userId);
 
-        $this->assertEquals(['targetId'=>'targetId'], $result);
+        $counter->remove($targetId, $user);
+
+        $counter->setGuest(true);
+        $guest = $this->getGuest();
+        $guest->shouldReceive('getId')->andReturn('');
+
+        $counter->remove($targetId, $guest);
+
+        $counter->remove($targetId);
     }
 
     /**
-     * Repository helper interface test
+     * test get point sum
      *
      * @return void
      */
-    public function testForRepositoryInterface()
+    public function testGetPoint()
     {
-        $repo = $this->repo;
-        $session = $this->session;
-        $configHandler = $this->configHandler;
-        $member = $this->member;
-        $auth = $this->auth;
-        $request = $this->request;
+        $counterName = 'test';
+        $counter = $this->getCounter($counterName);
+        $targetId = 'targetId';
+        $userId = 'userId';
+        $point = 10;
 
-        $counter = m::mock('Xpressengine\Counter\Counter', [$repo, $session, $configHandler, $member, $auth, $request])
-            ->shouldAllowMockingProtectedMethods()
-            ->makePartial();
+        $counterLogModel = $this->getCounterLogModel();
+        $counterLogModel->shouldReceive('sum')->andReturn($point);
+        $counterLogModel->shouldReceive('where')->andReturnSelf();
+        $counter->shouldReceive('newModel')->andReturn($counterLogModel);
 
-        // get users
-        $repo->shouldReceive('fetchByUserIds')->andReturn(['userId']);
-        $member->shouldReceive('find')->andReturn(['user1'=>'userId']);
-        $result = $counter->getUsers('targetId');
-        $this->assertEquals(['user1'=>'userId'], $result[0]);
+        $result = $counter->getPoint($targetId);
+        $this->assertEquals($point, $result);
+    }
 
-        $result = $counter->getUserIds('targetId');
-        $this->assertEquals(['userId'], $result);
+    /**
+     * test get users
+     *
+     * @return void
+     */
+    public function testGetUsers()
+    {
+        $counterName = 'test';
+        $counter = $this->getCounter($counterName);
+        $targetId = 'targetId';
+        $userId = 'userId';
+        $user = 'user';
+
+        $counterLogModel = $this->getCounterLogModel();
+        $returnLogModel = m::mock('stdClass');
+        $returnLogModel->user = $user;
+
+        $counterLogModel->shouldReceive('get')->andReturn([$returnLogModel]);
+        $counterLogModel->shouldReceive('where')->once()->with('targetId', $targetId)->andReturnSelf();
+        $counterLogModel->shouldReceive('where')->once()->with('counterName', $counterName)->andReturnSelf();
+        $counterLogModel->shouldReceive('where')->once()->with('counterOption', '')->andReturnSelf();
+        $counter->shouldReceive('newModel')->andReturn($counterLogModel);
+
+        $result = $counter->getUsers($targetId);
+
+        $this->assertEquals($user, $result[0]);
     }
 }

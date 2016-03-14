@@ -1,6 +1,6 @@
 <?php
 /**
- * Database VirtualConnection interface
+ * VirtualConnectionInterface
  *
  * PHP version 5
  *
@@ -10,19 +10,14 @@
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
- * @mainpage
- * # Database
- * > 이 패키지는 Illuminate\Database 의 wrapper 패키지 입니다.
- *
- * ## Xpresengine\DynamicField 패키지를 support 합니다.
- * > ProxyManager를 통해 ProxyInterface에 따라 QueryBuilder에서 처리합니다.
  */
 namespace Xpressengine\Database;
 
-use Illuminate\Database\ConnectionInterface as IlluminateConnectionInterface;
+use Illuminate\Database\ConnectionInterface;
 
 /**
- * VirtualConnection interface
+ * VirtualConnectionInterface
+ *
  * ConnectionInterface 를 따르며 DynamicField 처리를 위해 dynamic 메소드 추가
  *
  * @category    Database
@@ -32,7 +27,7 @@ use Illuminate\Database\ConnectionInterface as IlluminateConnectionInterface;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-interface VirtualConnectionInterface extends IlluminateConnectionInterface
+interface VirtualConnectionInterface extends ConnectionInterface
 {
     /**
      * Begin a fluent query against a database table.

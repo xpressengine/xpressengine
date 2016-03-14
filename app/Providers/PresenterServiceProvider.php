@@ -42,6 +42,11 @@ class PresenterServiceProvider extends ServiceProvider
         $this->registerFrontend();
     }
 
+    /**
+     * boot
+     *
+     * @return void
+     */
     public function boot()
     {
         if (app()->runningInConsole() === false) {
@@ -93,12 +98,18 @@ class PresenterServiceProvider extends ServiceProvider
             /** @var \Xpressengine\Presenter\RendererInterface $proxyJsonRenderer */
             $proxyJsonRenderer = $app['xe.interception']->proxy(JsonRenderer::class, 'JsonRenderer');
 
-            $presenter->register($proxyHtmlRenderer::format(), function(Presenter $presenter) use ($proxyHtmlRenderer) {
-                return new $proxyHtmlRenderer($presenter, app('xe.seo'), app('xe.widget.parser'));
-            });
-            $presenter->register($proxyJsonRenderer::format(), function(Presenter $presenter) use ($proxyJsonRenderer) {
-                return new $proxyJsonRenderer($presenter);
-            });
+            $presenter->register(
+                $proxyHtmlRenderer::format(),
+                function (Presenter $presenter) use ($proxyHtmlRenderer) {
+                    return new $proxyHtmlRenderer($presenter, app('xe.seo'), app('xe.widget.parser'));
+                }
+            );
+            $presenter->register(
+                $proxyJsonRenderer::format(),
+                function (Presenter $presenter) use ($proxyJsonRenderer) {
+                    return new $proxyJsonRenderer($presenter);
+                }
+            );
 
             return $presenter;
         });
