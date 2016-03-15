@@ -32,6 +32,18 @@ use Xpressengine\Document\Models\Document;
 class DocumentServiceProvider extends ServiceProvider
 {
     /**
+     * boot
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        Document::creating(function (Document $model) {
+            $model->setReply();
+        });
+    }
+
+    /**
      * Register the service provider.
      *
      * @return void
