@@ -62,7 +62,7 @@ class Permission extends AbstractUIObject
 
         $permissioinScriptString = implode('', $permissioinScriptString);
 
-        XeXeFrontend::html('permissionUiobject')->content($permissioinScriptString)->load();
+        XeFrontend::html('permissionUiobject')->content($permissioinScriptString)->load();
 
         $htmlString = [];
         $args = $this->arguments;
