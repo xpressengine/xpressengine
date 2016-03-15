@@ -44,8 +44,13 @@ class Tree implements ArrayAccess, JsonSerializable
     public function __construct($rawNodes = [])
     {
         $nodes = Collection::make($rawNodes);
-        $node = $nodes->first();
-        $this->rawNodes = $nodes->keyBy($node->getNodeIdentifierName());
+        if ($nodes->count() > 0) {
+            $node = $nodes->first();
+            $this->rawNodes = $nodes->keyBy($node->getNodeIdentifierName());
+        } else {
+            $this->rawNodes = $nodes;
+        }
+
         $this->arrange();
     }
 
