@@ -1,4 +1,4 @@
-define(['validator'], function(validator) {
+define(['xecore:/common/js/modules/dynamicField'], function(validator) {
 
     var XE = this;
 
@@ -9,7 +9,7 @@ define(['validator'], function(validator) {
         this.container = '';
 		this.urls = {
 			base: null,
-			
+
 		};
 
         this.init = function(group, databaseName, urls) {
