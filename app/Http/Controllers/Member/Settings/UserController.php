@@ -50,7 +50,7 @@ class UserController extends Controller
             $query = $query->whereHas(
                 'groups',
                 function (Builder $q) use ($group) {
-                    $q->where('id', $group);
+                    $q->where('groupId', $group);
                 }
             );
         }

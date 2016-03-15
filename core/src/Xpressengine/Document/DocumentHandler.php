@@ -297,7 +297,7 @@ class DocumentHandler
         }
 
         $revisionNo = 0;
-        $lastRevision = $this->getRevisionModel()->where('id', $doc->id)->max('revisionNo');
+        $lastRevision = $this->newRevisionModel()->where('id', $doc->id)->max('revisionNo');
         if ($lastRevision !== null) {
             $revisionNo = $lastRevision + 1;
         }

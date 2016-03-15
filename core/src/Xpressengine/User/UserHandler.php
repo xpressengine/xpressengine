@@ -868,4 +868,19 @@ class UserHandler
         $menus = $this->container->get('user/settings/section');
         return array_merge($this->settingsSections, $menus ?: []);
     }
+
+    /**
+     * __call
+     *
+     * @param $method
+     * @param $parameters
+     *
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+        $users = $this->users();
+        return call_user_func_array([$users, $method], $parameters);
+    }
+
 }
