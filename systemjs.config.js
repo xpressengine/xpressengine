@@ -33,6 +33,14 @@ System.config({
       "resources/assets/js/menu/TreeNode.jsx!github:floatdrop/plugin-jsx@1.2.1.js",
       "resources/assets/js/menu/MenuEntity.jsx!github:floatdrop/plugin-jsx@1.2.1.js",
       "resources/assets/js/menu/MenuItem.jsx!github:floatdrop/plugin-jsx@1.2.1.js"
+    ],
+    "xecore:/common/js/xe.bundle.js": [
+      "assets/core/common/js/xe.js",
+      "assets/core/common/js/xe.lang.js",
+      "assets/core/common/js/xe.progress.js",
+      "assets/core/common/js/xe.request.js",
+      "npm:jquery@2.2.1.js",
+      "npm:jquery@2.2.1/dist/jquery.js"
     ]
   },
 

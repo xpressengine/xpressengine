@@ -30,7 +30,10 @@
     {!! XeFrontend::output('translation') !!}
 
     <script type="text/javascript">
-        {{--
+        System.import('xecore:/common/js/xe.js').then(function(XE) {
+            console.log('@@@@@@@@@', XE);
+        });
+
         XE.setup({
             loginUserId: '{{ Auth::user()->getId() }}',
             loadedTime: {{ time() }},
@@ -39,15 +42,6 @@
         @if (in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER]))
         XE.configure({managePrefix: '{{ app('config')['xe.routing.settingsPrefix'] }}'});
         @endif
-
-        require.config({
-            baseUrl: '/assets/vendor/',
-            paths: {
-                griper: '../core/common/js/modules/griper/griper',
-                validator: '../core/common/js/modules/validator'
-            }
-        });
-        --}}
     </script>
 
 

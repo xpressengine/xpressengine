@@ -31,6 +31,8 @@ gulp.task('default', function(callback){
     'assets:sass',
     'jspm:admin',
     'jspm:component',
+    'jspm:menu',
+    'jspm:xe',
     callback);
 });
 
@@ -49,6 +51,14 @@ gulp.task('jspm', ['copy-assets'], function(callback){
     'jspm:component',
     'jspm:menu',
     callback);
+});
+
+gulp.task('jspm:xe', function(){
+  return gulp.src('assets/core/common/js/xe.js')
+    .pipe($.plumber())
+    .pipe($.jspm({selfExecutingBundle: true}))
+    .pipe($.rename('xe.bundle.js'))
+    .pipe(gulp.dest('assets/core/common/js'));
 });
 
 gulp.task('jspm:menu', function(){

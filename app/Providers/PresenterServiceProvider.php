@@ -180,10 +180,10 @@ class PresenterServiceProvider extends ServiceProvider
             // 'assets/core/common/js/toggleMenu.js',
             'jspm_packages/system.js',
             'systemjs.config.js',
+            'assets/core/common/js/xe.bundle.js',
             'assets/vendor/jquery/jquery.js',
-            'assets/core/common/js/translator.js',
-            'assets/core/common/js/xe.js',
-            // 'assets/core/common/js/helpers.js',
+            // 'assets/core/common/js/translator.js',
+            'assets/core/common/js/helpers.js', // @TODO 제거
         ])->appendTo('head.prepend')->load();
     }
 
