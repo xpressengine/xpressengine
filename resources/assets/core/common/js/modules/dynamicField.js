@@ -22,12 +22,18 @@ define(['xecore:/common/js/modules/dynamicField'], function(validator) {
             this.container.$addForm = this.container.find('.__xe_add_form_section');
 
             this.attachEvent();
+
+            this.closeAll = function() {
+                this.container.find('.__xe_form_edit').remove();
+                this.container.$addForm.find('form').remove();
+            };
         };
 
         this.attachEvent = function() {
             var self = this;
 
             this.container.on('click', '.__xe_btn_add', function() {
+                self.closeAll();
                 self.container.$addForm.html(self.formClone());
             });
             this.container.on('click', '.__xe_btn_submit', function() {
@@ -38,6 +44,7 @@ define(['xecore:/common/js/modules/dynamicField'], function(validator) {
             });
             this.container.on('click', '.__xe_btn_edit', function(e) {
                 e.preventDefault();
+                self.closeAll();
                 self.edit(this);
             });
             this.container.on('click', '.__xe_btn_delete', function(e) {
@@ -141,7 +148,7 @@ define(['xecore:/common/js/modules/dynamicField'], function(validator) {
                 id = tr.data('id'),
                 tbody = $(o).closest('tbody'),
                 colspanCount = $(o).closest('table').find('thead th'),
-                edit = $('<tr>').addClass('more-info-area').append(
+                edit = $('<tr>').addClass('more-info-area __xe_form_edit').append(
                     $('<td>').addClass('__xe_form_container').prop('colspan', colspanCount.length)
                 ),
                 frm = this.formClone();

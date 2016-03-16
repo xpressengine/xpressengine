@@ -209,7 +209,7 @@ class DynamicFieldController extends Controller
 
         $configHandler = $dynamicField->getConfigHandler();
 
-        $config = $configHandler->getDefault();
+        $config = $configHandler->get($inputs['group'], $inputs['id']);
         foreach ($inputs as $name => $value) {
             $config->set($name, $value);
         }

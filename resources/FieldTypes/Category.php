@@ -5,12 +5,12 @@
 namespace Xpressengine\FieldTypes;
 
 use Xpressengine\Database\DynamicQuery;
-use Xpressengine\DynamicField\DynamicFieldHandler;
 use Xpressengine\DynamicField\AbstractType;
 use Xpressengine\DynamicField\ColumnEntity;
 use Xpressengine\DynamicField\ColumnDataType;
 use Xpressengine\Config\ConfigEntity;
 use Illuminate\Database\Query\Builder;
+use Xpressengine\Category\Models\Category as CategoryModel;
 use Xpressengine\FieldSkins\Category\AfterTitle;
 use Xpressengine\FieldSkins\Category\BeforeTitle;
 use Xpressengine\FieldSkins\Category\DefaultSkin;
@@ -88,7 +88,7 @@ class Category extends AbstractType
     {
         $category = null;
         if ($config != null) {
-            $category = app('xe.category')->get($config->get('categoryId'));
+            $category = CategoryModel::find($config->get('categoryId'));
         }
 
         XeFrontend::rule('dynamicFieldSection', $this->getSettingsRules());
