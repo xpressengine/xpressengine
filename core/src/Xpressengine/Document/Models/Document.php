@@ -204,9 +204,6 @@ class Document extends DynamicModel
      */
     protected function performInsert(OriginBuilder $query, array $options = [])
     {
-        // set reply
-        $this->setReply();
-
         $result = parent::performInsert($query, $options);
 
         if ($this->division === true) {

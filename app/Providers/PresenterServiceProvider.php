@@ -19,6 +19,7 @@ use Xpressengine\Presenter\Html\HtmlRenderer;
 use Xpressengine\Presenter\Json\JsonRenderer;
 use Xpressengine\Presenter\Presenter;
 use Xpressengine\Routing\InstanceConfig;
+use Xpressengine\Storage\File;
 
 /**
  * Presenter Service Provider
@@ -210,9 +211,9 @@ class PresenterServiceProvider extends ServiceProvider
         $siteConfig = app('xe.site')->getSiteConfig();
 
         if ($siteConfig['favicon'] !== null) {
-            $iconFile = $this->app->make('xe.storage')->get($siteConfig['favicon']);
+            $iconFile = File::find($siteConfig['favicon']);
             if ($iconFile !== null) {
-                $iconUrl = $this->app->make('xe.media')->make($iconFile)->url();
+                $iconUrl = $iconFile->url();
                 $frontendHandler->icon($iconUrl)->load();
             }
         }
