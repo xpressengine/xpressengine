@@ -112,10 +112,10 @@
                     </div>
                     <div class="btn_right">
                         @if($plugin->isActivated() && ($plugin->getSettingsURI() !== null) )
-                            <a class="btn btn_txt"
+                            <a class="btn xe-button-text"
                                href="{{ $plugin->getSettingsURI() }}">{{ xe_trans('xe::settings') }}</a>
                         @endif
-                        <a href="{{ route('settings.plugins.show', [$plugin->getId()]) }}" class="btn btn_txt">
+                        <a href="{{ route('settings.plugins.show', [$plugin->getId()]) }}" class="btn xe-button-text">
                             {{ xe_trans('xe::showDetails') }}
                         </a>
                     </div>

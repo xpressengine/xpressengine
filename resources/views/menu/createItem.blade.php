@@ -37,7 +37,7 @@
 
                         <p class="sub_txt">{{xe_trans('xe::itemActivatedDescription')}}</p>
 
-                        <div class="togglebutton btn_right">
+                        <div class="xe-toggle-button btn_right">
                             <label>
                                 <span class="sr-only"></span>
                                 <input type="checkbox" name="itemActivated" value="1" checked>
@@ -55,7 +55,7 @@
                                     @if($menuType::isRouteAble())
                                         <em class="txt_blue">/</em>
                                     @endif
-                                    <input type="text" name="itemUrl" class="inpt_txt" value="{{Request::old('itemUrl')}}"/>
+                                    <input type="text" name="itemUrl" class="xe-input-text" value="{{Request::old('itemUrl')}}"/>
                                 </div>
                             </div>
                         </div>
@@ -121,7 +121,7 @@
                         <p class="txt_tit">theme<i class="xi-information-circle"></i></p>
 
                         <p class="sub_txt">{{xe_trans('xe::menuThemeDescription')}}</p>
-                        <div class="inpt_group">
+                        <div class="xe-input-group">
                             <input type="checkbox" name="parentTheme" id="parentTheme" value="1">
                             <label for="parentTheme" class="inpt_chk">{{xe_trans('xe::menuThemeInheritMode')}}</label>
                         </div>
@@ -133,8 +133,8 @@
             </div>
             {!! uio('menuType', $menuTypeArgs) !!}
             <div class="btn_group_all">
-                <button type="submit" class="btn btn_blue">{{xe_trans('xe::submit')}}</button>
-                <a href="{{ route('settings.menu.select.types')}}" class="btn btn_gray">{{xe_trans('xe::cancel')}}</a>
+                <button type="submit" class="xe-button xe-button-blue">{{xe_trans('xe::submit')}}</button>
+                <a href="{{ route('settings.menu.select.types')}}" class="xe-button xe-button-gray">{{xe_trans('xe::cancel')}}</a>
             </div>
         </div>
     </form>

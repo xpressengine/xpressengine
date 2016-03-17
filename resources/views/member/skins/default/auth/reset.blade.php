@@ -11,13 +11,13 @@
             <legend>비밀번호 찾기</legend>
             <div class="auth_group {{--wrong--}}">
                 <label for="email" class="sr-only">이메일 주소</label>
-                <input type="text" id="email" class="inpt_txt" placeholder="이메일 주소" name="email" value="{{ old('email') }}">
+                <input type="text" id="email" class="xe-input-text" placeholder="이메일 주소" name="email" value="{{ old('email') }}">
                 {{--<em class="txt_message">이메일을 입력하세요.</em>--}}
             </div>
-            <button class="btn btn_blue">다음</button>
+            <button class="xe-button xe-button-blue">다음</button>
         </fieldset>
     </form>
-    <a href="{{ route('login') }}" class="btn btn_txt v2">로그인으로 돌아가기</a>
+    <a href="{{ route('login') }}" class="btn xe-button-text v2">로그인으로 돌아가기</a>
 </div>
 <!-- // 비밀번호 찾기 1step-->
 
@@ -32,7 +32,7 @@
         {{--<em class="info_tit">이메일을 수신하지 못했습니까?</em><br>
         <p>accounts-noreply@xpressengine.com으로부터 수신된 메시지에 대해 스팸 또는 벌크 폴더를 확인하십시오.</p>--}}
     </div>
-    <a href="#" class="btn btn_txt v2">로그인으로 돌아기기</a>
+    <a href="#" class="btn xe-button-text v2">로그인으로 돌아기기</a>
 </div>
 <!-- // 비밀번호 찾기 2step-->
 

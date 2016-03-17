@@ -22,7 +22,7 @@
                         <p class="txt_tit">Item Activated<i class="xi-information-circle"></i></p>
 
                         <p class="sub_txt">{{xe_trans('xe::itemActivatedDescription')}}</p>
-                        <div class="togglebutton btn_right">
+                        <div class="xe-toggle-button btn_right">
                             <label>
                                 <span class="sr-only"></span>
                                 @if($item->id == $homeId)
@@ -46,7 +46,7 @@
                                     @if( $menuType !== null && $menuType::isRouteAble())
                                         <em class="txt_blue">/</em>
                                     @endif
-                                    <input type="text" name="itemUrl" class="inpt_txt" value="{{ $item->url }}"/>
+                                    <input type="text" name="itemUrl" class="xe-input-text" value="{{ $item->url }}"/>
                                 </div>
                             </div>
                         </div>
@@ -104,7 +104,7 @@
                         <p class="txt_tit">theme<i class="xi-information-circle"></i></p>
 
                         <p class="sub_txt">테마를 미리 보고 클릭하여 선택할 수 있습니다.</p>
-                        <div class="inpt_group">
+                        <div class="xe-input-group">
                             <input type="checkbox" name="parentTheme" id="parentTheme" value="1"
                                    @if($parentThemeMode) checked @endif>
                             <label for="parentTheme" class="inpt_chk">{{xe_trans('xe::menuThemeInheritMode')}}</label>
@@ -121,8 +121,8 @@
                 @include('menu.partial.typeLoadError', ['item' => $item])
             @endif
             <div class="btn_group_all">
-                <button class="btn btn_blue">{{xe_trans('xe::save')}}</button>
-                <a href="{{route('settings.menu.index')}}" class="btn btn_gray">{{xe_trans('xe::cancel')}}</a>
+                <button class="xe-button xe-button-blue">{{xe_trans('xe::save')}}</button>
+                <a href="{{route('settings.menu.index')}}" class="xe-button xe-button-gray">{{xe_trans('xe::cancel')}}</a>
             </div>
         </div>
     </form>

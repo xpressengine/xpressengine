@@ -108,9 +108,9 @@ var MenuItem = React.createClass({
                 <div className="item_cont">
                     <i className="xi-paper"></i>
                     <dl>
-                        <dt className="blind">{title}</dt>
+                        <dt className="xe-sr-only">{title}</dt>
                         <dd className="one_line"><a href={nodeUrl}>{title}</a></dd>
-                        <dt className="blind">{url}</dt>
+                        <dt className="xe-sr-only">{url}</dt>
                         <dd className="txt_blue one_line">
                             <a href={url}>{url}</a>
                             <em>[{type}]</em>

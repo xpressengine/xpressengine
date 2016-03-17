@@ -92,7 +92,7 @@ var LangEditor = React.createClass({
             name = (resource + '/locale/' + locale);
 
         if (!this.props.multiline) {
-            edit = <input type="text" className="inpt_txt" id={id} name={name} defaultValue={value} />;
+            edit = <input type="text" className="xe-input-text" id={id} name={name} defaultValue={value} />;
         } else {
             edit = <textarea id={id} name={name} defaultValue={value} />;
         }

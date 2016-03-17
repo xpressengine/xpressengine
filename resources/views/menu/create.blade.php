@@ -21,7 +21,7 @@
                         <div class="row">
                             <div class="col-sm-5">
                                 <div class="inpt_bd">
-                                    <input type="text" class="inpt_txt" name="menuTitle"
+                                    <input type="text" class="xe-input-text" name="menuTitle"
                                            value="{{Input::old('menuTitle')}}"
                                            placeholder="{{xe_trans('xe::menuTitlePlaceHolder')}}"/>
                                 </div>
@@ -55,8 +55,8 @@
                 </div>
             </div>
             <div class="btn_group_all">
-                <button class="btn btn_blue">{{xe_trans('xe::submit')}}</button>
-                <a href="{{ route('settings.menu.index')}}" class="btn btn_gray">{{xe_trans('xe::cancel')}}</a>
+                <button class="xe-button xe-button-blue">{{xe_trans('xe::submit')}}</button>
+                <a href="{{ route('settings.menu.index')}}" class="xe-button xe-button-gray">{{xe_trans('xe::cancel')}}</a>
             </div>
         </div>
 

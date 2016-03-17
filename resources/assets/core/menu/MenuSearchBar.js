@@ -173,8 +173,8 @@ var MenuSearchBar = React.createClass({
                 "form-group" : true,
                 open : query.length > 0
             })}>
-                <label for="inpt_srch"><span className="blind">검색</span></label>
-                <input id="inpt_srch" type="text" className="inpt_txt" placeholder={placeholder} ref="input"
+                <label for="xe-input-search"><span className="xe-sr-only">검색</span></label>
+                <input id="xe-input-search" type="text" className="xe-input-text" placeholder={placeholder} ref="input"
                        onChange={this.handleChange} onKeyDown={this.handleKeyDown}/>
                 <button type="button" className="pull-right" onClick={this.resetSearch}>
                     <i className="xi-magnifier"></i><i className="xi-close"></i>

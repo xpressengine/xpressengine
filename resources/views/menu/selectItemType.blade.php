@@ -19,8 +19,8 @@
                 </div>
             </div>
             <div class="btn_group_all">
-                <button class="btn btn_blue">{{xe_trans('xe::next')}}</button>
-                <a href="{{route('settings.menu.index')}}" class="btn btn_gray">{{xe_trans('xe::cancel')}}</a>
+                <button class="xe-button xe-button-blue">{{xe_trans('xe::next')}}</button>
+                <a href="{{route('settings.menu.index')}}" class="xe-button xe-button-gray">{{xe_trans('xe::cancel')}}</a>
             </div>
         </div>
     </form>

@@ -441,14 +441,14 @@ var MenuSearchBar = React.createClass({
             },
             React.createElement(
                 'label',
-                { 'for': 'inpt_srch' },
+                { 'for': 'xe-input-search' },
                 React.createElement(
                     'span',
                     {className: 'blind'},
                     '검색'
                 )
             ),
-            React.createElement('input', { id: 'inpt_srch', type: 'text', className: 'inpt_txt', placeholder: placeholder, ref: 'input',
+            React.createElement('input', { id: 'xe-input-search', type: 'text', className: 'xe-input-text', placeholder: placeholder, ref: 'input',
                 onChange: this.handleChange, onKeyDown: this.handleKeyDown }),
             React.createElement(
                 'button',

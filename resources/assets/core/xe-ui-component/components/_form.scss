@@ -125,7 +125,7 @@
   border-color: #8e8e93;
   color: #434a53;
 }
-.xe-button_group {
+.xe-button-group {
   display: inline-block;
   vertical-align: top;
 }
@@ -200,7 +200,7 @@
   background-color: #8e8e93;
   color: #2c2e37;
 }
-.xe-button_group_all {
+.xe-button_group-all {
   margin: 24px auto;
 }
 
@@ -214,7 +214,7 @@
   color: #fff;
 }
 
-.input-text,
+.xe-input-text,
 .form-control {
   width: 100%;
   height: 36px;
@@ -239,23 +239,23 @@ textarea {
 .form-control.srch {
   padding-right: 30px;
 }
-.input-text.readonly {
+.xe-input-text.readonly {
   height: 40px;
   background-color: #f6f6f6;
   border-color: #f6f6f6;
   color: #cbcbcb;
   font-size: 15px;
 }
-.wrong .input-text {
+.wrong .xe-input-text {
   border-color: #dd251e !important;
   color: #db2828;
 }
-.success .input-text {
+.success .xe-input-text {
   border-color: #2c8beb !important;
 }
-.input-text:focus,
+.xe-input-text:focus,
 .input-body textarea:focus,
-.input-body .input-text:focus,
+.input-body .xe-input-text:focus,
 .form-control:focus {
   border-color: #2389ee;
   color: #2c2e37;
@@ -287,7 +287,7 @@ textarea {
   position: relative;
 }
 .input-body textarea,
-.input-body .input-text {
+.input-body .xe-input-text {
   width: 100%;
   border: 1px solid #dadbde;
   outline: none;
@@ -305,14 +305,14 @@ textarea {
   display: inline-block;
   font-size: 0;
 }
-.form-group .input-text.v2 {
+.form-group .xe-input-text.v2 {
   width: 170px;
   margin: 0;
   border-right-color: transparent;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
-.form-group .input-text:focus {
+.form-group .xe-input-text:focus {
   border-color: #2389ee;
 }
 .form-group .xe-button {
@@ -320,6 +320,7 @@ textarea {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   color: #8e8e93;
+  vertical-align: top;
 }
 .form-group .xe-button:hover {
   background-color: #b5b7bd;
@@ -466,7 +467,7 @@ a.icon-gray:hover {
     font-size: 16px;
     color: #8e8e93;
   }
-  .input-text {
+  .xe-input-text {
     width: 224px;
     padding-left: 0;
     border: none;

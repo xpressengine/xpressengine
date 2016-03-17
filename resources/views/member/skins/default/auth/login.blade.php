@@ -8,16 +8,16 @@
             <legend>로그인</legend>
             <div class="auth_group {{--wrong--}}">
                 <label for="name" class="sr-only">이메일 주소 / 사용자 이름</label>
-                <input name="email" type="text" id="name" class="inpt_txt" value="{{ old('email') }}" placeholder="이메일 주소 / 사용자 이름">
+                <input name="email" type="text" id="name" class="xe-input-text" value="{{ old('email') }}" placeholder="이메일 주소 / 사용자 이름">
                 {{--<em class="txt_message">잘못된 이메일 주소입니다. 이메일 주소를 확인하시고 다시 입력해주세요.</em>--}}
             </div>
             <div class="auth_group">
                 <label for="pwd" class="sr-only">비밀번호</label>
-                <input name="password" type="password" id="pwd" class="inpt_txt" placeholder="비밀번호">
+                <input name="password" type="password" id="pwd" class="xe-input-text" placeholder="비밀번호">
             </div>
-            <div class="inpt_group">
+            <div class="xe-input-group">
                 <!--[D] 로그인 유지가 기본인 경우 inpuit에 "disabled="disabled"추가-->
-                <!--[D] 다른 inpt_group과 다르게 label(for=""), input(id="")  같은 값으로 매칭-->
+                <!--[D] 다른 xe-input-group과 다르게 label(for=""), input(id="")  같은 값으로 매칭-->
                 <input type="checkbox" id="chk" name="remember">
                 <label for="chk" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="__xe_infoRemember" data-target="#__xe_infoRemember"><span>로그인 유지하기</span></label>
                 <a href="{{ route('auth.reset') }}" class="pull-right">암호를 잊었습니까?</a>
@@ -32,7 +32,7 @@
                 {!! uio('captcha') !!}
             @endif
 
-            <button type="submit" class="btn btn_blue">로그인</button>
+            <button type="submit" class="xe-button xe-button-blue">로그인</button>
         </fieldset>
     </form>
     {{--<div class="hr">

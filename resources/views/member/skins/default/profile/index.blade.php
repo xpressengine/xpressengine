@@ -54,7 +54,7 @@
                         @if($grant['modify'])
                             <div class="profile_btn_area">
                                 <button type="button" class="__xe_profileEditBtn">프로필 수정</button>
-                                <button type="submit" class="__xe_profileSaveBtn btn_blue" style="display: none;">저장</button>
+                                <button type="submit" class="__xe_profileSaveBtn xe-button-blue" style="display: none;">저장</button>
                                 <button type="button" class="__xe_profileEditCancelBtn" style="display: none;">취소</button>
                             </div>
                         @endif

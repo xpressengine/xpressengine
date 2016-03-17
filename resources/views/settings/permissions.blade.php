@@ -21,7 +21,7 @@
                     {!! uio('xpressengine@registeredPermission',['title' => $permission['title'],'type' => 'settings','target' => $permission['id']])->render() !!}
 
                     <div class="btn_group_all">
-                        <button type="submit" class="btn btn_blue">{{ xe_trans('xe::applyModified') }}</button>
+                        <button type="submit" class="xe-button xe-button-blue">{{ xe_trans('xe::applyModified') }}</button>
                     </div>
                 </form>
         </div>

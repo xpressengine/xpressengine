@@ -146,7 +146,7 @@ h6 {
 .member fieldset {
   border: none;
 }
-.member .inpt_txt {
+.member .xe-input-text {
   margin: 0;
   background-color: transparent;
 }
@@ -167,10 +167,10 @@ h6 {
   position: relative;
   margin-bottom: 16px;
 }
-.member .inpt_group {
+.member .xe-input-group {
   margin: 16px 0;
 }
-.member .inpt_group label {
+.member .xe-input-group label {
   font-size: 14px;
   color: #696e7a;
   line-height: 20px;
@@ -178,7 +178,7 @@ h6 {
 }
 .member h1 {
   margin-bottom: 24px;
-  font-size: 24px;
+  font-size: 24px !important;
   line-height: 32px;
   font-weight: normal;
 }
@@ -191,13 +191,13 @@ h6 {
 .member .g-recaptcha {
   margin: 16px auto;
 }
-.member .btn_blue,
-.member .btn_txt {
+.member .xe-button-blue,
+.member .xe-button.xe-button-text {
   width: 100%;
   margin-bottom: 16px;
   text-align: center;
 }
-.member .btn_blue {
+.member .xe-button-blue {
   color: #fff;
 }
 .member .auth_txt {

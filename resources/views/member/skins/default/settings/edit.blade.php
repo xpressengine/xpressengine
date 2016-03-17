@@ -20,17 +20,17 @@
 
                 <div class="__xe_mailList">
                     @foreach($user->emails as $mail)
-                        <div class="inpt_group __xe_mailItem" data-email="{{ $mail->address }}">
+                        <div class="xe-input-group __xe_mailItem" data-email="{{ $mail->address }}">
                             <input type="radio" id="__xe_chk_mail_{{ $mail->id }}" name="email" value="{{ $mail->address }}" {{ $user->email === $mail->address ? 'checked' : '' }} >
                             <!--[D] 체크 시 inpt_chk에  on 클래스 추가-->
                             <label for="__xe_chk_mail_{{ $mail->id }}"><span>{{ $mail->address }}</span></label>
                             @if($user->email !== $mail->address)
                                 <span class="dot"> · </span>
-                                <button class="btn_txt __xe_wantDeleteBtn">{{ xe_trans('xe::delete') }}</button>
+                                <button class="xe-button-text __xe_wantDeleteBtn">{{ xe_trans('xe::delete') }}</button>
                                 <span class="__xe_confirmDelete" style="display: none">
                             <span>{{ xe_trans('xe::confirmDelete') }}</span>
-                            <button class="btn_txt __xe_deleteConfirmBtn" data-email="{{ $mail->address }}">{{ xe_trans('xe::confirm') }}</button>
-                            <button class="btn_txt __xe_deleteCancelBtn">{{ xe_trans('xe::cancel') }}</button>
+                            <button class="xe-button-text __xe_deleteConfirmBtn" data-email="{{ $mail->address }}">{{ xe_trans('xe::confirm') }}</button>
+                            <button class="xe-button-text __xe_deleteCancelBtn">{{ xe_trans('xe::cancel') }}</button>
                         </span>
                             @endif
                         </div>
@@ -45,12 +45,12 @@
                 <p>{{ xe_trans('xe::pendingEmail') }}</p>
                 <em class="txt_gray3">{!! xe_trans('xe::checkEmailForConfirmCode', ['email' => $pending->address]) !!}</em><br>
                 <div class="form_group">
-                    <input type="text" class="__xe_confirmCodeInput inpt_txt v2">
-                    <button class="__xe_confirmCodeBtn btn btn_gray">{{ xe_trans('xe::confirmation') }}</button>
+                    <input type="text" class="__xe_confirmCodeInput xe-input-text v2">
+                    <button class="__xe_confirmCodeBtn xe-button xe-button-gray">{{ xe_trans('xe::confirmation') }}</button>
                 </div>
                 <div class="btn_group txt_group">
-                    <button class="btn btn_txt __xe_resendConfirmBtn" data-email="{{ $pending->address }}">{{ xe_trans('xe::resendEmail') }}</button>
-                    <button class="btn btn_txt __xe_deletePendingBtn" data-email="{{ $pending->address }}">{{ xe_trans('xe::delete') }}</button>
+                    <button class="btn xe-button-text __xe_resendConfirmBtn" data-email="{{ $pending->address }}">{{ xe_trans('xe::resendEmail') }}</button>
+                    <button class="btn xe-button-text __xe_deletePendingBtn" data-email="{{ $pending->address }}">{{ xe_trans('xe::delete') }}</button>
                 </div>
                 <em class="txt_message">&nbsp;</em>
             </div>
@@ -60,10 +60,10 @@
                 <!--[D] 잘못표기 시 클래스 wrong 추가-->
             <div class="setting_detail_con __xe_addEmailBox">
                 <p>{{ xe_trans('xe::addMail') }}</p>
-                <input type="text" class="inpt_txt __xe_addInput">
+                <input type="text" class="xe-input-text __xe_addInput">
                 <div class="btn_group">
-                    <button class="__xe_addBtn btn btn-default blue">{{ xe_trans('xe::save') }}</button>
-                    <button class="__xe_addCancelBtn btn btn-default gray">{{ xe_trans('xe::cancel') }}</button>
+                    <button class="__xe_addBtn xe-button xe-button-default blue">{{ xe_trans('xe::save') }}</button>
+                    <button class="__xe_addCancelBtn xe-button xe-button-default">{{ xe_trans('xe::cancel') }}</button>
                 </div>
                 <em class="txt_message __xe_message">&nbsp;</em>
             </div>
@@ -71,8 +71,8 @@
             @endif
 
             <div class="btn_group_all">
-                <button class="__xe_saveBtn btn btn_blue">{{ xe_trans('xe::applyModified') }}</button>
-                <button class="__xe_cancelBtn btn btn_gray">{{ xe_trans('xe::cancel') }}</button>
+                <button class="__xe_saveBtn xe-button xe-button-blue">{{ xe_trans('xe::applyModified') }}</button>
+                <button class="__xe_cancelBtn xe-button xe-button-gray">{{ xe_trans('xe::cancel') }}</button>
             </div>
         </div>
     </div>
@@ -91,13 +91,13 @@
             <div class="setting_detail_con">
                 <p>{{ xe_trans('xe::changeMemberName') }}</p>
                 <em class="txt_gray2">{{ xe_trans('xe::canChangeMemberName') }}</em>
-                <input type="text" class="__xe_nameInput inpt_txt" name="name" value="{{ $user->getDisplayName() }}">
+                <input type="text" class="__xe_nameInput xe-input-text" name="name" value="{{ $user->getDisplayName() }}">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <em class="__xe_message txt_message">{{ xe_trans('xe::isYourCurrentName') }}</em>
             </div>
             <div class="btn_group_all">
-                <button class="__xe_saveBtn btn btn_blue">{{ xe_trans('xe::applyModified') }}</button>
-                <button class="__xe_cancelBtn btn btn_gray">{{ xe_trans('xe::cancel') }}</button>
+                <button class="__xe_saveBtn xe-button xe-button-blue">{{ xe_trans('xe::applyModified') }}</button>
+                <button class="__xe_cancelBtn xe-button xe-button-gray">{{ xe_trans('xe::cancel') }}</button>
             </div>
         </div>
     </div>
@@ -123,24 +123,24 @@
                 <em class="txt_gray2">{{ $passwordLevel['description'] }}</em>
                 <div class="pw_con __xe_currentPassword" @if(!$user->password) style="display: none;" @endif>
                     <p class="txt_pw">{{ xe_trans('xe::currentPassword') }}</p>
-                    <input type="password" class="inpt_txt" name="current_password">
+                    <input type="password" class="xe-input-text" name="current_password">
                     <em class="txt_message">&nbsp;</em>
                 </div>
                 <div class="pw_con __xe_newPassword">
                     <p class="txt_pw">{{ xe_trans('xe::newPassword') }}</p>
-                    <input type="password" class="inpt_txt" name="password">
+                    <input type="password" class="xe-input-text" name="password">
                     <em class="txt_message">&nbsp;</em>
                     <em class="__xe_secure txt_message" style="display: none;">{{ xe_trans('xe::passwordStrength') }}: <span class="__xe_low txt_red">{{ xe_trans('xe::weak') }}</span> <span class="__xe_normal">{{ xe_trans('xe::normal') }}</span> <span class="__xe_high txt_blue">{{ xe_trans('xe::strong') }}</span></em>
                 </div>
                 <div class="pw_con __xe_passwordConfirm">
                     <p class="txt_pw">{{ xe_trans('xe::newPasswordConfirm') }}</p>
-                    <input type="password" class="inpt_txt" name="password_confirmation">
+                    <input type="password" class="xe-input-text" name="password_confirmation">
                     <p class="txt_message">&nbsp;</p>
                 </div>
             </div>
             <div class="btn_group_all">
-                <button class="__xe_saveBtn btn btn_blue">{{ xe_trans('xe::applyModified') }}</button>
-                <button class="__xe_cancelBtn btn btn_gray">{{ xe_trans('xe::cancel') }}</button>
+                <button class="__xe_saveBtn xe-button xe-button-blue">{{ xe_trans('xe::applyModified') }}</button>
+                <button class="__xe_cancelBtn xe-button xe-button-gray">{{ xe_trans('xe::cancel') }}</button>
             </div>
         </div>
     </div>
@@ -159,7 +159,7 @@
                     <em class="txt_gray">{{ xe_trans('xe::warningAboutAccountDeletion') }}</em>
                 </div>
                 <div class="setting_right">
-                    <button class="__xe_editBtn btn_txt txt_blue">{{ xe_trans('xe::deleteOk') }}</button>
+                    <button class="__xe_editBtn xe-button-text txt_blue">{{ xe_trans('xe::deleteOk') }}</button>
                 </div>
             </div>
         </div>
@@ -175,15 +175,15 @@
                         <li>댓글, 메시지, 토론 게시글 등을 포함한 모든 정보가 삭제됩니다.</li>
                         <li>아무도 다시는 귀하의 계정정보나 게시글에 액세스할 수 없게 됩니다.</li>
                     </ul>
-                    <div class="inpt_group">
+                    <div class="xe-input-group">
                         <input type="checkbox" id="__xe_chkLeave" name="confirm_leave" value="Y">
                         <label for="__xe_chkLeave" class=""><span>약관에 동의하며 내 계정을 영구적으로 삭제하겠습니다.</span></label>
                         <em class="txt_message __xe_message">&nbsp;</em>
                     </div>
                 </div>
                 <div class="btn_group_all">
-                    <button class="__xe_saveBtn btn btn_blue">{{ xe_trans('xe::applyModified') }}</button>
-                    <button class="__xe_cancelBtn btn btn_gray">{{ xe_trans('xe::cancel') }}</button>
+                    <button class="__xe_saveBtn xe-button xe-button-blue">{{ xe_trans('xe::applyModified') }}</button>
+                    <button class="__xe_cancelBtn xe-button xe-button-gray">{{ xe_trans('xe::cancel') }}</button>
                 </div>
             </form>
         </div>

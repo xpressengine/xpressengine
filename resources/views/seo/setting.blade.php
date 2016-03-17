@@ -7,7 +7,7 @@
 @endsection
 <style>
     .inpt_url em {margin-right:10px;font-size:20px}
-    .inpt_url .inpt_txt {width:90%}
+    .inpt_url .xe-input-text {width:90%}
 </style>
 
 <div class="panel">
@@ -28,7 +28,7 @@
                     <div class="row">
                         <div class="col-sm-12 inpt_bd">
                             <p class="txt_tit">{{ xe_trans('xe::siteImage') }} (1200x600, 600x315, 200x200)</p>
-                            <input type="file" class="inpt_txt" name="siteImage">
+                            <input type="file" class="xe-input-text" name="siteImage">
                             @if($setting->getSiteImage())
                                 <br />
                                 {!! $setting->getSiteImage()->render(['responsive' => true]) !!}
@@ -69,7 +69,7 @@
                     <div class="row">
                         <div class="col-md-12 inpt_bd">
                             <p class="txt_tit">{{ xe_trans('xe::siteKeyword') }}</p>
-                            <input type="text" class="inpt_txt" name="keywords" value="{{ $setting->get('keywords') ?: Input::old('keywords') }}">
+                            <input type="text" class="xe-input-text" name="keywords" value="{{ $setting->get('keywords') ?: Input::old('keywords') }}">
                         </div>
                     </div>
                     <div class="row">
@@ -92,7 +92,7 @@
                         <div class="col-md-6">
                             <p class="txt_tit">Twitter Username</p>
                             <div class="inpt_url">
-                                <em class="txt_blue">@</em><input type="text" class="inpt_txt" name="twitterUsername" placeholder="username" value="{{ $setting->get('twitterUsername') ?: Input::old('twitterUsername') }}">
+                                <em class="txt_blue">@</em><input type="text" class="xe-input-text" name="twitterUsername" placeholder="username" value="{{ $setting->get('twitterUsername') ?: Input::old('twitterUsername') }}">
                             </div>
                         </div>
                     </div>

@@ -192,7 +192,7 @@ li {
 .setting_card .setting_detail_con .pw_con.wrong .txt_message {
   color: #db2828;
 }
-.setting_card .setting_detail_con .pw_con.wrong .inpt_txt {
+.setting_card .setting_detail_con .pw_con.wrong .xe-input-text {
   border-color: #dd251e;
 }
 
@@ -258,10 +258,10 @@ li {
 .setting_card .txt_blue {
   color: #2c8beb !important;
 }
-.setting_card .btn_txt.txt_blue {
+.setting_card .xe-button xe-button-text.txt_blue {
   margin-right: 12px;
 }
-.setting_card.login_connect .btn_txt {
+.setting_card.login_connect .xe-button xe-button-text {
   margin: 0 12px 0 0;
   color: #2c8beb;
   font-size: 15px;
@@ -270,13 +270,13 @@ li {
   color: #db2828 !important;
   font-size: 13px;
 }
-.setting_group .inpt_txt + .txt_blue {
+.setting_group .xe-input-text + .txt_blue {
   margin-top: 6px;
 }
-.setting_group .txt_red + .btn_txt {
+.setting_group .txt_red + .xe-button xe-button-text {
   margin-left: 10px;
 }
-.setting_group .inpt_txt.margin {
+.setting_group .xe-input-text.margin {
   margin: 9px 0 25px;
 }
 .setting_group .setting_left {
@@ -289,16 +289,16 @@ li {
   top: 50%;
   margin-top: -15px;
 }
-.setting_group .setting_right .togglebutton {
+.setting_group .setting_right .xe-toggle-button {
   margin-right: 16px;
 }
 .setting_card .setting_detail_con .setting_left {
   width: 70%;
 }
-.setting_card .btn_group_all {
+.setting_card .xe-button_group-all {
   margin-left: 16px;
 }
-.setting_card .inpt_group .btn_txt {
+.setting_card .xe-input-group .xe-button xe-button-text {
   height: auto;
   line-height: inherit;
   padding: 0;
@@ -467,22 +467,22 @@ li {
   .main_con .setting_group.pd_small {
     padding: 10px 0 20px;
   }
-  .setting_card .btn_group_all {
+  .setting_card .xe-button_group-all{
     margin-left: 0;
   }
-  .setting_group .inpt_txt {
+  .setting_group .xe-input-text {
     width: 290px;
   }
   .menu_open {
     display: none;
   }
-  .setting_card .inpt_txt {
+  .setting_card .xe-input-text {
     width: 280px;
   }
   .setting_card .btn_group {
     margin: 0 6px;
   }
-  .setting_group_con .togglebutton {
+  .setting_group_con .xe-toggle-button {
     margin-right: 16px;
   }
 

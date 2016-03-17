@@ -8,15 +8,15 @@
             <legend>이메일 인증</legend>
             <div class="auth_group {{--wrong--}}">
                 <label for="email" class="sr-only">이메일 주소</label>
-                <input type="text" id="email" class="inpt_txt" placeholder="이메일 주소" name="email" value="{{ Input::get('email') }}" readonly>
+                <input type="text" id="email" class="xe-input-text" placeholder="이메일 주소" name="email" value="{{ Input::get('email') }}" readonly>
             </div>
             <div class="auth_group {{--wrong--}}">
                 <label for="code" class="sr-only">인증 코드</label>
-                <input type="text" id="code" class="inpt_txt" placeholder="인증 코드" name="code">
+                <input type="text" id="code" class="xe-input-text" placeholder="인증 코드" name="code">
                 <button class="btn_eye on" style="display:none"><i class="xi-eye"></i><i class="xi-eye-slash"></i>
                 </button>
             </div>
-            <button type="submit" class="btn btn_blue">인증 요청</button>
+            <button type="submit" class="xe-button xe-button-blue">인증 요청</button>
         </fieldset>
     </form>
 </div>
