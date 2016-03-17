@@ -35,6 +35,11 @@ define(['xecore:/common/js/modules/dynamicField'], function(validator) {
             this.container.on('click', '.__xe_btn_add', function() {
                 self.closeAll();
                 self.container.$addForm.html(self.formClone());
+
+                var $langBox = self.container.$addForm.find('.dynamic-lang-editor-box');
+
+                $langBox.addClass('lang-editor-box');
+                langEditorBoxRender($langBox);
             });
             this.container.on('click', '.__xe_btn_submit', function() {
                 self.store(this);
@@ -50,6 +55,7 @@ define(['xecore:/common/js/modules/dynamicField'], function(validator) {
             this.container.on('click', '.__xe_btn_delete', function(e) {
                 e.preventDefault();
                 self.destroy(this);
+                self.closeAll();
             });
             this.container.on('change', '.__xe_type_id', function(e) {
                 var typeId = $(this).val(),
@@ -107,16 +113,12 @@ define(['xecore:/common/js/modules/dynamicField'], function(validator) {
                     self.addrow(data.list[i]);
                 }
             });
-            jqxhr.always(function(jqxhr, textStatus) {
-                // 따로 하고 싶은 complete 처리가 있어?
-            });
-            jqxhr.fail(function(jqxhr, settings, thrownError) {
-                // 따로 하고 싶은 에러 처리가 있어?
-            });
         };
 
         this.formClone = function() {
-            return this.container.$form.clone().removeClass('__xe_add_form').show();
+            var $form = this.container.$form.clone().removeClass('__xe_add_form');
+            $form.show();
+            return $form;
         };
 
         this.addrow = function(data) {
@@ -175,7 +177,12 @@ define(['xecore:/common/js/modules/dynamicField'], function(validator) {
                             $option.remove();
                         }
                     });
-                    frm.find('[name="label"]').val(response.config.label);
+
+                    var $langBox = frm.find('.dynamic-lang-editor-box');
+                    $langBox.data('lang-key', response.config.label);
+                    $langBox.addClass('lang-editor-box');
+                    langEditorBoxRender($langBox);
+
                     frm.find('[name="use"]').val(self.checkBox(response.config.use) ? 'true' : 'false');
                     frm.find('[name="required"]').val(self.checkBox(response.config.required) ? 'true' : 'false');
                     frm.find('[name="sortable"]').val(self.checkBox(response.config.sortable) ? 'true' : 'false');

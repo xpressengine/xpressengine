@@ -49,7 +49,7 @@ class LangPreprocessor
     {
         $fields = $request->all();
         foreach ($fields as $key => $value) {
-            if ($params = $this->parse($key)) {
+            if ($params = XeLang::parsePreprocessor($key)) {
                 list($kSeq, $seq, $command) = $params;
                 switch ( $command ) {
                     case 'name':
@@ -78,7 +78,7 @@ class LangPreprocessor
     {
         $fields = $request->all();
         foreach ($fields as $key => $value) {
-            if ($params = $this->parse($key)) {
+            if ($params = XeLang::parsePreprocessor($key)) {
                 list($kSeq, $seq, $command) = $params;
                 if ($command == 'locale') {
                     list($kSeq, $seq, $kLocale, $locale) = $params;
@@ -88,19 +88,5 @@ class LangPreprocessor
                 }
             }
         }
-    }
-
-    private function parse($key)
-    {
-        $protocol = 'xe_lang_preprocessor://';
-        $lenproto = strlen($protocol);
-
-        if ( starts_with($key, $protocol) ) {
-            $params = explode("/", substr($key, $lenproto));
-            array_shift($params);
-            return !empty($params) ? $params : null;
-        }
-
-        return null;
     }
 }

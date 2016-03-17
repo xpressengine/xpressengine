@@ -138,12 +138,17 @@ var LangEditor = React.createClass({
     }
 });
 
+var langEditorBoxRender = function ($o) {
+    var name = $o.data('name'),
+        langKey = $o.data('lang-key'),
+        multiline = $o.data('multiline'),
+        lines = $o.data('lines');
+
+    React.render(<LangEditorBox name={name} langKey={langKey} multiline={multiline} lines={lines} />, $o[0]);
+}
+
 $('.lang-editor-box').each(function(i) {
-    var name = $(this).data('name'),
-        langKey = $(this).data('lang-key'),
-        multiline = $(this).data('multiline'),
-        lines = $(this).data('lines');
-    React.render(<LangEditorBox name={name} langKey={langKey} multiline={multiline} lines={lines} />, this);
+    langEditorBoxRender($(this));
 });
 
 $(document).on('focus', '.lang-editor .main input, textarea', function() {

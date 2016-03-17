@@ -11,7 +11,9 @@ use Xpressengine\Http\Request;
 use Document;
 use App\Sections\DynamicFieldSection;
 use XeDB;
-use DynamicField;
+use XeLang;
+use XeDynamicField;
+use Xpressengine\Translation\Translator;
 
 class DynamicFieldController extends Controller
 {
@@ -54,6 +56,7 @@ class DynamicFieldController extends Controller
             $fieldType = $dynamicField->get($config->get('group'), $config->get('id'));
             $info['typeName'] = $fieldType->name();
             $info['skinName'] = $fieldType->getSkin()->name();
+            $info['label'] = xe_trans($info['label']);
 
             $list[] = $info;
         }
@@ -138,7 +141,7 @@ class DynamicFieldController extends Controller
      *
      * @return \Xpressengine\Presenter\RendererInterface
      */
-    public function store(Request $request)
+    public function store(Request $request, Translator $translator)
     {
         /**
          * @var \Xpressengine\DynamicField\DynamicFieldHandler $dynamicField
@@ -172,10 +175,14 @@ class DynamicFieldController extends Controller
 
 
         $row = $config->getPureAll();
+
         $fieldType = $registerHandler->getType($dynamicField, $row['typeId']);
         $fieldSkin = $registerHandler->getSkin($dynamicField, $row['skinId']);
         $row['typeName'] = $fieldType->name();
         $row['skinName'] = $fieldSkin->name();
+
+        $multiLang = $translator->getPreprocessorValues($inputs, session()->get('locale'));
+        $row['label'] = $multiLang['label'];
 
         return XePresenter::makeApi($row);
     }
@@ -185,7 +192,7 @@ class DynamicFieldController extends Controller
      *
      * @return \Xpressengine\Presenter\RendererInterface
      */
-    public function update(Request $request)
+    public function update(Request $request, Translator $translator)
     {
         /**
          * @var \Xpressengine\DynamicField\DynamicFieldHandler $dynamicField
@@ -222,6 +229,9 @@ class DynamicFieldController extends Controller
         $fieldSkin = $registerHandler->getSkin($dynamicField, $row['skinId']);
         $row['typeName'] = $fieldType->name();
         $row['skinName'] = $fieldSkin->name();
+
+        $multiLang = $translator->getPreprocessorValues($inputs, session()->get('locale'));
+        $row['label'] = $multiLang['label'];
 
         return XePresenter::makeApi($row);
     }
