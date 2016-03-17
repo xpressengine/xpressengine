@@ -70,12 +70,13 @@ class CacheDecorator implements RouteRepository
     public function all()
     {
         $key = $this->getCacheKey('all');
-        if (!$this->cache->has($key)) {
+
+        $routes = $this->cache->has($key) ? $this->cache->get($key) : call_user_func(function () use ($key) {
             $routes = $this->repo->all();
             $this->cache->put($key, $routes);
-        } else {
-            $routes = $this->cache->get($key);
-        }
+
+            return $routes;
+        });
 
         return $routes;
     }
