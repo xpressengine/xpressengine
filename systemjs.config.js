@@ -18,7 +18,6 @@ System.config({
     ],
     "xecore:/settings/js/admin.bundle.js": [
       "xecore:/settings/js/admin.js",
-      "github:twbs/bootstrap-sass@3.3.6/assets/javascripts/bootstrap.js",
       "npm:jquery@2.2.1.js",
       "npm:jquery@2.2.1/dist/jquery.js"
     ],

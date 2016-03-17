@@ -1,12 +1,11 @@
 (function (root, factory) {
     define([
       'exports',
-      'jquery',
-      "github:twbs/bootstrap-sass@3.3.6/assets/javascripts/bootstrap.js"
-    ], function (exports, jQuery, twbs) {
-      factory((root.commonJsStrictGlobal = exports), jQuery, twbs);
+      'jquery'
+    ], function (exports, jQuery) {
+      factory((root.commonJsStrictGlobal = exports), jQuery);
     });
-}(this, function (exports, $, twbs) {
+}(this, function (exports, $) {
   $(document).ready(function () {
     var $sidebar = $('.settings-nav-sidebar');
     var $dim = $('.dim');
