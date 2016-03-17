@@ -75,7 +75,7 @@ class ModuleValidator implements ValidatorInterface
     /**
      * boot
      *
-     * @param RouteRepository $routeRepo route handler
+     * @param RouteRepository $routeRepo    route handler
      * @param MenuHandler     $menuHandler  menu handler
      * @param ThemeHandler    $themeHandler theme handler
      * @param SiteHandler     $siteHandler  site handler
@@ -196,7 +196,6 @@ class ModuleValidator implements ValidatorInterface
      *
      * @param InstanceRoute $instanceRoute instance route
      * @param XeRequest     $request       xpressengine request
-     * @param Route         $route         route
      *
      * @return void
      */
