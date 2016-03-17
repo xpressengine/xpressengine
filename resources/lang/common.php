@@ -1163,5 +1163,9 @@ return [
     'inheritMode' => [
         'ko' => '상위 설정에 따름',
         'en' => 'Inherit Mode',
-    ]
+    ],
+    'moveToSite' => [
+        'ko' => '사이트로 이동',
+        'en' => 'Move to site',
+    ],
 ];

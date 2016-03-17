@@ -1,11 +1,11 @@
 <div class="admin-wrap">
     <header>
         <button type="button" class="btn-slide"><i class="xi-dedent"></i><span class="sr-only">{{ xe_trans('xe::hideMenus') }}</span></button>
-        <a href="{{ url('/') }}" class="btn-site-home"><i class="xi-home"></i><span class="sr-only">사이트로 이동</span></a>
+        <a href="{{ url('/') }}" class="btn-site-home"><i class="xi-home"></i><span class="sr-only">{{ xe_trans('xe::moveToSite') }}</span></a>
         <div class="right-menu">
             <ul>
                 <li>
-                    <a href="#" data-toggle="dropdown">
+                    <a href="#" data-toggle="dropdown" aria-expanded="true">
                         <div>
                             <img src="{{ $user->getProfileImage() }}" width="40" height="40" alt="{{ xe_trans('xe::profile') }}">
                             <span class="hidden-xs">{{ $user->getDisplayName() }}</span>
@@ -18,6 +18,23 @@
                             <li><a href="{{ route('member.profile', ['member' => auth()->id()]) }}">{{ xe_trans('xe::myProfile') }}</a></li>
                             <li><a href="{{ route('member.settings') }}">{{ xe_trans('xe::mySettings') }}</a></li>
                             <li><a href="{{ route('logout') }}">{{ xe_trans('xe::logout') }}</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <a href="#" data-toggle="dropdown" aria-expanded="true">
+                        <div>
+                            <!--[D] 국가명 입력 시 flag 이름 변경됨 belize, japan 등-->
+                            <span class="flag-code"><i class="south korea flag"></i>{{XeLang::getLocale()}}</span>
+                        </div>
+                    </a>
+                    <div class="transition dropdown-menu">
+                        <ul>
+                            @foreach ( XeLang::getLocales() as $locale )
+                                <li @if(XeLang::getLocale() == $locale) class="on" @endif>
+                                    <a href="/locale/{{ $locale }}"><i class="dominica {{ $locale }} flag" data-locale="{{ $locale }}"></i>{{ XeLang::getLocaleText($locale) }}</a>
+                                </li>
+                            @endforeach
                         </ul>
                     </div>
                 </li>
