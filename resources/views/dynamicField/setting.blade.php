@@ -62,37 +62,25 @@
         <div class="step">
             <div class="form-group">
                 <label for="">Label</label>
-                <input type="text" name="label" class="form-control">
+                <div class="dynamic-lang-editor-box" data-name="label" data-lang-key=""></div>
             </div>
             <div class="form-group">
-                <input type="hidden" name="use" value="false" />
-                <input type="hidden" name="required" value="false" />
+                <input type="hidden" name="use" value="true" />
+                <input type="hidden" name="required" value="true" />
                 <input type="hidden" name="sortable" value="true" />
                 <input type="hidden" name="searchable" value="true" />
                 <div class="checkbox mg-reset mg-bottom">
                     <label>
-                        <input type="checkbox" class="__xe_checkbox-config" data-name="use"/>
+                        <input type="checkbox" class="__xe_checkbox-config" data-name="use" checked="checked"/>
                         Use
                     </label>
                 </div>
                 <div class="checkbox mg-reset mg-bottom">
                     <label>
-                        <input type="checkbox" class="__xe_checkbox-config" data-name="required"/>
+                        <input type="checkbox" class="__xe_checkbox-config" data-name="required" checked="checked"/>
                         Rquired
                     </label>
                 </div>
-                {{--<div class="checkbox mg-reset mg-bottom">--}}
-                    {{--<label>--}}
-                        {{--<input type="checkbox" name="sortable" value="true">--}}
-                        {{--Sortable--}}
-                    {{--</label>--}}
-                {{--</div>--}}
-                {{--<div class="checkbox mg-reset mg-bottom">--}}
-                    {{--<label>--}}
-                        {{--<input type="checkbox" name="searchable" value="true">--}}
-                        {{--Searchable--}}
-                    {{--</label>--}}
-                {{--</div>--}}
             </div>
             <div class="form-group">
                 <label for="">Skin</label>
