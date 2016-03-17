@@ -14,6 +14,7 @@
 namespace Xpressengine\User\Repositories;
 
 use Xpressengine\User\GroupInterface;
+use Xpressengine\User\Models\UserGroup;
 use Xpressengine\User\UserInterface;
 
 /**
@@ -30,19 +31,9 @@ class UserGroupRepository implements UserGroupRepositoryInterface
     use RepositoryTrait;
 
     /**
-     * UserGroupRepository constructor.
-     *
-     * @param $model
-     */
-    public function __construct($model)
-    {
-        $this->setModel($model);
-    }
-
-    /**
      * delete
      *
-     * @param $group
+     * @param UserGroup $group
      *
      * @return bool
      */
