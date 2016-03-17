@@ -25,14 +25,14 @@
                     <a href="#" data-toggle="dropdown" aria-expanded="true">
                         <div>
                             <!--[D] 국가명 입력 시 flag 이름 변경됨 belize, japan 등-->
-                            <span class="flag-code"><i class="south korea flag"></i>{{XeLang::getLocale()}}</span>
+                            <span class="flag-code"><i class="{{XeLang::getLocale()}} flag"></i>{{XeLang::getLocale()}}</span>
                         </div>
                     </a>
                     <div class="transition dropdown-menu">
                         <ul>
                             @foreach ( XeLang::getLocales() as $locale )
                                 <li @if(XeLang::getLocale() == $locale) class="on" @endif>
-                                    <a href="/locale/{{ $locale }}"><i class="dominica {{ $locale }} flag" data-locale="{{ $locale }}"></i>{{ XeLang::getLocaleText($locale) }}</a>
+                                    <a href="/locale/{{ $locale }}"><i class="{{ $locale }} flag" data-locale="{{ $locale }}"></i>{{ XeLang::getLocaleText($locale) }}</a>
                                 </li>
                             @endforeach
                         </ul>
