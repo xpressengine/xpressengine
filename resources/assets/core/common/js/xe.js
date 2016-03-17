@@ -20,7 +20,6 @@
 
   var XE = {},
   $ = $.noConflict(true);
-  console.log('@xe.js', XeRequest);
 
   // @TODO ???
   // jquery 를 구분하기 위해 버전 변경
@@ -44,7 +43,7 @@
     this.options.loadedTime = options.loadedTime;
     this.options.timeLag = options.loadedTime - exports.options.nowTime;
 
-    this.Request.setup({
+    XeRequest.setup({
       headers: {
         'X-CSRF-TOKEN': options['X-CSRF-TOKEN']
       }
@@ -52,8 +51,10 @@
   };
 
   exports.configure = function (options) {
-    $.extend(exports.exports, options);
+    $.extend(exports.options, options);
+
   };
+
 
   exports.cssLoad = function(url) {
     $('head').append($('<link>').attr('rel', 'stylesheet').attr('href', url));
@@ -105,6 +106,10 @@
       var jqXHR = $.ajax(url, options);
       return jqXHR;
     };
+
+    $.ajaxPrefilter(function(options, originalOptions, jqXHR ) {
+      $.extend(options, XeRequest.options);
+    });
   }
 
 }));

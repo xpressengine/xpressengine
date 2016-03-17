@@ -3,10 +3,7 @@ System.config({
   defaultJSExtensions: true,
   transpiler: "babel",
   babelOptions: {
-    "optional": [
-      "runtime",
-      "optimisation.modules.system"
-    ]
+    "optional": []
   },
   paths: {
     "github:*": "jspm_packages/github/*",
@@ -15,32 +12,36 @@ System.config({
   },
   bundles: {
     "xecore:/xe-ui-component/js/xe-ui-component.bundle.js": [
-      "assets/core/xe-ui-component/js/xe-ui-component.js",
+      "xecore:/xe-ui-component/js/xe-ui-component.js",
       "npm:jquery@2.2.1.js",
       "npm:jquery@2.2.1/dist/jquery.js"
     ],
     "xecore:/settings/js/admin.bundle.js": [
-      "assets/core/settings/js/admin.js",
+      "xecore:/settings/js/admin.js",
       "github:twbs/bootstrap-sass@3.3.6/assets/javascripts/bootstrap.js",
       "npm:jquery@2.2.1.js",
       "npm:jquery@2.2.1/dist/jquery.js"
     ],
     "xecore:/menu/menu.js": [
-      "resources/assets/js/menu/MenuTree.jsx!github:floatdrop/plugin-jsx@1.2.1.js",
-      "resources/assets/js/menu/MenuSearchBar.jsx!github:floatdrop/plugin-jsx@1.2.1.js",
-      "resources/assets/js/menu/UITree.jsx!github:floatdrop/plugin-jsx@1.2.1.js",
-      "resources/assets/js/menu/MenuSearchSuggestion.jsx!github:floatdrop/plugin-jsx@1.2.1.js",
-      "resources/assets/js/menu/TreeNode.jsx!github:floatdrop/plugin-jsx@1.2.1.js",
-      "resources/assets/js/menu/MenuEntity.jsx!github:floatdrop/plugin-jsx@1.2.1.js",
-      "resources/assets/js/menu/MenuItem.jsx!github:floatdrop/plugin-jsx@1.2.1.js"
+      "xecore:/menu/MenuTree.jsx!github:floatdrop/plugin-jsx@1.2.1.js",
+      "xecore:/menu/MenuSearchBar.jsx!github:floatdrop/plugin-jsx@1.2.1.js",
+      "xecore:/menu/UITree.jsx!github:floatdrop/plugin-jsx@1.2.1.js",
+      "xecore:/menu/MenuSearchSuggestion.jsx!github:floatdrop/plugin-jsx@1.2.1.js",
+      "xecore:/menu/TreeNode.jsx!github:floatdrop/plugin-jsx@1.2.1.js",
+      "xecore:/menu/MenuEntity.jsx!github:floatdrop/plugin-jsx@1.2.1.js",
+      "xecore:/menu/MenuItem.jsx!github:floatdrop/plugin-jsx@1.2.1.js"
     ],
     "xecore:/common/js/xe.bundle.js": [
-      "assets/core/common/js/xe.js",
-      "assets/core/common/js/xe.lang.js",
-      "assets/core/common/js/xe.progress.js",
-      "assets/core/common/js/xe.request.js",
+      "xecore:/common/js/xe.js",
+      "xecore:/common/js/xe.lang.js",
+      "xecore:/common/js/xe.progress.js",
+      "xecore:/common/js/xe.request.js",
+      "xecore:/common/js/translator.js",
       "npm:jquery@2.2.1.js",
       "npm:jquery@2.2.1/dist/jquery.js"
+    ],
+    "xecore:/common/js/helper.js": [
+      "xecore:/common/js/helpers.js"
     ]
   },
 
@@ -363,6 +364,9 @@ System.config({
     },
     "npm:inherits@2.0.1": {
       "util": "github:jspm/nodelibs-util@0.1.0"
+    },
+    "npm:jquery@2.2.1": {
+      "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:jstransform@10.1.0": {
       "base62": "npm:base62@0.1.1",

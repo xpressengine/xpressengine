@@ -56,7 +56,7 @@ gulp.task('jspm', ['copy-assets'], function(callback){
 gulp.task('jspm:xe', function(){
   return gulp.src('assets/core/common/js/xe.js')
     .pipe($.plumber())
-    .pipe($.jspm({selfExecutingBundle: true}))
+    .pipe($.jspm({inject: true, selfExecutingBundle: true}))
     .pipe($.rename('xe.bundle.js'))
     .pipe(gulp.dest('assets/core/common/js'));
 });
