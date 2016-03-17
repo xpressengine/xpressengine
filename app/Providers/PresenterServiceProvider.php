@@ -167,6 +167,7 @@ class PresenterServiceProvider extends ServiceProvider
     {
         $frontendHandler->css([
             'assets/core/common/css/xe-common.css',
+            'assets/core/xe-ui-component/xe-ui-component.css',
             '//cdn.jsdelivr.net/xeicon/2.0.0/xeicon.min.css',
         ])->load();
 
@@ -185,6 +186,7 @@ class PresenterServiceProvider extends ServiceProvider
             'assets/vendor/jquery/jquery.js',
             // 'assets/core/common/js/translator.js',
             'assets/core/common/js/helpers.js', // @TODO 제거
+            'assets/core/xe-ui-component/js/xe-ui-component.bundle.js',
         ])->appendTo('head.prepend')->load();
     }
 
