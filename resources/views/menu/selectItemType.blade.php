@@ -8,12 +8,12 @@
             <div class="panel menu_detail">
                 <div class="panel-heading">
                     <div class="row">
-                        <p class="txt_tit">{{xe_trans('xe::selectItemTypeDescription')}}</p>
+                        <p class="text-title">{{xe_trans('xe::selectItemTypeDescription')}}</p>
                     </div>
                 </div>
                 <div class="panel-body">
                     <div class="row_cont v2">
-                        <p class="txt_tit">{{xe_trans('xe::menuItemType')}}<i class="xi-information-circle"></i></p>
+                        <p class="text-title">{{xe_trans('xe::menuItemType')}}<i class="xi-information-circle"></i></p>
                         {!! uio('uiobject/xpressengine@typeSelect') !!}
                     </div>
                 </div>

@@ -10,7 +10,7 @@
             <div class="panel menu_detail">
                 <div class="panel-heading">
                     <div class="row">
-                        <p class="txt_tit">{{xe_trans('xe::editItemDescription')}}</p>
+                        <p class="text-title">{{xe_trans('xe::editItemDescription')}}</p>
                         <div class="right_btn">
                             <button class="btn_clse ico_gray pull-left"><i class="xi-angle-down"></i><i
                                         class="xi-angle-up"></i></button>
@@ -19,7 +19,7 @@
                 </div>
                 <div class="panel-body">
                     <div class="row_con v2">
-                        <p class="txt_tit">Item Activated<i class="xi-information-circle"></i></p>
+                        <p class="text-title">Item Activated<i class="xi-information-circle"></i></p>
 
                         <p class="sub_txt">{{xe_trans('xe::itemActivatedDescription')}}</p>
                         <div class="xe-toggle-button btn_right">
@@ -38,7 +38,7 @@
                     </div>
                     <hr>
                     <div class="row_con">
-                        <p class="txt_tit">Item Url</p>
+                        <p class="text-title">Item Url</p>
 
                         <div class="row">
                             <div class="col-sm-6">
@@ -52,7 +52,7 @@
                         </div>
                     </div>
                     <div class="row_con">
-                        <p class="txt_tit">Item Title<i class="xi-information-circle"></i></p>
+                        <p class="text-title">Item Title<i class="xi-information-circle"></i></p>
 
                         <div class="row">
                             <div class="col-sm-6">
@@ -63,7 +63,7 @@
                         </div>
                     </div>
                     <div class="row_con">
-                        <p class="txt_tit">Item Description<i class="xi-information-circle"></i></p>
+                        <p class="text-title">Item Description<i class="xi-information-circle"></i></p>
 
                         <div class="row">
                             <div class="col-sm-9">
@@ -77,7 +77,7 @@
                     </div>
                     <hr>
                     <div class="row_con">
-                        <p class="txt_tit">Item Target<i class="xi-information-circle"></i></p>
+                        <p class="text-title">Item Target<i class="xi-information-circle"></i></p>
 
                         <p class="sub_txt">{{xe_trans('xe::itemTargetDescription')}}</p>
                         <div class="row">
@@ -101,7 +101,7 @@
                     </div>
                     <hr>
                     <div class="row_con v2">
-                        <p class="txt_tit">theme<i class="xi-information-circle"></i></p>
+                        <p class="text-title">theme<i class="xi-information-circle"></i></p>
 
                         <p class="sub_txt">테마를 미리 보고 클릭하여 선택할 수 있습니다.</p>
                         <div class="xe-input-group">

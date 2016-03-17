@@ -9,12 +9,12 @@
             <div class="panel menu_detail">
                 <div class="panel-heading">
                 <div class="row">
-                    <p class="txt_tit">{{xe_trans('xe::createMenuTitle')}}</p>
+                    <p class="text-title">{{xe_trans('xe::createMenuTitle')}}</p>
                 </div>
                 </div>
                 <div class="panel-body">
                     <div class="row_con v2">
-                    <p class="txt_tit">Menu Title<i class="xi-information-circle"></i></p>
+                    <p class="text-title">Menu Title<i class="xi-information-circle"></i></p>
 
                         <p class="sub_txt">{{xe_trans('xe::menuTitleDescription')}}</p>
 
@@ -29,7 +29,7 @@
                         </div>
                     </div>
                     <div class="row_con">
-                    <p class="txt_tit">Menu Description<i class="xi-information-circle"></i></p>
+                    <p class="text-title">Menu Description<i class="xi-information-circle"></i></p>
 
                         <div class="row">
                             <div class="col-sm-8">
@@ -41,7 +41,7 @@
                     </div>
                 </div>
                     <div class="row_con v2">
-                    <p class="txt_tit">Default Menu Theme<i class="xi-information-circle"></i></p>
+                    <p class="text-title">Default Menu Theme<i class="xi-information-circle"></i></p>
 
                         <p class="sub_txt">{{xe_trans('xe::menuThemeDescription')}}</p>
 

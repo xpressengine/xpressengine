@@ -11,7 +11,7 @@
             <div class="panel menu_detail">
                 <div class="panel-heading">
                     <div class="row">
-                        <p class="txt_tit">{{xe_trans('xe::deleteMenuConfig', ['title' => $menu->title])}} </p>
+                        <p class="text-title">{{xe_trans('xe::deleteMenuConfig', ['title' => $menu->title])}} </p>
                     </div>
                 </div>
                 <div class="panel-body">

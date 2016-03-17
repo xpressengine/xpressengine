@@ -10,7 +10,7 @@
             <div class="panel menu_detail">
                 <div class="panel-heading">
                     <div class="row">
-                        <p class="txt_tit">{{xe_trans('xe::deleteItemConfirm', ['title' => xe_trans($item->title)])}}</p>
+                        <p class="text-title">{{xe_trans('xe::deleteItemConfirm', ['title' => xe_trans($item->title)])}}</p>
                     </div>
                 </div>
                 <div class="panel-body">

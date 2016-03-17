@@ -4,7 +4,7 @@
 <div class="panel __xe_section_box">
     <div class="panel-heading">
         <div class="row">
-            <p class="txt_tit">{{ $groupName }}</p>
+            <p class="text-title">{{ $groupName }}</p>
 
             <div class="right_btn pull-right" role="button" data-toggle="collapse" data-parent="#accordion" data-target="#{{ $groupName }}Section">
                 <!-- [D] 메뉴 닫기 시 버튼 클래스에 card_close 추가 및 item_container none/block 처리-->

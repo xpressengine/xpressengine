@@ -21,13 +21,13 @@
             <div class="admin_card">
                 <div class="card_tit">
                     <div class="row">
-                        <p class="txt_tit">{{ xe_trans('xe::defaultSettings') }}</p>
+                        <p class="text-title">{{ xe_trans('xe::defaultSettings') }}</p>
                     </div>
                 </div>
                 <div class="card_cont">
                     <div class="row">
                         <div class="col-sm-12 inpt_bd">
-                            <p class="txt_tit">{{ xe_trans('xe::siteImage') }} (1200x600, 600x315, 200x200)</p>
+                            <p class="text-title">{{ xe_trans('xe::siteImage') }} (1200x600, 600x315, 200x200)</p>
                             <input type="file" class="xe-input-text" name="siteImage">
                             @if($setting->getSiteImage())
                                 <br />
@@ -41,18 +41,18 @@
             <div class="admin_card">
                 <div class="card_tit">
                     <div class="row">
-                        <p class="txt_tit">{{ xe_trans('xe::titleOptimization') }}</p>
+                        <p class="text-title">{{ xe_trans('xe::titleOptimization') }}</p>
                     </div>
                 </div>
                 <div class="card_cont">
                     <div class="row">
                         <div class="col-md-6">
-                            <p class="txt_tit">{{ xe_trans('xe::browserTitle') }}</p>
+                            <p class="text-title">{{ xe_trans('xe::browserTitle') }}</p>
                             {!! uio('langText', ['langKey'=> $setting->get('mainTitle'), 'name'=>'mainTitle']) !!}
 
                         </div>
                         <div class="col-md-6">
-                            <p class="txt_tit">{{ xe_trans('xe::browserSubTitle') }}</p>
+                            <p class="text-title">{{ xe_trans('xe::browserSubTitle') }}</p>
                             {!! uio('langText', ['langKey'=> $setting->get('subTitle'), 'name'=>'subTitle']) !!}
                         </div>
                     </div>
@@ -62,19 +62,19 @@
             <div class="admin_card">
                 <div class="card_tit">
                     <div class="row">
-                        <p class="txt_tit">Meta Tag</p>
+                        <p class="text-title">Meta Tag</p>
                     </div>
                 </div>
                 <div class="card_cont">
                     <div class="row">
                         <div class="col-md-12 inpt_bd">
-                            <p class="txt_tit">{{ xe_trans('xe::siteKeyword') }}</p>
+                            <p class="text-title">{{ xe_trans('xe::siteKeyword') }}</p>
                             <input type="text" class="xe-input-text" name="keywords" value="{{ $setting->get('keywords') ?: Input::old('keywords') }}">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <p class="txt_tit">{{ xe_trans('xe::description') }}</p>
+                            <p class="text-title">{{ xe_trans('xe::description') }}</p>
                             {!! uio('langText', ['langKey'=> $setting->get('description'), 'name'=>'description']) !!}
                         </div>
                     </div>
@@ -84,13 +84,13 @@
             <div class="admin_card">
                 <div class="card_tit">
                     <div class="row">
-                        <p class="txt_tit">{{ xe_trans('xe::etc') }}</p>
+                        <p class="text-title">{{ xe_trans('xe::etc') }}</p>
                     </div>
                 </div>
                 <div class="card_cont">
                     <div class="row">
                         <div class="col-md-6">
-                            <p class="txt_tit">Twitter Username</p>
+                            <p class="text-title">Twitter Username</p>
                             <div class="inpt_url">
                                 <em class="txt_blue">@</em><input type="text" class="xe-input-text" name="twitterUsername" placeholder="username" value="{{ $setting->get('twitterUsername') ?: Input::old('twitterUsername') }}">
                             </div>
