@@ -45,6 +45,7 @@ class SettingsTheme extends AbstractTheme
         $frontendHandler->css([
             'assets/vendor/bootstrap/css/bootstrap.css',
             'assets/core/settings/css/admin.css',
+            'assets/core/xe-ui-component/xe-ui-component.css',
         ])->load();
 
         $frontendHandler->js([

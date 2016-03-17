@@ -11,10 +11,10 @@ return [
     ],
 
     'lang' => [
-        'locales' => ['ko', 'en'],
+        'locales' => ['kr', 'us'],
         'localeTexts' => [
-            'ko' => '대한민국',
-            'en' => 'U.S.',
+            'kr' => '대한민국',
+            'us' => 'U.S.',
         ]
     ],
 
