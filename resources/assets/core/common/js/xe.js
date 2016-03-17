@@ -39,9 +39,9 @@
 
   // @TODO request 설정 분리
   exports.setup = function (options) {
-    this.options.loginUserId = options.loginUserId;
-    this.options.loadedTime = options.loadedTime;
-    this.options.timeLag = options.loadedTime - exports.options.nowTime;
+    exports.options.loginUserId = options.loginUserId;
+    exports.options.loadedTime = options.loadedTime;
+    exports.options.timeLag = options.loadedTime - exports.options.nowTime;
 
     XeRequest.setup({
       headers: {
