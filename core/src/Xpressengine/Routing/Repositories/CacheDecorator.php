@@ -73,7 +73,9 @@ class CacheDecorator implements RouteRepository
 
         $routes = $this->cache->has($key) ? $this->cache->get($key) : call_user_func(function () use ($key) {
             $routes = $this->repo->all();
-            $this->cache->put($key, $routes);
+            if (count($routes) > 1) {
+                $this->cache->put($key, $routes);
+            }
 
             return $routes;
         });
@@ -86,15 +88,16 @@ class CacheDecorator implements RouteRepository
      *
      * @param string $url     first segment of url
      * @param string $siteKey site key
-     * @return InstanceRoute
+     * @return InstanceRoute|null
      */
     public function findByUrlAndSiteKey($url, $siteKey)
     {
         $key = $this->getCacheKey($siteKey . '_' . $url);
 
         $route = $this->cache->has($key) ? $this->cache->get($key) : call_user_func(function () use ($url, $siteKey) {
-            $route = $this->repo->findByUrlAndSiteKey($url, $siteKey);
-            $this->cachingItem($route);
+            if ($route = $this->repo->findByUrlAndSiteKey($url, $siteKey)) {
+                $this->cachingItem($route);
+            }
 
             return $route;
         });
@@ -118,15 +121,16 @@ class CacheDecorator implements RouteRepository
      * Retrieve a route by instance identifier
      *
      * @param string $instanceId instance identifier
-     * @return InstanceRoute
+     * @return InstanceRoute|null
      */
     public function findByInstanceId($instanceId)
     {
         $key = $this->getCacheKey($instanceId);
 
         $route = $this->cache->has($key) ? $this->cache->get($key) : call_user_func(function () use ($instanceId) {
-            $route = $this->repo->findByInstanceId($instanceId);
-            $this->cachingItem($route);
+            if ($route = $this->repo->findByInstanceId($instanceId)) {
+                $this->cachingItem($route);
+            }
 
             return $route;
         });
@@ -146,7 +150,9 @@ class CacheDecorator implements RouteRepository
 
         $routes = $this->cache->has($key) ? $this->cache->get($key) : call_user_func(function () use ($siteKey, $key) {
             $routes = $this->repo->fetchBySiteKey($siteKey);
-            $this->cache->put($key, $routes);
+            if (count($routes) > 0) {
+                $this->cache->put($key, $routes);
+            }
 
             return $routes;
         });
@@ -166,7 +172,9 @@ class CacheDecorator implements RouteRepository
 
         $routes = $this->cache->has($key) ? $this->cache->get($key) : call_user_func(function () use ($module, $key) {
             $routes = $this->repo->fetchByModule($module);
-            $this->cache->put($key, $routes);
+            if (count($routes) > 0) {
+                $this->cache->put($key, $routes);
+            }
 
             return $routes;
         });
