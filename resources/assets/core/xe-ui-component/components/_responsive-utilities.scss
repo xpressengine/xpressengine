@@ -125,19 +125,19 @@
 }
 
 @media (max-width: $screen-xs-max) {
-  @include responsive-invisibility('.hidden-xs');
+  @include responsive-invisibility('.xe-hidden-xs');
 }
 
 @media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
-  @include responsive-invisibility('.hidden-sm');
+  @include responsive-invisibility('.xe-hidden-sm');
 }
 
 @media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
-  @include responsive-invisibility('.hidden-md');
+  @include responsive-invisibility('.xe-hidden-md');
 }
 
 @media (min-width: $screen-lg-min) {
-  @include responsive-invisibility('.hidden-lg');
+  @include responsive-invisibility('.xe-hidden-lg');
 }
 
 
@@ -175,5 +175,5 @@
 }
 
 @media print {
-  @include responsive-invisibility('.hidden-print');
+  @include responsive-invisibility('.xe-hidden-print');
 }
