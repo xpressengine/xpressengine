@@ -242,6 +242,11 @@ define(['validator'], function(validator) {
             var params = frm.serialize();
             var self = this;
 
+            frm.find('.__xe_additional_configure').html('');
+            if (frm.find('[name="typeId"]').val() == '') {
+                return;
+            }
+
             XE.ajax({
                 type: 'get',
                 dataType: 'json',
