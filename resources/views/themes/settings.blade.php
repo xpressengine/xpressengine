@@ -111,8 +111,8 @@
                 @section('page_head')
                 <div class="row">
                     <div class="col-sm-6">
-                        @yield('page_title', '<h2>'.xe_trans(data_get($selectedMenu, 'title', 'xe::inputTitle')).'</h2>')
-                        @yield('page_description', '<small>'.xe_trans(data_get($selectedMenu, 'description', 'xe::inputTitle')).'</small>')
+                        @yield('page_title', '<h2>'.xe_trans(data_get($selectedMenu->getParent(), 'title', 'xe::inputTitle')).'</h2>')
+                        @yield('page_description', '<small>'.xe_trans(data_get($selectedMenu->getParent(), 'description', 'xe::inputTitle')).'</small>')
                     </div>
                 </div>
                 <div class="row locate">
