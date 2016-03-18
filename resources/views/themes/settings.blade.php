@@ -24,7 +24,6 @@
                 <li>
                     <a href="#" data-toggle="dropdown" aria-expanded="true">
                         <div>
-                            <!--[D] 국가명 입력 시 flag 이름 변경됨 belize, japan 등-->
                             <span class="flag-code"><i class="{{XeLang::getLocale()}} flag"></i>{{XeLang::getLocale()}}</span>
                         </div>
                     </a>
@@ -61,7 +60,7 @@
                     >
                         <a href="{{ $top->link() }}">
                             <i class="{{data_get($top, 'icon', 'xi-paper-stack-o')}}"></i>
-                            {{$top->title}}
+                            {{xe_trans($top->title)}}
                         </a>
                         @if($top->hasVisibleChild())
                             <ul class="sub-depth-list">
@@ -73,7 +72,7 @@
                                         {{-- depth 2 --}}
                                         <li class="@if($middle->hasVisibleChild())sub-depth @endif @if($middle->isSelected() && $middle->hasVisibleChild())open @endif @if($middle->isSelected() && !$middle->hasVisibleChild())on @endif">
                                             <a href="{{ $middle->link() }}">
-                                                {{$middle->title}}
+                                                {{xe_trans($middle->title)}}
                                             </a>
                                             @if($middle->hasVisibleChild())
                                                 <ul class="sub-depth-list">
@@ -86,7 +85,7 @@
                                                             {{-- depth 3 --}}
                                                             <li @if($bottom->isSelected())class="on" @endif>
                                                                 <a href="{{ $bottom->link() }}">
-                                                                    {{$bottom->title}}
+                                                                    {{xe_trans($bottom->title)}}
                                                                 </a>
                                                             </li>
                                                         @endif
@@ -112,21 +111,18 @@
                 @section('page_head')
                 <div class="row">
                     <div class="col-sm-6">
-                        @yield('page_title', '<h2>'.data_get($selectedMenu, 'title', '제목을 입력하세요.').'</h2>')
-                        @yield('page_description', '<small>'.data_get($selectedMenu, 'description', '제목을 입력하세요.').'</small>')
-                    </div>
-                    <div class="col-sm-6">
-                        @DEPRECATED
-                        @yield('page_setting_menu')
-                        <!-- 버튼 등 서드파티에서 수정할 수 있는 영역 <button type="button" class="btn_setting blue v2 pull-right">메뉴 추가</button> -->
+                        @yield('page_title', '<h2>'.data_get($selectedMenu, 'title', xe_trans('xe::inputTitle')).'</h2>')
+                        @yield('page_description', '<small>'.data_get($selectedMenu, 'description', xe_trans('xe::inputTitle')).'</small>')
                     </div>
                 </div>
                 <div class="row locate">
                     <div class="col-sm-12">
                         <ul>
-                            <li><a href="#">Home</a><i class="xi-angle-right"></i></li>
-                            <li><a href="#">2depth</a><i class="xi-angle-right"></i></li>
-                            <li>빵조각은 좌측 SNB 리스트에 표시 안되는 영역만 노출</li>
+                        @foreach ($selectedMenu->getBreadCrumbs() as $menu)
+                            <li><a href="{{$menu->link()}}">{{xe_trans($menu->title)}}</a><i class="xi-angle-right"></i></li>
+                        @endforeach
+                            <!-- contents 에서 임의로 빵조각을 추가할 수 있음-->
+                            @yield('content_bread_crumbs')
                         </ul>
                     </div>
                 </div>
