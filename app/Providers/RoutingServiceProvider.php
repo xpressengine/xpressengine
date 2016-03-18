@@ -22,11 +22,13 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Routing\InstanceRoute;
 use Xpressengine\Routing\ModuleValidator;
+use Xpressengine\Routing\Repositories\CacheDecorator;
 use Xpressengine\Routing\Repositories\DatabaseRouteRepository;
 use Xpressengine\Routing\Repositories\MemoryDecorator;
 use Xpressengine\Routing\RouteCollection;
 use Xpressengine\Routing\RouteRepository;
 use Xpressengine\Routing\UriValidator;
+use Xpressengine\Support\LaravelCache;
 
 /**
  * Routing Service Provider
@@ -69,6 +71,7 @@ class RoutingServiceProvider extends ServiceProvider
                 $repo = new DatabaseRouteRepository($app['config'], InstanceRoute::class);
 
                 // todo: cache layer 추가
+                $repo = new CacheDecorator($repo, new LaravelCache($app['cache.store']));
 
                 return new MemoryDecorator($repo);
             }

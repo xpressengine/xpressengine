@@ -1,4 +1,16 @@
 <?php
+/**
+ * DatabaseRouteRepository
+ *
+ * PHP version 5
+ *
+ * @category  Routing
+ * @package   Xpressengine\Routing
+ * @author    XE Team (developers) <developers@xpressengine.com>
+ * @copyright 2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license   http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link      http://www.xpressengine.com
+ */
 namespace Xpressengine\Routing\Repositories;
 
 use Illuminate\Contracts\Config\Repository as IlluminateConfig;
@@ -6,8 +18,23 @@ use Xpressengine\Routing\Exceptions\UnusableUrlException;
 use Xpressengine\Routing\RouteRepository;
 use Xpressengine\Routing\InstanceRoute;
 
+/**
+ * class DatabaseRouteRepository
+ *
+ * @category  Routing
+ * @package   Xpressengine\Routing
+ * @author    XE Team (developers) <developers@xpressengine.com>
+ * @copyright 2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license   http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link      http://www.xpressengine.com
+ */
 class DatabaseRouteRepository implements RouteRepository
 {
+    /**
+     * Protected keyword for url first segment
+     *
+     * @var array
+     */
     public $protectedUrl = [
         'locale',
         'auth',
@@ -18,21 +45,49 @@ class DatabaseRouteRepository implements RouteRepository
         'temporary',
     ];
 
+    /**
+     * Laravel config instance
+     *
+     * @var IlluminateConfig
+     */
     protected $configs;
 
+    /**
+     * The route model
+     *
+     * @var string
+     */
     protected $model;
 
+    /**
+     * DatabaseRouteRepository constructor.
+     *
+     * @param IlluminateConfig $configs Laravel config instance
+     * @param string           $model   The route model
+     */
     public function __construct(IlluminateConfig $configs, $model)
     {
         $this->configs = $configs;
         $this->model = $model;
     }
 
+    /**
+     * Returns all route items
+     *
+     * @return InstanceRoute[]
+     */
     public function all()
     {
         return $this->createModel()->newQuery()->get();
     }
 
+    /**
+     * Retrieve a route by url segment and site key
+     *
+     * @param string $url     first segment of url
+     * @param string $siteKey site key
+     * @return InstanceRoute
+     */
     public function findByUrlAndSiteKey($url, $siteKey)
     {
         $model = $this->createModel();
@@ -40,6 +95,12 @@ class DatabaseRouteRepository implements RouteRepository
         return $model->newQuery()->where('url', $url)->where('siteKey', $siteKey)->first();
     }
 
+    /**
+     * Retrieve a route by instance identifier
+     *
+     * @param string $instanceId instance identifier
+     * @return InstanceRoute
+     */
     public function findByInstanceId($instanceId)
     {
         $model = $this->createModel();
@@ -47,6 +108,12 @@ class DatabaseRouteRepository implements RouteRepository
         return $model->newQuery()->where('instanceId', $instanceId)->first();
     }
 
+    /**
+     * Retrieve routes by site key
+     *
+     * @param string $siteKey site key
+     * @return InstanceRoute[]
+     */
     public function fetchBySiteKey($siteKey)
     {
         $model = $this->createModel();
@@ -54,6 +121,12 @@ class DatabaseRouteRepository implements RouteRepository
         return $model->newQuery()->where('siteKey', $siteKey)->get();
     }
 
+    /**
+     * Retrieve routes by module name
+     *
+     * @param string $module module name
+     * @return InstanceRoute[]
+     */
     public function fetchByModule($module)
     {
         $model = $this->createModel();
@@ -61,6 +134,12 @@ class DatabaseRouteRepository implements RouteRepository
         return $model->newQuery()->where('module', $module)->get();
     }
 
+    /**
+     * Save a new route item and return the instance
+     *
+     * @param array $input route item attributes
+     * @return InstanceRoute
+     */
     public function create(array $input)
     {
         /** @var InstanceRoute $model */
@@ -70,17 +149,31 @@ class DatabaseRouteRepository implements RouteRepository
         return $this->put($model);
     }
 
-    public function put(InstanceRoute $model)
+    /**
+     * Save the route item
+     *
+     * @param InstanceRoute $route route instance
+     * @return InstanceRoute
+     */
+    public function put(InstanceRoute $route)
     {
-        if (!$this->validateUrl($model->siteKey, $model->url, $model->exists === false)) {
-            throw new UnusableUrlException(['url' => $model->url]);
+        if (!$this->validateUrl($route->siteKey, $route->url, $route->exists === false)) {
+            throw new UnusableUrlException(['url' => $route->url]);
         }
 
-        $model->save();
+        $route->save();
 
-        return $model;
+        return $route;
     }
 
+    /**
+     * Check validate given url
+     *
+     * @param string $siteKey site key
+     * @param string $url     first segment of url
+     * @param bool   $isNew   if create new route then given true
+     * @return bool
+     */
     protected function validateUrl($siteKey, $url, $isNew)
     {
         $checkIncludingSlash = strpos($url, '/');
@@ -104,9 +197,15 @@ class DatabaseRouteRepository implements RouteRepository
         return true;
     }
 
-    public function delete(InstanceRoute $model)
+    /**
+     * Delete the route item from the repository
+     *
+     * @param InstanceRoute $route route instance
+     * @return bool|null
+     */
+    public function delete(InstanceRoute $route)
     {
-        return $model->delete();
+        return $route->delete();
     }
 
     /**
@@ -134,7 +233,7 @@ class DatabaseRouteRepository implements RouteRepository
     /**
      * Sets the name of the Eloquent user model.
      *
-     * @param  string  $model
+     * @param string $model model class
      * @return $this
      */
     public function setModel($model)
