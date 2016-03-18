@@ -70,8 +70,9 @@ class RoutingServiceProvider extends ServiceProvider
             function ($app) {
                 $repo = new DatabaseRouteRepository($app['config'], InstanceRoute::class);
 
-                // todo: cache layer 추가
-                $repo = new CacheDecorator($repo, new LaravelCache($app['cache.store']));
+                if (env('APP_DEBUG') != true) {
+                    $repo = new CacheDecorator($repo, new LaravelCache($app['cache.store']));
+                }
 
                 return new MemoryDecorator($repo);
             }
