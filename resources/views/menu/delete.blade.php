@@ -35,7 +35,7 @@
                 @if($menu->items->count() == 0)
                     <button type="submit" class="btn btn_red">{{xe_trans('xe::delete')}}</button>
                 @endif
-                <a href="{{ route('settings.menu.index')}}" class="xe-button xe-button-gray">{{xe_trans('xe::cancel')}}</a>
+                <a href="{{ route('settings.menu.index')}}" class="xe-btn xe-btn-gray">{{xe_trans('xe::cancel')}}</a>
             </div>
         </div>
     </form>

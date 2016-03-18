@@ -3,7 +3,7 @@
 @stop
 
 @section('page_description')
-    <p class="sub_txt">등록된 플러그인 목록을 볼 수 있습니다.</p>
+    <p class="sub-text">등록된 플러그인 목록을 볼 수 있습니다.</p>
 @stop
 
 <div class="row">
@@ -112,10 +112,10 @@
                     </div>
                     <div class="btn_right">
                         @if($plugin->isActivated() && ($plugin->getSettingsURI() !== null) )
-                            <a class="btn xe-button-text"
+                            <a class="btn xe-btn-text"
                                href="{{ $plugin->getSettingsURI() }}">{{ xe_trans('xe::settings') }}</a>
                         @endif
-                        <a href="{{ route('settings.plugins.show', [$plugin->getId()]) }}" class="btn xe-button-text">
+                        <a href="{{ route('settings.plugins.show', [$plugin->getId()]) }}" class="btn xe-btn-text">
                             {{ xe_trans('xe::showDetails') }}
                         </a>
                     </div>

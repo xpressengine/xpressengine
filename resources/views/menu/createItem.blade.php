@@ -26,7 +26,7 @@
                     <div class="row">
                         <p class="text-title">{{xe_trans('xe::newItemDescription')}}</p>
                         <div class="right_btn">
-                            <button type="button" class="btn_clse ico_gray pull-left"><i class="xi-angle-down"></i><i
+                            <button type="button" class="btn-close ico_gray pull-left"><i class="xi-angle-down"></i><i
                                         class="xi-angle-up"></i></button>
                         </div>
                     </div>
@@ -35,7 +35,7 @@
                     <div class="row_con v2">
                         <p class="text-title">Item Activated<i class="xi-information-circle"></i></p>
 
-                        <p class="sub_txt">{{xe_trans('xe::itemActivatedDescription')}}</p>
+                        <p class="sub-text">{{xe_trans('xe::itemActivatedDescription')}}</p>
 
                         <div class="xe-toggle-button btn_right">
                             <label>
@@ -95,7 +95,7 @@
                     <div class="row_con">
                         <p class="text-title">Item Target<i class="xi-information-circle"></i></p>
 
-                        <p class="sub_txt">{{xe_trans('xe::itemTargetDescription')}}</p>
+                        <p class="sub-text">{{xe_trans('xe::itemTargetDescription')}}</p>
 
                         <div class="row">
                             <div class="col-sm-5">
@@ -120,7 +120,7 @@
                     <div class="row_con v2">
                         <p class="text-title">theme<i class="xi-information-circle"></i></p>
 
-                        <p class="sub_txt">{{xe_trans('xe::menuThemeDescription')}}</p>
+                        <p class="sub-text">{{xe_trans('xe::menuThemeDescription')}}</p>
                         <div class="xe-input-group">
                             <input type="checkbox" name="parentTheme" id="parentTheme" value="1">
                             <label for="parentTheme" class="inpt_chk">{{xe_trans('xe::menuThemeInheritMode')}}</label>
@@ -133,8 +133,8 @@
             </div>
             {!! uio('menuType', $menuTypeArgs) !!}
             <div class="btn_group_all">
-                <button type="submit" class="xe-button xe-button-blue">{{xe_trans('xe::submit')}}</button>
-                <a href="{{ route('settings.menu.select.types')}}" class="xe-button xe-button-gray">{{xe_trans('xe::cancel')}}</a>
+                <button type="submit" class="xe-btn xe-btn-blue">{{xe_trans('xe::submit')}}</button>
+                <a href="{{ route('settings.menu.select.types')}}" class="xe-btn xe-btn-gray">{{xe_trans('xe::cancel')}}</a>
             </div>
         </div>
     </form>

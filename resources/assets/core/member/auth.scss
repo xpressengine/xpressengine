@@ -25,8 +25,8 @@ legend {
 .member h1,
 .member form,
 .member fieldset,
-.member .hr .txt_hr,
-.member .auth_txt {
+.member .hr .text-hr,
+.member .auth-text {
   margin: 0;
   padding: 0;
 }
@@ -112,12 +112,12 @@ hr {
   padding-right: 4px;
   padding-left: 4px;
 }
-.row_tit {
+.row-title {
   margin: 5px 0;
   padding-left: 4px;
   font-size: 14px;
 }
-.row_tit i {
+.row-title i {
   margin-left: 10px;
 }
 .member {
@@ -150,20 +150,20 @@ h6 {
   margin: 0;
   background-color: transparent;
 }
-.member .txt_message {
+.member .text-message {
   color: #696e7a;
 }
-.member .txt_message.normal {
+.member .text-message.normal {
   color: #696e7a !important;
 }
 .member .select-style {
   display: block;
 }
-.member .auth_group {
+.member .auth-group {
   position: relative;
   margin-bottom: 8px;
 }
-.member.find_pass .auth_group {
+.member.find-password .auth-group {
   position: relative;
   margin-bottom: 16px;
 }
@@ -182,7 +182,7 @@ h6 {
   line-height: 32px;
   font-weight: normal;
 }
-.member .sub_txt {
+.member .sub-text {
   margin-bottom: 16px;
   font-size: 14px;
   color: #696e7a;
@@ -191,28 +191,28 @@ h6 {
 .member .g-recaptcha {
   margin: 16px auto;
 }
-.member .xe-button-blue,
-.member .xe-button.xe-button-text {
+.member .xe-btn-blue,
+.member .xe-btn.xe-btn-text {
   width: 100%;
   margin-bottom: 16px;
   text-align: center;
 }
-.member .xe-button-blue {
+.member .xe-btn-blue {
   color: #fff;
 }
-.member .auth_txt {
+.member .auth-text {
   margin-top: 24px;
   text-align: center;
 }
-.member .auto_txt {
+.member .auto-text {
   font-size: 14px;
   color: #696e7a;
   line-height: 20px;
 }
-.member .auto_txt a {
+.member .auto-text a {
   color: #2c8beb,;
 }
-.member .auth_noti {
+.member .auth-noti {
   margin-top: 12px;
   font-size: 13px;
   color: #8e8e93;
@@ -221,70 +221,70 @@ h6 {
 .member .hr {
   border-top: 1px solid #e4e4e4;
 }
-.member .hr .txt_hr {
+.member .hr .text-hr {
   margin-top: -12px;
   text-align: center;
 }
-.member .hr .txt_hr > span {
+.member .hr .text-hr > span {
   padding: 0 16px;
   background-color: #fff;
 }
-.member .auth_sns {
+.member .auth-sns {
   position: relative;
   padding: 23px 0 20px;
   text-align: center;
   border-bottom: 1px solid #e4e4e4;
 }
-.member .auth_sns li {
+.member .auth-sns li {
   display: inline-block;
   list-style-type: none;
   width: 48px;
 }
-.member .auth_sns li a {
+.member .auth-sns li a {
   display: inline-block;
   width: 40px;
   height: 40px;
   border-radius: 50%;
   background-color: #3b5998;
 }
-.member .auth_sns li.sns_facebook a {
+.member .auth-sns li.sns-facebook a {
   background-color: #3b5998;
 }
-.member .auth_sns li.sns_twitter a {
+.member .auth-sns li.sns-twitter a {
   background-color: #55acee;
 }
-.member .auth_sns li.sns_naver a {
+.member .auth-sns li.sns-naver a {
   background-color: #23b300;
 }
-.member .auth_sns li.sns_google a {
+.member .auth-sns li.sns-google a {
   background-color: #4184f3;
 }
-.member .auth_sns li.sns_github a {
+.member .auth-sns li.sns-github a {
   background-color: #444;
 }
-.member .auth_sns li.sns_line a {
+.member .auth-sns li.sns-line a {
   background-color: #00c300;
 }
 
-.member .auth_sns li.sns_facebook a:hover {
+.member .auth-sns li.sns-facebook a:hover {
   background-color: #1d315b;
 }
-.member .auth_sns li.sns_twitter a:hover {
+.member .auth-sns li.sns-twitter a:hover {
   background-color: #006daa;
 }
-.member .auth_sns li.sns_naver a:hover {
+.member .auth-sns li.sns-naver a:hover {
   background-color: #1c8d00;
 }
-.member .auth_sns li.sns_google a:hover {
+.member .auth-sns li.sns-google a:hover {
   background-color: #3a76d6;
 }
-.member .auth_sns li.sns_github a:hover {
+.member .auth-sns li.sns-github a:hover {
   background-color: #222;
 }
-.member .auth_sns li.sns_line a:hover {
+.member .auth-sns li.sns-line a:hover {
   background-color: #23b300;
 }
-.member .auth_sns li a i {
+.member .auth-sns li a i {
   color: #fff;
   font-size: 25px;
   line-height: 40px;
@@ -294,17 +294,17 @@ h6 {
   border-color: #e4e4e4;
 }
 
-.member .auth_sns.v2 {
+.member .auth-sns.v2 {
   border-bottom: none;
 }
-.member .auth_sns.v2 ul {
+.member .auth-sns.v2 ul {
   max-width: 230px;
   margin: 8px auto 16px;
 }
-.member .auth_sns.v2 li {
+.member .auth-sns.v2 li {
   display: block;
 }
-.member .auth_sns.v2 li a {
+.member .auth-sns.v2 li a {
   display: block;
   width: 230px;
   margin-bottom: 8px;
@@ -316,13 +316,13 @@ h6 {
   text-align: left;
 }
 
-.member .auth_sns.v2 li a i {
+.member .auth-sns.v2 li a i {
   line-height: inherit;
   vertical-align: middle;
   margin-right: 7px;
 }
 
-.member .auth_group .btn_eye {
+.member .auth-group .btn-eye {
   position: absolute;
   top: 0;
   right: 4px;
@@ -334,14 +334,14 @@ h6 {
   border-color: transparent;
   background-color: transparent;
 }
-.member .auth_group .btn_eye .xi-eye-slash,
-.member .auth_group .btn_eye.on .xi-eye {
+.member .auth-group .btn-eye .xi-eye-slash,
+.member .auth-group .btn-eye.on .xi-eye {
   display: none;
 }
-.member .auth_group .btn_eye.on .xi-eye-slash {
+.member .auth-group .btn-eye.on .xi-eye-slash {
   display: block;
 }
-.member .auth_group.option {
+.member .auth-group.option {
   background-color: #f6f7f8;
   color: #2c2e37;
 }
@@ -355,11 +355,11 @@ h6 {
   color: #696e7a;
 }
 .info em,
-.member .sub_txt em {
+.member .sub-text em {
   font-weight: 600;
   color: #2c2e37;
 }
-.info em.info_tit {
+.info em.info-title {
   display: inline-block;
   margin-bottom: 8px;
 }

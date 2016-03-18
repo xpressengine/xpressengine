@@ -1,5 +1,5 @@
 <div class="profile_page __xe_profilePage" style="padding: 100px;background-size: cover; background-position: center;">
-    <div class="xo-container">
+    <div class="xe-container">
         <!-- content area -->
         <div class="profile_wrap">
             <h1 class="sr-only">프로필정보</h1>
@@ -28,7 +28,7 @@
 
                             @if($grant['manage'])
                                 <dt class="sr-only">그룹정보</dt>
-                                <dd class="txt_gray">
+                                <dd class="text-gray">
                                     @foreach($user->groups as $group)
                                         {{ $group->name }}
                                     @endforeach
@@ -54,7 +54,7 @@
                         @if($grant['modify'])
                             <div class="profile_btn_area">
                                 <button type="button" class="__xe_profileEditBtn">프로필 수정</button>
-                                <button type="submit" class="__xe_profileSaveBtn xe-button-blue" style="display: none;">저장</button>
+                                <button type="submit" class="__xe_profileSaveBtn xe-btn-blue" style="display: none;">저장</button>
                                 <button type="button" class="__xe_profileEditCancelBtn" style="display: none;">취소</button>
                             </div>
                         @endif

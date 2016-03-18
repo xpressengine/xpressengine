@@ -68,16 +68,16 @@
                         </form>
 
                         @if($plugin->isActivated() && $plugin->checkUpdated($plugin->getInstalledVersion()))
-                            {{--<button class="xe-button xe-button-default blue v2">업데이트</button>--}}
+                            {{--<button class="xe-btn xe-btn-default blue v2">업데이트</button>--}}
                         @endif
 
                         @if($plugin->getSettingsURI() !== null)
-                            {{--<button class="xe-button xe-button-default blue v2">관리</button>--}}
+                            {{--<button class="xe-btn xe-btn-default blue v2">관리</button>--}}
                         @endif
                     @else
                         <form method="POST" action="{{ route('settings.plugins.activate', [$plugin->getId()]) }}" accept-charset="UTF-8" role="form">
                             {!! csrf_field() !!}
-                            <button class="xe-button xe-button-default blue v2">켜기</button>
+                            <button class="xe-btn xe-btn-default blue v2">켜기</button>
                         </form>
                     @endif
 

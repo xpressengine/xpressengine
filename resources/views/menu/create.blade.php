@@ -1,5 +1,5 @@
 @section('page_title', "<h2><a href='".route('settings.menu.index')."'><i class='xi-arrow-left'></i></a>".xe_trans('xe::newMenu')."</h2>")
-@section('page_description', '<p class="sub_txt">'.xe_trans('xe::newMenuDescription').'</p>')
+@section('page_description', '<p class="sub-text">'.xe_trans('xe::newMenuDescription').'</p>')
 @extends('menu.layout')
 @section('menuContent')
     <form action="{{ route('settings.menu.store.menu') }}" method="post">
@@ -16,7 +16,7 @@
                     <div class="row_con v2">
                     <p class="text-title">Menu Title<i class="xi-information-circle"></i></p>
 
-                        <p class="sub_txt">{{xe_trans('xe::menuTitleDescription')}}</p>
+                        <p class="sub-text">{{xe_trans('xe::menuTitleDescription')}}</p>
 
                         <div class="row">
                             <div class="col-sm-5">
@@ -43,10 +43,10 @@
                     <div class="row_con v2">
                     <p class="text-title">Default Menu Theme<i class="xi-information-circle"></i></p>
 
-                        <p class="sub_txt">{{xe_trans('xe::menuThemeDescription')}}</p>
+                        <p class="sub-text">{{xe_trans('xe::menuThemeDescription')}}</p>
 
                         <div class="right_btn">
-                            <button class="btn_clse ico_gray pull-left card_close"><i class="xi-angle-down"></i><i
+                            <button class="btn-close ico_gray pull-left card_close"><i class="xi-angle-down"></i><i
                                         class="xi-angle-up"></i></button>
                         </div>
                         {!! uio('themeSelect') !!}
@@ -55,8 +55,8 @@
                 </div>
             </div>
             <div class="btn_group_all">
-                <button class="xe-button xe-button-blue">{{xe_trans('xe::submit')}}</button>
-                <a href="{{ route('settings.menu.index')}}" class="xe-button xe-button-gray">{{xe_trans('xe::cancel')}}</a>
+                <button class="xe-btn xe-btn-blue">{{xe_trans('xe::submit')}}</button>
+                <a href="{{ route('settings.menu.index')}}" class="xe-btn xe-btn-gray">{{xe_trans('xe::cancel')}}</a>
             </div>
         </div>
 

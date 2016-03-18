@@ -1,11 +1,11 @@
-<div class="xo-container">
+<div class="xe-container">
     <!--[D]  setting 영역-->
-    <div class="setting_wrap">
-        <div class="xo-container">
-            <div class="cont">
-                <div class="side_menu xo-col-sm-3">
-                    <div class="menu_open">
-                        <button class="xo-menu-toggle" type="button">
+    <div class="setting-wrap">
+        <div class="xe-container">
+            <div class="content">
+                <div class="side-menu xe-col-sm-3">
+                    <div class="menu-open">
+                        <button class="xe-menu-toggle" type="button">
                             <span class="sr-only">Toggle navigation</span>
                             <span class="icon-bar"></span>
                             <span class="icon-bar v2"></span>
@@ -21,7 +21,7 @@
                         @endforeach
                     </ul>
                 </div>
-                <div class="main_con xo-col-sm-9">
+                <div class="main-content xe-col-sm-9">
                     {!! $tabContent !!}
                 </div>
             </div>

@@ -12,7 +12,7 @@
                     <div class="row">
                         <p class="text-title">{{xe_trans('xe::editItemDescription')}}</p>
                         <div class="right_btn">
-                            <button class="btn_clse ico_gray pull-left"><i class="xi-angle-down"></i><i
+                            <button class="btn-close ico_gray pull-left"><i class="xi-angle-down"></i><i
                                         class="xi-angle-up"></i></button>
                         </div>
                     </div>
@@ -21,7 +21,7 @@
                     <div class="row_con v2">
                         <p class="text-title">Item Activated<i class="xi-information-circle"></i></p>
 
-                        <p class="sub_txt">{{xe_trans('xe::itemActivatedDescription')}}</p>
+                        <p class="sub-text">{{xe_trans('xe::itemActivatedDescription')}}</p>
                         <div class="xe-toggle-button btn_right">
                             <label>
                                 <span class="sr-only"></span>
@@ -79,7 +79,7 @@
                     <div class="row_con">
                         <p class="text-title">Item Target<i class="xi-information-circle"></i></p>
 
-                        <p class="sub_txt">{{xe_trans('xe::itemTargetDescription')}}</p>
+                        <p class="sub-text">{{xe_trans('xe::itemTargetDescription')}}</p>
                         <div class="row">
                             <div class="col-sm-5">
                                 <select name="itemTarget" class="form-control">
@@ -103,7 +103,7 @@
                     <div class="row_con v2">
                         <p class="text-title">theme<i class="xi-information-circle"></i></p>
 
-                        <p class="sub_txt">테마를 미리 보고 클릭하여 선택할 수 있습니다.</p>
+                        <p class="sub-text">테마를 미리 보고 클릭하여 선택할 수 있습니다.</p>
                         <div class="xe-input-group">
                             <input type="checkbox" name="parentTheme" id="parentTheme" value="1"
                                    @if($parentThemeMode) checked @endif>
@@ -121,8 +121,8 @@
                 @include('menu.partial.typeLoadError', ['item' => $item])
             @endif
             <div class="btn_group_all">
-                <button class="xe-button xe-button-blue">{{xe_trans('xe::save')}}</button>
-                <a href="{{route('settings.menu.index')}}" class="xe-button xe-button-gray">{{xe_trans('xe::cancel')}}</a>
+                <button class="xe-btn xe-btn-blue">{{xe_trans('xe::save')}}</button>
+                <a href="{{route('settings.menu.index')}}" class="xe-btn xe-btn-gray">{{xe_trans('xe::cancel')}}</a>
             </div>
         </div>
     </form>

@@ -1,6 +1,6 @@
 
 @section('page_setting_menu')
-<a href="{{ route('settings.member.create') }}" class="xe-button xe-button-blue v2 pull-right">{{ xe_trans('xe::addMember') }}</a>
+<a href="{{ route('settings.member.create') }}" class="xe-btn xe-btn-blue v2 pull-right">{{ xe_trans('xe::addMember') }}</a>
 @endsection
 
         <!--[DD] panel-default와 같이 서브속성이 지정되어야 기본 bs환경에서 제대로 출력됨 -->

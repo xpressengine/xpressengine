@@ -8,7 +8,7 @@
 
             <div class="right_btn pull-right" role="button" data-toggle="collapse" data-parent="#accordion" data-target="#{{ $groupName }}Section">
                 <!-- [D] 메뉴 닫기 시 버튼 클래스에 card_close 추가 및 item_container none/block 처리-->
-                <button class="btn_clse ico_gray pull-left"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">{{ xe_trans('xe::closeMenu') }}</span></button>
+                <button class="btn-close ico_gray pull-left"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">{{ xe_trans('xe::closeMenu') }}</span></button>
             </div>
         </div>
     </div>
@@ -21,7 +21,7 @@
                     {!! uio('xpressengine@registeredPermission',['title' => $permission['title'],'type' => 'settings','target' => $permission['id']])->render() !!}
 
                     <div class="btn_group_all">
-                        <button type="submit" class="xe-button xe-button-blue">{{ xe_trans('xe::applyModified') }}</button>
+                        <button type="submit" class="xe-btn xe-btn-blue">{{ xe_trans('xe::applyModified') }}</button>
                     </div>
                 </form>
         </div>
