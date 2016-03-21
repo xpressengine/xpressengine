@@ -29,17 +29,6 @@ class UserRepository implements UserRepositoryInterface
     use RepositoryTrait;
 
     /**
-     * UserRepository constructor.
-     *
-     * @param $model
-     */
-    public function __construct($model)
-    {
-        $this->setModel($model);
-    }
-
-
-    /**
      * create
      *
      * @param array $data
@@ -85,7 +74,7 @@ class UserRepository implements UserRepositoryInterface
      *
      * @return UserInterface
      */
-    public function findByEmail($address, $with = null)
+    public function findByEmail($address)
     {
         $user = $this->query()->whereHas(
             'emails',
@@ -105,7 +94,7 @@ class UserRepository implements UserRepositoryInterface
      *
      * @return UserInterface[]
      */
-    public function searchByEmailPrefix($emailPrefix, $with = null)
+    public function searchByEmailPrefix($emailPrefix)
     {
         $users = $this->query()->whereHas(
             'emails',

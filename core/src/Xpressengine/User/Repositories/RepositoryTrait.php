@@ -31,6 +31,16 @@ trait RepositoryTrait
     protected $model;
 
     /**
+     * constructor.
+     *
+     * @param $model
+     */
+    public function __construct($model)
+    {
+        $this->setModel($model);
+    }
+
+    /**
      * update
      *
      * @param Model $item

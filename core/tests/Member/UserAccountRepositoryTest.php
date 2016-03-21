@@ -17,7 +17,7 @@ class UserAccountRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testConstruct()
     {
         /** @var UserAccountRepository $repo */
-        $repo = $this->makeRepository();
+        $repo = new UserAccountRepository('foo');
         $this->assertInstanceOf('Xpressengine\User\Repositories\UserAccountRepository', $repo);
     }
 

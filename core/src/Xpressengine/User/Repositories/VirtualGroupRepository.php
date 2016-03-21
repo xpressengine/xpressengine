@@ -15,6 +15,7 @@ namespace Xpressengine\User\Repositories;
 
 use Closure;
 use Illuminate\Support\Collection;
+use Xpressengine\User\Exceptions\UserNotFoundException;
 use Xpressengine\User\Models\UserVirtualGroup;
 
 /**
@@ -102,7 +103,11 @@ class VirtualGroupRepository implements VirtualGroupRepositoryInterface
     public function findByUserId($userId)
     {
         $getByUser = $this->getter;
-        $user = $this->users->find($userId, ['groups', 'accounts', 'mails', 'pending_mails']);
+        $user = $this->users->find($userId);
+
+        if($user === null) {
+            throw new UserNotFoundException();
+        }
 
         $groupIds = $getByUser($user);
 
