@@ -1,8 +1,7 @@
 <?php namespace Xpressengine\UIObjects\Form;
 
 use XeFrontend;
-use Media;
-use Storage;
+use Xpressengine\Storage\File;
 use Xpressengine\UIObject\AbstractUIObject;
 
 class FormFile extends AbstractUIObject
@@ -33,7 +32,7 @@ class FormFile extends AbstractUIObject
 
         // set file
         if (isset($args['file'])) {
-            $file = Storage::get($args['file']);
+            $file = File::find($args['file']);
 
             if ($file === null) {
                 unset($args['file']);

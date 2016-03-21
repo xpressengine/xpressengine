@@ -36,6 +36,7 @@ class Translator extends NamespacedItemResolver implements TranslatorInterface
     protected $fileLoader;
     protected $urlLoader;
     protected $userKeyPrefix = 'user';
+    protected $preprocessorProtocol = 'xe_lang_preprocessor://';
 
     /**
      * @param array               $config     설정
@@ -392,5 +393,61 @@ class Translator extends NamespacedItemResolver implements TranslatorInterface
         list($namespace, $item) = $this->parseKey($key);
 
         $this->cachedDb->putLine($namespace, $item, $locale, $value, $multiLine);
+    }
+
+    /**
+     * 미들웨어에서 생성된 다국어 참조 키를 분해하여 리턴합니다
+     *
+     * @param string $key LangPreprocessor 에서 생성한 키
+     * @return array|null
+     * @see App\Http\Middleware\LangPreprocessor
+     */
+    public function parsePreprocessor($key)
+    {
+        $protocol = $this->preprocessorProtocol;
+        $len = strlen($protocol);
+
+        if (starts_with($key, $protocol)) {
+            $params = explode("/", substr($key, $len));
+            array_shift($params);
+            return !empty($params) ? $params : null;
+        }
+
+        return null;
+    }
+
+    /**
+     * LangPreprocessor 로 만들어진 다국어 정보에서
+     * 현재 설정에서 사용해야할 값들을 리턴합니다.
+     *
+     * @param array  $inputs        inputs
+     * @param string $sessionLocale 세션 로케일 정보
+     * @return array
+     */
+    public function getPreprocessorValues(array $inputs, $sessionLocale = null)
+    {
+        $names = [];
+        $expressions = [];
+        foreach ($inputs as $key => $value) {
+            if ($params = $this->parsePreprocessor($key)) {
+                list($kSeq, $seq, $command) = $params;
+                if ($command == 'name') {
+                    $names[$seq] = $value;
+                }
+                if ($command == 'locale') {
+                    list($kSeq, $seq, $kLocale, $locale) = $params;
+                    if ($locale == ($sessionLocale ?: $this->getLocale())) {
+                        $expressions[$seq] = $value;
+                    }
+                }
+            }
+        }
+
+        $values = [];
+        foreach ($names as $seq => $name) {
+            $values[$name] = $expressions[$seq];
+        }
+
+        return $values;
     }
 }

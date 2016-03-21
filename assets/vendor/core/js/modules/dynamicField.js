@@ -22,13 +22,24 @@ define(['validator'], function(validator) {
             this.container.$addForm = this.container.find('.__xe_add_form_section');
 
             this.attachEvent();
+
+            this.closeAll = function() {
+                this.container.find('.__xe_form_edit').remove();
+                this.container.$addForm.find('form').remove();
+            };
         };
 
         this.attachEvent = function() {
             var self = this;
 
             this.container.on('click', '.__xe_btn_add', function() {
+                self.closeAll();
                 self.container.$addForm.html(self.formClone());
+
+                var $langBox = self.container.$addForm.find('.dynamic-lang-editor-box');
+
+                $langBox.addClass('lang-editor-box');
+                langEditorBoxRender($langBox);
             });
             this.container.on('click', '.__xe_btn_submit', function() {
                 self.store(this);
@@ -38,11 +49,13 @@ define(['validator'], function(validator) {
             });
             this.container.on('click', '.__xe_btn_edit', function(e) {
                 e.preventDefault();
+                self.closeAll();
                 self.edit(this);
             });
             this.container.on('click', '.__xe_btn_delete', function(e) {
                 e.preventDefault();
                 self.destroy(this);
+                self.closeAll();
             });
             this.container.on('change', '.__xe_type_id', function(e) {
                 var typeId = $(this).val(),
@@ -100,16 +113,12 @@ define(['validator'], function(validator) {
                     self.addrow(data.list[i]);
                 }
             });
-            jqxhr.always(function(jqxhr, textStatus) {
-                // 따로 하고 싶은 complete 처리가 있어?
-            });
-            jqxhr.fail(function(jqxhr, settings, thrownError) {
-                // 따로 하고 싶은 에러 처리가 있어?
-            });
         };
 
         this.formClone = function() {
-            return this.container.$form.clone().removeClass('__xe_add_form').show();
+            var $form = this.container.$form.clone().removeClass('__xe_add_form');
+            $form.show();
+            return $form;
         };
 
         this.addrow = function(data) {
@@ -141,7 +150,7 @@ define(['validator'], function(validator) {
                 id = tr.data('id'),
                 tbody = $(o).closest('tbody'),
                 colspanCount = $(o).closest('table').find('thead th'),
-                edit = $('<tr>').addClass('more-info-area').append(
+                edit = $('<tr>').addClass('more-info-area __xe_form_edit').append(
                     $('<td>').addClass('__xe_form_container').prop('colspan', colspanCount.length)
                 ),
                 frm = this.formClone();
@@ -168,7 +177,12 @@ define(['validator'], function(validator) {
                             $option.remove();
                         }
                     });
-                    frm.find('[name="label"]').val(response.config.label);
+
+                    var $langBox = frm.find('.dynamic-lang-editor-box');
+                    $langBox.data('lang-key', response.config.label);
+                    $langBox.addClass('lang-editor-box');
+                    langEditorBoxRender($langBox);
+
                     frm.find('[name="use"]').val(self.checkBox(response.config.use) ? 'true' : 'false');
                     frm.find('[name="required"]').val(self.checkBox(response.config.required) ? 'true' : 'false');
                     frm.find('[name="sortable"]').val(self.checkBox(response.config.sortable) ? 'true' : 'false');
@@ -227,6 +241,11 @@ define(['validator'], function(validator) {
         this.getSkinOption = function(frm) {
             var params = frm.serialize();
             var self = this;
+
+            frm.find('.__xe_additional_configure').html('');
+            if (frm.find('[name="typeId"]').val() == '') {
+                return;
+            }
 
             XE.ajax({
                 type: 'get',

@@ -5,6 +5,7 @@
 namespace App\Sections;
 
 use DynamicField;
+use XeFrontend;
 use View;
 use Xpressengine\Database\VirtualConnectionInterface;
 use XeConfig;
@@ -71,7 +72,15 @@ class DynamicFieldSection
             $fieldTypes[] = $types;
         }
 
-        \XeFrontend::rule('dynamicFieldSection', $this->getRules());
+        XeFrontend::rule('dynamicFieldSection', $this->getRules());
+
+        // 다국어 입력 필드
+        XeFrontend::js('/assets/vendor/jqueryui/jquery-ui.js')->appendTo('head')->load();
+        XeFrontend::css('/assets/vendor/jqueryui/jquery-ui.css')->load();
+        XeFrontend::js('/assets/vendor/expanding/expanding.js')->appendTo('head')->load();
+        XeFrontend::js('/assets/vendor/lang/LangEditorBox.js')->type('text/jsx')->appendTo('head')->load();
+        XeFrontend::css('/assets/vendor/lang/LangEditorBox.css')->load();
+        XeFrontend::css('/assets/vendor/lang/flag.css')->load();
 
         return View::make('dynamicField.setting', [
             'databaseName' => $conn->getName(),
@@ -93,7 +102,7 @@ class DynamicFieldSection
             'typeId' => 'Required',
             'skinId' => 'Required',
             'id' => 'Required|AlphaNum|Between:4,20',
-            'label' => 'Required|Min:4',
+            //'label' => 'Required|Min:4',
         ];
     }
 }
