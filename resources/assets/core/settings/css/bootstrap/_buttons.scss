@@ -7,7 +7,7 @@
 // --------------------------------------------------
 
 .btn {
-  display: inline-block;  
+  display: inline-block;
   margin-bottom: 0; // For input.btn
   font-weight: $btn-font-weight;
   text-align: center;
@@ -167,57 +167,10 @@ input[type="button"] {
   }
 }
 
-.xe-toggle-button {
-  display: inline-block;
-  input[type=checkbox] {
-    opacity: 0;
-    width: 0;
-    height: 0;
-    &:checked + .toggle {
-      background-color: #DADBDE;
-      background-color: #359BF7;
-      &:after {
-        left: 20px;
-        outline: none;
-      }
-    }
-  }
-  label {
-    font-weight: 400;
-    font-size: 13px;
-    cursor: pointer;
-  }
-  .toggle {
-    display: inline-block;
-    width: 30px;
-    height: 6px;
-    background-color: #DADBDE;
-    border-radius: 15px;
-    margin-right: 10px;
-    transition: background .3s ease;
-    vertical-align: middle;
-    content: '';
-    &:after {
-      display: inline-block;
-      position: relative;
-      left: -14px;
-      top: -9px;
-      width: 24px;
-      height: 24px;
-      background-color: #fff;
-      border-radius: 20px;
-      border: 1px solid #e4e4e4;
-      transition: left .3s ease,background .3s ease,box-shadow .1s ease;
-      content: '';
-    }
-  }
-}
-
-.btn-ico{    
-    color:$btn-primary-bg;    
+.btn-ico{
+    color:$btn-primary-bg;
     &.off{
         color:#C6C6C8;
         border-color:#E3E3E5;
     }
 }
-

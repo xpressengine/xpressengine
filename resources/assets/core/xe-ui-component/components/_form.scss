@@ -215,7 +215,7 @@
 }
 
 .xe-input-text,
-.form-control {
+.xe-form-control {
   width: 100%;
   height: 36px;
   margin: 0 4px 4px 0;
@@ -236,7 +236,7 @@
 textarea {
   padding: 10px 12px;
 }
-.form-control.srch {
+.xe-form-control.srch {
   padding-right: 30px;
 }
 .xe-input-text.readonly {
@@ -254,9 +254,9 @@ textarea {
   border-color: #2c8beb !important;
 }
 .xe-input-text:focus,
-.input-body textarea:focus,
-.input-body .xe-input-text:focus,
-.form-control:focus {
+.xe-input-body textarea:focus,
+.xe-input-body .xe-input-text:focus,
+.xe-form-control:focus {
   border-color: #2389ee;
   color: #2c2e37;
   -webkit-box-shadow: none;
@@ -283,11 +283,11 @@ textarea {
   color: #2c8beb !important;
 }
 
-.input-body {
+.xe-input-body {
   position: relative;
 }
-.input-body textarea,
-.input-body .xe-input-text {
+.xe-input-body textarea,
+.xe-input-body .xe-input-text {
   width: 100%;
   border: 1px solid #dadbde;
   outline: none;
@@ -295,33 +295,33 @@ textarea {
   border-radius: 2px;
   color: #2c2e37;
 }
-.input-body .flag-code {
+.xe-input-body .flag-code {
   position: absolute;
   top: 10px;
   right: 15px;
 }
 
-.form-group {
+.xe-form-group {
   display: inline-block;
   font-size: 0;
 }
-.form-group .xe-input-text.v2 {
+.xe-form-group .xe-input-text.v2 {
   width: 170px;
   margin: 0;
   border-right-color: transparent;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
-.form-group .xe-input-text:focus {
+.xe-form-group .xe-input-text:focus {
   border-color: #2389ee;
 }
-.form-group .xe-btn {
+.xe-form-group .xe-btn {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   vertical-align: top;
 }
 
-.form-group.wrong + .txt_group + .text-message {
+.xe-form-group.wrong + .xe-text-group + .text-message {
   color: #db2828;
 }
 
@@ -329,7 +329,7 @@ button i + span,
 .xe-btn i + span {
   margin-left: 3px;
 }
-.txt_group button:hover {
+.xe-text-group button:hover {
   background-color: #d4e8fc;
   border-radius: 2px;
 }
@@ -367,7 +367,7 @@ a.icon-gray:hover {
   color: #434a53;
 }
 
-.select-style {
+.xe-select-style {
   display: inline-block;
   position: relative;
   margin: 0;
@@ -405,7 +405,7 @@ a.icon-gray:hover {
   }
 }
 
-.xe-toggle-button {
+.xe-btn-toggle {
   display: inline-block;
 
   input[type=checkbox] {
