@@ -65,6 +65,14 @@ return [
         'ko' => '등록',
         'en' => 'Registration',
     ],
+    'restore' => [
+        'ko' => '복원',
+        'en' => 'Restore',
+    ],
+    'destroy' => [
+        'ko' => '삭제',
+        'en' => 'Destroy',
+    ],
     'member' => [
         'ko' => '회원',
         'en' => 'Member',
@@ -496,6 +504,10 @@ return [
     'deny' => [
         'ko' => '거절',
         'en' => 'Deny',
+    ],
+    'approve' => [
+        'ko' => '승인',
+        'en' => 'Approve',
     ],
     'enableComment' => [
         'ko' => '댓글 허용',
