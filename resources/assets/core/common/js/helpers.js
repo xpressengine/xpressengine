@@ -1,4 +1,4 @@
-System.import('xecore:/common/js/xe.bundle').then(function(XE) {
+System.import('xecore:/common/js/xe').then(function(XE) {
   // @DEPRECATED
   XE.parseUrl = function (url) {
     if (url == undefined) {
