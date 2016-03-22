@@ -113,9 +113,9 @@ class Menu extends DynamicModel
     }
 
     /**
-     * Get a tree collection of category items
+     * Get a tree of category items
      *
-     * @return Collection
+     * @return Tree
      */
     public function getTree()
     {
