@@ -1,1 +1,1 @@
-이 링크를 누르면 비밀번호를 재설정할 수 있습니다: {{ route('auth.password', ['token' => $token, 'email' => $user->email]) }}
+이 링크로 이동하여 비밀번호를 재설정하세요: {{ route('auth.password', ['token' => $token, 'email' => $user->getEmailForPasswordReset()]) }}

@@ -46,7 +46,7 @@ class Number extends AbstractType
      */
     public function setRules()
     {
-        $this->rules = ['num' => 'digits'];
+        $this->rules = ['num' => 'numeric'];
     }
 
     /**
