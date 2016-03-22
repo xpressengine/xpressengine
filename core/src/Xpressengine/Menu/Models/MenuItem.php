@@ -14,7 +14,7 @@
 namespace Xpressengine\Menu\Models;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Xpressengine\Routing\InstanceRoute;
 use Xpressengine\Support\Tree\Node;
 
 /**
@@ -87,11 +87,21 @@ class MenuItem extends Node
     /**
      * Node group relationship
      *
-     * @return BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function menu()
     {
         return $this->belongsTo(Menu::class, 'menuId');
+    }
+
+    /**
+     * Instance route relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function route()
+    {
+        return $this->hasOne(InstanceRoute::class, 'instanceId');
     }
 
     /**

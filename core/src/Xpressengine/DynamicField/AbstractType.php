@@ -500,7 +500,7 @@ abstract class AbstractType implements ComponentInterface
                 $key = camel_case($config->get('id') . '_' . $column->name);
 
             if ($config->get('required') && (isset($args[$key]) === false || $args[$key] === '')) {
-                throw new Exceptions\RequiredParameterException;
+                throw new Exceptions\RequiredParameterException(['name' => $key]);
             }
 
             if (isset($args[$key])) {
@@ -562,7 +562,7 @@ abstract class AbstractType implements ComponentInterface
         foreach ($this->columns() as $column) {
             $key = camel_case($config->get('id') . '_' . $column->name);
             if ($config->get('required') && (isset($args[$key]) === true && $args[$key] === '')) {
-                throw new Exceptions\RequiredParameterException;
+                throw new Exceptions\RequiredParameterException(['name' => $key]);
             }
 
             if (isset($args[$key])) {
