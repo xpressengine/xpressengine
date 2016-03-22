@@ -111,16 +111,19 @@
                 @section('page_head')
                 <div class="row">
                     <div class="col-sm-6">
-                        @yield('page_title', '<h2>'.xe_trans(data_get($selectedMenu->getParent(), 'title', 'xe::inputTitle')).'</h2>')
-                        @yield('page_description', '<small>'.xe_trans(data_get($selectedMenu->getParent(), 'description', 'xe::inputTitle')).'</small>')
+                        @yield('page_title', '<h2>'.xe_trans(data_get($selectedMenu ? $selectedMenu->getParent() : [], 'title', 'xe::inputTitle')).'</h2>')
+                        @yield('page_description', '<small>'.xe_trans(data_get($selectedMenu ? $selectedMenu->getParent() : [], 'description', 'xe::inputTitle')).'</small>')
                     </div>
                 </div>
                 <div class="row locate">
                     <div class="col-sm-12">
                         <ul>
+                            <!-- 게시판 인스턴스 설정 같이 빵조각을 표시하기 어려운 환경 일 수 있음 -->
+                        @if ($selectedMenu)
                         @foreach ($selectedMenu->getBreadCrumbs() as $menu)
                             <li><a href="{{$menu->link()}}">{{xe_trans($menu->title)}}</a><i class="xi-angle-right"></i></li>
                         @endforeach
+                        @endif
                             <!-- contents 에서 임의로 빵조각을 추가할 수 있음-->
                             @yield('content_bread_crumbs')
                         </ul>

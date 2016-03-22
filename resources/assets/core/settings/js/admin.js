@@ -1,10 +1,16 @@
 (function (root, factory) {
+  if (typeof define === 'function' && define.amd) {
     define([
       'exports',
       'jquery'
-    ], function (exports, jQuery) {
-      factory((root.commonJsStrictGlobal = exports), jQuery);
-    });
+      ], function (exports, jQuery) {
+        factory(exports, jQuery);
+      });
+  } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
+    factory(exports, require('jquery'));
+  } else {
+    factory({}, root.jQuery);
+  }
 }(this, function (exports, $) {
   $(document).ready(function () {
     var $sidebar = $('.settings-nav-sidebar');
