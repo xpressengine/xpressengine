@@ -50,7 +50,10 @@ class SettingsTheme extends AbstractTheme
 
         $frontendHandler->js([
             'assets/vendor/bootstrap/js/bootstrap.min.js',
-            'assets/core/settings/js/admin.bundle.js'
         ])->appendTo('head')->load();
+
+        $frontendHandler->html('setting.js')->content(
+            '<script>System.import(\'xecore:/settings/js/admin.bundle\');</script>'
+        )->appendTo('body')->load();
     }
 }

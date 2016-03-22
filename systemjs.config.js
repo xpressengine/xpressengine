@@ -45,6 +45,9 @@ System.config({
   },
 
   meta: {
+    "xecore:/*": {
+      "format": "cjs"
+    },
     "xecore:/menu/menu.js": {
       "format": "global",
       "exports": "MenuTree"
