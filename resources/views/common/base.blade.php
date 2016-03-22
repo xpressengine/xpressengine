@@ -26,9 +26,6 @@
     <!-- JS at head.append -->
     {!! XeFrontend::output('js', 'head.append') !!}
 
-    <!-- Translation -->
-    {!! XeFrontend::output('translation') !!}
-
     <script type="text/javascript">
         System.import('xecore:/common/js/xe.bundle').then(function(XE) {
             XE.setup({
@@ -36,6 +33,9 @@
                 loadedTime: {{ time() }},
                 'X-CSRF-TOKEN': '{!! csrf_token() !!}'
             });
+
+            <!-- Translation -->
+            {!! XeFrontend::output('translation') !!}
 
             @if (in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER]))
                 XE.configure({managePrefix: '{{ app('config')['xe.routing.settingsPrefix'] }}'});
