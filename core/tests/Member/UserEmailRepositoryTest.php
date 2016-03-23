@@ -17,7 +17,7 @@ class UserEmailRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testConstruct()
     {
         /** @var UserEmailRepository $repo */
-        $repo = $this->makeRepository();
+        $repo = new UserEmailRepository('foo');
         $this->assertInstanceOf('Xpressengine\User\Repositories\UserEmailRepository', $repo);
     }
 
@@ -80,6 +80,43 @@ class UserEmailRepositoryTest extends \PHPUnit_Framework_TestCase
         /** @var UserEmailRepository $repo */
         /** @var User $user */
         $this->assertEquals($expected, $repo->findByAddress($address));
+    }
+
+    /**
+     * testDeleteWhenEmailIsMainEmail
+     *
+     * @expectedException \Xpressengine\User\Exceptions\CannotDeleteMainEmailOfUserException
+     */
+    public function testDeleteWhenEmailIsMainEmail()
+    {
+        $user = $this->makeUser();
+        $user->shouldReceive('getAttribute')->with('email')->once()->andReturn('foo@email.com');
+
+        $repo = $this->makeRepository();
+
+        $email = $this->makeEmail();
+        $email->shouldReceive('getAttribute')->with('user')->once()->andReturn($user);
+        //$email->shouldReceive('delete')->once()->withNoArgs()->andReturn(2);
+        $email->shouldReceive('getAddress')->once()->withNoArgs()->andReturn('foo@email.com');
+
+        /** @var UserEmailRepository $repo */
+        $repo->delete($email);
+    }
+
+    public function testDelete()
+    {
+        $user = $this->makeUser();
+        $user->shouldReceive('getAttribute')->with('email')->once()->andReturn('foo@email.com');
+
+        $repo = $this->makeRepository();
+
+        $email = $this->makeEmail();
+        $email->shouldReceive('getAttribute')->with('user')->once()->andReturn($user);
+        $email->shouldReceive('delete')->once()->withNoArgs()->andReturn(2);
+        $email->shouldReceive('getAddress')->once()->withNoArgs()->andReturn('bar@email.com');
+
+        /** @var UserEmailRepository $repo */
+        $repo->delete($email);
     }
 
     public function testDeleteByUserIds()

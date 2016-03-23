@@ -16,6 +16,8 @@ namespace Xpressengine\Category\Models;
 use Xpressengine\Database\Eloquent\DynamicModel;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Xpressengine\Support\Tree\Tree;
+use Xpressengine\Support\Tree\TreeMakerTrait;
 
 /**
  * Class Category
@@ -29,6 +31,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Category extends DynamicModel
 {
+    use TreeMakerTrait;
     /**
      * The table associated with the model.
      *
@@ -36,7 +39,19 @@ class Category extends DynamicModel
      */
     protected $table = 'category_group';
 
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
     protected $guarded = ['id'];
+
+    /**
+     * The tree instance consisting of item
+     *
+     * @var Tree
+     */
+    protected $tree;
 
     /**
      * Category item model
@@ -68,23 +83,17 @@ class Category extends DynamicModel
     }
 
     /**
-     * Get a tree collection of category items
+     * Get a tree of category items
      *
-     * @return Collection
+     * @return Tree
      */
     public function getTree()
     {
-        $collection = new Collection();
-
-        $progenitors = $this->getProgenitors();
-
-        /** @var CategoryItem $item */
-        foreach ($progenitors as $item) {
-            $item->setRelation($item->getTreeRelationName(), $item->getDescendantTree());
-            $collection->put($item->getKey(), $item);
+        if (!$this->tree) {
+            $this->tree = $this->makeTree($this->items);
         }
 
-        return $collection;
+        return $this->tree;
     }
 
     /**

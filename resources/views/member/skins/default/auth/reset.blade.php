@@ -32,7 +32,7 @@
         {{--<em class="info-title">이메일을 수신하지 못했습니까?</em><br>
         <p>accounts-noreply@xpressengine.com으로부터 수신된 메시지에 대해 스팸 또는 벌크 폴더를 확인하십시오.</p>--}}
     </div>
-    <a href="#" class="btn xe-btn-text v2">로그인으로 돌아기기</a>
+    <a href="{{ route('login') }}" class="btn xe-btn-text v2">로그인으로 돌아기기</a>
 </div>
 <!-- // 비밀번호 찾기 2step-->
 

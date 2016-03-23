@@ -100,4 +100,12 @@ interface MenuTypeInterface
      * @return mixed
      */
     public function deleteMenu($instanceId);
+
+    /**
+     * Get menu type's item object
+     *
+     * @param string $id item id of menu type
+     * @return mixed
+     */
+    public function getTypeItem($id);
 }

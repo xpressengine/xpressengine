@@ -114,7 +114,7 @@ class MenuMigration implements Migration {
         ];
         $menuTypeInput = [
             'pageTitle' => 'Welcome to XpressEngine3',
-            'comment' => 'use',
+            'comment' => false,
             'siteKey' => 'default'
         ];
 
