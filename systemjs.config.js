@@ -12,14 +12,10 @@ System.config({
   },
   bundles: {
     "xecore:/xe-ui-component/js/xe-ui-component.bundle.js": [
-      "xecore:/xe-ui-component/js/xe-ui-component.js",
-      "npm:jquery@2.2.1.js",
-      "npm:jquery@2.2.1/dist/jquery.js"
+      "xecore:/xe-ui-component/js/xe-ui-component.js"
     ],
     "xecore:/settings/js/admin.bundle.js": [
-      "xecore:/settings/js/admin.js",
-      "npm:jquery@2.2.1.js",
-      "npm:jquery@2.2.1/dist/jquery.js"
+      "xecore:/settings/js/admin.js"
     ],
     "xecore:/menu/menu.js": [
       "xecore:/menu/MenuTree.jsx!github:floatdrop/plugin-jsx@1.2.1.js",

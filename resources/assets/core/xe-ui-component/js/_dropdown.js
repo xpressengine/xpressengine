@@ -2,14 +2,14 @@
   if (typeof define === 'function' && define.amd) {
     // AMD
     define(['exports', 'jquery'], function (exports, jQuery) {
-      factory((root.commonJsStrictGlobal = exports), jQuery.noConflict(true));
+      factory(exports, jQuery);
     });
   } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
     // CommonJS
-    factory(exports, require('jquery').noConflict(true));
+    factory(exports, require('jquery'));
   } else {
     // Browser globals
-    factory((root.commonJsStrictGlobal = {}), root.jQuery.noConflict(true));
+    factory({}, root.jQuery);
   }
 }(this, function (exports, $) {
   'use strict';

@@ -1,15 +1,15 @@
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD
-    define(['exports', 'jquery'], function (exports, jQuery) {
-      factory((root.commonJsStrictGlobal = exports), jQuery);
+    define(['exports'], function (exports, jQuery) {
+      factory(exports, jQuery);
     });
   } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
     // CommonJS
-    factory(exports, require('jquery').noConflict(true));
+    factory(exports, require('jquery'));
   } else {
     // Browser globals
-    factory((root.commonJsStrictGlobal = {}), root.jQuery);
+    factory({}, root.jQuery);
   }
 }(this, function (exports, $) {
   'use strict';
@@ -102,7 +102,7 @@
 
       transition ?
         that.$dialog // wait for modal to slide in
-          .one('bsTransitionEnd', function () {
+          .one('xeTransitionEnd', function () {
             that.$element.trigger('focus').trigger(e)
           })
           .emulateTransitionEnd(Modal.TRANSITION_DURATION) :
@@ -135,7 +135,7 @@
 
     $.support.transition && this.$element.hasClass('fade') ?
       this.$element
-        .one('bsTransitionEnd', $.proxy(this.hideModal, this))
+        .one('xeTransitionEnd', $.proxy(this.hideModal, this))
         .emulateTransitionEnd(Modal.TRANSITION_DURATION) :
       this.hideModal()
   }
@@ -214,7 +214,7 @@
 
       doAnimate ?
         this.$backdrop
-          .one('bsTransitionEnd', callback)
+          .one('xeTransitionEnd', callback)
           .emulateTransitionEnd(Modal.BACKDROP_TRANSITION_DURATION) :
         callback()
 
@@ -227,7 +227,7 @@
       }
       $.support.transition && this.$element.hasClass('fade') ?
         this.$backdrop
-          .one('bsTransitionEnd', callbackRemove)
+          .one('xeTransitionEnd', callbackRemove)
           .emulateTransitionEnd(Modal.BACKDROP_TRANSITION_DURATION) :
         callbackRemove()
 

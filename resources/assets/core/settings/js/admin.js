@@ -1,17 +1,21 @@
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
+    // AMD
     define([
       'exports',
-      'jquery'
-      ], function (exports, jQuery) {
-        factory(exports, jQuery);
-      });
+      'jquery',
+      "github:twbs/bootstrap-sass@3.3.6/assets/javascripts/bootstrap.js"
+    ], function (exports, jQuery, twbs) {
+      factory(exports, jQuery, twbs);
+    });
   } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
+    // CommonJS
     factory(exports, require('jquery'));
   } else {
+    // Browser globals
     factory({}, root.jQuery);
   }
-}(this, function (exports, $) {
+}(this, function (exports, $, twbs) {
   $(document).ready(function () {
     var $sidebar = $('.settings-nav-sidebar');
     var $dim = $('.dim');
@@ -43,7 +47,6 @@
       $sidebar.trigger('setting.sidebar.close');
     });
     $(".btn-slide").on('click', function() {
-      console.log('asefsaefasef');
       $sidebar.trigger('setting.sidebar.toggle');
     });
 
