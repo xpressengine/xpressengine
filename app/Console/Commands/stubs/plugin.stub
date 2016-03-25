@@ -87,11 +87,11 @@ class DummyClass extends AbstractPlugin
      *
      * @return boolean 플러그인의 설치 유무
      */
-    public function checkInstall($installedVersion = null)
+    public function checkInstalled($installedVersion = null)
     {
         // implement code
 
-        return parent::checkInstall($installedVersion);
+        return parent::checkInstalled($installedVersion);
     }
 
     /**
@@ -107,4 +107,18 @@ class DummyClass extends AbstractPlugin
 
         parent::update($installedVersion);
     }
+
+    /**
+     * 해당 플러그인이 최신 상태로 업데이트가 된 상태라면 true, 업데이트가 필요한 상태라면 false를 반환함.
+     * 이 메소드를 구현하지 않았다면 기본적으로 최신업데이트 상태임(true)을 반환함.
+     *
+     * @param string $currentVersion 현재 설치된 버전
+     *
+     * @return boolean 플러그인의 설치 유무,
+     */
+    public function checkUpdated($currentVersion = null)
+    {
+        return true;
+    }
+
 }

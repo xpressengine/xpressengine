@@ -84,6 +84,10 @@ class MenuItem extends Node
      */
     protected $selected = false;
 
+    protected $casts = [
+        'activated' => 'integer',
+    ];
+
     /**
      * Node group relationship
      *
