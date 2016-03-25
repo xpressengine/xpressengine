@@ -24,20 +24,20 @@
             <div class="panel menu_detail">
                 <div class="panel-heading">
                     <div class="row">
-                        <p class="txt_tit">{{xe_trans('xe::newItemDescription')}}</p>
+                        <p class="text-title">{{xe_trans('xe::newItemDescription')}}</p>
                         <div class="right_btn">
-                            <button type="button" class="btn_clse ico_gray pull-left"><i class="xi-angle-down"></i><i
+                            <button type="button" class="btn-close ico_gray pull-left"><i class="xi-angle-down"></i><i
                                         class="xi-angle-up"></i></button>
                         </div>
                     </div>
                 </div>
                 <div class="panel-body">
                     <div class="row_con v2">
-                        <p class="txt_tit">Item Activated<i class="xi-information-circle"></i></p>
+                        <p class="text-title">Item Activated<i class="xi-information-circle"></i></p>
 
-                        <p class="sub_txt">{{xe_trans('xe::itemActivatedDescription')}}</p>
+                        <p class="sub-text">{{xe_trans('xe::itemActivatedDescription')}}</p>
 
-                        <div class="togglebutton btn_right">
+                        <div class="xe-toggle-button btn_right">
                             <label>
                                 <span class="sr-only"></span>
                                 <input type="checkbox" name="itemActivated" value="1" checked>
@@ -47,7 +47,7 @@
                     </div>
                     <hr>
                     <div class="row_con">
-                        <p class="txt_tit">Item Url</p>
+                        <p class="text-title">Item Url</p>
 
                         <div class="row">
                             <div class="col-sm-6">
@@ -55,13 +55,13 @@
                                     @if($menuType::isRouteAble())
                                         <em class="txt_blue">/</em>
                                     @endif
-                                    <input type="text" name="itemUrl" class="inpt_txt" value="{{Request::old('itemUrl')}}"/>
+                                    <input type="text" name="itemUrl" class="xe-input-text" value="{{Request::old('itemUrl')}}"/>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row_con">
-                        <p class="txt_tit">Item Title<i class="xi-information-circle"></i></p>
+                        <p class="text-title">Item Title<i class="xi-information-circle"></i></p>
                         <input type="hidden" name="itemOrdering" value="0" readonly/>
                         <div class="row">
                             <div class="col-sm-4">
@@ -80,7 +80,7 @@
                         </div>
                     </div>
                     <div class="row_con">
-                        <p class="txt_tit">Item Description<i class="xi-information-circle"></i></p>
+                        <p class="text-title">Item Description<i class="xi-information-circle"></i></p>
 
                         <div class="row">
                             <div class="col-sm-8">
@@ -93,9 +93,9 @@
                     </div>
                     <hr>
                     <div class="row_con">
-                        <p class="txt_tit">Item Target<i class="xi-information-circle"></i></p>
+                        <p class="text-title">Item Target<i class="xi-information-circle"></i></p>
 
-                        <p class="sub_txt">{{xe_trans('xe::itemTargetDescription')}}</p>
+                        <p class="sub-text">{{xe_trans('xe::itemTargetDescription')}}</p>
 
                         <div class="row">
                             <div class="col-sm-5">
@@ -118,10 +118,10 @@
                     </div>
                     <hr>
                     <div class="row_con v2">
-                        <p class="txt_tit">theme<i class="xi-information-circle"></i></p>
+                        <p class="text-title">theme<i class="xi-information-circle"></i></p>
 
-                        <p class="sub_txt">{{xe_trans('xe::menuThemeDescription')}}</p>
-                        <div class="inpt_group">
+                        <p class="sub-text">{{xe_trans('xe::menuThemeDescription')}}</p>
+                        <div class="xe-input-group">
                             <input type="checkbox" name="parentTheme" id="parentTheme" value="1">
                             <label for="parentTheme" class="inpt_chk">{{xe_trans('xe::menuThemeInheritMode')}}</label>
                         </div>
@@ -133,8 +133,8 @@
             </div>
             {!! uio('menuType', $menuTypeArgs) !!}
             <div class="btn_group_all">
-                <button type="submit" class="btn btn_blue">{{xe_trans('xe::submit')}}</button>
-                <a href="{{ route('settings.menu.select.types')}}" class="btn btn_gray">{{xe_trans('xe::cancel')}}</a>
+                <button type="submit" class="xe-btn xe-btn-blue">{{xe_trans('xe::submit')}}</button>
+                <a href="{{ route('settings.menu.select.types')}}" class="xe-btn xe-btn-gray">{{xe_trans('xe::cancel')}}</a>
             </div>
         </div>
     </form>

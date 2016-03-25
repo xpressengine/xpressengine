@@ -10,7 +10,7 @@
             <div class="panel menu_detail">
                 <div class="panel-heading">
                     <div class="row">
-                        <p class="txt_tit">{{xe_trans('xe::deleteItemConfirm', ['title' => xe_trans($item->title)])}}</p>
+                        <p class="text-title">{{xe_trans('xe::deleteItemConfirm', ['title' => xe_trans($item->title)])}}</p>
                     </div>
                 </div>
                 <div class="panel-body">
@@ -35,7 +35,7 @@
                 @if($item->getDescendantCount() == 0)
                     <button type="submit" class="btn btn_red">{{xe_trans('xe::delete')}}</button>
                 @endif
-                <a href="{{ route('settings.menu.index')}}" class="btn btn_gray">{{xe_trans('xe::cancel')}}</a>
+                <a href="{{ route('settings.menu.index')}}" class="xe-btn xe-btn-gray">{{xe_trans('xe::cancel')}}</a>
             </div>
         </div>
     </form>

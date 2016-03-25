@@ -23,28 +23,21 @@
     <!-- JS at head -->
     {!! XeFrontend::output('js', 'head.append') !!}
 
-    {{-- set CSRF token for ajax --}}
-    <!-- todo: move to js file!! -->
-
-    <!-- Translation -->
-    {!! XeFrontend::output('translation') !!}
-
-    <script src="/assets/vendor/requirejs/require.js" type="text/javascript"></script>
     <script type="text/javascript">
+    System.import('xecore:/common/js/xe').then(function(XE) {
         XE.setup({
             loginUserId: '{{ Auth::user()->getId() }}',
             loadedTime: {{ time() }},
             'X-CSRF-TOKEN': '{!! csrf_token() !!}'
         });
 
-        require.config({
-            baseUrl: '/assets/vendor/',
-            paths: {
-                griper: 'core/js/modules/griper/griper',
-                validator: 'core/js/modules/validator'
-            }
-        });
+        <!-- Translation -->
+        {!! XeFrontend::output('translation') !!}
 
+        @if (in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER]))
+            XE.configure({managePrefix: '{{ app('config')['xe.routing.settingsPrefix'] }}'});
+        @endif
+    });
     </script>
 
 

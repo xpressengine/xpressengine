@@ -42,27 +42,18 @@ class SettingsTheme extends AbstractTheme
             'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'
         )->load();
 
-        $frontendHandler->css('assets/vendor/bootstrap/css/bootstrap.css')->load();
-
         $frontendHandler->css([
-            'assets/common/css/form.css',
-            'assets/common/css/dropdown.css',
-            'assets/common/css/flag.css',
-            'assets/common/css/badge.css',
-            'assets/common/css/modal.css',
-            'assets/settings/css/admin.css',
-        ])->before(['assets/vendor/bootstrap/css/bootstrap.css', 'assets/common/css/normalize.css'])->load();
+            'assets/vendor/bootstrap/css/bootstrap.css',
+            'assets/core/settings/css/admin.css',
+            'assets/core/xe-ui-component/xe-ui-component.css',
+        ])->load();
 
-        $frontendHandler->js(
-            [
-                'assets/vendor/html5shiv/dist/html5shiv.min.js',
-                'assets/vendor/respond/dest/respond.min.js',
-                'assets/vendor/bootstrap/js/bootstrap.min.js'
-            ]
-        )->appendTo('head')->target('lt IE 9')->load();
+        $frontendHandler->js([
+            'assets/vendor/bootstrap/js/bootstrap.min.js',
+        ])->appendTo('head')->load();
 
-        $frontendHandler->js('assets/settings/js/admin.js')
-            ->before('assets/vendor/bootstrap/js/bootstrap.min.js')->load();
-
+        $frontendHandler->html('setting.js')->content(
+            '<script>System.import(\'xecore:/settings/js/admin.bundle\');</script>'
+        )->appendTo('body')->load();
     }
 }

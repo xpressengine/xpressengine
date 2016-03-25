@@ -60,14 +60,12 @@ class Translation
         }
         self::$keys = $newKeys;
 
-        $output = '<script type="text/javascript">';
-        $output .= sprintf(
+        $output = sprintf(
             'XE.Lang.setLocales(%s);'.
             'XE.Lang.set(%s);',
             json_enc(XeLang::getLocales()),
             json_enc(self::$keys)
         );
-        $output .= '</script>';
 
         return $output;
     }
