@@ -31,7 +31,7 @@
             </div>
         </div>
         <div class="btn_group_all">
-            <button type="submit" class="xe-btn xe-btn-blue">{{ xe_trans('xe::applyModified') }}</button>
+            <button type="submit" class="btn btn_blue">{{ xe_trans('xe::applyModified') }}</button>
         </div>
 
         </form>

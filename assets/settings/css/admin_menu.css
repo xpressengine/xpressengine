@@ -1,0 +1,118 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*reset css*/
+.form-group.menu-search .srch_lst em{font-style: normal}
+.form-group.menu-search .srch_lst a{text-decoration: none}
+.one_line{text-overflow:ellipsis;white-space:nowrap;word-wrap:normal;overflow:hidden}
+
+.menu_detail{max-width:1250px;}
+.menu_cont{position: relative;margin:-16px}
+.menu_tit{ overflow: hidden;border-bottom: 1px solid #e4e4e4;background-color:#DADBDE }
+.menu_tit h3{padding-left: 12px;font-size:14px;color:#2c2e37;line-height: 40px;}
+.menu_tit h3 i{margin-right:25px;color: #FBBD08;}
+.menu_tit .btn_clse{margin: 0 6px 0 -6px;}
+.menu_tit .btn_clse i{vertical-align:middle}
+
+.item{border-top: 1px solid #e4e4e4;}
+.item.move>.item_con,.item.move .item_con{box-shadow: -2px 4px 4px rgba(0, 0, 0, .1);-webkit-box-shadow: -2px 4px 4px rgba(0, 0, 0, .1);}
+.item.copy>.item_con dd,.item.copy .item_con dd,
+.item.copy>.item_con i,.item.copy .item_con i,
+.item.copy>.item_con .btn_group,.item.copy .item_con .btn_group,
+.item.copy>.item_con .btn_arrow,.item.copy .item_con .btn_arrow{display:none !important}
+.item.copy .item_con{background-color:#CAD9EA;border:1px dashed #76AFE8}
+.item.copy .item_con:hover{background-color:#CAD9EA}
+
+.item>.item_con{position: relative;min-height: 80px;/* padding-right: 55px; */background-color: #F8FAFD;}
+.item>li{border-bottom:1px solid #e4e4e4;border-top: none;}
+.item .handler{position: absolute;left: 0;width: 48px;padding: 19px 0;height: auto;text-align: center;vertical-align: middle;cursor: move;background-color: transparent;}
+.item .handler i{width: 24px;line-height: 42px;color: #999;background-color: #fafafa;font-size: 25px;}
+.item .item_cont{position: relative;margin-left: 48px;padding-right: 55px;}
+.item .item_cont i{position: absolute;left: 0;top: 0;font-size:20px;line-height: 80px;color:#00B5AD}
+.item .item_cont dl{padding-top: 29px}
+.item .item_cont dd{padding-left: 33px;}
+.item .item_cont dd a{display: block;color: #2c2e37}
+.item .item_cont dd.txt_blue a, .item .item_cont dd.txt_blue em{display:none;color:#2c8beb}
+.item .item_cont dd.txt_blue em{margin-left:8px;color:#2c2e37}
+.item .item_cont dd a:hover{text-decoration:underline}
+.item .btn_group{position: absolute;right: 0;top:0}
+.item .btn_group .btn_txt{float: left;font-size:25px;color:#B5B7BD;margin-right: 16px;}
+.item .btn_group .btn_txt.home_on{display: block;color:#2C8BEB}
+.item .togglebutton{margin: 0 20px 0 15px;}
+.item>.item_con+.item_container,.item>.item_con+.item_container+.item_container,.item>.item_con+.item_container+.item_container+.item_container{margin-left:24px}
+
+.item.off .item_cont i,.item.off .item_cont dd,.item.off .item_cont dd.txt_blue{color:#b5b7bd !important}
+.item .btn_group .btn_more{width:55px;height:80px;background-color:transparent;border:none}
+.item .btn_group .btn_more:active{color:#2C8BEB}
+.item .btn_arrow{position: absolute;left: 0;border-right:1px solid #e4e4e4}
+.item .btn_arrow button{display:block;width:40px;height:40px;background-color:#F1F2F6;border:none}
+.item .btn_arrow button:first-child{background-color:#F8FAFD;border-bottom:1px solid #e4e4e4}
+
+.item .more_area{display:none;overflow:hidden;margin-top: 32px;background-color:#2C8BEB}
+.item .more_area button,.item .more_area a{display: block;float:right;margin:0 18px;background-color:transparent;border:none;color:#fff;}
+.item .more_area button:active,.item .more_area a:active{color:#2c2e37}
+
+.panel.menu_detail .card_tit .txt_tit{width:80%}
+.panel.menu_detail .right_btn{position:absolute;top: 0;right: 0;}
+.panel.menu_detail .row_con.v2 .right_btn{top:16px}
+.menu_detail hr{margin-right: -16px}
+.menu_detail .inpt_url{white-space:nowrap}
+.menu_detail .inpt_url .inpt_txt{width:90%}
+.menu_detail .inpt_url em{margin-right:10px;font-size:20px;}
+
+.item_tit .slct_area{float:left;margin-right:5px}
+.menu_tit .row,.menu_detail .panel-body .row{/*position:relative;margin: 16px 0*/}
+.panel .menu_tit>.row{padding: 16px;background-color: #fff;margin: 0 -12px;}
+
+.menu_detail .inpt_txt{width:100%}
+.row_con .dropdown,.row_con .dropup,.row_con .dropdown>.btn,.row_con .dropup>.btn,.row_con .dropdown-menu{width:100%}
+.form-group{position: relative;height: 54px;margin-bottom:16px;background-color: #fff;border: 1px solid #e4e4e4;border-radius: 2px;white-space: nowrap;}
+.form-group .inpt_txt{width: 100%;margin: 8px 0 0 0;padding-right: 54px;border: none;}
+.form-group button{position: absolute;right: 0;top: 0;width: 54px;height: 54px;background-color: transparent;border: none;color: #8e8e93;outline: none;font-size:18px}
+.form-group button .xi-close,.form-group.open button .xi-magnifier{display:none}
+.form-group.open button .xi-close,.form-group button .xi-magnifier{display:block}
+.form-group.open{border-color:#2C8BEB}
+.form-group .srch_lst{display:none}
+.form-group.open .srch_lst{display:block;position: relative;margin: 9px -1px 0 -1px;border:1px solid #B6D3F3;border-top:none;z-index: 10;}
+.form-group .srch_lst li{border-top:1px solid #e4e4e4}
+.form-group .srch_lst li:first-child{border-top:none}
+.form-group .srch_lst a{display:block;height:48px;padding-left:15px;line-height:50px;background-color:#fff;color:#2c2e37;text-overflow: ellipsis;white-space:nowrap;word-wrap:normal;overflow:hidden;}
+.form-group .srch_lst a em{color:#2c8beb;font-weight:600}
+.form-group .srch_lst li:hover a,.form-group .srch_lst li.on a{background-color:#F6F7F8}
+
+.row.inline{font-size:0;text-align: center;}
+.row.inline .col-sm-6{float:none;display:inline-block;vertical-align:top;text-align:left}
+
+.m-draggable, .node {
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none
+}
+
+.m-draggable {
+    position: absolute;
+    z-index: 10;
+    opacity: .8;
+    user-select: none;
+}
+
+#uitree {
+    min-height: 72px;
+}
+
+@media (min-width: 768px) {
+.item>.item_con+.item_container,.item>.item_con+.item_container+.item_container,.item>.item_con+.item_container+.item_container+.item_container{margin-left:48px}
+.item .btn_group{top:25px}
+.item .item_cont{padding-right: 120px}
+.item .item_cont dl{padding-top: 20px}
+.item .item_cont dd.txt_blue a,.item .item_cont dd.txt_blue em{display:inline}
+}
+
+@media (min-width:1068px){
+.item>.item_con:hover{background-color:#fff}
+.item .btn_group .btn_txt{display:none;float: left;font-size:25px;color:#B5B7BD;}
+.item>.item_con:hover .btn_txt{display:block}
+
+}
+

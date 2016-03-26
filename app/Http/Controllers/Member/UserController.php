@@ -124,14 +124,14 @@ class UserController extends Controller
 
         app('xe.frontend')->css(
             [
-                'assets/core/common/css/grid.css',
-                'assets/core/common/css/form.css',
-                'assets/core/member/setting.css',
-                'assets/core/common/css/dropdown.css',
+                'assets/common/css/grid.css',
+                'assets/common/css/form.css',
+                'assets/member/setting.css',
+                'assets/common/css/dropdown.css',
             ]
         )->load();
 
-        app('xe.frontend')->js('assets/core/member/snb.js')->load();
+        app('xe.frontend')->js('assets/member/snb.js')->load();
 
         return XePresenter::make('index', compact('user', 'menus', 'tabContent'));
     }
@@ -571,7 +571,7 @@ class UserController extends Controller
 
         $useEmailConfirm = $this->handler->usingEmailConfirm();
 
-        app('xe.frontend')->js('assets/core/member/settings.js')->load();
+        app('xe.frontend')->js('assets/member/settings.js')->load();
 
         app('xe.frontend')->html('member.settings.loadScript')->content(
             "<script>

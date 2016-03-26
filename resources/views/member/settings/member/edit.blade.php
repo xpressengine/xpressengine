@@ -113,7 +113,7 @@
                 return {mails: [], selected: this.props.email};
             },
             loadCommentsFromServer: function () {
-                XE.$.ajax({
+                $.ajax({
                     url: this.props.url.mail.list,
                     type: 'get',
                     dataType: 'json',
@@ -131,7 +131,7 @@
                 this.setState($.extend(this.state, {selected: address}));
             },
             handleAddEmail: function (email) {
-                XE.$.ajax({
+                $.ajax({
                     url: this.props.url.mail.add,
                     type: 'post',
                     dataType: 'json',
@@ -150,7 +150,7 @@
             },
             handleDeleteEmail: function (email) {
 
-                XE.$.ajax({
+                $.ajax({
                     url: this.props.url.mail.delete,
                     type: 'post',
                     dataType: 'json',

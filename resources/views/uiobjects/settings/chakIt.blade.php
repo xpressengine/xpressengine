@@ -9,7 +9,6 @@
     <a href="#chak_comment"><span class="chak_txt">{{xe_trans('xe::chakButtonDescription')}}</span> </a>
 </div>
 <script type="text/javascript">
-System.import('xecore:/common/js/xe').then(function(XE) {
     XE.$(function($) {
         var s=document.createElement('script');s.type='text/javascript';s.src='//chak.it/static/service.js';s.async=true;(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(s);
 
@@ -36,5 +35,4 @@ System.import('xecore:/common/js/xe').then(function(XE) {
             $(event.target).closest('a').remove();
         });
     });
-});
 </script>

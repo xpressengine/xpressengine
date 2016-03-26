@@ -10,7 +10,7 @@
         <div class="panel menu_detail">
             <div class="panel-heading">
                 <div class="row">
-                    <p class="text-title">{{xe_trans('xe::editItemPermissionDescription')}}</p>
+                    <p class="txt_tit">{{xe_trans('xe::editItemPermissionDescription')}}</p>
                 </div>
             </div>
             <div class="panel-body">
@@ -36,7 +36,7 @@
             </div>
         </div>
         <div class="btn_group_all">
-            <button type="submit" class="xe-btn xe-btn-blue">{{xe_trans('xe::update')}}</button>
+            <button type="submit" class="btn btn_blue">{{xe_trans('xe::update')}}</button>
         </div>
     </div>
 </form>

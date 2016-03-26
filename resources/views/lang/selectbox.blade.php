@@ -1,5 +1,5 @@
-{{ XeFrontend::css('/assets/core/lang/flag.css')->load() }}
-{{ XeFrontend::css('/assets/core/common/css/dropdown.css')->load() }}
+{{ XeFrontend::css('/assets/vendor/lang/flag.css')->load() }}
+{{ XeFrontend::css('/assets/common/css/dropdown.css')->load() }}
 
 <div class="dropup v2">
     <button class="btn btn-default" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">

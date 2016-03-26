@@ -36,138 +36,138 @@ return [
         */
         'menus' => [
             'dashboard' => [
-                'title' => 'xe::dashBoard',
+                'title' => '대시보드',
                 'display' => true,
                 'description' => '',
                 'ordering' => 1000
             ],
             'sitemap' => [
-                'title' => 'xe::siteMap',
+                'title' => '사이트맵',
                 'display' => true,
                 'description' => '',
                 'ordering' => 2000
             ],
             'sitemap.default' => [
-                'title' => 'xe::editSiteMenu',
+                'title' => '사이트 메뉴 편집',
                 'display' => true,
                 'description' => '',
                 'ordering' => 100
             ],
             'member' => [
-                'title' => 'xe::member',
+                'title' => '회원',
                 'description' => '',
                 'display' => true,
                 'ordering' => 3000
             ],
             'member.list' => [
-                'title' => 'xe::memberList',
+                'title' => '회원목록',
                 'description' => '',
                 'display' => true,
                 'ordering' => 100
             ],
             'member.create' => [
-                'title' => 'xe::addMember',
+                'title' => '새회원 추가',
                 'description' => '신규회원을 추가합니다.',
                 'display' => false,
                 'ordering' => 200
             ],
             'member.edit' => [
-                'title' => 'xe::editMember',
+                'title' => '회원수정',
                 'description' => '회원정보를 수정합니다',
                 'display' => false,
                 'ordering' => 200
             ],
             'member.group' => [
-                'title' => 'xe::group',
+                'title' => '그룹',
                 'description' => '',
                 'ordering' => 200
             ],
             'member.setting' => [
-                'title' => 'xe::settings',
+                'title' => '설정',
                 'description' => '',
                 'display' => true,
                 'ordering' => 400
             ],
             'member.setting.default' => [
-                'title' => 'xe::defaultSettings',
+                'title' => '기본설정',
                 'description' => '',
                 'display' => true,
                 'ordering' => 100
             ],
             'member.setting.join' => [
-                'title' => 'xe::joinSettings',
+                'title' => '가입 설정',
                 'description' => '',
                 'display' => true,
                 'ordering' => 200
             ],
             'member.setting.skin' => [
-                'title' => 'xe::skinSettings',
+                'title' => '스킨 설정',
                 'description' => '',
                 'display' => true,
                 'ordering' => 300
             ],
             'member.setting.field' => [
-                'title' => 'xe::dynamicFieldSettings',
+                'title' => '추가필드 설정',
                 'description' => '',
                 'display' => true,
                 'ordering' => 400
             ],
             'contents' => [
-                'title' => 'xe::contents',
+                'title' => '컨텐츠',
                 'display' => true,
                 'description' => '',
                 'ordering' => 4000
             ],
             'plugin' => [
-                'title' => 'xe::plugin',
+                'title' => '플러그인',
                 'display' => true,
                 'description' => '',
                 'ordering' => 5000
             ],
             'plugin.list' => [
-                'title' => 'xe::pluginList',
+                'title' => '플러그인목록',
                 'display' => true,
                 'description' => '',
                 'ordering' => 100
             ],
             'plugin.list.detail' => [
-                'title' => 'xe::pluginDetails',
+                'title' => '플러그인 상세',
                 'display' => false,
                 'description' => '',
                 'ordering' => 100
             ],
             'setting' => [
-                'title' => 'xe::settings',
+                'title' => '설정',
                 'display' => true,
                 'description' => '',
                 'ordering' => 6000
             ],
             'setting.default' => [
-                'title' => 'xe::defaultSettings',
+                'title' => '사이트 기본 설정',
                 'display' => true,
                 'description' => '',
                 'ordering' => 100
             ],
             'setting.permission' => [
-                'title' => 'xe::managerPagePermissionSettings',
+                'title' => '관리페이지 권한 설정',
                 'display' => true,
                 'description' => '',
                 'ordering' => 200
             ],
             'setting.seo' => [
-                'title' => 'xe::SEOSettings',
+                'title' => 'SEO 설정',
                 'display' => true,
                 'description' => 'SEO를 설정 합니다',
                 'ordering' => 8000
             ],
             'lang' => [
-                'title' => 'xe::multiLang',
+                'title' => '다국어',
                 'display' => true,
                 'description' => 'blah blah~',
                 'ordering' => 7000
             ],
             'lang.default' => [
-                'title' => 'xe::multiLangSettings',
+                'title' => '다국어 설정',
                 'display' => true,
                 'description' => '다국어를 설정 합니다',
                 'ordering' => 100
@@ -268,7 +268,7 @@ return [
             ]
         ],
         'profileImage' => [
-            'default' => 'assets/core/member/img/default_avatar.gif',
+            'default' => 'assets/member/img/default_avatar.gif',
             'size' => ['width' => 240, 'height' => 240],
             'storage' => [
                 'disk' => 'local',

@@ -1,0 +1,37 @@
+@charset "utf-8";
+/* CSS Document */
+
+.xo-badge{-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;display:inline-block;vertical-align:baseline;-webkit-transition:background .1s ease;transition:background .1s ease;font-size:10px;min-width: 2em;min-height: 2em;padding: 0.5em;line-height:1em;text-align:center;border-radius:500rem;font-weight:bold;color:#fff}
+.xo-badge.small{min-width: 2.1em;min-height: 2.1em;line-height: 1.1em;font-size:11px}
+.xo-badge.medium{min-width: 2.2em;min-height: 2.2em;line-height:1.2em;font-size:12px}
+.xo-badge.empty{min-width: 0;min-height: 0;line-height: 0;font-size: inherit;padding: 4px;}
+.floating{position:absolute;font-size:10px;top:-0.5em;left:100%;margin:0 0 0 -1.5em}
+
+.xo-badge.red{background-color:#db2828}
+.xo-badge.orange{background-color:#f2711c}
+.xo-badge.yellow{background-color:#fbbd08}
+.xo-badge.olive{background-color:#b5cc18}
+.xo-badge.green{background-color:#00b96e}
+.xo-badge.teal{background-color:#00b5ad}
+.xo-badge.blue{background-color:#2c8beb}
+.xo-badge.violet{background-color:#6335c9}
+.xo-badge.purple{background-color:#aa46bb}
+.xo-badge.pink{background-color:#f4645f}
+.xo-badge.brown{background-color:#a5673f}
+.xo-badge.grey{background-color:#8e8e93}
+.xo-badge.black{background-color:#2c2e37}
+
+.xo-badge.red:hover{background-color:#d00000}
+.xo-badge.orange:hover{background-color:#f26202}
+.xo-badge.yellow:hover{background-color:#eaae00}
+.xo-badge.olive:hover{background-color:#a7bd0d}
+.xo-badge.green:hover{background-color:#199f69}
+.xo-badge.teal:hover{background-color:#009c95}
+.xo-badge.blue:hover{background-color:#0775ce}
+.xo-badge.violet:hover{background-color:#440cbb}
+.xo-badge.purple:hover{background-color:#8f0bba}
+.xo-badge.pink:hover{background-color:#ff514c}
+.xo-badge.brown:hover{background-color:#975b33}
+.xo-badge.grey:hover{background-color:#b5b7bd}
+.xo-badge.black:hover{background-color:#696e7a}
+
