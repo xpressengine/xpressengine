@@ -115,9 +115,6 @@ class EmailBroker implements EmailBrokerInterface
      */
     public function confirmEmail(EmailInterface $email, $code)
     {
-        if ($email === null) {
-            throw new PendingEmailNotExistsException();
-        }
         if ($this->validateConfirmCode($email, $code) === false) {
             throw new InvalidConfirmationCodeException();
         }
