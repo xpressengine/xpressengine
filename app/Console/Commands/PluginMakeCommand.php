@@ -434,7 +434,7 @@ class PluginMakeCommand extends Command
         $handler->getAllPlugins(true);
 
         if ($handler->isActivated($name) === false) {
-            $handler->activatePlugin($name, true);
+            $handler->activatePlugin($name);
         }
     }
 

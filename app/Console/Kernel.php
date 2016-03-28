@@ -39,6 +39,7 @@ class Kernel extends ConsoleKernel
 		\App\Console\Commands\StorageOptimize::class,
 		\App\Console\Commands\Site::class,
 		\App\Console\Commands\PluginMakeCommand::class,
+		\App\Console\Commands\PluginInstallCommand::class,
 	];
 
 	/**

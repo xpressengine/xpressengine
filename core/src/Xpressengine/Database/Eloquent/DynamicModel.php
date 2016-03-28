@@ -130,7 +130,7 @@ abstract class DynamicModel extends Model
             $attributes = $this->filter($attributes);
         }
 
-        parent::fill($attributes);
+        return parent::fill($attributes);
     }
 
     /**

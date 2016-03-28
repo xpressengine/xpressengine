@@ -16,7 +16,7 @@ class UserMigration implements Migration {
             $table->string('displayName', 255)->unique();
             $table->string('email', 255)->nullable();
             $table->string('password', 255)->nullable();
-            $table->string('rating', 15)->default('user');
+            $table->string('rating', 15)->default('member');
             $table->char('status', 20);
             $table->text('introduction')->default(null)->nullable();
             $table->string('profileImageId', 36)->nullable();
