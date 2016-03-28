@@ -95,7 +95,7 @@ class CategoryItem extends Node
      * @param Category $category category instance
      * @return Builder
      */
-    public function scopeProgenitors(Builder $query, Category $category)
+    public function scopeProgenitors(Builder $query, $category)
     {
         return $this->scopeRoots($query)->where('categoryId', $category->getKey());
     }

@@ -324,6 +324,30 @@ class MenuHandler
         return $item;
     }
 
+//    public function createItem(Menu $menu, array $inputs, array $menuTypeInput = [])
+//    {
+//        $model = $this->createItemModel($menu);
+//        $cnt = 0;
+//        while ($cnt++ < static::DUPLICATE_RETRY_CNT) {
+//            try {
+//                $inputs[$model->getKeyName()] = $this->generateNewId();
+//                $item = $this->categories->createItem($menu, $inputs);
+//
+//                break;
+//            } catch (QueryException $e) {
+//                if ($e->getCode() != "23000") {
+//                    throw $e;
+//                }
+//            }
+//        }
+//
+//        $this->registerItemPermission($item, new Grant);
+//
+//        $this->storeMenuType($item, $menuTypeInput);
+//
+//        return $item;
+//    }
+
     /**
      * Store menu type associated with the menu item.
      *

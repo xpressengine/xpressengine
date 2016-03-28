@@ -24,7 +24,7 @@ use Xpressengine\Category\Models\CategoryItem;
  * 여러단어들로 구성된 카테고리 처리를 담당
  *
  * ### app binding : xe.category 로 바인딩 되어 있음
- * `Category` Facade 로 접근 가능
+ * `XeCategory` Facade 로 접근 가능
  *
  * ### 카테고리 생성
  * ```php
