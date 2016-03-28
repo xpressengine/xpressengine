@@ -648,9 +648,12 @@ Route::settings('widget', function () {
 
 });
 
+/* deprecated */
 Route::fixed('toggleMenu', function () {
     Route::get('/', ['as' => 'fixed.toggleMenu', 'uses' => 'ToggleMenuController@get']);
 });
+
+Route::get('toggleMenu', ['as' => 'toggleMenu', 'uses' => 'ToggleMenuController@get']);
 
 Route::settings('toggleMenu', function () {
     Route::post('setting', ['as' => 'manage.toggleMenu.setting', 'uses' => 'ToggleMenuController@postSetting']);

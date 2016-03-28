@@ -160,7 +160,7 @@ class SettingController extends Controller
      */
     public function editToggleMenu()
     {
-        $toggleMenuSection = (new ToggleMenuSection())->setting('member');
+        $toggleMenuSection = (new ToggleMenuSection())->setting('user');
 
         return XePresenter::make(
             'member.settings.setting.usermenu',

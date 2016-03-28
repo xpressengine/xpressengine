@@ -4,7 +4,7 @@
  *
  * PHP version 5
  *
- * @category    
+ * @category
  * @package     Xpressengine\
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
@@ -13,34 +13,17 @@
  */
 namespace Xpressengine\ToggleMenus\Member;
 
-use Xpressengine\Plugin\ComponentInterface;
-use Xpressengine\Plugin\ComponentTrait;
-use Xpressengine\ToggleMenu\ItemInterface;
+use Xpressengine\ToggleMenu\AbstractToggleMenu as BaseToggleMenu;
 
 /**
- * @category    
+ * @category
  * @package     Xpressengine\ToggleMenus\Member
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-abstract class AbstractToggleMenuItem implements ItemInterface, ComponentInterface
+abstract class UserToggleMenu extends BaseToggleMenu
 {
-    use ComponentTrait;
-
-    public static function getId()
-    {
-        return static::$id;
-    }
-
-    public static function boot()
-    {
-    }
-
-    public static function getSettingsURI()
-    {
-    }
-
     public static function getName()
     {
         return static::getComponentInfo('name');

@@ -188,6 +188,8 @@ class PresenterServiceProvider extends ServiceProvider
             'assets/core/common/js/helpers.js', // @TODO 제거
             'assets/core/xe-ui-component/js/xe-ui-component.bundle.js',
         ])->appendTo('head.prepend')->load();
+
+        $frontendHandler->js('assets/core/common/js/member-menu.js')->load();
     }
 
     /**

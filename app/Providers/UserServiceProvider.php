@@ -22,8 +22,7 @@ use Xpressengine\Media\MediaManager;
 use Xpressengine\Media\Thumbnailer;
 use Xpressengine\Storage\File;
 use Xpressengine\Storage\Storage;
-use Xpressengine\ToggleMenus\Member\LinkItem;
-use Xpressengine\ToggleMenus\Member\RawItem;
+use Xpressengine\ToggleMenus\Member\ProfileItem;
 use Xpressengine\User\EmailBroker;
 use Xpressengine\User\Guard;
 use Xpressengine\User\GuardInterface;
@@ -246,8 +245,7 @@ class UserServiceProvider extends ServiceProvider
      */
     protected function registerToggleMenu()
     {
-        $this->app['xe.pluginRegister']->add(LinkItem::class);
-        $this->app['xe.pluginRegister']->add(RawItem::class);
+        $this->app['xe.pluginRegister']->add(ProfileItem::class);
     }
 
     /**
