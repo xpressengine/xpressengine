@@ -27,4 +27,5 @@ use Xpressengine\DynamicField\DynamicFieldException;
  */
 class RequiredParameterException extends DynamicFieldException
 {
+    protected $message = '":name" parameter required.';
 }

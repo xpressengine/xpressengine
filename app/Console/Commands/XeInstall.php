@@ -49,6 +49,7 @@ class XeInstall extends Command
         'claim',
         'comment',
         'page',
+        'news_client',
     ];
 
     /**

@@ -22,7 +22,6 @@
   "extra": {
     "xpressengine": {
       "title": "DummyPluginTitle",
-      "icon": "myicon.png",
       "component": []
     }
   },
