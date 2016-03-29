@@ -27,7 +27,7 @@
     {!! XeFrontend::output('js', 'head.append') !!}
 
     <script type="text/javascript">
-        System.import('xecore:/common/js/xe').then(function(XE) {
+        System.import('xecore:/common/js/xe.bundle').then(function() {
             XE.setup({
                 loginUserId: '{{ Auth::user()->getId() }}',
                 loadedTime: {{ time() }},
