@@ -65,9 +65,21 @@ return [
         'ko' => '등록',
         'en' => 'Registration',
     ],
+    'restore' => [
+        'ko' => '복원',
+        'en' => 'Restore',
+    ],
+    'destroy' => [
+        'ko' => '삭제',
+        'en' => 'Destroy',
+    ],
     'member' => [
         'ko' => '회원',
         'en' => 'Member',
+    ],
+    'group' => [
+        'ko' => '그룹',
+        'en' => 'Group',
     ],
     'comment' => [
         'ko' => '댓글',
@@ -493,6 +505,10 @@ return [
         'ko' => '거절',
         'en' => 'Deny',
     ],
+    'approve' => [
+        'ko' => '승인',
+        'en' => 'Approve',
+    ],
     'enableComment' => [
         'ko' => '댓글 허용',
         'en' => 'Enable Comment',
@@ -617,6 +633,26 @@ return [
         'ko' => '회원 수',
         'en' => 'Member Count',
     ],
+    'memberList' => [
+        'ko' => '회원 목록',
+        'en' => 'Member list',
+    ],
+    'editMember' => [
+        'ko' => '회원 수정',
+        'en' => 'Member edit',
+    ],
+    'joinSettings' => [
+        'ko' => '가입 설정',
+        'en' => 'Join settings',
+    ],
+    'skinSettings' => [
+        'ko' => '스킨 설정',
+        'en' => 'Skin settings',
+    ],
+    'dynamicFieldSettings' => [
+        'ko' => '확장 필드 설정',
+        'en' => 'Dynamic field settings',
+    ],
     'date' => [
         'ko' => '날짜',
         'en' => 'Date',
@@ -729,10 +765,18 @@ return [
         'ko' => '로그아웃',
         'en' => 'Logout'
     ],
+    'dashBoard' => [
+        'ko' => '대시보드',
+        'en' => 'DashBoard'
+    ],
     // 메뉴 Admin
     'siteMap' => [
         'ko' => '사이트맵',
         'en' => 'SiteMap'
+    ],
+    'editSiteMenu' => [
+        'ko' => '사이트 메뉴 편집',
+        'en' => 'Edit site menu'
     ],
     'siteMapDescription' => [
         'ko' => '사이트 메뉴 구조를 구성하고 관리할 수 있습니다.',
@@ -1159,5 +1203,41 @@ return [
     'inheritMode' => [
         'ko' => '상위 설정에 따름',
         'en' => 'Inherit Mode',
-    ]
+    ],
+    'moveToSite' => [
+        'ko' => '사이트로 이동',
+        'en' => 'Move to site',
+    ],
+    'contents' => [
+        'ko' => '컨텐츠',
+        'en' => 'Contents',
+    ],
+    'pluginList' => [
+        'ko' => '플러그인 목록',
+        'en' => 'Plugin list',
+    ],
+    'pluginDetails' => [
+        'ko' => '플러그인 상세',
+        'en' => 'Plugin Details',
+    ],
+    'managerPagePermissionSettings' => [
+        'ko' => '관리자 페이지 권한 설정',
+        'en' => 'Manager page permission settings',
+    ],
+    'SEOSettings' => [
+        'ko' => 'SEO 설정',
+        'en' => 'SEO Settings',
+    ],
+    'multiLang' => [
+        'ko' => '다국어',
+        'en' => 'Multi-language',
+    ],
+    'multiLangSettings' => [
+        'ko' => '다국어 설정',
+        'en' => 'Multi-language settings',
+    ],
+    'inputTitle' => [
+        'ko' => '제목을 입력하세요.',
+        'en' => 'Please input title.',
+    ],
 ];
