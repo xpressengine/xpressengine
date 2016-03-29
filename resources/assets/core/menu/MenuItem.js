@@ -75,13 +75,13 @@ var MenuItem = React.createClass({
     var homeElement;
     if (node.id == this.props.home) {
       homeElement =
-        <button type="button" className="btn_txt hidden-xs home_on">
+        <button type="button" className="btn-link hidden-xs home-on">
           <i className="xi-home"></i>
         </button>;
     } else {
       if (node.activated === 1) {
         homeElement =
-          <button type="button" className="btn_txt hidden-xs" onClick={this.onClickHome.bind(null, node)}>
+          <button type="button" className="btn btn-link hidden-xs" onClick={this.onClickHome.bind(null, node)}>
             <i className="xi-home"></i>
           </button>;
       } else {
@@ -101,24 +101,24 @@ var MenuItem = React.createClass({
 
     var nodeId = 'xe_tree_node_' + node.id;
     return (
-      <div className="item_con" ref="inner" id={nodeId}>
+      <div className="item-content" ref="inner" id={nodeId}>
         <button className="btn handler" onMouseDown={this.handleMouseDown}>
           <i className="xi-bullet-point"></i>
         </button>
-        <div className="item_cont">
+        <div className="item-info">
           <i className="xi-paper"></i>
           <dl>
-            <dt className="blind">{title}</dt>
-            <dd className="one_line"><a href={nodeUrl}>{title}</a></dd>
-            <dt className="blind">{url}</dt>
-            <dd className="txt_blue one_line">
+            <dt className="sr-only">{title}</dt>
+            <dd className="ellipsis"><a href={nodeUrl}>{title}</a></dd>
+            <dt className="sr-only">{url}</dt>
+            <dd className="text-blue ellipsis">
               <a href={url}>{url}</a>
               <em>[{type}]</em>
             </dd>
           </dl>
         </div>
-        <div className="btn_group pull-right">
-          <button type="button" className="btn_more visible-xs"
+        <div className="btn-group pull-right">
+          <button type="button" className="btn-more visible-xs"
                   onClick={this.onClickSetNode.bind(null, node)}>
             <i className="xi-ellipsis-v"></i>
           </button>
@@ -129,5 +129,6 @@ var MenuItem = React.createClass({
     );
   }
 });
+
 
 module.exports = MenuItem;

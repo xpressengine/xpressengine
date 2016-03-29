@@ -71,7 +71,7 @@ var TreeNode = React.createClass({
       });
       return (
         <div className={cx({
-                'item_container': true,
+                'item-container': true,
                 'move': isDragging
                 })} style={childrenStyles}>
           {childNodes}
@@ -92,7 +92,7 @@ var TreeNode = React.createClass({
 
     if (this.isMenuEntity(node)) {
       return (
-        <div className="menu_tit node">
+        <div className="menu-type">
           <MenuEntity
             index={index}
             getBaseUrl={props.getBaseUrl}

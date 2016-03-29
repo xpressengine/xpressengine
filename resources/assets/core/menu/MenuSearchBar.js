@@ -41,7 +41,6 @@ var MenuSearchBar = React.createClass({
   },
 
   searchMenu(keyword) {
-
     var self = this;
     var searchingCnt = this.state.searchingCnt + 1;
     var suggestions;
@@ -78,7 +77,6 @@ var MenuSearchBar = React.createClass({
   },
 
   resetSearch: function () {
-
     var input = this.refs.input.getDOMNode();
 
     this.setState({
@@ -170,40 +168,32 @@ var MenuSearchBar = React.createClass({
       placeholder = this.props.placeholder;
 
     return (
-      <div className={cx({ "form-group" : true, open : query.length > 0 })}>
-          <div class="pull-left">
-            <div class="input-group search-group">
-              <form>
-                <div class="input-group-btn">
-                </div>
-                <input type="text" class="form-control" aria-label="Text input with dropdown button" placeholder="검색어를 입력하세요." />
-                  <button class="btn-link">
-                    <i class="xi-magnifier"></i><span class="sr-only">검색</span>
-                  </button>
-              </form>
-            </div>
-          </div>
-          <div class="pull-right">
-            <a href="#" class="btn btn-primary pull-right"><i class="xi-plus"></i>메뉴 추가</a>
-          </div>
+      <div className="panel-heading">
+        <div className="pull-left">
+          <div className={cx({
+                "input-group" : true,
+                "search-group" : true,
+                open : query.length > 0
+            })}>
+            <input type="text" className="form-control" aria-label="Text input with dropdown button"
+                   placeholder={placeholder} ref="input" onChange={this.handleChange} onKeyDown={this.handleKeyDown}/>
+            <button className="btn-link" onClick={this.resetSearch}>
+              <i className="xi-magnifier"></i><span className="sr-only">검색</span>
+            </button>
 
-        <label for="inpt_srch"><span className="blind">검색</span></label>
-        <input id="inpt_srch" type="text" className="inpt_txt" placeholder={placeholder} ref="input"
-               onChange={this.handleChange} onKeyDown={this.handleKeyDown}/>
-        <button type="button" className="pull-right" onClick={this.resetSearch}>
-          <i className="xi-magnifier"></i>
-          <i className="xi-close"></i>
-        </button>
-        <MenuSearchSuggestion query={query}
-                              suggestions={suggestions}
-                              selectedIndex={selectedIndex}
-                              handleClick={this.handleSuggestionClick}
-                              handleHover={this.handleSuggestionHover}/>
-
+            <MenuSearchSuggestion query={query}
+                                  suggestions={suggestions}
+                                  selectedIndex={selectedIndex}
+                                  handleClick={this.handleSuggestionClick}
+                                  handleHover={this.handleSuggestionHover}/>
+          </div>
+        </div>
+        <div className="pull-right">
+          <a href="{{ route('settings.menu.create.menu') }}" className="btn btn-primary pull-right"><i className="xi-plus"></i> {XE.Lang.trans('xe::addMenu')}</a>
+        </div>
       </div>
     );
   }
 });
-
 
 module.exports = MenuSearchBar;
