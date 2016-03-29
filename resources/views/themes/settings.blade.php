@@ -118,11 +118,12 @@
                 <div class="row locate">
                     <div class="col-sm-12">
                         <ul>
-                            <!-- 게시판 인스턴스 설정 같이 빵조각을 표시하기 어려운 환경 일 수 있음 -->
                         @if ($selectedMenu)
-                        @foreach ($selectedMenu->getBreadCrumbs() as $menu)
-                            <li><a href="{{$menu->link()}}">{{xe_trans($menu->title)}}</a><i class="xi-angle-right"></i></li>
-                        @endforeach
+                            <li><a href="{{ route('settings') }}">Home</a></li>
+                            <!-- 게시판 인스턴스 설정 같이 빵조각을 표시하기 어려운 환경 일 수 있음 -->
+                            @foreach ($selectedMenu->getBreadCrumbs() as $menu)
+                            <li><i class="xi-angle-right"></i><a href="{{$menu->link()}}">{{xe_trans($menu->title)}}</a></li>
+                            @endforeach
                         @endif
                             <!-- contents 에서 임의로 빵조각을 추가할 수 있음-->
                             @yield('content_bread_crumbs')

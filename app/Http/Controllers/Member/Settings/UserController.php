@@ -421,7 +421,7 @@ class UserController extends Controller
      */
     public function deleteMember()
     {
-        $userIds = Input::get('id', []);
+        $userIds = Input::get('userId', []);
 
         XeDB::beginTransaction();
         try {

@@ -227,17 +227,13 @@ Route::settings(
     'user',
     function () {
 
-        Route::get(
-            'searchMember/{keyword?}',
-            ['as' => 'settings.member.search', 'uses' => 'Member\Settings\UserController@searchMember']
-        );
         // index
         Route::get(
             '/',
             [
                 'as' => 'settings.member.index',
                 'uses' => 'Member\Settings\UserController@index',
-                'settings_menu' => 'member.list',
+                'settings_menu' => ['member','member.list'],
                 'permission' => 'user.list'
             ]
         );
@@ -360,6 +356,11 @@ Route::settings(
                 );
 
             }
+        );
+
+        Route::get(
+            'searchMember/{keyword?}',
+            ['as' => 'settings.member.search', 'uses' => 'Member\Settings\UserController@searchMember']
         );
     }
 );

@@ -565,12 +565,6 @@ class UserHandler
             throw new CannotDeleteUserHavingSuperRatingException();
         }
 
-        // resolve group
-        foreach ($users as $user) {
-            // except user from user's groups
-            $user->groups()->detach();
-        }
-
         // delete user's emails
         $this->emails()->deleteByUserIds($userIds);
         $this->pendingEmails()->deleteByUserIds($userIds);
@@ -578,7 +572,12 @@ class UserHandler
         // delete user's accounts
         $this->accounts()->deleteByUserIds($userIds);
 
-        $user->delete();
+        // resolve group
+        foreach ($users as $user) {
+            // except user from user's groups
+            $user->groups()->detach();
+            $user->delete();
+        }
 
         // todo: remove profile image
     }
