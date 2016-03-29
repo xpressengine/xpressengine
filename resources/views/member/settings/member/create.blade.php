@@ -44,4 +44,3 @@
 
     </form>
 
-    {!! uio('uiobject/xpressengine@chakIt', 'Settings:회원목록') !!}

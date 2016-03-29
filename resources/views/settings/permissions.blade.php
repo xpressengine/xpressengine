@@ -31,5 +31,3 @@
 @endforeach
 
 </div>
-
-{!! uio('uiobject/xpressengine@chakIt', 'Settings:관리페이지권한설정') !!}

@@ -231,4 +231,3 @@
 </div>
 <!--//어드민 컨텐츠 영역 -->
 
-{!! uio('uiobject/xpressengine@chakIt', 'Settings:플러그인') !!}

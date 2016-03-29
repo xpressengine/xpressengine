@@ -109,4 +109,3 @@
 
     </div>
 </div>
-{!! uio('uiobject/xpressengine@chakIt', 'Settings:SEO설정') !!}
