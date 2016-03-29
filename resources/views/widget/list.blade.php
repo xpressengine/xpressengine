@@ -1,4 +1,4 @@
-{{ XeFrontend::js('assets/vendor/core/widgetSetup.js')->load() }}
+{{ XeFrontend::js('assets/core/common/widgetSetup.js')->load() }}
 <div class="row">
 <form name="__xe_widgetListForm" id="__xe_widgetList" method="get">
     <div class="col-md-12">

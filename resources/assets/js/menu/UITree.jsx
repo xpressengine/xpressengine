@@ -1,4 +1,4 @@
-var TreeNode = require('./TreeNode.jsx');
+var TreeNode = require('./TreeNode.jsx!');
 
 var UITree = React.createClass({
     displayName: 'UITree',

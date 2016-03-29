@@ -51,7 +51,7 @@ class ThemeSelect extends AbstractUIObject
     protected function loadFiles()
     {
         $frontend = app('xe.frontend');
-        $frontend->css('assets/theme/theme-select.css')->load();
-        $frontend->js('assets/common/js/form.js')->load();
+        $frontend->css('assets/core/theme/theme-select.css')->load();
+        $frontend->js('assets/core/common/js/form.js')->load();
     }
 }
