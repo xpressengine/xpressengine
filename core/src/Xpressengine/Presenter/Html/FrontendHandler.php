@@ -47,10 +47,10 @@ namespace Xpressengine\Presenter\Html;
  *
  * ```php
  * // xe.js파일을 head의 하단에 로드함.
- * XeFrontend::js('assets/core/common/js/xe.js')->appendTo('head')->load();
+ * XeFrontend::js('assets/common/js/xe.js')->appendTo('head')->load();
  *
  * // xe.js파일을 body의 상단에 로드함.
- * XeFrontend::js('assets/core/common/js/xe.js')->prependTo('body')->load();
+ * XeFrontend::js('assets/common/js/xe.js')->prependTo('body')->load();
  * ```
  *
  * ### 우선순위 지정
@@ -61,7 +61,7 @@ namespace Xpressengine\Presenter\Html;
  *
  * ```php
  * // bootstrap.js이 로드된 이후에 xe.js파일이 로드되도록 우선순위 지정
- * XeFrontend::js('assets/core/common/js/xe.js')
+ * XeFrontend::js('assets/common/js/xe.js')
  * ->before('assets/vendor/bootstrap/js/bootstrap.js')
  * ->appendTo('body')->load();
  * ```
@@ -72,7 +72,7 @@ namespace Xpressengine\Presenter\Html;
  *
  * ```php
  * // 로드된 xe.js파일을 언로드함.
- * XeFrontend::js('assets/core/common/js/xe.js')->unload();
+ * XeFrontend::js('assets/common/js/xe.js')->unload();
  * ```
  *
  * ## css 파일 로드하기
@@ -82,7 +82,7 @@ namespace Xpressengine\Presenter\Html;
  *
  * ```php
  * // xe.css파일을 로드함. 반드시 bootstrap.css가 로드된 다음에 로드되도록 우선순위를 지정
- * XeFrontend::js('assets/core/common/css/xe.css')->appendTo('body')->before('assets/vendor/bootstrap.css')->load();
+ * XeFrontend::js('assets/common/css/xe.css')->appendTo('body')->before('assets/vendor/bootstrap.css')->load();
  * ```
  *
  * ## meta 태그 추가

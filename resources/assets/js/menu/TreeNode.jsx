@@ -1,6 +1,6 @@
 //var cx = require('classnames');
-var MenuEntity = require('./MenuEntity.jsx!');
-var MenuItem = require('./MenuItem.jsx!');
+var MenuEntity = require('./MenuEntity.jsx');
+var MenuItem = require('./MenuItem.jsx');
 
 var TreeNode = React.createClass({
     displayName: 'TreeNode',

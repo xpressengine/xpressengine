@@ -10,26 +10,26 @@
             <div class="panel menu_detail">
                 <div class="panel-heading">
                     <div class="row">
-                        <p class="text-title">{{xe_trans('xe::editMenuDescription')}}</p>
+                        <p class="txt_tit">{{xe_trans('xe::editMenuDescription')}}</p>
                     </div>
                 </div>
                 <div class="panel-body">
                     <div class="row_con v2">
-                        <p class="text-title">Menu Title<i class="xi-information-circle"></i></p>
+                        <p class="txt_tit">Menu Title<i class="xi-information-circle"></i></p>
 
-                        <p class="sub-text">{{xe_trans('xe::menuTitleDescription')}}</p>
+                        <p class="sub_txt">{{xe_trans('xe::menuTitleDescription')}}</p>
 
                         <div class="row">
                             <div class="col-sm-5">
                                 <div class="inpt_bd">
-                                    <input type="text" class="xe-input-text" name="menuTitle" value="{{ $menu->title }}"
+                                    <input type="text" class="inpt_txt" name="menuTitle" value="{{ $menu->title }}"
                                            placeholder="{{xe_trans('xe::menuTitlePlaceHolder')}}"/>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row_con">
-                        <p class="text-title">Menu Description<i class="xi-information-circle"></i></p>
+                        <p class="txt_tit">Menu Description<i class="xi-information-circle"></i></p>
 
                         <div class="row">
                             <div class="col-sm-8">
@@ -41,9 +41,9 @@
                         </div>
                     </div>
                     <div class="row_con v2">
-                        <p class="text-title">Default Menu Theme<i class="xi-information-circle"></i></p>
+                        <p class="txt_tit">Default Menu Theme<i class="xi-information-circle"></i></p>
 
-                        <p class="sub-text">{{xe_trans('xe::menuThemeDescription')}}</p>
+                        <p class="sub_txt">{{xe_trans('xe::menuThemeDescription')}}</p>
 
                         {!! uio('themeSelect', ['selectedTheme' => ['desktop' => $config->get('desktopTheme'), 'mobile' => $config->get('mobileTheme')]]) !!}
                     </div>
@@ -51,7 +51,7 @@
                 </div>
             </div>
             <div class="btn_group_all">
-                <button type="submit" class="xe-btn xe-btn-blue">{{xe_trans('xe::update')}}</button>
+                <button type="submit" class="btn btn_blue">{{xe_trans('xe::update')}}</button>
             </div>
         </div>
     </form>

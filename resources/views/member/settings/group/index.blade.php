@@ -1,6 +1,6 @@
 
 @section('page_setting_menu')
-    <a href="{{ route('manage.group.create') }}" class="xe-btn xe-btn-blue pull-right">새그룹 추가</a>
+    <a href="{{ route('manage.group.create') }}" class="btn btn_blue pull-right">새그룹 추가</a>
 @endsection
 
 <form id="__xe_fList" method="post">

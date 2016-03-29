@@ -1,7 +1,7 @@
 <?php
 namespace Xpressengine\Tests\Member;
 
-use Xpressengine\Member\Rating;
+use Xpressengine\User\Rating;
 
 class RatingTest extends \PHPUnit_Framework_TestCase
 {

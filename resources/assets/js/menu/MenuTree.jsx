@@ -1,5 +1,6 @@
-var MenuSearchBar = require('./MenuSearchBar.jsx!');
-var UITree = require('./UITree.jsx!');
+var MenuSearchBar = require('./MenuSearchBar.jsx');
+var UITree = require('./UITree.jsx');
+
 var MenuTree = React.createClass({
     getInitialState: function () {
         return {
@@ -143,5 +144,6 @@ var MenuTree = React.createClass({
         return (node.entity && (node.entity == 'menu'));
     }
 });
+
 window["MenuTree"] = MenuTree;
 module.exports = MenuTree;

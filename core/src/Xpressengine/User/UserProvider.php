@@ -36,7 +36,6 @@ class UserProvider extends EloquentUserProvider
      */
     public function retrieveByCredentials(array $credentials)
     {
-
         $query = $this->createModel()->newQuery();
 
         $where = [];

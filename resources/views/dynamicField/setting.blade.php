@@ -101,7 +101,7 @@
 </div>
 
 <script>
-    System.import('xecore:/common/js/modules/dynamicField').then(function(dynamicField) {
+    require(['core/js/modules/dynamicField'], function(dynamicField) {
         var instance = new dynamicField();
 
         instance.init("{{$group}}", "{{$databaseName}}", {

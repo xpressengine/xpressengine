@@ -1,0 +1,11 @@
+@charset "utf-8";
+/* tooltip CSS Document */
+
+.xo-tooltip{display:block;position:absolute;top:0;left:0;max-width:250px;padding:6px 10px;color:#FFFFFF;background:#2c2e37;text-align: left;border-radius:2px;font-size:12px;line-height:20px}
+.xo-tooltip.right{left:auto}
+.xo-tooltip.wide{max-width:350px}
+.xo-tooltip.very-wide{max-width:450px}
+.xo-tooltip:after{position:absolute;top:100%;left:50%;width:0; height:0;margin-left: -3px;border-top: 3px solid #000000;border-right: 3px solid transparent;border-left: 3px solid transparent;content:''}
+.xo-tooltip.right:after{left:100%;margin-left:-17px}
+.xo-tooltip.left:after{left:0;margin-left:17px}
+.xo-tooltip.bottom:after{top:0;margin-top:-3px;border-top:none;border-bottom: 3px solid #000000;}

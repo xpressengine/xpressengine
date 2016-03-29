@@ -1,19 +1,19 @@
-<div class="admin-wrap">
-    <header>
-        <button type="button" class="btn-slide"><i class="xi-dedent"></i><span class="sr-only">{{ xe_trans('xe::hideMenus') }}</span></button>
-        <a href="{{ url('/') }}" class="btn-site-home"><i class="xi-home"></i><span class="sr-only">{{ xe_trans('xe::moveToSite') }}</span></a>
-        <div class="right-menu">
+<div class="admin_wrap">
+    <header class="xo-navbar xo-navbar-static-top">
+        <button type="button" class="btn_slide"><i class="xi-dedent"></i><span class="blind">{{ xe_trans('xe::hideMenus') }}</span></button>
+        <a href="{{ url('/') }}" class="btn_site_home"><i class="xi-home"></i><span class="blind">사이트로 이동</span></a>
+        <div class="right_menu">
             <ul>
                 <li>
-                    <a href="#" data-toggle="dropdown" aria-expanded="true">
+                    <a href="#" data-toggle="dropdown">
                         <div>
-                            <img src="{{ $user->getProfileImage() }}" width="40" height="40" alt="{{ xe_trans('xe::profile') }}">
+                            <img src="{{ $user->getProfileImage() }}" width="40" height="40" alt="{{ xe_trans('xe::profile') }}" class="img_profile">
                             <span class="hidden-xs">{{ $user->getDisplayName() }}</span>
                             <i class="xi-angle-down"></i>
                         </div>
                     </a>
                     <!--[D] a 클릭 시 하위메뉴 none/block로 처리-->
-                    <div class="transition dropdown-menu">
+                    <div class="trasition dropdown-menu">
                         <ul>
                             <li><a href="{{ route('member.profile', ['member' => auth()->id()]) }}">{{ xe_trans('xe::myProfile') }}</a></li>
                             <li><a href="{{ route('member.settings') }}">{{ xe_trans('xe::mySettings') }}</a></li>
@@ -21,32 +21,15 @@
                         </ul>
                     </div>
                 </li>
-                <li>
-                    <a href="#" data-toggle="dropdown" aria-expanded="true">
-                        <div>
-                            <span class="flag-code"><i class="{{XeLang::getLocale()}} flag"></i>{{XeLang::getLocale()}}</span>
-                        </div>
-                    </a>
-                    <div class="transition dropdown-menu">
-                        <ul>
-                            @foreach ( XeLang::getLocales() as $locale )
-                                <li @if(XeLang::getLocale() == $locale) class="on" @endif>
-                                    <a href="/locale/{{ $locale }}"><i class="{{ $locale }} flag" data-locale="{{ $locale }}"></i>{{ XeLang::getLocaleText($locale) }}</a>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
-                </li>
             </ul>
         </div>
     </header>
-
-    <aside class="transition settings-nav-sidebar">
-        <div class="logo-area transition">
-            <h1><a href="{{ route('settings') }}"><img src="{{ asset('assets/core/settings/img/logo.png') }}" width="28" height="28" alt="admin logo">{{ $siteTitle or 'XpressEngine3' }}</a></h1>
+    <aside class="trasition">
+        <div class="logo_area trasition">
+            <h1><a href="{{ route('settings') }}"><img src="{{ asset('assets/settings/img/logo.png') }}" width="28" height="28" alt="admin logo">{{ $siteTitle or 'XpressEngine3' }}</a></h1>
         </div>
-        <p class="list-title">MAIN MENU</p>
-        <ul class="snb-list">
+        <p class="lst_tit">MAIN MENU</p>
+        <ul class="snb_lst">
 
             {{-- main menu --}}
             @foreach($menu as $topId => $top)
@@ -54,28 +37,28 @@
 
                     {{-- depth 1--}}
                     <li class="{{$topId}}
-                        @if($top->hasVisibleChild())sub-depth @endif
+                        @if($top->hasVisibleChild())sub_depth @endif
                         @if($top->isSelected() && $top->hasVisibleChild())open @endif
                         @if($top->isSelected() && !$top->hasVisibleChild())on @endif"
                     >
                         <a href="{{ $top->link() }}">
                             <i class="{{data_get($top, 'icon', 'xi-paper-stack-o')}}"></i>
-                            {{xe_trans($top->title)}}
+                            {{$top->title}}
                         </a>
                         @if($top->hasVisibleChild())
-                            <ul class="sub-depth-list">
+                            <ul class="sub_depth_lst">
 
                                 {{--loop for middle--}}
                                 @foreach($top->getChildren() as $midId => $middle)
                                     @if(data_get($middle, 'display', true))
 
                                         {{-- depth 2 --}}
-                                        <li class="@if($middle->hasVisibleChild())sub-depth @endif @if($middle->isSelected() && $middle->hasVisibleChild())open @endif @if($middle->isSelected() && !$middle->hasVisibleChild())on @endif">
+                                        <li class="@if($middle->hasVisibleChild())sub_depth @endif @if($middle->isSelected() && $middle->hasVisibleChild())open @endif @if($middle->isSelected() && !$middle->hasVisibleChild())on @endif">
                                             <a href="{{ $middle->link() }}">
-                                                {{xe_trans($middle->title)}}
+                                                {{$middle->title}}
                                             </a>
                                             @if($middle->hasVisibleChild())
-                                                <ul class="sub-depth-list">
+                                                <ul class="sub_depth_lst">
 
 
                                                     {{--loop for bottom--}}
@@ -85,7 +68,7 @@
                                                             {{-- depth 3 --}}
                                                             <li @if($bottom->isSelected())class="on" @endif>
                                                                 <a href="{{ $bottom->link() }}">
-                                                                    {{xe_trans($bottom->title)}}
+                                                                    {{$bottom->title}}
                                                                 </a>
                                                             </li>
                                                         @endif
@@ -103,41 +86,32 @@
                     </li>
                 @endif
             @endforeach
-    </aside>
 
-    <div id="content" class="transition">
+    </aside>
+    <div id="content" class="trasition">
         <div class="ct">
-            <div class="title-area container-fluid">
-                @section('page_head')
-                <div class="row">
-                    <div class="col-sm-6">
-                        @yield('page_title', '<h2>'.xe_trans(data_get($selectedMenu ? $selectedMenu->getParent() : [], 'title', 'xe::inputTitle')).'</h2>')
-                        @yield('page_description', '<small>'.xe_trans(data_get($selectedMenu ? $selectedMenu->getParent() : [], 'description', 'xe::inputTitle')).'</small>')
+            <div class="tit_area">
+                <div class="tit_con">
+                    @section('page_head')
+                    <div class="row">
+                        <div class="col-sm-6">
+                            @yield('page_title', '<h2>'.data_get($selectedMenu, 'title', '제목을 입력하세요.').'</h2>')
+                            @yield('page_description', '<p class="sub_txt">'.data_get($selectedMenu, 'description', '제목을 입력하세요.').'</p>')
+                        </div>
+                        <div class="col-sm-6">
+                            @yield('page_setting_menu')
+                            <!-- 버튼 등 서드파티에서 수정할 수 있는 영역 <button type="button" class="btn_setting blue v2 pull-right">메뉴 추가</button> -->
+                        </div>
                     </div>
+                    @show
                 </div>
-                <div class="row locate">
-                    <div class="col-sm-12">
-                        <ul>
-                            <!-- 게시판 인스턴스 설정 같이 빵조각을 표시하기 어려운 환경 일 수 있음 -->
-                        @if ($selectedMenu)
-                        @foreach ($selectedMenu->getBreadCrumbs() as $menu)
-                            <li><a href="{{$menu->link()}}">{{xe_trans($menu->title)}}</a><i class="xi-angle-right"></i></li>
-                        @endforeach
-                        @endif
-                            <!-- contents 에서 임의로 빵조각을 추가할 수 있음-->
-                            @yield('content_bread_crumbs')
-                        </ul>
-                    </div>
-                </div>
-                @show
             </div>
-            <div class="container-fluid">
-                <!--어드민 컨텐츠 영역 col-sm-"n" n:1~12에 따라 그리드 사용가능-->
-                {!! $content !!}
+            <div class="container-fluid card_area">
+                    <!--어드민 컨텐츠 영역 col-sm-"n" n:1~12에 따라 그리드 사용가능-->
+                    {!! $content !!}
             </div>
         </div>
     </div>
-
     <div class="footer">
         <span>Copyright ©2015 <a href="http://xpressengine.io">XpressEngine.</a> All rights reserved.</span>
         {{--<em class="pull-r">Version 2.0.</em>--}}

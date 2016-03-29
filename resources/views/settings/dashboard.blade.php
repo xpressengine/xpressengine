@@ -19,4 +19,7 @@
     <div class="col-md-6 _card" data-card-id="2">
         {!! widget('widget/xpressengine@contentInfo', []) !!}
     </div>
+    <div class="col-md-6 _card" data-card-id="2">
+        {!! widget('widget/news_client@news', []) !!}
+    </div>
 </div>
