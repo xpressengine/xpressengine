@@ -56,4 +56,3 @@
         </form>
     </div>
 </div>
-{!! uio('uiobject/xpressengine@chakIt', 'Settings:회원설정') !!}

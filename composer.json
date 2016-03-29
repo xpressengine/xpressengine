@@ -44,7 +44,8 @@
         "xpressengine-plugin/ckeditor": "dev-master",
         "xpressengine-plugin/claim": "dev-master",
         "xpressengine-plugin/external_page": "dev-master",
-        "xpressengine-plugin/social_login": "dev-master"
+        "xpressengine-plugin/social_login": "dev-master",
+        "xpressengine-plugin/news_client": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

@@ -128,4 +128,3 @@
     </div>
 </div>
 
-{!! uio('uiobject/xpressengine@chakIt', 'Settings:플러그인') !!}

@@ -37,4 +37,3 @@
     });
 </script>
 
-{!! uio('uiobject/xpressengine@chakIt', 'Settings:사이트맵') !!}

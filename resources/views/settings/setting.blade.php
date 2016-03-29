@@ -39,5 +39,3 @@
 
     </div>
 </div>
-
-{!! uio('uiobject/xpressengine@chakIt', 'Settings:사이트기본설정') !!}

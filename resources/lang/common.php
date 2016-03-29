@@ -1180,10 +1180,6 @@ return [
         'ko' => '등록된 글이 없습니다.',
         'en' => 'There is no posts.',
     ],
-    'chakButtonDescription' => [
-        'ko' => '클릭하여 위 문서에 의견을 나눌 수 있습니다.',
-        'en' => 'You can click to share your thoughts on this article.',
-    ],
     'pluginNotFound' => [
         'ko' => '플러그인 파일 찾을 수 없습니다. 찾는 파일 경로(:path)',
         'en' => 'Not found plugin file. File path(:path)',

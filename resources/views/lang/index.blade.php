@@ -90,5 +90,3 @@
     </tbody>
 </table>
 {!! $pagination->render() !!}
-
-{!! uio('uiobject/xpressengine@chakIt', 'Settings:다국어') !!}

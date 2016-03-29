@@ -29,5 +29,3 @@
         </div>
     </form>
 </div>
-
-{!! uio('uiobject/xpressengine@chakIt', 'Settings:회원그룹') !!}

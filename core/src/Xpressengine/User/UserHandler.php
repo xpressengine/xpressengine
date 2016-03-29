@@ -622,7 +622,7 @@ class UserHandler
                 throw $e;
             }
 
-            if ($this->accounts()->where(array_only($account, ['accountId', 'providor'])) !== null) {
+            if ($this->accounts()->where(array_only($account, ['accountId', 'provider'])) !== null) {
                 throw new AccountAlreadyExistsException();
             }
         }

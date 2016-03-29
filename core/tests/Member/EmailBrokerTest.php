@@ -1,8 +1,11 @@
 <?php
 namespace Xpressengine\Tests\Member;
 
+use Illuminate\Contracts\Mail\Mailer;
 use Mockery;
-use Xpressengine\Member\EmailBroker;
+use Xpressengine\User\EmailBroker;
+use Xpressengine\User\EmailInterface;
+use Xpressengine\User\UserHandler;
 
 class EmailBrokerTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,58 +18,49 @@ class EmailBrokerTest extends \PHPUnit_Framework_TestCase
 
     public function testSendEmailForConfirmationSuccess()
     {
+        $mail = Mockery::mock(EmailInterface::class);
+        $mail->shouldReceive('getAddress')->once()->andReturnSelf();
 
-        $mail = Mockery::mock('\Xpressengine\Member\Entities\PendingMailEntityInterface');
+        $message = Mockery::mock(\Illuminate\Mail\Message::class);
+        $message->shouldReceive('to')->once()->with($mail)->andReturnNull();
 
-        $mails = Mockery::mock('\Xpressengine\Member\Repositories\MailRepositoryInterface');
-        $pendingMails = Mockery::mock('\Xpressengine\Member\Repositories\PendingMailRepositoryInterface');
+        /** @var UserHandler $userHandler */
+        $userHandler = $this->makeHandler();
 
-        $mailer = Mockery::mock('\Illuminate\Contracts\Mail\Mailer');
-        $mailer->shouldReceive('send')->with('view', compact('mail'), Mockery::type('callable'))->andReturnNull();
+        $validator = function($callable) use ($message) {
+            $callable($message);
+            return true;
+        };
 
-        $broker = new EmailBroker($mails, $pendingMails, $mailer, 'view');
+        /** @var Mailer $mailer */
+        $mailer = $this->makeMailer();
+        $mailer->shouldReceive('send')->with('view', compact('mail'), Mockery::on($validator))->andReturnNull();
+
+        $broker = new EmailBroker($userHandler, $mailer, 'view');
 
         $this->assertNull($broker->sendEmailForConfirmation($mail));
     }
 
     public function testConfirmEmailSuccess()
     {
-        $mail = Mockery::mock('\Xpressengine\Member\Entities\PendingMailEntityInterface');
+        $address = 'foo@gmail.com';
+        $mail = Mockery::mock(EmailInterface::class);
         $mail->shouldReceive('getConfirmationCode')->once()->andReturn('codecode');
-        $mail->shouldReceive('getAddress')->once()->andReturn('foo@gmail.com');
-        $mail->shouldReceive('getMemberId')->once()->andReturn('bar');
+        $mail->shouldReceive('getAddress')->once()->andReturn($address);
+        $user = $this->makeUser();
+        $mail->user = $user;
 
-        $mails = Mockery::mock('\Xpressengine\Member\Repositories\MailRepositoryInterface');
-        $mails->shouldReceive('insert')->once()->andReturn($mail);
+        $userHandler = $this->makeHandler();
+        $userHandler->shouldReceive('createEmail')->once()->with($user, compact('address'), true)->andReturnNull();
+        $userHandler->shouldReceive('deleteEmail')->once()->with($mail)->andReturnNull();
 
-        $pendingMails = Mockery::mock('\Xpressengine\Member\Repositories\PendingMailRepositoryInterface');
-        $pendingMails->shouldReceive('findByAddress')->once()->andReturn($mail);
-        $pendingMails->shouldReceive('delete')->with($mail)->once()->andReturn(1);
+        /** @var Mailer $mailer */
+        $mailer = $this->makeMailer();
 
-        $mailer = Mockery::mock('\Illuminate\Contracts\Mail\Mailer');
+        /** @var UserHandler $userHandler */
+        $broker = new EmailBroker($userHandler, $mailer, 'view');
 
-        $broker = new EmailBroker($mails, $pendingMails, $mailer, 'view');
-
-        $this->assertTrue($broker->confirmEmail('foo@gmail.com', 'codecode'));
-    }
-
-    /**
-     * testConfirmEmailFailIfAlreadyEmailConfirmed
-     *
-     * @expectedException \Xpressengine\User\Exceptions\PendingEmailNotExistsException
-     */
-    public function testConfirmEmailFailIfEmailNotExists()
-    {
-        $mails = Mockery::mock('\Xpressengine\Member\Repositories\MailRepositoryInterface');
-        $pendingMails = Mockery::mock('\Xpressengine\Member\Repositories\PendingMailRepositoryInterface');
-        $pendingMails->shouldReceive('findByAddress')->once()->andReturn(null);
-
-        $mailer = Mockery::mock('\Illuminate\Contracts\Mail\Mailer');
-
-        $broker = new EmailBroker($mails, $pendingMails, $mailer, 'view');
-
-        $broker->confirmEmail('sungbum00@gmail.com', 'codecode');
-
+        $this->assertTrue($broker->confirmEmail($mail, 'codecode'));
     }
 
     /**
@@ -76,43 +70,44 @@ class EmailBrokerTest extends \PHPUnit_Framework_TestCase
      */
     public function testConfirmEmailFailIfCodeIsInvalid()
     {
-        $mail = Mockery::mock('\Xpressengine\Member\Entities\PendingMailEntityInterface');
+        $address = 'foo@gmail.com';
+        $mail = Mockery::mock(EmailInterface::class);
         $mail->shouldReceive('getConfirmationCode')->once()->andReturn('codecode');
 
-        $mails = Mockery::mock('\Xpressengine\Member\Repositories\MailRepositoryInterface');
+        $userHandler = $this->makeHandler();
 
-        $pendingMails = Mockery::mock('\Xpressengine\Member\Repositories\PendingMailRepositoryInterface');
-        $pendingMails->shouldReceive('findByAddress')->once()->andReturn($mail);
+        /** @var Mailer $mailer */
+        $mailer = $this->makeMailer();
 
-        $mailer = Mockery::mock('\Illuminate\Contracts\Mail\Mailer');
+        /** @var UserHandler $userHandler */
+        $broker = new EmailBroker($userHandler, $mailer, 'view');
 
-        $broker = new EmailBroker($mails, $pendingMails, $mailer, 'view');
-
-        $broker->confirmEmail('foo@gmail.com', 'invalid');
+        $this->assertTrue($broker->confirmEmail($mail, 'wrongcode'));
     }
 
     /**
-     * testConfirmEmailFailIfAlreadyEmailConfirmed
+     * makeHandler
      *
-     * @expectedException \Exception
+     * @return Mockery\Mock
      */
-    public function testConfirmEmailFailIfMailExists()
+    protected function makeHandler()
     {
-        $mail = Mockery::mock('\Xpressengine\Member\Entities\PendingMailEntityInterface');
-        $mail->shouldReceive('getConfirmationCode')->once()->andReturn('codecode');
-        $mail->shouldReceive('getAddress')->once()->andReturn('foo@gmail.com');
-        $mail->shouldReceive('getMemberId')->once()->andReturn('bar');
-
-        $mails = Mockery::mock('\Xpressengine\Member\Repositories\MailRepositoryInterface');
-        $mails->shouldReceive('insert')->once()->andThrow('\Exception');
-
-        $pendingMails = Mockery::mock('\Xpressengine\Member\Repositories\PendingMailRepositoryInterface');
-        $pendingMails->shouldReceive('findByAddress')->once()->andReturn($mail);
-
-        $mailer = Mockery::mock('\Illuminate\Contracts\Mail\Mailer');
-
-        $broker = new EmailBroker($mails, $pendingMails, $mailer, 'view');
-
-        $broker->confirmEmail('foo@gmail.com', 'codecode');
+        return Mockery::mock(\Xpressengine\User\UserHandler::class);
     }
+
+    protected function makeMailer()
+    {
+        return Mockery::mock(\Illuminate\Contracts\Mail\Mailer::class);
+    }
+
+    /**
+     * makeUser
+     *
+     * @return Mockery\MockInterface
+     */
+    private function makeUser()
+    {
+        return Mockery::mock(\Xpressengine\User\Models\User::class);
+    }
+
 }

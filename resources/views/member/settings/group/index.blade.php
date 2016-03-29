@@ -64,4 +64,3 @@
     })
 </script>
 
-{!! uio('uiobject/xpressengine@chakIt', 'Settings:회원그룹') !!}
