@@ -18,14 +18,13 @@
 }(this, function (exports, $, XeLang, XeProgress, XeRequest) {
   'use strict';
 
-  var XE = {},
-    $ = jQuery = $.noConflict(true);
+  var XE = {};
 
   // @TODO ???
   // jquery 를 구분하기 위해 버전 변경
   // $.jquery = $.jquery + '.XE';
 
-  exports.$ = XE.jQuery = $;
+  exports.$ = exports.jQuery = $;
   exports.Lang = XeLang;
   exports.Progress = XeProgress;
   exports.Request = XeRequest;
