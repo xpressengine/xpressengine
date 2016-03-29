@@ -18,7 +18,7 @@
   'use strict';
 
   var XE = {},
-    $ = $.noConflict(true);
+    $ = jQuery = $.noConflict(true);
 
   // @TODO ???
   // jquery 를 구분하기 위해 버전 변경
