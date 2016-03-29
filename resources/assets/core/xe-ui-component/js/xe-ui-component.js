@@ -24,5 +24,4 @@
     factory({}, root.jQuery);
   }
 }(this, function (exports, XeDropdown, XeModal) {
-
 }));

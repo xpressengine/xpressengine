@@ -10,7 +10,8 @@
         factory((root.XE = exports), $, XeLang, XeProgress, XeRequest);
       });
   } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
-    factory((root.XE = exports), require('jquery'), require('xecore:/common/js/xe.lang'), require('xecore:/common/js/xe.progress'), require('xecore:/common/js/xe.request'));
+    console.info('cjs');
+    factory((root.XE = exports), require('jquery')(window), require('xecore:/common/js/xe.lang'), require('xecore:/common/js/xe.progress'), require('xecore:/common/js/xe.request'));
   } else {
     factory((root.XE = {}), root.jQuery);
   }
