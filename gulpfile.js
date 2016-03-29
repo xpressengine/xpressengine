@@ -62,7 +62,7 @@ gulp.task('jspm:xe', function(){
 });
 
 gulp.task('jspm:menu', function(){
-  return gulp.src('resources/assets/js/menu/MenuTree.jsx')
+  return gulp.src('assets/core/menu/MenuTree.js')
     .pipe($.plumber())
     .pipe($.jspm({selfExecutingBundle: true, plugin: 'jsx'}))
     .pipe($.rename('menu.js'))
