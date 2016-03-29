@@ -32,6 +32,7 @@ gulp.task('default', function(callback){
     'jspm:admin',
     'jspm:component',
     'jspm:menu',
+    'jspm:langbox',
     'jspm:xe',
     callback);
 });
@@ -50,6 +51,7 @@ gulp.task('jspm', ['copy-assets'], function(callback){
     'jspm:admin',
     'jspm:component',
     'jspm:menu',
+    'jspm:langbox',
     callback);
 });
 
@@ -62,11 +64,19 @@ gulp.task('jspm:xe', function(){
 });
 
 gulp.task('jspm:menu', function(){
-  return gulp.src('resources/assets/js/menu/MenuTree.jsx')
+  return gulp.src('assets/core/menu/MenuTree.js')
     .pipe($.plumber())
     .pipe($.jspm({selfExecutingBundle: true, plugin: 'jsx'}))
     .pipe($.rename('menu.js'))
     .pipe(gulp.dest('assets/core/menu'));
+});
+
+gulp.task('jspm:langbox', function(){
+  return gulp.src('assets/core/lang/LangEditorBox.js')
+      .pipe($.plumber())
+      .pipe($.jspm({selfExecutingBundle: true, plugin: 'jsx'}))
+      .pipe($.rename('LangEditorBox.js'))
+      .pipe(gulp.dest('assets/core/lang'));
 });
 
 gulp.task('jspm:component', function(){

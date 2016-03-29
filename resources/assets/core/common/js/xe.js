@@ -10,6 +10,7 @@
         factory((root.XE = exports), $, XeLang, XeProgress, XeRequest);
       });
   } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
+    console.info('cjs');
     factory((root.XE = exports), require('jquery'), require('xecore:/common/js/xe.lang'), require('xecore:/common/js/xe.progress'), require('xecore:/common/js/xe.request'));
   } else {
     factory((root.XE = {}), root.jQuery);
@@ -17,14 +18,13 @@
 }(this, function (exports, $, XeLang, XeProgress, XeRequest) {
   'use strict';
 
-  var XE = {},
-    $ = $.noConflict(true);
+  var XE = {};
 
   // @TODO ???
   // jquery 를 구분하기 위해 버전 변경
   // $.jquery = $.jquery + '.XE';
 
-  exports.$ = XE.jQuery = $;
+  exports.$ = exports.jQuery = $;
   exports.Lang = XeLang;
   exports.Progress = XeProgress;
   exports.Request = XeRequest;
