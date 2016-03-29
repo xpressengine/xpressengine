@@ -5,12 +5,12 @@
 <!--어드민 컨텐츠 영역 col-sm-"n" n:1~12에 따라 그리드 사용가능-->
 <div class="row">
     <div class="col-sm-12">
-        <div class="panel plugin_detail">
+        <div class="panel plugin-detail">
             <div class="panel-heading">
-                <div class="col_left">
-                    <p class="plugin_tit">{{$plugin->getTitle()}}</p>
-                    <div class="plugin_summary">
-                        <div class="img_thmb">
+                <div class="pull-left">
+                    <p class="plugin-title">{{$plugin->getTitle()}}</p>
+                    <div class="plugin-summary">
+                        <div class="img-thumbnail">
                             @if($plugin->getIcon() === null)
                                 <img src="{{ asset('assets/core/plugin/img/noicon.png') }}" width="100" height="100" alt="{{$plugin->getTitle()}}">
                             @else
@@ -60,11 +60,11 @@
 
                     </div>
                 </div>
-                <div class="col_right">
+                <div class="pull-right">
                     @if($plugin->isActivated())
                         <form method="POST" action="{{ route('settings.plugins.deactivate', [$plugin->getId()]) }}" accept-charset="UTF-8" role="form">
                             {!! csrf_field() !!}
-                            <button class="btn btn-danger v2">끄기</button>
+                            <button class="btn btn-danger">끄기</button>
                         </form>
 
                         @if($plugin->isActivated() && $plugin->checkUpdated($plugin->getInstalledVersion()))
@@ -77,7 +77,7 @@
                     @else
                         <form method="POST" action="{{ route('settings.plugins.activate', [$plugin->getId()]) }}" accept-charset="UTF-8" role="form">
                             {!! csrf_field() !!}
-                            <button class="xe-btn xe-btn-default blue v2">켜기</button>
+                            <button class="btn btn-default">켜기</button>
                         </form>
                     @endif
 
