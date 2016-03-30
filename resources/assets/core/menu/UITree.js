@@ -126,7 +126,7 @@ var UITree = React.createClass({
       />;
     });
     return (
-      <div className="menu_cont" id="uitree">
+      <div className="menu-content" id="uitree">
         {draggingDom}
         {treeItems}
       </div>
@@ -339,6 +339,7 @@ var UITree = React.createClass({
         targetParent: null
       }
     });
+
   },
 
   toggleCollapse: function (nodeId) {
@@ -355,5 +356,6 @@ var UITree = React.createClass({
     });
   }
 });
+
 
 module.exports = UITree;

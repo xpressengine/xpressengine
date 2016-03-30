@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html>
 <head>
-
     <!-- CUSTOM TAGS -->
     {!! XeFrontend::output('html', 'head.prepend') !!}
 
@@ -23,16 +22,17 @@
     <!-- JS at head.prepend -->
     {!! XeFrontend::output('js', 'head.prepend') !!}
 
+
+    <!-- Translation -->
+    {!! XeFrontend::output('translation') !!}
+
     <script type="text/javascript">
         System.import('xecore:/common/js/xe.bundle').then(function() {
             XE.setup({
+                'X-CSRF-TOKEN': '{!! csrf_token() !!}',
                 loginUserId: '{{ Auth::user()->getId() }}',
-                loadedTime: {{ time() }},
-                'X-CSRF-TOKEN': '{!! csrf_token() !!}'
+                loadedTime: {{ time() }}
             });
-
-            <!-- Translation -->
-            {!! XeFrontend::output('translation') !!}
 
             @if (in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER]))
                 XE.configure({managePrefix: '{{ app('config')['xe.routing.settingsPrefix'] }}'});
@@ -46,8 +46,8 @@
 
     <!-- CUSTOM TAGS -->
     {!! XeFrontend::output('html', 'head.append') !!}
-
 </head>
+
 <body class="{{ XeFrontend::output('bodyClass') }}">
 
 <!-- JS at body.prepend -->

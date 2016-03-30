@@ -48,12 +48,12 @@ var MenuSearchSuggestion = React.createClass({
 
     if ((suggestions && suggestions.length === 0) || props.query.length < MIN_QUERY_LENGTH) {
       return (
-        <div className="srch_lst"/>
+        <div className="search-list"/>
       );
     }
 
     return (
-      <div className="srch_lst">
+      <div className="search-list">
         <ul>
           {suggestions}
         </ul>
