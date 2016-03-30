@@ -27,6 +27,16 @@ class ThemeController extends Controller
         /** @var ThemeEntity $theme */
         $files = $theme->getEditFiles();
 
+        if(empty($files)) {
+            return \XePresenter::make(
+                'theme.edit',
+                [
+                    'theme' => $theme,
+                    'files' => $files,
+                ]
+            );
+        }
+
         if ($fileName === null) {
             $fileName = key($files[$type]);
         }
