@@ -44,6 +44,12 @@ System.config({
     "xecore:/*": {
       "format": "cjs"
     },
+    "xecore:/common/js/modules/dynamicField": {
+      "format": "amd"
+    },
+    "xecore:/common/js/modules/validator": {
+      "format": "amd"
+    },
     "xecore:/menu/menu.js": {
       "format": "global",
       "exports": "MenuTree"

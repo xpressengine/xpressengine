@@ -1,4 +1,4 @@
-define(['xecore:/common/js/modules/dynamicField'], function(validator) {
+define(['xecore:/common/js/modules/validator'], function(validator) {
 
     var XE = this;
 
