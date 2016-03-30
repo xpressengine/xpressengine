@@ -442,18 +442,18 @@ class UserController extends Controller
      *
      * @return \Xpressengine\Presenter\RendererInterface
      */
-    public function searchMember($keyword = null)
+    public function search($keyword = null)
     {
         /** @var UserRepository $users */
         $users = $this->handler->users();
 
         if ($keyword === null) {
-            return XePresenter::makeApi($users->paginate());
+            return XePresenter::makeApi([]);
         }
 
-        $matchedMemberList = (array) $users->query()->where('displayName', 'like', '%'.$keyword.'%')->get(
+        $matchedMemberList = $users->query()->where('displayName', 'like', '%'.$keyword.'%')->paginate( null,
             ['id', 'displayName', 'email']
-        );
+        )->items();
 
         return XePresenter::makeApi($matchedMemberList);
     }

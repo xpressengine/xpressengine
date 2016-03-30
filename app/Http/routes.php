@@ -361,7 +361,7 @@ Route::settings(
 
         Route::get(
             'searchMember/{keyword?}',
-            ['as' => 'settings.member.search', 'uses' => 'Member\Settings\UserController@searchMember']
+            ['as' => 'settings.member.search', 'uses' => 'Member\Settings\UserController@search']
         );
     }
 );
