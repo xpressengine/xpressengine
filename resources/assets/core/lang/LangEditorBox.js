@@ -139,7 +139,7 @@ var LangEditor = React.createClass({
     }
 });
 
-var langEditorBoxRender = function ($o) {
+window.langEditorBoxRender = function ($o) {
     var name = $o.data('name'),
         langKey = $o.data('lang-key'),
         multiline = $o.data('multiline'),
