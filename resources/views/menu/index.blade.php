@@ -5,9 +5,6 @@
 
 @section('page_title',"<h2>".xe_trans('xe::siteMap')."</h2>")
 @section('page_description',xe_trans('xe::siteMapDescription'))
-@section('page_setting_menu')
-    <a type="button" href="{{ route('settings.menu.create.menu') }}" class="btn btn_setting blue v2 pull-right"><i class="xi-plus"></i>{{xe_trans('xe::addMenu')}}</a>
-@endsection
 <script>
     var Keys = {
         ENTER: 13,
@@ -30,7 +27,10 @@
             React.createElement(MenuTree, {
                 baseUrl: "{{ route('settings.menu.index') }}",
                 home: "{{$home}}",
-                menus: {!! json_encode($menus) !!}
+                menus: {!! json_encode($menus) !!},
+                menuRoutes: {
+                    createMenu : '{{ route('settings.menu.create.menu') }}'
+                }
             }, null),
             document.getElementById("menuContainer")
         );
