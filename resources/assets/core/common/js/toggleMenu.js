@@ -39,14 +39,14 @@ var ToggleMenu = React.createClass({
     },
 
     getBody: function () {
-        var classes = 'dropdown-toggle';
+        var classes = 'xe-dropdown-toggle';
         if (this.props.class) {
             var temp = [classes];
             temp.push(this.props.class);
             classes = temp.join(' ');
         }
 
-        var props = {className: classes, "data-toggle": "dropdown", "aria-expanded": "false", onClick: this.onClick};
+        var props = {className: classes, "data-toggle": "xe-dropdown", "aria-expanded": "false", onClick: this.onClick};
 
         if (this.props.html) {
             $.extend(props, {dangerouslySetInnerHTML: {__html: this.props.html}});
@@ -62,6 +62,8 @@ var ToggleMenu = React.createClass({
     },
 
     onClick: function (e) {
+        e.preventDefault();
+
         if (this.state.loaded === true) {
             return;
         }
@@ -81,9 +83,9 @@ var ToggleMenu = React.createClass({
 
     render: function () {
         return (
-            React.DOM.span({className: "dropdown v2"},
+            React.DOM.span({className: "xe-dropdown"},
                 this.getBody(),
-                React.DOM.ul({className: "dropdown-menu", role: "menu"}, this.getItems())
+                React.DOM.ul({className: "xe-dropdown-menu", role: "menu"}, this.getItems())
             )
         );
     }
