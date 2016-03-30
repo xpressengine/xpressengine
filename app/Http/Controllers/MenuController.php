@@ -73,7 +73,7 @@ class MenuController extends Controller
         }
 
         // 메뉴 어드민 트리 뷰에서 필요한 고유 다국어
-        XeFrontend::translation(['xe::addItem', 'xe::goLink', 'xe::setHome']);
+        XeFrontend::translation(['xe::addMenu', 'xe::addItem', 'xe::goLink', 'xe::setHome']);
         // 메뉴 타이틀 user 다국어
         XeFrontend::translation($transKey);
         return XePresenter::make('menu.index',

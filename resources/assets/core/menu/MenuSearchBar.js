@@ -165,7 +165,10 @@ var MenuSearchBar = React.createClass({
     var query = this.state.query.trim(),
       selectedIndex = this.state.selectedIndex,
       suggestions = this.state.suggestions,
-      placeholder = this.props.placeholder;
+      placeholder = this.props.placeholder
+    var trans = {
+      addMenu: XE.Lang.trans('xe::addMenu')
+    };
 
     return (
       <div className="panel-heading">
@@ -189,7 +192,7 @@ var MenuSearchBar = React.createClass({
           </div>
         </div>
         <div className="pull-right">
-          <a href="{{ route('settings.menu.create.menu') }}" className="btn btn-primary pull-right"><i className="xi-plus"></i> {XE.Lang.trans('xe::addMenu')}</a>
+          <a href="{{ route('settings.menu.create.menu') }}" className="btn btn-primary pull-right"><i className="xi-plus"></i> {trans.addMenu}</a>
         </div>
       </div>
     );

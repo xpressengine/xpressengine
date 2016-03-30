@@ -19,6 +19,11 @@ var MenuEntity = React.createClass({
     var nodeUrl = this.props.getBaseUrl() + '/menus/' + node.id;
     var addItemUrl = this.props.getBaseUrl() + '/menus/' + node.id + '/types';
 
+    // trans
+    var trans = {
+      addItem: XE.Lang.trans('xe::addItem')
+    };
+
     var nodeId = 'xe_tree_node_' + node.id;
     return (
       <div className="panel-heading" id={nodeId}>
@@ -32,7 +37,7 @@ var MenuEntity = React.createClass({
           <a href={nodeUrl}><h3><i className="xi-folder"></i>{node.title}</h3></a>
         </div>
         <div className="pull-right">
-          <a href={addItemUrl} className="btn btn-primary"><i className="xi-plus"></i><span>{XE.Lang.trans('xe::addItem')}</span></a>
+          <a href={addItemUrl} className="btn btn-primary"><i className="xi-plus"></i><span>{trans.addItem}</span></a>
         </div>
       </div>
     );
