@@ -653,6 +653,10 @@ return [
         'ko' => '확장 필드 설정',
         'en' => 'Dynamic field settings',
     ],
+    'toggleMenuSettings' => [
+        'ko' => '회원 토글 메뉴 설정',
+        'en' => 'Toggle menu settings',
+    ],
     'date' => [
         'ko' => '날짜',
         'en' => 'Date',

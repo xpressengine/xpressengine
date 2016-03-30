@@ -1,5 +1,6 @@
 <div class="__xe_skinSetting" data-instance-id="{{ $skinInstanceId }}" data-skin-id="{{ $selectedSkin->getId() }}">
 
+
     <div class="__xe_skinIndicator">
         {{--skin type--}}
         <span class="label label-default">{{ $mode !== 'mobile' ? '기본' : '모바일' }}</span>

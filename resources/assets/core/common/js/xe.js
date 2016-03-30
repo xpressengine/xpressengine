@@ -26,6 +26,7 @@
   var INSTANCE = null;
 
   var XE = function () {
+    var self = this;
     this.$ = this.jQuery = $;
     this.Lang = XeLang;
     this.Progress = XeProgress;
@@ -96,8 +97,7 @@
     };
 
     if(this.Request) {
-      var self = this;
-      this.ajax = this.Request.ajax = function(url, options) {
+      self.ajax = self.Request.ajax = function(url, options) {
         if ( typeof url === "object" ) {
           options = $.extend({}, self.Request.options, url);
           url = undefined;

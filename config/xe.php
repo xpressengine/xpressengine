@@ -112,6 +112,12 @@ return [
                 'display' => true,
                 'ordering' => 400
             ],
+            'member.setting.menu' => [
+                'title' => 'xe::toggleMenuSettings',
+                'description' => '',
+                'display' => true,
+                'ordering' => 500
+            ],
             'contents' => [
                 'title' => 'xe::contents',
                 'display' => true,

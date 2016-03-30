@@ -349,8 +349,9 @@ Route::settings(
                 Route::get(
                     'togglemenu',
                     [
-                        'as' => 'settings.member.setting.togglemenu',
+                        'as' => 'settings.member.setting.menu',
                         'uses' => 'Member\Settings\SettingController@editToggleMenu',
+                        'settings_menu' => 'member.setting.menu',
                         'permission' => 'user.setting'
                     ]
                 );
@@ -423,6 +424,8 @@ Route::settings(
             ]
         );
         Route::post('store', ['as' => 'settings.setting.update', 'uses' => 'SettingsController@updateSetting']);
+
+        Route::post('store/theme', ['as' => 'settings.setting.theme', 'uses' => 'SettingsController@updateTheme']);
 
         Route::get(
             'permissions',

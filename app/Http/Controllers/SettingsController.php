@@ -71,6 +71,16 @@ class SettingsController extends Controller
         return \Redirect::back()->with('alert', ['type' => 'success', 'message' => '저장되었습니다.']);
     }
 
+    public function updateTheme(ThemeHandler $themeHandler, Request $request)
+    {
+        // resolve theme
+        $theme = $request->only(['theme_desktop', 'theme_mobile']);
+        $theme = ['desktop' => $theme['theme_desktop'], 'mobile' => $theme['theme_mobile']];
+        $themeHandler->setSiteTheme($theme);
+
+        return \Redirect::back()->with('alert', ['type' => 'success', 'message' => '저장되었습니다.']);
+    }
+
     public function editPermissions()
     {
         /** @var SettingsHandler $manageHandler */

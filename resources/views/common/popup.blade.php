@@ -26,17 +26,18 @@
     {!! XeFrontend::output('translation') !!}
 
     <script type="text/javascript">
-        System.import('xecore:/common/js/xe.bundle').then(function() {
-            XE.setup({
-                'X-CSRF-TOKEN': '{!! csrf_token() !!}',
-                loginUserId: '{{ Auth::user()->getId() }}',
-                loadedTime: {{ time() }}
-            });
-
-            @if (in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER]))
-                XE.configure({managePrefix: '{{ app('config')['xe.routing.settingsPrefix'] }}'});
-            @endif
+        XE.setup({
+            'X-CSRF-TOKEN': '{!! csrf_token() !!}',
+            loginUserId: '{{ Auth::user()->getId() }}',
+            loadedTime: {{ time() }}
         });
+
+        <!-- Translation -->
+        {!! XeFrontend::output('translation') !!}
+
+        @if (in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER]))
+            XE.configure({managePrefix: '{{ app('config')['xe.routing.settingsPrefix'] }}'});
+        @endif
     </script>
 
     <!-- JS at head.append -->

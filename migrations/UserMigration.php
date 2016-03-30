@@ -115,8 +115,8 @@ class UserMigration implements Migration {
     {
         \DB::table('config')->insert([
                                          ['name' => 'user', 'vars' => '[]'],
-                                         ['name' => 'user.common', 'vars' => '{"secureLevel":"low","useCaptcha":false,"webmasterName":"webmaster","webmasterEmail":"webmaster@domain.com"}'],
-                                         ['name' => 'user.join', 'vars' => '{"joinable":true,"useEmailCertify":false,"agreement":"","useCaptcha":false}'],
+                                         ['name' => 'user.common', 'vars' => '{"secureLevel":"low","useCaptcha":false,"webmasterName":"webmaster","webmasterEmail":"webmaster@domain.com","agreement":"","privacy":""}'],
+                                         ['name' => 'user.join', 'vars' => '{"joinable":true,"useEmailCertify":false,"useCaptcha":false}'],
                                          ['name' => 'user.usermenu', 'vars' => '{"activate":[]}'],
                                      ]);
     }
