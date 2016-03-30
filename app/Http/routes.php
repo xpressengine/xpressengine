@@ -349,8 +349,9 @@ Route::settings(
                 Route::get(
                     'togglemenu',
                     [
-                        'as' => 'settings.member.setting.togglemenu',
+                        'as' => 'settings.member.setting.menu',
                         'uses' => 'Member\Settings\SettingController@editToggleMenu',
+                        'settings_menu' => 'member.setting.menu',
                         'permission' => 'user.setting'
                     ]
                 );
