@@ -81,11 +81,21 @@ class SettingsController extends Controller
         return \Redirect::back()->with('alert', ['type' => 'success', 'message' => '저장되었습니다.']);
     }
 
-    public function editPermissions()
+    public function editPermissions(PermissionHandler $permissionHandler)
     {
-        /** @var SettingsHandler $manageHandler */
-        $manageHandler = app('xe.settings');
-        $permissionGroups = $manageHandler->getPermissionList();
+        /** @var SettingsHandler $settingsHandler */
+        $settingsHandler = app('xe.settings');
+        $permissionGroups = $settingsHandler->getPermissionList();
+
+        foreach ($permissionGroups as $tab => &$group) {
+            foreach ($group as $key => &$item) {
+                $permission = $permissionHandler->find($item['id']);
+                if($permission === null) {
+                    $permission = $permissionHandler->register($item['id'], new Grant());
+                }
+                $item['permission'] = $permission;
+            }
+        }
 
         return \XePresenter::make('settings.permissions', compact('permissionGroups'));
     }

@@ -1,8 +1,9 @@
 <?php namespace Xpressengine\UIObjects\Settings;
 
-use Xpressengine\Permission\Factory;
+use XeFrontend;
 use Xpressengine\Permission\Grant;
 use Xpressengine\Permission\Permission;
+use Xpressengine\Permission\PermissionHandler;
 use Xpressengine\UIObject\AbstractUIObject;
 
 class SettingsPermission extends AbstractUIObject
@@ -12,66 +13,55 @@ class SettingsPermission extends AbstractUIObject
 
     public function render()
     {
-        $htmlString = [];
         $args = $this->arguments;
 
-        $title = $args['title'];
-        $type = $args['type'];
-        $target = $args['target'];
+        $permissionInfo = $args['permission'];
+        $title = $permissionInfo['title'];
 
-        /** @var Factory $permissionFactory */
-        $permissionFactory = app('xe.permission');
-        $permission = $permissionFactory->make($type, $target);
-        $actions = $permission->getActions();
-        $registered = $permission->getRegistered();
+        /** @var Permission $permission */
+        $permission = $permissionInfo['permission'];
+
+        // permission is collection of grant
+        // grant is bundle of assigned
+        // $grant = [
+        //    'rating' => $visibleGrant['rating'],
+        //    'group' => UserGroup::whereIn('id', $visibleGrant['group'])->get()->toArray(),
+        //    'user' => User::whereIn('id', $visibleGrant['user'])->get()->toArray(),
+        //    'except' => User::whereIn('id', $visibleGrant['except'])->get()->toArray(),
+        // ];
 
         $groups = app('xe.user.groups')->all();
 
         $settings = [];
-        $content = [];
-        foreach ($actions as $action) {
-            $pureGrant = $registered->pure($action);
-            $mode = "manual";
-
-            $content[] = uio('permission', [
-                'mode' => $mode,
-                'title' => $action,
-                'grant' => $this->getGrant($registered, $action),
-                'groups' => $groups
-            ]);
-        }
-        $content = implode('<hr>', $content);
+        $content = uio('permission', [
+            'mode' => 'manual',
+            'title' => $title,
+            'grant' => $this->getGrant($permission['access']),
+            'groups' => $groups
+        ]);
         $settings[] = $this->generateBox($title, $content);
         $this->template = implode(PHP_EOL, $settings);
 
+        XeFrontend::js('/assets/core/permission/Permission.js')->unload();
+        XeFrontend::js('/assets/core/permission/SettingsPermission.js')->type('text/jsx')->load();
+        
         return parent::render();
     }
 
-    public static function boot()
+    protected function getGrant($grant)
     {
-        // TODO: Implement boot() method.
-    }
-
-    public static function getSettingsURI()
-    {
-    }
-
-    protected function getGrant(Permission $registered, $action)
-    {
-        $defaultPerm = [
+        $defaultGrant = [
             Grant::RATING_TYPE => '',
             Grant::GROUP_TYPE => [],
             Grant::USER_TYPE => [],
             Grant::EXCEPT_TYPE => []
         ];
 
-        if ($registered[$action] != null) {
-            $grant = array_merge($defaultPerm, $registered[$action]);
+        if ($grant !== null) {
+            return array_merge($defaultGrant, $grant);
         } else {
-            $grant = $defaultPerm;
+            return $defaultGrant;
         }
-
-        return $grant;
     }
 
     private function generateBox($title, $content)

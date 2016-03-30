@@ -1,6 +1,6 @@
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 
-@foreach ($permissionGroups as $groupName => $permissions)
+@foreach ($permissionGroups as $groupName => $group)
 <div class="panel __xe_section_box">
     <div class="panel-heading">
         <div class="row">
@@ -14,11 +14,11 @@
     </div>
 
     <div id="{{ $groupName }}Section" class="panel-collapse collapse in" role="tabpanel">
-        @foreach ($permissions as $key => $permission)
+        @foreach ($group as $key => $item)
         <div class="panel-body">
-                <form method="post" action="{{ route('settings.setting.update.permission', $permission['id']) }}">
+                <form method="post" action="{{ route('settings.setting.update.permission', $item['id']) }}">
                     <input type="hidden" name="_token" value="{{{ Session::token() }}}">
-                    {!! uio('xpressengine@registeredPermission',['title' => $permission['title'],'type' => 'settings','target' => $permission['id']])->render() !!}
+                    {!! uio('xpressengine@registeredPermission',['permission'=>$item]) !!}
 
                     <div class="btn_group_all">
                         <button type="submit" class="xe-btn xe-btn-blue">{{ xe_trans('xe::applyModified') }}</button>
