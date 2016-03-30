@@ -22,7 +22,8 @@
     "gulp-sass": "^2.2.0",
     "jest-cli": "*",
     "laravel-elixir": "^3.0.0",
-    "run-sequence": "^1.1.5"
+    "run-sequence": "^1.1.5",
+    "lodash": "^4.6.1"
   },
   "scripts": {
     "test": "jest"
@@ -40,6 +41,7 @@
       "css": "github:systemjs/plugin-css@^0.1.20",
       "jquery": "npm:jquery@^2.2.1",
       "jsx": "github:floatdrop/plugin-jsx@^1.2.1",
+      "lodash": "npm:lodash@^4.6.1",
       "normalize.css": "github:necolas/normalize.css@^3.0.3",
       "react": "npm:react@^0.13",
       "react-dom": "npm:react-dom@^0.13"
