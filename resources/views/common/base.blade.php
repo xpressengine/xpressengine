@@ -23,9 +23,6 @@
     <!-- JS at head.prepend -->
     {!! XeFrontend::output('js', 'head.prepend') !!}
 
-    <!-- JS at head.append -->
-    {!! XeFrontend::output('js', 'head.append') !!}
-
     <script type="text/javascript">
         System.import('xecore:/common/js/xe.bundle').then(function() {
             XE.setup({
@@ -42,6 +39,9 @@
             @endif
         });
     </script>
+
+    <!-- JS at head.append -->
+    {!! XeFrontend::output('js', 'head.append') !!}
 
 
     <!-- CUSTOM TAGS -->
