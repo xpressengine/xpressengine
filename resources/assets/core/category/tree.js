@@ -587,4 +587,4 @@
     window.categoryTree = categoryTree;
 
     return categoryTree;
-})(typeof window !== "undefined" ? window : this, XE.jQuery, XE);
+})(typeof window !== "undefined" ? window : this, jQuery, XE);
