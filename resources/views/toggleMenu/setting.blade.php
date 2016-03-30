@@ -45,7 +45,7 @@
     </form>
 
 <script type="text/javascript">
-    XE.$(function($) {
+    $(function($) {
         $("#__xe_toggleMenu_{{$typeIdable}}_{{$instanceId}}.__xe_sortable_items").sortable();
         $("#__xe_toggleMenu_{{$typeIdable}}_{{$instanceId}}.__xe_sortable_items").disableSelection();
 

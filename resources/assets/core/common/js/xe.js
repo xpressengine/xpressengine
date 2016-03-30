@@ -2,32 +2,30 @@
   if (typeof define === 'function' && define.amd) {
     define([
       'exports',
-      'jquery',
       'xecore:/common/js/xe.lang',
       'xecore:/common/js/xe.progress',
       'xecore:/common/js/xe.request',
       ], function (exports, $, XeLang, XeProgress, XeRequest) {
         if(typeof root.XE === "undefined") {
-          factory((root.XE = exports), $, XeLang, XeProgress, XeRequest);
+          factory((root.XE = exports), XeLang, XeProgress, XeRequest);
         }
       });
   } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
     if(typeof root.XE === "undefined") {
-      factory((root.XE = exports), require('jquery'), require('xecore:/common/js/xe.lang'), require('xecore:/common/js/xe.progress'), require('xecore:/common/js/xe.request'));
+      factory((root.XE = exports), require('xecore:/common/js/xe.lang'), require('xecore:/common/js/xe.progress'), require('xecore:/common/js/xe.request'));
     }
   } else {
     if(typeof root.XE === "undefined") {
-      factory((root.XE = {}), root.jQuery);
+      factory((root.XE = {}));
     }
   }
-}(this, function (exports, $, XeLang, XeProgress, XeRequest) {
+}(this, function (exports, XeLang, XeProgress, XeRequest) {
   'use strict';
 
   var INSTANCE = null;
 
   var XE = function () {
     var self = this;
-    this.$ = this.jQuery = $;
     this.Lang = XeLang;
     this.Progress = XeProgress;
     this.Request = XeRequest;

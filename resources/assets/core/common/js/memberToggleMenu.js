@@ -62,7 +62,7 @@ MemberToggleMenu.Item = React.createClass({
 });
 
 // member toggle menu
-XE.$(function($) {
+$(function($) {
     $(document).on('click', function(){
         $('.__xe_member').popover('destroy');
     })

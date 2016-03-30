@@ -24,5 +24,5 @@
 
             $(this).addClass(keyword);
         });
-    })(XE, XE.jQuery);
+    })(XE, jQuery);
 </script>

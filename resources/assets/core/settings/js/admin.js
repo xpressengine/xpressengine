@@ -3,19 +3,18 @@
     // AMD
     define([
       'exports',
-      'jquery',
       "github:twbs/bootstrap-sass@3.3.6/assets/javascripts/bootstrap.js"
-    ], function (exports, jQuery, twbs) {
-      factory(exports, jQuery, twbs);
+    ], function (exports, twbs) {
+      factory(exports, twbs);
     });
   } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
     // CommonJS
-    factory(exports, require('jquery'));
+    factory(exports, require("github:twbs/bootstrap-sass@3.3.6/assets/javascripts/bootstrap.js"));
   } else {
     // Browser globals
-    factory({}, root.jQuery);
+    factory({});
   }
-}(this, function (exports, $, twbs) {
+}(this, function (exports, twbs) {
   $(document).ready(function () {
     var $sidebar = $('.settings-nav-sidebar');
     var $dim = $('.dim');

@@ -1,5 +1,5 @@
 System.import('xecore:/common/js/xe').then(function(XE) {
-  XE.$(function ($) {
+  $(function ($) {
     $.fn.extend({
       xeSkinSetting: function (initOptions) {
         // support mutltiple elements

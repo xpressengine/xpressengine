@@ -1,13 +1,13 @@
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
-    define(['exports', 'jquery', 'xecore:/common/js/translator'], factory);
+    define(['exports', 'xecore:/common/js/translator'], factory);
   } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
     // CommonJS
-    factory(exports, require('jquery'), require('xecore:/common/js/translator'));
+    factory(exports, require('xecore:/common/js/translator'));
   } else {
-    factory((root.XeLang = {}), root.jQuery, root.translator);
+    factory((root.XeLang = {}), root.translator);
   }
-}(this, function (exports, $, Translator) {
+}(this, function (exports, Translator) {
   'use strict';
 
   Translator.placeHolderPrefix = ':';

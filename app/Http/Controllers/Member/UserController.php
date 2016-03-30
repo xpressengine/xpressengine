@@ -575,7 +575,7 @@ class UserController extends Controller
 
         app('xe.frontend')->html('member.settings.loadScript')->content(
             "<script>
-            XE.$(function () {
+            $(function () {
                 $('.__xe_setting.__xe_settingDisplayName').xeDisplayNameSetting({
                     checkUrl: '".route('member.settings.name.check')."',
                     saveUrl: '".route('member.settings.name.update')."'

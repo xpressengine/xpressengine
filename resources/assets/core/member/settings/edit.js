@@ -1,13 +1,13 @@
 System.import('xecore:/common/js/xe').then(function(XE) {
 
-  XE.$(function () {
+  $(function () {
     $('.__xe_settingEmail').click(function () {
       $('.__xe_emailView').slideToggle();
       $('#__xe_emailSetting').slideToggle();
     })
   });
 
-  XE.$(function () {
+  $(function () {
 
     var EmailBox = React.createClass({
       componentDidMount: function () {
@@ -17,7 +17,7 @@ System.import('xecore:/common/js/xe').then(function(XE) {
         return {mails: [], selected: this.props.email};
       },
       loadCommentsFromServer: function () {
-        XE.$.ajax({
+        $.ajax({
           url: this.props.url.mail.list,
           type: 'get',
           dataType: 'json',
@@ -35,7 +35,7 @@ System.import('xecore:/common/js/xe').then(function(XE) {
         this.setState($.extend(this.state, {selected: address}));
       },
       handleAddEmail: function (email) {
-        XE.$.ajax({
+        $.ajax({
           url: this.props.url.mail.add,
           type: 'post',
           dataType: 'json',
@@ -54,7 +54,7 @@ System.import('xecore:/common/js/xe').then(function(XE) {
       },
       handleDeleteEmail: function (email) {
 
-        XE.$.ajax({
+        $.ajax({
           url: this.props.url.mail.delete,
           type: 'post',
           dataType: 'json',

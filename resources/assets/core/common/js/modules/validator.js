@@ -1,8 +1,7 @@
 define([], function(XE) {
     'use strict';
 
-    var Validator = {},
-        $ = XE.$;
+    var Validator = {};
 
     Validator.rules = {};
 
