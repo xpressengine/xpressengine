@@ -60,6 +60,30 @@ class SettingController extends Controller
     }
 
     /**
+     * update Common setting
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateCommon(Request $request)
+    {
+        $inputs = $request->only(['useCaptcha', 'webmasterName', 'webmasterEmail', 'agreement', 'privacy']);
+
+        if ($inputs['useCaptcha'] === 'true') {
+            $driver = config('captcha.driver');
+            $captcha = config("captcha.apis.$driver.siteKey");
+            if (!$captcha) {
+                throw new ConfigurationNotExistsException();
+            }
+        }
+
+        app('xe.config')->put('user.common', $inputs);
+
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => '저장되었습니다.']);
+    }
+
+    /**
      * edit Skin setting
      *
      * @return \Xpressengine\Presenter\RendererInterface
@@ -78,28 +102,6 @@ class SettingController extends Controller
                 compact('authSkinSection', 'settingsSkinSection', 'profileSkinSection')
             )
         );
-    }
-
-    /**
-     * update Common setting
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function updateCommon(Request $request)
-    {
-        $inputs = $request->only(['useCaptcha', 'webmasterName', 'webmasterEmail']);
-
-        if ($inputs['useCaptcha'] === 'true') {
-            if (config('captcha.apis.google.siteKey') === null) {
-                throw new ConfigurationNotExistsException();
-            }
-        }
-
-        app('xe.config')->put('user.common', $inputs);
-
-        return redirect()->back()->with('alert', ['type' => 'success', 'message' => '저장되었습니다.']);
     }
 
     /**
