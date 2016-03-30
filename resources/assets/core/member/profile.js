@@ -1,4 +1,4 @@
-XE.$(function ($) {
+$(function ($) {
 
     var $box = $('.__xe_profileBox');
     var $editBtn = $('.__xe_profileEditBtn');

@@ -1,13 +1,13 @@
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
-    define(['exports', 'jquery'], factory);
+    define(['exports'], factory);
   } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
     // CommonJS
-    factory(exports, require('jquery'));
+    factory(exports);
   } else {
-    factory((root.XeLang = {}), root.b);
+    factory({});
   }
-}(this, function (exports, $) {
+}(this, function (exports) {
   'use strict';
 
   // @TODO 라이브러리 분리

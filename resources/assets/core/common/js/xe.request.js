@@ -1,13 +1,13 @@
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
-    define(['exports', 'jquery'], factory);
+    define(['exports'], factory);
   } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
     // CommonJS
-    factory(exports, require('jquery'));
+    factory(exports);
   } else {
-    factory((root.XeRequest = {}), root.b);
+    factory({});
   }
-}(this, function (exports, $) {
+}(this, function (exports) {
   'use strict';
 
   // @TODO ajax options
@@ -33,8 +33,6 @@
 
   exports.setup = function(options) {
     $.extend(exports.options, options);
-
-    // XE.$ 를 주입받아 사용해야 할 jquery 의 서드파티들...
     $.ajaxSetup(exports.options);
   };
 

@@ -1,4 +1,4 @@
-XE.$(function ($) {
+$(function ($) {
 
     Setting = function (element, options) {
         this.options = null;
@@ -91,7 +91,7 @@ XE.$(function ($) {
 })
 ;
 
-XE.$(function () {
+$(function () {
     var DisplayNameSetting = XE.Setting.extend(
         function (element, options) {
             this.init(element, options);
@@ -217,10 +217,10 @@ XE.$(function () {
             }
         }
     );
-    XE.$.fn.xeDisplayNameSetting = XE.Setting.generate(DisplayNameSetting);
+    $.fn.xeDisplayNameSetting = XE.Setting.generate(DisplayNameSetting);
 });
 
-XE.$(function () {
+$(function () {
 
     var PasswordSetting = XE.Setting.extend(
         function (element, options) {
@@ -363,11 +363,11 @@ XE.$(function () {
 
         }
     );
-    XE.$.fn.xePasswordSetting = XE.Setting.generate(PasswordSetting);
+    $.fn.xePasswordSetting = XE.Setting.generate(PasswordSetting);
 
 });
 
-XE.$(function () {
+$(function () {
     var EmailSetting = XE.Setting.extend(
         function (element, options) {
             this.init(element, options);
@@ -568,10 +568,10 @@ XE.$(function () {
             },
         }
     );
-    XE.$.fn.xeEmailSetting = XE.Setting.generate(EmailSetting);
+    $.fn.xeEmailSetting = XE.Setting.generate(EmailSetting);
 });
 
-XE.$(function () {
+$(function () {
     var LeaveSetting = XE.Setting.extend(
         function (element, options) {
             this.init(element, options);
@@ -608,11 +608,11 @@ XE.$(function () {
             },
         }
     );
-    XE.$.fn.xeLeaveSetting = XE.Setting.generate(LeaveSetting);
+    $.fn.xeLeaveSetting = XE.Setting.generate(LeaveSetting);
 });
 
 
-XE.$(function () {
+$(function () {
 
     // menu toggle
     $('.xo-menu-toggle').click(function () {

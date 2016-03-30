@@ -13,4 +13,4 @@
                 $this.parent('.__xe_radio').removeClass('on');
             }
         });
-}(XE.$));
+}($));

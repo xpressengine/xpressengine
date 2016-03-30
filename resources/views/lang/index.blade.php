@@ -77,7 +77,6 @@
 
 <script>
     System.import('xecore:/common/js/xe.bundle').then(function() {
-        var $ = XE.$;
         $(function () {
             $('button.save').click(function (e) {
                 var url = '/settings/lang/save',

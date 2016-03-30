@@ -58,7 +58,7 @@ var LangEditor = React.createClass({
 
             if ( this.props.langKey ) {
                 if ( this.state.lines.length == 0 ) {
-                    XE.$.ajax({
+                    $.ajax({
                         type: 'get',
                         dataType: 'json',
                         url: '/' + XE.options.managePrefix + '/lang/lines/' + this.props.langKey,
@@ -149,7 +149,6 @@ window.langEditorBoxRender = function ($o) {
 };
 
 System.import('xecore:/common/js/xe.bundle').then(function() {
-    var $ = XE.$;
     $(function () {
         $('.lang-editor-box').each(function(i) {
             langEditorBoxRender($(this));
