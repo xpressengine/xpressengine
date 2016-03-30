@@ -22,6 +22,7 @@
     <!-- JS at head.prepend -->
     {!! XeFrontend::output('js', 'head.prepend') !!}
 
+
     <!-- Translation -->
     {!! XeFrontend::output('translation') !!}
 
@@ -41,6 +42,7 @@
 
     <!-- JS at head.append -->
     {!! XeFrontend::output('js', 'head.append') !!}
+
 
     <!-- CUSTOM TAGS -->
     {!! XeFrontend::output('html', 'head.append') !!}
