@@ -26,13 +26,13 @@ class Permission extends AbstractUIObject
      */
     public function render()
     {
-        XeFrontend::js('/assets/core/lodash.min.js')->appendTo('head')->load();
-        XeFrontend::js('/assets/core/permission/PermissionTag.js')->type('text/jsx')->appendTo('head')->load();
-        XeFrontend::js('/assets/core/permission/PermissionTagSuggestion.js')->type('text/jsx')->appendTo('head')->load(
+        XeFrontend::js('/assets/core/lodash.min.js')->load();
+        XeFrontend::js('/assets/core/permission/PermissionTag.js')->type('text/jsx')->load();
+        XeFrontend::js('/assets/core/permission/PermissionTagSuggestion.js')->type('text/jsx')->load(
         );
-        XeFrontend::js('/assets/core/permission/PermissionInclude.js')->type('text/jsx')->appendTo('head')->load();
-        XeFrontend::js('/assets/core/permission/PermissionExclude.js')->type('text/jsx')->appendTo('head')->load();
-        XeFrontend::js('/assets/core/permission/Permission.js')->type('text/jsx')->appendTo('head')->load();
+        XeFrontend::js('/assets/core/permission/PermissionInclude.js')->type('text/jsx')->load();
+        XeFrontend::js('/assets/core/permission/PermissionExclude.js')->type('text/jsx')->load();
+        XeFrontend::js('/assets/core/permission/Permission.js')->type('text/jsx')->load();
         XeFrontend::css('/assets/core/permission/permission.css')->load();
 
         $permissioinScriptString = [];
