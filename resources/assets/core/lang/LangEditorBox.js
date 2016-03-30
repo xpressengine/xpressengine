@@ -60,7 +60,7 @@ var LangEditor = React.createClass({
 
             if ( this.props.langKey ) {
                 if ( this.state.lines.length == 0 ) {
-                    XE.ajax({
+                    XE.$.ajax({
                         type: 'get',
                         dataType: 'json',
                         url: '/' + XE.options.managePrefix + '/lang/lines/' + this.props.langKey,
@@ -72,7 +72,7 @@ var LangEditor = React.createClass({
             }
 
             $(el).find('input[type=text]:first,textarea:first').autocomplete({
-                source: '/' + XE.options.managePrefix + '/lang/search/' + Translator.locale,
+                source: '/' + XE.options.managePrefix + '/lang/search/' + XE.Lang.locales[0],
                 minLength: 1,
                 focus: function(event, ui) { event.preventDefault(); },
                 select: function(event, ui) { self.setLines(ui.item.lines); }
@@ -123,17 +123,18 @@ var LangEditor = React.createClass({
                         <span className="flag_code"><i className={self.getFlagClass(locale)}></i>{locale}</span>
                     </div>
                 </div>
-                <div className="sub">{fallback.map(function (locale) {
-                    var value = self.getValueFromLinesWithLocale(locale);
-                    return (
-                        <div key={locale} className="inpt_bd">
-                            {self.getEditor(resource, locale, value)}
-                            <span className="flag_code"><i className={self.getFlagClass(locale)}></i>{locale}</span>
-                        </div>
-                    );
-                })}</div>
+                <div className="sub">
+                    {fallback.map(function (locale) {
+                        var value = self.getValueFromLinesWithLocale(locale);
+                        return (
+                            <div key={locale} className="inpt_bd">
+                                {self.getEditor(resource, locale, value)}
+                                <span className="flag_code"><i className={self.getFlagClass(locale)}></i>{locale}</span>
+                            </div>
+                        );
+                    })}
+                </div>
             </div>
-
         );
     }
 });
@@ -145,18 +146,24 @@ var langEditorBoxRender = function ($o) {
         lines = $o.data('lines');
 
     React.render(<LangEditorBox name={name} langKey={langKey} multiline={multiline} lines={lines} />, $o[0]);
-}
+};
 
-$('.lang-editor-box').each(function(i) {
-    langEditorBoxRender($(this));
-});
+System.import('xecore:/common/js/xe.bundle').then(function() {
+    var $ = XE.$;
+    $(function () {
+        console.log(document.documentElement.lang);
+        $('.lang-editor-box').each(function(i) {
+            langEditorBoxRender($(this));
+        });
 
-$(document).on('focus', '.lang-editor .main input, textarea', function() {
+        $(document).on('focus', '.lang-editor .main input, textarea', function() {
 
-    var el = $(this).closest('.lang-editor').find('.sub');
-    if ($(el).is(':hidden')) {
-        $(el).slideDown('fast');
-    }
+            var el = $(this).closest('.lang-editor').find('.sub');
+            if ($(el).is(':hidden')) {
+                $(el).slideDown('fast');
+            }
 
-    $(".lang-editor textarea").expanding();
+            $(".lang-editor textarea").expanding();
+        });
+    });
 });
