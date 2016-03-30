@@ -469,6 +469,18 @@ return [
         'ko' => '브라우저 제목으로 사용될 문구를 입력하세요',
         'en' => 'Input browser title.'
     ],
+    'metaTag' => [
+        'ko' => '메타태그',
+        'en' => 'Meta Tag'
+    ],
+    'inputSiteKeyword' => [
+        'ko' => '사이트 키워드를 입력하세요',
+        'en' => 'Input site keyword'
+    ],
+    'inputSiteDescription' => [
+        'ko' => '사이트 설명을 입력하세요',
+        'en' => 'Input site description'
+    ],
     'title' => [
         'ko' => '제목',
         'en' => 'Title',
@@ -1243,5 +1255,17 @@ return [
     'inputTitle' => [
         'ko' => '제목을 입력하세요.',
         'en' => 'Please input title.',
+    ],
+    'owner' => [
+        'ko' => '소유자',
+        'en' => 'Owner',
+    ],
+    'info' => [
+        'ko' => '정보',
+        'en' => 'Information',
+    ],
+    'inputSourceAddress' => [
+        'ko' => '출처 표기 시 :name 주소를 입력하세요',
+        'en' => 'Input :name address',
     ],
 ];

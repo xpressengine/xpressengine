@@ -12,16 +12,14 @@ var LangEditorBox = React.createClass({
     render: function () {
         LangEditor.seq++;
         return (
-            <div className="lang-editor">
-                <LangEditor
-                    key={LangEditor.seq}
-                    seq={LangEditor.seq}
-                    name={this.state.name}
-                    langKey={this.state.langKey}
-                    multiline={this.state.multiline}
-                    lines = {this.state.lines}
-                    />
-            </div>
+            <LangEditor
+                key={LangEditor.seq}
+                seq={LangEditor.seq}
+                name={this.state.name}
+                langKey={this.state.langKey}
+                multiline={this.state.multiline}
+                lines = {this.state.lines}
+                />
         );
     }
 });
@@ -79,22 +77,22 @@ var LangEditor = React.createClass({
             });
         }
     },
-    getFlagClass: function (locale) {
-        var code = XE.Lang.getLangCode(locale),
-            arr = code.split('-'),
-            keyword = arr[1].toLowerCase();
-
-        return 'flag ' + keyword;
-    },
+    // getFlagClass: function (locale) {
+    //     var code = XE.Lang.getLangCode(locale),
+    //         arr = code.split('-'),
+    //         keyword = arr[1].toLowerCase();
+    //
+    //     return 'flag ' + keyword;
+    // },
     getEditor: function (resource, locale, value) {
         var edit = null,
             id = ('input-' + this.props.seq + '-' + locale),
             name = (resource + '/locale/' + locale);
 
         if (!this.props.multiline) {
-            edit = <input type="text" className="xe-input-text" id={id} name={name} defaultValue={value} />;
+            edit = <input type="text" className="form-control" id={id} name={name} defaultValue={value} />;
         } else {
-            edit = <textarea id={id} name={name} defaultValue={value} />;
+            edit = <textarea className="form-control" id={id} name={name} defaultValue={value} />;
         }
         return edit;
     },
@@ -117,22 +115,24 @@ var LangEditor = React.createClass({
                 <input type="hidden" name={resource + '/key'} defaultValue={this.props.langKey} />
                 {multiline}
                 <input type="hidden" name={this.props.name} defaultValue={this.props.langKey} />
-                <div className="main">
-                    <div className="inpt_bd">
-                        {self.getEditor(resource, locale, value)}
-                        <span className="flag_code"><i className={self.getFlagClass(locale)}></i>{locale}</span>
-                    </div>
+                <div key={locale} className="input-group">
+                    {self.getEditor(resource, locale, value)}
+                            <span className="input-group-addon">
+                                <span className="flag-code"><i className={locale + ' flag'}></i>{locale}</span>
+                            </span>
                 </div>
                 <div className="sub">
-                    {fallback.map(function (locale) {
-                        var value = self.getValueFromLinesWithLocale(locale);
-                        return (
-                            <div key={locale} className="inpt_bd">
-                                {self.getEditor(resource, locale, value)}
-                                <span className="flag_code"><i className={self.getFlagClass(locale)}></i>{locale}</span>
-                            </div>
-                        );
-                    })}
+                {fallback.map(function (locale, i) {
+                    var value = self.getValueFromLinesWithLocale(locale);
+                    return (
+                        <div key={locale} className="input-group">
+                            {self.getEditor(resource, locale, value)}
+                            <span className="input-group-addon">
+                                <span className="flag-code"><i className={locale + ' flag'}></i>{locale}</span>
+                            </span>
+                        </div>
+                    );
+                })}
                 </div>
             </div>
         );
@@ -151,19 +151,19 @@ var langEditorBoxRender = function ($o) {
 System.import('xecore:/common/js/xe.bundle').then(function() {
     var $ = XE.$;
     $(function () {
-        console.log(document.documentElement.lang);
         $('.lang-editor-box').each(function(i) {
             langEditorBoxRender($(this));
         });
 
-        $(document).on('focus', '.lang-editor .main input, textarea', function() {
+        $(document).on('focus', '.lang-editor-box input, textarea', function() {
 
-            var el = $(this).closest('.lang-editor').find('.sub');
+            var box = $(this).closest('.lang-editor-box'),
+                el = box.find('.sub');
             if ($(el).is(':hidden')) {
                 $(el).slideDown('fast');
+                // todo: 기능 점검
+                // $(box).find('textarea').expanding();
             }
-
-            $(".lang-editor textarea").expanding();
         });
     });
 });

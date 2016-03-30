@@ -58,6 +58,7 @@ System.config({
     "css": "github:systemjs/plugin-css@0.1.20",
     "jquery": "npm:jquery@2.2.1",
     "jsx": "github:floatdrop/plugin-jsx@1.2.1",
+    "lodash": "npm:lodash@4.6.1",
     "normalize.css": "github:necolas/normalize.css@3.0.3",
     "react": "npm:react@0.13.3",
     "react-dom": "npm:react-dom@0.14.7",
@@ -235,8 +236,7 @@ System.config({
     "npm:core-js@1.2.6": {
       "fs": "github:jspm/nodelibs-fs@0.1.2",
       "path": "github:jspm/nodelibs-path@0.1.0",
-      "process": "github:jspm/nodelibs-process@0.1.2",
-      "systemjs-json": "github:systemjs/plugin-json@0.1.0"
+      "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:core-util-is@1.0.2": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0"
@@ -373,6 +373,10 @@ System.config({
       "fs": "github:jspm/nodelibs-fs@0.1.2",
       "process": "github:jspm/nodelibs-process@0.1.2",
       "source-map": "npm:source-map@0.1.31"
+    },
+    "npm:lodash@4.6.1": {
+      "buffer": "github:jspm/nodelibs-buffer@0.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:miller-rabin@4.0.0": {
       "bn.js": "npm:bn.js@4.11.0",
