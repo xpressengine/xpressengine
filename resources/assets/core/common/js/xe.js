@@ -40,11 +40,11 @@
     };
 
     this.setup = function (options) {
-      this.options.loginUserId = options.loginUserId;
-      this.options.loadedTime = options.loadedTime;
-      this.options.timeLag = options.loadedTime - this.options.nowTime;
+      self.options.loginUserId = options.loginUserId;
+      self.options.loadedTime = options.loadedTime;
+      self.options.timeLag = options.loadedTime - self.options.nowTime;
 
-      this.Request.setup({
+      self.Request.setup({
         headers: {
           'X-CSRF-TOKEN': options['X-CSRF-TOKEN']
         }
@@ -52,7 +52,7 @@
     };
 
     this.configure = function (options) {
-      $.extend(this.options, options);
+      $.extend(self.options, options);
 
     };
 
@@ -104,13 +104,16 @@
           url = undefined;
         }
 
+        console.log(url);
+        console.log(options);
+        $.ajaxSetup(options);
         var jqXHR = $.ajax(url, options);
         return jqXHR;
       };
 
-      $.ajaxPrefilter(function(options, originalOptions, jqXHR ) {
-        $.extend(options, self.Request.options);
-      });
+      // $.ajaxPrefilter(function(options, originalOptions, jqXHR ) {
+      //   $.extend(options, self.Request.options);
+      // });
     }
   };
 
