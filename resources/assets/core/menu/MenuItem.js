@@ -59,7 +59,11 @@ var MenuItem = React.createClass({
     var type = node.type;
     var url = '';
 
-    title = XE.Lang.trans(title);
+    var trans = {
+      title: XE.Lang.trans(title),
+      setHome: XE.Lang.trans('xe::setHome'),
+      goLink: XE.Lang.trans('xe::goLink'),
+    };
 
     if (node.type !== "xpressengine@directLink") {
       if (node.id == this.props.home) {
@@ -92,10 +96,10 @@ var MenuItem = React.createClass({
     var controlElement;
     var selected = this.props.getSelectedNode();
     if (selected == node) {
-      controlElement = <div className="visible-xs more_area" style={{display:"block"}}>
+      controlElement = <div className="visible-xs more-area" style={{display:"block"}}>
         <button className="btn" type="button"
-                onClick={this.onClickHome.bind(null, node)}>{XE.Lang.trans('xe::setHome')}</button>
-        <a href={url} className="btn">{XE.Lang.trans('xe::goLink')}</a>
+                onClick={this.onClickHome.bind(null, node)}>{trans.setHome}</button>
+        <a href={url} className="btn">{trans.goLink}</a>
       </div>;
     }
 
@@ -108,8 +112,8 @@ var MenuItem = React.createClass({
         <div className="item-info">
           <i className="xi-paper"></i>
           <dl>
-            <dt className="sr-only">{title}</dt>
-            <dd className="ellipsis"><a href={nodeUrl}>{title}</a></dd>
+            <dt className="sr-only">{trans.title}</dt>
+            <dd className="ellipsis"><a href={nodeUrl}>{trans.title}</a></dd>
             <dt className="sr-only">{url}</dt>
             <dd className="text-blue ellipsis">
               <a href={url}>{url}</a>

@@ -1,5 +1,5 @@
 <div class="form-group">
-    @if($label = array_get($args, 'label'))<label>{!! $label !!}</label>@endif
+    @if($label = array_get($args, 'label'))<label>{!! $label !!} @if($description = array_get($args, 'description'))<small>{!! $description !!}</small>@endif</label>@endif
     <div class="__xe_filebox_{{ $seq }} clearfix panel panel-default">
         <div class="panel-body">
             <div class="row">
