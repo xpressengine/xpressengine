@@ -26,6 +26,7 @@
   var INSTANCE = null;
 
   var XE = function () {
+    var self = this;
     this.$ = this.jQuery = $;
     this.Lang = XeLang;
     this.Progress = XeProgress;
@@ -96,12 +97,12 @@
     };
 
     if(this.Request) {
-      this.ajax = this.Request.ajax = function(url, options) {
+      self.ajax = self.Request.ajax = function(url, options) {
         if ( typeof url === "object" ) {
-          options = $.extend({}, this.Request.options, url);
+          options = $.extend({}, self.Request.options, url);
           url = undefined;
         } else {
-          options = $.extend({}, options, this.Request.options, {url: url});
+          options = $.extend({}, options, self.Request.options, {url: url});
           url = undefined;
         }
 
@@ -110,7 +111,7 @@
       };
 
       $.ajaxPrefilter(function(options, originalOptions, jqXHR ) {
-        $.extend(options, this.Request.options);
+        $.extend(options, self.Request.options);
       });
     }
   };
