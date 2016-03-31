@@ -91,6 +91,9 @@
                 if (collapsed) {
                     var $form = formProvider.make('create', null, self.onCreate.bind(self));
                     $('.__xe_content_body', $item).empty().append($form);
+                    $form.find('.lang-editor-box').each(function () {
+                        langEditorBoxRender($(this));
+                    });
                     $item.find('.collapse').collapse('show');
                 }
 
@@ -163,10 +166,11 @@
             e.preventDefault();
             var self = this;
             var data = this.serializeObject(form);
-            if (!data.word || $.trim(data.word) == '') {
-                alertBox('warning', XE.Lang.trans('xe::required', {name: XE.Lang.trans('xe::word')}));
-                return false;
-            }
+            // todo: validation 임시 제거
+            // if (!data.word || $.trim(data.word) == '') {
+            //     alertBox('warning', XE.Lang.trans('xe::required', {name: XE.Lang.trans('xe::word')}));
+            //     return false;
+            // }
 
             $('button', form).prop('disabled', true);
 
@@ -205,10 +209,11 @@
                 return false;
             }
 
-            if (!data.word || $.trim(data.word) == '') {
-                alertBox('warning', XE.Lang.trans('xe::required', {name: XE.Lang.trans('xe::word')}));
-                return false;
-            }
+            // todo: validation 임시 제거
+            // if (!data.word || $.trim(data.word) == '') {
+            //     alertBox('warning', XE.Lang.trans('xe::required', {name: XE.Lang.trans('xe::word')}));
+            //     return false;
+            // }
 
             $('button', form).prop('disabled', true);
 
@@ -219,7 +224,8 @@
                 data: data,
                 success: function (node) {
                     var $item = $('#' + itemMaker.makeIdAttr(node.id));
-                    $('> .__xe_item_block .__xe_word', $item).text(node.word);
+                    // $('> .__xe_item_block .__xe_word', $item).text(node.word);
+                    $('> .__xe_item_block .__xe_word', $item).text(node.readableWord);
                     self.repo.set(node);
 
                     self.closeBody($item);
@@ -353,6 +359,9 @@
                 var $form = formProvider.make(action, self.repo.get(id), submitHandler.bind(self), self.onRemove.bind(self));
 
                 $('.__xe_content_body', $(this).closest('.__xe_item_block')).empty().append($form);
+                $form.find('.lang-editor-box').each(function () {
+                    langEditorBoxRender($(this));
+                });
 
 
                 if ($(this).closest('.__xe_item_block').children('.collapse').hasClass('in') !== true) {
@@ -460,7 +469,8 @@
 
             $('<span>').addClass('head-bth __xe_btn_toggle_children')
                     .append($('<i>').addClass('xi-angle-right')).appendTo(header);
-            $('<span>').addClass('__xe_word').text(data.word).appendTo(header);
+            // $('<span>').addClass('__xe_word').text(data.word).appendTo(header);
+            $('<span>').addClass('__xe_word').text(data.readableWord).appendTo(header);
             $('<span>').addClass('pull-right toggle-btns')
                     .append(
                         $('<span>').addClass('head-bth')
@@ -548,12 +558,14 @@
             $('<div>').addClass('form-group')
                 .append($('<label>').addClass('control-label').text(XE.Lang.trans('xe::word')))
                 .append(
-                    $('<input>').addClass('form-control').attr('name', 'word')
+                    $('<div>').addClass('lang-editor-box').data('name', 'word')
+                    // $('<input>').addClass('form-control').attr('name', 'word')
                 ).appendTo($form);
             $('<div>').addClass('form-group')
                 .append($('<label>').addClass('control-label').text(XE.Lang.trans('xe::description')))
                 .append(
-                    $('<textarea>').addClass('form-control').attr('name', 'description')
+                    $('<div>').addClass('lang-editor-box').data('name', 'description').data('multiline', true)
+                    // $('<textarea>').addClass('form-control').attr('name', 'description')
                 ).appendTo($form);
             $('<button>').attr('type', 'submit').addClass('btn btn-primary').text(XE.Lang.trans('xe::save')).appendTo($form);
 
@@ -571,12 +583,14 @@
             $('<div>').addClass('form-group')
                 .append($('<label>').addClass('control-label').text(XE.Lang.trans('xe::word')))
                 .append(
-                    $('<input>').addClass('form-control').attr('name', 'word').val(data.word)
+                    $('<div>').addClass('lang-editor-box').data('name', 'word').data('lang-key', data.word)
+                    // $('<input>').addClass('form-control').attr('name', 'word').val(data.word)
                 ).appendTo($form);
             $('<div>').addClass('form-group')
                 .append($('<label>').addClass('control-label').text(XE.Lang.trans('xe::description')))
                 .append(
-                    $('<textarea>').addClass('form-control').attr('name', 'description').val(data.description)
+                    $('<div>').addClass('lang-editor-box').data('name', 'description').data('lang-key', data.description).data('multiline', true)
+                    // $('<textarea>').addClass('form-control').attr('name', 'description').val(data.description)
                 ).appendTo($form);
             $('<button>').attr('type', 'submit').addClass('btn btn-primary').text(XE.Lang.trans('xe::save')).appendTo($form);
 
