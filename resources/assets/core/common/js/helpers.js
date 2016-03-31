@@ -1,4 +1,4 @@
-System.import('xecore:/common/js/xe.bundle').then(function(XE) {
+System.import('xecore:/common/js/xe.bundle').then(function() {
   // @DEPRECATED
   XE.parseUrl = function (url) {
     if (url == undefined) {
@@ -41,28 +41,30 @@ System.import('xecore:/common/js/xe.bundle').then(function(XE) {
       $(this).text(getShortDate(timeLag)).show();
     });
   };
+
+
+  // @DEPRECATED
+  function getShortDate(timeLag) {
+    if (timeLag > 365 * 86400) {
+      return this.props.data.createdAt.substr(0, 10);
+    }
+    if (timeLag > 30 * 86400) {
+      return parseInt((timeLag / (30 * 86400))).toString() + '개월 전';
+    }
+    if (timeLag > 86400) {
+      return parseInt((timeLag / 86400)).toString() + '일 전';
+    }
+    if (timeLag > 3600) {
+      return parseInt((timeLag / 3600)).toString() + '시간 전';
+    }
+    if (timeLag > 60) {
+      return parseInt((timeLag / 60)).toString() + '분 전';
+    }
+
+    return timeLag.toString() + '초 전';
+  }
 });
 
-// @DEPRECATED
-function getShortDate(timeLag) {
-  if (timeLag > 365 * 86400) {
-    return this.props.data.createdAt.substr(0, 10);
-  }
-  if (timeLag > 30 * 86400) {
-    return parseInt((timeLag / (30 * 86400))).toString() + '개월 전';
-  }
-  if (timeLag > 86400) {
-    return parseInt((timeLag / 86400)).toString() + '일 전';
-  }
-  if (timeLag > 3600) {
-    return parseInt((timeLag / 3600)).toString() + '시간 전';
-  }
-  if (timeLag > 60) {
-    return parseInt((timeLag / 60)).toString() + '분 전';
-  }
-
-  return timeLag.toString() + '초 전';
-}
 
 // @DEPRECATED
 function alertBox(type, message)
