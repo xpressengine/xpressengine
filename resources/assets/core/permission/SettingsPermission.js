@@ -225,10 +225,6 @@ var Permission = React.createClass({
         return (
             <div>
                 <p>
-                    <h4>{permissionTitle}</h4>
-                </p>
-                {modeUI}
-                <p>
                     <label>
                         Rating &nbsp;
                         <i className="fa fa-info-circle" data-toggle="popover" data-content="권한의 등급을 설정합니다."

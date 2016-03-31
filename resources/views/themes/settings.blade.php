@@ -110,7 +110,7 @@
             <div class="title-area container-fluid">
                 @section('page_head')
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-12">
                         @yield('page_title', '<h2>'.xe_trans(data_get($selectedMenu ? $selectedMenu->getParent() : [], 'title', 'xe::inputTitle')).'</h2>')
                         @yield('page_description', '<small>'.xe_trans(data_get($selectedMenu ? $selectedMenu->getParent() : [], 'description', 'xe::inputTitle')).'</small>')
                     </div>
