@@ -82,6 +82,18 @@ return [
                 'description' => '',
                 'ordering' => 200
             ],
+            'member.group.create' => [
+                'title' => '새그룹 추가',
+                'description' => '',
+                'display' => false,
+                'ordering' => 100
+            ],
+            'member.group.edit' => [
+                'title' => '그룹 수정',
+                'description' => '',
+                'display' => false,
+                'ordering' => 200
+            ],
             'member.setting' => [
                 'title' => 'xe::settings',
                 'description' => '',
