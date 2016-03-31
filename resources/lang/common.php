@@ -401,6 +401,10 @@ return [
         'ko' => '문서',
         'en' => 'Document',
     ],
+    'user' => [
+        'ko' => '회원',
+        'en' => 'User',
+    ],
     'userId' => [
         'ko' => '회원 아이디',
         'en' => 'User ID',
@@ -1267,5 +1271,13 @@ return [
     'inputSourceAddress' => [
         'ko' => '출처 표기 시 :name 주소를 입력하세요',
         'en' => 'Input :name address',
+    ],
+    'shortcut' => [
+        'ko' => '바로가기',
+        'en' => 'Shortcut',
+    ],
+    'noMenu' => [
+        'ko' => '등록된 메뉴가 없습니다.',
+        'en' => 'There is no menu.',
     ],
 ];
