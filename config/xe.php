@@ -167,7 +167,7 @@ return [
                 'ordering' => 100
             ],
             'setting.permission' => [
-                'title' => 'xe::managerPagePermissionSettings',
+                'title' => 'xe::settingsPermissionSettings',
                 'display' => true,
                 'description' => '',
                 'ordering' => 200

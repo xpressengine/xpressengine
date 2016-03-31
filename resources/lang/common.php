@@ -1236,9 +1236,9 @@ return [
         'ko' => '플러그인 상세',
         'en' => 'Plugin Details',
     ],
-    'managerPagePermissionSettings' => [
-        'ko' => '관리자 페이지 권한 설정',
-        'en' => 'Manager page permission settings',
+    'settingsPermissionSettings' => [
+        'ko' => '관리페이지 권한 설정',
+        'en' => 'Settings page permission settings',
     ],
     'SEOSettings' => [
         'ko' => 'SEO 설정',
