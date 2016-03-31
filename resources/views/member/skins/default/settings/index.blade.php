@@ -13,7 +13,7 @@
                         </button>
                         <p>계정설정</p>
                     </div>
-                    <ul class="sub-list">
+                    <ul class="snb-list">
                         @foreach($menus as $id => $menu)
                             <li class="@if(array_get($menu, 'selected', false))on @endif">
                                 <a href="{{ route('member.settings', ['section'=>$id]) }}">{{ $menu['title'] }}</a>

@@ -42,21 +42,24 @@ class SettingsSkin extends BladeSkin
      */
     public function render()
     {
-        app('xe.frontend')->css('assets/core/xe-ui-component/xe-ui-component.css')->load();
-        app('xe.frontend')->js('assets/core/member/snb.js')->load();
-
+        app('xe.frontend')->css(
+            [
+                'assets/core/xe-ui-component/xe-ui-component.css',
+                'assets/core/member/setting.css'
+            ]
+        )->load();
+        app('xe.frontend')->js(
+            [
+                'assets/core/member/snb.js',
+                'assets/core/member/settings.js'
+            ]
+        )->load();
         return parent::render();
     }
 
     public function edit($view)
     {
         $useEmailConfirm = app('xe.user')->usingEmailConfirm();
-
-        app('xe.frontend')->css('assets/core/member/setting.css')->load();
-
-        app('xe.frontend')->js(
-            'assets/core/member/settings.js'
-        )->load();
 
         app('xe.frontend')->html('member.settings.loadScript')->content(
             "<script>
