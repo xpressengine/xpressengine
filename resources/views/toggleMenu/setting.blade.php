@@ -45,7 +45,7 @@
                         <button type="submit" class="btn btn-primary"><i class="xi-download"></i>{{ xe_trans('xe::save') }}</button>
                     </div>
                 </p>
-                
+
             </div>
             <div class="col-sm-1">&nbsp;</div>
         </div>
