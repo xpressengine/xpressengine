@@ -41,7 +41,8 @@
   padding: 0 5%;
   text-align: center;
 }
-.xe-profile .profile_img img {
+.xe-profile .profile_img img,
+.xe-profile .profile_img canvas {
   border-radius: 50%;
 }
 .xe-profile .inpt_nick {
@@ -186,7 +187,7 @@
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  content: "\e72c";
+  content: "\ea4a";
   color: #fff;
   font-size: 54px;
 }
@@ -312,7 +313,4 @@
   .xe-profile {
     padding: 0;
   }
-  .profile_wrap .xe-col-sm-6 {
-    margin-bottom: 0;
-  }
-}
+  .profile_wrap .xe-col-sm
