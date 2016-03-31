@@ -122,17 +122,6 @@ class UserController extends Controller
         $content = $selectedSection['content'];
         $tabContent = $content instanceof \Closure ? $content($user) : $content;
 
-        app('xe.frontend')->css(
-            [
-                'assets/core/common/css/grid.css',
-                'assets/core/common/css/form.css',
-                'assets/core/member/setting.css',
-                'assets/core/common/css/dropdown.css',
-            ]
-        )->load();
-
-        app('xe.frontend')->js('assets/core/member/snb.js')->load();
-
         return XePresenter::make('index', compact('user', 'menus', 'tabContent'));
     }
 
@@ -568,37 +557,6 @@ class UserController extends Controller
         // password configuration
         $passwordConfig = app('config')->get('xe.user.password');
         $passwordLevel = array_get($passwordConfig['levels'], $passwordConfig['default']);
-
-        $useEmailConfirm = $this->handler->usingEmailConfirm();
-
-        app('xe.frontend')->js('assets/core/member/settings.js')->load();
-
-        app('xe.frontend')->html('member.settings.loadScript')->content(
-            "<script>
-            $(function () {
-                $('.__xe_setting.__xe_settingDisplayName').xeDisplayNameSetting({
-                    checkUrl: '".route('member.settings.name.check')."',
-                    saveUrl: '".route('member.settings.name.update')."'
-                });
-                $('.__xe_setting.__xe_settingPassword').xePasswordSetting({
-                    checkUrl: '".route('member.settings.password.check')."',
-                    saveUrl: '".route('member.settings.password.update')."'
-                });
-                $('.__xe_setting.__xe_settingEmail').xeEmailSetting({
-                    addUrl: '".route('member.settings.mail.add')."',
-                    saveUrl: '".route('member.settings.mail.update')."',
-                    deleteUrl: '".route('member.settings.mail.delete')."',
-                    confirmUrl: '".route('member.settings.mail.confirm')."',
-                    deletePendingUrl: '".route('member.settings.pending_mail.delete')."',
-                    resendPendingUrl: '".route('member.settings.pending_mail.resend')."',
-                    useEmailConfirm: ".($useEmailConfirm ? 'true' : 'false')."
-                });
-                $('.__xe_setting.__xe_settingLeave').xeLeaveSetting({
-                    saveUrl: '".route('member.settings.leave')."'
-                });
-            });
-            </script>"
-        )->appendTo('body')->load();
 
         /** @var SkinHandler $skinHandler */
         $skinHandler = app('xe.skin');

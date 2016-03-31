@@ -8,9 +8,9 @@ $(function ($) {
 
     Setting.DEFAULTS = {
         siblings: '.__xe_setting',
-        indicator: '.setting_group',
+        indicator: '.setting-group',
         editBtn: '.__xe_editBtn',
-        editor: '.setting_detail',
+        editor: '.setting-detail',
         cancelBtn: '.__xe_cancelBtn',
         saveBtn: '.__xe_saveBtn',
     };
@@ -615,7 +615,7 @@ $(function () {
 $(function () {
 
     // menu toggle
-    $('.xo-menu-toggle').click(function () {
+    $('.xe-menu-toggle').click(function () {
         $('.snb-list').toggle();
     });
 

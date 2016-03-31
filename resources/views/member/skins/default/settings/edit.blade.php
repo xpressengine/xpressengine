@@ -70,13 +70,12 @@
 
             @endif
 
-            <div class="btn_group_all">
+            <div class="xe-btn-group-all">
                 <button class="__xe_saveBtn xe-btn xe-btn-blue">{{ xe_trans('xe::applyModified') }}</button>
                 <button class="__xe_cancelBtn xe-btn xe-btn-gray">{{ xe_trans('xe::cancel') }}</button>
             </div>
         </div>
     </div>
-
 
     <div class="__xe_setting __xe_settingDisplayName" data-origin-name="{{ $user->getDisplayName() }}" data-init-name="{{ old('name', $user->getDisplayName()) }}">
         <div class="setting-group">
@@ -95,7 +94,7 @@
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <em class="__xe_message text-message">{{ xe_trans('xe::isYourCurrentName') }}</em>
             </div>
-            <div class="btn_group_all">
+            <div class="xe-btn-group-all">
                 <button class="__xe_saveBtn xe-btn xe-btn-blue">{{ xe_trans('xe::applyModified') }}</button>
                 <button class="__xe_cancelBtn xe-btn xe-btn-gray">{{ xe_trans('xe::cancel') }}</button>
             </div>
@@ -138,7 +137,7 @@
                     <p class="text-message">&nbsp;</p>
                 </div>
             </div>
-            <div class="btn_group_all">
+            <div class="xe-btn-group-all">
                 <button class="__xe_saveBtn xe-btn xe-btn-blue">{{ xe_trans('xe::applyModified') }}</button>
                 <button class="__xe_cancelBtn xe-btn xe-btn-gray">{{ xe_trans('xe::cancel') }}</button>
             </div>
@@ -181,7 +180,7 @@
                         <em class="text-message __xe_message">&nbsp;</em>
                     </div>
                 </div>
-                <div class="btn_group_all">
+                <div class="xe-btn-group-all">
                     <button class="__xe_saveBtn xe-btn xe-btn-blue">{{ xe_trans('xe::applyModified') }}</button>
                     <button class="__xe_cancelBtn xe-btn xe-btn-gray">{{ xe_trans('xe::cancel') }}</button>
                 </div>
