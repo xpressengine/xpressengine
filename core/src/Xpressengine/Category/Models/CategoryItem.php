@@ -47,11 +47,11 @@ class CategoryItem extends Node
     protected $hierarchyTable = 'category_item_hierarchy';
 
     /**
-     * protected property when update
+     * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $guarded = ['id', 'categoryId'];
+    protected $fillable = ['parentId', 'word', 'description'];
 
     /**
      * Node group relationship

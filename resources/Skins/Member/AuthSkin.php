@@ -60,9 +60,9 @@ class AuthSkin extends BladeSkin
             ]
         )->load();
 
-        \XeFrontend::js('assets/vendor/bootstrap/js/bootstrap.js')
-            ->min('assets/vendor/bootstrap/js/bootstrap.min.js')
-            ->appendTo('head')
-            ->load();
+        // \XeFrontend::js('assets/vendor/bootstrap/js/bootstrap.js')
+        //     ->min('assets/vendor/bootstrap/js/bootstrap.min.js')
+        //     ->appendTo('head')
+        //     ->load();
     }
 }

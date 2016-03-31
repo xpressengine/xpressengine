@@ -305,14 +305,14 @@
 
   var old = $.fn.modal
 
-  $.fn.modal             = Plugin
-  $.fn.modal.Constructor = Modal
+  $.fn.xeModel             = Plugin
+  $.fn.xeModel.Constructor = Modal
 
 
   // MODAL NO CONFLICT
   // =================
 
-  $.fn.modal.noConflict = function () {
+  $.fn.xeModel.noConflict = function () {
     $.fn.modal = old
     return this
   }
