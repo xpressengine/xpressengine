@@ -30,8 +30,7 @@ class GroupController extends Controller
      */
     public function index()
     {
-        $groups = $this->groups->get();
-
+        $groups = $this->groups->orderBy('createdAt')->get();
         return XePresenter::make('member.settings.group.index', compact('groups'));
     }
 

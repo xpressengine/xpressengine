@@ -389,7 +389,7 @@ Route::settings(
         );
 
         // create
-        Route::get('create', ['as' => 'manage.group.create', 'uses' => 'Member\Settings\GroupController@create']);
+        Route::get('create', ['as' => 'manage.group.create', 'uses' => 'Member\Settings\GroupController@create', 'settings_menu' => ['member.group.create']]);
         Route::post('create', ['as' => 'manage.group.create', 'uses' => 'Member\Settings\GroupController@store']);
 
         // edit
@@ -398,6 +398,7 @@ Route::settings(
             [
                 'as' => 'manage.group.edit',
                 'uses' => 'Member\Settings\GroupController@edit',
+                'settings_menu' => ['member.group.edit']
             ]
         )->where('id', '[0-9a-z\-]+');
         Route::post('{id}/edit', ['as' => 'manage.group.edit', 'uses' => 'Member\Settings\GroupController@update'])

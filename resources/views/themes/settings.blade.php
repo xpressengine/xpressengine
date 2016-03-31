@@ -58,47 +58,43 @@
                         @if($top->isSelected() && $top->hasVisibleChild())open @endif
                         @if($top->isSelected() && !$top->hasVisibleChild())on @endif"
                     >
-                        <a href="{{ $top->link() }}">
-                            <i class="{{data_get($top, 'icon', 'xi-paper-stack-o')}}"></i>
-                            {{xe_trans($top->title)}}
-                        </a>
+                        <a href="{{ $top->link()?:'#'}}" @if(!$top->link()) class="__xe_collapseMenu" @endif><i class="{{data_get($top, 'icon', 'xi-bars')}}"></i>{{xe_trans($top->title)}}</a>
+
                         @if($top->hasVisibleChild())
-                            <ul class="sub-depth-list">
+                        <button type="button" class="btn-link toggle __xe_collapseMenu"><i class="xi-angle-right-thin"></i></button>
+                        <ul class="sub-depth-list">
 
-                                {{--loop for middle--}}
-                                @foreach($top->getChildren() as $midId => $middle)
-                                    @if(data_get($middle, 'display', true))
+                            {{--loop for middle--}}
+                            @foreach($top->getChildren() as $midId => $middle)
+                                @if(data_get($middle, 'display', true))
 
-                                        {{-- depth 2 --}}
-                                        <li class="@if($middle->hasVisibleChild())sub-depth @endif @if($middle->isSelected() && $middle->hasVisibleChild())open @endif @if($middle->isSelected() && !$middle->hasVisibleChild())on @endif">
-                                            <a href="{{ $middle->link() }}">
-                                                {{xe_trans($middle->title)}}
-                                            </a>
-                                            @if($middle->hasVisibleChild())
-                                                <ul class="sub-depth-list">
+                                    {{-- depth 2 --}}
+                                    <li class="@if($middle->hasVisibleChild())sub-depth @endif @if($middle->isSelected() && $middle->hasVisibleChild())open @endif @if($middle->isSelected() && !$middle->hasVisibleChild())on @endif">
+                                        <a href="{{ $middle->link()?:'#' }}" @if(!$middle->link()) class="__xe_collapseMenu" @endif>
+                                            {{xe_trans($middle->title)}}
+                                        </a>
+                                        @if($middle->hasVisibleChild())
+                                        <button type="button" class="btn-link toggle __xe_collapseMenu"><i class="xi-angle-right-thin"></i></button>
+                                        <ul class="sub-depth-list">
+                                            {{--loop for bottom--}}
+                                            @foreach($middle->getChildren() as $bottomId => $bottom)
+                                                @if(data_get($bottom, 'display', true))
 
+                                                    {{-- depth 3 --}}
+                                                    <li @if($bottom->isSelected())class="on" @endif>
+                                                        <a href="{{ $bottom->link()?:'#' }}">
+                                                            {{xe_trans($bottom->title)}}
+                                                        </a>
+                                                    </li>
+                                                @endif
+                                            @endforeach
+                                        </ul>
+                                        @endif
+                                    </li>
+                                @endif
+                            @endforeach
 
-                                                    {{--loop for bottom--}}
-                                                    @foreach($middle->getChildren() as $bottomId => $bottom)
-                                                        @if(data_get($bottom, 'display', true))
-
-                                                            {{-- depth 3 --}}
-                                                            <li @if($bottom->isSelected())class="on" @endif>
-                                                                <a href="{{ $bottom->link() }}">
-                                                                    {{xe_trans($bottom->title)}}
-                                                                </a>
-                                                            </li>
-                                                        @endif
-                                                    @endforeach
-
-
-                                                </ul>
-                                            @endif
-                                        </li>
-                                    @endif
-                                @endforeach
-
-                            </ul>
+                        </ul>
                         @endif
                     </li>
                 @endif
@@ -110,7 +106,7 @@
             <div class="title-area container-fluid">
                 @section('page_head')
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-12">
                         @yield('page_title', '<h2>'.xe_trans(data_get($selectedMenu ? $selectedMenu->getParent() : [], 'title', 'xe::inputTitle')).'</h2>')
                         @yield('page_description', '<small>'.xe_trans(data_get($selectedMenu ? $selectedMenu->getParent() : [], 'description', 'xe::inputTitle')).'</small>')
                     </div>
