@@ -54,8 +54,9 @@
 
 <script type="text/javascript">
     $(function() {
-        $("#__xe_toggleMenu_{{$typeIdable}}_{{$instanceId}}.__xe_sortable_items").sortable({handle: ".xi-bullet-point"});
-        $("#__xe_toggleMenu_{{$typeIdable}}_{{$instanceId}}.__xe_sortable_items").disableSelection();
+
+        $("#__xe_toggleMenu_{{$typeIdable}}_{{$instanceId}} .__xe_sortable_items").sortable({handle: ".xi-bullet-point"});
+        $("#__xe_toggleMenu_{{$typeIdable}}_{{$instanceId}} .__xe_sortable_items").disableSelection();
 
         $('#__xe_toggleMenu_{{$typeIdable}}_{{$instanceId}}').submit(function () {
             $('<input>').attr('type', 'hidden').attr('name', 'redirect').val(location.href).appendTo(this);
