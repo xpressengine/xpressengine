@@ -2,6 +2,7 @@
 namespace Xpressengine\Migrations;
 
 use Xpressengine\Support\Migration;
+use XeLang;
 
 class ThemeMigration implements Migration
 {

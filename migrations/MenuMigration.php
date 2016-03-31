@@ -3,6 +3,7 @@ namespace Xpressengine\Migrations;
 
 use Illuminate\Database\Schema\Blueprint;
 use Schema;
+use XeLang;
 use Xpressengine\Menu\MenuHandler;
 use Xpressengine\Menu\Models\Menu;
 use Xpressengine\Menu\Models\MenuItem;
@@ -101,10 +102,19 @@ class MenuMigration implements Migration {
         /** @var MenuHandler $menuHandler */
         $menuHandler = app('xe.menu');
 
+        $menuTitle = XeLang::genUserKey();
+        foreach (XeLang::getLocales() as $locale) {
+            $value = "홈";
+            if ($locale != 'ko') {
+                $value = "Home";
+            }
+            XeLang::save($menuTitle, $locale, $value, false);
+        }
+
         $inputs = [
             'menuId' => $mainMenu->id,
             'parentId' => null,
-            'title' => '홈',
+            'title' => $menuTitle,
             'url' => 'home',
             'description' => 'home',
             'target' => '_blank',
@@ -147,10 +157,19 @@ class MenuMigration implements Migration {
         /** @var MenuHandler $menuHandler */
         $menuHandler = app('xe.menu');
 
+        $menuTitle = XeLang::genUserKey();
+        foreach (XeLang::getLocales() as $locale) {
+            $value = "게시판";
+            if ($locale != 'ko') {
+                $value = "Board";
+            }
+            XeLang::save($menuTitle, $locale, $value, false);
+        }
+
         $inputs = [
             'menuId' => $mainMenu->id,
             'parentId' => null,
-            'title' => '게시판',
+            'title' => $menuTitle,
             'url' => 'board1',
             'description' => 'board1',
             'target' => '_blank',
