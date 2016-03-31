@@ -28,7 +28,7 @@
 
 /*reset, helper class*/
 
-.logo-area h1, aside ul, header .right-menu ul, aside .list-title, .title-area h2, .title-area .title-bottom ul {
+.logo-area h1, aside ul, header .right-menu ul, aside .list-title, .title-area h2, .title-area .tit_bottom ul {
   margin: 0;
   padding: 0;
 }
@@ -40,7 +40,7 @@
   }
 }
 
-.panel .panel-heading .text-title, .locate ul{
+.panel .panel-heading .txt_tit, .locate ul{
   margin: 0;
   padding: 0;
 }
@@ -53,7 +53,7 @@ aside ul li a, .right-menu ul a, .theme_con .theme_active + table a, .title-area
   list-style: none;
 }
 
-aside ul li em, .item .item-content dd.txt_blue em {
+aside ul li em, .item .item_cont dd.txt_blue em {
   font-style: normal;
 }
 
@@ -288,13 +288,16 @@ aside {
     }
     > li a {
       height: 48px;
-      padding: 0 16px 0 24px;
+      padding: 0 54px 0 24px;
       line-height: 48px;
       vertical-align: middle;
       background-color: #2A2A2A;
       font-size: 14px;
       color: #b5b7bd;
     }
+  }
+  .sub-depth{
+    position: relative;
   }
   .sub-depth.open .sub-depth-list > li.on a {
     background-color: #6F8DFF;
@@ -306,25 +309,24 @@ aside {
         color: #696e7a;
       }
       &.sub-depth {
-        > a:after {
+        >.btn-link.toggle{
           position: absolute;
-          right: 30px;
-          top: 50%;
-          width: 8px;
-          height: 8px;
-          margin-top: -6px;
-          border-right: 1px solid #b5b7bd;
-          border-bottom: 1px solid #b5b7bd;
-          -webkit-transform: rotate(-45deg);
-          transform: rotate(-45deg);
-          content: "";
+          top: 0;
+          right: 0;
+          width: 48px;
+          height: 48px;
+          padding-right: 15px;
+          color:#b5b7bd;
+          font-size:15px;
           -webkit-transition: all 0.3s ease;
           transition: all 0.3s ease;
+          outline:none;
+          z-index: 5;
         }
-        &.open > a:after {
-          -webkit-transform: rotate(45deg);
-          transform: rotate(45deg);
-          margin-top: -5px;
+
+        &.open>.btn-link.toggle i{
+          -webkit-transform: rotate(90deg);
+          transform: rotate(90deg);
         }
       }
       ul.sub-depth-list {
@@ -387,7 +389,7 @@ aside {
     position: relative;
     padding: 24px;
   }
-  .title-bottom {
+  .tit_bottom {
     margin: 24px -24px 0;
     padding: 15px 24px 0;
     border-top: 1px solid #e4e4e4;
@@ -417,7 +419,7 @@ aside {
       margin-right: 18px;
       color: #8E8E93;
     }
-    small {
+    +small {
       display: block;
       margin-top: 4px;
       font-size: 14px;

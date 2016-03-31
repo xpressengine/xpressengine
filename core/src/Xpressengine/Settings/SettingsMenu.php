@@ -79,7 +79,7 @@ class SettingsMenu extends Entity implements NodeInterface, JsonSerializable
     public function link()
     {
         if ($this->display === false) {
-            return '#';
+            return null;
         }
 
         // menu에 링크 정보가 있을 경우
@@ -93,7 +93,7 @@ class SettingsMenu extends Entity implements NodeInterface, JsonSerializable
 
         // 어떤 링크정보도 찾을 수 없으면 #
         if ($this->route === null) {
-            return '#';
+            return null;
         }
 
         // route 정보 사용

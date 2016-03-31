@@ -50,10 +50,10 @@
     });
 
     /* 사이드바 메뉴 */
-    $(document).on('click', function (event) {
-      var $target = $(event.target);
+    $('.snb-list').on('click', '.__xe_collapseMenu', function (event) {
+      var $target = $(this);
       var $subdepth = $target.parent('.sub-depth');
-      var $ul = $($target).next('.sub-depth-list');
+      var $ul = $target.siblings('.sub-depth-list');
 
       if ($ul.is(':visible')) {
         $ul.find('.sub-depth-list').slideUp('fast');
@@ -69,6 +69,8 @@
         $ul.slideDown('fast');
         $subdepth.addClass('open');
       }
+
+      return false;
     });
   });
 }));

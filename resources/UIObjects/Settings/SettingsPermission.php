@@ -35,7 +35,7 @@ class SettingsPermission extends AbstractUIObject
         $settings = [];
         $content = uio('permission', [
             'mode' => 'manual',
-            'title' => $title,
+            'title' => 'access',
             'grant' => $this->getGrant($permission['access']),
             'groups' => $groups
         ]);
@@ -44,7 +44,7 @@ class SettingsPermission extends AbstractUIObject
 
         XeFrontend::js('/assets/core/permission/Permission.js')->unload();
         XeFrontend::js('/assets/core/permission/SettingsPermission.js')->type('text/jsx')->load();
-        
+
         return parent::render();
     }
 
@@ -67,10 +67,7 @@ class SettingsPermission extends AbstractUIObject
     private function generateBox($title, $content)
     {
         return "<div class=\"form-group\">
-    <label>$title</label>
-    <div class=\"well\">
         $content
-    </div>
 </div>";
     }
 }

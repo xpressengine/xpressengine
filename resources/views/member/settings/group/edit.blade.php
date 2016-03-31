@@ -1,31 +1,32 @@
-
-@section('page_title')
-    <h2>그룹수정</h2>
-@endsection
-
-@section('page_description')
-    그룹을 수정하는 페이지 입니다.
-@endsection
-
-<div class="container">
-    <form class="form-horizontal" name="fGroupCreate" method="post" action="{{ route('manage.group.edit', ['id' => $group->id]) }}">
-        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-        <div class="form-group">
-            <label for="inputName" class="col-sm-2 control-label">Name</label>
-            <div class="col-sm-10">
-                <input type="text" name="name" class="form-control" id="inputName" placeholder="Group name" value="{{ $group->name }}">
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel-group">
+            <div class="panel">
+                <form name="fGroupCreate" method="post" action="{{ route('manage.group.edit', ['id' => $group->id]) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <div class="panel-heading">
+                        <div class="pull-left">
+                            <h3 class="panel-title">그룹 수정</h3>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                {!! uio('formText', ['label'=>'그룹명', 'placeholder'=>'이름을 입력하세요', 'value'=>$group->name, 'name'=>'name']) !!}
+                            </div>
+                            <div class="col-sm-12">
+                                {!! uio('formTextarea', ['label'=>'소개글', 'placeholder'=>'설명을 작성해 주세요', 'value'=>$group->description, 'name'=>'description']) !!}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="pull-right">
+                            <a href="{{ route('manage.group.index') }}" class="btn btn-default">취소</a>
+                            <button type="submit" class="btn btn-primary"><i class="xi-download"></i>저장</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
-        <div class="form-group">
-            <label for="inputDesc" class="col-sm-2 control-label">Description</label>
-            <div class="col-sm-10">
-                <input type="text" name="description" class="form-control" id="inputDesc" placeholder="Description" value="{{ $group->description }}">
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-primary">등록</button>
-            </div>
-        </div>
-    </form>
+    </div>
 </div>

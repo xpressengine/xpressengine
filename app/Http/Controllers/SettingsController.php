@@ -102,9 +102,19 @@ class SettingsController extends Controller
 
     public function updatePermission(PermissionHandler $permissionHandler, Request $request, $permissionId)
     {
-        $permissionHandler->register($permissionId,$this->createAccessGrant($request->only([
-            'accessRating', 'accessGroup', 'accessUser', 'accessExcept'
-        ])));
+        $permissionHandler->register(
+            $permissionId,
+            $this->createAccessGrant(
+                $request->only(
+                    [
+                        'accessRating',
+                        'accessGroup',
+                        'accessUser',
+                        'accessExcept'
+                    ]
+                )
+            )
+        );
 
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => '저장되었습니다.']);
     }
