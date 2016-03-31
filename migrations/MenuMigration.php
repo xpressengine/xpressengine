@@ -255,7 +255,7 @@ class MenuMigration implements Migration {
 					<h2>WELCOME</h2>
 					<strong>There are a million reasons to use XE3.</strong>
 					<p>XpressEngine은 자유로운 웹 콘텐츠 발행을 돕는 CMS입니다. Laravel framework 기반의 XE3는 다양한 번들 시스템으로 빠른 피드백을 제공하고 유연한 확장성을 자랑합니다.</p>
-					<a href="#" class="link-info">안내 페이지 바로가기</a>
+					<a href="http://xpressengine.io/features" class="link-info">안내 페이지 바로가기</a>
 				</div>
 			</div>
 			<div class="content theme">
@@ -334,7 +334,7 @@ class MenuMigration implements Migration {
 								<i class="xi-home-o"></i>
 								<dl>
 									<dt>사이트 기본 설정</dt>
-									<dd>홈페이지 기본 설정을 변경해 보세요.<br><a href="#">관리 > 설정 > 사이트 기본설정</a>에서 사이트 제목을 설정할 수 있습니다.</dd>
+									<dd>홈페이지 기본 설정을 변경해 보세요.<br><a href="'.route('settings.setting.edit').'">사이트관리 > 설정 > 사이트 기본설정</a>에서 사이트 제목을 설정할 수 있습니다.</dd>
 								</dl>
 							</div>
 						</div>
@@ -343,7 +343,7 @@ class MenuMigration implements Migration {
 								<i class="xi-laptop"></i>
 								<dl>
 									<dt>초기화면 바꾸기</dt>
-									<dd>사이트 홈을 설정해 보세요.<br>하단의 <a href="#">페이지 관리자 바로가기</a>에서 설정을 변경할 수 있습니다.</dd>
+									<dd>사이트 홈을 설정해 보세요.<br><a href="'.route('settings.menu.index').'">사이트관리 > 사이트맵 > 사이트 메뉴 편집</a>에서 홈을 설정합니다.</dd>
 								</dl>
 							</div>
 						</div>
@@ -354,7 +354,7 @@ class MenuMigration implements Migration {
 								<i class="xi-sitemap-o"></i>
 								<dl>
 									<dt>메뉴 구조 구성하기</dt>
-									<dd>메뉴를 만들어 사이트맵을 구성해 보세요.<br><a href="#">관리 > 사이트맵 > 사이트 메뉴 편집</a>에서 메뉴를 설정합니다.</dd>
+									<dd>메뉴를 만들어 사이트맵을 구성해 보세요.<br><a href="'.route('settings.menu.index').'">사이트관리 > 사이트맵 > 사이트 메뉴 편집</a>에서 메뉴를 설정합니다.</dd>
 								</dl>
 							</div>
 						</div>
@@ -363,7 +363,7 @@ class MenuMigration implements Migration {
 								<i class="xi-windows-text"></i>
 								<dl>
 									<dt>테마 디자인 변경하기</dt>
-									<dd>XE3는 별도의 테마 디자인을 제공합니다. 레이아웃 디자인은 <a href="#">관리 > 설정 > 사이트 기본설정</a>에서 변경할 수 있습니다. </dd>
+									<dd>XE3는 별도의 테마 디자인을 제공합니다. 레이아웃 디자인은 <a href="'.route('settings.setting.edit').'">사이트관리 > 설정 > 사이트 기본설정</a>에서 변경할 수 있습니다. </dd>
 								</dl>
 							</div>
 						</div>
@@ -373,8 +373,8 @@ class MenuMigration implements Migration {
 							<div class="start-guide">
 								<i class="xi-plus-circle-o"></i>
 								<dl>
-									<dt>플러그인 추가하기</dt>
-									<dd><a href="#">자료실</a>에서 플러그인을 설치하여 사이트를 풍성하게 만들어 보세요. 플러그인은 <a href="#">관리>플러그인>플러그인 목록</a>에서 설정할 수 있습니다.</dd>
+									<dt>플러그인 관리하기</dt>
+									<dd><a href="#">자료실</a>에서 플러그인을 설치하여 사이트를 풍성하게 만들어 보세요. 플러그인은 <a href="'.route('settings.plugins').'">사이트관리 > 플러그인 > 플러그인 목록</a>에서 설정할 수 있습니다.</dd>
 								</dl>
 							</div>
 						</div>
@@ -383,7 +383,7 @@ class MenuMigration implements Migration {
 								<i class="xi-lock"></i>
 								<dl>
 									<dt>관리페이지 권한 설정하기</dt>
-									<dd>설치된 사이트 관리 권한을 설정하세요. 사이트의 관리 권한 설정은 <a href="#">설정>관리페이지 권한 설정</a>에서 수정할 수 있습니다.</dd>
+									<dd>사이트의 관리 권한을 설정하세요. 사이트의 관리 권한 설정은 <a href="'.route('settings.setting.permissions').'">사이트관리 > 설정 > 관리페이지 권한 설정</a>에서 수정할 수 있습니다.</dd>
 								</dl>
 							</div>
 						</div>
@@ -394,7 +394,7 @@ class MenuMigration implements Migration {
 				<div class="involve-inner xe-container">
 					<h2>Get involved</h2>
 					<p>XpressEngine3는 많은사람들이 함께 만들어가는 오픈소스 프로젝트입니다.<br>GitHub Project에서 개발 현황을 살펴보고 개발에 참여해보세요  </p>
-					<a href="#">GitHub Project</a>
+					<a href="https://github.com/xpressengine/xpressengine">GitHub Project</a>
 				</div>
 			</div>
 			<div class="content support">
@@ -413,7 +413,7 @@ class MenuMigration implements Migration {
 											<dt>XE Forum Chat</dt>
 											<dd>XE 오픈소스 프로젝트 참여자 간 실시간 정보 교환을 할 수 있는 Slack 채널입니다.</dd>
 										</dl>
-										<a href="#">XE Slack 바로가기</a>
+										<a href="https://xeforum.slack.com/">XE Slack 바로가기</a>
 									</div>
 								</div>
 							</div>
@@ -428,7 +428,7 @@ class MenuMigration implements Migration {
 											<dt>XE Facebook Group</dt>
 											<dd>XE 자료를 만들고 배포하거나 의견을 공유하며 행사일정을 확인할 수 있습니다.</dd>
 										</dl>
-										<a href="#">XE Slack 바로가기</a>
+										<a href="#">XE Facebook Group 바로가기</a>
 									</div>
 								</div>
 							</div>
@@ -441,9 +441,9 @@ class MenuMigration implements Migration {
 									<div>
 										<dl>
 											<dt>XE Town</dt>
-											<dd>XpressEngine 사용자들을 위한 커뮤니티입니다.</dd>
+											<dd>XpressEngine 사용자들에게 가장 인기있는 커뮤니티입니다.</dd>
 										</dl>
-										<a href="#">XE Slack 바로가기</a>
+										<a href="https://www.xetown.com/">XE Town 바로가기</a>
 									</div>
 								</div>
 							</div>
@@ -455,7 +455,7 @@ class MenuMigration implements Migration {
 				<div class="xe-container">
 					<strong>We made<br>what you need.</strong>
 					<div class="rectangle">
-						<p>by XpressEngine.io</p>
+						<p>by <a href="http://xpressengine.io/">XpressEngine.io</a></p>
 					</div>
 				</div>
 			</div>
