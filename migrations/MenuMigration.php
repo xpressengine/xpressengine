@@ -413,7 +413,7 @@ class MenuMigration implements Migration {
 											<dt>XE Forum Chat</dt>
 											<dd>XE 오픈소스 프로젝트 참여자 간 실시간 정보 교환을 할 수 있는 Slack 채널입니다.</dd>
 										</dl>
-										<a href="https://xeforum.slack.com/">XE Slack 바로가기</a>
+										<a href="https://xeforum.slack.com/" target="_blank">XE Slack 바로가기</a>
 									</div>
 								</div>
 							</div>
@@ -428,7 +428,7 @@ class MenuMigration implements Migration {
 											<dt>XE Facebook Group</dt>
 											<dd>XE 자료를 만들고 배포하거나 의견을 공유하며 행사일정을 확인할 수 있습니다.</dd>
 										</dl>
-										<a href="#">XE Facebook Group 바로가기</a>
+										<a href="https://www.facebook.com/xehub" target="_blank">XE Facebook Group 바로가기</a>
 									</div>
 								</div>
 							</div>
@@ -443,7 +443,7 @@ class MenuMigration implements Migration {
 											<dt>XE Town</dt>
 											<dd>XpressEngine 사용자들에게 가장 인기있는 커뮤니티입니다.</dd>
 										</dl>
-										<a href="https://www.xetown.com/">XE Town 바로가기</a>
+										<a href="https://www.xetown.com/" target="_blank">XE Town 바로가기</a>
 									</div>
 								</div>
 							</div>
