@@ -88,7 +88,7 @@ class ThemeMigration implements Migration
         }
 
         $config = [
-            "subTopImagePath" => '/plugins/alice/assets/img/bg_sub_spot.jpg',
+            "subTopImagePath" => asset('/plugins/alice/assets/img/bg_sub_spot.jpg'),
             "footerLogoImagePath" => "",
             "mainContentsAreaType" => "extend",
             "subContentsAreaType" => "fixed",
@@ -100,13 +100,13 @@ class ThemeMigration implements Migration
             "footerContents" => "XpressEngine",
             "slide1TitleText" => $slide1TitleText,
             "slide1SubText" => $slide1SubText,
-            "slide1ImagePath" => '/plugins/alice/assets/img/img_slide.jpg',
+            "slide1ImagePath" => asset('/plugins/alice/assets/img/img_slide.jpg'),
             "slide2TitleText" => $slide2TitleText,
             "slide2SubText" => $slide2SubText,
-            "slide2ImagePath" => '/plugins/alice/assets/img/img_slide2.jpg',
+            "slide2ImagePath" => asset('/plugins/alice/assets/img/img_slide2.jpg'),
             "slide3TitleText" => $slide3TitleText,
             "slide3SubText" => $slide3SubText,
-            "slide3ImagePath" => '/plugins/alice/assets/img/img_slide3.jpg',
+            "slide3ImagePath" => asset('/plugins/alice/assets/img/img_slide3.jpg'),
             "useColorSet" => false,
             "useColorValue" => "",
             "mainMenuTheme" => "",
@@ -115,8 +115,7 @@ class ThemeMigration implements Migration
             "copyRight" => "Copyright © NAVER Corp. Supported by D2 Program.",
         ];
 
-        app('xe.theme')->setThemeConfig('theme/alice@main', $config);
-        app('xe.theme')->setThemeConfig('theme/alice@sub', $config);
+        app('xe.theme')->setThemeConfig('theme/alice', $config);
     }
 
     public function update($currentVersion)

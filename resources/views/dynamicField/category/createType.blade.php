@@ -5,12 +5,12 @@
 					id = $(obj).closest('form').find('[name="id"]').val();
 
 			if (id == '') {
-				require(['griper'], function(griper) {
+				System.import('xecore:/common/js/modules/griper/griper').then(function (griper) {
 					griper.form($(obj), '아이디 입력 후 생성 가능합니다.');
 				});
 				return;
 			} else {
-				require(['griper'], function(griper) {
+				System.import('xecore:/common/js/modules/griper/griper').then(function (griper) {
 					griper.form.fn.clear($(obj).closest('form'));
 				});
 			}
