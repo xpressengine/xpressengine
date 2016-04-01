@@ -1,6 +1,6 @@
-
 @foreach(['desktop'=>'데스크탑','mobile'=>'모바일'] as $type => $typeTitle)
 <label>{{ $typeTitle }}</label>
+
 <div class="row theme-select-group">
     @foreach($themes as $id => $theme)
     <div class="col-sm-4">

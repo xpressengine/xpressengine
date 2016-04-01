@@ -1,3 +1,5 @@
+{{ XeFrontend::css('/assets/core/theme/menutype-select.css')->load() }}
+
 @section('page_title', "<h2><a href='".route('settings.menu.index')."'><i class='xi-arrow-left'></i></a>".xe_trans('xe::selectItemType')."</h2>")
 @section('page_description', '<p class="sub-text">'.xe_trans('xe::selectItemTypeDescription').'</p>')
 @extends('menu.layout')
@@ -5,22 +7,24 @@
     <form action="{{ route('settings.menu.create.item', [$menuId]) }}" method="get">
         <input type="hidden" name="parent" value="{{$parent}}"/>
         <div class="col-sm-12">
-            <div class="panel menu_detail">
-                <div class="panel-heading">
-                    <div class="row">
-                        <p class="text-title">{{xe_trans('xe::selectItemTypeDescription')}}</p>
+            <div class="panel-group">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <div class="pull-left">
+                            <h3 class="panel-title">{{xe_trans('xe::menuItemType')}}</h3>
+                        </div>
                     </div>
-                </div>
-                <div class="panel-body">
-                    <div class="row_cont v2">
-                        <p class="text-title">{{xe_trans('xe::menuItemType')}}<i class="xi-information-circle"></i></p>
+
+                    <div class="panel-body">
                         {!! uio('uiobject/xpressengine@typeSelect') !!}
                     </div>
+                    <div class="panel-footer">
+                        <div class="pull-right">
+                            <a href="{{route('settings.menu.index')}}" class="btn btn-default">{{xe_trans('xe::cancel')}}</a>
+                            <button class="btn btn-primary">{{xe_trans('xe::next')}}</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="btn_group_all">
-                <button class="xe-btn xe-btn-blue">{{xe_trans('xe::next')}}</button>
-                <a href="{{route('settings.menu.index')}}" class="xe-btn xe-btn-gray">{{xe_trans('xe::cancel')}}</a>
             </div>
         </div>
     </form>
