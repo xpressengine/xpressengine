@@ -1,8 +1,7 @@
 var gulp = require("gulp"),
-  $ = require('gulp-load-plugins')();
+$ = require('gulp-load-plugins')();
 var runSequence = require('run-sequence');
 var elixir = require('laravel-elixir');
-var _ = require('lodash');
 
 /*
  |--------------------------------------------------------------------------
@@ -15,7 +14,7 @@ var _ = require('lodash');
  |
  */
 
-elixir(function (mix) {
+ elixir(function (mix) {
   mix.browserify('../core/menu/MenuTree.jsx', 'assets/vendor/menu/menu.js');
 });
 
@@ -73,10 +72,10 @@ gulp.task('jspm:menu', function(){
 
 gulp.task('jspm:langbox', function(){
   return gulp.src('assets/core/lang/LangEditorBox.js')
-      .pipe($.plumber())
-      .pipe($.jspm({selfExecutingBundle: true, plugin: 'jsx'}))
-      .pipe($.rename('LangEditorBox.js'))
-      .pipe(gulp.dest('assets/core/lang'));
+    .pipe($.plumber())
+    .pipe($.jspm({selfExecutingBundle: true, plugin: 'jsx'}))
+    .pipe($.rename('LangEditorBox.js'))
+    .pipe(gulp.dest('assets/core/lang'));
 });
 
 gulp.task('jspm:component', function(){
