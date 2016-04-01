@@ -17,7 +17,6 @@ use Mockery\MockInterface;
 use PHPUnit_Framework_TestCase;
 use Xpressengine\Menu\MenuType\MenuTypeInterface;
 use Xpressengine\Module\ModuleHandler;
-use Xpressengine\tests\Menu\FakeMenuTypeClass;
 
 /**
  * Class ModuleHandlerTest
@@ -52,15 +51,20 @@ class ModuleHandlerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetAll()
     {
+        $module = m::mock('\stdClass', 'Xpressengine\Menu\MenuType\MenuTypeInterface');
+        $module->shouldReceive('getId')->andReturn('id');
+        $module->shouldReceive('getComponentInfo')->with('name')->andReturn('title');
+        $module->shouldReceive('getComponentInfo')->with('description')->andReturn('description');
+        $module->shouldReceive('getComponentInfo')->with('screenshot')->andReturn('screenshot');
+
         $register = $this->register;
-        $register->shouldReceive('get')->andReturn([MenuTypeInterface::class]);
+        $register->shouldReceive('get')->andReturn([$module]);
 
         $moduleHandler = new ModuleHandler($register);
 
         $modules = $moduleHandler->getAll();
 
-        $this->assertEquals([MenuTypeInterface::class], $modules);
-
+        $this->assertInstanceOf(MenuTypeInterface::class, $modules[0]);
     }
 
     /**
@@ -70,9 +74,14 @@ class ModuleHandlerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetAllModuleInfo()
     {
+        $module = m::mock('\stdClass');
+        $module->shouldReceive('getId')->andReturn('id');
+        $module->shouldReceive('getComponentInfo')->with('name')->andReturn('title');
+        $module->shouldReceive('getComponentInfo')->with('description')->andReturn('description');
+        $module->shouldReceive('getComponentInfo')->with('screenshot')->andReturn('screenshot');
 
         $register = $this->register;
-        $register->shouldReceive('get')->andReturn([FakeMenuTypeClass::class]);
+        $register->shouldReceive('get')->andReturn([$module]);
         $moduleHandler = new ModuleHandler($register);
 
         $modules = $moduleHandler->getAllModuleInfo();
@@ -92,13 +101,19 @@ class ModuleHandlerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetModuleClassName()
     {
+        $module = m::mock('\stdClass');
+        $module->shouldReceive('getId')->andReturn('id');
+        $module->shouldReceive('getComponentInfo')->with('name')->andReturn('title');
+        $module->shouldReceive('getComponentInfo')->with('description')->andReturn('description');
+        $module->shouldReceive('getComponentInfo')->with('screenshot')->andReturn('screenshot');
+
         $register = $this->register;
-        $register->shouldReceive('get')->andReturn(FakeMenuTypeClass::class);
+        $register->shouldReceive('get')->andReturn($module);
         $moduleHandler = new ModuleHandler($register);
 
         $moduleClassName = $moduleHandler->getModuleClassName('module/xpressengine@test');
 
-        $this->assertEquals(FakeMenuTypeClass::class, $moduleClassName);
+        $this->assertEquals($module, $moduleClassName);
     }
 
     /**
@@ -108,13 +123,19 @@ class ModuleHandlerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetModuleObject()
     {
+        $module = m::mock('\stdClass');
+        $module->shouldReceive('getId')->andReturn('id');
+        $module->shouldReceive('getComponentInfo')->with('name')->andReturn('title');
+        $module->shouldReceive('getComponentInfo')->with('description')->andReturn('description');
+        $module->shouldReceive('getComponentInfo')->with('screenshot')->andReturn('screenshot');
+
         $register = $this->register;
-        $register->shouldReceive('get')->andReturn(FakeMenuTypeClass::class);
+        $register->shouldReceive('get')->andReturn($module);
         $moduleHandler = new ModuleHandler($register);
 
         $moduleObj = $moduleHandler->getModuleObject('module/xpressengine@test');
 
-        $result = $moduleObj instanceof FakeMenuTypeClass;
+        $result = $moduleObj instanceof \stdClass;
 
         $this->assertEquals(true, $result);
     }

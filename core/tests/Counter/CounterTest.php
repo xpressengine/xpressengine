@@ -225,22 +225,6 @@ class CounterTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * counter 가 guest 에 대한 처리를 지원하지 않을 때
-     *
-     * @expectedException \Xpressengine\Counter\Exceptions\GuestNotSupportException
-     */
-    public function testGetFailGuestNotAllowed()
-    {
-        $counter = $this->getCounter('test');
-        $targetId = 'targetId';
-
-        $guest = $this->getGuest();
-        $guest->shouldReceive('getId')->andReturn('');
-
-         $counter->get($targetId, $guest);
-    }
-
-    /**
      * test get by name
      *
      * @return void
@@ -271,22 +255,6 @@ class CounterTest extends PHPUnit_Framework_TestCase
 
         $result = $counter->getByName($targetId);
         $this->assertInstanceOf('Xpressengine\Counter\Models\CounterLog', $result);
-    }
-
-    /**
-     * counter 가 guest 에 대한 처리를 지원하지 않을 때
-     *
-     * @expectedException \Xpressengine\Counter\Exceptions\GuestNotSupportException
-     */
-    public function testGetByNameFailGuestNotAllowed()
-    {
-        $counter = $this->getCounter('test');
-        $targetId = 'targetId';
-
-        $guest = $this->getGuest();
-        $guest->shouldReceive('getId')->andReturn('');
-
-        $counter->getByName($targetId, $guest);
     }
 
     /**
