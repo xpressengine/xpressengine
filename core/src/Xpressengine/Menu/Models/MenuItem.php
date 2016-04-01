@@ -50,14 +50,14 @@ class MenuItem extends CategoryItem
      *
      * @var string
      */
-    protected $table = 'menuItem';
+    protected $table = 'menu_item';
 
     /**
      * The hierarchy table associated with the model.
      *
      * @var string
      */
-    protected $hierarchyTable = 'menuTreePath';
+    protected $closureTable = 'menu_closure';
 
     /**
      * Indicates if the IDs are auto-incrementing.
@@ -74,11 +74,11 @@ class MenuItem extends CategoryItem
     public $timestamps = false;
 
     /**
-     * The attributes that aren't mass assignable.
+     * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $guarded = ['id'];
+    protected $fillable = ['parentId', 'title', 'url', 'description', 'target', 'type' , 'ordering', 'activated'];
 
     /**
      * Indicates if the model selected.
@@ -87,18 +87,23 @@ class MenuItem extends CategoryItem
      */
     protected $selected = false;
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
     protected $casts = [
         'activated' => 'integer',
     ];
 
     /**
-     * Node group relationship
+     * Alias aggregation
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function menu()
     {
-        return $this->belongsTo(Menu::class, 'menuId');
+        return $this->aggregator();
     }
 
     /**
@@ -136,9 +141,9 @@ class MenuItem extends CategoryItem
 //     *
 //     * @return string
 //     */
-//    public function getHierarchyTable()
+//    public function getClosureTable()
 //    {
-//        return $this->hierarchyTable;
+//        return $this->closureTable;
 //    }
 //
 //    /**
@@ -190,6 +195,16 @@ class MenuItem extends CategoryItem
 //    {
 //        return 'ordering';
 //    }
+
+    /**
+     * Get the aggregator key name for model
+     *
+     * @return string
+     */
+    public function getAggregatorKeyName()
+    {
+        return 'menuId';
+    }
 
     /**
      * Set model selected

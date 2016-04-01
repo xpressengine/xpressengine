@@ -55,7 +55,7 @@ abstract class Node extends DynamicModel implements NodeInterface
     {
         $relation = $this->belongsToMany(
             static::class,
-            $this->getHierarchyTable(),
+            $this->getClosureTable(),
             $this->getDescendantName(),
             $this->getAncestorName()
         )->withPivot($this->getDepthName());
@@ -74,7 +74,7 @@ abstract class Node extends DynamicModel implements NodeInterface
     {
         $relation = $this->belongsToMany(
             static::class,
-            $this->getHierarchyTable(),
+            $this->getClosureTable(),
             $this->getAncestorName(),
             $this->getDescendantName()
         )->withPivot($this->getDepthName());
@@ -283,7 +283,7 @@ abstract class Node extends DynamicModel implements NodeInterface
      *
      * @return string
      */
-    abstract public function getHierarchyTable();
+    abstract public function getClosureTable();
 
     /**
      * Get the ancestor key name of pivot table

@@ -37,7 +37,7 @@ class Category extends DynamicModel
      *
      * @var string
      */
-    protected $table = 'category_group';
+    protected $table = 'category';
 
     /**
      * The attributes that aren't mass assignable.
@@ -122,5 +122,15 @@ class Category extends DynamicModel
     public static function getItemModel()
     {
         return static::$itemModel;
+    }
+
+    /**
+     * Get the count name for model
+     * 
+     * @return string
+     */
+    public function getCountName()
+    {
+        return 'count' ;
     }
 }

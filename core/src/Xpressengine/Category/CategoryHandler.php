@@ -75,15 +75,32 @@ class CategoryHandler
      */
     public function create(array $inputs = [])
     {
-        $class = $this->getModel();
+        $category = $this->createModel();
+        $category->fill($inputs);
+        $category->save();
 
-        return $class::create($inputs);
+        return $category;
+    }
+
+    /**
+     * Update category
+     *
+     * @param Category $category $category instance
+     * @return Category
+     */
+    public function put(Category $category)
+    {
+        if ($category->isDirty()) {
+            $category->save();
+        }
+
+        return $category;
     }
 
     /**
      * Remove category
      *
-     * @param Category $category category object
+     * @param Category $category category instance
      * @return bool
      */
     public function remove(Category $category)
@@ -98,36 +115,47 @@ class CategoryHandler
     /**
      * Create a new category item
      *
-     * @param Category $category category object
+     * @param Category $category category instance
      * @param array    $inputs   item attributes for created
      * @return CategoryItem
      */
-    public function createItem(Category $category, $inputs)
+    public function createItem(Category $category, array $inputs)
     {
         /** @var CategoryItem $item */
         $item = $category->items()->create($inputs);
-        $item->ancestors()->attach($item->getKey(), [$item->getDepthName() => 0]);
-
-        if ($item->{$item->getParentIdName()}) {
-            $itemModel = $category->getItemModel();
-            /** @var CategoryItem $parent */
-            $parent = $itemModel::find($item->{$item->getParentIdName()});
-            $ascIds = array_reverse($parent->getBreadcrumbs());
-            $depth = 1;
-
-            // todo: linkHierarchy method 사용?
-            foreach ($ascIds as $ascId) {
-                $item->ancestors()->attach($ascId, [$item->getDepthName() => $depth]);
-                $depth++;
-            }
-        }
+        
+        $this->setHierarchy($item);
 
         $this->setOrder($item, $category->count);
 
         // 아이템이 추가되면 카테고리 그룹의 아이템 수량을 증가 시킴
-        $category->increment('count');
+        $category->increment($category->getCountName());
 
         return $item;
+    }
+
+    /**
+     * Set hierarchy information for new item
+     * 
+     * @param CategoryItem $item item object
+     * @return void
+     */
+    protected function setHierarchy(CategoryItem $item)
+    {
+        // 이미 존재하는 경우 hierarchy 정보를 새로 등록하지 않음
+        try {
+            $item->ancestors()->attach($item->getKey(), [$item->getDepthName() => 0]);
+        } catch (\Exception $e) {
+            return;
+        }
+        
+        if ($item->{$item->getParentIdName()}) {
+            $model = $this->createItemModel();
+            /** @var CategoryItem $parent */
+            $parent = $model->newQuery()->find($item->{$item->getParentIdName()});
+
+            $this->linkHierarchy($item, $parent);
+        }
     }
 
     /**
@@ -209,6 +237,8 @@ class CategoryHandler
      * @param CategoryItem $parent   new parent item object
      * @return void
      * @throws UnableMoveToSelfException
+     * 
+     * todo: ordering 기능 분리
      */
     public function moveTo(CategoryItem $item, $position, CategoryItem $parent = null)
     {
@@ -254,7 +284,7 @@ class CategoryHandler
     {
         $conn = $item->getConnection();
         $prefix = $conn->getTablePrefix();
-        $table = $item->getHierarchyTable();
+        $table = $item->getClosureTable();
         $ancestor = $item->getAncestorName();
         $descendant = $item->getDescendantName();
         $depth = $item->getDepthName();
@@ -286,7 +316,7 @@ class CategoryHandler
     protected function unlinkHierarchy(CategoryItem $item, CategoryItem $parent)
     {
         $conn = $item->getConnection();
-        $table = $item->getHierarchyTable();
+        $table = $item->getClosureTable();
         $ancestor = $item->getAncestorName();
         $descendant = $item->getDescendantName();
 
@@ -313,7 +343,7 @@ class CategoryHandler
     {
         /** @var CategoryItem $parent */
         if (!$parent = $item->getParent()) {
-            $children = $item->category->getProgenitors();
+            $children = $item->aggregator->getProgenitors();
         } else {
             $children = $parent->getChildren();
         }
@@ -359,9 +389,23 @@ class CategoryHandler
      *
      * @return Category
      */
-    public function newModel()
+    public function createModel()
     {
         $class = $this->getModel();
+
+        return new $class;
+    }
+
+    /**
+     * Create new category item model
+     *
+     * @param Category $category category instance
+     * @return mixed
+     */
+    public function createItemModel(Category $category = null)
+    {
+        $category = $category ?: $this->createModel();
+        $class = $category->getItemModel();
 
         return new $class;
     }

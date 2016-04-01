@@ -16,6 +16,7 @@ namespace Xpressengine\Menu;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Database\QueryException;
+use Xpressengine\Category\CategoryHandler;
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Keygen\Keygen;
 use Xpressengine\Menu\Exceptions\CanNotDeleteMenuEntityHaveChildException;
@@ -118,7 +119,7 @@ use Xpressengine\Routing\RouteRepository;
  * @license   http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link      http://www.xpressengine.com
  */
-class MenuHandler
+class MenuHandler extends CategoryHandler
 {
     /**
      * Model class
@@ -244,21 +245,6 @@ class MenuHandler
     }
 
     /**
-     * Upate menu
-     *
-     * @param Menu $menu menu instance
-     * @return Menu
-     */
-    public function put(Menu $menu)
-    {
-        if ($menu->isDirty()) {
-            $menu->save();
-        }
-
-        return $menu;
-    }
-
-    /**
      * Delete menu
      *
      * @param Menu $menu menu instance
@@ -305,16 +291,7 @@ class MenuHandler
             }
         }
 
-        $item->ancestors()->attach($item->getKey(), [$item->getDepthName() => 0]);
-        if ($item->{$item->getParentIdName()}) {
-            /** @var MenuItem $parent */
-            $parent = $item->newQuery()->find($item->{$item->getParentIdName()});
-            $ascIds = array_reverse($parent->getBreadcrumbs());
-
-            foreach ($ascIds as $idx => $ascId) {
-                $item->ancestors()->attach($ascId, [$item->getDepthName() => $idx + 1]);
-            }
-        }
+        $this->setHierarchy($item);
 
         $this->setOrder($item, $inputs['ordering']);
         $this->registerItemPermission($item, new Grant);
@@ -323,30 +300,6 @@ class MenuHandler
 
         return $item;
     }
-
-//    public function createItem(Menu $menu, array $inputs, array $menuTypeInput = [])
-//    {
-//        $model = $this->createItemModel($menu);
-//        $cnt = 0;
-//        while ($cnt++ < static::DUPLICATE_RETRY_CNT) {
-//            try {
-//                $inputs[$model->getKeyName()] = $this->generateNewId();
-//                $item = $this->categories->createItem($menu, $inputs);
-//
-//                break;
-//            } catch (QueryException $e) {
-//                if ($e->getCode() != "23000") {
-//                    throw $e;
-//                }
-//            }
-//        }
-//
-//        $this->registerItemPermission($item, new Grant);
-//
-//        $this->storeMenuType($item, $menuTypeInput);
-//
-//        return $item;
-//    }
 
     /**
      * Store menu type associated with the menu item.
@@ -381,9 +334,7 @@ class MenuHandler
      */
     public function putItem(MenuItem $item, array $menuTypeInput)
     {
-        if ($item->isDirty()) {
-            $item->save();
-        }
+        parent::putItem($item);
 
         $this->updateMenuType($item, $menuTypeInput);
 
@@ -451,37 +402,6 @@ class MenuHandler
     }
 
     /**
-     * Set item order
-     *
-     * @param MenuItem $item     item instance
-     * @param int      $position order position
-     * @return void
-     */
-    public function setOrder(MenuItem $item, $position)
-    {
-        /** @var MenuItem $parent */
-        if (!$parent = $item->getParent()) {
-            $children = $item->menu->getProgenitors();
-        } else {
-            $children = $parent->getChildren();
-        }
-
-        /** @var Collection $children */
-        $children = $children->filter(function (MenuItem $model) use ($item) {
-            return $model->getKey() != $item->getKey();
-        });
-
-        $children = $children->slice(0, $position)
-            ->merge([$item])
-            ->merge($children->slice($position));
-
-        $children->each(function (MenuItem $model, $idx) {
-            $model->{$model->getOrderKeyName()} = $idx;
-            $model->save();
-        });
-    }
-
-    /**
      * Move menu item
      *
      * @param Menu          $menu   menu instance
@@ -489,6 +409,8 @@ class MenuHandler
      * @param MenuItem|null $parent menu item instance
      * @return MenuItem
      * @throws InvalidArgumentException
+     *
+     * todo: parent::moveTo 활용
      */
     public function moveItem(Menu $menu, MenuItem $item, MenuItem $parent = null)
     {
@@ -519,65 +441,6 @@ class MenuHandler
         $item->setRelation('menu', $menu);
 
         return $item;
-    }
-
-    /**
-     * Unlink menu item hierarchy
-     *
-     * @param MenuItem $item   menu item instance
-     * @param MenuItem $parent menu item instance
-     * @return int
-     */
-    protected function unlinkHierarchy(MenuItem $item, MenuItem $parent)
-    {
-        $conn = $item->getConnection();
-        $table = $item->getHierarchyTable();
-        $ancestor = $item->getAncestorName();
-        $descendant = $item->getDescendantName();
-
-        $rows = $conn->table($table . ' as a')
-            ->join($table . ' as rel', "a.{$ancestor}", '=', "rel.{$ancestor}")
-            ->join($table . ' as d', "d.{$descendant}", '=', "rel.{$descendant}")
-            ->where("a.{$descendant}", $parent->getKey())
-            ->where("d.{$ancestor}", $item->getKey())
-            ->get(['rel.' . $item->getKeyName()]);
-
-        $ids = array_column($rows, $item->getKeyName());
-
-        return $conn->table($table)->whereIn($item->getKeyName(), $ids)->delete();
-    }
-
-    /**
-     * Link menu item hierarchy
-     *
-     * @param MenuItem $item   menu item instance
-     * @param MenuItem $parent menu item instance
-     * @return bool
-     */
-    protected function linkHierarchy(MenuItem $item, MenuItem $parent)
-    {
-        $conn = $item->getConnection();
-        $prefix = $conn->getTablePrefix();
-        $table = $item->getHierarchyTable();
-        $ancestor = $item->getAncestorName();
-        $descendant = $item->getDescendantName();
-        $depth = $item->getDepthName();
-
-        $select = $conn->table($table . ' as a')
-            ->joinWhere($table . ' as d', "d.{$ancestor}", '=', $item->getKey())
-            ->where("a.{$descendant}", '=', $parent->getKey())
-            ->select([
-                "a.{$ancestor}",
-                "d.{$descendant}",
-                new Expression("`{$prefix}a`.`{$depth}` + `{$prefix}d`.`{$depth}` + 1")
-            ]);
-
-        $bindings = $select->getBindings();
-
-        $insertQuery = sprintf("insert into %s (`{$ancestor}`, `{$descendant}`, `{$depth}`) ", $prefix . $table)
-            . $select->toSql();
-
-        return $conn->insert($insertQuery, $bindings);
     }
 
     /**
@@ -850,52 +713,52 @@ class MenuHandler
         return $item->menu->getKey() . '.' . implode('.', $item->getBreadcrumbs());
     }
 
-    /**
-     * Create new menu model
-     *
-     * @return Menu
-     */
-    public function createModel()
-    {
-        $class = $this->getModel();
-
-        return new $class;
-    }
-
-    /**
-     * Get menu model
-     *
-     * @return string
-     */
-    public function getModel()
-    {
-        return $this->model;
-    }
-
-    /**
-     * Set menu model
-     *
-     * @param string $model model class
-     * @return void
-     */
-    public function setModel($model)
-    {
-        $this->model = '\\' . ltrim($model, '\\');
-    }
-
-    /**
-     * Create new menu item model
-     *
-     * @param Menu $menu menu instance
-     * @return mixed
-     */
-    public function createItemModel(Menu $menu = null)
-    {
-        $menu = $menu ?: $this->createModel();
-        $class = $menu->getItemModel();
-
-        return new $class;
-    }
+//    /**
+//     * Create new menu model
+//     *
+//     * @return Menu
+//     */
+//    public function createModel()
+//    {
+//        $class = $this->getModel();
+//
+//        return new $class;
+//    }
+//
+//    /**
+//     * Get menu model
+//     *
+//     * @return string
+//     */
+//    public function getModel()
+//    {
+//        return $this->model;
+//    }
+//
+//    /**
+//     * Set menu model
+//     *
+//     * @param string $model model class
+//     * @return void
+//     */
+//    public function setModel($model)
+//    {
+//        $this->model = '\\' . ltrim($model, '\\');
+//    }
+//
+//    /**
+//     * Create new menu item model
+//     *
+//     * @param Menu $menu menu instance
+//     * @return mixed
+//     */
+//    public function createItemModel(Menu $menu = null)
+//    {
+//        $menu = $menu ?: $this->createModel();
+//        $class = $menu->getItemModel();
+//
+//        return new $class;
+//    }
 
     /**
      * Generate new key

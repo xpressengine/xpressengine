@@ -27,8 +27,6 @@ use Xpressengine\Support\Tree\Node;
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
- *
- * @property Category $category
  */
 class CategoryItem extends Node
 {
@@ -51,7 +49,7 @@ class CategoryItem extends Node
      *
      * @var string
      */
-    protected $hierarchyTable = 'category_item_hierarchy';
+    protected $closureTable = 'category_closure';
 
     /**
      * The attributes that are mass assignable.
@@ -65,9 +63,19 @@ class CategoryItem extends Node
      *
      * @return BelongsTo
      */
+    public function aggregator()
+    {
+        return $this->belongsTo(Category::class, $this->getAggregatorKeyName());
+    }
+
+    /**
+     * Alias aggregation
+     *
+     * @return BelongsTo
+     */
     public function category()
     {
-        return $this->belongsTo(Category::class, 'categoryId');
+        return $this->aggregator();
     }
 
     /**
@@ -112,9 +120,9 @@ class CategoryItem extends Node
      *
      * @return string
      */
-    public function getHierarchyTable()
+    public function getClosureTable()
     {
-        return $this->hierarchyTable;
+        return $this->closureTable;
     }
 
     /**
@@ -165,5 +173,15 @@ class CategoryItem extends Node
     public function getOrderKeyName()
     {
         return 'ordering';
+    }
+
+    /**
+     * Get the aggregator key name for model
+     * 
+     * @return string
+     */
+    public function getAggregatorKeyName()
+    {
+        return 'categoryId';
     }
 }
