@@ -1,7 +1,8 @@
 var gulp = require("gulp"),
-$ = require('gulp-load-plugins')();
+  $ = require('gulp-load-plugins')();
 var runSequence = require('run-sequence');
 var elixir = require('laravel-elixir');
+var merge = require('merge-stream');
 
 /*
  |--------------------------------------------------------------------------
@@ -14,7 +15,7 @@ var elixir = require('laravel-elixir');
  |
  */
 
- elixir(function (mix) {
+elixir(function (mix) {
   mix.browserify('../core/menu/MenuTree.jsx', 'assets/vendor/menu/menu.js');
 });
 
@@ -122,7 +123,6 @@ gulp.task('assets:sass', function () {
 });
 
 
-
 /* lint */
 var lint_ignore = ['**/bower_components/**', '**/*.min.*'];
 gulp.task('lint', ['lint:sass', 'lint:css', 'lint:js']);
@@ -154,3 +154,35 @@ gulp.task('lint:js', function() {
 });
 /* END:lint */
 
+gulp.task('jspm-assets', function() {
+  var assets = [];
+
+  // jQuery
+  assets.push($.jspmAssets.jspmAssets({
+      'jquery': '**/*',
+      'jquery-migrate': 'dist/jquery-migrate.min.js'
+    })
+  // normalize
+    .pipe(gulp.dest('./assets/vendor/jquery')));
+  assets.push($.jspmAssets.jspmAssets('normalize.css', 'normalize.css')
+    .pipe(gulp.dest('./assets/vendor/normalize')));
+  // Swiper@^2
+  assets.push($.jspmAssets.jspmAssets('swiper2', 'dist/*')
+    .pipe(gulp.dest('./assets/vendor/swiper2')));
+  // blueimp-file-upload
+  // assets.push($.jspmAssets.jspmAssets('blueimp-file-upload', '**/*')
+  //   .pipe(gulp.dest('./assets/vendor/blueimp-file-upload')));
+  // lodash
+  assets.push($.jspmAssets.jspmAssets('lodash', 'lodash.min.js')
+    .pipe(gulp.dest('./assets/vendor/lodash')));
+  // moment
+  assets.push($.jspmAssets.jspmAssets('moment', 'moment.js')
+    .pipe($.uglify())
+    .pipe($.rename('moment.min.js'))
+    .pipe(gulp.dest('./assets/vendor/moment')));
+  assets.push($.jspmAssets.jspmAssets('moment', 'locale/*')
+    .pipe($.uglify())
+    .pipe(gulp.dest('./assets/vendor/moment/locale')));
+
+  return merge(assets);
+});

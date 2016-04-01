@@ -48,9 +48,18 @@ System.config({
   },
 
   map: {
+    "blueimp-file-upload": "npm:blueimp-file-upload@9.12.1",
+    "bootstrap-sass": "github:twbs/bootstrap-sass@3.3.6",
+    "core-js": "npm:core-js@1.2.6",
     "css": "github:systemjs/plugin-css@0.1.20",
+    "jquery": "npm:jquery@2.2.2",
+    "jquery-migrate": "npm:jquery-migrate@1.4.0",
+    "jquery-ui": "npm:jquery-ui@1.10.5",
     "jsx": "github:floatdrop/plugin-jsx@1.2.1",
+    "lodash": "npm:lodash@4.7.0",
+    "moment": "npm:moment@2.12.0",
     "normalize.css": "github:necolas/normalize.css@4.0.0",
+    "swiper2": "npm:swiper@2.7.6",
     "twbs/bootstrap-sass": "github:twbs/bootstrap-sass@3.3.6",
     "xedep-jquery": "npm:jquery@2.2.2",
     "xedep-jquery-migrate": "npm:jquery-migrate@1.4.0",
@@ -116,6 +125,10 @@ System.config({
     },
     "npm:assert@1.3.0": {
       "util": "npm:util@0.10.3"
+    },
+    "npm:blueimp-file-upload@9.12.1": {
+      "process": "github:jspm/nodelibs-process@0.1.2",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.0"
     },
     "npm:bn.js@4.11.1": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0"
@@ -340,6 +353,9 @@ System.config({
       "path": "github:jspm/nodelibs-path@0.1.0",
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
+    "npm:jquery-ui@1.10.5": {
+      "fs": "github:jspm/nodelibs-fs@0.1.2"
+    },
     "npm:jstransform@10.1.0": {
       "base62": "npm:base62@0.1.1",
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
@@ -347,6 +363,10 @@ System.config({
       "fs": "github:jspm/nodelibs-fs@0.1.2",
       "process": "github:jspm/nodelibs-process@0.1.2",
       "source-map": "npm:source-map@0.1.31"
+    },
+    "npm:lodash@4.7.0": {
+      "buffer": "github:jspm/nodelibs-buffer@0.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:miller-rabin@4.0.0": {
       "bn.js": "npm:bn.js@4.11.1",
@@ -360,6 +380,9 @@ System.config({
       "fs": "github:jspm/nodelibs-fs@0.1.2",
       "minimist": "npm:minimist@0.0.8",
       "path": "github:jspm/nodelibs-path@0.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.2"
+    },
+    "npm:moment@2.12.0": {
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:once@1.3.3": {
