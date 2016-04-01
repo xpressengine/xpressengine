@@ -15,8 +15,8 @@ class CategoryMigration implements Migration {
             $table->increments('id');
             $table->string('name', 100);
             $table->integer('count');
-            $table->timestamp('createdAt');
-            $table->timestamp('updatedAt');
+//            $table->timestamp('createdAt');
+//            $table->timestamp('updatedAt');
         });
 
         Schema::create('category_item', function (Blueprint $table) {
@@ -27,8 +27,8 @@ class CategoryMigration implements Migration {
             $table->integer('parentId')->nullable();
             $table->string('word', 250);
             $table->text('description');
-            $table->timestamp('createdAt');
-            $table->timestamp('updatedAt');
+//            $table->timestamp('createdAt');
+//            $table->timestamp('updatedAt');
             $table->integer('ordering');
 
             $table->index('categoryId');

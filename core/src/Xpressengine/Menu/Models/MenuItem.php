@@ -14,6 +14,8 @@
 namespace Xpressengine\Menu\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Xpressengine\Category\Models\Category;
+use Xpressengine\Category\Models\CategoryItem;
 use Xpressengine\Routing\InstanceRoute;
 use Xpressengine\Support\Tree\Node;
 
@@ -40,7 +42,8 @@ use Xpressengine\Support\Tree\Node;
  * @property string $type        해당 메뉴의 type
  * @property int    $ordering    정렬을 위한 순서
  */
-class MenuItem extends Node
+//class MenuItem extends Node
+class MenuItem extends CategoryItem
 {
     /**
      * The table associated with the model.
@@ -108,6 +111,14 @@ class MenuItem extends Node
         return $this->hasOne(InstanceRoute::class, 'instanceId');
     }
 
+    public function getChildren()
+    {
+        $rfc = new \ReflectionClass($this);
+        $method = $rfc->getParentClass()->getParentClass()->getMethod('getChildren');
+
+        return $method->invoke($this);
+    }
+
     /**
      * Scope for get node items of progenitor
      *
@@ -115,70 +126,70 @@ class MenuItem extends Node
      * @param Menu    $menu  category instance
      * @return Builder
      */
-    public function scopeProgenitors(Builder $query, Menu $menu)
+    public function scopeProgenitors(Builder $query, $menu)
     {
         return $this->scopeRoots($query)->where('menuId', $menu->getKey());
     }
 
-    /**
-     * Get the pivot table for model's hierarchy
-     *
-     * @return string
-     */
-    public function getHierarchyTable()
-    {
-        return $this->hierarchyTable;
-    }
-
-    /**
-     * Get the ancestor key name of pivot table
-     *
-     * @return string
-     */
-    public function getAncestorName()
-    {
-        return 'ancestor';
-    }
-
-    /**
-     * Get the descendant key name of pivot table
-     *
-     * @return string
-     */
-    public function getDescendantName()
-    {
-        return 'descendant';
-    }
-
-    /**
-     * Get the depth key name of pivot table
-     *
-     * @return string
-     */
-    public function getDepthName()
-    {
-        return 'depth';
-    }
-
-    /**
-     * Get the parent key name for model
-     *
-     * @return string
-     */
-    public function getParentIdName()
-    {
-        return 'parentId';
-    }
-
-    /**
-     * Get the order key name for model
-     *
-     * @return string
-     */
-    public function getOrderKeyName()
-    {
-        return 'ordering';
-    }
+//    /**
+//     * Get the pivot table for model's hierarchy
+//     *
+//     * @return string
+//     */
+//    public function getHierarchyTable()
+//    {
+//        return $this->hierarchyTable;
+//    }
+//
+//    /**
+//     * Get the ancestor key name of pivot table
+//     *
+//     * @return string
+//     */
+//    public function getAncestorName()
+//    {
+//        return 'ancestor';
+//    }
+//
+//    /**
+//     * Get the descendant key name of pivot table
+//     *
+//     * @return string
+//     */
+//    public function getDescendantName()
+//    {
+//        return 'descendant';
+//    }
+//
+//    /**
+//     * Get the depth key name of pivot table
+//     *
+//     * @return string
+//     */
+//    public function getDepthName()
+//    {
+//        return 'depth';
+//    }
+//
+//    /**
+//     * Get the parent key name for model
+//     *
+//     * @return string
+//     */
+//    public function getParentIdName()
+//    {
+//        return 'parentId';
+//    }
+//
+//    /**
+//     * Get the order key name for model
+//     *
+//     * @return string
+//     */
+//    public function getOrderKeyName()
+//    {
+//        return 'ordering';
+//    }
 
     /**
      * Set model selected

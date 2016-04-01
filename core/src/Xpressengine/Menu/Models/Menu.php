@@ -14,6 +14,7 @@
 namespace Xpressengine\Menu\Models;
 
 use Illuminate\Database\Eloquent\Collection;
+use Xpressengine\Category\Models\Category;
 use Xpressengine\Database\Eloquent\DynamicModel;
 use Xpressengine\Site\Site;
 use Xpressengine\Support\Tree\Tree;
@@ -34,9 +35,10 @@ use Xpressengine\Support\Tree\TreeMakerTrait;
  * @property string $siteKey
  * @property string $description
  */
-class Menu extends DynamicModel
+//class Menu extends DynamicModel
+class Menu extends Category
 {
-    use TreeMakerTrait;
+//    use TreeMakerTrait;
 
     /**
      * The table associated with the model.
@@ -66,12 +68,12 @@ class Menu extends DynamicModel
      */
     protected $guarded = ['id'];
 
-    /**
-     * The tree instance consisting of item
-     *
-     * @var Tree
-     */
-    protected $tree;
+//    /**
+//     * The tree instance consisting of item
+//     *
+//     * @var Tree
+//     */
+//    protected $tree;
 
     /**
      * Item model class
@@ -100,31 +102,31 @@ class Menu extends DynamicModel
         return $this->hasMany(static::$itemModel, 'menuId');
     }
 
-    /**
-     * Get category items of root level
-     *
-     * @return Collection
-     */
-    public function getProgenitors()
-    {
-        $class = static::getItemModel();
+//    /**
+//     * Get category items of root level
+//     *
+//     * @return Collection
+//     */
+//    public function getProgenitors()
+//    {
+//        $class = static::getItemModel();
+//
+//        return $class::progenitors($this)->get();
+//    }
 
-        return $class::progenitors($this)->get();
-    }
-
-    /**
-     * Get a tree of category items
-     *
-     * @return Tree
-     */
-    public function getTree()
-    {
-        if (!$this->tree) {
-            $this->tree = $this->makeTree($this->items);
-        }
-
-        return $this->tree;
-    }
+//    /**
+//     * Get a tree of category items
+//     *
+//     * @return Tree
+//     */
+//    public function getTree()
+//    {
+//        if (!$this->tree) {
+//            $this->tree = $this->makeTree($this->items);
+//        }
+//
+//        return $this->tree;
+//    }
 
     /**
      * Set selected to item has given key
@@ -141,26 +143,26 @@ class Menu extends DynamicModel
         }
     }
 
-    /**
-     * Set the menu item model
-     *
-     * @param string $model model class
-     * @return void
-     */
-    public static function setItemModel($model)
-    {
-        static::$itemModel = '\\' . ltrim($model, '\\');
-    }
-
-    /**
-     * Get the menu item model
-     *
-     * @return string
-     */
-    public static function getItemModel()
-    {
-        return static::$itemModel;
-    }
+//    /**
+//     * Set the menu item model
+//     *
+//     * @param string $model model class
+//     * @return void
+//     */
+//    public static function setItemModel($model)
+//    {
+//        static::$itemModel = '\\' . ltrim($model, '\\');
+//    }
+//
+//    /**
+//     * Get the menu item model
+//     *
+//     * @return string
+//     */
+//    public static function getItemModel()
+//    {
+//        return static::$itemModel;
+//    }
 
     /**
      * Convert the model instance to an array.

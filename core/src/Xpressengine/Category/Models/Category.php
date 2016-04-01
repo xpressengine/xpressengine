@@ -47,6 +47,13 @@ class Category extends DynamicModel
     protected $guarded = ['id'];
 
     /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+
+    /**
      * The tree instance consisting of item
      *
      * @var Tree

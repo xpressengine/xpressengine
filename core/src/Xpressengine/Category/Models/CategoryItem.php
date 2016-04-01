@@ -40,6 +40,13 @@ class CategoryItem extends Node
     protected $table = 'category_item';
 
     /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+
+    /**
      * The pivot table associated with the model.
      *
      * @var string
@@ -95,7 +102,7 @@ class CategoryItem extends Node
      * @param Category $category category instance
      * @return Builder
      */
-    public function scopeProgenitors(Builder $query, Category $category)
+    public function scopeProgenitors(Builder $query, $category)
     {
         return $this->scopeRoots($query)->where('categoryId', $category->getKey());
     }
