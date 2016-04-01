@@ -40,7 +40,6 @@ define([], function(XE) {
             self = this,
             alertType = $frm.data('rule-alert-type');
 
-
         if (alertType == undefined) {
             alertType = 'form';
         }
@@ -71,7 +70,6 @@ define([], function(XE) {
         var parts = rule.split('|'),
             self = this;
 
-
         $.each(parts, function(index, part) {
             var res = part.split(':'),
                 command = res[0].toLowerCase(),
@@ -79,9 +77,7 @@ define([], function(XE) {
 
             if (typeof self.validators[command] === 'function') {
                 var $dst = $frm.find('[name="'+name+'"]');
-
                 self.errorClear($frm);
-
                 if (self.validators[command]($dst, parameters) === false) {
                     throw Error('Validation error.');
                 }
@@ -95,18 +91,18 @@ define([], function(XE) {
     };
 
     Validator.errorClear = function($form) {
-        require(['griper'], function(griper) {
+        System.import('xecore:/common/js/modules/griper/griper').then(function (griper) {
             griper.form.fn.clear($form);
         });
     };
 
     Validator.error = function($element, message) {
         if (this.alertType == 'form') {
-            require(['griper'], function(griper) {
+            System.import('xecore:/common/js/modules/griper/griper').then(function (griper) {
                 griper.form($element, message);
             });
         } else if (this.alertType == 'toast') {
-            require(['griper'], function(griper) {
+            System.import('xecore:/common/js/modules/griper/griper').then(function (griper) {
                 var typeName = $element.attr('placeholder');
                 if (typeName == undefined) {
                     typeName = $element.attr('name');
@@ -122,7 +118,6 @@ define([], function(XE) {
     Validator.validators = {
         required: function($dst, parameters) {
             var value = $dst.val();
-
             if (value === '') {
                 Validator.error($dst, XE.Lang.trans('xe::ValidatorRequired'));
                 return false;
