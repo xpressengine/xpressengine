@@ -126,7 +126,27 @@ class XeInstall extends Command
 
         $this->env = $this->getDefaultEnv();
 
-        $this->process();
+        try {
+            $this->process();
+
+            $this->output->success('Install was completed successfully.');
+        } catch (\Exception $e) {
+            $err = [
+                'System error',
+                ' message: ' . $e->getMessage(),
+                ' file: ' . $e->getFile(),
+                ' line: ' . $e->getLine(),
+            ];
+            $this->output->error(implode(PHP_EOL, $err));
+            $note = [
+                'Check point for reinstall:',
+                ' * remove [.env] file',
+                ' * remove all table in your database',
+            ];
+            $this->output->note(implode(PHP_EOL, $note));
+            $this->output->error('Install fail!! Try again.');
+//            throw $e;
+        }
     }
 
     /**
@@ -149,12 +169,12 @@ class XeInstall extends Command
     /**
      * Prompt the user for input and validation the answer.
      *
-     * @param string  $question
-     * @param string  $default
-     * @param \Closure
+     * @param string   $question
+     * @param string   $default
+     * @param callable $validator
      * @return string
      */
-    public function askValidation($question, $default = null, \Closure $validator = null)
+    public function askValidation($question, $default = null, callable $validator = null)
     {
         $question = new Question($question, $default);
 
@@ -182,41 +202,103 @@ APP_KEY=SomeRandomString";
      */
     protected function process()
     {
-        // get db info
-        $this->getDBInfo();
+        // set db information
+        $this->info('[Setup Database(MySQL)]');
+        $this->stepDB();
 
-        // validate db info
-        $this->validateDBInfo($this->defaultInfos['database']);
-
-        // set db info
-        $this->setDBInfo($this->defaultInfos['database']);
-
-        // get site info
-        $this->getSiteInfo();
-
-        // set site info
-        $this->setSiteInfo($this->defaultInfos['site']);
-
+        // set site information
+        $this->info('[Setup Site]');
+        $this->stepSiteInfo();
 
         // load framework, migrations, installPlugin, run composer post script
+        $this->info('[Base Framework load]');
         $this->installFramework();
-
-
+        
         // create admin and login
-        $this->getAdminInfo();
-        $this->createAdminAndLogin($this->defaultInfos['admin']);
+        $this->info('[Setup Admin information]');
+        $this->stepAdmin();
 
         // make welcomepage
         $this->initializeCore();
 
         $this->disableDebugMode();
-
+        
         // change directory permissions
-        $this->setDirectoryPermission();
-
+        $this->info('[Setup Directory Permission]');
+        $this->stepDirPermission();
+        
         $this->markInstalled();
+    }
 
-        $this->line('Install was completed successfully.' . PHP_EOL);
+    /**
+     * stepDB
+     * 
+     * @return void
+     */
+    protected function stepDB()
+    {
+        try {
+            // get db info
+            $this->getDBInfo();
+            // validate db info
+            $this->validateDBInfo($this->defaultInfos['database']);
+            // set db info
+            $this->setDBInfo($this->defaultInfos['database']);
+        } catch (\Exception $e) {
+            $this->defaultInfos['database']['password'] = null;
+            $this->stepDB();
+        }
+    }
+
+    /**
+     * stepSiteInfo
+     *
+     * @return void
+     */
+    protected function stepSiteInfo()
+    {
+        // get site info
+        $this->getSiteInfo();
+
+        // set site info
+        $this->setSiteInfo($this->defaultInfos['site']);
+    }
+
+    /**
+     * stepAdmin
+     *
+     * @return void
+     */
+    protected function stepAdmin()
+    {
+        try {
+            // create admin and login
+            $this->getAdminInfo();
+            $this->createAdminAndLogin($this->defaultInfos['admin']);
+        } catch (\Exception $e) {
+            $this->defaultInfos['admin']['password'] = null;
+            $this->stepAdmin();
+        }
+    }
+
+    /**
+     * stepDirPermission
+     *
+     * @return void
+     */
+    protected function stepDirPermission()
+    {
+        try {
+            $this->setStorageDirPermission();
+        } catch (\Exception $e) {
+            $this->error('Fail to change storage directory permission. Check directory after install.' . PHP_EOL . ' message: '. $e->getMessage());
+        }
+
+        try {
+            $this->setBootCacheDirPermission();
+        } catch (\Exception $e) {
+            $this->error('Fail to change bootstrap cache directory permission. Check directory after install.' . PHP_EOL . ' message: '. $e->getMessage());
+        }
     }
 
     /**
@@ -226,8 +308,6 @@ APP_KEY=SomeRandomString";
      */
     private function getDBInfo()
     {
-        $this->info('[Setup Database(MySQL)]');
-
         if ($this->noInteraction) {
             $this->line('passed');
             return;
@@ -266,8 +346,7 @@ APP_KEY=SomeRandomString";
     /**
      * validateDBInfo
 
-     * @param                 $dbInfo
-     *
+     * @param  array $dbInfo
      * @return bool
      * @throws \Exception
      */
@@ -293,13 +372,13 @@ APP_KEY=SomeRandomString";
             $result = $stmt->fetch();
             $count = $result['cnt'];
         } catch (\Exception $e) {
-            $this->error('Connection failed!!');
+            $this->output->error('Connection failed!! Check Your Database!');
             throw $e;
         }
 
         if ($count !== '0') {
             $message = "database {$dbInfo['dbname']} is not empty. Please drop all tables in {$dbInfo['dbname']}";
-            $this->error($message);
+            $this->output->error($message);
             throw new \Exception($message);
         }
 
@@ -310,8 +389,7 @@ APP_KEY=SomeRandomString";
     /**
      * setDBInfo
      *
-     * @param $dbInfo
-     *
+     * @param array $dbInfo
      * @return void
      */
     private function setDBInfo($dbInfo)
@@ -336,6 +414,13 @@ APP_KEY=SomeRandomString";
         $this->configFileGenerate('database', $info);
     }
 
+    /**
+     * configFileGenerate
+     *
+     * @param string $key
+     * @param array $data
+     * @return void
+     */
     private function configFileGenerate($key, array $data)
     {
         $dir = config_path() . '/cms';
@@ -347,6 +432,12 @@ APP_KEY=SomeRandomString";
         file_put_contents($file, '<?php' . str_repeat(PHP_EOL, 2) . 'return [' . PHP_EOL . $data . '];' . PHP_EOL);
     }
 
+    /**
+     * makeDir
+     *
+     * @param string $dir
+     * @return bool
+     */
     private function makeDir($dir)
     {
         /** @var Filesystem $filesystem */
@@ -358,6 +449,13 @@ APP_KEY=SomeRandomString";
         return true;
     }
 
+    /**
+     * encodeArr2Str
+     *
+     * @param array $arr
+     * @param int $depth
+     * @return string
+     */
     private function encodeArr2Str(array $arr, $depth = 0)
     {
         $output = '';
@@ -373,6 +471,12 @@ APP_KEY=SomeRandomString";
         return $output;
     }
 
+    /**
+     * getIndent
+     *
+     * @param int $depth
+     * @return string
+     */
     private function getIndent($depth)
     {
         $indent = '';
@@ -382,8 +486,6 @@ APP_KEY=SomeRandomString";
 
         return $indent;
     }
-
-
 
     /**
      * setEnv
@@ -406,8 +508,6 @@ APP_KEY=SomeRandomString";
      */
     private function getSiteInfo()
     {
-        $this->info('[Setup Site]');
-
         if ($this->noInteraction) {
             $this->line('passed');
             return;
@@ -462,7 +562,6 @@ APP_KEY=SomeRandomString";
      */
     protected function installFramework()
     {
-        $this->info('[Base Framework load]');
         $this->line('Base Framework is loading...');
 
         $this->writeEnvFile();
@@ -533,8 +632,6 @@ APP_KEY=SomeRandomString";
         }
 
         $app = include($appFile);
-
-//        $app = app();
 
         $kernel = $app->make('Illuminate\Contracts\Console\Kernel');
         if ($withXE) {
@@ -636,8 +733,6 @@ APP_KEY=SomeRandomString";
      */
     private function getAdminInfo()
     {
-        $this->info('[Setup Admin information]');
-
         if ($this->noInteraction) {
             $this->line("passed");
             return;
@@ -666,29 +761,48 @@ APP_KEY=SomeRandomString";
             if (strlen(trim($displayName)) === 0) {
                 throw new \Exception('Input Name');
             }
+
             return $displayName;
         });
 
+        $adminInfo['password'] = $this->getAdminPassword($adminInfo);
+
+        $this->defaultInfos['admin'] = $adminInfo;
+    }
+
+    /**
+     * getAdminPassword
+     *
+     * @param array $adminInfo
+     * @return string
+     */
+    private function getAdminPassword($adminInfo)
+    {
         // password
-        $default = '';
+        $default = null;
         if (isset($adminInfo['password']) && $adminInfo['password'] !== null) {
             $default = 'imported from config file';
         }
         $password = $this->secretDefault("Password", false, $default);
         if (!$password || $password == $default) {
             $password = $adminInfo['password'];
+        } else {
+            $repassword = $this->secretDefault("Password again", false);
+            if ($password !== $repassword) {
+                $this->output->error('Password not matched');
+                $password = $this->getAdminPassword($adminInfo);
+            }
         }
-        $adminInfo['password'] = $password;
 
-        $this->defaultInfos['admin'] = $adminInfo;
+        return $password;
     }
 
     /**
      * createAdminAndLogin
      *
-     * @param $config
-     *
+     * @param array $config
      * @return void
+     * @throws \Exception
      */
     protected function createAdminAndLogin($config)
     {
@@ -699,7 +813,13 @@ APP_KEY=SomeRandomString";
         // create admin account
         /** @var UserHandler $userHandler */
         $userHandler = app('xe.user');
-        $admin = $userHandler->create($config);
+
+        try {
+            $admin = $userHandler->create($config);
+        } catch (\Exception $e) {
+            $this->output->error($e->getMessage());
+            throw $e;
+        }
 
         // create mail config
         $info = [
@@ -745,23 +865,19 @@ APP_KEY=SomeRandomString";
     }
 
     /**
-     * setDirectoryPermission
+     * setStorageDirPermission
      *
      * @return void
      */
-    private function setDirectoryPermission()
+    private function setStorageDirPermission()
     {
-        $this->info('[Setup Directory Permission]');
-
         $storagePath = $this->getBasePath('storage');
-        $bootCachePath = $this->getBasePath('bootstrap/cache');
-        $storagePerm = $bootCachePerm = '0707';
+        $storagePerm = '0707';
 
         if (!$this->noInteraction) {
             $this->line('Input directory permission for storage.');
 
-            $storagePerm = $this->ask('./storage directory permission', '0707');
-            $bootCachePerm = $this->ask('./bootstrap/cache directory permission', '0707');
+            $storagePerm = $this->ask('./storage directory permission', $storagePerm);
         } else {
             $this->line("passed");
         }
@@ -772,6 +888,25 @@ APP_KEY=SomeRandomString";
         // executes after the command finishes
         if (!$process->isSuccessful()) {
             throw new \RuntimeException($process->getErrorOutput());
+        }
+    }
+
+    /**
+     * setBootCacheDirPermission
+     *
+     * @return void
+     */
+    private function setBootCacheDirPermission()
+    {
+        $bootCachePath = $this->getBasePath('bootstrap/cache');
+        $bootCachePerm = '0707';
+
+        if (!$this->noInteraction) {
+            $this->line('Input directory permission for bootstrap cache.');
+
+            $bootCachePerm = $this->ask('./bootstrap/cache directory permission', $bootCachePerm);
+        } else {
+            $this->line("passed");
         }
 
         $process = new Process("chmod -R $bootCachePerm $bootCachePath");
