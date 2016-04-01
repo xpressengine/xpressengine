@@ -171,22 +171,15 @@ class PresenterServiceProvider extends ServiceProvider
             '//cdn.jsdelivr.net/xeicon/2.0.0/xeicon.min.css',
         ])->load();
 
-        // $frontendHandler->js('assets/vendor/bootstrap/js/bootstrap.js')
-        //     ->min('assets/vendor/bootstrap/js/bootstrap.min.js')->appendTo('head')->load();
         $frontendHandler->js([
-            // 'assets/vendor/jQuery-File-Upload/js/vendor/jquery.ui.widget.js',
-            // 'assets/vendor/jQuery-File-Upload/js/jquery.iframe-transport.js',
-            // 'assets/vendor/jQuery-File-Upload/js/jquery.fileupload.js',
-            'assets/vendor/react/react-with-addons.js',
-             'assets/vendor/react/JSXTransformer.js',
-            // 'assets/core/common/js/toggleMenu.js',
             'assets/jspm_packages/system.js',
             'assets/systemjs.config.js',
-            'assets/vendor/jquery/jquery.js',
+            'assets/vendor/react/react-with-addons.js',
+            'assets/vendor/react/JSXTransformer.js',
+            'assets/vendor/jquery/jquery.min.js',
             'assets/core/common/js/xe.bundle.js',
-            // 'assets/core/common/js/translator.js',
             'assets/core/common/js/helpers.js', // @TODO 제거
-            'assets/core/xe-ui-component/js/xe-ui-component.bundle.js',
+            'assets/core/xe-ui-component/js/xe-ui-component.bundle.js', // @TODO 제거
         ])->appendTo('head.prepend')->load();
 
         $frontendHandler->js('assets/core/common/js/member-menu.js')->load();

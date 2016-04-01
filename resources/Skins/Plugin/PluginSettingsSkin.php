@@ -55,10 +55,10 @@ class PluginSettingsSkin extends BladeSkin
         $this->loadDefault();
 
         app('xe.frontend')->js([
-           'assets/vendor/swiper2/swiper2.js',
+           'assets/vendor/swiper2/idangerous.swiper.js',
            'assets/core/plugin/js/plugin.js'
         ])->appendTo('head')->load();
-        app('xe.frontend')->css('assets/vendor/swiper2/swiper2.css')
+        app('xe.frontend')->css('assets/vendor/swiper2/idangerous.swiper.css')
             ->before('assets/core/settings/css/admin.css')->load();
 
         return $this->renderBlade();
