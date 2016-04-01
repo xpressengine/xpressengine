@@ -192,10 +192,8 @@ class MenuMigration implements Migration {
     {
         /** @var ThemeHandler $themeHandler */
         $themeHandler = app('xe.theme');
-        $themeHandler->setThemeConfig('theme/alice@main', 'mainMenu', $mainMenu );
-        $themeHandler->setThemeConfig('theme/alice@sub', 'mainMenu', $mainMenu );
-        $themeHandler->setThemeConfig('theme/alice@main', 'subMenu', $mainMenu );
-        $themeHandler->setThemeConfig('theme/alice@sub', 'subMenu', $mainMenu );
+        $themeHandler->setThemeConfig('theme/alice', 'mainMenu', $mainMenu );
+        $themeHandler->setThemeConfig('theme/alice', 'subMenu', $mainMenu );
     }
 
     /**
