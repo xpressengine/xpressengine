@@ -1,18 +1,18 @@
 <div class="form-group">
     @if($label = array_get($args, 'label'))<label>{!! $label !!}</label>@endif
     <div class="__xe_imagebox_{{ $seq }} clearfix list-group-item">
-        <a class="pull-left btn btn-default __xe_inputBtn fileinput-button">
+        <a class="pull-left btn btn-default btn-sm __xe_inputBtn fileinput-button">
         @if(isset($args['image']))
-            <span>변경</span>
+            <span>변경하기</span>
             @else
-            <span>등록</span>
+            <span>등록하기</span>
             @endif
             <input class="__xe_file_{{ $seq }}" type="file" name="{{ array_get($args, 'name', 'imagebox') }}"/>
         </a>
         <div class="__xe_file_preview_{{ $seq }}">
             @if(isset($args['image']))
-                <img class="__thumbnail center-block" src="{{ $args['image'] }}"
-                     style="width:{{ $args['width'] }}px; height:{{ $args['height'] }}px;">
+                <img class="__thumbnail center-block" src="{{ asset($args['image']) }}"
+                     style="max-width: 100%; width:{{ $args['width'] }}px; height:auto;">
             @endif
         </div>
     </div>

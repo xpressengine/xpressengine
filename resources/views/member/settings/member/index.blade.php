@@ -96,12 +96,13 @@
                                 <a href="#" data-toggle="xeUserMenu" data-user-id="{{ $user->getId() }}" data-text="{{ $user->getDisplayName() }}">{{ $user->getDisplayName() }}</a></i>
                             </td>
                             <td>
-                                @if(isset($user->accounts))
+
+                                @if(count($user->accounts))
                                     @foreach($user->accounts as $account)
-                                        <span class="label label-default">{{ $account->provider }}</span>
+                                        <span data-toggle="tooltip" class="xe-badge grey {{ $account->provider }}" title="{{ $account->provider }}"><i class="xi-{{ $account->provider }}"></i></span>
                                     @endforeach
                                 @else
-                                    <span class="label label-default">default</span>
+                                    <span data-toggle="tooltip" class="xe-badge black" title="기본">xe</span>
                                 @endif
                             </td>
                             <td>{{ data_get($user, 'email', '없음') }}</td>
@@ -140,7 +141,13 @@
 </div>
 
 <script type="text/javascript">
+
     $(function () {
+
+        System.import('xecore:/settings/js/admin.bundle').then(function(){
+            $('[data-toggle=tooltip]').tooltip();
+        });
+
         $('.__xe_selectKeyfield').click(function (event) {
             event.preventDefault();
             var val = $(this).attr('data-value');
