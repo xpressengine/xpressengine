@@ -26,7 +26,7 @@ class Permission extends AbstractUIObject
      */
     public function render()
     {
-        XeFrontend::js('/assets/core/lodash.min.js')->load();
+        XeFrontend::js('/assets/vendor/lodash/lodash.min.js')->load();
         XeFrontend::js('/assets/core/permission/PermissionTag.js')->type('text/jsx')->load();
         XeFrontend::js('/assets/core/permission/PermissionTagSuggestion.js')->type('text/jsx')->load(
         );

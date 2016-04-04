@@ -5,6 +5,7 @@ composer.lock
 *.iml
 .DS_Store
 /plugins
-/jspm_packages
 /node_modules
 /bower_components
+/assets/jspm_packages/*
+!/assets/jspm_packages/*.*
