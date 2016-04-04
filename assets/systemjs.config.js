@@ -6,7 +6,8 @@ System.config({
     "github:*": "assets/jspm_packages/github/*",
     "npm:*": "assets/jspm_packages/npm/*",
     "xecore:/*": "assets/core/*",
-    "vendor:/*": "assets/vendor/*"
+    "xevendor:/*": "assets/vendor/*",
+    "jquery": "xevendor:/jquery/jquery.min.js"
   },
   bundles: {
     "xecore:/xe-ui-component/js/xe-ui-component.bundle.js": [
@@ -41,6 +42,9 @@ System.config({
     "xecore:/*": {
       "format": "cjs"
     },
+    "lodash": {
+      "format": "cjs"
+    },
     "xecore:/menu/menu.js": {
       "format": "global",
       "exports": "MenuTree"
@@ -50,6 +54,7 @@ System.config({
   map: {
     "blueimp-file-upload": "npm:blueimp-file-upload@9.12.1",
     "bootstrap-sass": "github:twbs/bootstrap-sass@3.3.6",
+    "buffer": "npm:buffer@4.5.1",
     "core-js": "npm:core-js@1.2.6",
     "css": "github:systemjs/plugin-css@0.1.20",
     "jquery": "npm:jquery@2.2.2",
@@ -191,6 +196,15 @@ System.config({
       "fs": "github:jspm/nodelibs-fs@0.1.2",
       "ieee754": "npm:ieee754@1.1.6",
       "isarray": "npm:isarray@1.0.0",
+      "process": "github:jspm/nodelibs-process@0.1.2"
+    },
+    "npm:buffer@4.5.1": {
+      "base64-js": "npm:base64-js@1.1.2",
+      "child_process": "github:jspm/nodelibs-child_process@0.1.0",
+      "fs": "github:jspm/nodelibs-fs@0.1.2",
+      "ieee754": "npm:ieee754@1.1.6",
+      "isarray": "npm:isarray@1.0.0",
+      "path": "github:jspm/nodelibs-path@0.1.0",
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:cipher-base@1.0.2": {
