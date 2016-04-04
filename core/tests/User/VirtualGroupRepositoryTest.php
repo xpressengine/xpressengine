@@ -1,5 +1,5 @@
 <?php
-namespace Xpressengine\Tests\Member;
+namespace Xpressengine\Tests\User;
 
 use Mockery;
 use Xpressengine\User\Repositories\VirtualGroupRepository;

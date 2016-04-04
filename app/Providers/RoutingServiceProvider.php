@@ -191,10 +191,10 @@ class RoutingServiceProvider extends ServiceProvider
      */
     protected function registerInstanceMacro(Router $router)
     {
-        $instanceMacro = function ($key, Closure $callback, $routeOptions = null) {
+        static $seq = 1;
+        $instanceMacro = function ($key, Closure $callback, $routeOptions = null) use (&$seq) {
 
-            $pattern = sprintf("%s%s%s", "{", preg_replace("/[@\/]/", "_", $key), "}");
-
+            $pattern = '{instanceGroup'.$seq++.'}';
             $attributes = [
                 'prefix' => $pattern,
                 'module' => $key,
@@ -211,6 +211,7 @@ class RoutingServiceProvider extends ServiceProvider
             }
 
             $this->group($attributes, $callback);
+
         };
 
         $router->macro('instance', $instanceMacro);
