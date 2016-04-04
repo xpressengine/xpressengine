@@ -1,17 +1,16 @@
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
-    console.info('@griper : amd');
-    define(['exports', 'jquery'], factory);
+    define(['exports'], factory);
   } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
     // CommonJS
-    console.info('@griper : cjs');
-    factory(exports, require('jquery'));
+    factory(exports);
   } else {
-    console.info('@griper : global');
-    factory((root.XeGriper = {}), root.jQuery);
+    factory({});
   }
-}(this, function (exports, $) {
+}(this, function (exports) {
   'use strict';
+
+  var $ = jQuery = window.jQuery;
 
   System.import('xecore:/common/js/modules/griper/style.css!');
 

@@ -23,6 +23,7 @@
   'use strict';
 
   var INSTANCE = null;
+  var $ = window.jQuery;
 
   var XE = function () {
     var self = this;

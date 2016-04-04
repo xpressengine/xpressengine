@@ -10,6 +10,8 @@
 }(this, function (exports) {
   'use strict';
 
+  var $ = window.jQuery;
+
   // @TODO ajax options
 
   exports.options = {

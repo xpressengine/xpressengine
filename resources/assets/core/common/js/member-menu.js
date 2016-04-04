@@ -1,18 +1,20 @@
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD
-    define(['exports', 'jquery'], function (exports, jQuery) {
-      factory(exports, jQuery);
+    define(['exports'], function (exports) {
+      factory(exports);
     });
   } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
     // CommonJS
-    factory(exports, require('jquery'));
+    factory(exports);
   } else {
     // Browser globals
-    factory({}, root.jQuery);
+    factory({});
   }
-}(this, function (exports, $) {
+}(this, function (exports) {
   'use strict';
+
+  var $ = jQuery = window.jQuery;
 
   var XeUserMenu = function (element, options) {
     this.type       = null

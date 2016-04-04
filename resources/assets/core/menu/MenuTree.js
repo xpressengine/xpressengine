@@ -1,5 +1,7 @@
 var MenuSearchBar = require('./MenuSearchBar.js!jsx');
 var UITree = require('./UITree.js!jsx');
+var _ = require('lodash');
+
 var MenuTree = React.createClass({
   getInitialState: function () {
     return {
