@@ -13,11 +13,10 @@
  */
 namespace Xpressengine\Category;
 
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Query\Expression;
 use Xpressengine\Category\Exceptions\UnableMoveToSelfException;
 use Xpressengine\Category\Models\Category;
 use Xpressengine\Category\Models\CategoryItem;
+use Xpressengine\Support\Tree\NodePositionTrait;
 
 /**
  * # CategoryHandler
@@ -65,6 +64,13 @@ use Xpressengine\Category\Models\CategoryItem;
  */
 class CategoryHandler
 {
+    use NodePositionTrait;
+
+    /**
+     * Model class
+     * 
+     * @var string
+     */
     protected $model = Category::class;
 
     /**
@@ -73,7 +79,7 @@ class CategoryHandler
      * @param array $inputs attributes for created
      * @return Category
      */
-    public function create(array $inputs = [])
+    public function create(array $inputs)
     {
         $category = $this->createModel();
         $category->fill($inputs);
@@ -85,7 +91,7 @@ class CategoryHandler
     /**
      * Update category
      *
-     * @param Category $category $category instance
+     * @param Category $category category instance
      * @return Category
      */
     public function put(Category $category)
@@ -125,8 +131,7 @@ class CategoryHandler
         $item = $category->items()->create($inputs);
         
         $this->setHierarchy($item);
-
-        $this->setOrder($item, $category->count);
+        $this->setOrder($item);
 
         // 아이템이 추가되면 카테고리 그룹의 아이템 수량을 증가 시킴
         $category->increment($category->getCountName());
@@ -169,13 +174,17 @@ class CategoryHandler
         /** @var CategoryItem $parent */
         $parent = null;
         if ($item->isDirty($item->getParentIdName())) {
+            // todo: parent 가 존재하다가 없어진 경우 처리 필요
+
+            
             $parent = $item->newQuery()->find($item->getAttribute($item->getParentIdName()));
         }
 
         $item->save();
 
         if ($parent) {
-            $this->moveTo($item, count($parent->getChildren()), $parent);
+            $this->moveTo($item, $parent);
+            $this->setOrder($item, count($parent->getChildren()));
         }
 
         return $item;
@@ -233,14 +242,11 @@ class CategoryHandler
      * Move to another parent CategoryItem
      *
      * @param CategoryItem $item     item object
-     * @param int          $position position for order
      * @param CategoryItem $parent   new parent item object
-     * @return void
+     * @return CategoryItem
      * @throws UnableMoveToSelfException
-     * 
-     * todo: ordering 기능 분리
      */
-    public function moveTo(CategoryItem $item, $position, CategoryItem $parent = null)
+    public function moveTo(CategoryItem $item, CategoryItem $parent = null)
     {
         $oldParent = $item->getParent();
         if ($parent !== null) {
@@ -249,7 +255,6 @@ class CategoryHandler
             }
 
             if ($oldParent !== null && $oldParent->getKey() == $parent->getKey()) {
-                $this->setOrder($item, $position);
                 return;
             }
         }
@@ -257,10 +262,6 @@ class CategoryHandler
         if ($oldParent !== null) {
             $this->unlinkHierarchy($item, $oldParent);
             $item->{$item->getParentIdName()} = null;
-            // unlink 작업이 객체에 의해 처리되지 않으므로
-            // 객채가 갱신되지 않음
-            // 그래서 수동으로 객체에 로드된 연관객체를 초기화 함
-            unset($item->ancestors);
         }
 
         if ($parent !== null) {
@@ -270,97 +271,8 @@ class CategoryHandler
 
         $item->save();
 
-        $this->setOrder($item, $position);
-    }
-
-    /**
-     * Linked parent and child relation
-     *
-     * @param CategoryItem $item   child item instance
-     * @param CategoryItem $parent parent item instance
-     * @return bool
-     */
-    protected function linkHierarchy(CategoryItem $item, CategoryItem $parent)
-    {
-        $conn = $item->getConnection();
-        $prefix = $conn->getTablePrefix();
-        $table = $item->getClosureTable();
-        $ancestor = $item->getAncestorName();
-        $descendant = $item->getDescendantName();
-        $depth = $item->getDepthName();
-
-        $select = $conn->table($table . ' as a')
-            ->joinWhere($table . ' as d', "d.{$ancestor}", '=', $item->getKey())
-            ->where("a.{$descendant}", '=', $parent->getKey())
-            ->select([
-                "a.{$ancestor}",
-                "d.{$descendant}",
-                new Expression("`{$prefix}a`.`{$depth}` + `{$prefix}d`.`{$depth}` + 1")
-            ]);
-
-        $bindings = $select->getBindings();
-
-        $insertQuery = sprintf("insert into %s (`{$ancestor}`, `{$descendant}`, `{$depth}`) ", $prefix . $table)
-            . $select->toSql();
-
-        return $conn->insert($insertQuery, $bindings);
-    }
-
-    /**
-     * unlinked parent and child relation
-     *
-     * @param CategoryItem $item   child item instance
-     * @param CategoryItem $parent parent item instance
-     * @return int affected row count
-     */
-    protected function unlinkHierarchy(CategoryItem $item, CategoryItem $parent)
-    {
-        $conn = $item->getConnection();
-        $table = $item->getClosureTable();
-        $ancestor = $item->getAncestorName();
-        $descendant = $item->getDescendantName();
-
-        $rows = $conn->table($table . ' as a')
-            ->join($table . ' as rel', "a.{$ancestor}", '=', "rel.{$ancestor}")
-            ->join($table . ' as d', "d.{$descendant}", '=', "rel.{$descendant}")
-            ->where("a.{$descendant}", $parent->getKey())
-            ->where("d.{$ancestor}", $item->getKey())
-            ->get(['rel.' . $item->getKeyName()]);
-
-        $ids = array_column($rows, $item->getKeyName());
-
-        return $conn->table($table)->whereIn($item->getKeyName(), $ids)->delete();
-    }
-
-    /**
-     * Set item ordering value
-     *
-     * @param CategoryItem $item     item object
-     * @param int          $position sequence value
-     * @return void
-     */
-    protected function setOrder(CategoryItem $item, $position)
-    {
-        /** @var CategoryItem $parent */
-        if (!$parent = $item->getParent()) {
-            $children = $item->aggregator->getProgenitors();
-        } else {
-            $children = $parent->getChildren();
-        }
-
-        /** @var Collection $children */
-        $children = $children->filter(function (CategoryItem $model) use ($item) {
-            return $model->getKey() != $item->getKey();
-        });
-
-        $children = $children->slice(0, $position)
-            ->merge([$item])
-            ->merge($children->slice($position));
-
-        $children->each(function (CategoryItem $model, $idx) {
-            $model->{$model->getOrderKeyName()} = $idx;
-            $model->save();
-        });
+        // 연관 객체 정보들이 변경 되었으므로 객채를 갱신 함
+        return $item->newQuery()->find($item->getKey());
     }
 
     /**

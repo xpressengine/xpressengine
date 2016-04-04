@@ -97,7 +97,7 @@ class MenuItem extends CategoryItem
     ];
 
     /**
-     * Alias aggregation
+     * Alias aggregator
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -123,78 +123,16 @@ class MenuItem extends CategoryItem
 
         return $method->invoke($this);
     }
-
+    
     /**
-     * Scope for get node items of progenitor
+     * Get the aggregator model name for model
      *
-     * @param Builder $query query builder
-     * @param Menu    $menu  category instance
-     * @return Builder
+     * @return string
      */
-    public function scopeProgenitors(Builder $query, $menu)
+    public function getAggregatorModel()
     {
-        return $this->scopeRoots($query)->where('menuId', $menu->getKey());
+        return Menu::class;
     }
-
-//    /**
-//     * Get the pivot table for model's hierarchy
-//     *
-//     * @return string
-//     */
-//    public function getClosureTable()
-//    {
-//        return $this->closureTable;
-//    }
-//
-//    /**
-//     * Get the ancestor key name of pivot table
-//     *
-//     * @return string
-//     */
-//    public function getAncestorName()
-//    {
-//        return 'ancestor';
-//    }
-//
-//    /**
-//     * Get the descendant key name of pivot table
-//     *
-//     * @return string
-//     */
-//    public function getDescendantName()
-//    {
-//        return 'descendant';
-//    }
-//
-//    /**
-//     * Get the depth key name of pivot table
-//     *
-//     * @return string
-//     */
-//    public function getDepthName()
-//    {
-//        return 'depth';
-//    }
-//
-//    /**
-//     * Get the parent key name for model
-//     *
-//     * @return string
-//     */
-//    public function getParentIdName()
-//    {
-//        return 'parentId';
-//    }
-//
-//    /**
-//     * Get the order key name for model
-//     *
-//     * @return string
-//     */
-//    public function getOrderKeyName()
-//    {
-//        return 'ordering';
-//    }
 
     /**
      * Get the aggregator key name for model

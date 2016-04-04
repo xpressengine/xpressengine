@@ -13,10 +13,7 @@
  */
 namespace Xpressengine\Menu;
 
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Query\Expression;
 use Illuminate\Database\QueryException;
-use Xpressengine\Category\CategoryHandler;
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Keygen\Keygen;
 use Xpressengine\Menu\Exceptions\CanNotDeleteMenuEntityHaveChildException;
@@ -28,6 +25,7 @@ use Xpressengine\Module\ModuleHandler;
 use Xpressengine\Permission\Grant;
 use Xpressengine\Permission\PermissionHandler;
 use Xpressengine\Routing\RouteRepository;
+use Xpressengine\Support\Tree\NodePositionTrait;
 
 /**
  * # MenuHandler
@@ -119,8 +117,10 @@ use Xpressengine\Routing\RouteRepository;
  * @license   http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link      http://www.xpressengine.com
  */
-class MenuHandler extends CategoryHandler
+class MenuHandler
 {
+    use NodePositionTrait;
+    
     /**
      * Model class
      *
@@ -245,6 +245,21 @@ class MenuHandler extends CategoryHandler
     }
 
     /**
+     * Update category
+     *
+     * @param Menu $menu menu instance
+     * @return Menu
+     */
+    public function put(Menu $menu)
+    {
+        if ($menu->isDirty()) {
+            $menu->save();
+        }
+
+        return $menu;
+    }
+
+    /**
      * Delete menu
      *
      * @param Menu $menu menu instance
@@ -290,15 +305,39 @@ class MenuHandler extends CategoryHandler
                 }
             }
         }
-
+        
         $this->setHierarchy($item);
-
-        $this->setOrder($item, $inputs['ordering']);
+        $this->setOrder($item);
+        $menu->increment($menu->getCountName());
+        
         $this->registerItemPermission($item, new Grant);
-
         $this->storeMenuType($item, $menuTypeInput);
 
         return $item;
+    }
+
+    /**
+     * Set hierarchy information for new item
+     *
+     * @param MenuItem $item item object
+     * @return void
+     */
+    protected function setHierarchy(MenuItem $item)
+    {
+        // 이미 존재하는 경우 hierarchy 정보를 새로 등록하지 않음
+        try {
+            $item->ancestors()->attach($item->getKey(), [$item->getDepthName() => 0]);
+        } catch (\Exception $e) {
+            return;
+        }
+
+        if ($item->{$item->getParentIdName()}) {
+            $model = $this->createItemModel();
+            /** @var MenuItem $parent */
+            $parent = $model->newQuery()->find($item->{$item->getParentIdName()});
+
+            $this->linkHierarchy($item, $parent);
+        }
     }
 
     /**
@@ -334,7 +373,20 @@ class MenuHandler extends CategoryHandler
      */
     public function putItem(MenuItem $item, array $menuTypeInput)
     {
-        parent::putItem($item);
+        /** @var MenuItem $parent */
+        $parent = null;
+        if ($item->isDirty($item->getParentIdName())) {
+            // todo: parent 가 존재하다가 없어진 경우 처리 필요
+
+            $parent = $item->newQuery()->find($item->getAttribute($item->getParentIdName()));
+        }
+
+        $item->save();
+
+        if ($parent) {
+            $this->moveItem($parent->menu, $item, $parent);
+            $this->setOrder($item, count($parent->getChildren()));
+        }
 
         $this->updateMenuType($item, $menuTypeInput);
 
@@ -409,8 +461,6 @@ class MenuHandler extends CategoryHandler
      * @param MenuItem|null $parent menu item instance
      * @return MenuItem
      * @throws InvalidArgumentException
-     *
-     * todo: parent::moveTo 활용
      */
     public function moveItem(Menu $menu, MenuItem $item, MenuItem $parent = null)
     {
@@ -433,14 +483,8 @@ class MenuHandler extends CategoryHandler
         $item->menuId = $menu->getKey();
         $item->save();
 
-        // flush relationship
-        foreach (array_keys($item->getRelations()) as $relation) {
-            unset($item->{$relation});
-        }
-
-        $item->setRelation('menu', $menu);
-
-        return $item;
+        // 연관 객체 정보들이 변경 되었으므로 객채를 갱신 함
+        return $item->newQuery()->find($item->getKey());
     }
 
     /**
@@ -713,52 +757,52 @@ class MenuHandler extends CategoryHandler
         return $item->menu->getKey() . '.' . implode('.', $item->getBreadcrumbs());
     }
 
-//    /**
-//     * Create new menu model
-//     *
-//     * @return Menu
-//     */
-//    public function createModel()
-//    {
-//        $class = $this->getModel();
-//
-//        return new $class;
-//    }
-//
-//    /**
-//     * Get menu model
-//     *
-//     * @return string
-//     */
-//    public function getModel()
-//    {
-//        return $this->model;
-//    }
-//
-//    /**
-//     * Set menu model
-//     *
-//     * @param string $model model class
-//     * @return void
-//     */
-//    public function setModel($model)
-//    {
-//        $this->model = '\\' . ltrim($model, '\\');
-//    }
-//
-//    /**
-//     * Create new menu item model
-//     *
-//     * @param Menu $menu menu instance
-//     * @return mixed
-//     */
-//    public function createItemModel(Menu $menu = null)
-//    {
-//        $menu = $menu ?: $this->createModel();
-//        $class = $menu->getItemModel();
-//
-//        return new $class;
-//    }
+    /**
+     * Create new menu model
+     *
+     * @return Menu
+     */
+    public function createModel()
+    {
+        $class = $this->getModel();
+
+        return new $class;
+    }
+
+    /**
+     * Get menu model
+     *
+     * @return string
+     */
+    public function getModel()
+    {
+        return $this->model;
+    }
+
+    /**
+     * Set menu model
+     *
+     * @param string $model model class
+     * @return void
+     */
+    public function setModel($model)
+    {
+        $this->model = '\\' . ltrim($model, '\\');
+    }
+
+    /**
+     * Create new menu item model
+     *
+     * @param Menu $menu menu instance
+     * @return mixed
+     */
+    public function createItemModel(Menu $menu = null)
+    {
+        $menu = $menu ?: $this->createModel();
+        $class = $menu->getItemModel();
+
+        return new $class;
+    }
 
     /**
      * Generate new key

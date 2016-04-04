@@ -4,8 +4,8 @@
  *
  * PHP version 5
  *
- * @category    Category
- * @package     Xpressengine\Category
+ * @category    Support
+ * @package     Xpressengine\Support
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
@@ -14,6 +14,7 @@
 namespace Xpressengine\Support\Tree;
 
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Xpressengine\Database\Eloquent\DynamicModel;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Builder;
@@ -45,6 +46,16 @@ abstract class Node extends DynamicModel implements NodeInterface
      * @var Collection
      */
     protected $children;
+
+    /**
+     * Aggregator relationship
+     *
+     * @return BelongsTo
+     */
+    public function aggregator()
+    {
+        return $this->belongsTo($this->getAggregatorModel(), $this->getAggregatorKeyName());
+    }
 
     /**
      * Ancestors relationship
@@ -279,6 +290,18 @@ abstract class Node extends DynamicModel implements NodeInterface
     }
 
     /**
+     * Scope for get node items of progenitor
+     *
+     * @param Builder    $query      query builder
+     * @param Aggregator $aggregator category instance
+     * @return Builder
+     */
+    public function scopeProgenitors(Builder $query, $aggregator)
+    {
+        return $this->scopeRoots($query)->where($this->getAggregatorKeyName(), $aggregator->getKey());
+    }
+
+    /**
      * Get the pivot table for model's hierarchy
      *
      * @return string
@@ -312,4 +335,18 @@ abstract class Node extends DynamicModel implements NodeInterface
      * @return string
      */
     abstract public function getParentIdName();
+
+    /**
+     * Get the aggregator model name for model
+     *
+     * @return string
+     */
+    abstract public function getAggregatorModel();
+
+    /**
+     * Get the aggregator key name for model
+     *
+     * @return string
+     */
+    abstract public function getAggregatorKeyName();
 }

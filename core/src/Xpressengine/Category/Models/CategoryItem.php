@@ -59,17 +59,7 @@ class CategoryItem extends Node
     protected $fillable = ['parentId', 'word', 'description'];
 
     /**
-     * Node group relationship
-     *
-     * @return BelongsTo
-     */
-    public function aggregator()
-    {
-        return $this->belongsTo(Category::class, $this->getAggregatorKeyName());
-    }
-
-    /**
-     * Alias aggregation
+     * Alias aggregator
      *
      * @return BelongsTo
      */
@@ -102,19 +92,7 @@ class CategoryItem extends Node
 
         return $this->children;
     }
-
-    /**
-     * Scope for get node items of progenitor
-     *
-     * @param Builder  $query    query builder
-     * @param Category $category category instance
-     * @return Builder
-     */
-    public function scopeProgenitors(Builder $query, $category)
-    {
-        return $this->scopeRoots($query)->where('categoryId', $category->getKey());
-    }
-
+    
     /**
      * Get the pivot table for model's hierarchy
      *
@@ -175,6 +153,16 @@ class CategoryItem extends Node
         return 'ordering';
     }
 
+    /**
+     * Get the aggregator model name for model
+     * 
+     * @return string
+     */
+    public function getAggregatorModel()
+    {
+        return Category::class;
+    }
+    
     /**
      * Get the aggregator key name for model
      * 

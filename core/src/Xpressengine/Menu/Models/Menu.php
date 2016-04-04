@@ -13,12 +13,8 @@
  */
 namespace Xpressengine\Menu\Models;
 
-use Illuminate\Database\Eloquent\Collection;
 use Xpressengine\Category\Models\Category;
-use Xpressengine\Database\Eloquent\DynamicModel;
 use Xpressengine\Site\Site;
-use Xpressengine\Support\Tree\Tree;
-use Xpressengine\Support\Tree\TreeMakerTrait;
 
 /**
  * Class Menu
@@ -35,11 +31,8 @@ use Xpressengine\Support\Tree\TreeMakerTrait;
  * @property string $siteKey
  * @property string $description
  */
-//class Menu extends DynamicModel
 class Menu extends Category
 {
-//    use TreeMakerTrait;
-
     /**
      * The table associated with the model.
      *
@@ -62,18 +55,11 @@ class Menu extends Category
     public $timestamps = false;
 
     /**
-     * The attributes that aren't mass assignable.
+     * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $guarded = ['id'];
-
-//    /**
-//     * The tree instance consisting of item
-//     *
-//     * @var Tree
-//     */
-//    protected $tree;
+    protected $fillable = ['title', 'siteKey', 'description'];
 
     /**
      * Item model class
@@ -93,42 +79,6 @@ class Menu extends Category
     }
 
     /**
-     * Relation of items
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function items()
-    {
-        return $this->hasMany(static::$itemModel, 'menuId');
-    }
-
-//    /**
-//     * Get category items of root level
-//     *
-//     * @return Collection
-//     */
-//    public function getProgenitors()
-//    {
-//        $class = static::getItemModel();
-//
-//        return $class::progenitors($this)->get();
-//    }
-
-//    /**
-//     * Get a tree of category items
-//     *
-//     * @return Tree
-//     */
-//    public function getTree()
-//    {
-//        if (!$this->tree) {
-//            $this->tree = $this->makeTree($this->items);
-//        }
-//
-//        return $this->tree;
-//    }
-
-    /**
      * Set selected to item has given key
      *
      * @param string $itemKey item key
@@ -142,27 +92,6 @@ class Menu extends Category
             $tree[$itemKey]->setSelected();
         }
     }
-
-//    /**
-//     * Set the menu item model
-//     *
-//     * @param string $model model class
-//     * @return void
-//     */
-//    public static function setItemModel($model)
-//    {
-//        static::$itemModel = '\\' . ltrim($model, '\\');
-//    }
-//
-//    /**
-//     * Get the menu item model
-//     *
-//     * @return string
-//     */
-//    public static function getItemModel()
-//    {
-//        return static::$itemModel;
-//    }
 
     /**
      * Convert the model instance to an array.
