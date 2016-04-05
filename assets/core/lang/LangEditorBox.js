@@ -162,18 +162,16 @@ $__System.registerDynamic("1", [], true, function($__require, exports, module) {
       lines: lines
     }), $o[0]);
   };
-  System.import('xecore:/common/js/xe.bundle').then(function() {
-    $(function() {
-      $('.lang-editor-box').each(function(i) {
-        langEditorBoxRender($(this));
-      });
-      $(document).on('focus', '.lang-editor-box input, textarea', function() {
-        var box = $(this).closest('.lang-editor-box'),
-            el = box.find('.sub');
-        if ($(el).is(':hidden')) {
-          $(el).slideDown('fast');
-        }
-      });
+  $(function() {
+    $('.lang-editor-box').each(function(i) {
+      langEditorBoxRender($(this));
+    });
+    $(document).on('focus', '.lang-editor-box input, textarea', function() {
+      var box = $(this).closest('.lang-editor-box'),
+          el = box.find('.sub');
+      if ($(el).is(':hidden')) {
+        $(el).slideDown('fast');
+      }
     });
   });
   return module.exports;
