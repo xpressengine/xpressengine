@@ -115,7 +115,7 @@ class ThemeMigration implements Migration
             "copyRight" => "Copyright © NAVER Corp. Supported by D2 Program.",
         ];
 
-        app('xe.theme')->setThemeConfig('theme/alice', $config);
+        app('xe.theme')->setThemeConfig('alice', $config);
     }
 
     public function update($currentVersion)

@@ -1,0 +1,142 @@
+#__xe__notificationCenterContainer{top:0;height:100%; min-height:100%;padding:0;background:red;right:0;}
+#__xe__notificationCenter {position:fixed; top:0; width:320px; height:100%; min-height:100%; padding: 0; background:#fff; box-shadow: 0 0 50px rgba(0,0,0,0.3); z-index:1; font-size:14px; }
+
+/* close button */
+#__xe__notificationCenter .btn_close {position:absolute; left:-60px; top:15px; opacity: 0.6; cursor: pointer; font-size: 45px; color:#fff;}
+#__xe__notificationCenter .btn_close:hover { opacity: 1;}
+
+#__xe__notificationCenter .wrap {position:relative;height:100%;overflow-y:auto;}
+
+/* header */
+#__xe__notificationCenter .wrap > .header {height:110px; border-bottom:1px solid #ededed }
+#__xe__notificationCenter .wrap > .header h1 { font-family: 'Open Sans', sans-serif; font-weight: normal; font-size: 36px;  margin: 0; padding:17px 30px 0;  }
+#__xe__notificationCenter .wrap > .header h1 small {display:block; font-size:14px}
+#__xe__notificationCenter .wrap > .header .icon {float:left; height:110px; line-height:110px; font-size:50px; padding:0 20px 0 40px; }
+
+
+#__xe__notificationCenter .sidebar-content {position: absolute; top:100px; width:100%;}
+/* layout preview */
+#__xe__notificationCenter .layout-preview {list-style: none; overflow: hidden}
+#__xe__notificationCenter .layout-preview li {float:left;}
+
+/* item list */
+#__xe__notificationCenter .itemlist {list-style:none; margin:0; padding:0;}
+#__xe__notificationCenter .itemlist li {padding: 22px 30px; background:#fff; overflow:hidden; border-bottom:1px solid #ededed}
+#__xe__notificationCenter .itemlist .profile {float:left;}
+#__xe__notificationCenter .itemlist .profile img {width : 50px; height: 50px; border-radius:50px}
+#__xe__notificationCenter .itemlist .message {margin-left: 70px; font-size:15px; line-height: 1.8}
+#__xe__notificationCenter .itemlist .ago {display:block; margin-top:4px; color:#555; font-size: 13px; }
+#__xe__notificationCenter .itemlist .count {float:right; }
+
+#__xe__notificationCenter .notify {text-align:center; padding: 90px 30px; background-color:#fff; }
+#__xe__notificationCenter .notify .icon {font-size: 90px; margin: 20px 0;}
+#__xe__notificationCenter .notify .text {line-height: 1.8; font-size: 16px;}
+
+#__xe__notificationCenter .loading {text-align:center; padding: 90px 0 0; font-size: 60px; opacity: 0.8; -moz-opacity: 0.8}
+#__xe__notificationCenter .loading p { font-size: 13px; margin:8px 0 0; padding:0;}
+#__xe__notificationCenter .moment {font-size:12px; color: rgba(50,50,50,0.7)}
+
+/* noti-groups */
+.noti-groups{ position: relative;}
+.noti-groups .noti-header {
+    width: 100%;
+    display:block;
+    box-sizing: border-box;
+    float: left;
+    padding-left:10px;
+    font-size: 14px;
+    height: 35px;
+    border-left: 1px solid #ededed;
+    line-height: 35px;
+    box-shadow: 0 -2px 0 #e1e1e1 inset;
+    background: #fff;
+    transition: opacity .2s ease, background .2s ease, box-shadow .2s ease;
+    -webkit-transition: opacity .2s ease, background .2s ease, box-shadow .2s ease;
+}
+.noti-groups .noti-content{}
+
+/* dimmer */
+.dimmer { background:#000; opacity:0.75; position:fixed;  top:0; left:0; width:100%; height:100%; z-index:0; cursor:pointer}
+
+/* tabs */
+.tabs .tabs-menu {width:100%; list-style:none; margin:0; padding:0;}
+.tabs .tabs-menu li {position:relative; width:33.3333%; box-sizing:border-box; float:left; text-align:center; font-size:14px; height: 55px; border-left:1px solid #ededed; line-height:55px; background:#fff;box-shadow: 0 -2px 0 #e1e1e1 inset; transition: opacity .2s ease,background .2s ease,box-shadow .2s ease; -webkit-transition: opacity .2s ease,background .2s ease,box-shadow .2s ease;}
+.tabs .tabs-menu li:hover {background: #fafafa;}
+.tabs .tabs-menu li:first-child {border:none;}
+.tabs .tabs-menu li.is-active {box-shadow: 0 -4px 0 #ff7b70 inset}
+.tabs .tabs-menu li a {display:block; width:100%; height:100%; text-decoration: none; color:#777}
+.tabs .tabs-menu li i {font-size:19px}
+.tabs .tab-panel {float:left; width:100%;}
+
+.noti-body {list-style:none; padding:0; margin:0;}
+.noti-body li {padding: 18px 30px; background:rgba(255,255,255,0.8); overflow:hidden; border-bottom:1px solid #ededed; transition: background .1s ease; -webkit-transition: background .1s ease;}
+.noti-body li:hover {background:rgba(245,245,245,1);}
+.noti-body li .count {  float: right; padding: 3px 10px; background-color: #A0A0A0; color: #fff; border-radius: 4px; font-size: 12px;}
+.noti-body li.active .count {background-color:#ff7b70}
+
+.HashtagList.noti-body li {font-size: 15px; color:#666; cursor:pointer}
+.HashtagList.noti-body li.active .hashtag {font-size: 18px; color:#222}
+
+.LinkList.noti-body li {padding:0;}
+.LinkList.noti-body li a {display:block; padding:20px 30px; width:100%; height:100%; color:#777; line-height: 1.7; word-break: break-all; box-sizing: border-box;}
+.LinkList.noti-body li a:hover,
+.LinkList.noti-body li a:focus,
+.LinkList.noti-body li a:active {color:#000}
+
+.NotifyList li {font-size:14px;}
+.NotifyList .avatar {float:left; width:30px; height:30px; border-radius:4px; vertical-align: middle}
+.NotifyList .text {margin: 3px 0 0 45px; padding: 0; line-height: 1.8;}
+
+
+
+/* mypage header */
+#__xe__notificationCenter .wrap {overflow:hidden}
+#__xe__notificationCenter .wrap > .header { position:absolute; top:0; width:100%; height: 100px; padding:30px; background:#fff; border-bottom: 1px solid #ededed; box-sizing: border-box}
+#__xe__notificationCenter .wrap > .header .avatar {float:left;}
+#__xe__notificationCenter .wrap > .header .avatar img {width:40px; height:40px; border-radius: 100%;}
+
+#__xe__notificationCenter .wrap > .header .user_info { margin-left: 90px; }
+#__xe__notificationCenter .wrap > .header .block { display:block;  }
+#__xe__notificationCenter .wrap > .header .user_name {font-size: 17px;}
+#__xe__notificationCenter .wrap > .header .nick_name {margin-top:7px; font-size: 13px; opacity : 0.8 }
+#__xe__notificationCenter .wrap > .header .count {list-style:none; padding:0; margin:12px 0 0;}
+#__xe__notificationCenter .wrap > .header .count li {float:left; background:rgb(239, 239, 239); padding: 2px 5px; border-radius:4px; }
+
+#__xe__notificationCenter .footer { position:absolute; bottom:0; left:0; height: 50px; line-height: 50px; text-align:right; padding-right: 30px; width: 100%; border-top: 1px solid #f4f4f4; box-sizing:border-box; background-color:#fff; z-index: 999 }
+#__xe__notificationCenter .footer img {height:23px; vertical-align: middle}
+
+/* NotificationRow */
+.NotificationRow {cursor:pointer}
+.NotificationRow p {margin: 0; padding:0; line-height: 1.8}
+.NotificationRow .moment {margin-top: 14px;}
+.NotificationRow .avatar {float:right; padding:5px 0 0;}
+.NotificationRow .avatar + .text {margin-right : 65px }
+.NotificationRow .avatar img {width: 40px; height: 40px; border-radius: 40px;}
+
+/* Extra Small Devices, Phones */
+@media only screen and (max-width : 480px) {
+    #__xe__notificationCenter {position:fixed; top:0; right:0; width:100%; height:100%; padding: 0 0 30px; background:#FFFEF9; box-shadow: 0 0 50px rgba(0,0,0,0.3); z-index:1; }
+    #__xe__notificationCenter .wrap > .header .icon {padding-left:20px;}
+    #__xe__notificationCenter .wrap > .header h1 {font-size:27px}
+}
+
+.notiftypecount{
+    display: inline;
+    font-size: 80%;
+}
+.closenotif{
+position: absolute;
+width: 16px;
+height: 16px;
+top: 8px;
+right: 10px;
+cursor: pointer;
+background-color: red;
+-moz-border-radius: 100px;
+-webkit-border-radius: 100px;
+border-radius: 100px;
+text-align: center;
+font-size: 14px;
+line-height: 1px;
+padding: 2px;
+}

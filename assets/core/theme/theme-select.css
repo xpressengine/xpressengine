@@ -1,0 +1,38 @@
+.theme-select-group .thumbnail {
+  border-bottom: none;
+}
+
+.theme-select-group .thumbnail .caption strong {
+  margin-bottom: 4px;
+  font-size: 18px;
+  color: #2c2e37;
+  line-height: 24px;
+  font-weight: normal;
+}
+
+.theme-select-group .thumbnail .xe-ellipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+  overflow: hidden;
+  font-size: 13px;
+  color: #8e8e93;
+  line-height: 20px;
+}
+
+.theme-select-group .thumbnail .btn-group > .btn {
+  padding: 13px 12px;
+  border-right: none;
+  border-radius: 0;
+  border-color: #e4e4e4;
+  background-color: #F8FAFD;
+  color: #696e7a;
+}
+
+.theme-select-group .thumbnail .btn-group > .btn:hover {
+  background-color: #DADBDE;
+}
+
+.theme-select-group .thumbnail .btn-group > .btn:first-child:not(:last-child):not(.dropdown-toggle) {
+  border-left: none;
+}
