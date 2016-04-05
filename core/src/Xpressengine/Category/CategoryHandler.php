@@ -171,21 +171,14 @@ class CategoryHandler
      */
     public function putItem(CategoryItem $item)
     {
-        /** @var CategoryItem $parent */
-        $parent = null;
-        if ($item->isDirty($item->getParentIdName())) {
-            // todo: parent 가 존재하다가 없어진 경우 처리 필요
-
-            
-            $parent = $item->newQuery()->find($item->getAttribute($item->getParentIdName()));
+        if ($item->isDirty($parentIdName = $item->getParentIdName())) {
+            // 내용 수정시 부모 키 변경은 허용하지 않음
+            // 부모 키가 변경되는 경우는 반드시 moveTo, setOrder 를
+            // 통해 처리되야 함
+            $item->{$parentIdName} = $item->getOriginal($parentIdName);
         }
 
         $item->save();
-
-        if ($parent) {
-            $this->moveTo($item, $parent);
-            $this->setOrder($item, count($parent->getChildren()));
-        }
 
         return $item;
     }

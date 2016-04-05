@@ -373,20 +373,14 @@ class MenuHandler
      */
     public function putItem(MenuItem $item, array $menuTypeInput)
     {
-        /** @var MenuItem $parent */
-        $parent = null;
-        if ($item->isDirty($item->getParentIdName())) {
-            // todo: parent 가 존재하다가 없어진 경우 처리 필요
-
-            $parent = $item->newQuery()->find($item->getAttribute($item->getParentIdName()));
+        if ($item->isDirty($parentIdName = $item->getParentIdName())) {
+            // 내용 수정시 부모 키 변경은 허용하지 않음
+            // 부모 키가 변경되는 경우는 반드시 moveItem, setOrder 를
+            // 통해 처리되야 함
+            $item->{$parentIdName} = $item->getOriginal($parentIdName);
         }
 
         $item->save();
-
-        if ($parent) {
-            $this->moveItem($parent->menu, $item, $parent);
-            $this->setOrder($item, count($parent->getChildren()));
-        }
 
         $this->updateMenuType($item, $menuTypeInput);
 
