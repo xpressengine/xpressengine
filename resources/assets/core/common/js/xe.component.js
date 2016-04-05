@@ -1,13 +1,6 @@
 (function (root, factory) {
-  if (typeof define === 'function' && define.amd) {
-    define(['exports'], factory);
-  } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
-    // CommonJS
-    factory(exports);
-  } else {
-    factory({});
-  }
-}(this, function (exports, Translator) {
+  module.exports = factory();
+}(this, function () {
   'use strict';
 
   $(function() {
@@ -45,11 +38,15 @@
   });
 
   function boot() {
-    exports.timeago();
+    timeago();
   }
 
-  exports.timeago = function() {
+  function timeago() {
     $('[data-xe-timeago]').trigger('xe.timeago');
+  };
+
+  return {
+    timeago: timeago
   };
 
 }));
