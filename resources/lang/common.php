@@ -1108,7 +1108,7 @@ return [
         'en' => "It's current your name."
     ],
     'changedAt' => [
-        'ko' => ':time 변경됨',
+        'ko' => ':time에 변경됨',
         'en' => 'changed at :time'
     ],
     'passwordNotRegisterd' => [
