@@ -75,7 +75,7 @@ gulp.task('jspm:langbox', function(){
   return gulp.src('assets/core/lang/LangEditorBox.js')
     .pipe($.plumber())
     .pipe($.jspm({selfExecutingBundle: true, plugin: 'jsx'}))
-    .pipe($.rename('LangEditorBox.js'))
+    .pipe($.rename('LangEditorBox.bundle.js'))
     .pipe(gulp.dest('assets/core/lang'));
 });
 
