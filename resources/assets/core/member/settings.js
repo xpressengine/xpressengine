@@ -493,11 +493,11 @@ $(function () {
                     data: {address: email},
                     success: function (data, textStatus, jqXHR) {
                         box.remove();
-                        alertBox('success', data.message);
+                        XE.toast('success', data.message);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         // delete에 실패하면 오류 출력
-                        alertBox('danger', jqXHR.responseJSON.message)
+                        XE.toast('danger', jqXHR.responseJSON.message)
                     }
                 });
             },
@@ -512,11 +512,11 @@ $(function () {
                     success: function (data, textStatus, jqXHR) {
                         self.ui.addEmailBox.show();
                         self.ui.confirmEmailBox.hide();
-                        alertBox('success', data.message);
+                        XE.toast('success', data.message);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         // delete에 실패하면 오류 출력
-                        alertBox('danger', jqXHR.responseJSON.message)
+                        XE.toast('danger', jqXHR.responseJSON.message)
                     }
                 });
             },
@@ -529,11 +529,11 @@ $(function () {
                     dataType: 'json',
                     data: {address: email},
                     success: function (data, textStatus, jqXHR) {
-                        alertBox('success', data.message);
+                        XE.toast('success', data.message);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         // resend에 실패하면 오류 출력
-                        alertBox('danger', jqXHR.responseJSON.message)
+                        XE.toast('danger', jqXHR.responseJSON.message)
                     }
                 });
             },
@@ -619,7 +619,7 @@ $(function () {
         $('.snb-list').toggle();
     });
 
-    XE.shortDate();
+    XE.Component.timeago();
 });
 
 $(window).resize(function () {
