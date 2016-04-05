@@ -32,16 +32,6 @@ class PendingEmailRepository implements PendingEmailRepositoryInterface
     use RepositoryTrait;
 
     /**
-     * PendingEmailRepository constructor.
-     *
-     * @param $model
-     */
-    public function __construct($model)
-    {
-        $this->setModel($model);
-    }
-
-    /**
      * create
      *
      * @param UserInterface $user
@@ -70,7 +60,6 @@ class PendingEmailRepository implements PendingEmailRepositoryInterface
      */
     public function delete(EmailInterface $email)
     {
-        $user = $email->user;
         return $email->delete();
     }
 

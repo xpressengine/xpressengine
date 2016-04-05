@@ -4,6 +4,7 @@ namespace Xpressengine\Tests\User;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Validation\Factory;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Support\MessageBag;
 use Mockery;
 use Xpressengine\Register\Container;
 use Xpressengine\User\Rating;
@@ -323,6 +324,7 @@ class UserHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler->validateForCreate($data);
     }
+
     /**
      * @expectedException \Xpressengine\User\Exceptions\DisplayNameAlreadyExistsException
      */
@@ -441,6 +443,124 @@ class UserHandlerTest extends \PHPUnit_Framework_TestCase
         ];
 
         $handler->validateForCreate($data);
+    }
+
+    public function testValidatePasswordWhenSuccess()
+    {
+        /*$messages = Mockery::mock(MessageBag::class);
+        $messages->shouldReceive('get')->with('password');*/
+        $validate = Mockery::mock(
+            Validator::class, [
+            'fails' => false,
+            /*'messages' => $messages*/
+        ]);
+        $validator = $this->getValidator();
+        $validator->shouldReceive('make')->once()->andReturn($validate);
+
+        /** @var UserHandler $handler */
+        $handler = $this->getHandler(null, null, null, null, null, null, null, $validator);
+        $this->assertTrue($handler->validatePassword('foo'));
+    }
+
+    /**
+     * @expectedException \Xpressengine\Support\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage error_message
+     */
+    public function testValidatePasswordWhenFail()
+    {
+        $messages = Mockery::mock(MessageBag::class);
+        $messages->shouldReceive('get')->with('password')->andReturn(['error_message']);
+        $validate = Mockery::mock(
+            Validator::class, [
+            'fails' => true,
+            'messages' => $messages
+        ]);
+        $validator = $this->getValidator();
+        $validator->shouldReceive('make')->once()->andReturn($validate);
+
+        /** @var UserHandler $handler */
+        $handler = $this->getHandler(null, null, null, null, null, null, null, $validator);
+        $handler->validatePassword('foo');
+    }
+
+    public function testUpdateWhenDisplayNameisEqual()
+    {
+        $changes = ['attached'=>[], 'detached'=>[]];
+        $user = $this->makeUser();
+        $user->shouldReceive('getAttribute')->once()->with('displayName')->andReturn('origin name');
+        $user->shouldReceive('groups->sync')->once()->andReturn($changes);
+        $user->shouldReceive('setAttribute')->once()->with('displayName', 'origin name')->andReturnSelf();
+        $user->shouldReceive('setAttribute')->once()->with('password', 'encrypted password')->andReturnSelf();
+        $user->shouldReceive('save')->once()->andReturnSelf();
+
+        /** @var Mockery\MockInterface $hasher */
+        $hasher = $this->getHasher();
+        $hasher->shouldReceive('make')->once()->with('new password')->andReturn('encrypted password');
+
+        $validate = Mockery::mock(
+            Validator::class, [
+            'fails' => false,
+        ]);
+        /** @var Mockery\MockInterface $validator */
+        $validator = $this->getValidator();
+        $validator->shouldReceive('make')->once()->andReturn($validate);
+
+        $groups = $this->getGroups();
+        $groups->shouldReceive('findMany')->twice()->with([])->andReturn([]);
+
+        /** @var Mockery\MockInterface $handler */
+        $handler = $this->getHandler(null, null, $groups, null, null, null, $hasher, $validator);
+
+        $data = [
+            'password' => 'new password',
+            'displayName' => 'origin name'
+        ];
+
+        $this->assertEquals($user, $handler->update($user, $data));
+
+    }
+
+    public function testUpdateWhenDisplayNameisDifferent()
+    {
+        $changes = ['attached'=>[], 'detached'=>[]];
+        $user = $this->makeUser();
+        $user->shouldReceive('getAttribute')->once()->with('displayName')->andReturn('origin name');
+        $user->shouldReceive('groups->sync')->once()->andReturn($changes);
+        $user->shouldReceive('setAttribute')->once()->with('displayName', 'new name')->andReturnSelf();
+        $user->shouldReceive('setAttribute')->once()->with('password', 'encrypted password')->andReturnSelf();
+        $user->shouldReceive('save')->once()->andReturnSelf();
+
+        /** @var Mockery\MockInterface $hasher */
+        $hasher = $this->getHasher();
+        $hasher->shouldReceive('make')->once()->with('new password')->andReturn('encrypted password');
+
+        $validate = Mockery::mock(
+            Validator::class, [
+            'fails' => false,
+        ]);
+        /** @var Mockery\MockInterface $validator */
+        $validator = $this->getValidator();
+        $validator->shouldReceive('make')->twice()->andReturn($validate);
+
+        $groups = $this->getGroups();
+        $groups->shouldReceive('findMany')->twice()->with([])->andReturn([]);
+
+        /** @var Mockery\MockInterface $users */
+        $users = $this->getUsers();
+        $query = $this->makeQuery();
+        $query->shouldReceive('first')->once()->andReturnNull();
+        $users->shouldReceive('where')->once()->with(['displayName'=>'new name'])->andReturn($query);
+
+        /** @var Mockery\MockInterface $handler */
+        $handler = $this->getHandler($users, null, $groups, null, null, null, $hasher, $validator);
+
+        $data = [
+            'password' => 'new password',
+            'displayName' => 'new name'
+        ];
+
+        $this->assertEquals($user, $handler->update($user, $data));
+
     }
 
     public function testCallMagicMethod()
@@ -659,4 +779,15 @@ class UserHandlerTest extends \PHPUnit_Framework_TestCase
     {
         return Mockery::mock(\Xpressengine\User\Models\UserAccount::class);
     }
+
+    /**
+     * makeQuery
+     *
+     * @return Mockery\MockInterface
+     */
+    private function makeQuery()
+    {
+        return Mockery::mock('\Illuminate\Database\Eloquent\Builder');
+    }
+
 }

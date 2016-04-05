@@ -22,7 +22,6 @@
                 <directory suffix="Facade.php">./src/</directory>
                 <directory suffix="Exception.php">./src/</directory>
                 <directory suffix="helpers.php">./src/</directory>
-                <directory>./src/Xpressengine/*/Facades</directory>
             </exclude>
         </whitelist>
     </filter>

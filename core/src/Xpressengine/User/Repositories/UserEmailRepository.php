@@ -32,16 +32,6 @@ class UserEmailRepository implements UserEmailRepositoryInterface
     use RepositoryTrait;
 
     /**
-     * UserEmailRepository constructor.
-     *
-     * @param $model
-     */
-    public function __construct($model)
-    {
-        $this->setModel($model);
-    }
-
-    /**
      * create
      *
      * @param UserInterface $user
