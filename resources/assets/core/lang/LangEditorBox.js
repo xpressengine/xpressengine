@@ -165,10 +165,11 @@ $(function () {
   });
 
   $(document).on('focus', '.lang-editor-box input, textarea', function () {
-    var box = $(this).closest('.lang-editor-box'),
-      el = box.find('.sub');
+    var box = $(this).closest('.lang-editor-box');
+    var el = box.find('.sub');
     if ($(el).is(':hidden')) {
       $(el).slideDown('fast');
+
       // todo: 기능 점검
       // $(box).find('textarea').expanding();
     }
