@@ -9,24 +9,25 @@ $__System.registerDynamic("1", [], true, function($__require, exports, module) {
       GLOBAL = this;
   var LangEditorBox = React.createClass({
     displayName: "LangEditorBox",
-    getInitialState: function() {
-      var state = {
-        name: this.props.name || '',
-        langKey: this.props.langKey || '',
-        multiline: this.props.multiline || false,
-        lines: this.props.lines || []
+    getDefaultProps() {
+      return {
+        name: '',
+        langKey: '',
+        multiline: false,
+        lines: [],
+        autocomplete: false
       };
-      return state;
     },
     render: function() {
       LangEditor.seq++;
       return (React.createElement(LangEditor, {
         key: LangEditor.seq,
         seq: LangEditor.seq,
-        name: this.state.name,
-        langKey: this.state.langKey,
-        multiline: this.state.multiline,
-        lines: this.state.lines
+        name: this.props.name,
+        langKey: this.props.langKey,
+        multiline: this.props.multiline,
+        lines: this.props.lines,
+        autocomplete: this.props.autocomplete
       }));
     }
   });
@@ -76,16 +77,18 @@ $__System.registerDynamic("1", [], true, function($__require, exports, module) {
             });
           }
         }
-        $(el).find('input[type=text]:first,textarea:first').autocomplete({
-          source: '/' + XE.options.managePrefix + '/lang/search/' + XE.Lang.locales[0],
-          minLength: 1,
-          focus: function(event, ui) {
-            event.preventDefault();
-          },
-          select: function(event, ui) {
-            self.setLines(ui.item.lines);
-          }
-        });
+        if (this.props.autocomplete) {
+          $(el).find('input[type=text]:first,textarea:first').autocomplete({
+            source: '/' + XE.options.managePrefix + '/lang/search/' + XE.Lang.locales[0],
+            minLength: 1,
+            focus: function(event, ui) {
+              event.preventDefault();
+            },
+            select: function(event, ui) {
+              self.setLines(ui.item.lines);
+            }
+          });
+        }
       }
     },
     getEditor: function(resource, locale, value) {
@@ -154,24 +157,28 @@ $__System.registerDynamic("1", [], true, function($__require, exports, module) {
     var name = $o.data('name'),
         langKey = $o.data('lang-key'),
         multiline = $o.data('multiline'),
-        lines = $o.data('lines');
+        lines = $o.data('lines'),
+        autocomplete = $o.data('autocomplete');
     React.render(React.createElement(LangEditorBox, {
       name: name,
       langKey: langKey,
       multiline: multiline,
-      lines: lines
+      lines: lines,
+      autocomplete: autocomplete
     }), $o[0]);
   };
-  $(function() {
-    $('.lang-editor-box').each(function(i) {
-      langEditorBoxRender($(this));
-    });
-    $(document).on('focus', '.lang-editor-box input, textarea', function() {
-      var box = $(this).closest('.lang-editor-box');
-      var el = box.find('.sub');
-      if ($(el).is(':hidden')) {
-        $(el).slideDown('fast');
-      }
+  System.import('xecore:/common/js/xe.bundle').then(function() {
+    $(function() {
+      $('.lang-editor-box').each(function(i) {
+        langEditorBoxRender($(this));
+      });
+      $(document).on('focus', '.lang-editor-box input, textarea', function() {
+        var box = $(this).closest('.lang-editor-box'),
+            el = box.find('.sub');
+        if ($(el).is(':hidden')) {
+          $(el).slideDown('fast');
+        }
+      });
     });
   });
   return module.exports;
