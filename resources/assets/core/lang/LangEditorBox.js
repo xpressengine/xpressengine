@@ -1,13 +1,13 @@
 
 var LangEditorBox = React.createClass({
-    getInitialState: function () {
-        var state = {
-            name: this.props.name || '',
-            langKey: this.props.langKey || '',
-            multiline: this.props.multiline || false,
-            lines: this.props.lines || []
+    getDefaultProps() {
+        return {
+            name: '',
+            langKey: '',
+            multiline: false,
+            lines: [],
+            autocomplete: false
         };
-        return state;
     },
     render: function () {
         LangEditor.seq++;
@@ -15,10 +15,11 @@ var LangEditorBox = React.createClass({
             <LangEditor
                 key={LangEditor.seq}
                 seq={LangEditor.seq}
-                name={this.state.name}
-                langKey={this.state.langKey}
-                multiline={this.state.multiline}
-                lines = {this.state.lines}
+                name={this.props.name}
+                langKey={this.props.langKey}
+                multiline={this.props.multiline}
+                lines = {this.props.lines}
+                autocomplete = {this.props.autocomplete}
                 />
         );
     }
@@ -69,12 +70,14 @@ var LangEditor = React.createClass({
                 }
             }
 
-            $(el).find('input[type=text]:first,textarea:first').autocomplete({
-                source: '/' + XE.options.managePrefix + '/lang/search/' + XE.Lang.locales[0],
-                minLength: 1,
-                focus: function(event, ui) { event.preventDefault(); },
-                select: function(event, ui) { self.setLines(ui.item.lines); }
-            });
+            if (this.props.autocomplete) {
+                $(el).find('input[type=text]:first,textarea:first').autocomplete({
+                    source: '/' + XE.options.managePrefix + '/lang/search/' + XE.Lang.locales[0],
+                    minLength: 1,
+                    focus: function(event, ui) { event.preventDefault(); },
+                    select: function(event, ui) { self.setLines(ui.item.lines); }
+                });
+            }
         }
     },
     // getFlagClass: function (locale) {
@@ -143,9 +146,10 @@ window.langEditorBoxRender = function ($o) {
     var name = $o.data('name'),
         langKey = $o.data('lang-key'),
         multiline = $o.data('multiline'),
-        lines = $o.data('lines');
+        lines = $o.data('lines'),
+        autocomplete = $o.data('autocomplete');
 
-    React.render(<LangEditorBox name={name} langKey={langKey} multiline={multiline} lines={lines} />, $o[0]);
+    React.render(<LangEditorBox name={name} langKey={langKey} multiline={multiline} lines={lines} autocomplete={autocomplete} />, $o[0]);
 };
 
 System.import('xecore:/common/js/xe.bundle').then(function() {

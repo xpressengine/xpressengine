@@ -3,6 +3,7 @@
 namespace Xpressengine\UIObjects\Lang;
 
 use XeFrontend;
+use Config;
 use Xpressengine\UIObject\AbstractUIObject;
 
 class LangText extends AbstractUIObject
@@ -30,8 +31,12 @@ class LangText extends AbstractUIObject
         )->load();
 
         $langKey = htmlspecialchars($args['langKey'], ENT_QUOTES, 'UTF-8');
+        $autocomplete = Config::get('xe.lang.autocomplete');
 
-        return "<div class=\"lang-editor-box\" data-name=\"{$args['name']}\" data-lang-key=\"{$langKey}\"></div>";
+        return "<div class=\"lang-editor-box\""
+            . " data-name=\"{$args['name']}\""
+            . " data-lang-key=\"{$langKey}\""
+            . " data-autocomplete=\"{$autocomplete}\"></div>";
     }
 
     public static function boot()
