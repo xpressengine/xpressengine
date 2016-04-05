@@ -1,4 +1,4 @@
-@import url(../../../../assets/jspm_packages/github/necolas/normalize.css@4.0.0/normalize.css);
+@import url(../../../../assets/vendor/normalize/normalize.css);
 html {
   box-sizing: border-box;
 }
