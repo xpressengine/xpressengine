@@ -288,9 +288,10 @@ class MenuHandler
      */
     public function createItem(Menu $menu, array $inputs, array $menuTypeInput = [])
     {
+        /** @var MenuItem $item */
         $item = $this->createItemModel($menu);
         $item->fill($inputs);
-        $item->menuId = $menu->getKey();
+        $item->{$item->getAggregatorKeyName()} = $menu->getKey();
 
         $cnt = 0;
         while ($cnt++ < static::DUPLICATE_RETRY_CNT) {
@@ -357,8 +358,8 @@ class MenuHandler
             $this->routes->create([
                 'url' => $item->url,
                 'module' => $menuTypeObj::getId(),
-                'instanceId' => $item->id,
-                'menuId' => $item->menuId,
+                'instanceId' => $item->getKey(),
+                'menuId' => $item->{$item->getAggregatorKeyName()},
                 'siteKey' => $item->menu->siteKey
             ]);
         }
@@ -474,7 +475,7 @@ class MenuHandler
             $item->parentId = $parent->getKey();
         }
 
-        $item->menuId = $menu->getKey();
+        $item->{$item->getAggregatorKeyName()} = $menu->getKey();
         $item->save();
 
         // 연관 객체 정보들이 변경 되었으므로 객채를 갱신 함
