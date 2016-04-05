@@ -100,7 +100,7 @@ class Guard extends LaravelGuard implements GuardInterface
         // Once we have fired the logout event we will clear the users out of memory
         // so they are no longer available as the user is no longer considered as
         // being signed into this application and should not be available here.
-        $this->user = null;
+        $this->user = $this->makeGuest();
 
         $this->loggedOut = true;
     }

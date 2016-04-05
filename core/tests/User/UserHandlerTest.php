@@ -1,5 +1,5 @@
 <?php
-namespace Xpressengine\Tests\Member;
+namespace Xpressengine\Tests\User;
 
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Validation\Factory;
@@ -424,7 +424,8 @@ class UserHandlerTest extends \PHPUnit_Framework_TestCase
 
         /** @var Mockery\MockInterface $accounts */
         $accounts = $handler->accounts();
-        $accounts->shouldReceive('where')->once()->with(['accountId'=>'foo','provider'=>'foo'])->andReturn(true);
+        $accounts->shouldReceive('where')->once()->with(['accountId'=>'foo','provider'=>'foo'])->andReturnSelf();
+        $accounts->shouldReceive('first')->once()->andReturn(true);
 
         $data = [
             'rating' => Rating::MEMBER,
