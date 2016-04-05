@@ -78,7 +78,7 @@ class DynamicFieldSection
         XeFrontend::js('/assets/vendor/jqueryui/jquery-ui.js')->appendTo('head')->load();
         XeFrontend::css('/assets/vendor/jqueryui/jquery-ui.css')->load();
         XeFrontend::js('/assets/vendor/expanding/expanding.js')->appendTo('head')->load();
-        XeFrontend::js('/assets/core/lang/LangEditorBox.js')->type('text/jsx')->appendTo('head')->load();
+        XeFrontend::js('/assets/core/lang/LangEditorBox.bundle.js')->appendTo('head')->load();
         XeFrontend::css('/assets/core/lang/LangEditorBox.css')->load();
         XeFrontend::css('/assets/core/lang/flag.css')->load();
 

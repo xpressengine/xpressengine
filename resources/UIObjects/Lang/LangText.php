@@ -18,7 +18,7 @@ class LangText extends AbstractUIObject
             [
                 '/assets/vendor/jqueryui/jquery-ui.js',
                 '/assets/vendor/expanding/expanding.js',
-                '/assets/core/lang/LangEditorBox.js'
+                '/assets/core/lang/LangEditorBox.bundle.js'
             ]
         )->load();
 
