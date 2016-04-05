@@ -1,0 +1,3741 @@
+/* xe-badge */
+.xe-badge {
+  display: inline-block;
+  vertical-align: baseline;
+  transition: background .1s ease;
+  font-size: 10px;
+  min-width: 2em;
+  min-height: 2em;
+  padding: .5em;
+  line-height: 1em;
+  text-align: center;
+  border-radius: 500rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.xe-badge.small {
+  min-width: 2.1em;
+  min-height: 2.1em;
+  line-height: 1.1em;
+  font-size: 11px;
+}
+
+.xe-badge.medium {
+  min-width: 2.2em;
+  min-height: 2.2em;
+  line-height: 1.2em;
+  font-size: 12px;
+}
+
+.xe-badge.empty {
+  min-width: 0;
+  min-height: 0;
+  line-height: 0;
+  font-size: inherit;
+  padding: 4px;
+}
+
+.xe-badge.floating {
+  position: absolute;
+  font-size: 10px;
+  top: -.5em;
+  left: 100%;
+  margin: 0 0 0 -1.5em;
+}
+
+.xe-badge.red {
+  background-color: #db2828;
+}
+
+.xe-badge.red:hover {
+  background-color: #d00000;
+}
+
+.xe-badge.orange {
+  background-color: #f2711c;
+}
+
+.xe-badge.orange:hover {
+  background-color: #f26202;
+}
+
+.xe-badge.yellow {
+  background-color: #fbbd08;
+}
+
+.xe-badge.yellow:hover {
+  background-color: #eaae00;
+}
+
+.xe-badge.olive {
+  background-color: #b5cc18;
+}
+
+.xe-badge.olive:hover {
+  background-color: #a7bd0d;
+}
+
+.xe-badge.green {
+  background-color: #00b96e;
+}
+
+.xe-badge.green:hover {
+  background-color: #199f69;
+}
+
+.xe-badge.teal {
+  background-color: #00b5ad;
+}
+
+.xe-badge.teal:hover {
+  background-color: #009c95;
+}
+
+.xe-badge.blue {
+  background-color: #2c8beb;
+}
+
+.xe-badge.blue:hover {
+  background-color: #0775ce;
+}
+
+.xe-badge.violet {
+  background-color: #6335c9;
+}
+
+.xe-badge.violet:hover {
+  background-color: #440cbb;
+}
+
+.xe-badge.purple {
+  background-color: #aa46bb;
+}
+
+.xe-badge.purple:hover {
+  background-color: #8f0bba;
+}
+
+.xe-badge.pink {
+  background-color: #f4645f;
+}
+
+.xe-badge.pink:hover {
+  background-color: #ff514c;
+}
+
+.xe-badge.brown {
+  background-color: #a5673f;
+}
+
+.xe-badge.brown:hover {
+  background-color: #975b33;
+}
+
+.xe-badge.grey {
+  background-color: #8e8e93;
+}
+
+.xe-badge.grey:hover {
+  background-color: #b5b7bd;
+}
+
+.xe-badge.black {
+  background-color: #2c2e37;
+}
+
+.xe-badge.black:hover {
+  background-color: #696e7a;
+}
+
+/* CSS Document */
+/*reset css*/
+.xe-dropdown-menu ul {
+  margin: 0;
+  padding: 0;
+}
+
+.xe-dropdown-menu li > a {
+  text-decoration: none;
+}
+
+/*dropdown*/
+.xe-dropdown,
+.xe-dropup {
+  display: inline-block;
+  position: relative;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.xe-dropdown > .xe-btn,
+.xe-dropup > .xe-btn,
+.xe-dropdown-menu li > a {
+  padding: 8px 55px 8px 16px;
+}
+
+.xe-dropdown > .xe-btn .caret,
+.xe-dropup > .xe-btn .caret {
+  display: none;
+}
+
+.xe-dropdown > .xe-btn,
+.xe-dropup > .xe-btn {
+  display: inline-block;
+  position: relative;
+  height: 36px;
+  border: 1px solid #dadbde;
+  background-color: #fff;
+  color: #2c2e37;
+  text-decoration: none;
+  text-align: left;
+  outline: none;
+  white-space: nowrap;
+  line-height: 1em;
+  border-radius: 2px;
+}
+
+.xe-dropdown.v2 > .xe-btn,
+.xe-dropup.v2 > .xe-btn {
+  border: none;
+}
+
+.xe-dropdown.open > .xe-btn {
+  border-radius: 2px 2px 0 0;
+}
+
+.xe-dropdown > .xe-btn:hover,
+.xe-dropup > .xe-btn:hover {
+  border-color: #b5b7bd;
+}
+
+.xe-dropdown > .xe-btn:after,
+.xe-dropup > .xe-btn:after {
+  display: inline-block;
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  width: 0;
+  height: 0;
+  margin-top: -2px;
+  border-style: solid;
+  border-width: 3px;
+  border-color: #8e8e93 transparent transparent transparent;
+  content: "";
+}
+
+.xe-dropdown-menu {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  margin-top: -1px;
+  padding: 0;
+  border: 1px solid #dadbde;
+  border-width: 0 1px 1px 1px;
+  border-radius: 0 0 2px 2px;
+  background-color: #fff;
+  z-index: 10;
+}
+
+.xe-dropdown.v2 .xe-dropdown-menu,
+.xe-dropup.v2 .xe-dropdown-menu {
+  padding: 8px 0;
+  border-width: 0;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3);
+}
+
+.xe-dropup .xe-dropdown-menu {
+  top: auto;
+  bottom: 100%;
+}
+
+.xe-dropup.v2 .xe-dropdown-menu {
+  border-radius: 2px;
+}
+
+.xe-dropdown.open > .xe-btn,
+.xe-dropdown.open .xe-dropdown-menu,
+.xe-dropup.open > .xe-btn,
+.xe-dropup.open .xe-dropdown-menu {
+  border-color: #2389ee;
+}
+
+.xe-dropdown .xe-dropdown-menu,
+.xe-dropup .xe-dropdown-menu {
+  display: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.xe-dropdown.open .xe-dropdown-menu,
+.xe-dropup.open .xe-dropdown-menu {
+  display: block;
+}
+
+.xe-dropdown-menu li > a {
+  display: block;
+  position: relative;
+  color: #2c2e37;
+}
+
+.xe-dropdown-menu li > a:hover {
+  background-color: #2389ee;
+  color: #fff !important;
+}
+
+.xe-dropdown-menu li {
+  list-style: none;
+}
+
+.xe-dropdown-menu li.on a {
+  color: #2c8beb;
+}
+
+.xe-dropdown-menu li.on a:after {
+  display: inline-block;
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  margin-top: -9px;
+  font-family: xeicon;
+  speak: none;
+  font-style: normal;
+  font-weight: 400;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  content: "\e92a";
+  color: #b5b7bd;
+  font-size: 18px;
+}
+
+.xe-dropdown.v2 .xe-dropdown-menu li.on a,
+.xe-dropup.v2 .xe-dropdown-menu li.on a {
+  padding-right: 16px;
+}
+
+.xe-dropdown.v2 .xe-dropdown-menu li.on a:after,
+.xe-dropup.v2 .xe-dropdown-menu li.on a:after {
+  display: none;
+}
+
+.xe-dropdown > .xe-btn,
+.xe-dropup > .xe-btn,
+.xe-dropdown-menu {
+  min-width: auto;
+  width: 168px;
+}
+
+.xe-dropdown.v2 > .xe-btn,
+.xe-dropup.v22 > .xe-btn,
+.xe-dropdown-menu {
+  width: auto;
+}
+
+.xe-dropdown.small > .xe-btn,
+.xe-dropup.small > .xe-btn,
+.xe-dropdown.small .xe-dropdown-menu,
+.xe-dropup.small .xe-dropdown-menu {
+  width: 112px;
+}
+
+.xe-dropdown.wide > .xe-btn,
+.xe-dropup.wide > .xe-btn,
+.xe-dropdown.wide .xe-dropdown-menu,
+.xe-dropup.wide .xe-dropdown-menu {
+  width: 224px;
+}
+
+.xe-dropdown.very-wide > .xe-btn,
+.xe-dropup.very-wide > .xe-btn,
+.xe-dropdown.very-wide .xe-dropdown-menu,
+.xe-dropup.very-wide .xe-dropdown-menu {
+  width: 280px;
+}
+
+.xe-dropdown.max-wide > .xe-btn,
+.xe-dropup.max-wide > .xe-btn,
+.xe-dropdown.max-wide .xe-dropdown-menu,
+.xe-dropup.max-wide .xe-dropdown-menu {
+  width: 336px;
+}
+
+.xe-select-box {
+  position: relative;
+  min-width: 140px;
+  height: 30px;
+  border: 1px solid #e4e4e4;
+  border-radius: 2px;
+  background-color: #fff;
+}
+
+.xe-select-box:after {
+  display: inline-block;
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  width: 0;
+  height: 0;
+  margin-top: -2px;
+  border-style: solid;
+  border-width: 3px;
+  border-color: #8e8e93 transparent transparent transparent;
+  content: "";
+}
+
+.xe-select-box label {
+  position: absolute;
+  font-size: 14px;
+  color: #696e7a;
+  top: 4px;
+  left: 12px;
+  letter-spacing: 1px;
+}
+
+.xe-select-box select {
+  width: 100%;
+  height: 30px;
+  font-size: 14px;
+  line-height: 30px;
+  padding: 0 10px;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  -webkit-appearance: menulist-xe-btn;
+}
+
+.xe-select-label {
+  position: relative;
+}
+
+.xe-select-label .label-input ul {
+  margin: 0;
+  padding: 0;
+}
+
+.xe-select-label .label-input ul li {
+  list-style: none;
+}
+
+.xe-select-label .label-list li {
+  list-style: none;
+}
+
+.xe-select-label .label-input {
+  position: relative;
+  overflow: hidden;
+  padding: 0 25px 0 10px;
+  background-color: #F6F7F9;
+  border: 1px solid #DBDADF;
+  border-radius: 2px;
+}
+
+.xe-select-label .label-input:after {
+  display: inline-block;
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  width: 0;
+  height: 0;
+  margin-top: -2px;
+  border-style: solid;
+  border-width: 4px;
+  border-color: #8e8e93 transparent transparent transparent;
+  content: "";
+}
+
+.xe-select-label .label-input ul li {
+  float: left;
+}
+
+.xe-select-label .label-input ul li:first-child .label-choice {
+  margin-left: 0;
+}
+
+.xe-select-label .label-input ul li .label-choice {
+  display: block;
+  position: relative;
+  margin: 6px 2px;
+  padding: 1px 28px 1px 8px;
+  color: #fff;
+  font-size: 13px;
+  background-color: #B5B8BD;
+  border: 1px solid #DBDADF;
+  border-radius: 4px;
+}
+
+.xe-select-label .label-input ul li .label-choice button {
+  position: absolute;
+  right: 3px;
+  top: 1px;
+  background-color: transparent;
+  border: transparent;
+  outline: none;
+  font-size: 11px;
+  color: #fff;
+}
+
+.xe-select-label .label-input ul li .search-label {
+  height: 21px;
+  margin: 6px 2px;
+  border-color: transparent;
+  background-color: transparent;
+}
+
+.xe-select-label .label-list {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  border: 1px solid #8DC5FF;
+  background-color: #fff;
+  z-index: 100;
+}
+
+.xe-select-label.open .label-list {
+  display: block;
+}
+
+.xe-select-label .label-list .label-division {
+  padding: 10px;
+  font-size: 13px;
+}
+
+.xe-select-label .label-list .label-division + .label-division {
+  border-top: 1px solid #DBDBDD;
+}
+
+.xe-select-label .label-list .label-division strong {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.xe-select-label .label-list .label-division a {
+  display: block;
+  padding: 0 10px;
+  color: #696e7a;
+  line-height: 24px;
+  border-radius: 4px;
+}
+
+.xe-select-label .label-list .label-division a:hover {
+  background-color: #2992FB;
+  color: #fff;
+}
+
+/*!
+ * # Semantic UI 2.1.4 - Flag
+ * http://github.com/semantic-org/semantic-ui/
+ *
+ *
+ * Copyright 2015 Contributors
+ * Released under the MIT license
+ * http://opensource.org/licenses/MIT
+ *
+ */
+/*******************************
+             Flag
+*******************************/
+i.flag {
+  display: inline-block;
+  width: 16px;
+  height: 11px;
+  line-height: 11px;
+  vertical-align: baseline;
+  margin: 0 .5em 0 0;
+  text-decoration: inherit;
+  speak: none;
+  font-smoothing: antialiased;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+/* Sprite */
+i.flag:before {
+  display: inline-block;
+  content: "";
+  background: url("img/flags.png") no-repeat 0 0;
+  width: 16px;
+  height: 11px;
+}
+
+/* Flag Sprite Based On http://www.famfamfam.com/lab/icons/flags/ */
+/*******************************
+         Theme Overrides
+*******************************/
+i.flag.ad:before,
+i.flag.andorra:before {
+  background-position: 0 0;
+}
+
+i.flag.ae:before,
+i.flag.united.arab.emirates:before,
+i.flag.uae:before {
+  background-position: 0 -26px;
+}
+
+i.flag.af:before,
+i.flag.afghanistan:before {
+  background-position: 0 -52px;
+}
+
+i.flag.ag:before,
+i.flag.antigua:before {
+  background-position: 0 -78px;
+}
+
+i.flag.ai:before,
+i.flag.anguilla:before {
+  background-position: 0 -104px;
+}
+
+i.flag.al:before,
+i.flag.albania:before {
+  background-position: 0 -130px;
+}
+
+i.flag.am:before,
+i.flag.armenia:before {
+  background-position: 0 -156px;
+}
+
+i.flag.an:before,
+i.flag.netherlands.antilles:before {
+  background-position: 0 -182px;
+}
+
+i.flag.ao:before,
+i.flag.angola:before {
+  background-position: 0 -208px;
+}
+
+i.flag.ar:before,
+i.flag.argentina:before {
+  background-position: 0 -234px;
+}
+
+i.flag.as:before,
+i.flag.american.samoa:before {
+  background-position: 0 -260px;
+}
+
+i.flag.at:before,
+i.flag.austria:before {
+  background-position: 0 -286px;
+}
+
+i.flag.au:before,
+i.flag.australia:before {
+  background-position: 0 -312px;
+}
+
+i.flag.aw:before,
+i.flag.aruba:before {
+  background-position: 0 -338px;
+}
+
+i.flag.ax:before,
+i.flag.aland.islands:before {
+  background-position: 0 -364px;
+}
+
+i.flag.az:before,
+i.flag.azerbaijan:before {
+  background-position: 0 -390px;
+}
+
+i.flag.ba:before,
+i.flag.bosnia:before {
+  background-position: 0 -416px;
+}
+
+i.flag.bb:before,
+i.flag.barbados:before {
+  background-position: 0 -442px;
+}
+
+i.flag.bd:before,
+i.flag.bangladesh:before {
+  background-position: 0 -468px;
+}
+
+i.flag.be:before,
+i.flag.belgium:before {
+  background-position: 0 -494px;
+}
+
+i.flag.bf:before,
+i.flag.burkina.faso:before {
+  background-position: 0 -520px;
+}
+
+i.flag.bg:before,
+i.flag.bulgaria:before {
+  background-position: 0 -546px;
+}
+
+i.flag.bh:before,
+i.flag.bahrain:before {
+  background-position: 0 -572px;
+}
+
+i.flag.bi:before,
+i.flag.burundi:before {
+  background-position: 0 -598px;
+}
+
+i.flag.bj:before,
+i.flag.benin:before {
+  background-position: 0 -624px;
+}
+
+i.flag.bm:before,
+i.flag.bermuda:before {
+  background-position: 0 -650px;
+}
+
+i.flag.bn:before,
+i.flag.brunei:before {
+  background-position: 0 -676px;
+}
+
+i.flag.bo:before,
+i.flag.bolivia:before {
+  background-position: 0 -702px;
+}
+
+i.flag.br:before,
+i.flag.brazil:before {
+  background-position: 0 -728px;
+}
+
+i.flag.bs:before,
+i.flag.bahamas:before {
+  background-position: 0 -754px;
+}
+
+i.flag.bt:before,
+i.flag.bhutan:before {
+  background-position: 0 -780px;
+}
+
+i.flag.bv:before,
+i.flag.bouvet.island:before {
+  background-position: 0 -806px;
+}
+
+i.flag.bw:before,
+i.flag.botswana:before {
+  background-position: 0 -832px;
+}
+
+i.flag.by:before,
+i.flag.belarus:before {
+  background-position: 0 -858px;
+}
+
+i.flag.bz:before,
+i.flag.belize:before {
+  background-position: 0 -884px;
+}
+
+i.flag.ca:before,
+i.flag.canada:before {
+  background-position: 0 -910px;
+}
+
+i.flag.cc:before,
+i.flag.cocos.islands:before {
+  background-position: 0 -962px;
+}
+
+i.flag.cd:before,
+i.flag.congo:before {
+  background-position: 0 -988px;
+}
+
+i.flag.cf:before,
+i.flag.central.african.republic:before {
+  background-position: 0 -1014px;
+}
+
+i.flag.cg:before,
+i.flag.congo.brazzaville:before {
+  background-position: 0 -1040px;
+}
+
+i.flag.ch:before,
+i.flag.switzerland:before {
+  background-position: 0 -1066px;
+}
+
+i.flag.ci:before,
+i.flag.cote.divoire:before {
+  background-position: 0 -1092px;
+}
+
+i.flag.ck:before,
+i.flag.cook.islands:before {
+  background-position: 0 -1118px;
+}
+
+i.flag.cl:before,
+i.flag.chile:before {
+  background-position: 0 -1144px;
+}
+
+i.flag.cm:before,
+i.flag.cameroon:before {
+  background-position: 0 -1170px;
+}
+
+i.flag.cn:before,
+i.flag.china:before {
+  background-position: 0 -1196px;
+}
+
+i.flag.co:before,
+i.flag.colombia:before {
+  background-position: 0 -1222px;
+}
+
+i.flag.cr:before,
+i.flag.costa.rica:before {
+  background-position: 0 -1248px;
+}
+
+i.flag.cs:before,
+i.flag.serbia:before {
+  background-position: 0 -1274px;
+}
+
+i.flag.cu:before,
+i.flag.cuba:before {
+  background-position: 0 -1300px;
+}
+
+i.flag.cv:before,
+i.flag.cape.verde:before {
+  background-position: 0 -1326px;
+}
+
+i.flag.cx:before,
+i.flag.christmas.island:before {
+  background-position: 0 -1352px;
+}
+
+i.flag.cy:before,
+i.flag.cyprus:before {
+  background-position: 0 -1378px;
+}
+
+i.flag.cz:before,
+i.flag.czech.republic:before {
+  background-position: 0 -1404px;
+}
+
+i.flag.de:before,
+i.flag.germany:before {
+  background-position: 0 -1430px;
+}
+
+i.flag.dj:before,
+i.flag.djibouti:before {
+  background-position: 0 -1456px;
+}
+
+i.flag.dk:before,
+i.flag.denmark:before {
+  background-position: 0 -1482px;
+}
+
+i.flag.dm:before,
+i.flag.dominica:before {
+  background-position: 0 -1508px;
+}
+
+i.flag.do:before,
+i.flag.dominican.republic:before {
+  background-position: 0 -1534px;
+}
+
+i.flag.dz:before,
+i.flag.algeria:before {
+  background-position: 0 -1560px;
+}
+
+i.flag.ec:before,
+i.flag.ecuador:before {
+  background-position: 0 -1586px;
+}
+
+i.flag.ee:before,
+i.flag.estonia:before {
+  background-position: 0 -1612px;
+}
+
+i.flag.eg:before,
+i.flag.egypt:before {
+  background-position: 0 -1638px;
+}
+
+i.flag.eh:before,
+i.flag.western.sahara:before {
+  background-position: 0 -1664px;
+}
+
+i.flag.er:before,
+i.flag.eritrea:before {
+  background-position: 0 -1716px;
+}
+
+i.flag.es:before,
+i.flag.spain:before {
+  background-position: 0 -1742px;
+}
+
+i.flag.et:before,
+i.flag.ethiopia:before {
+  background-position: 0 -1768px;
+}
+
+i.flag.eu:before,
+i.flag.european.union:before {
+  background-position: 0 -1794px;
+}
+
+i.flag.fi:before,
+i.flag.finland:before {
+  background-position: 0 -1846px;
+}
+
+i.flag.fj:before,
+i.flag.fiji:before {
+  background-position: 0 -1872px;
+}
+
+i.flag.fk:before,
+i.flag.falkland.islands:before {
+  background-position: 0 -1898px;
+}
+
+i.flag.fm:before,
+i.flag.micronesia:before {
+  background-position: 0 -1924px;
+}
+
+i.flag.fo:before,
+i.flag.faroe.islands:before {
+  background-position: 0 -1950px;
+}
+
+i.flag.fr:before,
+i.flag.france:before {
+  background-position: 0 -1976px;
+}
+
+i.flag.ga:before,
+i.flag.gabon:before {
+  background-position: -36px 0;
+}
+
+i.flag.gb:before,
+i.flag.united.kingdom:before {
+  background-position: -36px -26px;
+}
+
+i.flag.gd:before,
+i.flag.grenada:before {
+  background-position: -36px -52px;
+}
+
+i.flag.ge:before,
+i.flag.georgia:before {
+  background-position: -36px -78px;
+}
+
+i.flag.gf:before,
+i.flag.french.guiana:before {
+  background-position: -36px -104px;
+}
+
+i.flag.gh:before,
+i.flag.ghana:before {
+  background-position: -36px -130px;
+}
+
+i.flag.gi:before,
+i.flag.gibraltar:before {
+  background-position: -36px -156px;
+}
+
+i.flag.gl:before,
+i.flag.greenland:before {
+  background-position: -36px -182px;
+}
+
+i.flag.gm:before,
+i.flag.gambia:before {
+  background-position: -36px -208px;
+}
+
+i.flag.gn:before,
+i.flag.guinea:before {
+  background-position: -36px -234px;
+}
+
+i.flag.gp:before,
+i.flag.guadeloupe:before {
+  background-position: -36px -260px;
+}
+
+i.flag.gq:before,
+i.flag.equatorial.guinea:before {
+  background-position: -36px -286px;
+}
+
+i.flag.gr:before,
+i.flag.greece:before {
+  background-position: -36px -312px;
+}
+
+i.flag.gs:before,
+i.flag.sandwich.islands:before {
+  background-position: -36px -338px;
+}
+
+i.flag.gt:before,
+i.flag.guatemala:before {
+  background-position: -36px -364px;
+}
+
+i.flag.gu:before,
+i.flag.guam:before {
+  background-position: -36px -390px;
+}
+
+i.flag.gw:before,
+i.flag.guinea-bissau:before {
+  background-position: -36px -416px;
+}
+
+i.flag.gy:before,
+i.flag.guyana:before {
+  background-position: -36px -442px;
+}
+
+i.flag.hk:before,
+i.flag.hong.kong:before {
+  background-position: -36px -468px;
+}
+
+i.flag.hm:before,
+i.flag.heard.island:before {
+  background-position: -36px -494px;
+}
+
+i.flag.hn:before,
+i.flag.honduras:before {
+  background-position: -36px -520px;
+}
+
+i.flag.hr:before,
+i.flag.croatia:before {
+  background-position: -36px -546px;
+}
+
+i.flag.ht:before,
+i.flag.haiti:before {
+  background-position: -36px -572px;
+}
+
+i.flag.hu:before,
+i.flag.hungary:before {
+  background-position: -36px -598px;
+}
+
+i.flag.id:before,
+i.flag.indonesia:before {
+  background-position: -36px -624px;
+}
+
+i.flag.ie:before,
+i.flag.ireland:before {
+  background-position: -36px -650px;
+}
+
+i.flag.il:before,
+i.flag.israel:before {
+  background-position: -36px -676px;
+}
+
+i.flag.in:before,
+i.flag.india:before {
+  background-position: -36px -702px;
+}
+
+i.flag.io:before,
+i.flag.indian.ocean.territory:before {
+  background-position: -36px -728px;
+}
+
+i.flag.iq:before,
+i.flag.iraq:before {
+  background-position: -36px -754px;
+}
+
+i.flag.ir:before,
+i.flag.iran:before {
+  background-position: -36px -780px;
+}
+
+i.flag.is:before,
+i.flag.iceland:before {
+  background-position: -36px -806px;
+}
+
+i.flag.it:before,
+i.flag.italy:before {
+  background-position: -36px -832px;
+}
+
+i.flag.jm:before,
+i.flag.jamaica:before {
+  background-position: -36px -858px;
+}
+
+i.flag.jo:before,
+i.flag.jordan:before {
+  background-position: -36px -884px;
+}
+
+i.flag.jp:before,
+i.flag.japan:before {
+  background-position: -36px -910px;
+}
+
+i.flag.ke:before,
+i.flag.kenya:before {
+  background-position: -36px -936px;
+}
+
+i.flag.kg:before,
+i.flag.kyrgyzstan:before {
+  background-position: -36px -962px;
+}
+
+i.flag.kh:before,
+i.flag.cambodia:before {
+  background-position: -36px -988px;
+}
+
+i.flag.ki:before,
+i.flag.kiribati:before {
+  background-position: -36px -1014px;
+}
+
+i.flag.km:before,
+i.flag.comoros:before {
+  background-position: -36px -1040px;
+}
+
+i.flag.kn:before,
+i.flag.saint.kitts.and.nevis:before {
+  background-position: -36px -1066px;
+}
+
+i.flag.kp:before,
+i.flag.north.korea:before {
+  background-position: -36px -1092px;
+}
+
+i.flag.ko:before,
+i.flag.kr:before,
+i.flag.south.korea:before {
+  background-position: -36px -1118px;
+}
+
+i.flag.kw:before,
+i.flag.kuwait:before {
+  background-position: -36px -1144px;
+}
+
+i.flag.ky:before,
+i.flag.cayman.islands:before {
+  background-position: -36px -1170px;
+}
+
+i.flag.kz:before,
+i.flag.kazakhstan:before {
+  background-position: -36px -1196px;
+}
+
+i.flag.la:before,
+i.flag.laos:before {
+  background-position: -36px -1222px;
+}
+
+i.flag.lb:before,
+i.flag.lebanon:before {
+  background-position: -36px -1248px;
+}
+
+i.flag.lc:before,
+i.flag.saint.lucia:before {
+  background-position: -36px -1274px;
+}
+
+i.flag.li:before,
+i.flag.liechtenstein:before {
+  background-position: -36px -1300px;
+}
+
+i.flag.lk:before,
+i.flag.sri.lanka:before {
+  background-position: -36px -1326px;
+}
+
+i.flag.lr:before,
+i.flag.liberia:before {
+  background-position: -36px -1352px;
+}
+
+i.flag.ls:before,
+i.flag.lesotho:before {
+  background-position: -36px -1378px;
+}
+
+i.flag.lt:before,
+i.flag.lithuania:before {
+  background-position: -36px -1404px;
+}
+
+i.flag.lu:before,
+i.flag.luxembourg:before {
+  background-position: -36px -1430px;
+}
+
+i.flag.lv:before,
+i.flag.latvia:before {
+  background-position: -36px -1456px;
+}
+
+i.flag.ly:before,
+i.flag.libya:before {
+  background-position: -36px -1482px;
+}
+
+i.flag.ma:before,
+i.flag.morocco:before {
+  background-position: -36px -1508px;
+}
+
+i.flag.mc:before,
+i.flag.monaco:before {
+  background-position: -36px -1534px;
+}
+
+i.flag.md:before,
+i.flag.moldova:before {
+  background-position: -36px -1560px;
+}
+
+i.flag.me:before,
+i.flag.montenegro:before {
+  background-position: -36px -1586px;
+}
+
+i.flag.mg:before,
+i.flag.madagascar:before {
+  background-position: -36px -1613px;
+}
+
+i.flag.mh:before,
+i.flag.marshall.islands:before {
+  background-position: -36px -1639px;
+}
+
+i.flag.mk:before,
+i.flag.macedonia:before {
+  background-position: -36px -1665px;
+}
+
+i.flag.ml:before,
+i.flag.mali:before {
+  background-position: -36px -1691px;
+}
+
+i.flag.mm:before,
+i.flag.myanmar:before,
+i.flag.burma:before {
+  background-position: -36px -1717px;
+}
+
+i.flag.mn:before,
+i.flag.mongolia:before {
+  background-position: -36px -1743px;
+}
+
+i.flag.mo:before,
+i.flag.macau:before {
+  background-position: -36px -1769px;
+}
+
+i.flag.mp:before,
+i.flag.northern.mariana.islands:before {
+  background-position: -36px -1795px;
+}
+
+i.flag.mq:before,
+i.flag.martinique:before {
+  background-position: -36px -1821px;
+}
+
+i.flag.mr:before,
+i.flag.mauritania:before {
+  background-position: -36px -1847px;
+}
+
+i.flag.ms:before,
+i.flag.montserrat:before {
+  background-position: -36px -1873px;
+}
+
+i.flag.mt:before,
+i.flag.malta:before {
+  background-position: -36px -1899px;
+}
+
+i.flag.mu:before,
+i.flag.mauritius:before {
+  background-position: -36px -1925px;
+}
+
+i.flag.mv:before,
+i.flag.maldives:before {
+  background-position: -36px -1951px;
+}
+
+i.flag.mw:before,
+i.flag.malawi:before {
+  background-position: -36px -1977px;
+}
+
+i.flag.mx:before,
+i.flag.mexico:before {
+  background-position: -72px 0;
+}
+
+i.flag.my:before,
+i.flag.malaysia:before {
+  background-position: -72px -26px;
+}
+
+i.flag.mz:before,
+i.flag.mozambique:before {
+  background-position: -72px -52px;
+}
+
+i.flag.na:before,
+i.flag.namibia:before {
+  background-position: -72px -78px;
+}
+
+i.flag.nc:before,
+i.flag.new.caledonia:before {
+  background-position: -72px -104px;
+}
+
+i.flag.ne:before,
+i.flag.niger:before {
+  background-position: -72px -130px;
+}
+
+i.flag.nf:before,
+i.flag.norfolk.island:before {
+  background-position: -72px -156px;
+}
+
+i.flag.ng:before,
+i.flag.nigeria:before {
+  background-position: -72px -182px;
+}
+
+i.flag.ni:before,
+i.flag.nicaragua:before {
+  background-position: -72px -208px;
+}
+
+i.flag.nl:before,
+i.flag.netherlands:before {
+  background-position: -72px -234px;
+}
+
+i.flag.no:before,
+i.flag.norway:before {
+  background-position: -72px -260px;
+}
+
+i.flag.np:before,
+i.flag.nepal:before {
+  background-position: -72px -286px;
+}
+
+i.flag.nr:before,
+i.flag.nauru:before {
+  background-position: -72px -312px;
+}
+
+i.flag.nu:before,
+i.flag.niue:before {
+  background-position: -72px -338px;
+}
+
+i.flag.nz:before,
+i.flag.new.zealand:before {
+  background-position: -72px -364px;
+}
+
+i.flag.om:before,
+i.flag.oman:before {
+  background-position: -72px -390px;
+}
+
+i.flag.pa:before,
+i.flag.panama:before {
+  background-position: -72px -416px;
+}
+
+i.flag.pe:before,
+i.flag.peru:before {
+  background-position: -72px -442px;
+}
+
+i.flag.pf:before,
+i.flag.french.polynesia:before {
+  background-position: -72px -468px;
+}
+
+i.flag.pg:before,
+i.flag.new.guinea:before {
+  background-position: -72px -494px;
+}
+
+i.flag.ph:before,
+i.flag.philippines:before {
+  background-position: -72px -520px;
+}
+
+i.flag.pk:before,
+i.flag.pakistan:before {
+  background-position: -72px -546px;
+}
+
+i.flag.pl:before,
+i.flag.poland:before {
+  background-position: -72px -572px;
+}
+
+i.flag.pm:before,
+i.flag.saint.pierre:before {
+  background-position: -72px -598px;
+}
+
+i.flag.pn:before,
+i.flag.pitcairn.islands:before {
+  background-position: -72px -624px;
+}
+
+i.flag.pr:before,
+i.flag.puerto.rico:before {
+  background-position: -72px -650px;
+}
+
+i.flag.ps:before,
+i.flag.palestine:before {
+  background-position: -72px -676px;
+}
+
+i.flag.pt:before,
+i.flag.portugal:before {
+  background-position: -72px -702px;
+}
+
+i.flag.pw:before,
+i.flag.palau:before {
+  background-position: -72px -728px;
+}
+
+i.flag.py:before,
+i.flag.paraguay:before {
+  background-position: -72px -754px;
+}
+
+i.flag.qa:before,
+i.flag.qatar:before {
+  background-position: -72px -780px;
+}
+
+i.flag.re:before,
+i.flag.reunion:before {
+  background-position: -72px -806px;
+}
+
+i.flag.ro:before,
+i.flag.romania:before {
+  background-position: -72px -832px;
+}
+
+i.flag.rs:before,
+i.flag.serbia:before {
+  background-position: -72px -858px;
+}
+
+i.flag.ru:before,
+i.flag.russia:before {
+  background-position: -72px -884px;
+}
+
+i.flag.rw:before,
+i.flag.rwanda:before {
+  background-position: -72px -910px;
+}
+
+i.flag.sa:before,
+i.flag.saudi.arabia:before {
+  background-position: -72px -936px;
+}
+
+i.flag.sb:before,
+i.flag.solomon.islands:before {
+  background-position: -72px -962px;
+}
+
+i.flag.sc:before,
+i.flag.seychelles:before {
+  background-position: -72px -988px;
+}
+
+i.flag.sd:before,
+i.flag.sudan:before {
+  background-position: -72px -1040px;
+}
+
+i.flag.se:before,
+i.flag.sweden:before {
+  background-position: -72px -1066px;
+}
+
+i.flag.sg:before,
+i.flag.singapore:before {
+  background-position: -72px -1092px;
+}
+
+i.flag.sh:before,
+i.flag.saint.helena:before {
+  background-position: -72px -1118px;
+}
+
+i.flag.si:before,
+i.flag.slovenia:before {
+  background-position: -72px -1144px;
+}
+
+i.flag.sj:before,
+i.flag.svalbard:before,
+i.flag.jan.mayen:before {
+  background-position: -72px -1170px;
+}
+
+i.flag.sk:before,
+i.flag.slovakia:before {
+  background-position: -72px -1196px;
+}
+
+i.flag.sl:before,
+i.flag.sierra.leone:before {
+  background-position: -72px -1222px;
+}
+
+i.flag.sm:before,
+i.flag.san.marino:before {
+  background-position: -72px -1248px;
+}
+
+i.flag.sn:before,
+i.flag.senegal:before {
+  background-position: -72px -1274px;
+}
+
+i.flag.so:before,
+i.flag.somalia:before {
+  background-position: -72px -1300px;
+}
+
+i.flag.sr:before,
+i.flag.suriname:before {
+  background-position: -72px -1326px;
+}
+
+i.flag.st:before,
+i.flag.sao.tome:before {
+  background-position: -72px -1352px;
+}
+
+i.flag.sv:before,
+i.flag.el.salvador:before {
+  background-position: -72px -1378px;
+}
+
+i.flag.sy:before,
+i.flag.syria:before {
+  background-position: -72px -1404px;
+}
+
+i.flag.sz:before,
+i.flag.swaziland:before {
+  background-position: -72px -1430px;
+}
+
+i.flag.tc:before,
+i.flag.caicos.islands:before {
+  background-position: -72px -1456px;
+}
+
+i.flag.td:before,
+i.flag.chad:before {
+  background-position: -72px -1482px;
+}
+
+i.flag.tf:before,
+i.flag.french.territories:before {
+  background-position: -72px -1508px;
+}
+
+i.flag.tg:before,
+i.flag.togo:before {
+  background-position: -72px -1534px;
+}
+
+i.flag.th:before,
+i.flag.thailand:before {
+  background-position: -72px -1560px;
+}
+
+i.flag.tj:before,
+i.flag.tajikistan:before {
+  background-position: -72px -1586px;
+}
+
+i.flag.tk:before,
+i.flag.tokelau:before {
+  background-position: -72px -1612px;
+}
+
+i.flag.tl:before,
+i.flag.timorleste:before {
+  background-position: -72px -1638px;
+}
+
+i.flag.tm:before,
+i.flag.turkmenistan:before {
+  background-position: -72px -1664px;
+}
+
+i.flag.tn:before,
+i.flag.tunisia:before {
+  background-position: -72px -1690px;
+}
+
+i.flag.to:before,
+i.flag.tonga:before {
+  background-position: -72px -1716px;
+}
+
+i.flag.tr:before,
+i.flag.turkey:before {
+  background-position: -72px -1742px;
+}
+
+i.flag.tt:before,
+i.flag.trinidad:before {
+  background-position: -72px -1768px;
+}
+
+i.flag.tv:before,
+i.flag.tuvalu:before {
+  background-position: -72px -1794px;
+}
+
+i.flag.tw:before,
+i.flag.taiwan:before {
+  background-position: -72px -1820px;
+}
+
+i.flag.tz:before,
+i.flag.tanzania:before {
+  background-position: -72px -1846px;
+}
+
+i.flag.ua:before,
+i.flag.ukraine:before {
+  background-position: -72px -1872px;
+}
+
+i.flag.ug:before,
+i.flag.uganda:before {
+  background-position: -72px -1898px;
+}
+
+i.flag.um:before,
+i.flag.us.minor.islands:before {
+  background-position: -72px -1924px;
+}
+
+i.flag.en:before,
+i.flag.us:before,
+i.flag.america:before,
+i.flag.united.states:before {
+  background-position: -72px -1950px;
+}
+
+i.flag.uy:before,
+i.flag.uruguay:before {
+  background-position: -72px -1976px;
+}
+
+i.flag.uz:before,
+i.flag.uzbekistan:before {
+  background-position: -108px 0;
+}
+
+i.flag.va:before,
+i.flag.vatican.city:before {
+  background-position: -108px -26px;
+}
+
+i.flag.vc:before,
+i.flag.saint.vincent:before {
+  background-position: -108px -52px;
+}
+
+i.flag.ve:before,
+i.flag.venezuela:before {
+  background-position: -108px -78px;
+}
+
+i.flag.vg:before,
+i.flag.british.virgin.islands:before {
+  background-position: -108px -104px;
+}
+
+i.flag.vi:before,
+i.flag.us.virgin.islands:before {
+  background-position: -108px -130px;
+}
+
+i.flag.vn:before,
+i.flag.vietnam:before {
+  background-position: -108px -156px;
+}
+
+i.flag.vu:before,
+i.flag.vanuatu:before {
+  background-position: -108px -182px;
+}
+
+i.flag.wf:before,
+i.flag.wallis.and.futuna:before {
+  background-position: -108px -234px;
+}
+
+i.flag.ws:before,
+i.flag.samoa:before {
+  background-position: -108px -260px;
+}
+
+i.flag.ye:before,
+i.flag.yemen:before {
+  background-position: -108px -286px;
+}
+
+i.flag.yt:before,
+i.flag.mayotte:before {
+  background-position: -108px -312px;
+}
+
+i.flag.za:before,
+i.flag.south.africa:before {
+  background-position: -108px -338px;
+}
+
+i.flag.zm:before,
+i.flag.zambia:before {
+  background-position: -108px -364px;
+}
+
+i.flag.zw:before,
+i.flag.zimbabwe:before {
+  background-position: -108px -390px;
+}
+
+/*******************************
+         Site Overrides
+*******************************/
+/* CSS Document */
+.xe-input-group .xe-btn-text {
+  font-size: 15px;
+  margin: 0;
+}
+
+.xe-input-group .dot {
+  margin: 0 4px;
+  font-size: 10px;
+}
+
+.xe-input-group > input[type="checkbox"],
+.xe-input-group > input[type="radio"] {
+  position: relative;
+  top: -1px;
+  vertical-align: middle;
+}
+
+.xe-input-group:not(#cross) > input[type="checkbox"],
+.xe-input-group:not(#cross) > input[type="radio"] {
+  overflow: hidden;
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: 0;
+  font-size: 0;
+  line-height: 0;
+  left: -9999px;
+}
+
+.xe-input-group:not(#cross) > input[type="checkbox"] + label,
+.xe-input-group:not(#cross) > input[type="radio"] + label {
+  display: inline-block;
+  margin: 0 0 0 0;
+  padding: 0 10px 2px 25px;
+  background: url(img/spr_inpt.png) no-repeat 0 0;
+  background-size: 18px 252px;
+  height: 22px;
+  color: #434a53;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.xe-input-group:not(#cross) > input[type="checkbox"] + label:hover {
+  background-position: 0 -26px;
+}
+
+.xe-input-group:not(#cross) > input[type="checkbox"]:checked + label {
+  background-position: 0 -52px;
+}
+
+.xe-input-group:not(#cross) > input[type="checkbox"]:disabled + label {
+  background-position: 0 -78px;
+  color: #b5b7bd;
+}
+
+.xe-input-group:not(#cross) > input[type="checkbox"]:disabled:checked + label {
+  background-position: 0 -103px;
+}
+
+.xe-input-group:not(#cross) > input[type="radio"] + label {
+  background-position: 0 -130px;
+}
+
+.xe-input-group:not(#cross) > input[type="radio"] + label:hover {
+  background-position: 0 -156px;
+}
+
+.xe-input-group:not(#cross) > input[type="radio"]:checked + label {
+  background-position: 0 -182px;
+}
+
+.xe-input-group:not(#cross) > input[type="radio"]:disabled + label {
+  background-position: left -208px;
+  color: #b5b7bd;
+}
+
+.xe-input-group:not(#cross) > input[type="radio"]:disabled:checked + label {
+  background-position: 0 -234px;
+}
+
+.xe-btn {
+  display: inline-block;
+  padding: .7143em .8571em;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-image: none;
+  border-radius: 2px;
+  outline: none;
+  border: 1px solid transparent;
+  -webkit-transition: all .2s ease;
+  transition: all .2s ease;
+}
+
+.xe-btn.xe-btn-default {
+  color: #8e8e93;
+  border-color: #dadbde;
+  background-color: transparent;
+}
+
+.xe-btn:active,
+.xe-btn:focus,
+.xe-btn:active:focus {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  outline: none;
+}
+
+.xe-btn:focus {
+  color: #fff;
+}
+
+.xe-btn-default:hover,
+.open > .dropdown-toggle.xe-btn-default {
+  background-color: transparent;
+  border-color: #b5b7bd;
+  color: #696e7a;
+}
+
+.xe-btn-default.focus,
+.xe-btn-default:focus {
+  background-color: inherit;
+  color: #8e8e93;
+}
+
+.xe-btn-default.active,
+.xe-btn-default:active {
+  background-color: transparent;
+  border-color: #8e8e93;
+  color: #434a53;
+}
+
+.xe-btn-group {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.xe-btn.blue {
+  border-color: #2c8beb;
+  color: #2c8beb;
+}
+
+.wrong .xe-btn {
+  border-color: #dadbde;
+  color: #8e8e93;
+}
+
+.wrong .xe-btn.blue {
+  border-color: #a3c9f2;
+  color: #2c8beb;
+}
+
+.xe-btn.blue:hover {
+  border-color: #1677cb;
+  color: #1677cb;
+}
+
+.xe-btn.blue:active {
+  border-color: #085daa;
+  color: #085daa;
+}
+
+.xe-btn.blue.v2:hover {
+  border-color: #2c8beb;
+  background-color: #2c8beb;
+  color: #fff;
+}
+
+.xe-btn.blue.v2:active {
+  border-color: #0775ce;
+  background-color: #0775ce;
+  color: #fff;
+}
+
+.xe-btn-text {
+  color: #2c8beb;
+  border-color: transparent;
+  background-color: transparent;
+}
+
+.xe-btn-text:hover,
+.xe-btn-text:focus {
+  color: #085daa;
+  text-decoration: none;
+  border-color: transparent !important;
+}
+
+.xe-btn-text.v2:hover {
+  text-decoration: none;
+  background-color: #f1f2f6;
+  color: #2c8beb;
+}
+
+.xe-btn-text.v2:active {
+  background-color: #dadbde;
+}
+
+.xe-btn-text.v3 {
+  color: #696e7a;
+}
+
+.xe-btn-text.v3:hover {
+  color: #2c8beb;
+}
+
+.xe-btn-text.v3:active {
+  color: #085daa;
+}
+
+.xe-btn.xe-btn-gray {
+  background-color: #dadbde;
+  color: #696e7a;
+  border-color: transparent;
+}
+
+.xe-btn.xe-btn-gray:hover {
+  background-color: #b5b7bd;
+  color: #434a53;
+}
+
+.xe-btn.xe-btn-gray:active {
+  background-color: #8e8e93;
+  color: #2c2e37;
+}
+
+.xe-btn-group-all {
+  margin: 24px auto;
+}
+
+.xe-btn-danger.v2 {
+  background-color: transparent;
+  border-color: #db2828;
+  color: #db2828;
+}
+
+.xe-btn-danger.v2:hover {
+  background-color: #db2828;
+  color: #fff;
+}
+
+.xe-input-text,
+.xe-form-control {
+  width: 100%;
+  height: 36px;
+  margin: 0 4px 4px 0;
+  padding: 5px 12px;
+  border: 1px solid #dadbde;
+  border-radius: 2px;
+  line-height: 1.42857143;
+  font-size: 14px;
+  color: #2c2e37;
+  outline: none;
+  -webkit-appearance: none;
+  background-color: #fff;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  transition: .1s ease;
+  -webkit-transition: .1s ease;
+}
+
+textarea {
+  padding: 10px 12px;
+}
+
+.xe-form-control.srch {
+  padding-right: 30px;
+}
+
+.xe-input-text.readonly {
+  height: 40px;
+  background-color: #f6f6f6;
+  border-color: #f6f6f6;
+  color: #cbcbcb;
+  font-size: 15px;
+}
+
+.wrong .xe-input-text {
+  border-color: #dd251e !important;
+  color: #db2828;
+}
+
+.success .xe-input-text {
+  border-color: #2c8beb !important;
+}
+
+.xe-input-text:focus,
+.xe-input-body textarea:focus,
+.xe-input-body .xe-input-text:focus,
+.xe-form-control:focus {
+  border-color: #2389ee;
+  color: #2c2e37;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  transition: .1s ease;
+  -webkit-transition: .1s ease;
+}
+
+.label-text {
+  color: #8e8e93;
+  font-size: 14px;
+  line-height: 36px;
+}
+
+.text-message {
+  display: block;
+  margin: 5px 0 0;
+  font-size: 13px;
+  color: #2c8beb;
+}
+
+.wrong .text-message {
+  color: #db2828 !important;
+}
+
+.success .text-message {
+  color: #2c8beb !important;
+}
+
+.xe-input-body {
+  position: relative;
+}
+
+.xe-input-body textarea,
+.xe-input-body .xe-input-text {
+  width: 100%;
+  border: 1px solid #dadbde;
+  outline: none;
+  padding-right: 55px;
+  border-radius: 2px;
+  color: #2c2e37;
+}
+
+.xe-input-body .flag-code {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+}
+
+.xe-form-group {
+  display: inline-block;
+  font-size: 0;
+}
+
+.xe-form-group .xe-input-text.v2 {
+  width: 170px;
+  margin: 0;
+  border-right-color: transparent;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.xe-form-group .xe-input-text:focus {
+  border-color: #2389ee;
+}
+
+.xe-form-group .xe-btn {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  vertical-align: top;
+}
+
+.xe-form-group.wrong + .xe-text-group + .text-message {
+  color: #db2828;
+}
+
+button i + span,
+.xe-btn i + span {
+  margin-left: 3px;
+}
+
+.xe-text-group button:hover {
+  background-color: #d4e8fc;
+  border-radius: 2px;
+}
+
+button.xe-btn-blue,
+a.xe-btn-blue {
+  display: inline-block;
+  background-color: #2c8beb;
+  border-color: transparent;
+  color: #fff;
+}
+
+button.xe-btn-blue:hover,
+a.xe-btn-blue:hover {
+  background-color: #1677cb;
+  border-radius: 2px;
+  color: #fff;
+}
+
+button.xe-btn-blue:active,
+a.xe-btn-blue:active {
+  background-color: #085daa;
+  color: #fff;
+}
+
+button.icon-gray,
+a.icon-gray {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background-color: transparent;
+  border-color: transparent;
+  color: #8e8e93;
+  font-size: 20px;
+}
+
+button.icon-gray:hover,
+a.icon-gray:hover {
+  color: #434a53;
+}
+
+.xe-select-style {
+  display: inline-block;
+  position: relative;
+  margin: 0;
+  border: 1px solid #e4e4e4;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.xe-select-style em.ico {
+  display: inline-block;
+  position: absolute;
+  right: 11px;
+  top: 50%;
+  width: 0;
+  height: 0;
+  margin-top: -2px;
+  border-style: solid;
+  border-width: 3px;
+  border-color: #8e8e93 transparent transparent transparent;
+  font-size: 13px;
+}
+
+.xe-select-style select {
+  padding: .6643em .8571em .6643em;
+  width: 130%;
+  margin-right: 20px;
+  border: none;
+  box-shadow: none;
+  background-color: transparent;
+  background-image: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  line-height: 1em;
+}
+
+.xe-select-style select:focus {
+  outline: none;
+}
+
+.xe-btn-toggle {
+  display: inline-block;
+}
+
+.xe-btn-toggle input[type=checkbox] {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.xe-btn-toggle input[type=checkbox]:checked + .toggle {
+  background-color: #dadbde;
+  background-color: #359bf7;
+}
+
+.xe-btn-toggle input[type=checkbox]:checked + .toggle:after {
+  left: 20px;
+  outline: none;
+}
+
+.xe-btn-toggle label {
+  font-weight: 400;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.xe-btn-toggle .toggle {
+  display: inline-block;
+  width: 30px;
+  height: 6px;
+  background-color: #dadbde;
+  border-radius: 15px;
+  margin-right: 10px;
+  transition: background .3s ease;
+  vertical-align: middle;
+  content: "";
+}
+
+.xe-btn-toggle .toggle:after {
+  display: inline-block;
+  position: relative;
+  left: -14px;
+  top: -9px;
+  width: 24px;
+  height: 24px;
+  background-color: #fff;
+  border-radius: 20px;
+  border: 1px solid #e4e4e4;
+  transition: left .3s ease,background .3s ease,box-shadow .1s ease;
+  content: "";
+}
+
+.search-group {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.search-group label {
+  margin: 0;
+  padding: 8px 16px;
+  font-size: 16px;
+  color: #8e8e93;
+}
+
+.search-group .xe-input-text {
+  width: 224px;
+  padding-left: 0;
+  border: none;
+}
+
+.search-group.bd_on {
+  border: 1px solid #e4e4e4;
+}
+
+.search-group.bd_on label {
+  color: #929297;
+}
+
+@media \0screen\,screen\9 {
+  .xe-toggle-button input[type=checkbox] {
+    width: auto;
+    height: auto;
+  }
+  .xe-toggle-button .toggle {
+    display: none;
+  }
+}
+
+.xe-container {
+  margin-right: auto;
+  margin-left: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.xe-container:before, .xe-container:after {
+  content: " ";
+  display: table;
+}
+
+.xe-container:after {
+  clear: both;
+}
+
+@media (min-width: 768px) {
+  .xe-container {
+    max-width: 740px;
+  }
+  .xe-container .content {
+    padding: 0;
+  }
+}
+
+@media (min-width: 1068px) {
+  .xe-container {
+    max-width: 980px;
+  }
+}
+
+.xe-container-fluid {
+  margin-right: auto;
+  margin-left: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.xe-container-fluid:before, .xe-container-fluid:after {
+  content: " ";
+  display: table;
+}
+
+.xe-container-fluid:after {
+  clear: both;
+}
+
+.xe-row {
+  margin-left: -15px;
+  margin-right: -15px;
+}
+
+.xe-row:before, .xe-row:after {
+  content: " ";
+  display: table;
+}
+
+.xe-row:after {
+  clear: both;
+}
+
+.xe-col-xs-1, .xe-col-sm-1, .xe-col-md-1, .xe-col-lg-1, .xe-col-xs-2, .xe-col-sm-2, .xe-col-md-2, .xe-col-lg-2, .xe-col-xs-3, .xe-col-sm-3, .xe-col-md-3, .xe-col-lg-3, .xe-col-xs-4, .xe-col-sm-4, .xe-col-md-4, .xe-col-lg-4, .xe-col-xs-5, .xe-col-sm-5, .xe-col-md-5, .xe-col-lg-5, .xe-col-xs-6, .xe-col-sm-6, .xe-col-md-6, .xe-col-lg-6, .xe-col-xs-7, .xe-col-sm-7, .xe-col-md-7, .xe-col-lg-7, .xe-col-xs-8, .xe-col-sm-8, .xe-col-md-8, .xe-col-lg-8, .xe-col-xs-9, .xe-col-sm-9, .xe-col-md-9, .xe-col-lg-9, .xe-col-xs-10, .xe-col-sm-10, .xe-col-md-10, .xe-col-lg-10, .xe-col-xs-11, .xe-col-sm-11, .xe-col-md-11, .xe-col-lg-11, .xe-col-xs-12, .xe-col-sm-12, .xe-col-md-12, .xe-col-lg-12 {
+  position: relative;
+  min-height: 1px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.xe-col-xs-1, .xe-col-xs-2, .xe-col-xs-3, .xe-col-xs-4, .xe-col-xs-5, .xe-col-xs-6, .xe-col-xs-7, .xe-col-xs-8, .xe-col-xs-9, .xe-col-xs-10, .xe-col-xs-11, .xe-col-xs-12 {
+  float: left;
+}
+
+.xe-col-xs-1 {
+  width: 8.33333%;
+}
+
+.xe-col-xs-2 {
+  width: 16.66667%;
+}
+
+.xe-col-xs-3 {
+  width: 25%;
+}
+
+.xe-col-xs-4 {
+  width: 33.33333%;
+}
+
+.xe-col-xs-5 {
+  width: 41.66667%;
+}
+
+.xe-col-xs-6 {
+  width: 50%;
+}
+
+.xe-col-xs-7 {
+  width: 58.33333%;
+}
+
+.xe-col-xs-8 {
+  width: 66.66667%;
+}
+
+.xe-col-xs-9 {
+  width: 75%;
+}
+
+.xe-col-xs-10 {
+  width: 83.33333%;
+}
+
+.xe-col-xs-11 {
+  width: 91.66667%;
+}
+
+.xe-col-xs-12 {
+  width: 100%;
+}
+
+.xe-col-xs-pull-0 {
+  right: auto;
+}
+
+.xe-col-xs-pull-1 {
+  right: 8.33333%;
+}
+
+.xe-col-xs-pull-2 {
+  right: 16.66667%;
+}
+
+.xe-col-xs-pull-3 {
+  right: 25%;
+}
+
+.xe-col-xs-pull-4 {
+  right: 33.33333%;
+}
+
+.xe-col-xs-pull-5 {
+  right: 41.66667%;
+}
+
+.xe-col-xs-pull-6 {
+  right: 50%;
+}
+
+.xe-col-xs-pull-7 {
+  right: 58.33333%;
+}
+
+.xe-col-xs-pull-8 {
+  right: 66.66667%;
+}
+
+.xe-col-xs-pull-9 {
+  right: 75%;
+}
+
+.xe-col-xs-pull-10 {
+  right: 83.33333%;
+}
+
+.xe-col-xs-pull-11 {
+  right: 91.66667%;
+}
+
+.xe-col-xs-pull-12 {
+  right: 100%;
+}
+
+.xe-col-xs-push-0 {
+  left: auto;
+}
+
+.xe-col-xs-push-1 {
+  left: 8.33333%;
+}
+
+.xe-col-xs-push-2 {
+  left: 16.66667%;
+}
+
+.xe-col-xs-push-3 {
+  left: 25%;
+}
+
+.xe-col-xs-push-4 {
+  left: 33.33333%;
+}
+
+.xe-col-xs-push-5 {
+  left: 41.66667%;
+}
+
+.xe-col-xs-push-6 {
+  left: 50%;
+}
+
+.xe-col-xs-push-7 {
+  left: 58.33333%;
+}
+
+.xe-col-xs-push-8 {
+  left: 66.66667%;
+}
+
+.xe-col-xs-push-9 {
+  left: 75%;
+}
+
+.xe-col-xs-push-10 {
+  left: 83.33333%;
+}
+
+.xe-col-xs-push-11 {
+  left: 91.66667%;
+}
+
+.xe-col-xs-push-12 {
+  left: 100%;
+}
+
+.xe-col-xs-offset-0 {
+  margin-left: 0%;
+}
+
+.xe-col-xs-offset-1 {
+  margin-left: 8.33333%;
+}
+
+.xe-col-xs-offset-2 {
+  margin-left: 16.66667%;
+}
+
+.xe-col-xs-offset-3 {
+  margin-left: 25%;
+}
+
+.xe-col-xs-offset-4 {
+  margin-left: 33.33333%;
+}
+
+.xe-col-xs-offset-5 {
+  margin-left: 41.66667%;
+}
+
+.xe-col-xs-offset-6 {
+  margin-left: 50%;
+}
+
+.xe-col-xs-offset-7 {
+  margin-left: 58.33333%;
+}
+
+.xe-col-xs-offset-8 {
+  margin-left: 66.66667%;
+}
+
+.xe-col-xs-offset-9 {
+  margin-left: 75%;
+}
+
+.xe-col-xs-offset-10 {
+  margin-left: 83.33333%;
+}
+
+.xe-col-xs-offset-11 {
+  margin-left: 91.66667%;
+}
+
+.xe-col-xs-offset-12 {
+  margin-left: 100%;
+}
+
+@media (min-width: 768px) {
+  .xe-col-sm-1, .xe-col-sm-2, .xe-col-sm-3, .xe-col-sm-4, .xe-col-sm-5, .xe-col-sm-6, .xe-col-sm-7, .xe-col-sm-8, .xe-col-sm-9, .xe-col-sm-10, .xe-col-sm-11, .xe-col-sm-12 {
+    float: left;
+  }
+  .xe-col-sm-1 {
+    width: 8.33333%;
+  }
+  .xe-col-sm-2 {
+    width: 16.66667%;
+  }
+  .xe-col-sm-3 {
+    width: 25%;
+  }
+  .xe-col-sm-4 {
+    width: 33.33333%;
+  }
+  .xe-col-sm-5 {
+    width: 41.66667%;
+  }
+  .xe-col-sm-6 {
+    width: 50%;
+  }
+  .xe-col-sm-7 {
+    width: 58.33333%;
+  }
+  .xe-col-sm-8 {
+    width: 66.66667%;
+  }
+  .xe-col-sm-9 {
+    width: 75%;
+  }
+  .xe-col-sm-10 {
+    width: 83.33333%;
+  }
+  .xe-col-sm-11 {
+    width: 91.66667%;
+  }
+  .xe-col-sm-12 {
+    width: 100%;
+  }
+  .xe-col-sm-pull-0 {
+    right: auto;
+  }
+  .xe-col-sm-pull-1 {
+    right: 8.33333%;
+  }
+  .xe-col-sm-pull-2 {
+    right: 16.66667%;
+  }
+  .xe-col-sm-pull-3 {
+    right: 25%;
+  }
+  .xe-col-sm-pull-4 {
+    right: 33.33333%;
+  }
+  .xe-col-sm-pull-5 {
+    right: 41.66667%;
+  }
+  .xe-col-sm-pull-6 {
+    right: 50%;
+  }
+  .xe-col-sm-pull-7 {
+    right: 58.33333%;
+  }
+  .xe-col-sm-pull-8 {
+    right: 66.66667%;
+  }
+  .xe-col-sm-pull-9 {
+    right: 75%;
+  }
+  .xe-col-sm-pull-10 {
+    right: 83.33333%;
+  }
+  .xe-col-sm-pull-11 {
+    right: 91.66667%;
+  }
+  .xe-col-sm-pull-12 {
+    right: 100%;
+  }
+  .xe-col-sm-push-0 {
+    left: auto;
+  }
+  .xe-col-sm-push-1 {
+    left: 8.33333%;
+  }
+  .xe-col-sm-push-2 {
+    left: 16.66667%;
+  }
+  .xe-col-sm-push-3 {
+    left: 25%;
+  }
+  .xe-col-sm-push-4 {
+    left: 33.33333%;
+  }
+  .xe-col-sm-push-5 {
+    left: 41.66667%;
+  }
+  .xe-col-sm-push-6 {
+    left: 50%;
+  }
+  .xe-col-sm-push-7 {
+    left: 58.33333%;
+  }
+  .xe-col-sm-push-8 {
+    left: 66.66667%;
+  }
+  .xe-col-sm-push-9 {
+    left: 75%;
+  }
+  .xe-col-sm-push-10 {
+    left: 83.33333%;
+  }
+  .xe-col-sm-push-11 {
+    left: 91.66667%;
+  }
+  .xe-col-sm-push-12 {
+    left: 100%;
+  }
+  .xe-col-sm-offset-0 {
+    margin-left: 0%;
+  }
+  .xe-col-sm-offset-1 {
+    margin-left: 8.33333%;
+  }
+  .xe-col-sm-offset-2 {
+    margin-left: 16.66667%;
+  }
+  .xe-col-sm-offset-3 {
+    margin-left: 25%;
+  }
+  .xe-col-sm-offset-4 {
+    margin-left: 33.33333%;
+  }
+  .xe-col-sm-offset-5 {
+    margin-left: 41.66667%;
+  }
+  .xe-col-sm-offset-6 {
+    margin-left: 50%;
+  }
+  .xe-col-sm-offset-7 {
+    margin-left: 58.33333%;
+  }
+  .xe-col-sm-offset-8 {
+    margin-left: 66.66667%;
+  }
+  .xe-col-sm-offset-9 {
+    margin-left: 75%;
+  }
+  .xe-col-sm-offset-10 {
+    margin-left: 83.33333%;
+  }
+  .xe-col-sm-offset-11 {
+    margin-left: 91.66667%;
+  }
+  .xe-col-sm-offset-12 {
+    margin-left: 100%;
+  }
+}
+
+@media (min-width: 992px) {
+  .xe-col-md-1, .xe-col-md-2, .xe-col-md-3, .xe-col-md-4, .xe-col-md-5, .xe-col-md-6, .xe-col-md-7, .xe-col-md-8, .xe-col-md-9, .xe-col-md-10, .xe-col-md-11, .xe-col-md-12 {
+    float: left;
+  }
+  .xe-col-md-1 {
+    width: 8.33333%;
+  }
+  .xe-col-md-2 {
+    width: 16.66667%;
+  }
+  .xe-col-md-3 {
+    width: 25%;
+  }
+  .xe-col-md-4 {
+    width: 33.33333%;
+  }
+  .xe-col-md-5 {
+    width: 41.66667%;
+  }
+  .xe-col-md-6 {
+    width: 50%;
+  }
+  .xe-col-md-7 {
+    width: 58.33333%;
+  }
+  .xe-col-md-8 {
+    width: 66.66667%;
+  }
+  .xe-col-md-9 {
+    width: 75%;
+  }
+  .xe-col-md-10 {
+    width: 83.33333%;
+  }
+  .xe-col-md-11 {
+    width: 91.66667%;
+  }
+  .xe-col-md-12 {
+    width: 100%;
+  }
+  .xe-col-md-pull-0 {
+    right: auto;
+  }
+  .xe-col-md-pull-1 {
+    right: 8.33333%;
+  }
+  .xe-col-md-pull-2 {
+    right: 16.66667%;
+  }
+  .xe-col-md-pull-3 {
+    right: 25%;
+  }
+  .xe-col-md-pull-4 {
+    right: 33.33333%;
+  }
+  .xe-col-md-pull-5 {
+    right: 41.66667%;
+  }
+  .xe-col-md-pull-6 {
+    right: 50%;
+  }
+  .xe-col-md-pull-7 {
+    right: 58.33333%;
+  }
+  .xe-col-md-pull-8 {
+    right: 66.66667%;
+  }
+  .xe-col-md-pull-9 {
+    right: 75%;
+  }
+  .xe-col-md-pull-10 {
+    right: 83.33333%;
+  }
+  .xe-col-md-pull-11 {
+    right: 91.66667%;
+  }
+  .xe-col-md-pull-12 {
+    right: 100%;
+  }
+  .xe-col-md-push-0 {
+    left: auto;
+  }
+  .xe-col-md-push-1 {
+    left: 8.33333%;
+  }
+  .xe-col-md-push-2 {
+    left: 16.66667%;
+  }
+  .xe-col-md-push-3 {
+    left: 25%;
+  }
+  .xe-col-md-push-4 {
+    left: 33.33333%;
+  }
+  .xe-col-md-push-5 {
+    left: 41.66667%;
+  }
+  .xe-col-md-push-6 {
+    left: 50%;
+  }
+  .xe-col-md-push-7 {
+    left: 58.33333%;
+  }
+  .xe-col-md-push-8 {
+    left: 66.66667%;
+  }
+  .xe-col-md-push-9 {
+    left: 75%;
+  }
+  .xe-col-md-push-10 {
+    left: 83.33333%;
+  }
+  .xe-col-md-push-11 {
+    left: 91.66667%;
+  }
+  .xe-col-md-push-12 {
+    left: 100%;
+  }
+  .xe-col-md-offset-0 {
+    margin-left: 0%;
+  }
+  .xe-col-md-offset-1 {
+    margin-left: 8.33333%;
+  }
+  .xe-col-md-offset-2 {
+    margin-left: 16.66667%;
+  }
+  .xe-col-md-offset-3 {
+    margin-left: 25%;
+  }
+  .xe-col-md-offset-4 {
+    margin-left: 33.33333%;
+  }
+  .xe-col-md-offset-5 {
+    margin-left: 41.66667%;
+  }
+  .xe-col-md-offset-6 {
+    margin-left: 50%;
+  }
+  .xe-col-md-offset-7 {
+    margin-left: 58.33333%;
+  }
+  .xe-col-md-offset-8 {
+    margin-left: 66.66667%;
+  }
+  .xe-col-md-offset-9 {
+    margin-left: 75%;
+  }
+  .xe-col-md-offset-10 {
+    margin-left: 83.33333%;
+  }
+  .xe-col-md-offset-11 {
+    margin-left: 91.66667%;
+  }
+  .xe-col-md-offset-12 {
+    margin-left: 100%;
+  }
+}
+
+@media (min-width: 1068px) {
+  .xe-col-lg-1, .xe-col-lg-2, .xe-col-lg-3, .xe-col-lg-4, .xe-col-lg-5, .xe-col-lg-6, .xe-col-lg-7, .xe-col-lg-8, .xe-col-lg-9, .xe-col-lg-10, .xe-col-lg-11, .xe-col-lg-12 {
+    float: left;
+  }
+  .xe-col-lg-1 {
+    width: 8.33333%;
+  }
+  .xe-col-lg-2 {
+    width: 16.66667%;
+  }
+  .xe-col-lg-3 {
+    width: 25%;
+  }
+  .xe-col-lg-4 {
+    width: 33.33333%;
+  }
+  .xe-col-lg-5 {
+    width: 41.66667%;
+  }
+  .xe-col-lg-6 {
+    width: 50%;
+  }
+  .xe-col-lg-7 {
+    width: 58.33333%;
+  }
+  .xe-col-lg-8 {
+    width: 66.66667%;
+  }
+  .xe-col-lg-9 {
+    width: 75%;
+  }
+  .xe-col-lg-10 {
+    width: 83.33333%;
+  }
+  .xe-col-lg-11 {
+    width: 91.66667%;
+  }
+  .xe-col-lg-12 {
+    width: 100%;
+  }
+  .xe-col-lg-pull-0 {
+    right: auto;
+  }
+  .xe-col-lg-pull-1 {
+    right: 8.33333%;
+  }
+  .xe-col-lg-pull-2 {
+    right: 16.66667%;
+  }
+  .xe-col-lg-pull-3 {
+    right: 25%;
+  }
+  .xe-col-lg-pull-4 {
+    right: 33.33333%;
+  }
+  .xe-col-lg-pull-5 {
+    right: 41.66667%;
+  }
+  .xe-col-lg-pull-6 {
+    right: 50%;
+  }
+  .xe-col-lg-pull-7 {
+    right: 58.33333%;
+  }
+  .xe-col-lg-pull-8 {
+    right: 66.66667%;
+  }
+  .xe-col-lg-pull-9 {
+    right: 75%;
+  }
+  .xe-col-lg-pull-10 {
+    right: 83.33333%;
+  }
+  .xe-col-lg-pull-11 {
+    right: 91.66667%;
+  }
+  .xe-col-lg-pull-12 {
+    right: 100%;
+  }
+  .xe-col-lg-push-0 {
+    left: auto;
+  }
+  .xe-col-lg-push-1 {
+    left: 8.33333%;
+  }
+  .xe-col-lg-push-2 {
+    left: 16.66667%;
+  }
+  .xe-col-lg-push-3 {
+    left: 25%;
+  }
+  .xe-col-lg-push-4 {
+    left: 33.33333%;
+  }
+  .xe-col-lg-push-5 {
+    left: 41.66667%;
+  }
+  .xe-col-lg-push-6 {
+    left: 50%;
+  }
+  .xe-col-lg-push-7 {
+    left: 58.33333%;
+  }
+  .xe-col-lg-push-8 {
+    left: 66.66667%;
+  }
+  .xe-col-lg-push-9 {
+    left: 75%;
+  }
+  .xe-col-lg-push-10 {
+    left: 83.33333%;
+  }
+  .xe-col-lg-push-11 {
+    left: 91.66667%;
+  }
+  .xe-col-lg-push-12 {
+    left: 100%;
+  }
+  .xe-col-lg-offset-0 {
+    margin-left: 0%;
+  }
+  .xe-col-lg-offset-1 {
+    margin-left: 8.33333%;
+  }
+  .xe-col-lg-offset-2 {
+    margin-left: 16.66667%;
+  }
+  .xe-col-lg-offset-3 {
+    margin-left: 25%;
+  }
+  .xe-col-lg-offset-4 {
+    margin-left: 33.33333%;
+  }
+  .xe-col-lg-offset-5 {
+    margin-left: 41.66667%;
+  }
+  .xe-col-lg-offset-6 {
+    margin-left: 50%;
+  }
+  .xe-col-lg-offset-7 {
+    margin-left: 58.33333%;
+  }
+  .xe-col-lg-offset-8 {
+    margin-left: 66.66667%;
+  }
+  .xe-col-lg-offset-9 {
+    margin-left: 75%;
+  }
+  .xe-col-lg-offset-10 {
+    margin-left: 83.33333%;
+  }
+  .xe-col-lg-offset-11 {
+    margin-left: 91.66667%;
+  }
+  .xe-col-lg-offset-12 {
+    margin-left: 100%;
+  }
+}
+
+/* CSS Document */
+/*bs reset*/
+.xe-modal-open .xe-modal {
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-right: 17px !important;
+}
+
+.xe-modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1050;
+  display: none;
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+  outline: 0;
+}
+
+.xe-modal.fade {
+  opacity: 0;
+  transition: opacity .15s linear;
+}
+
+.xe-modal-dialog {
+  position: relative;
+  width: auto;
+  margin: 10px;
+}
+
+.xe-modal-content {
+  position: relative;
+  background-color: #fff;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  border: 1px solid #999;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  outline: 0;
+  -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+}
+
+.xe-modal-header .close {
+  float: right;
+  font-size: 21px;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  filter: alpha(opacity=20);
+  opacity: .2;
+}
+
+.xe-modal-header button.close {
+  -webkit-appearance: none;
+  padding: 0;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+}
+
+.xe-modal-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1040;
+  background-color: #000;
+}
+
+.xe-modal-backdrop.fade.in {
+  opacity: 1;
+}
+
+.xe-modal-backdrop.in {
+  filter: alpha(opacity=50);
+  opacity: .5;
+}
+
+@media (min-width: 768px) {
+  .xe-modal-dialog {
+    width: 600px;
+    margin: 30px auto;
+  }
+  .xe-modal-sm {
+    width: 300px;
+  }
+}
+
+@media (min-width: 992px) {
+  .xe-modal-lg {
+    width: 900px;
+  }
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.xe-modal-footer .xe-btn + .xe-btn {
+  margin-bottom: 0;
+  margin-left: 5px;
+}
+
+hr {
+  margin-top: 24px;
+  margin-bottom: 24px;
+  border: 0;
+  border-top: 1px solid #e4e4e4;
+}
+
+/*bs custom*/
+.xe-modal p {
+  font-size: 14px;
+  color: #8e8e93;
+}
+
+.xe-modal .xe-modal-title {
+  margin: 0;
+  line-height: 1.42857143;
+  font-size: 20px;
+  line-height: 28px;
+  font-size: 20px;
+  color: #434a53;
+}
+
+.xe-modal-header {
+  min-height: auto;
+  padding: 24px;
+  border-bottom: none;
+}
+
+.xe-modal-header.bg_gray {
+  background-color: #f1f2f6;
+}
+
+.xe-modal-header.bg_blue {
+  background-color: #2c8beb;
+}
+
+.xe-modal-header.bg_blue .xe-modal-title {
+  color: #fff;
+}
+
+.xe-modal-header button.close {
+  position: absolute;
+  right: 24px;
+  top: 24px;
+  z-index: 10;
+}
+
+.xe-modal-header.bg_blue button.close {
+  color: #fff;
+  opacity: 1;
+}
+
+.xe-modal-content {
+  border-radius: 2px;
+}
+
+.xe-modal-body .ico_result {
+  margin-bottom: -25px;
+  font-size: 130px;
+  color: #2c8beb;
+}
+
+.xe-modal-body {
+  padding: 0 24px 24px 24px;
+}
+
+.xe-modal-body .body_tit,
+.xe-modal-body .txt_result {
+  margin-bottom: 5px;
+  font-size: 16px;
+  color: #434a53;
+}
+
+.xe-modal-body .txt_result {
+  font-size: 20px;
+}
+
+.xe-modal-body .ico_result.error {
+  color: #434a53;
+}
+
+.xe-modal-body .ico_result.error {
+  color: #db2828;
+}
+
+.xe-modal-body .ico_result.warning {
+  color: #f2711c;
+}
+
+.xe-modal-body .ico_result.info {
+  color: #696e7a;
+}
+
+.xe-modal-body hr {
+  margin: 24px auto;
+}
+
+.xe-modal-footer {
+  padding: 8px 24px 24px 24px;
+  text-align: right;
+  border-top: none;
+}
+
+.xe-modal .xe-btn {
+  min-width: 64px;
+}
+
+.xe-modal-footer.text-center {
+  text-align: center !important;
+}
+
+.xe-modal .list-group {
+  overflow-y: auto;
+  padding-left: 24px;
+  margin-bottom: 0;
+  max-height: 365px;
+}
+
+.xe-modal .list-group .img_thmb {
+  overflow: hidden;
+  display: table-cell;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+}
+
+.xe-modal .list-group li {
+  overflow: hidden;
+  padding: 12px 24px 12px 0;
+  border-top: 1px solid #e4e4e4;
+  list-style: none;
+}
+
+.xe-modal .list-group li:first-child {
+  border-top: none;
+}
+
+.xe-modal .list-group .list_txt {
+  display: table-cell;
+  vertical-align: middle;
+  padding-left: 10px;
+  text-align: left;
+}
+
+.xe-modal .list-group .list_txt > p {
+  font-size: 16px;
+  color: #2c2e37;
+}
+
+.xe-modal .list-group .list_txt .txt_sub {
+  font-size: 14px;
+  color: #b5b7bd;
+}
+
+.xe-modal .list-group li > a,
+.xe-modal .list-group li > div {
+  display: table;
+  height: 100%;
+  width: 100%;
+}
+
+/* alert CSS Document */
+.xe-toast_container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 900;
+}
+
+.xe-toast_container .xe-alert {
+  position: relative;
+  max-width: 560px;
+  margin: 4px auto 0;
+  padding: 14px 40px 14px 20px;
+  background-color: #2c2e37;
+  background-color: rgba(44, 46, 55, 0.95);
+  color: #fff;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: left;
+  border-radius: 2px;
+}
+
+.xe-toast_container .xe-alert.warning {
+  background-color: #cd1e3d;
+  background-color: #cd1e37;
+}
+
+.xe-toast_container .xe-alert.success {
+  background-color: #2c8beb;
+  background-color: rgba(44, 139, 235, 0.95);
+}
+
+.xe-toast_container .xe-alert a {
+  color: #ffea00;
+}
+
+.xe-toast_container .xe-alert a:hover {
+  text-decoration: underline;
+}
+
+.btn_alert_close {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  margin-top: -20px;
+  width: 40px;
+  height: 40px;
+  line-height: 1;
+  -webkit-appearance: none;
+  padding: 0;
+  cursor: pointer;
+  background: url(img/btn_alert_clse.png) 50% 50% no-repeat;
+  border: 0;
+  outline: none;
+}
+
+.btn_alert_close:hover {
+  background-image: url(img/btn_alert_clse_on.png);
+}
+
+@media (min-width: 768px) {
+  .xe-toast_container {
+    padding: 0 20px;
+  }
+  .xe-toast_container .xe-alert {
+    max-width: 960px;
+  }
+}
+
+/* tooltip CSS Document */
+.xe-tooltip {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: 250px;
+  padding: 6px 10px;
+  color: #fff;
+  background: #2c2e37;
+  text-align: left;
+  border-radius: 2px;
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.xe-tooltip.right {
+  left: auto;
+}
+
+.xe-tooltip.wide {
+  max-width: 350px;
+}
+
+.xe-tooltip.very-wide {
+  max-width: 450px;
+}
+
+.xe-tooltip:after {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  margin-left: -3px;
+  border-top: 3px solid #000;
+  border-right: 3px solid transparent;
+  border-left: 3px solid transparent;
+  content: "";
+}
+
+.xe-tooltip.right:after {
+  left: 100%;
+  margin-left: -17px;
+}
+
+.xe-tooltip.left:after {
+  left: 0;
+  margin-left: 17px;
+}
+
+.xe-tooltip.bottom:after {
+  top: 0;
+  margin-top: -3px;
+  border-top: none;
+  border-bottom: 3px solid #000;
+}
+
+@-ms-viewport {
+  width: device-width;
+}
+
+.xe-visible-xs {
+  display: none !important;
+}
+
+.xe-visible-sm {
+  display: none !important;
+}
+
+.xe-visible-md {
+  display: none !important;
+}
+
+.xe-visible-lg {
+  display: none !important;
+}
+
+.xe-visible-xs-block,
+.xe-visible-xs-inline,
+.xe-visible-xs-inline-block,
+.xe-visible-sm-block,
+.xe-visible-sm-inline,
+.xe-visible-sm-inline-block,
+.xe-visible-md-block,
+.xe-visible-md-inline,
+.xe-visible-md-inline-block,
+.xe-visible-lg-block,
+.xe-visible-lg-inline,
+.xe-visible-lg-inline-block {
+  display: none !important;
+}
+
+@media (max-width: 767px) {
+  .xe-visible-xs {
+    display: block !important;
+  }
+  table.xe-visible-xs {
+    display: table !important;
+  }
+  tr.xe-visible-xs {
+    display: table-row !important;
+  }
+  th.xe-visible-xs,
+  td.xe-visible-xs {
+    display: table-cell !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .xe-visible-xs-block {
+    display: block !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .xe-visible-xs-inline {
+    display: inline !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .xe-visible-xs-inline-block {
+    display: inline-block !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .xe-visible-sm {
+    display: block !important;
+  }
+  table.xe-visible-sm {
+    display: table !important;
+  }
+  tr.xe-visible-sm {
+    display: table-row !important;
+  }
+  th.xe-visible-sm,
+  td.xe-visible-sm {
+    display: table-cell !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .xe-visible-sm-block {
+    display: block !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .xe-visible-sm-inline {
+    display: inline !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .xe-visible-sm-inline-block {
+    display: inline-block !important;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1067px) {
+  .xe-visible-md {
+    display: block !important;
+  }
+  table.xe-visible-md {
+    display: table !important;
+  }
+  tr.xe-visible-md {
+    display: table-row !important;
+  }
+  th.xe-visible-md,
+  td.xe-visible-md {
+    display: table-cell !important;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1067px) {
+  .xe-visible-md-block {
+    display: block !important;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1067px) {
+  .xe-visible-md-inline {
+    display: inline !important;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1067px) {
+  .xe-visible-md-inline-block {
+    display: inline-block !important;
+  }
+}
+
+@media (min-width: 1068px) {
+  .xe-visible-lg {
+    display: block !important;
+  }
+  table.xe-visible-lg {
+    display: table !important;
+  }
+  tr.xe-visible-lg {
+    display: table-row !important;
+  }
+  th.xe-visible-lg,
+  td.xe-visible-lg {
+    display: table-cell !important;
+  }
+}
+
+@media (min-width: 1068px) {
+  .xe-visible-lg-block {
+    display: block !important;
+  }
+}
+
+@media (min-width: 1068px) {
+  .xe-visible-lg-inline {
+    display: inline !important;
+  }
+}
+
+@media (min-width: 1068px) {
+  .xe-visible-lg-inline-block {
+    display: inline-block !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .xe-hidden-xs {
+    display: none !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .xe-hidden-sm {
+    display: none !important;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1067px) {
+  .xe-hidden-md {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1068px) {
+  .xe-hidden-lg {
+    display: none !important;
+  }
+}
+
+.xe-visible-print {
+  display: none !important;
+}
+
+@media print {
+  .xe-visible-print {
+    display: block !important;
+  }
+  table.xe-visible-print {
+    display: table !important;
+  }
+  tr.xe-visible-print {
+    display: table-row !important;
+  }
+  th.xe-visible-print,
+  td.xe-visible-print {
+    display: table-cell !important;
+  }
+}
+
+.xe-visible-print-block {
+  display: none !important;
+}
+
+@media print {
+  .xe-visible-print-block {
+    display: block !important;
+  }
+}
+
+.xe-visible-print-inline {
+  display: none !important;
+}
+
+@media print {
+  .xe-visible-print-inline {
+    display: inline !important;
+  }
+}
+
+.xe-visible-print-inline-block {
+  display: none !important;
+}
+
+@media print {
+  .xe-visible-print-inline-block {
+    display: inline-block !important;
+  }
+}
+
+@media print {
+  .xe-hidden-print {
+    display: none !important;
+  }
+}
