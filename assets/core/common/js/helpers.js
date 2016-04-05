@@ -35,11 +35,11 @@ System.import('xecore:/common/js/xe.bundle').then(function() {
 
   // @DEPRECATED
   XE.shortDate = function () {
-    // $('.__xe_short_date').each(function () {
-    //   var time = parseInt($(this).attr('data-timestamp'));
-    //   var timeLag = parseInt(new Date().getTime() / 1000) - time + XE.options.timeLag;
-    //   $(this).text(getShortDate(timeLag)).show();
-    // });
+    $('.__xe_short_date').each(function () {
+      var time = parseInt($(this).attr('data-timestamp'));
+      var timeLag = parseInt(new Date().getTime() / 1000) - time + XE.options.timeLag;
+      $(this).text(getShortDate(timeLag)).show();
+    });
   };
 
 

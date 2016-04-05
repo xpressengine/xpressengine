@@ -619,7 +619,7 @@ $(function () {
         $('.snb-list').toggle();
     });
 
-    XE.Component.timeago();
+    XE.shortDate();
 });
 
 $(window).resize(function () {
