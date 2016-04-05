@@ -168,7 +168,7 @@
             var data = this.serializeObject(form);
             // todo: validation 임시 제거
             // if (!data.word || $.trim(data.word) == '') {
-            //     alertBox('warning', XE.Lang.trans('xe::required', {name: XE.Lang.trans('xe::word')}));
+            //     XE.toast('warning', XE.Lang.trans('xe::required', {name: XE.Lang.trans('xe::word')}));
             //     return false;
             // }
 
@@ -205,13 +205,13 @@
             var data = this.serializeObject(form);
 
             if (!data.id || $.trim(data.id) == '') {
-                alertBox('warning', XE.Lang.trans('xe::required', {name: 'id'}));
+                XE.toast('warning', XE.Lang.trans('xe::required', {name: 'id'}));
                 return false;
             }
 
             // todo: validation 임시 제거
             // if (!data.word || $.trim(data.word) == '') {
-            //     alertBox('warning', XE.Lang.trans('xe::required', {name: XE.Lang.trans('xe::word')}));
+            //     XE.toast('warning', XE.Lang.trans('xe::required', {name: XE.Lang.trans('xe::word')}));
             //     return false;
             // }
 

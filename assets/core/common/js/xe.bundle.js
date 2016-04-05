@@ -898,28 +898,76 @@ $__System.registerDynamic("5", [], true, function($__require, exports, module) {
   return module.exports;
 });
 
-$__System.registerDynamic("1", ["3", "4", "5"], true, function($__require, exports, module) {
+$__System.registerDynamic("6", [], true, function($__require, exports, module) {
   ;
   var define,
       global = this,
       GLOBAL = this;
   (function(root, factory) {
     if (typeof define === 'function' && define.amd) {
-      define(['exports', 'xecore:/common/js/xe.lang', 'xecore:/common/js/xe.progress', 'xecore:/common/js/xe.request'], function(exports, $, XeLang, XeProgress, XeRequest) {
+      define(['exports'], factory);
+    } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
+      factory(exports);
+    } else {
+      factory({});
+    }
+  }(this, function(exports, Translator) {
+    'use strict';
+    $(function() {
+      System.import('vendor:/moment').then(function(moment) {
+        var locale = window.navigator.userLanguage || window.navigator.language;
+        moment.locale(locale);
+      });
+      $(document).on('xe.timeago', '[data-xe-timeago]', function() {
+        var $this = $(this);
+        if ($this.data().xeTimeagoCalled === true)
+          false;
+        System.import('vendor:/moment').then(function(moment) {
+          var dataDate = $this.data('xe-timeago');
+          var isTimestamp = (parseInt(dataDate) == dataDate);
+          if (isTimestamp) {
+            dataDate = moment.unix(dataDate);
+          } else {
+            dataDate = moment(dataDate);
+          }
+          $this.text(dataDate.fromNow());
+          $this.data().xeTimeagoCalled = true;
+        });
+      });
+      boot();
+    });
+    function boot() {
+      exports.timeago();
+    }
+    exports.timeago = function() {
+      $('[data-xe-timeago]').trigger('xe.timeago');
+    };
+  }));
+  return module.exports;
+});
+
+$__System.registerDynamic("1", ["3", "4", "5", "6"], true, function($__require, exports, module) {
+  ;
+  var define,
+      global = this,
+      GLOBAL = this;
+  (function(root, factory) {
+    if (typeof define === 'function' && define.amd) {
+      define(['exports', 'xecore:/common/js/xe.lang', 'xecore:/common/js/xe.progress', 'xecore:/common/js/xe.request', 'xecore:/common/js/xe.component'], function(exports, $, XeLang, XeProgress, XeRequest) {
         if (typeof root.XE === "undefined") {
           factory((root.XE = exports), XeLang, XeProgress, XeRequest);
         }
       });
     } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
       if (typeof root.XE === "undefined") {
-        factory((root.XE = exports), $__require('3'), $__require('4'), $__require('5'));
+        factory((root.XE = exports), $__require('3'), $__require('4'), $__require('5'), $__require('6'));
       }
     } else {
       if (typeof root.XE === "undefined") {
         factory((root.XE = {}));
       }
     }
-  }(this, function(exports, XeLang, XeProgress, XeRequest) {
+  }(this, function(exports, XeLang, XeProgress, XeRequest, XeComponent) {
     'use strict';
     var INSTANCE = null;
     var $ = window.jQuery;
@@ -928,6 +976,7 @@ $__System.registerDynamic("1", ["3", "4", "5"], true, function($__require, expor
       this.Lang = XeLang;
       this.Progress = XeProgress;
       this.Request = XeRequest;
+      this.Component = XeComponent;
       this.options = {
         loadedTime: null,
         nowTime: parseInt(new Date().getTime() / 1000),
@@ -982,8 +1031,6 @@ $__System.registerDynamic("1", ["3", "4", "5"], true, function($__require, expor
             options = $.extend({}, options, self.Request.options, {url: url});
             url = undefined;
           }
-          console.log(url);
-          console.log(options);
           $.ajaxSetup(options);
           var jqXHR = $.ajax(url, options);
           return jqXHR;

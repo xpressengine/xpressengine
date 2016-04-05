@@ -7,7 +7,8 @@ System.config({
     "npm:*": "assets/jspm_packages/npm/*",
     "xecore:/*": "assets/core/*",
     "xevendor:/*": "assets/vendor/*",
-    "jquery": "xevendor:/jquery/jquery.min.js"
+    "jquery": "xevendor:/jquery/jquery.min.js",
+    "moment": "xevendor:/moment/moment-with-locales.min.js"
   },
   bundles: {
     "xecore:/xe-ui-component/js/xe-ui-component.bundle.js": [
@@ -32,17 +33,11 @@ System.config({
       "xecore:/common/js/xe.progress.js",
       "xecore:/common/js/xe.request.js",
       "xecore:/common/js/translator.js"
-    ],
-    "xecore:/common/js/helper.js": [
-      "xecore:/common/js/helpers.js"
     ]
   },
 
   meta: {
     "xecore:/*": {
-      "format": "cjs"
-    },
-    "lodash": {
       "format": "cjs"
     },
     "xecore:/menu/menu.js": {
@@ -68,6 +63,7 @@ System.config({
     "twbs/bootstrap-sass": "github:twbs/bootstrap-sass@3.3.6",
     "xedep-jquery": "npm:jquery@2.2.2",
     "xedep-jquery-migrate": "npm:jquery-migrate@1.4.0",
+    "vendor:/moment": "xevendor:/moment/moment-with-locales.min",
     "github:floatdrop/plugin-jsx@1.2.1": {
       "react-tools": "npm:react-tools@0.13.3"
     },

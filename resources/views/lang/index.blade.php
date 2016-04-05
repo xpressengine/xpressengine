@@ -84,10 +84,10 @@
                 $.ajax({
                     type: 'PUT', url: url, dataType: 'json', data: data,
                     success: function (data, textStatus) {
-                        alertBox('success', XE.Lang.trans('lang::admin.editor.saved'));
+                        XE.toast('success', XE.Lang.trans('lang::admin.editor.saved'));
                     },
                     error: function (request, status, error) {
-                        alertBox('danger', XE.Lang.trans('lang::admin.editor.failed'));
+                        XE.toast('danger', XE.Lang.trans('lang::admin.editor.failed'));
                     }
                 });
                 return false;
