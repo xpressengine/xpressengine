@@ -6,9 +6,7 @@ System.config({
     "github:*": "assets/jspm_packages/github/*",
     "npm:*": "assets/jspm_packages/npm/*",
     "xecore:/*": "assets/core/*",
-    "xevendor:/*": "assets/vendor/*",
-    "jquery": "xevendor:/jquery/jquery.min.js",
-    "moment": "xevendor:/moment/moment-with-locales.min.js"
+    "xevendor:/*": "assets/vendor/*"
   },
   bundles: {
     "xecore:/xe-ui-component/js/xe-ui-component.bundle.js": [
@@ -64,6 +62,9 @@ System.config({
     "xedep-jquery": "npm:jquery@2.2.2",
     "xedep-jquery-migrate": "npm:jquery-migrate@1.4.0",
     "vendor:/moment": "xevendor:/moment/moment-with-locales.min",
+    "vendor:/jquery": "xevendor:/jquery/jquery",
+    "vendor:/jquery-migrate": "xevendor:/jquery/jquery",
+    "vendor:/jquery-ui": "xevendor:/jqueryui/jquery-ui",
     "github:floatdrop/plugin-jsx@1.2.1": {
       "react-tools": "npm:react-tools@0.13.3"
     },
