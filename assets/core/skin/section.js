@@ -138,14 +138,14 @@ System.import('xecore:/common/js/xe').then(function(XE) {
               dataType: 'json',
               data: postData,
               success: function (data, textStatus, jqXHR) {
-                alertBox('success', data.message);
+                XE.toast('success', data.message);
                 if (callback) {
                   callback('success', data, textStatus, jqXHR);
                 }
               },
               error: function (jqXHR, textStatus, errorThrown) {
 
-                alertBox('danger', '스킨을 지정하지 못했습니다');
+                XE.toast('danger', '스킨을 지정하지 못했습니다');
 
                 if (callback) {
                   callback('error', jqXHR, textStatus, errorThrown);

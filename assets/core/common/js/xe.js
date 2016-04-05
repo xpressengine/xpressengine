@@ -5,6 +5,7 @@
       'xecore:/common/js/xe.lang',
       'xecore:/common/js/xe.progress',
       'xecore:/common/js/xe.request',
+      'xecore:/common/js/xe.component',
       ], function (exports, $, XeLang, XeProgress, XeRequest) {
         if(typeof root.XE === "undefined") {
           factory((root.XE = exports), XeLang, XeProgress, XeRequest);
@@ -12,14 +13,14 @@
       });
   } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
     if(typeof root.XE === "undefined") {
-      factory((root.XE = exports), require('xecore:/common/js/xe.lang'), require('xecore:/common/js/xe.progress'), require('xecore:/common/js/xe.request'));
+      factory((root.XE = exports), require('xecore:/common/js/xe.lang'), require('xecore:/common/js/xe.progress'), require('xecore:/common/js/xe.request'), require('xecore:/common/js/xe.component'));
     }
   } else {
     if(typeof root.XE === "undefined") {
       factory((root.XE = {}));
     }
   }
-}(this, function (exports, XeLang, XeProgress, XeRequest) {
+}(this, function (exports, XeLang, XeProgress, XeRequest, XeComponent) {
   'use strict';
 
   var INSTANCE = null;
@@ -30,6 +31,7 @@
     this.Lang = XeLang;
     this.Progress = XeProgress;
     this.Request = XeRequest;
+    this.Component = XeComponent;
 
     this.options = {
       // @DEPRECATED
@@ -105,8 +107,6 @@
           url = undefined;
         }
 
-        console.log(url);
-        console.log(options);
         $.ajaxSetup(options);
         var jqXHR = $.ajax(url, options);
         return jqXHR;
