@@ -26,7 +26,6 @@
         XE.setup({
             'X-CSRF-TOKEN': '{!! csrf_token() !!}',
             loginUserId: '{{ Auth::user()->getId() }}',
-            loadedTime: {{ time() }}
         });
 
         <!-- Translation -->

@@ -59,12 +59,12 @@ System.config({
     "normalize.css": "github:necolas/normalize.css@4.0.0",
     "swiper2": "npm:swiper@2.7.6",
     "twbs/bootstrap-sass": "github:twbs/bootstrap-sass@3.3.6",
-    "xedep-jquery": "npm:jquery@2.2.2",
-    "xedep-jquery-migrate": "npm:jquery-migrate@1.4.0",
-    "vendor:/moment": "xevendor:/moment/moment-with-locales.min",
     "vendor:/jquery": "xevendor:/jquery/jquery",
     "vendor:/jquery-migrate": "xevendor:/jquery/jquery",
     "vendor:/jquery-ui": "xevendor:/jqueryui/jquery-ui",
+    "vendor:/moment": "xevendor:/moment/moment-with-locales.min",
+    "xedep-jquery": "npm:jquery@2.2.2",
+    "xedep-jquery-migrate": "npm:jquery-migrate@1.4.0",
     "github:floatdrop/plugin-jsx@1.2.1": {
       "react-tools": "npm:react-tools@0.13.3"
     },

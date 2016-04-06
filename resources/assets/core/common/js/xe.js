@@ -33,19 +33,10 @@
     this.Request = XeRequest;
     this.Component = XeComponent;
 
-    this.options = {
-      // @DEPRECATED
-      loadedTime: null,
-      // @DEPRECATED
-      nowTime: parseInt(new Date().getTime() / 1000),
-      // @DEPRECATED
-      timeLag: null
-    };
+    this.options = {};
 
     this.setup = function (options) {
       self.options.loginUserId = options.loginUserId;
-      self.options.loadedTime = options.loadedTime;
-      self.options.timeLag = options.loadedTime - self.options.nowTime;
 
       self.Request.setup({
         headers: {
