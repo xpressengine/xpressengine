@@ -233,7 +233,7 @@ Route::settings(
             [
                 'as' => 'settings.member.index',
                 'uses' => 'Member\Settings\UserController@index',
-                'settings_menu' => ['member','member.list'],
+                'settings_menu' => 'member.list',
                 'permission' => 'user.list'
             ]
         );
