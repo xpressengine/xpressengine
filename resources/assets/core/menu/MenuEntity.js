@@ -28,12 +28,6 @@ var MenuEntity = React.createClass({
     return (
       <div className="panel-heading" id={nodeId}>
         <div className="pull-left">
-          <button className="btn-close pull-left" onClick={this.handleCollapse}>
-            <i className={cx({
-                          "xi-angle-down" : !index.collapsed,
-                          "xi-angle-right" : index.collapsed
-                          })}></i>
-          </button>
           <a href={nodeUrl}><h3><i className="xi-folder"></i>{node.title}</h3></a>
         </div>
         <div className="pull-right">
