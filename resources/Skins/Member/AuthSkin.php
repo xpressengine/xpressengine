@@ -54,8 +54,7 @@ class AuthSkin extends BladeSkin
     {
         \XeFrontend::css(
             [
-                'assets/vendor/bootstrap/css/bootstrap.css',
-                'assets/core/common/css/form.css',
+                'assets/core/xe-ui-component/xe-ui-component.css',
                 'assets/core/member/auth.css'
             ]
         )->load();

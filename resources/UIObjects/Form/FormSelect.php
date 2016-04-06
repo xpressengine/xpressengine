@@ -19,48 +19,49 @@ class FormSelect extends AbstractUIObject
         $args = $this->arguments;
         PhpQuery::newDocument();
 
-
-
         $this->markup = PhpQuery::pq($this->template);
-        
-        $label = $this->markup['label'];
-        $select = $this->markup['select'];
+
+        $labelEl = $this->markup['label'];
+        $selectEl = $this->markup['select'];
         $selectedValue = array_get($args, 'selected', null);
 
         foreach ($args as $key => $arg) {
             switch ($key) {
                 case 'class':
-                    $select->addClass($arg);
+                    $selectEl->addClass($arg);
                     break;
                 case 'label':
-                    $label->removeClass('hidden')->html($arg);
+                    $labelEl->removeClass('hidden')->html($arg);
                     break;
                 case 'options':
-                    foreach ($arg as $option) {
-                        if (is_string($option) === true) {
-                            $value = $text = $option;
-                        } else {
-                            $value = array_get($option, 'value');
-                            $text = array_get($option, 'text', $value);
-
-                            if ($selectedValue === null) {
-                                $selected = array_get($option, 'selected', false) ? 'selected="selected"' : '';
-                            } else {
-                                $selected = $value === $selectedValue ? 'selected="selected"' : '';
+                    foreach ($arg as $value => $option) {
+                        if (is_array($option) === false) {
+                            $text = $option;
+                            if(is_string($value) === false) {
+                                $value = $option;
                             }
+                            $selected = '';
+                        } else {
+                            $value = array_get($option, 'value', $value);
+                            $text = array_get($option, 'text', $value);
                         }
-
-
-
-                        $option = PhpQuery::pq("<option value=\"$value\" $selected\">$text</option>");
-                        $select->append($option);
+                        if ($selectedValue === null) {
+                            $selected = array_get($option, 'selected', false) ? 'selected="selected"' : '';
+                        } else {
+                            $selected = $value === $selectedValue ? 'selected="selected"' : '';
+                        }
+                        $optionEl = PhpQuery::pq("<option value=\"$value\" $selected \">$text</option>");
+                        $selectEl->append($optionEl);
                     }
+                    break;
 
                 case 'id':
-                    $label->attr('for', $arg);
+                    $labelEl->attr('for', $arg);
                     // pass to default
                 default:
-                    $select->attr($key, $arg);
+                    if(is_string($arg)){
+                        $selectEl->attr($key, $arg);
+                    }
                     break;
             }
         }
