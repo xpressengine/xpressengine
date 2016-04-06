@@ -4055,8 +4055,7 @@ $__System.registerDynamic("7", [], true, function($__require, exports, module) {
     'use strict';
     $(function() {
       System.import('vendor:/moment').then(function(moment) {
-        var locale = window.navigator.userLanguage || window.navigator.language;
-        moment.locale(locale);
+        moment.locale(XE.getLocale());
       });
       $(document).on('xe.timeago', '[data-xe-timeago]', function() {
         var $this = $(this);
@@ -4167,6 +4166,12 @@ $__System.registerDynamic("1", ["2", "4", "5", "6", "7"], true, function($__requ
         } else {
           return System.import(name);
         }
+      };
+      this.getLocale = function() {
+        return self.options.locale;
+      };
+      this.getDefaultLocale = function() {
+        return self.options.defaultLocale;
       };
       if (this.Request) {
         self.ajax = self.Request.ajax = function(url, options) {

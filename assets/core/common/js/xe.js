@@ -99,6 +99,14 @@
       }
     };
 
+    this.getLocale = function() {
+      return self.options.locale;
+    }
+
+    this.getDefaultLocale = function() {
+      return self.options.defaultLocale;
+    }
+
      if(this.Request) {
       self.ajax = self.Request.ajax = function(url, options) {
         if ( typeof url === "object" ) {
