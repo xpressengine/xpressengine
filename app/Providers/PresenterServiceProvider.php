@@ -173,6 +173,7 @@ class PresenterServiceProvider extends ServiceProvider
 
         $frontendHandler->js([
             'assets/jspm_packages/system.js',
+            'assets/jspm_packages/system-polyfills.js',
             'assets/systemjs.config.js',
             'assets/vendor/react/react-with-addons.js',
             'assets/vendor/react/JSXTransformer.js', // @TODO 제거

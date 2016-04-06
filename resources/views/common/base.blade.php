@@ -26,6 +26,8 @@
         XE.setup({
             'X-CSRF-TOKEN': '{!! csrf_token() !!}',
             loginUserId: '{{ Auth::user()->getId() }}',
+            locale: '{{ session()->get('locale') ?: app('xe.translator')->getLocale() }}',
+            defaultLocale: '{{ app('xe.translator')->getLocale() }}'
         });
 
         <!-- Translation -->

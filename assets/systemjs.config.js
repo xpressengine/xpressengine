@@ -27,6 +27,7 @@ System.config({
     ],
     "xecore:/common/js/xe.bundle.js": [
       "xecore:/common/js/xe.js",
+      "vendor:/lodash",
       "xecore:/common/js/xe.lang.js",
       "xecore:/common/js/xe.progress.js",
       "xecore:/common/js/xe.request.js",
@@ -63,6 +64,7 @@ System.config({
     "vendor:/jquery-migrate": "xevendor:/jquery/jquery",
     "vendor:/jquery-ui": "xevendor:/jqueryui/jquery-ui",
     "vendor:/moment": "xevendor:/moment/moment-with-locales.min",
+    "vendor:/lodash": "xevendor:/lodash/lodash.min",
     "xedep-jquery": "npm:jquery@2.2.2",
     "xedep-jquery-migrate": "npm:jquery-migrate@1.4.0",
     "github:floatdrop/plugin-jsx@1.2.1": {
