@@ -503,6 +503,6 @@
   // APPLY TO STANDARD DROPDOWN ELEMENTS
   // ===================================
 
-  $(document).xeUserMenu({selector:'[data-toggle=xeUserMenu]', container:'body', trigger:'click', placement:'top'});
+  $(document).xeUserMenu({selector:'[data-toggle=xeUserMenu]', container:'body', trigger:'click', placement:'buttom'});
 
 }));

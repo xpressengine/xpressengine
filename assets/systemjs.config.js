@@ -63,8 +63,8 @@ System.config({
     "vendor:/jquery": "xevendor:/jquery/jquery",
     "vendor:/jquery-migrate": "xevendor:/jquery/jquery",
     "vendor:/jquery-ui": "xevendor:/jqueryui/jquery-ui",
-    "vendor:/moment": "xevendor:/moment/moment-with-locales.min",
     "vendor:/lodash": "xevendor:/lodash/lodash.min",
+    "vendor:/moment": "xevendor:/moment/moment-with-locales.min",
     "xedep-jquery": "npm:jquery@2.2.2",
     "xedep-jquery-migrate": "npm:jquery-migrate@1.4.0",
     "github:floatdrop/plugin-jsx@1.2.1": {
