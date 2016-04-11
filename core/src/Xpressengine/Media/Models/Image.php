@@ -13,6 +13,7 @@
  */
 namespace Xpressengine\Media\Models;
 
+use Illuminate\Support\Arr;
 use Xpressengine\Media\Models\Meta\ImageMeta;
 
 /**
@@ -100,7 +101,10 @@ class Image extends Media
             return '<img src="' . $this->url() . '" style="max-width: 100%" />';
         }
 
-        return '<img src="' . $this->url() . '" width="' . $this->width . '" height="' . $this->height . '" />';
+        $width = Arr::get($option, 'width') ?: $this->width;
+        $height = Arr::get($option, 'height') ?: $this->height;
+
+        return '<img src="' . $this->url() . '" width="' . $width . '" height="' . $height . '" />';
     }
 
     /**
