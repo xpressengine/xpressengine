@@ -92,16 +92,16 @@
                         <div class="form-group">
                             <label>
                                 Link image
-                                <small>사이트 네비게이션에 텍스트 메뉴명을 대신할 이미지를 등록 합니다.</small>
+                                <small>{{ xe_trans('xe::linkImageDescription') }}</small>
                             </label>
 
                             <div class="well">
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <label>
-                                            기본
+                                            {{ xe_trans('xe::default') }}
                                             @if($item->basicImage)
-                                                <small><input type="checkbox" name="removeBasicImage" value="1"> 지우기</small>
+                                                <small><input type="checkbox" name="removeBasicImage" value="1"> {{ xe_trans('xe::destroy') }}</small>
 
                                             @endif
                                         </label>
@@ -109,9 +109,9 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <label>
-                                            마우스 오버
+                                            {{ xe_trans('xe::hover') }}
                                             @if($item->hoverImage)
-                                                <small><input type="checkbox" name="removeHoverImage" value="1"> 지우기</small>
+                                                <small><input type="checkbox" name="removeHoverImage" value="1"> {{ xe_trans('xe::destroy') }}</small>
 
                                             @endif
                                         </label>
@@ -119,9 +119,9 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <label>
-                                            선택 됨
+                                            {{ xe_trans('xe::selected') }}
                                             @if($item->selectedImage)
-                                                <small><input type="checkbox" name="removeSelectedImage" value="1"> 지우기</small>
+                                                <small><input type="checkbox" name="removeSelectedImage" value="1"> {{ xe_trans('xe::destroy') }}</small>
 
                                             @endif
                                         </label>

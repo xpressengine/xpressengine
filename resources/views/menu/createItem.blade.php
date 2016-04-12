@@ -102,21 +102,21 @@
                         <div class="form-group">
                             <label>
                                 Link image
-                                <small>사이트 네비게이션에 텍스트 메뉴명을 대신할 이미지를 등록 합니다.</small>
+                                <small>{{ xe_trans('xe::linkImageDescription') }}</small>
                             </label>
 
                             <div class="well">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        <label>기본</label>
+                                        <label>{{ xe_trans('xe::default') }}</label>
                                         {!! uio('uiobject/xpressengine@formImage', ['name' => 'basicImage']) !!}
                                     </div>
                                     <div class="col-sm-4">
-                                        <label>마우스 오버</label>
+                                        <label>{{ xe_trans('xe::hover') }}</label>
                                         {!! uio('uiobject/xpressengine@formImage', ['name' => 'hoverImage']) !!}
                                     </div>
                                     <div class="col-sm-4">
-                                        <label>선택 됨</label>
+                                        <label>{{ xe_trans('xe::selected') }}</label>
                                         {!! uio('uiobject/xpressengine@formImage', ['name' => 'selectedImage']) !!}
                                     </div>
                                 </div>
