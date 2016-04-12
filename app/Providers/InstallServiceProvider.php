@@ -45,6 +45,8 @@ class InstallServiceProvider extends ServiceProvider
 
         Route::get('/', '\App\Http\Controllers\InstallController@index');
         Route::get('/step1', '\App\Http\Controllers\InstallController@step1');
+        Route::get('/checkPHP', '\App\Http\Controllers\InstallController@checkPHP');
+        Route::get('/checkDirectoryPermission', '\App\Http\Controllers\InstallController@checkDirectoryPermission');
         Route::post('/install', '\App\Http\Controllers\InstallController@install');
 
         app('config')->set('app.key', File::get($appKeyPath));

@@ -55,8 +55,12 @@
             <div class="inner cover">
                 <h1 class="cover-heading">XE 3.x Installer</h1>
                 <p class="lead">XE 설치를 위한 현재 서버의 상태를 체크합니다</p>
+                <div class="checking-list">
+
+                </div>
                 <p class="lead">
-                    <a href="/step1" class="btn btn-lg btn-default">Getting start</a>
+                    <a href="/" class="btn btn-lg btn-danger again-button" style="display:none;">Checking Again</a>
+                    <a href="/step1" class="btn btn-lg btn-default next-button">Getting start</a>
                 </p>
             </div>
 
@@ -81,5 +85,55 @@
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="http://getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
 
+<script>
+    function checkPHP()
+    {
+        $('.checking-list').append($('<p>').html('<span class="glyphicon glyphicon-refresh php-icon" aria-hidden="true"></span> PHP 버전을 체크합니다.'));
+
+        $.ajax({
+            type: 'get',
+            dataType: 'json',
+            data: {},
+            url: '/checkPHP',
+            success: function(data) {
+                if (data.result == false) {
+                    $('.php-icon').addClass('glyphicon-ban-circle').removeClass('glyphicon-refresh');
+                    $('.next-button').hide();
+                    $('.again-button').show();
+
+                } else {
+                    $('.php-icon').addClass('glyphicon-ok-circle').removeClass('glyphicon-refresh');
+                }
+            }
+        });
+    }
+
+    function directoryPermission()
+    {
+        $('.checking-list').append($('<p>').html('<span class="glyphicon glyphicon-refresh directory-icon" aria-hidden="true"></span> 디렉토리 사용 권한을 체크합니다.'));
+
+        $.ajax({
+            type: 'get',
+            dataType: 'json',
+            data: {},
+            url: '/checkDirectoryPermission',
+            success: function(data) {
+                if (data.result == false) {
+                    $('.directory-icon').addClass('glyphicon-ban-circle').removeClass('glyphicon-refresh');
+                    $('.next-button').hide();
+                    $('.again-button').show();
+
+                } else {
+                    $('.directory-icon').addClass('glyphicon-ok-circle').removeClass('glyphicon-refresh');
+                }
+            }
+        });
+    }
+
+    $(function() {
+        checkPHP();
+        directoryPermission();
+    });
+</script>
 </body>
 </html>
