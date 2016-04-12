@@ -182,7 +182,7 @@ class PresenterServiceProvider extends ServiceProvider
             'assets/core/xe-ui-component/js/xe-ui-component.bundle.js',
         ])->appendTo('head.prepend')->load();
 
-        $frontendHandler->js('assets/core/common/js/member-menu.js')->load(); // @TODO 제거
+        $frontendHandler->js('assets/core/common/js/usermenu.js')->load(); // @TODO 제거
     }
 
     /**
