@@ -46,7 +46,7 @@ class PutTranslation extends Command
     /**
      * @var string
      */
-    protected $description = '다국어 파일을 database 에 넣습니다.';
+    protected $description = 'Translation data import to database.';
 
     /**
      * @var Translator
@@ -72,27 +72,76 @@ class PutTranslation extends Command
      */
     public function fire()
     {
-        $namespace = $this->input->getOption('ns');
-        if ($namespace == false) {
-            $this->error('네임스페이스를 입력하세요.');
-            return null;
-        }
-
+        $name = $this->input->getArgument('name');
         $path = $this->input->getOption('path');
-        if ($path == false) {
-            $this->error('다국어 파일 위치를 입력하세요.');
-            return null;
+
+        if ($path && !file_exists(base_path($path))) {
+            $this->error(sprintf('Not exists [%s]', base_path($path)));
+            return;
         }
 
-        $path = base_path($path);
-        if (file_exists($path) === false) {
-            $this->error('다국어 파일을 찾을 수 없습니다.');
-            return null;
+        $files = [];
+        if ($path && !is_dir(base_path($path))) {
+            $files = [base_path($path)];
+        } else {
+            $dirPath = !$path ? $this->getLangsDir($name) : base_path($path);
+
+            $dir = dir($dirPath);
+
+            while ($entry = $dir->read()) {
+                $path = $dirPath . DIRECTORY_SEPARATOR . $entry;
+                if (is_dir($path)) {
+                    continue;
+                }
+                $files[] = $path;
+
+            }
         }
 
-        $this->translator->putFromLangDataSource($namespace, $path);
+        foreach ($files as $file) {
+            $this->translator->putFromLangDataSource($this->getNamespace($name), $file);
+        }
 
         $this->info('Language import complete!');
+    }
+
+    /**
+     * Get the directory path where the language file
+     *
+     * @param string|null $name
+     * @return string
+     */
+    protected function getLangsDir($name = null)
+    {
+        if (!$name) {
+            // core language
+            return base_path('resources') . DIRECTORY_SEPARATOR . 'lang';
+        }
+
+        return base_path('plugins') . DIRECTORY_SEPARATOR . $name . DIRECTORY_SEPARATOR . 'langs';
+    }
+
+    /**
+     * Get the namespace for the package
+     *
+     * @param string|null $name
+     * @return string
+     */
+    protected function getNamespace($name = null)
+    {
+        return $name ?: 'xe';
+    }
+
+    /**
+     * Get the console command arguments.
+     *
+     * @return array
+     */
+    protected function getArguments()
+    {
+        return [
+            ['name', InputArgument::OPTIONAL, 'The name of the plugin'],
+        ];
     }
 
     /**
@@ -103,8 +152,7 @@ class PutTranslation extends Command
     protected function getOptions()
     {
         return [
-            ['ns', null, InputOption::VALUE_OPTIONAL, '네임스페이스'],
-            ['path', null, InputOption::VALUE_OPTIONAL, '다국어 파일 경로'],
+            ['path', null, InputOption::VALUE_OPTIONAL, 'The directory or file path for translation'],
         ];
     }
 }
