@@ -458,9 +458,9 @@
 
     if(self != root) {
       e.stopPropagation();
-      self.menubox().hasClass('in') ? self.leave(self) : self.enter(self)
+      self.menubox().hasClass('in') ? self.leave(self) : self.enter(self);
+      return false;
     }
-    return false;
   }
 
   XeUserMenu.prototype.destroy = function () {
