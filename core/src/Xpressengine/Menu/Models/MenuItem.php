@@ -13,11 +13,9 @@
  */
 namespace Xpressengine\Menu\Models;
 
-use Illuminate\Database\Eloquent\Builder;
-use Xpressengine\Category\Models\Category;
 use Xpressengine\Category\Models\CategoryItem;
+use Xpressengine\Media\Models\Image;
 use Xpressengine\Routing\InstanceRoute;
-use Xpressengine\Support\Tree\Node;
 
 /**
  * Class MenuItem
@@ -42,7 +40,6 @@ use Xpressengine\Support\Tree\Node;
  * @property string $type        해당 메뉴의 type
  * @property int    $ordering    정렬을 위한 순서
  */
-//class MenuItem extends Node
 class MenuItem extends CategoryItem
 {
     /**
@@ -116,6 +113,69 @@ class MenuItem extends CategoryItem
         return $this->hasOne(InstanceRoute::class, 'instanceId');
     }
 
+    /**
+     * Basic link image relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function basicImage()
+    {
+        return $this->belongsTo(Image::class, 'basicImageId');
+    }
+
+    /**
+     * Hover link image relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function hoverImage()
+    {
+        return $this->belongsTo(Image::class, 'hoverImageId');
+    }
+
+    /**
+     * Selected link image relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function selectedImage()
+    {
+        return $this->belongsTo(Image::class, 'selectedImageId');
+    }
+
+    /**
+     * Get hover link image of model
+     *
+     * @return Image|null
+     */
+    public function getHoverImage()
+    {
+        if (!$this->getAttribute('hoverImageId')) {
+            return $this->getRelationValue('basicImage');
+        }
+
+        return $this->getRelationValue('hoverImage');
+    }
+
+    /**
+     * Get selected link image of model
+     *
+     * @return Image|null
+     */
+    public function getSelectedImage()
+    {
+        if (!$this->getAttribute('selectedImageId')) {
+            return $this->getHoverImage();
+        }
+
+        return $this->getRelationValue('selectedImage');
+    }
+
+    /**
+     * Get a children collection of model
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
     public function getChildren()
     {
         $rfc = new \ReflectionClass($this);

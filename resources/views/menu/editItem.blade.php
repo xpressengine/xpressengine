@@ -1,7 +1,7 @@
 @section('page_title', "<h2><a href='".route('settings.menu.index')."'><i class='xi-arrow-left'></i></a>Edit Item</h2>")
 @extends('menu.layout')
 @section('menuContent')
-<form action="{{ route('settings.menu.update.item', [$menu->id, $item->id])}}" method="post">
+<form action="{{ route('settings.menu.update.item', [$menu->id, $item->id])}}" method="post" enctype="multipart/form-data">
     <input type="hidden" name="_method" value="put"/>
     <input type="hidden" name="_token" value="{{ Session::token() }}"/>
     <input type="hidden" name="itemOrdering" value="{{ $item->ordering }}"/>
@@ -87,6 +87,48 @@
                                     {{xe_trans('xe::itemTargetOption_topFrame')}}
                                 </option>
                             </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                Link image
+                                <small>사이트 네비게이션에 텍스트 메뉴명을 대신할 이미지를 등록 합니다.</small>
+                            </label>
+
+                            <div class="well">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <label>
+                                            기본
+                                            @if($item->basicImage)
+                                                <small><input type="checkbox" name="removeBasicImage" value="1"> 지우기</small>
+
+                                            @endif
+                                        </label>
+                                        {!! uio('uiobject/xpressengine@formImage', ['name' => 'basicImage', 'image' => $item->basicImage]) !!}
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label>
+                                            마우스 오버
+                                            @if($item->hoverImage)
+                                                <small><input type="checkbox" name="removeHoverImage" value="1"> 지우기</small>
+
+                                            @endif
+                                        </label>
+                                        {!! uio('uiobject/xpressengine@formImage', ['name' => 'hoverImage', 'image' => $item->hoverImage]) !!}
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label>
+                                            선택 됨
+                                            @if($item->selectedImage)
+                                                <small><input type="checkbox" name="removeSelectedImage" value="1"> 지우기</small>
+
+                                            @endif
+                                        </label>
+                                        {!! uio('uiobject/xpressengine@formImage', ['name' => 'selectedImage', 'image' => $item->selectedImage]) !!}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
