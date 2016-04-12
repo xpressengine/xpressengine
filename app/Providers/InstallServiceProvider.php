@@ -37,6 +37,8 @@ class InstallServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        echo 'Please Install XE3';
+        exit;
         $appKeyPath = storage_path('app') . '/appKey';
 
         if (File::exists($appKeyPath) === false) {
