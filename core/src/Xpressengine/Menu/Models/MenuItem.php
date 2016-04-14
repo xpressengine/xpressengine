@@ -172,6 +172,78 @@ class MenuItem extends CategoryItem
     }
 
     /**
+     * Mobile basic link image relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function mBasicImage()
+    {
+        return $this->belongsTo(Image::class, 'mBasicImageId');
+    }
+
+    /**
+     * Mobile hover link image relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function mHoverImage()
+    {
+        return $this->belongsTo(Image::class, 'mHoverImageId');
+    }
+
+    /**
+     * Mobile selected link image relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function mSelectedImage()
+    {
+        return $this->belongsTo(Image::class, 'mSelectedImageId');
+    }
+
+    /**
+     * Get mobile basic link image of model
+     *
+     * @return Image|null
+     */
+    public function getMBasicImage()
+    {
+        if (!$this->getAttribute('mBasicImageId')) {
+            return $this->getRelationValue('basicImage');
+        }
+
+        return $this->getRelationValue('mBasicImage');
+    }
+
+    /**
+     * Get mobile hover link image of model
+     *
+     * @return Image|null
+     */
+    public function getMHoverImage()
+    {
+        if (!$this->getAttribute('mHoverImageId')) {
+            return $this->getMBasicImage();
+        }
+
+        return $this->getRelationValue('mHoverImage');
+    }
+
+    /**
+     * Get mobile selected link image of model
+     *
+     * @return Image|null
+     */
+    public function getMSelectedImage()
+    {
+        if (!$this->getAttribute('mSelectedImageId')) {
+            return $this->getMHoverImage();
+        }
+
+        return $this->getRelationValue('mSelectedImage');
+    }
+
+    /**
      * Get a children collection of model
      *
      * @return \Illuminate\Database\Eloquent\Collection

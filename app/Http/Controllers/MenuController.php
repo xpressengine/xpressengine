@@ -493,6 +493,9 @@ class MenuController extends Controller
             $this->registerItemImage($item, 'basicImage');
             $this->registerItemImage($item, 'hoverImage');
             $this->registerItemImage($item, 'selectedImage');
+            $this->registerItemImage($item, 'mBasicImage');
+            $this->registerItemImage($item, 'mHoverImage');
+            $this->registerItemImage($item, 'mSelectedImage');
 
             $handler->putItem($item, $menuTypeInput);
 
@@ -621,6 +624,9 @@ class MenuController extends Controller
             $this->registerItemImage($item, 'basicImage');
             $this->registerItemImage($item, 'hoverImage');
             $this->registerItemImage($item, 'selectedImage');
+            $this->registerItemImage($item, 'mBasicImage');
+            $this->registerItemImage($item, 'mHoverImage');
+            $this->registerItemImage($item, 'mSelectedImage');
 
             $handler->putItem($item, $menuTypeInput);
 

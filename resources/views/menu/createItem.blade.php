@@ -108,16 +108,31 @@
                             <div class="well">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        <label>{{ xe_trans('xe::default') }}</label>
+                                        <label>PC - {{ xe_trans('xe::default') }}</label>
                                         {!! uio('uiobject/xpressengine@formImage', ['name' => 'basicImage']) !!}
                                     </div>
                                     <div class="col-sm-4">
-                                        <label>{{ xe_trans('xe::hover') }}</label>
+                                        <label>PC - {{ xe_trans('xe::hover') }}</label>
                                         {!! uio('uiobject/xpressengine@formImage', ['name' => 'hoverImage']) !!}
                                     </div>
                                     <div class="col-sm-4">
-                                        <label>{{ xe_trans('xe::selected') }}</label>
+                                        <label>PC - {{ xe_trans('xe::selected') }}</label>
                                         {!! uio('uiobject/xpressengine@formImage', ['name' => 'selectedImage']) !!}
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <label>Mobile - {{ xe_trans('xe::default') }}</label>
+                                        {!! uio('uiobject/xpressengine@formImage', ['name' => 'mBasicImage']) !!}
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label>Mobile - {{ xe_trans('xe::hover') }}</label>
+                                        {!! uio('uiobject/xpressengine@formImage', ['name' => 'mHoverImage']) !!}
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label>Mobile - {{ xe_trans('xe::selected') }}</label>
+                                        {!! uio('uiobject/xpressengine@formImage', ['name' => 'mSelectedImage']) !!}
                                     </div>
                                 </div>
                             </div>

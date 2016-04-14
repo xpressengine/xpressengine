@@ -99,33 +99,60 @@
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <label>
-                                            {{ xe_trans('xe::default') }}
+                                            PC - {{ xe_trans('xe::default') }}
                                             @if($item->basicImage)
                                                 <small><input type="checkbox" name="removeBasicImage" value="1"> {{ xe_trans('xe::destroy') }}</small>
-
                                             @endif
                                         </label>
                                         {!! uio('uiobject/xpressengine@formImage', ['name' => 'basicImage', 'image' => $item->basicImage]) !!}
                                     </div>
                                     <div class="col-sm-4">
                                         <label>
-                                            {{ xe_trans('xe::hover') }}
+                                            PC - {{ xe_trans('xe::hover') }}
                                             @if($item->hoverImage)
                                                 <small><input type="checkbox" name="removeHoverImage" value="1"> {{ xe_trans('xe::destroy') }}</small>
-
                                             @endif
                                         </label>
                                         {!! uio('uiobject/xpressengine@formImage', ['name' => 'hoverImage', 'image' => $item->hoverImage]) !!}
                                     </div>
                                     <div class="col-sm-4">
                                         <label>
-                                            {{ xe_trans('xe::selected') }}
+                                            PC - {{ xe_trans('xe::selected') }}
                                             @if($item->selectedImage)
                                                 <small><input type="checkbox" name="removeSelectedImage" value="1"> {{ xe_trans('xe::destroy') }}</small>
-
                                             @endif
                                         </label>
                                         {!! uio('uiobject/xpressengine@formImage', ['name' => 'selectedImage', 'image' => $item->selectedImage]) !!}
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <label>
+                                            Mobile - {{ xe_trans('xe::default') }}
+                                            @if(null)
+                                                <small><input type="checkbox" name="removeMBasicImage" value="1"> {{ xe_trans('xe::destroy') }}</small>
+                                            @endif
+                                        </label>
+                                        {!! uio('uiobject/xpressengine@formImage', ['name' => 'mBasicImage', 'image' => $item->mBasicImage]) !!}
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label>
+                                            Mobile - {{ xe_trans('xe::hover') }}
+                                            @if(null)
+                                                <small><input type="checkbox" name="removeMHoverImage" value="1"> {{ xe_trans('xe::destroy') }}</small>
+                                            @endif
+                                        </label>
+                                        {!! uio('uiobject/xpressengine@formImage', ['name' => 'mHoverImage', 'image' => $item->mHoverImage]) !!}
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label>
+                                            Mobile - {{ xe_trans('xe::selected') }}
+                                            @if(null)
+                                                <small><input type="checkbox" name="removeMSelectedImage" value="1"> {{ xe_trans('xe::destroy') }}</small>
+                                            @endif
+                                        </label>
+                                        {!! uio('uiobject/xpressengine@formImage', ['name' => 'mSelectedImage', 'image' => $item->mSelectedImage]) !!}
                                     </div>
                                 </div>
                             </div>
