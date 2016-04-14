@@ -144,7 +144,6 @@
 </form>
 <script>
     $('#parentTheme').change(function (e) {
-        console.log(this);
         $(e.target).closest('.panel-collapse').find('>.panel-body').toggle();
     });
 </script>
