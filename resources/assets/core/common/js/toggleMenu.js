@@ -80,10 +80,12 @@ var ToggleMenu = React.createClass({
       }.bind(this)
     });
   },
-
+  isActive:function(value){
+    return 'xe-dropdown ' + ((this.state.loaded === true) ? 'open' : '');
+  },
   render: function () {
     return (
-      React.DOM.span({className: "xe-dropdown"},
+      React.DOM.span({className: this.isActive(), ref: "dropdown"},
         this.getBody(),
         React.DOM.ul({className: "xe-dropdown-menu", role: "menu"}, this.getItems())
       )
