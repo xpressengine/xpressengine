@@ -431,7 +431,7 @@ class ThemeHandler
     public function getThemeConfig($id)
     {
         $configId = $this->getConfigId($id);
-        return $this->config->get($configId);
+        return $this->config->get($configId, true);
     }
 
     /**
