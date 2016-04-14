@@ -103,7 +103,7 @@ class SettingsMiddleware
             throw new AccessDeniedHttpException();
         }
 
-        if ($this->gate->allows('access', new Instance($permissionId))) {
+        if ($this->gate->denies('access', new Instance('settings.'.$permissionId))) {
             throw new AccessDeniedHttpException();
         }
     }
