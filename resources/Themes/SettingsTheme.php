@@ -48,8 +48,6 @@ class SettingsTheme extends AbstractTheme
             'assets/core/settings/css/admin.css',
         ])->load();
 
-        $frontendHandler->html('setting.js')->content(
-            '<script>System.import(\'xecore:/settings/js/admin.bundle\');</script>'
-        )->appendTo('body')->load();
+        $frontendHandler->js('assets/core/settings/js/admin.bundle.js')->appendTo('head')->load();
     }
 }

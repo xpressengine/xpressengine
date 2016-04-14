@@ -235,19 +235,14 @@ proto.move = function (fromId, toId, placement) {
         tree: this
       }
     );
+
     if (!result) {
-      console.log('move filted');
       return;
-    } else
-      console.log('move padded');
+    }
 
     fromId = result.fromId;
     toId = result.toId;
     placement = result.placement;
-
-    console.log('fromId' + fromId);
-    console.log('toId' + toId);
-    console.log('placement' + placement);
   }
 
   var obj = this.remove(fromId);
