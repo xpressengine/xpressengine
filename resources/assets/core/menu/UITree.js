@@ -135,8 +135,6 @@ var UITree = React.createClass({
 
   dragStart(id, dom, e) {
     var tree = this.state.tree;
-    console.log('drag start');
-    console.log(tree);
     var node = tree.get(id);
     if (node.entity && node.entity == 'menu')
       return;

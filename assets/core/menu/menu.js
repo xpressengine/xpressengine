@@ -612,8 +612,6 @@ $__System.registerDynamic("7", ["6"], true, function($__require, exports, module
     },
     dragStart(id, dom, e) {
       var tree = this.state.tree;
-      console.log('drag start');
-      console.log(tree);
       var node = tree.get(id);
       if (node.entity && node.entity == 'menu')
         return;
