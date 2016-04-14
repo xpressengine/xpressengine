@@ -18,13 +18,14 @@ var ToggleMenu = React.createClass({
   getItems: function () {
 
     if (this.state.items.length < 1 && this.state.firstLoaded === false) {
-      return React.createElement("li", {className: "text-center"}, React.createElement("span", null, "Loading..."));
+      return React.createElement("li", {className: "xe-dropdown-header", onClick: this.onClick}, 'Loading...');
     } else if (this.state.items.length < 1) {
-      return React.createElement("li", {className: "text-center"}, React.createElement("span", null, "항목이 없습니다."));
+      return React.createElement("li", {className: "xe-dropdown-header", onClick: this.onClick}, '항목이 없습니다.');
     } else {
       return this.state.items.map(function (item, i) {
         var props = $.extend({}, item, {
           identifier: this.props.identifier,
+          align: this.props.align,
           class: this.props.itemClass,
           data: this.props.data,
           reload: this.reload
@@ -87,7 +88,7 @@ var ToggleMenu = React.createClass({
     return (
       React.DOM.span({className: this.isActive(), ref: "dropdown"},
         this.getBody(),
-        React.DOM.ul({className: "xe-dropdown-menu", role: "menu"}, this.getItems())
+        React.DOM.ul({className: "xe-dropdown-menu" + ((this.props.align === 'right') ? ' xe-dropdown-menu-right' : ''), role: "menu"}, this.getItems())
       )
     );
   }
