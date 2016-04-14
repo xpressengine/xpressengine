@@ -227,10 +227,6 @@ Route::settings(
     'user',
     function () {
 
-        Route::get(
-            'searchMember/{keyword?}',
-            ['as' => 'settings.member.search', 'uses' => 'Member\Settings\UserController@searchMember']
-        );
         // index
         Route::get(
             '/',
@@ -353,13 +349,19 @@ Route::settings(
                 Route::get(
                     'togglemenu',
                     [
-                        'as' => 'settings.member.setting.togglemenu',
+                        'as' => 'settings.member.setting.menu',
                         'uses' => 'Member\Settings\SettingController@editToggleMenu',
+                        'settings_menu' => 'member.setting.menu',
                         'permission' => 'user.setting'
                     ]
                 );
 
             }
+        );
+
+        Route::get(
+            'searchMember/{keyword?}',
+            ['as' => 'settings.member.search', 'uses' => 'Member\Settings\UserController@search']
         );
     }
 );
@@ -387,7 +389,7 @@ Route::settings(
         );
 
         // create
-        Route::get('create', ['as' => 'manage.group.create', 'uses' => 'Member\Settings\GroupController@create']);
+        Route::get('create', ['as' => 'manage.group.create', 'uses' => 'Member\Settings\GroupController@create', 'settings_menu' => ['member.group.create']]);
         Route::post('create', ['as' => 'manage.group.create', 'uses' => 'Member\Settings\GroupController@store']);
 
         // edit
@@ -396,6 +398,7 @@ Route::settings(
             [
                 'as' => 'manage.group.edit',
                 'uses' => 'Member\Settings\GroupController@edit',
+                'settings_menu' => ['member.group.edit']
             ]
         )->where('id', '[0-9a-z\-]+');
         Route::post('{id}/edit', ['as' => 'manage.group.edit', 'uses' => 'Member\Settings\GroupController@update'])
@@ -422,6 +425,8 @@ Route::settings(
             ]
         );
         Route::post('store', ['as' => 'settings.setting.update', 'uses' => 'SettingsController@updateSetting']);
+
+        Route::post('store/theme', ['as' => 'settings.setting.theme', 'uses' => 'SettingsController@updateTheme']);
 
         Route::get(
             'permissions',
@@ -648,9 +653,12 @@ Route::settings('widget', function () {
 
 });
 
+/* deprecated */
 Route::fixed('toggleMenu', function () {
     Route::get('/', ['as' => 'fixed.toggleMenu', 'uses' => 'ToggleMenuController@get']);
 });
+
+Route::get('toggleMenu', ['as' => 'toggleMenu', 'uses' => 'ToggleMenuController@get']);
 
 Route::settings('toggleMenu', function () {
     Route::post('setting', ['as' => 'manage.toggleMenu.setting', 'uses' => 'ToggleMenuController@postSetting']);

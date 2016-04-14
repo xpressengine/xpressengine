@@ -1,0 +1,60 @@
+@charset "utf-8";
+
+
+.error-page {
+    margin:7% auto;
+}
+.error-page>.headline {
+    margin:0;
+}
+@media (max-width: 991px) {
+    .error-page>.error-content>p {
+        text-align: center;
+    }
+}
+
+.error-page-contents {
+    width:400px;
+    margin:30px auto;
+    background-color:#ffffff;
+    border: 1px solid #999;
+    border-radius:6px;
+    box-shadow:0 3px 7px #ccc;
+    box-sizing:border-box;
+}
+.error-page-contents>.login-header{padding:9px 15px;border-bottom:1px solid #eee}
+.error-page-contents>.login-header>h1{margin:0;font-size:16px;line-height:1.4;font-weight:600;color:#666}
+.error-page-contents>.login-header>h1>i{opacity:.5;filter:alpha(opacity=50);margin:2px 0 0 0}
+.error-page-contents>.login-body{max-height:400px;padding:15px}
+.error-page-contents>.login-body>*:first-child{margin-top:0}
+.error-page-contents>.login-footer{padding:14px 15px 15px;margin-bottom:0;text-align:right;background-color:#f5f5f5;border-top:1px solid #ddd;-webkit-border-radius:0 0 6px 6px;-moz-border-radius:0 0 6px 6px;border-radius:0 0 6px 6px;*zoom:1;-webkit-box-shadow:inset 0 1px 0 #ffffff;-moz-box-shadow:inset 0 1px 0 #ffffff;box-shadow:inset 0 1px 0 #ffffff; color:#ccc}
+.error-page-contents .control-group{position:relative;padding:0 14px 0 0;margin:0;clear:both}
+.error-page-contents .control-group:before{content:"";display:block;clear:both}
+.error-page-contents form{margin:0}
+.error-page-contents fieldset{margin:0}
+.error-page-contents label{cursor:pointer;display:inline-block}
+.error-page-contents input[type="text"],
+.error-page-contents input[type="email"],
+.error-page-contents input[type="password"]{width:100%}
+.error-page-contents input[type="checkbox"]{margin:0}
+.error-page-contents .btn{border-radius:2px;overflow:visible;font-size:14px;line-height:18px;height:auto;padding:3px 9px;text-decoration:none}
+.error-page-contents .submit{position:absolute;top:0;right:0}
+.error-page-contents p{margin:10px 0}
+.error-page-contents #warning{margin-right:-14px}
+.error-page-contents a{color: #0088cc;text-decoration: none;}
+@media all and (max-width:480px){
+    .error-page-contents {position:static;margin:0;width:100%}
+}
+
+/* Message customize */
+.error-page-contents {background-color:#fafafa;border:1px solid #ccc;border-radius:0;box-shadow:none;box-sizing:initial}
+.error-page-contents>.login-header{padding:32px 15px 0;border-bottom:0;text-align:center}
+.error-page-contents>.login-header h1{margin-top:25px;font-size:15px;font-weight:normal;color:#414141}
+.error-page-contents>.login-body{padding:20px 40px 0}
+.error-page-contents>.login-body a{display:block;height:48px;border:1px solid #3f5ac9;background-color:#455ede;font-size:15px;line-height:48px;text-align:center;color:#fafafa}
+.error-page-contents>.login-footer{padding:13px 0 34px;margin:30px 40px 0;text-align:center;border-top:1px solid #ccc;border-radius:0;box-shadow:none;background:none;color:#888}
+.error-page-contents>.login-footer>a{text-decoration:none;font-size:12px;color:#888}
+.error-page-contents>.login-footer>a:hover,
+.error-page-contents>.login-footer>a:active,
+.error-page-contents>.login-footer>a:focus{text-decoration:underline}
+.error-page-contents>.login-footer>.bar{display:inline-block;margin:0 8px}

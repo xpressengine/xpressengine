@@ -26,14 +26,14 @@ class Permission extends AbstractUIObject
      */
     public function render()
     {
-        XeFrontend::js('/assets/vendor/core/lodash.min.js')->appendTo('head')->load();
-        XeFrontend::js('/assets/vendor/permission/PermissionTag.js')->type('text/jsx')->appendTo('head')->load();
-        XeFrontend::js('/assets/vendor/permission/PermissionTagSuggestion.js')->type('text/jsx')->appendTo('head')->load(
+        XeFrontend::js('/assets/vendor/lodash/lodash.min.js')->load();
+        XeFrontend::js('/assets/core/permission/PermissionTag.js')->type('text/jsx')->load();
+        XeFrontend::js('/assets/core/permission/PermissionTagSuggestion.js')->type('text/jsx')->load(
         );
-        XeFrontend::js('/assets/vendor/permission/PermissionInclude.js')->type('text/jsx')->appendTo('head')->load();
-        XeFrontend::js('/assets/vendor/permission/PermissionExclude.js')->type('text/jsx')->appendTo('head')->load();
-        XeFrontend::js('/assets/vendor/permission/Permission.js')->type('text/jsx')->appendTo('head')->load();
-        XeFrontend::css('/assets/vendor/permission/permission.css')->load();
+        XeFrontend::js('/assets/core/permission/PermissionInclude.js')->type('text/jsx')->load();
+        XeFrontend::js('/assets/core/permission/PermissionExclude.js')->type('text/jsx')->load();
+        XeFrontend::js('/assets/core/permission/Permission.js')->type('text/jsx')->load();
+        XeFrontend::css('/assets/core/permission/permission.css')->load();
 
         $permissioinScriptString = [];
 
@@ -113,9 +113,9 @@ class Permission extends AbstractUIObject
         $groupRepo = app('xe.user.groups');
         $userRepo = app('xe.users');
 
-        $groups = $groupRepo->find($grant['group']);
-        $users = $userRepo->find($grant['user'], ['id','displayName']);
-        $excepts = $userRepo->find($grant['except'], ['id','displayName']);
+        $groups = $groupRepo->findMany($grant['group']);
+        $users = $userRepo->findMany($grant['user'], ['id','displayName']);
+        $excepts = $userRepo->findMany($grant['except'], ['id','displayName']);
 
         $permissionValueArray['rating'] = $grant['rating'];
         $permissionValueArray['group'] = $groups;

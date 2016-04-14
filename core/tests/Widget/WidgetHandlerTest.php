@@ -139,7 +139,7 @@ namespace Xpressengine\Tests\Widget {
             $register = $this->register;
             $register->shouldReceive('get')->andReturn($this->fakeWidgetClassName);
 
-            $mockUser = m::mock('Xpressengine\Member\Entities\MemberEntityInterface');
+            $mockUser = m::mock('Xpressengine\User\UserInterface');
             $mockUser->shouldReceive('getRating')->andReturn('super');
 
             $guard = $this->guard;
@@ -163,7 +163,7 @@ namespace Xpressengine\Tests\Widget {
             $register = $this->register;
             $register->shouldReceive('get')->andReturn($this->fakeWidgetClassName);
 
-            $mockUser = m::mock('Xpressengine\Member\Entities\MemberEntityInterface');
+            $mockUser = m::mock('Xpressengine\User\UserInterface');
             $mockUser->shouldReceive('getRating')->andReturn('super');
 
             $guard = $this->guard;
@@ -186,7 +186,7 @@ namespace Xpressengine\Tests\Widget {
             $register = $this->register;
             $register->shouldReceive('get')->andReturn($this->fakeWidgetClassName);
 
-            $mockUser = m::mock('Xpressengine\Member\Entities\MemberEntityInterface');
+            $mockUser = m::mock('Xpressengine\User\UserInterface');
             $mockUser->shouldReceive('getRating')->andReturn('guest');
 
             $guard = $this->guard;
@@ -209,7 +209,7 @@ namespace Xpressengine\Tests\Widget {
             $register = $this->register;
             $register->shouldReceive('get')->andReturn(null);
 
-            $mockUser = m::mock('Xpressengine\Member\Entities\MemberEntityInterface');
+            $mockUser = m::mock('Xpressengine\User\UserInterface');
             $mockUser->shouldReceive('getRating')->andReturn('super');
 
             $guard = $this->guard;
@@ -236,7 +236,7 @@ namespace Xpressengine\Tests\Widget {
             $register = $this->register;
             $register->shouldReceive('get')->andReturn(null);
 
-            $mockUser = m::mock('Xpressengine\Member\Entities\MemberEntityInterface');
+            $mockUser = m::mock('Xpressengine\User\UserInterface');
             $mockUser->shouldReceive('getRating')->andReturn('guest');
 
             $guard = $this->guard;
@@ -376,7 +376,7 @@ namespace Xpressengine\Tests\Widget {
         public function setUp()
         {
             $registerMock = m::mock('Xpressengine\Plugin\PluginRegister');
-            $guardMock = m::mock('Xpressengine\Member\GuardInterface');
+            $guardMock = m::mock('Xpressengine\User\GuardInterface');
             $factoryMock = m::mock('Illuminate\Contracts\View\Factory');
 
             $this->register = $registerMock;

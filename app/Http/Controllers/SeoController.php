@@ -3,8 +3,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use XePresenter;
-use Storage;
-use Media;
+use XeStorage;
+use XeMedia;
 use XeFrontend;
 use Symfony\Component\HttpFoundation\Response;
 use Validator;
@@ -39,8 +39,8 @@ class SeoController extends Controller
         $setting->set($inputs);
 
         if ($request->file('siteImage') !== null) {
-            $file = Storage::upload($request->file('siteImage'), 'seo');
-            $image = Media::make($file);
+            $file = XeStorage::upload($request->file('siteImage'), 'seo');
+            $image = XeMedia::make($file);
             $setting->setSiteImage($image);
         }
 

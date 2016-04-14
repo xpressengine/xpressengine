@@ -1,59 +1,62 @@
-<div class="panel">
-    <div class="panel-body">
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel-group">
         <form id="fSetting" class="form" method="post" action="{{ route('settings.member.setting.join') }}">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
-
-            <div class="form-group">
-                <label>회원 가입 허용</label>
-                <div class="radio mg-reset mg-bottom">
-                    <label class="radio-inline">
-                        <input type="radio" name="joinable" value="true" @if($config->get('joinable')) checked="checked" @endif>  허용
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="joinable" value="false" @if(!$config->get('joinable')) checked="checked" @endif> 허용 안함
-                    </label>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>이메일 인증 사용</label>
-                <div class="radio mg-reset mg-bottom">
-                    <label class="radio-inline">
-                        <input type="radio" name="useEmailCertify" value="true" @if($config->get('useEmailCertify')) checked="checked" @endif>  사용
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="useEmailCertify" value="false" @if(!$config->get('useEmailCertify')) checked="checked" @endif> 사용 안함
-                    </label>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="">회원 가입 약관</label>
-                <textarea id="agreement" class="form-control" name="agreement" rows="10">{{ $config->get('agreement') }}</textarea>
-            </div>
-            <div class="form-group">
-                <label>가입시 CAPTCHA 사용</label>
-                <div class="radio">
-                    <label class="radio-inline">
-                        <input type="radio" name="useCaptcha" value="true" @if($config->get('useCaptcha')) checked="checked" @endif> 사용
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="useCaptcha" value="false" @if(!$config->get('useCaptcha')) checked="checked" @endif>
-                        사용 안함
-                    </label>
-                </div>
-            </div>
-
-            {{--<div class="form-group">
-                <label>추가 필드</label>
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        {!! $dynamicFieldSection !!}
+            <div class="panel">
+                <div class="panel-heading">
+                    <div class="pull-left">
+                        <h3 class="panel-title">회원 가입 설정</h3>
                     </div>
                 </div>
-            </div>--}}
-            <button type="submit" class="btn btn-primary">Save</button>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label for="item-url">회원 가입 허용</label>
+                        <div class="list-group-item">
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="joinable" value="true" @if($config->get('joinable')) checked="checked" @endif> 허용
+                                </label>
+                                <label>
+                                    <input type="radio" name="joinable" value="false" @if(!$config->get('joinable')) checked="checked" @endif> 허용 안함
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="item-url">이메일 인증 사용</label>
+                        <div class="list-group-item">
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="useEmailCertify" value="true" @if($config->get('useEmailCertify')) checked="checked" @endif>  사용
+                                </label>
+                                <label>
+                                    <input type="radio" name="useEmailCertify" value="false" @if(!$config->get('useEmailCertify')) checked="checked" @endif> 사용 안함
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="item-url">가입 CAPTCHA 사용</label>
+                        <div class="list-group-item">
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="useCaptcha" value="false" @if(!$config->get('useCaptcha')) checked="checked" @endif> 사용
+                                </label>
+                                <label>
+                                    <input type="radio" name="useCaptcha" value="false" @if(!$config->get('useCaptcha')) checked="checked" @endif> 사용 안함
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <div class="pull-right">
+                        <button type="submit" class="btn btn-primary"><i class="xi-download"></i>저장</button>
+                    </div>
+                </div>
+            </div>
         </form>
+        </div>
     </div>
 </div>
-{!! uio('uiobject/xpressengine@chakIt', 'Settings:회원설정') !!}

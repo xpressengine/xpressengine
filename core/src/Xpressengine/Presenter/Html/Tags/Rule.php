@@ -127,7 +127,7 @@ class Rule
     public function render()
     {
         $rule = sprintf(
-            'require(["validator"], function(validator) { validator.setRules("%s", %s); });',
+            'System.import(\'xecore:/common/js/modules/validator\').then(function(validator) { validator.setRules("%s", %s); });',
             $this->ruleName,
             json_enc($this->rules)
         ) . PHP_EOL;

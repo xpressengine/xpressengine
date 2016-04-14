@@ -5,14 +5,14 @@
 <!--어드민 컨텐츠 영역 col-sm-"n" n:1~12에 따라 그리드 사용가능-->
 <div class="row">
     <div class="col-sm-12">
-        <div class="panel plugin_detail">
+        <div class="panel plugin-detail">
             <div class="panel-heading">
-                <div class="col_left">
-                    <p class="plugin_tit">{{$plugin->getTitle()}}</p>
-                    <div class="plugin_summary">
-                        <div class="img_thmb">
+                <div class="pull-left">
+                    <p class="plugin-title">{{$plugin->getTitle()}}</p>
+                    <div class="plugin-summary">
+                        <div class="img-thumbnail">
                             @if($plugin->getIcon() === null)
-                                <img src="{{ asset('assets/plugin/img/noicon.png') }}" width="100" height="100" alt="{{$plugin->getTitle()}}">
+                                <img src="{{ asset('assets/core/plugin/img/noicon.png') }}" width="100" height="100" alt="{{$plugin->getTitle()}}">
                             @else
                                 <img src="{{$plugin->getIcon()}}" width="100" height="100" alt="{{$plugin->getTitle()}}">
                             @endif
@@ -24,7 +24,7 @@
                         @if($author = $plugin->getAuthor())
 
                             {{-- author name --}}
-                            <dt class="blind">{{xe_trans('xe::author')}}</dt>
+                            <dt class="sr-only">{{xe_trans('xe::author')}}</dt>
                             <dd>
                                 <i class="xi-user"></i>
                                 @if($email = array_get($author, 'email'))
@@ -38,7 +38,7 @@
 
                             {{-- author homepage --}}
                             @if($homepage = array_get($author, 'homepage'))
-                            <dt class="blind">{{xe_trans('xe::author')}}</dt>
+                            <dt class="sr-only">{{xe_trans('xe::author')}}</dt>
                             <dd>
                                 <i class="xi-clip"></i>
                                 <a href="{{ $homepage }}">
@@ -51,7 +51,7 @@
 
                             {{-- author source--}}
                             @if($source = $plugin->getSupport('source'))
-                            <dt class="blind">Source</dt>
+                            <dt class="sr-only">Source</dt>
                             <dd><i class="xi-download"></i>
                                 <a href="{{ $source }}" target="_blank">{{ $source }}</a>
                             </dd>
@@ -60,24 +60,24 @@
 
                     </div>
                 </div>
-                <div class="col_right">
+                <div class="pull-right">
                     @if($plugin->isActivated())
                         <form method="POST" action="{{ route('settings.plugins.deactivate', [$plugin->getId()]) }}" accept-charset="UTF-8" role="form">
                             {!! csrf_field() !!}
-                            <button class="btn btn-danger v2">끄기</button>
+                            <button class="btn btn-danger">끄기</button>
                         </form>
 
                         @if($plugin->isActivated() && $plugin->checkUpdated($plugin->getInstalledVersion()))
-                            {{--<button class="btn btn-default blue v2">업데이트</button>--}}
+                            {{--<button class="xe-btn xe-btn-default blue v2">업데이트</button>--}}
                         @endif
 
                         @if($plugin->getSettingsURI() !== null)
-                            {{--<button class="btn btn-default blue v2">관리</button>--}}
+                            {{--<button class="xe-btn xe-btn-default blue v2">관리</button>--}}
                         @endif
                     @else
                         <form method="POST" action="{{ route('settings.plugins.activate', [$plugin->getId()]) }}" accept-charset="UTF-8" role="form">
                             {!! csrf_field() !!}
-                            <button class="btn btn-default blue v2">켜기</button>
+                            <button class="btn btn-default">켜기</button>
                         </form>
                     @endif
 
@@ -231,4 +231,3 @@
 </div>
 <!--//어드민 컨텐츠 영역 -->
 
-{!! uio('uiobject/xpressengine@chakIt', 'Settings:플러그인') !!}

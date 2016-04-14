@@ -88,7 +88,5 @@ class UIObjectServiceProvider extends ServiceProvider
 
         $register->add(LangText::class);
         $register->add(LangTextArea::class);
-
-        $register->add(ChakIt::class);
     }
 }

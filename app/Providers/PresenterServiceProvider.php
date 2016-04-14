@@ -165,31 +165,24 @@ class PresenterServiceProvider extends ServiceProvider
      */
     protected function loadDefaultFiles(FrontendHandler $frontendHandler)
     {
-        $frontendHandler->js('assets/vendor/jquery/jquery.js')
-            ->min('assets/vendor/jquery/jquery.min.js')->appendTo('head')->load();
-        $frontendHandler->js('assets/vendor/bootstrap/js/bootstrap.js')
-            ->min('assets/vendor/bootstrap/js/bootstrap.min.js')->appendTo('head')->load();
-        $frontendHandler->js(
-            [
-                'assets/vendor/jQuery-File-Upload/js/vendor/jquery.ui.widget.js',
-                'assets/vendor/jQuery-File-Upload/js/jquery.iframe-transport.js',
-                'assets/vendor/jQuery-File-Upload/js/jquery.fileupload.js',
-                'assets/vendor/react/react-with-addons.js',
-                'assets/vendor/react/JSXTransformer.js',
-                'assets/vendor/core/js/translator.js',
-                'assets/vendor/core/js/xe.js',
-                'assets/vendor/core/js/helpers.js',
-                'assets/vendor/core/js/toggleMenu.js',
-            ]
-        )->appendTo('head')->load();
-
-
         $frontendHandler->css([
-            'assets/common/css/normalize.css',
-            'assets/vendor/core/css/xe.css',
-            'assets/common/css/alert.css',
-            '//cdn.jsdelivr.net/xeicon/2.0.0/xeicon.min.css',
-        ])->before('assets/vendor/bootstrap/css/bootstrap.css')->load();
+            'assets/core/common/css/xe-common.css',
+            'assets/core/xe-ui-component/xe-ui-component.css', // @TODO 제거
+            '//cdn.jsdelivr.net/xeicon/2.0.0/xeicon.min.css', // @TODO 제거
+        ])->load();
+
+        $frontendHandler->js([
+            'assets/jspm_packages/system.js',
+            'assets/jspm_packages/system-polyfills.js',
+            'assets/systemjs.config.js',
+            'assets/vendor/react/react-with-addons.js',
+            'assets/vendor/react/JSXTransformer.js', // @TODO 제거
+            'assets/vendor/jquery/jquery.min.js',
+            'assets/core/common/js/xe.bundle.js',
+            'assets/core/xe-ui-component/js/xe-ui-component.bundle.js',
+        ])->appendTo('head.prepend')->load();
+
+        $frontendHandler->js('assets/core/common/js/usermenu.js')->load(); // @TODO 제거
     }
 
     /**

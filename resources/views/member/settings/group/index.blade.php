@@ -1,45 +1,56 @@
-
-@section('page_setting_menu')
-    <a href="{{ route('manage.group.create') }}" class="btn btn_blue pull-right">새그룹 추가</a>
-@endsection
-
-<form id="__xe_fList" method="post">
-    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-    <div class="panel panel-default">
-        <table class="table table-striped">
-            <tbody><tr>
-                <th>그룹명</th>
-                <th>설명</th>
-                <th>소속된 회원수</th>
-                <th>생성일</th>
-                <th>수정</th>
-                <th class="text-right"><input type="checkbox" id="__xe_check-all"/></th>
-            </tr>
-            @foreach($groups as $group)
-                <tr>
-                    <td>{{ $group->name }}</td>
-                    <td>{{ $group->description }}</td>
-                    <td>{{ $group->count }}</td>
-                    <td>{!! Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $group->createdAt)->format('y-m-d') !!}</td>
-                    <td><a href="{{ route('manage.group.edit', ['id' => $group->id]) }}" class="btn btn-default btn-sm">edit</a></td>
-                    <td class="text-right"><input type="checkbox" name="id[]" class="__xe_checkbox" value="{{ $group->id }}" /></td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
-    </div>
-</form>
 <div class="row">
-    <div class="col-sm-12 text-right">
-        <div class="btn-group btn-group-sm">
-            <a href="{{ route('manage.group.create') }}" class="btn btn-primary"><i class="fa fa-plus"></i> 신규추가</a>
-            <button type="button" class="btn btn-danger __xe_remove"><i class="fa fa-trash"></i> 선택그룹 삭제</button>
+    <div class="col-sm-12">
+        <div class="panel-group">
+        <form id="__xe_fList" method="post">
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            <div class="panel">
+                <div class="panel-heading">
+                    <div class="pull-left">
+                        <h3 class="panel-title">그룹 관리<small>{{ $groups->count() }}개의 그룹이 존재합니다.</small></h3>
+                    </div>
+                    <div class="pull-right">
+                        <a href="{{ route('manage.group.create') }}" class="btn btn-primary"><i class="xi-plus"></i><span>새그룹 추가</span></a>
+                    </div>
+                </div>
+
+                <div class="panel-heading">
+                    <div class="pull-left">
+                        <div class="btn-group" role="group">
+                            <button type="button" class="__xe_remove btn btn-default">선택그룹 삭제</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col"><input type="checkbox" id="__xe_check-all"></th>
+                            <th scope="col">그룹명</th>
+                            <th scope="col">설명</th>
+                            {{--<th scope="col">기본그룹</th>--}}
+                            <th scope="col">소속 회원수</th>
+                            <th scope="col">관리</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($groups as $group)
+                            <tr>
+                                <td><input type="checkbox" name="id[]" value="{{ $group->id }}" class="__xe_checkbox" /></td>
+                                <td>{{ $group->name }}</td>
+                                <td>{{ $group->description }}</td>
+                                {{--<td><input type="radio"></td>--}}
+                                <td>{{ $group->count }}</td>
+                                <td><a href="{{ route('manage.group.edit', ['id' => $group->id]) }}" class="btn btn-default btn-sm">{{ xe_trans('xe::management') }}</a></td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </form>
         </div>
     </div>
 </div>
-
-{{-- page navigation--}}
-<nav class="text-center">{!! $groups->render() !!}</nav>
 
 <script type="text/javascript">
     $(function () {
@@ -64,4 +75,3 @@
     })
 </script>
 
-{!! uio('uiobject/xpressengine@chakIt', 'Settings:회원그룹') !!}

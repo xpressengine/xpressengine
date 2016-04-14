@@ -1,11 +1,23 @@
+{{ XeFrontend::css(
+[
+'/assets/vendor/jqueryui/jquery-ui.css',
+'/assets/core/lang/LangEditorBox.css',
+'/assets/core/lang/flag.css'
+]
+)->load() }}
 
-{{ XeFrontend::css('/assets/vendor/jqueryui/jquery-ui.css')->load() }}
+{{ XeFrontend::css('/assets/core/category/style.css')->load() }}
 
-{{ XeFrontend::css('/assets/vendor/core/category/style.css')->load() }}
+{{ XeFrontend::js(
+[
+'/assets/vendor/jqueryui/jquery-ui.js',
+'/assets/vendor/expanding/expanding.js',
+'/assets/core/lang/LangEditorBox.bundle.js'
+]
+)->appendTo('head')->load() }}
 
-{{ XeFrontend::js('/assets/vendor/jqueryui/jquery-ui.js')->appendTo('head')->load() }}
 {{ XeFrontend::js('/assets/vendor/nestedSortable/jquery.mjs.nestedSortable.js')->appendTo('head')->load() }}
-{{ XeFrontend::js('/assets/vendor/core/category/tree.js')->appendTo('head')->load() }}
+{{ XeFrontend::js('/assets/core/category/tree.js')->appendTo('head')->load() }}
 
 {{ XeFrontend::translation([
     'xe::required',

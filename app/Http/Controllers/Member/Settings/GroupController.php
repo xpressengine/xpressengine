@@ -30,9 +30,7 @@ class GroupController extends Controller
      */
     public function index()
     {
-        // todo: validate inputs!!
-        $groups = $this->groups->paginate();
-
+        $groups = $this->groups->orderBy('createdAt')->get();
         return XePresenter::make('member.settings.group.index', compact('groups'));
     }
 
@@ -152,10 +150,10 @@ class GroupController extends Controller
     public function search($keyword = null)
     {
         if ($keyword === null) {
-            return XePresenter::makeApi($this->groups->paginate());
+            return XePresenter::makeApi([]);
         }
 
-        $matched = $this->groups->where('name', 'like', '%'.$keyword.'%')->items();
+        $matched = $this->groups->where('name', 'like', '%'.$keyword.'%')->paginate()->items();
         return XePresenter::makeApi($matched);
     }
 }

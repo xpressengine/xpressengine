@@ -6,6 +6,9 @@
         테마를 편집합니다
     @stop
 
+    @if(count($files) === 0)
+        <p>이 테마는 편집을 지원하지 않습니다.</p>
+    @else
     <div class="row">
         <div class="col-md-2">
             <ul class="nav nav-pills nav-stacked">
@@ -34,3 +37,4 @@
 
         </div>
     </div>
+    @endif

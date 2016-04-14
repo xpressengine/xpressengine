@@ -32,6 +32,7 @@ class Translator extends NamespacedItemResolver implements TranslatorInterface
 {
     protected $locales = [];
     protected $texts = [];
+    protected $keyGen;
     protected $cachedDb;
     protected $fileLoader;
     protected $urlLoader;
@@ -90,7 +91,7 @@ class Translator extends NamespacedItemResolver implements TranslatorInterface
     /**
      * 현재 선택 로케일을 리턴
      *
-     * @return void
+     * @return string
      */
     public function getLocale()
     {

@@ -3,6 +3,7 @@ namespace Xpressengine\Migrations;
 
 use Illuminate\Database\Schema\Blueprint;
 use Schema;
+use XeLang;
 use Xpressengine\Menu\MenuHandler;
 use Xpressengine\Menu\Models\Menu;
 use Xpressengine\Menu\Models\MenuItem;
@@ -101,10 +102,19 @@ class MenuMigration implements Migration {
         /** @var MenuHandler $menuHandler */
         $menuHandler = app('xe.menu');
 
+        $menuTitle = XeLang::genUserKey();
+        foreach (XeLang::getLocales() as $locale) {
+            $value = "홈";
+            if ($locale != 'ko') {
+                $value = "Home";
+            }
+            XeLang::save($menuTitle, $locale, $value, false);
+        }
+
         $inputs = [
             'menuId' => $mainMenu->id,
             'parentId' => null,
-            'title' => '홈',
+            'title' => $menuTitle,
             'url' => 'home',
             'description' => 'home',
             'target' => '_blank',
@@ -147,10 +157,19 @@ class MenuMigration implements Migration {
         /** @var MenuHandler $menuHandler */
         $menuHandler = app('xe.menu');
 
+        $menuTitle = XeLang::genUserKey();
+        foreach (XeLang::getLocales() as $locale) {
+            $value = "게시판";
+            if ($locale != 'ko') {
+                $value = "Board";
+            }
+            XeLang::save($menuTitle, $locale, $value, false);
+        }
+
         $inputs = [
             'menuId' => $mainMenu->id,
             'parentId' => null,
-            'title' => '게시판',
+            'title' => $menuTitle,
             'url' => 'board1',
             'description' => 'board1',
             'target' => '_blank',
@@ -173,7 +192,8 @@ class MenuMigration implements Migration {
     {
         /** @var ThemeHandler $themeHandler */
         $themeHandler = app('xe.theme');
-        $themeHandler->setThemeConfig('theme/alice@main', 'mainmenu', $mainMenu );
+        $themeHandler->setThemeConfig('alice', 'mainMenu', $mainMenu );
+        $themeHandler->setThemeConfig('alice', 'subMenu', $mainMenu );
     }
 
     /**
@@ -226,65 +246,219 @@ class MenuMigration implements Migration {
 
         $title = "Welcome XE3";
         $content = '
-           <div class="section no-pad-bot" id="index-banner">
-               <div class="container">
-                    <h1 class="header center thin">XE3 Template</h1>
-                   <div class="row center">
-                        <h5 class="header col s12 light">A modern responsive front-end framework based on Material Design</h5>
-                   </div>
-               </div>
-           </div>
-            <hr>
-           <div class="container">
-               <h2 class="center sub_tit">Features</h2>
-               <div class="row center">
-                   <p class=" sub_txt">당신이 원하는 모든 기능이 이미 준비되어 있습니다. 무엇보다 서비스에 친화적인 시스템을 가지고 있죠. 모던한 개발기술을 적용하였고 사이트 규모가 커져도 유연하게 대처할 수 있습니다. 지금 XE3의 특징을 경험해보세요.<a href="#" class="btn_more">더 알아보기<i class="xi-angle-right"></i></a></p>
-               </div>
-           </div>
-            <div class="container">
-               <div class="section feature">
-                   <div class="row">
-                       <div class="col s12 m4">
-                           <dl>
-                           <dt><i class="xo xo-modern"></i>Modern</dt>
-                           <dd>Composer를 기반으로한 최신의 php 기능들을 사용하고 packgist의 패키지들과 손쉽게 통합될 수 있습니다.</dd>
-                           </dl>
-                       </div>
-                       <div class="col s12 m4">
-                           <dl>
-                           <dt><i class="xo xo-extendableg"></i>Extendableg</dt>
-                           <dd>자료실을 통해서 다양한 플러그인을 설치하고 사이트를 확장할 수 있습니다. 쉽게 설치하고 쉽게 업데이트 하세요.</dd>
-                           </dl>
-                       </div>
-                       <div class="col s12 m4">
-                           <dl>
-                           <dt><i class="xo xo-bythepeople"></i>By the people</dt>
-                           <dd>chak.it을 통해 자신의 사이트에서 전세계 사용자들과 손쉽게 의견을 주고 받을 수 있습니다.</dd>
-                           </dl>
-                       </div>
-                   </div>
-                    <div class="row">
-                       <div class="col s12 m4">
-                           <dl>
-                           <dt><i class="xo xo-socialite"></i>Socialite</dt>
-                           <dd>다양한 소셜사이트 정보로 로그인할 수 있고, 원하는 소셜서비스에 대한 기능을 확장할 수 있습니다.</dd>
-                           </dl>
-                       </div>
-                       <div class="col s12 m4">
-                           <dl>
-                           <dt><i class="xo xo-scalable"></i>Scalable</dt>
-                           <dd>사이트 규모가 커졌을 때에도, 유연하게 클라우드 상에서 DB, Storage를 확장할 수 있는 구조를 가지고 있습니다.</dd>
-                           </dl>
-                       </div>
-                       <div class="col s12 m4">
-                           <dl>
-                           <dt><i class="xo xo-stable"></i>Stable</dt>
-                           <dd>선행 깔끔하게 코딩하고 부정 행위처럼 그렇게 쉽게 사용할 수있는 다양한 테마 기능, 당신은 응답 빠르게 제공합니다.</dd>
-                           </dl>
-                       </div>
-                   </div>
-               </div>
-            </div>';
+           <div class="xe-row">
+		<!--content area -->
+			<div class="content welcome">
+				<div class="content-inner xe-container">
+					<h2>WELCOME</h2>
+					<strong>There are a million reasons to use XE3.</strong>
+					<p>XpressEngine은 자유로운 웹 콘텐츠 발행을 돕는 CMS입니다. Laravel framework 기반의 XE3는 다양한 번들 시스템으로 빠른 피드백을 제공하고 유연한 확장성을 자랑합니다.</p>
+					<a href="http://xpressengine.io/features" class="link-info">안내 페이지 바로가기</a>
+				</div>
+			</div>
+			<div class="content theme">
+				<div class="content-inner xe-container">
+					<h2>DISCOVER</h2>
+					<strong>XE3 Theme Alice.</strong>
+					<p>XE3의 테마 앨리스는 모바일, 타블렛, 데스크탑 스크린 모두에 적합한 레이아웃을 제공합니다. 또한 홈페이지 특징에 맞게 사용할 수 있는 여러가지 컬러 테마를 지원하죠.</p>
+					<div class="num xe-hidden-xs">
+						<span class="on"></span>
+						<span class="blue"></span>
+						<span class="red"></span>
+					</div>
+				</div>
+				<div class="owl-wrap">
+					<div id="owl-color" class="owl-color xe-hidden-xs">
+						<div class="item">
+							<div class="theme-color">
+								<div class="diagonal-area"></div>
+							</div>
+						</div>
+						<div class="item">
+							<div class="theme-color blue-bg">
+								<div class="diagonal-area"></div>
+							</div>
+						</div>
+						<div class="item">
+							<div class="theme-color red-bg">
+								<div class="diagonal-area"></div>
+							</div>
+						</div>
+					</div>
+					<div class="owl-inner">
+						<div id="owl-mobile" class="owl-mobile">
+							<div class="item">
+								<div class="bg-img brown"></div>
+							</div>
+							<div class="item">
+								<div class="bg-img blue"></div>
+							</div>
+							<div class="item">
+								<div class="bg-img red"></div>
+							</div>
+						</div>
+						<div id="owl-tablet" class="owl-tablet xe-hidden-xs">
+							<div class="item">
+								<div class="bg-img brown"></div>
+							</div>
+							<div class="item">
+								<div class="bg-img blue"></div>
+							</div>
+							<div class="item">
+								<div class="bg-img red"></div>
+							</div>
+						</div>
+						<div id="owl-pc" class="owl-pc xe-visible-lg">
+							<div class="item">
+								<div class="bg-img brown"></div>
+							</div>
+							<div class="item">
+								<div class="bg-img blue"></div>
+							</div>
+							<div class="item">
+								<div class="bg-img red"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="content stater">
+				<div class="content-inner xe-container">
+					<h2>GUIDE</h2>
+					<strong>For starter.</strong>
+					<div class="xe-row">
+						<div class="xe-col-sm-6">
+							<div class="start-guide">
+								<i class="xi-home-o"></i>
+								<dl>
+									<dt>사이트 기본 설정</dt>
+									<dd>홈페이지 기본 설정을 변경해 보세요.<br><a href="'.route('settings.setting.edit').'">사이트관리 > 설정 > 사이트 기본설정</a>에서 사이트 제목을 설정할 수 있습니다.</dd>
+								</dl>
+							</div>
+						</div>
+						<div class="xe-col-sm-6">
+							<div class="start-guide">
+								<i class="xi-laptop"></i>
+								<dl>
+									<dt>초기화면 바꾸기</dt>
+									<dd>사이트 홈을 설정해 보세요.<br><a href="'.route('settings.menu.index').'">사이트관리 > 사이트맵 > 사이트 메뉴 편집</a>에서 홈을 설정합니다.</dd>
+								</dl>
+							</div>
+						</div>
+					</div>
+					<div class="xe-row">
+						<div class="xe-col-sm-6">
+							<div class="start-guide">
+								<i class="xi-sitemap-o"></i>
+								<dl>
+									<dt>메뉴 구조 구성하기</dt>
+									<dd>메뉴를 만들어 사이트맵을 구성해 보세요.<br><a href="'.route('settings.menu.index').'">사이트관리 > 사이트맵 > 사이트 메뉴 편집</a>에서 메뉴를 설정합니다.</dd>
+								</dl>
+							</div>
+						</div>
+						<div class="xe-col-sm-6">
+							<div class="start-guide">
+								<i class="xi-windows-text"></i>
+								<dl>
+									<dt>테마 디자인 변경하기</dt>
+									<dd>XE3는 별도의 테마 디자인을 제공합니다. 레이아웃 디자인은 <a href="'.route('settings.setting.edit').'">사이트관리 > 설정 > 사이트 기본설정</a>에서 변경할 수 있습니다. </dd>
+								</dl>
+							</div>
+						</div>
+					</div>
+					<div class="xe-row">
+						<div class="xe-col-sm-6">
+							<div class="start-guide">
+								<i class="xi-plus-circle-o"></i>
+								<dl>
+									<dt>플러그인 관리하기</dt>
+									<dd><a href="#">자료실</a>에서 플러그인을 설치하여 사이트를 풍성하게 만들어 보세요. 플러그인은 <a href="'.route('settings.plugins').'">사이트관리 > 플러그인 > 플러그인 목록</a>에서 설정할 수 있습니다.</dd>
+								</dl>
+							</div>
+						</div>
+						<div class="xe-col-sm-6">
+							<div class="start-guide">
+								<i class="xi-lock"></i>
+								<dl>
+									<dt>관리페이지 권한 설정하기</dt>
+									<dd>사이트의 관리 권한을 설정하세요. 사이트의 관리 권한 설정은 <a href="'.route('settings.setting.permissions').'">사이트관리 > 설정 > 관리페이지 권한 설정</a>에서 수정할 수 있습니다.</dd>
+								</dl>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="content involve">
+				<div class="involve-inner xe-container">
+					<h2>Get involved</h2>
+					<p>XpressEngine3는 많은사람들이 함께 만들어가는 오픈소스 프로젝트입니다.<br>GitHub Project에서 개발 현황을 살펴보고 개발에 참여해보세요  </p>
+					<a href="https://github.com/xpressengine/xpressengine">GitHub Project</a>
+				</div>
+			</div>
+			<div class="content support">
+				<div class="content-inner xe-container">
+					<h2>SUPPORT</h2>
+					<strong>XpressEngine Communities</strong>
+					<p>XpressEngine의 정보를 교환하고 토론, 토의할 수 있는 공간에 참여할 수 있습니다. Slack 공식 채널과 여러 커뮤니티에서 다양한 정보를 나눌 수 있습니다.</p>
+					<div class="xe-row support-list">
+						<div class="xe-col-md-4">
+							<div class="support-img">
+							</div>
+							<div class="support-txt">
+								<div class="table-txt">
+									<div>
+										<dl>
+											<dt>XE Forum Chat</dt>
+											<dd>XE 오픈소스 프로젝트 참여자 간 실시간 정보 교환을 할 수 있는 Slack 채널입니다.</dd>
+										</dl>
+										<a href="https://xeforum.slack.com/" target="_blank">XE Slack 바로가기</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="xe-col-md-4">
+							<div class="support-img second">
+							</div>
+							<div class="support-txt">
+								<div class="table-txt">
+									<div>
+										<dl>
+											<dt>XE Facebook Group</dt>
+											<dd>XE 자료를 만들고 배포하거나 의견을 공유하며 행사일정을 확인할 수 있습니다.</dd>
+										</dl>
+										<a href="https://www.facebook.com/xehub" target="_blank">XE Facebook Group 바로가기</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="xe-col-md-4">
+							<div class="support-img third">
+							</div>
+							<div class="support-txt">
+								<div class="table-txt">
+									<div>
+										<dl>
+											<dt>XE Town</dt>
+											<dd>XpressEngine 사용자들에게 가장 인기있는 커뮤니티입니다.</dd>
+										</dl>
+										<a href="https://www.xetown.com/" target="_blank">XE Town 바로가기</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="content parallax">
+				<div class="xe-container">
+					<strong>We made<br>what you need.</strong>
+					<div class="rectangle">
+						<p>by <a href="http://xpressengine.io/">XpressEngine.io</a></p>
+					</div>
+				</div>
+			</div>
+		<!--// content area -->
+		</div>';
 
         $handler->updatePageContent($documentId, $item->id, $content, $title, $locale);
     }
