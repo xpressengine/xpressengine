@@ -36,13 +36,12 @@
 
                 <div class="panel-body" id="collapseOne">
                     <div class="form-group">
-                        <p class="text-title">Item Activated<i class="xi-information-circle"></i></p>
-                        <p class="sub-text">{{xe_trans('xe::itemActivatedDescription')}}</p>
+                        <label for="item-active">Item Activated<br><small>{{xe_trans('xe::itemActivatedDescription')}}</small></label>
 
-                        <div class="xe-toggle-button btn_right">
+                        <div class="xe-btn-toggle pull-right">
                             <label>
-                                <span class="sr-only"></span>
-                                <input type="checkbox" name="itemActivated" value="1" checked>
+                                <span class="sr-only"><span class="sr-only">활성화 비활성화</span></span>
+                                <input type="checkbox" checked="" id="item-active" name="itemActivated">
                                 <span class="toggle"></span>
                             </label>
                         </div>

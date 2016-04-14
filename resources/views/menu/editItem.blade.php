@@ -35,7 +35,7 @@
                                 <label>
                                     <span class="sr-only"><span class="sr-only">활성화 비활성화</span></span>
                                     @if($item->id == $homeId)
-                                    <input type="checkbox" id="item-active"name="dummyActivated" value="1" checked disabled/>
+                                    <input type="checkbox" id="item-active" name="dummyActivated" value="1" checked disabled/>
                                     <input type="hidden" name="itemActivated" value="1"/>
                                     @else
                                     <input type="checkbox" id="item-active" name="itemActivated" {{ ($item->activated === 1)?"checked":'' }} value="1"/>
