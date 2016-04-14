@@ -57,7 +57,7 @@ class InstallController extends Controller
     {
         // throw exception
 
-        if ($this->checkPermission() === false) {
+        if ($this->checkDirectoryPermission() === false) {
 
         }
         if ($this->checkPHP() === false) {
