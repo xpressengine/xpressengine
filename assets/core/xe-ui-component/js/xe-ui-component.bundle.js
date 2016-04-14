@@ -100,9 +100,9 @@ System.registerDynamic("xecore:/xe-ui-component/js/_dropdown.js", [], true, func
     function Plugin(option) {
       return this.each(function() {
         var $this = $(this);
-        var data = $this.data('bs.xe-dropdown');
+        var data = $this.data('xe.dropdown');
         if (!data)
-          $this.data('bs.xe-dropdown', (data = new Dropdown(this)));
+          $this.data('xe.dropdown', (data = new Dropdown(this)));
         if (typeof option == 'string')
           data[option].call($this);
       });

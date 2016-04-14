@@ -1976,16 +1976,16 @@ input[type="button"].btn-block {
   border-left: 4px solid transparent;
 }
 
-.dropup,
-.dropdown {
+.xe-dropup,
+.xe-dropdown {
   position: relative;
 }
 
-.dropdown-toggle:focus {
+.xe-dropdown-toggle:focus {
   outline: 0;
 }
 
-.dropdown-menu {
+.xe-dropdown-menu {
   position: absolute;
   top: 100%;
   left: 0;
@@ -2007,19 +2007,19 @@ input[type="button"].btn-block {
   background-clip: padding-box;
 }
 
-.dropdown-menu.pull-right {
+.xe-dropdown-menu.pull-right {
   right: 0;
   left: auto;
 }
 
-.dropdown-menu .divider {
+.xe-dropdown-menu .divider {
   height: 1px;
   margin: 8px 0;
   overflow: hidden;
   background-color: #e5e5e5;
 }
 
-.dropdown-menu > li > a {
+.xe-dropdown-menu > li > a {
   display: block;
   padding: 5px 20px;
   clear: both;
@@ -2029,7 +2029,7 @@ input[type="button"].btn-block {
   white-space: nowrap;
 }
 
-.dropdown-menu > li > strong {
+.xe-dropdown-menu > li > strong {
   display: block;
   padding: 5px 10px;
   font-weight: normal;
