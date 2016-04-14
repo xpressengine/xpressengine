@@ -17,7 +17,7 @@
 @endsection
 @extends('menu.layout')
 @section('menuContent')
-    <form action="{{ route('settings.menu.store.item', $menu->id) }}" method="post">
+    <form action="{{ route('settings.menu.store.item', $menu->id) }}" method="post" enctype="multipart/form-data">
         <input type="hidden" name="_token" value="{{ Session::token() }}"/>
         <input type="hidden" name="selectedType" value="{{ $selectedType }}"/>
         <input type="hidden" name="siteKey" value="{{ $siteKey }}"/>
@@ -98,6 +98,31 @@
                                 </option>
                             </select>
                         </div>
+
+                        <div class="form-group">
+                            <label>
+                                Link image
+                                <small>{{ xe_trans('xe::linkImageDescription') }}</small>
+                            </label>
+
+                            <div class="well">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <label>{{ xe_trans('xe::default') }}</label>
+                                        {!! uio('uiobject/xpressengine@formImage', ['name' => 'basicImage']) !!}
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label>{{ xe_trans('xe::hover') }}</label>
+                                        {!! uio('uiobject/xpressengine@formImage', ['name' => 'hoverImage']) !!}
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label>{{ xe_trans('xe::selected') }}</label>
+                                        {!! uio('uiobject/xpressengine@formImage', ['name' => 'selectedImage']) !!}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 

@@ -269,6 +269,10 @@ return [
         'ko' => '전체 선택 해제',
         'en' => 'Deselect All',
     ],
+    'selected' => [
+        'ko' => '선택 됨',
+        'en' => 'Selected',
+    ],
     'reverseSelect' => [
         'ko' => '선택 반전',
         'en' => 'Reverse Select',
@@ -368,6 +372,10 @@ return [
     'favorite' => [
         'ko' => '즐겨찾기',
         'en' => 'Favorite',
+    ],
+    'default' => [
+        'ko' => '기본',
+        'en' => 'Default',
     ],
     'menu' => [
         'ko' => '메뉴',
@@ -886,6 +894,10 @@ return [
         'ko' => '최상위 프레임에서 열기',
         'en' => 'Top Frame'
     ],
+    'linkImageDescription' => [
+        'ko' => '사이트 네비게이션에 텍스트 메뉴명을 대신할 이미지를 등록 합니다.',
+        'en' => 'Register image for site navigation'
+    ],
     'deleteMenu' => [
         'ko' => '메뉴 삭제하기',
         'en' => 'Delete Menu'
@@ -1279,5 +1291,9 @@ return [
     'noMenu' => [
         'ko' => '등록된 메뉴가 없습니다.',
         'en' => 'There is no menu.',
+    ],
+    'hover' => [
+        'ko' => '마우스 오버',
+        'en' => 'Hover',
     ],
 ];
