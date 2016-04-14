@@ -128,9 +128,9 @@
         </div>
 
         @if($menuType !== null)
-        {!! uio('menuType', ['menuType' => $menuType, 'action' => 'editMenuForm', 'param' => $item->id ]) !!}
+            {!! uio('menuType', ['menuType' => $menuType, 'action' => 'editMenuForm', 'param' => $item->id ]) !!}
         @else
-        @include('menu.partial.typeLoadError', ['item' => $item])
+            @include('menu.partial.typeLoadError', ['item' => $item])
         @endif
 
         <div class="pull-right">
