@@ -1,3 +1,3 @@
 @if($item != null && !empty($item->word))
-<span>{{ $item->word }}</span>
+<span>{{ xe_trans($item->word) }}</span>
 @endif
