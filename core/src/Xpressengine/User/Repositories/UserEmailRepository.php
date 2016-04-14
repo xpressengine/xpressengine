@@ -32,20 +32,10 @@ class UserEmailRepository implements UserEmailRepositoryInterface
     use RepositoryTrait;
 
     /**
-     * UserEmailRepository constructor.
-     *
-     * @param $model
-     */
-    public function __construct($model)
-    {
-        $this->setModel($model);
-    }
-
-    /**
      * create
      *
-     * @param UserInterface $user
-     * @param array         $data
+     * @param UserInterface $user user
+     * @param array         $data data
      *
      * @return EmailInterface
      */
@@ -59,7 +49,7 @@ class UserEmailRepository implements UserEmailRepositoryInterface
     /**
      * delete
      *
-     * @param EmailInterface $email
+     * @param EmailInterface $email email
      *
      * @return bool|null
      * @throws CannotDeleteMainEmailOfUserException
@@ -67,7 +57,7 @@ class UserEmailRepository implements UserEmailRepositoryInterface
     public function delete(EmailInterface $email)
     {
         $user = $email->user;
-        if($user->email === $email->getAddress()) {
+        if ($user->email === $email->getAddress()) {
             throw new CannotDeleteMainEmailOfUserException();
         }
         return $email->delete();
@@ -76,7 +66,7 @@ class UserEmailRepository implements UserEmailRepositoryInterface
     /**
      * 이메일 주소로 이메일 정보를 조회한다.
      *
-     * @param string        $address 조회할 이메일 주소
+     * @param string $address 조회할 이메일 주소
      *
      * @return EmailInterface
      */
@@ -89,7 +79,7 @@ class UserEmailRepository implements UserEmailRepositoryInterface
     /**
      * 회원 아이디로 이메일을 조회하여 반환한다.
      *
-     * @param $userId
+     * @param string $userId user id
      *
      * @return EmailInterface[]
      */

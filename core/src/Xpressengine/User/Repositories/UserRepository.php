@@ -31,7 +31,7 @@ class UserRepository implements UserRepositoryInterface
     /**
      * create
      *
-     * @param array $data
+     * @param array $data data
      *
      * @return UserInterface
      */
@@ -48,8 +48,8 @@ class UserRepository implements UserRepositoryInterface
     /**
      * update
      *
-     * @param UserInterface $user
-     * @param array         $data
+     * @param UserInterface $user user
+     * @param array         $data data
      *
      * @return UserInterface
      */
@@ -69,8 +69,7 @@ class UserRepository implements UserRepositoryInterface
     /**
      * 이메일 주소를 소유한 회원을 조회한다.
      *
-     * @param string        $address 이메일 주소
-     * @param string[]|null $with    함께 반환할 relation 정보
+     * @param string $address 이메일 주소
      *
      * @return UserInterface
      */
@@ -89,8 +88,7 @@ class UserRepository implements UserRepositoryInterface
     /**
      * 이메일의 이름 영역을 사용하여 회원을 조회한다.
      *
-     * @param string        $emailPrefix 조회할 이메일의 이름영역
-     * @param string[]|null $with        함께 반환할 relation 정보
+     * @param string $emailPrefix 조회할 이메일의 이름영역
      *
      * @return UserInterface[]
      */

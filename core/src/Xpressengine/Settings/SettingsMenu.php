@@ -255,6 +255,11 @@ class SettingsMenu extends Entity implements NodeInterface, JsonSerializable
         return $this->childItems;
     }
 
+    /**
+     * get order key name
+     *
+     * @return string
+     */
     public function getOrderKeyName()
     {
         return 'ordering';

@@ -250,13 +250,7 @@ $__System.registerDynamic("4", [], true, function($__require, exports, module) {
       return (React.createElement("div", {
         className: "panel-heading",
         id: nodeId
-      }, React.createElement("div", {className: "pull-left"}, React.createElement("button", {
-        className: "btn-close pull-left",
-        onClick: this.handleCollapse
-      }, React.createElement("i", {className: cx({
-          "xi-angle-down": !index.collapsed,
-          "xi-angle-right": index.collapsed
-        })})), React.createElement("a", {href: nodeUrl}, React.createElement("h3", null, React.createElement("i", {className: "xi-folder"}), node.title))), React.createElement("div", {className: "pull-right"}, React.createElement("a", {
+      }, React.createElement("div", {className: "pull-left"}, React.createElement("a", {href: nodeUrl}, React.createElement("h3", null, React.createElement("i", {className: "xi-folder"}), node.title))), React.createElement("div", {className: "pull-right"}, React.createElement("a", {
         href: addItemUrl,
         className: "btn btn-primary"
       }, React.createElement("i", {className: "xi-plus"}), React.createElement("span", null, trans.addItem)))));
@@ -618,8 +612,6 @@ $__System.registerDynamic("7", ["6"], true, function($__require, exports, module
     },
     dragStart(id, dom, e) {
       var tree = this.state.tree;
-      console.log('drag start');
-      console.log(tree);
       var node = tree.get(id);
       if (node.entity && node.entity == 'menu')
         return;

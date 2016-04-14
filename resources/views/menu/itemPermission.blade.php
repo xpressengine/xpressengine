@@ -1,5 +1,4 @@
-@section('page_title', xe_trans($item->title).'-'.xe_trans('xe::editItemPermission'))
-@include('menu.partial.itemPageHeader')
+@section('page_title', '<h2>' . xe_trans($item->title).'-'.xe_trans('xe::editItemPermission') . '</h2>')
 @extends('menu.layout')
 @section('menuContent')
 <form action="{{ route('settings.menu.update.permission.item', [$menu->id, $item->id]) }}" method="post">

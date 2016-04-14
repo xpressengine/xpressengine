@@ -33,7 +33,7 @@ class UserGroupRepository implements UserGroupRepositoryInterface
     /**
      * delete
      *
-     * @param UserGroup $group
+     * @param UserGroup $group group
      *
      * @return bool
      */

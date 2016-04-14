@@ -2,6 +2,7 @@
   if (typeof define === 'function' && define.amd) {
     define([
       'exports',
+      'vendor:/lodash',
       'xecore:/common/js/xe.lang',
       'xecore:/common/js/xe.progress',
       'xecore:/common/js/xe.request',
@@ -13,14 +14,14 @@
       });
   } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
     if(typeof root.XE === "undefined") {
-      factory((root.XE = exports), require('xecore:/common/js/xe.lang'), require('xecore:/common/js/xe.progress'), require('xecore:/common/js/xe.request'), require('xecore:/common/js/xe.component'));
+      factory((root.XE = exports), require('vendor:/lodash'), require('xecore:/common/js/xe.lang'), require('xecore:/common/js/xe.progress'), require('xecore:/common/js/xe.request'), require('xecore:/common/js/xe.component'));
     }
   } else {
     if(typeof root.XE === "undefined") {
       factory((root.XE = {}));
     }
   }
-}(this, function (exports, XeLang, XeProgress, XeRequest, XeComponent) {
+}(this, function (exports, _, XeLang, XeProgress, XeRequest, XeComponent) {
   'use strict';
 
   var INSTANCE = null;
@@ -33,19 +34,10 @@
     this.Request = XeRequest;
     this.Component = XeComponent;
 
-    this.options = {
-      // @DEPRECATED
-      loadedTime: null,
-      // @DEPRECATED
-      nowTime: parseInt(new Date().getTime() / 1000),
-      // @DEPRECATED
-      timeLag: null
-    };
+    this.options = {};
 
     this.setup = function (options) {
       self.options.loginUserId = options.loginUserId;
-      self.options.loadedTime = options.loadedTime;
-      self.options.timeLag = options.loadedTime - self.options.nowTime;
 
       self.Request.setup({
         headers: {
@@ -56,7 +48,6 @@
 
     this.configure = function (options) {
       $.extend(self.options, options);
-
     };
 
     // @DEPRECATED
@@ -97,7 +88,26 @@
       });
     };
 
-    if(this.Request) {
+    this.import = function(name, parentName, parentAddress) {
+      if(_.isArray(name)) {
+        var modules = _.map(name, function(module){
+          return System.import(module);
+        });
+        return Promise.all(modules);
+      } else {
+          return System.import(name);
+      }
+    };
+
+    this.getLocale = function() {
+      return self.options.locale;
+    }
+
+    this.getDefaultLocale = function() {
+      return self.options.defaultLocale;
+    }
+
+     if(this.Request) {
       self.ajax = self.Request.ajax = function(url, options) {
         if ( typeof url === "object" ) {
           options = $.extend({}, self.Request.options, url);

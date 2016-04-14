@@ -33,7 +33,7 @@ class UserAccountRepository implements UserAccountRepositoryInterface
     /**
      * UserAccountRepository constructor.
      *
-     * @param $model
+     * @param mixed $model model
      */
     public function __construct($model)
     {
@@ -43,8 +43,8 @@ class UserAccountRepository implements UserAccountRepositoryInterface
     /**
      * create
      *
-     * @param UserInterface $user
-     * @param array         $data
+     * @param UserInterface $user user
+     * @param array         $data data
      *
      * @return AccountInterface
      */
@@ -79,5 +79,4 @@ class UserAccountRepository implements UserAccountRepositoryInterface
     {
         return $this->query()->whereIn('userId', (array) $userIds)->delete();
     }
-
 }

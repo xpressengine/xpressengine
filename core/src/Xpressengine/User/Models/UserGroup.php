@@ -56,7 +56,7 @@ class UserGroup extends DynamicModel implements GroupInterface
     /**
      * add User to this group
      *
-     * @param UserInterface $user
+     * @param UserInterface $user user
      *
      * @return static
      */
@@ -70,7 +70,7 @@ class UserGroup extends DynamicModel implements GroupInterface
     /**
      * except User
      *
-     * @param UserInterface $user
+     * @param UserInterface $user user
      *
      * @return static
      */
@@ -80,5 +80,4 @@ class UserGroup extends DynamicModel implements GroupInterface
         $this->decrement('count');
         return $this;
     }
-
 }

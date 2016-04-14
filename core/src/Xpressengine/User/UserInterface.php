@@ -102,7 +102,7 @@ interface UserInterface extends Authenticatable, CanResetPassword
     /**
      * add this user to groups
      *
-     * @param array $groups
+     * @param array $groups group names
      *
      * @return static
      */
@@ -111,7 +111,7 @@ interface UserInterface extends Authenticatable, CanResetPassword
     /**
      * leave groups
      *
-     * @param array $groups
+     * @param array $groups group names
      *
      * @return static
      */

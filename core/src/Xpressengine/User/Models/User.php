@@ -54,7 +54,8 @@ class User extends DynamicModel implements UserInterface
     protected $hidden = ['password'];
 
     /**
-     * @var \Closure 회원의 프로필 이미지 Resolver. 프로필 이미지 아이디에 해당하는 프로필 이미지 URL을 반환한다.
+     * @var \Closure 회원의 프로필 이미지 Resolver.
+     * 프로필 이미지 아이디에 해당하는 프로필 이미지 URL을 반환한다.
      */
     protected static $profileImageResolver;
 
@@ -176,7 +177,7 @@ class User extends DynamicModel implements UserInterface
     /**
      * Set the token value for the "remember me" session.
      *
-     * @param  string $value
+     * @param string $value value
      *
      * @return void
      */
@@ -319,7 +320,7 @@ class User extends DynamicModel implements UserInterface
     /**
      * add this user to groups
      *
-     * @param array $groups
+     * @param array $groups groups
      *
      * @return static
      */
@@ -333,7 +334,7 @@ class User extends DynamicModel implements UserInterface
     /**
      * leave groups
      *
-     * @param array $groups
+     * @param array $groups groups
      *
      * @return static
      */

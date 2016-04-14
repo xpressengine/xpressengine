@@ -458,9 +458,9 @@
 
     if(self != root) {
       e.stopPropagation();
-      self.menubox().hasClass('in') ? self.leave(self) : self.enter(self)
+      self.menubox().hasClass('in') ? self.leave(self) : self.enter(self);
+      return false;
     }
-
   }
 
   XeUserMenu.prototype.destroy = function () {
@@ -503,6 +503,6 @@
   // APPLY TO STANDARD DROPDOWN ELEMENTS
   // ===================================
 
-  $(document).xeUserMenu({selector:'[data-toggle=xeUserMenu]', container:'body', trigger:'click', placement:'top'});
+  $(document).xeUserMenu({selector:'[data-toggle=xeUserMenu]', container:'body', trigger:'click', placement:'buttom'});
 
 }));

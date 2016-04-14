@@ -26,14 +26,15 @@ use Xpressengine\Database\Eloquent\DynamicModel as Model;
 trait RepositoryTrait
 {
     /**
-     * @var string model name. Xpressengine\Database\Eloquent\DynamicModel를 상속받은 class의 이름이어야 한다
+     * @var string model name.
+     * Xpressengine\Database\Eloquent\DynamicModel를 상속받은 class의 이름이어야 한다
      */
     protected $model;
 
     /**
      * constructor.
      *
-     * @param $model
+     * @param mixed $model model
      */
     public function __construct($model)
     {
@@ -43,8 +44,8 @@ trait RepositoryTrait
     /**
      * update
      *
-     * @param Model $item
-     * @param array $data
+     * @param Model $item item
+     * @param array $data data
      *
      * @return Model
      */
@@ -57,7 +58,7 @@ trait RepositoryTrait
     /**
      * delete
      *
-     * @param Model $item
+     * @param Model $item item
      *
      * @return bool|null
      * @throws \Exception
@@ -105,10 +106,18 @@ trait RepositoryTrait
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(){
+    public function query()
+    {
         return $this->createModel()->newQuery();
     }
 
+    /**
+     * __call
+     *
+     * @param string $method     method name
+     * @param array  $parameters parameters
+     * @return mixed
+     */
     public function __call($method, $parameters)
     {
         $model = $this->createModel();

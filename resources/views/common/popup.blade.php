@@ -22,26 +22,27 @@
     <!-- JS at head.prepend -->
     {!! XeFrontend::output('js', 'head.prepend') !!}
 
-    <!-- Translation -->
-    {!! XeFrontend::output('translation') !!}
-
     <script type="text/javascript">
         XE.setup({
             'X-CSRF-TOKEN': '{!! csrf_token() !!}',
-            loginUserId: '{{ Auth::user()->getId() }}',
-            loadedTime: {{ time() }}
+            loginUserId: '{{ Auth::user()->getId() }}'
+        });
+
+        XE.configure({
+            locale: '{{ session()->get('locale') ?: app('xe.translator')->getLocale() }}',
+            defaultLocale: '{{ app('xe.translator')->getLocale() }}',
+            @if (in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER]))
+                managePrefix: '{{ app('config')['xe.routing.settingsPrefix'] }}'
+            @endif
         });
 
         <!-- Translation -->
         {!! XeFrontend::output('translation') !!}
-
-        @if (in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER]))
-            XE.configure({managePrefix: '{{ app('config')['xe.routing.settingsPrefix'] }}'});
-        @endif
     </script>
 
     <!-- JS at head.append -->
     {!! XeFrontend::output('js', 'head.append') !!}
+
 
     <!-- CUSTOM TAGS -->
     {!! XeFrontend::output('html', 'head.append') !!}

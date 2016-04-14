@@ -10,3 +10,4 @@ composer.lock
 /bower_components
 /assets/jspm_packages/*
 !/assets/jspm_packages/*.*
+assets/jspm_packages/.*

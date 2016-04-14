@@ -29,7 +29,7 @@ interface GroupInterface
     /**
      * add User to this group
      *
-     * @param UserInterface $user
+     * @param UserInterface $user user
      *
      * @return static
      */
@@ -38,7 +38,7 @@ interface GroupInterface
     /**
      * except User
      *
-     * @param UserInterface $user
+     * @param UserInterface $user user
      *
      * @return static
      */

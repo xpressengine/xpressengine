@@ -30,7 +30,7 @@ interface PendingEmailRepositoryInterface extends UserEmailRepositoryInterface
     /**
      * 이메일 주소로 이메일 정보를 조회한다.
      *
-     * @param string        $address 조회할 이메일 주소
+     * @param string $address 조회할 이메일 주소
      *
      * @return EmailInterface
      */
@@ -40,7 +40,7 @@ interface PendingEmailRepositoryInterface extends UserEmailRepositoryInterface
     /**
      * 회원 아이디로 이메일을 조회하여 반환한다.
      *
-     * @param $userId
+     * @param string $userId user id
      *
      * @return EmailInterface
      */

@@ -91,14 +91,14 @@ var Permission = React.createClass({
         var finded;
 
         if(tag.hasOwnProperty('displayName')){
-            finded = _.findWhere(includeMembers, {id:tag.id});
+            finded = _.find(includeMembers, {id:tag.id});
 
             if(!finded){
                 includeMembers.push(tag);
                 this.setState({includeMembers: includeMembers});
             }
         }else{
-            finded = _.findWhere(includeGroups, {id:tag.id});
+            finded = _.find(includeGroups, {id:tag.id});
 
             if(!finded){
                 includeGroups.push(tag);
@@ -109,7 +109,7 @@ var Permission = React.createClass({
 
     handleExcludeAddition(tag) {
         var tags = this.state.excludeMembers;
-        var finded = _.findWhere(tags, {id:tag.id});
+        var finded = _.find(tags, {id:tag.id});
 
         if(!finded){
             tags.push(tag);

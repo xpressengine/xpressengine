@@ -131,7 +131,7 @@ class ThemeHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $config = $this->getConfig();
         $config->shouldReceive('get')
-            ->with('theme.settings.theme/pluginA@blue')
+            ->with('theme.settings.theme/pluginA@blue', true)
             ->once()
             ->andReturn(['config']);
 

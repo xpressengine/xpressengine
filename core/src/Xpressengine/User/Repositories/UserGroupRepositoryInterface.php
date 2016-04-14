@@ -27,12 +27,11 @@ use Xpressengine\User\UserInterface;
  */
 interface UserGroupRepositoryInterface
 {
-
     /**
      * 주어진 그룹에 주어진 회원을 추가한다.
      *
-     * @param GroupInterface           $group 대상 그룹
-     * @param UserInterface $user  추가할 회원
+     * @param GroupInterface $group 대상 그룹
+     * @param UserInterface  $user  추가할 회원
      *
      * @return mixed
      */
@@ -41,8 +40,8 @@ interface UserGroupRepositoryInterface
     /**
      * 주어진 회원을 그룹에서 제외시킨다.
      *
-     * @param GroupInterface  $group 대상 그룹
-     * @param UserInterface $user  제외시킬 회원
+     * @param GroupInterface $group 대상 그룹
+     * @param UserInterface  $user  제외시킬 회원
      *
      * @return void
      */

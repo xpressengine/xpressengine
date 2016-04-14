@@ -54,5 +54,4 @@ interface EmailInterface
      * @return bool
      */
     public function isConfirmed();
-
 }

@@ -79,15 +79,15 @@ trait MobileSupportTrait
     /**
      * 지정된 버전을 지원하는지 조사한다.
      *
-     * @param $version
+     * @param string $version version
      *
      * @return bool
      */
     public static function support($version)
     {
-        if($version === 'desktop') {
+        if ($version === 'desktop') {
             return static::$supportDesktop;
-        } elseif($version === 'mobile') {
+        } elseif ($version === 'mobile') {
             return static::$supportMobile;
         }
     }

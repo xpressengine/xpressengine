@@ -53,9 +53,9 @@ class EmailBroker implements EmailBrokerInterface
     /**
      * 생성자.
      *
-     * @param UserHandler $handler
-     * @param Mailer      $mailer mail sender
-     * @param string      $view   mail 전송시 사용할 view 파일
+     * @param UserHandler $handler handler
+     * @param Mailer      $mailer  mail sender
+     * @param string      $view    mail 전송시 사용할 view 파일
      */
     public function __construct(
         UserHandler $handler,
@@ -105,7 +105,8 @@ class EmailBroker implements EmailBrokerInterface
 
     /**
      * 주어진 이메일을 인증처리 한다.
-     * 주어진 등록 대기 이메일의 인증코드가 주어진 인증코드와 동일하면 해당 이메일을 해당회원의 실제 이메일로 등록하고, 본 등록대기 이메일은 삭제한다.
+     * 주어진 등록 대기 이메일의 인증코드가 주어진 인증코드와 동일하면
+     * 해당 이메일을 해당회원의 실제 이메일로 등록하고, 본 등록대기 이메일은 삭제한다.
      *
      * @param EmailInterface $email 인증할 이메일
      * @param string         $code  인증코드

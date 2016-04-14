@@ -283,7 +283,7 @@ class ConfigEntity extends Entity implements IteratorAggregate
     /**
      * Dynamically retrieve the value of an attribute.
      *
-     * @param string $key
+     * @param string $key key
      * @return mixed
      */
     public function __get($key)

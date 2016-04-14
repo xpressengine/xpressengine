@@ -94,7 +94,7 @@ class UserImageHandler
         if (!empty($user->profileImageId)) {
             $file = File::find($user->profileImageId);
             if ($file !== null) {
-                try{
+                try {
                     $this->storage->remove($file);
                 } catch (\Exception $e) {
                     ;

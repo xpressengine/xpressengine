@@ -11,8 +11,7 @@
      * <span data-xe-timeago="{timestmap|ISO8601}" title="2016-04-04 07:05:44" />3 Hours ago</span>
      */
     System.import('vendor:/moment').then(function(moment) {
-      var locale = window.navigator.userLanguage || window.navigator.language;
-      moment.locale(locale);
+      moment.locale(XE.getLocale());
     });
 
     $(document).on('xe.timeago', '[data-xe-timeago]', function() {

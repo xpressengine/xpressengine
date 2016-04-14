@@ -17,7 +17,8 @@ use Closure;
 
 /**
  * 이 인터페이스는 이메일 인증 처리 클래스가 구현해야 하는 인터페이스이다.
- * 이 인터페이스는 인증 요청 메일 전송, 인증메일의 인증처리, 인증메일의 인증여부를 체크하는 메소드로 구성된다.
+ * 이 인터페이스는 인증 요청 메일 전송, 인증메일의 인증처리,
+ * 인증메일의 인증여부를 체크하는 메소드로 구성된다.
  *
  * @category    User
  * @package     Xpressengine\User
@@ -31,7 +32,7 @@ interface EmailBrokerInterface
      * 이메일 인증 요청 메일을 전송한다.
      *
      * @param EmailInterface $mail     전송할 이메일 정보
-     * @param null|Closure $callback 이메일 전송할 때 처리할 로직
+     * @param null|Closure   $callback 이메일 전송할 때 처리할 로직
      *
      * @return void
      */

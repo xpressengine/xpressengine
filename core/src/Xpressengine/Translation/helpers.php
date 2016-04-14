@@ -28,7 +28,7 @@ if (! function_exists('xe_trans')) {
 
         try {
             return app('xe.translator')->trans($id, $parameters, $domain, $locale);
-        } catch (Exception $e){
+        } catch (Exception $e) {
             return $id;
         }
     }
