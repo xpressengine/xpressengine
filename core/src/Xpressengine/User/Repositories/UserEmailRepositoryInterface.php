@@ -40,7 +40,7 @@ interface UserEmailRepositoryInterface
     /**
      * 회원 아이디로 이메일을 조회하여 반환한다.
      *
-     * @param $userId
+     * @param string $userId user id
      *
      * @return EmailInterface[]
      */

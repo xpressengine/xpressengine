@@ -18,7 +18,8 @@ use Xpressengine\User\Models\Guest;
 
 /**
  * 이 클래스는 Xpressengine의 회원 인증 기능을 처리하는 클래스이다.
- * 이 클래스의 주요 기능은 사용자를 로그인, 현재 로그인된 사용자의 로그아웃, 로그인된 사용자의 정보를 반환하는 역할을 한다.
+ * 이 클래스의 주요 기능은 사용자를 로그인, 현재 로그인된 사용자의 로그아웃,
+ * 로그인된 사용자의 정보를 반환하는 역할을 한다.
  *
  * @category    User
  * @package     Xpressengine\User

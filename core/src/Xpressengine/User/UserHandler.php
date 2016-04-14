@@ -28,7 +28,8 @@ use Xpressengine\User\Repositories\UserGroupRepositoryInterface;
 use Xpressengine\User\Repositories\UserRepositoryInterface;
 
 /**
- * 회원 및 회원과 관련된 데이터(그룹정보, 계정정보, 이메일 정보 등)를 조회하거나 처리할 때에 UserHandler를 사용할 수 있습니다. UserHandler는 `XeUser` 파사드를 통해 쉽게 사용할 수 있습니다.
+ * 회원 및 회원과 관련된 데이터(그룹정보, 계정정보, 이메일 정보 등)를 조회하거나 처리할 때에 UserHandler를 사용할 수 있습니다.
+ * UserHandler는 `XeUser` 파사드를 통해 쉽게 사용할 수 있습니다.
  *
  * ## 회원 조회
  *
@@ -38,7 +39,8 @@ use Xpressengine\User\Repositories\UserRepositoryInterface;
  * $userRepository = XeUser::users();
  * ```
  *
- * > UserRepository는 laravel의 Eloquent 모델의 사용법을 대부분 그대로 사용할 수 있습니다. laravel Eloquent 모델의 사용법은 [라라벨 문서](https://laravel.com/docs/5.2/eloquent)를 참조하십시오.
+ * > UserRepository는 laravel의 Eloquent 모델의 사용법을 대부분 그대로 사용할 수 있습니다.
+ * laravel Eloquent 모델의 사용법은 [라라벨 문서](https://laravel.com/docs/5.2/eloquent)를 참조하십시오.
  *
  * ### 회원아이디로 회원조회
  *
@@ -77,7 +79,9 @@ use Xpressengine\User\Repositories\UserRepositoryInterface;
  *
  * ## 신규 회원 추가
  *
- * UserHandler는 복잡한 회원 생성 과정을 한번에 처리해주는 `create` 메소드를 제공합니다. `create` 메소드는 입력한 신규회원 정보에 대한 유효성 검사후 신규회원을 생성합니다. 또한 회원의  계정(account), 이메일(email) 정보도 자동으로 추가되며, 소솔될 그룹에 대한 정보가 전달되었을 경우, 그룹에 추가시켜주기도 합니다.
+ * UserHandler는 복잡한 회원 생성 과정을 한번에 처리해주는 `create` 메소드를 제공합니다.
+ * `create` 메소드는 입력한 신규회원 정보에 대한 유효성 검사후 신규회원을 생성합니다.
+ * 또한 회원의  계정(account), 이메일(email) 정보도 자동으로 추가되며, 소솔될 그룹에 대한 정보가 전달되었을 경우, 그룹에 추가시켜주기도 합니다.
  *
  * ```php
  * $data = [
@@ -132,7 +136,8 @@ use Xpressengine\User\Repositories\UserRepositoryInterface;
  * $newUser = XeUser::users()->create($data);
  * ```
  *
- * > `주의!` UserRepository의 `create` 메소드는 `password`를 암호화하지 않고 바로 저장합니다. 먼저 `password` 필드를 직접 암호화하십시오.
+ * > `주의!` UserRepository의 `create` 메소드는 `password`를 암호화하지 않고 바로 저장합니다.
+ * 먼저 `password` 필드를 직접 암호화하십시오.
  *
  *
  * ## 회원정보 수정
@@ -163,9 +168,11 @@ use Xpressengine\User\Repositories\UserRepositoryInterface;
  *
  * ## 회원과 관련된 정보의 조회 및 처리
  *
- * 회원계정(account), 회원이메일(email), 회원 승인대기 이메일(pending email), 회원그룹(group)과 같은 회원과 관련된 정보도 UserHandler를 사용하여 조회하고 처리할 수 있습니다.
+ * 회원계정(account), 회원이메일(email), 회원 승인대기 이메일(pending email), 회원그룹(group)과 같은
+ * 회원과 관련된 정보도 UserHandler를 사용하여 조회하고 처리할 수 있습니다.
  *
- * 회원과 관련된 정보에 대한 생성(create), 삭제(delete), 업데이트(update) 기능은 UserHandler에서 직접 제공합니다. 단, 회원과 관련된 정보에 대한 조회(retrieve) 기능은 각각의 Repository를 통해 실행해야 합니다.
+ * 회원과 관련된 정보에 대한 생성(create), 삭제(delete), 업데이트(update) 기능은 UserHandler에서 직접 제공합니다.
+ * 단, 회원과 관련된 정보에 대한 조회(retrieve) 기능은 각각의 Repository를 통해 실행해야 합니다.
  *
  * UserHandler에서 제공하는 생성(create), 삭제(delete), 업데이트(update) 기능은 아래 코드를 참고하십시오.
  *
@@ -205,9 +212,11 @@ use Xpressengine\User\Repositories\UserRepositoryInterface;
  *
  * ### 회원계정(account)
  *
- * XE에서 각각의 회원(user)는 여러개의 외부 계정을 가질 수 있습니다. 만약 한 회원이 facebook, google, naver 등 여러개의 외부 계정을 소유하고 있다면, 소유한 계정중 하나를 이용하여 로그인할 수 있습니다.
+ * XE에서 각각의 회원(user)는 여러개의 외부 계정을 가질 수 있습니다.
+ * 만약 한 회원이 facebook, google, naver 등 여러개의 외부 계정을 소유하고 있다면, 소유한 계정중 하나를 이용하여 로그인할 수 있습니다.
  *
- * 회원계정을 조회할 때에는 UserAccountRepository를 사용하십시오. UserAccountRepository는 UserHandler를 통하여 가져올 수 있습니다.
+ * 회원계정을 조회할 때에는 UserAccountRepository를 사용하십시오.
+ * UserAccountRepository는 UserHandler를 통하여 가져올 수 있습니다.
  *
  * ```php
  * $accountRepository = XeUser::accounts();
@@ -228,13 +237,16 @@ use Xpressengine\User\Repositories\UserRepositoryInterface;
  * $accounts = $user->accounts;
  * ```
  *
- * > UserAccountRepository는 laravel의 Eloquent 모델의 사용법을 대부분 그대로 사용할 수 있습니다. laravel Eloquent 모델의 사용법은 [라라벨 문서](https://laravel.com/docs/5.2/eloquent)를 참조하십시오.
+ * > UserAccountRepository는 laravel의 Eloquent 모델의 사용법을 대부분 그대로 사용할 수 있습니다.
+ * laravel Eloquent 모델의 사용법은 [라라벨 문서](https://laravel.com/docs/5.2/eloquent)를 참조하십시오.
  *
  * ### 회원 이메일(email)
  *
- * XE에서 각각의 회원은 여러개의 이메일을 가질 수 있습니다. 만약 한 회원이 여러개의 이메일을 소유하고 있다면, 소유한 이메일 중 하나와 비밀번호를 사용하여 로그인 할 수 있습니다.
+ * XE에서 각각의 회원은 여러개의 이메일을 가질 수 있습니다.
+ * 만약 한 회원이 여러개의 이메일을 소유하고 있다면, 소유한 이메일 중 하나와 비밀번호를 사용하여 로그인 할 수 있습니다.
  *
- * 회원의 이메일을 조회할 때에는 UserEmailRepository를 사용하십시오. UserEmailRepository는 UserHandler를 통하여 가져올 수 있습니다.
+ * 회원의 이메일을 조회할 때에는 UserEmailRepository를 사용하십시오.
+ * UserEmailRepository는 UserHandler를 통하여 가져올 수 있습니다.
  *
  * ```php
  * $emailRepository = XeUser::emails();
@@ -248,11 +260,14 @@ use Xpressengine\User\Repositories\UserRepositoryInterface;
  *
  * ### 승인 대기중인 이메일(pending email)
  *
- * 회원이 소유한 이메일은 승인된 이메일과 승인 대기중인 이메일로 구분됩니다. 승인된 이메일(email)과 승인대기 이메일(pendingEmail)은 별도의 테이블에 저장됩니다. 승인된 이메일은 한 회원이 여러개 가질 수 있지만, 승인대기 이메일은 한 회원당 하나만 가질 수 있습니다.
+ * 회원이 소유한 이메일은 승인된 이메일과 승인 대기중인 이메일로 구분됩니다.
+ * 승인된 이메일(email)과 승인대기 이메일(pendingEmail)은 별도의 테이블에 저장됩니다.
+ * 승인된 이메일은 한 회원이 여러개 가질 수 있지만, 승인대기 이메일은 한 회원당 하나만 가질 수 있습니다.
  *
  * 승인대기 이메일 주소로는 로그인을 할 수 없습니다.
  *
- * 회원의 승인대기 이메일을 조회할 때에는 PendingEmailRepository를 사용하십시오. PendingEmailRepository는 UserHandler를 통하여 가져올 수 있습니다.
+ * 회원의 승인대기 이메일을 조회할 때에는 PendingEmailRepository를 사용하십시오.
+ * PendingEmailRepository는 UserHandler를 통하여 가져올 수 있습니다.
  *
  * ```php
  * $pendingEmailRepository = XeUser::pendingEmails();
@@ -351,7 +366,7 @@ class UserHandler
      * @param UserGroupRepositoryInterface    $groups          UserGroup 그룹 저장소
      * @param UserEmailRepositoryInterface    $mails           회원 이메일 저장소
      * @param PendingEmailRepositoryInterface $pendingEmails   회원 등록대기 이메일 저장소
-     * @param UserImageHandler                $imageHandler
+     * @param UserImageHandler                $imageHandler    image handler
      * @param Hasher                          $hasher          해시코드 생성기, 비밀번호 해싱을 위해 사용됨
      * @param Validator                       $validator       유효성 검사기. 비밀번호 및 표시이름(dispalyName)의 유효성 검사를 위해 사용됨
      * @param Container                       $container       Xpressengine 레지스터
@@ -478,16 +493,14 @@ class UserHandler
         // insert accounts
         if (isset($data['account'])) {
             $accountData = $data['account'];
-            $account = $this->accounts()->create($user,
-                [
-                    'userId' => $user->id,
-                    'accountId' => array_get($accountData, 'accountId'),
-                    'email' => array_get($accountData, 'email', array_get($data, 'email')),
-                    'provider' => array_get($accountData, 'provider'),
-                    'data' => array_get($accountData, 'data'),
-                    'token' => array_get($accountData, 'token'),
-                ]
-            );
+            $account = $this->accounts()->create($user, [
+                'userId' => $user->id,
+                'accountId' => array_get($accountData, 'accountId'),
+                'email' => array_get($accountData, 'email', array_get($data, 'email')),
+                'provider' => array_get($accountData, 'provider'),
+                'data' => array_get($accountData, 'data'),
+                'token' => array_get($accountData, 'token'),
+            ]);
             $user->accounts()->save($account);
         }
 
@@ -498,8 +511,8 @@ class UserHandler
      * 회원정보를 업데이트 한다.
      * 필드: email, displayName, password, status, introduction, profileImgFile, groupId
      *
-     * @param UserInterface $user
-     * @param null          $data
+     * @param UserInterface $user     user
+     * @param array         $userData user data
      *
      * @return UserInterface|static
      */
@@ -693,8 +706,8 @@ class UserHandler
     /**
      * 회원의 정보를 업데이트할 때 필요한 유효성 검사를 한다.
      *
-     * @param UserInterface $user
-     * @param array         $data
+     * @param UserInterface $user user
+     * @param array         $data data
      *
      * @return bool 유효성검사 결과, 통과할 경우 true, 실패할 경우 false
      */
@@ -716,7 +729,7 @@ class UserHandler
     /**
      * 새로운 그룹을 추가한다.
      *
-     * @param array $data
+     * @param array $data data
      *
      * @return GroupInterface
      */
@@ -729,8 +742,8 @@ class UserHandler
     /**
      * 그룹을 수정한다
      *
-     * @param $group
-     * @param $data
+     * @param GroupInterface $group group
+     * @param array          $data  data
      *
      * @return GroupInterface
      */
@@ -743,7 +756,7 @@ class UserHandler
     /**
      * 그룹을 삭제한다
      *
-     * @param GroupInterface $group
+     * @param GroupInterface $group group
      *
      * @return bool
      */
@@ -755,9 +768,9 @@ class UserHandler
     /**
      * 새로운 이메일을 생성한다
      *
-     * @param UserInterface  $user
-     * @param array $data
-     * @param bool  $confirmed
+     * @param UserInterface $user      user
+     * @param array         $data      data
+     * @param bool          $confirmed confirmed
      *
      * @return EmailInterface
      */
@@ -774,14 +787,14 @@ class UserHandler
     /**
      * 이메일을 수정한다
      *
-     * @param EmailInterface $email
-     * @param array $data
+     * @param EmailInterface $email email
+     * @param array          $data  data
      *
      * @return EmailInterface
      */
     public function updateEmail(EmailInterface $email, array $data = [])
     {
-        if($email->isConfirmed()) {
+        if ($email->isConfirmed()) {
             $this->emails()->update($email, $data);
         } else {
             $this->pendingEmails()->update($email, $data);
@@ -792,13 +805,13 @@ class UserHandler
     /**
      * 이메일을 삭제한다
      *
-     * @param EmailInterface $email
+     * @param EmailInterface $email email
      *
      * @return bool
      */
     public function deleteEmail(EmailInterface $email)
     {
-        if($email->isConfirmed()) {
+        if ($email->isConfirmed()) {
             return $this->emails()->delete($email);
         } else {
             return $this->pendingEmails()->delete($email);
@@ -808,8 +821,8 @@ class UserHandler
     /**
      * 새로운 계정을 추가한다.
      *
-     * @param UserInterface $user
-     * @param array $data
+     * @param UserInterface $user user
+     * @param array         $data data
      *
      * @return void
      */
@@ -821,8 +834,8 @@ class UserHandler
     /**
      * 계정을 수정한다
      *
-     * @param AccountInterface $account
-     * @param $data
+     * @param AccountInterface $account account
+     * @param array            $data    data
      *
      * @return AccountInterface
      */
@@ -835,7 +848,7 @@ class UserHandler
     /**
      * 계정을 삭제한다
      *
-     * @param $account
+     * @param string $account account
      *
      * @return void
      */
@@ -856,7 +869,8 @@ class UserHandler
 
     /**
      * 개인 회원정보 설정 페이지의 섹션 목록을 반환한다.
-     * 개인 회원정보 설정 페이지는 여러개의 섹션(메뉴)로 구성된다. 기본적으로 Xpressengien은 '회원 기본정보 설정' 섹션이 가지고 있고,
+     * 개인 회원정보 설정 페이지는 여러개의 섹션(메뉴)로 구성된다.
+     * 기본적으로 Xpressengien은 '회원 기본정보 설정' 섹션이 가지고 있고,
      * 다른 서드파티에서 자유롭게 섹션을 추가할 수 있다. 예) 소셜로그인 플러그인의 '외부 로그인 설정' 섹션
      * 이 메소드는 이렇게 등록된 섹션 목록을 반환한다.
      *
@@ -871,8 +885,8 @@ class UserHandler
     /**
      * __call
      *
-     * @param $method
-     * @param $parameters
+     * @param string $method     method name
+     * @param array  $parameters parameters
      *
      * @return mixed
      */
@@ -881,5 +895,4 @@ class UserHandler
         $users = $this->users();
         return call_user_func_array([$users, $method], $parameters);
     }
-
 }

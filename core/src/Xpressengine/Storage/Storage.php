@@ -185,7 +185,7 @@ class Storage
      * @param string        $path     be saved path
      * @param string|null   $name     be saved file name
      * @param string|null   $disk     disk name (ex. local, ftp, s3 ...)
-     * @param UserInterface $user user instance
+     * @param UserInterface $user     user instance
      * @return File
      */
     public function upload(
@@ -233,7 +233,7 @@ class Storage
      * @param string        $name     saved name
      * @param string|null   $disk     disk for saved
      * @param string|null   $originId original file id
-     * @param UserInterface $user user instance
+     * @param UserInterface $user     user instance
      * @return File
      */
     public function create($content, $path, $name, $disk = null, $originId = null, UserInterface $user = null)

@@ -45,5 +45,4 @@ interface AccountInterface
      * @return string|null
      */
     public function getEmailAddress();
-
 }

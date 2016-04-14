@@ -255,7 +255,7 @@ class Guest implements UserInterface
     /**
      * add this user to groups
      *
-     * @param array $groups
+     * @param array $groups groups
      *
      * @return static
      */
@@ -267,7 +267,7 @@ class Guest implements UserInterface
     /**
      * leave groups
      *
-     * @param array $groups
+     * @param array $groups groups
      *
      * @return static
      */

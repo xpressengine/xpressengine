@@ -57,7 +57,7 @@ class UserProvider extends EloquentUserProvider
             if (!str_contains($email, '@')) {
                 $emailPrefix = $email;
 
-                $query = $query->whereHas('emails', function($q) use($emailPrefix) {
+                $query = $query->whereHas('emails', function ($q) use ($emailPrefix) {
                     $q->where('address', 'like', $emailPrefix.'@%');
                 })->get();
 
@@ -67,7 +67,7 @@ class UserProvider extends EloquentUserProvider
                     return null;
                 }
             } else {
-                $user = $query->whereHas('emails', function($q) use($email) {
+                $user = $query->whereHas('emails', function ($q) use ($email) {
                     $q->where('address', $email);
                 })->first();
             }
@@ -94,7 +94,7 @@ class UserProvider extends EloquentUserProvider
             }
         }
 
-        if($user === null) {
+        if ($user === null) {
             // retrieve user without email
             foreach ($where as $key => $value) {
                 if (strpos($key, 'password') === false) {
@@ -106,5 +106,4 @@ class UserProvider extends EloquentUserProvider
 
         return $user;
     }
-
 }

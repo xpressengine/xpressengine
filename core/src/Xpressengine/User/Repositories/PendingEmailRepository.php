@@ -34,8 +34,8 @@ class PendingEmailRepository implements PendingEmailRepositoryInterface
     /**
      * create
      *
-     * @param UserInterface $user
-     * @param array         $data
+     * @param UserInterface $user user
+     * @param array         $data data
      *
      * @return EmailInterface
      */
@@ -53,7 +53,7 @@ class PendingEmailRepository implements PendingEmailRepositoryInterface
     /**
      * delete
      *
-     * @param EmailInterface $email
+     * @param EmailInterface $email email
      *
      * @return mixed
      * @throws CannotDeleteMainEmailOfUserException
@@ -67,7 +67,7 @@ class PendingEmailRepository implements PendingEmailRepositoryInterface
     /**
      * 이메일 주소로 등록대기 이메일 정보를 조회한다.
      *
-     * @param string        $address 조회할 이메일 주소
+     * @param string $address 조회할 이메일 주소
      *
      * @return EmailInterface
      */
@@ -80,7 +80,7 @@ class PendingEmailRepository implements PendingEmailRepositoryInterface
     /**
      * 회원 아이디로 이메일을 조회하여 반환한다.
      *
-     * @param $userId
+     * @param string $userId user id
      *
      * @return EmailInterface
      */
@@ -105,8 +105,8 @@ class PendingEmailRepository implements PendingEmailRepositoryInterface
     /**
      * 주어진 회원이 소유한 등록대기 이메일의 인증 코드를 반환한다.
      *
-     * @param string        $userId user id
-     * @param string        $code   mail confirmation code
+     * @param string $userId user id
+     * @param string $code   mail confirmation code
      *
      * @return EmailInterface
      */

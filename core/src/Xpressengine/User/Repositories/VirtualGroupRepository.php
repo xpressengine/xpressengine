@@ -105,7 +105,7 @@ class VirtualGroupRepository implements VirtualGroupRepositoryInterface
         $getByUser = $this->getter;
         $user = $this->users->find($userId);
 
-        if($user === null) {
+        if ($user === null) {
             throw new UserNotFoundException();
         }
 

@@ -102,7 +102,7 @@ abstract class AbstractTheme implements ComponentInterface, Renderable
      */
     protected static function getConfig()
     {
-        if(static::$configID === null) {
+        if (static::$configID === null) {
             $configId = static::getId();
         } else {
             $configId = static::$configID;

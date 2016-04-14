@@ -119,6 +119,12 @@ class Grant extends Fluent
         return $value;
     }
 
+    /**
+     * Value filter
+     *
+     * @param array $value values
+     * @return array
+     */
     protected function valueFilter(array $value)
     {
         $unknown = [];
@@ -131,6 +137,12 @@ class Grant extends Fluent
         return array_except($value, $unknown);
     }
 
+    /**
+     * Check type is allowed
+     *
+     * @param stirng $type type
+     * @return bool
+     */
     protected function isAllowType($type)
     {
         $constName = __CLASS__ . '::' . strtoupper($type) . '_TYPE';
