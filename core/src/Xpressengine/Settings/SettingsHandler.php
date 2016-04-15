@@ -313,7 +313,7 @@ class SettingsHandler
             if (!$isSuper) {
                 foreach ((array) $permissions as $permissionId) {
                     // todo: implementing
-                    $instance = new Instance($permissionId);
+                    $instance = new Instance('settings'.$permissionId);
                     if ($this->gate->allows('access', $instance)) {
                         $visible = true;
                     }
