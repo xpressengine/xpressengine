@@ -1,5 +1,6 @@
 <?php namespace App\Exceptions;
 
+use Event;
 use XePresenter;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
