@@ -132,7 +132,7 @@ class XeInstall extends Command
             $this->output->success('Install was completed successfully.');
         } catch (\Exception $e) {
             $err = [
-                'System error',
+                'Install fail!! Try again.',
                 ' message: ' . $e->getMessage(),
                 ' file: ' . $e->getFile(),
                 ' line: ' . $e->getLine(),
@@ -144,7 +144,6 @@ class XeInstall extends Command
                 ' * remove all table in your database',
             ];
             $this->output->note(implode(PHP_EOL, $note));
-            $this->output->error('Install fail!! Try again.');
 //            throw $e;
         }
     }
@@ -213,7 +212,7 @@ APP_KEY=SomeRandomString";
         // load framework, migrations, installPlugin, run composer post script
         $this->info('[Base Framework load]');
         $this->installFramework();
-        
+
         // create admin and login
         $this->info('[Setup Admin information]');
         $this->stepAdmin();
@@ -222,17 +221,19 @@ APP_KEY=SomeRandomString";
         $this->initializeCore();
 
         $this->disableDebugMode();
-        
+
         // change directory permissions
         $this->info('[Setup Directory Permission]');
         $this->stepDirPermission();
-        
+
+        $this->stepAgreeCollectEnv();
+
         $this->markInstalled();
     }
 
     /**
      * stepDB
-     * 
+     *
      * @return void
      */
     protected function stepDB()
@@ -298,6 +299,31 @@ APP_KEY=SomeRandomString";
             $this->setBootCacheDirPermission();
         } catch (\Exception $e) {
             $this->error('Fail to change bootstrap cache directory permission. Check directory after install.' . PHP_EOL . ' message: '. $e->getMessage());
+        }
+    }
+
+    protected function stepAgreeCollectEnv()
+    {
+        if ($this->noInteraction) {
+            return;
+        }
+
+        $this->warn(
+            PHP_EOL
+            . 'Try to collect environmental information for debugging from server of XE installed.'
+            . PHP_EOL
+            . 'Your personal information will not be collected.'
+        );
+        $answer = $this->askValidation('Do you agree to collect your system environmental information?', 'yes', function ($value) {
+            if (!in_array($value, ['yes', 'no'])) {
+                throw new \Exception('Input only yes or no.');
+            }
+
+            return $value === 'yes';
+        });
+
+        if ($answer === true) {
+            app('xe.plugin.news_client')->getHandler()->setAgree(true);
         }
     }
 
@@ -383,6 +409,8 @@ APP_KEY=SomeRandomString";
         }
 
         $this->line('Connection successful.');
+        $this->output->newLine();
+
         return true;
     }
 
