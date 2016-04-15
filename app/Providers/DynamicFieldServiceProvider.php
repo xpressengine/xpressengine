@@ -25,6 +25,7 @@ use Xpressengine\FieldTypes\Category;
 use Xpressengine\FieldTypes\Number;
 use Xpressengine\FieldTypes\Text;
 use Xpressengine\FieldTypes\Boolean;
+use Xpressengine\FieldTypes\Address;
 
 /**
  * laravel service provider
@@ -60,9 +61,9 @@ class DynamicFieldServiceProvider extends ServiceProvider
 
         $registerHandler->add(Category::class);
         $registerHandler->add(Number::class);
-
         $registerHandler->add(Text::class);
         $registerHandler->add(Boolean::class);
+        $registerHandler->add(Address::class);
     }
 
     /**
