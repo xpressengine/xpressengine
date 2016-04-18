@@ -201,6 +201,9 @@ APP_KEY=SomeRandomString";
      */
     protected function process()
     {
+        $this->info('[Check the system requirement]');
+        $this->stepRequirement();
+
         // set db information
         $this->info('[Setup Database(MySQL)]');
         $this->stepDB();
@@ -229,6 +232,40 @@ APP_KEY=SomeRandomString";
         $this->stepAgreeCollectEnv();
 
         $this->markInstalled();
+    }
+
+    protected function stepRequirement()
+    {
+        if (!defined('PHP_VERSION_ID')) {
+            $version = explode('.', PHP_VERSION);
+            define('PHP_VERSION_ID', ($version[0] * 10000 + $version[1] * 100 + $version[2]));
+        }
+
+        $versionCheck = constant('PHP_VERSION_ID') < 50509 ? false : true;
+
+        if (!$versionCheck) {
+            $this->error('PHP version is not available');
+            die();
+        }
+
+        $extensions = ['mcrypt', 'curl', 'gd'];
+        $result = [];
+        foreach ($extensions as $ext) {
+            $result[$ext] = extension_loaded($ext);
+            $this->output->write("- check {$ext} extension: ");
+            if ($result[$ext]) {
+                $this->info('true');
+            } else {
+                $this->error('false');
+            }
+        }
+
+        $this->output->newLine();
+
+        if (array_search(false, $result) > -1) {
+            $this->error('PHP extension is not ready! Please check php extensions. And retry install.');
+            die();
+        }
     }
 
     /**
