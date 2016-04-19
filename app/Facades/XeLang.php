@@ -1,11 +1,11 @@
 <?php
 /**
- * XeToggleMenu
+ * XeLang
  *
  * PHP version 5
  *
- * @category    ToggleMenu
- * @package     Xpressengine\ToggleMenu
+ * @category    Translation
+ * @package     Xpressengine\Translation
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
@@ -16,17 +16,17 @@ namespace App\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * facade 사용을 위한 클래스.
+ * facade 로 이용 하기위해 선언되어진 클래스
  *
- * @category    ToggleMenu
- * @package     Xpressengine\ToggleMenu
+ * @category    Translation
+ * @package     Xpressengine\Translation
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
- * @see         Xpressengine\ToggleMenu\ToggleMenuHandler
+ * @see         Xpressengine\Translation\Translator
  */
-class XeToggleMenu extends Facade
+class XeLang extends Facade
 {
     /**
      * Get the registered name of the component.
@@ -35,6 +35,6 @@ class XeToggleMenu extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'xe.toggleMenu';
+        return 'xe.translator';
     }
 }

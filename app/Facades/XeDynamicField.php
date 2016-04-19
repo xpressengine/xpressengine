@@ -1,11 +1,11 @@
 <?php
 /**
- * DynamicField class for Facade
+ * XeDynamicField
  *
  * PHP version 5
  *
  * @category    DynamicField
- * @package     Xpressengine\DynamidField
+ * @package     Xpressengine\DynamicField
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
@@ -24,14 +24,15 @@ use Illuminate\Support\Facades\Facade;
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
+ * @see         Xpressengine\DynamicField\DynamicFieldHandler
  */
-class XeDynamicField  extends Facade
+class XeDynamicField extends Facade
 {
 
     /**
      * facade access keyword
      *
-     * @return stirng
+     * @return string
      */
     protected static function getFacadeAccessor()
     {

@@ -270,7 +270,7 @@ return [
         'XeTrash' => App\Facades\XeTrash::class,
         'XeMedia' => App\Facades\XeMedia::class,
 
-        'XeLang' => App\Facades\Lang::class,
+        'XeLang' => App\Facades\XeLang::class,
         'XeSEO' => App\Facades\XeSEO::class,
     ],
 ];

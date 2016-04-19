@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is accessor for use storage by facade
+ * XeStorage
  *
  * PHP version 5
  *
@@ -24,8 +24,9 @@ use Illuminate\Support\Facades\Facade;
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
+ * @see         Xpressengine\Storage\Storage
  */
-class XeStorage  extends Facade
+class XeStorage extends Facade
 {
     /**
      * facade access keyword

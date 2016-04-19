@@ -1,6 +1,6 @@
 <?php
 /**
- * Presenter class for Facade
+ * XePresenter
  *
  * PHP version 5
  *
@@ -24,8 +24,9 @@ use Illuminate\Support\Facades\Facade;
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
+ * @see         Xpressengine\Presenter\Presenter
  */
-class XePresenter  extends Facade
+class XePresenter extends Facade
 {
 
     /**
