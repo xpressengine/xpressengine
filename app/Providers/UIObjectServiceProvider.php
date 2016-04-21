@@ -15,7 +15,6 @@ use Xpressengine\UIObjects\Lang\LangText;
 use Xpressengine\UIObjects\Lang\LangTextArea;
 use Xpressengine\UIObjects\Member\ProfileBgImage;
 use Xpressengine\UIObjects\Member\ProfileImage;
-use Xpressengine\UIObjects\Settings\ChakIt;
 
 class UIObjectServiceProvider extends ServiceProvider
 {
