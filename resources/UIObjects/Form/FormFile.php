@@ -93,7 +93,7 @@ class FormFile extends AbstractUIObject
                 'assets/vendor/jQuery-File-Upload/js/jquery.fileupload-video.js',
                 'assets/vendor/jQuery-File-Upload/js/jquery.fileupload-validate.js',
             ]
-        )->appendTo('head')->before('/assets/vendor/requirejs/require.js')->load();
+        )->load();
 
         XeFrontend::css(
             [
