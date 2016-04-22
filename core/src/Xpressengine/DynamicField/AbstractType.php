@@ -634,7 +634,7 @@ abstract class AbstractType implements ComponentInterface
     /**
      * table join
      *
-     * @param Builder      $query  query builder
+     * @param DynamicQuery $query  query builder
      * @param ConfigEntity $config config entity
      * @return Builder
      */
