@@ -181,7 +181,9 @@ class MenuMigration implements Migration {
         $menuTypeInput = [
             'pageTitle' => 'XpressEngine3 Board',
             'boardName' => 'Board',
-            'siteKey' => 'default'
+            'siteKey' => 'default',
+            'revision' => 'true',
+            'division' => 'false',
         ];
 
         $item = $menuHandler->createItem($mainMenu, $inputs, $menuTypeInput);
