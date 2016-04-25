@@ -20,7 +20,7 @@
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                 <span class="caret"></span>
                             </button>
-                            <ul class="dropdown-menu" role="menu">
+                            <ul class="xe-dropdown-menu" role="menu">
                                 <li><strong>승인/거부</strong></li>
                                 <li @if(!Input::get('status')) class="active" @endif><a href="{{ route('settings.member.index', Input::except('status') ) }}">전체</a></li>
                                 <li @if(Input::get('status') === \XeUser::STATUS_ACTIVATED) class="active" @endif><a href="{{ route('settings.member.index', array_merge(Input::all(), ['status'=> \XeUser::STATUS_ACTIVATED] )) }}">승인됨</a></li>
@@ -53,7 +53,7 @@
                                         </span>
                                         <span class="caret"></span>
                                     </button>
-                                    <ul class="dropdown-menu" role="menu">
+                                    <ul class="xe-dropdown-menu" role="menu">
                                         <li><a href="#" class="__xe_selectKeyfield" data-value="displayName">이름</a></li>
                                         <li><a href="#" class="__xe_selectKeyfield" data-value="email">이메일</a></li>
                                     </ul>
@@ -72,12 +72,12 @@
 
                 </div>
                 <div class="table-responsive">
-                <form id="__xe_fList" method="post">
+                <form id="__xe_fList" method="post" action="{{ route('settings.member.destroy') }}">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <table class="table">
                         <thead>
                         <tr>
-                            <th scope="col"><input type="checkbox"></th>
+                            <th scope="col"><input type="checkbox" class="__xe_check-all"></th>
                             <th scope="col">이름</th>
                             <th scope="col">계정</th>
                             <th scope="col">이메일</th>
@@ -142,37 +142,65 @@
 
 <script type="text/javascript">
 
-    $(function () {
+    var MemberList = (function() {
+        var self;
 
-        System.import('xecore:/settings/js/admin.bundle').then(function(){
-            $('[data-toggle=tooltip]').tooltip();
-        });
+        return {
+            init: function() {
+                self = this;
 
-        $('.__xe_selectKeyfield').click(function (event) {
-            event.preventDefault();
-            var val = $(this).attr('data-value');
-            var name = $(this).text();
-            $('.__xe_selectedKeyfield').text(name);
-            $('.__xe_keyfield').val(val);
-        });
+                self.cache();
+                self.bindEvents();
 
-        $('.__xe_check-all').change(function () {
-            if ($(this).is(':checked')) {
-                $('input.__xe_checkbox:not(disabled)').prop('checked', true);
-            } else {
-                $('input.__xe_checkbox:not(disabled)').prop('checked', false);
+                return this;
+            },
+            cache: function() {
+                self.$selectKeyfield = $('.__xe_selectKeyfield');
+                self.$selectedKeyfield = $('.__xe_selectedKeyfield');
+                self.$keyfield = $('.__xe_keyfield');
+                self.$checkAll = $('.__xe_check-all');
+                self.$remove = $('.__xe_remove');
+                self.$tooltip = $('[data-toggle=tooltip]');
+                self.$dropdownToggle = $('.dropdown-toggle');
+            },
+            bindEvents: function() {
+                //tooltip;
+                self.$tooltip.tooltip();
+
+                //dropdown toggle
+                self.$dropdownToggle.dropdown();
+
+                self.$selectKeyfield.on('click', self.selectKeyfield);
+                self.$checkAll.on('change', self.checkAll);
+                self.$remove.on('click', self.remove);
+            },
+            selectKeyfield: function(e) {
+                e.preventDefault();
+
+                var $this = $(this),
+                        val = $this.attr('data-value'),
+                        name = $this.text();
+
+                self.$selectedKeyfield.text(name);
+                self.$keyfield.val(val);
+
+            },
+            checkAll: function(e) {
+                if ($(this).is(':checked')) {
+                    $('input.__xe_checkbox:not(disabled)').prop('checked', true);
+                } else {
+                    $('input.__xe_checkbox:not(disabled)').prop('checked', false);
+                }
+            },
+            remove: function() {
+                if (!$('input.__xe_checkbox:checked').is('input')) {
+                    return false;
+                }
+                var $f = $('#__xe_fList');
+                $('<input type="hidden" name="_method" value="DELETE">').prependTo($f);
+                $f.submit();
             }
-        });
-
-        $('.__xe_remove').click(function (e) {
-            if (!$('input.__xe_checkbox:checked').is('input')) {
-                return false;
-            }
-            var $f = $('#__xe_fList');
-            $f.attr('action', "{{ route('settings.member.destroy') }}");
-            $('<input type="hidden" name="_method" value="DELETE">').prependTo($f);
-            $f.submit();
-        });
-    });
+        }
+    })().init();
 </script>
 

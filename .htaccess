@@ -76,6 +76,7 @@
     RewriteCond %{REQUEST_URI} !\.mpeg
     RewriteCond %{REQUEST_URI} !\.webm
     RewriteCond %{REQUEST_URI} !\.mkv
+    RewriteCond %{REQUEST_URI} !storage/app/member/profile/.*
     RewriteRule ^ index.php [L,NC]
 
     ##
