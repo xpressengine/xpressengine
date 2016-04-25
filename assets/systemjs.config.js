@@ -47,7 +47,7 @@ System.config({
 
   map: {
     "blueimp-file-upload": "npm:blueimp-file-upload@9.12.1",
-    "bootstrap-sass": "github:twbs/bootstrap-sass@3.3.6",
+    "bootstrap-sass": "npm:bootstrap-sass@3.3.6",
     "buffer": "npm:buffer@4.5.1",
     "core-js": "npm:core-js@1.2.6",
     "css": "github:systemjs/plugin-css@0.1.20",
@@ -506,6 +506,12 @@ System.config({
     },
     "npm:vm-browserify@0.0.4": {
       "indexof": "npm:indexof@0.0.1"
-    }
+    },
+    "xe.bundle": "assets/core/common/js/xe.bundle",
+    "xe.lang": "assets/core/common/js/xe.lang",
+    "xe.progress": "assets/core/common/js/xe.progress",
+    "xe.request": "assets/core/common/js/xe.request",
+    "xe.component": "assets/core/common/js/xe.component",
+    "translator": "assets/core/common/js/translator"
   }
 });

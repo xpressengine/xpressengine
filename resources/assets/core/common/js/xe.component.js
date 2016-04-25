@@ -1,7 +1,8 @@
-(function (root, factory) {
-  module.exports = factory();
-}(this, function () {
-  'use strict';
+System.amdDefine('xe.component', [], function() {
+
+  return {
+    timeago: timeago
+  };
 
   $(function() {
     /*
@@ -44,8 +45,4 @@
     $('[data-xe-timeago]').trigger('xe.timeago');
   };
 
-  return {
-    timeago: timeago
-  };
-
-}));
+});

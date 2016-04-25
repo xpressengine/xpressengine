@@ -1,4 +1,6 @@
 var gulp = require("gulp"),
+    concat = require("gulp-concat"),
+    clean = require("gulp-clean"),
   $ = require('gulp-load-plugins')();
 var runSequence = require('run-sequence');
 var elixir = require('laravel-elixir');
@@ -19,14 +21,19 @@ elixir(function (mix) {
   mix.browserify('../core/menu/MenuTree.jsx', 'assets/vendor/menu/menu.js');
 });
 
+gulp.task('clean', function () {
+  return gulp.src('assets/core/common/js/xe.bundle.js')
+    .pipe(clean({force: true}));
+});
+
 // assets 재구성을 위한 임시 task
 elixir(function(mix) {
   mix.copy('resources/assets/core', 'assets/core');
 });
 
-
 gulp.task('default', function(callback){
   runSequence(
+    'clean',
     'copy-assets',
     'assets:sass',
     'jspm:admin',
@@ -55,12 +62,18 @@ gulp.task('jspm', ['copy-assets'], function(callback){
     callback);
 });
 
-gulp.task('jspm:xe', function(){
-  return gulp.src('assets/core/common/js/xe.js')
-    .pipe($.plumber())
-    .pipe($.jspm({inject: true, selfExecutingBundle: true}))
-    .pipe($.rename('xe.bundle.js'))
-    .pipe(gulp.dest('assets/core/common/js'));
+// gulp.task('jspm:xe', function(){
+//   return gulp.src('assets/core/common/js/xe.js')
+//     .pipe($.plumber())
+//     .pipe($.jspm({inject: true, selfExecutingBundle: true}))
+//     .pipe($.rename('xe.bundle.js'))
+//     .pipe(gulp.dest('assets/core/common/js'));
+// });
+
+gulp.task('jspm:xe', function() {
+  return gulp.src(['assets/core/common/js/translator.js', 'assets/core/common/js/xe.*.js', 'assets/core/common/js/xe.js'])
+    .pipe(concat('xe.bundle.js'))
+    .pipe(gulp.dest('assets/core/common/js/'));
 });
 
 gulp.task('jspm:menu', function(){

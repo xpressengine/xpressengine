@@ -25,7 +25,9 @@
     "merge-stream": "^1.0.0",
     "run-sequence": "^1.1.5"
   },
-  "dependencies": {},
+  "dependencies": {
+    "gulp-clean": "^0.3.2"
+  },
   "scripts": {
     "test": "jest"
   },
@@ -42,7 +44,7 @@
     "configFile": "assets/systemjs.config.js",
     "dependencies": {
       "blueimp-file-upload": "npm:blueimp-file-upload@^9.12.1",
-      "bootstrap-sass": "github:twbs/bootstrap-sass@^3.3.6",
+      "bootstrap-sass": "npm:bootstrap-sass@^3.3.6",
       "buffer": "npm:buffer@^4.5.1",
       "jquery": "npm:jquery@^2.2.2",
       "jquery-migrate": "npm:jquery-migrate@^1.4.0",
@@ -67,6 +69,7 @@
         ],
         "ignore": [
           "js/vendor",
+          "node_modules",
           "node_modules"
         ]
       },

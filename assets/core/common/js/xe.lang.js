@@ -1,35 +1,35 @@
-(function (root, factory) {
-  if (typeof define === 'function' && define.amd) {
-    define(['exports', 'xecore:/common/js/translator'], factory);
-  } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
-    // CommonJS
-    factory(exports, require('xecore:/common/js/translator'));
-  } else {
-    factory((root.XeLang = {}), root.translator);
-  }
-}(this, function (exports, Translator) {
+System.amdDefine('xe.lang', ['translator'], function(Translator) {
   'use strict';
+
+  var self,
+      _locales = [],
+      _items = {};
+
+  return {
+    set: set,
+    setLocales: setLocales,
+    getLangCode: getLangCode,
+    trans: trans,
+    transChoice: transChoice
+  };
 
   Translator.placeHolderPrefix = ':';
   Translator.placeHolderSuffix = '';
 
   // var Lang = {};
-
-  exports.locales = [];
-  exports.setLocales = function(locales) {
-    exports.locales = locales;
-    Translator.locale = locales.length > 0 ? locales[0] : 'en';
+  function setLocales(locales) {
+    _locales = locales;
+    Translator.locale = (locales.length > 0)? locales[0] : 'en';
   };
 
-  exports.items = {};
-  exports.set = function(items) {
-    $.extend(exports.items, items);
-    $.each(exports.items, function(key, value) {
+  function set(items) {
+    $.extend(_items, items);
+    $.each(_items, function(key, value) {
       Translator.add(key, value);
     });
   };
 
-  exports.getLangCode = function (locale) {
+  function getLangCode(locale) {
     var list = {
       'af' : 'af-ZA',
       'ar' : 'ar-SA',
@@ -116,11 +116,12 @@
     return locale ? list[locale] : list;
   };
 
-  exports.trans = function(id, parameters) {
+  function trans(id, parameters) {
     return Translator.trans(id, parameters);
   };
 
-  exports.transChoice = function(id, number, parameters) {
+  function transChoice(id, number, parameters) {
     return Translator.transChoice(id, number, parameters);
   };
-}));
+
+});
