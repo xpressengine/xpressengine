@@ -485,7 +485,7 @@ class MenuController extends Controller
                 'target' => $itemInput['itemTarget'],
                 'type' => $itemInput['selectedType'],
                 'ordering' => $itemInput['itemOrdering'],
-                'activated' => $itemInput['itemActivated'],
+                'activated' => isset($itemInput['itemActivated']) ? $itemInput['itemActivated'] : 0,
                 'parentId' => $itemInput['parent']
             ], $menuTypeInput);
 
