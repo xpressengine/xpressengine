@@ -1,9 +1,9 @@
 {{ XeFrontend::css('/assets/core/lang/flag.css')->load() }}
 
-<div class="dropup v2">
-    <button class="btn btn-default" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+<div class="xe-dropup v2">
+    <button class="xe-btn xe-btn-default" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
         <i class="south {{ XeLang::getLocale() }} flag" data-locale="{{ XeLang::getLocale() }}"></i>{{ XeLang::getLocaleText(XeLang::getLocale()) }}</button>
-    <div class="dropdown-menu">
+    <div class="xe-dropdown-menu">
         <ul>
             @foreach ( XeLang::getLocales() as $locale )
                 <li @if(XeLang::getLocale() == $locale) class="on" @endif>

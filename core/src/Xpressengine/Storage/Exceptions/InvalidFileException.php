@@ -27,5 +27,5 @@ use Xpressengine\Storage\StorageException;
  */
 class InvalidFileException extends StorageException
 {
-    protected $message = '유효한 파일이 아닙니다.';
+    protected $message = 'Not uploading possible file [:name] :detail';
 }

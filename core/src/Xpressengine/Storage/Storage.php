@@ -196,7 +196,10 @@ class Storage
         UserInterface $user = null
     ) {
         if ($uploaded->isValid() === false) {
-            throw new InvalidFileException();
+            throw new InvalidFileException([
+                'name' => $uploaded->getClientOriginalName(),
+                'detail' => $uploaded->getErrorMessage()
+            ]);
         }
 
         $id = $this->keygen->generate();
