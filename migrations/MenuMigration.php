@@ -23,11 +23,12 @@ class MenuMigration implements Migration {
             $table->string('title');
             $table->string('siteKey');
             $table->text('description')->nullable();
+            $table->integer('count');
 
             $table->primary('id');
         });
 
-        Schema::create('menuItem', function (Blueprint $table) {
+        Schema::create('menu_item', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
             $table->string('id', 8);
@@ -45,7 +46,7 @@ class MenuMigration implements Migration {
             $table->primary('id');
         });
 
-        Schema::create('menuTreePath', function (Blueprint $table) {
+        Schema::create('menu_closure', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
             $table->increments('id');
@@ -180,7 +181,9 @@ class MenuMigration implements Migration {
         $menuTypeInput = [
             'pageTitle' => 'XpressEngine3 Board',
             'boardName' => 'Board',
-            'siteKey' => 'default'
+            'siteKey' => 'default',
+            'revision' => 'true',
+            'division' => 'false',
         ];
 
         $item = $menuHandler->createItem($mainMenu, $inputs, $menuTypeInput);

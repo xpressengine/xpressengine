@@ -13,8 +13,6 @@
  */
 namespace Xpressengine\Menu;
 
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Query\Expression;
 use Illuminate\Database\QueryException;
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Keygen\Keygen;
@@ -27,6 +25,7 @@ use Xpressengine\Module\ModuleHandler;
 use Xpressengine\Permission\Grant;
 use Xpressengine\Permission\PermissionHandler;
 use Xpressengine\Routing\RouteRepository;
+use Xpressengine\Support\Tree\NodePositionTrait;
 
 /**
  * # MenuHandler
@@ -120,6 +119,8 @@ use Xpressengine\Routing\RouteRepository;
  */
 class MenuHandler
 {
+    use NodePositionTrait;
+    
     /**
      * Model class
      *
@@ -244,7 +245,7 @@ class MenuHandler
     }
 
     /**
-     * Upate menu
+     * Update category
      *
      * @param Menu $menu menu instance
      * @return Menu
@@ -287,9 +288,10 @@ class MenuHandler
      */
     public function createItem(Menu $menu, array $inputs, array $menuTypeInput = [])
     {
+        /** @var MenuItem $item */
         $item = $this->createItemModel($menu);
         $item->fill($inputs);
-        $item->menuId = $menu->getKey();
+        $item->{$item->getAggregatorKeyName()} = $menu->getKey();
 
         $cnt = 0;
         while ($cnt++ < static::DUPLICATE_RETRY_CNT) {
@@ -304,24 +306,39 @@ class MenuHandler
                 }
             }
         }
-
-        $item->ancestors()->attach($item->getKey(), [$item->getDepthName() => 0]);
-        if ($item->{$item->getParentIdName()}) {
-            /** @var MenuItem $parent */
-            $parent = $item->newQuery()->find($item->{$item->getParentIdName()});
-            $ascIds = array_reverse($parent->getBreadcrumbs());
-
-            foreach ($ascIds as $idx => $ascId) {
-                $item->ancestors()->attach($ascId, [$item->getDepthName() => $idx + 1]);
-            }
-        }
-
-        $this->setOrder($item, $inputs['ordering']);
+        
+        $this->setHierarchy($item);
+        $this->setOrder($item);
+        $menu->increment($menu->getCountName());
+        
         $this->registerItemPermission($item, new Grant);
-
         $this->storeMenuType($item, $menuTypeInput);
 
         return $item;
+    }
+
+    /**
+     * Set hierarchy information for new item
+     *
+     * @param MenuItem $item item object
+     * @return void
+     */
+    protected function setHierarchy(MenuItem $item)
+    {
+        // 이미 존재하는 경우 hierarchy 정보를 새로 등록하지 않음
+        try {
+            $item->ancestors()->attach($item->getKey(), [$item->getDepthName() => 0]);
+        } catch (\Exception $e) {
+            return;
+        }
+
+        if ($item->{$item->getParentIdName()}) {
+            $model = $this->createItemModel();
+            /** @var MenuItem $parent */
+            $parent = $model->newQuery()->find($item->{$item->getParentIdName()});
+
+            $this->linkHierarchy($item, $parent);
+        }
     }
 
     /**
@@ -341,8 +358,8 @@ class MenuHandler
             $this->routes->create([
                 'url' => $item->url,
                 'module' => $menuTypeObj::getId(),
-                'instanceId' => $item->id,
-                'menuId' => $item->menuId,
+                'instanceId' => $item->getKey(),
+                'menuId' => $item->{$item->getAggregatorKeyName()},
                 'siteKey' => $item->menu->siteKey
             ]);
         }
@@ -357,9 +374,14 @@ class MenuHandler
      */
     public function putItem(MenuItem $item, array $menuTypeInput)
     {
-        if ($item->isDirty()) {
-            $item->save();
+        if ($item->isDirty($parentIdName = $item->getParentIdName())) {
+            // 내용 수정시 부모 키 변경은 허용하지 않음
+            // 부모 키가 변경되는 경우는 반드시 moveItem, setOrder 를
+            // 통해 처리되야 함
+            $item->{$parentIdName} = $item->getOriginal($parentIdName);
         }
+
+        $item->save();
 
         $this->updateMenuType($item, $menuTypeInput);
 
@@ -427,37 +449,6 @@ class MenuHandler
     }
 
     /**
-     * Set item order
-     *
-     * @param MenuItem $item     item instance
-     * @param int      $position order position
-     * @return void
-     */
-    public function setOrder(MenuItem $item, $position)
-    {
-        /** @var MenuItem $parent */
-        if (!$parent = $item->getParent()) {
-            $children = $item->menu->getProgenitors();
-        } else {
-            $children = $parent->getChildren();
-        }
-
-        /** @var Collection $children */
-        $children = $children->filter(function (MenuItem $model) use ($item) {
-            return $model->getKey() != $item->getKey();
-        });
-
-        $children = $children->slice(0, $position)
-            ->merge([$item])
-            ->merge($children->slice($position));
-
-        $children->each(function (MenuItem $model, $idx) {
-            $model->{$model->getOrderKeyName()} = $idx;
-            $model->save();
-        });
-    }
-
-    /**
      * Move menu item
      *
      * @param Menu          $menu   menu instance
@@ -484,76 +475,11 @@ class MenuHandler
             $item->parentId = $parent->getKey();
         }
 
-        $item->menuId = $menu->getKey();
+        $item->{$item->getAggregatorKeyName()} = $menu->getKey();
         $item->save();
 
-        // flush relationship
-        foreach (array_keys($item->getRelations()) as $relation) {
-            unset($item->{$relation});
-        }
-
-        $item->setRelation('menu', $menu);
-
-        return $item;
-    }
-
-    /**
-     * Unlink menu item hierarchy
-     *
-     * @param MenuItem $item   menu item instance
-     * @param MenuItem $parent menu item instance
-     * @return int
-     */
-    protected function unlinkHierarchy(MenuItem $item, MenuItem $parent)
-    {
-        $conn = $item->getConnection();
-        $table = $item->getHierarchyTable();
-        $ancestor = $item->getAncestorName();
-        $descendant = $item->getDescendantName();
-
-        $rows = $conn->table($table . ' as a')
-            ->join($table . ' as rel', "a.{$ancestor}", '=', "rel.{$ancestor}")
-            ->join($table . ' as d', "d.{$descendant}", '=', "rel.{$descendant}")
-            ->where("a.{$descendant}", $parent->getKey())
-            ->where("d.{$ancestor}", $item->getKey())
-            ->get(['rel.' . $item->getKeyName()]);
-
-        $ids = array_column($rows, $item->getKeyName());
-
-        return $conn->table($table)->whereIn($item->getKeyName(), $ids)->delete();
-    }
-
-    /**
-     * Link menu item hierarchy
-     *
-     * @param MenuItem $item   menu item instance
-     * @param MenuItem $parent menu item instance
-     * @return bool
-     */
-    protected function linkHierarchy(MenuItem $item, MenuItem $parent)
-    {
-        $conn = $item->getConnection();
-        $prefix = $conn->getTablePrefix();
-        $table = $item->getHierarchyTable();
-        $ancestor = $item->getAncestorName();
-        $descendant = $item->getDescendantName();
-        $depth = $item->getDepthName();
-
-        $select = $conn->table($table . ' as a')
-            ->joinWhere($table . ' as d', "d.{$ancestor}", '=', $item->getKey())
-            ->where("a.{$descendant}", '=', $parent->getKey())
-            ->select([
-                "a.{$ancestor}",
-                "d.{$descendant}",
-                new Expression("`{$prefix}a`.`{$depth}` + `{$prefix}d`.`{$depth}` + 1")
-            ]);
-
-        $bindings = $select->getBindings();
-
-        $insertQuery = sprintf("insert into %s (`{$ancestor}`, `{$descendant}`, `{$depth}`) ", $prefix . $table)
-            . $select->toSql();
-
-        return $conn->insert($insertQuery, $bindings);
+        // 연관 객체 정보들이 변경 되었으므로 객채를 갱신 함
+        return $item->newQuery()->find($item->getKey());
     }
 
     /**

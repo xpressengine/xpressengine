@@ -15,7 +15,8 @@ return [
         'localeTexts' => [
             'ko' => '대한민국',
             'en' => 'U.S.',
-        ]
+        ],
+        'autocomplete' => false,
     ],
 
     'settings' => [

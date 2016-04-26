@@ -33,7 +33,7 @@
             disableImageResize: true,
             imageCrop: false
         }).on('fileuploadadd', function (e, data) {
-            $('.fileinput-button span').text('변경');
+            $('.fileinput-button span', this).text('변경');
             data.context = $('.__xe_file_preview_{{ $seq }}').empty();
 
         }).on('fileuploadprocessalways', function (e, data) {

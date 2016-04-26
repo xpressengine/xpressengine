@@ -66,10 +66,14 @@ class XpressengineException extends RuntimeException
      * string 타입으로 캐스팅될 때, Exception의 message를 출력한다.
      *
      * @return string
+     * @deprecated 3.0.0-dev5
      */
     public function __toString()
     {
-        return $this->getMessage();
+        // 에러 메시지가 정상 출력 되지 않는 문제
+        // Monolog\Logger 에서 메시지 생성 시 문제
+        //return $this->getMessage();
+        return parent::__toString();
     }
 
     /**

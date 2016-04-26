@@ -14,6 +14,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Xpressengine\Http\Request;
 use Xpressengine\Site\Site;
 use Xpressengine\Site\SiteHandler;
 
@@ -37,8 +38,9 @@ class SiteServiceProvider extends ServiceProvider
     public function boot()
     {
         if (app()->runningInConsole() === false) {
+            /** @var Request $request */
             $request = app('request');
-            $host = $request->getHost();
+            $host = $request->getHttpHost();
 
             $site = Site::where('host', $host)->first();
             app('xe.site')->setCurrentSite($site);

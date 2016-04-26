@@ -1,0 +1,1 @@
+<input type="text" name="{{$config->get('id') . 'Address1'}}" value="{{$current}}" placeholder="주소1">

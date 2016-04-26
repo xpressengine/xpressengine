@@ -56,20 +56,6 @@ var LangEditor = React.createClass({
       var self = this;
       var el = this.getDOMNode();
 
-      if (this.props.langKey) {
-        if (this.state.lines.length == 0) {
-          $.ajax({
-            type: 'get',
-            dataType: 'json',
-            url: '/' + XE.options.managePrefix + '/lang/lines/' + this.props.langKey,
-            success: function (result) {
-              if (this.isMounted()) {
-                self.setLines(result);
-              }
-            }.bind(this)
-          });
-        }
-      }
 
       if (this.props.autocomplete) {
         $(el).find('input[type=text]:first,textarea:first').autocomplete({
@@ -84,6 +70,17 @@ var LangEditor = React.createClass({
         });
       }
     }
+
+    $(el).find('input[type=text]:first,textarea:first').autocomplete({
+      source: '/' + XE.options.managePrefix + '/lang/search/' + XE.Lang.locales[0],
+      minLength: 1,
+      focus: function (event, ui) {
+        event.preventDefault();
+      },
+      select: function (event, ui) {
+        self.setLines(ui.item.lines);
+      }
+    });
   },
   // getFlagClass: function (locale) {
   //     var code = XE.Lang.getLangCode(locale),
@@ -125,9 +122,9 @@ var LangEditor = React.createClass({
         <input type="hidden" name={this.props.name} defaultValue={this.props.langKey}/>
         <div key={locale} className="input-group">
           {self.getEditor(resource, locale, value)}
-                            <span className="input-group-addon">
-                                <span className="flag-code"><i className={locale + ' flag'}></i>{locale}</span>
-                            </span>
+                <span className="input-group-addon">
+                <span className="flag-code"><i className={locale + ' flag'}></i>{locale}</span>
+                </span>
         </div>
         <div className="sub">
           {fallback.map(function (locale, i) {
@@ -135,9 +132,9 @@ var LangEditor = React.createClass({
             return (
               <div key={locale} className="input-group">
                 {self.getEditor(resource, locale, value)}
-                            <span className="input-group-addon">
-                                <span className="flag-code"><i className={locale + ' flag'}></i>{locale}</span>
-                            </span>
+                    <span className="input-group-addon">
+                    <span className="flag-code"><i className={locale + ' flag'}></i>{locale}</span>
+                    </span>
               </div>
             );
           })}
@@ -164,11 +161,11 @@ $(function () {
   });
 
   $(document).on('focus', '.lang-editor-box input, textarea', function () {
-
-    var box = $(this).closest('.lang-editor-box'),
-      el = box.find('.sub');
+    var box = $(this).closest('.lang-editor-box');
+    var el = box.find('.sub');
     if ($(el).is(':hidden')) {
       $(el).slideDown('fast');
+
       // todo: 기능 점검
       // $(box).find('textarea').expanding();
     }

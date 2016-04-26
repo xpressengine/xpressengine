@@ -13,9 +13,9 @@
  */
 namespace Xpressengine\Menu\Models;
 
-use Illuminate\Database\Eloquent\Builder;
+use Xpressengine\Category\Models\CategoryItem;
+use Xpressengine\Media\Models\Image;
 use Xpressengine\Routing\InstanceRoute;
-use Xpressengine\Support\Tree\Node;
 
 /**
  * Class MenuItem
@@ -40,21 +40,21 @@ use Xpressengine\Support\Tree\Node;
  * @property string $type        해당 메뉴의 type
  * @property int    $ordering    정렬을 위한 순서
  */
-class MenuItem extends Node
+class MenuItem extends CategoryItem
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'menuItem';
+    protected $table = 'menu_item';
 
     /**
      * The hierarchy table associated with the model.
      *
      * @var string
      */
-    protected $hierarchyTable = 'menuTreePath';
+    protected $closureTable = 'menu_closure';
 
     /**
      * Indicates if the IDs are auto-incrementing.
@@ -71,11 +71,11 @@ class MenuItem extends Node
     public $timestamps = false;
 
     /**
-     * The attributes that aren't mass assignable.
+     * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $guarded = ['id'];
+    protected $fillable = ['parentId', 'title', 'url', 'description', 'target', 'type' , 'ordering', 'activated'];
 
     /**
      * Indicates if the model selected.
@@ -84,18 +84,23 @@ class MenuItem extends Node
      */
     protected $selected = false;
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
     protected $casts = [
         'activated' => 'integer',
     ];
 
     /**
-     * Node group relationship
+     * Alias aggregator
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function menu()
     {
-        return $this->belongsTo(Menu::class, 'menuId');
+        return $this->aggregator();
     }
 
     /**
@@ -109,75 +114,166 @@ class MenuItem extends Node
     }
 
     /**
-     * Scope for get node items of progenitor
+     * Basic link image relationship
      *
-     * @param Builder $query query builder
-     * @param Menu    $menu  category instance
-     * @return Builder
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function scopeProgenitors(Builder $query, Menu $menu)
+    public function basicImage()
     {
-        return $this->scopeRoots($query)->where('menuId', $menu->getKey());
+        return $this->belongsTo(Image::class, 'basicImageId');
     }
 
     /**
-     * Get the pivot table for model's hierarchy
+     * Hover link image relationship
      *
-     * @return string
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function getHierarchyTable()
+    public function hoverImage()
     {
-        return $this->hierarchyTable;
+        return $this->belongsTo(Image::class, 'hoverImageId');
     }
 
     /**
-     * Get the ancestor key name of pivot table
+     * Selected link image relationship
      *
-     * @return string
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function getAncestorName()
+    public function selectedImage()
     {
-        return 'ancestor';
+        return $this->belongsTo(Image::class, 'selectedImageId');
     }
 
     /**
-     * Get the descendant key name of pivot table
+     * Get hover link image of model
      *
-     * @return string
+     * @return Image|null
      */
-    public function getDescendantName()
+    public function getHoverImage()
     {
-        return 'descendant';
+        if (!$this->getAttribute('hoverImageId')) {
+            return $this->getRelationValue('basicImage');
+        }
+
+        return $this->getRelationValue('hoverImage');
     }
 
     /**
-     * Get the depth key name of pivot table
+     * Get selected link image of model
      *
-     * @return string
+     * @return Image|null
      */
-    public function getDepthName()
+    public function getSelectedImage()
     {
-        return 'depth';
+        if (!$this->getAttribute('selectedImageId')) {
+            return $this->getHoverImage();
+        }
+
+        return $this->getRelationValue('selectedImage');
     }
 
     /**
-     * Get the parent key name for model
+     * Mobile basic link image relationship
      *
-     * @return string
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function getParentIdName()
+    public function mBasicImage()
     {
-        return 'parentId';
+        return $this->belongsTo(Image::class, 'mBasicImageId');
     }
 
     /**
-     * Get the order key name for model
+     * Mobile hover link image relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function mHoverImage()
+    {
+        return $this->belongsTo(Image::class, 'mHoverImageId');
+    }
+
+    /**
+     * Mobile selected link image relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function mSelectedImage()
+    {
+        return $this->belongsTo(Image::class, 'mSelectedImageId');
+    }
+
+    /**
+     * Get mobile basic link image of model
+     *
+     * @return Image|null
+     */
+    public function getMBasicImage()
+    {
+        if (!$this->getAttribute('mBasicImageId')) {
+            return $this->getRelationValue('basicImage');
+        }
+
+        return $this->getRelationValue('mBasicImage');
+    }
+
+    /**
+     * Get mobile hover link image of model
+     *
+     * @return Image|null
+     */
+    public function getMHoverImage()
+    {
+        if (!$this->getAttribute('mHoverImageId')) {
+            return $this->getMBasicImage();
+        }
+
+        return $this->getRelationValue('mHoverImage');
+    }
+
+    /**
+     * Get mobile selected link image of model
+     *
+     * @return Image|null
+     */
+    public function getMSelectedImage()
+    {
+        if (!$this->getAttribute('mSelectedImageId')) {
+            return $this->getMHoverImage();
+        }
+
+        return $this->getRelationValue('mSelectedImage');
+    }
+
+    /**
+     * Get a children collection of model
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getChildren()
+    {
+        $rfc = new \ReflectionClass($this);
+        $method = $rfc->getParentClass()->getParentClass()->getMethod('getChildren');
+
+        return $method->invoke($this);
+    }
+    
+    /**
+     * Get the aggregator model name for model
      *
      * @return string
      */
-    public function getOrderKeyName()
+    public function getAggregatorModel()
     {
-        return 'ordering';
+        return Menu::class;
+    }
+
+    /**
+     * Get the aggregator key name for model
+     *
+     * @return string
+     */
+    public function getAggregatorKeyName()
+    {
+        return 'menuId';
     }
 
     /**
