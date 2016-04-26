@@ -26,7 +26,7 @@ class LoadConfiguration extends BaseLoadConfiguration
 
         foreach ($files as $key => $path) {
             // cascading config 지원을 위하여 별도로 저장.
-            if (strpos($key, $env) === 0) {
+            if (strpos($key, $env.'.') === 0) {
                 $filesByEnv[$key] = $path;
                 continue;
             }
@@ -58,6 +58,7 @@ class LoadConfiguration extends BaseLoadConfiguration
         foreach ($filesByEnv as $key => $path) {
             $key = substr($key, $ignoreCount);
             $origin = $repository->get($key);
+
             $repository->set($key, array_replace_recursive($origin, require $path));
         }
     }
