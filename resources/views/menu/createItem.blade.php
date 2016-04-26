@@ -41,7 +41,7 @@
                         <div class="xe-btn-toggle pull-right">
                             <label>
                                 <span class="sr-only"><span class="sr-only">활성화 비활성화</span></span>
-                                <input type="checkbox" checked="" id="item-active" name="itemActivated">
+                                <input type="checkbox" checked="checked" value="1" id="item-active" name="itemActivated">
                                 <span class="toggle"></span>
                             </label>
                         </div>

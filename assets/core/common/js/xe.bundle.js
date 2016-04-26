@@ -656,14 +656,15 @@ System.amdDefine('xe.component', [], function() {
 
 });
 
+//xe.lang.js
 System.amdDefine('xe.lang', ['translator'], function(Translator) {
   'use strict';
 
-  var self,
-      _locales = [],
+  var self = this,
       _items = {};
 
   return {
+    locales: [],
     set: set,
     setLocales: setLocales,
     getLangCode: getLangCode,
@@ -676,9 +677,9 @@ System.amdDefine('xe.lang', ['translator'], function(Translator) {
 
   // var Lang = {};
   function setLocales(locales) {
-    _locales = locales;
+    this.locales = locales;
     Translator.locale = (locales.length > 0)? locales[0] : 'en';
-  };
+  }
 
   function set(items) {
     $.extend(_items, items);
