@@ -349,14 +349,13 @@ class MenuController extends Controller
 
         XeDB::commit();
 
-        return Redirect::route('settings.menu.index');
     }
 
     protected function inputFilterParser($prefix, $inputs = [])
     {
-        $inputs = array_filter($inputs, function ($value) use ($prefix) {
-            return starts_with($value, $prefix);
-        }, ARRAY_FILTER_USE_KEY);
+        $inputs = array_where($inputs, function ($key, $value) use ($prefix) {
+            return starts_with($key, $prefix);
+        });
 
         $result = [];
         foreach ($inputs as $key => $val) {
@@ -825,7 +824,7 @@ class MenuController extends Controller
 
         XeDB::commit();
 
-        return Redirect::route('settings.menu.index');
+		return Redirect::back()->with('alert', ['type' => 'success', 'message' => 'success']);
     }
 
     /**
