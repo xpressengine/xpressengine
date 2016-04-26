@@ -70,83 +70,79 @@ var LangEditor = React.createClass({
         });
       }
     }
-  }
 
-  $(el).find('input[type=text]:first,textarea:first').autocomplete({
-  source: '/' + XE.options.managePrefix + '/lang/search/' + XE.Lang.locales[0],
-  minLength: 1,
-  focus: function (event, ui) {
-    event.preventDefault();
+    $(el).find('input[type=text]:first,textarea:first').autocomplete({
+      source: '/' + XE.options.managePrefix + '/lang/search/' + XE.Lang.locales[0],
+      minLength: 1,
+      focus: function (event, ui) {
+        event.preventDefault();
+      },
+      select: function (event, ui) {
+        self.setLines(ui.item.lines);
+      }
+    });
   },
-  select: function (event, ui) {
-    self.setLines(ui.item.lines);
+  // getFlagClass: function (locale) {
+  //     var code = XE.Lang.getLangCode(locale),
+  //         arr = code.split('-'),
+  //         keyword = arr[1].toLowerCase();
+  //
+  //     return 'flag ' + keyword;
+  // },
+  getEditor: function (resource, locale, value) {
+    var edit = null,
+      id = ('input-' + this.props.seq + '-' + locale),
+      name = (resource + '/locale/' + locale);
+
+    if (!this.props.multiline) {
+      edit = <input type="text" className="form-control" id={id} name={name} defaultValue={value}/>;
+    } else {
+      edit = <textarea className="form-control" id={id} name={name} defaultValue={value}/>;
+    }
+    return edit;
+  },
+  render: function () {
+    var self = this,
+      locale = XE.Lang.locales[0],
+      fallback = XE.Lang.locales.slice(1),
+      resource = 'xe_lang_preprocessor://lang/seq/' + this.props.seq,
+      value = this.getValueFromLinesWithLocale(locale),
+      inputClass = this.props.multiline ? 'textarea' : 'text';
+
+    var multiline = this.props.multiline
+      ? <input type="hidden" name={resource + '/multiline'} defaultValue='true'/>
+      : null;
+
+    return (
+      <div className={inputClass}>
+        <input type="hidden" name="xe_use_request_preprocessor" value="Y"/>
+        <input type="hidden" name={resource + '/name'} defaultValue={this.props.name}/>
+        <input type="hidden" name={resource + '/key'} defaultValue={this.props.langKey}/>
+        {multiline}
+        <input type="hidden" name={this.props.name} defaultValue={this.props.langKey}/>
+        <div key={locale} className="input-group">
+          {self.getEditor(resource, locale, value)}
+                <span className="input-group-addon">
+                <span className="flag-code"><i className={locale + ' flag'}></i>{locale}</span>
+                </span>
+        </div>
+        <div className="sub">
+          {fallback.map(function (locale, i) {
+            var value = self.getValueFromLinesWithLocale(locale);
+            return (
+              <div key={locale} className="input-group">
+                {self.getEditor(resource, locale, value)}
+                    <span className="input-group-addon">
+                    <span className="flag-code"><i className={locale + ' flag'}></i>{locale}</span>
+                    </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
   }
 });
-}
-},
-// getFlagClass: function (locale) {
-//     var code = XE.Lang.getLangCode(locale),
-//         arr = code.split('-'),
-//         keyword = arr[1].toLowerCase();
-//
-//     return 'flag ' + keyword;
-// },
-getEditor: function (resource, locale, value) {
-  var edit = null,
-    id = ('input-' + this.props.seq + '-' + locale),
-    name = (resource + '/locale/' + locale);
-
-  if (!this.props.multiline) {
-    edit = <input type="text" className="form-control" id={id} name={name} defaultValue={value}/>;
-  } else {
-    edit = <textarea className="form-control" id={id} name={name} defaultValue={value}/>;
-  }
-  return edit;
-}
-,
-render: function () {
-  var self = this,
-    locale = XE.Lang.locales[0],
-    fallback = XE.Lang.locales.slice(1),
-    resource = 'xe_lang_preprocessor://lang/seq/' + this.props.seq,
-    value = this.getValueFromLinesWithLocale(locale),
-    inputClass = this.props.multiline ? 'textarea' : 'text';
-
-  var multiline = this.props.multiline
-    ? <input type="hidden" name={resource + '/multiline'} defaultValue='true'/>
-    : null;
-
-  return (
-    <div className={inputClass}>
-      <input type="hidden" name="xe_use_request_preprocessor" value="Y"/>
-      <input type="hidden" name={resource + '/name'} defaultValue={this.props.name}/>
-      <input type="hidden" name={resource + '/key'} defaultValue={this.props.langKey}/>
-      {multiline}
-      <input type="hidden" name={this.props.name} defaultValue={this.props.langKey}/>
-      <div key={locale} className="input-group">
-        {self.getEditor(resource, locale, value)}
-              <span className="input-group-addon">
-              <span className="flag-code"><i className={locale + ' flag'}></i>{locale}</span>
-              </span>
-      </div>
-      <div className="sub">
-        {fallback.map(function (locale, i) {
-          var value = self.getValueFromLinesWithLocale(locale);
-          return (
-            <div key={locale} className="input-group">
-              {self.getEditor(resource, locale, value)}
-                  <span className="input-group-addon">
-                  <span className="flag-code"><i className={locale + ' flag'}></i>{locale}</span>
-                  </span>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-})
-;
 
 window.langEditorBoxRender = function ($o) {
   var name = $o.data('name'),
