@@ -14,7 +14,9 @@ $__System.registerDynamic("2", [], true, function($__require, exports, module) {
       query: React.PropTypes.string.isRequired,
       handleClick: React.PropTypes.func.isRequired,
       handleHover: React.PropTypes.func.isRequired,
-      searchingCnt: React.PropTypes.number
+      searchingCnt: React.PropTypes.number,
+      suggestions: React.PropTypes.array,
+      selectedIndex: React.PropTypes.number
     },
     markIt(item, query) {
       var escapedRegex = query.trim().replace(/[-\\^$*+?.()|[\]{}]/g, "\\$&");
@@ -177,6 +179,7 @@ $__System.registerDynamic("3", ["2"], true, function($__require, exports, module
       input.focus();
     },
     handleSuggestionClick: function handleSuggestionClick(i, e) {
+      e.preventDefault();
       this.selection(this.state.suggestions[i]);
     },
     handleSuggestionHover: function handleSuggestionHover(i, e) {
@@ -825,6 +828,7 @@ $__System.registerDynamic("1", ["3", "7"], true, function($__require, exports, m
       return this.state.searched;
     },
     setSearchedNode: function(node) {
+      console.log(node);
       this.setState({searched: node});
     },
     getSelectedNode: function() {

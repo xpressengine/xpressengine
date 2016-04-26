@@ -21,6 +21,7 @@ var MenuTree = React.createClass({
   },
 
   setSearchedNode: function (node) {
+    console.log(node);
     this.setState({
       searched: node
     });

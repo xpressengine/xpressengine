@@ -6,7 +6,9 @@ var MenuSearchSuggestion = React.createClass({
     query: React.PropTypes.string.isRequired,
     handleClick: React.PropTypes.func.isRequired,
     handleHover: React.PropTypes.func.isRequired,
-    searchingCnt: React.PropTypes.number
+    searchingCnt: React.PropTypes.number,
+    suggestions: React.PropTypes.array,
+    selectedIndex: React.PropTypes.number
   },
   markIt(item, query) {
 
