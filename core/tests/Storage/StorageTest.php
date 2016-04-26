@@ -58,6 +58,9 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
         $uploaded = m::mock('Symfony\Component\HttpFoundation\File\UploadedFile');
         $uploaded->shouldReceive('isValid')->andReturn(false);
+        $uploaded->shouldReceive('getClientOriginalName')->andReturn('filename.jpg');
+        $uploaded->shouldReceive('getErrorMessage')->andReturn('exceeds your upload_max_filesize ini directive');
+
 
         try {
             $instance->upload($uploaded, 'attached');
