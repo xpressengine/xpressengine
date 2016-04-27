@@ -25,13 +25,6 @@ class PluginMakeCommand extends Command
     protected $description = 'Create a new plugin of XpressEngine';
 
     /**
-     * The type of class being generated.
-     *
-     * @var string
-     */
-    protected $type = 'Plugin';
-
-    /**
      * The filesystem instance.
      *
      * @var \Illuminate\Filesystem\Filesystem
@@ -84,16 +77,16 @@ class PluginMakeCommand extends Command
 
             // plugin activate
             $this->activatePlugin($name);
+
         } catch (\Exception $e) {
             $this->files->deleteDirectory($path);
             throw $e;
         }
 
-
         // print info
         $url = trim(config('app.url'), '/').'/'.config('xe.routing.fixedPrefix').'/'.$name;
 
-        $this->info($this->type." created and activated successfully.");
+        $this->info("Plugin created and activated successfully.");
 
         $this->info("See ./plugins/$name directory. And open $url in your browser.");
 
@@ -104,7 +97,13 @@ class PluginMakeCommand extends Command
     {
         // check directory exists
         if ($this->files->exists($path)) {
-            $this->error($this->type.' already exists!');
+            $this->error('Plugin already exists!');
+            return false;
+        }
+
+        // check namespace
+        if(!str_contains($namespace, '\\')) {
+            $this->error('The namespace must have at least 1 delimiter(\\), use double backslash(\\\\) as delimiter');
             return false;
         }
 
@@ -325,9 +324,10 @@ class PluginMakeCommand extends Command
      */
     protected function getNamespace()
     {
-        return trim($this->getNamespaceInput(), '\\');
+        $namespace = $this->getNamespaceInput();
+        $namespace = str_replace('\\\\', '\\', $namespace);
+        return trim($namespace, '\\');
     }
-
 
     /**
      * getPluginName
@@ -363,7 +363,7 @@ class PluginMakeCommand extends Command
             [
                 'namespace',
                 InputArgument::REQUIRED,
-                'The namespace of the plugin. use double backslash(\\\\) as delimeter'
+                'The namespace of the plugin. use double backslash(\\\\) as delimiter'
             ],
             ['title', InputArgument::REQUIRED, 'The title of the plugin'],
         ];
