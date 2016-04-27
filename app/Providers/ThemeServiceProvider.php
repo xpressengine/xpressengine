@@ -84,7 +84,7 @@ class ThemeServiceProvider extends ServiceProvider
         $preview_theme = $this->app['request']->get('preview_theme', null);
         if ($preview_theme !== null) {
             intercept(
-                'Theme@getSelectedTheme',
+                'XeTheme@getSelectedTheme',
                 'preview_theme',
                 function ($target) use ($preview_theme) {
                     if (!auth()->user()->isAdmin()) {

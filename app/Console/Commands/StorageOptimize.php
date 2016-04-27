@@ -82,7 +82,7 @@ class StorageOptimize extends Command
 
     private function intercept()
     {
-        intercept('Storage@remove', 'storage.optimize.log', function ($target, $file) {
+        intercept('XeStorage@remove', 'storage.optimize.log', function ($target, $file) {
 
             $this->bag[] = $file;
 
