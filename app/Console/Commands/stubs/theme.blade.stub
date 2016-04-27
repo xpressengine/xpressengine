@@ -1,0 +1,23 @@
+<div class="xe-container">
+    <div class="header">
+        <h3>{{ xe_trans(XeFrontend::output('title')) }}</h3>
+    </div>
+
+    <div class="spot">
+        <h1>Basic Theme for XpressEngine3</h1>
+        <p class="lead"></p>
+    </div>
+
+    <div class="xe-row">
+        <div class="xe-col-md-12">
+            <div id="content">
+                {!! $content !!}
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>XpressEngine3</p>
+    </footer>
+
+</div>

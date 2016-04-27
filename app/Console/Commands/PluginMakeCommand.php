@@ -86,7 +86,7 @@ class PluginMakeCommand extends Command
         // print info
         $url = trim(config('app.url'), '/').'/'.config('xe.routing.fixedPrefix').'/'.$name;
 
-        $this->info("Plugin created and activated successfully.");
+        $this->info("Plugin is created and activated successfully.");
 
         $this->info("See ./plugins/$name directory. And open $url in your browser.");
 
