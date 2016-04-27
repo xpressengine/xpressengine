@@ -250,7 +250,6 @@ return [
         'XeRegister' => App\Facades\XeRegister::class,
         'XeSettings' => App\Facades\XeSettings::class,
         'XeMenu' => App\Facades\XeMenu::class,
-        'Module' => App\Facades\Module::class,
         'XeConfig' => App\Facades\XeConfig::class,
         'XeStorage' => App\Facades\XeStorage::class,
         'XeSite'      => App\Facades\XeSite::class,
