@@ -68,7 +68,7 @@ class CategoryHandler
 
     /**
      * Model class
-     * 
+     *
      * @var string
      */
     protected $model = Category::class;
@@ -141,7 +141,7 @@ class CategoryHandler
 
     /**
      * Set hierarchy information for new item
-     * 
+     *
      * @param CategoryItem $item item object
      * @return void
      */
@@ -234,8 +234,8 @@ class CategoryHandler
     /**
      * Move to another parent CategoryItem
      *
-     * @param CategoryItem $item     item object
-     * @param CategoryItem $parent   new parent item object
+     * @param CategoryItem $item   item object
+     * @param CategoryItem $parent new parent item object
      * @return CategoryItem
      * @throws UnableMoveToSelfException
      */

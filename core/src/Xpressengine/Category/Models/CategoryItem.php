@@ -155,7 +155,7 @@ class CategoryItem extends Node
 
     /**
      * Get the aggregator model name for model
-     * 
+     *
      * @return string
      */
     public function getAggregatorModel()
@@ -165,7 +165,7 @@ class CategoryItem extends Node
     
     /**
      * Get the aggregator key name for model
-     * 
+     *
      * @return string
      */
     public function getAggregatorKeyName()

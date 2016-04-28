@@ -90,8 +90,8 @@ trait NodePositionTrait
     /**
      * Set item ordering value
      *
-     * @param Node $item     item object
-     * @param int|null     $position sequence value
+     * @param Node     $item     item object
+     * @param int|null $position sequence value
      * @return void
      */
     public function setOrder(Node $item, $position = null)
