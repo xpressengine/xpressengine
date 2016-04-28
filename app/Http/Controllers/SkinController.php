@@ -32,7 +32,7 @@ class SkinController extends Controller
         $skinConfig = $skinHandler->getStore()->getConfigs($skinInstanceId, $skinId);
         $skin = $skinHandler->get($skinId, $skinConfig);
 
-        $view = $skin->getSettingView();
+        $view = $skin->getSettingView($skinConfig);
 
         return XePresenter::makeApi(['view' => (string) $view]);
     }
