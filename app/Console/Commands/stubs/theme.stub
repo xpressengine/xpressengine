@@ -1,6 +1,7 @@
 <?php
 namespace DummyNamespace;
 
+use Route;
 use XeFrontend;
 use Xpressengine\Theme\AbstractTheme;
 use DummyPluginNamespace\DummyPluginClass;
@@ -10,6 +11,54 @@ class DummyClass extends AbstractTheme
 
     protected static $supportDesktop = true;
     protected static $supportMobile = false;
+
+    protected static $configID = 'DummyConfigId';
+
+    /**
+     * boot
+     *
+     * @return void
+     */
+    public static function boot()
+    {
+        // register route for theme config page
+        Route::settings(
+            DummyPluginClass::getId(),
+            function () {
+                $alias = DummyPluginClass::getIdWith('theme.config');
+                Route::get('config', ['as' => "$alias", 'uses' => 'ConfigController@edit']);
+                Route::post('config', ['as' => "$alias", 'uses' => 'ConfigController@update']);
+            }, ['namespace' => 'DummyPluginNamespace\Controllers\Theme']
+        );
+    }
+
+
+    /**
+     * return settings manage uri
+     *
+     * @return null|string
+     */
+    public static function getSettingsURI()
+    {
+        return route(DummyPluginClass::getIdWith('theme.config'));
+    }
+
+    /**
+     * 테마 편집 페이지에서 편집할 수 있는 파일의 목록을 반환한다.
+     *
+     * @return array
+     */
+    public static function getEditFiles()
+    {
+        return [
+            'template' => [
+                'theme.blade.php' => DummyPluginClass::getPath('DummyTemplateFile'),
+            ],
+            'stylesheets' => [
+                'theme.css' => DummyPluginClass::getPath('DummyCssFile'),
+            ]
+        ];
+    }
 
     /**
      * 테마를 출력한다.
@@ -37,21 +86,5 @@ class DummyClass extends AbstractTheme
         XeFrontend::css(DummyPluginClass::asset('DummyCssFile'))->load();
     }
 
-    /**
-     * 테마 편집 페이지에서 편집할 수 있는 파일의 목록을 반환한다.
-     *
-     * @return array
-     */
-    public static function getEditFiles()
-    {
-        return [
-            'template' => [
-                'theme.blade.php' => DummyPluginClass::getPath('DummyTemplateFile'),
-            ],
-            'stylesheets' => [
-                'theme.css' => DummyPluginClass::getPath('DummyCssFile'),
-            ]
-        ];
-    }
 
 }
