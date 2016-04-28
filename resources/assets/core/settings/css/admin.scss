@@ -28,7 +28,7 @@
 
 /*reset, helper class*/
 
-.logo-area h1, aside ul, header .right-menu ul, aside .list-title, .title-area h2, .title-area .tit_bottom ul {
+.logo-area h1, aside ul, header .right-menu ul, aside .list-title, .title-area h2, .title-area .tit_bottom ul, .normal-list, .item-container{
   margin: 0;
   padding: 0;
 }
@@ -49,7 +49,9 @@ aside ul li a, .right-menu ul a, .theme_con .theme_active + table a, .title-area
   text-decoration: none;
 }
 
-.dropdown-menu li {
+.dropdown-menu li,
+.normal-list li,
+.item-container li{
   list-style: none;
 }
 
@@ -68,6 +70,29 @@ aside ul li em, .item .item_cont dd.txt_blue em {
   background: #010101;
   opacity: 0.5;
   cursor: default;
+}
+
+p.text{
+  color:$brand-grey;
+  margin-bottom:$form-group-margin-bottom;
+}
+
+.normal-list li{
+  position: relative;
+  padding-left: 15px;
+  color:$brand-grey;
+  &:before{
+    position: absolute;
+    top:50%;
+    left:0;
+    width:4px;
+    height:4px;
+    margin-top:-2px;
+    background-color: #8e8e93;
+    border-radius: 50%;
+    content: "";
+  }
+
 }
 
 /* layout */
@@ -651,6 +676,172 @@ aside {
 .plugin-detail .table > thead > tr > th {
   border-bottom: 1px solid #e4e4e4;
 }
+
+.board-category{
+  background-color: transparent;
+  .panel.panel-edit{
+    display: none;
+    margin-bottom:0;
+    padding-top:7px;
+    background-color: #fff;
+    border: 1px solid $brand-primary;
+    clear: both;
+    .panel-heading{
+      padding:0 20px;
+    }
+    .panel-body{
+      padding:20px;
+      margin:0 20px 20px 20px;
+      background-color: #fafafc;
+      border: 1px solid #ededed;
+      border-radius: 2px;
+    }
+    .panel-footer{
+      background-color: $panel-footer-bg;
+      border-top: 1px solid #ededed;
+    }
+  }
+
+  .panel-heading{
+    &.open .panel.panel-edit{
+      display: block;
+    }
+  }
+
+  .item-container .item{
+    &.open>.item-content >.panel.panel-edit{
+      display: block;
+    }
+  }
+
+  >.panel-heading{
+    margin-bottom:20px;
+    background-color: #fff;
+    border:1px solid $panel-inner-border;
+    .panel.panel-edit{
+      margin:0 -15px;
+    }
+    &.open{
+      background-color: $brand-primary;
+      >.pull-left .panel-title{
+        color:#fff;
+      }
+      >.pull-right{
+        display: none;
+      }
+    }
+  }
+
+  >.panel-body{
+    padding:0 !important;
+    border:1px solid $panel-inner-border;
+
+    >.item-container {
+      &:first-child{
+        >.item{
+          &:first-child{
+            border-top:none;
+          }
+        }
+      }
+    }
+  }
+
+  .item-container {
+    background-color: #dadbde;
+    .item{
+      position: relative;
+      .item-content{
+        min-height: 70px;
+        .handler{
+          padding:14px 0;
+        }
+        .item-info{
+          height:70px;
+          padding-right: 120px;
+          text-decoration: none;
+          i{
+            line-height: 70px
+          }
+          strong{
+            display: block;
+            vertical-align: middle;
+            padding-left:30px;
+            font-size:$font-size-large;
+            color:#2c2e37;
+            font-weight: normal;
+            line-height: 70px;
+            @include text-overflow;
+          }
+        }
+        .edit-btn-area{
+          position: absolute;
+          right:20px;
+          top:18px;
+          button{
+            background-color: $brand-primary;
+            color:#fff;
+            font-size: 13px;
+            &.on{
+              background-color: #fff;
+              color: $brand-primary;
+            }
+          }
+        }
+      }
+      &.copy{
+        .item-content strong{
+          display: none;
+        }
+      }
+      &.open>.item-content{
+        background-color: $brand-primary;
+        .handler i{
+          background-color: $brand-primary;
+          color:#fff;
+        }
+        .item-info {
+          i{
+            color:#ffce3b;
+          }
+          strong{
+            color:#fff;
+          }
+        }
+        .edit-btn-area button{
+          background-color: #8ca4ff;
+          &.on{
+            background-color: #fff;
+            color: $brand-primary;
+          }
+        }
+
+      }
+      //  .panel.panel-edit{
+      //    display: none;
+      //  }
+      //  &.open .panel.panel-edit{
+      //    display: block;
+      //    margin:0;
+      //    background-color: #fff;
+      //    border: 1px solid $brand-primary;
+      //    .panel-heading{
+      //      padding:0 20px;
+      //    }
+      //    .panel-body{
+      //      padding:20px;
+      //      margin:0 20px 20px 20px;
+      //    }
+      //    .panel-footer{
+      //      background-color: $panel-footer-bg;
+      //      border-top: 1px solid #ededed;
+      //    }
+      //  }
+
+    }
+  }
+}
+
 
 @media (min-width: 768px) {
   /* tablet */
