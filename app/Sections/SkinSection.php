@@ -46,7 +46,7 @@ class SkinSection
         $selectedSkin = $skinHandler->getAssigned([$target, $instanceId], $mode);
 
         if ($selectedSkin !== null) {
-            $settingView = $selectedSkin->getSettingView();
+            $settingView = $selectedSkin->getSettingView($selectedSkin->getConfig());
         } else {
             $settingView = null;
         }
