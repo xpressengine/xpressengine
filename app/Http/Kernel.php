@@ -51,4 +51,70 @@ class Kernel extends HttpKernel
         'access' => \Xpressengine\Routing\AccessMiddleware::class
     ];
 
+    /**
+     * Bootstrap the application for artisan commands.
+     *
+     * @return void
+     */
+    public function bootstrap()
+    {
+        $args = func_get_args();
+        $withXE = array_shift($args);
+
+        if (!$this->isInstalled() && $withXE !== true) {
+            $this->resetForInstall();
+        }
+
+        parent::bootstrap();
+    }
+
+    /**
+     * Is installed
+     *
+     * @return bool
+     */
+    protected function isInstalled()
+    {
+        return file_exists($this->app->storagePath() . '/app/installed');
+    }
+
+    /**
+     * Reset for install
+     *
+     * @return void
+     */
+    protected function resetForInstall()
+    {
+        $this->middleware = [
+            \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+            \App\Http\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            \App\Http\Middleware\ExceptAppendableVerifyCsrfToken::class,
+        ];
+
+        $this->resetProviders();
+    }
+
+    /**
+     * Define for providers of framework.
+     *
+     * @return void
+     */
+    protected function resetProviders()
+    {
+        $this->app['events']->listen('bootstrapped: App\Bootstrappers\LoadConfiguration', function ($app) {
+            $config = $app['config'];
+
+            $providers = $config['app.providers'];
+            $providers = array_filter($providers, function ($p) {
+                return substr($p, 0, strlen('Illuminate')) == 'Illuminate';
+            });
+
+            $providers[] = \App\Providers\InstallServiceProvider::class;
+
+            $config->set('app.providers', $providers);
+        });
+    }
 }

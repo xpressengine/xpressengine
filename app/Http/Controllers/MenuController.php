@@ -14,7 +14,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Facades\XeFrontend;
+use XeFrontend;
+use XeStorage;
+use XeMedia;
 use Exception;
 use Illuminate\Contracts\Config\Repository as IlluminateConfig;
 use Illuminate\Http\RedirectResponse;
@@ -31,6 +33,7 @@ use Xpressengine\Module\ModuleHandler;
 use Xpressengine\Permission\Grant;
 use Xpressengine\Presenter\RendererInterface;
 use Xpressengine\Site\SiteHandler;
+use Xpressengine\Storage\File;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
 use Xpressengine\User\Models\User;
 use Xpressengine\User\Models\UserGroup;
@@ -481,9 +484,19 @@ class MenuController extends Controller
                 'target' => $itemInput['itemTarget'],
                 'type' => $itemInput['selectedType'],
                 'ordering' => $itemInput['itemOrdering'],
-                'activated' => $itemInput['itemActivated'],
+                'activated' => isset($itemInput['itemActivated']) ? $itemInput['itemActivated'] : 0,
                 'parentId' => $itemInput['parent']
             ], $menuTypeInput);
+
+            // link image 등록
+            $this->registerItemImage($item, 'basicImage');
+            $this->registerItemImage($item, 'hoverImage');
+            $this->registerItemImage($item, 'selectedImage');
+            $this->registerItemImage($item, 'mBasicImage');
+            $this->registerItemImage($item, 'mHoverImage');
+            $this->registerItemImage($item, 'mSelectedImage');
+
+            $handler->putItem($item, $menuTypeInput);
 
             $handler->setMenuItemTheme($item, $desktopTheme, $mobileTheme);
 
@@ -496,26 +509,6 @@ class MenuController extends Controller
         XeDB::commit();
 
         return Redirect::route('settings.menu.index');
-    }
-
-    protected function inputClassify(array $inputs)
-    {
-        $itemInputKeys = [
-            'itemId',
-            'parent',
-            'itemTitle',
-            'itemUrl',
-            'itemDescription',
-            'itemTarget',
-            'selectedType',
-            'itemOrdering',
-            'itemActivated',
-        ];
-
-        return [
-            array_only($inputs, $itemInputKeys),
-            array_except($inputs, $itemInputKeys),
-        ];
     }
 
     /**
@@ -591,6 +584,7 @@ class MenuController extends Controller
      */
     public function updateItem(MenuHandler $handler, $menuId, $itemId)
     {
+
         XeDB::beginTransaction();
 
         try {
@@ -625,6 +619,14 @@ class MenuController extends Controller
                 'activated' => array_get($itemInput, 'itemActivated', '0'),
             ]);
 
+            // link image 등록
+            $this->registerItemImage($item, 'basicImage');
+            $this->registerItemImage($item, 'hoverImage');
+            $this->registerItemImage($item, 'selectedImage');
+            $this->registerItemImage($item, 'mBasicImage');
+            $this->registerItemImage($item, 'mHoverImage');
+            $this->registerItemImage($item, 'mSelectedImage');
+
             $handler->putItem($item, $menuTypeInput);
 
             $handler->updateMenuItemTheme($item, $desktopTheme, $mobileTheme);
@@ -639,6 +641,28 @@ class MenuController extends Controller
 
         return Redirect::route('settings.menu.index');
 
+    }
+
+    protected function registerItemImage(MenuItem $item, $name)
+    {
+        $columnKeyName = $name . 'Id';
+
+        if ($uploadImg = Request::file($name)) {
+            $image = XeMedia::make(XeStorage::upload($uploadImg, 'menu'));
+            XeStorage::bind($item->getKey(), $image);
+
+            if ($item->{$columnKeyName} !== null) {
+                XeStorage::unBind($item->getKey(), $item->{$name});
+            }
+
+            $item->{$columnKeyName} = $image->getKey();
+        } else {
+            $key = 'remove' . ucfirst($name);
+            if (Request::get($key) && $item->{$columnKeyName} !== null) {
+                XeStorage::unBind($item->getKey(), $item->{$name});
+                $item->{$columnKeyName} = null;
+            }
+        }
     }
 
     /**
@@ -699,6 +723,10 @@ class MenuController extends Controller
         XeDB::beginTransaction();
         try {
             $handler->removeItem($item);
+
+            foreach (File::getByFileable($item->getKey()) as $file) {
+                XeStorage::unBind($item->getKey(), $file);
+            }
 
             $handler->deleteMenuItemTheme($item);
 
@@ -872,6 +900,29 @@ class MenuController extends Controller
         XeDB::commit();
 
         return XePresenter::makeApi(\Request::all());
+    }
+
+    protected function inputClassify(array $inputs)
+    {
+        $itemInputKeys = [
+            'itemId',
+            'parent',
+            'itemTitle',
+            'itemUrl',
+            'itemDescription',
+            'itemTarget',
+            'selectedType',
+            'itemOrdering',
+            'itemActivated',
+            'basicImage',
+            'hoverImage',
+            'selectedImage',
+        ];
+
+        return [
+            array_only($inputs, $itemInputKeys),
+            array_except($inputs, $itemInputKeys),
+        ];
     }
 
     /**

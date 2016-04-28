@@ -98,34 +98,4 @@ class Category extends AbstractType
             'category' => $category,
         ])->render();
     }
-
-    /**
-     * $query 에 inner join 된 쿼리를 리턴
-     *
-     * @param Builder $query query builder
-     * @return Builder
-     */
-    public function get(DynamicQuery $query)
-    {
-        $config = $this->config;
-
-        if ($config->get('sortable') === false && $config->get('searchable') === false) {
-            return $query;
-        }
-
-        $query = parent::get($query, $config, $this->handler);
-
-        $createTableName = $this->handler->getConfigHandler()->getTableName($config);
-        $keyName = $config->get('id').'ItemId';
-
-        if (isset($args[$keyName]) && $args[$keyName] !== '') {
-            $query->where(
-                sprintf('%s.%s', $createTableName, $keyName),
-                '=',
-                $args[$keyName]
-            );
-        }
-
-        return $query;
-    }
 }

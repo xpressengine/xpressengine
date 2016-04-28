@@ -24,6 +24,7 @@ use Xpressengine\Database\Eloquent\DynamicModel;
  * @property string id
  * @property string parentId
  * @property string instanceId
+ * @property string type
  * @property string userId
  * @property string writer
  * @property string email

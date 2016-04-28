@@ -13,12 +13,13 @@ class CategoryHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testCreate()
     {
-        $instance = new CategoryHandler();
+        $instance = $this->getMock(CategoryHandler::class, ['createModel']);
 
         $mockModel = m::mock('Xpressengine\Category\Models\Category');
-        $instance->setModel(get_class($mockModel));
+        $instance->expects($this->once())->method('createModel')->willReturn($mockModel);
 
-        $mockModel->shouldReceive('create')->once()->with(['word' => 'first'])->andReturn($mockModel);
+        $mockModel->shouldReceive('fill')->once()->with(['word' => 'first']);
+        $mockModel->shouldReceive('save')->once();
 
         $category = $instance->create(['word' => 'first']);
 
@@ -50,22 +51,14 @@ class CategoryHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testPutItem()
     {
-        $instance = m::mock(CategoryHandler::class)
-            ->shouldAllowMockingProtectedMethods()
-            ->makePartial();
-
-        $mockParentItem = m::mock('Xpressengine\Category\Models\CategoryItem');
-        $mockParentItem->shouldReceive('getChildren')->andReturn([3, 4, 5]);
+        $instance = new CategoryHandler();
 
         $mockItem = m::mock('Xpressengine\Category\Models\CategoryItem');
-        $mockItem->shouldReceive('isDirty')->once()->andReturn(true);
+        $mockItem->shouldReceive('isDirty')->once()->with('parentId')->andReturn(true);
         $mockItem->shouldReceive('getParentIdName')->andReturn('parentId');
-        $mockItem->shouldReceive('getAttribute')->with('parentId')->andReturn(1);
-        $mockItem->shouldReceive('newQuery')->once()->andReturnSelf();
-        $mockItem->shouldReceive('find')->once()->with(1)->andReturn($mockParentItem);
+        $mockItem->shouldReceive('getOriginal')->with('parentId')->andReturn(1);
+        $mockItem->shouldReceive('setAttribute')->with('parentId', 1);
         $mockItem->shouldReceive('save')->andReturnNull();
-
-        $instance->shouldReceive('moveTo')->once($mockItem, 3, $mockParentItem);
 
         $item = $instance->putItem($mockItem);
 
@@ -152,20 +145,18 @@ class CategoryHandlerTest extends \PHPUnit_Framework_TestCase
         $mockItem->shouldReceive('getParent')->andReturnNull();
 
         try {
-            $instance->moveTo($mockItem, 0, $mockParent);
-
-
+            $instance->moveTo($mockItem, $mockParent);
+            
             $this->assertTrue(false);
         } catch (\Exception $e) {
+
             $this->assertInstanceOf('Xpressengine\Category\Exceptions\UnableMoveToSelfException', $e);
         }
     }
 
     public function testMoveTo()
     {
-        $instance = m::mock(CategoryHandler::class)
-            ->shouldAllowMockingProtectedMethods()
-            ->makePartial();
+        $instance = $this->getMock(CategoryHandler::class, ['linkHierarchy', 'unlinkHierarchy']);
 
         $mockItem = m::mock('Xpressengine\Category\Models\CategoryItem');
         $mockItem->shouldReceive('getParentIdName')->andReturn('parentId');
@@ -181,11 +172,16 @@ class CategoryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $mockItem->shouldReceive('getParent')->andReturn($mockOldParent);
 
-        $instance->shouldReceive('unlinkHierarchy')->once()->with($mockItem, $mockOldParent)->andReturnNull();
-        $instance->shouldReceive('linkHierarchy')->once()->with($mockItem, $mockParent)->andReturnNull();
-        $instance->shouldReceive('setOrder')->once()->with($mockItem, 0)->andReturnNull();
+//        $instance->shouldReceive('unlinkHierarchy')->once()->with($mockItem, $mockOldParent)->andReturnNull();
+//        $instance->shouldReceive('linkHierarchy')->once()->with($mockItem, $mockParent)->andReturnNull();
+        $instance->expects($this->once())->method('unlinkHierarchy')->with($mockItem, $mockOldParent);
+        $instance->expects($this->once())->method('linkHierarchy')->with($mockItem, $mockParent);
 
-        $instance->moveTo($mockItem, 0, $mockParent);
+        $mockItem->shouldReceive('newQuery')->andReturnSelf();
+        $mockItem->shouldReceive('find')->once()->with(1)->andReturnSelf();
+
+
+        $instance->moveTo($mockItem, $mockParent);
     }
 
     public function testSetOrder()

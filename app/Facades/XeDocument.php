@@ -1,6 +1,6 @@
 <?php
 /**
- * Document class for Facade
+ * XeDocument
  *
  * PHP version 5
  *
@@ -24,8 +24,9 @@ use Illuminate\Support\Facades\Facade;
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
+ * @see         Xpressengine\Document\DocumentHandler
  */
-class XeDocument  extends Facade
+class XeDocument extends Facade
 {
 
     /**

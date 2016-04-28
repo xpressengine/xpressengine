@@ -27,4 +27,5 @@ use Xpressengine\DynamicField\DynamicFieldException;
  */
 class InvalidConfigException extends DynamicFieldException
 {
+    protected $message = 'Invalid dynamic field config.';
 }

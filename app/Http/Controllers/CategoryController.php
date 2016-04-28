@@ -96,7 +96,8 @@ class CategoryController extends Controller
         DB::beginTransaction();
 
         try {
-            XeCategory::moveTo($item, $request->get('ordering', 0), $parent);
+            $item = XeCategory::moveTo($item, $parent);
+            XeCategory::setOrder($item, $request->get('ordering', 0));
         } catch (Exception $e) {
             DB::rollBack();
 

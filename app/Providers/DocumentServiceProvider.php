@@ -38,6 +38,7 @@ class DocumentServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // reply 설정을 위해 create event listener 등록
         Document::creating(function (Document $model) {
             $model->setReply();
         });

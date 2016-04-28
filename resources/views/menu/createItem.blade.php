@@ -17,20 +17,20 @@
 @endsection
 @extends('menu.layout')
 @section('menuContent')
-<form action="{{ route('settings.menu.store.item', $menu->id) }}" method="post">
-    <input type="hidden" name="_token" value="{{ Session::token() }}"/>
-    <input type="hidden" name="selectedType" value="{{ $selectedType }}"/>
-    <input type="hidden" name="siteKey" value="{{ $siteKey }}"/>
-    <input type="hidden" name="menuId" value="{{ $menu->id}}"/>
-    <div class="col-md-12">
-        <div class="panel-group">
-            <div class="panel">
-                <div class="panel-heading">
-                    <div class="pull-left">
-                        <h3 class="panel-title">{{xe_trans('xe::newItemDescription')}}</h3>
-                    </div>
-                    <div class="pull-right">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="btn-link panel-toggle pull-right"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">메뉴닫기</span></a>
+    <form action="{{ route('settings.menu.store.item', $menu->id) }}" method="post">
+        <input type="hidden" name="_token" value="{{ Session::token() }}"/>
+        <input type="hidden" name="selectedType" value="{{ $selectedType }}"/>
+        <input type="hidden" name="siteKey" value="{{ $siteKey }}"/>
+        <input type="hidden" name="menuId" value="{{ $menu->id}}"/>
+        <div class="col-md-12">
+            <div class="panel-group">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <div class="pull-left">
+                            <h3 class="panel-title">{{xe_trans('xe::newItemDescription')}}</h3>
+                        </div>
+                        <div class="pull-right">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="btn-link panel-toggle pull-right"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">메뉴닫기</span></a>
                     </div>
                 </div>
 
@@ -41,7 +41,7 @@
                         <div class="xe-btn-toggle pull-right">
                             <label>
                                 <span class="sr-only"><span class="sr-only">활성화 비활성화</span></span>
-                                <input type="checkbox" checked="" id="item-active" name="itemActivated">
+                                <input type="checkbox" checked="checked" value="1" id="item-active" name="itemActivated">
                                 <span class="toggle"></span>
                             </label>
                         </div>
@@ -82,20 +82,60 @@
                     <div class="form-group">
                         <label for="item-target">Item Target<br><small>{{xe_trans('xe::itemTargetDescription')}}</small></label>
 
-                        <select name="itemTarget" class="form-control">
-                            <option value="_self" selected>
-                                {{xe_trans('xe::itemTargetOption_sameFrame')}}
-                            </option>
-                            <option value="_black">
-                                {{xe_trans('xe::itemTargetOption_newWindow')}}
-                            </option>
-                            <option value="_parent">
-                                {{xe_trans('xe::itemTargetOption_parentFrame')}}
-                            </option>
-                            <option value="_top">
-                                {{xe_trans('xe::itemTargetOption_topFrame')}}
-                            </option>
-                        </select>
+                            <select name="itemTarget" class="form-control">
+                                <option value="_self" selected>
+                                    {{xe_trans('xe::itemTargetOption_sameFrame')}}
+                                </option>
+                                <option value="_black">
+                                    {{xe_trans('xe::itemTargetOption_newWindow')}}
+                                </option>
+                                <option value="_parent">
+                                    {{xe_trans('xe::itemTargetOption_parentFrame')}}
+                                </option>
+                                <option value="_top">
+                                    {{xe_trans('xe::itemTargetOption_topFrame')}}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                Link image
+                                <small>{{ xe_trans('xe::linkImageDescription') }}</small>
+                            </label>
+
+                            <div class="well">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <label>PC - {{ xe_trans('xe::default') }}</label>
+                                        {!! uio('uiobject/xpressengine@formImage', ['name' => 'basicImage']) !!}
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label>PC - {{ xe_trans('xe::hover') }}</label>
+                                        {!! uio('uiobject/xpressengine@formImage', ['name' => 'hoverImage']) !!}
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label>PC - {{ xe_trans('xe::selected') }}</label>
+                                        {!! uio('uiobject/xpressengine@formImage', ['name' => 'selectedImage']) !!}
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <label>Mobile - {{ xe_trans('xe::default') }}</label>
+                                        {!! uio('uiobject/xpressengine@formImage', ['name' => 'mBasicImage']) !!}
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label>Mobile - {{ xe_trans('xe::hover') }}</label>
+                                        {!! uio('uiobject/xpressengine@formImage', ['name' => 'mHoverImage']) !!}
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label>Mobile - {{ xe_trans('xe::selected') }}</label>
+                                        {!! uio('uiobject/xpressengine@formImage', ['name' => 'mSelectedImage']) !!}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

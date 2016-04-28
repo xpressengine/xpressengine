@@ -13,11 +13,8 @@
  */
 namespace Xpressengine\Category\Models;
 
-use Xpressengine\Database\Eloquent\DynamicModel;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Xpressengine\Support\Tree\Tree;
-use Xpressengine\Support\Tree\TreeMakerTrait;
+use Xpressengine\Support\Tree\Aggregator;
 
 /**
  * Class Category
@@ -29,29 +26,28 @@ use Xpressengine\Support\Tree\TreeMakerTrait;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class Category extends DynamicModel
+class Category extends Aggregator
 {
-    use TreeMakerTrait;
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'category_group';
+    protected $table = 'category';
 
     /**
-     * The attributes that aren't mass assignable.
+     * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $guarded = ['id'];
+    protected $fillable = ['name'];
 
     /**
-     * The tree instance consisting of item
+     * Indicates if the model should be timestamped.
      *
-     * @var Tree
+     * @var bool
      */
-    protected $tree;
+    public $timestamps = false;
 
     /**
      * Category item model
@@ -61,39 +57,15 @@ class Category extends DynamicModel
     protected static $itemModel = CategoryItem::class;
 
     /**
-     * Items relationship
-     *
-     * @return HasMany
-     */
-    public function items()
-    {
-        return $this->hasMany(static::$itemModel, 'categoryId');
-    }
-
-    /**
      * Get category items of root level
      *
      * @return Collection
      */
     public function getProgenitors()
     {
-        $class = static::getItemModel();
+        $class = $this->getItemModel();
 
         return $class::progenitors($this)->get();
-    }
-
-    /**
-     * Get a tree of category items
-     *
-     * @return Tree
-     */
-    public function getTree()
-    {
-        if (!$this->tree) {
-            $this->tree = $this->makeTree($this->items);
-        }
-
-        return $this->tree;
     }
 
     /**
@@ -112,8 +84,18 @@ class Category extends DynamicModel
      *
      * @return string
      */
-    public static function getItemModel()
+    public function getItemModel()
     {
         return static::$itemModel;
+    }
+
+    /**
+     * Get the count name for model
+     *
+     * @return string
+     */
+    public function getCountName()
+    {
+        return 'count' ;
     }
 }

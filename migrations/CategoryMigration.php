@@ -9,14 +9,12 @@ class CategoryMigration implements Migration {
 
     public function install()
     {
-        Schema::create('category_group', function (Blueprint $table) {
+        Schema::create('category', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
             $table->increments('id');
             $table->string('name', 100);
             $table->integer('count');
-            $table->timestamp('createdAt');
-            $table->timestamp('updatedAt');
         });
 
         Schema::create('category_item', function (Blueprint $table) {
@@ -27,15 +25,13 @@ class CategoryMigration implements Migration {
             $table->integer('parentId')->nullable();
             $table->string('word', 250);
             $table->text('description');
-            $table->timestamp('createdAt');
-            $table->timestamp('updatedAt');
             $table->integer('ordering');
 
             $table->index('categoryId');
             $table->index('parentId');
         });
 
-        Schema::create('category_item_hierarchy', function (Blueprint $table) {
+        Schema::create('category_closure', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
             $table->bigIncrements('id');

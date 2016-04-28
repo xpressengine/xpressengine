@@ -6,6 +6,11 @@ use Xpressengine\Menu\MenuHandler;
 
 class MenuHandlerTest extends \PHPUnit_Framework_TestCase
 {
+    public function tearDown()
+    {
+        m::close();
+    }
+
     public function testCreate()
     {
         list($keygen, $configs, $permissoins, $modules,  $routes) = $this->getMocks();
@@ -87,11 +92,11 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
         list($keygen, $configs, $permissoins, $modules,  $routes) = $this->getMocks();
         $instance = $this->getMock(
             MenuHandler::class,
-            ['createItemModel', 'generateNewId', 'setOrder', 'registerItemPermission', 'storeMenuType'],
+            ['createItemModel', 'generateNewId', 'setHierarchy', 'setOrder', 'registerItemPermission', 'storeMenuType'],
             [$keygen, $configs, $permissoins, $modules,  $routes]
         );
 
-        $mockMenu = m::mock('Xpressengine\Menu\Models\Menu');
+        $mockMenu = m::mock('Xpressengine\Menu\Models\Menu')->shouldAllowMockingProtectedMethods();
         $mockMenu->shouldReceive('getKey')->andReturn('menuKey');
 
         $mockMenuItem = m::mock('Xpressengine\Menu\Models\MenuItem');
@@ -101,6 +106,7 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
             'url' => 'test_url',
             'ordering' => 1,
         ]);
+        $mockMenuItem->shouldReceive('getAggregatorKeyName')->andReturn('menuId');
         $mockMenuItem->shouldReceive('setAttribute')->once()->with('menuId', 'menuKey');
 
         $mockMenuItem->shouldReceive('getKeyName')->andReturn('id');
@@ -114,23 +120,20 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
         $instance->expects($this->any())->method('generateNewId')->willReturn('abcdefg');
 
         $mockRelate = m::mock('stdClass');
-        $mockRelate->shouldReceive('attach')->once()->with(m::on(function () { return true; }), ['depth' => 0]);
         $mockMenuItem->shouldReceive('ancestors')->andReturn($mockRelate);
 
 
         $mockMenuItemParent = m::mock('stdClass');
         $mockMenuItemParent->shouldReceive('getBreadcrumbs')->andReturn(['ppid', 'pid']);
 
-        $mockMenuItem->shouldReceive('newQuery')->once()->andReturn($mockMenuItem);
-        $mockMenuItem->shouldReceive('find')->once()->with('pid')->andReturn($mockMenuItemParent);
-
         $mockMenuItem->shouldReceive('setAttribute')->once()->with('id', 'abcdefg');
 
-        $mockRelate->shouldReceive('attach')->once()->with('pid', m::on(function () { return true; }));
-        $mockRelate->shouldReceive('attach')->once()->with('ppid', m::on(function () { return true; }));
+        $mockMenu->shouldReceive('getCountName')->andReturn('count');
+        $mockMenu->shouldReceive('increment')->once()->with('count');
 
 
-        $instance->expects($this->any())->method('setOrder')->with($mockMenuItem, 1);
+        $instance->expects($this->once())->method('setHierarchy')->with($mockMenuItem);
+        $instance->expects($this->once())->method('setOrder')->with($mockMenuItem);
         $instance->expects($this->once())->method('registerItemPermission')->with($mockMenuItem, $this->anything());
         $instance->expects($this->once())->method('storeMenuType')->with($mockMenuItem, ['foo' => 'var']);
 
@@ -155,7 +158,10 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $mockMenuItem = m::mock('Xpressengine\Menu\Models\MenuItem');
-        $mockMenuItem->shouldReceive('isDirty')->andReturn(true);
+        $mockMenuItem->shouldReceive('isDirty')->once()->with('parentId')->andReturn(true);
+        $mockMenuItem->shouldReceive('getParentIdName')->andReturn('parentId');
+        $mockMenuItem->shouldReceive('getOriginal')->with('parentId')->andReturn('1');
+        $mockMenuItem->shouldReceive('setAttribute')->once()->with('parentId', '1');
         $mockMenuItem->shouldReceive('save')->once();
 
         $instance->expects($this->once())->method('updateMenuType')->with($mockMenuItem, ['foo' => 'var']);
@@ -241,6 +247,8 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
         $mockMenuItem = m::mock('Xpressengine\Menu\Models\MenuItem');
         $mockMenuItem->shouldReceive('getParentIdName')->andReturn('parentId');
         $mockMenuItem->shouldReceive('getAttribute')->with('parentId')->andReturn('pid');
+        $mockMenuItem->shouldReceive('getKey')->andReturn('itemKey');
+        $mockMenuItem->shouldReceive('getAggregatorKeyName')->andReturn('menuId');
 
         $mockMenuItemNewParent = m::mock('Xpressengine\Menu\Models\MenuItem');
         $mockMenuItemNewParent->shouldReceive('getAttribute')->with('menu')->andReturn($mockMenu);
@@ -264,9 +272,10 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
         $mockMenuItem->shouldReceive('setAttribute')->with('menuId', 'menuKey');
         $mockMenuItem->shouldReceive('save')->once();
 
-        $mockMenuItem->shouldReceive('getRelations')->once()->andReturn(['relate' => true]);
-        $mockMenuItem->shouldReceive('setRelation')->once()->with('menu', $mockMenu);
         $mockMenuItem->shouldReceive('__unset');
+
+        $mockMenuItem->shouldReceive('newQuery')->andReturnSelf();
+        $mockMenuItem->shouldReceive('find')->once()->with('itemKey')->andReturnSelf();
 
         $instance->moveItem($mockMenu, $mockMenuItem, $mockMenuItemNewParent);
     }

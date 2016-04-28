@@ -250,7 +250,6 @@ return [
         'XeRegister' => App\Facades\XeRegister::class,
         'XeSettings' => App\Facades\XeSettings::class,
         'XeMenu' => App\Facades\XeMenu::class,
-        'Module' => App\Facades\Module::class,
         'XeConfig' => App\Facades\XeConfig::class,
         'XeStorage' => App\Facades\XeStorage::class,
         'XeSite'      => App\Facades\XeSite::class,
@@ -270,7 +269,7 @@ return [
         'XeTrash' => App\Facades\XeTrash::class,
         'XeMedia' => App\Facades\XeMedia::class,
 
-        'XeLang' => App\Facades\Lang::class,
+        'XeLang' => App\Facades\XeLang::class,
         'XeSEO' => App\Facades\XeSEO::class,
     ],
 ];

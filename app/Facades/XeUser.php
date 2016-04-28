@@ -1,11 +1,11 @@
 <?php
 /**
- * This file is accessor for use User by facade
+ * XeUser
  *
  * PHP version 5
  *
- * @category    Member
- * @package     Xpressengine\Member
+ * @category    User
+ * @package     Xpressengine\User
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Facade;
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
+ * @see         Xpressengine\User\UserHandler
  */
 class XeUser extends Facade
 {

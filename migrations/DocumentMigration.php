@@ -73,6 +73,7 @@ class DocumentMigration implements Migration
         $table->string('parentId', 255)->default('');
 
         $table->string('instanceId', 255)->default('');
+        $table->string('type', 255)->default('');
 
         // users
         $table->string('userType', '16')->default('normal');
@@ -108,14 +109,13 @@ class DocumentMigration implements Migration
         $table->text('content');
         $table->text('pureContent');
 
-        $table->timestamp('createdAt');
-        $table->timestamp('publishedAt');
-        $table->timestamp('updatedAt');
+        $table->timestamp('createdAt')->useCurrent();
+        $table->timestamp('updatedAt')->useCurrent();
+        $table->timestamp('publishedAt')->nullable();
         $table->timestamp('deletedAt')->nullable();
 
-        $table->string('head', 50);    // timestamp + uuid (ex. 1430369257-bd1fc797-474f-47a6-bedb-867a376490f2)
+        $table->string('head', 50);
         $table->string('reply', 200);
-        //$table->string('listOrder', 250);
         $table->string('ipaddress', 16);
 
         $table->index('createdAt');
