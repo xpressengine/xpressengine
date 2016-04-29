@@ -464,5 +464,6 @@
     "fs": "github:jspm/nodelibs-fs@^0.1.0",
     "path": "github:jspm/nodelibs-path@^0.1.0",
     "process": "github:jspm/nodelibs-process@^0.1.0"
-  }
+  },
+  "npm:bootstrap-sass@3.3.6": {}
 }

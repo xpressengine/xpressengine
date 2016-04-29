@@ -1,5 +1,9 @@
 System.amdDefine('xe.component', [], function() {
 
+  var loadedCSS = {
+    'xe.modal': false
+  };
+
   return {
     timeago: timeago
   };
@@ -15,6 +19,8 @@ System.amdDefine('xe.component', [], function() {
       moment.locale(XE.getLocale());
     });
 
+    
+    
     $(document).on('xe.timeago', '[data-xe-timeago]', function() {
       var $this = $(this);
       if($this.data().xeTimeagoCalled === true) false;
@@ -46,3 +52,50 @@ System.amdDefine('xe.component', [], function() {
   };
 
 });
+
+(function($) {
+  var loadedCSS = false;
+
+  // xeModal =========================================================
+  $.fn.xeModal = function(options) {
+    var $el = this;
+
+    System.import("xe.component.modal").then(function() {
+      $el.xeModal(options);
+    });
+
+    if(!loadedCSS) {
+      XE.cssLoad("/assets/core/xe-ui-component/xe-ui-component.css");
+      loadedCSS = true;
+    }
+  };
+
+  // xeDropdown ======================================================
+  $.fn.xeDropdown = function(options) {
+    var $el = this;
+
+    System.import("xe.component.dropdown").then(function() {
+      $el.xeDropdown(options);
+    });
+
+    if(!loadedCSS) {
+      XE.cssLoad("/assets/core/xe-ui-component/xe-ui-component.css");
+      loadedCSS = true;
+    }
+  };
+
+  // xeTooltip =======================================================
+  $.fn.xeTooltip = function(options) {
+    var $el = this;
+
+    System.import("xe.component.tooltip").then(function() {
+      $el.xeTooltip(options);
+    });
+
+    if(!loadedCSS) {
+      XE.cssLoad("/assets/core/xe-ui-component/xe-ui-component.css");
+      loadedCSS = true;
+    }
+  };
+
+})(jQuery);

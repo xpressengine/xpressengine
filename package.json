@@ -26,7 +26,8 @@
     "run-sequence": "^1.1.5"
   },
   "dependencies": {
-    "gulp-clean": "^0.3.2"
+    "gulp-clean": "^0.3.2",
+    "gulp-sourcemaps": "^2.0.0-alpha"
   },
   "scripts": {
     "test": "jest"
@@ -69,6 +70,8 @@
         ],
         "ignore": [
           "js/vendor",
+          "node_modules",
+          "node_modules",
           "node_modules",
           "node_modules"
         ]

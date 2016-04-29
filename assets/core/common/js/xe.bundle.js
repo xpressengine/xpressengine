@@ -609,6 +609,10 @@ if (typeof exports !== 'undefined') {
 
 System.amdDefine('xe.component', [], function() {
 
+  var loadedCSS = {
+    'xe.modal': false
+  };
+
   return {
     timeago: timeago
   };
@@ -624,6 +628,8 @@ System.amdDefine('xe.component', [], function() {
       moment.locale(XE.getLocale());
     });
 
+    
+    
     $(document).on('xe.timeago', '[data-xe-timeago]', function() {
       var $this = $(this);
       if($this.data().xeTimeagoCalled === true) false;
@@ -655,6 +661,53 @@ System.amdDefine('xe.component', [], function() {
   };
 
 });
+
+(function($) {
+  var loadedCSS = false;
+
+  // xeModal =========================================================
+  $.fn.xeModal = function(options) {
+    var $el = this;
+
+    System.import("xe.component.modal").then(function() {
+      $el.xeModal(options);
+    });
+
+    if(!loadedCSS) {
+      XE.cssLoad("/assets/core/xe-ui-component/xe-ui-component.css");
+      loadedCSS = true;
+    }
+  };
+
+  // xeDropdown ======================================================
+  $.fn.xeDropdown = function(options) {
+    var $el = this;
+
+    System.import("xe.component.dropdown").then(function() {
+      $el.xeDropdown(options);
+    });
+
+    if(!loadedCSS) {
+      XE.cssLoad("/assets/core/xe-ui-component/xe-ui-component.css");
+      loadedCSS = true;
+    }
+  };
+
+  // xeTooltip =======================================================
+  $.fn.xeTooltip = function(options) {
+    var $el = this;
+
+    System.import("xe.component.tooltip").then(function() {
+      $el.xeTooltip(options);
+    });
+
+    if(!loadedCSS) {
+      XE.cssLoad("/assets/core/xe-ui-component/xe-ui-component.css");
+      loadedCSS = true;
+    }
+  };
+
+})(jQuery);
 
 //xe.lang.js
 System.amdDefine('xe.lang', ['translator'], function(Translator) {
@@ -1378,6 +1431,8 @@ System.amdDefine('xe.request', ['xe.progress'], function(Progress) {
     getLocale: getLocale,
     getDefaultLocale: getDefaultLocale,
 
+    options: {},
+
     Lang: '',
     Progress: '',
     Request: '',
@@ -1407,6 +1462,7 @@ System.amdDefine('xe.request', ['xe.progress'], function(Progress) {
 
   function _loadXEModule() {
     System.amdRequire(['xe.lang', 'xe.progress', 'xe.request', 'xe.component'], function(lang, progress, request, component) {
+
       self.Lang = lang;
       self.Progress = progress;
       self.Request = request;
@@ -1433,6 +1489,7 @@ System.amdDefine('xe.request', ['xe.progress'], function(Progress) {
    * */
   function setup(options) {
     _options.loginUserId = options.loginUserId;
+    self.options.loginUserId = options.loginUserId;
 
     self.Request.setup({
       headers: {
@@ -1446,6 +1503,7 @@ System.amdDefine('xe.request', ['xe.progress'], function(Progress) {
    * */
   function configure(options) {
     $.extend(_options, options);
+    $.extend(self.options, options);
   }
 
   // @DEPRECATED

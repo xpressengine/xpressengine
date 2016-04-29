@@ -167,7 +167,8 @@ var MenuSearchBar = React.createClass({
     var query = this.state.query.trim(),
         selectedIndex = this.state.selectedIndex,
         suggestions = this.state.suggestions,
-        placeholder = this.props.placeholder
+        placeholder = this.props.placeholder;
+
     var trans = {
       addMenu: XE.Lang.trans('xe::addMenu')
     };

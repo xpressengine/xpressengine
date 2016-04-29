@@ -18,6 +18,8 @@
     getLocale: getLocale,
     getDefaultLocale: getDefaultLocale,
 
+    options: {},
+
     Lang: '',
     Progress: '',
     Request: '',
@@ -47,6 +49,7 @@
 
   function _loadXEModule() {
     System.amdRequire(['xe.lang', 'xe.progress', 'xe.request', 'xe.component'], function(lang, progress, request, component) {
+
       self.Lang = lang;
       self.Progress = progress;
       self.Request = request;
@@ -73,6 +76,7 @@
    * */
   function setup(options) {
     _options.loginUserId = options.loginUserId;
+    self.options.loginUserId = options.loginUserId;
 
     self.Request.setup({
       headers: {
@@ -86,6 +90,7 @@
    * */
   function configure(options) {
     $.extend(_options, options);
+    $.extend(self.options, options);
   }
 
   // @DEPRECATED

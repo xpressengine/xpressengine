@@ -9,10 +9,6 @@ System.config({
     "xevendor:/*": "assets/vendor/*"
   },
   bundles: {
-    "xecore:/xe-ui-component/js/xe-ui-component.bundle.js": [
-      "xecore:/xe-ui-component/js/xe-ui-component.js",
-      "xecore:/xe-ui-component/xe-ui-component.css"
-    ],
     "xecore:/settings/js/admin.bundle.js": [
       "xecore:/settings/js/admin.js"
     ],
@@ -59,12 +55,14 @@ System.config({
     "moment": "npm:moment@2.12.0",
     "normalize.css": "github:necolas/normalize.css@4.0.0",
     "swiper2": "npm:swiper@2.7.6",
+    "translator": "assets/core/common/js/translator",
     "twbs/bootstrap-sass": "github:twbs/bootstrap-sass@3.3.6",
     "vendor:/jquery": "xevendor:/jquery/jquery",
     "vendor:/jquery-migrate": "xevendor:/jquery/jquery",
     "vendor:/jquery-ui": "xevendor:/jqueryui/jquery-ui",
     "vendor:/lodash": "xevendor:/lodash/lodash.min",
     "vendor:/moment": "xevendor:/moment/moment-with-locales.min",
+
     "xedep-jquery": "npm:jquery@2.2.2",
     "xedep-jquery-migrate": "npm:jquery-migrate@1.4.0",
     "github:floatdrop/plugin-jsx@1.2.1": {
@@ -508,10 +506,12 @@ System.config({
       "indexof": "npm:indexof@0.0.1"
     },
     "xe.bundle": "assets/core/common/js/xe.bundle",
-    "xe.lang": "assets/core/common/js/xe.lang",
-    "xe.progress": "assets/core/common/js/xe.progress",
-    "xe.request": "assets/core/common/js/xe.request",
     "xe.component": "assets/core/common/js/xe.component",
-    "translator": "assets/core/common/js/translator"
+    "xe.lang": "assets/core/common/js/xe.lang",
+    "xe.component.modal": "assets/core/xe-ui-component/js/xe-modal",
+    "xe.component.dropdown": "assets/core/xe-ui-component/js/xe-dropdown",
+    "xe.component.tooltip": "assets/core/xe-ui-component/js/xe-tooltip",
+    "xe.progress": "assets/core/common/js/xe.progress",
+    "xe.request": "assets/core/common/js/xe.request"
   }
 });
