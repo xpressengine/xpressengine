@@ -4,8 +4,12 @@
     </div>
 
     <div class="spot">
-        <h1>Basic Theme for XpressEngine3</h1>
-        <p class="lead"></p>
+        <h1>{{ $config->get('spotTitle', 'Xpressengine') }}</h1>
+        <p class="lead">
+            @if($config->get('spotImagePath') !== null)
+            <img src="{{ $config->get('spotImagePath') }}">
+            @endif
+        </p>
     </div>
 
     <div class="xe-row">

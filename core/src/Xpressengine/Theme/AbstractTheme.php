@@ -100,7 +100,7 @@ abstract class AbstractTheme implements ComponentInterface, Renderable
      *
      * @return array
      */
-    protected static function getConfig()
+    public static function getConfig()
     {
         if (static::$configID === null) {
             $configId = static::getId();
@@ -108,5 +108,20 @@ abstract class AbstractTheme implements ComponentInterface, Renderable
             $configId = static::$configID;
         }
         return static::$handler->getThemeConfig($configId);
+    }
+
+    /**
+     * 테마의 설정 데이터를 반환한다.
+     *
+     * @return array
+     */
+    public static function setConfig($config)
+    {
+        if (static::$configID === null) {
+            $configId = static::getId();
+        } else {
+            $configId = static::$configID;
+        }
+        return static::$handler->setThemeConfig($configId, $config);
     }
 }
