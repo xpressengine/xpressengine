@@ -3,18 +3,18 @@
     // AMD
     define([
       'exports',
-      "github:twbs/bootstrap-sass@3.3.6/assets/javascripts/bootstrap.js"
-    ], function (exports, twbs) {
-      factory(exports, twbs);
+      'jquery'
+    ], function (exports, jQuery) {
+      factory(exports, jQuery);
     });
   } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
     // CommonJS
-    factory(exports, require("github:twbs/bootstrap-sass@3.3.6/assets/javascripts/bootstrap.js"));
+    factory(exports, require('jquery'));
   } else {
     // Browser globals
-    factory({});
+    factory({}, root.jQuery);
   }
-}(this, function (exports, twbs) {
+}(this, function (exports, $) {
   $(document).ready(function () {
     var $sidebar = $('.settings-nav-sidebar');
     var $dim = $('.dim');
@@ -50,10 +50,10 @@
     });
 
     /* 사이드바 메뉴 */
-    $('.snb-list').on('click', '.__xe_collapseMenu', function (event) {
-      var $target = $(this);
+    $(document).on('click', function (event) {
+      var $target = $(event.target);
       var $subdepth = $target.parent('.sub-depth');
-      var $ul = $target.siblings('.sub-depth-list');
+      var $ul = $($target).next('.sub-depth-list');
 
       if ($ul.is(':visible')) {
         $ul.find('.sub-depth-list').slideUp('fast');
@@ -69,8 +69,6 @@
         $ul.slideDown('fast');
         $subdepth.addClass('open');
       }
-
-      return false;
     });
   });
 }));

@@ -247,6 +247,17 @@ input[type="search"] {
     font-weight: normal;
     cursor: pointer;
   }
+  
+  &.pull-right{
+    margin:0 0 10px 0;
+    label{
+      margin-right: 0;
+    }
+  }
+  &.font-size-large input[type="checkbox"],
+  &.font-size-large input[type="radio"] {
+    margin-top:5px;
+  }
 }
 .radio input[type="radio"],
 .radio-inline input[type="radio"],

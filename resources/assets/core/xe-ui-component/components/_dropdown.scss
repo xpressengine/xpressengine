@@ -1,238 +1,336 @@
-//
-// Dropdown menus
-// --------------------------------------------------
+@charset "utf-8";
+/* CSS Document */
+/*reset css*/
+.xe-dropdown-menu ul {
+  margin: 0;
+  padding: 0;
+}
+.xe-dropdown-menu li > a {
+  text-decoration: none;
+}
 
 
-// Dropdown arrow/caret
-.caret {
+/*dropdown*/
+.xe-dropdown,
+.xe-dropup {
   display: inline-block;
+  position: relative;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+.xe-dropdown > .xe-btn,
+.xe-dropup > .xe-btn,
+.xe-dropdown-menu li > a {
+  padding: 8px 55px 8px 16px;
+}
+.xe-dropdown > .xe-btn .caret,
+.xe-dropup > .xe-btn .caret {
+  display: none;
+}
+.xe-dropdown > .xe-btn,
+.xe-dropup > .xe-btn {
+  display: inline-block;
+  position: relative;
+  height: 36px;
+  border: 1px solid #dadbde;
+  background-color: #fff;
+  color: #2c2e37;
+  text-decoration: none;
+  text-align: left;
+  outline: none;
+  white-space: nowrap;
+  line-height: 1em;
+  border-radius: 2px;
+}
+.xe-dropdown.v2 > .xe-btn,
+.xe-dropup.v2 > .xe-btn {
+  border: none;
+}
+.xe-dropdown.open > .xe-btn {
+  border-radius: 2px 2px 0 0;
+}
+.xe-dropdown > .xe-btn:hover,
+.xe-dropup > .xe-btn:hover {
+  border-color: #b5b7bd;
+}
+.xe-dropdown > .xe-btn:after,
+.xe-dropup > .xe-btn:after {
+  display: inline-block;
+  position: absolute;
+  right: 16px;
+  top: 50%;
   width: 0;
   height: 0;
-  margin-left: 2px;
-  vertical-align: middle;
-  border-top:   $caret-width-base dashed;
-  border-top:   $caret-width-base solid \9; // IE8
-  border-right: $caret-width-base solid transparent;
-  border-left:  $caret-width-base solid transparent;
+  margin-top: -2px;
+  border-style: solid;
+  border-width: 3px;
+  border-color: #8e8e93 transparent transparent transparent;
+  content: "";
 }
-
-// The dropdown wrapper (div)
-.xe-dropup,
-.xe-dropdown {
-  position: relative;
-}
-
-// Prevent the focus on the dropdown toggle when closing dropdowns
-.xe-dropdown-toggle:focus {
-  outline: 0;
-}
-
-// The dropdown menu (ul)
 .xe-dropdown-menu {
   position: absolute;
+  left: 0;
+  right: 0;
   top: 100%;
-  left: 0;
-  z-index: $zindex-dropdown;
-  display: none; // none by default, but block on "open" of the menu
-  float: left;
-  min-width: 160px;
-  padding: 5px 0;
-  margin: 2px 0 0; // override default ul
-  list-style: none;
-  font-size: $font-size-base;
-  text-align: left; // Ensures proper alignment if parent has it changed (e.g., modal footer)
-  background-color: $dropdown-bg;
-  border: 1px solid $dropdown-fallback-border; // IE8 fallback
-  border: 1px solid $dropdown-border;
-  border-radius: $border-radius-base;
-  @include box-shadow(0 6px 12px rgba(0,0,0,.175));
-  background-clip: padding-box;
-
-  // Aligns the dropdown menu to right
-  //
-  // Deprecated as of 3.1.0 in favor of `.dropdown-menu-[dir]`
-  &.pull-right {
-    right: 0;
-    left: auto;
-  }
-
-  // Dividers (basically an hr) within the dropdown
-  .divider {
-    @include nav-divider($dropdown-divider-bg);
-  }
-
-  // Links within the dropdown menu
-  > li > a {
-    display: block;
-    padding: 5px 20px;
-    clear: both;
-    font-weight: normal;
-    line-height: $line-height-base;
-    color: $dropdown-link-color;
-    white-space: nowrap; // prevent links from randomly breaking onto new lines
-  }
-
-  > li > strong{
-      display:block;
-      padding:5px 10px;
-      font-weight: normal;
-      color:#A9A9AB;
-      font-size: 13px}
+  margin-top: -1px;
+  padding: 0;
+  border: 1px solid #dadbde;
+  border-width: 0 1px 1px 1px;
+  border-radius: 0 0 2px 2px;
+  background-color: #fff;
+  z-index: 10;
 }
-
-// Hover/Focus state
-.xe-dropdown-menu > li > a {
-  position:relative;
-  &:hover,
-  &:focus {
-    text-decoration: none;
-    color: $dropdown-link-hover-color;
-    background-color: $dropdown-link-hover-bg;
-  }
+.xe-dropdown.v2 .xe-dropdown-menu,
+.xe-dropup.v2 .xe-dropdown-menu {
+  padding: 8px 0;
+  border-width: 0;
+  box-shadow: 0 0 2px rgba(0, 0, 0, .3);
+  -webkit-box-shadow: 0 0 2px 0 rgba(0, 0, 0, .3);
 }
-
-// Active state
-.xe-dropdown-menu > .active > a {
-  &,
-  &:hover,
-  &:focus {
-    color: $dropdown-link-active-color;
-    text-decoration: none;
-    outline: 0;
-    background-color: $dropdown-link-active-bg;
-  }
+.xe-dropup .xe-dropdown-menu {
+  top: auto;
+  bottom: 100%;
 }
-
-.btn-fillter .xe-dropdown-menu > .active > a {
-    padding:6px 25px 6px 20px;
-    &:after{position:absolute;
-        right: 13px;
-        top:50%;
-        width: 7px;
-        height: 10px;
-        margin-top: -6px;
-        border-right: 2px solid #fff;
-        border-bottom: 2px solid #fff;
-        -webkit-transform: rotate(45deg);
-        transform: rotate(45deg);content:"";}
+.xe-dropup.v2 .xe-dropdown-menu {
+  border-radius: 2px;
 }
-
-// Disabled state
-//
-// Gray out text and ensure the hover/focus state remains gray
-
-.xe-dropdown-menu > .disabled > a {
-  &,
-  &:hover,
-  &:focus {
-    color: $dropdown-link-disabled-color;
-  }
-
-  // Nuke hover/focus effects
-  &:hover,
-  &:focus {
-    text-decoration: none;
-    background-color: transparent;
-    background-image: none; // Remove CSS gradient
-    @include reset-filter;
-    cursor: $cursor-disabled;
-  }
+.xe-dropdown.open > .xe-btn,
+.xe-dropdown.open .xe-dropdown-menu,
+.xe-dropup.open > .xe-btn,
+.xe-dropup.open .xe-dropdown-menu {
+  border-color: #2389ee;
 }
-
-// Open state for the dropdown
-.open {
-  // Show the menu
-  > .xe-dropdown-menu {
-    display: block;
-  }
-
-  // Remove the outline when :focus is triggered
-  > a {
-    outline: 0;
-  }
+.xe-dropdown .xe-dropdown-menu,
+.xe-dropup .xe-dropdown-menu {
+  display: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
 }
-
-// Menu positioning
-//
-// Add extra class to `.dropdown-menu` to flip the alignment of the dropdown
-// menu with the parent.
-.xe-dropdown-menu-right {
-  left: auto; // Reset the default from `.dropdown-menu`
-  right: 0;
-}
-// With v3, we enabled auto-flipping if you have a dropdown within a right
-// aligned nav component. To enable the undoing of that, we provide an override
-// to restore the default dropdown menu alignment.
-//
-// This is only for left-aligning a dropdown menu within a `.navbar-right` or
-// `.pull-right` nav component.
-.xe-dropdown-menu-left {
-  left: 0;
-  right: auto;
-}
-
-// Dropdown section headers
-.xe-dropdown-header {
+.xe-dropdown.open .xe-dropdown-menu,
+.xe-dropup.open .xe-dropdown-menu {
   display: block;
-  padding: 3px 20px;
-  font-size: $font-size-small;
-  line-height: $line-height-base;
-  color: $dropdown-header-color;
-  white-space: nowrap; // as with > li > a
+}
+.xe-dropdown-menu li > a {
+  display: block;
+  position: relative;
+  color: #2c2e37;
+}
+.xe-dropdown-menu li > a:hover {
+  background-color: #2389ee;
+  color: #fff !important;
+}
+.xe-dropdown-menu li {
+  list-style: none;
+}
+.xe-dropdown-menu li.on a {
+  color: #2c8beb;
+}
+.xe-dropdown-menu li.on a:after {
+  display: inline-block;
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  margin-top: -9px;
+  font-family: xeicon;
+  speak: none;
+  font-style: normal;
+  font-weight: 400;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  content: "\e92a";
+  color: #b5b7bd;
+  font-size: 18px;
+}
+.xe-dropdown.v2 .xe-dropdown-menu li.on a,
+.xe-dropup.v2 .xe-dropdown-menu li.on a {
+  padding-right: 16px;
+}
+.xe-dropdown.v2 .xe-dropdown-menu li.on a:after,
+.xe-dropup.v2 .xe-dropdown-menu li.on a:after {
+  display: none;
+}
+.xe-dropdown > .xe-btn,
+.xe-dropup > .xe-btn,
+.xe-dropdown-menu {
+  min-width: auto;
+  width: 168px;
+}
+.xe-dropdown.v2 > .xe-btn,
+.xe-dropup.v22 > .xe-btn,
+.xe-dropdown-menu {
+  width: auto;
+}
+.xe-dropdown.small > .xe-btn,
+.xe-dropup.small > .xe-btn,
+.xe-dropdown.small .xe-dropdown-menu,
+.xe-dropup.small .xe-dropdown-menu {
+  width: 112px;
+}
+.xe-dropdown.wide > .xe-btn,
+.xe-dropup.wide > .xe-btn,
+.xe-dropdown.wide .xe-dropdown-menu,
+.xe-dropup.wide .xe-dropdown-menu {
+  width: 224px;
+}
+.xe-dropdown.very-wide > .xe-btn,
+.xe-dropup.very-wide > .xe-btn,
+.xe-dropdown.very-wide .xe-dropdown-menu,
+.xe-dropup.very-wide .xe-dropdown-menu {
+  width: 280px;
+}
+.xe-dropdown.max-wide > .xe-btn,
+.xe-dropup.max-wide > .xe-btn,
+.xe-dropdown.max-wide .xe-dropdown-menu,
+.xe-dropup.max-wide .xe-dropdown-menu {
+  width: 336px;
 }
 
-// Backdrop to catch body clicks on mobile, etc.
-.xe-dropdown-backdrop {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 0;
-  z-index: ($zindex-dropdown - 10);
+.xe-select-box {
+  position: relative;
+  overflow: hidden;
+  min-width: 140px;
+  line-height: 30px;
+  padding: 0 20px 0 10px;
+  border: 1px solid #e4e4e4;
+  border-radius: 2px;
+  background-color: #fff;
+  text-overflow: ellipsis;
+  word-break: break-word;
+  white-space: nowrap;
+}
+.xe-select-box:after {
+  display: inline-block;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  width: 0;
+  height: 0;
+  margin-top: -2px;
+  border-style: solid;
+  border-width: 3px;
+  border-color: #8e8e93 transparent transparent transparent;
+  content: "";
+}
+.xe-select-box label {
+  font-size: 14px;
+  color: #696e7a;
+  letter-spacing: 1px;
+}
+.xe-select-box select {
+  position: absolute;
+  top:0;
+  left:0;
+  width: 100%;
+  height: 30px;
+  font-size: 14px;
+  line-height: 30px;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  -webkit-appearance: menulist-xe-btn;
 }
 
-// Right aligned dropdowns
-.pull-right > .xe-dropdown-menu {
-  right: 0;
-  left: auto;
-}
-
-// Allow for dropdowns to go bottom up (aka, dropup-menu)
-//
-// Just add .dropup after the standard .dropdown class and you're set, bro.
-// TODO: abstract this so that the navbar fixed styles are not placed here?
-
-.xe-dropup,
-.navbar-fixed-bottom .xe-dropdown {
-  // Reverse the caret
-  .caret {
-    border-top: 0;
-    border-bottom: $caret-width-base dashed;
-    border-bottom: $caret-width-base solid \9; // IE8
-    content: "";
-  }
-  // Different positioning for bottom up menu
-  .xe-dropdown-menu {
-    top: auto;
-    bottom: 100%;
-    margin-bottom: 2px;
-  }
-}
-
-
-// Component alignment
-//
-// Reiterate per navbar.less and the modified component alignment there.
-
-@media (min-width: $grid-float-breakpoint) {
-  .navbar-right {
-    .xe-dropdown-menu {
-      right: 0; left: auto;
+.xe-select-label {
+  .label-input ul {
+    margin: 0;
+    padding: 0;
+    li {
+      list-style: none;
     }
-    // Necessary for overrides of the default right aligned menu.
-    // Will remove come v4 in all likelihood.
-    .xe-dropdown-menu-left {
-      left: 0; right: auto;
+  }
+  .label-list li {
+    list-style: none;
+  }
+  position: relative;
+  .label-input {
+    position: relative;
+    overflow: hidden;
+    padding: 0 25px 0 10px;
+    background-color: #F6F7F9;
+    border: 1px solid #DBDADF;
+    border-radius: 2px;
+    &:after {
+      display: inline-block;
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      width: 0;
+      height: 0;
+      margin-top: -2px;
+      border-style: solid;
+      border-width: 4px;
+      border-color: #8e8e93 transparent transparent transparent;
+      content: "";
+    }
+    ul li {
+      float: left;
+      &:first-child .label-choice {
+        margin-left: 0;
+      }
+      .label-choice {
+        display: block;
+        position: relative;
+        margin: 6px 2px;
+        padding: 1px 28px 1px 8px;
+        color: #fff;
+        font-size: 13px;
+        background-color: #B5B8BD;
+        border: 1px solid #DBDADF;
+        border-radius: 4px;
+        button {
+          position: absolute;
+          right: 3px;
+          top: 1px;
+          background-color: transparent;
+          border: transparent;
+          outline: none;
+          font-size: 11px;
+          color: #fff;
+        }
+      }
+      .search-label {
+        height: 21px;
+        margin: 6px 2px;
+        border-color: transparent;
+        background-color: transparent;
+      }
+    }
+  }
+  .label-list {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    border: 1px solid #8DC5FF;
+    background-color: #fff;
+    z-index: 100;
+  }
+  &.open .label-list {
+    display: block;
+  }
+  .label-list .label-division {
+    padding: 10px;
+    font-size: 13px;
+    + .label-division {
+      border-top: 1px solid #DBDBDD;
+    }
+    strong {
+      display: block;
+      margin-bottom: 10px;
+    }
+    a {
+      display: block;
+      padding: 0 10px;
+      color: #696e7a;
+      line-height: 24px;
+      border-radius: 4px;
+      &:hover {
+        background-color: #2992FB;
+        color: #fff;
+      }
     }
   }
 }

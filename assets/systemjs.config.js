@@ -57,7 +57,7 @@ System.config({
     "jsx": "github:floatdrop/plugin-jsx@1.2.1",
     "lodash": "npm:lodash@4.7.0",
     "moment": "npm:moment@2.12.0",
-    "normalize.css": "github:necolas/normalize.css@4.0.0",
+    "normalize.css": "github:necolas/normalize.css@4.1.1",
     "swiper2": "npm:swiper@2.7.6",
     "twbs/bootstrap-sass": "github:twbs/bootstrap-sass@3.3.6",
     "vendor:/jquery": "xevendor:/jquery/jquery",
