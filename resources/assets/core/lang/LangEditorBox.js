@@ -56,31 +56,29 @@ var LangEditor = React.createClass({
       var self = this;
       var el = this.getDOMNode();
 
+      if ( this.props.langKey ) {
+        if ( this.state.lines.length == 0 ) {
+          $.ajax({
+            type: 'get',
+            dataType: 'json',
+            url: '/' + XE.options.managePrefix + '/lang/lines/' + this.props.langKey,
+            success: function(result) {
+              if (this.isMounted()) { self.setLines(result); }
+            }.bind(this)
+          });
+        }
+      }
 
       if (this.props.autocomplete) {
         $(el).find('input[type=text]:first,textarea:first').autocomplete({
           source: '/' + XE.options.managePrefix + '/lang/search/' + XE.Lang.locales[0],
           minLength: 1,
-          focus: function (event, ui) {
-            event.preventDefault();
-          },
-          select: function (event, ui) {
-            self.setLines(ui.item.lines);
-          }
+          focus: function(event, ui) { event.preventDefault(); },
+          select: function(event, ui) { self.setLines(ui.item.lines); }
         });
       }
     }
 
-    $(el).find('input[type=text]:first,textarea:first').autocomplete({
-      source: '/' + XE.options.managePrefix + '/lang/search/' + XE.Lang.locales[0],
-      minLength: 1,
-      focus: function (event, ui) {
-        event.preventDefault();
-      },
-      select: function (event, ui) {
-        self.setLines(ui.item.lines);
-      }
-    });
   },
   // getFlagClass: function (locale) {
   //     var code = XE.Lang.getLangCode(locale),
