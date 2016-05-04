@@ -113,11 +113,13 @@ class PluginRegister
             case 'uiobject':
             case 'FieldType':
             case 'FieldSkin':
+            case 'editor':
             default:
                 if ($parts['target'] != '') {
                     $key = $target = $parts['target'].self::KEY_DELIMITER.$parts['type'];
                 }
                 $this->register->set($key.'.'.$component::getId(), $component);
+                break;
         }
     }
 
@@ -184,12 +186,12 @@ class PluginRegister
     {
         /** @var \Xpressengine\Plugin\ComponentInterface $class */
         $class = $info['class'];
-
         if (!is_subclass_of($class, ComponentInterface::class)) {
             throw new Exceptions\NotImplementedException(['className' => $class]);
         }
 
         $class::setId($info['id']);
+
         $class::setComponentInfo(array_except($info, ['class', 'id']));
     }
 }

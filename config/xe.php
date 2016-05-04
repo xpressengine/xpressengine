@@ -416,6 +416,10 @@ return [
         'blank' => 'Xpressengine\Themes\BlankTheme'
     ],
 
+    'editor' => [
+        'default' => 'editor/xpressengine@ckEditor',
+    ],
+
     'HtmlWrapper' => [
         'common' => 'common.base',
         'popup' => 'common.popup',
