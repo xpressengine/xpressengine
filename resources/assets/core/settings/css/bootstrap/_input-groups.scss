@@ -38,12 +38,6 @@
   textarea{
       width:100%;
   }
-  textarea+.flag-code {
-      position: absolute;
-      top: 10px;
-      right: 15px;
-      z-index: 5;
-  }
 
   +.input-group{
       margin-top:5px;
@@ -186,6 +180,7 @@
 }
 
 .input-group.search-group {
+  font-size: 0;
   .input-group-btn, .form-control {
     display: inline-block;
     float: none;

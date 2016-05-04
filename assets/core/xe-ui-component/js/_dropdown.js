@@ -1,17 +1,17 @@
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD
-    define(['exports'], function (exports) {
-      factory(exports);
+    define(['exports', 'jquery'], function (exports, jQuery) {
+      factory(exports, jQuery);
     });
   } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
     // CommonJS
-    factory(exports);
+    factory(exports, require('jquery'));
   } else {
     // Browser globals
-    factory({});
+    factory({}, root.jQuery);
   }
-}(this, function (exports) {
+}(this, function (exports, $) {
   'use strict';
 
   // DROPDOWN CLASS DEFINITION
@@ -20,7 +20,7 @@
   var backdrop = '.xe-dropdown-backdrop'
   var toggle   = '[data-toggle="xe-dropdown"]'
   var Dropdown = function (element) {
-    $(element).on('click.xe.dropdown', this.toggle)
+    $(element).on('click.bs.xe-dropdown', this.toggle)
   }
 
   Dropdown.VERSION = '3.3.6'
@@ -50,12 +50,12 @@
 
       if (e && e.type == 'click' && /input|textarea/i.test(e.target.tagName) && $.contains($parent[0], e.target)) return
 
-      $parent.trigger(e = $.Event('hide.xe.dropdown', relatedTarget))
+      $parent.trigger(e = $.Event('hide.bs.xe-dropdown', relatedTarget))
 
       if (e.isDefaultPrevented()) return
 
       $this.attr('aria-expanded', 'false')
-      $parent.removeClass('open').trigger($.Event('hidden.xe.dropdown', relatedTarget))
+      $parent.removeClass('open').trigger($.Event('hidden.bs.xe-dropdown', relatedTarget))
     })
   }
 
@@ -73,13 +73,13 @@
       if ('ontouchstart' in document.documentElement && !$parent.closest('.navbar-nav').length) {
         // if mobile we use a backdrop because click events don't delegate
         $(document.createElement('div'))
-          .addClass('xe-dropdown-backdrop')
+          .addClass('dropdown-backdrop')
           .insertAfter($(this))
           .on('click', clearMenus)
       }
 
       var relatedTarget = { relatedTarget: this }
-      $parent.trigger(e = $.Event('show.xe.dropdown', relatedTarget))
+      $parent.trigger(e = $.Event('show.bs.xe-dropdown', relatedTarget))
 
       if (e.isDefaultPrevented()) return
 
@@ -89,7 +89,7 @@
 
       $parent
         .toggleClass('open')
-        .trigger($.Event('shown.xe.dropdown', relatedTarget))
+        .trigger($.Event('shown.bs.xe-dropdown', relatedTarget))
     }
 
     return false
@@ -134,14 +134,14 @@
   function Plugin(option) {
     return this.each(function () {
       var $this = $(this)
-      var data  = $this.data('xe.dropdown')
+      var data  = $this.data('bs.xe-dropdown')
 
-      if (!data) $this.data('xe.dropdown', (data = new Dropdown(this)))
+      if (!data) $this.data('bs.xe-dropdown', (data = new Dropdown(this)))
       if (typeof option == 'string') data[option].call($this)
     })
   }
 
-  var old = $.fn.dropdown
+  var old = $.fn.xeDropdown
 
   $.fn.xeDropdown             = Plugin
   $.fn.xeDropdown.Constructor = Dropdown
@@ -151,7 +151,7 @@
   // ====================
 
   $.fn.xeDropdown.noConflict = function () {
-    $.fn.dropdown = old
+    $.fn.xeDropdown = old
     return this
   }
 
@@ -160,10 +160,10 @@
   // ===================================
 
   $(document)
-    .on('click.xe.dropdown.data-api', clearMenus)
-    .on('click.xe.dropdown.data-api', '.xe-dropdown form', function (e) { e.stopPropagation() })
-    .on('click.xe.dropdown.data-api', toggle, Dropdown.prototype.toggle)
-    .on('keydown.xe.dropdown.data-api', toggle, Dropdown.prototype.keydown)
-    .on('keydown.xe.dropdown.data-api', '.xe-dropdown-menu', Dropdown.prototype.keydown)
+    .on('click.bs.xe-dropdown.data-api', clearMenus)
+    .on('click.bs.xe-dropdown.data-api', '.xe-dropdown form', function (e) { e.stopPropagation() })
+    .on('click.bs.xe-dropdown.data-api', toggle, Dropdown.prototype.toggle)
+    .on('keydown.bs.xe-dropdown.data-api', toggle, Dropdown.prototype.keydown)
+    .on('keydown.bs.xe-dropdown.data-api', '.xe-dropdown-menu', Dropdown.prototype.keydown)
 
 }));

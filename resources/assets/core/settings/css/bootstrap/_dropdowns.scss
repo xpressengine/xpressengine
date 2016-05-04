@@ -17,18 +17,18 @@
 }
 
 // The dropdown wrapper (div)
-.xe-dropup,
-.xe-dropdown {
+.dropup,
+.dropdown {
   position: relative;
 }
 
 // Prevent the focus on the dropdown toggle when closing dropdowns
-.xe-dropdown-toggle:focus {
+.dropdown-toggle:focus {
   outline: 0;
 }
 
 // The dropdown menu (ul)
-.xe-dropdown-menu {
+.dropdown-menu {
   position: absolute;
   top: 100%;
   left: 0;

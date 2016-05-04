@@ -29,9 +29,9 @@
         this.container = container;
         this.urls = urls;
 
-        this.newBoxClass = 'sortable-new';
+        this.newBoxClass = '__xe_sortable-new';
 
-        this.boxClass = 'sortable';
+        this.boxClass = '__xe_sortable';
         this.treeBox = null;
 
         this.repo = new DataCache();
@@ -39,23 +39,29 @@
 
     Tree.prototype = {
         init: function () {
-            $('<ol>').addClass(this.boxClass + ' item-box').appendTo(this.container);
-            this.treeBox = $('> ol', this.container)[0];
+            $(this.container).addClass('panel board-category');
+
+            $('<div>').addClass('panel-body').append(
+                $('<ul>').addClass(this.boxClass + ' item-container')
+            ).appendTo(this.container);
+
+            this.treeBox = $('> .panel-body > ul', this.container)[0];
 
             $(this.treeBox).nestedSortable({
                 forcePlaceholderSize: true,
-                handle: 'header',
-                helper:	'clone',
+                // handle: 'header',
+                handle: '.handler',
+                cancel: '',
+                helper: 'clone',
+                listType: 'ul',
                 items: 'li',
                 opacity: .6,
-                placeholder: 'placeholder',
+                placeholder: 'item copy',
                 tolerance: 'pointer',
                 toleranceElement: '> div',
                 isTree: true,
                 // startCollapsed: true,
                 relocate: function (e, locate) {
-                    // console.log(arguments);
-
                     this.move(locate.item[0]);
                 }.bind(this),
                 isAllowed: function ($placeholder, $parent, $item) {
@@ -70,7 +76,7 @@
             this.drawNew();
 
             this.attachToggleChildren();
-            this.attachActive();
+            // this.attachActive();
             this.attachToggleBtns();
 
             this.load(null, function (nodes) {
@@ -81,29 +87,37 @@
         },
         drawNew: function () {
             var self = this;
-            var $item = itemMaker.makeNew();
 
-            $('header', $item).click(function () {
-                var collapsed = $item.find('.collapse').hasClass('in') ? false : true;
+            var $item = $('<div>').addClass(this.newBoxClass + ' panel-heading').append(
+                $('<div>').addClass('pull-left').append(
+                    $('<h3>').addClass('panel-title').text('카테고리')
+                )
+            ).append(
+                $('<div>').addClass('pull-right').append(
+                    $('<button>').addClass('btn btn-primary __xe_btn_new').append(
+                        $('<i>').addClass('xi-plus')
+                    ).append(
+                        $('<span>').text(XE.Lang.trans('xe::addItem'))
+                    )
+                )
+            ).append(itemMaker.getBody());
 
+            $('.__xe_btn_new', $item).click(function () {
                 self.closeBodyAll();
 
-                if (collapsed) {
+                if (!$item.hasClass('open')) {
                     var $form = formProvider.make('create', null, self.onCreate.bind(self));
                     $('.__xe_content_body', $item).empty().append($form);
                     $form.find('.lang-editor-box').each(function () {
                         langEditorBoxRender($(this));
                     });
-                    $item.find('.collapse').collapse('show');
+                    $item.addClass('open');
+                } else {
+                    $item.removeClass('open');
                 }
-
-
-                //closeBodyAll
             });
 
-            $('<ol>').addClass(this.newBoxClass + ' item-box item-box-new')
-                .append($item)
-                .prependTo(this.container);
+            $item.prependTo(this.container);
         },
         load: function (parentId, callback) {
             var data = parentId ? {id: parentId} : null;
@@ -143,23 +157,32 @@
             XE.ajax({
                 url: this.urls.move,
                 type: 'post',
+                dataType: 'html',
                 data: {id: id, parentId: parentInfo.item_id, ordering: ordering},
                 success: function () {
                     var $parent = $('#' + itemMaker.makeIdAttr(parentInfo.item_id));
                     if ($parent.data('is_loaded') !== true) {
-                        $('> .panel .__xe_btn_toggle_children', $parent).trigger('click');
+                        $('> .__xe_item_block .__xe_btn_toggle_children', $parent).trigger('click');
                     }
                 }
             });
         },
         onRemove: function (e, data) {
-            $('#' + itemMaker.makeIdAttr(data.id)).remove();
-            this.repo.remove(data.id);
+            $('#' + itemMaker.makeIdAttr(data.id)).hide();
 
+            var self = this;
             XE.ajax({
                 url: this.urls.remove,
                 type: 'post',
-                data: {id: data.id}
+                dataType: 'html',
+                data: {id: data.id},
+                success: function () {
+                    $('#' + itemMaker.makeIdAttr(data.id)).remove();
+                    self.repo.remove(data.id);
+                },
+                error: function () {
+                    $('#' + itemMaker.makeIdAttr(data.id)).show();
+                }
             });
         },
         onCreate: function (e, form) {
@@ -184,13 +207,13 @@
                         var $parent = $('#' + itemMaker.makeIdAttr(data.parentId));
                         self.closeBody($parent);
                         if ($parent.data('is_loaded') !== true) {
-                            $('> .panel .__xe_btn_toggle_children', $parent).trigger('click');
+                            $('> .__xe_item_block .__xe_btn_toggle_children', $parent).trigger('click');
                             return;
                         }
                     }
 
                     // create new form close
-                    $('> .' + self.newBoxClass, self.container).find('.collapse.in').collapse('hide');
+                    $('> .' + self.newBoxClass, self.container).removeClass('open');
 
                     self.add(node, data.parentId);
                 },
@@ -224,7 +247,6 @@
                 data: data,
                 success: function (node) {
                     var $item = $('#' + itemMaker.makeIdAttr(node.id));
-                    // $('> .__xe_item_block .__xe_word', $item).text(node.word);
                     $('> .__xe_item_block .__xe_word', $item).text(node.readableWord);
                     self.repo.set(node);
 
@@ -249,7 +271,7 @@
                 return this.treeBox;
             }
 
-            return $('> ol', '#' + itemMaker.makeIdAttr(id))[0];
+            return $('> ul', '#' + itemMaker.makeIdAttr(id))[0];
         },
         getNestedInfo: function (id) {
             var arr = $(this.treeBox).nestedSortable('toArray', {startDepthCount: 0});
@@ -310,8 +332,8 @@
                 if ($item.data('is_loaded') !== true) {
                     $item.data('is_loading', true);
                     self.load(id, function (nodes) {
-                        if ($(self.getChildrenBox(id)).is('ol') !== true) {
-                            $('<ol>').appendTo('#' + itemMaker.makeIdAttr(id));
+                        if ($(self.getChildrenBox(id)).is('ul') !== true) {
+                            $('<ul>').appendTo('#' + itemMaker.makeIdAttr(id));
                         }
 
                         for (var i in nodes) {
@@ -328,31 +350,22 @@
                 self.setToggleChildrenIcon($item);
             });
         },
-        attachActive: function () {
-            var self = this;
-            $(this.treeBox).on('click', '.__xe_item_block', function (e) {
-                $(this).closest('.' + self.boxClass).find('.__xe_item_block').removeClass('active');
-                $(this).addClass('active');
-
-                var $item = $(this).closest('.' + self.boxClass).find('.collapse.in').closest('li');
-                if ($('> .__xe_item_block', $item).hasClass('active') !== true) {
-                    self.closeBody($item);
-                }
-            });
-        },
         attachToggleBtns: function () {
             var self = this;
-            $(this.treeBox).on('click', '.toggle-btns > span', function () {
-                if ($(this).hasClass('active')) {
+
+            $(this.treeBox).on('click', '.__xe_toggle-btns > .btn', function () {
+                if ($(this).hasClass('on')) {
                     self.closeBody($(this).closest('li'));
                     return;
                 }
 
-                $(self.treeBox).find('.toggle-btns > span').removeClass('active');
-                $(this).addClass('active');
+                $('.__xe_toggle-btns > .btn', self.treeBox).removeClass('on');
+                $(this).addClass('on');
 
+                $('.item', self.treeBox).removeClass('open');
+                $(this).closest('li').addClass('open');
 
-                var action = $(this).attr('data-action');
+                var action = $(this).data('action');
                 var submitHandler = action === 'child' ? self.onCreate : self.onEdit;
                 var id = itemMaker.extractId($(this).closest('li')[0]);
 
@@ -362,47 +375,37 @@
                 $form.find('.lang-editor-box').each(function () {
                     langEditorBoxRender($(this));
                 });
-
-
-                if ($(this).closest('.__xe_item_block').children('.collapse').hasClass('in') !== true) {
-                    self.closeBodyAll();
-                    $(this).closest('.__xe_item_block').children('.collapse').collapse('show');
-                }
             });
         },
         closeBody: function ($item) {
-            var $itemBlock = $('> .__xe_item_block', $item);
-            var btn = $('.toggle-btns > span.active', $itemBlock);
-            $itemBlock.children('.collapse')
-                .one('hidden.bs.collapse', function () {
-                    $(btn).removeClass('active');
-                })
-                .collapse('hide');
+            $item.removeClass('open');
+            $('> .__xe_item_block .__xe_toggle-btns .btn.on', $item).removeClass('on');
         },
         closeBodyAll: function () {
-            $('> .' + this.newBoxClass, this.container).find('.collapse.in').collapse('hide');
-
-            this.closeBody($(this.treeBox).find('.collapse.in').closest('li'));
+            var self = this;
+            $(this.treeBox).find('li.open').each(function () {
+                self.closeBody($(this));
+            });
         },
         setToggleChildrenIcon: function ($item) {
             var $btn = $('> .__xe_item_block .__xe_btn_toggle_children', $item);
 
-            $('i', $btn).removeClass('xi-angle-right xi-angle-down xi-spinner-1 xi-spin');
+            $($btn).removeClass('xi-angle-right xi-angle-down xi-refresh xi-spin');
 
             if ($item.data('is_loading') === true) {
-                $('i', $btn).addClass('xi-spinner-1 xi-spin');
+                $($btn).addClass('xi-refresh xi-spin');
             } else {
                 if ($item.hasClass('__xe_state_open')) {
-                    $('i', $btn).addClass('xi-angle-down');
+                    $($btn).addClass('xi-angle-down');
                 } else {
-                    $('i', $btn).addClass('xi-angle-right');
+                    $($btn).addClass('xi-angle-right');
                 }
             }
 
             if ($item.hasClass('__xe_state_open')) {
-                $('> ol', $item).show();
+                $('> ul', $item).show();
             } else {
-                $('> ol', $item).hide();
+                $('> ul', $item).hide();
             }
         }
     };
@@ -438,57 +441,43 @@
 
             return idAttr.replace(this.prefix + this.expression, '');
         },
-        makeNew: function () {
-            var item = $('<li>')
-                .append(
-                    $('<div>').addClass('panel panel-default __xe_item_block')
-                            .append(
-                                $('<header>').addClass('panel-heading')
-                                    .append($('<span>').addClass('head-bth').append($('<i>').addClass('xi-plus')))
-                                    .append($('<span>').text(XE.Lang.trans('xe::addItem')))
-                            )
-                            .append(this.getBody())
-                );
-
-            return item;
-        },
         make: function (data) {
             var item = $('<li>')
                 .attr('id', this.makeIdAttr(data.id))
-                .addClass('__xe_state_close')
+                .addClass('item __xe_state_close')
                 .append(
-                    $('<div>').addClass('panel panel-default __xe_item_block')
+                    $('<div>').addClass('item-content __xe_item_block')
+                            .append(
+                                $('<button>').addClass('btn handler').append($('<i>').addClass('xi-bullet-point'))
+                            )
                             .append(this.getHeader(data))
+                            .append(this.getBtns())
                             .append(this.getBody())
-                );//.append($('<ol>').css('display', 'none'));
+                );
+
 
             return item;
         },
         getHeader: function (data) {
-            var header = $('<header>').addClass('panel-heading');
-
-            $('<span>').addClass('head-bth __xe_btn_toggle_children')
-                    .append($('<i>').addClass('xi-angle-right')).appendTo(header);
-            // $('<span>').addClass('__xe_word').text(data.word).appendTo(header);
-            $('<span>').addClass('__xe_word').text(data.readableWord).appendTo(header);
-            $('<span>').addClass('pull-right toggle-btns')
-                    .append(
-                        $('<span>').addClass('head-bth')
-                            .attr('data-action', 'edit')
-                            .append($('<i>').addClass('xi-pen'))
-                    )
-                    .append(
-                        $('<span>').addClass('head-bth')
-                            .attr('data-action', 'child')
-                            .append($('<i>').addClass('xi-plus'))
-                    )
-                    .appendTo(header);
+            var header = $('<div>').addClass('item-info').append(
+                $('<i>').addClass('xi-angle-right __xe_btn_toggle_children').css('cursor', 'pointer')
+            ).append(
+                $('<strong>').addClass('__xe_word').text(data.readableWord)
+            );
 
             return header;
         },
+        getBtns: function () {
+            var btns = $('<div>').addClass('edit-btn-area __xe_toggle-btns').append(
+                $('<button>').addClass('btn').data('action', 'edit').append($('<i>').addClass('xi-pen'))
+            ).append(
+                $('<button>').addClass('btn').data('action', 'child').append($('<i>').addClass('xi-plus'))
+            );
+
+            return btns;
+        },
         getBody: function () {
-            var body = $('<div>').addClass('panel-collapse collapse')
-                    .append($('<div>').addClass('panel-body __xe_content_body'));
+            var body = $('<div>').addClass('panel panel-edit __xe_content_body');
 
             return body;
         }
@@ -500,36 +489,12 @@
             $form.submit(function (e) {
                 submitHandler(e, this);
             });
-            var $legend = $('<h1>').text(this.getTitleText(action));
 
-            if (action == 'edit') {
-                $legend.append(this.removeBtn(data, removeHandler));
-            }
+            $('.__xe_btn_remove', $form).click(function (e) {
+                removeHandler(e, data, this);
+            });
 
-            var $p = $('<p>').css({
-                'border-bottom': '1px solid #000',
-                'padding-bottom': '10px',
-                'margin-bottom': '20px'
-            }).append($legend);
-
-            return $('<div>').append($p)
-                .append($('<div>').append($form));
-        },
-        getTitleText: function (action) {
-            switch (action) {
-                case 'create':
-                    return XE.Lang.trans('xe::create');
-                break;
-                case 'child':
-                    return XE.Lang.trans('xe::createChild');
-                break;
-                case 'edit':
-                    return XE.Lang.trans('xe::edit');
-                break;
-                default:
-                    return XE.Lang.trans('xe::unknown');
-                break;
-            }
+            return $form;
         },
         removeBtn: function (data, removeHandler) {
             return $('<span>').addClass('pull-right').css('cursor', 'pointer').append(
@@ -555,19 +520,45 @@
         _create: function (parentId) {
             var $form = $('<form>');
 
-            $('<div>').addClass('form-group')
-                .append($('<label>').addClass('control-label').text(XE.Lang.trans('xe::word')))
-                .append(
-                    $('<div>').addClass('lang-editor-box').data('name', 'word')
-                    // $('<input>').addClass('form-control').attr('name', 'word')
-                ).appendTo($form);
-            $('<div>').addClass('form-group')
-                .append($('<label>').addClass('control-label').text(XE.Lang.trans('xe::description')))
-                .append(
-                    $('<div>').addClass('lang-editor-box').data('name', 'description').data('multiline', true)
-                    // $('<textarea>').addClass('form-control').attr('name', 'description')
-                ).appendTo($form);
-            $('<button>').attr('type', 'submit').addClass('btn btn-primary').text(XE.Lang.trans('xe::save')).appendTo($form);
+            $('<div>').addClass('panel-heading').append(
+                $('<div>').addClass('pull-left').append(
+                    $('<strong>').addClass('panel-title').text(parentId ? XE.Lang.trans('xe::createChild') : XE.Lang.trans('xe::create'))
+                )
+            ).appendTo($form);
+
+            $('<div>').addClass('panel-body').append(
+                $('<div>').addClass('form-group')
+                    .append($('<label>').text(XE.Lang.trans('xe::word')))
+                    .append(
+                        $('<div>').addClass('lang-editor-box').data({
+                            'name': 'word',
+                            'autocomplete': false
+                        })
+                    )
+            ).append(
+                $('<div>').addClass('form-group')
+                    .append($('<label>').text(XE.Lang.trans('xe::description')))
+                    .append(
+                        $('<div>').addClass('lang-editor-box').data({
+                            'name': 'description',
+                            'multiline': true,
+                            'autocomplete': false
+                        })
+                    )
+            ).appendTo($form);
+
+            var btns = $('<div>').addClass('pull-right').append(
+                $('<button>').attr('type', 'submit').addClass('btn btn-primary').text(XE.Lang.trans('xe::save'))
+            );
+            if (!parentId) {
+                btns.prepend(
+                    $('<button>').attr('type', 'button').addClass('btn btn-default').text('닫기').click(function () {
+                        $(this).closest('.open').removeClass('open');
+                    })
+                );
+            }
+
+            $('<div>').addClass('panel-footer').append(btns).appendTo($form);
 
             if (parentId) {
                 $('<input>').attr({type: 'hidden', name: 'parentId'}).val(parentId).appendTo($form);
@@ -580,19 +571,42 @@
 
             $('<input>').attr({type: 'hidden', name: 'id'}).val(data.id).appendTo($form);
 
-            $('<div>').addClass('form-group')
-                .append($('<label>').addClass('control-label').text(XE.Lang.trans('xe::word')))
-                .append(
-                    $('<div>').addClass('lang-editor-box').data('name', 'word').data('lang-key', data.word)
-                    // $('<input>').addClass('form-control').attr('name', 'word').val(data.word)
-                ).appendTo($form);
-            $('<div>').addClass('form-group')
-                .append($('<label>').addClass('control-label').text(XE.Lang.trans('xe::description')))
-                .append(
-                    $('<div>').addClass('lang-editor-box').data('name', 'description').data('lang-key', data.description).data('multiline', true)
-                    // $('<textarea>').addClass('form-control').attr('name', 'description').val(data.description)
-                ).appendTo($form);
-            $('<button>').attr('type', 'submit').addClass('btn btn-primary').text(XE.Lang.trans('xe::save')).appendTo($form);
+            $('<div>').addClass('panel-heading').append(
+                $('<div>').addClass('pull-left').append(
+                    $('<strong>').addClass('panel-title').text(XE.Lang.trans('xe::edit'))
+                )
+            ).appendTo($form);
+
+            $('<div>').addClass('panel-body').append(
+                $('<div>').addClass('form-group')
+                    .append($('<label>').text(XE.Lang.trans('xe::word')))
+                    .append(
+                        $('<div>').addClass('lang-editor-box').data({
+                            'name': 'word',
+                            'lang-key': data.word,
+                            'autocomplete': false
+                        })
+                    )
+            ).append(
+                $('<div>').addClass('form-group')
+                    .append($('<label>').text(XE.Lang.trans('xe::description')))
+                    .append(
+                        $('<div>').addClass('lang-editor-box').data({
+                            'name': 'description',
+                            'lang-key': data.description,
+                            'multiline': true,
+                            'autocomplete': false
+                        })
+                    )
+            ).appendTo($form);
+
+            $('<div>').addClass('panel-footer').append(
+                $('<div>').addClass('pull-right').append(
+                    $('<button>').attr('type', 'button').addClass('btn btn-default __xe_btn_remove').text('삭제')
+                ).append(
+                    $('<button>').attr('type', 'submit').addClass('btn btn-primary').text(XE.Lang.trans('xe::save'))
+                )
+            ).appendTo($form);
 
             return $form;
         }
