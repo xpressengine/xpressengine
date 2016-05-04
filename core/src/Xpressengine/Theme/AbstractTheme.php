@@ -38,8 +38,6 @@ abstract class AbstractTheme implements ComponentInterface, Renderable
      */
     protected static $handler  = null;
 
-    protected static $configID = null;
-
     /**
      * 테마 핸들러를 지정한다.
      *
@@ -86,6 +84,18 @@ abstract class AbstractTheme implements ComponentInterface, Renderable
     }
 
     /**
+     * getSettingView
+     *
+     * @param $config
+     *
+     * @return string
+     */
+    public static function getSettingView($config = [])
+    {
+        return '';
+    }
+
+    /**
      * 테마 편집 페이지에서 편집할 수 있는 파일의 목록을 반환한다.
      *
      * @return array
@@ -93,35 +103,5 @@ abstract class AbstractTheme implements ComponentInterface, Renderable
     public static function getEditFiles()
     {
         return [];
-    }
-
-    /**
-     * 테마의 설정 데이터를 반환한다.
-     *
-     * @return array
-     */
-    public static function getConfig()
-    {
-        if (static::$configID === null) {
-            $configId = static::getId();
-        } else {
-            $configId = static::$configID;
-        }
-        return static::$handler->getThemeConfig($configId);
-    }
-
-    /**
-     * 테마의 설정 데이터를 반환한다.
-     *
-     * @return array
-     */
-    public static function setConfig($config)
-    {
-        if (static::$configID === null) {
-            $configId = static::getId();
-        } else {
-            $configId = static::$configID;
-        }
-        return static::$handler->setThemeConfig($configId, $config);
     }
 }

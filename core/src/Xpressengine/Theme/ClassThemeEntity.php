@@ -13,8 +13,7 @@
  */
 namespace Xpressengine\Theme;
 
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Jsonable;
+use Xpressengine\Config\ConfigEntity;
 
 /**
  * ThemeEntity는 하나의 테마에 대한 정보를 가지고 있는 클래스이다.
@@ -26,7 +25,7 @@ use Illuminate\Contracts\Support\Jsonable;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class ThemeEntity implements Arrayable, Jsonable
+class ClassThemeEntity implements ThemeEntityInterface
 {
 
     /**
@@ -43,6 +42,11 @@ class ThemeEntity implements Arrayable, Jsonable
      * @var AbstractTheme object of theme
      */
     protected $object;
+
+    /**
+     * @var ConfigEntity
+     */
+    protected $config;
 
     /**
      * ThemeEntity constructor.
@@ -188,6 +192,7 @@ class ThemeEntity implements Arrayable, Jsonable
             return $this->object;
         } else {
             $this->object = new $this->class();
+
             return $this->object;
         }
     }
@@ -231,5 +236,57 @@ class ThemeEntity implements Arrayable, Jsonable
             'description' => $this->getDescription(),
             'screenshot' => $this->getScreenshot()
         ];
+    }
+
+    /**
+     * Get the evaluated contents of the object.
+     *
+     * @return string
+     */
+    public function render()
+    {
+        return $this->getObject()->render();
+    }
+
+    /**
+     * return editConfigView
+     *
+     * @param ConfigEntity $config
+     *
+     * @return \Illuminate\Contracts\View\View|void
+     */
+    public function editConfig(ConfigEntity $config = null)
+    {
+        $class = $this->class;
+        return $class::getSettingView($config);
+    }
+
+    /**
+     * updateConfig
+     *
+     * @param array $config
+     *
+     * @return array
+     */
+    public function updateConfig(array $config)
+    {
+        $oldConfig = $this->config();
+
+        // $config = ['_configId', ...]
+        return $config;
+    }
+
+    /**
+     * get and set config
+     *
+     * @param ConfigEntity $config
+     *
+     * @return null
+     */
+    public function config(ConfigEntity $config = null) {
+        if($config !== null) {
+            $this->config = $config;
+        }
+        return $this->config;
     }
 }

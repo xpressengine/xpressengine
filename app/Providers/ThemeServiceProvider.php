@@ -5,6 +5,7 @@ use Illuminate\Support\ServiceProvider;
 use Xpressengine\Plugin\PluginRegister;
 use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
 use Xpressengine\Theme\AbstractTheme;
+use Xpressengine\Theme\GenericThemeEntity;
 use Xpressengine\Theme\ThemeHandler;
 use Xpressengine\UIObjects\Theme\ThemeList;
 use Xpressengine\UIObjects\Theme\ThemeSelect;
@@ -36,7 +37,7 @@ class ThemeServiceProvider extends ServiceProvider
                 $themeHandler = $app['xe.interception']->proxy(ThemeHandler::class, 'XeTheme');
 
                 $blankThemeClass = $app['config']->get('xe.theme.blank');
-                $themeHandler = new $themeHandler($register, $app['xe.config'], $blankThemeClass::getId());
+                $themeHandler = new $themeHandler($register, $app['xe.config'], $app['view'], $blankThemeClass::getId());
 
                 return $themeHandler;
             }
@@ -131,5 +132,6 @@ class ThemeServiceProvider extends ServiceProvider
     private function setThemeHandlerForTheme()
     {
         AbstractTheme::setHandler($this->app->make('xe.theme'));
+        GenericThemeEntity::setHandler($this->app->make('xe.theme'));
     }
 }

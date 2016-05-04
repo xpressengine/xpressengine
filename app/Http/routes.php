@@ -536,6 +536,11 @@ Route::settings(
     function () {
         Route::get('edit', ['as' => 'settings.theme.edit', 'uses' => 'ThemeController@getEdit']);
         Route::post('edit', ['as' => 'settings.theme.edit', 'uses' => 'ThemeController@postEdit']);
+
+        Route::get('config', ['as' => 'settings.theme.config', 'uses' => 'ThemeController@getConfig']);
+        Route::post('config', ['as' => 'settings.theme.config', 'uses' => 'ThemeController@postConfig']);
+
+        Route::post('config/create', ['as' => 'settings.theme.config.create', 'uses' => 'ThemeController@createConfig']);
     }
 );
 

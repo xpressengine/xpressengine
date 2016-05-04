@@ -46,13 +46,19 @@ class PluginRegister
     protected $register;
 
     /**
+     * @var string
+     */
+    protected $pluginsDir;
+
+    /**
      * PluginRegister constructor.
      *
      * @param Container $register Register
      */
-    public function __construct(Container $register)
+    public function __construct(Container $register, $pluginsDir)
     {
         $this->register = $register;
+        $this->pluginsDir = $pluginsDir;
     }
 
     /**
@@ -67,9 +73,17 @@ class PluginRegister
         $componentList = $entity->getComponentList();
 
         foreach ($componentList as $id => $info) {
-            $info['id'] = $id;
-            $this->setComponentInfo($info);
-            $this->add($info['class']);
+            if ($class = array_get($info, 'class')) {
+                $info['id'] = $id;
+                $this->setComponentInfo($info);
+                $this->add($class);
+            } elseif ($path = array_get($info, 'path')) {
+                // path가 있을 경우, path를 절대경로로 변환
+                array_set($info, 'path', $this->pluginsDir.DIRECTORY_SEPARATOR.$entity->getId().DIRECTORY_SEPARATOR.$path);
+                $this->register->set($id, $info);
+                $parts = $this->split($id);
+                $this->addByType($parts, $id, $info);
+            }
         }
     }
 
@@ -88,18 +102,18 @@ class PluginRegister
 
         $parts = $this->split($id);
 
-        $this->addByType($parts, $component);
+        $this->addByType($parts, $id, $component);
     }
 
     /**
      * type, target + type 두가지 모두 등록
      *
-     * @param array              $parts     parts of id
-     * @param ComponentInterface $component component class name
+     * @param array                    $parts     parts of id
+     * @param string                   $id
+     * @param array|ComponentInterface $component component class name
      *
-     * @return void
      */
-    protected function addByType(array $parts, $component)
+    protected function addByType(array $parts, $id, $component)
     {
         $key = $parts['type'];
 
@@ -117,7 +131,7 @@ class PluginRegister
                 if ($parts['target'] != '') {
                     $key = $target = $parts['target'].self::KEY_DELIMITER.$parts['type'];
                 }
-                $this->register->set($key.'.'.$component::getId(), $component);
+                $this->register->set($key.'.'.$id, $component);
         }
     }
 
@@ -178,18 +192,19 @@ class PluginRegister
      *
      * @param array $info component 정보
      *
-     * @return void
+     * @return string|array
      */
     protected function setComponentInfo(array $info)
     {
-        /** @var \Xpressengine\Plugin\ComponentInterface $class */
         $class = $info['class'];
 
+        /** @var \Xpressengine\Plugin\ComponentInterface $class */
         if (!is_subclass_of($class, ComponentInterface::class)) {
             throw new Exceptions\NotImplementedException(['className' => $class]);
         }
 
         $class::setId($info['id']);
         $class::setComponentInfo(array_except($info, ['class', 'id']));
+        return $class;
     }
 }

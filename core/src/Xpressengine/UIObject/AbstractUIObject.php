@@ -15,6 +15,7 @@ namespace Xpressengine\UIObject;
 
 use Closure;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\View\Expression;
 use PhpQuery\PhpQuery;
 use PhpQuery\PhpQueryObject;
 use Xpressengine\Plugin\ComponentInterface;
@@ -97,7 +98,8 @@ abstract class AbstractUIObject implements Renderable, ComponentInterface
             $callback($this->markup);
         }
 
-        return $this->markup === null ? $this->template : $this->markup;
+        $viewStr = $this->markup === null ? $this->template : (string)$this->markup;
+        return new Expression($viewStr);
     }
 
     /**

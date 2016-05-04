@@ -1,8 +1,8 @@
 <?php
 namespace Xpressengine\Themes;
 
-use Xpressengine\User\Rating;
 use Xpressengine\Theme\AbstractTheme;
+use Xpressengine\User\Rating;
 
 class SettingsTheme extends AbstractTheme
 {
@@ -25,7 +25,7 @@ class SettingsTheme extends AbstractTheme
         $siteTitle = app('xe.site')->getSiteConfigValue('site_title');
         $siteTitle = $siteTitle !== null ? xe_trans($siteTitle) : 'XpressEngine';
         $selectedMenu = \XeSettings::getSelectedMenu($isSuper);
-        return \View::make('themes.settings', compact('menu', 'selectedMenu', 'user', 'siteTitle'));
+        return view()->make('themes.settings', compact('menu', 'selectedMenu', 'user', 'siteTitle'));
     }
 
     /**
@@ -48,6 +48,9 @@ class SettingsTheme extends AbstractTheme
             'assets/core/settings/css/admin.css',
         ])->load();
 
-        $frontendHandler->js('assets/core/settings/js/admin.bundle.js')->appendTo('head')->load();
+        $frontendHandler->js([
+             'assets/vendor/bootstrap/js/bootstrap.js',
+             'assets/core/settings/js/admin.bundle.js'
+         ])->appendTo('head')->load();
     }
 }
