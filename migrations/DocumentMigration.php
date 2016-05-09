@@ -109,8 +109,8 @@ class DocumentMigration implements Migration
         $table->text('content');
         $table->text('pureContent');
 
-        $table->timestamp('createdAt')->useCurrent();
-        $table->timestamp('updatedAt')->useCurrent();
+        $table->timestamp('createdAt');
+        $table->timestamp('updatedAt');
         $table->timestamp('publishedAt')->nullable();
         $table->timestamp('deletedAt')->nullable();
 
