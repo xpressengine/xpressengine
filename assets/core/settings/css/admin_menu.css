@@ -122,7 +122,7 @@
   position: absolute;
   left: 0;
   top: 0;
-  font-size: 20px;
+  font-size: 23px;
   line-height: 80px;
   color: #00B5AD;
 }
@@ -132,7 +132,7 @@
 }
 
 .item .item-info dd {
-  padding-left: 33px;
+  padding-left: 40px;
 }
 
 .item .item-info dd a {
@@ -174,7 +174,7 @@
   color: #2C8BEB;
 }
 
-.item .xe-toggle-button {
+.item .togglebutton {
   margin: 0 20px 0 15px;
 }
 

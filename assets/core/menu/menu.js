@@ -828,7 +828,6 @@ $__System.registerDynamic("1", ["3", "7"], true, function($__require, exports, m
       return this.state.searched;
     },
     setSearchedNode: function(node) {
-      console.log(node);
       this.setState({searched: node});
     },
     getSelectedNode: function() {
