@@ -39,7 +39,9 @@
         <!-- Translation -->
         {!! XeFrontend::output('translation') !!}
     </script>
-
+    {{--<script src="http://cdn.tinymce.com/4/tinymce.min.js"></script>--}}
+    {{--<script src="http://cdn.ckeditor.com/4.4.6/standard/ckeditor.js"></script>--}}
+    {{--<script src="/assets/core/common/js/xe.editor.js"></script>--}}
     <!-- JS at head.append -->
     {!! XeFrontend::output('js', 'head.append') !!}
 
@@ -49,6 +51,11 @@
 </head>
 
 <body class="{{ XeFrontend::output('bodyClass') }}">
+
+{{--<textarea name="test" id="editor1" cols="30" rows="10"></textarea>--}}
+{{--<textarea name="test2" id="editor2" cols="30" rows="10"></textarea>--}}
+{{--<textarea name="test3" id="editor3" cols="30" rows="10"></textarea>--}}
+{{--<textarea name="test4" id="editor4" cols="30" rows="10"></textarea>--}}
 
 <!-- JS at body.prepend -->
 {!! XeFrontend::output('js', 'body.prepend') !!}
