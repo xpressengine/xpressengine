@@ -1551,7 +1551,6 @@ System.amdDefine('xe.request', ['xe.progress'], function(Progress) {
     Component: ''
   };
 
-
   exports.XE = XE;
 
   return XE;
@@ -1562,17 +1561,21 @@ System.amdDefine('xe.request', ['xe.progress'], function(Progress) {
    *     XE module initialize
    * </pre>
    * */
-  function initialize() {
+  function initialize(callback) {
 
     self = this;
     _options = {};
-    _loadXEModule();
 
-    return this;
+    _loadXEModule().promise().then(function() {
+        callback();
+    });
+
   }
 
 
   function _loadXEModule() {
+
+    var d = $.Deferred();
     System.amdRequire(['xe.lang', 'xe.progress', 'xe.request', 'xe.component'], function(lang, progress, request, component) {
 
       self.Lang = lang;
@@ -1593,7 +1596,11 @@ System.amdDefine('xe.request', ['xe.progress'], function(Progress) {
         var jqXHR = $.ajax(url, options);
         return jqXHR;
       };
+
+      d.resolve();
     });
+
+    return d;
   }
 
   /**
@@ -1602,12 +1609,12 @@ System.amdDefine('xe.request', ['xe.progress'], function(Progress) {
   function setup(options) {
     _options.loginUserId = options.loginUserId;
     self.options.loginUserId = options.loginUserId;
-
     self.Request.setup({
-      headers: {
-        'X-CSRF-TOKEN': options['X-CSRF-TOKEN']
-      }
+        headers: {
+            'X-CSRF-TOKEN': options['X-CSRF-TOKEN']
+        }
     });
+
   }
 
   /**
@@ -1684,4 +1691,4 @@ System.amdDefine('xe.request', ['xe.progress'], function(Progress) {
     // });
 
 
-})(window).initialize();
+})(window);

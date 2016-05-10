@@ -26,7 +26,6 @@
     Component: ''
   };
 
-
   exports.XE = XE;
 
   return XE;
@@ -37,17 +36,21 @@
    *     XE module initialize
    * </pre>
    * */
-  function initialize() {
+  function initialize(callback) {
 
     self = this;
     _options = {};
-    _loadXEModule();
 
-    return this;
+    _loadXEModule().promise().then(function() {
+      callback();
+    });
+
   }
 
 
   function _loadXEModule() {
+
+    var d = $.Deferred();
     System.amdRequire(['xe.lang', 'xe.progress', 'xe.request', 'xe.component'], function(lang, progress, request, component) {
 
       self.Lang = lang;
@@ -68,7 +71,11 @@
         var jqXHR = $.ajax(url, options);
         return jqXHR;
       };
+
+      d.resolve();
     });
+
+    return d;
   }
 
   /**
@@ -77,12 +84,12 @@
   function setup(options) {
     _options.loginUserId = options.loginUserId;
     self.options.loginUserId = options.loginUserId;
-
     self.Request.setup({
       headers: {
         'X-CSRF-TOKEN': options['X-CSRF-TOKEN']
       }
     });
+
   }
 
   /**
@@ -154,9 +161,9 @@
 
   }
 
-    // $.ajaxPrefilter(function(options, originalOptions, jqXHR ) {
-    //   $.extend(options, self.Request.options);
-    // });
+  // $.ajaxPrefilter(function(options, originalOptions, jqXHR ) {
+  //   $.extend(options, self.Request.options);
+  // });
 
 
-})(window).initialize();
+})(window);
