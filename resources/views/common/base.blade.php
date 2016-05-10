@@ -23,28 +23,29 @@
     {!! XeFrontend::output('js', 'head.prepend') !!}
 
     <script type="text/javascript">
-        XE.setup({
-            'X-CSRF-TOKEN': '{!! csrf_token() !!}',
-            loginUserId: '{{ Auth::user()->getId() }}'
-        });
+        XE.initialize(function() {
+            XE.setup({
+                'X-CSRF-TOKEN': '{!! csrf_token() !!}',
+                loginUserId: '{{ Auth::user()->getId() }}'
+            });
 
-        XE.configure({
-            locale: '{{ session()->get('locale') ?: app('xe.translator')->getLocale() }}',
-            defaultLocale: '{{ app('xe.translator')->getLocale() }}',
-            @if (in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER]))
+            XE.configure({
+                locale: '{{ session()->get('locale') ?: app('xe.translator')->getLocale() }}',
+                defaultLocale: '{{ app('xe.translator')->getLocale() }}',
+                @if (in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER]))
                 managePrefix: '{{ app('config')['xe.routing.settingsPrefix'] }}'
-            @endif
-        });
+                @endif
+            });
 
-        <!-- Translation -->
-        {!! XeFrontend::output('translation') !!}
+            <!-- Translation -->
+            {!! XeFrontend::output('translation') !!}
+        });
     </script>
     {{--<script src="http://cdn.tinymce.com/4/tinymce.min.js"></script>--}}
     {{--<script src="http://cdn.ckeditor.com/4.4.6/standard/ckeditor.js"></script>--}}
     {{--<script src="/assets/core/common/js/xe.editor.js"></script>--}}
     <!-- JS at head.append -->
     {!! XeFrontend::output('js', 'head.append') !!}
-
 
     <!-- CUSTOM TAGS -->
     {!! XeFrontend::output('html', 'head.append') !!}
