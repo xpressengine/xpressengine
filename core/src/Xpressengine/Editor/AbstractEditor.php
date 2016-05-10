@@ -135,4 +135,9 @@ abstract class AbstractEditor implements ComponentInterface, Renderable
     {
         return '';
     }
+
+    public static function getInstanceSettingURI($instanceId)
+    {
+        return null;
+    }
 }

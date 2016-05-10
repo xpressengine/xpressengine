@@ -180,4 +180,9 @@ class EditorHandler
     {
         return $this->get($instanceId)->setArguments($args)->render();
     }
+    
+    public function getPartsAll()
+    {
+        return $this->register->get('editorparts');
+    }
 }

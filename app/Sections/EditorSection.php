@@ -13,14 +13,24 @@ class EditorSection
     public function setting($instanceId)
     {
         /**
-         * @var EditorHandler @handler
+         * @var EditorHandler $handler
          */
         $handler = app('xe.editor');
-        $component = $handler->get($instanceId);
-        $settingView = $component->getSettingView();
+//        $component = $handler->get($instanceId);
+//        $settingView = $component->getSettingView();
+//
+//        return View::make('editor.section', [
+//            'settingView' => $settingView,
+//        ]);
 
-        return View::make('editor.section', [
-            'settingView' => $settingView,
+        $editors = $handler->getAll();
+
+        $parts = $handler->getPartsAll();
+
+        return view('editor.section', [
+            'instanceId' => $instanceId,
+            'editors' => $editors,
+            'parts' => $parts,
         ]);
     }
 }
