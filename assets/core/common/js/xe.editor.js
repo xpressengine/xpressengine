@@ -99,6 +99,8 @@
     exports.XEeditor = XEeditor;
 })(window);
 
+
+
 // editor 개발자가 해당 editor를 define한다. name으로 맵핑
 XEeditor.define({
     name: 'editor.ckeditor',
@@ -156,7 +158,7 @@ XEeditor.define({
 // XEeditor로 정의된 에디터를 생성한다.
 //XEeditor.getEditor('editor.ckeditor').create('#textarea', {});
 //ckeditor.getContents();
-//
+
 $(function() {
     var ckEditor = XEeditor.getEditor('editor.ckeditor');
     var tinyEditor = XEeditor.getEditor('editor.tinyMCE');
