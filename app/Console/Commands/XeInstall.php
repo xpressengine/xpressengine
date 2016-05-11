@@ -283,6 +283,11 @@ APP_KEY=SomeRandomString";
             // set db info
             $this->setDBInfo($this->defaultInfos['database']);
         } catch (\Exception $e) {
+            if ($this->noInteraction) {
+                $this->error($e->getMessage());
+                die();
+            }
+
             $this->defaultInfos['database']['password'] = null;
             $this->stepDB();
         }
@@ -314,6 +319,11 @@ APP_KEY=SomeRandomString";
             $this->getAdminInfo();
             $this->createAdminAndLogin($this->defaultInfos['admin']);
         } catch (\Exception $e) {
+            if ($this->noInteraction) {
+                $this->error($e->getMessage());
+                die();
+            }
+
             $this->defaultInfos['admin']['password'] = null;
             $this->stepAdmin();
         }
