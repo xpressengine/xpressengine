@@ -1482,7 +1482,7 @@ System.amdDefine('xe.request', ['xe.progress'], function(Progress) {
   }).ajaxComplete(function(event, jqxhr, settings) {
     Progress.done(settings.context == undefined ? $('body') : settings.context);
   }).ajaxError(function(event, jqxhr, settings, thrownError) {
-    window.error(jqxhr, settings, thrownError);
+    error(jqxhr, settings, thrownError);
   });
 
   return {
