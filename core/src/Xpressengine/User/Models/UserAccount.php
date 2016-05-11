@@ -33,7 +33,11 @@ class UserAccount extends DynamicModel implements AccountInterface
 
     protected $fillable = [
         'userId',
-        'address'
+        'email',
+        'accountId',
+        'provider',
+        'token',
+        'data'
     ];
 
     /**
