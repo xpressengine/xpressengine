@@ -1,5 +1,5 @@
 /*
- * SystemJS v0.19.27
+ * SystemJS v0.19.26
  */
 (function() {
 function bootstrap() {// from https://gist.github.com/Yaffle/1088850
@@ -101,8 +101,6 @@ global.URLPolyfill = URLPolyfill;
     }
   })();
 
-  var errArgs = new Error(0, '_').fileName == '_';
-
   function addToError(err, msg) {
     // parse the stack removing loader code lines for simplification
     if (!err.originalErr) {
@@ -120,7 +118,7 @@ global.URLPolyfill = URLPolyfill;
     if (!isBrowser)
       newMsg = newMsg.replace(isWindows ? /file:\/\/\//g : /file:\/\//g, '');
 
-    var newErr = errArgs ? new Error(newMsg, err.fileName, err.lineNumber) : new Error(newMsg);
+    var newErr = new Error(newMsg, err.fileName, err.lineNumber);
     
     // Node needs stack adjustment for throw to show message
     if (!isBrowser)
@@ -1494,8 +1492,6 @@ var __exec;
 
   var vm;
   __exec = function(load) {
-    if (!load.source)
-      return;
     if ((load.metadata.integrity || load.metadata.nonce) && supportsScriptExec)
       return scriptExec.call(this, load);
     try {
@@ -2542,7 +2538,6 @@ SystemJSLoader.prototype.config = function(cfg) {
 
     // NB remove this when json is default
     (configLoader.meta[pkgConfigPath] = configLoader.meta[pkgConfigPath] || {}).format = 'json';
-    configLoader.meta[pkgConfigPath].loader = null;
 
     return configLoader.load(pkgConfigPath)
     .then(function() {
@@ -4974,7 +4969,7 @@ hookConstructor(function(constructor) {
 System = new SystemJSLoader();
 
 __global.SystemJS = System;
-System.version = '0.19.27 Standard';
+System.version = '0.19.26 Standard';
   // -- exporting --
 
   if (typeof exports === 'object')

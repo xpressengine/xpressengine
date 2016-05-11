@@ -18,6 +18,7 @@
     "react-tools": "npm:react-tools@^0.13.0"
   },
   "github:systemjs/plugin-css@0.1.20": {},
+  "github:necolas/normalize.css@4.0.0": {},
   "github:twbs/bootstrap-sass@3.3.6": {},
   "npm:react-tools@0.13.3": {
     "commoner": "npm:commoner@^0.10.0",
@@ -464,5 +465,5 @@
     "path": "github:jspm/nodelibs-path@^0.1.0",
     "process": "github:jspm/nodelibs-process@^0.1.0"
   },
-  "github:necolas/normalize.css@4.1.1": {}
+  "npm:bootstrap-sass@3.3.6": {}
 }
