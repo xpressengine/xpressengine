@@ -412,12 +412,15 @@ a.icon-gray:hover {
     opacity: 0;
     width: 0;
     height: 0;
-    &:checked + .toggle {
-      background-color: #dadbde;
+    &:checked + .toggle {      
       background-color: #359bf7;
       &:after {
-        left: 20px;
+        left: 41px;
         outline: none;
+      }
+      &:before{                
+        left:11px;
+        content:"ON";        
       }
     }
   }
@@ -425,11 +428,13 @@ a.icon-gray:hover {
     font-weight: 400;
     font-size: 13px;
     cursor: pointer;
+    line-height: 28px;
   }
   .toggle {
+    position: relative;
     display: inline-block;
-    width: 30px;
-    height: 6px;
+    width: 68px;
+    height: 28px;
     background-color: #dadbde;
     border-radius: 15px;
     margin-right: 10px;
@@ -439,15 +444,21 @@ a.icon-gray:hover {
     &:after {
       display: inline-block;
       position: relative;
-      left: -14px;
-      top: -9px;
-      width: 24px;
-      height: 24px;
+      left: 0;
+      top: 1px;
+      width: 26px;
+      height: 26px;
       background-color: #fff;
       border-radius: 20px;
       border: 1px solid #e4e4e4;
       transition: left .3s ease,background .3s ease,box-shadow .1s ease;
       content: "";
+    }
+    &:before{
+      position: absolute;
+      right:10px;           
+      content:"OFF";
+      color:#fff;
     }
   }
 }
