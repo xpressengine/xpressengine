@@ -178,8 +178,7 @@ class PresenterServiceProvider extends ServiceProvider
             'assets/vendor/react/react-with-addons.js',
             'assets/vendor/react/JSXTransformer.js', // @TODO 제거
             'assets/vendor/jquery/jquery.min.js',
-            'assets/core/common/js/xe.bundle.js',
-            'assets/core/xe-ui-component/js/xe-ui-component.bundle.js',
+            'assets/core/common/js/xe.bundle.js'
         ])->appendTo('head.prepend')->load();
 
         $frontendHandler->js('assets/core/common/js/usermenu.js')->load(); // @TODO 제거
