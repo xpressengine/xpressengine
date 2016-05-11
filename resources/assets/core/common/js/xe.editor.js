@@ -3,35 +3,34 @@
 
     //define시 필수 구현되어야 하는 object
     var requireOptions = [
-            'name', 'editorType', 'editorRoot',
-            'getContents', 'setContents',
+            'name',
+            'getContents', 'setContents', 'addContents',
             'initialize'
         ],
-        editorSet = {},
-        editorType = [],
-        editorOptionSet = {};
+        editorSet = {};
 
     var instanceObj = function(editorName, sel, options) {
         this.editorName = editorName;
         this.selector = sel;
         this.options = options;
-
+        this.props = {};
     };
 
     instanceObj.prototype = {
-        props: {},
         getInstance: function() {
             return editorSet[this.editorName].editorList[this.selector];
         },
         getContents: function() {
             return editorSet[this.editorName].getContents.call(this.getInstance());
         },
-        setContents: function() {
-            editorSet[this.editorName].setContents.bind(this.getInstance());
+        setContents: function(text) {
+            editorSet[this.editorName].setContents.call(this.getInstance(), text);
+        },
+        addContents: function(text) {
+            editorSet[this.editorName].addContents.call(this.getInstance(), text);
         },
         addProps: function(obj) {
             for(var o in obj) {
-                //this['props'][o] = obj[o];
                 this.getInstance().props[o] = obj[o];
             }
         }
@@ -60,13 +59,15 @@
         },
         setContents: function() {
             console.error('Editor.setContents');
+        },
+        addContents: function() {
+            console.error('Editor.addContents');
         }
     };
 
     var XEeditor = {
         define: function(options) {
             if(this.isValidOptions(options)) {
-                editorOptionSet[options.name] = options;
                 editorSet[options.name] = new Editor(options);
             }
         },
@@ -74,7 +75,7 @@
             var valid = true;
             for(var option in requireOptions) {
                 if(!options.hasOwnProperty(requireOptions[option])) {
-                    console.error('구현 필요 [fn:' + requireOptions[option] + ']');
+                    console.error('구현 필요 [instance name : ' + options.name + ' fn:' + requireOptions[option] + ']');
                     valid = false;
                 }
             }
@@ -92,20 +93,10 @@
         },
         getEditor: function(name) {
             return editorSet[name];
-        },
-        setEditorType: function(types) {
-
-            if(types instanceof Array) {
-
-            }else if(typeof types === 'string'){
-
-            }
-
         }
     };
 
     exports.XEeditor = XEeditor;
 })(window);
-
 
 
