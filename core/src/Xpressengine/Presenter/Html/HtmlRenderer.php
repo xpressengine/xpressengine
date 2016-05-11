@@ -214,9 +214,6 @@ class HtmlRenderer implements RendererInterface
         $instanceId = $instanceConfig->getInstanceId();
 
         $skinTargetId = $this->presenter->getSkinTargetId();
-        if ($skinTargetId === null) {
-            $skinTargetId = $instanceConfig->getModule();
-        }
         $id = $this->presenter->getId();
 
         $skinView = null;
