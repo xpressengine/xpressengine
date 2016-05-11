@@ -1,8 +1,72 @@
 /*
- * SystemJS v0.19.24
+ * SystemJS v0.19.26
  */
 (function() {
-function bootstrap() {(function(__global) {
+function bootstrap() {// from https://gist.github.com/Yaffle/1088850
+(function(global) {
+function URLPolyfill(url, baseURL) {
+  if (typeof url != 'string')
+    throw new TypeError('URL must be a string');
+  var m = String(url).replace(/^\s+|\s+$/g, "").match(/^([^:\/?#]+:)?(?:\/\/(?:([^:@\/?#]*)(?::([^:@\/?#]*))?@)?(([^:\/?#]*)(?::(\d*))?))?([^?#]*)(\?[^#]*)?(#[\s\S]*)?/);
+  if (!m)
+    throw new RangeError('Invalid URL format');
+  var protocol = m[1] || "";
+  var username = m[2] || "";
+  var password = m[3] || "";
+  var host = m[4] || "";
+  var hostname = m[5] || "";
+  var port = m[6] || "";
+  var pathname = m[7] || "";
+  var search = m[8] || "";
+  var hash = m[9] || "";
+  if (baseURL !== undefined) {
+    var base = baseURL instanceof URLPolyfill ? baseURL : new URLPolyfill(baseURL);
+    var flag = !protocol && !host && !username;
+    if (flag && !pathname && !search)
+      search = base.search;
+    if (flag && pathname[0] !== "/")
+      pathname = (pathname ? (((base.host || base.username) && !base.pathname ? "/" : "") + base.pathname.slice(0, base.pathname.lastIndexOf("/") + 1) + pathname) : base.pathname);
+    // dot segments removal
+    var output = [];
+    pathname.replace(/^(\.\.?(\/|$))+/, "")
+      .replace(/\/(\.(\/|$))+/g, "/")
+      .replace(/\/\.\.$/, "/../")
+      .replace(/\/?[^\/]*/g, function (p) {
+        if (p === "/..")
+          output.pop();
+        else
+          output.push(p);
+      });
+    pathname = output.join("").replace(/^\//, pathname[0] === "/" ? "/" : "");
+    if (flag) {
+      port = base.port;
+      hostname = base.hostname;
+      host = base.host;
+      password = base.password;
+      username = base.username;
+    }
+    if (!protocol)
+      protocol = base.protocol;
+  }
+
+  // convert windows file URLs to use /
+  if (protocol == 'file:')
+    pathname = pathname.replace(/\\/g, '/');
+
+  this.origin = host ? protocol + (protocol !== "" || host !== "" ? "//" : "") + host : "";
+  this.href = protocol + (protocol && host || protocol == "file:" ? "//" : "") + (username !== "" ? username + (password !== "" ? ":" + password : "") + "@" : "") + host + pathname + search + hash;
+  this.protocol = protocol;
+  this.username = username;
+  this.password = password;
+  this.host = host;
+  this.hostname = hostname;
+  this.port = port;
+  this.pathname = pathname;
+  this.search = search;
+  this.hash = hash;
+}
+global.URLPolyfill = URLPolyfill;
+})(typeof self != 'undefined' ? self : global);(function(__global) {
 
   var isWorker = typeof window == 'undefined' && typeof self != 'undefined' && typeof importScripts != 'undefined';
   var isBrowser = typeof window != 'undefined' && typeof document != 'undefined';
@@ -104,7 +168,12 @@ function bootstrap() {(function(__global) {
     throw new TypeError('No environment baseURI');
   }
 
-  var URL = __global.URLPolyfill || __global.URL;
+  try {
+    var nativeURL = new __global.URL('test:///').protocol == 'test:';
+  }
+  catch(e) {}
+
+  var URL = nativeURL ? __global.URL : __global.URLPolyfill;
 /*
 *********************************************************************************************
 
@@ -1206,18 +1275,16 @@ function getESModule(exports) {
   var esModule = {};
   // don't trigger getters/setters in environments that support them
   if (typeof exports == 'object' || typeof exports == 'function') {
+    var hasOwnProperty = exports && exports.hasOwnProperty;
     if (getOwnPropertyDescriptor) {
-      var d;
-      for (var p in exports)
-        if (d = Object.getOwnPropertyDescriptor(exports, p))
-          defineProperty(esModule, p, d);
+      for (var p in exports) {
+        if (!trySilentDefineProperty(esModule, exports, p))
+          setPropertyIfHasOwnProperty(esModule, exports, p, hasOwnProperty);
+      }
     }
     else {
-      var hasOwnProperty = exports && exports.hasOwnProperty;
-      for (var p in exports) {
-        if (!hasOwnProperty || exports.hasOwnProperty(p))
-          esModule[p] = exports[p];
-      }
+      for (var p in exports)
+        setPropertyIfHasOwnProperty(esModule, exports, p, hasOwnProperty);
     }
   }
   esModule['default'] = exports;
@@ -1225,6 +1292,24 @@ function getESModule(exports) {
     value: true
   });
   return esModule;
+}
+
+function setPropertyIfHasOwnProperty(targetObj, sourceObj, propName, hasOwnProperty) {
+  if (!hasOwnProperty || sourceObj.hasOwnProperty(propName))
+    targetObj[propName] = sourceObj[propName];
+}
+
+function trySilentDefineProperty(targetObj, sourceObj, propName) {
+  try {
+    var d;
+    if (d = Object.getOwnPropertyDescriptor(sourceObj, propName))
+      defineProperty(targetObj, propName, d);
+
+    return true;
+  } catch (ex) {
+    // Object.getOwnPropertyDescriptor threw an exception, fall back to normal set property.
+    return false;
+  }
 }
 
 function extend(a, b, prepend) {
@@ -1259,7 +1344,8 @@ function extendMeta(a, b, prepend) {
 function warn(msg) {
   if (this.warnings && typeof console != 'undefined' && console.warn)
     console.warn(msg);
-}var absURLRegEx = /^[^\/]+:\/\//;
+}
+var absURLRegEx = /^[^\/]+:\/\//;
 
 function readMemberExpression(p, value) {
   var pParts = p.split('.');
@@ -1940,6 +2026,9 @@ SystemJSLoader.prototype.config = function(cfg) {
   function doMapSync(loader, pkg, pkgName, mapMatch, path, skipExtensions) {
     var mapped = pkg.map[mapMatch];
 
+    if (typeof mapped == 'object')
+      throw new Error('Synchronous conditional normalization not supported sync normalizing ' + mapMatch + ' in ' + pkgName);
+
     validateMapping(mapMatch, mapped, pkgName);
 
     // ignore conditionals in sync
@@ -2207,8 +2296,7 @@ SystemJSLoader.prototype.config = function(cfg) {
     var length = Math.max(lastWildcard + 1, path.lastIndexOf('/'));
     return {
       length: length,
-      // NB handle regex control character escapes or simply create a test function here
-      regEx: new RegExp('^(' + path.substr(0, length).replace(/\*/g, '[^\\/]+') + ')(\\/|$)'),
+      regEx: new RegExp('^(' + path.substr(0, length).replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '[^\\/]+') + ')(\\/|$)'),
       wildcard: lastWildcard != -1
     };
   }
@@ -2316,7 +2404,7 @@ SystemJSLoader.prototype.config = function(cfg) {
       }
     }
     // exact meta
-    var exactMeta = pkgMeta[subPath] || pkgMeta['./' + subPath];
+    var exactMeta = pkgMeta[subPath] && pkgMeta.hasOwnProperty && pkgMeta.hasOwnProperty(subPath) ? pkgMeta[subPath] : pkgMeta['./' + subPath];
     if (exactMeta)
       matchFn(exactMeta, exactMeta, 0);
   }
@@ -2367,6 +2455,7 @@ SystemJSLoader.prototype.config = function(cfg) {
     var head = document.getElementsByTagName('head')[0];
 
   var curSystem;
+  var curRequire;
 
   // if doing worker executing, this is set to the load record being executed
   var workerLoad = null;
@@ -2491,6 +2580,7 @@ SystemJSLoader.prototype.config = function(cfg) {
         loadingCnt++;
 
         curSystem = __global.System;
+        curRequire = __global.require;
 
         s.src = load.address;
         head.appendChild(s);
@@ -2528,6 +2618,7 @@ SystemJSLoader.prototype.config = function(cfg) {
 
         function cleanup() {
           __global.System = curSystem;
+          __global.require = curRequire;
 
           if (s.detachEvent) {
             s.detachEvent('onreadystatechange', complete);
@@ -2705,7 +2796,7 @@ function createEntry() {
       // anonymous register
       if (!entry.name || load && entry.name == load.name) {
         if (!curMeta)
-          throw new TypeError('Unexpected anonymous System.register call.');
+          throw new TypeError('Invalid System.register call. Anonymous System.register calls can only be made by modules loaded by SystemJS.import and not via script tags.');
         if (curMeta.entry) {
           if (curMeta.format == 'register')
             throw new Error('Multiple anonymous System.register calls in module ' + load.name + '. If loading a bundle, ensure all the System.register calls are named.');
@@ -3526,8 +3617,12 @@ hookConstructor(function(constructor) {
         var curMeta = load && load.metadata;
         var entry = register.entry;
 
-        if (curMeta)
-          curMeta.format = 'amd';
+        if (curMeta) {
+          if (!curMeta.format || curMeta.format == 'detect')
+            curMeta.format = 'amd';
+          else if (!entry.name && curMeta.format != 'amd')
+            throw new Error('AMD define called while executing ' + curMeta.format + ' module ' + load.name);
+        }
 
         // anonymous define
         if (!entry.name) {
@@ -4296,7 +4391,7 @@ hook('fetch', function(fetch) {
 });System = new SystemJSLoader();
 
 __global.SystemJS = System;
-System.version = '0.19.24 CSP';
+System.version = '0.19.26 CSP';
   // -- exporting --
 
   if (typeof exports === 'object')
@@ -4319,13 +4414,8 @@ System.version = '0.19.24 CSP';
 
 })(typeof self != 'undefined' ? self : global);}
 
-// auto-load Promise and URL polyfills if needed in the browser
-try {
-  var hasURL = typeof URLPolyfill != 'undefined' || new URL('test:///').protocol == 'test:';
-}
-catch(e) {}
-
-var doPolyfill = typeof Promise === 'undefined' || !hasURL;
+// auto-load Promise polyfill if needed in the browser
+var doPolyfill = typeof Promise === 'undefined';
 
 // document.write
 if (typeof document !== 'undefined') {

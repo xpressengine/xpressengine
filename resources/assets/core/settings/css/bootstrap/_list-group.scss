@@ -40,6 +40,15 @@
   }
 
   @include clearfix
+  
+  p.text{
+    margin:10px 0 0;
+    &:first-child{
+      margin-top:0;
+    }
+  }
+  
+  
 }
 
 

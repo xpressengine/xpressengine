@@ -1,16 +1,17 @@
 {{ XeFrontend::css(
 [
-'/assets/vendor/jqueryui/jquery-ui.css',
+'/assets/vendor/jqueryui/jquery-ui.min.css',
 '/assets/core/lang/LangEditorBox.css',
 '/assets/core/lang/flag.css'
 ]
 )->load() }}
 
-{{ XeFrontend::css('/assets/core/category/style.css')->load() }}
+
+{{ XeFrontend::css('/assets/core/settings/css/admin_menu.css')->before('/assets/core/settings/css/admin.css')->load() }}
 
 {{ XeFrontend::js(
 [
-'/assets/vendor/jqueryui/jquery-ui.js',
+'/assets/vendor/jqueryui/jquery-ui.min.js',
 '/assets/vendor/expanding/expanding.js',
 '/assets/core/lang/LangEditorBox.bundle.js'
 ]
@@ -39,6 +40,12 @@
     {{ $category->name }} 을(를) 수정합니다.
 @endsection
 
+<style type="text/css">
+    .item.copy{
+        background-color: #CAD9EA;
+        border: 1px dashed #76AFE8;
+    }
+</style>
 
 <div id="__xe_category-tree-container">
 </div>

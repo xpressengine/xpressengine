@@ -87,7 +87,7 @@
 
   // validator 추가
   Validator.put = function (name, callback) {
-    $.extend(this.validators, {name: callback});
+    this.validators[name] = callback;
   };
 
   Validator.errorClear = function ($form) {
@@ -155,9 +155,6 @@
         Validator.error($dst, XE.Lang.trans('xe::ValidatorBetween', {between: parameters}));
         return false;
       }
-    },
-    langrequired: function ($dst, parameters) {
-      return true;
     }
   };
 

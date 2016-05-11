@@ -47,7 +47,7 @@
 
   >.pull-left,
   >.pull-right{
-    padding:17px 0;
+    margin:17px 0;
   }
 
   @include clearfix;
@@ -58,7 +58,7 @@
 
       >.pull-left,
       >.pull-right{
-        padding:10px 0;
+        margin:10px 0;
       }
 
     }
@@ -70,9 +70,10 @@
   display: inline-block;
   margin-top: 0;
   margin-bottom: 0;
-  font-size: 18px;
+  font-size: 20px;
   color: inherit;
   line-height: $input-height-base;
+  font-weight: normal;
 
   > a,
   > small,
@@ -91,6 +92,11 @@
   background-color: $panel-footer-bg;
   border-top: 1px solid $panel-inner-border;
   @include border-bottom-radius(($panel-border-radius - 1));
+  @include clearfix;
+  >.pull-left,
+  >.pull-right{
+    margin:10px 0;
+  }  
 }
 
 
@@ -125,11 +131,10 @@
       }
     }
   }
-  > .panel-collapse .panel-heading{
-      background-color: $panel-footer-bg;
+  > .panel-collapse .panel-heading{      
       >.pull-left,
       >.pull-right{
-        padding:10px 0;
+        margin:10px 0;
       }
     }
 
@@ -140,7 +145,7 @@
     }
   }
   .panel-bottom-btn{
-      padding:10px 0
+      margin:10px 0
   }
 }
 // Collapse space between when there's no additional content.
@@ -294,14 +299,9 @@
   }
 
   .panel-footer {
-    border-top: 1px solid $panel-heading-border;
-    @include clearfix;
+    border-top: 1px solid $panel-heading-border;    
     + .panel-collapse .panel-body {
       border-bottom: 1px solid $panel-inner-border;
-    }
-    >.pull-left,
-    >.pull-right{
-      padding:10px 0;
     }
   }
 }
@@ -342,4 +342,38 @@
   .btn-link i.xi-angle-up {
     display: none;
   }
+}
+
+// Panel contents
+.panel-body,
+.panel-heading {  
+  .panel{
+    margin-bottom:30px;
+    border-color: transparent;
+    
+    .panel-heading{
+      padding:0;
+      border-bottom-color: transparent;
+      >.pull-left,
+      >.pull-right{
+        margin:10px 0;
+      }  
+      .panel-title{
+        font-size:16px;
+      }  
+      @include clearfix;
+      .panel-title{
+        line-height: inherit;
+      }
+    }    
+    .panel-body{      
+      background-color: #fafafc;
+      border: 1px solid #ededed;
+      border-radius : $border-radius-base;
+    }    
+    .panel-footer{
+      background-color: #fff;
+      border-color: transparent;
+    }
+  }  
 }
