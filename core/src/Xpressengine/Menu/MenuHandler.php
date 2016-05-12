@@ -19,6 +19,7 @@ use Xpressengine\Keygen\Keygen;
 use Xpressengine\Menu\Exceptions\CanNotDeleteMenuEntityHaveChildException;
 use Xpressengine\Menu\Exceptions\CanNotDeleteMenuItemHaveChildException;
 use Xpressengine\Menu\Exceptions\InvalidArgumentException;
+use Xpressengine\Menu\Exceptions\NotFoundMenuItemException;
 use Xpressengine\Menu\Models\Menu;
 use Xpressengine\Menu\Models\MenuItem;
 use Xpressengine\Module\ModuleHandler;
@@ -753,6 +754,19 @@ class MenuHandler
     }
 
     /**
+     * Get setting page url by menu item
+     *
+     * @param MenuItem $item menu item instance
+     * @return string|null
+     */
+    public function getInstanceSettingURI(MenuItem $item)
+    {
+        $menuType = $this->modules->getModuleObject($item->type);
+
+        return $menuType::getInstanceSettingURI($item->getKey());
+    }
+
+    /**
      * Create new menu model
      *
      * @return Menu
@@ -789,7 +803,7 @@ class MenuHandler
      * Create new menu item model
      *
      * @param Menu $menu menu instance
-     * @return mixed
+     * @return MenuItem
      */
     public function createItemModel(Menu $menu = null)
     {

@@ -70,7 +70,7 @@
   display: inline-block;
   margin-top: 0;
   margin-bottom: 0;
-  font-size: 20px;
+  font-size: 24px;
   color: inherit;
   line-height: $input-height-base;
   font-weight: normal;
@@ -165,14 +165,76 @@
 
 .panel {
   > .table,
-  > .table-responsive > .table,
+  .table-responsive > .table,
   > .panel-collapse > .table {
     margin-bottom: 0;
 
     caption {
       padding-left: $panel-body-padding;
       padding-right: $panel-body-padding;
-    }
+    }    
+    &.skin-setting{      
+      
+      .skin-check{
+        text-align: center;
+        &.hover{
+          background-color: #f8fafd;
+        }
+      }
+      
+      tbody{
+        tr.on{
+          .skin-check{
+            position: relative;                              
+            &:first-child{
+              &:after{
+                position: absolute;
+                top:0;
+                left:0px;
+                height:100%;
+                border-left: 2px solid $brand-primary;
+                content: "";
+              }  
+            }        
+          }   
+        }
+        
+        .open-skin-setting{          
+          td{
+            border-top:none;
+            .panel{
+              border:none;
+              .panel-heading{
+                padding:0;
+                border-bottom:none;
+                .pull-left, 
+                .pull-right{
+                  margin:10px 0;
+                }
+                .panel-title{
+                  font-size:18px;
+                }
+              }
+              .panel-body{
+                background-color: #fafafc;
+                border: 1px solid #ededed;
+                border-radius : $border-radius-base;
+              }
+              .panel-footer{
+                background-color: #fff;
+                border-top:none;
+              }
+              
+            }
+          }
+        }                
+      }
+      .img-thumnail{
+        max-width: 128px;
+        max-height: 90px;
+      }
+    }  
+    
   }
   // Add border top radius for first one
   > .table:first-child,
@@ -359,21 +421,50 @@
         margin:10px 0;
       }  
       .panel-title{
-        font-size:16px;
-      }  
-      @include clearfix;
-      .panel-title{
+        font-size:18px;
         line-height: inherit;
-      }
+      }  
+      @include clearfix;      
     }    
     .panel-body{      
       background-color: #fafafc;
       border: 1px solid #ededed;
       border-radius : $border-radius-base;
+      
+      .panel{
+        border-color: #fafafc;
+        .panel-heading{
+          background-color: #fafafc;
+          >.pull-left,
+          >.pull-right{
+            margin:10px 0;
+          }  
+          .panel-title{
+            font-size :$font-size-base;
+            font-weight: bold;
+          }            
+        }        
+        .panel-body{
+          background-color: #fff;
+        }        
+      }
+      
     }    
     .panel-footer{
+      padding:0;
       background-color: #fff;
       border-color: transparent;
+    }
+    .table-responsive{
+      border:1px solid $panel-inner-border;  
+      th{
+        background-color: #fafafc;
+      }  
+    }    
+    .list-group {      
+      &.item-setting{
+        border: 1px solid $list-group-border;
+      }
     }
   }  
 }

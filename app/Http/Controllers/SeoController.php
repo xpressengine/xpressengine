@@ -8,7 +8,7 @@ use XeMedia;
 use XeFrontend;
 use Symfony\Component\HttpFoundation\Response;
 use Validator;
-use Xpressengine\Support\Exceptions\HttpXpressengineException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class SeoController extends Controller
 {
@@ -63,17 +63,16 @@ class SeoController extends Controller
      * @param  array  $messages
      * @param  array  $customAttributes
      * @return void
-     * @throws HttpXpressengineException
+     * @throws HttpException
      */
     public function validate(Request $request, array $rules, array $messages = [], array $customAttributes = [])
     {
+        /** @var \Illuminate\Validation\Validator $validator */
         $validator = Validator::make($request->all(), $rules, $messages, $customAttributes);
 
         if ($validator->fails()) {
             $request->flash();
-            $e = new HttpXpressengineException(Response::HTTP_NOT_ACCEPTABLE);
-            $e->setMessage($validator->errors()->first());
-            throw $e;
+            throw new HttpException(Response::HTTP_NOT_ACCEPTABLE, $validator->errors()->first());
         }
     }
 }

@@ -1,27 +1,100 @@
-(function (root, factory) {
-  if (typeof define === 'function' && define.amd) {
-    define(['exports'], factory);
-  } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
-    // CommonJS
-    factory(exports);
-  } else {
-    factory({});
+System.amdDefine('queue', [], function() {
+
+  var pending = [];
+
+  function next() {
+    var fn = pending.shift();
+    if (fn) {
+      fn(next);
+    }
   }
-}(this, function (exports) {
-  'use strict';
+
+  return function(fn) {
+    pending.push(fn);
+    if (pending.length == 1) next();
+  };
+
+});
+
+System.amdDefine('css', [], function() {
+  var cssPrefixes = [ 'Webkit', 'O', 'Moz', 'ms' ],
+    cssProps    = {};
+
+  function camelCase(string) {
+    return string.replace(/^-ms-/, 'ms-').replace(/-([\da-z])/gi, function(match, letter) {
+      return letter.toUpperCase();
+    });
+  }
+
+  function getVendorProp(name) {
+    var style = document.body.style;
+    if (name in style) return name;
+
+    var i = cssPrefixes.length,
+      capName = name.charAt(0).toUpperCase() + name.slice(1),
+      vendorName;
+    while (i--) {
+      vendorName = cssPrefixes[i] + capName;
+      if (vendorName in style) return vendorName;
+    }
+
+    return name;
+  }
+
+  function getStyleProp(name) {
+    name = camelCase(name);
+    return cssProps[name] || (cssProps[name] = getVendorProp(name));
+  }
+
+  function applyCss(element, prop, value) {
+    prop = getStyleProp(prop);
+    if (element) {
+      element[0].style[prop] = value;
+    }
+  }
+
+  return function(element, properties) {
+    var args = arguments,
+      prop,
+      value;
+
+    if (args.length == 2) {
+      for (prop in properties) {
+        value = properties[prop];
+        if (value !== undefined && properties.hasOwnProperty(prop)) applyCss(element, prop, value);
+      }
+    } else {
+      applyCss(element, args[1], args[2]);
+    }
+  };
+
+});
+
+System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
+  'use strict'
+
+  var instances = [];
+
+  return {
+    cssLoad: cssLoad,
+    start: start,
+    done: done
+  };
+
+
 
   // @TODO 라이브러리 분리
   // 다중 인스턴스를 위해 수정된 상태임
 
   var cssLoaded = false;
-  exports.cssLoad = function() {
+  function cssLoad() {
     if (cssLoaded === false) {
       cssLoaded = true;
       XE.cssLoad('/assets/core/common/css/progress.css'); // @TODO
     }
   };
 
-  exports.start = function(context) {
+  function start(context) {
     this.cssLoad();
 
     var $context = $(context);
@@ -34,7 +107,7 @@
     $context.trigger('progressStart');
   };
 
-  exports.done = function(context) {
+  function done(context) {
     var $context = $(context);
     if ($context.context === undefined) {
       $context = $('body');
@@ -51,9 +124,9 @@
 
   };
 
-  var instances = [];
 
-  var getInstance = function($context) {
+
+  function getInstance($context) {
     var instanceId = $context.attr('data-progress-instance');
 
     var instance = null;
@@ -64,7 +137,7 @@
     return instance;
   };
 
-  var getCount = function($context) {
+  function getCount($context) {
     var count = $context.attr('data-progress-count');
 
     if (count != undefined) {
@@ -73,19 +146,19 @@
     return count;
   };
 
-  var setCount = function($context, count) {
+  function setCount($context, count) {
     if (parseInt(count) < 0) {
       count = 0;
     }
     $context.attr('data-progress-count', count);
   }
 
-  var setInstance = function($context, instance) {
+  function setInstance($context, instance) {
     if (getInstance($context) === null) {
       var progress = new XeProgress(),
-      parent = 'body',
-      type = $context.data('progress-type') === undefined ? 'default' : $context.data('progress-type'),
-      showSpinner = type !== 'nospin';
+        parent = 'body',
+        type = $context.data('progress-type') === undefined ? 'default' : $context.data('progress-type'),
+        showSpinner = type !== 'nospin';
 
 
       if ($context.attr('id') !== undefined) {
@@ -110,7 +183,7 @@
     }
   };
 
-  var attachInstance = function($context) {
+  function attachInstance($context) {
     $context.bind('progressStart', function(e) {
       e.stopPropagation();
       var count = getCount($context);
@@ -138,9 +211,9 @@
   /**
    * progress bar 없이 spinner 만 사용
    */
-   var xeSpinner = function() {
+  var xeSpinner = function() {
 
-   };
+  };
 
   /**
    * NProgress, (c) 2013, 2014 Rico Sta. Cruz - http://ricostacruz.com/nprogress
@@ -148,7 +221,7 @@
    *
    * NProgress 모듈을 instance 화 할 수 있도록 하기위해 수정함
    * */
-   var XeProgress = function() {
+  function XeProgress() {
     this.settings = {
       type: 'default',    // defautl, cover, nospin
       minimum: 0.08,
@@ -241,13 +314,13 @@
       this.status = (n === 1 ? null : n);
 
       var $progress = this.render(!started),
-      $bar      = this.$bar,
-      speed    = this.settings.speed,
-      ease     = this.settings.easing;
+        $bar      = this.$bar,
+        speed    = this.settings.speed,
+        ease     = this.settings.easing;
 
       // $progress.offsetWidth; /* Repaint */
       var self = this,
-      time = this.getTime();
+        time = this.getTime();
       queue(function(next) {
         // Set positionUsing if it hasn't already been set
         if (self.settings.positionUsing === '') self.settings.positionUsing = self.getPositioningCSS();
@@ -331,9 +404,9 @@
       $progress.html(this.settings.template[this.settings.type]);
 
       var $bar      = $progress.find(this.settings.barSelector),
-      perc     = fromStart ? '-100' : toBarPerc(this.status || 0),
-      $parent   = $(this.settings.parent),
-      $spinner;
+        perc     = fromStart ? '-100' : toBarPerc(this.status || 0),
+        $parent   = $(this.settings.parent),
+        $spinner;
 
       $bar.attr('title-name', this.instanceId);
       this.$bar = $bar;
@@ -362,7 +435,7 @@
     /**
      * Removes the element. Opposite of render().
      */
-     this.remove = function(time) {
+    this.remove = function(time) {
       this.done(time);
 
       $(this.settings.parent).removeClass('xe-progress-custom-parent xe-progress-'+this.settings.type);
@@ -379,117 +452,52 @@
     /**
      * Checks if the progress bar is rendered.
      */
-     this.isRendered = function() {
-        //return !!$(this.settings.parent).children('.xe-progress').length;
-        return this.$progress !== null;
-      };
+    this.isRendered = function() {
+      //return !!$(this.settings.parent).children('.xe-progress').length;
+      return this.$progress !== null;
+    };
 
     /**
      * Determine which positioning CSS rule to use.
      */
-     this.getPositioningCSS = function() {
+    this.getPositioningCSS = function() {
       var bodyStyle = document.body.style;
 
       // Sniff prefixes
       var vendorPrefix = ('WebkitTransform' in bodyStyle) ? 'Webkit' :
-      ('MozTransform' in bodyStyle) ? 'Moz' :
-      ('msTransform' in bodyStyle) ? 'ms' :
-      ('OTransform' in bodyStyle) ? 'O' : '';
+        ('MozTransform' in bodyStyle) ? 'Moz' :
+          ('msTransform' in bodyStyle) ? 'ms' :
+            ('OTransform' in bodyStyle) ? 'O' : '';
 
       if (vendorPrefix + 'Perspective' in bodyStyle) {
-          // Modern browsers with 3D support, e.g. Webkit, IE10
-          return 'translate3d';
-        } else if (vendorPrefix + 'Transform' in bodyStyle) {
-          // Browsers without 3D support, e.g. IE9
-          return 'translate';
-        } else {
-          // Browsers without translate() support, e.g. IE7-8
-          return 'margin';
-        }
+        // Modern browsers with 3D support, e.g. Webkit, IE10
+        return 'translate3d';
+      } else if (vendorPrefix + 'Transform' in bodyStyle) {
+        // Browsers without 3D support, e.g. IE9
+        return 'translate';
+      } else {
+        // Browsers without translate() support, e.g. IE7-8
+        return 'margin';
       }
-    };
+    }
+  };
 
-    var css = (function() {
-      var cssPrefixes = [ 'Webkit', 'O', 'Moz', 'ms' ],
-      cssProps    = {};
 
-      function camelCase(string) {
-        return string.replace(/^-ms-/, 'ms-').replace(/-([\da-z])/gi, function(match, letter) {
-          return letter.toUpperCase();
-        });
-      }
-
-      function getVendorProp(name) {
-        var style = document.body.style;
-        if (name in style) return name;
-
-        var i = cssPrefixes.length,
-        capName = name.charAt(0).toUpperCase() + name.slice(1),
-        vendorName;
-        while (i--) {
-          vendorName = cssPrefixes[i] + capName;
-          if (vendorName in style) return vendorName;
-        }
-
-        return name;
-      }
-
-      function getStyleProp(name) {
-        name = camelCase(name);
-        return cssProps[name] || (cssProps[name] = getVendorProp(name));
-      }
-
-      function applyCss(element, prop, value) {
-        prop = getStyleProp(prop);
-        if (element) {
-          element[0].style[prop] = value;
-        }
-      }
-
-      return function(element, properties) {
-        var args = arguments,
-        prop,
-        value;
-
-        if (args.length == 2) {
-          for (prop in properties) {
-            value = properties[prop];
-            if (value !== undefined && properties.hasOwnProperty(prop)) applyCss(element, prop, value);
-          }
-        } else {
-          applyCss(element, args[1], args[2]);
-        }
-      }
-    })();
 
   /**
    * Helpers
    */
-   var clamp = function(n, min, max) {
+  function clamp(n, min, max) {
     if (n < min) return min;
     if (n > max) return max;
     return n;
-  };
+  }
 
   function toBarPerc(n) {
     return (-1 + n) * 100;
   }
 
-  var queue = (function() {
-    var pending = [];
 
-    function next() {
-      var fn = pending.shift();
-      if (fn) {
-        fn(next);
-      }
-    }
-
-    return function(fn) {
-      pending.push(fn);
-      if (pending.length == 1) next();
-    };
-  })();
 
   function barPositionCSS(n, speed, ease, Settings) {
     var barCSS;
@@ -506,4 +514,4 @@
 
     return barCSS;
   }
-}));
+});

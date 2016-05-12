@@ -2267,25 +2267,31 @@ a.icon-gray:hover {
 }
 
 .xe-btn-toggle input[type=checkbox]:checked + .toggle {
-  background-color: #dadbde;
   background-color: #359bf7;
 }
 
 .xe-btn-toggle input[type=checkbox]:checked + .toggle:after {
-  left: 20px;
+  left: 41px;
   outline: none;
+}
+
+.xe-btn-toggle input[type=checkbox]:checked + .toggle:before {
+  left: 11px;
+  content: "ON";
 }
 
 .xe-btn-toggle label {
   font-weight: 400;
   font-size: 13px;
   cursor: pointer;
+  line-height: 28px;
 }
 
 .xe-btn-toggle .toggle {
+  position: relative;
   display: inline-block;
-  width: 30px;
-  height: 6px;
+  width: 68px;
+  height: 28px;
   background-color: #dadbde;
   border-radius: 15px;
   margin-right: 10px;
@@ -2297,15 +2303,22 @@ a.icon-gray:hover {
 .xe-btn-toggle .toggle:after {
   display: inline-block;
   position: relative;
-  left: -14px;
-  top: -9px;
-  width: 24px;
-  height: 24px;
+  left: 0;
+  top: 1px;
+  width: 26px;
+  height: 26px;
   background-color: #fff;
   border-radius: 20px;
   border: 1px solid #e4e4e4;
   transition: left .3s ease,background .3s ease,box-shadow .1s ease;
   content: "";
+}
+
+.xe-btn-toggle .toggle:before {
+  position: absolute;
+  right: 10px;
+  content: "OFF";
+  color: #fff;
 }
 
 .search-group {
@@ -3743,3 +3756,5 @@ hr {
     display: none !important;
   }
 }
+
+/*# sourceMappingURL=xe-ui-component.css.map */
