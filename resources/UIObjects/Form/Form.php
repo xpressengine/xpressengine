@@ -28,7 +28,7 @@ class Form extends AbstractUIObject
                     $form->addClass($arg);
                     break;
                 case 'inputs':
-                    $this->appendInputs($form, $arg, array_get($args, 'values'));
+                    $this->appendInputs($form, $arg, array_get($args, 'values', []));
                 default:
                     $form->attr($key, $arg);
                     break;
