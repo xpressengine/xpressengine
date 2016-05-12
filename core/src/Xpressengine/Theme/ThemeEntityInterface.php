@@ -74,25 +74,11 @@ interface ThemeEntityInterface extends Arrayable, Jsonable
     public function supportDesktop();
 
     /**
-     * 테마가 desktop 버전만을 지원하는지 조사한다.
-     *
-     * @return bool desktop 버전만을 지원할 경우 true
-     */
-    public function supportDesktopOnly();
-
-    /**
      * 테마가 mobile 버전을 지원하는지 조사한다.
      *
      * @return bool mobile 버전을 지원할 경우 true
      */
     public function supportMobile();
-
-    /**
-     * 테마가 mobile 버전만을 지원하는지 조사한다.
-     *
-     * @return bool mobile 버전만을 지원할 경우 true
-     */
-    public function supportMobileOnly();
 
     /**
      * Get the evaluated contents of the object.
@@ -108,7 +94,7 @@ interface ThemeEntityInterface extends Arrayable, Jsonable
      *
      * @return \Illuminate\Contracts\View\View|void
      */
-    public function editConfig(ConfigEntity $config = null);
+    public function getSettingView(ConfigEntity $config = null);
 
     /**
      * updateConfig
@@ -117,7 +103,7 @@ interface ThemeEntityInterface extends Arrayable, Jsonable
      *
      * @return array
      */
-    public function updateConfig(array $config);
+    public function updateSetting(array $config);
 
     /**
      * get and set config
@@ -126,5 +112,5 @@ interface ThemeEntityInterface extends Arrayable, Jsonable
      *
      * @return null
      */
-    public function config(ConfigEntity $config = null);
+    public function setting(ConfigEntity $config = null);
 }

@@ -534,11 +534,11 @@ Route::settings(
 Route::settings(
     'theme',
     function () {
-        Route::get('edit', ['as' => 'settings.theme.edit', 'uses' => 'ThemeController@getEdit']);
-        Route::post('edit', ['as' => 'settings.theme.edit', 'uses' => 'ThemeController@postEdit']);
+        Route::get('edit', ['as' => 'settings.theme.edit', 'uses' => 'ThemeController@edit']);
+        Route::post('edit', ['as' => 'settings.theme.edit', 'uses' => 'ThemeController@update']);
 
-        Route::get('config', ['as' => 'settings.theme.config', 'uses' => 'ThemeController@getConfig']);
-        Route::post('config', ['as' => 'settings.theme.config', 'uses' => 'ThemeController@postConfig']);
+        Route::get('config', ['as' => 'settings.theme.config', 'uses' => 'ThemeController@editConfig']);
+        Route::post('config', ['as' => 'settings.theme.config', 'uses' => 'ThemeController@updateConfig']);
 
         Route::post('config/create', ['as' => 'settings.theme.config.create', 'uses' => 'ThemeController@createConfig']);
     }

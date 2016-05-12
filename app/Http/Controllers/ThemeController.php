@@ -10,7 +10,7 @@ use Xpressengine\Theme\ThemeHandler;
 class ThemeController extends Controller
 {
 
-    public function getEdit(Request $request)
+    public function edit(Request $request)
     {
         $themeId = $request->get('theme');
         $fileName = $request->get('file');
@@ -67,7 +67,7 @@ class ThemeController extends Controller
         );
     }
 
-    public function postEdit(Request $request, ThemeHandler $themeHandler)
+    public function update(Request $request, ThemeHandler $themeHandler)
     {
         $themeId = $request->get('theme');
         $fileName = $request->get('file');
@@ -109,7 +109,7 @@ class ThemeController extends Controller
         return redirect()->route('settings.theme.config', ['theme'=>$newId])->with('alert', ['type' => 'success', 'message' => '생성되었습니다.']);;
     }
 
-    public function getConfig(Request $request, ThemeHandler $themeHandler)
+    public function editConfig(Request $request, ThemeHandler $themeHandler)
     {
         $this->validate($request, [
             'theme' => 'required',
@@ -117,7 +117,7 @@ class ThemeController extends Controller
 
         $themeId = $request->get('theme');
         $theme = $themeHandler->getTheme($themeId);
-        $config = $theme->config();
+        $config = $theme->setting();
         $configs = $themeHandler->getThemeConfigList($theme->getId());
 
         $configList = [];
@@ -128,11 +128,10 @@ class ThemeController extends Controller
         return \XePresenter::make('theme.config', compact('theme', 'config', 'configList'));
     }
 
-    public function postConfig(Request $request, ThemeHandler $themeHandler)
+    public function updateConfig(Request $request, ThemeHandler $themeHandler)
     {
         $this->validate($request, [
             'theme' => 'required',
-            'title' => 'required'
         ]);
 
         $themeId = $request->get('theme');
@@ -145,9 +144,8 @@ class ThemeController extends Controller
         $configTitle = $inputs['_configTitle'];
 
         // 해당 테마에게 config를 가공할 수 있는 기회를 준다.
-        $config = $theme->updateConfig($inputs);
+        $config = $theme->updateSetting($inputs);
 
-        unset($config['_configId']);
         $config = array_merge($configInfo, $config);
 
         $themeHandler->setThemeConfig($themeId, $config);

@@ -255,10 +255,12 @@ class ClassThemeEntity implements ThemeEntityInterface
      *
      * @return \Illuminate\Contracts\View\View|void
      */
-    public function editConfig(ConfigEntity $config = null)
+    public function getSettingView(ConfigEntity $config = null)
     {
-        $class = $this->class;
-        return $class::getSettingView($config);
+        if($config === null) {
+            $config = $this->setting();
+        }
+        return $this->getObject()->getSettingView($config);
     }
 
     /**
@@ -268,12 +270,9 @@ class ClassThemeEntity implements ThemeEntityInterface
      *
      * @return array
      */
-    public function updateConfig(array $config)
+    public function updateSetting(array $config)
     {
-        $oldConfig = $this->config();
-
-        // $config = ['_configId', ...]
-        return $config;
+        return $this->getObject()->updateSetting($config);
     }
 
     /**
@@ -283,10 +282,7 @@ class ClassThemeEntity implements ThemeEntityInterface
      *
      * @return null
      */
-    public function config(ConfigEntity $config = null) {
-        if($config !== null) {
-            $this->config = $config;
-        }
-        return $this->config;
+    public function setting(ConfigEntity $config = null) {
+        return $this->getObject()->setting($config);
     }
 }

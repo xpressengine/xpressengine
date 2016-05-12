@@ -8,9 +8,11 @@ function asset($value)
 
 namespace Xpressengine\Tests\Theme;
 
+use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Theme\AbstractTheme;
 
-class AbstractThemeTest extends \PHPUnit_Framework_TestCase {
+class AbstractThemeTest extends \PHPUnit_Framework_TestCase
+{
 
     protected function tearDown()
     {
@@ -67,7 +69,7 @@ class TestTheme extends AbstractTheme
     {
     }
 
-    public static function getEditFiles()
+    public function getEditFiles()
     {
         return ['foo'];
     }
@@ -82,5 +84,15 @@ class TestTheme extends AbstractTheme
         return 'http://foo.bar';
     }
 
-
+    /**
+     * 테마 설정 페이지에 출력할 html 텍스트를 출력한다.
+     * 설정폼은 자동으로 생성되며 설정폼 내부에 출력할 html만 반환하면 된다.
+     *
+     * @param ConfigEntity|null $config 기존에 설정된 설정값
+     *
+     * @return string
+     */
+    public function getSettingView(ConfigEntity $config = null)
+    {
+    }
 }

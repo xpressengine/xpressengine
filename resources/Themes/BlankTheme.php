@@ -13,6 +13,7 @@
  */
 namespace Xpressengine\Themes;
 
+use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Theme\AbstractTheme;
 
 /**
@@ -72,5 +73,18 @@ class BlankTheme extends AbstractTheme
     public function render()
     {
         return view('themes.blank');
+    }
+
+    /**
+     * 테마 설정 페이지에 출력할 html 텍스트를 출력한다.
+     * 설정폼은 자동으로 생성되며 설정폼 내부에 출력할 html만 반환하면 된다.
+     *
+     * @param ConfigEntity|null $config 기존에 설정된 설정값
+     *
+     * @return string
+     */
+    public function getSettingView(ConfigEntity $config = null)
+    {
+        return '';
     }
 }

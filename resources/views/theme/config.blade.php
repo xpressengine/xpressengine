@@ -10,8 +10,7 @@
 
 <div class="row">
     <div class="col-sm-12">
-        <form role="form" action="{{ route('settings.theme.config', ['theme'=>$theme->getId()]) }}" method="post" enctype="multipart/form-data">
-            {{ csrf_field() }}
+        <form role="form" action="{{ route('settings.theme.config', ['theme'=>request()->get('theme')]) }}" method="post" enctype="multipart/form-data">
             <div class="panel-group">
                 <div class="panel">
                     <div class="panel-heading">
@@ -24,11 +23,16 @@
                         </div>
                     </div>
                     <div class="panel-body">
-                        {{ uio('formSelect', ['id'=> '__xe_selectConfig', 'name'=>'_configId', 'options'=> $configList, 'selected'=>request()->get('theme')]) }}
+                        {{ uio('formSelect', ['label'=>'설정을 선택하세요.', 'id'=> '__xe_selectConfig', 'name'=>'_configId', 'options'=> $configList, 'selected'=>request()->get('theme')]) }}
+
+                        {{ uio('formText', ['name'=>'_configTitle', 'value' => $config->get('_configTitle', '기본'), 'label'=>'설정 이름 변경']) }}
                     </div>
                 </div>
-                {!! $theme->editConfig() !!}
             </div>
+
+            {!! $theme->getSettingView() !!}
+
+            {{ csrf_field() }}
 
             <div class="pull-right">
                 <button type="submit" class="btn btn-primary">저장</button>

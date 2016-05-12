@@ -47,16 +47,6 @@ trait MobileSupportTrait
     }
 
     /**
-     * desktop 버전만을 지원하는지 조사한다.
-     *
-     * @return bool
-     */
-    public static function supportDesktopOnly()
-    {
-        return static::$supportDesktop === true && static::$supportMobile === false;
-    }
-
-    /**
      * mobile 버전 지원 여부를 조사한다.
      *
      * @return bool
@@ -64,16 +54,6 @@ trait MobileSupportTrait
     public static function supportMobile()
     {
         return static::$supportMobile;
-    }
-
-    /**
-     * mobile 버전만을 지원하는지 조사한다.
-     *
-     * @return bool
-     */
-    public static function supportMobileOnly()
-    {
-        return static::$supportMobile === true && static::$supportDesktop === false;
     }
 
     /**
@@ -86,9 +66,9 @@ trait MobileSupportTrait
     public static function support($version)
     {
         if ($version === 'desktop') {
-            return static::$supportDesktop;
+            return static::supportDesktop();
         } elseif ($version === 'mobile') {
-            return static::$supportMobile;
+            return static::supportMobile();
         }
     }
 }

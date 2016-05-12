@@ -25,8 +25,10 @@ use Xpressengine\Config\ConfigEntity;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class GenericThemeEntity implements ThemeEntityInterface
+class CompactThemeEntity implements ThemeEntityInterface
 {
+    use GenericThemeTrait;
+
     /**
      * @var ThemeHandler
      */
@@ -77,8 +79,8 @@ class GenericThemeEntity implements ThemeEntityInterface
     /**
      * ThemeEntity constructor.
      *
-     * @param string $id   theme id
-     * @param string $path theme directory path
+     * @param string $id theme id
+     * @param array  $componentInfo theme component info
      */
     public function __construct($id, $componentInfo)
     {
@@ -86,7 +88,7 @@ class GenericThemeEntity implements ThemeEntityInterface
         $this->path = $componentInfo['path'];
         unset($componentInfo['path']);
 
-        $info = include(base_path($this->path.'/'.'info.php'));
+        $info = include(base_path($this->getPath().'/'.'info.php'));
         $this->resolveInfo($info, $componentInfo);
     }
 
@@ -98,16 +100,6 @@ class GenericThemeEntity implements ThemeEntityInterface
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * get class name of theme
-     *
-     * @return string
-     */
-    public function getPath()
-    {
-        return $this->path;
     }
 
     /**
@@ -128,27 +120,6 @@ class GenericThemeEntity implements ThemeEntityInterface
     public function getDescription()
     {
         return $this->info('description');
-    }
-
-    /**
-     * 각 테마는 편집 페이지에서 편집할 수 있는 템플릿파일(blade)이나 css 파일 목록을 지정한다.
-     * 이 메소드는 그 파일 목록을 조회한다.
-     *
-     * @return array
-     */
-    public function getEditFiles()
-    {
-        $path = base_path($this->path.DIRECTORY_SEPARATOR.'views');
-        $editable = $this->info('editable');
-
-        $files = [];
-        foreach ($editable as $type => $list) {
-            $files[$type] = [];
-            foreach ($list as $file) {
-                $files[$type][$file] = base_path($path.DIRECTORY_SEPARATOR.$type.DIRECTORY_SEPARATOR.$file);
-            }
-        }
-        return $files;
     }
 
     /**
@@ -181,16 +152,6 @@ class GenericThemeEntity implements ThemeEntityInterface
     }
 
     /**
-     * 테마가 desktop 버전만을 지원하는지 조사한다.
-     *
-     * @return bool desktop 버전만을 지원할 경우 true
-     */
-    public function supportDesktopOnly()
-    {
-        return $this->info('support.desktop') === true && $this->info('support.mobile') === false;
-    }
-
-    /**
      * 테마가 mobile 버전을 지원하는지 조사한다.
      *
      * @return bool mobile 버전을 지원할 경우 true
@@ -198,16 +159,6 @@ class GenericThemeEntity implements ThemeEntityInterface
     public function supportMobile()
     {
         return $this->info('support.desktop');
-    }
-
-    /**
-     * 테마가 mobile 버전만을 지원하는지 조사한다.
-     *
-     * @return bool mobile 버전만을 지원할 경우 true
-     */
-    public function supportMobileOnly()
-    {
-        return $this->info('support.desktop') === false && $this->info('support.mobile') === true;
     }
 
     /**
@@ -231,78 +182,11 @@ class GenericThemeEntity implements ThemeEntityInterface
     {
         return [
             'id' => $this->id,
-            'path' => $this->path,
+            'path' => $this->getPath(),
             'title' => $this->getTitle(),
             'description' => $this->getDescription(),
             'screenshot' => $this->getScreenshot()
         ];
-    }
-
-    /**
-     * Get the evaluated contents of the object.
-     *
-     * @return string
-     */
-    public function render()
-    {
-        $config = $this->config();
-
-        $this->registerViewNamespace();
-
-        $view = $this->viewname('view', 'theme');
-        return static::$handler->getViewFactory()->make($view, compact('config'));
-    }
-
-    /**
-     * return editConfigView
-     *
-     * @param ConfigEntity $config
-     *
-     * @return \Illuminate\Contracts\View\View|void
-     */
-    public function editConfig(ConfigEntity $config = null)
-    {
-        if($config === null) {
-            $config = $this->config();
-        }
-        $view = array_get($this->info, 'config', 'config');
-
-        $this->registerViewNamespace();
-
-        if(is_string($view)) {
-            return static::$handler->getViewFactory()->make($this->viewname($view, 'config'), compact('config'));
-        } elseif (is_array($view)) {
-            return $this->makeConfigView($view, $config);
-        }
-    }
-
-    /**
-     * updateConfig
-     *
-     * @param array $config
-     *
-     * @return array
-     */
-    public function updateConfig(array $config)
-    {
-        $oldConfig = $this->config();
-
-        // $config = ['_configId', ...]
-        return $config;
-    }
-
-    /**
-     * get and set config
-     *
-     * @param ConfigEntity $config
-     *
-     * @return ConfigEntity
-     */
-    public function config(ConfigEntity $config = null) {
-        if($config !== null) {
-            $this->config = $config;
-        }
-        return $this->config;
     }
 
     /**
@@ -314,7 +198,7 @@ class GenericThemeEntity implements ThemeEntityInterface
      */
     protected function info($key = null)
     {
-        if($key !== null) {
+        if ($key !== null) {
             return array_get($this->info, $key);
         }
         return $this->info;
@@ -332,50 +216,20 @@ class GenericThemeEntity implements ThemeEntityInterface
     {
         // resolve screenshot
         $screenshot = array_get($info, 'screenshot');
-        if($screenshot !== null) {
-            array_set($info, 'screenshot', asset($this->path.'/'.$screenshot));
+        if ($screenshot !== null) {
+            array_set($info, 'screenshot', asset($this->getPath().'/'.$screenshot));
         }
 
         $this->info = array_merge($info, $componentInfo);
     }
 
     /**
-     * view
-     *
-     * @param        $name
-     * @param string $default
+     * get class name of theme
      *
      * @return string
      */
-    protected function viewname($name, $default = '')
+    public function getPath()
     {
-        return static::$viewNamespace.'::'.array_get($this->info, $name, $default);
-    }
-
-    /**
-     * makeConfigView
-     *
-     * @param array $info
-     * @param ConfigEntity $config
-     *
-     * @return string
-     */
-    private function makeConfigView(array $info, ConfigEntity $config)
-    {
-        return '...';
-    }
-
-    /**
-     * registerViewNamespace
-     *
-     * @return void
-     */
-    private function registerViewNamespace()
-    {
-        // register '_theme::' view namespace
-        static::$handler->getViewFactory()->addNamespace(
-            static::$viewNamespace,
-            $this->path.DIRECTORY_SEPARATOR.'views'
-        );
+        return $this->path;
     }
 }

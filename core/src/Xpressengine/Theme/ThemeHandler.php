@@ -217,13 +217,13 @@ class ThemeHandler
             if (is_string($registerd) && is_subclass_of($registerd, ComponentInterface::class)) {
                 $this->themeList[$themeId] = new ClassThemeEntity($themeId, $registerd);
             } elseif(is_array($registerd)) {
-                $this->themeList[$themeId] = new GenericThemeEntity($themeId, $registerd);
+                $this->themeList[$themeId] = new CompactThemeEntity($themeId, $registerd);
             }
         }
 
         $config = $this->getThemeConfig($instanceId);
         $theme = $this->themeList[$themeId];
-        $theme->config($config);
+        $theme->setting($config);
 
         return $theme;
     }
@@ -354,7 +354,8 @@ class ThemeHandler
     {
         $id = implode($this->configDelimiter, func_get_args());
         $configId = $this->getConfigId($id);
-        return $this->config->get($configId, true);
+        $config = $this->config->get($configId, true);
+        return $config;
     }
 
     /**

@@ -5,7 +5,7 @@ use Illuminate\Support\ServiceProvider;
 use Xpressengine\Plugin\PluginRegister;
 use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
 use Xpressengine\Theme\AbstractTheme;
-use Xpressengine\Theme\GenericThemeEntity;
+use Xpressengine\Theme\CompactThemeEntity;
 use Xpressengine\Theme\ThemeHandler;
 use Xpressengine\UIObjects\Theme\ThemeList;
 use Xpressengine\UIObjects\Theme\ThemeSelect;
@@ -132,6 +132,6 @@ class ThemeServiceProvider extends ServiceProvider
     private function setThemeHandlerForTheme()
     {
         AbstractTheme::setHandler($this->app->make('xe.theme'));
-        GenericThemeEntity::setHandler($this->app->make('xe.theme'));
+        CompactThemeEntity::setHandler($this->app->make('xe.theme'));
     }
 }
