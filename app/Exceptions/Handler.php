@@ -72,7 +72,6 @@ class Handler extends ExceptionHandler
             $responseException = $e;
         } // http exception
         elseif ($e instanceof HttpExceptionInterface) {
-            // 인터페이스가...
             $e->setMessage(xe_trans($e->getMessage(), $e->getArgs()));
             $responseException = $e;
         } // xpressengine exception
