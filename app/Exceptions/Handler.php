@@ -59,11 +59,11 @@ class Handler extends ExceptionHandler
         */
         // token mismatch
         if ($e instanceof TokenMismatchException) {
-            $responseException = new HttpXpressengineException(Response::HTTP_FORBIDDEN);
+            $responseException = new HttpXpressengineException([], Response::HTTP_FORBIDDEN);
             $responseException->setMessage(xe_trans('xe::tokenMismatch'));
         } // not found
         elseif ($e instanceof NotFoundHttpException) {
-            $responseException = new HttpXpressengineException(Response::HTTP_NOT_FOUND);
+            $responseException = new HttpXpressengineException([], Response::HTTP_NOT_FOUND);
             $responseException->setMessage(xe_trans('xe::pageNotFound'));
         } // access denied
         elseif ($e instanceof AccessDeniedHttpException) {
@@ -72,7 +72,6 @@ class Handler extends ExceptionHandler
             $responseException = $e;
         } // http exception
         elseif ($e instanceof HttpExceptionInterface) {
-            // 인터페이스가...
             $e->setMessage(xe_trans($e->getMessage(), $e->getArgs()));
             $responseException = $e;
         } // xpressengine exception
@@ -84,7 +83,7 @@ class Handler extends ExceptionHandler
                 $cache->store('plugins')->flush();
                 Event::fire('cache:cleared', ['plugins']);
             }
-            $responseException = new HttpXpressengineException(Response::HTTP_INTERNAL_SERVER_ERROR);
+            $responseException = new HttpXpressengineException([], Response::HTTP_INTERNAL_SERVER_ERROR);
             $message = xe_trans($e->getMessage(), $e->getArgs());
             if ('' === $message) {
                 $message = get_class($e);
@@ -96,7 +95,7 @@ class Handler extends ExceptionHandler
         elseif ($e instanceof ModelNotFoundException) {
             $responseException = new NotFoundHttpException($e->getMessage(), $e);
         } else {
-            $responseException = new HttpXpressengineException(Response::HTTP_INTERNAL_SERVER_ERROR);
+            $responseException = new HttpXpressengineException([], Response::HTTP_INTERNAL_SERVER_ERROR);
             $responseException->setMessage(xe_trans('xe::systemError'));
         }
 

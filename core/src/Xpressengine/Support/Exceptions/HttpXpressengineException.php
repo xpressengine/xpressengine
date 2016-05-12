@@ -37,8 +37,8 @@ class HttpXpressengineException extends XpressengineException implements HttpExc
      * @param int             $code       code
      */
     public function __construct(
-        $statusCode = null,
         $args = [],
+        $statusCode = null,
         \Exception $previous = null,
         array $headers = [],
         $code = 0

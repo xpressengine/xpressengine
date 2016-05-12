@@ -1,13 +1,12 @@
 <?php namespace App\Http\Controllers;
 
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use XePlugin;
 use XePresenter;
 use Redirect;
 use Symfony\Component\HttpFoundation\Response;
 use Xpressengine\Http\Request;
 use Xpressengine\Plugin\PluginHandler;
-use Xpressengine\Support\Exceptions\HttpXpressengineException;
-use Xpressengine\Support\Exceptions\XpressengineException;
 
 class PluginController extends Controller
 {
@@ -59,9 +58,7 @@ class PluginController extends Controller
         try {
             XePlugin::activatePlugin($pluginId);
         } catch (XpressengineException $e) {
-            $exception = new HttpXpressengineException('403');
-            $exception->setMessage($e->getMessage());
-            throw $exception;
+            throw new HttpException(Response::HTTP_FORBIDDEN, $e->getMessage(), $e);
         } catch (\Exception $e) {
             throw $e;
         }
@@ -74,9 +71,7 @@ class PluginController extends Controller
         try {
             XePlugin::deactivatePlugin($pluginId);
         } catch (XpressengineException $e) {
-            $exception = new HttpXpressengineException('403');
-            $exception->setMessage($e->getMessage());
-            throw $exception;
+            throw new HttpException(Response::HTTP_FORBIDDEN, $e->getMessage(), $e);
         } catch (\Exception $e) {
             throw $e;
         }
@@ -89,9 +84,7 @@ class PluginController extends Controller
         try {
             XePlugin::updatePlugin($pluginId);
         } catch (XpressengineException $e) {
-            $exception = new HttpXpressengineException(Response::HTTP_FORBIDDEN);
-            $exception->setMessage($e->getMessage());
-            throw $exception;
+            throw new HttpException(Response::HTTP_FORBIDDEN, $e->getMessage(), $e);
         } catch (\Exception $e) {
             throw $e;
         }
