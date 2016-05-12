@@ -22,7 +22,7 @@ class ProfileBgImage extends ProfileImage
      *
      * @return void
      */
-    protected function loadFiles()
+    protected function loadAssets()
     {
         XeFrontend::js(
             [

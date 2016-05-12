@@ -24,6 +24,9 @@ class FormSelect extends AbstractUIObject
         $labelEl = $this->markup['label'];
         $selectEl = $this->markup['select'];
         $selectedValue = array_get($args, 'selected', null);
+        if ($selectedValue === null) {
+            $selectedValue = array_get($args, 'value', null);
+        }
 
         foreach ($args as $key => $arg) {
             switch ($key) {

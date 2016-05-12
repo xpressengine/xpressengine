@@ -23,7 +23,7 @@ class ProfileImage extends FormImage
      *
      * @return void
      */
-    protected function loadFiles()
+    protected function loadAssets()
     {
         XeFrontend::js(
             [

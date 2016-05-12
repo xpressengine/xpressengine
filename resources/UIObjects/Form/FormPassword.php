@@ -25,14 +25,14 @@ class FormPassword extends AbstractUIObject
         foreach ($args as $key => $arg) {
             switch ($key) {
                 case 'class':
-                    $input->addClass('class', $arg);
+                    $input->addClass($arg);
                     break;
                 case 'label':
                     $label->removeClass('hidden')->html($arg);
                     break;
                 case 'id':
                     $label->attr('for', $arg);
-                // pass to default
+                    // pass to default
                 default:
                     $input->attr($key, $arg);
                     break;

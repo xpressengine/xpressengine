@@ -379,7 +379,7 @@ return [
 
     'uiobject' => [
         'aliases' => [
-            'phone' => 'uiobject/xpressengine@phone',
+            'form' => 'uiobject/xpressengine@form',
             'formText' => 'uiobject/xpressengine@formText',
             'formPassword' => 'uiobject/xpressengine@formPassword',
             'formTextarea' => 'uiobject/xpressengine@formTextArea',

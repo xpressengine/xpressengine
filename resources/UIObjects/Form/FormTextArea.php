@@ -25,7 +25,7 @@ class FormTextArea extends AbstractUIObject
         foreach ($args as $key => $arg) {
             switch ($key) {
                 case 'class':
-                    $textarea->addClass('class', $arg);
+                    $textarea->addClass($arg);
                     break;
                 case 'label':
                     $label->removeClass('hidden')->html($arg);
@@ -35,6 +35,7 @@ class FormTextArea extends AbstractUIObject
                     break;
                 case 'id':
                     $label->attr('for', $arg);
+                    // pass to default
                 default:
                     $textarea->attr($key, $arg);
                     break;

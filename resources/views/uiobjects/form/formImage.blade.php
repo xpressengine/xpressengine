@@ -7,10 +7,14 @@
             @else
             <span>등록하기</span>
             @endif
-            <input class="__xe_file_{{ $seq }}" type="file" name="{{ array_get($args, 'name', 'imagebox') }}"/>
+            <input class="__xe_file_{{ $seq }}" type="file" name="{{ array_get($args, 'name', 'image') }}"/>
         </a>
         <div class="__xe_file_preview_{{ $seq }}">
-            @if(isset($args['image']))
+            @if(isset($args['value']))
+                <img class="__thumbnail center-block" src="{{ asset(array_get($args,'value.path')) }}"
+                     style="max-width: 100%; width:{{ $args['width'] }}px; height:auto;">
+            {{-- @deprecated: image 대신 value를 사용하는 것을 권장 --}}
+            @elseif(isset($args['image']))
                 <img class="__thumbnail center-block" src="{{ asset($args['image']) }}"
                      style="max-width: 100%; width:{{ $args['width'] }}px; height:auto;">
             @endif
