@@ -1,5 +1,8 @@
 var gulp = require("gulp"),
-  $ = require('gulp-load-plugins')();
+    concat = require("gulp-concat"),
+    clean = require("gulp-clean"),
+    $ = require('gulp-load-plugins')(),
+    sourcemaps = require('gulp-sourcemaps');
 var runSequence = require('run-sequence');
 var elixir = require('laravel-elixir');
 var merge = require('merge-stream');
@@ -19,17 +22,21 @@ elixir(function (mix) {
   mix.browserify('../core/menu/MenuTree.jsx', 'assets/vendor/menu/menu.js');
 });
 
+gulp.task('clean', function () {
+  return gulp.src('assets/core/common/js/xe.bundle.js')
+    .pipe(clean({force: true}));
+});
+
 // assets 재구성을 위한 임시 task
 elixir(function(mix) {
   mix.copy('resources/assets/core', 'assets/core');
 });
 
-
 gulp.task('default', function(callback){
   runSequence(
+    'clean',
     'copy-assets',
     'assets:sass',
-    'jspm:admin',
     'jspm:component',
     'jspm:menu',
     'jspm:langbox',
@@ -48,19 +55,16 @@ gulp.task('copy-assets', function () {
 
 gulp.task('jspm', ['copy-assets'], function(callback){
   runSequence(
-    'jspm:admin',
     'jspm:component',
     'jspm:menu',
     'jspm:langbox',
     callback);
 });
 
-gulp.task('jspm:xe', function(){
-  return gulp.src('assets/core/common/js/xe.js')
-    .pipe($.plumber())
-    .pipe($.jspm({inject: true, selfExecutingBundle: true}))
-    .pipe($.rename('xe.bundle.js'))
-    .pipe(gulp.dest('assets/core/common/js'));
+gulp.task('jspm:xe', function() {
+  return gulp.src(['assets/core/common/js/translator.js', 'assets/core/common/js/xe.*.js', 'assets/core/common/js/xe.js'])
+    .pipe(concat('xe.bundle.js'))
+    .pipe(gulp.dest('assets/core/common/js/'));
 });
 
 gulp.task('jspm:menu', function(){
@@ -87,14 +91,6 @@ gulp.task('jspm:component', function(){
     .pipe(gulp.dest('assets/core/settings/js'));
 });
 
-gulp.task('jspm:admin', function(){
-  return gulp.src('assets/core/xe-ui-component/js/xe-ui-component.js')
-    .pipe($.plumber())
-    .pipe($.jspm())
-    .pipe($.rename('xe-ui-component.bundle.js'))
-    .pipe(gulp.dest('assets/core/xe-ui-component/js'));
-});
-
 gulp.task('watch', function() {
   gulp.watch(['./resources/assets/**'], ['default']);
 });
@@ -117,8 +113,10 @@ gulp.task('csslint', function() {
 
 gulp.task('assets:sass', function () {
   return gulp.src('./resources/assets/**/*.scss')
+    .pipe(sourcemaps.init())
     .pipe($.plumber())
     .pipe($.sass({outputStyle: 'expanded'}).on('error', $.sass.logError))
+    .pipe(sourcemaps.write("."))
     .pipe(gulp.dest('./assets'));
 });
 

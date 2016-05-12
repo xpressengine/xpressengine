@@ -7,13 +7,15 @@
             'getContents', 'setContents', 'addContents',
             'initialize'
         ],
-        editorSet = {};
+        editorSet = {},
+        editorOptionSet = {};
 
     var instanceObj = function(editorName, sel, options) {
         this.editorName = editorName;
         this.selector = sel;
         this.options = options;
         this.props = {};
+
     };
 
     instanceObj.prototype = {
@@ -38,8 +40,6 @@
 
     var Editor = function(options) {
         this.name = options.name;
-        this.editorType = options.editorType;
-        this.editor = options.editor;
         this.editorList = {};
 
         for(var o in options) {
@@ -52,22 +52,30 @@
             this.editorList[sel] = new instanceObj(this.name, sel, options);
             this.initialize.call(this.editorList[sel], sel, options);
 
+            if(this.hasOwnProperty('components') && this.components.length > 0) {
+                this.addComponent(this.components);
+            }
+
             return this.editorList[sel];
         },
         getContents: function() {
             console.error('Editor.getContents');
         },
-        setContents: function() {
+        setContents: function(text) {
             console.error('Editor.setContents');
         },
-        addContents: function() {
+        addContents: function(text) {
             console.error('Editor.addContents');
+        },
+        addComponent: function(components) {
+
         }
     };
 
     var XEeditor = {
         define: function(options) {
             if(this.isValidOptions(options)) {
+                editorOptionSet[options.name] = options;
                 editorSet[options.name] = new Editor(options);
             }
         },
@@ -75,8 +83,14 @@
             var valid = true;
             for(var option in requireOptions) {
                 if(!options.hasOwnProperty(requireOptions[option])) {
-                    console.error('구현 필요 [instance name : ' + options.name + ' fn:' + requireOptions[option] + ']');
+                    console.error('구현 필요 [fn:' + requireOptions[option] + ']');
                     valid = false;
+                }
+                if(options.hasOwnProperty('components')
+                    && options.components instanceof Array
+                    && options.components.length > 0
+                    && !options.hasOwnProperty('addComponent')) {
+                    console.error('구현 필요 [fn:addComponent]');
                 }
             }
 
@@ -98,81 +112,5 @@
 
     exports.XEeditor = XEeditor;
 })(window);
-
-
-
-// editor 개발자가 해당 editor를 define한다. name으로 맵핑
-XEeditor.define({
-    name: 'editor.ckeditor',
-    initialize: function(selector, options) {
-        CKEDITOR.replace(selector, options || {});
-
-        this.addProps({
-            selector: selector
-            , options: options
-        });
-    }
-    ,
-    getContents: function() {
-        return CKEDITOR.instances[this.props.selector].getData();
-    },
-    setContents: function(text) {
-        CKEDITOR.instances[this.props.selector].setData(text);
-    },
-    addContents: function(text) {
-        CKEDITOR.instances[this.props.selector].insertHtml(text);
-    }
-});
-
-// editor 개발자가 해당 editor를 define한다. name으로 맵핑
-XEeditor.define({
-    name: 'editor.tinyMCE',
-    initialize: function(selector, options) {
-        tinymce.init({
-            selector: selector,
-            setup: function (editor) {
-                editor.on('keyup', function (e) {
-
-                });
-            }
-        });
-
-        this.addProps({
-            selector: selector
-            , options: options
-            , id: selector.replace('#', '')
-        });
-    },
-    getContents: function() {
-        return tinymce.get(this.props.id).getContent();
-    },
-    setContents: function(text) {
-        tinymce.get(this.props.id).setContent(text);
-    },
-    addContents: function(text) {
-        tinymce.get(this.props.id).execCommand('mceInsertContent', false, text);
-    }
-});
-
-// 사용자
-// XEeditor로 정의된 에디터를 생성한다.
-//XEeditor.getEditor('editor.ckeditor').create('#textarea', {});
-//ckeditor.getContents();
-
-$(function() {
-    var ckEditor = XEeditor.getEditor('editor.ckeditor');
-    var tinyEditor = XEeditor.getEditor('editor.tinyMCE');
-
-    var editor11 = ckEditor.create('editor1', {});
-    var editor33 = ckEditor.create('editor3', {});
-    var editor22 = tinyEditor.create('#editor2', {});
-    var editor44 = tinyEditor.create('#editor4', {});
-
-
-    window.editor11 = editor11;
-    window.editor22 = editor22;
-    window.editor33 = editor33;
-    window.editor44 = editor44;
-});
 
 

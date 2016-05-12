@@ -1,17 +1,17 @@
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD
-    define(['exports'], function (exports) {
-      factory(exports);
+    define(['exports'], function (exports, jQuery) {
+      factory(exports, jQuery);
     });
   } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
     // CommonJS
-    factory(exports);
+    factory(exports, require('jquery'));
   } else {
     // Browser globals
-    factory({});
+    factory({}, root.jQuery);
   }
-}(this, function (exports) {
+}(this, function (exports, $) {
   'use strict';
 
   // MODAL CLASS DEFINITION
@@ -305,14 +305,14 @@
 
   var old = $.fn.modal
 
-  $.fn.xeModel             = Plugin
-  $.fn.xeModel.Constructor = Modal
+  $.fn.modal             = Plugin
+  $.fn.modal.Constructor = Modal
 
 
   // MODAL NO CONFLICT
   // =================
 
-  $.fn.xeModel.noConflict = function () {
+  $.fn.modal.noConflict = function () {
     $.fn.modal = old
     return this
   }

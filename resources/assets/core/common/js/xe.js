@@ -67,9 +67,7 @@
           url = undefined;
         }
 
-        $.ajaxSetup(options);
-        var jqXHR = $.ajax(url, options);
-        return jqXHR;
+        return $.ajax(url, options);
       };
 
       d.resolve();

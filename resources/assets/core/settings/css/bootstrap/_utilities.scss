@@ -58,3 +58,10 @@
      @include text-overflow;
 }
 
+.font-size-large{
+  font-size: $font-size-large;
+}
+
+.gray-font{
+  color:$gray-light;
+}

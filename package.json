@@ -49,34 +49,14 @@
       "jquery-ui": "npm:jquery-ui@^1.10.5",
       "lodash": "npm:lodash@^4.7.0",
       "moment": "npm:moment@^2.12.0",
-      "normalize.css": "github:necolas/normalize.css@^4.0.0",
+      "normalize.css": "github:necolas/normalize.css@^4.1.1",
       "swiper2": "npm:swiper@^2",
       "twbs/bootstrap-sass": "github:twbs/bootstrap-sass@3.3.6",
       "xedep-jquery": "npm:jquery@^2.2.2"
     },
     "devDependencies": {
-      "css": "github:systemjs/plugin-css@^0.1.20",
+      "css": "github:systemjs/plugin-css@^0.1.21",
       "jsx": "github:floatdrop/plugin-jsx@^1.2.1"
-    },
-    "overrides": {
-      "npm:blueimp-file-upload@9.12.1": {
-        "files": [
-          "js",
-          "README.md",
-          "package.json"
-        ],
-        "ignore": [
-          "js/vendor",
-          "node_modules"
-        ]
-      },
-      "npm:jquery@2.2.2": {
-        "files": [
-          "dist/jquery.min.js",
-          "LICENSE.txt",
-          "package.json"
-        ]
-      }
     }
   }
 }
