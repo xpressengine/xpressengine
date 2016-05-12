@@ -6,11 +6,12 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Routing\UrlGenerator;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use XePresenter;
 use XeTheme;
 use XeDB;
-use Xpressengine\Support\Exceptions\HttpXpressengineException;
 use Xpressengine\User\EmailBrokerInterface;
 use Xpressengine\User\Exceptions\JoinNotAllowedException;
 use Xpressengine\User\Exceptions\PendingEmailNotExistsException;
@@ -307,9 +308,7 @@ class AuthController extends Controller
         $config = app('xe.config')->get('user.'.$action);
         if ($config->get('useCaptcha', false) === true) {
             if (app('xe.captcha')->verify() !== true) {
-                $e = new HttpXpressengineException(403);
-                $e->setMessage('자동인증방지 기능을 통과하지 못하였습니다.');
-                throw $e;
+                throw new HttpException(Response::HTTP_FORBIDDEN, '자동인증방지 기능을 통과하지 못하였습니다.');
             }
         }
     }
