@@ -3,35 +3,36 @@
 
     //define시 필수 구현되어야 하는 object
     var requireOptions = [
-            'name', 'editorType', 'editorRoot',
-            'getContents', 'setContents',
+            'name',
+            'getContents', 'setContents', 'addContents',
             'initialize'
         ],
         editorSet = {},
-        editorType = [],
         editorOptionSet = {};
 
     var instanceObj = function(editorName, sel, options) {
         this.editorName = editorName;
         this.selector = sel;
         this.options = options;
+        this.props = {};
 
     };
 
     instanceObj.prototype = {
-        props: {},
         getInstance: function() {
             return editorSet[this.editorName].editorList[this.selector];
         },
         getContents: function() {
             return editorSet[this.editorName].getContents.call(this.getInstance());
         },
-        setContents: function() {
-            editorSet[this.editorName].setContents.bind(this.getInstance());
+        setContents: function(text) {
+            editorSet[this.editorName].setContents.call(this.getInstance(), text);
+        },
+        addContents: function(text) {
+            editorSet[this.editorName].addContents.call(this.getInstance(), text);
         },
         addProps: function(obj) {
             for(var o in obj) {
-                //this['props'][o] = obj[o];
                 this.getInstance().props[o] = obj[o];
             }
         }
@@ -39,8 +40,6 @@
 
     var Editor = function(options) {
         this.name = options.name;
-        this.editorType = options.editorType;
-        this.editor = options.editor;
         this.editorList = {};
 
         for(var o in options) {
@@ -53,13 +52,23 @@
             this.editorList[sel] = new instanceObj(this.name, sel, options);
             this.initialize.call(this.editorList[sel], sel, options);
 
+            if(this.hasOwnProperty('components') && this.components.length > 0) {
+                this.addComponent(this.components);
+            }
+
             return this.editorList[sel];
         },
         getContents: function() {
             console.error('Editor.getContents');
         },
-        setContents: function() {
+        setContents: function(text) {
             console.error('Editor.setContents');
+        },
+        addContents: function(text) {
+            console.error('Editor.addContents');
+        },
+        addComponent: function(components) {
+
         }
     };
 
@@ -77,6 +86,12 @@
                     console.error('구현 필요 [fn:' + requireOptions[option] + ']');
                     valid = false;
                 }
+                if(options.hasOwnProperty('components')
+                    && options.components instanceof Array
+                    && options.components.length > 0
+                    && !options.hasOwnProperty('addComponent')) {
+                    console.error('구현 필요 [fn:addComponent]');
+                }
             }
 
             if(!!editorSet.hasOwnProperty(options.name)) {
@@ -92,15 +107,6 @@
         },
         getEditor: function(name) {
             return editorSet[name];
-        },
-        setEditorType: function(types) {
-
-            if(types instanceof Array) {
-
-            }else if(typeof types === 'string'){
-
-            }
-
         }
     };
 
