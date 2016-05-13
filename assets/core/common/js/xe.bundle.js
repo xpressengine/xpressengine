@@ -764,7 +764,7 @@ System.amdDefine('xe.component', [], function() {
             this.initialize.call(this.editorList[sel], sel, options);
 
             if(this.hasOwnProperty('components') && this.components.length > 0) {
-                this.addComponent(this.components);
+                this.addComponent.call(this.editorList[sel], this.components);
             }
 
             return this.editorList[sel];

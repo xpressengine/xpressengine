@@ -12,7 +12,12 @@
 
   var $ = jQuery = window.jQuery;
 
-  System.import('xecore:/common/js/modules/griper/style.css!');
+  var styleLoaded = false;
+  //System.import('xecore:/common/js/modules/griper/style.css!');
+  if(!styleLoaded) {
+    styleLoaded = true;
+    XE.cssLoad('/assets/core/common/js/modules/griper/style.css');
+  }
 
   exports.options = {
     toastContainer: {
