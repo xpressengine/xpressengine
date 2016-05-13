@@ -53,7 +53,6 @@ class Handler extends ExceptionHandler
     {
         $responseException = null;
 
-
         /*
          * make responseException
         */
@@ -71,7 +70,10 @@ class Handler extends ExceptionHandler
             $e->setMessage(xe_trans('xe::accessDenied'));
             $responseException = $e;
         } // http exception
-        elseif ($e instanceof HttpExceptionInterface) {
+        elseif ($e instanceof HttpException) {
+            $responseException = $e;
+        } // xpressengine exception
+        elseif ($e instanceof HttpXpressengineException) {
             $e->setMessage(xe_trans($e->getMessage(), $e->getArgs()));
             $responseException = $e;
         } // xpressengine exception
@@ -116,6 +118,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+        /** @var HttpExceptionInterface $responseException */
         $responseException = $this->filter($e);
 
         // debugging mode
@@ -159,7 +162,7 @@ class Handler extends ExceptionHandler
      *
      * @param Request   $request
      * @param Exception $e
-     * @param Exception $responseException
+     * @param HttpExceptionInterface $responseException
      *
      * @return \Illuminate\Http\RedirectResponse|Response
      */
