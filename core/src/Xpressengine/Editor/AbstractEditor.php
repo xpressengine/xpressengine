@@ -130,6 +130,8 @@ abstract class AbstractEditor implements ComponentInterface, Renderable
      * @param array $config editor config
      *
      * @return string|Renderable
+     *
+     * @deprecated 
      */
     public static function getSettingView($config = [])
     {

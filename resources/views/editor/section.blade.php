@@ -14,29 +14,29 @@
         @endforeach
     </select>
 </div>
-<div class="form-group">
-    <div class="well">
-        <label>부가기능</label>
-        <ul class="list-group">
-            @foreach($parts as $id => $class)
-                <li class="list-group-item">
-                    <div class="row">
-                        <div class="col-sm-1"><i class="xi-bullet-point"></i></div>
-                        <div class="col-sm-4">{{ $class::getComponentInfo('name') }}</div>
-                        <div class="col-sm-4">{{ $class::getComponentInfo('description') }}</div>
-                        <div class="col-sm-2"><input type="checkbox"> 사용</div>
-                        <div class="col-sm-1">
-                            @if($uri = $class::getInstanceSettingURI($instanceId))
-                                <a href="{{ $uri }}" class="btn btn-default btn-xs">설정</a>
-                            @endif
-                        </div>
-                    </div>
-                </li>
-            @endforeach
-        </ul>
-    </div>
+{{--<div class="form-group">--}}
+    {{--<div class="well">--}}
+        {{--<label>부가기능</label>--}}
+        {{--<ul class="list-group">--}}
+            {{--@foreach($parts as $id => $class)--}}
+                {{--<li class="list-group-item">--}}
+                    {{--<div class="row">--}}
+                        {{--<div class="col-sm-1"><i class="xi-bullet-point"></i></div>--}}
+                        {{--<div class="col-sm-4">{{ $class::getComponentInfo('name') }}</div>--}}
+                        {{--<div class="col-sm-4">{{ $class::getComponentInfo('description') }}</div>--}}
+                        {{--<div class="col-sm-2"><input type="checkbox"> 사용</div>--}}
+                        {{--<div class="col-sm-1">--}}
+                            {{--@if($uri = $class::getInstanceSettingURI($instanceId))--}}
+                                {{--<a href="{{ $uri }}" class="btn btn-default btn-xs">설정</a>--}}
+                            {{--@endif--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+                {{--</li>--}}
+            {{--@endforeach--}}
+        {{--</ul>--}}
+    {{--</div>--}}
 
-</div>
+{{--</div>--}}
 
 <script type="text/javascript">
     $(function () {

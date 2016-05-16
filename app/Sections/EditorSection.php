@@ -25,12 +25,12 @@ class EditorSection
 
         $editors = $handler->getAll();
 
-        $parts = $handler->getPartsAll();
+//        $parts = $handler->getPartsAll();
 
         return view('editor.section', [
             'instanceId' => $instanceId,
             'editors' => $editors,
-            'parts' => $parts,
+//            'parts' => $parts,
         ]);
     }
 }
