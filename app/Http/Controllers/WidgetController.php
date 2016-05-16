@@ -1,9 +1,8 @@
 <?php namespace App\Http\Controllers;
 
-use App\Sections\WidgetSection;
+use App\Http\Sections\WidgetSection;
 use Input;
 use View;
-use Xpressengine\Module\ModuleHandler;
 use XePresenter;
 use Xpressengine\Widget\WidgetHandler;
 
@@ -17,8 +16,7 @@ class WidgetController extends Controller {
      */
     public function index()
     {
-        $widgetSection = new WidgetSection;
-        $widgetSectionView = $widgetSection->getSection('__xe_content');
+        $widgetSectionView = new WidgetSection('__xe_content');
 
         return XePresenter::make('widget.index', [
             'widgetSectionView' => $widgetSectionView
