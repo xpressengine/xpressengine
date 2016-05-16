@@ -2,7 +2,7 @@
 /**
  *
  */
-namespace App\Sections;
+namespace App\Http\Sections;
 
 use DynamicField;
 use XeFrontend;
@@ -15,7 +15,7 @@ use Xpressengine\Config\ConfigEntity;
  * Class DynamicFieldSection
  * @package App\Sections
  */
-class DynamicFieldSection
+class DynamicFieldSection extends Section
 {
     const CACHE_SESSION_NAME = 'DF_CACHE';
     const STEP_SESSION_NAME = 'DF_STEP';
@@ -27,23 +27,50 @@ class DynamicFieldSection
     protected $group;
 
     /**
+     * @var VirtualConnectionInterface
+     */
+    protected $conn;
+
+    /**
+     * @var bool
+     */
+    protected $revision;
+
+    /**
      * create instance
      *
-     * @param string $group config group name
+     * @param string                     $group    config group name
+     * @param VirtualConnectionInterface $conn     database connection
+     * @param bool                       $revision 리비전 처리
      */
-    public function __construct($group)
+    public function __construct($group, VirtualConnectionInterface $conn, $revision = false)
     {
         $this->group = $group;
+        $this->conn = $conn;
+        $this->revision = $revision;
+    }
+    
+    /**
+     * form validation rules
+     *
+     * @return array
+     */
+    public static function getRules()
+    {
+        return [
+            'typeId' => 'Required',
+            'skinId' => 'Required',
+            'id' => 'Required|AlphaNum|Between:4,20',
+            //'label' => 'Required|Min:4',
+        ];
     }
 
     /**
-     * setting
+     * Get the evaluated contents of the object.
      *
-     * @param VirtualConnectionInterface $conn     database connection
-     * @param bool               $revision 리비전 처리
-     * @return \Illuminate\View\View
+     * @return string
      */
-    public function setting(VirtualConnectionInterface $conn, $revision = false)
+    public function render()
     {
         /** @var \Xpressengine\DynamicField\DynamicFieldHandler $dynamicField */
         $dynamicField = app('xe.dynamicField');
@@ -72,7 +99,7 @@ class DynamicFieldSection
             $fieldTypes[] = $types;
         }
 
-        XeFrontend::rule('dynamicFieldSection', $this->getRules());
+        XeFrontend::rule('dynamicFieldSection', static::getRules());
 
         // 다국어 입력 필드
         XeFrontend::js('/assets/vendor/jqueryui/jquery-ui.js')->appendTo('head')->load();
@@ -83,26 +110,11 @@ class DynamicFieldSection
         XeFrontend::css('/assets/core/lang/flag.css')->load();
 
         return View::make('dynamicField.setting', [
-            'databaseName' => $conn->getName(),
+            'databaseName' => $this->conn->getName(),
             'group' => $this->group,
             'configs' => $configs,
             'fieldTypes' => $fieldTypes,
-            'revision' => $revision,
+            'revision' => $this->revision,
         ]);
-    }
-
-    /**
-     * form validation rules
-     *
-     * @return array
-     */
-    public function getRules()
-    {
-        return [
-            'typeId' => 'Required',
-            'skinId' => 'Required',
-            'id' => 'Required|AlphaNum|Between:4,20',
-            //'label' => 'Required|Min:4',
-        ];
     }
 }

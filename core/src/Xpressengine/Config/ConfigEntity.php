@@ -131,7 +131,19 @@ class ConfigEntity extends Entity implements IteratorAggregate
      */
     public function getPure($name, $default = null)
     {
-        return $this->vo->{$name} !== null ? $this->vo->{$name} : $default;
+        $segments = explode('.', $name);
+        $key = array_shift($segments);
+
+        if ($this->vo->{$key} !== null) {
+            $value = $this->vo->{$key};
+            if (empty($segments) || !is_array($value)) {
+                return $value;
+            }
+
+            return array_get($value, implode('.', $segments));
+        }
+
+        return $default;
     }
 
     /**
