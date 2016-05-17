@@ -12,6 +12,8 @@
  * @link      http://www.xpressengine.com
  */
 
+use Illuminate\Support\Collection;
+use Xpressengine\Menu\Models\Menu;
 use Xpressengine\Routing\InstanceConfig;
 
 if (!function_exists('getCurrentInstanceId')) {
@@ -25,4 +27,32 @@ if (!function_exists('getCurrentInstanceId')) {
         $instanceConfig = InstanceConfig::instance();
         return $instanceConfig->getInstanceId();
     }
+
+    /**
+     * 메뉴를 html 마크업으로 출력할 때, 사용하기 쉽도록 메뉴아이템 리스트를 제공한다.
+     *
+     * @param string $menuId 출력할 메뉴의 ID
+     *
+     * @return Collection 메뉴아이템 리스트
+     */
+    function menu($menuId)
+    {
+        if ($menuId !== null) {
+            $menu = Menu::with('items.basicImage', 'items.hoverImage', 'items.selectedImage')->find($menuId);
+            // pre load
+            app('xe.permission')->loadBranch($menuId);
+        }
+
+        if ($menu !== null) {
+            $current = getCurrentInstanceId();
+            if($current !== null) {
+                $menu->setItemSelected($current);
+            }
+            $menuTree = $menu->getTree()->getTreeNodes();
+            return $menuTree;
+        } else {
+            return new Collection();
+        }
+    }
+
 }

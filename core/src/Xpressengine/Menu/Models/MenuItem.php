@@ -13,6 +13,7 @@
  */
 namespace Xpressengine\Menu\Models;
 
+use Closure;
 use Xpressengine\Category\Models\CategoryItem;
 use Xpressengine\Media\Models\Image;
 use Xpressengine\Routing\InstanceRoute;
@@ -42,6 +43,12 @@ use Xpressengine\Routing\InstanceRoute;
  */
 class MenuItem extends CategoryItem
 {
+
+    /**
+     * @var Closure
+     */
+    protected static $linkResolver = null;
+
     /**
      * The table associated with the model.
      *
@@ -255,7 +262,7 @@ class MenuItem extends CategoryItem
 
         return $method->invoke($this);
     }
-    
+
     /**
      * Get the aggregator model name for model
      *
@@ -311,5 +318,16 @@ class MenuItem extends CategoryItem
         return array_merge(parent::toArray(), [
             'items' => $this->getChildren(),
         ]);
+    }
+
+    public static function setLinkResolver(Closure $callback)
+    {
+        static::$linkResolver = $callback;
+    }
+
+    public function getLinkAttribute()
+    {
+        $callback = static::$linkResolver;
+        return $callback($this);
     }
 }
