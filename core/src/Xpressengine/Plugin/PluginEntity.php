@@ -570,10 +570,8 @@ class PluginEntity implements Arrayable, Jsonable
     {
         foreach ($this->getComponentList() as $id => $info) {
             /** @var \Xpressengine\Plugin\ComponentInterface $class */
-            $class = array_get($info, 'class');
-            if($class !== null) {
-                $class::boot();
-            }
+            $class = $info['class'];
+            $class::boot();
         }
     }
 
