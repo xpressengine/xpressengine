@@ -1,9 +1,5 @@
 System.amdDefine('xe.component', [], function() {
 
-  var loadedCSS = {
-    'xe.modal': false
-  };
-
   return {
     timeago: timeago
   };

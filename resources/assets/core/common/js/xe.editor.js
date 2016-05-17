@@ -39,9 +39,6 @@
     };
 
     var Editor = function(options) {
-        this.name = options.name;
-        this.editorList = {};
-
         for(var o in options) {
             this[o] = options[o];
         }
@@ -53,7 +50,7 @@
             this.initialize.call(this.editorList[sel], sel, options);
 
             if(this.hasOwnProperty('components') && this.components.length > 0) {
-                this.addComponent.call(this.editorList[sel], this.components);
+                this.addComponents.call(this.editorList[sel], this.components);
             }
 
             return this.editorList[sel];
@@ -67,7 +64,10 @@
         addContents: function(text) {
             console.error('Editor.addContents');
         },
-        addComponent: function(components) {
+        addComponents: function(components) {
+
+        },
+        addPlugins: function(plugins) {
 
         }
     };
@@ -86,11 +86,19 @@
                     console.error('구현 필요 [fn:' + requireOptions[option] + ']');
                     valid = false;
                 }
+                
                 if(options.hasOwnProperty('components')
                     && options.components instanceof Array
                     && options.components.length > 0
-                    && !options.hasOwnProperty('addComponent')) {
-                    console.error('구현 필요 [fn:addComponent]');
+                    && !options.hasOwnProperty('addComponents')) {
+                    console.error('구현 필요 [fn:addComponents]');
+                }
+                
+                if(options.hasOwnProperty('plugins')
+                    && options.plugins instanceof Array
+                    && options.plugins.length > 0
+                    && !options.hasOwnProperty('addPlugins')) {
+                    console.error('구현 필요 [fn:addPlugins]');
                 }
             }
 
@@ -113,47 +121,36 @@
     exports.XEeditor = XEeditor;
 })(window);
 
+// <textarea name="test" id="editor1" cols="30" rows="10"></textarea>
+// <textarea name="test2" id="editor2" cols="30" rows="10"></textarea>
 
 
-
+// var components = [{
+//     name: 'Code',
+//     options: {
+//         label: 'Wrap code',
+//         command: 'wrapCode'
+//     },
+//     exec: function(editor) {
+//         editor.insertText( '```diagram\n' + editor.getSelection().getSelectedText() + '\n```' );
+//     }
+// }, {
+//     name: 'Diagram',
+//     options: {
+//         label: 'Wrap diagram',
+//         command: 'wrapDiagram'
+//     },
+//     exec: function (editor) {
+//         editor.insertText( '```diagram\n' + editor.getSelection().getSelectedText() + '\n```' );
+//     }
+// }
+// ];
+//
 // //ckeditor
 // XEeditor.define({
 //     name: 'editor.ckeditor',
-//     components: [{
-//         name: 'Code',
-//         options: {
-//             label: 'Wrap code',
-//             command: 'wrapCode'
-//         },
-//         exec: function () {
-//             editor.insertText( '```javascript\n' + editor.getSelection().getSelectedText() + '\n```' );
-//         }
-//     }, {
-//         name: 'Diagram',
-//         options: {
-//             label: 'Wrap diagram',
-//             command: 'wrapDiagram'
-//         },
-//         exec: function () {
-//             editor.insertText( '```diagram\n' + editor.getSelection().getSelectedText() + '\n```' );
-//         }
-//     }, {
-//         name: 'FileUpload',
-//         options: {
-//             label: 'File upload'
-//         },
-//         exec: function () {
-//             console.log('textComp2 click');
-//         }
-//     }, {
-//         name: 'ImageUpload',
-//         options: {
-//             label: 'Image upload'
-//         },
-//         exec: function () {
-//             console.log('textComp2 click');
-//         }
-//     }],
+//     components: components,
+//     plugins: [],
 //     initialize: function (selector, options) {
 //
 //         var options = $.extend({
@@ -191,63 +188,22 @@
 //     addContents: function (text) {
 //         CKEDITOR.instances[this.props.selector].insertHtml(text);
 //     },
-//     addComponent: function (components) {
-//         console.log("addComponent", components);
+//     addComponents: function (components) {
+//         console.log("addComponents", components);
 //
-//         var basePath = CKEDITOR.basePath;
-//         basePath = basePath.substr(0, basePath.indexOf("ckeditor/")) + '/ckeditor/assets/plugins/';
-//
-//         CKEDITOR.plugins.addExternal('extractor', basePath + 'extractor/plugin.js');
-//         CKEDITOR.plugins.addExternal('fileUpload', basePath + 'fileUpload/plugin.js');
-//         CKEDITOR.plugins.addExternal('suggestion', basePath + 'suggestion/plugin.js');
-//         CKEDITOR.plugins.addExternal('sourcearea', basePath + 'sourcearea/plugin.js');
-//
-//         xe3CkEditorConfig.addPlugin('extractor');
-//         xe3CkEditorConfig.addPlugin('fileUpload');
-//         xe3CkEditorConfig.addPlugin('suggestion');
-//         xe3CkEditorConfig.addPlugin('sourcearea');
-//
-// //                editor.ui.add( 'Code', CKEDITOR.UI_BUTTON, {
-// //                    label: 'Wrap code',
-// //                    command: 'wrapCode'
-// //                });
-// //                editor.ui.add( 'Diagram', CKEDITOR.UI_BUTTON, {
-// //                    label: 'Wrap diagram',
-// //                    command: 'wrapDiagram'
-// //                });
-// //
-// //                editor.ui.add( 'FileUpload', CKEDITOR.UI_BUTTON, {
-// //                    label: 'File upload'
-// //                });
-// //                editor.ui.add( 'ImageUpload', CKEDITOR.UI_BUTTON, {
-// //                    label: 'Image upload'
-// //                });
-// //
-// //                editor.addCommand( 'fileUpload', {
-// //                    exec: function() {
-// //                        editor.insertText( '```diagram\n' + editor.getSelection().getSelectedText() + '\n```' );
-// //                    }
-// //                });
-// //
-// //                editor.addCommand( 'wrapCode', {
-// //                    exec: function( editor ) {
-// //                        editor.insertText( '```javascript\n' + editor.getSelection().getSelectedText() + '\n```' );
-// //                    }
-// //                });
-// //                editor.addCommand( 'wrapDiagram', {
-// //                    exec: function( editor ) {
-// //                        editor.insertText( '```diagram\n' + editor.getSelection().getSelectedText() + '\n```' );
-// //                    }
-// //                });
 //         var editor = this.props.editor;
-//         for (var component in components) {
-//             CKEDITOR.plugins.add(component.name, {
-//                 //init: function (editor) {
-//                 init: function () {
-//                     editor.ui.addButton(component.name, component);
-//                     editor.addCommand(component.name, {exec: component.exec});
-//                 }
-//             });
+//
+//         for(var i = 0, max = components.length; i < max; i += 1) {
+//             var component = components[i];
+//
+//             editor.ui.add( component.name, CKEDITOR.UI_BUTTON, component.options);
+//
+//             if(component.hasOwnProperty('options')
+//                 && component.options.hasOwnProperty('command')) {
+//                 editor.addCommand(component.options.command, {
+//                     exec: component.exec
+//                 });
+//             }
 //         }
 //     }
 // });
@@ -289,21 +245,6 @@
 //
 //     console.log(xe3CkEditorConfig.configs);
 //
-//     var editor11 = ckEditor.create('editor1', xe3CkEditorConfig.configs);
+//     window.editor11 = ckEditor.create('editor1', xe3CkEditorConfig.configs);
 //
-//     window.editor11 = editor11;
-//
-//
-// //            var editor33 = ckEditor.create('editor3', {});
-// //            var editor22 = tinyEditor.create('#editor2', {});
-// //            var editor44 = tinyEditor.create('#editor4', {});
-//
-//     window.editor11 = editor11;
-// //            window.editor22 = editor22;
-// //            window.editor33 = editor33;
-// //            window.editor44 = editor44;
 // });
-//
-// // <div style="height:300px;width:100%"></div>
-// // <textarea name="test" id="editor1" cols="30" rows="10"></textarea>
-// //     <textarea name="test2" id="editor2" cols="30" rows="10"></textarea>
