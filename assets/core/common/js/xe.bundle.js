@@ -1759,16 +1759,14 @@ System.amdDefine('xe.request', ['xe.progress'], function(Progress) {
   }
 
   // @DEPRECATED
-  function cssLoad(url, load, error) {
-    var $css = $('<link>', {rel: 'stylesheet', type: 'text/css', href: url}).load(load).error(error);
+  function cssLoad(url) {
+    var $css = $('<link>', {rel: 'stylesheet', type: 'text/css', href: url});
 
     $('head').append($css);
   }
 
-  function jsLoad(url, load, error) {
+  function jsLoad(url) {
     var $js = $('<script>', {id: 'jsload', type: 'text/javascript', src: url});
-
-    $js[0].addEventListener('load', load, true);
 
     $('head').append($js);
   }

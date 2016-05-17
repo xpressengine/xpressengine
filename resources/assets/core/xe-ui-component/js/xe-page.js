@@ -33,13 +33,11 @@ var page = (function($) {
                 var loadingCount = 0;
 
                 return function(e) {
-
-                    console.log('loadingCount', loadingCount, e.target);
                     loadingCount++;
-                    if(e.type == 'load') {
-                        var src = (e.target.tagName === 'LINK')? e.target.href.split("?")[0] : e.target.src.split('?')[0];
-                        _assets[src] = {};
-                    }
+
+                    var src = (e.target.tagName === 'LINK')? e.target.href.split("?")[0] : e.target.src.split('?')[0];
+                    _assets[src] = {};
+
 
                     if(cssLen + jsLen === loadingCount && !!callback) {
                         callback();
@@ -118,17 +116,17 @@ var page = (function($) {
                 if(css.length > 0) {
                     for(var i = 0, max = css.length; i < max; i += 1) {
                         if(!_assets.hasOwnProperty(css[i])) {
-                            XE.cssLoad(css[i], loadDone, loadDone);
+                            XE.cssLoad(css[i]);
+                            loadDone();
                         }
                     }
                 }
 
-
-                //TODO:: js load count확인
                 if(js.length > 0) {
                     for(var i = 0, max = js.length; i < max; i += 1) {
                         if(!_assets.hasOwnProperty(js[i])) {
-                            XE.jsLoad(js[i], loadDone, loadDone);
+                            XE.jsLoad(js[i]);
+                            loadDone();
                         }
                     }
                 }

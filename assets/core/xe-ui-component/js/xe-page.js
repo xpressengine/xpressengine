@@ -33,13 +33,11 @@ var page = (function($) {
                 var loadingCount = 0;
 
                 return function(e) {
-
-                    console.log('loadingCount', loadingCount, e.target);
                     loadingCount++;
-                    if(e.type == 'load') {
-                        var src = (e.target.tagName === 'LINK')? e.target.href.split("?")[0] : e.target.src.split('?')[0];
-                        _assets[src] = {};
-                    }
+
+                    var src = (e.target.tagName === 'LINK')? e.target.href.split("?")[0] : e.target.src.split('?')[0];
+                    _assets[src] = {};
+
 
                     if(cssLen + jsLen === loadingCount && !!callback) {
                         callback();
@@ -47,7 +45,8 @@ var page = (function($) {
                 }
             }
         };
-    }().init();
+    };
+    //}().init();
 
     return {
         /**
@@ -71,35 +70,35 @@ var page = (function($) {
                 return;
             }
 
-            var css = [],//['https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.css', 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/themes/blitzer/jquery-ui.min.css'],
-                js = ['https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js'],
-                html = "<div id='test'></div>";
+            // var css = [],//['https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.css', 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/themes/blitzer/jquery-ui.min.css'],
+            //     js = ['https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js'],
+            //     html = "<div id='test'></div>";
+            //
+            // var loadDone = pageCommon.loadDone(css.length, js.length, function() {
+            //     $target.html(html);
+            //
+            //     if(callback) {
+            //         callback();
+            //     }
+            // });
+            //
+            // if(css.length > 0) {
+            //     for(var i = 0, max = css.length; i < max; i += 1) {
+            //         if(!_assets.hasOwnProperty(css[i])) {
+            //             XE.cssLoad(css[i], loadDone, loadDone);
+            //         }
+            //     }
+            // }
+            //
+            // if(js.length > 0) {
+            //     for (var i = 0, max = js.length; i < max; i += 1) {
+            //         if (!_assets.hasOwnProperty(js[i])) {
+            //             XE.jsLoad(js[i], loadDone, loadDone);
+            //         }
+            //     }
+            // }
+            //<script type="text/javascript" src="/assets/core/xe-ui-component/js/xe-page.js"></script>
 
-            var loadDone = pageCommon.loadDone(css.length, js.length, function() {
-                $target.html(html);
-
-                if(callback) {
-                    callback();
-                }
-            });
-
-            if(css.length > 0) {
-                for(var i = 0, max = css.length; i < max; i += 1) {
-                    if(!_assets.hasOwnProperty(css[i])) {
-                        XE.cssLoad(css[i], loadDone, loadDone);
-                    }
-                }
-            }
-
-            if(js.length > 0) {
-                for (var i = 0, max = js.length; i < max; i += 1) {
-                    if (!_assets.hasOwnProperty(js[i])) {
-                        XE.jsLoad(js[i], loadDone, loadDone);
-                    }
-                }
-            }
-            
-            /*
             XE.Request[options.type](options.url, {}, function(data) {
                 var assets = data['XE_ASSET_LOAD'],
                     css = assets['css'] || [],
@@ -117,7 +116,8 @@ var page = (function($) {
                 if(css.length > 0) {
                     for(var i = 0, max = css.length; i < max; i += 1) {
                         if(!_assets.hasOwnProperty(css[i])) {
-                            XE.cssLoad(css[i], loadDone, loadDone);
+                            XE.cssLoad(css[i]);
+                            loadDone();
                         }
                     }
                 }
@@ -125,14 +125,15 @@ var page = (function($) {
                 if(js.length > 0) {
                     for(var i = 0, max = js.length; i < max; i += 1) {
                         if(!_assets.hasOwnProperty(js[i])) {
-                            XE.jsLoad(js[i], loadDone, loadDone);
+                            XE.jsLoad(js[i]);
+                            loadDone();
                         }
                     }
                 }
 
 
             }, 'json');
-            */
+
         },
         /**
          * @param {object} options
@@ -144,55 +145,6 @@ var page = (function($) {
          * */
         modalPage: function(options, callback) {
 
-            if(!options.hasOwnProperty('type') || ['get', 'post'].indexOf(options.type.toLowerCase()) === -1) {
-                console.error('type [ get | post ]');
-                return;
-            }
-
-            XE.Request[options.type](options.url, {}, function(data) {
-                var assets = data['XE_ASSET_LOAD'],
-                    css = assets['css'] || [],
-                    js = assets['js'] || [],
-                    html = data.html;
-
-                var loadDone = pageCommon.loadDone(css.length, js.length, function() {
-                    var modalTemplate = [
-                        '<div class="xe-modal fade" id="pageModal" tabindex="-1" role="dialog" aria-labelledby="xePageModalLabel">',
-                            '<div class="modal-dialog" role="document">',
-                                '<div class="xe-modal-content"></div>',
-                            '</div>',
-                        '</div>'
-                    ].join("\n");
-
-                    $("body").append(modalTemplate).find("#pageModal").html(html);
-
-                    $("#pageModal").xeModal().on('hidden.xe.modal', function() {
-                        $(this).remove();
-                    });
-
-                    if(callback) {
-                        callback();
-                    }
-                });
-
-                if(css.length > 0) {
-                    for(var i = 0, max = css.length; i < max; i += 1) {
-                        if(!_assets.hasOwnProperty(css[i])) {
-                            XE.cssLoad(css[i], loadDone, loadDone);
-                        }
-                    }
-                }
-
-                if(js.length > 0) {
-                    for(var i = 0, max = js.length; i < max; i += 1) {
-                        if(!_assets.hasOwnProperty(js[i])) {
-                            XE.jsLoad(js[i], loadDone, loadDone);
-                        }
-                    }
-                }
-
-
-            }, 'json');
 
         }
     };
