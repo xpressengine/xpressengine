@@ -13,9 +13,13 @@
  */
 namespace Xpressengine\Theme;
 
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Xpressengine\Config\ConfigEntity;
+use Xpressengine\Storage\File;
+
 /**
- * 이 클래스는 Xpressengine에서 테마를 구현할 때 필요한 추상클래스이다. 테마를 Xpressengine에 등록하려면
- * 이 추상 클래스를 상속(extends) 받는 클래스를 작성하여야 한다.
+ * 이 클래스는 Xpressengine에서 테마를 간편하게 구현할 수 있도록 제공하는 클래스이다. 특정 디렉토리에 지정된 형식에 맞게 테마에 필요한 파일들을 구성한 후,
+ * 이 클래스의 $path에 디렉토리의 경로를 지정하여 사용한다.
  *
  * @category    Theme
  * @package     Xpressengine\Theme
@@ -23,10 +27,8 @@ namespace Xpressengine\Theme;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class GenericTheme extends AbstractTheme
+abstract class GenericTheme extends AbstractTheme
 {
-    use GenericThemeTrait;
-
     /**
      * @var string
      */
@@ -36,11 +38,6 @@ class GenericTheme extends AbstractTheme
      * @var array
      */
     protected static $info = null;
-
-    /**
-     * @var ThemeHandler
-     */
-    protected static $handler  = null;
 
     /**
      * @var string
@@ -67,7 +64,7 @@ class GenericTheme extends AbstractTheme
         return static::info('support.desktop');
     }
 
-    public function getPath()
+    public static function getPath()
     {
         return static::$path;
     }
@@ -79,15 +76,182 @@ class GenericTheme extends AbstractTheme
      *
      * @return array
      */
-    protected function info($key = null)
+    protected static function info($key = null, $default = null)
     {
         if(static::$info === null) {
-            static::$info = include(base_path($this->getPath().'/'.'info.php'));
+            static::$info = include(base_path(static::getPath().'/'.'info.php'));
         }
 
         if ($key !== null) {
-            return array_get(static::$info, $key);
+            return array_get(static::$info, $key, $default);
         }
         return static::$info;
+    }
+
+    /**
+     * Get the evaluated contents of the object.
+     *
+     * @return string
+     */
+    public function render()
+    {
+        $config = $this->setting();
+
+        $this->registerViewNamespace();
+
+        $view = $this->viewname('view', 'theme');
+        return static::$handler->getViewFactory()->make($view, compact('config'));
+    }
+
+    /**
+     * 각 테마는 편집 페이지에서 편집할 수 있는 템플릿파일(blade)이나 css 파일 목록을 지정한다.
+     * 이 메소드는 그 파일 목록을 조회한다.
+     *
+     * @return array
+     */
+    public function getEditFiles()
+    {
+        $path = base_path($this->getPath().DIRECTORY_SEPARATOR.'views');
+        $editable = $this->info('editable');
+
+        $files = [];
+        foreach ($editable as $type => $list) {
+            $files[$type] = [];
+            foreach ($list as $file) {
+                $files[$type][$file] = base_path($path.DIRECTORY_SEPARATOR.$type.DIRECTORY_SEPARATOR.$file);
+            }
+        }
+        return $files;
+    }
+
+    /**
+     * return editConfigView
+     *
+     * @param ConfigEntity $config
+     *
+     * @return \Illuminate\Contracts\View\View|void
+     */
+    public function getSettingView(ConfigEntity $config = null)
+    {
+        if ($config === null) {
+            $config = $this->setting();
+        }
+        $view = $this->info('setting');
+
+        $this->registerViewNamespace();
+
+        if (is_string($view)) {
+            return static::$handler->getViewFactory()->make($this->viewname($view, 'config'), compact('config'));
+        } elseif (is_array($view)) {
+            return $this->makeConfigView($view, $config);
+        }
+    }
+
+    /**
+     * updateConfig
+     *
+     * @param array $config
+     *
+     * @return array
+     */
+    public function updateSetting(array $config)
+    {
+        $configId = array_get($config, '_configId');
+
+        // 파일만 별도 처리
+        foreach ($config as $key => $item) {
+            if($item instanceof UploadedFile) {
+                array_set($config, $key, $this->saveFile($configId, $key, $item));
+            }
+        }
+        return $config;
+    }
+
+    protected function saveFile($configId, $key, UploadedFile $file)
+    {
+        $oldSetting = $this->setting();
+        $oldFileId = $oldSetting->get("$key.id");
+
+        $storage = app('xe.storage');
+
+        // remove old file
+        if($oldFileId !== null) {
+            $oldFile = File::find($oldFileId);
+            if ($oldFile) {
+                $storage->remove($oldFile);
+            }
+        }
+
+        // save new file
+        $file = $storage->upload($file, $configId, null, 'theme');
+        $saved = [
+            'id'=>$file->id,
+            'filename'=>$file->clientname
+        ];
+
+        $media = app('xe.media');
+        $mediaFile = null;
+        if ($media->is($file)) {
+            $mediaFile = $media->make($file);
+            $saved['path'] = $mediaFile->url();
+        }
+
+        return $saved;
+    }
+
+    /**
+     * makeConfigView
+     *
+     * @param array        $info
+     * @param ConfigEntity $old
+     *
+     * @return string
+     */
+    protected function makeConfigView(array $info, ConfigEntity $old)
+    {
+        return uio('form', ['class' => $this->getId(), 'inputs' => $info, 'values' => $old]);
+    }
+
+
+    /**
+     * get and set config
+     *
+     * @param ConfigEntity $config
+     *
+     * @return ConfigEntity
+     */
+    public function setting(ConfigEntity $config = null)
+    {
+        if ($config !== null) {
+            $this->config = $config;
+        }
+        return $this->config;
+    }
+
+    /**
+     * view
+     *
+     * @param        $name
+     * @param string $default
+     *
+     * @return string
+     */
+    protected function viewname($name, $default = '')
+    {
+        return static::$viewNamespace.'::'.array_get($this->info(), $name, $default);
+    }
+
+    /**
+     * registerViewNamespace
+     *
+     * @return void
+     */
+    protected function registerViewNamespace()
+    {
+        // register '_theme::' view namespace
+        static::$handler->getViewFactory()->addNamespace(
+            static::$viewNamespace,
+            $this->getPath().DIRECTORY_SEPARATOR.'views'
+        );
     }
 }

@@ -32,7 +32,7 @@ class ThemeHandler
 {
 
     /**
-     * @var ThemeEntityInterface[] 모든 테마 목록
+     * @var ThemeEntity[] 모든 테마 목록
      */
     protected $themeList = [];
 
@@ -44,7 +44,7 @@ class ThemeHandler
     protected $configKey = 'theme.settings';
 
     /**
-     * @var ThemeEntityInterface 현재 요청(Request)에서 사용하기로 지정 돼 있는 테마
+     * @var ThemeEntity 현재 요청(Request)에서 사용하기로 지정 돼 있는 테마
      */
     protected $selectedTheme = null;
 
@@ -181,7 +181,7 @@ class ThemeHandler
     /**
      * 현재 Request에서 사용되는 테마를 반환한다. 반환되는 테마는 일반 테마일 수도 있고, 관리페이지용 테마일수도 있다.
      *
-     * @return ThemeEntityInterface
+     * @return ThemeEntity
      */
     public function getSelectedTheme()
     {
@@ -200,7 +200,7 @@ class ThemeHandler
      *
      * @param string $instanceId 조회할 테마의 id
      *
-     * @return ThemeEntityInterface
+     * @return ThemeEntity
      */
     public function getTheme($instanceId)
     {
@@ -214,11 +214,7 @@ class ThemeHandler
         }
 
         if (isset($this->themeList[$themeId]) === false) {
-            if (is_string($registerd) && is_subclass_of($registerd, ComponentInterface::class)) {
-                $this->themeList[$themeId] = new ClassThemeEntity($themeId, $registerd);
-            } elseif(is_array($registerd)) {
-                $this->themeList[$themeId] = new CompactThemeEntity($themeId, $registerd);
-            }
+            $this->themeList[$themeId] = new ThemeEntity($themeId, $registerd);
         }
 
         $config = $this->getThemeConfig($instanceId);
@@ -299,7 +295,7 @@ class ThemeHandler
         return array_where(
             $themes,
             function ($id, $entity) {
-                /** @var ThemeEntityInterface $entity */
+                /** @var ThemeEntity $entity */
                 return $entity->supportMobile();
             }
         );
@@ -316,7 +312,7 @@ class ThemeHandler
         return array_where(
             $themes,
             function ($id, $entity) {
-                /** @var ThemeEntityInterface $entity */
+                /** @var ThemeEntity $entity */
                 return $entity->supportDesktop();
             }
         );

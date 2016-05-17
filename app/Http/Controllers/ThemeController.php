@@ -89,7 +89,7 @@ class ThemeController extends Controller
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => '저장되었습니다.']);
     }
 
-    public function createConfig(Request $request, ThemeHandler $themeHandler)
+    public function createSetting(Request $request, ThemeHandler $themeHandler)
     {
         $instanceId = $request->get('theme');
         $title = $request->get('title');
@@ -109,7 +109,7 @@ class ThemeController extends Controller
         return redirect()->route('settings.theme.config', ['theme'=>$newId])->with('alert', ['type' => 'success', 'message' => '생성되었습니다.']);;
     }
 
-    public function editConfig(Request $request, ThemeHandler $themeHandler)
+    public function editSetting(Request $request, ThemeHandler $themeHandler)
     {
         $this->validate($request, [
             'theme' => 'required',
@@ -128,7 +128,7 @@ class ThemeController extends Controller
         return \XePresenter::make('theme.config', compact('theme', 'config', 'configList'));
     }
 
-    public function updateConfig(Request $request, ThemeHandler $themeHandler)
+    public function updateSetting(Request $request, ThemeHandler $themeHandler)
     {
         $this->validate($request, [
             'theme' => 'required',
@@ -137,7 +137,7 @@ class ThemeController extends Controller
         $themeId = $request->get('theme');
         $theme = $themeHandler->getTheme($themeId);
 
-        $configInfo = $request->only('_configTitle');
+        $configInfo = $request->only('_configTitle', '_configId');
 
         $inputs =  $request->except('_token');
         $inputs['_configId'] = $themeId;

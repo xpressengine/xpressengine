@@ -10,7 +10,7 @@
 
 <div class="row">
     <div class="col-sm-12">
-        <form role="form" action="{{ route('settings.theme.config', ['theme'=>request()->get('theme')]) }}" method="post" enctype="multipart/form-data">
+        <form role="form" action="{{ route('settings.theme.setting', ['theme'=>request()->get('theme')]) }}" method="post" enctype="multipart/form-data">
             <div class="panel-group">
                 <div class="panel">
                     <div class="panel-heading">
@@ -43,7 +43,7 @@
 
 <div id="addConfig" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog">
-        <form action="{{ route('settings.theme.config.create') }}" method="POST">
+        <form action="{{ route('settings.theme.setting.create') }}" method="POST">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -66,7 +66,7 @@
 <script>
 
     jQuery(function($) {
-        var $configUrl = '{{ route('settings.theme.config') }}'
+        var $configUrl = '{{ route('settings.theme.setting') }}'
         $('#__xe_selectConfig').change(function(){
             var themeId = this.value;
             location.href = $configUrl + '?theme=' + themeId;

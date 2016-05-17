@@ -537,10 +537,10 @@ Route::settings(
         Route::get('edit', ['as' => 'settings.theme.edit', 'uses' => 'ThemeController@edit']);
         Route::post('edit', ['as' => 'settings.theme.edit', 'uses' => 'ThemeController@update']);
 
-        Route::get('config', ['as' => 'settings.theme.config', 'uses' => 'ThemeController@editConfig']);
-        Route::post('config', ['as' => 'settings.theme.config', 'uses' => 'ThemeController@updateConfig']);
+        Route::get('setting', ['as' => 'settings.theme.setting', 'uses' => 'ThemeController@editSetting']);
+        Route::post('setting', ['as' => 'settings.theme.setting', 'uses' => 'ThemeController@updateSetting']);
 
-        Route::post('config/create', ['as' => 'settings.theme.config.create', 'uses' => 'ThemeController@createConfig']);
+        Route::post('setting/create', ['as' => 'settings.theme.setting.create', 'uses' => 'ThemeController@createSetting']);
     }
 );
 

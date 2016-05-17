@@ -25,7 +25,7 @@ use Xpressengine\Config\ConfigEntity;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-class ClassThemeEntity implements ThemeEntityInterface
+class ThemeEntity implements ThemeEntityInterface
 {
 
     /**
