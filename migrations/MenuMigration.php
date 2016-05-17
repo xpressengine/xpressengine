@@ -39,6 +39,12 @@ class MenuMigration implements Migration {
             $table->text('description')->nullable();
             $table->string('target');
             $table->string('type');
+            $table->string('basicImageId', 36);
+            $table->string('hoverImageId', 36);
+            $table->string('selectedImageId', 36);
+            $table->string('mBasicImageId', 36);
+            $table->string('mHoverImageId', 36);
+            $table->string('mSelectedImageId', 36);
             $table->integer('ordering');
             $table->boolean('activated');
             $table->string('options');
