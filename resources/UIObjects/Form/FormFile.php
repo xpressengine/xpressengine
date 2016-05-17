@@ -8,6 +8,8 @@ class FormFile extends AbstractUIObject
 {
     protected static $id = 'uiobject/xpressengine@formFile';
 
+    protected $view = 'uiobjects.form.formFile';
+
     public function render()
     {
         $this->loadFiles();
@@ -50,15 +52,16 @@ class FormFile extends AbstractUIObject
         array_set($fileuploadOptions, 'previewMaxWidth', $args['width']);
         array_set($fileuploadOptions, 'previewMaxHeight', $args['height']);
 
-        $types = (array) array_get($args, 'types');
+        $types = array_get($args, 'types');
         if ($types !== null) {
-            array_set($fileuploadOptions, 'acceptFileTypes', '(\\.|\\/)('.implode('|', $types).')$');
+            array_set($fileuploadOptions, 'acceptFileTypes', '(\\.|\\/)('.implode('|', (array)$types).')$');
         }
 
         array_set($args, 'fileuploadOptions', $fileuploadOptions);
 
         // render template
-        $this->template = \View::make('uiobjects.form.formFile', ['args' => $args, 'seq' => $seq])->render();
+        $this->template = \View::make($this->view, ['args' => $args, 'seq' => $seq])->render();
+
         return parent::render();
     }
 

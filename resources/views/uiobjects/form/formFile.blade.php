@@ -17,7 +17,9 @@
                     <div class="__xe_file_info_{{ $seq }}">
                     </div>
                     <div class="__xe_file_preview_{{ $seq }}">
-                        @if(isset($args['file']))
+                        @if(isset($args['value']))
+                            {{ array_get($args, 'value.filename') }}
+                        @elseif(isset($args['file']))
                             {{ $args['file'] }}
                         @endif
                     </div>
