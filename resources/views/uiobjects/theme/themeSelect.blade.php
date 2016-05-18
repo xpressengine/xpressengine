@@ -25,7 +25,7 @@
 
             <div class="btn-group btn-group-justified" role="group" aria-label="Justified button group">
                 <a target="_blank" href="{{ url($previewLink.'preview_theme='.$theme->getId()) }}" class="btn btn-default" role="button">미리보기</a>
-                <a target="_blank" href="{{ route('settings.theme.config', ['theme'=>$theme->getId()]) }}" class="btn btn-default" role="button">테마설정</a>
+                <a target="_blank" href="{{ route('settings.theme.setting', ['theme'=>$theme->getId()]) }}" class="btn btn-default" role="button">테마설정</a>
                 <a target="_blank" href="{{ route('settings.theme.edit', ['theme'=>$theme->getId()]) }}" class="btn btn-default" role="button">테마편집</a>
             </div>
         </div>
