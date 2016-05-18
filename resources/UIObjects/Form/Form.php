@@ -56,13 +56,13 @@ class Form extends AbstractUIObject
             $uio = 'form'.ucfirst($type);
             $input = uio($uio, $arg);
 
-            $this->wrapInput($input)->appendTo($section);
+            $this->wrapInput($name, $input)->appendTo($section);
         }
     }
 
     private function getSection($form, $sectionName)
     {
-        $classname = 'section-'.$sectionName;
+        $classname = 'form-section-'.str_replace([' ', '.'], '-', $sectionName);
         if(count($form['.'.$classname]) === 0){
 
             $section = sprintf('<div class="panel %s"><div class="panel-heading"><div class="pull-left"><h3>%s</h3></div></div><div class="panel-body"><div class="row"></div></div></div>', $classname, $sectionName);
@@ -72,8 +72,9 @@ class Form extends AbstractUIObject
         return $form['.'.$classname]['.panel-body .row'];
     }
 
-    private function wrapInput($input)
+    private function wrapInput($name, $input)
     {
-        return PhpQuery::pq('<div class="col-sm-12">'.(string)$input.'</div>');
+        $classname = 'form-col-'.str_replace([' ', '.'], '-', $name);
+        return PhpQuery::pq('<div class="col-md-6 '.$classname.'">'.(string)$input.'</div>');
     }
 }
