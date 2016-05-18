@@ -1,32 +1,29 @@
 <?php
-namespace App\Sections;
+namespace App\Http\Sections;
 
 use View;
 use Xpressengine\Skin\SkinHandler;
 
-class SkinSection
+class SkinSection extends Section
 {
+    protected $target;
+    protected $instanceId;
+    protected $mode;
 
     /**
-     * setting
+     * SkinSection constructor.
      *
      * @param string $target
-     * @param string $instanceId
-     *
-     * @return \Illuminate\View\View
+     * @param string|null $instanceId
+     * @param string|null $mode
      */
-    public function setting($target, $instanceId = null, $mode = null)
+    public function __construct($target, $instanceId = null, $mode = null)
     {
-        if ($mode === null) {
-            $view = $this->makeView($target, $instanceId, 'desktop')->render();
-            $view .= $this->makeView($target, $instanceId, 'mobile')->render();
-            return $view;
-        } else {
-            return $this->makeView($target, $instanceId, $mode);
-        }
-
+        $this->target = $target;
+        $this->instanceId = $instanceId;
+        $this->mode = $mode;
     }
-
+    
     /**
      * makeView
      *
@@ -92,5 +89,21 @@ class SkinSection
             'skin.setting',
             compact('skinInstanceId', 'settingView', 'skins', 'mode', 'selectedSkin')
         );
+    }
+
+    /**
+     * Get the evaluated contents of the object.
+     *
+     * @return string
+     */
+    public function render()
+    {
+        if ($this->mode === null) {
+            $view = $this->makeView($this->target, $this->instanceId, 'desktop')->render();
+            $view .= $this->makeView($this->target, $this->instanceId, 'mobile')->render();
+            return $view;
+        } else {
+            return $this->makeView($this->target, $this->instanceId, $this->mode);
+        }
     }
 }

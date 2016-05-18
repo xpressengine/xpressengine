@@ -35,23 +35,23 @@
         "jenssegers/agent": "*",
         "xpressengine/installer": "dev-master",
         "ezyang/htmlpurifier": "~4.7",
-        "xpressengine-plugin/alice": "dev-master",
-        "xpressengine-plugin/google_analytics": "dev-master",
-        "xpressengine-plugin/orientator": "dev-master",
-        "xpressengine-plugin/page": "dev-master",
-        "xpressengine-plugin/board": "dev-master",
-        "xpressengine-plugin/comment": "*@dev",
-        "xpressengine-plugin/ckeditor": "dev-master",
-        "xpressengine-plugin/claim": "dev-master",
-        "xpressengine-plugin/external_page": "dev-master",
-        "xpressengine-plugin/social_login": "dev-master",
-        "xpressengine-plugin/news_client": "dev-master",
-        "barryvdh/laravel-debugbar": "^2.2"
+        "xpressengine-plugin/alice": "*",
+        "xpressengine-plugin/google_analytics": "*",
+        "xpressengine-plugin/orientator": "*",
+        "xpressengine-plugin/page": "*",
+        "xpressengine-plugin/board": "*",
+        "xpressengine-plugin/comment": "*",
+        "xpressengine-plugin/ckeditor": "*",
+        "xpressengine-plugin/claim": "*",
+        "xpressengine-plugin/external_page": "*",
+        "xpressengine-plugin/social_login": "*",
+        "xpressengine-plugin/news_client": "*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
         "phpunit/phpunit": "~4.0",
-        "mockery/mockery": "0.9.*"
+        "mockery/mockery": "0.9.*",
+        "barryvdh/laravel-debugbar": "^2.2"
     },
     "autoload": {
         "classmap": [

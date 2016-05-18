@@ -14,13 +14,14 @@
 namespace App\Http\Controllers\Member\Settings;
 
 use App\Http\Controllers\Controller;
-use App\Sections\DynamicFieldSection;
-use App\Sections\ToggleMenuSection;
+use App\Http\Sections\DynamicFieldSection;
+use App\Http\Sections\ToggleMenuSection;
 use Config;
 use Input;
 use XePresenter;
 use Xpressengine\Captcha\Exceptions\ConfigurationNotExistsException;
 use Xpressengine\Http\Request;
+use App\Http\Sections\SkinSection;
 
 /**
  * @category
@@ -90,11 +91,11 @@ class SettingController extends Controller
      */
     public function editSkin()
     {
-        $authSkinSection = (new \App\Sections\SkinSection())->setting('member/auth', null);
+        $authSkinSection = new SkinSection('member/auth');
 
-        $settingsSkinSection = (new \App\Sections\SkinSection())->setting('member/settings', null);
+        $settingsSkinSection = new SkinSection('member/settings');
 
-        $profileSkinSection = (new \App\Sections\SkinSection())->setting('member/profile', null);
+        $profileSkinSection = new SkinSection('member/profile');
 
         return XePresenter::make(
             'member.settings.setting.skin',
@@ -143,10 +144,9 @@ class SettingController extends Controller
      */
     public function editField()
     {
-        $dynamicFieldSection = new DynamicFieldSection('user');
         $connection = $this->users->getConnection();
-        $dynamicFieldSection = $dynamicFieldSection->setting($connection, false);
-
+        $dynamicFieldSection = new DynamicFieldSection('user', $connection, false);
+        
         return XePresenter::make(
             'member.settings.setting.field',
             array_merge(
@@ -162,7 +162,7 @@ class SettingController extends Controller
      */
     public function editToggleMenu()
     {
-        $toggleMenuSection = (new ToggleMenuSection())->setting('user');
+        $toggleMenuSection = new ToggleMenuSection('user');
 
         return XePresenter::make(
             'member.settings.setting.usermenu',

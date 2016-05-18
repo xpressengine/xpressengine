@@ -9,7 +9,7 @@ use Auth;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Http\Request;
 use Document;
-use App\Sections\DynamicFieldSection;
+use App\Http\Sections\DynamicFieldSection;
 use XeDB;
 use XeLang;
 use XeDynamicField;
@@ -17,9 +17,6 @@ use Xpressengine\Translation\Translator;
 
 class DynamicFieldController extends Controller
 {
-
-    protected $section;
-
     protected $targetName;
 
     /**
@@ -28,7 +25,6 @@ class DynamicFieldController extends Controller
     public function __construct(Request $request)
     {
         $this->targetName = $request->get('targetName');
-        $this->section = new DynamicFieldSection($this->targetName);
     }
 
     /**
@@ -156,7 +152,7 @@ class DynamicFieldController extends Controller
          */
         $registerHandler = $dynamicField->getRegisterHandler();
 
-        $rules = $this->section->getRules();
+        $rules = DynamicFieldSection::getRules();
         $fieldType = $registerHandler->getSkin($dynamicField, $inputs['typeId']);
         $fieldSkin = $registerHandler->getSkin($dynamicField, $inputs['skinId']);
         $rules = array_merge($rules, $fieldType->getSettingsRules(), $fieldSkin->getSettingsRules());
@@ -207,7 +203,7 @@ class DynamicFieldController extends Controller
          */
         $registerHandler = $dynamicField->getRegisterHandler();
 
-        $rules = $this->section->getRules();
+        $rules = DynamicFieldSection::getRules();
         $fieldType = $registerHandler->getSkin($dynamicField, $inputs['typeId']);
         $fieldSkin = $registerHandler->getSkin($dynamicField, $inputs['skinId']);
         $rules = array_merge($rules, $fieldType->getSettingsRules(), $fieldSkin->getSettingsRules());
