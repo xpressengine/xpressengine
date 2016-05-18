@@ -734,24 +734,27 @@ System.amdDefine('xe.component', [], function() {
             return editorSet[this.editorName].editorList[this.selector];
         },
         getContents: function() {
-            return editorSet[this.editorName].getContents.call(this.getInstance());
+            return editorSet[this.editorName].interfaces.getContents.call(this.getInstance());
         },
         setContents: function(text) {
-            editorSet[this.editorName].setContents.call(this.getInstance(), text);
+            editorSet[this.editorName].interfaces.setContents.call(this.getInstance(), text);
         },
         addContents: function(text) {
-            editorSet[this.editorName].addContents.call(this.getInstance(), text);
+            editorSet[this.editorName].interfaces.addContents.call(this.getInstance(), text);
         },
         addProps: function(obj) {
             for(var o in obj) {
                 this.getInstance().props[o] = obj[o];
             }
+        },
+        addComponents: function(components) {
+            editorSet[this.editorName].interfaces.addComponents.call(this.getInstance(), components);
         }
     };
 
     var Editor = function(editorSettings, interfaces) {
         this.name = editorSettings.name;
-        this.defaultOptions = editorSettings.defaultOptions;
+        this.configs = editorSettings.configs;
         this.editorList = [];
 
         if(editorSettings.hasOwnProperty('plugins')
@@ -761,43 +764,25 @@ System.amdDefine('xe.component', [], function() {
             editorSettings.addPlugins(editorSettings.plugins);
         }
 
-        if(editorSettings.hasOwnProperty('components')
-            && editorSettings.components instanceof Array
-            && editorSettings.components.length > 0
-            && editorSettings.hasOwnProperty('addComponents')) {
-            editorSettings.addComponents(editorSettings.components);
-        }
-
         for(var o in interfaces) {
-            this[o] = interfaces[o];
+            this.interfaces[o] = interfaces[o];
         }
     };
 
     Editor.prototype = {
-        defaultOptions: {},
+        configs: {},
+        interfaces: {},
         create: function(sel, options) {
-            var options = $.extend(this.defaultOptions, options);
+            var options = $.extend(this.configs, options);
 
             this.editorList[sel] = new instanceObj(this.name, sel, options);
-            this.initialize.call(this.editorList[sel], sel, options);
+            this.interfaces.initialize.call(this.editorList[sel], sel, options);
 
-            if(this.hasOwnProperty('components') && this.components.length > 0) {
-                this.addComponents.call(this.editorList[sel], this.components);
+            if(this.interfaces.hasOwnProperty('components') && this.interfaces.components.length > 0) {
+                this.interfaces.addComponents.call(this.editorList[sel], this.interfaces.components);
             }
 
             return this.editorList[sel];
-        },
-        getContents: function() {
-            console.error('Editor.getContents');
-        },
-        setContents: function(text) {
-            console.error('Editor.setContents');
-        },
-        addContents: function(text) {
-            console.error('Editor.addContents');
-        },
-        addComponents: function(components) {
-
         }
     };
 
@@ -825,20 +810,20 @@ System.amdDefine('xe.component', [], function() {
                     console.error('구현 필요 [' + requireOptions.interfaces[eInterface] + ']');
                     valid = false;
                 }
+            }
 
-                if(editorSettings.hasOwnProperty('components')
-                    && editorSettings.components instanceof Array
-                    && editorSettings.components.length > 0
-                    && !editorSettings.hasOwnProperty('addComponents')) {
-                    console.error('구현 필요 [fn:addComponents]');
-                }
+            if(editorSettings.hasOwnProperty('plugins')
+                && editorSettings.plugins instanceof Array
+                && editorSettings.plugins.length > 0
+                && !editorSettings.hasOwnProperty('addPlugins')) {
+                console.error('구현 필요 [fn:addPlugins]');
+            }
 
-                if(editorSettings.hasOwnProperty('plugins')
-                    && editorSettings.plugins instanceof Array
-                    && editorSettings.plugins.length > 0
-                    && !editorSettings.hasOwnProperty('addPlugins')) {
-                    console.error('구현 필요 [fn:addPlugins]');
-                }
+            if(interfaces.hasOwnProperty('components')
+                && interfaces.components instanceof Array
+                && interfaces.components.length > 0
+                && !interfaces.hasOwnProperty('addComponents')) {
+                console.error('구현 필요 [fn:addComponents]');
             }
 
             if(!!editorSet.hasOwnProperty(editorSettings.name)) {
