@@ -153,6 +153,9 @@ h6 {
 .member .text-message {
   color: #696e7a;
 }
+.member .success-input .text-message {
+  color: #2c8beb;
+}
 .member .text-message.normal {
   color: #696e7a !important;
 }
@@ -191,11 +194,11 @@ h6 {
 .member .g-recaptcha {
   margin: 16px auto;
 }
-.member .xe-btn-blue,
-.member .xe-btn.xe-btn-text {
-  width: 100%;
+.member .xe-btn-primary,
+.member .xe-btn.xe-btn-link {
+  // width: 100%;
   margin-bottom: 16px;
-  text-align: center;
+  // text-align: center;
 }
 .member .xe-btn-blue {
   color: #fff;

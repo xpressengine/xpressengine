@@ -1,498 +1,252 @@
 @charset "utf-8";
 /* CSS Document */
 
-.xe-input-group .xe-btn-text {
-  font-size: 15px;
-  margin: 0;
-}
-.xe-input-group .dot {
-  margin: 0 4px;
-  font-size: 10px;
-}
-.xe-input-group > input[type="checkbox"],
-.xe-input-group > input[type="radio"] {
+.xe-label {
+  display: block;
   position: relative;
-  top: -1px;
-  vertical-align: middle;
-}
-.xe-input-group:not(#cross) > input[type="checkbox"],
-.xe-input-group:not(#cross) > input[type="radio"] {
-  overflow: hidden;
-  position: absolute;
-  width: 0;
-  height: 0;
-  border: 0;
-  font-size: 0;
-  line-height: 0;
-  left: -9999px;
-}
-.xe-input-group:not(#cross) > input[type="checkbox"] + label,
-.xe-input-group:not(#cross) > input[type="radio"] + label {
-  display: inline-block;
-  margin: 0 0 0 0;
-  padding: 0 10px 2px 25px;
-  background: url(img/spr_inpt.png) no-repeat 0 0;
-  background-size: 18px 252px;
-  height: 22px;
-  color: #434a53;
-  font-weight: normal;
+  min-width: $xe-label-size;
+  min-height: $xe-label-size;
+  margin-top: 10px;
+  margin-bottom: 10px;  
   cursor: pointer;
-}
-.xe-input-group:not(#cross) > input[type="checkbox"] + label:hover {
-  background-position: 0 -26px;
-}
-.xe-input-group:not(#cross) > input[type="checkbox"]:checked + label {
-  background-position: 0 -52px;
-}
-.xe-input-group:not(#cross) > input[type="checkbox"]:disabled + label {
-  background-position: 0 -78px;
-  color: #b5b7bd;
-}
-.xe-input-group:not(#cross) > input[type="checkbox"]:disabled:checked + label {
-  background-position: 0 -103px;
-}
-
-.xe-input-group:not(#cross) > input[type="radio"] + label {
-  background-position: 0 -130px;
-}
-.xe-input-group:not(#cross) > input[type="radio"] + label:hover {
-  background-position: 0 -156px;
-}
-.xe-input-group:not(#cross) > input[type="radio"]:checked + label {
-  background-position: 0 -182px;
-}
-.xe-input-group:not(#cross) > input[type="radio"]:disabled + label {
-  background-position: left -208px;
-  color: #b5b7bd;
-}
-.xe-input-group:not(#cross) > input[type="radio"]:disabled:checked + label {
-  background-position: 0 -234px;
-}
-
-.xe-btn {
-  display: inline-block;
-  padding: .7143em .8571em;
-  margin-bottom: 0;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  -ms-touch-action: manipulation;
-  touch-action: manipulation;
-  cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  background-image: none;
-  border-radius: 2px;
-  outline: none;
-  border: 1px solid transparent;
-  -webkit-transition: all .2s ease;
-  transition: all .2s ease;
-}
-.xe-btn.xe-btn-default {
-  color: #8e8e93;
-  border-color: #dadbde;
-  background-color: transparent;
-}
-.xe-btn:active,
-.xe-btn:focus,
-.xe-btn:active:focus {
-  -webkit-box-shadow: none;
-  box-shadow: none;
-  outline: none;
-}
-.xe-btn:focus {
-  color: #fff;
-}
-.xe-btn-default:hover,
-.open > .dropdown-toggle.xe-btn-default {
-  background-color: transparent;
-  border-color: #b5b7bd;
-  color: #696e7a;
-}
-.xe-btn-default.focus,
-.xe-btn-default:focus {
-  background-color: inherit;
-  color: #8e8e93;
-}
-.xe-btn-default.active,
-.xe-btn-default:active {
-  background-color: transparent;
-  border-color: #8e8e93;
-  color: #434a53;
-}
-.xe-btn-group {
-  display: inline-block;
-  vertical-align: top;
-}
-.xe-btn.blue {
-  border-color: #2c8beb;
-  color: #2c8beb;
-}
-.wrong .xe-btn {
-  border-color: #dadbde;
-  color: #8e8e93;
-}
-.wrong .xe-btn.blue {
-  border-color: #a3c9f2;
-  color: #2c8beb;
-}
-.xe-btn.blue:hover {
-  border-color: #1677cb;
-  color: #1677cb;
-}
-.xe-btn.blue:active {
-  border-color: #085daa;
-  color: #085daa;
-}
-.xe-btn.blue.v2:hover {
-  border-color: #2c8beb;
-  background-color: #2c8beb;
-  color: #fff;
-}
-.xe-btn.blue.v2:active {
-  border-color: #0775ce;
-  background-color: #0775ce;
-  color: #fff;
-}
-.xe-btn-text {
-  color: #2c8beb;
-  border-color: transparent;
-  background-color: transparent;
-}
-.xe-btn-text:hover,
-.xe-btn-text:focus {
-  color: #085daa;
-  text-decoration: none;
-  border-color: transparent !important;
-}
-.xe-btn-text.v2:hover {
-  text-decoration: none;
-  background-color: #f1f2f6;
-  color: #2c8beb;
-}
-.xe-btn-text.v2:active {
-  background-color: #dadbde;
-}
-.xe-btn-text.v3 {
-  color: #696e7a;
-}
-.xe-btn-text.v3:hover {
-  color: #2c8beb;
-}
-.xe-btn-text.v3:active {
-  color: #085daa;
-}
-.xe-btn.xe-btn-gray {
-  background-color: #dadbde;
-  color: #696e7a;
-  border-color: transparent;
-}
-.xe-btn.xe-btn-gray:hover {
-  background-color: #b5b7bd;
-  color: #434a53;
-}
-.xe-btn.xe-btn-gray:active {
-  background-color: #8e8e93;
-  color: #2c2e37;
-}
-.xe-btn-group-all {
-  margin: 24px auto;
+  .xe-label-text{
+    display: inline-block;
+    padding-left: 25px;  
+  }
+  input {
+    &[type="checkbox"], &[type="radio"] {
+      overflow: hidden;
+      position: absolute;
+      width: 0;
+      height: 0;
+      border: 0;
+      font-size: 0;
+      line-height: 0;
+      left: -9999px;
+    }
+  }
+  > input {
+    &[type="checkbox"] + .xe-input-helper {
+      display: inline-block;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: $xe-label-size;
+      height: $xe-label-size;
+      background-color: #fff;
+      border: 1px solid $xe-input-border;
+      border-radius: $border-radius-base;
+      vertical-align: middle;
+    }
+    &[type="radio"] + .xe-input-helper {
+      display: inline-block;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: $xe-label-size;
+      height: $xe-label-size;
+      background-color: #fff;
+      border: 1px solid $xe-input-border;
+      border-radius: $border-radius-base;
+      vertical-align: middle;
+      border-radius: 50%;
+    }
+    &[type="checkbox"]:hover + .xe-input-helper, &[type="radio"]:hover + .xe-input-helper {
+      border-color: $xe-label-color;
+    }
+    &[type="checkbox"]:checked + .xe-input-helper {
+      border-color: transparent;
+      background-color: $xe-label-color;
+    }
+    &[type="radio"]:checked + .xe-input-helper {
+      border-color: $xe-label-color;
+    }
+    &[type="checkbox"]:checked + .xe-input-helper:after {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 8px;
+      height: 12px;
+      margin-top: -8px;
+      margin-left: -4px;
+      border-right: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+      -webkit-transform: rotate(40deg);
+      transform: rotate(40deg);
+      content: "";
+    }
+    &[type="radio"]:checked + .xe-input-helper:after {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 8px;
+      height: 12px;
+      margin-top: -8px;
+      margin-left: -4px;
+      border-right: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+      -webkit-transform: rotate(40deg);
+      transform: rotate(40deg);
+      content: "";
+      width: 10px;
+      height: 10px;
+      margin-top: -5px;
+      margin-left: -5px;
+      border: none;
+      background-color: $xe-label-color;
+      border-radius: 50%;
+    }
+    &[type="checkbox"]:disabled + .xe-input-helper, &[type="radio"]:disabled + .xe-input-helper {
+      border-color: #DEDFE2;
+    }
+    &[type="checkbox"]:disabled:checked + .xe-input-helper, &[type="radio"]:disabled:checked + .xe-input-helper:after {
+      border-color: transparent;
+      background-color: #c8c9cc;
+    }
+    &[type="checkbox"]:disabled + .xe-input-helper + .xe-label-text, &[type="radio"]:disabled + .xe-input-helper + .xe-label-text {
+      color: #b5b7bd;
+    }
+  }
 }
 
-.xe-btn-danger.v2 {
-  background-color: transparent;
-  border-color: #db2828;
-  color: #db2828;
-}
-.xe-btn-danger.v2:hover {
-  background-color: #db2828;
-  color: #fff;
+.xe-form-group {
+  display: block;
+  margin-bottom: 20px;
 }
 
-.xe-input-text,
 .xe-form-control {
-  width: 100%;
-  height: 36px;
-  margin: 0 4px 4px 0;
-  padding: 5px 12px;
-  border: 1px solid #dadbde;
-  border-radius: 2px;
-  line-height: 1.42857143;
-  font-size: 14px;
-  color: #2c2e37;
-  outline: none;
-  -webkit-appearance: none;
-  background-color: #fff;
-  -webkit-box-shadow: none;
+  display: block;
+  width:100%;
+  height: $input-height-base; // Make inputs at least the height of their button counterpart (base line-height + padding + border)
+  padding: $padding-base-vertical $padding-base-horizontal;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  color: $input-color;
+  background-color: $input-bg;
+  border: 1px solid $input-border;
+  border-radius: $input-border-radius; // Note: This has no effect on <select>s in some browsers, due to the limited stylability of <select>s in CSS.
   box-shadow: none;
-  transition: .1s ease;
-  -webkit-transition: .1s ease;
+  outline: none;
+
+  // Customize the `:focus` state to imitate native WebKit styles.
+
+
+  // Placeholder
+  @include placeholder;
+
+  // Unstyle the caret on `<select>`s in IE10+.
+  &::-ms-expand {
+    border: 0;
+    background-color: transparent;
+  }
+
+  // Disabled and read-only inputs
+  //
+  // HTML5 says that controls under a fieldset > legend:first-child won't be
+  // disabled if the fieldset is disabled. Due to implementation difficulty, we
+  // don't honor that edge case; we style them as disabled anyway.
+  &[disabled],
+  &[readonly],
+  fieldset[disabled] & {
+    background-color: $input-bg-disabled;
+    opacity: 1; // iOS fix for unreadable disabled content; see https://github.com/twbs/bootstrap/issues/11655
+  }
+
+  &[disabled],
+  fieldset[disabled] & {
+    cursor: $cursor-disabled;
+  }
+  &:focus {
+    box-shadow: none;
+    border-color: $brand-primary;
+  }
+
 }
-textarea {
-  padding: 10px 12px;
+
+textarea.xe-form-control {
+  height: auto;
 }
-.xe-form-control.srch {
-  padding-right: 30px;
+
+@mixin form-inline {
+
+  // Kick in the inline
+  @media (min-width: $screen-sm-min) {
+    // Inline-block all the things for "inline"
+    .xe-form-group {
+      display: inline-block;
+      margin-bottom: 0;
+      margin-right: 20px;
+      vertical-align: middle;
+    }
+
+    // In navbar-form, allow folks to *not* use `.form-group`
+    .xe-form-control {
+      display: inline-block;
+      width: auto; // Prevent labels from stacking above inputs in `.form-group`
+      vertical-align: middle;
+    }
+    
+    .xe-input-group {
+        display: inline-table;
+        vertical-align: middle;
+
+        .xe-input-group-addon,
+        .xe-input-group-btn,
+        .xe-form-control {
+          width: auto;
+        }
+      }
+
+    // Input groups need that 100% width though
+    .xe-input-group > .xe-form-control {
+      width: 100%;
+    }
+      
+    .xe-label {
+      display: inline-block;
+      margin-top: 0;
+      margin-bottom: 0;
+      margin-right: 10px;
+      vertical-align: middle;
+    
+      label {
+        padding-left: 0;
+      }
+    }
+    // .xe-dropdown > .xe-btn,
+    // .xe-dropup > .xe-btn,
+    .xe-select-box.xe-btn,
+    .xe-dropdown,
+    .xe-dropup,
+    .xe-select-label .label-input {  
+      display: inline-block;
+      width:auto;
+    }
+
+  }
 }
-.xe-input-text.readonly {
-  height: 40px;
-  background-color: #f6f6f6;
-  border-color: #f6f6f6;
-  color: #cbcbcb;
-  font-size: 15px;
+
+.xe-form-inline {
+  @include form-inline;
 }
-.wrong .xe-input-text {
+
+.wrong-input .xe-form-control,
+.wrong-input.xe-form-control {
   border-color: #dd251e !important;
   color: #db2828;
 }
-.success .xe-input-text {
+.success-input .xe-form-control,
+.success-input.xe-form-control {
   border-color: #2c8beb !important;
-}
-.xe-input-text:focus,
-.xe-input-body textarea:focus,
-.xe-input-body .xe-input-text:focus,
-.xe-form-control:focus {
-  border-color: #2389ee;
-  color: #2c2e37;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-  transition: .1s ease;
-  -webkit-transition: .1s ease;
-}
-.label-text {
-  color: #8e8e93;
-  font-size: 14px;
-  line-height: 36px;
 }
 
 .text-message {
   display: block;
-  margin: 5px 0 0;
+  margin-top: 5px !important;
   font-size: 13px;
   color: #2c8beb;
 }
-.wrong .text-message {
+.wrong-input .text-message,
+.wrong-input.text-message {
   color: #db2828 !important;
-}
-.success .text-message {
-  color: #2c8beb !important;
-}
-
-.xe-input-body {
-  position: relative;
-}
-.xe-input-body textarea,
-.xe-input-body .xe-input-text {
-  width: 100%;
-  border: 1px solid #dadbde;
-  outline: none;
-  padding-right: 55px;
-  border-radius: 2px;
-  color: #2c2e37;
-}
-.xe-input-body .flag-code {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-}
-
-.xe-form-group {
-  display: inline-block;
-  font-size: 0;
-}
-.xe-form-group .xe-input-text.v2 {
-  width: 170px;
-  margin: 0;
-  border-right-color: transparent;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-}
-.xe-form-group .xe-input-text:focus {
-  border-color: #2389ee;
-}
-.xe-form-group .xe-btn {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  vertical-align: top;
-}
-
-.xe-form-group.wrong + .xe-text-group + .text-message {
-  color: #db2828;
-}
-
-button i + span,
-.xe-btn i + span {
-  margin-left: 3px;
-}
-.xe-text-group button:hover {
-  background-color: #d4e8fc;
-  border-radius: 2px;
-}
-button.xe-btn-blue,
-a.xe-btn-blue {
-  display: inline-block;
-  background-color: #2c8beb;
-  border-color: transparent;
-  color: #fff;
-}
-button.xe-btn-blue:hover,
-a.xe-btn-blue:hover {
-  background-color: #1677cb;
-  border-radius: 2px;
-  color: #fff;
-}
-button.xe-btn-blue:active,
-a.xe-btn-blue:active {
-  background-color: #085daa;
-  color: #fff;
-}
-button.icon-gray,
-a.icon-gray {
-  display: inline-block;
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  background-color: transparent;
-  border-color: transparent;
-  color: #8e8e93;
-  font-size: 20px;
-}
-button.icon-gray:hover,
-a.icon-gray:hover {
-  color: #434a53;
-}
-
-.xe-select-style {
-  display: inline-block;
-  position: relative;
-  margin: 0;
-  border: 1px solid #e4e4e4;
-  border-radius: 2px;
-  overflow: hidden;
-  em.ico {
-    display: inline-block;
-    position: absolute;
-    right: 11px;
-    top: 50%;
-    width: 0;
-    height: 0;
-    margin-top: -2px;
-    border-style: solid;
-    border-width: 3px;
-    border-color: #8e8e93 transparent transparent transparent;
-    font-size: 13px;
-  }
-  select {
-    padding: .6643em .8571em .6643em;
-    width: 130%;
-    margin-right: 20px;
-    border: none;
-    box-shadow: none;
-    background-color: transparent;
-    background-image: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    line-height: 1em;
-    &:focus {
-      outline: none;
-    }
-  }
-}
-
-.xe-btn-toggle {
-  display: inline-block;
-
-  input[type=checkbox] {
-    opacity: 0;
-    width: 0;
-    height: 0;
-    &:checked + .toggle {      
-      background-color: #359bf7;
-      &:after {
-        left: 41px;
-        outline: none;
-      }
-      &:before{                
-        left:11px;
-        content:"ON";        
-      }
-    }
-  }
-  label {
-    font-weight: 400;
-    font-size: 13px;
-    cursor: pointer;
-    line-height: 28px;
-  }
-  .toggle {
-    position: relative;
-    display: inline-block;
-    width: 68px;
-    height: 28px;
-    background-color: #dadbde;
-    border-radius: 15px;
-    margin-right: 10px;
-    transition: background .3s ease;
-    vertical-align: middle;
-    content: "";
-    &:after {
-      display: inline-block;
-      position: relative;
-      left: 0;
-      top: 1px;
-      width: 26px;
-      height: 26px;
-      background-color: #fff;
-      border-radius: 20px;
-      border: 1px solid #e4e4e4;
-      transition: left .3s ease,background .3s ease,box-shadow .1s ease;
-      content: "";
-    }
-    &:before{
-      position: absolute;
-      right:10px;           
-      content:"OFF";
-      color:#fff;
-    }
-  }
-}
-
-.search-group {
-  display: inline-block;
-  white-space: nowrap;
-  label {
-    margin: 0;
-    padding: 8px 16px;
-    font-size: 16px;
-    color: #8e8e93;
-  }
-  .xe-input-text {
-    width: 224px;
-    padding-left: 0;
-    border: none;
-  }
-  &.bd_on {
-    border: 1px solid #e4e4e4;
-    label {
-      color: #929297;
-    }
-  }
-}
-
-@media \0screen\,screen\9 {
-  .xe-toggle-button {
-    input[type=checkbox] {
-      width: auto;
-      height: auto;
-    }
-    .toggle {
-      display: none;
-    }
-  }
 }

@@ -2,15 +2,15 @@
 /* CSS Document */
 
 /*reset css*/
-.profile_wrap dl,
-.profile_wrap dt,
-.profile_wrap dd,
-.card_wrap .profile_card .card_tit h2,
-.right_menu.long_txt ul {
+.profile-wrap dl,
+.profile-wrap dt,
+.profile-wrap dd,
+.card-wrap .profile-card .card-title h2,
+.right-menu.long-text ul {
   margin: 0;
   padding: 0;
 }
-.profile_wrap .card_profile_info .profile_thmb em {
+.profile-wrap .card-profile-infomation .profile-thumbnail em {
   font-style: normal;
 }
 
@@ -18,17 +18,17 @@
   max-width: none !important;
   padding-bottom: 0 !important;
 }
-.profile_wrap .xe-row,
-.profile_wrap .xe-row .xe-col-sm-6:first-child {
+.profile-wrap .xe-row,
+.profile-wrap .xe-row .xe-col-sm-6:first-child {
   margin-bottom: 24px;
 }
-.profile_wrap .xe-col-sm-6,
-.profile_wrap .xe-col-sm-12 {
+.profile-wrap .xe-col-sm-6,
+.profile-wrap .xe-col-sm-12 {
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.profile_wrap h1 {
+.profile-wrap h1 {
   margin-bottom: 40px;
   font-size: 32px;
   color: #2c2e37;
@@ -41,15 +41,15 @@
   padding: 0 5%;
   text-align: center;
 }
-.xe-profile .profile_img img,
-.xe-profile .profile_img canvas {
+.xe-profile .profile-img img,
+.xe-profile .profile-img canvas {
   border-radius: 50%;
 }
-.xe-profile .inpt_nick {
+.xe-profile .input-nick {
   margin: 24px 0 8px;
 }
-.xe-profile .inpt_nick input,
-.xe-profile .inpt_intro input {
+.xe-profile .input-nick input,
+.xe-profile .input-intro input {
   width: 100%;
   height: 40px;
   border: 0;
@@ -59,29 +59,29 @@
   line-height: 40px;
   font-weight: 600;
 }
-.xe-profile .inpt_intro input,
-.xe-profile .inpt_intro p {
+.xe-profile .input-intro input,
+.xe-profile .input-intro p {
   font-size: 16px;
   color: #8e8e93;
   line-height: 24px;
 }
-.xe-profile .inpt_intro p {
+.xe-profile .input-intro p {
   max-width: 400px;
   margin: 0 auto;
 }
-.xe-profile .inpt_intro input {
+.xe-profile .input-intro input {
   font-weight: normal;
 }
-.xe-profile .txt_gray {
+.xe-profile .text-gray {
   color: #8e8e93;
 }
-.xe-profile .inpt_intro {
+.xe-profile .input-intro {
   margin: 24px auto 16px;
 }
-.xe-profile .inpt_intro a {
+.xe-profile .input-intro a {
   color: #2c2e37;
 }
-.xe-profile .inpt_intro a:hover {
+.xe-profile .input-intro a:hover {
   text-decoration: underline;
 }
 .xe-profile dd i {
@@ -104,67 +104,57 @@
 .xe-profile .xi-github.on {
   color: #333;
 }
-.xe-profile .connect_sns a {
+.xe-profile .connect-sns a {
   display: inline-block;
   margin-left: 10px;
 }
-.xe-profile .connect_sns a:first-child {
+.xe-profile .connect-sns a:first-child {
   margin-left: 0;
 }
 .xe-profile.edit i,
 .xe-profile.edit i.on {
   color: #e5e5e5;
 }
-.profile_wrap .profile_btn_area {
+.profile-wrap .profile-btn-area {
   margin-top: 32px;
 }
-.profile_wrap .profile_btn_area button {
-  display: inline-block;
-  height: 40px;
-  margin-left: 2px;
-  padding: 0 19px;
-  border-radius: 20px;
-  border: 1px solid #dadbde;
-  background-color: transparent;
-  font-size: 14px;
-  color: #8e8e93;
-  cursor: pointer;
-  outline: none;
+.profile-wrap .profile-btn-area button {  
+  border-radius: 20px;  
 }
-.profile_wrap .profile_btn_area button:first-child {
-  margin-left: 0;
-}
-.profile_wrap .profile_btn_area button:hover {
-  border-color: #b5b7bd;
-  color: #434a53;
-}
-.profile_wrap .profile_btn_area button:active {
-  border-color: #8e8e93;
-  color: #2c2e37;
-}
-.profile_wrap .profile_btn_area button.btn_blue {
-  margin-right: 4px;
-  border-color: #2c8beb;
-  color: #2c8beb;
-}
-.profile_wrap .profile_btn_area button.btn_blue:hover {
-  border-color: #085daa;
-  color: #085daa;
-}
-.profile_wrap .profile_btn_area button.btn_blue.on {
-  background-color: #2389ee;
-  border-color: #2389ee;
-  color: #fff;
-}
-.profile_wrap .profile_btn_area button.btn_blue.on:hover {
-  background-color: #0775ce;
-  border-color: #0775ce;
-}
+// .profile-wrap .profile-btn-area button:first-child {
+//   margin-left: 0;
+// }
+// .profile-wrap .profile-btn-area button:hover {
+//   border-color: #b5b7bd;
+//   color: #434a53;
+// }
+// .profile-wrap .profile-btn-area button:active {
+//   border-color: #8e8e93;
+//   color: #2c2e37;
+// }
+// .profile-wrap .profile-btn-area button.btn_blue {
+//   margin-right: 4px;
+//   border-color: #2c8beb;
+//   color: #2c8beb;
+// }
+// .profile-wrap .profile-btn-area button.btn_blue:hover {
+//   border-color: #085daa;
+//   color: #085daa;
+// }
+// .profile-wrap .profile-btn-area button.btn_blue.on {
+//   background-color: #2389ee;
+//   border-color: #2389ee;
+//   color: #fff;
+// }
+// .profile-wrap .profile-btn-area button.btn_blue.on:hover {
+//   background-color: #0775ce;
+//   border-color: #0775ce;
+// }
 
-.xe-profile .profile_img {
+.xe-profile .profile-img {
   position: relative;
 }
-.xe-profile .btn_file {
+.xe-profile .btn-file {
   position: absolute;
   width: 100%;
   max-width: 140px;
@@ -173,7 +163,7 @@
   left: 50%;
   margin-left: -70px;
 }
-.xe-profile .btn_file:after {
+.xe-profile .btn-file:after {
   display: inline-block;
   position: absolute;
   left: 44px;
@@ -191,7 +181,7 @@
   color: #fff;
   font-size: 54px;
 }
-.xe-profile .btn_file input[type=file] {
+.xe-profile .btn-file input[type=file] {
   position: absolute;
   top: 0;
   right: 0;
@@ -208,21 +198,21 @@
   z-index: 10;
 }
 
-.card_wrap {
+.card-wrap {
   padding: 40px 0 56px;/* background-color:#F6F7F8; */
   border-top: 1px solid #e4e4e4;
 }
-.card_wrap .profile_card {
+.card-wrap .profile-card {
   background-color: #fff;
   border: 1px solid #e4e4e4;
 }
-.card_wrap .profile_card .card_tit {
+.card-wrap .profile-card .card-title {
   position: relative;
   overflow: hidden;
   padding: 0 24px;
   border-bottom: 1px solid #e4e4e4;
 }
-.card_wrap .profile_card .card_tit h2 {
+.card-wrap .profile-card .card-title h2 {
   display: inline-block;
   margin-right: 15px;
   padding: 16px 0;
@@ -231,24 +221,24 @@
   line-height: 24px;
   color: #2c2e37;
 }
-.card_wrap .right_menu {
+.card-wrap .right-menu {
   position: absolute;
   right: 16px;
   top: 50%;
   margin-top: -20px;
 }
-.card_wrap .right_menu .btn_card_more {
+.card-wrap .right-menu .btn-card-more {
   display: block;
   padding: 8px;
 }
-.card_wrap .right_menu .btn_card_more i {
+.card-wrap .right-menu .btn-card-more i {
   font-size: 23px;
   color: #cecfd3;
 }
-.card_wrap .right_menu .btn_card_more:hover i {
+.card-wrap .right-menu .btn-card-more:hover i {
   color: #6f7177;
 }
-.card_wrap .right_menu.long_txt {
+.card-wrap .right-menu.long-text {
   position: relative;
   float: right;
   right: 0;
@@ -258,51 +248,51 @@
   color: #8e8e93;
   font-size: 14px;
 }
-.card_wrap .right_menu.long_txt li {
+.card-wrap .right-menu.long-text li {
   display: inline-block;
   margin-left: 8px;
   list-style: none;
   color: #8e8e93;
   font-size: 14px;
 }
-.card_wrap .right_menu .xe-badge.empty {
+.card-wrap .right-menu .xe-badge.empty {
   margin-right: 8px;
 }
-.card_wrap .right_menu.long_txt li:first-child {
+.card-wrap .right-menu.long-text li:first-child {
   margin-left: 0;
 }
-.card_cont {
+.card-content {
   padding: 0 24px;
 }
 
-.profile_wrap .card_info {
+.profile-wrap .card-infomation {
   text-align: center;
 }
-.profile_wrap .card_profile_info {
+.profile-wrap .card-profile-infomation {
   overflow: hidden;
   padding: 16px 0;
   border-top: 1px solid #e4e4e4;
 }
-.profile_wrap .card_profile_info .profile_thmb {
+.profile-wrap .card-profile-infomation .profile-thumbnail {
   float: left;
   width: 65%;
   overflow: hidden;
 }
-.profile_wrap .card_profile_info .profile_thmb img {
+.profile-wrap .card-profile-infomation .profile-thumbnail img {
   border-radius: 50%;
   margin-right: 13px;
 }
-.profile_wrap .card_profile_info .profile_thmb em {
+.profile-wrap .card-profile-infomation .profile-thumbnail em {
   display: table-cell;
   vertical-align: middle;
   font-size: 14px;
   color: #2c8beb;
 }
-.profile_wrap .card_profile_info .profile_thmb .thmb_img {
+.profile-wrap .card-profile-infomation .profile-thumbnail .thumbnail-img {
   display: table;
 }
 
-.profile_wrap .card_info .profile_btn_area {
+.profile-wrap .card-infomation .profile-btn-area {
   float: right;
   margin-top: 0;
 }
@@ -313,7 +303,7 @@
   .xe-profile {
     padding: 0;
   }
-  .profile_wrap .xe-col-sm-6 {
+  .profile-wrap .xe-col-sm-6 {
     margin-bottom: 0;
   }
 }
