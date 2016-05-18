@@ -30,7 +30,7 @@ use Xpressengine\Storage\File;
 abstract class GenericTheme extends AbstractTheme
 {
     /**
-     * @var string
+     * @var string 테마를 정의한 디렉토리 경로, 플러그인디렉토리명을 포함한 디렉토리 경로를 지정해야 한다. ex) 'myplugin/theme'
      */
     protected static $path = null;
 
@@ -64,9 +64,14 @@ abstract class GenericTheme extends AbstractTheme
         return static::info('support.desktop');
     }
 
+    /**
+     * get path, example: 'plugins/myplugin/theme'
+     *
+     * @return mixed
+     */
     public static function getPath()
     {
-        return static::$path;
+        return trim(str_replace(base_path(), '', plugins_path(static::$path)), DIRECTORY_SEPARATOR);
     }
 
     /**
@@ -99,8 +104,10 @@ abstract class GenericTheme extends AbstractTheme
 
         $this->registerViewNamespace();
 
+        $theme = static::class;
+
         $view = $this->viewname('view', 'theme');
-        return static::$handler->getViewFactory()->make($view, compact('config'));
+        return static::$handler->getViewFactory()->make($view, compact('config', 'theme'));
     }
 
     /**
@@ -251,7 +258,22 @@ abstract class GenericTheme extends AbstractTheme
         // register '_theme::' view namespace
         static::$handler->getViewFactory()->addNamespace(
             static::$viewNamespace,
-            $this->getPath().DIRECTORY_SEPARATOR.'views'
+            base_path($this->getPath().DIRECTORY_SEPARATOR.'views')
         );
     }
+
+    /**
+     * 테마의 asset 파일 주소(url)를 반환한다.
+     *
+     * @param string $path   path가 주어질 경우 주어진 파일의 URL을 반환한다. path는 테마의 assets 디렉토리 내에서의 상대 경로이어야 한다.
+     * @param string $secure https 여부
+     *
+     * @return string
+     */
+    public static function asset($path, $secure = null)
+    {
+        $path = static::getPath().'/assets/'.$path;
+        return asset($path, $secure);
+    }
+
 }
