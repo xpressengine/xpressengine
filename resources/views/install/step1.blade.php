@@ -56,62 +56,62 @@
                 <form action="/install" method="post">
                     <input type="hidden" name="_token" value="{!! Session::token() !!}" />
                     <h2>Database</h2>
-                    <div class="form-group">
+                    <div class="xe-form-group">
                         <label for="exampleInputEmail1">Host</label>
-                        <input type="text" class="form-control" name="database_host" placeholder="Database Host(localhost)" value="{{ Input::old('database_host') }}">
+                        <input type="text" class="xe-form-control" name="database_host" placeholder="Database Host(localhost)" value="{{ Input::old('database_host') }}">
                     </div>
 
-                    <div class="form-group">
+                    <div class="xe-form-group">
                         <label for="exampleInputEmail1">Port</label>
-                        <input type="text" class="form-control" name="database_port" placeholder="Port(3306)" value="{{ Input::old('database_port') }}">
+                        <input type="text" class="xe-form-control" name="database_port" placeholder="Port(3306)" value="{{ Input::old('database_port') }}">
                     </div>
 
-                    <div class="form-group">
+                    <div class="xe-form-group">
                         <label for="exampleInputEmail1">Database Name</label>
-                        <input type="text" class="form-control" name="database_name" placeholder="Database Name" value="{{ Input::old('database_name') }}">
+                        <input type="text" class="xe-form-control" name="database_name" placeholder="Database Name" value="{{ Input::old('database_name') }}">
                     </div>
 
-                    <div class="form-group">
+                    <div class="xe-form-group">
                         <label for="exampleInputEmail1">Database User Name</label>
-                        <input type="text" class="form-control" name="database_user_name" placeholder="Database User Name" value="{{ Input::old('database_user_name') }}">
+                        <input type="text" class="xe-form-control" name="database_user_name" placeholder="Database User Name" value="{{ Input::old('database_user_name') }}">
                     </div>
 
-                    <div class="form-group">
+                    <div class="xe-form-group">
                         <label for="exampleInputEmail1">Password</label>
-                        <input type="password" class="form-control" name="database_password" placeholder="Password" value="{{ Input::old('database_password') }}">
+                        <input type="password" class="xe-form-control" name="database_password" placeholder="Password" value="{{ Input::old('database_password') }}">
                     </div>
 
 
                     <h2>Web site Information</h2>
-                    <div class="form-group">
+                    <div class="xe-form-group">
                         <label for="exampleInputEmail1">Site Address</label>
-                        <input type="text" class="form-control" name="web_url" placeholder="Url(http:://...)" value="{{ Input::old('web_url') }}">
+                        <input type="text" class="xe-form-control" name="web_url" placeholder="Url(http:://...)" value="{{ Input::old('web_url') }}">
                     </div>
 
-                    <div class="form-group">
+                    <div class="xe-form-group">
                         <label for="exampleInputEmail1">Time Zone</label>
-                        <input type="text" class="form-control" name="web_timezone" placeholder="셀렉트 박스 구성 이나. 자동완성?" value="{{ Input::old('web_timezone') }}">
+                        <input type="text" class="xe-form-control" name="web_timezone" placeholder="셀렉트 박스 구성 이나. 자동완성?" value="{{ Input::old('web_timezone') }}">
                     </div>
 
                     <h2>Administrator</h2>
-                    <div class="form-group">
+                    <div class="xe-form-group">
                         <label for="exampleInputEmail1">Email</label>
-                        <input type="email" class="form-control" name="admin_email" placeholder="Email" value="{{ Input::old('admin_email') }}">
+                        <input type="email" class="xe-form-control" name="admin_email" placeholder="Email" value="{{ Input::old('admin_email') }}">
                     </div>
 
-                    <div class="form-group">
+                    <div class="xe-form-group">
                         <label for="exampleInputEmail1">Display Name</label>
-                        <input type="text" class="form-control" name="admin_display_name" placeholder="Display Name(admin)" value="{{ Input::old('admin_display_name') }}">
+                        <input type="text" class="xe-form-control" name="admin_display_name" placeholder="Display Name(admin)" value="{{ Input::old('admin_display_name') }}">
                     </div>
 
-                    <div class="form-group">
+                    <div class="xe-form-group">
                         <label for="exampleInputEmail1">Password</label>
-                        <input type="password" class="form-control" name="admin_password" placeholder="Password" value="{{ Input::old('admin_password') }}">
+                        <input type="password" class="xe-form-control" name="admin_password" placeholder="Password" value="{{ Input::old('admin_password') }}">
                     </div>
 
-                    <div class="form-group">
+                    <div class="xe-form-group">
                         <label for="exampleInputEmail1">Password Check</label>
-                        <input type="password" class="form-control" name="admin_password_confirmation" placeholder="Password" value="{{ Input::old('admin_password_confirmation') }}">
+                        <input type="password" class="xe-form-control" name="admin_password_confirmation" placeholder="Password" value="{{ Input::old('admin_password_confirmation') }}">
                     </div>
 
                     <button type="submit" class="btn btn-default">Submit</button>
