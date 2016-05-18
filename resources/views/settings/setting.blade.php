@@ -16,11 +16,13 @@
                     <div class="panel-body">
 
                         {{-- 샤이트 제목 --}}
-                        <label>{{ xe_trans('xe::site')}} {{ xe_trans('xe::title') }}</label>
-                        {!! uio('langText', ['placeholder'=>xe_trans('xe::inputBrowserTitle'), 'langKey'=>array_get($config, 'site_title', null), 'name'=>'site_title']) !!}
+                        <div class="form-group">
+                            <label>{{ xe_trans('xe::site')}} {{ xe_trans('xe::title') }}</label>
+                            {!! uio('langText', ['placeholder'=>xe_trans('xe::inputBrowserTitle'), 'langKey'=>array_get($config, 'site_title', null), 'name'=>'site_title']) !!}
+                        </div>
 
                         {{-- 파비콘 --}}
-                        {!! uio('formFile', ['name' => 'favicon', 'label' => xe_trans('xe::favicon'), 'file' => array_get($config,'favicon'), 'width' => 80, 'height' => 80, 'types' => 'ico', 'fileuploadOptions' => [ 'maxFileSize' => 10000000 ] ]) !!}
+                        {!! uio('formFile', ['name' => 'favicon', 'label' => xe_trans('xe::favicon'), 'value' => $config->get('favicon'), 'width' => 80, 'height' => 80, 'types' => 'ico', 'fileuploadOptions' => [ 'maxFileSize' => 10000000 ] ]) !!}
 
                         <div class="form-group">
                             <label for="__xe_index_instance">{{ xe_trans('xe::selectHomeMenu') }}</label>
