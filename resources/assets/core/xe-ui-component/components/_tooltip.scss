@@ -1,52 +1,101 @@
-@charset "utf-8";
-/* tooltip CSS Document */
+//
+// Tooltips
+// --------------------------------------------------
 
+
+// Base class
 .xe-tooltip {
+  position: absolute;
+  z-index: $zindex-tooltip;
   display: block;
+  // Our parent element can be arbitrary since tooltips are by default inserted as a sibling of their target element.
+  // So reset our font and text properties to avoid inheriting weird values.
+  // @include reset-text;
+  font-size: $font-size-small;
+
+  @include opacity(0);
+
+  &.in     { @include opacity($tooltip-opacity); }
+  &.top    { margin-top:  -3px; padding: $tooltip-arrow-width 0; }
+  &.right  { margin-left:  3px; padding: 0 $tooltip-arrow-width; }
+  &.bottom { margin-top:   3px; padding: $tooltip-arrow-width 0; }
+  &.left   { margin-left: -3px; padding: 0 $tooltip-arrow-width; }
+}
+
+// Wrapper for the tooltip content
+.xe-tooltip-inner {
+  max-width: $tooltip-max-width;
+  padding: 3px 8px;
+  color: $tooltip-color;
+  text-align: center;
+  background-color: $tooltip-bg;
+  border-radius: $border-radius-base;
+}
+
+// Arrows
+.xe-tooltip-arrow {
   position: absolute;
-  top: 0;
-  left: 0;
-  max-width: 250px;
-  padding: 6px 10px;
-  color: #fff;
-  background: #2c2e37;
-  text-align: left;
-  border-radius: 2px;
-  font-size: 12px;
-  line-height: 20px;
-}
-.xe-tooltip.right {
-  left: auto;
-}
-.xe-tooltip.wide {
-  max-width: 350px;
-}
-.xe-tooltip.very-wide {
-  max-width: 450px;
-}
-.xe-tooltip:after {
-  position: absolute;
-  top: 100%;
-  left: 50%;
   width: 0;
   height: 0;
-  margin-left: -3px;
-  border-top: 3px solid #000;
-  border-right: 3px solid transparent;
-  border-left: 3px solid transparent;
-  content: "";
+  border-color: transparent;
+  border-style: solid;
 }
-.xe-tooltip.right:after {
-  left: 100%;
-  margin-left: -17px;
-}
-.xe-tooltip.left:after {
-  left: 0;
-  margin-left: 17px;
-}
-.xe-tooltip.bottom:after {
-  top: 0;
-  margin-top: -3px;
-  border-top: none;
-  border-bottom: 3px solid #000;
+// Note: Deprecated .top-left, .top-right, .bottom-left, and .bottom-right as of v3.3.1
+.xe-tooltip {
+  &.top .xe-tooltip-arrow {
+    bottom: 0;
+    left: 50%;
+    margin-left: -$tooltip-arrow-width;
+    border-width: $tooltip-arrow-width $tooltip-arrow-width 0;
+    border-top-color: $tooltip-arrow-color;
+  }
+  &.top-left .xe-tooltip-arrow {
+    bottom: 0;
+    right: $tooltip-arrow-width;
+    margin-bottom: -$tooltip-arrow-width;
+    border-width: $tooltip-arrow-width $tooltip-arrow-width 0;
+    border-top-color: $tooltip-arrow-color;
+  }
+  &.top-right .xe-tooltip-arrow {
+    bottom: 0;
+    left: $tooltip-arrow-width;
+    margin-bottom: -$tooltip-arrow-width;
+    border-width: $tooltip-arrow-width $tooltip-arrow-width 0;
+    border-top-color: $tooltip-arrow-color;
+  }
+  &.right .xe-tooltip-arrow {
+    top: 50%;
+    left: 0;
+    margin-top: -$tooltip-arrow-width;
+    border-width: $tooltip-arrow-width $tooltip-arrow-width $tooltip-arrow-width 0;
+    border-right-color: $tooltip-arrow-color;
+  }
+  &.left .xe-tooltip-arrow {
+    top: 50%;
+    right: 0;
+    margin-top: -$tooltip-arrow-width;
+    border-width: $tooltip-arrow-width 0 $tooltip-arrow-width $tooltip-arrow-width;
+    border-left-color: $tooltip-arrow-color;
+  }
+  &.bottom .xe-tooltip-arrow {
+    top: 0;
+    left: 50%;
+    margin-left: -$tooltip-arrow-width;
+    border-width: 0 $tooltip-arrow-width $tooltip-arrow-width;
+    border-bottom-color: $tooltip-arrow-color;
+  }
+  &.bottom-left .xe-tooltip-arrow {
+    top: 0;
+    right: $tooltip-arrow-width;
+    margin-top: -$tooltip-arrow-width;
+    border-width: 0 $tooltip-arrow-width $tooltip-arrow-width;
+    border-bottom-color: $tooltip-arrow-color;
+  }
+  &.bottom-right .xe-tooltip-arrow {
+    top: 0;
+    left: $tooltip-arrow-width;
+    margin-top: -$tooltip-arrow-width;
+    border-width: 0 $tooltip-arrow-width $tooltip-arrow-width;
+    border-bottom-color: $tooltip-arrow-color;
+  }
 }

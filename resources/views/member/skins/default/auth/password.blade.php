@@ -12,23 +12,23 @@
             <legend>비밀번호</legend>
             <div class="auth-group {{--wrong--}}">
                 <label for="email" class="sr-only">이메일 주소</label>
-                <input type="text" id="email" class="xe-input-text" placeholder="이메일 주소" name="email" value="{{ $email or old('email') }}">
+                <input type="text" id="email" class="xe-form-control" placeholder="이메일 주소" name="email" value="{{ $email or old('email') }}">
                 {{--<em class="text-message">이메일을 입력하세요.</em>--}}
             </div>
             <div class="auth-group {{--wrong--}}">
                 <label for="pwd" class="sr-only">비밀번호</label>
-                <input type="password" id="pwd" class="xe-input-text" placeholder="비밀번호" name="password">
+                <input type="password" id="pwd" class="xe-form-control" placeholder="비밀번호" name="password">
                 <button class="btn-eye on" style="display:none"><i class="xi-eye"></i><i class="xi-eye-slash"></i>
                 </button>
             </div>
             <div class="auth-group {{--wrong--}}">
                 <label for="pwd2" class="sr-only">비밀번호 다시 입력</label>
-                <input type="password" id="pwd2" class="xe-input-text" placeholder="비밀번호 다시 입력" name="password_confirmation">
+                <input type="password" id="pwd2" class="xe-form-control" placeholder="비밀번호 다시 입력" name="password_confirmation">
                 <button class="btn-eye on"><i class="xi-eye"></i><i class="xi-eye-slash"></i></button>
                 {{--<em class="text-message">비밀번호가 일치하지 않습니다.</em>--}}
                 <em class="text-message normal">비밀번호는 6자리 이상이며 영문, 숫자, 특수문자를 포함하여야 합니다.</em>
             </div>
-            <button type="submit" class="xe-btn xe-btn-blue">비밀번호 변경</button>
+            <button type="submit" class="xe-btn xe-btn-primary">비밀번호 변경</button>
         </fieldset>
     </form>
 </div>

@@ -2312,6 +2312,10 @@ input[type="button"].btn-block {
   margin-left: -1px;
 }
 
+.input-group.search-group {
+  font-size: 0;
+}
+
 .input-group.search-group .input-group-btn, .input-group.search-group .form-control {
   display: inline-block;
   float: none;

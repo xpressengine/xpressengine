@@ -11,13 +11,13 @@
             <legend>비밀번호 찾기</legend>
             <div class="auth-group {{--wrong--}}">
                 <label for="email" class="sr-only">이메일 주소</label>
-                <input type="text" id="email" class="xe-input-text" placeholder="이메일 주소" name="email" value="{{ old('email') }}">
+                <input type="text" id="email" class="xe-form-control" placeholder="이메일 주소" name="email" value="{{ old('email') }}">
                 {{--<em class="text-message">이메일을 입력하세요.</em>--}}
             </div>
-            <button class="xe-btn xe-btn-blue">다음</button>
+            <button class="xe-btn xe-btn-primary">다음</button>
         </fieldset>
     </form>
-    <a href="{{ route('login') }}" class="xe-btn xe-btn-text v2">로그인으로 돌아가기</a>
+    <a href="{{ route('login') }}" class="xe-btn xe-btn-link v2">로그인으로 돌아가기</a>
 </div>
 <!-- // 비밀번호 찾기 1step-->
 

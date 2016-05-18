@@ -312,10 +312,10 @@
 
 // Large screen / wide desktop
 //** Deprecated `$screen-lg` as of v3.0.1
-$screen-lg:                  1068px;
-$screen-lg-min:              $screen-lg;
+// $screen-lg:                  1068px;
+// $screen-lg-min:              $screen-lg;
 //** Deprecated `$screen-lg-desktop` as of v3.0.1
-$screen-lg-desktop:          $screen-lg-min;
+// $screen-lg-desktop:          $screen-lg-min;
 
 // So media queries don't overlap when required, provide a maximum
 // $screen-xs-max:              ($screen-sm-min - 1)
@@ -343,9 +343,9 @@ $screen-lg-desktop:          $screen-lg-min;
 //## Define the maximum width of `.container` for different screen sizes.
 
 // Small screen / tablet
-$container-tablet:             740px;
+// $container-tablet:             740px;
 //** For `$screen-sm-min` and up.
-$container-sm:                 $container-tablet;
+// $container-sm:                 $container-tablet;
 
 // Medium screen / desktop
 // $container-desktop:            (940px + $grid-gutter-width)
@@ -353,9 +353,9 @@ $container-sm:                 $container-tablet;
 // $container-md:                 $container-desktop
 
 // Large screen / wide desktop
-$container-large-desktop:      980px;
+// $container-large-desktop:      980px;
 //** For `$screen-lg-min` and up.
-$container-lg:                 $container-large-desktop;
+// $container-lg:                 $container-large-desktop;
 
 
 //== Navbar

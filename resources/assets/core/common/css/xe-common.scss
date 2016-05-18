@@ -30,3 +30,20 @@ html {
   overflow: visible;
   clip: auto;
 }
+
+.xe-pull-right {
+  float: right !important;
+}
+.xe-pull-left {
+  float: left !important;
+}
+
+@mixin text-overflow() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.xe-ellipsis{
+  @include text-overflow;
+}

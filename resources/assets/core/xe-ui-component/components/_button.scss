@@ -1,0 +1,310 @@
+@charset "utf-8";
+/* CSS Document */
+
+@mixin button-outline-variant($color) {
+  color: $color;
+  background-image: none;
+  background-color: #fff;
+  border-color: $color;
+
+  &:focus,
+  &.focus,
+  &:active,
+  &.active,
+  .open > &.dropdown-toggle {
+    color: #fff;
+    background-color: $color;
+        border-color: $color;
+  }
+  &:hover {
+    color: #fff;
+    background-color: $color;
+        border-color: $color;
+  }
+  
+  &:active,
+  &.active,
+  .open > &.dropdown-toggle {
+    &:hover,
+    &:focus,
+    &.focus {
+      color: #fff;
+      background-color: $color;          
+    }
+  }  
+
+  &.disabled,
+  &:disabled {
+    &:focus,
+    &.focus {
+      border-color: lighten($color, 20%);
+    }
+    &:hover {
+      border-color: lighten($color, 20%);
+    }
+  }
+}
+
+.xe-btn {
+  display: inline-block;
+  margin-bottom: 0; // For input.btn
+  font-weight: $btn-font-weight;
+  text-align: center;
+  vertical-align: middle;
+  touch-action: manipulation;
+  cursor: pointer;
+  background-image: none; // Reset unusual Firefox-on-Android default style; see https://github.com/necolas/normalize.css/issues/214
+  border: 1px solid transparent;
+  white-space: nowrap;
+  @include button-size($padding-base-vertical, $padding-base-horizontal, $font-size-base, $line-height-base, $btn-border-radius-base);
+  @include button-variant($btn-default-color, $btn-default-bg, $btn-default-border);
+  @include user-select(none);
+
+  &,
+  &:active,
+  &.active {
+    &:focus,
+    &.focus {
+      @include tab-focus;
+    }
+  }
+
+  &:hover,
+  &:focus,
+  &.focus {
+    color: $btn-default-color;
+    text-decoration: none;
+  }
+
+  &:active,
+  &.active {
+    outline: 0;
+    background-image: none;    
+  }
+
+  &.disabled,
+  &[disabled],
+  fieldset[disabled] & {
+    cursor: $cursor-disabled;
+    @include opacity(.65);
+    @include box-shadow(none);
+  }
+
+  // [converter] extracted a& to a.btn
+}
+
+a.btn {
+  &.disabled,
+  fieldset[disabled] & {
+    pointer-events: none; // Future-proof disabling of clicks on `<a>` elements
+  }
+}
+
+
+// Alternate buttons
+// --------------------------------------------------
+
+.xe-btn-secondary {
+  @include button-variant($btn-secondary-color, $btn-secondary-bg, $btn-secondary-border);
+}
+.xe-btn-primary {
+  @include button-variant($btn-primary-color, $btn-primary-bg, $btn-primary-border);
+}
+// Success appears as green
+.xe-btn-success {
+  @include button-variant($btn-success-color, $btn-success-bg, $btn-success-border);
+}
+// Info appears as blue-green
+.xe-btn-positive {
+  @include button-variant($btn-positive-color, $btn-positive-bg, $btn-positive-border);
+}
+// Warning appears as orange
+.xe-btn-warning {
+  @include button-variant($btn-warning-color, $btn-warning-bg, $btn-warning-border);
+}
+// Danger and error appear as red
+.xe-btn-danger {
+  @include button-variant($btn-danger-color, $btn-danger-bg, $btn-danger-border);
+}
+
+.xe-btn-fail {
+  @include button-variant($btn-fail-color, $btn-fail-bg, $btn-fail-border);
+}
+
+.xe-btn-black {
+  @include button-variant($btn-black-color, $btn-black-bg, $btn-black-border);
+}
+
+// outline version
+.xe-btn-primary-outline {
+  @include button-outline-variant($btn-primary-outline-color);
+}
+
+.xe-btn-success-outline {
+  @include button-outline-variant($btn-success-outline-color);
+}
+
+.xe-btn-positive-outline {
+  @include button-outline-variant($btn-positive-outline-color);
+}
+
+.xe-btn-warning-outline {
+  @include button-outline-variant($btn-warning-outline-color);
+}
+
+.xe-btn-danger-outline {
+  @include button-outline-variant($btn-danger-outline-color);
+}
+
+.xe-btn-fail-outline {
+  @include button-outline-variant($btn-fail-outline-color);
+}
+
+
+// Link buttons
+// -------------------------
+
+// Make a button lopositive and behave like a link
+.xe-btn-link {
+  color: $link-color;
+  font-weight: normal;
+  border-radius: 0;
+
+  &,
+  &:active,
+  &.active,
+  &[disabled],
+  fieldset[disabled] & {
+    background-color: transparent;
+    @include box-shadow(none);
+  }
+  &,
+  &:hover,
+  &:focus,
+  &:active {
+    border-color: transparent;
+  }
+  &:hover,
+  &:focus {
+    color: $link-hover-color;
+    text-decoration: $link-hover-decoration;
+    background-color: transparent;
+  }
+  &[disabled],
+  fieldset[disabled] & {
+    &:hover,
+    &:focus {
+      color: $btn-link-disabled-color;
+      text-decoration: none;
+    }
+  }
+}
+
+
+// // Button Sizes
+// // --------------------------------------------------
+// 
+// .btn-lg {
+//   // line-height: ensure even-numbered height of button next to large input
+//   @include button-size($padding-large-vertical, $padding-large-horizontal, $font-size-large, $line-height-large, $btn-border-radius-large);
+// }
+// .btn-sm {
+//   // line-height: ensure proper height of button next to small input
+//   @include button-size($padding-small-vertical, $padding-small-horizontal, $font-size-small, $line-height-small, $btn-border-radius-small);
+// }
+// .btn-xs {
+//   @include button-size($padding-xs-vertical, $padding-xs-horizontal, $font-size-small, $line-height-small, $btn-border-radius-small);
+// }
+
+
+// Block button
+// --------------------------------------------------
+
+.xe-btn-block {
+  display: block;
+  width: 100%;
+}
+
+// Vertically space out multiple block buttons
+.xe-btn-block + .xe-btn-block {
+  margin-top: 5px;
+}
+
+// Specificity overrides
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+  &.btn-block {
+    width: 100%;
+  }
+}
+
+.xe-btn-toggle {
+  display: inline-block;
+
+  input[type=checkbox] {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    &:checked + .toggle {      
+      background-color: #6f8dff;
+      &:after {
+        left: 41px;
+        outline: none;
+      }
+      &:before{                
+        left:11px;
+        content:"ON";        
+      }
+    }
+  }
+  label {
+    font-weight: 400;
+    font-size: 13px;
+    cursor: pointer;
+    line-height: 30px;
+  }
+  .toggle {
+    position: relative;
+    display: inline-block;
+    width: 68px;
+    height: 28px;
+    background-color: #dadbde;
+    border-radius: 15px;
+    margin-right: 10px;
+    transition: background .3s ease;
+    vertical-align: middle;
+    content: "";
+    &:after {
+      display: inline-block;
+      position: relative;
+      left: 0;
+      top: 1px;
+      width: 26px;
+      height: 26px;
+      background-color: #fff;
+      border-radius: 20px;
+      border: 1px solid #e4e4e4;
+      transition: left .3s ease,background .3s ease,box-shadow .1s ease;
+      content: "";
+    }
+    &:before{
+      position: absolute;
+      right:10px;           
+      content:"OFF";
+      color:#fff;
+    }
+  }
+}
+
+@media \0screen\,screen\9 {
+  .xe-toggle-button {
+    input[type=checkbox] {
+      width: auto;
+      height: auto;
+    }
+    .toggle {
+      display: none;
+    }
+  }
+}
