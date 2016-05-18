@@ -169,6 +169,8 @@ abstract class GenericTheme extends AbstractTheme
         foreach ($config as $key => $item) {
             if($item instanceof UploadedFile) {
                 array_set($config, $key, $this->saveFile($configId, $key, $item));
+            } elseif($item === null) {
+                unset($config[$key]);
             }
         }
         return $config;
@@ -216,7 +218,7 @@ abstract class GenericTheme extends AbstractTheme
      */
     protected function makeConfigView(array $info, ConfigEntity $old)
     {
-        return uio('form', ['class' => $this->getId(), 'inputs' => $info, 'values' => $old]);
+        return uio('form', ['class' => $this->getId(), 'inputs' => $info, 'value' => $old]);
     }
 
 

@@ -141,7 +141,6 @@ class ThemeController extends Controller
 
         $inputs =  $request->except('_token');
         $inputs['_configId'] = $themeId;
-        $configTitle = $inputs['_configTitle'];
 
         // 해당 테마에게 config를 가공할 수 있는 기회를 준다.
         $config = $theme->updateSetting($inputs);
