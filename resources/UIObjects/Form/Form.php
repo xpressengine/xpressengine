@@ -28,7 +28,7 @@ class Form extends AbstractUIObject
                     $form->addClass($arg);
                     break;
                 case 'inputs':
-                    $this->appendInputs($form, $arg, array_get($args, 'values', []));
+                    $this->appendInputs($form, $arg, array_get($args, 'value', []));
                 default:
                     $form->attr($key, $arg);
                     break;
@@ -41,7 +41,18 @@ class Form extends AbstractUIObject
     private function appendInputs($form, $inputs, $values)
     {
         foreach ($inputs as $name => $arg) {
+
+            preg_match("/^([^[]+)\\[(.+)\\]$/", $name, $m);
+            if(!empty($m)) {
+                $seq = (int)$m[2];
+                $value = array_get($values, "$m[1].$seq");
+                $name = $m[1].'[]';
+            } else {
+                $value = array_get($values, $name);
+            }
+
             $arg['name'] = $name;
+
             $type = array_get($arg, '_type');
             unset($arg['_type']);
 
@@ -50,7 +61,6 @@ class Form extends AbstractUIObject
 
             $section = $this->getSection($form, $sectionName);
 
-            $value = array_get($values, $name);
             array_set($arg, 'value', $value);
 
             $uio = 'form'.ucfirst($type);
