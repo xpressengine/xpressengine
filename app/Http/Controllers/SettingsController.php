@@ -79,12 +79,6 @@ class SettingsController extends Controller
         $indexInstance = $request->get('indexInstance');
         $siteHandler->setHomeInstanceId($indexInstance);
 
-        // resolve theme
-        $theme = $request->only(['theme_desktop', 'theme_mobile']);
-        $theme = ['desktop' => $theme['theme_desktop'], 'mobile' => $theme['theme_mobile']];
-        $themeHandler->setSiteTheme($theme);
-
-
         return \Redirect::back()->with('alert', ['type' => 'success', 'message' => '저장되었습니다.']);
     }
 
