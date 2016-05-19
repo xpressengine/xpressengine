@@ -192,20 +192,20 @@ class EditorHandler
         return $this->get($instanceId)->setArguments($args)->render();
     }
     
-    public function getPartsAll()
+    public function getToolAll()
     {
-        return $this->register->get('editorparts');
+        return $this->register->get('editortool');
     }
     
-    public function getParts($partsId, $instanceId)
+    public function getTool($toolId, $instanceId)
     {
-        foreach ($this->getPartsAll() as $id => $class) {
-            if ($partsId === $id) {
-                /** @var AbstractParts $parts */
-                $parts = $this->container->make($class);
-                $parts->setInstanceId($instanceId);
+        foreach ($this->getToolAll() as $id => $class) {
+            if ($toolId === $id) {
+                /** @var AbstractTool $tool */
+                $tool = $this->container->make($class);
+                $tool->setInstanceId($instanceId);
 
-                return $parts;
+                return $tool;
             }
         }
 

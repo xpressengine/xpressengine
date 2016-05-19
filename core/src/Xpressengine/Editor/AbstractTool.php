@@ -4,7 +4,7 @@ namespace Xpressengine\Editor;
 use Xpressengine\Plugin\ComponentInterface;
 use Xpressengine\Plugin\ComponentTrait;
 
-abstract class AbstractParts implements ComponentInterface
+abstract class AbstractTool implements ComponentInterface
 {
     use ComponentTrait;
 
@@ -25,4 +25,9 @@ abstract class AbstractParts implements ComponentInterface
     abstract public function getName();
 
     abstract public function getIcon();
+
+    public function getOptions()
+    {
+        return [];
+    }
 }
