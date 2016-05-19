@@ -13,10 +13,10 @@
  */
 namespace Xpressengine\Editor;
 
-use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Config\ConfigManager;
-use Xpressengine\Plugin\PluginRegister;
 use Xpressengine\Editor\Exceptions\EditorNotFoundException;
+use Xpressengine\Plugin\PluginRegister;
+use Illuminate\Container\Container;
 
 /**
  * EditorHandler
@@ -40,6 +40,11 @@ class EditorHandler
     protected $configManager;
 
     /**
+     * @var Container
+     */
+    protected $container;
+
+    /**
      * @var string
      */
     protected $defaultEditorId;
@@ -49,10 +54,11 @@ class EditorHandler
      */
     const CONFIG_NAME = 'editors';
 
-    public function __construct(PluginRegister $register, ConfigManager $configManager)
+    public function __construct(PluginRegister $register, ConfigManager $configManager, Container $container)
     {
         $this->register = $register;
         $this->configManager = $configManager;
+        $this->container = $container;
     }
 
     /**
@@ -92,55 +98,59 @@ class EditorHandler
      * @param $editorId
      * @param $config
      */
-    public function setInstance($instanceId, $editorId, ConfigEntity $config)
+    public function setInstance($instanceId, $editorId/*, ConfigEntity $config */)
     {
-        $this->configManager->set(self::CONFIG_NAME, [$instanceId, $editorId]);
+        if ($editorId !== null && !$this->register->get($editorId)) {
+            throw new EditorNotFoundException;
+        }
 
-        $component = $this->register->get($editorId);
-        /**
-         * @var AbstractEditor $editor
-         */
-        $editor = new $component;
-        $editor->setConfig($instanceId, $config);
+        $this->configManager->set(self::CONFIG_NAME, [$instanceId => $editorId]);
+
+//        $component = $this->register->get($editorId);
+//        /**
+//         * @var AbstractEditor $editor
+//         */
+//        $editor = new $component;
+//        $editor->setConfig($instanceId, $config);
     }
 
-    /**
-     * get editor instance
-     *
-     * @param $instanceId
-     * @return AbstractEditor
-     * @deprecated
-     */
-    public function getInstance($instanceId)
-    {
-        $editorId = $this->getEditorId($instanceId);
+//    /**
+//     * get editor instance
+//     *
+//     * @param $instanceId
+//     * @return AbstractEditor
+//     * @deprecated
+//     */
+//    public function getInstance($instanceId)
+//    {
+//        $editorId = $this->getEditorId($instanceId);
+//
+//        $component = $this->register->get($editorId);
+//        /**
+//         * @var AbstractEditor $editor
+//         */
+//        $editor = new $component;
+//        $editor->setInstanceId($instanceId);
+//
+//        return $editor;
+//    }
 
-        $component = $this->register->get($editorId);
-        /**
-         * @var AbstractEditor $editor
-         */
-        $editor = new $component;
-        $editor->setInstanceId($instanceId);
-
-        return $editor;
-    }
-
-    public function removeInstance($instanceId)
-    {
-        $editorId = $this->getEditorId($instanceId);
-
-        $component = $this->register->get($editorId);
-        /**
-         * @var AbstractEditor $editor
-         */
-        $editor = new $component;
-        $editor->removeConfig($instanceId);
-
-        $config = $this->configManager->get(self::CONFIG_NAME);
-        $arr = $config->getPureAll();
-        unset($arr[$instanceId]);
-        $this->configManager->put(self::CONFIG_NAME, $arr);
-    }
+//    public function removeInstance($instanceId)
+//    {
+//        $editorId = $this->getEditorId($instanceId);
+//
+//        $component = $this->register->get($editorId);
+//        /**
+//         * @var AbstractEditor $editor
+//         */
+//        $editor = new $component;
+//        $editor->removeConfig($instanceId);
+//
+//        $config = $this->configManager->get(self::CONFIG_NAME);
+//        $arr = $config->getPureAll();
+//        unset($arr[$instanceId]);
+//        $this->configManager->put(self::CONFIG_NAME, $arr);
+//    }
 
     public function getEditorId($instanceId)
     {
@@ -165,16 +175,17 @@ class EditorHandler
         /**
          * @var AbstractEditor $editor
          */
-        $editor = new $component;
+//        $editor = new $component;
+        $editor = $this->container->make($component);
         $editor->setInstanceId($instanceId);
 
         return $editor;
     }
 
-    public function getByEditorId($editorId)
-    {
-
-    }
+//    public function getByEditorId($editorId)
+//    {
+//
+//    }
 
     public function render($instanceId, $args)
     {
@@ -184,5 +195,20 @@ class EditorHandler
     public function getPartsAll()
     {
         return $this->register->get('editorparts');
+    }
+    
+    public function getParts($partsId, $instanceId)
+    {
+        foreach ($this->getPartsAll() as $id => $class) {
+            if ($partsId === $id) {
+                /** @var AbstractParts $parts */
+                $parts = $this->container->make($class);
+                $parts->setInstanceId($instanceId);
+
+                return $parts;
+            }
+        }
+
+        return null;
     }
 }

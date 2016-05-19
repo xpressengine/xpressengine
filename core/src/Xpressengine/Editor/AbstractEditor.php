@@ -37,6 +37,9 @@ abstract class AbstractEditor implements ComponentInterface, Renderable
 
     protected static $configID = null;
 
+    /**
+     * @var ConfigEntity|null
+     */
     protected $config;
 
     protected $arguments = [];
@@ -77,44 +80,64 @@ abstract class AbstractEditor implements ComponentInterface, Renderable
     public function setInstanceId($instanceId)
     {
         $this->instanceId = $instanceId;
+
+        $this->config = $this->resolveConfig($instanceId);
     }
+
+    protected static $resolver;
+
+    public static function setConfigResolver(callable $resolver)
+    {
+        static::$resolver = $resolver;
+    }
+
+    protected function resolveConfig($instanceId)
+    {
+        if (!static::$resolver) {
+            return null;
+        }
+
+        return call_user_func(static::$resolver, $this->getConfigKey($instanceId));
+    }
+
+    protected function getConfigKey($instanceId)
+    {
+        return $this->getId() . '.' . $instanceId;
+    }
+
+
+
 
     public function setArguments($arguments)
     {
         $this->arguments = $arguments;
         return $this;
     }
-    /**
-     * 설정 등록
-     *
-     * @param string       $instanceId editor instance id
-     * @param ConfigEntity $config     config
-     * @return void
-     */
-    abstract public function setConfig($instanceId, ConfigEntity $config);
 
-    /**
-     * 설정 반환
-     *
-     * @param string $instanceId editor instance id
-     * @return mixed
-     */
-    abstract public function getConfig($instanceId);
-
-    /**
-     * 설정 삭제
-     *
-     * @param string $instanceId editor instance id
-     * @return void
-     */
-    abstract public function removeConfig($instanceId);
-
-    /**
-     * 에디터 출력
-     *
-     * @return Renderable|string
-     */
-    abstract public function render();
+//    /**
+//     * 설정 등록
+//     *
+//     * @param string       $instanceId editor instance id
+//     * @param ConfigEntity $config     config
+//     * @return void
+//     */
+//    abstract public function setConfig($instanceId, ConfigEntity $config);
+//
+//    /**
+//     * 설정 반환
+//     *
+//     * @param string $instanceId editor instance id
+//     * @return mixed
+//     */
+//    abstract public function getConfig($instanceId);
+//
+//    /**
+//     * 설정 삭제
+//     *
+//     * @param string $instanceId editor instance id
+//     * @return void
+//     */
+//    abstract public function removeConfig($instanceId);
 
     /**
      * 에디터로 등록된 내용 출력

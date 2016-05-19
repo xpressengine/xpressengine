@@ -1,19 +1,31 @@
 {{--{!! $settingView !!}--}}
 
 
-
-<div class="form-group">
-    <div>
-        <label>Editor 선택</label>
-        <a href="#" class="pull-right __xe_btn_go_setting"><i class="xi-cog"></i></a>
-    </div>
-    <select class="form-control" name="editorId">
-        <option value="">선택하세요</option>
-        @foreach($editors as $id => $class)
-            <option value="{{ $id }}" data-url="{{ $class::getInstanceSettingURI($instanceId) }}">{{ $class::getTitle() }}</option>
-        @endforeach
-    </select>
+<div class="panel">
+    <form method="post" action="{{ route('settings.editor.setting', $instanceId) }}">
+        {{ csrf_field() }}
+        <div class="panel-body">
+            <div class="form-group">
+                <div>
+                    <label>Editor 선택</label>
+                    <a href="#" class="pull-right __xe_btn_go_setting"><i class="xi-cog"></i></a>
+                </div>
+                <select class="form-control" name="editorId">
+                    <option value="">선택하세요</option>
+                    @foreach($editors as $id => $class)
+                        <option value="{{ $id }}" data-url="{{ $class::getInstanceSettingURI($instanceId) }}" {{ $id == $selected ? 'selected' : '' }}>{{ $class::getTitle() }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <div class="pull-right">
+                <button type="submit" class="btn btn-primary"><i class="xi-download"></i>저장</button>
+            </div>
+        </div>
+    </form>
 </div>
+
 {{--<div class="form-group">--}}
     {{--<div class="well">--}}
         {{--<label>부가기능</label>--}}

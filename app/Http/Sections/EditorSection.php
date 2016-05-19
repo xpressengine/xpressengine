@@ -1,16 +1,24 @@
 <?php
-namespace App\Sections;
+namespace App\Http\Sections;
 
 use View;
 use Xpressengine\Editor\EditorHandler;
 
-class EditorSection
+class EditorSection extends Section
 {
-    public function __construct()
+    protected $instanceId;
+
+    public function __construct($instanceId)
     {
+        $this->instanceId = $instanceId;
     }
 
-    public function setting($instanceId)
+    /**
+     * Get the evaluated contents of the object.
+     *
+     * @return string
+     */
+    public function render()
     {
         /**
          * @var EditorHandler $handler
@@ -24,12 +32,14 @@ class EditorSection
 //        ]);
 
         $editors = $handler->getAll();
+        $selected = $handler->getEditorId($this->instanceId);
 
 //        $parts = $handler->getPartsAll();
 
         return view('editor.section', [
-            'instanceId' => $instanceId,
+            'instanceId' => $this->instanceId,
             'editors' => $editors,
+            'selected' => $selected,
 //            'parts' => $parts,
         ]);
     }

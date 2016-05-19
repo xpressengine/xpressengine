@@ -2,9 +2,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Xpressengine\Editor\ConfigHandler;
+use Xpressengine\Editor\AbstractEditor;
 use Xpressengine\Editor\EditorHandler;
-use Xpressengine\Editor\EditorInstanceStore;
 
 class EditorServiceProvider extends ServiceProvider
 {
@@ -17,6 +16,18 @@ class EditorServiceProvider extends ServiceProvider
     protected $defer = false;
 
     /**
+     * Bootstrap the application events.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        AbstractEditor::setConfigResolver(function ($key) {
+            return $this->app['xe.config']->get($key);
+        });
+    }
+
+    /**
      * Register the service provider.
      *
      * @return void
@@ -24,7 +35,7 @@ class EditorServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(
-            'xe.editor',
+            [EditorHandler::class => 'xe.editor'],
             function ($app) {
                 $editorHandler = $app['xe.interception']->proxy(EditorHandler::class, 'XeEditor');
                 /**
@@ -32,13 +43,13 @@ class EditorServiceProvider extends ServiceProvider
                  */
                 $editorHandler = new $editorHandler(
                     $app['xe.pluginRegister'],
-                    app('xe.config')
+                    $app['xe.config'],
+                    $app
                 );
                 $editorHandler->setDefaultEditorId($app['config']->get('xe.editor.default'));
                 return $editorHandler;
             }
         );
-        $this->app->bind(editorHandler::class, 'xe.editor');
     }
 
     /**
@@ -48,6 +59,6 @@ class EditorServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return array();
+        return array('xe.editor');
     }
 }
