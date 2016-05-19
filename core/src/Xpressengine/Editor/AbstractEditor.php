@@ -44,25 +44,7 @@ abstract class AbstractEditor implements ComponentInterface, Renderable
 
     protected $arguments = [];
 
-    /**
-     * 에디터 이름 반환
-     *
-     * @return string
-     */
-    public static function getTitle()
-    {
-        return static::getComponentInfo('name');
-    }
-
-    /**
-     * 에디터 설명 반환
-     *
-     * @return string
-     */
-    public static function getDescription()
-    {
-        return static::getComponentInfo('description');
-    }
+    protected static $resolver;
 
     /**
      * 에디터 스크린샷 반환
@@ -84,7 +66,12 @@ abstract class AbstractEditor implements ComponentInterface, Renderable
         $this->config = $this->resolveConfig($instanceId);
     }
 
-    protected static $resolver;
+    public function setArguments($arguments)
+    {
+        $this->arguments = $arguments;
+
+        return $this;
+    }
 
     public static function setConfigResolver(callable $resolver)
     {
@@ -105,39 +92,7 @@ abstract class AbstractEditor implements ComponentInterface, Renderable
         return $this->getId() . '.' . $instanceId;
     }
 
-
-
-
-    public function setArguments($arguments)
-    {
-        $this->arguments = $arguments;
-        return $this;
-    }
-
-//    /**
-//     * 설정 등록
-//     *
-//     * @param string       $instanceId editor instance id
-//     * @param ConfigEntity $config     config
-//     * @return void
-//     */
-//    abstract public function setConfig($instanceId, ConfigEntity $config);
-//
-//    /**
-//     * 설정 반환
-//     *
-//     * @param string $instanceId editor instance id
-//     * @return mixed
-//     */
-//    abstract public function getConfig($instanceId);
-//
-//    /**
-//     * 설정 삭제
-//     *
-//     * @param string $instanceId editor instance id
-//     * @return void
-//     */
-//    abstract public function removeConfig($instanceId);
+    abstract public function getName();
 
     /**
      * 에디터로 등록된 내용 출력
@@ -146,21 +101,7 @@ abstract class AbstractEditor implements ComponentInterface, Renderable
      * @return string
      */
     abstract public function contentsCompile($contents);
-
-    /**
-     * 에디터 관리자 폼 출력
-     *
-     * @param array $config editor config
-     *
-     * @return string|Renderable
-     *
-     * @deprecated 
-     */
-    public static function getSettingView($config = [])
-    {
-        return '';
-    }
-
+    
     public static function getInstanceSettingURI($instanceId)
     {
         return null;

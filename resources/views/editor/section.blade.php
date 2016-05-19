@@ -13,7 +13,7 @@
                 <select class="form-control" name="editorId">
                     <option value="">선택하세요</option>
                     @foreach($editors as $id => $class)
-                        <option value="{{ $id }}" data-url="{{ $class::getInstanceSettingURI($instanceId) }}" {{ $id == $selected ? 'selected' : '' }}>{{ $class::getTitle() }}</option>
+                        <option value="{{ $id }}" data-url="{{ $class::getInstanceSettingURI($instanceId) }}" {{ $id == $selected ? 'selected' : '' }}>{{ $class::getComponentInfo('name') }}</option>
                     @endforeach
                 </select>
             </div>
