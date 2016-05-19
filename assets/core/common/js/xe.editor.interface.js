@@ -14,11 +14,24 @@
         editorSet = {},
         editorOptionSet = {};
 
-    var instanceObj = function(editorName, sel, options) {
+    var instanceObj = function(editorName, sel, editorOptions, authOptions, partsOptions) {
+
+        // this.editorOptions = editorOptions;
+        // this.authOptions = authOptions;
+        // this.partsOptions = partsOptions;
+
+        var _options = {
+            editorOptions: editorOptions,
+            authOptions: authOptions,
+            partsOptions: partsOptions
+        };
+
         this.editorName = editorName;
         this.selector = sel;
-        this.options = options;
         this.props = {};
+        this.getOptions = function() {
+            return _options;
+        }
 
     };
 
@@ -65,11 +78,19 @@
     Editor.prototype = {
         configs: {},
         interfaces: {},
-        create: function(sel, options) {
-            var options = $.extend(this.configs, options);
+        create: function(sel, editorOptions, authOptions, partsOptions) {
+            var editorOptions = editorOptions || {},
+                authOptions = authOptions || {},
+                partsOptions = partsOptions || {};
 
-            this.editorList[sel] = new instanceObj(this.name, sel, options);
-            this.interfaces.initialize.call(this.editorList[sel], sel, options);
+            var editorOptions = $.extend(this.configs || {}, editorOptions);
+
+            if(!sel) {
+                console.error('[XEeditor fn:create] invalid editor id. (id=' + sel + ')');
+            }
+
+            this.editorList[sel] = new instanceObj(this.name, sel, editorOptions, authOptions, partsOptions);
+            this.interfaces.initialize.call(this.editorList[sel], sel, editorOptions, authOptions, partsOptions);
 
             if(this.interfaces.hasOwnProperty('components') && this.interfaces.components.length > 0) {
                 this.interfaces.addComponents.call(this.editorList[sel], this.interfaces.components);
