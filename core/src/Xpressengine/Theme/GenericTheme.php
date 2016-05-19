@@ -265,7 +265,7 @@ abstract class GenericTheme extends AbstractTheme
     }
 
     /**
-     * 테마의 asset 파일 주소(url)를 반환한다.
+     * 테마의 asset 파일 주소(url)를 반환한다. 템플릿 파일 작성시 편의를 위해 사용한다.
      *
      * @param string $path   path가 주어질 경우 주어진 파일의 URL을 반환한다. path는 테마의 assets 디렉토리 내에서의 상대 경로이어야 한다.
      * @param string $secure https 여부
@@ -278,4 +278,16 @@ abstract class GenericTheme extends AbstractTheme
         return asset($path, $secure);
     }
 
+    /**
+     * view name을 반환한다. 템플릿 파일 작성시 편의를 위해 사용한다.
+     *
+     * @param string $view
+     *
+     * @return string
+     */
+    public static function view($view)
+    {
+        $view = str_replace('/','.', static::$path).".views.$view";
+        return $view;
+    }
 }
