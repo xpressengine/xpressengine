@@ -40,11 +40,6 @@ abstract class GenericTheme extends AbstractTheme
     protected static $info = null;
 
     /**
-     * @var string
-     */
-    protected static $viewNamespace = '_theme';
-
-    /**
      * 테마가 desktop 버전을 지원하는지 조사한다.
      *
      * @return bool desktop 버전을 지원할 경우 true
@@ -102,11 +97,10 @@ abstract class GenericTheme extends AbstractTheme
     {
         $config = $this->setting();
 
-        $this->registerViewNamespace();
-
         $theme = static::class;
 
-        $view = $this->viewname('view', 'theme');
+        $view = $this->view($this->info('view', 'theme'));
+
         return static::$handler->getViewFactory()->make($view, compact('config', 'theme'));
     }
 
@@ -132,7 +126,7 @@ abstract class GenericTheme extends AbstractTheme
     }
 
     /**
-     * return editConfigView
+     * return content of setting page
      *
      * @param ConfigEntity $config
      *
@@ -143,12 +137,10 @@ abstract class GenericTheme extends AbstractTheme
         if ($config === null) {
             $config = $this->setting();
         }
-        $view = $this->info('setting');
-
-        $this->registerViewNamespace();
+        $view = $this->info('setting', 'setting');
 
         if (is_string($view)) {
-            return static::$handler->getViewFactory()->make($this->viewname($view, 'config'), compact('config'));
+            return static::$handler->getViewFactory()->make($this->view($view), compact('config'));
         } elseif (is_array($view)) {
             return $this->makeConfigView($view, $config);
         }
@@ -176,32 +168,38 @@ abstract class GenericTheme extends AbstractTheme
         return $config;
     }
 
+    /**
+     * setting 과정에서 upload되는 파일을 저장한다.
+     *
+     * @param              $configId
+     * @param              $key
+     * @param UploadedFile $file
+     *
+     * @return array
+     */
     protected function saveFile($configId, $key, UploadedFile $file)
     {
         $oldSetting = $this->setting();
         $oldFileId = $oldSetting->get("$key.id");
 
-        $storage = app('xe.storage');
-
         // remove old file
         if($oldFileId !== null) {
             $oldFile = File::find($oldFileId);
             if ($oldFile) {
-                $storage->remove($oldFile);
+                app('xe.storage')->remove($oldFile);
             }
         }
 
         // save new file
-        $file = $storage->upload($file, $configId, null, 'theme');
+        $file = app('xe.storage')->upload($file, $configId, null, 'theme');
         $saved = [
             'id'=>$file->id,
             'filename'=>$file->clientname
         ];
 
-        $media = app('xe.media');
         $mediaFile = null;
-        if ($media->is($file)) {
-            $mediaFile = $media->make($file);
+        if (app('xe.media')->is($file)) {
+            $mediaFile = app('xe.media')->make($file);
             $saved['path'] = $mediaFile->url();
         }
 
@@ -235,33 +233,6 @@ abstract class GenericTheme extends AbstractTheme
             $this->config = $config;
         }
         return $this->config;
-    }
-
-    /**
-     * view
-     *
-     * @param        $name
-     * @param string $default
-     *
-     * @return string
-     */
-    protected function viewname($name, $default = '')
-    {
-        return static::$viewNamespace.'::'.array_get($this->info(), $name, $default);
-    }
-
-    /**
-     * registerViewNamespace
-     *
-     * @return void
-     */
-    protected function registerViewNamespace()
-    {
-        // register '_theme::' view namespace
-        static::$handler->getViewFactory()->addNamespace(
-            static::$viewNamespace,
-            base_path($this->getPath().DIRECTORY_SEPARATOR.'views')
-        );
     }
 
     /**
