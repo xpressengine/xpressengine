@@ -609,10 +609,6 @@ if (typeof exports !== 'undefined') {
 
 System.amdDefine('xe.component', [], function() {
 
-  var loadedCSS = {
-    'xe.modal': false
-  };
-
   return {
     timeago: timeago
   };
@@ -713,114 +709,199 @@ System.amdDefine('xe.component', [], function() {
     'use strict';
 
     //define시 필수 구현되어야 하는 object
-    var requireOptions = [
-            'name', 'editorType', 'editorRoot',
-            'getContents', 'setContents',
-            'initialize'
-        ],
+    var requireOptions = {
+            editorSettings: [
+                'name'
+            ],
+            interfaces: [
+                'initialize',
+                'getContents', 'setContents', 'addContents'
+            ]
+        },
         editorSet = {},
-        editorType = [],
         editorOptionSet = {};
 
-    var instanceObj = function(editorName, sel, options) {
+    var instanceObj = function(editorName, sel, editorOptions, authOptions, partsOptions) {
+
+        // this.editorOptions = editorOptions;
+        // this.authOptions = authOptions;
+        // this.partsOptions = partsOptions;
+
+        var _options = {
+            editorOptions: editorOptions,
+            authOptions: authOptions,
+            partsOptions: partsOptions
+        };
+
         this.editorName = editorName;
         this.selector = sel;
-        this.options = options;
+        this.props = {};
+        this.getOptions = function() {
+            return _options;
+        }
 
     };
 
     instanceObj.prototype = {
-        props: {},
         getInstance: function() {
             return editorSet[this.editorName].editorList[this.selector];
         },
         getContents: function() {
-            return editorSet[this.editorName].getContents.call(this.getInstance());
+            return editorSet[this.editorName].interfaces.getContents.call(this.getInstance());
         },
-        setContents: function() {
-            editorSet[this.editorName].setContents.bind(this.getInstance());
+        setContents: function(text) {
+            editorSet[this.editorName].interfaces.setContents.call(this.getInstance(), text);
+        },
+        addContents: function(text) {
+            editorSet[this.editorName].interfaces.addContents.call(this.getInstance(), text);
         },
         addProps: function(obj) {
             for(var o in obj) {
-                //this['props'][o] = obj[o];
                 this.getInstance().props[o] = obj[o];
             }
+        },
+        addComponents: function(components) {
+            editorSet[this.editorName].interfaces.addComponents.call(this.getInstance(), components);
         }
     };
 
-    var Editor = function(options) {
-        this.name = options.name;
-        this.editorType = options.editorType;
-        this.editor = options.editor;
-        this.editorList = {};
+    var Editor = function(editorSettings, interfaces) {
+        this.name = editorSettings.name;
+        this.configs = editorSettings.configs;
+        this.editorList = [];
 
-        for(var o in options) {
-            this[o] = options[o];
+        if(editorSettings.hasOwnProperty('plugins')
+            && editorSettings.plugins instanceof Array
+            && editorSettings.plugins.length > 0
+            && editorSettings.hasOwnProperty('addPlugins')) {
+            editorSettings.addPlugins(editorSettings.plugins);
+        }
+
+        for(var o in interfaces) {
+            this.interfaces[o] = interfaces[o];
         }
     };
 
     Editor.prototype = {
-        create: function(sel, options) {
-            this.editorList[sel] = new instanceObj(this.name, sel, options);
-            this.initialize.call(this.editorList[sel], sel, options);
+        configs: {},
+        interfaces: {},
+        create: function(sel, editorOptions, authOptions, partsOptions) {
+            var editorOptions = editorOptions || {},
+                authOptions = authOptions || {},
+                partsOptions = partsOptions || {};
+
+            var editorOptions = $.extend(this.configs || {}, editorOptions);
+
+            if(!sel) {
+                console.error('[XEeditor fn:create] invalid editor id. (id=' + sel + ')');
+            }
+
+            this.editorList[sel] = new instanceObj(this.name, sel, editorOptions, authOptions, partsOptions);
+            this.interfaces.initialize.call(this.editorList[sel], sel, editorOptions, authOptions, partsOptions);
+
+            if(this.interfaces.hasOwnProperty('components') && this.interfaces.components.length > 0) {
+                this.interfaces.addComponents.call(this.editorList[sel], this.interfaces.components);
+            }
 
             return this.editorList[sel];
-        },
-        getContents: function() {
-            console.error('Editor.getContents');
-        },
-        setContents: function() {
-            console.error('Editor.setContents');
         }
     };
 
     var XEeditor = {
-        define: function(options) {
-            if(this.isValidOptions(options)) {
-                editorOptionSet[options.name] = options;
-                editorSet[options.name] = new Editor(options);
+        define: function(obj) {
+            var editorSettings = obj.editorSettings,
+                interfaces = obj.interfaces;
+
+            if(this.isValidOptions(editorSettings, interfaces)) {
+                editorOptionSet[editorSettings.name] = editorSettings;
+                editorSet[editorSettings.name] = new Editor(editorSettings, interfaces);
             }
         },
-        isValidOptions: function(options) {
+        isValidOptions: function(editorSettings, interfaces) {
             var valid = true;
-            for(var option in requireOptions) {
-                if(!options.hasOwnProperty(requireOptions[option])) {
-                    console.error('구현 필요 [fn:' + requireOptions[option] + ']');
+            for(var eSettings in requireOptions.editorSettings) {
+                if(!editorSettings.hasOwnProperty(requireOptions.editorSettings[eSettings])) {
+                    console.error('구현 필요 [editorSettings.' + requireOptions.editorSettings[eSettings] + ']');
                     valid = false;
                 }
             }
 
-            if(!!editorSet.hasOwnProperty(options.name)) {
-                console.error('등록된 에디터 있음 [' + options.name + ']');
+            for(var eInterface in requireOptions.interfaces) {
+                if(!interfaces.hasOwnProperty(requireOptions.interfaces[eInterface])) {
+                    console.error('구현 필요 [' + requireOptions.interfaces[eInterface] + ']');
+                    valid = false;
+                }
+            }
+
+            if(editorSettings.hasOwnProperty('plugins')
+                && editorSettings.plugins instanceof Array
+                && editorSettings.plugins.length > 0
+                && !editorSettings.hasOwnProperty('addPlugins')) {
+                console.error('구현 필요 [fn:addPlugins]');
+            }
+
+            if(interfaces.hasOwnProperty('components')
+                && interfaces.components instanceof Array
+                && interfaces.components.length > 0
+                && !interfaces.hasOwnProperty('addComponents')) {
+                console.error('구현 필요 [fn:addComponents]');
+            }
+
+            if(!!editorSet.hasOwnProperty(editorSettings.name)) {
+                console.error('등록된 에디터 있음 [' + editorSettings.name + ']');
                 valid = false;
             }
 
-            if(!valid) {
-                return false;
-            }
-
-            return true;
+            return (!valid)? false : true;
         },
         getEditor: function(name) {
             return editorSet[name];
-        },
-        setEditorType: function(types) {
-
-            if(types instanceof Array) {
-
-            }else if(typeof types === 'string'){
-
-            }
-
         }
     };
 
     exports.XEeditor = XEeditor;
 })(window);
 
-
-
-
+// //tinyMCE
+// XEeditor.define({
+//     name: 'editor.tinyMCE',
+//     initialize: function (selector, options) {
+//         tinymce.init({
+//             selector: selector,
+//             setup: function (editor) {
+//                 editor.on('keyup', function (e) {
+//
+//                 });
+//             }
+//         });
+//
+//         this.addProps({
+//             selector: selector
+//             , options: options
+//             , id: selector.replace('#', '')
+//         });
+//     },
+//     getContents: function () {
+//         return tinymce.get(this.props.id).getContent();
+//     },
+//     setContents: function (text) {
+//         tinymce.get(this.props.id).setContent(text);
+//     },
+//     addContents: function (text) {
+//         tinymce.get(this.props.id).execCommand('mceInsertContent', false, text);
+//     }
+// });
+//
+//
+// $(function () {
+//     var ckEditor = XEeditor.getEditor('editor.ckeditor');
+//     var tinyEditor = XEeditor.getEditor('editor.tinyMCE');
+//
+//     console.log(xe3CkEditorConfig.configs);
+//
+//     window.editor11 = ckEditor.create('editor1', xe3CkEditorConfig.configs);
+//
+// });
 //xe.lang.js
 System.amdDefine('xe.lang', ['translator'], function(Translator) {
   'use strict';
@@ -1047,7 +1128,7 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
   };
 
   function start(context) {
-    this.cssLoad();``
+    this.cssLoad();
 
     var $context = $(context);
     if ($context.context === undefined) {
@@ -1482,7 +1563,7 @@ System.amdDefine('xe.request', ['xe.progress'], function(Progress) {
   }).ajaxComplete(function(event, jqxhr, settings) {
     Progress.done(settings.context == undefined ? $('body') : settings.context);
   }).ajaxError(function(event, jqxhr, settings, thrownError) {
-    window.error(jqxhr, settings, thrownError);
+    error(jqxhr, settings, thrownError);
   });
 
   return {
@@ -1535,6 +1616,7 @@ System.amdDefine('xe.request', ['xe.progress'], function(Progress) {
     setup: setup,
     configure: configure,
     cssLoad: cssLoad,
+    jsLoad: jsLoad,
     toast: toast,
     toastByStatus: toastByStatus,
     formError: formError,
@@ -1542,7 +1624,7 @@ System.amdDefine('xe.request', ['xe.progress'], function(Progress) {
     validate: validate,
     getLocale: getLocale,
     getDefaultLocale: getDefaultLocale,
-
+    
     options: {},
 
     Lang: '',
@@ -1592,9 +1674,7 @@ System.amdDefine('xe.request', ['xe.progress'], function(Progress) {
           url = undefined;
         }
 
-        $.ajaxSetup(options);
-        var jqXHR = $.ajax(url, options);
-        return jqXHR;
+        return $.ajax(url, options);
       };
 
       d.resolve();
@@ -1627,7 +1707,15 @@ System.amdDefine('xe.request', ['xe.progress'], function(Progress) {
 
   // @DEPRECATED
   function cssLoad(url) {
-    $('head').append($('<link>').attr('rel', 'stylesheet').attr('href', url));
+    var $css = $('<link>', {rel: 'stylesheet', type: 'text/css', href: url});
+
+    $('head').append($css);
+  }
+
+  function jsLoad(url) {
+    var $js = $('<script>', {id: 'jsload', type: 'text/javascript', src: url});
+
+    $('head').append($js);
   }
 
   function toast(type, message) {
@@ -1662,17 +1750,6 @@ System.amdDefine('xe.request', ['xe.progress'], function(Progress) {
       validator.validate($form);
     });
   }
-  //
-  // function import(name, parentName, parentAddress) {
-  //   if(_.isArray(name)) {
-  //     var modules = _.map(name, function(module){
-  //       return System.import(module);
-  //     });
-  //     return Promise.all(modules);
-  //   } else {
-  //     return System.import(name);
-  //   }
-  // }
 
   function getLocale() {
     return _options.locale;

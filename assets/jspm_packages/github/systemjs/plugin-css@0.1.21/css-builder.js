@@ -1,5 +1,6 @@
 // it's bad to do this in general, as code is now heavily environment specific
 var fs = System._nodeRequire('fs');
+var CleanCSS = require('./clean-css.js');
 
 function escape(source) {
   return source
@@ -42,7 +43,6 @@ exports.listAssets = function(loads, compileOpts, outputOpts) {
 exports.bundle = function(loads, compileOpts, outputOpts) {
   var loader = this;
 
-  return loader['import']('clean-css').then(function(CleanCSS) {
     // SystemJS Builder 0.14 will write the stubs for use, we detect by the 3 argument over 2 argument bundle call
     var writeStubs = typeof outputOpts == 'undefined';
     outputOpts = outputOpts || compileOpts;
@@ -90,9 +90,4 @@ exports.bundle = function(loads, compileOpts, outputOpts) {
     }
 
     return [stubDefines, cssInject, '("' + escape(cssOutput) + '");'].join('\n');
-  }, function(err) {
-    if (err.toString().indexOf('ENOENT') != -1)
-      throw new Error('Install Clean CSS via `jspm install npm:clean-css --dev` for CSS build support. Set System.buildCSS = false to skip CSS builds.');
-    throw err;
-  });
 };

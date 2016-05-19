@@ -95,7 +95,7 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
   };
 
   function start(context) {
-    this.cssLoad();``
+    this.cssLoad();
 
     var $context = $(context);
     if ($context.context === undefined) {

@@ -6,12 +6,13 @@ use App\Http\Controllers\Controller;
 use Auth;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use XePresenter;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use XeTheme;
 use XeDB;
 use Xpressengine\Skin\SkinHandler;
-use Xpressengine\Support\Exceptions\HttpXpressengineException;
 use Xpressengine\Support\Exceptions\InvalidArgumentException;
 use Xpressengine\User\EmailBroker;
 use Xpressengine\User\Exceptions\DisplayNameAlreadyExistsException;
@@ -225,9 +226,7 @@ class UserController extends Controller
         try {
             $this->handler->validatePassword($password);
         } catch(Exception $e) {
-            $e = new HttpXpressengineException();
-            $e->setMessage('비밀번호 보안수준을 만족하지 못했습니다.');
-            throw $e;
+            throw new HttpException(Response::HTTP_FORBIDDEN, '비밀번호 보안수준을 만족하지 못했습니다.', $e);
         }
 
         XeDB::beginTransaction();
@@ -240,7 +239,6 @@ class UserController extends Controller
             throw $e;
         }
         XeDB::commit();
-
 
         return XePresenter::makeApi(
             ['type' => 'success', 'result' => $result, 'message' => $message, 'target' => $target]

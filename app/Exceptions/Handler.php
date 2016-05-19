@@ -53,17 +53,16 @@ class Handler extends ExceptionHandler
     {
         $responseException = null;
 
-
         /*
          * make responseException
         */
         // token mismatch
         if ($e instanceof TokenMismatchException) {
-            $responseException = new HttpXpressengineException(Response::HTTP_FORBIDDEN);
+            $responseException = new HttpXpressengineException([], Response::HTTP_FORBIDDEN);
             $responseException->setMessage(xe_trans('xe::tokenMismatch'));
         } // not found
         elseif ($e instanceof NotFoundHttpException) {
-            $responseException = new HttpXpressengineException(Response::HTTP_NOT_FOUND);
+            $responseException = new HttpXpressengineException([], Response::HTTP_NOT_FOUND);
             $responseException->setMessage(xe_trans('xe::pageNotFound'));
         } // access denied
         elseif ($e instanceof AccessDeniedHttpException) {
@@ -71,8 +70,10 @@ class Handler extends ExceptionHandler
             $e->setMessage(xe_trans('xe::accessDenied'));
             $responseException = $e;
         } // http exception
-        elseif ($e instanceof HttpExceptionInterface) {
-            // 인터페이스가...
+        elseif ($e instanceof HttpException) {
+            $responseException = $e;
+        } // xpressengine exception
+        elseif ($e instanceof HttpXpressengineException) {
             $e->setMessage(xe_trans($e->getMessage(), $e->getArgs()));
             $responseException = $e;
         } // xpressengine exception
@@ -84,7 +85,7 @@ class Handler extends ExceptionHandler
                 $cache->store('plugins')->flush();
                 Event::fire('cache:cleared', ['plugins']);
             }
-            $responseException = new HttpXpressengineException(Response::HTTP_INTERNAL_SERVER_ERROR);
+            $responseException = new HttpXpressengineException([], Response::HTTP_INTERNAL_SERVER_ERROR);
             $message = xe_trans($e->getMessage(), $e->getArgs());
             if ('' === $message) {
                 $message = get_class($e);
@@ -96,7 +97,7 @@ class Handler extends ExceptionHandler
         elseif ($e instanceof ModelNotFoundException) {
             $responseException = new NotFoundHttpException($e->getMessage(), $e);
         } else {
-            $responseException = new HttpXpressengineException(Response::HTTP_INTERNAL_SERVER_ERROR);
+            $responseException = new HttpXpressengineException([], Response::HTTP_INTERNAL_SERVER_ERROR);
             $responseException->setMessage(xe_trans('xe::systemError'));
         }
 
@@ -117,6 +118,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+        /** @var HttpExceptionInterface $responseException */
         $responseException = $this->filter($e);
 
         // debugging mode
@@ -160,7 +162,7 @@ class Handler extends ExceptionHandler
      *
      * @param Request   $request
      * @param Exception $e
-     * @param Exception $responseException
+     * @param HttpExceptionInterface $responseException
      *
      * @return \Illuminate\Http\RedirectResponse|Response
      */
