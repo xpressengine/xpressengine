@@ -14,7 +14,7 @@ class ThemeController extends Controller
     {
         $themeId = $request->get('theme');
         $fileName = $request->get('file');
-        $type = $request->get('type', 'template');
+        $type = $request->get('type', 'views');
 
         // TODO: validate themeid, fileName
         if($themeId === null) {

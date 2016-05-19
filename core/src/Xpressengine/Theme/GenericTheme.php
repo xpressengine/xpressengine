@@ -112,14 +112,14 @@ abstract class GenericTheme extends AbstractTheme
      */
     public function getEditFiles()
     {
-        $path = base_path($this->getPath().DIRECTORY_SEPARATOR.'views');
+        $path = base_path($this->getPath().DIRECTORY_SEPARATOR);
         $editable = $this->info('editable');
 
         $files = [];
         foreach ($editable as $type => $list) {
             $files[$type] = [];
             foreach ($list as $file) {
-                $files[$type][$file] = base_path($path.DIRECTORY_SEPARATOR.$type.DIRECTORY_SEPARATOR.$file);
+                $files[$type][$file] = $path.DIRECTORY_SEPARATOR.$type.DIRECTORY_SEPARATOR.$file;
             }
         }
         return $files;

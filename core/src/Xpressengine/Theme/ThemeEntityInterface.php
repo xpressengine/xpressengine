@@ -52,14 +52,6 @@ interface ThemeEntityInterface extends Arrayable, Jsonable
     public function getDescription();
 
     /**
-     * 각 테마는 편집 페이지에서 편집할 수 있는 템플릿파일(blade)이나 css 파일 목록을 지정한다.
-     * 이 메소드는 그 파일 목록을 조회한다.
-     *
-     * @return array
-     */
-    public function getEditFiles();
-
-    /**
      * get screenshot of theme
      *
      * @return mixed
