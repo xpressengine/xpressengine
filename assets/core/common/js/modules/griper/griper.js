@@ -100,13 +100,13 @@
       setInterval(function() {
         var time = parseInt(new Date().getTime() / 1000);
         toast_box
-        .find('div.xo-alert')
-        .each(function() {
-          var expireTime = parseInt($(this).data('expire-time'));
-          if (expireTime != 0 && time > expireTime) {
-            exports.toast.fn.destroy($(this));
-          }
-        });
+            .find('div.xo-alert')
+            .each(function() {
+              var expireTime = parseInt($(this).data('expire-time'));
+              if (expireTime != 0 && time > expireTime) {
+                exports.toast.fn.destroy($(this));
+              }
+            });
       }, 1000);
 
       return toast_box;
@@ -130,16 +130,16 @@
       // $group 이 1 보다 클땐 어찌 될지 모르겠음...
       if ($group.length == 1) {
         $group.append(
-          $('<'+this.options.tags.message+'>')
-          .addClass(this.options.classes.message.join(' '))
-          .text(message)
-          );
+            $('<'+this.options.tags.message+'>')
+                .addClass(this.options.classes.message.join(' '))
+                .text(message)
+        );
       } else if ($group.length == 0) {
         $element.after(
-          $('<'+this.options.tags.message+'>')
-          .addClass(this.options.classes.message.join(' '))
-          .text(message)
-          );
+            $('<'+this.options.tags.message+'>')
+                .addClass(this.options.classes.message.join(' '))
+                .text(message)
+        );
       }
     },
     clear: function($form) {

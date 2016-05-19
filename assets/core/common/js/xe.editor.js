@@ -7,15 +7,13 @@
             'getContents', 'setContents', 'addContents',
             'initialize'
         ],
-        editorSet = {},
-        editorOptionSet = {};
+        editorSet = {};
 
     var instanceObj = function(editorName, sel, options) {
         this.editorName = editorName;
         this.selector = sel;
         this.options = options;
         this.props = {};
-
     };
 
     instanceObj.prototype = {
@@ -40,6 +38,8 @@
 
     var Editor = function(options) {
         this.name = options.name;
+        this.editorType = options.editorType;
+        this.editor = options.editor;
         this.editorList = {};
 
         for(var o in options) {
@@ -52,30 +52,22 @@
             this.editorList[sel] = new instanceObj(this.name, sel, options);
             this.initialize.call(this.editorList[sel], sel, options);
 
-            if(this.hasOwnProperty('components') && this.components.length > 0) {
-                this.addComponent(this.components);
-            }
-
             return this.editorList[sel];
         },
         getContents: function() {
             console.error('Editor.getContents');
         },
-        setContents: function(text) {
+        setContents: function() {
             console.error('Editor.setContents');
         },
-        addContents: function(text) {
+        addContents: function() {
             console.error('Editor.addContents');
-        },
-        addComponent: function(components) {
-
         }
     };
 
     var XEeditor = {
         define: function(options) {
             if(this.isValidOptions(options)) {
-                editorOptionSet[options.name] = options;
                 editorSet[options.name] = new Editor(options);
             }
         },
@@ -83,14 +75,8 @@
             var valid = true;
             for(var option in requireOptions) {
                 if(!options.hasOwnProperty(requireOptions[option])) {
-                    console.error('구현 필요 [fn:' + requireOptions[option] + ']');
+                    console.error('구현 필요 [instance name : ' + options.name + ' fn:' + requireOptions[option] + ']');
                     valid = false;
-                }
-                if(options.hasOwnProperty('components')
-                    && options.components instanceof Array
-                    && options.components.length > 0
-                    && !options.hasOwnProperty('addComponent')) {
-                    console.error('구현 필요 [fn:addComponent]');
                 }
             }
 
@@ -112,5 +98,4 @@
 
     exports.XEeditor = XEeditor;
 })(window);
-
 

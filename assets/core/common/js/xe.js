@@ -10,6 +10,7 @@
     setup: setup,
     configure: configure,
     cssLoad: cssLoad,
+    jsLoad: jsLoad,
     toast: toast,
     toastByStatus: toastByStatus,
     formError: formError,
@@ -17,7 +18,7 @@
     validate: validate,
     getLocale: getLocale,
     getDefaultLocale: getDefaultLocale,
-
+    
     options: {},
 
     Lang: '',
@@ -100,7 +101,15 @@
 
   // @DEPRECATED
   function cssLoad(url) {
-    $('head').append($('<link>').attr('rel', 'stylesheet').attr('href', url));
+    var $css = $('<link>', {rel: 'stylesheet', type: 'text/css', href: url});
+
+    $('head').append($css);
+  }
+
+  function jsLoad(url) {
+    var $js = $('<script>', {id: 'jsload', type: 'text/javascript', src: url});
+
+    $('head').append($js);
   }
 
   function toast(type, message) {
@@ -135,17 +144,6 @@
       validator.validate($form);
     });
   }
-  //
-  // function import(name, parentName, parentAddress) {
-  //   if(_.isArray(name)) {
-  //     var modules = _.map(name, function(module){
-  //       return System.import(module);
-  //     });
-  //     return Promise.all(modules);
-  //   } else {
-  //     return System.import(name);
-  //   }
-  // }
 
   function getLocale() {
     return _options.locale;
