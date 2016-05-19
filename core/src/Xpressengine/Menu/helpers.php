@@ -14,6 +14,7 @@
 
 use Illuminate\Support\Collection;
 use Xpressengine\Menu\Models\Menu;
+use Xpressengine\Menu\Models\MenuItem;
 use Xpressengine\Routing\InstanceConfig;
 
 if (!function_exists('getCurrentInstanceId')) {
@@ -28,6 +29,15 @@ if (!function_exists('getCurrentInstanceId')) {
         return $instanceConfig->getInstanceId();
     }
 
+    function current_menu()
+    {
+        $id = getCurrentInstanceId();
+        if($id !== null) {
+            return MenuItem::find($id);
+        }
+        return null;
+    }
+
     /**
      * 메뉴를 html 마크업으로 출력할 때, 사용하기 쉽도록 메뉴아이템 리스트를 제공한다.
      *
@@ -35,8 +45,9 @@ if (!function_exists('getCurrentInstanceId')) {
      *
      * @return Collection 메뉴아이템 리스트
      */
-    function menu($menuId)
+    function menu_list($menuId)
     {
+        $menu = null;
         if ($menuId !== null) {
             $menu = Menu::with('items.basicImage', 'items.hoverImage', 'items.selectedImage')->find($menuId);
             // pre load
