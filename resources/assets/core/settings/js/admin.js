@@ -2,9 +2,10 @@
   if (typeof define === 'function' && define.amd) {
     // AMD
     define([
-      'exports'
+      'exports',
+       'github:twbs/bootstrap-sass@3.3.6/assets/javascripts/bootstrap.js'
     ], function (exports) {
-      factory(exports);
+      factory(exports, require('github:twbs/bootstrap-sass@3.3.6/assets/javascripts/bootstrap.js'));
     });
   } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
     // CommonJS
@@ -49,10 +50,16 @@
     });
 
     /* 사이드바 메뉴 */
-    $(document).on('click', function (event) {
+    $(document).on('click', '.snb-list', function (event) {
       var $target = $(event.target);
-      var $subdepth = $target.parent('.sub-depth');
-      var $ul = $($target).next('.sub-depth-list');
+      var $subdepth = $target.closest('.sub-depth');
+      var $ul;
+
+      if($.inArray('__xe_collapseMenu', $target[0].classList) > -1) {
+        $ul = $target.siblings('.sub-depth-list');
+      }else {
+        $ul = $target.parent().siblings('.sub-depth-list')
+      }
 
       if ($ul.is(':visible')) {
         $ul.find('.sub-depth-list').slideUp('fast');
