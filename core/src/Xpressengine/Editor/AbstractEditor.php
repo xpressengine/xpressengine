@@ -33,10 +33,13 @@ abstract class AbstractEditor implements ComponentInterface, Renderable
     use ComponentTrait;
     use MobileSupportTrait;
 
+    /**
+     * todo: instanceId 생성자로 전달
+     *
+     * @var string
+     */
     protected $instanceId;
-
-    protected static $configID = null;
-
+    
     /**
      * @var ConfigEntity|null
      */
@@ -56,6 +59,7 @@ abstract class AbstractEditor implements ComponentInterface, Renderable
         if (static::getComponentInfo('screenshot') === null) {
             return null;
         }
+
         return asset(static::getComponentInfo('screenshot'));
     }
 
@@ -84,12 +88,12 @@ abstract class AbstractEditor implements ComponentInterface, Renderable
             return null;
         }
 
-        return call_user_func(static::$resolver, $this->getConfigKey($instanceId));
+        return call_user_func(static::$resolver, static::getConfigKey($instanceId));
     }
 
-    protected function getConfigKey($instanceId)
+    public static function getConfigKey($instanceId)
     {
-        return $this->getId() . '.' . $instanceId;
+        return static::getId() . '.' . $instanceId;
     }
 
     abstract public function getName();
@@ -101,7 +105,7 @@ abstract class AbstractEditor implements ComponentInterface, Renderable
      * @return string
      */
     abstract public function contentsCompile($contents);
-    
+
     public static function getInstanceSettingURI($instanceId)
     {
         return null;

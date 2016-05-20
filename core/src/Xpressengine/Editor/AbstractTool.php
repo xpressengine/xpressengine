@@ -10,11 +10,8 @@ abstract class AbstractTool implements ComponentInterface
 
     protected $instanceId;
 
-    public static function getInstanceSettingURI($instanceId)
-    {
-        return null;
-    }
-
+    protected $userResolver;
+    
     public function setInstanceId($instanceId)
     {
         $this->instanceId = $instanceId;
@@ -29,5 +26,15 @@ abstract class AbstractTool implements ComponentInterface
     public function getOptions()
     {
         return [];
+    }
+
+    public function allows()
+    {
+        return true;
+    }
+
+    public static function getInstanceSettingURI($instanceId)
+    {
+        return null;
     }
 }

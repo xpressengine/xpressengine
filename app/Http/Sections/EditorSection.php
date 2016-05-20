@@ -24,23 +24,14 @@ class EditorSection extends Section
          * @var EditorHandler $handler
          */
         $handler = app('xe.editor');
-//        $component = $handler->get($instanceId);
-//        $settingView = $component->getSettingView();
-//
-//        return View::make('editor.section', [
-//            'settingView' => $settingView,
-//        ]);
 
         $editors = $handler->getAll();
         $selected = $handler->getEditorId($this->instanceId);
-
-//        $parts = $handler->getPartsAll();
 
         return view('editor.section', [
             'instanceId' => $this->instanceId,
             'editors' => $editors,
             'selected' => $selected,
-//            'parts' => $parts,
         ]);
     }
 }
