@@ -11,10 +11,8 @@ use Xpressengine\Plugin\PluginEntity;
 
 class ThemeMakeCommand extends Command
 {
-
     protected $signature = 'make:theme
-                        {plugin : The name of target plugin}
-                        {class : The class name of theme. except namespace}
+                        {path : The path of theme directory started with plugin_id}
                         {title : The title of the theme}
                         {--id= : The path of theme class file}
                         {--description= : The description of the theme}';
@@ -35,15 +33,12 @@ class ThemeMakeCommand extends Command
 
     protected $originComposerStr = null;
 
-    protected $srcDir;
     protected $attr;
 
     /**
      * Create a new controller creator command instance.
      *
      * @param  \Illuminate\Filesystem\Filesystem $files
-     *
-     * @return void
      */
     public function __construct(Filesystem $files)
     {
@@ -56,6 +51,7 @@ class ThemeMakeCommand extends Command
      * Execute the console command.
      *
      * @return bool|null
+     * @throws \Exception
      */
     public function fire()
     {
@@ -63,41 +59,26 @@ class ThemeMakeCommand extends Command
         $plugin = $this->getPlugin();
         $pluginClass = new ReflectionClass($plugin->getClass());
         $namespace = $pluginClass->getNamespaceName();
-        $this->resolvePluginSrcDir($plugin, $namespace);
 
         // get theme info
-        $themeClass = ucfirst($this->argument('class')); // Basic
-        $themeFile = $this->getThemeFile($plugin, $themeClass); // src/Theme/Basic.php
-        $themeId = $this->getThemeId($plugin, $themeClass); // myplugin@basic
+        $path = $this->getPath();
+        $themeClass = studly_case(str_replace('/',' ',$path));
+        $themeFile = $this->getThemeFile($plugin, $path, $themeClass); // path_to_theme_dir/Theme.php
+        $themeId = $this->getThemeId($plugin, $themeClass); // myplugin@theme
         $themeTitle = $this->getThemeTitle();
         $description = $this->getThemeDescription($themeId, $plugin);
 
-        // other files info
-        $view = strtolower($themeClass); // basic
-        $templateFile = $this->getTemplateFile($view, $plugin); // views/theme/basic.blade.php
-        $cssFile = $this->getCssFile($view, $plugin); // assets/theme/basic.css
-        $controllerFile = $this->getControllerFile($plugin); // src/Controllers/Theme/ConfigController.php
-        $configTemplateFile = $this->getConfigTemplateFile($plugin);
-
-        $configId = $this->getConfigId($plugin, $themeId);
-
         $this->attr = compact(
             'plugin',
+            'path',
             'pluginClass',
             'namespace',
             'themeClass',
             'themeFile',
             'themeId',
             'themeTitle',
-            'description',
-            'view',
-            'templateFile',
-            'cssFile',
-            'controllerFile',
-            'configTemplateFile',
-            'configId'
+            'description'
         );
-
 
         // print and confirm the information of theme
         if($this->confirmInfo() === false){
@@ -105,18 +86,15 @@ class ThemeMakeCommand extends Command
         }
 
         try {
+            $this->copyThemeDirectory();
             $this->makeThemeClass();
-            $this->makeTemplate();
-            $this->makeCss();
-
-            // for config
-            $this->makeControllerClass();
-            $this->makeConfigTemplate();
 
             // composer.json 파일 수정
             if($this->registerTheme() === false) {
                 throw new \Exception('Writing to composer.json file was failed.');
             }
+
+            $this->runComposerDump($plugin->getPath());
 
         } catch (\Exception $e) {
             $this->clean();
@@ -157,26 +135,15 @@ class ThemeMakeCommand extends Command
 
         /*
          * DummyNamespace
-         * DummyPluginNamespace
-         * DummyPlugin
          * DummyClass
-         * DummyTemplateFile
-         * DummyTemplateView
-         * DummyCssFile
-         * DummyConfigId
-         * DummyTitle
+         * DummyPluginId
+         * DummyThemeDirname
         */
 
         $this->replaceCode($code, 'DummyNamespace', $this->attr('namespace').'\\Theme')
             ->replaceCode($code, 'DummyClass', $this->attr('themeClass'))
-            ->replaceCode($code, 'DummyPluginNamespace', $this->attr('pluginClass')->getNamespaceName())
             ->replaceCode($code, 'DummyPluginId', $this->attr('plugin')->getId())
-            ->replaceCode($code, 'DummyPluginClass', $this->attr('pluginClass')->getShortName())
-            ->replaceCode($code, 'DummyTemplateFile', $this->attr('templateFile'))
-            ->replaceCode($code, 'DummyTemplateView', 'views.theme.'.$this->attr('view'))
-            ->replaceCode($code, 'DummyCssFile', $this->attr('cssFile'))
-            ->replaceCode($code, 'DummyConfigId', $this->attr('configId'))
-            ->replaceCode($code, 'DummyTitle', $this->attr('themeTitle'));
+            ->replaceCode($code, 'DummyThemeDirname', $this->attr('path'));
 
         return $code;
     }
@@ -251,7 +218,8 @@ class ThemeMakeCommand extends Command
      */
     protected function getPlugin()
     {
-        $plugin = $this->argument('plugin');
+        $path = $this->argument('path');
+        list($plugin, $path) = explode('/', $path, 2);
 
         $plugin = app('xe.plugin')->getPlugin($plugin);
         if($plugin === null) {
@@ -259,6 +227,21 @@ class ThemeMakeCommand extends Command
         }
 
         return $plugin;
+    }
+
+    /**
+     * get theme directory
+     *
+     * @param $file
+     *
+     * @return PluginEntity
+     */
+    protected function getPath()
+    {
+        $path = $this->argument('path');
+        list($plugin, $path) = explode('/', $path, 2);
+
+        return $path;
     }
 
     /**
@@ -283,10 +266,7 @@ class ThemeMakeCommand extends Command
     {
         $description = $this->option('description');
         if(!$description) {
-            $description = sprintf(
-                '%s Theme supported by %s plugin.',
-                ucfirst(last(explode('@', $id))), ucfirst($plugin->getId())
-            );
+            $description = 'The Theme supported by '.ucfirst($plugin->getId()).' plugin.';
         }
         return $description;
     }
@@ -294,102 +274,24 @@ class ThemeMakeCommand extends Command
     /**
      * getThemeFile
      *
+     * @param PluginEntity $plugin
+     * @param              $path
+     * @param              $themeClass
+     *
      * @return array|string
      * @throws \Exception
      */
-    protected function getThemeFile(PluginEntity $plugin, $themeClass)
+    protected function getThemeFile(PluginEntity $plugin, $path, $themeClass)
     {
-        $path = $this->srcDir."/Theme/$themeClass.php";
+        $path = $path."/$themeClass.php";
         if(file_exists($plugin->getPath($path))) {
             throw new \Exception("file[$path] already exists.");
         }
         return $path;
-    }
-
-    /**
-     * getControllerFile
-     *
-     * @param PluginEntity $plugin
-     *
-     * @return string
-     * @throws \Exception
-     */
-    protected function getControllerFile(PluginEntity $plugin)
-    {
-        $path = $this->srcDir."/Controllers/Theme/ConfigController.php";
-        if(file_exists($plugin->getPath($path))) {
-            throw new \Exception("file[$path] already exists.");
-        }
-        return $path;
-    }
-
-    /**
-     * getTemplatePath
-     *
-     * @param $id
-     * @param $plugin
-     *
-     * @return string
-     * @throws \Exception
-     */
-    protected function getTemplateFile($view, PluginEntity $plugin)
-    {
-        $viewFile = 'views/theme/'.$view.'.blade.php';
-        if(file_exists($plugin->getPath($viewFile))) {
-            throw new \Exception("template file[$viewFile] already exists.");
-        }
-        return $viewFile;
-    }
-
-    /**
-     * getConfigTemplateFile
-     *
-     * @param PluginEntity $plugin
-     *
-     * @return string
-     * @throws \Exception
-     */
-    protected function getConfigTemplateFile(PluginEntity $plugin)
-    {
-        $viewFile = 'views/theme/config.blade.php';
-        if(file_exists($plugin->getPath($viewFile))) {
-            throw new \Exception("template file[$viewFile] already exists.");
-        }
-        return $viewFile;
-    }
-
-    /**
-     * getCssPath
-     *
-     * @param $id
-     * @param $plugin
-     *
-     * @return string
-     * @throws \Exception
-     */
-    protected function getCssFile($view, PluginEntity $plugin)
-    {
-        $cssFile = 'assets/theme/'.$view.'.css';
-        if(file_exists($plugin->getPath($cssFile))) {
-            throw new \Exception("css file[$cssFile] already exists.");
-        }
-        return $cssFile;
     }
 
     /**
      * confirmInfo
-     *
-     * @param $plugin
-     * @param $namespace
-     * @param $themeClass
-     * @param $themeFile
-     * @param $themeId
-     * @param $themeTitle
-     * @param $description
-     * @param $templateFile
-     * @param $cssFile
-     * @param $controllerFile
-     * @param $configId
      *
      * @return bool
      */
@@ -397,27 +299,23 @@ class ThemeMakeCommand extends Command
         $this->info(
             sprintf(
                 "[New theme info]
-  plugin: %s
-  class name: %s
-  class file: %s
-  id: %s
-  title: %s
-  description: %s
-  template file: %s
-  css file: %s,
-  config id: %s
-  config controller file: %s",
+  plugin:\t %s
+  path:\t\t %s/%s
+  class file:\t %s/%s
+  class name:\t %s
+  id:\t\t theme/%s
+  title:\t %s
+  description:\t %s",
                 $this->attr['plugin']->getId(),
-                $this->attr['namespace'].'\\'.$this->attr['themeClass'],
+                $this->attr['plugin']->getId(),
+                $this->attr['path'],
+                $this->attr['plugin']->getId(),
                 $this->attr['themeFile'],
+                $this->attr['namespace'].'\\'.$this->attr['themeClass'],
                 $this->attr['themeId'],
                 $this->attr['themeTitle'],
-                $this->attr['description'],
-                $this->attr['templateFile'],
-                $this->attr['cssFile'],
-                $this->attr['configId'],
-                $this->attr['controllerFile']
-            )
+                $this->attr['description']
+              )
         );
 
         while ($confirm = $this->ask('Do you want to add theme? [yes|no]')) {
@@ -438,53 +336,43 @@ class ThemeMakeCommand extends Command
     {
         $plugin = $this->attr('plugin');
         $themeFile = $this->attr('themeFile');
-        $namespace = $this->attr('namespace');
-        $class = $this->attr('themeClass');
         $path = $plugin->getPath($themeFile);
 
-        $code = $this->buildCode('theme.stub');
-
-        $this->makeDirectory(dirname($path));
+        $code = $this->buildCode('theme/theme.stub');
 
         $this->files->put($path, $code);
-
-        if(!class_exists($namespace.'\\Theme\\'.$class)) {
-            $this->files->delete($path);
-            throw new \Exception("Unable to load the theme class file[$path]. please check autoload setting of composer.json");
-        }
     }
 
-    protected function makeControllerClass()
+    protected function runComposerDump($path)
     {
-        $plugin = $this->attr('plugin');
-        $controllerFile = $this->attr('controllerFile');
-        $namespace = $this->attr('namespace');
-        $class = 'ConfigController';
-        $path = $plugin->getPath($controllerFile);
+        $composer = $this->findComposer();
+        $commands = [
+            $composer.' dump-autoload'
+        ];
 
-        $code = $this->buildCode('theme.config.controller.stub');
+        $process = new Process(implode(' && ', $commands), $path, null, null, null);
 
-        $this->makeDirectory(dirname($path));
+        $output = $this->output;
 
-        $this->files->put($path, $code);
-
-        if(!class_exists($namespace.'\\Controllers\\Theme\\'.$class)) {
-            $this->files->delete($path);
-            throw new \Exception("Unable to load the theme class file[$path]. please check autoload setting of composer.json");
-        }
+        $process->run(
+            function ($type, $line) use ($output) {
+                $output->write($line);
+            }
+        );
     }
 
-    protected function makeConfigTemplate()
+    /**
+     * findComposer
+     *
+     * @return string
+     */
+    protected function findComposer()
     {
-        $plugin = $this->attr('plugin');
-        $configTemplateFile = $this->attr('configTemplateFile');
-        $path = $plugin->getPath($configTemplateFile);
+        if (file_exists(getcwd().'/composer.phar')) {
+            return '"'.PHP_BINARY.'" composer.phar';
+        }
 
-        $code = $this->buildCode('theme.config.blade.stub');
-
-        $this->makeDirectory(dirname($path));
-
-        $this->files->put($path, $code);
+        return 'composer';
     }
 
     /**
@@ -607,57 +495,35 @@ class ThemeMakeCommand extends Command
         $class = $this->attr('namespace').'\\Theme\\'.$this->attr('themeClass');
         $title = $this->attr('themeTitle');
         $description = $this->attr('description');
+        $themeFile = $this->attr('themeFile');
 
+        // add component
         $composerStr = $this->files->get($plugin->getPath('composer.json'));
         $this->originComposerStr = $composerStr;
-        $json = json_decode($composerStr, true);
+        $json = json_decode($composerStr);
         $component = data_get($json, 'extra.xpressengine.component');
-        if(isset($component[$id])) {
+        if(isset($component->$id)) {
             throw new \Exception(sprintf('component[%s] already exists.', $id));
         }
-        $component[$id] = [];
-        $component[$id]['class'] = $class;
-        $component[$id]['name'] = $title;
-        $component[$id]['description'] = $description;
-        array_set($json, 'extra.xpressengine.component', $component);
+        $component->$id = new \stdClass();
+        $component->$id->class = $class;
+        $component->$id->name = $title;
+        $component->$id->description = $description;
+        $json->extra->xpressengine->component = $component;
+
+        // add autoload
+        $classmap = data_get($json, 'autoload.classmap', []);
+        if(!in_array($themeFile, $classmap)) {
+            $classmap[] = $themeFile;
+        };
+        if(!isset($json->autoload)) {
+            $json->autoload = new \stdClass();
+        }
+        $json->autoload->classmap = $classmap;
 
         $json = $this->formatJson(json_encode($json));
 
         return $this->files->put($plugin->getPath('composer.json'), $json);
-    }
-
-    /**
-     * makeTemplate
-     *
-     * @param $plugin
-     * @param $template
-     *
-     * @return bool
-     */
-    protected function makeTemplate()
-    {
-        $plugin = $this->attr('plugin');
-        $file = $plugin->getPath($this->attr('templateFile'));
-        $this->makeDirectory(dirname($file));
-
-        return $this->files->copy($this->getStub('theme.blade.stub'), $file);
-    }
-
-    /**
-     * makeCss
-     *
-     * @param $plugin
-     * @param $css
-     *
-     * @return bool
-     */
-    protected function makeCss()
-    {
-        $plugin = $this->attr('plugin');
-        $css = $this->attr('cssFile');
-        $file = $plugin->getPath($css);
-        $this->makeDirectory(dirname($file));
-        return $this->files->copy($this->getStub('theme.css.stub'), $file);
     }
 
     /**
@@ -673,15 +539,11 @@ class ThemeMakeCommand extends Command
     protected function clean()
     {
         $plugin = $this->attr('plugin');
-        $themeFile  = $this->attr('themeFile');
-        $template = $this->attr('templateFile');
-        $css = $this->attr('css');
-        $controller = $this->attr('controllerFile');
-        $configTemplate = $this->attr('configTemplateFile');
+        $path = $this->attr('path');
 
-        // delete theme class file
-        if(is_writable($plugin->getPath($themeFile))) {
-            $this->files->delete($plugin->getPath($themeFile));
+        // delete theme path
+        if(is_writable($plugin->getPath($path))) {
+            $this->files->deleteDirectory($plugin->getPath($path));
         }
 
         // unregister component from composer.json
@@ -689,69 +551,6 @@ class ThemeMakeCommand extends Command
         if($this->originComposerStr !== null && is_writable($composerFile)) {
             $this->files->put($composerFile, $this->originComposerStr);
         }
-
-        // delete template file
-        $templateFile = $plugin->getPath($template);
-        if(is_writable($templateFile)) {
-            $this->files->delete($templateFile);
-        }
-
-        // delete css file
-        $cssFile = $plugin->getPath($css);
-        if(is_writable($cssFile)) {
-            $this->files->delete($cssFile);
-        }
-
-        // delete controller file
-        $controllerFile = $plugin->getPath($controller);
-        if(is_writable($controllerFile)) {
-            $this->files->delete($controllerFile);
-        }
-
-        // delete config template file
-        $configTemplateFile = $plugin->getPath($configTemplate);
-        if(is_writable($configTemplateFile)) {
-            $this->files->delete($configTemplateFile);
-        }
-
-    }
-
-    /**
-     * getConfigId
-     *
-     * @param $plugin
-     * @param $id
-     *
-     * @return string
-     */
-    protected function getConfigId(PluginEntity $plugin, $id)
-    {
-        return $plugin->getId().'@'.$id;
-    }
-
-    /**
-     * resolvePluginSrcDir
-     *
-     * @param $plugin
-     * @param $namespace
-     *
-     * @return string
-     * @throws \Exception
-     */
-    private function resolvePluginSrcDir($plugin, $namespace)
-    {
-        $autoloads = $plugin->getMetaData('autoload.psr-4');
-        $srcDir = false;
-        foreach ($autoloads as $key => $dir) {
-            if (trim($key, '\\') === trim($namespace, '\\')) {
-                $srcDir = trim($dir, '/');
-            }
-        }
-        if ($srcDir === false) {
-            throw new \Exception(sprintf("Plugin format is wrong. Can not add theme to %s plugin", $plugin->getId()));
-        }
-
-        return $this->srcDir = $srcDir;
     }
 
     /**
@@ -764,6 +563,18 @@ class ThemeMakeCommand extends Command
     private function attr($key)
     {
         return array_get($this->attr, $key);
+    }
+
+    protected function copyThemeDirectory()
+    {
+        $plugin = $this->attr('plugin');
+        $path = $plugin->getPath($this->attr('path'));
+
+        if(!$this->files->copyDirectory(__DIR__.'/stubs/theme', $path)) {
+            throw new \Exception("Unable to create theme directory[$path]. please check permission.");
+        }
+        rename($path.'/info.stub', $path.'/info.php');
+        unlink($path.'/theme.stub');
     }
 
 
