@@ -61,8 +61,6 @@
         $ul = $target.parent().siblings('.sub-depth-list')
       }
 
-      //var $ul = $target.next('.sub-depth-list');
-
       if ($ul.is(':visible')) {
         $ul.find('.sub-depth-list').slideUp('fast');
         $ul.find('.sub-depth').removeClass('open');
@@ -71,7 +69,7 @@
         $subdepth.removeClass('open');
       } else {
         var $parent = $subdepth.parent();
-        $parent.find('.sub-depth.open>.sub-depth-list').slideUp('fast');
+        // $parent.find('.sub-depth.open>.sub-depth-list').slideUp('fast');
         $parent.find('.sub-depth.open').removeClass('open');
 
         $ul.slideDown('fast');

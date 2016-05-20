@@ -1655,7 +1655,6 @@ $__System.registerDynamic("1", ["2"], true, function($__require, exports, module
           $subdepth.removeClass('open');
         } else {
           var $parent = $subdepth.parent();
-          $parent.find('.sub-depth.open>.sub-depth-list').slideUp('fast');
           $parent.find('.sub-depth.open').removeClass('open');
           $ul.slideDown('fast');
           $subdepth.addClass('open');
