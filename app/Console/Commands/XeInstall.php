@@ -12,6 +12,7 @@ use Symfony\Component\Process\ProcessUtils;
 use Symfony\Component\Yaml\Yaml;
 use Xpressengine\Support\Migration;
 use Xpressengine\User\UserHandler;
+use Illuminate\Support\Str;
 
 class XeInstall extends Command
 {
@@ -189,9 +190,11 @@ class XeInstall extends Command
      */
     protected function getDefaultEnv()
     {
+        $appKey = Str::random(32);
+
         return "APP_ENV=cms
 APP_DEBUG=true
-APP_KEY=SomeRandomString";
+APP_KEY={$appKey}";
     }
 
     /**
