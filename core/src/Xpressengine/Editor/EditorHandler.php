@@ -187,6 +187,13 @@ class EditorHandler
 //
 //    }
 
+    /**
+     * @param $instanceId
+     * @param $args
+     * @return string
+     *
+     * @deprecated 
+     */
     public function render($instanceId, $args)
     {
         return $this->get($instanceId)->setArguments($args)->render();
