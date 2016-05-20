@@ -5,16 +5,11 @@
     var editorSet = {},
         editorOptionSet = {};
 
-    var instanceObj = function(editorName, sel, editorOptions, authOptions, partsOptions) {
-
-        // this.editorOptions = editorOptions;
-        // this.authOptions = authOptions;
-        // this.partsOptions = partsOptions;
-
+    var instanceObj = function(editorName, sel, editorOptions, authOptions, tools) {
         var _options = {
             editorOptions: editorOptions,
             authOptions: authOptions,
-            partsOptions: partsOptions
+            tools: tools
         };
 
         this.editorName = editorName;
@@ -23,7 +18,6 @@
         this.getOptions = function() {
             return _options;
         };
-
     };
 
     instanceObj.prototype = {
@@ -69,10 +63,10 @@
     Editor.prototype = {
         configs: {},
         interfaces: {},
-        create: function(sel, editorOptions, authOptions, partsOptions) {
+        create: function(sel, editorOptions, authOptions, tools) {
             var editorOptions = editorOptions || {},
                 authOptions = authOptions || {},
-                partsOptions = partsOptions || {};
+                tools = tools || {};
 
             var editorOptions = $.extend(this.configs || {}, editorOptions);
 
@@ -80,10 +74,10 @@
                 console.error('[XEeditor fn:create] invalid editor id. (id=' + sel + ')');
             }
 
-            this.editorList[sel] = new instanceObj(this.name, sel, editorOptions, authOptions, partsOptions);
-            this.interfaces.initialize.call(this.editorList[sel], sel, editorOptions, authOptions, partsOptions);
+            this.editorList[sel] = new instanceObj(this.name, sel, editorOptions, authOptions, tools);
+            this.interfaces.initialize.call(this.editorList[sel], sel, editorOptions, authOptions, tools);
 
-            if(this.interfaces.hasOwnProperty('tools') && this.interfaces.tools.length > 0) {
+            if(!!tools && tools.lenglth > 0) {
                 this.interfaces.addTools.call(this.editorList[sel], this.interfaces.tools);
             }
 
@@ -93,8 +87,12 @@
 
     var Tools = function(obj) {
         this.id = obj.id;
-        this.events = obj.events;
+        this.iconClick = obj.events.iconClick;
+        this.elementDbClick = obj.events.elementDbClick;
+
     };
+
+    var toolsSet = {};
 
     var XEeditor = (function() {
         return {
@@ -113,22 +111,11 @@
             tools: {
                 define: function(obj) {
                     if(Validation.isValidToolsObject(obj)) {
-                        // {
-                        //     id : 'editorparts/emoticon@emoticon',
-                        //         events: {
-                        //     'icon.click': function() {
-                        //
-                        //     },
-                        //     'element.dblclick': function(e, editor, target) {
-                        //
-                        //     }
-                        // }
-
-
+                        toolsSet[obj.id] = new Tools(obj);
                     }
                 },
                 get: function(id) {
-
+                    return toolsSet[id];
                 }
             }
         }
@@ -148,7 +135,7 @@
                     'id', 'events'
                 ],
                 events: [
-                    'icon.click', 'element.dbclick'
+                    'toolClick', 'elementDbClick'
                 ]
             }
         };
