@@ -219,7 +219,7 @@ class HtmlRenderer implements RendererInterface
         $skinView = null;
 
         if ($skinTargetId != null && is_string($skinTargetId)) {
-            if ($this->presenter->getIsSettings()) {
+            if ($this->presenter->getIsSettings() && $skinTargetId !== 'error') {
                 $skin = $skinHandler->getAssignedSettings($skinTargetId);
             } else {
                 $skin = $skinHandler->getAssigned([$skinTargetId, $instanceId], $isMobile ? 'mobile' : 'desktop');
