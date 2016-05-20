@@ -147,7 +147,7 @@ class ThemeController extends Controller
 
         $config = array_merge($configInfo, $config);
 
-        $themeHandler->setThemeConfig($themeId, $config);
+        $themeHandler->setThemeConfig($config['_configId'], $config);
 
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => '저장되었습니다.']);
     }
