@@ -1,6 +1,7 @@
 composer.lock
 /vendor
 !/assets/vendor
+.env
 .idea/
 *.iml
 .DS_Store
