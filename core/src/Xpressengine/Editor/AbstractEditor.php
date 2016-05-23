@@ -33,33 +33,21 @@ abstract class AbstractEditor implements ComponentInterface, Renderable
     use ComponentTrait;
     use MobileSupportTrait;
 
+    /**
+     * todo: instanceId 생성자로 전달
+     *
+     * @var string
+     */
     protected $instanceId;
-
-    protected static $configID = null;
-
+    
+    /**
+     * @var ConfigEntity|null
+     */
     protected $config;
 
     protected $arguments = [];
 
-    /**
-     * 에디터 이름 반환
-     *
-     * @return string
-     */
-    public static function getTitle()
-    {
-        return static::getComponentInfo('name');
-    }
-
-    /**
-     * 에디터 설명 반환
-     *
-     * @return string
-     */
-    public static function getDescription()
-    {
-        return static::getComponentInfo('description');
-    }
+    protected static $resolver;
 
     /**
      * 에디터 스크린샷 반환
@@ -71,50 +59,44 @@ abstract class AbstractEditor implements ComponentInterface, Renderable
         if (static::getComponentInfo('screenshot') === null) {
             return null;
         }
+
         return asset(static::getComponentInfo('screenshot'));
     }
 
     public function setInstanceId($instanceId)
     {
         $this->instanceId = $instanceId;
+
+        $this->config = $this->resolveConfig($instanceId);
     }
 
     public function setArguments($arguments)
     {
         $this->arguments = $arguments;
+
         return $this;
     }
-    /**
-     * 설정 등록
-     *
-     * @param string       $instanceId editor instance id
-     * @param ConfigEntity $config     config
-     * @return void
-     */
-    abstract public function setConfig($instanceId, ConfigEntity $config);
 
-    /**
-     * 설정 반환
-     *
-     * @param string $instanceId editor instance id
-     * @return mixed
-     */
-    abstract public function getConfig($instanceId);
+    public static function setConfigResolver(callable $resolver)
+    {
+        static::$resolver = $resolver;
+    }
 
-    /**
-     * 설정 삭제
-     *
-     * @param string $instanceId editor instance id
-     * @return void
-     */
-    abstract public function removeConfig($instanceId);
+    protected function resolveConfig($instanceId)
+    {
+        if (!static::$resolver) {
+            return null;
+        }
 
-    /**
-     * 에디터 출력
-     *
-     * @return Renderable|string
-     */
-    abstract public function render();
+        return call_user_func(static::$resolver, static::getConfigKey($instanceId));
+    }
+
+    public static function getConfigKey($instanceId)
+    {
+        return static::getId() . '.' . $instanceId;
+    }
+
+    abstract public function getName();
 
     /**
      * 에디터로 등록된 내용 출력
@@ -123,18 +105,6 @@ abstract class AbstractEditor implements ComponentInterface, Renderable
      * @return string
      */
     abstract public function contentsCompile($contents);
-
-    /**
-     * 에디터 관리자 폼 출력
-     *
-     * @param array $config editor config
-     *
-     * @return string|Renderable
-     */
-    public static function getSettingView($config = [])
-    {
-        return '';
-    }
 
     public static function getInstanceSettingURI($instanceId)
     {

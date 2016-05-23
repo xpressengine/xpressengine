@@ -767,6 +767,19 @@ class MenuHandler
     }
 
     /**
+     * Get setting page url by menu item id
+     *
+     * @param string $itemId menu item identifier
+     * @return string|null
+     */
+    public function getInstanceSettingURIByItemId($itemId)
+    {
+        $item = $this->createItemModel()->newQuery()->find($itemId);
+
+        return $this->getInstanceSettingURI($item);
+    }
+
+    /**
      * Create new menu model
      *
      * @return Menu
