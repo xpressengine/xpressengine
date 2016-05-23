@@ -122,6 +122,8 @@ class EditorHandler
     {
         $editorId = $this->getEditorId($instanceId);
         if ($editorId === null) {
+            // todo: default 사용할지 말지
+            return null;
             $editorId = $this->getDefaultEditorId();
         }
 
