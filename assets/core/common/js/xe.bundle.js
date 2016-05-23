@@ -1280,7 +1280,7 @@ System.amdDefine('queue', [], function() {
 
 System.amdDefine('css', [], function() {
   var cssPrefixes = [ 'Webkit', 'O', 'Moz', 'ms' ],
-    cssProps    = {};
+      cssProps    = {};
 
   function camelCase(string) {
     return string.replace(/^-ms-/, 'ms-').replace(/-([\da-z])/gi, function(match, letter) {
@@ -1293,8 +1293,8 @@ System.amdDefine('css', [], function() {
     if (name in style) return name;
 
     var i = cssPrefixes.length,
-      capName = name.charAt(0).toUpperCase() + name.slice(1),
-      vendorName;
+        capName = name.charAt(0).toUpperCase() + name.slice(1),
+        vendorName;
     while (i--) {
       vendorName = cssPrefixes[i] + capName;
       if (vendorName in style) return vendorName;
@@ -1317,8 +1317,8 @@ System.amdDefine('css', [], function() {
 
   return function(element, properties) {
     var args = arguments,
-      prop,
-      value;
+        prop,
+        value;
 
     if (args.length == 2) {
       for (prop in properties) {
@@ -1354,10 +1354,12 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
       cssLoaded = true;
       XE.cssLoad('/assets/core/common/css/progress.css'); // @TODO
     }
-  };
+  }
 
   function start(context) {
-    this.cssLoad();
+    if($('link[href*="assets/core/common/css/progress.css"]').length == 0) {
+      XE.cssLoad('/assets/core/common/css/progress.css'); // @TODO
+    }
 
     var $context = $(context);
     if ($context.context === undefined) {
@@ -1376,7 +1378,7 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
     }
 
     $context.trigger('progressDone');
-  };
+  }
 
   exports.spinner = function(context) {
 
@@ -1397,7 +1399,7 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
     }
 
     return instance;
-  };
+  }
 
   function getCount($context) {
     var count = $context.attr('data-progress-count');
@@ -1406,7 +1408,7 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
       count = parseInt(count);
     }
     return count;
-  };
+  }
 
   function setCount($context, count) {
     if (parseInt(count) < 0) {
@@ -1418,9 +1420,9 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
   function setInstance($context, instance) {
     if (getInstance($context) === null) {
       var progress = new XeProgress(),
-        parent = 'body',
-        type = $context.data('progress-type') === undefined ? 'default' : $context.data('progress-type'),
-        showSpinner = type !== 'nospin';
+          parent = 'body',
+          type = $context.data('progress-type') === undefined ? 'default' : $context.data('progress-type'),
+          showSpinner = type !== 'nospin';
 
 
       if ($context.attr('id') !== undefined) {
@@ -1443,14 +1445,14 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
       setCount($context, 0);
       attachInstance($context);
     }
-  };
+  }
 
   function attachInstance($context) {
     $context.bind('progressStart', function(e) {
       e.stopPropagation();
       var count = getCount($context);
       setCount($context, count+1);
-      if (count === 0) {
+      if (count === 1) {
         getInstance($context).start();
       }
 
@@ -1459,15 +1461,14 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
     $context.bind('progressDone', function(e) {
       e.stopPropagation();
 
-      var count = getCount($context);
-
+      var count = getCount($(this));
       setCount($(this), count-1);
-      if (count === 1) {
+      if (getCount($(this)) === 1) {
         var instance = getInstance($context);
         instance.done(instance.getTime());
       }
     });
-  };
+  }
 
 
   /**
@@ -1576,13 +1577,13 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
       this.status = (n === 1 ? null : n);
 
       var $progress = this.render(!started),
-        $bar      = this.$bar,
-        speed    = this.settings.speed,
-        ease     = this.settings.easing;
+          $bar      = this.$bar,
+          speed    = this.settings.speed,
+          ease     = this.settings.easing;
 
       // $progress.offsetWidth; /* Repaint */
       var self = this,
-        time = this.getTime();
+          time = this.getTime();
       queue(function(next) {
         // Set positionUsing if it hasn't already been set
         if (self.settings.positionUsing === '') self.settings.positionUsing = self.getPositioningCSS();
@@ -1666,9 +1667,9 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
       $progress.html(this.settings.template[this.settings.type]);
 
       var $bar      = $progress.find(this.settings.barSelector),
-        perc     = fromStart ? '-100' : toBarPerc(this.status || 0),
-        $parent   = $(this.settings.parent),
-        $spinner;
+          perc     = fromStart ? '-100' : toBarPerc(this.status || 0),
+          $parent   = $(this.settings.parent),
+          $spinner;
 
       $bar.attr('title-name', this.instanceId);
       this.$bar = $bar;
@@ -1727,9 +1728,9 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
 
       // Sniff prefixes
       var vendorPrefix = ('WebkitTransform' in bodyStyle) ? 'Webkit' :
-        ('MozTransform' in bodyStyle) ? 'Moz' :
-          ('msTransform' in bodyStyle) ? 'ms' :
-            ('OTransform' in bodyStyle) ? 'O' : '';
+          ('MozTransform' in bodyStyle) ? 'Moz' :
+              ('msTransform' in bodyStyle) ? 'ms' :
+                  ('OTransform' in bodyStyle) ? 'O' : '';
 
       if (vendorPrefix + 'Perspective' in bodyStyle) {
         // Modern browsers with 3D support, e.g. Webkit, IE10
