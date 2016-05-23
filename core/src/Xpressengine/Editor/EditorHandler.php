@@ -96,62 +96,16 @@ class EditorHandler
      *
      * @param $instanceId
      * @param $editorId
-     * @param $config
      */
-    public function setInstance($instanceId, $editorId/*, ConfigEntity $config */)
+    public function setInstance($instanceId, $editorId)
     {
         if ($editorId !== null && !$this->register->get($editorId)) {
             throw new EditorNotFoundException;
         }
 
         $this->configManager->set(self::CONFIG_NAME, [$instanceId => $editorId]);
-
-//        $component = $this->register->get($editorId);
-//        /**
-//         * @var AbstractEditor $editor
-//         */
-//        $editor = new $component;
-//        $editor->setConfig($instanceId, $config);
     }
-
-//    /**
-//     * get editor instance
-//     *
-//     * @param $instanceId
-//     * @return AbstractEditor
-//     * @deprecated
-//     */
-//    public function getInstance($instanceId)
-//    {
-//        $editorId = $this->getEditorId($instanceId);
-//
-//        $component = $this->register->get($editorId);
-//        /**
-//         * @var AbstractEditor $editor
-//         */
-//        $editor = new $component;
-//        $editor->setInstanceId($instanceId);
-//
-//        return $editor;
-//    }
-
-//    public function removeInstance($instanceId)
-//    {
-//        $editorId = $this->getEditorId($instanceId);
-//
-//        $component = $this->register->get($editorId);
-//        /**
-//         * @var AbstractEditor $editor
-//         */
-//        $editor = new $component;
-//        $editor->removeConfig($instanceId);
-//
-//        $config = $this->configManager->get(self::CONFIG_NAME);
-//        $arr = $config->getPureAll();
-//        unset($arr[$instanceId]);
-//        $this->configManager->put(self::CONFIG_NAME, $arr);
-//    }
-
+    
     public function getEditorId($instanceId)
     {
         $config = $this->configManager->get(self::CONFIG_NAME);
@@ -168,6 +122,8 @@ class EditorHandler
     {
         $editorId = $this->getEditorId($instanceId);
         if ($editorId === null) {
+            // todo: default 사용할지 말지
+            return null;
             $editorId = $this->getDefaultEditorId();
         }
 
@@ -181,11 +137,6 @@ class EditorHandler
 
         return $editor;
     }
-
-//    public function getByEditorId($editorId)
-//    {
-//
-//    }
 
     /**
      * @param $instanceId

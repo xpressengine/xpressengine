@@ -34,12 +34,10 @@ abstract class AbstractEditor implements ComponentInterface, Renderable
     use MobileSupportTrait;
 
     /**
-     * todo: instanceId 생성자로 전달
-     *
      * @var string
      */
     protected $instanceId;
-    
+
     /**
      * @var ConfigEntity|null
      */
@@ -47,7 +45,7 @@ abstract class AbstractEditor implements ComponentInterface, Renderable
 
     protected $arguments = [];
 
-    protected static $resolver;
+    protected static $configResolver;
 
     /**
      * 에디터 스크린샷 반환
@@ -79,16 +77,16 @@ abstract class AbstractEditor implements ComponentInterface, Renderable
 
     public static function setConfigResolver(callable $resolver)
     {
-        static::$resolver = $resolver;
+        static::$configResolver = $resolver;
     }
 
     protected function resolveConfig($instanceId)
     {
-        if (!static::$resolver) {
+        if (!static::$configResolver) {
             return null;
         }
 
-        return call_user_func(static::$resolver, static::getConfigKey($instanceId));
+        return call_user_func(static::$configResolver, static::getConfigKey($instanceId));
     }
 
     public static function getConfigKey($instanceId)
@@ -97,6 +95,16 @@ abstract class AbstractEditor implements ComponentInterface, Renderable
     }
 
     abstract public function getName();
+
+    /**
+     * @return array
+     */
+    abstract public function getConfigData();
+
+    /**
+     * @return array
+     */
+    abstract public function getTools();
 
     /**
      * 에디터로 등록된 내용 출력
