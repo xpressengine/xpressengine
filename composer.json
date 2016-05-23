@@ -35,7 +35,7 @@
         "jenssegers/agent": "*",
         "xpressengine/installer": "dev-master",
         "ezyang/htmlpurifier": "~4.7",
-        "xpressengine-plugin/alice": "*",
+        "xpressengine-plugin/alice": "dev-develop",
         "xpressengine-plugin/google_analytics": "*",
         "xpressengine-plugin/orientator": "*",
         "xpressengine-plugin/page": "*",
