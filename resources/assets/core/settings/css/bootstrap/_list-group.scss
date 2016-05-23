@@ -49,36 +49,6 @@
   }   
 }
 
-.list-group {  
-  &.item-setting{    
-    .list-group-item {
-      padding-left: 0;
-      background-color: #f8fafd;
-      .handler{
-        margin-right: 30px;
-        background-color: transparent;
-        font-size: 16px;
-        cursor:move;
-      }
-      .item-title{
-        display: inline-block;
-        min-width: 90px;
-        color:$brand-primary;
-        font-style: normal;
-        font-size: 14px;
-      }
-      .item-subtext{
-        color:#8e8e93;
-        font-size:13px;
-      }
-      &:last-child{
-        border-bottom:transparent;
-      }
-    }
-  }
-  
-}
-
 
 // Interactive list items
 //

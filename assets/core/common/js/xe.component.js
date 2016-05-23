@@ -1,56 +1,79 @@
 System.amdDefine('xe.component', [], function() {
 
   return {
-    timeago: timeago
+    timeago: timeago,
+    boot: boot
   };
 
-  $(function() {
-    /*
-     * @Component Timeago
-     *
-     * <span data-xe-timeago="{timestmap|ISO8601}">2016-04-04 07:05:44</span>
-     * <span data-xe-timeago="{timestmap|ISO8601}" title="2016-04-04 07:05:44" />3 Hours ago</span>
-     */
-    System.import('vendor:/moment').then(function(moment) {
-      moment.locale(XE.getLocale());
-    });
-
-    
-    
-    $(document).on('xe.timeago', '[data-xe-timeago]', function() {
-      var $this = $(this);
-      if($this.data().xeTimeagoCalled === true) false;
-
-      System.import('vendor:/moment').then(function(moment) {
-        var dataDate = $this.data('xe-timeago');
-        var isTimestamp = (parseInt(dataDate) == dataDate);
-
-        if(isTimestamp) {
-          dataDate = moment.unix(dataDate);
-        } else {
-          dataDate = moment(dataDate);
-        }
-
-        $this.text(dataDate.fromNow());
-        $this.data().xeTimeagoCalled = true;
-      });
-    });
-
-    boot();
-  });
+  function timeago() {
+    $('[data-xe-timeago]').trigger('boot.xe.timeago');
+  }
 
   function boot() {
     timeago();
+    $('[data-toggle=xe-dropdown]').trigger('boot.xe.dropdown');
+    $('[data-toggle=xe-modal]').trigger('boot.xe.modal');
+    $('[data-toggle=xe-tooltip]').trigger('boot.xe.tooltip');
   }
-
-  function timeago() {
-    $('[data-xe-timeago]').trigger('xe.timeago');
-  };
 
 });
 
+$(function() {
+  /*
+   * @Component Timeago
+   *
+   * <span data-xe-timeago="{timestmap|ISO8601}">2016-04-04 07:05:44</span>
+   * <span data-xe-timeago="{timestmap|ISO8601}" title="2016-04-04 07:05:44" />3 Hours ago</span>
+   */
+  System.import('vendor:/moment').then(function(moment) {
+    moment.locale(XE.getLocale());
+  });
+
+
+
+  $(document).on('boot.xe.timeago', '[data-xe-timeago]', function() {
+    var $this = $(this);
+    if($this.data().xeTimeagoCalled === true) false;
+
+    System.import('vendor:/moment').then(function(moment) {
+      var dataDate = $this.data('xe-timeago');
+      var isTimestamp = (parseInt(dataDate) == dataDate);
+
+      if(isTimestamp) {
+        dataDate = moment.unix(dataDate);
+      } else {
+        dataDate = moment(dataDate);
+      }
+
+      $this.text(dataDate.fromNow());
+      $this.data().xeTimeagoCalled = true;
+    });
+  });
+
+  $(document).on('boot.xe.dropdown', '[data-toggle=xe-dropdown]', function() {
+    System.import("xe.component.dropdown").then(function() {
+      $('[xe-toggle=xe-dropdown]').xeDropdown();
+    });
+  });
+
+  $(document).on('boot.xe.modal', '[data-toggle=xe-modal]', function() {
+    System.import("xe.component.modal").then(function() {
+      $('[xe-toggle=xe-modal]').xeModal();
+    });
+  });
+
+  $(document).on('boot.xe.modal', '[data-toggle=xe-tooltip]', function() {
+    System.import("xe.component.tooltip").then(function() {
+      $('[xe-toggle=xe-tooltip]').xeTooltip();
+    });
+  });
+
+  XE.Component.boot();
+
+});
+
+
 (function($) {
-  var loadedCSS = false;
 
   // xeModal =========================================================
   $.fn.xeModal = function(options) {
@@ -60,9 +83,8 @@ System.amdDefine('xe.component', [], function() {
       $el.xeModal(options);
     });
 
-    if(!loadedCSS) {
+    if($('link[href*="assets/core/xe-ui-component/xe-ui-component.css"]').length == 0) {
       XE.cssLoad("/assets/core/xe-ui-component/xe-ui-component.css");
-      loadedCSS = true;
     }
   };
 
@@ -74,9 +96,8 @@ System.amdDefine('xe.component', [], function() {
       $el.xeDropdown(options);
     });
 
-    if(!loadedCSS) {
+    if($('link[href*="assets/core/xe-ui-component/xe-ui-component.css"]').length == 0) {
       XE.cssLoad("/assets/core/xe-ui-component/xe-ui-component.css");
-      loadedCSS = true;
     }
   };
 
@@ -88,9 +109,8 @@ System.amdDefine('xe.component', [], function() {
       $el.xeTooltip(options);
     });
 
-    if(!loadedCSS) {
+    if($('link[href*="assets/core/xe-ui-component/xe-ui-component.css"]').length == 0) {
       XE.cssLoad("/assets/core/xe-ui-component/xe-ui-component.css");
-      loadedCSS = true;
     }
   };
 

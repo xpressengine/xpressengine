@@ -95,7 +95,7 @@
   @include clearfix;
   >.pull-left,
   >.pull-right{
-    margin:10px 0;
+    margin:14px 0;
   }  
 }
 
@@ -137,7 +137,9 @@
         margin:10px 0;
       }
     }
-
+  > .panel-collapse >.panel-heading{
+       background-color: $panel-footer-bg;
+   }
 
   > .panel-heading + .panel-collapse > .list-group {
     .list-group-item:first-child {
@@ -466,5 +468,13 @@
         border: 1px solid $list-group-border;
       }
     }
+  }
+  .panel-body{      
+    background-color: #fafafc;
+    border: 1px solid #ededed;
+    border-radius : $border-radius-base;
+    .panel-body{
+      background-color: #fff;
+    }     
   }  
 }

@@ -122,8 +122,6 @@ var page = (function($) {
                     }
                 }
 
-
-                //TODO:: js load count확인
                 if(js.length > 0) {
                     for(var i = 0, max = js.length; i < max; i += 1) {
                         if(!_assets.hasOwnProperty(js[i])) {

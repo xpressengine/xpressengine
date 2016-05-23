@@ -610,56 +610,79 @@ if (typeof exports !== 'undefined') {
 System.amdDefine('xe.component', [], function() {
 
   return {
-    timeago: timeago
+    timeago: timeago,
+    boot: boot
   };
 
-  $(function() {
-    /*
-     * @Component Timeago
-     *
-     * <span data-xe-timeago="{timestmap|ISO8601}">2016-04-04 07:05:44</span>
-     * <span data-xe-timeago="{timestmap|ISO8601}" title="2016-04-04 07:05:44" />3 Hours ago</span>
-     */
-    System.import('vendor:/moment').then(function(moment) {
-      moment.locale(XE.getLocale());
-    });
-
-    
-    
-    $(document).on('xe.timeago', '[data-xe-timeago]', function() {
-      var $this = $(this);
-      if($this.data().xeTimeagoCalled === true) false;
-
-      System.import('vendor:/moment').then(function(moment) {
-        var dataDate = $this.data('xe-timeago');
-        var isTimestamp = (parseInt(dataDate) == dataDate);
-
-        if(isTimestamp) {
-          dataDate = moment.unix(dataDate);
-        } else {
-          dataDate = moment(dataDate);
-        }
-
-        $this.text(dataDate.fromNow());
-        $this.data().xeTimeagoCalled = true;
-      });
-    });
-
-    boot();
-  });
+  function timeago() {
+    $('[data-xe-timeago]').trigger('boot.xe.timeago');
+  }
 
   function boot() {
     timeago();
+    $('[data-toggle=xe-dropdown]').trigger('boot.xe.dropdown');
+    $('[data-toggle=xe-modal]').trigger('boot.xe.modal');
+    $('[data-toggle=xe-tooltip]').trigger('boot.xe.tooltip');
   }
-
-  function timeago() {
-    $('[data-xe-timeago]').trigger('xe.timeago');
-  };
 
 });
 
+$(function() {
+  /*
+   * @Component Timeago
+   *
+   * <span data-xe-timeago="{timestmap|ISO8601}">2016-04-04 07:05:44</span>
+   * <span data-xe-timeago="{timestmap|ISO8601}" title="2016-04-04 07:05:44" />3 Hours ago</span>
+   */
+  System.import('vendor:/moment').then(function(moment) {
+    moment.locale(XE.getLocale());
+  });
+
+
+
+  $(document).on('boot.xe.timeago', '[data-xe-timeago]', function() {
+    var $this = $(this);
+    if($this.data().xeTimeagoCalled === true) false;
+
+    System.import('vendor:/moment').then(function(moment) {
+      var dataDate = $this.data('xe-timeago');
+      var isTimestamp = (parseInt(dataDate) == dataDate);
+
+      if(isTimestamp) {
+        dataDate = moment.unix(dataDate);
+      } else {
+        dataDate = moment(dataDate);
+      }
+
+      $this.text(dataDate.fromNow());
+      $this.data().xeTimeagoCalled = true;
+    });
+  });
+
+  $(document).on('boot.xe.dropdown', '[data-toggle=xe-dropdown]', function() {
+    System.import("xe.component.dropdown").then(function() {
+      $('[xe-toggle=xe-dropdown]').xeDropdown();
+    });
+  });
+
+  $(document).on('boot.xe.modal', '[data-toggle=xe-modal]', function() {
+    System.import("xe.component.modal").then(function() {
+      $('[xe-toggle=xe-modal]').xeModal();
+    });
+  });
+
+  $(document).on('boot.xe.modal', '[data-toggle=xe-tooltip]', function() {
+    System.import("xe.component.tooltip").then(function() {
+      $('[xe-toggle=xe-tooltip]').xeTooltip();
+    });
+  });
+
+  XE.Component.boot();
+
+});
+
+
 (function($) {
-  var loadedCSS = false;
 
   // xeModal =========================================================
   $.fn.xeModal = function(options) {
@@ -669,9 +692,8 @@ System.amdDefine('xe.component', [], function() {
       $el.xeModal(options);
     });
 
-    if(!loadedCSS) {
+    if($('link[href*="assets/core/xe-ui-component/xe-ui-component.css"]').length == 0) {
       XE.cssLoad("/assets/core/xe-ui-component/xe-ui-component.css");
-      loadedCSS = true;
     }
   };
 
@@ -683,9 +705,8 @@ System.amdDefine('xe.component', [], function() {
       $el.xeDropdown(options);
     });
 
-    if(!loadedCSS) {
+    if($('link[href*="assets/core/xe-ui-component/xe-ui-component.css"]').length == 0) {
       XE.cssLoad("/assets/core/xe-ui-component/xe-ui-component.css");
-      loadedCSS = true;
     }
   };
 
@@ -697,14 +718,12 @@ System.amdDefine('xe.component', [], function() {
       $el.xeTooltip(options);
     });
 
-    if(!loadedCSS) {
+    if($('link[href*="assets/core/xe-ui-component/xe-ui-component.css"]').length == 0) {
       XE.cssLoad("/assets/core/xe-ui-component/xe-ui-component.css");
-      loadedCSS = true;
     }
   };
 
 })(jQuery);
-
 (function(exports) {
     'use strict';
 
@@ -841,6 +860,256 @@ System.amdDefine('xe.component', [], function() {
     exports.XEeditor = XEeditor;
 })(window);
 
+// //tinyMCE
+// XEeditor.define({
+//     name: 'editor.tinyMCE',
+//     initialize: function (selector, options) {
+//         tinymce.init({
+//             selector: selector,
+//             setup: function (editor) {
+//                 editor.on('keyup', function (e) {
+//
+//                 });
+//             }
+//         });
+//
+//         this.addProps({
+//             selector: selector
+//             , options: options
+//             , id: selector.replace('#', '')
+//         });
+//     },
+//     getContents: function () {
+//         return tinymce.get(this.props.id).getContent();
+//     },
+//     setContents: function (text) {
+//         tinymce.get(this.props.id).setContent(text);
+//     },
+//     addContents: function (text) {
+//         tinymce.get(this.props.id).execCommand('mceInsertContent', false, text);
+//     }
+// });
+//
+//
+// $(function () {
+//     var ckEditor = XEeditor.getEditor('editor.ckeditor');
+//     var tinyEditor = XEeditor.getEditor('editor.tinyMCE');
+//
+//     console.log(xe3CkEditorConfig.configs);
+//
+//     window.editor11 = ckEditor.create('editor1', xe3CkEditorConfig.configs);
+//
+// });
+(function(exports) {
+    'use strict';
+
+    //define시 필수 구현되어야 하는 object
+    var requireOptions = [
+            'name',
+            'getContents', 'setContents', 'addContents',
+            'initialize'
+        ],
+        editorSet = {},
+        editorOptionSet = {};
+
+    var instanceObj = function(editorName, sel, options) {
+        this.editorName = editorName;
+        this.selector = sel;
+        this.options = options;
+        this.props = {};
+
+    };
+
+    instanceObj.prototype = {
+        getInstance: function() {
+            return editorSet[this.editorName].editorList[this.selector];
+        },
+        getContents: function() {
+            return editorSet[this.editorName].getContents.call(this.getInstance());
+        },
+        setContents: function(text) {
+            editorSet[this.editorName].setContents.call(this.getInstance(), text);
+        },
+        addContents: function(text) {
+            editorSet[this.editorName].addContents.call(this.getInstance(), text);
+        },
+        addProps: function(obj) {
+            for(var o in obj) {
+                this.getInstance().props[o] = obj[o];
+            }
+        }
+    };
+
+    var Editor = function(options) {
+        for(var o in options) {
+            this[o] = options[o];
+        }
+    };
+
+    Editor.prototype = {
+        create: function(sel, options) {
+            this.editorList[sel] = new instanceObj(this.name, sel, options);
+            this.initialize.call(this.editorList[sel], sel, options);
+
+            if(this.hasOwnProperty('components') && this.components.length > 0) {
+                this.addComponents.call(this.editorList[sel], this.components);
+            }
+
+            return this.editorList[sel];
+        },
+        getContents: function() {
+            console.error('Editor.getContents');
+        },
+        setContents: function(text) {
+            console.error('Editor.setContents');
+        },
+        addContents: function(text) {
+            console.error('Editor.addContents');
+        },
+        addComponents: function(components) {
+
+        },
+        addPlugins: function(plugins) {
+
+        }
+    };
+
+    var XEeditor = {
+        define: function(options) {
+            if(this.isValidOptions(options)) {
+                editorOptionSet[options.name] = options;
+                editorSet[options.name] = new Editor(options);
+            }
+        },
+        isValidOptions: function(options) {
+            var valid = true;
+            for(var option in requireOptions) {
+                if(!options.hasOwnProperty(requireOptions[option])) {
+                    console.error('구현 필요 [fn:' + requireOptions[option] + ']');
+                    valid = false;
+                }
+                
+                if(options.hasOwnProperty('components')
+                    && options.components instanceof Array
+                    && options.components.length > 0
+                    && !options.hasOwnProperty('addComponents')) {
+                    console.error('구현 필요 [fn:addComponents]');
+                }
+                
+                if(options.hasOwnProperty('plugins')
+                    && options.plugins instanceof Array
+                    && options.plugins.length > 0
+                    && !options.hasOwnProperty('addPlugins')) {
+                    console.error('구현 필요 [fn:addPlugins]');
+                }
+            }
+
+            if(!!editorSet.hasOwnProperty(options.name)) {
+                console.error('등록된 에디터 있음 [' + options.name + ']');
+                valid = false;
+            }
+
+            if(!valid) {
+                return false;
+            }
+
+            return true;
+        },
+        getEditor: function(name) {
+            return editorSet[name];
+        }
+    };
+
+    exports.XEeditor = XEeditor;
+})(window);
+
+// <textarea name="test" id="editor1" cols="30" rows="10"></textarea>
+// <textarea name="test2" id="editor2" cols="30" rows="10"></textarea>
+
+
+// var components = [{
+//     name: 'Code',
+//     options: {
+//         label: 'Wrap code',
+//         command: 'wrapCode'
+//     },
+//     exec: function(editor) {
+//         editor.insertText( '```diagram\n' + editor.getSelection().getSelectedText() + '\n```' );
+//     }
+// }, {
+//     name: 'Diagram',
+//     options: {
+//         label: 'Wrap diagram',
+//         command: 'wrapDiagram'
+//     },
+//     exec: function (editor) {
+//         editor.insertText( '```diagram\n' + editor.getSelection().getSelectedText() + '\n```' );
+//     }
+// }
+// ];
+//
+// //ckeditor
+// XEeditor.define({
+//     name: 'editor.ckeditor',
+//     components: components,
+//     plugins: [],
+//     initialize: function (selector, options) {
+//
+//         var options = $.extend({
+//             "height": 200,
+//             "fileUpload":{
+//                 "upload_url": "/file/upload",
+//                 "source_url": "/file/source",
+//                 "download_url": "/file/download"
+//             },
+//             "suggestion":{
+//                 "hashtag_api": "/suggestion/hashTag",
+//                 "mention_api": "/suggestion/mention"
+//             }
+//         }, options);
+//
+//         var editor = CKEDITOR.replace(selector, options || {});
+//
+//         console.log('editor', editor);
+//         editor.on('change', function(e) {
+//             e.editor.updateElement();
+//         });
+//
+//         this.addProps({
+//             editor: editor
+//             , selector: selector
+//             , options: options
+//         });
+//     },
+//     getContents: function () {
+//         return CKEDITOR.instances[this.props.selector].getData();
+//     },
+//     setContents: function (text) {
+//         CKEDITOR.instances[this.props.selector].setData(text);
+//     },
+//     addContents: function (text) {
+//         CKEDITOR.instances[this.props.selector].insertHtml(text);
+//     },
+//     addComponents: function (components) {
+//         console.log("addComponents", components);
+//
+//         var editor = this.props.editor;
+//
+//         for(var i = 0, max = components.length; i < max; i += 1) {
+//             var component = components[i];
+//
+//             editor.ui.add( component.name, CKEDITOR.UI_BUTTON, component.options);
+//
+//             if(component.hasOwnProperty('options')
+//                 && component.options.hasOwnProperty('command')) {
+//                 editor.addCommand(component.options.command, {
+//                     exec: component.exec
+//                 });
+//             }
+//         }
+//     }
+// });
+//
 // //tinyMCE
 // XEeditor.define({
 //     name: 'editor.tinyMCE',
@@ -1030,7 +1299,7 @@ System.amdDefine('queue', [], function() {
 
 System.amdDefine('css', [], function() {
   var cssPrefixes = [ 'Webkit', 'O', 'Moz', 'ms' ],
-    cssProps    = {};
+      cssProps    = {};
 
   function camelCase(string) {
     return string.replace(/^-ms-/, 'ms-').replace(/-([\da-z])/gi, function(match, letter) {
@@ -1043,8 +1312,8 @@ System.amdDefine('css', [], function() {
     if (name in style) return name;
 
     var i = cssPrefixes.length,
-      capName = name.charAt(0).toUpperCase() + name.slice(1),
-      vendorName;
+        capName = name.charAt(0).toUpperCase() + name.slice(1),
+        vendorName;
     while (i--) {
       vendorName = cssPrefixes[i] + capName;
       if (vendorName in style) return vendorName;
@@ -1067,8 +1336,8 @@ System.amdDefine('css', [], function() {
 
   return function(element, properties) {
     var args = arguments,
-      prop,
-      value;
+        prop,
+        value;
 
     if (args.length == 2) {
       for (prop in properties) {
@@ -1104,10 +1373,12 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
       cssLoaded = true;
       XE.cssLoad('/assets/core/common/css/progress.css'); // @TODO
     }
-  };
+  }
 
   function start(context) {
-    this.cssLoad();
+    if($('link[href*="assets/core/common/css/progress.css"]').length == 0) {
+      XE.cssLoad('/assets/core/common/css/progress.css'); // @TODO
+    }
 
     var $context = $(context);
     if ($context.context === undefined) {
@@ -1126,7 +1397,7 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
     }
 
     $context.trigger('progressDone');
-  };
+  }
 
   exports.spinner = function(context) {
 
@@ -1147,7 +1418,7 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
     }
 
     return instance;
-  };
+  }
 
   function getCount($context) {
     var count = $context.attr('data-progress-count');
@@ -1156,7 +1427,7 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
       count = parseInt(count);
     }
     return count;
-  };
+  }
 
   function setCount($context, count) {
     if (parseInt(count) < 0) {
@@ -1168,9 +1439,9 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
   function setInstance($context, instance) {
     if (getInstance($context) === null) {
       var progress = new XeProgress(),
-        parent = 'body',
-        type = $context.data('progress-type') === undefined ? 'default' : $context.data('progress-type'),
-        showSpinner = type !== 'nospin';
+          parent = 'body',
+          type = $context.data('progress-type') === undefined ? 'default' : $context.data('progress-type'),
+          showSpinner = type !== 'nospin';
 
 
       if ($context.attr('id') !== undefined) {
@@ -1193,14 +1464,14 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
       setCount($context, 0);
       attachInstance($context);
     }
-  };
+  }
 
   function attachInstance($context) {
     $context.bind('progressStart', function(e) {
       e.stopPropagation();
       var count = getCount($context);
       setCount($context, count+1);
-      if (count === 0) {
+      if (count === 1) {
         getInstance($context).start();
       }
 
@@ -1209,15 +1480,14 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
     $context.bind('progressDone', function(e) {
       e.stopPropagation();
 
-      var count = getCount($context);
-
+      var count = getCount($(this));
       setCount($(this), count-1);
-      if (count === 1) {
+      if (getCount($(this)) === 1) {
         var instance = getInstance($context);
         instance.done(instance.getTime());
       }
     });
-  };
+  }
 
 
   /**
@@ -1326,13 +1596,13 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
       this.status = (n === 1 ? null : n);
 
       var $progress = this.render(!started),
-        $bar      = this.$bar,
-        speed    = this.settings.speed,
-        ease     = this.settings.easing;
+          $bar      = this.$bar,
+          speed    = this.settings.speed,
+          ease     = this.settings.easing;
 
       // $progress.offsetWidth; /* Repaint */
       var self = this,
-        time = this.getTime();
+          time = this.getTime();
       queue(function(next) {
         // Set positionUsing if it hasn't already been set
         if (self.settings.positionUsing === '') self.settings.positionUsing = self.getPositioningCSS();
@@ -1416,9 +1686,9 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
       $progress.html(this.settings.template[this.settings.type]);
 
       var $bar      = $progress.find(this.settings.barSelector),
-        perc     = fromStart ? '-100' : toBarPerc(this.status || 0),
-        $parent   = $(this.settings.parent),
-        $spinner;
+          perc     = fromStart ? '-100' : toBarPerc(this.status || 0),
+          $parent   = $(this.settings.parent),
+          $spinner;
 
       $bar.attr('title-name', this.instanceId);
       this.$bar = $bar;
@@ -1477,9 +1747,9 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
 
       // Sniff prefixes
       var vendorPrefix = ('WebkitTransform' in bodyStyle) ? 'Webkit' :
-        ('MozTransform' in bodyStyle) ? 'Moz' :
-          ('msTransform' in bodyStyle) ? 'ms' :
-            ('OTransform' in bodyStyle) ? 'O' : '';
+          ('MozTransform' in bodyStyle) ? 'Moz' :
+              ('msTransform' in bodyStyle) ? 'ms' :
+                  ('OTransform' in bodyStyle) ? 'O' : '';
 
       if (vendorPrefix + 'Perspective' in bodyStyle) {
         // Modern browsers with 3D support, e.g. Webkit, IE10
