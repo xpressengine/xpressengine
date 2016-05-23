@@ -45,6 +45,8 @@ class MenuSelector extends AbstractUIObject
             $option->appendTo($select)->attr('value', $menu->id)->html($menu->title);
             if(isset($args['selected']) && $menu->id == $args['selected']) {
                 $option->attr('selected', 'selected');
+            } elseif(isset($args['value']) && $menu->id == $args['value']) {
+                $option->attr('selected', 'selected');
             }
         }
 

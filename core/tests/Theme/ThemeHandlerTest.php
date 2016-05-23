@@ -3,7 +3,7 @@ namespace Xpressengine\Tests\Theme;
 
 use Mockery;
 use Xpressengine\Plugin\PluginRegister;
-use Xpressengine\Theme\ThemeEntity;
+use Xpressengine\Theme\ThemeEntityInterface;
 use Xpressengine\Theme\ThemeHandler;
 
 class ThemeHandlerTest extends \PHPUnit_Framework_TestCase
@@ -24,12 +24,12 @@ class ThemeHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $id = 'theme/pluginA@blue';
         $theme = $this->getHandler()->getTheme($id);
-        $this->assertInstanceOf(ThemeEntity::class, $theme);
+        $this->assertInstanceOf(ThemeEntityInterface::class, $theme);
         $this->assertEquals('Theme_theme_pluginA_blue', $theme->getClass());
 
         $id = 'theme/pluginA@red';
         $theme = $this->getHandler()->getTheme($id);
-        $this->assertInstanceOf(ThemeEntity::class, $theme);
+        $this->assertInstanceOf(ThemeEntityInterface::class, $theme);
         $this->assertEquals('Theme_theme_pluginA_red', $theme->getClass());
     }
 

@@ -28,11 +28,11 @@ class PluginServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->registerPluginRegisterManager();
+        $this->registerPluginRegister();
         $this->registerPluginHandler();
     }
 
-    protected function registerPluginRegisterManager()
+    protected function registerPluginRegister()
     {
         $this->app->singleton(
             'xe.pluginRegister',
@@ -44,7 +44,7 @@ class PluginServiceProvider extends ServiceProvider
 
                 /** @var \Xpressengine\Register\Container $register */
                 $register = $app['xe.register'];
-                $pluginRegister = new $pluginRegister($register);
+                $pluginRegister = new $pluginRegister($register, 'plugins');
 
                 return $pluginRegister;
             }

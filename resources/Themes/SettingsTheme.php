@@ -1,8 +1,9 @@
 <?php
 namespace Xpressengine\Themes;
 
-use Xpressengine\User\Rating;
+use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Theme\AbstractTheme;
+use Xpressengine\User\Rating;
 
 class SettingsTheme extends AbstractTheme
 {
@@ -25,7 +26,7 @@ class SettingsTheme extends AbstractTheme
         $siteTitle = app('xe.site')->getSiteConfigValue('site_title');
         $siteTitle = $siteTitle !== null ? xe_trans($siteTitle) : 'XpressEngine';
         $selectedMenu = \XeSettings::getSelectedMenu($isSuper);
-        return \View::make('themes.settings', compact('menu', 'selectedMenu', 'user', 'siteTitle'));
+        return view()->make('themes.settings', compact('menu', 'selectedMenu', 'user', 'siteTitle'));
     }
 
     /**
@@ -48,6 +49,23 @@ class SettingsTheme extends AbstractTheme
             'assets/core/settings/css/admin.css',
         ])->load();
 
-        $frontendHandler->js('assets/core/settings/js/admin.bundle.js')->appendTo('head')->load();
+        $frontendHandler->js([
+             'assets/vendor/bootstrap/js/bootstrap.js',
+             'assets/core/settings/js/admin.bundle.js'
+         ])->appendTo('head')->load();
     }
+
+    /**
+     * 테마 설정 페이지에 출력할 html 텍스트를 출력한다.
+     * 설정폼은 자동으로 생성되며 설정폼 내부에 출력할 html만 반환하면 된다.
+     *
+     * @param ConfigEntity|null $config 기존에 설정된 설정값
+     *
+     * @return string
+     */
+    public function getSettingView(ConfigEntity $config = null)
+    {
+        return '';
+    }
+
 }

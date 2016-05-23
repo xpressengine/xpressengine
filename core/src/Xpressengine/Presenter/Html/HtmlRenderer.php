@@ -18,7 +18,7 @@ use Xpressengine\Presenter\RendererInterface;
 use Xpressengine\Presenter\Presenter;
 use Xpressengine\Presenter\Exceptions\NotFoundSkinException;
 use Xpressengine\Seo\SeoHandler;
-use Xpressengine\Theme\ThemeEntity;
+use Xpressengine\Theme\ThemeEntityInterface;
 use Xpressengine\Widget\WidgetParser;
 
 /**
@@ -248,7 +248,7 @@ class HtmlRenderer implements RendererInterface
         $themeHandler = $this->presenter->getThemeHandler();
 
         // get instance theme
-        /** @var ThemeEntity $theme */
+        /** @var ThemeEntityInterface $theme */
         $theme = $themeHandler->getSelectedTheme();
 
         // get site default theme

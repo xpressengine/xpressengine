@@ -11,7 +11,7 @@ class FormImage extends AbstractUIObject
 
     public function render()
     {
-        $this->loadFiles();
+        $this->loadAssets();
 
         $args = $this->arguments;
         $seq  = $this->seq();
@@ -26,21 +26,12 @@ class FormImage extends AbstractUIObject
         return parent::render();
     }
 
-    public static function boot()
-    {
-        // TODO: Implement boot() method.
-    }
-
-    public static function getSettingsURI()
-    {
-    }
-
     /**
      * loadFiles
      *
      * @return void
      */
-    protected function loadFiles()
+    protected function loadAssets()
     {
         XeFrontend::js(
             [

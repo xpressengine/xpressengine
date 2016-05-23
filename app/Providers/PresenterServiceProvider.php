@@ -206,12 +206,9 @@ class PresenterServiceProvider extends ServiceProvider
     {
         $siteConfig = app('xe.site')->getSiteConfig();
 
-        if ($siteConfig['favicon'] !== null) {
-            $iconFile = File::find($siteConfig['favicon']);
-            if ($iconFile !== null) {
-                $iconUrl = $iconFile->url();
-                $frontendHandler->icon($iconUrl)->load();
-            }
+        $icon = $siteConfig->get('favicon.path');
+        if ($icon !== null) {
+                $frontendHandler->icon($icon)->load();
         }
     }
 

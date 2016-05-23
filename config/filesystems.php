@@ -56,6 +56,14 @@ return [
 			'url'	 => '/storage/plugin/',
         ],
 
+        'theme' => [
+            'driver' => 'local',
+            'root'   => storage_path('theme'),
+			'url'	 => '/storage/theme/',
+        ],
+
+
+
 		'ftp' => [
 			'driver'   => 'ftp',
 			'host'     => 'ftp.example.com',

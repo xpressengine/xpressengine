@@ -1,19 +1,19 @@
 <?php
 namespace Xpressengine\Tests\Theme;
 
-use Xpressengine\Theme\ThemeEntity;
+use Xpressengine\Theme\ThemeEntityInterface;
 
 class ThemeEntityTest extends \PHPUnit_Framework_TestCase
 {
     public function testConstruct()
     {
-        $entity = new ThemeEntity(TestTheme::getId(), TestTheme::class);
-        $this->assertInstanceOf(ThemeEntity::class, $entity);
+        $entity = new ThemeEntityInterface(TestTheme::getId(), TestTheme::class);
+        $this->assertInstanceOf(ThemeEntityInterface::class, $entity);
     }
 
     public function testGetters()
     {
-        $entity = new ThemeEntity(TestTheme::getId(), TestTheme::class);
+        $entity = new ThemeEntityInterface(TestTheme::getId(), TestTheme::class);
 
         $this->assertEquals('Test Theme', $entity->getTitle());
         $this->assertEquals('blur~~ blur~~', $entity->getDescription());
@@ -24,7 +24,7 @@ class ThemeEntityTest extends \PHPUnit_Framework_TestCase
 
     public function testSupports()
     {
-        $entity = new ThemeEntity(TestTheme::getId(), TestTheme::class);
+        $entity = new ThemeEntityInterface(TestTheme::getId(), TestTheme::class);
 
         $this->assertFalse($entity->supportDesktop());
         $this->assertFalse($entity->supportDesktopOnly());
@@ -34,7 +34,7 @@ class ThemeEntityTest extends \PHPUnit_Framework_TestCase
 
     public function testGetObject()
     {
-        $entity = new ThemeEntity(TestTheme::getId(), TestTheme::class);
+        $entity = new ThemeEntityInterface(TestTheme::getId(), TestTheme::class);
 
         $this->assertInstanceOf('Xpressengine\Theme\AbstractTheme', $entity->getObject());
         $this->assertInstanceOf('Xpressengine\Theme\AbstractTheme', $entity->getObject());
@@ -42,7 +42,7 @@ class ThemeEntityTest extends \PHPUnit_Framework_TestCase
 
     public function testToArray()
     {
-        $entity = new ThemeEntity(TestTheme::getId(), TestTheme::class);
+        $entity = new ThemeEntityInterface(TestTheme::getId(), TestTheme::class);
 
         $this->assertEquals(
             [

@@ -1,0 +1,47 @@
+<?php
+return [
+    'view' => 'theme',
+    'setting' => [
+        'spot_title' => [
+            '_type' => 'text',
+            '_section' => '기본설정',
+            'label' => '메인 문구',
+            'placeholder' => '로고 제목을 입력하세요',
+            'description' => '로고 제목을 입력하세요',
+        ],
+        'spot_image' => [
+            '_type' => 'image',
+            '_section' => '기본설정',
+            'label' => '메인 이미지',
+            'description' => '로고 이미지를 등록하세요'
+        ],
+        'layout' => [
+            '_type' => 'select',
+            '_section' => '레이아웃',
+            'label' => '레이아웃',
+            'options' => [
+                'no_side' => '사이드바없음',
+                'left_side' => '좌측사이드바',
+                'right_side' => '우측사이드바',
+            ]
+        ],
+        'gnb' => [
+            '_type' => 'menu',
+            '_section' => '메뉴',
+            'label' => '메인메뉴',
+        ]
+    ],
+    'support' => [
+        'mobile' => true,
+        'desktop' => true
+    ],
+    'editable' => [
+        'views' => [
+            'theme.blade.php',
+            'gnb.blade.php',
+        ],
+        'assets' => [
+            'css/theme.css'
+        ]
+    ]
+];

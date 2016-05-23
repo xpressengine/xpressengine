@@ -1,0 +1,9 @@
+<?php
+namespace DummyNamespace;
+
+use Xpressengine\Theme\GenericTheme;
+
+class DummyClass extends GenericTheme
+{
+    protected static $path = 'DummyPluginId/DummyThemeDirname';
+}

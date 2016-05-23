@@ -71,6 +71,11 @@ class PluginScanner
 
         foreach ($directories as $directory) {
             $id = basename($directory);
+
+            if(strpos($id, '_') === 0) {
+                continue;
+            }
+
             $path = $directory.'/plugin.php';
 
             $pluginInfo = [];

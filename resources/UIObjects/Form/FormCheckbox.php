@@ -20,7 +20,7 @@ class FormCheckbox extends AbstractUIObject
         $args = $this->arguments;
         PhpQuery::newDocument();
         $this->markup = PhpQuery::pq($this->template);
-        
+
         $label = $this->markup['label'];
         $this->box = $this->markup['.checkbox'];
 
@@ -47,7 +47,7 @@ class FormCheckbox extends AbstractUIObject
             foreach ($args as $key => $arg) {
                 switch ($key) {
                     case 'class':
-                        $checkboxObj->addClass('class', $arg);
+                        $checkboxObj->addClass($arg);
                         break;
                     case 'id':
                         $label->attr('for', $arg);

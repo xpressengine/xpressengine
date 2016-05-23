@@ -36,7 +36,7 @@ class ThemeServiceProvider extends ServiceProvider
                 $themeHandler = $app['xe.interception']->proxy(ThemeHandler::class, 'XeTheme');
 
                 $blankThemeClass = $app['config']->get('xe.theme.blank');
-                $themeHandler = new $themeHandler($register, $app['xe.config'], $blankThemeClass::getId());
+                $themeHandler = new $themeHandler($register, $app['xe.config'], $app['view'], $blankThemeClass::getId());
 
                 return $themeHandler;
             }
