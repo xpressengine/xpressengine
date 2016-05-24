@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,12 +42,6 @@
             <div class="masthead clearfix">
                 <div class="inner">
                     <h3 class="masthead-brand">XpressEngine</h3>
-                    <nav>
-                        <ul class="nav masthead-nav">
-                            <li class="active"><a href="#">Steps?</a></li>
-                            <li><a href="#">Steps1</a></li>
-                        </ul>
-                    </nav>
                 </div>
             </div>
 
@@ -59,15 +52,9 @@
 
                 </div>
                 <p class="lead">
-                    <a href="/" class="btn btn-lg btn-danger again-button" style="display:none;">Checking Again</a>
-                    <a href="/step1" class="btn btn-lg btn-default next-button">Getting start</a>
+                    <a href="/installer" class="btn btn-lg btn-danger again-button">Checking Again</a>
+                    <a href="/install" class="btn btn-lg btn-default next-button" style="display:none;">Getting start</a>
                 </p>
-            </div>
-
-            <div class="mastfoot">
-                <div class="inner">
-                    <p>Cover template for <a href="http://getbootstrap.com">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>.</p>
-                </div>
             </div>
 
         </div>
@@ -86,53 +73,52 @@
 <script src="http://getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
 
 <script>
-    function checkPHP()
+    var checkSystems = [];
+
+    function check(msg, checkKey)
     {
-        $('.checking-list').append($('<p>').html('<span class="glyphicon glyphicon-refresh php-icon" aria-hidden="true"></span> PHP 버전을 체크합니다.'));
+        checkSystems[checkKey] = false;
+
+        $('.checking-list').append($('<p>').html('<span class="glyphicon glyphicon-refresh '+checkKey+' " aria-hidden="true"></span> ' + msg));
 
         $.ajax({
             type: 'get',
             dataType: 'json',
-            data: {},
-            url: '/checkPHP',
+            data: {'key' : checkKey},
+            url: '/installer/check.php',
             success: function(data) {
                 if (data.result == false) {
-                    $('.php-icon').addClass('glyphicon-ban-circle').removeClass('glyphicon-refresh');
-                    $('.next-button').hide();
-                    $('.again-button').show();
-
+                    $('.'+checkKey).addClass('glyphicon-ban-circle').css('color','red').removeClass('glyphicon-refresh');
+                    $('.'+checkKey).closest('p').append($('<span>').css('color','red').text(data.message));
                 } else {
-                    $('.php-icon').addClass('glyphicon-ok-circle').removeClass('glyphicon-refresh');
+                    $('.'+checkKey).addClass('glyphicon-ok-circle').removeClass('glyphicon-refresh');
                 }
-            }
-        });
-    }
 
-    function directoryPermission()
-    {
-        $('.checking-list').append($('<p>').html('<span class="glyphicon glyphicon-refresh directory-icon" aria-hidden="true"></span> 디렉토리 사용 권한을 체크합니다.'));
+                checkSystems[checkKey] = data.result
 
-        $.ajax({
-            type: 'get',
-            dataType: 'json',
-            data: {},
-            url: '/checkDirectoryPermission',
-            success: function(data) {
-                if (data.result == false) {
-                    $('.directory-icon').addClass('glyphicon-ban-circle').removeClass('glyphicon-refresh');
-                    $('.next-button').hide();
-                    $('.again-button').show();
+                var result = true;
+                for (var key in checkSystems) {
+                    if (checkSystems[key] === false) {
+                        result = false;
+                        break;
+                    }
+                }
 
-                } else {
-                    $('.directory-icon').addClass('glyphicon-ok-circle').removeClass('glyphicon-refresh');
+                if (result == true) {
+                    $('.again-button').hide();
+                    $('.next-button').show();
                 }
             }
         });
     }
 
     $(function() {
-        checkPHP();
-        directoryPermission();
+        check('PHP 버전을 체크합니다.', 'phpVersion');
+        check('디렉토리 사용 권한을 체크합니다.', 'directoryPermission');
+        check('환경설청 파일을 체크합니다.', 'envFile');
+        check('cURL PHP Extension is required', 'curl');
+        check('MCrypt PHP Extension is required', 'mcrypt');
+        check('GD PHP Library is required', 'gd');
     });
 </script>
 </body>

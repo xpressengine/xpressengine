@@ -37,19 +37,12 @@ class InstallServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $appKeyPath = storage_path('app') . '/appKey';
+        Route::get('/', function() {
+            return redirect('/installer');
+        });
 
-        if (File::exists($appKeyPath) === false) {
-            File::put($appKeyPath, Str::random(32));
-        }
-
-        Route::get('/', '\App\Http\Controllers\InstallController@index');
-        Route::get('/step1', '\App\Http\Controllers\InstallController@step1');
-        Route::get('/checkPHP', '\App\Http\Controllers\InstallController@checkPHP');
-        Route::get('/checkDirectoryPermission', '\App\Http\Controllers\InstallController@checkDirectoryPermission');
-        Route::post('/install', '\App\Http\Controllers\InstallController@install');
-
-        app('config')->set('app.key', File::get($appKeyPath));
+        Route::get('/install', '\App\Http\Controllers\InstallController@create');
+        Route::post('/install/post', '\App\Http\Controllers\InstallController@install');
     }
 
     /**

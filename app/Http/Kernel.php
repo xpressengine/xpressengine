@@ -61,7 +61,7 @@ class Kernel extends HttpKernel
         $args = func_get_args();
         $withXE = array_shift($args);
 
-        if (!$this->isInstalled() && $withXE !== true) {
+        if ($this->isInstalled() === false && $withXE !== true) {
             $this->resetForInstall();
         }
 

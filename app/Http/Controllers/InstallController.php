@@ -6,67 +6,39 @@ use View;
 use Artisan;
 use File;
 use Symfony\Component\Yaml\Yaml;
+use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
 
 class InstallController extends Controller
 {
     protected $phpVersion = 50509;
 
-    public function index()
+    /**
+     * Is installed
+     *
+     * @return bool
+     */
+    protected function isInstalled()
     {
-        return View::make('install.index', []);
+        return file_exists(storage_path() . '/app/installed');
     }
 
-    public function checkDirectoryPermission()
+    public function create()
     {
-        $request = app('request');
-
-        // 파일을 쓰고 지우는 동작을 통해 permission 유무 체크
-        $result = true;
-
-        // 이것 저것 체크해야 하지만.. 지원 안하는것으로 결정되어 추가 개발 안함
-        $configPath = storage_path('app');
-
-        if ($request->format() == 'json') {
-            return json_encode(['result' => $result]);
-        } else {
-            return $result;
+        if ($this->isInstalled() === true) {
+            throw new \Exception('Already installed');
         }
-    }
 
-    public function checkPHP()
-    {
-        $request = app('request');
-
-        $result = PHP_VERSION_ID < $this->phpVersion ? false : true;
-        $result = true;
-        if ($request->format() == 'json') {
-            return json_encode(['result' => $result]);
-        } else {
-            return $result;
-        }
-    }
-
-    public function step1()
-    {
-        $request = app('request');
-
-        return View::make('install.step1', []);
-    }
-
-    protected function checkSystem()
-    {
-        // throw exception
-
-        if ($this->checkDirectoryPermission() === false) {
-
-        }
-        if ($this->checkPHP() === false) {
-
-        }
+        return View::make('install.create', []);
     }
 
     public function install()
     {
+        if ($this->isInstalled() === true) {
+            throw new \Exception('Already installed');
+        }
+
+        app('config')->set('app.debug', true);
+
         $request = app('request');
 
         $this->validate($request, [
@@ -78,10 +50,6 @@ class InstallController extends Controller
         ]);
 
         // check database connect - throw exception
-        // check database is empty - throw exception
-
-        $this->checkSystem();
-
 
         $appKeyPath = storage_path('app') . '/appKey';
         $configPath = storage_path('app') . '/installConfig';
@@ -107,7 +75,7 @@ class InstallController extends Controller
 
         File::put($configPath, $string);
 
-        $exitCode = Artisan::call('xe:install', [
+        Artisan::call('xe:install', [
             '--config' => $configPath,
             '--no-interaction' => true,
         ]);
