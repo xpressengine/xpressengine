@@ -10,7 +10,7 @@ abstract class AbstractTool implements ComponentInterface, \JsonSerializable
 
     protected $instanceId;
 
-    public function setInstanceId($instanceId)
+    public function __construct($instanceId)
     {
         $this->instanceId = $instanceId;
     }

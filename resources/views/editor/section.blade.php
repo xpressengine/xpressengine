@@ -3,10 +3,10 @@
     <div class="form-group">
         <label>Editor</label>
         <div class="input-group">
-            <input type="text" class="form-control" aria-describedby="basic-addon2" readonly="readonly" value="{{ $selected ? $selected['class']::getComponentInfo('name') : '' }}">
+            <input type="text" class="form-control" aria-describedby="basic-addon2" readonly="readonly" value="{{ $selected ? $selected->getComponentInfo('name') : '' }}">
             <!--[D] 상세 설정 등 투명 링크는 .input-group-link 클래스 추가  -->
             <span class="input-group-btn input-group-link">
-                @if($selected && $link = $selected['class']::getInstanceSettingURI($instanceId))
+                @if($selected && $link = $selected->getInstanceSettingURI($instanceId))
                 <a href="{{ $link }}" class="btn btn-link">상세설정</a>
                 @endif
             </span>
@@ -24,7 +24,7 @@
                 <select class="form-control" name="editorId">
                     <option value="">선택하세요</option>
                     @foreach($editors as $id => $class)
-                        <option value="{{ $id }}" {{ $selected && $id === $selected['id'] ? 'selected' : '' }}>{{ $class::getComponentInfo('name') }}</option>
+                        <option value="{{ $id }}" {{ $selected && $id === $selected->getId() ? 'selected' : '' }}>{{ $class::getComponentInfo('name') }}</option>
                     @endforeach
                 </select>
             </div>

@@ -130,11 +130,8 @@ class EditorHandler
         }
 
         $class = $this->register->get($editorId);
-        /** @var AbstractEditor $editor */
-        $editor = $this->container->make($class);
-        $editor->setInstanceId($instanceId);
 
-        return $editor;
+        return $this->container->make($class, ['instanceId' => $instanceId]);
     }
 
     /**
@@ -158,11 +155,7 @@ class EditorHandler
     {
         foreach ($this->getToolAll() as $id => $class) {
             if ($toolId === $id) {
-                /** @var AbstractTool $tool */
-                $tool = $this->container->make($class);
-                $tool->setInstanceId($instanceId);
-
-                return $tool;
+                return $this->container->make($class, ['instanceId' => $instanceId]);
             }
         }
 

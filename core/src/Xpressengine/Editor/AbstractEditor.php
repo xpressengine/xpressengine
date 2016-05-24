@@ -13,7 +13,6 @@
  */
 namespace Xpressengine\Editor;
 
-use Illuminate\Contracts\Support\Renderable;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Plugin\ComponentInterface;
 use Xpressengine\Plugin\ComponentTrait;
@@ -28,10 +27,11 @@ use Xpressengine\Support\MobileSupportTrait;
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-abstract class AbstractEditor implements ComponentInterface, Renderable
+abstract class AbstractEditor implements ComponentInterface
 {
-    use ComponentTrait;
-    use MobileSupportTrait;
+    use ComponentTrait, MobileSupportTrait;
+
+    protected $editors;
 
     /**
      * @var string
@@ -45,24 +45,13 @@ abstract class AbstractEditor implements ComponentInterface, Renderable
 
     protected $arguments = [];
 
+    protected $tools;
+
     protected static $configResolver;
 
-    /**
-     * 에디터 스크린샷 반환
-     *
-     * @return mixed
-     */
-    public static function getScreenshot()
+    public function __construct(EditorHandler $editors, $instanceId)
     {
-        if (static::getComponentInfo('screenshot') === null) {
-            return null;
-        }
-
-        return asset(static::getComponentInfo('screenshot'));
-    }
-
-    public function setInstanceId($instanceId)
-    {
+        $this->editors = $editors;
         $this->instanceId = $instanceId;
 
         $this->config = $this->resolveConfig($instanceId);
@@ -102,9 +91,33 @@ abstract class AbstractEditor implements ComponentInterface, Renderable
     abstract public function getConfigData();
 
     /**
+     * @return array
+     */
+    abstract public function getActivateToolIds();
+
+    /**
      * @return AbstractTool[]
      */
-    abstract public function getTools();
+    public function getTools()
+    {
+        if ($this->tools === null) {
+            $this->tools = [];
+            foreach ($this->config->get('tools', []) as $toolId) {
+                if ($tool = $this->editors->getTool($toolId, $this->instanceId)) {
+                    $this->tools[] = $tool;
+                }
+            }
+        }
+
+        return $this->tools;
+    }
+
+    /**
+     * Get the evaluated contents of the object.
+     *
+     * @return string
+     */
+    abstract public function render();
 
     /**
      * 에디터로 등록된 내용 출력
