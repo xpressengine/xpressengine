@@ -54,6 +54,8 @@ class EditorHandler
      */
     const CONFIG_NAME = 'editors';
 
+    protected $selectorName = 'editor_component';
+
     public function __construct(PluginRegister $register, ConfigManager $configManager, Container $container)
     {
         $this->register = $register;
@@ -127,12 +129,9 @@ class EditorHandler
             $editorId = $this->getDefaultEditorId();
         }
 
-        $component = $this->register->get($editorId);
-        /**
-         * @var AbstractEditor $editor
-         */
-//        $editor = new $component;
-        $editor = $this->container->make($component);
+        $class = $this->register->get($editorId);
+        /** @var AbstractEditor $editor */
+        $editor = $this->container->make($class);
         $editor->setInstanceId($instanceId);
 
         return $editor;
@@ -172,42 +171,36 @@ class EditorHandler
     
     public function compile($instanceId, $content)
     {
-        $editor = $this->get($instanceId);
-        $content = $editor->compile($content);
-        /** @var AbstractTool $tool */
-        foreach ($editor->getTools() as $tool) {
-            $content = $tool->compile($content);
-        }
-
-        return $content;
+        return $this->compileTools($instanceId, $this->get($instanceId)->compile($content));
     }
 
-//    function transComponent($content)
-//    {
-//        $content = preg_replace_callback('!<(?:(div)|img)([^>]*)editor_component=([^>]*)>(?(1)(.*?)</div>)!is', array($this,'transEditorComponent'), $content);
-//        return $content;
-//    }
-//    /**
-//     * @brief Convert editor component code of the contents
-//     */
-//    function transEditorComponent($match)
-//    {
-//        $script = " {$match[2]} editor_component={$match[3]}";
-//        $script = preg_replace('/([\w:-]+)\s*=(?:\s*(["\']))?((?(2).*?|[^ ]+))\2/i', '\1="\3"', $script);
-//        preg_match_all('/([a-z0-9_-]+)="([^"]+)"/is', $script, $m);
-//        $xml_obj = new stdClass;
-//        $xml_obj->attrs = new stdClass;
-//        for($i=0,$c=count($m[0]);$i<$c;$i++)
-//        {
-//            if(!isset($xml_obj->attrs)) $xml_obj->attrs = new stdClass;
-//            $xml_obj->attrs->{$m[1][$i]} = $m[2][$i];
-//        }
-//        $xml_obj->body = $match[4];
-//        if(!$xml_obj->attrs->editor_component) return $match[0];
-//        // Get converted codes by using component::transHTML()
-//        $oEditorModel = getModel('editor');
-//        $oComponent = &$oEditorModel->getComponentObject($xml_obj->attrs->editor_component, 0);
-//        if(!is_object($oComponent)||!method_exists($oComponent, 'transHTML')) return $match[0];
-//        return $oComponent->transHTML($xml_obj);
-//    }
+    protected function compileTools($instanceId, $content)
+    {
+        return preg_replace_callback(
+            '!<(?:(div)|img)([^>]*)' . $this->selectorName . '=([^>]*)>(?(1)(.*?)</div>)!is',
+            function ($match) use ($instanceId) {
+                $script = " {$match[2]} {$this->selectorName}={$match[3]}";
+                $script = preg_replace('/([\w:-]+)\s*=(?:\s*(["\']))?((?(2).*?|[^ ]+))\2/i', '\1="\3"', $script);
+                preg_match_all('/([a-z0-9_-]+)="([^"]+)"/is', $script, $m);
+
+                $attributes = [];
+                for ($i = 0, $c = count($m[0]); $i<$c; $i++) {
+                    $attributes[$m[1][$i]] = $m[2][$i];
+                }
+
+                if (!isset($attributes[$this->selectorName])) {
+                    return $match[0];
+                }
+
+                /** @var AbstractTool $tool */
+                if ($tool = $this->getTool($attributes[$this->selectorName], $instanceId)) {
+                    $tool->compile($match[0]);
+                }
+
+                // 대상 editor tool 이 존재하지 않는 경우 해당 내용 삭제
+                return '';
+            },
+            $content
+        );
+    }
 }
