@@ -417,7 +417,7 @@ return [
     ],
 
     'editor' => [
-        'default' => 'editor/xpressengine@ckEditor',
+        'default' => 'editor/xpressengine@textarea',
     ],
 
     'HtmlWrapper' => [

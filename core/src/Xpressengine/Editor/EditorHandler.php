@@ -111,6 +111,7 @@ class EditorHandler
     public function getEditorId($instanceId)
     {
         $config = $this->configManager->get(self::CONFIG_NAME);
+        
         return $config->get($instanceId);
     }
 
@@ -122,10 +123,7 @@ class EditorHandler
      */
     public function get($instanceId)
     {
-        $editorId = $this->getEditorId($instanceId);
-        if ($editorId === null) {
-            // todo: default 사용할지 말지
-            return null;
+        if (!$editorId = $this->getEditorId($instanceId)) {
             $editorId = $this->getDefaultEditorId();
         }
 

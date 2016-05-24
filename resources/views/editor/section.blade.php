@@ -22,7 +22,6 @@
             <div class="form-group">
                 <label>Editor 변경</label>
                 <select class="form-control" name="editorId">
-                    <option value="">선택하세요</option>
                     @foreach($editors as $id => $class)
                         <option value="{{ $id }}" {{ $selected && $id === $selected->getId() ? 'selected' : '' }}>{{ $class::getComponentInfo('name') }}</option>
                     @endforeach

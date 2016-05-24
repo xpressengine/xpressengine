@@ -45,7 +45,20 @@ abstract class AbstractEditor implements ComponentInterface
 
     protected $arguments = [];
 
+    protected $scriptOnly = false;
+
     protected $tools;
+
+    protected $defaultOptions = [
+        'contentDomName' => 'content',
+        'contentDomId' => 'xeContentEditor',
+        'contentDomOptions' => [
+            'class' => 'form-control',
+            'rows' => '20',
+            'cols' => '80'
+        ],
+        'editorOptions' => [],
+    ];
 
     protected static $configResolver;
 
@@ -57,11 +70,25 @@ abstract class AbstractEditor implements ComponentInterface
         $this->config = $this->resolveConfig($instanceId);
     }
 
-    public function setArguments($arguments)
+    public function setArguments($arguments = [])
     {
         $this->arguments = $arguments;
 
+        if ($arguments === false) {
+            $this->scriptOnly = true;
+        }
+
         return $this;
+    }
+
+    /**
+     * get options
+     *
+     * @return array
+     */
+    protected function getOptions()
+    {
+        return array_merge($this->defaultOptions, $this->arguments);
     }
 
     public static function setConfigResolver(callable $resolver)
@@ -95,6 +122,13 @@ abstract class AbstractEditor implements ComponentInterface
      */
     abstract public function getActivateToolIds();
 
+    protected function loadTools()
+    {
+        foreach ($this->getTools() as $tool) {
+            $tool->initAssets();
+        }
+    }
+    
     /**
      * @return AbstractTool[]
      */
@@ -102,7 +136,7 @@ abstract class AbstractEditor implements ComponentInterface
     {
         if ($this->tools === null) {
             $this->tools = [];
-            foreach ($this->config->get('tools', []) as $toolId) {
+            foreach ($this->getActivateToolIds() as $toolId) {
                 if ($tool = $this->editors->getTool($toolId, $this->instanceId)) {
                     $this->tools[] = $tool;
                 }
@@ -117,7 +151,20 @@ abstract class AbstractEditor implements ComponentInterface
      *
      * @return string
      */
-    abstract public function render();
+    public function render()
+    {
+        $this->loadTools();
+
+        $htmlString = [];
+        if($this->scriptOnly === false){
+            $options = $this->getOptions();
+
+            $htmlString[] = $this->getContentHtml(array_get($options, 'content'), $options);
+            $htmlString[] = $this->getEditorScript($options);
+        }
+        
+        return implode('', $htmlString); 
+    }
 
     /**
      * 에디터로 등록된 내용 출력
@@ -126,6 +173,56 @@ abstract class AbstractEditor implements ComponentInterface
      * @return string
      */
     abstract public function compile($content);
+
+    protected function getContentHtml($content, $options)
+    {
+        $contentHtml = [];
+        $contentHtml[] = '<textarea ';
+        $contentHtml[] = 'name="' . $options['contentDomName'] . '" ';
+        $contentHtml[] = 'id="' . $options['contentDomId'] . '" ';
+        $contentHtml[] = $this->getContentDomHtmlOption($options['contentDomOptions']);
+        $contentHtml[] = ' placeholder="' . xe_trans('xe::content') . '">';
+        $contentHtml[] = $content;
+        $contentHtml[] = '</textarea>';
+
+        return implode('', $contentHtml);
+    }
+
+    /**
+     * getContentDomHtmlOption
+     *
+     * @param array $domOptions
+     *
+     * @return string
+     */
+    protected function getContentDomHtmlOption($domOptions)
+    {
+        $optionsString = '';
+        foreach ($domOptions as $key => $val) {
+            $optionsString.= "$key='{$val}' ";
+        }
+
+        return $optionsString;
+    }
+
+    protected function getEditorScript($options)
+    {
+        $editorScript = '
+        <script>
+            $(function() {
+                XEeditor.getEditor(\'%s\').create(\'%s\', %s, %s, %s);
+            });
+        </script>';
+
+        return sprintf(
+            $editorScript,
+            $this->getName(),
+            $options['contentDomId'],
+            json_encode($options['editorOptions']),
+            json_encode($this->getConfigData()),
+            json_encode($this->getTools())
+        );
+    }
 
     public static function getInstanceSettingURI($instanceId)
     {
