@@ -102,17 +102,17 @@ abstract class AbstractEditor implements ComponentInterface, Renderable
     abstract public function getConfigData();
 
     /**
-     * @return array
+     * @return AbstractTool[]
      */
     abstract public function getTools();
 
     /**
      * 에디터로 등록된 내용 출력
      *
-     * @param string $contents contents
+     * @param string $content content
      * @return string
      */
-    abstract public function contentsCompile($contents);
+    abstract public function compile($content);
 
     public static function getInstanceSettingURI($instanceId)
     {

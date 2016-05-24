@@ -36,6 +36,8 @@ abstract class AbstractTool implements ComponentInterface, \JsonSerializable
         return null;
     }
 
+    abstract public function compile($content);
+
     public function jsonSerialize()
     {
         return [

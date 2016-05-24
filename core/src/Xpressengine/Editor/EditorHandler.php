@@ -169,4 +169,45 @@ class EditorHandler
 
         return null;
     }
+    
+    public function compile($instanceId, $content)
+    {
+        $editor = $this->get($instanceId);
+        $content = $editor->compile($content);
+        /** @var AbstractTool $tool */
+        foreach ($editor->getTools() as $tool) {
+            $content = $tool->compile($content);
+        }
+
+        return $content;
+    }
+
+//    function transComponent($content)
+//    {
+//        $content = preg_replace_callback('!<(?:(div)|img)([^>]*)editor_component=([^>]*)>(?(1)(.*?)</div>)!is', array($this,'transEditorComponent'), $content);
+//        return $content;
+//    }
+//    /**
+//     * @brief Convert editor component code of the contents
+//     */
+//    function transEditorComponent($match)
+//    {
+//        $script = " {$match[2]} editor_component={$match[3]}";
+//        $script = preg_replace('/([\w:-]+)\s*=(?:\s*(["\']))?((?(2).*?|[^ ]+))\2/i', '\1="\3"', $script);
+//        preg_match_all('/([a-z0-9_-]+)="([^"]+)"/is', $script, $m);
+//        $xml_obj = new stdClass;
+//        $xml_obj->attrs = new stdClass;
+//        for($i=0,$c=count($m[0]);$i<$c;$i++)
+//        {
+//            if(!isset($xml_obj->attrs)) $xml_obj->attrs = new stdClass;
+//            $xml_obj->attrs->{$m[1][$i]} = $m[2][$i];
+//        }
+//        $xml_obj->body = $match[4];
+//        if(!$xml_obj->attrs->editor_component) return $match[0];
+//        // Get converted codes by using component::transHTML()
+//        $oEditorModel = getModel('editor');
+//        $oComponent = &$oEditorModel->getComponentObject($xml_obj->attrs->editor_component, 0);
+//        if(!is_object($oComponent)||!method_exists($oComponent, 'transHTML')) return $match[0];
+//        return $oComponent->transHTML($xml_obj);
+//    }
 }
