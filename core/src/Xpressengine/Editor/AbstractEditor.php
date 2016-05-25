@@ -1,6 +1,6 @@
 <?php
 /**
- *  AbstractEditor
+ * AbstractEditor
  *
  * PHP version 5
  *
@@ -19,7 +19,7 @@ use Xpressengine\Plugin\ComponentTrait;
 use Xpressengine\Support\MobileSupportTrait;
 
 /**
- * AbstractEditor
+ * Class AbstractEditor
  *
  * @category    Editor
  * @package     Xpressengine\Editor
@@ -31,24 +31,53 @@ abstract class AbstractEditor implements ComponentInterface
 {
     use ComponentTrait, MobileSupportTrait;
 
+    /**
+     * EditorHandler instance
+     *
+     * @var EditorHandler
+     */
     protected $editors;
 
     /**
+     * Instance identifier
+     *
      * @var string
      */
     protected $instanceId;
 
     /**
+     * ConfigEntity instance
+     *
      * @var ConfigEntity|null
      */
     protected $config;
 
+    /**
+     * Given arguments for the editor
+     *
+     * @var array
+     */
     protected $arguments = [];
 
+    /**
+     * Indicates if used only javascript.
+     *
+     * @var bool
+     */
     protected $scriptOnly = false;
 
+    /**
+     * The registered tools for the editor
+     *
+     * @var AbstractTool[]
+     */
     protected $tools;
 
+    /**
+     * Default editor options
+     *
+     * @var array
+     */
     protected $defaultOptions = [
         'contentDomName' => 'content',
         'contentDomId' => 'xeContentEditor',
@@ -60,8 +89,19 @@ abstract class AbstractEditor implements ComponentInterface
         'editorOptions' => [],
     ];
 
+    /**
+     * The config resolver
+     *
+     * @var callable
+     */
     protected static $configResolver;
 
+    /**
+     * AbstractEditor constructor.
+     *
+     * @param EditorHandler $editors    EditorHandler instance
+     * @param string        $instanceId Instance identifier
+     */
     public function __construct(EditorHandler $editors, $instanceId)
     {
         $this->editors = $editors;
@@ -70,6 +110,12 @@ abstract class AbstractEditor implements ComponentInterface
         $this->config = $this->resolveConfig($instanceId);
     }
 
+    /**
+     * Set arguments for the editor
+     *
+     * @param array $arguments arguments
+     * @return $this
+     */
     public function setArguments($arguments = [])
     {
         $this->arguments = $arguments;
@@ -82,7 +128,7 @@ abstract class AbstractEditor implements ComponentInterface
     }
 
     /**
-     * get options
+     * Get options
      *
      * @return array
      */
@@ -91,11 +137,23 @@ abstract class AbstractEditor implements ComponentInterface
         return array_merge($this->defaultOptions, $this->arguments);
     }
 
+    /**
+     * Set the config resolver
+     *
+     * @param callable $resolver config resolver
+     * @return void
+     */
     public static function setConfigResolver(callable $resolver)
     {
         static::$configResolver = $resolver;
     }
 
+    /**
+     * Resolve a config instance
+     *
+     * @param string $instanceId instance identifier
+     * @return ConfigEntity|null
+     */
     protected function resolveConfig($instanceId)
     {
         if (!static::$configResolver) {
@@ -105,23 +163,43 @@ abstract class AbstractEditor implements ComponentInterface
         return call_user_func(static::$configResolver, static::getConfigKey($instanceId));
     }
 
+    /**
+     * Get a key string for the config
+     *
+     * @param string $instanceId instance identifier
+     * @return string
+     */
     public static function getConfigKey($instanceId)
     {
         return static::getId() . '.' . $instanceId;
     }
 
+    /**
+     * Get a editor name
+     *
+     * @return string
+     */
     abstract public function getName();
 
     /**
+     * Get config data for the editor
+     *
      * @return array
      */
     abstract public function getConfigData();
 
     /**
+     * Get activated tool's identifier for the editor
+     *
      * @return array
      */
     abstract public function getActivateToolIds();
 
+    /**
+     * Load tools
+     *
+     * @return void
+     */
     protected function loadTools()
     {
         foreach ($this->getTools() as $tool) {
@@ -130,6 +208,8 @@ abstract class AbstractEditor implements ComponentInterface
     }
     
     /**
+     * Get activated tools for the editor
+     *
      * @return AbstractTool[]
      */
     public function getTools()
@@ -156,24 +236,31 @@ abstract class AbstractEditor implements ComponentInterface
         $this->loadTools();
 
         $htmlString = [];
-        if($this->scriptOnly === false){
+        if ($this->scriptOnly === false) {
             $options = $this->getOptions();
 
             $htmlString[] = $this->getContentHtml(array_get($options, 'content'), $options);
             $htmlString[] = $this->getEditorScript($options);
         }
         
-        return implode('', $htmlString); 
+        return implode('', $htmlString);
     }
 
     /**
-     * 에디터로 등록된 내용 출력
+     * Compile the raw content to be useful
      *
      * @param string $content content
      * @return string
      */
     abstract public function compile($content);
 
+    /**
+     * Get a content html tag string
+     *
+     * @param string $content content
+     * @param array  $options dom options
+     * @return string
+     */
     protected function getContentHtml($content, $options)
     {
         $contentHtml = [];
@@ -189,10 +276,9 @@ abstract class AbstractEditor implements ComponentInterface
     }
 
     /**
-     * getContentDomHtmlOption
+     * Get attributes string for content html tag
      *
-     * @param array $domOptions
-     *
+     * @param array $domOptions dom options
      * @return string
      */
     protected function getContentDomHtmlOption($domOptions)
@@ -205,7 +291,13 @@ abstract class AbstractEditor implements ComponentInterface
         return $optionsString;
     }
 
-    protected function getEditorScript($options)
+    /**
+     * Get script for running the editor
+     *
+     * @param array $options options
+     * @return mixed
+     */
+    protected function getEditorScript(array $options)
     {
         $editorScript = '
         <script>
@@ -224,6 +316,12 @@ abstract class AbstractEditor implements ComponentInterface
         );
     }
 
+    /**
+     * Get uri string for editor setting by instance identifier
+     *
+     * @param string $instanceId instance identifier
+     * @return string|null
+     */
     public static function getInstanceSettingURI($instanceId)
     {
         return null;
