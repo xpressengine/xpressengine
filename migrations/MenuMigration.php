@@ -137,7 +137,7 @@ class MenuMigration implements Migration {
 
         $item = $menuHandler->createItem($mainMenu, $inputs, $menuTypeInput);
 
-        $menuHandler->setMenuItemTheme($item, 'theme/alice@main', 'theme/alice@main');
+        $menuHandler->setMenuItemTheme($item, 'theme/alice@alice.1', 'theme/alice@alice.1');
         /**
          * @var $configManager ConfigManager
          */
@@ -194,15 +194,14 @@ class MenuMigration implements Migration {
 
         $item = $menuHandler->createItem($mainMenu, $inputs, $menuTypeInput);
 
-        $menuHandler->setMenuItemTheme($item, 'theme/alice@sub', 'theme/alice@sub');
+        $menuHandler->setMenuItemTheme($item, 'theme/alice@alice', 'theme/alice@alice');
     }
 
     protected function setThemeConfig($mainMenu)
     {
         /** @var ThemeHandler $themeHandler */
         $themeHandler = app('xe.theme');
-        $themeHandler->setThemeConfig('alice', 'mainMenu', $mainMenu );
-        $themeHandler->setThemeConfig('alice', 'subMenu', $mainMenu );
+        $themeHandler->setThemeConfig('theme/alice@alice', 'mainMenu', $mainMenu );
     }
 
     /**
