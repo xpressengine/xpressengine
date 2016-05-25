@@ -26,14 +26,8 @@ class EditorSection extends Section
         $handler = app('xe.editor');
 
         $editors = $handler->getAll();
-        $selected = null;
-        if ($editor = $handler->get($this->instanceId)) {
-            $selected = [
-                'id' => $editor->getId(),
-                'class' => get_class($editor) 
-            ];
-        }
-        
+        $selected = $handler->get($this->instanceId);
+
         return view('editor.section', [
             'instanceId' => $this->instanceId,
             'editors' => $editors,

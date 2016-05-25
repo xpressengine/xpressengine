@@ -4,6 +4,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Editor\AbstractEditor;
 use Xpressengine\Editor\EditorHandler;
+use Xpressengine\Editor\Textarea;
 
 class EditorServiceProvider extends ServiceProvider
 {
@@ -25,6 +26,8 @@ class EditorServiceProvider extends ServiceProvider
         AbstractEditor::setConfigResolver(function ($key) {
             return $this->app['xe.config']->get($key);
         });
+
+        $this->app['xe.pluginRegister']->add(Textarea::class);
     }
 
     /**
