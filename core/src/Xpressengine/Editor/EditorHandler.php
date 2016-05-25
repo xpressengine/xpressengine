@@ -166,7 +166,6 @@ class EditorHandler
      * @param string      $instanceId instance id
      * @param array|false $args       argument for editor
      * @return string
-     * @deprecated
      */
     public function render($instanceId, $args)
     {
