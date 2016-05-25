@@ -39,7 +39,7 @@
         "xpressengine-plugin/google_analytics": "*",
         "xpressengine-plugin/orientator": "*",
         "xpressengine-plugin/page": "*",
-        "xpressengine-plugin/board": "*",
+        "xpressengine-plugin/board": "dev-develop",
         "xpressengine-plugin/comment": "*",
         "xpressengine-plugin/ckeditor": "*",
         "xpressengine-plugin/claim": "*",
