@@ -7,6 +7,7 @@ use Redirect;
 use Symfony\Component\HttpFoundation\Response;
 use Xpressengine\Http\Request;
 use Xpressengine\Plugin\PluginHandler;
+use Xpressengine\Support\Exceptions\XpressengineException;
 
 class PluginController extends Controller
 {
@@ -53,10 +54,10 @@ class PluginController extends Controller
         return XePresenter::make('show', compact('plugin', 'componentTypes'));
     }
 
-    public function postActivatePlugin($pluginId)
+    public function postActivatePlugin($pluginId, PluginHandler $handler)
     {
         try {
-            XePlugin::activatePlugin($pluginId);
+            $handler->activatePlugin($pluginId);
         } catch (XpressengineException $e) {
             throw new HttpException(Response::HTTP_FORBIDDEN, $e->getMessage(), $e);
         } catch (\Exception $e) {
@@ -66,10 +67,10 @@ class PluginController extends Controller
         return Redirect::route('settings.plugins')->withAlert(['type' => 'success', 'message' => '플러그인을 켰습니다.']);
     }
 
-    public function postDeactivatePlugin($pluginId)
+    public function postDeactivatePlugin($pluginId, PluginHandler $handler)
     {
         try {
-            XePlugin::deactivatePlugin($pluginId);
+            $handler->deactivatePlugin($pluginId);
         } catch (XpressengineException $e) {
             throw new HttpException(Response::HTTP_FORBIDDEN, $e->getMessage(), $e);
         } catch (\Exception $e) {
@@ -79,10 +80,10 @@ class PluginController extends Controller
         return Redirect::route('settings.plugins')->withAlert(['type' => 'success', 'message' => '플러그인을 껐습니다.']);
     }
 
-    public function postUpdatePlugin($pluginId)
+    public function postUpdatePlugin($pluginId, PluginHandler $handler)
     {
         try {
-            XePlugin::updatePlugin($pluginId);
+            $handler->updatePlugin($pluginId);
         } catch (XpressengineException $e) {
             throw new HttpException(Response::HTTP_FORBIDDEN, $e->getMessage(), $e);
         } catch (\Exception $e) {

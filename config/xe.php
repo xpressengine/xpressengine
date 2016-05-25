@@ -377,6 +377,10 @@ return [
         'safeMode' => true
     ],
 
+    'plugin' => [
+        'server' => 'http://xpressengine.io/plugins'
+    ],
+
     'uiobject' => [
         'aliases' => [
             'form' => 'uiobject/xpressengine@form',

@@ -10,6 +10,7 @@ use Xpressengine\Plugin\PluginEntity;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginRegister;
 use Xpressengine\Plugin\PluginScanner;
+use Xpressengine\Plugin\PluginProvider;
 use Xpressengine\Skins\Plugin\PluginSettingsSkin;
 
 class PluginServiceProvider extends ServiceProvider
@@ -29,6 +30,7 @@ class PluginServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerPluginRegister();
+        $this->registerPluginRepository();
         $this->registerPluginHandler();
     }
 
@@ -84,7 +86,7 @@ class PluginServiceProvider extends ServiceProvider
                 $interception = $app['xe.interception'];
                 $pluginHandler = $interception->proxy(PluginHandler::class, 'XePlugin');
                 $pluginHandler = new $pluginHandler(
-                    $pluginDir, $pluginCollection, $app['view'], $app['xe.pluginRegister'], $app
+                    $pluginDir, $pluginCollection, $app['xe.plugin.provider'], $app['view'], $app['xe.pluginRegister'], $app
                 );
 
                 $pluginHandler->setConfig($app['xe.config']);
@@ -93,6 +95,18 @@ class PluginServiceProvider extends ServiceProvider
             }
         );
         $this->app->bind(PluginHandler::class, 'xe.plugin');
+    }
+
+    protected function registerPluginRepository()
+    {
+        $this->app->singleton(
+            'xe.plugin.provider',
+            function ($app) {
+                $url = $app['config']->get('xe.plugin.server');
+                $provider = new PluginProvider($url);
+                return $provider;
+            }
+        );
     }
 
     /**

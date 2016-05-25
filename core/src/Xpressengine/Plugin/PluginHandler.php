@@ -67,6 +67,11 @@ class PluginHandler
     protected $plugins;
 
     /**
+     * @var PluginProvider
+     */
+    protected $provider;
+
+    /**
      * 현재 부팅중인 플러그인의 id
      *
      * @var string
@@ -113,6 +118,7 @@ class PluginHandler
      *
      * @param string           $pluginsDir  플러그인 디렉토리
      * @param PluginCollection $plugins     플러그인 목록
+     * @param PluginProvider   $provider
      * @param Factory          $viewFactory View
      * @param PluginRegister   $register    plugin register
      * @param Application      $app         application
@@ -120,12 +126,14 @@ class PluginHandler
     public function __construct(
         $pluginsDir,
         PluginCollection $plugins,
+        PluginProvider $provider,
         Factory $viewFactory,
         PluginRegister $register,
         Application $app
     ) {
         $this->plugins = $plugins;
         $this->pluginsDir = $pluginsDir;
+        $this->provider = $provider;
         $this->viewFactory = $viewFactory;
         $this->register = $register;
         $this->app = $app;
@@ -279,6 +287,7 @@ class PluginHandler
             'status' => static::STATUS_DEACTIVATED,
             'version' => $entity->getVersion()
         ];
+
         $this->setPluginsStatus($configs);
     }
 
@@ -367,10 +376,14 @@ class PluginHandler
      *
      * @return PluginCollection
      */
-    public function getAllPlugins($refresh = false)
+    public function getAllPlugins($refresh = false, $withUpdate = false)
     {
         if ($refresh === true) {
             $this->plugins->initialize(true);
+        }
+
+        if($withUpdate === true) {
+            $this->provider->sync($this->plugins);
         }
         return $this->plugins;
     }
