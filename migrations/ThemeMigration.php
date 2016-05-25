@@ -52,7 +52,7 @@ class ThemeMigration implements Migration
             'slide3Subtitle' => '지식을 나누고 컨텐츠를 출판하며 즐거움을 함께합니다.',
             'logoText' => 'Alice',
             'logoImage' => ['path' => null],
-            'mainMenu' => null,
+            //'mainMenu' => null,
             'headerPosition' => '',
             'headerColorset' => 'black-header',
             'footerLogoText' => '<i class="xi-xpressengine"></i>',
