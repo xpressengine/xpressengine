@@ -17,8 +17,6 @@ abstract class AbstractTool implements ComponentInterface, \JsonSerializable
     
     abstract public function initAssets();
 
-    abstract public function getName();
-
     abstract public function getIcon();
 
     public function getOptions()
@@ -42,7 +40,6 @@ abstract class AbstractTool implements ComponentInterface, \JsonSerializable
     {
         return [
             'id' => $this->getId(),
-            'name' => $this->getName(),
             'icon' => $this->getIcon(),
             'options' => $this->getOptions(),
             'enable' => $this->enable(),
