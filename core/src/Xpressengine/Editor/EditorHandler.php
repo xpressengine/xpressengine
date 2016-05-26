@@ -19,7 +19,7 @@ use Xpressengine\Plugin\PluginRegister;
 use Illuminate\Container\Container;
 
 /**
- * EditorHandler
+ * Class EditorHandler
  *
  * @category    Editor
  * @package     Xpressengine\Editor
@@ -30,32 +30,52 @@ use Illuminate\Container\Container;
 class EditorHandler
 {
     /**
+     * PluginRegister instance
+     *
      * @var PluginRegister
      */
     protected $register;
 
     /**
+     * ConfigManager instance
+     *
      * @var ConfigManager
      */
     protected $configManager;
 
     /**
+     * Container instance
+     *
      * @var Container
      */
     protected $container;
 
     /**
+     * Default editor identifier
+     *
      * @var string
      */
     protected $defaultEditorId;
+
+    /**
+     * The selector for tool's compiling
+     *
+     * @var string
+     */
+    protected $selectorName = 'editor_component';
 
     /**
      * config name
      */
     const CONFIG_NAME = 'editors';
 
-    protected $selectorName = 'editor_component';
-
+    /**
+     * EditorHandler constructor.
+     *
+     * @param PluginRegister $register      PluginRegister instance
+     * @param ConfigManager  $configManager ConfigManager instance
+     * @param Container      $container     Container instance
+     */
     public function __construct(PluginRegister $register, ConfigManager $configManager, Container $container)
     {
         $this->register = $register;
@@ -64,7 +84,7 @@ class EditorHandler
     }
 
     /**
-     * get registered editor component ids
+     * Get registered editor ids
      *
      * @return array
      */
@@ -74,9 +94,10 @@ class EditorHandler
     }
 
     /**
-     * set default editor id
+     * Set default editor id
      *
      * @param string $editorId editor id
+     * @return void
      */
     public function setDefaultEditorId($editorId)
     {
@@ -84,7 +105,7 @@ class EditorHandler
     }
 
     /**
-     * get default editor id
+     * Get default editor id
      *
      * @return string
      */
@@ -94,10 +115,11 @@ class EditorHandler
     }
 
     /**
-     * set instance by instance id
+     * Set instance by instance id
      *
-     * @param $instanceId
-     * @param $editorId
+     * @param string $instanceId instance id
+     * @param string $editorId   editor id
+     * @return void
      */
     public function setInstance($instanceId, $editorId)
     {
@@ -107,16 +129,22 @@ class EditorHandler
 
         $this->configManager->set(self::CONFIG_NAME, [$instanceId => $editorId]);
     }
-    
+
+    /**
+     * Get editor id by instance id
+     *
+     * @param string $instanceId instance id
+     * @return string
+     */
     public function getEditorId($instanceId)
     {
         $config = $this->configManager->get(self::CONFIG_NAME);
-        
+
         return $config->get($instanceId);
     }
 
     /**
-     * get editor by instance id
+     * Get editor by instance id
      *
      * @param string $instanceId instance id
      * @return AbstractEditor
@@ -133,22 +161,34 @@ class EditorHandler
     }
 
     /**
-     * @param $instanceId
-     * @param $args
-     * @return string
+     * Rendering the editor
      *
-     * @deprecated 
+     * @param string      $instanceId instance id
+     * @param array|false $args       argument for editor
+     * @return string
      */
     public function render($instanceId, $args)
     {
         return $this->get($instanceId)->setArguments($args)->render();
     }
-    
+
+    /**
+     * Get all registered tools
+     *
+     * @return array
+     */
     public function getToolAll()
     {
-        return $this->register->get('editortool');
+        return $this->register->get('editortool') ?: [];
     }
-    
+
+    /**
+     * Get a tool
+     *
+     * @param string $toolId     tool id
+     * @param string $instanceId instance id
+     * @return AbstractTool|null
+     */
     public function getTool($toolId, $instanceId)
     {
         foreach ($this->getToolAll() as $id => $class) {
@@ -159,12 +199,26 @@ class EditorHandler
 
         return null;
     }
-    
+
+    /**
+     * Compile the raw content to be useful
+     *
+     * @param string $instanceId instance id
+     * @param string $content    content
+     * @return string
+     */
     public function compile($instanceId, $content)
     {
         return $this->compileTools($instanceId, $this->get($instanceId)->compile($content));
     }
 
+    /**
+     * Compile the raw content to be useful by tools
+     *
+     * @param string $instanceId instance id
+     * @param string $content    content
+     * @return string
+     */
     protected function compileTools($instanceId, $content)
     {
         return preg_replace_callback(
