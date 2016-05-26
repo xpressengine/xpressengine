@@ -39,7 +39,7 @@ class BlankTheme extends AbstractTheme
 
     public static function getDescription()
     {
-        return '테마를 사용하지 않으려면 이 테마를 선택하십시오.';
+        return '테마를 출력하지 않습니다.';
     }
 
     public static function getScreenshot()
