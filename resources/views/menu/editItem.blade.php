@@ -185,12 +185,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <div id="themeSelect" @if($parentThemeMode) style="display:none" @endif>
-                                {!! uio('themeSelect', ['selectedTheme' => ['desktop' => $itemConfig->get('desktopTheme'), 'mobile' => $itemConfig->get('mobileTheme')]]) !!}
-                            </div>
-                        </div>
+                    <div id="themeSelect" @if($parentThemeMode) style="display:none" @endif>
+                        {!! uio('themeSelect', ['selectedTheme' => ['desktop' => $itemConfig->get('desktopTheme'), 'mobile' => $itemConfig->get('mobileTheme')]]) !!}
                     </div>
                 </div>
             </div>

@@ -56,11 +56,7 @@
                 </div>
 
                 <div id="collapseTwo" class="panel-collapse collapse in">
-                    <div class="panel-body">
-                        <div class="form-group">
-                            {!! uio('themeSelect', ['selectedTheme' => ['desktop' => $config->get('desktopTheme'), 'mobile' => $config->get('mobileTheme')]]) !!}
-                        </div>
-                    </div>
+                    {!! uio('themeSelect', ['selectedTheme' => ['desktop' => $config->get('desktopTheme'), 'mobile' => $config->get('mobileTheme')]]) !!}
                 </div>
             </div>
         </div>

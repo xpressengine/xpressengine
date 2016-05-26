@@ -45,12 +45,8 @@
                     </div>
 
                     <div id="collapseTwo" class="panel-collapse collapse in">
-                        <div class="panel-body">
-                            <div class="form-group">
-                                <div id="themeSelect">
-                                    {!! uio('themeSelect') !!}
-                                </div>
-                            </div>
+                        <div id="themeSelect">
+                            {!! uio('themeSelect') !!}
                         </div>
                     </div>
 
