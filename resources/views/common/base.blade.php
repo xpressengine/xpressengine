@@ -41,81 +41,7 @@
             {!! XeFrontend::output('translation') !!}
         });
     </script>
-    {{--<script src="http://cdn.tinymce.com/4/tinymce.min.js"></script>--}}
-    {{--<script src="http://cdn.ckeditor.com/4.4.6/standard/ckeditor.js"></script>--}}
-    {{--<script src="/assets/core/common/js/xe.editor.js"></script>--}}
-    {{--<script type="text/javascript">--}}
 
-        {{--//ckeditor--}}
-        {{--XEeditor.define({--}}
-            {{--name: 'editor.ckeditor',--}}
-            {{--initialize: function(selector, options) {--}}
-                {{--CKEDITOR.replace(selector, options || {});--}}
-
-                {{--this.addProps({--}}
-                    {{--selector: selector--}}
-                    {{--, options: options--}}
-                {{--});--}}
-            {{--},--}}
-            {{--getContents: function() {--}}
-                {{--return CKEDITOR.instances[this.props.selector].getData();--}}
-            {{--},--}}
-            {{--setContents: function(text) {--}}
-                {{--CKEDITOR.instances[this.props.selector].setData(text);--}}
-            {{--},--}}
-            {{--addContents: function(text) {--}}
-                {{--CKEDITOR.instances[this.props.selector].insertHtml(text);--}}
-            {{--}--}}
-        {{--});--}}
-
-        {{--//tinyMCE--}}
-        {{--XEeditor.define({--}}
-            {{--name: 'editor.tinyMCE',--}}
-            {{--initialize: function(selector, options) {--}}
-                {{--tinymce.init({--}}
-                    {{--selector: selector,--}}
-                    {{--setup: function (editor) {--}}
-                        {{--editor.on('keyup', function (e) {--}}
-
-                        {{--});--}}
-                    {{--}--}}
-                {{--});--}}
-
-                {{--this.addProps({--}}
-                    {{--selector: selector--}}
-                    {{--, options: options--}}
-                    {{--, id: selector.replace('#', '')--}}
-                {{--});--}}
-            {{--},--}}
-            {{--getContents: function() {--}}
-                {{--return tinymce.get(this.props.id).getContent();--}}
-            {{--},--}}
-            {{--setContents: function(text) {--}}
-                {{--tinymce.get(this.props.id).setContent(text);--}}
-            {{--},--}}
-            {{--addContents: function(text) {--}}
-                {{--tinymce.get(this.props.id).execCommand('mceInsertContent', false, text);--}}
-            {{--}--}}
-        {{--});--}}
-
-        {{--$(function() {--}}
-            {{--var ckEditor = XEeditor.getEditor('editor.ckeditor');--}}
-            {{--var tinyEditor = XEeditor.getEditor('editor.tinyMCE');--}}
-
-            {{--var editor11 = ckEditor.create('editor1', {});--}}
-            {{--eidtor11.addComponent();--}}
-
-            {{--var editor33 = ckEditor.create('editor3', {});--}}
-            {{--var editor22 = tinyEditor.create('#editor2', {});--}}
-            {{--var editor44 = tinyEditor.create('#editor4', {});--}}
-
-            {{--window.editor11 = editor11;--}}
-            {{--window.editor22 = editor22;--}}
-            {{--window.editor33 = editor33;--}}
-            {{--window.editor44 = editor44;--}}
-        {{--});--}}
-
-    {{--</script>--}}
     <!-- JS at head.append -->
     {!! XeFrontend::output('js', 'head.append') !!}
 
@@ -124,11 +50,6 @@
 </head>
 
 <body class="{{ XeFrontend::output('bodyClass') }}">
-
-<textarea name="test" id="editor1" cols="30" rows="10"></textarea>
-{{--<textarea name="test2" id="editor2" cols="30" rows="10"></textarea>--}}
-{{--<textarea name="test3" id="editor3" cols="30" rows="10"></textarea>--}}
-{{--<textarea name="test4" id="editor4" cols="30" rows="10"></textarea>--}}
 
 <!-- JS at body.prepend -->
 {!! XeFrontend::output('js', 'body.prepend') !!}
