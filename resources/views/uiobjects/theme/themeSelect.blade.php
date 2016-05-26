@@ -5,7 +5,7 @@
         @foreach($themes as $id => $theme)
             <li>
                 <div class="theme-desc">
-                    <img src="{{ $theme->getScreenshot() }}" alt="screenshot" class="hidden-xs" width="98" height="70">
+                    <img src="{{ $theme->getScreenshot() ?: asset('assets/core/common/img/default_image_196x140.jpg') }}" alt="screenshot" class="hidden-xs" width="98" height="70">
                     <strong class="ellipsis">{{ $theme->getTitle() }}</strong>
                     <p>{{ $theme->getDescription() }}</p>
                     <div class="btn-right hidden-sm">
