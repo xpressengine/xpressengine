@@ -8,22 +8,25 @@
 
     RedirectMatch 403 ^/\.(.*)
 
-	<Files *.php>
-	    Order Deny,Allow
-	    Deny from all
-	    Allow from 127.0.0.1
-	</Files>
+    <Files *.php>
+        Order Deny,Allow
+        Deny from all
+        Allow from 127.0.0.1
+        Allow from localhost
+    </Files>
 
-	<Files index.php>
-	    Order Allow,Deny
-	    Allow from all
-	</Files>
+    <Files index.php>
+        Order Allow,Deny
+        Allow from all
+    </Files>
 
     ##
     ## You may need to uncomment the following line for some hosting environments,
     ## if you have installed to a subdirectory, enter the name here also.
     ##
     # RewriteBase /
+
+    RewriteRule ^web_installer - [L]
 
     ##
     ## Black list protected files
