@@ -49,6 +49,12 @@ return [
             'url' => '/storage/app/',
         ],
 
+        'uploaded' => [
+            'driver' => 'local',
+            'root' => storage_path('uploaded'),
+            'url' => '/storage/uploaded/',
+        ],
+
         // assigned to each plugin.
         'plugin' => [
             'driver' => 'local',
