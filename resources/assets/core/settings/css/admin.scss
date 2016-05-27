@@ -22,6 +22,7 @@
 @import "bootstrap/panels";
 @import "bootstrap/thumbnails";
 @import "bootstrap/navs";
+@import "bootstrap/modals";
 
 // Utility classes
 @import "bootstrap/utilities";
@@ -50,7 +51,7 @@ aside ul li a, .right-menu ul a, .theme_con .theme_active + table a, .title-area
 }
 
 .dropdown-menu li,
-.normal-list li, 
+.normal-list li,
  .item-container li{
   list-style: none;
 }
@@ -79,12 +80,12 @@ p.text{
 
 .normal-list li{
   position: relative;
-  padding-left: 15px;  
+  padding-left: 15px;
   color:$brand-grey;
   &:before{
     position: absolute;
     top:50%;
-    left:0;    
+    left:0;
     width:4px;
     height:4px;
     margin-top:-2px;
@@ -92,7 +93,7 @@ p.text{
     border-radius: 50%;
     content: "";
   }
-  
+
 }
 
 /* layout */
@@ -682,39 +683,39 @@ aside {
   .panel.panel-edit{
     display: none;
     margin-bottom:0;
-    padding-top:7px; 
+    padding-top:7px;
     background-color: #fff;
     border: 1px solid $brand-primary;
     clear: both;
     .panel-heading{
       padding:0 20px;
-    }        
+    }
     .panel-body{
       padding:20px;
       margin:0 20px 20px 20px;
       background-color: #fafafc;
       border: 1px solid #ededed;
       border-radius: 2px;
-    }        
-    .panel-footer{           
+    }
+    .panel-footer{
       padding:0 15px;
       background-color: $panel-footer-bg;
-      border-top: 1px solid #ededed;      
-    }    
+      border-top: 1px solid #ededed;
+    }
   }
-  
+
   .panel-heading{
     &.open .panel.panel-edit{
       display: block;
     }
   }
-  
+
   .item-container .item{
     &.open>.item-content >.panel.panel-edit{
       display: block;
     }
-  } 
-    
+  }
+
   >.panel-heading{
     margin-bottom:20px;
     background-color: #fff;
@@ -732,54 +733,54 @@ aside {
       }
     }
   }
-  
+
   >.panel-body{
    padding:0 !important;
-   border:1px solid $panel-inner-border;   
-   
-   >.item-container { 
+   border:1px solid $panel-inner-border;
+
+   >.item-container {
      &:first-child{
-       >.item{       
+       >.item{
           &:first-child{
            border-top:none;
          }
        }
-     }     
+     }
    }
  }
- 
- .item-container {  
-   background-color: #dadbde;   
-   .item{     
+
+ .item-container {
+   background-color: #dadbde;
+   .item{
      position: relative;
-     .item-content{    
-       min-height: 70px;      
+     .item-content{
+       min-height: 70px;
        .handler{
          padding:14px 0;
-       }        
-      .item-info{                
+       }
+      .item-info{
         height:70px;
         padding-right: 120px;
-        text-decoration: none;        
+        text-decoration: none;
         i{
           line-height: 70px
-        }        
+        }
         strong{
           display: block;
           vertical-align: middle;
           padding-left:30px;
           font-size:$font-size-large;
-          color:#2c2e37;      
+          color:#2c2e37;
           font-weight: normal;
           line-height: 70px;
           @include text-overflow;
-        }   
-      } 
+        }
+      }
       .edit-btn-area{
         position: absolute;
         right:20px;
         top:18px;
-        button{          
+        button{
           background-color: $brand-primary;
           color:#fff;
           font-size: 13px;
@@ -807,7 +808,7 @@ aside {
          }
          strong{
            color:#fff;
-         }   
+         }
        }
        .edit-btn-area button{
         background-color: #8ca4ff;
@@ -816,10 +817,10 @@ aside {
           color: $brand-primary;
         }
        }
-       
-     }     
+
+     }
    }
- } 
+ }
 }
 
 .item-setting .table tbody{
@@ -832,7 +833,7 @@ aside {
     >td{
       &:first-child{
         padding-left: 0;
-      }      
+      }
       border-top: 1px solid $list-group-border;
       background-color: #f8fafd;
       .handler{
@@ -874,6 +875,89 @@ aside {
   font-size:13px;
 }
 
+.skin-setting-list{
+  margin:0;
+  padding: 0;
+  list-style: none;
+  li{
+    position: relative;
+    border-top:1px solid #e4e4e4;
+    @include clearfix;
+
+    &.on{
+      border-left:2px solid $brand-primary;
+    }
+    .skin-select-btn{
+      float: left;
+      height: 100%;
+      padding: 40px 5px;
+      .btn{
+        i{
+          display: none;
+          &.visible-xs{
+            font-size: 18px;
+          }
+        }
+        &.on{
+          background-color: $brand-primary;
+          color:#fff;
+          border-color: transparent;
+          i{
+            display: inline-block;
+            margin-right: 3px;
+          }
+        }
+      }
+      &:first-of-type{
+       padding-left: 15px;
+      }
+    }
+    .skin-desc{
+      position: relative;
+      height: 110px;
+      padding: 10px 80px 0 18px;
+      margin-right: 20px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      img{
+        float: left;
+        max-width: 128px;
+        max-height: 90px;
+        margin-right: 20px;
+      }
+      strong{
+        display: block;
+        margin-top: 25px;
+      }
+      p{
+        display: block;
+      }
+      .btn-right{
+        position: absolute;
+        right:0;
+        top:35px;
+        .btn{
+          color:$gray-light;
+          text-decoration: none;
+          i{
+            margin-right: 3px;
+            font-size:15px;
+            vertical-align: middle;
+            padding-bottom:2px;
+          }
+        }
+      }
+    }
+    .panel-body{
+      display: none;
+      margin:$panel-body-padding;
+      background-color: $panel-footer-bg;
+      border:1px solid $panel-inner-border;
+    }
+  }
+}
+
 
 @media (min-width: 768px) {
   /* tablet */
@@ -905,6 +989,22 @@ aside {
       &.active:hover a {
         background-color: #696E7A;
         color: #fff;
+      }
+    }
+  }
+  .skin-setting-list{
+    li{
+      .skin-select-btn{
+        padding:40px 10px;
+        .btn{
+          width: 86px;
+          &.hover{
+            border-color: $brand-primary;
+          }
+        }
+        &+.skin-select-btn{
+          // background-color: #F9FAFE;
+        }
       }
     }
   }

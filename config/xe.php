@@ -287,7 +287,7 @@ return [
             ]
         ],
         'profileImage' => [
-            'default' => 'assets/core/member/img/default_avatar.gif',
+            'default' => 'assets/core/member/img/default_avatar.jpg',
             'size' => ['width' => 240, 'height' => 240],
             'storage' => [
                 'disk' => 'local',

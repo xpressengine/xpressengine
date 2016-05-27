@@ -49,22 +49,18 @@
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <div class="panel-heading">
                     <div class="pull-left">
-                        <h3 class="panel-title">기본 테마 지정<small>테마를 미리 보고 클릭하여 선택할 수 있습니다.</small></h3>
+                        <h3 class="panel-title">기본 테마 지정 <small>지정된 테마가 출력할 테마를 지정하세요. 데스크탑과 모바일에서 사용할 테마를 각각 선택할 수 있습니다.</small></h3>
                     </div>
                     <div class="pull-right">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="btn-link panel-toggle pull-right"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">메뉴닫기</span></a>
                     </div>
                 </div>
                 <div id="collapseTwo" class="panel-collapse collapse in">
-                    <div class="panel-body">
-                        <div class="form-group">
                             {!! uio('themeSelect', ['selectedTheme' => $selectedTheme]) !!}
-                        </div>
-                    </div>
-                    <div class="panel-footer">
-                        <div class="pull-right">
-                            <button type="submit" class="btn btn-primary"><i class="xi-download"></i>저장</button>
-                        </div>
+                </div>
+                <div class="panel-footer">
+                    <div class="pull-right">
+                        <button type="submit" class="btn btn-primary"><i class="xi-download"></i>저장</button>
                     </div>
                 </div>
             </div>
