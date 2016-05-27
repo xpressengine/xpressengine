@@ -62,7 +62,7 @@ class EditorHandler
      *
      * @var string
      */
-    protected $selectorName = 'editor_component';
+    protected $selectorName = 'xe-tool-id';
 
     /**
      * config name
@@ -138,7 +138,9 @@ class EditorHandler
      */
     public function getEditorId($instanceId)
     {
-        $config = $this->configManager->get(self::CONFIG_NAME);
+        if (!$config = $this->configManager->get(self::CONFIG_NAME)) {
+            $config = $this->configManager->set(self::CONFIG_NAME, []);
+        }
 
         return $config->get($instanceId);
     }
@@ -239,7 +241,7 @@ class EditorHandler
 
                 /** @var AbstractTool $tool */
                 if ($tool = $this->getTool($attributes[$this->selectorName], $instanceId)) {
-                    $tool->compile($match[0]);
+                    return $tool->compile($match[0]);
                 }
 
                 // 대상 editor tool 이 존재하지 않는 경우 해당 내용 삭제
