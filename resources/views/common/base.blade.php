@@ -23,23 +23,21 @@
     {!! XeFrontend::output('js', 'head.prepend') !!}
 
     <script type="text/javascript">
-        XE.initialize(function() {
-            XE.setup({
-                'X-CSRF-TOKEN': '{!! csrf_token() !!}',
-                loginUserId: '{{ Auth::user()->getId() }}'
-            });
-
-            XE.configure({
-                locale: '{{ session()->get('locale') ?: app('xe.translator')->getLocale() }}',
-                defaultLocale: '{{ app('xe.translator')->getLocale() }}',
-                @if (in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER]))
-                managePrefix: '{{ app('config')['xe.routing.settingsPrefix'] }}'
-                @endif
-            });
-
-            <!-- Translation -->
-            {!! XeFrontend::output('translation') !!}
+        XE.setup({
+            'X-CSRF-TOKEN': '{!! csrf_token() !!}',
+            loginUserId: '{{ Auth::user()->getId() }}'
         });
+
+        XE.configure({
+            locale: '{{ session()->get('locale') ?: app('xe.translator')->getLocale() }}',
+            defaultLocale: '{{ app('xe.translator')->getLocale() }}',
+            @if (in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER]))
+            managePrefix: '{{ app('config')['xe.routing.settingsPrefix'] }}'
+            @endif
+        });
+
+        <!-- Translation -->
+        {!! XeFrontend::output('translation') !!}
     </script>
 
     <!-- JS at head.append -->
