@@ -1,4 +1,4 @@
-(function(exports) {
+(function(exports, Progress) {
   exports.XE.Request = function() {
     var _options = {
       headers : {
@@ -44,4 +44,4 @@
       }
     }
   }();
-})(window);
+})(window, XE.Progress);

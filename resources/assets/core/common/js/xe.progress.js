@@ -62,8 +62,8 @@
   function attachInstance($context) {
     $context.bind('progressStart', function(e) {
       e.stopPropagation();
-      var count = getCount($context);
-      setCount($context, count+1);
+      var count = getCount($context) + 1;
+      setCount($context, count);
       if (count === 1) {
         getInstance($context).start();
       }
@@ -73,9 +73,9 @@
     $context.bind('progressDone', function(e) {
       e.stopPropagation();
 
-      var count = getCount($(this));
-      setCount($(this), count-1);
-      if (getCount($(this)) === 1) {
+      var count = getCount($(this)) - 1;
+      setCount($(this), count);
+      if (getCount($(this)) === 0) {
         var instance = getInstance($context);
         instance.done(instance.getTime());
       }
@@ -196,23 +196,23 @@
       // $progress.offsetWidth; /* Repaint */
       var self = this,
           time = this.getTime();
-      Progress.queue(function(next) {
+      XE.Progress.queue(function(next) {
         // Set positionUsing if it hasn't already been set
         if (self.settings.positionUsing === '') self.settings.positionUsing = self.getPositioningCSS();
 
         // Add transition
-        Progress.css(self.$bar, barPositionCSS(n, speed, ease, self.settings));
+        XE.Progress.css(self.$bar, barPositionCSS(n, speed, ease, self.settings));
 
         if (n === 1) {
           // Fade out
-          Progress.css(self.$progress, {
+          XE.Progress.css(self.$progress, {
             transition: 'none',
             opacity: 1
           });
           //$progress.offsetWidth; /* Repaint */
 
           setTimeout(function() {
-            Progress.css(self.$progress, {
+            XE.Progress.css(self.$progress, {
               transition: 'all ' + speed + 'ms linear',
               opacity: 0
             });
@@ -286,7 +286,7 @@
       $bar.attr('title-name', this.instanceId);
       this.$bar = $bar;
 
-      Progress.css($bar, {
+      XE.Progress.css($bar, {
         transition: 'all 0 linear',
         transform: 'translate3d(' + perc + '%,0,0)'
       });
@@ -422,7 +422,7 @@
         $context.trigger('progressDone');
       }
     }
-  }
+  }();
 })(window);
 
 
@@ -437,11 +437,9 @@
     }
   }
 
-  Progress.queue = function() {
-    return function(fn) {
-      pending.push(fn);
-      if (pending.length == 1) next();
-    };
+  Progress.queue = function(fn) {
+    pending.push(fn);
+    if (pending.length == 1) next();
   };
 
 })(window, XE.Progress);

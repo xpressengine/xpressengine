@@ -925,8 +925,8 @@ if (typeof exports !== 'undefined') {
   function attachInstance($context) {
     $context.bind('progressStart', function(e) {
       e.stopPropagation();
-      var count = getCount($context);
-      setCount($context, count+1);
+      var count = getCount($context) + 1;
+      setCount($context, count);
       if (count === 1) {
         getInstance($context).start();
       }
@@ -936,9 +936,9 @@ if (typeof exports !== 'undefined') {
     $context.bind('progressDone', function(e) {
       e.stopPropagation();
 
-      var count = getCount($(this));
-      setCount($(this), count-1);
-      if (getCount($(this)) === 1) {
+      var count = getCount($(this)) - 1;
+      setCount($(this), count);
+      if (getCount($(this)) === 0) {
         var instance = getInstance($context);
         instance.done(instance.getTime());
       }
@@ -1059,23 +1059,23 @@ if (typeof exports !== 'undefined') {
       // $progress.offsetWidth; /* Repaint */
       var self = this,
           time = this.getTime();
-      Progress.queue(function(next) {
+      XE.Progress.queue(function(next) {
         // Set positionUsing if it hasn't already been set
         if (self.settings.positionUsing === '') self.settings.positionUsing = self.getPositioningCSS();
 
         // Add transition
-        Progress.css(self.$bar, barPositionCSS(n, speed, ease, self.settings));
+        XE.Progress.css(self.$bar, barPositionCSS(n, speed, ease, self.settings));
 
         if (n === 1) {
           // Fade out
-          Progress.css(self.$progress, {
+          XE.Progress.css(self.$progress, {
             transition: 'none',
             opacity: 1
           });
           //$progress.offsetWidth; /* Repaint */
 
           setTimeout(function() {
-            Progress.css(self.$progress, {
+            XE.Progress.css(self.$progress, {
               transition: 'all ' + speed + 'ms linear',
               opacity: 0
             });
@@ -1149,7 +1149,7 @@ if (typeof exports !== 'undefined') {
       $bar.attr('title-name', this.instanceId);
       this.$bar = $bar;
 
-      Progress.css($bar, {
+      XE.Progress.css($bar, {
         transition: 'all 0 linear',
         transform: 'translate3d(' + perc + '%,0,0)'
       });
@@ -1285,7 +1285,7 @@ if (typeof exports !== 'undefined') {
         $context.trigger('progressDone');
       }
     }
-  }
+  }();
 })(window);
 
 
@@ -1300,11 +1300,9 @@ if (typeof exports !== 'undefined') {
     }
   }
 
-  Progress.queue = function() {
-    return function(fn) {
-      pending.push(fn);
-      if (pending.length == 1) next();
-    };
+  Progress.queue = function(fn) {
+    pending.push(fn);
+    if (pending.length == 1) next();
   };
 
 })(window, XE.Progress);
@@ -1366,7 +1364,7 @@ if (typeof exports !== 'undefined') {
   }
 })(window, XE.Progress);
 
-(function(exports) {
+(function(exports, Progress) {
   exports.XE.Request = function() {
     var _options = {
       headers : {
@@ -1412,7 +1410,7 @@ if (typeof exports !== 'undefined') {
       }
     }
   }();
-})(window);
+})(window, XE.Progress);
 
 (function(exports) {
   exports.XE.Component = function() {
@@ -1425,7 +1423,7 @@ if (typeof exports !== 'undefined') {
         $('[data-toggle=xe-dropdown]').trigger('boot.xe.dropdown');
         $('[data-toggle=xe-modal]').trigger('boot.xe.modal');
         $('[data-toggle=xe-tooltip]').trigger('boot.xe.tooltip');
-
+        $('[data-toggle=dropdown]').trigger('boot.dropdown');
       }
     };
   }();

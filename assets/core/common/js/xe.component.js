@@ -9,7 +9,7 @@
         $('[data-toggle=xe-dropdown]').trigger('boot.xe.dropdown');
         $('[data-toggle=xe-modal]').trigger('boot.xe.modal');
         $('[data-toggle=xe-tooltip]').trigger('boot.xe.tooltip');
-
+        $('[data-toggle=dropdown]').trigger('boot.dropdown');
       }
     };
   }();
