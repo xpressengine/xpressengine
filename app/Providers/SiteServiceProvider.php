@@ -42,6 +42,8 @@ class SiteServiceProvider extends ServiceProvider
             $request = app('request');
             $host = $request->getHttpHost();
 
+            $host = $host.str_replace('/index.php','',$request->server('SCRIPT_NAME'));
+
             $site = Site::where('host', $host)->first();
             app('xe.site')->setCurrentSite($site);
         }
