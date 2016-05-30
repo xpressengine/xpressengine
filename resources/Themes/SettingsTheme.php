@@ -50,7 +50,6 @@ class SettingsTheme extends AbstractTheme
         ])->load();
 
         $frontendHandler->js([
-             'assets/vendor/bootstrap/js/bootstrap.js',
              'assets/core/settings/js/admin.bundle.js'
          ])->appendTo('head')->load();
     }
