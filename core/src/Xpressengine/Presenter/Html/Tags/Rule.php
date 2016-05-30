@@ -36,9 +36,10 @@ class Rule
     protected static $ruleList = [];
 
     /**
-     * @var Translation
+     * @var bool
      */
-    protected static $translation;
+    protected static $loaded = false;
+
     /**
      * 해당 인스턴스에 포함된 rule 이름
      *
@@ -99,9 +100,9 @@ class Rule
         $this->rules       = $rules;
         self::$ruleList[$ruleName] = $this;
 
-        // Rule 을 사용할 때 validator 를 사용하게 되므로 valiator 다국어 추가
-        if (self::$translation === null) {
-            self::$translation = new Translation([
+        if (static::$loaded === false) {
+            static::$loaded = true;
+            new Translation([
                 'xe::validatorRequired',
                 'xe::validatorAlphanum',
                 'xe::validatorMin',
