@@ -20,6 +20,7 @@
     {!! XeFrontend::output('css') !!}
 
     <!-- JS at head.prepend -->
+    <script>var xeBaseURL = '{{  url() }}';</script>
     {!! XeFrontend::output('js', 'head.prepend') !!}
 
     <script type="text/javascript">
