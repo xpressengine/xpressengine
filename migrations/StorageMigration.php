@@ -28,7 +28,7 @@ class StorageMigration implements Migration {
             $table->timestamp('updatedAt');
 
             $table->primary('id');
-            $table->unique(['disk', 'path', 'filename'], 'findKey');
+            $table->index('disk');
             $table->index('originId');
         });
 
