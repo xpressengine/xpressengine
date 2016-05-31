@@ -13,35 +13,59 @@
                 return this;
             },
             bindEvent: function () {
-                $(document).on('click', 'a[data-modal=xe-page]', self.openXeModal);
+                $(document).on('click', 'a[data-toggle=xe-page]', self.execPage);
+                $(document).on('click', 'a[data-toggle=xe-page-modal]', self.execPageModal);
             },
-            openXeModal: function (e) {
+            execPage: function(e) {
                 e.preventDefault();
 
                 var $this = $(this),
                     targetSelector = $this.data('target'),
+                    data = $this.data('params'),
                     callback = $this.data('callback'),
-                    url = $this.attr('url');
+                    url = $this.data('url');
+
+                data = data? JSON.parse(data) : {};
 
                 var objStack = callback.split(".");
                 var callbackFunc = window;
 
                 var options = {
-                    url: url,
-                    target: targetSelector
+                    data: data
                 };
 
                 if(objStack.length > 0) {
-                    if(self.isValidPageModal()) {
-                        for(var i = 0, max = objStack.length; i < max; i += 1) {
-                            callbackFunc = callbackFunc[objStack[i]];
-                        }
+                    for(var i = 0, max = objStack.length; i < max; i += 1) {
+                        callbackFunc = callbackFunc[objStack[i]];
                     }
                 }
 
-                XE.pageModal({
+                XE.page(url, targetSelector, options, callbackFunc);
+            },
+            execPageModal: function (e) {
+                e.preventDefault();
 
-                });
+                var $this = $(this),
+                    data = $this.data('data'),
+                    callback = $this.data('callback'),
+                    url = $this.data('url');
+
+                data = data? JSON.parse(data) : {};
+
+                var objStack = callback.split(".");
+                var callbackFunc = window;
+
+                var options = {
+                    data: data
+                };
+
+                if(objStack.length > 0) {
+                    for(var i = 0, max = objStack.length; i < max; i += 1) {
+                        callbackFunc = callbackFunc[objStack[i]];
+                    }
+                }
+
+                XE.pageModal(url, options, callbackFunc);
             },
             cssLoad: function(url, load, error) {
                 var $css = $('<link>', {rel: 'stylesheet', type: 'text/css', href: url}).on('load', load).on('error', error);
