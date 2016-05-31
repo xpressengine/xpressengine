@@ -1,37 +1,8 @@
 //xe.lang.js
-System.amdDefine('xe.lang', ['translator'], function(Translator) {
-  'use strict';
+(function(exports, Translator) {
+  exports.XE.Lang = function() {
 
-  var self = this,
-      _items = {};
-
-  return {
-    locales: [],
-    set: set,
-    setLocales: setLocales,
-    getLangCode: getLangCode,
-    trans: trans,
-    transChoice: transChoice
-  };
-
-  Translator.placeHolderPrefix = ':';
-  Translator.placeHolderSuffix = '';
-
-  // var Lang = {};
-  function setLocales(locales) {
-    this.locales = locales;
-    Translator.locale = (locales.length > 0)? locales[0] : 'en';
-  }
-
-  function set(items) {
-    $.extend(_items, items);
-    $.each(_items, function(key, value) {
-      Translator.add(key, value);
-    });
-  };
-
-  function getLangCode(locale) {
-    var list = {
+    var _items = {
       'af' : 'af-ZA',
       'ar' : 'ar-SA',
       'az' : 'az-AZ',
@@ -114,15 +85,34 @@ System.amdDefine('xe.lang', ['translator'], function(Translator) {
       'zu' : 'zu-ZA'
     };
 
-    return locale ? list[locale] : list;
-  };
+    return {
+      locales: [],
+      init: function() {
+        Translator.placeHolderPrefix = ':';
+        Translator.placeHolderSuffix = '';
 
-  function trans(id, parameters) {
-    return Translator.trans(id, parameters);
-  };
+        return this;
+      },
+      set: function(items) {
+        $.extend(_items, items);
+        $.each(_items, function(key, value) {
+          Translator.add(key, value);
+        });
 
-  function transChoice(id, number, parameters) {
-    return Translator.transChoice(id, number, parameters);
-  };
-
-});
+      },
+      setLocales: function(locales) {
+        this.locales = locales;
+        Translator.locale = (locales.length > 0)? locales[0] : 'en';
+      },
+      getLangCode: function(locale) {
+        return locale? _items[locale] : _items;
+      },
+      trans: function(id, parameters) {
+        return Translator.trans(id, parameters);
+      },
+      transChoice: function(id, number, parameters) {
+        return Translator.transChoice(id, number, parameters);
+      }
+    }.init();
+  }();
+})(window, Translator);

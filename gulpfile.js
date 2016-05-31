@@ -62,7 +62,7 @@ gulp.task('jspm', ['copy-assets'], function(callback){
 });
 
 gulp.task('jspm:xe', function() {
-  return gulp.src(['assets/core/common/js/translator.js', 'assets/core/common/js/xe.*.js', 'assets/core/common/js/xe.js'])
+  return gulp.src(['assets/core/common/js/xe.js', 'assets/core/common/js/translator.js', 'assets/core/common/js/xe.lang.js', 'assets/core/common/js/xe.progress.js', 'assets/core/common/js/xe.request.js', 'assets/core/common/js/xe.component.js'])
     .pipe(concat('xe.bundle.js'))
     .pipe(gulp.dest('assets/core/common/js/'));
 });

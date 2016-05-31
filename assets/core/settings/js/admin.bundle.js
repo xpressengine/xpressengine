@@ -1599,11 +1599,11 @@ $__System.registerDynamic("1", ["2"], true, function($__require, exports, module
       GLOBAL = this;
   (function(root, factory) {
     if (typeof define === 'function' && define.amd) {
-      define(['exports', 'github:twbs/bootstrap-sass@3.3.6/assets/javascripts/bootstrap.js'], function(exports) {
-        factory(exports, $__require('2'));
+      define(['exports', "github:twbs/bootstrap-sass@3.3.6/assets/javascripts/bootstrap.js"], function(exports) {
+        factory(exports, jQuery);
       });
     } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
-      factory(exports);
+      factory(exports, $__require('2'));
     } else {
       factory({});
     }

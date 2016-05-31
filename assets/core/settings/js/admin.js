@@ -3,13 +3,13 @@
     // AMD
     define([
       'exports',
-       'github:twbs/bootstrap-sass@3.3.6/assets/javascripts/bootstrap.js'
+      "github:twbs/bootstrap-sass@3.3.6/assets/javascripts/bootstrap.js"
     ], function (exports) {
-      factory(exports, require('github:twbs/bootstrap-sass@3.3.6/assets/javascripts/bootstrap.js'));
+      factory(exports, jQuery);
     });
   } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
     // CommonJS
-    factory(exports);
+    factory(exports, require("github:twbs/bootstrap-sass@3.3.6/assets/javascripts/bootstrap.js"));
   } else {
     // Browser globals
     factory({});

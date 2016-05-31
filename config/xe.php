@@ -290,8 +290,8 @@ return [
             'default' => 'assets/core/member/img/default_avatar.gif',
             'size' => ['width' => 240, 'height' => 240],
             'storage' => [
-                'disk' => 'local',
-                'path' => 'member/profile'
+                'disk' => 'uploaded',
+                'path' => 'user/profile_image'
             ]
         ]
     ],
@@ -375,6 +375,10 @@ return [
 
     'security' => [
         'safeMode' => true
+    ],
+
+    'plugin' => [
+        'server' => 'http://xpressengine.io/plugins'
     ],
 
     'uiobject' => [

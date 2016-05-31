@@ -160,12 +160,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <div id="themeSelect">
-                                {!! uio('themeSelect', ['selectedTheme' => ['desktop' => $menuConfig->get('desktopTheme'), 'mobile' => $menuConfig->get('mobileTheme')]]) !!}
-                            </div>
-                        </div>
+                    <div id="themeSelect">
+                        {!! uio('themeSelect', ['selectedTheme' => ['desktop' => $menuConfig->get('desktopTheme'), 'mobile' => $menuConfig->get('mobileTheme')]]) !!}
                     </div>
                 </div>
 

@@ -35,7 +35,6 @@ class ThemeSelect extends AbstractUIObject
             $previewLink .= '&';
         }
 
-
         $this->loadFiles();
 
         $this->template = view($this->view, compact('themes', 'selectedThemeId', 'prefix', 'previewLink'))->render();
