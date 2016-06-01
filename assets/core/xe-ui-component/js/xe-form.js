@@ -31,6 +31,7 @@
                         url: $this.attr('action')
                         , type: $this.attr("method")
                         , param: $this.serialize()
+                        , dataType: 'json'
                         , success: callbackFunc
                     };
 
