@@ -48,26 +48,6 @@ abstract class AbstractSkin implements ComponentInterface, Renderable
     protected $view;
 
     /**
-     * 스킨이 XE에 등록된 다음 실행되어야 하는 코드가 있을 경우 여기에 작성한다.
-     *
-     * @return void
-     */
-    public static function boot()
-    {
-        return;
-    }
-
-    /**
-     * get settings uri
-     *
-     * @return string|null
-     */
-    public static function getSettingsURI()
-    {
-        return null;
-    }
-
-    /**
      * AbstractSkin constructor.
      *
      * @param array $config configuration data
@@ -153,24 +133,43 @@ abstract class AbstractSkin implements ComponentInterface, Renderable
     }
 
     /**
-     * get skin's config data
-     *
-     * @return array
-     */
-    public function getConfig()
-    {
-        return $this->config;
-    }
-
-    /**
      * 스킨 설정을 위한 화면에 출력될 html 반환
      *
      * @param array $config skin config
      *
      * @return string|Renderable
      */
-    public static function getSettingView($config = [])
+    public function getSettingView($config = [])
     {
         return '';
+    }
+
+    /**
+     * 스킨 설정 페이지에서 입력된 설정값이 저장되기 전 필요한 처리한다.
+     * 사이트관리자가 스킨 설정 페이지에서 저장 요청을 할 경우, 스킨핸들러가 설정값을 저장하기 전에 이 메소드가 실행된다.
+     * 설정값을 보완할 필요가 있을 경우 이 메소드에서 보완하여 다시 반환하면 된다.
+     *
+     * @param array $config
+     *
+     * @return array
+     */
+    public function updateSetting(array $config)
+    {
+        return $config;
+    }
+
+    /**
+     * set or get config info
+     *
+     * @param array|null $config
+     *
+     * @return array|void
+     */
+    public function setting(array $config = null)
+    {
+        if($config !== null) {
+            $this->config = $config;
+        }
+        return $this->config;
     }
 }

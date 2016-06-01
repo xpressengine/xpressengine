@@ -425,7 +425,7 @@ class SkinHandler
         $storeKey = $this->mergeKey($target);
 
         // set config
-        $this->store->setConfigs($storeKey, $skin->getId(), $skin->getConfig());
+        $this->store->setConfigs($storeKey, $skin->getId(), $skin->setting());
     }
 
     /**

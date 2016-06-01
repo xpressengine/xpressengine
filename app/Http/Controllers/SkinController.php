@@ -78,12 +78,17 @@ class SkinController extends Controller
         }
         $skinInstanceId = $request->get('instanceId');
         $skinId = $request->get('skinId');
-        $mode = $request->get('mode', 'desktop');
 
-        $config = $request->except('instanceId', 'skinId', 'mode', '_token');
+        $config = $request->except('instanceId', 'skinId', '_token');
 
-        $skin = $skinHandler->get($skinId, $config);
-        $skinHandler->saveConfig($skinInstanceId, $skin, $mode);
+        $skin = $skinHandler->get($skinId);
+
+        // 각 스킨에게 config값을 전처리 할 기회를 준다.
+        $config = $skin->updateSetting($config);
+
+        $skin->setting($config);
+
+        $skinHandler->saveConfig($skinInstanceId, $skin);
 
         return XePresenter::makeApi(
             ['type' => 'success', 'message' => '저장되었습니다.', 'skinId' => $skinId, 'skinTitle' => $skin->getTitle()]
