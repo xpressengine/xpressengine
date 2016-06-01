@@ -88,7 +88,7 @@
     <link href="http://getbootstrap.com/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="/assets/core/common/css/install.css" rel="stylesheet">
+    <link href="../assets/core/common/css/install.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="http://getbootstrap.com/assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -122,8 +122,8 @@
 
                 </div>
                 <p class="lead">
-                    <a href="/web_installer" class="btn btn-lg btn-danger again-button">Checking Again</a>
-                    <a href="/install" class="btn btn-lg btn-default next-button" style="display:none;">Getting start</a>
+                    <a href="../web_installer" class="btn btn-lg btn-danger again-button">Checking Again</a>
+                    <a href="../install" class="btn btn-lg btn-default next-button" style="display:none;">Getting start</a>
                 </p>
             </div>
 
@@ -155,7 +155,7 @@
             type: 'get',
             dataType: 'json',
             data: {'key' : checkKey},
-            url: '/web_installer/index.php',
+            url: 'index.php',
             success: function(data) {
                 if (data.result == false) {
                     $('.'+checkKey).addClass('glyphicon-ban-circle').css('color','red').removeClass('glyphicon-refresh');

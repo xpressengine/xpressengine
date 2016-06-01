@@ -1,22 +1,19 @@
-System.amdDefine('xe.component', [], function() {
-
-  return {
-    timeago: timeago,
-    boot: boot
-  };
-
-  function timeago() {
-    $('[data-xe-timeago]').trigger('boot.xe.timeago');
-  }
-
-  function boot() {
-    timeago();
-    $('[data-toggle=xe-dropdown]').trigger('boot.xe.dropdown');
-    $('[data-toggle=xe-modal]').trigger('boot.xe.modal');
-    $('[data-toggle=xe-tooltip]').trigger('boot.xe.tooltip');
-  }
-
-});
+(function(exports) {
+  exports.XE.Component = function() {
+    return {
+      timeago: function() {
+        $('[data-xe-timeago]').trigger('boot.xe.timeago');
+      },
+      boot: function() {
+        this.timeago();
+        $('[data-toggle=xe-dropdown]').trigger('boot.xe.dropdown');
+        $('[data-toggle=xe-modal]').trigger('boot.xe.modal');
+        $('[data-toggle=xe-tooltip]').trigger('boot.xe.tooltip');
+        $('[data-toggle=dropdown]').trigger('boot.dropdown');
+      }
+    };
+  }();
+})(window);
 
 $(function() {
   /*
@@ -52,20 +49,24 @@ $(function() {
 
   $(document).on('boot.xe.dropdown', '[data-toggle=xe-dropdown]', function() {
     System.import("xe.component.dropdown").then(function() {
-      $('[xe-toggle=xe-dropdown]').xeDropdown();
+      $('[data-toggle=xe-dropdown]').xeDropdown();
     });
   });
 
   $(document).on('boot.xe.modal', '[data-toggle=xe-modal]', function() {
     System.import("xe.component.modal").then(function() {
-      $('[xe-toggle=xe-modal]').xeModal();
+      $('[data-toggle=xe-modal]').xeModal();
     });
   });
 
   $(document).on('boot.xe.modal', '[data-toggle=xe-tooltip]', function() {
     System.import("xe.component.tooltip").then(function() {
-      $('[xe-toggle=xe-tooltip]').xeTooltip();
+      $('[data-toggle=xe-tooltip]').xeTooltip();
     });
+  });
+
+  $(document).on('boot.dropdown', '[data-toggle=dropdown]', function() {
+    $('[data-toggle=dropdown]').dropdown();
   });
 
   XE.Component.boot();

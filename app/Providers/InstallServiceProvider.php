@@ -42,7 +42,10 @@ class InstallServiceProvider extends ServiceProvider
         });
 
         Route::get('/install', '\App\Http\Controllers\InstallController@create');
-        Route::post('/install/post', '\App\Http\Controllers\InstallController@install');
+        Route::post('/install/post', [
+            'as' => 'webinstall.install.post',
+            'uses' => '\App\Http\Controllers\InstallController@install'
+        ]);
 
         $appKeyPath = storage_path('app') . '/appKey';
         if (File::exists($appKeyPath) === false) {

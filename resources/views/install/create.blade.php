@@ -19,7 +19,7 @@
     <link href="http://getbootstrap.com/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="/assets/core/common/css/install.css" rel="stylesheet">
+    <link href="{{ asset('/assets/core/common/css/install.css') }}" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="http://getbootstrap.com/assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -47,7 +47,7 @@
             </div>
 
             <div class="inner cover" style="padding: 50px; 0">
-                <form action="/install/post" method="post">
+                <form action="{{ route('webinstall.install.post') }}" method="post">
                     <input type="hidden" name="_token" value="{!! Session::token() !!}" />
                     <h2>Database</h2>
                     <div class="form-group">

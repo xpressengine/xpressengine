@@ -1,12 +1,11 @@
 <?php
 namespace App\Http\Controllers;
 
-use Xpressengine\Http\Request;
+use Illuminate\Http\Request;
 use View;
 use Artisan;
 use File;
 use Symfony\Component\Yaml\Yaml;
-use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
 
 class InstallController extends Controller
 {
@@ -31,16 +30,14 @@ class InstallController extends Controller
         return View::make('install.create', []);
     }
 
-    public function install()
+    public function install(Request $request)
     {
         if ($this->isInstalled() === true) {
             throw new \Exception('Already installed');
         }
 
         app('config')->set('app.debug', true);
-
-        $request = app('request');
-
+        
         $this->validate($request, [
             'admin_email' => 'required|email',
             'admin_password' => 'required|confirmed',
@@ -56,7 +53,7 @@ class InstallController extends Controller
 
         $string = Yaml::dump([
             'site' => [
-                'url' => $request->get('web_url') != '' ? $request->get('web_url') : 'http://localhost',
+                'url' => $request->get('web_url') != '' ? rtrim($request->get('web_url'), '/') : 'http://localhost',
                 'timezone' =>  $request->get('web_timezone') != '' ? $request->get('web_timezone') : 'Asia/Seoul',
             ],
             'admin' => [
@@ -83,7 +80,7 @@ class InstallController extends Controller
         File::delete($configPath);
         File::delete($appKeyPath);
 
-        return redirect('/');
+        return redirect($request->root());
 
     }
 }

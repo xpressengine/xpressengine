@@ -25,7 +25,11 @@
     "merge-stream": "^1.0.0",
     "run-sequence": "^1.1.5"
   },
-  "dependencies": {},
+  "dependencies": {
+    "gulp-clean": "^0.3.2",
+    "gulp-concat": "^2.6.0",
+    "gulp-sourcemaps": "^1.6.0"
+  },
   "scripts": {
     "test": "jest"
   },

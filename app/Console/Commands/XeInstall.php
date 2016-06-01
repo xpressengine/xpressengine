@@ -664,7 +664,7 @@ APP_KEY={$appKey}";
 
         // composer의 post script를 run한다.
         // script - optimizing & key generation
-        $this->runPostScript();
+//        $this->runPostScript();
 
         $this->line("Base Framework is loaded\n");
     }
@@ -760,27 +760,27 @@ APP_KEY={$appKey}";
         }
     }
 
-    /**
-     * runPostScript
-     *
-     * @return void
-     */
-    private function runPostScript()
-    {
-        $composer = $this->findComposer();
-        $commands = [
-            $composer.' run-script post-install-cmd',
-            $composer.' run-script post-create-project-cmd',
-        ];
-
-        $process = new Process(implode(' && ', $commands), $this->getBasePath(), null, null, null);
-
-        $process->run(
-            function ($type, $line) {
-                $this->line($line);
-            }
-        );
-    }
+//    /**
+//     * runPostScript
+//     *
+//     * @return void
+//     */
+//    private function runPostScript()
+//    {
+//        $composer = $this->findComposer();
+//        $commands = [
+//            $composer.' run-script post-install-cmd',
+//            $composer.' run-script post-create-project-cmd',
+//        ];
+//
+//        $process = new Process(implode(' && ', $commands), $this->getBasePath(), null, null, null);
+//
+//        $process->run(
+//            function ($type, $line) {
+//                $this->line($line);
+//            }
+//        );
+//    }
 
     /**
      * Illuminate\Foundation\Composer
