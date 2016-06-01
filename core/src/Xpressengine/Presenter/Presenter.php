@@ -307,7 +307,8 @@ class Presenter
             throw new NotFoundFormatException(['name' => $format]);
         }
 
-        return $this->renderers[$format];
+        $renderer = call_user_func_array($this->renderers[$format], [$this]);
+        return $renderer;
     }
 
     /**
@@ -469,12 +470,34 @@ class Presenter
     }
 
     /**
+     * set id
+     *
+     * @param string $id id
+     * @return void
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
      * get shared data
      * @return array
      */
     public function getData()
     {
         return $this->shared;
+    }
+
+    /**
+     * set shared data
+     *
+     * @param array $shared shared
+     * @return void
+     */
+    public function setData(array $shared)
+    {
+        $this->shared = $shared;
     }
 
     /**
@@ -523,8 +546,7 @@ class Presenter
             throw new NotApprovedFormatException(['name' => $format]);
         }
 
-        $callback = $this->getRenderer($format);
-        $renderer = call_user_func_array($callback, [$this]);
+        $renderer = $this->getRenderer($format);
 
         if (is_subclass_of($renderer, 'Xpressengine\Presenter\RendererInterface') === false) {
             throw new InvalidRendererException(['name' => get_class($renderer)]);

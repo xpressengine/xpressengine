@@ -97,20 +97,16 @@ if (function_exists('apiRender') === false) {
     {
         XePresenter::htmlRenderPartial();
 
-        $request = XePresenter::getRequest();
-        if ($request instanceof Xpressengine\Http\Request) {
-            $isMobile = $request->isMobile();
-        } else {
-            $isMobile = false;
-        }
+        XePresenter::setId($id);
+        XePresenter::setData($data);
 
-        $instanceConfig = XePresenter::getInstanceConfig();
-        $instanceId = $instanceConfig->getInstanceId();
-        $skin = XeSkin::getAssigned([XePresenter::getSkinTargetId(), $instanceId], $isMobile ? 'mobile' : 'desktop');
-        $skinView = $skin->setView($id)->setData($data)->render();
+        /** @var Xpressengine\Presenter\Html\HtmlRenderer $renderer */
+        $renderer = XePresenter::getRenderer('html');
+        $renderer->setData();
+        $result = $renderer->renderSkin();
 
         return XePresenter::makeApi([
-            'result' => (string)$skinView,
+            'result' => (string)$result,
             'XE_ASSET_LOAD' => [
                 'css' => [],
                 'js' => [],
