@@ -13,8 +13,8 @@
                 return this;
             },
             bindEvent: function () {
-                $(document).on('click', 'a[data-toggle=xe-page]', self.execPage);
-                $(document).on('click', 'a[data-toggle=xe-page-modal]', self.execPageModal);
+                $(document).on('click', '[data-toggle=xe-page]', self.execPage);
+                $(document).on('click', '[data-toggle=xe-page-modal]', self.execPageModal);
             },
             execPage: function(e) {
                 e.preventDefault();
@@ -150,52 +150,64 @@
     var _page = function(options, callback) {
 
         var $target = $(options.target);
+        var defaultOptions = {
+            url: options.url
+            , type: options.type || 'get'
+            , dateType: 'json'
+            , data: options.data || {}
+        };
 
-        XE.Request[options.type](options.url, options.data || {}, function(data) {
+        var options = $.extend(defaultOptions, {
+            success: function(data) {
+                var assets = data['XE_ASSET_LOAD'],
+                    css = assets['css'] || [],
+                    js = assets['js'] || [],
+                    html = data.result,
+                    cssLen = css.length,
+                    jsLen = js.length;
 
-            var assets = data['XE_ASSET_LOAD'],
-                css = assets['css'] || [],
-                js = assets['js'] || [],
-                html = data.result,
-                cssLen = css.length,
-                jsLen = js.length;
+                var next = function() {
+                    $target.html(html);
 
+                    if(callback) {
+                        callback();
+                    }
+                };
 
-            var next = function() {
-                $target.html(html);
+                var loadDone = _pageCommon.loadDone(cssLen, jsLen, next);
 
-                if(callback) {
-                    callback();
-                }
-            };
-
-            var loadDone = _pageCommon.loadDone(cssLen, jsLen, next);
-
-            if(cssLen > 0) {
-                for(var i = 0, max = cssLen; i < max; i += 1) {
-                    if(!_assets.hasOwnProperty(css[i])) {
-                        _pageCommon.cssLoad(css[i], loadDone, loadDone);
-                    }else {
-                        loadDone();
+                if(cssLen > 0) {
+                    for(var i = 0, max = cssLen; i < max; i += 1) {
+                        if(!_assets.hasOwnProperty(css[i])) {
+                            _pageCommon.cssLoad(css[i], loadDone, loadDone);
+                        }else {
+                            loadDone();
+                        }
                     }
                 }
-            }
 
-            if(jsLen > 0) {
-                for(var i = 0, max = jsLen; i < max; i += 1) {
-                    if(!_assets.hasOwnProperty(css[i])) {
-                        _pageCommon.jsLoad(js[i], loadDone, loadDone);
-                    }else {
-                        loadDone();
+                if(jsLen > 0) {
+                    for(var i = 0, max = jsLen; i < max; i += 1) {
+                        if(!_assets.hasOwnProperty(css[i])) {
+                            _pageCommon.jsLoad(js[i], loadDone, loadDone);
+                        }else {
+                            loadDone();
+                        }
                     }
                 }
-            }
 
-            if((cssLen + jsLen) === 0) {
-                next();
-            }
+                if((cssLen + jsLen) === 0) {
+                    next();
+                }
+            },
+            error: function(data) {
+                XE.Progress.done();
 
-        }, 'json');
+                XE.toast(data.type, data.message);
+            }
+        });
+
+        XE.ajax(options);
 
     };
 
