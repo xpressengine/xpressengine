@@ -11,15 +11,7 @@
                     </div>
                 </div>
                 <div id="collapseOne" class="panel-collapse collapse in">
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <ul class="list-group">
-                                <li class="list-group-item">
-                                    {!! $authSkinSection !!}
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+                    {!! $authSkinSection !!}
                 </div>
             </div>
 
@@ -33,15 +25,7 @@
                     </div>
                 </div>
                 <div id="collapseTwo" class="panel-collapse collapse in">
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <ul class="list-group">
-                                <li class="list-group-item">
-                                    {!! $settingsSkinSection !!}
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+                    {!! $settingsSkinSection !!}
                 </div>
             </div>
 
@@ -55,15 +39,7 @@
                     </div>
                 </div>
                 <div id="collapseThree" class="panel-collapse collapse in">
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <ul class="list-group">
-                                <li class="list-group-item">
-                                    {!! $profileSkinSection !!}
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+                    {!! $profileSkinSection !!}
                 </div>
             </div>
 

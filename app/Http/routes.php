@@ -680,6 +680,7 @@ Route::settings(
     function () {
         Route::get('/section', ['as' => 'settings.skin.section.setting', 'uses' => 'SkinController@getSetting']);
         Route::post('/section', ['as' => 'settings.skin.section.setting', 'uses' => 'SkinController@postSetting']);
+        Route::post('/section', ['as' => 'settings.skin.section.assign', 'uses' => 'SkinController@postAssign']);
     }
 );
 

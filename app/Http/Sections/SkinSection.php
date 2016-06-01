@@ -8,22 +8,20 @@ class SkinSection extends Section
 {
     protected $target;
     protected $instanceId;
-    protected $mode;
 
     /**
      * SkinSection constructor.
      *
-     * @param string $target
+     * @param string      $target
      * @param string|null $instanceId
      * @param string|null $mode
      */
-    public function __construct($target, $instanceId = null, $mode = null)
+    public function __construct($target, $instanceId = null)
     {
         $this->target = $target;
         $this->instanceId = $instanceId;
-        $this->mode = $mode;
     }
-    
+
     /**
      * makeView
      *
@@ -33,20 +31,16 @@ class SkinSection extends Section
      *
      * @return \Illuminate\Contracts\View\View
      */
-    protected function makeView($target, $instanceId, $mode)
+    protected function makeView($target, $instanceId)
     {
         /** @var SkinHandler $skinHandler */
         $skinHandler = app('xe.skin');
 
         $skinInstanceId = $skinHandler->mergeKey($target, $instanceId);
 
-        $selectedSkin = $skinHandler->getAssigned([$target, $instanceId], $mode);
-
-        if ($selectedSkin !== null) {
-            $settingView = $selectedSkin->getSettingView($selectedSkin->getConfig());
-        } else {
-            $settingView = null;
-        }
+        $selectedSkin = [];
+        $selectedSkin['desktop'] = $skinHandler->getAssigned([$target, $instanceId], 'desktop');
+        $selectedSkin['mobile'] = $skinHandler->getAssigned([$target, $instanceId], 'mobile');
 
         // get skin list
         $skinList = $skinHandler->getList($target);
@@ -73,7 +67,6 @@ class SkinSection extends Section
 
         $skins = $skins($skinList, $selectedSkin);
 
-
         $url = route('settings.skin.section.setting');
         \XeFrontend::html('skin.loadSkinSetting')->content(
             "<script>
@@ -86,8 +79,8 @@ class SkinSection extends Section
         \XeFrontend::js('assets/core/skin/section.js')->load();
 
         return View::make(
-            'skin.setting',
-            compact('skinInstanceId', 'settingView', 'skins', 'mode', 'selectedSkin')
+            'skin.section',
+            compact('skinInstanceId', 'skinList', 'selectedSkin')
         );
     }
 
@@ -98,12 +91,6 @@ class SkinSection extends Section
      */
     public function render()
     {
-        if ($this->mode === null) {
-            $view = $this->makeView($this->target, $this->instanceId, 'desktop')->render();
-            $view .= $this->makeView($this->target, $this->instanceId, 'mobile')->render();
-            return $view;
-        } else {
-            return $this->makeView($this->target, $this->instanceId, $this->mode);
-        }
+        return $this->makeView($this->target, $this->instanceId)->render();
     }
 }
