@@ -104,7 +104,11 @@ abstract class AbstractSkin implements ComponentInterface, Renderable
      */
     public static function getScreenshot()
     {
-        return static::getComponentInfo('screenshot');
+        $screenshots = static::getComponentInfo('screenshot');
+        if(is_array($screenshots)) {
+            return array_shift($screenshots);
+        }
+        return $screenshots;
     }
 
     /**
