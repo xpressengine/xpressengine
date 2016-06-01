@@ -23,7 +23,7 @@ $(function ($) {
     });
   })
 
-  $('.__xe_skinForm .__xe_skin-setting-btn').click(function(){
+  $('.skin-setting-list .__xe_skin-setting-btn').click(function(){
     var url = $(this).data('url');
     modalPage(url)
   })
