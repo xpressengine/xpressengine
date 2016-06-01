@@ -84,3 +84,37 @@ if (function_exists('bytes') === false) {
         return sprintf("%.{$dec}f", $bytes / pow(1024, $factor)) . $size[$factor];
     }
 }
+
+if (function_exists('apiRender') === false) {
+    /**
+     * XE.page() 를 사용하여 호출할 경우 render 된 html 반환
+     *
+     * @param string $id   view id
+     * @param array  $data data
+     * @return mixed
+     */
+    function apiRender($id, array $data = [])
+    {
+        XePresenter::htmlRenderPartial();
+
+        $request = XePresenter::getRequest();
+        if ($request instanceof Xpressengine\Http\Request) {
+            $isMobile = $request->isMobile();
+        } else {
+            $isMobile = false;
+        }
+
+        $instanceConfig = XePresenter::getInstanceConfig();
+        $instanceId = $instanceConfig->getInstanceId();
+        $skin = XeSkin::getAssigned([XePresenter::getSkinTargetId(), $instanceId], $isMobile ? 'mobile' : 'desktop');
+        $skinView = $skin->setView($id)->setData($data)->render();
+
+        return XePresenter::makeApi([
+            'result' => (string)$skinView,
+            'XE_ASSET_LOAD' => [
+                'css' => [],
+                'js' => [],
+            ],
+        ]);
+    }
+}

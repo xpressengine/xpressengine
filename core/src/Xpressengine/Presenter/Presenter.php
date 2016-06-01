@@ -184,7 +184,7 @@ class Presenter
      *
      * @var array
      */
-    protected $renderes = [];
+    protected $renderers = [];
 
     /**
      * Create a new RendererManager instance.
@@ -292,7 +292,22 @@ class Presenter
      */
     public function register($format, Closure $callback)
     {
-        $this->renderes[$format] = $callback;
+        $this->renderers[$format] = $callback;
+    }
+
+    /**
+     * get renderer
+     *
+     * @param string $format renderer format
+     * @return RendererInterface
+     */
+    public function getRenderer($format)
+    {
+        if (isset($this->renderers[$format]) === false) {
+            throw new NotFoundFormatException(['name' => $format]);
+        }
+
+        return $this->renderers[$format];
     }
 
     /**
@@ -508,11 +523,7 @@ class Presenter
             throw new NotApprovedFormatException(['name' => $format]);
         }
 
-        if (isset($this->renderes[$format]) === false) {
-            throw new NotFoundFormatException(['name' => $format]);
-        }
-
-        $callback = $this->renderes[$format];
+        $callback = $this->getRenderer($format);
         $renderer = call_user_func_array($callback, [$this]);
 
         if (is_subclass_of($renderer, 'Xpressengine\Presenter\RendererInterface') === false) {
