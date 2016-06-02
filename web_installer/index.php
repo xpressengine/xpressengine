@@ -1,10 +1,5 @@
 <?php
 
-//    require '../vendor/autoload.php';
-//    $app = include('../bootstrap/app.php');
-//    $kernel = $app->make('Illuminate\Contracts\Http\Kernel');
-//    $kernel->bootstrap();
-
     if (empty($_GET['key']) === false) {
         $key = $_GET['key'];
 
@@ -73,6 +68,10 @@
         exit;
     }
 
+    $https = isset($_SERVER['HTTPS']) ? $_SERVER['HTTPS'] : '';
+    $schema = !empty($https) && 'off' !== strtolower($https) ? 'https' : 'http';
+    $url = $schema.'://'.$_SERVER['SERVER_NAME'];
+
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
@@ -82,17 +81,15 @@
     <title>XE3 - Web installer</title>
 
     <link rel="stylesheet" href="../assets/core/common/css/xe-common.css">
+    <script src="../assets/vendor/jquery/jquery.min.js"></script>
     <script src="../assets/jspm_packages/system.js"></script>
     <script src="../assets/systemjs.config.js"></script>
+    <script src="../assets/core/common/js/xe.bundle.js"></script>
 
     <link rel="stylesheet" href="../assets/core/xe-ui-component/xe-ui-component.css">
-    <script>
-        System.import('xecore:/xe-ui-component/js/xe-ui-component.bundle');
-    </script>
 
     <link rel="stylesheet" href="../assets/core/common/css/install.css">
     <link rel="stylesheet" href="http://cdn.jsdelivr.net/xeicon/2.0.0/xeicon.min.css">
-    <script src="../assets/vendor/jquery/jquery.min.js"></script>
 </head>
 
 <body>
@@ -120,7 +117,7 @@
                 <span class="dot"><em class="xe-sr-only">.</em></span>
                 <span class="num0"><em class="xe-sr-only">0</em></span>
                 <span class="dot"><em class="xe-sr-only">.</em></span>
-                <span class="num1"><em class="xe-sr-only">0</em></span>
+                <span class="num0"><em class="xe-sr-only">0</em></span>
                 <!--// version number area-->
                 <span class="text-installer"><span class="xe-sr-only">installer</span></span>
             </h2>
@@ -261,7 +258,7 @@
                 <tbody>
                 <tr>
                     <th scope="row">Site Address</th>
-                    <td><input type="text" class="xe-form-control" name="web_url" placeholder="URL(http://...)"></td>
+                    <td><input type="text" class="xe-form-control" name="web_url" placeholder="URL(http://...)" value="<?=$url?>"></td>
                 </tr>
                 <tr>
                     <th scope="row">Time Zone</th>
