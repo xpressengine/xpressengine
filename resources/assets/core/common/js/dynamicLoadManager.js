@@ -35,7 +35,15 @@
                 var src = url.split("?")[0];
 
                 if(!_assets.css.hasOwnProperty(src)) {
-                    var $css = $('<link>', {rel: 'stylesheet', type: 'text/css', href: url}).on('load', load).on('error', error);
+                    var $css = $('<link>', {rel: 'stylesheet', type: 'text/css', href: url});
+
+                    if(load) {
+                        $css.on('load', load)
+                    }
+
+                    if(error) {
+                        $css.on('error', error)
+                    }
 
                     $('head').append($css);
 
