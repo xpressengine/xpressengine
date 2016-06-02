@@ -18,8 +18,8 @@
                     var $this = $(this);
                     var callback = $this.data('callback');
 
-                    var objStack = callback.split(".");
-                    var callbackFunc = window;
+                    var objStack = callback? callback.split(".") : [];
+                    var callbackFunc = (objStack.length > 0)? window : '';
 
                     if(objStack.length > 0) {
                         for(var i = 0, max = objStack.length; i < max; i += 1) {
@@ -34,6 +34,10 @@
                         , dataType: 'json'
                         , success: callbackFunc
                     };
+
+                    if(callbackFunc === '') {
+                        delete options.success;
+                    }
 
                     if(_formCommon.isValidForm(options, callback)) {
                         XE.ajax(options);
