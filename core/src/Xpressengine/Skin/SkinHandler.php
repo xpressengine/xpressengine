@@ -418,9 +418,14 @@ class SkinHandler
 
         // set skin id
         $this->store->setSelectedSkin($storeKey, $mode, $skin->getId());
+    }
+
+    public function saveConfig($target, SkinEntity $skin)
+    {
+        $storeKey = $this->mergeKey($target);
 
         // set config
-        $this->store->setConfigs($storeKey, $skin->getId(), $skin->getConfig());
+        $this->store->setConfigs($storeKey, $skin->getId(), $skin->setting());
     }
 
     /**

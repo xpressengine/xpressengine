@@ -128,36 +128,30 @@ class SkinEntity implements Arrayable, Jsonable
      */
     public function getSettingView($config = [])
     {
-        $class = $this->class;
-        return $class::getSettingView($config);
+        return $this->getObject()->getSettingView($config);
     }
 
     /**
-     * get skin's config data
+     * updateConfig
+     *
+     * @param array $config
      *
      * @return array
      */
-    public function getConfig()
+    public function updateSetting(array $config)
     {
-        if ($this->object !== null) {
-            return $this->object->getConfig();
-        }
-        if ($this->config !== null) {
-            return $this->config;
-        }
-        return [];
+        return $this->getObject()->updateSetting($config);
     }
 
     /**
-     * set skin's config data
+     * get and set config
      *
-     * @param array $config config data
+     * @param array $config
      *
-     * @return void
+     * @return null
      */
-    public function setConfig($config)
-    {
-        $this->config = $config;
+    public function setting(array $config = null) {
+        return $this->getObject()->setting($config);
     }
 
     /**
@@ -203,7 +197,6 @@ class SkinEntity implements Arrayable, Jsonable
         $class = $this->class;
         return $class::supportMobileOnly();
     }
-
 
     /**
      * get object of skin
