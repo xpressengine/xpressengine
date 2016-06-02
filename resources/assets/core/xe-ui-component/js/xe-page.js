@@ -1,8 +1,5 @@
-(function($, exports, XE) {
+;(function($, exports, XE, DynamicLoadManager) {
     var self = this;
-    var _assets = {
-        src: {}
-    };
 
     var _pageCommon = function() {
         return {
@@ -27,8 +24,8 @@
 
                 data = data? JSON.parse(data) : {};
 
-                var objStack = callback.split(".");
-                var callbackFunc = window;
+                var objStack = callback? callback.split(".") : [];
+                var callbackFunc = (objStack.length > 0)? window : '';
 
                 var options = {
                     data: data
@@ -52,8 +49,8 @@
 
                 data = data? JSON.parse(data) : {};
 
-                var objStack = callback.split(".");
-                var callbackFunc = window;
+                var objStack = callback? callback.split(".") : [];
+                var callbackFunc = (objStack.length > 0)? window : '';
 
                 var options = {
                     data: data
@@ -67,39 +64,18 @@
 
                 XE.pageModal(url, options, callbackFunc);
             },
-            cssLoad: function(url, load, error) {
-                var $css = $('<link>', {rel: 'stylesheet', type: 'text/css', href: url}).on('load', load).on('error', error);
-
-                $('head').append($css);
-            },
-            jsLoad: function(url, load, error) {
-                var el = document.createElement( 'script' );
-                el.src = url;
-
-                if(load) {
-                    el.onload = load;
-                }
-
-                if(error) {
-                    el.onerror = error;
-                }
-
-                document.head.appendChild(el);
-            },
             loadDone: function(cssLen, jsLen, next) {
                 var loadingCount = 0;
 
                 return function(e) {
 
                     loadingCount++;
-                    //var src = (e.target.tagName === 'LINK')? e.target.href.split("?")[0] : e.target.src.split('?')[0];
 
                     if((cssLen + jsLen) === loadingCount && !!next) {
                         next();
                     }
                 }
             },
-
             getModalTemplate: function() {
                 return [
                     '<div class="xe-modal" data-use="xe-page">',
@@ -153,13 +129,13 @@
         var defaultOptions = {
             url: options.url
             , type: options.type || 'get'
-            , dateType: 'json'
+            , dataType: 'json'
             , data: options.data || {}
         };
 
         var options = $.extend(defaultOptions, {
             success: function(data) {
-                var assets = data['XE_ASSET_LOAD'],
+                var assets = data['XE_ASSET_LOAD'] || {},
                     css = assets['css'] || [],
                     js = assets['js'] || [],
                     html = data.result,
@@ -178,21 +154,13 @@
 
                 if(cssLen > 0) {
                     for(var i = 0, max = cssLen; i < max; i += 1) {
-                        if(!_assets.hasOwnProperty(css[i])) {
-                            _pageCommon.cssLoad(css[i], loadDone, loadDone);
-                        }else {
-                            loadDone();
-                        }
+                        DynamicLoadManager.cssLoad(css[i], loadDone, loadDone);
                     }
                 }
 
                 if(jsLen > 0) {
                     for(var i = 0, max = jsLen; i < max; i += 1) {
-                        if(!_assets.hasOwnProperty(css[i])) {
-                            _pageCommon.jsLoad(js[i], loadDone, loadDone);
-                        }else {
-                            loadDone();
-                        }
+                        DynamicLoadManager.jsLoad(js[i], loadDone, loadDone);
                     }
                 }
 
@@ -292,4 +260,4 @@
         }
     };
 
-})(jQuery, window, XE);
+})(jQuery, window, XE, DynamicLoadManager);
