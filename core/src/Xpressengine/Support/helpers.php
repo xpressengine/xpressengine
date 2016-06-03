@@ -43,6 +43,20 @@ if (function_exists('json_dec') === false) {
     }
 }
 
+if (function_exists('json_format') === false) {
+    /**
+     *
+     *
+     * @param  string $json
+     * @param  bool   $unescapeUnicode Un escape unicode
+     * @param  bool   $unescapeSlashes Un escape slashes
+     * @return string
+     */
+    function json_format($json, $unescapeUnicode = true, $unescapeSlashes = true) {
+        return \Xpressengine\Support\Json::format($json, $unescapeUnicode, $unescapeSlashes);
+    }
+}
+
 if (function_exists('cast') === false) {
     /**
      * scalar 타입 문자열을 실제 형태로 형변환
@@ -57,7 +71,6 @@ if (function_exists('cast') === false) {
         return Xpressengine\Support\Caster::cast($value);
     }
 }
-
 
 if (function_exists('bytes') === false) {
     /**
@@ -114,3 +127,4 @@ if (function_exists('apiRender') === false) {
         ]);
     }
 }
+
