@@ -12,14 +12,14 @@
                         <hr>
                     </div>
                     <div class="col-sm-12">
-                        <div class="form-group">
-                            <input type="text" class="form-control" name="email" value="{{ $member->email }}" readonly />
+                        <div class="xe-form-group">
+                            <input type="text" class="xe-form-control" name="email" value="{{ $member->email }}" readonly />
                         </div>
-                        <div class="form-group">
-                            <input type="password" class="form-control" placeholder="비밀번호를 입력하세요" name="password" />
+                        <div class="xe-form-group">
+                            <input type="password" class="xe-form-control" placeholder="비밀번호를 입력하세요" name="password" />
                         </div>
-                        <div class="form-group">
-                            <button type="submit" class="form-control btn btn-primary btn-block">탈퇴</button>
+                        <div class="xe-form-group">
+                            <button type="submit" class="xe-form-control btn btn-primary btn-block">탈퇴</button>
                         </div>
                     </div>
                     <div class="hidden-md hidden-lg text-center">

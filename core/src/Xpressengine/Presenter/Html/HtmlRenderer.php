@@ -2,15 +2,15 @@
 /**
  * HtmlRenderer
  *
- * PHP version 5
- *
  * @category  Presenter
  * @package   Xpressengine\Presenter
- * @author    XE Team (developers) <developers@xpressengine.com>
- * @copyright 2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license   http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link      http://www.xpressengine.com
+ * @author    XE Developers <developers@xpressengine.com>
+ * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license   LGPL-2.1
+ * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link      https://xpressengine.io
  */
+
 namespace Xpressengine\Presenter\Html;
 
 use Xpressengine\Http\Request;
@@ -18,7 +18,7 @@ use Xpressengine\Presenter\RendererInterface;
 use Xpressengine\Presenter\Presenter;
 use Xpressengine\Presenter\Exceptions\NotFoundSkinException;
 use Xpressengine\Seo\SeoHandler;
-use Xpressengine\Theme\ThemeEntity;
+use Xpressengine\Theme\ThemeEntityInterface;
 use Xpressengine\Widget\WidgetParser;
 
 /**
@@ -30,10 +30,6 @@ use Xpressengine\Widget\WidgetParser;
  *
  * @category  Presenter
  * @package   Xpressengine\Presenter
- * @author    XE Team (developers) <developers@xpressengine.com>
- * @copyright 2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license   http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link      http://www.xpressengine.com
  */
 class HtmlRenderer implements RendererInterface
 {
@@ -219,7 +215,7 @@ class HtmlRenderer implements RendererInterface
         $skinView = null;
 
         if ($skinTargetId != null && is_string($skinTargetId)) {
-            if ($this->presenter->getIsSettings()) {
+            if ($this->presenter->getIsSettings() && $skinTargetId !== 'error') {
                 $skin = $skinHandler->getAssignedSettings($skinTargetId);
             } else {
                 $skin = $skinHandler->getAssigned([$skinTargetId, $instanceId], $isMobile ? 'mobile' : 'desktop');
@@ -248,7 +244,7 @@ class HtmlRenderer implements RendererInterface
         $themeHandler = $this->presenter->getThemeHandler();
 
         // get instance theme
-        /** @var ThemeEntity $theme */
+        /** @var ThemeEntityInterface $theme */
         $theme = $themeHandler->getSelectedTheme();
 
         // get site default theme

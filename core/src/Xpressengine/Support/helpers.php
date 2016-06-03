@@ -2,14 +2,13 @@
 /**
  * This file is support helper functions
  *
- * PHP version 5
- *
  * @category    Support
  * @package     Xpressengine\Support
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
  */
 
 if (function_exists('json_enc') === false) {
@@ -82,5 +81,35 @@ if (function_exists('bytes') === false) {
         }
 
         return sprintf("%.{$dec}f", $bytes / pow(1024, $factor)) . $size[$factor];
+    }
+}
+
+if (function_exists('apiRender') === false) {
+    /**
+     * XE.page() 를 사용하여 호출할 경우 render 된 html 반환
+     *
+     * @param string $id   view id
+     * @param array  $data data
+     * @return mixed
+     */
+    function apiRender($id, array $data = [])
+    {
+        XePresenter::htmlRenderPartial();
+
+        XePresenter::setId($id);
+        XePresenter::setData($data);
+
+        /** @var Xpressengine\Presenter\Html\HtmlRenderer $renderer */
+        $renderer = XePresenter::getRenderer('html');
+        $renderer->setData();
+        $result = $renderer->renderSkin();
+
+        return XePresenter::makeApi([
+            'result' => (string)$result,
+            'XE_ASSET_LOAD' => [
+                'css' => [],
+                'js' => [],
+            ],
+        ]);
     }
 }

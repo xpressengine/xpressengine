@@ -1296,4 +1296,8 @@ return [
         'ko' => '마우스 오버',
         'en' => 'Hover',
     ],
+    'processed' => [
+        'ko' => '처리되었습니다.',
+        'en' => 'Has been processed.',
+    ],
 ];

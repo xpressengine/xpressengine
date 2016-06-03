@@ -2,9 +2,9 @@
     "name": "xpressengine/core",
     "description": "XpressEngine (XE)",
     "keywords": ["xpressengine", "xe", "laravel", "cms"],
-    "license": "LGPL",
+    "license": "LGPL-2.1",
     "require": {
-	"php": ">=5.5.9",
+        "php": ">=5.5.9",
         "laravel/framework": "5.1.*",
         "wittiws/phpquery": "dev-master",
         "james-heinrich/getid3": "1.9.*",
@@ -17,7 +17,7 @@
     },
     "autoload": {
         "psr-4": {
-	    "Xpressengine\\": "src/Xpressengine"
+            "Xpressengine\\": "src/Xpressengine"
         },
         "files": [
             "src/Xpressengine/Interception/helpers.php"

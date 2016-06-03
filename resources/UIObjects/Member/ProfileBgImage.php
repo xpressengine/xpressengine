@@ -1,4 +1,13 @@
-<?php namespace Xpressengine\UIObjects\Member;
+<?php
+/**
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
+ */
+
+namespace Xpressengine\UIObjects\Member;
 
 use XeFrontend;
 
@@ -22,7 +31,7 @@ class ProfileBgImage extends ProfileImage
      *
      * @return void
      */
-    protected function loadFiles()
+    protected function loadAssets()
     {
         XeFrontend::js(
             [

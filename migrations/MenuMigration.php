@@ -1,4 +1,12 @@
 <?php
+/**
+ * @author    XE Developers <developers@xpressengine.com>
+ * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license   LGPL-2.1
+ * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link      https://xpressengine.io
+ */
+
 namespace Xpressengine\Migrations;
 
 use Illuminate\Database\Schema\Blueprint;
@@ -39,6 +47,12 @@ class MenuMigration implements Migration {
             $table->text('description')->nullable();
             $table->string('target');
             $table->string('type');
+            $table->string('basicImageId', 36);
+            $table->string('hoverImageId', 36);
+            $table->string('selectedImageId', 36);
+            $table->string('mBasicImageId', 36);
+            $table->string('mHoverImageId', 36);
+            $table->string('mSelectedImageId', 36);
             $table->integer('ordering');
             $table->boolean('activated');
             $table->string('options');
@@ -131,7 +145,7 @@ class MenuMigration implements Migration {
 
         $item = $menuHandler->createItem($mainMenu, $inputs, $menuTypeInput);
 
-        $menuHandler->setMenuItemTheme($item, 'theme/alice@main', 'theme/alice@main');
+        $menuHandler->setMenuItemTheme($item, 'theme/alice@alice.1', 'theme/alice@alice.1');
         /**
          * @var $configManager ConfigManager
          */
@@ -188,15 +202,14 @@ class MenuMigration implements Migration {
 
         $item = $menuHandler->createItem($mainMenu, $inputs, $menuTypeInput);
 
-        $menuHandler->setMenuItemTheme($item, 'theme/alice@sub', 'theme/alice@sub');
+        $menuHandler->setMenuItemTheme($item, 'theme/alice@alice', 'theme/alice@alice');
     }
 
     protected function setThemeConfig($mainMenu)
     {
         /** @var ThemeHandler $themeHandler */
         $themeHandler = app('xe.theme');
-        $themeHandler->setThemeConfig('alice', 'mainMenu', $mainMenu );
-        $themeHandler->setThemeConfig('alice', 'subMenu', $mainMenu );
+        $themeHandler->setThemeConfig('theme/alice@alice', 'mainMenu', $mainMenu );
     }
 
     /**

@@ -1,7 +1,15 @@
 <?php
+/**
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     LGPL-2.1 http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
+ */
+
 namespace App\Http\Controllers;
 
-use Xpressengine\Http\Request;
+use Illuminate\Http\Request;
 use View;
 use Artisan;
 use File;
@@ -11,84 +19,49 @@ class InstallController extends Controller
 {
     protected $phpVersion = 50509;
 
-    public function index()
+    /**
+     * Is installed
+     *
+     * @return bool
+     */
+    protected function isInstalled()
     {
-        return View::make('install.index', []);
+        return file_exists(storage_path() . '/app/installed');
     }
 
-    public function checkDirectoryPermission()
+    public function install(Request $request)
     {
-        $request = app('request');
-
-        // 파일을 쓰고 지우는 동작을 통해 permission 유무 체크
-        $result = true;
-
-        // 이것 저것 체크해야 하지만.. 지원 안하는것으로 결정되어 추가 개발 안함
-        $configPath = storage_path('app');
-
-        if ($request->format() == 'json') {
-            return json_encode(['result' => $result]);
-        } else {
-            return $result;
+        if ($this->isInstalled() === true) {
+            throw new \Exception('Already installed');
         }
-    }
 
-    public function checkPHP()
-    {
-        $request = app('request');
+        app('config')->set('app.debug', true);
 
-        $result = PHP_VERSION_ID < $this->phpVersion ? false : true;
-        $result = true;
-        if ($request->format() == 'json') {
-            return json_encode(['result' => $result]);
-        } else {
-            return $result;
+        $url = $this->getUrl($request->get('web_url', ''));
+        $validator = $this->getValidationFactory()->make(
+            array_merge($request->all(), ['web_url' => $url]),
+            [
+                'admin_email' => 'required|email',
+                'admin_password' => 'required|confirmed',
+                'admin_password_confirmation' => 'required',
+                'database_name' => 'required',
+                'database_password' => 'required',
+                'web_url' => 'url',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return $this->back($validator->getMessageBag()->first());
         }
-    }
-
-    public function step1()
-    {
-        $request = app('request');
-
-        return View::make('install.step1', []);
-    }
-
-    protected function checkSystem()
-    {
-        // throw exception
-
-        if ($this->checkDirectoryPermission() === false) {
-
-        }
-        if ($this->checkPHP() === false) {
-
-        }
-    }
-
-    public function install()
-    {
-        $request = app('request');
-
-        $this->validate($request, [
-            'admin_email' => 'required|email',
-            'admin_password' => 'required|confirmed',
-            'admin_password_confirmation' => 'required',
-            'database_name' => 'required',
-            'database_password' => 'required',
-        ]);
 
         // check database connect - throw exception
-        // check database is empty - throw exception
-
-        $this->checkSystem();
-
 
         $appKeyPath = storage_path('app') . '/appKey';
         $configPath = storage_path('app') . '/installConfig';
 
         $string = Yaml::dump([
             'site' => [
-                'url' => $request->get('web_url') != '' ? $request->get('web_url') : 'http://localhost',
+                'url' => $url != '' ? $url : 'http://localhost',
                 'timezone' =>  $request->get('web_timezone') != '' ? $request->get('web_timezone') : 'Asia/Seoul',
             ],
             'admin' => [
@@ -107,7 +80,7 @@ class InstallController extends Controller
 
         File::put($configPath, $string);
 
-        $exitCode = Artisan::call('xe:install', [
+        Artisan::call('xe:install', [
             '--config' => $configPath,
             '--no-interaction' => true,
         ]);
@@ -115,7 +88,22 @@ class InstallController extends Controller
         File::delete($configPath);
         File::delete($appKeyPath);
 
-        return redirect('/');
+        return redirect($request->root());
+    }
 
+    private function back($msg = null)
+    {
+        $alert = $msg ? 'alert("'.$msg.'");' : '';
+        return sprintf('<script>%s history.back();</script>', $alert);
+    }
+
+    private function getUrl($url)
+    {
+        $url = trim($url, '/');
+        if (!empty($url) && !preg_match('/^(http(s)?\:\/\/)/', $url)) {
+            $url = 'http://' . $url;
+        }
+
+        return $url;
     }
 }

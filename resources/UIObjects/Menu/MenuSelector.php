@@ -1,4 +1,12 @@
 <?php
+/**
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
+ */
+
 namespace Xpressengine\UIObjects\Menu;
 
 use XeSite;
@@ -44,6 +52,8 @@ class MenuSelector extends AbstractUIObject
             $option = PhpQuery::pq('<option></option>');
             $option->appendTo($select)->attr('value', $menu->id)->html($menu->title);
             if(isset($args['selected']) && $menu->id == $args['selected']) {
+                $option->attr('selected', 'selected');
+            } elseif(isset($args['value']) && $menu->id == $args['value']) {
                 $option->attr('selected', 'selected');
             }
         }

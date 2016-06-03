@@ -2,19 +2,18 @@
 /**
  *  This file is part of the Xpressengine package.
  *
- * PHP version 5
- *
  * @category    Theme
  * @package     Xpressengine\Theme
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
  */
+
 namespace Xpressengine\Theme;
 
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Jsonable;
+use Xpressengine\Config\ConfigEntity;
 
 /**
  * ThemeEntity는 하나의 테마에 대한 정보를 가지고 있는 클래스이다.
@@ -22,11 +21,8 @@ use Illuminate\Contracts\Support\Jsonable;
  *
  * @category    Theme
  * @package     Xpressengine\Theme
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
  */
-class ThemeEntity implements Arrayable, Jsonable
+class ThemeEntity implements ThemeEntityInterface
 {
 
     /**
@@ -43,6 +39,11 @@ class ThemeEntity implements Arrayable, Jsonable
      * @var AbstractTheme object of theme
      */
     protected $object;
+
+    /**
+     * @var ConfigEntity
+     */
+    protected $config;
 
     /**
      * ThemeEntity constructor.
@@ -96,18 +97,6 @@ class ThemeEntity implements Arrayable, Jsonable
     {
         $class = $this->class;
         return $class::getDescription();
-    }
-
-    /**
-     * 각 테마는 편집 페이지에서 편집할 수 있는 템플릿파일(blade)이나 css 파일 목록을 지정한다.
-     * 이 메소드는 그 파일 목록을 조회한다.
-     *
-     * @return array
-     */
-    public function getEditFiles()
-    {
-        $class = $this->class;
-        return $class::getEditFiles();
     }
 
     /**
@@ -188,6 +177,7 @@ class ThemeEntity implements Arrayable, Jsonable
             return $this->object;
         } else {
             $this->object = new $this->class();
+
             return $this->object;
         }
     }
@@ -231,5 +221,53 @@ class ThemeEntity implements Arrayable, Jsonable
             'description' => $this->getDescription(),
             'screenshot' => $this->getScreenshot()
         ];
+    }
+
+    /**
+     * Get the evaluated contents of the object.
+     *
+     * @return string
+     */
+    public function render()
+    {
+        return $this->getObject()->render();
+    }
+
+    /**
+     * return editConfigView
+     *
+     * @param ConfigEntity $config
+     *
+     * @return \Illuminate\Contracts\View\View|void
+     */
+    public function getSettingView(ConfigEntity $config = null)
+    {
+        if($config === null) {
+            $config = $this->setting();
+        }
+        return $this->getObject()->getSettingView($config);
+    }
+
+    /**
+     * updateConfig
+     *
+     * @param array $config
+     *
+     * @return array
+     */
+    public function updateSetting(array $config)
+    {
+        return $this->getObject()->updateSetting($config);
+    }
+
+    /**
+     * get and set config
+     *
+     * @param ConfigEntity $config
+     *
+     * @return null
+     */
+    public function setting(ConfigEntity $config = null) {
+        return $this->getObject()->setting($config);
     }
 }

@@ -119,7 +119,7 @@
     required: function ($dst, parameters) {
       var value = $dst.val();
       if (value === '') {
-        Validator.error($dst, XE.Lang.trans('xe::ValidatorRequired'));
+        Validator.error($dst, XE.Lang.trans('xe::validatorRequired'));
         return false;
       }
       return true;
@@ -128,7 +128,7 @@
       var value = $dst.val(),
         pattern = /[^a-zA-Z0-9]/;
       if (pattern.test(value) === true) {
-        Validator.error($dst, XE.Lang.trans('xe::ValidatorAlphanum'));
+        Validator.error($dst, XE.Lang.trans('xe::validatorAlphanum'));
         return false;
       }
       return true;
@@ -137,7 +137,7 @@
       var value = $dst.val();
 
       if (value.length <= parseInt(parameters)) {
-        Validator.error($dst, XE.Lang.transChoice('xe::ValidatorMin', parameters, {charCount: parameters}));
+        Validator.error($dst, XE.Lang.transChoice('xe::validatorMin', parameters, {charCount: parameters}));
         return false;
       }
       return true;
@@ -152,7 +152,7 @@
       }
 
       if (value.length <= parseInt(range[0]) || value.length >= parseInt(range[1])) {
-        Validator.error($dst, XE.Lang.trans('xe::ValidatorBetween', {between: parameters}));
+        Validator.error($dst, XE.Lang.trans('xe::validatorBetween', {between: parameters}));
         return false;
       }
     }

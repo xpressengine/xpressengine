@@ -2,15 +2,15 @@
 /**
  * Presenter
  *
- * PHP version 5
- *
  * @category  Presenter
  * @package   Xpressengine\Presenter
- * @author    XE Team (developers) <developers@xpressengine.com>
- * @copyright 2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license   http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link      http://www.xpressengine.com
+ * @author    XE Developers <developers@xpressengine.com>
+ * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license   LGPL-2.1
+ * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link      https://xpressengine.io
  */
+
 namespace Xpressengine\Presenter;
 
 use Illuminate\Http\Request;
@@ -80,10 +80,6 @@ use Closure;
  *
  * @category    Presenter
  * @package     Xpressengine\Presenter
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
  */
 class Presenter
 {
@@ -184,7 +180,7 @@ class Presenter
      *
      * @var array
      */
-    protected $renderes = [];
+    protected $renderers = [];
 
     /**
      * Create a new RendererManager instance.
@@ -292,7 +288,19 @@ class Presenter
      */
     public function register($format, Closure $callback)
     {
-        $this->renderes[$format] = $callback;
+        $this->renderers[$format] = $callback;
+    }
+
+    /**
+     * get renderer
+     *
+     * @param string $format renderer format
+     * @return RendererInterface
+     */
+    public function getRenderer($format)
+    {
+        $renderer = call_user_func_array($this->renderers[$format], [$this]);
+        return $renderer;
     }
 
     /**
@@ -454,12 +462,34 @@ class Presenter
     }
 
     /**
+     * set id
+     *
+     * @param string $id id
+     * @return void
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
      * get shared data
      * @return array
      */
     public function getData()
     {
         return $this->shared;
+    }
+
+    /**
+     * set shared data
+     *
+     * @param array $shared shared
+     * @return void
+     */
+    public function setData(array $shared)
+    {
+        $this->shared = $shared;
     }
 
     /**
@@ -508,12 +538,11 @@ class Presenter
             throw new NotApprovedFormatException(['name' => $format]);
         }
 
-        if (isset($this->renderes[$format]) === false) {
+        if (isset($this->renderers[$format]) === false) {
             throw new NotFoundFormatException(['name' => $format]);
         }
 
-        $callback = $this->renderes[$format];
-        $renderer = call_user_func_array($callback, [$this]);
+        $renderer = $this->getRenderer($format);
 
         if (is_subclass_of($renderer, 'Xpressengine\Presenter\RendererInterface') === false) {
             throw new InvalidRendererException(['name' => get_class($renderer)]);

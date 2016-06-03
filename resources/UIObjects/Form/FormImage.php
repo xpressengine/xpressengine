@@ -1,4 +1,13 @@
-<?php namespace Xpressengine\UIObjects\Form;
+<?php
+/**
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
+ */
+
+namespace Xpressengine\UIObjects\Form;
 
 use XeFrontend;
 use Xpressengine\UIObject\AbstractUIObject;
@@ -11,7 +20,7 @@ class FormImage extends AbstractUIObject
 
     public function render()
     {
-        $this->loadFiles();
+        $this->loadAssets();
 
         $args = $this->arguments;
         $seq  = $this->seq();
@@ -26,21 +35,12 @@ class FormImage extends AbstractUIObject
         return parent::render();
     }
 
-    public static function boot()
-    {
-        // TODO: Implement boot() method.
-    }
-
-    public static function getSettingsURI()
-    {
-    }
-
     /**
      * loadFiles
      *
      * @return void
      */
-    protected function loadFiles()
+    protected function loadAssets()
     {
         XeFrontend::js(
             [

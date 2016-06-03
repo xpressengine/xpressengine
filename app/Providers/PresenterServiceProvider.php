@@ -2,15 +2,15 @@
 /**
  * Service provider
  *
- * PHP version 5
- *
  * @category  Providers
  * @package   App\Providers
- * @author    XE Team (developers) <developers@xpressengine.com>
- * @copyright 2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license   http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link      http://www.xpressengine.com
+ * @author    XE Developers <developers@xpressengine.com>
+ * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license   LGPL-2.1
+ * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link      https://xpressengine.io
  */
+
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
@@ -26,9 +26,6 @@ use Xpressengine\Storage\File;
  *
  * @category  Providers
  * @package   App\Providers
- * @author    XE Team (developers) <developers@xpressengine.com>
- * @license  http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link     http://www.xpressengine.com
  */
 class PresenterServiceProvider extends ServiceProvider
 {
@@ -172,6 +169,7 @@ class PresenterServiceProvider extends ServiceProvider
         ])->load();
 
         $frontendHandler->js([
+            'assets/core/common/js/dynamicLoadManager.js',
             'assets/jspm_packages/system.js',
             'assets/jspm_packages/system-polyfills.js',
             'assets/systemjs.config.js',
@@ -206,12 +204,9 @@ class PresenterServiceProvider extends ServiceProvider
     {
         $siteConfig = app('xe.site')->getSiteConfig();
 
-        if ($siteConfig['favicon'] !== null) {
-            $iconFile = File::find($siteConfig['favicon']);
-            if ($iconFile !== null) {
-                $iconUrl = $iconFile->url();
-                $frontendHandler->icon($iconUrl)->load();
-            }
+        $icon = $siteConfig->get('favicon.path');
+        if ($icon !== null) {
+                $frontendHandler->icon($icon)->load();
         }
     }
 

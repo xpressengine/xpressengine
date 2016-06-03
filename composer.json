@@ -9,7 +9,7 @@
     ],
     "authors": [
         {
-            "name": "XE Team",
+            "name": "XE Developers",
             "email": "developers@xpressengine.com",
             "homepage": "http://xpressengine.io",
             "role": "Developer"
@@ -35,11 +35,11 @@
         "jenssegers/agent": "*",
         "xpressengine/installer": "dev-master",
         "ezyang/htmlpurifier": "~4.7",
-        "xpressengine-plugin/alice": "*",
+        "xpressengine-plugin/alice": "dev-develop",
         "xpressengine-plugin/google_analytics": "*",
         "xpressengine-plugin/orientator": "*",
         "xpressengine-plugin/page": "*",
-        "xpressengine-plugin/board": "*",
+        "xpressengine-plugin/board": "dev-develop",
         "xpressengine-plugin/comment": "*",
         "xpressengine-plugin/ckeditor": "*",
         "xpressengine-plugin/claim": "*",
@@ -78,8 +78,8 @@
             "core/src/Xpressengine/Module/helpers.php",
             "core/src/Xpressengine/Widget/helpers.php",
             "core/src/Xpressengine/Support/helpers.php",
-            "core/src/Xpressengine/Editor/helpers.php",
-            "core/src/Xpressengine/DynamicField/helpers.php"
+            "core/src/Xpressengine/DynamicField/helpers.php",
+            "core/src/Xpressengine/Plugin/helpers.php"
         ]
     },
     "autoload-dev": {

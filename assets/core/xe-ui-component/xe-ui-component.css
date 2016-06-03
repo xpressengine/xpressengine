@@ -1,3 +1,4 @@
+/*add custom*/
 /* xe-badge */
 .xe-badge {
   display: inline-block;
@@ -6,22 +7,22 @@
   font-size: 10px;
   min-width: 2em;
   min-height: 2em;
-  padding: .5em;
+  padding: .5em .7em;
+  border-radius: 500rem;
+  border: 1px solid transparent;
   line-height: 1em;
   text-align: center;
-  border-radius: 500rem;
-  font-weight: bold;
   color: #fff;
 }
 
-.xe-badge.small {
+.xe-badge.medium {
   min-width: 2.1em;
   min-height: 2.1em;
   line-height: 1.1em;
   font-size: 11px;
 }
 
-.xe-badge.medium {
+.xe-badge.large {
   min-width: 2.2em;
   min-height: 2.2em;
   line-height: 1.2em;
@@ -44,491 +45,102 @@
   margin: 0 0 0 -1.5em;
 }
 
-.xe-badge.red {
-  background-color: #db2828;
-}
-
-.xe-badge.red:hover {
-  background-color: #d00000;
-}
-
-.xe-badge.orange {
-  background-color: #f2711c;
-}
-
-.xe-badge.orange:hover {
-  background-color: #f26202;
-}
-
-.xe-badge.yellow {
-  background-color: #fbbd08;
-}
-
-.xe-badge.yellow:hover {
-  background-color: #eaae00;
-}
-
-.xe-badge.olive {
-  background-color: #b5cc18;
-}
-
-.xe-badge.olive:hover {
-  background-color: #a7bd0d;
-}
-
-.xe-badge.green {
-  background-color: #00b96e;
-}
-
-.xe-badge.green:hover {
-  background-color: #199f69;
-}
-
-.xe-badge.teal {
-  background-color: #00b5ad;
-}
-
-.xe-badge.teal:hover {
-  background-color: #009c95;
-}
-
-.xe-badge.blue {
+.xe-badge.xe-primary {
   background-color: #2c8beb;
 }
 
-.xe-badge.blue:hover {
-  background-color: #0775ce;
+.xe-badge.xe-primary:hover {
+  background-color: #167ee8;
 }
 
-.xe-badge.violet {
-  background-color: #6335c9;
+.xe-badge.xe-success {
+  background-color: #5cb85c;
 }
 
-.xe-badge.violet:hover {
-  background-color: #440cbb;
+.xe-badge.xe-success:hover {
+  background-color: #4cae4c;
 }
 
-.xe-badge.purple {
-  background-color: #aa46bb;
+.xe-badge.xe-positive {
+  background-color: #5bc0de;
 }
 
-.xe-badge.purple:hover {
-  background-color: #8f0bba;
+.xe-badge.xe-positive:hover {
+  background-color: #46b8da;
 }
 
-.xe-badge.pink {
-  background-color: #f4645f;
+.xe-badge.xe-warning {
+  background-color: #f0ad4e;
 }
 
-.xe-badge.pink:hover {
-  background-color: #ff514c;
+.xe-badge.xe-warning:hover {
+  background-color: #eea236;
 }
 
-.xe-badge.brown {
-  background-color: #a5673f;
+.xe-badge.xe-danger {
+  background-color: #d9534f;
 }
 
-.xe-badge.brown:hover {
-  background-color: #975b33;
+.xe-badge.xe-danger:hover {
+  background-color: #d43f3a;
 }
 
-.xe-badge.grey {
-  background-color: #8e8e93;
+.xe-badge.xe-fail {
+  background-color: #6c57d9;
 }
 
-.xe-badge.grey:hover {
-  background-color: #b5b7bd;
+.xe-badge.xe-fail:hover {
+  background-color: #5a42d4;
 }
 
-.xe-badge.black {
-  background-color: #2c2e37;
+.xe-badge.xe-black {
+  background-color: #3c414d;
 }
 
-.xe-badge.black:hover {
-  background-color: #696e7a;
+.xe-badge.xe-black:hover {
+  background-color: #31353f;
 }
 
-/* CSS Document */
-/*reset css*/
-.xe-dropdown-menu ul {
-  margin: 0;
-  padding: 0;
-}
-
-.xe-dropdown-menu li > a {
-  text-decoration: none;
-}
-
-/*dropdown*/
-.xe-dropdown,
-.xe-dropup {
-  display: inline-block;
-  position: relative;
-  margin-bottom: 4px;
-  font-size: 14px;
-}
-
-.xe-dropdown > .xe-btn,
-.xe-dropup > .xe-btn,
-.xe-dropdown-menu li > a {
-  padding: 8px 55px 8px 16px;
-}
-
-.xe-dropdown > .xe-btn .caret,
-.xe-dropup > .xe-btn .caret {
-  display: none;
-}
-
-.xe-dropdown > .xe-btn,
-.xe-dropup > .xe-btn {
-  display: inline-block;
-  position: relative;
-  height: 36px;
-  border: 1px solid #dadbde;
-  background-color: #fff;
-  color: #2c2e37;
-  text-decoration: none;
-  text-align: left;
-  outline: none;
-  white-space: nowrap;
-  line-height: 1em;
-  border-radius: 2px;
-}
-
-.xe-dropdown.v2 > .xe-btn,
-.xe-dropup.v2 > .xe-btn {
-  border: none;
-}
-
-.xe-dropdown.open > .xe-btn {
-  border-radius: 2px 2px 0 0;
-}
-
-.xe-dropdown > .xe-btn:hover,
-.xe-dropup > .xe-btn:hover {
-  border-color: #b5b7bd;
-}
-
-.xe-dropdown > .xe-btn:after,
-.xe-dropup > .xe-btn:after {
-  display: inline-block;
-  position: absolute;
-  right: 16px;
-  top: 50%;
-  width: 0;
-  height: 0;
-  margin-top: -2px;
-  border-style: solid;
-  border-width: 3px;
-  border-color: #8e8e93 transparent transparent transparent;
-  content: "";
-}
-
-.xe-dropdown-menu {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 100%;
-  margin-top: -1px;
-  padding: 0;
-  border: 1px solid #dadbde;
-  border-width: 0 1px 1px 1px;
-  border-radius: 0 0 2px 2px;
-  background-color: #fff;
-  z-index: 10;
-}
-
-.xe-dropdown.v2 .xe-dropdown-menu,
-.xe-dropup.v2 .xe-dropdown-menu {
-  padding: 8px 0;
-  border-width: 0;
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
-  -webkit-box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3);
-}
-
-.xe-dropup .xe-dropdown-menu {
-  top: auto;
-  bottom: 100%;
-}
-
-.xe-dropup.v2 .xe-dropdown-menu {
-  border-radius: 2px;
-}
-
-.xe-dropdown.open > .xe-btn,
-.xe-dropdown.open .xe-dropdown-menu,
-.xe-dropup.open > .xe-btn,
-.xe-dropup.open .xe-dropdown-menu {
-  border-color: #2389ee;
-}
-
-.xe-dropdown .xe-dropdown-menu,
-.xe-dropup .xe-dropdown-menu {
-  display: none;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-}
-
-.xe-dropdown.open .xe-dropdown-menu,
-.xe-dropup.open .xe-dropdown-menu {
-  display: block;
-}
-
-.xe-dropdown-menu li > a {
-  display: block;
-  position: relative;
-  color: #2c2e37;
-}
-
-.xe-dropdown-menu li > a:hover {
-  background-color: #2389ee;
-  color: #fff !important;
-}
-
-.xe-dropdown-menu li {
-  list-style: none;
-}
-
-.xe-dropdown-menu li.on a {
+.xe-badge.xe-primary-outline {
   color: #2c8beb;
-}
-
-.xe-dropdown-menu li.on a:after {
-  display: inline-block;
-  position: absolute;
-  right: 16px;
-  top: 50%;
-  margin-top: -9px;
-  font-family: xeicon;
-  speak: none;
-  font-style: normal;
-  font-weight: 400;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  content: "\e92a";
-  color: #b5b7bd;
-  font-size: 18px;
-}
-
-.xe-dropdown.v2 .xe-dropdown-menu li.on a,
-.xe-dropup.v2 .xe-dropdown-menu li.on a {
-  padding-right: 16px;
-}
-
-.xe-dropdown.v2 .xe-dropdown-menu li.on a:after,
-.xe-dropup.v2 .xe-dropdown-menu li.on a:after {
-  display: none;
-}
-
-.xe-dropdown > .xe-btn,
-.xe-dropup > .xe-btn,
-.xe-dropdown-menu {
-  min-width: auto;
-  width: 168px;
-}
-
-.xe-dropdown.v2 > .xe-btn,
-.xe-dropup.v22 > .xe-btn,
-.xe-dropdown-menu {
-  width: auto;
-}
-
-.xe-dropdown.small > .xe-btn,
-.xe-dropup.small > .xe-btn,
-.xe-dropdown.small .xe-dropdown-menu,
-.xe-dropup.small .xe-dropdown-menu {
-  width: 112px;
-}
-
-.xe-dropdown.wide > .xe-btn,
-.xe-dropup.wide > .xe-btn,
-.xe-dropdown.wide .xe-dropdown-menu,
-.xe-dropup.wide .xe-dropdown-menu {
-  width: 224px;
-}
-
-.xe-dropdown.very-wide > .xe-btn,
-.xe-dropup.very-wide > .xe-btn,
-.xe-dropdown.very-wide .xe-dropdown-menu,
-.xe-dropup.very-wide .xe-dropdown-menu {
-  width: 280px;
-}
-
-.xe-dropdown.max-wide > .xe-btn,
-.xe-dropup.max-wide > .xe-btn,
-.xe-dropdown.max-wide .xe-dropdown-menu,
-.xe-dropup.max-wide .xe-dropdown-menu {
-  width: 336px;
-}
-
-.xe-select-box {
-  position: relative;
-  overflow: hidden;
-  min-width: 140px;
-  line-height: 30px;
-  padding: 0 20px 0 10px;
-  border: 1px solid #e4e4e4;
-  border-radius: 2px;
-  background-color: #fff;
-  text-overflow: ellipsis;
-  word-break: break-word;
-  white-space: nowrap;
-}
-
-.xe-select-box:after {
-  display: inline-block;
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  width: 0;
-  height: 0;
-  margin-top: -2px;
-  border-style: solid;
-  border-width: 3px;
-  border-color: #8e8e93 transparent transparent transparent;
-  content: "";
-}
-
-.xe-select-box label {
-  font-size: 14px;
-  color: #696e7a;
-  letter-spacing: 1px;
-}
-
-.xe-select-box select {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 30px;
-  font-size: 14px;
-  line-height: 30px;
-  opacity: 0;
-  filter: alpha(opacity=0);
-  -webkit-appearance: menulist-xe-btn;
-}
-
-.xe-select-label {
-  position: relative;
-}
-
-.xe-select-label .label-input ul {
-  margin: 0;
-  padding: 0;
-}
-
-.xe-select-label .label-input ul li {
-  list-style: none;
-}
-
-.xe-select-label .label-list li {
-  list-style: none;
-}
-
-.xe-select-label .label-input {
-  position: relative;
-  overflow: hidden;
-  padding: 0 25px 0 10px;
-  background-color: #F6F7F9;
-  border: 1px solid #DBDADF;
-  border-radius: 2px;
-}
-
-.xe-select-label .label-input:after {
-  display: inline-block;
-  position: absolute;
-  right: 16px;
-  top: 50%;
-  width: 0;
-  height: 0;
-  margin-top: -2px;
-  border-style: solid;
-  border-width: 4px;
-  border-color: #8e8e93 transparent transparent transparent;
-  content: "";
-}
-
-.xe-select-label .label-input ul li {
-  float: left;
-}
-
-.xe-select-label .label-input ul li:first-child .label-choice {
-  margin-left: 0;
-}
-
-.xe-select-label .label-input ul li .label-choice {
-  display: block;
-  position: relative;
-  margin: 6px 2px;
-  padding: 1px 28px 1px 8px;
-  color: #fff;
-  font-size: 13px;
-  background-color: #B5B8BD;
-  border: 1px solid #DBDADF;
-  border-radius: 4px;
-}
-
-.xe-select-label .label-input ul li .label-choice button {
-  position: absolute;
-  right: 3px;
-  top: 1px;
   background-color: transparent;
-  border: transparent;
-  outline: none;
-  font-size: 11px;
-  color: #fff;
+  border: 1px solid #2c8beb;
 }
 
-.xe-select-label .label-input ul li .search-label {
-  height: 21px;
-  margin: 6px 2px;
-  border-color: transparent;
+.xe-badge.xe-success-outline {
+  color: #5cb85c;
   background-color: transparent;
+  border: 1px solid #5cb85c;
 }
 
-.xe-select-label .label-list {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  border: 1px solid #8DC5FF;
-  background-color: #fff;
-  z-index: 100;
+.xe-badge.xe-positive-outline {
+  color: #5bc0de;
+  background-color: transparent;
+  border: 1px solid #5bc0de;
 }
 
-.xe-select-label.open .label-list {
-  display: block;
+.xe-badge.xe-warning-outline {
+  color: #f0ad4e;
+  background-color: transparent;
+  border: 1px solid #f0ad4e;
 }
 
-.xe-select-label .label-list .label-division {
-  padding: 10px;
-  font-size: 13px;
+.xe-badge.xe-danger-outline {
+  color: #d9534f;
+  background-color: transparent;
+  border: 1px solid #d9534f;
 }
 
-.xe-select-label .label-list .label-division + .label-division {
-  border-top: 1px solid #DBDBDD;
+.xe-badge.xe-fail-outline {
+  color: #6c57d9;
+  background-color: transparent;
+  border: 1px solid #6c57d9;
 }
 
-.xe-select-label .label-list .label-division strong {
-  display: block;
-  margin-bottom: 10px;
-}
-
-.xe-select-label .label-list .label-division a {
-  display: block;
-  padding: 0 10px;
-  color: #696e7a;
-  line-height: 24px;
-  border-radius: 4px;
-}
-
-.xe-select-label .label-list .label-division a:hover {
-  background-color: #2992FB;
-  color: #fff;
+.xe-badge.xe-black-outline {
+  color: #3c414d;
+  background-color: transparent;
+  border: 1px solid #3c414d;
 }
 
 /*!
@@ -544,7 +156,7 @@
 /*******************************
              Flag
 *******************************/
-i.flag {
+i.xe-flag {
   display: inline-block;
   width: 16px;
   height: 11px;
@@ -559,7 +171,7 @@ i.flag {
 }
 
 /* Sprite */
-i.flag:before {
+i.xe-flag:before {
   display: inline-block;
   content: "";
   background: url("img/flags.png") no-repeat 0 0;
@@ -571,1219 +183,1219 @@ i.flag:before {
 /*******************************
          Theme Overrides
 *******************************/
-i.flag.ad:before,
-i.flag.andorra:before {
+i.xe-flag.ad:before,
+i.xe-flag.andorra:before {
   background-position: 0 0;
 }
 
-i.flag.ae:before,
-i.flag.united.arab.emirates:before,
-i.flag.uae:before {
+i.xe-flag.ae:before,
+i.xe-flag.united.arab.emirates:before,
+i.xe-flag.uae:before {
   background-position: 0 -26px;
 }
 
-i.flag.af:before,
-i.flag.afghanistan:before {
+i.xe-flag.af:before,
+i.xe-flag.afghanistan:before {
   background-position: 0 -52px;
 }
 
-i.flag.ag:before,
-i.flag.antigua:before {
+i.xe-flag.ag:before,
+i.xe-flag.antigua:before {
   background-position: 0 -78px;
 }
 
-i.flag.ai:before,
-i.flag.anguilla:before {
+i.xe-flag.ai:before,
+i.xe-flag.anguilla:before {
   background-position: 0 -104px;
 }
 
-i.flag.al:before,
-i.flag.albania:before {
+i.xe-flag.al:before,
+i.xe-flag.albania:before {
   background-position: 0 -130px;
 }
 
-i.flag.am:before,
-i.flag.armenia:before {
+i.xe-flag.am:before,
+i.xe-flag.armenia:before {
   background-position: 0 -156px;
 }
 
-i.flag.an:before,
-i.flag.netherlands.antilles:before {
+i.xe-flag.an:before,
+i.xe-flag.netherlands.antilles:before {
   background-position: 0 -182px;
 }
 
-i.flag.ao:before,
-i.flag.angola:before {
+i.xe-flag.ao:before,
+i.xe-flag.angola:before {
   background-position: 0 -208px;
 }
 
-i.flag.ar:before,
-i.flag.argentina:before {
+i.xe-flag.ar:before,
+i.xe-flag.argentina:before {
   background-position: 0 -234px;
 }
 
-i.flag.as:before,
-i.flag.american.samoa:before {
+i.xe-flag.as:before,
+i.xe-flag.american.samoa:before {
   background-position: 0 -260px;
 }
 
-i.flag.at:before,
-i.flag.austria:before {
+i.xe-flag.at:before,
+i.xe-flag.austria:before {
   background-position: 0 -286px;
 }
 
-i.flag.au:before,
-i.flag.australia:before {
+i.xe-flag.au:before,
+i.xe-flag.australia:before {
   background-position: 0 -312px;
 }
 
-i.flag.aw:before,
-i.flag.aruba:before {
+i.xe-flag.aw:before,
+i.xe-flag.aruba:before {
   background-position: 0 -338px;
 }
 
-i.flag.ax:before,
-i.flag.aland.islands:before {
+i.xe-flag.ax:before,
+i.xe-flag.aland.islands:before {
   background-position: 0 -364px;
 }
 
-i.flag.az:before,
-i.flag.azerbaijan:before {
+i.xe-flag.az:before,
+i.xe-flag.azerbaijan:before {
   background-position: 0 -390px;
 }
 
-i.flag.ba:before,
-i.flag.bosnia:before {
+i.xe-flag.ba:before,
+i.xe-flag.bosnia:before {
   background-position: 0 -416px;
 }
 
-i.flag.bb:before,
-i.flag.barbados:before {
+i.xe-flag.bb:before,
+i.xe-flag.barbados:before {
   background-position: 0 -442px;
 }
 
-i.flag.bd:before,
-i.flag.bangladesh:before {
+i.xe-flag.bd:before,
+i.xe-flag.bangladesh:before {
   background-position: 0 -468px;
 }
 
-i.flag.be:before,
-i.flag.belgium:before {
+i.xe-flag.be:before,
+i.xe-flag.belgium:before {
   background-position: 0 -494px;
 }
 
-i.flag.bf:before,
-i.flag.burkina.faso:before {
+i.xe-flag.bf:before,
+i.xe-flag.burkina.faso:before {
   background-position: 0 -520px;
 }
 
-i.flag.bg:before,
-i.flag.bulgaria:before {
+i.xe-flag.bg:before,
+i.xe-flag.bulgaria:before {
   background-position: 0 -546px;
 }
 
-i.flag.bh:before,
-i.flag.bahrain:before {
+i.xe-flag.bh:before,
+i.xe-flag.bahrain:before {
   background-position: 0 -572px;
 }
 
-i.flag.bi:before,
-i.flag.burundi:before {
+i.xe-flag.bi:before,
+i.xe-flag.burundi:before {
   background-position: 0 -598px;
 }
 
-i.flag.bj:before,
-i.flag.benin:before {
+i.xe-flag.bj:before,
+i.xe-flag.benin:before {
   background-position: 0 -624px;
 }
 
-i.flag.bm:before,
-i.flag.bermuda:before {
+i.xe-flag.bm:before,
+i.xe-flag.bermuda:before {
   background-position: 0 -650px;
 }
 
-i.flag.bn:before,
-i.flag.brunei:before {
+i.xe-flag.bn:before,
+i.xe-flag.brunei:before {
   background-position: 0 -676px;
 }
 
-i.flag.bo:before,
-i.flag.bolivia:before {
+i.xe-flag.bo:before,
+i.xe-flag.bolivia:before {
   background-position: 0 -702px;
 }
 
-i.flag.br:before,
-i.flag.brazil:before {
+i.xe-flag.br:before,
+i.xe-flag.brazil:before {
   background-position: 0 -728px;
 }
 
-i.flag.bs:before,
-i.flag.bahamas:before {
+i.xe-flag.bs:before,
+i.xe-flag.bahamas:before {
   background-position: 0 -754px;
 }
 
-i.flag.bt:before,
-i.flag.bhutan:before {
+i.xe-flag.bt:before,
+i.xe-flag.bhutan:before {
   background-position: 0 -780px;
 }
 
-i.flag.bv:before,
-i.flag.bouvet.island:before {
+i.xe-flag.bv:before,
+i.xe-flag.bouvet.island:before {
   background-position: 0 -806px;
 }
 
-i.flag.bw:before,
-i.flag.botswana:before {
+i.xe-flag.bw:before,
+i.xe-flag.botswana:before {
   background-position: 0 -832px;
 }
 
-i.flag.by:before,
-i.flag.belarus:before {
+i.xe-flag.by:before,
+i.xe-flag.belarus:before {
   background-position: 0 -858px;
 }
 
-i.flag.bz:before,
-i.flag.belize:before {
+i.xe-flag.bz:before,
+i.xe-flag.belize:before {
   background-position: 0 -884px;
 }
 
-i.flag.ca:before,
-i.flag.canada:before {
+i.xe-flag.ca:before,
+i.xe-flag.canada:before {
   background-position: 0 -910px;
 }
 
-i.flag.cc:before,
-i.flag.cocos.islands:before {
+i.xe-flag.cc:before,
+i.xe-flag.cocos.islands:before {
   background-position: 0 -962px;
 }
 
-i.flag.cd:before,
-i.flag.congo:before {
+i.xe-flag.cd:before,
+i.xe-flag.congo:before {
   background-position: 0 -988px;
 }
 
-i.flag.cf:before,
-i.flag.central.african.republic:before {
+i.xe-flag.cf:before,
+i.xe-flag.central.african.republic:before {
   background-position: 0 -1014px;
 }
 
-i.flag.cg:before,
-i.flag.congo.brazzaville:before {
+i.xe-flag.cg:before,
+i.xe-flag.congo.brazzaville:before {
   background-position: 0 -1040px;
 }
 
-i.flag.ch:before,
-i.flag.switzerland:before {
+i.xe-flag.ch:before,
+i.xe-flag.switzerland:before {
   background-position: 0 -1066px;
 }
 
-i.flag.ci:before,
-i.flag.cote.divoire:before {
+i.xe-flag.ci:before,
+i.xe-flag.cote.divoire:before {
   background-position: 0 -1092px;
 }
 
-i.flag.ck:before,
-i.flag.cook.islands:before {
+i.xe-flag.ck:before,
+i.xe-flag.cook.islands:before {
   background-position: 0 -1118px;
 }
 
-i.flag.cl:before,
-i.flag.chile:before {
+i.xe-flag.cl:before,
+i.xe-flag.chile:before {
   background-position: 0 -1144px;
 }
 
-i.flag.cm:before,
-i.flag.cameroon:before {
+i.xe-flag.cm:before,
+i.xe-flag.cameroon:before {
   background-position: 0 -1170px;
 }
 
-i.flag.cn:before,
-i.flag.china:before {
+i.xe-flag.cn:before,
+i.xe-flag.china:before {
   background-position: 0 -1196px;
 }
 
-i.flag.co:before,
-i.flag.colombia:before {
+i.xe-flag.co:before,
+i.xe-flag.colombia:before {
   background-position: 0 -1222px;
 }
 
-i.flag.cr:before,
-i.flag.costa.rica:before {
+i.xe-flag.cr:before,
+i.xe-flag.costa.rica:before {
   background-position: 0 -1248px;
 }
 
-i.flag.cs:before,
-i.flag.serbia:before {
+i.xe-flag.cs:before,
+i.xe-flag.serbia:before {
   background-position: 0 -1274px;
 }
 
-i.flag.cu:before,
-i.flag.cuba:before {
+i.xe-flag.cu:before,
+i.xe-flag.cuba:before {
   background-position: 0 -1300px;
 }
 
-i.flag.cv:before,
-i.flag.cape.verde:before {
+i.xe-flag.cv:before,
+i.xe-flag.cape.verde:before {
   background-position: 0 -1326px;
 }
 
-i.flag.cx:before,
-i.flag.christmas.island:before {
+i.xe-flag.cx:before,
+i.xe-flag.christmas.island:before {
   background-position: 0 -1352px;
 }
 
-i.flag.cy:before,
-i.flag.cyprus:before {
+i.xe-flag.cy:before,
+i.xe-flag.cyprus:before {
   background-position: 0 -1378px;
 }
 
-i.flag.cz:before,
-i.flag.czech.republic:before {
+i.xe-flag.cz:before,
+i.xe-flag.czech.republic:before {
   background-position: 0 -1404px;
 }
 
-i.flag.de:before,
-i.flag.germany:before {
+i.xe-flag.de:before,
+i.xe-flag.germany:before {
   background-position: 0 -1430px;
 }
 
-i.flag.dj:before,
-i.flag.djibouti:before {
+i.xe-flag.dj:before,
+i.xe-flag.djibouti:before {
   background-position: 0 -1456px;
 }
 
-i.flag.dk:before,
-i.flag.denmark:before {
+i.xe-flag.dk:before,
+i.xe-flag.denmark:before {
   background-position: 0 -1482px;
 }
 
-i.flag.dm:before,
-i.flag.dominica:before {
+i.xe-flag.dm:before,
+i.xe-flag.dominica:before {
   background-position: 0 -1508px;
 }
 
-i.flag.do:before,
-i.flag.dominican.republic:before {
+i.xe-flag.do:before,
+i.xe-flag.dominican.republic:before {
   background-position: 0 -1534px;
 }
 
-i.flag.dz:before,
-i.flag.algeria:before {
+i.xe-flag.dz:before,
+i.xe-flag.algeria:before {
   background-position: 0 -1560px;
 }
 
-i.flag.ec:before,
-i.flag.ecuador:before {
+i.xe-flag.ec:before,
+i.xe-flag.ecuador:before {
   background-position: 0 -1586px;
 }
 
-i.flag.ee:before,
-i.flag.estonia:before {
+i.xe-flag.ee:before,
+i.xe-flag.estonia:before {
   background-position: 0 -1612px;
 }
 
-i.flag.eg:before,
-i.flag.egypt:before {
+i.xe-flag.eg:before,
+i.xe-flag.egypt:before {
   background-position: 0 -1638px;
 }
 
-i.flag.eh:before,
-i.flag.western.sahara:before {
+i.xe-flag.eh:before,
+i.xe-flag.western.sahara:before {
   background-position: 0 -1664px;
 }
 
-i.flag.er:before,
-i.flag.eritrea:before {
+i.xe-flag.er:before,
+i.xe-flag.eritrea:before {
   background-position: 0 -1716px;
 }
 
-i.flag.es:before,
-i.flag.spain:before {
+i.xe-flag.es:before,
+i.xe-flag.spain:before {
   background-position: 0 -1742px;
 }
 
-i.flag.et:before,
-i.flag.ethiopia:before {
+i.xe-flag.et:before,
+i.xe-flag.ethiopia:before {
   background-position: 0 -1768px;
 }
 
-i.flag.eu:before,
-i.flag.european.union:before {
+i.xe-flag.eu:before,
+i.xe-flag.european.union:before {
   background-position: 0 -1794px;
 }
 
-i.flag.fi:before,
-i.flag.finland:before {
+i.xe-flag.fi:before,
+i.xe-flag.finland:before {
   background-position: 0 -1846px;
 }
 
-i.flag.fj:before,
-i.flag.fiji:before {
+i.xe-flag.fj:before,
+i.xe-flag.fiji:before {
   background-position: 0 -1872px;
 }
 
-i.flag.fk:before,
-i.flag.falkland.islands:before {
+i.xe-flag.fk:before,
+i.xe-flag.falkland.islands:before {
   background-position: 0 -1898px;
 }
 
-i.flag.fm:before,
-i.flag.micronesia:before {
+i.xe-flag.fm:before,
+i.xe-flag.micronesia:before {
   background-position: 0 -1924px;
 }
 
-i.flag.fo:before,
-i.flag.faroe.islands:before {
+i.xe-flag.fo:before,
+i.xe-flag.faroe.islands:before {
   background-position: 0 -1950px;
 }
 
-i.flag.fr:before,
-i.flag.france:before {
+i.xe-flag.fr:before,
+i.xe-flag.france:before {
   background-position: 0 -1976px;
 }
 
-i.flag.ga:before,
-i.flag.gabon:before {
+i.xe-flag.ga:before,
+i.xe-flag.gabon:before {
   background-position: -36px 0;
 }
 
-i.flag.gb:before,
-i.flag.united.kingdom:before {
+i.xe-flag.gb:before,
+i.xe-flag.united.kingdom:before {
   background-position: -36px -26px;
 }
 
-i.flag.gd:before,
-i.flag.grenada:before {
+i.xe-flag.gd:before,
+i.xe-flag.grenada:before {
   background-position: -36px -52px;
 }
 
-i.flag.ge:before,
-i.flag.georgia:before {
+i.xe-flag.ge:before,
+i.xe-flag.georgia:before {
   background-position: -36px -78px;
 }
 
-i.flag.gf:before,
-i.flag.french.guiana:before {
+i.xe-flag.gf:before,
+i.xe-flag.french.guiana:before {
   background-position: -36px -104px;
 }
 
-i.flag.gh:before,
-i.flag.ghana:before {
+i.xe-flag.gh:before,
+i.xe-flag.ghana:before {
   background-position: -36px -130px;
 }
 
-i.flag.gi:before,
-i.flag.gibraltar:before {
+i.xe-flag.gi:before,
+i.xe-flag.gibraltar:before {
   background-position: -36px -156px;
 }
 
-i.flag.gl:before,
-i.flag.greenland:before {
+i.xe-flag.gl:before,
+i.xe-flag.greenland:before {
   background-position: -36px -182px;
 }
 
-i.flag.gm:before,
-i.flag.gambia:before {
+i.xe-flag.gm:before,
+i.xe-flag.gambia:before {
   background-position: -36px -208px;
 }
 
-i.flag.gn:before,
-i.flag.guinea:before {
+i.xe-flag.gn:before,
+i.xe-flag.guinea:before {
   background-position: -36px -234px;
 }
 
-i.flag.gp:before,
-i.flag.guadeloupe:before {
+i.xe-flag.gp:before,
+i.xe-flag.guadeloupe:before {
   background-position: -36px -260px;
 }
 
-i.flag.gq:before,
-i.flag.equatorial.guinea:before {
+i.xe-flag.gq:before,
+i.xe-flag.equatorial.guinea:before {
   background-position: -36px -286px;
 }
 
-i.flag.gr:before,
-i.flag.greece:before {
+i.xe-flag.gr:before,
+i.xe-flag.greece:before {
   background-position: -36px -312px;
 }
 
-i.flag.gs:before,
-i.flag.sandwich.islands:before {
+i.xe-flag.gs:before,
+i.xe-flag.sandwich.islands:before {
   background-position: -36px -338px;
 }
 
-i.flag.gt:before,
-i.flag.guatemala:before {
+i.xe-flag.gt:before,
+i.xe-flag.guatemala:before {
   background-position: -36px -364px;
 }
 
-i.flag.gu:before,
-i.flag.guam:before {
+i.xe-flag.gu:before,
+i.xe-flag.guam:before {
   background-position: -36px -390px;
 }
 
-i.flag.gw:before,
-i.flag.guinea-bissau:before {
+i.xe-flag.gw:before,
+i.xe-flag.guinea-bissau:before {
   background-position: -36px -416px;
 }
 
-i.flag.gy:before,
-i.flag.guyana:before {
+i.xe-flag.gy:before,
+i.xe-flag.guyana:before {
   background-position: -36px -442px;
 }
 
-i.flag.hk:before,
-i.flag.hong.kong:before {
+i.xe-flag.hk:before,
+i.xe-flag.hong.kong:before {
   background-position: -36px -468px;
 }
 
-i.flag.hm:before,
-i.flag.heard.island:before {
+i.xe-flag.hm:before,
+i.xe-flag.heard.island:before {
   background-position: -36px -494px;
 }
 
-i.flag.hn:before,
-i.flag.honduras:before {
+i.xe-flag.hn:before,
+i.xe-flag.honduras:before {
   background-position: -36px -520px;
 }
 
-i.flag.hr:before,
-i.flag.croatia:before {
+i.xe-flag.hr:before,
+i.xe-flag.croatia:before {
   background-position: -36px -546px;
 }
 
-i.flag.ht:before,
-i.flag.haiti:before {
+i.xe-flag.ht:before,
+i.xe-flag.haiti:before {
   background-position: -36px -572px;
 }
 
-i.flag.hu:before,
-i.flag.hungary:before {
+i.xe-flag.hu:before,
+i.xe-flag.hungary:before {
   background-position: -36px -598px;
 }
 
-i.flag.id:before,
-i.flag.indonesia:before {
+i.xe-flag.id:before,
+i.xe-flag.indonesia:before {
   background-position: -36px -624px;
 }
 
-i.flag.ie:before,
-i.flag.ireland:before {
+i.xe-flag.ie:before,
+i.xe-flag.ireland:before {
   background-position: -36px -650px;
 }
 
-i.flag.il:before,
-i.flag.israel:before {
+i.xe-flag.il:before,
+i.xe-flag.israel:before {
   background-position: -36px -676px;
 }
 
-i.flag.in:before,
-i.flag.india:before {
+i.xe-flag.in:before,
+i.xe-flag.india:before {
   background-position: -36px -702px;
 }
 
-i.flag.io:before,
-i.flag.indian.ocean.territory:before {
+i.xe-flag.io:before,
+i.xe-flag.indian.ocean.territory:before {
   background-position: -36px -728px;
 }
 
-i.flag.iq:before,
-i.flag.iraq:before {
+i.xe-flag.iq:before,
+i.xe-flag.iraq:before {
   background-position: -36px -754px;
 }
 
-i.flag.ir:before,
-i.flag.iran:before {
+i.xe-flag.ir:before,
+i.xe-flag.iran:before {
   background-position: -36px -780px;
 }
 
-i.flag.is:before,
-i.flag.iceland:before {
+i.xe-flag.is:before,
+i.xe-flag.iceland:before {
   background-position: -36px -806px;
 }
 
-i.flag.it:before,
-i.flag.italy:before {
+i.xe-flag.it:before,
+i.xe-flag.italy:before {
   background-position: -36px -832px;
 }
 
-i.flag.jm:before,
-i.flag.jamaica:before {
+i.xe-flag.jm:before,
+i.xe-flag.jamaica:before {
   background-position: -36px -858px;
 }
 
-i.flag.jo:before,
-i.flag.jordan:before {
+i.xe-flag.jo:before,
+i.xe-flag.jordan:before {
   background-position: -36px -884px;
 }
 
-i.flag.jp:before,
-i.flag.japan:before {
+i.xe-flag.jp:before,
+i.xe-flag.japan:before {
   background-position: -36px -910px;
 }
 
-i.flag.ke:before,
-i.flag.kenya:before {
+i.xe-flag.ke:before,
+i.xe-flag.kenya:before {
   background-position: -36px -936px;
 }
 
-i.flag.kg:before,
-i.flag.kyrgyzstan:before {
+i.xe-flag.kg:before,
+i.xe-flag.kyrgyzstan:before {
   background-position: -36px -962px;
 }
 
-i.flag.kh:before,
-i.flag.cambodia:before {
+i.xe-flag.kh:before,
+i.xe-flag.cambodia:before {
   background-position: -36px -988px;
 }
 
-i.flag.ki:before,
-i.flag.kiribati:before {
+i.xe-flag.ki:before,
+i.xe-flag.kiribati:before {
   background-position: -36px -1014px;
 }
 
-i.flag.km:before,
-i.flag.comoros:before {
+i.xe-flag.km:before,
+i.xe-flag.comoros:before {
   background-position: -36px -1040px;
 }
 
-i.flag.kn:before,
-i.flag.saint.kitts.and.nevis:before {
+i.xe-flag.kn:before,
+i.xe-flag.saint.kitts.and.nevis:before {
   background-position: -36px -1066px;
 }
 
-i.flag.kp:before,
-i.flag.north.korea:before {
+i.xe-flag.kp:before,
+i.xe-flag.north.korea:before {
   background-position: -36px -1092px;
 }
 
-i.flag.ko:before,
-i.flag.kr:before,
-i.flag.south.korea:before {
+i.xe-flag.ko:before,
+i.xe-flag.kr:before,
+i.xe-flag.south.korea:before {
   background-position: -36px -1118px;
 }
 
-i.flag.kw:before,
-i.flag.kuwait:before {
+i.xe-flag.kw:before,
+i.xe-flag.kuwait:before {
   background-position: -36px -1144px;
 }
 
-i.flag.ky:before,
-i.flag.cayman.islands:before {
+i.xe-flag.ky:before,
+i.xe-flag.cayman.islands:before {
   background-position: -36px -1170px;
 }
 
-i.flag.kz:before,
-i.flag.kazakhstan:before {
+i.xe-flag.kz:before,
+i.xe-flag.kazakhstan:before {
   background-position: -36px -1196px;
 }
 
-i.flag.la:before,
-i.flag.laos:before {
+i.xe-flag.la:before,
+i.xe-flag.laos:before {
   background-position: -36px -1222px;
 }
 
-i.flag.lb:before,
-i.flag.lebanon:before {
+i.xe-flag.lb:before,
+i.xe-flag.lebanon:before {
   background-position: -36px -1248px;
 }
 
-i.flag.lc:before,
-i.flag.saint.lucia:before {
+i.xe-flag.lc:before,
+i.xe-flag.saint.lucia:before {
   background-position: -36px -1274px;
 }
 
-i.flag.li:before,
-i.flag.liechtenstein:before {
+i.xe-flag.li:before,
+i.xe-flag.liechtenstein:before {
   background-position: -36px -1300px;
 }
 
-i.flag.lk:before,
-i.flag.sri.lanka:before {
+i.xe-flag.lk:before,
+i.xe-flag.sri.lanka:before {
   background-position: -36px -1326px;
 }
 
-i.flag.lr:before,
-i.flag.liberia:before {
+i.xe-flag.lr:before,
+i.xe-flag.liberia:before {
   background-position: -36px -1352px;
 }
 
-i.flag.ls:before,
-i.flag.lesotho:before {
+i.xe-flag.ls:before,
+i.xe-flag.lesotho:before {
   background-position: -36px -1378px;
 }
 
-i.flag.lt:before,
-i.flag.lithuania:before {
+i.xe-flag.lt:before,
+i.xe-flag.lithuania:before {
   background-position: -36px -1404px;
 }
 
-i.flag.lu:before,
-i.flag.luxembourg:before {
+i.xe-flag.lu:before,
+i.xe-flag.luxembourg:before {
   background-position: -36px -1430px;
 }
 
-i.flag.lv:before,
-i.flag.latvia:before {
+i.xe-flag.lv:before,
+i.xe-flag.latvia:before {
   background-position: -36px -1456px;
 }
 
-i.flag.ly:before,
-i.flag.libya:before {
+i.xe-flag.ly:before,
+i.xe-flag.libya:before {
   background-position: -36px -1482px;
 }
 
-i.flag.ma:before,
-i.flag.morocco:before {
+i.xe-flag.ma:before,
+i.xe-flag.morocco:before {
   background-position: -36px -1508px;
 }
 
-i.flag.mc:before,
-i.flag.monaco:before {
+i.xe-flag.mc:before,
+i.xe-flag.monaco:before {
   background-position: -36px -1534px;
 }
 
-i.flag.md:before,
-i.flag.moldova:before {
+i.xe-flag.md:before,
+i.xe-flag.moldova:before {
   background-position: -36px -1560px;
 }
 
-i.flag.me:before,
-i.flag.montenegro:before {
+i.xe-flag.me:before,
+i.xe-flag.montenegro:before {
   background-position: -36px -1586px;
 }
 
-i.flag.mg:before,
-i.flag.madagascar:before {
+i.xe-flag.mg:before,
+i.xe-flag.madagascar:before {
   background-position: -36px -1613px;
 }
 
-i.flag.mh:before,
-i.flag.marshall.islands:before {
+i.xe-flag.mh:before,
+i.xe-flag.marshall.islands:before {
   background-position: -36px -1639px;
 }
 
-i.flag.mk:before,
-i.flag.macedonia:before {
+i.xe-flag.mk:before,
+i.xe-flag.macedonia:before {
   background-position: -36px -1665px;
 }
 
-i.flag.ml:before,
-i.flag.mali:before {
+i.xe-flag.ml:before,
+i.xe-flag.mali:before {
   background-position: -36px -1691px;
 }
 
-i.flag.mm:before,
-i.flag.myanmar:before,
-i.flag.burma:before {
+i.xe-flag.mm:before,
+i.xe-flag.myanmar:before,
+i.xe-flag.burma:before {
   background-position: -36px -1717px;
 }
 
-i.flag.mn:before,
-i.flag.mongolia:before {
+i.xe-flag.mn:before,
+i.xe-flag.mongolia:before {
   background-position: -36px -1743px;
 }
 
-i.flag.mo:before,
-i.flag.macau:before {
+i.xe-flag.mo:before,
+i.xe-flag.macau:before {
   background-position: -36px -1769px;
 }
 
-i.flag.mp:before,
-i.flag.northern.mariana.islands:before {
+i.xe-flag.mp:before,
+i.xe-flag.northern.mariana.islands:before {
   background-position: -36px -1795px;
 }
 
-i.flag.mq:before,
-i.flag.martinique:before {
+i.xe-flag.mq:before,
+i.xe-flag.martinique:before {
   background-position: -36px -1821px;
 }
 
-i.flag.mr:before,
-i.flag.mauritania:before {
+i.xe-flag.mr:before,
+i.xe-flag.mauritania:before {
   background-position: -36px -1847px;
 }
 
-i.flag.ms:before,
-i.flag.montserrat:before {
+i.xe-flag.ms:before,
+i.xe-flag.montserrat:before {
   background-position: -36px -1873px;
 }
 
-i.flag.mt:before,
-i.flag.malta:before {
+i.xe-flag.mt:before,
+i.xe-flag.malta:before {
   background-position: -36px -1899px;
 }
 
-i.flag.mu:before,
-i.flag.mauritius:before {
+i.xe-flag.mu:before,
+i.xe-flag.mauritius:before {
   background-position: -36px -1925px;
 }
 
-i.flag.mv:before,
-i.flag.maldives:before {
+i.xe-flag.mv:before,
+i.xe-flag.maldives:before {
   background-position: -36px -1951px;
 }
 
-i.flag.mw:before,
-i.flag.malawi:before {
+i.xe-flag.mw:before,
+i.xe-flag.malawi:before {
   background-position: -36px -1977px;
 }
 
-i.flag.mx:before,
-i.flag.mexico:before {
+i.xe-flag.mx:before,
+i.xe-flag.mexico:before {
   background-position: -72px 0;
 }
 
-i.flag.my:before,
-i.flag.malaysia:before {
+i.xe-flag.my:before,
+i.xe-flag.malaysia:before {
   background-position: -72px -26px;
 }
 
-i.flag.mz:before,
-i.flag.mozambique:before {
+i.xe-flag.mz:before,
+i.xe-flag.mozambique:before {
   background-position: -72px -52px;
 }
 
-i.flag.na:before,
-i.flag.namibia:before {
+i.xe-flag.na:before,
+i.xe-flag.namibia:before {
   background-position: -72px -78px;
 }
 
-i.flag.nc:before,
-i.flag.new.caledonia:before {
+i.xe-flag.nc:before,
+i.xe-flag.new.caledonia:before {
   background-position: -72px -104px;
 }
 
-i.flag.ne:before,
-i.flag.niger:before {
+i.xe-flag.ne:before,
+i.xe-flag.niger:before {
   background-position: -72px -130px;
 }
 
-i.flag.nf:before,
-i.flag.norfolk.island:before {
+i.xe-flag.nf:before,
+i.xe-flag.norfolk.island:before {
   background-position: -72px -156px;
 }
 
-i.flag.ng:before,
-i.flag.nigeria:before {
+i.xe-flag.ng:before,
+i.xe-flag.nigeria:before {
   background-position: -72px -182px;
 }
 
-i.flag.ni:before,
-i.flag.nicaragua:before {
+i.xe-flag.ni:before,
+i.xe-flag.nicaragua:before {
   background-position: -72px -208px;
 }
 
-i.flag.nl:before,
-i.flag.netherlands:before {
+i.xe-flag.nl:before,
+i.xe-flag.netherlands:before {
   background-position: -72px -234px;
 }
 
-i.flag.no:before,
-i.flag.norway:before {
+i.xe-flag.no:before,
+i.xe-flag.norway:before {
   background-position: -72px -260px;
 }
 
-i.flag.np:before,
-i.flag.nepal:before {
+i.xe-flag.np:before,
+i.xe-flag.nepal:before {
   background-position: -72px -286px;
 }
 
-i.flag.nr:before,
-i.flag.nauru:before {
+i.xe-flag.nr:before,
+i.xe-flag.nauru:before {
   background-position: -72px -312px;
 }
 
-i.flag.nu:before,
-i.flag.niue:before {
+i.xe-flag.nu:before,
+i.xe-flag.niue:before {
   background-position: -72px -338px;
 }
 
-i.flag.nz:before,
-i.flag.new.zealand:before {
+i.xe-flag.nz:before,
+i.xe-flag.new.zealand:before {
   background-position: -72px -364px;
 }
 
-i.flag.om:before,
-i.flag.oman:before {
+i.xe-flag.om:before,
+i.xe-flag.oman:before {
   background-position: -72px -390px;
 }
 
-i.flag.pa:before,
-i.flag.panama:before {
+i.xe-flag.pa:before,
+i.xe-flag.panama:before {
   background-position: -72px -416px;
 }
 
-i.flag.pe:before,
-i.flag.peru:before {
+i.xe-flag.pe:before,
+i.xe-flag.peru:before {
   background-position: -72px -442px;
 }
 
-i.flag.pf:before,
-i.flag.french.polynesia:before {
+i.xe-flag.pf:before,
+i.xe-flag.french.polynesia:before {
   background-position: -72px -468px;
 }
 
-i.flag.pg:before,
-i.flag.new.guinea:before {
+i.xe-flag.pg:before,
+i.xe-flag.new.guinea:before {
   background-position: -72px -494px;
 }
 
-i.flag.ph:before,
-i.flag.philippines:before {
+i.xe-flag.ph:before,
+i.xe-flag.philippines:before {
   background-position: -72px -520px;
 }
 
-i.flag.pk:before,
-i.flag.pakistan:before {
+i.xe-flag.pk:before,
+i.xe-flag.pakistan:before {
   background-position: -72px -546px;
 }
 
-i.flag.pl:before,
-i.flag.poland:before {
+i.xe-flag.pl:before,
+i.xe-flag.poland:before {
   background-position: -72px -572px;
 }
 
-i.flag.pm:before,
-i.flag.saint.pierre:before {
+i.xe-flag.pm:before,
+i.xe-flag.saint.pierre:before {
   background-position: -72px -598px;
 }
 
-i.flag.pn:before,
-i.flag.pitcairn.islands:before {
+i.xe-flag.pn:before,
+i.xe-flag.pitcairn.islands:before {
   background-position: -72px -624px;
 }
 
-i.flag.pr:before,
-i.flag.puerto.rico:before {
+i.xe-flag.pr:before,
+i.xe-flag.puerto.rico:before {
   background-position: -72px -650px;
 }
 
-i.flag.ps:before,
-i.flag.palestine:before {
+i.xe-flag.ps:before,
+i.xe-flag.palestine:before {
   background-position: -72px -676px;
 }
 
-i.flag.pt:before,
-i.flag.portugal:before {
+i.xe-flag.pt:before,
+i.xe-flag.portugal:before {
   background-position: -72px -702px;
 }
 
-i.flag.pw:before,
-i.flag.palau:before {
+i.xe-flag.pw:before,
+i.xe-flag.palau:before {
   background-position: -72px -728px;
 }
 
-i.flag.py:before,
-i.flag.paraguay:before {
+i.xe-flag.py:before,
+i.xe-flag.paraguay:before {
   background-position: -72px -754px;
 }
 
-i.flag.qa:before,
-i.flag.qatar:before {
+i.xe-flag.qa:before,
+i.xe-flag.qatar:before {
   background-position: -72px -780px;
 }
 
-i.flag.re:before,
-i.flag.reunion:before {
+i.xe-flag.re:before,
+i.xe-flag.reunion:before {
   background-position: -72px -806px;
 }
 
-i.flag.ro:before,
-i.flag.romania:before {
+i.xe-flag.ro:before,
+i.xe-flag.romania:before {
   background-position: -72px -832px;
 }
 
-i.flag.rs:before,
-i.flag.serbia:before {
+i.xe-flag.rs:before,
+i.xe-flag.serbia:before {
   background-position: -72px -858px;
 }
 
-i.flag.ru:before,
-i.flag.russia:before {
+i.xe-flag.ru:before,
+i.xe-flag.russia:before {
   background-position: -72px -884px;
 }
 
-i.flag.rw:before,
-i.flag.rwanda:before {
+i.xe-flag.rw:before,
+i.xe-flag.rwanda:before {
   background-position: -72px -910px;
 }
 
-i.flag.sa:before,
-i.flag.saudi.arabia:before {
+i.xe-flag.sa:before,
+i.xe-flag.saudi.arabia:before {
   background-position: -72px -936px;
 }
 
-i.flag.sb:before,
-i.flag.solomon.islands:before {
+i.xe-flag.sb:before,
+i.xe-flag.solomon.islands:before {
   background-position: -72px -962px;
 }
 
-i.flag.sc:before,
-i.flag.seychelles:before {
+i.xe-flag.sc:before,
+i.xe-flag.seychelles:before {
   background-position: -72px -988px;
 }
 
-i.flag.sd:before,
-i.flag.sudan:before {
+i.xe-flag.sd:before,
+i.xe-flag.sudan:before {
   background-position: -72px -1040px;
 }
 
-i.flag.se:before,
-i.flag.sweden:before {
+i.xe-flag.se:before,
+i.xe-flag.sweden:before {
   background-position: -72px -1066px;
 }
 
-i.flag.sg:before,
-i.flag.singapore:before {
+i.xe-flag.sg:before,
+i.xe-flag.singapore:before {
   background-position: -72px -1092px;
 }
 
-i.flag.sh:before,
-i.flag.saint.helena:before {
+i.xe-flag.sh:before,
+i.xe-flag.saint.helena:before {
   background-position: -72px -1118px;
 }
 
-i.flag.si:before,
-i.flag.slovenia:before {
+i.xe-flag.si:before,
+i.xe-flag.slovenia:before {
   background-position: -72px -1144px;
 }
 
-i.flag.sj:before,
-i.flag.svalbard:before,
-i.flag.jan.mayen:before {
+i.xe-flag.sj:before,
+i.xe-flag.svalbard:before,
+i.xe-flag.jan.mayen:before {
   background-position: -72px -1170px;
 }
 
-i.flag.sk:before,
-i.flag.slovakia:before {
+i.xe-flag.sk:before,
+i.xe-flag.slovakia:before {
   background-position: -72px -1196px;
 }
 
-i.flag.sl:before,
-i.flag.sierra.leone:before {
+i.xe-flag.sl:before,
+i.xe-flag.sierra.leone:before {
   background-position: -72px -1222px;
 }
 
-i.flag.sm:before,
-i.flag.san.marino:before {
+i.xe-flag.sm:before,
+i.xe-flag.san.marino:before {
   background-position: -72px -1248px;
 }
 
-i.flag.sn:before,
-i.flag.senegal:before {
+i.xe-flag.sn:before,
+i.xe-flag.senegal:before {
   background-position: -72px -1274px;
 }
 
-i.flag.so:before,
-i.flag.somalia:before {
+i.xe-flag.so:before,
+i.xe-flag.somalia:before {
   background-position: -72px -1300px;
 }
 
-i.flag.sr:before,
-i.flag.suriname:before {
+i.xe-flag.sr:before,
+i.xe-flag.suriname:before {
   background-position: -72px -1326px;
 }
 
-i.flag.st:before,
-i.flag.sao.tome:before {
+i.xe-flag.st:before,
+i.xe-flag.sao.tome:before {
   background-position: -72px -1352px;
 }
 
-i.flag.sv:before,
-i.flag.el.salvador:before {
+i.xe-flag.sv:before,
+i.xe-flag.el.salvador:before {
   background-position: -72px -1378px;
 }
 
-i.flag.sy:before,
-i.flag.syria:before {
+i.xe-flag.sy:before,
+i.xe-flag.syria:before {
   background-position: -72px -1404px;
 }
 
-i.flag.sz:before,
-i.flag.swaziland:before {
+i.xe-flag.sz:before,
+i.xe-flag.swaziland:before {
   background-position: -72px -1430px;
 }
 
-i.flag.tc:before,
-i.flag.caicos.islands:before {
+i.xe-flag.tc:before,
+i.xe-flag.caicos.islands:before {
   background-position: -72px -1456px;
 }
 
-i.flag.td:before,
-i.flag.chad:before {
+i.xe-flag.td:before,
+i.xe-flag.chad:before {
   background-position: -72px -1482px;
 }
 
-i.flag.tf:before,
-i.flag.french.territories:before {
+i.xe-flag.tf:before,
+i.xe-flag.french.territories:before {
   background-position: -72px -1508px;
 }
 
-i.flag.tg:before,
-i.flag.togo:before {
+i.xe-flag.tg:before,
+i.xe-flag.togo:before {
   background-position: -72px -1534px;
 }
 
-i.flag.th:before,
-i.flag.thailand:before {
+i.xe-flag.th:before,
+i.xe-flag.thailand:before {
   background-position: -72px -1560px;
 }
 
-i.flag.tj:before,
-i.flag.tajikistan:before {
+i.xe-flag.tj:before,
+i.xe-flag.tajikistan:before {
   background-position: -72px -1586px;
 }
 
-i.flag.tk:before,
-i.flag.tokelau:before {
+i.xe-flag.tk:before,
+i.xe-flag.tokelau:before {
   background-position: -72px -1612px;
 }
 
-i.flag.tl:before,
-i.flag.timorleste:before {
+i.xe-flag.tl:before,
+i.xe-flag.timorleste:before {
   background-position: -72px -1638px;
 }
 
-i.flag.tm:before,
-i.flag.turkmenistan:before {
+i.xe-flag.tm:before,
+i.xe-flag.turkmenistan:before {
   background-position: -72px -1664px;
 }
 
-i.flag.tn:before,
-i.flag.tunisia:before {
+i.xe-flag.tn:before,
+i.xe-flag.tunisia:before {
   background-position: -72px -1690px;
 }
 
-i.flag.to:before,
-i.flag.tonga:before {
+i.xe-flag.to:before,
+i.xe-flag.tonga:before {
   background-position: -72px -1716px;
 }
 
-i.flag.tr:before,
-i.flag.turkey:before {
+i.xe-flag.tr:before,
+i.xe-flag.turkey:before {
   background-position: -72px -1742px;
 }
 
-i.flag.tt:before,
-i.flag.trinidad:before {
+i.xe-flag.tt:before,
+i.xe-flag.trinidad:before {
   background-position: -72px -1768px;
 }
 
-i.flag.tv:before,
-i.flag.tuvalu:before {
+i.xe-flag.tv:before,
+i.xe-flag.tuvalu:before {
   background-position: -72px -1794px;
 }
 
-i.flag.tw:before,
-i.flag.taiwan:before {
+i.xe-flag.tw:before,
+i.xe-flag.taiwan:before {
   background-position: -72px -1820px;
 }
 
-i.flag.tz:before,
-i.flag.tanzania:before {
+i.xe-flag.tz:before,
+i.xe-flag.tanzania:before {
   background-position: -72px -1846px;
 }
 
-i.flag.ua:before,
-i.flag.ukraine:before {
+i.xe-flag.ua:before,
+i.xe-flag.ukraine:before {
   background-position: -72px -1872px;
 }
 
-i.flag.ug:before,
-i.flag.uganda:before {
+i.xe-flag.ug:before,
+i.xe-flag.uganda:before {
   background-position: -72px -1898px;
 }
 
-i.flag.um:before,
-i.flag.us.minor.islands:before {
+i.xe-flag.um:before,
+i.xe-flag.us.minor.islands:before {
   background-position: -72px -1924px;
 }
 
-i.flag.en:before,
-i.flag.us:before,
-i.flag.america:before,
-i.flag.united.states:before {
+i.xe-flag.en:before,
+i.xe-flag.us:before,
+i.xe-flag.america:before,
+i.xe-flag.united.states:before {
   background-position: -72px -1950px;
 }
 
-i.flag.uy:before,
-i.flag.uruguay:before {
+i.xe-flag.uy:before,
+i.xe-flag.uruguay:before {
   background-position: -72px -1976px;
 }
 
-i.flag.uz:before,
-i.flag.uzbekistan:before {
+i.xe-flag.uz:before,
+i.xe-flag.uzbekistan:before {
   background-position: -108px 0;
 }
 
-i.flag.va:before,
-i.flag.vatican.city:before {
+i.xe-flag.va:before,
+i.xe-flag.vatican.city:before {
   background-position: -108px -26px;
 }
 
-i.flag.vc:before,
-i.flag.saint.vincent:before {
+i.xe-flag.vc:before,
+i.xe-flag.saint.vincent:before {
   background-position: -108px -52px;
 }
 
-i.flag.ve:before,
-i.flag.venezuela:before {
+i.xe-flag.ve:before,
+i.xe-flag.venezuela:before {
   background-position: -108px -78px;
 }
 
-i.flag.vg:before,
-i.flag.british.virgin.islands:before {
+i.xe-flag.vg:before,
+i.xe-flag.british.virgin.islands:before {
   background-position: -108px -104px;
 }
 
-i.flag.vi:before,
-i.flag.us.virgin.islands:before {
+i.xe-flag.vi:before,
+i.xe-flag.us.virgin.islands:before {
   background-position: -108px -130px;
 }
 
-i.flag.vn:before,
-i.flag.vietnam:before {
+i.xe-flag.vn:before,
+i.xe-flag.vietnam:before {
   background-position: -108px -156px;
 }
 
-i.flag.vu:before,
-i.flag.vanuatu:before {
+i.xe-flag.vu:before,
+i.xe-flag.vanuatu:before {
   background-position: -108px -182px;
 }
 
-i.flag.wf:before,
-i.flag.wallis.and.futuna:before {
+i.xe-flag.wf:before,
+i.xe-flag.wallis.and.futuna:before {
   background-position: -108px -234px;
 }
 
-i.flag.ws:before,
-i.flag.samoa:before {
+i.xe-flag.ws:before,
+i.xe-flag.samoa:before {
   background-position: -108px -260px;
 }
 
-i.flag.ye:before,
-i.flag.yemen:before {
+i.xe-flag.ye:before,
+i.xe-flag.yemen:before {
   background-position: -108px -286px;
 }
 
-i.flag.yt:before,
-i.flag.mayotte:before {
+i.xe-flag.yt:before,
+i.xe-flag.mayotte:before {
   background-position: -108px -312px;
 }
 
-i.flag.za:before,
-i.flag.south.africa:before {
+i.xe-flag.za:before,
+i.xe-flag.south.africa:before {
   background-position: -108px -338px;
 }
 
-i.flag.zm:before,
-i.flag.zambia:before {
+i.xe-flag.zm:before,
+i.xe-flag.zambia:before {
   background-position: -108px -364px;
 }
 
-i.flag.zw:before,
-i.flag.zimbabwe:before {
+i.xe-flag.zw:before,
+i.xe-flag.zimbabwe:before {
   background-position: -108px -390px;
 }
 
@@ -1791,25 +1403,22 @@ i.flag.zimbabwe:before {
          Site Overrides
 *******************************/
 /* CSS Document */
-.xe-input-group .xe-btn-text {
-  font-size: 15px;
-  margin: 0;
-}
-
-.xe-input-group .dot {
-  margin: 0 4px;
-  font-size: 10px;
-}
-
-.xe-input-group > input[type="checkbox"],
-.xe-input-group > input[type="radio"] {
+.xe-label {
+  display: block;
   position: relative;
-  top: -1px;
-  vertical-align: middle;
+  min-width: 18px;
+  min-height: 18px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
 }
 
-.xe-input-group:not(#cross) > input[type="checkbox"],
-.xe-input-group:not(#cross) > input[type="radio"] {
+.xe-label .xe-label-text {
+  display: inline-block;
+  padding-left: 25px;
+}
+
+.xe-label input[type="checkbox"], .xe-label input[type="radio"] {
   overflow: hidden;
   position: absolute;
   width: 0;
@@ -1820,541 +1429,218 @@ i.flag.zimbabwe:before {
   left: -9999px;
 }
 
-.xe-input-group:not(#cross) > input[type="checkbox"] + label,
-.xe-input-group:not(#cross) > input[type="radio"] + label {
+.xe-label > input[type="checkbox"] + .xe-input-helper {
   display: inline-block;
-  margin: 0 0 0 0;
-  padding: 0 10px 2px 25px;
-  background: url(img/spr_inpt.png) no-repeat 0 0;
-  background-size: 18px 252px;
-  height: 22px;
-  color: #434a53;
-  font-weight: normal;
-  cursor: pointer;
-}
-
-.xe-input-group:not(#cross) > input[type="checkbox"] + label:hover {
-  background-position: 0 -26px;
-}
-
-.xe-input-group:not(#cross) > input[type="checkbox"]:checked + label {
-  background-position: 0 -52px;
-}
-
-.xe-input-group:not(#cross) > input[type="checkbox"]:disabled + label {
-  background-position: 0 -78px;
-  color: #b5b7bd;
-}
-
-.xe-input-group:not(#cross) > input[type="checkbox"]:disabled:checked + label {
-  background-position: 0 -103px;
-}
-
-.xe-input-group:not(#cross) > input[type="radio"] + label {
-  background-position: 0 -130px;
-}
-
-.xe-input-group:not(#cross) > input[type="radio"] + label:hover {
-  background-position: 0 -156px;
-}
-
-.xe-input-group:not(#cross) > input[type="radio"]:checked + label {
-  background-position: 0 -182px;
-}
-
-.xe-input-group:not(#cross) > input[type="radio"]:disabled + label {
-  background-position: left -208px;
-  color: #b5b7bd;
-}
-
-.xe-input-group:not(#cross) > input[type="radio"]:disabled:checked + label {
-  background-position: 0 -234px;
-}
-
-.xe-btn {
-  display: inline-block;
-  padding: .7143em .8571em;
-  margin-bottom: 0;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  -ms-touch-action: manipulation;
-  touch-action: manipulation;
-  cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  background-image: none;
-  border-radius: 2px;
-  outline: none;
-  border: 1px solid transparent;
-  -webkit-transition: all .2s ease;
-  transition: all .2s ease;
-}
-
-.xe-btn.xe-btn-default {
-  color: #8e8e93;
-  border-color: #dadbde;
-  background-color: transparent;
-}
-
-.xe-btn:active,
-.xe-btn:focus,
-.xe-btn:active:focus {
-  -webkit-box-shadow: none;
-  box-shadow: none;
-  outline: none;
-}
-
-.xe-btn:focus {
-  color: #fff;
-}
-
-.xe-btn-default:hover,
-.open > .dropdown-toggle.xe-btn-default {
-  background-color: transparent;
-  border-color: #b5b7bd;
-  color: #696e7a;
-}
-
-.xe-btn-default.focus,
-.xe-btn-default:focus {
-  background-color: inherit;
-  color: #8e8e93;
-}
-
-.xe-btn-default.active,
-.xe-btn-default:active {
-  background-color: transparent;
-  border-color: #8e8e93;
-  color: #434a53;
-}
-
-.xe-btn-group {
-  display: inline-block;
-  vertical-align: top;
-}
-
-.xe-btn.blue {
-  border-color: #2c8beb;
-  color: #2c8beb;
-}
-
-.wrong .xe-btn {
-  border-color: #dadbde;
-  color: #8e8e93;
-}
-
-.wrong .xe-btn.blue {
-  border-color: #a3c9f2;
-  color: #2c8beb;
-}
-
-.xe-btn.blue:hover {
-  border-color: #1677cb;
-  color: #1677cb;
-}
-
-.xe-btn.blue:active {
-  border-color: #085daa;
-  color: #085daa;
-}
-
-.xe-btn.blue.v2:hover {
-  border-color: #2c8beb;
-  background-color: #2c8beb;
-  color: #fff;
-}
-
-.xe-btn.blue.v2:active {
-  border-color: #0775ce;
-  background-color: #0775ce;
-  color: #fff;
-}
-
-.xe-btn-text {
-  color: #2c8beb;
-  border-color: transparent;
-  background-color: transparent;
-}
-
-.xe-btn-text:hover,
-.xe-btn-text:focus {
-  color: #085daa;
-  text-decoration: none;
-  border-color: transparent !important;
-}
-
-.xe-btn-text.v2:hover {
-  text-decoration: none;
-  background-color: #f1f2f6;
-  color: #2c8beb;
-}
-
-.xe-btn-text.v2:active {
-  background-color: #dadbde;
-}
-
-.xe-btn-text.v3 {
-  color: #696e7a;
-}
-
-.xe-btn-text.v3:hover {
-  color: #2c8beb;
-}
-
-.xe-btn-text.v3:active {
-  color: #085daa;
-}
-
-.xe-btn.xe-btn-gray {
-  background-color: #dadbde;
-  color: #696e7a;
-  border-color: transparent;
-}
-
-.xe-btn.xe-btn-gray:hover {
-  background-color: #b5b7bd;
-  color: #434a53;
-}
-
-.xe-btn.xe-btn-gray:active {
-  background-color: #8e8e93;
-  color: #2c2e37;
-}
-
-.xe-btn-group-all {
-  margin: 24px auto;
-}
-
-.xe-btn-danger.v2 {
-  background-color: transparent;
-  border-color: #db2828;
-  color: #db2828;
-}
-
-.xe-btn-danger.v2:hover {
-  background-color: #db2828;
-  color: #fff;
-}
-
-.xe-input-text,
-.xe-form-control {
-  width: 100%;
-  height: 36px;
-  margin: 0 4px 4px 0;
-  padding: 5px 12px;
-  border: 1px solid #dadbde;
-  border-radius: 2px;
-  line-height: 1.42857143;
-  font-size: 14px;
-  color: #2c2e37;
-  outline: none;
-  -webkit-appearance: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 18px;
+  height: 18px;
   background-color: #fff;
-  -webkit-box-shadow: none;
+  border: 1px solid #BEBFC5;
+  border-radius: 2px;
+  vertical-align: middle;
+}
+
+.xe-label > input[type="radio"] + .xe-input-helper {
+  display: inline-block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 18px;
+  height: 18px;
+  background-color: #fff;
+  border: 1px solid #BEBFC5;
+  border-radius: 2px;
+  vertical-align: middle;
+  border-radius: 50%;
+}
+
+.xe-label > input[type="checkbox"]:hover + .xe-input-helper, .xe-label > input[type="radio"]:hover + .xe-input-helper {
+  border-color: #2c8beb;
+}
+
+.xe-label > input[type="checkbox"]:checked + .xe-input-helper {
+  border-color: transparent;
+  background-color: #2c8beb;
+}
+
+.xe-label > input[type="radio"]:checked + .xe-input-helper {
+  border-color: #2c8beb;
+}
+
+.xe-label > input[type="checkbox"]:checked + .xe-input-helper:after {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 12px;
+  margin-top: -8px;
+  margin-left: -4px;
+  border-right: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  -webkit-transform: rotate(40deg);
+  transform: rotate(40deg);
+  content: "";
+}
+
+.xe-label > input[type="radio"]:checked + .xe-input-helper:after {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 12px;
+  margin-top: -8px;
+  margin-left: -4px;
+  border-right: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  -webkit-transform: rotate(40deg);
+  transform: rotate(40deg);
+  content: "";
+  width: 10px;
+  height: 10px;
+  margin-top: -5px;
+  margin-left: -5px;
+  border: none;
+  background-color: #2c8beb;
+  border-radius: 50%;
+}
+
+.xe-label > input[type="checkbox"]:disabled + .xe-input-helper, .xe-label > input[type="radio"]:disabled + .xe-input-helper {
+  border-color: #DEDFE2;
+}
+
+.xe-label > input[type="checkbox"]:disabled:checked + .xe-input-helper, .xe-label > input[type="radio"]:disabled:checked + .xe-input-helper:after {
+  border-color: transparent;
+  background-color: #c8c9cc;
+}
+
+.xe-label > input[type="checkbox"]:disabled + .xe-input-helper + .xe-label-text, .xe-label > input[type="radio"]:disabled + .xe-input-helper + .xe-label-text {
+  color: #b5b7bd;
+}
+
+.xe-form-group {
+  display: block;
+  margin-bottom: 20px;
+}
+
+.xe-form-control {
+  display: block;
+  width: 100%;
+  height: 35px;
+  padding: 7px 16px;
+  font-size: 14px;
+  line-height: 1.42857;
+  color: #555555;
+  background-color: #fff;
+  border: 1px solid #dcdde0;
+  border-radius: 2px;
   box-shadow: none;
-  transition: .1s ease;
-  -webkit-transition: .1s ease;
+  outline: none;
 }
 
-textarea {
-  padding: 10px 12px;
+.xe-form-control::-moz-placeholder {
+  color: #999;
+  opacity: 1;
 }
 
-.xe-form-control.srch {
-  padding-right: 30px;
+.xe-form-control:-ms-input-placeholder {
+  color: #999;
 }
 
-.xe-input-text.readonly {
-  height: 40px;
-  background-color: #f6f6f6;
-  border-color: #f6f6f6;
-  color: #cbcbcb;
-  font-size: 15px;
+.xe-form-control::-webkit-input-placeholder {
+  color: #999;
 }
 
-.wrong .xe-input-text {
+.xe-form-control::-ms-expand {
+  border: 0;
+  background-color: transparent;
+}
+
+.xe-form-control[disabled], .xe-form-control[readonly],
+fieldset[disabled] .xe-form-control {
+  background-color: #eeeeee;
+  opacity: 1;
+}
+
+.xe-form-control[disabled],
+fieldset[disabled] .xe-form-control {
+  cursor: not-allowed;
+}
+
+.xe-form-control:focus {
+  box-shadow: none;
+  border-color: #2c8beb;
+}
+
+textarea.xe-form-control {
+  height: auto;
+}
+
+@media (min-width: 768px) {
+  .xe-form-inline .xe-form-group {
+    display: inline-block;
+    margin-bottom: 0;
+    margin-right: 20px;
+    vertical-align: middle;
+  }
+  .xe-form-inline .xe-form-control {
+    display: inline-block;
+    width: auto;
+    vertical-align: middle;
+  }
+  .xe-form-inline .xe-input-group {
+    display: inline-table;
+    vertical-align: middle;
+  }
+  .xe-form-inline .xe-input-group .xe-input-group-addon,
+  .xe-form-inline .xe-input-group .xe-input-group-btn,
+  .xe-form-inline .xe-input-group .xe-form-control {
+    width: auto;
+  }
+  .xe-form-inline .xe-input-group > .xe-form-control {
+    width: 100%;
+  }
+  .xe-form-inline .xe-label {
+    display: inline-block;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-right: 10px;
+    vertical-align: middle;
+  }
+  .xe-form-inline .xe-label label {
+    padding-left: 0;
+  }
+  .xe-form-inline .xe-select-box.xe-btn,
+  .xe-form-inline .xe-dropdown,
+  .xe-form-inline .xe-dropup,
+  .xe-form-inline .xe-select-label .label-input {
+    display: inline-block;
+    width: auto;
+  }
+}
+
+.wrong-input .xe-form-control,
+.wrong-input.xe-form-control {
   border-color: #dd251e !important;
   color: #db2828;
 }
 
-.success .xe-input-text {
+.success-input .xe-form-control,
+.success-input.xe-form-control {
   border-color: #2c8beb !important;
-}
-
-.xe-input-text:focus,
-.xe-input-body textarea:focus,
-.xe-input-body .xe-input-text:focus,
-.xe-form-control:focus {
-  border-color: #2389ee;
-  color: #2c2e37;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-  transition: .1s ease;
-  -webkit-transition: .1s ease;
-}
-
-.label-text {
-  color: #8e8e93;
-  font-size: 14px;
-  line-height: 36px;
 }
 
 .text-message {
   display: block;
-  margin: 5px 0 0;
+  margin-top: 5px !important;
   font-size: 13px;
   color: #2c8beb;
 }
 
-.wrong .text-message {
+.wrong-input .text-message,
+.wrong-input.text-message {
   color: #db2828 !important;
-}
-
-.success .text-message {
-  color: #2c8beb !important;
-}
-
-.xe-input-body {
-  position: relative;
-}
-
-.xe-input-body textarea,
-.xe-input-body .xe-input-text {
-  width: 100%;
-  border: 1px solid #dadbde;
-  outline: none;
-  padding-right: 55px;
-  border-radius: 2px;
-  color: #2c2e37;
-}
-
-.xe-input-body .flag-code {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-}
-
-.xe-form-group {
-  display: inline-block;
-  font-size: 0;
-}
-
-.xe-form-group .xe-input-text.v2 {
-  width: 170px;
-  margin: 0;
-  border-right-color: transparent;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-.xe-form-group .xe-input-text:focus {
-  border-color: #2389ee;
-}
-
-.xe-form-group .xe-btn {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  vertical-align: top;
-}
-
-.xe-form-group.wrong + .xe-text-group + .text-message {
-  color: #db2828;
-}
-
-button i + span,
-.xe-btn i + span {
-  margin-left: 3px;
-}
-
-.xe-text-group button:hover {
-  background-color: #d4e8fc;
-  border-radius: 2px;
-}
-
-button.xe-btn-blue,
-a.xe-btn-blue {
-  display: inline-block;
-  background-color: #2c8beb;
-  border-color: transparent;
-  color: #fff;
-}
-
-button.xe-btn-blue:hover,
-a.xe-btn-blue:hover {
-  background-color: #1677cb;
-  border-radius: 2px;
-  color: #fff;
-}
-
-button.xe-btn-blue:active,
-a.xe-btn-blue:active {
-  background-color: #085daa;
-  color: #fff;
-}
-
-button.icon-gray,
-a.icon-gray {
-  display: inline-block;
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  background-color: transparent;
-  border-color: transparent;
-  color: #8e8e93;
-  font-size: 20px;
-}
-
-button.icon-gray:hover,
-a.icon-gray:hover {
-  color: #434a53;
-}
-
-.xe-select-style {
-  display: inline-block;
-  position: relative;
-  margin: 0;
-  border: 1px solid #e4e4e4;
-  border-radius: 2px;
-  overflow: hidden;
-}
-
-.xe-select-style em.ico {
-  display: inline-block;
-  position: absolute;
-  right: 11px;
-  top: 50%;
-  width: 0;
-  height: 0;
-  margin-top: -2px;
-  border-style: solid;
-  border-width: 3px;
-  border-color: #8e8e93 transparent transparent transparent;
-  font-size: 13px;
-}
-
-.xe-select-style select {
-  padding: .6643em .8571em .6643em;
-  width: 130%;
-  margin-right: 20px;
-  border: none;
-  box-shadow: none;
-  background-color: transparent;
-  background-image: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  line-height: 1em;
-}
-
-.xe-select-style select:focus {
-  outline: none;
-}
-
-.xe-btn-toggle {
-  display: inline-block;
-}
-
-.xe-btn-toggle input[type=checkbox] {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.xe-btn-toggle input[type=checkbox]:checked + .toggle {
-  background-color: #359bf7;
-}
-
-.xe-btn-toggle input[type=checkbox]:checked + .toggle:after {
-  left: 41px;
-  outline: none;
-}
-
-.xe-btn-toggle input[type=checkbox]:checked + .toggle:before {
-  left: 11px;
-  content: "ON";
-}
-
-.xe-btn-toggle label {
-  font-weight: 400;
-  font-size: 13px;
-  cursor: pointer;
-  line-height: 28px;
-}
-
-.xe-btn-toggle .toggle {
-  position: relative;
-  display: inline-block;
-  width: 68px;
-  height: 28px;
-  background-color: #dadbde;
-  border-radius: 15px;
-  margin-right: 10px;
-  transition: background .3s ease;
-  vertical-align: middle;
-  content: "";
-}
-
-.xe-btn-toggle .toggle:after {
-  display: inline-block;
-  position: relative;
-  left: 0;
-  top: 1px;
-  width: 26px;
-  height: 26px;
-  background-color: #fff;
-  border-radius: 20px;
-  border: 1px solid #e4e4e4;
-  transition: left .3s ease,background .3s ease,box-shadow .1s ease;
-  content: "";
-}
-
-.xe-btn-toggle .toggle:before {
-  position: absolute;
-  right: 10px;
-  content: "OFF";
-  color: #fff;
-}
-
-.search-group {
-  display: inline-block;
-  white-space: nowrap;
-}
-
-.search-group label {
-  margin: 0;
-  padding: 8px 16px;
-  font-size: 16px;
-  color: #8e8e93;
-}
-
-.search-group .xe-input-text {
-  width: 224px;
-  padding-left: 0;
-  border: none;
-}
-
-.search-group.bd_on {
-  border: 1px solid #e4e4e4;
-}
-
-.search-group.bd_on label {
-  color: #929297;
-}
-
-@media \0screen\,screen\9 {
-  .xe-toggle-button input[type=checkbox] {
-    width: auto;
-    height: auto;
-  }
-  .xe-toggle-button .toggle {
-    display: none;
-  }
 }
 
 .xe-container {
@@ -2375,16 +1661,19 @@ a.icon-gray:hover {
 
 @media (min-width: 768px) {
   .xe-container {
-    max-width: 740px;
-  }
-  .xe-container .content {
-    padding: 0;
+    max-width: 750px;
   }
 }
 
-@media (min-width: 1068px) {
+@media (min-width: 992px) {
   .xe-container {
-    max-width: 980px;
+    max-width: 970px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .xe-container {
+    max-width: 1170px;
   }
 }
 
@@ -2951,7 +2240,7 @@ a.icon-gray:hover {
   }
 }
 
-@media (min-width: 1068px) {
+@media (min-width: 1200px) {
   .xe-col-lg-1, .xe-col-lg-2, .xe-col-lg-3, .xe-col-lg-4, .xe-col-lg-5, .xe-col-lg-6, .xe-col-lg-7, .xe-col-lg-8, .xe-col-lg-9, .xe-col-lg-10, .xe-col-lg-11, .xe-col-lg-12 {
     float: left;
   }
@@ -3110,30 +2399,44 @@ a.icon-gray:hover {
   }
 }
 
-/* CSS Document */
-/*bs reset*/
-.xe-modal-open .xe-modal {
-  overflow-x: hidden;
-  overflow-y: auto;
-  padding-right: 17px !important;
+.xe-modal-open {
+  overflow: hidden;
 }
 
 .xe-modal {
+  display: none;
+  overflow: hidden;
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
   z-index: 1050;
-  display: none;
-  overflow: hidden;
   -webkit-overflow-scrolling: touch;
   outline: 0;
 }
 
-.xe-modal.fade {
-  opacity: 0;
-  transition: opacity .15s linear;
+.xe-modal.fade .xe-modal-dialog {
+  -webkit-transform: translate(0, -25%);
+  -ms-transform: translate(0, -25%);
+  -o-transform: translate(0, -25%);
+  transform: translate(0, -25%);
+  -webkit-transition: -webkit-transform 0.3s ease-out;
+  -moz-transition: -moz-transform 0.3s ease-out;
+  -o-transition: -o-transform 0.3s ease-out;
+  transition: transform 0.3s ease-out;
+}
+
+.xe-modal.in .xe-modal-dialog {
+  -webkit-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
+
+.xe-modal-open .xe-modal {
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .xe-modal-dialog {
@@ -3144,33 +2447,15 @@ a.icon-gray:hover {
 
 .xe-modal-content {
   position: relative;
+  overflow: hidden;
   background-color: #fff;
-  -webkit-background-clip: padding-box;
-  background-clip: padding-box;
   border: 1px solid #999;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border: 1px solid #2c8beb;
   border-radius: 6px;
-  outline: 0;
   -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
   box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
-}
-
-.xe-modal-header .close {
-  float: right;
-  font-size: 21px;
-  line-height: 1;
-  color: #000;
-  text-shadow: 0 1px 0 #fff;
-  filter: alpha(opacity=20);
-  opacity: .2;
-}
-
-.xe-modal-header button.close {
-  -webkit-appearance: none;
-  padding: 0;
-  cursor: pointer;
-  background: transparent;
-  border: 0;
+  background-clip: padding-box;
+  outline: 0;
 }
 
 .xe-modal-backdrop {
@@ -3183,19 +2468,112 @@ a.icon-gray:hover {
   background-color: #000;
 }
 
-.fade.in {
-  opacity: 1;
+.xe-modal-backdrop.fade {
+  opacity: 0;
+  filter: alpha(opacity=0);
 }
 
 .xe-modal-backdrop.in {
+  opacity: 0.5;
   filter: alpha(opacity=50);
-  opacity: .5;
+}
+
+.xe-modal-header {
+  padding: 15px;
+  background-color: #2c8beb;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.xe-modal-header:before, .xe-modal-header:after {
+  content: " ";
+  display: table;
+}
+
+.xe-modal-header:after {
+  clear: both;
+}
+
+.xe-modal-header .btn-close {
+  float: right;
+  background-color: transparent;
+  border: transparent;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.xe-modal-title,
+.xe-modal-content-title {
+  display: block;
+  margin: 0;
+  line-height: 1.42857;
+  font-weight: normal;
+  color: #fff;
+  font-size: 20px;
+}
+
+.xe-modal-content-title {
+  margin-bottom: 5px;
+  font-size: 16px;
+}
+
+.xe-modal-body {
+  position: relative;
+  padding: 15px;
+}
+
+.xe-modal-body p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #777777;
+}
+
+.xe-modal-footer {
+  padding: 15px;
+  text-align: right;
+  background-color: #f8f8fa;
+  border-top: 1px solid #e5e5e5;
+}
+
+.xe-modal-footer:before, .xe-modal-footer:after {
+  content: " ";
+  display: table;
+}
+
+.xe-modal-footer:after {
+  clear: both;
+}
+
+.xe-modal-footer .btn + .btn {
+  margin-left: 5px;
+  margin-bottom: 0;
+}
+
+.xe-modal-footer .btn-group .btn + .btn {
+  margin-left: -1px;
+}
+
+.xe-modal-footer .btn-block + .btn-block {
+  margin-left: 0;
+}
+
+.xe-modal-scrollbar-measure {
+  position: absolute;
+  top: -9999px;
+  width: 50px;
+  height: 50px;
+  overflow: scroll;
 }
 
 @media (min-width: 768px) {
   .xe-modal-dialog {
     width: 600px;
     margin: 30px auto;
+  }
+  .xe-modal-content {
+    -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
   }
   .xe-modal-sm {
     width: 300px;
@@ -3208,178 +2586,49 @@ a.icon-gray:hover {
   }
 }
 
-.text-center {
-  text-align: center !important;
-}
-
-.xe-modal-footer .xe-btn + .xe-btn {
-  margin-bottom: 0;
-  margin-left: 5px;
-}
-
-hr {
-  margin-top: 24px;
-  margin-bottom: 24px;
-  border: 0;
-  border-top: 1px solid #e4e4e4;
-}
-
-/*bs custom*/
-.xe-modal p {
-  font-size: 14px;
-  color: #8e8e93;
-}
-
-.xe-modal .xe-modal-title {
-  margin: 0;
-  line-height: 1.42857143;
-  font-size: 20px;
-  line-height: 28px;
-  font-size: 20px;
-  color: #434a53;
-}
-
-.xe-modal-header {
-  min-height: auto;
-  padding: 24px;
-  border-bottom: none;
-}
-
-.xe-modal-header.bg_gray {
-  background-color: #f1f2f6;
-}
-
-.xe-modal-header.bg_blue {
-  background-color: #2c8beb;
-}
-
-.xe-modal-header.bg_blue .xe-modal-title {
-  color: #fff;
-}
-
-.xe-modal-header button.close {
-  position: absolute;
-  right: 24px;
-  top: 24px;
-  z-index: 10;
-}
-
-.xe-modal-header.bg_blue button.close {
-  color: #fff;
-  opacity: 1;
-}
-
-.xe-modal-content {
-  border-radius: 2px;
-}
-
-.xe-modal-body .ico_result {
-  margin-bottom: -25px;
-  font-size: 130px;
-  color: #2c8beb;
-}
-
-.xe-modal-body {
-  padding: 0 24px 24px 24px;
-}
-
-.xe-modal-body .body_tit,
-.xe-modal-body .txt_result {
-  margin-bottom: 5px;
-  font-size: 16px;
-  color: #434a53;
-}
-
-.xe-modal-body .txt_result {
-  font-size: 20px;
-}
-
-.xe-modal-body .ico_result.error {
-  color: #434a53;
-}
-
-.xe-modal-body .ico_result.error {
-  color: #db2828;
-}
-
-.xe-modal-body .ico_result.warning {
-  color: #f2711c;
-}
-
-.xe-modal-body .ico_result.info {
-  color: #696e7a;
-}
-
-.xe-modal-body hr {
-  margin: 24px auto;
-}
-
-.xe-modal-footer {
-  padding: 8px 24px 24px 24px;
-  text-align: right;
-  border-top: none;
-}
-
-.xe-modal .xe-btn {
-  min-width: 64px;
-}
-
-.xe-modal-footer.text-center {
-  text-align: center !important;
-}
-
-.xe-modal .list-group {
+.xe-modal .xe-list-group {
   overflow-y: auto;
   padding-left: 24px;
-  margin-bottom: 0;
+  margin: 0;
   max-height: 365px;
 }
 
-.xe-modal .list-group .img_thmb {
-  overflow: hidden;
-  display: table-cell;
-  border-radius: 50%;
-  width: 48px;
-  height: 48px;
-}
-
-.xe-modal .list-group li {
+.xe-modal .xe-list-group li {
   overflow: hidden;
   padding: 12px 24px 12px 0;
   border-top: 1px solid #e4e4e4;
   list-style: none;
 }
 
-.xe-modal .list-group li:first-child {
+.xe-modal .xe-list-group li:first-child {
   border-top: none;
 }
 
-.xe-modal .list-group .list_txt {
+.xe-modal .xe-list-group li .list-text {
   display: table-cell;
   vertical-align: middle;
   padding-left: 10px;
   text-align: left;
 }
 
-.xe-modal .list-group .list_txt > p {
+.xe-modal .xe-list-group li .list-text > p {
   font-size: 16px;
   color: #2c2e37;
 }
 
-.xe-modal .list-group .list_txt .txt_sub {
+.xe-modal .xe-list-group li .list-text .sub-text {
   font-size: 14px;
   color: #b5b7bd;
 }
 
-.xe-modal .list-group li > a,
-.xe-modal .list-group li > div {
+.xe-modal .xe-list-group li > a, .xe-modal .xe-list-group li > div {
   display: table;
   height: 100%;
   width: 100%;
 }
 
 /* alert CSS Document */
-.xe-toast_container {
+.xe-toast-container {
   position: fixed;
   bottom: 0;
   left: 0;
@@ -3387,13 +2636,12 @@ hr {
   z-index: 900;
 }
 
-.xe-toast_container .xe-alert {
+.xe-toast-container .xe-alert {
   position: relative;
   max-width: 560px;
   margin: 4px auto 0;
   padding: 14px 40px 14px 20px;
-  background-color: #2c2e37;
-  background-color: rgba(44, 46, 55, 0.95);
+  background-color: #3c414d;
   color: #fff;
   font-size: 14px;
   line-height: 20px;
@@ -3401,25 +2649,35 @@ hr {
   border-radius: 2px;
 }
 
-.xe-toast_container .xe-alert.warning {
-  background-color: #cd1e3d;
-  background-color: #cd1e37;
+.xe-toast-container .xe-alert.xe-warning {
+  background-color: #f0ad4e;
 }
 
-.xe-toast_container .xe-alert.success {
-  background-color: #2c8beb;
-  background-color: rgba(44, 139, 235, 0.95);
+.xe-toast-container .xe-alert.xe-success {
+  background-color: #5cb85c;
 }
 
-.xe-toast_container .xe-alert a {
+.xe-toast-container .xe-alert.xe-danger {
+  background-color: #d9534f;
+}
+
+.xe-toast-container .xe-alert.xe-positive {
+  background-color: #5bc0de;
+}
+
+.xe-toast-container .xe-alert.xe-fail {
+  background-color: #6c57d9;
+}
+
+.xe-toast-container .xe-alert a {
   color: #ffea00;
 }
 
-.xe-toast_container .xe-alert a:hover {
+.xe-toast-container .xe-alert a:hover {
   text-decoration: underline;
 }
 
-.btn_alert_close {
+.xe-btn-alert-close {
   position: absolute;
   right: 0;
   top: 50%;
@@ -3430,80 +2688,1405 @@ hr {
   -webkit-appearance: none;
   padding: 0;
   cursor: pointer;
-  background: url(img/btn_alert_clse.png) 50% 50% no-repeat;
   border: 0;
   outline: none;
+  background-color: transparent;
+  color: #fff;
 }
 
-.btn_alert_close:hover {
-  background-image: url(img/btn_alert_clse_on.png);
+.xe-btn-alert-close i {
+  width: 20px;
+  height: 20px;
+  font-size: 11px;
+}
+
+.xe-btn-alert-close:hover i {
+  background-color: #fff;
+  border-radius: 50%;
+  color: #000;
+  line-height: 20px;
 }
 
 @media (min-width: 768px) {
-  .xe-toast_container {
+  .xe-toast-container {
     padding: 0 20px;
   }
-  .xe-toast_container .xe-alert {
+  .xe-toast-container .xe-alert {
     max-width: 960px;
   }
 }
 
-/* tooltip CSS Document */
 .xe-tooltip {
-  display: block;
   position: absolute;
-  top: 0;
-  left: 0;
-  max-width: 250px;
-  padding: 6px 10px;
-  color: #fff;
-  background: #2c2e37;
-  text-align: left;
-  border-radius: 2px;
+  z-index: 1070;
+  display: block;
   font-size: 12px;
-  line-height: 20px;
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+
+.xe-tooltip.in {
+  opacity: 0.9;
+  filter: alpha(opacity=90);
+}
+
+.xe-tooltip.top {
+  margin-top: -3px;
+  padding: 5px 0;
 }
 
 .xe-tooltip.right {
-  left: auto;
+  margin-left: 3px;
+  padding: 0 5px;
 }
 
-.xe-tooltip.wide {
-  max-width: 350px;
+.xe-tooltip.bottom {
+  margin-top: 3px;
+  padding: 5px 0;
 }
 
-.xe-tooltip.very-wide {
-  max-width: 450px;
+.xe-tooltip.left {
+  margin-left: -3px;
+  padding: 0 5px;
 }
 
-.xe-tooltip:after {
+.xe-tooltip-inner {
+  max-width: 200px;
+  padding: 3px 8px;
+  color: #fff;
+  text-align: center;
+  background-color: #000;
+  border-radius: 2px;
+}
+
+.xe-tooltip-arrow {
   position: absolute;
-  top: 100%;
-  left: 50%;
   width: 0;
   height: 0;
-  margin-left: -3px;
-  border-top: 3px solid #000;
-  border-right: 3px solid transparent;
-  border-left: 3px solid transparent;
+  border-color: transparent;
+  border-style: solid;
+}
+
+.xe-tooltip.top .xe-tooltip-arrow {
+  bottom: 0;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px 5px 0;
+  border-top-color: #000;
+}
+
+.xe-tooltip.top-left .xe-tooltip-arrow {
+  bottom: 0;
+  right: 5px;
+  margin-bottom: -5px;
+  border-width: 5px 5px 0;
+  border-top-color: #000;
+}
+
+.xe-tooltip.top-right .xe-tooltip-arrow {
+  bottom: 0;
+  left: 5px;
+  margin-bottom: -5px;
+  border-width: 5px 5px 0;
+  border-top-color: #000;
+}
+
+.xe-tooltip.right .xe-tooltip-arrow {
+  top: 50%;
+  left: 0;
+  margin-top: -5px;
+  border-width: 5px 5px 5px 0;
+  border-right-color: #000;
+}
+
+.xe-tooltip.left .xe-tooltip-arrow {
+  top: 50%;
+  right: 0;
+  margin-top: -5px;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #000;
+}
+
+.xe-tooltip.bottom .xe-tooltip-arrow {
+  top: 0;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 0 5px 5px;
+  border-bottom-color: #000;
+}
+
+.xe-tooltip.bottom-left .xe-tooltip-arrow {
+  top: 0;
+  right: 5px;
+  margin-top: -5px;
+  border-width: 0 5px 5px;
+  border-bottom-color: #000;
+}
+
+.xe-tooltip.bottom-right .xe-tooltip-arrow {
+  top: 0;
+  left: 5px;
+  margin-top: -5px;
+  border-width: 0 5px 5px;
+  border-bottom-color: #000;
+}
+
+/* CSS Document */
+.xe-btn {
+  display: inline-block;
+  margin-bottom: 0;
+  font-weight: normal;
+  text-align: center;
+  vertical-align: middle;
+  touch-action: manipulation;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  padding: 7px 16px;
+  font-size: 14px;
+  line-height: 1.42857;
+  border-radius: 2px;
+  color: #333;
+  background-color: #fff;
+  border-color: #bbbcbf;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.xe-btn:focus, .xe-btn.focus {
+  color: #333;
+  background-color: #e6e6e6;
+  border-color: #797b81;
+}
+
+.xe-btn:hover {
+  color: #333;
+  background-color: #e6e6e6;
+  border-color: #9b9da1;
+}
+
+.xe-btn:active, .xe-btn.active,
+.open > .xe-btn.dropdown-toggle {
+  color: #333;
+  background-color: #e6e6e6;
+  border-color: #9b9da1;
+}
+
+.xe-btn:active:hover, .xe-btn:active:focus, .xe-btn:active.focus, .xe-btn.active:hover, .xe-btn.active:focus, .xe-btn.active.focus,
+.open > .xe-btn.dropdown-toggle:hover,
+.open > .xe-btn.dropdown-toggle:focus,
+.open > .xe-btn.dropdown-toggle.focus {
+  color: #333;
+  background-color: #d4d4d4;
+  border-color: #797b81;
+}
+
+.xe-btn:active, .xe-btn.active,
+.open > .xe-btn.dropdown-toggle {
+  background-image: none;
+}
+
+.xe-btn.disabled:hover, .xe-btn.disabled:focus, .xe-btn.disabled.focus, .xe-btn[disabled]:hover, .xe-btn[disabled]:focus, .xe-btn[disabled].focus,
+fieldset[disabled] .xe-btn:hover,
+fieldset[disabled] .xe-btn:focus,
+fieldset[disabled] .xe-btn.focus {
+  background-color: #fff;
+  border-color: #bbbcbf;
+}
+
+.xe-btn .badge {
+  color: #fff;
+  background-color: #333;
+}
+
+.xe-btn:focus, .xe-btn.focus, .xe-btn:active:focus, .xe-btn:active.focus, .xe-btn.active:focus, .xe-btn.active.focus {
+  outline: thin dotted;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+
+.xe-btn:hover, .xe-btn:focus, .xe-btn.focus {
+  color: #333;
+  text-decoration: none;
+}
+
+.xe-btn:active, .xe-btn.active {
+  outline: 0;
+  background-image: none;
+}
+
+.xe-btn.disabled, .xe-btn[disabled],
+fieldset[disabled] .xe-btn {
+  cursor: not-allowed;
+  opacity: 0.65;
+  filter: alpha(opacity=65);
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+a.btn.disabled,
+fieldset[disabled] a.btn {
+  pointer-events: none;
+}
+
+.xe-btn-secondary {
+  color: #656973;
+  background-color: #dcdde0;
+  border-color: transparent;
+}
+
+.xe-btn-secondary:focus, .xe-btn-secondary.focus {
+  color: #656973;
+  background-color: #c1c3c8;
+  border-color: transparent;
+}
+
+.xe-btn-secondary:hover {
+  color: #656973;
+  background-color: #c1c3c8;
+  border-color: transparent;
+}
+
+.xe-btn-secondary:active, .xe-btn-secondary.active,
+.open > .xe-btn-secondary.dropdown-toggle {
+  color: #656973;
+  background-color: #c1c3c8;
+  border-color: transparent;
+}
+
+.xe-btn-secondary:active:hover, .xe-btn-secondary:active:focus, .xe-btn-secondary:active.focus, .xe-btn-secondary.active:hover, .xe-btn-secondary.active:focus, .xe-btn-secondary.active.focus,
+.open > .xe-btn-secondary.dropdown-toggle:hover,
+.open > .xe-btn-secondary.dropdown-toggle:focus,
+.open > .xe-btn-secondary.dropdown-toggle.focus {
+  color: #656973;
+  background-color: #aeb0b7;
+  border-color: transparent;
+}
+
+.xe-btn-secondary:active, .xe-btn-secondary.active,
+.open > .xe-btn-secondary.dropdown-toggle {
+  background-image: none;
+}
+
+.xe-btn-secondary.disabled:hover, .xe-btn-secondary.disabled:focus, .xe-btn-secondary.disabled.focus, .xe-btn-secondary[disabled]:hover, .xe-btn-secondary[disabled]:focus, .xe-btn-secondary[disabled].focus,
+fieldset[disabled] .xe-btn-secondary:hover,
+fieldset[disabled] .xe-btn-secondary:focus,
+fieldset[disabled] .xe-btn-secondary.focus {
+  background-color: #dcdde0;
+  border-color: transparent;
+}
+
+.xe-btn-secondary .badge {
+  color: #dcdde0;
+  background-color: #656973;
+}
+
+.xe-btn-primary {
+  color: #fff;
+  background-color: #2c8beb;
+  border-color: #2c8beb;
+}
+
+.xe-btn-primary:focus, .xe-btn-primary.focus {
+  color: #fff;
+  background-color: #1472d0;
+  border-color: #0d4b8a;
+}
+
+.xe-btn-primary:hover {
+  color: #fff;
+  background-color: #1472d0;
+  border-color: #136cc7;
+}
+
+.xe-btn-primary:active, .xe-btn-primary.active,
+.open > .xe-btn-primary.dropdown-toggle {
+  color: #fff;
+  background-color: #1472d0;
+  border-color: #136cc7;
+}
+
+.xe-btn-primary:active:hover, .xe-btn-primary:active:focus, .xe-btn-primary:active.focus, .xe-btn-primary.active:hover, .xe-btn-primary.active:focus, .xe-btn-primary.active.focus,
+.open > .xe-btn-primary.dropdown-toggle:hover,
+.open > .xe-btn-primary.dropdown-toggle:focus,
+.open > .xe-btn-primary.dropdown-toggle.focus {
+  color: #fff;
+  background-color: #1160b0;
+  border-color: #0d4b8a;
+}
+
+.xe-btn-primary:active, .xe-btn-primary.active,
+.open > .xe-btn-primary.dropdown-toggle {
+  background-image: none;
+}
+
+.xe-btn-primary.disabled:hover, .xe-btn-primary.disabled:focus, .xe-btn-primary.disabled.focus, .xe-btn-primary[disabled]:hover, .xe-btn-primary[disabled]:focus, .xe-btn-primary[disabled].focus,
+fieldset[disabled] .xe-btn-primary:hover,
+fieldset[disabled] .xe-btn-primary:focus,
+fieldset[disabled] .xe-btn-primary.focus {
+  background-color: #2c8beb;
+  border-color: #2c8beb;
+}
+
+.xe-btn-primary .badge {
+  color: #2c8beb;
+  background-color: #fff;
+}
+
+.xe-btn-success {
+  color: #fff;
+  background-color: #5cb85c;
+  border-color: #5cb85c;
+}
+
+.xe-btn-success:focus, .xe-btn-success.focus {
+  color: #fff;
+  background-color: #449d44;
+  border-color: #2d672d;
+}
+
+.xe-btn-success:hover {
+  color: #fff;
+  background-color: #449d44;
+  border-color: #419641;
+}
+
+.xe-btn-success:active, .xe-btn-success.active,
+.open > .xe-btn-success.dropdown-toggle {
+  color: #fff;
+  background-color: #449d44;
+  border-color: #419641;
+}
+
+.xe-btn-success:active:hover, .xe-btn-success:active:focus, .xe-btn-success:active.focus, .xe-btn-success.active:hover, .xe-btn-success.active:focus, .xe-btn-success.active.focus,
+.open > .xe-btn-success.dropdown-toggle:hover,
+.open > .xe-btn-success.dropdown-toggle:focus,
+.open > .xe-btn-success.dropdown-toggle.focus {
+  color: #fff;
+  background-color: #398439;
+  border-color: #2d672d;
+}
+
+.xe-btn-success:active, .xe-btn-success.active,
+.open > .xe-btn-success.dropdown-toggle {
+  background-image: none;
+}
+
+.xe-btn-success.disabled:hover, .xe-btn-success.disabled:focus, .xe-btn-success.disabled.focus, .xe-btn-success[disabled]:hover, .xe-btn-success[disabled]:focus, .xe-btn-success[disabled].focus,
+fieldset[disabled] .xe-btn-success:hover,
+fieldset[disabled] .xe-btn-success:focus,
+fieldset[disabled] .xe-btn-success.focus {
+  background-color: #5cb85c;
+  border-color: #5cb85c;
+}
+
+.xe-btn-success .badge {
+  color: #5cb85c;
+  background-color: #fff;
+}
+
+.xe-btn-positive {
+  color: #fff;
+  background-color: #5bc0de;
+  border-color: #5bc0de;
+}
+
+.xe-btn-positive:focus, .xe-btn-positive.focus {
+  color: #fff;
+  background-color: #31b0d5;
+  border-color: #1f7e9a;
+}
+
+.xe-btn-positive:hover {
+  color: #fff;
+  background-color: #31b0d5;
+  border-color: #2aabd2;
+}
+
+.xe-btn-positive:active, .xe-btn-positive.active,
+.open > .xe-btn-positive.dropdown-toggle {
+  color: #fff;
+  background-color: #31b0d5;
+  border-color: #2aabd2;
+}
+
+.xe-btn-positive:active:hover, .xe-btn-positive:active:focus, .xe-btn-positive:active.focus, .xe-btn-positive.active:hover, .xe-btn-positive.active:focus, .xe-btn-positive.active.focus,
+.open > .xe-btn-positive.dropdown-toggle:hover,
+.open > .xe-btn-positive.dropdown-toggle:focus,
+.open > .xe-btn-positive.dropdown-toggle.focus {
+  color: #fff;
+  background-color: #269abc;
+  border-color: #1f7e9a;
+}
+
+.xe-btn-positive:active, .xe-btn-positive.active,
+.open > .xe-btn-positive.dropdown-toggle {
+  background-image: none;
+}
+
+.xe-btn-positive.disabled:hover, .xe-btn-positive.disabled:focus, .xe-btn-positive.disabled.focus, .xe-btn-positive[disabled]:hover, .xe-btn-positive[disabled]:focus, .xe-btn-positive[disabled].focus,
+fieldset[disabled] .xe-btn-positive:hover,
+fieldset[disabled] .xe-btn-positive:focus,
+fieldset[disabled] .xe-btn-positive.focus {
+  background-color: #5bc0de;
+  border-color: #5bc0de;
+}
+
+.xe-btn-positive .badge {
+  color: #5bc0de;
+  background-color: #fff;
+}
+
+.xe-btn-warning {
+  color: #fff;
+  background-color: #f0ad4e;
+  border-color: #f0ad4e;
+}
+
+.xe-btn-warning:focus, .xe-btn-warning.focus {
+  color: #fff;
+  background-color: #ec971f;
+  border-color: #b06d0f;
+}
+
+.xe-btn-warning:hover {
+  color: #fff;
+  background-color: #ec971f;
+  border-color: #eb9316;
+}
+
+.xe-btn-warning:active, .xe-btn-warning.active,
+.open > .xe-btn-warning.dropdown-toggle {
+  color: #fff;
+  background-color: #ec971f;
+  border-color: #eb9316;
+}
+
+.xe-btn-warning:active:hover, .xe-btn-warning:active:focus, .xe-btn-warning:active.focus, .xe-btn-warning.active:hover, .xe-btn-warning.active:focus, .xe-btn-warning.active.focus,
+.open > .xe-btn-warning.dropdown-toggle:hover,
+.open > .xe-btn-warning.dropdown-toggle:focus,
+.open > .xe-btn-warning.dropdown-toggle.focus {
+  color: #fff;
+  background-color: #d58512;
+  border-color: #b06d0f;
+}
+
+.xe-btn-warning:active, .xe-btn-warning.active,
+.open > .xe-btn-warning.dropdown-toggle {
+  background-image: none;
+}
+
+.xe-btn-warning.disabled:hover, .xe-btn-warning.disabled:focus, .xe-btn-warning.disabled.focus, .xe-btn-warning[disabled]:hover, .xe-btn-warning[disabled]:focus, .xe-btn-warning[disabled].focus,
+fieldset[disabled] .xe-btn-warning:hover,
+fieldset[disabled] .xe-btn-warning:focus,
+fieldset[disabled] .xe-btn-warning.focus {
+  background-color: #f0ad4e;
+  border-color: #f0ad4e;
+}
+
+.xe-btn-warning .badge {
+  color: #f0ad4e;
+  background-color: #fff;
+}
+
+.xe-btn-danger {
+  color: #fff;
+  background-color: #d9534f;
+  border-color: #d9534f;
+}
+
+.xe-btn-danger:focus, .xe-btn-danger.focus {
+  color: #fff;
+  background-color: #c9302c;
+  border-color: #8b211e;
+}
+
+.xe-btn-danger:hover {
+  color: #fff;
+  background-color: #c9302c;
+  border-color: #c12e2a;
+}
+
+.xe-btn-danger:active, .xe-btn-danger.active,
+.open > .xe-btn-danger.dropdown-toggle {
+  color: #fff;
+  background-color: #c9302c;
+  border-color: #c12e2a;
+}
+
+.xe-btn-danger:active:hover, .xe-btn-danger:active:focus, .xe-btn-danger:active.focus, .xe-btn-danger.active:hover, .xe-btn-danger.active:focus, .xe-btn-danger.active.focus,
+.open > .xe-btn-danger.dropdown-toggle:hover,
+.open > .xe-btn-danger.dropdown-toggle:focus,
+.open > .xe-btn-danger.dropdown-toggle.focus {
+  color: #fff;
+  background-color: #ac2925;
+  border-color: #8b211e;
+}
+
+.xe-btn-danger:active, .xe-btn-danger.active,
+.open > .xe-btn-danger.dropdown-toggle {
+  background-image: none;
+}
+
+.xe-btn-danger.disabled:hover, .xe-btn-danger.disabled:focus, .xe-btn-danger.disabled.focus, .xe-btn-danger[disabled]:hover, .xe-btn-danger[disabled]:focus, .xe-btn-danger[disabled].focus,
+fieldset[disabled] .xe-btn-danger:hover,
+fieldset[disabled] .xe-btn-danger:focus,
+fieldset[disabled] .xe-btn-danger.focus {
+  background-color: #d9534f;
+  border-color: #d9534f;
+}
+
+.xe-btn-danger .badge {
+  color: #d9534f;
+  background-color: #fff;
+}
+
+.xe-btn-fail {
+  color: #fff;
+  background-color: #6c57d9;
+  border-color: #6c57d9;
+}
+
+.xe-btn-fail:focus, .xe-btn-fail.focus {
+  color: #fff;
+  background-color: #482fce;
+  border-color: #332190;
+}
+
+.xe-btn-fail:hover {
+  color: #fff;
+  background-color: #482fce;
+  border-color: #462dc6;
+}
+
+.xe-btn-fail:active, .xe-btn-fail.active,
+.open > .xe-btn-fail.dropdown-toggle {
+  color: #fff;
+  background-color: #482fce;
+  border-color: #462dc6;
+}
+
+.xe-btn-fail:active:hover, .xe-btn-fail:active:focus, .xe-btn-fail:active.focus, .xe-btn-fail.active:hover, .xe-btn-fail.active:focus, .xe-btn-fail.active.focus,
+.open > .xe-btn-fail.dropdown-toggle:hover,
+.open > .xe-btn-fail.dropdown-toggle:focus,
+.open > .xe-btn-fail.dropdown-toggle.focus {
+  color: #fff;
+  background-color: #3e28b1;
+  border-color: #332190;
+}
+
+.xe-btn-fail:active, .xe-btn-fail.active,
+.open > .xe-btn-fail.dropdown-toggle {
+  background-image: none;
+}
+
+.xe-btn-fail.disabled:hover, .xe-btn-fail.disabled:focus, .xe-btn-fail.disabled.focus, .xe-btn-fail[disabled]:hover, .xe-btn-fail[disabled]:focus, .xe-btn-fail[disabled].focus,
+fieldset[disabled] .xe-btn-fail:hover,
+fieldset[disabled] .xe-btn-fail:focus,
+fieldset[disabled] .xe-btn-fail.focus {
+  background-color: #6c57d9;
+  border-color: #6c57d9;
+}
+
+.xe-btn-fail .badge {
+  color: #6c57d9;
+  background-color: #fff;
+}
+
+.xe-btn-black {
+  color: #fff;
+  background-color: #3c414d;
+  border-color: #3c414d;
+}
+
+.xe-btn-black:focus, .xe-btn-black.focus {
+  color: #fff;
+  background-color: #262930;
+  border-color: #040505;
+}
+
+.xe-btn-black:hover {
+  color: #fff;
+  background-color: #262930;
+  border-color: #21242b;
+}
+
+.xe-btn-black:active, .xe-btn-black.active,
+.open > .xe-btn-black.dropdown-toggle {
+  color: #fff;
+  background-color: #262930;
+  border-color: #21242b;
+}
+
+.xe-btn-black:active:hover, .xe-btn-black:active:focus, .xe-btn-black:active.focus, .xe-btn-black.active:hover, .xe-btn-black.active:focus, .xe-btn-black.active.focus,
+.open > .xe-btn-black.dropdown-toggle:hover,
+.open > .xe-btn-black.dropdown-toggle:focus,
+.open > .xe-btn-black.dropdown-toggle.focus {
+  color: #fff;
+  background-color: #16181c;
+  border-color: #040505;
+}
+
+.xe-btn-black:active, .xe-btn-black.active,
+.open > .xe-btn-black.dropdown-toggle {
+  background-image: none;
+}
+
+.xe-btn-black.disabled:hover, .xe-btn-black.disabled:focus, .xe-btn-black.disabled.focus, .xe-btn-black[disabled]:hover, .xe-btn-black[disabled]:focus, .xe-btn-black[disabled].focus,
+fieldset[disabled] .xe-btn-black:hover,
+fieldset[disabled] .xe-btn-black:focus,
+fieldset[disabled] .xe-btn-black.focus {
+  background-color: #3c414d;
+  border-color: #3c414d;
+}
+
+.xe-btn-black .badge {
+  color: #3c414d;
+  background-color: #fff;
+}
+
+.xe-btn-primary-outline {
+  color: #2c8beb;
+  background-image: none;
+  background-color: #fff;
+  border-color: #2c8beb;
+}
+
+.xe-btn-primary-outline:focus, .xe-btn-primary-outline.focus, .xe-btn-primary-outline:active, .xe-btn-primary-outline.active,
+.open > .xe-btn-primary-outline.dropdown-toggle {
+  color: #fff;
+  background-color: #2c8beb;
+  border-color: #2c8beb;
+}
+
+.xe-btn-primary-outline:hover {
+  color: #fff;
+  background-color: #2c8beb;
+  border-color: #2c8beb;
+}
+
+.xe-btn-primary-outline:active:hover, .xe-btn-primary-outline:active:focus, .xe-btn-primary-outline:active.focus, .xe-btn-primary-outline.active:hover, .xe-btn-primary-outline.active:focus, .xe-btn-primary-outline.active.focus,
+.open > .xe-btn-primary-outline.dropdown-toggle:hover,
+.open > .xe-btn-primary-outline.dropdown-toggle:focus,
+.open > .xe-btn-primary-outline.dropdown-toggle.focus {
+  color: #fff;
+  background-color: #2c8beb;
+}
+
+.xe-btn-primary-outline.disabled:focus, .xe-btn-primary-outline.disabled.focus, .xe-btn-primary-outline:disabled:focus, .xe-btn-primary-outline:disabled.focus {
+  border-color: #89bef4;
+}
+
+.xe-btn-primary-outline.disabled:hover, .xe-btn-primary-outline:disabled:hover {
+  border-color: #89bef4;
+}
+
+.xe-btn-success-outline {
+  color: #5cb85c;
+  background-image: none;
+  background-color: #fff;
+  border-color: #5cb85c;
+}
+
+.xe-btn-success-outline:focus, .xe-btn-success-outline.focus, .xe-btn-success-outline:active, .xe-btn-success-outline.active,
+.open > .xe-btn-success-outline.dropdown-toggle {
+  color: #fff;
+  background-color: #5cb85c;
+  border-color: #5cb85c;
+}
+
+.xe-btn-success-outline:hover {
+  color: #fff;
+  background-color: #5cb85c;
+  border-color: #5cb85c;
+}
+
+.xe-btn-success-outline:active:hover, .xe-btn-success-outline:active:focus, .xe-btn-success-outline:active.focus, .xe-btn-success-outline.active:hover, .xe-btn-success-outline.active:focus, .xe-btn-success-outline.active.focus,
+.open > .xe-btn-success-outline.dropdown-toggle:hover,
+.open > .xe-btn-success-outline.dropdown-toggle:focus,
+.open > .xe-btn-success-outline.dropdown-toggle.focus {
+  color: #fff;
+  background-color: #5cb85c;
+}
+
+.xe-btn-success-outline.disabled:focus, .xe-btn-success-outline.disabled.focus, .xe-btn-success-outline:disabled:focus, .xe-btn-success-outline:disabled.focus {
+  border-color: #a3d7a3;
+}
+
+.xe-btn-success-outline.disabled:hover, .xe-btn-success-outline:disabled:hover {
+  border-color: #a3d7a3;
+}
+
+.xe-btn-positive-outline {
+  color: #5bc0de;
+  background-image: none;
+  background-color: #fff;
+  border-color: #5bc0de;
+}
+
+.xe-btn-positive-outline:focus, .xe-btn-positive-outline.focus, .xe-btn-positive-outline:active, .xe-btn-positive-outline.active,
+.open > .xe-btn-positive-outline.dropdown-toggle {
+  color: #fff;
+  background-color: #5bc0de;
+  border-color: #5bc0de;
+}
+
+.xe-btn-positive-outline:hover {
+  color: #fff;
+  background-color: #5bc0de;
+  border-color: #5bc0de;
+}
+
+.xe-btn-positive-outline:active:hover, .xe-btn-positive-outline:active:focus, .xe-btn-positive-outline:active.focus, .xe-btn-positive-outline.active:hover, .xe-btn-positive-outline.active:focus, .xe-btn-positive-outline.active.focus,
+.open > .xe-btn-positive-outline.dropdown-toggle:hover,
+.open > .xe-btn-positive-outline.dropdown-toggle:focus,
+.open > .xe-btn-positive-outline.dropdown-toggle.focus {
+  color: #fff;
+  background-color: #5bc0de;
+}
+
+.xe-btn-positive-outline.disabled:focus, .xe-btn-positive-outline.disabled.focus, .xe-btn-positive-outline:disabled:focus, .xe-btn-positive-outline:disabled.focus {
+  border-color: #b0e1ef;
+}
+
+.xe-btn-positive-outline.disabled:hover, .xe-btn-positive-outline:disabled:hover {
+  border-color: #b0e1ef;
+}
+
+.xe-btn-warning-outline {
+  color: #f0ad4e;
+  background-image: none;
+  background-color: #fff;
+  border-color: #f0ad4e;
+}
+
+.xe-btn-warning-outline:focus, .xe-btn-warning-outline.focus, .xe-btn-warning-outline:active, .xe-btn-warning-outline.active,
+.open > .xe-btn-warning-outline.dropdown-toggle {
+  color: #fff;
+  background-color: #f0ad4e;
+  border-color: #f0ad4e;
+}
+
+.xe-btn-warning-outline:hover {
+  color: #fff;
+  background-color: #f0ad4e;
+  border-color: #f0ad4e;
+}
+
+.xe-btn-warning-outline:active:hover, .xe-btn-warning-outline:active:focus, .xe-btn-warning-outline:active.focus, .xe-btn-warning-outline.active:hover, .xe-btn-warning-outline.active:focus, .xe-btn-warning-outline.active.focus,
+.open > .xe-btn-warning-outline.dropdown-toggle:hover,
+.open > .xe-btn-warning-outline.dropdown-toggle:focus,
+.open > .xe-btn-warning-outline.dropdown-toggle.focus {
+  color: #fff;
+  background-color: #f0ad4e;
+}
+
+.xe-btn-warning-outline.disabled:focus, .xe-btn-warning-outline.disabled.focus, .xe-btn-warning-outline:disabled:focus, .xe-btn-warning-outline:disabled.focus {
+  border-color: #f8d9ac;
+}
+
+.xe-btn-warning-outline.disabled:hover, .xe-btn-warning-outline:disabled:hover {
+  border-color: #f8d9ac;
+}
+
+.xe-btn-danger-outline {
+  color: #d9534f;
+  background-image: none;
+  background-color: #fff;
+  border-color: #d9534f;
+}
+
+.xe-btn-danger-outline:focus, .xe-btn-danger-outline.focus, .xe-btn-danger-outline:active, .xe-btn-danger-outline.active,
+.open > .xe-btn-danger-outline.dropdown-toggle {
+  color: #fff;
+  background-color: #d9534f;
+  border-color: #d9534f;
+}
+
+.xe-btn-danger-outline:hover {
+  color: #fff;
+  background-color: #d9534f;
+  border-color: #d9534f;
+}
+
+.xe-btn-danger-outline:active:hover, .xe-btn-danger-outline:active:focus, .xe-btn-danger-outline:active.focus, .xe-btn-danger-outline.active:hover, .xe-btn-danger-outline.active:focus, .xe-btn-danger-outline.active.focus,
+.open > .xe-btn-danger-outline.dropdown-toggle:hover,
+.open > .xe-btn-danger-outline.dropdown-toggle:focus,
+.open > .xe-btn-danger-outline.dropdown-toggle.focus {
+  color: #fff;
+  background-color: #d9534f;
+}
+
+.xe-btn-danger-outline.disabled:focus, .xe-btn-danger-outline.disabled.focus, .xe-btn-danger-outline:disabled:focus, .xe-btn-danger-outline:disabled.focus {
+  border-color: #eba5a3;
+}
+
+.xe-btn-danger-outline.disabled:hover, .xe-btn-danger-outline:disabled:hover {
+  border-color: #eba5a3;
+}
+
+.xe-btn-fail-outline {
+  color: #6c57d9;
+  background-image: none;
+  background-color: #fff;
+  border-color: #6c57d9;
+}
+
+.xe-btn-fail-outline:focus, .xe-btn-fail-outline.focus, .xe-btn-fail-outline:active, .xe-btn-fail-outline.active,
+.open > .xe-btn-fail-outline.dropdown-toggle {
+  color: #fff;
+  background-color: #6c57d9;
+  border-color: #6c57d9;
+}
+
+.xe-btn-fail-outline:hover {
+  color: #fff;
+  background-color: #6c57d9;
+  border-color: #6c57d9;
+}
+
+.xe-btn-fail-outline:active:hover, .xe-btn-fail-outline:active:focus, .xe-btn-fail-outline:active.focus, .xe-btn-fail-outline.active:hover, .xe-btn-fail-outline.active:focus, .xe-btn-fail-outline.active.focus,
+.open > .xe-btn-fail-outline.dropdown-toggle:hover,
+.open > .xe-btn-fail-outline.dropdown-toggle:focus,
+.open > .xe-btn-fail-outline.dropdown-toggle.focus {
+  color: #fff;
+  background-color: #6c57d9;
+}
+
+.xe-btn-fail-outline.disabled:focus, .xe-btn-fail-outline.disabled.focus, .xe-btn-fail-outline:disabled:focus, .xe-btn-fail-outline:disabled.focus {
+  border-color: #b5aaec;
+}
+
+.xe-btn-fail-outline.disabled:hover, .xe-btn-fail-outline:disabled:hover {
+  border-color: #b5aaec;
+}
+
+.xe-btn-link {
+  color: #2c8beb;
+  font-weight: normal;
+  border-radius: 0;
+}
+
+.xe-btn-link, .xe-btn-link:active, .xe-btn-link.active, .xe-btn-link[disabled],
+fieldset[disabled] .xe-btn-link {
+  background-color: transparent;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.xe-btn-link, .xe-btn-link:hover, .xe-btn-link:focus, .xe-btn-link:active {
+  border-color: transparent;
+}
+
+.xe-btn-link:hover, .xe-btn-link:focus {
+  color: #1265b9;
+  text-decoration: underline;
+  background-color: transparent;
+}
+
+.xe-btn-link[disabled]:hover, .xe-btn-link[disabled]:focus,
+fieldset[disabled] .xe-btn-link:hover,
+fieldset[disabled] .xe-btn-link:focus {
+  color: #777777;
+  text-decoration: none;
+}
+
+.xe-btn-block {
+  display: block;
+  width: 100%;
+}
+
+.xe-btn-block + .xe-btn-block {
+  margin-top: 5px;
+}
+
+input[type="submit"].btn-block,
+input[type="reset"].btn-block,
+input[type="button"].btn-block {
+  width: 100%;
+}
+
+.xe-btn-toggle {
+  display: inline-block;
+}
+
+.xe-btn-toggle input[type=checkbox] {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.xe-btn-toggle input[type=checkbox]:checked + .toggle {
+  background-color: #6f8dff;
+}
+
+.xe-btn-toggle input[type=checkbox]:checked + .toggle:after {
+  left: 41px;
+  outline: none;
+}
+
+.xe-btn-toggle input[type=checkbox]:checked + .toggle:before {
+  left: 11px;
+  content: "ON";
+}
+
+.xe-btn-toggle label {
+  font-weight: 400;
+  font-size: 13px;
+  cursor: pointer;
+  line-height: 30px;
+}
+
+.xe-btn-toggle .toggle {
+  position: relative;
+  display: inline-block;
+  width: 68px;
+  height: 28px;
+  background-color: #dadbde;
+  border-radius: 15px;
+  margin-right: 10px;
+  transition: background .3s ease;
+  vertical-align: middle;
   content: "";
 }
 
-.xe-tooltip.right:after {
-  left: 100%;
-  margin-left: -17px;
-}
-
-.xe-tooltip.left:after {
+.xe-btn-toggle .toggle:after {
+  display: inline-block;
+  position: relative;
   left: 0;
-  margin-left: 17px;
+  top: 1px;
+  width: 26px;
+  height: 26px;
+  background-color: #fff;
+  border-radius: 20px;
+  border: 1px solid #e4e4e4;
+  transition: left .3s ease,background .3s ease,box-shadow .1s ease;
+  content: "";
 }
 
-.xe-tooltip.bottom:after {
+.xe-btn-toggle .toggle:before {
+  position: absolute;
+  right: 10px;
+  content: "OFF";
+  color: #fff;
+}
+
+@media \0screen\,screen\9 {
+  .xe-toggle-button input[type=checkbox] {
+    width: auto;
+    height: auto;
+  }
+  .xe-toggle-button .toggle {
+    display: none;
+  }
+}
+
+/* CSS Document */
+.xe-select-label .label-input ul,
+.xe-select-label .label-list ul {
+  margin: 0;
+  padding: 0;
+}
+
+.xe-select-label .label-input ul li,
+.xe-select-label .label-list ul li {
+  list-style: none;
+}
+
+.xe-select-label .label-list li {
+  list-style: none;
+}
+
+.xe-select-label .label-list li a {
+  text-decoration: none;
+}
+
+.xe-dropdown-menu,
+.xe-dropdown-menu ul {
+  margin: 0;
+  padding: 0;
+}
+
+.xe-dropdown-menu li,
+.xe-dropdown-menu ul li {
+  list-style: none;
+}
+
+.xe-dropdown-menu li a,
+.xe-dropdown-menu ul li a {
+  text-decoration: none;
+}
+
+/*dropdown*/
+.xe-dropdown, .xe-dropup {
+  display: block;
+  position: relative;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.xe-dropdown > .xe-btn,
+.xe-dropup > .xe-btn,
+.xe-select-box.xe-btn {
+  display: block;
+  position: relative;
+  width: 100%;
+  padding-right: 37px;
+  text-align: left;
+  white-space: nowrap;
+  outline: none;
+}
+
+.xe-dropdown > .xe-btn:focus, .xe-dropdown > .xe-btn.focus, .xe-dropdown > .xe-btn:active, .xe-dropdown > .xe-btn.active,
+.xe-dropup > .xe-btn:focus,
+.xe-dropup > .xe-btn.focus,
+.xe-dropup > .xe-btn:active,
+.xe-dropup > .xe-btn.active,
+.xe-select-box.xe-btn:focus,
+.xe-select-box.xe-btn.focus,
+.xe-select-box.xe-btn:active,
+.xe-select-box.xe-btn.active {
+  background-color: #fff;
+}
+
+.xe-dropdown > .xe-btn:hover,
+.xe-dropup > .xe-btn:hover,
+.xe-select-box.xe-btn:hover {
+  background-color: #fff;
+}
+
+.xe-dropdown > .xe-btn:active:focus,
+.xe-dropup > .xe-btn:active:focus,
+.xe-select-box.xe-btn:active:focus {
+  background-color: #fff;
+  outline: none;
+}
+
+.xe-dropdown.outline-off > .xe-btn,
+.xe-dropup.outline-off > .xe-btn {
+  border: none;
+}
+
+.xe-dropdown > .xe-btn:after,
+.xe-dropup > .xe-btn:after,
+.xe-select-box.xe-btn:after,
+.xe-select-label .label-input:after {
+  display: inline-block;
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  width: 0;
+  height: 0;
+  margin-top: -2px;
+  border-style: solid;
+  border-width: 3px;
+  border-color: #656973 transparent transparent transparent;
+  content: "";
+}
+
+.xe-dropdown > .xe-dropdown-menu,
+.xe-dropup > .xe-dropdown-menu {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  margin-top: -1px;
+  padding: 8px 0;
+  border: 1px solid #51586b;
+  border-radius: 2px;
+  background-color: #fff;
+  z-index: 10;
+}
+
+.xe-dropup .xe-dropdown-menu {
+  margin-top: auto;
+  margin-bottom: -1px;
+  top: auto;
+  bottom: 100%;
+}
+
+.xe-dropdown .xe-dropdown-menu,
+.xe-dropup .xe-dropdown-menu {
+  display: none;
+}
+
+.xe-dropdown.open .xe-dropdown-menu,
+.xe-dropup.open .xe-dropdown-menu {
+  display: block;
+  width: 100%;
+}
+
+.xe-dropdown-menu li > a {
+  overflow: hidden;
+  display: block;
+  position: relative;
+  padding: 8px 15px;
+  color: #2c2e37;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.xe-dropdown-menu li > a:hover {
+  background-color: #2389ee;
+  color: #fff !important;
+}
+
+.xe-dropdown-menu li.on a {
+  color: #2c8beb;
+}
+
+.xe-select-box {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+  white-space: nowrap;
+}
+
+.xe-select-box select {
+  position: absolute;
   top: 0;
-  margin-top: -3px;
-  border-top: none;
-  border-bottom: 3px solid #000;
+  left: 0;
+  width: 100%;
+  height: 30px;
+  font-size: 14px;
+  line-height: 30px;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  -webkit-appearance: menulist-xe-btn;
+}
+
+.xe-select-label {
+  position: relative;
+}
+
+.xe-select-label .label-input {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  padding: 0 37px 0 10px;
+  background-color: #F6F7F9;
+  border: 1px solid #DBDADF;
+  border-radius: 2px;
+}
+
+.xe-select-label .label-input ul li {
+  float: left;
+}
+
+.xe-select-label .label-input ul li:first-child .label-choice {
+  margin-left: 0;
+}
+
+.xe-select-label .label-input ul li .label-choice {
+  display: block;
+  position: relative;
+  margin: 5px 2px;
+  padding: 1px 28px 1px 8px;
+  color: #fff;
+  font-size: 13px;
+  background-color: #B5B8BD;
+  border: 1px solid #DBDADF;
+  border-radius: 4px;
+}
+
+.xe-select-label .label-input ul li .label-choice button {
+  position: absolute;
+  right: 3px;
+  top: 1px;
+  background-color: transparent;
+  border: transparent;
+  outline: none;
+  font-size: 11px;
+  color: #fff;
+}
+
+.xe-select-label .label-input ul li .search-label {
+  height: 21px;
+  margin: 5px 2px;
+  border-color: transparent;
+  background-color: transparent;
+}
+
+.xe-select-label .label-list {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  border: 1px solid #8DC5FF;
+  background-color: #fff;
+  z-index: 100;
+}
+
+.xe-select-label.open .label-list {
+  display: block;
+}
+
+.xe-select-label .label-list .label-division {
+  padding: 10px;
+  font-size: 13px;
+}
+
+.xe-select-label .label-list .label-division + .label-division {
+  border-top: 1px solid #DBDBDD;
+}
+
+.xe-select-label .label-list .label-division strong {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.xe-select-label .label-list .label-division a {
+  display: block;
+  padding: 0 10px;
+  color: #696e7a;
+  line-height: 24px;
+  border-radius: 4px;
+}
+
+.xe-select-label .label-list .label-division a:hover {
+  background-color: #2992FB;
+  color: #fff;
+}
+
+.xe-input-group {
+  position: relative;
+  display: table;
+  border-collapse: separate;
+}
+
+.xe-input-group[class*="col-"] {
+  float: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.xe-input-group .xe-form-control {
+  position: relative;
+  z-index: 2;
+  float: left;
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.xe-input-group .xe-form-control:focus {
+  z-index: 3;
+}
+
+.xe-input-group-addon,
+.xe-input-group-btn,
+.xe-input-group .xe-form-control {
+  display: table-cell;
+}
+
+.xe-input-group-addon:not(:first-child):not(:last-child),
+.xe-input-group-btn:not(:first-child):not(:last-child),
+.xe-input-group .xe-form-control:not(:first-child):not(:last-child) {
+  border-radius: 0;
+}
+
+.xe-input-group-addon,
+.xe-input-group-btn {
+  width: 1%;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.xe-input-group-addon {
+  padding: 7px 16px;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1;
+  color: #555555;
+  text-align: center;
+  background-color: #eeeeee;
+  border: 1px solid #dcdde0;
+  border-radius: 2px;
+}
+
+.xe-input-group-addon.input-sm,
+.xe-input-group-sm > .xe-input-group-addon,
+.xe-input-group-sm > .xe-input-group-btn > .xe-input-group-addon.xe-btn {
+  padding: 5px 10px;
+  font-size: 12px;
+  border-radius: 3px;
+}
+
+.xe-input-group-addon.input-lg,
+.xe-input-group-lg > .xe-input-group-addon,
+.xe-input-group-lg > .xe-input-group-btn > .xe-input-group-addon.xe-btn {
+  padding: 10px 16px;
+  font-size: 18px;
+  border-radius: 6px;
+}
+
+.xe-input-group-addon input[type="radio"],
+.xe-input-group-addon input[type="checkbox"] {
+  margin-top: 0;
+}
+
+.xe-input-group .xe-form-control:first-child,
+.xe-input-group-addon:first-child,
+.xe-input-group-btn:first-child > .xe-btn,
+.xe-input-group-btn:first-child > .xe-btn-group > .xe-btn,
+.xe-input-group-btn:first-child > .xe-dropdown,
+.xe-input-group-btn:first-child > .xe-dropup,
+.xe-input-group-btn:last-child > .xe-btn:not(:last-child):not(.xe-dropdown),
+.xe-input-group-btn:last-child > .xe-btn:not(:last-child):not(.xe-dropup),
+.xe-input-group-btn:last-child > .xe-btn-group:not(:last-child) > .xe-btn {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.xe-input-group-addon:first-child {
+  border-right: 0;
+}
+
+.xe-input-group .xe-form-control:last-child,
+.xe-input-group-addon:last-child,
+.xe-input-group-btn:last-child > .xe-btn,
+.xe-input-group-btn:last-child > .xe-btn-group > .xe-btn,
+.xe-input-group-btn:last-child > .xe-dropdown,
+.xe-input-group-btn:last-child > .xe-dropup,
+.xe-input-group-btn:first-child > .xe-btn:not(:first-child),
+.xe-input-group-btn:first-child > .xe-btn-group:not(:first-child) > .xe-btn {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
+
+.xe-input-group-addon:last-child {
+  border-left: 0;
+}
+
+.xe-input-group-btn {
+  position: relative;
+  font-size: 0;
+  white-space: nowrap;
+}
+
+.xe-input-group-btn > .xe-btn {
+  position: relative;
+}
+
+.xe-input-group-btn > .xe-btn + .xe-btn {
+  margin-left: -1px;
+}
+
+.xe-input-group-btn > .xe-btn:hover, .xe-input-group-btn > .xe-btn:focus, .xe-input-group-btn > .xe-btn:active {
+  z-index: 2;
+}
+
+.xe-input-group-btn:first-child > .xe-btn,
+.xe-input-group-btn:first-child > .xe-btn-group {
+  margin-right: -1px;
+}
+
+.xe-input-group-btn:last-child > .xe-btn,
+.xe-input-group-btn:last-child > .xe-btn-group {
+  z-index: 2;
+  margin-left: -1px;
 }
 
 @-ms-viewport {
@@ -3609,7 +4192,7 @@ hr {
   }
 }
 
-@media (min-width: 992px) and (max-width: 1067px) {
+@media (min-width: 992px) and (max-width: 1199px) {
   .xe-visible-md {
     display: block !important;
   }
@@ -3625,25 +4208,25 @@ hr {
   }
 }
 
-@media (min-width: 992px) and (max-width: 1067px) {
+@media (min-width: 992px) and (max-width: 1199px) {
   .xe-visible-md-block {
     display: block !important;
   }
 }
 
-@media (min-width: 992px) and (max-width: 1067px) {
+@media (min-width: 992px) and (max-width: 1199px) {
   .xe-visible-md-inline {
     display: inline !important;
   }
 }
 
-@media (min-width: 992px) and (max-width: 1067px) {
+@media (min-width: 992px) and (max-width: 1199px) {
   .xe-visible-md-inline-block {
     display: inline-block !important;
   }
 }
 
-@media (min-width: 1068px) {
+@media (min-width: 1200px) {
   .xe-visible-lg {
     display: block !important;
   }
@@ -3659,19 +4242,19 @@ hr {
   }
 }
 
-@media (min-width: 1068px) {
+@media (min-width: 1200px) {
   .xe-visible-lg-block {
     display: block !important;
   }
 }
 
-@media (min-width: 1068px) {
+@media (min-width: 1200px) {
   .xe-visible-lg-inline {
     display: inline !important;
   }
 }
 
-@media (min-width: 1068px) {
+@media (min-width: 1200px) {
   .xe-visible-lg-inline-block {
     display: inline-block !important;
   }
@@ -3689,13 +4272,13 @@ hr {
   }
 }
 
-@media (min-width: 992px) and (max-width: 1067px) {
+@media (min-width: 992px) and (max-width: 1199px) {
   .xe-hidden-md {
     display: none !important;
   }
 }
 
-@media (min-width: 1068px) {
+@media (min-width: 1200px) {
   .xe-hidden-lg {
     display: none !important;
   }

@@ -1,4 +1,12 @@
 <?php
+/**
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
+ */
+
 namespace Xpressengine\UIObjects\Form;
 
 use PhpQuery\PhpQuery;
@@ -25,7 +33,7 @@ class FormTextArea extends AbstractUIObject
         foreach ($args as $key => $arg) {
             switch ($key) {
                 case 'class':
-                    $textarea->addClass('class', $arg);
+                    $textarea->addClass($arg);
                     break;
                 case 'label':
                     $label->removeClass('hidden')->html($arg);
@@ -35,6 +43,7 @@ class FormTextArea extends AbstractUIObject
                     break;
                 case 'id':
                     $label->attr('for', $arg);
+                    // pass to default
                 default:
                     $textarea->attr($key, $arg);
                     break;

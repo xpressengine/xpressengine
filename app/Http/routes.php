@@ -1,4 +1,11 @@
 <?php
+/**
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     LGPL-2.1 http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
+ */
 
 /*
 |--------------------------------------------------------------------------
@@ -90,6 +97,15 @@ Route::group(
 /*
  * member/profile
  * */
+Route::group(
+    ['prefix' => '@{member}'],
+    function () {
+        // profile
+        Route::get('/', ['as' => 'member.profile', 'uses' => 'Member\ProfileController@index']);
+        Route::post('/', ['as' => 'member.profile.update', 'uses' => 'Member\ProfileController@update']);
+    }
+);
+
 Route::group(
     ['prefix' => '@{member}'],
     function () {
@@ -534,8 +550,13 @@ Route::settings(
 Route::settings(
     'theme',
     function () {
-        Route::get('edit', ['as' => 'settings.theme.edit', 'uses' => 'ThemeController@getEdit']);
-        Route::post('edit', ['as' => 'settings.theme.edit', 'uses' => 'ThemeController@postEdit']);
+        Route::get('edit', ['as' => 'settings.theme.edit', 'uses' => 'ThemeController@edit']);
+        Route::post('edit', ['as' => 'settings.theme.edit', 'uses' => 'ThemeController@update']);
+
+        Route::get('setting', ['as' => 'settings.theme.setting', 'uses' => 'ThemeController@editSetting']);
+        Route::post('setting', ['as' => 'settings.theme.setting', 'uses' => 'ThemeController@updateSetting']);
+
+        Route::post('setting/create', ['as' => 'settings.theme.setting.create', 'uses' => 'ThemeController@createSetting']);
     }
 );
 
@@ -675,6 +696,7 @@ Route::settings(
     function () {
         Route::get('/section', ['as' => 'settings.skin.section.setting', 'uses' => 'SkinController@getSetting']);
         Route::post('/section', ['as' => 'settings.skin.section.setting', 'uses' => 'SkinController@postSetting']);
+        Route::post('/assign', ['as' => 'settings.skin.section.assign', 'uses' => 'SkinController@postAssign']);
     }
 );
 

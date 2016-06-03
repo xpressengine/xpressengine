@@ -2,15 +2,15 @@
 /**
  * Rule
  *
- * PHP version 5
- *
  * @category    Frontend
  * @package     Xpressengine\Presenter
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
  */
+
 namespace Xpressengine\Presenter\Html\Tags;
 
 /**
@@ -18,9 +18,6 @@ namespace Xpressengine\Presenter\Html\Tags;
  *
  * @category    Frontend
  * @package     Xpressengine\Presenter
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
  */
 class Rule
 {
@@ -36,9 +33,10 @@ class Rule
     protected static $ruleList = [];
 
     /**
-     * @var Translation
+     * @var bool
      */
-    protected static $translation;
+    protected static $loaded = false;
+
     /**
      * 해당 인스턴스에 포함된 rule 이름
      *
@@ -99,9 +97,9 @@ class Rule
         $this->rules       = $rules;
         self::$ruleList[$ruleName] = $this;
 
-        // Rule 을 사용할 때 validator 를 사용하게 되므로 valiator 다국어 추가
-        if (self::$translation === null) {
-            self::$translation = new Translation([
+        if (static::$loaded === false) {
+            static::$loaded = true;
+            new Translation([
                 'xe::validatorRequired',
                 'xe::validatorAlphanum',
                 'xe::validatorMin',

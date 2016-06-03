@@ -1,4 +1,12 @@
 <?php
+/**
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
+ */
+
 namespace Xpressengine\UIObjects\Form;
 
 use PhpQuery\PhpQuery;
@@ -20,7 +28,7 @@ class FormCheckbox extends AbstractUIObject
         $args = $this->arguments;
         PhpQuery::newDocument();
         $this->markup = PhpQuery::pq($this->template);
-        
+
         $label = $this->markup['label'];
         $this->box = $this->markup['.checkbox'];
 
@@ -47,7 +55,7 @@ class FormCheckbox extends AbstractUIObject
             foreach ($args as $key => $arg) {
                 switch ($key) {
                     case 'class':
-                        $checkboxObj->addClass('class', $arg);
+                        $checkboxObj->addClass($arg);
                         break;
                     case 'id':
                         $label->attr('for', $arg);

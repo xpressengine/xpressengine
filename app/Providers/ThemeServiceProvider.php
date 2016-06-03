@@ -1,4 +1,12 @@
 <?php
+/**
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     LGPL-2.1 http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
+ */
+
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
@@ -36,7 +44,7 @@ class ThemeServiceProvider extends ServiceProvider
                 $themeHandler = $app['xe.interception']->proxy(ThemeHandler::class, 'XeTheme');
 
                 $blankThemeClass = $app['config']->get('xe.theme.blank');
-                $themeHandler = new $themeHandler($register, $app['xe.config'], $blankThemeClass::getId());
+                $themeHandler = new $themeHandler($register, $app['xe.config'], $app['view'], $blankThemeClass::getId());
 
                 return $themeHandler;
             }

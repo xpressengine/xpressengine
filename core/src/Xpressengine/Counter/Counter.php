@@ -2,15 +2,15 @@
 /**
  * Counter
  *
- * PHP version 5
- *
  * @category    Counter
  * @package     Xpressengine\Counter
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
  */
+
 namespace Xpressengine\Counter;
 
 use Xpressengine\Counter\Exceptions\GuestNotSupportException;
@@ -31,10 +31,6 @@ use Xpressengine\User\UserInterface;
  *
  * @category    Counter
  * @package     Xpressengine\Counter
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
  */
 class Counter
 {
@@ -303,7 +299,7 @@ class Counter
      *
      * @return string
      */
-    protected function getModel()
+    public function getModel()
     {
         return $this->model;
     }
@@ -313,7 +309,7 @@ class Counter
      *
      * @return CounterLog
      */
-    protected function newModel()
+    public function newModel()
     {
         $class = $this->getModel();
 

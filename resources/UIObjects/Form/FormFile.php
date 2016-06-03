@@ -1,4 +1,13 @@
-<?php namespace Xpressengine\UIObjects\Form;
+<?php
+/**
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
+ */
+
+namespace Xpressengine\UIObjects\Form;
 
 use XeFrontend;
 use Xpressengine\Storage\File;
@@ -7,6 +16,8 @@ use Xpressengine\UIObject\AbstractUIObject;
 class FormFile extends AbstractUIObject
 {
     protected static $id = 'uiobject/xpressengine@formFile';
+
+    protected $view = 'uiobjects.form.formFile';
 
     public function render()
     {
@@ -50,15 +61,16 @@ class FormFile extends AbstractUIObject
         array_set($fileuploadOptions, 'previewMaxWidth', $args['width']);
         array_set($fileuploadOptions, 'previewMaxHeight', $args['height']);
 
-        $types = (array) array_get($args, 'types');
+        $types = array_get($args, 'types');
         if ($types !== null) {
-            array_set($fileuploadOptions, 'acceptFileTypes', '(\\.|\\/)('.implode('|', $types).')$');
+            array_set($fileuploadOptions, 'acceptFileTypes', '(\\.|\\/)('.implode('|', (array)$types).')$');
         }
 
         array_set($args, 'fileuploadOptions', $fileuploadOptions);
 
         // render template
-        $this->template = \View::make('uiobjects.form.formFile', ['args' => $args, 'seq' => $seq])->render();
+        $this->template = \View::make($this->view, ['args' => $args, 'seq' => $seq])->render();
+
         return parent::render();
     }
 

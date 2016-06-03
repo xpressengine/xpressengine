@@ -1,4 +1,12 @@
 <?php
+/**
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
+ */
+
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -12,6 +20,7 @@ use Symfony\Component\Process\ProcessUtils;
 use Symfony\Component\Yaml\Yaml;
 use Xpressengine\Support\Migration;
 use Xpressengine\User\UserHandler;
+use Illuminate\Support\Str;
 
 class XeInstall extends Command
 {
@@ -131,20 +140,14 @@ class XeInstall extends Command
 
             $this->output->success('Install was completed successfully.');
         } catch (\Exception $e) {
-            $err = [
-                'Install fail!! Try again.',
-                ' message: ' . $e->getMessage(),
-                ' file: ' . $e->getFile(),
-                ' line: ' . $e->getLine(),
-            ];
-            $this->output->error(implode(PHP_EOL, $err));
+            $this->output->error('Install fail!! Try again.');
             $note = [
                 'Check point for reinstall:',
                 ' * remove [.env] file',
                 ' * remove all table in your database',
             ];
             $this->output->note(implode(PHP_EOL, $note));
-//            throw $e;
+            throw $e;
         }
     }
 
@@ -189,9 +192,11 @@ class XeInstall extends Command
      */
     protected function getDefaultEnv()
     {
+        $appKey = Str::random(32);
+
         return "APP_ENV=cms
 APP_DEBUG=true
-APP_KEY=SomeRandomString";
+APP_KEY={$appKey}";
     }
 
     /**
@@ -244,8 +249,7 @@ APP_KEY=SomeRandomString";
         $versionCheck = constant('PHP_VERSION_ID') < 50509 ? false : true;
 
         if (!$versionCheck) {
-            $this->error('PHP version is not available');
-            die();
+            throw new \Exception('PHP version is not available');
         }
 
         $extensions = ['mcrypt', 'curl', 'gd'];
@@ -263,8 +267,7 @@ APP_KEY=SomeRandomString";
         $this->output->newLine();
 
         if (array_search(false, $result) > -1) {
-            $this->error('PHP extension is not ready! Please check php extensions. And retry install.');
-            die();
+            throw new \Exception('PHP extension is not ready! Please check php extensions. And retry install.');
         }
     }
 
@@ -284,8 +287,7 @@ APP_KEY=SomeRandomString";
             $this->setDBInfo($this->defaultInfos['database']);
         } catch (\Exception $e) {
             if ($this->noInteraction) {
-                $this->error($e->getMessage());
-                die();
+                throw $e;
             }
 
             $this->defaultInfos['database']['password'] = null;
@@ -320,8 +322,7 @@ APP_KEY=SomeRandomString";
             $this->createAdminAndLogin($this->defaultInfos['admin']);
         } catch (\Exception $e) {
             if ($this->noInteraction) {
-                $this->error($e->getMessage());
-                die();
+                throw $e;
             }
 
             $this->defaultInfos['admin']['password'] = null;
@@ -595,6 +596,9 @@ APP_KEY=SomeRandomString";
         // site url
         $siteInfo['url'] = $this->askValidation('site url', $siteInfo['url'], function ($url) {
             $url = trim($url, "/");
+            if (!preg_match('/^(http(s)?\:\/\/)/', $url)) {
+                $url = 'http://' . $url;
+            }
             if (filter_var($url, FILTER_VALIDATE_URL) === false) {
                 throw new \Exception('Invalid URL Format.');
             }
@@ -661,7 +665,7 @@ APP_KEY=SomeRandomString";
 
         // composer의 post script를 run한다.
         // script - optimizing & key generation
-        $this->runPostScript();
+//        $this->runPostScript();
 
         $this->line("Base Framework is loaded\n");
     }
@@ -757,27 +761,27 @@ APP_KEY=SomeRandomString";
         }
     }
 
-    /**
-     * runPostScript
-     *
-     * @return void
-     */
-    private function runPostScript()
-    {
-        $composer = $this->findComposer();
-        $commands = [
-            $composer.' run-script post-install-cmd',
-            $composer.' run-script post-create-project-cmd',
-        ];
-
-        $process = new Process(implode(' && ', $commands), $this->getBasePath(), null, null, null);
-
-        $process->run(
-            function ($type, $line) {
-                $this->line($line);
-            }
-        );
-    }
+//    /**
+//     * runPostScript
+//     *
+//     * @return void
+//     */
+//    private function runPostScript()
+//    {
+//        $composer = $this->findComposer();
+//        $commands = [
+//            $composer.' run-script post-install-cmd',
+//            $composer.' run-script post-create-project-cmd',
+//        ];
+//
+//        $process = new Process(implode(' && ', $commands), $this->getBasePath(), null, null, null);
+//
+//        $process->run(
+//            function ($type, $line) {
+//                $this->line($line);
+//            }
+//        );
+//    }
 
     /**
      * Illuminate\Foundation\Composer

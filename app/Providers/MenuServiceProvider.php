@@ -2,15 +2,15 @@
 /**
  * Service provider
  *
- * PHP version 5
- *
  * @category  Menu
  * @package   Xpressengine\Menu
- * @author    XE Team (developers) <developers@xpressengine.com>
- * @copyright 2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license   http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link      http://www.xpressengine.com
+ * @author    XE Developers <developers@xpressengine.com>
+ * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license   LGPL-2.1
+ * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link      https://xpressengine.io
  */
+
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
@@ -36,9 +36,6 @@ use Illuminate\Contracts\Auth\Access\Gate as GateContract;
  *
  * @category Menu
  * @package  Xpressengine\Menu
- * @author   XE Team (developers) <developers@xpressengine.com>
- * @license  http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link     http://www.xpressengine.com
  */
 class MenuServiceProvider extends ServiceProvider
 {
@@ -65,6 +62,22 @@ class MenuServiceProvider extends ServiceProvider
         foreach ($this->policies as $class => $policy) {
             $gate->policy($class, $policy);
         }
+
+        // 메뉴아이템의 링크를 편하게 제공하기 위한 resolver 등록
+        MenuItem::setLinkResolver(function(MenuItem $item){
+            $title = xe_trans($item->getAttributeValue('title'));
+            if($item->getRelationValue('basicImage')) {
+                if($item->isSelected()) {
+                    $image = $item->getSelectedImage();
+                } else {
+                    $image = $item->basicImage;
+                }
+                $hoverImage = $item->getHoverImage();
+                return sprintf('<img src="%s" class="__xe_menu_image" data-hover="%s" alt="%s"/>', $image, $hoverImage, $title);
+            }
+            return $title;
+        });
+
     }
 
     /**

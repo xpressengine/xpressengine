@@ -95,8 +95,8 @@
   @include clearfix;
   >.pull-left,
   >.pull-right{
-    margin:10px 0;
-  }  
+    margin:14px 0;
+  }
 }
 
 
@@ -131,13 +131,15 @@
       }
     }
   }
-  > .panel-collapse .panel-heading{      
+  > .panel-collapse .panel-heading{
       >.pull-left,
       >.pull-right{
         margin:10px 0;
       }
     }
-
+  > .panel-collapse >.panel-heading{
+       background-color: $panel-footer-bg;
+   }
 
   > .panel-heading + .panel-collapse > .list-group {
     .list-group-item:first-child {
@@ -172,69 +174,7 @@
     caption {
       padding-left: $panel-body-padding;
       padding-right: $panel-body-padding;
-    }    
-    &.skin-setting{      
-      
-      .skin-check{
-        text-align: center;
-        &.hover{
-          background-color: #f8fafd;
-        }
-      }
-      
-      tbody{
-        tr.on{
-          .skin-check{
-            position: relative;                              
-            &:first-child{
-              &:after{
-                position: absolute;
-                top:0;
-                left:0px;
-                height:100%;
-                border-left: 2px solid $brand-primary;
-                content: "";
-              }  
-            }        
-          }   
-        }
-        
-        .open-skin-setting{          
-          td{
-            border-top:none;
-            .panel{
-              border:none;
-              .panel-heading{
-                padding:0;
-                border-bottom:none;
-                .pull-left, 
-                .pull-right{
-                  margin:10px 0;
-                }
-                .panel-title{
-                  font-size:18px;
-                }
-              }
-              .panel-body{
-                background-color: #fafafc;
-                border: 1px solid #ededed;
-                border-radius : $border-radius-base;
-              }
-              .panel-footer{
-                background-color: #fff;
-                border-top:none;
-              }
-              
-            }
-          }
-        }                
-      }
-      .img-thumnail{
-        max-width: 128px;
-        max-height: 90px;
-      }
-    }  
-    
+    }
   }
   // Add border top radius for first one
   > .table:first-child,
@@ -361,7 +301,7 @@
   }
 
   .panel-footer {
-    border-top: 1px solid $panel-heading-border;    
+    border-top: 1px solid $panel-heading-border;
     + .panel-collapse .panel-body {
       border-bottom: 1px solid $panel-inner-border;
     }
@@ -408,63 +348,78 @@
 
 // Panel contents
 .panel-body,
-.panel-heading {  
+.panel-heading {
   .panel{
     margin-bottom:30px;
     border-color: transparent;
-    
+
     .panel-heading{
       padding:0;
       border-bottom-color: transparent;
       >.pull-left,
       >.pull-right{
         margin:10px 0;
-      }  
+      }
       .panel-title{
         font-size:18px;
         line-height: inherit;
-      }  
-      @include clearfix;      
-    }    
-    .panel-body{      
-      background-color: #fafafc;
-      border: 1px solid #ededed;
+      }
+      @include clearfix;
+    }
+    .panel-body{
+      background-color: $panel-inner-bg;
+      border: 1px solid $panel-inner-border;
       border-radius : $border-radius-base;
-      
+
       .panel{
-        border-color: #fafafc;
+        border-color: $panel-inner-bg;
         .panel-heading{
-          background-color: #fafafc;
+          background-color: $panel-inner-bg;
           >.pull-left,
           >.pull-right{
             margin:10px 0;
-          }  
+          }
           .panel-title{
             font-size :$font-size-base;
             font-weight: bold;
-          }            
-        }        
+          }
+        }
         .panel-body{
           background-color: #fff;
-        }        
+        }
       }
-      
-    }    
+
+    }
     .panel-footer{
       padding:0;
       background-color: #fff;
       border-color: transparent;
     }
     .table-responsive{
-      border:1px solid $panel-inner-border;  
+      border:1px solid $panel-inner-border;
       th{
-        background-color: #fafafc;
-      }  
-    }    
-    .list-group {      
+        background-color: $panel-inner-bg;
+      }
+    }
+    .list-group {
       &.item-setting{
         border: 1px solid $list-group-border;
       }
     }
-  }  
+  }
+  .panel-body{
+    background-color: $panel-inner-bg;
+    border: 1px solid $panel-inner-border;
+    border-radius : $border-radius-base;
+    .panel-body{
+      background-color: #fff;
+    }
+  }
+}
+
+.modal-body{
+  .panel-body{
+    background-color: $panel-inner-bg;
+    border: 1px solid $panel-inner-border;
+  }
 }

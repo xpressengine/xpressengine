@@ -1,3 +1,139 @@
+(function(exports) {
+  'use strict';
+
+  var self;
+
+  /**
+   * @description
+   * <pre>
+   *     XE module initialize
+   * </pre>
+   * */
+  function initialize() {
+    self = this;
+
+    return this;
+  }
+
+
+  function ajax(url, options) {
+    if ( typeof url === "object" ) {
+      options = $.extend({}, self.Request.options, url);
+      url = undefined;
+    } else {
+      options = $.extend({}, options, self.Request.options, {url: url});
+      url = undefined;
+    }
+
+    return $.ajax(url, options);
+  }
+
+  /**
+   * @param {object} options
+   * */
+  function setup(options) {
+    self.options.loginUserId = options.loginUserId;
+    self.Request.setup({
+      headers: {
+        'X-CSRF-TOKEN': options['X-CSRF-TOKEN']
+      }
+    });
+
+  }
+
+  /**
+   * @param {object} options
+   * */
+  function configure(options) {
+    $.extend(self.options, options);
+  }
+
+  // @DEPRECATED
+  function cssLoad(url) {
+    var $css = $('<link>', {rel: 'stylesheet', type: 'text/css', href: url});
+
+    $('head').append($css);
+  }
+
+  function jsLoad(url) {
+    var $js = $('<script>', {id: 'jsload', type: 'text/javascript', src: url});
+
+    $('head').append($js);
+  }
+
+  function toast(type, message) {
+    if (type == '') {
+      type = 'danger';
+    }
+    System.import('xecore:/common/js/modules/griper/griper').then(function (griper) {
+      return griper.toast(type, message);
+    });
+  }
+
+  function toastByStatus(status, message) {
+    System.import('xecore:/common/js/modules/griper/griper').then(function (griper) {
+      return griper.toast(griper.toast.fn.statusToType(status), message);
+    });
+  }
+
+  function formError($element, message) {
+    System.import('xecore:/common/js/modules/griper/griper').then(function (griper) {
+      return griper.form($element, message);
+    });
+  }
+
+  function formErrorClear($form) {
+    System.import('xecore:/common/js/modules/griper/griper').then(function (griper) {
+      return griper.form.fn.clear($form);
+    });
+  }
+
+  function validate($form) {
+    System.import('xecore:/common/js/modules/validator').then(function (validator) {
+      validator.validate($form);
+    });
+  }
+
+  function getLocale() {
+    return self.options.locale;
+  }
+
+  function getDefaultLocale() {
+    return self.options.defaultLocale;
+  }
+
+
+  // $.ajaxPrefilter(function(options, originalOptions, jqXHR ) {
+  //   $.extend(options, self.Request.options);
+  // });
+
+
+  exports.XE = function() {
+    return {
+      initialize: initialize,
+      ajax: ajax,
+      setup: setup,
+      configure: configure,
+      cssLoad: cssLoad,
+      jsLoad: jsLoad,
+      toast: toast,
+      toastByStatus: toastByStatus,
+      formError: formError,
+      formErrorClear: formErrorClear,
+      validate: validate,
+      getLocale: getLocale,
+      getDefaultLocale: getDefaultLocale,
+
+      options: {},
+
+      Lang: '',
+      Progress: '',
+      Request: '',
+      Component: ''
+    }.initialize();
+  }();
+
+})(window);
 /*!
  * William DURAND <william.durand1@gmail.com>
  * MIT Licensed
@@ -607,716 +743,11 @@ if (typeof exports !== 'undefined') {
     }
 }
 
-System.amdDefine('xe.component', [], function() {
-
-  return {
-    timeago: timeago
-  };
-
-  $(function() {
-    /*
-     * @Component Timeago
-     *
-     * <span data-xe-timeago="{timestmap|ISO8601}">2016-04-04 07:05:44</span>
-     * <span data-xe-timeago="{timestmap|ISO8601}" title="2016-04-04 07:05:44" />3 Hours ago</span>
-     */
-    System.import('vendor:/moment').then(function(moment) {
-      moment.locale(XE.getLocale());
-    });
-
-    
-    
-    $(document).on('xe.timeago', '[data-xe-timeago]', function() {
-      var $this = $(this);
-      if($this.data().xeTimeagoCalled === true) false;
-
-      System.import('vendor:/moment').then(function(moment) {
-        var dataDate = $this.data('xe-timeago');
-        var isTimestamp = (parseInt(dataDate) == dataDate);
-
-        if(isTimestamp) {
-          dataDate = moment.unix(dataDate);
-        } else {
-          dataDate = moment(dataDate);
-        }
-
-        $this.text(dataDate.fromNow());
-        $this.data().xeTimeagoCalled = true;
-      });
-    });
-
-    boot();
-  });
-
-  function boot() {
-    timeago();
-  }
-
-  function timeago() {
-    $('[data-xe-timeago]').trigger('xe.timeago');
-  };
-
-});
-
-(function($) {
-  var loadedCSS = false;
-
-  // xeModal =========================================================
-  $.fn.xeModal = function(options) {
-    var $el = this;
-
-    System.import("xe.component.modal").then(function() {
-      $el.xeModal(options);
-    });
-
-    if(!loadedCSS) {
-      XE.cssLoad("/assets/core/xe-ui-component/xe-ui-component.css");
-      loadedCSS = true;
-    }
-  };
-
-  // xeDropdown ======================================================
-  $.fn.xeDropdown = function(options) {
-    var $el = this;
-
-    System.import("xe.component.dropdown").then(function() {
-      $el.xeDropdown(options);
-    });
-
-    if(!loadedCSS) {
-      XE.cssLoad("/assets/core/xe-ui-component/xe-ui-component.css");
-      loadedCSS = true;
-    }
-  };
-
-  // xeTooltip =======================================================
-  $.fn.xeTooltip = function(options) {
-    var $el = this;
-
-    System.import("xe.component.tooltip").then(function() {
-      $el.xeTooltip(options);
-    });
-
-    if(!loadedCSS) {
-      XE.cssLoad("/assets/core/xe-ui-component/xe-ui-component.css");
-      loadedCSS = true;
-    }
-  };
-
-})(jQuery);
-
-(function(exports) {
-    'use strict';
-
-    //define시 필수 구현되어야 하는 object
-    var editorSet = {},
-        editorOptionSet = {};
-
-    var instanceObj = function(editorName, sel, editorOptions, toolInfoList) {
-        var _options = {
-            editorOptions: editorOptions,
-            toolInfoList: toolInfoList
-        };
-
-        this.editorName = editorName;
-        this.selector = sel;
-        this.props = {};
-        this.getOptions = function() {
-            return _options;
-        };
-    };
-
-    instanceObj.prototype = {
-        getInstance: function() {
-            return editorSet[this.editorName].editorList[this.selector];
-        },
-        getContents: function() {
-            return editorSet[this.editorName].interfaces.getContents.call(this.getInstance());
-        },
-        setContents: function(text) {
-            editorSet[this.editorName].interfaces.setContents.call(this.getInstance(), text);
-        },
-        addContents: function(text) {
-            editorSet[this.editorName].interfaces.addContents.call(this.getInstance(), text);
-        },
-        addProps: function(obj) {
-            for(var o in obj) {
-                this.getInstance().props[o] = obj[o];
-            }
-        },
-        addTools: function(toolInstanceList) {
-            editorSet[this.editorName].interfaces.addTools.call(this.getInstance(), this.getOptions().toolInfoList, toolInstanceList);
-        }
-    };
-
-    var Editor = function(editorSettings, interfaces) {
-        this.name = editorSettings.name;
-        this.configs = editorSettings.configs;
-        this.editorList = [];
-
-        if(editorSettings.hasOwnProperty('plugins')
-            && editorSettings.plugins instanceof Array
-            && editorSettings.plugins.length > 0
-            && editorSettings.hasOwnProperty('addPlugins')) {
-            editorSettings.addPlugins(editorSettings.plugins);
-        }
-
-        for(var o in interfaces) {
-            this.interfaces[o] = interfaces[o];
-        }
-    };
-
-    Editor.prototype = {
-        configs: {},
-        interfaces: {},
-        create: function(sel, editorOptions, customOptions, toolInfoList) {
-            var editorOptions = editorOptions || {},
-                toolInfoList = toolInfoList || [];
-
-            var editorOptions = $.extend(this.configs || {}, editorOptions);
-
-            if(Validation.isValidBeforeCreateInstance(sel, toolInfoList, this)) {
-                this.editorList[sel] = new instanceObj(this.name, sel, editorOptions, toolInfoList);
-                this.interfaces.initialize.call(this.editorList[sel], sel, editorOptions, customOptions);
-
-                if(!!toolInfoList && toolInfoList.length > 0) {
-                    var tools = {};
-                    var toolInfoListFilter = [];
-
-                    for(var i = 0, max = toolInfoList.length; i < max; i += 1) {
-                        if(XEeditor.tools.get(toolInfoList[i].id)) {
-                            //tools.push(XEeditor.tools.get(toolInfoList[i].id));
-                            tools[toolInfoList[i].id] = XEeditor.tools.get(toolInfoList[i].id);
-                            toolInfoListFilter.push(toolInfoList[i]);
-
-                        }else {
-                            console.error('define된 tool이 존재하지 않음. [' + toolInfoList[i].id + ']');
-                        }
-                    }
-
-                    this.interfaces.addTools.call(this.editorList[sel], tools, toolInfoListFilter);
-                }
-
-                return this.editorList[sel];
-            }
-        }
-    };
-
-    var Tools = function(obj) {
-        for(var o in obj) {
-            this[o] = obj[o];
-        }
-    };
-
-    var toolsSet = {};
-
-    var XEeditor = (function() {
-        return {
-            define: function(obj) {
-                var editorSettings = obj.editorSettings,
-                    interfaces = obj.interfaces;
-
-                if(Validation.isValidEditorOptions(editorSettings, interfaces)) {
-                    editorOptionSet[editorSettings.name] = editorSettings;
-                    editorSet[editorSettings.name] = new Editor(editorSettings, interfaces);
-                }
-            },
-            getEditor: function(name) {
-                return editorSet[name];
-            },
-            tools: {
-                define: function(obj) {
-                    if(Validation.isValidToolsObject(obj)) {
-                        toolsSet[obj.id] = new Tools(obj);
-                    }
-                },
-                get: function(id) {
-                    return toolsSet[id];
-                }
-            },
-            attachDomId: function(content, id) {
-                return $(content).attr('xe-tool-id', id).clone().wrap('<div/>').parent().html();
-            },
-            getDomSelector: function(id) {
-                return '[xe-tool-id="' + id + '"]';
-            }
-        }
-    })();
-
-    var Validation = (function() {
-        var requireOptions = {
-            editorSettings: [
-                'name'
-            ],
-            interfaces: [
-                'initialize',
-                'getContents', 'setContents', 'addContents'
-            ],
-            tools: {
-                property: [
-                    'id', 'events'
-                ],
-                events: [
-                    'iconClick', 'elementDoubleClick'
-                ]
-            }
-        };
-
-        return {
-            isValidBeforeCreateInstance: function(sel, toolIdList, editorParent) {
-                if(!sel) {
-                    console.error('error: 중복 editor id. (' + sel + ')');
-                    return false;
-                }
-
-                if(editorParent.editorList.length > 0) {
-                    var selValid = true;
-                    for(var i = 0, max = editorParent.editorList.length; i < max; i += 1) {
-                        if(editorParent.editorList[i] === sel) {
-                            selValid = false;
-
-                            console.error();
-                            break;
-                        }
-                    }
-
-                    if(!selValid) {
-                        return false;
-                    }
-                }
-
-                return true;
-            },
-            isValidEditorOptions: function(editorSettings, interfaces) {
-                var valid = true;
-                for(var eSettings in requireOptions.editorSettings) {
-                    if(!editorSettings.hasOwnProperty(requireOptions.editorSettings[eSettings])) {
-                        console.error('구현 필요 [editorSettings.' + requireOptions.editorSettings[eSettings] + ']');
-                        valid = false;
-                    }
-                }
-
-                for(var eInterface in requireOptions.interfaces) {
-                    if(!interfaces.hasOwnProperty(requireOptions.interfaces[eInterface])) {
-                        console.error('구현 필요 [' + requireOptions.interfaces[eInterface] + ']');
-                        valid = false;
-                    }
-                }
-
-                if(editorSettings.hasOwnProperty('plugins')
-                    && editorSettings.plugins instanceof Array
-                    && editorSettings.plugins.length > 0
-                    && !editorSettings.hasOwnProperty('addPlugins')) {
-                    console.error('구현 필요 [fn:addPlugins]');
-                }
-
-                if(!!editorSet.hasOwnProperty(editorSettings.name)) {
-                    console.error('등록된 에디터 있음 [' + editorSettings.name + ']');
-                    valid = false;
-                }
-
-                return (!valid)? false : true;
-            },
-            isValidToolsObject: function(obj) {
-                var valid = true;
-
-                for(var i = 0, max = requireOptions.tools.property.length; i < max; i += 1) {
-                    if(!obj.hasOwnProperty(requireOptions.tools.property[i])) {
-                        console.error('구현 필요 [XEeditor.tools.define => fn:' + requireOptions.tools.property[i] + ']');
-                        valid = false;
-                    }
-                }
-
-                for(var i = 0, max = requireOptions.tools.events.length; i < max; i += 1) {
-                    if(!obj.events.hasOwnProperty(requireOptions.tools.events[i])) {
-                        console.error('구현 필요[XEeditor.tools.define => event' + requireOptions.tools.events[i] + ']');
-                        valid = false;
-                    }
-                }
-
-                return valid;
-            }
-        }
-    })();
-
-
-
-    exports.XEeditor = XEeditor;
-})(window);
-
-// //tinyMCE
-// XEeditor.define({
-//     name: 'editor.tinyMCE',
-//     initialize: function (selector, options) {
-//         tinymce.init({
-//             selector: selector,
-//             setup: function (editor) {
-//                 editor.on('keyup', function (e) {
-//
-//                 });
-//             }
-//         });
-//
-//         this.addProps({
-//             selector: selector
-//             , options: options
-//             , id: selector.replace('#', '')
-//         });
-//     },
-//     getContents: function () {
-//         return tinymce.get(this.props.id).getContent();
-//     },
-//     setContents: function (text) {
-//         tinymce.get(this.props.id).setContent(text);
-//     },
-//     addContents: function (text) {
-//         tinymce.get(this.props.id).execCommand('mceInsertContent', false, text);
-//     }
-// });
-//
-//
-// $(function () {
-//     var ckEditor = XEeditor.getEditor('editor.ckeditor');
-//     var tinyEditor = XEeditor.getEditor('editor.tinyMCE');
-//
-//     console.log(xe3CkEditorConfig.configs);
-//
-//     window.editor11 = ckEditor.create('editor1', xe3CkEditorConfig.configs);
-//
-// });
-(function(exports) {
-    'use strict';
-
-    //define시 필수 구현되어야 하는 object
-    var requireOptions = {
-            editorSettings: [
-                'name'
-            ],
-            interfaces: [
-                'initialize',
-                'getContents', 'setContents', 'addContents'
-            ]
-        },
-        editorSet = {},
-        editorOptionSet = {};
-
-    var instanceObj = function(editorName, sel, editorOptions, authOptions, partsOptions) {
-
-        // this.editorOptions = editorOptions;
-        // this.authOptions = authOptions;
-        // this.partsOptions = partsOptions;
-
-        var _options = {
-            editorOptions: editorOptions,
-            authOptions: authOptions,
-            partsOptions: partsOptions
-        };
-
-        this.editorName = editorName;
-        this.selector = sel;
-        this.props = {};
-        this.getOptions = function() {
-            return _options;
-        }
-
-    };
-
-    instanceObj.prototype = {
-        getInstance: function() {
-            return editorSet[this.editorName].editorList[this.selector];
-        },
-        getContents: function() {
-            return editorSet[this.editorName].interfaces.getContents.call(this.getInstance());
-        },
-        setContents: function(text) {
-            editorSet[this.editorName].interfaces.setContents.call(this.getInstance(), text);
-        },
-        addContents: function(text) {
-            editorSet[this.editorName].interfaces.addContents.call(this.getInstance(), text);
-        },
-        addProps: function(obj) {
-            for(var o in obj) {
-                this.getInstance().props[o] = obj[o];
-            }
-        },
-        addComponents: function(components) {
-            editorSet[this.editorName].interfaces.addComponents.call(this.getInstance(), components);
-        }
-    };
-
-    var Editor = function(editorSettings, interfaces) {
-        this.name = editorSettings.name;
-        this.configs = editorSettings.configs;
-        this.editorList = [];
-
-        if(editorSettings.hasOwnProperty('plugins')
-            && editorSettings.plugins instanceof Array
-            && editorSettings.plugins.length > 0
-            && editorSettings.hasOwnProperty('addPlugins')) {
-            editorSettings.addPlugins(editorSettings.plugins);
-        }
-
-        for(var o in interfaces) {
-            this.interfaces[o] = interfaces[o];
-        }
-    };
-
-    Editor.prototype = {
-        configs: {},
-        interfaces: {},
-        create: function(sel, editorOptions, authOptions, partsOptions) {
-            var editorOptions = editorOptions || {},
-                authOptions = authOptions || {},
-                partsOptions = partsOptions || {};
-
-            var editorOptions = $.extend(this.configs || {}, editorOptions);
-
-            if(!sel) {
-                console.error('[XEeditor fn:create] invalid editor id. (id=' + sel + ')');
-            }
-
-            this.editorList[sel] = new instanceObj(this.name, sel, editorOptions, authOptions, partsOptions);
-            this.interfaces.initialize.call(this.editorList[sel], sel, editorOptions, authOptions, partsOptions);
-
-            if(this.interfaces.hasOwnProperty('components') && this.interfaces.components.length > 0) {
-                this.interfaces.addComponents.call(this.editorList[sel], this.interfaces.components);
-            }
-
-            return this.editorList[sel];
-        }
-    };
-
-    var XEeditor = {
-        define: function(obj) {
-            var editorSettings = obj.editorSettings,
-                interfaces = obj.interfaces;
-
-            if(this.isValidOptions(editorSettings, interfaces)) {
-                editorOptionSet[editorSettings.name] = editorSettings;
-                editorSet[editorSettings.name] = new Editor(editorSettings, interfaces);
-            }
-        },
-        isValidOptions: function(editorSettings, interfaces) {
-            var valid = true;
-            for(var eSettings in requireOptions.editorSettings) {
-                if(!editorSettings.hasOwnProperty(requireOptions.editorSettings[eSettings])) {
-                    console.error('구현 필요 [editorSettings.' + requireOptions.editorSettings[eSettings] + ']');
-                    valid = false;
-                }
-            }
-
-            for(var eInterface in requireOptions.interfaces) {
-                if(!interfaces.hasOwnProperty(requireOptions.interfaces[eInterface])) {
-                    console.error('구현 필요 [' + requireOptions.interfaces[eInterface] + ']');
-                    valid = false;
-                }
-            }
-
-            if(editorSettings.hasOwnProperty('plugins')
-                && editorSettings.plugins instanceof Array
-                && editorSettings.plugins.length > 0
-                && !editorSettings.hasOwnProperty('addPlugins')) {
-                console.error('구현 필요 [fn:addPlugins]');
-            }
-
-            if(interfaces.hasOwnProperty('components')
-                && interfaces.components instanceof Array
-                && interfaces.components.length > 0
-                && !interfaces.hasOwnProperty('addComponents')) {
-                console.error('구현 필요 [fn:addComponents]');
-            }
-
-            if(!!editorSet.hasOwnProperty(editorSettings.name)) {
-                console.error('등록된 에디터 있음 [' + editorSettings.name + ']');
-                valid = false;
-            }
-
-            return (!valid)? false : true;
-        },
-        getEditor: function(name) {
-            return editorSet[name];
-        }
-    };
-
-    exports.XEeditor = XEeditor;
-})(window);
-
-// //tinyMCE
-// XEeditor.define({
-//     name: 'editor.tinyMCE',
-//     initialize: function (selector, options) {
-//         tinymce.init({
-//             selector: selector,
-//             setup: function (editor) {
-//                 editor.on('keyup', function (e) {
-//
-//                 });
-//             }
-//         });
-//
-//         this.addProps({
-//             selector: selector
-//             , options: options
-//             , id: selector.replace('#', '')
-//         });
-//     },
-//     getContents: function () {
-//         return tinymce.get(this.props.id).getContent();
-//     },
-//     setContents: function (text) {
-//         tinymce.get(this.props.id).setContent(text);
-//     },
-//     addContents: function (text) {
-//         tinymce.get(this.props.id).execCommand('mceInsertContent', false, text);
-//     }
-// });
-//
-//
-// $(function () {
-//     var ckEditor = XEeditor.getEditor('editor.ckeditor');
-//     var tinyEditor = XEeditor.getEditor('editor.tinyMCE');
-//
-//     console.log(xe3CkEditorConfig.configs);
-//
-//     window.editor11 = ckEditor.create('editor1', xe3CkEditorConfig.configs);
-//
-// });
-(function(exports) {
-    'use strict';
-
-    //define시 필수 구현되어야 하는 object
-    var requireOptions = [
-            'name',
-            'getContents', 'setContents', 'addContents',
-            'initialize'
-        ],
-        editorSet = {};
-
-    var instanceObj = function(editorName, sel, options) {
-        this.editorName = editorName;
-        this.selector = sel;
-        this.options = options;
-        this.props = {};
-    };
-
-    instanceObj.prototype = {
-        getInstance: function() {
-            return editorSet[this.editorName].editorList[this.selector];
-        },
-        getContents: function() {
-            return editorSet[this.editorName].getContents.call(this.getInstance());
-        },
-        setContents: function(text) {
-            editorSet[this.editorName].setContents.call(this.getInstance(), text);
-        },
-        addContents: function(text) {
-            editorSet[this.editorName].addContents.call(this.getInstance(), text);
-        },
-        addProps: function(obj) {
-            for(var o in obj) {
-                this.getInstance().props[o] = obj[o];
-            }
-        }
-    };
-
-    var Editor = function(options) {
-        this.name = options.name;
-        this.editorType = options.editorType;
-        this.editor = options.editor;
-        this.editorList = {};
-
-        for(var o in options) {
-            this[o] = options[o];
-        }
-    };
-
-    Editor.prototype = {
-        create: function(sel, options) {
-            this.editorList[sel] = new instanceObj(this.name, sel, options);
-            this.initialize.call(this.editorList[sel], sel, options);
-
-            return this.editorList[sel];
-        },
-        getContents: function() {
-            console.error('Editor.getContents');
-        },
-        setContents: function() {
-            console.error('Editor.setContents');
-        },
-        addContents: function() {
-            console.error('Editor.addContents');
-        }
-    };
-
-    var XEeditor = {
-        define: function(options) {
-            if(this.isValidOptions(options)) {
-                editorSet[options.name] = new Editor(options);
-            }
-        },
-        isValidOptions: function(options) {
-            var valid = true;
-            for(var option in requireOptions) {
-                if(!options.hasOwnProperty(requireOptions[option])) {
-                    console.error('구현 필요 [instance name : ' + options.name + ' fn:' + requireOptions[option] + ']');
-                    valid = false;
-                }
-            }
-
-            if(!!editorSet.hasOwnProperty(options.name)) {
-                console.error('등록된 에디터 있음 [' + options.name + ']');
-                valid = false;
-            }
-
-            if(!valid) {
-                return false;
-            }
-
-            return true;
-        },
-        getEditor: function(name) {
-            return editorSet[name];
-        }
-    };
-
-    exports.XEeditor = XEeditor;
-})(window);
-
-
 //xe.lang.js
-System.amdDefine('xe.lang', ['translator'], function(Translator) {
-  'use strict';
+(function(exports, Translator) {
+  exports.XE.Lang = function() {
 
-  var self = this,
-      _items = {};
-
-  return {
-    locales: [],
-    set: set,
-    setLocales: setLocales,
-    getLangCode: getLangCode,
-    trans: trans,
-    transChoice: transChoice
-  };
-
-  Translator.placeHolderPrefix = ':';
-  Translator.placeHolderSuffix = '';
-
-  // var Lang = {};
-  function setLocales(locales) {
-    this.locales = locales;
-    Translator.locale = (locales.length > 0)? locales[0] : 'en';
-  }
-
-  function set(items) {
-    $.extend(_items, items);
-    $.each(_items, function(key, value) {
-      Translator.add(key, value);
-    });
-  };
-
-  function getLangCode(locale) {
-    var list = {
+    var _items = {
       'af' : 'af-ZA',
       'ar' : 'ar-SA',
       'az' : 'az-AZ',
@@ -1399,146 +830,40 @@ System.amdDefine('xe.lang', ['translator'], function(Translator) {
       'zu' : 'zu-ZA'
     };
 
-    return locale ? list[locale] : list;
-  };
+    return {
+      locales: [],
+      init: function() {
+        Translator.placeHolderPrefix = ':';
+        Translator.placeHolderSuffix = '';
 
-  function trans(id, parameters) {
-    return Translator.trans(id, parameters);
-  };
+        return this;
+      },
+      set: function(items) {
+        $.extend(_items, items);
+        $.each(_items, function(key, value) {
+          Translator.add(key, value);
+        });
 
-  function transChoice(id, number, parameters) {
-    return Translator.transChoice(id, number, parameters);
-  };
-
-});
-
-System.amdDefine('queue', [], function() {
-
-  var pending = [];
-
-  function next() {
-    var fn = pending.shift();
-    if (fn) {
-      fn(next);
-    }
-  }
-
-  return function(fn) {
-    pending.push(fn);
-    if (pending.length == 1) next();
-  };
-
-});
-
-System.amdDefine('css', [], function() {
-  var cssPrefixes = [ 'Webkit', 'O', 'Moz', 'ms' ],
-    cssProps    = {};
-
-  function camelCase(string) {
-    return string.replace(/^-ms-/, 'ms-').replace(/-([\da-z])/gi, function(match, letter) {
-      return letter.toUpperCase();
-    });
-  }
-
-  function getVendorProp(name) {
-    var style = document.body.style;
-    if (name in style) return name;
-
-    var i = cssPrefixes.length,
-      capName = name.charAt(0).toUpperCase() + name.slice(1),
-      vendorName;
-    while (i--) {
-      vendorName = cssPrefixes[i] + capName;
-      if (vendorName in style) return vendorName;
-    }
-
-    return name;
-  }
-
-  function getStyleProp(name) {
-    name = camelCase(name);
-    return cssProps[name] || (cssProps[name] = getVendorProp(name));
-  }
-
-  function applyCss(element, prop, value) {
-    prop = getStyleProp(prop);
-    if (element) {
-      element[0].style[prop] = value;
-    }
-  }
-
-  return function(element, properties) {
-    var args = arguments,
-      prop,
-      value;
-
-    if (args.length == 2) {
-      for (prop in properties) {
-        value = properties[prop];
-        if (value !== undefined && properties.hasOwnProperty(prop)) applyCss(element, prop, value);
+      },
+      setLocales: function(locales) {
+        this.locales = locales;
+        Translator.locale = (locales.length > 0)? locales[0] : 'en';
+      },
+      getLangCode: function(locale) {
+        return locale? _items[locale] : _items;
+      },
+      trans: function(id, parameters) {
+        return Translator.trans(id, parameters);
+      },
+      transChoice: function(id, number, parameters) {
+        return Translator.transChoice(id, number, parameters);
       }
-    } else {
-      applyCss(element, args[1], args[2]);
-    }
-  };
-
-});
-
-System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
-  'use strict'
-
+    }.init();
+  }();
+})(window, Translator);
+(function(exports) {
   var instances = [];
-
-  return {
-    cssLoad: cssLoad,
-    start: start,
-    done: done
-  };
-
-
-
-  // @TODO 라이브러리 분리
-  // 다중 인스턴스를 위해 수정된 상태임
-
   var cssLoaded = false;
-  function cssLoad() {
-    if (cssLoaded === false) {
-      cssLoaded = true;
-      XE.cssLoad('/assets/core/common/css/progress.css'); // @TODO
-    }
-  };
-
-  function start(context) {
-    this.cssLoad();
-
-    var $context = $(context);
-    if ($context.context === undefined) {
-      $context = $('body');
-    }
-
-    setInstance($context);
-
-    $context.trigger('progressStart');
-  };
-
-  function done(context) {
-    var $context = $(context);
-    if ($context.context === undefined) {
-      $context = $('body');
-    }
-
-    $context.trigger('progressDone');
-  };
-
-  exports.spinner = function(context) {
-
-  };
-
-  exports.clearSpinner = function(context) {
-
-  };
-
-
 
   function getInstance($context) {
     var instanceId = $context.attr('data-progress-instance');
@@ -1549,7 +874,7 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
     }
 
     return instance;
-  };
+  }
 
   function getCount($context) {
     var count = $context.attr('data-progress-count');
@@ -1558,7 +883,7 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
       count = parseInt(count);
     }
     return count;
-  };
+  }
 
   function setCount($context, count) {
     if (parseInt(count) < 0) {
@@ -1570,9 +895,9 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
   function setInstance($context, instance) {
     if (getInstance($context) === null) {
       var progress = new XeProgress(),
-        parent = 'body',
-        type = $context.data('progress-type') === undefined ? 'default' : $context.data('progress-type'),
-        showSpinner = type !== 'nospin';
+          parent = 'body',
+          type = $context.data('progress-type') === undefined ? 'default' : $context.data('progress-type'),
+          showSpinner = type !== 'nospin';
 
 
       if ($context.attr('id') !== undefined) {
@@ -1595,14 +920,14 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
       setCount($context, 0);
       attachInstance($context);
     }
-  };
+  }
 
   function attachInstance($context) {
     $context.bind('progressStart', function(e) {
       e.stopPropagation();
-      var count = getCount($context);
-      setCount($context, count+1);
-      if (count === 0) {
+      var count = getCount($context) + 1;
+      setCount($context, count);
+      if (count === 1) {
         getInstance($context).start();
       }
 
@@ -1611,15 +936,14 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
     $context.bind('progressDone', function(e) {
       e.stopPropagation();
 
-      var count = getCount($context);
-
-      setCount($(this), count-1);
-      if (count === 1) {
+      var count = getCount($(this)) - 1;
+      setCount($(this), count);
+      if (getCount($(this)) === 0) {
         var instance = getInstance($context);
         instance.done(instance.getTime());
       }
     });
-  };
+  }
 
 
   /**
@@ -1728,30 +1052,30 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
       this.status = (n === 1 ? null : n);
 
       var $progress = this.render(!started),
-        $bar      = this.$bar,
-        speed    = this.settings.speed,
-        ease     = this.settings.easing;
+          $bar      = this.$bar,
+          speed    = this.settings.speed,
+          ease     = this.settings.easing;
 
       // $progress.offsetWidth; /* Repaint */
       var self = this,
-        time = this.getTime();
-      queue(function(next) {
+          time = this.getTime();
+      XE.Progress.queue(function(next) {
         // Set positionUsing if it hasn't already been set
         if (self.settings.positionUsing === '') self.settings.positionUsing = self.getPositioningCSS();
 
         // Add transition
-        css(self.$bar, barPositionCSS(n, speed, ease, self.settings));
+        XE.Progress.css(self.$bar, barPositionCSS(n, speed, ease, self.settings));
 
         if (n === 1) {
           // Fade out
-          css(self.$progress, {
+          XE.Progress.css(self.$progress, {
             transition: 'none',
             opacity: 1
           });
           //$progress.offsetWidth; /* Repaint */
 
           setTimeout(function() {
-            css(self.$progress, {
+            XE.Progress.css(self.$progress, {
               transition: 'all ' + speed + 'ms linear',
               opacity: 0
             });
@@ -1818,14 +1142,14 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
       $progress.html(this.settings.template[this.settings.type]);
 
       var $bar      = $progress.find(this.settings.barSelector),
-        perc     = fromStart ? '-100' : toBarPerc(this.status || 0),
-        $parent   = $(this.settings.parent),
-        $spinner;
+          perc     = fromStart ? '-100' : toBarPerc(this.status || 0),
+          $parent   = $(this.settings.parent),
+          $spinner;
 
       $bar.attr('title-name', this.instanceId);
       this.$bar = $bar;
 
-      css($bar, {
+      XE.Progress.css($bar, {
         transition: 'all 0 linear',
         transform: 'translate3d(' + perc + '%,0,0)'
       });
@@ -1879,9 +1203,9 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
 
       // Sniff prefixes
       var vendorPrefix = ('WebkitTransform' in bodyStyle) ? 'Webkit' :
-        ('MozTransform' in bodyStyle) ? 'Moz' :
-          ('msTransform' in bodyStyle) ? 'ms' :
-            ('OTransform' in bodyStyle) ? 'O' : '';
+          ('MozTransform' in bodyStyle) ? 'Moz' :
+              ('msTransform' in bodyStyle) ? 'ms' :
+                  ('OTransform' in bodyStyle) ? 'O' : '';
 
       if (vendorPrefix + 'Perspective' in bodyStyle) {
         // Modern browsers with 3D support, e.g. Webkit, IE10
@@ -1928,225 +1252,276 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
 
     return barCSS;
   }
-});
 
-System.amdDefine('xe.request', ['xe.progress'], function(Progress) {
+  exports.XE.Progress = function() {
 
-  var _options = {
-    headers : {
-      'X-CSRF-TOKEN': null
-    }
-  };
-
-  // @FIXME
-  $(document).ajaxSend(function(event, jqxhr, settings) {
-    Progress.start(settings.context == undefined ? $('body') : settings.context);
-  }).ajaxComplete(function(event, jqxhr, settings) {
-    Progress.done(settings.context == undefined ? $('body') : settings.context);
-  }).ajaxError(function(event, jqxhr, settings, thrownError) {
-    error(jqxhr, settings, thrownError);
-  });
-
-  return {
-    setup: setup,
-    get: get,
-    post: post,
-    options: _options
-  };
-
-  function setup(options) {
-    $.extend(_options, options);
-    $.ajaxSetup(_options);
-  }
-
-  function get(url, data, callback, type) {
-    return $.get(url, data, callback, type)
-  }
-
-  function post(url, data, callback, type) {
-    return $.post(url, data, callback, type);
-  }
-
-  function error(jqxhr, settings, thrownError) {
-    var status = jqxhr.status,
-      type = 'danger',
-      errorMessage = 'Not defined error message ('+status+')';
-
-    // @TODO dataType 에 따라 메시지 획득 방식을 추가 해야함.
-    if (settings.dataType == 'json') {
-      errorMessage = $.parseJSON(jqxhr.responseText).message;
-    } else {
-      errorMessage = jqxhr.statusText;
-    }
-
-    // @FIXME 의존성
-    window.XE.toastByStatus(status, errorMessage);
-  }
-
-});
-
-(function(exports) {
-  'use strict';
-
-  var self,
-      _options;
-
-
-  var XE = {
-    initialize: initialize,
-    setup: setup,
-    configure: configure,
-    cssLoad: cssLoad,
-    jsLoad: jsLoad,
-    toast: toast,
-    toastByStatus: toastByStatus,
-    formError: formError,
-    formErrorClear: formErrorClear,
-    validate: validate,
-    getLocale: getLocale,
-    getDefaultLocale: getDefaultLocale,
-    
-    options: {},
-
-    Lang: '',
-    Progress: '',
-    Request: '',
-    Component: ''
-  };
-
-  exports.XE = XE;
-
-  return XE;
-
-  /**
-   * @description
-   * <pre>
-   *     XE module initialize
-   * </pre>
-   * */
-  function initialize(callback) {
-
-    self = this;
-    _options = {};
-
-    _loadXEModule().promise().then(function() {
-      callback();
-    });
-
-  }
-
-
-  function _loadXEModule() {
-
-    var d = $.Deferred();
-    System.amdRequire(['xe.lang', 'xe.progress', 'xe.request', 'xe.component'], function(lang, progress, request, component) {
-
-      self.Lang = lang;
-      self.Progress = progress;
-      self.Request = request;
-      self.Component = component;
-
-      self.ajax = self.Request.ajax = function(url, options) {
-        if ( typeof url === "object" ) {
-          options = $.extend({}, self.Request.options, url);
-          url = undefined;
-        } else {
-          options = $.extend({}, options, self.Request.options, {url: url});
-          url = undefined;
+    return {
+      cssLoad: function() {
+        if (cssLoaded === false) {
+          cssLoaded = true;
+          XE.cssLoad('/assets/core/common/css/progress.css'); // @TODO
+        }
+      },
+      start: function(context) {
+        if($('link[href*="assets/core/common/css/progress.css"]').length == 0) {
+          XE.cssLoad('/assets/core/common/css/progress.css'); // @TODO
         }
 
-        return $.ajax(url, options);
-      };
+        var $context = $(context);
+        if ($context.context === undefined) {
+          $context = $('body');
+        }
 
-      d.resolve();
-    });
+        setInstance($context);
 
-    return d;
-  }
+        $context.trigger('progressStart');
+      },
+      done: function(context) {
+        var $context = $(context);
+        if ($context.context === undefined) {
+          $context = $('body');
+        }
 
-  /**
-   * @param {object} options
-   * */
-  function setup(options) {
-    _options.loginUserId = options.loginUserId;
-    self.options.loginUserId = options.loginUserId;
-    self.Request.setup({
-      headers: {
-        'X-CSRF-TOKEN': options['X-CSRF-TOKEN']
+        $context.trigger('progressDone');
       }
-    });
-
-  }
-
-  /**
-   * @param {object} options
-   * */
-  function configure(options) {
-    $.extend(_options, options);
-    $.extend(self.options, options);
-  }
-
-  // @DEPRECATED
-  function cssLoad(url) {
-    var $css = $('<link>', {rel: 'stylesheet', type: 'text/css', href: url});
-
-    $('head').append($css);
-  }
-
-  function jsLoad(url) {
-    var $js = $('<script>', {id: 'jsload', type: 'text/javascript', src: url});
-
-    $('head').append($js);
-  }
-
-  function toast(type, message) {
-    if (type == '') {
-      type = 'danger';
     }
-    System.import('xecore:/common/js/modules/griper/griper').then(function (griper) {
-      return griper.toast(type, message);
-    });
-  }
-
-  function toastByStatus(status, message) {
-    System.import('xecore:/common/js/modules/griper/griper').then(function (griper) {
-      return griper.toast(griper.toast.fn.statusToType(status), message);
-    });
-  }
-
-  function formError($element, message) {
-    System.import('xecore:/common/js/modules/griper/griper').then(function (griper) {
-      return griper.form($element, message);
-    });
-  }
-
-  function formErrorClear($form) {
-    System.import('xecore:/common/js/modules/griper/griper').then(function (griper) {
-      return griper.form.fn.clear($form);
-    });
-  }
-
-  function validate($form) {
-    System.import('xecore:/common/js/modules/validator').then(function (validator) {
-      validator.validate($form);
-    });
-  }
-
-  function getLocale() {
-    return _options.locale;
-  }
-
-  function getDefaultLocale() {
-    return _options.defaultLocale;
-  }
-
-  if(this.Request) {
-
-  }
-
-  // $.ajaxPrefilter(function(options, originalOptions, jqXHR ) {
-  //   $.extend(options, self.Request.options);
-  // });
-
-
+  }();
 })(window);
+
+
+//queue
+(function(exports, Progress) {
+  var pending = [];
+
+  function next() {
+    var fn = pending.shift();
+    if (fn) {
+      fn(next);
+    }
+  }
+
+  Progress.queue = function(fn) {
+    pending.push(fn);
+    if (pending.length == 1) next();
+  };
+
+})(window, XE.Progress);
+
+//css
+(function(exports, Progress) {
+
+  var cssPrefixes = [ 'Webkit', 'O', 'Moz', 'ms' ],
+      cssProps    = {};
+
+  function camelCase(string) {
+    return string.replace(/^-ms-/, 'ms-').replace(/-([\da-z])/gi, function(match, letter) {
+      return letter.toUpperCase();
+    });
+  }
+
+  function getVendorProp(name) {
+    var style = document.body.style;
+    if (name in style) return name;
+
+    var i = cssPrefixes.length,
+        capName = name.charAt(0).toUpperCase() + name.slice(1),
+        vendorName;
+    while (i--) {
+      vendorName = cssPrefixes[i] + capName;
+      if (vendorName in style) return vendorName;
+    }
+
+    return name;
+  }
+
+  function getStyleProp(name) {
+    name = camelCase(name);
+    return cssProps[name] || (cssProps[name] = getVendorProp(name));
+  }
+
+  function applyCss(element, prop, value) {
+    prop = getStyleProp(prop);
+    if (element) {
+      element[0].style[prop] = value;
+    }
+  }
+
+  Progress.css = function() {
+    return function(element, properties) {
+      var args = arguments,
+          prop,
+          value;
+
+      if (args.length == 2) {
+        for (prop in properties) {
+          value = properties[prop];
+          if (value !== undefined && properties.hasOwnProperty(prop)) applyCss(element, prop, value);
+        }
+      } else {
+        applyCss(element, args[1], args[2]);
+      }
+    };
+  }
+})(window, XE.Progress);
+
+(function(exports, Progress) {
+  exports.XE.Request = function() {
+    var _options = {
+      headers : {
+        'X-CSRF-TOKEN': null
+      }
+    };
+
+    // @FIXME
+    $(document).ajaxSend(function(event, jqxhr, settings) {
+      Progress.start(settings.context == undefined ? $('body') : settings.context);
+    }).ajaxComplete(function(event, jqxhr, settings) {
+      Progress.done(settings.context == undefined ? $('body') : settings.context);
+    }).ajaxError(function(event, jqxhr, settings, thrownError) {
+      error(jqxhr, settings, thrownError);
+    });
+
+    return {
+      options: _options,
+      setup: function(options) {
+        $.extend(_options, options);
+        $.ajaxSetup(_options);
+      },
+      get: function(url, data, callback, type) {
+        return $.get(url, data, callback, type)
+      },
+      post: function (url, data, callback, type) {
+        return $.post(url, data, callback, type);
+      },
+      error: function (jqxhr, settings, thrownError) {
+        var status = jqxhr.status,
+            type = 'danger',
+            errorMessage = 'Not defined error message ('+status+')';
+
+        // @TODO dataType 에 따라 메시지 획득 방식을 추가 해야함.
+        if (settings.dataType == 'json') {
+          errorMessage = $.parseJSON(jqxhr.responseText).message;
+        } else {
+          errorMessage = jqxhr.statusText;
+        }
+
+        // @FIXME 의존성
+        window.XE.toastByStatus(status, errorMessage);
+      }
+    }
+  }();
+})(window, XE.Progress);
+
+(function(exports) {
+  exports.XE.Component = function() {
+    return {
+      timeago: function() {
+        $('[data-xe-timeago]').trigger('boot.xe.timeago');
+      },
+      boot: function() {
+        this.timeago();
+        $('[data-toggle=xe-dropdown]').trigger('boot.xe.dropdown');
+        $('[data-toggle=xe-modal]').trigger('boot.xe.modal');
+        $('[data-toggle=xe-tooltip]').trigger('boot.xe.tooltip');
+        $('[data-toggle=dropdown]').trigger('boot.dropdown');
+      }
+    };
+  }();
+})(window);
+
+$(function() {
+  /*
+   * @Component Timeago
+   *
+   * <span data-xe-timeago="{timestmap|ISO8601}">2016-04-04 07:05:44</span>
+   * <span data-xe-timeago="{timestmap|ISO8601}" title="2016-04-04 07:05:44" />3 Hours ago</span>
+   */
+  System.import('vendor:/moment').then(function(moment) {
+    moment.locale(XE.getLocale());
+  });
+
+
+
+  $(document).on('boot.xe.timeago', '[data-xe-timeago]', function() {
+    var $this = $(this);
+    if($this.data().xeTimeagoCalled === true) false;
+
+    System.import('vendor:/moment').then(function(moment) {
+      var dataDate = $this.data('xe-timeago');
+      var isTimestamp = (parseInt(dataDate) == dataDate);
+
+      if(isTimestamp) {
+        dataDate = moment.unix(dataDate);
+      } else {
+        dataDate = moment(dataDate);
+      }
+
+      $this.text(dataDate.fromNow());
+      $this.data().xeTimeagoCalled = true;
+    });
+  });
+
+  $(document).on('boot.xe.dropdown', '[data-toggle=xe-dropdown]', function() {
+    System.import("xe.component.dropdown").then(function() {
+      $('[data-toggle=xe-dropdown]').xeDropdown();
+    });
+  });
+
+  $(document).on('boot.xe.modal', '[data-toggle=xe-modal]', function() {
+    System.import("xe.component.modal").then(function() {
+      $('[data-toggle=xe-modal]').xeModal();
+    });
+  });
+
+  $(document).on('boot.xe.modal', '[data-toggle=xe-tooltip]', function() {
+    System.import("xe.component.tooltip").then(function() {
+      $('[data-toggle=xe-tooltip]').xeTooltip();
+    });
+  });
+
+  XE.Component.boot();
+
+});
+
+(function($) {
+
+  // xeModal =========================================================
+  $.fn.xeModal = function(options) {
+    var $el = this;
+
+    System.import("xe.component.modal").then(function() {
+      $el.xeModal(options);
+    });
+
+    if($('link[href*="assets/core/xe-ui-component/xe-ui-component.css"]').length == 0) {
+      XE.cssLoad("/assets/core/xe-ui-component/xe-ui-component.css");
+    }
+  };
+
+  // xeDropdown ======================================================
+  $.fn.xeDropdown = function(options) {
+    var $el = this;
+
+    System.import("xe.component.dropdown").then(function() {
+      $el.xeDropdown(options);
+    });
+
+    if($('link[href*="assets/core/xe-ui-component/xe-ui-component.css"]').length == 0) {
+      XE.cssLoad("/assets/core/xe-ui-component/xe-ui-component.css");
+    }
+  };
+
+  // xeTooltip =======================================================
+  $.fn.xeTooltip = function(options) {
+    var $el = this;
+
+    System.import("xe.component.tooltip").then(function() {
+      $el.xeTooltip(options);
+    });
+
+    if($('link[href*="assets/core/xe-ui-component/xe-ui-component.css"]').length == 0) {
+      XE.cssLoad("/assets/core/xe-ui-component/xe-ui-component.css");
+    }
+  };
+
+})(jQuery);

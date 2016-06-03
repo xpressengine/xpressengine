@@ -1,19 +1,28 @@
 <?php
+/**
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     LGPL-2.1 http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
+ */
+
 namespace App\Http\Controllers;
 
 use Xpressengine\Http\Request;
 use Xpressengine\Support\Exceptions\FileAccessDeniedHttpException;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
-use Xpressengine\Theme\ThemeEntity;
+use Xpressengine\Theme\ThemeEntityInterface;
+use Xpressengine\Theme\ThemeHandler;
 
 class ThemeController extends Controller
 {
 
-    public function getEdit(Request $request)
+    public function edit(Request $request)
     {
         $themeId = $request->get('theme');
         $fileName = $request->get('file');
-        $type = $request->get('type', 'template');
+        $type = $request->get('type', 'views');
 
         // TODO: validate themeid, fileName
         if($themeId === null) {
@@ -24,7 +33,7 @@ class ThemeController extends Controller
 
         $theme = \XeTheme::getTheme($themeId);
 
-        /** @var ThemeEntity $theme */
+        /** @var ThemeEntityInterface $theme */
         $files = $theme->getEditFiles();
 
         if(empty($files)) {
@@ -66,15 +75,15 @@ class ThemeController extends Controller
         );
     }
 
-    public function postEdit()
+    public function update(Request $request, ThemeHandler $themeHandler)
     {
-        $themeId = \Input::get('theme');
-        $fileName = \Input::get('file');
-        $type = \Input::get('type', 'template');
+        $themeId = $request->get('theme');
+        $fileName = $request->get('file');
+        $type = $request->get('type', 'template');
 
-        $content = \Input::get('content');
+        $content = $request->get('content');
 
-        $theme = \XeTheme::getTheme($themeId);
+        $theme = $themeHandler->getTheme($themeId);
         $files = $theme->getEditFiles();
 
         $filePath = $files[$type][$fileName];
@@ -85,7 +94,70 @@ class ThemeController extends Controller
             throw new FileAccessDeniedHttpException();
         }
 
-        return \Redirect::back()->with('alert', ['type' => 'success', 'message' => '저장되었습니다.']);
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => '저장되었습니다.']);
+    }
+
+    public function createSetting(Request $request, ThemeHandler $themeHandler)
+    {
+        $instanceId = $request->get('theme');
+        $title = $request->get('title');
+        $theme = $themeHandler->getTheme($instanceId);
+        $configs = $themeHandler->getThemeConfigList($theme->getId());
+
+        $last = array_pop($configs);
+        $lastId = $last->name;
+
+        $prefix = $themeHandler->getConfigId($theme->getId());
+        $id = str_replace([$prefix, $themeHandler->configDelimiter], '', $lastId);
+        $id = (int)$id + 1;
+        $newId = $instanceId.$themeHandler->configDelimiter.$id;
+
+        $themeHandler->setThemeConfig($newId, '_configTitle', $title);
+
+        return redirect()->route('settings.theme.config', ['theme'=>$newId])->with('alert', ['type' => 'success', 'message' => '생성되었습니다.']);;
+    }
+
+    public function editSetting(Request $request, ThemeHandler $themeHandler)
+    {
+        $this->validate($request, [
+            'theme' => 'required',
+        ]);
+
+        $themeId = $request->get('theme');
+        $theme = $themeHandler->getTheme($themeId);
+        $config = $theme->setting();
+        $configs = $themeHandler->getThemeConfigList($theme->getId());
+
+        $configList = [];
+        foreach ($configs as $id => $item) {
+            $configList[$id] = $item->get('_configTitle', '기본');
+        }
+
+        return \XePresenter::make('theme.config', compact('theme', 'config', 'configList'));
+    }
+
+    public function updateSetting(Request $request, ThemeHandler $themeHandler)
+    {
+        $this->validate($request, [
+            'theme' => 'required',
+        ]);
+
+        $themeId = $request->get('theme');
+        $theme = $themeHandler->getTheme($themeId);
+
+        $configInfo = $request->only('_configTitle', '_configId');
+
+        $inputs =  $request->except('_token');
+        $inputs['_configId'] = $themeId;
+
+        // 해당 테마에게 config를 가공할 수 있는 기회를 준다.
+        $config = $theme->updateSetting($inputs);
+
+        $config = array_merge($configInfo, $config);
+
+        $themeHandler->setThemeConfig($config['_configId'], $config);
+
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => '저장되었습니다.']);
     }
 }
 

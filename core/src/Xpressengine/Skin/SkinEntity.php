@@ -2,15 +2,15 @@
 /**
  *  This file is part of the Xpressengine package.
  *
- * PHP version 5
- *
  * @category    Skin
  * @package     Xpressengine\Skin
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
  */
+
 namespace Xpressengine\Skin;
 
 use Illuminate\Contracts\Support\Arrayable;
@@ -23,9 +23,6 @@ use Illuminate\Contracts\Support\Renderable;
  *
  * @category    Skin
  * @package     Xpressengine\Skin
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
  * @method AbstractSkin setData($data)
  * @method AbstractSkin setView($view)
  */
@@ -128,36 +125,30 @@ class SkinEntity implements Arrayable, Jsonable
      */
     public function getSettingView($config = [])
     {
-        $class = $this->class;
-        return $class::getSettingView($config);
+        return $this->getObject()->getSettingView($config);
     }
 
     /**
-     * get skin's config data
+     * updateConfig
+     *
+     * @param array $config
      *
      * @return array
      */
-    public function getConfig()
+    public function updateSetting(array $config)
     {
-        if ($this->object !== null) {
-            return $this->object->getConfig();
-        }
-        if ($this->config !== null) {
-            return $this->config;
-        }
-        return [];
+        return $this->getObject()->updateSetting($config);
     }
 
     /**
-     * set skin's config data
+     * get and set config
      *
-     * @param array $config config data
+     * @param array $config
      *
-     * @return void
+     * @return null
      */
-    public function setConfig($config)
-    {
-        $this->config = $config;
+    public function setting(array $config = null) {
+        return $this->getObject()->setting($config);
     }
 
     /**
@@ -203,7 +194,6 @@ class SkinEntity implements Arrayable, Jsonable
         $class = $this->class;
         return $class::supportMobileOnly();
     }
-
 
     /**
      * get object of skin

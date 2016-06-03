@@ -87,7 +87,7 @@
 
             transition ?
                 that.$dialog // wait for modal to slide in
-                    .one('xeTransitionEnd', function () {
+                    .one('transitionEnd', function () {
                         that.$element.trigger('focus').trigger(e)
                     })
                     .emulateTransitionEnd(Modal.TRANSITION_DURATION) :
@@ -120,7 +120,7 @@
 
         $.support.transition && this.$element.hasClass('fade') ?
             this.$element
-                .one('xeTransitionEnd', $.proxy(this.hideModal, this))
+                .one('transitionEnd', $.proxy(this.hideModal, this))
                 .emulateTransitionEnd(Modal.TRANSITION_DURATION) :
             this.hideModal()
     }
@@ -157,7 +157,7 @@
         var that = this
         this.$element.hide()
         this.backdrop(function () {
-            that.$body.removeClass('modal-open')
+            that.$body.removeClass('xe-modal-open')
             that.resetAdjustments()
             that.resetScrollbar()
             that.$element.trigger('hidden.xe.modal')
@@ -199,7 +199,7 @@
 
             doAnimate ?
                 this.$backdrop
-                    .one('xeTransitionEnd', callback)
+                    .one('transitionEnd', callback)
                     .emulateTransitionEnd(Modal.BACKDROP_TRANSITION_DURATION) :
                 callback()
 
@@ -212,7 +212,7 @@
             }
             $.support.transition && this.$element.hasClass('fade') ?
                 this.$backdrop
-                    .one('xeTransitionEnd', callbackRemove)
+                    .one('transitionEnd', callbackRemove)
                     .emulateTransitionEnd(Modal.BACKDROP_TRANSITION_DURATION) :
                 callbackRemove()
 

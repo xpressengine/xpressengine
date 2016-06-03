@@ -2,19 +2,20 @@
 /**
  * AbstractUIObject class. This file is part of the Xpressengine package.
  *
- * PHP version 5
- *
  * @category    UIObejct
  * @package     Xpressengine\UIObejct
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
  */
+
 namespace Xpressengine\UIObject;
 
 use Closure;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\View\Expression;
 use PhpQuery\PhpQuery;
 use PhpQuery\PhpQueryObject;
 use Xpressengine\Plugin\ComponentInterface;
@@ -26,9 +27,6 @@ use Xpressengine\Plugin\ComponentTrait;
  *
  * @category    UIObject
  * @package     Xpressengine\UIObject
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
  */
 abstract class AbstractUIObject implements Renderable, ComponentInterface
 {
@@ -97,7 +95,8 @@ abstract class AbstractUIObject implements Renderable, ComponentInterface
             $callback($this->markup);
         }
 
-        return $this->markup === null ? $this->template : $this->markup;
+        $viewStr = $this->markup === null ? $this->template : (string)$this->markup;
+        return new Expression($viewStr);
     }
 
     /**

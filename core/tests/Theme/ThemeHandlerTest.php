@@ -1,9 +1,17 @@
 <?php
+/**
+ * @author    XE Developers <developers@xpressengine.com>
+ * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license   LGPL-2.1
+ * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link      https://xpressengine.io
+ */
+
 namespace Xpressengine\Tests\Theme;
 
 use Mockery;
 use Xpressengine\Plugin\PluginRegister;
-use Xpressengine\Theme\ThemeEntity;
+use Xpressengine\Theme\ThemeEntityInterface;
 use Xpressengine\Theme\ThemeHandler;
 
 class ThemeHandlerTest extends \PHPUnit_Framework_TestCase
@@ -24,12 +32,12 @@ class ThemeHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $id = 'theme/pluginA@blue';
         $theme = $this->getHandler()->getTheme($id);
-        $this->assertInstanceOf(ThemeEntity::class, $theme);
+        $this->assertInstanceOf(ThemeEntityInterface::class, $theme);
         $this->assertEquals('Theme_theme_pluginA_blue', $theme->getClass());
 
         $id = 'theme/pluginA@red';
         $theme = $this->getHandler()->getTheme($id);
-        $this->assertInstanceOf(ThemeEntity::class, $theme);
+        $this->assertInstanceOf(ThemeEntityInterface::class, $theme);
         $this->assertEquals('Theme_theme_pluginA_red', $theme->getClass());
     }
 

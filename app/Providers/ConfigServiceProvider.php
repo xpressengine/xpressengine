@@ -2,15 +2,15 @@
 /**
  * Config service provider class
  *
- * PHP version 5
- *
  * @category    Config
  * @package     Xpressengine\Config
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
  */
+
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
@@ -25,10 +25,6 @@ use Xpressengine\Config\Repositories\CacheDecorator;
  *
  * @category    Config
  * @package     Xpressengine\Config
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
  */
 class ConfigServiceProvider extends ServiceProvider
 {
@@ -58,7 +54,7 @@ class ConfigServiceProvider extends ServiceProvider
     {
         $this->app->bind('xe.config', function ($app) {
             $repo = new DatabaseRepository($app['xe.db']->connection());
-            
+
             if (env('APP_DEBUG') != true) {
                 $repo = new CacheDecorator(
                     $repo,

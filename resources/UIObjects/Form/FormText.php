@@ -1,4 +1,12 @@
 <?php
+/**
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
+ */
+
 namespace Xpressengine\UIObjects\Form;
 
 use PhpQuery\PhpQuery;
@@ -11,6 +19,7 @@ class FormText extends AbstractUIObject
     protected $template = '<div class="form-group">
         <label for="" class="hidden"></label>
         <input type="text" class="form-control" id="" placeholder="">
+        <p class="help-block"></p>
     </div>';
 
     public function render()
@@ -21,18 +30,22 @@ class FormText extends AbstractUIObject
 
         $label = $this->markup['label'];
         $input = $this->markup['input'];
+        $description = $this->markup['.help-block'];
 
         foreach ($args as $key => $arg) {
             switch ($key) {
                 case 'class':
-                    $input->addClass('class', $arg);
+                    $input->addClass($arg);
                     break;
                 case 'label':
                     $label->removeClass('hidden')->html($arg);
                     break;
+                case 'description':
+                    $description->html($arg);
+                    break;
                 case 'id':
                     $label->attr('for', $arg);
-                // pass to default
+                    // pass to default
                 default:
                     $input->attr($key, $arg);
                     break;
@@ -40,13 +53,5 @@ class FormText extends AbstractUIObject
         }
 
         return parent::render();
-    }
-
-    public static function boot()
-    {
-    }
-
-    public static function getSettingsURI()
-    {
     }
 }

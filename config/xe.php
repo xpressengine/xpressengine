@@ -290,8 +290,8 @@ return [
             'default' => 'assets/core/member/img/default_avatar.gif',
             'size' => ['width' => 240, 'height' => 240],
             'storage' => [
-                'disk' => 'local',
-                'path' => 'member/profile'
+                'disk' => 'uploaded',
+                'path' => 'user/profile_image'
             ]
         ]
     ],
@@ -377,9 +377,13 @@ return [
         'safeMode' => true
     ],
 
+    'plugin' => [
+        'server' => 'http://xpressengine.io/plugins'
+    ],
+
     'uiobject' => [
         'aliases' => [
-            'phone' => 'uiobject/xpressengine@phone',
+            'form' => 'uiobject/xpressengine@form',
             'formText' => 'uiobject/xpressengine@formText',
             'formPassword' => 'uiobject/xpressengine@formPassword',
             'formTextarea' => 'uiobject/xpressengine@formTextArea',
@@ -387,11 +391,12 @@ return [
             'formCheckbox' => 'uiobject/xpressengine@formCheckbox',
             'formFile' => 'uiobject/xpressengine@formFile',
             'formImage' => 'uiobject/xpressengine@formImage',
+            'formMenu' => 'uiobject/xpressengine@menuSelector',
             'langText' => 'uiobject/xpressengine@langText',
             'langTextArea' => 'uiobject/xpressengine@langTextArea',
             'menu' => 'uiobject/xpressengine@menuType',
-            'menuList' => 'uiobject/xpressengine@menuList',
             'menuType' => 'uiobject/xpressengine@menuType',
+            'menuList' => 'uiobject/xpressengine@menuList',
             'permission' => 'uiobject/xpressengine@permission',
             'visibility' => 'uiobject/xpressengine@visibility',
             'themeSelect' => 'uiobject/xpressengine@themeSelect',

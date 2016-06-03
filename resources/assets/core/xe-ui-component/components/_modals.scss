@@ -1,0 +1,211 @@
+//
+// Modals
+// --------------------------------------------------
+
+// .xe-modal-open      - body class for killing the scroll
+// .xe-modal           - container to scroll within
+// .xe-modal-dialog    - positioning shell for the actual modal
+// .xe-modal-content   - actual modal w/ bg and corners and shit
+
+// Kill the scroll on the body
+.xe-modal-open {
+  overflow: hidden;
+}
+
+// Container that the modal scrolls within
+.xe-modal {
+  display: none;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: $zindex-modal;
+  -webkit-overflow-scrolling: touch;
+
+  // Prevent Chrome on Windows from adding a focus outline. For details, see
+  // https://github.com/twbs/bootstrap/pull/10951.
+  outline: 0;
+
+  // When fading in the modal, animate it to slide down
+  &.fade .xe-modal-dialog {
+    @include translate(0, -25%);
+    @include transition-transform(0.3s ease-out);
+  }
+  &.in .xe-modal-dialog { @include translate(0, 0) }
+}
+.xe-modal-open .xe-modal {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+// Shell div to position the modal with bottom padding
+.xe-modal-dialog {
+  position: relative;
+  width: auto;
+  margin: 10px;
+}
+
+// Actual modal
+.xe-modal-content {
+  position: relative;
+  overflow: hidden;
+  background-color: $modal-content-bg;
+  border: 1px solid $modal-content-fallback-border-color; //old browsers fallback (ie8 etc)
+  border: 1px solid $modal-content-border-color;
+  border-radius: $border-radius-large;
+  @include box-shadow(0 3px 9px rgba(0,0,0,.5));
+  background-clip: padding-box;
+  // Remove focus outline from opened modal
+  outline: 0;
+}
+
+// Modal background
+.xe-modal-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: $zindex-modal-background;
+  background-color: $modal-backdrop-bg;
+  // Fade for backdrop
+  &.fade { @include opacity(0); }
+  &.in { @include opacity($modal-backdrop-opacity); }
+}
+
+// Modal header
+// Top section of the modal w/ title and dismiss
+.xe-modal-header {
+  padding: $modal-title-padding;
+  background-color: $brand-primary;
+  border-bottom: 1px solid $modal-header-border-color;
+  @include clearfix;
+}
+// Close icon
+.xe-modal-header .btn-close {
+  float:right;
+  background-color: transparent;
+  border: transparent;
+  color:#fff;
+  font-size:20px;
+  cursor:pointer;
+}
+
+// Title text within header
+.xe-modal-title, 
+.xe-modal-content-title{
+  display: block;
+  margin: 0;
+  line-height: $modal-title-line-height;
+  font-weight: normal;
+  color: #fff;
+  font-size:20px;
+}
+
+.xe-modal-content-title{
+  margin-bottom:5px;
+  font-size: 16px;  
+}
+
+// Modal body
+// Where all modal content resides (sibling of .xe-modal-header and .xe-modal-footer)
+.xe-modal-body {
+  position: relative;
+  padding: $modal-inner-padding;
+  p{
+    margin:0;
+    font-size: $font-size-base;
+    line-height: $line-height-small;
+    color: $gray-light;
+  }
+}
+
+// Footer (for actions)
+.xe-modal-footer {
+  padding: $modal-inner-padding;
+  text-align: right; // right align buttons
+  background-color: $modal-footer-bg-color;
+  border-top: 1px solid $modal-footer-border-color;
+  @include clearfix; // clear it in case folks use .pull-* classes on buttons
+
+  // Properly space out buttons
+  .btn + .btn {
+    margin-left: 5px;
+    margin-bottom: 0; // account for input[type="submit"] which gets the bottom margin like all other inputs
+  }
+  // but override that for button groups
+  .btn-group .btn + .btn {
+    margin-left: -1px;
+  }
+  // and override it for block buttons as well
+  .btn-block + .btn-block {
+    margin-left: 0;
+  }
+}
+
+// Measure scrollbar width for padding body during modal show/hide
+.xe-modal-scrollbar-measure {
+  position: absolute;
+  top: -9999px;
+  width: 50px;
+  height: 50px;
+  overflow: scroll;
+}
+
+// Scale up the modal
+@media (min-width: $screen-sm-min) {
+  // Automatically set modal's width for larger viewports
+  .xe-modal-dialog {
+    width: $modal-md;
+    margin: 30px auto;
+  }
+  .xe-modal-content {
+    @include box-shadow(0 5px 15px rgba(0,0,0,.5));
+  }
+
+  // Modal sizes
+  .xe-modal-sm { width: $modal-sm; }
+}
+
+@media (min-width: $screen-md-min) {
+  .xe-modal-lg { width: $modal-lg; }
+}
+
+.xe-modal .xe-list-group {
+  overflow-y: auto;
+  padding-left: 24px;
+  margin: 0;
+  max-height: 365px;
+  li {
+    overflow: hidden;
+    padding: 12px 24px 12px 0;
+    border-top: 1px solid #e4e4e4;
+    list-style: none;
+    &:first-child {
+      border-top: none;
+    }
+    .list-text {
+      display: table-cell;
+      vertical-align: middle;
+      padding-left: 10px;
+      text-align: left;
+      > p {
+        font-size: 16px;
+        color: #2c2e37;
+      }
+      .sub-text {
+        font-size: 14px;
+        color: #b5b7bd;
+      }
+    }
+    > {
+      a, div {
+        display: table;
+        height: 100%;
+        width: 100%;
+      }
+    }
+  }
+}

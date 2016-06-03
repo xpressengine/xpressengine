@@ -1,4 +1,12 @@
 <?php
+/**
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
+ */
+
 namespace Xpressengine\UIObjects\Form;
 
 use PhpQuery\PhpQuery;
@@ -25,14 +33,14 @@ class FormPassword extends AbstractUIObject
         foreach ($args as $key => $arg) {
             switch ($key) {
                 case 'class':
-                    $input->addClass('class', $arg);
+                    $input->addClass($arg);
                     break;
                 case 'label':
                     $label->removeClass('hidden')->html($arg);
                     break;
                 case 'id':
                     $label->attr('for', $arg);
-                // pass to default
+                    // pass to default
                 default:
                     $input->attr($key, $arg);
                     break;

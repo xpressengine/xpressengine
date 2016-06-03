@@ -1,4 +1,12 @@
 <?php
+/**
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     LGPL-2.1 http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
+ */
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests;
@@ -39,34 +47,45 @@ class SettingsController extends Controller
     public function updateSetting(SiteHandler $siteHandler, ThemeHandler $themeHandler, Request $request)
     {
         $newConfig = $request->only(['site_title', 'favicon']);
-        $config = $siteHandler->getSiteConfig();
+        $oldConfig = $siteHandler->getSiteConfig();
 
-        // resolve site_title
-        $config['site_title'] = $newConfig['site_title'];
+        /* resolve site_title */
+        $oldConfig['site_title'] = $newConfig['site_title'];
 
-        // resolve favicon
-        $uploadedFavicon = array_get($newConfig, 'favicon');
-        if ($uploadedFavicon !== null) {
+        /* resolve favicon */
+        $uploaded = array_get($newConfig, 'favicon');
+        if ($uploaded !== null) {
+
             // remove old favicon file
-            if (isset($config['favicon'])) {
-                $oldLogoFileId = $config['favicon'];
-                $oldLogoFile = File::find($oldLogoFileId);
-                XeStorage::remove($oldLogoFile);
+            if ($oldId = $oldConfig->get('favicon.id')) {
+                $oldId = $oldConfig->get('favicon.id');
+                if($oldId !== null) {
+                    $oldFile = File::find($oldId);
+                    if($oldFile !== null) {
+                        app('xe.storage')->remove($oldFile);
+                    }
+                }
             }
-            $favicon = XeStorage::upload($uploadedFavicon, 'filebox');
-            $config['favicon'] = $favicon->id;
+
+            $saved = app('xe.storage')->upload($uploaded, 'filebox');
+            $favicon = [
+                'id'=>$saved->id,
+                'filename'=>$saved->clientname
+            ];
+
+            $media = app('xe.media');
+            $mediaFile = null;
+            if ($media->is($saved)) {
+                $mediaFile = $media->make($saved);
+                $favicon['path'] = $mediaFile->url();
+            }
+            $oldConfig['favicon'] = $favicon;
         }
-        $siteHandler->putSiteConfig($config);
+        $siteHandler->putSiteConfig($oldConfig);
 
         // resolve index instance
         $indexInstance = $request->get('indexInstance');
         $siteHandler->setHomeInstanceId($indexInstance);
-
-        // resolve theme
-        $theme = $request->only(['theme_desktop', 'theme_mobile']);
-        $theme = ['desktop' => $theme['theme_desktop'], 'mobile' => $theme['theme_mobile']];
-        $themeHandler->setSiteTheme($theme);
-
 
         return \Redirect::back()->with('alert', ['type' => 'success', 'message' => '저장되었습니다.']);
     }

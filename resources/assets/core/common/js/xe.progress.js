@@ -1,130 +1,6 @@
-System.amdDefine('queue', [], function() {
-
-  var pending = [];
-
-  function next() {
-    var fn = pending.shift();
-    if (fn) {
-      fn(next);
-    }
-  }
-
-  return function(fn) {
-    pending.push(fn);
-    if (pending.length == 1) next();
-  };
-
-});
-
-System.amdDefine('css', [], function() {
-  var cssPrefixes = [ 'Webkit', 'O', 'Moz', 'ms' ],
-    cssProps    = {};
-
-  function camelCase(string) {
-    return string.replace(/^-ms-/, 'ms-').replace(/-([\da-z])/gi, function(match, letter) {
-      return letter.toUpperCase();
-    });
-  }
-
-  function getVendorProp(name) {
-    var style = document.body.style;
-    if (name in style) return name;
-
-    var i = cssPrefixes.length,
-      capName = name.charAt(0).toUpperCase() + name.slice(1),
-      vendorName;
-    while (i--) {
-      vendorName = cssPrefixes[i] + capName;
-      if (vendorName in style) return vendorName;
-    }
-
-    return name;
-  }
-
-  function getStyleProp(name) {
-    name = camelCase(name);
-    return cssProps[name] || (cssProps[name] = getVendorProp(name));
-  }
-
-  function applyCss(element, prop, value) {
-    prop = getStyleProp(prop);
-    if (element) {
-      element[0].style[prop] = value;
-    }
-  }
-
-  return function(element, properties) {
-    var args = arguments,
-      prop,
-      value;
-
-    if (args.length == 2) {
-      for (prop in properties) {
-        value = properties[prop];
-        if (value !== undefined && properties.hasOwnProperty(prop)) applyCss(element, prop, value);
-      }
-    } else {
-      applyCss(element, args[1], args[2]);
-    }
-  };
-
-});
-
-System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
-  'use strict'
-
+(function(exports) {
   var instances = [];
-
-  return {
-    cssLoad: cssLoad,
-    start: start,
-    done: done
-  };
-
-
-
-  // @TODO 라이브러리 분리
-  // 다중 인스턴스를 위해 수정된 상태임
-
   var cssLoaded = false;
-  function cssLoad() {
-    if (cssLoaded === false) {
-      cssLoaded = true;
-      XE.cssLoad('/assets/core/common/css/progress.css'); // @TODO
-    }
-  };
-
-  function start(context) {
-    this.cssLoad();
-
-    var $context = $(context);
-    if ($context.context === undefined) {
-      $context = $('body');
-    }
-
-    setInstance($context);
-
-    $context.trigger('progressStart');
-  };
-
-  function done(context) {
-    var $context = $(context);
-    if ($context.context === undefined) {
-      $context = $('body');
-    }
-
-    $context.trigger('progressDone');
-  };
-
-  exports.spinner = function(context) {
-
-  };
-
-  exports.clearSpinner = function(context) {
-
-  };
-
-
 
   function getInstance($context) {
     var instanceId = $context.attr('data-progress-instance');
@@ -135,7 +11,7 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
     }
 
     return instance;
-  };
+  }
 
   function getCount($context) {
     var count = $context.attr('data-progress-count');
@@ -144,7 +20,7 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
       count = parseInt(count);
     }
     return count;
-  };
+  }
 
   function setCount($context, count) {
     if (parseInt(count) < 0) {
@@ -156,9 +32,9 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
   function setInstance($context, instance) {
     if (getInstance($context) === null) {
       var progress = new XeProgress(),
-        parent = 'body',
-        type = $context.data('progress-type') === undefined ? 'default' : $context.data('progress-type'),
-        showSpinner = type !== 'nospin';
+          parent = 'body',
+          type = $context.data('progress-type') === undefined ? 'default' : $context.data('progress-type'),
+          showSpinner = type !== 'nospin';
 
 
       if ($context.attr('id') !== undefined) {
@@ -181,14 +57,14 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
       setCount($context, 0);
       attachInstance($context);
     }
-  };
+  }
 
   function attachInstance($context) {
     $context.bind('progressStart', function(e) {
       e.stopPropagation();
-      var count = getCount($context);
-      setCount($context, count+1);
-      if (count === 0) {
+      var count = getCount($context) + 1;
+      setCount($context, count);
+      if (count === 1) {
         getInstance($context).start();
       }
 
@@ -197,15 +73,14 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
     $context.bind('progressDone', function(e) {
       e.stopPropagation();
 
-      var count = getCount($context);
-
-      setCount($(this), count-1);
-      if (count === 1) {
+      var count = getCount($(this)) - 1;
+      setCount($(this), count);
+      if (getCount($(this)) === 0) {
         var instance = getInstance($context);
         instance.done(instance.getTime());
       }
     });
-  };
+  }
 
 
   /**
@@ -314,30 +189,30 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
       this.status = (n === 1 ? null : n);
 
       var $progress = this.render(!started),
-        $bar      = this.$bar,
-        speed    = this.settings.speed,
-        ease     = this.settings.easing;
+          $bar      = this.$bar,
+          speed    = this.settings.speed,
+          ease     = this.settings.easing;
 
       // $progress.offsetWidth; /* Repaint */
       var self = this,
-        time = this.getTime();
-      queue(function(next) {
+          time = this.getTime();
+      XE.Progress.queue(function(next) {
         // Set positionUsing if it hasn't already been set
         if (self.settings.positionUsing === '') self.settings.positionUsing = self.getPositioningCSS();
 
         // Add transition
-        css(self.$bar, barPositionCSS(n, speed, ease, self.settings));
+        XE.Progress.css(self.$bar, barPositionCSS(n, speed, ease, self.settings));
 
         if (n === 1) {
           // Fade out
-          css(self.$progress, {
+          XE.Progress.css(self.$progress, {
             transition: 'none',
             opacity: 1
           });
           //$progress.offsetWidth; /* Repaint */
 
           setTimeout(function() {
-            css(self.$progress, {
+            XE.Progress.css(self.$progress, {
               transition: 'all ' + speed + 'ms linear',
               opacity: 0
             });
@@ -404,14 +279,14 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
       $progress.html(this.settings.template[this.settings.type]);
 
       var $bar      = $progress.find(this.settings.barSelector),
-        perc     = fromStart ? '-100' : toBarPerc(this.status || 0),
-        $parent   = $(this.settings.parent),
-        $spinner;
+          perc     = fromStart ? '-100' : toBarPerc(this.status || 0),
+          $parent   = $(this.settings.parent),
+          $spinner;
 
       $bar.attr('title-name', this.instanceId);
       this.$bar = $bar;
 
-      css($bar, {
+      XE.Progress.css($bar, {
         transition: 'all 0 linear',
         transform: 'translate3d(' + perc + '%,0,0)'
       });
@@ -465,9 +340,9 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
 
       // Sniff prefixes
       var vendorPrefix = ('WebkitTransform' in bodyStyle) ? 'Webkit' :
-        ('MozTransform' in bodyStyle) ? 'Moz' :
-          ('msTransform' in bodyStyle) ? 'ms' :
-            ('OTransform' in bodyStyle) ? 'O' : '';
+          ('MozTransform' in bodyStyle) ? 'Moz' :
+              ('msTransform' in bodyStyle) ? 'ms' :
+                  ('OTransform' in bodyStyle) ? 'O' : '';
 
       if (vendorPrefix + 'Perspective' in bodyStyle) {
         // Modern browsers with 3D support, e.g. Webkit, IE10
@@ -514,4 +389,114 @@ System.amdDefine('xe.progress', ['css', 'queue'], function(css, queue) {
 
     return barCSS;
   }
-});
+
+  exports.XE.Progress = function() {
+
+    return {
+      cssLoad: function() {
+        if (cssLoaded === false) {
+          cssLoaded = true;
+          XE.cssLoad('/assets/core/common/css/progress.css'); // @TODO
+        }
+      },
+      start: function(context) {
+        if($('link[href*="assets/core/common/css/progress.css"]').length == 0) {
+          XE.cssLoad('/assets/core/common/css/progress.css'); // @TODO
+        }
+
+        var $context = $(context);
+        if ($context.context === undefined) {
+          $context = $('body');
+        }
+
+        setInstance($context);
+
+        $context.trigger('progressStart');
+      },
+      done: function(context) {
+        var $context = $(context);
+        if ($context.context === undefined) {
+          $context = $('body');
+        }
+
+        $context.trigger('progressDone');
+      }
+    }
+  }();
+})(window);
+
+
+//queue
+(function(exports, Progress) {
+  var pending = [];
+
+  function next() {
+    var fn = pending.shift();
+    if (fn) {
+      fn(next);
+    }
+  }
+
+  Progress.queue = function(fn) {
+    pending.push(fn);
+    if (pending.length == 1) next();
+  };
+
+})(window, XE.Progress);
+
+//css
+(function(exports, Progress) {
+
+  var cssPrefixes = [ 'Webkit', 'O', 'Moz', 'ms' ],
+      cssProps    = {};
+
+  function camelCase(string) {
+    return string.replace(/^-ms-/, 'ms-').replace(/-([\da-z])/gi, function(match, letter) {
+      return letter.toUpperCase();
+    });
+  }
+
+  function getVendorProp(name) {
+    var style = document.body.style;
+    if (name in style) return name;
+
+    var i = cssPrefixes.length,
+        capName = name.charAt(0).toUpperCase() + name.slice(1),
+        vendorName;
+    while (i--) {
+      vendorName = cssPrefixes[i] + capName;
+      if (vendorName in style) return vendorName;
+    }
+
+    return name;
+  }
+
+  function getStyleProp(name) {
+    name = camelCase(name);
+    return cssProps[name] || (cssProps[name] = getVendorProp(name));
+  }
+
+  function applyCss(element, prop, value) {
+    prop = getStyleProp(prop);
+    if (element) {
+      element[0].style[prop] = value;
+    }
+  }
+
+  Progress.css = function() {
+    return function(element, properties) {
+      var args = arguments,
+          prop,
+          value;
+
+      if (args.length == 2) {
+        for (prop in properties) {
+          value = properties[prop];
+          if (value !== undefined && properties.hasOwnProperty(prop)) applyCss(element, prop, value);
+        }
+      } else {
+        applyCss(element, args[1], args[2]);
+      }
+    };
+  }
+})(window, XE.Progress);

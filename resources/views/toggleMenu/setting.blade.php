@@ -3,60 +3,67 @@
 {{ XeFrontend::js('/assets/vendor/jqueryui/jquery-ui.js')->appendTo('head')->load() }}
 
 
-    <form id="__xe_toggleMenu_{{$typeIdable}}_{{$instanceId}}" class="form-horizontal" method="post" action="{{ route('manage.toggleMenu.setting') }}">
-        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-        <input type="hidden" name="type" value="{{ $type }}">
-        @if($instanceId !== null)
+<form id="__xe_toggleMenu_{{$typeIdable}}_{{$instanceId}}" class="form-horizontal" method="post" action="{{ route('manage.toggleMenu.setting') }}">
+    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="type" value="{{ $type }}">
+    @if($instanceId !== null)
         <input type="hidden" name="instanceId" value="{{ $instanceId }}">
-        @endif
+    @endif
 
-        <div class="row">
-            <div class="col-md-12">
-
-                <div class="panel">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-sm-1"></div>
-                            <div class="col-sm-4"><h5>{{ xe_trans('xe::menu') }}</h5></div>
-                            <div class="col-sm-4"><h5>{{ xe_trans('xe::description') }}</h5></div>
-                            <div class="col-sm-3"><h5>{{ xe_trans('xe::on') }}/{{ xe_trans('xe::off') }}</h5></div>
+    <div class="table-responsive item-setting">
+        <table class="table table-sortable">
+            <colgroup>
+                <col width="200">
+                <col>
+                <col>
+            </colgroup>
+            <tbody>
+            @forelse($items as $key => $data)
+                <tr>
+                    <td>
+                        <button class="btn handler"><i class="xi-bullet-point"></i></button>
+                        <em class="item-title">{{ $data['item']::getName() }}</em>
+                    </td>
+                    <td>
+                        <span class="item-subtext">{{ $data['item']::getDescription() }}</span>
+                    </td>
+                    <td>
+                        <div class="xe-btn-toggle pull-right">
+                            <label>
+                                <span class="sr-only">toggle</span>
+                                <input type="checkbox" name="items[]" value="{{ $key }}" @if($data['activated']) checked="checked" @endif />
+                                <span class="toggle"></span>
+                            </label>
                         </div>
-                    </div>
-                    <ul class="list-group __xe_sortable_items">
-                        @forelse($items as $key => $data)
-                            <li class="list-group-item">
-                                <div class="row">
-                                    <div class="col-sm-1"><i class="xi-bullet-point"></i></div>
-                                    <div class="col-sm-4">{{ $data['item']::getName() }}</div>
-                                    <div class="col-sm-4">{{ $data['item']::getDescription() }}</div>
-                                    <div class="col-sm-3"><input type="checkbox" name="items[]" value="{{ $key }}" @if($data['activated']) checked @endif data-toggle="toggle" data-size="small" data-onstyle="info"></div>
-                                </div>
-                            </li>
-                        @empty
-                            <li class="list-group-item text-center">
-                                <h4>{{ xe_trans('xe::noMenu') }}</h4>
-                            </li>
-                        @endforelse
-                    </ul>
-                </div>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td>{{ xe_trans('xe::noMenu') }}</td>
+                </tr>
+            @endforelse
+            </tbody>
+        </table>
+    </div>
 
-                <p>
-                    <div class="pull-right">
-                        <button type="submit" class="btn btn-primary"><i class="xi-download"></i>{{ xe_trans('xe::save') }}</button>
-                    </div>
-                </p>
-
-            </div>
-            <div class="col-sm-1">&nbsp;</div>
+    <div class="panel-footer">
+        <div class="pull-right">
+            <button type="submit" class="btn btn-primary btn-lg">{{ xe_trans('xe::save') }}</button>
         </div>
+    </div>
 
-    </form>
+</form>
 
 <script type="text/javascript">
     $(function() {
-
-        $("#__xe_toggleMenu_{{$typeIdable}}_{{$instanceId}} .__xe_sortable_items").sortable({handle: ".xi-bullet-point"});
-        $("#__xe_toggleMenu_{{$typeIdable}}_{{$instanceId}} .__xe_sortable_items").disableSelection();
+        // sortable 한 table 구현해야 함
+        $(".table-sortable tbody").sortable({
+            handle: '.handler',
+            cancel: '',
+            update: function( event, ui ) {
+                console.log('update', event, ui);
+            }
+        }).disableSelection();
 
         $('#__xe_toggleMenu_{{$typeIdable}}_{{$instanceId}}').submit(function () {
             $('<input>').attr('type', 'hidden').attr('name', 'redirect').val(location.href).appendTo(this);

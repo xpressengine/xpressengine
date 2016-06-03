@@ -435,4 +435,18 @@ html {
   clip: auto;
 }
 
+.xe-pull-right {
+  float: right !important;
+}
+
+.xe-pull-left {
+  float: left !important;
+}
+
+.xe-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /*# sourceMappingURL=xe-common.css.map */

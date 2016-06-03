@@ -228,7 +228,7 @@
 
             $.support.transition && this.$tip.hasClass('fade') ?
                 $tip
-                    .one('xeTransitionEnd', complete)
+                    .one('transitionEnd', complete)
                     .emulateTransitionEnd(Tooltip.TRANSITION_DURATION) :
                 complete()
         }
@@ -319,7 +319,7 @@
 
         $.support.transition && $tip.hasClass('fade') ?
             $tip
-                .one('xeTransitionEnd', complete)
+                .one('transitionEnd', complete)
                 .emulateTransitionEnd(Tooltip.TRANSITION_DURATION) :
             complete()
 

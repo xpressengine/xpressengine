@@ -1,0 +1,174 @@
+//
+// Input groups
+// --------------------------------------------------
+
+// Base styles
+// -------------------------
+.xe-input-group {
+  position: relative; // For dropdowns
+  display: table;
+  border-collapse: separate; // prevent input groups from inheriting border styles from table cells when placed within a table
+
+  // Undo padding and float of grid classes
+  &[class*="col-"] {
+    float: none;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .xe-form-control {
+    // Ensure that the input is always above the *appended* addon button for
+    // proper border colors.
+    position: relative;
+    z-index: 2;
+
+    // IE9 fubars the placeholder attribute in text inputs and the arrows on
+    // select elements in input groups. To fix it, we float the input. Details:
+    // https://github.com/twbs/bootstrap/issues/11561#issuecomment-28936855
+    float: left;
+
+    width: 100%;
+    margin-bottom: 0;
+    
+    &:focus {
+      z-index: 3;
+    }
+  }
+}
+
+// Sizing options
+//
+// Remix the default form control sizing classes into new ones for easier
+// manipulation.
+
+.xe-input-group-lg > .xe-form-control,
+.xe-input-group-lg > .xe-input-group-addon,
+.xe-input-group-lg > .xe-input-group-btn > .xe-btn {
+  @extend .input-lg;
+}
+.xe-input-group-sm > .xe-form-control,
+.xe-input-group-sm > .xe-input-group-addon,
+.xe-input-group-sm > .xe-input-group-btn > .xe-btn {
+  @extend .input-sm;
+}
+
+
+// Display as table-cell
+// -------------------------
+.xe-input-group-addon,
+.xe-input-group-btn,
+.xe-input-group .xe-form-control {
+  display: table-cell;
+
+  &:not(:first-child):not(:last-child) {
+    border-radius: 0;
+  }
+}
+// Addon and addon wrapper for buttons
+.xe-input-group-addon,
+.xe-input-group-btn {
+  width: 1%;
+  white-space: nowrap;
+  vertical-align: middle; // Match the inputs
+}
+
+// Text input groups
+// -------------------------
+.xe-input-group-addon {
+  padding: $padding-base-vertical $padding-base-horizontal;
+  font-size: $font-size-base;
+  font-weight: normal;
+  line-height: 1;
+  color: $input-color;
+  text-align: center;
+  background-color: $input-group-addon-bg;
+  border: 1px solid $input-group-addon-border-color;
+  border-radius: $input-border-radius;
+
+  // Sizing
+  &.input-sm {
+    padding: $padding-small-vertical $padding-small-horizontal;
+    font-size: $font-size-small;
+    border-radius: $input-border-radius-small;
+  }
+  &.input-lg {
+    padding: $padding-large-vertical $padding-large-horizontal;
+    font-size: $font-size-large;
+    border-radius: $input-border-radius-large;
+  }
+
+  // Nuke default margins from checkboxes and radios to vertically center within.
+  input[type="radio"],
+  input[type="checkbox"] {
+    margin-top: 0;
+  }
+}
+
+// Reset rounded corners
+.xe-input-group .xe-form-control:first-child,
+.xe-input-group-addon:first-child,
+.xe-input-group-btn:first-child > .xe-btn,
+.xe-input-group-btn:first-child > .xe-btn-group > .xe-btn,
+.xe-input-group-btn:first-child > .xe-dropdown,
+.xe-input-group-btn:first-child > .xe-dropup,
+.xe-input-group-btn:last-child > .xe-btn:not(:last-child):not(.xe-dropdown),
+.xe-input-group-btn:last-child > .xe-btn:not(:last-child):not(.xe-dropup),
+.xe-input-group-btn:last-child > .xe-btn-group:not(:last-child) > .xe-btn {
+  @include border-right-radius(0);
+}
+.xe-input-group-addon:first-child {
+  border-right: 0;
+}
+.xe-input-group .xe-form-control:last-child,
+.xe-input-group-addon:last-child,
+.xe-input-group-btn:last-child > .xe-btn,
+.xe-input-group-btn:last-child > .xe-btn-group > .xe-btn,
+.xe-input-group-btn:last-child > .xe-dropdown,
+.xe-input-group-btn:last-child > .xe-dropup,
+.xe-input-group-btn:first-child > .xe-btn:not(:first-child),
+.xe-input-group-btn:first-child > .xe-btn-group:not(:first-child) > .xe-btn {
+  @include border-left-radius(0);
+}
+.xe-input-group-addon:last-child {
+  border-left: 0;
+}
+
+// Button input groups
+// -------------------------
+.xe-input-group-btn {
+  position: relative;
+  // Jankily prevent input button groups from wrapping with `white-space` and
+  // `font-size` in combination with `inline-block` on buttons.
+  font-size: 0;
+  white-space: nowrap;
+
+  // Negative margin for spacing, position for bringing hovered/focused/actived
+  // element above the siblings.
+  > .xe-btn {
+    position: relative;
+    + .xe-btn {
+      margin-left: -1px;
+    }
+    // Bring the "active" button to the front
+    &:hover,
+    &:focus,
+    &:active {
+      z-index: 2;
+    }
+  }
+
+  // Negative margin to only have a 1px border between the two
+  &:first-child {
+    > .xe-btn,
+    > .xe-btn-group {
+      margin-right: -1px;
+    }
+  }
+  &:last-child {
+    > .xe-btn,
+    > .xe-btn-group {
+      z-index: 2;
+      margin-left: -1px;
+    }
+  }
+}

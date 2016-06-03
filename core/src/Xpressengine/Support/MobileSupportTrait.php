@@ -2,15 +2,15 @@
 /**
  *  This file is part of the Xpressengine package.
  *
- * PHP version 5
- *
  * @category    Support
  * @package     Xpressengine\Support
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
  */
+
 namespace Xpressengine\Support;
 
 /**
@@ -19,9 +19,6 @@ namespace Xpressengine\Support;
  *
  * @category    Support
  * @package     Xpressengine\Support
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
  */
 trait MobileSupportTrait
 {
@@ -47,16 +44,6 @@ trait MobileSupportTrait
     }
 
     /**
-     * desktop 버전만을 지원하는지 조사한다.
-     *
-     * @return bool
-     */
-    public static function supportDesktopOnly()
-    {
-        return static::$supportDesktop === true && static::$supportMobile === false;
-    }
-
-    /**
      * mobile 버전 지원 여부를 조사한다.
      *
      * @return bool
@@ -64,16 +51,6 @@ trait MobileSupportTrait
     public static function supportMobile()
     {
         return static::$supportMobile;
-    }
-
-    /**
-     * mobile 버전만을 지원하는지 조사한다.
-     *
-     * @return bool
-     */
-    public static function supportMobileOnly()
-    {
-        return static::$supportMobile === true && static::$supportDesktop === false;
     }
 
     /**
@@ -86,9 +63,9 @@ trait MobileSupportTrait
     public static function support($version)
     {
         if ($version === 'desktop') {
-            return static::$supportDesktop;
+            return static::supportDesktop();
         } elseif ($version === 'mobile') {
-            return static::$supportMobile;
+            return static::supportMobile();
         }
     }
 }

@@ -22,7 +22,7 @@
   "extra": {
     "xpressengine": {
       "title": "DummyPluginTitle",
-      "component": []
+      "component": {}
     }
   },
   "repositories": [
@@ -32,7 +32,6 @@
     }
   ],
   "require": {
-
   },
   "autoload": {
     "psr-4": {

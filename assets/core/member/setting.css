@@ -44,6 +44,12 @@ li {
   vertical-align: top;
 }
 
+.label-text {
+  color: #8e8e93;
+  font-size: 14px;
+  line-height: 36px;
+}
+
 .setting-wrap h1 {
   margin: 0;
   padding: 0 16px;
@@ -149,6 +155,7 @@ li {
   border: none;
   color: #2389ee;
   font-size: 25px;
+  cursor: pointer;
 }
 
 .setting-group p,
@@ -217,12 +224,12 @@ li {
   color: #434a53;
 }
 
-.setting-card .setting-detail-content .password-content.wrong p,
-.setting-card .setting-detail-content .password-content.wrong .text-message {
+.setting-card .setting-detail-content .password-content.wrong-input p,
+.setting-card .setting-detail-content .password-content.wrong-input .text-message {
   color: #db2828;
 }
 
-.setting-card .setting-detail-content .password-content.wrong .xe-input-text {
+.setting-card .setting-detail-content .password-content.wrong-input .xe-form-control {
   border-color: #dd251e;
 }
 
@@ -304,10 +311,6 @@ li {
   color: #2c8beb !important;
 }
 
-.setting-card .xe-btn xe-btn-text.text-blue {
-  margin-right: 12px;
-}
-
 .setting-card.login-connect .xe-btn xe-btn-text {
   margin: 0 12px 0 0;
   color: #2c8beb;
@@ -319,7 +322,7 @@ li {
   font-size: 13px;
 }
 
-.setting-group .xe-input-text + .text-blue {
+.setting-group .xe-form-control + .text-blue {
   margin-top: 6px;
 }
 
@@ -327,7 +330,7 @@ li {
   margin-left: 10px;
 }
 
-.setting-group .xe-input-text.margin {
+.setting-group .xe-form-control.margin {
   margin: 9px 0 25px;
 }
 
@@ -352,7 +355,7 @@ li {
 }
 
 .setting-card .xe-btn-group-all {
-  margin-left: 16px;
+  margin: 24px 0 24px 16px;
 }
 
 .setting-card .xe-input-group .xe-btn xe-btn-text {
@@ -541,13 +544,13 @@ li {
   .setting-card .xe-btn-group-all {
     margin-left: 0;
   }
-  .setting-group .xe-input-text {
+  .setting-group .xe-form-control {
     width: 290px;
   }
   .menu-open {
     display: none;
   }
-  .setting-card .xe-input-text {
+  .setting-card .xe-form-control {
     width: 280px;
   }
   .setting-card .btn-group {

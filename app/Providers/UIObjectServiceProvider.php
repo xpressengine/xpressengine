@@ -1,9 +1,18 @@
 <?php
+/**
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     LGPL-2.1 http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
+ */
+
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Plugin\PluginRegister;
 use Xpressengine\UIObject\UIObjectHandler;
+use Xpressengine\UIObjects\Form\Form;
 use Xpressengine\UIObjects\Form\FormCheckbox;
 use Xpressengine\UIObjects\Form\FormFile;
 use Xpressengine\UIObjects\Form\FormImage;
@@ -74,6 +83,7 @@ class UIObjectServiceProvider extends ServiceProvider
         /** @var PluginRegister $register */
         $register = $this->app['xe.pluginRegister'];
 
+        $register->add(Form::class);
         $register->add(FormText::class);
         $register->add(FormPassword::class);
         $register->add(FormTextArea::class);
