@@ -2,8 +2,6 @@
 /**
  * AbstractType
  *
- * PHP version 5
- *
  * @category    DynamicField
  * @package     Xpressengine\DynamidField
  * @author      XE Team (developers) <developers@xpressengine.com>
@@ -489,7 +487,7 @@ abstract class AbstractType implements ComponentInterface
     public function insert(array $args)
     {
         $config = $this->config;
-        
+
         if (isset($args[$config->get('joinColumnName')]) === false) {
             throw new Exceptions\RequiredJoinColumnException;
         }
@@ -550,7 +548,7 @@ abstract class AbstractType implements ComponentInterface
     public function update(array $args, array $wheres)
     {
         $config = $this->config;
-        
+
         $where = $this->parseWhere($wheres);
 
         if (isset($where[$config->get('joinColumnName')]) === false) {

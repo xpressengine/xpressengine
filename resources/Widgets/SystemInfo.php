@@ -8,8 +8,6 @@ use Xpressengine\Widget\AbstractWidget;
 /**
  * SystemInfo.php
  *
- * PHP version 5
- *
  * @category
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>

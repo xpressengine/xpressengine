@@ -2,8 +2,6 @@
 /**
  * InvalidRendererException
  *
- * PHP version 5
- *
  * @category    Database
  * @package     Xpressengine\Database
  * @author      XE Team (developers) <developers@xpressengine.com>

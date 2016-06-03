@@ -2,8 +2,6 @@
 /**
  * Site.php
  *
- * PHP version 5
- *
  * @category    Command
  * @package     App\Console\Commands
  * @author      XE Team (developers) <developers@xpressengine.com>

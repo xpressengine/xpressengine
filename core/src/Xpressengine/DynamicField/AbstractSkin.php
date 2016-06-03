@@ -2,8 +2,6 @@
 /**
  * AbstractSkin
  *
- * PHP version 5
- *
  * @category    DynamicField
  * @package     Xpressengine\DynamidField
  * @author      XE Team (developers) <developers@xpressengine.com>
@@ -118,7 +116,7 @@ abstract class AbstractSkin implements ComponentInterface
      * @return mixed
      */
     abstract public function output($name, array $args);
-    
+
     /**
      * boot
      *

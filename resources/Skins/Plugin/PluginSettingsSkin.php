@@ -2,8 +2,6 @@
 /**
  *  This file is part of the Xpressengine package.
  *
- * PHP version 5
- *
  * @category    Plugin
  * @package     Xpressengine\Skins\Plugin
  * @author      XE Team (developers) <developers@xpressengine.com>

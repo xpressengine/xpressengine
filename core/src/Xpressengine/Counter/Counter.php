@@ -2,8 +2,6 @@
 /**
  * Counter
  *
- * PHP version 5
- *
  * @category    Counter
  * @package     Xpressengine\Counter
  * @author      XE Team (developers) <developers@xpressengine.com>

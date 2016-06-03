@@ -2,8 +2,6 @@
 /**
  * This file is unable move to self exception.
  *
- * PHP version 5
- *
  * @category    Category
  * @package     Xpressengine\Category
  * @author      XE Team (developers) <developers@xpressengine.com>

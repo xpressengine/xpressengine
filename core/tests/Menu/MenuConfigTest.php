@@ -2,8 +2,6 @@
 /**
  * MenuConfigTest
  *
- * PHP version 5
- *
  * @category  Test
  * @package   Xpressengine\Tests\Menu
  * @author    XE Team (developers) <developers@xpressengine.com>

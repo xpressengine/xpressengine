@@ -2,8 +2,6 @@
 /**
  * This file is position class
  *
- * PHP version 5
- *
  * @category    Media
  * @package     Xpressengine\Media
  * @author      XE Team (developers) <developers@xpressengine.com>

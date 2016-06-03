@@ -2,8 +2,6 @@
 /**
  * Exceptions
  *
- * PHP version 5
- *
  * @category    Trash
  * @package     Xpressengine\Trash
  * @author      XE Team (developers) <developers@xpressengine.com>

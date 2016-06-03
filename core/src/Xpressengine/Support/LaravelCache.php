@@ -2,8 +2,6 @@
 /**
  * Laravel Cache class
  *
- * PHP version 5
- *
  * @category    Support
  * @package     Xpressengine\Support
  * @author      XE Team (developers) <developers@xpressengine.com>

@@ -2,8 +2,6 @@
 /**
  * This file is captcha manager.
  *
- * PHP version 5
- *
  * @category    Captcha
  * @package     Xpressengine\Captcha
  * @author      XE Team (developers) <developers@xpressengine.com>

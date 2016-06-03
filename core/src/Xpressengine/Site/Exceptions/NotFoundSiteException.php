@@ -2,8 +2,6 @@
 /**
  * Class NotFoundSiteException
  *
- * PHP version 5
- *
  * @category  Site
  * @package   Xpressengine\Site
  * @author    XE Team (developers) <developers@xpressengine.com>

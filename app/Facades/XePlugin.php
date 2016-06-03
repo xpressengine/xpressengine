@@ -2,8 +2,6 @@
 /**
  * XePlugin
  *
- * PHP version 5
- *
  * @category    Plugin
  * @package     Xpressengine\Plugin
  * @author      XE Team (developers) <developers@xpressengine.com>

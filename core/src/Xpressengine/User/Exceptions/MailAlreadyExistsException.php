@@ -2,8 +2,6 @@
 /**
  * This file is already exists input mail address exception.
  *
- * PHP version 5
- *
  * @category    User
  * @package     Xpressengine\User
  * @author      XE Team (developers) <developers@xpressengine.com>

@@ -2,8 +2,6 @@
 /**
  * This file is open graph importer.
  *
- * PHP version 5
- *
  * @category    Seo
  * @package     Xpressengine\Seo
  * @author      XE Team (developers) <developers@xpressengine.com>

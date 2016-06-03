@@ -2,8 +2,6 @@
 /**
  * widget helper function. This file is part of the Xpressengine package.
  *
- * PHP version 5
- *
  * @category    Widget
  * @package     Xpressengine\Widget
  * @author      XE Team (develop) <develops@xpressengine.com>

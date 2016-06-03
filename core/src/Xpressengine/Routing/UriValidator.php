@@ -2,8 +2,6 @@
 /**
  * UriValidator
  *
- * PHP version 5
- *
  * @category  Routing
  * @package   Xpressengine\Routing
  * @author    XE Team (developers) <developers@xpressengine.com>

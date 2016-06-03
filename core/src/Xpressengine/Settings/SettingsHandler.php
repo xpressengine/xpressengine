@@ -2,8 +2,6 @@
 /**
  * SettingsHandler class.
  *
- * PHP version 5
- *
  * @category    Settings
  * @package     Xpressengine\Settings
  * @author      XE Team (developers) <developers@xpressengine.com>

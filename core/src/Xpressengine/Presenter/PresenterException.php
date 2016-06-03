@@ -2,8 +2,6 @@
 /**
  * PresenterException
  *
- * PHP version 5
- *
  * @category    Presenter
  * @package     Xpressengine\Presenter
  * @author      XE Team (developers) <developers@xpressengine.com>

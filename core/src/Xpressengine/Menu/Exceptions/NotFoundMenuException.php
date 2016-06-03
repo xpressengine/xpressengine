@@ -2,8 +2,6 @@
 /**
  * Class NotFountMenuException
  *
- * PHP version 5
- *
  * @category  Menu
  * @package   Xpressengine\Menu
  * @author    XE Team (developers) <developers@xpressengine.com>

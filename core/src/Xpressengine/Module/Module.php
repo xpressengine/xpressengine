@@ -2,8 +2,6 @@
 /**
  * Module
  *
- * PHP version 5
- *
  * @category  Module
  * @package   Xpressengine\Module
  * @author    XE Team (developers) <developers@xpressengine.com>

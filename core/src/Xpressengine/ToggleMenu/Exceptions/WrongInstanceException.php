@@ -2,8 +2,6 @@
 /**
  * This file is exception of wrong instance.
  *
- * PHP version 5
- *
  * @category    ToggleMenu
  * @package     Xpressengine\ToggleMenu
  * @author      XE Team (developers) <developers@xpressengine.com>

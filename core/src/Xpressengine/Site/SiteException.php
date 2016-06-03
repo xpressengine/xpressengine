@@ -2,8 +2,6 @@
 /**
  * SiteException Class
  *
- * PHP version 5
- *
  * @category    Site
  * @package     Xpressengine\Site\Exceptions
  * @author      XE Team (developers) <developers@xpressengine.com>

@@ -2,8 +2,6 @@
 /**
  * Class Translation
  *
- * PHP version 5
- *
  * @category    Translation
  * @package     Xpressengine\Translation
  * @author      XE Team (developers) <developers@xpressengine.com>

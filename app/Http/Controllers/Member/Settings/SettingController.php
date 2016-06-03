@@ -2,8 +2,6 @@
 /**
  *  This file is part of the Xpressengine package.
  *
- * PHP version 5
- *
  * @category
  * @package     Xpressengine\
  * @author      XE Team (developers) <developers@xpressengine.com>
@@ -146,7 +144,7 @@ class SettingController extends Controller
     {
         $connection = $this->users->getConnection();
         $dynamicFieldSection = new DynamicFieldSection('user', $connection, false);
-        
+
         return XePresenter::make(
             'member.settings.setting.field',
             array_merge(

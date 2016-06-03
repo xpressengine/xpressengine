@@ -2,8 +2,6 @@
 /**
  * ThemeHandler class. This file is part of the Xpressengine package.
  *
- * PHP version 5
- *
  * @category    Theme
  * @package     Xpressengine\Theme
  * @author      XE Team (developers) <developers@xpressengine.com>

@@ -2,8 +2,6 @@
 /**
  * This file is support helper functions
  *
- * PHP version 5
- *
  * @category    Support
  * @package     Xpressengine\Support
  * @author      XE Team (developers) <developers@xpressengine.com>

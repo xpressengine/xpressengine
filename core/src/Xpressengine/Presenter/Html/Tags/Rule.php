@@ -2,8 +2,6 @@
 /**
  * Rule
  *
- * PHP version 5
- *
  * @category    Frontend
  * @package     Xpressengine\Presenter
  * @author      XE Team (developers) <developers@xpressengine.com>

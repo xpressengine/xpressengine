@@ -2,8 +2,6 @@
 /**
  * XeTemporary
  *
- * PHP version 5
- *
  * @category    Temporary
  * @package     Xpressengine\Temporary
  * @author      XE Team (developers) <developers@xpressengine.com>

@@ -2,8 +2,6 @@
 /**
  * This file is not matched instance exception
  *
- * PHP version 5
- *
  * @category    Permission
  * @package     Xpressengine\Permission
  * @author      XE Team (developers) <developers@xpressengine.com>

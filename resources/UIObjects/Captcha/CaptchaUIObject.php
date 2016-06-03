@@ -2,8 +2,6 @@
 /**
  * This file is captcha UI object.
  *
- * PHP version 5
- *
  * @category    Captcha
  * @package     Xpressengine\Captcha
  * @author      XE Team (developers) <developers@xpressengine.com>

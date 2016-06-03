@@ -2,8 +2,6 @@
 /**
  * XeInterception
  *
- * PHP version 5
- *
  * @category    Interception
  * @package     Xpressengine\Interception
  * @author      XE Team (developers) <developers@xpressengine.com>

@@ -3,8 +3,6 @@
 /**
  * SiteHandlerTest
  *
- * PHP version 5
- *
  * @category  Test
  * @package   Xpressengine\Tests\Site
  * @author    XE Team (developers) <developers@xpressengine.com>

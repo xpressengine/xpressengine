@@ -2,8 +2,6 @@
 /**
  * MemoryDecorator
  *
- * PHP version 5
- *
  * @category  Routing
  * @package   Xpressengine\Routing
  * @author    XE Team (developers) <developers@xpressengine.com>
@@ -74,7 +72,7 @@ class MemoryDecorator implements RouteRepository
     public function all()
     {
         $routes = $this->repo->all();
-        
+
         foreach ($routes as $route) {
             $this->setToMap($route);
         }

@@ -2,8 +2,6 @@
 /**
  * Service provider
  *
- * PHP version 5
- *
  * @category    DyanmicField
  * @package     Xpressengine\DynamidField
  * @author      XE Team (developers) <developers@xpressengine.com>

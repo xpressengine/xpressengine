@@ -2,8 +2,6 @@
 /**
  * This file is a policy for instance class.
  *
- * PHP version 5
- *
  * @category    Permission
  * @package     Xpressengine\Permission
  * @author      XE Team (developers) <developers@xpressengine.com>

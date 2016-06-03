@@ -2,8 +2,6 @@
 /**
  * Site
  *
- * PHP version 5
- *
  * @category    Site
  * @package     Xpressengine\Site
  * @author      XE Team (developers) <developers@xpressengine.com>
@@ -17,8 +15,6 @@ use Xpressengine\Database\Eloquent\DynamicModel;
 
 /**
  * Site
- *
- * PHP version 5
  *
  * @category    Site
  * @package     Xpressengine\Site

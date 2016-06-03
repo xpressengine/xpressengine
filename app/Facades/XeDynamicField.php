@@ -2,8 +2,6 @@
 /**
  * XeDynamicField
  *
- * PHP version 5
- *
  * @category    DynamicField
  * @package     Xpressengine\DynamicField
  * @author      XE Team (developers) <developers@xpressengine.com>

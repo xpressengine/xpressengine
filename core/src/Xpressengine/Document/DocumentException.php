@@ -2,8 +2,6 @@
 /**
  * DocumentException
  *
- * PHP version 5
- *
  * @category    Document
  * @package     Xpressengine\Document
  * @author      XE Team (developers) <developers@xpressengine.com>

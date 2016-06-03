@@ -2,8 +2,6 @@
 /**
  * UserVirtualGroup
  *
- * PHP version 5
- *
  * @category    User
  * @package     Xpressengine\User
  * @author      XE Team (developers) <developers@xpressengine.com>

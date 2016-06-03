@@ -2,8 +2,6 @@
 /**
  * Service provider
  *
- * PHP version 5
- *
  * @category  Providers
  * @package   App\Providers
  * @author    XE Team (developers) <developers@xpressengine.com>

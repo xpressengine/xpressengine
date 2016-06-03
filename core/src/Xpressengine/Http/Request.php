@@ -2,8 +2,6 @@
 /**
  *  This file is part of the Xpressengine package.
  *
- * PHP version 5
- *
  * @category    Http
  * @package     Xpressengine\Http
  * @author      XE Team (developers) <developers@xpressengine.com>
@@ -21,8 +19,6 @@ use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 /**
  * Request 클래스
- *
- * PHP version 5
  *
  * @category    Http
  * @package     Xpressengine\Http

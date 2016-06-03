@@ -2,8 +2,6 @@
 /**
  * InstanceConfigTest
  *
- * PHP version 5
- *
  * @category    Test
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>

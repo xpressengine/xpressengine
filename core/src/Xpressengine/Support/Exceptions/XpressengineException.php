@@ -2,8 +2,6 @@
 /**
  * XpressengineException class.
  *
- * PHP version 5
- *
  * @category    Exceptions
  * @package     Xpressengine\Support\Exceptions
  * @author      XE Team (developers) <developers@xpressengine.com>

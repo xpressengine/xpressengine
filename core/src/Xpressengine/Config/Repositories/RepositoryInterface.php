@@ -2,8 +2,6 @@
 /**
  * Repository interface
  *
- * PHP version 5
- *
  * @category    Config
  * @package     Xpressengine\Config
  * @author      XE Team (developers) <developers@xpressengine.com>

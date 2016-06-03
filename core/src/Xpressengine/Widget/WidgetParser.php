@@ -2,8 +2,6 @@
 /**
  * WidgetParser
  *
- * PHP version 5
- *
  * @category  Widget
  * @package   Xpressengine\Widget
  * @author    XE Team (developers) <developers@xpressengine.com>

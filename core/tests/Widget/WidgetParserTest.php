@@ -3,8 +3,6 @@
 /**
  * WidgetParserTest
  *
- * PHP version 5
- *
  * @category  Test
  * @package   Xpressengine\Tests\Widget
  * @author    XE Team (developers) <developers@xpressengine.com>

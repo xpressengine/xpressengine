@@ -2,8 +2,6 @@
 /**
  * DynamicFieldException
  *
- * PHP version 5
- *
  * @category    DynamicField
  * @package     Xpressengine\DynamidField
  * @author      XE Team (developers) <developers@xpressengine.com>

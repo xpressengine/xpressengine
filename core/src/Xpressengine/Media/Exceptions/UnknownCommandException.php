@@ -2,8 +2,6 @@
 /**
  * This file is unknown command exception
  *
- * PHP version 5
- *
  * @category    Media
  * @package     Xpressengine\Media
  * @author      XE Team (developers) <developers@xpressengine.com>

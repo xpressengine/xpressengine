@@ -2,8 +2,6 @@
 /**
  * Abstarct ToggleMenu class. This file is part of the Xpressengine package.
  *
- * PHP version 5
- *
  * @category    Support
  * @package     Xpressengine\ToggleMenu
  * @author      XE Team (developers) <developers@xpressengine.com>

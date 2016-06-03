@@ -2,8 +2,6 @@
 /**
  * Service provider
  *
- * PHP version 5
- *
  * @category  Install
  * @package   Xpressengine\Install
  * @author    XE Team (developers) <developers@xpressengine.com>
@@ -40,7 +38,7 @@ class InstallServiceProvider extends ServiceProvider
         Route::get('/', function() {
             return redirect('/web_installer');
         });
-        
+
         Route::post('/install/post', '\App\Http\Controllers\InstallController@install');
 
         \App\Http\Middleware\ExceptAppendableVerifyCsrfToken::setExcept('/install/post');

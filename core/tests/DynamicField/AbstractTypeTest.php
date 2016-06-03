@@ -2,8 +2,6 @@
 /**
  * AbstractTypeTest
  *
- * PHP version 5
- *
  * @category    DynamicField
  * @package     Xpressengine\Tests\DynamicField
  * @author      XE Team (developers) <developers@xpressengine.com>

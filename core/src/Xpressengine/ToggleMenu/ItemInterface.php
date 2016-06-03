@@ -2,8 +2,6 @@
 /**
  * This file is toggle menu item interface
  *
- * PHP version 5
- *
  * @category    ToggleMenu
  * @package     Xpressengine\ToggleMenu
  * @author      XE Team (developers) <developers@xpressengine.com>

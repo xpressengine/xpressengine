@@ -2,8 +2,6 @@
 /**
  * This file is Keygen main exception.
  *
- * PHP version 5
- *
  * @category    Keygen
  * @package     Xpressengine\Keygen
  * @author      XE Team (developers) <developers@xpressengine.com>

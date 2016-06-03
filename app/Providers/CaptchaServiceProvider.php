@@ -2,8 +2,6 @@
 /**
  * This file is register this package for laravel
  *
- * PHP version 5
- *
  * @category    Captcha
  * @package     Xpressengine\Captcha
  * @author      XE Team (developers) <developers@xpressengine.com>

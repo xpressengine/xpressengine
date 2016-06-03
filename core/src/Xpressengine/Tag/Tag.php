@@ -2,8 +2,6 @@
 /**
  * This file is tag model class
  *
- * PHP version 5
- *
  * @category    Tag
  * @package     Xpressengine\Tag
  * @author      XE Team (developers) <developers@xpressengine.com>

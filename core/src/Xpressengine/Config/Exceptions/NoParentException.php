@@ -2,8 +2,6 @@
 /**
  * This file is the exception of object has not parent.
  *
- * PHP version 5
- *
  * @category    Config
  * @package     Xpressengine\Config
  * @author      XE Team (developers) <developers@xpressengine.com>

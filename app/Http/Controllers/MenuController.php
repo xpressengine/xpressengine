@@ -2,8 +2,6 @@
 /**
  * Class MenuController
  *
- * PHP version 5
- *
  * @category  App\Http\Controllers
  * @package   App\Http\Controllers
  * @author    XE Team (developers) <developers@xpressengine.com>

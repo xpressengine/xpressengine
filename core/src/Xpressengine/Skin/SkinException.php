@@ -2,8 +2,6 @@
 /**
  * SkinException class.
  *
- * PHP version 5
- *
  * @category    Skin
  * @package     Xpressengine\Skin
  * @author      XE Team (developers) <developers@xpressengine.com>

@@ -2,8 +2,6 @@
 /**
  * MenuHandler
  *
- * PHP version 5
- *
  * @category  Menu
  * @package   Xpressengine\Menu
  * @author    XE Team (developers) <developers@xpressengine.com>
@@ -121,7 +119,7 @@ use Xpressengine\Support\Tree\NodePositionTrait;
 class MenuHandler
 {
     use NodePositionTrait;
-    
+
     /**
      * Model class
      *
@@ -307,11 +305,11 @@ class MenuHandler
                 }
             }
         }
-        
+
         $this->setHierarchy($item);
         $this->setOrder($item);
         $menu->increment($menu->getCountName());
-        
+
         $this->registerItemPermission($item, new Grant);
         $this->storeMenuType($item, $menuTypeInput);
 
@@ -571,7 +569,7 @@ class MenuHandler
     public function getMenuItemTheme(MenuItem $item)
     {
         $configKeyString = $this->menuKeyString($item);
-        
+
         return $this->configs->get($configKeyString);
     }
 

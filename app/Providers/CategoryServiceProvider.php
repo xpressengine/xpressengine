@@ -2,8 +2,6 @@
 /**
  * This file is category service provier for laravel.
  *
- * PHP version 5
- *
  * @category    Category
  * @package     Xpressengine\Category
  * @author      XE Team (developers) <developers@xpressengine.com>
