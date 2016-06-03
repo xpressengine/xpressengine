@@ -65,14 +65,9 @@ $(function() {
     });
   });
 
-  $(document).on('boot.dropdown', '[data-toggle=dropdown]', function() {
-    $('[data-toggle=dropdown]').dropdown();
-  });
-
   XE.Component.boot();
 
 });
-
 
 (function($) {
 
