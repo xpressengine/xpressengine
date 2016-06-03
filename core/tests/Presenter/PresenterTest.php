@@ -1,7 +1,12 @@
 <?php
 /**
- *
+ * @author    XE Developers <developers@xpressengine.com>
+ * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license   LGPL-2.1
+ * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link      https://xpressengine.io
  */
+
 namespace Xpressengine\Tests\Presenter;
 
 use Mockery as m;
@@ -28,7 +33,7 @@ class PresenterTest extends PHPUnit_Framework_TestCase
      * @var m\MockInterface|\Xpressengine\Theme\ThemeHandler
      */
     protected $theme;
-    
+
     /**
      * @var m\MockInterface|\Xpressengine\Skin\SkinHandler
      */
@@ -43,7 +48,7 @@ class PresenterTest extends PHPUnit_Framework_TestCase
      * @var m\MockInterface|\Xpressengine\Routing\InstanceConfig
      */
     protected $instanceConfig;
-    
+
     /**
      * tear down
      *
@@ -67,7 +72,7 @@ class PresenterTest extends PHPUnit_Framework_TestCase
         $skin = m::mock('Xpressengine\Skin\SkinHandler');
         $settings = m::mock('Xpressengine\Settings\SettingsHandler');
         $instanceConfig = m::mock('Xpressengine\Routing\InstanceConfig');
-        
+
         $this->request = $request;
         $this->view = $view;
         $this->theme = $theme;
@@ -96,7 +101,7 @@ class PresenterTest extends PHPUnit_Framework_TestCase
 
     /**
      * test get property
-     * 
+     *
      * @return void
      */
     public function testGetProperty()

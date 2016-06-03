@@ -4,11 +4,13 @@
  *
  * @category  Menu
  * @package   Xpressengine\Menu
- * @author    XE Team (developers) <developers@xpressengine.com>
- * @copyright 2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license   http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link      http://www.xpressengine.com
+ * @author    XE Developers <developers@xpressengine.com>
+ * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license   LGPL-2.1
+ * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link      https://xpressengine.io
  */
+
 namespace Xpressengine\Menu\Models;
 
 use Closure;
@@ -21,10 +23,6 @@ use Xpressengine\Routing\InstanceRoute;
  *
  * @category  Menu
  * @package   Xpressengine\Menu
- * @author    XE Team (developers) <developers@xpressengine.com>
- * @copyright 2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license   http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link      http://www.xpressengine.com
  *
  * @property string $id          자동 생성된 고유한 식별자
  * @property string $menuId      소속된 MenuEntity 의 ID

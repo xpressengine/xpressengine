@@ -1,4 +1,12 @@
 <?php
+/**
+ * @author    XE Developers <developers@xpressengine.com>
+ * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license   LGPL-2.1
+ * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link      https://xpressengine.io
+ */
+
 namespace Xpressengine\Tests\Permission;
 
 use Mockery as m;
@@ -45,7 +53,7 @@ class PolicyTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($instance->read($mockUser, 'plugin.dummy', 'default'));
         $this->assertFalse($instance->update($mockUser, 'plugin.dummy', 'default'));
     }
-    
+
     private function getMocks()
     {
         return [

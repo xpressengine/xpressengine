@@ -2,12 +2,6 @@
 /**
  * This file is unique key generate class
  *
- * @category    Keygen
- * @package     Xpressengine\Keygen
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
  * @mainpage
  * ### configure
  * ```
@@ -28,7 +22,16 @@
  * $generator = Xpressengine\Keygenn\Keygen($config);
  * $id = $generator->generate();  // 25769c6c-d34d-4bfe-ba98-e0ee856f3e7a
  * ```
+ *
+ * @category    Keygen
+ * @package     Xpressengine\Keygen
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
  */
+
 namespace Xpressengine\Keygen;
 
 use Rhumsaa\Uuid\Uuid;
@@ -52,10 +55,6 @@ use Xpressengine\Keygen\Exceptions\UnknownGeneratorVersionException;
  *
  * @category    Keygen
  * @package     Xpressengine\Keygen
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
  */
 class Keygen
 {

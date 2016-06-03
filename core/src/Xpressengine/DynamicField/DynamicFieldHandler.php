@@ -2,12 +2,6 @@
 /**
  * DynamicFieldHandler
  *
- * @category    DynamicField
- * @package     Xpressengine\DynamicField
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
  * @mainpage    DynamicField
  * # Dynamic Field
  * 이 패키지는 database table의 column을 자유롭게 확장하여 사용하기 위한 것입니다.\n
@@ -15,7 +9,16 @@
  * 형태의 column으로 table을 생성 하거나 수정합니다.\n
  * DynamicField는 이렇게 변경된 database table에
  * 데이터를 입/출력 할 수 있도록 도와주는 패키지 입니다.
+ *
+ * @category    DynamicField
+ * @package     Xpressengine\DynamicField
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
  */
+
 namespace Xpressengine\DynamicField;
 
 use Xpressengine\Database\VirtualConnectionInterface;
@@ -55,10 +58,6 @@ use Xpressengine\Config\ConfigEntity;
  *
  * @category    DynamicField
  * @package     Xpressengine\DynamicField
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
  */
 class DynamicFieldHandler
 {

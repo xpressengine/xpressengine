@@ -4,11 +4,13 @@
  *
  * @category    Category
  * @package     Xpressengine\Category
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
  */
+
 namespace Xpressengine\Category;
 
 use Xpressengine\Category\Exceptions\UnableMoveToSelfException;
@@ -55,10 +57,6 @@ use Xpressengine\Support\Tree\NodePositionTrait;
  *
  * @category    Category
  * @package     Xpressengine\Category
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
  */
 class CategoryHandler
 {
@@ -127,7 +125,7 @@ class CategoryHandler
     {
         /** @var CategoryItem $item */
         $item = $category->items()->create($inputs);
-        
+
         $this->setHierarchy($item);
         $this->setOrder($item);
 
@@ -151,7 +149,7 @@ class CategoryHandler
         } catch (\Exception $e) {
             return;
         }
-        
+
         if ($item->{$item->getParentIdName()}) {
             $model = $this->createItemModel();
             /** @var CategoryItem $parent */
