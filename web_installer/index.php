@@ -72,6 +72,16 @@
     $schema = !empty($https) && 'off' !== strtolower($https) ? 'https' : 'http';
     $url = $schema.'://'.$_SERVER['SERVER_NAME'];
 
+    $locale = isset($_COOKIE['locale']) ? $_COOKIE['locale'] : 'ko';
+    $filePath = 'lang' . DIRECTORY_SEPARATOR . $locale . '.php';
+    $langs = file_exists($filePath) ? require $filePath : [];
+
+    function trans($key) {
+        global $langs;
+
+        return isset($langs[$key]) ? $langs[$key] : $key;
+    }
+
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
@@ -124,69 +134,20 @@
             <div class="xe-dropdown">
                 <button class="xe-btn" type="button" data-toggle="xe-dropdown">Language</button>
                 <ul class="xe-dropdown-menu">
-                    <li><a href="#"><i class="south korea xe-flag"></i>korea</a></li>
-                    <li><a href="#"><i class="united states xe-flag"></i>United States</a></li>
+                    <li><a href="#" class="__xe_locale_item" data-locale="ko"><i class="south korea xe-flag"></i>korea</a></li>
+                    <li><a href="#" class="__xe_locale_item" data-locale="en"><i class="united states xe-flag"></i>United States</a></li>
                 </ul>
             </div>
 
-            <p class="text-version-check">XE 설치를 위해 현재 서버의 상태를 체크합니다.</p>
+            <p class="text-version-check"><?=trans('checkForInstall')?></p>
             <a href="#" class="btn-start __xe_btn_next"><span class="xe-sr-only">start</span></a>
         </div>
     </div>
 
     <div class="content __xe_step" data-step="1" style="display: none;">
-        <h2>시스템 검사</h2>
+        <h2><?=trans('systemCheck')?></h2>
         <ul class="system-check-list __xe_check_list">
             <!-- 검사 결과에 따라 li.pass, li.false 추가  -->
-            <li class="pass">
-                <div>
-						<span class="install-check">
-							<strong class="xe-sr-only">pass</strong>
-						</span>
-                    <p>PHP version 5.4 or greater required</p>
-                </div>
-            </li>
-            <li class="false">
-                <div>
-						<span class="install-check">
-							<strong class="xe-sr-only">false</strong>
-						</span>
-                    <p>Test connection to the installation server</p>
-                    <strong>“.env”(home/vagrant/Code/xpressengine/installer/../env) fime</strong>
-                </div>
-            </li>
-            <li class="pass">
-                <div>
-						<span class="install-check">
-							<strong class="xe-sr-only">ready</strong>
-						</span>
-                    <p>Permission to write to directories and files</p>
-                </div>
-            </li>
-            <li>
-                <div>
-						<span class="install-check">
-							<strong class="xe-sr-only">ready</strong>
-						</span>
-                    <p>PDO PHP Extension is required</p>
-                </div>
-            </li>
-            <li>
-                <div>
-						<span class="install-check">
-							<strong class="xe-sr-only">ready</strong>
-						</span>
-                    <p>MCrypt PHP Extension is required</p>
-                </div>
-            </li>
-            <li>
-                <div>
-						<span class="install-check">
-							<strong class="xe-sr-only">ready</strong>
-						</span>
-                    <p>Mbstring PHP Extension is required</p>
-                </div>
-            </li>
         </ul>
         <div class="btn-center">
             <!--[D] 모든 항목 pass 시 btn-next로 변경, 버튼태그로 교체 가능  -->
@@ -196,22 +157,13 @@
     </div>
 
     <div class="content __xe_step" data-step="2" style="display: none;">
-        <h2>약관 동의</h2>
-			<textarea class="xe-form-control" rows="12" cols="40">이 문서는 정보 제공의 목적으로만 제공됩니다. `NAVER(주)`는 이 문서에 수록된 정보의 완전성과
-정확성을 검증하기 위해 노력하였으나, 발생할 수 있는 내용상의 오류가 있거나 누락되었을 수 있습니다.
-이 문서의 사용이나 사용 결과에 따른 책임은 전적으로 사용자에게 있으며, `NAVER(주)`는 이에 대해
-명시적 혹은 묵시적으로 어떠한 보증도 하지 않습니다.
-
-관련 URL 정보를 포함하여 이 문서에서 언급한 특정 소프트웨어 상품이나 제품은 해당 소유자가 속한
-현지 및 국내외 관련법을 따르며, 해당 법률을 준수하지 않음으로 인해 발생하는 모든 결과에 대한 책임은
-전적으로 사용자 자신에게 있습니다.
-
-`NAVER(주)`는 이 문서의 내용을 예고 없이 변경할 수 있습니다.</textarea>
+        <h2><?=trans('terms')?></h2>
+			<textarea class="xe-form-control" rows="12" cols="40"><?=trans('termsText')?></textarea>
         <div class="agree-area">
             <label class="xe-label">
                 <input type="checkbox" id="__xe_agree">
                 <span class="xe-input-helper"></span>
-                <span class="xe-label-text">이용 약관을 모두 읽었으며, 이에 동의합니다.</span>
+                <span class="xe-label-text"><?=trans('termsReadAndAgree')?></span>
             </label>
         </div>
         <div class="btn-center">
@@ -230,23 +182,23 @@
                 <tbody>
                 <tr>
                     <th scope="row">Host</th>
-                    <td><input type="text" class="xe-form-control" name="database_host" placeholder="Database Host를 입력하세요.(default: localhost)"></td>
+                    <td><input type="text" class="xe-form-control" name="database_host" placeholder="<?=trans('inputDBHost')?>(default: localhost)"></td>
                 </tr>
                 <tr>
                     <th scope="row">Port</th>
-                    <td><input type="text" class="xe-form-control" name="database_port" placeholder="Port를 입력하세요.(default: 3306)"></td>
+                    <td><input type="text" class="xe-form-control" name="database_port" placeholder="<?=trans('inputDBPort')?>(default: 3306)"></td>
                 </tr>
                 <tr>
                     <th scope="row">Database Name</th>
-                    <td><input type="text" class="xe-form-control" name="database_name" placeholder="Database Name을 입력하세요."></td>
+                    <td><input type="text" class="xe-form-control" name="database_name" placeholder="<?=trans('inputDBName')?>"></td>
                 </tr>
                 <tr>
                     <th scope="row">Database User Name</th>
-                    <td><input type="text" class="xe-form-control" name="database_user_name" placeholder="Database User Name을 입력하세요.(default: root)"></td>
+                    <td><input type="text" class="xe-form-control" name="database_user_name" placeholder="<?=trans('inputDBUser')?>(default: root)"></td>
                 </tr>
                 <tr>
                     <th scope="row">Password</th>
-                    <td><input type="password" class="xe-form-control" name="database_password" placeholder="Password를 입력하세요."></td>
+                    <td><input type="password" class="xe-form-control" name="database_password" placeholder="<?=trans('inputDBPassword')?>"></td>
                 </tr>
                 </tbody>
             </table>
@@ -279,19 +231,19 @@
                 <tbody>
                 <tr>
                     <th scope="row">Email</th>
-                    <td><input type="text" class="xe-form-control" name="admin_email" placeholder="Email을 입력하세요."></td>
+                    <td><input type="text" class="xe-form-control" name="admin_email" placeholder="<?=trans('inputAdminEmail')?>"></td>
                 </tr>
                 <tr>
                     <th scope="row">Display Name</th>
-                    <td><input type="text" class="xe-form-control" name="admin_display_name" placeholder="화면에 표시될 이름을 입력하세요.(default: admin)"></td>
+                    <td><input type="text" class="xe-form-control" name="admin_display_name" placeholder="<?=trans('inputAdminName')?>(default: admin)"></td>
                 </tr>
                 <tr>
                     <th scope="row">Password</th>
-                    <td><input type="password" class="xe-form-control" name="admin_password" placeholder="Password를 입력하세요."></td>
+                    <td><input type="password" class="xe-form-control" name="admin_password" placeholder="<?=trans('inputAdminPassword')?>"></td>
                 </tr>
                 <tr>
                     <th scope="row">Password Check</th>
-                    <td><input type="password" class="xe-form-control" name="admin_password_confirmation" placeholder="Password를 재입력하세요."></td>
+                    <td><input type="password" class="xe-form-control" name="admin_password_confirmation" placeholder="<?=trans('reInputAdminPassword')?>"></td>
                 </tr>
                 </tbody>
             </table>
@@ -311,6 +263,13 @@
 
 
 <script type="text/javascript">
+    function setCookie(cname, cvalue, exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays*24*60*60*1000));
+        var expires = "expires="+d.toUTCString();
+        document.cookie = cname + "=" + cvalue + "; " + expires;
+    }
+
     var stepper = {
         current: 0,
         checked: false,
@@ -323,12 +282,12 @@
         },
         check: function () {
             $('.__xe_check_list').empty();
-            check('PHP 버전을 체크합니다.', 'phpVersion');
-            check('디렉토리 사용 권한을 체크합니다.', 'directoryPermission');
-            check('환경설청 파일을 체크합니다.', 'envFile');
-            check('cURL PHP Extension is required', 'curl');
-            check('MCrypt PHP Extension is required', 'mcrypt');
-            check('GD PHP Library is required', 'gd');
+            check('<?=trans('checkPHPVersion')?>', 'phpVersion');
+            check('<?=trans('checkDirPermission')?>', 'directoryPermission');
+            check('<?=trans('checkEnvFile')?>', 'envFile');
+            check('<?=trans('checkPHPExtCURL')?>', 'curl');
+            check('<?=trans('checkPHPExtMCRYPT')?>', 'mcrypt');
+            check('<?=trans('checkPHPExtGD')?>', 'gd');
             this.checked = true;
         },
         goto: function (step) {
@@ -336,7 +295,7 @@
             step = parseInt(step);
 
             if (step == 3 && !$('#__xe_agree').is(':checked')) {
-                alert('약관에 동의 하셔야 합니다.');
+                alert('<?=trans('termsMustAgree')?>');
                 step = 2;
             }
 
@@ -412,7 +371,7 @@
     function validation(f)
     {
         if (!$('#__xe_agree').is(':checked')) {
-            alert('약관에 동의 하셔야 합니다.');
+            alert('<?=trans('termsMustAgree')?>');
             stepper.goto(2);
             return false;
         }
@@ -511,6 +470,12 @@
     ];
 
     $(function () {
+        $('.__xe_locale_item').click(function (e) {
+            e.preventDefault();
+            setCookie('locale', $(this).data('locale'), 365);
+            location.reload();
+        });
+
         $('.__xe_btn_next').click(function (e) {
             e.preventDefault();
             stepper.next();
@@ -521,9 +486,12 @@
         });
         $('.__xe_btn_submit').click(function (e) {
             e.preventDefault();
+            $(this).hide();
             var $f = $(this).closest('form');
             if (validation($f[0]) === true) {
                 $f.submit();
+            } else {
+                $(this).show();
             }
         });
 
