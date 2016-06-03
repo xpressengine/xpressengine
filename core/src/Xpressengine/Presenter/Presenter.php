@@ -303,10 +303,6 @@ class Presenter
      */
     public function getRenderer($format)
     {
-        if (isset($this->renderers[$format]) === false) {
-            throw new NotFoundFormatException(['name' => $format]);
-        }
-
         $renderer = call_user_func_array($this->renderers[$format], [$this]);
         return $renderer;
     }
@@ -544,6 +540,10 @@ class Presenter
         $format = $this->request->format();
         if ($this->isApproveFormat($format) === false) {
             throw new NotApprovedFormatException(['name' => $format]);
+        }
+
+        if (isset($this->renderers[$format]) === false) {
+            throw new NotFoundFormatException(['name' => $format]);
         }
 
         $renderer = $this->getRenderer($format);
