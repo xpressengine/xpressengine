@@ -29,13 +29,18 @@ class InstallController extends Controller
 
         app('config')->set('app.debug', true);
 
-        $validator = $this->getValidationFactory()->make($request->all(), [
-            'admin_email' => 'required|email',
-            'admin_password' => 'required|confirmed',
-            'admin_password_confirmation' => 'required',
-            'database_name' => 'required',
-            'database_password' => 'required',
-        ]);
+        $url = $this->getUrl($request->get('web_url', ''));
+        $validator = $this->getValidationFactory()->make(
+            array_merge($request->all(), ['web_url' => $url]),
+            [
+                'admin_email' => 'required|email',
+                'admin_password' => 'required|confirmed',
+                'admin_password_confirmation' => 'required',
+                'database_name' => 'required',
+                'database_password' => 'required',
+                'web_url' => 'url',
+            ]
+        );
 
         if ($validator->fails()) {
             return $this->back($validator->getMessageBag()->first());
@@ -48,7 +53,7 @@ class InstallController extends Controller
 
         $string = Yaml::dump([
             'site' => [
-                'url' => $request->get('web_url') != '' ? rtrim($request->get('web_url'), '/') : 'http://localhost',
+                'url' => $url != '' ? $url : 'http://localhost',
                 'timezone' =>  $request->get('web_timezone') != '' ? $request->get('web_timezone') : 'Asia/Seoul',
             ],
             'admin' => [
@@ -82,5 +87,15 @@ class InstallController extends Controller
     {
         $alert = $msg ? 'alert("'.$msg.'");' : '';
         return sprintf('<script>%s history.back();</script>', $alert);
+    }
+
+    private function getUrl($url)
+    {
+        $url = trim($url, '/');
+        if (!empty($url) && !preg_match('/^(http(s)?\:\/\/)/', $url)) {
+            $url = 'http://' . $url;
+        }
+
+        return $url;
     }
 }

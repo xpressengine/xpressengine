@@ -588,6 +588,9 @@ APP_KEY={$appKey}";
         // site url
         $siteInfo['url'] = $this->askValidation('site url', $siteInfo['url'], function ($url) {
             $url = trim($url, "/");
+            if (!preg_match('/^(http(s)?\:\/\/)/', $url)) {
+                $url = 'http://' . $url;
+            }
             if (filter_var($url, FILTER_VALIDATE_URL) === false) {
                 throw new \Exception('Invalid URL Format.');
             }
