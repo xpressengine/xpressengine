@@ -486,9 +486,12 @@
         });
         $('.__xe_btn_submit').click(function (e) {
             e.preventDefault();
+            $(this).hide();
             var $f = $(this).closest('form');
             if (validation($f[0]) === true) {
                 $f.submit();
+            } else {
+                $(this).show();
             }
         });
 
