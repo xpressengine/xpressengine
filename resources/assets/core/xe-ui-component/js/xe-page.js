@@ -31,6 +31,16 @@
                     data: data
                 };
 
+                if(!url
+                    && $this.get(0).tagName === "A"
+                    && $this.attr("href")) {
+                    data.url = $this.attr('href');
+                }
+
+                if(!url) {
+                    url = $this.attr('href');
+                }
+
                 if(objStack.length > 0) {
                     for(var i = 0, max = objStack.length; i < max; i += 1) {
                         callbackFunc = callbackFunc[objStack[i]];
@@ -56,6 +66,12 @@
                     data: data
                 };
 
+                if(!url
+                    && $this.get(0).tagName === "A"
+                    && $this.attr("href")) {
+                    data.url = $this.attr('href');
+                }
+
                 if(objStack.length > 0) {
                     for(var i = 0, max = objStack.length; i < max; i += 1) {
                         callbackFunc = callbackFunc[objStack[i]];
@@ -79,9 +95,9 @@
             getModalTemplate: function() {
                 return [
                     '<div class="xe-modal" data-use="xe-page">',
-                        '<div class="xe-modal-dialog ">',
-                            '<div class="xe-modal-content"></div>',
-                        '</div>',
+                    '<div class="xe-modal-dialog ">',
+                    '<div class="xe-modal-content"></div>',
+                    '</div>',
                     '</div>'
                 ].join("\n");
             }
@@ -259,5 +275,6 @@
 
         }
     };
+
 
 })(jQuery, window, XE, DynamicLoadManager);
