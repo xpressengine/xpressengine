@@ -6,13 +6,13 @@
 
     RewriteEngine On
 
+    # Deny hidden files(.*)
     RedirectMatch 403 ^/\.(.*)
 
     <Files *.php>
         Order Deny,Allow
         Deny from all
         Allow from 127.0.0.1
-        Allow from localhost
     </Files>
 
     <Files index.php>
@@ -26,71 +26,33 @@
     ##
     # RewriteBase /
 
-    RewriteRule ^web_installer - [L]
+    # Allow web_installer/index.php
+    RewriteRule ^web_installer/.* - [L]
 
-    ##
-    ## Black list protected files
-    ##
+    # Deny */index.php
+    RewriteRule ^.*/index.php index.php [L]
+
+    # Allow plugins/*
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^plugins/.* - [L]
+
+    # Allow storage/uploaded/*
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^storage/uploaded/.* - [L]
+
+    # Black list
     RewriteRule ^bootstrap/.* index.php [L,NC]
     RewriteRule ^config/.* index.php [L,NC]
     RewriteRule ^core/.* index.php [L,NC]
     RewriteRule ^database/.* index.php [L,NC]
     RewriteRule ^migrations/.* index.php [L,NC]
     RewriteRule ^resource/.* index.php [L,NC]
-    RewriteRule ^storage/interception/.* index.php [L,NC]
-    RewriteRule ^storage/logs/.* index.php [L,NC]
-    RewriteRule ^storage/framework/.* index.php [L,NC]
+    RewriteRule ^storage/.* index.php [L,NC]
     RewriteRule ^tests/.* index.php [L,NC]
     RewriteRule ^vendor/.* index.php [L,NC]
 
-    ##
-    ## White listed folders and files
-    ##
-    RewriteCond %{REQUEST_FILENAME} -f
-    RewriteCond %{REQUEST_URI} !\.js
-    RewriteCond %{REQUEST_URI} !\.map
-    RewriteCond %{REQUEST_URI} !\.ico
-    RewriteCond %{REQUEST_URI} !\.jpg
-    RewriteCond %{REQUEST_URI} !\.jpeg
-    RewriteCond %{REQUEST_URI} !\.bmp
-    RewriteCond %{REQUEST_URI} !\.png
-    RewriteCond %{REQUEST_URI} !\.gif
-    RewriteCond %{REQUEST_URI} !\.svg
-    RewriteCond %{REQUEST_URI} !\.css
-    RewriteCond %{REQUEST_URI} !\.less
-    RewriteCond %{REQUEST_URI} !\.scss
-    RewriteCond %{REQUEST_URI} !\.pdf
-    RewriteCond %{REQUEST_URI} !\.swf
-    RewriteCond %{REQUEST_URI} !\.txt
-    RewriteCond %{REQUEST_URI} !\.xml
-    RewriteCond %{REQUEST_URI} !\.xls
-    RewriteCond %{REQUEST_URI} !\.eot
-    RewriteCond %{REQUEST_URI} !\.woff
-    RewriteCond %{REQUEST_URI} !\.woff2
-    RewriteCond %{REQUEST_URI} !\.ttf
-    RewriteCond %{REQUEST_URI} !\.flv
-    RewriteCond %{REQUEST_URI} !\.wmv
-    RewriteCond %{REQUEST_URI} !\.mp3
-    RewriteCond %{REQUEST_URI} !\.ogg
-    RewriteCond %{REQUEST_URI} !\.wav
-    RewriteCond %{REQUEST_URI} !\.avi
-    RewriteCond %{REQUEST_URI} !\.mov
-    RewriteCond %{REQUEST_URI} !\.mp4
-    RewriteCond %{REQUEST_URI} !\.mpeg
-    RewriteCond %{REQUEST_URI} !\.webm
-    RewriteCond %{REQUEST_URI} !\.mkv
-    RewriteCond %{REQUEST_URI} !storage/app/member/profile/.*
-    RewriteRule ^ index.php [L,NC]
-
-    ##
     ## Standard routes
-    ##
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
-
-    # Handle Front Controller...
-        RewriteCond %{REQUEST_FILENAME} !-d
-        RewriteCond %{REQUEST_FILENAME} !-f
-        RewriteRule ^ index.php [L]
 
 </IfModule>

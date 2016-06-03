@@ -287,11 +287,11 @@ return [
             ]
         ],
         'profileImage' => [
-            'default' => 'assets/core/member/img/default_avatar.jpg',
+            'default' => 'assets/core/member/img/default_avatar.gif',
             'size' => ['width' => 240, 'height' => 240],
             'storage' => [
-                'disk' => 'local',
-                'path' => 'member/profile'
+                'disk' => 'uploaded',
+                'path' => 'user/profile_image'
             ]
         ]
     ],

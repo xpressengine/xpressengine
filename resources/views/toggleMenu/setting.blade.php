@@ -4,14 +4,14 @@
 
 
 <form id="__xe_toggleMenu_{{$typeIdable}}_{{$instanceId}}" class="form-horizontal" method="post" action="{{ route('manage.toggleMenu.setting') }}">
-<input type="hidden" name="_token" value="{{ csrf_token() }}">
-<input type="hidden" name="type" value="{{ $type }}">
-@if($instanceId !== null)
-    <input type="hidden" name="instanceId" value="{{ $instanceId }}">
-@endif
+    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="type" value="{{ $type }}">
+    @if($instanceId !== null)
+        <input type="hidden" name="instanceId" value="{{ $instanceId }}">
+    @endif
 
     <div class="table-responsive item-setting">
-        <table class="table">
+        <table class="table table-sortable">
             <colgroup>
                 <col width="200">
                 <col>
@@ -57,6 +57,13 @@
 <script type="text/javascript">
     $(function() {
         // sortable 한 table 구현해야 함
+        $(".table-sortable tbody").sortable({
+            handle: '.handler',
+            cancel: '',
+            update: function( event, ui ) {
+                console.log('update', event, ui);
+            }
+        }).disableSelection();
 
         $('#__xe_toggleMenu_{{$typeIdable}}_{{$instanceId}}').submit(function () {
             $('<input>').attr('type', 'hidden').attr('name', 'redirect').val(location.href).appendTo(this);

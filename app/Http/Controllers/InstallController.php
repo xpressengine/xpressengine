@@ -1,12 +1,11 @@
 <?php
 namespace App\Http\Controllers;
 
-use Xpressengine\Http\Request;
+use Illuminate\Http\Request;
 use View;
 use Artisan;
 use File;
 use Symfony\Component\Yaml\Yaml;
-use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
 
 class InstallController extends Controller
 {
@@ -22,16 +21,7 @@ class InstallController extends Controller
         return file_exists(storage_path() . '/app/installed');
     }
 
-    public function create()
-    {
-        if ($this->isInstalled() === true) {
-            throw new \Exception('Already installed');
-        }
-
-        return View::make('install.create', []);
-    }
-
-    public function install()
+    public function install(Request $request)
     {
         if ($this->isInstalled() === true) {
             throw new \Exception('Already installed');
@@ -39,15 +29,17 @@ class InstallController extends Controller
 
         app('config')->set('app.debug', true);
 
-        $request = app('request');
-
-        $this->validate($request, [
+        $validator = $this->getValidationFactory()->make($request->all(), [
             'admin_email' => 'required|email',
             'admin_password' => 'required|confirmed',
             'admin_password_confirmation' => 'required',
             'database_name' => 'required',
             'database_password' => 'required',
         ]);
+
+        if ($validator->fails()) {
+            return $this->back($validator->getMessageBag()->first());
+        }
 
         // check database connect - throw exception
 
@@ -56,7 +48,7 @@ class InstallController extends Controller
 
         $string = Yaml::dump([
             'site' => [
-                'url' => $request->get('web_url') != '' ? $request->get('web_url') : 'http://localhost',
+                'url' => $request->get('web_url') != '' ? rtrim($request->get('web_url'), '/') : 'http://localhost',
                 'timezone' =>  $request->get('web_timezone') != '' ? $request->get('web_timezone') : 'Asia/Seoul',
             ],
             'admin' => [
@@ -83,7 +75,12 @@ class InstallController extends Controller
         File::delete($configPath);
         File::delete($appKeyPath);
 
-        return redirect('/');
+        return redirect($request->root());
+    }
 
+    private function back($msg = null)
+    {
+        $alert = $msg ? 'alert("'.$msg.'");' : '';
+        return sprintf('<script>%s history.back();</script>', $alert);
     }
 }

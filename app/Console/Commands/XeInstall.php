@@ -132,20 +132,14 @@ class XeInstall extends Command
 
             $this->output->success('Install was completed successfully.');
         } catch (\Exception $e) {
-            $err = [
-                'Install fail!! Try again.',
-                ' message: ' . $e->getMessage(),
-                ' file: ' . $e->getFile(),
-                ' line: ' . $e->getLine(),
-            ];
-            $this->output->error(implode(PHP_EOL, $err));
+            $this->output->error('Install fail!! Try again.');
             $note = [
                 'Check point for reinstall:',
                 ' * remove [.env] file',
                 ' * remove all table in your database',
             ];
             $this->output->note(implode(PHP_EOL, $note));
-//            throw $e;
+            throw $e;
         }
     }
 
@@ -247,8 +241,7 @@ APP_KEY={$appKey}";
         $versionCheck = constant('PHP_VERSION_ID') < 50509 ? false : true;
 
         if (!$versionCheck) {
-            $this->error('PHP version is not available');
-            die();
+            throw new \Exception('PHP version is not available');
         }
 
         $extensions = ['mcrypt', 'curl', 'gd'];
@@ -266,8 +259,7 @@ APP_KEY={$appKey}";
         $this->output->newLine();
 
         if (array_search(false, $result) > -1) {
-            $this->error('PHP extension is not ready! Please check php extensions. And retry install.');
-            die();
+            throw new \Exception('PHP extension is not ready! Please check php extensions. And retry install.');
         }
     }
 
@@ -287,8 +279,7 @@ APP_KEY={$appKey}";
             $this->setDBInfo($this->defaultInfos['database']);
         } catch (\Exception $e) {
             if ($this->noInteraction) {
-                $this->error($e->getMessage());
-                die();
+                throw $e;
             }
 
             $this->defaultInfos['database']['password'] = null;
@@ -323,8 +314,7 @@ APP_KEY={$appKey}";
             $this->createAdminAndLogin($this->defaultInfos['admin']);
         } catch (\Exception $e) {
             if ($this->noInteraction) {
-                $this->error($e->getMessage());
-                die();
+                throw $e;
             }
 
             $this->defaultInfos['admin']['password'] = null;
@@ -664,7 +654,7 @@ APP_KEY={$appKey}";
 
         // composer의 post script를 run한다.
         // script - optimizing & key generation
-        $this->runPostScript();
+//        $this->runPostScript();
 
         $this->line("Base Framework is loaded\n");
     }
@@ -760,27 +750,27 @@ APP_KEY={$appKey}";
         }
     }
 
-    /**
-     * runPostScript
-     *
-     * @return void
-     */
-    private function runPostScript()
-    {
-        $composer = $this->findComposer();
-        $commands = [
-            $composer.' run-script post-install-cmd',
-            $composer.' run-script post-create-project-cmd',
-        ];
-
-        $process = new Process(implode(' && ', $commands), $this->getBasePath(), null, null, null);
-
-        $process->run(
-            function ($type, $line) {
-                $this->line($line);
-            }
-        );
-    }
+//    /**
+//     * runPostScript
+//     *
+//     * @return void
+//     */
+//    private function runPostScript()
+//    {
+//        $composer = $this->findComposer();
+//        $commands = [
+//            $composer.' run-script post-install-cmd',
+//            $composer.' run-script post-create-project-cmd',
+//        ];
+//
+//        $process = new Process(implode(' && ', $commands), $this->getBasePath(), null, null, null);
+//
+//        $process->run(
+//            function ($type, $line) {
+//                $this->line($line);
+//            }
+//        );
+//    }
 
     /**
      * Illuminate\Foundation\Composer

@@ -303,7 +303,7 @@ class Counter
      *
      * @return string
      */
-    protected function getModel()
+    public function getModel()
     {
         return $this->model;
     }
@@ -313,7 +313,7 @@ class Counter
      *
      * @return CounterLog
      */
-    protected function newModel()
+    public function newModel()
     {
         $class = $this->getModel();
 

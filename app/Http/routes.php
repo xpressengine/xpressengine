@@ -99,6 +99,15 @@ Route::group(
     }
 );
 
+Route::group(
+    ['prefix' => '@{member}'],
+    function () {
+        // profile
+        Route::get('/', ['as' => 'member.profile', 'uses' => 'Member\ProfileController@index']);
+        Route::post('/', ['as' => 'member.profile.update', 'uses' => 'Member\ProfileController@update']);
+    }
+);
+
 /*
  * member settings
  * */
@@ -680,6 +689,7 @@ Route::settings(
     function () {
         Route::get('/section', ['as' => 'settings.skin.section.setting', 'uses' => 'SkinController@getSetting']);
         Route::post('/section', ['as' => 'settings.skin.section.setting', 'uses' => 'SkinController@postSetting']);
+        Route::post('/assign', ['as' => 'settings.skin.section.assign', 'uses' => 'SkinController@postAssign']);
     }
 );
 

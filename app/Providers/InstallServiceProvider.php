@@ -40,9 +40,10 @@ class InstallServiceProvider extends ServiceProvider
         Route::get('/', function() {
             return redirect('/web_installer');
         });
-
-        Route::get('/install', '\App\Http\Controllers\InstallController@create');
+        
         Route::post('/install/post', '\App\Http\Controllers\InstallController@install');
+
+        \App\Http\Middleware\ExceptAppendableVerifyCsrfToken::setExcept('/install/post');
 
         $appKeyPath = storage_path('app') . '/appKey';
         if (File::exists($appKeyPath) === false) {

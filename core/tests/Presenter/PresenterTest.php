@@ -142,7 +142,7 @@ class PresenterTest extends PHPUnit_Framework_TestCase
         });
 
         $reflection = new \ReflectionClass(get_class($presenter));
-        $property = $reflection->getProperty('renderes');
+        $property = $reflection->getProperty('renderers');
         $property->setAccessible(true);
         $result = $property->getValue($presenter);
 
