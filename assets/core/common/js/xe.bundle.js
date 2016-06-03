@@ -1390,10 +1390,10 @@ if (typeof exports !== 'undefined') {
       get: function(url, data, callback, type) {
         return $.get(url, data, callback, type)
       },
-      post: function post(url, data, callback, type) {
+      post: function (url, data, callback, type) {
         return $.post(url, data, callback, type);
       },
-      error: function error(jqxhr, settings, thrownError) {
+      error: function (jqxhr, settings, thrownError) {
         var status = jqxhr.status,
             type = 'danger',
             errorMessage = 'Not defined error message ('+status+')';
@@ -1479,14 +1479,9 @@ $(function() {
     });
   });
 
-  $(document).on('boot.dropdown', '[data-toggle=dropdown]', function() {
-    $('[data-toggle=dropdown]').dropdown();
-  });
-
   XE.Component.boot();
 
 });
-
 
 (function($) {
 
