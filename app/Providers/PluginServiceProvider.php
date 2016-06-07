@@ -4,6 +4,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Plugin\Cache\ArrayPluginCache;
 use Xpressengine\Plugin\Cache\FilePluginCache;
+use Xpressengine\Plugin\ComposerFileWriter;
 use Xpressengine\Plugin\MetaFileReader;
 use Xpressengine\Plugin\PluginCollection;
 use Xpressengine\Plugin\PluginEntity;
@@ -30,7 +31,9 @@ class PluginServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerPluginRegister();
-        $this->registerPluginRepository();
+        $this->registerPluginScanner();
+        $this->registerPluginProvider();
+        $this->registerComposerWriter();
         $this->registerPluginHandler();
     }
 
@@ -53,10 +56,27 @@ class PluginServiceProvider extends ServiceProvider
         );
     }
 
+    protected function registerPluginScanner()
+    {
+        $this->app->singleton(
+            PluginScanner::class,
+            function ($app) {
+
+                $pluginDir = base_path('plugins');
+
+                $metaFileReader = new MetaFileReader('composer.json');
+                $scanner = new PluginScanner($metaFileReader, $pluginDir);
+
+                return $scanner;
+            }
+        );
+    }
+
+
     protected function registerPluginHandler()
     {
         $this->app->singleton(
-            'xe.plugin',
+            [PluginHandler::class => 'xe.plugin'],
             function ($app) {
 
                 $pluginDir = base_path('plugins');
@@ -77,10 +97,7 @@ class PluginServiceProvider extends ServiceProvider
                     $cache = new FilePluginCache($app['cache']->driver('plugins'), 'list');
                 }
 
-                $metaFileReader = new MetaFileReader('composer.json');
-                $scanner = new PluginScanner($metaFileReader, $pluginDir);
-
-                $pluginCollection = new PluginCollection($scanner, $cache, PluginEntity::class, $pluginStatus);
+                $pluginCollection = new PluginCollection($app[PluginScanner::class], $cache, PluginEntity::class, $pluginStatus);
 
                 /** @var \Xpressengine\Interception\InterceptionHandler $interception */
                 $interception = $app['xe.interception'];
@@ -94,17 +111,27 @@ class PluginServiceProvider extends ServiceProvider
                 return $pluginHandler;
             }
         );
-        $this->app->bind(PluginHandler::class, 'xe.plugin');
     }
 
-    protected function registerPluginRepository()
+    protected function registerPluginProvider()
     {
         $this->app->singleton(
-            'xe.plugin.provider',
+            [PluginProvider::class => 'xe.plugin.provider'],
             function ($app) {
-                $url = $app['config']->get('xe.plugin.server');
+                $url = $app['config']->get('xe.plugin.api.url');
                 $provider = new PluginProvider($url);
                 return $provider;
+            }
+        );
+    }
+
+    protected function registerComposerWriter()
+    {
+        $this->app->singleton(
+            [ComposerFileWriter::class => 'xe.plugin.writer'],
+            function ($app) {
+                $writer = new ComposerFileWriter(storage_path('app/composer.plugins.json'), $app[PluginScanner::class], config('xe.plugin.packagist'));
+                return $writer;
             }
         );
     }

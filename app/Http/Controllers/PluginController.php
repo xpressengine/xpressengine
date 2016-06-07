@@ -7,6 +7,7 @@ use Redirect;
 use Symfony\Component\HttpFoundation\Response;
 use Xpressengine\Http\Request;
 use Xpressengine\Plugin\PluginHandler;
+use Xpressengine\Plugin\PluginProvider;
 use Xpressengine\Support\Exceptions\XpressengineException;
 
 class PluginController extends Controller
@@ -20,7 +21,7 @@ class PluginController extends Controller
         XePresenter::setSettingsSkinTargetId('plugins');
     }
 
-    public function index(Request $request)
+    public function index(Request $request, PluginProvider $provider)
     {
         // filter input
         $field = [];
@@ -34,6 +35,8 @@ class PluginController extends Controller
 
         $collection = XePlugin::getAllPlugins(true);
         $plugins = $collection->fetch($field);
+
+
 
         $componentTypes = $this->getComponentTypes();
 

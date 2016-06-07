@@ -300,7 +300,10 @@ class PluginHandler
      */
     public function updatePlugin($pluginId)
     {
-        $this->deactivatePlugin($pluginId);
+        $plugin = $this->getPlugin($pluginId);
+        if($plugin->isActivated()) {
+            $this->deactivatePlugin($pluginId);
+        }
         $this->activatePlugin($pluginId);
     }
 
@@ -321,13 +324,7 @@ class PluginHandler
             throw new CannotDeleteActivatedPluginException();
         }
 
-        try {
-            $entity->getObject()->uninstall();
-            // remove plugin dir
-            rmdir($entity->getPath());
-        } catch (\Exception $e) {
-            throw $e;
-        }
+        $entity->getObject()->uninstall();
     }
 
     /**

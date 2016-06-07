@@ -1,0 +1,191 @@
+<?php
+/**
+ *  This file is part of the Xpressengine package.
+ *
+ * PHP version 5
+ *
+ * @category
+ * @package     Xpressengine\
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
+namespace Xpressengine\Plugin;
+
+/**
+ * @category
+ * @package     Xpressengine\Plugin
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
+class ComposerFileWriter
+{
+
+    /**
+     * @var string
+     */
+    protected $path;
+
+    /**
+     * @var array
+     */
+    protected $data;
+
+    /**
+     * @var PluginScanner
+     */
+    private $scanner;
+
+    private $packagistUrl;
+
+    /**
+     * ComposerFileWriter constructor.
+     *
+     * @param string        $path
+     * @param PluginScanner $scanner
+     */
+    public function __construct($path, PluginScanner $scanner, $packagistUrl)
+    {
+        $this->scanner = $scanner;
+        $this->path = $path;
+        $this->reload();
+        $this->packagistUrl = $packagistUrl;
+    }
+
+    public function makeFile(){
+
+        $data = [];
+        $data['repositories'] = [];
+        $data['repositories'][] = ['type'=>'composer', 'url'=>$this->packagistUrl];
+
+        $data['require'] = [];
+
+        $data['extra'] = ['xpressengine-plugin' => [
+            "path"=> "storage/app/composer.plugins.json",
+            "uninstall"=> [],
+            "changed"=> []
+        ]];
+
+        $json = json_format(json_encode($data));
+        file_put_contents($this->path, $json);
+    }
+
+    public function reload()
+    {
+        if(!is_file($this->path)) {
+            $this->makeFile();
+        }
+
+        $str = file_get_contents($this->path);
+        $this->data = json_decode($str, true);
+    }
+
+    /**
+     * addRequire
+     *
+     * @param $name
+     * @param $version
+     *
+     * @return void
+     */
+    public function addRequire($name, $version)
+    {
+        array_set($this->data, "require.$name", $version);
+    }
+
+    public function removeRequire($name)
+    {
+        array_forget($this->data, "require.$name");
+        array_set($this->data, "extra.xpressengine-plugin.uninstall", [$name]);
+    }
+
+    /**
+     * 현재 다운로드 되어 있는 플러그인 중에 require되어 있거나 vendor가 있는 플러그인을 제외한 플러그인의 composer.json 정보를 require시킨다.
+     *
+     * @return void
+     */
+    public function resolvePlugins()
+    {
+        $requires = $this->get('require');
+        $includes = [];
+        $dir = $this->scanner->getPluginDirectory();
+
+        foreach ($this->scanner->scanDirectory() as $plugin) {
+
+            $name = array_get($plugin, 'metaData.name');
+            $version = array_get($plugin, 'metaData.version');
+            if(is_dir($dir.DIRECTORY_SEPARATOR.$plugin['id'].DIRECTORY_SEPARATOR.'vendor')) {
+                continue;
+            }
+            $requires[$name] = $version;
+        }
+        array_set($this->data, 'require', $requires);
+    }
+
+    public function write()
+    {
+        $json = json_encode($this->data);
+        $json = json_format($json);
+        file_put_contents($this->path, $json);
+    }
+
+    public function setUpdateMode()
+    {
+        $operation = '>=';
+        $requires = [];
+        foreach (array_get($this->data, 'require', []) as $package => $version) {
+            $requires[$package] = $operation. str_replace($operation, '', $version);
+        }
+        array_set($this->data, 'require', $requires);
+
+        array_set($this->data, 'extra.xpressengine-plugin.uninstall', []);
+        array_set($this->data, 'extra.xpressengine-plugin.changed', []);
+    }
+
+    public function setFixMode()
+    {
+        $operation = '>=';
+        $requires = [];
+        foreach (array_get($this->data, 'require', []) as $package => $version) {
+            $requires[$package] = str_replace($operation, '', $version);
+        }
+        array_set($this->data, 'require', $requires);
+
+        array_set($this->data, 'extra.xpressengine-plugin.uninstall', []);
+        array_set($this->data, 'extra.xpressengine-plugin.changed', []);
+    }
+
+    /**
+     * get
+     *
+     * @param      $key
+     * @param null $default
+     *
+     * @return mixed
+     */
+    public function get($key, $default = null)
+    {
+        return array_get($this->data, $key, $default);
+    }
+
+    /**
+     * set
+     *
+     * @param $key
+     * @param $value
+     *
+     * @return void
+     */
+    public function set($key, $value)
+    {
+        array_set($this->data, $key, $value);
+    }
+
+    public function all()
+    {
+        return $this->data;
+    }
+}

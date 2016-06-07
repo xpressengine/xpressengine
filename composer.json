@@ -17,12 +17,6 @@
     ],
     "license": "LGPL-2.0",
     "type": "project",
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://packagist.xpressengine.io"
-        }
-    ],
     "require": {
         "php": ">=5.5.9",
         "wikimedia/composer-merge-plugin": "~1.3",
@@ -34,7 +28,8 @@
         "google/recaptcha": "~1.1",
         "intervention/image": "2.1.*",
         "jenssegers/agent": "*",
-        "ezyang/htmlpurifier": "~4.7"
+        "ezyang/htmlpurifier": "~4.7",
+        "guzzlehttp/guzzle": "~6.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -48,9 +43,10 @@
           "storage/app/composer.plugins.json",
           "composer.user.json"
         ],
-        "recurse": false,
+        "recurse": true,
         "replace": false,
-        "merge-extra": false
+        "merge-dev": false,
+        "merge-extra": true
       }
     },
     "autoload": {
