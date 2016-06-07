@@ -151,6 +151,7 @@ return [
         App\Providers\UIObjectServiceProvider::class,
         App\Providers\ThemeServiceProvider::class,
         App\Providers\SkinServiceProvider::class,
+        App\Providers\EditorServiceProvider::class,
         App\Providers\SettingsServiceProvider::class,
         App\Providers\RegisterServiceProvider::class,
 
@@ -247,6 +248,7 @@ return [
         'XeUI' => App\Facades\XeUI::class,
         'XeTheme' => App\Facades\XeTheme::class,
         'XeSkin' => App\Facades\XeSkin::class,
+        'XeEditor' => App\Facades\XeEditor::class,
         'XeRegister' => App\Facades\XeRegister::class,
         'XeSettings' => App\Facades\XeSettings::class,
         'XeMenu' => App\Facades\XeMenu::class,
