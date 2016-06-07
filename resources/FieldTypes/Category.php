@@ -46,10 +46,6 @@ class Category extends AbstractType
     {
         app('xe.pluginRegister')->add(DefaultSkin::class);
         DefaultSkin::boot();
-        app('xe.pluginRegister')->add(AfterTitle::class);
-        AfterTitle::boot();
-        app('xe.pluginRegister')->add(BeforeTitle::class);
-        BeforeTitle::boot();
     }
 
     /**

@@ -132,7 +132,6 @@ class DefaultSkin extends AbstractSkin
             $item = CategoryItem::find($itemId);
         }
 
-
         return View::make($view, [
             'config' => $config,
             'items' => $items,
@@ -152,7 +151,7 @@ class DefaultSkin extends AbstractSkin
             return null;
         }
 
-        return CategoryItem::find($args[$key])->word;
+        return xe_trans(CategoryItem::find($args[$key])->word);
     }
 
     public static function getSettingsURI()
