@@ -2,15 +2,15 @@
 /**
  * MenuHandler
  *
- * PHP version 5
- *
  * @category  Menu
  * @package   Xpressengine\Menu
- * @author    XE Team (developers) <developers@xpressengine.com>
- * @copyright 2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license   http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link      http://www.xpressengine.com
+ * @author    XE Developers <developers@xpressengine.com>
+ * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license   LGPL-2.1
+ * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link      https://xpressengine.io
  */
+
 namespace Xpressengine\Menu;
 
 use Illuminate\Database\QueryException;
@@ -113,15 +113,11 @@ use Xpressengine\Support\Tree\NodePositionTrait;
  *
  * @category  Menu
  * @package   Xpressengine\Menu
- * @author    XE Team (developers) <developers@xpressengine.com>
- * @copyright 2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license   http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link      http://www.xpressengine.com
  */
 class MenuHandler
 {
     use NodePositionTrait;
-    
+
     /**
      * Model class
      *
@@ -307,11 +303,11 @@ class MenuHandler
                 }
             }
         }
-        
+
         $this->setHierarchy($item);
         $this->setOrder($item);
         $menu->increment($menu->getCountName());
-        
+
         $this->registerItemPermission($item, new Grant);
         $this->storeMenuType($item, $menuTypeInput);
 
@@ -571,7 +567,7 @@ class MenuHandler
     public function getMenuItemTheme(MenuItem $item)
     {
         $configKeyString = $this->menuKeyString($item);
-        
+
         return $this->configs->get($configKeyString);
     }
 
@@ -764,6 +760,19 @@ class MenuHandler
         $menuType = $this->modules->getModuleObject($item->type);
 
         return $menuType::getInstanceSettingURI($item->getKey());
+    }
+
+    /**
+     * Get setting page url by menu item id
+     *
+     * @param string $itemId menu item identifier
+     * @return string|null
+     */
+    public function getInstanceSettingURIByItemId($itemId)
+    {
+        $item = $this->createItemModel()->newQuery()->find($itemId);
+
+        return $this->getInstanceSettingURI($item);
     }
 
     /**

@@ -2,15 +2,15 @@
 /**
  * PluginEntity class. This file is part of the Xpressengine package.
  *
- * PHP version 5
- *
  * @category    Plugin
  * @package     Xpressengine\Plugin
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
  */
+
 namespace Xpressengine\Plugin;
 
 use Illuminate\Contracts\Support\Arrayable;
@@ -23,9 +23,7 @@ use Xpressengine\Plugin\PluginHandler as Plugin;
  *
  * @category    Plugin
  * @package     Xpressengine\Plugin
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
+ *
  * @method void activate($installedVersion = null)
  * @method void deactivate($installedVersion = null)
  * @method void install()

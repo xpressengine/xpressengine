@@ -1,28 +1,19 @@
 <?php
 /**
- * Class InterceptionHandler. This file is part of the Xpressengine package.
- *
- * PHP version 5
- *
- * @category    Interception
- * @package     Xpressengine\Interception
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
- */
-namespace Xpressengine\Interception;
-
-/**
  * 이 라이브러리는 AOP(aspect-oriented programming)을 구현한 라이브러리이며 이 클래스는 프로그램 내에서
  * AOP를 관리하는 역할을 한다.
  *
  * @category    Interception
  * @package     Xpressengine\Interception
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
  */
+
+namespace Xpressengine\Interception;
+
 use Xpressengine\Interception\Proxy\Loader\Loader;
 use Xpressengine\Interception\Proxy\Pass\Pass;
 use Xpressengine\Interception\Proxy\ProxyGenerator;
@@ -30,10 +21,6 @@ use Xpressengine\Interception\Proxy\ProxyGenerator;
 /**
  * @category    Interception
  * @package     Xpressengine\Interception
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
- * @description
  */
 class InterceptionHandler
 {
