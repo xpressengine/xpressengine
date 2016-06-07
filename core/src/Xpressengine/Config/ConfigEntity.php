@@ -89,6 +89,18 @@ class ConfigEntity extends Entity implements IteratorAggregate
     }
 
     /**
+     * Get all of the items in the config entity.
+     *
+     * @return array
+     */
+    public function all()
+    {
+        $parentAttributes = $this->parent !== null ? $this->parent->all() : [];
+
+        return array_merge($parentAttributes, $this->vo->getAttributes());
+    }
+
+    /**
      * get value, chain of responsibility
      *
      * @param string $name    variable name
@@ -271,9 +283,7 @@ class ConfigEntity extends Entity implements IteratorAggregate
      */
     public function getIterator()
     {
-        $parentAttributes = ($this->parent !== null) ? $this->parent->getIterator()->getArrayCopy() : [];
-
-        return new ArrayIterator(array_merge($parentAttributes, $this->vo->getAttributes()));
+        return new ArrayIterator($this->all());
     }
 
     /**
