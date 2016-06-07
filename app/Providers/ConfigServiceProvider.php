@@ -54,8 +54,8 @@ class ConfigServiceProvider extends ServiceProvider
     {
         $this->app->bind('xe.config', function ($app) {
             $repo = new DatabaseRepository($app['xe.db']->connection());
-
-            if (env('APP_DEBUG') != true) {
+            
+            if ($app['config']['app.debug'] !== true) {
                 $repo = new CacheDecorator(
                     $repo,
                     new LaravelCache($app['cache.store'])

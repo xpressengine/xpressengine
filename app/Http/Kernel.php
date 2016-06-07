@@ -58,10 +58,7 @@ class Kernel extends HttpKernel
      */
     public function bootstrap()
     {
-        $args = func_get_args();
-        $withXE = array_shift($args);
-
-        if ($this->isInstalled() === false && $withXE !== true) {
+        if ($this->isInstalled() === false) {
             $this->resetForInstall();
         }
 

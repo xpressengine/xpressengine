@@ -10,7 +10,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use View;
 use Artisan;
 use File;
 use Symfony\Component\Yaml\Yaml;
@@ -54,9 +53,6 @@ class InstallController extends Controller
             return $this->back($validator->getMessageBag()->first());
         }
 
-        // check database connect - throw exception
-
-        $appKeyPath = storage_path('app') . '/appKey';
         $configPath = storage_path('app') . '/installConfig';
 
         $string = Yaml::dump([
@@ -86,7 +82,6 @@ class InstallController extends Controller
         ]);
 
         File::delete($configPath);
-        File::delete($appKeyPath);
 
         return redirect($request->root());
     }

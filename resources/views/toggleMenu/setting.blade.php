@@ -61,7 +61,6 @@
             handle: '.handler',
             cancel: '',
             update: function( event, ui ) {
-                console.log('update', event, ui);
             }
         }).disableSelection();
 

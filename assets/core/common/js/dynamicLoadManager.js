@@ -6,13 +6,40 @@
         };
 
         return {
+            import: function(arrUrl, callback) {
+                var arr = [];
+
+                for(var i = 0, max = arrUrl.length; i < max; i += 1) {
+                    if(!_assets.js.hasOwnProperty(arrUrl[i])) {
+                        _assets.js[arrUrl[i]] = "";
+                    }
+
+                    arr.push(System.import(arrUrl[i]));
+                }
+
+                Promise.all(arr).then(function(modules) {
+                    if(callback) {
+                        callback.apply(null, modules);
+                    }
+                });
+            },
+            jsLoadMultiple: function(arrjs) {
+                var html = "";
+
+                for(var i = 0, max = arrjs.length; i < max; i += 1) {
+                    html += "<script src='" + arrjs[i] + "'></script>";
+                }
+
+                $("head").append(html);
+            },
             jsLoad: function(url, load, error) {
                 var src = url.split('?')[0];
 
                 if(!_assets.js.hasOwnProperty(src)) {
                     var el = document.createElement( 'script' );
                     el.src = url;
-
+                    el.async = true;
+                    
                     if(load) {
                         el.onload = load;
                     }
