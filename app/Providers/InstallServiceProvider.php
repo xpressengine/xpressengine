@@ -16,7 +16,6 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Route;
-use File;
 
 /**
  * Install Service Provider
@@ -40,16 +39,13 @@ class InstallServiceProvider extends ServiceProvider
         Route::get('/', function() {
             return redirect('/web_installer');
         });
-        
+
         Route::post('/install/post', '\App\Http\Controllers\InstallController@install');
 
         \App\Http\Middleware\ExceptAppendableVerifyCsrfToken::setExcept('/install/post');
 
-        $appKeyPath = storage_path('app') . '/appKey';
-        if (File::exists($appKeyPath) === false) {
-            File::put($appKeyPath, Str::random(32));
-        }
-        app('config')->set('app.key', File::get($appKeyPath));
+        // 실제 키 생성전 임시
+        app('config')->set('app.key', Str::random(32));
     }
 
     /**

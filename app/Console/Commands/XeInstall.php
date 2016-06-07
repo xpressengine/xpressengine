@@ -6,9 +6,7 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Filesystem\Filesystem;
 use PDO;
 use Symfony\Component\Console\Question\Question;
-use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
-use Symfony\Component\Process\ProcessUtils;
 use Symfony\Component\Yaml\Yaml;
 use Xpressengine\Support\Migration;
 use Xpressengine\User\UserHandler;
@@ -29,11 +27,6 @@ class XeInstall extends Command
      * @var string
      */
     protected $description = 'Xpressengine installation';
-
-    /**
-     * @var \Illuminate\Contracts\Foundation\Application
-     */
-    protected $app;
 
     /**
      * @var bool
@@ -58,10 +51,7 @@ class XeInstall extends Command
      */
     protected $migrations;
 
-    /**
-     * @var
-     */
-    protected $env;
+    protected $appKey;
 
     /**
      * @var null|string
@@ -89,6 +79,7 @@ class XeInstall extends Command
             'password' => null,
         ],
     ];
+
     /**
      * @var bool
      */
@@ -124,8 +115,6 @@ class XeInstall extends Command
             // configFile 있을 경우에만 noInteraction 가능
             $this->noInteraction = $noInteraction;
         }
-
-        $this->env = $this->getDefaultEnv();
 
         try {
             $this->process();
@@ -175,20 +164,6 @@ class XeInstall extends Command
         $question->setValidator($validator)->setMaxAttempts(null);
 
         return $this->output->askQuestion($question);
-    }
-
-    /**
-     * getDefaultEnv
-     *
-     * @return string
-     */
-    protected function getDefaultEnv()
-    {
-        $appKey = Str::random(32);
-
-        return "APP_ENV=cms
-APP_DEBUG=true
-APP_KEY={$appKey}";
     }
 
     /**
@@ -491,7 +466,7 @@ APP_KEY={$appKey}";
      */
     private function configFileGenerate($key, array $data)
     {
-        $dir = config_path() . '/cms';
+        $dir = config_path() . '/production';
         $this->makeDir($dir);
 
         $data = $this->encodeArr2Str($data);
@@ -532,7 +507,12 @@ APP_KEY={$appKey}";
             if (is_array($val)) {
                 $output .= $this->getIndent($depth) . "'{$key}' => " . '[' . PHP_EOL . $this->encodeArr2Str($val, $depth + 1) . $this->getIndent($depth) . '],' . PHP_EOL;
             } else {
-                $output .= $this->getIndent($depth) . "'{$key}' => " . (is_int($val) ? $val : "'{$val}'") .',' . PHP_EOL;
+                if (is_bool($val)) {
+                    $val = $val ? 'true' : 'false';
+                } elseif (!is_int($val)) {
+                    $val = "'{$val}'";
+                }
+                $output .= $this->getIndent($depth) . "'{$key}' => " . $val .',' . PHP_EOL;
             }
         }
 
@@ -553,20 +533,6 @@ APP_KEY={$appKey}";
         }
 
         return $indent;
-    }
-
-    /**
-     * setEnv
-     *
-     * @param        $key
-     * @param        $newValue
-     * @param string $defaultValue
-     *
-     * @return void
-     */
-    protected function setEnv($key, $newValue, $defaultValue = '')
-    {
-        $this->env = str_replace("$key=".$defaultValue, "$key=".$newValue, $this->env);
     }
 
     /**
@@ -613,17 +579,46 @@ APP_KEY={$appKey}";
      * setSiteInfo
      *
      * @param $siteInfo
+     * @param $debug
      *
      * @return void
      */
-    private function setSiteInfo($siteInfo)
+    private function setSiteInfo($siteInfo, $debug = true)
     {
         $info = [
+            'debug' => $debug,
             'url' => $siteInfo['url'],
             'timezone' => $siteInfo['timezone'],
+            'key' => $this->getKey(),
         ];
 
         $this->configFileGenerate('app', $info);
+    }
+
+    private function getKey()
+    {
+        if (!$this->appKey) {
+            $this->appKey = $this->getRandomKey($this->laravel['config']['app.cipher']);
+        }
+
+        return $this->appKey;
+    }
+
+    /**
+     * Generate a random key for the application.
+     *
+     * Illuminate\Foundation\Console\KeyGenerateCommand
+     *
+     * @param  string  $cipher
+     * @return string
+     */
+    private function getRandomKey($cipher)
+    {
+        if ($cipher === 'AES-128-CBC') {
+            return Str::random(16);
+        }
+
+        return Str::random(32);
     }
 
     /**
@@ -635,8 +630,7 @@ APP_KEY={$appKey}";
     {
         $this->line('Base Framework is loading...');
 
-        $this->writeEnvFile();
-        // reboot for load env file
+        // reboot for load config
         $this->bootFramework();
 
         // migration
@@ -655,22 +649,7 @@ APP_KEY={$appKey}";
         // booting framework with xpressengine service providers
         $this->bootFramework(true);
 
-        // composer의 post script를 run한다.
-        // script - optimizing & key generation
-//        $this->runPostScript();
-
         $this->line("Base Framework is loaded\n");
-    }
-
-    /**
-     * writeEnvFile
-     *
-     * @return void
-     */
-    private function writeEnvFile()
-    {
-        $path = $this->getBasePath('.env');
-        file_put_contents($path, $this->env);
     }
 
     /**
@@ -751,50 +730,6 @@ APP_KEY={$appKey}";
         foreach ($plugins as $plugin) {
             \XePlugin::activatePlugin($plugin);
         }
-    }
-
-//    /**
-//     * runPostScript
-//     *
-//     * @return void
-//     */
-//    private function runPostScript()
-//    {
-//        $composer = $this->findComposer();
-//        $commands = [
-//            $composer.' run-script post-install-cmd',
-//            $composer.' run-script post-create-project-cmd',
-//        ];
-//
-//        $process = new Process(implode(' && ', $commands), $this->getBasePath(), null, null, null);
-//
-//        $process->run(
-//            function ($type, $line) {
-//                $this->line($line);
-//            }
-//        );
-//    }
-
-    /**
-     * Illuminate\Foundation\Composer
-     *
-     * Get the composer command for the environment.
-     *
-     * @return string
-     */
-    protected function findComposer()
-    {
-        if (!file_exists($this->getBasePath('composer.phar'))) {
-            return 'composer';
-        }
-
-        $binary = ProcessUtils::escapeArgument((new PhpExecutableFinder)->find(false));
-
-        if (defined('HHVM_VERSION')) {
-            $binary .= ' --php';
-        }
-
-        return "{$binary} composer.phar";
     }
 
     /**
@@ -914,11 +849,7 @@ APP_KEY={$appKey}";
      */
     private function disableDebugMode()
     {
-        // for sync APP_KEY
-        $this->env = file_get_contents($this->getBasePath('.env'));
-
-        $this->setEnv('APP_DEBUG', 'false', 'true');
-        $this->writeEnvFile();
+        $this->setSiteInfo($this->defaultInfos['site'], false);
     }
 
     /**
