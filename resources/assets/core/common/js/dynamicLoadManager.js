@@ -23,13 +23,23 @@
                     }
                 });
             },
+            jsLoadMultiple: function(arrjs) {
+                var html = "";
+
+                for(var i = 0, max = arrjs.length; i < max; i += 1) {
+                    html += "<script src='" + arrjs[i] + "'></script>";
+                }
+
+                $("head").append(html);
+            },
             jsLoad: function(url, load, error) {
                 var src = url.split('?')[0];
 
                 if(!_assets.js.hasOwnProperty(src)) {
                     var el = document.createElement( 'script' );
                     el.src = url;
-
+                    el.async = true;
+                    
                     if(load) {
                         el.onload = load;
                     }
