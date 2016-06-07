@@ -6,6 +6,23 @@
         };
 
         return {
+            import: function(arrUrl, callback) {
+                var arr = [];
+
+                for(var i = 0, max = arrUrl.length; i < max; i += 1) {
+                    if(!_assets.js.hasOwnProperty(arrUrl[i])) {
+                        _assets.js[arrUrl[i]] = "";
+                    }
+
+                    arr.push(System.import(arrUrl[i]));
+                }
+
+                Promise.all(arr).then(function(modules) {
+                    if(callback) {
+                        callback.apply(null, modules);
+                    }
+                });
+            },
             jsLoad: function(url, load, error) {
                 var src = url.split('?')[0];
 
