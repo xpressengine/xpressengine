@@ -20,8 +20,8 @@
                     </div>
                     <div class="panel-footer">
                         <div class="pull-right">
-                            <a href="{{route('settings.menu.index')}}" class="btn btn-default">{{xe_trans('xe::cancel')}}</a>
-                            <button class="btn btn-primary">{{xe_trans('xe::next')}}</button>
+                            <a href="{{route('settings.menu.index')}}" class="btn btn-default btn-lg">{{xe_trans('xe::cancel')}}</a>
+                            <button class="btn btn-primary btn-lg">{{xe_trans('xe::next')}}</button>
                         </div>
                     </div>
                 </div>

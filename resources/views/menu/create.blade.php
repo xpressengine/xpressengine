@@ -24,7 +24,7 @@
                                 <small>{{xe_trans('xe::menuTitleDescription')}}</small>
                             </label>
 
-                            <input type="text" class="xe-input-text" name="menuTitle" value="{{Input::old('menuTitle')}}"placeholder="{{xe_trans('xe::menuTitlePlaceHolder')}}"/>
+                            <input type="text" class="form-control" name="menuTitle" value="{{Input::old('menuTitle')}}"placeholder="{{xe_trans('xe::menuTitlePlaceHolder')}}"/>
                         </div>
                         <div class="form-group">
                             <label>Menu Description</label>
@@ -52,8 +52,8 @@
 
                     <div class="panel-footer">
                         <div class="pull-right">
-                            <a href="{{ route('settings.menu.index')}}" class="btn btn-default">{{xe_trans('xe::cancel')}}</a>
-                            <button class="btn btn-primary">{{xe_trans('xe::submit')}}</button>
+                            <a href="{{ route('settings.menu.index')}}" class="btn btn-default btn-lg">{{xe_trans('xe::cancel')}}</a>
+                            <button class="btn btn-primary btn-lg">{{xe_trans('xe::submit')}}</button>
                         </div>
                     </div>
                 </div>

@@ -52,7 +52,7 @@
                 </div>
                 <div class="panel-footer">
                     <div class="pull-right">
-                        <button type="submit" class="btn btn-primary"><i class="xi-download"></i>저장</button>
+                        <button type="submit" class="btn btn-primary btn-lg">저장</button>
                     </div>
                 </div>
             </div>

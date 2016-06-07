@@ -52,7 +52,6 @@
                             {{-- author source--}}
                             @if($source = $plugin->getSupport('source'))
                             <dt class="sr-only">Source</dt>
-                            <dd><i class="xi-download"></i>
                                 <a href="{{ $source }}" target="_blank">{{ $source }}</a>
                             </dd>
                             @endif

@@ -29,7 +29,7 @@
                 </div>
                 <div class="panel-footer">
                     <div class="pull-right">
-                        <button type="submit" class="xe-btn xe-btn-blue">{{xe_trans('xe::update')}}</button>
+                        <button type="submit" class="btn btn-primary btn-lg">{{xe_trans('xe::update')}}</button>
                     </div>
                 </div>
             </div>

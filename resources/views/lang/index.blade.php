@@ -58,7 +58,7 @@
                         ])
                         <div class="input-group clearfix">
                             <button type="button" class="btn btn-primary pull-right save" data-line-id="{{ $search['id'] }}">
-                                <i class="xi-download"></i>{{ XeLang::trans('lang::admin.editor.save') }}
+                                {{ XeLang::trans('lang::admin.editor.save') }}
                             </button>
                         </div>
                     </div>

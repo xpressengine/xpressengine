@@ -45,8 +45,8 @@
                         </div>
                         <div class="panel-footer">
                             <div class="pull-right">
-                                <button type="button" class="btn btn-default">취소</button>
-                                <button type="submit" class="btn btn-primary"><i class="xi-download"></i>저장</button>
+                                <button type="button" class="btn btn-default btn-lg">취소</button>
+                                <button type="submit" class="btn btn-primary btn-lg">저장</button>
                             </div>
                         </div>
                     </div>

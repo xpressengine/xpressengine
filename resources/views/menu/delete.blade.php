@@ -27,9 +27,9 @@
             </div>
         </div>
         <div class="pull-right">
-            <a href="{{ route('settings.menu.index')}}" class="btn btn-default">{{xe_trans('xe::cancel')}}</a>
+            <a href="{{ route('settings.menu.index')}}" class="btn btn-default btn-lg">{{xe_trans('xe::cancel')}}</a>
             @if($menu->items->count() == 0)
-            <button type="submit" class="btn btn-danger">{{xe_trans('xe::delete')}}</button>
+            <button type="submit" class="btn btn-danger btn-lg">{{xe_trans('xe::delete')}}</button>
             @endif
         </div>
     </div>

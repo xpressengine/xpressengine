@@ -1,36 +1,24 @@
-@section('page_head')
-<h2><a href="{{route('settings.menu.select.types', $menu->id)}}"><i class="xi-arrow-left"></i></a>{{xe_trans('xe::newItem')}}</h2>
-<div class="tit_btn_area">
-    <button type="button" class="btn_lst_toggle visible-xs pull-right"><i class="xi-ellipsis-v"></i></button>
-    <ul class="btn_lst"></ul>
-</div>
-<div class="tit_bottom">
-    <ul class="locate">
-        <li>
-            <a href="{{ route('settings.menu.edit.menu', $menu->id) }}">
-                {{$menu->title}}
-            </a>
-            <i class="xi-angle-right"></i>
-        </li>
-    </ul>
-</div>
-@endsection
+
+@section('page_title', "<h2><a href='".route('settings.menu.index')."'><i class='xi-arrow-left'></i></a>".xe_trans('xe::newItem')."</h2>")
+@section('page_description', '<p class="sub-text">'.xe_trans('xe::selectItemTypeDescription').'</p>')
+
 @extends('menu.layout')
+
 @section('menuContent')
-    <form action="{{ route('settings.menu.store.item', $menu->id) }}" method="post">
-        <input type="hidden" name="_token" value="{{ Session::token() }}"/>
-        <input type="hidden" name="selectedType" value="{{ $selectedType }}"/>
-        <input type="hidden" name="siteKey" value="{{ $siteKey }}"/>
-        <input type="hidden" name="menuId" value="{{ $menu->id}}"/>
-        <div class="col-md-12">
-            <div class="panel-group">
-                <div class="panel">
-                    <div class="panel-heading">
-                        <div class="pull-left">
-                            <h3 class="panel-title">{{xe_trans('xe::newItemDescription')}}</h3>
-                        </div>
-                        <div class="pull-right">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="btn-link panel-toggle pull-right"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">메뉴닫기</span></a>
+<form action="{{ route('settings.menu.store.item', $menu->id) }}" method="post">
+    <input type="hidden" name="_token" value="{{ Session::token() }}"/>
+    <input type="hidden" name="selectedType" value="{{ $selectedType }}"/>
+    <input type="hidden" name="siteKey" value="{{ $siteKey }}"/>
+    <input type="hidden" name="menuId" value="{{ $menu->id}}"/>
+    <div class="col-md-12">
+        <div class="panel-group">
+            <div class="panel">
+                <div class="panel-heading">
+                    <div class="pull-left">
+                        <h3 class="panel-title">{{xe_trans('xe::newItemDescription')}}</h3>
+                    </div>
+                    <div class="pull-right">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="btn-link panel-toggle pull-right"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">메뉴닫기</span></a>
                     </div>
                 </div>
 
@@ -54,7 +42,7 @@
                         @if($menuType::isRouteAble())
                         <em class="txt_blue">/</em>
                         @endif
-                        <input type="text" id="item-url" name="itemUrl" class="xe-input-text" value="{{Request::old('itemUrl')}}"/>
+                        <input type="text" id="item-url" name="itemUrl" class="form-control" value="{{Request::old('itemUrl')}}"/>
                     </div>
                     <div class="form-group">
                         <label for="item-title">Item Title</label>
@@ -82,101 +70,101 @@
                     <div class="form-group">
                         <label for="item-target">Item Target<br><small>{{xe_trans('xe::itemTargetDescription')}}</small></label>
 
-                            <select name="itemTarget" class="form-control">
-                                <option value="_self" selected>
-                                    {{xe_trans('xe::itemTargetOption_sameFrame')}}
-                                </option>
-                                <option value="_black">
-                                    {{xe_trans('xe::itemTargetOption_newWindow')}}
-                                </option>
-                                <option value="_parent">
-                                    {{xe_trans('xe::itemTargetOption_parentFrame')}}
-                                </option>
-                                <option value="_top">
-                                    {{xe_trans('xe::itemTargetOption_topFrame')}}
-                                </option>
-                            </select>
-                        </div>
+                        <select name="itemTarget" class="form-control">
+                            <option value="_self" selected>
+                                {{xe_trans('xe::itemTargetOption_sameFrame')}}
+                            </option>
+                            <option value="_black">
+                                {{xe_trans('xe::itemTargetOption_newWindow')}}
+                            </option>
+                            <option value="_parent">
+                                {{xe_trans('xe::itemTargetOption_parentFrame')}}
+                            </option>
+                            <option value="_top">
+                                {{xe_trans('xe::itemTargetOption_topFrame')}}
+                            </option>
+                        </select>
+                    </div>
 
-                        <div class="form-group">
-                            <label>
-                                Link image
-                                <small>{{ xe_trans('xe::linkImageDescription') }}</small>
-                            </label>
+                    <div class="form-group">
+                        <label>
+                            Link image
+                            <small>{{ xe_trans('xe::linkImageDescription') }}</small>
+                        </label>
 
-                            <div class="well">
-                                <div class="row">
-                                    <div class="col-sm-4">
-                                        <label>PC - {{ xe_trans('xe::default') }}</label>
-                                        {!! uio('uiobject/xpressengine@formImage', ['name' => 'basicImage']) !!}
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <label>PC - {{ xe_trans('xe::hover') }}</label>
-                                        {!! uio('uiobject/xpressengine@formImage', ['name' => 'hoverImage']) !!}
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <label>PC - {{ xe_trans('xe::selected') }}</label>
-                                        {!! uio('uiobject/xpressengine@formImage', ['name' => 'selectedImage']) !!}
-                                    </div>
+                        <div class="well">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <label>PC - {{ xe_trans('xe::default') }}</label>
+                                    {!! uio('uiobject/xpressengine@formImage', ['name' => 'basicImage']) !!}
                                 </div>
+                                <div class="col-sm-4">
+                                    <label>PC - {{ xe_trans('xe::hover') }}</label>
+                                    {!! uio('uiobject/xpressengine@formImage', ['name' => 'hoverImage']) !!}
+                                </div>
+                                <div class="col-sm-4">
+                                    <label>PC - {{ xe_trans('xe::selected') }}</label>
+                                    {!! uio('uiobject/xpressengine@formImage', ['name' => 'selectedImage']) !!}
+                                </div>
+                            </div>
 
-                                <div class="row">
-                                    <div class="col-sm-4">
-                                        <label>Mobile - {{ xe_trans('xe::default') }}</label>
-                                        {!! uio('uiobject/xpressengine@formImage', ['name' => 'mBasicImage']) !!}
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <label>Mobile - {{ xe_trans('xe::hover') }}</label>
-                                        {!! uio('uiobject/xpressengine@formImage', ['name' => 'mHoverImage']) !!}
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <label>Mobile - {{ xe_trans('xe::selected') }}</label>
-                                        {!! uio('uiobject/xpressengine@formImage', ['name' => 'mSelectedImage']) !!}
-                                    </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <label>Mobile - {{ xe_trans('xe::default') }}</label>
+                                    {!! uio('uiobject/xpressengine@formImage', ['name' => 'mBasicImage']) !!}
+                                </div>
+                                <div class="col-sm-4">
+                                    <label>Mobile - {{ xe_trans('xe::hover') }}</label>
+                                    {!! uio('uiobject/xpressengine@formImage', ['name' => 'mHoverImage']) !!}
+                                </div>
+                                <div class="col-sm-4">
+                                    <label>Mobile - {{ xe_trans('xe::selected') }}</label>
+                                    {!! uio('uiobject/xpressengine@formImage', ['name' => 'mSelectedImage']) !!}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="panel">
+        <div class="panel">
+            <div class="panel-heading">
+                <div class="pull-left">
+                    <h3 class="panel-title">Theme<small>{{xe_trans('xe::menuThemeDescription')}}</small></h3>
+                </div>
+                <div class="pull-right">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="btn-link panel-toggle pull-right"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">메뉴닫기</span></a>
+                </div>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse in">
                 <div class="panel-heading">
                     <div class="pull-left">
-                        <h3 class="panel-title">Theme<small>{{xe_trans('xe::menuThemeDescription')}}</small></h3>
-                    </div>
-                    <div class="pull-right">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="btn-link panel-toggle pull-right"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">메뉴닫기</span></a>
-                    </div>
-                </div>
-                <div id="collapseTwo" class="panel-collapse collapse in">
-                    <div class="panel-heading">
-                        <div class="pull-left">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" name="parentTheme" id="parentTheme" value="1">
-                                    {{xe_trans('xe::menuThemeInheritMode')}}
-                                </label>
-                            </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="parentTheme" id="parentTheme" value="1">
+                                {{xe_trans('xe::menuThemeInheritMode')}}
+                            </label>
                         </div>
                     </div>
-                    <div id="themeSelect">
-                        {!! uio('themeSelect', ['selectedTheme' => ['desktop' => $menuConfig->get('desktopTheme'), 'mobile' => $menuConfig->get('mobileTheme')]]) !!}
-                    </div>
                 </div>
+                <div id="themeSelect">
+                    {!! uio('themeSelect', ['selectedTheme' => ['desktop' => $menuConfig->get('desktopTheme'), 'mobile' => $menuConfig->get('mobileTheme')]]) !!}
+                </div>
+            </div>
 
-                <div class="panel-footer">
-                </div>
+            <div class="panel-footer">
             </div>
         </div>
 
-        {!! uio('menuType', $menuTypeArgs) !!}
-
         <div class="pull-right">
-            <a href="{{ route('settings.menu.select.types')}}" class="btn btn-default">{{xe_trans('xe::cancel')}}</a>
-            <button type="submit" class="btn btn-primary">{{xe_trans('xe::submit')}}</button>
+            <a href="{{ route('settings.menu.select.types')}}" class="btn btn-link">{{xe_trans('xe::cancel')}}</a>
+            <button type="submit" class="btn btn-primary btn-lg">{{xe_trans('xe::save')}}</button>
         </div>
     </div>
+
+    {!! uio('menuType', $menuTypeArgs) !!}
+
 </form>
 <script>
     $('#parentTheme').change(function (e) {

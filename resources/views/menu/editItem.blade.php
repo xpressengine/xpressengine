@@ -199,8 +199,8 @@
         @endif
 
         <div class="pull-right">
-            <a href="{{route('settings.menu.index')}}" class="btn btn-default">{{xe_trans('xe::cancel')}}</a>
-            <button class="btn btn-primary">{{xe_trans('xe::save')}}</button>
+            <a href="{{route('settings.menu.index')}}" class="btn btn-default btn-lg">{{xe_trans('xe::cancel')}}</a>
+            <button class="btn btn-primary btn-lg">{{xe_trans('xe::save')}}</button>
         </div>
     </div>
 </form>

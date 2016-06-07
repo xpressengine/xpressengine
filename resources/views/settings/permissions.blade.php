@@ -27,7 +27,7 @@
                                 <div id="collapseOne" class="panel-collapse">
                                     <div class="panel-heading">
                                         <div class="pull-right">
-                                            <button type="submit" class="btn btn-primary"><i class="xi-download"></i>저장
+                                            <button type="submit" class="btn btn-primary">저장
                                             </button>
                                         </div>
                                     </div>
