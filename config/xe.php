@@ -343,8 +343,6 @@ return [
 
     'documentReplyCodeLen' => 3,
 
-    //    'commentReplyCodeLen' => 3,
-
     'media' => [
         /*
          * type => fit(max resize):꽉 차게, letter(min resize): 다 들어가게, widen: 가로기준으로, heighten: 세로기준으로, stretch: 지정된 사이즈에 맞게 늘림, spill: 지정된 사이즈에 꽉차면서 넘치는 부분을 잘라내지 않음
@@ -402,7 +400,6 @@ return [
             'themeSelect' => 'uiobject/xpressengine@themeSelect',
             'typeList' => 'uiobject/xpressengine@typeList',
             'captcha' => 'uiobject/xpressengine@captcha',
-            //            'comment' => 'uiobject/xpressengine@comment'
         ]
     ],
 
