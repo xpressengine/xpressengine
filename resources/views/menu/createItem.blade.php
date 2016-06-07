@@ -1,20 +1,5 @@
-@section('page_head')
-<h2><a href="{{route('settings.menu.select.types', $menu->id)}}"><i class="xi-arrow-left"></i></a>{{xe_trans('xe::newItem')}}</h2>
-<div class="tit_btn_area">
-    <button type="button" class="btn_lst_toggle visible-xs pull-right"><i class="xi-ellipsis-v"></i></button>
-    <ul class="btn_lst"></ul>
-</div>
-<div class="tit_bottom">
-    <ul class="locate">
-        <li>
-            <a href="{{ route('settings.menu.edit.menu', $menu->id) }}">
-                {{$menu->title}}
-            </a>
-            <i class="xi-angle-right"></i>
-        </li>
-    </ul>
-</div>
-@endsection
+@section('page_title', "<h2><a href='".route('settings.menu.index')."'><i class='xi-arrow-left'></i></a>".xe_trans('xe::newItem')."</h2>")
+
 @extends('menu.layout')
 @section('menuContent')
 <form action="{{ route('settings.menu.store.item', $menu->id) }}" method="post">
@@ -54,7 +39,7 @@
                     @if($menuType::isRouteAble())
                     <em class="txt_blue">/</em>
                     @endif
-                    <input type="text" id="item-url" name="itemUrl" class="xe-input-text" value="{{Request::old('itemUrl')}}"/>
+                    <input type="text" id="item-url" name="itemUrl" class="form-control" value="{{Request::old('itemUrl')}}"/>
                 </div>
                 <div class="form-group">
                     <label for="item-title">Item Title</label>
