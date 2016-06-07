@@ -154,13 +154,13 @@
                         <div class="pull-left">
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" name="parentTheme" id="parentTheme" value="1">
+                                    <input type="checkbox" name="parentTheme" id="parentTheme" value="1" checked>
                                     {{xe_trans('xe::menuThemeInheritMode')}}
                                 </label>
                             </div>
                         </div>
                     </div>
-                    <div id="themeSelect">
+                    <div id="themeSelect" style="display:none">
                         {!! uio('themeSelect', ['selectedTheme' => ['desktop' => $menuConfig->get('desktopTheme'), 'mobile' => $menuConfig->get('mobileTheme')]]) !!}
                     </div>
                 </div>
@@ -179,8 +179,8 @@
     </div>
 </form>
 <script>
-    $('#parentTheme').change(function (e) {
-        $(e.target).closest('.panel-collapse').find('>.panel-body').toggle();
+    $('#parentTheme').change(function () {
+        $('#themeSelect').toggle();
     });
 </script>
 @endsection
