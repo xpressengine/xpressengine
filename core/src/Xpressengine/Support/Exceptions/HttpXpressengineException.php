@@ -14,6 +14,7 @@
 namespace Xpressengine\Support\Exceptions;
 
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * HttpXpressengineException
@@ -23,6 +24,7 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
  */
 class HttpXpressengineException extends XpressengineException implements HttpExceptionInterface
 {
+    protected $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
     /**
      * HttpXpressengineException constructor.
      *
