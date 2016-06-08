@@ -35,6 +35,10 @@
                 $result = PHP_VERSION_ID < $phpVersion ? false : true;
                 break;
 
+            case 'pdo' :
+                $result = extension_loaded('PDO') && extension_loaded('pdo_mysql');
+                break;
+
             case "mcrypt" :
                 $result = extension_loaded('mcrypt');
                 break;
@@ -272,7 +276,7 @@
             $('.__xe_check_list').empty();
             check('<?=trans('checkPHPVersion')?>', 'phpVersion');
             check('<?=trans('checkDirPermission')?>', 'directoryPermission');
-//            check('<?//=trans('checkEnvFile')?>//', 'envFile');
+            check('<?=trans('checkPHPExtPDO')?>', 'pdo');
             check('<?=trans('checkPHPExtCURL')?>', 'curl');
             check('<?=trans('checkPHPExtMCRYPT')?>', 'mcrypt');
             check('<?=trans('checkPHPExtGD')?>', 'gd');

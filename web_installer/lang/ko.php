@@ -6,10 +6,10 @@ return [
     'systemCheck' => '시스템 검사',
     'checkPHPVersion' => 'PHP 버전을 체크합니다.',
     'checkDirPermission' => '디렉토리 사용 권한을 체크합니다.',
-    'checkEnvFile' => '환경설정 파일을 체크합니다.',
+    'checkPHPExtPDO' => 'PDO, pdo_mysql PHP 확장 기능이 필요합니다.',
     'checkPHPExtCURL' => 'cURL PHP 확장 기능이 필요합니다.',
     'checkPHPExtMCRYPT' => 'MCrypt PHP 확장 기능이 필요합니다.',
-    'checkPHPExtGD' => 'GD PHP 라이브러리가 필요합니다.',
+    'checkPHPExtGD' => 'GD PHP 확장 기능이 필요합니다.',
 
     'terms' => '약관 동의',
     'termsText' => '이 문서는 정보 제공의 목적으로만 제공됩니다. `NAVER(주)`는 이 문서에 수록된 정보의 완전성과
