@@ -12,7 +12,7 @@ use Xpressengine\Plugin\Exceptions\CannotDeleteActivatedPluginException;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
 
-class PluginUninstallCommand extends Command
+class PluginUninstall extends Command
 {
     /**
      * The console command name.
@@ -159,8 +159,14 @@ class PluginUninstallCommand extends Command
 
         $writer->write();
 
-        // 삭제 성공 문구 출력
-        $this->output->success("$title - $name:$version 플러그인을 삭제하였습니다.");
+        if(!array_has($updated, $name)) {
+            $this->output->warning("$name:$version 플러그인을 삭제하지 못했습니다. 플러그인 간의 의존관계로 인해 삭제가 불가능할 수도 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다.");
+        } else {
+            // 삭제 성공 문구 출력
+            $this->output->success("$title - $name:$version 플러그인을 삭제하였습니다.");
+        }
+
+
     }
 
     /**

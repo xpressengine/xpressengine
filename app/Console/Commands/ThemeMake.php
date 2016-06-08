@@ -9,7 +9,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Process\Process;
 use Xpressengine\Plugin\PluginEntity;
 
-class ThemeMakeCommand extends Command
+class ThemeMake extends Command
 {
     protected $signature = 'make:theme
                         {path : The path of theme directory started with plugin_id}

@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Process\Process;
 use Xpressengine\Plugin\PluginHandler;
 
-class PluginMakeCommand extends Command
+class PluginMake extends Command
 {
     /**
      * The console command name.

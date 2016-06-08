@@ -11,7 +11,7 @@ use Xpressengine\Plugin\ComposerFileWriter;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
 
-class PluginInstallCommand extends Command
+class PluginInstall extends Command
 {
     /**
      * The console command name.
@@ -80,6 +80,13 @@ class PluginInstallCommand extends Command
 
         $title = $pluginData->title;
         $name = $pluginData->name;
+
+        if($version) {
+            $releaseData = $provider->findRelease($id, $version);
+            if($releaseData === null) {
+                throw new \Exception("플러그인[$id]의 버전[$version]을 자료실에서 찾지 못했습니다.");
+            }
+        }
         $version = $version ?: $pluginData->latest_release->version;
 
         // 플러그인 정보 출력
@@ -106,9 +113,9 @@ class PluginInstallCommand extends Command
 
         // composer update실행(composer update --prefer-lowest --with-dependencies xpressengine-plugin/plugin_id)
         $this->warn('composer update를 실행합니다. 최대 수분이 소요될 수 있습니다.');
-        $this->line(' composer update --prefer-lowest --with-dependencies xpressengine-plugin/'.$id);
+        $this->line(' composer update --prefer-lowest --with-dependencies xpressengine-plugin/*');
         try {
-            $this->runComposer(base_path(), 'update --prefer-lowest --with-dependencies xpressengine-plugin/'.$id);
+            $this->runComposer(base_path(), 'update --prefer-lowest --with-dependencies xpressengine-plugin/*');
         } catch (\Exception $e) {
             ;
         }
@@ -166,8 +173,16 @@ class PluginInstallCommand extends Command
             }
         }
 
-        // 설치 성공 문구 출력
-        $this->output->success("$title - $name:$version 플러그인을 설치했습니다.");
+        if(!array_has($installed, $name)) {
+            $this->output->error("$name:$version 플러그인을 설치하지 못했습니다. 플러그인 간의 의존관계로 인해 설치가 불가능할 수도 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다.");
+        } elseif($updated[$name] !== $version) {
+            $this->output->error("$name:$version 플러그인을 설치하였으나 다른 버전으로 설치되었습니다. 플러그인 간의 의존관계로 인해 다른 버전으로 설치되었을 가능성이 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다.");
+        } else {
+            // 설치 성공 문구 출력
+            $this->output->success("$title - $name:$version 플러그인을 설치했습니다.");
+        }
+
+
     }
 
     /**

@@ -30,18 +30,20 @@ class Kernel extends ConsoleKernel
 	 * @var array
 	 */
 	protected $commands = [
-		\App\Console\Commands\Inspire::class,
+        \App\Console\Commands\Inspire::class,
         \App\Console\Commands\XeInstall::class,
-		\App\Console\Commands\Trash::class,
-		\App\Console\Commands\Schema::class,
-		\App\Console\Commands\PutTranslation::class,
-		\App\Console\Commands\XeCacheClear::class,
-		\App\Console\Commands\StorageOptimize::class,
-		\App\Console\Commands\Site::class,
-		\App\Console\Commands\PluginMakeCommand::class,
-		\App\Console\Commands\PluginInstallCommand::class,
-		\App\Console\Commands\PluginUninstallCommand::class,
-		\App\Console\Commands\ThemeMakeCommand::class,
+        \App\Console\Commands\XeUpdate::class,
+        \App\Console\Commands\Trash::class,
+        \App\Console\Commands\Schema::class,
+        \App\Console\Commands\PutTranslation::class,
+        \App\Console\Commands\XeCacheClear::class,
+        \App\Console\Commands\StorageOptimize::class,
+        \App\Console\Commands\Site::class,
+        \App\Console\Commands\PluginMake::class,
+        \App\Console\Commands\PluginInstall::class,
+        \App\Console\Commands\PluginUpdate::class,
+        \App\Console\Commands\PluginUninstall::class,
+        \App\Console\Commands\ThemeMake::class,
 	];
 
 	/**

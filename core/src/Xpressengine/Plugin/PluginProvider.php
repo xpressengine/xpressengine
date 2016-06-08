@@ -72,6 +72,22 @@ class PluginProvider
     {
     }
 
+    public function findRelease($id, $version)
+    {
+
+        $url = "$id/releases/$version";
+        try {
+            $response = $this->request($url);
+        } catch (ClientException $e) {
+            if($e->getCode() === Response::HTTP_NOT_FOUND) {
+                return null;
+            }
+            throw $e;
+        }
+
+        return $response;
+    }
+
     /**
      * 현재 설치된 plugin들의 정보를 자료실에 등록된 정보를 가져와 적용한다.
      *

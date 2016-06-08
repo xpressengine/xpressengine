@@ -109,8 +109,7 @@ class ComposerFileWriter
      */
     public function resolvePlugins()
     {
-        $requires = $this->get('require');
-        $includes = [];
+        $requires = [];
         $dir = $this->scanner->getPluginDirectory();
 
         foreach ($this->scanner->scanDirectory() as $plugin) {
@@ -141,6 +140,7 @@ class ComposerFileWriter
         }
         array_set($this->data, 'require', $requires);
 
+        array_set($this->data, 'repositories', [['type'=>'composer', 'url'=>$this->packagistUrl]]);
         array_set($this->data, 'extra.xpressengine-plugin.uninstall', []);
         array_set($this->data, 'extra.xpressengine-plugin.changed', []);
     }
@@ -154,6 +154,7 @@ class ComposerFileWriter
         }
         array_set($this->data, 'require', $requires);
 
+        array_set($this->data, 'repositories', [['type'=>'composer', 'url'=>$this->packagistUrl]]);
         array_set($this->data, 'extra.xpressengine-plugin.uninstall', []);
         array_set($this->data, 'extra.xpressengine-plugin.changed', []);
     }
