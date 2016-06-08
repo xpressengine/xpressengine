@@ -2,19 +2,20 @@
 /**
  * This file is support helper functions
  *
- * PHP version 5
- *
  * @category    Support
  * @package     Xpressengine\Support
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
  */
 
 if (function_exists('json_enc') === false) {
     /**
      * Returns the JSON representation of a value
+     *
+     * @package Xpressengine\Support
      *
      * @param mixed $value   target for encoding
      * @param int   $options json behavior constant
@@ -31,6 +32,8 @@ if (function_exists('json_dec') === false) {
     /**
      * Decodes a JSON string
      *
+     * @package Xpressengine\Support
+     *
      * @param string $string  target for decoding
      * @param bool   $assoc   when true, object be converted to array
      * @param int    $depth   recursion depth
@@ -45,7 +48,7 @@ if (function_exists('json_dec') === false) {
 
 if (function_exists('json_format') === false) {
     /**
-     *
+     * 
      *
      * @param  string $json
      * @param  bool   $unescapeUnicode Un escape unicode
@@ -63,6 +66,8 @@ if (function_exists('cast') === false) {
      *
      * '1' -> 1, '1.0001' -> 1.0001, 'true' -> true
      *
+     * @package Xpressengine\Support
+     *
      * @param string $value 대상 문자열
      * @return mixed
      */
@@ -75,6 +80,8 @@ if (function_exists('cast') === false) {
 if (function_exists('bytes') === false) {
     /**
      * 파일 용량을 보기 좋은 형태로 변환
+     *
+     * @package Xpressengine\Support
      *
      * @param int         $bytes bytes 수치
      * @param null|string $unit  표현 단위
@@ -102,6 +109,8 @@ if (function_exists('apiRender') === false) {
     /**
      * XE.page() 를 사용하여 호출할 경우 render 된 html 반환
      *
+     * @package Xpressengine\Presenter
+     *
      * @param string $id   view id
      * @param array  $data data
      * @return mixed
@@ -128,3 +137,410 @@ if (function_exists('apiRender') === false) {
     }
 }
 
+if (function_exists('intercept') === false) {
+    /**
+     * 이 함수는 Xpressengine에서 aop를 사용하기 위해 구현된 함수이다. 이 함수를 사용하여, Proxy가 지정된 특정 클래스의 메소드가 실행될 때,
+     * 항상 먼저 실행될 Closure(advice)를 지정할 수 있다.
+     * ```
+     *  // Document클래스의 insertDocument 메소드가 실행될 때 실행될 Closure 등록
+     *  intercept(
+     *      'Document@insertDocument',
+     *      'spamfilter',
+     *      function ($target, $title, $content) {
+     *          if($this->checkSpam($content)) {
+     *              return $target($title, $content);
+     *          } else {
+     *              throw new \Exception();
+     *          }
+     *      }
+     *  );
+     *
+     * ```
+     *
+     * 또한 다른 advice와의 실행순서를 지정할 수도 있다.
+     *
+     * ```
+     *  // mailsend가 실행된 후, logging이 실행되기 전에 이 advice(spamfilter)를 실행하도록 지정
+     *  intercept(
+     *      'Document@insertDocument',
+     *      ['spamfilter' => ['before'=>'mailsend','after'=>'logging']],
+     *      function ($target, $title, $content) {
+     *          if($this->checkSpam($content)) {
+     *              return $target($title, $content);
+     *          } else {
+     *              throw new \Exception();
+     *          }
+     *      }
+     *  );
+     * ```
+     *
+     * @package Xpressengine\Interception
+     *
+     * @param string       $pointCut advice가 실행되기를 바라는 대상 클래스와 메소드, {CLASS명}@{METHOD명}의 형식이어야 한다.
+     * @param string|array $name     advisor의 이름 및 우선순위 지정을 위한 array
+     * @param Closure      $advice   실행될 Closure
+     *
+     * @return void
+     */
+    function intercept($pointCut, $name, Closure $advice)
+    {
+        app('xe.interception')->addAdvisor($pointCut, $name, $advice);
+    }
+}
+
+if (function_exists('xe_trans') === false) {
+    /**
+     * 다국어 변환
+     *
+     * @package Xpressengine\Translation
+     *
+     * @param null   $id         다국어 키
+     * @param array  $parameters 파라매터
+     * @param string $domain     domain
+     * @param null   $locale     로케일
+     * @return string
+     */
+    function xe_trans($id = null, $parameters = array(), $domain = 'messages', $locale = null)
+    {
+        if (is_null($id)) {
+            return app('xe.translator');
+        }
+
+        try {
+            return app('xe.translator')->trans($id, $parameters, $domain, $locale);
+        } catch (Exception $e) {
+            return $id;
+        }
+    }
+}
+
+if (function_exists('xe_trans_choice') === false) {
+    /**
+     * 수량에 의한 다국어 변환
+     *
+     * @package Xpressengine\Translation
+     *
+     * @param string $id         다국어 키
+     * @param int    $number     숫자
+     * @param array  $parameters 파라매터
+     * @param string $domain     domain
+     * @param null   $locale     로케일
+     * @return string
+     */
+    function xe_trans_choice($id, $number, array $parameters = array(), $domain = 'messages', $locale = null)
+    {
+        return app('xe.translator')->transChoice($id, $number, $parameters, $domain, $locale);
+    }
+}
+
+if (function_exists('uio') === false) {
+    /**
+     * 주어진 타입의 AbstractUIObject 인스턴스를 생성하여 반환한다.
+     *
+     * @package Xpressengine\UIObject
+     *
+     * @param string $id       UIObject의 id, 또는 alias
+     * @param mixed  $args     UIObject를 생성할 때 전달할 argument
+     * @param null   $callback UIObject의 출력을 변경하려고 할 때 사용된다. 만약 callback이 지정돼 있으면 UIObject가 출력될 때,
+     *                         callback을 한번 실행후 출력한다.
+     *                         이 때 callback은 파라메터로 출력될 html의 PhpQueryObject 인스턴스를 전달받는다.
+     *                         ```php
+     *                         uio('phone', $data, function(PhpQueryObject $markup) {
+     *                         $firstNum = $markup['input:first'];
+     *                         $firstNum->val('010');
+     *                         }
+     *                         ```
+     * @return Xpressengine\UIObject\AbstractUIObject 생성된 AbstractUIObject
+     */
+    function uio($id, $args = [], $callback = null)
+    {
+        return XeUI::create($id, $args, $callback)->render();
+    }
+}
+
+if (!function_exists('instanceRoute')) {
+    /**
+     * Generate a URL to a named route.
+     *
+     * @package Xpressengine\Routing
+     *
+     * @param  string                   $name       route name
+     * @param  array                    $parameters route parameter
+     * @param  string                   $instanceId instance id
+     * @param  bool                     $absolute   absolute bool
+     * @param  Illuminate\Routing\Route $route      illuminate route
+     * @return string
+     */
+    function instanceRoute($name, $parameters = array(), $instanceId = null, $absolute = true, $route = null)
+    {
+        if ($instanceId === null) {
+            $instanceConfig = Xpressengine\Routing\InstanceConfig::instance();
+            $module = $instanceConfig->getModule();
+            $url = $instanceConfig->getUrl();
+        } else {
+            /**
+             * @var Xpressengine\Routing\RouteRepository $instanceRouter
+             */
+            $instanceRouter = app('xe.router');
+            $instanceRoute = $instanceRouter->findByInstanceId($instanceId);
+            $url = $instanceRoute->url;
+            $module = $instanceRoute->module;
+        }
+
+        $name = $module . '.' . $name;
+
+        array_unshift($parameters, $url);
+
+        return app('url')->route($name, $parameters, $absolute, $route);
+    }
+}
+
+if (!function_exists('getCurrentInstanceId')) {
+    /**
+     * Return current Instance Id
+     *
+     * @package Xpressengine\Menu
+     *
+     * @return string
+     */
+    function getCurrentInstanceId()
+    {
+        $instanceConfig = Xpressengine\Routing\InstanceConfig::instance();
+        return $instanceConfig->getInstanceId();
+    }
+}
+
+if (!function_exists('current_menu')) {
+
+    /**
+     * Returns current menu item
+     *
+     * @package Xpressengine\Menu
+     * @return Xpressengine\Menu\Models\MenuItem|null
+     */
+    function current_menu()
+    {
+        $id = getCurrentInstanceId();
+        if ($id !== null) {
+            return Xpressengine\Menu\Models\MenuItem::find($id);
+        }
+        return null;
+    }
+}
+
+if (!function_exists('menu_list')) {
+
+    /**
+     * 메뉴를 html 마크업으로 출력할 때, 사용하기 쉽도록 메뉴아이템 리스트를 제공한다.
+     *
+     * @package Xpressengine\Menu
+     *
+     * @param string $menuId 출력할 메뉴의 ID
+     * @return Illuminate\Support\Collection 메뉴아이템 리스트
+     */
+    function menu_list($menuId)
+    {
+        $menu = null;
+        if ($menuId !== null) {
+            $menu = Xpressengine\Menu\Models\Menu::with('items.basicImage', 'items.hoverImage', 'items.selectedImage')
+                ->find($menuId);
+            // pre load
+            app('xe.permission')->loadBranch($menuId);
+        }
+
+        /** @var Xpressengine\Menu\Models\Menu $menu */
+        if ($menu !== null) {
+            $current = getCurrentInstanceId();
+            if ($current !== null) {
+                $menu->setItemSelected($current);
+            }
+            $menuTree = $menu->getTree()->getTreeNodes();
+            return $menuTree;
+        } else {
+            return new Illuminate\Support\Collection();
+        }
+    }
+
+}
+
+if (!function_exists('shortModuleId')) {
+    /**
+     * Generate a short Menu Type Id
+     *
+     * @package Xpressengine\Module
+     *
+     * @param  string $moduleId extract 'module/'
+     * @return string
+     */
+    function shortModuleId($moduleId)
+    {
+        return str_ireplace('module/', '', $moduleId);
+    }
+}
+
+if (!function_exists('fullModuleId')) {
+    /**
+     * Get a full Module Id
+     *
+     * @package Xpressengine\Module
+     *
+     * @param  string $moduleId to prepend 'module/'
+     * @return string
+     */
+    function fullModuleId($moduleId)
+    {
+        if (stripos($moduleId, 'module/') !== false) {
+            return $moduleId;
+        } else {
+            return 'module/' . $moduleId;
+        }
+    }
+}
+
+if (!function_exists('moduleClass')) {
+    /**
+     * Get a Module Id class name
+     *
+     * @package Xpressengine\Module
+     *
+     * @param  string $moduleId to find menu type class
+     * @return string|null
+     */
+    function moduleClass($moduleId)
+    {
+        return app('xe.module')->getModuleClassName(fullModuleId($moduleId));
+    }
+}
+
+if (function_exists('widget') === false) {
+    /**
+     * widget
+     *
+     * @package Xpressengine\Widget
+     *
+     * @param string  $id       widget id
+     * @param array   $args     to render html arguments
+     * @param closure $callback if it need
+     * @return mixed
+     */
+    function widget($id, $args = [], $callback = null)
+    {
+        return app('xe.widget')->create($id, $args, $callback);
+    }
+}
+
+if (function_exists('setupWidget') === false) {
+    /**
+     * setupWidget
+     *
+     * @package Xpressengine\Widget
+     *
+     * @param string $id widget id
+     * @return mixed
+     */
+    function setupWidget($id)
+    {
+        return app('xe.widget')->setup($id);
+    }
+}
+
+if (!function_exists('shortWidgetId')) {
+    /**
+     * Generate a short Menu Type Id
+     *
+     * @package Xpressengine\Widget
+     *
+     * @param  string $widgetId widget id
+     * @return string
+     */
+    function shortWidgetId($widgetId)
+    {
+        return str_ireplace('widget/', '', $widgetId);
+    }
+}
+
+if (!function_exists('fullWidgetId')) {
+    /**
+     * Get a full Menu Type Id
+     *
+     * @package Xpressengine\Widget
+     *
+     * @param  string $widgetId widget id
+     * @return string
+     */
+    function fullWidgetId($widgetId)
+    {
+        if (stripos($widgetId, 'widget/') !== false) {
+            return $widgetId;
+        } else {
+            return 'widget/' . $widgetId;
+        }
+    }
+}
+
+if (function_exists('df') === false) {
+    /**
+     * @package Xpressengine\DynamicField
+     *
+     * @param string $group      group name
+     * @param string $columnName dynamic field id
+     * @return \Xpressengine\DynamicField\AbstractType
+     */
+    function df($group, $columnName)
+    {
+        return \XeDynamicField::get($group, $columnName);
+    }
+}
+
+if (function_exists('dfCreate') === false) {
+    /**
+     * @package Xpressengine\DynamicField
+     *
+     * @param string $group      group name
+     * @param string $columnName dynamic field id
+     * @param array  $args       arguments
+     * @return string
+     */
+    function dfCreate($group, $columnName, $args)
+    {
+        $fieldType = df($group, $columnName);
+        if ($fieldType == null) {
+            return '';
+        }
+        return $fieldType->getSkin()->create($args);
+
+    }
+}
+
+if (function_exists('dfEdit') === false) {
+    /**
+     * @package Xpressengine\DynamicField
+     *
+     * @param string $group      group name
+     * @param string $columnName dynamic field id
+     * @param array  $args       arguments
+     * @return string
+     */
+    function dfEdit($group, $columnName, $args)
+    {
+        $fieldType = df($group, $columnName);
+        if ($fieldType == null) {
+            return '';
+        }
+        return $fieldType->getSkin()->edit($args);
+    }
+}
+
+if (function_exists('plugins_path') === false) {
+    /**
+     * @package Xpressengine\Interception
+     *
+     * @param string $path path
+     * @return string
+     */
+    function plugins_path($path = '')
+    {
+        $path = trim($path, DIRECTORY_SEPARATOR);
+        return rtrim(XePlugin::getPluginsDir(), DIRECTORY_SEPARATOR).($path ? DIRECTORY_SEPARATOR.$path : $path);
+    }
+}

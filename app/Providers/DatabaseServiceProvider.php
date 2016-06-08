@@ -2,15 +2,15 @@
 /**
  * Service provider
  *
- * PHP version 5
- *
  * @category    Providers
  * @package     App\Providers
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
  */
+
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
@@ -28,10 +28,6 @@ use Xpressengine\Support\LaravelCache;
  *
  * @category    Providers
  * @package     App\Providers
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
  */
 class DatabaseServiceProvider extends ServiceProvider
 {

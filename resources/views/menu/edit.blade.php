@@ -32,7 +32,7 @@
                         <div class="form-group">
                             <label class="text-title">Menu Title<br><small>{{xe_trans('xe::menuTitleDescription')}}</small></label>
 
-                            <input type="text" class="xe-input-text" name="menuTitle" value="{{ $menu->title }}"placeholder="{{xe_trans('xe::menuTitlePlaceHolder')}}"/>
+                            <input type="text" class="form-control" name="menuTitle" value="{{ $menu->title }}"placeholder="{{xe_trans('xe::menuTitlePlaceHolder')}}"/>
                         </div>
                         <div class="form-group">
                             <label class="text-title">Menu Description</label>

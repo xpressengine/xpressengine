@@ -19,7 +19,7 @@
                     </div>
                     <div class="panel-body">
                         <div class="form-group">
-                            <label>{{ xe_trans('xe::siteImage') }} <small>1200x600, 600x315, 200x200</small></label>
+                            <label>{{ xe_trans('xe::siteImage') }} <small>1200x630, 600x315, 200x200</small></label>
                             <div class="list-group-item">
                                 <input type="file" name="siteImage">
                                 @if($setting->getSiteImage())
@@ -64,8 +64,8 @@
                     </div>
                     <div class="panel-footer">
                         <div class="pull-right">
-                            {{--<button type="button" class="btn btn-default">취소</button>--}}
-                            <button type="submit" class="btn btn-primary"><i class="xi-download"></i>{{ xe_trans('xe::submit') }}</button>
+                            {{--<button type="button" class="btn btn-default btn-lg">취소</button>--}}
+                            <button type="submit" class="btn btn-primary btn-lg">{{ xe_trans('xe::save') }}</button>
                         </div>
                     </div>
                 </div>

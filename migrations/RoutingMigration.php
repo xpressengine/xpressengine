@@ -1,4 +1,12 @@
 <?php
+/**
+ * @author    XE Developers <developers@xpressengine.com>
+ * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license   LGPL-2.1
+ * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link      https://xpressengine.io
+ */
+
 namespace Xpressengine\Migrations;
 
 use Illuminate\Database\Schema\Blueprint;
@@ -9,7 +17,7 @@ class RoutingMigration implements Migration {
 
     public function install()
     {
-        Schema::create('instanceRoute', function (Blueprint $table) {
+        Schema::create('instance_route', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
             $table->increments('id');

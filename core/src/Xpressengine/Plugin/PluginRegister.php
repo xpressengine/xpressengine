@@ -2,15 +2,15 @@
 /**
  *  This file is part of the Xpressengine package.
  *
- * PHP version 5
- *
  * @category    Plugin
  * @package     Xpressengine\Plugin
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
  */
+
 namespace Xpressengine\Plugin;
 
 use Xpressengine\Register\Container;
@@ -21,9 +21,6 @@ use Xpressengine\Register\Container;
  *
  * @category    Plugin
  * @package     Xpressengine\Plugin
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
  */
 class PluginRegister
 {
@@ -113,11 +110,13 @@ class PluginRegister
             case 'uiobject':
             case 'FieldType':
             case 'FieldSkin':
+            case 'editor':
             default:
                 if ($parts['target'] != '') {
                     $key = $target = $parts['target'].self::KEY_DELIMITER.$parts['type'];
                 }
                 $this->register->set($key.'.'.$component::getId(), $component);
+                break;
         }
     }
 
@@ -184,12 +183,12 @@ class PluginRegister
     {
         /** @var \Xpressengine\Plugin\ComponentInterface $class */
         $class = $info['class'];
-
         if (!is_subclass_of($class, ComponentInterface::class)) {
             throw new Exceptions\NotImplementedException(['className' => $class]);
         }
 
         $class::setId($info['id']);
+
         $class::setComponentInfo(array_except($info, ['class', 'id']));
     }
 }

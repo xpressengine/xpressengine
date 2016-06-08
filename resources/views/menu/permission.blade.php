@@ -32,7 +32,7 @@
             </div>
         </div>
         <div class="pull-right">
-            <button type="submit" class="btn btn-primary">수정</button>
+            <button type="submit" class="btn btn-primary btn-lg">수정</button>
         </div>
     </div>
 </form>

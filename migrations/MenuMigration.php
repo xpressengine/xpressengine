@@ -1,4 +1,12 @@
 <?php
+/**
+ * @author    XE Developers <developers@xpressengine.com>
+ * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license   LGPL-2.1
+ * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link      https://xpressengine.io
+ */
+
 namespace Xpressengine\Migrations;
 
 use Illuminate\Database\Schema\Blueprint;
@@ -79,7 +87,7 @@ class MenuMigration implements Migration {
         $menuHandler = app('xe.menu');
 
         // 기본 메뉴 config  설정 (theme)
-        $defaultMenuTheme = 'theme/alice@main';
+        $defaultMenuTheme = 'theme/alice@alice';
 
         $mainMenu = $menuHandler->create([
             'title' => 'Main Menu',

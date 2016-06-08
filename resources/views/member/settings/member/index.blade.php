@@ -1,6 +1,3 @@
-@section('page_setting_menu')
-<a href="{{ route('settings.member.create') }}" class="xe-btn xe-btn-blue v2 pull-right">{{ xe_trans('xe::addMember') }}</a>
-@endsection
 <div class="row">
     <div class="col-sm-12">
         <div class="panel-group">
@@ -15,12 +12,13 @@
                 </div>
 
                 <div class="panel-heading">
+
                     <div class="pull-left">
                         <div class="btn-group btn-fillter" role="group">
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                 <span class="caret"></span>
                             </button>
-                            <ul class="xe-dropdown-menu" role="menu">
+                            <ul class="dropdown-menu" role="menu">
                                 <li><strong>승인/거부</strong></li>
                                 <li @if(!Input::get('status')) class="active" @endif><a href="{{ route('settings.member.index', Input::except('status') ) }}">전체</a></li>
                                 <li @if(Input::get('status') === \XeUser::STATUS_ACTIVATED) class="active" @endif><a href="{{ route('settings.member.index', array_merge(Input::all(), ['status'=> \XeUser::STATUS_ACTIVATED] )) }}">승인됨</a></li>
@@ -43,7 +41,7 @@
                                 <div class="input-group-btn">
                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                         <span class="__xe_selectedKeyfield">
-                                        @if(Input::get('keyfield')==='dispalyName')
+                                        @if(Input::get('keyfield')==='displayName')
                                             이름
                                         @elseif(Input::get('keyfield')==='email')
                                             이메일
@@ -53,7 +51,7 @@
                                         </span>
                                         <span class="caret"></span>
                                     </button>
-                                    <ul class="xe-dropdown-menu" role="menu">
+                                    <ul class="dropdown-menu" role="menu">
                                         <li><a href="#" class="__xe_selectKeyfield" data-value="displayName">이름</a></li>
                                         <li><a href="#" class="__xe_selectKeyfield" data-value="email">이메일</a></li>
                                     </ul>
@@ -99,10 +97,10 @@
 
                                 @if(count($user->accounts))
                                     @foreach($user->accounts as $account)
-                                        <span data-toggle="tooltip" class="xe-badge grey {{ $account->provider }}" title="{{ $account->provider }}"><i class="xi-{{ $account->provider }}"></i></span>
+                                        <span data-toggle="tooltip" class="badge grey {{ $account->provider }}" title="{{ $account->provider }}"><i class="xi-{{ $account->provider }}"></i></span>
                                     @endforeach
                                 @else
-                                    <span data-toggle="tooltip" class="xe-badge black" title="기본">xe</span>
+                                    <span data-toggle="tooltip" class="badge black" title="기본">xe</span>
                                 @endif
                             </td>
                             <td>{{ data_get($user, 'email', '없음') }}</td>

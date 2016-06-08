@@ -2,15 +2,15 @@
 /**
  * AbstractType
  *
- * PHP version 5
- *
  * @category    DynamicField
- * @package     Xpressengine\DynamidField
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
+ * @package     Xpressengine\DynamicField
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
  */
+
 namespace Xpressengine\DynamicField;
 
 use Xpressengine\Config\ConfigEntity;
@@ -28,10 +28,6 @@ use Xpressengine\Plugin\ComponentInterface;
  *
  * @category    DynamicField
  * @package     Xpressengine\DynamicField
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
  */
 abstract class AbstractType implements ComponentInterface
 {
@@ -489,7 +485,7 @@ abstract class AbstractType implements ComponentInterface
     public function insert(array $args)
     {
         $config = $this->config;
-        
+
         if (isset($args[$config->get('joinColumnName')]) === false) {
             throw new Exceptions\RequiredJoinColumnException;
         }
@@ -550,7 +546,7 @@ abstract class AbstractType implements ComponentInterface
     public function update(array $args, array $wheres)
     {
         $config = $this->config;
-        
+
         $where = $this->parseWhere($wheres);
 
         if (isset($where[$config->get('joinColumnName')]) === false) {

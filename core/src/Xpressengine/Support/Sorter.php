@@ -2,15 +2,15 @@
 /**
  * Sorter class. This file is part of the Xpressengine package.
  *
- * PHP version 5
- *
  * @category    Support
  * @package     Xpressengine\Support
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
  */
+
 namespace Xpressengine\Support;
 
 use Xpressengine\Tests\Support\SorterStub;
@@ -18,10 +18,6 @@ use Xpressengine\Tests\Support\SorterStub;
 /**
  * @category    Support
  * @package     Xpressengine\Support
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
- * @description
  */
 class Sorter
 {

@@ -1,4 +1,12 @@
 <?php
+/**
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
+ */
+
 namespace Xpressengine\FieldSkins\Category;
 
 use Xpressengine\Category\Models\Category;
@@ -124,7 +132,6 @@ class DefaultSkin extends AbstractSkin
             $item = CategoryItem::find($itemId);
         }
 
-
         return View::make($view, [
             'config' => $config,
             'items' => $items,
@@ -144,7 +151,7 @@ class DefaultSkin extends AbstractSkin
             return null;
         }
 
-        return CategoryItem::find($args[$key])->word;
+        return xe_trans(CategoryItem::find($args[$key])->word);
     }
 
     public static function getSettingsURI()

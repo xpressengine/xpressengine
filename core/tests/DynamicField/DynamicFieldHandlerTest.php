@@ -1,7 +1,12 @@
 <?php
 /**
- *
+ * @author    XE Developers <developers@xpressengine.com>
+ * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license   LGPL-2.1
+ * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link      https://xpressengine.io
  */
+
 namespace Xpressengine\Tests\DynamicField;
 
 use Mockery as m;
@@ -18,12 +23,12 @@ class DynamicFieldHandlerTest extends PHPUnit_Framework_TestCase
      * @var m\MockInterface|\Xpressengine\Database\VirtualConnectionInterface
      */
     protected $conn;
-    
+
     /**
      * @var m\MockInterface|\Xpressengine\DynamicField\ConfigHandler
      */
     protected $configHandler;
-    
+
     /**
      * @var m\MockInterface|\Xpressengine\DynamicField\RegisterHandler
      */
@@ -64,10 +69,10 @@ class DynamicFieldHandlerTest extends PHPUnit_Framework_TestCase
     {
         return m::mock('Xpressengine\Config\ConfigEntity');
     }
-    
+
     /**
      * test get property
-     * 
+     *
      * @return void
      */
     public function testGetProperty()
@@ -104,7 +109,7 @@ class DynamicFieldHandlerTest extends PHPUnit_Framework_TestCase
 
     /**
      * test create
-     * 
+     *
      * @return void
      */
     public function testCreate()

@@ -21,8 +21,8 @@
                 </div>
                 <div class="panel-footer">
                     <div class="pull-right">
-                        <a href="{{ route('manage.group.index') }}" class="btn btn-default">취소</a>
-                        <button type="submit" class="btn btn-primary"><i class="xi-download"></i>저장</button>
+                        <a href="{{ route('manage.group.index') }}" class="btn btn-default btn-lg">취소</a>
+                        <button type="submit" class="btn btn-primary btn-lg">저장</button>
                     </div>
                 </div>
             </form>

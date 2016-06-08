@@ -158,7 +158,7 @@
                     <em class="text-gray">{{ xe_trans('xe::warningAboutAccountDeletion') }}</em>
                 </div>
                 <div class="setting-right">
-                    <button class="__xe_editBtn xe-btn-text txt_blue">{{ xe_trans('xe::deleteOk') }}</button>
+                    <button class="__xe_editBtn xe-btn xe-btn-link xe-btn-primary">{{ xe_trans('xe::deleteOk') }}</button>
                 </div>
             </div>
         </div>

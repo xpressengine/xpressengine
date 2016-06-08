@@ -87,18 +87,18 @@ class Kernel extends ConsoleKernel
      * @return void
      */
     protected function resetForFramework()
-	{
-		$this->resetProviders();
-		$this->setCommandBeforeInstall();
-	}
+    {
+        $this->resetProviders();
+        $this->setCommandBeforeInstall();
+    }
 
     /**
      * Define for providers of framework.
      *
      * @return void
      */
-	protected function resetProviders()
-	{
+    protected function resetProviders()
+    {
         $this->app['events']->listen('bootstrapped: App\Bootstrappers\LoadConfiguration', function ($app) {
             $config = $app['config'];
 
@@ -109,20 +109,20 @@ class Kernel extends ConsoleKernel
 
             $config->set('app.providers', $providers);
         });
-	}
+    }
 
     /**
      * Define commands for previously installation
      *
      * @return void
      */
-	protected function setCommandBeforeInstall()
-	{
-		$this->commands = array_intersect($this->commands, [
+    protected function setCommandBeforeInstall()
+    {
+        $this->commands = array_intersect($this->commands, [
             \App\Console\Commands\Inspire::class,
             \App\Console\Commands\XeInstall::class
         ]);
-	}
+    }
 
     /**
      * Define commands for after installation

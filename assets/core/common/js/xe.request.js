@@ -1,5 +1,7 @@
 (function(exports, Progress) {
   exports.XE.Request = function() {
+    var self;
+
     var _options = {
       headers : {
         'X-CSRF-TOKEN': null
@@ -12,10 +14,15 @@
     }).ajaxComplete(function(event, jqxhr, settings) {
       Progress.done(settings.context == undefined ? $('body') : settings.context);
     }).ajaxError(function(event, jqxhr, settings, thrownError) {
-      error(jqxhr, settings, thrownError);
+      self.error(jqxhr, settings, thrownError);
     });
 
     return {
+      init: function() {
+        self = this;
+
+        return this;
+      },
       options: _options,
       setup: function(options) {
         $.extend(_options, options);
@@ -24,10 +31,10 @@
       get: function(url, data, callback, type) {
         return $.get(url, data, callback, type)
       },
-      post: function post(url, data, callback, type) {
+      post: function (url, data, callback, type) {
         return $.post(url, data, callback, type);
       },
-      error: function error(jqxhr, settings, thrownError) {
+      error: function (jqxhr, settings, thrownError) {
         var status = jqxhr.status,
             type = 'danger',
             errorMessage = 'Not defined error message ('+status+')';
@@ -42,6 +49,6 @@
         // @FIXME 의존성
         window.XE.toastByStatus(status, errorMessage);
       }
-    }
+    }.init();
   }();
 })(window, XE.Progress);

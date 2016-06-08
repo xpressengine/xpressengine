@@ -1,16 +1,14 @@
 <?php
-
 /**
  * WidgetParserTest
  *
- * PHP version 5
- *
  * @category  Test
  * @package   Xpressengine\Tests\Widget
- * @author    XE Team (developers) <developers@xpressengine.com>
- * @copyright 2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license   http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link      http://www.xpressengine.com
+ * @author    XE Developers <developers@xpressengine.com>
+ * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license   LGPL-2.1
+ * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link      https://xpressengine.io
  */
 
 namespace Xpressengine\Tests\Widget;
@@ -26,9 +24,6 @@ use Xpressengine\Widget\WidgetHandler;
  *
  * @category Test
  * @package  Xpressengine\Tests\Widget
- * @author   XE Team (developers) <developers@xpressengine.com>
- * @license  http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link     http://www.xpressengine.com
  */
 class WidgetParserTest extends PHPUnit_Framework_TestCase
 {

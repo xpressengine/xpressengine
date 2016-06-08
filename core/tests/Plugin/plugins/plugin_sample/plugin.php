@@ -1,15 +1,14 @@
 <?php
+/**
+ * @author    XE Developers <developers@xpressengine.com>
+ * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license   LGPL-2.1
+ * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link      https://xpressengine.io
+ */
+
 namespace Xpressengine\Tests\Plugin\Sample;
 
-/*
-Plugin Name: 플러그인명
-Plugin URI: http://download.xpressengine.com/xe3/plugins/board
-Description: 플러그인 설명
-Version: 3.0.2.2
-Author: XE Team.
-Author URI: http://xpressengine.com
-Text Domain: XE
-*/
 
 use Route;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;

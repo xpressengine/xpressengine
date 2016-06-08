@@ -40,7 +40,7 @@
                                 <td>{{ $group->description }}</td>
                                 {{--<td><input type="radio"></td>--}}
                                 <td>{{ $group->count }}</td>
-                                <td><a href="{{ route('manage.group.edit', ['id' => $group->id]) }}" class="btn btn-default btn-sm">{{ xe_trans('xe::management') }}</a></td>
+                                <td><a href="{{ route('manage.group.edit', ['id' => $group->id]) }}" class="btn btn-default">{{ xe_trans('xe::management') }}</a></td>
                             </tr>
                         @endforeach
                         </tbody>
