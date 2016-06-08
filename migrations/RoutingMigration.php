@@ -17,7 +17,7 @@ class RoutingMigration implements Migration {
 
     public function install()
     {
-        Schema::create('instanceRoute', function (Blueprint $table) {
+        Schema::create('instance_route', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
             $table->increments('id');

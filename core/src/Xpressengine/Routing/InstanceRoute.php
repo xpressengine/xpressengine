@@ -35,7 +35,7 @@ class InstanceRoute extends DynamicModel
      *
      * @var string
      */
-    protected $table = 'instanceRoute';
+    protected $table = 'instance_route';
 
     /**
      * Indicates if the model should be timestamped.
