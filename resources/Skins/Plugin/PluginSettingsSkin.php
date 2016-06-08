@@ -39,6 +39,17 @@ class PluginSettingsSkin extends BladeSkin
     protected function index()
     {
         $this->loadDefault();
+
+        app('xe.frontend')->html('plugins.updatelist')->content("
+        <script>
+            $(function (){
+                $('.__xe_btn-show-update').click(function(){
+                    $(this).toggleClass('btn-primary');
+                    $('ul.list-plugin li.list-group-item.__xe_no-update').toggleClass('hidden');
+                })
+            });
+        </script>")->load();
+
         return $this->renderBlade();
     }
 
@@ -68,8 +79,6 @@ class PluginSettingsSkin extends BladeSkin
               $('[data-toggle=tooltip]').tooltip()
             })
         </script>")->load();
-
-
 
         array_set($this->data, 'color', [
             'theme' => 'success',

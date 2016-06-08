@@ -63,7 +63,7 @@
                     @if($plugin->isActivated())
                         <form method="POST" action="{{ route('settings.plugins.deactivate', [$plugin->getId()]) }}" accept-charset="UTF-8" role="form">
                             {!! csrf_field() !!}
-                            <button class="btn btn-danger">끄기</button>
+                            <button class="btn btn-danger">{{ xe_trans('xe::deactivate') }}</button>
                         </form>
 
                         @if($plugin->isActivated() && $plugin->checkUpdated($plugin->getInstalledVersion()))
@@ -76,8 +76,15 @@
                     @else
                         <form method="POST" action="{{ route('settings.plugins.activate', [$plugin->getId()]) }}" accept-charset="UTF-8" role="form">
                             {!! csrf_field() !!}
-                            <button class="btn btn-default">켜기</button>
+                            <button class="btn btn-default">{{ xe_trans('xe::activate') }}</button>
                         </form>
+                    @endif
+
+                    @if($plugin->needUpdateInstall())
+                            <form method="POST" action="{{ route('settings.plugins.update', [$plugin->getId()]) }}" accept-charset="UTF-8" role="form">
+                                {!! csrf_field() !!}
+                                <button class="btn btn-default">{{ xe_trans('xe::update_plugin') }}</button>
+                            </form>
                     @endif
 
                 </div>

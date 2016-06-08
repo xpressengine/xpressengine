@@ -376,6 +376,9 @@ return [
     ],
 
     'plugin' => [
+        'store' => [
+            'detail_url' => 'https://xpressengine.io/plugins/detail',
+        ],
         'api' => [
             'url' => 'https://xpressengine.io/plugins/api/1.0'
         ],

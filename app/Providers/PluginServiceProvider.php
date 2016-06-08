@@ -127,7 +127,8 @@ class PluginServiceProvider extends ServiceProvider
             [PluginProvider::class => 'xe.plugin.provider'],
             function ($app) {
                 $url = $app['config']->get('xe.plugin.api.url');
-                $provider = new PluginProvider($url);
+                $auth = $app['config']->get('xe.plugin.api.auth');
+                $provider = new PluginProvider($url, $auth);
                 return $provider;
             }
         );

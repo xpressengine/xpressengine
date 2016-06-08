@@ -45,7 +45,7 @@ class PluginController extends Controller
         $collection = XePlugin::getAllPlugins(true);
         $plugins = $collection->fetch($field);
 
-
+        $provider->sync($plugins);
 
         $componentTypes = $this->getComponentTypes();
 
