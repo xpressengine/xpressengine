@@ -23,5 +23,5 @@ use Xpressengine\Config\ConfigException;
  */
 class NoParentException extends ConfigException
 {
-    protected $message = '부모 객체가 존재 하지 않습니다.';
+    protected $message = 'Parent is not exists';
 }
