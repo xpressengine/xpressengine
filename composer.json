@@ -70,16 +70,7 @@
             "Xpressengine\\ToggleMenus\\": "resources/ToggleMenus"
         },
         "files": [
-            "core/src/Xpressengine/Interception/helpers.php",
-            "core/src/Xpressengine/Translation/helpers.php",
-            "core/src/Xpressengine/UIObject/helpers.php",
-            "core/src/Xpressengine/Routing/helpers.php",
-            "core/src/Xpressengine/Menu/helpers.php",
-            "core/src/Xpressengine/Module/helpers.php",
-            "core/src/Xpressengine/Widget/helpers.php",
-            "core/src/Xpressengine/Support/helpers.php",
-            "core/src/Xpressengine/DynamicField/helpers.php",
-            "core/src/Xpressengine/Plugin/helpers.php"
+            "core/src/Xpressengine/Support/helpers.php"
         ]
     },
     "autoload-dev": {
