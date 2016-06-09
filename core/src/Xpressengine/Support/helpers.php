@@ -254,7 +254,17 @@ if (function_exists('uio') === false) {
      */
     function uio($id, $args = [], $callback = null)
     {
-        return XeUI::create($id, $args, $callback)->render();
+        try {
+            return XeUI::create($id, $args, $callback)->render();
+        } catch (\Xpressengine\UIObject\Exceptions\UIObjectNotFoundException $e) {
+            if(config('app.debug') === true) {
+                return "UI오브젝트[$id]를 찾을 수 없습니다";
+            } else {
+                return '';
+            }
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 }
 

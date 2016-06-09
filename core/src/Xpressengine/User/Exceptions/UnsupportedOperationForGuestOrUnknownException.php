@@ -21,7 +21,7 @@ use Xpressengine\User\UserException;
  * @category    User
  * @package     Xpressengine\User
  */
-class UnsupportedOperationByGuestUserException extends UserException
+class UnsupportedOperationForGuestOrUnknownException extends UserException
 {
-    protected $message = 'Guest 회원은 해당 기능을 제공하지 않습니다.';
+    protected $message = 'Guest 또는 Unknown 회원은 해당 기능을 제공하지 않습니다.';
 }
