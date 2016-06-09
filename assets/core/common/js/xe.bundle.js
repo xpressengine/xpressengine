@@ -1366,6 +1366,8 @@ if (typeof exports !== 'undefined') {
 
 (function(exports, Progress) {
   exports.XE.Request = function() {
+    var self;
+
     var _options = {
       headers : {
         'X-CSRF-TOKEN': null
@@ -1378,10 +1380,15 @@ if (typeof exports !== 'undefined') {
     }).ajaxComplete(function(event, jqxhr, settings) {
       Progress.done(settings.context == undefined ? $('body') : settings.context);
     }).ajaxError(function(event, jqxhr, settings, thrownError) {
-      error(jqxhr, settings, thrownError);
+      self.error(jqxhr, settings, thrownError);
     });
 
     return {
+      init: function() {
+        self = this;
+
+        return this;
+      },
       options: _options,
       setup: function(options) {
         $.extend(_options, options);
@@ -1408,7 +1415,7 @@ if (typeof exports !== 'undefined') {
         // @FIXME 의존성
         window.XE.toastByStatus(status, errorMessage);
       }
-    }
+    }.init();
   }();
 })(window, XE.Progress);
 
