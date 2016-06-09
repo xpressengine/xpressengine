@@ -1,7 +1,5 @@
 <?php
 /**
- * This file is guest user
- *
  * @category    User
  * @package     Xpressengine\User
  * @author      XE Developers <developers@xpressengine.com>
@@ -19,12 +17,12 @@ use Xpressengine\User\UserHandler;
 use Xpressengine\User\UserInterface;
 
 /**
- * 비로그인 상태의 회원 객체 클래스
+ * 데이터베이스에서 회원정보를 찾을 수 없는 상태의 회원을 위한 객체 클래스
  *
  * @category    User
  * @package     Xpressengine\User
  */
-class Guest implements UserInterface
+class UnknownUser implements UserInterface
 {
     /**
      * getDisplayName()메소드가 호출될 때, 반환될 이름
@@ -37,6 +35,18 @@ class Guest implements UserInterface
      * @var string getProfileImage() 메소드가 호출될 때, 반환될 프로필이미지의 주소
      */
     protected static $profileImage = '';
+
+    protected $attributes;
+
+    /**
+     * UnknownUser constructor.
+     *
+     * @param array $attributes
+     */
+    public function __construct(array $attributes = [])
+    {
+        $this->attributes = $attributes;
+    }
 
     /**
      * Get the unique identifier
@@ -55,7 +65,7 @@ class Guest implements UserInterface
      */
     public function getDisplayName()
     {
-        return self::$name;
+        return array_get($this->attributes, 'displayName', self::$name);
     }
 
     /**
@@ -69,7 +79,7 @@ class Guest implements UserInterface
     }
 
     /**
-     * Guest 회원이 사용할 DisplayName을 지정한다.
+     * Unknown 회원이 사용할 DisplayName을 지정한다.
      *
      * @param string $name name that represents the guest
      *
@@ -99,7 +109,7 @@ class Guest implements UserInterface
      */
     public function getProfileImage()
     {
-        return asset(static::$profileImage);
+        return asset(array_get($this->attributes, 'profileImage', static::$profileImage));
     }
 
     /**
@@ -119,7 +129,7 @@ class Guest implements UserInterface
      */
     public function getStatus()
     {
-        return UserHandler::STATUS_ACTIVATED;
+        return UserHandler::STATUS_DENIED;
     }
 
     /**
@@ -221,7 +231,7 @@ class Guest implements UserInterface
      *
      * @param string $provider provider
      *
-     * @return AccountEntity
+     * @return null
      */
     public function getAccountByProvider($provider)
     {

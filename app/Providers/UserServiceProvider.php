@@ -28,6 +28,7 @@ use Xpressengine\User\Guard;
 use Xpressengine\User\GuardInterface;
 use Xpressengine\User\Models\Guest;
 use Xpressengine\User\Models\PendingEmail;
+use Xpressengine\User\Models\UnknownUser;
 use Xpressengine\User\Models\User;
 use Xpressengine\User\Models\UserAccount;
 use Xpressengine\User\Models\UserEmail;
@@ -214,8 +215,14 @@ class UserServiceProvider extends ServiceProvider
         // set guest's display name
         Guest::setName($this->app['config']['xe.user.guest.name']);
 
-        // set user entity's default profile image
+        // set guest's default profile image
         Guest::setDefaultProfileImage($this->app['config']['xe.user.profileImage.default']);
+
+        // set unknown's display name
+        UnknownUser::setName($this->app['config']['xe.user.unknown.name']);
+
+        // set unknown's default profile image
+        UnknownUser::setDefaultProfileImage($this->app['config']['xe.user.profileImage.default']);
 
         $this->setProfileImageResolverOfUser();
 

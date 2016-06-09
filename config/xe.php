@@ -220,6 +220,9 @@ return [
         'guest' => [
             'name' => 'Guest'
         ],
+        'unknown' => [
+            'name' => 'UnKnown'
+        ],
         'displayName' => [
             'validate' => function ($value) {
                 if (!is_string($value) && !is_numeric($value)) {
