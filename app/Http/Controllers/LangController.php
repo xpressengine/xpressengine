@@ -16,12 +16,14 @@ use XePresenter;
 use XeLang;
 use XeDB;
 use XeFrontend;
+use Illuminate\Contracts\Cookie\QueueingFactory as JarContract;
 
 class LangController extends Controller
 {
-    public function setLocale(Request $request, $locale)
+    public function setLocale(JarContract $cookie, $locale)
     {
-        $request->session()->put('locale', $locale);
+        $cookie->queue($cookie->forever('locale', $locale));
+
         return Redirect::back();
     }
 

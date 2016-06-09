@@ -26,7 +26,7 @@ class LangPreprocessor
         app('events')->listen('locale.changed', function($locale) {
             app('xe.translator')->setLocale($locale);
         });
-        $locale = session()->get('locale') ?: app('xe.translator')->getLocale();
+        $locale = $request->cookie('locale') ?: app('xe.translator')->getLocale();
         app()->setLocale($locale);
 
         Route::matched(function($route, $request) use($locale) {
