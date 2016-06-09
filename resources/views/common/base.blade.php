@@ -26,7 +26,7 @@
     <script type="text/javascript">
         XE.setup({
             'X-CSRF-TOKEN': '{!! csrf_token() !!}',
-            loginUserId: '{{ Auth::user()->getId() }}'
+            loginUserId: '{{ Auth::check() ? Auth::user()->getId() : ''}}'
         });
 
         XE.configure({
