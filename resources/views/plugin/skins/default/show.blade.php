@@ -1,5 +1,5 @@
 @section('page_title')
-    <h2><a href="{{ route('settings.plugins') }}"><i class="xi-arrow-left"></i>플러그인 상세</a></h2>
+    <h2><a href="{{ route('settings.plugins') }}"><i class="xi-arrow-left"></i>{{xe_trans('xe::pluginDetails')}}</a></h2>
 @stop
 
 <!--어드민 컨텐츠 영역 col-sm-"n" n:1~12에 따라 그리드 사용가능-->
@@ -63,7 +63,7 @@
                     @if($plugin->isActivated())
                         <form method="POST" action="{{ route('settings.plugins.deactivate', [$plugin->getId()]) }}" accept-charset="UTF-8" role="form">
                             {!! csrf_field() !!}
-                            <button class="btn btn-danger">끄기</button>
+                            <button class="btn btn-danger">{{xe_trans('xe::deactivation')}}</button>
                         </form>
 
                         @if($plugin->isActivated() && $plugin->checkUpdated($plugin->getInstalledVersion()))
@@ -76,7 +76,7 @@
                     @else
                         <form method="POST" action="{{ route('settings.plugins.activate', [$plugin->getId()]) }}" accept-charset="UTF-8" role="form">
                             {!! csrf_field() !!}
-                            <button class="btn btn-default">켜기</button>
+                            <button class="btn btn-default">{{xe_trans('xe::activation')}}</button>
                         </form>
                     @endif
 
@@ -96,7 +96,7 @@
                         <p>{{ $plugin->getDescription() }}</p>
                     </li>
                     <li class="list-group-item">
-                        <p class="tit">정보</p>
+                        <p class="tit">{{xe_trans('xe::information')}}</p>
                         <div>
                             <table class="plugin_tbl">
                                 <colgroup>
@@ -125,7 +125,7 @@
                                 {{--<td>1+ million</td>--}}
                                 {{--</tr>--}}
                                 {{--<tr>--}}
-                                <th scope="row">지원컴포넌트</th>
+                                <th scope="row">{{xe_trans('xe::supportingComponents')}}</th>
                                 <td>
                                 @foreach($componentTypes as $type => $typeText)
                                     @foreach($plugin->getComponentList($type) as $key => $component)
@@ -162,7 +162,7 @@
                             <div class="swiper-button-prev swiper-button-white swiper-button-prev" style="opacity:0"></div>
                         </div>
                         @else
-                            스크린샷이 없습니다.
+                            {{xe_trans('xe::msgNoScreenshot')}}
                         @endif
 
                     </li>
@@ -207,7 +207,7 @@
                     @if($readme = $plugin->getReadMe())
                     {{ nl2br($readme) }}
                     @else
-                    작성된 문서가 없습니다.
+                    {{xe_trans('xe::msgNoDocument')}}
                     @endif
                 </div>
 
@@ -221,7 +221,7 @@
                     @if($changelog = $plugin->getChangeLog())
                         {{ nl2br($changelog) }}
                     @else
-                        작성된 업데이트 사항이 없습니다.
+                        {{xe_trans('xe::msgNoUpdateChangeLog')}}
                     @endif
                 </div>
             </div>
