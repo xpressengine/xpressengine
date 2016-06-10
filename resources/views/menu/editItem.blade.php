@@ -14,7 +14,7 @@
                         <h3 class="panel-title">{{xe_trans('xe::editItemDescription')}}</h3>
                     </div>
                     <div class="pull-right">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="btn-link panel-toggle pull-right"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">메뉴닫기</span></a>
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="btn-link panel-toggle pull-right"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">{{xe_trans('xe::fold')}}</span></a>
                     </div>
                 </div>
 
@@ -33,7 +33,7 @@
 
                             <div class="xe-btn-toggle pull-right">
                                 <label>
-                                    <span class="sr-only"><span class="sr-only">활성화 비활성화</span></span>
+                                    <span class="sr-only"><span class="sr-only">{{xe_trans('xe::activation')}}</span></span>
                                     @if($item->id == $homeId)
                                         <input type="hidden" name="itemActivated" value="1" />
                                         <input type="checkbox" checked disabled />
@@ -166,10 +166,10 @@
             <div class="panel">
                 <div class="panel-heading">
                     <div class="pull-left">
-                        <h3 class="panel-title">테마 지정<small>테마를 미리 보고 클릭하여 선택할 수 있습니다.</small></h3>
+                        <h3 class="panel-title">{{xe_trans('xe::theme')}}<small>{{xe_trans('xe::menuThemeDescription')}}</small></h3>
                     </div>
                     <div class="pull-right">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="btn-link panel-toggle pull-right"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">메뉴닫기</span></a>
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="btn-link panel-toggle pull-right"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">{{xe_trans('xe::fold')}}</span></a>
                     </div>
                 </div>
 

@@ -17,10 +17,9 @@
                 <div class="panel-body">
                     <div class="form-group">
                         @if($menu->items->count() != 0)
-                            이 메뉴는 {{$menu->items->count()}}개의 메뉴 아이템을 가지고 있습니다.
-                            <br/>메뉴 아이템을 삭제한 뒤 삭제를 다시 시도하십시오.
+                            {!! xe_trans('xe::menuDeleteCautionHaveItems', ['count' => $menu->items->count()]) !!}}
                         @else
-                            메뉴 삭제하면 다시 복구할 수 없습니다.
+                            {{xe_trans('xe::menuDeleteCaution')}}
                         @endif
                     </div>
                 </div>

@@ -1010,6 +1010,10 @@ return [
         'ko' => '메뉴 아이템의 권한을 수정합니다.',
         'en' => 'Edit Item Permission'
     ],
+    'menuPermissionSettings' => [
+        'ko' => '메뉴 권한 설정',
+        'en' => 'Menu permission Settings',
+    ],
     'editMenuPermission' => [
         'ko' => '메뉴 권한을 수정합니다.',
         'en' => 'Edit Menu Permission'
@@ -1664,8 +1668,28 @@ return [
         'ko' => '메뉴 삭제하면 다시 복구할 수 없습니다.',
         'en' => 'When you remove the menu can not be recovered.',
     ],
-    'menuDeleteSummary' => [
-        'ko' => '',
-        'en' => '',
+    'menuDeleteCautionHaveItems' => [
+        'ko' => '이 메뉴는 :count 개의 메뉴 아이템을 가지고 있습니다. <br/>메뉴 아이템을 삭제한 뒤 삭제를 다시 시도하십시오.',
+        'en' => 'This menu has :count different menu items. <br/>After you delete a menu item, and then try to delete it again.',
+    ],
+    'menuItemDeleteCaution' => [
+        'ko' => '메뉴 아이템을삭제하면 다시 복구할 수 없습니다.',
+        'en' => 'When you remove the menu item can not be recovered.',
+    ],
+    'menuItemDeleteCautionHaveItems' => [
+        'ko' => '이 메뉴 아이템 하위에 :count 개의 메뉴 아이템이 존재하고 있어 삭제할 수 없습니다.',
+        'en' => 'This menu item has :count different menu items. <br/>After you delete a menu item, and then try to delete it again.',
+    ],
+    'moveToPage' => [
+        'ko' => '페이지로 이동',
+        'en' => 'Move to page',
+    ],
+    'permissionSettings' => [
+        'ko' => '권한 설정',
+        'en' => 'Permission setting',
+    ],
+    'detailSettings' => [
+        'ko' => '상세 설정',
+        'en' => 'Detail setting',
     ],
 ];

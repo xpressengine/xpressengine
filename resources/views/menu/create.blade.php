@@ -37,10 +37,10 @@
                 <div class="panel">
                     <div class="panel-heading">
                         <div class="pull-left">
-                            <h3 class="panel-title">테마 지정<small>{{xe_trans('xe::menuThemeDescription')}}</small></h3>
+                            <h3 class="panel-title">{{xe_trans('xe::theme')}}<small>{{xe_trans('xe::menuThemeDescription')}}</small></h3>
                         </div>
                         <div class="pull-right">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="btn-link panel-toggle pull-right"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">메뉴닫기</span></a>
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="btn-link panel-toggle pull-right"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">{{xe_trans('xe::fold')}}</span></a>
                         </div>
                     </div>
 
