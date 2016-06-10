@@ -77,9 +77,41 @@ return [
         'ko' => '회원',
         'en' => 'Member',
     ],
+    'memberGroup' => [
+        'ko' => '회원 그룹',
+        'en' => 'Member group',
+    ],
     'group' => [
         'ko' => '그룹',
         'en' => 'Group',
+    ],
+    'addNewMember' => [
+        'ko' => '새 회원 추가',
+        'en' => 'Add new member',
+    ],
+    'groupName' => [
+        'ko' => '그룹명',
+        'en' => 'Group name',
+    ],
+    'addNewGroup' => [
+        'ko' => '새 그룹 추가',
+        'en' => 'Add new group',
+    ],
+    'groupEdit' => [
+        'ko' => '그룹 수정',
+        'en' => 'Group edit',
+    ],
+    'groupManagement' => [
+        'ko' => '그룹 관리',
+        'en' => 'Group management',
+    ],
+    'groupManagementSummary' => [
+        'ko' => ':count 개의 그룹이 존재합니다.',
+        'en' => 'There is :count groups.',
+    ],
+    'groupMemberCount' => [
+        'ko' => '그룹 회원 수',
+        'en' => 'Group member count',
     ],
     'comment' => [
         'ko' => '댓글',
@@ -128,6 +160,14 @@ return [
     'save' => [
         'ko' => '저장',
         'en' => 'Save',
+    ],
+    'modify' => [
+        'ko' => '수정',
+        'en' => 'Modify',
+    ],
+    'register' => [
+        'ko' => '등록',
+        'en' => 'Register',
     ],
     'applyModified' => [
         'ko' => '변경내용 저장',
@@ -277,6 +317,10 @@ return [
         'ko' => '선택 반전',
         'en' => 'Reverse Select',
     ],
+    'deleteSelected' => [
+        'ko' => '선택 삭제',
+        'en' => 'Delete Selected Items',
+    ],
     'closeAll' => [
         'ko' => '모두 닫기',
         'en' => 'Close All',
@@ -396,6 +440,18 @@ return [
     'category' => [
         'ko' => '분류',
         'en' => 'Category',
+    ],
+    'categoryModifyDescription' => [
+        'ko' => ':name 을(를) 수정합니다.',
+        'en' => 'Modify the :name.',
+    ],
+    'createCategoryGroup' => [
+        'ko' => '카테고리 그룹 생성',
+        'en' => 'Create category group',
+    ],
+    'categoryManagement' => [
+        'ko' => '카테고리 관리',
+        'en' => 'Category management',
     ],
     'noneCategory' => [
         'ko' => '분류 없음',
@@ -532,6 +588,14 @@ return [
     'approve' => [
         'ko' => '승인',
         'en' => 'Approve',
+    ],
+    'permitted' => [
+        'ko' => '승인됨',
+        'en' => 'Permitted',
+    ],
+    'rejected' => [
+        'ko' => '거절됨',
+        'en' => 'Rejected',
     ],
     'enableComment' => [
         'ko' => '댓글 허용',
@@ -729,6 +793,10 @@ return [
         'ko' => '플러그인 인터페이스에 오류가 있습니다 ":className" 을 확인하세요',
         'en' => 'Check ":className" class implements plugin interface.',
     ],
+    'wrongInput' => [
+        'ko' => '잘못 입력되었습니다.',
+        'en' => 'It has been entered incorrectly.',
+    ],
     'required' => [
         'ko' => ':name 이(가) 필요합니다.',
         'en' => 'Require :name',
@@ -792,6 +860,14 @@ return [
     'logout' => [
         'ko' => '로그아웃',
         'en' => 'Logout'
+    ],
+    'signUp' => [
+        'ko' => '회원 가입',
+        'en' => 'Sign up',
+    ],
+    'signUpDate' => [
+        'ko' => '가입일',
+        'en' => 'Sign up date',
     ],
     'dashBoard' => [
         'ko' => '대시보드',
@@ -1095,6 +1171,10 @@ return [
         'ko' => '인증',
         'en' => 'confirmation'
     ],
+    'emailConfirm' => [
+        'ko' => '이메일 인증',
+        'en' => 'Email confirm'
+    ],
     'resendEmail' => [
         'ko' => '이메일 재전송',
         'en' => 'Resend Email'
@@ -1156,6 +1236,10 @@ return [
         'ko' => '비밀번호 보안 수준',
         'en' => 'Password strength'
     ],
+    'findPassword' => [
+        'ko' => '비밀번호 찾기',
+        'en' => 'Find password',
+    ],
     'weak' => [
         'ko' => '약함',
         'en' => 'weak'
@@ -1168,9 +1252,17 @@ return [
         'ko' => '높음',
         'en' => 'strong'
     ],
+    'moveAndResetPassword' => [
+        'ko' => '이 링크로 이동하여 비밀번호를 재설정하세요.',
+        'en' => 'Go to this link to reset your password.'
+    ],
     'addMember' => [
         'ko' => '새회원 추가',
         'en' => 'New member'
+    ],
+    'editMember' => [
+        'ko' => '회원 수정',
+        'en' => 'Edit member'
     ],
     'toggleMenu' => [
         'ko' => '토글 메뉴',
@@ -1268,9 +1360,25 @@ return [
         'ko' => '다국어 설정',
         'en' => 'Multi-language settings',
     ],
-    'inputTitle' => [
+    'enterTitle' => [
         'ko' => '제목을 입력하세요.',
-        'en' => 'Please input title.',
+        'en' => 'Please enter title.',
+    ],
+    'enterName' => [
+        'ko' => '이름을 입력하세요.',
+        'en' => 'Please enter name.',
+    ],
+    'enterDescription' => [
+        'ko' => '설명을 입력하세요.',
+        'en' => 'Please enter description.',
+    ],
+    'enterPassword' => [
+        'ko' => '비밀번호를 입력하세요.',
+        'en' => 'Please enter password.',
+    ],
+    'enterEmail' => [
+        'ko' => '이메일을 입력하세요.',
+        'en' => 'Please enter email.',
     ],
     'owner' => [
         'ko' => '소유자',
@@ -1299,5 +1407,137 @@ return [
     'processed' => [
         'ko' => '처리되었습니다.',
         'en' => 'Has been processed.',
+    ],
+    'postCode' => [
+        'ko' => '우편번호',
+        'en' => 'Post code',
+    ],
+    'findPostCode' => [
+        'ko' => '우편번호 찾기',
+        'en' => 'Find post code',
+    ],
+    'address' => [
+        'ko' => '주소',
+        'en' => 'Address',
+    ],
+    'detailedAddress' => [
+        'ko' => '상세 주소',
+        'en' => 'DetailedAddress',
+    ],
+    'fold' => [
+        'ko' => '접기',
+        'en' => 'fold',
+    ],
+    'detailConfigure' => [
+        'ko' => '세부 설정',
+        'en' => 'Detail configure',
+    ],
+    'editor' => [
+        'ko' => '에디터',
+        'en' => 'Editor',
+    ],
+    'editorEdit' => [
+        'ko' => '에디터 변경',
+        'en' => 'Editor edit',
+    ],
+    'multilingualInput' => [
+        'ko' => '다국어 입력',
+        'en' => 'Multilingual input',
+    ],
+    'status' => [
+        'ko' => '상태',
+        'en' => 'Status',
+    ],
+    'introduction' => [
+        'ko' => '소개',
+        'en' => 'Introduction',
+    ],
+    'enterIntroduction' => [
+        'ko' => '소개를 작성해 주세요.',
+        'en' => 'Please enter introduction.',
+    ],
+    'memberRating' => [
+        'ko' => '회원 등급',
+        'en' => 'Member grade',
+    ],
+    'memberRatingNormal' => [
+        'ko' => '일반',
+        'en' => 'Normal',
+    ],
+    'memberRatingManager' => [
+        'ko' => '관리자',
+        'en' => 'Manager',
+    ],
+    'memberRatingAdministrator' => [
+        'ko' => '최고 관리자',
+        'en' => 'Administrator',
+    ],
+    'allGroup' => [
+        'ko' => '전체 그룹',
+        'en' => 'All group',
+    ],
+    'empty' => [
+        'ko' => '비었음',
+        'en' => 'empty',
+    ],
+    'memberDefaultSetting' => [
+        'ko' => '회원 기본 설정',
+        'en' => 'Member default setting',
+    ],
+    'useLoginCaptcha' => [
+        'ko' => '로그인 시 CAPTCHA 사용',
+        'en' => 'Login CAPTCHA activate',
+    ],
+    'useSignUpCaptcha' => [
+        'ko' => '회원 가입 시 CAPTCHA 사용',
+        'en' => 'Sign up CAPTCHA activate',
+    ],
+    'webmasterName' => [
+        'ko' => '웹마스터 이름',
+        'en' => 'Webmaster name',
+    ],
+    'webmasterEmail' => [
+        'ko' => '웹마스터 이메일',
+        'en' => 'Webmaster email',
+    ],
+    'siteTermsUse' => [
+        'ko' => '사이트 이용약관',
+        'en' => 'Site Terms of Use',
+    ],
+    'sitePrivacyPolicy' => [
+        'ko' => '사이트 개인정보 보호 정책',
+        'en' => 'Site Privacy Policy',
+    ],
+    'memberDynamicFieldDescription' => [
+        'ko' => '회원정보에 추가할 필드를 설정합니다.',
+        'en' => 'Set dynamic field for member information.',
+    ],
+    'useEmailConfirm' => [
+        'ko' => '이메일 인증 사용',
+        'en' => 'Email confirm activate'
+    ],
+    'permitSignUp' => [
+        'ko' => '회원 가입 허용',
+        'en' => 'Permit to sign up'
+    ],
+    'memberSingUpLoginSkin' => [
+        'ko' => '회원 가입/로그인 스킨',
+        'en' => 'Skin for sing up and login skin',
+    ],
+    'myPageSkin' => [
+        'ko' => '마이페이지 스킨',
+        'en' => 'Skin for my page',
+    ],
+    'profileSkin' => [
+        'ko' => '프로필 스킨',
+        'en' => 'Skin for profile page',
+    ],
+    'memberToggleMenu' => [
+        'ko' => '회원 팝업 메뉴',
+        'en' => 'Member toggle menu',
+    ],
+    'memberToggleMenuDescription' => [
+        'ko' => '회원 이름을 클릭했을 때 표시될 메뉴를 설정합니다.',
+        'en' => 'Set the menu that appears when you click on the member name.',
     ],
 ];

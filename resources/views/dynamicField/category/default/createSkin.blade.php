@@ -1,5 +1,5 @@
 <div class="form-group">
-    <label for="">카테고리 스킨 Colorset 설정</label>
+    <label for="">Colorset</label>
     @if ($config == null)
     <select type="text" name="colorSet" class="form-control">
         <option value="default">Default</option>

@@ -4,10 +4,10 @@
             <div class="panel">
                 <div class="panel-heading">
                     <div class="pull-left">
-                        <h3 class="panel-title">회원목록</h3>
+                        <h3 class="panel-title">{{xe_trans('xe::memberList')}}</h3>
                     </div>
                     <div class="pull-right">
-                        <a href="{{ route('settings.member.create') }}" class="btn btn-primary"><i class="xi-plus"></i><span>새회원 추가</span></a>
+                        <a href="{{ route('settings.member.create') }}" class="btn btn-primary"><i class="xi-plus"></i><span>{{xe_trans('xe::addNewMember')}}</span></a>
                     </div>
                 </div>
 
@@ -19,20 +19,20 @@
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" role="menu">
-                                <li><strong>승인/거부</strong></li>
-                                <li @if(!Input::get('status')) class="active" @endif><a href="{{ route('settings.member.index', Input::except('status') ) }}">전체</a></li>
-                                <li @if(Input::get('status') === \XeUser::STATUS_ACTIVATED) class="active" @endif><a href="{{ route('settings.member.index', array_merge(Input::all(), ['status'=> \XeUser::STATUS_ACTIVATED] )) }}">승인됨</a></li>
-                                <li @if(Input::get('status') === \XeUser::STATUS_DENIED) class="active" @endif><a href="{{ route('settings.member.index', array_merge(Input::all(), ['status'=> \XeUser::STATUS_DENIED] )) }}">거부됨</a></li>
+                                <li><strong>{{xe_trans('xe::approve')}}/{{xe_trans('xe::deny')}}</strong></li>
+                                <li @if(!Input::get('status')) class="active" @endif><a href="{{ route('settings.member.index', Input::except('status') ) }}">{{xe_trans('xe::all')}}</a></li>
+                                <li @if(Input::get('status') === \XeUser::STATUS_ACTIVATED) class="active" @endif><a href="{{ route('settings.member.index', array_merge(Input::all(), ['status'=> \XeUser::STATUS_ACTIVATED] )) }}">{{xe_trans('xe::permitted')}}</a></li>
+                                <li @if(Input::get('status') === \XeUser::STATUS_DENIED) class="active" @endif><a href="{{ route('settings.member.index', array_merge(Input::all(), ['status'=> \XeUser::STATUS_DENIED] )) }}">{{xe_trans('xe::rejected')}}</a></li>
                                 <li class="divider"></li>
-                                <li><strong>그룹</strong></li>
-                                <li @if(!Input::get('group'))class="active"@endif><a href="{{ route('settings.member.index', Input::except(['group'])) }}"><span>전체 그룹</span></a></li>
+                                <li><strong>{{xe_trans('xe::group')}}</strong></li>
+                                <li @if(!Input::get('group'))class="active"@endif><a href="{{ route('settings.member.index', Input::except(['group'])) }}"><span>{{xe_trans('xe::allGroup')}}</span></a></li>
                                 @foreach($groups as $key => $group)
                                 <li @if(Input::get('group') === $group->id)class="active"@endif><a href="{{ route('settings.member.index', array_merge( Input::all(), ['group'=> $group->id] )) }}">{{ $group->name }}</a></li>
                                 @endforeach
                             </ul>
                         </div>
                         <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-default __xe_remove">선택회원 삭제</button>
+                            <button type="button" class="btn btn-default __xe_remove">{{xe_trans('xe::deleteSelected')}}</button>
                         </div>
                     </div>
                     <div class="pull-right">
@@ -42,23 +42,23 @@
                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                         <span class="__xe_selectedKeyfield">
                                         @if(Input::get('keyfield')==='displayName')
-                                            이름
+                                            {{xe_trans('xe::name')}}
                                         @elseif(Input::get('keyfield')==='email')
-                                            이메일
+                                            {{xe_trans('xe::email')}}
                                         @else
-                                            검색대상
+                                            {{xe_trans('xe::select')}}
                                         @endif
                                         </span>
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" role="menu">
-                                        <li><a href="#" class="__xe_selectKeyfield" data-value="displayName">이름</a></li>
-                                        <li><a href="#" class="__xe_selectKeyfield" data-value="email">이메일</a></li>
+                                        <li><a href="#" class="__xe_selectKeyfield" data-value="displayName">{{xe_trans('xe::name')}}</a></li>
+                                        <li><a href="#" class="__xe_selectKeyfield" data-value="email">{{xe_trans('xe::email')}}</a></li>
                                     </ul>
                                 </div><!-- /btn-group -->
-                                <input type="text" name="keyword" class="form-control" aria-label="Text input with dropdown button" placeholder="검색어를 입력하세요." value="{{ Input::get('keyword') }}">
+                                <input type="text" name="keyword" class="form-control" aria-label="Text input with dropdown button" placeholder="{{xe_trans('xe::enterKeyword')}}" value="{{ Input::get('keyword') }}">
                                 <button type="submit" class="btn-link">
-                                    <i class="xi-magnifier"></i><span class="sr-only">검색</span>
+                                    <i class="xi-magnifier"></i><span class="sr-only">{{xe_trans('xe::search')}}</span>
                                 </button>
                                 @foreach(Input::except(['keyfield','keyword']) as $name => $value)
                                     <input type="hidden" name="{{ $name }}" value="{{ $value }}">
@@ -76,13 +76,13 @@
                         <thead>
                         <tr>
                             <th scope="col"><input type="checkbox" class="__xe_check-all"></th>
-                            <th scope="col">이름</th>
-                            <th scope="col">계정</th>
-                            <th scope="col">이메일</th>
-                            <th scope="col">가입일</th>
-                            <th scope="col">회원그룹</th>
-                            <th scope="col">상태</th>
-                            <th scope="col">관리</th>
+                            <th scope="col">{{xe_trans('xe::name')}}</th>
+                            <th scope="col">{{xe_trans('xe::account')}}</th>
+                            <th scope="col">{{xe_trans('xe::email')}}</th>
+                            <th scope="col">{{xe_trans('xe::signUpDate')}}</th>
+                            <th scope="col">{{xe_trans('xe::memberGroup')}}</th>
+                            <th scope="col">{{xe_trans('xe::status')}}</th>
+                            <th scope="col">{{xe_trans('xe::management')}}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -90,7 +90,7 @@
                         <tr>
                             <td><input name="userId" class="__xe_checkbox" type="checkbox" value="{{ $user->getId() }}" @if($user->rating === \Xpressengine\User\Rating::SUPER) disabled @endif></td>
                             <td>
-                                <img data-toggle="xeUserMenu" data-user-id="{{ $user->getId() }}" src="{{ $user->getProfileImage() }}" width="30" height="30" alt="프로필" class="member-profile">
+                                <img data-toggle="xeUserMenu" data-user-id="{{ $user->getId() }}" src="{{ $user->getProfileImage() }}" width="30" height="30" alt="{{xe_trans('xe::profileImage')}}" class="member-profile">
                                 <a href="#" data-toggle="xeUserMenu" data-user-id="{{ $user->getId() }}" data-text="{{ $user->getDisplayName() }}">{{ $user->getDisplayName() }}</a></i>
                             </td>
                             <td>
@@ -103,7 +103,7 @@
                                     <span data-toggle="tooltip" class="badge black" title="기본">xe</span>
                                 @endif
                             </td>
-                            <td>{{ data_get($user, 'email', '없음') }}</td>
+                            <td>{{ data_get($user, 'email', xe_trans('xe::empty')) }}</td>
                             <td>{!! $user->createdAt->format('y-m-d') !!}</td>
                             <td>
                                 @if($user->groups !== null)
@@ -112,12 +112,12 @@
                             </td>
                             <td>
                                 @if($user->status===\XeUser::STATUS_DENIED)
-                                <label class="label label-danger">거부됨</label>
+                                <label class="label label-danger">{{xe_trans('xe::rejected')}}</label>
                                 @else
-                                <label class="label label-green">승인됨</label>
+                                <label class="label label-green">{{xe_trans('xe::permitted')}}</label>
                                 @endif
                             </td>
-                            <td><a href="{{ route('settings.member.edit', ['id' => $user->getId()]) }}" class="btn btn-default">관리</a></td>
+                            <td><a href="{{ route('settings.member.edit', ['id' => $user->getId()]) }}" class="btn btn-default">{{xe_trans('xe::management')}}</a></td>
                         </tr>
                         @endforeach
                         </tbody>

@@ -3,9 +3,9 @@
     <div class="__xe_imagebox_{{ $seq }} clearfix list-group-item">
         <a class="pull-left btn btn-default btn-sm __xe_inputBtn fileinput-button">
         @if(isset($args['image']))
-            <span>변경하기</span>
+            <span>{{xe_trans('xe::modify')}}</span>
             @else
-            <span>등록하기</span>
+            <span>{{xe_trans('xe::register')}}</span>
             @endif
             <input class="__xe_file_{{ $seq }}" type="file" name="{{ array_get($args, 'name', 'image') }}"/>
         </a>

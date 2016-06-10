@@ -6,45 +6,45 @@
             <div class="panel">
                 <div class="panel-heading">
                     <div class="pull-left">
-                        <h3 class="panel-title">회원 가입 설정</h3>
+                        <h3 class="panel-title">{{xe_trans('xe::joinSettings')}}</h3>
                     </div>
                 </div>
                 <div class="panel-body">
                     <div class="form-group">
-                        <label for="item-url">회원 가입 허용</label>
+                        <label for="item-url">{{xe_trans('xe::permitSignUp')}}</label>
                         <div class="list-group-item">
                             <div class="radio">
                                 <label>
-                                    <input type="radio" name="joinable" value="true" @if($config->get('joinable')) checked="checked" @endif> 허용
+                                    <input type="radio" name="joinable" value="true" @if($config->get('joinable')) checked="checked" @endif> {{xe_trans('xe::allow')}}
                                 </label>
                                 <label>
-                                    <input type="radio" name="joinable" value="false" @if(!$config->get('joinable')) checked="checked" @endif> 허용 안함
+                                    <input type="radio" name="joinable" value="false" @if(!$config->get('joinable')) checked="checked" @endif> {{xe_trans('xe::deny')}}
                                 </label>
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="item-url">이메일 인증 사용</label>
+                        <label for="item-url">{{xe_trans('xe::useEmailConfirm')}}</label>
                         <div class="list-group-item">
                             <div class="radio">
                                 <label>
-                                    <input type="radio" name="useEmailCertify" value="true" @if($config->get('useEmailCertify')) checked="checked" @endif>  사용
+                                    <input type="radio" name="useEmailCertify" value="true" @if($config->get('useEmailCertify')) checked="checked" @endif>  {{xe_trans('xe::use')}}
                                 </label>
                                 <label>
-                                    <input type="radio" name="useEmailCertify" value="false" @if(!$config->get('useEmailCertify')) checked="checked" @endif> 사용 안함
+                                    <input type="radio" name="useEmailCertify" value="false" @if(!$config->get('useEmailCertify')) checked="checked" @endif> {{xe_trans('xe::disuse')}}
                                 </label>
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="item-url">가입 CAPTCHA 사용</label>
+                        <label for="item-url">{{xe_trans('xe::useSignUpCaptcha')}}</label>
                         <div class="list-group-item">
                             <div class="radio">
                                 <label>
-                                    <input type="radio" name="useCaptcha" value="false" @if(!$config->get('useCaptcha')) checked="checked" @endif> 사용
+                                    <input type="radio" name="useCaptcha" value="false" @if(!$config->get('useCaptcha')) checked="checked" @endif> {{xe_trans('xe::use')}}
                                 </label>
                                 <label>
-                                    <input type="radio" name="useCaptcha" value="false" @if(!$config->get('useCaptcha')) checked="checked" @endif> 사용 안함
+                                    <input type="radio" name="useCaptcha" value="false" @if(!$config->get('useCaptcha')) checked="checked" @endif> {{xe_trans('xe::disuse')}}
                                 </label>
                             </div>
                         </div>
@@ -52,7 +52,7 @@
                 </div>
                 <div class="panel-footer">
                     <div class="pull-right">
-                        <button type="submit" class="btn btn-primary btn-lg">저장</button>
+                        <button type="submit" class="btn btn-primary btn-lg">{{xe_trans('xe::save')}}</button>
                     </div>
                 </div>
             </div>
