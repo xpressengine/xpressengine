@@ -21,7 +21,7 @@
     background-color: $color;
         border-color: $color;
   }
-  
+
   &:active,
   &.active,
   .open > &.dropdown-toggle {
@@ -29,9 +29,9 @@
     &:focus,
     &.focus {
       color: #fff;
-      background-color: $color;          
+      background-color: $color;
     }
-  }  
+  }
 
   &.disabled,
   &:disabled {
@@ -56,6 +56,7 @@
   background-image: none; // Reset unusual Firefox-on-Android default style; see https://github.com/necolas/normalize.css/issues/214
   border: 1px solid transparent;
   white-space: nowrap;
+  text-decoration: none;
   @include button-size($padding-base-vertical, $padding-base-horizontal, $font-size-base, $line-height-base, $btn-border-radius-base);
   @include button-variant($btn-default-color, $btn-default-bg, $btn-default-border);
   @include user-select(none);
@@ -79,7 +80,7 @@
   &:active,
   &.active {
     outline: 0;
-    background-image: none;    
+    background-image: none;
   }
 
   &.disabled,
@@ -201,20 +202,20 @@ a.btn {
 }
 
 
-// // Button Sizes
-// // --------------------------------------------------
-// 
-// .btn-lg {
-//   // line-height: ensure even-numbered height of button next to large input
-//   @include button-size($padding-large-vertical, $padding-large-horizontal, $font-size-large, $line-height-large, $btn-border-radius-large);
-// }
-// .btn-sm {
-//   // line-height: ensure proper height of button next to small input
-//   @include button-size($padding-small-vertical, $padding-small-horizontal, $font-size-small, $line-height-small, $btn-border-radius-small);
-// }
-// .btn-xs {
-//   @include button-size($padding-xs-vertical, $padding-xs-horizontal, $font-size-small, $line-height-small, $btn-border-radius-small);
-// }
+// Button Sizes
+// --------------------------------------------------
+
+.xe-btn-lg {
+  // line-height: ensure even-numbered height of button next to large input
+  @include button-size($padding-large-vertical, $padding-large-horizontal, $font-size-large, $line-height-large, $btn-border-radius-large);
+}
+.xe-btn-sm {
+  // line-height: ensure proper height of button next to small input
+  @include button-size($padding-small-vertical, $padding-small-horizontal, $font-size-small, $line-height-small, $btn-border-radius-small);
+}
+.xe-btn-xs {
+  @include button-size($padding-xs-vertical, $padding-xs-horizontal, $font-size-small, $line-height-small, $btn-border-radius-small);
+}
 
 
 // Block button
@@ -246,15 +247,15 @@ input[type="button"] {
     opacity: 0;
     width: 0;
     height: 0;
-    &:checked + .toggle {      
+    &:checked + .toggle {
       background-color: #6f8dff;
       &:after {
         left: 41px;
         outline: none;
       }
-      &:before{                
+      &:before{
         left:11px;
-        content:"ON";        
+        content:"ON";
       }
     }
   }
@@ -290,7 +291,7 @@ input[type="button"] {
     }
     &:before{
       position: absolute;
-      right:10px;           
+      right:10px;
       content:"OFF";
       color:#fff;
     }

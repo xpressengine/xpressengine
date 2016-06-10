@@ -12,6 +12,7 @@
   .xe-label-text{
     display: inline-block;
     padding-left: 25px;  
+    line-height: 19px;
   }
   input {
     &[type="checkbox"], &[type="radio"] {
@@ -109,9 +110,16 @@
   }
 }
 
+.xe-form-label{
+  display: inline-block;
+  max-width: 100%;
+  margin-bottom: 5px;
+  font-weight: 700;
+}
+
 .xe-form-group {
   display: block;
-  margin-bottom: 20px;
+  margin-bottom: $xe-form-group-bottom-margin;
 }
 
 .xe-form-control {
@@ -228,6 +236,45 @@ textarea.xe-form-control {
 
 .xe-form-inline {
   @include form-inline;
+  margin-bottom: $xe-form-group-bottom-margin;
+}
+
+@include input-size('.xe-input-sm', $input-height-small, $padding-small-vertical, $padding-small-horizontal, $font-size-small, $line-height-small, $input-border-radius-small);
+.xe-form-group-sm {
+  .xe-form-control {
+    height: $input-height-small;
+    padding: $padding-small-vertical $padding-small-horizontal;
+    font-size: $font-size-small;
+    line-height: $line-height-small;
+    border-radius: $input-border-radius-small;
+  }
+  select.xe-form-control {
+    height: $input-height-small;
+    line-height: $input-height-small;
+  }
+  textarea.xe-form-control,
+  select[multiple].xe-form-control {
+    height: auto;
+  }  
+}
+
+@include input-size('.xe-input-lg', $input-height-large, $padding-large-vertical, $padding-large-horizontal, $font-size-large, $line-height-large, $input-border-radius-large);
+.xe-form-group-lg {
+  .xe-form-control {
+    height: $input-height-large;
+    padding: $padding-large-vertical $padding-large-horizontal;
+    font-size: $font-size-large;
+    line-height: $line-height-large;
+    border-radius: $input-border-radius-large;
+  }
+  select.xe-form-control {
+    height: $input-height-large;
+    line-height: $input-height-large;
+  }
+  textarea.xe-form-control,
+  select[multiple].form-control {
+    height: auto;
+  }
 }
 
 .wrong-input .xe-form-control,
