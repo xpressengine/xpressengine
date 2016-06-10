@@ -17,7 +17,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Application;
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Plugin\Exceptions\CannotDeleteActivatedPluginException;
-use Xpressengine\Plugin\Exceptions\PluginActivationFailedException;
 use Xpressengine\Plugin\Exceptions\PluginAlreadyActivatedException;
 use Xpressengine\Plugin\Exceptions\PluginAlreadyDeactivatedException;
 use Xpressengine\Plugin\Exceptions\PluginDeactivationFailedException;
@@ -181,49 +180,7 @@ class PluginHandler
     {
         $entity = $this->getPlugin($pluginId);
 
-        // 플러그인이 존재하는지 검사한다.
-        if ($entity === null) {
-            throw new PluginNotFoundException(['pluginName' => $pluginId]);
-        }
-
-        // 플러그인이 이미 활성화되어있는 상태인지 체크한다.
-        if ($entity->getStatus() === static::STATUS_ACTIVATED) {
-            throw new PluginAlreadyActivatedException();
-        }
-
-        // 플러그인이 설치되어 있는지 검사한다.
-        if ($entity->checkInstalled() === false) {
-            $entity->install();
-        }
-
-        // 기존에 설치(활성화)된 적이 있는지 검사한다. 기존에 활성화된 적이 있다면 설치된 버전을 조회한다.
-        $installedVersion = $entity->getInstalledVersion();
-
-        // 플러그인이 최신업데이트 상태인지 검사하고, 업데이트가 필요하면 업데이트 한다.
-        if ($entity->checkUpdated() === false) {
-            $entity->update($installedVersion);
-        }
-
-        // 활성화하려는 플러그인이 의존하는 플러그인들의 활성화 상태를 체크해야 한다.
-        // 만약 의존하는 플러그인이 있다면, 의존 플러그인의 활성화 상태를 조회하여 활성화되어 있지 않다면 예외를 발생시킨다.
-        /*$dependencies = $entity->getDependencies();
-        foreach ($dependencies as $id) {
-            $dependency = $this->getPlugin($id);
-            if ($dependency === null || $dependency->getStatus() !== static::STATUS_ACTIVATED) {
-                throw new PluginDependencyException();
-            }
-        }*/
-
-
-        // 플러그인 활성화. 플러그인을 활성화할 때마다 각 플러그인의 activate() 메소드를 호출해준다.
-        // 각 플러그인은 activate() 메소드에서 자신이 XE에 설치된 상황을 파악한 후, 활성화에 필요한 준비를 한다.
-        $plugin = $entity->getObject();
-
-        try {
-            $plugin->activate($installedVersion);
-        } catch (\Exception $e) {
-            throw new PluginActivationFailedException();
-        }
+        $this->updatePlugin($pluginId, false);
 
         $entity->setStatus(static::STATUS_ACTIVATED);
 
@@ -292,16 +249,44 @@ class PluginHandler
      * 플러그인을 업데이트한다. 내부적으로는 단순히 플러그인을 다시 activate 시킨다.
      *
      * @param string $pluginId 업데이트할 플러그인의 아이디
-     *
-     * @return void
+     * @param bool   $updateStatus true일 경우, 업데이트한 플러그인의 상태를 status에 업데이트한다.
      */
-    public function updatePlugin($pluginId)
+    public function updatePlugin($pluginId, $updateStatus = true)
     {
-        $plugin = $this->getPlugin($pluginId);
-        if($plugin->isActivated()) {
-            $this->deactivatePlugin($pluginId);
+        $entity = $this->getPlugin($pluginId);
+
+        // 플러그인이 존재하는지 검사한다.
+        if ($entity === null) {
+            throw new PluginNotFoundException(['pluginName' => $pluginId]);
         }
-        $this->activatePlugin($pluginId);
+
+        // 플러그인이 이미 활성화되어있는 상태인지 체크한다.
+        if ($entity->getStatus() === static::STATUS_ACTIVATED) {
+            throw new PluginAlreadyActivatedException();
+        }
+
+        // 플러그인이 설치되어 있는지 검사한다.
+        if ($entity->checkInstalled() === false) {
+            $entity->install();
+        }
+
+        // 기존에 설치(활성화)된 적이 있는지 검사한다. 기존에 활성화된 적이 있다면 설치된 버전을 조회한다.
+        $installedVersion = $entity->getInstalledVersion();
+
+        // 플러그인이 최신업데이트 상태인지 검사하고, 업데이트가 필요하면 업데이트 한다.
+        if ($entity->checkUpdated() === false) {
+            $entity->update($installedVersion);
+        }
+
+        if($updateStatus) {
+            // 플러그인의 정보를 config에 기록한다.
+            $configs = $this->getPluginsStatus();
+            $configs[$pluginId] = [
+                'status' => $entity->getStatus(),
+                'version' => $entity->getVersion()
+            ];
+            $this->setPluginsStatus($configs);
+        }
     }
 
     /**
