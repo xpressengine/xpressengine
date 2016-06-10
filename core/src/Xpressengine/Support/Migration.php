@@ -29,7 +29,7 @@ interface Migration
      *
      * @return mixed
      */
-    public function checkInstall();
+    public function checkInstalled();
 
     /**
      * install
@@ -41,18 +41,18 @@ interface Migration
     /**
      * checkUpdate
      *
-     * @param string $currentVersion current version
+     * @param string $installedVersion current version
      *
      * @return mixed
      */
-    public function checkUpdate($currentVersion);
+    public function checkUpdated($installedVersion = null);
 
     /**
      * update
      *
-     * @param string $currentVersion current version
+     * @param string $installedVersion current version
      *
      * @return mixed
      */
-    public function update($currentVersion);
+    public function update($installedVersion = null);
 }

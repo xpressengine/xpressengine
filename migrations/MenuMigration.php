@@ -215,11 +215,10 @@ class MenuMigration implements Migration {
     /**
      * update
      *
-     * @param string $currentVersion
+     * @param string $installedVersion
      *
-     * @return void
      */
-    public function update($currentVersion)
+    public function update($installedVersion = null)
     {
     }
 
@@ -228,18 +227,17 @@ class MenuMigration implements Migration {
      *
      * @return void
      */
-    public function checkInstall()
+    public function checkInstalled()
     {
     }
 
     /**
      * checkUpdate
      *
-     * @param string $currentVersion
+     * @param string $installedVersion
      *
-     * @return void
      */
-    public function checkUpdate($currentVersion)
+    public function checkUpdated($installedVersion = null)
     {
     }
 

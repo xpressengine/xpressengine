@@ -25,15 +25,15 @@ class PluginMigration implements Migration
         \DB::table('config')->insert(['name' => 'plugin', 'vars' => '[]']);
     }
 
-    public function update($currentVersion)
+    public function update($installedVersion = null)
     {
     }
 
-    public function checkInstall()
+    public function checkInstalled()
     {
     }
 
-    public function checkUpdate($currentVersion)
+    public function checkUpdated($installedVersion = null)
     {
     }
 }

@@ -107,15 +107,15 @@ class ThemeMigration implements Migration
         app('xe.theme')->setThemeConfig('theme/alice@alice.1', $main);
     }
 
-    public function update($currentVersion)
+    public function update($installedVersion = null)
     {
     }
 
-    public function checkInstall()
+    public function checkInstalled()
     {
     }
 
-    public function checkUpdate($currentVersion)
+    public function checkUpdated($installedVersion = null)
     {
     }
 }
