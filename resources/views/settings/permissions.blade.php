@@ -1,5 +1,5 @@
 @section('page_description')
-    <small>사이트관리의 각 페이지에 접근하려면 그 페이지에 지정된 권한에 충족되는 사용자이어야 합니다. 여기에서 각 권한에 사용자를 지정할 수 있습니다.</small>
+    <small>{{xe_trans('xe::settingsPermissionSettingsDescription')}}</small>
 @endsection
 
 <div class="row">
@@ -27,8 +27,7 @@
                                 <div id="collapseOne" class="panel-collapse">
                                     <div class="panel-heading">
                                         <div class="pull-right">
-                                            <button type="submit" class="btn btn-primary">저장
-                                            </button>
+                                            <button type="submit" class="btn btn-primary">{{xe_trans('xe::save')}}</button>
                                         </div>
                                     </div>
                                 </div>

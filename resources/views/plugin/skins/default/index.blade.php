@@ -1,9 +1,9 @@
 @section('page_title')
-    <h2>{{ xe_trans('xe::plugin') }} {{ xe_trans('xe::list') }}</h2>
+    <h2>{{ xe_trans('xe::pluginList') }}</h2>
 @stop
 
 @section('page_description')
-    <p class="sub-text">등록된 플러그인 목록을 볼 수 있습니다.</p>
+    <p class="sub-text">{{ xe_trans('xe::pluginListDescription') }}</p>
 @stop
 
 

@@ -157,6 +157,10 @@ return [
         'ko' => '추가',
         'en' => 'Insert',
     ],
+    'add' => [
+        'ko' => '추가',
+        'en' => 'Add',
+    ],
     'save' => [
         'ko' => '저장',
         'en' => 'Save',
@@ -1102,6 +1106,10 @@ return [
         'ko' => '테마 편집',
         'en' => 'Edit theme'
     ],
+    'editThemeDescription' => [
+        'ko' => '테마를 편집합니다.',
+        'en' => 'Edit the theme.'
+    ],
     'hideMenus' => [
         'ko' => '메뉴 숨기기',
         'en' => 'Hide menus'
@@ -1376,6 +1384,10 @@ return [
         'ko' => '플러그인 목록',
         'en' => 'Plugin list',
     ],
+    'pluginListDescription' => [
+        'ko' => '등록된 플러그인 목록을 볼 수 있습니다.',
+        'en' => 'You can view the list of registered plug-ins.',
+    ],
     'pluginDetails' => [
         'ko' => '플러그인 상세',
         'en' => 'Plugin Details',
@@ -1383,6 +1395,10 @@ return [
     'settingsPermissionSettings' => [
         'ko' => '관리페이지 권한 설정',
         'en' => 'Settings page permission settings',
+    ],
+    'settingsPermissionSettingsDescription' => [
+        'ko' => '사이트관리의 각 페이지에 접근하려면 그 페이지에 지정된 권한에 충족되는 사용자이어야 합니다. 여기에서 각 권한에 사용자를 지정할 수 있습니다.',
+        'en' => 'To access each page of the site must be user management that meets the permissions assigned to that page. Here you can specify the permissions for each user.',
     ],
     'SEOSettings' => [
         'ko' => 'SEO 설정',
@@ -1421,6 +1437,10 @@ return [
         'en' => 'Owner',
     ],
     'info' => [
+        'ko' => '정보',
+        'en' => 'Information',
+    ],
+    'information' => [
         'ko' => '정보',
         'en' => 'Information',
     ],
@@ -1664,6 +1684,10 @@ return [
         'ko' => '활성화',
         'en' => 'Activation',
     ],
+    'deactivation' => [
+        'ko' => '비활성화',
+        'en' => 'Deactivation',
+    ],
     'menuDeleteCaution' => [
         'ko' => '메뉴 삭제하면 다시 복구할 수 없습니다.',
         'en' => 'When you remove the menu can not be recovered.',
@@ -1691,5 +1715,61 @@ return [
     'detailSettings' => [
         'ko' => '상세 설정',
         'en' => 'Detail setting',
+    ],
+    'msgNoDocument' => [
+        'ko' => '작성된 문서가 없습니다.',
+        'en' => 'No Documents.',
+    ],
+    'msgNoScreenshot' => [
+        'ko' => '스크린샷이 없습니다.',
+        'en' => 'No screenshots.',
+    ],
+    'msgNoUpdateChangeLog' => [
+        'ko' => '작성된 업데이트 사항이 없습니다.',
+        'en' => 'No update change logs.',
+    ],
+    'siteDefaultSettings' => [
+        'ko' => '사이트 기본 설정',
+        'en' => 'Site default settings',
+    ],
+    'siteDefaultTheme' => [
+        'ko' => '기본 테마 지정',
+        'en' => 'Site default theme',
+    ],
+    'siteDefaultThemeDescription' => [
+        'ko' => '지정된 테마가 출력할 테마를 지정하세요. 데스크탑과 모바일에서 사용할 테마를 각각 선택할 수 있습니다.',
+        'en' => 'Please specify a theme to print a specified theme. Themes can be selected for use in desktop and mobile respectively.',
+    ],
+    'themeSettingsDescription' => [
+        'ko' => '테마를 설정합니다.',
+        'en' => 'Set the theme.',
+    ],
+    'selectThemeInstance' => [
+        'ko' => '설정 선택',
+        'en' => 'Select theme instance',
+    ],
+    'msgSelectThemeInstance' => [
+        'ko' => '설정을 선택하세요.',
+        'en' => 'Choose a theme instance.',
+    ],
+    'selectThemeInstanceDescription' => [
+        'ko' => ':count 개의 저장된 설정이 있습니다.',
+        'en' => 'There are :count saved settings.',
+    ],
+    'addNewThemeInstance' => [
+        'ko' => '새 설정 추가',
+        'en' => 'Add new theme instance',
+    ],
+    'themeInstanceName' => [
+        'ko' => '설정 이름',
+        'en' => 'Theme instance name',
+    ],
+    'changeThemeInstanceName' => [
+        'ko' => '설정 이름 변경',
+        'en' => 'Change theme instance name',
+    ],
+    'themeNotSupportEdit' => [
+        'ko' => '이 테마는 편집을 지원하지 않습니다.',
+        'en' => 'This theme does not support editing.',
     ],
 ];

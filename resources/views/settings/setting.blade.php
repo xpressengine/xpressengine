@@ -6,10 +6,10 @@
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <div class="panel-heading">
                     <div class="pull-left">
-                        <h3 class="panel-title">사이트 기본 설정</h3>
+                        <h3 class="panel-title">{{xe_trans('xe::siteDefaultSettings')}}</h3>
                     </div>
                     <div class="pull-right">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="btn-link panel-toggle pull-right"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">메뉴닫기</span></a>
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="btn-link panel-toggle pull-right"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">{{xe_trans('xe::fold')}}</span></a>
                     </div>
                 </div>
                 <div id="collapseOne" class="panel-collapse collapse in">
@@ -38,7 +38,7 @@
                     </div>
                     <div class="panel-footer">
                         <div class="pull-right">
-                            <button type="submit" class="btn btn-primary btn-lg">저장</button>
+                            <button type="submit" class="btn btn-primary btn-lg">{{xe_trans('xe::save')}}</button>
                         </div>
                     </div>
                 </div>
@@ -49,10 +49,10 @@
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <div class="panel-heading">
                     <div class="pull-left">
-                        <h3 class="panel-title">기본 테마 지정 <small>지정된 테마가 출력할 테마를 지정하세요. 데스크탑과 모바일에서 사용할 테마를 각각 선택할 수 있습니다.</small></h3>
+                        <h3 class="panel-title">{{xe_trans('xe::siteDefaultTheme')}} <small>{{xe_trans('xe::siteDefaultThemeDescription')}}</small></h3>
                     </div>
                     <div class="pull-right">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="btn-link panel-toggle pull-right"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">메뉴닫기</span></a>
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="btn-link panel-toggle pull-right"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">{{xe_trans('xe::fold')}}</span></a>
                     </div>
                 </div>
                 <div id="collapseTwo" class="panel-collapse collapse in">
@@ -60,7 +60,7 @@
                 </div>
                 <div class="panel-footer">
                     <div class="pull-right">
-                        <button type="submit" class="btn btn-primary btn-lg">저장</button>
+                        <button type="submit" class="btn btn-primary btn-lg">{{xe_trans('xe::save')}}</button>
                     </div>
                 </div>
             </div>
