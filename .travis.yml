@@ -10,6 +10,5 @@ matrix:
 sudo: false
 before_script:
   - travis_retry composer install
-  - travis_retry npm install
 script:
   - ./vendor/bin/phpunit -c core/phpunit.xml 
