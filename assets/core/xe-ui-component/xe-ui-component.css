@@ -1416,6 +1416,7 @@ i.xe-flag.zimbabwe:before {
 .xe-label .xe-label-text {
   display: inline-block;
   padding-left: 25px;
+  line-height: 19px;
 }
 
 .xe-label input[type="checkbox"], .xe-label input[type="radio"] {
@@ -1519,6 +1520,13 @@ i.xe-flag.zimbabwe:before {
   color: #b5b7bd;
 }
 
+.xe-form-label {
+  display: inline-block;
+  max-width: 100%;
+  margin-bottom: 5px;
+  font-weight: 700;
+}
+
 .xe-form-group {
   display: block;
   margin-bottom: 20px;
@@ -1577,6 +1585,10 @@ textarea.xe-form-control {
   height: auto;
 }
 
+.xe-form-inline {
+  margin-bottom: 20px;
+}
+
 @media (min-width: 768px) {
   .xe-form-inline .xe-form-group {
     display: inline-block;
@@ -1618,6 +1630,96 @@ textarea.xe-form-control {
     display: inline-block;
     width: auto;
   }
+}
+
+.xe-input-sm, .xe-input-group-sm > .xe-form-control,
+.xe-input-group-sm > .xe-input-group-addon,
+.xe-input-group-sm > .xe-input-group-btn > .xe-btn {
+  height: 30px;
+  padding: 5px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 3px;
+}
+
+select.xe-input-sm, .xe-input-group-sm > select.xe-form-control,
+.xe-input-group-sm > select.xe-input-group-addon,
+.xe-input-group-sm > .xe-input-group-btn > select.xe-btn {
+  height: 30px;
+  line-height: 30px;
+}
+
+textarea.xe-input-sm, .xe-input-group-sm > textarea.xe-form-control,
+.xe-input-group-sm > textarea.xe-input-group-addon,
+.xe-input-group-sm > .xe-input-group-btn > textarea.xe-btn,
+select[multiple].xe-input-sm,
+.xe-input-group-sm > select[multiple].xe-form-control,
+.xe-input-group-sm > select[multiple].xe-input-group-addon,
+.xe-input-group-sm > .xe-input-group-btn > select[multiple].xe-btn {
+  height: auto;
+}
+
+.xe-form-group-sm .xe-form-control {
+  height: 30px;
+  padding: 5px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 3px;
+}
+
+.xe-form-group-sm select.xe-form-control {
+  height: 30px;
+  line-height: 30px;
+}
+
+.xe-form-group-sm textarea.xe-form-control,
+.xe-form-group-sm select[multiple].xe-form-control {
+  height: auto;
+}
+
+.xe-input-lg, .xe-input-group-lg > .xe-form-control,
+.xe-input-group-lg > .xe-input-group-addon,
+.xe-input-group-lg > .xe-input-group-btn > .xe-btn {
+  height: 46px;
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.33333;
+  border-radius: 6px;
+}
+
+select.xe-input-lg, .xe-input-group-lg > select.xe-form-control,
+.xe-input-group-lg > select.xe-input-group-addon,
+.xe-input-group-lg > .xe-input-group-btn > select.xe-btn {
+  height: 46px;
+  line-height: 46px;
+}
+
+textarea.xe-input-lg, .xe-input-group-lg > textarea.xe-form-control,
+.xe-input-group-lg > textarea.xe-input-group-addon,
+.xe-input-group-lg > .xe-input-group-btn > textarea.xe-btn,
+select[multiple].xe-input-lg,
+.xe-input-group-lg > select[multiple].xe-form-control,
+.xe-input-group-lg > select[multiple].xe-input-group-addon,
+.xe-input-group-lg > .xe-input-group-btn > select[multiple].xe-btn {
+  height: auto;
+}
+
+.xe-form-group-lg .xe-form-control {
+  height: 46px;
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.33333;
+  border-radius: 6px;
+}
+
+.xe-form-group-lg select.xe-form-control {
+  height: 46px;
+  line-height: 46px;
+}
+
+.xe-form-group-lg textarea.xe-form-control,
+.xe-form-group-lg select[multiple].form-control {
+  height: auto;
 }
 
 .wrong-input .xe-form-control,
@@ -2593,38 +2695,34 @@ textarea.xe-form-control {
   max-height: 365px;
 }
 
-.xe-modal .xe-list-group li {
+.xe-modal .xe-list-group .slick-cell {
+  width: 100%;
+  border: none;
+}
+
+.xe-modal .xe-list-group .list-inner-item {
+  display: block;
   overflow: hidden;
-  padding: 12px 24px 12px 0;
-  border-top: 1px solid #e4e4e4;
-  list-style: none;
+  padding: 14px 24px 14px 0;
+  border-bottom: 1px solid #e4e4e4;
 }
 
-.xe-modal .xe-list-group li:first-child {
-  border-top: none;
-}
-
-.xe-modal .xe-list-group li .list-text {
+.xe-modal .xe-list-group .list-inner-item .list-text {
   display: table-cell;
   vertical-align: middle;
   padding-left: 10px;
   text-align: left;
 }
 
-.xe-modal .xe-list-group li .list-text > p {
+.xe-modal .xe-list-group .list-inner-item .list-text > p {
+  margin: 0;
   font-size: 16px;
   color: #2c2e37;
 }
 
-.xe-modal .xe-list-group li .list-text .sub-text {
+.xe-modal .xe-list-group .list-inner-item .list-text .sub-text {
   font-size: 14px;
   color: #b5b7bd;
-}
-
-.xe-modal .xe-list-group li > a, .xe-modal .xe-list-group li > div {
-  display: table;
-  height: 100%;
-  width: 100%;
 }
 
 /* alert CSS Document */
@@ -2752,11 +2850,12 @@ textarea.xe-form-control {
 
 .xe-tooltip-inner {
   max-width: 200px;
-  padding: 3px 8px;
+  padding: 10px 8px;
   color: #fff;
-  text-align: center;
+  text-align: left;
   background-color: #000;
   border-radius: 2px;
+  line-height: 18px;
 }
 
 .xe-tooltip-arrow {
@@ -2843,6 +2942,7 @@ textarea.xe-form-control {
   background-image: none;
   border: 1px solid transparent;
   white-space: nowrap;
+  text-decoration: none;
   padding: 7px 16px;
   font-size: 14px;
   line-height: 1.42857;
@@ -3594,6 +3694,27 @@ fieldset[disabled] .xe-btn-link:focus {
   text-decoration: none;
 }
 
+.xe-btn-lg, .xe-btn-group-lg > .xe-btn {
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.33333;
+  border-radius: 6px;
+}
+
+.xe-btn-sm, .xe-btn-group-sm > .xe-btn {
+  padding: 5px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 3px;
+}
+
+.xe-btn-xs, .xe-btn-group-xs > .xe-btn {
+  padding: 1px 5px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 3px;
+}
+
 .xe-btn-block {
   display: block;
   width: 100%;
@@ -3684,6 +3805,229 @@ input[type="button"].btn-block {
   }
 }
 
+.xe-btn-group,
+.xe-btn-group-vertical {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.xe-btn-group > .xe-btn,
+.xe-btn-group-vertical > .xe-btn {
+  position: relative;
+  float: left;
+}
+
+.xe-btn-group > .xe-btn:hover, .xe-btn-group > .xe-btn:focus, .xe-btn-group > .xe-btn:active, .xe-btn-group > .xe-btn.active,
+.xe-btn-group-vertical > .xe-btn:hover,
+.xe-btn-group-vertical > .xe-btn:focus,
+.xe-btn-group-vertical > .xe-btn:active,
+.xe-btn-group-vertical > .xe-btn.active {
+  z-index: 2;
+}
+
+.xe-btn-group .xe-btn + .xe-btn,
+.xe-btn-group .xe-btn + .xe-btn-group,
+.xe-btn-group .xe-btn-group + .xe-btn,
+.xe-btn-group .xe-btn-group + .xe-btn-group {
+  margin-left: -1px;
+}
+
+.xe-btn-toolbar {
+  margin-left: -5px;
+}
+
+.xe-btn-toolbar:before, .xe-btn-toolbar:after {
+  content: " ";
+  display: table;
+}
+
+.xe-btn-toolbar:after {
+  clear: both;
+}
+
+.xe-btn-toolbar .xe-btn,
+.xe-btn-toolbar .xe-btn-group,
+.xe-btn-toolbar .input-group {
+  float: left;
+}
+
+.xe-btn-toolbar > .xe-btn,
+.xe-btn-toolbar > .xe-btn-group,
+.xe-btn-toolbar > .input-group {
+  margin-left: 5px;
+}
+
+.xe-btn-group > .xe-btn:not(:first-child):not(:last-child):not(.xe-dropdown-toggle) {
+  border-radius: 0;
+}
+
+.xe-btn-group > .xe-btn:first-child {
+  margin-left: 0;
+}
+
+.xe-btn-group > .xe-btn:first-child:not(:last-child):not(.xe-dropdown-toggle) {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.xe-btn-group > .xe-btn:last-child:not(:first-child),
+.xe-btn-group > .xe-dropdown-toggle:not(:first-child) {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
+
+.xe-btn-group > .xe-btn-group {
+  float: left;
+}
+
+.xe-btn-group > .xe-btn-group:not(:first-child):not(:last-child) > .xe-btn {
+  border-radius: 0;
+}
+
+.xe-btn-group > .xe-btn-group:first-child:not(:last-child) > .xe-btn:last-child,
+.xe-btn-group > .xe-btn-group:first-child:not(:last-child) > .xe-dropdown-toggle {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.xe-btn-group > .xe-btn-group:last-child:not(:first-child) > .xe-btn:first-child {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
+
+.xe-btn-group .xe-dropdown-toggle:active,
+.xe-btn-group.open .xe-dropdown-toggle {
+  outline: 0;
+}
+
+.xe-btn-group > .xe-btn + .xe-dropdown-toggle {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.xe-btn-group > .xe-btn-lg + .xe-dropdown-toggle, .xe-btn-group-lg.xe-btn-group > .xe-btn + .xe-dropdown-toggle {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.xe-btn-group.open .xe-dropdown-toggle {
+  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+
+.xe-btn-group.open .xe-dropdown-toggle.xe-btn-link {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.xe-btn .caret {
+  margin-left: 0;
+}
+
+.xe-btn-lg .caret, .xe-btn-group-lg > .xe-btn .caret {
+  border-width: 5px 5px 0;
+  border-bottom-width: 0;
+}
+
+.dropup .xe-btn-lg .caret, .dropup .xe-btn-group-lg > .xe-btn .caret {
+  border-width: 0 5px 5px;
+}
+
+.xe-btn-group-vertical > .xe-btn,
+.xe-btn-group-vertical > .xe-btn-group,
+.xe-btn-group-vertical > .xe-btn-group > .xe-btn {
+  display: block;
+  float: none;
+  width: 100%;
+  max-width: 100%;
+}
+
+.xe-btn-group-vertical > .xe-btn-group:before, .xe-btn-group-vertical > .xe-btn-group:after {
+  content: " ";
+  display: table;
+}
+
+.xe-btn-group-vertical > .xe-btn-group:after {
+  clear: both;
+}
+
+.xe-btn-group-vertical > .xe-btn-group > .xe-btn {
+  float: none;
+}
+
+.xe-btn-group-vertical > .xe-btn + .xe-btn,
+.xe-btn-group-vertical > .xe-btn + .xe-btn-group,
+.xe-btn-group-vertical > .xe-btn-group + .xe-btn,
+.xe-btn-group-vertical > .xe-btn-group + .xe-btn-group {
+  margin-top: -1px;
+  margin-left: 0;
+}
+
+.xe-btn-group-vertical > .xe-btn:not(:first-child):not(:last-child) {
+  border-radius: 0;
+}
+
+.xe-btn-group-vertical > .xe-btn:first-child:not(:last-child) {
+  border-top-right-radius: 2px;
+  border-top-left-radius: 2px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.xe-btn-group-vertical > .xe-btn:last-child:not(:first-child) {
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  border-bottom-right-radius: 2px;
+  border-bottom-left-radius: 2px;
+}
+
+.xe-btn-group-vertical > .xe-btn-group:not(:first-child):not(:last-child) > .xe-btn {
+  border-radius: 0;
+}
+
+.xe-btn-group-vertical > .xe-btn-group:first-child:not(:last-child) > .xe-btn:last-child,
+.xe-btn-group-vertical > .xe-btn-group:first-child:not(:last-child) > .xe-dropdown-toggle {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.xe-btn-group-vertical > .xe-btn-group:last-child:not(:first-child) > .xe-btn:first-child {
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+}
+
+.xe-btn-group-justified {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: separate;
+}
+
+.xe-btn-group-justified > .xe-btn,
+.xe-btn-group-justified > .xe-btn-group {
+  float: none;
+  display: table-cell;
+  width: 1%;
+}
+
+.xe-btn-group-justified > .xe-btn-group .xe-btn {
+  width: 100%;
+}
+
+.xe-btn-group-justified > .xe-btn-group .dropdown-menu {
+  left: auto;
+}
+
+[data-toggle="buttons"] > .xe-btn input[type="radio"],
+[data-toggle="buttons"] > .xe-btn input[type="checkbox"],
+[data-toggle="buttons"] > .xe-btn-group > .xe-btn input[type="radio"],
+[data-toggle="buttons"] > .xe-btn-group > .xe-btn input[type="checkbox"] {
+  position: absolute;
+  clip: rect(0, 0, 0, 0);
+  pointer-events: none;
+}
+
 /* CSS Document */
 .xe-select-label .label-input ul,
 .xe-select-label .label-list ul {
@@ -3726,6 +4070,7 @@ input[type="button"].btn-block {
   position: relative;
   font-size: 14px;
   white-space: nowrap;
+  vertical-align: middle;
 }
 
 .xe-dropdown > .xe-btn,
@@ -3787,8 +4132,15 @@ input[type="button"].btn-block {
   content: "";
 }
 
-.xe-dropdown > .xe-dropdown-menu,
-.xe-dropup > .xe-dropdown-menu {
+.xe-dropup .xe-dropdown-menu {
+  margin-top: auto;
+  margin-bottom: -1px;
+  top: auto;
+  bottom: 100%;
+}
+
+.xe-dropdown-menu {
+  display: none;
   position: absolute;
   left: 0;
   top: 100%;
@@ -3800,20 +4152,7 @@ input[type="button"].btn-block {
   z-index: 10;
 }
 
-.xe-dropup .xe-dropdown-menu {
-  margin-top: auto;
-  margin-bottom: -1px;
-  top: auto;
-  bottom: 100%;
-}
-
-.xe-dropdown .xe-dropdown-menu,
-.xe-dropup .xe-dropdown-menu {
-  display: none;
-}
-
-.xe-dropdown.open .xe-dropdown-menu,
-.xe-dropup.open .xe-dropdown-menu {
+.open > .xe-dropdown-menu {
   display: block;
   width: 100%;
 }
@@ -3951,6 +4290,18 @@ input[type="button"].btn-block {
   color: #fff;
 }
 
+.caret {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 2px;
+  vertical-align: middle;
+  border-top: 4px dashed;
+  border-top: 4px solid \9;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+}
+
 .xe-input-group {
   position: relative;
   display: table;
@@ -4006,7 +4357,7 @@ input[type="button"].btn-block {
   border-radius: 2px;
 }
 
-.xe-input-group-addon.input-sm,
+.xe-input-group-addon.xe-input-sm,
 .xe-input-group-sm > .xe-input-group-addon,
 .xe-input-group-sm > .xe-input-group-btn > .xe-input-group-addon.xe-btn {
   padding: 5px 10px;
@@ -4014,7 +4365,7 @@ input[type="button"].btn-block {
   border-radius: 3px;
 }
 
-.xe-input-group-addon.input-lg,
+.xe-input-group-addon.xe-input-lg,
 .xe-input-group-lg > .xe-input-group-addon,
 .xe-input-group-lg > .xe-input-group-btn > .xe-input-group-addon.xe-btn {
   padding: 10px 16px;
@@ -4087,6 +4438,41 @@ input[type="button"].btn-block {
 .xe-input-group-btn:last-child > .xe-btn-group {
   z-index: 2;
   margin-left: -1px;
+}
+
+.xe-well {
+  min-height: 20px;
+  padding: 19px;
+  margin-bottom: 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #e3e3e3;
+  border-radius: 2px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+.xe-well blockquote {
+  border-color: #ddd;
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+.xe-well:before, .xe-well:after {
+  content: " ";
+  display: table;
+}
+
+.xe-well:after {
+  clear: both;
+}
+
+.xe-well-lg {
+  padding: 24px;
+  border-radius: 6px;
+}
+
+.xe-well-sm {
+  padding: 9px;
+  border-radius: 3px;
 }
 
 @-ms-viewport {
