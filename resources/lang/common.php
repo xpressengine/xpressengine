@@ -1107,7 +1107,7 @@ return [
         'en' => 'profile'
     ],
     'profileImage' => [
-        'ko' => '프로필사진',
+        'ko' => '프로필 사진',
         'en' => 'profile image'
     ],
     'myProfile' => [
@@ -1125,6 +1125,10 @@ return [
     'privateInfoAndOptionSettings' => [
         'ko' => '개인정보 및 옵션 관리',
         'en' => 'Private Informations & Options'
+    ],
+    'privateInfoAndOptionSettingsDescription' => [
+        'ko' => '개인정보를 관리할 수 있습니다. 이메일 주소, 닉네임, 외부로그인 등을 설정하여 계정에 저장할 데이터를 관리하고 개인정보를 보호할 수 있습니다.',
+        'en' => 'You can manage your personal information. Select the e-mail address, a nickname, such as an external login to manage data stored in your account and allows you to protect your privacy.'
     ],
     'closeMenu' => [
         'ko' => '메뉴닫기',
@@ -1174,6 +1178,14 @@ return [
     'emailConfirm' => [
         'ko' => '이메일 인증',
         'en' => 'Email confirm'
+    ],
+    'emailConfirmDescription' => [
+        'ko' => '회원가입을 완료하려면 이메일 인증을 해야 합니다. :email 을 확인하신후, 인증 코드를 입력해주세요.',
+        'en' => 'To complete your membership you need to email authentication, please check the :email , please enter your authorization code.'
+    ],
+    'confirmCode' => [
+        'ko' => '인증 코드',
+        'en' => 'Confirm code',
     ],
     'resendEmail' => [
         'ko' => '이메일 재전송',
@@ -1228,6 +1240,10 @@ return [
         'ko' => '비밀번호 변경',
         'en' => 'Change password'
     ],
+    'changePasswordDescription' => [
+        'ko' => '암호를 재설정합니다. 새로운 암호를 입력해주세요.',
+        'en' => 'To reset your password. Please enter a new password.'
+    ],
     'currentPassword' => [
         'ko' => '현재 비밀번호',
         'en' => 'Current password'
@@ -1236,9 +1252,25 @@ return [
         'ko' => '비밀번호 보안 수준',
         'en' => 'Password strength'
     ],
+    'passwordStrengthWeakDescription' => [
+        'ko' => '비밀번호는 4자 이상이어야 합니다.',
+        'ko' => 'Passwords must be at least 4 characters.',
+    ],
+    'passwordStrengthNormalDescription' => [
+        'ko' => '비밀번호는 6자리 이상이어야 하며 영문과 숫자를 반드시 포함해야 합니다.',
+        'ko' => 'The password must be at least six characters long and must contain letters and numbers.',
+    ],
+    'passwordStrengthStrongDescription' => [
+        'ko' => '비밀번호는 8자리 이상이어야 하며 영문과 숫자, 특수문자를 반드시 포함해야 합니다.',
+        'ko' => 'The password must be at least 8 characters and must contain letters and numbers, and special characters.',
+    ],
     'findPassword' => [
         'ko' => '비밀번호 찾기',
         'en' => 'Find password',
+    ],
+    'passwordChangeComplete' => [
+        'ko' => '비밀번호 변경이 완료되었습니다.',
+        'ko' => 'Password change complete.',
     ],
     'weak' => [
         'ko' => '약함',
@@ -1539,5 +1571,101 @@ return [
     'memberToggleMenuDescription' => [
         'ko' => '회원 이름을 클릭했을 때 표시될 메뉴를 설정합니다.',
         'en' => 'Set the menu that appears when you click on the member name.',
+    ],
+    'emailOrUserName' => [
+        'ko' => '이메일 주소 / 사용자 이름',
+        'en' => 'Email / User name',
+    ],
+    'forgotPassword' => [
+        'ko' => '암호를 잊었습니까?',
+        'en' => 'Forgot password?',
+    ],
+    'forgotPasswordDescription' => [
+        'ko' => '계정에 등록된 이메일 주소를 입력하세요. 비밀번호를 재설정할 수 있는 링크를 이메일로 보내드립니다.',
+        'en' => 'Please enter the e-mail address associated with your account. I will send you a link to reset your password via email.',
+    ],
+    'emailSendComplete' => [
+        'ko' => '이메일 전송 완료',
+        'en' => 'Email transfer completed',
+    ],
+    'msgEmailSendComplete' => [
+        'ko' => '이메일이 전송되었습니다.',
+        'en' => 'Email has been successfully sent.',
+    ],
+    'checkSentEmail' => [
+        'ko' => '이메일 발송 확인을 확인해주시기 바랍니다.',
+        'en' => 'Please check your email.',
+    ],
+    'checkFindPasswordEmailDescription' => [
+        'ko' => ':email 으로 암호를 새로 만드는 방법에 대한 지침이 포함된 메일이 전송되었습니다.',
+        'en' => 'This e-mail with instructions on how to create a new password has been sent to the :email.',
+    ],
+    'keepLogin' => [
+        'ko' => '로그인 유지하기',
+        'en' => 'Keep me logged in',
+    ],
+    'keepLoginDescription' => [
+        'ko' => '브라우저를 닫더라도 로그인이 계속 유지될 수 있습니다. 로그인 유지 기능을 사용할 경우 다음 접속부터는 로그인할 필요가 없습니다. 단, 게임방, 학교 등 공공장소에서 이용 시 개인정보가 유출될 수 있으니 꼭 로그아웃을 해주세요.',
+        'en' => 'Even when the browser is closed, it will be still signed in. Not recommended to use this if you need to log in from the next connection. However, the game room, so privacy could be compromised using a public school please do log out.',
+    ],
+    'signUpSite' => [
+        'ko' => '아직 회원이 아닙니까?',
+        'en' => 'Not a member yet?',
+    ],
+    'agreeSiteTermsUseAndSitePrivacyPolicy' => [
+        'ko' => '<a href=":termLink" target="_blank">이용 약관</a> 및 <a href=":policyLink" target="_blank">개인정보 보호정책</a>을 읽었으며 이에 동의합니다.',
+        'en' => 'By clicking you agree to our <a href=":termLink" target="_blank">Site Terms of Use</a>, <a href=":policyLink" target="_blank">Privacy Policy</a>',
+    ],
+    'agreeSiteTermsUseAndSitePrivacyPolicyDescription' => [
+        'ko' => '계속하려면 이용 약관 및 개인정보 보호정책을 읽었으며 이에 동의한다는 의사 표시로 확인란을 선택해야 합니다.',
+        'en' => 'I have read the Terms of Use and Privacy Policy To continue, you must check the box stating that a doctor agrees.',
+    ],
+    'alreadyHaveAccount' => [
+        'ko' => '이미 계정이 있습니까?',
+        'en' => 'Already have an account?',
+    ],
+    'profileEdit' => [
+        'ko' => '프로필 수정',
+        'en' => 'Profile edit',
+    ],
+    'accountDeleteCaution' => [
+        'ko' => '계정 삭제가 의미하는 내용',
+        'en' => 'Content means the account is deleted',
+    ],
+    'accountDeleteCautionDescription' => [
+        'ko' => '계정을 삭제하기 전에 아래의 약관을 읽어 보시기 바랍니다.',
+        'en' => 'Please read the terms and conditions below before deleting the account.',
+    ],
+    'accountDeleteCaution1' => [
+        'ko' => '계정 삭제 작업은 영구적이며 되돌릴 수 없습니다. 삭제하는 즉시 귀하의 계정에 액세스할 수 없게 됩니다.',
+        'en' => 'Account deletion is permanent and irreversible. As soon as you remove you will not be able to access your account.',
+    ],
+    'accountDeleteCaution2' => [
+        'ko' => '귀하의 모든 콘텐츠가 삭제됩니다.',
+        'en' => 'All of your content will be deleted.',
+    ],
+    'accountDeleteCaution3' => [
+        'ko' => '댓글, 메시지, 토론 게시글 등을 포함한 모든 정보가 삭제됩니다.',
+        'en' => 'All information, including comments, messages, discussion posts, etc. will be deleted.',
+    ],
+    'accountDeleteCaution4' => [
+        'ko' => '아무도 다시는 귀하의 계정정보나 게시글에 액세스할 수 없게 됩니다.',
+        'en' => 'No one will again be able to access your account information and posts.',
+    ],
+    'agreeAccountDeleteCaution' => [
+        'ko' => '약관에 동의하며 내 계정을 영구적으로 삭제하겠습니다.',
+        'en' => 'I agree to the terms and conditions and we will permanently delete my account.',
+    ],
+    'activation' => [
+        'ko' => '활성화',
+        'en' => 'Activation',
+    ],
+    'menuDeleteCaution' => [
+        'ko' => '메뉴 삭제하면 다시 복구할 수 없습니다.',
+        'en' => 'When you remove the menu can not be recovered.',
+    ],
+    'menuDeleteSummary' => [
+        'ko' => '',
+        'en' => '',
     ],
 ];

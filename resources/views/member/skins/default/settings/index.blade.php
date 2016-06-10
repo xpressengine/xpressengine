@@ -11,7 +11,7 @@
                             <span class="icon-bar v2"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <p>계정설정</p>
+                        <p>{{ xe_trans('xe::defaultSettings') }}</p>
                     </div>
                     <ul class="snb-list">
                         @foreach($menus as $id => $menu)
