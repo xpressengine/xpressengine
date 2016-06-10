@@ -58,11 +58,14 @@ class PluginController extends Controller
         );
     }
 
-    public function show($pluginId, PluginHandler $handler)
+    public function show($pluginId, PluginHandler $handler, PluginProvider $provider)
     {
         $componentTypes = $this->getComponentTypes();
 
         $plugin = $handler->getPlugin($pluginId);
+
+        $provider->sync($plugin);
+
         return XePresenter::make('show', compact('plugin', 'componentTypes'));
     }
 
@@ -102,7 +105,8 @@ class PluginController extends Controller
             throw $e;
         }
 
-        return Redirect::route('settings.plugins')->withAlert(['type' => 'success', 'message' => '플러그인을 업데이트했습니다.']);
+        app('session.store')->flash('alert', ['type' => 'success', 'message' => '플러그인을 업데이트했습니다.']);
+        return XePresenter::makeApi(['type' => 'success', 'message' => '플러그인을 업데이트했습니다.']);
     }
 
     /**

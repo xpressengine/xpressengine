@@ -112,12 +112,15 @@ class PluginProvider
     /**
      * 현재 설치된 plugin들의 정보를 자료실에 등록된 정보를 가져와 적용한다.
      *
-     * @param PluginEntity[] $plugins
+     * @param PluginEntity|PluginEntity[] $plugins
      *
      * @return void
      */
-    public function sync(array $plugins)
+    public function sync($plugins)
     {
+        if(!is_array($plugins)) {
+            $plugins = [$plugins->getId() => $plugins];
+        }
         $ids = array_keys($plugins);
         $infos = $this->findAll($ids);
 

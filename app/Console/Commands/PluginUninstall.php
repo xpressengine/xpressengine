@@ -108,11 +108,13 @@ class PluginUninstall extends Command
 
         $writer->write();
 
+
+
         // composer update실행(composer update --prefer-lowest --with-dependencies xpressengine-plugin/*)
         $this->warn('composer update를 실행합니다. 최대 수분이 소요될 수 있습니다.');
-        $this->line(' composer update --prefer-lowest --with-dependencies xpressengine-plugin/*');
+        $this->line(" composer update --prefer-lowest --with-dependencies $vendorName/*");
         try {
-            $this->runComposer(base_path(), 'update --prefer-lowest --with-dependencies xpressengine-plugin/*');
+            $this->runComposer(base_path(), "update --prefer-lowest --with-dependencies $vendorName/*");
         } catch (\Exception $e) {
             ;
         }

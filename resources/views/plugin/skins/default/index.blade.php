@@ -92,15 +92,13 @@
                             @if($plugin->needUpdateInstall())
                             <div class="alert alert-danger" role="alert">
                                 <i class="xi-info-o txt_red"></i>{{ xe_trans('xe::newUpdateDownloaded') }}
-                                <a href="{{ route('settings.plugins.show', [$plugin->getId()]) }}" class="alert-link">{{ xe_trans('xe::applyUpdateNow') }}</a>
+                                <a href="#" data-url="{{ route('settings.plugins.update', [$plugin->getId()]) }}" class="__xe_btn-update-plugin alert-link">{{ xe_trans('xe::applyUpdateNow') }}</a>
                             </div>
                             @elseif($plugin->hasUpdate())
-
                                 <div class="alert alert-danger" role="alert">
                                     <i class="xi-info-o"></i>{{ xe_trans('xe::hasNewUpdate') }}
                                     <a href="{{ config('xe.plugin.store.detail_url').'/'.$plugin->getId() }}" class="alert-link" target="_blank">Version {{ $plugin->getLatestVersion() }} {{ xe_trans('xe::details') }}</a> {{ xe_trans('xe::or') }} <a href="#" class="alert-link">지금 업데이트 다운로드하기</a>
                                 </div>
-
                             @endif
 
                         </div>

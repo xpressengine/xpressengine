@@ -58,20 +58,22 @@ class XeUpdate extends Command
             return;
         }
 
-        $writer->resolvePlugins();
-        $writer->setFixMode();
-        $writer->write();
+        // 안내문구 출력
 
-        // composer update실행(composer update --prefer-lowest --with-dependencies xpressengine-plugin/plugin_id)
+
+
+        $writer->resolvePlugins()->setFixMode()->write();
+
+        // composer update실행(composer update --no-dev)
         $this->output->section('composer update를 실행합니다. 최대 수분이 소요될 수 있습니다.');
-        $this->line(' composer update --prefer-lowest --with-dependencies xpressengine-plugin/*');
+        $this->line(" composer update --no-dev");
         try {
-            $this->runComposer(base_path(), 'update --prefer-lowest --with-dependencies xpressengine-plugin/*');
+            $this->runComposer(base_path(), "update --no-dev");
         } catch (\Exception $e) {
             ;
         }
 
-        
+
 
     }
 
@@ -164,6 +166,7 @@ class XeUpdate extends Command
                 '3. "php artisan xe:update --skip-download"를 실행합니다.',
             ]
         );
+        $this->output->newLine();
     }
 
 

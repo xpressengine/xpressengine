@@ -105,7 +105,7 @@ class ComposerFileWriter
     /**
      * 현재 다운로드 되어 있는 플러그인 중에 require되어 있거나 vendor가 있는 플러그인을 제외한 플러그인의 composer.json 정보를 require시킨다.
      *
-     * @return void
+     * @return $this
      */
     public function resolvePlugins()
     {
@@ -122,6 +122,8 @@ class ComposerFileWriter
             $requires[$name] = $version;
         }
         array_set($this->data, 'require', $requires);
+
+        return $this;
     }
 
     public function write()
@@ -131,6 +133,11 @@ class ComposerFileWriter
         file_put_contents($this->path, $json);
     }
 
+    /**
+     * setUpdateMode
+     *
+     * @return $this
+     */
     public function setUpdateMode()
     {
         $operation = '>=';
@@ -143,8 +150,15 @@ class ComposerFileWriter
         array_set($this->data, 'repositories', [['type'=>'composer', 'url'=>$this->packagistUrl]]);
         array_set($this->data, 'extra.xpressengine-plugin.uninstall', []);
         array_set($this->data, 'extra.xpressengine-plugin.changed', []);
+
+        return $this;
     }
 
+    /**
+     * setFixMode
+     *
+     * @return $this
+     */
     public function setFixMode()
     {
         $operation = '>=';
@@ -157,6 +171,8 @@ class ComposerFileWriter
         array_set($this->data, 'repositories', [['type'=>'composer', 'url'=>$this->packagistUrl]]);
         array_set($this->data, 'extra.xpressengine-plugin.uninstall', []);
         array_set($this->data, 'extra.xpressengine-plugin.changed', []);
+
+        return $this;
     }
 
     /**

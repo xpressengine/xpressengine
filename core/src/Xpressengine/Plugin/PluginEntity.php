@@ -326,7 +326,7 @@ class PluginEntity implements Arrayable, Jsonable
      */
     public function needUpdateInstall()
     {
-        return version_compare($this->getInstalledVersion(), $this->getVersion(), '<');
+        return version_compare($this->getInstalledVersion(), $this->getVersion()) !== 0;
     }
 
     /**
@@ -448,7 +448,7 @@ class PluginEntity implements Arrayable, Jsonable
         if (!file_exists($file)) {
             return '';
         } else {
-            return file_get_contents($file);
+            return nl2br(file_get_contents($file));
         }
     }
 
@@ -457,15 +457,16 @@ class PluginEntity implements Arrayable, Jsonable
      *
      * @return string
      */
-    public function getChangeLog()
+    public function getChangeLog($parsed = true)
     {
 
         if($this->hasRemoteData()) {
             $logs = '';
             foreach (data_get($this->remoteData, 'releases', []) as $release) {
-                $logs .= "<dt>{$release->version}</dt><dd>{data_get($release, 'changeLog', '')}</dd>";
+                $content = data_get($release, 'parsed_changelog')?:'-';
+                $logs .= "<dt>{$release->version}</dt><dd>$content</dd>";
             }
-            return "<dl>".$logs."</dl>";
+            return "<dl>$logs</dl>";
         }
 
         $file = $this->getPath('CHANGELOG.md');
@@ -473,7 +474,7 @@ class PluginEntity implements Arrayable, Jsonable
         if (!file_exists($file)) {
             return '';
         } else {
-            return file_get_contents($file);
+            return nl2br(file_get_contents($file));
         }
     }
 

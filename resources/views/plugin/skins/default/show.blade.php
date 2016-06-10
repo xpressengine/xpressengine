@@ -64,27 +64,21 @@
                         <form method="POST" action="{{ route('settings.plugins.deactivate', [$plugin->getId()]) }}" accept-charset="UTF-8" role="form">
                             {!! csrf_field() !!}
                             <button class="btn btn-danger">{{ xe_trans('xe::deactivate') }}</button>
+
+                        @if($plugin->needUpdateInstall())
+                            <button data-url="{{ route('settings.plugins.update', [$plugin->getId()]) }}" class="btn btn-default __xe_btn-update-plugin">{{ xe_trans('xe::update_plugin') }}</button>
+                        @endif
+
+                        @if($plugin->getSettingsURI())
+                            <a href="{{ $plugin->getSettingsURI() }}" class="xe-btn xe-btn-default blue v2">관리</a>
+                        @endif
+
                         </form>
-
-                        @if($plugin->isActivated() && $plugin->checkUpdated($plugin->getInstalledVersion()))
-                            {{--<button class="xe-btn xe-btn-default blue v2">업데이트</button>--}}
-                        @endif
-
-                        @if($plugin->getSettingsURI() !== null)
-                            {{--<button class="xe-btn xe-btn-default blue v2">관리</button>--}}
-                        @endif
                     @else
                         <form method="POST" action="{{ route('settings.plugins.activate', [$plugin->getId()]) }}" accept-charset="UTF-8" role="form">
                             {!! csrf_field() !!}
                             <button class="btn btn-default">{{ xe_trans('xe::activate') }}</button>
                         </form>
-                    @endif
-
-                    @if($plugin->needUpdateInstall())
-                            <form method="POST" action="{{ route('settings.plugins.update', [$plugin->getId()]) }}" accept-charset="UTF-8" role="form">
-                                {!! csrf_field() !!}
-                                <button class="btn btn-default">{{ xe_trans('xe::update_plugin') }}</button>
-                            </form>
                     @endif
 
                 </div>
@@ -212,7 +206,7 @@
                 {{-- 문서정보 --}}
                 <div role="tabpanel" class="tab-pane fade panel-body" id="readme">
                     @if($readme = $plugin->getReadMe())
-                    {{ nl2br($readme) }}
+                    {!!  $readme !!}
                     @else
                     작성된 문서가 없습니다.
                     @endif
@@ -226,7 +220,7 @@
                 {{-- 업데이트 기록 --}}
                 <div role="tabpanel" class="tab-pane fade panel-body" id="changelog">
                     @if($changelog = $plugin->getChangeLog())
-                        {{ nl2br($changelog) }}
+                        {!!  nl2br($changelog)  !!}
                     @else
                         작성된 업데이트 사항이 없습니다.
                     @endif

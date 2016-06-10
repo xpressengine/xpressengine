@@ -370,15 +370,12 @@ class PluginHandler
      *
      * @return PluginCollection
      */
-    public function getAllPlugins($refresh = false, $withUpdate = false)
+    public function getAllPlugins($refresh = false)
     {
         if ($refresh === true) {
             $this->plugins->initialize(true);
         }
 
-        if($withUpdate === true) {
-            $this->provider->sync($this->plugins);
-        }
         return $this->plugins;
     }
 
