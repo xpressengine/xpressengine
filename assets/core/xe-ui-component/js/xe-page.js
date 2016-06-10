@@ -183,12 +183,13 @@
                 if((cssLen + jsLen) === 0) {
                     next();
                 }
-            },
-            error: function(data) {
-                XE.Progress.done();
-
-                XE.toast(data.type, data.message);
             }
+            // , 공통에서 처리함
+            // error: function(data) {
+            //     XE.Progress.done();
+            //
+            //     XE.toast(data.type, data.message);
+            // }
         });
 
         XE.ajax(options);

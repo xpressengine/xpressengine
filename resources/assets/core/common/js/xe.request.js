@@ -14,6 +14,7 @@
     }).ajaxComplete(function(event, jqxhr, settings) {
       Progress.done(settings.context == undefined ? $('body') : settings.context);
     }).ajaxError(function(event, jqxhr, settings, thrownError) {
+      XE.Progress.done();
       self.error(jqxhr, settings, thrownError);
     });
 
