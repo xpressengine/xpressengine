@@ -31,14 +31,6 @@ class PluginUninstall extends Command
     protected $description = 'Uninstall plugin of XpressEngine';
 
     /**
-     * Create a new controller creator command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @param PluginHandler  $handler
@@ -103,12 +95,12 @@ class PluginUninstall extends Command
         // - empty changed
         $writer->setUpdateMode();
 
-        // - require, extra.merge-plugin.require에서 삭제할 플러그인 제거
+        // - require에서 삭제할 플러그인 제거
         $writer->removeRequire($name);
 
         $writer->write();
 
-
+        $vendorName = PluginHandler::PLUGIN_VENDOR_NAME;
 
         // composer update실행(composer update --prefer-lowest --with-dependencies xpressengine-plugin/*)
         $this->warn('composer update를 실행합니다. 최대 수분이 소요될 수 있습니다.');
@@ -167,7 +159,6 @@ class PluginUninstall extends Command
             // 삭제 성공 문구 출력
             $this->output->success("$title - $name:$version 플러그인을 삭제하였습니다.");
         }
-
 
     }
 
@@ -240,7 +231,5 @@ class PluginUninstall extends Command
         $handler->getAllPlugins(true);
         $handler->updatePlugin($pluginId);
     }
-
-
 
 }

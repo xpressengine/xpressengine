@@ -99,7 +99,6 @@ class ComposerFileWriter
     public function removeRequire($name)
     {
         array_forget($this->data, "require.$name");
-        array_set($this->data, "extra.xpressengine-plugin.uninstall", [$name]);
     }
 
     /**
