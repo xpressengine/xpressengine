@@ -2,20 +2,16 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Process\Process;
 use Xpressengine\Plugin\ComposerFileWriter;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
 
-class PluginInstall extends Command
+class PluginInstall extends PluginCommand
 {
     /**
      * The console command name.
-     * php artisan plugin:install [--without-activate] <plugin name> [<version>]
+     * php artisan plugin:install [--no-activate] <plugin name> [<version>]
+     *
      * @var string
      */
     protected $signature = 'plugin:install
@@ -41,14 +37,17 @@ class PluginInstall extends Command
     /**
      * Execute the console command.
      *
-     * @param PluginHandler  $handler
-     * @param PluginProvider $provider
+     * @param PluginHandler      $handler
+     * @param PluginProvider     $provider
+     * @param ComposerFileWriter $writer
      *
      * @return bool|null
      * @throws \Exception
      */
-    public function fire(PluginHandler $handler, PluginProvider $provider, ComposerFileWriter $writer, Filesystem $files)
+    public function fire(PluginHandler $handler, PluginProvider $provider, ComposerFileWriter $writer)
     {
+        $this->init($handler, $provider, $writer);
+
         // php artisan plugin:install [--no-activate] <plugin name> [<version>]
 
         $id = $this->argument('plugin_id');
@@ -56,34 +55,34 @@ class PluginInstall extends Command
         $version = $this->argument('version');
 
         // 플러그인이 이미 설치돼 있는지 검사
-        if($handler->getPlugin($id) !== null) {
+        if ($handler->getPlugin($id) !== null) {
             throw new \Exception('이미 설치되어 있는 플러그인입니다.');
         }
 
         // 설치가능 환경인지 검사
         // - check writable of composer.plugin.json
-        if(!is_writable($composerFile = storage_path('app/composer.plugins.json'))) {
+        if (!is_writable($composerFile = storage_path('app/composer.plugins.json'))) {
             throw new \Exception("[$composerFile] 파일에 쓰기 권한이 없습니다. 플러그인을 설치하기 위해서는 이 파일의 쓰기 권한이 있어야 합니다.");
         }
 
         // - check writable of plugins/ directory
-        if(!is_writable($pluginDir = base_path('plugins'))) {
+        if (!is_writable($pluginDir = base_path('plugins'))) {
             throw new \Exception("[$pluginDir] 디렉토리에 쓰기 권한이 없습니다. 플러그인을 설치하기 위해서는 이 디렉토리의 쓰기 권한이 있어야 합니다.");
         }
 
         // 자료실에서 플러그인 정보 조회
         $pluginData = $provider->find($id);
 
-        if($pluginData === null) {
+        if ($pluginData === null) {
             throw new \Exception("설치할 플러그인[$id]을 자료실에서 찾지 못했습니다.");
         }
 
         $title = $pluginData->title;
         $name = $pluginData->name;
 
-        if($version) {
+        if ($version) {
             $releaseData = $provider->findRelease($id, $version);
-            if($releaseData === null) {
+            if ($releaseData === null) {
                 throw new \Exception("플러그인[$id]의 버전[$version]을 자료실에서 찾지 못했습니다.");
             }
         }
@@ -94,7 +93,10 @@ class PluginInstall extends Command
         $this->line("  $title - $name:$version".PHP_EOL);
 
         // 안내 멘트 출력
-        if($this->confirm("위 플러그인을 다운로드하고 설치합니다. \r\n 위 플러그인이 의존하는 다른 플러그인이 함께 다운로드 될 수 있으며, 수분이 소요될수 있습니다.\r\n 플러그인을 설치하시겠습니까?") === false) {
+        if ($this->confirm(
+                "위 플러그인을 다운로드하고 설치합니다. \r\n 위 플러그인이 의존하는 다른 플러그인이 함께 다운로드 될 수 있으며, 수분이 소요될수 있습니다.\r\n 플러그인을 설치하시겠습니까?"
+            ) === false
+        ) {
             //return;
         }
 
@@ -128,33 +130,8 @@ class PluginInstall extends Command
         $writer->reload();
 
         // changed plugin list 정보 출력
-        $installed = $writer->get('extra.xpressengine-plugin.changed.installed', []);
-        $updated = $writer->get('extra.xpressengine-plugin.changed.updated', []);
-
-        // 플러그인 설치시에 삭제되는 플러그인은 없다.
-        $uninstalled = $writer->get('extra.xpressengine-plugin.changed.uninstalled', []);
-
-        if(count($installed)) {
-            $this->warn('신규 다운로드 플러그인:');
-            foreach ($installed as $package => $version) {
-                $this->line("  $package:$version");
-            }
-        }
-
-        if (count($updated)) {
-            $this->warn('업데이트 다운로드 플러그인:');
-            foreach ($updated as $package => $version) {
-                $this->line("  $package:$version");
-            }
-        }
-
-        // 플러그인 설치시에 삭제되는 플러그인은 없다.
-        //if (count($uninstalled)) {
-        //    $this->warn('삭제된 플러그인 목록:');
-        //    foreach ($uninstalled as $package => $version) {
-        //        $this->line("  $package:$version");
-        //    }
-        //}
+        $changed = $this->getChangedPlugins($writer);
+        $this->printChangedPlugins($changed);
 
         // composer.plugins.json 정리
         // - require list에서 '>=' 제거
@@ -166,97 +143,28 @@ class PluginInstall extends Command
 
         $writer->write();
 
-        // changed plugin들 업데이트
-        foreach (array_merge($installed, $updated) as $package => $version) {
-            list($vendor, $id) = explode('/', $package);
-            if($this->option('no-activate') === false) {
+        // changed plugin 업데이트
+        if ($this->option('no-activate') === false) {
+            foreach (array_merge($changed['installed'], $changed['updated']) as $package => $version) {
+                list($vendor, $id) = explode('/', $package);
                 $this->updatePlugin($id);
                 $this->activatePlugin($id);
             }
         }
 
-        if(!array_has($installed, $name)) {
-            $this->output->error("$name:$version 플러그인을 설치하지 못했습니다. 플러그인 간의 의존관계로 인해 설치가 불가능할 수도 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다.");
-        } elseif($updated[$name] !== $version) {
-            $this->output->error("$name:$version 플러그인을 설치하였으나 다른 버전으로 설치되었습니다. 플러그인 간의 의존관계로 인해 다른 버전으로 설치되었을 가능성이 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다.");
+        if (!array_has($changed['installed'], $name)) {
+            $this->output->error(
+                "$name:$version 플러그인을 설치하지 못했습니다. 플러그인 간의 의존관계로 인해 설치가 불가능할 수도 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다."
+            );
+        } elseif ($changed['updated'][$name] !== $version) {
+            $this->output->error(
+                "$name:$version 플러그인을 설치하였으나 다른 버전으로 설치되었습니다. 플러그인 간의 의존관계로 인해 다른 버전으로 설치되었을 가능성이 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다."
+            );
         } else {
             // 설치 성공 문구 출력
             $this->output->success("$title - $name:$version 플러그인을 설치했습니다.");
         }
-
-
     }
-
-    /**
-     * runComposer
-     *
-     * @param $path
-     * @param $command
-     *
-     * @return int
-     */
-    protected function runComposer($path, $command)
-    {
-        $composer = $this->findComposer();
-
-        $process = new Process($composer.' '.$command, $path, null, null, null);
-
-        $output = $this->output;
-
-        return $process->run(
-            function ($type, $line) use ($output) {
-                $output->write($line);
-            }
-        );
-    }
-
-    /**
-     * findComposer
-     *
-     * @return string
-     */
-    protected function findComposer()
-    {
-        if (file_exists(getcwd().'/composer.phar')) {
-            return '"'.PHP_BINARY.'" composer.phar';
-        }
-
-        return 'composer';
-    }
-
-    /**
-     * activatePlugin
-     *
-     * @param $pluginId
-     *
-     * @return void
-     */
-    protected function activatePlugin($pluginId)
-    {
-        /** @var PluginHandler $handler */
-        $handler = app('xe.plugin');
-        $handler->getAllPlugins(true);
-
-        if ($handler->isActivated($pluginId) === false) {
-            $handler->activatePlugin($pluginId);
-        }
-    }
-
-    /**
-     * activatePlugin
-     *
-     * @param $pluginId
-     *
-     * @return void
-     */
-    protected function updatePlugin($pluginId)
-    {
-        /** @var PluginHandler $handler */
-        $handler = app('xe.plugin');
-        $handler->getAllPlugins(true);
-        $handler->updatePlugin($pluginId);
-    }
-
 
 
 }

@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -11,7 +10,7 @@ use Xpressengine\Plugin\ComposerFileWriter;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
 
-class PluginUpdate extends Command
+class PluginUpdate extends PluginCommand
 {
     /**
      * The console command name.
@@ -41,14 +40,17 @@ class PluginUpdate extends Command
     /**
      * Execute the console command.
      *
-     * @param PluginHandler  $handler
-     * @param PluginProvider $provider
+     * @param PluginHandler      $handler
+     * @param PluginProvider     $provider
+     * @param ComposerFileWriter $writer
      *
      * @return bool|null
      * @throws \Exception
      */
-    public function fire(PluginHandler $handler, PluginProvider $provider, ComposerFileWriter $writer, Filesystem $files)
+    public function fire(PluginHandler $handler, PluginProvider $provider, ComposerFileWriter $writer)
     {
+        $this->init($handler, $provider, $writer);
+
         // php artisan plugin:install [--no-activate] <plugin name> [<version>]
 
         $id = $this->argument('plugin_id');
@@ -187,77 +189,4 @@ class PluginUpdate extends Command
             $this->output->success("$title - $name:$version 플러그인을 업데이트했습니다.");
         }
     }
-
-    /**
-     * runComposer
-     *
-     * @param $path
-     * @param $command
-     *
-     * @return int
-     */
-    protected function runComposer($path, $command)
-    {
-        $composer = $this->findComposer();
-
-        $process = new Process($composer.' '.$command, $path, null, null, null);
-
-        $output = $this->output;
-
-        return $process->run(
-            function ($type, $line) use ($output) {
-                $output->write($line);
-            }
-        );
-    }
-
-    /**
-     * findComposer
-     *
-     * @return string
-     */
-    protected function findComposer()
-    {
-        if (file_exists(getcwd().'/composer.phar')) {
-            return '"'.PHP_BINARY.'" composer.phar';
-        }
-
-        return 'composer';
-    }
-
-    /**
-     * activatePlugin
-     *
-     * @param $pluginId
-     *
-     * @return void
-     */
-    protected function activatePlugin($pluginId)
-    {
-        /** @var PluginHandler $handler */
-        $handler = app('xe.plugin');
-        $handler->getAllPlugins(true);
-
-        if ($handler->isActivated($pluginId) === false) {
-            $handler->activatePlugin($pluginId);
-        }
-    }
-
-    /**
-     * activatePlugin
-     *
-     * @param $pluginId
-     *
-     * @return void
-     */
-    protected function updatePlugin($pluginId)
-    {
-        /** @var PluginHandler $handler */
-        $handler = app('xe.plugin');
-        $handler->getAllPlugins(true);
-        $handler->updatePlugin($pluginId);
-    }
-
-
-
 }
