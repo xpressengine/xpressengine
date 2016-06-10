@@ -2,6 +2,8 @@
 /**
  * This file is register this package for laravel
  *
+ * PHP version 5
+ *
  * @category    User
  * @package     Xpressengine\User
  * @author      XE Developers <developers@xpressengine.com>

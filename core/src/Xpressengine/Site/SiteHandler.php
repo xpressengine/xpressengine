@@ -2,6 +2,8 @@
 /**
  * SiteHandler
  *
+ * PHP version 5
+ *
  * @category    Site
  * @package     Xpressengine\Site
  * @author      XE Developers <developers@xpressengine.com>

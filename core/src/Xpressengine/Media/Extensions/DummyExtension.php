@@ -2,6 +2,8 @@
 /**
  * This file is dummy extension class
  *
+ * PHP version 5
+ *
  * @category    Media
  * @package     Xpressengine\Media
  * @author      XE Developers <developers@xpressengine.com>

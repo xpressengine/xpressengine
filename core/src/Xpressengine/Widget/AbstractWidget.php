@@ -2,6 +2,8 @@
 /**
  * AbstractWidget class. This file is part of the Xpressengine package.
  *
+ * PHP version 5
+ *
  * @category    Widget
  * @package     Xpressengine\Widget
  * @author      XE Developers <develops@xpressengine.com>

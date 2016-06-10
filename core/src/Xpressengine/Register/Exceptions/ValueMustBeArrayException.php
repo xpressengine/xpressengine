@@ -2,6 +2,8 @@
 /**
  * InvalidIDException class. This file is part of the Xpressengine package.
  *
+ * PHP version 5
+ *
  * @category    Register
  * @package     Xpressengine\Register
  * @author      XE Developers <developers@xpressengine.com>

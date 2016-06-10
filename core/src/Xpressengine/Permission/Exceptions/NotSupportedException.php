@@ -2,6 +2,8 @@
 /**
  * This file is not supported exception
  *
+ * PHP version 5
+ *
  * @category    Permission
  * @package     Xpressengine\Permission
  * @author      XE Developers <developers@xpressengine.com>

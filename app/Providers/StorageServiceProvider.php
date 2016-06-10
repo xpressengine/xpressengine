@@ -2,6 +2,8 @@
 /**
  * This file is registered for use with this package at Laravel
  *
+ * PHP version 5
+ *
  * @category    Storage
  * @package     Xpressengine\Storage
  * @author      XE Developers <developers@xpressengine.com>

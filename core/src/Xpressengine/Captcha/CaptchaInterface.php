@@ -2,6 +2,8 @@
 /**
  * This file is captcha interface.
  *
+ * PHP version 5
+ *
  * @category    Captcha
  * @package     Xpressengine\Captcha
  * @author      XE Developers <developers@xpressengine.com>

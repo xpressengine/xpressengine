@@ -2,6 +2,8 @@
 /**
  * Cache Decorator class
  *
+ * PHP version 5
+ *
  * @category    Config
  * @package     Xpressengine\Config
  * @author      XE Developers <developers@xpressengine.com>

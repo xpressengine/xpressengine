@@ -2,6 +2,8 @@
 /**
  * UIObjectException
  *
+ * PHP version 5
+ *
  * @category    UIObject
  * @package     Xpressengine\UIObject
  * @author      XE Developers <developers@xpressengine.com>

@@ -16,6 +16,8 @@ use Xpressengine\Widget\AbstractWidget;
 /**
  * SystemInfo.php
  *
+ * PHP version 5
+ *
  * @category
  */
 class SystemInfo extends AbstractWidget

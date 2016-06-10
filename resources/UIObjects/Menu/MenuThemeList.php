@@ -2,6 +2,8 @@
 /**
  * MenuThemeList
  *
+ * PHP version 5
+ *
  * @category    UIObjects
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>

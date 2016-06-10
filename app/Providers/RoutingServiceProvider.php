@@ -2,6 +2,8 @@
 /**
  * Service provider
  *
+ * PHP version 5
+ *
  * @category  Routing
  * @package   Xpressengine\Routing
  * @author    XE Developers <developers@xpressengine.com>

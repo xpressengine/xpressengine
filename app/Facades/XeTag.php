@@ -2,6 +2,8 @@
 /**
  * XeTag
  *
+ * PHP version 5
+ *
  * @category    Tag
  * @package     Xpressengine\Tag
  * @author      XE Developers <developers@xpressengine.com>

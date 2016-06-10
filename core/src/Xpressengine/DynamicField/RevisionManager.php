@@ -2,6 +2,8 @@
 /**
  * RevisionManager
  *
+ * PHP version 5
+ *
  * @category    DynamicField
  * @package     Xpressengine\DynamicField
  * @author      XE Developers <developers@xpressengine.com>

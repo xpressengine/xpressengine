@@ -2,6 +2,8 @@
 /**
  * This file is exception of no parent.
  *
+ * PHP version 5
+ *
  * @category    Permission
  * @package     Xpressengine\Permission
  * @author      XE Developers <developers@xpressengine.com>
@@ -17,6 +19,8 @@ use Xpressengine\Permission\PermissionException;
 
 /**
  * This file is exception of invalid argument.
+ *
+ * PHP version 5
  *
  * @category    Permission
  * @package     Xpressengine\Permission

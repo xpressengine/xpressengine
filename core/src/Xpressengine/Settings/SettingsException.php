@@ -2,6 +2,8 @@
 /**
  * SettingsException class
  *
+ * PHP version 5
+ *
  * @category    Settings
  * @package     Xpressengine\Settings
  * @author      XE Developers <developers@xpressengine.com>

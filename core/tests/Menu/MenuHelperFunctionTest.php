@@ -2,6 +2,8 @@
 /**
  * MenuHelperFunctionTest class
  *
+ * PHP version 5
+ *
  * @category  Test
  * @package   Xpressengine\Tests\Menu
  * @author    XE Developers <developers@xpressengine.com>

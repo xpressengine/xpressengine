@@ -2,6 +2,8 @@
 /**
  *  Package
  *
+ * PHP version 5
+ *
  * @category    Presenter\Html|Tags
  * @package     Xpressengine\Presenter\Html|Tags
  * @author      XE Developers <developers@xpressengine.com>

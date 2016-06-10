@@ -2,6 +2,8 @@
 /**
  * Class Json
  *
+ * PHP version 5
+ *
  * @category    Support
  * @package     Xpressengine\Support
  * @author      XE Developers <developers@xpressengine.com>

@@ -2,6 +2,8 @@
 /**
  * NotFoundWidgetException
  *
+ * PHP version 5
+ *
  * @category  Widget
  * @package   Xpressengine\Widget
  * @author    XE Developers <developers@xpressengine.com>
@@ -18,6 +20,8 @@ use Xpressengine\Widget\WidgetException;
 
 /**
  * NotFoundWidgetException
+ *
+ * PHP version 5
  *
  * @category    Widget
  * @package     Xpressengine\Widget

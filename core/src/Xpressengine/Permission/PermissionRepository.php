@@ -2,6 +2,8 @@
 /**
  * This file is a permission repository.
  *
+ * PHP version 5
+ *
  * @category    Permission
  * @package     Xpressengine\Permission
  * @author      XE Developers <developers@xpressengine.com>

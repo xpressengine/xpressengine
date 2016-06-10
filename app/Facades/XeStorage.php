@@ -2,6 +2,8 @@
 /**
  * XeStorage
  *
+ * PHP version 5
+ *
  * @category    Storage
  * @package     Xpressengine\Storage
  * @author      XE Developers <developers@xpressengine.com>

@@ -2,6 +2,8 @@
 /**
  * GuestNotSupportException
  *
+ * PHP version 5
+ *
  * @category    Document
  * @package     Xpressengine\Document
  * @author      XE Developers <developers@xpressengine.com>

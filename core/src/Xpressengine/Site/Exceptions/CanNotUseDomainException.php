@@ -2,6 +2,8 @@
 /**
  * CanNotUseDomainException
  *
+ * PHP version 5
+ *
  * @category    Site
  * @package     Xpressengine\Site\Exceptions
  * @author      XE Developers <developers@xpressengine.com>

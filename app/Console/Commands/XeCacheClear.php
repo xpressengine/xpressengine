@@ -2,6 +2,8 @@
 /**
  * Database command class. This file is part of the Xpressengine package.
  *
+ * PHP version 5
+ *
  * @category    Commands
  * @package     App\Console\Commands
  * @author      XE Developers <developers@xpressengine.com>

@@ -2,6 +2,8 @@
 /**
  * This file is the exception of not exists item.
  *
+ * PHP version 5
+ *
  * @category    Config
  * @package     Xpressengine\Config
  * @author      XE Developers <developers@xpressengine.com>

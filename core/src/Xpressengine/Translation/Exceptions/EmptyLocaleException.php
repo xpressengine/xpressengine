@@ -2,6 +2,8 @@
 /**
  * Class EmptyLocaleException
  *
+ * PHP version 5
+ *
  * @category    Translation
  * @package     Xpressengine\Translation
  * @author      XE Developers <developers@xpressengine.com>

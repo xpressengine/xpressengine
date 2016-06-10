@@ -2,6 +2,8 @@
 /**
  * ModuleHelperTest class
  *
+ * PHP version 5
+ *
  * @category  Test
  * @package   Xpressengine\Tests\Module
  * @author    XE Developers <developers@xpressengine.com>

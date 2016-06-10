@@ -2,6 +2,8 @@
 /**
  * ProxyInterface
  *
+ * PHP version 5
+ *
  * @category    Database
  * @package     Xpressengine\Database
  * @author      XE Developers <developers@xpressengine.com>

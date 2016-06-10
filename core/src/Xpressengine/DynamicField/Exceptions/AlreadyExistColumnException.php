@@ -2,6 +2,8 @@
 /**
  * AlreadyExistException
  *
+ * PHP version 5
+ *
  * @category    DynamicField
  * @package     Xpressengine\DynamidField
  * @author      XE Developers <developers@xpressengine.com>

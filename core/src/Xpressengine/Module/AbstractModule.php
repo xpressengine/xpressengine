@@ -2,6 +2,8 @@
 /**
  * Abstract Module class. This file is part of the Xpressengine package.
  *
+ * PHP version 5
+ *
  * @category    Module
  * @package     Xpressengine\Module
  * @author      XE Developers <developers@xpressengine.com>

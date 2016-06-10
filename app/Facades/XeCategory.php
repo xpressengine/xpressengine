@@ -2,6 +2,8 @@
 /**
  * XeCategory
  *
+ * PHP version 5
+ *
  * @category    Category
  * @package     Xpressengine\Category
  * @author      XE Developers <developers@xpressengine.com>

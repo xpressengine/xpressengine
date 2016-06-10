@@ -2,6 +2,8 @@
 /**
  * WidgetHelperTest
  *
+ * PHP version 5
+ *
  * @category  Test
  * @package   Xpressengine\Tests\Widget
  * @author    XE Developers <developers@xpressengine.com>

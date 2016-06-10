@@ -2,6 +2,8 @@
 /**
  *  This file is part of the Xpressengine package.
  *
+ * PHP version 5
+ *
  * @category
  * @package     Xpressengine\
  * @author      XE Developers <developers@xpressengine.com>

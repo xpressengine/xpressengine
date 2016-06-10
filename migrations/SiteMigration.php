@@ -2,6 +2,8 @@
 /**
  * SiteMigration.php
  *
+ * PHP version 5
+ *
  * @category    Migrations
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>

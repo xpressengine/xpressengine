@@ -2,6 +2,8 @@
 /**
  * This file is ImageMeta class
  *
+ * PHP version 5
+ *
  * @category    Media
  * @package     Xpressengine\Media
  * @author      XE Developers <developers@xpressengine.com>

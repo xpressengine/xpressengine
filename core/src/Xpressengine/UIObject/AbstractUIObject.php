@@ -2,6 +2,8 @@
 /**
  * AbstractUIObject class. This file is part of the Xpressengine package.
  *
+ * PHP version 5
+ *
  * @category    UIObejct
  * @package     Xpressengine\UIObejct
  * @author      XE Developers <developers@xpressengine.com>

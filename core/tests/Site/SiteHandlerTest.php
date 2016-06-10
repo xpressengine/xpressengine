@@ -2,6 +2,8 @@
 /**
  * SiteHandlerTest
  *
+ * PHP version 5
+ *
  * @category  Test
  * @package   Xpressengine\Tests\Site
  * @author    XE Developers <developers@xpressengine.com>

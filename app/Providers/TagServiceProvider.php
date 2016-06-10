@@ -2,6 +2,8 @@
 /**
  * This file is tag package service provider class.
  *
+ * PHP version 5
+ *
  * @category    Tag
  * @package     Xpressengine\Tag
  * @author      XE Developers <developers@xpressengine.com>

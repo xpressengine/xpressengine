@@ -2,6 +2,8 @@
 /**
  * This file is temporary handler class
  *
+ * PHP version 5
+ *
  * @category    Temporary
  * @package     Xpressengine\Temporary
  * @author      XE Developers <developers@xpressengine.com>

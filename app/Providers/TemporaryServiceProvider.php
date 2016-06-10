@@ -2,6 +2,8 @@
 /**
  * This file is Temporary package service provider.
  *
+ * PHP version 5
+ *
  * @category    Temporary
  * @package     Xpressengine\Temporary
  * @author      XE Developers <developers@xpressengine.com>

@@ -2,6 +2,8 @@
 /**
  * Class InvalidArgumentException
  *
+ * PHP version 5
+ *
  * @category  Menu
  * @package   Xpressengine\Menu
  * @author    XE Developers <developers@xpressengine.com>

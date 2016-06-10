@@ -2,6 +2,8 @@
 /**
  * Advisor class. This file is part of the Xpressengine package.
  *
+ * PHP version 5
+ *
  * @category    Interception
  * @package     Xpressengine\Interception
  * @author      XE Developers <developers@xpressengine.com>

@@ -2,6 +2,8 @@
 /**
  * WidgetException
  *
+ * PHP version 5
+ *
  * @category  Widget
  * @package   Xpressengine\Widget
  * @author    XE Developers <developers@xpressengine.com>

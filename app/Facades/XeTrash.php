@@ -2,6 +2,8 @@
 /**
  * XeTrash
  *
+ * PHP version 5
+ *
  * @category    Trash
  * @package     Xpressengine\Trash
  * @author      XE Developers <developers@xpressengine.com>

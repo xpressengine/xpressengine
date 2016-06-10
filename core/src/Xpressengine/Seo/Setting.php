@@ -2,6 +2,8 @@
 /**
  * This file is search engine optimizer setting.
  *
+ * PHP version 5
+ *
  * @category    Seo
  * @package     Xpressengine\Seo
  * @author      XE Developers <developers@xpressengine.com>

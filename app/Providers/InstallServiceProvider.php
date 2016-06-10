@@ -2,6 +2,8 @@
 /**
  * Service provider
  *
+ * PHP version 5
+ *
  * @category  Install
  * @package   Xpressengine\Install
  * @author    XE Developers <developers@xpressengine.com>

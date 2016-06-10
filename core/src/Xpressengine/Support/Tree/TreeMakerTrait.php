@@ -2,6 +2,8 @@
 /**
  * This file is trait for tree makes.
  *
+ * PHP version 5
+ *
  * @category    Support
  * @package     Xpressengine\Support
  * @author      XE Developers <developers@xpressengine.com>
