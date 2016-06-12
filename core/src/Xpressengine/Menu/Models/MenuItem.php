@@ -2,12 +2,13 @@
 /**
  * MenuItem
  *
+ * PHP version 5
+ *
  * @category  Menu
  * @package   Xpressengine\Menu
  * @author    XE Developers <developers@xpressengine.com>
  * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license   LGPL-2.1
- * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link      https://xpressengine.io
  */
 
@@ -36,6 +37,10 @@ use Xpressengine\Routing\InstanceRoute;
  * @property bool   $activated   활성/비활성 유무
  * @property string $type        해당 메뉴의 type
  * @property int    $ordering    정렬을 위한 순서
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class MenuItem extends CategoryItem
 {

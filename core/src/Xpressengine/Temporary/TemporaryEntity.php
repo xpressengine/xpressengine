@@ -2,12 +2,13 @@
 /**
  * This file is temporary entity class
  *
+ * PHP version 5
+ *
  * @category    Temporary
  * @package     Xpressengine\Temporary
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     LGPL-2.1
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
 
@@ -20,6 +21,10 @@ use Xpressengine\Support\Entity;
  *
  * @category    Temporary
  * @package     Xpressengine\Temporary
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class TemporaryEntity extends Entity
 {

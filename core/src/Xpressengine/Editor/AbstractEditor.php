@@ -23,9 +23,10 @@ use Xpressengine\Support\MobileSupportTrait;
  *
  * @category    Editor
  * @package     Xpressengine\Editor
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 abstract class AbstractEditor implements ComponentInterface
 {
@@ -206,7 +207,7 @@ abstract class AbstractEditor implements ComponentInterface
             $tool->initAssets();
         }
     }
-    
+
     /**
      * Get activated tools for the editor
      *
@@ -242,7 +243,7 @@ abstract class AbstractEditor implements ComponentInterface
             $htmlString[] = $this->getContentHtml(array_get($options, 'content'), $options);
             $htmlString[] = $this->getEditorScript($options);
         }
-        
+
         return implode('', $htmlString);
     }
 

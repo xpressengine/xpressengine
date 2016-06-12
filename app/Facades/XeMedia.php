@@ -2,12 +2,13 @@
 /**
  * XeMedia
  *
+ * PHP version 5
+ *
  * @category    Media
  * @package     Xpressengine\Media
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     LGPL-2.1
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
 
@@ -20,6 +21,10 @@ use Illuminate\Support\Facades\Facade;
  *
  * @category    Media
  * @package     Xpressengine\Media
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  * @see         Xpressengine\Media\MediaManager
  */
 class XeMedia extends Facade
