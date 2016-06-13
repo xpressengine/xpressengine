@@ -22,21 +22,20 @@ use Illuminate\Contracts\Config\Repository as IlluminateConfig;
 use Illuminate\Http\RedirectResponse;
 use XePresenter;
 use Redirect;
-use Request;
+use Input;
 use Validator;
 use XeDB;
+use Xpressengine\Http\Request;
 use Xpressengine\Menu\MenuHandler;
 use Xpressengine\Menu\Models\Menu;
 use Xpressengine\Menu\Models\MenuItem;
 use Xpressengine\Module\Exceptions\NotFoundModuleException;
 use Xpressengine\Module\ModuleHandler;
-use Xpressengine\Permission\Grant;
+use Xpressengine\Permission\PermissionSupport;
 use Xpressengine\Presenter\RendererInterface;
 use Xpressengine\Site\SiteHandler;
 use Xpressengine\Storage\File;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
-use Xpressengine\User\Models\User;
-use Xpressengine\User\Models\UserGroup;
 
 /**
  * Class MenuController
@@ -50,6 +49,7 @@ use Xpressengine\User\Models\UserGroup;
  */
 class MenuController extends Controller
 {
+    use PermissionSupport;
 
     /**
      * index
@@ -113,34 +113,36 @@ class MenuController extends Controller
      */
     public function store(MenuHandler $handler)
     {
-        $desktopTheme = Request::get('theme_desktop');
-        $mobileTheme = Request::get('theme_mobile');
+        $desktopTheme = Input::get('theme_desktop');
+        $mobileTheme = Input::get('theme_mobile');
 
         $rules = [
             'menuTitle'=> 'required',
             'theme_desktop' => 'required',
             'theme_mobile' => 'required',
         ];
-        $validator = Validator::make(Request::all(), $rules);
+        $validator = Validator::make(Input::all(), $rules);
 
         if ($validator->fails()) {
-            Request::flash();
+            Input::flash();
             return Redirect::back()->with('alert', ['type' => 'danger', 'message' => $validator->messages()]);
         }
 
         XeDB::beginTransaction();
         try {
             $menu = $handler->create([
-                'title' => Request::get('menuTitle'),
-                'description' => Request::get('menuDescription'),
-                'siteKey' => Request::get('siteKey')
+                'title' => Input::get('menuTitle'),
+                'description' => Input::get('menuDescription'),
+                'siteKey' => Input::get('siteKey')
             ]);
 
             $handler->setMenuTheme($menu, $desktopTheme, $mobileTheme);
+            
+            $this->permissionRegisterGrant($menu->getKey(), $handler->getDefaultGrant());
 
         } catch (Exception $e) {
             XeDB::rollback();
-            Request::flash();
+            Input::flash();
             return Redirect::back()->with('alert', ['type' => 'danger', 'message' => $e->getMessage()]);
         }
 
@@ -182,33 +184,33 @@ class MenuController extends Controller
         /** @var Menu $menu */
         $menu = $model->newQuery()->find($menuId);
 
-        $desktopTheme = Request::get('theme_desktop');
-        $mobileTheme = Request::get('theme_desktop');
+        $desktopTheme = Input::get('theme_desktop');
+        $mobileTheme = Input::get('theme_desktop');
 
         $rules = [
             'menuTitle'=> 'required',
             'theme_desktop' => 'required',
             'theme_mobile' => 'required',
         ];
-        $validator = Validator::make(Request::all(), $rules);
+        $validator = Validator::make(Input::all(), $rules);
 
         if ($validator->fails()) {
-            Request::flash();
+            Input::flash();
             return Redirect::back()->with('alert', ['type' => 'danger', 'message' => $validator->messages()]);
         }
 
         XeDB::beginTransaction();
 
         try {
-            $menu->title = Request::get('menuTitle');
-            $menu->description = Request::get('menuDescription');
+            $menu->title = Input::get('menuTitle');
+            $menu->description = Input::get('menuDescription');
 
             $handler->put($menu);
             $handler->updateMenuTheme($menu, $desktopTheme, $mobileTheme);
 
         } catch (Exception $e) {
             XeDB::rollback();
-            Request::flash();
+            Input::flash();
             return Redirect::back()->with('alert', ['type' => 'danger', 'message' => $e->getMessage()]);
         }
 
@@ -256,6 +258,7 @@ class MenuController extends Controller
             $menu = $model->newQuery()->find($menuId);
 
             $handler->remove($menu);
+            $this->permissionUnregister($menu->getKey());
         } catch (Exception $e) {
             XeDB::rollback();
             return Redirect::back()->with('alert', ['type' => 'danger', 'message' => $e->getMessage()]);
@@ -281,96 +284,43 @@ class MenuController extends Controller
         /** @var Menu $menu */
         $menu = $model->newQuery()->find($menuId);
 
-        $permission = $handler->getPermission($menu);
-
-        $accessGrant = $permission[MenuHandler::ACCESS];
-        $accessParams = [
-            'rating' => $accessGrant['rating'],
-            'group' => UserGroup::whereIn('id', $accessGrant['group'])->get(),
-            'user' => User::whereIn('id', $accessGrant['user'])->get(),
-            'except' => User::whereIn('id', $accessGrant['except'])->get(),
-        ];
-
-        $visibleGrant = $permission[MenuHandler::VISIBLE];
-        $visibleParams = [
-            'rating' => $visibleGrant['rating'],
-            'group' => UserGroup::whereIn('id', $visibleGrant['group'])->get(),
-            'user' => User::whereIn('id', $visibleGrant['user'])->get(),
-            'except' => User::whereIn('id', $visibleGrant['except'])->get(),
-        ];
+        $permArgs = $this->getPermArguments($menu->getKey(), [MenuHandler::ACCESS, MenuHandler::VISIBLE]);
 
         return XePresenter::make(
             'menu.permission',
-            [
-                'menu' => $menu,
-                MenuHandler::ACCESS => [
-                    'grant' => $accessParams,
-                    'title' => 'access'
-                ],
-                MenuHandler::VISIBLE => [
-                    'grant' => $visibleParams,
-                    'title' => 'visible',
-                ]
-            ]
+            array_merge(['menu' => $menu], $permArgs)
         );
     }
 
     /**
      * updateMenuPermission
      *
+     * @param Request     $request request
      * @param MenuHandler $handler menu handler
      * @param string      $menuId  menu id
      *
      * @return RedirectResponse
      * @throws Exception
      */
-    public function updateMenuPermission(MenuHandler $handler, $menuId)
+    public function updateMenuPermission(Request $request, MenuHandler $handler, $menuId)
     {
         XeDB::beginTransaction();
 
         try {
-            $inputs = Request::all();
-
             $model = $handler->createModel();
             /** @var Menu $menu */
             $menu = $model->newQuery()->find($menuId);
 
-            $accessInput = $this->inputFilterParser(MenuHandler::ACCESS, $inputs);
-            $visibleInput = $this->inputFilterParser(MenuHandler::VISIBLE, $inputs);
-
-            $grant = new Grant();
-            $grant->set(MenuHandler::ACCESS, $accessInput);
-            $grant->set(MenuHandler::VISIBLE, $visibleInput);
-
-            $handler->registerMenuPermission($menu, $grant);
-
+            $this->permissionRegister($request, $menu->getKey(), [MenuHandler::ACCESS, MenuHandler::VISIBLE]);
         } catch (Exception $e) {
             XeDB::rollback();
-            Request::flash();
+            $request->flash();
             return Redirect::back()->with('alert', ['type' => 'danger', 'message' => $e->getMessage()]);
         }
 
         XeDB::commit();
 
-    }
-
-    protected function inputFilterParser($prefix, $inputs = [])
-    {
-        $inputs = array_where($inputs, function ($key, $value) use ($prefix) {
-            return starts_with($key, $prefix);
-        });
-
-        $result = [];
-        foreach ($inputs as $key => $val) {
-            $name = strtolower(ltrim($key, $prefix));
-            if (in_array($name, ['group', 'user', 'except'])) {
-                $val = array_filter(explode(',', $val));
-            }
-
-            $result[$name] = $val;
-        }
-
-        return $result;
+        return Redirect::back()->with('alert', ['type' => 'success', 'message' => 'success']);
     }
 
     /**
@@ -382,7 +332,7 @@ class MenuController extends Controller
      */
     public function selectType($menuId)
     {
-        $parent = Request::get('parent', $menuId);
+        $parent = Input::get('parent', $menuId);
 
         return XePresenter::make(
             'menu.selectItemType',
@@ -415,10 +365,10 @@ class MenuController extends Controller
         /** @var Menu $menu */
         $menu = $model->newQuery()->find($menuId);
         $menuConfig = $handler->getMenuTheme($menu);
-//        $parent = Request::get('parent', $menuId);
-        $parent = Request::get('parent');
+//        $parent = Input::get('parent', $menuId);
+        $parent = Input::get('parent');
 
-        $selectedMenuType = Request::get('selectType');
+        $selectedMenuType = Input::get('selectType');
         if ($selectedMenuType === null) {
             return Redirect::route('settings.menu.select.types', [$menu->id])
                 ->with('alert', ['type' => 'warning', 'message' => 'type 을 선택하십시오']);
@@ -465,11 +415,11 @@ class MenuController extends Controller
         $menu = $model->newQuery()->find($menuId);
 
         try {
-            $inputs = Request::except(['_token', 'theme_desktop', 'theme_mobile']);
-            $parentThemeMode = Request::get('parentTheme', false);
+            $inputs = Input::except(['_token', 'theme_desktop', 'theme_mobile']);
+            $parentThemeMode = Input::get('parentTheme', false);
             if ($parentThemeMode === false) {
-                $desktopTheme = Request::get('theme_desktop');
-                $mobileTheme = Request::get('theme_mobile');
+                $desktopTheme = Input::get('theme_desktop');
+                $mobileTheme = Input::get('theme_mobile');
             } else {
                 $desktopTheme = null;
                 $mobileTheme = null;
@@ -499,10 +449,11 @@ class MenuController extends Controller
             $handler->putItem($item, $menuTypeInput);
 
             $handler->setMenuItemTheme($item, $desktopTheme, $mobileTheme);
+            $this->permissionRegisterGrant($handler->permKeyString($item), null, $menu->siteKey);
 
         } catch (Exception $e) {
             XeDB::rollback();
-            Request::flash();
+            Input::flash();
             return Redirect::back()->with('alert', ['type' => 'danger', 'message' => $e->getMessage()]);
         }
 
@@ -588,7 +539,7 @@ class MenuController extends Controller
         XeDB::beginTransaction();
 
         try {
-            $inputs = Request::except(['_token', 'theme_desktop', 'theme_mobile']);
+            $inputs = Input::except(['_token', 'theme_desktop', 'theme_mobile']);
 
             $model = $handler->createModel();
             $itemClass = $model->getItemModel();
@@ -599,10 +550,10 @@ class MenuController extends Controller
                 throw new InvalidArgumentHttpException(400);
             }
 
-            $parentThemeMode = Request::get('parentTheme', false);
+            $parentThemeMode = Input::get('parentTheme', false);
             if ($parentThemeMode === false) {
-                $desktopTheme = Request::get('theme_desktop');
-                $mobileTheme = Request::get('theme_mobile');
+                $desktopTheme = Input::get('theme_desktop');
+                $mobileTheme = Input::get('theme_mobile');
             } else {
                 $desktopTheme = null;
                 $mobileTheme = null;
@@ -633,7 +584,7 @@ class MenuController extends Controller
 
         } catch (Exception $e) {
             XeDB::rollback();
-            Request::flash();
+            Input::flash();
             return Redirect::back()->with('alert', ['type' => 'danger', 'message' => $e->getMessage()]);
         }
 
@@ -647,7 +598,7 @@ class MenuController extends Controller
     {
         $columnKeyName = $name . 'Id';
 
-        if ($uploadImg = Request::file($name)) {
+        if ($uploadImg = Input::file($name)) {
             $image = XeMedia::make(XeStorage::upload($uploadImg, 'menu'));
             XeStorage::bind($item->getKey(), $image);
 
@@ -658,7 +609,7 @@ class MenuController extends Controller
             $item->{$columnKeyName} = $image->getKey();
         } else {
             $key = 'remove' . ucfirst($name);
-            if (Request::get($key) && $item->{$columnKeyName} !== null) {
+            if (Input::get($key) && $item->{$columnKeyName} !== null) {
                 XeStorage::unBind($item->getKey(), $item->{$name});
                 $item->{$columnKeyName} = null;
             }
@@ -729,6 +680,7 @@ class MenuController extends Controller
             }
 
             $handler->deleteMenuItemTheme($item);
+            $this->permissionUnregister($handler->permKeyString($item));
 
         } catch (Exception $e) {
             XeDB::rollback();
@@ -768,48 +720,25 @@ class MenuController extends Controller
             $menuType = null;
         }
 
-        $permission = $handler->getItemPermission($item);
-
-
-        $accessGrant = $permission[MenuHandler::ACCESS];
-        $accessParams = [
-            'rating' => $accessGrant['rating'],
-            'group' => UserGroup::whereIn('id', $accessGrant['group'])->get()->toArray(),
-            'user' => User::whereIn('id', $accessGrant['user'])->get()->toArray(),
-            'except' => User::whereIn('id', $accessGrant['except'])->get()->toArray(),
-        ];
-
-        $visibleGrant = $permission[MenuHandler::VISIBLE];
-        $visibleParams = [
-            'rating' => $visibleGrant['rating'],
-            'group' => UserGroup::whereIn('id', $visibleGrant['group'])->get()->toArray(),
-            'user' => User::whereIn('id', $visibleGrant['user'])->get()->toArray(),
-            'except' => User::whereIn('id', $visibleGrant['except'])->get()->toArray(),
-        ];
+        $permArgs = $this->getPermArguments(
+            $handler->permKeyString($item),
+            [MenuHandler::ACCESS, MenuHandler::VISIBLE]
+        );
 
         return XePresenter::make(
             'menu.itemPermission',
-            [
+            array_merge([
                 'menu' => $menu,
                 'item' => $item,
                 'menuType' => $menuType,
-                MenuHandler::ACCESS => [
-                    'mode' => $permission->pure(MenuHandler::ACCESS) === null ? "inherit" : "manual",
-                    'grant' => $accessParams,
-                    'title' => 'access'
-                ],
-                MenuHandler::VISIBLE => [
-                    'mode' => $permission->pure(MenuHandler::VISIBLE) === null ? "inherit" : "manual",
-                    'grant' => $visibleParams,
-                    'title' => 'visible',
-                ]
-            ]
+            ], $permArgs)
         );
     }
 
     /**
      * updateItemPermission
      *
+     * @param Request     $request request
      * @param MenuHandler $handler menu handler
      * @param string      $menuId  menu id
      * @param string      $itemId  menu item id
@@ -817,6 +746,7 @@ class MenuController extends Controller
      * @return RedirectResponse
      */
     public function updateItemPermission(
+        Request $request,
         MenuHandler $handler,
         $menuId,
         $itemId
@@ -824,8 +754,6 @@ class MenuController extends Controller
         XeDB::beginTransaction();
 
         try {
-            $inputs = Request::all();
-
             $model = $handler->createModel();
             $itemClass = $model->getItemModel();
             /** @var MenuItem $item */
@@ -835,18 +763,16 @@ class MenuController extends Controller
                 throw new InvalidArgumentHttpException(400);
             }
 
-            $accessInput = $this->inputFilterParser(MenuHandler::ACCESS, $inputs);
-            $visibleInput = $this->inputFilterParser(MenuHandler::VISIBLE, $inputs);
-
-            $grant = new Grant();
-            $grant->set(MenuHandler::ACCESS, $accessInput['mode'] == 'manual' ? $accessInput : []);
-            $grant->set(MenuHandler::VISIBLE, $visibleInput['mode'] == 'manual' ? $visibleInput : []);
-
-            $handler->registerItemPermission($item, $grant);
+            $this->permissionRegister(
+                $request,
+                $handler->permKeyString($item),
+                [MenuHandler::ACCESS, MenuHandler::VISIBLE]
+            );
+            
 
         } catch (Exception $e) {
             XeDB::rollback();
-            Request::flash();
+            Input::flash();
             return Redirect::back()->with('alert', ['type' => 'danger', 'message' => $e->getMessage()]);
         }
 
@@ -865,9 +791,9 @@ class MenuController extends Controller
      */
     public function moveItem(MenuHandler $handler)
     {
-        $ordering = Request::get('ordering');
-        $itemId = Request::get('itemId');
-        $parentId = Request::get('parent');
+        $ordering = Input::get('ordering');
+        $itemId = Input::get('itemId');
+        $parentId = Input::get('parent');
 
         XeDB::beginTransaction();
 
@@ -891,7 +817,11 @@ class MenuController extends Controller
             $handler->setOrder($item, $ordering);
 
             $handler->moveItemConfig($old, $item);
-            $handler->moveItemPermission($old, $item);
+
+            $toKey = $handler->permKeyString($item);
+            $toKey = substr($toKey, 0, strrpos($toKey, '.'));
+                
+            $this->permissionMove($handler->permKeyString($old), $toKey);
         } catch (\Exception $e) {
             XeDB::rollback();
             throw $e;
@@ -899,7 +829,7 @@ class MenuController extends Controller
 
         XeDB::commit();
 
-        return XePresenter::makeApi(\Request::all());
+        return XePresenter::makeApi(\Input::all());
     }
 
     protected function inputClassify(array $inputs)
@@ -935,7 +865,7 @@ class MenuController extends Controller
      */
     public function setHome(SiteHandler $siteHandler)
     {
-        $itemId = Request::get('itemId');
+        $itemId = Input::get('itemId');
 
         $siteHandler->setHomeInstanceId($itemId);
 

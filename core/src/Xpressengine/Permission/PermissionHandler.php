@@ -329,18 +329,6 @@ class PermissionHandler
     }
 
     /**
-     * 여러개의 대상을 지정해 권한 정보를 가져와 캐싱 함
-     *
-     * @param string|array $names   permission name
-     * @param string       $siteKey site key name
-     * @return void
-     */
-    public function loadEach($names, $siteKey = 'default')
-    {
-        $names = !is_array($names) ? [$names] : $names;
-    }
-
-    /**
      * Move entity hierarchy to new parent or root
      *
      * @param Permission  $permission permission instance

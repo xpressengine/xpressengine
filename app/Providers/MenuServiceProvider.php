@@ -92,7 +92,6 @@ class MenuServiceProvider extends ServiceProvider
             return new MenuHandler(
                 $app['xe.keygen'],
                 $app['xe.config'],
-                $app['xe.permission'],
                 $app['xe.module'],
                 $app['xe.router']
             );

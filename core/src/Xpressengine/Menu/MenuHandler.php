@@ -20,12 +20,10 @@ use Xpressengine\Keygen\Keygen;
 use Xpressengine\Menu\Exceptions\CanNotDeleteMenuEntityHaveChildException;
 use Xpressengine\Menu\Exceptions\CanNotDeleteMenuItemHaveChildException;
 use Xpressengine\Menu\Exceptions\InvalidArgumentException;
-use Xpressengine\Menu\Exceptions\NotFoundMenuItemException;
 use Xpressengine\Menu\Models\Menu;
 use Xpressengine\Menu\Models\MenuItem;
 use Xpressengine\Module\ModuleHandler;
 use Xpressengine\Permission\Grant;
-use Xpressengine\Permission\PermissionHandler;
 use Xpressengine\Routing\RouteRepository;
 use Xpressengine\Support\Tree\NodePositionTrait;
 
@@ -143,14 +141,7 @@ class MenuHandler
      * @var ConfigManager
      */
     protected $configs;
-
-    /**
-     * PermissionHandler instance
-     *
-     * @var PermissionHandler
-     */
-    protected $permissions;
-
+    
     /**
      * ModuleHandler instance
      *
@@ -198,20 +189,17 @@ class MenuHandler
      *
      * @param Keygen            $keygen      Keygen instance
      * @param ConfigManager     $configs     ConfigManager instance
-     * @param PermissionHandler $permissions PermissionHandler instance
      * @param ModuleHandler     $modules     ModuleHandler instance
      * @param RouteRepository   $routes      RouteRepository instance
      */
     public function __construct(
         Keygen $keygen,
         ConfigManager $configs,
-        PermissionHandler $permissions,
         ModuleHandler $modules,
         RouteRepository $routes
     ) {
         $this->keygen = $keygen;
         $this->configs = $configs;
-        $this->permissions = $permissions;
         $this->modules = $modules;
         $this->routes = $routes;
     }
@@ -240,8 +228,6 @@ class MenuHandler
                 }
             }
         }
-
-        $this->registerDefaultPermission($menu);
 
         return $menu;
     }
@@ -275,7 +261,6 @@ class MenuHandler
         }
 
         $this->deleteMenuTheme($menu);
-        $this->deleteMenuPermission($menu);
 
         return $menu->delete();
     }
@@ -313,7 +298,6 @@ class MenuHandler
         $this->setOrder($item);
         $menu->increment($menu->getCountName());
 
-        $this->registerItemPermission($item, new Grant);
         $this->storeMenuType($item, $menuTypeInput);
 
         return $item;
@@ -423,7 +407,6 @@ class MenuHandler
             throw new CanNotDeleteMenuItemHaveChildException;
         }
 
-        $this->deleteItemPermission($item);
         $item->ancestors()->detach($item);
 
         $result = $item->delete();
@@ -639,12 +622,11 @@ class MenuHandler
     }
 
     /**
-     * Set default permission to menu
-     *
-     * @param Menu $menu menu instance
-     * @return void
+     * Get default grant
+     * 
+     * @return Grant
      */
-    protected function registerDefaultPermission(Menu $menu)
+    public function getDefaultGrant()
     {
         $grant = new Grant();
 
@@ -657,90 +639,8 @@ class MenuHandler
         $grant->add(static::VISIBLE, 'group', []);
         $grant->add(static::VISIBLE, 'user', []);
         $grant->add(static::VISIBLE, 'except', []);
-
-        $this->registerMenuPermission($menu, $grant);
-    }
-
-    /**
-     * Register menu permission
-     *
-     * @param Menu  $menu  menu instance
-     * @param Grant $grant permission grant instance
-     * @return void
-     */
-    public function registerMenuPermission(Menu $menu, Grant $grant)
-    {
-        $this->permissions->register($menu->getKey(), $grant, $menu->siteKey);
-    }
-
-    /**
-     * Get menu permission
-     *
-     * @param Menu $menu menu instance
-     * @return \Xpressengine\Permission\Permission
-     */
-    public function getPermission(Menu $menu)
-    {
-        return $this->permissions->find($menu->getKey(), $menu->siteKey);
-    }
-
-    /**
-     * Delete menu permission
-     *
-     * @param Menu $menu menu instance
-     * @return void
-     */
-    public function deleteMenuPermission(Menu $menu)
-    {
-        $this->permissions->destroy($menu->getKey(), $menu->siteKey);
-    }
-
-    /**
-     * Register menu item permission
-     *
-     * @param MenuItem $item  menu item instance
-     * @param Grant    $grant permission grant instance
-     * @return \Xpressengine\Permission\Permission
-     */
-    public function registerItemPermission(MenuItem $item, Grant $grant)
-    {
-        return $this->permissions->register($this->permKeyString($item), $grant, $item->menu->siteKey);
-    }
-
-    /**
-     * Get menu item permission
-     *
-     * @param MenuItem $item menu item instance
-     * @return \Xpressengine\Permission\Permission
-     */
-    public function getItemPermission(MenuItem $item)
-    {
-        return $this->permissions->find($this->permKeyString($item), $item->menu->siteKey);
-    }
-
-    /**
-     * Delete menu item permission
-     *
-     * @param MenuItem $item menu item instance
-     * @return void
-     */
-    public function deleteItemPermission(MenuItem $item)
-    {
-        $this->permissions->destroy($this->permKeyString($item), $item->menu->siteKey);
-    }
-
-    /**
-     * Move menu item permission
-     *
-     * @param MenuItem $fromItem  before item
-     * @param MenuItem $movedItem after item
-     * @return void
-     */
-    public function moveItemPermission(MenuItem $fromItem, MenuItem $movedItem)
-    {
-        $permission = $this->permissions->find($this->permKeyString($fromItem), $fromItem->menu->siteKey);
-        $to = $this->permKeyString($movedItem);
-        $this->permissions->move($permission, substr($to, 0, strrpos($to, '.')));
+        
+        return $grant;
     }
 
     /**
@@ -749,7 +649,7 @@ class MenuHandler
      * @param MenuItem $item menu item instance
      * @return string
      */
-    protected function permKeyString(MenuItem $item)
+    public function permKeyString(MenuItem $item)
     {
         return $item->menu->getKey() . '.' . implode('.', $item->getBreadcrumbs());
     }
