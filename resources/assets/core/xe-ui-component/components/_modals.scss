@@ -94,7 +94,7 @@
 }
 
 // Title text within header
-.xe-modal-title, 
+.xe-modal-title,
 .xe-modal-content-title{
   display: block;
   margin: 0;
@@ -106,7 +106,7 @@
 
 .xe-modal-content-title{
   margin-bottom:5px;
-  font-size: 16px;  
+  font-size: 16px;
 }
 
 // Modal body
@@ -178,33 +178,28 @@
   padding-left: 24px;
   margin: 0;
   max-height: 365px;
-  li {
+  .slick-cell{
+    width: 100%;
+    border: none;
+  }
+  .list-inner-item {
+    display: block;
     overflow: hidden;
-    padding: 12px 24px 12px 0;
-    border-top: 1px solid #e4e4e4;
-    list-style: none;
-    &:first-child {
-      border-top: none;
-    }
+    padding: 14px 24px 14px 0;
+    border-bottom: 1px solid #e4e4e4;
     .list-text {
       display: table-cell;
       vertical-align: middle;
       padding-left: 10px;
       text-align: left;
       > p {
+        margin:0;
         font-size: 16px;
         color: #2c2e37;
       }
       .sub-text {
         font-size: 14px;
         color: #b5b7bd;
-      }
-    }
-    > {
-      a, div {
-        display: table;
-        height: 100%;
-        width: 100%;
       }
     }
   }
