@@ -1,5 +1,4 @@
 <IfModule mod_rewrite.c>
-
     <IfModule mod_negotiation.c>
         Options -MultiViews
     </IfModule>
@@ -9,50 +8,38 @@
     # Deny hidden files(.*)
     RedirectMatch 403 ^/\.(.*)
 
-    <Files *.php>
-        Order Deny,Allow
-        Deny from all
-        Allow from 127.0.0.1
-    </Files>
-
-    <Files index.php>
-        Order Allow,Deny
-        Allow from all
-    </Files>
-
     ##
     ## You may need to uncomment the following line for some hosting environments,
     ## if you have installed to a subdirectory, enter the name here also.
     ##
     # RewriteBase /
 
-    # Allow web_installer/index.php
-    RewriteRule ^web_installer/.* - [L]
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)/$ /$1 [L,R=301]
 
-    # Deny */index.php
-    RewriteRule ^.*/index.php index.php [L]
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^index.php$ - [L]
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^web_installer/index.php - [L]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^web_installer web_installer/index.php [L]
 
-    # Allow plugins/*
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule \.php$ - [L,R=403]
+
+    # Allow
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^assets/.* - [L]
     RewriteCond %{REQUEST_FILENAME} -f
     RewriteRule ^plugins/.* - [L]
-
-    # Allow storage/uploaded/*
     RewriteCond %{REQUEST_FILENAME} -f
     RewriteRule ^storage/uploaded/.* - [L]
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^favicon.*$ - [L]
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^robots.txt$ - [L]
 
-    # Black list
-    RewriteRule ^bootstrap/.* index.php [L,NC]
-    RewriteRule ^config/.* index.php [L,NC]
-    RewriteRule ^core/.* index.php [L,NC]
-    RewriteRule ^database/.* index.php [L,NC]
-    RewriteRule ^migrations/.* index.php [L,NC]
-    RewriteRule ^resource/.* index.php [L,NC]
-    RewriteRule ^storage/.* index.php [L,NC]
-    RewriteRule ^tests/.* index.php [L,NC]
-    RewriteRule ^vendor/.* index.php [L,NC]
-
-    ## Standard routes
-    RewriteCond %{REQUEST_FILENAME} !-f
+    # Standard routes
     RewriteRule ^ index.php [L]
-
 </IfModule>
