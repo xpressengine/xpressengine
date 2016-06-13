@@ -2593,38 +2593,34 @@ textarea.xe-form-control {
   max-height: 365px;
 }
 
-.xe-modal .xe-list-group li {
+.xe-modal .xe-list-group .slick-cell {
+  width: 100%;
+  border: none;
+}
+
+.xe-modal .xe-list-group .list-inner-item {
+  display: block;
   overflow: hidden;
-  padding: 12px 24px 12px 0;
-  border-top: 1px solid #e4e4e4;
-  list-style: none;
+  padding: 14px 24px 14px 0;
+  border-bottom: 1px solid #e4e4e4;
 }
 
-.xe-modal .xe-list-group li:first-child {
-  border-top: none;
-}
-
-.xe-modal .xe-list-group li .list-text {
+.xe-modal .xe-list-group .list-inner-item .list-text {
   display: table-cell;
   vertical-align: middle;
   padding-left: 10px;
   text-align: left;
 }
 
-.xe-modal .xe-list-group li .list-text > p {
+.xe-modal .xe-list-group .list-inner-item .list-text > p {
+  margin: 0;
   font-size: 16px;
   color: #2c2e37;
 }
 
-.xe-modal .xe-list-group li .list-text .sub-text {
+.xe-modal .xe-list-group .list-inner-item .list-text .sub-text {
   font-size: 14px;
   color: #b5b7bd;
-}
-
-.xe-modal .xe-list-group li > a, .xe-modal .xe-list-group li > div {
-  display: table;
-  height: 100%;
-  width: 100%;
 }
 
 /* alert CSS Document */
