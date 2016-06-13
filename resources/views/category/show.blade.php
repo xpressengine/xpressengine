@@ -33,11 +33,11 @@
 ]) }}
 
 @section('page_title')
-    <h2>카테고리</h2>
+    <h2>{{xe_trans('xe::category')}}</h2>
 @endsection
 
 @section('page_description')
-    {{ $category->name }} 을(를) 수정합니다.
+    {{xe_trans('xe::categoryModifyDescription', ['name' => xe_trans($category->name)])}}
 @endsection
 
 <style type="text/css">

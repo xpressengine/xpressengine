@@ -8,30 +8,30 @@
                     <div class="panel">
                         <div class="panel-heading">
                             <div class="pull-left">
-                                <h3 class="panel-title">새 회원 추가</h3>
+                                <h3 class="panel-title">{{xe_trans('xe::addMember')}}</h3>
                             </div>
                         </div>
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-sm-6">
                                         {{-- displayName --}}
-                                        {!! XeUI::formText(['id'=>'__xe_displayName', 'label'=>'이름', 'placeholder'=>'이름을 입력하세요', 'value'=> old('displayName'), 'name'=>'displayName']) !!}
+                                        {!! XeUI::formText(['id'=>'__xe_displayName', 'label'=>xe_trans('xe::name'), 'placeholder'=>xe_trans('xe::enterName'), 'value'=> old('displayName'), 'name'=>'displayName']) !!}
                                         {{-- email --}}
-                                        {!! XeUI::formText(['id'=>'__xe_email', 'label'=>'이메일', 'placeholder'=>'이메일을 입력하세요', 'value'=> old('email'), 'name'=>'email']) !!}
+                                        {!! XeUI::formText(['id'=>'__xe_email', 'label'=>xe_trans('xe::email'), 'placeholder'=>xe_trans('xe::enterEmail'), 'value'=> old('email'), 'name'=>'email']) !!}
                                         {{-- password --}}
-                                        {!! XeUI::formPassword(['id'=>'__xe_password', 'label'=>'패스워드', 'placeholder'=>'비밀번호를 입력하세요', 'name'=>'password']) !!}
+                                        {!! XeUI::formPassword(['id'=>'__xe_password', 'label'=>xe_trans('xe::password'), 'placeholder'=>xe_trans('xe::enterPassword'), 'name'=>'password']) !!}
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         {{-- status --}}
-                                        {!! XeUI::formSelect(['id'=>'__xe_status', 'label'=>'상태', 'name'=>'status', 'options'=> $status]) !!}
+                                        {!! XeUI::formSelect(['id'=>'__xe_status', 'label'=>xe_trans('xe::status'), 'name'=>'status', 'options'=> $status]) !!}
                                     </div>
                                     <div class="form-group">
                                         {{-- rating --}}
-                                        {!! XeUI::formSelect(['id'=>'__xe_rating', 'label'=>'회원등급', 'name'=>'rating', 'options'=> $ratings]) !!}
+                                        {!! XeUI::formSelect(['id'=>'__xe_rating', 'label'=>xe_trans('xe::memberRating'), 'name'=>'rating', 'options'=> $ratings]) !!}
                                     </div>
                                     <div class="form-group">
-                                        {!! XeUI::formCheckbox(['id'=>'__xe_rating', 'label'=>'그룹', 'name'=>'groupId', 'checkboxes'=> $groups]) !!}
+                                        {!! XeUI::formCheckbox(['id'=>'__xe_rating', 'label'=>xe_trans('xe::group'), 'name'=>'groupId', 'checkboxes'=> $groups]) !!}
                                     </div>
                                 </div>
                                 <div class="col-sm-12">
@@ -45,8 +45,8 @@
                         </div>
                         <div class="panel-footer">
                             <div class="pull-right">
-                                <button type="button" class="btn btn-default btn-lg">취소</button>
-                                <button type="submit" class="btn btn-primary btn-lg">저장</button>
+                                <button type="button" class="btn btn-default btn-lg">{{xe_trans('xe::cancel')}}</button>
+                                <button type="submit" class="btn btn-primary btn-lg">{{xe_trans('xe::save')}}</button>
                             </div>
                         </div>
                     </div>

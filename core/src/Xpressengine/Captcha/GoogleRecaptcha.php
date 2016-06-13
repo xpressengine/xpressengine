@@ -2,12 +2,13 @@
 /**
  * This file is google reCAPTCHA.
  *
+ * PHP version 5
+ *
  * @category    Captcha
  * @package     Xpressengine\Captcha
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     LGPL-2.1
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
 
@@ -23,6 +24,10 @@ use Xpressengine\Presenter\Html\FrontendHandler;
  *
  * @category    Captcha
  * @package     Xpressengine\Captcha
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class GoogleRecaptcha implements CaptchaInterface
 {

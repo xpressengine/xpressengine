@@ -2,12 +2,13 @@
 /**
  * FrontendHandler
  *
+ * PHP version 5
+ *
  * @category    Frontend
  * @package     Xpressengine\Presenter
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     LGPL-2.1
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
 
@@ -140,6 +141,10 @@ namespace Xpressengine\Presenter\Html;
  * @method Tags\Package package($name) custom package tag를 추가한다.
  * @method Tags\Rule rule($ruleName, $rules) validation rule을 추가한다.
  * @method Tags\Translation translation($keys) javascript에서 사용할 다국어를 추가한다.
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class FrontendHandler
 {

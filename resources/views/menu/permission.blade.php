@@ -1,4 +1,4 @@
-@section('page_title', '<h2>메뉴 권한 설정</h2>')
+@section('page_title', '<h2>'.xe_trans('xe::menuPermissionSettings').'</h2>')
 @extends('menu.layout')
 @section('menuContent')
 <form action="{{ route('settings.menu.update.permission.menu',$menu->id) }}" method="post">
@@ -10,7 +10,7 @@
             <div class="panel">
                 <div class="panel-heading">
                     <div class="pull-left">
-                        <h3 class="panel-title">메뉴 권한 설정 <small>{{xe_trans('xe::editMenuPermissionDescription')}}</small></h3>
+                        <h3 class="panel-title">{{xe_trans('xe::menuPermissionSettings')}} <small>{{xe_trans('xe::editMenuPermissionDescription')}}</small></h3>
                     </div>
                 </div>
                 <div class="panel-collapse">
@@ -32,7 +32,7 @@
             </div>
         </div>
         <div class="pull-right">
-            <button type="submit" class="btn btn-primary btn-lg">수정</button>
+            <button type="submit" class="btn btn-primary btn-lg">{{xe_trans('xe::modify')}}</button>
         </div>
     </div>
 </form>

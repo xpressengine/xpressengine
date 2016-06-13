@@ -18,9 +18,9 @@
                         @if($item->getDescendantCount() == 0)
                             {{$menuType->summary($item->getKey())}}
                             <br/>
-                            메뉴 아이템을삭제하면 다시 복구할 수 없습니다.
+                            {{xe_trans('xe::menuItemDeleteCaution')}}
                         @else
-                            이 메뉴 아이템 하위에 {{ $item->countSubItems() }} 개의 메뉴 아이템이 존재하고 있어 삭제할 수 없습니다.
+                            {!! xe_trans('xe::menuItemDeleteCautionHaveItems', ['count' => $item->countSubItems()]) !!}
                         @endif
                     </div>
                 </div>

@@ -1,1 +1,1 @@
-<input type="text" name="{{$config->get('id') . 'Address1'}}" value="{{$current}}" placeholder="주소1">
+<input type="text" name="{{$config->get('id') . 'Address1'}}" value="{{$current}}" placeholder="{{xe_trans('xe::address')}}">

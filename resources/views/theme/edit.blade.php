@@ -3,11 +3,11 @@
     @stop
 
     @section('page_description')
-        테마를 편집합니다
+        {{xe_trans('xe::editThemeDescription')}}
     @stop
 
     @if(count($files) === 0)
-        <p>이 테마는 편집을 지원하지 않습니다.</p>
+        <p>{{xe_trans('xe::themeNotSupportEdit')}}</p>
     @else
     <div class="row">
         <div class="col-md-2">

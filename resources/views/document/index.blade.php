@@ -1,3 +1,4 @@
+<!-- 사용 안하는 페이지 -->
 @section('page_title')
     <h2>문서관리</h2>
 @endsection

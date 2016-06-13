@@ -2,12 +2,13 @@
 /**
  *  This file is part of the Xpressengine package.
  *
- * @category
- * @package     Xpressengine\
+ * PHP version 5
+ *
+ * @category    Theme
+ * @package     Xpressengine\Theme
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     LGPL-2.1
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
 
@@ -24,6 +25,10 @@ use Xpressengine\Config\ConfigEntity;
  *
  * @category    Theme
  * @package     Xpressengine\Theme
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 interface ThemeEntityInterface extends Arrayable, Jsonable
 {

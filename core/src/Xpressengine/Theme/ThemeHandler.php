@@ -2,12 +2,13 @@
 /**
  * ThemeHandler class. This file is part of the Xpressengine package.
  *
+ * PHP version 5
+ *
  * @category    Theme
  * @package     Xpressengine\Theme
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     LGPL-2.1
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
 
@@ -23,6 +24,10 @@ use Xpressengine\Plugin\PluginRegister;
 /**
  * @category    Theme
  * @package     Xpressengine\Theme
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class ThemeHandler
 {
@@ -80,7 +85,7 @@ class ThemeHandler
      * @param PluginRegister $register   plugin registry manager
      * @param ConfigManager  $config     config manager
      * @param Factory        $viewFactory
-     * @param string         $blankTheme blanktheme id
+     * @param string         $blankTheme blanktheme_id
      */
     public function __construct(PluginRegister $register, ConfigManager $config, Factory $viewFactory, $blankTheme)
     {

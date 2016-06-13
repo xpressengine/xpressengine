@@ -6,17 +6,17 @@
             <div class="panel">
                 <div class="panel-heading">
                     <div class="pull-left">
-                        <h3 class="panel-title">그룹 관리<small>{{ $groups->count() }}개의 그룹이 존재합니다.</small></h3>
+                        <h3 class="panel-title">{{xe_trans('xe::groupManagement')}}<small>{{xe_trans('xe::groupManagementSummary', ['count' => $groups->count()])}}</small></h3>
                     </div>
                     <div class="pull-right">
-                        <a href="{{ route('manage.group.create') }}" class="btn btn-primary"><i class="xi-plus"></i><span>새그룹 추가</span></a>
+                        <a href="{{ route('manage.group.create') }}" class="btn btn-primary"><i class="xi-plus"></i><span>{{xe_trans('xe::addNewGroup')}}</span></a>
                     </div>
                 </div>
 
                 <div class="panel-heading">
                     <div class="pull-left">
                         <div class="btn-group" role="group">
-                            <button type="button" class="__xe_remove btn btn-default">선택그룹 삭제</button>
+                            <button type="button" class="__xe_remove btn btn-default">{{xe_trans('xe::deleteSelected')}}</button>
                         </div>
                     </div>
                 </div>
@@ -25,11 +25,11 @@
                         <thead>
                         <tr>
                             <th scope="col"><input type="checkbox" id="__xe_check-all"></th>
-                            <th scope="col">그룹명</th>
-                            <th scope="col">설명</th>
+                            <th scope="col">{{xe_trans('xe::groupName')}}</th>
+                            <th scope="col">{{xe_trans('xe::description')}}</th>
                             {{--<th scope="col">기본그룹</th>--}}
-                            <th scope="col">소속 회원수</th>
-                            <th scope="col">관리</th>
+                            <th scope="col">{{xe_trans('xe::groupMemberCount')}}</th>
+                            <th scope="col">{{xe_trans('xe::management')}}</th>
                         </tr>
                         </thead>
                         <tbody>

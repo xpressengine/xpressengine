@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<ruleset name="XE3">
+	<description>The XpressEngine v3 coding standard. coding style by PSR2 and annotation by PEAR</description>
+	<arg name="encoding" value="UTF-8" />
+	<rule ref="PSR2">
+	</rule>
+
+	<rule ref="PEAR.Commenting">
+	</rule>
+</ruleset>

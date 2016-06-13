@@ -7,11 +7,11 @@
             <!--[D] 상세 설정 등 투명 링크는 .input-group-link 클래스 추가  -->
             <span class="input-group-btn input-group-link">
                 @if($selected && $link = $selected->getInstanceSettingURI($instanceId))
-                <a href="{{ $link }}" class="btn btn-link">상세설정</a>
+                <a href="{{ $link }}" class="btn btn-link">{{xe_trans('xe::detailConfigure')}}</a>
                 @endif
             </span>
             <span class="input-group-btn">
-                <button class="btn btn-default __xe_btn_edit" type="button">변경</button>
+                <button class="btn btn-default __xe_btn_edit" type="button">{{xe_trans('xe::edit')}}</button>
             </span>
         </div>
     </div>
@@ -20,7 +20,7 @@
         <form method="post" action="{{ route('settings.editor.setting', $instanceId) }}">
             {{ csrf_field() }}
             <div class="form-group">
-                <label>Editor 변경</label>
+                <label>{{xe_trans('xe:editorEdit')}}</label>
                 <select class="form-control" name="editorId">
                     @foreach($editors as $id => $class)
                         <option value="{{ $id }}" {{ $selected && $id === $selected->getId() ? 'selected' : '' }}>{{ $class::getComponentInfo('name') }}</option>
@@ -29,8 +29,8 @@
             </div>
             <div class="input-group clearfix">
                 <div class="pull-right">
-                    <button type="button" class="btn btn-default __xe_btn_close">닫기</button>
-                    <button type="submit" class="btn btn-primary">저장</button>
+                    <button type="button" class="btn btn-default __xe_btn_close">{{xe_trans('xe::close')}}</button>
+                    <button type="submit" class="btn btn-primary">{{xe_trans('xe::save')}}</button>
                 </div>
             </div>
         </form>

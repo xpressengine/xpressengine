@@ -6,7 +6,7 @@
 
     @if(sizeof($menuType['screenshot']) === 0)
      <div class="thumbnail-box" style="height:228px;background-size: cover; ">
-      스크린샷 없음
+      {{xe_trans('xe::noScreenshot')}}
      </div>
     @else
      <div class="thumbnail-box"

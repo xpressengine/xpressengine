@@ -1,5 +1,5 @@
 <h1>{{ xe_trans('xe::privateInfoAndOptionSettings') }}</h1>
-<p>개인정보를 관리할 수 있습니다. 이메일 주소, 닉네임, 외부로그인 등을 설정하여 계정에 저장할 데이터를 관리하고 개인정보를 보호할 수 있습니다.</p>
+<p>{{xe_trans('xe::privateInfoAndOptionSettingsDescription')}}</p>
 <div class="setting-card">
     <h2>{{ xe_trans('xe::defaultSettings') }}</h2>
 
@@ -166,17 +166,17 @@
             <form method="post" class="__xe_form" action="{{ route('member.settings.leave') }}">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <div class="setting-detail-content">
-                    <p>계정 삭제가 의미하는 내용</p>
-                    <em class="text-gray">계정을 삭제하기 전에 아래의 약관을 읽어 보시기 바랍니다.</em>
+                    <p>{{xe_trans('xe::accountDeleteCaution')}}</p>
+                    <em class="text-gray">{{xe_trans('xe::accountDeleteCautionDescription')}}</em>
                     <ul class="acount-list">
-                        <li>계정 삭제 작업은 영구적이며 되돌릴 수 없습니다. 삭제하는 즉시 귀하의 계정에 액세스할 수 없게 됩니다. </li>
-                        <li>귀하의 모든 콘텐츠가 삭제됩니다.</li>
-                        <li>댓글, 메시지, 토론 게시글 등을 포함한 모든 정보가 삭제됩니다.</li>
-                        <li>아무도 다시는 귀하의 계정정보나 게시글에 액세스할 수 없게 됩니다.</li>
+                        <li>{{xe_trans('xe::accountDeleteCaution1')}}</li>
+                        <li>{{xe_trans('xe::accountDeleteCaution2')}}</li>
+                        <li>{{xe_trans('xe::accountDeleteCaution3')}}</li>
+                        <li>{{xe_trans('xe::accountDeleteCaution4')}}</li>
                     </ul>
                     <div class="xe-form-group">
                         <input type="checkbox" id="__xe_chkLeave" name="confirm_leave" value="Y">
-                        <label for="__xe_chkLeave" class=""><span>약관에 동의하며 내 계정을 영구적으로 삭제하겠습니다.</span></label>
+                        <label for="__xe_chkLeave" class=""><span>{{xe_trans('xe::agreeAccountDeleteCaution')}}</span></label>
                         <em class="text-message __xe_message">&nbsp;</em>
                     </div>
                 </div>
