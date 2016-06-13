@@ -10,7 +10,7 @@
     <script type="text/javascript">
         System.import('xecore:/common/js/xe.bundle').then(function() {
             $(function() {
-                XE.toast('{{ $_errors['type'] }}', '잘못 입력되었습니다. <ul>@foreach ($_errors->all() as $error) <li>{{ $error }}</li>@endforeach</ul>');
+                XE.toast('{{ $_errors['type'] }}', '{{xe_trans('xe::wrongInput')}} <ul>@foreach ($_errors->all() as $error) <li>{{ $error }}</li>@endforeach</ul>');
             });
         });
     </script>
@@ -36,7 +36,7 @@
     <script type="text/javascript">
         System.import('xecore:/common/js/xe.bundle').then(function() {
             $(function() {
-                XE.toast('danger', '잘못된 입력이 있습니다. <ul>@foreach ($errors->all() as $error) <li>{{ $error }}</li>@endforeach</ul>');
+                XE.toast('danger', '{{xe_trans('xe::wrongInput')}} <ul>@foreach ($errors->all() as $error) <li>{{ $error }}</li>@endforeach</ul>');
             });
         });
     </script>

@@ -2,8 +2,7 @@
 /**
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     LGPL-2.1
- * @license     LGPL-2.1 http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
 
@@ -47,7 +46,7 @@ class SeoController extends Controller
         $setting->set($inputs);
 
         if ($request->file('siteImage') !== null) {
-            $file = XeStorage::upload($request->file('siteImage'), 'seo');
+            $file = XeStorage::upload($request->file('siteImage'), 'seo', null, 'uploaded');
             $image = XeMedia::make($file);
             $setting->setSiteImage($image);
         }

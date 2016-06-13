@@ -9,8 +9,8 @@
                     <strong class="ellipsis">{{ $theme->getTitle() }}</strong>
                     <p>{{ $theme->getDescription() }}</p>
                     <div class="btn-right hidden-sm">
-                        <a href="#" class="btn btn-default">새 설정 추가</a>
-                        <a href="{{ route('settings.theme.edit', ['theme'=>$theme->getId()]) }}" target="_blank" class="btn btn-primary">편집</a>
+                        <a href="#" class="btn btn-default">{{xe_trans('xe::addNewInstance')}}</a>
+                        <a href="{{ route('settings.theme.edit', ['theme'=>$theme->getId()]) }}" target="_blank" class="btn btn-primary">{{xe_trans('xe::edit')}}</a>
                     </div>
                 </div>
                 <ul>
@@ -25,10 +25,10 @@
                                 <div class="skin-select-btn">
                                     <button type="button" class="__xe_mobile-theme-btn btn btn-default btn-sm @if($selectedThemeId['mobile'] === $configId) on @endif " data-config-id="{{ $configId }}"><i class="xi-mobile visible-xs"></i><span class="hidden-xs"><i class="xi-check"></i>Mobile</span></button>
                                 </div>
-                                <strong class="ellipsis">{{ $config->get('_configTitle', '기본') }}</strong>
+                                <strong class="ellipsis">{{ $config->get('_configTitle', xe_trans('xe::default')) }}</strong>
                                 <div class="btn-right">
-                                    <a href="{{ route('settings.theme.setting', ['theme'=>$configId]) }}" target="_blank" class="btn btn-link"><i class="xi-cog"></i><span class="hidden-xs">수정</span></a>
-                                    <a href="{{ url($previewLink.'preview_theme='.$configId) }}" target="_blank" class="btn btn-link"><i class="xi-magnifier"></i><span class="hidden-xs">미리보기</span></a>
+                                    <a href="{{ route('settings.theme.setting', ['theme'=>$configId]) }}" target="_blank" class="btn btn-link"><i class="xi-cog"></i><span class="hidden-xs">{{xe_trans('xe::modify')}}</span></a>
+                                    <a href="{{ url($previewLink.'preview_theme='.$configId) }}" target="_blank" class="btn btn-link"><i class="xi-magnifier"></i><span class="hidden-xs">{{xe_trans('xe::preview')}}</span></a>
                                 </div>
                             </li>
                         @endforeach

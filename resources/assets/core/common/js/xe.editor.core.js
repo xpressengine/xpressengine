@@ -39,6 +39,9 @@
         },
         addTools: function(toolInstanceList) {
             editorSet[this.editorName].interfaces.addTools.call(this.getInstance(), this.getOptions().toolInfoList, toolInstanceList);
+        },
+        on: function(eventName, callback) {
+            editorSet[this.editorName].interfaces.on.call(this.getInstance(), eventName, callback);
         }
     };
 

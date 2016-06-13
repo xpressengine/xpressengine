@@ -5,7 +5,7 @@
             <div class="panel">
                 <div class="panel-heading">
                     <div class="pull-left">
-                        <h3 class="panel-title">다국어 입력</h3>
+                        <h3 class="panel-title">{{xe_trans('xe::multilingualInput')}}</h3>
                     </div>
                 </div>
                 <div class="panel-heading">
@@ -36,7 +36,7 @@
                                         @endforeach
                                     </ul>
                                 </div><!-- /btn-group -->
-                                <input type="text" class="form-control" aria-label="Text input with dropdown button" placeholder="검색어를 입력하세요." value="{{ $selected_keyword }}">
+                                <input type="text" class="form-control" aria-label="Text input with dropdown button" placeholder="{{xe_trans('xe::enterKeyword')}}" value="{{ $selected_keyword }}">
                                 <button class="btn-link" id="btn-search">
                                     <i class="xi-magnifier"></i><span class="sr-only">{{ XeLang::trans('lang::admin.search-short') }}</span>
                                 </button>

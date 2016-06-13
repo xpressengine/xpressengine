@@ -12,8 +12,8 @@
     @if(Auth::check())
         <a href="{{ route('logout') }}">{{ xe_trans('xe::logout') }}</a>
     @else
-    <a href="{{ route('auth.reset') }}">비밀번호 찾기</a>
+    <a href="{{ route('auth.reset') }}">{{xe_trans('xe::findPassword')}}</a>
     <span class="bar">|</span>
-    <a href="{{ route('auth.register') }}"><span>회원가입</span></a>
+    <a href="{{ route('auth.register') }}"><span>{{xe_trans('xe::signUp')}}</span></a>
     @endif
 </div>

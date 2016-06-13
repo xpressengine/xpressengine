@@ -2,8 +2,7 @@
 /**
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     LGPL-2.1
- * @license     LGPL-2.1 http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
 
@@ -104,9 +103,9 @@ class UserController extends Controller
     {
         $ratings = Rating::getUsableAll();
         $ratingNames = [
-            'member' => '일반',
-            'manager' => '관리자',
-            'super' => '최고관리자',
+            'member' => xe_trans('xe::memberRatingNormal'),
+            'manager' => xe_trans('xe::memberRatingManager'),
+            'super' => xe_trans('xe::memberRatingAdministrator'),
         ];
 
         foreach ($ratings as $key => $rating) {
@@ -120,8 +119,8 @@ class UserController extends Controller
         $groups = $this->getGroupInfo($groupList);
 
         $status = [
-            ['value' => \XeUser::STATUS_ACTIVATED, 'text' => '승인됨'],
-            ['value' => \XeUser::STATUS_DENIED, 'text' => '거절됨'],
+            ['value' => \XeUser::STATUS_ACTIVATED, 'text' => xe_trans('xe::permitted')],
+            ['value' => \XeUser::STATUS_DENIED, 'text' => xe_trans('xe::rejected')],
         ];
 
         // dynamic field
@@ -188,9 +187,9 @@ class UserController extends Controller
 
         $ratings = Rating::getUsableAll();
         $ratingNames = [
-            'member' => '일반',
-            'manager' => '관리자',
-            'super' => '최고관리자',
+            'member' => xe_trans('xe::memberRatingNormal'),
+            'manager' => xe_trans('xe::memberRatingManager'),
+            'super' => xe_trans('xe::memberRatingAdministrator'),
         ];
         foreach ($ratings as $key => $rating) {
             $ratings[$key] = [
@@ -210,8 +209,8 @@ class UserController extends Controller
         }
 
         $status = [
-            \XeUser::STATUS_ACTIVATED => ['value' => \XeUser::STATUS_ACTIVATED, 'text' => '승인됨'],
-            \XeUser::STATUS_DENIED => ['value' => \XeUser::STATUS_DENIED, 'text' => '거절됨'],
+            \XeUser::STATUS_ACTIVATED => ['value' => \XeUser::STATUS_ACTIVATED, 'text' => xe_trans('xe::permitted')],
+            \XeUser::STATUS_DENIED => ['value' => \XeUser::STATUS_DENIED, 'text' => xe_trans('xe::rejected')],
         ];
 
         $status[$user->status]['selected'] = 'selected';

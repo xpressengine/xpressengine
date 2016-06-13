@@ -2,12 +2,13 @@
 /**
  * RevisionManager
  *
+ * PHP version 5
+ *
  * @category    DynamicField
  * @package     Xpressengine\DynamicField
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     LGPL-2.1
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
 
@@ -23,6 +24,10 @@ use Xpressengine\Database\DynamicQuery;
  *
  * @category    DynamicField
  * @package     Xpressengine\DynamicField
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  * @deprecated  proxy option 으로 처리할 수 있도록 기능 수정
  */
 class RevisionManager

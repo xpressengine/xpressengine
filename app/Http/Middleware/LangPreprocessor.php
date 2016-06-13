@@ -2,8 +2,7 @@
 /**
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     LGPL-2.1
- * @license     LGPL-2.1 http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
 
@@ -26,7 +25,7 @@ class LangPreprocessor
         app('events')->listen('locale.changed', function($locale) {
             app('xe.translator')->setLocale($locale);
         });
-        $locale = session()->get('locale') ?: app('xe.translator')->getLocale();
+        $locale = $request->cookie('locale') ?: app('xe.translator')->getLocale();
         app()->setLocale($locale);
 
         Route::matched(function($route, $request) use($locale) {

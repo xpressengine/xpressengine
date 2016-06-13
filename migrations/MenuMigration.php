@@ -2,8 +2,7 @@
 /**
  * @author    XE Developers <developers@xpressengine.com>
  * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license   LGPL-2.1
- * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link      https://xpressengine.io
  */
 
@@ -95,6 +94,7 @@ class MenuMigration implements Migration {
             'siteKey' => 'default'
         ]);
         $menuHandler->setMenuTheme($mainMenu, $defaultMenuTheme, $defaultMenuTheme);
+        app('xe.permission')->register($mainMenu->getKey(), $menuHandler->getDefaultGrant());
 
         $this->pageModuleMenuSetup($mainMenu);
         $this->boardModuleMenuSetup($mainMenu);
@@ -146,6 +146,8 @@ class MenuMigration implements Migration {
         $item = $menuHandler->createItem($mainMenu, $inputs, $menuTypeInput);
 
         $menuHandler->setMenuItemTheme($item, 'theme/alice@alice.1', 'theme/alice@alice.1');
+        app('xe.permission')->register($menuHandler->permKeyString($item), new Grant);
+
         /**
          * @var $configManager ConfigManager
          */
@@ -203,6 +205,7 @@ class MenuMigration implements Migration {
         $item = $menuHandler->createItem($mainMenu, $inputs, $menuTypeInput);
 
         $menuHandler->setMenuItemTheme($item, 'theme/alice@alice', 'theme/alice@alice');
+        app('xe.permission')->register($menuHandler->permKeyString($item), new Grant);
     }
 
     protected function setThemeConfig($mainMenu)
