@@ -4,7 +4,7 @@
     </div>
     <div class="panel-body">
         @if(sizeof($list) == 0)
-            <h4>업로드된 파일이 없습니다.</h4>
+            <h4>{{xe_trans('xe::msgNoUploadFiles')}}</h4>
         @endif
         @foreach($list as $disk => $value)
             <h4>

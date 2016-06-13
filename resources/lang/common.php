@@ -505,6 +505,10 @@ return [
         'ko' => '비밀번호 확인',
         'en' => 'Password Confirm',
     ],
+    'summary' => [
+        'ko' => '요약',
+        'en' => 'Summary',
+    ],
     'newPassword' => [
         'ko' => '새 비밀번호',
         'en' => 'New Password',
@@ -1771,5 +1775,25 @@ return [
     'themeNotSupportEdit' => [
         'ko' => '이 테마는 편집을 지원하지 않습니다.',
         'en' => 'This theme does not support editing.',
+    ],
+    'emptyTrash' => [
+        'ko' => '휴지통 비우기',
+        'en' => 'Empty Trash',
+    ],
+    'msgNoUploadFiles' => [
+        'ko' => '업로드된 파일이 없습니다.',
+        'en' => 'No files uploaded.',
+    ],
+    'selectWidget' => [
+        'ko' => '위젯 선택',
+        'en' => 'Select widget',
+    ],
+    'selectWidgetDescription' => [
+        'ko' => '원하시는 위젯을 선택하여 주십시오.',
+        'en' => 'Please select the widget you want.',
+    ],
+    'addNewInstance' => [
+        'ko' => '새 설정 추가',
+        'en' => 'Add new instance',
     ],
 ];

@@ -6,7 +6,7 @@
             <div class="btn-group pull-left mg-bottom mg-right-sm __xe_function_buttons">
                 <button type="button" class="btn btn-default __xe_button __xe_trash_dump_all" data-mode="destroy">
                     <i class="fa fa-times"></i>
-                    휴지통 비우기
+                    {{xe_trans('xe::emptyTrash')}}
                 </button>
             </div>
             <!-- /function button -->
@@ -22,8 +22,8 @@
                     <thead>
                     <tr>
                         <th scope="col"><input type="checkbox" title="Check All" class="__xe_check_all"></th>
-                        <th scope="col">휴지통 이름</th>
-                        <th scope="col">요약 정보</th>
+                        <th scope="col">{{xe_trans('xe::name')}}</th>
+                        <th scope="col">{{xe_trans('xe::summary')}}</th>
                     </tr>
                     </thead>
                     <tbody>
