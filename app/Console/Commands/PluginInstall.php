@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use Xpressengine\Plugin\ComposerFileWriter;
+use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
 
@@ -115,11 +115,12 @@ class PluginInstall extends PluginCommand
 
         $vendorName = PluginHandler::PLUGIN_VENDOR_NAME;
 
-        // composer update실행(composer update --prefer-lowest --with-dependencies xpressengine-plugin/plugin_id)
+        // composer update실행(composer update --prefer-lowest --with-dependencies xpressengine-plugin/*)
         $this->warn('composer update를 실행합니다. 최대 수분이 소요될 수 있습니다.');
         $this->line(" composer update --prefer-lowest --with-dependencies $vendorName/*");
         try {
-            $this->runComposer(base_path(), "update --prefer-lowest --with-dependencies $vendorName/*");
+            $result = $this->runComposer(base_path(), "update -vvv --prefer-lowest --with-dependencies $vendorName/*");
+            dump('result=', $result);
         } catch (\Exception $e) {
             ;
         }

@@ -3,24 +3,31 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Process\Process;
-use Xpressengine\Plugin\ComposerFileWriter;
-use Xpressengine\Plugin\PluginHandler;
-use Xpressengine\Plugin\PluginProvider;
+use Xpressengine\Plugin\Composer\ComposerFileWriter;
+use Xpressengine\Support\Migration;
+
 
 class XeUpdate extends Command
 {
+    use ComposerRunTrait;
+
+    /**
+     * @var
+     */
+    protected $migrations;
+
     /**
      * The console command name.
-     * php artisan plugin:install [--without-activate] <plugin name> [<version>]
+     * php artisan xe:update [version] [--skip-download]
      *
      * @var string
      */
     protected $signature = 'xe:update
                         {version? : The version of xpressengine for install}
+                        {--skip-composer : skip running composer update.}
                         {--skip-download : skip downloading update file.}';
 
     /**
@@ -41,110 +48,97 @@ class XeUpdate extends Command
     /**
      * Execute the console command.
      *
-     * @param PluginHandler $handler
-     * @param PluginProvider $provider
+     * @param ComposerFileWriter $writer
      *
      * @return bool|null
-     * @throws \Exception
      */
-    public function fire(
-        ComposerFileWriter $writer
-    ) {
+    public function fire(ComposerFileWriter $writer) {
+
         // php artisan xe:update [version] [--skip-download]
 
+        // title
+        $this->output->block('Xpressengine을 업데이트합니다.');
+
+        // check option
         if (!$this->option('skip-download')) {
             $this->output->caution('업데이트 파일의 다운로드는 아직 지원하지 않습니다. 아래의 안내대로 코어를 업데이트 하십시오.');
             $this->printGuide();
             return;
         }
 
-        // 안내문구 출력
+        // version 안내
+        $installedVersion = trim(file_get_contents(storage_path('app/installed')));
+        $this->warn(' 업데이트 버전 정보:');
+        $this->output->text("  $installedVersion -> ".__XE_VERSION__);
 
+        // confirm
+        if($this->confirm(
+                "Xpressengine ver.".__XE_VERSION__."을 업데이트합니다. 최대 수분이 소요될 수 있습니다.\r\n 업데이트 하시겠습니까?"
+            ) === false
+        ) {
+            //return;
+        }
 
-
+        // 플러그인 업데이트 잠금
         $writer->resolvePlugins()->setFixMode()->write();
 
         // composer update실행(composer update --no-dev)
-        $this->output->section('composer update를 실행합니다. 최대 수분이 소요될 수 있습니다.');
-        $this->line(" composer update --no-dev");
-        try {
-            $this->runComposer(base_path(), "update --no-dev");
-        } catch (\Exception $e) {
-            ;
-        }
-
-
-
-    }
-
-    /**
-     * runComposer
-     *
-     * @param $path
-     * @param $command
-     *
-     * @return int
-     */
-    protected function runComposer($path, $command)
-    {
-        $composer = $this->findComposer();
-
-        $process = new Process($composer.' '.$command, $path, null, null, null);
-
-        $output = $this->output;
-
-        return $process->run(
-            function ($type, $line) use ($output) {
-                $output->write($line);
+        if(!$this->option('skip-composer')) {
+            $this->output->section('composer update를 실행합니다. 최대 수분이 소요될 수 있습니다.');
+            $this->line(" composer update");
+            try {
+                $this->runComposer(base_path(), "update");
+            } catch (\Exception $e) {
+                ;
             }
-        );
-    }
-
-    /**
-     * findComposer
-     *
-     * @return string
-     */
-    protected function findComposer()
-    {
-        if (file_exists(getcwd().'/composer.phar')) {
-            return '"'.PHP_BINARY.'" composer.phar';
         }
 
-        return 'composer';
+        // migration
+        $this->output->section('Xpressengine 마이그레이션을 실행합니다.');
+        $this->migrateCore($installedVersion, __XE_VERSION__);
+
+        // mark installed
+        $this->markInstalled();
+
+        $this->output->success("Xpressengine을 ver.".__XE_VERSION__."로 업데이트하였습니다");
+
     }
 
     /**
-     * activatePlugin
-     *
-     * @param $pluginId
+     * migrateCore
      *
      * @return void
      */
-    protected function activatePlugin($pluginId)
+    private function migrateCore($installedVersion, $newVersion)
     {
-        /** @var PluginHandler $handler */
-        $handler = app('xe.plugin');
-        $handler->getAllPlugins(true);
+        /** @var Filesystem $filesystem */
+        $filesystem = app('files');
+        $files = $filesystem->files(base_path('migrations'));
 
-        if ($handler->isActivated($pluginId) === false) {
-            $handler->activatePlugin($pluginId);
+        foreach ($files as $file) {
+            $name = lcfirst(str_replace('Migration', '', basename($file, '.php')));
+
+            $class = "\\Xpressengine\\Migrations\\".basename($file, '.php');
+            $this->migrations[] = $migration = new $class();
+            /** @var Migration $migration */
+            $this->output->write(" updating $name.. ");
+            if($migration->checkUpdated($installedVersion)) {
+                $migration->update($installedVersion);
+                $this->info("[success]");
+            } else {
+                $this->warn("[skipped]");
+            }
         }
     }
 
     /**
-     * activatePlugin
-     *
-     * @param $pluginId
+     * markInstalled
      *
      * @return void
      */
-    protected function updatePlugin($pluginId)
+    private function markInstalled()
     {
-        /** @var PluginHandler $handler */
-        $handler = app('xe.plugin');
-        $handler->getAllPlugins(true);
-        $handler->updatePlugin($pluginId);
+        file_put_contents(base_path('storage/app/installed'), __XE_VERSION__);
     }
 
     private function printGuide()

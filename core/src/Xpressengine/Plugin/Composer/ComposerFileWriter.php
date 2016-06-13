@@ -11,7 +11,9 @@
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Plugin;
+namespace Xpressengine\Plugin\Composer;
+
+use Xpressengine\Plugin\PluginScanner;
 
 /**
  * @category
@@ -40,6 +42,14 @@ class ComposerFileWriter
     private $scanner;
 
     private $packagistUrl;
+
+    /**
+     * @return string
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
 
     /**
      * ComposerFileWriter constructor.
@@ -99,6 +109,7 @@ class ComposerFileWriter
     public function removeRequire($name)
     {
         array_forget($this->data, "require.$name");
+        array_set($this->data, "extra.xpressengine-plugin.uninstall", [$name]);
     }
 
     /**
@@ -147,8 +158,9 @@ class ComposerFileWriter
         array_set($this->data, 'require', $requires);
 
         array_set($this->data, 'repositories', [['type'=>'composer', 'url'=>$this->packagistUrl]]);
-        array_set($this->data, 'extra.xpressengine-plugin.uninstall', []);
-        array_set($this->data, 'extra.xpressengine-plugin.changed', []);
+        array_set($this->data, 'xpressengine-plugin.mode', 'plugins-update');
+        array_set($this->data, 'xpressengine-plugin.uninstall', []);
+        array_set($this->data, 'xpressengine-plugin.changed', []);
 
         return $this;
     }
@@ -168,8 +180,9 @@ class ComposerFileWriter
         array_set($this->data, 'require', $requires);
 
         array_set($this->data, 'repositories', [['type'=>'composer', 'url'=>$this->packagistUrl]]);
-        array_set($this->data, 'extra.xpressengine-plugin.uninstall', []);
-        array_set($this->data, 'extra.xpressengine-plugin.changed', []);
+        array_set($this->data, 'xpressengine-plugin.mode', 'plugins-fixed');
+        array_set($this->data, 'xpressengine-plugin.uninstall', []);
+        array_set($this->data, 'xpressengine-plugin.changed', []);
 
         return $this;
     }

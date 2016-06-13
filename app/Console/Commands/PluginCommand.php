@@ -14,7 +14,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Xpressengine\Plugin\ComposerFileWriter;
+use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
 

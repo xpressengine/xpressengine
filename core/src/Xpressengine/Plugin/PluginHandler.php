@@ -48,7 +48,7 @@ class PluginHandler
     const PLUGIN_VENDOR_NAME = 'xpressengine-plugin';
 
     /**
-     * the path of root directory that all plugins is located
+     * the path of directory that all plugins is located
      * 플러그인이 등록돼 있는 디렉토리 경로. 모든 플러그인은 이 디렉토리 안에 존재한다.
      *
      * @var string

@@ -2,11 +2,10 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Process\Process;
-use Xpressengine\Plugin\ComposerFileWriter;
+use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\Exceptions\CannotDeleteActivatedPluginException;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
@@ -75,7 +74,7 @@ class PluginUninstall extends PluginCommand
         // 안내 멘트 출력
         $this->output->warning("위 플러그인을 삭제합니다. 플러그인을 삭제하면 사이트가 정상적으로 작동하지 않을 수 있습니다.");
         if($this->confirm("플러그인을 삭제하시겠습니까?") === false) {
-            return;
+            //return;
         }
 
         if($this->option('deactivate')) {
@@ -108,11 +107,14 @@ class PluginUninstall extends PluginCommand
         // composer update실행(composer update --prefer-lowest --with-dependencies xpressengine-plugin/*)
         $this->warn('composer update를 실행합니다. 최대 수분이 소요될 수 있습니다.');
         $this->line(" composer update --prefer-lowest --with-dependencies $vendorName/$id");
+
         try {
-            $this->runComposer(base_path(), "update --prefer-lowest --with-dependencies $vendorName/$id");
+            $result = $this->runComposer(base_path(), "update --prefer-lowest --with-dependencies $vendorName/$id");
         } catch (\Exception $e) {
             ;
         }
+
+
 
         $this->warn('composer 실행을 마쳤습니다.'.PHP_EOL);
 

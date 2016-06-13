@@ -33,7 +33,7 @@ trait ComposerRunTrait
 
         $process = new Process($composer.' '.$command, $path, null, null, null);
 
-        $output = $this->output;
+        $output = $this->getOutput();
 
         return $process->run(
             function ($type, $line) use ($output) {

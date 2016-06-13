@@ -12,14 +12,14 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Plugin\Cache\ArrayPluginCache;
 use Xpressengine\Plugin\Cache\FilePluginCache;
-use Xpressengine\Plugin\ComposerFileWriter;
+use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\MetaFileReader;
 use Xpressengine\Plugin\PluginCollection;
 use Xpressengine\Plugin\PluginEntity;
 use Xpressengine\Plugin\PluginHandler;
+use Xpressengine\Plugin\PluginProvider;
 use Xpressengine\Plugin\PluginRegister;
 use Xpressengine\Plugin\PluginScanner;
-use Xpressengine\Plugin\PluginProvider;
 use Xpressengine\Skins\Plugin\PluginSettingsSkin;
 
 class PluginServiceProvider extends ServiceProvider

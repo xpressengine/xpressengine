@@ -47,6 +47,9 @@
         "replace": false,
         "merge-dev": false,
         "merge-extra": true
+      },
+      "xpressengine-plugin": {
+        "path": "storage/app/composer.plugins.json"
       }
     },
     "autoload": {

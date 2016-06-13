@@ -43,6 +43,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\PluginInstall::class,
         \App\Console\Commands\PluginUpdate::class,
         \App\Console\Commands\PluginUninstall::class,
+        \App\Console\Commands\PluginComposerSync::class,
         \App\Console\Commands\ThemeMake::class,
 	];
 
