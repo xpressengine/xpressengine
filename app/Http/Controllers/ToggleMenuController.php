@@ -41,6 +41,33 @@ class ToggleMenuController extends Controller
         return XePresenter::makeApi($data);
     }
 
+    public function getPage()
+    {
+        $type = Input::get('type');
+        $id = Input::get('id');
+
+        if (strstr($type, '/')) {
+            $pos = strrpos($type, '/');
+            $instanceId = substr($type, $pos+1);
+            $type = substr($type, 0, $pos);
+        } else {
+            $instanceId = null;
+        }
+
+        $items = [];
+        foreach (XeToggleMenu::getItems($type, $instanceId, $id) as $item) {
+            $items[] = [
+                'text' => $item->getText(),
+                'type' => $item->getType(),
+                'action' => $item->getAction(),
+                'script' => $item->getScript(),
+                'icon' => $item->getIcon(),
+            ];
+        }
+
+        return apiRender('toggleMenu.get', ['items' => $items]);
+    }
+
     public function postSetting()
     {
         // check is manager
