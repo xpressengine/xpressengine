@@ -32,7 +32,7 @@ class ThemeMigration implements Migration
     public function init()
     {
         // set site default theme
-        $theme = ['desktop' => 'theme/alice@sub', 'mobile' => 'theme/alice@sub'];
+        $theme = ['desktop' => 'theme/alice@alice.1', 'mobile' => 'theme/alice@alice.1'];
         app('xe.theme')->setSiteTheme($theme);
 
         // set alice theme
