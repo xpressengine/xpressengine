@@ -47,3 +47,13 @@ html {
 .xe-ellipsis{
   @include text-overflow;
 }
+
+.xe-show {
+  display: block !important;
+}
+.xe-hidden {
+  display: none !important;
+}
+.xe-invisible {
+  visibility: hidden;
+}
