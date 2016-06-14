@@ -2,12 +2,13 @@
 /**
  *  This file is part of the Xpressengine package.
  *
+ * PHP version 5
+ *
  * @category    Http
  * @package     Xpressengine\Http
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     LGPL-2.1
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
 
@@ -22,8 +23,14 @@ use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 /**
  * Request 클래스
  *
+ * PHP version 5
+ *
  * @category    Http
  * @package     Xpressengine\Http
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  */
 class Request extends \Illuminate\Http\Request
 {

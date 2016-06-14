@@ -3,7 +3,7 @@
         <img class="__thumbnail" alt="{{ xe_trans('xe::profileImage') }}" src="{{ $args['image'] }}"
              style="width:{{ $args['width'] }}px; height:{{ $args['height'] }}px;">
     </div>
-    <div class="__xe_inputBtn fileinput-button btn_file __xe_imgUploadBox" style="display: none;">
+    <div class="__xe_inputBtn fileinput-button btn-file __xe_imgUploadBox" style="display: none;">
         <input class="__xe_file_{{ $seq }}" type="file" name="{{ array_get($args, 'name', 'imagebox') }}"/>
     </div>
 </div>
