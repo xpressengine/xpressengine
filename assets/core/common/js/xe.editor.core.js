@@ -42,6 +42,9 @@
         },
         on: function(eventName, callback) {
             editorSet[this.editorName].interfaces.on.call(this.getInstance(), eventName, callback);
+        },
+        renderFileUploader: function(customOptions) {
+            editorSet[this.editorName].interfaces.renderFileUploader.call(this.getInstance(), customOptions);
         }
     };
 

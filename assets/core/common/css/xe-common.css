@@ -449,4 +449,16 @@ html {
   white-space: nowrap;
 }
 
+.xe-show {
+  display: block !important;
+}
+
+.xe-hidden {
+  display: none !important;
+}
+
+.xe-invisible {
+  visibility: hidden;
+}
+
 /*# sourceMappingURL=xe-common.css.map */
