@@ -84,6 +84,34 @@ class JSFile
         return $output;
     }
 
+    public static function getFileList($location = 'async.append', $minified = false)
+    {
+        $output = [];
+        // get files by location
+        // $list is assoc array(filename => JSFile instance)
+        $list = array_get(static::$fileList, $location, []);
+
+        $sorted = static::$sorter->sort(array_diff(array_keys($list), static::$unloaded));
+
+        array_map(
+            function ($file) use ($list, &$output, $minified) {
+                $fileObj = $list[$file];
+                $output[] = $fileObj->getFile($file, $minified);
+            },
+            $sorted
+        );
+
+        return $output;
+    }
+
+    public function getFile($file, $minified = false)
+    {
+        if($minified) {
+            return $this->minified;
+        }
+        return $file;
+    }
+
     /**
      * init 전역 메소드이며, javascript 파일의 목록을 관리하기 위해 필요한 초기 작업으로
      * sorter와 file list를 설정한다.
@@ -135,6 +163,12 @@ class JSFile
     public function unload()
     {
         static::$unloaded = array_merge(static::$unloaded, $this->files);
+    }
+
+    public function loadAsync()
+    {
+        $this->location = 'async.append';
+        return $this->load();
     }
 
     /**

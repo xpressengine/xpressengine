@@ -29,6 +29,7 @@ use Xpressengine\Support\Sorter;
 class CSSFile
 {
     use AttributeTrait;
+    use LocatableTrait;
     use MinifyTrait;
     use SortTrait;
     use TargetTrait;
@@ -55,16 +56,20 @@ class CSSFile
     protected $loaded = false;
 
     /**
-     * 로드된 JS파일 목록을 출력한다.
+     * 주어진 위치에 해당하는 로드된 CSS파일 목록을 출력한다.
      *
-     * @param bool $minified minified 파일을 출력할지 결정한다.
+     * @param string $location 출력할 파일의 위치\n
+     *                         (head.append|head.prepend|body.append|body.prepend)
+     * @param bool   $minified minified 파일을 출력할지 결정한다.
      * @return string
      */
-    public static function output($minified = false)
+    public static function output($location = 'head.append', $minified = false)
     {
         $output = '';
 
-        $list = static::$fileList;
+        // get files by location
+        // $list is assoc array(filename => JSFile instance)
+        $list = array_get(static::$fileList, $location, []);
 
         $sorted = static::$sorter->sort(array_diff(array_keys($list), static::$unloaded));
 
@@ -78,6 +83,37 @@ class CSSFile
 
         return $output;
     }
+
+
+    public static function getFileList($location = 'async.append', $minified = false)
+    {
+        $output = [];
+
+        // get files by location
+        // $list is assoc array(filename => CSSFile instance)
+        $list = array_get(static::$fileList, $location, []);
+
+        $sorted = static::$sorter->sort(array_diff(array_keys($list), static::$unloaded));
+
+        array_map(
+            function ($file) use ($list, &$output, $minified) {
+                $fileObj = $list[$file];
+                $output[] = $fileObj->getFile($file, $minified);
+            },
+            $sorted
+        );
+
+        return $output;
+    }
+
+    public function getFile($file, $minified = false)
+    {
+        if($minified) {
+            return $this->minified;
+        }
+        return $file;
+    }
+
 
     /**
      * init 전역 메소드이며, javascript 파일의 목록을 관리하기 위해 필요한 초기 작업으로
@@ -101,6 +137,8 @@ class CSSFile
      */
     public function __construct($files)
     {
+        $this->location = 'head.append';
+
         foreach ((array) $files as $file) {
             $file          = $this->asset($file);
             $this->files[] = $file;
@@ -146,6 +184,12 @@ class CSSFile
         static::$unloaded = array_merge(static::$unloaded, $this->files);
     }
 
+    public function loadAsync()
+    {
+        $this->location = 'async.append';
+        return $this->load();
+    }
+
     /**
      * load
      *
@@ -162,9 +206,13 @@ class CSSFile
         }
 
         $prev = null;
-        foreach ((array)$this->files as $file) {
+        foreach ((array) $this->files as $file) {
 
-            static::$fileList[$file] = $this;
+            // add file to output list
+            static::$fileList = array_add(static::$fileList, $this->location, []);
+
+            list($element, $position) = explode('.', $this->location);
+            static::$fileList[$element][$position][$file] = $this;
 
             $added = false;
 

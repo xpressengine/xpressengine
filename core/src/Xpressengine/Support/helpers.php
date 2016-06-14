@@ -118,8 +118,8 @@ if (function_exists('apiRender') === false) {
         return XePresenter::makeApi([
             'result' => (string)$result,
             'XE_ASSET_LOAD' => [
-                'css' => [],
-                'js' => [],
+                'css' => \Xpressengine\Presenter\Html\Tags\CSSFile::getFileList(),
+                'js' => \Xpressengine\Presenter\Html\Tags\JSFile::getFileList(),
             ],
         ]);
     }
