@@ -15,6 +15,8 @@ use Xpressengine\UIObjects\Form\Form;
 use Xpressengine\UIObjects\Form\FormCheckbox;
 use Xpressengine\UIObjects\Form\FormFile;
 use Xpressengine\UIObjects\Form\FormImage;
+use Xpressengine\UIObjects\Form\FormLangText;
+use Xpressengine\UIObjects\Form\FormLangTextArea;
 use Xpressengine\UIObjects\Form\FormPassword;
 use Xpressengine\UIObjects\Form\FormSelect;
 use Xpressengine\UIObjects\Form\FormText;
@@ -96,5 +98,8 @@ class UIObjectServiceProvider extends ServiceProvider
 
         $register->add(LangText::class);
         $register->add(LangTextArea::class);
+
+        $register->add(FormLangText::class);
+        $register->add(FormLangTextArea::class);
     }
 }
