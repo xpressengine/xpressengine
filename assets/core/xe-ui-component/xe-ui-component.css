@@ -2513,7 +2513,7 @@ select[multiple].xe-input-lg,
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 1050;
+  z-index: 1060;
   -webkit-overflow-scrolling: touch;
   outline: 0;
 }
@@ -2693,6 +2693,12 @@ select[multiple].xe-input-lg,
   padding-left: 24px;
   margin: 0;
   max-height: 365px;
+}
+
+.xe-modal .xe-list-group .grid-canvas {
+  position: relative;
+  outline: 0;
+  width: 100% !important;
 }
 
 .xe-modal .xe-list-group .slick-cell {

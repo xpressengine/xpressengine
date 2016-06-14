@@ -32,9 +32,6 @@
         addContents: function(text) {
             editorSet[this.editorName].interfaces.addContents.call(this.getInstance(), text);
         },
-        setCustomOptions: function(customOptions) {
-            editorSet[this.editorName].interfaces.setCustomOptions.call(this.getInstance(), customOptions || {});
-        },
         addProps: function(obj) {
             for(var o in obj) {
                 this.getInstance().props[o] = obj[o];

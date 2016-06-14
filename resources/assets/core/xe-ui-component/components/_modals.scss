@@ -178,6 +178,11 @@
   padding-left: 24px;
   margin: 0;
   max-height: 365px;
+  .grid-canvas {
+     position: relative;
+     outline: 0;
+     width: 100% !important;
+   }
   .slick-cell{
     width: 100%;
     border: none;
