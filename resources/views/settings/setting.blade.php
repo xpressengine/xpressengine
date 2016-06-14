@@ -18,7 +18,7 @@
                         {{-- 샤이트 제목 --}}
                         <div class="form-group">
                             <label>{{ xe_trans('xe::site')}} {{ xe_trans('xe::title') }}</label>
-                            {!! uio('langText', ['placeholder'=>xe_trans('xe::inputBrowserTitle'), 'langKey'=>array_get($config, 'site_title', null), 'name'=>'site_title']) !!}
+                            {!! uio('langText', ['placeholder'=>xe_trans('xe::inputBrowserTitle'), 'langKey'=>$config->get('site_title', null), 'name'=>'site_title']) !!}
                         </div>
 
                         {{-- 파비콘 --}}
