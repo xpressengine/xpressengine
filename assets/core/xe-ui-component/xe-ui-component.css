@@ -2695,6 +2695,12 @@ select[multiple].xe-input-lg,
   max-height: 365px;
 }
 
+.xe-modal .xe-list-group .grid-canvas {
+  position: relative;
+  outline: 0;
+  width: 100% !important;
+}
+
 .xe-modal .xe-list-group .slick-cell {
   width: 100%;
   border: none;
