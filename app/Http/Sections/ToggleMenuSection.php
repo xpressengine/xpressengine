@@ -32,6 +32,7 @@ class ToggleMenuSection extends Section
         $activated = XeToggleMenu::getActivated($this->type, $this->instanceId);
         $deactivated = XeToggleMenu::getDeactivated($this->type, $this->instanceId);
         $items = [];
+
         foreach ($activated as $key => $item) {
             $items[$key] = ['item' => $item, 'activated' => true];
         }
