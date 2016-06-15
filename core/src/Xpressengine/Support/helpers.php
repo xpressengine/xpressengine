@@ -238,7 +238,9 @@ if (function_exists('uio') === false) {
      *                         $firstNum->val('010');
      *                         }
      *                         ```
-     * @return Xpressengine\UIObject\AbstractUIObject 생성된 AbstractUIObject
+     *
+     * @return \Xpressengine\UIObject\AbstractUIObject 생성된 AbstractUIObject
+     * @throws Exception
      */
     function uio($id, $args = [], $callback = null)
     {
@@ -342,11 +344,50 @@ if (!function_exists('getCurrentInstanceId')) {
 
         /** @var Xpressengine\Menu\Models\Menu $menu */
         if ($menu !== null) {
+
+            /**
+             * 보이지 않는(보기 권한이 없는) 메뉴는 제외시킨다.
+             *
+             * @param \Xpressengine\Menu\Models\MenuItem $item
+             * @param \Xpressengine\Menu\Models\Menu $menu
+             *
+             * @return null|\Xpressengine\Menu\Models\MenuItem
+             */
+            function removeInvisible($item, $menu) {
+
+                // resolve item
+                if(app('gate')->denies('visible', [$item, $menu])) {
+                    return null;
+                }
+
+                // resolve child menuitems of item
+                $children = new \Illuminate\Support\Collection();
+                foreach ($item['children'] as $child) {
+                    if($new = removeInvisible($child, $menu)) {
+                        if($new) {
+                            $children[] = $new;
+                        }
+                    }
+                }
+                $item['children'] = $children;
+
+                return $item;
+            };
+
             $current = getCurrentInstanceId();
             if ($current !== null) {
                 $menu->setItemSelected($current);
             }
-            $menuTree = $menu->getTree()->getTreeNodes();
+            $tree = $menu->getTree()->getTreeNodes();
+
+            // resolve menu visible
+            $menuTree = [];
+            foreach($tree as $item) {
+                if($new = removeInvisible($item, $menu)) {
+                    $menuTree[] = $new;
+                }
+            }
+
             return $menuTree;
         } else {
             return new Illuminate\Support\Collection();
