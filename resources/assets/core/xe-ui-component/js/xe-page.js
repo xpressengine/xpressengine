@@ -13,6 +13,7 @@
                 $(document).on('click', '[data-toggle=xe-page]', self.execPage);
                 $(document).on('click', '[data-toggle=xe-page-modal]', self.execPageModal);
                 $(document).on('click', '[data-toggle=xe-page-toggle-menu]', self.execPageToggleMenu);
+                $(document).on('click', self.execPageCheck);
             },
             execPage: function(e) {
                 e.preventDefault();
@@ -86,29 +87,18 @@
 
                 var $this = $(this),
                     data = $this.data('data'),
-                    targetSelector = $this.data('target'),
+                    side = $this.data('side'),
                     callback = $this.data('callback'),
                     url = $this.data('url');
 
                 data = data? (typeof data === "object")? data : JSON.parse(data) : {};
 
-                // target 을 찾을 대 parent() 에서 한번 찾고 다음엔 전체에서 찾음
-                var $target;
-                if (targetSelector) {
-                    $target = $this.parent().find(targetSelector);
-                }
-                if ($target.length == 0) {
-                    $target = $(targetSelector);
-                }
-                if ($target.length == 0) {
-                    console.error('pageToggleMenu: target not found.');
-                }
-
                 var objStack = callback? callback.split(".") : [];
                 var callbackFunc = (objStack.length > 0)? window : '';
 
                 var options = {
-                    data: data
+                    data: data,
+                    side: side
                 };
 
                 if(!url
@@ -123,7 +113,7 @@
                     }
                 }
 
-                XE.pageToggleMenu(url, $target, options, callbackFunc);
+                XE.pageToggleMenu(url, $this, options, callbackFunc);
             },
             loadDone: function(cssLen, jsLen, next) {
                 var loadingCount = 0;
@@ -148,8 +138,16 @@
             },
             getLayerPopupTemplate: function() {
                 return [
-                    '<ul class="xe-toggle-menu-items"></ul>'
+                    '<ul class="xe-dropdown-menu xe-toggle-menu"></ul>'
                 ].join("\n");
+            },
+            execPageCheck: function(e) {
+                var $target = $(event.target);
+
+                // close ToggleMenu
+                if ($target.closest('.xe-dropdown').length == 0) {
+                    $('[data-toggle=xe-page-toggle-menu]').parent('.xe-dropdown').removeClass('open');
+                }
             }
         }.init();
     }();
@@ -341,7 +339,7 @@
 
     /**
      * @param {string} url
-     * @param {string} target : attach destination
+     * @param {object} $this
      * @param {object} options
      * <pre>
      *     - data : request parameters
@@ -359,36 +357,43 @@
      *     4)modal show
      * </pre>
      * */
-    XE.pageToggleMenu = function(url, target, options, callback) {
+    XE.pageToggleMenu = function(url, $this, options, callback) {
+        var $container = $this.parent();
+
+        if ($container.hasClass('xe-dropdown') == false) {
+            $container.addClass('xe-dropdown');
+        }
+
+        if ($container.hasClass('open')) {
+            $container.removeClass('open');
+            return;
+        }
+
+        var $target = $container.find('.xe-dropdown-menu');
+        if ($target.length == 0) {
+            var toggleMenuTemplate = _pageCommon.getLayerPopupTemplate();
+            $container.append(toggleMenuTemplate);
+            $target = $container.find('.xe-dropdown-menu');
+        }
+
+        if (options.side) {
+            $target.addClass(options.side);
+        }
 
         var options = $.extend(options, {
-            target: target,
+            target: $target,
             url: url,
             type: options.type || 'get'
         });
 
         if(_validation.isValidPageToggleMenu(options)) {
-
-            var $container = target.find(".xe-toggle-menu-items");
-
-            if($container.length > 0) {
-                $container.empty();
-            }else {
-                var toggleMenuTemplate = _pageCommon.getLayerPopupTemplate();
-
-                target.append(toggleMenuTemplate);
-            }
-
-            target.addClass('ly_popup');
-
             _page(options, function() {
                 if(callback) {
                     callback();
                 }
 
-                target.css('display', 'block');
+                $container.addClass('open');
             });
-
         }
     };
 
