@@ -136,13 +136,11 @@ class ToggleMenuHandler
             $this->cfg->set($this->getConfigKey($id, null), []);
         }
 
-
         if (($config = $this->cfg->get($this->getConfigKey($id, $instanceId))) === null) {
             $config = $this->setActivates($id, $instanceId);
         }
 
         $keys = $config->get('activate', []);
-
 
         $activated = array_intersect_key($this->all($id), array_flip($keys));
 
