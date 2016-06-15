@@ -356,7 +356,7 @@ if (!function_exists('getCurrentInstanceId')) {
             function removeInvisible($item, $menu) {
 
                 // resolve item
-                if(app('gate')->denies('visible', [$item, $menu])) {
+                if(Gate::denies('visible', [$item, $menu])) {
                     return null;
                 }
 
