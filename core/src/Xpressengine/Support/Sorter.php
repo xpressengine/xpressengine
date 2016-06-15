@@ -125,6 +125,10 @@ class Sorter
         $tails   = $this->tails;
         $targets = $keyList === null ? $this->tails : (array) $keyList;
 
+        if(count($targets) === 1) {
+            return $targets;
+        }
+
         $list           = [];
         $this->resolved = [];
 

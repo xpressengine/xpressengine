@@ -14,6 +14,8 @@
 
 namespace Xpressengine\Presenter\Html\Tags;
 
+use Xpressengine\Presenter\Exceptions\MinifyNotAllowedException;
+
 /**
  * MinifyTrait
  *
@@ -41,6 +43,9 @@ trait MinifyTrait
      */
     public function min($minified, $useMinified = false)
     {
+        if(count($this->files) > 1) {
+            throw new MinifyNotAllowedException();
+        }
         $this->minified    = $minified;
         $this->useMinified = $useMinified;
         return $this;

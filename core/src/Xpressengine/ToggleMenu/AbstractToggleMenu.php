@@ -40,4 +40,14 @@ abstract class AbstractToggleMenu implements ComponentInterface, ItemInterface
     {
         return;
     }
+
+    /**
+     * 메뉴에 표시여부 반환
+     * 표실 할  경우 true 반환
+     *
+     * @return bool
+     */
+    public function allows() {
+        return true;
+    }
 }

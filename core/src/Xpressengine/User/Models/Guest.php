@@ -50,7 +50,7 @@ class Guest implements UserInterface
      */
     public function getId()
     {
-        $this->throwNotSupportedException();
+        return null;
     }
 
     /**

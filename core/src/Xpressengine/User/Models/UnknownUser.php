@@ -59,7 +59,7 @@ class UnknownUser implements UserInterface
      */
     public function getId()
     {
-        $this->throwNotSupportedException();
+        return null;
     }
 
     /**

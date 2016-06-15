@@ -78,4 +78,12 @@ interface ItemInterface
      * @return string
      */
     public function getIcon();
+
+    /**
+     * 메뉴에 표시여부 반환
+     * 표실 할  경우 true 반환
+     *
+     * @return bool
+     */
+    public function allows();
 }

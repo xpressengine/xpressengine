@@ -33,9 +33,9 @@
 }
 
 .xe-dropdown-menu,
-.xe-dropdown-menu ul{  
+.xe-dropdown-menu ul{
   margin: 0;
-  padding: 0;  
+  padding: 0;
   li {
     list-style: none;
     a {
@@ -47,32 +47,32 @@
 /*dropdown*/
 .xe-dropdown, .xe-dropup {
   display: block;
-  position: relative;  
+  position: relative;
   font-size: 14px;
-  white-space: nowrap;  
-  // clear: both;
+  white-space: nowrap;
+  vertical-align: middle;
 }
 
 .xe-dropdown > .xe-btn,
 .xe-dropup > .xe-btn,
-.xe-select-box.xe-btn {  
+.xe-select-box.xe-btn {
   display: block;
-  position: relative;     
+  position: relative;
   width:100%;
-  padding-right: $dropdown-right-padding;  
-  text-align: left;  
-  white-space: nowrap;    
+  padding-right: $dropdown-right-padding;
+  text-align: left;
+  white-space: nowrap;
   outline: none;
 
   &:focus,
   &.focus,
   &:active,
-  &.active {    
-    background-color: $btn-default-bg;        
+  &.active {
+    background-color: $btn-default-bg;
   }
-  &:hover {    
-    background-color: $btn-default-bg;        
-  }  
+  &:hover {
+    background-color: $btn-default-bg;
+  }
   &:active{
     &:focus{
       background-color: $btn-default-bg;
@@ -86,26 +86,13 @@
   border: none;
 }
 
-.xe-dropdown > .xe-btn, 
+.xe-dropdown > .xe-btn,
 .xe-dropup > .xe-btn,
 .xe-select-box.xe-btn,
 .xe-select-label .label-input{
   &:after{
-    @include dropdown-arrow($dropdown-arrow-color);    
+    @include dropdown-arrow($dropdown-arrow-color);
   }
-}
-
-.xe-dropdown > .xe-dropdown-menu, 
-.xe-dropup > .xe-dropdown-menu {
-  position: absolute;
-  left: 0;  
-  top: 100%;  
-  margin-top:-1px;
-  padding:8px 0;
-  border: 1px solid $dropdown-border-color; 
-  border-radius: $border-radius-base;
-  background-color: #fff;
-  z-index: 10;
 }
 
 .xe-dropup {
@@ -117,13 +104,21 @@
   }
 }
 
-.xe-dropdown .xe-dropdown-menu,
-.xe-dropup .xe-dropdown-menu {
-  display: none;  
+.xe-dropdown-menu {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 100%;
+  margin-top:-1px;
+  padding:8px 0;
+  border: 1px solid $dropdown-border-color;
+  border-radius: $border-radius-base;
+  background-color: #fff;
+  z-index: 10;
 }
 
-.xe-dropdown.open .xe-dropdown-menu, 
-.xe-dropup.open .xe-dropdown-menu {
+
+.open>.xe-dropdown-menu {
   display: block;
   width:100%;
 }
@@ -133,7 +128,7 @@
     overflow: hidden;
     display: block;
     position: relative;
-    padding: 8px 15px;    
+    padding: 8px 15px;
     color: #2c2e37;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -141,7 +136,7 @@
       background-color: #2389ee;
       color: #fff !important;
     }
-  }  
+  }
   &.on a {
     color: #2c8beb;
   }
@@ -149,11 +144,11 @@
 
 // design custom selectbox
 
-.xe-select-box {  
+.xe-select-box {
   overflow: hidden;
   text-overflow: ellipsis;
   word-break: break-word;
-  white-space: nowrap;  
+  white-space: nowrap;
   select {
     position: absolute;
     top: 0;
@@ -168,7 +163,7 @@
   }
 }
 
-.xe-select-label {     
+.xe-select-label {
   position: relative;
   .label-input {
     display: block;
@@ -247,4 +242,16 @@
       }
     }
   }
+}
+
+.caret {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 2px;
+  vertical-align: middle;
+  border-top:   $caret-width-base dashed;
+  border-top:   $caret-width-base solid \9; // IE8
+  border-right: $caret-width-base solid transparent;
+  border-left:  $caret-width-base solid transparent;
 }

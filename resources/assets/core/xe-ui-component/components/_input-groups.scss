@@ -44,12 +44,12 @@
 .xe-input-group-lg > .xe-form-control,
 .xe-input-group-lg > .xe-input-group-addon,
 .xe-input-group-lg > .xe-input-group-btn > .xe-btn {
-  @extend .input-lg;
+  @extend .xe-input-lg;
 }
 .xe-input-group-sm > .xe-form-control,
 .xe-input-group-sm > .xe-input-group-addon,
 .xe-input-group-sm > .xe-input-group-btn > .xe-btn {
-  @extend .input-sm;
+  @extend .xe-input-sm;
 }
 
 
@@ -86,12 +86,12 @@
   border-radius: $input-border-radius;
 
   // Sizing
-  &.input-sm {
+  &.xe-input-sm {
     padding: $padding-small-vertical $padding-small-horizontal;
     font-size: $font-size-small;
     border-radius: $input-border-radius-small;
   }
-  &.input-lg {
+  &.xe-input-lg {
     padding: $padding-large-vertical $padding-large-horizontal;
     font-size: $font-size-large;
     border-radius: $input-border-radius-large;

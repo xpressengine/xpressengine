@@ -25,11 +25,12 @@
 // Wrapper for the tooltip content
 .xe-tooltip-inner {
   max-width: $tooltip-max-width;
-  padding: 3px 8px;
+  padding: 10px 8px;
   color: $tooltip-color;
-  text-align: center;
+  text-align: left;
   background-color: $tooltip-bg;
   border-radius: $border-radius-base;
+  line-height: 18px;
 }
 
 // Arrows

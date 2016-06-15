@@ -1820,4 +1820,8 @@ return [
         'ko' => '새 설정 추가',
         'en' => 'Add new instance',
     ],
+    'moveToTrash' => [
+        'ko' => '휴지통으로 이동',
+        'en' => 'Move to trash',
+    ],
 ];

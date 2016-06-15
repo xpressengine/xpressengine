@@ -11,6 +11,7 @@ namespace App\Http\Controllers;
 use XeToggleMenu;
 use Input;
 use XePresenter;
+use Xpressengine\ToggleMenu\AbstractToggleMenu;
 
 class ToggleMenuController extends Controller
 {
@@ -28,7 +29,12 @@ class ToggleMenuController extends Controller
         }
 
         $data = [];
+        /** @var AbstractToggleMenu $item */
         foreach (XeToggleMenu::getItems($type, $instanceId, $id) as $item) {
+            if ($item->allows() == false) {
+                continue;
+            }
+
             $data[] = [
                 'text' => $item->getText(),
                 'type' => $item->getType(),
@@ -39,6 +45,39 @@ class ToggleMenuController extends Controller
         }
 
         return XePresenter::makeApi($data);
+    }
+
+    public function getPage()
+    {
+        $type = Input::get('type');
+        $id = Input::get('id');
+
+        if (strstr($type, '/')) {
+            $pos = strrpos($type, '/');
+            $instanceId = substr($type, $pos+1);
+            $type = substr($type, 0, $pos);
+        } else {
+            $instanceId = null;
+        }
+
+        $items = [];
+        /** @var AbstractToggleMenu $item */
+        foreach (XeToggleMenu::getItems($type, $instanceId, $id) as $item) {
+            if ($item->allows() == false) {
+                continue;
+            }
+
+            $items[] = [
+                'text' => $item->getText(),
+                'type' => $item->getType(),
+                'action' => $item->getAction(),
+                'script' => $item->getScript(),
+                'icon' => $item->getIcon(),
+            ];
+
+        }
+
+        return apiRender('toggleMenu.get', ['items' => $items]);
     }
 
     public function postSetting()

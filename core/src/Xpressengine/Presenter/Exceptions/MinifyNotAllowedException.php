@@ -26,7 +26,7 @@ use Xpressengine\Presenter\PresenterException;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class RegisteredClosureException extends PresenterException
+class MinifyNotAllowedException extends PresenterException
 {
-    
+    protected $message = 'minify method is allowed for single file.';
 }
