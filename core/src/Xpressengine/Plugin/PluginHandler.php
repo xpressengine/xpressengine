@@ -18,6 +18,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Application;
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Plugin\Exceptions\CannotDeleteActivatedPluginException;
+use Xpressengine\Plugin\Exceptions\PluginActivationFailedException;
 use Xpressengine\Plugin\Exceptions\PluginAlreadyActivatedException;
 use Xpressengine\Plugin\Exceptions\PluginAlreadyDeactivatedException;
 use Xpressengine\Plugin\Exceptions\PluginDeactivationFailedException;
@@ -185,9 +186,20 @@ class PluginHandler
     {
         $entity = $this->getPlugin($pluginId);
 
+        // 기존에 설치(활성화)된 적이 있는지 검사한다. 기존에 활성화된 적이 있다면 설치된 버전을 조회한다.
+        $installedVersion = $entity->getInstalledVersion();
+
         $this->updatePlugin($pluginId, false);
 
+        // 플러그인 활성화. 플러그인을 활성화할 때마다 각 플러그인의 activate() 메소드를 호출해준다.
+        try {
+            $entity->activate($installedVersion);
+        } catch (\Exception $e) {
+            throw new PluginActivationFailedException();
+        }
+
         $entity->setStatus(static::STATUS_ACTIVATED);
+        $entity->setInstalledVersion($entity->getVersion());
 
         // 활성화 된 플러그인의 정보를 config에 기록한다.
         $configs = $this->getPluginsStatus();
