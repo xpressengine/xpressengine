@@ -49,26 +49,6 @@ return [
             'url' => '/storage/app/',
         ],
 
-        'uploaded' => [
-            'driver' => 'local',
-            'root' => storage_path('uploaded'),
-            'url' => '/storage/uploaded/',
-        ],
-
-        // assigned to each plugin.
-        'plugin' => [
-            'driver' => 'local',
-            'root' => storage_path('uploaded/plugin'),
-            'url' => '/storage/uploaded/plugin/',
-        ],
-
-        // assigned to theme package
-        'theme' => [
-            'driver' => 'local',
-            'root' => storage_path('uploaded/theme'),
-            'url' => '/storage/uploaded/theme/',
-        ],
-
         'ftp' => [
             'driver' => 'ftp',
             'host' => 'ftp.example.com',
