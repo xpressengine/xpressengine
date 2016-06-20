@@ -72,7 +72,7 @@ class Kernel extends HttpKernel
      */
     protected function isInstalled()
     {
-        return file_exists($this->app->storagePath() . '/framework/installed');
+        return file_exists($this->app->storagePath() . '/app/installed');
     }
 
     /**

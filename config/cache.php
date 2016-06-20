@@ -49,7 +49,7 @@ return [
 
 		'lang' => [
 			'driver' => 'file',
-			'path'   => storage_path('framework/lang'),
+			'path'   => storage_path('app/lang'),
 		],
 
 		'plugins' => [

@@ -934,7 +934,7 @@ class XeInstall extends Command
      */
     private function markInstalled()
     {
-        $markFile = $path = $this->getBasePath('storage/framework/installed');
+        $markFile = $path = $this->getBasePath('storage/app/installed');
         touch($markFile);
     }
 }
