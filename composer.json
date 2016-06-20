@@ -40,7 +40,7 @@
         "xpressengine-plugin/orientator": "dev-master",
         "xpressengine-plugin/page": "dev-master",
         "xpressengine-plugin/board": "dev-master",
-        "xpressengine-plugin/comment": "dev-master",
+        "xpressengine-plugin/comment": "0.1.*-dev",
         "xpressengine-plugin/ckeditor": "dev-master",
         "xpressengine-plugin/claim": "dev-master",
         "xpressengine-plugin/external_page": "dev-master",
