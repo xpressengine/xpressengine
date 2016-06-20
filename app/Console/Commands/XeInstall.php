@@ -45,9 +45,9 @@ class XeInstall extends Command
      */
     protected $basePlugins = [
         'alice',
+        'claim',
         'board',
         'ckeditor',
-        'claim',
         'comment',
         'page',
         'news_client',
