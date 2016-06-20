@@ -11,7 +11,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use XeStorage;
 use Xpressengine\Http\Request;
-use Xpressengine\Menu\Models\Menu;
+use Xpressengine\Menu\MenuHandler;
 use Xpressengine\Permission\Grant;
 use Xpressengine\Permission\PermissionHandler;
 use Xpressengine\Settings\SettingsHandler;
@@ -22,14 +22,14 @@ use Xpressengine\Theme\ThemeHandler;
 class SettingsController extends Controller
 {
 
-    public function editSetting(SiteHandler $siteHandler, ThemeHandler $themeHandler)
+    public function editSetting(SiteHandler $siteHandler, ThemeHandler $themeHandler, MenuHandler $menuHandler)
     {
         $config = app('xe.site')->getSiteConfig();
 
         $siteKey = $siteHandler->getCurrentSiteKey();
         $indexInstance = $siteHandler->getHomeInstanceId();
 
-        $menus = Menu::with('items')->where('siteKey', $siteKey)->get();
+        $menus = $menuHandler->getAll($siteKey, 'items');
         $selectedTheme = $themeHandler->getSiteThemeId();
 
         return \XePresenter::make(

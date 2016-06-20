@@ -205,6 +205,34 @@ class MenuHandler
     }
 
     /**
+     * Get menu
+     *
+     * @param string $id   menu identifier
+     * @param array  $with relation
+     * @return Menu
+     */
+    public function get($id, $with = [])
+    {
+        $with = !is_array($with) ? [$with] : $with;
+
+        return $this->createModel()->newQuery()->with($with)->find($id);
+    }
+
+    /**
+     * Get all menu
+     *
+     * @param string $siteKey site key
+     * @param array  $with    relation
+     * @return Menu[]
+     */
+    public function getAll($siteKey, $with = [])
+    {
+        $with = !is_array($with) ? [$with] : $with;
+
+        return $this->createModel()->newQuery()->with($with)->where('siteKey', $siteKey)->get()->getDictionary();
+    }
+
+    /**
      * Create new menu
      *
      * @param array $inputs attributes
@@ -263,6 +291,20 @@ class MenuHandler
         $this->deleteMenuTheme($menu);
 
         return $menu->delete();
+    }
+
+    /**
+     * Get menu item
+     *
+     * @param string $id   menu item identifier
+     * @param array  $with relation
+     * @return MenuItem
+     */
+    public function getItem($id, $with = [])
+    {
+        $with = !is_array($with) ? [$with] : $with;
+
+        return $this->createItemModel()->newQuery()->with($with)->find($id);
     }
 
     /**

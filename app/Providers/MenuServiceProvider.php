@@ -15,15 +15,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Xpressengine\Menu\DBMenuRepository;
-use Xpressengine\Menu\MenuAlterHandler;
-use Xpressengine\Menu\MenuCacheHandler;
-use Xpressengine\Menu\MenuConfigHandler;
 use Xpressengine\Menu\MenuHandler;
 use Xpressengine\Menu\MenuItemPolicy;
 use Xpressengine\Menu\Models\MenuItem;
-use Xpressengine\Menu\MenuPermissionHandler;
-use Xpressengine\Menu\MenuRetrieveHandler;
 use Xpressengine\UIObjects\Menu\MenuList;
 use Xpressengine\UIObjects\Menu\MenuType;
 use Xpressengine\UIObjects\Menu\MenuThemeList;

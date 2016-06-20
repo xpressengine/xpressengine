@@ -321,7 +321,7 @@ if (!function_exists('getCurrentInstanceId')) {
     {
         $id = getCurrentInstanceId();
         if ($id !== null) {
-            return Xpressengine\Menu\Models\MenuItem::find($id);
+            return app('xe.menu')->getItem($id);
         }
         return null;
     }
@@ -338,8 +338,10 @@ if (!function_exists('getCurrentInstanceId')) {
     {
         $menu = null;
         if ($menuId !== null) {
-            $menu = Xpressengine\Menu\Models\Menu::with('items.basicImage', 'items.hoverImage', 'items.selectedImage')
-                ->find($menuId);
+            $menu = app('xe.menu')->get($menuId, [
+                'items.basicImage', 'items.hoverImage', 'items.selectedImage',
+                'items.mBasicImage', 'items.mHoverImage', 'items.mSelectedImage'
+            ]);
             // pre load
             app('xe.permission')->loadBranch($menuId);
         }
