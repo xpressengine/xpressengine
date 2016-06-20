@@ -20,7 +20,7 @@
     "require": {
         "php": ">=5.5.9",
         "wikimedia/composer-merge-plugin": "~1.3",
-        "xpressengine/installer": "dev-master",
+        "xpressengine/installer": "dev-develop",
         "laravel/framework": "5.1.*",
         "wittiws/phpquery": "dev-master",
         "james-heinrich/getid3": "1.9.*",
