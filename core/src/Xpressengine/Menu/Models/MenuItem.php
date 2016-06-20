@@ -321,11 +321,22 @@ class MenuItem extends CategoryItem
         ]);
     }
 
+    /**
+     * Set the link resolver callback
+     *
+     * @param Closure $callback resolver callback
+     * @return void
+     */
     public static function setLinkResolver(Closure $callback)
     {
         static::$linkResolver = $callback;
     }
 
+    /**
+     * Get link attribute
+     *
+     * @return string
+     */
     public function getLinkAttribute()
     {
         $callback = static::$linkResolver;

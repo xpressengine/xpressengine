@@ -129,11 +129,11 @@ class MenuHandler
     protected $model = Menu::class;
 
     /**
-     * Keygen instance
+     * MenuRepository instance
      *
-     * @var Keygen
+     * @var MenuRepository
      */
-    protected $keygen;
+    protected $repo;
 
     /**
      * ConfigManager instance
@@ -187,21 +187,45 @@ class MenuHandler
     /**
      * MenuHandler constructor.
      *
-     * @param Keygen            $keygen      Keygen instance
-     * @param ConfigManager     $configs     ConfigManager instance
-     * @param ModuleHandler     $modules     ModuleHandler instance
-     * @param RouteRepository   $routes      RouteRepository instance
+     * @param MenuRepository  $repo    MenuRepository instance
+     * @param ConfigManager   $configs ConfigManager instance
+     * @param ModuleHandler   $modules ModuleHandler instance
+     * @param RouteRepository $routes  RouteRepository instance
      */
     public function __construct(
-        Keygen $keygen,
+        MenuRepository $repo,
         ConfigManager $configs,
         ModuleHandler $modules,
         RouteRepository $routes
     ) {
-        $this->keygen = $keygen;
+        $this->repo = $repo;
         $this->configs = $configs;
         $this->modules = $modules;
         $this->routes = $routes;
+    }
+
+    /**
+     * Get menu
+     *
+     * @param string $id   menu identifier
+     * @param array  $with relation
+     * @return Menu
+     */
+    public function get($id, $with = [])
+    {
+        return $this->repo->find($id, $with);
+    }
+
+    /**
+     * Get all menu
+     *
+     * @param string $siteKey site key
+     * @param array  $with    relation
+     * @return Menu[]
+     */
+    public function getAll($siteKey, $with = [])
+    {
+        return $this->repo->all($siteKey, $with);
     }
 
     /**
@@ -212,24 +236,10 @@ class MenuHandler
      */
     public function create(array $inputs)
     {
-        $menu = $this->createModel();
+        $menu = $this->repo->createModel();
         $menu->fill($inputs);
 
-        $cnt = 0;
-        while ($cnt++ < static::DUPLICATE_RETRY_CNT) {
-            try {
-                $menu->{$menu->getKeyName()} = $this->generateNewId();
-                $menu->save();
-
-                break;
-            } catch (QueryException $e) {
-                if ($e->getCode() != "23000") {
-                    throw $e;
-                }
-            }
-        }
-
-        return $menu;
+        return $this->repo->insert($menu);
     }
 
     /**
@@ -240,18 +250,14 @@ class MenuHandler
      */
     public function put(Menu $menu)
     {
-        if ($menu->isDirty()) {
-            $menu->save();
-        }
-
-        return $menu;
+        return $this->repo->update($menu);
     }
 
     /**
      * Delete menu
      *
      * @param Menu $menu menu instance
-     * @return bool|null
+     * @return bool
      * @throws CanNotDeleteMenuEntityHaveChildException
      */
     public function remove(Menu $menu)
@@ -262,7 +268,19 @@ class MenuHandler
 
         $this->deleteMenuTheme($menu);
 
-        return $menu->delete();
+        return $this->repo->delete($menu);
+    }
+
+    /**
+     * Get menu item
+     *
+     * @param string $id   menu item identifier
+     * @param array  $with relation
+     * @return MenuItem
+     */
+    public function getItem($id, $with = [])
+    {
+        return $this->repo->findItem($id, $with);
     }
 
     /**
@@ -276,27 +294,15 @@ class MenuHandler
     public function createItem(Menu $menu, array $inputs, array $menuTypeInput = [])
     {
         /** @var MenuItem $item */
-        $item = $this->createItemModel($menu);
+        $item = $this->repo->createItemModel($menu);
         $item->fill($inputs);
         $item->{$item->getAggregatorKeyName()} = $menu->getKey();
 
-        $cnt = 0;
-        while ($cnt++ < static::DUPLICATE_RETRY_CNT) {
-            try {
-                $item->{$item->getKeyName()} = $this->generateNewId();
-                $item->save();
-
-                break;
-            } catch (QueryException $e) {
-                if ($e->getCode() != "23000") {
-                    throw $e;
-                }
-            }
-        }
+        $item = $this->repo->insertItem($item);
 
         $this->setHierarchy($item);
         $this->setOrder($item);
-        $menu->increment($menu->getCountName());
+        $this->repo->increment($menu);
 
         $this->storeMenuType($item, $menuTypeInput);
 
@@ -319,9 +325,7 @@ class MenuHandler
         }
 
         if ($item->{$item->getParentIdName()}) {
-            $model = $this->createItemModel();
-            /** @var MenuItem $parent */
-            $parent = $model->newQuery()->find($item->{$item->getParentIdName()});
+            $parent = $this->repo->findItem($item->{$item->getParentIdName()});
 
             $this->linkHierarchy($item, $parent);
         }
@@ -367,7 +371,7 @@ class MenuHandler
             $item->{$parentIdName} = $item->getOriginal($parentIdName);
         }
 
-        $item->save();
+        $item = $this->repo->updateItem($item);
 
         $this->updateMenuType($item, $menuTypeInput);
 
@@ -399,7 +403,7 @@ class MenuHandler
      *
      * @param MenuItem $item item instance
      * @return bool|null
-     * @throws \Exception
+     * @throws CanNotDeleteMenuItemHaveChildException
      */
     public function removeItem(MenuItem $item)
     {
@@ -408,12 +412,9 @@ class MenuHandler
         }
 
         $item->ancestors()->detach($item);
-
-        $result = $item->delete();
-
         $this->destroyMenuType($item);
 
-        return $result;
+        return $this->repo->deleteItem($item);
     }
 
     /**
@@ -449,8 +450,7 @@ class MenuHandler
         }
 
         if ($item->{$item->getParentIdName()}) {
-            $model = $this->createItemModel($menu);
-            $oldParent = $model->newQuery()->find($item->{$item->getParentIdName()});
+            $oldParent = $this->repo->findItem($item->{$item->getParentIdName()});
             $this->unlinkHierarchy($item, $oldParent);
             $item->{$item->getParentIdName()} = null;
         }
@@ -461,10 +461,11 @@ class MenuHandler
         }
 
         $item->{$item->getAggregatorKeyName()} = $menu->getKey();
-        $item->save();
+        $item = $this->repo->updateItem($item);
 
+        // todo: 캐시 갱신 점검
         // 연관 객체 정보들이 변경 되었으므로 객채를 갱신 함
-        return $item->newQuery()->find($item->getKey());
+        return $this->repo->findItem($item->getKey());
     }
 
     /**
@@ -623,7 +624,7 @@ class MenuHandler
 
     /**
      * Get default grant
-     * 
+     *
      * @return Grant
      */
     public function getDefaultGrant()
@@ -675,71 +676,8 @@ class MenuHandler
      */
     public function getInstanceSettingURIByItemId($itemId)
     {
-        $item = $this->createItemModel()->newQuery()->find($itemId);
+        $item = $this->repo->findItem($itemId);
 
         return $this->getInstanceSettingURI($item);
-    }
-
-    /**
-     * Create new menu model
-     *
-     * @return Menu
-     */
-    public function createModel()
-    {
-        $class = $this->getModel();
-
-        return new $class;
-    }
-
-    /**
-     * Get menu model
-     *
-     * @return string
-     */
-    public function getModel()
-    {
-        return $this->model;
-    }
-
-    /**
-     * Set menu model
-     *
-     * @param string $model model class
-     * @return void
-     */
-    public function setModel($model)
-    {
-        $this->model = '\\' . ltrim($model, '\\');
-    }
-
-    /**
-     * Create new menu item model
-     *
-     * @param Menu $menu menu instance
-     * @return MenuItem
-     */
-    public function createItemModel(Menu $menu = null)
-    {
-        $menu = $menu ?: $this->createModel();
-        $class = $menu->getItemModel();
-
-        return new $class;
-    }
-
-    /**
-     * Generate new key
-     *
-     * @return string
-     */
-    protected function generateNewId()
-    {
-        $newId = substr($this->keygen->generate(), 0, 8);
-
-        if (!preg_match('/[^0-9]/', $newId)) {
-            $newId = $this->generateNewId();
-        }
-
-        return $newId;
     }
 }
