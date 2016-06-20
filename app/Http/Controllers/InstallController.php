@@ -24,7 +24,7 @@ class InstallController extends Controller
      */
     protected function isInstalled()
     {
-        return file_exists(storage_path() . '/app/installed');
+        return file_exists(storage_path() . '/framework/installed');
     }
 
     public function install(Request $request)
