@@ -293,8 +293,8 @@ return [
             'default' => 'assets/core/member/img/default_avatar.gif',
             'size' => ['width' => 240, 'height' => 240],
             'storage' => [
-                'disk' => 'uploaded',
-                'path' => 'user/profile_image'
+                'disk' => 'local',
+                'path' => 'public/user/profile_image'
             ]
         ]
     ],
@@ -426,7 +426,11 @@ return [
     ],
 
     'theme' => [
-        'blank' => 'Xpressengine\Themes\BlankTheme'
+        'blank' => 'Xpressengine\Themes\BlankTheme',
+        'storage' => [
+            'disk' => 'local',
+            'path' => 'public/theme/'
+        ]
     ],
 
     'editor' => [
