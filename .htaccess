@@ -34,7 +34,7 @@
     RewriteCond %{REQUEST_FILENAME} -f
     RewriteRule ^plugins/.* - [L]
     RewriteCond %{REQUEST_FILENAME} -f
-    RewriteRule ^storage/uploaded/.* - [L]
+    RewriteRule ^storage/app/public/.* - [L]
     RewriteCond %{REQUEST_FILENAME} -f
     RewriteRule ^favicon.*$ - [L]
     RewriteCond %{REQUEST_FILENAME} -f
