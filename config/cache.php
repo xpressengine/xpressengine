@@ -47,11 +47,6 @@ return [
 			'path'   => storage_path('framework/cache'),
 		],
 
-		'lang' => [
-			'driver' => 'file',
-			'path'   => storage_path('app/lang'),
-		],
-
 		'plugins' => [
 			'driver' => 'file',
 			'path'   => storage_path('framework/plugins'),

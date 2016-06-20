@@ -57,7 +57,6 @@ class XeCacheClear extends ClearCommand
         // xe 에서 관리하는 stores
         $stores = [
             'file',
-            'lang',
             'plugins',
             'schema',
         ];
