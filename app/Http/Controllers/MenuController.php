@@ -136,7 +136,7 @@ class MenuController extends Controller
             ]);
 
             $handler->setMenuTheme($menu, $desktopTheme, $mobileTheme);
-            
+
             $this->permissionRegisterGrant($menu->getKey(), $handler->getDefaultGrant());
 
         } catch (Exception $e) {
@@ -579,7 +579,7 @@ class MenuController extends Controller
         $columnKeyName = $name . 'Id';
 
         if ($uploadImg = Input::file($name)) {
-            $image = XeMedia::make(XeStorage::upload($uploadImg, 'menu'));
+            $image = XeMedia::make(XeStorage::upload($uploadImg, 'public/menu'));
             XeStorage::bind($item->getKey(), $image);
 
             if ($item->{$columnKeyName} !== null) {
@@ -736,7 +736,7 @@ class MenuController extends Controller
                 $handler->permKeyString($item),
                 [MenuHandler::ACCESS, MenuHandler::VISIBLE]
             );
-            
+
 
         } catch (Exception $e) {
             XeDB::rollback();
@@ -785,7 +785,7 @@ class MenuController extends Controller
 
             $toKey = $handler->permKeyString($item);
             $toKey = substr($toKey, 0, strrpos($toKey, '.'));
-                
+
             $this->permissionMove($handler->permKeyString($old), $toKey);
         } catch (\Exception $e) {
             XeDB::rollback();

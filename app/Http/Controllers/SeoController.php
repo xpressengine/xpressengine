@@ -46,7 +46,7 @@ class SeoController extends Controller
         $setting->set($inputs);
 
         if ($request->file('siteImage') !== null) {
-            $file = XeStorage::upload($request->file('siteImage'), 'seo', null, 'uploaded');
+            $file = XeStorage::upload($request->file('siteImage'), 'public/seo');
             $image = XeMedia::make($file);
             $setting->setSiteImage($image);
         }

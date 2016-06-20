@@ -39,7 +39,7 @@ class InterceptionServiceProvider extends ServiceProvider
             function ($app) {
                 $advisorCollection = new AdvisorCollection();
 
-                $loader = new FileLoader(storage_path('interception'), $app['config']->get('app.debug') === true);
+                $loader = new FileLoader(storage_path('app/interception'), $app['config']->get('app.debug') === true);
                 //$loader = new EvalLoader();
                 $passes = [new ClassPass(), new MethodDefinitionPass()];
 
