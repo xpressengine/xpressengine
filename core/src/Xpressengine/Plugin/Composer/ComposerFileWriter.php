@@ -15,6 +15,8 @@ namespace Xpressengine\Plugin\Composer;
 
 use Xpressengine\Plugin\PluginScanner;
 
+require_once __DIR__.'/helpers.php';
+
 /**
  * @category
  * @package     Xpressengine\Plugin
@@ -66,21 +68,20 @@ class ComposerFileWriter
     }
 
     public function makeFile(){
-
         $data = [];
         $data['repositories'] = [];
         $data['repositories'][] = ['type'=>'composer', 'url'=>$this->packagistUrl];
 
         $data['require'] = [];
 
-        $data['extra'] = ['xpressengine-plugin' => [
+        $data['xpressengine-plugin'] = [
             "path"=> "storage/app/composer.plugins.json",
             "uninstall"=> [],
             "changed"=> []
-        ]];
+        ];
 
-        $json = json_format(json_encode($data));
-        file_put_contents($this->path, $json);
+        $this->data = $data;
+        $this->write();
     }
 
     public function reload()
@@ -139,7 +140,11 @@ class ComposerFileWriter
     public function write()
     {
         $json = json_encode($this->data);
-        $json = json_format($json);
+        if(function_exists('json_format')) {
+            $json = json_format($json);
+        } else {
+            $json = \Composer\Json\JsonFormatter::format($json, true, true);
+        }
         file_put_contents($this->path, $json);
     }
 
