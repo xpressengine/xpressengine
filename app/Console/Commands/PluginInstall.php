@@ -16,8 +16,7 @@ class PluginInstall extends PluginCommand
      */
     protected $signature = 'plugin:install
                         {plugin_id : The plugin id for install}
-                        {version? : The version of plugin for install}
-                        {--no-activate : not activate the plugin after install.}';
+                        {version? : The version of plugin for install}';
 
     /**
      * The console command description.
@@ -48,7 +47,7 @@ class PluginInstall extends PluginCommand
     {
         $this->init($handler, $provider, $writer);
 
-        // php artisan plugin:install [--no-activate] <plugin name> [<version>]
+        // php artisan plugin:install <plugin name> [<version>]
 
         $id = $this->argument('plugin_id');
 
@@ -144,13 +143,13 @@ class PluginInstall extends PluginCommand
         $writer->write();
 
         // changed plugin 업데이트
-        if ($this->option('no-activate') === false) {
+        /*if ($this->option('no-activate') === false) {
             foreach (array_merge($changed['installed'], $changed['updated']) as $package => $version) {
                 list($vendor, $id) = explode('/', $package);
                 $this->updatePlugin($id);
                 $this->activatePlugin($id);
             }
-        }
+        }*/
 
         if (!array_has($changed['installed'], $name)) {
             $this->output->error(

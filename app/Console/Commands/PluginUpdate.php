@@ -18,8 +18,7 @@ class PluginUpdate extends PluginCommand
      */
     protected $signature = 'plugin:update
                         {plugin_id : The plugin id for install}
-                        {version? : The version of plugin for install}
-                        {--no-activate : not activate the plugin after install.}';
+                        {version? : The version of plugin for install}';
 
     /**
      * The console command description.
@@ -50,7 +49,7 @@ class PluginUpdate extends PluginCommand
     {
         $this->init($handler, $provider, $writer);
 
-        // php artisan plugin:install [--no-activate] <plugin name> [<version>]
+        // php artisan plugin:update <plugin name> [<version>]
 
         $id = $this->argument('plugin_id');
 
@@ -169,13 +168,13 @@ class PluginUpdate extends PluginCommand
         $writer->write();
 
         // changed plugin들 업데이트
-        foreach (array_merge($installed, $updated) as $package => $version) {
+        /*foreach (array_merge($installed, $updated) as $package => $version) {
             list($vendor, $id) = explode('/', $package);
             if($this->option('no-activate') === false) {
                 $this->updatePlugin($id);
                 $this->activatePlugin($id);
             }
-        }
+        }*/
 
         if(!array_has($updated, $name)) {
             $this->output->warning("$name:$version 플러그인을 업데이트하지 못했습니다. 플러그인 간의 의존관계로 인해 업데이트가 불가능할 수도 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다.");
