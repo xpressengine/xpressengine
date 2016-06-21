@@ -75,6 +75,10 @@
     $https = isset($_SERVER['HTTPS']) ? $_SERVER['HTTPS'] : '';
     $schema = !empty($https) && 'off' !== strtolower($https) ? 'https' : 'http';
     $url = $schema.'://'.$_SERVER['SERVER_NAME'];
+    $subdir = trim(str_replace('web_installer/index.php', '', $_SERVER['SCRIPT_NAME']), '/');
+    if (!empty($subdir)) {
+        $url .= '/' . $subdir;
+    }
 
     $locale = file_exists(getLangFilePath($_COOKIE['install_locale'])) ? $_COOKIE['install_locale'] : 'ko';
     $langs = require getLangFilePath($locale);
