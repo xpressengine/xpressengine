@@ -33,10 +33,16 @@ class Composer
 
     protected static $pluginsDir = 'plugins';
 
-    protected static $packagistUrl = 'http://khongchi.xe3.dev1.xpressengine.com';
+    protected static $packagistUrl = 'http://xe3.dev1.xpressengine.com';
 
     public static $basePlugins = [
-        'kpackage' => '1.0.0'
+        'alice' => '0.9.0',
+        'claim' => '0.9.0',
+        'board' => '0.9.0',
+        'ckeditor' => '0.9.0',
+        'comment' => '0.9.0',
+        'page' => '0.9.0',
+        'news_client' => '0.9.0',
     ];
 
     public static function requireBasePlugins(Event $event)
