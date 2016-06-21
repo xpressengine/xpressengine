@@ -91,15 +91,13 @@ class PluginUpdate extends PluginCommand
         }
         $version = $version ?: $pluginData->latest_release->version;
 
-
-
         // 플러그인 정보 출력
         $this->warn(PHP_EOL." 업데이트 플러그인 정보:");
         $this->line("  $title - $name: {$plugin->getVersion()} -> $version".PHP_EOL);
 
         // 안내 멘트 출력
         if($this->confirm("위 플러그인을 다운로드하고 업데이트합니다. \r\n 위 플러그인이 의존하는 다른 플러그인이 함께 다운로드 될 수 있으며, 수분이 소요될수 있습니다.\r\n 플러그인을 업데이트하시겠습니까?") === false) {
-            //return;
+            return;
         }
 
         // - plugins require info 갱신

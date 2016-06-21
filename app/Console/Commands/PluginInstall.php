@@ -97,7 +97,7 @@ class PluginInstall extends PluginCommand
                 "위 플러그인을 다운로드하고 설치합니다. \r\n 위 플러그인이 의존하는 다른 플러그인이 함께 다운로드 될 수 있으며, 수분이 소요될수 있습니다.\r\n 플러그인을 설치하시겠습니까?"
             ) === false
         ) {
-            //return;
+            return;
         }
 
         // - plugins require info 갱신

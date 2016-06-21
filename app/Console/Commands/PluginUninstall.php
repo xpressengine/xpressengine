@@ -74,7 +74,7 @@ class PluginUninstall extends PluginCommand
         // 안내 멘트 출력
         $this->output->warning("위 플러그인을 삭제합니다. 플러그인을 삭제하면 사이트가 정상적으로 작동하지 않을 수 있습니다.");
         if($this->confirm("플러그인을 삭제하시겠습니까?") === false) {
-            //return;
+            return;
         }
 
         if($this->option('deactivate')) {
