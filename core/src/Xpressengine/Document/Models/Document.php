@@ -311,7 +311,7 @@ class Document extends DynamicModel
             $attributes['reply'] = '';
         }
         if (empty($attributes['locale']) === true) {
-            $attributes['locale'] = 'default';
+            $attributes['locale'] = '';
         }
 
         return $attributes;
