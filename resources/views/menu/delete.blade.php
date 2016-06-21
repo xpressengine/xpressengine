@@ -17,7 +17,7 @@
                 <div class="panel-body">
                     <div class="form-group">
                         @if($menu->items->count() != 0)
-                            {!! xe_trans('xe::menuDeleteCautionHaveItems', ['count' => $menu->items->count()]) !!}}
+                            {!! xe_trans('xe::menuDeleteCautionHaveItems', ['count' => $menu->items->count()]) !!}
                         @else
                             {{xe_trans('xe::menuDeleteCaution')}}
                         @endif

@@ -42,6 +42,11 @@ use Xpressengine\Plugin\PluginHandler as Plugin;
 class PluginEntity implements Arrayable, Jsonable
 {
     /**
+     * @var PluginCollection
+     */
+    public static $collection;
+
+    /**
      * 플러그인의 ID, 플러그인의 저장된 디렉토리명과 동일하다.
      *
      * @var string
@@ -91,10 +96,7 @@ class PluginEntity implements Arrayable, Jsonable
      */
     protected $metaData;
 
-    /**
-     * @var PluginCollection
-     */
-    public static $collection;
+    protected $remoteData = null;
 
     /**
      * 플러그인의 정보를 전달받아 Entity 클래스를 생성한다.
@@ -298,13 +300,38 @@ class PluginEntity implements Arrayable, Jsonable
     }
 
     /**
+     * 자료실에 등록된 자료 정보가 있는지 검사
+     *
+     * @return bool
+     */
+    public function hasRemoteData()
+    {
+        if($this->remoteData !== null) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 자료실에 등록된 플러그인의 정보를 설정한다.
+     *
+     * @param $data
+     *
+     * @return void
+     */
+    public function setRemoteData($data)
+    {
+        $this->remoteData = $data;
+    }
+
+    /**
      * 플러그인의 설치버전과 현재버전을 비교한다. 플러그인의 새로운 업데이트가 서버에 다운로드 되어 있는 상태인지 확인한다.
      *
      * @return boolean 설치가 필요할 경우 true를 반환
      */
     public function needUpdateInstall()
     {
-        return version_compare($this->getInstalledVersion(), $this->getVersion(), '<');
+        return version_compare($this->getInstalledVersion(), $this->getVersion()) !== 0;
     }
 
     /**
@@ -312,10 +339,13 @@ class PluginEntity implements Arrayable, Jsonable
      *
      * @return void boolean 새버전이 서버에 존재할 경우 true를 반환
      */
-    public function needUpdateDownload()
+    public function hasUpdate()
     {
-        // TODO. Xpressengine 자료실 구축후 지원예정
-        throw new \Exception('Not yet implemented.');
+        if($this->hasRemoteData()) {
+            return version_compare($this->getLatestVersion(), $this->getVersion(), '>');
+        }
+
+        return false;
     }
 
     /**
@@ -325,8 +355,9 @@ class PluginEntity implements Arrayable, Jsonable
      */
     public function getLatestVersion()
     {
-        // TODO. Xpressengine 자료실 구축후 지원예정
-        throw new \Exception('Not yet implemented.');
+        if($this->hasRemoteData()) {
+            return data_get($this->remoteData, 'latest_release.version');
+        }
     }
 
     /**
@@ -412,12 +443,17 @@ class PluginEntity implements Arrayable, Jsonable
      */
     public function getReadMe()
     {
+
+        if($this->hasRemoteData()) {
+            return data_get($this->remoteData, 'details', '');
+        }
+
         $file = $this->getPath('README.md');
 
         if (!file_exists($file)) {
             return '';
         } else {
-            return file_get_contents($file);
+            return nl2br(file_get_contents($file));
         }
     }
 
@@ -426,14 +462,24 @@ class PluginEntity implements Arrayable, Jsonable
      *
      * @return string
      */
-    public function getChangeLog()
+    public function getChangeLog($parsed = true)
     {
+
+        if($this->hasRemoteData()) {
+            $logs = '';
+            foreach (data_get($this->remoteData, 'releases', []) as $release) {
+                $content = data_get($release, 'parsed_changelog')?:'-';
+                $logs .= "<dt>{$release->version}</dt><dd>$content</dd>";
+            }
+            return "<dl>$logs</dl>";
+        }
+
         $file = $this->getPath('CHANGELOG.md');
 
         if (!file_exists($file)) {
             return '';
         } else {
-            return file_get_contents($file);
+            return nl2br(file_get_contents($file));
         }
     }
 

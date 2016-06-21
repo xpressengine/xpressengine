@@ -6,7 +6,6 @@
     <p class="sub-text">{{ xe_trans('xe::pluginListDescription') }}</p>
 @stop
 
-
 <div class="row">
     <div class="col-sm-12">
         <div class="panel-group" id="accordion">
@@ -15,12 +14,12 @@
                 <div class="panel-heading">
                     <div class="pull-left">
                         <div class="btn-group">
-                            <a href="{{ route('settings.plugins', Input::except('status')) }}" class="btn btn-default @if(Input::get('status') === null) on @endif">{{ xe_trans('xe::all') }}</a>
-                            <a href="{{ route('settings.plugins', array_merge(Input::all(), ['status'=> XePlugin::STATUS_ACTIVATED] )) }}" class="btn btn-default @if(Input::get('status') === XePlugin::STATUS_ACTIVATED) on @endif">{{ xe_trans('xe::enabled') }}</a>
-                            <a href="{{ route('settings.plugins', array_merge(Input::all(), ['status'=> XePlugin::STATUS_DEACTIVATED] )) }}" class="btn btn-default @if(Input::get('status') === XePlugin::STATUS_DEACTIVATED) on @endif">{{ xe_trans('xe::disabled') }}</a>
+                            <a href="{{ route('settings.plugins', Input::except('status')) }}" class="btn btn-default @if(Input::get('status') === null) btn-primary @endif">{{ xe_trans('xe::all') }}</a>
+                            <a href="{{ route('settings.plugins', array_merge(Input::all(), ['status'=> XePlugin::STATUS_ACTIVATED] )) }}" class="btn btn-default @if(Input::get('status') === XePlugin::STATUS_ACTIVATED) btn-primary @endif">{{ xe_trans('xe::enabled') }}</a>
+                            <a href="{{ route('settings.plugins', array_merge(Input::all(), ['status'=> XePlugin::STATUS_DEACTIVATED] )) }}" class="btn btn-default @if(Input::get('status') === XePlugin::STATUS_DEACTIVATED) btn-primary @endif">{{ xe_trans('xe::disabled') }}</a>
                         </div>
                         <div class="btn-group">
-                            <button class="btn btn-default">{{ xe_trans('xe::updateList') }}</button>
+                            <button class="btn btn-default __xe_btn-show-update">{{ xe_trans('xe::updateList') }}</button>
                         </div>
                     </div>
                     {{-- filter --}}
@@ -61,13 +60,13 @@
                     @foreach($plugins as $plugin)
 
                     <!--[D] 플러그인 비활성화  상태off, 업데이트 필요 시 update 클래스 추가 -->
-                    <li class="list-group-item @if($plugin->needUpdateInstall()){{--update--}} @endif @if( ! $plugin->isActivated() )off @endif">
+                    <li class="list-group-item @if($plugin->needUpdateInstall() || $plugin->hasUpdate())update @else __xe_no-update @endif @if( ! $plugin->isActivated() )off @endif">
 
                         <div class="left-group">
                             <a href="{{ route('settings.plugins.show', [$plugin->getId()]) }}" class="plugin-title">{{ $plugin->getTitle() }}</a>
                             <dl>
                                 <dt class="sr-only">version</dt>
-                                <dd>Version {{ $plugin->getInstalledVersion() }}</dd>
+                                <dd>Version {{ $plugin->getVersion() }}</dd>
                                 <dt class="sr-only">{{ xe_trans('xe::author') }}</dt>
                                 <dd>By
                                     @if($authors = $plugin->getAuthors())
@@ -93,17 +92,13 @@
                             @if($plugin->needUpdateInstall())
                             <div class="alert alert-danger" role="alert">
                                 <i class="xi-info-o txt_red"></i>{{ xe_trans('xe::newUpdateDownloaded') }}
-                                <a href="{{ route('settings.plugins.show', [$plugin->getId()]) }}" class="alert-link">
-                                    Version {{ $plugin->getVersion() }} {{ xe_trans('xe::changeLog') }}</a>
-                                {{ xe_trans('xe::or') }}
-                                <a href="#" class="alert-link">{{ xe_trans('xe::applyUpdateNow') }}</a>
+                                <a href="#" data-url="{{ route('settings.plugins.update', [$plugin->getId()]) }}" class="__xe_btn-update-plugin alert-link">{{ xe_trans('xe::applyUpdateNow') }}</a>
                             </div>
-                            {{--@elseif($plugin->needUpdateDownload())
-                                <i class="xi-information-circle txt_red"></i>새로운 업데이트가 있습니다..
-                                <a href="#LinkForStoreServer" class="alert-link">
-                                    Version {{ $plugin->getLatestVersion() }} 세부 사항</a>
-                                또는
-                                <a href="#" class="alert-link">지금 업데이트 다운로드하기.</a>--}}
+                            @elseif($plugin->hasUpdate())
+                                <div class="alert alert-danger" role="alert">
+                                    <i class="xi-info-o"></i>{{ xe_trans('xe::hasNewUpdate') }}
+                                    <a href="{{ config('xe.plugin.store.detail_url').'/'.$plugin->getId() }}" class="alert-link" target="_blank">Version {{ $plugin->getLatestVersion() }} {{ xe_trans('xe::details') }}</a> {{ xe_trans('xe::or') }} <a href="#" class="alert-link">지금 업데이트 다운로드하기</a>
+                                </div>
                             @endif
 
                         </div>

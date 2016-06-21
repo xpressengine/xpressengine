@@ -595,6 +595,13 @@ Route::settings(
                 'uses' => 'PluginController@postDeactivatePlugin'
             ]
         );
+        Route::post(
+            '{pluginId}/update',
+            [
+                'as' => 'settings.plugins.update',
+                'uses' => 'PluginController@postUpdatePlugin'
+            ]
+        );
     }
 );
 

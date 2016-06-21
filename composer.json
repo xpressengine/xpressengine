@@ -15,43 +15,42 @@
             "role": "Developer"
         }
     ],
-    "license": "LGPL-2.0",
+    "license": "LGPL-2.1",
     "type": "project",
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://packagist.xpressengine.io"
-        }
-    ],
     "require": {
         "php": ">=5.5.9",
+        "wikimedia/composer-merge-plugin": "~1.3",
+        "xpressengine/installer": "dev-develop",
         "laravel/framework": "5.1.*",
         "wittiws/phpquery": "dev-master",
         "james-heinrich/getid3": "1.9.*",
         "ramsey/uuid": "2.8.*",
         "google/recaptcha": "~1.1",
         "intervention/image": "2.1.*",
-        "doctrine/dbal": "~2.4",
         "jenssegers/agent": "*",
-        "xpressengine/installer": "dev-master",
         "ezyang/htmlpurifier": "~4.7",
-        "xpressengine-plugin/alice": "dev-master",
-        "xpressengine-plugin/google_analytics": "dev-master",
-        "xpressengine-plugin/orientator": "dev-master",
-        "xpressengine-plugin/page": "dev-master",
-        "xpressengine-plugin/board": "dev-master",
-        "xpressengine-plugin/comment": "0.1.*-dev",
-        "xpressengine-plugin/ckeditor": "dev-master",
-        "xpressengine-plugin/claim": "dev-master",
-        "xpressengine-plugin/external_page": "dev-master",
-        "xpressengine-plugin/social_login": "dev-master",
-        "xpressengine-plugin/news_client": "dev-master"
+        "guzzlehttp/guzzle": "~6.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
         "phpunit/phpunit": "~4.0",
         "mockery/mockery": "0.9.*",
         "barryvdh/laravel-debugbar": "^2.2"
+    },
+    "extra": {
+      "merge-plugin": {
+        "include": [
+          "storage/app/composer.plugins.json",
+          "composer.user.json"
+        ],
+        "recurse": true,
+        "replace": false,
+        "merge-dev": false,
+        "merge-extra": true
+      },
+      "xpressengine-plugin": {
+        "path": "storage/app/composer.plugins.json"
+      }
     },
     "autoload": {
         "classmap": [
@@ -79,12 +78,20 @@
         ]
     },
     "scripts": {
+        "pre-install-cmd": [
+            "Xpressengine\\Plugin\\Composer\\Composer::requireBasePlugins"
+        ],
+        "pre-update-cmd": [
+            "Xpressengine\\Plugin\\Composer\\Composer::requireBasePlugins"
+        ],
         "post-install-cmd": [
+            "Xpressengine\\Plugin\\Composer\\Composer::resolvePlugins",
             "php artisan clear-compiled",
             "php artisan optimize"
         ],
         "post-update-cmd": [
-            "php artisan clear-compiled",
+          "Xpressengine\\Plugin\\Composer\\Composer::resolvePlugins",
+          "php artisan clear-compiled",
             "php artisan optimize"
         ],
         "post-root-package-install": [

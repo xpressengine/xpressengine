@@ -61,7 +61,7 @@ class TranslationServiceProvider extends ServiceProvider
         $this->app->singleton('xe.translator', function ($app) {
             $debug = $app['config']['app.debug'];
             $keyGen = $app['xe.keygen'];
-            $cache = new TransCache($app['cache']->driver('lang'), $debug);
+            $cache = new TransCache($app['cache']->driver(), $debug);
             $conn = $app['xe.db']->connection();
             $db = new TransCachedDatabase($cache, $conn);
             $fileLoader = new LangFileLoader($app['files']);

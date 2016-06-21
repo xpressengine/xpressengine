@@ -40,6 +40,17 @@ class PluginSettingsSkin extends BladeSkin
     protected function index()
     {
         $this->loadDefault();
+
+        app('xe.frontend')->html('plugins.updateList')->content("
+        <script>
+            $(function (){
+                $('.__xe_btn-show-update').click(function(){
+                    $(this).toggleClass('btn-primary');
+                    $('ul.list-plugin li.list-group-item.__xe_no-update').toggleClass('hidden');
+                })
+            });
+        </script>")->load();
+
         return $this->renderBlade();
     }
 
@@ -70,7 +81,25 @@ class PluginSettingsSkin extends BladeSkin
             })
         </script>")->load();
 
-
+        app('xe.frontend')->html('plugins.updatePlugin')->content("<script>
+            $(function () {
+              $('.__xe_btn-update-plugin').click(function(){
+                var url = $(this).data('url');
+                $.ajax({
+                  type : 'post',
+                  url : url,
+                  dataType: 'json',
+                  success : function (data) {
+                    location.reload();
+                  },
+                  error : function(data) {
+                    XE.toast(data.type, data.message);
+                  }
+                });
+                return false;
+              })
+            })
+        </script>")->load();
 
         array_set($this->data, 'color', [
             'theme' => 'success',

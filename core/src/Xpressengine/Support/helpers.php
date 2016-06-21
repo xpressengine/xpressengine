@@ -47,6 +47,20 @@ if (function_exists('json_dec') === false) {
     }
 }
 
+if (function_exists('json_format') === false) {
+    /**
+     * 
+     *
+     * @param  string $json
+     * @param  bool   $unescapeUnicode Un escape unicode
+     * @param  bool   $unescapeSlashes Un escape slashes
+     * @return string
+     */
+    function json_format($json, $unescapeUnicode = true, $unescapeSlashes = true) {
+        return \Xpressengine\Support\Json::format($json, $unescapeUnicode, $unescapeSlashes);
+    }
+}
+
 if (function_exists('cast') === false) {
     /**
      * scalar 타입 문자열을 실제 형태로 형변환
@@ -63,7 +77,6 @@ if (function_exists('cast') === false) {
         return Xpressengine\Support\Caster::cast($value);
     }
 }
-
 
 if (function_exists('bytes') === false) {
     /**
@@ -174,7 +187,7 @@ if (function_exists('intercept') === false) {
      */
     function intercept($pointCut, $name, Closure $advice)
     {
-        XeInterception::addAdvisor($pointCut, $name, $advice);
+        app('xe.interception')->addAdvisor($pointCut, $name, $advice);
     }
 }
 
@@ -310,6 +323,9 @@ if (!function_exists('getCurrentInstanceId')) {
         $instanceConfig = Xpressengine\Routing\InstanceConfig::instance();
         return $instanceConfig->getInstanceId();
     }
+}
+
+if (!function_exists('current_menu')) {
 
     /**
      * Returns current menu item
@@ -321,10 +337,13 @@ if (!function_exists('getCurrentInstanceId')) {
     {
         $id = getCurrentInstanceId();
         if ($id !== null) {
-            return Xpressengine\Menu\Models\MenuItem::find($id);
+            return app('xe.menu')->getItem($id);
         }
         return null;
     }
+}
+
+if (!function_exists('menu_list')) {
 
     /**
      * 메뉴를 html 마크업으로 출력할 때, 사용하기 쉽도록 메뉴아이템 리스트를 제공한다.
@@ -338,8 +357,10 @@ if (!function_exists('getCurrentInstanceId')) {
     {
         $menu = null;
         if ($menuId !== null) {
-            $menu = Xpressengine\Menu\Models\Menu::with('items.basicImage', 'items.hoverImage', 'items.selectedImage')
-                ->find($menuId);
+            $menu = app('xe.menu')->get($menuId, [
+                'items.basicImage', 'items.hoverImage', 'items.selectedImage',
+                'items.mBasicImage', 'items.mHoverImage', 'items.mSelectedImage'
+            ]);
             // pre load
             app('xe.permission')->loadBranch($menuId);
         }

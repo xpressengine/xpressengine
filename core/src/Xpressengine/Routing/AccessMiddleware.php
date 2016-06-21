@@ -17,9 +17,8 @@ namespace Xpressengine\Routing;
 use Auth;
 use Closure;
 use Illuminate\Contracts\Foundation\Application;
-//use Xpressengine\Menu\MenuItem;
+use Xpressengine\Menu\MenuHandler;
 use Xpressengine\Menu\Models\MenuItem;
-use Xpressengine\Menu\MenuRetrieveHandler;
 use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 
@@ -101,14 +100,12 @@ class AccessMiddleware
     protected function getMenuItem()
     {
         /**
-         * @var MenuRetrieveHandler $menuHandler
+         * @var MenuHandler $menuHandler
          */
         $instanceConfig = InstanceConfig::instance();
-//        $menuHandler = $this->app['xe.menu'];
-//        $item = $menuHandler->getItem($instanceConfig->instanceId);
-
-        $item = MenuItem::find($instanceConfig->instanceId);
-
+        $menuHandler = $this->app['xe.menu'];
+        $item = $menuHandler->getItem($instanceConfig->instanceId);
+        
         return $item;
     }
 }
