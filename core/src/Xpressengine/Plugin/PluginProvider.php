@@ -15,7 +15,6 @@ namespace Xpressengine\Plugin;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Symfony\Component\HttpFoundation\Response;
-use function GuzzleHttp\Psr7\str;
 
 /**
  * XE 자료실에 등록된 플러그인들을 조회할 때 사용하는 PluginProvider

@@ -33,7 +33,7 @@ class Composer
 
     protected static $pluginsDir = 'plugins';
 
-    protected static $packagistUrl = 'http://xe3.dev1.xpressengine.com';
+    protected static $packagistUrl = 'http://xpressengine.io';
 
     public static $basePlugins = [
         'xpressengine-plugin/alice' => '0.9.0',
@@ -51,7 +51,7 @@ class Composer
         $path = static::getPath($extra);
 
         // XE가 이미 설치돼 있을 경우 아무 것도 하지 않는다.
-        if(file_exists($path)/* || file_exists(static::$installedFlagPath)*/) {
+        if(file_exists($path) || file_exists(static::$installedFlagPath)) {
             $event->getIO()->write("Xpressengine: Xpressengine was installed or file[$path] already exists!");
             return;
         }
@@ -74,9 +74,9 @@ class Composer
         $path = static::getPath($extra);
 
         // XE가 이미 설치돼 있을 경우 아무 것도 하지 않는다.
-        /*if(file_exists(static::$installedFlagPath)) {
+        if(file_exists(static::$installedFlagPath)) {
             return;
-        }*/
+        }
 
         // XE가 설치돼 있지 않을 경우, resolve plugins
         $writer = self::getWriter($path);
@@ -111,7 +111,7 @@ class Composer
     protected static function getPath($extra)
     {
         if (!isset($extra['xpressengine-plugin']['path'])) {
-            throw new \Exception('xpressengine-installer: extra > xpressengine-plugin > path is needed.');
+            throw new \Exception('xpressengine-installer: extra > xpressengine-plugin > path is required.');
         }
         $path = $extra['xpressengine-plugin']['path'];
         return $path;

@@ -186,8 +186,8 @@ class ComposerFileWriter
 
         array_set($this->data, 'repositories', [['type'=>'composer', 'url'=>$this->packagistUrl]]);
         array_set($this->data, 'xpressengine-plugin.mode', 'plugins-fixed');
-        /*array_set($this->data, 'xpressengine-plugin.uninstall', []);
-        array_set($this->data, 'xpressengine-plugin.changed', []);*/
+        array_set($this->data, 'xpressengine-plugin.uninstall', []);
+        /*array_set($this->data, 'xpressengine-plugin.changed', []);*/
 
         return $this;
     }
