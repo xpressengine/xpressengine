@@ -50,6 +50,18 @@
             case "gd" :
                 $result = extension_loaded('gd');
                 break;
+
+            case "mbstring" :
+                $result = extension_loaded('mbstring');
+                break;
+
+            case "openssl" :
+                $result = extension_loaded('openssl');
+                break;
+
+            case "zip" :
+                $result = extension_loaded('zip');
+                break;
         }
 
         echo json_encode([
@@ -280,6 +292,10 @@
             check('<?=trans('checkPHPExtCURL')?>', 'curl');
             check('<?=trans('checkPHPExtMCRYPT')?>', 'mcrypt');
             check('<?=trans('checkPHPExtGD')?>', 'gd');
+            check('<?=trans('checkPHPExtMBSTRING')?>', 'mbstring');
+            check('<?=trans('checkPHPExtOPENSSL')?>', 'openssl');
+            check('<?=trans('checkPHPExtZIP')?>', 'zip');
+
             this.checked = true;
         },
         goto: function (step) {

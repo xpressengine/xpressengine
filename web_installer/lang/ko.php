@@ -10,6 +10,9 @@ return [
     'checkPHPExtCURL' => 'cURL PHP 확장 기능이 필요합니다.',
     'checkPHPExtMCRYPT' => 'MCrypt PHP 확장 기능이 필요합니다.',
     'checkPHPExtGD' => 'GD PHP 확장 기능이 필요합니다.',
+    'checkPHPExtMBSTRING' => 'Mbstring PHP 확장 기능이 필요합니다.',
+    'checkPHPExtOPENSSL' => 'OpenSSL PHP 확장 기능이 필요합니다.',
+    'checkPHPExtZIP' => 'ZipArchive PHP 확장 기능이 필요합니다.',
 
     'terms' => '약관 동의',
     'termsText' => '이 문서는 정보 제공의 목적으로만 제공됩니다. `NAVER(주)`는 이 문서에 수록된 정보의 완전성과
