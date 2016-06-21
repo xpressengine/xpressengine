@@ -15,15 +15,13 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Xpressengine\Menu\DBMenuRepository;
-use Xpressengine\Menu\MenuAlterHandler;
-use Xpressengine\Menu\MenuCacheHandler;
-use Xpressengine\Menu\MenuConfigHandler;
 use Xpressengine\Menu\MenuHandler;
 use Xpressengine\Menu\MenuItemPolicy;
 use Xpressengine\Menu\Models\MenuItem;
-use Xpressengine\Menu\MenuPermissionHandler;
-use Xpressengine\Menu\MenuRetrieveHandler;
+use Xpressengine\Menu\Repositories\CacheDecorator;
+use Xpressengine\Menu\Repositories\EloquentRepository;
+use Xpressengine\Menu\Repositories\MemoryDecorator;
+use Xpressengine\Support\LaravelCache;
 use Xpressengine\UIObjects\Menu\MenuList;
 use Xpressengine\UIObjects\Menu\MenuType;
 use Xpressengine\UIObjects\Menu\MenuThemeList;
@@ -89,8 +87,14 @@ class MenuServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton([MenuHandler::class => 'xe.menu'], function ($app) {
+            $repo = new EloquentRepository($app['xe.keygen']);
+
+            if (env('APP_DEBUG') != true) {
+                $repo = new CacheDecorator($repo, new LaravelCache($app['cache.store']));
+            }
+
             return new MenuHandler(
-                $app['xe.keygen'],
+                new MemoryDecorator($repo),
                 $app['xe.config'],
                 $app['xe.module'],
                 $app['xe.router']

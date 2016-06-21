@@ -63,8 +63,7 @@ class MenuController extends Controller
     public function index(MenuHandler $handler, IlluminateConfig $config, SiteHandler $siteHandler)
     {
         $siteKey = $siteHandler->getCurrentSiteKey();
-        $model = $handler->createModel();
-        $menus = $model->newQuery()->where('siteKey', $siteKey)->get()->getDictionary();
+        $menus = $handler->getAll($siteKey);
         $homeMenuId = $siteHandler->getHomeInstanceId();
         $menuMaxDepth = $config->get('xe.menu.maxDepth');
 
@@ -137,7 +136,7 @@ class MenuController extends Controller
             ]);
 
             $handler->setMenuTheme($menu, $desktopTheme, $mobileTheme);
-            
+
             $this->permissionRegisterGrant($menu->getKey(), $handler->getDefaultGrant());
 
         } catch (Exception $e) {
@@ -161,9 +160,7 @@ class MenuController extends Controller
      */
     public function edit(MenuHandler $handler, $menuId)
     {
-        $model = $handler->createModel();
-        /** @var Menu $menu */
-        $menu = $model->newQuery()->find($menuId);
+        $menu = $handler->get($menuId);
         $menuConfig = $handler->getMenuTheme($menu);
 
         return XePresenter::make('menu.edit', ['menu' => $menu, 'config' => $menuConfig]);
@@ -180,9 +177,7 @@ class MenuController extends Controller
      */
     public function update(MenuHandler $handler, $menuId)
     {
-        $model = $handler->createModel();
-        /** @var Menu $menu */
-        $menu = $model->newQuery()->find($menuId);
+        $menu = $handler->get($menuId);
 
         $desktopTheme = Input::get('theme_desktop');
         $mobileTheme = Input::get('theme_desktop');
@@ -229,9 +224,7 @@ class MenuController extends Controller
      */
     public function permit(MenuHandler $handler, $menuId)
     {
-        $model = $handler->createModel();
-        /** @var Menu $menu */
-        $menu = $model->newQuery()->with('items')->find($menuId);
+        $menu = $handler->get($menuId, 'items');
 
         return XePresenter::make(
             'menu.delete',
@@ -253,9 +246,7 @@ class MenuController extends Controller
         XeDB::beginTransaction();
 
         try {
-            $model = $handler->createModel();
-            /** @var Menu $menu */
-            $menu = $model->newQuery()->find($menuId);
+            $menu = $handler->get($menuId);
 
             $handler->remove($menu);
             $this->permissionUnregister($menu->getKey());
@@ -280,9 +271,7 @@ class MenuController extends Controller
      */
     public function editMenuPermission(MenuHandler $handler, $menuId)
     {
-        $model = $handler->createModel();
-        /** @var Menu $menu */
-        $menu = $model->newQuery()->find($menuId);
+        $menu = $handler->get($menuId);
 
         $permArgs = $this->getPermArguments($menu->getKey(), [MenuHandler::ACCESS, MenuHandler::VISIBLE]);
 
@@ -307,9 +296,7 @@ class MenuController extends Controller
         XeDB::beginTransaction();
 
         try {
-            $model = $handler->createModel();
-            /** @var Menu $menu */
-            $menu = $model->newQuery()->find($menuId);
+            $menu = $handler->get($menuId);
 
             $this->permissionRegister($request, $menu->getKey(), [MenuHandler::ACCESS, MenuHandler::VISIBLE]);
         } catch (Exception $e) {
@@ -361,11 +348,9 @@ class MenuController extends Controller
         SiteHandler $siteHandler,
         $menuId
     ) {
-        $model = $handler->createModel();
-        /** @var Menu $menu */
-        $menu = $model->newQuery()->find($menuId);
+        $menu = $handler->get($menuId);
         $menuConfig = $handler->getMenuTheme($menu);
-//        $parent = Input::get('parent', $menuId);
+
         $parent = Input::get('parent');
 
         $selectedMenuType = Input::get('selectType');
@@ -410,9 +395,7 @@ class MenuController extends Controller
     {
         XeDB::beginTransaction();
 
-        $model = $handler->createModel();
-        /** @var Menu $menu */
-        $menu = $model->newQuery()->find($menuId);
+        $menu = $handler->get($menuId);
 
         try {
             $inputs = Input::except(['_token', 'theme_desktop', 'theme_mobile']);
@@ -481,10 +464,10 @@ class MenuController extends Controller
         $menuId,
         $itemId
     ) {
-        $model = $handler->createModel();
-        $itemClass = $model->getItemModel();
-        /** @var MenuItem $item */
-        $item = $itemClass::find($itemId);
+        $item = $handler->getItem($itemId, [
+            'basicImage', 'hoverImage', 'selectedImage',
+            'mBasicImage', 'mHoverImage', 'mSelectedImage'
+        ]);
         $menu = $item->menu;
         if ($menu->getKey() !== $menuId) {
             throw new InvalidArgumentHttpException(400);
@@ -541,10 +524,7 @@ class MenuController extends Controller
         try {
             $inputs = Input::except(['_token', 'theme_desktop', 'theme_mobile']);
 
-            $model = $handler->createModel();
-            $itemClass = $model->getItemModel();
-            /** @var MenuItem $item */
-            $item = $itemClass::find($itemId);
+            $item = $handler->getItem($itemId);
             $menu = $item->menu;
             if ($menu->getKey() !== $menuId) {
                 throw new InvalidArgumentHttpException(400);
@@ -599,7 +579,7 @@ class MenuController extends Controller
         $columnKeyName = $name . 'Id';
 
         if ($uploadImg = Input::file($name)) {
-            $image = XeMedia::make(XeStorage::upload($uploadImg, 'menu'));
+            $image = XeMedia::make(XeStorage::upload($uploadImg, 'public/menu'));
             XeStorage::bind($item->getKey(), $image);
 
             if ($item->{$columnKeyName} !== null) {
@@ -628,10 +608,7 @@ class MenuController extends Controller
      */
     public function permitItem(MenuHandler $handler, ModuleHandler $modules, $menuId, $itemId)
     {
-        $model = $handler->createModel();
-        $itemClass = $model->getItemModel();
-        /** @var MenuItem $item */
-        $item = $itemClass::find($itemId);
+        $item = $handler->getItem($itemId);
         $menu = $item->menu;
         if ($menu->getKey() !== $menuId) {
             throw new InvalidArgumentHttpException(400);
@@ -662,10 +639,7 @@ class MenuController extends Controller
      */
     public function destroyItem(MenuHandler $handler, $menuId, $itemId)
     {
-        $model = $handler->createModel();
-        $itemClass = $model->getItemModel();
-        /** @var MenuItem $item */
-        $item = $itemClass::find($itemId);
+        $item = $handler->getItem($itemId);
         $menu = $item->menu;
         if ($menu->getKey() !== $menuId) {
             throw new InvalidArgumentHttpException(400);
@@ -705,10 +679,7 @@ class MenuController extends Controller
      */
     public function editItemPermission(MenuHandler $handler, ModuleHandler $modules, $menuId, $itemId)
     {
-        $model = $handler->createModel();
-        $itemClass = $model->getItemModel();
-        /** @var MenuItem $item */
-        $item = $itemClass::find($itemId);
+        $item = $handler->getItem($itemId);
         $menu = $item->menu;
         if ($menu->getKey() !== $menuId) {
             throw new InvalidArgumentHttpException(400);
@@ -754,10 +725,7 @@ class MenuController extends Controller
         XeDB::beginTransaction();
 
         try {
-            $model = $handler->createModel();
-            $itemClass = $model->getItemModel();
-            /** @var MenuItem $item */
-            $item = $itemClass::find($itemId);
+            $item = $handler->getItem($itemId);
             $menu = $item->menu;
             if ($menu->getKey() !== $menuId) {
                 throw new InvalidArgumentHttpException(400);
@@ -768,7 +736,7 @@ class MenuController extends Controller
                 $handler->permKeyString($item),
                 [MenuHandler::ACCESS, MenuHandler::VISIBLE]
             );
-            
+
 
         } catch (Exception $e) {
             XeDB::rollback();
@@ -797,15 +765,12 @@ class MenuController extends Controller
 
         XeDB::beginTransaction();
 
-        $model = $handler->createModel();
-        $itemClass = $model->getItemModel();
-
         try {
-            $item = $itemClass::find($itemId);
-            if (!$parent = $itemClass::find($parentId)) {
 
-                /** @var Menu $menu */
-                $menu = $model->newQuery()->find($parentId);
+            $item = $handler->getItem($itemId);
+            /** @var Menu $menu */
+            if (!$parent = $handler->getItem($parentId)) {
+                $menu = $handler->get($parentId);
             } else {
                 $menu = $parent->menu;
             }
@@ -820,7 +785,7 @@ class MenuController extends Controller
 
             $toKey = $handler->permKeyString($item);
             $toKey = substr($toKey, 0, strrpos($toKey, '.'));
-                
+
             $this->permissionMove($handler->permKeyString($old), $toKey);
         } catch (\Exception $e) {
             XeDB::rollback();
@@ -829,7 +794,7 @@ class MenuController extends Controller
 
         XeDB::commit();
 
-        return XePresenter::makeApi(\Input::all());
+        return XePresenter::makeApi(Input::all());
     }
 
     protected function inputClassify(array $inputs)

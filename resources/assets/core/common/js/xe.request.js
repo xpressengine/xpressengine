@@ -37,7 +37,7 @@
       },
       error: function (jqxhr, settings, thrownError) {
         var status = jqxhr.status,
-            type = 'danger',
+            type = 'xe-danger',
             errorMessage = 'Not defined error message ('+status+')';
 
         // @TODO dataType 에 따라 메시지 획득 방식을 추가 해야함.

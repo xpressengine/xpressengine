@@ -99,11 +99,12 @@ if (function_exists('apiRender') === false) {
      *
      * @package Xpressengine\Presenter
      *
-     * @param string $id   view id
-     * @param array  $data data
+     * @param string $id           view id
+     * @param array  $data         data
+     * @param array  $responseData data
      * @return mixed
      */
-    function apiRender($id, array $data = [])
+    function apiRender($id, array $data = [], array $responseData = [])
     {
         XePresenter::htmlRenderPartial();
 
@@ -117,6 +118,7 @@ if (function_exists('apiRender') === false) {
 
         return XePresenter::makeApi([
             'result' => (string)$result,
+            'data' => $responseData,
             'XE_ASSET_LOAD' => [
                 'css' => \Xpressengine\Presenter\Html\Tags\CSSFile::getFileList(),
                 'js' => \Xpressengine\Presenter\Html\Tags\JSFile::getFileList(),
@@ -319,7 +321,7 @@ if (!function_exists('getCurrentInstanceId')) {
     {
         $id = getCurrentInstanceId();
         if ($id !== null) {
-            return Xpressengine\Menu\Models\MenuItem::find($id);
+            return app('xe.menu')->getItem($id);
         }
         return null;
     }
@@ -336,8 +338,10 @@ if (!function_exists('getCurrentInstanceId')) {
     {
         $menu = null;
         if ($menuId !== null) {
-            $menu = Xpressengine\Menu\Models\Menu::with('items.basicImage', 'items.hoverImage', 'items.selectedImage')
-                ->find($menuId);
+            $menu = app('xe.menu')->get($menuId, [
+                'items.basicImage', 'items.hoverImage', 'items.selectedImage',
+                'items.mBasicImage', 'items.mHoverImage', 'items.mSelectedImage'
+            ]);
             // pre load
             app('xe.permission')->loadBranch($menuId);
         }

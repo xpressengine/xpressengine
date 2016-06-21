@@ -216,13 +216,14 @@
                     js = assets['js'] || [],
                     html = data.result,
                     cssLen = css.length,
-                    jsLen = js.length;
+                    jsLen = js.length
+                    data = data.data || {};
 
                 var next = function() {
                     $target.html(html);
 
                     if(callback) {
-                        callback();
+                        callback(data);
                     }
                 };
 
