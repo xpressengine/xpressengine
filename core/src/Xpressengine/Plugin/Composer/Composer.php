@@ -36,13 +36,13 @@ class Composer
     protected static $packagistUrl = 'http://xe3.dev1.xpressengine.com';
 
     public static $basePlugins = [
-        'alice' => '0.9.0',
-        'claim' => '0.9.0',
-        'board' => '0.9.0',
-        'ckeditor' => '0.9.0',
-        'comment' => '0.9.0',
-        'page' => '0.9.0',
-        'news_client' => '0.9.0',
+        'xpressengine-plugin/alice' => '0.9.0',
+        'xpressengine-plugin/claim' => '0.9.0',
+        'xpressengine-plugin/board' => '0.9.0',
+        'xpressengine-plugin/ckeditor' => '0.9.0',
+        'xpressengine-plugin/comment' => '0.9.0',
+        'xpressengine-plugin/page' => '0.9.0',
+        'xpressengine-plugin/news_client' => '0.9.0',
     ];
 
     public static function requireBasePlugins(Event $event)
