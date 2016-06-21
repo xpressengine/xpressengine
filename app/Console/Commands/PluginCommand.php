@@ -90,9 +90,9 @@ class PluginCommand extends Command
     protected function getChangedPlugins(ComposerFileWriter $writer)
     {
         $changed = [];
-        $changed['installed'] = $writer->get('extra.xpressengine-plugin.changed.installed', []);
-        $changed['updated'] = $writer->get('extra.xpressengine-plugin.changed.updated', []);
-        $changed['uninstalled'] = $writer->get('extra.xpressengine-plugin.changed.uninstalled', []);
+        $changed['installed'] = $writer->get('xpressengine-plugin.changed.installed', []);
+        $changed['updated'] = $writer->get('xpressengine-plugin.changed.updated', []);
+        $changed['uninstalled'] = $writer->get('xpressengine-plugin.changed.uninstalled', []);
         return $changed;
     }
 
