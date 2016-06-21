@@ -78,7 +78,7 @@ class PluginUninstall extends PluginCommand
         }
 
         if($this->option('deactivate')) {
-            $plugin->deactivate();
+            $handler->deactivatePlugin($id);
         }
 
         // 플러그인 uninstall 실행
