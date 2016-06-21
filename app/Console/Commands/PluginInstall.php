@@ -119,8 +119,7 @@ class PluginInstall extends PluginCommand
         $this->warn('composer update를 실행합니다. 최대 수분이 소요될 수 있습니다.');
         $this->line(" composer update --prefer-lowest --with-dependencies $vendorName/*");
         try {
-            $result = $this->runComposer(base_path(), "update -vvv --prefer-lowest --with-dependencies $vendorName/*");
-            dump('result=', $result);
+            $result = $this->runComposer(base_path(), "update --prefer-lowest --with-dependencies $vendorName/*");
         } catch (\Exception $e) {
             ;
         }
