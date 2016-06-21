@@ -76,9 +76,12 @@
     $schema = !empty($https) && 'off' !== strtolower($https) ? 'https' : 'http';
     $url = $schema.'://'.$_SERVER['SERVER_NAME'];
 
-    $locale = isset($_COOKIE['locale']) ? $_COOKIE['locale'] : 'ko';
-    $filePath = 'lang' . DIRECTORY_SEPARATOR . $locale . '.php';
-    $langs = file_exists($filePath) ? require $filePath : [];
+    $locale = file_exists(getLangFilePath($_COOKIE['install_locale'])) ? $_COOKIE['install_locale'] : 'ko';
+    $langs = require getLangFilePath($locale);
+
+    function getLangFilePath($locale) {
+        return 'lang' . DIRECTORY_SEPARATOR . $locale . '.php';
+    }
 
     function trans($key) {
         global $langs;
@@ -175,9 +178,10 @@
         </div>
     </div>
 
-    
+
     <div class="content __xe_step" data-step="3" style="display: none;">
         <form action="../install/post" method="post">
+            <input type="hidden" name="locale" value="<?=$locale?>">
             <h2>Database</h2>
             <table>
                 <colgroup>
@@ -393,7 +397,7 @@
                 return false;
             }
         }
-        
+
         if ($(f['admin_password']).val() !== $(f['admin_password_confirmation']).val()) {
             alert('비밀번호가 일치하지 않습니다.');
             $(f['admin_password_confirmation']).focus();
@@ -408,7 +412,7 @@
     $(function () {
         $('.__xe_locale_item').click(function (e) {
             e.preventDefault();
-            setCookie('locale', $(this).data('locale'), 365);
+            setCookie('install_locale', $(this).data('locale'), 24);
             location.reload();
         });
 
