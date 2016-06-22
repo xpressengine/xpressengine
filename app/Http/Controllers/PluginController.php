@@ -59,6 +59,9 @@ class PluginController extends Controller
 
     public function show($pluginId, PluginHandler $handler, PluginProvider $provider)
     {
+        // refresh plugin cache
+        XePlugin::getAllPlugins(true);
+
         $componentTypes = $this->getComponentTypes();
 
         $plugin = $handler->getPlugin($pluginId);

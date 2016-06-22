@@ -278,17 +278,17 @@ class PluginHandler
         }
 
         // 플러그인이 이미 활성화되어있는 상태인지 체크한다.
-        if ($entity->getStatus() === static::STATUS_ACTIVATED) {
+        /*if ($entity->getStatus() === static::STATUS_ACTIVATED) {
             throw new PluginAlreadyActivatedException();
-        }
+        }*/
+
+        // 기존에 설치(활성화)된 적이 있다면 설치된 버전을 조사한다.
+        $installedVersion = $entity->getInstalledVersion();
 
         // 플러그인이 설치되어 있는지 검사한다.
         if ($entity->checkInstalled() === false) {
             $entity->install();
         }
-
-        // 기존에 설치(활성화)된 적이 있는지 검사한다. 기존에 활성화된 적이 있다면 설치된 버전을 조회한다.
-        $installedVersion = $entity->getInstalledVersion();
 
         // 플러그인이 최신업데이트 상태인지 검사하고, 업데이트가 필요하면 업데이트 한다.
         if ($entity->checkUpdated() === false) {
