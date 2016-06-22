@@ -79,7 +79,7 @@ class PluginMake extends Command
             $this->makeDirectoryStructure($path);
 
             // composer update
-            $this->runComposerUpdate($path);
+            $this->runComposerDump($path);
 
             // plugin activate
             $this->activatePlugin($name);
@@ -415,11 +415,11 @@ class PluginMake extends Command
         $this->files->put($path.'/assets/style.css', $stub);
     }
 
-    protected function runComposerUpdate($path)
+    protected function runComposerDump($path)
     {
         $composer = $this->findComposer();
         $commands = [
-            $composer.' update'
+            $composer.' dump-autoload'
         ];
 
         $process = new Process(implode(' && ', $commands), $path, null, null, null);
