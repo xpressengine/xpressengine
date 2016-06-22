@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Artisan;
 use File;
 use Symfony\Component\Yaml\Yaml;
+use Illuminate\Contracts\Cookie\QueueingFactory as JarContract;
 
 class InstallController extends Controller
 {
@@ -27,7 +28,7 @@ class InstallController extends Controller
         return file_exists(storage_path() . '/app/installed');
     }
 
-    public function install(Request $request)
+    public function install(Request $request, JarContract $cookie)
     {
         if ($this->isInstalled() === true) {
             throw new \Exception('Already installed');
@@ -81,6 +82,10 @@ class InstallController extends Controller
         ]);
 
         File::delete($configPath);
+
+        if (!empty($request->get('locale'))) {
+            $cookie->queue($cookie->forever('locale', $request->get('locale')));
+        }
 
         return redirect($request->root());
     }

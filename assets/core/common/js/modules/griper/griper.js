@@ -12,23 +12,17 @@
 
   var $ = jQuery = window.jQuery;
 
-  var styleLoaded = false;
-  //System.import('xecore:/common/js/modules/griper/style.css!');
-  if(!styleLoaded) {
-    styleLoaded = true;
-    XE.cssLoad('/assets/core/common/js/modules/griper/style.css');
-  }
+  DynamicLoadManager.cssLoad('/assets/core/common/js/modules/griper/style.css');
 
   exports.options = {
     toastContainer: {
-      template: '<div class="__xe_toast_container xo-toast_container"></div>',
+      template: '<div class="__xe_toast_container xe-toast-container"></div>',
       boxTemplate: '<div class="toast_box"></div>'
     },
     toast: {
-      iconClass: {danger: 'xi-ban-circle', info: 'xi-information-circle', warning: 'xi-info-triangle', success: 'xi-check'},
-      expireTimes: {danger: 0, info: 5, warning: 10, success: 2},
+      expireTimes: {'xe-danger': 0, 'xe-positive': 5, 'xe-warning': 10, 'xe-success': 2, 'xe-fail': 5},
       status: {500: 'warning', 401: 'info'},
-      template: '<div class="alert-dismissable xo-alert" style="display:none;"><button type="button" class="__xe_close btn_alert_close" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+      template: '<div class="alert-dismissable xe-alert" style="display:none;"><button type="button" class="__xe_close xe-btn-alert-close" aria-label="Close"><i class="xi-close"></i></button>' +
       '<span class="message"></span></div>'
     },
     form: {
@@ -93,14 +87,14 @@
       $('body').append(container);
 
       container.on('click', 'button.__xe_close', function (e) {
-        exports.toast.fn.destroy($(this).parents('.xo-alert'));
+        exports.toast.fn.destroy($(this).parents('.xe-alert'));
         e.preventDefault();
       });
 
       setInterval(function() {
         var time = parseInt(new Date().getTime() / 1000);
         toast_box
-            .find('div.xo-alert')
+            .find('div.xe-alert')
             .each(function() {
               var expireTime = parseInt($(this).data('expire-time'));
               if (expireTime != 0 && time > expireTime) {
