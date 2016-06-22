@@ -92,7 +92,7 @@ class PluginInstall extends PluginCommand
         $this->line("  $title - $name:$version".PHP_EOL);
 
         // 안내 멘트 출력
-        if ($this->confirm(
+        if ($this->input->isInteractive() && $this->confirm(
                 "위 플러그인을 다운로드하고 설치합니다. \r\n 위 플러그인이 의존하는 다른 플러그인이 함께 다운로드 될 수 있으며, 수분이 소요될수 있습니다.\r\n 플러그인을 설치하시겠습니까?"
             ) === false
         ) {
@@ -151,17 +151,17 @@ class PluginInstall extends PluginCommand
             }
         }*/
 
-        if (!array_has($changed['installed'], $name)) {
+        if (array_get($changed, 'installed.'.$name) === $version) {
+            // 설치 성공 문구 출력
+            $this->output->success("$title - $name:$version 플러그인을 설치했습니다.");
+        } elseif (array_get($changed, 'installed.'.$name) !== $version) {
+            $this->output->success(
+                "$name 플러그인을 설치하였으나 다른 버전(".array_get($changed, 'installed.'.$name).")으로 설치되었습니다. 플러그인 간의 의존관계로 인해 다른 버전으로 설치되었을 가능성이 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다."
+            );
+        } else {
             $this->output->error(
                 "$name:$version 플러그인을 설치하지 못했습니다. 플러그인 간의 의존관계로 인해 설치가 불가능할 수도 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다."
             );
-        } elseif ($changed['updated'][$name] !== $version) {
-            $this->output->error(
-                "$name:$version 플러그인을 설치하였으나 다른 버전으로 설치되었습니다. 플러그인 간의 의존관계로 인해 다른 버전으로 설치되었을 가능성이 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다."
-            );
-        } else {
-            // 설치 성공 문구 출력
-            $this->output->success("$title - $name:$version 플러그인을 설치했습니다.");
         }
     }
 

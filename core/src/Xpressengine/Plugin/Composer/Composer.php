@@ -52,7 +52,7 @@ class Composer
 
         // XE가 이미 설치돼 있을 경우 아무 것도 하지 않는다.
         if(file_exists($path) || file_exists(static::$installedFlagPath)) {
-            $event->getIO()->write("Xpressengine: Xpressengine was installed or file[$path] already exists!");
+            $event->getIO()->write("xpressengine-installer: : Xpressengine was installed or file[$path] already exists!");
             return;
         }
 
@@ -65,7 +65,7 @@ class Composer
         }
 
         $writer->write();
-        $event->getIO()->write('Xpressengine: Plugin composer file is generated');
+        $event->getIO()->write('xpressengine-installer: : Plugin composer file is generated');
     }
 
     public static function resolvePlugins(Event $event)

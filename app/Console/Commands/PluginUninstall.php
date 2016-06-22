@@ -73,7 +73,7 @@ class PluginUninstall extends PluginCommand
 
         // 안내 멘트 출력
         $this->output->warning("위 플러그인을 삭제합니다. 플러그인을 삭제하면 사이트가 정상적으로 작동하지 않을 수 있습니다.");
-        if($this->confirm("플러그인을 삭제하시겠습니까?") === false) {
+        if($this->input->isInteractive() && $this->confirm("플러그인을 삭제하시겠습니까?") === false) {
             return;
         }
 
@@ -135,11 +135,11 @@ class PluginUninstall extends PluginCommand
 
         $writer->write();
 
-        if(!array_has($changed['uninstalled'], $name)) {
-            $this->output->warning("$name:$version 플러그인을 삭제하지 못했습니다. 플러그인 간의 의존관계로 인해 삭제가 불가능할 수도 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다.");
-        } else {
+        if(array_has($changed, 'uninstalled.'.$name)) {
             // 삭제 성공 문구 출력
             $this->output->success("$title - $name:$version 플러그인을 삭제하였습니다.");
+        } else {
+            $this->output->warning("$name:$version 플러그인을 삭제하지 못했습니다. 플러그인 간의 의존관계로 인해 삭제가 불가능할 수도 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다.");
         }
 
     }

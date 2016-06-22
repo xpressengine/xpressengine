@@ -95,7 +95,7 @@ class PluginUpdate extends PluginCommand
         $this->line("  $title - $name: {$plugin->getVersion()} -> $version".PHP_EOL);
 
         // 안내 멘트 출력
-        if($this->confirm("위 플러그인을 다운로드하고 업데이트합니다. \r\n 위 플러그인이 의존하는 다른 플러그인이 함께 다운로드 될 수 있으며, 수분이 소요될수 있습니다.\r\n 플러그인을 업데이트하시겠습니까?") === false) {
+        if($this->input->isInteractive() && $this->confirm("위 플러그인을 다운로드하고 업데이트합니다. \r\n 위 플러그인이 의존하는 다른 플러그인이 함께 다운로드 될 수 있으며, 수분이 소요될수 있습니다.\r\n 플러그인을 업데이트하시겠습니까?") === false) {
             return;
         }
 
@@ -129,33 +129,8 @@ class PluginUpdate extends PluginCommand
         $writer->reload();
 
         // changed plugin list 정보 출력
-        $installed = $writer->get('extra.xpressengine-plugin.changed.installed', []);
-        $updated = $writer->get('extra.xpressengine-plugin.changed.updated', []);
-
-        // 플러그인 설치시에 삭제되는 플러그인은 없다.
-        $uninstalled = $writer->get('extra.xpressengine-plugin.changed.uninstalled', []);
-
-        if(count($installed)) {
-            $this->warn('신규 다운로드 플러그인:');
-            foreach ($installed as $package => $version) {
-                $this->line("  $package:$version");
-            }
-        }
-
-        if (count($updated)) {
-            $this->warn('업데이트 다운로드 플러그인:');
-            foreach ($updated as $package => $version) {
-                $this->line("  $package:$version");
-            }
-        }
-
-        // 플러그인 설치시에 삭제되는 플러그인은 없다.
-        //if (count($uninstalled)) {
-        //    $this->warn('삭제된 플러그인 목록:');
-        //    foreach ($uninstalled as $package => $version) {
-        //        $this->line("  $package:$version");
-        //    }
-        //}
+        $changed = $this->getChangedPlugins($writer);
+        $this->printChangedPlugins($changed);
 
         // composer.plugins.json 정리
         // - require list에서 '>=' 제거
@@ -176,13 +151,17 @@ class PluginUpdate extends PluginCommand
             }
         }*/
 
-        if(!array_has($updated, $name)) {
-            $this->output->warning("$name:$version 플러그인을 업데이트하지 못했습니다. 플러그인 간의 의존관계로 인해 업데이트가 불가능할 수도 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다.");
-        } elseif($updated[$name] !== $version) {
-            $this->output->warning("$name:$version 플러그인을 업데이트하였으나 다른 버전으로 업데이트되었습니다. 플러그인 간의 의존관계로 인해 다른 버전으로 업데이트되었을 가능성이 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다.");
-        } else {
+        if (array_get($changed, 'updated.'.$name) === $version) {
             // 설치 성공 문구 출력
             $this->output->success("$title - $name:$version 플러그인을 업데이트했습니다.");
+        } elseif (array_get($changed, 'updated.'.$name) !== $version) {
+            $this->output->warning(
+                "$name:$version 플러그인을 업데이트하였으나 다른 버전으로 업데이트되었습니다. 플러그인 간의 의존관계로 인해 다른 버전으로 업데이트되었을 가능성이 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다."
+            );
+        } else {
+            $this->output->warning(
+                "$name:$version 플러그인을 업데이트하지 못했습니다. 플러그인 간의 의존관계로 인해 업데이트가 불가능할 수도 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다."
+            );
         }
     }
 }
