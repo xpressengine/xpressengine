@@ -327,4 +327,16 @@ abstract class AbstractEditor implements ComponentInterface
     {
         return null;
     }
+
+    /**
+     * Perform any final actions for the store action lifecycle
+     *
+     * @param string $targetId   target id
+     * @param array  $inputs     request inputs
+     * @return void
+     */
+    public function terminate($targetId, $inputs = [])
+    {
+        //
+    }
 }

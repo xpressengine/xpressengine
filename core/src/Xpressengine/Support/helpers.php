@@ -581,3 +581,31 @@ if (function_exists('plugins_path') === false) {
         return rtrim(XePlugin::getPluginsDir(), DIRECTORY_SEPARATOR).($path ? DIRECTORY_SEPARATOR.$path : $path);
     }
 }
+
+if (!function_exists('editor')) {
+    /**
+     * @package Xpressengine\Editor
+     *
+     * @param string      $instanceId instance id
+     * @param array|false $arguments  argument for editor
+     * @return string
+     */
+    function editor($instanceId, $arguments)
+    {
+        return app('xe.editor')->render($instanceId, $arguments);
+    }
+}
+
+if (!function_exists('compile')) {
+    /**
+     * @package Xpressengine\Editor
+     *
+     * @param string $instanceId instance id
+     * @param string $content    content
+     * @return string
+     */
+    function compile($instanceId, $content)
+    {
+        return app('xe.editor')->compile($instanceId, $content);
+    }
+}

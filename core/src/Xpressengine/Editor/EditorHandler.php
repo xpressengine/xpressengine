@@ -210,7 +210,7 @@ class EditorHandler
      * @param string $content    content
      * @return string
      */
-    public function compile($instanceId, $content)
+    public function compile($instanceId, $content, $bodyOnly = false)
     {
         return $this->compileTools($instanceId, $this->get($instanceId)->compile($content));
     }
@@ -250,5 +250,18 @@ class EditorHandler
             },
             $content
         );
+    }
+
+    /**
+     * Perform any final actions for the store action lifecycle
+     *
+     * @param string $instanceId instance id
+     * @param string $targetId   target id
+     * @param array  $inputs     request inputs
+     * @return void
+     */
+    public function terminate($instanceId, $targetId, $inputs = [])
+    {
+        $this->get($instanceId)->terminate($targetId, $inputs);
     }
 }

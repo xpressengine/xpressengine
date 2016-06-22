@@ -88,7 +88,7 @@ trait PermissionSupport
 
         return [
             Grant::RATING_TYPE => $request->get($ability . 'Rating'),
-            Grant::GROUP_TYPE => $request->get($ability . 'Group', []),
+            Grant::GROUP_TYPE => array_filter(explode(',', $request->get($ability . 'Group', ''))),
             Grant::USER_TYPE => array_filter(explode(',', $request->get($ability . 'User', ''))),
             Grant::EXCEPT_TYPE => array_filter(explode(',', $request->get($ability . 'Except', ''))),
             Grant::VGROUP_TYPE => $request->get($ability . 'VGroup', []),

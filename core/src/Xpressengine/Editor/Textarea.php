@@ -81,4 +81,15 @@ class Textarea extends AbstractEditor
     {
         return $content;
     }
+
+    /**
+     * Get script for running the editor
+     *
+     * @param array $options options
+     * @return mixed
+     */
+    protected function getEditorScript(array $options)
+    {
+        return '';
+    }
 }
