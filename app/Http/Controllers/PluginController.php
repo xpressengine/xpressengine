@@ -29,7 +29,7 @@ class PluginController extends Controller
         XePresenter::setSettingsSkinTargetId('plugins');
     }
 
-    public function index(Request $request, PluginProvider $provider)
+    public function index(Request $request, PluginHandler $handler, PluginProvider $provider)
     {
         // filter input
         $field = [];
@@ -41,7 +41,7 @@ class PluginController extends Controller
             $field['keyword'] = null;
         }
 
-        $collection = XePlugin::getAllPlugins(true);
+        $collection = $handler->getAllPlugins(true);
         $plugins = $collection->fetch($field);
 
         $provider->sync($plugins);
@@ -60,7 +60,7 @@ class PluginController extends Controller
     public function show($pluginId, PluginHandler $handler, PluginProvider $provider)
     {
         // refresh plugin cache
-        XePlugin::getAllPlugins(true);
+        $handler->getAllPlugins(true);
 
         $componentTypes = $this->getComponentTypes();
 

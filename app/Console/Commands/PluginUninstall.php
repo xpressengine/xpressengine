@@ -83,7 +83,7 @@ class PluginUninstall extends PluginCommand
 
         // 플러그인 uninstall 실행
         try {
-            $handler->deletePlugin($id);
+            $handler->uninstallPlugin($id);
         } catch (CannotDeleteActivatedPluginException $e) {
             $e->setMessage('활성화된 플러그인은 삭제할 수 없습니다. 비활성화 한 후 삭제하려면 --deactivate 옵션을 사용하십시오.');
             throw $e;

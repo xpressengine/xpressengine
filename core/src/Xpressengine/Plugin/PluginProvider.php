@@ -14,6 +14,7 @@ namespace Xpressengine\Plugin;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ConnectException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -73,7 +74,7 @@ class PluginProvider
      *
      * @param array $ids
      *
-     * @return void
+     * @return mixed
      */
     public function findAll(array $ids)
     {
@@ -113,7 +114,7 @@ class PluginProvider
      *
      * @param PluginEntity|PluginEntity[] $plugins
      *
-     * @return void
+     * @return bool 성공여부
      */
     public function sync($plugins)
     {
@@ -121,7 +122,11 @@ class PluginProvider
             $plugins = [$plugins->getId() => $plugins];
         }
         $ids = array_keys($plugins);
-        $infos = $this->findAll($ids);
+        try {
+            $infos = $this->findAll($ids);
+        } catch (ConnectException $e) {
+            return false;
+        }
 
         foreach ($infos as $data) {
 
@@ -129,6 +134,8 @@ class PluginProvider
             $plugin = $plugins[$id];
             $plugin->setRemoteData($data);
         }
+
+        return true;
     }
 
     protected function request($url, $queries = [])

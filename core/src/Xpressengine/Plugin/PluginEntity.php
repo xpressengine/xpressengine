@@ -331,13 +331,17 @@ class PluginEntity implements Arrayable, Jsonable
      */
     public function needUpdateInstall()
     {
-        return version_compare($this->getInstalledVersion(), $this->getVersion()) !== 0;
+        $installedVersion = $this->getInstalledVersion();
+        if($installedVersion === $this->getVersion()) {
+            return false;
+        }
+        return !$this->checkInstalled() || !$this->checkUpdated($installedVersion);
     }
 
     /**
      * 플러그인의 업데이트가 Xpressengine의 서버에 존재하고, 아직 다운로드되어 있지 않은 상태인지 체크한다.
      *
-     * @return void boolean 새버전이 서버에 존재할 경우 true를 반환
+     * @return boolean 새버전이 서버에 존재할 경우 true를 반환
      */
     public function hasUpdate()
     {
@@ -351,7 +355,7 @@ class PluginEntity implements Arrayable, Jsonable
     /**
      * 플러그인의 최신 업데이트 버전을 Xpressengine의 서버에서 조회하여 반환한다.
      *
-     * @return void string latest version
+     * @return string latest version
      */
     public function getLatestVersion()
     {
