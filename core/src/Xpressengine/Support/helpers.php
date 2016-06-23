@@ -605,8 +605,8 @@ if (!function_exists('compile')) {
      * @param string $content    content
      * @return string
      */
-    function compile($instanceId, $content)
+    function compile($instanceId, $content, $targetId = null, $bodyOnly = false)
     {
-        return app('xe.editor')->compile($instanceId, $content);
+        return app('xe.editor')->compile($instanceId, $content, $targetId, $bodyOnly);
     }
 }

@@ -17,6 +17,7 @@ use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Plugin\ComponentInterface;
 use Xpressengine\Plugin\ComponentTrait;
 use Xpressengine\Support\MobileSupportTrait;
+use Illuminate\Contracts\Routing\UrlGenerator;
 
 /**
  * Class AbstractEditor
@@ -39,6 +40,8 @@ abstract class AbstractEditor implements ComponentInterface
      */
     protected $editors;
 
+    protected $urls;
+
     /**
      * Instance identifier
      *
@@ -60,6 +63,13 @@ abstract class AbstractEditor implements ComponentInterface
      */
     protected $arguments = [];
 
+    protected $files = [];
+
+    /**
+     * @var
+     *
+     * @deprecated
+     */
     protected $targetId;
 
     /**
@@ -92,10 +102,14 @@ abstract class AbstractEditor implements ComponentInterface
         'editorOptions' => [],
     ];
 
+    protected $fileInputName = '_files';
+
     /**
      * The config resolver
      *
      * @var callable
+     *
+     * @deprecated
      */
     protected static $configResolver;
 
@@ -105,12 +119,20 @@ abstract class AbstractEditor implements ComponentInterface
      * @param EditorHandler $editors    EditorHandler instance
      * @param string        $instanceId Instance identifier
      */
-    public function __construct(EditorHandler $editors, $instanceId)
+    public function __construct(EditorHandler $editors, UrlGenerator $urls, $instanceId)
     {
         $this->editors = $editors;
+        $this->urls = $urls;
         $this->instanceId = $instanceId;
 
-        $this->config = $this->resolveConfig($instanceId);
+//        $this->config = $this->resolveConfig($instanceId);
+    }
+
+    public function setConfig(ConfigEntity $config)
+    {
+        $this->config = $config;
+
+        return $this;
     }
 
     /**
@@ -130,11 +152,18 @@ abstract class AbstractEditor implements ComponentInterface
         return $this;
     }
 
+    public function setFiles($files = [])
+    {
+        $this->files = $files;
+    }
+
     /**
      * Set target identified for the editor
      *
      * @param string $targetId target id
      * @return $this
+     *
+     * @deprecated
      */
     public function setTargetId($targetId)
     {
@@ -158,6 +187,8 @@ abstract class AbstractEditor implements ComponentInterface
      *
      * @param callable $resolver config resolver
      * @return void
+     *
+     * @deprecated
      */
     public static function setConfigResolver(callable $resolver)
     {
@@ -169,6 +200,8 @@ abstract class AbstractEditor implements ComponentInterface
      *
      * @param string $instanceId instance identifier
      * @return ConfigEntity|null
+     *
+     * @deprecated
      */
     protected function resolveConfig($instanceId)
     {
@@ -184,6 +217,8 @@ abstract class AbstractEditor implements ComponentInterface
      *
      * @param string $instanceId instance identifier
      * @return string
+     * 
+     * @deprecated 
      */
     public static function getConfigKey($instanceId)
     {
@@ -254,6 +289,21 @@ abstract class AbstractEditor implements ComponentInterface
         $htmlString = [];
         if ($this->scriptOnly === false) {
             $options = $this->getOptions();
+            
+            $options = array_merge($options, [
+                'editorOptions' => [
+                    'fileUpload' => [
+                        'upload_url' => $this->urls->route('editor.file.upload'),
+                        'source_url' => $this->urls->route('editor.file.source'),
+                        'download_url' => $this->urls->route('editor.file.download'),
+                        'destroy_url' => $this->urls->route('editor.file.destroy'),
+                    ],
+                    'suggestion' => [
+                        'hashtag_api' => $this->urls->route('editor.hashTag'),
+                        'mention_api' => $this->urls->route('editor.mention'),
+                    ],
+                ]
+            ]);
 
             $htmlString[] = $this->getContentHtml(array_get($options, 'content'), $options);
             $htmlString[] = $this->getEditorScript($options);
@@ -268,7 +318,14 @@ abstract class AbstractEditor implements ComponentInterface
      * @param string $content content
      * @return string
      */
-    abstract public function compile($content);
+    public function compile($content)
+    {
+        return $this->compileBody($content) . $this->getFileView();
+    }
+
+    abstract protected function compileBody($content);
+
+    abstract protected function getFileView();
 
     /**
      * Get a content html tag string
@@ -337,6 +394,8 @@ abstract class AbstractEditor implements ComponentInterface
      *
      * @param string $instanceId instance identifier
      * @return string|null
+     *
+     * @deprecated
      */
     public static function getInstanceSettingURI($instanceId)
     {
@@ -349,9 +408,16 @@ abstract class AbstractEditor implements ComponentInterface
      * @param array       $inputs     request inputs
      * @param string|null $targetId   target id
      * @return void
+     *
+     * @deprecated
      */
     public function terminate($inputs = [], $targetId = null)
     {
         //
+    }
+
+    public function getFileInputName()
+    {
+        return $this->fileInputName;
     }
 }

@@ -6,9 +6,10 @@
             <input type="text" class="form-control" aria-describedby="basic-addon2" readonly="readonly" value="{{ $selected ? $selected->getComponentInfo('name') : '' }}">
             <!--[D] 상세 설정 등 투명 링크는 .input-group-link 클래스 추가  -->
             <span class="input-group-btn input-group-link">
-                @if($selected && $link = $selected->getInstanceSettingURI($instanceId))
-                <a href="{{ $link }}" class="btn btn-link">{{xe_trans('xe::detailConfigure')}}</a>
-                @endif
+                {{--@if($selected && $link = $selected->getInstanceSettingURI($instanceId))--}}
+                {{--<a href="{{ $link }}" class="btn btn-link">{{xe_trans('xe::detailConfigure')}}</a>--}}
+                {{--@endif--}}
+                <a href="{{ route('settings.editor.setting.detail', $instanceId) }}" class="btn btn-link">{{xe_trans('xe::detailConfigure')}}</a>
             </span>
             <span class="input-group-btn">
                 <button class="btn btn-default __xe_btn_edit" type="button">{{xe_trans('xe::edit')}}</button>

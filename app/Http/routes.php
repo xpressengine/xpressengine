@@ -723,4 +723,15 @@ Route::settings(
 
 Route::settings('editor', function () {
     Route::post('setting/{instanceId}', ['as' => 'settings.editor.setting', 'uses' => 'EditorController@setting']);
+    Route::get('setting/{instanceId}/detail', ['as' => 'settings.editor.setting.detail', 'uses' => 'EditorController@getDetailSetting']);
+    Route::post('setting/{instanceId}/detail', ['as' => 'settings.editor.setting.detail', 'uses' => 'EditorController@postDetailSetting']);
+});
+
+Route::group(['prefix' => 'editor'], function () {
+    Route::post('/file/upload', ['as' => 'editor.file.upload', 'uses' => 'EditorController@fileUpload']);
+    Route::get('/file/source/{id?}', ['as' => 'editor.file.source', 'uses' => 'EditorController@fileSource']);
+    Route::get('/file/download/{id?}', ['as' => 'editor.file.download', 'uses' => 'EditorController@fileDownload']);
+    Route::post('/file/destroy/{id?}', ['as' => 'editor.file.destroy', 'uses' => 'EditorController@fileDestroy']);
+    Route::get('/hashTag/{id?}', ['as' => 'editor.hashTag', 'uses' => 'EditorController@hashTag']);
+    Route::get('/mention/{id?}', ['as' => 'editor.mention', 'uses' => 'EditorController@mention']);
 });

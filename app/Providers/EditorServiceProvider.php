@@ -47,7 +47,9 @@ class EditorServiceProvider extends ServiceProvider
                 $editorHandler = new $editorHandler(
                     $app['xe.pluginRegister'],
                     $app['xe.config'],
-                    $app
+                    $app,
+                    $app['xe.storage'],
+                    $app['xe.media']
                 );
                 $editorHandler->setDefaultEditorId($app['config']->get('xe.editor.default'));
                 return $editorHandler;
