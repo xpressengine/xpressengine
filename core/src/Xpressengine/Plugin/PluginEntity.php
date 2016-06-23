@@ -281,9 +281,6 @@ class PluginEntity implements Arrayable, Jsonable
      */
     public function getInstalledVersion()
     {
-        if ($this->installedVersion === null) {
-            return $this->getVersion();
-        }
         return $this->installedVersion;
     }
 

@@ -253,7 +253,7 @@ class PluginHandler
         // 비활성화된 플러그인 정보를 config에 기록한다.
         $configs[$pluginId] = [
             'status' => static::STATUS_DEACTIVATED,
-            'version' => $entity->getVersion()
+            'version' => $entity->getInstalledVersion()
         ];
 
         $this->setPluginsStatus($configs);
@@ -283,7 +283,7 @@ class PluginHandler
         $installedVersion = $entity->getInstalledVersion();
 
         // 플러그인이 설치되어 있는지 검사한다.
-        if ($entity->checkInstalled() === false) {
+        if ($entity->checkInstalled($installedVersion) === false) {
             $entity->install();
         }
 
