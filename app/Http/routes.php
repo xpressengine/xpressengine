@@ -419,6 +419,9 @@ Route::settings(
         Route::post('{id}/edit', ['as' => 'manage.group.edit', 'uses' => 'Member\Settings\GroupController@update'])
             ->where('id', '[0-9a-z\-]+');
 
+        Route::post('update/join', ['as' => 'manage.group.update.join', 'uses' => 'Member\Settings\GroupController@updateJoinGroup'])
+            ->where('id', '[0-9a-z\-]+');
+
         // delete
         Route::delete(
             'destroy',

@@ -112,6 +112,13 @@ class AuthController extends Controller
         $userData = $request->except('_token', 'agree');
         $userData['rating'] = Rating::MEMBER;
         $userData['status'] = \XeUser::STATUS_ACTIVATED;
+
+        // set default join group
+        $config = \app('xe.config')->get('user.join');
+        $joinGroup = $config->get('joinGroup');
+        array_add($userData, 'groupId', []);
+        $userData['groupId'][] = $joinGroup;
+
         unset($userData['password_confirmation']);
 
         XeDB::beginTransaction();

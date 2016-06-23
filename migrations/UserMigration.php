@@ -115,17 +115,32 @@ class UserMigration implements Migration {
             $table->timestamp('created_at');
         });
 
-
     }
 
     public function installed()
     {
+        // add default user groups
+        $joinGroup = app('xe.user')->groups()->create(
+            [
+                'name' => '정회원',
+                'description' => 'default user group'
+            ]
+        );
+
+        app('xe.user')->groups()->create(
+            [
+                'name' => '준회원',
+                'description' => 'sub user group'
+            ]
+        );
+
         \DB::table('config')->insert([
                                          ['name' => 'user', 'vars' => '[]'],
                                          ['name' => 'user.common', 'vars' => '{"secureLevel":"low","useCaptcha":false,"webmasterName":"webmaster","webmasterEmail":"webmaster@domain.com","agreement":"","privacy":""}'],
-                                         ['name' => 'user.join', 'vars' => '{"joinable":true,"useEmailCertify":false,"useCaptcha":false}'],
+                                         ['name' => 'user.join', 'vars' => '{"joinable":true,"useEmailCertify":false,"useCaptcha":false,"joinGroup":'.$joinGroup->id.'}'],
                                          ['name' => 'toggleMenu@user', 'vars' => '{"activate":["user/toggleMenu/xpressengine@raw"]}']
                                      ]);
+
     }
 
     public function update($installedVersion = null)
