@@ -193,7 +193,6 @@ class EditorHandler
      */
     public function render($instanceId, $args, $targetId = null)
     {
-//        return $this->get($instanceId)->setArguments($args)->setTargetId($targetId)->render();
         $editor = $this->get($instanceId)->setArguments($args);
         if ($targetId) {
             $editor->setFiles($this->getFiles($targetId));
@@ -243,7 +242,7 @@ class EditorHandler
         if ($targetId) {
             $editor->setFiles($this->getFiles($targetId));
         }
-        
+
         return $this->compileTools($instanceId, $editor->compile($content));
     }
 

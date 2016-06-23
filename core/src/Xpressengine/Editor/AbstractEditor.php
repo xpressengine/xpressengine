@@ -64,14 +64,7 @@ abstract class AbstractEditor implements ComponentInterface
     protected $arguments = [];
 
     protected $files = [];
-
-    /**
-     * @var
-     *
-     * @deprecated
-     */
-    protected $targetId;
-
+    
     /**
      * Indicates if used only javascript.
      *
@@ -105,15 +98,6 @@ abstract class AbstractEditor implements ComponentInterface
     protected $fileInputName = '_files';
 
     /**
-     * The config resolver
-     *
-     * @var callable
-     *
-     * @deprecated
-     */
-    protected static $configResolver;
-
-    /**
      * AbstractEditor constructor.
      *
      * @param EditorHandler $editors    EditorHandler instance
@@ -124,8 +108,6 @@ abstract class AbstractEditor implements ComponentInterface
         $this->editors = $editors;
         $this->urls = $urls;
         $this->instanceId = $instanceId;
-
-//        $this->config = $this->resolveConfig($instanceId);
     }
 
     public function setConfig(ConfigEntity $config)
@@ -158,21 +140,6 @@ abstract class AbstractEditor implements ComponentInterface
     }
 
     /**
-     * Set target identified for the editor
-     *
-     * @param string $targetId target id
-     * @return $this
-     *
-     * @deprecated
-     */
-    public function setTargetId($targetId)
-    {
-        $this->targetId = $targetId;
-
-        return $this;
-    }
-
-    /**
      * Get options
      *
      * @return array
@@ -180,36 +147,6 @@ abstract class AbstractEditor implements ComponentInterface
     protected function getOptions()
     {
         return array_merge($this->defaultOptions, $this->arguments);
-    }
-
-    /**
-     * Set the config resolver
-     *
-     * @param callable $resolver config resolver
-     * @return void
-     *
-     * @deprecated
-     */
-    public static function setConfigResolver(callable $resolver)
-    {
-        static::$configResolver = $resolver;
-    }
-
-    /**
-     * Resolve a config instance
-     *
-     * @param string $instanceId instance identifier
-     * @return ConfigEntity|null
-     *
-     * @deprecated
-     */
-    protected function resolveConfig($instanceId)
-    {
-        if (!static::$configResolver) {
-            return null;
-        }
-
-        return call_user_func(static::$configResolver, static::getConfigKey($instanceId));
     }
 
     /**
@@ -387,33 +324,6 @@ abstract class AbstractEditor implements ComponentInterface
             json_encode($this->getConfigData()),
             json_encode($this->getTools())
         );
-    }
-
-    /**
-     * Get uri string for editor setting by instance identifier
-     *
-     * @param string $instanceId instance identifier
-     * @return string|null
-     *
-     * @deprecated
-     */
-    public static function getInstanceSettingURI($instanceId)
-    {
-        return null;
-    }
-
-    /**
-     * Perform any final actions for the store action lifecycle
-     *
-     * @param array       $inputs     request inputs
-     * @param string|null $targetId   target id
-     * @return void
-     *
-     * @deprecated
-     */
-    public function terminate($inputs = [], $targetId = null)
-    {
-        //
     }
 
     public function getFileInputName()

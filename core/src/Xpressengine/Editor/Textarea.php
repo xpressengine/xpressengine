@@ -71,17 +71,6 @@ class Textarea extends AbstractEditor
         return [];
     }
 
-//    /**
-//     * Compile the raw content to be useful
-//     *
-//     * @param string $content content
-//     * @return string
-//     */
-//    public function compile($content)
-//    {
-//        return $content;
-//    }
-
     protected function compileBody($content)
     {
         return $content;

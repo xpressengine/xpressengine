@@ -23,10 +23,6 @@ class EditorServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        AbstractEditor::setConfigResolver(function ($key) {
-            return $this->app['xe.config']->getOrNew($key);
-        });
-
         $this->app['xe.pluginRegister']->add(Textarea::class);
     }
 
