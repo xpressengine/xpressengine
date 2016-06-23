@@ -168,11 +168,12 @@ class EditorHandler
      *
      * @param string      $instanceId instance id
      * @param array|false $args       argument for editor
+     * @param string|null $targetId   target id
      * @return string
      */
-    public function render($instanceId, $args)
+    public function render($instanceId, $args, $targetId = null)
     {
-        return $this->get($instanceId)->setArguments($args)->render();
+        return $this->get($instanceId)->setArguments($args)->setTargetId($targetId)->render();
     }
 
     /**
@@ -255,13 +256,13 @@ class EditorHandler
     /**
      * Perform any final actions for the store action lifecycle
      *
-     * @param string $instanceId instance id
-     * @param string $targetId   target id
-     * @param array  $inputs     request inputs
+     * @param string      $instanceId instance id
+     * @param array       $inputs     request inputs
+     * @param string|null $targetId   target id
      * @return void
      */
-    public function terminate($instanceId, $targetId, $inputs = [])
+    public function terminate($instanceId, $inputs = [], $targetId = null)
     {
-        $this->get($instanceId)->terminate($targetId, $inputs);
+        $this->get($instanceId)->terminate($inputs, $targetId);
     }
 }

@@ -60,6 +60,8 @@ abstract class AbstractEditor implements ComponentInterface
      */
     protected $arguments = [];
 
+    protected $targetId;
+
     /**
      * Indicates if used only javascript.
      *
@@ -124,6 +126,19 @@ abstract class AbstractEditor implements ComponentInterface
         if ($arguments === false) {
             $this->scriptOnly = true;
         }
+
+        return $this;
+    }
+
+    /**
+     * Set target identified for the editor
+     *
+     * @param string $targetId target id
+     * @return $this
+     */
+    public function setTargetId($targetId)
+    {
+        $this->targetId = $targetId;
 
         return $this;
     }
@@ -331,11 +346,11 @@ abstract class AbstractEditor implements ComponentInterface
     /**
      * Perform any final actions for the store action lifecycle
      *
-     * @param string $targetId   target id
-     * @param array  $inputs     request inputs
+     * @param array       $inputs     request inputs
+     * @param string|null $targetId   target id
      * @return void
      */
-    public function terminate($targetId, $inputs = [])
+    public function terminate($inputs = [], $targetId = null)
     {
         //
     }

@@ -588,11 +588,12 @@ if (!function_exists('editor')) {
      *
      * @param string      $instanceId instance id
      * @param array|false $arguments  argument for editor
+     * @param string|null $targetId   target id
      * @return string
      */
-    function editor($instanceId, $arguments)
+    function editor($instanceId, $arguments, $targetId = null)
     {
-        return app('xe.editor')->render($instanceId, $arguments);
+        return app('xe.editor')->render($instanceId, $arguments, $targetId);
     }
 }
 
