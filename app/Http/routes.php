@@ -734,3 +734,5 @@ Route::settings(
 Route::settings('editor', function () {
     Route::post('setting/{instanceId}', ['as' => 'settings.editor.setting', 'uses' => 'EditorController@setting']);
 });
+
+Route::get('widgetbox/edit/{boxId}', ['as' => 'widgetbox.edit', 'uses' => 'WidgetBoxController@edit']);

@@ -1,6 +1,8 @@
 <?php namespace App\Exceptions;
 
 use Event;
+use RuntimeException;
+use XeTheme;
 use XePresenter;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -118,7 +120,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        /** @var HttpExceptionInterface $responseException */
+        /** @var HttpXpressengineException|RuntimeException $responseException */
         $responseException = $this->filter($e);
 
         // debugging mode
@@ -142,12 +144,12 @@ class Handler extends ExceptionHandler
 
         // ajax request
         if ($request->ajax() || $request->wantsJson()) {
-            $view = XePresenter::makeApi(
-                ['message' => $responseException->getMessage()]
-            );
+            $view = XePresenter::makeApi([
+                'message' => $responseException->getMessage(),
+            ]);
         } else {
             XePresenter::setSkinTargetId('error');
-            \XeTheme::selectBlankTheme();
+            XeTheme::selectBlankTheme();
             $view = XePresenter::make(
                 'error',
                 ['type' => 'danger', 'exception' => $responseException, 'message' => $responseException->getMessage()]

@@ -21,7 +21,7 @@
     },
     toast: {
       expireTimes: {'xe-danger': 0, 'xe-positive': 5, 'xe-warning': 10, 'xe-success': 2, 'xe-fail': 5},
-      status: {500: 'warning', 401: 'info'},
+      status: {500: 'xe-danger', 401: 'xe-warning'},
       template: '<div class="alert-dismissable xe-alert" style="display:none;"><button type="button" class="__xe_close xe-btn-alert-close" aria-label="Close"><i class="xi-close"></i></button>' +
       '<span class="message"></span></div>'
     },
@@ -49,7 +49,7 @@
     options: exports.options.toast,
     statusToType: function(status) {
       var type = this.options.status[status];
-      return type === undefined ? 'danger' : type;
+      return type === undefined ? 'xe-danger' : type;
     },
     add: function(type, message) {
       exports.toast.fn.create(type, message);

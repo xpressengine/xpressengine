@@ -1824,4 +1824,8 @@ return [
         'ko' => '휴지통으로 이동',
         'en' => 'Move to trash',
     ],
+    'msgLoginRequired' => [
+        'ko' => '로그인이 필요합니다.',
+        'en' => 'Login is required.'
+    ],
 ];
