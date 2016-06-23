@@ -32,6 +32,36 @@ abstract class AbstractToggleMenu implements ComponentInterface, ItemInterface
     use ComponentTrait;
 
     /**
+     * getTitle
+     *
+     * @return mixed
+     */
+    public static function getTitle()
+    {
+        return static::getComponentInfo('name');
+    }
+
+    /**
+     * getDescription
+     *
+     * @return mixed
+     */
+    public static function getDescription()
+    {
+        return static::getComponentInfo('description');
+    }
+
+    /**
+     * getScreenshot
+     *
+     * @return mixed
+     */
+    public static function getScreenshot()
+    {
+        return static::getComponentInfo('screenshot');
+    }
+
+    /**
      * boot
      *
      * @return void
