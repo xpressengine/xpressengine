@@ -21,6 +21,7 @@ use Xpressengine\Plugin\PluginRegister;
 use Illuminate\Contracts\Container\Container;
 use Xpressengine\Storage\File;
 use Xpressengine\Storage\Storage;
+use Xpressengine\Tag\TagHandler;
 
 /**
  * Class EditorHandler
@@ -59,6 +60,8 @@ class EditorHandler
 
     protected $mediaManager;
 
+    protected $tagHandler;
+
     /**
      * Default editor identifier
      *
@@ -91,13 +94,20 @@ class EditorHandler
      * @param ConfigManager  $configManager ConfigManager instance
      * @param Container      $container     Container instance
      */
-    public function __construct(PluginRegister $register, ConfigManager $configManager, Container $container, Storage $storage, MediaManager $mediaManager)
-    {
+    public function __construct(
+        PluginRegister $register,
+        ConfigManager $configManager,
+        Container $container,
+        Storage $storage,
+        MediaManager $mediaManager,
+        TagHandler $tagHandler
+    ) {
         $this->register = $register;
         $this->configManager = $configManager;
         $this->container = $container;
         $this->storage = $storage;
         $this->mediaManager = $mediaManager;
+        $this->tagHandler = $tagHandler;
     }
 
     /**
@@ -232,11 +242,12 @@ class EditorHandler
     /**
      * Compile the raw content to be useful
      *
-     * @param string $instanceId instance id
-     * @param string $content    content
+     * @param string      $instanceId instance id
+     * @param string      $content    content
+     * @param string|null $targetId target id
      * @return string
      */
-    public function compile($instanceId, $content, $targetId = null, $bodyOnly = false)
+    public function compile($instanceId, $content, $targetId = null)
     {
         $editor = $this->get($instanceId);
         if ($targetId) {
@@ -286,7 +297,7 @@ class EditorHandler
     /**
      * Perform any final actions for the store action lifecycle
      *
-     * todo: tag 처리 필요 (mention 도 필요한지 확인)
+     * todo: mention 도 필요한지 확인
      *
      * @param string $instanceId instance id
      * @param string $targetId   target id
@@ -310,6 +321,8 @@ class EditorHandler
         foreach ($olds as $old) {
             $this->storage->unBind($targetId, $old, true);
         }
+        
+        $this->tagHandler->set($targetId, array_get($inputs, $editor->getTagInputName(), []), $instanceId);
     }
 
     protected function getFiles($targetId)

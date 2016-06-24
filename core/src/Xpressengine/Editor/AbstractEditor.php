@@ -16,8 +16,12 @@ namespace Xpressengine\Editor;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Plugin\ComponentInterface;
 use Xpressengine\Plugin\ComponentTrait;
+use Xpressengine\Skin\SkinHandler;
 use Xpressengine\Support\MobileSupportTrait;
+use Xpressengine\Permission\Instance;
 use Illuminate\Contracts\Routing\UrlGenerator;
+use Illuminate\Contracts\Auth\Access\Gate;
+use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Class AbstractEditor
@@ -42,6 +46,10 @@ abstract class AbstractEditor implements ComponentInterface
 
     protected $urls;
 
+    protected $gate;
+
+    protected $skins;
+
     /**
      * Instance identifier
      *
@@ -64,7 +72,7 @@ abstract class AbstractEditor implements ComponentInterface
     protected $arguments = [];
 
     protected $files = [];
-    
+
     /**
      * Indicates if used only javascript.
      *
@@ -97,16 +105,20 @@ abstract class AbstractEditor implements ComponentInterface
 
     protected $fileInputName = '_files';
 
+    protected $tagInputName = '_tags';
+
     /**
      * AbstractEditor constructor.
      *
      * @param EditorHandler $editors    EditorHandler instance
      * @param string        $instanceId Instance identifier
      */
-    public function __construct(EditorHandler $editors, UrlGenerator $urls, $instanceId)
+    public function __construct(EditorHandler $editors, UrlGenerator $urls, Gate $gate, SkinHandler $skins, $instanceId)
     {
         $this->editors = $editors;
         $this->urls = $urls;
+        $this->gate = $gate;
+        $this->skins = $skins;
         $this->instanceId = $instanceId;
     }
 
@@ -174,14 +186,36 @@ abstract class AbstractEditor implements ComponentInterface
      *
      * @return array
      */
-    abstract public function getConfigData();
+    public function getConfigData()
+    {
+        $data = array_except($this->config->all(), 'tools');
+        $data['fontFamily'] = isset($data['fontFamily']) ? array_map(function ($v) {
+            return trim($v);
+        }, explode(',', $data['fontFamily'])) : [];
+        $data['extensions'] = isset($data['extensions']) ? array_map(function ($v) {
+            return trim($v);
+        }, explode(',', $data['extensions'])) : [];
+        $instance = new Instance($this->editors->getPermKey($this->instanceId));
+        $data['perms'] = [
+            'html' => $this->gate->allows('html', $instance),
+            'tool' => $this->gate->allows('tool', $instance),
+            'upload' => $this->gate->allows('upload', $instance),
+        ];
+
+        $data['files'] = $this->files;
+
+        return $data;
+    }
 
     /**
      * Get activated tool's identifier for the editor
      *
      * @return array
      */
-    abstract public function getActivateToolIds();
+    public function getActivateToolIds()
+    {
+        return $this->config->get('tools', []);
+    }
 
     /**
      * Load tools
@@ -257,12 +291,23 @@ abstract class AbstractEditor implements ComponentInterface
      */
     public function compile($content)
     {
+        $content = $this->hashTag($content);
+        $content = $this->mention($content);
+        $content = $this->link($content);
+        
         return $this->compileBody($content) . $this->getFileView();
     }
 
     abstract protected function compileBody($content);
 
-    abstract protected function getFileView();
+    protected function getFileView()
+    {
+        if (count($this->files) < 1) {
+            return '';
+        }
+
+        return $this->skins->getAssigned('editor')->setView('files')->setData(['files' => $this->files])->render();
+    }
 
     /**
      * Get a content html tag string
@@ -326,8 +371,79 @@ abstract class AbstractEditor implements ComponentInterface
         );
     }
 
+    protected function hashTag($content)
+    {
+        $tags = $this->getData($content, '.__xe_hashtag');
+        foreach ($tags as $tag) {
+            $word = ltrim($tag['text'], '#');
+            $content = str_replace(
+                $tag['html'],
+                sprintf('<a href="#%s" class="__xe_hashtag" target="_blank">#%s</a>', $word, $word),
+                $content
+            );
+        }
+
+        return $content;
+    }
+
+    protected function mention($content)
+    {
+        $mentions = $this->getData($content, '.__xe_mention', 'data-id');
+        foreach ($mentions as $mention) {
+            $name = ltrim($mention['text'], '@');
+            $content = str_replace(
+                $mention['html'],
+                sprintf(
+                    '<span role="button" class="__xe_member __xe_mention" data-id="%s" data-text="%s">@%s</span>',
+                    $mention['data-id'],
+                    $name,
+                    $name
+                ),
+                $content
+            );
+        }
+
+        return $content;
+    }
+
+    protected function link($content)
+    {
+        return $content;
+    }
+
+    private function getData($content, $selector, $attributes = [])
+    {
+        $attributes = !is_array($attributes) ? [$attributes] : $attributes;
+
+        $crawler = $this->createCrawler($content);
+        return $crawler->filter($selector)->each(function ($node, $i) use ($attributes) {
+            $dom = $node->getNode(0);
+            $data = [
+                'html' => $dom->ownerDocument->saveHTML($dom),
+                'inner' => $node->html(),
+                'text' => $node->text(),
+            ];
+
+            foreach ($attributes as $attr) {
+                $data[$attr] = $node->attr($attr);
+            }
+
+            return $data;
+        });
+    }
+
+    private function createCrawler($content)
+    {
+        return new Crawler($content);
+    }
+
     public function getFileInputName()
     {
         return $this->fileInputName;
+    }
+
+    public function getTagInputName()
+    {
+        return $this->tagInputName;
     }
 }

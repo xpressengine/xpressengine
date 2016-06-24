@@ -601,12 +601,13 @@ if (!function_exists('compile')) {
     /**
      * @package Xpressengine\Editor
      *
-     * @param string $instanceId instance id
-     * @param string $content    content
+     * @param string      $instanceId instance id
+     * @param string      $content    content
+     * @param string|null $targetId target id
      * @return string
      */
-    function compile($instanceId, $content, $targetId = null, $bodyOnly = false)
+    function compile($instanceId, $content, $targetId = null)
     {
-        return app('xe.editor')->compile($instanceId, $content, $targetId, $bodyOnly);
+        return app('xe.editor')->compile($instanceId, $content, $targetId);
     }
 }
