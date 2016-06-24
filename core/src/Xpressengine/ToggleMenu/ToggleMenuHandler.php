@@ -119,7 +119,11 @@ class ToggleMenuHandler
      */
     public function setActivates($id, $instanceId = null, array $keys = [])
     {
-        return $this->cfg->set($this->getConfigKey($id, $instanceId), ['activate' => $keys]);
+        $config = [];
+        if (count($keys) > 0) {
+            $config = ['activate' => $keys];
+        }
+        return $this->cfg->set($this->getConfigKey($id, $instanceId), $config);
     }
 
     /**
@@ -131,15 +135,9 @@ class ToggleMenuHandler
      */
     public function getActivated($id, $instanceId = null)
     {
-        // todo: 임시? seed 로 추가되면 제거?
-        if ($this->cfg->get($this->getConfigKey($id, null)) === null) {
-            $this->cfg->set($this->getConfigKey($id, null), []);
-        }
-
         if (($config = $this->cfg->get($this->getConfigKey($id, $instanceId))) === null) {
             $config = $this->setActivates($id, $instanceId);
         }
-
         $keys = $config->get('activate', []);
 
         $activated = array_intersect_key($this->all($id), array_flip($keys));
