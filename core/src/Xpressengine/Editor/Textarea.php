@@ -52,26 +52,6 @@ class Textarea extends AbstractEditor
     }
 
     /**
-     * Get config data for the editor
-     *
-     * @return array
-     */
-    public function getConfigData()
-    {
-        return [];
-    }
-
-    /**
-     * Get activated tool's identifier for the editor
-     *
-     * @return array
-     */
-    public function getActivateToolIds()
-    {
-        return [];
-    }
-
-    /**
      * Compile content body
      *
      * @param string $content content
