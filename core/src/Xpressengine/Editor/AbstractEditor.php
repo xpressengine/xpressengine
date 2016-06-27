@@ -147,6 +147,13 @@ abstract class AbstractEditor implements ComponentInterface
     protected $mentionInputName = '_mentions';
 
     /**
+     * The file class name
+     *
+     * @var string
+     */
+    protected $fileClassName = '__xe_file';
+
+    /**
      * The image class name
      *
      * @var string
@@ -166,6 +173,13 @@ abstract class AbstractEditor implements ComponentInterface
      * @var string
      */
     protected $mentionClassName = '__xe_mention';
+
+    /**
+     * The file identifier attribute name
+     *
+     * @var string
+     */
+    protected $fileIdentifierAttrName = 'data-id';
 
     /**
      * The image identifier attribute name
@@ -271,6 +285,8 @@ abstract class AbstractEditor implements ComponentInterface
             'names' => [
                 'file' => [
                     'input' => $this->getFileInputName(),
+                    'class' => $this->getFileClassName(),
+                    'identifier' => $this->getFileIdentifierAttrName(),
                     'image' => [
                         'class' => $this->getImageClassName(),
                         'identifier' => $this->getImageIdentifierAttrName(),
@@ -374,13 +390,12 @@ abstract class AbstractEditor implements ComponentInterface
     {
         $this->loadTools();
 
-        $htmlString = [];
+        $htmlString = '';
         if ($this->scriptOnly === false) {
-            $htmlString[] = $this->getContentHtml();
-            $htmlString[] = $this->getEditorScript($this->getOptions());
+            $htmlString = $this->getContentHtml() . $this->getEditorScript($this->getOptions());
         }
 
-        return implode('', $htmlString);
+        return $htmlString;
     }
 
     /**
@@ -699,6 +714,16 @@ abstract class AbstractEditor implements ComponentInterface
     }
 
     /**
+     * Get the file class name
+     *
+     * @return string
+     */
+    public function getFileClassName()
+    {
+        return $this->fileClassName;
+    }
+
+    /**
      * Get the image class name
      *
      * @return string
@@ -726,6 +751,16 @@ abstract class AbstractEditor implements ComponentInterface
     public function getMentionClassName()
     {
         return $this->mentionClassName;
+    }
+
+    /**
+     * Get the file identifier attribute name
+     *
+     * @return string
+     */
+    public function getFileIdentifierAttrName()
+    {
+        return $this->fileIdentifierAttrName;
     }
 
     /**
