@@ -89,20 +89,15 @@ abstract class AbstractEditor implements ComponentInterface
 
     protected static $imageResolver;
 
-    /**
-     * Default editor options
-     *
-     * @var array
-     */
-    protected $defaultOptions = [
+    protected $defaultArguments = [
+        'content' => '',
         'contentDomName' => 'content',
         'contentDomId' => 'xeContentEditor',
         'contentDomOptions' => [
             'class' => 'form-control',
             'rows' => '20',
             'cols' => '80'
-        ],
-        'editorOptions' => [],
+        ]
     ];
 
     protected $fileInputName = '_files';
@@ -111,11 +106,15 @@ abstract class AbstractEditor implements ComponentInterface
 
     protected $mentionInputName = '_mentions';
 
+    protected $imageClassName = '__xe_image';
+
     protected $tagClassName = '__xe_hashtag';
 
     protected $mentionClassName = '__xe_mention';
 
-    protected $imageClassName = '__xe_image';
+    protected $imageIdentifierAttrName = 'data-id';
+
+    protected $mentionIdentifierAttrName = 'data-id';
 
     /**
      * AbstractEditor constructor.
@@ -156,6 +155,11 @@ abstract class AbstractEditor implements ComponentInterface
         return $this;
     }
 
+    public function getArguments()
+    {
+        return array_merge($this->defaultArguments, $this->arguments);
+    }
+
     public function setFiles($files = [])
     {
         $this->files = $files;
@@ -166,9 +170,40 @@ abstract class AbstractEditor implements ComponentInterface
      *
      * @return array
      */
-    protected function getOptions()
+    public function getOptions()
     {
-        return array_merge($this->defaultOptions, $this->arguments);
+        $options = [
+            'fileUpload' => [
+                'upload_url' => $this->urls->route('editor.file.upload'),
+                'source_url' => $this->urls->route('editor.file.source'),
+                'download_url' => $this->urls->route('editor.file.download'),
+                'destroy_url' => $this->urls->route('editor.file.destroy'),
+            ],
+            'suggestion' => [
+                'hashtag_api' => $this->urls->route('editor.hashTag'),
+                'mention_api' => $this->urls->route('editor.mention'),
+            ],
+            'names' => [
+                'file' => [
+                    'input' => $this->getFileInputName(),
+                    'image' => [
+                        'class' => $this->getImageClassName(),
+                        'identifier' => $this->getImageIdentifierAttrName(),
+                    ]
+                ],
+                'tag' => [
+                    'input' => $this->getTagInputName(),
+                    'class' => $this->getTagClassName(),
+                ],
+                'mention' => [
+                    'input' => $this->getMentionInputName(),
+                    'class' => $this->getMentionClassName(),
+                    'identifier' => $this->getMentionIdentifierAttrName(),
+                ],
+            ]
+        ];
+
+        return array_merge($options, $this->getDynamicOption());
     }
 
     /**
@@ -179,11 +214,11 @@ abstract class AbstractEditor implements ComponentInterface
     abstract public function getName();
 
     /**
-     * Get config data for the editor
+     * Get dynamic option data for the editor
      *
      * @return array
      */
-    public function getConfigData()
+    protected function getDynamicOption()
     {
         $data = array_except($this->config->all(), 'tools');
         $data['fontFamily'] = isset($data['fontFamily']) ? array_map(function ($v) {
@@ -256,25 +291,8 @@ abstract class AbstractEditor implements ComponentInterface
 
         $htmlString = [];
         if ($this->scriptOnly === false) {
-            $options = $this->getOptions();
-            
-            $options = array_merge($options, [
-                'editorOptions' => [
-                    'fileUpload' => [
-                        'upload_url' => $this->urls->route('editor.file.upload'),
-                        'source_url' => $this->urls->route('editor.file.source'),
-                        'download_url' => $this->urls->route('editor.file.download'),
-                        'destroy_url' => $this->urls->route('editor.file.destroy'),
-                    ],
-                    'suggestion' => [
-                        'hashtag_api' => $this->urls->route('editor.hashTag'),
-                        'mention_api' => $this->urls->route('editor.mention'),
-                    ],
-                ]
-            ]);
-
-            $htmlString[] = $this->getContentHtml(array_get($options, 'content'), $options);
-            $htmlString[] = $this->getEditorScript($options);
+            $htmlString[] = $this->getContentHtml();
+            $htmlString[] = $this->getEditorScript($this->getOptions());
         }
 
         return implode('', $htmlString);
@@ -310,22 +328,21 @@ abstract class AbstractEditor implements ComponentInterface
     /**
      * Get a content html tag string
      *
-     * @param string $content content
-     * @param array  $options dom options
      * @return string
      */
-    protected function getContentHtml($content, $options)
+    protected function getContentHtml()
     {
-        $contentHtml = [];
-        $contentHtml[] = '<textarea ';
-        $contentHtml[] = 'name="' . $options['contentDomName'] . '" ';
-        $contentHtml[] = 'id="' . $options['contentDomId'] . '" ';
-        $contentHtml[] = $this->getContentDomHtmlOption($options['contentDomOptions']);
-        $contentHtml[] = ' placeholder="' . xe_trans('xe::content') . '">';
-        $contentHtml[] = $content;
-        $contentHtml[] = '</textarea>';
+        $args = $this->getArguments();
+        $html =
+            '<textarea ' .
+            'name="' . $args['contentDomName'] . '" ' .
+            'id="' . $args['contentDomId'] . '" ' .
+            $this->getContentDomHtmlOption($args['contentDomOptions']) .
+            ' placeholder="' . xe_trans('xe::content') . '">'.
+            $args['content'] .
+            '</textarea>';
 
-        return implode('', $contentHtml);
+        return $html;
     }
 
     /**
@@ -362,11 +379,16 @@ abstract class AbstractEditor implements ComponentInterface
         return sprintf(
             $editorScript,
             $this->getName(),
-            $options['contentDomId'],
-            json_encode($options['editorOptions']),
-            json_encode($this->getConfigData()),
+            $this->getArguments()['contentDomId'],
+            json_encode($options),
+            json_encode($this->getCustomOptions()),
             json_encode($this->getTools())
         );
+    }
+
+    public function getCustomOptions()
+    {
+        return [];
     }
 
     protected function hashTag($content)
@@ -376,7 +398,7 @@ abstract class AbstractEditor implements ComponentInterface
             $word = ltrim($tag['text'], '#');
             $content = str_replace(
                 $tag['html'],
-                sprintf('<a href="#%s" class="%s" target="_blank">#%s</a>', $word, $this->getTagClassName(), $word),
+                sprintf('<a href="#%s" class="%s">#%s</a>', $word, $this->getTagClassName(), $word),
                 $content
             );
         }
@@ -400,8 +422,6 @@ abstract class AbstractEditor implements ComponentInterface
                 $content
             );
         }
-
-
 
         return $content;
     }
@@ -501,6 +521,11 @@ abstract class AbstractEditor implements ComponentInterface
         return $this->mentionInputName;
     }
 
+    public function getImageClassName()
+    {
+        return $this->imageClassName;
+    }
+
     public function getTagClassName()
     {
         return $this->tagClassName;
@@ -511,8 +536,13 @@ abstract class AbstractEditor implements ComponentInterface
         return $this->mentionClassName;
     }
 
-    public function getImageClassName()
+    public function getImageIdentifierAttrName()
     {
-        return $this->imageClassName;
+        return $this->imageIdentifierAttrName;
+    }
+
+    public function getMentionIdentifierAttrName()
+    {
+        return $this->mentionIdentifierAttrName;
     }
 }
