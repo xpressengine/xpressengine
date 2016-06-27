@@ -68,7 +68,7 @@
     Editor.prototype = {
         configs: {},
         interfaces: {},
-        create: function(sel, editorOptions, customOptions, toolInfoList) {
+        create: function(sel, options, editorOptions, toolInfoList) {
             var editorOptions = editorOptions || {},
                 toolInfoList = toolInfoList || [];
 
@@ -76,7 +76,7 @@
 
             if(Validation.isValidBeforeCreateInstance(sel, toolInfoList, this)) {
                 this.editorList[sel] = new instanceObj(this.name, sel, editorOptions, toolInfoList);
-                this.interfaces.initialize.call(this.editorList[sel], sel, editorOptions, customOptions);
+                this.interfaces.initialize.call(this.editorList[sel], sel, options, editorOptions);
 
                 if(!!toolInfoList && toolInfoList.length > 0) {
                     var tools = {};
