@@ -87,6 +87,8 @@ abstract class AbstractEditor implements ComponentInterface
      */
     protected $tools;
 
+    protected static $imageResolver;
+
     /**
      * Default editor options
      *
@@ -106,6 +108,14 @@ abstract class AbstractEditor implements ComponentInterface
     protected $fileInputName = '_files';
 
     protected $tagInputName = '_tags';
+
+    protected $mentionInputName = '_mentions';
+
+    protected $tagClassName = '__xe_hashtag';
+
+    protected $mentionClassName = '__xe_mention';
+
+    protected $imageClassName = '__xe_image';
 
     /**
      * AbstractEditor constructor.
@@ -159,19 +169,6 @@ abstract class AbstractEditor implements ComponentInterface
     protected function getOptions()
     {
         return array_merge($this->defaultOptions, $this->arguments);
-    }
-
-    /**
-     * Get a key string for the config
-     *
-     * @param string $instanceId instance identifier
-     * @return string
-     * 
-     * @deprecated 
-     */
-    public static function getConfigKey($instanceId)
-    {
-        return static::getId() . '.' . $instanceId;
     }
 
     /**
@@ -294,7 +291,8 @@ abstract class AbstractEditor implements ComponentInterface
         $content = $this->hashTag($content);
         $content = $this->mention($content);
         $content = $this->link($content);
-        
+        $content = $this->image($content);
+
         return $this->compileBody($content) . $this->getFileView();
     }
 
@@ -373,12 +371,12 @@ abstract class AbstractEditor implements ComponentInterface
 
     protected function hashTag($content)
     {
-        $tags = $this->getData($content, '.__xe_hashtag');
+        $tags = $this->getData($content, '.' . $this->getTagClassName());
         foreach ($tags as $tag) {
             $word = ltrim($tag['text'], '#');
             $content = str_replace(
                 $tag['html'],
-                sprintf('<a href="#%s" class="__xe_hashtag" target="_blank">#%s</a>', $word, $word),
+                sprintf('<a href="#%s" class="%s" target="_blank">#%s</a>', $word, $this->getTagClassName(), $word),
                 $content
             );
         }
@@ -388,26 +386,65 @@ abstract class AbstractEditor implements ComponentInterface
 
     protected function mention($content)
     {
-        $mentions = $this->getData($content, '.__xe_mention', 'data-id');
+        $mentions = $this->getData($content, '.' . $this->getMentionClassName(), 'data-id');
         foreach ($mentions as $mention) {
             $name = ltrim($mention['text'], '@');
             $content = str_replace(
                 $mention['html'],
                 sprintf(
-                    '<span role="button" class="__xe_member __xe_mention" data-id="%s" data-text="%s">@%s</span>',
+                    '<span role="button" class="%s" data-toggle="xeUserMenu" data-user-id="%s">@%s</span>',
+                    $this->getMentionClassName(),
                     $mention['data-id'],
-                    $name,
                     $name
                 ),
                 $content
             );
         }
 
+
+
         return $content;
     }
 
     protected function link($content)
     {
+        return $content;
+    }
+
+    protected function image($content)
+    {
+        $list = $this->getData($content, 'img.' . $this->getImageClassName(), 'data-id');
+
+        $ids = array_column($list, 'data-id');
+        $images = static::resolveImage($ids);
+        $temp = [];
+        foreach ($images as $image) {
+            $temp[$image->getOriginKey()] = $image;
+        }
+        $images = $temp;
+        unset($temp);
+        
+        foreach ($list as $data) {
+            $image = $images[$data['data-id']];
+
+            $attrStr = trim($data['html'], ' </>');
+            $content = str_replace(
+                [
+                    '<' . $attrStr . '>',
+                    '<' . $attrStr . '/>',
+                    '<' . $attrStr . ' >',
+                    '<' . $attrStr . ' />',
+                ],
+                sprintf(
+                    '<img src="%s" class="%s" data-id="%s" />',
+                    $image->url(),
+                    $this->getImageClassName(),
+                    $data['data-id']
+                ),
+                $content
+            );
+        }
+
         return $content;
     }
 
@@ -432,6 +469,18 @@ abstract class AbstractEditor implements ComponentInterface
         });
     }
 
+    public static function setImageResolver(callable $resolver)
+    {
+        static::$imageResolver = $resolver;
+    }
+
+    public static function resolveImage($ids = [])
+    {
+        $ids = !is_array($ids) ? [$ids] : $ids;
+
+        return call_user_func(static::$imageResolver, $ids);
+    }
+
     private function createCrawler($content)
     {
         return new Crawler($content);
@@ -445,5 +494,25 @@ abstract class AbstractEditor implements ComponentInterface
     public function getTagInputName()
     {
         return $this->tagInputName;
+    }
+
+    public function getMentionInputName()
+    {
+        return $this->mentionInputName;
+    }
+
+    public function getTagClassName()
+    {
+        return $this->tagClassName;
+    }
+
+    public function getMentionClassName()
+    {
+        return $this->mentionClassName;
+    }
+
+    public function getImageClassName()
+    {
+        return $this->imageClassName;
     }
 }
