@@ -19,6 +19,7 @@ use Illuminate\Foundation\Application;
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Plugin\Exceptions\CannotDeleteActivatedPluginException;
 use Xpressengine\Plugin\Exceptions\PluginActivationFailedException;
+use Xpressengine\Plugin\Exceptions\PluginAlreadyActivatedException;
 use Xpressengine\Plugin\Exceptions\PluginAlreadyDeactivatedException;
 use Xpressengine\Plugin\Exceptions\PluginDeactivationFailedException;
 use Xpressengine\Plugin\Exceptions\PluginDependencyException;
@@ -185,6 +186,16 @@ class PluginHandler
     {
         $entity = $this->getPlugin($pluginId);
 
+        // 플러그인이 존재하는지 검사한다.
+        if ($entity === null) {
+            throw new PluginNotFoundException(['pluginName' => $pluginId]);
+        }
+
+        // 플러그인이 이미 활성화되어있는 상태인지 체크한다.
+        if ($entity->getStatus() === static::STATUS_ACTIVATED) {
+            throw new PluginAlreadyActivatedException();
+        }
+
         // 기존에 설치(활성화)된 적이 있는지 검사한다. 기존에 활성화된 적이 있다면 설치된 버전을 조회한다.
         $installedVersion = $entity->getInstalledVersion();
 
@@ -235,9 +246,7 @@ class PluginHandler
         }
 
         // 기존에 설치(활성화)된 적이 있는지 검사한다. 기존에 활성화된 적이 있다면 설치된 버전을 조회한다.
-        $configs = $this->getPluginsStatus();
-        $config = array_get($configs, $pluginId, []);
-        $installedVersion = array_get($config, 'version', null);
+        $installedVersion = $entity->getInstalledVersion();
 
         // 플러그인 비활성화. 플러그인을 비활성화할 때마다 각 플러그인의 deactivate() 메소드를 호출해준다.
         // 각 플러그인은 deactivate() 메소드에서 자신이 XE에 설치된 상황을 파악한 후, 비활성화에 필요한 준비를 한다.
@@ -251,12 +260,10 @@ class PluginHandler
         $entity->setStatus(static::STATUS_DEACTIVATED);
 
         // 비활성화된 플러그인 정보를 config에 기록한다.
-        $configs[$pluginId] = [
+        $this->setPluginStatus($pluginId, [
             'status' => static::STATUS_DEACTIVATED,
             'version' => $entity->getInstalledVersion()
-        ];
-
-        $this->setPluginsStatus($configs);
+        ]);
     }
 
     /**
@@ -288,7 +295,7 @@ class PluginHandler
         }
 
         // 플러그인이 최신업데이트 상태인지 검사하고, 업데이트가 필요하면 업데이트 한다.
-        if ($entity->checkUpdated() === false) {
+        if ($entity->checkUpdated($installedVersion) === false) {
             $entity->update($installedVersion);
         }
 
@@ -378,7 +385,7 @@ class PluginHandler
             $this->plugins->initialize(true);
 
             // 각 플러그인의 설치된 버전과 실제버전이 다르고, 별도의 install이나 update가 필요없을 경우, 설치된 버전정보를 갱신한다.
-            foreach ($this->plugins as $plugin) {
+            foreach ($this->plugins->getList() as $plugin) {
                 /** @var PluginEntity $plugin */
                 $installedVersion = $plugin->getInstalledVersion();
                 $sourceVersion = $plugin->getVersion();
