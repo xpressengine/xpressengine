@@ -93,6 +93,13 @@ class EditorHandler
     protected $selectorName = 'xe-tool-id';
 
     /**
+     * Unique name
+     *
+     * @var string
+     */
+    const NAME = 'editor';
+
+    /**
      * The name of config prefix
      *
      * @var string

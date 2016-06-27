@@ -28,7 +28,7 @@ class EditorServiceProvider extends ServiceProvider
     {
         $this->app['xe.pluginRegister']->add(Textarea::class);
         $this->app['xe.pluginRegister']->add(DefaultSkin::class);
-        $this->app['xe.skin']->setDefaultSkin('editor', 'editor/skin/xpressengine@default');
+        $this->app['xe.skin']->setDefaultSkin(EditorHandler::NAME, 'editor/skin/xpressengine@default');
         
         AbstractEditor::setImageResolver(function (array $ids) {
             $dimension = $this->app['request']->isMobile() ? 'M' : 'L';
