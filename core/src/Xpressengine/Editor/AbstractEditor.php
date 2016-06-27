@@ -658,6 +658,17 @@ abstract class AbstractEditor implements ComponentInterface
     }
 
     /**
+     * Get uri for custom setting
+     *
+     * @param string $instanceId instance identifier
+     * @return string|null
+     */
+    public static function getInstanceSettingURI($instanceId)
+    {
+        return null;
+    }
+
+    /**
      * Get the file input name
      *
      * @return string
