@@ -17,6 +17,7 @@ use Xpressengine\Config\ConfigManager;
 use Xpressengine\Editor\Exceptions\EditorNotFoundException;
 use Xpressengine\Media\MediaManager;
 use Xpressengine\Media\Models\Image;
+use Xpressengine\Media\Models\Media;
 use Xpressengine\Plugin\PluginRegister;
 use Illuminate\Contracts\Container\Container;
 use Xpressengine\Storage\File;
@@ -342,9 +343,10 @@ class EditorHandler
     public function terminate($instanceId, $targetId, $inputs = [])
     {
         $editor = $this->get($instanceId);
-        $olds = File::getByFileable($targetId);
+        $fileClass = $this->storage->getModel();
+        $olds = $fileClass::getByFileable($targetId);
         $olds = $olds->getDictionary();
-        $files = File::whereIn('id', array_get($inputs, $editor->getFileInputName(), []))->get();
+        $files = $fileClass::whereIn('id', array_get($inputs, $editor->getFileInputName(), []))->get();
         foreach ($files as $file) {
             if (!isset($olds[$file->getKey()])) {
                 $this->storage->bind($targetId, $file);
@@ -369,11 +371,13 @@ class EditorHandler
     protected function getFiles($targetId)
     {
         $data = [];
-        $files = File::getByFileable($targetId);
+        $fileClass = $this->storage->getModel();
+        $files = $fileClass::getByFileable($targetId);
         foreach ($files as $file) {
             $thumbnails = null;
             if ($this->mediaManager->is($file)) {
-                $thumbnails = Image::getThumbnails($this->mediaManager->make($file), static::THUMBNAIL_TYPE);
+                $imgClass = $this->mediaManager->getHandler(Media::TYPE_IMAGE)->getModel();
+                $thumbnails = $imgClass::getThumbnails($this->mediaManager->make($file), static::THUMBNAIL_TYPE);
             }
 
             $file->setRelation('thumbnails', $thumbnails);

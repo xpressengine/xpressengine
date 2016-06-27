@@ -5,10 +5,9 @@ use Illuminate\Support\ServiceProvider;
 use Xpressengine\Editor\AbstractEditor;
 use Xpressengine\Editor\EditorHandler;
 use Xpressengine\Editor\Textarea;
-use Xpressengine\Media\Models\Image;
+use Xpressengine\Media\Models\Media;
 use Xpressengine\Permission\Grant;
 use Xpressengine\Skins\Editor\DefaultSkin;
-use Xpressengine\Storage\File;
 
 class EditorServiceProvider extends ServiceProvider
 {
@@ -33,11 +32,13 @@ class EditorServiceProvider extends ServiceProvider
         
         AbstractEditor::setImageResolver(function (array $ids) {
             $dimension = $this->app['request']->isMobile() ? 'M' : 'L';
-            $files = File::whereIn('id', $ids)->get();
+            $fileClass = $this->app['xe.storage']->getModel();
+            $files = $fileClass::whereIn('id', $ids)->get();
 
+            $imgClass = $this->app['xe.media']->getHandler(Media::TYPE_IMAGE)->getModel();
             $images = [];
             foreach ($files as $file) {
-                $images[] = Image::getThumbnail(
+                $images[] = $imgClass::getThumbnail(
                     $this->app['xe.media']->make($file),
                     EditorHandler::THUMBNAIL_TYPE,
                     $dimension
@@ -83,7 +84,7 @@ class EditorServiceProvider extends ServiceProvider
 
             return $func($instanceId, $args, $targetId);
         });
-        
+
         intercept('XeEditor@render', 'editor.core.script', function ($func, $instanceId, $args, $targetId) {
             $this->app['xe.frontend']->js('assets/core/common/js/xe.editor.core.js')->load();
 
