@@ -368,7 +368,7 @@ class EditorHandler
      * @param string $targetId target identifier
      * @return File[]
      */
-    protected function getFiles($targetId)
+    public function getFiles($targetId)
     {
         $data = [];
         $fileClass = $this->storage->getModel();
