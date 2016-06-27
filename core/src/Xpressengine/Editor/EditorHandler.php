@@ -56,10 +56,25 @@ class EditorHandler
      */
     protected $container;
 
+    /**
+     * Storage instance
+     *
+     * @var Storage
+     */
     protected $storage;
 
+    /**
+     * MediaManager instance
+     *
+     * @var MediaManager
+     */
     protected $mediaManager;
 
+    /**
+     * TagHandler instance
+     *
+     * @var TagHandler
+     */
     protected $tagHandler;
 
     /**
@@ -76,15 +91,32 @@ class EditorHandler
      */
     protected $selectorName = 'xe-tool-id';
 
+    /**
+     * The name of config prefix
+     *
+     * @var string
+     */
     const CONFIG_NAME = 'editor';
 
     /**
-     * map config name
+     * The name of map config
+     *
+     * @var string
      */
     const MAP_CONFIG_NAME = 'editors';
 
+    /**
+     * The path for upload
+     *
+     * @var string
+     */
     const FILE_UPLOAD_PATH = 'public/editor';
 
+    /**
+     * The type of thumbnail
+     *
+     * @var string
+     */
     const THUMBNAIL_TYPE = 'spill';
 
     /**
@@ -93,6 +125,9 @@ class EditorHandler
      * @param PluginRegister $register      PluginRegister instance
      * @param ConfigManager  $configManager ConfigManager instance
      * @param Container      $container     Container instance
+     * @param Storage        $storage       Storage instance
+     * @param MediaManager   $mediaManager  MediaManager instance
+     * @param TagHandler     $tagHandler    TagHandler instance
      */
     public function __construct(
         PluginRegister $register,
@@ -244,7 +279,7 @@ class EditorHandler
      *
      * @param string      $instanceId instance id
      * @param string      $content    content
-     * @param string|null $targetId target id
+     * @param string|null $targetId   target id
      * @return string
      */
     public function compile($instanceId, $content, $targetId = null)
@@ -325,6 +360,12 @@ class EditorHandler
         $this->tagHandler->set($targetId, array_get($inputs, $editor->getTagInputName(), []), $instanceId);
     }
 
+    /**
+     * Get files of target used
+     *
+     * @param string $targetId target identifier
+     * @return File[]
+     */
     protected function getFiles($targetId)
     {
         $data = [];

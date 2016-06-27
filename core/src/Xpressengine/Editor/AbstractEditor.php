@@ -44,10 +44,25 @@ abstract class AbstractEditor implements ComponentInterface
      */
     protected $editors;
 
+    /**
+     * UrlGenerator instance
+     *
+     * @var UrlGenerator
+     */
     protected $urls;
 
+    /**
+     * Gate instance
+     *
+     * @var Gate
+     */
     protected $gate;
 
+    /**
+     * SkinHandler instance
+     *
+     * @var SkinHandler
+     */
     protected $skins;
 
     /**
@@ -87,8 +102,18 @@ abstract class AbstractEditor implements ComponentInterface
      */
     protected $tools;
 
+    /**
+     * The image resolver
+     *
+     * @var callable
+     */
     protected static $imageResolver;
 
+    /**
+     * Default editor arguments
+     *
+     * @var array
+     */
     protected $defaultArguments = [
         'content' => '',
         'contentDomName' => 'content',
@@ -100,26 +125,69 @@ abstract class AbstractEditor implements ComponentInterface
         ]
     ];
 
+    /**
+     * The file input name
+     *
+     * @var string
+     */
     protected $fileInputName = '_files';
 
+    /**
+     * The tag input name
+     *
+     * @var string
+     */
     protected $tagInputName = '_tags';
 
+    /**
+     * The mention input name
+     *
+     * @var string
+     */
     protected $mentionInputName = '_mentions';
 
+    /**
+     * The image class name
+     *
+     * @var string
+     */
     protected $imageClassName = '__xe_image';
 
+    /**
+     * The tag class name
+     *
+     * @var string
+     */
     protected $tagClassName = '__xe_hashtag';
 
+    /**
+     * The mention class name
+     *
+     * @var string
+     */
     protected $mentionClassName = '__xe_mention';
 
+    /**
+     * The image identifier attribute name
+     *
+     * @var string
+     */
     protected $imageIdentifierAttrName = 'data-id';
 
+    /**
+     * The mention identifier attribute name
+     *
+     * @var string
+     */
     protected $mentionIdentifierAttrName = 'data-id';
 
     /**
      * AbstractEditor constructor.
      *
      * @param EditorHandler $editors    EditorHandler instance
+     * @param UrlGenerator  $urls       UrlGenerator instance
+     * @param Gate          $gate       Gate instance
+     * @param SkinHandler   $skins      SkinHandler instance
      * @param string        $instanceId Instance identifier
      */
     public function __construct(EditorHandler $editors, UrlGenerator $urls, Gate $gate, SkinHandler $skins, $instanceId)
@@ -131,6 +199,12 @@ abstract class AbstractEditor implements ComponentInterface
         $this->instanceId = $instanceId;
     }
 
+    /**
+     * Set config for the editor
+     *
+     * @param ConfigEntity $config config instance
+     * @return $this
+     */
     public function setConfig(ConfigEntity $config)
     {
         $this->config = $config;
@@ -155,11 +229,22 @@ abstract class AbstractEditor implements ComponentInterface
         return $this;
     }
 
+    /**
+     * Get arguments for the editor
+     *
+     * @return array
+     */
     public function getArguments()
     {
         return array_merge($this->defaultArguments, $this->arguments);
     }
 
+    /**
+     * Set files the editor used
+     *
+     * @param array $files file instances
+     * @return void
+     */
     public function setFiles($files = [])
     {
         $this->files = $files;
@@ -314,8 +399,19 @@ abstract class AbstractEditor implements ComponentInterface
         return $this->compileBody($content) . $this->getFileView();
     }
 
+    /**
+     * Compile content body
+     *
+     * @param string $content content
+     * @return string
+     */
     abstract protected function compileBody($content);
 
+    /**
+     * Get file list view
+     *
+     * @return \Illuminate\Contracts\Support\Renderable|string
+     */
     protected function getFileView()
     {
         if (count($this->files) < 1) {
@@ -386,11 +482,22 @@ abstract class AbstractEditor implements ComponentInterface
         );
     }
 
+    /**
+     * Get options for some editor only
+     *
+     * @return array
+     */
     public function getCustomOptions()
     {
         return [];
     }
 
+    /**
+     * Compile tags in content body
+     *
+     * @param string $content content
+     * @return string
+     */
     protected function hashTag($content)
     {
         $tags = $this->getData($content, '.' . $this->getTagClassName());
@@ -406,6 +513,12 @@ abstract class AbstractEditor implements ComponentInterface
         return $content;
     }
 
+    /**
+     * Compile mentions in content body
+     *
+     * @param string $content content
+     * @return string
+     */
     protected function mention($content)
     {
         $mentions = $this->getData($content, '.' . $this->getMentionClassName(), 'data-id');
@@ -426,11 +539,23 @@ abstract class AbstractEditor implements ComponentInterface
         return $content;
     }
 
+    /**
+     * Compile links in content body
+     *
+     * @param string $content content
+     * @return string
+     */
     protected function link($content)
     {
         return $content;
     }
 
+    /**
+     * Compile images in content body
+     *
+     * @param string $content content
+     * @return string
+     */
     protected function image($content)
     {
         $list = $this->getData($content, 'img.' . $this->getImageClassName(), 'data-id');
@@ -468,6 +593,14 @@ abstract class AbstractEditor implements ComponentInterface
         return $content;
     }
 
+    /**
+     * Get html node data
+     *
+     * @param string $content    content
+     * @param string $selector   selector string
+     * @param array  $attributes attribute names
+     * @return array
+     */
     private function getData($content, $selector, $attributes = [])
     {
         $attributes = !is_array($attributes) ? [$attributes] : $attributes;
@@ -489,11 +622,23 @@ abstract class AbstractEditor implements ComponentInterface
         });
     }
 
+    /**
+     * Set the image resolver
+     *
+     * @param callable $resolver resolver
+     * @return void
+     */
     public static function setImageResolver(callable $resolver)
     {
         static::$imageResolver = $resolver;
     }
 
+    /**
+     * Resolve image instances
+     *
+     * @param array $ids identifier list
+     * @return array
+     */
     public static function resolveImage($ids = [])
     {
         $ids = !is_array($ids) ? [$ids] : $ids;
@@ -501,46 +646,92 @@ abstract class AbstractEditor implements ComponentInterface
         return call_user_func(static::$imageResolver, $ids);
     }
 
+    /**
+     * Create crawler instance
+     *
+     * @param string $content content
+     * @return Crawler
+     */
     private function createCrawler($content)
     {
         return new Crawler($content);
     }
 
+    /**
+     * Get the file input name
+     *
+     * @return string
+     */
     public function getFileInputName()
     {
         return $this->fileInputName;
     }
 
+    /**
+     * Get the tag input name
+     *
+     * @return string
+     */
     public function getTagInputName()
     {
         return $this->tagInputName;
     }
 
+    /**
+     * Get the mention input name
+     *
+     * @return string
+     */
     public function getMentionInputName()
     {
         return $this->mentionInputName;
     }
 
+    /**
+     * Get the image class name
+     *
+     * @return string
+     */
     public function getImageClassName()
     {
         return $this->imageClassName;
     }
 
+    /**
+     * Get the tag class name
+     *
+     * @return string
+     */
     public function getTagClassName()
     {
         return $this->tagClassName;
     }
 
+    /**
+     * Get the mention class name
+     *
+     * @return string
+     */
     public function getMentionClassName()
     {
         return $this->mentionClassName;
     }
 
+    /**
+     * Get the image identifier attribute name
+     *
+     * @return string
+     */
     public function getImageIdentifierAttrName()
     {
         return $this->imageIdentifierAttrName;
     }
 
+    /**
+     * Get the mention identifier attribute name
+     *
+     * @return string
+     */
     public function getMentionIdentifierAttrName()
     {
         return $this->mentionIdentifierAttrName;

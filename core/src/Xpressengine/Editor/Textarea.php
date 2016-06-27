@@ -71,14 +71,15 @@ class Textarea extends AbstractEditor
         return [];
     }
 
+    /**
+     * Compile content body
+     *
+     * @param string $content content
+     * @return string
+     */
     protected function compileBody($content)
     {
         return $content;
-    }
-
-    protected function getFileView()
-    {
-        return '';
     }
 
     /**
