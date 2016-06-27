@@ -13,6 +13,7 @@
  */
 namespace Xpressengine\Editor;
 
+use Illuminate\Contracts\Events\Dispatcher;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Plugin\ComponentInterface;
 use Xpressengine\Plugin\ComponentTrait;
@@ -66,6 +67,13 @@ abstract class AbstractEditor implements ComponentInterface
     protected $skins;
 
     /**
+     * Dispatcher instance
+     *
+     * @var Dispatcher
+     */
+    protected $events;
+
+    /**
      * Instance identifier
      *
      * @var string
@@ -86,6 +94,11 @@ abstract class AbstractEditor implements ComponentInterface
      */
     protected $arguments = [];
 
+    /**
+     * Used files
+     *
+     * @var array
+     */
     protected $files = [];
 
     /**
@@ -204,12 +217,19 @@ abstract class AbstractEditor implements ComponentInterface
      * @param SkinHandler   $skins      SkinHandler instance
      * @param string        $instanceId Instance identifier
      */
-    public function __construct(EditorHandler $editors, UrlGenerator $urls, Gate $gate, SkinHandler $skins, $instanceId)
-    {
+    public function __construct(
+        EditorHandler $editors,
+        UrlGenerator $urls,
+        Gate $gate,
+        SkinHandler $skins,
+        Dispatcher $events,
+        $instanceId
+    ) {
         $this->editors = $editors;
         $this->urls = $urls;
         $this->gate = $gate;
         $this->skins = $skins;
+        $this->events = $events;
         $this->instanceId = $instanceId;
     }
 
@@ -388,6 +408,8 @@ abstract class AbstractEditor implements ComponentInterface
      */
     public function render()
     {
+        $this->events->fire('xe.editor.render', $this);
+
         $this->loadTools();
 
         $htmlString = '';
@@ -406,6 +428,8 @@ abstract class AbstractEditor implements ComponentInterface
      */
     public function compile($content)
     {
+        $this->events->fire('xe.editor.compile', $this);
+
         $content = $this->hashTag($content);
         $content = $this->mention($content);
         $content = $this->link($content);
@@ -671,6 +695,16 @@ abstract class AbstractEditor implements ComponentInterface
     private function createCrawler($content)
     {
         return new Crawler($content);
+    }
+
+    /**
+     * Get instance id for the editor
+     *
+     * @return string
+     */
+    public function getInstanceId()
+    {
+        return $this->instanceId;
     }
 
     /**

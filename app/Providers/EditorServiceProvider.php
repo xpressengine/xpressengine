@@ -47,6 +47,15 @@ class EditorServiceProvider extends ServiceProvider
 
             return $images;
         });
+
+        $this->app['events']->listen('xe.editor.render', function ($editor) {
+            $key = $this->app['xe.editor']->getPermKey($editor->getInstanceId());
+            if (!$this->app['xe.permission']->get($key)) {
+                $this->app['xe.permission']->register($key, new Grant);
+            }
+
+            $this->app['xe.frontend']->js('assets/core/common/js/xe.editor.core.js')->load();
+        });
     }
 
     /**
@@ -75,21 +84,6 @@ class EditorServiceProvider extends ServiceProvider
                 return $editorHandler;
             }
         );
-
-        intercept('XeEditor@render', 'editor.perm.default', function ($func, $instanceId, $args, $targetId) {
-            $key = $this->app['xe.editor']->getPermKey($instanceId);
-            if (!$this->app['xe.permission']->get($key)) {
-                $this->app['xe.permission']->register($key, new Grant);
-            }
-
-            return $func($instanceId, $args, $targetId);
-        });
-
-        intercept('XeEditor@render', 'editor.core.script', function ($func, $instanceId, $args, $targetId) {
-            $this->app['xe.frontend']->js('assets/core/common/js/xe.editor.core.js')->load();
-
-            return $func($instanceId, $args, $targetId);
-        });
     }
 
     /**
