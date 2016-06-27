@@ -676,7 +676,9 @@ class MenuHandler
      */
     public function getInstanceSettingURIByItemId($itemId)
     {
-        $item = $this->repo->findItem($itemId);
+        if (!$item = $this->repo->findItem($itemId)) {
+            return null;
+        }
 
         return $this->getInstanceSettingURI($item);
     }
