@@ -52,6 +52,10 @@ class PluginUninstall extends PluginCommand
             throw new \Exception('설치되어 있지 않은 플러그인입니다.');
         }
 
+        if(file_exists($plugin->getPath('vendor'))) {
+            throw new \Exception('개발모드의 플러그인입니다. 개발모드의 플러그인을 삭제하려면 직접 플러그인 디렉토리를 삭제하시기 바랍니다.');
+        }
+
         // 설치가능 환경인지 검사
         // - check writable of composer.plugin.json
         if(!is_writable($pluginDir = storage_path('app/composer.plugins.json'))) {
@@ -92,13 +96,8 @@ class PluginUninstall extends PluginCommand
         // - dependent plugins 갱신
         $writer->resolvePlugins();
 
-        // composer.plugins.json 업데이트
-        // - require list에 '>=' 추가
-        // - empty changed
-        $writer->setUpdateMode();
-
         // - require에서 삭제할 플러그인 제거
-        $writer->removeRequire($name);
+        $writer->uninstall($name);
 
         $writer->write();
 
@@ -114,8 +113,6 @@ class PluginUninstall extends PluginCommand
             ;
         }
 
-
-
         $this->warn('composer 실행을 마쳤습니다.'.PHP_EOL);
 
         // composer.plugins.json 파일을 다시 읽어들인다.
@@ -124,16 +121,6 @@ class PluginUninstall extends PluginCommand
         // changed plugin list 정보 출력
         $changed = $this->getChangedPlugins($writer);
         $this->printChangedPlugins($changed);
-
-        // composer.plugins.json 정리
-        // - require list에서 '>=' 제거
-        // - empty changed
-        $writer->setFixMode();
-
-        // - dependent plugins 갱신
-        $writer->resolvePlugins();
-
-        $writer->write();
 
         if(array_has($changed, 'uninstalled.'.$name)) {
             // 삭제 성공 문구 출력

@@ -61,6 +61,10 @@ class PluginUpdate extends PluginCommand
             throw new \Exception('설치되어 있지 않은 플러그인입니다.');
         }
 
+        if(file_exists($plugin->getPath('vendor'))) {
+            throw new \Exception('개발모드의 플러그인입니다. 개발모드의 플러그인을 삭제하려면 직접 플러그인 디렉토리를 삭제하시기 바랍니다.');
+        }
+
         // 설치가능 환경인지 검사
         // - check writable of composer.plugin.json
         if(!is_writable($composerFile = storage_path('app/composer.plugins.json'))) {
@@ -104,11 +108,7 @@ class PluginUpdate extends PluginCommand
 
         // composer.plugins.json 업데이트
         // - require에 설치할 플러그인 추가
-        $writer->addRequire($name, $version);
-
-        // - require list에 '>=' 추가
-        // - empty changed
-        $writer->setUpdateMode();
+        $writer->update($name, $version);
 
         $writer->write();
 
@@ -132,31 +132,16 @@ class PluginUpdate extends PluginCommand
         $changed = $this->getChangedPlugins($writer);
         $this->printChangedPlugins($changed);
 
-        // composer.plugins.json 정리
-        // - require list에서 '>=' 제거
-        // - empty changed
-        $writer->setFixMode();
-
-        // - dependent plugins 갱신
-        $writer->resolvePlugins();
-
-        $writer->write();
-
-        // changed plugin들 업데이트
-        /*foreach (array_merge($installed, $updated) as $package => $version) {
-            list($vendor, $id) = explode('/', $package);
-            if($this->option('no-activate') === false) {
-                $this->updatePlugin($id);
-                $this->activatePlugin($id);
-            }
-        }*/
-
         if (array_get($changed, 'updated.'.$name) === $version) {
             // 설치 성공 문구 출력
             $this->output->success("$title - $name:$version 플러그인을 업데이트했습니다.");
-        } elseif (array_get($changed, 'updated.'.$name) !== $version) {
+        } elseif (array_get($changed, 'updated.'.$name)) {
             $this->output->warning(
                 "$name:$version 플러그인을 업데이트하였으나 다른 버전으로 업데이트되었습니다. 플러그인 간의 의존관계로 인해 다른 버전으로 업데이트되었을 가능성이 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다."
+            );
+        } elseif($plugin->getVersion() === $version) {
+            $this->output->warning(
+                "동일한 버전의 플러그인이 이미 설치되어 있으므로 업데이트가 되지 않았습니다."
             );
         } else {
             $this->output->warning(

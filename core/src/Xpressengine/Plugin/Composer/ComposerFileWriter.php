@@ -76,6 +76,8 @@ class ComposerFileWriter
 
         $data['xpressengine-plugin'] = [
             "path"=> "storage/app/composer.plugins.json",
+            "install"=> [],
+            "update"=> [],
             "uninstall"=> [],
             "changed"=> []
         ];
@@ -94,6 +96,37 @@ class ComposerFileWriter
         $this->data = json_decode($str, true);
     }
 
+    public function install($name, $version)
+    {
+        array_set($this->data, "xpressengine-plugin.install.$name", $version);
+        return $this;
+    }
+
+    public function update($name, $version)
+    {
+        array_set($this->data, "xpressengine-plugin.update.$name", $version);
+        return $this;
+    }
+
+    public function uninstall($name)
+    {
+        $uninstall = array_get($this->data, "xpressengine-plugin.uninstall", []);
+        if(!in_array($name, $uninstall)) {
+            $uninstall[] = $name;
+        }
+        array_set($this->data, "xpressengine-plugin.uninstall", $uninstall);
+        return $this;
+    }
+
+    public function reset()
+    {
+        array_set($this->data, "xpressengine-plugin.install", []);
+        array_set($this->data, "xpressengine-plugin.update", []);
+        array_set($this->data, "xpressengine-plugin.uninstall", []);
+        return $this;
+    }
+
+
     /**
      * addRequire
      *
@@ -110,7 +143,6 @@ class ComposerFileWriter
     public function removeRequire($name)
     {
         array_forget($this->data, "require.$name");
-        array_set($this->data, "xpressengine-plugin.uninstall", [$name]);
     }
 
     /**
@@ -121,6 +153,8 @@ class ComposerFileWriter
     public function resolvePlugins()
     {
         $requires = [];
+        $replace = [];
+
         $dir = $this->scanner->getPluginDirectory();
 
         foreach ($this->scanner->scanDirectory() as $plugin) {
@@ -128,11 +162,13 @@ class ComposerFileWriter
             $name = array_get($plugin, 'metaData.name');
             $version = array_get($plugin, 'metaData.version');
             if(is_dir($dir.DIRECTORY_SEPARATOR.$plugin['id'].DIRECTORY_SEPARATOR.'vendor')) {
+                $replace[$name] = '*';
                 continue;
             }
             $requires[$name] = $version;
         }
         array_set($this->data, 'require', $requires);
+        array_set($this->data, 'replace', $replace);
 
         return $this;
     }
@@ -164,7 +200,6 @@ class ComposerFileWriter
 
         array_set($this->data, 'repositories', [['type'=>'composer', 'url'=>$this->packagistUrl]]);
         array_set($this->data, 'xpressengine-plugin.mode', 'plugins-update');
-        array_set($this->data, 'xpressengine-plugin.uninstall', []);
         array_set($this->data, 'xpressengine-plugin.changed', []);
 
         return $this;
@@ -186,8 +221,8 @@ class ComposerFileWriter
 
         array_set($this->data, 'repositories', [['type'=>'composer', 'url'=>$this->packagistUrl]]);
         array_set($this->data, 'xpressengine-plugin.mode', 'plugins-fixed');
-        array_set($this->data, 'xpressengine-plugin.uninstall', []);
-        /*array_set($this->data, 'xpressengine-plugin.changed', []);*/
+
+        $this->reset();
 
         return $this;
     }

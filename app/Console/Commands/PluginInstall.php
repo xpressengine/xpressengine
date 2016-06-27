@@ -104,11 +104,7 @@ class PluginInstall extends PluginCommand
 
         // composer.plugins.json 업데이트
         // - require에 설치할 플러그인 추가
-        $writer->addRequire($name, $version);
-
-        // - require list에 '>=' 추가
-        // - empty changed
-        $writer->setUpdateMode();
+        $writer->install($name, $version);
 
         $writer->write();
 
@@ -132,29 +128,10 @@ class PluginInstall extends PluginCommand
         $changed = $this->getChangedPlugins($writer);
         $this->printChangedPlugins($changed);
 
-        // composer.plugins.json 정리
-        // - require list에서 '>=' 제거
-        // - empty changed
-        $writer->setFixMode();
-
-        // - dependent plugins 갱신
-        $writer->resolvePlugins();
-
-        $writer->write();
-
-        // changed plugin 업데이트
-        /*if ($this->option('no-activate') === false) {
-            foreach (array_merge($changed['installed'], $changed['updated']) as $package => $version) {
-                list($vendor, $id) = explode('/', $package);
-                $this->updatePlugin($id);
-                $this->activatePlugin($id);
-            }
-        }*/
-
         if (array_get($changed, 'installed.'.$name) === $version) {
             // 설치 성공 문구 출력
             $this->output->success("$title - $name:$version 플러그인을 설치했습니다.");
-        } elseif (array_get($changed, 'installed.'.$name) !== $version) {
+        } elseif (array_get($changed, 'installed.'.$name)) {
             $this->output->success(
                 "$name 플러그인을 설치하였으나 다른 버전(".array_get($changed, 'installed.'.$name).")으로 설치되었습니다. 플러그인 간의 의존관계로 인해 다른 버전으로 설치되었을 가능성이 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다."
             );
@@ -164,6 +141,4 @@ class PluginInstall extends PluginCommand
             );
         }
     }
-
-
 }
