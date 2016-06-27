@@ -4,6 +4,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Editor\EditorHandler;
 use Xpressengine\Editor\Textarea;
+use Xpressengine\Permission\Grant;
 use Xpressengine\Skins\Editor\DefaultSkin;
 
 class EditorServiceProvider extends ServiceProvider
@@ -54,6 +55,15 @@ class EditorServiceProvider extends ServiceProvider
                 return $editorHandler;
             }
         );
+
+        intercept('XeEditor@render', 'editor.perm.default', function ($func, $instanceId, $args, $targetId) {
+            $key = $this->app['xe.editor']->getPermKey($instanceId);
+            if (!$this->app['xe.permission']->get($key)) {
+                $this->app['xe.permission']->register($key, new Grant);
+            }
+
+            return $func($instanceId, $args, $targetId);
+        });
     }
 
     /**
