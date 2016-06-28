@@ -291,12 +291,13 @@ abstract class AbstractEditor implements ComponentInterface
      */
     public function getOptions()
     {
+        $routeParam = ['instanceId' => $this->instanceId];
         $options = [
             'fileUpload' => [
-                'upload_url' => $this->urls->route('editor.file.upload'),
-                'source_url' => $this->urls->route('editor.file.source'),
-                'download_url' => $this->urls->route('editor.file.download'),
-                'destroy_url' => $this->urls->route('editor.file.destroy'),
+                'upload_url' => $this->urls->route('editor.file.upload', $routeParam),
+                'source_url' => $this->urls->route('editor.file.source', $routeParam),
+                'download_url' => $this->urls->route('editor.file.download', $routeParam),
+                'destroy_url' => $this->urls->route('editor.file.destroy', $routeParam),
             ],
             'suggestion' => [
                 'hashtag_api' => $this->urls->route('editor.hashTag'),

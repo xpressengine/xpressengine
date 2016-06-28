@@ -1,18 +1,24 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Http\Sections\SkinSection;
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Editor\EditorHandler;
 use Xpressengine\Http\Request;
 use XeMenu;
 use XePresenter;
+use Xpressengine\Media\MediaManager;
 use Xpressengine\Media\Models\Image;
+use Xpressengine\Permission\Instance;
 use Xpressengine\Permission\PermissionSupport;
+use Xpressengine\Presenter\RendererInterface;
 use Xpressengine\Storage\File;
 use Xpressengine\Storage\Storage;
+use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
+use Xpressengine\Support\Exceptions\InvalidArgumentException;
 use Xpressengine\Tag\TagHandler;
-use Xpressengine\User\Models\User;
 use Auth;
+use Gate;
 
 class EditorController extends Controller
 {
@@ -27,7 +33,11 @@ class EditorController extends Controller
 
         $handler->setInstance($instanceId, $editorId);
 
-        return redirect(XeMenu::getInstanceSettingURIByItemId($instanceId));
+        if (!$url = XeMenu::getInstanceSettingURIByItemId($instanceId)) {
+            return redirect()->back();
+        } else {
+            return redirect($url);
+        }
     }
 
     public function getDetailSetting(EditorHandler $handler, ConfigManager $configs, $instanceId)
@@ -48,12 +58,15 @@ class EditorController extends Controller
         foreach ($deactivated as $key => $item) {
             $items[$key] = ['class' => $item, 'activated' => false];
         }
+
+        $skinSection = new SkinSection(EditorHandler::NAME, $instanceId);
         
         return XePresenter::make('editor.detail', [
             'instanceId' => $instanceId,
             'config' => $config,
             'permArgs' => $this->getPermArguments($handler->getPermKey($instanceId), ['html', 'tool', 'upload']),
             'items' => $items,
+            'skinSection' => $skinSection,
         ]);
     }
 
@@ -82,12 +95,20 @@ class EditorController extends Controller
     /**
      * file upload
      *
-     * @param Request $request request
-     * @param Storage $storage storage
-     * @return mixed
+     * @param Request       $request      request
+     * @param EditorHandler $handler      editor handler
+     * @param Storage       $storage      storage
+     * @param MediaManager  $mediaManager media manager
+     * @param string        $instanceId   instance id
+     * @return RendererInterface
      */
-    public function fileUpload(Request $request, Storage $storage)
-    {
+    public function fileUpload(
+        Request $request,
+        EditorHandler $handler,
+        Storage $storage,
+        MediaManager $mediaManager,
+        $instanceId
+    ) {
         $uploadedFile = null;
         if ($request->file('file') !== null) {
             $uploadedFile = $request->file('file');
@@ -96,14 +117,15 @@ class EditorController extends Controller
         }
 
         if ($uploadedFile === null) {
-//            throw new NotFoundUploadFileException;
-            throw new \Exception;
+            throw new InvalidArgumentException;
+        }
+
+        if (Gate::denies('upload', new Instance($handler->getPermKey($instanceId)))) {
+            throw new AccessDeniedHttpException;
         }
 
         $file = $storage->upload($uploadedFile, EditorHandler::FILE_UPLOAD_PATH);
 
-        /** @var \Xpressengine\Media\MediaManager $mediaManager */
-        $mediaManager = app('xe.media');
         $media = null;
         $thumbnails = null;
         if ($mediaManager->is($file) === true) {
@@ -127,20 +149,17 @@ class EditorController extends Controller
     /**
      * get file source
      *
-     * @param string $id document id
+     * @param EditorHandler $handler    editor handler
+     * @param string        $instanceId instance id
+     * @param string        $id         document id
      * @return void
+     * @throws InvalidArgumentException
      */
-    public function fileSource($id)
+    public function fileSource(EditorHandler $handler, $instanceId, $id)
     {
         if (empty($id)) {
-            throw new \Exception('File id required');
+            throw new InvalidArgumentException;
         }
-//        if (Gate::denies(
-//            BoardPermissionHandler::ACTION_READ,
-//            new Instance($boardPermission->name($this->instanceId)))
-//        ) {
-//            throw new AccessDeniedHttpException;
-//        }
 
         $file = File::find($id);
 
@@ -165,41 +184,43 @@ class EditorController extends Controller
     /**
      * file download
      *
-     * @param $id
+     * @param EditorHandler $handler    editor handler
+     * @param Storage       $storage    storage
+     * @param string        $instanceId instance id
+     * @param string        $id
      * @return void
      */
-    public function fileDownload($id)
+    public function fileDownload(EditorHandler $handler, Storage $storage, $instanceId, $id)
     {
-        if (empty($id)) {
-            throw new \Exception('File id required');
+        if (empty($id) || !$file = File::find($id)) {
+            throw new InvalidArgumentException;
         }
 
-//        if (Gate::denies(
-//            BoardPermissionHandler::ACTION_READ,
-//            new Instance($boardPermission->name($this->instanceId)))
-//        ) {
+//        if (Gate::denies('download', new Instance($handler->getPermKey($instanceId)))) {
 //            throw new AccessDeniedHttpException;
 //        }
 
-        $file = File::find($id);
-
-        /** @var \Xpressengine\Storage\Storage $storage */
-        $storage = app('xe.storage');
         $storage->download($file);
     }
 
-    public function fileDestroy($id)
+    public function fileDestroy(Storage $storage, $instanceId, $id)
     {
-        if (empty($id)) {
-            throw new \Exception('File id required');
+        if (empty($id) || !$file = File::find($id)) {
+            throw new InvalidArgumentException;
         }
 
-        /** @var \Xpressengine\Storage\Storage $storage */
-        $storage = app('xe.storage');
-        $storage->remove(File::find($id));
+        if ($file->userId !== Auth::id()) {
+            throw new AccessDeniedHttpException;
+        }
+
+        try {
+            $result = $storage->remove($file);
+        } catch (\Exception $e) {
+            $result = false;
+        }
 
         return XePresenter::makeApi([
-            'deleted' => true,
+            'deleted' => $result,
         ]);
     }
 
