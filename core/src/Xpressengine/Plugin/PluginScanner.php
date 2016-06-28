@@ -50,6 +50,14 @@ class PluginScanner
     }
 
     /**
+     * @return string
+     */
+    public function getPluginDirectory()
+    {
+        return $this->pluginDirectory;
+    }
+
+    /**
      * 플러그인 디렉토리에 있는 모든 플러그인을 스캔하며 플러그인 정보를 수집한다.
      * 만약 특정 플러그인이 주어졌을 경우 주어진 플러그인의 정보만 수집한다.
      *

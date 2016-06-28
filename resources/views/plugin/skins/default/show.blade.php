@@ -66,13 +66,14 @@
                             <button class="btn btn-danger">{{xe_trans('xe::deactivation')}}</button>
                         </form>
 
-                        @if($plugin->isActivated() && $plugin->checkUpdated($plugin->getInstalledVersion()))
-                            {{--<button class="xe-btn xe-btn-default blue v2">업데이트</button>--}}
+                        @if($plugin->needUpdateInstall())
+                            <button data-url="{{ route('settings.plugins.update', [$plugin->getId()]) }}" class="btn btn-default __xe_btn-update-plugin">{{ xe_trans('xe::update_plugin') }}</button>
                         @endif
 
-                        @if($plugin->getSettingsURI() !== null)
-                            {{--<button class="xe-btn xe-btn-default blue v2">관리</button>--}}
+                        @if($plugin->getSettingsURI())
+                            <a href="{{ $plugin->getSettingsURI() }}" class="xe-btn xe-btn-default blue v2">{{xe_trans('xe::settings')}}</a>
                         @endif
+
                     @else
                         <form method="POST" action="{{ route('settings.plugins.activate', [$plugin->getId()]) }}" accept-charset="UTF-8" role="form">
                             {!! csrf_field() !!}
@@ -205,7 +206,7 @@
                 {{-- 문서정보 --}}
                 <div role="tabpanel" class="tab-pane fade panel-body" id="readme">
                     @if($readme = $plugin->getReadMe())
-                    {{ nl2br($readme) }}
+                    {!!  $readme !!}
                     @else
                     {{xe_trans('xe::msgNoDocument')}}
                     @endif
@@ -219,7 +220,7 @@
                 {{-- 업데이트 기록 --}}
                 <div role="tabpanel" class="tab-pane fade panel-body" id="changelog">
                     @if($changelog = $plugin->getChangeLog())
-                        {{ nl2br($changelog) }}
+                        {!!  nl2br($changelog)  !!}
                     @else
                         {{xe_trans('xe::msgNoUpdateChangeLog')}}
                     @endif

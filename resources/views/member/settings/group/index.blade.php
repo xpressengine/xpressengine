@@ -27,7 +27,7 @@
                             <th scope="col"><input type="checkbox" id="__xe_check-all"></th>
                             <th scope="col">{{xe_trans('xe::groupName')}}</th>
                             <th scope="col">{{xe_trans('xe::description')}}</th>
-                            {{--<th scope="col">기본그룹</th>--}}
+                            <th scope="col">기본그룹</th>
                             <th scope="col">{{xe_trans('xe::groupMemberCount')}}</th>
                             <th scope="col">{{xe_trans('xe::management')}}</th>
                         </tr>
@@ -35,10 +35,10 @@
                         <tbody>
                         @foreach($groups as $group)
                             <tr>
-                                <td><input type="checkbox" name="id[]" value="{{ $group->id }}" class="__xe_checkbox" /></td>
+                                <td><input type="checkbox" name="id[]" @if($joinGroup === $group->id) disabled="disabled" @endif value="{{ $group->id }}" class="__xe_checkbox" /></td>
                                 <td>{{ $group->name }}</td>
                                 <td>{{ $group->description }}</td>
-                                {{--<td><input type="radio"></td>--}}
+                                <td><input class="__xe_check_join_group" name="join_group" type="radio" value="{{ $group->id }}" @if($joinGroup === $group->id) checked="checked" @endif ></td>
                                 <td>{{ $group->count }}</td>
                                 <td><a href="{{ route('manage.group.edit', ['id' => $group->id]) }}" class="btn btn-default">{{ xe_trans('xe::management') }}</a></td>
                             </tr>
@@ -54,6 +54,26 @@
 
 <script type="text/javascript">
     $(function () {
+
+        $('.__xe_check_join_group').change(function () {
+            var join_group = $(this).val();
+            $.ajax({
+                type: 'post',
+                url: '{{ route('manage.group.update.join') }}',
+                cache: false,
+                data: {'join_group':join_group},
+                dataType: 'json',
+                success: function (data) {
+
+                    $('.__xe_checkbox').each(function(){this.disabled = false})
+                    $('.__xe_checkbox[value='+join_group+']').attr('disabled','disabled');
+                    XE.toast(data.type, data.message);
+                },
+                error: function (data) {
+                    XE.toast(data.type, data.message);
+                }
+            });
+        });
 
         $('#__xe_check-all').change(function () {
             if ($(this).is(':checked')) {

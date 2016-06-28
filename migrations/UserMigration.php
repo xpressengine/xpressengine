@@ -115,7 +115,6 @@ class UserMigration implements Migration {
             $table->timestamp('created_at');
         });
 
-
     }
 
     public function installed()
@@ -128,16 +127,38 @@ class UserMigration implements Migration {
                                      ]);
     }
 
-    public function update($currentVersion)
+    public function init()
+    {
+        // add default user groups
+        $joinGroup = app('xe.user')->groups()->create(
+            [
+                'name' => '정회원',
+                'description' => 'default user group'
+            ]
+        );
+        app('xe.user')->groups()->create(
+            [
+                'name' => '준회원',
+                'description' => 'sub user group'
+            ]
+        );
+        $joinConfig = app('xe.config')->get('user.join');
+
+        $joinConfig->set('joinGroup', $joinGroup->id);
+        app('xe.config')->modify($joinConfig);
+
+    }
+
+    public function update($installedVersion = null)
     {
 
     }
 
-    public function checkInstall()
+    public function checkInstalled()
     {
     }
 
-    public function checkUpdate($currentVersion)
+    public function checkUpdated($installedVersion = null)
     {
     }
 }
