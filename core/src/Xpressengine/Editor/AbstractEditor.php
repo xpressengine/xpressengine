@@ -215,6 +215,7 @@ abstract class AbstractEditor implements ComponentInterface
      * @param UrlGenerator  $urls       UrlGenerator instance
      * @param Gate          $gate       Gate instance
      * @param SkinHandler   $skins      SkinHandler instance
+     * @param Dispatcher    $events     Dispatcher instance
      * @param string        $instanceId Instance identifier
      */
     public function __construct(
@@ -628,7 +629,7 @@ abstract class AbstractEditor implements ComponentInterface
             if (!isset($images[$data['data-id']])) {
                 continue;
             }
-            
+
             $image = $images[$data['data-id']];
 
             $attrStr = trim($data['html'], ' </>');

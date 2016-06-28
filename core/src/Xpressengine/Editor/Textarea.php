@@ -52,6 +52,18 @@ class Textarea extends AbstractEditor
     }
 
     /**
+     * Get the evaluated contents of the object.
+     *
+     * @return string
+     */
+    public function render()
+    {
+        app('xe.frontend')->js('assets/core/common/js/xe.textarea.define.js')->load();
+
+        return parent::render();
+    }
+
+    /**
      * Compile content body
      *
      * @param string $content content
