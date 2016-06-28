@@ -110,6 +110,24 @@ class MemoryDecorator implements MenuRepository
     }
 
     /**
+     * Get menu items by identifier list
+     *
+     * @param array $ids  menu item identifier
+     * @param array $with relation
+     * @return MenuItem[]
+     */
+    public function fetchInItem(array $ids, $with = [])
+    {
+        $items = $this->repo->fetchInItem($ids, $with);
+
+        foreach ($items as $item) {
+            $this->bag[$item->getKey()] = $item;
+        }
+
+        return $items;
+    }
+
+    /**
      * Insert menu
      *
      * @param Menu $menu menu instance

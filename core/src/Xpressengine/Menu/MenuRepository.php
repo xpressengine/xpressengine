@@ -56,6 +56,15 @@ interface MenuRepository
     public function findItem($id, $with = []);
 
     /**
+     * Get menu items by identifier list
+     *
+     * @param array $ids  menu item identifier
+     * @param array $with relation
+     * @return MenuItem[]
+     */
+    public function fetchInItem(array $ids, $with = []);
+
+    /**
      * Insert menu
      *
      * @param Menu $menu menu instance
