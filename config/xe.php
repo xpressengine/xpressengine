@@ -203,7 +203,7 @@ return [
             'master' => ['default'],
             'slave' => ['default'],
         ],
-        'member' => [
+        'user' => [
             'master' => ['default'],
             'slave' => ['default'],
         ],

@@ -30,6 +30,8 @@ class UserGroup extends DynamicModel implements GroupInterface
 {
     protected $table = 'user_group';
 
+    protected $connection = 'user';
+
     public $incrementing = false;
 
     public $fillable = [

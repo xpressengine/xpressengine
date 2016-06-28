@@ -30,6 +30,8 @@ class UserAccount extends DynamicModel implements AccountInterface
 
     protected $table = 'user_account';
 
+    protected $connection = 'user';
+
     public $incrementing = false;
 
     protected $fillable = [

@@ -32,6 +32,8 @@ class User extends DynamicModel implements UserInterface
 
     protected $table = 'user';
 
+    protected $connection = 'user';
+
     public $incrementing = false;
 
     /**
