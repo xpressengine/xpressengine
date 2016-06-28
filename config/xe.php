@@ -380,12 +380,12 @@ return [
 
     'plugin' => [
         'store' => [
-            'detail_url' => 'http://xpressengine.io/plugins/detail',
+            'detail_url' => 'https://xpressengine.io/plugins/detail',
         ],
         'api' => [
-            'url' => 'http://xpressengine.io/plugins/api/1.0'
+            'url' => 'https://xpressengine.io/plugins/api/1.0'
         ],
-        'packagist' => 'http://xpressengine.io'
+        'packagist' => 'https://xpressengine.io'
     ],
 
     'uiobject' => [

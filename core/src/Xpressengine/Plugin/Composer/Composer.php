@@ -32,7 +32,7 @@ class Composer
 
     protected static $pluginsDir = 'plugins';
 
-    protected static $packagistUrl = 'http://xpressengine.io';
+    protected static $packagistUrl = 'https://xpressengine.io';
 
     protected static $composerFile = 'storage/app/composer.plugins.json';
 
