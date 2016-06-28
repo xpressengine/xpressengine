@@ -52,6 +52,7 @@
         this.name = editorSettings.name;
         this.configs = editorSettings.configs;
         this.editorList = [];
+        this.interfaces = {};
 
         if(editorSettings.hasOwnProperty('plugins')
             && editorSettings.plugins instanceof Array
@@ -75,6 +76,9 @@
             var editorOptions = $.extend(this.configs || {}, editorOptions);
 
             if(Validation.isValidBeforeCreateInstance(sel, toolInfoList, this)) {
+                // this.editorList[sel] = new instanceObj(this.name, sel, editorOptions, toolInfoList);
+                // this.interfaces.initialize.call(this.editorList[sel], sel, options, editorOptions);
+
                 this.editorList[sel] = new instanceObj(this.name, sel, editorOptions, toolInfoList);
                 this.interfaces.initialize.call(this.editorList[sel], sel, options, editorOptions);
 
@@ -93,9 +97,11 @@
                         }
                     }
 
+                    // this.interfaces.addTools.call(this.editorList[sel], tools, toolInfoListFilter);
                     this.interfaces.addTools.call(this.editorList[sel], tools, toolInfoListFilter);
                 }
 
+                // return this.editorList[sel];
                 return this.editorList[sel];
             }
         }
