@@ -12,6 +12,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Schema\Builder;
 use Schema;
 use DB;
+use XeDB;
 use Xpressengine\Support\Migration;
 
 class DocumentMigration implements Migration
@@ -28,8 +29,10 @@ class DocumentMigration implements Migration
 
     public function create($table, $revision = '')
     {
+        $schema = Schema::setConnection(XeDB::connection('document')->master());
+
         // create documents table
-        Schema::create($table, function (Blueprint $table) {
+        $schema->create($table, function (Blueprint $table) {
             $table->engine = "InnoDB";
 
             $table->string('id', 255);
@@ -40,7 +43,7 @@ class DocumentMigration implements Migration
 
         if ($revision != '') {
             // create revision table
-            Schema::create($revision, function (Blueprint $table) {
+            $schema->create($revision, function (Blueprint $table) {
                 $table->engine = "InnoDB";
 
                 $table->string('revisionId', 255);
