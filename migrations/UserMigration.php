@@ -10,16 +10,13 @@ namespace Xpressengine\Migrations;
 
 use Illuminate\Database\Schema\Blueprint;
 use Schema;
-use XeDB;
 use Xpressengine\Support\Migration;
 
 class UserMigration implements Migration {
 
     public function install()
     {
-        $schema = Schema::setConnection(XeDB::connection('user')->master());
-        
-        $schema->create('user', function (Blueprint $table) {
+        Schema::create('user', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
             $table->string('id', 36);
@@ -38,7 +35,7 @@ class UserMigration implements Migration {
             $table->primary('id');
         });
 
-        $schema->create('user_group', function (Blueprint $table) {
+        Schema::create('user_group', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
             $table->string('id', 36);
@@ -52,7 +49,7 @@ class UserMigration implements Migration {
             $table->primary('id');
         });
 
-        $schema->create('user_group_user', function (Blueprint $table) {
+        Schema::create('user_group_user', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
             $table->increments('id');
@@ -65,7 +62,7 @@ class UserMigration implements Migration {
             $table->index('userId');
         });
 
-        $schema->create('user_account', function (Blueprint $table) {
+        Schema::create('user_account', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
             $table->string('id', 36);
@@ -82,7 +79,7 @@ class UserMigration implements Migration {
             $table->unique(['provider','accountId']);
         });
 
-        $schema->create('user_email', function (Blueprint $table) {
+        Schema::create('user_email', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
             $table->increments('id');
@@ -95,7 +92,7 @@ class UserMigration implements Migration {
             $table->index('address');
         });
 
-        $schema->create('user_pending_email', function (Blueprint $table) {
+        Schema::create('user_pending_email', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
             $table->increments('id');
@@ -109,7 +106,7 @@ class UserMigration implements Migration {
             $table->index('address');
         });
 
-        $schema->create('password_resets', function (Blueprint $table) {
+        Schema::create('password_resets', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
             $table->increments('id');
