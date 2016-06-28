@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Sections\SkinSection;
+use Illuminate\Http\Response;
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Editor\EditorHandler;
 use Xpressengine\Http\Request;
@@ -19,6 +20,7 @@ use Xpressengine\Support\Exceptions\InvalidArgumentException;
 use Xpressengine\Tag\TagHandler;
 use Auth;
 use Gate;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class EditorController extends Controller
 {
@@ -77,7 +79,9 @@ class EditorController extends Controller
     {
         $this->validate($request, [
             'height' => 'required|numeric',
-            'fontSize' => 'required'
+            'fontSize' => 'required',
+            'fileMaxSize' => 'numeric',
+            'attachMaxSize' => 'numeric',
         ]);
         $configs->set($handler->getConfigKey($instanceId), [
             'height' => $request->get('height'),
@@ -86,7 +90,7 @@ class EditorController extends Controller
             'uploadActive' => !!$request->get('uploadActive', false),
             'fileMaxSize' => $request->get('fileMaxSize', 0),
             'attachMaxSize' => $request->get('attachMaxSize', 0),
-            'extensions' => empty($request->get('extensions')) ? null : $request->get('extensions'),
+            'extensions' => empty($request->get('extensions')) ? null : strtolower($request->get('extensions')),
             'tools' => $request->get('tools', [])
         ]);
 
@@ -123,8 +127,33 @@ class EditorController extends Controller
             throw new InvalidArgumentException;
         }
 
-        if (Gate::denies('upload', new Instance($handler->getPermKey($instanceId)))) {
+        $config = $handler->get($instanceId)->getConfig();
+
+        if (!$config->get('uploadActive') || Gate::denies('upload', new Instance($handler->getPermKey($instanceId)))) {
             throw new AccessDeniedHttpException;
+        }
+
+        if ($config->get('fileMaxSize') * 1024 * 1024 < $uploadedFile->getSize()) {
+            throw new HttpException(
+                Response::HTTP_REQUEST_ENTITY_TOO_LARGE,
+                xe_trans('xe::msgMaxFileSize', [
+                    'fileMaxSize' => $config->get('fileMaxSize'),
+                    'uploadFileName' => $uploadedFile->getClientOriginalName()
+                ])
+            );
+        }
+        $extensions = array_map(function ($v) {
+            return trim($v);
+        }, explode(',', $config->get('extensions', '')));
+        if (array_search('*', $extensions) === false
+            && !in_array(strtolower($uploadedFile->getClientOriginalExtension()), $extensions)) {
+            throw new HttpException(
+                Response::HTTP_NOT_ACCEPTABLE,
+                xe_trans('xe::msgAvailableUploadingFiles', [
+                    'extensions' => $config->get('extensions'),
+                    'uploadFileName' => $uploadedFile->getClientOriginalName()
+                ])
+            );
         }
 
         $file = $storage->upload($uploadedFile, EditorHandler::FILE_UPLOAD_PATH);

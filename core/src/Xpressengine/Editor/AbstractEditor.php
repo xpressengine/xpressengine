@@ -247,6 +247,16 @@ abstract class AbstractEditor implements ComponentInterface
     }
 
     /**
+     * Get config for the editor
+     *
+     * @return null|ConfigEntity
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
      * Set arguments for the editor
      *
      * @param array $arguments arguments
@@ -349,6 +359,7 @@ abstract class AbstractEditor implements ComponentInterface
         $data['extensions'] = isset($data['extensions']) ? array_map(function ($v) {
             return trim($v);
         }, explode(',', $data['extensions'])) : [];
+        $data['extensions'] = array_search('*', $data['extensions']) !== false ? ['*'] : $data['extensions'];
         $instance = new Instance($this->editors->getPermKey($this->instanceId));
         $data['perms'] = [
             'html' => $this->gate->allows('html', $instance),
@@ -614,6 +625,10 @@ abstract class AbstractEditor implements ComponentInterface
         unset($temp);
         
         foreach ($list as $data) {
+            if (!isset($images[$data['data-id']])) {
+                continue;
+            }
+            
             $image = $images[$data['data-id']];
 
             $attrStr = trim($data['html'], ' </>');

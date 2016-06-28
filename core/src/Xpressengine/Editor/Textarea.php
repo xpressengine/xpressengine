@@ -48,7 +48,7 @@ class Textarea extends AbstractEditor
      */
     public function getName()
     {
-        return 'Textarea';
+        return 'XEtextarea';
     }
 
     /**
@@ -60,16 +60,5 @@ class Textarea extends AbstractEditor
     protected function compileBody($content)
     {
         return $content;
-    }
-
-    /**
-     * Get script for running the editor
-     *
-     * @param array $options options
-     * @return mixed
-     */
-    protected function getEditorScript(array $options)
-    {
-        return '';
     }
 }

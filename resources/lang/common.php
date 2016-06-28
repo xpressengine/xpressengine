@@ -1804,4 +1804,12 @@ return [
         'ko' => '휴지통으로 이동',
         'en' => 'Move to trash',
     ],
+    'msgMaxFileSize' => [
+        'ko' => '파일 용량은 :fileMaxSize MB를 초과할 수 없습니다. [ :uploadFileName ]',
+        'en' => 'The file upload size can not exceed :fileMaxSize. [ :uploadFileName ]',
+    ],
+    'msgAvailableUploadingFiles' => [
+        'ko' => '[:extensions] 확장자만 업로드 가능합니다. [:uploadFileName]',
+        'en' => '[:extensions] extensions only upload. [:uploadFileName]'
+    ],
 ];
