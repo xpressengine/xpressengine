@@ -22,8 +22,6 @@ XEeditor.define({
                 files: []
             }, options);
 
-            console.log("options", options);
-
             var editor = $("#" + selector), self = this;
             var height = options.height
                 , fontFamily = options.fontFamily
