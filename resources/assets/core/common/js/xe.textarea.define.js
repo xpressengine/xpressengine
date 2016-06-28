@@ -22,8 +22,6 @@ XEeditor.define({
                 files: []
             }, options);
 
-            console.log("options", options);
-
             var editor = $("#" + selector), self = this;
             var height = options.height
                 , fontFamily = options.fontFamily
@@ -36,18 +34,18 @@ XEeditor.define({
             });
 
             if(height) {
-                this.props.editor.css('height', height+"px");
+                editor.css('height', height+"px");
             }
 
             if(fontFamily || fontSize) {
                 var bodyStyle = "";
 
                 if(fontFamily && fontFamily.length > 0) {
-                    this.props.editor.css('font-family', fontFamily.join(","));
+                    editor.css('font-family', fontFamily.join(","));
                 }
 
                 if(fontSize) {
-                    this.props.editor.css('font-size', fontSize);
+                    editor.css('font-size', fontSize);
                 }
             }
 
@@ -75,9 +73,9 @@ XEeditor.define({
                 //hashtag
                 if(tagLen > 0) {
                     $hashTags.each(function() {
-                        var val = $(this).val();
+                        var val = $(this).text().replace(/#(.+)/g, "$1");
 
-                        $paramWrap.append("<input name='" + tagInput + "[]' value='" + val + "' />");
+                        $paramWrap.append("<input type='hidden' name='" + tagInput + "[]' value='" + val + "' />");
                     });
                 }
 
@@ -86,7 +84,7 @@ XEeditor.define({
                     $mentions.each(function() {
                         var val = $(this).attr(mentionIdentifier);
 
-                        $paramWrap.append("<input name='" + mentionInput + "[]' value='" + val + "' />");
+                        $paramWrap.append("<input type='hidden' name='" + mentionInput + "[]' value='" + val + "' />");
                     });
                 }
 
@@ -95,7 +93,7 @@ XEeditor.define({
                     for(var i = 0, max = files.length; i < max; i += 1) {
                         var file = files[i];
 
-                        $paramWrap.append("<input name='" + fileInput + "[]' value='" + file.id + "' />");
+                        $paramWrap.append("<input type='hidden'name='" + fileInput + "[]' value='" + file.id + "' />");
                     }
                 }
             });
