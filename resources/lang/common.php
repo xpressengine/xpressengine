@@ -910,6 +910,10 @@ return [
         'ko' => '페이지로 이동',
         'en' => 'Go Link'
     ],
+    'goSettingPage' => [
+        'ko' => '설정 페이지로 이동',
+        'en' => 'Go to Settings page'
+    ],
     'newMenu' => [
         'ko' => '새로운 메뉴',
         'en' => 'New Menu'

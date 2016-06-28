@@ -6,7 +6,7 @@ use Xpressengine\Http\Request;
  * Define Xpressengine Version
  */
 if (!defined('__XE_VERSION__')) {
-    define('__XE_VERSION__', '3.0.0-dev5');
+    define('__XE_VERSION__', '3.0.0-dev6');
 }
 
 
