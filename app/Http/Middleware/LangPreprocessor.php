@@ -47,7 +47,7 @@ class LangPreprocessor
         $response = $next($request);
 
         // set locale to cookie of response
-        $response->withCookie(cookie()->forever('locale', $locale));
+        // $response->withCookie(cookie()->forever('locale', $locale));
 
         if ($request->has('xe_use_request_preprocessor') && $this->available()) {
             $this->conduct($request);
