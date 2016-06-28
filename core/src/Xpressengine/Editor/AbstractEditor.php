@@ -459,7 +459,10 @@ abstract class AbstractEditor implements ComponentInterface
         }
 
         return $this->skins->getAssigned([EditorHandler::NAME, $this->instanceId])
-            ->setView('files')->setData(['files' => $this->files])->render();
+            ->setView('files')->setData([
+                'instanceId' => $this->instanceId,
+                'files' => $this->files
+            ])->render();
     }
 
     /**
