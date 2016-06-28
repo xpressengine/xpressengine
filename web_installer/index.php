@@ -110,7 +110,7 @@
     <link rel="stylesheet" href="../assets/core/xe-ui-component/xe-ui-component.css">
 
     <link rel="stylesheet" href="../assets/core/common/css/install.css">
-    <link rel="stylesheet" href="http://cdn.jsdelivr.net/xeicon/2.0.0/xeicon.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/xeicon/2.0.0/xeicon.min.css">
 </head>
 
 <body>
