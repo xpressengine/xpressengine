@@ -31,7 +31,7 @@ interface ItemInterface
      *
      * @return string
      */
-    public static function getName();
+    public static function getTitle();
 
     /**
      * 메뉴아이템에 대한 설명

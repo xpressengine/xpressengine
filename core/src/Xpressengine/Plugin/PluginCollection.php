@@ -108,8 +108,9 @@ class PluginCollection implements Countable, Arrayable, IteratorAggregate, Jsona
         // set status of plugins
         foreach ($this->statusList as $id => $info) {
             if (array_has($this->plugins, $id)) {
-                $this->get($id)->setStatus($info['status']);
-                $this->get($id)->setInstalledVersion($info['version']);
+                $plugin = $this->get($id);
+                $plugin->setStatus($info['status']);
+                $plugin->setInstalledVersion($info['version']);
             }
         }
     }

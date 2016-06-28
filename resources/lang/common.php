@@ -1102,9 +1102,33 @@ return [
         'ko' => '또는',
         'en' => 'or'
     ],
+    'activate' => [
+        'ko' => '켜기',
+        'en' => 'activate'
+    ],
+    'deactivate' => [
+        'ko' => '끄기',
+        'en' => 'deactivate'
+    ],
+    'update_plugin' => [
+        'ko' => '업데이트',
+        'en' => 'update'
+    ],
     'applyUpdateNow' => [
         'ko' => '지금 업데이트 적용하기.',
         'en' => 'Apply downloaded update now.'
+    ],
+    'hasNewUpdate' => [
+        'ko' => '새로운 업데이트가 있습니다.',
+        'en' => ''
+    ],
+    'downloadUpdateNow' => [
+        'ko' => '지금 업데이트 다운로드하기',
+        'en' => ''
+    ],
+    'details' => [
+        'ko' => '세부 사항',
+        'en' => ''
     ],
     'showDetails' => [
         'ko' => '자세히보기',
@@ -1803,5 +1827,9 @@ return [
     'moveToTrash' => [
         'ko' => '휴지통으로 이동',
         'en' => 'Move to trash',
+    ],
+    'msgLoginRequired' => [
+        'ko' => '로그인이 필요합니다.',
+        'en' => 'Login is required.'
     ],
 ];

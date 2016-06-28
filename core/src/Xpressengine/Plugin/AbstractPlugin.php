@@ -98,7 +98,7 @@ abstract class AbstractPlugin
 
     /**
      * 해당 플러그인이 설치된 상태라면 true, 설치되어있지 않다면 false를 반환한다.
-     * 이 메소드를 구현하지 않았다면 기본적으로 설치된 상태(true)를 반환한다.
+     * 이 메소드를 구현하지 않았다면 기본적으로 XE에 설치되었던 기록에 기반하여 판단한다.
      *
      * @param string $installedVersion 이 플러그인의 현재 설치된 버전정보
      *
@@ -106,6 +106,9 @@ abstract class AbstractPlugin
      */
     public function checkInstalled($installedVersion = null)
     {
+        if ($installedVersion === null) {
+            return false;
+        }
         return true;
     }
 

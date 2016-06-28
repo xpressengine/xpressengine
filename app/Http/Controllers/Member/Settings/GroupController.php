@@ -38,7 +38,11 @@ class GroupController extends Controller
     public function index()
     {
         $groups = $this->groups->orderBy('createdAt')->get();
-        return XePresenter::make('member.settings.group.index', compact('groups'));
+
+        $config = app('xe.config')->get('user.join');
+        $joinGroup = $config->get('joinGroup');
+
+        return XePresenter::make('member.settings.group.index', compact('groups', 'joinGroup'));
     }
 
     /**
@@ -103,7 +107,7 @@ class GroupController extends Controller
     {
         $input = $request->only(['name', 'description']);
 
-        $this->validate($request, ['name' => 'Required']);
+        $this->validate($request, ['name' => 'required']);
 
         $group = $this->groups->find($id);
 
@@ -119,6 +123,20 @@ class GroupController extends Controller
         return redirect()->route('manage.group.index')->with('alert', ['type' => 'success', 'message' => '수정되었습니다.']);
     }
 
+    public function updateJoinGroup(Request $request)
+    {
+        $this->validate($request, ['join_group' => 'required']);
+
+        $groupId = $request->get('join_group');
+
+        $joinConfig = \app('xe.config')->get('user.join');
+
+        $joinConfig->set('joinGroup', $groupId);
+        \app('xe.config')->modify($joinConfig);
+
+        return XePresenter::makeApi(['type' => 'success', 'message' => '기본 가입 그룹이 변경되었습니다.', 'groupId' => $groupId]);
+    }
+
     /**
      * delete group
      *
@@ -131,12 +149,19 @@ class GroupController extends Controller
     {
         $groupIds = $request->get('id');
 
+        $joinConfig = \app('xe.config')->get('user.join');
+        $joinGroup = $joinConfig->get('joinGroup');
+
+
+
         $groups = $this->groups->query()->whereIn('id', $groupIds)->get();
 
         XeDB::beginTransaction();
         try {
             foreach ($groups as $group) {
-                $this->groups->delete($group);
+                if($joinGroup !== $group->id) {
+                    $this->groups->delete($group);
+                }
             }
         } catch (Exception $e) {
             XeDB::rollBack();

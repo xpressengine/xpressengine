@@ -147,10 +147,9 @@ class DocumentMigration implements Migration
     /**
      * update
      *
-     * @param string $currentVersion version
-     * @return void
+     * @param string $installedVersion version
      */
-    public function update($currentVersion)
+    public function update($installedVersion = null)
     {
 
     }
@@ -160,17 +159,16 @@ class DocumentMigration implements Migration
      *
      * @return void
      */
-    public function checkInstall()
+    public function checkInstalled()
     {
     }
 
     /**
      * check update
      *
-     * @param string $currentVersion version
-     * @return void
+     * @param string $installedVersion version
      */
-    public function checkUpdate($currentVersion)
+    public function checkUpdated($installedVersion = null)
     {
     }
 }

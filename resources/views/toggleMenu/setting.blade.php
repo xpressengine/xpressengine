@@ -22,7 +22,7 @@
                 <tr>
                     <td>
                         <button class="btn handler"><i class="xi-bullet-point"></i></button>
-                        <em class="item-title">{{ $data['item']::getName() }}</em>
+                        <em class="item-title">{{ $data['item']::getTitle() }}</em>
                     </td>
                     <td>
                         <span class="item-subtext">{{ $data['item']::getDescription() }}</span>

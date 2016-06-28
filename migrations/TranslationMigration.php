@@ -42,16 +42,16 @@ class TranslationMigration implements Migration {
         app('xe.translator')->putFromLangDataSource('xe', app()->langPath()."/common.php");
     }
 
-    public function update($currentVersion)
+    public function update($installedVersion = null)
     {
 
     }
 
-    public function checkInstall()
+    public function checkInstalled()
     {
     }
 
-    public function checkUpdate($currentVersion)
+    public function checkUpdated($installedVersion = null)
     {
     }
 }
