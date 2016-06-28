@@ -64,7 +64,10 @@ class EditorController extends Controller
         return XePresenter::make('editor.detail', [
             'instanceId' => $instanceId,
             'config' => $config,
-            'permArgs' => $this->getPermArguments($handler->getPermKey($instanceId), ['html', 'tool', 'upload']),
+            'permArgs' => $this->getPermArguments(
+                $handler->getPermKey($instanceId),
+                ['html', 'tool', 'upload', 'download']
+            ),
             'items' => $items,
             'skinSection' => $skinSection,
         ]);
@@ -87,7 +90,7 @@ class EditorController extends Controller
             'tools' => $request->get('tools', [])
         ]);
 
-        $this->permissionRegister($request, $handler->getPermKey($instanceId), ['html', 'tool', 'upload']);
+        $this->permissionRegister($request, $handler->getPermKey($instanceId), ['html', 'tool', 'upload', 'download']);
 
         return redirect()->route('settings.editor.setting.detail', $instanceId);
     }
@@ -196,9 +199,9 @@ class EditorController extends Controller
             throw new InvalidArgumentException;
         }
 
-//        if (Gate::denies('download', new Instance($handler->getPermKey($instanceId)))) {
-//            throw new AccessDeniedHttpException;
-//        }
+        if (Gate::denies('download', new Instance($handler->getPermKey($instanceId)))) {
+            throw new AccessDeniedHttpException;
+        }
 
         $storage->download($file);
     }

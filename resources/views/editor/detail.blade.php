@@ -179,6 +179,17 @@
                                 </div>
                             </div>
 
+                            <div class="panel">
+                                <div class="panel-heading">
+                                    <div class="pull-left">
+                                        <h4 class="panel-title">다운로드 권한</h4>
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                    {!! uio('permission', $permArgs['download']) !!}
+                                </div>
+                            </div>
+
                         </div>
                     </div>
 

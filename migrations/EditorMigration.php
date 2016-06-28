@@ -85,6 +85,7 @@ class EditorMigration implements Migration
         $grant->set('html', $data);
         $grant->set('tool', $data);
         $grant->set('upload', $data);
+        $grant->set('download', $data);
         app('xe.permission')->register(EditorHandler::CONFIG_NAME, $grant);
     }
 }
