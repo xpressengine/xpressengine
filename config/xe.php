@@ -203,10 +203,6 @@ return [
             'master' => ['default'],
             'slave' => ['default'],
         ],
-        'comment' => [
-            'master' => ['default'],
-            'slave' => ['default'],
-        ],
         'member' => [
             'master' => ['default'],
             'slave' => ['default'],
