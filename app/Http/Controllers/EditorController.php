@@ -206,6 +206,14 @@ class EditorController extends Controller
         $storage->download($file);
     }
 
+    /**
+     * file destory
+     *
+     * @param Storage $storage
+     * @param string  $instanceId
+     * @param string  $id
+     * @return RendererInterface
+     */
     public function fileDestroy(Storage $storage, $instanceId, $id)
     {
         if (empty($id) || !$file = File::find($id)) {
@@ -232,10 +240,9 @@ class EditorController extends Controller
      *
      * @param Request $request
      * @param TagHandler $tag
-     * @param string|null $id
      * @return mixed
      */
-    public function hashTag(Request $request, TagHandler $tag, $id = null)
+    public function hashTag(Request $request, TagHandler $tag)
     {
         $tags = $tag->similar($request->get('string'));
 
@@ -254,10 +261,9 @@ class EditorController extends Controller
      * 멘션 suggestion 리스트
      *
      * @param Request $request
-     * @param string|null $id
      * @return mixed
      */
-    public function mention(Request $request, $id = null)
+    public function mention(Request $request)
     {
         $suggestions = [];
 

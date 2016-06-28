@@ -728,10 +728,10 @@ Route::settings('editor', function () {
 });
 
 Route::group(['prefix' => 'editor'], function () {
-    Route::post('/file/{instanceId}/upload', ['as' => 'editor.file.upload', 'uses' => 'EditorController@fileUpload']);
-    Route::get('/file/{instanceId}/source/{id?}', ['as' => 'editor.file.source', 'uses' => 'EditorController@fileSource']);
-    Route::get('/file/{instanceId}/download/{id?}', ['as' => 'editor.file.download', 'uses' => 'EditorController@fileDownload']);
-    Route::post('/file/{instanceId}/destroy/{id?}', ['as' => 'editor.file.destroy', 'uses' => 'EditorController@fileDestroy']);
-    Route::get('/hashTag/{id?}', ['as' => 'editor.hashTag', 'uses' => 'EditorController@hashTag']);
-    Route::get('/mention/{id?}', ['as' => 'editor.mention', 'uses' => 'EditorController@mention']);
+    Route::post('file/{instanceId}/upload', ['as' => 'editor.file.upload', 'uses' => 'EditorController@fileUpload']);
+    Route::get('file/{instanceId}/source/{id?}', ['as' => 'editor.file.source', 'uses' => 'EditorController@fileSource']);
+    Route::get('file/{instanceId}/download/{id?}', ['as' => 'editor.file.download', 'uses' => 'EditorController@fileDownload']);
+    Route::post('file/{instanceId}/destroy/{id?}', ['as' => 'editor.file.destroy', 'uses' => 'EditorController@fileDestroy']);
+    Route::get('hashTag', ['as' => 'editor.hashTag', 'uses' => 'EditorController@hashTag']);
+    Route::get('mention', ['as' => 'editor.mention', 'uses' => 'EditorController@mention']);
 });
