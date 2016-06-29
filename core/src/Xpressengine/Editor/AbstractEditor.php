@@ -95,6 +95,13 @@ abstract class AbstractEditor implements ComponentInterface
     protected $arguments = [];
 
     /**
+     * Options for the editor
+     *
+     * @var null
+     */
+    protected $options = null;
+
+    /**
      * Used files
      *
      * @var array
@@ -296,14 +303,51 @@ abstract class AbstractEditor implements ComponentInterface
     }
 
     /**
+     * Get a editor name
+     *
+     * @return string
+     */
+    abstract public function getName();
+
+    /**
      * Get options
      *
      * @return array
      */
     public function getOptions()
     {
+        if (!$this->options) {
+            $this->options = $this->buildOptions();
+        }
+
+        return $this->options;
+    }
+
+    /**
+     * Build options
+     *
+     * @return array
+     */
+    protected function buildOptions()
+    {
+        $this->events->fire('xe.editor.option.building', $this);
+
+        $options = array_merge($this->getStaticOption(), $this->getDynamicOption());
+
+        $this->events->fire('xe.editor.option.builded', $this);
+
+        return $options;
+    }
+
+    /**
+     * Get static option data for the editor
+     * 
+     * @return array
+     */
+    protected function getStaticOption()
+    {
         $routeParam = ['instanceId' => $this->instanceId];
-        $options = [
+        return [
             'fileUpload' => [
                 'upload_url' => $this->urls->route('editor.file.upload', $routeParam),
                 'source_url' => $this->urls->route('editor.file.source', $routeParam),
@@ -335,16 +379,7 @@ abstract class AbstractEditor implements ComponentInterface
                 ],
             ]
         ];
-
-        return array_merge($options, $this->getDynamicOption());
     }
-
-    /**
-     * Get a editor name
-     *
-     * @return string
-     */
-    abstract public function getName();
 
     /**
      * Get dynamic option data for the editor

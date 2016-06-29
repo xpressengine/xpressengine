@@ -48,7 +48,7 @@ class EditorServiceProvider extends ServiceProvider
             return $images;
         });
 
-        $this->app['events']->listen('xe.editor.render', function ($editor) {
+        $this->app['events']->listen('xe.editor.option.building', function ($editor) {
             $key = $this->app['xe.editor']->getPermKey($editor->getInstanceId());
             if (!$this->app['xe.permission']->get($key)) {
                 $this->app['xe.permission']->register($key, new Grant);
