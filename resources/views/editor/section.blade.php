@@ -26,7 +26,7 @@
         <form method="post" action="{{ route('settings.editor.setting', $instanceId) }}">
             {{ csrf_field() }}
             <div class="form-group">
-                <label>{{xe_trans('xe:editorEdit')}}</label>
+                <label>{{xe_trans('xe::editorEdit')}}</label>
                 <select class="form-control" name="editorId">
                     @foreach($editors as $id => $class)
                         <option value="{{ $id }}" {{ $selected && $id === $selected->getId() ? 'selected' : '' }}>{{ $class::getComponentInfo('name') }}</option>
