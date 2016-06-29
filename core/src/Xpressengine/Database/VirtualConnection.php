@@ -67,7 +67,7 @@ class VirtualConnection implements VirtualConnectionInterface
     const TYPE_SLAVE = 'slave';
 
     /**
-     * default database connection neme (config/database.php 의 기본 connection 설정 이름)
+     * default database connection name (config/database.php 의 기본 connection 설정 이름)
      */
     const DEFAULT_CONNECTION_NAME = 'default';
 
