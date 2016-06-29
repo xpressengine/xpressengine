@@ -46,6 +46,10 @@ class Composer
         'xpressengine-plugin/comment' => '0.9.0',
         'xpressengine-plugin/page' => '0.9.0',
         'xpressengine-plugin/news_client' => '0.9.0',
+        "xpressengine-plugin/google_analytics" => "0.9.0",
+        "xpressengine-plugin/orientator" => "0.9.0",
+        "xpressengine-plugin/external_page" => "0.9.0",
+        "xpressengine-plugin/social_login" => "0.9.0",
     ];
 
     public static function init(CommandEvent $event)
