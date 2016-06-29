@@ -80,7 +80,10 @@
         $url .= '/' . $subdir;
     }
 
-    $locale = file_exists(getLangFilePath($_COOKIE['install_locale'])) ? $_COOKIE['install_locale'] : 'ko';
+    $locale = 'ko';
+    if (isset($_COOKIE['install_locale']) && file_exists(getLangFilePath($_COOKIE['install_locale'])) === true) {
+        $locale = $_COOKIE['install_locale'];
+    }
     $langs = require getLangFilePath($locale);
 
     function getLangFilePath($locale) {
