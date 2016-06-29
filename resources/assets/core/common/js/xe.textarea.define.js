@@ -109,6 +109,13 @@ XEeditor.define({
         },
         on: function (eventName, callback) {
             this.props.editor.on(eventName, callback);
+        },
+        reset: function() {
+            //contents 삭제
+            this.props.editor.val("").focus();
+
+            //input hidden 삭제
+            this.props.editor.nextAll(".paramWrap").remove();
         }
     }
 });

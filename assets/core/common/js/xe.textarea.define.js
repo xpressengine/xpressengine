@@ -38,8 +38,6 @@ XEeditor.define({
             }
 
             if(fontFamily || fontSize) {
-                var bodyStyle = "";
-
                 if(fontFamily && fontFamily.length > 0) {
                     editor.css('font-family', fontFamily.join(","));
                 }
@@ -68,7 +66,7 @@ XEeditor.define({
                 //tag, mention, files input삭제 후 생성
                 editor.nextAll(".paramWrap").remove();
                 editor.after("<div class='paramWrap'>");
-                $paramWrap = editor.nextAll(".paramWrap")
+                $paramWrap = editor.nextAll(".paramWrap");
 
                 //hashtag
                 if(tagLen > 0) {
@@ -111,6 +109,13 @@ XEeditor.define({
         },
         on: function (eventName, callback) {
             this.props.editor.on(eventName, callback);
+        },
+        reset: function() {
+            //contents 삭제
+            this.props.editor.val("").focus();
+
+            //input hidden 삭제
+            this.props.editor.nextAll(".paramWrap").remove();
         }
     }
 });

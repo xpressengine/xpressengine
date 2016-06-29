@@ -45,6 +45,9 @@
         },
         renderFileUploader: function(customOptions) {
             editorSet[this.editorName].interfaces.renderFileUploader.call(this.getInstance(), customOptions);
+        },
+        reset: function() {
+            editorSet[this.editorName].interfaces.reset.call(this.getInstance());
         }
     };
 
@@ -76,8 +79,6 @@
             var editorOptions = $.extend(this.configs || {}, editorOptions);
 
             if(Validation.isValidBeforeCreateInstance(sel, toolInfoList, this)) {
-                // this.editorList[sel] = new instanceObj(this.name, sel, editorOptions, toolInfoList);
-                // this.interfaces.initialize.call(this.editorList[sel], sel, options, editorOptions);
 
                 this.editorList[sel] = new instanceObj(this.name, sel, editorOptions, toolInfoList);
                 this.interfaces.initialize.call(this.editorList[sel], sel, options, editorOptions);
@@ -88,7 +89,6 @@
 
                     for(var i = 0, max = toolInfoList.length; i < max; i += 1) {
                         if(XEeditor.tools.get(toolInfoList[i].id)) {
-                            //tools.push(XEeditor.tools.get(toolInfoList[i].id));
                             tools[toolInfoList[i].id] = XEeditor.tools.get(toolInfoList[i].id);
                             toolInfoListFilter.push(toolInfoList[i]);
 
@@ -97,7 +97,6 @@
                         }
                     }
 
-                    // this.interfaces.addTools.call(this.editorList[sel], tools, toolInfoListFilter);
                     this.interfaces.addTools.call(this.editorList[sel], tools, toolInfoListFilter);
                 }
 
