@@ -310,6 +310,13 @@ abstract class AbstractEditor implements ComponentInterface
     abstract public function getName();
 
     /**
+     * Determine if a editor html usable.
+     *
+     * @return boolean
+     */
+    abstract public function htmlable();
+
+    /**
      * Get options
      *
      * @return array
@@ -471,12 +478,17 @@ abstract class AbstractEditor implements ComponentInterface
     /**
      * Compile the raw content to be useful
      *
-     * @param string $content content
+     * @param string $content  content
+     * @param bool   $htmlable content is htmlable
      * @return string
      */
-    public function compile($content)
+    public function compile($content, $htmlable = false)
     {
         $this->events->fire('xe.editor.compile', $this);
+
+        if ($htmlable !== true) {
+            $content = htmlspecialchars($content);
+        }
 
         $content = $this->hashTag($content);
         $content = $this->mention($content);

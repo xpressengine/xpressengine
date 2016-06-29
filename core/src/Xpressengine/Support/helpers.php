@@ -622,11 +622,12 @@ if (!function_exists('compile')) {
      *
      * @param string      $instanceId instance id
      * @param string      $content    content
-     * @param string|null $targetId target id
+     * @param bool        $htmlable   content is htmlable
+     * @param string|null $targetId   target id
      * @return string
      */
-    function compile($instanceId, $content, $targetId = null)
+    function compile($instanceId, $content, $htmlable = false, $targetId = null)
     {
-        return app('xe.editor')->compile($instanceId, $content, $targetId);
+        return app('xe.editor')->compile($instanceId, $content, $htmlable, $targetId);
     }
 }

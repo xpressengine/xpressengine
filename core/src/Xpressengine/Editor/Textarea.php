@@ -52,6 +52,16 @@ class Textarea extends AbstractEditor
     }
 
     /**
+     * Determine if a editor html usable.
+     *
+     * @return boolean
+     */
+    public function htmlable()
+    {
+        return false;
+    }
+
+    /**
      * Get the evaluated contents of the object.
      *
      * @return string

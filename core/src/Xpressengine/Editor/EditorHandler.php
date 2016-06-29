@@ -287,17 +287,18 @@ class EditorHandler
      *
      * @param string      $instanceId instance id
      * @param string      $content    content
+     * @param bool        $htmlable   content is htmlable
      * @param string|null $targetId   target id
      * @return string
      */
-    public function compile($instanceId, $content, $targetId = null)
+    public function compile($instanceId, $content, $htmlable = false, $targetId = null)
     {
         $editor = $this->get($instanceId);
         if ($targetId) {
             $editor->setFiles($this->getFiles($targetId));
         }
 
-        return $this->compileTools($instanceId, $editor->compile($content));
+        return $this->compileTools($instanceId, $editor->compile($content, $htmlable));
     }
 
     /**
