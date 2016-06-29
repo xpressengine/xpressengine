@@ -105,6 +105,22 @@ class EloquentRepository implements MenuRepository
     }
 
     /**
+     * Get menu items by identifier list
+     *
+     * @param array $ids  menu item identifier
+     * @param array $with relation
+     * @return MenuItem[]
+     */
+    public function fetchInItem(array $ids, $with = [])
+    {
+        $with = !is_array($with) ? [$with] : $with;
+
+        $model = $this->createItemModel();
+        
+        return $model->newQuery()->with($with)->whereIn($model->getKeyName(), $ids)->get();
+    }
+
+    /**
      * Insert menu
      *
      * @param Menu $menu menu instance

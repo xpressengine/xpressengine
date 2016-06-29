@@ -196,15 +196,12 @@ return [
     ],
     'database' => [
         'default' => [
-            'master' => ['default'],
             'slave' => ['default'],
         ],
         'document' => [
-            'master' => ['default'],
             'slave' => ['default'],
         ],
-        'member' => [
-            'master' => ['default'],
+        'user' => [
             'slave' => ['default'],
         ],
     ],
