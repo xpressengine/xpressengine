@@ -1,0 +1,3 @@
+{
+  "_readme": "Use this file for indivisual configuration for composer instead of composer.json. Before using this file, rename file name to 'composer.user.json'"
+}

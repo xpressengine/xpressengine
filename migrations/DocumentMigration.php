@@ -12,6 +12,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Schema\Builder;
 use Schema;
 use DB;
+use Xpressengine\Document\Models\Document;
 use Xpressengine\Support\Migration;
 
 class DocumentMigration implements Migration
@@ -96,18 +97,11 @@ class DocumentMigration implements Migration
         $table->integer('dissentCount')->default(0);
 
         // display contents config values
-        $table->enum('approved', array(
-            'approved', 'waiting', 'rejected',
-        ))->default('approved');
-        $table->enum('published', array(
-            'published', 'waiting', 'reserved', 'rejected',
-        ))->default('published');
-        $table->enum('status', array(
-            'public', 'temp', 'trash', 'private', 'notice',
-        ))->default('public');
-        $table->enum('display', array(
-            'visible', 'secret', 'hidden',
-        ))->default('visible');
+        $table->integer('approved')->default(Document::APPROVED_APPROVED);
+        $table->integer('published')->default(Document::PUBLISHED_PUBLISHED);
+        $table->integer('status')->default(Document::STATUS_PUBLIC);
+        $table->integer('display')->default(Document::DISPLAY_VISIBLE);
+        $table->integer('format')->default(Document::FORMAT_HTML);
 
         // search
         $table->string('locale', 255)->default('');
@@ -147,10 +141,9 @@ class DocumentMigration implements Migration
     /**
      * update
      *
-     * @param string $currentVersion version
-     * @return void
+     * @param string $installedVersion version
      */
-    public function update($currentVersion)
+    public function update($installedVersion = null)
     {
 
     }
@@ -160,17 +153,16 @@ class DocumentMigration implements Migration
      *
      * @return void
      */
-    public function checkInstall()
+    public function checkInstalled()
     {
     }
 
     /**
      * check update
      *
-     * @param string $currentVersion version
-     * @return void
+     * @param string $installedVersion version
      */
-    public function checkUpdate($currentVersion)
+    public function checkUpdated($installedVersion = null)
     {
     }
 }

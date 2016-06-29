@@ -585,7 +585,7 @@ class VirtualConnection implements VirtualConnectionInterface
             $cache->forget($table);
         }
 
-        $schema = $this->getSchemaBuilder()->getColumnListing($table);
+        $schema = $this->getConnection('master')->getSchemaBuilder()->getColumnListing($table);
         if (count($schema) === 0) {
             return false;
         }

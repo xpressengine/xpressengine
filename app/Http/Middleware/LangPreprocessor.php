@@ -9,9 +9,10 @@
 namespace App\Http\Middleware;
 
 use Auth;
-use Route;
+use Illuminate\Http\Response;
 use XeLang;
 use Closure;
+use Xpressengine\Http\Request;
 use Xpressengine\User\Rating;
 
 class LangPreprocessor
@@ -20,15 +21,20 @@ class LangPreprocessor
     private $mapSeqKey = [];
     private $mapSeqMultiLine = [];
 
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
         app('events')->listen('locale.changed', function($locale) {
             app('xe.translator')->setLocale($locale);
         });
-        $locale = $request->cookie('locale') ?: app('xe.translator')->getLocale();
+
+        // check locale at request & set locale
+        $locale = $request->get('_l');
+        if(!$locale) {
+            $locale = $request->cookie('locale', app('xe.translator')->getLocale());
+        }
         app()->setLocale($locale);
 
-        Route::matched(function($route, $request) use($locale) {
+        app('router')->matched(function($route, $request) use($locale) {
             $key = self::class.'://'.$request->method().'/'.$route->getPath().'/'.$locale;
             app('xe.translator')->setCurrentCacheKey($key);
         });
@@ -37,7 +43,11 @@ class LangPreprocessor
             $this->prepare($request);
         }
 
+        /** @var Response $response */
         $response = $next($request);
+
+        // set locale to cookie of response
+        // $response->withCookie(cookie()->forever('locale', $locale));
 
         if ($request->has('xe_use_request_preprocessor') && $this->available()) {
             $this->conduct($request);

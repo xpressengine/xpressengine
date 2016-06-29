@@ -296,3 +296,10 @@ address {
   font-style: normal;
   line-height: $line-height-base;
 }
+
+label{
+  small{
+    color: $gray-light;
+    font-size: 90%;
+  }
+}

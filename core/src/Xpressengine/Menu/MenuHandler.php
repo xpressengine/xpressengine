@@ -282,6 +282,11 @@ class MenuHandler
     {
         return $this->repo->findItem($id, $with);
     }
+    
+    public function getItemIn($ids, $with = [])
+    {
+        return $this->repo->fetchInItem((array)$ids, $with);
+    }
 
     /**
      * Create new menu item

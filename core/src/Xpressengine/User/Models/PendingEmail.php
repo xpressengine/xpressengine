@@ -30,6 +30,8 @@ class PendingEmail extends DynamicModel implements EmailInterface
 
     protected $table = 'user_pending_email';
 
+    protected $connection = 'user';
+
     /**
      * @var bool use dynamic query
      */

@@ -514,6 +514,11 @@ address {
   line-height: 1.43;
 }
 
+label small {
+  color: #777777;
+  font-size: 90%;
+}
+
 table {
   background-color: transparent;
 }

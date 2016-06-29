@@ -22,16 +22,16 @@ class DynamicFieldMigration implements Migration {
         \DB::table('config')->insert(['name' => 'dynamicField', 'vars' => '{"required":false,"sortable":false,"searchable":false,"use":true,"tableMethod":false}']);
     }
 
-    public function update($currentVersion)
+    public function update($installedVersion = null)
     {
 
     }
 
-    public function checkInstall()
+    public function checkInstalled()
     {
     }
 
-    public function checkUpdate($currentVersion)
+    public function checkUpdated($installedVersion = null)
     {
     }
 }

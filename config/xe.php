@@ -203,11 +203,7 @@ return [
             'master' => ['default'],
             'slave' => ['default'],
         ],
-        'comment' => [
-            'master' => ['default'],
-            'slave' => ['default'],
-        ],
-        'member' => [
+        'user' => [
             'master' => ['default'],
             'slave' => ['default'],
         ],
@@ -385,7 +381,7 @@ return [
         'api' => [
             'url' => 'https://xpressengine.io/plugins/api/1.0'
         ],
-        'packagist' => 'https://packagist.xpressengine.io'
+        'packagist' => 'https://xpressengine.io'
     ],
 
     'uiobject' => [

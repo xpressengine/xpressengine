@@ -15,6 +15,8 @@ use Redirect;
 use Symfony\Component\HttpFoundation\Response;
 use Xpressengine\Http\Request;
 use Xpressengine\Plugin\PluginHandler;
+use Xpressengine\Plugin\PluginProvider;
+use Xpressengine\Support\Exceptions\XpressengineException;
 
 class PluginController extends Controller
 {
@@ -27,7 +29,7 @@ class PluginController extends Controller
         XePresenter::setSettingsSkinTargetId('plugins');
     }
 
-    public function index(Request $request)
+    public function index(Request $request, PluginHandler $handler, PluginProvider $provider)
     {
         // filter input
         $field = [];
@@ -39,8 +41,10 @@ class PluginController extends Controller
             $field['keyword'] = null;
         }
 
-        $collection = XePlugin::getAllPlugins(true);
+        $collection = $handler->getAllPlugins(true);
         $plugins = $collection->fetch($field);
+
+        $provider->sync($plugins);
 
         $componentTypes = $this->getComponentTypes();
 
@@ -53,18 +57,24 @@ class PluginController extends Controller
         );
     }
 
-    public function show($pluginId, PluginHandler $handler)
+    public function show($pluginId, PluginHandler $handler, PluginProvider $provider)
     {
+        // refresh plugin cache
+        $handler->getAllPlugins(true);
+
         $componentTypes = $this->getComponentTypes();
 
         $plugin = $handler->getPlugin($pluginId);
+
+        $provider->sync($plugin);
+
         return XePresenter::make('show', compact('plugin', 'componentTypes'));
     }
 
-    public function postActivatePlugin($pluginId)
+    public function postActivatePlugin($pluginId, PluginHandler $handler)
     {
         try {
-            XePlugin::activatePlugin($pluginId);
+            $handler->activatePlugin($pluginId);
         } catch (XpressengineException $e) {
             throw new HttpException(Response::HTTP_FORBIDDEN, $e->getMessage(), $e);
         } catch (\Exception $e) {
@@ -74,10 +84,10 @@ class PluginController extends Controller
         return Redirect::route('settings.plugins')->withAlert(['type' => 'success', 'message' => '플러그인을 켰습니다.']);
     }
 
-    public function postDeactivatePlugin($pluginId)
+    public function postDeactivatePlugin($pluginId, PluginHandler $handler)
     {
         try {
-            XePlugin::deactivatePlugin($pluginId);
+            $handler->deactivatePlugin($pluginId);
         } catch (XpressengineException $e) {
             throw new HttpException(Response::HTTP_FORBIDDEN, $e->getMessage(), $e);
         } catch (\Exception $e) {
@@ -87,17 +97,18 @@ class PluginController extends Controller
         return Redirect::route('settings.plugins')->withAlert(['type' => 'success', 'message' => '플러그인을 껐습니다.']);
     }
 
-    public function postUpdatePlugin($pluginId)
+    public function postUpdatePlugin($pluginId, PluginHandler $handler)
     {
         try {
-            XePlugin::updatePlugin($pluginId);
+            $handler->updatePlugin($pluginId);
         } catch (XpressengineException $e) {
             throw new HttpException(Response::HTTP_FORBIDDEN, $e->getMessage(), $e);
         } catch (\Exception $e) {
             throw $e;
         }
 
-        return Redirect::route('settings.plugins')->withAlert(['type' => 'success', 'message' => '플러그인을 업데이트했습니다.']);
+        app('session.store')->flash('alert', ['type' => 'success', 'message' => '플러그인을 업데이트했습니다.']);
+        return XePresenter::makeApi(['type' => 'success', 'message' => '플러그인을 업데이트했습니다.']);
     }
 
     /**

@@ -41,10 +41,10 @@ use Illuminate\Database\Eloquent\Builder as OriginBuilder;
  * @property integer commentCount
  * @property integer assentCount
  * @property integer dissentCount
- * @property string approved
- * @property string published
- * @property string status
- * @property string display
+ * @property integer approved
+ * @property integer published
+ * @property integer status
+ * @property integer display
  * @property string locale
  * @property string title
  * @property string content
@@ -100,33 +100,36 @@ class Document extends DynamicModel
     protected static $replyCharLen = 3;
 
     // status
-    const STATUS_PUBLIC = 'public';
-    const STATUS_PRIVATE = 'private';
-    const STATUS_TEMP = 'temp';
-    const STATUS_TRASH = 'trash';
-    const STATUS_NOTICE = 'notice';
+    const STATUS_TRASH = 0;
+    const STATUS_TEMP = 10;
+    const STATUS_PRIVATE = 20;
+    const STATUS_PUBLIC = 30;
+    const STATUS_NOTICE = 50;
 
     // approved
-    const APPROVED_APPROVED = 'approved';
-    const APPROVED_WAITING = 'waiting';
-    const APPROVED_REJECTED = 'rejected';
+    const APPROVED_REJECTED = 0;
+    const APPROVED_WAITING = 10;
+    const APPROVED_APPROVED = 30;
 
     // published
-    const PUBLISHED_PUBLISHED = 'published';
-    const PUBLISHED_RESERVED = 'reserved';
-    const PUBLISHED_WAITING = 'waiting';
-    const PUBLISHED_REJECTED = 'rejected';
+    const PUBLISHED_REJECTED = 0;
+    const PUBLISHED_WAITING = 10;
+    const PUBLISHED_RESERVED = 20;
+    const PUBLISHED_PUBLISHED = 30;
 
     // display
-    const DISPLAY_VISIBLE = 'visible';
-    const DISPLAY_SECRET = 'secret';
-    const DISPLAY_HIDDEN = 'hidden';
+    const DISPLAY_HIDDEN = 0;
+    const DISPLAY_SECRET = 10;
+    const DISPLAY_VISIBLE = 20;
+
+    const FORMAT_NONE = 0;
+    const FORMAT_HTML = 10;
 
     // user type
+    const USER_TYPE_GUEST = 'guest';
+    const USER_TYPE_ANONYMITY = 'anonymity';
     const USER_TYPE_NORMAL = 'normal';
     const USER_TYPE_USER = 'user';
-    const USER_TYPE_ANONYMITY = 'anonymity';
-    const USER_TYPE_GUEST = 'guest';
 
     /**
      * @var array

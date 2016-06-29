@@ -130,6 +130,25 @@ class CacheDecorator implements MenuRepository
     }
 
     /**
+     * Get menu items by identifier list
+     *
+     * @param array $ids  menu item identifier
+     * @param array $with relation
+     * @return MenuItem[]
+     */
+    public function fetchInItem(array $ids, $with = [])
+    {
+        $items = $this->repo->fetchInItem($ids, $with);
+
+        foreach ($items as $item) {
+            $key = $this->getItemCacheKey($item->getKey());
+            $this->cache->put($key, $item);
+        }
+
+        return $items;
+    }
+
+    /**
      * Insert menu
      *
      * @param Menu $menu menu instance

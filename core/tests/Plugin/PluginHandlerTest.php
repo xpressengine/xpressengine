@@ -39,6 +39,7 @@ class PluginHandlerTest extends \PHPUnit_Framework_TestCase
         /** @var Mockery\MockInterface $plugins */
         $plugins = $this->makeCollection();
         $plugins->shouldReceive('initialize')->with(true)->once()->andReturnNull();
+        $plugins->shouldReceive('getList')->withNoArgs()->once()->andReturn([]);
 
         $handler = $this->getHandler(null, $plugins);
         $this->assertInstanceOf(PluginCollection::class, $handler->getAllPlugins(true));
@@ -113,18 +114,19 @@ class PluginHandlerTest extends \PHPUnit_Framework_TestCase
         $plugins = $this->makeCollection();
 
         $plugin = Mockery::mock('\Xpressengine\Plugin\AbstractPlugin');
-        $plugin->shouldReceive('activate')->once()->andReturnNull();
 
         $entity = $this->makeEntity();
         $entity->shouldReceive('getStatus')->once()->withNoArgs()->andReturn(PluginHandler::STATUS_DEACTIVATED);
         $entity->shouldReceive('setStatus')->once()->withArgs(['activated'])->andReturnNull();
-        $entity->shouldReceive('getObject')->once()->withNoArgs()->andReturn($plugin);
-        $entity->shouldReceive('getVersion')->once()->withNoArgs()->andReturn('1.0');
-        $entity->shouldReceive('getInstalledVersion')->once()->withNoArgs()->andReturn('0.9');
-        $entity->shouldReceive('checkInstalled')->once()->withNoArgs()->andReturn(true);
-        $entity->shouldReceive('checkUpdated')->once()->withNoArgs()->andReturn(true);
+        $entity->shouldReceive('setInstalledVersion')->once()->with('1.0')->andReturnNull();
+        $entity->shouldReceive('getObject')->withNoArgs()->andReturn($plugin);
+        $entity->shouldReceive('getVersion')->withNoArgs()->andReturn('1.0');
+        $entity->shouldReceive('getInstalledVersion')->withNoArgs()->andReturn('0.9');
+        $entity->shouldReceive('checkInstalled')->with('0.9')->andReturn(true);
+        $entity->shouldReceive('checkUpdated')->with('0.9')->andReturn(true);
+        $entity->shouldReceive('activate')->with('0.9')->andReturn(true);
 
-        $plugins->shouldReceive('get')->with($pluginId)->once()->andReturn($entity);
+        $plugins->shouldReceive('get')->with($pluginId)->andReturn($entity);
 
         $handler = $this->getHandler(null, $plugins);
         $config = $this->setConfig($handler);
@@ -173,16 +175,19 @@ class PluginHandlerTest extends \PHPUnit_Framework_TestCase
         $entity->shouldReceive('setStatus')->once()->withArgs(['deactivated'])->andReturn();
         $entity->shouldReceive('getDependencies')->once()->withNoArgs()->andReturn([]);
         $entity->shouldReceive('getObject')->once()->withNoArgs()->andReturn($plugin);
-        $entity->shouldReceive('getVersion')->once()->withNoArgs()->andReturn('1.0');
+        $entity->shouldReceive('getInstalledVersion')->withNoArgs()->andReturn('0.9');
+
 
         $plugins->shouldReceive('get')->with($pluginId)->once()->andReturn($entity);
         $plugins->shouldReceive('fetchByStatus')->with(PluginHandler::STATUS_ACTIVATED)->once()->andReturn([$entity]);
 
         $handler = $this->getHandler(null, $plugins);
         $config = $this->setConfig($handler);
-        $config->shouldReceive('getVal')->with('plugin.list', [])->once()->andReturn([
-           $pluginId => []
-        ]);
+        $config->shouldReceive('getVal')->with('plugin.list', [])->once()->andReturn(
+            [
+                $pluginId => []
+            ]
+        );
         $config->shouldReceive('setVal')->withAnyArgs()->once()->andReturnNull();
 
         $handler->deactivatePlugin($pluginId);
@@ -236,21 +241,26 @@ class PluginHandlerTest extends \PHPUnit_Framework_TestCase
         return Mockery::mock('\Xpressengine\Plugin\PluginEntity');
     }
 
+    private function makeProvider()
+    {
+        return Mockery::mock(\Xpressengine\Plugin\PluginProvider::class);
+    }
+
     private function setConfig($handler)
     {
-
         $config = Mockery::mock('\Xpressengine\Config\ConfigManager');
         $handler->setConfig($config);
         return $config;
     }
 
-    private function getHandler($dir = null, $plugins = null, $factory = null, $register = null, $app = null)
+    private function getHandler($dir = null, $plugins = null, $provider = null, $factory = null, $register = null, $app = null)
     {
         if($dir === null) $dir = __DIR__.'/plugins';
         if($plugins === null) $plugins = $this->makeCollection();
+        if($provider === null) $provider = $this->makeProvider();
         if($factory === null) $factory = $this->makeViewFactory();
         if($register === null) $register = $this->makeRegister();
         if($app === null) $app = $this->makeApp();
-        return new PluginHandler($dir, $plugins, $factory, $register, $app);
+        return new PluginHandler($dir, $plugins, $provider, $factory, $register, $app);
     }
 }

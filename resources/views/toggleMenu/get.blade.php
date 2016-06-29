@@ -1,3 +1,6 @@
+<script type="text/javascript">
+    {!! XeFrontend::output('translation') !!}
+</script>
 @foreach($items as $item)
     @if($item['script'] != null){{ XeFrontend::js($item['script'])->loadAsync() }}@endif
     {{--raw, func type 처리 해야 함--}}
