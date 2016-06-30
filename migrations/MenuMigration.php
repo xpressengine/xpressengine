@@ -133,7 +133,7 @@ class MenuMigration implements Migration {
             'url' => 'home',
             'description' => 'home',
             'target' => '',
-            'type' => 'module/page@page',
+            'type' => 'page@page',
             'ordering' => '1',
             'activated' => '1',
         ];
@@ -190,7 +190,7 @@ class MenuMigration implements Migration {
             'url' => 'board1',
             'description' => 'board1',
             'target' => '',
-            'type' => 'module/board@board',
+            'type' => 'board@board',
             'ordering' => '1',
             'activated' => '1',
         ];
