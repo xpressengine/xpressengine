@@ -128,8 +128,12 @@ class Composer
 
     private static function isUpdateMode(CommandEvent $event)
     {
-        $packages = $event->getInput()->getArgument('packages');
-        $packages = array_shift($packages);
-        return ($packages && strpos($packages, 'xpressengine-plugin') === 0);
+        if($event->getInput()->hasArgument('packages')) {
+            $packages = $event->getInput()->getArgument('packages');
+            $packages = array_shift($packages);
+            return ($packages && strpos($packages, 'xpressengine-plugin') === 0);
+        } else {
+            return false;
+        }
     }
 }
