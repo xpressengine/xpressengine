@@ -24,7 +24,7 @@
                 <li>
                     <a href="#" data-toggle="dropdown" aria-expanded="true">
                         <div>
-                            <span class="flag-code"><i class="{{XeLang::getLocale()}} flag"></i>{{XeLang::getLocale()}}</span>
+                            <span class="flag-code"><i class="{{XeLang::getLocale()}} xe-flag"></i>{{XeLang::getLocale()}}</span>
                         </div>
                     </a>
                     <div class="transition dropdown-menu">

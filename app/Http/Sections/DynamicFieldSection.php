@@ -111,7 +111,7 @@ class DynamicFieldSection extends Section
         XeFrontend::js('/assets/vendor/expanding/expanding.js')->appendTo('head')->load();
         XeFrontend::js('/assets/core/lang/LangEditorBox.bundle.js')->appendTo('head')->load();
         XeFrontend::css('/assets/core/lang/LangEditorBox.css')->load();
-        XeFrontend::css('/assets/core/lang/flag.css')->load();
+        XeFrontend::css('/assets/core/xe-ui-component/xe-ui-component.css')->load();
 
         return View::make('dynamicField.setting', [
             'databaseName' => $this->conn->getName(),
