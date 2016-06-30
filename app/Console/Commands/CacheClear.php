@@ -31,21 +31,21 @@ use Illuminate\Cache\Console\ClearCommand;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class XeCacheClear extends ClearCommand
+class CacheClear extends ClearCommand
 {
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $name = 'xeCache:clear';
+    protected $name = 'cache:clear-xe';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'XE 에서 추가된 모든 Cache store 를 삭제합니다.';
+    protected $description = 'Remove XE cache files';
 
     /**
      * Execute the console command.
