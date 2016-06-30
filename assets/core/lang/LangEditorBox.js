@@ -120,7 +120,7 @@ var LangEditor = React.createClass({
         <div key={locale} className="input-group">
           {self.getEditor(resource, locale, value)}
                 <span className="input-group-addon">
-                <span className="flag-code"><i className={locale + ' flag'}></i>{locale}</span>
+                <span className="flag-code"><i className={locale + ' xe-flag'}></i>{locale}</span>
                 </span>
         </div>
         <div className="sub">
@@ -130,7 +130,7 @@ var LangEditor = React.createClass({
               <div key={locale} className="input-group">
                 {self.getEditor(resource, locale, value)}
                     <span className="input-group-addon">
-                    <span className="flag-code"><i className={locale + ' flag'}></i>{locale}</span>
+                    <span className="flag-code"><i className={locale + ' xe-flag'}></i>{locale}</span>
                     </span>
               </div>
             );

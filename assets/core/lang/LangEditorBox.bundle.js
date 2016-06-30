@@ -144,12 +144,12 @@ $__System.registerDynamic("1", [], true, function($__require, exports, module) {
       }), React.createElement("div", {
         key: locale,
         className: "input-group"
-      }, self.getEditor(resource, locale, value), React.createElement("span", {className: "input-group-addon"}, React.createElement("span", {className: "flag-code"}, React.createElement("i", {className: locale + ' flag'}), locale))), React.createElement("div", {className: "sub"}, fallback.map(function(locale, i) {
+      }, self.getEditor(resource, locale, value), React.createElement("span", {className: "input-group-addon"}, React.createElement("span", {className: "flag-code"}, React.createElement("i", {className: locale + ' xe-flag'}), locale))), React.createElement("div", {className: "sub"}, fallback.map(function(locale, i) {
         var value = self.getValueFromLinesWithLocale(locale);
         return (React.createElement("div", {
           key: locale,
           className: "input-group"
-        }, self.getEditor(resource, locale, value), React.createElement("span", {className: "input-group-addon"}, React.createElement("span", {className: "flag-code"}, React.createElement("i", {className: locale + ' flag'}), locale))));
+        }, self.getEditor(resource, locale, value), React.createElement("span", {className: "input-group-addon"}, React.createElement("span", {className: "flag-code"}, React.createElement("i", {className: locale + ' xe-flag'}), locale))));
       }))));
     }
   });
