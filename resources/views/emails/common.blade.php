@@ -1,14 +1,14 @@
-<table class="table1" border="0" cellpadding="0" cellspacing="0" align="center" style="width:100%;background:#F1F6FB">
+<table border="0" cellpadding="0" cellspacing="0" align="center" style="width:100%;background:#F1F6FB">
     <tr>
         <td align="center">
             <!-- 아웃룩용 max-width 핵 -->
             <!--[if (gte mso 9)|(IE)]>
-            <table class="table2" border="0" cellpadding="0" cellspacing="0">
+            <table border="0" cellpadding="0" cellspacing="0">
                 <tr>
                     <td width="600">
             <![endif]-->
             <div style="max-width:600px;margin:0 auto">
-                <table class="table3" cellpadding="0" cellspacing="0" style="width:100%;margin:0 auto;background-color:#F1F6FB;-webkit-text-size-adjust:100%;text-align:left">
+                <table cellpadding="0" cellspacing="0" style="width:100%;margin:0 auto;background-color:#F1F6FB;-webkit-text-size-adjust:100%;text-align:left">
                     <tbody>
                     <tr>
                         <td height="50"></td>
@@ -25,7 +25,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <table class="table4" cellpadding="0" cellspacing="0" style="width:100%;margin:0 auto;background-color:#fff;-webkit-text-size-adjust:100%;text-align:left;color:#2c2e37">
+                            <table cellpadding="0" cellspacing="0" style="width:100%;margin:0 auto;background-color:#fff;-webkit-text-size-adjust:100%;text-align:left;color:#2c2e37">
                                 <tbody>
                                 <tr>
                                     <td height="35"></td>

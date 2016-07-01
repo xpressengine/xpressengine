@@ -1,7 +1,7 @@
 @extends('emails.common')
 
 @section('content')
-    <table class="table5" cellpadding="0" cellspacing="0" style="width:100%;margin:0 auto;background-color:#fff;-webkit-text-size-adjust:100%;text-align:left">
+    <table cellpadding="0" cellspacing="0" style="width:100%;margin:0 auto;background-color:#fff;-webkit-text-size-adjust:100%;text-align:left">
         <tbody>
 
         <tr>
