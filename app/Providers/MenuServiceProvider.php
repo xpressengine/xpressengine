@@ -51,11 +51,11 @@ class MenuServiceProvider extends ServiceProvider
     {
         $pluginRegister = $this->app['xe.pluginRegister'];
 
-        $pluginRegister->add(MenuList::class);
+//        $pluginRegister->add(MenuList::class);
         $pluginRegister->add(MenuType::class);
         $pluginRegister->add(TypeSelect::class);
-        $pluginRegister->add(MenuSelector::class);
-        $pluginRegister->add(MenuThemeList::class);
+//        $pluginRegister->add(MenuSelector::class);
+//        $pluginRegister->add(MenuThemeList::class);
         $pluginRegister->add(DirectLink::class);
 
         foreach ($this->policies as $class => $policy) {
