@@ -49,7 +49,7 @@ if (function_exists('json_dec') === false) {
 
 if (function_exists('json_format') === false) {
     /**
-     * 
+     *
      *
      * @param  string $json
      * @param  bool   $unescapeUnicode Un escape unicode
@@ -210,7 +210,7 @@ if (function_exists('xe_trans') === false) {
         }
 
         try {
-            return app('xe.translator')->trans($id, $parameters, $domain, $locale);
+            return new \Illuminate\View\Expression(app('xe.translator')->trans($id, $parameters, $domain, $locale));
         } catch (Exception $e) {
             return $id;
         }
