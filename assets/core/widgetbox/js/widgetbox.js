@@ -20,7 +20,16 @@
             selectColumn: function(e) {
                 e.stopPropagation();
 
+                $(".selected").removeClass("selected");
                 $(this).toggleClass("selected");
+            },
+            setOrdering: function() {
+                $(".widgetarea").find(".order").each(function(i, ele) {
+                    $(ele).text(i);
+                });
+            },
+            deselectAll: function() {
+                $(".selected").removeClass("selected");
             }
         };
     })();

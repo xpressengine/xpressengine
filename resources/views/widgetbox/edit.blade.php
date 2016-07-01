@@ -1,6 +1,7 @@
+{{ XeFrontend::js('/assets/core/widgetbox/js/widgetbox.js')->appendTo("head")->load() }}
 {{ XeFrontend::js('/assets/core/widgetbox/js/widgetboxSnb.js')->appendTo("head")->load() }}
 {{ XeFrontend::js('/assets/core/widgetbox/js/widgetAdder.js')->appendTo("head")->load() }}
-{{ XeFrontend::js('/assets/core/widgetbox/js/widgetbox.js')->appendTo("head")->load() }}
+
 {{ XeFrontend::css('http://cdn.jsdelivr.net/xeicon/2.0.0/xeicon.min.css')->load() }}
 {{ XeFrontend::css('/assets/core/widgetbox/css/widgetbox.css')->load() }}
 
@@ -74,7 +75,7 @@
                         </div>
                     </div>
 
-                    <button type="button" class="xe-btn xe-btn-sm xe-btn-primary-outline">셀추가</button>
+                    <button type="button" class="xe-btn xe-btn-sm xe-btn-primary-outline" id="btnAddRow">셀추가</button>
                 </div>
                 <div class="xe-form-inline">
                     <div class="xe-form-group">
@@ -127,7 +128,7 @@
                 </div>
                 <div>
                     <button type="button" class="xe-btn xe-btn-sm btnDivision" data-direction="horizontal"><span class="text-horizontal">수평분할</span></button>
-                    <button type="button" class="xe-btn xe-btn-sm">선택 취소</button>
+                    <button type="button" class="xe-btn xe-btn-sm" id="btnDeselectAll">선택 취소</button>
                     <button type="button" class="xe-btn xe-btn-sm">삭제</button>
                 </div>
             </div>
@@ -142,82 +143,14 @@
             <h3>편집 영역 <i class="xi-question-o" data-toggle="xe-tooltip" data-placement="bottom" title="각 셀에 출력되는 번호는 셀이 출력되는 순서입니다. 생성된 위젯은 drag &amp; drop 으로 순서를 변경하거나  다른셀로 이동이 가능합니다.셀을 클릭하여 선택하거나 삭제가 가능합니다."></i></h3>
             <!-- editor area -->
             <div class="editor xe-container-fluid">
-                <div class="xe-row">
-
+                <div class="xe-row widgetarea-row">
                     <div class="xe-col-md-12">
-                        <div class="xe-row widgetarea-row">
-                            <div class="xe-col-md-12">
-                                <div class="widgetarea">
-                                    <span class="order">0</span>
-                                    <div class="xe-row"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--
-                    <div class="xe-col-md-6">
-                        <div class="xe-row widgetarea-row">
-                            <div class="xe-col-md-12">
-                                <div class="widgetarea"><span class="order">0</span>
-                                    <div class="xe-row"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="xe-col-md-6">
-                        <div class="xe-row widgetarea-row">
-                            <div class="xe-col-md-12">
-                                <div class="widgetarea"><span class="order">1</span>
-                                    <div class="xe-row"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    -->
-
-                </div>
-
-                <!--
-                <div class="xe-row">
-                    <div class="xe-col-md-4">
-                        <div class="xe-row widgetarea-row">
-                            <div class="xe-col-md-12">
-                                <div class="widgetarea"><span class="order">2</span>
-                                    <div class="xe-row"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="xe-col-md-4">
-                        <div class="xe-row widgetarea-row">
-                            <div class="xe-col-md-12">
-                                <div class="widgetarea"><span class="order">3</span>
-                                    <div class="xe-row"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="xe-col-md-4">
-                        <div class="xe-row widgetarea-row">
-                            <div class="xe-col-md-12 selected">
-                                <div class="widgetarea"><span class="order">4</span>
-                                    <div class="xe-row">
-                                        <div class="xe-col-md-12">
-                                            <div class="xe-well widget">
-                                                <strong>위젯1</strong>
-                                                <div class="xe-pull-right widget-config-btn">
-                                                    <a href="#" class="xe-btn xe-btn-link"><i class="xi-cog"></i></a>
-                                                    <button type="button" class="xe-btn xe-btn-link"><i class="xi-trash"></i></button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="widgetarea">
+                            <span class="order">0</span>
+                            {{--<div class="xe-row"></div>--}}
                         </div>
                     </div>
                 </div>
-                -->
             </div>
             <!-- editor area -->
         </div>
@@ -348,9 +281,9 @@
             $("body").css("overflow", "");
         });
 
-
+        WidgetBox.init();
         WidgetSnb.init();
         WidgetAdder.init();
-        WidgetBox.init();
+
     });
 </script>
