@@ -733,10 +733,6 @@ return [
         'ko' => '회원 목록',
         'en' => 'Member list',
     ],
-    'editMember' => [
-        'ko' => '회원 수정',
-        'en' => 'Member edit',
-    ],
     'joinSettings' => [
         'ko' => '가입 설정',
         'en' => 'Join settings',
@@ -1227,6 +1223,10 @@ return [
         'ko' => '회원가입을 완료하려면 이메일 인증을 해야 합니다. :email 을 확인하신후, 인증 코드를 입력해주세요.',
         'en' => 'To complete your membership you need to email authentication, please check the :email , please enter your authorization code.'
     ],
+    'msgEmailConfirm' => [
+        'ko' => '<p>저희 사이트에 가입해주셔서 감사합니다.</p><p>요청하신 회원가입을 완료하기 위한 인증번호입니다.<br>인증페이지에서 아래의 인증번호를 입력하거나, 인증버튼을 누르면 인증이 완료됩니다.</p>',
+        'en' => '<p>Welcome to join.</p><p>To complete finishing sign up, input below confirmation code to confirmation page or click below button.</p>'
+    ],
     'confirmCode' => [
         'ko' => '인증 코드',
         'en' => 'Confirm code',
@@ -1328,7 +1328,11 @@ return [
         'ko' => '높음',
         'en' => 'strong'
     ],
-    'moveAndResetPassword' => [
+    'resetPassword' => [
+        'ko' => '비밀번호 재설정',
+        'en' => 'Password Resetting'
+    ],
+    'msgResetPassword' => [
         'ko' => '이 링크로 이동하여 비밀번호를 재설정하세요.',
         'en' => 'Go to this link to reset your password.'
     ],
