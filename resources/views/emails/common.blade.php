@@ -35,7 +35,9 @@
                                         &nbsp;
                                     </td>
                                     <td>
-                                        @yield('content')
+                                        @section('content')
+                                            {!! $content or '' !!}
+                                        @show
                                     </td>
                                     <td style="width: 40px;line-height: 0;font-size: 0;background-color:#fff;">
                                         &nbsp;
