@@ -80,11 +80,31 @@
         $url .= '/' . $subdir;
     }
 
+    $supportLocales = getAllLangFileNames();
+    $allLangs = [];
+    foreach ($supportLocales as $locale) {
+        $allLangs[$locale] = require getLangFilePath($locale);
+    }
+
     $locale = 'ko';
     if (isset($_COOKIE['install_locale']) && file_exists(getLangFilePath($_COOKIE['install_locale'])) === true) {
         $locale = $_COOKIE['install_locale'];
     }
-    $langs = require getLangFilePath($locale);
+    $langs = $allLangs[$locale];
+
+    function getAllLangFileNames()
+    {
+        $names = [];
+        foreach (scandir('lang') as $name) {
+            $parts = pathinfo($name);
+            if ($parts['extension'] != 'php') {
+                continue;
+            }
+
+            $names[] = $parts['filename'];
+        }
+        return $names;
+    }
 
     function getLangFilePath($locale) {
         return 'lang' . DIRECTORY_SEPARATOR . $locale . '.php';
@@ -148,8 +168,13 @@
             <div class="xe-dropdown">
                 <button class="xe-btn" type="button" data-toggle="xe-dropdown">Language</button>
                 <ul class="xe-dropdown-menu">
-                    <li><a href="#" class="__xe_locale_item" data-locale="ko"><i class="south korea xe-flag"></i>korea</a></li>
-                    <li><a href="#" class="__xe_locale_item" data-locale="en"><i class="united states xe-flag"></i>United States</a></li>
+                    <?php
+                    foreach ($allLangs as $key => $value) {
+                    ?>
+                    <li><a href="#" class="__xe_locale_item" data-locale="<?=$key?>"><i class="country-code"></i><?=$value['localeExpression']?></a></li>
+                    <?php
+                    }
+                    ?>
                 </ul>
             </div>
 
