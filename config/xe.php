@@ -13,8 +13,8 @@ return [
     'lang' => [
         'locales' => ['ko', 'en'],
         'localeTexts' => [
-            'ko' => '대한민국',
-            'en' => 'U.S.',
+            'ko' => '한국어',
+            'en' => 'English',
         ],
         'autocomplete' => false,
     ],

@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'localeExpression' => '한국어',
     'checkForInstall' => 'XE 설치를 위해 현재 서버의 상태를 체크합니다.',
 
     'systemCheck' => '시스템 검사',
