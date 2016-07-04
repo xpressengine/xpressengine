@@ -21,7 +21,7 @@ var PermissionInclude = React.createClass({
         handleMemberDelete: React.PropTypes.func.isRequired,
         handleAddition: React.PropTypes.func.isRequired
     },
-    getDefaultProps() {
+    getDefaultProps: function () {
         return {
             placeholder: 'Input group or member',
             selectedGroup: [],
@@ -30,9 +30,9 @@ var PermissionInclude = React.createClass({
             memberSuggestions: []
         };
     },
-    componentDidMount() {
+    componentDidMount: function () {
     },
-    getInitialState() {
+    getInitialState: function () {
         return {
             suggestions: [],
             groupSuggestions: [],
@@ -43,15 +43,15 @@ var PermissionInclude = React.createClass({
             searchingCnt : 0
         };
     },
-    handleGroupDelete(i, e) {
+    handleGroupDelete: function (i, e) {
         this.props.handleGroupDelete(i);
         this.setState({ query: '' });
     },
-    handleMemberDelete(i, e) {
+    handleMemberDelete: function (i, e) {
         this.props.handleMemberDelete(i);
         this.setState({ query: '' });
     },
-    handleChange(e)
+    handleChange: function (e)
     {
         var query = e.target.value.trim();
 
@@ -81,7 +81,7 @@ var PermissionInclude = React.createClass({
             });
         }
     },
-    searchMember(keyword) {
+    searchMember: function (keyword) {
 
         var searchMemberUrl = this.props.searchMemberUrl;
         var self = this;
@@ -119,7 +119,7 @@ var PermissionInclude = React.createClass({
 
     },
 
-    searchGroup(keyword) {
+    searchGroup: function (keyword) {
 
         var searchGroupUrl = this.props.searchGroupUrl;
         var self = this;
@@ -157,7 +157,7 @@ var PermissionInclude = React.createClass({
 
     },
 
-    handleKeyDown: function handleKeyDown(e) {
+    handleKeyDown: function(e) {
         var _state = this.state;
         var query = _state.query;
         var selectedIndex = _state.selectedIndex;
@@ -215,7 +215,7 @@ var PermissionInclude = React.createClass({
             });
         }
     },
-    addTag(tag) {
+    addTag: function (tag) {
         var input = this.refs.input.getDOMNode();
 
         // call method to add
@@ -232,17 +232,17 @@ var PermissionInclude = React.createClass({
         input.value = '';
         input.focus();
     },
-    handleSuggestionClick: function handleSuggestionClick(i, e) {
+    handleSuggestionClick: function(i, e) {
         this.addTag(this.state.suggestions[i]);
     },
-    handleSuggestionHover: function handleSuggestionHover(i, e) {
+    handleSuggestionHover: function(i, e) {
         this.setState({
             selectedIndex: i,
             selectionMode: true
         });
     },
 
-    render: function render() {
+    render: function() {
         var groupPrefix = "%";
         var memberPrefix = "@";
 

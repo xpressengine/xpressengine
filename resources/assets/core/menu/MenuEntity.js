@@ -7,13 +7,13 @@ var MenuEntity = React.createClass({
     getBaseUrl: React.PropTypes.func
   },
 
-  handleCollapse(e) {
+  handleCollapse: function (e) {
     e.stopPropagation();
     var nodeId = this.props.index.id;
     if (this.props.onCollapse) this.props.onCollapse(nodeId);
   },
 
-  render() {
+  render: function () {
     var index = this.props.index;
     var node = index.node;
     var nodeUrl = this.props.getBaseUrl() + '/menus/' + node.id;

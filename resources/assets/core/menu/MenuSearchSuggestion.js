@@ -10,7 +10,7 @@ var MenuSearchSuggestion = React.createClass({
     suggestions: React.PropTypes.array,
     selectedIndex: React.PropTypes.number
   },
-  markIt(item, query) {
+  markIt: function (item, query) {
 
     var escapedRegex = query.trim().replace(/[-\\^$*+?.()|[\]{}]/g, "\\$&");
     var r = RegExp(escapedRegex, "gi");
@@ -27,7 +27,7 @@ var MenuSearchSuggestion = React.createClass({
     return (node.entity && (node.entity == 'menu'));
   },
 
-  render() {
+  render: function () {
 
     var props = this.props;
     var suggestions = this.props.suggestions.map((function (item, i) {

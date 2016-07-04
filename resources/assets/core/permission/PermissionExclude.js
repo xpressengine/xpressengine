@@ -17,16 +17,16 @@ var PermissionExclude = React.createClass({
         handleDelete: React.PropTypes.func.isRequired,
         handleAddition: React.PropTypes.func.isRequired
     },
-    getDefaultProps() {
+    getDefaultProps: function () {
         return {
             placeholder: 'Input member',
             selectedMember: [],
             suggestions: []
         };
     },
-    componentDidMount() {
+    componentDidMount: function () {
     },
-    getInitialState() {
+    getInitialState: function () {
         return {
             suggestions: [],
             query: '',
@@ -35,11 +35,11 @@ var PermissionExclude = React.createClass({
             searchingCnt: 0
         };
     },
-    handleDelete(i, e) {
+    handleDelete: function (i, e) {
         this.props.handleDelete(i);
         this.setState({query: ''});
     },
-    handleChange(e)
+    handleChange: function (e)
     {
         var query = e.target.value.trim();
 
@@ -62,7 +62,7 @@ var PermissionExclude = React.createClass({
         }
     },
 
-    searchMember(keyword) {
+    searchMember: function (keyword) {
 
         var searchMemberUrl = this.props.searchMemberUrl;
         var self = this;
@@ -100,7 +100,7 @@ var PermissionExclude = React.createClass({
 
     },
 
-    handleKeyDown: function handleKeyDown(e) {
+    handleKeyDown: function(e) {
         var _state = this.state;
         var query = _state.query;
         var selectedIndex = _state.selectedIndex;
@@ -156,7 +156,7 @@ var PermissionExclude = React.createClass({
             });
         }
     },
-    addTag(tag) {
+    addTag: function (tag) {
         var input = this.refs.input.getDOMNode();
 
         // call method to add
@@ -173,17 +173,17 @@ var PermissionExclude = React.createClass({
         input.value = '';
         input.focus();
     },
-    handleSuggestionClick: function handleSuggestionClick(i, e) {
+    handleSuggestionClick: function(i, e) {
         this.addTag(this.state.suggestions[i]);
     },
-    handleSuggestionHover: function handleSuggestionHover(i, e) {
+    handleSuggestionHover: function(i, e) {
         this.setState({
             selectedIndex: i,
             selectionMode: true
         });
     },
 
-    render: function render() {
+    render: function() {
 
         var prefix = '@';
         var tagItems = this.props.selectedMember.map((function (tag, i) {

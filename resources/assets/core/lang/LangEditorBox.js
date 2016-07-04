@@ -1,5 +1,5 @@
 var LangEditorBox = React.createClass({
-  getDefaultProps() {
+  getDefaultProps: function () {
     return {
       name: '',
       langKey: '',

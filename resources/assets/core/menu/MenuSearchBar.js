@@ -41,7 +41,7 @@ var MenuSearchBar = React.createClass({
     }
   },
 
-  searchMenu(keyword) {
+  searchMenu: function (keyword) {
     var self = this;
     var searchingCnt = this.state.searchingCnt + 1;
     var suggestions;
@@ -137,7 +137,7 @@ var MenuSearchBar = React.createClass({
     }
   },
 
-  selection(index) {
+  selection: function (index) {
     var input = this.refs.input.getDOMNode();
 
     this.props.handleSearch(index.node);

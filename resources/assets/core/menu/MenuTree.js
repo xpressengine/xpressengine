@@ -30,7 +30,7 @@ var MenuTree = React.createClass({
     return this.state.selected;
   },
 
-  setSelectedNode(node) {
+  setSelectedNode: function (node) {
     this.setState({
       selected: node
     });
@@ -73,7 +73,7 @@ var MenuTree = React.createClass({
     }
   },
 
-  moveMenuItem(target) {
+  moveMenuItem: function (target) {
     var moveItemUrl = this.props.baseUrl + '/moveItem';
     XE.ajax({
       url: moveItemUrl,
@@ -92,7 +92,7 @@ var MenuTree = React.createClass({
 
   },
 
-  getBaseUrl() {
+  getBaseUrl: function () {
     return this.props.baseUrl;
   },
 
@@ -141,7 +141,7 @@ var MenuTree = React.createClass({
     );
   },
 
-  isMenuEntity(node) {
+  isMenuEntity: function (node) {
     return (node.entity && (node.entity == 'menu'));
   }
 });
