@@ -15,8 +15,14 @@ namespace Xpressengine\Editor;
 
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Editor\Exceptions\EditorNotFoundException;
+use Xpressengine\Media\MediaManager;
+use Xpressengine\Media\Models\Image;
+use Xpressengine\Media\Models\Media;
 use Xpressengine\Plugin\PluginRegister;
-use Illuminate\Container\Container;
+use Illuminate\Contracts\Container\Container;
+use Xpressengine\Storage\File;
+use Xpressengine\Storage\Storage;
+use Xpressengine\Tag\TagHandler;
 
 /**
  * Class EditorHandler
@@ -52,6 +58,27 @@ class EditorHandler
     protected $container;
 
     /**
+     * Storage instance
+     *
+     * @var Storage
+     */
+    protected $storage;
+
+    /**
+     * MediaManager instance
+     *
+     * @var MediaManager
+     */
+    protected $mediaManager;
+
+    /**
+     * TagHandler instance
+     *
+     * @var TagHandler
+     */
+    protected $tagHandler;
+
+    /**
      * Default editor identifier
      *
      * @var string
@@ -66,9 +93,39 @@ class EditorHandler
     protected $selectorName = 'xe-tool-id';
 
     /**
-     * config name
+     * Unique name
+     *
+     * @var string
      */
-    const CONFIG_NAME = 'editors';
+    const NAME = 'editor';
+
+    /**
+     * The name of config prefix
+     *
+     * @var string
+     */
+    const CONFIG_NAME = 'editor';
+
+    /**
+     * The name of map config
+     *
+     * @var string
+     */
+    const MAP_CONFIG_NAME = 'editors';
+
+    /**
+     * The path for upload
+     *
+     * @var string
+     */
+    const FILE_UPLOAD_PATH = 'public/editor';
+
+    /**
+     * The type of thumbnail
+     *
+     * @var string
+     */
+    const THUMBNAIL_TYPE = 'spill';
 
     /**
      * EditorHandler constructor.
@@ -76,12 +133,24 @@ class EditorHandler
      * @param PluginRegister $register      PluginRegister instance
      * @param ConfigManager  $configManager ConfigManager instance
      * @param Container      $container     Container instance
+     * @param Storage        $storage       Storage instance
+     * @param MediaManager   $mediaManager  MediaManager instance
+     * @param TagHandler     $tagHandler    TagHandler instance
      */
-    public function __construct(PluginRegister $register, ConfigManager $configManager, Container $container)
-    {
+    public function __construct(
+        PluginRegister $register,
+        ConfigManager $configManager,
+        Container $container,
+        Storage $storage,
+        MediaManager $mediaManager,
+        TagHandler $tagHandler
+    ) {
         $this->register = $register;
         $this->configManager = $configManager;
         $this->container = $container;
+        $this->storage = $storage;
+        $this->mediaManager = $mediaManager;
+        $this->tagHandler = $tagHandler;
     }
 
     /**
@@ -128,7 +197,7 @@ class EditorHandler
             throw new EditorNotFoundException;
         }
 
-        $this->configManager->set(self::CONFIG_NAME, [$instanceId => $editorId]);
+        $this->configManager->set(self::MAP_CONFIG_NAME, [$instanceId => $editorId]);
     }
 
     /**
@@ -139,8 +208,8 @@ class EditorHandler
      */
     public function getEditorId($instanceId)
     {
-        if (!$config = $this->configManager->get(self::CONFIG_NAME)) {
-            $config = $this->configManager->set(self::CONFIG_NAME, []);
+        if (!$config = $this->configManager->get(self::MAP_CONFIG_NAME)) {
+            $config = $this->configManager->set(self::MAP_CONFIG_NAME, []);
         }
 
         return $config->get($instanceId);
@@ -160,7 +229,11 @@ class EditorHandler
 
         $class = $this->register->get($editorId);
 
-        return $this->container->make($class, ['instanceId' => $instanceId]);
+        /** @var AbstractEditor $editor */
+        $editor = $this->container->make($class, ['instanceId' => $instanceId]);
+        $editor->setConfig($this->configManager->getOrNew($this->getConfigKey($instanceId)));
+
+        return $editor;
     }
 
     /**
@@ -168,11 +241,17 @@ class EditorHandler
      *
      * @param string      $instanceId instance id
      * @param array|false $args       argument for editor
+     * @param string|null $targetId   target id
      * @return string
      */
-    public function render($instanceId, $args)
+    public function render($instanceId, $args, $targetId = null)
     {
-        return $this->get($instanceId)->setArguments($args)->render();
+        $editor = $this->get($instanceId)->setArguments($args);
+        if ($targetId) {
+            $editor->setFiles($this->getFiles($targetId));
+        }
+
+        return $editor->render();
     }
 
     /**
@@ -206,13 +285,20 @@ class EditorHandler
     /**
      * Compile the raw content to be useful
      *
-     * @param string $instanceId instance id
-     * @param string $content    content
+     * @param string      $instanceId instance id
+     * @param string      $content    content
+     * @param bool        $htmlable   content is htmlable
+     * @param string|null $targetId   target id
      * @return string
      */
-    public function compile($instanceId, $content)
+    public function compile($instanceId, $content, $htmlable = false, $targetId = null)
     {
-        return $this->compileTools($instanceId, $this->get($instanceId)->compile($content));
+        $editor = $this->get($instanceId);
+        if ($targetId) {
+            $editor->setFiles($this->getFiles($targetId));
+        }
+
+        return $this->compileTools($instanceId, $editor->compile($content, $htmlable));
     }
 
     /**
@@ -250,5 +336,84 @@ class EditorHandler
             },
             $content
         );
+    }
+
+    /**
+     * Perform any final actions for the store action lifecycle
+     *
+     * todo: mention 도 필요한지 확인
+     *
+     * @param string $instanceId instance id
+     * @param string $targetId   target id
+     * @param array  $inputs     request inputs
+     * @return void
+     */
+    public function terminate($instanceId, $targetId, $inputs = [])
+    {
+        $editor = $this->get($instanceId);
+        $fileClass = $this->storage->getModel();
+        $olds = $fileClass::getByFileable($targetId);
+        $olds = $olds->getDictionary();
+        $files = $fileClass::whereIn('id', array_get($inputs, $editor->getFileInputName(), []))->get();
+        foreach ($files as $file) {
+            if (!isset($olds[$file->getKey()])) {
+                $this->storage->bind($targetId, $file);
+            } else {
+                unset($olds[$file->getKey()]);
+            }
+        }
+
+        foreach ($olds as $old) {
+            $this->storage->unBind($targetId, $old, true);
+        }
+        
+        $this->tagHandler->set($targetId, array_get($inputs, $editor->getTagInputName(), []), $instanceId);
+    }
+
+    /**
+     * Get files of target used
+     *
+     * @param string $targetId target identifier
+     * @return File[]
+     */
+    public function getFiles($targetId)
+    {
+        $data = [];
+        $fileClass = $this->storage->getModel();
+        $files = $fileClass::getByFileable($targetId);
+        foreach ($files as $file) {
+            $thumbnails = null;
+            if ($this->mediaManager->is($file)) {
+                $imgClass = $this->mediaManager->getHandler(Media::TYPE_IMAGE)->getModel();
+                $thumbnails = $imgClass::getThumbnails($this->mediaManager->make($file), static::THUMBNAIL_TYPE);
+            }
+
+            $file->setRelation('thumbnails', $thumbnails);
+            $data[] = $file;
+        }
+
+        return $data;
+    }
+
+    /**
+     * Get a key string for the config
+     *
+     * @param string $instanceId instance identifier
+     * @return string
+     */
+    public function getConfigKey($instanceId)
+    {
+        return static::CONFIG_NAME . '.' . $instanceId;
+    }
+
+    /**
+     * Get a key string for the permission
+     *
+     * @param string $instanceId instance identifier
+     * @return string
+     */
+    public function getPermKey($instanceId)
+    {
+        return $this->getConfigKey($instanceId);
     }
 }

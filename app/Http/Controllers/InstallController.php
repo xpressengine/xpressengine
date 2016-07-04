@@ -57,6 +57,7 @@ class InstallController extends Controller
 
         $string = Yaml::dump([
             'site' => [
+                'locale' => $request->get('locale') != '' ? $request->get('locale') : 'ko',
                 'url' => $url != '' ? $url : 'http://localhost',
                 'timezone' =>  $request->get('web_timezone') != '' ? $request->get('web_timezone') : 'Asia/Seoul',
             ],

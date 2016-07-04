@@ -20,6 +20,15 @@
       boxTemplate: '<div class="toast_box"></div>'
     },
     toast: {
+      classSet: {
+        danger: 'xe-danger'
+        , positive: 'xe-positive'
+        , warning: 'xe-warning'
+        , success: 'xe-success'
+        , fail: 'xe-fail'
+        , error: 'xe-danger'
+        , info: 'xe-positive'
+      },
       expireTimes: {'xe-danger': 0, 'xe-positive': 5, 'xe-warning': 10, 'xe-success': 2, 'xe-fail': 5},
       status: {500: 'xe-danger', 401: 'xe-warning'},
       template: '<div class="alert-dismissable xe-alert" style="display:none;"><button type="button" class="__xe_close xe-btn-alert-close" aria-label="Close"><i class="xi-close"></i></button>' +
@@ -58,6 +67,8 @@
 
     create: function(type, message) {
       var expireTime = 0;
+      var type = this.options.classSet[type] || 'xe-danger';
+
       if (this.options.expireTimes[type] != 0) {
         expireTime = parseInt(new Date().getTime() / 1000)  + this.options.expireTimes[type];
       }

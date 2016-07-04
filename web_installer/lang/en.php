@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'localeExpression' => 'English',
     'checkForInstall' => 'Check your server status for XE installation.',
     
     'systemCheck' => 'System check',

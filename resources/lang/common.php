@@ -733,10 +733,6 @@ return [
         'ko' => '회원 목록',
         'en' => 'Member list',
     ],
-    'editMember' => [
-        'ko' => '회원 수정',
-        'en' => 'Member edit',
-    ],
     'joinSettings' => [
         'ko' => '가입 설정',
         'en' => 'Join settings',
@@ -1227,6 +1223,10 @@ return [
         'ko' => '회원가입을 완료하려면 이메일 인증을 해야 합니다. :email 을 확인하신후, 인증 코드를 입력해주세요.',
         'en' => 'To complete your membership you need to email authentication, please check the :email , please enter your authorization code.'
     ],
+    'msgEmailConfirm' => [
+        'ko' => '<p>저희 사이트에 가입해주셔서 감사합니다.</p><p>요청하신 회원가입을 완료하기 위한 인증번호입니다.<br>인증페이지에서 아래의 인증번호를 입력하거나, 인증버튼을 누르면 인증이 완료됩니다.</p>',
+        'en' => '<p>Welcome to join.</p><p>To complete finishing sign up, input below confirmation code to confirmation page or click below button.</p>'
+    ],
     'confirmCode' => [
         'ko' => '인증 코드',
         'en' => 'Confirm code',
@@ -1328,7 +1328,11 @@ return [
         'ko' => '높음',
         'en' => 'strong'
     ],
-    'moveAndResetPassword' => [
+    'resetPassword' => [
+        'ko' => '비밀번호 재설정',
+        'en' => 'Password Resetting'
+    ],
+    'msgResetPassword' => [
         'ko' => '이 링크로 이동하여 비밀번호를 재설정하세요.',
         'en' => 'Go to this link to reset your password.'
     ],
@@ -1827,6 +1831,98 @@ return [
     'moveToTrash' => [
         'ko' => '휴지통으로 이동',
         'en' => 'Move to trash',
+    ],
+    'editorSetting' => [
+        'ko' => 'Editor 설정',
+        'en' => 'Editor Setting',
+    ],
+    'descEditorSetting' => [
+        'ko' => 'Editor 설정페이지 입니다.',
+        'en' => 'This page is setting for editor.',
+    ],
+    'editorHeight' => [
+        'ko' => '에디터 높이',
+        'en' => 'Editor height',
+    ],
+    'unit' => [
+        'ko' => '단위',
+        'en' => 'Unit',
+    ],
+    'fontSize' => [
+        'ko' => '글자 크기',
+        'en' => 'Font size',
+    ],
+    'explainFontSize' => [
+        'ko' => '12px, 1em등 단위까지 포함해서 입력해주세요.',
+        'en' => 'Input with unit. ex) 12px, 1em',
+    ],
+    'fontFamily' => [
+        'ko' => '글꼴',
+        'en' => 'Font family',
+    ],
+    'explainFontFamily' => [
+        'ko' => '콤마(,)로 여러 글꼴을 지정할 수 있습니다.',
+        'en' => 'Fonts are separated by a comma(,).',
+    ],
+    'htmlEditPermission' => [
+        'ko' => 'HTML 편집 권한',
+        'en' => 'HTML permission',
+    ],
+    'basicToolUsePermission' => [
+        'ko' => '기본 도구 사용 권한',
+        'en' => 'Basic tool permission',
+    ],
+    'enableUpload' => [
+        'ko' => '업로드 사용',
+        'en' => 'Enable upload',
+    ],
+    'explainEnableUpload' => [
+        'ko' => '에디터에서 파일을 업로드 할 수 있습니다.',
+        'en' => 'You can upload the file in the editor.',
+    ],
+    'availableExtension' => [
+        'ko' => '허용 확장자',
+        'en' => 'Available extensions',
+    ],
+    'explainAvailableExtension' => [
+        'ko' => '콤마(,)로 여러 확장자를 지정할 수 있습니다. 예) * or jpg,gif',
+        'en' => 'Extensions are separated by a comma(,). ex) * or jpg,gif',
+    ],
+    'maxFileSize' => [
+        'ko' => '파일 크기 제한',
+        'en' => 'Max file size',
+    ],
+    'descMaxFileSize' => [
+        'ko' => '하나의 파일에 대해 최고 용량을 지정할 수 있습니다.',
+        'en' => 'You can specify the highest capacity for a single file.',
+    ],
+    'attachMaxSize' => [
+        'ko' => '문서 첨부 제한',
+        'en' => 'Attach max size',
+    ],
+    'descAttachMaxSize' => [
+        'ko' => '하나의 문서에 첨부할 수 있는 최고 용량을 지정할 수 있습니다.',
+        'en' => 'You can specify the maximum capacity that can be attached to a single document.',
+    ],
+    'msgMaxFileSize' => [
+        'ko' => '파일 용량은 :fileMaxSize MB를 초과할 수 없습니다. [ :uploadFileName ]',
+        'en' => 'The file upload size can not exceed :fileMaxSize. [ :uploadFileName ]',
+    ],
+    'msgAvailableUploadingFiles' => [
+        'ko' => '[:extensions] 확장자만 업로드 가능합니다. [:uploadFileName]',
+        'en' => '[:extensions] extensions only upload. [:uploadFileName]',
+    ],
+    'uploadPermission' => [
+        'ko' => '업로드 권한',
+        'en' => 'Upload permission',
+    ],
+    'downloadPermission' => [
+        'ko' => '다운로드 권한',
+        'en' => 'Download permission',
+    ],
+    'addTools' => [
+        'ko' => '추가도구',
+        'en' => 'Add-tools',
     ],
     'msgLoginRequired' => [
         'ko' => '로그인이 필요합니다.',

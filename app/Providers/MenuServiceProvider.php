@@ -22,10 +22,7 @@ use Xpressengine\Menu\Repositories\CacheDecorator;
 use Xpressengine\Menu\Repositories\EloquentRepository;
 use Xpressengine\Menu\Repositories\MemoryDecorator;
 use Xpressengine\Support\LaravelCache;
-use Xpressengine\UIObjects\Menu\MenuList;
 use Xpressengine\UIObjects\Menu\MenuType;
-use Xpressengine\UIObjects\Menu\MenuThemeList;
-use Xpressengine\UIObjects\Menu\MenuSelector;
 use Xpressengine\Menu\MenuType\DirectLink;
 use Xpressengine\UIObjects\Menu\TypeSelect;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
@@ -51,11 +48,8 @@ class MenuServiceProvider extends ServiceProvider
     {
         $pluginRegister = $this->app['xe.pluginRegister'];
 
-        $pluginRegister->add(MenuList::class);
         $pluginRegister->add(MenuType::class);
         $pluginRegister->add(TypeSelect::class);
-        $pluginRegister->add(MenuSelector::class);
-        $pluginRegister->add(MenuThemeList::class);
         $pluginRegister->add(DirectLink::class);
 
         foreach ($this->policies as $class => $policy) {
@@ -89,7 +83,7 @@ class MenuServiceProvider extends ServiceProvider
         $this->app->singleton([MenuHandler::class => 'xe.menu'], function ($app) {
             $repo = new EloquentRepository($app['xe.keygen']);
 
-            if (env('APP_DEBUG') != true) {
+            if ($app['config']['app.debug'] !== true) {
                 $repo = new CacheDecorator($repo, new LaravelCache($app['cache.store']));
             }
 

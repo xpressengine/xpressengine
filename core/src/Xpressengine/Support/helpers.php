@@ -49,7 +49,7 @@ if (function_exists('json_dec') === false) {
 
 if (function_exists('json_format') === false) {
     /**
-     * 
+     *
      *
      * @param  string $json
      * @param  bool   $unescapeUnicode Un escape unicode
@@ -210,7 +210,7 @@ if (function_exists('xe_trans') === false) {
         }
 
         try {
-            return app('xe.translator')->trans($id, $parameters, $domain, $locale);
+            return new \Illuminate\View\Expression(app('xe.translator')->trans($id, $parameters, $domain, $locale));
         } catch (Exception $e) {
             return $id;
         }
@@ -598,5 +598,36 @@ if (function_exists('plugins_path') === false) {
     {
         $path = trim($path, DIRECTORY_SEPARATOR);
         return rtrim(XePlugin::getPluginsDir(), DIRECTORY_SEPARATOR).($path ? DIRECTORY_SEPARATOR.$path : $path);
+    }
+}
+
+if (!function_exists('editor')) {
+    /**
+     * @package Xpressengine\Editor
+     *
+     * @param string      $instanceId instance id
+     * @param array|false $arguments  argument for editor
+     * @param string|null $targetId   target id
+     * @return string
+     */
+    function editor($instanceId, $arguments, $targetId = null)
+    {
+        return app('xe.editor')->render($instanceId, $arguments, $targetId);
+    }
+}
+
+if (!function_exists('compile')) {
+    /**
+     * @package Xpressengine\Editor
+     *
+     * @param string      $instanceId instance id
+     * @param string      $content    content
+     * @param bool        $htmlable   content is htmlable
+     * @param string|null $targetId   target id
+     * @return string
+     */
+    function compile($instanceId, $content, $htmlable = false, $targetId = null)
+    {
+        return app('xe.editor')->compile($instanceId, $content, $htmlable, $targetId);
     }
 }

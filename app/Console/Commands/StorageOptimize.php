@@ -25,7 +25,7 @@ class StorageOptimize extends Command
      *
      * @var string
      */
-    protected $description = '사용되지 않는 파일들을 삭제합니다.';
+    protected $description = 'Delete the unused files';
 
     protected $storage;
 

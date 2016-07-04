@@ -13,8 +13,8 @@ class AbstractEditorTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadTools()
     {
-        list($editors, $instanceId) = $this->getMocks();
-        $instance = $this->getMock(Dummy::class, ['getTools'], [$editors, $instanceId]);
+        list($editors, $urls, $gate, $skins, $events, $instanceId) = $this->getMocks();
+        $instance = $this->getMock(Dummy::class, ['getTools'], [$editors, $urls, $gate, $skins, $events, $instanceId]);
 
         $mockTool1 = m::mock('Xpressengine\Editor\AbstractTool');
         $mockTool1->shouldReceive('initAssets');
@@ -27,8 +27,8 @@ class AbstractEditorTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTools()
     {
-        list($editors, $instanceId) = $this->getMocks();
-        $instance = $this->getMock(Dummy::class, ['getActivateToolIds'], [$editors, $instanceId]);
+        list($editors, $urls, $gate, $skins, $events, $instanceId) = $this->getMocks();
+        $instance = $this->getMock(Dummy::class, ['getActivateToolIds'], [$editors, $urls, $gate, $skins, $events, $instanceId]);
 
         $instance->expects($this->once())->method('getActivateToolIds')->willReturn([
             'editortool/foo@bar',
@@ -46,21 +46,21 @@ class AbstractEditorTest extends \PHPUnit_Framework_TestCase
 
     public function testRender()
     {
-        list($editors, $instanceId) = $this->getMocks();
+        list($editors, $urls, $gate, $skins, $events, $instanceId) = $this->getMocks();
         $instance = $this->getMock(
             Dummy::class,
             ['loadTools', 'getOptions', 'getContentHtml', 'getEditorScript'],
-            [$editors, $instanceId]
+            [$editors, $urls, $gate, $skins, $events, $instanceId]
         );
 
         $instance->expects($this->once())->method('loadTools');
         $instance->expects($this->once())->method('getOptions')
             ->willReturn(['content' => 'content body', 'var' => 'foo']);
-        $instance->expects($this->once())->method('getContentHtml')
-            ->with('content body', ['content' => 'content body', 'var' => 'foo'])->willReturn('<div>content body</div>');
+        $instance->expects($this->once())->method('getContentHtml')->willReturn('<div>content body</div>');
         $instance->expects($this->once())->method('getEditorScript')
             ->with(['content' => 'content body', 'var' => 'foo'])->willReturn('<script></script>');
 
+        $events->shouldReceive('fire')->once();
 
         $content = $instance->render();
 
@@ -80,6 +80,10 @@ class AbstractEditorTest extends \PHPUnit_Framework_TestCase
     {
         return [
             m::mock('Xpressengine\Editor\EditorHandler'),
+            m::mock('Illuminate\Contracts\Routing\UrlGenerator'),
+            m::mock('Illuminate\Contracts\Auth\Access\Gate'),
+            m::mock('Xpressengine\Skin\SkinHandler'),
+            m::mock('Illuminate\Contracts\Events\Dispatcher'),
             'someinstanceid'
         ];
     }

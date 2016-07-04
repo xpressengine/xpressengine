@@ -5,6 +5,9 @@ use Illuminate\Support\ServiceProvider;
 use Xpressengine\Editor\AbstractEditor;
 use Xpressengine\Editor\EditorHandler;
 use Xpressengine\Editor\Textarea;
+use Xpressengine\Media\Models\Media;
+use Xpressengine\Permission\Grant;
+use Xpressengine\Skins\Editor\DefaultSkin;
 
 class EditorServiceProvider extends ServiceProvider
 {
@@ -23,11 +26,38 @@ class EditorServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        AbstractEditor::setConfigResolver(function ($key) {
-            return $this->app['xe.config']->getOrNew($key);
+        $this->app['xe.pluginRegister']->add(Textarea::class);
+        $this->app['xe.pluginRegister']->add(DefaultSkin::class);
+        $this->app['xe.skin']->setDefaultSkin(EditorHandler::NAME, 'editor/skin/xpressengine@default');
+        
+        AbstractEditor::setImageResolver(function (array $ids) {
+            $dimension = $this->app['request']->isMobile() ? 'M' : 'L';
+            $fileClass = $this->app['xe.storage']->getModel();
+            $files = $fileClass::whereIn('id', $ids)->get();
+
+            $imgClass = $this->app['xe.media']->getHandler(Media::TYPE_IMAGE)->getModel();
+            $images = [];
+            foreach ($files as $file) {
+                $images[] = $imgClass::getThumbnail(
+                    $this->app['xe.media']->make($file),
+                    EditorHandler::THUMBNAIL_TYPE,
+                    $dimension
+                );
+            }
+
+            return $images;
         });
 
-        $this->app['xe.pluginRegister']->add(Textarea::class);
+        $this->app['events']->listen('xe.editor.option.building', function ($editor) {
+            $key = $this->app['xe.editor']->getPermKey($editor->getInstanceId());
+            if (!$this->app['xe.permission']->get($key)) {
+                $this->app['xe.permission']->register($key, new Grant);
+            }
+        });
+
+        $this->app['events']->listen('xe.editor.render', function ($editor) {
+            $this->app['xe.frontend']->js('assets/core/common/js/xe.editor.core.js')->load();
+        });
     }
 
     /**
@@ -47,7 +77,10 @@ class EditorServiceProvider extends ServiceProvider
                 $editorHandler = new $editorHandler(
                     $app['xe.pluginRegister'],
                     $app['xe.config'],
-                    $app
+                    $app,
+                    $app['xe.storage'],
+                    $app['xe.media'],
+                    $app['xe.tag']
                 );
                 $editorHandler->setDefaultEditorId($app['config']->get('xe.editor.default'));
                 return $editorHandler;

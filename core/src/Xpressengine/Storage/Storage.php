@@ -480,13 +480,25 @@ class Storage
     }
 
     /**
+     * Returns model class
+     *
+     * @return string
+     */
+    public function getModel()
+    {
+        return File::class;
+    }
+
+    /**
      * create file model
      *
      * @return File
      */
     public function createModel()
     {
-        return new File;
+        $class = $this->getModel();
+
+        return new $class;
     }
 
     /**

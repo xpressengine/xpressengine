@@ -39,7 +39,7 @@ class Site extends Command
      *
      * @var string
      */
-    protected $name = 'site:host:update';
+    protected $name = 'site:host-update';
     /**
      * @var SiteHandler
      */
@@ -50,7 +50,7 @@ class Site extends Command
      *
      * @var string
      */
-    protected $description = '사이트 Host 정보가 변경되었습니다 ';
+    protected $description = 'Update site host information';
 
     /**
      * @param SiteHandler $handler site handler
@@ -85,9 +85,9 @@ class Site extends Command
             $this->comment($this->description);
 
         } catch (NotFoundSiteException $e) {
-            $this->comment("{$siteKey} 에 해당하는 사이트 정보를 찾을 수 없습니다");
+            $this->comment("Cannot find site information. (find key :{$siteKey})");
         } catch (InvalidArgumentException $e) {
-            $this->comment("{$host} 형식이 잘못 입력되었습니다. 입력예) example.com ");
+            $this->comment("{$host} is incorrect host format. ex) example.com ");
         }
     }
 
@@ -99,7 +99,7 @@ class Site extends Command
     protected function getArguments()
     {
         return [
-            ['action', InputArgument::OPTIONAL, '"list" 등록된 사이트 목록을 확인합니다. "update" 사이트 호스트를 변경합니다.', 'list'],
+            ['action', InputArgument::OPTIONAL, '"list" Get site list. "update" Changing site host information.', 'list'],
         ];
     }
 
@@ -111,8 +111,8 @@ class Site extends Command
     protected function getOptions()
     {
         return [
-            ['siteKey', null, InputOption::VALUE_REQUIRED, '사이트 키를 지정합니다', 'default'],
-            ['host', null, InputOption::VALUE_REQUIRED, '변경할 호스트'],
+            ['siteKey', null, InputOption::VALUE_REQUIRED, 'Site key', 'default'],
+            ['host', null, InputOption::VALUE_REQUIRED, 'Host information to be changed'],
         ];
     }
 

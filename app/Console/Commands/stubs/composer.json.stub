@@ -9,13 +9,13 @@
   "version": "1.0.0",
   "type": "xpressengine-plugin",
   "support": {
-    "email": "email@email.com"
+    "email": "input@your.email"
   },
   "authors": [
     {
       "name": "input your name",
       "email": "input@your.email",
-      "homepage": "http://mysite.com",
+      "homepage": "http://input.your.site",
       "role": "Developer"
     }
   ],
@@ -25,12 +25,6 @@
       "component": {}
     }
   },
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "https://packagist.xpressengine.io/"
-    }
-  ],
   "require": {
   },
   "autoload": {

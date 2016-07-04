@@ -26,7 +26,7 @@ use Xpressengine\Translation\Translator;
  *
  * ## 명령어 사용
  * ```
- * php artisan trans:put --path=path
+ * php artisan trans:import {pluginName}
  * ```
  *
  * @category    Commands
@@ -36,18 +36,18 @@ use Xpressengine\Translation\Translator;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class PutTranslation extends Command
+class TranslationImport extends Command
 {
 
     /**
      * @var string
      */
-    protected $name = 'trans';
+    protected $name = 'translation:import';
 
     /**
      * @var string
      */
-    protected $description = 'Translation data import to database.';
+    protected $description = 'Translation data import to database';
 
     /**
      * @var Translator

@@ -72,6 +72,7 @@ class XeInstall extends Command
         'site' => [
             'url' => 'http://mysite.com',
             'timezone' => 'Asia/Seoul',
+            'locale' => 'ko',
         ],
         'admin' => [
             'email' => null,
@@ -579,6 +580,14 @@ class XeInstall extends Command
             return $timezone;
         });
 
+        // locale
+        $siteInfo['locale'] = $this->askValidation('Locale (ko or en)', $siteInfo['locale'], function ($locale) {
+            if ($locale !== 'ko') {
+                $locale = 'en';
+            }
+            return $locale;
+        });
+
         $this->defaultInfos['site'] = $siteInfo;
     }
 
@@ -600,6 +609,17 @@ class XeInstall extends Command
         ];
 
         $this->configFileGenerate('app', $info);
+
+        $locales = ['ko', 'en'];
+        if ($siteInfo['locale'] != 'ko') {
+            $locales = ['en', 'ko'];
+        }
+        $info = [
+            'lang' => [
+                'locales' => $locales,
+            ],
+        ];
+        $this->configFileGenerate('xe', $info);
     }
 
     private function getKey()

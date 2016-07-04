@@ -13,7 +13,6 @@ use Xpressengine\Plugin\PluginRegister;
 use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
 use Xpressengine\Theme\AbstractTheme;
 use Xpressengine\Theme\ThemeHandler;
-use Xpressengine\UIObjects\Theme\ThemeList;
 use Xpressengine\UIObjects\Theme\ThemeSelect;
 
 class ThemeServiceProvider extends ServiceProvider
@@ -124,7 +123,6 @@ class ThemeServiceProvider extends ServiceProvider
     {
         /** @var PluginRegister $registryManager */
         $registryManager = $this->app['xe.pluginRegister'];
-        $registryManager->add(ThemeList::class);
         $registryManager->add(ThemeSelect::class);
     }
 

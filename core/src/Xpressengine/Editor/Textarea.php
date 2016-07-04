@@ -48,36 +48,39 @@ class Textarea extends AbstractEditor
      */
     public function getName()
     {
-        return 'Textarea';
+        return 'XEtextarea';
     }
 
     /**
-     * Get config data for the editor
+     * Determine if a editor html usable.
      *
-     * @return array
+     * @return boolean
      */
-    public function getConfigData()
+    public function htmlable()
     {
-        return [];
+        return false;
     }
 
     /**
-     * Get activated tool's identifier for the editor
+     * Get the evaluated contents of the object.
      *
-     * @return array
+     * @return string
      */
-    public function getActivateToolIds()
+    public function render()
     {
-        return [];
+        app('xe.frontend')->js('assets/core/common/js/xe.textarea.define.js')
+            ->before('assets/core/common/js/xe.editor.core.js')->load();
+
+        return parent::render();
     }
 
     /**
-     * Compile the raw content to be useful
+     * Compile content body
      *
      * @param string $content content
      * @return string
      */
-    public function compile($content)
+    protected function compileBody($content)
     {
         return $content;
     }

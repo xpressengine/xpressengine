@@ -188,7 +188,7 @@ class AuthController extends Controller
         }
         XeDB::commit();
 
-        return redirect()->route('login')->with('alert', ['type' => 'success', 'message' => '인증되었습니다.']);
+        return redirect('/')->with('alert', ['type' => 'success', 'message' => '인증되었습니다. 로그인하시기 바랍니다.']);
     }
 
     /**

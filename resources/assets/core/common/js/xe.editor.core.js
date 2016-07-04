@@ -45,6 +45,9 @@
         },
         renderFileUploader: function(customOptions) {
             editorSet[this.editorName].interfaces.renderFileUploader.call(this.getInstance(), customOptions);
+        },
+        reset: function() {
+            editorSet[this.editorName].interfaces.reset.call(this.getInstance());
         }
     };
 
@@ -52,6 +55,7 @@
         this.name = editorSettings.name;
         this.configs = editorSettings.configs;
         this.editorList = [];
+        this.interfaces = {};
 
         if(editorSettings.hasOwnProperty('plugins')
             && editorSettings.plugins instanceof Array
@@ -68,15 +72,16 @@
     Editor.prototype = {
         configs: {},
         interfaces: {},
-        create: function(sel, editorOptions, customOptions, toolInfoList) {
+        create: function(sel, options, editorOptions, toolInfoList) {
             var editorOptions = editorOptions || {},
                 toolInfoList = toolInfoList || [];
 
             var editorOptions = $.extend(this.configs || {}, editorOptions);
 
             if(Validation.isValidBeforeCreateInstance(sel, toolInfoList, this)) {
+
                 this.editorList[sel] = new instanceObj(this.name, sel, editorOptions, toolInfoList);
-                this.interfaces.initialize.call(this.editorList[sel], sel, editorOptions, customOptions);
+                this.interfaces.initialize.call(this.editorList[sel], sel, options, editorOptions);
 
                 if(!!toolInfoList && toolInfoList.length > 0) {
                     var tools = {};
@@ -84,7 +89,6 @@
 
                     for(var i = 0, max = toolInfoList.length; i < max; i += 1) {
                         if(XEeditor.tools.get(toolInfoList[i].id)) {
-                            //tools.push(XEeditor.tools.get(toolInfoList[i].id));
                             tools[toolInfoList[i].id] = XEeditor.tools.get(toolInfoList[i].id);
                             toolInfoListFilter.push(toolInfoList[i]);
 
@@ -96,6 +100,7 @@
                     this.interfaces.addTools.call(this.editorList[sel], tools, toolInfoListFilter);
                 }
 
+                // return this.editorList[sel];
                 return this.editorList[sel];
             }
         }
