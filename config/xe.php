@@ -391,18 +391,13 @@ return [
             'formCheckbox' => 'uiobject/xpressengine@formCheckbox',
             'formFile' => 'uiobject/xpressengine@formFile',
             'formImage' => 'uiobject/xpressengine@formImage',
-//            'formMenu' => 'uiobject/xpressengine@menuSelector',
             'formLangText' => 'uiobject/xpressengine@formLangText',
             'formLangTextarea' => 'uiobject/xpressengine@formLangTextArea',
             'langText' => 'uiobject/xpressengine@langText',
             'langTextArea' => 'uiobject/xpressengine@langTextArea',
-//            'menu' => 'uiobject/xpressengine@menuType',
             'menuType' => 'uiobject/xpressengine@menuType',
-//            'menuList' => 'uiobject/xpressengine@menuList',
             'permission' => 'uiobject/xpressengine@permission',
-//            'visibility' => 'uiobject/xpressengine@visibility',     // ??
             'themeSelect' => 'uiobject/xpressengine@themeSelect',
-//            'typeList' => 'uiobject/xpressengine@typeList',         // ??
             'captcha' => 'uiobject/xpressengine@captcha',
         ]
     ],
