@@ -91,7 +91,7 @@ class ToggleMenuHandler
      * @param string $id         target plugin id
      * @param string $instanceId instance id
      * @param string $identifier target identifier
-     * @return ItemInterface[]
+     * @return AbstractToggleMenu[]
      * @throws WrongInstanceException
      */
     public function getItems($id, $instanceId = null, $identifier = null)
@@ -101,7 +101,7 @@ class ToggleMenuHandler
         foreach ($items as &$item) {
             $item = new $item($id, $identifier);
 
-            if (!$item instanceof ItemInterface) {
+            if (!$item instanceof AbstractToggleMenu) {
                 throw new WrongInstanceException();
             }
         }
