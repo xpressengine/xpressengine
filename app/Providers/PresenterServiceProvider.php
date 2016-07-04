@@ -121,7 +121,7 @@ class PresenterServiceProvider extends ServiceProvider
      */
     private function registerFrontend()
     {
-        $this->app->singleton('xe.frontend', function ($app) {
+        $this->app->singleton([FrontendHandler::class => 'xe.frontend'], function ($app) {
             $tags = [
                 'title' => \Xpressengine\Presenter\Html\Tags\Title::class,
                 'meta' => \Xpressengine\Presenter\Html\Tags\Meta::class,
