@@ -82,6 +82,17 @@ class InstanceManagerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * get connnection
+     *
+     * @return \Illuminate\Database\Connection
+     */
+    private function getConnection()
+    {
+        $connection = m::mock('Illuminate\Database\Connection');
+        return $connection;
+    }
+
+    /**
      * test add instance
      *
      * @return void
@@ -100,8 +111,10 @@ class InstanceManagerTest extends PHPUnit_Framework_TestCase
 
         $schemaBuilder = $this->getSchemaBuilder();
         $schemaBuilder->shouldReceive('hasTable')->andReturn(false);
+        $schemaBuilder->shouldReceive('setConnection');
 
         $this->conn->shouldReceive('getSchemaBuilder')->andReturn($schemaBuilder);
+        $this->conn->shouldReceive('master')->andReturn($this->getConnection());
 
         $manager = new InstanceManager($this->conn, $configHandler);
 

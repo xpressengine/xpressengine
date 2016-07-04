@@ -20,6 +20,7 @@ use Xpressengine\Plugin\ComponentTrait;
 use Xpressengine\Skin\SkinHandler;
 use Xpressengine\Support\MobileSupportTrait;
 use Xpressengine\Permission\Instance;
+use Xpressengine\Presenter\Html\FrontendHandler;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Symfony\Component\DomCrawler\Crawler;
@@ -72,6 +73,13 @@ abstract class AbstractEditor implements ComponentInterface
      * @var Dispatcher
      */
     protected $events;
+
+    /**
+     * FrontendHandler instance
+     *
+     * @var FrontendHandler
+     */
+    protected $frontend;
 
     /**
      * Instance identifier
@@ -218,12 +226,13 @@ abstract class AbstractEditor implements ComponentInterface
     /**
      * AbstractEditor constructor.
      *
-     * @param EditorHandler $editors    EditorHandler instance
-     * @param UrlGenerator  $urls       UrlGenerator instance
-     * @param Gate          $gate       Gate instance
-     * @param SkinHandler   $skins      SkinHandler instance
-     * @param Dispatcher    $events     Dispatcher instance
-     * @param string        $instanceId Instance identifier
+     * @param EditorHandler   $editors    EditorHandler instance
+     * @param UrlGenerator    $urls       UrlGenerator instance
+     * @param Gate            $gate       Gate instance
+     * @param SkinHandler     $skins      SkinHandler instance
+     * @param Dispatcher      $events     Dispatcher instance
+     * @param FrontendHandler $frontend   FrontendHandler instance
+     * @param string          $instanceId Instance identifier
      */
     public function __construct(
         EditorHandler $editors,
@@ -231,6 +240,7 @@ abstract class AbstractEditor implements ComponentInterface
         Gate $gate,
         SkinHandler $skins,
         Dispatcher $events,
+        FrontendHandler $frontend,
         $instanceId
     ) {
         $this->editors = $editors;
@@ -238,6 +248,7 @@ abstract class AbstractEditor implements ComponentInterface
         $this->gate = $gate;
         $this->skins = $skins;
         $this->events = $events;
+        $this->frontend = $frontend;
         $this->instanceId = $instanceId;
     }
 

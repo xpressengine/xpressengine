@@ -68,7 +68,7 @@ class Textarea extends AbstractEditor
      */
     public function render()
     {
-        app('xe.frontend')->js('assets/core/common/js/xe.textarea.define.js')
+        $this->frontend->js('assets/core/common/js/xe.textarea.define.js')
             ->before('assets/core/common/js/xe.editor.core.js')->load();
 
         return parent::render();
