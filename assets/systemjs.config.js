@@ -1,5 +1,5 @@
 System.config({
-  baseURL: "/",
+  baseURL: xeBaseURL,
   defaultJSExtensions: true,
   transpiler: false,
   paths: {
