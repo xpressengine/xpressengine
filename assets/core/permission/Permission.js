@@ -7,17 +7,17 @@ var Permission = React.createClass({
         type: React.PropTypes.string
     },
 
-    getDefaultProps() {
+    getDefaultProps: function () {
         return {
             modeEnable: false
         };
     },
 
-    getInitialState() {
+    getInitialState: function () {
         return this.init(this.props);
     },
 
-    init(props){
+    init: function (props){
         var permission = props.permission;
 
         var mode;
@@ -47,10 +47,10 @@ var Permission = React.createClass({
         };
     },
 
-    componentDidMount(){
+    componentDidMount: function (){
     },
 
-    componentDidUpdate(prevProps){
+    componentDidUpdate: function (prevProps){
         var permission = this.props.permission;
         if ( permission !== prevProps.permission) {
             this.setState(this.init(this.props));
@@ -58,7 +58,7 @@ var Permission = React.createClass({
 
     },
 
-    inputChange(key, event){
+    inputChange: function (key, event){
         var value = event.target.value;
         var formData = this.state.formData;
 
@@ -69,22 +69,22 @@ var Permission = React.createClass({
         });
     },
 
-    handleIncludeGroupDelete(i) {
+    handleIncludeGroupDelete: function (i) {
         var tags = this.state.includeGroups;
         tags.splice(i, 1);
         this.setState({includeGroups: tags});
     },
-    handleIncludeMemberDelete(i) {
+    handleIncludeMemberDelete: function (i) {
         var tags = this.state.includeMembers;
         tags.splice(i, 1);
         this.setState({includeMembers: tags});
     },
-    handleExcludeMemberDelete(i) {
+    handleExcludeMemberDelete: function (i) {
         var tags = this.state.excludeMembers;
         tags.splice(i, 1);
         this.setState({excludeMembers: tags});
     },
-    handleIncludeAddition(tag) {
+    handleIncludeAddition: function (tag) {
         var includeGroups = this.state.includeGroups;
         var includeMembers = this.state.includeMembers;
 
@@ -107,7 +107,7 @@ var Permission = React.createClass({
         }
     },
 
-    handleExcludeAddition(tag) {
+    handleExcludeAddition: function (tag) {
         var tags = this.state.excludeMembers;
         var finded = _.find(tags, {id:tag.id});
 
@@ -117,7 +117,7 @@ var Permission = React.createClass({
         }
     },
 
-    render(){
+    render: function (){
         var self = this;
 
         var modeEnable = this.props.modeEnable;

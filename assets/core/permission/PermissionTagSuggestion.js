@@ -10,7 +10,7 @@ var PermissionTagSuggestion = React.createClass({
         handleHover: React.PropTypes.func.isRequired,
         searchingCnt: React.PropTypes.number
     },
-    markIt(item, query) {
+    markIt: function (item, query) {
 
         var escapedRegex = query.trim().replace(/[-\\^$*+?.()|[\]{}]/g, "\\$&");
         var r = RegExp(escapedRegex, "gi");
@@ -19,7 +19,7 @@ var PermissionTagSuggestion = React.createClass({
             __html: itemName.replace(r, "<mark>$&</mark>")
         };
     },
-    render() {
+    render: function () {
         var props = this.props;
         var suggestionList;
         var searching;
