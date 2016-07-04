@@ -35,7 +35,7 @@ class XeUpdate extends Command
      *
      * @var string
      */
-    protected $description = 'Update XpressEngine';
+    protected $description = 'Update the XpressEngine';
 
     /**
      * Create a new controller creator command instance.
@@ -57,23 +57,23 @@ class XeUpdate extends Command
         // php artisan xe:update [version] [--skip-download]
 
         // title
-        $this->output->block('Xpressengine을 업데이트합니다.');
+        $this->output->block('Update Xpressengine.');
 
         // check option
         if (!$this->option('skip-download')) {
-            $this->output->caution('업데이트 파일의 다운로드는 아직 지원하지 않습니다. 아래의 안내대로 코어를 업데이트 하십시오.');
+            $this->output->caution('Download the update file does not yet support. Update the core following the instructions below.');
             $this->printGuide();
             return;
         }
 
         // version 안내
         $installedVersion = trim(file_get_contents(storage_path('app/installed')));
-        $this->warn(' 업데이트 버전 정보:');
+        $this->warn(' Update version information:');
         $this->output->text("  $installedVersion -> ".__XE_VERSION__);
 
         // confirm
         if($this->confirm(
-                "Xpressengine ver.".__XE_VERSION__."을 업데이트합니다. 최대 수분이 소요될 수 있습니다.\r\n 업데이트 하시겠습니까?"
+                "Update the Xpressengine ver.".__XE_VERSION__.". There is a maximum moisture is applied. \r\nDo you want to update?"
             ) === false
         ) {
             //return;
@@ -84,7 +84,7 @@ class XeUpdate extends Command
 
         // composer update실행(composer update --no-dev)
         if(!$this->option('skip-composer')) {
-            $this->output->section('composer update를 실행합니다. 최대 수분이 소요될 수 있습니다.');
+            $this->output->section('Run the composer update. There is a maximum moisture is applied.');
             $this->line(" composer update");
             try {
                 $this->runComposer(base_path(), "update");
@@ -94,13 +94,13 @@ class XeUpdate extends Command
         }
 
         // migration
-        $this->output->section('Xpressengine 마이그레이션을 실행합니다.');
+        $this->output->section('Run the migration of the Xpressengine.');
         $this->migrateCore($installedVersion, __XE_VERSION__);
 
         // mark installed
         $this->markInstalled();
 
-        $this->output->success("Xpressengine을 ver.".__XE_VERSION__."로 업데이트하였습니다");
+        $this->output->success("Update the Xpressengine to ver.".__XE_VERSION__.".");
 
     }
 
@@ -144,24 +144,22 @@ class XeUpdate extends Command
     private function printGuide()
     {
 
-        $this->output->section('방법1 - git을 사용하여 Xpressengine을 설치한 경우');
+        $this->output->section('Method 1 - If you installed the Xpressengine using Git');
         $this->output->text(
             [
-                '1. "git pull origin master"를 실행합니다.',
-                '2. "php artisan xe:update --skip-download"를 실행합니다.',
+                '1. Run the "git pull origin master".',
+                '2. Run the "php artisan xe:update --skip-download".',
             ]
         );
 
-        $this->output->section('방법2 - installer를 사용하여 Xpressengine을 설치한 경우');
+        $this->output->section('Method 2 - If you installed the XpressEngine using the Installer');
         $this->output->text(
             [
-                '1. https://github.com/xpressengine/xpressengine/releases에서 최신 릴리즈 파일을 다운로드 받습니다.',
-                '2. XE를 설치한 root 디렉토리에서 다운로드 받은 파일의 압축을 풀어서 덮어씌웁니다.',
-                '3. "php artisan xe:update --skip-download"를 실행합니다.',
+                '1. Download the latest release files from https://github.com/xpressengine/xpressengine/releases.',
+                '2. The file that you downloaded from the root directory where you installed the XE to overwrite unzip.',
+                '3. Run the "php artisan xe:update --skip-download".',
             ]
         );
         $this->output->newLine();
     }
-
-
 }
