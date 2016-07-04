@@ -154,12 +154,12 @@ class EditorHandlerTest extends \PHPUnit_Framework_TestCase
 
         $mockEditor = m::mock('Xpressengine\Editor\AbstractEditor');
         $instance->expects($this->once())->method('get')->with('someinstanceid')->willReturn($mockEditor);
-        $mockEditor->shouldReceive('compile')->with('<div></div>')->andReturn('<div attr="foo"></div>');
+        $mockEditor->shouldReceive('compile')->with('<div></div>', true)->andReturn('<div attr="foo"></div>');
 
         $instance->expects($this->once())->method('compileTools')
             ->with('someinstanceid', '<div attr="foo"></div>')->willReturn('<div attr="foo"><p></p></div>');
 
-        $content = $instance->compile('someinstanceid', '<div></div>');
+        $content = $instance->compile('someinstanceid', '<div></div>', true);
 
         $this->assertEquals('<div attr="foo"><p></p></div>', $content);
     }
