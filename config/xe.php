@@ -345,7 +345,7 @@ return [
          */
         'thumbnail' => [
             'disk' => 'local',
-            'path' => 'attached',
+            'path' => 'public/thumbnails',
             'type' => 'fit',
             'dimensions' => [
                 'S' => ['width' => 200, 'height' => 200,],

@@ -72,6 +72,7 @@ class XeInstall extends Command
         'site' => [
             'url' => 'http://mysite.com',
             'timezone' => 'Asia/Seoul',
+            'locale' => 'ko',
         ],
         'admin' => [
             'email' => null,
