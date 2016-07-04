@@ -22,6 +22,7 @@
                 self.$btnDivision = $(".btnDivision");
                 self.$btnAddRow = $("#btnAddRow");
                 self.$btnDeselectAll = $("#btnDeselectAll");
+                self.$btnDelBlock = $("#btnDelBlock");
             },
             bindEvents: function() {
                 self.$btnMode.on("click", self.selectMode);
@@ -29,6 +30,7 @@
                 self.$btnDivision.on('click', self.divide)
                 self.$btnAddRow.on('click', self.addRow);
                 self.$btnDeselectAll.on("click", WidgetBox.deselectAll);
+                self.$btnDelBlock.on("click", self.deleteBlock);
             },
             selectMode: function() {
                 var $this = $(this)
@@ -49,6 +51,8 @@
                             , $target = $selected.closest(".widgetarea-row")
                             , html = "";
 
+                        var height = $selected.data("height") || $selected.height();
+
                         $target.removeClass("widgetarea-row");
                         $selected.remove();
 
@@ -57,7 +61,7 @@
                                 '<div class="xe-col-md-' + v + '">',
                                     '<div class="xe-row widgetarea-row">',
                                         '<div class="xe-col-md-12">',
-                                            '<div class="widgetarea">',
+                                            '<div class="widgetarea" data-height="' + height + '" style="height:' + height + 'px">',
                                                 '<span class="order"></span>',
                                             '</div>',
                                         '</div>',
@@ -68,7 +72,7 @@
 
                         $target.html(html);
 
-                        break
+                        break;
                     case 'horizontal' :
 
                         var $selected = $(".selected")
@@ -77,7 +81,7 @@
                         $widgetAreaRow.after([
                             '<div class="xe-row widgetarea-row">',
                                 '<div class="xe-col-md-12">',
-                                    '<div class="widgetarea">',
+                                    '<div class="widgetarea" data-height="140">',
                                         '<span class="order"></span>',
                                     '</div>',
                                 '</div>',
@@ -85,35 +89,37 @@
                         ].join("\n"));
 
                         if($selected.height() > 140) {
-                            var height = ($selected.height() - 25) / 2;
+                            var height = ($selected.height() - 25) / 2
+                                , $wdigetareaRow = $selected.parents(".widgetarea-row")
+                                , selectedHeight = $wdigetareaRow.find(".widgetarea").height();
 
-                            var $wdigetareaRow = $selected.parents(".widgetarea-row");
-                            var selectedHeight = $wdigetareaRow.find(".widgetarea").height();
-
-                            $wdigetareaRow.find(".widgetarea").height(140);
+                            $wdigetareaRow.find(".widgetarea").height(140).data("height", 140);
 
                             if((selectedHeight - 165) > 140) {
-                                $wdigetareaRow.next().find(".widgetarea").height(selectedHeight - 165);
+                                $wdigetareaRow.next().find(".widgetarea").height(selectedHeight - 165).data("height", selectedHeight - 165);
                             }else {
-                                $wdigetareaRow.next().find(".widgetarea").height(140);
+                                var height = $wdigetareaRow.next().find(".widgetarea").data("height");
+                                $wdigetareaRow.next().find(".widgetarea").height(height).data("height", height);
                             }
 
                         }else {
                             var $cols = $widgetAreaRow.parents("div[class^='xe-col-']").siblings();
-                            var rowLen = $widgetAreaRow.siblings().length + 1;
 
                             $cols.each(function() {
                                 var $this = $(this);
 
-                                $this.find(".widgetarea").eq($this.find(".widgetarea").length - 1).height(140 * rowLen + 25 * (rowLen - 1));
+                                $this.find(".widgetarea-row").parent().find(".widgetarea-row:last").each(function() {
+                                    var $this = $(this);
+                                    var height = $this.height() + 140;
+                                    $this.find(".widgetarea:last").height(height).data("height", height);
+                                });
                             });
-
-                            console.log(rowLen, $cols, $widgetAreaRow.siblings());
                         }
 
-
-
                         break;
+
+                    default:
+                        console.error("type error.");
                 }
 
                 WidgetBox.deselectAll();
@@ -123,14 +129,30 @@
                 self.$editor.append([
                     '<div class="xe-row widgetarea-row">',
                         '<div class="xe-col-md-12">',
-                            '<div class="widgetarea">',
+                            '<div class="widgetarea" data-height="140">',
                                 '<span class="order"></span>',
                             '</div>',
                         '</div>',
                     '</div>'
                 ].join("\n"));
-            }
+            },
+            deleteBlock: function() {
+                var $selected = $(".selected");
+                var $cols = $selected.parents(".widgetarea-row").parents("div[class^='xe-col-']");
+                var $rowTarget = $cols.closest(".xe-row");
 
+                // $cols.remove().promise().then(function() {
+                //     $rowTarget.addClass(".widgetarea-row").append([
+                //         '<div class="xe-row widgetarea-row">',
+                //             '<div class="xe-col-md-12">',
+                //                     '<div class="widgetarea" data-height="140">',
+                //                     '<span class="order"></span>',
+                //                 '</div>',
+                //             '</div>',
+                //         '</div>'
+                //     ].split("\n"));
+                // });
+            }
         }
     })();
 })(window, WidgetBox);

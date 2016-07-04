@@ -129,7 +129,7 @@
                 <div>
                     <button type="button" class="xe-btn xe-btn-sm btnDivision" data-direction="horizontal"><span class="text-horizontal">수평분할</span></button>
                     <button type="button" class="xe-btn xe-btn-sm" id="btnDeselectAll">선택 취소</button>
-                    <button type="button" class="xe-btn xe-btn-sm">삭제</button>
+                    <button type="button" class="xe-btn xe-btn-sm" id="btnDelBlock">삭제</button>
                 </div>
             </div>
         </div>
@@ -145,7 +145,7 @@
             <div class="editor xe-container-fluid">
                 <div class="xe-row widgetarea-row">
                     <div class="xe-col-md-12">
-                        <div class="widgetarea">
+                        <div class="widgetarea" data-height="140">
                             <span class="order">0</span>
                             {{--<div class="xe-row"></div>--}}
                         </div>
