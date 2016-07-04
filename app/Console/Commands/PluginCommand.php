@@ -107,21 +107,21 @@ class PluginCommand extends Command
     protected function printChangedPlugins(array $changed)
     {
         if (count($changed['installed'])) {
-            $this->warn('새로 추가된 플러그인:');
+            $this->warn('Added plugins:');
             foreach ($changed['installed'] as $p => $v) {
                 $this->line("  $p:$v");
             }
         }
 
         if (count($changed['updated'])) {
-            $this->warn('업데이트된 플러그인:');
+            $this->warn('Updated plugins:');
             foreach ($changed['updated'] as $p => $v) {
                 $this->line("  $p:$v");
             }
         }
 
         if (count($changed['uninstalled'])) {
-            $this->warn('삭제된 플러그인:');
+            $this->warn('Deleted plugins:');
             foreach ($changed['uninstalled'] as $p => $v) {
                 $this->line("  $p:$v");
             }
