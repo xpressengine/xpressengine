@@ -7,7 +7,6 @@ use Xpressengine\Editor\EditorHandler;
 use Xpressengine\Editor\Textarea;
 use Xpressengine\Media\Models\Media;
 use Xpressengine\Permission\Grant;
-use Xpressengine\Skins\Editor\DefaultSkin;
 
 class EditorServiceProvider extends ServiceProvider
 {
@@ -27,9 +26,7 @@ class EditorServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->app['xe.pluginRegister']->add(Textarea::class);
-        $this->app['xe.pluginRegister']->add(DefaultSkin::class);
-        $this->app['xe.skin']->setDefaultSkin(EditorHandler::NAME, 'editor/skin/xpressengine@default');
-        
+
         AbstractEditor::setImageResolver(function (array $ids) {
             $dimension = $this->app['request']->isMobile() ? 'M' : 'L';
             $fileClass = $this->app['xe.storage']->getModel();

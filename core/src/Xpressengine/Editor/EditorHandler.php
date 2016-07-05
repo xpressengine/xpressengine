@@ -288,15 +288,11 @@ class EditorHandler
      * @param string      $instanceId instance id
      * @param string      $content    content
      * @param bool        $htmlable   content is htmlable
-     * @param string|null $targetId   target id
      * @return string
      */
-    public function compile($instanceId, $content, $htmlable = false, $targetId = null)
+    public function compile($instanceId, $content, $htmlable = false)
     {
         $editor = $this->get($instanceId);
-        if ($targetId) {
-            $editor->setFiles($this->getFiles($targetId));
-        }
 
         return $this->compileTools($instanceId, $editor->compile($content, $htmlable));
     }
@@ -336,38 +332,6 @@ class EditorHandler
             },
             $content
         );
-    }
-
-    /**
-     * Perform any final actions for the store action lifecycle
-     *
-     * todo: mention 도 필요한지 확인
-     *
-     * @param string $instanceId instance id
-     * @param string $targetId   target id
-     * @param array  $inputs     request inputs
-     * @return void
-     */
-    public function terminate($instanceId, $targetId, $inputs = [])
-    {
-        $editor = $this->get($instanceId);
-        $fileClass = $this->storage->getModel();
-        $olds = $fileClass::getByFileable($targetId);
-        $olds = $olds->getDictionary();
-        $files = $fileClass::whereIn('id', array_get($inputs, $editor->getFileInputName(), []))->get();
-        foreach ($files as $file) {
-            if (!isset($olds[$file->getKey()])) {
-                $this->storage->bind($targetId, $file);
-            } else {
-                unset($olds[$file->getKey()]);
-            }
-        }
-
-        foreach ($olds as $old) {
-            $this->storage->unBind($targetId, $old, true);
-        }
-        
-        $this->tagHandler->set($targetId, array_get($inputs, $editor->getTagInputName(), []), $instanceId);
     }
 
     /**

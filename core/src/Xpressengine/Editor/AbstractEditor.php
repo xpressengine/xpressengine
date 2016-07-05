@@ -506,7 +506,7 @@ abstract class AbstractEditor implements ComponentInterface
         $content = $this->link($content);
         $content = $this->image($content);
 
-        return $this->compileBody($content) . $this->getFileView();
+        return $this->compileBody($content);
     }
 
     /**
@@ -516,24 +516,6 @@ abstract class AbstractEditor implements ComponentInterface
      * @return string
      */
     abstract protected function compileBody($content);
-
-    /**
-     * Get file list view
-     *
-     * @return \Illuminate\Contracts\Support\Renderable|string
-     */
-    protected function getFileView()
-    {
-        if (count($this->files) < 1) {
-            return '';
-        }
-
-        return $this->skins->getAssigned([EditorHandler::NAME, $this->instanceId])
-            ->setView('files')->setData([
-                'instanceId' => $this->instanceId,
-                'files' => $this->files
-            ])->render();
-    }
 
     /**
      * Get a content html tag string
