@@ -404,7 +404,7 @@ class SkinHandler
     }
 
     /**
-     * 타겟에 주어진 스킨을 지정한다. 지정된 정보를 저장소에 저장되고, getAssigned() 메소드를 통해 조회할 수 있다.
+     * 타겟에 주어진 스킨을 지정한다. 지정된 정보를 저장소에 저장하고, getAssigned() 메소드를 통해 조회할 수 있다.
      *
      * @param string      $target 타겟
      * @param SkinEntity  $skin   스킨
