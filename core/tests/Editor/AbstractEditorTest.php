@@ -13,8 +13,12 @@ class AbstractEditorTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadTools()
     {
-        list($editors, $urls, $gate, $skins, $events, $instanceId) = $this->getMocks();
-        $instance = $this->getMock(Dummy::class, ['getTools'], [$editors, $urls, $gate, $skins, $events, $instanceId]);
+        list($editors, $urls, $gate, $skins, $events, $frontend, $instanceId) = $this->getMocks();
+        $instance = $this->getMock(
+            Dummy::class,
+            ['getTools'],
+            [$editors, $urls, $gate, $skins, $events, $frontend, $instanceId]
+        );
 
         $mockTool1 = m::mock('Xpressengine\Editor\AbstractTool');
         $mockTool1->shouldReceive('initAssets');
@@ -27,8 +31,12 @@ class AbstractEditorTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTools()
     {
-        list($editors, $urls, $gate, $skins, $events, $instanceId) = $this->getMocks();
-        $instance = $this->getMock(Dummy::class, ['getActivateToolIds'], [$editors, $urls, $gate, $skins, $events, $instanceId]);
+        list($editors, $urls, $gate, $skins, $events, $frontend, $instanceId) = $this->getMocks();
+        $instance = $this->getMock(
+            Dummy::class,
+            ['getActivateToolIds'],
+            [$editors, $urls, $gate, $skins, $events, $frontend, $instanceId]
+        );
 
         $instance->expects($this->once())->method('getActivateToolIds')->willReturn([
             'editortool/foo@bar',
@@ -46,11 +54,11 @@ class AbstractEditorTest extends \PHPUnit_Framework_TestCase
 
     public function testRender()
     {
-        list($editors, $urls, $gate, $skins, $events, $instanceId) = $this->getMocks();
+        list($editors, $urls, $gate, $skins, $events, $frontend, $instanceId) = $this->getMocks();
         $instance = $this->getMock(
             Dummy::class,
             ['loadTools', 'getOptions', 'getContentHtml', 'getEditorScript'],
-            [$editors, $urls, $gate, $skins, $events, $instanceId]
+            [$editors, $urls, $gate, $skins, $events, $frontend, $instanceId]
         );
 
         $instance->expects($this->once())->method('loadTools');
@@ -61,6 +69,9 @@ class AbstractEditorTest extends \PHPUnit_Framework_TestCase
             ->with(['content' => 'content body', 'var' => 'foo'])->willReturn('<script></script>');
 
         $events->shouldReceive('fire')->once();
+        $frontend->shouldReceive('js')->once()->andReturnSelf();
+        $frontend->shouldReceive('before')->once()->andReturnSelf();
+        $frontend->shouldReceive('load')->once();
 
         $content = $instance->render();
 
@@ -84,6 +95,7 @@ class AbstractEditorTest extends \PHPUnit_Framework_TestCase
             m::mock('Illuminate\Contracts\Auth\Access\Gate'),
             m::mock('Xpressengine\Skin\SkinHandler'),
             m::mock('Illuminate\Contracts\Events\Dispatcher'),
+            m::mock('Xpressengine\Presenter\Html\FrontendHandler'),
             'someinstanceid'
         ];
     }

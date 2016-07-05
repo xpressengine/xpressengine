@@ -20,7 +20,7 @@ var TreeNode = React.createClass({
     setSearchedNode: React.PropTypes.func
   },
 
-  renderChildren() {
+  renderChildren: function () {
     var props = this.props;
     var index = props.index;
     var tree = props.tree;
@@ -82,7 +82,7 @@ var TreeNode = React.createClass({
     return null;
   },
 
-  render() {
+  render: function () {
     var props = this.props;
     var index = props.index;
     var home = props.home;
@@ -129,17 +129,17 @@ var TreeNode = React.createClass({
     }
   },
 
-  handleMouseDown(nodeId, dom, e) {
+  handleMouseDown: function (nodeId, dom, e) {
     if (this.props.onDragStart) {
       this.props.onDragStart(nodeId, dom, e);
     }
   },
 
-  isMenuEntity(node) {
+  isMenuEntity: function (node) {
     return (node.entity && (node.entity == 'menu'));
   },
 
-  isPlaceHolder(props) {
+  isPlaceHolder: function (props) {
     var index = props.index;
     var dragging = props.dragging;
     return ((index.id === dragging) || props.isPlaceHolder);

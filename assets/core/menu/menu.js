@@ -18,7 +18,7 @@ $__System.registerDynamic("2", [], true, function($__require, exports, module) {
       suggestions: React.PropTypes.array,
       selectedIndex: React.PropTypes.number
     },
-    markIt(item, query) {
+    markIt: function(item, query) {
       var escapedRegex = query.trim().replace(/[-\\^$*+?.()|[\]{}]/g, "\\$&");
       var r = RegExp(escapedRegex, "gi");
       var itemName = item.node.title;
@@ -30,7 +30,7 @@ $__System.registerDynamic("2", [], true, function($__require, exports, module) {
     isMenuEntity: function(node) {
       return (node.entity && (node.entity == 'menu'));
     },
-    render() {
+    render: function() {
       var props = this.props;
       var suggestions = this.props.suggestions.map((function(item, i) {
         return (React.createElement("li", {
@@ -94,7 +94,7 @@ $__System.registerDynamic("3", ["2"], true, function($__require, exports, module
         });
       }
     },
-    searchMenu(keyword) {
+    searchMenu: function(keyword) {
       var self = this;
       var searchingCnt = this.state.searchingCnt + 1;
       var suggestions;
@@ -167,7 +167,7 @@ $__System.registerDynamic("3", ["2"], true, function($__require, exports, module
         });
       }
     },
-    selection(index) {
+    selection: function(index) {
       var input = this.refs.input.getDOMNode();
       this.props.handleSearch(index.node);
       this.setState({
@@ -237,13 +237,13 @@ $__System.registerDynamic("4", [], true, function($__require, exports, module) {
       onCollapse: React.PropTypes.func,
       getBaseUrl: React.PropTypes.func
     },
-    handleCollapse(e) {
+    handleCollapse: function(e) {
       e.stopPropagation();
       var nodeId = this.props.index.id;
       if (this.props.onCollapse)
         this.props.onCollapse(nodeId);
     },
-    render() {
+    render: function() {
       var index = this.props.index;
       var node = index.node;
       var nodeUrl = this.props.getBaseUrl() + '/menus/' + node.id;
@@ -279,7 +279,7 @@ $__System.registerDynamic("5", [], true, function($__require, exports, module) {
       getSelectedNode: React.PropTypes.func,
       setSelectedNode: React.PropTypes.func
     },
-    onClickLink(node) {
+    onClickLink: function(node) {
       if (node.type !== "xpressengine@directLink") {
         location.href = '/' + node.url;
       } else {
@@ -294,15 +294,15 @@ $__System.registerDynamic("5", [], true, function($__require, exports, module) {
         this.props.setSearchedNode(null);
       }
     },
-    onClickHome(node) {
+    onClickHome: function(node) {
       this.props.clickHome(node);
     },
-    handleMouseDown(e) {
+    handleMouseDown: function(e) {
       var nodeId = this.props.index.id;
       var dom = this.refs.inner.getDOMNode();
       this.props.mouseDown(nodeId, dom, e);
     },
-    onClickSetNode(node) {
+    onClickSetNode: function(node) {
       var selected = this.props.getSelectedNode();
       if (selected === node) {
         this.props.setSelectedNode(null);
@@ -310,7 +310,7 @@ $__System.registerDynamic("5", [], true, function($__require, exports, module) {
         this.props.setSelectedNode(node);
       }
     },
-    render() {
+    render: function() {
       var node = this.props.index.node;
       var title = node.title || '';
       var type = node.type;
@@ -404,7 +404,7 @@ $__System.registerDynamic("6", ["4", "5"], true, function($__require, exports, m
       getSearchedNode: React.PropTypes.func,
       setSearchedNode: React.PropTypes.func
     },
-    renderChildren() {
+    renderChildren: function() {
       var props = this.props;
       var index = props.index;
       var tree = props.tree;
@@ -454,7 +454,7 @@ $__System.registerDynamic("6", ["4", "5"], true, function($__require, exports, m
       }
       return null;
     },
-    render() {
+    render: function() {
       var props = this.props;
       var index = props.index;
       var home = props.home;
@@ -485,15 +485,15 @@ $__System.registerDynamic("6", ["4", "5"], true, function($__require, exports, m
         }), this.renderChildren()));
       }
     },
-    handleMouseDown(nodeId, dom, e) {
+    handleMouseDown: function(nodeId, dom, e) {
       if (this.props.onDragStart) {
         this.props.onDragStart(nodeId, dom, e);
       }
     },
-    isMenuEntity(node) {
+    isMenuEntity: function(node) {
       return (node.entity && (node.entity == 'menu'));
     },
-    isPlaceHolder(props) {
+    isPlaceHolder: function(props) {
       var index = props.index;
       var dragging = props.dragging;
       return ((index.id === dragging) || props.isPlaceHolder);
@@ -523,20 +523,20 @@ $__System.registerDynamic("7", ["6"], true, function($__require, exports, module
       setSearchedNode: React.PropTypes.func,
       moveNode: React.PropTypes.func
     },
-    getDefaultProps() {
+    getDefaultProps: function() {
       return {paddingLeft: 48};
     },
-    getInitialState() {
+    getInitialState: function() {
       return this.init(this.props);
     },
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps: function(nextProps) {
       if (!this._update) {
         this.setState(this.init(nextProps));
       } else {
         this._update = false;
       }
     },
-    init(props) {
+    init: function(props) {
       var tree = props.tree;
       tree.updateNodesPosition();
       return {
@@ -553,7 +553,7 @@ $__System.registerDynamic("7", ["6"], true, function($__require, exports, module
         }
       };
     },
-    getDraggingDom() {
+    getDraggingDom: function() {
       var tree = this.state.tree;
       var dragging = this.state.dragging;
       var home = this.props.home;
@@ -583,7 +583,7 @@ $__System.registerDynamic("7", ["6"], true, function($__require, exports, module
       }
       return null;
     },
-    render() {
+    render: function() {
       var tree = this.state.tree;
       var dragging = this.state.dragging;
       var draggingDom = this.getDraggingDom();
@@ -613,7 +613,7 @@ $__System.registerDynamic("7", ["6"], true, function($__require, exports, module
         id: "uitree"
       }, draggingDom, treeItems));
     },
-    dragStart(id, dom, e) {
+    dragStart: function(id, dom, e) {
       var tree = this.state.tree;
       var node = tree.get(id);
       if (node.entity && node.entity == 'menu')
@@ -639,7 +639,7 @@ $__System.registerDynamic("7", ["6"], true, function($__require, exports, module
       document.body.addEventListener('mousemove', this.drag);
       document.body.addEventListener('mouseup', this.dragEnd);
     },
-    drag(e) {
+    drag: function(e) {
       if (this._start) {
         this.setState({dragging: this.dragging});
         this._start = false;
@@ -713,7 +713,7 @@ $__System.registerDynamic("7", ["6"], true, function($__require, exports, module
         dragging: dragging
       });
     },
-    dragStop(e) {
+    dragStop: function(e) {
       var Keys = {
         ENTER: 13,
         TAB: 9,
@@ -730,7 +730,7 @@ $__System.registerDynamic("7", ["6"], true, function($__require, exports, module
       document.body.removeEventListener('mouseup', this.dragEnd);
       document.body.removeEventListener('keydown', this.dragStop);
     },
-    dragEnd() {
+    dragEnd: function() {
       this.setState({
         tempTree: null,
         dragging: {
@@ -765,7 +765,7 @@ $__System.registerDynamic("7", ["6"], true, function($__require, exports, module
       document.body.removeEventListener('mouseup', this.dragEnd);
       document.body.removeEventListener('keydown', this.dragStop);
     },
-    rollbackTree() {
+    rollbackTree: function() {
       var rollbackTree = this.state.tempTree;
       if (!rollbackTree)
         return;
@@ -833,7 +833,7 @@ $__System.registerDynamic("1", ["3", "7"], true, function($__require, exports, m
     getSelectedNode: function() {
       return this.state.selected;
     },
-    setSelectedNode(node) {
+    setSelectedNode: function(node) {
       this.setState({selected: node});
     },
     movementFilter: function(param) {
@@ -869,7 +869,7 @@ $__System.registerDynamic("1", ["3", "7"], true, function($__require, exports, m
         return param;
       }
     },
-    moveMenuItem(target) {
+    moveMenuItem: function(target) {
       var moveItemUrl = this.props.baseUrl + '/moveItem';
       XE.ajax({
         url: moveItemUrl,
@@ -886,7 +886,7 @@ $__System.registerDynamic("1", ["3", "7"], true, function($__require, exports, m
         }.bind(this)
       });
     },
-    getBaseUrl() {
+    getBaseUrl: function() {
       return this.props.baseUrl;
     },
     onClickHome: function(node) {
@@ -926,7 +926,7 @@ $__System.registerDynamic("1", ["3", "7"], true, function($__require, exports, m
         moveNode: this.moveMenuItem
       })))));
     },
-    isMenuEntity(node) {
+    isMenuEntity: function(node) {
       return (node.entity && (node.entity == 'menu'));
     }
   });

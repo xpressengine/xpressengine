@@ -1,0 +1,62 @@
+@charset "utf-8";
+
+.bd_file_list > ul {
+    display: none;
+    margin: 15px 0 0 0;
+    padding: 0;
+    list-style: none;
+}
+.bd_file_list li:first-child {
+    margin-top: 0;
+}
+.bd_file_list li {
+    margin-top: 9px;
+}
+.bd_file_list li > a,
+.bd_file_list .bd_file_size {
+    font-size: 13px;
+    color: #bebebe;
+    line-height: 15px;
+    text-decoration: none;
+}
+.bd_file_list .bd_file_size {
+    padding-left: 6px;
+}
+.bd_file_list li > a:hover {
+    color: #696e7a;
+    text-decoration: underline;
+}
+.bd_file_list li > a > i {
+    width: 15px;
+    height: 15px;
+    margin-right: 10px;
+    text-align: center;
+}
+.bd_file_list .bd_btn_file {
+    display: inline-block;
+    color: #bebebe;
+    font-size: 20px;
+    text-align: center;
+    line-height: 24px;
+    text-decoration: none;
+}
+.bd_file_list .bd_btn_file:hover {
+    color: #696e7a;
+}
+.bd_file_list .bd_btn_file.on {
+    color: #696e7a;
+}
+.bd_file_list .bd_btn_file.on ~ ul {
+    display: block;
+}
+.bd_file_list .bd_btn_file > i {
+    float: left;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+}
+.bd_file_list .bd_file_num {
+    margin-left: 10px;
+    font-style: normal;
+    font-size: 14px;
+}

@@ -9,7 +9,7 @@ $__System.registerDynamic("1", [], true, function($__require, exports, module) {
       GLOBAL = this;
   var LangEditorBox = React.createClass({
     displayName: "LangEditorBox",
-    getDefaultProps() {
+    getDefaultProps: function() {
       return {
         name: '',
         langKey: '',
