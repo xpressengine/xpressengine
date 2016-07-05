@@ -81,7 +81,7 @@
                     <div class="xe-form-group">
                         <!--[D] 기본 dropdown 구조에서 .vertical-list 추가-->
                         <div class="xe-btn-group vertical-list">
-                            <button type="button" class="xe-btn xe-btn-sm btnDivision" data-direction="vertical"><span class="text-vertical">수직분할</span></button>
+                            <button type="button" class="xe-btn xe-btn-sm btnDivision" data-direction="vertical"><span class="text-vertical">수직분할</span> (<span id="divisionTypeView">6:6</span>)</button>
                             <button type="button" class="xe-btn xe-btn-sm xe-dropdown-toggle" data-toggle="xe-dropdown">
                                 <span class="caret"></span>
                                 <span class="xe-sr-only">Toggle Dropdown</span>
@@ -89,26 +89,26 @@
                             <div class="xe-dropdown-menu">
                                 <ul id="selectDivision">
                                     <li>
-                                        <a href="#" data-type="6|6">
+                                        <a href="#" data-type="6|6" data-display="6:6">
                                             <span style="width:77px">6</span>
                                             <span style="width:78px">6</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#" data-type="4|8">
+                                        <a href="#" data-type="4|8" data-display="4:8">
                                             <span style="width:52px">4</span>
                                             <span style="width:103px">8</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#" data-type="4|4|4">
+                                        <a href="#" data-type="4|4|4" data-display="4:4:4">
                                             <span style="width:50px">4</span>
                                             <span style="width:50px">4</span>
                                             <span style="width:50px">4</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#" data-type="3|3|3|3">
+                                        <a href="#" data-type="3|3|3|3" data-display="3:3:3:3">
                                             <span style="width:36px">3</span>
                                             <span style="width:36px">3</span>
                                             <span style="width:36px">3</span>
@@ -145,7 +145,7 @@
             <div class="editor xe-container-fluid">
                 <div class="xe-row widgetarea-row">
                     <div class="xe-col-md-12">
-                        <div class="widgetarea" data-height="140">
+                        <div class="widgetarea" data-height="140" style="height:140px">
                             <span class="order">0</span>
                             {{--<div class="xe-row"></div>--}}
                         </div>
