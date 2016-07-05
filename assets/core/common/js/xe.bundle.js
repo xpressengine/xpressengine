@@ -852,6 +852,9 @@ if (typeof exports !== 'undefined') {
       getLangCode: function(locale) {
         return locale? _items[locale] : _items;
       },
+      getCurrentLocale: function() {
+        return this.locales[0];
+      },
       trans: function(id, parameters) {
         return Translator.trans(id, parameters);
       },
