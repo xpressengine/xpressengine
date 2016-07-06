@@ -495,6 +495,7 @@ abstract class AbstractEditor implements ComponentInterface
      */
     public function compile($content, $htmlable = false)
     {
+        $content = (string)$content;
         $this->events->fire('xe.editor.compile', $this);
 
         if ($htmlable !== true) {
