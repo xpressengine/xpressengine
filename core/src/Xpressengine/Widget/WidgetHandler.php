@@ -139,17 +139,17 @@ class WidgetHandler
      *
      * @param string $widgetId widget id
      *
-     * @return mixed
+     * @return AbstractWidget
      * @throws Exception
      */
-    protected function getInstance($widgetId)
+    protected function getInstance($widgetId, $args = null)
     {
         $className = $this->getClassName($widgetId);
         if ($className === null) {
             throw new NotFoundWidgetException(['id' => $widgetId]);
         }
 
-        $instance = new $className();
+        $instance = new $className($args);
         return $instance;
     }
 
@@ -162,15 +162,15 @@ class WidgetHandler
      * @return mixed
      * @throws Exception
      */
-    public function create($widgetId, $args = [])
+    public function render($widgetId, $args = [])
     {
         $currentUserRating = $this->guard->user()->getRating();
 
         try {
-            $instance = $this->getInstance($widgetId);
+            $instance = $this->getInstance($widgetId, $args);
 
             if (in_array($currentUserRating, $instance::$ratingWhiteList)) {
-                $ret = $instance->render($args);
+                $ret = $instance->render();
                 if ($ret instanceof Renderable) {
                     $ret = $ret->render();
                 }
@@ -195,11 +195,11 @@ class WidgetHandler
      * @return mixed
      * @throws Exception
      */
-    public function setUp($widgetId)
+    public function setup($widgetId)
     {
         $instance = $this->getInstance($widgetId);
 
-        return $instance->getCodeCreationForm();
+        return $instance->renderSetting();
     }
 
     /**
@@ -228,13 +228,18 @@ class WidgetHandler
      *
      * @return string
      */
-    public function getGeneratedCode($widgetId, array $inputs)
+    public function generateCode($widgetId, array $inputs)
     {
+        $widget = $this->getInstance($widgetId);
+
         $codeString = [
             "<xewidget id='{$widgetId}'>"
         ];
+
+        $inputs = $widget->resolveSetting($inputs);
+
         foreach ($inputs as $k => $v) {
-            $paramString = sprintf("<param title='%s'>%s</param>", $k, $v);
+            $paramString = sprintf("<%s>%s</%s>", $k, $v, $k);
             array_push($codeString, $paramString);
         }
 

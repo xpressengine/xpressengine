@@ -35,7 +35,7 @@ class WidgetController extends Controller {
     {
         $id = Input::get('widget');
         $inputs = Input::except('widget');
-        return $widgetHandler->getGeneratedCode($id, $inputs);
+        return $widgetHandler->generateCode($id, $inputs);
 
     }
 
@@ -50,7 +50,7 @@ class WidgetController extends Controller {
     {
         $id = Input::get('widget');
 
-        $settingFormView = $widgetHandler->setUp($id);
+        $settingFormView = $widgetHandler->setup($id);
 
         return $settingFormView->render();
     }
@@ -67,7 +67,7 @@ class WidgetController extends Controller {
         $id = Input::get('widget');
         $args = Input::except('widget');
 
-        $render = $widgetHandler->create($id, $args);
+        $render = $widgetHandler->render($id, $args);
 
         return $render;
     }

@@ -680,7 +680,6 @@ Route::settings('widget', function () {
     Route::get('setup', ['as' => 'manage.widget.setup', 'uses' => 'WidgetController@setup']);
     Route::get('render', ['as' => 'manage.widget.render', 'uses' => 'WidgetController@render']);
     Route::get('generate', ['as' => 'manage.widget.generate', 'uses' => 'WidgetController@generate']);
-
 });
 
 /* deprecated */

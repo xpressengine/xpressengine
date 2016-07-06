@@ -23,20 +23,16 @@ class StorageSpace extends AbstractWidget
 {
     protected static $id = 'widget/xpressengine@storageSpace';
 
-    protected function init()
-    {
-        //
-    }
-
     /**
      * render
      *
-     * @param array $args
-     *
      * @return string
+     * @internal param array $args
+     *
      */
-    public function render(array $args)
+    public function render()
     {
+        $args = $this->config;
         $limit = isset($args['limit']) ? $args['limit'] : 5;
 
         $disks = Config::get('filesystems.disks');
@@ -74,15 +70,5 @@ class StorageSpace extends AbstractWidget
             }),
             'total' => $total
         ])->render();
-    }
-
-    /**
-     * getCodeCreationForm
-     *
-     * @return mixed
-     */
-    public function getCodeCreationForm()
-    {
-        //
     }
 }

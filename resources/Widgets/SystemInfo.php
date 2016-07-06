@@ -25,35 +25,26 @@ class SystemInfo extends AbstractWidget
     protected static $id = 'widget/xpressengine@systemInfo';
 
     /**
-     * init
-     *
-     * @return mixed
-     */
-    protected function init()
-    {
-        // TODO: Implement init() method.
-    }
-
-    /**
      * getCodeCreationForm
      *
+     * @param array $args
+     *
      * @return mixed
      */
-    public function getCodeCreationForm()
+    public function renderSetting(array $args = [])
     {
-        // TODO: Implement getCodeCreationForm() method.
+        // TODO: Implement renderSetting() method.
     }
 
     /**
      * render
      *
-     * @param array $args to render parameter array
-     *
      * @return mixed
+     * @internal param array $args to render parameter array
+     *
      */
-    public function render(array $args)
+    public function render()
     {
-
         $request = app('request');
 
         $viewData = [

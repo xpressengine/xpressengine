@@ -26,33 +26,13 @@ class ContentInfo extends AbstractWidget
     protected static $id = 'widget/xpressengine@contentInfo';
 
     /**
-     * init
-     *
-     * @return mixed
-     */
-    protected function init()
-    {
-        // TODO: Implement init() method.
-    }
-
-    /**
-     * getCodeCreationForm
-     *
-     * @return mixed
-     */
-    public function getCodeCreationForm()
-    {
-        // TODO: Implement getCodeCreationForm() method.
-    }
-
-    /**
      * render
      *
-     * @param array $args to render parameter array
-     *
      * @return mixed
+     * @internal param array $args to render parameter array
+     *
      */
-    public function render(array $args)
+    public function render()
     {
         $viewData = [
             'totalDocument' => Document::count(),

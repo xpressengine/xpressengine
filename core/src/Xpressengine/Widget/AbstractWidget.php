@@ -38,47 +38,43 @@ abstract class AbstractWidget implements ComponentInterface
      */
     public static $ratingWhiteList = ['super', 'manager', 'member', 'guest'];
 
-    /**
-     * 생성자. 모든 Widget 동일한 방식으로 생성되어야 한다.
-     *
-     */
-    final public function __construct()
-    {
-        $this->init();
-    }
+    protected $config;
 
-    /**
-     * init
-     *
-     * @return mixed
-     */
-    abstract protected function init();
-
-    /**
-     * Return this widget is widget code creation able or unable
-     * codeCreationAble
-     * default value is false
-     *
-     * @return boolean
-     */
-    public static function codeCreationAble()
+    public function __construct($config = null)
     {
-        return false;
+        $this->config = $config;
     }
 
     /**
      * getCodeCreationForm
      *
+     * @param array $args
+     *
      * @return mixed
      */
-    abstract public function getCodeCreationForm();
+    public function renderSetting(array $args = [])
+    {
+        return null;
+    }
+
+    public function resolveSetting(array $inputs = [])
+    {
+        return $inputs;
+    }
 
     /**
-     * render
+     * set or get config info
      *
-     * @param array $args to render parameter array
+     * @param array|null $config
      *
-     * @return mixed
+     * @return array|void
      */
-    abstract public function render(array $args);
+    public function setting(array $config = null)
+    {
+        if($config !== null) {
+            $this->config = $config;
+        }
+        return $this->config;
+    }
+
 }

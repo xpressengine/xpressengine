@@ -18,7 +18,6 @@ use Illuminate\Contracts\Support\Renderable;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Plugin\ComponentInterface;
 use Xpressengine\Plugin\ComponentTrait;
-use Xpressengine\Plugins\Alice\Alice;
 use Xpressengine\Support\MobileSupportTrait;
 
 /**
