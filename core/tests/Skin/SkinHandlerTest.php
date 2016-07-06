@@ -158,9 +158,6 @@ class SkinHandlerTest extends \PHPUnit_Framework_TestCase
         $store->shouldReceive('setSelectedSkin')->withArgs(
             [$key.SkinHandler::INSTANCE_DELIMITER.$instanceId, 'desktop', 'foo']
         )->once()->andReturnNull();
-        $store->shouldReceive('setConfigs')->withArgs(
-            [$key.SkinHandler::INSTANCE_DELIMITER.$instanceId, 'foo', ['bar']]
-        )->once()->andReturnNull();
 
         $this->handler->setStore($store);
 

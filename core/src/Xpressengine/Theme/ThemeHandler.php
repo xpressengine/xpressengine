@@ -215,7 +215,7 @@ class ThemeHandler
         }
 
         if (isset($this->themeList[$themeId]) === false) {
-            $this->themeList[$themeId] = new ThemeEntity($themeId, $registerd);
+            $this->themeList[$themeId] = $this->makeEntity($themeId, $registerd);
         }
 
         $config = $this->getThemeConfig($instanceId);
@@ -406,5 +406,18 @@ class ThemeHandler
     public function getConfigId($id)
     {
         return $this->configKey.'.'.$id;
+    }
+
+    /**
+     * make and return ThemeEntity
+     *
+     * @param $id
+     * @param $class
+     *
+     * @return ThemeEntity
+     */
+    protected function makeEntity($id, $class)
+    {
+        return new ThemeEntity($id, $class);
     }
 }
