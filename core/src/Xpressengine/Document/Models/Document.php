@@ -45,6 +45,7 @@ use Illuminate\Database\Eloquent\Builder as OriginBuilder;
  * @property integer published
  * @property integer status
  * @property integer display
+ * @property integer format
  * @property string locale
  * @property string title
  * @property string content
@@ -77,9 +78,17 @@ class Document extends DynamicModel
 
     protected $fillable = [
         'parentId', 'instanceId', 'userId', 'writer', 'approved',
-        'published', 'status', 'display', 'locale', 'title',
+        'published', 'status', 'display', 'format', 'locale', 'title',
         'content', 'pureContent', 'createdAt', 'publishedAt', 'head', 'reply',
         'listOrder', 'ipaddress', 'userType', 'certifyKey', 'email',
+    ];
+
+    protected $casts = [
+        'status' => 'int',
+        'approved' => 'int',
+        'published' => 'int',
+        'display' => 'int',
+        'format' => 'int',
     ];
 
     /**
