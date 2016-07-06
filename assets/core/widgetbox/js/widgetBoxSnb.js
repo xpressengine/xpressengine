@@ -104,7 +104,7 @@
                     $widgetAreaRow.after([
                         '<div class="xe-row widgetarea-row">',
                             '<div class="xe-col-md-12">',
-                                '<div class="widgetarea" data-height="140">',
+                                '<div class="widgetarea" data-height="140" style="height:140px">',
                                     '<span class="order"></span>',
                                 '</div>',
                             '</div>',
@@ -132,9 +132,11 @@
                             var $this = $(this);
 
                             $this.find(".widgetarea-row").parent().find(".widgetarea-row:last").each(function() {
-                                var $this = $(this);
-                                var height = $this.height() + 140;
-                                $this.find(".widgetarea:last").height(height).data("height", height);
+                                var $this = $(this)
+                                    , $lastTarget = $this.find(".widgetarea:last")
+                                    , height = $lastTarget.data("height") + 165;
+
+                                $lastTarget.height(height).data("height", height);
                             });
                         });
                     }
@@ -147,7 +149,7 @@
                 self.$editor.append([
                     '<div class="xe-row widgetarea-row">',
                         '<div class="xe-col-md-12">',
-                            '<div class="widgetarea" data-height="140">',
+                            '<div class="widgetarea" data-height="140" style="height:140px">',
                                 '<span class="order"></span>',
                             '</div>',
                         '</div>',
@@ -163,32 +165,52 @@
                     , $lastColumn = $selectedParentCol.siblings(":last");
 
                 if($siblingsRow.length > 0) {
-                    var $expendTargetRow = $()
-                        , height = $selectedParentRow.height();
+                    // var $expendTargetRow = $()
+                    //     , height = $selectedParentRow.height();
+                    //
+                    // if($selectedParentRow.next().length > 0) {
+                    //     $expendTargetRow = $selectedParentRow.next();
+                    // }else {
+                    //     $expendTargetRow = $selectedParentRow.prev();
+                    // }
+                    //
+                    // height += $expendTargetRow.find("> div[class^='xe-col-'] .widgetarea").height();
+                    //
+                    // $selectedParentRow.remove();
+                    // $expendTargetRow.find(".widgetarea").height(height).data("height", height);
 
-                    if($selectedParentRow.next().length > 0) {
-                        $expendTargetRow = $selectedParentRow.next();
-                    }else {
-                        $expendTargetRow = $selectedParentRow.prev();
-                    }
 
-                    height += $expendTargetRow.find("> div[class^='xe-col-'] .widgetarea").height();
+                    //var $target = $selectedParentRow.parent().siblings().parents("div[class^='xe-col-']");
+                    var $target = $selectedParentRow.parent().siblings();
 
                     $selectedParentRow.remove();
-                    $expendTargetRow.find(".widgetarea").height(height).data("height", height);
+
+                    self.reduceBlock($target);
+                    $("[reduce=true]").removeAttr("reduce");
 
                 }else {
                     if($lastColumn.length > 0) {
                         var height = $selectedParentCol.find(".widgetarea").height()
                             , size = parseInt($selectedParentCol.attr('class').match(/col-md-([0-9]+)/i)[1]) + parseInt($lastColumn.attr('class').match(/col-md-([0-9]+)/i)[1]);
 
+                        var $lastWidgetRow = $lastColumn.find(".widgetarea-row")
+
                         $selectedParentCol.remove();
-                        $lastColumn.closest(".xe-row").addClass("widgetarea-row");
-                        $lastColumn.removeAttr('class').addClass('xe-col-md-' + size).html([
-                            '<div class="widgetarea" data-height="140" data-height="' + height + '" style="height:' + height + 'px">',
-                                '<span class="order">0</span>',
-                            '</div>'
-                        ].join("\n"));
+                        $lastColumn.removeAttr('class').addClass('xe-col-md-' + size);
+
+                        //TODO:: 수정 필요
+                        if($lastWidgetRow.length > 0) {
+                            var $lastColumnParentRow = $lastColumn.closest(".xe-row");
+
+                            $lastColumnParentRow.parent().append($lastWidgetRow);
+                            $lastColumnParentRow.remove();
+                        }
+
+                        // $lastColumn.removeAttr('class').addClass('xe-col-md-' + size).html([
+                        //     '<div class="widgetarea" data-height="140" data-height="' + height + '" style="height:' + height + 'px">',
+                        //         '<span class="order">0</span>',
+                        //     '</div>'
+                        // ].join("\n"));
 
                     }else {
 
@@ -197,6 +219,31 @@
 
                 WidgetBox.deselectAll();
                 WidgetBox.setOrdering();
+            },
+            reduceBlock: function($target) {
+                if($target.length > 0) {
+
+                    $target.each(function() {
+                        var $targetPiece = $(this);
+
+
+                        $targetPiece.find("> .widgetarea-row > div[class^='xe-col-'] > .widgetarea:last ").each(function() {
+                            var $widgetarea = $(this);
+
+                            if($widgetarea.data("height") > 140) {
+                                var height = $widgetarea.height() - 165;
+
+                                if (!$widgetarea.attr("reduce")) {
+                                    $widgetarea.data("height", height).height(height).attr("reduce", true);
+                                }
+
+                            }
+                        });
+
+                    });
+
+                    self.reduceBlock($target.parents("div[class^='xe-col-']").siblings());
+                }
             }
         }
     })();
