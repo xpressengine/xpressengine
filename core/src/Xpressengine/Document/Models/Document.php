@@ -143,7 +143,7 @@ class Document extends DynamicModel
     /**
      * @var array
      */
-    protected $status = [
+    protected $statuses = [
         self::STATUS_PUBLIC,
         self::STATUS_PRIVATE,
         self::STATUS_TEMP,
@@ -154,7 +154,7 @@ class Document extends DynamicModel
     /**
      * @var array
      */
-    protected $display = [
+    protected $displays = [
         self::DISPLAY_VISIBLE,
         self::DISPLAY_SECRET,
         self::DISPLAY_HIDDEN,
@@ -163,7 +163,7 @@ class Document extends DynamicModel
     /**
      * @var array
      */
-    protected $approved = [
+    protected $approves = [
         self::APPROVED_APPROVED,
         self::APPROVED_WAITING,
         self::APPROVED_REJECTED,
@@ -172,7 +172,7 @@ class Document extends DynamicModel
     /**
      * @var array
      */
-    protected $published = [
+    protected $publishes = [
         self::PUBLISHED_PUBLISHED,
         self::PUBLISHED_RESERVED,
         self::PUBLISHED_WAITING,
@@ -455,7 +455,7 @@ class Document extends DynamicModel
     public function setApproved($approved)
     {
         $approved = strtolower($approved);
-        if (in_array($approved, $this->approved) === false) {
+        if (in_array($approved, $this->approves) === false) {
             throw new NotAllowedTypeException(['type' => $approved, 'to' => 'Approved']);
         }
         $this->setAttribute('approved', $approved);
@@ -470,7 +470,7 @@ class Document extends DynamicModel
     public function setDisplay($display)
     {
         $display = strtolower($display);
-        if (in_array($display, $this->display) === false) {
+        if (in_array($display, $this->displays) === false) {
             throw new NotAllowedTypeException(['type' => $display, 'to' => 'Display']);
         }
         $this->setAttribute('display', $display);
@@ -485,7 +485,7 @@ class Document extends DynamicModel
     public function setStatus($status)
     {
         $status = strtolower($status);
-        if (in_array($status, $this->status) === false) {
+        if (in_array($status, $this->statuses) === false) {
             throw new NotAllowedTypeException(['type' => $status, 'to' => 'Status']);
         }
         $this->setAttribute('status', $status);
@@ -501,7 +501,7 @@ class Document extends DynamicModel
     public function setPublished($published)
     {
         $published = strtolower($published);
-        if (in_array($published, $this->published) === false) {
+        if (in_array($published, $this->publishes) === false) {
             throw new NotAllowedTypeException(['type' => $published, 'to' => 'Published']);
         }
         $this->setAttribute('published', $published);
