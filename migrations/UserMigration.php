@@ -123,7 +123,9 @@ class UserMigration implements Migration {
                                          ['name' => 'user', 'vars' => '[]'],
                                          ['name' => 'user.common', 'vars' => '{"secureLevel":"low","useCaptcha":false,"webmasterName":"webmaster","webmasterEmail":"webmaster@domain.com","agreement":"","privacy":""}'],
                                          ['name' => 'user.join', 'vars' => '{"joinable":true,"useEmailCertify":false,"useCaptcha":false}'],
-                                         ['name' => 'toggleMenu@user', 'vars' => '{"activate":["user/toggleMenu/xpressengine@raw"]}']
+                                         ['name' => 'toggleMenu@user', 'vars' => '{"activate":["user/toggleMenu/xpressengine@raw"]}'],
+                                         // 이걸 안하면 게시판의 댓글설정 화면이 보이지 않아요.
+                                         ['name' => 'toggleMenu@comment', 'vars' => '{}']
                                      ]);
     }
 
