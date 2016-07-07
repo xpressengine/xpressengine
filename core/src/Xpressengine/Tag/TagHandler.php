@@ -16,6 +16,7 @@ namespace Xpressengine\Tag;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\QueryException;
 
 /**
  * # TagHandler
@@ -171,7 +172,11 @@ class TagHandler
                 ]);
 
                 $tag->increment('count');
-            } catch (\Exception $e) {
+            } catch (QueryException $e) {
+                if ($e->getCode() != "23000") {
+                    throw $e;
+                }
+
                 $conn->table($tag->getTaggableTable())
                     ->where('tagId', $tag->getKey())
                     ->where('taggableId', $taggableId)
