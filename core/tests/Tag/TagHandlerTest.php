@@ -23,7 +23,7 @@ class TagHandlerTest extends \PHPUnit_Framework_TestCase
     {
         list($decomposer) = $this->getMocks();
 
-        $instance = $this->getMock(TagHandler::class, ['createModel', 'relate', 'unrelate'], [$decomposer]);
+        $instance = $this->getMock(TagHandler::class, ['createModel', 'attach', 'detach'], [$decomposer]);
 
         $mockModel = m::mock('Xpressengine\Tag\Tag');
 
@@ -57,7 +57,7 @@ class TagHandlerTest extends \PHPUnit_Framework_TestCase
             'instanceId' => null,
         ])->andReturn($mockTagNew);
 
-        $instance->expects($this->once())->method('relate')->with(
+        $instance->expects($this->once())->method('attach')->with(
             'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
             [$mockTagExists1, $mockTagExists2, $mockTagNew]
         )->will($this->returnValue(null));
@@ -68,7 +68,7 @@ class TagHandlerTest extends \PHPUnit_Framework_TestCase
         $mockTagOld2->shouldReceive('getKey')->andReturn(4);
 
 
-        $instance->expects($this->once())->method('unrelate')->with(
+        $instance->expects($this->once())->method('detach')->with(
             'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
             new Collection([$mockTagOld1, $mockTagOld2])
         )->will($this->returnValue(null));
@@ -92,7 +92,7 @@ class TagHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([1, 2, 5], $keys);
     }
 
-    public function testRelate()
+    public function testAttach()
     {
         list($decomposer) = $this->getMocks();
 
@@ -114,10 +114,10 @@ class TagHandlerTest extends \PHPUnit_Framework_TestCase
 
         $mockTag->shouldReceive('increment')->once()->with('count')->andReturnNull();
 
-        $this->invokeMethod($instance, 'relate', ['xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', [$mockTag]]);
+        $this->invokeMethod($instance, 'attach', ['xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', [$mockTag]]);
     }
 
-    public function testRelateDoUpdateWhenThrowsException()
+    public function testAttachDoUpdateWhenThrowsException()
     {
         list($decomposer) = $this->getMocks();
 
@@ -144,10 +144,10 @@ class TagHandlerTest extends \PHPUnit_Framework_TestCase
         $mockConn->shouldReceive('update')->once()->with(['position' => 0])->andReturnNull();
 
 
-        $this->invokeMethod($instance, 'relate', ['xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', [$mockTag]]);
+        $this->invokeMethod($instance, 'attach', ['xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', [$mockTag]]);
     }
 
-    public function testUnrelate()
+    public function testDetach()
     {
         list($decomposer) = $this->getMocks();
 
@@ -169,7 +169,7 @@ class TagHandlerTest extends \PHPUnit_Framework_TestCase
 
         $mockTag->shouldReceive('decrement')->once()->with('count')->andReturnNull();
 
-        $this->invokeMethod($instance, 'unrelate', ['xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', [$mockTag]]);
+        $this->invokeMethod($instance, 'detach', ['xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', [$mockTag]]);
     }
 
     public function testSimilar()

@@ -104,6 +104,36 @@ class MenuMigration implements Migration {
     }
 
     /**
+     * site default config setup
+     *
+     * @param $mainMenu
+     * @param $homeId
+     * @return void
+     */
+    public function siteDefaultConfig($mainMenu, $homeId)
+    {
+        $site_title = XeLang::genUserKey();
+        foreach (XeLang::getLocales() as $locale) {
+            $value = "XE3";
+            if ($locale != 'ko') {
+                $value = "XE3";
+            }
+            XeLang::save($site_title, $locale, $value, false);
+        }
+
+        /**
+         * @var $configManager ConfigManager
+         */
+        $configManager = app('xe.config');
+        $configEntity = $configManager->get('site.default');
+        $configEntity->set('defaultMenu', $mainMenu->id);
+        $configEntity->set('homeInstance', $homeId);
+        $configEntity->set('site_title', $site_title);
+
+        $configManager->modify($configEntity);
+    }
+
+    /**
      * pageModuleMenuSetup
      *
      * @param Menu $mainMenu
@@ -148,16 +178,8 @@ class MenuMigration implements Migration {
         $menuHandler->setMenuItemTheme($item, 'theme/alice@alice.1', 'theme/alice@alice.1');
         app('xe.permission')->register($menuHandler->permKeyString($item), new Grant);
 
-        /**
-         * @var $configManager ConfigManager
-         */
-        $configManager = app('xe.config');
-        $configEntity = $configManager->get('site.default');
-        $configEntity->set('defaultMenu', $mainMenu->id);
-        $configEntity->set('homeInstance', $item->id);
 
-        $configManager->modify($configEntity);
-
+        $this->siteDefaultConfig($mainMenu, $item->id);
         $this->registerWelcomePageContent($item);
     }
 

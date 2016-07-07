@@ -95,9 +95,6 @@ class Handler extends ExceptionHandler
                 $message = $e->getMessage();
             }
             $responseException->setMessage($message);
-        } // no http exception
-        elseif ($e instanceof ModelNotFoundException) {
-            $responseException = new NotFoundHttpException($e->getMessage(), $e);
         } else {
             $responseException = new HttpXpressengineException([], Response::HTTP_INTERNAL_SERVER_ERROR);
             $responseException->setMessage(xe_trans('xe::systemError'));
@@ -149,7 +146,6 @@ class Handler extends ExceptionHandler
             ]);
         } else {
             XePresenter::setSkinTargetId('error');
-            XeTheme::selectBlankTheme();
             $view = XePresenter::make(
                 'error',
                 ['type' => 'danger', 'exception' => $responseException, 'message' => $responseException->getMessage()]
