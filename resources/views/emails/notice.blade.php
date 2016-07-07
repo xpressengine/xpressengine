@@ -46,7 +46,7 @@
                                                             <tbody>
                                                             <tr>
                                                                 <td height="42" style="text-align:center">
-                                                                    {{ $contents }}
+                                                                    {!! $contents !!}
                                                                 </td>
                                                             </tr>
                                                             </tbody>
