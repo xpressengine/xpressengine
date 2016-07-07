@@ -285,9 +285,9 @@ class EditorHandler
     /**
      * Compile the raw content to be useful
      *
-     * @param string      $instanceId instance id
-     * @param string      $content    content
-     * @param bool        $htmlable   content is htmlable
+     * @param string $instanceId instance id
+     * @param string $content    content
+     * @param bool   $htmlable   content is htmlable
      * @return string
      */
     public function compile($instanceId, $content, $htmlable = false)

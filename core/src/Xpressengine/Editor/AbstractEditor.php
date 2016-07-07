@@ -357,7 +357,7 @@ abstract class AbstractEditor implements ComponentInterface
 
     /**
      * Get static option data for the editor
-     * 
+     *
      * @return array
      */
     protected function getStaticOption()

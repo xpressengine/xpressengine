@@ -397,7 +397,7 @@ class Storage
 
     /**
      * Sync fileable's files to fileable
-     * 
+     *
      * @param string $fileableId fileable identifier
      * @param array  $fileIds    file identifier
      * @return void
