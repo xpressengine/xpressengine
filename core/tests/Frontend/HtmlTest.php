@@ -26,7 +26,7 @@ class HtmlTest extends \PHPUnit_Framework_TestCase
 
     public function testConstruct()
     {
-        $html = new Html();
+        $html = new Html('html1');
         $this->assertInstanceOf('Xpressengine\Presenter\Html\Tags\Html', $html);
 
         $html2 = new Html('alias');
@@ -42,17 +42,17 @@ class HtmlTest extends \PHPUnit_Framework_TestCase
     {
         $html->content('<div></div>')->load();
         $output = Html::output('body.append');
-        $this->assertEquals('<div></div>', trim($output));
+        $this->assertEquals('<!-- html1 -->'.PHP_EOL.'<div></div>', trim($output));
     }
 
     public function testOutputComposer()
     {
-        $html = new Html();
+        $html = new Html('hi');
         $html->content(function(){
             return 'hi';
         })->load();
         $output = Html::output('body.append');
-        $this->assertEquals('hi', trim($output));
+        $this->assertEquals('<!-- hi -->'.PHP_EOL.'hi', trim($output));
     }
 
     public function testAppendTo()
@@ -107,7 +107,7 @@ class HtmlTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         Html::init();
-        $this->html = new Html('<div></div>');
+        $this->html = new Html();
         parent::setUp();
     }
 }
