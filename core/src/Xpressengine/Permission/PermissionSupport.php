@@ -25,6 +25,14 @@ use Xpressengine\User\Models\UserGroup;
  */
 trait PermissionSupport
 {
+    /**
+     * Get permission argument
+     *
+     * @param string       $key       permission key
+     * @param array|string $abilities abilities
+     * @param string       $siteKey   site key
+     * @return array
+     */
     public function getPermArguments($key, $abilities, $siteKey = 'default')
     {
         $abilities = !is_array($abilities) ? [$abilities] : $abilities;
@@ -48,6 +56,15 @@ trait PermissionSupport
         return $arguments;
     }
 
+    /**
+     * Register permission
+     *
+     * @param Request      $request   request instance
+     * @param string       $key       permission key
+     * @param array|string $abilities abilities
+     * @param string       $siteKey   site key
+     * @return void
+     */
     public function permissionRegister(Request $request, $key, $abilities, $siteKey = 'default')
     {
         $abilities = !is_array($abilities) ? [$abilities] : $abilities;
@@ -62,6 +79,14 @@ trait PermissionSupport
         $this->permissionRegisterGrant($key, $grant, $siteKey);
     }
 
+    /**
+     * Register grant to permission
+     *
+     * @param string     $key     permission key
+     * @param Grant|null $grant   grant object
+     * @param string     $siteKey site key
+     * @return void
+     */
     public function permissionRegisterGrant($key, Grant $grant = null, $siteKey = 'default')
     {
         $grant = $grant ?: new Grant;
@@ -69,17 +94,39 @@ trait PermissionSupport
         app('xe.permission')->register($key, $grant, $siteKey);
     }
 
+    /**
+     * Unregister permission
+     *
+     * @param string $key     permission key
+     * @param string $siteKey site key
+     * @return void
+     */
     public function permissionUnregister($key, $siteKey = 'default')
     {
         app('xe.permission')->destroy($key, $siteKey);
     }
 
+    /**
+     * Move
+     *
+     * @param string $from    previous key
+     * @param string $to      parent key
+     * @param string $siteKey site key
+     * @return void
+     */
     public function permissionMove($from, $to, $siteKey = 'default')
     {
         $permission = app('xe.permission')->find($from, $siteKey);
         app('xe.permission')->move($permission, $to);
     }
 
+    /**
+     * Make data for grant
+     *
+     * @param Request $request request instance
+     * @param string  $ability ability
+     * @return array|null
+     */
     protected function makeGrantData(Request $request, $ability)
     {
         if ($request->get($ability . 'Mode') === 'inherit') {
