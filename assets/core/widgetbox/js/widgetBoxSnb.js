@@ -165,52 +165,46 @@
                     , $lastColumn = $selectedParentCol.siblings(":last");
 
                 if($siblingsRow.length > 0) {
-                    // var $expendTargetRow = $()
-                    //     , height = $selectedParentRow.height();
-                    //
-                    // if($selectedParentRow.next().length > 0) {
-                    //     $expendTargetRow = $selectedParentRow.next();
-                    // }else {
-                    //     $expendTargetRow = $selectedParentRow.prev();
-                    // }
-                    //
-                    // height += $expendTargetRow.find("> div[class^='xe-col-'] .widgetarea").height();
-                    //
-                    // $selectedParentRow.remove();
-                    // $expendTargetRow.find(".widgetarea").height(height).data("height", height);
-
-
-                    //var $target = $selectedParentRow.parent().siblings().parents("div[class^='xe-col-']");
                     var $target = $selectedParentRow.parent().siblings();
 
-                    $selectedParentRow.remove();
+                    if($selectedParentRow.siblings().length > 0) {
+                        var height = $selected.find(".widgetarea").data("height");
+                        var lastColHeight = $selectedParentRow.siblings().last().find(".widgetarea").height();
+
+                        if($selectedParentRow.parent().siblings().find("> .xe-row").length > 1) {
+                            var $extendTarget = ($selectedParentRow.next().length > 0)? $selectedParentRow.next() : $selectedParentRow.prev()
+
+                            $extendTarget.find(".widgetarea").height(lastColHeight + height + 25).data("height", lastColHeight + height + 25);
+                            $selectedParentRow.remove();
+
+                            return;
+                        }else {
+                            $selectedParentRow.remove();
+                            $target = $target.siblings().andSelf();
+                        }
+
+                    }else {
+                        $selectedParentRow.remove();
+                    }
 
                     self.reduceBlock($target);
                     $("[reduce=true]").removeAttr("reduce");
 
                 }else {
                     if($lastColumn.length > 0) {
-                        var height = $selectedParentCol.find(".widgetarea").height()
-                            , size = parseInt($selectedParentCol.attr('class').match(/col-md-([0-9]+)/i)[1]) + parseInt($lastColumn.attr('class').match(/col-md-([0-9]+)/i)[1]);
+                        var size = parseInt($selectedParentCol.attr('class').match(/col-md-([0-9]+)/i)[1]) + parseInt($lastColumn.attr('class').match(/col-md-([0-9]+)/i)[1]);
 
-                        var $lastWidgetRow = $lastColumn.find(".widgetarea-row")
+                        var $lastWidgetRow = $lastColumn.html();
 
                         $selectedParentCol.remove();
                         $lastColumn.removeAttr('class').addClass('xe-col-md-' + size);
 
-                        //TODO:: 수정 필요
                         if($lastWidgetRow.length > 0) {
                             var $lastColumnParentRow = $lastColumn.closest(".xe-row");
 
                             $lastColumnParentRow.parent().append($lastWidgetRow);
                             $lastColumnParentRow.remove();
                         }
-
-                        // $lastColumn.removeAttr('class').addClass('xe-col-md-' + size).html([
-                        //     '<div class="widgetarea" data-height="140" data-height="' + height + '" style="height:' + height + 'px">',
-                        //         '<span class="order">0</span>',
-                        //     '</div>'
-                        // ].join("\n"));
 
                     }else {
 
@@ -227,18 +221,32 @@
                         var $targetPiece = $(this);
 
 
-                        $targetPiece.find("> .widgetarea-row > div[class^='xe-col-'] > .widgetarea:last ").each(function() {
-                            var $widgetarea = $(this);
+                        //$targetPiece.find("> .widgetarea-row > div[class^='xe-col-'] > .widgetarea:last ").each(function() {
 
-                            if($widgetarea.data("height") > 140) {
-                                var height = $widgetarea.height() - 165;
 
-                                if (!$widgetarea.attr("reduce")) {
-                                    $widgetarea.data("height", height).height(height).attr("reduce", true);
-                                }
+                        if($targetPiece.find("> .xe-row").length > 1) {
+                            //$targetPiece.find("> .xe-row:last").find("> div[class^='xe-col-']")
+                            console.log("row");
 
+                        }else {
+                            if($targetPiece.find("> .xe-row > div[class^='xe-col-'] > .widgetarea:last").length > 0) {
+                                $targetPiece.find("> .xe-row > div[class^='xe-col-'] > .widgetarea:last").each(function() {
+                                    var $widgetarea = $(this);
+
+                                    if($widgetarea.data("height") > 140) {
+                                        var height = $widgetarea.height() - 165;
+
+                                        if (!$widgetarea.attr("reduce")) {
+                                            $widgetarea.data("height", height).height(height).attr("reduce", true);
+                                        }
+
+                                    }
+                                });
+                            }else {
+                                $target = $targetPiece.find("> .xe-row > div[class^='xe-col-']");
                             }
-                        });
+
+                        }
 
                     });
 
