@@ -165,7 +165,7 @@
                     , $lastColumn = $selectedParentCol.siblings(":last");
 
                 if($siblingsRow.length > 0) {
-                    var $target = $selectedParentRow.parent().siblings();
+
 
                     if($selectedParentRow.siblings().length > 0) {
                         var height = $selected.find(".widgetarea").data("height");
@@ -179,6 +179,27 @@
 
                             return;
                         }else {
+
+                            var $parentsCol = $();
+
+                            while(true) {
+                                $parentsCol = $selectedParentRow.closest("div[class^='xe-col-']");
+
+                                if($parentsCol.length === 0) {
+                                    $target = $selectedParentCol;
+                                    break;
+                                }else {
+                                    if($parentsCol.siblings().length > 0) {
+                                        $selectedParentRow.remove();
+                                        $target = $parentsCol.siblings().andSelf();
+                                        break;
+                                    }else {
+                                        $selectedParentRow = $selectedParentRow.closest(".xe-row");
+                                        break;
+                                    }
+                                }
+                            }
+
                             $selectedParentRow.remove();
                             $target = $target.siblings().andSelf();
                         }
@@ -199,7 +220,7 @@
                         $selectedParentCol.remove();
                         $lastColumn.removeAttr('class').addClass('xe-col-md-' + size);
 
-                        if($lastWidgetRow.length > 0) {
+                        if($($lastWidgetRow).wrap("div").parent().find("> .widgetarea-row").length > 0) {
                             var $lastColumnParentRow = $lastColumn.closest(".xe-row");
 
                             $lastColumnParentRow.parent().append($lastWidgetRow);
@@ -207,6 +228,12 @@
                         }
 
                     }else {
+                        var $target = $selectedParentRow.closest("div[class^='xe-col-']:not(.xe-col-md-12)").siblings();
+
+                        $selectedParentRow.remove();
+
+                        self.reduceBlock($target);
+                        $("[reduce=true]").removeAttr("reduce");
 
                     }
                 }
@@ -214,10 +241,92 @@
                 WidgetBox.deselectAll();
                 WidgetBox.setOrdering();
             },
+            /**
+             * TODO
+             * @param {jquery element} $selected 선택된 column
+             * @description
+             * <pre>
+             *     - 삭제 될수 있는 block인지 상, 하, 좌, 우 합쳐져야하는 요소인지 확인
+             *     1)줄어들어야 하는 height 수치 필요 (상하 병합 되면서 수치가 늘어날수 있음)
+             *     2)상위 dom으로 올라가며 확인
+             * </pre>
+             * @return {boolean} deletable
+             * */
+            checkBlock: function($selected) {
+                var targetHeight = $selected.find(".widgetarea").data("height");
+                var deletable = true;
+
+                var $divCol = $selected.parent().closest("div[class^='xe-col-']:not(.xe-col-md-12)");
+
+                while(true) { //상위 col-xx을 찾음 12가 아닌것
+                    if($divCol.length > 0 && deletable) {
+                        var $siblingCols = $divCol.siblings();
+
+                        deletable = self.checkChildBlock($siblingCols, targetHeight);
+
+                        $divCol = $divCol.parent().closest("div[class^='xe-col-']:not(.xe-col-md-12)");
+
+                    }else {
+                        break;
+                    }
+                }
+
+
+                return deletable;
+
+            },
+            /**
+             * TODO
+             * @description 하위 dom을 내려가며 확인
+             * */
+            checkChildBlock: function($cols, targetHeight) {
+                var deletable = true;
+
+                $cols.each(function() {
+
+                    var $sCol = $(this);
+
+                    if($sCol.find("> .xe-row").length > 0) {
+                        $sCol.find("> .xe-row").each(function() {
+
+                            var $target = $(this).find("div[class^='xe-col-']:not(.xe-col-md-12)");
+
+                            if($target.length === 0) {
+
+                            }
+
+                            deletable = self.checkChildBlock($target, targetHeight);
+
+                            if(!deletable) {
+                                return false;
+                            }
+                        });
+                    }else {
+                        //아래 로직이 최상위까지 돌아야됨
+                        if($sCol.find("> .xe-row:last .widgetarea").data("height") <= targetHeight) {
+                            //삭제 불가.
+
+                            deletable = false;
+                        }else {
+                            //삭제될수 있음. 상위로 돌면서 확인
+
+                            deletable = true;
+                        }
+                    }
+
+                    if(!deletable) {
+                        return false;
+                    }
+
+                });
+
+
+                return deletable;
+            },
             reduceBlock: function($target) {
                 if($target.length > 0) {
 
-                    $target.each(function() {
+                        $target.each(function() {
                         var $targetPiece = $(this);
 
 
