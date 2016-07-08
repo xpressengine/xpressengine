@@ -278,10 +278,13 @@
      * </pre>
      * */
     XE.page = function(url, target, options, callback) {
-        var options = $.extend(options, {
+        var defaultOptions = {
+            type: 'get'
+        };
+
+        var options = $.extend(defaultOptions, options || {}, {
             url: url,
-            target: target,
-            type: options.type || 'get'
+            target: target
         });
 
         if(_validation.isValidPage(options)) {
@@ -310,10 +313,13 @@
      * */
     XE.pageModal = function(url, options, callback) {
 
-        var options = $.extend(options, {
+        var defaultOptions = {
+            type: 'get'
+        };
+
+        var options = $.extend(defaultOptions, options || {}, {
             target: ".xe-modal[data-use=xe-page] .xe-modal-content",
-            url: url,
-            type: options.type || 'get'
+            url: url
         });
 
         if(_validation.isValidPageModal(options)) {
