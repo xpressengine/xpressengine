@@ -1,4 +1,4 @@
-<div class="profile-page __xe_profilePage" style="padding: 100px;background-size: cover; background-position: center;">
+<div class="profile-page __xe_profilePage" style="padding-top: 100px;">
     <div class="xe-container">
         <!-- content area -->
         <div class="profile-wrap">

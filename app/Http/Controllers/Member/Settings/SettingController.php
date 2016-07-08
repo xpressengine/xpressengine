@@ -132,9 +132,13 @@ class SettingController extends Controller
     public function updateJoin()
     {
         $inputs = Input::except('_token');
-        //$inputs['fields'] = json_decode($inputs['fields'], true);
 
-        app('xe.config')->put('user.join', $inputs);
+        $config = app('xe.config')->get('user.join');
+
+        foreach ($inputs as $key => $val) {
+            $config->set($key, $val);
+        }
+        app('xe.config')->modify($config);
 
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => '저장되었습니다.']);
     }

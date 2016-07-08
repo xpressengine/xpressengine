@@ -7,22 +7,21 @@
         <fieldset>
             <legend>로그인</legend>
             <div class="auth-group {{--wrong--}}">
-                <label for="name" class="sr-only">{{xe_trans('xe::emailOrUserName')}}</label>
-                <input name="email" type="text" id="name" class="xe-form-control" value="{{ old('email') }}" placeholder="{{xe_trans('xe::emailOrUserName')}}">
+                <label for="name" class="sr-only">{{xe_trans('xe::email')}}</label>
+                <input name="email" type="text" id="name" class="xe-form-control" value="{{ old('email') }}" placeholder="{{xe_trans('xe::enterEmail')}}">
                 {{--<em class="text-message">잘못된 이메일 주소입니다. 이메일 주소를 확인하시고 다시 입력해주세요.</em>--}}
             </div>
             <div class="auth-group">
                 <label for="pwd" class="sr-only">{{xe_trans('xe::password')}}</label>
-                <input name="password" type="password" id="pwd" class="xe-form-control" placeholder="{{xe_trans('xe::password')}}">
+                <input name="password" type="password" id="pwd" class="xe-form-control" placeholder="{{xe_trans('xe::enterPassword')}}">
             </div>
             <div class="xe-form-group">
                 <!--[D] 로그인 유지가 기본인 경우 inpuit에 "disabled="disabled"추가-->
                 <!--[D] 다른 xe-form-group과 다르게 label(for=""), input(id="")  같은 값으로 매칭-->
-                <input type="checkbox" id="chk" name="remember">
-                <label for="chk" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="__xe_infoRemember" data-target="#__xe_infoRemember"><span>{{xe_trans('xe::keepLogin')}}</span></label>
+                <label for="chk" role="button"><input type="checkbox" class="__xe_keep_login" id="chk" name="remember"> <span>{{xe_trans('xe::keepLogin')}}</span></label>
                 <a href="{{ route('auth.reset') }}" class="pull-right">{{xe_trans('xe::forgotPassword')}}</a>
                 <!--[D] 체크 시 하단메시지 노출-->
-                <div class="auth-noti collapse" id="__xe_infoRemember">
+                <div class="auth-noti" id="__xe_infoRemember" style=";">
                     <p>{{xe_trans('xe::keepLoginDescription')}}</p>
                 </div>
             </div>
@@ -32,22 +31,22 @@
                 {!! uio('captcha') !!}
             @endif
 
-            <button type="submit" class="xe-btn xe-btn-primary">{{xe_trans('xe::login')}}</button>
+            <button type="submit" class="xe-btn xe-btn-primary xe-btn-block">{{xe_trans('xe::login')}}</button>
         </fieldset>
     </form>
-    {{--<div class="hr">
-        <p class="txt_hr"><span>or</span></p>
-    </div>
-    <div class="auth-sns">
-        <ul>
-            <li class="sns_facebook"><a href="#"><i class="xi-facebook"></i></a></li>
-            <li class="sns-twitter"><a href="#"><i class="xi-twitter"></i></a></li>
-            <li class="sns-naver"><a href="#"><i class="xi-naver"></i></a></li>
-            <li class="sns-google"><a href="#"><i class="xi-google-plus"></i></a></li>
-            <li class="sns-github"><a href="#"><i class="xi-github"></i></a></li>
-            <li class="sns-line"><a href="#"><i class="xi-line-messenger"></i></a></li>
-        </ul>
-    </div>--}}
     <p class="auth-text">{{xe_trans('xe::signUpSite')}} <a href="{{ route('auth.register') }}">{{xe_trans('xe::signUp')}}</a></p>
 </div>
 <!-- //로그인 폼  -->
+
+{!! app('xe.frontend')->html('user.keep_login')->content("<script>
+    $(function($) {
+        $('.__xe_keep_login').change(function() {
+            if(this.checked) {
+                $('#__xe_infoRemember').slideDown();
+            } else {
+                $('#__xe_infoRemember').slideUp();
+            }
+        })
+    });
+
+</script>")->load()  !!}
