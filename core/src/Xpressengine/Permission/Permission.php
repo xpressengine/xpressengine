@@ -23,14 +23,14 @@ use Xpressengine\Support\Entity;
  *
  * @category    Permission
  * @package     Xpressengine\Permission
- *
- * @property int $id
- * @property string $siteKey
- * @property string $name
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
+ *
+ * @property int $id
+ * @property string $siteKey
+ * @property string $name
  */
 class Permission extends Entity implements IteratorAggregate
 {

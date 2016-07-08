@@ -361,8 +361,6 @@ if (!function_exists('menu_list')) {
                 'items.basicImage', 'items.hoverImage', 'items.selectedImage',
                 'items.mBasicImage', 'items.mHoverImage', 'items.mSelectedImage'
             ]);
-            // pre load
-            app('xe.permission')->loadBranch($menuId);
         }
 
         /** @var Xpressengine\Menu\Models\Menu $menu */

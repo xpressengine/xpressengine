@@ -107,7 +107,7 @@ class SettingsController extends Controller
 
         foreach ($permissionGroups as $tab => &$group) {
             foreach ($group as $key => &$item) {
-                $permission = $permissionHandler->find('settings.'.$item['id']);
+                $permission = $permissionHandler->get('settings.'.$item['id']);
                 if($permission === null) {
                     $permission = $permissionHandler->register('settings.'.$item['id'], new Grant());
                 }

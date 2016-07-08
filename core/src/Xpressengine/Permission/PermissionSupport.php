@@ -37,7 +37,7 @@ trait PermissionSupport
     {
         $abilities = !is_array($abilities) ? [$abilities] : $abilities;
 
-        $permission = app('xe.permission')->findOrNew($key, $siteKey);
+        $permission = app('xe.permission')->getOrNew($key, $siteKey);
         $mode = function ($action) use ($permission) {
             return $permission->pure($action) ? 'manual' : 'inherit';
         };
@@ -116,7 +116,7 @@ trait PermissionSupport
      */
     public function permissionMove($from, $to, $siteKey = 'default')
     {
-        $permission = app('xe.permission')->find($from, $siteKey);
+        $permission = app('xe.permission')->get($from, $siteKey);
         app('xe.permission')->move($permission, $to);
     }
 
