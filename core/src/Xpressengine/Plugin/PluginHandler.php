@@ -212,10 +212,13 @@ class PluginHandler
         $entity->setInstalledVersion($entity->getVersion());
 
         // 활성화 된 플러그인의 정보를 config에 기록한다.
-        $this->setPluginStatus($pluginId, [
-            'status' => static::STATUS_ACTIVATED,
-            'version' => $entity->getVersion()
-        ]);
+        $this->setPluginStatus(
+            $pluginId,
+            [
+                'status' => static::STATUS_ACTIVATED,
+                'version' => $entity->getVersion()
+            ]
+        );
     }
 
     /**
@@ -260,10 +263,13 @@ class PluginHandler
         $entity->setStatus(static::STATUS_DEACTIVATED);
 
         // 비활성화된 플러그인 정보를 config에 기록한다.
-        $this->setPluginStatus($pluginId, [
-            'status' => static::STATUS_DEACTIVATED,
-            'version' => $entity->getInstalledVersion()
-        ]);
+        $this->setPluginStatus(
+            $pluginId,
+            [
+                'status' => static::STATUS_DEACTIVATED,
+                'version' => $entity->getInstalledVersion()
+            ]
+        );
     }
 
     /**
@@ -301,10 +307,13 @@ class PluginHandler
 
         if ($updateStatus) {
             // 플러그인의 정보를 config에 기록한다.
-            $this->setPluginStatus($pluginId, [
-                'status' => $entity->getStatus(),
-                'version' => $entity->getVersion()
-            ]);
+            $this->setPluginStatus(
+                $pluginId,
+                [
+                    'status' => $entity->getStatus(),
+                    'version' => $entity->getVersion()
+                ]
+            );
         }
     }
 
@@ -329,7 +338,7 @@ class PluginHandler
 
         // status list에서 해당 플러그인 정보를 삭제한다.
         $configs = $this->getPluginsStatus();
-        array_forget($configs,$pluginId);
+        array_forget($configs, $pluginId);
         $this->setPluginsStatus($configs);
     }
 
@@ -391,7 +400,10 @@ class PluginHandler
                 $sourceVersion = $plugin->getVersion();
                 if ($sourceVersion !== $installedVersion) {
                     if ($plugin->checkInstalled($installedVersion) && $plugin->checkUpdated($installedVersion)) {
-                        $this->setPluginStatus($plugin->getId(), 'version', $sourceVersion);
+                        $this->setPluginStatus(
+                            $plugin->getId(),
+                            ['version' => $sourceVersion, 'status' => $plugin->getStatus()]
+                        );
                         $plugin->setInstalledVersion($sourceVersion);
                     }
                 }
