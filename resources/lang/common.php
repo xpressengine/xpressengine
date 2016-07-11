@@ -1298,15 +1298,15 @@ return [
     ],
     'passwordStrengthWeakDescription' => [
         'ko' => '비밀번호는 4자 이상이어야 합니다.',
-        'ko' => 'Passwords must be at least 4 characters.',
+        'en' => 'Passwords must be at least 4 characters.',
     ],
     'passwordStrengthNormalDescription' => [
         'ko' => '비밀번호는 6자리 이상이어야 하며 영문과 숫자를 반드시 포함해야 합니다.',
-        'ko' => 'The password must be at least six characters long and must contain letters and numbers.',
+        'en' => 'The password must be at least six characters long and must contain letters and numbers.',
     ],
     'passwordStrengthStrongDescription' => [
         'ko' => '비밀번호는 8자리 이상이어야 하며 영문과 숫자, 특수문자를 반드시 포함해야 합니다.',
-        'ko' => 'The password must be at least 8 characters and must contain letters and numbers, and special characters.',
+        'en' => 'The password must be at least 8 characters and must contain letters and numbers, and special characters.',
     ],
     'findPassword' => [
         'ko' => '비밀번호 찾기',
@@ -1314,7 +1314,7 @@ return [
     ],
     'passwordChangeComplete' => [
         'ko' => '비밀번호 변경이 완료되었습니다.',
-        'ko' => 'Password change complete.',
+        'en' => 'Password change complete.',
     ],
     'weak' => [
         'ko' => '약함',

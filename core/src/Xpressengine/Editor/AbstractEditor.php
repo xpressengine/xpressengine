@@ -148,8 +148,6 @@ abstract class AbstractEditor implements ComponentInterface
         'contentDomId' => 'xeContentEditor',
         'contentDomOptions' => [
             'class' => 'form-control',
-            'rows' => '20',
-            'cols' => '80'
         ]
     ];
 
@@ -359,7 +357,7 @@ abstract class AbstractEditor implements ComponentInterface
 
     /**
      * Get static option data for the editor
-     * 
+     *
      * @return array
      */
     protected function getStaticOption()
@@ -495,6 +493,7 @@ abstract class AbstractEditor implements ComponentInterface
      */
     public function compile($content, $htmlable = false)
     {
+        $content = (string)$content;
         $this->events->fire('xe.editor.compile', $this);
 
         if ($htmlable !== true) {
@@ -530,7 +529,8 @@ abstract class AbstractEditor implements ComponentInterface
             'name="' . $args['contentDomName'] . '" ' .
             'id="' . $args['contentDomId'] . '" ' .
             $this->getContentDomHtmlOption($args['contentDomOptions']) .
-            ' placeholder="' . xe_trans('xe::content') . '">'.
+            ' placeholder="' . xe_trans('xe::content') . '" '.
+            'style="width:100%;">'.
             $args['content'] .
             '</textarea>';
 

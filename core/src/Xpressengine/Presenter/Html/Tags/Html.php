@@ -87,7 +87,10 @@ class Html
         array_map(
             function ($alias) use ($list, &$output) {
                 $htmlObj = $list[$alias];
-                $output .= "<!-- $alias -->".PHP_EOL.$htmlObj->render();
+                if(is_string($alias)) {
+                    $output .= "<!-- $alias -->".PHP_EOL;
+                }
+                $output .= $htmlObj->render();
             },
             $sorted
         );

@@ -114,7 +114,7 @@ class AuthController extends Controller
         $userData['status'] = \XeUser::STATUS_ACTIVATED;
 
         // set default join group
-        $config = \app('xe.config')->get('user.join');
+        $config = app('xe.config')->get('user.join');
         $joinGroup = $config->get('joinGroup');
         array_add($userData, 'groupId', []);
         $userData['groupId'][] = $joinGroup;
