@@ -115,7 +115,7 @@ gulp.task('assets:sass', function () {
   return gulp.src('./resources/assets/**/*.scss')
     .pipe(sourcemaps.init())
     .pipe($.plumber())
-    .pipe($.sass({outputStyle: 'expanded'}).on('error', $.sass.logError))
+    .pipe($.sass({outputStyle: 'expanded', precision: 8}).on('error', $.sass.logError))
     .pipe(sourcemaps.write("."))
     .pipe(gulp.dest('./assets'));
 });
