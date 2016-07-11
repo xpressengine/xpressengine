@@ -195,11 +195,10 @@ class WidgetHandler
      * @return mixed
      * @throws Exception
      */
-    public function setup($widgetId)
+    public function setup($widgetId, $configs = [])
     {
         $instance = $this->getInstance($widgetId);
-
-        return $instance->renderSetting();
+        return $instance->renderSetting($configs);
     }
 
     /**

@@ -37,6 +37,7 @@ class WidgetGenerator extends AbstractUIObject
             $selectedWidgetId = array_get($args, 'selectedWidget');
         }
 
+        // except skin setting
         $form = $handler->setup($selectedWidgetId);
 
         $this->loadFiles();
@@ -82,8 +83,6 @@ class WidgetGenerator extends AbstractUIObject
                           }
                         })
                     });
-                    
-                    
                 });
             </script>"
         )->load();

@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Input;
 use View;
 use XePresenter;
+use Xpressengine\Skin\SkinHandler;
 use Xpressengine\Widget\WidgetHandler;
 
 class WidgetController extends Controller {
@@ -51,7 +52,7 @@ class WidgetController extends Controller {
      *
      * @return View
      */
-    public function setup(Request $request, WidgetHandler $widgetHandler)
+    public function setup(Request $request, WidgetHandler $widgetHandler, SkinHandler $skinHandler)
     {
         $this->validate($request, [
             'widget' => 'required'
@@ -59,11 +60,28 @@ class WidgetController extends Controller {
 
         $id = $request->get('widget');
 
+        $skinList = $skinHandler->getList($id);
+
+        $skins = [];
+        foreach ($skinList as $skin => $class) {
+            $skins[$skin] = $class::getTitle();
+        }
+
+        reset($skins);
+        $skinId = key($skins);
+
+        // testcode;
+        $skins = ['test'=>'테스트스킨','real'=>'진짜스킨'];
+        $skinId = 'real';
+
+        $skinSelect = uio('formSelect', ['name'=>'skinId', 'label'=>'위젯스킨', 'class'=>'__xe_skin_select', 'selected'=>$skinId, 'options'=>$skins]);
+
         $form = $widgetHandler->setup($id);
 
+        $output = $skinSelect . '<hr>' . $form;
+
         return XePresenter::makeApi([
-             'result' => (string)$form,
-             'data' => [],
+             'result' => (string)$output,
              'XE_ASSET_LOAD' => [
                  'css' => \Xpressengine\Presenter\Html\Tags\CSSFile::getFileList(),
                  'js' => \Xpressengine\Presenter\Html\Tags\JSFile::getFileList(),
