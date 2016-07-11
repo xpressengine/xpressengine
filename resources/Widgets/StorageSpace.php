@@ -24,6 +24,16 @@ class StorageSpace extends AbstractWidget
     protected static $id = 'widget/xpressengine@storageSpace';
 
     /**
+     * 위젯의 이름을 반환한다.
+     *
+     * @return string
+     */
+    public static function getTitle()
+    {
+        return '스토리지 위젯';
+    }
+
+    /**
      * render
      *
      * @return string
@@ -71,4 +81,17 @@ class StorageSpace extends AbstractWidget
             'total' => $total
         ])->render();
     }
+
+    /**
+     * getCodeCreationForm
+     *
+     * @param array $args
+     *
+     * @return mixed
+     */
+    public function renderSetting(array $args = [])
+    {
+        return 'hello';
+    }
+
 }

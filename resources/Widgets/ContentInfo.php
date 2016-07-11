@@ -26,6 +26,16 @@ class ContentInfo extends AbstractWidget
     protected static $id = 'widget/xpressengine@contentInfo';
 
     /**
+     * 위젯의 이름을 반환한다.
+     *
+     * @return string
+     */
+    public static function getTitle()
+    {
+        return '콘텐츠 현황 위젯';
+    }
+
+    /**
      * render
      *
      * @return mixed

@@ -14,6 +14,7 @@
 
 namespace Xpressengine\Widget;
 
+use Illuminate\Contracts\Support\Renderable;
 use Xpressengine\Plugin\ComponentInterface;
 use Xpressengine\Plugin\ComponentTrait;
 
@@ -29,7 +30,7 @@ use Xpressengine\Plugin\ComponentTrait;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-abstract class AbstractWidget implements ComponentInterface
+abstract class AbstractWidget implements ComponentInterface, Renderable
 {
     use ComponentTrait;
 
@@ -44,6 +45,33 @@ abstract class AbstractWidget implements ComponentInterface
     {
         $this->config = $config;
     }
+
+    /**
+     * 위젯의 이름을 반환한다.
+     *
+     * @return string
+     */
+    public static function getTitle()
+    {
+        return static::getComponentInfo('name');
+    }
+
+    /**
+     * 위젯의 설명을 반환한다.
+     *
+     * @return string
+     */
+    public static function getDescription()
+    {
+        return static::getComponentInfo('description');
+    }
+
+    /**
+     * Get the evaluated contents of the object.
+     *
+     * @return string
+     */
+    abstract public function render();
 
     /**
      * getCodeCreationForm

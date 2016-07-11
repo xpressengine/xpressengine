@@ -9,6 +9,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Xpressengine\UIObjects\Widget\WidgetGenerator;
 use Xpressengine\Widget\WidgetHandler;
 use Xpressengine\Widget\WidgetParser;
 use Xpressengine\Widgets\ContentInfo;
@@ -96,10 +97,8 @@ class WidgetServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $pluginRegister = $this->app['xe.pluginRegister'];
-        $pluginRegister->add(StorageSpace::class);
-        $pluginRegister->add(ContentInfo::class);
-        $pluginRegister->add(SystemInfo::class);
+        $this->registerWidgets();
+        $this->registerUIObject();
     }
 
 
@@ -111,5 +110,24 @@ class WidgetServiceProvider extends ServiceProvider
     public function provides()
     {
         return array();
+    }
+
+    /**
+     * registerWidgets
+     *
+     * @return void
+     */
+    protected function registerWidgets()
+    {
+        $pluginRegister = $this->app['xe.pluginRegister'];
+        $pluginRegister->add(StorageSpace::class);
+        $pluginRegister->add(ContentInfo::class);
+        $pluginRegister->add(SystemInfo::class);
+    }
+
+    protected function registerUIObject()
+    {
+        $registryManager = $this->app['xe.pluginRegister'];
+        $registryManager->add(WidgetGenerator::class);
     }
 }

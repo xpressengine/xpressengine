@@ -399,6 +399,7 @@ return [
             'permission' => 'uiobject/xpressengine@permission',
             'themeSelect' => 'uiobject/xpressengine@themeSelect',
             'captcha' => 'uiobject/xpressengine@captcha',
+            'widget' => 'uiobject/xpressengine@widgetGenerator',
         ]
     ],
 

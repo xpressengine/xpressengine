@@ -233,13 +233,13 @@ class WidgetHandler
         $widget = $this->getInstance($widgetId);
 
         $codeString = [
-            "<xewidget id='{$widgetId}'>"
+            "<xewidget id='{$widgetId}'>".PHP_EOL
         ];
 
         $inputs = $widget->resolveSetting($inputs);
 
         foreach ($inputs as $k => $v) {
-            $paramString = sprintf("<%s>%s</%s>", $k, $v, $k);
+            $paramString = sprintf("  <%s>%s</%s>".PHP_EOL, $k, $v, $k);
             array_push($codeString, $paramString);
         }
 

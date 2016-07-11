@@ -9,6 +9,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Sections\WidgetSection;
+use Illuminate\Http\Request;
 use Input;
 use View;
 use XePresenter;
@@ -31,11 +32,15 @@ class WidgetController extends Controller {
         ]);
     }
 
-    public function generate(WidgetHandler $widgetHandler)
+    public function generate(Request $request, WidgetHandler $widgetHandler)
     {
-        $id = Input::get('widget');
-        $inputs = Input::except('widget');
-        return $widgetHandler->generateCode($id, $inputs);
+        $id = $request->get('widget');
+        $inputs = $request->except('widget');
+
+        $code = $widgetHandler->generateCode($id, $inputs);
+        return XePresenter::makeApi([
+            'code' => $code,
+        ]);
 
     }
 
@@ -46,13 +51,24 @@ class WidgetController extends Controller {
      *
      * @return View
      */
-    public function setup(WidgetHandler $widgetHandler)
+    public function setup(Request $request, WidgetHandler $widgetHandler)
     {
-        $id = Input::get('widget');
+        $this->validate($request, [
+            'widget' => 'required'
+        ]);
 
-        $settingFormView = $widgetHandler->setup($id);
+        $id = $request->get('widget');
 
-        return $settingFormView->render();
+        $form = $widgetHandler->setup($id);
+
+        return XePresenter::makeApi([
+             'result' => (string)$form,
+             'data' => [],
+             'XE_ASSET_LOAD' => [
+                 'css' => \Xpressengine\Presenter\Html\Tags\CSSFile::getFileList(),
+                 'js' => \Xpressengine\Presenter\Html\Tags\JSFile::getFileList(),
+             ],
+         ]);
     }
 
     /**

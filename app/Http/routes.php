@@ -676,10 +676,10 @@ Route::group(['prefix' => 'temporary'], function () {
 });
 
 Route::settings('widget', function () {
-    Route::get('list', ['as' => 'manage.widget.list', 'uses' => 'WidgetController@index']);
-    Route::get('setup', ['as' => 'manage.widget.setup', 'uses' => 'WidgetController@setup']);
-    Route::get('render', ['as' => 'manage.widget.render', 'uses' => 'WidgetController@render']);
-    Route::get('generate', ['as' => 'manage.widget.generate', 'uses' => 'WidgetController@generate']);
+    Route::get('list', ['as' => 'settings.widget.list', 'uses' => 'WidgetController@index']);
+    Route::get('setup', ['as' => 'settings.widget.setup', 'uses' => 'WidgetController@setup']);
+    Route::get('render', ['as' => 'settings.widget.render', 'uses' => 'WidgetController@render']);
+    Route::post('generate', ['as' => 'settings.widget.generate', 'uses' => 'WidgetController@generate']);
 });
 
 /* deprecated */
