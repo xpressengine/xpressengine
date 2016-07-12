@@ -94,7 +94,7 @@ class Guest implements UserInterface
      */
     public static function setDefaultProfileImage($img)
     {
-        self::$profileImage= $img;
+        self::$profileImage = $img;
     }
 
     /**

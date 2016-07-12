@@ -31,6 +31,7 @@ trait LocatableTrait
      * append to
      *
      * @param string $location location
+     *
      * @return $this
      */
     public function appendTo($location)
@@ -43,6 +44,7 @@ trait LocatableTrait
      * prepend to
      *
      * @param string $location location
+     *
      * @return $this
      */
     public function prependTo($location)

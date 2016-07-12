@@ -58,6 +58,7 @@ class BodyClass
      * tag list를 설정한다.
      *
      * @param array $classes tag list
+     *
      * @return void
      */
     public static function init($classes = [])

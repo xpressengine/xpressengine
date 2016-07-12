@@ -87,7 +87,7 @@ abstract class AbstractSkin implements ComponentInterface, Renderable
     public static function getScreenshot()
     {
         $screenshots = static::getComponentInfo('screenshot');
-        if(is_array($screenshots)) {
+        if (is_array($screenshots)) {
             return array_shift($screenshots);
         }
         return $screenshots;
@@ -169,7 +169,7 @@ abstract class AbstractSkin implements ComponentInterface, Renderable
      */
     public function setting(array $config = null)
     {
-        if($config !== null) {
+        if ($config !== null) {
             $this->config = $config;
         }
         return $this->config;

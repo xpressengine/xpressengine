@@ -39,7 +39,7 @@ class PluginProvider
      * PluginProvider constructor.
      *
      * @param string $url
-     * @param array $auth
+     * @param array  $auth
      */
     public function __construct($url, array $auth = null)
     {
@@ -60,7 +60,7 @@ class PluginProvider
         try {
             $response = $this->request($url);
         } catch (ClientException $e) {
-            if($e->getCode() === Response::HTTP_NOT_FOUND) {
+            if ($e->getCode() === Response::HTTP_NOT_FOUND) {
                 return null;
             }
             throw $e;
@@ -79,12 +79,12 @@ class PluginProvider
     public function findAll(array $ids)
     {
         $url = 'list';
-        $queries = ['name'=> implode(',', $ids)];
+        $queries = ['name' => implode(',', $ids)];
 
         try {
             $response = $this->request($url, $queries);
         } catch (ClientException $e) {
-            if($e->getCode() === Response::HTTP_NOT_FOUND) {
+            if ($e->getCode() === Response::HTTP_NOT_FOUND) {
                 return [];
             }
             throw $e;
@@ -100,7 +100,7 @@ class PluginProvider
         try {
             $response = $this->request($url);
         } catch (ClientException $e) {
-            if($e->getCode() === Response::HTTP_NOT_FOUND) {
+            if ($e->getCode() === Response::HTTP_NOT_FOUND) {
                 return null;
             }
             throw $e;
@@ -118,7 +118,7 @@ class PluginProvider
      */
     public function sync($plugins)
     {
-        if(!is_array($plugins)) {
+        if (!is_array($plugins)) {
             $plugins = [$plugins->getId() => $plugins];
         }
         $ids = array_keys($plugins);
@@ -130,7 +130,7 @@ class PluginProvider
 
         foreach ($infos as $data) {
 
-            list($vendor , $id) = explode('/', $data->name);
+            list($vendor, $id) = explode('/', $data->name);
             $plugin = $plugins[$id];
             $plugin->setRemoteData($data);
         }
@@ -150,7 +150,7 @@ class PluginProvider
             ],
             'query' => $queries,
         ];
-        if($this->auth !== null) {
+        if ($this->auth !== null) {
             $options['auth'] = $this->auth;
         }
         $res = $client->request(
