@@ -18,6 +18,20 @@
   }
 }
 
+.xe-dropdown-menu,
+.xe-dropdown-menu ul{
+  margin: 0;
+  padding: 0;
+  li {
+    list-style: none;
+    a {
+    text-decoration: none;
+    }
+  }
+}
+
+/*dropdown*/
+
 @mixin dropdown-arrow($color) {
   display: inline-block;
   position: absolute;
@@ -32,19 +46,6 @@
   content: "";
 }
 
-.xe-dropdown-menu,
-.xe-dropdown-menu ul{
-  margin: 0;
-  padding: 0;
-  li {
-    list-style: none;
-    a {
-    text-decoration: none;
-    }
-  }
-}
-
-/*dropdown*/
 .xe-dropdown, .xe-dropup {
   display: block;
   position: relative;
@@ -82,7 +83,8 @@
 }
 
 .xe-dropdown.outline-off > .xe-btn,
-.xe-dropup.outline-off > .xe-btn {
+.xe-dropup.outline-off > .xe-btn, 
+.xe-select-box.outline-off.xe-btn {
   border: none;
 }
 
@@ -106,32 +108,32 @@
 
 .xe-dropdown-menu {
   display: none;
+  overflow-y: auto;
   position: absolute;
   left: 0;
   top: 100%;
-  margin-top:-1px;
+  max-height: 366px;
+  margin-top:-1px !important;
   padding:8px 0;
   border: 1px solid $dropdown-border-color;
-  border-radius: $border-radius-base;
+  border-radius: 0 0 2px 2px;
   background-color: #fff;
   z-index: 10;
 }
 
-
-.open>.xe-dropdown-menu {
+.open .xe-dropdown-menu {
   display: block;
-  width:100%;
+  min-width:100%;
 }
 
 .xe-dropdown-menu li {
-  > a {
-    overflow: hidden;
+  > a {    
     display: block;
     position: relative;
     padding: 8px 15px;
-    color: #2c2e37;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    color: #2c2e37;        
+    text-align: left;
+    line-height: $line-height-base;
     &:hover {
       background-color: #2389ee;
       color: #fff !important;
@@ -188,6 +190,7 @@
         background-color: #B5B8BD;
         border: 1px solid #DBDADF;
         border-radius: 4px;
+        line-height: $line-height-base;
         button {
           position: absolute;
           right: 3px;
@@ -197,6 +200,7 @@
           outline: none;
           font-size: 11px;
           color: #fff;
+          cursor: pointer;
         }
       }
       .search-label {
@@ -223,12 +227,15 @@
   .label-list .label-division {
     padding: 10px;
     font-size: 13px;
+    line-height: $line-height-base;
+    text-align: left;
     + .label-division {
       border-top: 1px solid #DBDBDD;
     }
     strong {
       display: block;
       margin-bottom: 10px;
+      color: $text-color;
     }
     a {
       display: block;
