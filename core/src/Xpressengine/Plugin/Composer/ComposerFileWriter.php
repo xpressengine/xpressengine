@@ -67,19 +67,20 @@ class ComposerFileWriter
         $this->packagistUrl = $packagistUrl;
     }
 
-    public function makeFile(){
+    public function makeFile()
+    {
         $data = [];
         $data['repositories'] = [];
-        $data['repositories'][] = ['type'=>'composer', 'url'=>$this->packagistUrl];
+        $data['repositories'][] = ['type' => 'composer', 'url' => $this->packagistUrl];
 
         $data['require'] = [];
 
         $data['xpressengine-plugin'] = [
-            "path"=> "storage/app/composer.plugins.json",
-            "install"=> [],
-            "update"=> [],
-            "uninstall"=> [],
-            "changed"=> []
+            "path" => "storage/app/composer.plugins.json",
+            "install" => [],
+            "update" => [],
+            "uninstall" => [],
+            "changed" => []
         ];
 
         $this->data = $data;
@@ -88,7 +89,7 @@ class ComposerFileWriter
 
     public function reload()
     {
-        if(!is_file($this->path)) {
+        if (!is_file($this->path)) {
             $this->makeFile();
         }
 
@@ -111,7 +112,7 @@ class ComposerFileWriter
     public function uninstall($name)
     {
         $uninstall = array_get($this->data, "xpressengine-plugin.uninstall", []);
-        if(!in_array($name, $uninstall)) {
+        if (!in_array($name, $uninstall)) {
             $uninstall[] = $name;
         }
         array_set($this->data, "xpressengine-plugin.uninstall", $uninstall);
@@ -161,7 +162,7 @@ class ComposerFileWriter
 
             $name = array_get($plugin, 'metaData.name');
             $version = array_get($plugin, 'metaData.version');
-            if(is_dir($dir.DIRECTORY_SEPARATOR.$plugin['id'].DIRECTORY_SEPARATOR.'vendor')) {
+            if (is_dir($dir.DIRECTORY_SEPARATOR.$plugin['id'].DIRECTORY_SEPARATOR.'vendor')) {
                 $replace[$name] = '*';
                 continue;
             }
@@ -176,7 +177,7 @@ class ComposerFileWriter
     public function write()
     {
         $json = json_encode($this->data);
-        if(function_exists('json_format')) {
+        if (function_exists('json_format')) {
             $json = json_format($json);
         } else {
             $json = \Composer\Json\JsonFormatter::format($json, true, true);
@@ -194,11 +195,11 @@ class ComposerFileWriter
         $operation = '>=';
         $requires = [];
         foreach (array_get($this->data, 'require', []) as $package => $version) {
-            $requires[$package] = $operation. str_replace($operation, '', $version);
+            $requires[$package] = $operation.str_replace($operation, '', $version);
         }
         array_set($this->data, 'require', $requires);
 
-        array_set($this->data, 'repositories', [['type'=>'composer', 'url'=>$this->packagistUrl]]);
+        array_set($this->data, 'repositories', [['type' => 'composer', 'url' => $this->packagistUrl]]);
         array_set($this->data, 'xpressengine-plugin.mode', 'plugins-update');
         array_set($this->data, 'xpressengine-plugin.changed', []);
 
@@ -219,7 +220,7 @@ class ComposerFileWriter
         }
         array_set($this->data, 'require', $requires);
 
-        array_set($this->data, 'repositories', [['type'=>'composer', 'url'=>$this->packagistUrl]]);
+        array_set($this->data, 'repositories', [['type' => 'composer', 'url' => $this->packagistUrl]]);
         array_set($this->data, 'xpressengine-plugin.mode', 'plugins-fixed');
 
         $this->reset();

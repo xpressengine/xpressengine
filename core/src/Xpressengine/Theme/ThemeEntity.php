@@ -224,7 +224,7 @@ class ThemeEntity implements ThemeEntityInterface
      */
     public function getSettingView(ConfigEntity $config = null)
     {
-        if($config === null) {
+        if ($config === null) {
             $config = $this->setting();
         }
         return $this->getObject()->getSettingView($config);
@@ -249,7 +249,8 @@ class ThemeEntity implements ThemeEntityInterface
      *
      * @return null
      */
-    public function setting(ConfigEntity $config = null) {
+    public function setting(ConfigEntity $config = null)
+    {
         return $this->getObject()->setting($config);
     }
 }

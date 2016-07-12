@@ -98,6 +98,5 @@ namespace Xpressengine\Plugin\Composer {
 
         return $array;
     }
-
 }
 

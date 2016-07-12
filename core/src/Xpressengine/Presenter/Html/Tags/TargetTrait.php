@@ -31,6 +31,7 @@ trait TargetTrait
      * set target
      *
      * @param string $target target
+     *
      * @return $this
      */
     public function target($target)

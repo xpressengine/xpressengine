@@ -18,7 +18,6 @@ use Closure;
 use Illuminate\Contracts\View\Factory;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Config\ConfigManager;
-use Xpressengine\Plugin\ComponentInterface;
 use Xpressengine\Plugin\PluginRegister;
 
 /**
@@ -361,6 +360,7 @@ class ThemeHandler
      * @param string       $id         theme id
      * @param string|array $key        config data or, config key for setting value
      * @param mixed        $configData config
+     *
      * @return void
      */
     public function setThemeConfig($id, $key, $configData = null)

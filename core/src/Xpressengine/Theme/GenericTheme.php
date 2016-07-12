@@ -80,7 +80,7 @@ abstract class GenericTheme extends AbstractTheme
      */
     protected static function info($key = null, $default = null)
     {
-        if(static::$info === null) {
+        if (static::$info === null) {
             static::$info = include(base_path(static::getPath().'/'.'info.php'));
         }
 
@@ -162,9 +162,9 @@ abstract class GenericTheme extends AbstractTheme
 
         // 파일만 별도 처리
         foreach ($config as $key => $item) {
-            if($item instanceof UploadedFile) {
+            if ($item instanceof UploadedFile) {
                 array_set($config, $key, $this->saveFile($configId, $key, $item));
-            } elseif($item === null) {
+            } elseif ($item === null) {
                 unset($config[$key]);
             }
         }
@@ -186,7 +186,7 @@ abstract class GenericTheme extends AbstractTheme
         $oldFileId = $oldSetting->get("$key.id");
 
         // remove old file
-        if($oldFileId !== null) {
+        if ($oldFileId !== null) {
             $oldFile = File::find($oldFileId);
             if ($oldFile) {
                 app('xe.storage')->remove($oldFile);
@@ -194,10 +194,14 @@ abstract class GenericTheme extends AbstractTheme
         }
 
         // save new file
-        $file = app('xe.storage')->upload($file, config('xe.theme.upload.path').$configId, config('xe.theme.upload.disk'));
+        $file = app('xe.storage')->upload(
+            $file,
+            config('xe.theme.upload.path').$configId,
+            config('xe.theme.upload.disk')
+        );
         $saved = [
-            'id'=>$file->id,
-            'filename'=>$file->clientname
+            'id' => $file->id,
+            'filename' => $file->clientname
         ];
 
         $mediaFile = null;
@@ -261,7 +265,7 @@ abstract class GenericTheme extends AbstractTheme
      */
     public static function view($view)
     {
-        $view = str_replace('/','.', static::$path).".views.$view";
+        $view = str_replace('/', '.', static::$path).".views.$view";
         return $view;
     }
 }

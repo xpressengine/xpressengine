@@ -63,7 +63,7 @@ class Rule
      */
     public static function output()
     {
-        $output = '<script type="text/javascript">' . PHP_EOL;
+        $output = '<script type="text/javascript">'.PHP_EOL;
 
         $list = static::$ruleList;
 
@@ -83,7 +83,6 @@ class Rule
      */
     public static function init()
     {
-
     }
 
     /**
@@ -91,24 +90,27 @@ class Rule
      *
      * @param string $ruleName rule 이름
      * @param array  $rules    rules
+     *
      * @throws \Exception
      */
     public function __construct($ruleName, $rules)
     {
-        if (isset(self::$ruleList[$ruleName]) ===  true) {
+        if (isset(self::$ruleList[$ruleName]) === true) {
             $rules = array_merge($rules, self::$ruleList[$ruleName]->getRules());
         }
-        $this->ruleName       = $ruleName;
-        $this->rules       = $rules;
+        $this->ruleName = $ruleName;
+        $this->rules = $rules;
         self::$ruleList[$ruleName] = $this;
 
         if (static::$loaded === false) {
             static::$loaded = true;
-            new Translation([
-                'xe::validatorRequired',
-                'xe::validatorAlphanum',
-                'xe::validatorMin',
-            ]);
+            new Translation(
+                [
+                    'xe::validatorRequired',
+                    'xe::validatorAlphanum',
+                    'xe::validatorMin',
+                ]
+            );
         }
     }
 
@@ -130,11 +132,10 @@ class Rule
     public function render()
     {
         $rule = sprintf(
-            'System.import(\'xecore:/common/js/modules/validator\')'.
-            '.then(function(validator) { validator.setRules("%s", %s); });',
-            $this->ruleName,
-            json_enc($this->rules)
-        ) . PHP_EOL;
+                    'System.import(\'xecore:/common/js/modules/validator\')'.'.then(function(validator) { validator.setRules("%s", %s); });',
+                    $this->ruleName,
+                    json_enc($this->rules)
+                ).PHP_EOL;
 
         return $rule;
     }
