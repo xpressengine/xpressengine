@@ -19,8 +19,8 @@ html {
 
 body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 13px;
-  line-height: 1.43;
+  font-size: 14px;
+  line-height: 1.42857143;
   color: #333333;
   background-color: #fff;
 }
@@ -71,7 +71,7 @@ img {
 
 .img-thumbnail {
   padding: 0px;
-  line-height: 1.43;
+  line-height: 1.42857143;
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 0;
@@ -88,8 +88,8 @@ img {
 }
 
 hr {
-  margin-top: 18px;
-  margin-bottom: 18px;
+  margin-top: 20px;
+  margin-bottom: 20px;
   border: 0;
   border-top: 1px solid #eeeeee;
 }
@@ -148,8 +148,8 @@ h6 .small,
 h1, .h1,
 h2, .h2,
 h3, .h3 {
-  margin-top: 18px;
-  margin-bottom: 9px;
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 
 h1 small,
@@ -167,8 +167,8 @@ h3 .small, .h3 small,
 h4, .h4,
 h5, .h5,
 h6, .h6 {
-  margin-top: 9px;
-  margin-bottom: 9px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 h4 small,
@@ -184,23 +184,23 @@ h6 .small, .h6 small,
 }
 
 h1, .h1 {
-  font-size: 33px;
+  font-size: 36px;
 }
 
 h2, .h2 {
-  font-size: 27px;
+  font-size: 30px;
 }
 
 h3, .h3 {
-  font-size: 23px;
+  font-size: 24px;
 }
 
 h4, .h4 {
-  font-size: 17px;
+  font-size: 18px;
 }
 
 h5, .h5 {
-  font-size: 13px;
+  font-size: 14px;
 }
 
 h6, .h6 {
@@ -208,25 +208,25 @@ h6, .h6 {
 }
 
 p {
-  margin: 0 0 9px;
+  margin: 0 0 10px;
 }
 
 .lead {
-  margin-bottom: 18px;
-  font-size: 14px;
+  margin-bottom: 20px;
+  font-size: 16px;
   font-weight: 300;
   line-height: 1.4;
 }
 
 @media (min-width: 768px) {
   .lead {
-    font-size: 19.5px;
+    font-size: 21px;
   }
 }
 
 small,
 .small {
-  font-size: 92%;
+  font-size: 85%;
 }
 
 mark,
@@ -366,15 +366,15 @@ a.bg-danger:focus {
 }
 
 .page-header {
-  padding-bottom: 8px;
-  margin: 36px 0 18px;
+  padding-bottom: 9px;
+  margin: 40px 0 20px;
   border-bottom: 1px solid #eeeeee;
 }
 
 ul,
 ol {
   margin-top: 0;
-  margin-bottom: 9px;
+  margin-bottom: 10px;
 }
 
 ul ul,
@@ -403,12 +403,12 @@ ol ol {
 
 dl {
   margin-top: 0;
-  margin-bottom: 18px;
+  margin-bottom: 20px;
 }
 
 dt,
 dd {
-  line-height: 1.43;
+  line-height: 1.42857143;
 }
 
 dt {
@@ -454,9 +454,9 @@ abbr[data-original-title] {
 }
 
 blockquote {
-  padding: 9px 18px;
-  margin: 0 0 18px;
-  font-size: 16.25px;
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 17.5px;
   border-left: 5px solid #eeeeee;
 }
 
@@ -471,7 +471,7 @@ blockquote small,
 blockquote .small {
   display: block;
   font-size: 80%;
-  line-height: 1.43;
+  line-height: 1.42857143;
   color: #777777;
 }
 
@@ -509,9 +509,14 @@ blockquote.pull-right .small:after {
 }
 
 address {
-  margin-bottom: 18px;
+  margin-bottom: 20px;
   font-style: normal;
-  line-height: 1.43;
+  line-height: 1.42857143;
+}
+
+label small {
+  color: #777777;
+  font-size: 90%;
 }
 
 table {
@@ -532,7 +537,7 @@ th {
 .table {
   width: 100%;
   max-width: 100%;
-  margin-bottom: 18px;
+  margin-bottom: 20px;
 }
 
 .table > thead > tr > th,
@@ -542,7 +547,7 @@ th {
 .table > tfoot > tr > th,
 .table > tfoot > tr > td {
   padding: 8px 15px;
-  line-height: 1.43;
+  line-height: 1.42857143;
   vertical-align: middle;
   border-top: 1px solid #f5f5f5;
 }
@@ -822,7 +827,7 @@ table th[class*="col-"] {
 @media screen and (max-width: 767px) {
   .table-responsive {
     width: 100%;
-    margin-bottom: 13.5px;
+    margin-bottom: 15px;
     overflow-y: hidden;
     -ms-overflow-style: -ms-autohiding-scrollbar;
     border: 1px solid #e5e5e5;
@@ -867,9 +872,9 @@ table th[class*="col-"] {
 
 .form-control {
   height: 34px;
-  padding: 7px 12px;
-  font-size: 13px;
-  line-height: 1.43;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
   color: #555555;
   background-color: #fff;
   border: 1px solid #C8C7CC;
@@ -975,7 +980,7 @@ textarea.form-control.code-box {
   .input-group-lg > .input-group-btn > input[type="month"].btn,
   .input-group-lg
   input[type="month"] {
-    line-height: 40px;
+    line-height: 41px;
   }
 }
 
@@ -1002,7 +1007,7 @@ textarea.form-control.code-box {
 
 .radio label,
 .checkbox label {
-  min-height: 18px;
+  min-height: 20px;
   margin-right: 35px;
   padding-left: 20px;
   margin-bottom: 0;
@@ -1084,10 +1089,10 @@ fieldset[disabled]
 }
 
 .form-control-static {
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding-top: 7px;
+  padding-bottom: 7px;
   margin-bottom: 0;
-  min-height: 31px;
+  min-height: 34px;
 }
 
 .form-control-static.input-lg, .input-group-lg > .form-control-static.form-control,
@@ -1146,7 +1151,7 @@ select[multiple].input-sm,
 
 .form-group-sm .form-control-static {
   height: 30px;
-  min-height: 30px;
+  min-height: 32px;
   padding: 6px 10px;
   font-size: 12px;
   line-height: 1.5;
@@ -1155,18 +1160,18 @@ select[multiple].input-sm,
 .input-lg, .input-group-lg > .form-control,
 .input-group-lg > .input-group-addon,
 .input-group-lg > .input-group-btn > .btn {
-  height: 40px;
+  height: 41px;
   padding: 8px 16px;
-  font-size: 16px;
-  line-height: 1.33333;
+  font-size: 17px;
+  line-height: 1.3333333;
   border-radius: 2px;
 }
 
 select.input-lg, .input-group-lg > select.form-control,
 .input-group-lg > select.input-group-addon,
 .input-group-lg > .input-group-btn > select.btn {
-  height: 40px;
-  line-height: 40px;
+  height: 41px;
+  line-height: 41px;
 }
 
 textarea.input-lg, .input-group-lg > textarea.form-control,
@@ -1180,16 +1185,16 @@ select[multiple].input-lg,
 }
 
 .form-group-lg .form-control {
-  height: 40px;
+  height: 41px;
   padding: 8px 16px;
-  font-size: 16px;
-  line-height: 1.33333;
+  font-size: 17px;
+  line-height: 1.3333333;
   border-radius: 2px;
 }
 
 .form-group-lg select.form-control {
-  height: 40px;
-  line-height: 40px;
+  height: 41px;
+  line-height: 41px;
 }
 
 .form-group-lg textarea.form-control,
@@ -1198,11 +1203,11 @@ select[multiple].input-lg,
 }
 
 .form-group-lg .form-control-static {
-  height: 40px;
-  min-height: 34px;
+  height: 41px;
+  min-height: 37px;
   padding: 9px 16px;
-  font-size: 16px;
-  line-height: 1.33333;
+  font-size: 17px;
+  line-height: 1.3333333;
 }
 
 .has-feedback {
@@ -1231,9 +1236,9 @@ select[multiple].input-lg,
 .input-group-lg > .input-group-btn > .btn + .form-control-feedback,
 .input-group-lg + .form-control-feedback,
 .form-group-lg .form-control + .form-control-feedback {
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
+  width: 41px;
+  height: 41px;
+  line-height: 41px;
 }
 
 .input-sm + .form-control-feedback, .input-group-sm > .form-control + .form-control-feedback,
@@ -1352,7 +1357,7 @@ select[multiple].input-lg,
 }
 
 .has-feedback label ~ .form-control-feedback {
-  top: 23px;
+  top: 25px;
 }
 
 .has-feedback label.sr-only ~ .form-control-feedback {
@@ -1423,12 +1428,12 @@ select[multiple].input-lg,
 .form-horizontal .checkbox-inline {
   margin-top: 0;
   margin-bottom: 0;
-  padding-top: 8px;
+  padding-top: 7px;
 }
 
 .form-horizontal .radio,
 .form-horizontal .checkbox {
-  min-height: 26px;
+  min-height: 27px;
 }
 
 .form-horizontal .form-group {
@@ -1449,7 +1454,7 @@ select[multiple].input-lg,
   .form-horizontal .control-label {
     text-align: right;
     margin-bottom: 0;
-    padding-top: 8px;
+    padding-top: 7px;
   }
 }
 
@@ -1460,7 +1465,7 @@ select[multiple].input-lg,
 @media (min-width: 768px) {
   .form-horizontal .form-group-lg .control-label {
     padding-top: 9px;
-    font-size: 16px;
+    font-size: 17px;
   }
 }
 
@@ -1500,9 +1505,9 @@ select[multiple].input-lg,
   background-image: none;
   border: 1px solid transparent;
   white-space: nowrap;
-  padding: 7px 12px;
-  font-size: 13px;
-  line-height: 1.43;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
   border-radius: 2px;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -1886,8 +1891,8 @@ fieldset[disabled] .btn-link:focus {
 
 .btn-lg {
   padding: 8px 16px;
-  font-size: 16px;
-  line-height: 1.33333;
+  font-size: 17px;
+  line-height: 1.3333333;
   border-radius: 2px;
 }
 
@@ -1961,7 +1966,7 @@ input[type="button"].btn-block {
   padding: 5px 0;
   margin: 2px 0 0;
   list-style: none;
-  font-size: 13px;
+  font-size: 14px;
   text-align: left;
   background-color: #fff;
   border: 1px solid #ccc;
@@ -1979,7 +1984,7 @@ input[type="button"].btn-block {
 
 .dropdown-menu .divider {
   height: 1px;
-  margin: 8px 0;
+  margin: 9px 0;
   overflow: hidden;
   background-color: #e5e5e5;
 }
@@ -1989,7 +1994,7 @@ input[type="button"].btn-block {
   padding: 5px 20px;
   clear: both;
   font-weight: normal;
-  line-height: 1.43;
+  line-height: 1.42857143;
   color: #333333;
   white-space: nowrap;
 }
@@ -2071,7 +2076,7 @@ input[type="button"].btn-block {
   display: block;
   padding: 3px 20px;
   font-size: 12px;
-  line-height: 1.43;
+  line-height: 1.42857143;
   color: #777777;
   white-space: nowrap;
 }
@@ -2190,8 +2195,8 @@ input[type="button"].btn-block {
 }
 
 .input-group-addon {
-  padding: 7px 12px;
-  font-size: 13px;
+  padding: 6px 12px;
+  font-size: 14px;
   font-weight: normal;
   line-height: 1;
   color: #555555;
@@ -2213,7 +2218,7 @@ input[type="button"].btn-block {
 .input-group-lg > .input-group-addon,
 .input-group-lg > .input-group-btn > .input-group-addon.btn {
   padding: 8px 16px;
-  font-size: 16px;
+  font-size: 17px;
   border-radius: 2px;
 }
 
@@ -2292,9 +2297,18 @@ input[type="button"].btn-block {
   vertical-align: top;
 }
 
+.input-group.search-group .search-input-group {
+  display: inline-block;
+  position: relative;
+}
+
+.input-group.search-group .search-input-group .form-control {
+  padding-right: 27px;
+}
+
 .input-group.search-group .btn-link {
   position: absolute;
-  bottom: 1px;
+  bottom: 0;
   right: 3px;
   z-index: 10;
   height: 34px;
@@ -2460,7 +2474,7 @@ a.label:hover, a.label:focus {
 .list-group-item {
   position: relative;
   display: block;
-  padding: 7px 12px;
+  padding: 6px 12px;
   margin-bottom: -1px;
   background-color: #fff;
   border: 1px solid #e0e0e0;
@@ -2513,8 +2527,8 @@ a.label:hover, a.label:focus {
 .pagination > li > span {
   position: relative;
   float: left;
-  padding: 7px 12px;
-  line-height: 1.43;
+  padding: 6px 12px;
+  line-height: 1.42857143;
   text-decoration: none;
   color: #6F8DFF;
   background-color: #fff;
@@ -2570,8 +2584,8 @@ a.label:hover, a.label:focus {
 .pagination-lg > li > a,
 .pagination-lg > li > span {
   padding: 8px 16px;
-  font-size: 16px;
-  line-height: 1.33333;
+  font-size: 17px;
+  line-height: 1.3333333;
 }
 
 .pagination-lg > li:first-child > a,
@@ -2606,7 +2620,7 @@ a.label:hover, a.label:focus {
 }
 
 .panel {
-  margin-bottom: 18px;
+  margin-bottom: 20px;
   background-color: #fff;
   border: 1px solid transparent;
   border-radius: 2px;
@@ -2936,7 +2950,7 @@ a.label:hover, a.label:focus {
 }
 
 .panel-group {
-  margin-bottom: 18px;
+  margin-bottom: 20px;
 }
 
 .panel-group .panel {
@@ -3183,7 +3197,7 @@ a.label:hover, a.label:focus {
 
 .panel-body .panel .panel-body .panel .panel-heading .panel-title,
 .panel-heading .panel .panel-body .panel .panel-heading .panel-title {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: bold;
 }
 
@@ -3234,8 +3248,8 @@ a.label:hover, a.label:focus {
 .thumbnail {
   display: block;
   padding: 0px;
-  margin-bottom: 18px;
-  line-height: 1.43;
+  margin-bottom: 20px;
+  line-height: 1.42857143;
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 0;
@@ -3318,7 +3332,7 @@ a.thumbnail.active {
 
 .nav .nav-divider {
   height: 1px;
-  margin: 8px 0;
+  margin: 9px 0;
   overflow: hidden;
   background-color: #e5e5e5;
 }
@@ -3338,7 +3352,7 @@ a.thumbnail.active {
 
 .nav-tabs > li > a {
   margin-right: 2px;
-  line-height: 1.43;
+  line-height: 1.42857143;
   border: 1px solid transparent;
   border-radius: 2px 2px 0 0;
 }
@@ -3489,7 +3503,7 @@ a.thumbnail.active {
 
 .modal-title {
   margin: 0;
-  line-height: 1.43;
+  line-height: 1.42857143;
   color: #fff;
   font-size: 19px;
   font-weight: normal;
@@ -3567,7 +3581,7 @@ a.thumbnail.active {
 }
 
 .font-size-large {
-  font-size: 16px;
+  font-size: 17px;
 }
 
 .gray-font {
@@ -4374,7 +4388,7 @@ aside.open {
   display: block;
   vertical-align: middle;
   padding-left: 30px;
-  font-size: 16px;
+  font-size: 17px;
   color: #2c2e37;
   font-weight: normal;
   line-height: 70px;
