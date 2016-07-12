@@ -165,71 +165,94 @@
                     , $selectedParentCol = $selectedParentRow.closest("div[class^='xe-col-']")
                     , $lastColumn = $selectedParentCol.siblings(":last");
 
+                if($(".editor").find(".widgetarea").length === 1) {
+                    console.error("삭제될수 없음");
+                    return;
+                }
+
                 if($siblingsRow.length > 0) {
 
 
-                    if(self.checkBlock($selected)) {
-                        if($selectedParentRow.siblings().length > 0) {
-                            var height = $selected.find(".widgetarea").data("height");
-                            var targetHeight = $selectedParentRow.siblings().last().find(".widgetarea").height();
+                    var deletable = self.checkRowBlock($selected);
+                    var $target = $();
 
-                            if($selectedParentRow.parent().siblings().find("> .xe-row").length > 1) {
-                                var $combineRow = ($selectedParentRow.next().length > 0)? $selectedParentRow.next() : $selectedParentRow.prev()
+                    if(deletable) {
 
-                                var $findCol = ($combineRow.find("div[class^='xe-col-']:not(.xe-col-md-12)").length > 0)? $combineRow.find(".widgetarea-row") : $combineRow;
-
-                                $selectedParentRow.remove();
-
-                                $findCol.parent().each(function() {
-                                    $(this).find(".widgetarea-row:last .widgetarea").each(function() {
-                                        var $widgetarea = $(this)
-                                            , widgetareaHeight = $widgetarea.data("height");
-
-
-                                        var resetHeight = widgetareaHeight + targetHeight + 25;
-
-                                        $widgetarea.data("height", resetHeight).height(resetHeight);
-                                    });
-                                });
+                        var height = $selected.find(".widgetarea").data("height");
+                        // var targetHeight = $selectedParentRow.siblings().last().find(".widgetarea").height();
 
 
 
-                                // $combineRow.find(".widgetarea").height(lastColHeight + height + 25).data("height", lastColHeight + height + 25);
-                                // $selectedParentRow.remove();
+                        $(".editor").find(".widgetarea-row:last-child:not(:has(.selected))").each(function() {
+                            var $lastWidgetareaRow = $(this)
+                                , $widgetarea = $lastWidgetareaRow.find(".widgetarea")
+                                , lastWidgetareaRowHeight = $widgetarea.height();
 
-                                return;
-                            }else {
+                            if(lastWidgetareaRowHeight > height) {
+                                var resetHeight = lastWidgetareaRowHeight - height - 25;
 
-                                var $parentsCol = $();
-
-                                while(true) {
-                                    $parentsCol = $selectedParentRow.closest("div[class^='xe-col-']");
-
-                                    if($parentsCol.length === 0) {
-                                        $target = $selectedParentCol;
-                                        break;
-                                    }else {
-                                        if($parentsCol.siblings().length > 0) {
-                                            $selectedParentRow.remove();
-                                            $target = $parentsCol.siblings().andSelf();
-                                            break;
-                                        }else {
-                                            $selectedParentRow = $selectedParentRow.closest(".xe-row");
-                                            break;
-                                        }
-                                    }
-                                }
-
-                                $selectedParentRow.remove();
-                                $target = $target.siblings().andSelf();
+                                $widgetarea.height(resetHeight).data("height", resetHeight);
                             }
+                        });
 
-                        }else {
-                            $selectedParentRow.remove();
-                        }
+                        $selectedParentRow.remove();
 
-                        self.reduceBlock($target);
-                        $("[reduce=true]").removeAttr("reduce");
+                        // if($selectedParentRow.parent().siblings().find("> .xe-row").length > 1) {
+                        //     var $combineRow = ($selectedParentRow.next().length > 0)? $selectedParentRow.next() : $selectedParentRow.prev();
+                        //
+                        //     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        //
+                        //     // if($combineRow.find(".widgetarea-row:last-child").length > 0 && deletable) {
+                        //     //     //가장 하위의 bottom DOM을 선택
+                        //     //     $combineRow.find(".widgetarea-row:last-child .widgetarea").each(function() {
+                        //     //         var $widgetarea = $(this)
+                        //     //             , widgetareaHeight = $widgetarea.data("height")
+                        //     //             , resetHeight = widgetareaHeight + targetHeight + 25;
+                        //     //
+                        //     //         $widgetarea.height(resetHeight).data("height", resetHeight);
+                        //     //     });
+                        //     // }else {
+                        //     //     //$combineRow가 .widgetarea-row 일때
+                        //     //     var $widgetarea = $combineRow.find(".widgetarea")
+                        //     //         , widgetareaHeight = $widgetarea.data("height")
+                        //     //         , resetHeight = widgetareaHeight + targetHeight + 25;
+                        //     //
+                        //     //     $widgetarea.height(resetHeight).data("height", resetHeight);
+                        //     // }
+                        //
+                        //     $selectedParentRow.remove();
+                        //
+                        //     return;
+                        //     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        //
+                        // }else {
+                        //
+                        //     var $parentsCol = $();
+                        //
+                        //     while(true) {
+                        //         $parentsCol = $selectedParentRow.closest("div[class^='xe-col-']");
+                        //
+                        //         if($parentsCol.length === 0) {
+                        //             $target = $selectedParentCol;
+                        //             break;
+                        //         }else {
+                        //             if($parentsCol.siblings().length > 0) {
+                        //                 $selectedParentRow.remove();
+                        //                 $target = $parentsCol.siblings().andSelf();
+                        //                 break;
+                        //             }else {
+                        //                 $selectedParentRow = $selectedParentRow.closest(".xe-row");
+                        //                 break;
+                        //             }
+                        //         }
+                        //     }
+                        //
+                        //     $selectedParentRow.remove();
+                        //     $target = $target.siblings().andSelf();
+                        // }
+                        //
+                        // self.reduceBlock($target);
+                        // $("[reduce=true]").removeAttr("reduce");
 
                     }else {
 
@@ -256,49 +279,73 @@
                             //     $widgetarea.data("height", resetHeight).height(resetHeight);
                             // });
 
-
-                            var $findCol = ($combineRow.find("div[class^='xe-col-']:not(.xe-col-md-12)").length > 0)? $combineRow.find(".widgetarea-row") : $combineRow;
-
                             $selectedParentRow.remove();
 
-                            $findCol.parent().each(function() {
-                                $(this).find(".widgetarea-row:last .widgetarea").each(function() {
+                            if($combineRow.find(".widgetarea-row:last-child").length > 0 && deletable) {
+                                //가장 하위의 bottom DOM을 선택
+                                $combineRow.find(".widgetarea-row:last-child .widgetarea").each(function() {
                                     var $widgetarea = $(this)
-                                        , widgetareaHeight = $widgetarea.data("height");
+                                        , widgetareaHeight = $widgetarea.data("height")
+                                        , resetHeight = widgetareaHeight + targetHeight + 25;
 
-
-                                    var resetHeight = widgetareaHeight + targetHeight + 25;
-
-                                    $widgetarea.data("height", resetHeight).height(resetHeight);
+                                    $widgetarea.height(resetHeight).data("height", resetHeight);
                                 });
-                            });
+                            }else {
+                                //$combineRow가 .widgetarea-row 일때
+                                var $widgetarea = $combineRow.find(".widgetarea")
+                                    , widgetareaHeight = $widgetarea.data("height")
+                                    , resetHeight = widgetareaHeight + targetHeight + 25;
+
+                                $widgetarea.height(resetHeight).data("height", resetHeight);
+                            }
+
+
+                            // var $findCol = ($combineRow.find("div[class^='xe-col-']:not(.xe-col-md-12)").length > 0)? $combineRow.find(".widgetarea-row") : $combineRow;
+                            //
+                            // $selectedParentRow.remove();
+                            //
+                            // $findCol.parent().each(function() {
+                            //     $(this).find(".widgetarea-row:last .widgetarea").each(function() {
+                            //         var $widgetarea = $(this)
+                            //             , widgetareaHeight = $widgetarea.data("height");
+                            //
+                            //
+                            //         var resetHeight = widgetareaHeight + targetHeight + 25;
+                            //
+                            //         $widgetarea.data("height", resetHeight).height(resetHeight);
+                            //     });
+                            // });
 
                         }else {
                             //없어야 정상
                             console.error("error 정의되지 않은 조건. ");
                         }
-
-
-
-                        console.log($selected);
-
                     }
 
                 }else {
-                    if($lastColumn.length > 0) {
+                    if($selectedParentCol.siblings().length > 0) {
                         var size = parseInt($selectedParentCol.attr('class').match(/col-md-([0-9]+)/i)[1]) + parseInt($lastColumn.attr('class').match(/col-md-([0-9]+)/i)[1]);
 
-                        var $lastWidgetRow = $lastColumn.html();
+                        //var $lastWidgetRow = $lastColumn.html();
+                        var $siblingCol = ($selectedParentCol.next().length > 0)? $selectedParentCol.next() : $selectedParentCol.prev()
+                            , siblingColHtml = $siblingCol.html();
 
                         $selectedParentCol.remove();
-                        $lastColumn.removeAttr('class').addClass('xe-col-md-' + size);
+                        $siblingCol.removeAttr('class').addClass('xe-col-md-' + size);
 
-                        if($($lastWidgetRow).wrap("div").parent().find("> .widgetarea-row").length > 0) {
-                            var $lastColumnParentRow = $lastColumn.closest(".xe-row");
-
-                            $lastColumnParentRow.parent().append($lastWidgetRow);
-                            $lastColumnParentRow.remove();
+                        //if($(siblingColHtml).wrap("div").parent().find("> .widgetarea-row").length > 0) {
+                        if($siblingCol.closest(".xe-row").parent().find("> .xe-row").length > 1 || $siblingCol.siblings().length === 0) {
+                            $siblingCol.closest(".xe-row").parent().append(siblingColHtml);
+                            $siblingCol.closest(".xe-row").remove();
                         }
+
+
+                        // if($(siblingColHtml).wrap("div").parent().find("> .widgetarea-row").length > 0) {
+                        //     var $lastColumnParentRow = $lastColumn.closest(".xe-row");
+                        //
+                        //     $lastColumnParentRow.parent().append(siblingColHtml);
+                        //     $lastColumnParentRow.remove();
+                        // }
 
                     }else {
                         var $target = $selectedParentRow.closest("div[class^='xe-col-']:not(.xe-col-md-12)").siblings();
@@ -325,7 +372,7 @@
              * </pre>
              * @return {boolean} _deletable
              * */
-            checkBlock: function($selected) {
+            checkRowBlock: function($selected) {
                 var targetHeight = $selected.find(".widgetarea").data("height");
                 _deletable = true;
 
@@ -335,7 +382,7 @@
                     if($divCol.length > 0 && _deletable) {
                         var $siblingCols = $divCol.siblings();
 
-                        _deletable = self.checkChildBlock($siblingCols, targetHeight);
+                        _deletable = self.checkRowChildBlock($siblingCols, targetHeight);
 
                         $divCol = $divCol.parent().closest("div[class^='xe-col-']:not(.xe-col-md-12)");
 
@@ -355,7 +402,7 @@
              * TODO
              * @description 하위 dom을 내려가며 확인
              * */
-            checkChildBlock: function($cols, targetHeight) {
+            checkRowChildBlock: function($cols, targetHeight) {
 
                 if(!_deletable) {
                     return false;
@@ -379,7 +426,7 @@
                             // return self.checkChildBlock($target, targetHeight);
                         }
 
-                        _deletable = self.checkChildBlock($target, targetHeight);
+                        _deletable = self.checkRowChildBlock($target, targetHeight);
 
                         // $sCol.find("> .xe-row").each(function() {
                         //
@@ -424,7 +471,7 @@
             reduceBlock: function($target) {
                 if($target.length > 0) {
 
-                        $target.each(function() {
+                    $target.each(function() {
                         var $targetPiece = $(this);
 
 
@@ -436,8 +483,10 @@
                             console.log("row");
 
                         }else {
-                            if($targetPiece.find("> .xe-row > div[class^='xe-col-'] > .widgetarea:last").length > 0) {
-                                $targetPiece.find("> .xe-row > div[class^='xe-col-'] > .widgetarea:last").each(function() {
+                            if($targetPiece.find(".widgetarea-row:last-child:not(:has(.selected))").length > 0) {
+//                                $targetPiece.find("> .xe-row > div[class^='xe-col-'] > .widgetarea:last").each(function() {
+                                $targetPiece.find(".widgetarea-row:last-child:not(:has(.selected))").find(".widgetarea").each(function() {
+
                                     var $widgetarea = $(this);
 
                                     if($widgetarea.data("height") > 140) {
