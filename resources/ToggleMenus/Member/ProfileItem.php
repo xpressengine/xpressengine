@@ -16,15 +16,6 @@ class ProfileItem extends UserToggleMenu
         'name' => '프로필',
         'description' => '회원의 프로필 이미지를 출력하고 프로필 페이지로 이동합니다.'
     ];
-    /**
-     * @var
-     */
-    private $userId;
-
-    public function __construct($instanceId, $userId)
-    {
-        $this->userId = $userId;
-    }
 
     public function getText()
     {
@@ -33,12 +24,12 @@ class ProfileItem extends UserToggleMenu
 
     public function getType()
     {
-        return 'raw';
+        return static::MENUTYPE_RAW;
     }
 
     public function getAction()
     {
-        $user = app('xe.users')->find($this->userId);
+        $user = app('xe.users')->find($this->identifier);
         $link = route('member.profile', $user->getId());
         $profileImage = $user->getProfileImage();
         $content = sprintf('<a href="%s"><img src="%s" width="96" height="96"><br>프로필보기</a>', $link, $profileImage, $user->getDisplayName());
@@ -48,9 +39,5 @@ class ProfileItem extends UserToggleMenu
     public function getScript()
     {
         return asset('assets/core/sample.js');
-    }
-    public function getIcon()
-    {
-        return null;
     }
 }
