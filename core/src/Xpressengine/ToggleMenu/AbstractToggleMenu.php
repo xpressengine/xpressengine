@@ -46,8 +46,6 @@ abstract class AbstractToggleMenu implements ComponentInterface
      */
     protected $identifier;
 
-    const MENUTYPE_FUNC = 'func';
-
     const MENUTYPE_EXEC = 'exec';
 
     const MENUTYPE_LINK = 'link';
@@ -118,7 +116,7 @@ abstract class AbstractToggleMenu implements ComponentInterface
 
     /**
      * 메뉴의 타입
-     * 'func' or 'exec' or 'link' or 'raw' 중에 하나
+     * 'exec' or 'link' or 'raw' 중에 하나
      *
      * @return string
      */
