@@ -1,6 +1,14 @@
 <?php
 namespace Xpressengine\Plugin\Composer {
 
+    /**
+     * array_forget
+     *
+     * @param $array
+     * @param $keys
+     *
+     * @return void
+     */
     function array_forget(&$array, $keys)
     {
         $original = &$array;
@@ -98,6 +106,4 @@ namespace Xpressengine\Plugin\Composer {
 
         return $array;
     }
-
 }
-

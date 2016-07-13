@@ -8,11 +8,14 @@
   min-height: $xe-label-size;
   margin-top: 10px;
   margin-bottom: 10px;  
+  text-align: left;
   cursor: pointer;
+  line-height: 19px;
+  font-size: 14px;
   .xe-label-text{
     display: inline-block;
-    padding-left: 25px;  
-    line-height: 19px;
+    padding-left: 25px;      
+    color: $text-color;
   }
   input {
     &[type="checkbox"], &[type="radio"] {
@@ -214,7 +217,7 @@ textarea.xe-form-control {
       display: inline-block;
       margin-top: 0;
       margin-bottom: 0;
-      margin-right: 10px;
+      margin-right: 20px;
       vertical-align: middle;
     
       label {

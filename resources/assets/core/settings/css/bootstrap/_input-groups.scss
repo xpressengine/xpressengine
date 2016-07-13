@@ -203,15 +203,22 @@
 
 .input-group.search-group {
   font-size: 0;
-  .input-group-btn, .form-control {
+  .input-group-btn, .form-control{
     display: inline-block;
     float: none;
     width: auto;
     vertical-align: top;
   }
+  .search-input-group{
+    display: inline-block;
+    position: relative;
+    .form-control{
+      padding-right: 27px;
+    }
+  }
   .btn-link {
     position: absolute;
-    bottom: 1px;
+    bottom: 0;
     right: 3px;
     z-index: 10;
     height: $input-height-base;

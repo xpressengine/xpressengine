@@ -18,7 +18,6 @@ use Illuminate\Contracts\Support\Renderable;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Plugin\ComponentInterface;
 use Xpressengine\Plugin\ComponentTrait;
-use Xpressengine\Plugins\Alice\Alice;
 use Xpressengine\Support\MobileSupportTrait;
 
 /**
@@ -40,7 +39,7 @@ abstract class AbstractTheme implements ComponentInterface, Renderable
     /**
      * @var ThemeHandler
      */
-    protected static $handler  = null;
+    protected static $handler = null;
 
     /**
      * @var ConfigEntity
@@ -135,7 +134,7 @@ abstract class AbstractTheme implements ComponentInterface, Renderable
      */
     public function setting(ConfigEntity $config = null)
     {
-        if($config !== null) {
+        if ($config !== null) {
             $this->config = $config;
         }
         return $this->config;

@@ -152,7 +152,8 @@ class SkinEntity implements Arrayable, Jsonable
      *
      * @return null
      */
-    public function setting(array $config = null) {
+    public function setting(array $config = null)
+    {
         return $this->getObject()->setting($config);
     }
 

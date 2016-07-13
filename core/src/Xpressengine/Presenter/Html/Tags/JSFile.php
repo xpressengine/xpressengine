@@ -61,6 +61,7 @@ class JSFile
      * @param string $location 출력할 파일의 위치\n
      *                         (head.append|head.prepend|body.append|body.prepend)
      * @param bool   $minified minified 파일을 출력할지 결정한다.
+     *
      * @return string
      */
     public static function output($location = 'body.append', $minified = false)
@@ -106,7 +107,7 @@ class JSFile
 
     public function getFile($file, $minified = false)
     {
-        if($minified) {
+        if ($minified) {
             return $this->minified;
         }
         return $file;
@@ -118,11 +119,12 @@ class JSFile
      *
      * @param array  $fileList js file의 목록
      * @param Sorter $sorter   우선순위 정렬을 위한 sorter
+     *
      * @return void
      */
     public static function init($fileList = [], $sorter = null)
     {
-        static::$sorter   = $sorter === null ? new Sorter() : $sorter;
+        static::$sorter = $sorter === null ? new Sorter() : $sorter;
         static::$fileList = $fileList;
     }
 
@@ -135,7 +137,7 @@ class JSFile
     public function __construct($files)
     {
         foreach ((array) $files as $file) {
-            $file          = $this->asset($file);
+            $file = $this->asset($file);
             $this->files[] = $file;
         }
 
@@ -147,6 +149,7 @@ class JSFile
      * type
      *
      * @param string $type type
+     *
      * @return $this
      */
     public function type($type)
@@ -235,6 +238,7 @@ class JSFile
      *
      * @param string     $file     file path
      * @param bool|false $minified minified
+     *
      * @return string
      */
     public function render($file, $minified = false)
@@ -268,6 +272,7 @@ class JSFile
      * key resolver
      *
      * @param string $file file path
+     *
      * @return string
      */
     protected function resolveKey($file)
@@ -279,6 +284,7 @@ class JSFile
      * asset
      *
      * @param string $file file path
+     *
      * @return string
      */
     protected function asset($file)

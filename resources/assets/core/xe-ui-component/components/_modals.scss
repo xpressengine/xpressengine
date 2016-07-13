@@ -94,7 +94,7 @@
 }
 
 // Title text within header
-.xe-modal-title,
+.xe-modal-title, 
 .xe-modal-content-title{
   display: block;
   margin: 0;
@@ -106,7 +106,7 @@
 
 .xe-modal-content-title{
   margin-bottom:5px;
-  font-size: 16px;
+  font-size: 16px;  
 }
 
 // Modal body
@@ -114,11 +114,11 @@
 .xe-modal-body {
   position: relative;
   padding: $modal-inner-padding;
+  font-size: $font-size-base;
+  line-height: $line-height-small;
+  color: $gray-light;
   p{
-    margin:0;
-    font-size: $font-size-base;
-    line-height: $line-height-small;
-    color: $gray-light;
+    margin:0;    
   }
 }
 
@@ -189,9 +189,9 @@
   }
   .list-inner-item {
     display: block;
-    overflow: hidden;
+    overflow: hidden;    
     padding: 14px 24px 14px 0;
-    border-bottom: 1px solid #e4e4e4;
+    border-bottom: 1px solid #e4e4e4;    
     .list-text {
       display: table-cell;
       vertical-align: middle;

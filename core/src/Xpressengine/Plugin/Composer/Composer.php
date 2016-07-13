@@ -19,7 +19,7 @@ use Xpressengine\Plugin\MetaFileReader;
 use Xpressengine\Plugin\PluginScanner;
 
 /**
- * @category
+ * @category    Plugin
  * @package     Xpressengine\Plugin
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
@@ -61,7 +61,7 @@ class Composer
         $writer->resolvePlugins()->write();
 
         // XE가 설치돼 있지 않을 경우, base plugin require에 추가
-        if(!file_exists(static::$installedFlagPath)) {
+        if (!file_exists(static::$installedFlagPath)) {
             foreach (static::$basePlugins as $plugin => $version) {
                 $writer->install($plugin, $version);
             }
@@ -70,7 +70,7 @@ class Composer
             $event->getOutput()->writeln("xpressengine-installer: running in update mode");
         } else {
             static::applyRequire($writer);
-            if(static::isUpdateMode($event)) {
+            if (static::isUpdateMode($event)) {
                 $writer->setUpdateMode();
                 $event->getOutput()->writeln("xpressengine-installer: running in update mode");
             } else {
@@ -111,24 +111,23 @@ class Composer
 
     private static function applyRequire(ComposerFileWriter $writer)
     {
-            $installs = $writer->get('xpressengine-plugin.install', []);
-            foreach ($installs as $name => $version) {
-                $writer->addRequire($name, $version);
-            }
-            $updates = $writer->get('xpressengine-plugin.update', []);
-            foreach ($updates as $name => $version) {
-                $writer->addRequire($name, $version);
-            }
-            $uninstalls = $writer->get('xpressengine-plugin.uninstall', []);
-            foreach ($uninstalls as $name) {
-                $writer->removeRequire($name);
-            }
-
+        $installs = $writer->get('xpressengine-plugin.install', []);
+        foreach ($installs as $name => $version) {
+            $writer->addRequire($name, $version);
+        }
+        $updates = $writer->get('xpressengine-plugin.update', []);
+        foreach ($updates as $name => $version) {
+            $writer->addRequire($name, $version);
+        }
+        $uninstalls = $writer->get('xpressengine-plugin.uninstall', []);
+        foreach ($uninstalls as $name) {
+            $writer->removeRequire($name);
+        }
     }
 
     private static function isUpdateMode(CommandEvent $event)
     {
-        if($event->getInput()->hasArgument('packages')) {
+        if ($event->getInput()->hasArgument('packages')) {
             $packages = $event->getInput()->getArgument('packages');
             $packages = array_shift($packages);
             return ($packages && strpos($packages, 'xpressengine-plugin') === 0);
