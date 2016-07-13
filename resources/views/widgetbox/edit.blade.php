@@ -246,8 +246,9 @@
             </div>
         </div>
         <div class="btn-center">
+            <input type="hidden" id="widgetCode" value="{{ "<xewidget id='widget/banner' title='상단배너'><banner_count>2</banner_count><banner_size>2</banner_size></xewidget>" }}" />
             <button type="button" class="xe-btn xe-btn-secondary">취소</button>
-            <button type="button" class="xe-btn xe-btn-primary">확인</button>
+            <button type="button" class="xe-btn xe-btn-primary btnSetWidget">확인</button>
         </div>
     </div>
     <!--// widget layer  -->
@@ -264,26 +265,26 @@
             $(this).parents(".seciton").toggleClass("close");
         });
 
-        $(".snb-section .btn-widget-add").on('click', function (e) {
-            // close sidebar
-            if ($('.widget-layer').hasClass("open")) {
-                $("aside").removeClass("open");
-                // open sidebar
-            } else {
-                $(".widget-layer").addClass("open");
-                $(".dimd").show();
-                $("body").css("overflow", "hidden");
-            }
-        });
         $('.dimd, .layer-close').on('click', function () {
             $(".widget-layer").removeClass("open");
             $(".dimd").hide();
             $("body").css("overflow", "");
         });
 
+        $(".btnSetWidget").on("click", function() {
+            var widgetCode = $("#widgetCode").val()
+                , $widgetCode = $(widgetCode);
+
+            var title = $widgetCode.attr("title");
+
+
+            console.log(title);
+
+
+        });
+
         WidgetBox.init();
         WidgetSnb.init();
         WidgetAdder.init();
-
     });
 </script>

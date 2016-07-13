@@ -25,6 +25,7 @@
                 self.$btnAddRow = $("#btnAddRow");
                 self.$btnDeselectAll = $("#btnDeselectAll");
                 self.$btnDelBlock = $("#btnDelBlock");
+                self.$btnWidgetAdd = $(".btn-widget-add");
             },
             bindEvents: function() {
                 self.$btnMode.on("click", self.selectMode);
@@ -33,6 +34,25 @@
                 self.$btnAddRow.on('click', self.addRow);
                 self.$btnDeselectAll.on("click", WidgetBox.deselectAll);
                 self.$btnDelBlock.on("click", self.removeBlock);
+                self.$btnWidgetAdd.on("click", self.toggleWidgetAddLayer);
+            },
+            toggleWidgetAddLayer: function() {
+                // close sidebar
+                if ($('.widget-layer').hasClass("open")) {
+                    $("aside").removeClass("open");
+                    // open sidebar
+                } else {
+
+                    if($(".selected").length > 0) {
+                        $(".widget-layer").addClass("open");
+                        $(".dimd").show();
+                        $("body").css("overflow", "hidden");
+
+                    }else {
+                        alert("위젯을 추가할 셀을 선택하세요.");
+
+                    }
+                }
             },
             selectMode: function() {
                 var $this = $(this)
@@ -72,7 +92,8 @@
                     , html = "";
 
                 if($selected.length > 0) {
-                    var height = $selected.find(".widgetarea").data("height") || $selected.find(".widgetarea").height();
+                    //var height = $selected.find(".widgetarea").data("height") || $selected.find(".widgetarea").height();
+                    var height = $selected.find(".widgetarea").height();
 
                     $target.removeClass("widgetarea-row");
                     $selected.remove();
@@ -80,13 +101,13 @@
                     columns.forEach(function(v, i) {
                         html += [
                             '<div class="xe-col-md-' + v + '">',
-                                '<div class="xe-row widgetarea-row">',
-                                    '<div class="xe-col-md-12">',
-                                        '<div class="widgetarea" data-height="' + height + '" style="height:' + height + 'px">',
-                                            '<span class="order"></span>',
-                                        '</div>',
-                                    '</div>',
-                                '</div>',
+                            '<div class="xe-row widgetarea-row">',
+                            '<div class="xe-col-md-12">',
+                            '<div class="widgetarea" data-height="' + height + '" style="height:' + height + 'px">',
+                            '<span class="order"></span>',
+                            '</div>',
+                            '</div>',
+                            '</div>',
                             '</div>'
                         ].join("\n");
                     });
@@ -104,11 +125,11 @@
                 if($selected.length > 0) {
                     $widgetAreaRow.after([
                         '<div class="xe-row widgetarea-row">',
-                            '<div class="xe-col-md-12">',
-                                '<div class="widgetarea" data-height="140" style="height:140px">',
-                                    '<span class="order"></span>',
-                                '</div>',
-                            '</div>',
+                        '<div class="xe-col-md-12">',
+                        '<div class="widgetarea" data-height="140" style="height:140px">',
+                        '<span class="order"></span>',
+                        '</div>',
+                        '</div>',
                         '</div>',
                     ].join("\n"));
 
@@ -122,7 +143,8 @@
                         if((selectedHeight - 165) > 140) {
                             $wdigetareaRow.next().find(".widgetarea").height(selectedHeight - 165).data("height", selectedHeight - 165);
                         }else {
-                            var height = $wdigetareaRow.next().find(".widgetarea").data("height");
+                            //var height = $wdigetareaRow.next().find(".widgetarea").data("height");
+                            var height = $wdigetareaRow.next().find(".widgetarea").height();
                             $wdigetareaRow.next().find(".widgetarea").height(height).data("height", height);
                         }
 
@@ -135,7 +157,8 @@
                             $this.find(".widgetarea-row").parent().find(".widgetarea-row:last").each(function() {
                                 var $this = $(this)
                                     , $lastTarget = $this.find(".widgetarea:last")
-                                    , height = $lastTarget.data("height") + 165;
+                                    , height = $lastTarget.height() + 165;
+                                //, height = $lastTarget.data("height") + 165;
 
                                 $lastTarget.height(height).data("height", height);
                             });
@@ -149,11 +172,11 @@
             addRow: function() {
                 self.$editor.append([
                     '<div class="xe-row widgetarea-row">',
-                        '<div class="xe-col-md-12">',
-                            '<div class="widgetarea" data-height="140" style="height:140px">',
-                                '<span class="order"></span>',
-                            '</div>',
-                        '</div>',
+                    '<div class="xe-col-md-12">',
+                    '<div class="widgetarea" data-height="140" style="height:140px">',
+                    '<span class="order"></span>',
+                    '</div>',
+                    '</div>',
                     '</div>'
                 ].join("\n"));
             },
@@ -165,7 +188,7 @@
                     , $selectedParentCol = $selectedParentRow.closest("div[class^='xe-col-']")
                     , $lastColumn = $selectedParentCol.siblings(":last");
 
-                if($(".editor").find(".widgetarea").length === 1) {
+                if(self.$editor.find(".widgetarea").length === 1) {
                     console.error("삭제될수 없음");
                     return;
                 }
@@ -178,12 +201,13 @@
 
                     if(deletable) {
 
-                        var height = $selected.find(".widgetarea").data("height");
+                        var height = $selected.find(".widgetarea").height();
+                        //var height = $selected.find(".widgetarea").data("height");
                         // var targetHeight = $selectedParentRow.siblings().last().find(".widgetarea").height();
 
 
 
-                        $(".editor").find(".widgetarea-row:last-child:not(:has(.selected))").each(function() {
+                        $(".editor > .xe-row:has(.selected)").find(".widgetarea-row:last-child:not(:has(.selected))").not($(".selected").closest(".widgetarea-row").siblings()).each(function() {
                             var $lastWidgetareaRow = $(this)
                                 , $widgetarea = $lastWidgetareaRow.find(".widgetarea")
                                 , lastWidgetareaRowHeight = $widgetarea.height();
@@ -264,7 +288,8 @@
                          * 4)row라면 last row에 있는 컬럽을 늘림
                          * 5)col이라면 col하위의 last row의 col을 늘림
                          * */
-                        var targetHeight = $selected.find(".widgetarea").data("height");
+                        //var targetHeight = $selected.find(".widgetarea").data("height");
+                        var targetHeight = $selected.find(".widgetarea").height();
 
                         if($selectedParentRow.siblings().length > 0) {
                             var $combineRow = ($selectedParentRow.next().length > 0)? $selectedParentRow.next() : $selectedParentRow.prev();
@@ -285,7 +310,8 @@
                                 //가장 하위의 bottom DOM을 선택
                                 $combineRow.find(".widgetarea-row:last-child .widgetarea").each(function() {
                                     var $widgetarea = $(this)
-                                        , widgetareaHeight = $widgetarea.data("height")
+                                        , widgetareaHeight = $widgetarea.height()
+                                    // , widgetareaHeight = $widgetarea.data("height")
                                         , resetHeight = widgetareaHeight + targetHeight + 25;
 
                                     $widgetarea.height(resetHeight).data("height", resetHeight);
@@ -293,7 +319,8 @@
                             }else {
                                 //$combineRow가 .widgetarea-row 일때
                                 var $widgetarea = $combineRow.find(".widgetarea")
-                                    , widgetareaHeight = $widgetarea.data("height")
+                                //, widgetareaHeight = $widgetarea.data("height")
+                                    , widgetareaHeight = $widgetarea.height()
                                     , resetHeight = widgetareaHeight + targetHeight + 25;
 
                                 $widgetarea.height(resetHeight).data("height", resetHeight);
@@ -334,7 +361,8 @@
                         $siblingCol.removeAttr('class').addClass('xe-col-md-' + size);
 
                         //if($(siblingColHtml).wrap("div").parent().find("> .widgetarea-row").length > 0) {
-                        if($siblingCol.closest(".xe-row").parent().find("> .xe-row").length > 1 || $siblingCol.siblings().length === 0) {
+                        //if($siblingCol.closest(".xe-row").parent().find("> .xe-row").length > 1 || $siblingCol.siblings().length === 0) {
+                        if($siblingCol.siblings().length === 0) {
                             $siblingCol.closest(".xe-row").parent().append(siblingColHtml);
                             $siblingCol.closest(".xe-row").remove();
                         }
@@ -370,9 +398,29 @@
              *     1)줄어들어야 하는 height 수치 필요 (상하 병합 되면서 수치가 늘어날수 있음)
              *     2)상위 dom으로 올라가며 확인
              * </pre>
-             * @return {boolean} _deletable
+             * @return {boolean} deletable
              * */
             checkRowBlock: function($selected) {
+                //var targetHeight = $selected.find(".widgetarea").data("height");
+
+
+                // var targetHeight = $selected.find(".widgetarea").height()
+                // var deletable = true;
+                //
+                // $(".editor > .xe-row:has(.selected)")
+                //     .find(".widgetarea-row:last-child:not(:has(.selected))")
+                //     .not($selected.closest(".widgetarea-row").siblings()).each(function() {
+                //
+                //     var $row = $(this);
+                //
+                //     //if($row.find(".widgetarea").data("height") <= targetHeight) {
+                //     if($row.find(".widgetarea").height() <= targetHeight) {
+                //         deletable = false;
+                //     }
+                // });
+
+
+
                 var targetHeight = $selected.find(".widgetarea").data("height");
                 _deletable = true;
 
@@ -381,6 +429,9 @@
                 while(true) { //상위 col-xx을 찾음 12가 아닌것
                     if($divCol.length > 0 && _deletable) {
                         var $siblingCols = $divCol.siblings();
+
+
+
 
                         _deletable = self.checkRowChildBlock($siblingCols, targetHeight);
 
@@ -396,6 +447,8 @@
                 console.log(":: deletable :: " + _deletable);
 
                 return _deletable;
+
+                // return deletable;
 
             },
             /**
@@ -446,7 +499,8 @@
                         // });
                     }else {
                         //최하위 cols
-                        if($sCol.find(".widgetarea").data("height") <= targetHeight) {
+                        //if($sCol.find(".widgetarea").data("height") <= targetHeight) {
+                        if($sCol.find(".widgetarea").height() <= targetHeight) {
                             _deletable = false;
                             return false;
                         }
@@ -489,7 +543,8 @@
 
                                     var $widgetarea = $(this);
 
-                                    if($widgetarea.data("height") > 140) {
+                                    //if($widgetarea.data("height") > 140) {
+                                    if($widgetarea.height() > 140) {
                                         var height = $widgetarea.height() - 165;
 
                                         if (!$widgetarea.attr("reduce")) {
