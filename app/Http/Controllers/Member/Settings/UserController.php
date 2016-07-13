@@ -18,7 +18,6 @@ use XeDB;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
 use Xpressengine\User\Exceptions\EmailNotFoundException;
 use Xpressengine\User\Exceptions\MailAlreadyExistsException;
-use Xpressengine\User\Models\User;
 use Xpressengine\User\Rating;
 use Xpressengine\User\Repositories\UserRepository;
 use Xpressengine\User\UserHandler;
@@ -146,7 +145,7 @@ class UserController extends Controller
             [
                 'email' => 'email|required',
                 'displayName' => 'required',
-                'password' => 'required',
+                'password' => 'required|password',
             ]
         );
 
@@ -272,6 +271,7 @@ class UserController extends Controller
                 'displayName' => 'required',
                 'rating' => 'required',
                 'status' => 'required',
+                'password' => 'password'
             ]
         );
 
