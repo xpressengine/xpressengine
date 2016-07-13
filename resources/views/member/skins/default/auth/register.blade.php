@@ -55,3 +55,18 @@
     <p class="auth-text">{{xe_trans('xe::alreadyHaveAccount')}} <a href="{{ route('login') }}">{{xe_trans('xe::login')}}</a></p>
 </div>
 <!--// 회원가입하기 기본폼 -->
+
+{!! app('xe.frontend')->html('auth.register')->content("
+    <script>
+        $(function($) {
+            $('.__xe_btn_privacy').click(function(){
+                XE.pageModal('".route('auth.privacy')."');
+                return false;
+            })
+            $('.__xe_btn_agreement').click(function(){
+                XE.pageModal('".route('auth.agreement')."');
+                return false;
+            })
+        });
+    </script>
+")->load() !!}
