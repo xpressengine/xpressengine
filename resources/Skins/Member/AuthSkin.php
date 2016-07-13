@@ -43,6 +43,12 @@ class AuthSkin extends BladeSkin
         return parent::render();
     }
 
+    protected function register()
+    {
+        app('xe.frontend')->js('assets/core/xe-ui-component/js/xe-page.js')->load();
+        return $this->renderBlade('register');
+    }
+
     /**
      * loadAssets
      *
@@ -50,7 +56,7 @@ class AuthSkin extends BladeSkin
      */
     protected function loadAssets()
     {
-        \XeFrontend::css(
+        app('xe.frontend')->css(
             [
                 'assets/core/xe-ui-component/xe-ui-component.css',
                 'assets/core/member/auth.css'
