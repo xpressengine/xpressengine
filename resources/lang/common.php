@@ -1673,8 +1673,8 @@ return [
         'en' => 'Not a member yet?',
     ],
     'agreeSiteTermsUseAndSitePrivacyPolicy' => [
-        'ko' => '<a href=":termLink" target="_blank">이용 약관</a> 및 <a href=":policyLink" target="_blank">개인정보 보호정책</a>을 읽었으며 이에 동의합니다.',
-        'en' => 'By clicking you agree to our <a href=":termLink" target="_blank">Site Terms of Use</a>, <a href=":policyLink" target="_blank">Privacy Policy</a>',
+        'ko' => '<a href=":termLink" class="__xe_btn_agreement" target="_blank">이용 약관</a> 및 <a href=":policyLink" class="__xe_btn_privacy" target="_blank">개인정보 보호정책</a>을 읽었으며 이에 동의합니다.',
+        'en' => 'By clicking you agree to our <a href=":termLink" class="__xe_btn_agreement" target="_blank">Site Terms of Use</a>, <a href=":policyLink" class="__xe_btn_privacy" target="_blank">Privacy Policy</a>',
     ],
     'agreeSiteTermsUseAndSitePrivacyPolicyDescription' => [
         'ko' => '계속하려면 이용 약관 및 개인정보 보호정책을 읽었으며 이에 동의한다는 의사 표시로 확인란을 선택해야 합니다.',

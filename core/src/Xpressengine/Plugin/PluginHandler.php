@@ -120,7 +120,7 @@ class PluginHandler
      *
      * @param string           $pluginsDir  플러그인 디렉토리
      * @param PluginCollection $plugins     플러그인 목록
-     * @param PluginProvider   $provider
+     * @param PluginProvider   $provider    플러그인 프로바이더
      * @param Factory          $viewFactory View
      * @param PluginRegister   $register    plugin register
      * @param Application      $app         application
@@ -277,6 +277,8 @@ class PluginHandler
      *
      * @param string $pluginId     업데이트할 플러그인의 아이디
      * @param bool   $updateStatus true일 경우, 업데이트한 플러그인의 상태를 status에 업데이트한다.
+     *
+     * @return void
      */
     public function updatePlugin($pluginId, $updateStatus = true)
     {
@@ -450,7 +452,6 @@ class PluginHandler
      * 주어진 플러그인의 상태정보를 조회한다.
      *
      * @param string $pluginId
-     *
      * @param null   $field
      *
      * @return mixed

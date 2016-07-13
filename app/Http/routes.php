@@ -90,6 +90,10 @@ Route::group(
         // password reset
         Route::get('password', ['as' => 'auth.password', 'uses' => 'Auth\PasswordController@getPassword']);
         Route::post('password', ['as' => 'auth.password', 'uses' => 'Auth\PasswordController@postPassword']);
+
+        // agreement, privacy
+        Route::get('agreement', ['as' => 'auth.agreement', 'uses' => 'Auth\AuthController@getAgreement']);
+        Route::get('privacy', ['as' => 'auth.privacy', 'uses' => 'Auth\AuthController@getPrivacy']);
     }
 );
 
