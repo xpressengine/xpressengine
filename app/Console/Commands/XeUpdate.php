@@ -122,7 +122,7 @@ class XeUpdate extends Command
             $this->migrations[] = $migration = new $class();
             /** @var Migration $migration */
             $this->output->write(" updating $name.. ");
-            if($migration->checkUpdated($installedVersion)) {
+            if($migration->checkUpdated($installedVersion) === false) {
                 $migration->update($installedVersion);
                 $this->info("[success]");
             } else {
