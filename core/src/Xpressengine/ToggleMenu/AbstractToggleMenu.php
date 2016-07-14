@@ -34,25 +34,24 @@ abstract class AbstractToggleMenu implements ComponentInterface
     /**
      * @var string
      */
-    protected $type;
+    protected $componentType;
 
     /**
      * @var string
      */
-    protected $target;
+    protected $instanceId;
 
     /**
-     * create instance
-     *
-     * @param string $type   type
-     * @param string $target target
+     * @var string
      */
-    public function __construct($type, $target)
-    {
-        $this->type = $type;
-        $this->target = $target;
-    }
+    protected $identifier;
 
+    const MENUTYPE_EXEC = 'exec';
+
+    const MENUTYPE_LINK = 'link';
+
+    const MENUTYPE_RAW = 'raw';
+    
     /**
      * getTitle
      *
@@ -84,6 +83,21 @@ abstract class AbstractToggleMenu implements ComponentInterface
     }
 
     /**
+     * Set basic arguments
+     *
+     * @param string $componentType target type, component id
+     * @param string $instanceId    instance id
+     * @param string $identifier    target identifier
+     * @return void
+     */
+    public function setArguments($componentType, $instanceId, $identifier)
+    {
+        $this->componentType = $componentType;
+        $this->instanceId = $instanceId;
+        $this->identifier = $identifier;
+    }
+
+    /**
      * boot
      *
      * @return void
@@ -102,7 +116,7 @@ abstract class AbstractToggleMenu implements ComponentInterface
 
     /**
      * 메뉴의 타입
-     * 'func' or 'exec' or 'link' or 'raw' 중에 하나
+     * 'exec' or 'link' or 'raw' 중에 하나
      *
      * @return string
      */
@@ -128,9 +142,12 @@ abstract class AbstractToggleMenu implements ComponentInterface
      * 아이콘을 표시하기 위한 문자
      * todo: class 명, 이미지 경로 등을 지원 할 예정
      *
-     * @return string
+     * @return string|null
      */
-    abstract public function getIcon();
+    public function getIcon()
+    {
+        return null;
+    }
 
     /**
      * 메뉴에 표시여부 반환

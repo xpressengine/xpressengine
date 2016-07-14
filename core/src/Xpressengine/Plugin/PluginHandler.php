@@ -120,7 +120,7 @@ class PluginHandler
      *
      * @param string           $pluginsDir  플러그인 디렉토리
      * @param PluginCollection $plugins     플러그인 목록
-     * @param PluginProvider   $provider
+     * @param PluginProvider   $provider    플러그인 프로바이더
      * @param Factory          $viewFactory View
      * @param PluginRegister   $register    plugin register
      * @param Application      $app         application
@@ -212,10 +212,13 @@ class PluginHandler
         $entity->setInstalledVersion($entity->getVersion());
 
         // 활성화 된 플러그인의 정보를 config에 기록한다.
-        $this->setPluginStatus($pluginId, [
-            'status' => static::STATUS_ACTIVATED,
-            'version' => $entity->getVersion()
-        ]);
+        $this->setPluginStatus(
+            $pluginId,
+            [
+                'status' => static::STATUS_ACTIVATED,
+                'version' => $entity->getVersion()
+            ]
+        );
     }
 
     /**
@@ -260,10 +263,13 @@ class PluginHandler
         $entity->setStatus(static::STATUS_DEACTIVATED);
 
         // 비활성화된 플러그인 정보를 config에 기록한다.
-        $this->setPluginStatus($pluginId, [
-            'status' => static::STATUS_DEACTIVATED,
-            'version' => $entity->getInstalledVersion()
-        ]);
+        $this->setPluginStatus(
+            $pluginId,
+            [
+                'status' => static::STATUS_DEACTIVATED,
+                'version' => $entity->getInstalledVersion()
+            ]
+        );
     }
 
     /**
@@ -271,6 +277,8 @@ class PluginHandler
      *
      * @param string $pluginId     업데이트할 플러그인의 아이디
      * @param bool   $updateStatus true일 경우, 업데이트한 플러그인의 상태를 status에 업데이트한다.
+     *
+     * @return void
      */
     public function updatePlugin($pluginId, $updateStatus = true)
     {
@@ -301,10 +309,13 @@ class PluginHandler
 
         if ($updateStatus) {
             // 플러그인의 정보를 config에 기록한다.
-            $this->setPluginStatus($pluginId, [
-                'status' => $entity->getStatus(),
-                'version' => $entity->getVersion()
-            ]);
+            $this->setPluginStatus(
+                $pluginId,
+                [
+                    'status' => $entity->getStatus(),
+                    'version' => $entity->getVersion()
+                ]
+            );
         }
     }
 
@@ -329,7 +340,7 @@ class PluginHandler
 
         // status list에서 해당 플러그인 정보를 삭제한다.
         $configs = $this->getPluginsStatus();
-        array_forget($configs,$pluginId);
+        array_forget($configs, $pluginId);
         $this->setPluginsStatus($configs);
     }
 
@@ -391,7 +402,10 @@ class PluginHandler
                 $sourceVersion = $plugin->getVersion();
                 if ($sourceVersion !== $installedVersion) {
                     if ($plugin->checkInstalled($installedVersion) && $plugin->checkUpdated($installedVersion)) {
-                        $this->setPluginStatus($plugin->getId(), 'version', $sourceVersion);
+                        $this->setPluginStatus(
+                            $plugin->getId(),
+                            ['version' => $sourceVersion, 'status' => $plugin->getStatus()]
+                        );
                         $plugin->setInstalledVersion($sourceVersion);
                     }
                 }
@@ -437,9 +451,8 @@ class PluginHandler
     /**
      * 주어진 플러그인의 상태정보를 조회한다.
      *
-     * @param string $pluginId
-     *
-     * @param null   $field
+     * @param string $pluginId plugin id
+     * @param null   $field    'version' or 'status'
      *
      * @return mixed
      */
@@ -470,9 +483,9 @@ class PluginHandler
      * 주어진 plugin의 상태를 갱신한다.
      * 상태정보에는 status, version 필드가 있으며, 둘중 하나만 선택해서 갱신할 수도 있다.
      *
-     * @param string $pluginId
-     * @param string $field
-     * @param null   $status
+     * @param string $pluginId plugin id
+     * @param string $field    'version' or 'status'
+     * @param null   $status   value of field
      *
      * @return void
      */

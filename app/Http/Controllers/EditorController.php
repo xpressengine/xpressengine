@@ -61,8 +61,6 @@ class EditorController extends Controller
             $items[$key] = ['class' => $item, 'activated' => false];
         }
 
-        $skinSection = new SkinSection(EditorHandler::NAME, $instanceId);
-        
         return XePresenter::make('editor.detail', [
             'instanceId' => $instanceId,
             'config' => $config,
@@ -71,7 +69,6 @@ class EditorController extends Controller
                 ['html', 'tool', 'upload', 'download']
             ),
             'items' => $items,
-            'skinSection' => $skinSection,
         ]);
     }
 

@@ -14,8 +14,6 @@
 
 namespace Xpressengine\Plugin\Cache;
 
-use Xpressengine\Plugin\PluginCollection;
-
 /**
  * 이 클래스는 XE에 존재하는 플러그인의 목록을 캐싱하는 클래스를 위한 인터페이스이다. 플러그인의 목록을 캐싱하여 플러그인을 디렉토리에서
  * 조회하는 시간을 단축시키기 위하여 사용한다.

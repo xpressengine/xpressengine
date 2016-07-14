@@ -46,6 +46,7 @@ class Title
      * tag list를 설정한다.
      *
      * @param string $title title
+     *
      * @return void
      */
     public static function init($title = '')

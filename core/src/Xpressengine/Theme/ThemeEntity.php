@@ -138,17 +138,6 @@ class ThemeEntity implements ThemeEntityInterface
     }
 
     /**
-     * 테마가 desktop 버전만을 지원하는지 조사한다.
-     *
-     * @return bool desktop 버전만을 지원할 경우 true
-     */
-    public function supportDesktopOnly()
-    {
-        $class = $this->class;
-        return $class::supportDesktopOnly();
-    }
-
-    /**
      * 테마가 mobile 버전을 지원하는지 조사한다.
      *
      * @return bool mobile 버전을 지원할 경우 true
@@ -158,18 +147,6 @@ class ThemeEntity implements ThemeEntityInterface
         $class = $this->class;
         return $class::supportMobile();
     }
-
-    /**
-     * 테마가 mobile 버전만을 지원하는지 조사한다.
-     *
-     * @return bool mobile 버전만을 지원할 경우 true
-     */
-    public function supportMobileOnly()
-    {
-        $class = $this->class;
-        return $class::supportMobileOnly();
-    }
-
 
     /**
      * get object of theme
@@ -241,13 +218,13 @@ class ThemeEntity implements ThemeEntityInterface
     /**
      * return editConfigView
      *
-     * @param ConfigEntity $config
+     * @param ConfigEntity $config config data
      *
      * @return \Illuminate\Contracts\View\View|void
      */
     public function getSettingView(ConfigEntity $config = null)
     {
-        if($config === null) {
+        if ($config === null) {
             $config = $this->setting();
         }
         return $this->getObject()->getSettingView($config);
@@ -256,7 +233,7 @@ class ThemeEntity implements ThemeEntityInterface
     /**
      * updateConfig
      *
-     * @param array $config
+     * @param array $config pure config data
      *
      * @return array
      */
@@ -268,11 +245,12 @@ class ThemeEntity implements ThemeEntityInterface
     /**
      * get and set config
      *
-     * @param ConfigEntity $config
+     * @param ConfigEntity $config config data
      *
      * @return null
      */
-    public function setting(ConfigEntity $config = null) {
+    public function setting(ConfigEntity $config = null)
+    {
         return $this->getObject()->setting($config);
     }
 }

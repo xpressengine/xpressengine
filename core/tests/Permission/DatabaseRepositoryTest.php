@@ -9,9 +9,9 @@
 namespace Xpressengine\Tests\Permission;
 
 use Mockery as m;
-use Xpressengine\Permission\PermissionRepository;
+use Xpressengine\Permission\Repositories\DatabaseRepository;
 
-class PermissionRepositoryTest extends \PHPUnit_Framework_TestCase
+class DatabaseRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     public function tearDown()
     {
@@ -31,7 +31,7 @@ class PermissionRepositoryTest extends \PHPUnit_Framework_TestCase
             'grants' => '{"access":{"type":"power","value":"guest"},"create":{"type":"power","value":"member"},"read":{"type":"power","value":"guest"},"update":{"type":"group","value":["group_id_1","group_id_2"]},"delete":{"type":"group","value":["group_id_1","group_id_2"]}}',
         ]);
 
-        $instance = new PermissionRepository($conn);
+        $instance = new DatabaseRepository($conn);
         $registered = $instance->findByName('default', 'board.notice');
 
         $this->assertInstanceOf('Xpressengine\Permission\Permission', $registered);
@@ -66,7 +66,7 @@ class PermissionRepositoryTest extends \PHPUnit_Framework_TestCase
             && $array['grants'] === '{"access":{"type":"power","value":"guest"},"create":{"type":"power","value":"member"}}';
         }))->andReturn(1);
 
-        $instance = new PermissionRepository($conn);
+        $instance = new DatabaseRepository($conn);
         $registered = $instance->insert($mockRegistered);
 
         $this->assertEquals(1, $registered->id);
@@ -97,7 +97,7 @@ class PermissionRepositoryTest extends \PHPUnit_Framework_TestCase
             return $array['grants'] === '{"access":{"type":"power","value":"guest"},"create":{"type":"power","value":"member"}}';
         }))->andReturnNull();
 
-        $instance = new PermissionRepository($conn);
+        $instance = new DatabaseRepository($conn);
         $registered = $instance->update($mockRegistered);
 
         $this->assertEquals(1, $registered->id);
@@ -117,7 +117,7 @@ class PermissionRepositoryTest extends \PHPUnit_Framework_TestCase
         $query->shouldReceive('where')->once()->with('id', 1)->andReturn($query);
         $query->shouldReceive('delete')->once()->withNoArgs()->andReturnNull();
 
-        $instance = new PermissionRepository($conn);
+        $instance = new DatabaseRepository($conn);
         $instance->delete($mockRegistered);
     }
 
@@ -148,7 +148,7 @@ class PermissionRepositoryTest extends \PHPUnit_Framework_TestCase
             ]
         ]);
 
-        $instance = new PermissionRepository($conn);
+        $instance = new DatabaseRepository($conn);
         $registereds = $instance->fetchAncestor($mockRegistered);
 
         $this->assertEquals(2, count($registereds));
@@ -163,7 +163,7 @@ class PermissionRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testFoster()
     {
         list($conn, $query) = $this->getMocks();
-        $instance = new PermissionRepository($conn);
+        $instance = new DatabaseRepository($conn);
 
         $mockRegistered = m::mock('Xpressengine\Permission\Permission');
         $mockRegistered->shouldReceive('get')->with('siteKey')->andReturn('default');
@@ -195,7 +195,7 @@ class PermissionRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testAffiliate()
     {
         list($conn, $query) = $this->getMocks();
-        $instance = new PermissionRepository($conn);
+        $instance = new DatabaseRepository($conn);
 
         $mockRegistered = m::mock('Xpressengine\Permission\Permission');
         $mockRegistered->shouldReceive('get')->with('siteKey')->andReturn('default');

@@ -148,8 +148,6 @@ abstract class AbstractEditor implements ComponentInterface
         'contentDomId' => 'xeContentEditor',
         'contentDomOptions' => [
             'class' => 'form-control',
-            'rows' => '20',
-            'cols' => '80'
         ]
     ];
 
@@ -359,7 +357,7 @@ abstract class AbstractEditor implements ComponentInterface
 
     /**
      * Get static option data for the editor
-     * 
+     *
      * @return array
      */
     protected function getStaticOption()
@@ -495,6 +493,7 @@ abstract class AbstractEditor implements ComponentInterface
      */
     public function compile($content, $htmlable = false)
     {
+        $content = (string)$content;
         $this->events->fire('xe.editor.compile', $this);
 
         if ($htmlable !== true) {
@@ -506,7 +505,7 @@ abstract class AbstractEditor implements ComponentInterface
         $content = $this->link($content);
         $content = $this->image($content);
 
-        return $this->compileBody($content) . $this->getFileView();
+        return $this->compileBody($content);
     }
 
     /**
@@ -516,24 +515,6 @@ abstract class AbstractEditor implements ComponentInterface
      * @return string
      */
     abstract protected function compileBody($content);
-
-    /**
-     * Get file list view
-     *
-     * @return \Illuminate\Contracts\Support\Renderable|string
-     */
-    protected function getFileView()
-    {
-        if (count($this->files) < 1) {
-            return '';
-        }
-
-        return $this->skins->getAssigned([EditorHandler::NAME, $this->instanceId])
-            ->setView('files')->setData([
-                'instanceId' => $this->instanceId,
-                'files' => $this->files
-            ])->render();
-    }
 
     /**
      * Get a content html tag string
@@ -548,7 +529,8 @@ abstract class AbstractEditor implements ComponentInterface
             'name="' . $args['contentDomName'] . '" ' .
             'id="' . $args['contentDomId'] . '" ' .
             $this->getContentDomHtmlOption($args['contentDomOptions']) .
-            ' placeholder="' . xe_trans('xe::content') . '">'.
+            ' placeholder="' . xe_trans('xe::content') . '" '.
+            'style="width:100%;">'.
             $args['content'] .
             '</textarea>';
 

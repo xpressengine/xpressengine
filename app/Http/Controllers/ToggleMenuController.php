@@ -19,14 +19,7 @@ class ToggleMenuController extends Controller
     {
         $type = Input::get('type');
         $id = Input::get('id');
-
-        if (strstr($type, '/')) {
-            $pos = strrpos($type, '/');
-            $instanceId = substr($type, $pos+1);
-            $type = substr($type, 0, $pos);
-        } else {
-            $instanceId = null;
-        }
+        $instanceId = Input::get('instanceId');
 
         $data = [];
         /** @var AbstractToggleMenu $item */
@@ -51,14 +44,7 @@ class ToggleMenuController extends Controller
     {
         $type = Input::get('type');
         $id = Input::get('id');
-
-        if (strstr($type, '/')) {
-            $pos = strrpos($type, '/');
-            $instanceId = substr($type, $pos+1);
-            $type = substr($type, 0, $pos);
-        } else {
-            $instanceId = null;
-        }
+        $instanceId = Input::get('instanceId');
 
         $items = [];
         /** @var AbstractToggleMenu $item */

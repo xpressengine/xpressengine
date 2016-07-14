@@ -282,7 +282,14 @@ class MenuHandler
     {
         return $this->repo->findItem($id, $with);
     }
-    
+
+    /**
+     * Get menu item list by identifiers
+     *
+     * @param array $ids  menu item identifier list
+     * @param array $with relation
+     * @return MenuItem[]
+     */
     public function getItemIn($ids, $with = [])
     {
         return $this->repo->fetchInItem((array)$ids, $with);

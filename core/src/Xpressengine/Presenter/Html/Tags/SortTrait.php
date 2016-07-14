@@ -44,6 +44,7 @@ trait SortTrait
      * before
      *
      * @param string $befores befores
+     *
      * @return $this
      */
     public function before($befores)
@@ -63,6 +64,7 @@ trait SortTrait
      * after
      *
      * @param string $afters afters
+     *
      * @return $this
      */
     public function after($afters)

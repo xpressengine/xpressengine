@@ -136,7 +136,7 @@ class SkinEntity implements Arrayable, Jsonable
     /**
      * updateConfig
      *
-     * @param array $config
+     * @param array $config pure config data
      *
      * @return array
      */
@@ -148,11 +148,12 @@ class SkinEntity implements Arrayable, Jsonable
     /**
      * get and set config
      *
-     * @param array $config
+     * @param array $config config data
      *
      * @return null
      */
-    public function setting(array $config = null) {
+    public function setting(array $config = null)
+    {
         return $this->getObject()->setting($config);
     }
 

@@ -15,8 +15,11 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Xpressengine\Permission\PermissionRepository;
 use Xpressengine\Permission\PermissionHandler;
+use Xpressengine\Permission\Repositories\CacheDecorator;
+use Xpressengine\Permission\Repositories\DatabaseRepository;
+use Xpressengine\Permission\Repositories\MemoryDecorator;
+use Xpressengine\Support\LaravelCache;
 use Xpressengine\UIObjects\Permission\Permission as PermissionUIObject;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Xpressengine\Permission\Instance;
@@ -63,7 +66,14 @@ class PermissionServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton([PermissionHandler::class => 'xe.permission'], function ($app) {
-            return new PermissionHandler(new PermissionRepository($app['xe.db']->connection()));
+            $repo = new DatabaseRepository($app['xe.db']->connection());
+
+            if ($app['config']['app.debug'] !== true) {
+                $repo = new CacheDecorator($repo, new LaravelCache($app['cache.store']));
+            }
+            $repo = new MemoryDecorator($repo);
+
+            return new PermissionHandler($repo);
         });
     }
 

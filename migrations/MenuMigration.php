@@ -96,11 +96,40 @@ class MenuMigration implements Migration {
         $menuHandler->setMenuTheme($mainMenu, $defaultMenuTheme, $defaultMenuTheme);
         app('xe.permission')->register($mainMenu->getKey(), $menuHandler->getDefaultGrant());
 
-        $this->pageModuleMenuSetup($mainMenu);
-        $this->boardModuleMenuSetup($mainMenu);
-
         $this->setThemeConfig($mainMenu->id);
 
+        $this->pageModuleMenuSetup($mainMenu);
+        $this->boardModuleMenuSetup($mainMenu);
+    }
+
+    /**
+     * site default config setup
+     *
+     * @param $mainMenu
+     * @param $homeId
+     * @return void
+     */
+    public function siteDefaultConfig($mainMenu, $homeId)
+    {
+        $site_title = XeLang::genUserKey();
+        foreach (XeLang::getLocales() as $locale) {
+            $value = "XE3";
+            if ($locale != 'ko') {
+                $value = "XE3";
+            }
+            XeLang::save($site_title, $locale, $value, false);
+        }
+
+        /**
+         * @var $configManager ConfigManager
+         */
+        $configManager = app('xe.config');
+        $configEntity = $configManager->get('site.default');
+        $configEntity->set('defaultMenu', $mainMenu->id);
+        $configEntity->set('homeInstance', $homeId);
+        $configEntity->set('site_title', $site_title);
+
+        $configManager->modify($configEntity);
     }
 
     /**
@@ -145,19 +174,11 @@ class MenuMigration implements Migration {
 
         $item = $menuHandler->createItem($mainMenu, $inputs, $menuTypeInput);
 
-        $menuHandler->setMenuItemTheme($item, 'theme/alice@alice.1', 'theme/alice@alice.1');
+        $menuHandler->setMenuItemTheme($item, null, null);
         app('xe.permission')->register($menuHandler->permKeyString($item), new Grant);
 
-        /**
-         * @var $configManager ConfigManager
-         */
-        $configManager = app('xe.config');
-        $configEntity = $configManager->get('site.default');
-        $configEntity->set('defaultMenu', $mainMenu->id);
-        $configEntity->set('homeInstance', $item->id);
 
-        $configManager->modify($configEntity);
-
+        $this->siteDefaultConfig($mainMenu, $item->id);
         $this->registerWelcomePageContent($item);
     }
 
@@ -204,7 +225,7 @@ class MenuMigration implements Migration {
 
         $item = $menuHandler->createItem($mainMenu, $inputs, $menuTypeInput);
 
-        $menuHandler->setMenuItemTheme($item, 'theme/alice@alice', 'theme/alice@alice');
+        $menuHandler->setMenuItemTheme($item, null, null);
         app('xe.permission')->register($menuHandler->permKeyString($item), new Grant);
     }
 

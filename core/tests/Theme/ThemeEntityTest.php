@@ -8,19 +8,19 @@
 
 namespace Xpressengine\Tests\Theme;
 
-use Xpressengine\Theme\ThemeEntityInterface;
+use Xpressengine\Theme\ThemeEntity;
 
 class ThemeEntityTest extends \PHPUnit_Framework_TestCase
 {
     public function testConstruct()
     {
-        $entity = new ThemeEntityInterface(TestTheme::getId(), TestTheme::class);
-        $this->assertInstanceOf(ThemeEntityInterface::class, $entity);
+        $entity = new ThemeEntity(TestTheme::getId(), TestTheme::class);
+        $this->assertInstanceOf(ThemeEntity::class, $entity);
     }
 
     public function testGetters()
     {
-        $entity = new ThemeEntityInterface(TestTheme::getId(), TestTheme::class);
+        $entity = new ThemeEntity(TestTheme::getId(), TestTheme::class);
 
         $this->assertEquals('Test Theme', $entity->getTitle());
         $this->assertEquals('blur~~ blur~~', $entity->getDescription());
@@ -31,17 +31,17 @@ class ThemeEntityTest extends \PHPUnit_Framework_TestCase
 
     public function testSupports()
     {
-        $entity = new ThemeEntityInterface(TestTheme::getId(), TestTheme::class);
+        $entity = new ThemeEntity(TestTheme::getId(), TestTheme::class);
 
+        $this->assertFalse($entity->support('desktop'));
+        $this->assertTrue($entity->support('mobile'));
         $this->assertFalse($entity->supportDesktop());
-        $this->assertFalse($entity->supportDesktopOnly());
         $this->assertTrue($entity->supportMobile());
-        $this->assertTrue($entity->supportMobileOnly());
     }
 
     public function testGetObject()
     {
-        $entity = new ThemeEntityInterface(TestTheme::getId(), TestTheme::class);
+        $entity = new ThemeEntity(TestTheme::getId(), TestTheme::class);
 
         $this->assertInstanceOf('Xpressengine\Theme\AbstractTheme', $entity->getObject());
         $this->assertInstanceOf('Xpressengine\Theme\AbstractTheme', $entity->getObject());
@@ -49,7 +49,7 @@ class ThemeEntityTest extends \PHPUnit_Framework_TestCase
 
     public function testToArray()
     {
-        $entity = new ThemeEntityInterface(TestTheme::getId(), TestTheme::class);
+        $entity = new ThemeEntity(TestTheme::getId(), TestTheme::class);
 
         $this->assertEquals(
             [

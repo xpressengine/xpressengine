@@ -29,12 +29,16 @@ class AbstractSkinTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($data, $skin->render());
     }
 
-    public function testGetConfig()
+    public function testSetting()
     {
         $config = 'config';
         $skin = new TestSkin($config);
 
-        $this->assertEquals($config, $skin->getConfig());
+        $this->assertEquals($config, $skin->setting());
+
+        $skin->setting(['config2']);
+        $this->assertEquals(['config2'], $skin->setting());
+
     }
 
     public function testRender()

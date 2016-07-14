@@ -36,35 +36,35 @@
     }
   }
   textarea{
-      width:100%;
+    width:100%;
   }
 
   +.input-group{
-      margin-top:5px;
+    margin-top:5px;
   }
-  
-  .form-control{    
+
+  .form-control{
     +.input-group-btn.input-group-link {
       margin-left: -1px;
       .btn{
         position: relative;
         margin-left: -1px;
         background-color: #fff;
-        border: 1px solid $input-border;    
-        border-width: 1px 1px 1px 0;        
+        border: 1px solid $input-border;
+        border-width: 1px 1px 1px 0;
         z-index: 5;
         text-decoration: underline;
-      }  
+      }
     }
     &:focus{
       +.input-group-btn.input-group-link .btn{
-          border-color: #66afe9;
-          @include transition(border-color ease-in-out .15s, box-shadow ease-in-out .15s);
+        border-color: #66afe9;
+        @include transition(border-color ease-in-out .15s, box-shadow ease-in-out .15s);
       }
     }
   }
-  
-  
+
+
 }
 
 // Sizing options
@@ -203,15 +203,22 @@
 
 .input-group.search-group {
   font-size: 0;
-  .input-group-btn, .form-control {
+  .input-group-btn, .form-control{
     display: inline-block;
     float: none;
     width: auto;
     vertical-align: top;
   }
+  .search-input-group{
+    display: inline-block;
+    position: relative;
+    .form-control{
+      padding-right: 27px;
+    }
+  }
   .btn-link {
     position: absolute;
-    bottom: 1px;
+    bottom: 0;
     right: 3px;
     z-index: 10;
     height: $input-height-base;

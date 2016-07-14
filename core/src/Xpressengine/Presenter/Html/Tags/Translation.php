@@ -63,8 +63,7 @@ class Translation
         self::$keys = $newKeys;
 
         $output = sprintf(
-            'XE.Lang.setLocales(%s);'.
-            'XE.Lang.set(%s);',
+            'XE.Lang.setLocales(%s);'.'XE.Lang.set(%s);',
             json_enc(XeLang::getLocales()),
             json_enc(self::$keys)
         );
@@ -76,6 +75,7 @@ class Translation
      * add key
      *
      * @param string $key key
+     *
      * @return void
      */
     private static function addKey($key)
@@ -87,6 +87,7 @@ class Translation
      * add keys
      *
      * @param array $keys keys
+     *
      * @return void
      */
     private static function addKeys(array $keys)
@@ -101,7 +102,6 @@ class Translation
      */
     public static function init()
     {
-
     }
 
     /**

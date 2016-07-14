@@ -1,4 +1,4 @@
-<div id="__xe_container_DF_setting_{{$group}}">
+<div id="__xe_container_DF_setting_{{$group}}" class="table-responsive">
     <table class="table">
         <caption>DynamicField Manager</caption>
         <thead>
