@@ -14,8 +14,6 @@
 
 namespace Xpressengine\Support;
 
-use Xpressengine\Tests\Support\SorterStub;
-
 /**
  * @category    Support
  * @package     Xpressengine\Support
@@ -92,8 +90,8 @@ class Sorter
         }
 
         if ($relation === Sorter::AFTER) {
-            $temp       = $keys;
-            $keys       = $targetKeys;
+            $temp = $keys;
+            $keys = $targetKeys;
             $targetKeys = $temp;
         }
 
@@ -122,17 +120,17 @@ class Sorter
      */
     public function sort($keyList = null)
     {
-        $tails   = $this->tails;
+        $tails = $this->tails;
         $targets = $keyList === null ? $this->tails : (array) $keyList;
 
-        if(count($targets) === 1) {
+        if (count($targets) === 1) {
             return $targets;
         }
 
-        $list           = [];
+        $list = [];
         $this->resolved = [];
 
-        $count         = count($tails);
+        $count = count($tails);
         $infiniteCount = 0;
         while ($tail = array_shift($tails)) {
             if (in_array($tail, $this->resolved)) {

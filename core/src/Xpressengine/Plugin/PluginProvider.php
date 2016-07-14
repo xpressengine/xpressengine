@@ -2,6 +2,8 @@
 /**
  * PluginProvider class. This file is part of the Xpressengine package.
  *
+ * PHP version 5
+ *
  * @category    Plugin
  * @package     Xpressengine\Plugin
  * @author      XE Developers <developers@xpressengine.com>
@@ -152,8 +154,8 @@ class PluginProvider
     /**
      * send request to server.
      *
-     * @param string $url request url
-     * @param array $queries list of query string
+     * @param string $url     request url
+     * @param array  $queries list of query string
      *
      * @return mixed
      */

@@ -83,7 +83,7 @@ interface ThemeEntityInterface extends Arrayable, Jsonable
     /**
      * return editConfigView
      *
-     * @param ConfigEntity $config
+     * @param ConfigEntity $config config data
      *
      * @return \Illuminate\Contracts\View\View|void
      */
@@ -92,7 +92,7 @@ interface ThemeEntityInterface extends Arrayable, Jsonable
     /**
      * updateConfig
      *
-     * @param array $config
+     * @param array $config pure config data
      *
      * @return array
      */
@@ -101,7 +101,7 @@ interface ThemeEntityInterface extends Arrayable, Jsonable
     /**
      * get and set config
      *
-     * @param ConfigEntity $config
+     * @param ConfigEntity $config config data
      *
      * @return null
      */

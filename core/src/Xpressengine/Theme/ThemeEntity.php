@@ -218,7 +218,7 @@ class ThemeEntity implements ThemeEntityInterface
     /**
      * return editConfigView
      *
-     * @param ConfigEntity $config
+     * @param ConfigEntity $config config data
      *
      * @return \Illuminate\Contracts\View\View|void
      */
@@ -233,7 +233,7 @@ class ThemeEntity implements ThemeEntityInterface
     /**
      * updateConfig
      *
-     * @param array $config
+     * @param array $config pure config data
      *
      * @return array
      */
@@ -245,7 +245,7 @@ class ThemeEntity implements ThemeEntityInterface
     /**
      * get and set config
      *
-     * @param ConfigEntity $config
+     * @param ConfigEntity $config config data
      *
      * @return null
      */

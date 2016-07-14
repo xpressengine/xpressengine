@@ -72,13 +72,14 @@ abstract class GenericTheme extends AbstractTheme
     }
 
     /**
-     * get theme info
+     * retrieve theme info from info.php file
      *
-     * @param null $key
+     * @param string $key     info field
+     * @param mixed  $default default value
      *
      * @return array
      */
-    protected static function info($key = null, $default = null)
+    static function info($key = null, $default = null)
     {
         if (static::$info === null) {
             static::$info = include(base_path(static::getPath().'/'.'info.php'));
@@ -130,7 +131,7 @@ abstract class GenericTheme extends AbstractTheme
     /**
      * return content of setting page
      *
-     * @param ConfigEntity $config
+     * @param ConfigEntity $config config data
      *
      * @return \Illuminate\Contracts\View\View|void
      */
@@ -152,7 +153,7 @@ abstract class GenericTheme extends AbstractTheme
     /**
      * updateConfig
      *
-     * @param array $config
+     * @param array $config pure config data
      *
      * @return array
      */
@@ -174,9 +175,9 @@ abstract class GenericTheme extends AbstractTheme
     /**
      * setting 과정에서 upload되는 파일을 저장한다.
      *
-     * @param              $configId
-     * @param              $key
-     * @param UploadedFile $file
+     * @param string       $configId config id
+     * @param string       $key      config field key
+     * @param UploadedFile $file     file
      *
      * @return array
      */
@@ -214,10 +215,10 @@ abstract class GenericTheme extends AbstractTheme
     }
 
     /**
-     * makeConfigView
+     * info.php에 등록돼 있는 setting 폼 리스트를 가져와 form을 생성하여 반환한다.
      *
-     * @param array        $info
-     * @param ConfigEntity $old
+     * @param array        $info setting form info
+     * @param ConfigEntity $old  old config data
      *
      * @return string
      */
@@ -230,7 +231,7 @@ abstract class GenericTheme extends AbstractTheme
     /**
      * get and set config
      *
-     * @param ConfigEntity $config
+     * @param ConfigEntity|null $config config data
      *
      * @return ConfigEntity
      */
@@ -259,7 +260,7 @@ abstract class GenericTheme extends AbstractTheme
     /**
      * view name을 반환한다. 템플릿 파일 작성시 편의를 위해 사용한다.
      *
-     * @param string $view
+     * @param string $view view name
      *
      * @return string
      */

@@ -46,7 +46,7 @@ class UnknownUser implements UserInterface
     /**
      * UnknownUser constructor.
      *
-     * @param array $attributes
+     * @param array $attributes unknown user's initial information
      */
     public function __construct(array $attributes = [])
     {

@@ -30,11 +30,12 @@ use Symfony\Component\HttpFoundation\Response;
 class HttpXpressengineException extends XpressengineException implements HttpExceptionInterface
 {
     protected $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
+
     /**
      * HttpXpressengineException constructor.
      *
-     * @param int             $statusCode exception status code
      * @param array           $args       arguments array
+     * @param int             $statusCode exception status code
      * @param \Exception|null $previous   exception
      * @param array           $headers    header
      * @param int             $code       code
