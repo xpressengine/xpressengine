@@ -13,8 +13,6 @@
  */
 namespace Xpressengine\Plugin\Composer;
 
-require_once(__DIR__.'/helpers.php');
-
 use Xpressengine\Plugin\PluginScanner;
 
 /**
@@ -67,6 +65,7 @@ class ComposerFileWriter
      */
     public function __construct($path, PluginScanner $scanner, $packagistUrl)
     {
+        require_once(__DIR__.'/helpers.php');
         $this->scanner = $scanner;
         $this->path = $path;
         $this->reload();
