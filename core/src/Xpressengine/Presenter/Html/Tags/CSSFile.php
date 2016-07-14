@@ -86,6 +86,14 @@ class CSSFile
     }
 
 
+    /**
+     * 로드된 파일 목록을 반환한다.
+     *
+     * @param string $location 파일 로드 위치
+     * @param bool   $minified min 파일 반환 여부
+     *
+     * @return array
+     */
     public static function getFileList($location = 'async.append', $minified = false)
     {
         $output = [];
@@ -107,7 +115,15 @@ class CSSFile
         return $output;
     }
 
-    public function getFile($file, $minified = false)
+    /**
+     * 로드된 파일을 반환한다.
+     *
+     * @param string $file     파일경로
+     * @param bool   $minified true일 경우, min파일을 반환한다.
+     *
+     * @return string
+     */
+    protected function getFile($file, $minified = false)
     {
         if ($minified) {
             return $this->minified;
@@ -188,6 +204,11 @@ class CSSFile
         static::$unloaded = array_merge(static::$unloaded, $this->files);
     }
 
+    /**
+     * load this file to async list
+     *
+     * @return CSSFile
+     */
     public function loadAsync()
     {
         $this->location = 'async.append';
@@ -195,7 +216,7 @@ class CSSFile
     }
 
     /**
-     * load
+     * load this file
      *
      * @return $this
      */

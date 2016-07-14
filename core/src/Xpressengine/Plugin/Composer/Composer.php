@@ -4,8 +4,8 @@
  *
  * PHP version 5
  *
- * @category
- * @package     Xpressengine\
+ * @category    Plugin
+ * @package     Xpressengine\Plugin
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
@@ -52,6 +52,13 @@ class Composer
         "xpressengine-plugin/social_login" => "0.9.0",
     ];
 
+    /**
+     * composer가 실행될 때 호출된다. composer.plugins.json 파일이 있는지 조사하고, 생성한다.
+     *
+     * @param CommandEvent $event composer가 제공하는 event
+     *
+     * @return void
+     */
     public static function init(CommandEvent $event)
     {
         $path = static::$composerFile;
@@ -83,6 +90,14 @@ class Composer
         $event->getOutput()->writeln("xpressengine-installer: Plugin composer file[$path] is written");
     }
 
+    /**
+     * composer 실행중 post-install-cmd, post-update-cmd 이벤트가 발생할 경우 실행된다.
+     * composer.plugins.json 파일을 현재 XE 상태에 맞춰 갱신한다.
+     *
+     * @param Event $event composer가 제공하는 event
+     *
+     * @return void
+     */
     public static function postUpdate(Event $event)
     {
         $path = static::$composerFile;
@@ -93,9 +108,9 @@ class Composer
     }
 
     /**
-     * getWriter
+     * ComposerFileWriter 인스턴스를 생성한다.
      *
-     * @param string $path
+     * @param string $path plugin용 composer 파일 경로
      *
      * @return ComposerFileWriter
      * @throws \Exception
@@ -109,6 +124,13 @@ class Composer
         return $writer;
     }
 
+    /**
+     * plugin composer 파일에 등록된 플러그인 제어정보를 require에 적용한다.
+     *
+     * @param ComposerFileWriter $writer composer file writer
+     *
+     * @return void
+     */
     private static function applyRequire(ComposerFileWriter $writer)
     {
         $installs = $writer->get('xpressengine-plugin.install', []);
@@ -125,6 +147,13 @@ class Composer
         }
     }
 
+    /**
+     * 플러그인 커맨드를 통해 composer가 실행된 상태인지 조사한다.
+     *
+     * @param CommandEvent $event composer가 제공하는 event
+     *
+     * @return bool
+     */
     private static function isUpdateMode(CommandEvent $event)
     {
         if ($event->getInput()->hasArgument('packages')) {

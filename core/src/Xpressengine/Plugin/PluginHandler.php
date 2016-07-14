@@ -451,8 +451,8 @@ class PluginHandler
     /**
      * 주어진 플러그인의 상태정보를 조회한다.
      *
-     * @param string $pluginId
-     * @param null   $field
+     * @param string $pluginId plugin id
+     * @param null   $field    'version' or 'status'
      *
      * @return mixed
      */
@@ -483,9 +483,9 @@ class PluginHandler
      * 주어진 plugin의 상태를 갱신한다.
      * 상태정보에는 status, version 필드가 있으며, 둘중 하나만 선택해서 갱신할 수도 있다.
      *
-     * @param string $pluginId
-     * @param string $field
-     * @param null   $status
+     * @param string $pluginId plugin id
+     * @param string $field    'version' or 'status'
+     * @param null   $status   value of field
      *
      * @return void
      */

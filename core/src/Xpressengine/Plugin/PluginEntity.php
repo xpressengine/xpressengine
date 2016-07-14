@@ -312,7 +312,7 @@ class PluginEntity implements Arrayable, Jsonable
     /**
      * 자료실에 등록된 플러그인의 정보를 설정한다.
      *
-     * @param array $data
+     * @param array $data 자료실에 등록된 플러그인 정보
      *
      * @return void
      */

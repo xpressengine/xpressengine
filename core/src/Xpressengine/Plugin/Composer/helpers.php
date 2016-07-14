@@ -1,11 +1,23 @@
 <?php
+/**
+ *  This file is part of the Xpressengine package.
+ *
+ * PHP version 5
+ *
+ * @category    Plugin
+ * @package     Xpressengine\Plugin
+ * @author      XE Team (developers) <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        http://www.xpressengine.com
+ */
 namespace Xpressengine\Plugin\Composer {
 
     /**
-     * array_forget
+     * array_forget, copy from laravel
      *
-     * @param $array
-     * @param $keys
+     * @param array        $array target array
+     * @param array|string $keys  list of item key
      *
      * @return void
      */
@@ -44,9 +56,9 @@ namespace Xpressengine\Plugin\Composer {
      *
      * If no key is given to the method, the entire array will be replaced.
      *
-     * @param  array  $array
-     * @param  string $key
-     * @param  mixed  $value
+     * @param  array  $array array
+     * @param  string $key   item key
+     * @param  mixed  $value item value
      *
      * @return array
      */
@@ -80,9 +92,9 @@ namespace Xpressengine\Plugin\Composer {
     /**
      * Get an item from an array using "dot" notation.
      *
-     * @param  array  $array
-     * @param  string $key
-     * @param  mixed  $default
+     * @param  array  $array   array
+     * @param  string $key     item key
+     * @param  mixed  $default default value
      *
      * @return mixed
      */
