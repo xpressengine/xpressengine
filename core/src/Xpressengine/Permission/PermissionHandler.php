@@ -109,13 +109,6 @@ class PermissionHandler
     protected $repo;
 
     /**
-     * The loaded permission instance
-     *
-     * @var array
-     */
-    protected $loaded = [];
-
-    /**
      * PermissionHandler constructor.
      *
      * @param PermissionRepository $repo repository instance
@@ -126,7 +119,7 @@ class PermissionHandler
     }
 
     /**
-     * Get a permission
+     * Get a permission from repository
      *
      * @param string $name    permission name
      * @param string $siteKey site key name
@@ -134,45 +127,31 @@ class PermissionHandler
      */
     public function get($name, $siteKey = 'default')
     {
-        if (!$this->load($siteKey, $name)) {
-            return null;
+        if ($permission = $this->repo->findByName($siteKey, $name)) {
+            $this->setAncestor($permission);
         }
 
-        return $this->loaded[$this->makeKeyForLoaded($siteKey, $name)];
+        return $permission;
     }
 
     /**
-     * Load permission from repository
+     * Get a permission from repository or generate when not exists
      *
-     * @param string $siteKey site key name
      * @param string $name    permission name
-     * @return bool
+     * @param string $siteKey site key name
+     * @return Permission|null
      */
-    protected function load($siteKey, $name)
+    public function getOrNew($name, $siteKey = 'default')
     {
-        $loadedKey = $this->makeKeyForLoaded($siteKey, $name);
-
-        if (!isset($this->loaded[$loadedKey])) {
-            if (!$permission = $this->find($name, $siteKey)) {
-                return false;
-            }
-
-            $this->loaded[$loadedKey] = $permission;
+        if (!$permission = $this->get($name, $siteKey)) {
+            $permission = $this->newItem();
+            $permission->siteKey = $siteKey;
+            $permission->name = $name;
         }
 
-        return true;
-    }
+        $this->setAncestor($permission);
 
-    /**
-     * Make key for loaded property
-     *
-     * @param string $siteKey site key name
-     * @param string $name    permission name
-     * @return string
-     */
-    protected function makeKeyForLoaded($siteKey, $name)
-    {
-        return $siteKey .'-'. $name;
+        return $permission;
     }
 
     /**
@@ -181,14 +160,12 @@ class PermissionHandler
      * @param string $name    permission name
      * @param string $siteKey site key name
      * @return Permission|null
+     *
+     * @deprecated since 3.0.0-beta.2
      */
     public function find($name, $siteKey = 'default')
     {
-        if ($permission = $this->repo->findByName($siteKey, $name)) {
-            $this->setAncestor($permission);
-        }
-
-        return $permission;
+        return $this->get($name, $siteKey);
     }
 
     /**
@@ -210,21 +187,7 @@ class PermissionHandler
 
         foreach ($ancestors as $ancestor) {
             $permission->addParent($ancestor);
-
-            // 각각의 record 를 loaded 에 캐싱 함
-            $loadedKey = $this->makeKeyForLoaded($ancestor->siteKey, $ancestor->name);
-            $this->loaded[$loadedKey] = $ancestor;
         }
-
-//        $permissions = array_merge($ancestors, [$permission]);
-//        $parent = null;
-//        foreach ($permissions as $idx => $permission) {
-//            if ($idx > 0) {
-//                $permission->addParent($parent);
-//            }
-//
-//            $parent = $permission;
-//        }
     }
 
     /**
@@ -233,18 +196,12 @@ class PermissionHandler
      * @param string $name    permission name
      * @param string $siteKey site key name
      * @return Permission|null
+     *
+     * @deprecated since 3.0.0-beta.2
      */
     public function findOrNew($name, $siteKey = 'default')
     {
-        if (!$permission = $this->find($name, $siteKey)) {
-            $permission = $this->newItem();
-            $permission->siteKey = $siteKey;
-            $permission->name = $name;
-        }
-
-        $this->setAncestor($permission);
-
-        return $permission;
+        return $this->getOrNew($name, $siteKey);
     }
 
     /**
@@ -267,7 +224,7 @@ class PermissionHandler
      */
     public function register($name, Grant $grant, $siteKey = 'default')
     {
-        $permission = $this->findOrNew($name, $siteKey);
+        $permission = $this->getOrNew($name, $siteKey);
         $permission->setGrant($grant);
 
         if ($permission->exists !== true) {
@@ -286,7 +243,7 @@ class PermissionHandler
      */
     public function destroy($name, $siteKey = 'default')
     {
-        if ($permission = $this->find($name, $siteKey)) {
+        if ($permission = $this->get($name, $siteKey)) {
             $this->repo->delete($permission);
         }
     }
@@ -297,35 +254,12 @@ class PermissionHandler
      * @param string $name    permission name
      * @param string $siteKey site key name
      * @return void
+     *
+     * @deprecated since 3.0.0-beta.2
      */
     public function loadBranch($name, $siteKey = 'default')
     {
-        if (!$this->load($siteKey, $name)) {
-            return;
-        }
-
-        $permission = $this->loaded[$this->makeKeyForLoaded($siteKey, $name)];
-        $descendants = $this->repo->fetchDescendant($permission);
-
-        usort($descendants, function (Permission $a, Permission $b) {
-            if ($a->getDepth() == $b->getDepth()) {
-                return 0;
-            }
-
-            return $a->getDepth() < $b->getDepth() ? -1 : 1;
-        });
-
-        foreach ($descendants as $descendant) {
-            $ascKey = $this->makeKeyForLoaded(
-                $descendant->siteKey,
-                substr($descendant->name, 0, strrpos($descendant->name, '.'))
-            );
-            $descendant->addParent($this->loaded[$ascKey]);
-
-            // 각각의 record 를 loaded 에 캐싱 함
-            $loadedKey = $this->makeKeyForLoaded($descendant->siteKey, $descendant->name);
-            $this->loaded[$loadedKey] = $descendant;
-        }
+        // it was legacy cache code
     }
 
     /**

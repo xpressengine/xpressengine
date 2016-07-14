@@ -44,6 +44,6 @@ class PluginComposerSync extends PluginCommand
         // sync
         $writer->resolvePlugins()->setFixMode()->write();
 
-        $this->output->success("플러그인 설치 정보를 composer 파일[".$writer->getPath()."]과 동기화했습니다.");
+        $this->output->success("The installation information of the plug-in was synchronized with the composer file(".$writer->getPath().").");
     }
 }

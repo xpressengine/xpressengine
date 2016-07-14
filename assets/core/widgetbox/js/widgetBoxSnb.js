@@ -26,6 +26,8 @@
                 self.$btnDeselectAll = $("#btnDeselectAll");
                 self.$btnDelBlock = $("#btnDelBlock");
                 self.$btnWidgetAdd = $(".btn-widget-add");
+                self.$inputVerticalSize = $("#inputVerticalSize");
+                self.$btnAddDivisionType = $("#btnAddDivisionType");
             },
             bindEvents: function() {
                 self.$btnMode.on("click", self.selectMode);
@@ -35,6 +37,25 @@
                 self.$btnDeselectAll.on("click", WidgetBox.deselectAll);
                 self.$btnDelBlock.on("click", self.removeBlock);
                 self.$btnWidgetAdd.on("click", self.toggleWidgetAddLayer);
+                self.$inputVerticalSize.on("keypress", self.inputVerticalSize);
+                self.$btnAddDivisionType.on("click", self.addDivisionType);
+            },
+            addDivisionType: function() {
+                var divisionType = self.$inputVerticalSize.val();
+
+                if(divisionType === '') {
+                    alert("추가할 수직분할 형태를 입력하세요.");
+                    return;
+                }else if(divisionType){
+
+                }
+            },
+            inputVerticalSize: function(e) {
+                if(e.keyCode != 13) {
+                    self.addDivisionType();
+                }else {
+
+                }
             },
             toggleWidgetAddLayer: function() {
                 // close sidebar
@@ -71,18 +92,25 @@
             },
             divide: function() {
                 var direction = $(this).data("direction"); //horizontal or vertical
+                var $selected = $(".selected");
 
-                switch(direction) {
-                    case 'vertical' :
-                        self.divideVertical();
-                        break;
+                if($selected.find(".widgetarea .widget").length > 0) {
+                    alert("위젯을 추가한 셀은 분할될 수 없습니다.");
+                    return;
 
-                    case 'horizontal' :
-                        self.divideHorizontal();
-                        break;
+                }else {
+                    switch(direction) {
+                        case 'vertical' :
+                            self.divideVertical();
+                            break;
 
-                    default:
-                        console.error("type error.");
+                        case 'horizontal' :
+                            self.divideHorizontal();
+                            break;
+
+                        default:
+                            console.error("type error.");
+                    }
                 }
             },
             divideVertical: function() {
@@ -101,13 +129,13 @@
                     columns.forEach(function(v, i) {
                         html += [
                             '<div class="xe-col-md-' + v + '">',
-                            '<div class="xe-row widgetarea-row">',
-                            '<div class="xe-col-md-12">',
-                            '<div class="widgetarea" data-height="' + height + '" style="height:' + height + 'px">',
-                            '<span class="order"></span>',
-                            '</div>',
-                            '</div>',
-                            '</div>',
+                                '<div class="xe-row widgetarea-row">',
+                                    '<div class="xe-col-md-12">',
+                                        '<div class="widgetarea" data-height="' + height + '" style="height:' + height + 'px">',
+                                            '<span class="order"></span>',
+                                        '</div>',
+                                    '</div>',
+                                '</div>',
                             '</div>'
                         ].join("\n");
                     });
@@ -125,11 +153,11 @@
                 if($selected.length > 0) {
                     $widgetAreaRow.after([
                         '<div class="xe-row widgetarea-row">',
-                        '<div class="xe-col-md-12">',
-                        '<div class="widgetarea" data-height="140" style="height:140px">',
-                        '<span class="order"></span>',
-                        '</div>',
-                        '</div>',
+                            '<div class="xe-col-md-12">',
+                                '<div class="widgetarea" data-height="140" style="height:140px">',
+                                    '<span class="order"></span>',
+                                '</div>',
+                            '</div>',
                         '</div>',
                     ].join("\n"));
 
@@ -172,11 +200,11 @@
             addRow: function() {
                 self.$editor.append([
                     '<div class="xe-row widgetarea-row">',
-                    '<div class="xe-col-md-12">',
-                    '<div class="widgetarea" data-height="140" style="height:140px">',
-                    '<span class="order"></span>',
-                    '</div>',
-                    '</div>',
+                        '<div class="xe-col-md-12">',
+                            '<div class="widgetarea" data-height="140" style="height:140px">',
+                                '<span class="order"></span>',
+                            '</div>',
+                        '</div>',
                     '</div>'
                 ].join("\n"));
             },
@@ -187,6 +215,11 @@
                     , $siblingsRow = $selectedParentRow.siblings()
                     , $selectedParentCol = $selectedParentRow.closest("div[class^='xe-col-']")
                     , $lastColumn = $selectedParentCol.siblings(":last");
+
+                if($selected.find(".widgetarea .widget").length > 0) {
+                    alert("위젯을 추가한 셀은 삭제될 수 없습니다.");
+                    return;
+                }
 
                 if(self.$editor.find(".widgetarea").length === 1) {
                     console.error("삭제될수 없음");

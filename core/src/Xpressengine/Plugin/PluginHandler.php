@@ -19,6 +19,7 @@ use Illuminate\Foundation\Application;
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Plugin\Exceptions\CannotDeleteActivatedPluginException;
 use Xpressengine\Plugin\Exceptions\PluginActivationFailedException;
+use Xpressengine\Plugin\Exceptions\PluginAlreadyActivatedException;
 use Xpressengine\Plugin\Exceptions\PluginAlreadyDeactivatedException;
 use Xpressengine\Plugin\Exceptions\PluginDeactivationFailedException;
 use Xpressengine\Plugin\Exceptions\PluginDependencyException;
@@ -119,7 +120,7 @@ class PluginHandler
      *
      * @param string           $pluginsDir  플러그인 디렉토리
      * @param PluginCollection $plugins     플러그인 목록
-     * @param PluginProvider   $provider
+     * @param PluginProvider   $provider    플러그인 프로바이더
      * @param Factory          $viewFactory View
      * @param PluginRegister   $register    plugin register
      * @param Application      $app         application
@@ -185,6 +186,16 @@ class PluginHandler
     {
         $entity = $this->getPlugin($pluginId);
 
+        // 플러그인이 존재하는지 검사한다.
+        if ($entity === null) {
+            throw new PluginNotFoundException(['pluginName' => $pluginId]);
+        }
+
+        // 플러그인이 이미 활성화되어있는 상태인지 체크한다.
+        if ($entity->getStatus() === static::STATUS_ACTIVATED) {
+            throw new PluginAlreadyActivatedException();
+        }
+
         // 기존에 설치(활성화)된 적이 있는지 검사한다. 기존에 활성화된 적이 있다면 설치된 버전을 조회한다.
         $installedVersion = $entity->getInstalledVersion();
 
@@ -201,10 +212,13 @@ class PluginHandler
         $entity->setInstalledVersion($entity->getVersion());
 
         // 활성화 된 플러그인의 정보를 config에 기록한다.
-        $this->setPluginStatus($pluginId, [
-            'status' => static::STATUS_ACTIVATED,
-            'version' => $entity->getVersion()
-        ]);
+        $this->setPluginStatus(
+            $pluginId,
+            [
+                'status' => static::STATUS_ACTIVATED,
+                'version' => $entity->getVersion()
+            ]
+        );
     }
 
     /**
@@ -235,9 +249,7 @@ class PluginHandler
         }
 
         // 기존에 설치(활성화)된 적이 있는지 검사한다. 기존에 활성화된 적이 있다면 설치된 버전을 조회한다.
-        $configs = $this->getPluginsStatus();
-        $config = array_get($configs, $pluginId, []);
-        $installedVersion = array_get($config, 'version', null);
+        $installedVersion = $entity->getInstalledVersion();
 
         // 플러그인 비활성화. 플러그인을 비활성화할 때마다 각 플러그인의 deactivate() 메소드를 호출해준다.
         // 각 플러그인은 deactivate() 메소드에서 자신이 XE에 설치된 상황을 파악한 후, 비활성화에 필요한 준비를 한다.
@@ -251,12 +263,13 @@ class PluginHandler
         $entity->setStatus(static::STATUS_DEACTIVATED);
 
         // 비활성화된 플러그인 정보를 config에 기록한다.
-        $configs[$pluginId] = [
-            'status' => static::STATUS_DEACTIVATED,
-            'version' => $entity->getInstalledVersion()
-        ];
-
-        $this->setPluginsStatus($configs);
+        $this->setPluginStatus(
+            $pluginId,
+            [
+                'status' => static::STATUS_DEACTIVATED,
+                'version' => $entity->getInstalledVersion()
+            ]
+        );
     }
 
     /**
@@ -264,6 +277,8 @@ class PluginHandler
      *
      * @param string $pluginId     업데이트할 플러그인의 아이디
      * @param bool   $updateStatus true일 경우, 업데이트한 플러그인의 상태를 status에 업데이트한다.
+     *
+     * @return void
      */
     public function updatePlugin($pluginId, $updateStatus = true)
     {
@@ -288,16 +303,19 @@ class PluginHandler
         }
 
         // 플러그인이 최신업데이트 상태인지 검사하고, 업데이트가 필요하면 업데이트 한다.
-        if ($entity->checkUpdated() === false) {
+        if ($entity->checkUpdated($installedVersion) === false) {
             $entity->update($installedVersion);
         }
 
         if ($updateStatus) {
             // 플러그인의 정보를 config에 기록한다.
-            $this->setPluginStatus($pluginId, [
-                'status' => $entity->getStatus(),
-                'version' => $entity->getVersion()
-            ]);
+            $this->setPluginStatus(
+                $pluginId,
+                [
+                    'status' => $entity->getStatus(),
+                    'version' => $entity->getVersion()
+                ]
+            );
         }
     }
 
@@ -322,7 +340,7 @@ class PluginHandler
 
         // status list에서 해당 플러그인 정보를 삭제한다.
         $configs = $this->getPluginsStatus();
-        array_forget($configs,$pluginId);
+        array_forget($configs, $pluginId);
         $this->setPluginsStatus($configs);
     }
 
@@ -378,13 +396,16 @@ class PluginHandler
             $this->plugins->initialize(true);
 
             // 각 플러그인의 설치된 버전과 실제버전이 다르고, 별도의 install이나 update가 필요없을 경우, 설치된 버전정보를 갱신한다.
-            foreach ($this->plugins as $plugin) {
+            foreach ($this->plugins->getList() as $plugin) {
                 /** @var PluginEntity $plugin */
                 $installedVersion = $plugin->getInstalledVersion();
                 $sourceVersion = $plugin->getVersion();
                 if ($sourceVersion !== $installedVersion) {
                     if ($plugin->checkInstalled($installedVersion) && $plugin->checkUpdated($installedVersion)) {
-                        $this->setPluginStatus($plugin->getId(), 'version', $sourceVersion);
+                        $this->setPluginStatus(
+                            $plugin->getId(),
+                            ['version' => $sourceVersion, 'status' => $plugin->getStatus()]
+                        );
                         $plugin->setInstalledVersion($sourceVersion);
                     }
                 }
@@ -430,9 +451,8 @@ class PluginHandler
     /**
      * 주어진 플러그인의 상태정보를 조회한다.
      *
-     * @param string $pluginId
-     *
-     * @param null   $field
+     * @param string $pluginId plugin id
+     * @param null   $field    'version' or 'status'
      *
      * @return mixed
      */
@@ -463,9 +483,9 @@ class PluginHandler
      * 주어진 plugin의 상태를 갱신한다.
      * 상태정보에는 status, version 필드가 있으며, 둘중 하나만 선택해서 갱신할 수도 있다.
      *
-     * @param string $pluginId
-     * @param string $field
-     * @param null   $status
+     * @param string $pluginId plugin id
+     * @param string $field    'version' or 'status'
+     * @param null   $status   value of field
      *
      * @return void
      */

@@ -12,7 +12,7 @@ var MenuItem = React.createClass({
     setSelectedNode: React.PropTypes.func
   },
 
-  onClickLink(node) {
+  onClickLink: function (node) {
     if (node.type !== "xpressengine@directLink") {
       location.href = '/' + node.url;
     } else {
@@ -31,17 +31,17 @@ var MenuItem = React.createClass({
     }
   },
 
-  onClickHome(node){
+  onClickHome: function (node){
     this.props.clickHome(node);
   },
 
-  handleMouseDown(e){
+  handleMouseDown: function (e){
     var nodeId = this.props.index.id;
     var dom = this.refs.inner.getDOMNode();
     this.props.mouseDown(nodeId, dom, e);
   },
 
-  onClickSetNode(node){
+  onClickSetNode: function (node){
 
     var selected = this.props.getSelectedNode();
 
@@ -52,7 +52,7 @@ var MenuItem = React.createClass({
     }
   },
 
-  render() {
+  render: function () {
     var node = this.props.index.node;
 
     var title = node.title || '';

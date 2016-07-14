@@ -114,7 +114,7 @@ class AuthController extends Controller
         $userData['status'] = \XeUser::STATUS_ACTIVATED;
 
         // set default join group
-        $config = \app('xe.config')->get('user.join');
+        $config = app('xe.config')->get('user.join');
         $joinGroup = $config->get('joinGroup');
         array_add($userData, 'groupId', []);
         $userData['groupId'][] = $joinGroup;
@@ -154,6 +154,22 @@ class AuthController extends Controller
         return redirect($this->redirectPath());
     }
 
+    public function getAgreement(){
+
+        $config = app('xe.config')->get('user.common');
+        $agreement = $config->get('agreement');
+
+        return apiRender('agreement', compact('agreement'));
+    }
+
+    public function getPrivacy()
+    {
+        $config = app('xe.config')->get('user.common');
+        $privacy = $config->get('privacy');
+
+        return apiRender('privacy', compact('privacy'));
+    }
+
     public function getConfirm(Request $request)
     {
         // validation
@@ -188,7 +204,7 @@ class AuthController extends Controller
         }
         XeDB::commit();
 
-        return redirect()->route('login')->with('alert', ['type' => 'success', 'message' => '인증되었습니다.']);
+        return redirect('/')->with('alert', ['type' => 'success', 'message' => '인증되었습니다. 로그인하시기 바랍니다.']);
     }
 
     /**
@@ -320,7 +336,7 @@ class AuthController extends Controller
         }
     }
 
-    private function useEmailConfirm()
+    protected function useEmailConfirm()
     {
         $config = app('xe.config')->get('user.join');
         return $config->get('useEmailCertify', true);

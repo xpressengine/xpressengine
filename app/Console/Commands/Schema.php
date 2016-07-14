@@ -25,7 +25,7 @@ use Xpressengine\Database\DatabaseHandler;
  *
  * ## 명령어 사용
  * ```
- * php artisan schema --tables=tableName1,tableName2...
+ * php artisan db:schema-cache --tables=tableName1,tableName2...
  * ```
  *
  * @category    Commands
@@ -41,12 +41,12 @@ class Schema extends Command
     /**
      * @var string
      */
-    protected $name = 'schema';
+    protected $name = 'db:schema-cache';
 
     /**
      * @var string
      */
-    protected $description = '테이블 스키마 캐시';
+    protected $description = 'Cache database table schema';
 
     /**
      * @var DatabaseHandler
@@ -74,12 +74,12 @@ class Schema extends Command
     {
         $tables = $this->input->getOption('tables');
         if ($tables == false) {
-            $this->error('캐시를 위한 테이블 이름이 없습니다.');
+            $this->error('Cannot find table name.');
         }
 
         $tables = explode(',', $tables);
         if (count($tables) == 0) {
-            $this->error('캐시를 위한 테이블 이름이 없습니다.');
+            $this->error('Cannot find table name.');
         }
 
         $config = $this->databaseHandler->getConfig();
@@ -105,9 +105,9 @@ class Schema extends Command
         }
 
         if (count($cacheNames) === 0) {
-            $this->error('캐시된 테이블이 없습니다. 테이블 이름을 확인하세요.');
+            $this->error('Cannot find table name. Please check database table name');
         } else {
-            $this->info(implode(',', array_unique($cacheNames)) . ' 테이블을 캐시 했습니다.');
+            $this->info(implode(',', array_unique($cacheNames)) . ' database tables cached.');
         }
     }
 

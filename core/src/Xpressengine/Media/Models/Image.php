@@ -64,7 +64,7 @@ class Image extends Media
      */
     public static function getThumbnail(Media $media, $type, $dimension, $defaultSelf = true)
     {
-        $image = static::derives($media) //->where('type', $type)->where('code', $dimension)->first();
+        $image = static::derives($media)
             ->whereHas('meta', function ($query) use ($type, $dimension) {
                 $query->where('type', $type)->where('code', $dimension);
             })->with('meta')->first();
@@ -84,7 +84,9 @@ class Image extends Media
         $query = static::derives($media)->with('meta');
 
         if ($type !== null) {
-            $query->where('type', $type);
+            $query->whereHas('meta', function ($query) use ($type) {
+                $query->where('type', $type);
+            });
         }
 
         return $query->get();

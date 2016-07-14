@@ -1,15 +1,21 @@
 
 <div id="__xe_section_editor">
     <div class="form-group">
-        <label>Editor</label>
+        <div class="pull-left">
+            <label>Editor</label>
+        </div>
+        <div class="pull-right">
+            <a href="{{ route('settings.editor.setting.detail', $instanceId) }}" class="btn btn-link"><i class="xi-cog"></i><span class="hidden-xs">{{xe_trans('xe::setup')}}</span></a>
+        </div>
         <div class="input-group">
             <input type="text" class="form-control" aria-describedby="basic-addon2" readonly="readonly" value="{{ $selected ? $selected->getComponentInfo('name') : '' }}">
             <!--[D] 상세 설정 등 투명 링크는 .input-group-link 클래스 추가  -->
             <span class="input-group-btn input-group-link">
                 @if($selected && $link = $selected->getInstanceSettingURI($instanceId))
-                <a href="{{ $link }}" class="btn btn-link">{{xe_trans('xe::detailConfigure')}}</a>
+                    <a href="{{ $link }}" class="btn btn-link">{{xe_trans('xe::detailConfigure')}}</a>
                 @endif
             </span>
+
             <span class="input-group-btn">
                 <button class="btn btn-default __xe_btn_edit" type="button">{{xe_trans('xe::edit')}}</button>
             </span>
@@ -20,7 +26,7 @@
         <form method="post" action="{{ route('settings.editor.setting', $instanceId) }}">
             {{ csrf_field() }}
             <div class="form-group">
-                <label>{{xe_trans('xe:editorEdit')}}</label>
+                <label>{{xe_trans('xe::editorEdit')}}</label>
                 <select class="form-control" name="editorId">
                     @foreach($editors as $id => $class)
                         <option value="{{ $id }}" {{ $selected && $id === $selected->getId() ? 'selected' : '' }}>{{ $class::getComponentInfo('name') }}</option>

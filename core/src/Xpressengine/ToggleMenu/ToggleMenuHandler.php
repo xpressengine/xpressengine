@@ -14,6 +14,7 @@
 
 namespace Xpressengine\ToggleMenu;
 
+use Illuminate\Contracts\Container\Container;
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Plugin\PluginRegister;
 use Xpressengine\ToggleMenu\Exceptions\WrongInstanceException;
@@ -67,6 +68,13 @@ class ToggleMenuHandler
     protected $cfg;
 
     /**
+     * Container instance
+     *
+     * @var Container
+     */
+    protected $container;
+
+    /**
      * Type suffix for register
      *
      * @var string
@@ -76,13 +84,15 @@ class ToggleMenuHandler
     /**
      * Constructor
      *
-     * @param PluginRegister $register Register instance
-     * @param ConfigManager  $cfg      Xe config instance
+     * @param PluginRegister $register  Register instance
+     * @param ConfigManager  $cfg       Xe config instance
+     * @param Container      $container Container instance
      */
-    public function __construct(PluginRegister $register, ConfigManager $cfg)
+    public function __construct(PluginRegister $register, ConfigManager $cfg, Container $container)
     {
         $this->register = $register;
         $this->cfg = $cfg;
+        $this->container = $container;
     }
 
     /**
@@ -91,7 +101,7 @@ class ToggleMenuHandler
      * @param string $id         target plugin id
      * @param string $instanceId instance id
      * @param string $identifier target identifier
-     * @return ItemInterface[]
+     * @return AbstractToggleMenu[]
      * @throws WrongInstanceException
      */
     public function getItems($id, $instanceId = null, $identifier = null)
@@ -99,11 +109,13 @@ class ToggleMenuHandler
         $items = $this->getActivated($id, $instanceId);
 
         foreach ($items as &$item) {
-            $item = new $item($id, $identifier);
+            $item = $this->container->make($item);
 
-            if (!$item instanceof ItemInterface) {
+            if (!$item instanceof AbstractToggleMenu) {
                 throw new WrongInstanceException();
             }
+
+            $item->setArguments($id, $instanceId, $identifier);
         }
 
         return $items;
@@ -119,7 +131,11 @@ class ToggleMenuHandler
      */
     public function setActivates($id, $instanceId = null, array $keys = [])
     {
-        return $this->cfg->set($this->getConfigKey($id, $instanceId), ['activate' => $keys]);
+        $config = [];
+        if (count($keys) > 0) {
+            $config = ['activate' => $keys];
+        }
+        return $this->cfg->set($this->getConfigKey($id, $instanceId), $config);
     }
 
     /**
@@ -131,15 +147,9 @@ class ToggleMenuHandler
      */
     public function getActivated($id, $instanceId = null)
     {
-        // todo: 임시? seed 로 추가되면 제거?
-        if ($this->cfg->get($this->getConfigKey($id, null)) === null) {
-            $this->cfg->set($this->getConfigKey($id, null), []);
-        }
-
         if (($config = $this->cfg->get($this->getConfigKey($id, $instanceId))) === null) {
             $config = $this->setActivates($id, $instanceId);
         }
-
         $keys = $config->get('activate', []);
 
         $activated = array_intersect_key($this->all($id), array_flip($keys));
@@ -171,7 +181,7 @@ class ToggleMenuHandler
      * @param string|null $instanceId instance id
      * @return string
      */
-    protected function getConfigKey($id, $instanceId)
+    public function getConfigKey($id, $instanceId)
     {
         return 'toggleMenu@' . $id . ($instanceId !== null ? '.' . $instanceId : '');
     }

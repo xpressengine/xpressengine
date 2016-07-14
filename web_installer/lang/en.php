@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'localeExpression' => 'English',
     'checkForInstall' => 'Check your server status for XE installation.',
     
     'systemCheck' => 'System check',
@@ -9,7 +10,10 @@ return [
     'checkPHPExtPDO' => 'PDO, pdo_mysql PHP Extension is required.',
     'checkPHPExtCURL' => 'cURL PHP Extension is required.',
     'checkPHPExtMCRYPT' => 'MCrypt PHP Extension is required.',
-    'checkPHPExtGD' => 'GD PHP Extension is required',
+    'checkPHPExtGD' => 'GD PHP Extension is required.',
+    'checkPHPExtMBSTRING' => 'Mbstring PHP Extension is required.',
+    'checkPHPExtOPENSSL' => 'OpenSSL PHP Extension is required.',
+    'checkPHPExtZIP' => 'ZipArchive PHP Extension is required.',
 
     'terms' => 'Condition',
     'termsText' => '이 문서는 정보 제공의 목적으로만 제공됩니다. `NAVER(주)`는 이 문서에 수록된 정보의 완전성과

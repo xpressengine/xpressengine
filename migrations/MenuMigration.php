@@ -96,11 +96,40 @@ class MenuMigration implements Migration {
         $menuHandler->setMenuTheme($mainMenu, $defaultMenuTheme, $defaultMenuTheme);
         app('xe.permission')->register($mainMenu->getKey(), $menuHandler->getDefaultGrant());
 
-        $this->pageModuleMenuSetup($mainMenu);
-        $this->boardModuleMenuSetup($mainMenu);
-
         $this->setThemeConfig($mainMenu->id);
 
+        $this->pageModuleMenuSetup($mainMenu);
+        $this->boardModuleMenuSetup($mainMenu);
+    }
+
+    /**
+     * site default config setup
+     *
+     * @param $mainMenu
+     * @param $homeId
+     * @return void
+     */
+    public function siteDefaultConfig($mainMenu, $homeId)
+    {
+        $site_title = XeLang::genUserKey();
+        foreach (XeLang::getLocales() as $locale) {
+            $value = "XE3";
+            if ($locale != 'ko') {
+                $value = "XE3";
+            }
+            XeLang::save($site_title, $locale, $value, false);
+        }
+
+        /**
+         * @var $configManager ConfigManager
+         */
+        $configManager = app('xe.config');
+        $configEntity = $configManager->get('site.default');
+        $configEntity->set('defaultMenu', $mainMenu->id);
+        $configEntity->set('homeInstance', $homeId);
+        $configEntity->set('site_title', $site_title);
+
+        $configManager->modify($configEntity);
     }
 
     /**
@@ -133,7 +162,7 @@ class MenuMigration implements Migration {
             'url' => 'home',
             'description' => 'home',
             'target' => '',
-            'type' => 'module/page@page',
+            'type' => 'page@page',
             'ordering' => '1',
             'activated' => '1',
         ];
@@ -145,20 +174,12 @@ class MenuMigration implements Migration {
 
         $item = $menuHandler->createItem($mainMenu, $inputs, $menuTypeInput);
 
-        $menuHandler->setMenuItemTheme($item, 'theme/alice@alice.1', 'theme/alice@alice.1');
+        $menuHandler->setMenuItemTheme($item, null, null);
         app('xe.permission')->register($menuHandler->permKeyString($item), new Grant);
 
-        /**
-         * @var $configManager ConfigManager
-         */
-        $configManager = app('xe.config');
-        $configEntity = $configManager->get('site.default');
-        $configEntity->set('defaultMenu', $mainMenu->id);
-        $configEntity->set('homeInstance', $item->id);
 
-        $configManager->modify($configEntity);
-
-        $this->registerWelcomPageContent($item);
+        $this->siteDefaultConfig($mainMenu, $item->id);
+        $this->registerWelcomePageContent($item);
     }
 
     /**
@@ -190,7 +211,7 @@ class MenuMigration implements Migration {
             'url' => 'board1',
             'description' => 'board1',
             'target' => '',
-            'type' => 'module/board@board',
+            'type' => 'board@board',
             'ordering' => '1',
             'activated' => '1',
         ];
@@ -204,7 +225,7 @@ class MenuMigration implements Migration {
 
         $item = $menuHandler->createItem($mainMenu, $inputs, $menuTypeInput);
 
-        $menuHandler->setMenuItemTheme($item, 'theme/alice@alice', 'theme/alice@alice');
+        $menuHandler->setMenuItemTheme($item, null, null);
         app('xe.permission')->register($menuHandler->permKeyString($item), new Grant);
     }
 
@@ -245,24 +266,45 @@ class MenuMigration implements Migration {
     }
 
     /**
-     * registerWelcomPageContent
+     * registerWelcomePageContent
      *
      * @param MenuItem $item
      *
      * @return void
      * @throws \Exception
      */
-    private function registerWelcomPageContent(MenuItem $item)
+    private function registerWelcomePageContent(MenuItem $item)
     {
-        $locale = 'ko';
         $handler = app('xe.page.handler');
         $pageConfig = $handler->getPageConfig($item->id);
-
         $documentUids = $pageConfig->get('pcUids');
-        $documentId = $documentUids[$locale];
 
+        $locale = 'ko';
         $title = "Welcome XE3";
-        $content = '
+        $content = $this->getWelcomePageContentKo();
+        if ($handler->hasLocale($documentUids, $locale)) {
+            $documentId = $documentUids[$locale];
+            $handler->updatePageContent($documentId, $item->id, $content, $title, $locale);
+        } else {
+            $documentId = $handler->createNewLocalePageContent($item->id, $title, $locale, 'pc');
+            $handler->updatePageContent($documentId, $item->id, $content, $title, $locale);
+        }
+
+        $locale = 'en';
+        $title = "Welcome XE3";
+        $content = $this->getWelcomePageContentEn();
+        if ($handler->hasLocale($documentUids, $locale)) {
+            $documentId = $documentUids[$locale];
+            $handler->updatePageContent($documentId, $item->id, $content, $title, $locale);
+        } else {
+            $documentId = $handler->createNewLocalePageContent($item->id, $title, $locale, 'pc');
+            $handler->updatePageContent($documentId, $item->id, $content, $title, $locale);
+        }
+    }
+
+    private function getWelcomePageContentKo()
+    {
+        return '
            <div class="xe-row">
 		<!--content area -->
 			<div class="content welcome">
@@ -389,7 +431,7 @@ class MenuMigration implements Migration {
 								<i class="xi-plus-circle-o"></i>
 								<dl>
 									<dt>플러그인 관리하기</dt>
-									<dd><a href="#">자료실</a>에서 플러그인을 설치하여 사이트를 풍성하게 만들어 보세요. 플러그인은 <a href="'.route('settings.plugins').'">사이트관리 > 플러그인 > 플러그인 목록</a>에서 설정할 수 있습니다.</dd>
+									<dd><a href="http://xpressengine.io/plugins">자료실</a>에서 플러그인을 설치하여 사이트를 풍성하게 만들어 보세요. 플러그인은 <a href="'.route('settings.plugins').'">사이트관리 > 플러그인 > 플러그인 목록</a>에서 설정할 수 있습니다.</dd>
 								</dl>
 							</div>
 						</div>
@@ -476,7 +518,223 @@ class MenuMigration implements Migration {
 			</div>
 		<!--// content area -->
 		</div>';
+    }
 
-        $handler->updatePageContent($documentId, $item->id, $content, $title, $locale);
+    private function getWelcomePageContentEn()
+    {
+        return '
+           <div class="xe-row">
+		<!--content area -->
+			<div class="content welcome">
+				<div class="content-inner xe-container">
+					<h2>WELCOME</h2>
+					<strong>There are a million reasons to use XE3.</strong>
+					<p>XpressEngine is a CMS to support the issuance of free web content. Laravel framework based XE3 is to provide rapid feedback in a variety of bundle system, it boasts a flexible scalability.</p>
+					<a href="http://xpressengine.io/features" class="link-info">Go to information page</a>
+				</div>
+			</div>
+			<div class="content theme">
+				<div class="content-inner xe-container">
+					<h2>DISCOVER</h2>
+					<strong>XE3 Theme Alice.</strong>
+					<p>XE3 theme Alice is, mobile, tablet, offers a layout that is suitable for both desktop screen. In addition, it will support a variety of color themes that can be used to match the characteristics of the home page.</p>
+					<div class="num xe-hidden-xs">
+						<span class="on"></span>
+						<span class="blue"></span>
+						<span class="red"></span>
+					</div>
+				</div>
+				<div class="owl-wrap">
+					<div id="owl-color" class="owl-color xe-hidden-xs">
+						<div class="item">
+							<div class="theme-color">
+								<div class="diagonal-area"></div>
+							</div>
+						</div>
+						<div class="item">
+							<div class="theme-color blue-bg">
+								<div class="diagonal-area"></div>
+							</div>
+						</div>
+						<div class="item">
+							<div class="theme-color red-bg">
+								<div class="diagonal-area"></div>
+							</div>
+						</div>
+					</div>
+					<div class="owl-inner">
+						<div id="owl-mobile" class="owl-mobile">
+							<div class="item">
+								<div class="bg-img brown"></div>
+							</div>
+							<div class="item">
+								<div class="bg-img blue"></div>
+							</div>
+							<div class="item">
+								<div class="bg-img red"></div>
+							</div>
+						</div>
+						<div id="owl-tablet" class="owl-tablet xe-hidden-xs">
+							<div class="item">
+								<div class="bg-img brown"></div>
+							</div>
+							<div class="item">
+								<div class="bg-img blue"></div>
+							</div>
+							<div class="item">
+								<div class="bg-img red"></div>
+							</div>
+						</div>
+						<div id="owl-pc" class="owl-pc xe-visible-lg">
+							<div class="item">
+								<div class="bg-img brown"></div>
+							</div>
+							<div class="item">
+								<div class="bg-img blue"></div>
+							</div>
+							<div class="item">
+								<div class="bg-img red"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="content stater">
+				<div class="content-inner xe-container">
+					<h2>GUIDE</h2>
+					<strong>For starter.</strong>
+					<div class="xe-row">
+						<div class="xe-col-sm-6">
+							<div class="start-guide">
+								<i class="xi-home-o"></i>
+								<dl>
+									<dt>Basic settings of site</dt>
+									<dd>Please try to change the default settings for the home page.<br>You can set the site of the title in the <a href="'.route('settings.setting.edit').'">Site Management > Configuration > Basic settings of site</a>. </dd>
+								</dl>
+							</div>
+						</div>
+						<div class="xe-col-sm-6">
+							<div class="start-guide">
+								<i class="xi-laptop"></i>
+								<dl>
+									<dt>Changing the initial screen</dt>
+									<dd>Please try to set the site home.<br>Set the Home in the <a href="'.route('settings.menu.index').'">Site Management > Site map > Edit Site menu</a>. </dd>
+								</dl>
+							</div>
+						</div>
+					</div>
+					<div class="xe-row">
+						<div class="xe-col-sm-6">
+							<div class="start-guide">
+								<i class="xi-sitemap-o"></i>
+								<dl>
+									<dt>Make up the menu structure</dt>
+									<dd>Create a menu, please try to configure the site map.<br>Set the Menu in the <a href="'.route('settings.menu.index').'">Site Management > Site map > Edit Site menu</a>. </dd>
+								</dl>
+							</div>
+						</div>
+						<div class="xe-col-sm-6">
+							<div class="start-guide">
+								<i class="xi-windows-text"></i>
+								<dl>
+									<dt>To change the theme of the design</dt>
+									<dd>XE3 offers the design of another theme. Layout design can be changed in the  <a href="'.route('settings.setting.edit').'">Site Management > Configuration > Basic settings of site</a>. </dd>
+								</dl>
+							</div>
+						</div>
+					</div>
+					<div class="xe-row">
+						<div class="xe-col-sm-6">
+							<div class="start-guide">
+								<i class="xi-plus-circle-o"></i>
+								<dl>
+									<dt>To manage the plug-in</dt>
+									<dd>Install the plug-in at the <a href="http://xpressengine.io/plugins">Marketplace</a>, please try to enrich the site. Plug-ins can be set in the <a href="'.route('settings.plugins').'">Site Management > Plug-in > List of plug-ins</a>.</dd>
+								</dl>
+							</div>
+						</div>
+						<div class="xe-col-sm-6">
+							<div class="start-guide">
+								<i class="xi-lock"></i>
+								<dl>
+									<dt>To set the management page authority</dt>
+									<dd>Please set the site management authority. Set of site management authority, you can change the <a href="'.route('settings.setting.permissions').'">Site Management > Configuration > Setting the Management page authority</a>.</dd>
+								</dl>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="content involve">
+				<div class="involve-inner xe-container">
+					<h2>Get involved</h2>
+					<p>XpressEngine3 is an open source project that many of the people we make together.<br/>Please try to participate in the development a look at the current state of development in the GitHub Project. </p>
+					<a href="https://github.com/xpressengine/xpressengine">GitHub Project</a>
+				</div>
+			</div>
+			<div class="content support">
+				<div class="content-inner xe-container">
+					<h2>SUPPORT</h2>
+					<strong>XpressEngine Communities</strong>
+					<p>To exchange information of XpressEngine, discussion, you can participate in the space that can be discussed. It is possible to share various information with Slack official channels and multiple communities.</p>
+					<div class="xe-row support-list">
+						<div class="xe-col-md-4">
+							<div class="support-img">
+							</div>
+							<div class="support-txt">
+								<div class="table-txt">
+									<div>
+										<dl>
+											<dt>XE Forum Chat</dt>
+											<dd>It is Slack channels that can be a real-time exchange of information between the participants of the open source project of the XE.</dd>
+										</dl>
+										<a href="https://xeforum.slack.com/" target="_blank">Go to XE Slack</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="xe-col-md-4">
+							<div class="support-img second">
+							</div>
+							<div class="support-txt">
+								<div class="table-txt">
+									<div>
+										<dl>
+											<dt>XE Facebook Group</dt>
+											<dd>You can create and distribute XE article, you can share the opinion to confirm the schedule of events.</dd>
+										</dl>
+										<a href="https://www.facebook.com/xehub" target="_blank">Go to XE Facebook Group</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="xe-col-md-4">
+							<div class="support-img third">
+							</div>
+							<div class="support-txt">
+								<div class="table-txt">
+									<div>
+										<dl>
+											<dt>XE Town</dt>
+											<dd>Is the most popular community on XpressEngine users.</dd>
+										</dl>
+										<a href="https://www.xetown.com/" target="_blank">Go to XE Town</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="content parallax">
+				<div class="xe-container">
+					<strong>We made<br>what you need.</strong>
+					<div class="rectangle">
+						<p>by <a href="http://xpressengine.io/">XpressEngine.io</a></p>
+					</div>
+				</div>
+			</div>
+		<!--// content area -->
+		</div>';
     }
 }

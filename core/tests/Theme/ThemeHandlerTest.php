@@ -5,11 +5,15 @@
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link      https://xpressengine.io
  */
-
 namespace Xpressengine\Tests\Theme;
 
+require_once 'TestTheme.php';
+
 use Mockery;
+use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Plugin\PluginRegister;
+use Xpressengine\Plugins\OfficialHomepage\Theme\Theme;
+use Xpressengine\Theme\ThemeEntity;
 use Xpressengine\Theme\ThemeEntityInterface;
 use Xpressengine\Theme\ThemeHandler;
 
@@ -29,20 +33,36 @@ class ThemeHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTheme()
     {
+
+        $config = $this->getConfig();
+        $config->shouldReceive('get')
+            ->with('theme.settings.theme/pluginA@blue', true)
+            ->once()
+            ->andReturnNull();
+        $config->shouldReceive('get')
+            ->with('theme.settings.theme/pluginA@red', true)
+            ->once()
+            ->andReturnNull();
+
         $id = 'theme/pluginA@blue';
-        $theme = $this->getHandler()->getTheme($id);
+        $handler = $this->getHandler(null, $config);
+        $theme = $handler->getTheme($id);
         $this->assertInstanceOf(ThemeEntityInterface::class, $theme);
         $this->assertEquals('Theme_theme_pluginA_blue', $theme->getClass());
 
         $id = 'theme/pluginA@red';
-        $theme = $this->getHandler()->getTheme($id);
+        $theme = $handler->getTheme($id);
         $this->assertInstanceOf(ThemeEntityInterface::class, $theme);
         $this->assertEquals('Theme_theme_pluginA_red', $theme->getClass());
     }
 
     public function testGetAllTheme()
     {
-        $themes = $this->getHandler()->getAllTheme();
+        $config = $this->getConfig();
+        $config->shouldReceive('get')
+            ->andReturnNull();
+        $handler = $this->getHandler(null, $config);
+        $themes = $handler->getAllTheme();
 
         $this->assertCount(2, $themes);
 
@@ -54,7 +74,11 @@ class ThemeHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAllSettingsTheme()
     {
-        $themes = $this->getHandler()->getAllSettingsTheme();
+        $config = $this->getConfig();
+        $config->shouldReceive('get')
+            ->andReturnNull();
+        $handler = $this->getHandler(null, $config);
+        $themes = $handler->getAllSettingsTheme();
 
         $this->assertCount(2, $themes);
 
@@ -66,7 +90,10 @@ class ThemeHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testSelectedTheme()
     {
-        $handler = $this->getHandler();
+        $config = $this->getConfig();
+        $config->shouldReceive('get')
+            ->andReturnNull();
+        $handler = $this->getHandler(null, $config);
         $currentTheme = $handler->getSelectedTheme();
 
         $this->assertNull($currentTheme);
@@ -87,12 +114,15 @@ class ThemeHandlerTest extends \PHPUnit_Framework_TestCase
     public function testDeselectTheme()
     {
 
+        $config = $this->getConfig();
+        $config->shouldReceive('get')
+            ->andReturnNull();
         $container = $this->getRegister();
 
         $themeClassMock = $this->makeThemeMock('theme/xpressengine@blank');
         $container->shouldReceive('get')->withArgs(['theme/xpressengine@blank'])->once()->andReturn($themeClassMock);
 
-        $handler = $this->getHandler($container);
+        $handler = $this->getHandler($container, $config);
 
         // set
         $id = 'theme/pluginA@blue';
@@ -169,7 +199,11 @@ class ThemeHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAllThemeSupportingMobile()
     {
-        $themes = $this->getHandler()->getAllThemeSupportingMobile();
+        $config = $this->getConfig();
+        $config->shouldReceive('get')
+            ->andReturnNull();
+        $handler = $this->getHandler(null, $config);
+        $themes = $handler->getAllThemeSupportingMobile();
 
         $this->assertCount(2, $themes);
 
@@ -181,12 +215,16 @@ class ThemeHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testgetAllThemeSupportingDesktop()
     {
-        $themes = $this->getHandler()->getAllThemeSupportingDesktop();
+        $config = $this->getConfig();
+        $config->shouldReceive('get')
+            ->andReturnNull();
+        $handler = $this->getHandler(null, $config);
+        $themes = $handler->getAllThemeSupportingDesktop();
 
         $this->assertCount(0, $themes);
     }
 
-    protected function getHandler($register = null, $config = null, $blankTheme = 'theme/xpressengine@blank')
+    protected function getHandler($register = null, $config = null, $view = null, $blankTheme = 'theme/xpressengine@blank')
     {
         if ($register === null) {
             $register = $this->getRegister();
@@ -194,8 +232,11 @@ class ThemeHandlerTest extends \PHPUnit_Framework_TestCase
         if ($config === null) {
             $config = $this->getConfig();
         }
+        if ($view === null) {
+            $view = $this->getViewFactory();
+        }
 
-        return new ThemeHandler($register, $config, $blankTheme);
+        return new ThemeHandlerStub($register, $config, $view, $blankTheme);
     }
 
     /**
@@ -246,7 +287,7 @@ class ThemeHandlerTest extends \PHPUnit_Framework_TestCase
         $postfix = str_replace(['/', '@'], '_', $id);
         $mock = \Mockery::mock(
             'alias:Theme_'.$postfix,
-            'Xpressengine\Theme\AbstractTheme',
+            'Xpressengine\Tests\Theme\TestTheme',
             [
                 'getId' => $id,
                 'getTitle' => 'skin for test',
@@ -254,12 +295,49 @@ class ThemeHandlerTest extends \PHPUnit_Framework_TestCase
                 'supportDesktop' => false,
             ]
         );
+        $mock->shouldReceive('setting')->andReturnNull();
         return 'Theme_'.$postfix;
     }
 
     protected function getConfig()
     {
-        return Mockery::mock('Xpressengine\Config\ConfigManager');
+        $config = Mockery::mock('Xpressengine\Config\ConfigManager');
+        return $config;
     }
+
+    protected function getViewFactory()
+    {
+        return Mockery::mock('\Illuminate\Contracts\View\Factory');
+    }
+}
+
+class ThemeHandlerStub extends ThemeHandler {
+    /**
+     * make and return ThemeEntity
+     *
+     * @param $id
+     * @param $class
+     *
+     * @return ThemeEntity
+     */
+    protected function makeEntity($id, $class)
+    {
+        return new ThemeEntityStub($id, $class);
+    }
+}
+
+class ThemeEntityStub extends ThemeEntity {
+    /**
+     * get and set config
+     *
+     * @param ConfigEntity $config
+     *
+     * @return null
+     */
+    public function setting(ConfigEntity $config = null)
+    {
+        return null;
+    }
+
 }
 

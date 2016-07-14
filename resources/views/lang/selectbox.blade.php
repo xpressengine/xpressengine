@@ -1,4 +1,4 @@
-{{ XeFrontend::css('/assets/core/lang/flag.css')->load() }}
+{{ XeFrontend::css('/assets/core/xe-ui-component/xe-ui-component.css')->load() }}
 
 <div class="xe-dropup">
     <button class="xe-btn" type="button" id="dropdownMenu1" data-toggle="xe-dropdown" aria-expanded="true">

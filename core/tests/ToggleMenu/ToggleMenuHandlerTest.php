@@ -9,7 +9,7 @@
 namespace Xpressengine\Tests\ToggleMenu;
 
 use Mockery as m;
-use Xpressengine\ToggleMenu\ItemInterface;
+use Xpressengine\ToggleMenu\AbstractToggleMenu;
 use Xpressengine\ToggleMenu\ToggleMenuHandler;
 
 class ToggleMenuHandlerTest extends \PHPUnit_Framework_TestCase
@@ -21,8 +21,8 @@ class ToggleMenuHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetItems()
     {
-        list($register, $cfg) = $this->getMocks();
-        $instance = new ToggleMenuHandler($register, $cfg);
+        list($register, $cfg, $container) = $this->getMocks();
+        $instance = new ToggleMenuHandler($register, $cfg, $container);
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
         $mockConfig->shouldReceive('get')
@@ -30,13 +30,10 @@ class ToggleMenuHandlerTest extends \PHPUnit_Framework_TestCase
             ->with('activate', [])
             ->andReturn(['someTypemenu/xe@somemenu1', 'someTypemenu/xe@somemenu2']);
 
-        $cfg->shouldReceive('get')->once()->with('toggleMenu@someType')->andReturnNull();
-        $cfg->shouldReceive('set')->once()->with('toggleMenu@someType', []);
-
         $cfg->shouldReceive('get')->once()->with('toggleMenu@someType.someInstance')->andReturnNull();
         $cfg->shouldReceive('set')
             ->once()
-            ->with('toggleMenu@someType.someInstance', ['activate' => []])
+            ->with('toggleMenu@someType.someInstance', [])
             ->andReturn($mockConfig);
 
         $register->shouldReceive('get')->once()->andReturn([
@@ -45,15 +42,17 @@ class ToggleMenuHandlerTest extends \PHPUnit_Framework_TestCase
             'someTypemenu/xe@somemenu3' => ItemClass::class,
         ]);
 
+        $container->shouldReceive('make')->times(2)->with(ItemClass::class)->andReturn(new ItemClass());
+
         $items = $instance->getItems('someType', 'someInstance');
 
         $this->assertEquals(2, count($items));
     }
 
-    public function testGetItemsThrowsExceptionWhenNotInstanceOfItemInterface()
+    public function testGetItemsThrowsExceptionWhenNotInstanceOfAbstractToggleMenu()
     {
-        list($register, $cfg) = $this->getMocks();
-        $instance = new ToggleMenuHandler($register, $cfg);
+        list($register, $cfg, $container) = $this->getMocks();
+        $instance = new ToggleMenuHandler($register, $cfg, $container);
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
         $mockConfig->shouldReceive('get')
@@ -61,13 +60,10 @@ class ToggleMenuHandlerTest extends \PHPUnit_Framework_TestCase
             ->with('activate', [])
             ->andReturn(['someTypemenu/xe@somemenu1', 'someTypemenu/xe@somemenu2']);
 
-        $cfg->shouldReceive('get')->once()->with('toggleMenu@someType')->andReturnNull();
-        $cfg->shouldReceive('set')->once()->with('toggleMenu@someType', []);
-
         $cfg->shouldReceive('get')->once()->with('toggleMenu@someType.someInstance')->andReturnNull();
         $cfg->shouldReceive('set')
             ->once()
-            ->with('toggleMenu@someType.someInstance', ['activate' => []])
+            ->with('toggleMenu@someType.someInstance', [])
             ->andReturn($mockConfig);
 
         $register->shouldReceive('get')->once()->andReturn([
@@ -75,6 +71,9 @@ class ToggleMenuHandlerTest extends \PHPUnit_Framework_TestCase
             'someTypemenu/xe@somemenu2' => NonItemClass::class,
             'someTypemenu/xe@somemenu3' => ItemClass::class,
         ]);
+
+        $container->shouldReceive('make')->once()->with(ItemClass::class)->andReturn(new ItemClass());
+        $container->shouldReceive('make')->once()->with(NonItemClass::class)->andReturn(new NonItemClass());
 
         try {
             $instance->getItems('someType', 'someInstance');
@@ -87,8 +86,8 @@ class ToggleMenuHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDeactivated()
     {
-        list($register, $cfg) = $this->getMocks();
-        $instance = new ToggleMenuHandler($register, $cfg);
+        list($register, $cfg, $container) = $this->getMocks();
+        $instance = new ToggleMenuHandler($register, $cfg, $container);
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
         $mockConfig->shouldReceive('get')
@@ -96,13 +95,10 @@ class ToggleMenuHandlerTest extends \PHPUnit_Framework_TestCase
             ->with('activate', [])
             ->andReturn(['someTypemenu/xe@somemenu1', 'someTypemenu/xe@somemenu2']);
 
-        $cfg->shouldReceive('get')->once()->with('toggleMenu@someType')->andReturnNull();
-        $cfg->shouldReceive('set')->once()->with('toggleMenu@someType', []);
-
         $cfg->shouldReceive('get')->once()->with('toggleMenu@someType.someInstance')->andReturnNull();
         $cfg->shouldReceive('set')
             ->once()
-            ->with('toggleMenu@someType.someInstance', ['activate' => []])
+            ->with('toggleMenu@someType.someInstance', [])
             ->andReturn($mockConfig);
 
         $register->shouldReceive('get')->twice()->andReturn([
@@ -121,12 +117,13 @@ class ToggleMenuHandlerTest extends \PHPUnit_Framework_TestCase
     {
         return [
             m::mock('Xpressengine\Plugin\PluginRegister'),
-            m::mock('Xpressengine\Config\ConfigManager')
+            m::mock('Xpressengine\Config\ConfigManager'),
+            m::mock('Illuminate\Contracts\Container\Container'),
         ];
     }
 }
 
-class ItemClass implements ItemInterface
+class ItemClass extends AbstractToggleMenu
 {
     public static function getName()
     {
@@ -154,11 +151,6 @@ class ItemClass implements ItemInterface
     }
 
     public function getScript()
-    {
-
-    }
-
-    public function getIcon()
     {
 
     }

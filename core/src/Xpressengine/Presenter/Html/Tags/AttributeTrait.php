@@ -29,6 +29,7 @@ trait AttributeTrait
      *
      * @param string $name  name
      * @param string $value value
+     *
      * @return $this
      */
     public function attr($name, $value)

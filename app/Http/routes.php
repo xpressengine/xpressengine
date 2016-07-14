@@ -90,6 +90,10 @@ Route::group(
         // password reset
         Route::get('password', ['as' => 'auth.password', 'uses' => 'Auth\PasswordController@getPassword']);
         Route::post('password', ['as' => 'auth.password', 'uses' => 'Auth\PasswordController@postPassword']);
+
+        // agreement, privacy
+        Route::get('agreement', ['as' => 'auth.agreement', 'uses' => 'Auth\AuthController@getAgreement']);
+        Route::get('privacy', ['as' => 'auth.privacy', 'uses' => 'Auth\AuthController@getPrivacy']);
     }
 );
 
@@ -733,6 +737,17 @@ Route::settings(
 
 Route::settings('editor', function () {
     Route::post('setting/{instanceId}', ['as' => 'settings.editor.setting', 'uses' => 'EditorController@setting']);
+    Route::get('setting/{instanceId}/detail', ['as' => 'settings.editor.setting.detail', 'uses' => 'EditorController@getDetailSetting']);
+    Route::post('setting/{instanceId}/detail', ['as' => 'settings.editor.setting.detail', 'uses' => 'EditorController@postDetailSetting']);
+});
+
+Route::group(['prefix' => 'editor'], function () {
+    Route::post('file/{instanceId}/upload', ['as' => 'editor.file.upload', 'uses' => 'EditorController@fileUpload']);
+    Route::get('file/{instanceId}/source/{id?}', ['as' => 'editor.file.source', 'uses' => 'EditorController@fileSource']);
+    Route::get('file/{instanceId}/download/{id?}', ['as' => 'editor.file.download', 'uses' => 'EditorController@fileDownload']);
+    Route::post('file/{instanceId}/destroy/{id?}', ['as' => 'editor.file.destroy', 'uses' => 'EditorController@fileDestroy']);
+    Route::get('hashTag', ['as' => 'editor.hashTag', 'uses' => 'EditorController@hashTag']);
+    Route::get('mention', ['as' => 'editor.mention', 'uses' => 'EditorController@mention']);
 });
 
 Route::get('widgetbox/edit/{boxId}', ['as' => 'widgetbox.edit', 'uses' => 'WidgetBoxController@edit']);

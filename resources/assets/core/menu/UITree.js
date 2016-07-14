@@ -22,17 +22,17 @@ var UITree = React.createClass({
     moveNode: React.PropTypes.func
   },
 
-  getDefaultProps() {
+  getDefaultProps: function () {
     return {
       paddingLeft: 48
     };
   },
 
-  getInitialState() {
+  getInitialState: function () {
     return this.init(this.props);
   },
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps: function (nextProps) {
     if (!this._update) {
       this.setState(this.init(nextProps));
     } else {
@@ -40,7 +40,7 @@ var UITree = React.createClass({
     }
   },
 
-  init(props) {
+  init: function (props) {
     var tree = props.tree;
     tree.updateNodesPosition();
 
@@ -59,7 +59,7 @@ var UITree = React.createClass({
     };
   },
 
-  getDraggingDom() {
+  getDraggingDom: function () {
     var tree = this.state.tree;
     var dragging = this.state.dragging;
     var home = this.props.home;
@@ -94,7 +94,7 @@ var UITree = React.createClass({
     return null;
   },
 
-  render() {
+  render: function () {
     var tree = this.state.tree;
     var dragging = this.state.dragging;
     var draggingDom = this.getDraggingDom();
@@ -133,7 +133,7 @@ var UITree = React.createClass({
     );
   },
 
-  dragStart(id, dom, e) {
+  dragStart: function (id, dom, e) {
     var tree = this.state.tree;
     var node = tree.get(id);
     if (node.entity && node.entity == 'menu')
@@ -166,7 +166,7 @@ var UITree = React.createClass({
 
   },
 
-  drag(e) {
+  drag: function (e) {
     if (this._start) {
       this.setState({
         dragging: this.dragging
@@ -250,7 +250,7 @@ var UITree = React.createClass({
     });
   },
 
-  dragStop(e) {
+  dragStop: function (e) {
 
     var Keys = {
       ENTER: 13,
@@ -273,7 +273,7 @@ var UITree = React.createClass({
     document.body.removeEventListener('keydown', this.dragStop);
   },
 
-  dragEnd() {
+  dragEnd: function () {
     this.setState({
       tempTree: null,
       dragging: {
@@ -317,7 +317,7 @@ var UITree = React.createClass({
     document.body.removeEventListener('keydown', this.dragStop);
   },
 
-  rollbackTree() {
+  rollbackTree: function () {
 
     var rollbackTree = this.state.tempTree;
     if (!rollbackTree) return;

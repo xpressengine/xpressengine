@@ -22,7 +22,7 @@ use Symfony\Component\Console\Input\InputArgument;
  *
  * ## 명령어 사용
  * ```
- * trash [<action>] [<wastes>]
+ * trash:empty [<action>] [<wastes>]
  * ```
  *
  * ### 등록된 휴지통(waste) 의 요약 정보
@@ -38,10 +38,10 @@ use Symfony\Component\Console\Input\InputArgument;
  * ### 등록된 휴지통(waste) 비우기
  * ```
  * // 전체 휴지통 비우기
- * php artisan trash clean
+ * php artisan trash empty
  *
  * // 게시판 휴지통 비우기
- * php artisan trash clean board
+ * php artisan trash empty board
  * ```
  *
  * @category    Commands
@@ -52,7 +52,7 @@ use Symfony\Component\Console\Input\InputArgument;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class Trash extends Command
+class TrashEmpty extends Command
 {
 
     /**
@@ -63,7 +63,7 @@ class Trash extends Command
     /**
      * @var string
      */
-    protected $description = '휴지통의 정보를 확인하고 휴지통을 비울 수 있습니다.';
+    protected $description = 'Find information about the recycle bin and can empty the recycle bin';
 
     /**
      * Create a new command instance.
@@ -86,7 +86,7 @@ class Trash extends Command
             case 'summary':
                 $this->summary($args);
                 break;
-            case 'clean':
+            case 'empty':
                 $this->clean($args);
                 break;
             default:
@@ -104,13 +104,13 @@ class Trash extends Command
      */
     private function clean($args)
     {
-        $this->info('아래의 휴지통을 비웁니다.');
+        $this->info('Empty the recycle bin below.');
         $this->info('----------------------------------');
         $this->summary($args);
         $this->info('----------------------------------');
 
-        if ($this->confirm('이 동작은 실행 취소할 수 없습니다. 게속하시겠습니까? [yes|no]') == false) {
-            $this->error('취소 되었습니다.');
+        if ($this->confirm('This action can not be undone. Do you want to continue? [yes|no]') == false) {
+            $this->error('canceled');
             return null;
         }
 
@@ -158,7 +158,7 @@ class Trash extends Command
         }
 
         if (count($wastes) == 0) {
-            $this->error('처리할 휴지통이 없습니다.');
+            $this->error('There is no recycle bin to be processed.');
         }
 
         return $wastes;
@@ -172,8 +172,8 @@ class Trash extends Command
     protected function getArguments()
     {
         return [
-            ['action', InputArgument::OPTIONAL, '"summary" 등록된 휴지통의 요약정보. "clean" 등록된 휴지통들을 비웁니다.', 'summary'],
-            ['wastes', InputArgument::OPTIONAL, '휴지통 이름. 콤마(,) 로 구분하여 여러개의 이름을 지정할 수 있다.'],
+            ['action', InputArgument::OPTIONAL, '"summary" Get summary. "empty" Empty recycle bin.', 'summary'],
+            ['wastes', InputArgument::OPTIONAL, 'Names of Recycle bin. It is possible to specify multiple names, separated by commas.'],
         ];
     }
 

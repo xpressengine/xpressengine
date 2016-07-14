@@ -284,6 +284,18 @@ class MenuHandler
     }
 
     /**
+     * Get menu item list by identifiers
+     *
+     * @param array $ids  menu item identifier list
+     * @param array $with relation
+     * @return MenuItem[]
+     */
+    public function getItemIn($ids, $with = [])
+    {
+        return $this->repo->fetchInItem((array)$ids, $with);
+    }
+
+    /**
      * Create new menu item
      *
      * @param Menu  $menu          menu instance
@@ -676,7 +688,9 @@ class MenuHandler
      */
     public function getInstanceSettingURIByItemId($itemId)
     {
-        $item = $this->repo->findItem($itemId);
+        if (!$item = $this->repo->findItem($itemId)) {
+            return null;
+        }
 
         return $this->getInstanceSettingURI($item);
     }

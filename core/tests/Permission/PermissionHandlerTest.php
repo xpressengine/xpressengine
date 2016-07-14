@@ -20,23 +20,7 @@ class PermissionHandlerTest extends \PHPUnit_Framework_TestCase
         m::close();
     }
 
-    public function testLoad()
-    {
-        list($repo) = $this->getMocks();
-        $instance = m::mock('Xpressengine\Permission\PermissionHandler[makeKeyForLoaded, find]', [$repo])
-            ->shouldAllowMockingProtectedMethods();
-
-        $mockPermission = m::mock('Xpressengine\Permission\Permission');
-
-        $instance->shouldReceive('makeKeyForLoaded')->once()
-            ->with('default', 'plugin.dummy')
-            ->andReturn('default-plugin.dummy');
-        $instance->shouldReceive('find')->once()->with('plugin.dummy', 'default')->andReturn($mockPermission);
-
-        $this->assertTrue($this->invokeMethod($instance, 'load', ['default', 'plugin.dummy']));
-    }
-
-    public function testFind()
+    public function testGet()
     {
         list($repo) = $this->getMocks();
         $instance = m::mock('Xpressengine\Permission\PermissionHandler[setAncestor]', [$repo])
@@ -47,7 +31,7 @@ class PermissionHandlerTest extends \PHPUnit_Framework_TestCase
         $instance->shouldReceive('setAncestor')->once()->with($mockPermission);
         $repo->shouldReceive('findByName')->once()->with('default', 'plugin.dummy')->andReturn($mockPermission);
 
-        $permission = $instance->find('plugin.dummy', 'default');
+        $permission = $instance->get('plugin.dummy', 'default');
 
         $this->assertEquals($mockPermission, $permission);
     }
@@ -69,18 +53,18 @@ class PermissionHandlerTest extends \PHPUnit_Framework_TestCase
         $this->invokeMethod($instance, 'setAncestor', [$mockPermission]);
     }
 
-    public function testFindOrNew()
+    public function testGetOrNew()
     {
         list($repo) = $this->getMocks();
-        $instance = m::mock('Xpressengine\Permission\PermissionHandler[find, setAncestor]', [$repo])
+        $instance = m::mock('Xpressengine\Permission\PermissionHandler[get, setAncestor]', [$repo])
             ->shouldAllowMockingProtectedMethods();
 
-        $instance->shouldReceive('find')->once()->with('plugin.dummy', 'default')->andReturnNull();
+        $instance->shouldReceive('get')->once()->with('plugin.dummy', 'default')->andReturnNull();
         $instance->shouldReceive('setAncestor')->once()->with(m::on(function ($permission) {
             return $permission instanceof Permission;
         }));
 
-        $permission = $instance->findOrNew('plugin.dummy', 'default');
+        $permission = $instance->getOrNew('plugin.dummy', 'default');
 
         $this->assertEquals('default', $permission->siteKey);
         $this->assertEquals('plugin.dummy', $permission->name);
@@ -113,7 +97,7 @@ class PermissionHandlerTest extends \PHPUnit_Framework_TestCase
     public function testRegisterExecutedUpdateWhenNotExists()
     {
         list($repo) = $this->getMocks();
-        $instance = m::mock('Xpressengine\Permission\PermissionHandler[findOrNew]', [$repo])
+        $instance = m::mock('Xpressengine\Permission\PermissionHandler[getOrNew]', [$repo])
             ->shouldAllowMockingProtectedMethods();
 
         $grant = new Grant();
@@ -128,7 +112,7 @@ class PermissionHandlerTest extends \PHPUnit_Framework_TestCase
         $mockPermission->exists = true;
         $mockPermission->shouldReceive('setGrant')->once()->with($grant)->andReturnNull();
 
-        $instance->shouldReceive('findOrNew')->once()->with('plugin.dummy', 'default')->andReturn($mockPermission);
+        $instance->shouldReceive('getOrNew')->once()->with('plugin.dummy', 'default')->andReturn($mockPermission);
 
         $repo->shouldReceive('update')->once()->with($mockPermission)->andReturn($mockPermission);
 
@@ -138,12 +122,12 @@ class PermissionHandlerTest extends \PHPUnit_Framework_TestCase
     public function testDestory()
     {
         list($repo) = $this->getMocks();
-        $instance = m::mock('Xpressengine\Permission\PermissionHandler[find]', [$repo])
+        $instance = m::mock('Xpressengine\Permission\PermissionHandler[get]', [$repo])
             ->shouldAllowMockingProtectedMethods();
 
         $mockPermission = m::mock('Xpressengine\Permission\Permission');
 
-        $instance->shouldReceive('find')->once()->with('plugin.dummy', 'default')->andReturn($mockPermission);
+        $instance->shouldReceive('get')->once()->with('plugin.dummy', 'default')->andReturn($mockPermission);
         $repo->shouldReceive('delete')->once()->with($mockPermission);
 
         $instance->destroy('plugin.dummy', 'default');

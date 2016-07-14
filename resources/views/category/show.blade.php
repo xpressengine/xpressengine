@@ -2,7 +2,7 @@
 [
 '/assets/vendor/jqueryui/jquery-ui.min.css',
 '/assets/core/lang/LangEditorBox.css',
-'/assets/core/lang/flag.css'
+'/assets/core/xe-ui-component/xe-ui-component.css'
 ]
 )->load() }}
 

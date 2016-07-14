@@ -33,6 +33,7 @@ class LangPreprocessor
             $locale = $request->cookie('locale', app('xe.translator')->getLocale());
         }
         app()->setLocale($locale);
+        app('cookie')->queue(cookie()->forever('locale', $locale));
 
         app('router')->matched(function($route, $request) use($locale) {
             $key = self::class.'://'.$request->method().'/'.$route->getPath().'/'.$locale;
@@ -46,8 +47,6 @@ class LangPreprocessor
         /** @var Response $response */
         $response = $next($request);
 
-        // set locale to cookie of response
-        $response->withCookie(cookie()->forever('locale', $locale));
 
         if ($request->has('xe_use_request_preprocessor') && $this->available()) {
             $this->conduct($request);

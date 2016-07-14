@@ -59,7 +59,7 @@ class MediaServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('xe.media', function ($app) {
+        $this->app->singleton([MediaManager::class => 'xe.media'], function ($app) {
             $config = $app['config']['xe.media'];
             $proxyClass = $app['xe.interception']->proxy(MediaManager::class, 'XeMedia');
             $mediaManager = new $proxyClass($app['xe.storage'], new CommandFactory(), $config['thumbnail']);
@@ -89,7 +89,7 @@ class MediaServiceProvider extends ServiceProvider
             ));
 
             return $mediaManager;
-        }, true);
+        });
 
 
         $this->registerEvent();

@@ -112,7 +112,7 @@ class CSSFileTest extends \PHPUnit_Framework_TestCase {
         $cssfile = new CSSFileStub('path/to/file1.css');
         $cssfile->min('path/to/file1.min.css')->load();
 
-        $output = $cssfile->output(true);
+        $output = $cssfile->output('head.append', true);
 
         $this->assertEquals('<link href="path/to/file1.min.css" type="text/css" rel="stylesheet" media="all">', trim($output));
     }

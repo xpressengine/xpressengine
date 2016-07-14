@@ -72,6 +72,7 @@ class Html
      * 주어진 위치에 해당하는 로드된 JS파일 목록을 출력한다.
      *
      * @param string $location 출력할 파일의 위치 (head.append|head.prepend|body.append|body.prepend)
+     *
      * @return string
      */
     public static function output($location)
@@ -87,7 +88,10 @@ class Html
         array_map(
             function ($alias) use ($list, &$output) {
                 $htmlObj = $list[$alias];
-                $output .= "<!-- $alias -->".PHP_EOL.$htmlObj->render();
+                if (is_string($alias)) {
+                    $output .= "<!-- $alias -->".PHP_EOL;
+                }
+                $output .= $htmlObj->render();
             },
             $sorted
         );
@@ -101,6 +105,7 @@ class Html
      *
      * @param array  $htmlList js file의 목록
      * @param Sorter $sorter   우선순위 정렬을 위한 sorter
+     *
      * @return void
      */
     public static function init($htmlList = [], $sorter = null)
@@ -126,6 +131,7 @@ class Html
      * content
      *
      * @param string $content content
+     *
      * @return $this
      */
     public function content($content)
@@ -213,6 +219,7 @@ class Html
      * key resolver
      *
      * @param string $alias alias
+     *
      * @return string
      */
     protected function resolveKey($alias)

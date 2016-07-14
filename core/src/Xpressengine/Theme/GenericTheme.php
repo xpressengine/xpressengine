@@ -72,15 +72,16 @@ abstract class GenericTheme extends AbstractTheme
     }
 
     /**
-     * get theme info
+     * retrieve theme info from info.php file
      *
-     * @param null $key
+     * @param string $key     info field
+     * @param mixed  $default default value
      *
      * @return array
      */
-    protected static function info($key = null, $default = null)
+    public static function info($key = null, $default = null)
     {
-        if(static::$info === null) {
+        if (static::$info === null) {
             static::$info = include(base_path(static::getPath().'/'.'info.php'));
         }
 
@@ -130,7 +131,7 @@ abstract class GenericTheme extends AbstractTheme
     /**
      * return content of setting page
      *
-     * @param ConfigEntity $config
+     * @param ConfigEntity $config config data
      *
      * @return \Illuminate\Contracts\View\View|void
      */
@@ -152,7 +153,7 @@ abstract class GenericTheme extends AbstractTheme
     /**
      * updateConfig
      *
-     * @param array $config
+     * @param array $config pure config data
      *
      * @return array
      */
@@ -162,9 +163,9 @@ abstract class GenericTheme extends AbstractTheme
 
         // 파일만 별도 처리
         foreach ($config as $key => $item) {
-            if($item instanceof UploadedFile) {
+            if ($item instanceof UploadedFile) {
                 array_set($config, $key, $this->saveFile($configId, $key, $item));
-            } elseif($item === null) {
+            } elseif ($item === null) {
                 unset($config[$key]);
             }
         }
@@ -174,9 +175,9 @@ abstract class GenericTheme extends AbstractTheme
     /**
      * setting 과정에서 upload되는 파일을 저장한다.
      *
-     * @param              $configId
-     * @param              $key
-     * @param UploadedFile $file
+     * @param string       $configId config id
+     * @param string       $key      config field key
+     * @param UploadedFile $file     file
      *
      * @return array
      */
@@ -186,7 +187,7 @@ abstract class GenericTheme extends AbstractTheme
         $oldFileId = $oldSetting->get("$key.id");
 
         // remove old file
-        if($oldFileId !== null) {
+        if ($oldFileId !== null) {
             $oldFile = File::find($oldFileId);
             if ($oldFile) {
                 app('xe.storage')->remove($oldFile);
@@ -194,10 +195,14 @@ abstract class GenericTheme extends AbstractTheme
         }
 
         // save new file
-        $file = app('xe.storage')->upload($file, config('xe.theme.upload.path').$configId, config('xe.theme.upload.disk'));
+        $file = app('xe.storage')->upload(
+            $file,
+            config('xe.theme.upload.path').$configId,
+            config('xe.theme.upload.disk')
+        );
         $saved = [
-            'id'=>$file->id,
-            'filename'=>$file->clientname
+            'id' => $file->id,
+            'filename' => $file->clientname
         ];
 
         $mediaFile = null;
@@ -210,10 +215,10 @@ abstract class GenericTheme extends AbstractTheme
     }
 
     /**
-     * makeConfigView
+     * info.php에 등록돼 있는 setting 폼 리스트를 가져와 form을 생성하여 반환한다.
      *
-     * @param array        $info
-     * @param ConfigEntity $old
+     * @param array        $info setting form info
+     * @param ConfigEntity $old  old config data
      *
      * @return string
      */
@@ -226,7 +231,7 @@ abstract class GenericTheme extends AbstractTheme
     /**
      * get and set config
      *
-     * @param ConfigEntity $config
+     * @param ConfigEntity|null $config config data
      *
      * @return ConfigEntity
      */
@@ -255,13 +260,13 @@ abstract class GenericTheme extends AbstractTheme
     /**
      * view name을 반환한다. 템플릿 파일 작성시 편의를 위해 사용한다.
      *
-     * @param string $view
+     * @param string $view view name
      *
      * @return string
      */
     public static function view($view)
     {
-        $view = str_replace('/','.', static::$path).".views.$view";
+        $view = str_replace('/', '.', static::$path).".views.$view";
         return $view;
     }
 }

@@ -16,6 +16,7 @@ namespace Xpressengine\Tag;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\QueryException;
 
 /**
  * # TagHandler
@@ -113,14 +114,14 @@ class TagHandler
 
         // 넘겨준 태그와 대상 아이디를 연결
         $tags = $this->multisort($words, $tags->all());
-        $this->relate($taggableId, $tags);
+        $this->attach($taggableId, $tags);
 
         // 이전에 대상 아이디에 연결된 태그중
         // 전달된 단어 해당하는 태그가 없는경우 연결 해제 처리
         $olds = $model::getByTaggable($taggableId);
         $removes = $olds->diff($tags);
 
-        $this->unrelate($taggableId, $removes);
+        $this->detach($taggableId, $removes);
 
         return $model->newCollection($tags);
     }
@@ -147,13 +148,13 @@ class TagHandler
     }
 
     /**
-     * Relating tag to taggable
+     * Attach tag to taggable
      *
      * @param string             $taggableId taggable id
      * @param \ArrayAccess|array $tags       tag instances
      * @return void
      */
-    protected function relate($taggableId, $tags)
+    protected function attach($taggableId, $tags)
     {
         $position = 0;
         /** @var Tag $tag */
@@ -171,7 +172,11 @@ class TagHandler
                 ]);
 
                 $tag->increment('count');
-            } catch (\Exception $e) {
+            } catch (QueryException $e) {
+                if ($e->getCode() != "23000") {
+                    throw $e;
+                }
+
                 $conn->table($tag->getTaggableTable())
                     ->where('tagId', $tag->getKey())
                     ->where('taggableId', $taggableId)
@@ -183,13 +188,13 @@ class TagHandler
     }
 
     /**
-     * Unrelating tag to taggable
+     * Detach tag to taggable
      *
      * @param string             $taggableId taggable id
      * @param \ArrayAccess|array $tags       tag instances
      * @return void
      */
-    protected function unrelate($taggableId, $tags)
+    protected function detach($taggableId, $tags)
     {
         /** @var Tag $tag */
         foreach ($tags as $tag) {

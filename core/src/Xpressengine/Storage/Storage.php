@@ -14,6 +14,7 @@
 namespace Xpressengine\Storage;
 
 use Illuminate\Database\Query\Expression;
+use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Xpressengine\User\UserInterface;
 use Xpressengine\User\GuardInterface as Authenticator;
@@ -395,6 +396,34 @@ class Storage
     }
 
     /**
+     * Sync fileable's files to fileable
+     *
+     * @param string $fileableId fileable identifier
+     * @param array  $fileIds    file identifier
+     * @return void
+     */
+    public function sync($fileableId, $fileIds = [])
+    {
+        $fileIds = is_array($fileIds) ? $fileIds : [$fileIds];
+
+        $model = $this->createModel();
+        $files = $model->newQuery()->whereIn('id', $fileIds)->get();
+        $olds = $model->getByFileable($fileableId)->getDictionary();
+
+        foreach ($files as $file) {
+            if (!isset($olds[$file->getKey()])) {
+                $this->bind($fileableId, $file);
+            } else {
+                unset($olds[$file->getKey()]);
+            }
+        }
+
+        foreach ($olds as $old) {
+            $this->unBind($fileableId, $old, true);
+        }
+    }
+
+    /**
      * make path name
      *
      * @param string $id   identifier
@@ -480,13 +509,25 @@ class Storage
     }
 
     /**
+     * Returns model class
+     *
+     * @return string
+     */
+    public function getModel()
+    {
+        return File::class;
+    }
+
+    /**
      * create file model
      *
      * @return File
      */
     public function createModel()
     {
-        return new File;
+        $class = $this->getModel();
+
+        return new $class;
     }
 
     /**

@@ -50,6 +50,18 @@
             case "gd" :
                 $result = extension_loaded('gd');
                 break;
+
+            case "mbstring" :
+                $result = extension_loaded('mbstring');
+                break;
+
+            case "openssl" :
+                $result = extension_loaded('openssl');
+                break;
+
+            case "zip" :
+                $result = extension_loaded('zip');
+                break;
         }
 
         echo json_encode([
@@ -63,10 +75,40 @@
     $https = isset($_SERVER['HTTPS']) ? $_SERVER['HTTPS'] : '';
     $schema = !empty($https) && 'off' !== strtolower($https) ? 'https' : 'http';
     $url = $schema.'://'.$_SERVER['SERVER_NAME'];
+    $subdir = trim(str_replace('web_installer/index.php', '', $_SERVER['SCRIPT_NAME']), '/');
+    if (!empty($subdir)) {
+        $url .= '/' . $subdir;
+    }
 
-    $locale = isset($_COOKIE['locale']) ? $_COOKIE['locale'] : 'ko';
-    $filePath = 'lang' . DIRECTORY_SEPARATOR . $locale . '.php';
-    $langs = file_exists($filePath) ? require $filePath : [];
+    $supportLocales = getAllLangFileNames();
+    $allLangs = [];
+    foreach ($supportLocales as $locale) {
+        $allLangs[$locale] = require getLangFilePath($locale);
+    }
+
+    $locale = 'ko';
+    if (isset($_COOKIE['install_locale']) && file_exists(getLangFilePath($_COOKIE['install_locale'])) === true) {
+        $locale = $_COOKIE['install_locale'];
+    }
+    $langs = $allLangs[$locale];
+
+    function getAllLangFileNames()
+    {
+        $names = [];
+        foreach (scandir('lang') as $name) {
+            $parts = pathinfo($name);
+            if ($parts['extension'] != 'php') {
+                continue;
+            }
+
+            $names[] = $parts['filename'];
+        }
+        return $names;
+    }
+
+    function getLangFilePath($locale) {
+        return 'lang' . DIRECTORY_SEPARATOR . $locale . '.php';
+    }
 
     function trans($key) {
         global $langs;
@@ -91,7 +133,7 @@
     <link rel="stylesheet" href="../assets/core/xe-ui-component/xe-ui-component.css">
 
     <link rel="stylesheet" href="../assets/core/common/css/install.css">
-    <link rel="stylesheet" href="http://cdn.jsdelivr.net/xeicon/2.0.0/xeicon.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/xeicon/2.0.0/xeicon.min.css">
 </head>
 
 <body>
@@ -126,8 +168,13 @@
             <div class="xe-dropdown">
                 <button class="xe-btn" type="button" data-toggle="xe-dropdown">Language</button>
                 <ul class="xe-dropdown-menu">
-                    <li><a href="#" class="__xe_locale_item" data-locale="ko"><i class="south korea xe-flag"></i>korea</a></li>
-                    <li><a href="#" class="__xe_locale_item" data-locale="en"><i class="united states xe-flag"></i>United States</a></li>
+                    <?php
+                    foreach ($allLangs as $key => $value) {
+                    ?>
+                    <li><a href="#" class="__xe_locale_item" data-locale="<?=$key?>"><i class="country-code"></i><?=$value['localeExpression']?></a></li>
+                    <?php
+                    }
+                    ?>
                 </ul>
             </div>
 
@@ -163,9 +210,10 @@
         </div>
     </div>
 
-    
+
     <div class="content __xe_step" data-step="3" style="display: none;">
         <form action="../install/post" method="post">
+            <input type="hidden" name="locale" value="<?=$locale?>">
             <h2>Database</h2>
             <table>
                 <colgroup>
@@ -280,6 +328,10 @@
             check('<?=trans('checkPHPExtCURL')?>', 'curl');
             check('<?=trans('checkPHPExtMCRYPT')?>', 'mcrypt');
             check('<?=trans('checkPHPExtGD')?>', 'gd');
+            check('<?=trans('checkPHPExtMBSTRING')?>', 'mbstring');
+            check('<?=trans('checkPHPExtOPENSSL')?>', 'openssl');
+            check('<?=trans('checkPHPExtZIP')?>', 'zip');
+
             this.checked = true;
         },
         goto: function (step) {
@@ -377,7 +429,7 @@
                 return false;
             }
         }
-        
+
         if ($(f['admin_password']).val() !== $(f['admin_password_confirmation']).val()) {
             alert('비밀번호가 일치하지 않습니다.');
             $(f['admin_password_confirmation']).focus();
@@ -392,7 +444,7 @@
     $(function () {
         $('.__xe_locale_item').click(function (e) {
             e.preventDefault();
-            setCookie('locale', $(this).data('locale'), 365);
+            setCookie('install_locale', $(this).data('locale'), 24);
             location.reload();
         });
 

@@ -18,7 +18,6 @@ use Illuminate\Contracts\Support\Renderable;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Plugin\ComponentInterface;
 use Xpressengine\Plugin\ComponentTrait;
-use Xpressengine\Plugins\Alice\Alice;
 use Xpressengine\Support\MobileSupportTrait;
 
 /**
@@ -40,7 +39,7 @@ abstract class AbstractTheme implements ComponentInterface, Renderable
     /**
      * @var ThemeHandler
      */
-    protected static $handler  = null;
+    protected static $handler = null;
 
     /**
      * @var ConfigEntity
@@ -117,7 +116,7 @@ abstract class AbstractTheme implements ComponentInterface, Renderable
      * 사이트관리자가 테마 설정 페이지에서 저장 요청을 할 경우, 테마핸들러가 설정값을 저장하기 전에 이 메소드가 실행된다.
      * 설정값을 보완할 필요가 있을 경우 이 메소드에서 보완하여 다시 반환하면 된다.
      *
-     * @param array $config
+     * @param array $config pure config data
      *
      * @return array
      */
@@ -129,13 +128,13 @@ abstract class AbstractTheme implements ComponentInterface, Renderable
     /**
      * set or get config info
      *
-     * @param ConfigEntity|null $config
+     * @param ConfigEntity|null $config config data
      *
      * @return ConfigEntity|void
      */
     public function setting(ConfigEntity $config = null)
     {
-        if($config !== null) {
+        if ($config !== null) {
             $this->config = $config;
         }
         return $this->config;

@@ -3,7 +3,7 @@
 <div class="member find-password">
     <h1>{{xe_trans('xe::changePassword')}}</h1>
 
-    <p class="sub-text">{{xe_tans('xe::changePasswordDescription')}}</p>
+    <p class="sub-text">{{xe_trans('xe::changePasswordDescription')}}</p>
 
     <form role="form" method="POST" action="{{ route('auth.password') }}">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">

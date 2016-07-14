@@ -41,10 +41,11 @@ use Illuminate\Database\Eloquent\Builder as OriginBuilder;
  * @property integer commentCount
  * @property integer assentCount
  * @property integer dissentCount
- * @property string approved
- * @property string published
- * @property string status
- * @property string display
+ * @property integer approved
+ * @property integer published
+ * @property integer status
+ * @property integer display
+ * @property integer format
  * @property string locale
  * @property string title
  * @property string content
@@ -77,9 +78,17 @@ class Document extends DynamicModel
 
     protected $fillable = [
         'parentId', 'instanceId', 'userId', 'writer', 'approved',
-        'published', 'status', 'display', 'locale', 'title',
+        'published', 'status', 'display', 'format', 'locale', 'title',
         'content', 'pureContent', 'createdAt', 'publishedAt', 'head', 'reply',
         'listOrder', 'ipaddress', 'userType', 'certifyKey', 'email',
+    ];
+
+    protected $casts = [
+        'status' => 'int',
+        'approved' => 'int',
+        'published' => 'int',
+        'display' => 'int',
+        'format' => 'int',
     ];
 
     /**
@@ -100,38 +109,41 @@ class Document extends DynamicModel
     protected static $replyCharLen = 3;
 
     // status
-    const STATUS_PUBLIC = 'public';
-    const STATUS_PRIVATE = 'private';
-    const STATUS_TEMP = 'temp';
-    const STATUS_TRASH = 'trash';
-    const STATUS_NOTICE = 'notice';
+    const STATUS_TRASH = 0;
+    const STATUS_TEMP = 10;
+    const STATUS_PRIVATE = 20;
+    const STATUS_PUBLIC = 30;
+    const STATUS_NOTICE = 50;
 
     // approved
-    const APPROVED_APPROVED = 'approved';
-    const APPROVED_WAITING = 'waiting';
-    const APPROVED_REJECTED = 'rejected';
+    const APPROVED_REJECTED = 0;
+    const APPROVED_WAITING = 10;
+    const APPROVED_APPROVED = 30;
 
     // published
-    const PUBLISHED_PUBLISHED = 'published';
-    const PUBLISHED_RESERVED = 'reserved';
-    const PUBLISHED_WAITING = 'waiting';
-    const PUBLISHED_REJECTED = 'rejected';
+    const PUBLISHED_REJECTED = 0;
+    const PUBLISHED_WAITING = 10;
+    const PUBLISHED_RESERVED = 20;
+    const PUBLISHED_PUBLISHED = 30;
 
     // display
-    const DISPLAY_VISIBLE = 'visible';
-    const DISPLAY_SECRET = 'secret';
-    const DISPLAY_HIDDEN = 'hidden';
+    const DISPLAY_HIDDEN = 0;
+    const DISPLAY_SECRET = 10;
+    const DISPLAY_VISIBLE = 20;
+
+    const FORMAT_NONE = 0;
+    const FORMAT_HTML = 10;
 
     // user type
+    const USER_TYPE_GUEST = 'guest';
+    const USER_TYPE_ANONYMITY = 'anonymity';
     const USER_TYPE_NORMAL = 'normal';
     const USER_TYPE_USER = 'user';
-    const USER_TYPE_ANONYMITY = 'anonymity';
-    const USER_TYPE_GUEST = 'guest';
 
     /**
      * @var array
      */
-    protected $status = [
+    protected $statuses = [
         self::STATUS_PUBLIC,
         self::STATUS_PRIVATE,
         self::STATUS_TEMP,
@@ -142,7 +154,7 @@ class Document extends DynamicModel
     /**
      * @var array
      */
-    protected $display = [
+    protected $displays = [
         self::DISPLAY_VISIBLE,
         self::DISPLAY_SECRET,
         self::DISPLAY_HIDDEN,
@@ -151,7 +163,7 @@ class Document extends DynamicModel
     /**
      * @var array
      */
-    protected $approved = [
+    protected $approves = [
         self::APPROVED_APPROVED,
         self::APPROVED_WAITING,
         self::APPROVED_REJECTED,
@@ -160,7 +172,7 @@ class Document extends DynamicModel
     /**
      * @var array
      */
-    protected $published = [
+    protected $publishes = [
         self::PUBLISHED_PUBLISHED,
         self::PUBLISHED_RESERVED,
         self::PUBLISHED_WAITING,
@@ -311,7 +323,7 @@ class Document extends DynamicModel
             $attributes['reply'] = '';
         }
         if (empty($attributes['locale']) === true) {
-            $attributes['locale'] = 'default';
+            $attributes['locale'] = '';
         }
 
         return $attributes;
@@ -443,7 +455,7 @@ class Document extends DynamicModel
     public function setApproved($approved)
     {
         $approved = strtolower($approved);
-        if (in_array($approved, $this->approved) === false) {
+        if (in_array($approved, $this->approves) === false) {
             throw new NotAllowedTypeException(['type' => $approved, 'to' => 'Approved']);
         }
         $this->setAttribute('approved', $approved);
@@ -458,7 +470,7 @@ class Document extends DynamicModel
     public function setDisplay($display)
     {
         $display = strtolower($display);
-        if (in_array($display, $this->display) === false) {
+        if (in_array($display, $this->displays) === false) {
             throw new NotAllowedTypeException(['type' => $display, 'to' => 'Display']);
         }
         $this->setAttribute('display', $display);
@@ -473,7 +485,7 @@ class Document extends DynamicModel
     public function setStatus($status)
     {
         $status = strtolower($status);
-        if (in_array($status, $this->status) === false) {
+        if (in_array($status, $this->statuses) === false) {
             throw new NotAllowedTypeException(['type' => $status, 'to' => 'Status']);
         }
         $this->setAttribute('status', $status);
@@ -489,7 +501,7 @@ class Document extends DynamicModel
     public function setPublished($published)
     {
         $published = strtolower($published);
-        if (in_array($published, $this->published) === false) {
+        if (in_array($published, $this->publishes) === false) {
             throw new NotAllowedTypeException(['type' => $published, 'to' => 'Published']);
         }
         $this->setAttribute('published', $published);

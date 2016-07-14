@@ -78,19 +78,16 @@
         ]
     },
     "scripts": {
-        "pre-install-cmd": [
-            "Xpressengine\\Plugin\\Composer\\Composer::requireBasePlugins"
-        ],
-        "pre-update-cmd": [
-            "Xpressengine\\Plugin\\Composer\\Composer::requireBasePlugins"
+        "command": [
+            "Xpressengine\\Plugin\\Composer\\Composer::init"
         ],
         "post-install-cmd": [
-            "Xpressengine\\Plugin\\Composer\\Composer::resolvePlugins",
+            "Xpressengine\\Plugin\\Composer\\Composer::postUpdate",
             "php artisan clear-compiled",
             "php artisan optimize"
         ],
         "post-update-cmd": [
-          "Xpressengine\\Plugin\\Composer\\Composer::resolvePlugins",
+          "Xpressengine\\Plugin\\Composer\\Composer::postUpdate",
           "php artisan clear-compiled",
             "php artisan optimize"
         ],
@@ -102,7 +99,6 @@
         ]
     },
     "config": {
-        "preferred-install": "dist",
-        "secure-http": false
+        "preferred-install": "dist"
     }
 }

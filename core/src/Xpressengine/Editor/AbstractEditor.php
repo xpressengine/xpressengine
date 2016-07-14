@@ -13,10 +13,17 @@
  */
 namespace Xpressengine\Editor;
 
+use Illuminate\Contracts\Events\Dispatcher;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Plugin\ComponentInterface;
 use Xpressengine\Plugin\ComponentTrait;
+use Xpressengine\Skin\SkinHandler;
 use Xpressengine\Support\MobileSupportTrait;
+use Xpressengine\Permission\Instance;
+use Xpressengine\Presenter\Html\FrontendHandler;
+use Illuminate\Contracts\Routing\UrlGenerator;
+use Illuminate\Contracts\Auth\Access\Gate;
+use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Class AbstractEditor
@@ -40,6 +47,41 @@ abstract class AbstractEditor implements ComponentInterface
     protected $editors;
 
     /**
+     * UrlGenerator instance
+     *
+     * @var UrlGenerator
+     */
+    protected $urls;
+
+    /**
+     * Gate instance
+     *
+     * @var Gate
+     */
+    protected $gate;
+
+    /**
+     * SkinHandler instance
+     *
+     * @var SkinHandler
+     */
+    protected $skins;
+
+    /**
+     * Dispatcher instance
+     *
+     * @var Dispatcher
+     */
+    protected $events;
+
+    /**
+     * FrontendHandler instance
+     *
+     * @var FrontendHandler
+     */
+    protected $frontend;
+
+    /**
      * Instance identifier
      *
      * @var string
@@ -61,6 +103,20 @@ abstract class AbstractEditor implements ComponentInterface
     protected $arguments = [];
 
     /**
+     * Options for the editor
+     *
+     * @var null
+     */
+    protected $options = null;
+
+    /**
+     * Used files
+     *
+     * @var array
+     */
+    protected $files = [];
+
+    /**
      * Indicates if used only javascript.
      *
      * @var bool
@@ -75,40 +131,146 @@ abstract class AbstractEditor implements ComponentInterface
     protected $tools;
 
     /**
-     * Default editor options
+     * The image resolver
+     *
+     * @var callable
+     */
+    protected static $imageResolver;
+
+    /**
+     * Default editor arguments
      *
      * @var array
      */
-    protected $defaultOptions = [
+    protected $defaultArguments = [
+        'content' => '',
         'contentDomName' => 'content',
         'contentDomId' => 'xeContentEditor',
         'contentDomOptions' => [
             'class' => 'form-control',
-            'rows' => '20',
-            'cols' => '80'
-        ],
-        'editorOptions' => [],
+        ]
     ];
 
     /**
-     * The config resolver
+     * The file input name
      *
-     * @var callable
+     * @var string
      */
-    protected static $configResolver;
+    protected $fileInputName = '_files';
+
+    /**
+     * The tag input name
+     *
+     * @var string
+     */
+    protected $tagInputName = '_tags';
+
+    /**
+     * The mention input name
+     *
+     * @var string
+     */
+    protected $mentionInputName = '_mentions';
+
+    /**
+     * The file class name
+     *
+     * @var string
+     */
+    protected $fileClassName = '__xe_file';
+
+    /**
+     * The image class name
+     *
+     * @var string
+     */
+    protected $imageClassName = '__xe_image';
+
+    /**
+     * The tag class name
+     *
+     * @var string
+     */
+    protected $tagClassName = '__xe_hashtag';
+
+    /**
+     * The mention class name
+     *
+     * @var string
+     */
+    protected $mentionClassName = '__xe_mention';
+
+    /**
+     * The file identifier attribute name
+     *
+     * @var string
+     */
+    protected $fileIdentifierAttrName = 'data-id';
+
+    /**
+     * The image identifier attribute name
+     *
+     * @var string
+     */
+    protected $imageIdentifierAttrName = 'data-id';
+
+    /**
+     * The mention identifier attribute name
+     *
+     * @var string
+     */
+    protected $mentionIdentifierAttrName = 'data-id';
 
     /**
      * AbstractEditor constructor.
      *
-     * @param EditorHandler $editors    EditorHandler instance
-     * @param string        $instanceId Instance identifier
+     * @param EditorHandler   $editors    EditorHandler instance
+     * @param UrlGenerator    $urls       UrlGenerator instance
+     * @param Gate            $gate       Gate instance
+     * @param SkinHandler     $skins      SkinHandler instance
+     * @param Dispatcher      $events     Dispatcher instance
+     * @param FrontendHandler $frontend   FrontendHandler instance
+     * @param string          $instanceId Instance identifier
      */
-    public function __construct(EditorHandler $editors, $instanceId)
-    {
+    public function __construct(
+        EditorHandler $editors,
+        UrlGenerator $urls,
+        Gate $gate,
+        SkinHandler $skins,
+        Dispatcher $events,
+        FrontendHandler $frontend,
+        $instanceId
+    ) {
         $this->editors = $editors;
+        $this->urls = $urls;
+        $this->gate = $gate;
+        $this->skins = $skins;
+        $this->events = $events;
+        $this->frontend = $frontend;
         $this->instanceId = $instanceId;
+    }
 
-        $this->config = $this->resolveConfig($instanceId);
+    /**
+     * Set config for the editor
+     *
+     * @param ConfigEntity $config config instance
+     * @return $this
+     */
+    public function setConfig(ConfigEntity $config)
+    {
+        $this->config = $config;
+
+        return $this;
+    }
+
+    /**
+     * Get config for the editor
+     *
+     * @return null|ConfigEntity
+     */
+    public function getConfig()
+    {
+        return $this->config;
     }
 
     /**
@@ -129,50 +291,24 @@ abstract class AbstractEditor implements ComponentInterface
     }
 
     /**
-     * Get options
+     * Get arguments for the editor
      *
      * @return array
      */
-    protected function getOptions()
+    public function getArguments()
     {
-        return array_merge($this->defaultOptions, $this->arguments);
+        return array_merge($this->defaultArguments, $this->arguments);
     }
 
     /**
-     * Set the config resolver
+     * Set files the editor used
      *
-     * @param callable $resolver config resolver
+     * @param array $files file instances
      * @return void
      */
-    public static function setConfigResolver(callable $resolver)
+    public function setFiles($files = [])
     {
-        static::$configResolver = $resolver;
-    }
-
-    /**
-     * Resolve a config instance
-     *
-     * @param string $instanceId instance identifier
-     * @return ConfigEntity|null
-     */
-    protected function resolveConfig($instanceId)
-    {
-        if (!static::$configResolver) {
-            return null;
-        }
-
-        return call_user_func(static::$configResolver, static::getConfigKey($instanceId));
-    }
-
-    /**
-     * Get a key string for the config
-     *
-     * @param string $instanceId instance identifier
-     * @return string
-     */
-    public static function getConfigKey($instanceId)
-    {
-        return static::getId() . '.' . $instanceId;
+        $this->files = $files;
     }
 
     /**
@@ -183,18 +319,120 @@ abstract class AbstractEditor implements ComponentInterface
     abstract public function getName();
 
     /**
-     * Get config data for the editor
+     * Determine if a editor html usable.
+     *
+     * @return boolean
+     */
+    abstract public function htmlable();
+
+    /**
+     * Get options
      *
      * @return array
      */
-    abstract public function getConfigData();
+    public function getOptions()
+    {
+        if (!$this->options) {
+            $this->options = $this->buildOptions();
+        }
+
+        return $this->options;
+    }
+
+    /**
+     * Build options
+     *
+     * @return array
+     */
+    protected function buildOptions()
+    {
+        $this->events->fire('xe.editor.option.building', $this);
+
+        $options = array_merge($this->getStaticOption(), $this->getDynamicOption());
+
+        $this->events->fire('xe.editor.option.builded', $this);
+
+        return $options;
+    }
+
+    /**
+     * Get static option data for the editor
+     *
+     * @return array
+     */
+    protected function getStaticOption()
+    {
+        $routeParam = ['instanceId' => $this->instanceId];
+        return [
+            'fileUpload' => [
+                'upload_url' => $this->urls->route('editor.file.upload', $routeParam),
+                'source_url' => $this->urls->route('editor.file.source', $routeParam),
+                'download_url' => $this->urls->route('editor.file.download', $routeParam),
+                'destroy_url' => $this->urls->route('editor.file.destroy', $routeParam),
+            ],
+            'suggestion' => [
+                'hashtag_api' => $this->urls->route('editor.hashTag'),
+                'mention_api' => $this->urls->route('editor.mention'),
+            ],
+            'names' => [
+                'file' => [
+                    'input' => $this->getFileInputName(),
+                    'class' => $this->getFileClassName(),
+                    'identifier' => $this->getFileIdentifierAttrName(),
+                    'image' => [
+                        'class' => $this->getImageClassName(),
+                        'identifier' => $this->getImageIdentifierAttrName(),
+                    ]
+                ],
+                'tag' => [
+                    'input' => $this->getTagInputName(),
+                    'class' => $this->getTagClassName(),
+                ],
+                'mention' => [
+                    'input' => $this->getMentionInputName(),
+                    'class' => $this->getMentionClassName(),
+                    'identifier' => $this->getMentionIdentifierAttrName(),
+                ],
+            ]
+        ];
+    }
+
+    /**
+     * Get dynamic option data for the editor
+     *
+     * @return array
+     */
+    protected function getDynamicOption()
+    {
+        $data = array_except($this->config->all(), 'tools');
+        $data['fontFamily'] = isset($data['fontFamily']) ? array_map(function ($v) {
+            return trim($v);
+        }, explode(',', $data['fontFamily'])) : [];
+        $data['extensions'] = isset($data['extensions']) ? array_map(function ($v) {
+            return trim($v);
+        }, explode(',', $data['extensions'])) : [];
+        $data['extensions'] = array_search('*', $data['extensions']) !== false ? ['*'] : $data['extensions'];
+        $instance = new Instance($this->editors->getPermKey($this->instanceId));
+        $data['perms'] = [
+            'html' => $this->gate->allows('html', $instance),
+            'tool' => $this->gate->allows('tool', $instance),
+            'upload' => $this->gate->allows('upload', $instance),
+        ];
+
+        $data['files'] = $this->files;
+
+        return $data;
+    }
 
     /**
      * Get activated tool's identifier for the editor
      *
      * @return array
      */
-    abstract public function getActivateToolIds();
+    public function getActivateToolIds()
+    {
+        return $this->config->get('tools', []);
+    }
 
     /**
      * Load tools
@@ -234,46 +472,69 @@ abstract class AbstractEditor implements ComponentInterface
      */
     public function render()
     {
+        $this->events->fire('xe.editor.render', $this);
+
         $this->loadTools();
 
-        $htmlString = [];
+        $htmlString = '';
         if ($this->scriptOnly === false) {
-            $options = $this->getOptions();
-
-            $htmlString[] = $this->getContentHtml(array_get($options, 'content'), $options);
-            $htmlString[] = $this->getEditorScript($options);
+            $htmlString = $this->getContentHtml() . $this->getEditorScript($this->getOptions());
         }
 
-        return implode('', $htmlString);
+        return $htmlString;
     }
 
     /**
      * Compile the raw content to be useful
      *
+     * @param string $content  content
+     * @param bool   $htmlable content is htmlable
+     * @return string
+     */
+    public function compile($content, $htmlable = false)
+    {
+        $content = (string)$content;
+        $this->events->fire('xe.editor.compile', $this);
+
+        if ($htmlable !== true) {
+            $content = htmlspecialchars($content);
+        }
+
+        $content = $this->hashTag($content);
+        $content = $this->mention($content);
+        $content = $this->link($content);
+        $content = $this->image($content);
+
+        return $this->compileBody($content);
+    }
+
+    /**
+     * Compile content body
+     *
      * @param string $content content
      * @return string
      */
-    abstract public function compile($content);
+    abstract protected function compileBody($content);
 
     /**
      * Get a content html tag string
      *
-     * @param string $content content
-     * @param array  $options dom options
      * @return string
      */
-    protected function getContentHtml($content, $options)
+    protected function getContentHtml()
     {
-        $contentHtml = [];
-        $contentHtml[] = '<textarea ';
-        $contentHtml[] = 'name="' . $options['contentDomName'] . '" ';
-        $contentHtml[] = 'id="' . $options['contentDomId'] . '" ';
-        $contentHtml[] = $this->getContentDomHtmlOption($options['contentDomOptions']);
-        $contentHtml[] = ' placeholder="' . xe_trans('xe::content') . '">';
-        $contentHtml[] = $content;
-        $contentHtml[] = '</textarea>';
+        $args = $this->getArguments();
+        $html =
+            '<textarea ' .
+            'name="' . $args['contentDomName'] . '" ' .
+            'id="' . $args['contentDomId'] . '" ' .
+            $this->getContentDomHtmlOption($args['contentDomOptions']) .
+            ' placeholder="' . xe_trans('xe::content') . '" '.
+            'style="width:100%;">'.
+            $args['content'] .
+            '</textarea>';
 
-        return implode('', $contentHtml);
+        return $html;
     }
 
     /**
@@ -310,15 +571,204 @@ abstract class AbstractEditor implements ComponentInterface
         return sprintf(
             $editorScript,
             $this->getName(),
-            $options['contentDomId'],
-            json_encode($options['editorOptions']),
-            json_encode($this->getConfigData()),
+            $this->getArguments()['contentDomId'],
+            json_encode($options),
+            json_encode($this->getCustomOptions()),
             json_encode($this->getTools())
         );
     }
 
     /**
-     * Get uri string for editor setting by instance identifier
+     * Get options for some editor only
+     *
+     * @return array
+     */
+    public function getCustomOptions()
+    {
+        return [];
+    }
+
+    /**
+     * Compile tags in content body
+     *
+     * @param string $content content
+     * @return string
+     */
+    protected function hashTag($content)
+    {
+        $tags = $this->getData($content, '.' . $this->getTagClassName());
+        foreach ($tags as $tag) {
+            $word = ltrim($tag['text'], '#');
+            $content = str_replace(
+                $tag['html'],
+                sprintf('<a href="#%s" class="%s">#%s</a>', $word, $this->getTagClassName(), $word),
+                $content
+            );
+        }
+
+        return $content;
+    }
+
+    /**
+     * Compile mentions in content body
+     *
+     * @param string $content content
+     * @return string
+     */
+    protected function mention($content)
+    {
+        $mentions = $this->getData($content, '.' . $this->getMentionClassName(), 'data-id');
+        foreach ($mentions as $mention) {
+            $name = ltrim($mention['text'], '@');
+            $content = str_replace(
+                $mention['html'],
+                sprintf(
+                    '<span role="button" class="%s" data-toggle="xeUserMenu" data-user-id="%s">@%s</span>',
+                    $this->getMentionClassName(),
+                    $mention['data-id'],
+                    $name
+                ),
+                $content
+            );
+        }
+
+        return $content;
+    }
+
+    /**
+     * Compile links in content body
+     *
+     * @param string $content content
+     * @return string
+     */
+    protected function link($content)
+    {
+        return $content;
+    }
+
+    /**
+     * Compile images in content body
+     *
+     * @param string $content content
+     * @return string
+     */
+    protected function image($content)
+    {
+        $list = $this->getData($content, 'img.' . $this->getImageClassName(), 'data-id');
+
+        $ids = array_column($list, 'data-id');
+        $images = static::resolveImage($ids);
+        $temp = [];
+        foreach ($images as $image) {
+            $temp[$image->getOriginKey()] = $image;
+        }
+        $images = $temp;
+        unset($temp);
+        
+        foreach ($list as $data) {
+            if (!isset($images[$data['data-id']])) {
+                continue;
+            }
+
+            $image = $images[$data['data-id']];
+
+            $attrStr = trim($data['html'], ' </>');
+            $content = str_replace(
+                [
+                    '<' . $attrStr . '>',
+                    '<' . $attrStr . '/>',
+                    '<' . $attrStr . ' >',
+                    '<' . $attrStr . ' />',
+                ],
+                sprintf(
+                    '<img src="%s" class="%s" data-id="%s" />',
+                    $image->url(),
+                    $this->getImageClassName(),
+                    $data['data-id']
+                ),
+                $content
+            );
+        }
+
+        return $content;
+    }
+
+    /**
+     * Get html node data
+     *
+     * @param string $content    content
+     * @param string $selector   selector string
+     * @param array  $attributes attribute names
+     * @return array
+     */
+    private function getData($content, $selector, $attributes = [])
+    {
+        $attributes = !is_array($attributes) ? [$attributes] : $attributes;
+
+        $crawler = $this->createCrawler($content);
+        return $crawler->filter($selector)->each(function ($node, $i) use ($attributes) {
+            $dom = $node->getNode(0);
+            $data = [
+                'html' => $dom->ownerDocument->saveHTML($dom),
+                'inner' => $node->html(),
+                'text' => $node->text(),
+            ];
+
+            foreach ($attributes as $attr) {
+                $data[$attr] = $node->attr($attr);
+            }
+
+            return $data;
+        });
+    }
+
+    /**
+     * Set the image resolver
+     *
+     * @param callable $resolver resolver
+     * @return void
+     */
+    public static function setImageResolver(callable $resolver)
+    {
+        static::$imageResolver = $resolver;
+    }
+
+    /**
+     * Resolve image instances
+     *
+     * @param array $ids identifier list
+     * @return array
+     */
+    public static function resolveImage($ids = [])
+    {
+        $ids = !is_array($ids) ? [$ids] : $ids;
+
+        return call_user_func(static::$imageResolver, $ids);
+    }
+
+    /**
+     * Create crawler instance
+     *
+     * @param string $content content
+     * @return Crawler
+     */
+    private function createCrawler($content)
+    {
+        return new Crawler($content);
+    }
+
+    /**
+     * Get instance id for the editor
+     *
+     * @return string
+     */
+    public function getInstanceId()
+    {
+        return $this->instanceId;
+    }
+
+    /**
+     * Get uri for custom setting
      *
      * @param string $instanceId instance identifier
      * @return string|null
@@ -326,5 +776,105 @@ abstract class AbstractEditor implements ComponentInterface
     public static function getInstanceSettingURI($instanceId)
     {
         return null;
+    }
+
+    /**
+     * Get the file input name
+     *
+     * @return string
+     */
+    public function getFileInputName()
+    {
+        return $this->fileInputName;
+    }
+
+    /**
+     * Get the tag input name
+     *
+     * @return string
+     */
+    public function getTagInputName()
+    {
+        return $this->tagInputName;
+    }
+
+    /**
+     * Get the mention input name
+     *
+     * @return string
+     */
+    public function getMentionInputName()
+    {
+        return $this->mentionInputName;
+    }
+
+    /**
+     * Get the file class name
+     *
+     * @return string
+     */
+    public function getFileClassName()
+    {
+        return $this->fileClassName;
+    }
+
+    /**
+     * Get the image class name
+     *
+     * @return string
+     */
+    public function getImageClassName()
+    {
+        return $this->imageClassName;
+    }
+
+    /**
+     * Get the tag class name
+     *
+     * @return string
+     */
+    public function getTagClassName()
+    {
+        return $this->tagClassName;
+    }
+
+    /**
+     * Get the mention class name
+     *
+     * @return string
+     */
+    public function getMentionClassName()
+    {
+        return $this->mentionClassName;
+    }
+
+    /**
+     * Get the file identifier attribute name
+     *
+     * @return string
+     */
+    public function getFileIdentifierAttrName()
+    {
+        return $this->fileIdentifierAttrName;
+    }
+
+    /**
+     * Get the image identifier attribute name
+     *
+     * @return string
+     */
+    public function getImageIdentifierAttrName()
+    {
+        return $this->imageIdentifierAttrName;
+    }
+
+    /**
+     * Get the mention identifier attribute name
+     *
+     * @return string
+     */
+    public function getMentionIdentifierAttrName()
+    {
+        return $this->mentionIdentifierAttrName;
     }
 }

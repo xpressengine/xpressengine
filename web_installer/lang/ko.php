@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'localeExpression' => '한국어',
     'checkForInstall' => 'XE 설치를 위해 현재 서버의 상태를 체크합니다.',
 
     'systemCheck' => '시스템 검사',
@@ -10,6 +11,9 @@ return [
     'checkPHPExtCURL' => 'cURL PHP 확장 기능이 필요합니다.',
     'checkPHPExtMCRYPT' => 'MCrypt PHP 확장 기능이 필요합니다.',
     'checkPHPExtGD' => 'GD PHP 확장 기능이 필요합니다.',
+    'checkPHPExtMBSTRING' => 'Mbstring PHP 확장 기능이 필요합니다.',
+    'checkPHPExtOPENSSL' => 'OpenSSL PHP 확장 기능이 필요합니다.',
+    'checkPHPExtZIP' => 'ZipArchive PHP 확장 기능이 필요합니다.',
 
     'terms' => '약관 동의',
     'termsText' => '이 문서는 정보 제공의 목적으로만 제공됩니다. `NAVER(주)`는 이 문서에 수록된 정보의 완전성과

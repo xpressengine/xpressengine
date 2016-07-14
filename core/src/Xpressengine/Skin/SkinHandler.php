@@ -404,7 +404,7 @@ class SkinHandler
     }
 
     /**
-     * 타겟에 주어진 스킨을 지정한다. 지정된 정보를 저장소에 저장되고, getAssigned() 메소드를 통해 조회할 수 있다.
+     * 타겟에 주어진 스킨을 지정한다. 지정된 정보를 저장소에 저장하고, getAssigned() 메소드를 통해 조회할 수 있다.
      *
      * @param string      $target 타겟
      * @param SkinEntity  $skin   스킨
@@ -420,6 +420,14 @@ class SkinHandler
         $this->store->setSelectedSkin($storeKey, $mode, $skin->getId());
     }
 
+    /**
+     * 주어진 타겟에 지정된 스킨의 설정을 저장한다.
+     *
+     * @param string     $target 타겟
+     * @param SkinEntity $skin   지정된 스킨, 스킨은 설정정보를 가지고 있다.
+     *
+     * @return void
+     */
     public function saveConfig($target, SkinEntity $skin)
     {
         $storeKey = $this->mergeKey($target);

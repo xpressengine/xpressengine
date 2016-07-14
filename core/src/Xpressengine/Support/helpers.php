@@ -21,6 +21,7 @@ if (function_exists('json_enc') === false) {
      * @param mixed $value   target for encoding
      * @param int   $options json behavior constant
      * @param int   $depth   maximum depth
+     *
      * @return string
      */
     function json_enc($value, $options = 0, $depth = 512)
@@ -39,6 +40,7 @@ if (function_exists('json_dec') === false) {
      * @param bool   $assoc   when true, object be converted to array
      * @param int    $depth   recursion depth
      * @param int    $options decode option, just support 'JSON_BIGINT_AS_STRING'
+     *
      * @return mixed
      */
     function json_dec($string, $assoc = false, $depth = 512, $options = 0)
@@ -49,14 +51,16 @@ if (function_exists('json_dec') === false) {
 
 if (function_exists('json_format') === false) {
     /**
-     * 
+     * 주어진 json string을 보기 편하게 정리한다.
      *
-     * @param  string $json
+     * @param  string $json            json string
      * @param  bool   $unescapeUnicode Un escape unicode
      * @param  bool   $unescapeSlashes Un escape slashes
+     *
      * @return string
      */
-    function json_format($json, $unescapeUnicode = true, $unescapeSlashes = true) {
+    function json_format($json, $unescapeUnicode = true, $unescapeSlashes = true)
+    {
         return \Xpressengine\Support\Json::format($json, $unescapeUnicode, $unescapeSlashes);
     }
 }
@@ -70,6 +74,7 @@ if (function_exists('cast') === false) {
      * @package Xpressengine\Support
      *
      * @param string $value 대상 문자열
+     *
      * @return mixed
      */
     function cast($value)
@@ -87,22 +92,23 @@ if (function_exists('bytes') === false) {
      * @param int         $bytes bytes 수치
      * @param null|string $unit  표현 단위
      * @param int         $dec   소수점 이하 표현 갯수
+     *
      * @return string
      */
     function bytes($bytes, $unit = null, $dec = 2)
     {
-        $size   = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+        $size = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
         if (in_array($unit, $size)) {
             $factor = array_search($unit, $size);
         } else {
-            $factor = (int)((strlen($bytes) - 1) / 3);
+            $factor = (int) ((strlen($bytes) - 1) / 3);
         }
         $dec = $factor == 0 ? 0 : $dec;
         if ($factor >= count($size)) {
             $factor = count($size) - 1;
         }
 
-        return sprintf("%.{$dec}f", $bytes / pow(1024, $factor)) . $size[$factor];
+        return sprintf("%.{$dec}f", $bytes / pow(1024, $factor)).$size[$factor];
     }
 }
 
@@ -115,6 +121,7 @@ if (function_exists('apiRender') === false) {
      * @param string $id           view id
      * @param array  $data         data
      * @param array  $responseData data
+     *
      * @return mixed
      */
     function apiRender($id, array $data = [], array $responseData = [])
@@ -129,14 +136,16 @@ if (function_exists('apiRender') === false) {
         $renderer->setData();
         $result = $renderer->renderSkin();
 
-        return XePresenter::makeApi([
-            'result' => (string)$result,
-            'data' => $responseData,
-            'XE_ASSET_LOAD' => [
-                'css' => \Xpressengine\Presenter\Html\Tags\CSSFile::getFileList(),
-                'js' => \Xpressengine\Presenter\Html\Tags\JSFile::getFileList(),
-            ],
-        ]);
+        return XePresenter::makeApi(
+            [
+                'result' => (string) $result,
+                'data' => $responseData,
+                'XE_ASSET_LOAD' => [
+                    'css' => \Xpressengine\Presenter\Html\Tags\CSSFile::getFileList(),
+                    'js' => \Xpressengine\Presenter\Html\Tags\JSFile::getFileList(),
+                ],
+            ]
+        );
     }
 }
 
@@ -201,6 +210,7 @@ if (function_exists('xe_trans') === false) {
      * @param array  $parameters 파라매터
      * @param string $domain     domain
      * @param null   $locale     로케일
+     *
      * @return string
      */
     function xe_trans($id = null, $parameters = array(), $domain = 'messages', $locale = null)
@@ -210,7 +220,7 @@ if (function_exists('xe_trans') === false) {
         }
 
         try {
-            return app('xe.translator')->trans($id, $parameters, $domain, $locale);
+            return new \Illuminate\View\Expression(app('xe.translator')->trans($id, $parameters, $domain, $locale));
         } catch (Exception $e) {
             return $id;
         }
@@ -228,6 +238,7 @@ if (function_exists('xe_trans_choice') === false) {
      * @param array  $parameters 파라매터
      * @param string $domain     domain
      * @param null   $locale     로케일
+     *
      * @return string
      */
     function xe_trans_choice($id, $number, array $parameters = array(), $domain = 'messages', $locale = null)
@@ -262,7 +273,7 @@ if (function_exists('uio') === false) {
         try {
             return XeUI::create($id, $args, $callback)->render();
         } catch (\Xpressengine\UIObject\Exceptions\UIObjectNotFoundException $e) {
-            if(config('app.debug') === true) {
+            if (config('app.debug') === true) {
                 return "UI오브젝트[$id]를 찾을 수 없습니다";
             } else {
                 return '';
@@ -284,6 +295,7 @@ if (!function_exists('instanceRoute')) {
      * @param  string                   $instanceId instance id
      * @param  bool                     $absolute   absolute bool
      * @param  Illuminate\Routing\Route $route      illuminate route
+     *
      * @return string
      */
     function instanceRoute($name, $parameters = array(), $instanceId = null, $absolute = true, $route = null)
@@ -302,7 +314,7 @@ if (!function_exists('instanceRoute')) {
             $module = $instanceRoute->module;
         }
 
-        $name = $module . '.' . $name;
+        $name = $module.'.'.$name;
 
         array_unshift($parameters, $url);
 
@@ -351,18 +363,24 @@ if (!function_exists('menu_list')) {
      * @package Xpressengine\Menu
      *
      * @param string $menuId 출력할 메뉴의 ID
+     *
      * @return Illuminate\Support\Collection 메뉴아이템 리스트
      */
     function menu_list($menuId)
     {
         $menu = null;
         if ($menuId !== null) {
-            $menu = app('xe.menu')->get($menuId, [
-                'items.basicImage', 'items.hoverImage', 'items.selectedImage',
-                'items.mBasicImage', 'items.mHoverImage', 'items.mSelectedImage'
-            ]);
-            // pre load
-            app('xe.permission')->loadBranch($menuId);
+            $menu = app('xe.menu')->get(
+                $menuId,
+                [
+                    'items.basicImage',
+                    'items.hoverImage',
+                    'items.selectedImage',
+                    'items.mBasicImage',
+                    'items.mHoverImage',
+                    'items.mSelectedImage'
+                ]
+            );
         }
 
         /** @var Xpressengine\Menu\Models\Menu $menu */
@@ -371,23 +389,24 @@ if (!function_exists('menu_list')) {
             /**
              * 보이지 않는(보기 권한이 없는) 메뉴는 제외시킨다.
              *
-             * @param \Xpressengine\Menu\Models\MenuItem $item
-             * @param \Xpressengine\Menu\Models\Menu $menu
+             * @param \Xpressengine\Menu\Models\MenuItem $item menu item
+             * @param \Xpressengine\Menu\Models\Menu     $menu menu
              *
              * @return null|\Xpressengine\Menu\Models\MenuItem
              */
-            function removeInvisible($item, $menu) {
+            function removeInvisible($item, $menu)
+            {
 
                 // resolve item
-                if(Gate::denies('visible', [$item, $menu])) {
+                if (Gate::denies('visible', [$item, $menu])) {
                     return null;
                 }
 
                 // resolve child menuitems of item
                 $children = new \Illuminate\Support\Collection();
                 foreach ($item['children'] as $child) {
-                    if($new = removeInvisible($child, $menu)) {
-                        if($new) {
+                    if ($new = removeInvisible($child, $menu)) {
+                        if ($new) {
                             $children[] = $new;
                         }
                     }
@@ -395,7 +414,9 @@ if (!function_exists('menu_list')) {
                 $item['children'] = $children;
 
                 return $item;
-            };
+            }
+
+            ;
 
             $current = getCurrentInstanceId();
             if ($current !== null) {
@@ -405,8 +426,8 @@ if (!function_exists('menu_list')) {
 
             // resolve menu visible
             $menuTree = [];
-            foreach($tree as $item) {
-                if($new = removeInvisible($item, $menu)) {
+            foreach ($tree as $item) {
+                if ($new = removeInvisible($item, $menu)) {
                     $menuTree[] = $new;
                 }
             }
@@ -416,7 +437,6 @@ if (!function_exists('menu_list')) {
             return new Illuminate\Support\Collection();
         }
     }
-
 }
 
 if (!function_exists('shortModuleId')) {
@@ -426,6 +446,7 @@ if (!function_exists('shortModuleId')) {
      * @package Xpressengine\Module
      *
      * @param  string $moduleId extract 'module/'
+     *
      * @return string
      */
     function shortModuleId($moduleId)
@@ -441,6 +462,7 @@ if (!function_exists('fullModuleId')) {
      * @package Xpressengine\Module
      *
      * @param  string $moduleId to prepend 'module/'
+     *
      * @return string
      */
     function fullModuleId($moduleId)
@@ -448,7 +470,7 @@ if (!function_exists('fullModuleId')) {
         if (stripos($moduleId, 'module/') !== false) {
             return $moduleId;
         } else {
-            return 'module/' . $moduleId;
+            return 'module/'.$moduleId;
         }
     }
 }
@@ -460,6 +482,7 @@ if (!function_exists('moduleClass')) {
      * @package Xpressengine\Module
      *
      * @param  string $moduleId to find menu type class
+     *
      * @return string|null
      */
     function moduleClass($moduleId)
@@ -477,6 +500,7 @@ if (function_exists('widget') === false) {
      * @param string  $id       widget id
      * @param array   $args     to render html arguments
      * @param closure $callback if it need
+     *
      * @return mixed
      */
     function widget($id, $args = [], $callback = null)
@@ -492,6 +516,7 @@ if (function_exists('setupWidget') === false) {
      * @package Xpressengine\Widget
      *
      * @param string $id widget id
+     *
      * @return mixed
      */
     function setupWidget($id)
@@ -507,6 +532,7 @@ if (!function_exists('shortWidgetId')) {
      * @package Xpressengine\Widget
      *
      * @param  string $widgetId widget id
+     *
      * @return string
      */
     function shortWidgetId($widgetId)
@@ -522,6 +548,7 @@ if (!function_exists('fullWidgetId')) {
      * @package Xpressengine\Widget
      *
      * @param  string $widgetId widget id
+     *
      * @return string
      */
     function fullWidgetId($widgetId)
@@ -529,7 +556,7 @@ if (!function_exists('fullWidgetId')) {
         if (stripos($widgetId, 'widget/') !== false) {
             return $widgetId;
         } else {
-            return 'widget/' . $widgetId;
+            return 'widget/'.$widgetId;
         }
     }
 }
@@ -540,6 +567,7 @@ if (function_exists('df') === false) {
      *
      * @param string $group      group name
      * @param string $columnName dynamic field id
+     *
      * @return \Xpressengine\DynamicField\AbstractType
      */
     function df($group, $columnName)
@@ -555,6 +583,7 @@ if (function_exists('dfCreate') === false) {
      * @param string $group      group name
      * @param string $columnName dynamic field id
      * @param array  $args       arguments
+     *
      * @return string
      */
     function dfCreate($group, $columnName, $args)
@@ -564,7 +593,6 @@ if (function_exists('dfCreate') === false) {
             return '';
         }
         return $fieldType->getSkin()->create($args);
-
     }
 }
 
@@ -575,6 +603,7 @@ if (function_exists('dfEdit') === false) {
      * @param string $group      group name
      * @param string $columnName dynamic field id
      * @param array  $args       arguments
+     *
      * @return string
      */
     function dfEdit($group, $columnName, $args)
@@ -592,11 +621,44 @@ if (function_exists('plugins_path') === false) {
      * @package Xpressengine\Interception
      *
      * @param string $path path
+     *
      * @return string
      */
     function plugins_path($path = '')
     {
         $path = trim($path, DIRECTORY_SEPARATOR);
         return rtrim(XePlugin::getPluginsDir(), DIRECTORY_SEPARATOR).($path ? DIRECTORY_SEPARATOR.$path : $path);
+    }
+}
+
+if (!function_exists('editor')) {
+    /**
+     * @package Xpressengine\Editor
+     *
+     * @param string      $instanceId instance id
+     * @param array|false $arguments  argument for editor
+     * @param string|null $targetId   target id
+     *
+     * @return string
+     */
+    function editor($instanceId, $arguments, $targetId = null)
+    {
+        return app('xe.editor')->render($instanceId, $arguments, $targetId);
+    }
+}
+
+if (!function_exists('compile')) {
+    /**
+     * @package Xpressengine\Editor
+     *
+     * @param string $instanceId instance id
+     * @param string $content    content
+     * @param bool   $htmlable   content is htmlable
+     *
+     * @return string
+     */
+    function compile($instanceId, $content, $htmlable = false)
+    {
+        return app('xe.editor')->compile($instanceId, $content, $htmlable);
     }
 }

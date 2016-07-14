@@ -87,6 +87,7 @@ class IconFile
      * sorter와 file list를 설정한다.
      *
      * @param array $fileList js file의 목록
+     *
      * @return void
      */
     public static function init($fileList = [])
@@ -102,7 +103,7 @@ class IconFile
      */
     public function __construct($file)
     {
-        $file       = $this->asset($file);
+        $file = $this->asset($file);
         $this->file = $file;
 
         // initialization
@@ -114,6 +115,7 @@ class IconFile
      * type
      *
      * @param string $type type
+     *
      * @return $this
      */
     public function type($type)
@@ -138,6 +140,7 @@ class IconFile
      * sizes
      *
      * @param string $size size
+     *
      * @return $this
      */
     public function sizes($size)
@@ -206,6 +209,7 @@ class IconFile
      * asset
      *
      * @param string $file file path
+     *
      * @return string
      */
     protected function asset($file)

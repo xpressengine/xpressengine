@@ -13,8 +13,8 @@ class EditorHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAll()
     {
-        list($register, $configs, $container) = $this->getMocks();
-        $instance = new EditorHandler($register, $configs, $container);
+        list($register, $configs, $container, $storage, $medias, $tags) = $this->getMocks();
+        $instance = new EditorHandler($register, $configs, $container, $storage, $medias, $tags);
 
         $register->shouldReceive('get')->once()->with('editor')->andReturn([
             'editor/foo@bar' => 'class1',
@@ -31,8 +31,8 @@ class EditorHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testSetInstanceThrowsExceptionWhenNotExists()
     {
-        list($register, $configs, $container) = $this->getMocks();
-        $instance = new EditorHandler($register, $configs, $container);
+        list($register, $configs, $container, $storage, $medias, $tags) = $this->getMocks();
+        $instance = new EditorHandler($register, $configs, $container, $storage, $medias, $tags);
 
         $register->shouldReceive('get')->once()->with('editor/foo@bar')->andReturnNull();
 
@@ -47,24 +47,24 @@ class EditorHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testSetInstance()
     {
-        list($register, $configs, $container) = $this->getMocks();
-        $instance = new EditorHandler($register, $configs, $container);
+        list($register, $configs, $container, $storage, $medias, $tags) = $this->getMocks();
+        $instance = new EditorHandler($register, $configs, $container, $storage, $medias, $tags);
 
         $register->shouldReceive('get')->once()->with('editor/foo@bar')->andReturn('stdClass');
         $configs->shouldReceive('set')->once()
-            ->with(EditorHandler::CONFIG_NAME, ['someinstanceid' => 'editor/foo@bar']);
+            ->with(EditorHandler::MAP_CONFIG_NAME, ['someinstanceid' => 'editor/foo@bar']);
 
         $instance->setInstance('someinstanceid', 'editor/foo@bar');
     }
 
     public function testGetEditorId()
     {
-        list($register, $configs, $container) = $this->getMocks();
-        $instance = new EditorHandler($register, $configs, $container);
+        list($register, $configs, $container, $storage, $medias, $tags) = $this->getMocks();
+        $instance = new EditorHandler($register, $configs, $container, $storage, $medias, $tags);
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
         $mockConfig->shouldReceive('get')->with('someinstanceid')->andReturn('editor/foo@bar');
-        $configs->shouldReceive('get')->once()->with(EditorHandler::CONFIG_NAME)->andReturn($mockConfig);
+        $configs->shouldReceive('get')->once()->with(EditorHandler::MAP_CONFIG_NAME)->andReturn($mockConfig);
 
         $editorId = $instance->getEditorId('someinstanceid');
 
@@ -73,14 +73,19 @@ class EditorHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testGet()
     {
-        list($register, $configs, $container) = $this->getMocks();
-        $instance = $this->getMock(EditorHandler::class, ['getEditorId'], [$register, $configs, $container]);
+        list($register, $configs, $container, $storage, $medias, $tags) = $this->getMocks();
+        $instance = $this->getMock(EditorHandler::class, ['getEditorId'], [$register, $configs, $container, $storage, $medias, $tags]);
 
         $instance->expects($this->once())->method('getEditorId')->with('someinstanceid')->willReturn(null);
 
         $register->shouldReceive('get')->once()->with('editor/foo@bar')->andReturn('stdClass');
+
+        $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
+        $configs->shouldReceive('getOrNew')->once()->andReturn($mockConfig);
+        $mockEditor = m::mock('stdClass');
+        $mockEditor->shouldReceive('setConfig')->once()->with($mockConfig);
         $container->shouldReceive('make')->once()
-            ->with('stdClass', ['instanceId' => 'someinstanceid'])->andReturn(new \stdClass);
+            ->with('stdClass', ['instanceId' => 'someinstanceid'])->andReturn($mockEditor);
 
         $instance->setDefaultEditorId('editor/foo@bar');
         $editor = $instance->get('someinstanceid');
@@ -90,8 +95,8 @@ class EditorHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testRender()
     {
-        list($register, $configs, $container) = $this->getMocks();
-        $instance = $this->getMock(EditorHandler::class, ['get'], [$register, $configs, $container]);
+        list($register, $configs, $container, $storage, $medias, $tags) = $this->getMocks();
+        $instance = $this->getMock(EditorHandler::class, ['get'], [$register, $configs, $container, $storage, $medias, $tags]);
 
         $mockEditor = m::mock('Xpressengine\Editor\AbstractEditor');
         $instance->expects($this->once())->method('get')->with('someinstanceid')->willReturn($mockEditor);
@@ -107,8 +112,8 @@ class EditorHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetToolAll()
     {
-        list($register, $configs, $container) = $this->getMocks();
-        $instance = new EditorHandler($register, $configs, $container);
+        list($register, $configs, $container, $storage, $medias, $tags) = $this->getMocks();
+        $instance = new EditorHandler($register, $configs, $container, $storage, $medias, $tags);
 
         $register->shouldReceive('get')->once()->with('editortool')->andReturn([
             'editortool/foo@bar' => 'class1',
@@ -125,8 +130,8 @@ class EditorHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTool()
     {
-        list($register, $configs, $container) = $this->getMocks();
-        $instance = $this->getMock(EditorHandler::class, ['getToolAll'], [$register, $configs, $container]);
+        list($register, $configs, $container, $storage, $medias, $tags) = $this->getMocks();
+        $instance = $this->getMock(EditorHandler::class, ['getToolAll'], [$register, $configs, $container, $storage, $medias, $tags]);
 
         $instance->expects($this->exactly(2))->method('getToolAll')->willReturn([
             'editortool/foo@bar' => 'class1',
@@ -144,17 +149,17 @@ class EditorHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testCompile()
     {
-        list($register, $configs, $container) = $this->getMocks();
-        $instance = $this->getMock(EditorHandler::class, ['get', 'compileTools'], [$register, $configs, $container]);
+        list($register, $configs, $container, $storage, $medias, $tags) = $this->getMocks();
+        $instance = $this->getMock(EditorHandler::class, ['get', 'compileTools'], [$register, $configs, $container, $storage, $medias, $tags]);
 
         $mockEditor = m::mock('Xpressengine\Editor\AbstractEditor');
         $instance->expects($this->once())->method('get')->with('someinstanceid')->willReturn($mockEditor);
-        $mockEditor->shouldReceive('compile')->with('<div></div>')->andReturn('<div attr="foo"></div>');
+        $mockEditor->shouldReceive('compile')->with('<div></div>', true)->andReturn('<div attr="foo"></div>');
 
         $instance->expects($this->once())->method('compileTools')
             ->with('someinstanceid', '<div attr="foo"></div>')->willReturn('<div attr="foo"><p></p></div>');
 
-        $content = $instance->compile('someinstanceid', '<div></div>');
+        $content = $instance->compile('someinstanceid', '<div></div>', true);
 
         $this->assertEquals('<div attr="foo"><p></p></div>', $content);
     }
@@ -165,6 +170,9 @@ class EditorHandlerTest extends \PHPUnit_Framework_TestCase
             m::mock('Xpressengine\Plugin\PluginRegister'),
             m::mock('Xpressengine\Config\ConfigManager'),
             m::mock('Illuminate\Container\Container'),
+            m::mock('Xpressengine\Storage\Storage'),
+            m::mock('Xpressengine\Media\MediaManager'),
+            m::mock('Xpressengine\Tag\TagHandler'),
         ];
     }
 }

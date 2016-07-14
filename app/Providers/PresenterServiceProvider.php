@@ -121,7 +121,7 @@ class PresenterServiceProvider extends ServiceProvider
      */
     private function registerFrontend()
     {
-        $this->app->singleton('xe.frontend', function ($app) {
+        $this->app->singleton([FrontendHandler::class => 'xe.frontend'], function ($app) {
             $tags = [
                 'title' => \Xpressengine\Presenter\Html\Tags\Title::class,
                 'meta' => \Xpressengine\Presenter\Html\Tags\Meta::class,
@@ -172,7 +172,6 @@ class PresenterServiceProvider extends ServiceProvider
         $frontendHandler->js([
             'assets/core/common/js/dynamicLoadManager.js',
             'assets/jspm_packages/system.js',
-            'assets/jspm_packages/system-polyfills.js',
             'assets/systemjs.config.js',
             'assets/vendor/react/react-with-addons.js',
             'assets/vendor/react/JSXTransformer.js', // @TODO 제거

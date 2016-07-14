@@ -119,6 +119,16 @@ class UserMigration implements Migration {
 
     public function installed()
     {
+        \DB::table('config')->insert([
+                                         ['name' => 'user', 'vars' => '[]'],
+                                         ['name' => 'user.common', 'vars' => '{"secureLevel":"low","useCaptcha":false,"webmasterName":"webmaster","webmasterEmail":"webmaster@domain.com","agreement":"","privacy":""}'],
+                                         ['name' => 'user.join', 'vars' => '{"joinable":true,"useEmailCertify":false,"useCaptcha":false}'],
+                                         ['name' => 'toggleMenu@user', 'vars' => '{"activate":["user/toggleMenu/xpressengine@raw"]}']
+                                     ]);
+    }
+
+    public function init()
+    {
         // add default user groups
         $joinGroup = app('xe.user')->groups()->create(
             [
@@ -126,20 +136,16 @@ class UserMigration implements Migration {
                 'description' => 'default user group'
             ]
         );
-
         app('xe.user')->groups()->create(
             [
                 'name' => '준회원',
                 'description' => 'sub user group'
             ]
         );
+        $joinConfig = app('xe.config')->get('user.join');
 
-        \DB::table('config')->insert([
-                                         ['name' => 'user', 'vars' => '[]'],
-                                         ['name' => 'user.common', 'vars' => '{"secureLevel":"low","useCaptcha":false,"webmasterName":"webmaster","webmasterEmail":"webmaster@domain.com","agreement":"","privacy":""}'],
-                                         ['name' => 'user.join', 'vars' => '{"joinable":true,"useEmailCertify":false,"useCaptcha":false,"joinGroup":'.$joinGroup->id.'}'],
-                                         ['name' => 'toggleMenu@user', 'vars' => '{"activate":["user/toggleMenu/xpressengine@raw"]}']
-                                     ]);
+        $joinConfig->set('joinGroup', $joinGroup->id);
+        app('xe.config')->modify($joinConfig);
 
     }
 

@@ -33,9 +33,9 @@ class SkinEntityTest extends \PHPUnit_Framework_TestCase
         $entity = new SkinEntity(TestSkin::getId(), TestSkin::class);
 
         $this->assertTrue($entity->supportDesktop());
-        $this->assertFalse($entity->supportDesktopOnly());
         $this->assertTrue($entity->supportMobile());
-        $this->assertFalse($entity->supportMobileOnly());
+        $this->assertTrue($entity->support('desktop'));
+        $this->assertTrue($entity->support('mobile'));
     }
 
     public function testGetObject()

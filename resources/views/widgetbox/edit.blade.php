@@ -117,10 +117,10 @@
                                     </li>
                                 </ul>
                                 <div class="xe-input-group xe-input-group-sm">
-                                    <input type="text" class="xe-form-control">
-										<span class="xe-input-group-btn">
-											<button class="xe-btn" type="button">분할</button>
-										</span>
+                                    <input id="inputVerticalSize" type="text" class="xe-form-control">
+                                    <span class="xe-input-group-btn">
+                                        <button id="btnAddDivisionType" class="xe-btn" type="button">분할</button>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -159,7 +159,7 @@
     <!--[D] .open 추가 시 layer 펼침 -->
     <div class="widget-layer">
         <h1>h1 위젯 타이틀</h1>
-        <button type="button" class="layer-close"><i class="xi-close"></i><span class="xe-sr-only">layer close</span></button>
+        <button type="button" class="layer-close btnCloseLayer"><i class="xi-close"></i><span class="xe-sr-only">layer close</span></button>
         <p>콘텐츠를 다양한 형태로 출력하는 위젯입니다. 아래 필요한 값들을 입력한 후 추가 버튼을 누르면 페이지 내에 위젯이 삽입됩니다.</p>
         <div class="seciton">
             <div class="xe-form-group">
@@ -247,8 +247,8 @@
         </div>
         <div class="btn-center">
             <input type="hidden" id="widgetCode" value="{{ "<xewidget id='widget/banner' title='상단배너'><banner_count>2</banner_count><banner_size>2</banner_size></xewidget>" }}" />
-            <button type="button" class="xe-btn xe-btn-secondary">취소</button>
-            <button type="button" class="xe-btn xe-btn-primary btnSetWidget">확인</button>
+            <button type="button" class="xe-btn xe-btn-secondary btnCloseLayer">취소</button>
+            <button type="button" class="xe-btn xe-btn-primary btnPlaceWidget">확인</button>
         </div>
     </div>
     <!--// widget layer  -->
@@ -265,23 +265,11 @@
             $(this).parents(".seciton").toggleClass("close");
         });
 
-        $('.dimd, .layer-close').on('click', function () {
-            $(".widget-layer").removeClass("open");
-            $(".dimd").hide();
-            $("body").css("overflow", "");
-        });
-
-        $(".btnSetWidget").on("click", function() {
-            var widgetCode = $("#widgetCode").val()
-                , $widgetCode = $(widgetCode);
-
-            var title = $widgetCode.attr("title");
-
-
-            console.log(title);
-
-
-        });
+//        $('.dimd, .layer-close').on('click', function () {
+//            $(".widget-layer").removeClass("open");
+//            $(".dimd").hide();
+//            $("body").css("overflow", "");
+//        });
 
         WidgetBox.init();
         WidgetSnb.init();

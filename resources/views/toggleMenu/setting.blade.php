@@ -61,6 +61,14 @@
             handle: '.handler',
             cancel: '',
             update: function( event, ui ) {
+            },
+            start: function(e, ui) {
+                ui.placeholder.height(ui.helper.outerHeight());
+                ui.placeholder.css("display", "table-row");
+                ui.helper.css("display", "table");
+            },
+            stop: function(e, ui) {
+                $(ui.item.context).css("display", "table-row");
             }
         }).disableSelection();
 
