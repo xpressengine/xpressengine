@@ -181,7 +181,7 @@ class ToggleMenuHandler
      * @param string|null $instanceId instance id
      * @return string
      */
-    protected function getConfigKey($id, $instanceId)
+    public function getConfigKey($id, $instanceId)
     {
         return 'toggleMenu@' . $id . ($instanceId !== null ? '.' . $instanceId : '');
     }
