@@ -45,10 +45,12 @@
                                 @foreach(Input::except(['query']) as $name => $value)
                                     <input type="hidden" name="{{ $name }}" value="{{ $value }}">
                                 @endforeach
-                                <input type="text" class="form-control"  placeholder="{{ xe_trans('xe::enterKeyword') }}" name="query" value="{{ Input::get('query') }}">
-                                <button class="btn-link">
-                                    <i class="xi-magnifier"></i><span class="sr-only">검색</span>
-                                </button>
+                                <div class="search-input-group">
+                                    <input type="text" class="form-control" aria-label="Text input with dropdown button" placeholder="{{ xe_trans('xe::enterKeyword') }}" name="query" value="{{ Input::get('query') }}">
+                                    <button class="btn-link">
+                                        <i class="xi-magnifier"></i><span class="sr-only">{{xe_trans('xe::search')}}</span>
+                                    </button>
+                                </div>
                             </form>
                         </div>
                     </div>
