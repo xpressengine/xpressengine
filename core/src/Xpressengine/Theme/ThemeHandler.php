@@ -425,7 +425,7 @@ class ThemeHandler
     /**
      * make and return ThemeEntity
      *
-     * @param string $id theme id
+     * @param string $id    theme id
      * @param string $class theme class name
      *
      * @return ThemeEntity

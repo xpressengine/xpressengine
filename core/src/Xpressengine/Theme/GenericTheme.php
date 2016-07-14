@@ -79,7 +79,7 @@ abstract class GenericTheme extends AbstractTheme
      *
      * @return array
      */
-    static function info($key = null, $default = null)
+    public static function info($key = null, $default = null)
     {
         if (static::$info === null) {
             static::$info = include(base_path(static::getPath().'/'.'info.php'));

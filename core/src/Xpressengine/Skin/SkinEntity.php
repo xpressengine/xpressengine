@@ -136,7 +136,7 @@ class SkinEntity implements Arrayable, Jsonable
     /**
      * updateConfig
      *
-     * @param array $config
+     * @param array $config pure config data
      *
      * @return array
      */

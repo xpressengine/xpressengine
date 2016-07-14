@@ -1,5 +1,4 @@
 <?php
-require_once(__DIR__.'/helpers.php');
 /**
  *  This file is part of the Xpressengine package.
  *
@@ -13,6 +12,8 @@ require_once(__DIR__.'/helpers.php');
  * @link        http://www.xpressengine.com
  */
 namespace Xpressengine\Plugin\Composer;
+
+require_once(__DIR__.'/helpers.php');
 
 use Xpressengine\Plugin\PluginScanner;
 
