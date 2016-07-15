@@ -50,7 +50,7 @@ class SkinServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        $this->app['xe.pluginRegister']->add(\Xpressengine\Skins\Error\DefaultErrorSkin::class);
+        $this->app['xe.pluginRegister']->add(\App\Skins\Error\DefaultErrorSkin::class);
     }
 
     /**

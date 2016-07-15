@@ -59,14 +59,7 @@
         "psr-4": {
             "App\\": "app/",
             "Xpressengine\\": "core/src/Xpressengine/",
-            "Xpressengine\\Migrations\\": "migrations/",
-            "Xpressengine\\FieldTypes\\": "resources/FieldTypes",
-            "Xpressengine\\FieldSkins\\": "resources/FieldSkins",
-            "Xpressengine\\UIObjects\\": "resources/UIObjects",
-            "Xpressengine\\Themes\\": "resources/Themes",
-            "Xpressengine\\Skins\\": "resources/Skins",
-            "Xpressengine\\Widgets\\": "resources/Widgets",
-            "Xpressengine\\ToggleMenus\\": "resources/ToggleMenus"
+            "Xpressengine\\Migrations\\": "migrations/"
         },
         "files": [
             "core/src/Xpressengine/Support/helpers.php"
