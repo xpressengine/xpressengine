@@ -4,6 +4,9 @@
         var _settings = {
             mode: 'desktop'
             , divisionType: '6|6'
+            , divisionMap: {
+
+            }
             , order: 0
         };
         var _deletable = true;
@@ -13,6 +16,12 @@
                 self = this;
                 self.cache();
                 self.bindEvents();
+
+                self.$selectDivision.find("a[data-type]").each(function() {
+                    var type = $(this).data("type");
+
+                    _settings.divisionMap[type] = '';
+                })
 
                 return this;
             },
@@ -48,13 +57,71 @@
                     return;
                 }else if(divisionType){
 
+                    var validType = true;
+
+                    if(/^[0-9 ]+$/g.test(divisionType)) {
+                        var cells = divisionType.split(" ");
+                        var sum = 0;
+                        var division = "";
+                        cells.forEach(function(v, i) {
+                            sum += parseInt(v);
+
+                            division += parseInt(v);
+
+                            if(i !== (cells.length - 1)) {
+                                division += "|";
+                            }
+                        });
+
+                        if(sum !== 12) {
+                            validType = false;
+                        }
+                    }else {
+                        validType = false;
+                    }
+
+                    if(!validType) {
+                        alert("수직분할 형태는 [1 ~ 12]의 숫자와 스페이스로 입력하고 분할셀의 총 합은 12가 되어야 합니다.");
+                    }else {
+                        var locDivitionType = JSON.parse(localStorage.getItem("divisionType") || '[]');
+
+                        locDivitionType.push(division);
+                        localStorage.setItem("divisionType", JSON.stringify(locDivitionType));
+
+                        self.appendDivisionType([division]);
+
+                    }
+
                 }
             },
-            inputVerticalSize: function(e) {
-                if(e.keyCode != 13) {
-                    self.addDivisionType();
-                }else {
+            appendDivisionType: function(types) {
+                //self.$selectDivision
 
+                var html = "";
+
+                types.forEach(function(v, i) {
+                    var display = v.replace(/\|/g, ":");
+
+                    var spans = "";
+                    display.split(":").forEach(function(v, i) {
+                        spans += '<span style="width:' + v * 13 + 'px">' + v + '</span>';
+                    });
+
+                    //TODO span 160px기준 col-1 당 13px 임시로..
+                    html += [
+                        '<li>',
+                            '<a href="#" data-type="' + v + '" data-display="' + display + '">',
+                                spans,
+                            '</a>',
+                        '</li>'
+                    ].join("\n");
+                });
+
+                self.$selectDivision.append(html);
+            },
+            inputVerticalSize: function(e) {
+                if(e.keyCode === 13) {
+                    self.addDivisionType();
                 }
             },
             toggleWidgetAddLayer: function() {
