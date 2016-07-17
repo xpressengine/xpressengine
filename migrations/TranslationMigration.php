@@ -44,7 +44,7 @@ class TranslationMigration implements Migration {
 
     public function update($installedVersion = null)
     {
-
+        $this->init();
     }
 
     public function checkInstalled()
@@ -53,5 +53,6 @@ class TranslationMigration implements Migration {
 
     public function checkUpdated($installedVersion = null)
     {
+        return false;
     }
 }
