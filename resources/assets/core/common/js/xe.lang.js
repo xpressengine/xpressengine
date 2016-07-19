@@ -1,7 +1,7 @@
 //xe.lang.js
-(function(exports, Translator) {
+(function(exports) {
   exports.XE.Lang = function() {
-
+    var Translator = exports.Translator;
     var _items = {
       'af' : 'af-ZA',
       'ar' : 'ar-SA',
@@ -94,8 +94,8 @@
         return this;
       },
       set: function(items) {
-        $.extend(_items, items);
-        $.each(_items, function(key, value) {
+        //$.extend(_items, items);
+        $.each(items, function(key, value) {
           Translator.add(key, value);
         });
 
@@ -118,4 +118,4 @@
       }
     }.init();
   }();
-})(window, Translator);
+})(window);

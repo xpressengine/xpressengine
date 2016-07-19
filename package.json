@@ -21,7 +21,7 @@
     "gulp-uglify": "^1.5.3",
     "jest-cli": "*",
     "jspm": "^0.16.31",
-    "laravel-elixir": "^3.0.0",
+    "laravel-elixir": "^4.0.0",
     "merge-stream": "^1.0.0",
     "run-sequence": "^1.1.5"
   },
