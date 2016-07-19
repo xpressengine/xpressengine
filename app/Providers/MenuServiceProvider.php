@@ -14,6 +14,7 @@
 
 namespace App\Providers;
 
+use App\UIObjects\Menu\MenuSelect;
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Menu\MenuHandler;
 use Xpressengine\Menu\MenuItemPolicy;
@@ -22,9 +23,9 @@ use Xpressengine\Menu\Repositories\CacheDecorator;
 use Xpressengine\Menu\Repositories\EloquentRepository;
 use Xpressengine\Menu\Repositories\MemoryDecorator;
 use Xpressengine\Support\LaravelCache;
-use Xpressengine\UIObjects\Menu\MenuType;
+use App\UIObjects\Menu\MenuType;
 use Xpressengine\Menu\MenuType\DirectLink;
-use Xpressengine\UIObjects\Menu\TypeSelect;
+use App\UIObjects\Menu\TypeSelect;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 
 /**
@@ -49,6 +50,7 @@ class MenuServiceProvider extends ServiceProvider
         $pluginRegister = $this->app['xe.pluginRegister'];
 
         $pluginRegister->add(MenuType::class);
+        $pluginRegister->add(MenuSelect::class);
         $pluginRegister->add(TypeSelect::class);
         $pluginRegister->add(DirectLink::class);
 

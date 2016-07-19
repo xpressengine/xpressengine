@@ -19,7 +19,7 @@ use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
 use Xpressengine\Plugin\PluginRegister;
 use Xpressengine\Plugin\PluginScanner;
-use Xpressengine\Skins\Plugin\PluginSettingsSkin;
+use App\Skins\Plugin\PluginSettingsSkin;
 
 class PluginServiceProvider extends ServiceProvider
 {
