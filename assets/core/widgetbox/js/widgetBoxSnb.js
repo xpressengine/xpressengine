@@ -16,12 +16,9 @@
                 self = this;
                 self.cache();
                 self.bindEvents();
+                self.settings();
 
-                self.$selectDivision.find("a[data-type]").each(function() {
-                    var type = $(this).data("type");
 
-                    _settings.divisionMap[type] = '';
-                })
 
                 return this;
             },
@@ -49,6 +46,24 @@
                 self.$inputVerticalSize.on("keypress", self.inputVerticalSize);
                 self.$btnAddDivisionType.on("click", self.addDivisionType);
             },
+            settings: function() {
+                var locDivitionType = JSON.parse(localStorage.getItem("divisionType") || '[]');
+                var appendDivision = [];
+
+                self.$selectDivision.find("a[data-type]").each(function() {
+                    var type = $(this).data("type");
+
+                    _settings.divisionMap[type] = '';
+                });
+
+                locDivitionType.forEach(function(v, i) {
+                    if(!_settings.divisionMap.hasOwnProperty(v)) {
+                        appendDivision.push(v);
+                    }
+                });
+
+                self.appendDivisionType(appendDivision);
+            },
             addDivisionType: function() {
                 var divisionType = self.$inputVerticalSize.val();
 
@@ -58,11 +73,12 @@
                 }else if(divisionType){
 
                     var validType = true;
+                    var division = "";
 
                     if(/^[0-9 ]+$/g.test(divisionType)) {
                         var cells = divisionType.split(" ");
                         var sum = 0;
-                        var division = "";
+
                         cells.forEach(function(v, i) {
                             sum += parseInt(v);
 
@@ -85,11 +101,14 @@
                     }else {
                         var locDivitionType = JSON.parse(localStorage.getItem("divisionType") || '[]');
 
-                        locDivitionType.push(division);
-                        localStorage.setItem("divisionType", JSON.stringify(locDivitionType));
+                        if($.inArray(division, locDivitionType) === -1) {
+                            locDivitionType.push(division);
+                            localStorage.setItem("divisionType", JSON.stringify(locDivitionType));
 
-                        self.appendDivisionType([division]);
-
+                            self.appendDivisionType([division]);
+                        }else {
+                            alert("이미 추가한 분할타입입니다. [" + division.replace(/\|/g, " ") + "]");
+                        }
                     }
 
                 }
@@ -104,7 +123,7 @@
 
                     var spans = "";
                     display.split(":").forEach(function(v, i) {
-                        spans += '<span style="width:' + v * 13 + 'px">' + v + '</span>';
+                        spans += '<span style="width:' + (v * 13) + 'px">' + v + '</span>';
                     });
 
                     //TODO span 160px기준 col-1 당 13px 임시로..
