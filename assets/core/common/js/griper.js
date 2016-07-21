@@ -12,7 +12,7 @@
 
   var $ = jQuery = window.jQuery;
 
-  DynamicLoadManager.cssLoad('/assets/core/common/js/modules/griper/style.css');
+  DynamicLoadManager.cssLoad('/assets/core/common/css/griper.css');
 
   exports.options = {
     toastContainer: {

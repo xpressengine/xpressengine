@@ -1,5 +1,5 @@
 (function (root, factory) {
-  module.exports = factory(require('xecore:/common/js/modules/validator'));
+  module.exports = factory(require('xecore:/common/js/validator'));
 }(this, function (validator) {
   var DynamicField = function () {
     this.group = '';
@@ -327,7 +327,3 @@
 
   return DynamicField;
 }));
-// define(['xecore:/common/js/modules/validator'], function(validator) {
-
-
-// }.bind(XE));

@@ -91,18 +91,18 @@
   };
 
   Validator.errorClear = function ($form) {
-    System.import('xecore:/common/js/modules/griper/griper').then(function (griper) {
+    System.import('xecore:/common/js/griper').then(function (griper) {
       griper.form.fn.clear($form);
     });
   };
 
   Validator.error = function ($element, message) {
     if (this.alertType == 'form') {
-      System.import('xecore:/common/js/modules/griper/griper').then(function (griper) {
+      System.import('xecore:/common/js/griper').then(function (griper) {
         griper.form($element, message);
       });
     } else if (this.alertType == 'toast') {
-      System.import('xecore:/common/js/modules/griper/griper').then(function (griper) {
+      System.import('xecore:/common/js/griper').then(function (griper) {
         var typeName = $element.attr('placeholder');
         if (typeName == undefined) {
           typeName = $element.attr('name');

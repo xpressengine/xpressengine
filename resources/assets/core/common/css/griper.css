@@ -14,8 +14,8 @@
 .xo-toast_container .xo-alert.success{background-color:#2c8beb;background-color:rgba(44,139,235,0.95)}
 .xo-toast_container .xo-alert a{color:#ffea00}
 .xo-toast_container .xo-alert a:hover{text-decoration:underline}
-.btn_alert_close{position:absolute;right: 0px;top:50%;margin-top: -20px;width: 40px;height: 40px;line-height:1;-webkit-appearance:none;padding:0;cursor:pointer;background: url(./btn_alert_clse.png) 50% 50% no-repeat;border:0;outline:none}
-.btn_alert_close:hover{background-image:url(./btn_alert_clse_on.png)}
+.btn_alert_close{position:absolute;right: 0px;top:50%;margin-top: -20px;width: 40px;height: 40px;line-height:1;-webkit-appearance:none;padding:0;cursor:pointer;background: url(../js/modules/griper/btn_alert_clse.png) 50% 50% no-repeat;border:0;outline:none}
+.btn_alert_close:hover{background-image:url(../js/modules/griper/btn_alert_clse_on.png)}
 
 @media (min-width: 768px) {
     .xo-toast_container{padding:0 20px}
