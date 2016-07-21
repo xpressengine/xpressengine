@@ -24,9 +24,9 @@
             },
             cache: function() {
                 self.$editor = $(".editor");
-                self.$btnMode = $(".widget-snb .btnMode");
                 self.$selectDivision = $("#selectDivision");
                 self.$btnDivision = $(".btnDivision");
+                self.$btnMode = $(".widget-snb .btnMode");
                 self.$divisionTypeView = $("#divisionTypeView");
                 self.$btnAddRow = $("#btnAddRow");
                 self.$btnDeselectAll = $("#btnDeselectAll");
@@ -75,7 +75,7 @@
                     var validType = true;
                     var division = "";
 
-                    if(/^[0-9 ]+$/g.test(divisionType)) {
+                    if(/^[1-9 ]+$/g.test(divisionType)) {
                         var cells = divisionType.split(" ");
                         var sum = 0;
 
@@ -97,7 +97,7 @@
                     }
 
                     if(!validType) {
-                        alert("수직분할 형태는 [1 ~ 12]의 숫자와 스페이스로 입력하고 분할셀의 총 합은 12가 되어야 합니다.");
+                        alert("수직분할 형태는 [1 ~ 12]의 숫자와 스페이스로 입력하고\n 분할셀의 총 합은 12가 되어야 합니다.");
                     }else {
                         var locDivitionType = JSON.parse(localStorage.getItem("divisionType") || '[]');
 
