@@ -34,6 +34,13 @@ interface CaptchaInterface
     public function verify();
 
     /**
+     * Determine if captcha is available
+     *
+     * @return mixed
+     */
+    public function available();
+
+    /**
      * Message of fails
      *
      * @return array

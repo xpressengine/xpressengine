@@ -42,8 +42,6 @@ class CaptchaServiceProvider extends ServiceProvider
     {
         CaptchaUIObject::setManager($this->app['xe.captcha']);
 
-
-
         $this->app['xe.pluginRegister']->add(CaptchaUIObject::class);
     }
 
@@ -54,11 +52,11 @@ class CaptchaServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('xe.captcha', function ($app) {
+        $this->app->singleton([CaptchaManager::class => 'xe.captcha'], function ($app) {
             $proxyClass = $app['xe.interception']->proxy(CaptchaManager::class, 'Captcha');
             $captchaManager = new $proxyClass($app);
             return $captchaManager;
-        }, true);
+        });
     }
 
     /**
