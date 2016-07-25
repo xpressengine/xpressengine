@@ -50,14 +50,11 @@ Route::settings(
         Route::get('lines/{key}', ['as' => 'manage.lang.lines.key', 'uses' => 'LangController@getLinesWithKey']);
         Route::get('search/{locale}', ['as' => 'manage.lang.search', 'uses' => 'LangController@searchKeyword']);
         Route::put('save', ['as' => 'manage.lang.save', 'uses' => 'LangController@save']);
-        Route::get(
-            '{namespace?}/{keyword?}',
-            [
+        Route::get('/', [
                 'as' => 'manage.lang.index',
                 'uses' => 'LangController@index',
                 'settings_menu' => ['lang.default']
-            ]
-        );
+        ]);
     }
 );
 
