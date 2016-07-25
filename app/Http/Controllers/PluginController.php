@@ -14,6 +14,7 @@ use XePresenter;
 use Redirect;
 use Symfony\Component\HttpFoundation\Response;
 use Xpressengine\Http\Request;
+use Xpressengine\Interception\InterceptionHandler;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
 use Xpressengine\Support\Exceptions\XpressengineException;
@@ -71,10 +72,11 @@ class PluginController extends Controller
         return XePresenter::make('show', compact('plugin', 'componentTypes'));
     }
 
-    public function putActivatePlugin($pluginId, PluginHandler $handler)
+    public function putActivatePlugin($pluginId, PluginHandler $handler, InterceptionHandler $interceptionHandler)
     {
         try {
             $handler->activatePlugin($pluginId);
+            $interceptionHandler->clearProxies();
         } catch (XpressengineException $e) {
             throw new HttpException(Response::HTTP_FORBIDDEN, $e->getMessage(), $e);
         } catch (\Exception $e) {
@@ -84,10 +86,11 @@ class PluginController extends Controller
         return Redirect::route('settings.plugins')->withAlert(['type' => 'success', 'message' => '플러그인을 켰습니다.']);
     }
 
-    public function putDeactivatePlugin($pluginId, PluginHandler $handler)
+    public function putDeactivatePlugin($pluginId, PluginHandler $handler, InterceptionHandler $interceptionHandler)
     {
         try {
             $handler->deactivatePlugin($pluginId);
+            $interceptionHandler->clearProxies();
         } catch (XpressengineException $e) {
             throw new HttpException(Response::HTTP_FORBIDDEN, $e->getMessage(), $e);
         } catch (\Exception $e) {
@@ -97,10 +100,11 @@ class PluginController extends Controller
         return Redirect::route('settings.plugins')->withAlert(['type' => 'success', 'message' => '플러그인을 껐습니다.']);
     }
 
-    public function putUpdatePlugin($pluginId, PluginHandler $handler)
+    public function putUpdatePlugin($pluginId, PluginHandler $handler, InterceptionHandler $interceptionHandler)
     {
         try {
             $handler->updatePlugin($pluginId);
+            $interceptionHandler->clearProxies();
         } catch (XpressengineException $e) {
             throw new HttpException(Response::HTTP_FORBIDDEN, $e->getMessage(), $e);
         } catch (\Exception $e) {
