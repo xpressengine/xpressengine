@@ -14,6 +14,7 @@
 
 namespace App\Providers;
 
+use App\UIObjects\Menu\MenuSelect;
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Menu\MenuHandler;
 use Xpressengine\Menu\MenuItemPolicy;
@@ -49,6 +50,7 @@ class MenuServiceProvider extends ServiceProvider
         $pluginRegister = $this->app['xe.pluginRegister'];
 
         $pluginRegister->add(MenuType::class);
+        $pluginRegister->add(MenuSelect::class);
         $pluginRegister->add(TypeSelect::class);
         $pluginRegister->add(DirectLink::class);
 

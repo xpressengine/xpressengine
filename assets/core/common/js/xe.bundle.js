@@ -744,9 +744,9 @@ if (typeof exports !== 'undefined') {
 }
 
 //xe.lang.js
-(function(exports, Translator) {
+(function(exports) {
   exports.XE.Lang = function() {
-
+    var Translator = exports.Translator;
     var _items = {
       'af' : 'af-ZA',
       'ar' : 'ar-SA',
@@ -839,8 +839,8 @@ if (typeof exports !== 'undefined') {
         return this;
       },
       set: function(items) {
-        $.extend(_items, items);
-        $.each(_items, function(key, value) {
+        //$.extend(_items, items);
+        $.each(items, function(key, value) {
           Translator.add(key, value);
         });
 
@@ -863,7 +863,7 @@ if (typeof exports !== 'undefined') {
       }
     }.init();
   }();
-})(window, Translator);
+})(window);
 (function(exports) {
   var instances = [];
   var cssLoaded = false;

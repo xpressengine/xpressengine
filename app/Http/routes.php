@@ -585,25 +585,25 @@ Route::settings(
             ]
         );
 
-        Route::post(
+        Route::put(
             '{pluginId}/activate',
             [
                 'as' => 'settings.plugins.activate',
-                'uses' => 'PluginController@postActivatePlugin'
+                'uses' => 'PluginController@putActivatePlugin'
             ]
         );
-        Route::post(
+        Route::put(
             '{pluginId}/deactivate',
             [
                 'as' => 'settings.plugins.deactivate',
-                'uses' => 'PluginController@postDeactivatePlugin'
+                'uses' => 'PluginController@putDeactivatePlugin'
             ]
         );
-        Route::post(
+        Route::put(
             '{pluginId}/update',
             [
                 'as' => 'settings.plugins.update',
-                'uses' => 'PluginController@postUpdatePlugin'
+                'uses' => 'PluginController@putUpdatePlugin'
             ]
         );
     }

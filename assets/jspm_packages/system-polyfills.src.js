@@ -1,5 +1,5 @@
 /*
- * SystemJS Promise Polyfill
+ * SystemJS Polyfills for URL and Promise providing IE8+ Support
  */
 (function(define) {
 

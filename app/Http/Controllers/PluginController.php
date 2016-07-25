@@ -71,7 +71,7 @@ class PluginController extends Controller
         return XePresenter::make('show', compact('plugin', 'componentTypes'));
     }
 
-    public function postActivatePlugin($pluginId, PluginHandler $handler)
+    public function putActivatePlugin($pluginId, PluginHandler $handler)
     {
         try {
             $handler->activatePlugin($pluginId);
@@ -84,7 +84,7 @@ class PluginController extends Controller
         return Redirect::route('settings.plugins')->withAlert(['type' => 'success', 'message' => '플러그인을 켰습니다.']);
     }
 
-    public function postDeactivatePlugin($pluginId, PluginHandler $handler)
+    public function putDeactivatePlugin($pluginId, PluginHandler $handler)
     {
         try {
             $handler->deactivatePlugin($pluginId);
@@ -97,7 +97,7 @@ class PluginController extends Controller
         return Redirect::route('settings.plugins')->withAlert(['type' => 'success', 'message' => '플러그인을 껐습니다.']);
     }
 
-    public function postUpdatePlugin($pluginId, PluginHandler $handler)
+    public function putUpdatePlugin($pluginId, PluginHandler $handler)
     {
         try {
             $handler->updatePlugin($pluginId);
