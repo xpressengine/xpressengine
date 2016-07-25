@@ -360,20 +360,24 @@ class UserController extends Controller
             $request,
             [
                 'address' => 'email|required'
-            ]
+            ],
+            [],
+            ['address' => xe_trans('xe::email')]
         );
 
         // 이미 인증 요청중인 이메일이 있는지 확인한다.
         $useEmailConfirm = $this->handler->usingEmailConfirm();
         if ($useEmailConfirm) {
             if ($this->user->getPendingEmail() !== null) {
-                throw new PendingEmailAlreadyExistsException();
+                $e = new PendingEmailAlreadyExistsException();
+                throw new HttpException(400, $e->getMessage(), $e);
             }
         }
 
         // 이미 존재하는 이메일이 있는지 확인한다.
         if($this->emails->findByAddress($input['address'])) {
-            throw new MailAlreadyExistsException();
+            $e = new MailAlreadyExistsException();
+            throw new HttpException(400, $e->getMessage(), $e);
         }
 
         //array_set($input, 'userId', $this->user->getId());

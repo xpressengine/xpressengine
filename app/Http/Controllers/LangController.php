@@ -29,8 +29,11 @@ class LangController extends Controller
     /**
      * 다국어 manage 페이지
      */
-    public function index($namespace = '', $keyword = '')
+    public function index(Request $request)
     {
+        $namespace = $request->get('namespace');
+        $keyword = $request->get('keyword');
+        
         XeFrontend::translation([
             'lang::admin.editor.saved', 'lang::admin.editor.failed'
         ]);
