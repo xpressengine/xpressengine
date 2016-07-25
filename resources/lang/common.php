@@ -1928,4 +1928,14 @@ return [
         'ko' => '로그인이 필요합니다.',
         'en' => 'Login is required.'
     ],
+    'msgAlertCaptchaAtJoin' => [
+        'ko' => '현재 CAPTCHA 기능을 정상적으로 사용할 수 없습니다. CAPTCHA 설정이 정상적으로 되어 있는지 확인하십시오<br>
+                            CAPTCHA 설정이 정상적이지 않을 경우, \'회원 가입 시 CAPTCHA 사용\'으로 설정하면 회원가입이 제대로 이루어지지 않습니다.',
+        'en' => ''
+    ],
+    'masAlertCaptchaAtLogin' => [
+        'ko' => '현재 CAPTCHA 기능을 정상적으로 사용할 수 없습니다. CAPTCHA 설정이 정상적으로 되어 있는지 확인하십시오<br>
+                                CAPTCHA 설정이 정상적이지 않을 경우, \'로그인 시 CAPTCHA 사용\'으로 설정하면 로그인이 제대로 작동하지 않습니다.',
+        'en' => ''
+    ],
 ];

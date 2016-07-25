@@ -20,6 +20,7 @@ use App\Http\Sections\ToggleMenuSection;
 use Config;
 use Input;
 use XePresenter;
+use Xpressengine\Captcha\CaptchaManager;
 use Xpressengine\Captcha\Exceptions\ConfigurationNotExistsException;
 use Xpressengine\Http\Request;
 use App\Http\Sections\SkinSection;
@@ -50,15 +51,13 @@ class SettingController extends Controller
      *
      * @return \Xpressengine\Presenter\RendererInterface
      */
-    public function editCommon()
+    public function editCommon(CaptchaManager $captcha)
     {
         $config = app('xe.config')->get('user.common');
 
         return XePresenter::make(
             'member.settings.setting.common',
-            array_merge(
-                compact('config')
-            )
+            compact('config', 'captcha')
         );
     }
 
@@ -101,26 +100,24 @@ class SettingController extends Controller
 
         return XePresenter::make(
             'member.settings.setting.skin',
-            array_merge(
-                compact('authSkinSection', 'settingsSkinSection', 'profileSkinSection')
-            )
+            compact('authSkinSection', 'settingsSkinSection', 'profileSkinSection')
         );
     }
 
     /**
      * edit Join setting
      *
+     * @param CaptchaManager $captcha
+     *
      * @return \Xpressengine\Presenter\RendererInterface
      */
-    public function editJoin()
+    public function editJoin(CaptchaManager $captcha)
     {
         $config = app('xe.config')->get('user.join');
 
         return XePresenter::make(
             'member.settings.setting.join',
-            array_merge(
-                compact('config')
-            )
+            compact('config','captcha')
         );
     }
 
@@ -155,9 +152,7 @@ class SettingController extends Controller
 
         return XePresenter::make(
             'member.settings.setting.field',
-            array_merge(
-                compact('dynamicFieldSection')
-            )
+            compact('dynamicFieldSection')
         );
     }
 
@@ -172,9 +167,7 @@ class SettingController extends Controller
 
         return XePresenter::make(
             'member.settings.setting.usermenu',
-            array_merge(
-                compact('toggleMenuSection')
-            )
+            compact('toggleMenuSection')
         );
     }
 }
