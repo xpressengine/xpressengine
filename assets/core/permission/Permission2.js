@@ -134,6 +134,7 @@ var Permission = React.createClass({
         var controlDisabled = false;
 
         if(modeValue === 'manual' || modeValue === 'inherit') {
+            modeEnable = true;
             if(modeValue !== 'manual') {
                 controlDisabled = true;
             }
@@ -225,6 +226,10 @@ var Permission = React.createClass({
         return (
             React.createElement("div", null, 
                 React.createElement("p", null, 
+                    React.createElement("h4", null, permissionTitle, " Permission")
+                ), 
+                modeUI, 
+                React.createElement("p", null, 
                     React.createElement("label", null, 
                         "Rating  ", 
                         React.createElement("i", {className: "fa fa-info-circle", "data-toggle": "popover", "data-content": "권한의 등급을 설정합니다.", 
@@ -288,4 +293,4 @@ var Permission = React.createClass({
 
 
 
-//# sourceMappingURL=SettingsPermission.js.map
+//# sourceMappingURL=Permission.js.map

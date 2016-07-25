@@ -25,41 +25,39 @@ var PermissionTagSuggestion = React.createClass({
         var searching;
         var suggestions;
         if(this.props.searchingCnt > 0) {
-            searching = React.createElement("ul", null, React.createElement("li", null, "Searching ... ", React.createElement("span", {className: "spinner", role: "spinner"}, React.createElement("span", {className: "spinner-icon"}))));
+            searching = <ul><li>Searching ... <span className="spinner" role="spinner"><span className="spinner-icon"></span></span></li></ul>;
         }else{
             suggestions = props.suggestions.map((function (item, i) {
                 return (
 
-                    React.createElement("li", {
-                        key: i, 
-                        onClick: props.handleClick.bind(null, i), 
-                        onMouseOver: props.handleHover.bind(null, i), 
-                        className: i == props.selectedIndex ? "active" : ""
-                        }, 
-                    React.createElement("span", {
-                        dangerouslySetInnerHTML: this.markIt(item, props.query)}
-                        )
-                    )
+                    <li
+                        key={i}
+                        onClick={props.handleClick.bind(null, i)}
+                        onMouseOver={props.handleHover.bind(null, i)}
+                        className={i == props.selectedIndex ? "active" : "" }
+                        >
+                    <span
+                        dangerouslySetInnerHTML={this.markIt(item, props.query)}
+                        />
+                    </li>
 
                 );
             }).bind(this));
         }
 
-        suggestionList = React.createElement("ul", null, suggestions);
+        suggestionList = <ul>{suggestions}</ul>;
 
         if ((suggestions && suggestions.length === 0) || props.query.length < MIN_QUERY_LENGTH) {
             return (
-                React.createElement("div", {className: "ReactTags__suggestions"})
+                <div className="ReactTags__suggestions"/>
             );
         }
 
         return (
-            React.createElement("div", {className: "ReactTags__suggestions"}, 
-                searching, 
-                suggestionList
-            )
+            <div className="ReactTags__suggestions">
+                {searching}
+                {suggestionList}
+            </div>
         );
     }
 });
-
-//# sourceMappingURL=PermissionTagSuggestion.js.map
