@@ -12,9 +12,9 @@ use Illuminate\Support\ServiceProvider;
 use Xpressengine\UIObjects\Widget\WidgetGenerator;
 use Xpressengine\Widget\WidgetHandler;
 use Xpressengine\Widget\WidgetParser;
-use Xpressengine\Widgets\ContentInfo;
-use Xpressengine\Widgets\StorageSpace;
-use Xpressengine\Widgets\SystemInfo;
+use App\Widgets\ContentInfo;
+use App\Widgets\StorageSpace;
+use App\Widgets\SystemInfo;
 
 /**
  * Class WidgetServiceProvider

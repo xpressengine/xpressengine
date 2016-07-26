@@ -14,6 +14,7 @@
 
 namespace Xpressengine\ToggleMenu;
 
+use Illuminate\Contracts\Container\Container;
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Plugin\PluginRegister;
 use Xpressengine\ToggleMenu\Exceptions\WrongInstanceException;
@@ -67,6 +68,13 @@ class ToggleMenuHandler
     protected $cfg;
 
     /**
+     * Container instance
+     *
+     * @var Container
+     */
+    protected $container;
+
+    /**
      * Type suffix for register
      *
      * @var string
@@ -76,13 +84,15 @@ class ToggleMenuHandler
     /**
      * Constructor
      *
-     * @param PluginRegister $register Register instance
-     * @param ConfigManager  $cfg      Xe config instance
+     * @param PluginRegister $register  Register instance
+     * @param ConfigManager  $cfg       Xe config instance
+     * @param Container      $container Container instance
      */
-    public function __construct(PluginRegister $register, ConfigManager $cfg)
+    public function __construct(PluginRegister $register, ConfigManager $cfg, Container $container)
     {
         $this->register = $register;
         $this->cfg = $cfg;
+        $this->container = $container;
     }
 
     /**
@@ -99,11 +109,13 @@ class ToggleMenuHandler
         $items = $this->getActivated($id, $instanceId);
 
         foreach ($items as &$item) {
-            $item = new $item($id, $identifier);
+            $item = $this->container->make($item);
 
             if (!$item instanceof AbstractToggleMenu) {
                 throw new WrongInstanceException();
             }
+
+            $item->setArguments($id, $instanceId, $identifier);
         }
 
         return $items;
@@ -169,7 +181,7 @@ class ToggleMenuHandler
      * @param string|null $instanceId instance id
      * @return string
      */
-    protected function getConfigKey($id, $instanceId)
+    public function getConfigKey($id, $instanceId)
     {
         return 'toggleMenu@' . $id . ($instanceId !== null ? '.' . $instanceId : '');
     }

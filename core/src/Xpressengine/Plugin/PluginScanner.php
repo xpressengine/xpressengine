@@ -82,7 +82,7 @@ class PluginScanner
         foreach ($directories as $directory) {
             $id = basename($directory);
 
-            if(strpos($id, '_') === 0) {
+            if (strpos($id, '_') === 0) {
                 continue;
             }
 

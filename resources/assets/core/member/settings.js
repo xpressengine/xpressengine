@@ -109,7 +109,7 @@ $(function () {
 
                 this.ui = {
                     nameText: $this.find('.__xe_displayName'),
-                    settingBox: $this.find('.setting_detail_con'),
+                    settingBox: $this.find('.setting-detail-content'),
                     nameInput: $this.find('.__xe_nameInput'),
                     messageText: $this.find('.__xe_message'),
                 };
@@ -162,7 +162,7 @@ $(function () {
             },
 
             setStatus: function (pass, message) {
-                this.ui.settingBox.toggleClass('wrong', !pass);
+                this.ui.settingBox.toggleClass('wrong-input', !pass);
                 this.ui.messageText.text(message);
             },
             beforeCheck: function () {
@@ -238,7 +238,7 @@ $(function () {
                 this.validated = false;
 
                 this.ui = {
-                    settingBox: $this.find('.setting_detail_con'),
+                    settingBox: $this.find('.setting-detail-content'),
                     form: $this.find('.__xe_form'),
                     currentBox: $this.find('.__xe_currentPassword'),
                     newBox: $this.find('.__xe_newPassword'),
@@ -299,12 +299,12 @@ $(function () {
                 if (message == undefined || message.length == 0) {
                     message = ' ';
                 }
-                element.toggleClass('wrong', !status);
-                element.find('.txt_message:not(.__xe_secure)').show().toggleClass('txt_blue', status).text(message);
+                element.toggleClass('wrong-input', !status);
+                element.find('.text-message:not(.__xe_secure)').show().text(message);
             },
             setSecureLevel: function (level) {
-                this.ui.newBox.removeClass('wrong');
-                this.ui.newBox.find('.txt_message:not(.__xe_secure)').hide();
+                this.ui.newBox.removeClass('wrong-input');
+                this.ui.newBox.find('.text-message:not(.__xe_secure)').hide();
                 this.ui.newBox.find('.__xe_secure span').hide();
                 if(level != undefined) {
                     this.ui.newBox.find('.__xe_secure .__xe_' + level).show();
@@ -444,17 +444,21 @@ $(function () {
 
                 // 이메일 추가 요청
                 $.ajax({
-                    url: this.options.addUrl,
-                    type: "POST",
-                    dataType: 'json',
-                    data: {address: input},
-                    success: function (data, textStatus, jqXHR) {
-                        location.reload();
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        // add에 실패하면 오류 출력
-                        self.setStatus(self.ui.addEmailBox, false, jqXHR.responseJSON.message)
+                  url: this.options.addUrl,
+                  type: "POST",
+                  dataType: 'json',
+                  data: {address: input},
+                  success: function (data, textStatus, jqXHR) {
+                    location.reload();
+                  },
+                  error: function (jqXHR, textStatus, errorThrown) {
+                    // add에 실패하면 오류 출력
+                    if (jqXHR.status == 422) {
+                      self.setStatus(self.ui.addEmailBox, false, jqXHR.responseJSON.address[0])
+                    } else {
+                      self.setStatus(self.ui.addEmailBox, false, jqXHR.responseJSON.message)
                     }
+                  }
                 });
             },
             confirm: function() {
@@ -563,8 +567,8 @@ $(function () {
                 if (message == undefined || message.length == 0) {
                     message = ' ';
                 }
-                element.toggleClass('wrong', !status);
-                element.find('.txt_message:not(.__xe_secure)').show().toggleClass('txt_blue', status).text(message);
+                element.toggleClass('wrong-input', !status);
+                element.find('.text-message:not(.__xe_secure)').show().text(message);
             },
         }
     );
@@ -586,14 +590,14 @@ $(function () {
                 var $this = this.$element;
 
                 this.ui = {
-                    settingBox: $this.find('.setting_detail_con'),
+                    settingBox: $this.find('.setting-detail-content'),
                     messageText: $this.find('.__xe_message'),
                     form: $this.find('.__xe_form'),
                 };
 
             },
             setStatus: function (pass, message) {
-                this.ui.settingBox.toggleClass('wrong', !pass);
+                this.ui.settingBox.toggleClass('wrong-input', !pass);
                 this.ui.messageText.text(message);
             },
             save: function () {

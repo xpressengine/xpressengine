@@ -22,6 +22,11 @@
                                 </label>
                             </div>
                         </div>
+                        @if($captcha->available() !== true)
+                            <div class="alert alert-warning" role="alert">
+                                {{ xe_trans('xe::masAlertCaptchaAtLogin') }}
+                            </div>
+                        @endif
                     </div>
                     <div class="form-group">
                         <label for="webmasterName">{{xe_trans('xe::webmasterName')}}</label>

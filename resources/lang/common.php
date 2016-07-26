@@ -1673,8 +1673,8 @@ return [
         'en' => 'Not a member yet?',
     ],
     'agreeSiteTermsUseAndSitePrivacyPolicy' => [
-        'ko' => '<a href=":termLink" target="_blank">이용 약관</a> 및 <a href=":policyLink" target="_blank">개인정보 보호정책</a>을 읽었으며 이에 동의합니다.',
-        'en' => 'By clicking you agree to our <a href=":termLink" target="_blank">Site Terms of Use</a>, <a href=":policyLink" target="_blank">Privacy Policy</a>',
+        'ko' => '<a href=":termLink" class="__xe_btn_agreement" target="_blank">이용 약관</a> 및 <a href=":policyLink" class="__xe_btn_privacy" target="_blank">개인정보 보호정책</a>을 읽었으며 이에 동의합니다.',
+        'en' => 'By clicking you agree to our <a href=":termLink" class="__xe_btn_agreement" target="_blank">Site Terms of Use</a>, <a href=":policyLink" class="__xe_btn_privacy" target="_blank">Privacy Policy</a>',
     ],
     'agreeSiteTermsUseAndSitePrivacyPolicyDescription' => [
         'ko' => '계속하려면 이용 약관 및 개인정보 보호정책을 읽었으며 이에 동의한다는 의사 표시로 확인란을 선택해야 합니다.',
@@ -1927,5 +1927,15 @@ return [
     'msgLoginRequired' => [
         'ko' => '로그인이 필요합니다.',
         'en' => 'Login is required.'
+    ],
+    'msgAlertCaptchaAtJoin' => [
+        'ko' => '현재 CAPTCHA 기능을 정상적으로 사용할 수 없습니다. CAPTCHA 설정이 정상적으로 되어 있는지 확인하십시오<br>
+                            CAPTCHA 설정이 정상적이지 않을 경우, \'회원 가입 시 CAPTCHA 사용\'으로 설정하면 회원가입이 제대로 이루어지지 않습니다.',
+        'en' => ''
+    ],
+    'masAlertCaptchaAtLogin' => [
+        'ko' => '현재 CAPTCHA 기능을 정상적으로 사용할 수 없습니다. CAPTCHA 설정이 정상적으로 되어 있는지 확인하십시오<br>
+                                CAPTCHA 설정이 정상적이지 않을 경우, \'로그인 시 CAPTCHA 사용\'으로 설정하면 로그인이 제대로 작동하지 않습니다.',
+        'en' => ''
     ],
 ];

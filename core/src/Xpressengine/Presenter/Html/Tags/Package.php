@@ -81,6 +81,7 @@ class Package
      * set handler
      *
      * @param FrontendHandler $handler frontend handler
+     *
      * @return void
      */
     public static function setHandler($handler)

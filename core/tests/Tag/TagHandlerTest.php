@@ -135,7 +135,7 @@ class TagHandlerTest extends \PHPUnit_Framework_TestCase
             return $args['tagId'] === 1
             && $args['taggableId'] === 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
             && $args['position'] === 0;
-        }))->andThrowExceptions([new \Exception]);
+        }))->andThrowExceptions([new \Illuminate\Database\QueryException('select', [], new \Exception('', 23000))]);
 
         $mockConn->shouldReceive('where')->once()->with('tagId', 1)->andReturnSelf();
         $mockConn->shouldReceive('where')->once()

@@ -12,9 +12,9 @@ use Illuminate\Support\ServiceProvider;
 use Xpressengine\Settings\SettingsHandler;
 use Xpressengine\Settings\SettingsMenuPermission;
 use Xpressengine\Permission\Factory as PermissionFactory;
-use Xpressengine\Themes\SettingsTheme;
-use Xpressengine\Themes\DefaultSettings;
-use Xpressengine\UIObjects\Settings\SettingsPermission;
+use App\Themes\SettingsTheme;
+use App\Themes\DefaultSettings;
+use App\UIObjects\Settings\SettingsPermission;
 
 class SettingsServiceProvider extends ServiceProvider
 {

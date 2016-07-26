@@ -1,6 +1,7 @@
 <?php
 /**
  * PHP Version 5
+ *
  * @category    User
  * @package     Xpressengine\User
  * @author      XE Developers <developers@xpressengine.com>
@@ -45,7 +46,7 @@ class UnknownUser implements UserInterface
     /**
      * UnknownUser constructor.
      *
-     * @param array $attributes
+     * @param array $attributes unknown user's initial information
      */
     public function __construct(array $attributes = [])
     {
@@ -103,7 +104,7 @@ class UnknownUser implements UserInterface
      */
     public static function setDefaultProfileImage($img)
     {
-        self::$profileImage= $img;
+        self::$profileImage = $img;
     }
 
     /**

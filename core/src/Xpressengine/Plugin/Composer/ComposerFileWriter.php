@@ -4,8 +4,8 @@
  *
  * PHP version 5
  *
- * @category
- * @package     Xpressengine\
+ * @category    Plugin
+ * @package     Xpressengine\Plugin
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
@@ -15,10 +15,10 @@ namespace Xpressengine\Plugin\Composer;
 
 use Xpressengine\Plugin\PluginScanner;
 
-require_once __DIR__.'/helpers.php';
-
 /**
- * @category
+ * plugin composer 파일을 제어하는 클래스.
+ *
+ * @category    Plugin
  * @package     Xpressengine\Plugin
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
@@ -43,6 +43,9 @@ class ComposerFileWriter
      */
     private $scanner;
 
+    /**
+     * @var string
+     */
     private $packagistUrl;
 
     /**
@@ -56,39 +59,52 @@ class ComposerFileWriter
     /**
      * ComposerFileWriter constructor.
      *
-     * @param string        $path
-     * @param PluginScanner $scanner
+     * @param string        $path         path of plugin composer file
+     * @param PluginScanner $scanner      plugin scanner
+     * @param string        $packagistUrl packagist url
      */
     public function __construct($path, PluginScanner $scanner, $packagistUrl)
     {
+        require_once(__DIR__.'/helpers.php');
         $this->scanner = $scanner;
         $this->path = $path;
         $this->reload();
         $this->packagistUrl = $packagistUrl;
     }
 
-    public function makeFile(){
+    /**
+     * generate plugin composer file
+     *
+     * @return void
+     */
+    public function makeFile()
+    {
         $data = [];
         $data['repositories'] = [];
-        $data['repositories'][] = ['type'=>'composer', 'url'=>$this->packagistUrl];
+        $data['repositories'][] = ['type' => 'composer', 'url' => $this->packagistUrl];
 
         $data['require'] = [];
 
         $data['xpressengine-plugin'] = [
-            "path"=> "storage/app/composer.plugins.json",
-            "install"=> [],
-            "update"=> [],
-            "uninstall"=> [],
-            "changed"=> []
+            "path" => "storage/app/composer.plugins.json",
+            "install" => [],
+            "update" => [],
+            "uninstall" => [],
+            "changed" => []
         ];
 
         $this->data = $data;
         $this->write();
     }
 
+    /**
+     * reload plugin composer file
+     *
+     * @return void
+     */
     public function reload()
     {
-        if(!is_file($this->path)) {
+        if (!is_file($this->path)) {
             $this->makeFile();
         }
 
@@ -96,28 +112,56 @@ class ComposerFileWriter
         $this->data = json_decode($str, true);
     }
 
+    /**
+     * register plugin to install list
+     *
+     * @param string $name    package name of plugin
+     * @param string $version plugin version
+     *
+     * @return $this
+     */
     public function install($name, $version)
     {
         array_set($this->data, "xpressengine-plugin.install.$name", $version);
         return $this;
     }
 
+    /**
+     * register plugin to update list
+     *
+     * @param string $name    package name of plugin
+     * @param string $version plugin version
+     *
+     * @return $this
+     */
     public function update($name, $version)
     {
         array_set($this->data, "xpressengine-plugin.update.$name", $version);
         return $this;
     }
 
+    /**
+     * register plugin to uninstall list
+     *
+     * @param string $name package name of plugin
+     *
+     * @return $this
+     */
     public function uninstall($name)
     {
         $uninstall = array_get($this->data, "xpressengine-plugin.uninstall", []);
-        if(!in_array($name, $uninstall)) {
+        if (!in_array($name, $uninstall)) {
             $uninstall[] = $name;
         }
         array_set($this->data, "xpressengine-plugin.uninstall", $uninstall);
         return $this;
     }
 
+    /**
+     * reset plugin install/update/uninstall list
+     *
+     * @return $this
+     */
     public function reset()
     {
         array_set($this->data, "xpressengine-plugin.install", []);
@@ -128,21 +172,30 @@ class ComposerFileWriter
 
 
     /**
-     * addRequire
+     * add plugin to require
      *
-     * @param $name
-     * @param $version
+     * @param string $name    package name of plugin
+     * @param string $version version of plugin
      *
-     * @return void
+     * @return $this
      */
     public function addRequire($name, $version)
     {
         array_set($this->data, "require.$name", $version);
+        return $this;
     }
 
+    /**
+     * remove plugin from require
+     *
+     * @param string $name package name of plugin
+     *
+     * @return $this
+     */
     public function removeRequire($name)
     {
         array_forget($this->data, "require.$name");
+        return $this;
     }
 
     /**
@@ -161,7 +214,7 @@ class ComposerFileWriter
 
             $name = array_get($plugin, 'metaData.name');
             $version = array_get($plugin, 'metaData.version');
-            if(is_dir($dir.DIRECTORY_SEPARATOR.$plugin['id'].DIRECTORY_SEPARATOR.'vendor')) {
+            if (is_dir($dir.DIRECTORY_SEPARATOR.$plugin['id'].DIRECTORY_SEPARATOR.'vendor')) {
                 $replace[$name] = '*';
                 continue;
             }
@@ -173,10 +226,15 @@ class ComposerFileWriter
         return $this;
     }
 
+    /**
+     * save loaded data to plugin composer file
+     *
+     * @return void
+     */
     public function write()
     {
         $json = json_encode($this->data);
-        if(function_exists('json_format')) {
+        if (function_exists('json_format')) {
             $json = json_format($json);
         } else {
             $json = \Composer\Json\JsonFormatter::format($json, true, true);
@@ -194,11 +252,11 @@ class ComposerFileWriter
         $operation = '>=';
         $requires = [];
         foreach (array_get($this->data, 'require', []) as $package => $version) {
-            $requires[$package] = $operation. str_replace($operation, '', $version);
+            $requires[$package] = $operation.str_replace($operation, '', $version);
         }
         array_set($this->data, 'require', $requires);
 
-        array_set($this->data, 'repositories', [['type'=>'composer', 'url'=>$this->packagistUrl]]);
+        array_set($this->data, 'repositories', [['type' => 'composer', 'url' => $this->packagistUrl]]);
         array_set($this->data, 'xpressengine-plugin.mode', 'plugins-update');
         array_set($this->data, 'xpressengine-plugin.changed', []);
 
@@ -219,7 +277,7 @@ class ComposerFileWriter
         }
         array_set($this->data, 'require', $requires);
 
-        array_set($this->data, 'repositories', [['type'=>'composer', 'url'=>$this->packagistUrl]]);
+        array_set($this->data, 'repositories', [['type' => 'composer', 'url' => $this->packagistUrl]]);
         array_set($this->data, 'xpressengine-plugin.mode', 'plugins-fixed');
 
         $this->reset();
@@ -228,10 +286,10 @@ class ComposerFileWriter
     }
 
     /**
-     * get
+     * retreive data
      *
-     * @param      $key
-     * @param null $default
+     * @param string $key     data field key
+     * @param mixed  $default default data
      *
      * @return mixed
      */
@@ -241,10 +299,10 @@ class ComposerFileWriter
     }
 
     /**
-     * set
+     * set data
      *
-     * @param $key
-     * @param $value
+     * @param string $key   data field key
+     * @param mixed  $value data value
      *
      * @return void
      */
@@ -253,6 +311,11 @@ class ComposerFileWriter
         array_set($this->data, $key, $value);
     }
 
+    /**
+     * get all data
+     *
+     * @return array
+     */
     public function all()
     {
         return $this->data;

@@ -26,21 +26,26 @@
                     {{--</div>--}}
                     <div class="pull-right">
                         <div class="input-group search-group">
-                            <div id="namespace" data-namespace="{{ $selected_namespace ?: '' }}">
-                                <div class="input-group-btn">
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{ $selected_namespace ?: XeLang::trans('lang::admin.search.all') }} <span class="caret"></span></button>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li><a href="#" data-namespace="">{{ XeLang::trans('lang::admin.search.all') }}</a></li>
-                                        @foreach ( $namespaces as $namespace )
-                                        <li><a href="#" data-namespace="{{ $namespace }}">{{ $namespace }}</a></li>
-                                        @endforeach
-                                    </ul>
-                                </div><!-- /btn-group -->
-                                <input type="text" class="form-control" aria-label="Text input with dropdown button" placeholder="{{xe_trans('xe::enterKeyword')}}" value="{{ $selected_keyword }}">
-                                <button class="btn-link" id="btn-search">
-                                    <i class="xi-magnifier"></i><span class="sr-only">{{ XeLang::trans('lang::admin.search-short') }}</span>
-                                </button>
-                            </div>
+                            <form>
+                                <input type="hidden" name="namespace" value="{{ $selected_namespace ?: '' }}">
+                                {{--<div id="namespace" data-namespace="{{ $selected_namespace ?: '' }}">--}}
+                                    <div class="input-group-btn" id="__xe_namespace">
+                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{ $selected_namespace ?: XeLang::trans('lang::admin.search.all') }} <span class="caret"></span></button>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li><a href="#" data-namespace="">{{ XeLang::trans('lang::admin.search.all') }}</a></li>
+                                            @foreach ( $namespaces as $namespace )
+                                            <li><a href="#" data-namespace="{{ $namespace }}">{{ $namespace }}</a></li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                    <div class="search-input-group">
+                                        <input type="text" class="form-control" name="keyword" aria-label="Text input with dropdown button" placeholder="{{xe_trans('xe::enterKeyword')}}" value="{{ $selected_keyword }}">
+                                        <button class="btn-link" id="btn-search" type="submit">
+                                            <i class="xi-magnifier"></i><span class="sr-only">{{ XeLang::trans('lang::admin.search-short') }}</span>
+                                        </button>
+                                    </div>
+                                {{--</div>--}}
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -75,48 +80,33 @@
     </div>
 </div>
 
-<script>
-    System.import('xecore:/common/js/xe.bundle').then(function() {
-        $(function () {
-            $('button.save').click(function (e) {
-                var url = '/settings/lang/save',
-                        data = $(this).closest('form').serializeArray();
-                $.ajax({
-                    type: 'PUT', url: url, dataType: 'json', data: data,
-                    success: function (data, textStatus) {
-                        XE.toast('success', XE.Lang.trans('lang::admin.editor.saved'));
-                    },
-                    error: function (request, status, error) {
-                        XE.toast('danger', XE.Lang.trans('lang::admin.editor.failed'));
-                    }
-                });
-                return false;
-            });
-
-            $("#namespace .dropdown-menu li a").click(function () {
-                var selText = $(this).text();
-                var selNamespace = $(this).data('namespace');
-                $(this).parents('.input-group').find('.dropdown-toggle').html(selText + ' <span class="caret"></span>');
-                $(this).closest('#namespace').data('namespace', selNamespace);
-                $('.open .dropdown-toggle').dropdown('toggle');
-                return false;
-            });
-
-            $('#btn-search').click(function () {
-                var namespace = $('#namespace').data('namespace');
-                var keyword = $('#namespace input').val();
-                var url = '/' + XE.options.managePrefix + '/lang';
-
-                if (!namespace && !keyword) {
-                    document.location.href = url;
-                    return;
-                } else if (!namespace && keyword) {
-                    namespace = 'äll';
+<script type="text/javascript">
+    $(function () {
+        $('button.save').click(function (e) {
+            var url = '/settings/lang/save',
+                    data = $(this).closest('form').serializeArray();
+            $.ajax({
+                type: 'PUT', url: url, dataType: 'json', data: data,
+                success: function (data, textStatus) {
+                    XE.toast('success', XE.Lang.trans('lang::admin.editor.saved'));
+                },
+                error: function (request, status, error) {
+                    XE.toast('danger', XE.Lang.trans('lang::admin.editor.failed'));
                 }
-
-                document.location.href = url + '/' + namespace + (keyword ? '/' + keyword : '');
             });
+            return false;
         });
+
+        $("#__xe_namespace .dropdown-menu li a").click(function () {
+            var selText = $(this).text();
+            var selNamespace = $(this).data('namespace');
+            $(this).parents('.input-group-btn').find('.dropdown-toggle').html(selText + ' <span class="caret"></span>');
+            $(this).closest('form').find('input[name="namespace"]').val(selNamespace);
+            $('.open .dropdown-toggle').dropdown('toggle');
+            return false;
+        });
+
+
     });
 </script>
 

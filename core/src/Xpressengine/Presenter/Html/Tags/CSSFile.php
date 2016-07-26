@@ -61,6 +61,7 @@ class CSSFile
      * @param string $location 출력할 파일의 위치\n
      *                         (head.append|head.prepend|body.append|body.prepend)
      * @param bool   $minified minified 파일을 출력할지 결정한다.
+     *
      * @return string
      */
     public static function output($location = 'head.append', $minified = false)
@@ -85,6 +86,14 @@ class CSSFile
     }
 
 
+    /**
+     * 로드된 파일 목록을 반환한다.
+     *
+     * @param string $location 파일 로드 위치
+     * @param bool   $minified min 파일 반환 여부
+     *
+     * @return array
+     */
     public static function getFileList($location = 'async.append', $minified = false)
     {
         $output = [];
@@ -106,9 +115,17 @@ class CSSFile
         return $output;
     }
 
-    public function getFile($file, $minified = false)
+    /**
+     * 로드된 파일을 반환한다.
+     *
+     * @param string $file     파일경로
+     * @param bool   $minified true일 경우, min파일을 반환한다.
+     *
+     * @return string
+     */
+    protected function getFile($file, $minified = false)
     {
-        if($minified) {
+        if ($minified) {
             return $this->minified;
         }
         return $file;
@@ -121,11 +138,12 @@ class CSSFile
      *
      * @param array  $fileList js file의 목록
      * @param Sorter $sorter   우선순위 정렬을 위한 sorter
+     *
      * @return void
      */
     public static function init($fileList = [], $sorter = null)
     {
-        static::$sorter   = $sorter === null ? new Sorter() : $sorter;
+        static::$sorter = $sorter === null ? new Sorter() : $sorter;
         static::$fileList = $fileList;
     }
 
@@ -140,7 +158,7 @@ class CSSFile
         $this->location = 'head.append';
 
         foreach ((array) $files as $file) {
-            $file          = $this->asset($file);
+            $file = $this->asset($file);
             $this->files[] = $file;
         }
 
@@ -154,6 +172,7 @@ class CSSFile
      * type
      *
      * @param string $type type
+     *
      * @return $this
      */
     public function type($type)
@@ -166,6 +185,7 @@ class CSSFile
      * media
      *
      * @param string $media media
+     *
      * @return $this
      */
     public function media($media)
@@ -184,6 +204,11 @@ class CSSFile
         static::$unloaded = array_merge(static::$unloaded, $this->files);
     }
 
+    /**
+     * load this file to async list
+     *
+     * @return CSSFile
+     */
     public function loadAsync()
     {
         $this->location = 'async.append';
@@ -191,7 +216,7 @@ class CSSFile
     }
 
     /**
-     * load
+     * load this file
      *
      * @return $this
      */
@@ -254,6 +279,7 @@ class CSSFile
      *
      * @param string     $file     file path
      * @param bool|false $minified minified
+     *
      * @return string
      */
     public function render($file, $minified = false)
@@ -288,6 +314,7 @@ class CSSFile
      * key resolver
      *
      * @param string $file file path
+     *
      * @return string
      */
     protected function resolveKey($file)
@@ -299,6 +326,7 @@ class CSSFile
      * asset
      *
      * @param string $file file path
+     *
      * @return string
      */
     protected function asset($file)

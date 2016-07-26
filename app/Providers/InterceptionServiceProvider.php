@@ -35,7 +35,7 @@ class InterceptionServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(
-            'xe.interception',
+            [InterceptionHandler::class => 'xe.interception'],
             function ($app) {
                 $advisorCollection = new AdvisorCollection();
 

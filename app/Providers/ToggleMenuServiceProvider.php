@@ -51,7 +51,7 @@ class ToggleMenuServiceProvider extends ServiceProvider
     {
         $this->app->bind('xe.toggleMenu', function ($app) {
             $proxyClass = $app['xe.interception']->proxy(ToggleMenuHandler::class, 'ToggleMenu');
-            return new $proxyClass($app['xe.pluginRegister'], $app['xe.config']);
+            return new $proxyClass($app['xe.pluginRegister'], $app['xe.config'], $app);
         }, true);
     }
 

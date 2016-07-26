@@ -18,7 +18,6 @@ use Closure;
 use Illuminate\Contracts\View\Factory;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Config\ConfigManager;
-use Xpressengine\Plugin\ComponentInterface;
 use Xpressengine\Plugin\PluginRegister;
 
 /**
@@ -82,10 +81,10 @@ class ThemeHandler
     /**
      * 생성자
      *
-     * @param PluginRegister $register   plugin registry manager
-     * @param ConfigManager  $config     config manager
-     * @param Factory        $viewFactory
-     * @param string         $blankTheme blanktheme_id
+     * @param PluginRegister $register    plugin registry manager
+     * @param ConfigManager  $config      config manager
+     * @param Factory        $viewFactory view factory
+     * @param string         $blankTheme  blanktheme_id
      */
     public function __construct(PluginRegister $register, ConfigManager $config, Factory $viewFactory, $blankTheme)
     {
@@ -333,6 +332,13 @@ class ThemeHandler
         return $themes;
     }
 
+    /**
+     * 주어진 테마가 저장된 config data를 가지고 있는지 검사한다.
+     *
+     * @param string $id theme instance id
+     *
+     * @return bool
+     */
     public function hasThemeConfig($id)
     {
         $id = implode($this->configDelimiter, func_get_args());
@@ -341,7 +347,7 @@ class ThemeHandler
     }
 
     /**
-     * getThemeConfig
+     * 주어진 테마에 저장된 config data를 반환한다.
      *
      * @param string $id theme id
      *
@@ -356,11 +362,12 @@ class ThemeHandler
     }
 
     /**
-     * setThemeConfig
+     * 주어진 테마의 config data를 저장한다.
      *
      * @param string       $id         theme id
-     * @param string|array $key        config data or, config key for setting value
+     * @param string|array $key        config data or config key for setting value
      * @param mixed        $configData config
+     *
      * @return void
      */
     public function setThemeConfig($id, $key, $configData = null)
@@ -381,6 +388,13 @@ class ThemeHandler
         }
     }
 
+    /**
+     * 주어진 테마에 저장된 모든 config data를 반환한다.
+     *
+     * @param string $id theme id
+     *
+     * @return array
+     */
     public function getThemeConfigList($id)
     {
         $base = $this->getThemeConfig($id);
@@ -411,8 +425,8 @@ class ThemeHandler
     /**
      * make and return ThemeEntity
      *
-     * @param $id
-     * @param $class
+     * @param string $id    theme id
+     * @param string $class theme class name
      *
      * @return ThemeEntity
      */

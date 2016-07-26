@@ -96,11 +96,10 @@ class MenuMigration implements Migration {
         $menuHandler->setMenuTheme($mainMenu, $defaultMenuTheme, $defaultMenuTheme);
         app('xe.permission')->register($mainMenu->getKey(), $menuHandler->getDefaultGrant());
 
-        $this->pageModuleMenuSetup($mainMenu);
-        $this->boardModuleMenuSetup($mainMenu);
-
         $this->setThemeConfig($mainMenu->id);
 
+        $this->pageModuleMenuSetup($mainMenu);
+        $this->boardModuleMenuSetup($mainMenu);
     }
 
     /**
@@ -175,7 +174,7 @@ class MenuMigration implements Migration {
 
         $item = $menuHandler->createItem($mainMenu, $inputs, $menuTypeInput);
 
-        $menuHandler->setMenuItemTheme($item, 'theme/alice@alice.1', 'theme/alice@alice.1');
+        $menuHandler->setMenuItemTheme($item, null, null);
         app('xe.permission')->register($menuHandler->permKeyString($item), new Grant);
 
 
@@ -226,7 +225,7 @@ class MenuMigration implements Migration {
 
         $item = $menuHandler->createItem($mainMenu, $inputs, $menuTypeInput);
 
-        $menuHandler->setMenuItemTheme($item, 'theme/alice@alice', 'theme/alice@alice');
+        $menuHandler->setMenuItemTheme($item, null, null);
         app('xe.permission')->register($menuHandler->permKeyString($item), new Grant);
     }
 

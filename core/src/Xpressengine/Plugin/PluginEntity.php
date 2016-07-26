@@ -63,7 +63,7 @@ class PluginEntity implements Arrayable, Jsonable
     /**
      * 플러그인의 클래스명(네임스페이스 포함)
      *
-     * @var string
+     * @var string|AbstractPlugin
      */
     protected $class;
 
@@ -303,7 +303,7 @@ class PluginEntity implements Arrayable, Jsonable
      */
     public function hasRemoteData()
     {
-        if($this->remoteData !== null) {
+        if ($this->remoteData !== null) {
             return true;
         }
         return false;
@@ -312,7 +312,7 @@ class PluginEntity implements Arrayable, Jsonable
     /**
      * 자료실에 등록된 플러그인의 정보를 설정한다.
      *
-     * @param $data
+     * @param array $data 자료실에 등록된 플러그인 정보
      *
      * @return void
      */
@@ -329,7 +329,7 @@ class PluginEntity implements Arrayable, Jsonable
     public function needUpdateInstall()
     {
         $installedVersion = $this->getInstalledVersion();
-        if($installedVersion === $this->getVersion()) {
+        if ($installedVersion === $this->getVersion()) {
             return false;
         }
         return !$this->checkInstalled() || !$this->checkUpdated($installedVersion);
@@ -342,7 +342,7 @@ class PluginEntity implements Arrayable, Jsonable
      */
     public function hasUpdate()
     {
-        if($this->hasRemoteData()) {
+        if ($this->hasRemoteData()) {
             return version_compare($this->getLatestVersion(), $this->getVersion(), '>');
         }
 
@@ -356,9 +356,10 @@ class PluginEntity implements Arrayable, Jsonable
      */
     public function getLatestVersion()
     {
-        if($this->hasRemoteData()) {
+        if ($this->hasRemoteData()) {
             return data_get($this->remoteData, 'latest_release.version');
         }
+        return null;
     }
 
     /**
@@ -445,7 +446,7 @@ class PluginEntity implements Arrayable, Jsonable
     public function getReadMe()
     {
 
-        if($this->hasRemoteData()) {
+        if ($this->hasRemoteData()) {
             return data_get($this->remoteData, 'details', '');
         }
 
@@ -463,13 +464,13 @@ class PluginEntity implements Arrayable, Jsonable
      *
      * @return string
      */
-    public function getChangeLog($parsed = true)
+    public function getChangeLog()
     {
 
-        if($this->hasRemoteData()) {
+        if ($this->hasRemoteData()) {
             $logs = '';
             foreach (data_get($this->remoteData, 'releases', []) as $release) {
-                $content = data_get($release, 'parsed_changelog')?:'-';
+                $content = data_get($release, 'parsed_changelog') ?: '-';
                 $logs .= "<dt>{$release->version}</dt><dd>$content</dd>";
             }
             return "<dl>$logs</dl>";

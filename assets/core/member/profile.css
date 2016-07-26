@@ -151,18 +151,19 @@
 
 .xe-profile .btn-file {
   position: absolute;
-  width: 100%;
-  max-width: 140px;
+  width: 120px;
   height: 100%;
   top: 0;
   left: 50%;
-  margin-left: -70px;
+  margin-left: -60px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
 }
 
 .xe-profile .btn-file:after {
   display: inline-block;
   position: absolute;
-  left: 44px;
+  left: 34px;
   top: 33px;
   font-family: xeicon;
   speak: none;

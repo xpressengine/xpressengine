@@ -391,6 +391,7 @@ return [
             'formCheckbox' => 'uiobject/xpressengine@formCheckbox',
             'formFile' => 'uiobject/xpressengine@formFile',
             'formImage' => 'uiobject/xpressengine@formImage',
+            'formMenu' => 'uiobject/xpressengine@menuSelect',
             'formLangText' => 'uiobject/xpressengine@formLangText',
             'formLangTextarea' => 'uiobject/xpressengine@formLangTextArea',
             'langText' => 'uiobject/xpressengine@langText',
@@ -415,7 +416,7 @@ return [
     ],
 
     'theme' => [
-        'blank' => 'Xpressengine\Themes\BlankTheme',
+        'blank' => 'App\Themes\BlankTheme',
         'storage' => [
             'disk' => 'local',
             'path' => 'public/theme/'
