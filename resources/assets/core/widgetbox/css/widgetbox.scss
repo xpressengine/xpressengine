@@ -1,0 +1,436 @@
+@charset "utf-8";
+
+$widget-primary-color:         #6F8DFF !default;
+
+html, body, .widget-wrap{
+  height: 100%;
+  min-height: 100%;
+}
+
+header h1, .snb-section h2,.widget-content h3 {
+  margin: 0;
+  padding: 0;
+}
+
+body, input, textarea, select, table, .dt_sl {
+  font-family: "나눔바른고딕",NanumBarunGothic,'나눔고딕',NanumGothic,'맑은 고딕',malgungothic,'굴림',Gulim,AppleGothic,sans-serif;
+  font-size: 13px;
+  color: #2c2e37;
+}
+
+/*layout*/
+.widget-wrap{  
+  background-color: #FAFAFA;
+  min-width: 680px;
+  .xe-btn-primary{
+    background-color: $widget-primary-color;
+    border-color: $widget-primary-color;
+  }
+  .xe-btn-primary-outline{
+    border-color: $widget-primary-color;
+    &:hover {    
+      background-color: $widget-primary-color;
+      border-color: $widget-primary-color;
+    }
+  }  
+  
+  .xe-label > input {
+    &[type="checkbox"]:hover + .xe-input-helper, &[type="radio"]:hover + .xe-input-helper {
+      border-color: $widget-primary-color;
+    }
+    &[type="checkbox"]:checked + .xe-input-helper {
+      border-color: transparent;
+      background-color: $widget-primary-color;
+    }
+    &[type="radio"]:checked + .xe-input-helper {
+      border-color: $widget-primary-color;
+      &:after {
+        background-color: $widget-primary-color;
+      }
+    }
+  } 
+}
+
+header{
+  height: 60px;
+  padding:0 20px;
+  background-color: #fff;
+  border-bottom: 1px solid #e5e5e5;  
+  h1 {
+    display: inline-block;    
+    font-size: 33px;
+    line-height: 66px;
+    a {
+      color: $widget-primary-color;
+      .brand-title {
+      display: inline-block;
+      width: 150px;
+      height: 27px;
+      margin-left: 5px;
+      background: url(../img/h_brand.png) 0 50% no-repeat;
+      }
+    }
+  }
+  >.xe-pull-right{
+    margin-top:12px;
+    .xe-btn{
+      margin-left: 4px;
+      i{
+        margin-right: 4px;
+      }
+      &.xe-btn-link{
+        font-size: 18px;
+      }
+    }
+  }
+}
+.widget-snb{
+  position: absolute;
+  left:0;
+  top:59px;
+  bottom:0;
+  width:315px;
+  background-color: #fff;
+  border-right: 1px solid #e5e5e5;
+  color: #656973;
+  .snb-section{
+    padding:20px 20px 37px 20px;
+    border-top:1px solid #e5e5e5;    
+    .cell-config-btn{
+      .xe-btn{
+        margin-right: 2px;
+      }
+      .xe-btn-group > .xe-btn:first-child:not(:last-child):not(.xe-dropdown-toggle) {
+        border-bottom-right-radius: 2px;
+        border-top-right-radius: 2px;
+        margin-right: 2px;
+      }
+      .xe-btn-group.vertical-list > .xe-btn:first-child:not(:last-child):not(.xe-dropdown-toggle) {
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+        margin-right: 0;
+      }      
+    }
+    h2,
+    h3{
+      font-size: 24px;
+      font-weight: normal;
+      color: #2c2e37;
+    }
+    h3{
+      font-size: 15px;      
+      i{
+        font-size: 18px;
+        vertical-align: bottom;
+        color: #656973;
+      }
+    }
+    .xe-form-group{      
+      margin-bottom: 10px;
+    }
+    .xe-form-inline{
+      margin-bottom: 10px;
+      .xe-form-group{
+        margin-bottom: 0;
+      }
+    }    
+    .text-horizontal{
+      display: inline-block;
+      background: url(../img/ico_horizontal.png) 0 50% no-repeat;
+      padding-left: 20px;
+    }
+    .xe-btn{
+      i{
+        margin-right: 5px;
+        font-size: 16px;
+        vertical-align: bottom;
+        padding-bottom: 2px;
+      }
+    }
+    
+    .xe-dropdown-menu.drag-cell{
+      width: 200px;
+      padding:20px;
+      margin-top:2px;
+      text-align: center;
+      .xe-btn{
+        margin: 16px 0 0 6px;
+        &:first-of-type{
+          margin-left: 0;
+        }
+      }
+      li{
+        display: inline-block;        
+        font-size: 0;
+        span{
+          display: block;
+          width: 23px;
+          height: 23px;
+          background-color: #C8C9CC;
+          border:1px solid #AFB0B3;
+          cursor: pointer;
+        }
+        &.hover{
+          span{
+            background-color: $widget-primary-color;
+            border:1px solid #5779D9;
+          }
+        }
+      }
+    }    
+  }  
+  
+  .xe-btn-group.vertical-list{
+    text-align: center;
+    .text-vertical{
+      display: inline-block;
+      background: url(../img/ico_vertical.png) 0 50% no-repeat;
+      padding-left: 20px;
+    }
+    .xe-dropdown-menu{
+      width: auto;      
+      padding: 7px 15px 15px 15px;
+      li{
+        font-size: 0;
+        a {
+          overflow: hidden;
+          padding: 8px 0;
+          color:#fff;
+          white-space: nowrap;
+          text-align: center;
+          &:hover{
+            background-color: transparent;
+            >span em{
+              background-color: $widget-primary-color;
+              border-color:#5779D9;
+              &::after{
+                background-color: #5779D9;
+              }
+            }  
+          }
+          >span{
+            padding: 0;
+            >em{
+              display:block;
+              position: relative;        
+              height: 22px;
+              margin-left: 5px;
+              background-color: #C8C9CC;
+              border: 1px solid #AFB0B3;            
+              font-size: 12px;
+              line-height: 22px;           
+              font-style: normal;
+            }            
+            &::after{
+              position: absolute;
+              left: 2px;
+              top: -3px;
+              width: 1px;
+              height: 27px;
+              background-color:#AFB0B3;
+              content:"";
+            }
+            &:first-of-type{
+              em{
+                margin-left: 0;                
+              }
+              &::after{
+                background-color: transparent;
+              }
+            }
+          }  
+        }        
+      } 
+    }
+    .xe-input-group{
+      margin-top: 7px;
+      .xe-form-control{
+        width: 120px;
+      }  
+    }    
+  }
+}
+
+.widget-container{  
+  margin-left: 315px;
+  padding:20px 15px 100px;  
+  background-color: #FAFAFA;
+  .widget-content{
+    h3{
+      margin: 0 0 10px 5px;
+      font-size: 15px;
+      i{
+        font-size: 18px;
+        vertical-align: bottom;
+        color:#656973;
+      }
+    }
+  }
+}
+
+.dimd {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 90;
+  background: #000;
+  opacity: .5;
+  cursor: default;
+}
+
+.widget-layer{
+  position: fixed;
+  overflow-y: auto;
+  top:0;
+  bottom:0;
+  left: -470px;
+  width: 470px;
+  height: 100%;
+  padding: 30px;
+  background-color: #fff;
+  z-index: 100;
+  color:#656973;  
+  font-size: 13px;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  
+  &.open{
+    left: 0
+  }
+  
+  p{
+    margin: 5px 0;
+    line-height: 19px;
+  }
+  h1{
+    margin:0 0 25px 0;    
+    font-size: 24px;
+    font-weight: normal;
+    color:#2D2D35;
+  }
+  h2{
+    position: relative;
+    margin:0 0 15px 0;    
+    padding-bottom:5px;
+    font-weight: normal;
+    font-size: 20px;
+    color:$widget-primary-color;    
+    border-bottom: 1px solid #e5e5e5;    
+    .btn-section-close{
+      position: absolute;
+      right:0;
+      top:0;
+      background-color: transparent;
+      border-color: transparent;
+      cursor: pointer;
+      color: #656973;
+      font-size: 18px;      
+    }
+  }  
+  
+  .seciton{
+    margin-top:35px;
+    &.close .btn-section-close i{      
+      -webkit-transform: rotate(180deg);
+      transform: rotate(180deg);       
+    }
+  }
+  
+  .layer-close{
+    position: absolute;
+    right: 27px;
+    top: 27px;
+    background-color: transparent;
+    border-color: transparent;
+    cursor: pointer;
+    font-size: 20px;
+    color: #656973;
+  }
+  .btn-center{
+    margin-top: 30px;
+    padding-top: 30px;
+    border-top: 1px solid #e5e5e5;
+    text-align: center;
+    .xe-btn{
+      margin-left: 6px;
+      &:first-child{
+        margin-left: 0;
+      }
+    }
+  }  
+}
+
+
+//http://khongchi.test.dev1.xpressengine.com/assets/css/style.css 에서 갖고 와서 수정
+
+.editor .widgetarea-row {
+  > div {
+    border: 5px solid #FAFAFA;
+    background: #e6e6e6;
+    border-radius: 4px;
+    padding-top: 15px;
+  }
+  .widgetarea {
+    border: none;
+    background: none;
+    min-height: 140px;
+  }
+  .selected {
+    background-color: #B8DBFD;
+  }
+  
+  .widget-config-btn{
+    .xe-btn{
+      padding: 3px;
+      color:#656973;
+      font-size: 18px;
+    }
+  }
+  .xe-well{
+    margin-bottom: 10px;
+    padding:7px 15px;
+    background-color: #fff;
+    border:1px solid #C8C9CC;
+    strong{
+      font-weight: normal;
+      font-size: 18px;
+      line-height: 33px;
+    }
+  }
+}
+.layout-controller .btn-group {
+  margin-bottom: 10px;
+}
+.order {
+  display: none;
+}
+.editor .order {
+  display: block;
+  position: absolute;
+  left: 5px;
+  top: 3px;
+  color: #656973;
+}
+/*0727 blueng 추가건*/
+.editor.layout-mobile {
+   max-width: 450px;
+   margin-left: auto;
+   margin-right: auto;
+ }
+.editor.layout-mobile .xe-col-md-1,
+.editor.layout-mobile .xe-col-md-2,
+.editor.layout-mobile .xe-col-md-3,
+.editor.layout-mobile .xe-col-md-4,
+.editor.layout-mobile .xe-col-md-5,
+.editor.layout-mobile .xe-col-md-6,
+.editor.layout-mobile .xe-col-md-7,
+.editor.layout-mobile .xe-col-md-8,
+.editor.layout-mobile .xe-col-md-9,
+.editor.layout-mobile .xe-col-md-10,
+.editor.layout-mobile .xe-col-md-11,
+.editor.layout-mobile .xe-col-md-12 {
+   width: 100%;
+}
