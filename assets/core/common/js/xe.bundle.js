@@ -50,46 +50,42 @@
 
   // @DEPRECATED
   function cssLoad(url) {
-    var $css = $('<link>', {rel: 'stylesheet', type: 'text/css', href: url});
-
-    $('head').append($css);
+    DynamicLoadManager.cssLoad(url);
   }
 
   function jsLoad(url) {
-    var $js = $('<script>', {id: 'jsload', type: 'text/javascript', src: url});
-
-    $('head').append($js);
+    DynamicLoadManager.jsLoad(url);
   }
 
   function toast(type, message) {
     if (type == '') {
       type = 'danger';
     }
-    System.import('xecore:/common/js/modules/griper/griper').then(function (griper) {
+    System.import('xecore:/common/js/griper').then(function (griper) {
       return griper.toast(type, message);
     });
   }
 
   function toastByStatus(status, message) {
-    System.import('xecore:/common/js/modules/griper/griper').then(function (griper) {
+    System.import('xecore:/common/js/griper').then(function (griper) {
       return griper.toast(griper.toast.fn.statusToType(status), message);
     });
   }
 
   function formError($element, message) {
-    System.import('xecore:/common/js/modules/griper/griper').then(function (griper) {
+    System.import('xecore:/common/js/griper').then(function (griper) {
       return griper.form($element, message);
     });
   }
 
   function formErrorClear($form) {
-    System.import('xecore:/common/js/modules/griper/griper').then(function (griper) {
+    System.import('xecore:/common/js/griper').then(function (griper) {
       return griper.form.fn.clear($form);
     });
   }
 
   function validate($form) {
-    System.import('xecore:/common/js/modules/validator').then(function (validator) {
+    System.import('xecore:/common/js/validator').then(function (validator) {
       validator.validate($form);
     });
   }
@@ -1482,11 +1478,12 @@ $(function() {
 
   $(document).on('boot.xe.modal', '[data-toggle=xe-modal]', function() {
     System.import("xe.component.modal").then(function() {
-      $('[data-toggle=xe-modal]').xeModal();
+      //$('[data-toggle=xe-modal]').xeModal();
+
     });
   });
 
-  $(document).on('boot.xe.modal', '[data-toggle=xe-tooltip]', function() {
+  $(document).on('boot.xe.tooltip', '[data-toggle=xe-tooltip]', function() {
     System.import("xe.component.tooltip").then(function() {
       $('[data-toggle=xe-tooltip]').xeTooltip();
     });
