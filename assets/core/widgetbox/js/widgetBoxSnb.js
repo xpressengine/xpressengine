@@ -34,6 +34,9 @@
                 self.$btnWidgetAdd = $(".btn-widget-add");
                 self.$inputVerticalSize = $("#inputVerticalSize");
                 self.$btnAddDivisionType = $("#btnAddDivisionType");
+                self.$tooltips = $('[data-toggle="xe-tooltip"]');
+                self.$sectionClose = $(".btn-section-close");
+
             },
             bindEvents: function() {
                 self.$btnMode.on("click", self.selectMode);
@@ -45,6 +48,7 @@
                 self.$btnWidgetAdd.on("click", self.toggleWidgetAddLayer);
                 self.$inputVerticalSize.on("keypress", self.inputVerticalSize);
                 self.$btnAddDivisionType.on("click", self.addDivisionType);
+                self.$sectionClose.on("click", self.toggleSection);
             },
             settings: function() {
                 var locDivitionType = JSON.parse(localStorage.getItem("divisionType") || '[]');
@@ -63,6 +67,15 @@
                 });
 
                 self.appendDivisionType(appendDivision);
+
+                //tooltip
+                self.$tooltips.xeTooltip();
+            },
+            toggleSection: function() {
+                var $section = $(this).parents(".seciton");
+
+                $section.children(".section-group").toggle();
+                $section.toggleClass("close");
             },
             addDivisionType: function() {
                 var divisionType = self.$inputVerticalSize.val();
@@ -165,6 +178,16 @@
                 var $this = $(this)
                     , mode = $this.data("mode");
 
+                $this.addClass('xe-btn-primary').parent().siblings().find(".xe-btn").removeClass('xe-btn-primary');
+
+                if(mode == 'mobile') {
+                    //layout-mobile
+                    
+                    self.$editor.addClass("layout-mobile");
+                }else {
+                    self.$editor.removeClass("layout-mobile");
+                }
+                
                 _settings.mode = mode;
             },
             selectDivisionType: function() {

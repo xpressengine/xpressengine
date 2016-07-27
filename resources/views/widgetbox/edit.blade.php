@@ -254,25 +254,31 @@
     <!--// widget layer  -->
 </div>
 <div class="dimd"></div>
+
+<!-- TODO:: feature/redefine-markup branch merge후 삭제 -->
+<style type="text/css">
+    .editor.layout-mobile {
+        max-width: 450px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .editor.layout-mobile .xe-col-md-1
+    , .editor.layout-mobile .xe-col-md-2
+    , .editor.layout-mobile .xe-col-md-3
+    , .editor.layout-mobile .xe-col-md-4
+    , .editor.layout-mobile .xe-col-md-5
+    , .editor.layout-mobile .xe-col-md-6
+    , .editor.layout-mobile .xe-col-md-7
+    , .editor.layout-mobile .xe-col-md-8
+    , .editor.layout-mobile .xe-col-md-9
+    , .editor.layout-mobile .xe-col-md-10
+    , .editor.layout-mobile .xe-col-md-11
+    , .editor.layout-mobile .xe-col-md-12 {
+        width: 100%;
+    }
+</style>
 <script type="text/javascript">
-    // 마크업 테스트 코드
-    $(document).ready(function(){
-
-        $('[data-toggle="xe-tooltip"]').xeTooltip();
-
-        $(".btn-section-close").click(function(){
-            $(this).parents(".seciton").children(".section-group").toggle();
-            $(this).parents(".seciton").toggleClass("close");
-        });
-
-//        $('.dimd, .layer-close').on('click', function () {
-//            $(".widget-layer").removeClass("open");
-//            $(".dimd").hide();
-//            $("body").css("overflow", "");
-//        });
-
-        WidgetBox.init();
-        WidgetSnb.init();
-        WidgetAdder.init();
-    });
+    WidgetBox.init();
+    WidgetSnb.init();
+    WidgetAdder.init();
 </script>
