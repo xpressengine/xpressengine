@@ -6,12 +6,17 @@
     "babelify": "^7.1.0",
     "gulp": "^3.9.0",
     "gulp-babel": "^6.1.2",
+    "gulp-clean": "^0.3.2",
     "gulp-clean-css": "^2.0.4",
+    "gulp-concat": "^2.6.0",
     "gulp-copy": "0.0.2",
     "gulp-csscomb": "^3.0.6",
     "gulp-csslint": "^0.2.2",
     "gulp-filter": "^4.0.0",
     "gulp-if": "^2.0.1",
+    "gulp-ignore": "^2.0.1",
+    "gulp-jscs": "^4.0.0",
+    "gulp-jshint": "^2.0.1",
     "gulp-jspm": "^0.5.7",
     "gulp-jspm-assets": "^1.1.1",
     "gulp-load-plugins": "^1.2.0",
@@ -20,6 +25,8 @@
     "gulp-react": "^3.1.0",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^2.2.0",
+    "gulp-sass-lint": "^1.2.0",
+    "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^1.5.3",
     "gulp-util": "^3.0.7",
     "jest-cli": "*",
@@ -29,9 +36,6 @@
     "run-sequence": "^1.1.5"
   },
   "dependencies": {
-    "gulp-clean": "^0.3.2",
-    "gulp-concat": "^2.6.0",
-    "gulp-sourcemaps": "^1.6.0"
   },
   "scripts": {
     "test": "jest"
