@@ -51,7 +51,9 @@ class SettingsPermission extends AbstractUIObject
         $this->template = implode(PHP_EOL, $settings);
 
         XeFrontend::js('/assets/core/permission/Permission.js')->unload();
-        XeFrontend::js('/assets/core/permission/SettingsPermission.js')->type('text/jsx')->load();
+
+
+        XeFrontend::js('/assets/core/permission/SettingsPermission.js')->after('/assets/core/permission/PermissionTag.js')->load();
 
         return parent::render();
     }

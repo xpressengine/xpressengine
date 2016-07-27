@@ -159,10 +159,10 @@ var Permission = React.createClass({
         var RatingUI =
             ratingOption.map(function (data) {
                 if (data.value == ratingValue)
-                    return React.createElement("label", null, React.createElement("input", {type: "radio", disabled: controlDisabled, name: ratingTitle, key: data.value, value: data.value, checked: true, 
+                    return React.createElement("label", null, React.createElement("input", {type: "radio", disabled: controlDisabled, name: ratingTitle, key: data.value, value: data.value, checked: true,
                                   onChange: self.inputChange.bind(null, 'rating')}), " ", data.name, "  ");
                 else
-                    return React.createElement("label", null, React.createElement("input", {type: "radio", disabled: controlDisabled, name: ratingTitle, key: data.value, value: data.value, 
+                    return React.createElement("label", null, React.createElement("input", {type: "radio", disabled: controlDisabled, name: ratingTitle, key: data.value, value: data.value,
                                   onChange: self.inputChange.bind(null, 'rating')}), " ", data.name, "  ");
             });
 
@@ -187,7 +187,7 @@ var Permission = React.createClass({
                 inputProps['defaultChecked'] = true;
             }
             return (
-                React.createElement("label", null, 
+                React.createElement("label", null,
                     React.createElement("input", React.__spread({},  inputProps)), " ", data.title, "  "
                 )
             );
@@ -211,74 +211,74 @@ var Permission = React.createClass({
         var modeUI;
 
         if(modeEnable)
-            modeUI = React.createElement("p", null, 
-                React.createElement("label", null, 
-                    "Mode  ", 
-                    React.createElement("i", {className: "fa fa-info-circle", "data-toggle": "popover", "data-content": "권한의 모드를 설정합니다.", 
+            modeUI = React.createElement("p", null,
+                React.createElement("label", null,
+                    "Mode  ",
+                    React.createElement("i", {className: "fa fa-info-circle", "data-toggle": "popover", "data-content": "권한의 모드를 설정합니다.",
                        "data-original-title": ""})
-                ), React.createElement("br", null), 
-                React.createElement("select", {name: modeTitle, value: modeValue, onChange: this.inputChange.bind(null, 'mode')}, 
+                ), React.createElement("br", null),
+                React.createElement("select", {name: modeTitle, value: modeValue, onChange: this.inputChange.bind(null, 'mode')},
                     ModeSelectUI
                 )
             );
 
         return (
-            React.createElement("div", null, 
-                React.createElement("p", null, 
-                    React.createElement("label", null, 
-                        "Rating  ", 
-                        React.createElement("i", {className: "fa fa-info-circle", "data-toggle": "popover", "data-content": "권한의 등급을 설정합니다.", 
+            React.createElement("div", null,
+                React.createElement("p", null,
+                    React.createElement("label", null,
+                        "Rating  ",
+                        React.createElement("i", {className: "fa fa-info-circle", "data-toggle": "popover", "data-content": "권한의 등급을 설정합니다.",
                            "data-original-title": ""})
-                    ), React.createElement("br", null), 
+                    ), React.createElement("br", null),
                     RatingUI
-                ), 
-                React.createElement("p", null, 
-                    React.createElement("label", null, 
-                        "Include Group and User ", 
-                        React.createElement("i", {className: "fa fa-info-circle", "data-toggle": "popover", "data-content": "포함하고자 하는 대상을 지정합니다.", 
+                ),
+                React.createElement("p", null,
+                    React.createElement("label", null,
+                        "Include Group and User ",
+                        React.createElement("i", {className: "fa fa-info-circle", "data-toggle": "popover", "data-content": "포함하고자 하는 대상을 지정합니다.",
                            "data-original-title": ""})
-                    ), React.createElement("br", null), 
+                    ), React.createElement("br", null),
                     React.createElement(PermissionInclude, {
-                        selectedGroup: this.state.includeGroups, 
-                        selectedMember: this.state.includeMembers, 
-                        searchMemberUrl: this.props.memberSearchUrl, 
-                        searchGroupUrl: this.props.groupSearchUrl, 
-                        disabled: controlDisabled, 
-                        handleGroupDelete: this.handleIncludeGroupDelete, 
-                        handleMemberDelete: this.handleIncludeMemberDelete, 
+                        selectedGroup: this.state.includeGroups,
+                        selectedMember: this.state.includeMembers,
+                        searchMemberUrl: this.props.memberSearchUrl,
+                        searchGroupUrl: this.props.groupSearchUrl,
+                        disabled: controlDisabled,
+                        handleGroupDelete: this.handleIncludeGroupDelete,
+                        handleMemberDelete: this.handleIncludeMemberDelete,
                         handleAddition: this.handleIncludeAddition}
-                        ), 
-                    React.createElement("input", {type: "hidden", name: includeGroupTitle, className: "form-control", value: includeGroups}), 
+                        ),
+                    React.createElement("input", {type: "hidden", name: includeGroupTitle, className: "form-control", value: includeGroups}),
                     React.createElement("input", {type: "hidden", name: includeMemberTitle, className: "form-control", value: includeMembers})
 
-                ), 
+                ),
                 function () {
                     if (VGroupUI) {
                         return (
-                            React.createElement("p", null, 
-                                React.createElement("label", null, 
-                                    "Include Virtual Group ", 
-                                    React.createElement("i", {className: "fa fa-info-circle", "data-toggle": "popover", "data-content": "포함하고자 하는 대상을 지정합니다.", 
+                            React.createElement("p", null,
+                                React.createElement("label", null,
+                                    "Include Virtual Group ",
+                                    React.createElement("i", {className: "fa fa-info-circle", "data-toggle": "popover", "data-content": "포함하고자 하는 대상을 지정합니다.",
                                        "data-original-title": ""})
-                                ), React.createElement("br", null), 
+                                ), React.createElement("br", null),
                                 VGroupUI
                             )
                         );
                     }
-                }.call(this), 
-                React.createElement("p", null, 
-                    React.createElement("label", null, 
-                        "Exclude User  ", 
-                        React.createElement("i", {className: "fa fa-info-circle", "data-toggle": "popover", "data-content": "제외하고자 하는 대상을 지정합니다.", 
+                }.call(this),
+                React.createElement("p", null,
+                    React.createElement("label", null,
+                        "Exclude User  ",
+                        React.createElement("i", {className: "fa fa-info-circle", "data-toggle": "popover", "data-content": "제외하고자 하는 대상을 지정합니다.",
                            "data-original-title": ""})
-                    ), React.createElement("br", null), 
+                    ), React.createElement("br", null),
                     React.createElement(PermissionExclude, {
-                        selectedMember: this.state.excludeMembers, 
-                        searchMemberUrl: this.props.memberSearchUrl, 
-                        disabled: controlDisabled, 
-                        handleDelete: this.handleExcludeMemberDelete, 
+                        selectedMember: this.state.excludeMembers,
+                        searchMemberUrl: this.props.memberSearchUrl,
+                        disabled: controlDisabled,
+                        handleDelete: this.handleExcludeMemberDelete,
                         handleAddition: this.handleExcludeAddition}
-                        ), 
+                        ),
                     React.createElement("input", {type: "hidden", name: excludeMemberTitle, className: "form-control", value: excludeMembers})
                 )
             )
