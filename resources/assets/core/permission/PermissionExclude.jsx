@@ -19,7 +19,7 @@ var PermissionExclude = React.createClass({
     },
     getDefaultProps: function () {
         return {
-            placeholder: 'Input member',
+            placeholder: XE.Lang.trans('xe::explainExcludeUser'),
             selectedMember: [],
             suggestions: []
         };
