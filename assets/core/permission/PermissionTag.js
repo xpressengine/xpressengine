@@ -11,12 +11,14 @@ var PermissionTag = React.createClass({
         var label = tag.displayName || tag.name;
         label = this.props.prefix + label;
         return (
-            <span className="ReactTags__tag">
-                {label}
-                <a className="ReactTags__remove" onClick={this.props.onDelete}>x</a>
-            </span>
+            React.createElement("span", {className: "ReactTags__tag"}, 
+                label, 
+                React.createElement("a", {className: "ReactTags__remove", onClick: this.props.onDelete}, "x")
+            )
         );
 
 
     }
 });
+
+//# sourceMappingURL=PermissionTag.js.map

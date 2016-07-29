@@ -5,12 +5,12 @@
 					id = $(obj).closest('form').find('[name="id"]').val();
 
 			if (id == '') {
-				System.import('xecore:/common/js/modules/griper/griper').then(function (griper) {
+				System.import('xecore:/common/js/griper').then(function (griper) {
 					griper.form($(obj), 'You must first create a category ID.');
 				});
 				return;
 			} else {
-				System.import('xecore:/common/js/modules/griper/griper').then(function (griper) {
+				System.import('xecore:/common/js/griper').then(function (griper) {
 					griper.form.fn.clear($(obj).closest('form'));
 				});
 			}

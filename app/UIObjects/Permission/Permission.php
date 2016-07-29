@@ -35,42 +35,22 @@ class Permission extends AbstractUIObject
     public function render()
     {
         XeFrontend::js('/assets/vendor/lodash/lodash.min.js')->load();
-        XeFrontend::js('/assets/core/permission/PermissionTag.js')->type('text/jsx')->load();
-        XeFrontend::js('/assets/core/permission/PermissionTagSuggestion.js')->type('text/jsx')->load(
-        );
-        XeFrontend::js('/assets/core/permission/PermissionInclude.js')->type('text/jsx')->load();
-        XeFrontend::js('/assets/core/permission/PermissionExclude.js')->type('text/jsx')->load();
-        XeFrontend::js('/assets/core/permission/Permission.js')->type('text/jsx')->load();
+        XeFrontend::js([
+            '/assets/core/permission/Permission.js',
+            '/assets/core/permission/PermissionTag.js',
+            '/assets/core/permission/PermissionTagSuggestion.js',
+            '/assets/core/permission/PermissionInclude.js',
+            '/assets/core/permission/PermissionExclude.js',
+            '/assets/core/permission/PermissionRenderer.js',
+        ])->load();
+
         XeFrontend::css('/assets/core/permission/permission.css')->load();
 
-        $permissioinScriptString = [];
-
-        $permissioinScriptString[] = "<script type='text/jsx'>";
-        $permissioinScriptString[] = "$('.__xe__uiobject_permission').each(function(i) {";
-        $permissioinScriptString[] = "var el = $(this),";
-        $permissioinScriptString[] = "data = el.data('data');";
-        $permissioinScriptString[] = "key= el.data('key');";
-        $permissioinScriptString[] = "type = el.data('type');";
-        $permissioinScriptString[] = "memberUrl = el.data('memberUrl');";
-        $permissioinScriptString[] = "groupUrl= el.data('groupUrl');";
-        $permissioinScriptString[] = "vgroupAll= el.data('vgroupAll');";
-        $permissioinScriptString[] = "React.render(<Permission ";
-        $permissioinScriptString[] = "
-                                    key={key}
-                                    memberSearchUrl={memberUrl}
-                                    groupSearchUrl={groupUrl}
-                                    permission={data}
-                                    type={type}
-                                    vgroupAll={vgroupAll}
-                                    />";
-
-        $permissioinScriptString[] = ", this);\n";
-        $permissioinScriptString[] = "});";
-        $permissioinScriptString[] = "</script>";
-
-        $permissioinScriptString = implode('', $permissioinScriptString);
-
-        XeFrontend::html('permissionUiobject')->content($permissioinScriptString)->load();
+        XeFrontend::translation([
+            'xe::inheritMode', 'xe::memberRatingAdministrator', 'xe::memberRatingManager',
+            'xe::member', 'xe::guest', 'xe::memberRating', 'xe::includeUserOrGroup', 'xe::excludeUser',
+            'xe::includeVGroup', 'xe::explainIncludeUserOrGroup', 'xe::explainExcludeUser'
+        ]);
 
         $htmlString = [];
         $args = $this->arguments;

@@ -55,11 +55,12 @@ $(function() {
 
   $(document).on('boot.xe.modal', '[data-toggle=xe-modal]', function() {
     System.import("xe.component.modal").then(function() {
-      $('[data-toggle=xe-modal]').xeModal();
+      //$('[data-toggle=xe-modal]').xeModal();
+
     });
   });
 
-  $(document).on('boot.xe.modal', '[data-toggle=xe-tooltip]', function() {
+  $(document).on('boot.xe.tooltip', '[data-toggle=xe-tooltip]', function() {
     System.import("xe.component.tooltip").then(function() {
       $('[data-toggle=xe-tooltip]').xeTooltip();
     });
