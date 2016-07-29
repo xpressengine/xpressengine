@@ -83,8 +83,8 @@ class GoogleRecaptchaTest extends \PHPUnit_Framework_TestCase
 
 class GoogleRecaptcha extends Origin
 {
-    protected function create($secret)
+    protected function create()
     {
-        return GoogleRecaptchaTest::$captcha;
+        return $this->captcha = GoogleRecaptchaTest::$captcha;
     }
 }

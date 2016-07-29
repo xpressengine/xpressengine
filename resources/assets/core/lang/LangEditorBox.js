@@ -168,7 +168,7 @@ $(function () {
     }
   });
 
-  System.import('xecore:/common/js/modules/validator').then(function(validator) {
+  System.import('xecore:/common/js/validator').then(function(validator) {
     validator.put("langrequired", function ($dst, parameters) {
       var $input = $dst.closest('.lang-editor-box').find("input[name^='xe_lang_preprocessor']:not(:hidden):first");
 

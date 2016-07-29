@@ -138,40 +138,46 @@ header {
       padding-left: 20px; }
     .widget-snb .xe-btn-group.vertical-list .xe-dropdown-menu {
       width: auto;
-      margin-top: 2px;
-      padding-bottom: 15px; }
+      padding: 7px 15px 15px 15px; }
       .widget-snb .xe-btn-group.vertical-list .xe-dropdown-menu li {
         font-size: 0; }
         .widget-snb .xe-btn-group.vertical-list .xe-dropdown-menu li a {
-          color: #fff; }
+          overflow: hidden;
+          padding: 8px 0;
+          color: #fff;
+          white-space: nowrap;
+          text-align: center; }
           .widget-snb .xe-btn-group.vertical-list .xe-dropdown-menu li a:hover {
             background-color: transparent; }
-            .widget-snb .xe-btn-group.vertical-list .xe-dropdown-menu li a:hover > span {
+            .widget-snb .xe-btn-group.vertical-list .xe-dropdown-menu li a:hover > span em {
               background-color: #6F8DFF;
               border-color: #5779D9; }
-              .widget-snb .xe-btn-group.vertical-list .xe-dropdown-menu li a:hover > span::after {
+              .widget-snb .xe-btn-group.vertical-list .xe-dropdown-menu li a:hover > span em::after {
                 background-color: #5779D9; }
           .widget-snb .xe-btn-group.vertical-list .xe-dropdown-menu li a > span {
-            display: inline-block;
-            position: relative;
-            height: 22px;
-            margin-left: 5px;
-            background-color: #C8C9CC;
-            border: 1px solid #AFB0B3;
-            font-size: 12px;
-            line-height: 21px; }
+            padding: 0; }
+            .widget-snb .xe-btn-group.vertical-list .xe-dropdown-menu li a > span > em {
+              display: block;
+              position: relative;
+              height: 22px;
+              margin-left: 5px;
+              background-color: #C8C9CC;
+              border: 1px solid #AFB0B3;
+              font-size: 12px;
+              line-height: 22px;
+              font-style: normal; }
             .widget-snb .xe-btn-group.vertical-list .xe-dropdown-menu li a > span::after {
               position: absolute;
-              left: -4px;
+              left: 2px;
               top: -3px;
               width: 1px;
               height: 27px;
               background-color: #AFB0B3;
               content: ""; }
-            .widget-snb .xe-btn-group.vertical-list .xe-dropdown-menu li a > span:first-of-type {
+            .widget-snb .xe-btn-group.vertical-list .xe-dropdown-menu li a > span:first-of-type em {
               margin-left: 0; }
-              .widget-snb .xe-btn-group.vertical-list .xe-dropdown-menu li a > span:first-of-type::after {
-                background-color: transparent; }
+            .widget-snb .xe-btn-group.vertical-list .xe-dropdown-menu li a > span:first-of-type::after {
+              background-color: transparent; }
     .widget-snb .xe-btn-group.vertical-list .xe-input-group {
       margin-top: 7px; }
       .widget-snb .xe-btn-group.vertical-list .xe-input-group .xe-form-control {

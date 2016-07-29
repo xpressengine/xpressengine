@@ -6,6 +6,12 @@ var gulp = require("gulp"),
 var runSequence = require('run-sequence');
 var elixir = require('laravel-elixir');
 var merge = require('merge-stream');
+var react = require('gulp-react');
+
+var config = {
+  isProduction: !!$.util.env.production
+  , useSourceMaps: !$.util.env.production
+};
 
 /*
  |--------------------------------------------------------------------------
@@ -40,6 +46,7 @@ gulp.task('default', function(callback){
     'jspm:component',
     'jspm:menu',
     'jspm:langbox',
+    'jspm:permission',
     'jspm:xe',
     callback);
 });
@@ -80,7 +87,16 @@ gulp.task('jspm:langbox', function(){
     .pipe($.plumber())
     .pipe($.jspm({selfExecutingBundle: true, plugin: 'jsx'}))
     .pipe($.rename('LangEditorBox.bundle.js'))
-    .pipe(gulp.dest('assets/core/lang'));
+    .pipe(gulp.dest('assets/core/lang'))
+});
+
+gulp.task('jspm:permission', function() {
+  return gulp.src('assets/core/permission/*.jsx')
+    .pipe($.if(config.useSourceMaps, $.sourcemaps.init()))
+    .pipe($.plumber())
+    .pipe(react())
+    .pipe($.if(config.useSourceMaps, $.sourcemaps.write('.')))
+    .pipe(gulp.dest('assets/core/permission'))
 });
 
 gulp.task('jspm:component', function(){
@@ -113,10 +129,10 @@ gulp.task('csslint', function() {
 
 gulp.task('assets:sass', function () {
   return gulp.src('./resources/assets/**/*.scss')
-    .pipe(sourcemaps.init())
+    .pipe($.if(config.useSourceMaps, sourcemaps.init()))
     .pipe($.plumber())
-    .pipe($.sass({outputStyle: 'expanded', precision: 8}).on('error', $.sass.logError))
-    .pipe(sourcemaps.write("."))
+    .pipe($.sass({outputStyle: 'expanded'}).on('error', $.sass.logError))
+    .pipe($.if(config.useSourceMaps, sourcemaps.write(".")))
     .pipe(gulp.dest('./assets'));
 });
 

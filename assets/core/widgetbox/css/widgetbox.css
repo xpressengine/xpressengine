@@ -213,8 +213,7 @@ header > .xe-pull-right .xe-btn.xe-btn-link {
 
 .widget-snb .xe-btn-group.vertical-list .xe-dropdown-menu {
   width: auto;
-  margin-top: 2px;
-  padding-bottom: 15px;
+  padding: 7px 15px 15px 15px;
 }
 
 .widget-snb .xe-btn-group.vertical-list .xe-dropdown-menu li {
@@ -222,36 +221,45 @@ header > .xe-pull-right .xe-btn.xe-btn-link {
 }
 
 .widget-snb .xe-btn-group.vertical-list .xe-dropdown-menu li a {
+  overflow: hidden;
+  padding: 8px 0;
   color: #fff;
+  white-space: nowrap;
+  text-align: center;
 }
 
 .widget-snb .xe-btn-group.vertical-list .xe-dropdown-menu li a:hover {
   background-color: transparent;
 }
 
-.widget-snb .xe-btn-group.vertical-list .xe-dropdown-menu li a:hover > span {
+.widget-snb .xe-btn-group.vertical-list .xe-dropdown-menu li a:hover > span em {
   background-color: #6F8DFF;
   border-color: #5779D9;
 }
 
-.widget-snb .xe-btn-group.vertical-list .xe-dropdown-menu li a:hover > span::after {
+.widget-snb .xe-btn-group.vertical-list .xe-dropdown-menu li a:hover > span em::after {
   background-color: #5779D9;
 }
 
 .widget-snb .xe-btn-group.vertical-list .xe-dropdown-menu li a > span {
-  display: inline-block;
+  padding: 0;
+}
+
+.widget-snb .xe-btn-group.vertical-list .xe-dropdown-menu li a > span > em {
+  display: block;
   position: relative;
   height: 22px;
   margin-left: 5px;
   background-color: #C8C9CC;
   border: 1px solid #AFB0B3;
   font-size: 12px;
-  line-height: 21px;
+  line-height: 22px;
+  font-style: normal;
 }
 
 .widget-snb .xe-btn-group.vertical-list .xe-dropdown-menu li a > span::after {
   position: absolute;
-  left: -4px;
+  left: 2px;
   top: -3px;
   width: 1px;
   height: 27px;
@@ -259,7 +267,7 @@ header > .xe-pull-right .xe-btn.xe-btn-link {
   content: "";
 }
 
-.widget-snb .xe-btn-group.vertical-list .xe-dropdown-menu li a > span:first-of-type {
+.widget-snb .xe-btn-group.vertical-list .xe-dropdown-menu li a > span:first-of-type em {
   margin-left: 0;
 }
 
@@ -444,6 +452,28 @@ header > .xe-pull-right .xe-btn.xe-btn-link {
   left: 5px;
   top: 3px;
   color: #656973;
+}
+
+/*0727 blueng 추가건*/
+.editor.layout-mobile {
+  max-width: 450px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.editor.layout-mobile .xe-col-md-1,
+.editor.layout-mobile .xe-col-md-2,
+.editor.layout-mobile .xe-col-md-3,
+.editor.layout-mobile .xe-col-md-4,
+.editor.layout-mobile .xe-col-md-5,
+.editor.layout-mobile .xe-col-md-6,
+.editor.layout-mobile .xe-col-md-7,
+.editor.layout-mobile .xe-col-md-8,
+.editor.layout-mobile .xe-col-md-9,
+.editor.layout-mobile .xe-col-md-10,
+.editor.layout-mobile .xe-col-md-11,
+.editor.layout-mobile .xe-col-md-12 {
+  width: 100%;
 }
 
 /*# sourceMappingURL=widgetbox.css.map */

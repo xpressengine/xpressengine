@@ -14,7 +14,7 @@
         </tr>
         <tr>
             <td style="font-family:NanumBarunGothic,'나눔고딕',NanumGothic,dotum,'돋움',Helvetica;line-height:34px;vertical-align:top;color:#2c2e37;font-size:16px">
-                {{ xe_trans('xe::msgEmailConfirm') }}
+                {!!  xe_trans('xe::msgEmailConfirm') !!}
             </td>
         </tr>
         <tr>

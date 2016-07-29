@@ -64,6 +64,7 @@ class PluginCommand extends Command
         $this->handler->getAllPlugins(true);
         if ($this->handler->isActivated($pluginId) === false) {
             $this->handler->activatePlugin($pluginId);
+
         }
     }
 

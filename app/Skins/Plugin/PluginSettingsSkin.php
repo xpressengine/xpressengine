@@ -86,7 +86,7 @@ class PluginSettingsSkin extends BladeSkin
               $('.__xe_btn-update-plugin').click(function(){
                 var url = $(this).data('url');
                 $.ajax({
-                  type : 'post',
+                  type : 'put',
                   url : url,
                   dataType: 'json',
                   success : function (data) {

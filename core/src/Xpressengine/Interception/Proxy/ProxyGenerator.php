@@ -53,6 +53,18 @@ class ProxyGenerator
     }
 
     /**
+     * 기생성된 Proxy 파일을 모두 삭제한다.
+     *
+     * @return void
+     */
+    public function clear()
+    {
+        if ($this->loader instanceof FileLoader) {
+            $this->loader->clear();
+        }
+    }
+
+    /**
      * 주어진 타겟 클래스의 프록시 클래스를 생성하고, 로드한 다음 프록시 클래스명을 반환한다.
      * 비지니스 로직에서는 타겟 클래스 대신 프록시 클래스의 인스턴스를 생성하여 사용한다.
      *

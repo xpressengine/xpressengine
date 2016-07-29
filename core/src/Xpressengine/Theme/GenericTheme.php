@@ -58,7 +58,7 @@ abstract class GenericTheme extends AbstractTheme
      */
     public static function supportMobile()
     {
-        return static::info('support.desktop');
+        return static::info('support.mobile');
     }
 
     /**

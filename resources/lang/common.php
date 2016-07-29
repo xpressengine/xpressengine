@@ -73,6 +73,10 @@ return [
         'ko' => '삭제',
         'en' => 'Destroy',
     ],
+    'guest' => [
+        'ko' => '비회원',
+        'en' => 'Guest',
+    ],
     'member' => [
         'ko' => '회원',
         'en' => 'Member',
@@ -1927,5 +1931,35 @@ return [
     'msgLoginRequired' => [
         'ko' => '로그인이 필요합니다.',
         'en' => 'Login is required.'
+    ],
+    'msgAlertCaptchaAtJoin' => [
+        'ko' => '현재 CAPTCHA 기능을 정상적으로 사용할 수 없습니다. CAPTCHA 설정이 정상적으로 되어 있는지 확인하십시오<br>
+                            CAPTCHA 설정이 정상적이지 않을 경우, \'회원 가입 시 CAPTCHA 사용\'으로 설정하면 회원가입이 제대로 이루어지지 않습니다.',
+        'en' => ''
+    ],
+    'masAlertCaptchaAtLogin' => [
+        'ko' => '현재 CAPTCHA 기능을 정상적으로 사용할 수 없습니다. CAPTCHA 설정이 정상적으로 되어 있는지 확인하십시오<br>
+                                CAPTCHA 설정이 정상적이지 않을 경우, \'로그인 시 CAPTCHA 사용\'으로 설정하면 로그인이 제대로 작동하지 않습니다.',
+        'en' => ''
+    ],
+    'includeUserOrGroup' => [
+        'ko' => '포함할 그룹 또는 사용자',
+        'en' => 'Include User or Group'
+    ],
+    'explainIncludeUserOrGroup' => [
+        'ko' => '포함할 그룹이나 사용자를 입력하세요.',
+        'en' => 'Input user or group'
+    ],
+    'excludeUser' => [
+        'ko' => '제외할 사용자',
+        'en' => 'Exclude User'
+    ],
+    'explainExcludeUser' => [
+        'ko' => '제외할 사용자를 입력하세요',
+        'en' => 'Input user'
+    ],
+    'includeVGroup' => [
+        'ko' => '포함할 가상그룹',
+        'en' => 'Include Virtual Group'
     ],
 ];

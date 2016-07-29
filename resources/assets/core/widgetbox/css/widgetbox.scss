@@ -188,16 +188,19 @@ header{
       padding-left: 20px;
     }
     .xe-dropdown-menu{
-      width: auto;
-      margin-top: 2px;
-      padding-bottom: 15px;
+      width: auto;      
+      padding: 7px 15px 15px 15px;
       li{
         font-size: 0;
         a {
+          overflow: hidden;
+          padding: 8px 0;
           color:#fff;
+          white-space: nowrap;
+          text-align: center;
           &:hover{
             background-color: transparent;
-            >span{
+            >span em{
               background-color: $widget-primary-color;
               border-color:#5779D9;
               &::after{
@@ -206,17 +209,21 @@ header{
             }  
           }
           >span{
-            display: inline-block;;
-            position: relative;        
-            height: 22px;
-            margin-left: 5px;
-            background-color: #C8C9CC;
-            border: 1px solid #AFB0B3;            
-            font-size: 12px;
-            line-height: 21px;
+            padding: 0;
+            >em{
+              display:block;
+              position: relative;        
+              height: 22px;
+              margin-left: 5px;
+              background-color: #C8C9CC;
+              border: 1px solid #AFB0B3;            
+              font-size: 12px;
+              line-height: 22px;           
+              font-style: normal;
+            }            
             &::after{
               position: absolute;
-              left: -4px;
+              left: 2px;
               top: -3px;
               width: 1px;
               height: 27px;
@@ -224,7 +231,9 @@ header{
               content:"";
             }
             &:first-of-type{
-              margin-left: 0;
+              em{
+                margin-left: 0;                
+              }
               &::after{
                 background-color: transparent;
               }
@@ -404,4 +413,24 @@ header{
   left: 5px;
   top: 3px;
   color: #656973;
+}
+/*0727 blueng 추가건*/
+.editor.layout-mobile {
+   max-width: 450px;
+   margin-left: auto;
+   margin-right: auto;
+ }
+.editor.layout-mobile .xe-col-md-1,
+.editor.layout-mobile .xe-col-md-2,
+.editor.layout-mobile .xe-col-md-3,
+.editor.layout-mobile .xe-col-md-4,
+.editor.layout-mobile .xe-col-md-5,
+.editor.layout-mobile .xe-col-md-6,
+.editor.layout-mobile .xe-col-md-7,
+.editor.layout-mobile .xe-col-md-8,
+.editor.layout-mobile .xe-col-md-9,
+.editor.layout-mobile .xe-col-md-10,
+.editor.layout-mobile .xe-col-md-11,
+.editor.layout-mobile .xe-col-md-12 {
+   width: 100%;
 }

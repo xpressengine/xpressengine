@@ -58,6 +58,8 @@
 
                     $selected.find(".widgetarea").append(widgetView);
 
+                    self.increaseBlockSize($selected);
+
                 }else {
                     console.error("선택된 셀이 없음.");
                 }
@@ -68,6 +70,49 @@
             },
             delWidget: function() {
                 $(this).closest(".xe-row").remove();
+
+                self.reduceBlockSize($(this).closest("div[class^='xe-col-']"));
+            },
+            checkReducibleSiblings: function($colmun) {
+                var check = true;
+
+                $(".editor > .xe-row:has(.selected)").find(".widgetarea-row:last-child:not(:has(.selected))").not($(".selected").closest(".widgetarea-row").siblings()).each(function() {
+                    var $widgetarea = $(this).find(".widgetarea");
+
+                    if($widgetarea.find(".widget").length > 0) {
+                        check = false;
+                        return false;
+
+                    }
+
+                });
+
+                return check;
+            },
+            reduceBlockSize: function($column) {
+                if(self.checkReducibleSiblings($column)) {
+
+                }
+            },
+            increaseBlockSize: function($column) {
+
+                var $widgetarea = $column.find(".widgetarea")
+                    , widgetHeight = $widgetarea.find(".widget").parent().outerHeight()
+                    , widgetCnt = $widgetarea.find(".widget").length;
+
+                //해당 박스에 위젯이 들어갈 공간이 없을 경우
+                if($widgetarea.outerHeight() < widgetHeight * widgetCnt) {
+                    var widgetareaHeight = $column.find(".widgetarea").outerHeight();
+                    $column.find(".widgetarea").height((widgetareaHeight + 165)).data("height", (widgetareaHeight + 165));
+
+
+                    $(".editor > .xe-row:has(.selected)").find(".widgetarea-row:last-child:not(:has(.selected))").not($(".selected").closest(".widgetarea-row").siblings()).each(function() {
+                        var $widgetarea = $(this).find(".widgetarea");
+                        var widgetareaHeight = $widgetarea.outerHeight();
+
+                        $widgetarea.height(widgetareaHeight + 165).data("height", (widgetareaHeight + 165));
+                    })
+                }
             }
         };
     })();

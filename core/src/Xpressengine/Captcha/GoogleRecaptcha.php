@@ -36,7 +36,7 @@ class GoogleRecaptcha implements CaptchaInterface
      *
      * @var ReCaptcha
      */
-    protected $captcha;
+    protected $captcha = null;
 
     /**
      * Http Request instance
@@ -94,8 +94,6 @@ class GoogleRecaptcha implements CaptchaInterface
         $this->secret = $secret;
         $this->request = $request;
         $this->frontend = $frontend;
-
-        $this->captcha = $this->create($this->secret);
     }
 
     /**
@@ -105,6 +103,8 @@ class GoogleRecaptcha implements CaptchaInterface
      */
     public function verify()
     {
+        $this->create();
+
         if ($this->response === null) {
             $this->response = $this->captcha->verify($this->request->get($this->input), $this->request->ip());
         }
@@ -147,11 +147,30 @@ class GoogleRecaptcha implements CaptchaInterface
     /**
      * Create captcha instance
      *
-     * @param string $secret Api secret key
      * @return ReCaptcha
      */
-    protected function create($secret)
+    protected function create()
     {
-        return new ReCaptcha($secret);
+        if($this->captcha === null) {
+            $this->captcha = new ReCaptcha($this->secret);
+        }
+
+        return $this->captcha;
+    }
+
+    /**
+     * Determine if captcha is available
+     *
+     * @return mixed
+     */
+    public function available()
+    {
+        try {
+            $this->create();
+        } catch (\Exception $e) {
+            return false;
+        }
+
+        return true;
     }
 }
