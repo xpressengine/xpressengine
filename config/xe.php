@@ -411,6 +411,10 @@ return [
             'error' => 'error/skin/xpressengine@default',
         ],
         'defaultSettingsSkins' => [
+        ],
+        'storage' => [
+            'disk' => 'local',
+            'path' => 'public/skin/'
         ]
     ],
 
