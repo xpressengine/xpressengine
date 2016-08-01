@@ -90,29 +90,29 @@
                                 <ul id="selectDivision">
                                     <li>
                                         <a href="#" data-type="6|6" data-display="6:6">
-                                            <span style="width:77px">6</span>
-                                            <span style="width:78px">6</span>
+                                            <span class="xe-col-xs-6"><em>6</em></span>
+                                            <span class="xe-col-xs-6"><em>6</em></span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#" data-type="4|8" data-display="4:8">
-                                            <span style="width:52px">4</span>
-                                            <span style="width:103px">8</span>
+                                            <span class="xe-col-xs-4"><em>4</em></span>
+                                            <span class="xe-col-xs-8"><em>8</em></span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#" data-type="4|4|4" data-display="4:4:4">
-                                            <span style="width:50px">4</span>
-                                            <span style="width:50px">4</span>
-                                            <span style="width:50px">4</span>
+                                            <span class="xe-col-xs-4"><em>4</em></span>
+                                            <span class="xe-col-xs-4"><em>4</em></span>
+                                            <span class="xe-col-xs-4"><em>4</em></span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#" data-type="3|3|3|3" data-display="3:3:3:3">
-                                            <span style="width:36px">3</span>
-                                            <span style="width:36px">3</span>
-                                            <span style="width:36px">3</span>
-                                            <span style="width:37px">3</span>
+                                            <span class="xe-col-xs-3"><em>3</em></span>
+                                            <span class="xe-col-xs-3"><em>3</em></span>
+                                            <span class="xe-col-xs-3"><em>3</em></span>
+                                            <span class="xe-col-xs-3"><em>3</em></span>
                                         </a>
                                     </li>
                                 </ul>

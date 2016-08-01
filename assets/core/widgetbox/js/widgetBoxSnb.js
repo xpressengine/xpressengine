@@ -1,13 +1,13 @@
 ;(function(exports, WidgetBox) {
+    'use strict';
+
     exports.WidgetSnb = (function() {
         var self;
         var _settings = {
-            mode: 'desktop'
-            , divisionType: '6|6'
-            , divisionMap: {
-
-            }
-            , order: 0
+            mode: 'desktop',
+            divisionType: '6|6',
+            divisionMap: {},
+            order: 0
         };
         var _deletable = true;
 
@@ -17,8 +17,6 @@
                 self.cache();
                 self.bindEvents();
                 self.settings();
-
-
 
                 return this;
             },
@@ -41,7 +39,7 @@
             bindEvents: function() {
                 self.$btnMode.on("click", self.selectMode);
                 self.$selectDivision.on("click", "li > a", self.selectDivisionType);
-                self.$btnDivision.on('click', self.divide)
+                self.$btnDivision.on('click', self.divide);
                 self.$btnAddRow.on('click', self.addRow);
                 self.$btnDeselectAll.on("click", WidgetBox.deselectAll);
                 self.$btnDelBlock.on("click", self.removeBlock);
@@ -60,7 +58,7 @@
                     _settings.divisionMap[type] = '';
                 });
 
-                locDivitionType.forEach(function(v, i) {
+                locDivitionType.forEach(function(v) {
                     if(!_settings.divisionMap.hasOwnProperty(v)) {
                         appendDivision.push(v);
                     }
@@ -81,7 +79,7 @@
                 var divisionType = self.$inputVerticalSize.val();
 
                 if(divisionType === '') {
-                    alert("추가할 수직분할 형태를 입력하세요.");
+                    window.alert("추가할 수직분할 형태를 입력하세요.");
                     return;
                 }else if(divisionType){
 
@@ -110,7 +108,7 @@
                     }
 
                     if(!validType) {
-                        alert("수직분할 형태는 [1 ~ 12]의 숫자와 스페이스로 입력하고\n 분할셀의 총 합은 12가 되어야 합니다.");
+                        window.alert("수직분할 형태는 [1 ~ 12]의 숫자와 스페이스로 입력하고\n 분할셀의 총 합은 12가 되어야 합니다.");
                     }else {
                         var locDivitionType = JSON.parse(localStorage.getItem("divisionType") || '[]');
 
@@ -120,7 +118,7 @@
 
                             self.appendDivisionType([division]);
                         }else {
-                            alert("이미 추가한 분할타입입니다. [" + division.replace(/\|/g, " ") + "]");
+                            window.alert("이미 추가한 분할타입입니다. [" + division.replace(/\|/g, " ") + "]");
                         }
                     }
 
@@ -131,12 +129,12 @@
 
                 var html = "";
 
-                types.forEach(function(v, i) {
+                types.forEach(function(v) {
                     var display = v.replace(/\|/g, ":");
 
                     var spans = "";
                     display.split(":").forEach(function(v, i) {
-                        spans += '<span style="width:' + (v * 13) + 'px">' + v + '</span>';
+                        spans += '<span class="xe-col-xs-' + v + '"><em>' + v + '</em></span>';
                     });
 
                     //TODO span 160px기준 col-1 당 13px 임시로..
@@ -158,29 +156,28 @@
             },
             toggleWidgetAddLayer: function() {
                 // close sidebar
-                if ($('.widget-layer').hasClass("open")) {
-                    $("aside").removeClass("open");
-                    // open sidebar
-                } else {
+                if (!$('.widget-layer').hasClass("open")) {
 
-                    if($(".selected").length > 0) {
+                    if ($(".selected").length > 0) {
                         $(".widget-layer").addClass("open");
                         $(".dimd").show();
                         $("body").css("overflow", "hidden");
 
-                    }else {
-                        alert("위젯을 추가할 셀을 선택하세요.");
+                    } else {
+                        window.alert("위젯을 추가할 셀을 선택하세요.");
 
                     }
+                } else {
+                    $("aside").removeClass("open");
                 }
             },
             selectMode: function() {
-                var $this = $(this)
-                    , mode = $this.data("mode");
+                var $this = $(this),
+                    mode = $this.data("mode");
 
                 $this.addClass('xe-btn-primary').parent().siblings().find(".xe-btn").removeClass('xe-btn-primary');
 
-                if(mode == 'mobile') {
+                if(mode === 'mobile') {
                     //layout-mobile
                     
                     self.$editor.addClass("layout-mobile");
@@ -204,7 +201,7 @@
                 var $selected = $(".selected");
 
                 if($selected.find(".widgetarea .widget").length > 0) {
-                    alert("위젯을 추가한 셀은 분할될 수 없습니다.");
+                    window.alert("위젯을 추가한 셀은 분할될 수 없습니다.");
                     return;
 
                 }else {
@@ -218,15 +215,15 @@
                             break;
 
                         default:
-                            console.error("type error.");
+                            window.console.error("type error.");
                     }
                 }
             },
             divideVertical: function() {
-                var columns = _settings.divisionType.split("|")
-                    , $selected = $(".selected")
-                    , $target = $selected.closest(".widgetarea-row")
-                    , html = "";
+                var columns = _settings.divisionType.split("|"),
+                    $selected = $(".selected"),
+                    $target = $selected.closest(".widgetarea-row"),
+                    html = "";
 
                 if($selected.length > 0) {
                     //var height = $selected.find(".widgetarea").data("height") || $selected.find(".widgetarea").height();
@@ -256,8 +253,8 @@
                 }
             },
             divideHorizontal: function() {
-                var $selected = $(".selected")
-                    , $widgetAreaRow = $selected.parents(".widgetarea-row");
+                var $selected = $(".selected"),
+                    $widgetAreaRow = $selected.parents(".widgetarea-row");
 
                 if($selected.length > 0) {
                     $widgetAreaRow.after([
@@ -271,18 +268,18 @@
                     ].join("\n"));
 
                     if($selected.find(".widgetarea").height() > 140) {
-                        var height = ($selected.find(".widgetarea").height() - 25) / 2
-                            , $wdigetareaRow = $selected.parents(".widgetarea-row")
-                            , selectedHeight = $wdigetareaRow.find(".widgetarea").height();
+                        var height = ($selected.find(".widgetarea").height() - 25) / 2,
+                            $wdigetareaRow = $selected.parents(".widgetarea-row"),
+                            selectedHeight = $wdigetareaRow.find(".widgetarea").height();
 
                         $wdigetareaRow.find(".widgetarea").height(140).data("height", 140);
 
                         if((selectedHeight - 165) > 140) {
                             $wdigetareaRow.next().find(".widgetarea").height(selectedHeight - 165).data("height", selectedHeight - 165);
                         }else {
-                            //var height = $wdigetareaRow.next().find(".widgetarea").data("height");
-                            var height = $wdigetareaRow.next().find(".widgetarea").height();
-                            $wdigetareaRow.next().find(".widgetarea").height(height).data("height", height);
+
+                            var wHeight = $wdigetareaRow.next().find(".widgetarea").height();
+                            $wdigetareaRow.next().find(".widgetarea").height(wHeight).data("height", wHeight);
                         }
 
                     }else {
@@ -292,10 +289,10 @@
                             var $this = $(this);
 
                             $this.find(".widgetarea-row").parent().find(".widgetarea-row:last").each(function() {
-                                var $this = $(this)
-                                    , $lastTarget = $this.find(".widgetarea:last")
-                                    , height = $lastTarget.height() + 165;
-                                //, height = $lastTarget.data("height") + 165;
+                                var $this = $(this),
+                                    $lastTarget = $this.find(".widgetarea:last"),
+                                    height = $lastTarget.height() + 165;
+
 
                                 $lastTarget.height(height).data("height", height);
                             });
@@ -319,19 +316,19 @@
             },
             removeBlock: function() {
 
-                var $selected = $(".selected")
-                    , $selectedParentRow = $selected.parents(".widgetarea-row")
-                    , $siblingsRow = $selectedParentRow.siblings()
-                    , $selectedParentCol = $selectedParentRow.closest("div[class^='xe-col-']")
-                    , $lastColumn = $selectedParentCol.siblings(":last");
+                var $selected = $(".selected"),
+                    $selectedParentRow = $selected.parents(".widgetarea-row"),
+                    $siblingsRow = $selectedParentRow.siblings(),
+                    $selectedParentCol = $selectedParentRow.closest("div[class^='xe-col-']"),
+                    $lastColumn = $selectedParentCol.siblings(":last");
 
                 if($selected.find(".widgetarea .widget").length > 0) {
-                    alert("위젯을 추가한 셀은 삭제될 수 없습니다.");
+                    window.alert("위젯을 추가한 셀은 삭제될 수 없습니다.");
                     return;
                 }
 
                 if(self.$editor.find(".widgetarea").length === 1) {
-                    console.error("삭제될수 없음");
+                    window.console.error("삭제될수 없음");
                     return;
                 }
 
@@ -350,9 +347,9 @@
 
 
                         $(".editor > .xe-row:has(.selected)").find(".widgetarea-row:last-child:not(:has(.selected))").not($(".selected").closest(".widgetarea-row").siblings()).each(function() {
-                            var $lastWidgetareaRow = $(this)
-                                , $widgetarea = $lastWidgetareaRow.find(".widgetarea")
-                                , lastWidgetareaRowHeight = $widgetarea.height();
+                            var $lastWidgetareaRow = $(this),
+                                $widgetarea = $lastWidgetareaRow.find(".widgetarea"),
+                                lastWidgetareaRowHeight = $widgetarea.height();
 
                             if(lastWidgetareaRowHeight > height) {
                                 var resetHeight = lastWidgetareaRowHeight - height - 25;
@@ -451,19 +448,17 @@
                             if($combineRow.find(".widgetarea-row:last-child").length > 0 && deletable) {
                                 //가장 하위의 bottom DOM을 선택
                                 $combineRow.find(".widgetarea-row:last-child .widgetarea").each(function() {
-                                    var $widgetarea = $(this)
-                                        , widgetareaHeight = $widgetarea.height()
-                                    // , widgetareaHeight = $widgetarea.data("height")
-                                        , resetHeight = widgetareaHeight + targetHeight + 25;
+                                    var $widgetarea = $(this),
+                                        widgetareaHeight = $widgetarea.height(),
+                                        resetHeight = widgetareaHeight + targetHeight + 25;
 
                                     $widgetarea.height(resetHeight).data("height", resetHeight);
                                 });
                             }else {
                                 //$combineRow가 .widgetarea-row 일때
-                                var $widgetarea = $combineRow.find(".widgetarea")
-                                //, widgetareaHeight = $widgetarea.data("height")
-                                    , widgetareaHeight = $widgetarea.height()
-                                    , resetHeight = widgetareaHeight + targetHeight + 25;
+                                var $widgetarea = $combineRow.find(".widgetarea"),
+                                    widgetareaHeight = $widgetarea.height(),
+                                    resetHeight = widgetareaHeight + targetHeight + 25;
 
                                 $widgetarea.height(resetHeight).data("height", resetHeight);
                             }
@@ -487,7 +482,7 @@
 
                         }else {
                             //없어야 정상
-                            console.error("error 정의되지 않은 조건. ");
+                            window.console.error("error 정의되지 않은 조건. ");
                         }
                     }
 
@@ -496,8 +491,8 @@
                         var size = parseInt($selectedParentCol.attr('class').match(/col-md-([0-9]+)/i)[1]) + parseInt($lastColumn.attr('class').match(/col-md-([0-9]+)/i)[1]);
 
                         //var $lastWidgetRow = $lastColumn.html();
-                        var $siblingCol = ($selectedParentCol.next().length > 0)? $selectedParentCol.next() : $selectedParentCol.prev()
-                            , siblingColHtml = $siblingCol.html();
+                        var $siblingCol = ($selectedParentCol.next().length > 0)? $selectedParentCol.next() : $selectedParentCol.prev(),
+                            siblingColHtml = $siblingCol.html();
 
                         $selectedParentCol.remove();
                         $siblingCol.removeAttr('class').addClass('xe-col-md-' + size);
@@ -518,11 +513,11 @@
                         // }
 
                     }else {
-                        var $target = $selectedParentRow.closest("div[class^='xe-col-']:not(.xe-col-md-12)").siblings();
+                        var $sTarget = $selectedParentRow.closest("div[class^='xe-col-']:not(.xe-col-md-12)").siblings();
 
                         $selectedParentRow.remove();
 
-                        self.reduceBlock($target);
+                        self.reduceBlock($sTarget);
                         $("[reduce=true]").removeAttr("reduce");
 
                     }
@@ -580,13 +575,13 @@
                         $divCol = $divCol.parent().closest("div[class^='xe-col-']:not(.xe-col-md-12)");
 
                     }else {
-                        console.log("%c 최상위 col", "background:blue;color:#FFFFFF;font-weight:bold");
+                        window.console.log("%c 최상위 col", "background:blue;color:#FFFFFF;font-weight:bold");
                         break;
                     }
                 }
 
 
-                console.log(":: deletable :: " + _deletable);
+                window.console.log(":: deletable :: " + _deletable);
 
                 return _deletable;
 
@@ -676,7 +671,7 @@
 
                         if($targetPiece.find("> .xe-row").length > 1) {
                             //$targetPiece.find("> .xe-row:last").find("> div[class^='xe-col-']")
-                            console.log("row");
+                            window.console.log("row");
 
                         }else {
                             if($targetPiece.find(".widgetarea-row:last-child:not(:has(.selected))").length > 0) {
@@ -706,6 +701,6 @@
                     self.reduceBlock($target.parents("div[class^='xe-col-']").siblings());
                 }
             }
-        }
+        };
     })();
 })(window, WidgetBox);

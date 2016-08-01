@@ -1,4 +1,6 @@
 ;(function(exports) {
+    'use strict';
+
     exports.WidgetBox = (function() {
         var self = this;
 
@@ -6,7 +8,7 @@
             init: function() {
                 self = this;
 
-                self.cache()
+                self.cache();
                 self.bindEvents();
 
                 return this;
@@ -34,8 +36,8 @@
                 $(".selected").removeClass("selected");
             },
             placeWidget: function() {
-                var widgetCode = $("#widgetCode").val()
-                    , $widgetCode = $(widgetCode);
+                var widgetCode = $("#widgetCode").val(), 
+                    $widgetCode = $(widgetCode);
 
                 var $selected = $(".selected");
 
@@ -61,44 +63,44 @@
                     self.increaseBlockSize($selected);
 
                 }else {
-                    console.error("선택된 셀이 없음.");
+                    window.console.error("선택된 셀이 없음.");
                 }
 
             },
             openConfig: function() {
-                console.log("open config");
+                window.console.log("open config");
             },
             delWidget: function() {
+                //$(this).closest(".widgetarea").find()
                 $(this).closest(".xe-row").remove();
 
                 self.reduceBlockSize($(this).closest("div[class^='xe-col-']"));
             },
-            checkReducibleSiblings: function($colmun) {
+            checkReducibleSiblings: function($column) {
                 var check = true;
 
-                $(".editor > .xe-row:has(.selected)").find(".widgetarea-row:last-child:not(:has(.selected))").not($(".selected").closest(".widgetarea-row").siblings()).each(function() {
+                $(".editor > .xe-row").has($column).find(".widgetarea-row:last-child").not($column.parents(".xe-row")).not($column.closest(".widgetarea-row").siblings()).each(function() {
                     var $widgetarea = $(this).find(".widgetarea");
+                    var widgetsCnt = $widgetarea.find(".widget").length;
 
-                    if($widgetarea.find(".widget").length > 0) {
-                        check = false;
-                        return false;
-
-                    }
+                    // if(widgetsCnt > 0) {
+                    //
+                    // }
 
                 });
 
                 return check;
             },
             reduceBlockSize: function($column) {
-                if(self.checkReducibleSiblings($column)) {
-
-                }
+                // if(self.checkReducibleSiblings($column)) {
+                //
+                // }
             },
             increaseBlockSize: function($column) {
 
-                var $widgetarea = $column.find(".widgetarea")
-                    , widgetHeight = $widgetarea.find(".widget").parent().outerHeight()
-                    , widgetCnt = $widgetarea.find(".widget").length;
+                var $widgetarea = $column.find(".widgetarea"),
+                    widgetHeight = $widgetarea.find(".widget").parent().outerHeight(),
+                    widgetCnt = $widgetarea.find(".widget").length;
 
                 //해당 박스에 위젯이 들어갈 공간이 없을 경우
                 if($widgetarea.outerHeight() < widgetHeight * widgetCnt) {
@@ -111,7 +113,7 @@
                         var widgetareaHeight = $widgetarea.outerHeight();
 
                         $widgetarea.height(widgetareaHeight + 165).data("height", (widgetareaHeight + 165));
-                    })
+                    });
                 }
             }
         };
