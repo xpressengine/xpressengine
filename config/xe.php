@@ -415,7 +415,7 @@ return [
     ],
 
     'theme' => [
-        'blank' => 'Xpressengine\Themes\BlankTheme',
+        'blank' => 'App\Themes\BlankTheme',
         'storage' => [
             'disk' => 'local',
             'path' => 'public/theme/'

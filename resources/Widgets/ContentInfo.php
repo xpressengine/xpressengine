@@ -19,6 +19,7 @@ use Xpressengine\Widget\AbstractWidget;
  * PHP version 5
  *
  * @category
+ * @deprecated
  */
 class ContentInfo extends AbstractWidget
 {

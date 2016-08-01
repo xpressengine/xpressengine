@@ -16,6 +16,7 @@ use Xpressengine\UIObject\AbstractUIObject;
  *
  * @category    UIObjects
  * @package     Xpressengine\UIObjects\Menu
+ * @deprecated
  */
 class TypeSelect extends AbstractUIObject
 {

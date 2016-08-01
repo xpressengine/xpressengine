@@ -18,6 +18,7 @@ use Xpressengine\UIObject\AbstractUIObject;
  *
  * @category    UIObjects
  * @package     Xpressengine\UIObjects\Menu
+ * @deprecated
  */
 class MenuType extends AbstractUIObject
 {
