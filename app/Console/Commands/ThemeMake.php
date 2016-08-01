@@ -480,6 +480,8 @@ class ThemeMake extends Command
             throw new \Exception("Unable to create theme directory[$path]. please check permission.");
         }
         rename($path.'/info.stub', $path.'/info.php');
+        rename($path.'/views/gnb.blade.stub', $path.'/views/gnb.blade.php');
+        rename($path.'/views/theme.blade.stub', $path.'/views/theme.blade.php');
         unlink($path.'/theme.stub');
     }
 

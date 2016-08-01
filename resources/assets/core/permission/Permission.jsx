@@ -58,6 +58,16 @@ var Permission = React.createClass({
 
     },
 
+    modeChange: function (event) {
+        var formData = this.state.formData;
+
+        formData.mode = formData.mode === 'inherit' ? 'manual' : 'inherit';
+
+        this.setState({
+            formData: formData
+        });
+    },
+
     inputChange: function (key, event){
         var value = event.target.value;
         var formData = this.state.formData;
@@ -140,31 +150,31 @@ var Permission = React.createClass({
             }
         }
 
-        var modeOptions = [
-            {value: 'inherit', name: '상위 설정에 따름'}
-            , {value: 'manual', name: '직접 설정'}
-        ];
+        // var modeOptions = [
+        //     {value: 'inherit', name: '상위 설정에 따름'}
+        //     , {value: 'manual', name: '직접 설정'}
+        // ];
 
         var ratingOption = [
-            {value: 'super', name: 'Super'}
-            , {value: 'manager', name: 'Manager'}
-            , {value: 'member', name: 'Member'}
-            , {value: 'guest', name: 'Guest'}
+            {value: 'super', name: XE.Lang.trans('xe::memberRatingAdministrator')}
+            , {value: 'manager', name: XE.Lang.trans('xe::memberRatingManager')}
+            , {value: 'member', name: XE.Lang.trans('xe::member')}
+            , {value: 'guest', name: XE.Lang.trans('xe::guest')}
         ];
 
-        var ModeSelectUI =
-            modeOptions.map(function (data) {
-                return <option value={data.value} key={data.value}>{data.name}</option>;
-            });
+        // var ModeSelectUI =
+        //     modeOptions.map(function (data) {
+        //         return <option value={data.value} key={data.value}>{data.name}</option>;
+        //     });
 
         var RatingUI =
             ratingOption.map(function (data) {
                 if (data.value == ratingValue)
                     return <label><input type="radio" disabled={controlDisabled} name={ratingTitle} key={data.value} value={data.value} checked={true}
-                                  onChange={self.inputChange.bind(null, 'rating')}/> {data.name} &nbsp;</label>;
+                                         onChange={self.inputChange.bind(null, 'rating')}/>{data.name}</label>;
                 else
                     return <label><input type="radio" disabled={controlDisabled} name={ratingTitle} key={data.value} value={data.value}
-                                  onChange={self.inputChange.bind(null, 'rating')}/> {data.name} &nbsp;</label>;
+                                         onChange={self.inputChange.bind(null, 'rating')}/>{data.name}</label>;
             });
 
         var VGroupUI = this.props.vgroupAll.length < 1 ? null : this.props.vgroupAll.map(function (data) {
@@ -206,43 +216,31 @@ var Permission = React.createClass({
             return member.id;
         });
 
-        var permissionTitle = this.props.type.replace(/\w+/g,
-            function(w){return w[0].toUpperCase() + w.slice(1).toLowerCase();});
+        // var permissionTitle = this.props.type.replace(/\w+/g,
+        //     function(w){return w[0].toUpperCase() + w.slice(1).toLowerCase();});
 
         var modeUI;
 
         if(modeEnable)
-            modeUI = <p>
-                <label>
-                    Mode &nbsp;
-                    <i className="fa fa-info-circle" data-toggle="popover" data-content="권한의 모드를 설정합니다."
-                       data-original-title=""></i>
-                </label><br/>
-                <select name={modeTitle} value={modeValue} onChange={this.inputChange.bind(null, 'mode')}>
-                    {ModeSelectUI}
-                </select>
-            </p>;
+            modeUI = <div className="form-group">
+                <div className="checkbox">
+                    <label>
+                        <input type="checkbox" name={modeTitle} value="inherit" onChange={this.modeChange} checked={(modeValue === 'inherit')} /> {XE.Lang.trans('xe::inheritMode')}
+                    </label>
+                </div>
+            </div>;
 
         return (
             <div>
-                <p>
-                    <h4>{permissionTitle} Permission</h4>
-                </p>
                 {modeUI}
-                <p>
-                    <label>
-                        Rating &nbsp;
-                        <i className="fa fa-info-circle" data-toggle="popover" data-content="권한의 등급을 설정합니다."
-                           data-original-title=""></i>
-                    </label><br/>
-                    {RatingUI}
-                </p>
-                <p>
-                    <label>
-                        Include Group and User&nbsp;
-                        <i className="fa fa-info-circle" data-toggle="popover" data-content="포함하고자 하는 대상을 지정합니다."
-                           data-original-title=""></i>
-                    </label><br/>
+                <div className="form-group">
+                    <label>{XE.Lang.trans('xe::memberRating')}</label>
+                    <div className="radio">
+                        {RatingUI}
+                    </div>
+                </div>
+                <div className="form-group">
+                    <label>{XE.Lang.trans('xe::includeUserOrGroup')}</label>
                     <PermissionInclude
                         selectedGroup={this.state.includeGroups}
                         selectedMember={this.state.includeMembers}
@@ -252,31 +250,22 @@ var Permission = React.createClass({
                         handleGroupDelete={this.handleIncludeGroupDelete}
                         handleMemberDelete={this.handleIncludeMemberDelete}
                         handleAddition={this.handleIncludeAddition}
-                        />
+                    />
                     <input type="hidden" name={includeGroupTitle} className="form-control" value={includeGroups}/>
                     <input type="hidden" name={includeMemberTitle} className="form-control" value={includeMembers}/>
-
-                </p>
+                </div>
                 {function () {
                     if (VGroupUI) {
                         return (
-                            <p>
-                                <label>
-                                    Include Virtual Group&nbsp;
-                                    <i className="fa fa-info-circle" data-toggle="popover" data-content="포함하고자 하는 대상을 지정합니다."
-                                       data-original-title=""></i>
-                                </label><br/>
+                            <div className="form-group">
+                                <label>{XE.Lang.trans('xe::includeVGroup')}</label>
                                 {VGroupUI}
-                            </p>
+                            </div>
                         );
                     }
                 }.call(this)}
-                <p>
-                    <label>
-                        Exclude User &nbsp;
-                        <i className="fa fa-info-circle" data-toggle="popover" data-content="제외하고자 하는 대상을 지정합니다."
-                           data-original-title=""></i>
-                    </label><br/>
+                <div className="form-group">
+                    <label>{XE.Lang.trans('xe::excludeUser')}</label>
                     <PermissionExclude
                         selectedMember={this.state.excludeMembers}
                         searchMemberUrl={this.props.memberSearchUrl}
@@ -285,7 +274,7 @@ var Permission = React.createClass({
                         handleAddition={this.handleExcludeAddition}
                         />
                     <input type="hidden" name={excludeMemberTitle} className="form-control" value={excludeMembers} />
-                </p>
+                </div>
             </div>
         );
     }

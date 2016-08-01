@@ -127,11 +127,11 @@ abstract class AbstractPlugin
      * 해당 플러그인이 최신 상태로 업데이트가 된 상태라면 true, 업데이트가 필요한 상태라면 false를 반환함.
      * 이 메소드를 구현하지 않았다면 기본적으로 최신업데이트 상태임(true)을 반환함.
      *
-     * @param string $currentVersion 현재 설치된 버전
+     * @param string $installedVersion 현재 설치된 버전
      *
      * @return boolean 플러그인의 설치 유무,
      */
-    public function checkUpdated($currentVersion = null)
+    public function checkUpdated($installedVersion = null)
     {
         return true;
     }
@@ -170,8 +170,22 @@ abstract class AbstractPlugin
      * @param string $path path
      *
      * @return string
+     * @deprecated use path() instead
      */
     public static function getPath($path = '')
+    {
+        return static::path($path);
+    }
+
+    /**
+     * 해당 플러그인의 설치 경로를 반환한다.
+     * path가 주어질 경우, 주어진 path정보를 추가하여 반환한다.
+     *
+     * @param string $path path
+     *
+     * @return string
+     */
+    public static function path($path = '')
     {
         $reflector = new ReflectionClass(static::class);
         return dirname($reflector->getFileName()).($path ? DIRECTORY_SEPARATOR.$path : $path);
@@ -189,5 +203,17 @@ abstract class AbstractPlugin
     {
         $path = 'plugins/'.static::getId().'/'.trim($path, '/');
         return asset($path, $secure);
+    }
+
+    /**
+     * view name을 반환한다. 템플릿 파일 작성시 편의를 위해 사용한다.
+     *
+     * @param string $view view name
+     *
+     * @return string
+     */
+    public static function view($view)
+    {
+        return static::getId().'::'.$view;
     }
 }
