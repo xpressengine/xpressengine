@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Process\Process;
+use Xpressengine\Interception\InterceptionHandler;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Support\Migration;
 
@@ -48,11 +49,12 @@ class XeUpdate extends Command
     /**
      * Execute the console command.
      *
-     * @param ComposerFileWriter $writer
+     * @param ComposerFileWriter  $writer
+     * @param InterceptionHandler $interceptionHandler
      *
      * @return bool|null
      */
-    public function fire(ComposerFileWriter $writer) {
+    public function fire(ComposerFileWriter $writer, InterceptionHandler $interceptionHandler) {
 
         // php artisan xe:update [version] [--skip-download]
 
@@ -96,6 +98,9 @@ class XeUpdate extends Command
         // migration
         $this->output->section('Run the migration of the Xpressengine.');
         $this->migrateCore($installedVersion, __XE_VERSION__);
+
+        // clear proxy
+        $interceptionHandler->clearProxies();
 
         // mark installed
         $this->markInstalled();

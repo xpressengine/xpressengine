@@ -1380,7 +1380,10 @@ if (typeof exports !== 'undefined') {
       Progress.done(settings.context == undefined ? $('body') : settings.context);
     }).ajaxError(function(event, jqxhr, settings, thrownError) {
       XE.Progress.done();
-      self.error(jqxhr, settings, thrownError);
+
+      if(!settings.hasOwnProperty("error")) {
+        self.error(jqxhr, settings, thrownError);
+      }
     });
 
     return {
@@ -1402,7 +1405,6 @@ if (typeof exports !== 'undefined') {
       },
       error: function (jqxhr, settings, thrownError) {
         var status = jqxhr.status,
-            type = 'xe-danger',
             errorMessage = 'Not defined error message ('+status+')';
 
         // @TODO dataType 에 따라 메시지 획득 방식을 추가 해야함.

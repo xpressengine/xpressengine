@@ -23,7 +23,7 @@ var PermissionInclude = React.createClass({
     },
     getDefaultProps: function () {
         return {
-            placeholder: 'Input group or member',
+            placeholder: XE.Lang.trans('xe::explainIncludeUserOrGroup'),
             selectedGroup: [],
             selectedMember: [],
             groupSuggestions: [],

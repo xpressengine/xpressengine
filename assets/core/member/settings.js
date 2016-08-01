@@ -453,7 +453,11 @@ $(function () {
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         // add에 실패하면 오류 출력
-                        self.setStatus(self.ui.addEmailBox, false, jqXHR.responseJSON.message)
+                        if(jqXHR.status == 422) {
+                          self.setStatus(self.ui.addEmailBox, false, jqXHR.responseJSON.address[0])
+                        } else {
+                          self.setStatus(self.ui.addEmailBox, false, jqXHR.responseJSON.message)
+                        }
                     }
                 });
             },

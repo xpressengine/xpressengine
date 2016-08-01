@@ -63,6 +63,7 @@
                     @if($plugin->isActivated())
                         <form method="POST" action="{{ route('settings.plugins.deactivate', [$plugin->getId()]) }}" accept-charset="UTF-8" role="form">
                             {!! csrf_field() !!}
+                            {!! method_field('PUT') !!}
                             <button class="btn btn-danger">{{xe_trans('xe::deactivation')}}</button>
                         </form>
 
@@ -77,6 +78,7 @@
                     @else
                         <form method="POST" action="{{ route('settings.plugins.activate', [$plugin->getId()]) }}" accept-charset="UTF-8" role="form">
                             {!! csrf_field() !!}
+                            {!! method_field('PUT') !!}
                             <button class="btn btn-default">{{xe_trans('xe::activation')}}</button>
                         </form>
                     @endif

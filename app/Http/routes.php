@@ -50,14 +50,11 @@ Route::settings(
         Route::get('lines/{key}', ['as' => 'manage.lang.lines.key', 'uses' => 'LangController@getLinesWithKey']);
         Route::get('search/{locale}', ['as' => 'manage.lang.search', 'uses' => 'LangController@searchKeyword']);
         Route::put('save', ['as' => 'manage.lang.save', 'uses' => 'LangController@save']);
-        Route::get(
-            '{namespace?}/{keyword?}',
-            [
+        Route::get('/', [
                 'as' => 'manage.lang.index',
                 'uses' => 'LangController@index',
                 'settings_menu' => ['lang.default']
-            ]
-        );
+        ]);
     }
 );
 
@@ -588,25 +585,25 @@ Route::settings(
             ]
         );
 
-        Route::post(
+        Route::put(
             '{pluginId}/activate',
             [
                 'as' => 'settings.plugins.activate',
-                'uses' => 'PluginController@postActivatePlugin'
+                'uses' => 'PluginController@putActivatePlugin'
             ]
         );
-        Route::post(
+        Route::put(
             '{pluginId}/deactivate',
             [
                 'as' => 'settings.plugins.deactivate',
-                'uses' => 'PluginController@postDeactivatePlugin'
+                'uses' => 'PluginController@putDeactivatePlugin'
             ]
         );
-        Route::post(
+        Route::put(
             '{pluginId}/update',
             [
                 'as' => 'settings.plugins.update',
-                'uses' => 'PluginController@postUpdatePlugin'
+                'uses' => 'PluginController@putUpdatePlugin'
             ]
         );
     }

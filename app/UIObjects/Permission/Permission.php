@@ -46,6 +46,12 @@ class Permission extends AbstractUIObject
 
         XeFrontend::css('/assets/core/permission/permission.css')->load();
 
+        XeFrontend::translation([
+            'xe::inheritMode', 'xe::memberRatingAdministrator', 'xe::memberRatingManager',
+            'xe::member', 'xe::guest', 'xe::memberRating', 'xe::includeUserOrGroup', 'xe::excludeUser',
+            'xe::includeVGroup', 'xe::explainIncludeUserOrGroup', 'xe::explainExcludeUser'
+        ]);
+
         $htmlString = [];
         $args = $this->arguments;
 
