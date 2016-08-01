@@ -23,7 +23,7 @@ use Xpressengine\Media\MediaManager;
 use Xpressengine\Media\Thumbnailer;
 use Xpressengine\Storage\File;
 use Xpressengine\Storage\Storage;
-use App\ToggleMenus\Member\ProfileItem;
+use Xpressengine\ToggleMenus\Member\ProfileItem;
 use Xpressengine\User\EmailBroker;
 use Xpressengine\User\Guard;
 use Xpressengine\User\GuardInterface;
@@ -468,9 +468,9 @@ class UserServiceProvider extends ServiceProvider
     private function registerDefaultSkins()
     {
         $pluginRegister = $this->app['xe.pluginRegister'];
-        $pluginRegister->add(\App\Skins\Member\AuthSkin::class);
-        $pluginRegister->add(\App\Skins\Member\SettingsSkin::class);
-        $pluginRegister->add(\App\Skins\Member\ProfileSkin::class);
+        $pluginRegister->add(\Xpressengine\Skins\Member\AuthSkin::class);
+        $pluginRegister->add(\Xpressengine\Skins\Member\SettingsSkin::class);
+        $pluginRegister->add(\Xpressengine\Skins\Member\ProfileSkin::class);
     }
 
     private function registerSettingsPermissions()

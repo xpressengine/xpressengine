@@ -11,9 +11,9 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Widget\WidgetHandler;
 use Xpressengine\Widget\WidgetParser;
-use App\Widgets\ContentInfo;
-use App\Widgets\StorageSpace;
-use App\Widgets\SystemInfo;
+use Xpressengine\Widgets\ContentInfo;
+use Xpressengine\Widgets\StorageSpace;
+use Xpressengine\Widgets\SystemInfo;
 
 /**
  * Class WidgetServiceProvider

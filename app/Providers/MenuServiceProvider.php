@@ -23,9 +23,9 @@ use Xpressengine\Menu\Repositories\CacheDecorator;
 use Xpressengine\Menu\Repositories\EloquentRepository;
 use Xpressengine\Menu\Repositories\MemoryDecorator;
 use Xpressengine\Support\LaravelCache;
-use App\UIObjects\Menu\MenuType;
+use Xpressengine\UIObjects\Menu\MenuType;
 use Xpressengine\Menu\MenuType\DirectLink;
-use App\UIObjects\Menu\TypeSelect;
+use Xpressengine\UIObjects\Menu\TypeSelect;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 
 /**

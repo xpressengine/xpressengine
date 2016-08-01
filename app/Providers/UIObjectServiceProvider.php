@@ -11,20 +11,20 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Plugin\PluginRegister;
 use Xpressengine\UIObject\UIObjectHandler;
-use App\UIObjects\Form\Form;
-use App\UIObjects\Form\FormCheckbox;
-use App\UIObjects\Form\FormFile;
-use App\UIObjects\Form\FormImage;
-use App\UIObjects\Form\FormLangText;
-use App\UIObjects\Form\FormLangTextArea;
-use App\UIObjects\Form\FormPassword;
-use App\UIObjects\Form\FormSelect;
-use App\UIObjects\Form\FormText;
-use App\UIObjects\Form\FormTextArea;
-use App\UIObjects\Lang\LangText;
-use App\UIObjects\Lang\LangTextArea;
-use App\UIObjects\Member\ProfileBgImage;
-use App\UIObjects\Member\ProfileImage;
+use Xpressengine\UIObjects\Form\Form;
+use Xpressengine\UIObjects\Form\FormCheckbox;
+use Xpressengine\UIObjects\Form\FormFile;
+use Xpressengine\UIObjects\Form\FormImage;
+use Xpressengine\UIObjects\Form\FormLangText;
+use Xpressengine\UIObjects\Form\FormLangTextArea;
+use Xpressengine\UIObjects\Form\FormPassword;
+use Xpressengine\UIObjects\Form\FormSelect;
+use Xpressengine\UIObjects\Form\FormText;
+use Xpressengine\UIObjects\Form\FormTextArea;
+use Xpressengine\UIObjects\Lang\LangText;
+use Xpressengine\UIObjects\Lang\LangTextArea;
+use Xpressengine\UIObjects\Member\ProfileBgImage;
+use Xpressengine\UIObjects\Member\ProfileImage;
 
 class UIObjectServiceProvider extends ServiceProvider
 {

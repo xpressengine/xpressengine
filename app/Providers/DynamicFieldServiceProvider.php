@@ -22,11 +22,11 @@ use Xpressengine\DynamicField\DatabaseProxy;
 use Xpressengine\DynamicField\DynamicFieldHandler;
 use Xpressengine\DynamicField\RegisterHandler;
 use Xpressengine\DynamicField\RevisionManager;
-use App\FieldTypes\Category;
-use App\FieldTypes\Number;
-use App\FieldTypes\Text;
-use App\FieldTypes\Boolean;
-use App\FieldTypes\Address;
+use Xpressengine\FieldTypes\Category;
+use Xpressengine\FieldTypes\Number;
+use Xpressengine\FieldTypes\Text;
+use Xpressengine\FieldTypes\Boolean;
+use Xpressengine\FieldTypes\Address;
 
 /**
  * laravel service provider
