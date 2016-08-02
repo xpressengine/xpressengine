@@ -71,30 +71,39 @@
                 window.console.log("open config");
             },
             delWidget: function() {
-                //$(this).closest(".widgetarea").find()
+                var $column = $(this).closest("div[class^='xe-col-']:not(.xe-col-md-12)");
+
+                if(self.checkReducibleBlock($column)) {
+                    self.reduceBlockSize($column);
+                }
+
                 $(this).closest(".xe-row").remove();
-
-                self.reduceBlockSize($(this).closest("div[class^='xe-col-']"));
+                
             },
-            checkReducibleSiblings: function($column) {
-                var check = true;
+            checkReducibleBlock: function($column) {
+                var check = false;
+                var widgetCnt = $column.find('.widget');
+                var widgetHeight = $column.find('.widget').eq(0).outerHeight();
 
-                $(".editor > .xe-row").has($column).find(".widgetarea-row:last-child").not($column.parents(".xe-row")).not($column.closest(".widgetarea-row").siblings()).each(function() {
-                    var $widgetarea = $(this).find(".widgetarea");
-                    var widgetsCnt = $widgetarea.find(".widget").length;
-
-                    // if(widgetsCnt > 0) {
-                    //
-                    // }
-
-                });
+                //TODO siblings도 체크 해야됨.
+                if((widgetHeight - 165) > 0 && (widgetHeight - ((widgetCnt - 1) * $column.find('.widget').eq(0).outerHeight())) > 165) {
+                    check = true;
+                }
+                
+                // $(".editor > .xe-row").has($column).find(".widgetarea-row:last-child").not($column.parents(".xe-row")).not($column.closest(".widgetarea-row").siblings()).each(function() {
+                //     var $widgetarea = $(this).find(".widgetarea");
+                //     var widgetsCnt = $widgetarea.find(".widget").length;
+                //
+                //     if(widgetsCnt > 0) {
+                //
+                //     }
+                //
+                // });
 
                 return check;
             },
             reduceBlockSize: function($column) {
-                // if(self.checkReducibleSiblings($column)) {
-                //
-                // }
+                var widgetHeight = $column.find('.widget').eq(0).outerHeight();
             },
             increaseBlockSize: function($column) {
 
