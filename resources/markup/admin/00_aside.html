@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>Sample aside:IncludeByJS</title>
+</head>
+<body>
+	<div class="logo-area transition">
+		<h1><a href="#"><img src="sample/@tmp_admin_logo.jpg" width="32" height="32" alt="admin logo">Logo & Web title</a></h1>
+	</div>
+	<p class="list-title">목록 타이틀</p>
+	<ul class="snb-list">
+	<!--[D] 메뉴 선택 시 li.on 비활성화 시 li.off 클래스 추가-->
+	<li><a href="#"><i class="xi-bars"></i></i>첫번째 depth</a></li>
+	<li class="sub-depth">
+		<a href="http://www.naver.com/"><i class="xi-bars"></i></i>첫번째 depth</a>
+		<button type="button" class="btn-link toggle"><i class="xi-angle-right-thin"></i></button>
+		<ul class="sub-depth-list">
+		<li><a href="#">1차 하위<div class="xo-badge floating red">55</div></a></li>
+		<li><a href="#">1차 하위</a></li>
+		<li class="sub-depth">
+			<a href="#">1차 하위</a>
+			<ul class="sub-depth-list">
+			<li class="off"><a href="#">2차 하위<em class="list-label">설정됨</em></a></li>
+			<li class="on"><a href="#">2차 하위</a></li>
+			</ul>
+		</li>
+		</ul>
+	</li>
+	<li class="sub-depth">
+		<a href="#"><i class="xi-bars"></i></i>첫번째 depth</a>
+		<button type="button" class="btn-link toggle"><i class="xi-angle-right-thin"></i></button>
+		<ul class="sub-depth-list">
+		<li><a href="#">1차 하위</a></li>
+		<li><a href="#">1차 하위</a></li>
+		<li class="sub-depth">
+			<a href="#">1차 하위</a>
+			<button type="button" class="btn-link toggle"><i class="xi-angle-right-thin"></i></button>
+			<ul class="sub-depth-list">
+			<li><a href="#">2차 하위</a></li>
+			<li class="on"><a href="#">2차 하위</a></li>
+			</ul>
+		</li>
+		</ul>
+	</li>
+	</ul>
+	<p class="list-title">목록 타이틀</p>
+	<ul class="snb-list">
+	<li><a href="#"><i class="xi-bars"></i></i>첫번째 depth</a></li>
+	<li><a href="#"><i class="xi-bars"></i></i>첫번째 depth</a></li>
+	<li><a href="#"><i class="xi-bars"></i></i>첫번째 depth</a></li>
+	</ul>
+</body>
+</html>

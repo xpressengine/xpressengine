@@ -50,7 +50,7 @@
                         </div>
                         @if($captcha->available() !== true)
                         <div class="alert alert-warning" role="alert">
-                            {{ xe_trans('xe::msgAlertCaptchaAtJoin') }}
+                            {!! xe_trans('xe::msgAlertCaptchaAtJoin') !!}
                         </div>
                         @endif
                     </div>

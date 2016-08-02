@@ -43,7 +43,7 @@
                 <label for="chk3" >{!! xe_trans('xe::agreeSiteTermsUseAndSitePrivacyPolicy', ['termLink' => '#', 'policyLink' => '#']) !!}</label>
                 <!--[D] 동의 및 체크 시 아래 메시지 노출-->
                 <div class="auth-noti txt_red">
-                    <p>{{xe_trans('xe::agreeSiteTermsUseAndSitePrivacyPolicyDescription')}}</p>
+                    <p>{!! xe_trans('xe::agreeSiteTermsUseAndSitePrivacyPolicyDescription') !!}</p>
                 </div>
             </div>
             @if($config['useCaptcha'] === true)

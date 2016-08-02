@@ -132,7 +132,7 @@ class Rule
     public function render()
     {
         $rule = sprintf(
-            "System.import('xecore:/common/js/modules/validator')"
+            "System.import('xecore:/common/js/validator')"
             .'.then(function(validator) { validator.setRules("%s", %s); });',
             $this->ruleName,
             json_enc($this->rules)
