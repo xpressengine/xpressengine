@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>Sample Header:IncludeByJS</title>
+</head>
+<body>
+
+	<button type="button" class="btn-slide"><i class="xi-dedent"></i><span class="sr-only">메뉴 숨기기</span></button>
+	<a href="#" class="btn-site-home"><i class="xi-home"></i><span class="sr-only">홈페이지로 가기</span></a>
+	<div class="right-menu">
+		<ul>
+		<li>
+			<a href="#" data-toggle="dropdown" aria-expanded="true">
+				<div>
+				<img src="sample/@img_profile_tmp.jpg" width="40" height="40" alt="프로필">
+				<span class="hidden-xs">Junha Lee</span>
+				<i class="xi-angle-down"></i>
+				</div>
+			</a>
+			<div class="transition dropdown-menu">
+				<ul>
+				<li><a href="#">내 프로필</a></li>
+				<li><a href="#">개인 설정</a></li>
+				<li><a href="#">로그아웃</a></li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#" data-toggle="dropdown" aria-expanded="true">
+				<div>
+					<!--[D] 국가명 입력 시 flag 이름 변경됨 belize, japan 등-->
+					<span class="flag-code"><i class="south korea xe-flag"></i>kr</span>
+				</div>
+			</a>
+			<div class="transition dropdown-menu">
+				<ul>
+				<li><a href="#"><i class="canada xe-flag"></i>Canada</a></li>
+				<li><a href="#"><i class="denmark xe-flag"></i>Denmark</a></li>
+				<li><a href="#"><i class="dominica xe-flag"></i>Dominica</a></li>
+				</ul>
+			</div>
+		</li>
+		</ul>
+	</div>
+
+</body>
+</html>

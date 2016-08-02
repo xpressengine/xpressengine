@@ -50,46 +50,42 @@
 
   // @DEPRECATED
   function cssLoad(url) {
-    var $css = $('<link>', {rel: 'stylesheet', type: 'text/css', href: url});
-
-    $('head').append($css);
+    DynamicLoadManager.cssLoad(url);
   }
 
   function jsLoad(url) {
-    var $js = $('<script>', {id: 'jsload', type: 'text/javascript', src: url});
-
-    $('head').append($js);
+    DynamicLoadManager.jsLoad(url);
   }
 
   function toast(type, message) {
     if (type == '') {
       type = 'danger';
     }
-    System.import('xecore:/common/js/modules/griper/griper').then(function (griper) {
+    System.import('xecore:/common/js/griper').then(function (griper) {
       return griper.toast(type, message);
     });
   }
 
   function toastByStatus(status, message) {
-    System.import('xecore:/common/js/modules/griper/griper').then(function (griper) {
+    System.import('xecore:/common/js/griper').then(function (griper) {
       return griper.toast(griper.toast.fn.statusToType(status), message);
     });
   }
 
   function formError($element, message) {
-    System.import('xecore:/common/js/modules/griper/griper').then(function (griper) {
+    System.import('xecore:/common/js/griper').then(function (griper) {
       return griper.form($element, message);
     });
   }
 
   function formErrorClear($form) {
-    System.import('xecore:/common/js/modules/griper/griper').then(function (griper) {
+    System.import('xecore:/common/js/griper').then(function (griper) {
       return griper.form.fn.clear($form);
     });
   }
 
   function validate($form) {
-    System.import('xecore:/common/js/modules/validator').then(function (validator) {
+    System.import('xecore:/common/js/validator').then(function (validator) {
       validator.validate($form);
     });
   }
@@ -744,9 +740,9 @@ if (typeof exports !== 'undefined') {
 }
 
 //xe.lang.js
-(function(exports, Translator) {
+(function(exports) {
   exports.XE.Lang = function() {
-
+    var Translator = exports.Translator;
     var _items = {
       'af' : 'af-ZA',
       'ar' : 'ar-SA',
@@ -839,8 +835,8 @@ if (typeof exports !== 'undefined') {
         return this;
       },
       set: function(items) {
-        $.extend(_items, items);
-        $.each(_items, function(key, value) {
+        //$.extend(_items, items);
+        $.each(items, function(key, value) {
           Translator.add(key, value);
         });
 
@@ -863,7 +859,7 @@ if (typeof exports !== 'undefined') {
       }
     }.init();
   }();
-})(window, Translator);
+})(window);
 (function(exports) {
   var instances = [];
   var cssLoaded = false;
@@ -1384,7 +1380,10 @@ if (typeof exports !== 'undefined') {
       Progress.done(settings.context == undefined ? $('body') : settings.context);
     }).ajaxError(function(event, jqxhr, settings, thrownError) {
       XE.Progress.done();
-      self.error(jqxhr, settings, thrownError);
+
+      if(!settings.hasOwnProperty("error")) {
+        self.error(jqxhr, settings, thrownError);
+      }
     });
 
     return {
@@ -1406,7 +1405,6 @@ if (typeof exports !== 'undefined') {
       },
       error: function (jqxhr, settings, thrownError) {
         var status = jqxhr.status,
-            type = 'xe-danger',
             errorMessage = 'Not defined error message ('+status+')';
 
         // @TODO dataType 에 따라 메시지 획득 방식을 추가 해야함.
@@ -1480,11 +1478,12 @@ $(function() {
 
   $(document).on('boot.xe.modal', '[data-toggle=xe-modal]', function() {
     System.import("xe.component.modal").then(function() {
-      $('[data-toggle=xe-modal]').xeModal();
+      //$('[data-toggle=xe-modal]').xeModal();
+
     });
   });
 
-  $(document).on('boot.xe.modal', '[data-toggle=xe-tooltip]', function() {
+  $(document).on('boot.xe.tooltip', '[data-toggle=xe-tooltip]', function() {
     System.import("xe.component.tooltip").then(function() {
       $('[data-toggle=xe-tooltip]').xeTooltip();
     });

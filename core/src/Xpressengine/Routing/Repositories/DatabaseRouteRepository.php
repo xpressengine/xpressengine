@@ -182,10 +182,7 @@ class DatabaseRouteRepository implements RouteRepository
             return false;
         }
 
-        $configUrl = [
-            $this->configs->get('xe.routing.fixedPrefix'),
-            $this->configs->get('xe.routing.settingsPrefix')
-        ];
+        $configUrl = $this->configs->get('xe.routing');
 
         if ($isNew && $this->findByUrlAndSiteKey($url, $siteKey) !== null) {
             return false;

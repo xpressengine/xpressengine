@@ -125,6 +125,7 @@
     <title>XE3 - Web installer</title>
 
     <link rel="stylesheet" href="../assets/core/common/css/xe-common.css">
+    <script src="../assets/core/common/js/dynamicLoadManager.js" type="text/javascript"></script>
     <script src="../assets/vendor/jquery/jquery.min.js"></script>
     <script src="../assets/jspm_packages/system.js"></script>
     <script src="../assets/systemjs.config.js"></script>

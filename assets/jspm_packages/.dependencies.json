@@ -117,15 +117,6 @@
   "npm:inherits@2.0.1": {
     "util": "github:jspm/nodelibs-util@^0.1.0"
   },
-  "npm:inflight@1.0.4": {
-    "once": "npm:once@^1.3.0",
-    "wrappy": "npm:wrappy@^1.0.0",
-    "process": "github:jspm/nodelibs-process@^0.1.0"
-  },
-  "npm:minimatch@3.0.0": {
-    "brace-expansion": "npm:brace-expansion@^1.0.0",
-    "path": "github:jspm/nodelibs-path@^0.1.0"
-  },
   "npm:defined@1.0.0": {},
   "npm:path-is-absolute@1.0.0": {
     "process": "github:jspm/nodelibs-process@^0.1.0"
@@ -153,7 +144,6 @@
   "github:jspm/nodelibs-path@0.1.0": {
     "path-browserify": "npm:path-browserify@0.0.0"
   },
-  "npm:wrappy@1.0.1": {},
   "npm:amdefine@1.0.0": {
     "path": "github:jspm/nodelibs-path@^0.1.0",
     "process": "github:jspm/nodelibs-process@^0.1.0",
@@ -183,9 +173,6 @@
   },
   "github:jspm/nodelibs-crypto@0.1.0": {
     "crypto-browserify": "npm:crypto-browserify@^3.7.2"
-  },
-  "npm:assert@1.3.0": {
-    "util": "npm:util@0.10.3"
   },
   "npm:crypto-browserify@3.11.0": {
     "browserify-cipher": "npm:browserify-cipher@^1.0.0",
@@ -334,13 +321,6 @@
     "constants": "github:jspm/nodelibs-constants@^0.1.0",
     "buffer": "github:jspm/nodelibs-buffer@^0.1.0"
   },
-  "npm:elliptic@6.2.3": {
-    "bn.js": "npm:bn.js@^4.0.0",
-    "brorand": "npm:brorand@^1.0.1",
-    "hash.js": "npm:hash.js@^1.0.0",
-    "inherits": "npm:inherits@^2.0.1",
-    "systemjs-json": "github:systemjs/plugin-json@^0.1.0"
-  },
   "npm:browserify-aes@1.0.6": {
     "buffer-xor": "npm:buffer-xor@^1.0.2",
     "cipher-base": "npm:cipher-base@^1.0.0",
@@ -433,18 +413,7 @@
   "npm:source-map@0.5.6": {
     "process": "github:jspm/nodelibs-process@^0.1.0"
   },
-  "npm:brace-expansion@1.1.4": {
-    "balanced-match": "npm:balanced-match@^0.4.1",
-    "concat-map": "npm:concat-map@0.0.1"
-  },
-  "npm:balanced-match@0.4.1": {},
   "github:systemjs/plugin-json@0.1.2": {},
-  "npm:process@0.11.3": {
-    "assert": "github:jspm/nodelibs-assert@^0.1.0"
-  },
-  "npm:bn.js@4.11.3": {
-    "buffer": "github:jspm/nodelibs-buffer@^0.1.0"
-  },
   "npm:readable-stream@1.1.14": {
     "core-util-is": "npm:core-util-is@~1.0.0",
     "inherits": "npm:inherits@~2.0.1",
@@ -455,7 +424,235 @@
     "buffer": "github:jspm/nodelibs-buffer@^0.1.0",
     "events": "github:jspm/nodelibs-events@^0.1.1"
   },
-  "npm:asn1.js@4.6.0": {
+  "npm:react@15.2.1": {
+    "fbjs": "npm:fbjs@^0.8.1",
+    "loose-envify": "npm:loose-envify@^1.1.0",
+    "object-assign": "npm:object-assign@^4.1.0",
+    "process": "github:jspm/nodelibs-process@^0.1.0"
+  },
+  "npm:loose-envify@1.2.0": {
+    "js-tokens": "npm:js-tokens@^1.0.1",
+    "fs": "github:jspm/nodelibs-fs@^0.1.0",
+    "process": "github:jspm/nodelibs-process@^0.1.0",
+    "stream": "github:jspm/nodelibs-stream@^0.1.0",
+    "util": "github:jspm/nodelibs-util@^0.1.0"
+  },
+  "npm:fbjs@0.8.3": {
+    "core-js": "npm:core-js@^1.0.0",
+    "immutable": "npm:immutable@^3.7.6",
+    "isomorphic-fetch": "npm:isomorphic-fetch@^2.1.1",
+    "loose-envify": "npm:loose-envify@^1.0.0",
+    "object-assign": "npm:object-assign@^4.1.0",
+    "promise": "npm:promise@^7.1.1",
+    "ua-parser-js": "npm:ua-parser-js@^0.7.9",
+    "process": "github:jspm/nodelibs-process@^0.1.0"
+  },
+  "npm:object-assign@4.1.0": {},
+  "npm:js-tokens@1.0.3": {},
+  "npm:isomorphic-fetch@2.2.1": {
+    "node-fetch": "npm:node-fetch@^1.0.1",
+    "whatwg-fetch": "npm:whatwg-fetch"
+  },
+  "npm:ua-parser-js@0.7.10": {
+    "systemjs-json": "github:systemjs/plugin-json@^0.1.0"
+  },
+  "npm:promise@7.1.1": {
+    "asap": "npm:asap@~2.0.3",
+    "fs": "github:jspm/nodelibs-fs@^0.1.0"
+  },
+  "npm:immutable@3.8.1": {},
+  "npm:core-js@1.2.7": {
+    "systemjs-json": "github:systemjs/plugin-json@^0.1.0",
+    "process": "github:jspm/nodelibs-process@^0.1.0",
+    "fs": "github:jspm/nodelibs-fs@^0.1.0",
+    "path": "github:jspm/nodelibs-path@^0.1.0"
+  },
+  "npm:whatwg-fetch@1.0.0": {},
+  "npm:node-fetch@1.5.3": {
+    "encoding": "npm:encoding@^0.1.11",
+    "is-stream": "npm:is-stream@^1.0.1",
+    "stream": "github:jspm/nodelibs-stream@^0.1.0",
+    "buffer": "github:jspm/nodelibs-buffer@^0.1.0",
+    "util": "github:jspm/nodelibs-util@^0.1.0",
+    "url": "github:jspm/nodelibs-url@^0.1.0",
+    "http": "github:jspm/nodelibs-http@^1.7.0",
+    "https": "github:jspm/nodelibs-https@^0.1.0",
+    "zlib": "github:jspm/nodelibs-zlib@^0.1.0"
+  },
+  "npm:encoding@0.1.12": {
+    "iconv-lite": "npm:iconv-lite@~0.4.13",
+    "buffer": "github:jspm/nodelibs-buffer@^0.1.0"
+  },
+  "npm:is-stream@1.1.0": {},
+  "npm:asap@2.0.4": {
+    "process": "github:jspm/nodelibs-process@^0.1.0",
+    "domain": "github:jspm/nodelibs-domain@^0.1.0"
+  },
+  "github:jspm/nodelibs-http@1.7.1": {
+    "Base64": "npm:Base64@~0.2.0",
+    "inherits": "npm:inherits@~2.0.1",
+    "stream": "github:jspm/nodelibs-stream@^0.1.0",
+    "util": "github:jspm/nodelibs-util@^0.1.0",
+    "events": "github:jspm/nodelibs-events@^0.1.1",
+    "url": "github:jspm/nodelibs-url@^0.1.0"
+  },
+  "github:jspm/nodelibs-url@0.1.0": {
+    "url": "npm:url@^0.10.1"
+  },
+  "npm:process@0.11.5": {
+    "assert": "github:jspm/nodelibs-assert@^0.1.0",
+    "vm": "github:jspm/nodelibs-vm@^0.1.0",
+    "fs": "github:jspm/nodelibs-fs@^0.1.0"
+  },
+  "github:jspm/nodelibs-https@0.1.0": {
+    "https-browserify": "npm:https-browserify@0.0.0"
+  },
+  "github:jspm/nodelibs-zlib@0.1.0": {
+    "browserify-zlib": "npm:browserify-zlib@^0.1.4"
+  },
+  "npm:Base64@0.2.1": {},
+  "github:jspm/nodelibs-domain@0.1.0": {
+    "domain-browser": "npm:domain-browser@^1.1.3"
+  },
+  "npm:url@0.10.3": {
+    "punycode": "npm:punycode@1.3.2",
+    "querystring": "npm:querystring@0.2.0",
+    "assert": "github:jspm/nodelibs-assert@^0.1.0",
+    "util": "github:jspm/nodelibs-util@^0.1.0"
+  },
+  "npm:https-browserify@0.0.0": {
+    "http": "github:jspm/nodelibs-http@^1.7.0"
+  },
+  "npm:browserify-zlib@0.1.4": {
+    "readable-stream": "npm:readable-stream@^2.0.2",
+    "pako": "npm:pako@~0.2.0",
+    "buffer": "github:jspm/nodelibs-buffer@^0.1.0",
+    "process": "github:jspm/nodelibs-process@^0.1.0",
+    "util": "github:jspm/nodelibs-util@^0.1.0",
+    "assert": "github:jspm/nodelibs-assert@^0.1.0"
+  },
+  "npm:readable-stream@2.1.4": {
+    "buffer-shims": "npm:buffer-shims@^1.0.0",
+    "core-util-is": "npm:core-util-is@~1.0.0",
+    "inherits": "npm:inherits@~2.0.1",
+    "isarray": "npm:isarray@~1.0.0",
+    "process-nextick-args": "npm:process-nextick-args@~1.0.6",
+    "string_decoder": "npm:string_decoder@~0.10.0",
+    "util-deprecate": "npm:util-deprecate@~1.0.1",
+    "process": "github:jspm/nodelibs-process@^0.1.0",
+    "events": "github:jspm/nodelibs-events@^0.1.1",
+    "buffer": "github:jspm/nodelibs-buffer@^0.1.0"
+  },
+  "npm:querystring@0.2.0": {},
+  "npm:domain-browser@1.1.7": {
+    "events": "github:jspm/nodelibs-events@^0.1.1"
+  },
+  "npm:punycode@1.3.2": {
+    "process": "github:jspm/nodelibs-process@^0.1.0"
+  },
+  "npm:pako@0.2.8": {
+    "buffer": "github:jspm/nodelibs-buffer@^0.1.0",
+    "process": "github:jspm/nodelibs-process@^0.1.0"
+  },
+  "npm:util-deprecate@1.0.2": {
+    "util": "github:jspm/nodelibs-util@^0.1.0"
+  },
+  "npm:buffer-shims@1.0.0": {
+    "buffer": "github:jspm/nodelibs-buffer@^0.1.0"
+  },
+  "npm:process-nextick-args@1.0.7": {
+    "process": "github:jspm/nodelibs-process@^0.1.0"
+  },
+  "npm:assert@1.4.1": {
+    "util": "npm:util@0.10.3",
+    "buffer": "github:jspm/nodelibs-buffer@^0.1.0",
+    "assert": "github:jspm/nodelibs-assert@^0.1.0",
+    "process": "github:jspm/nodelibs-process@^0.1.0"
+  },
+  "npm:jspm-loader-jsx@0.0.7": {
+    "react-hot-api": "github:gaearon/react-hot-api@0.4.5",
+    "pascal-case": "npm:pascal-case@^1.1.1",
+    "path": "github:jspm/nodelibs-path@^0.1.0",
+    "react": "npm:react@^0.13.3"
+  },
+  "npm:pascal-case@1.1.2": {
+    "camel-case": "npm:camel-case@^1.1.1",
+    "upper-case-first": "npm:upper-case-first@^1.1.0"
+  },
+  "npm:react@0.13.3": {
+    "envify": "npm:envify@^3.0.0",
+    "process": "github:jspm/nodelibs-process@^0.1.0",
+    "buffer": "github:jspm/nodelibs-buffer@^0.1.0"
+  },
+  "npm:upper-case-first@1.1.2": {
+    "upper-case": "npm:upper-case@^1.1.1"
+  },
+  "npm:camel-case@1.2.2": {
+    "sentence-case": "npm:sentence-case@^1.1.1",
+    "upper-case": "npm:upper-case@^1.1.1"
+  },
+  "npm:upper-case@1.1.3": {},
+  "npm:sentence-case@1.1.3": {
+    "lower-case": "npm:lower-case@^1.1.1"
+  },
+  "npm:envify@3.4.1": {
+    "through": "npm:through@~2.3.4",
+    "jstransform": "npm:jstransform@^11.0.3",
+    "process": "github:jspm/nodelibs-process@^0.1.0"
+  },
+  "npm:lower-case@1.1.3": {},
+  "npm:through@2.3.8": {
+    "stream": "github:jspm/nodelibs-stream@^0.1.0",
+    "process": "github:jspm/nodelibs-process@^0.1.0"
+  },
+  "npm:object-assign@2.1.1": {},
+  "npm:base62@1.1.1": {},
+  "npm:source-map@0.4.4": {
+    "amdefine": "npm:amdefine",
+    "process": "github:jspm/nodelibs-process@^0.1.0"
+  },
+  "npm:esprima-fb@15001.1.0-dev-harmony-fb": {
+    "fs": "github:jspm/nodelibs-fs@^0.1.0",
+    "process": "github:jspm/nodelibs-process@^0.1.0"
+  },
+  "npm:jstransform@11.0.3": {
+    "base62": "npm:base62@^1.1.0",
+    "commoner": "npm:commoner@^0.10.1",
+    "esprima-fb": "npm:esprima-fb@^15001.1.0-dev-harmony-fb",
+    "object-assign": "npm:object-assign@^2.0.0",
+    "source-map": "npm:source-map@^0.4.2",
+    "systemjs-json": "github:systemjs/plugin-json@^0.1.0",
+    "process": "github:jspm/nodelibs-process@^0.1.0",
+    "buffer": "github:jspm/nodelibs-buffer@^0.1.0",
+    "fs": "github:jspm/nodelibs-fs@^0.1.0"
+  },
+  "npm:inflight@1.0.5": {
+    "once": "npm:once@^1.3.0",
+    "wrappy": "npm:wrappy@^1.0.0",
+    "process": "github:jspm/nodelibs-process@^0.1.0"
+  },
+  "npm:minimatch@3.0.2": {
+    "brace-expansion": "npm:brace-expansion@^1.0.0",
+    "path": "github:jspm/nodelibs-path@^0.1.0"
+  },
+  "npm:wrappy@1.0.2": {},
+  "github:gaearon/react-hot-api@0.4.5": {},
+  "npm:brace-expansion@1.1.5": {
+    "balanced-match": "npm:balanced-match@^0.4.1",
+    "concat-map": "npm:concat-map@0.0.1"
+  },
+  "npm:balanced-match@0.4.2": {},
+  "npm:elliptic@6.3.1": {
+    "bn.js": "npm:bn.js@^4.4.0",
+    "brorand": "npm:brorand@^1.0.1",
+    "hash.js": "npm:hash.js@^1.0.0",
+    "inherits": "npm:inherits@^2.0.1",
+    "systemjs-json": "github:systemjs/plugin-json@^0.1.0"
+  },
+  "npm:bn.js@4.11.5": {
+    "buffer": "github:jspm/nodelibs-buffer@^0.1.0"
+  },
+  "npm:asn1.js@4.8.0": {
     "bn.js": "npm:bn.js@^4.0.0",
     "inherits": "npm:inherits@^2.0.1",
     "minimalistic-assert": "npm:minimalistic-assert@^1.0.0",
@@ -463,5 +660,8 @@
     "buffer": "github:jspm/nodelibs-buffer@^0.1.0",
     "assert": "github:jspm/nodelibs-assert@^0.1.0",
     "fs": "github:jspm/nodelibs-fs@^0.1.0"
+  },
+  "npm:react-dom@15.2.1": {
+    "react": "npm:react@^15.2.1"
   }
 }

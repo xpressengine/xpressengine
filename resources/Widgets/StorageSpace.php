@@ -18,6 +18,7 @@ use View;
  *
  * @category    Widgets
  * @package     Xpressengine\Widgets
+ * @deprecated
  */
 class StorageSpace extends AbstractWidget
 {

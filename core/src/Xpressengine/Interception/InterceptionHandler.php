@@ -241,4 +241,14 @@ class InterceptionHandler
     {
         return $this->proxyList;
     }
+
+    /**
+     * 기생성된 Proxy 파일을 모두 삭제한다.
+     *
+     * @return void
+     */
+    public function clearProxies()
+    {
+        $this->proxyGenerator->clear();
+    }
 }

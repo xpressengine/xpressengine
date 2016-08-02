@@ -124,4 +124,20 @@ class FileLoader implements Loader
 
         require_once($path);
     }
+
+    /**
+     * 기생성된 Proxy 파일을 모두 삭제한다.
+     *
+     * @return void
+     */
+    public function clear()
+    {
+        $files = scandir($this->path);
+
+        foreach ($files as $file) {
+            if (strpos($file, '.') !== 0) {
+                unlink($this->path.'/'.$file);
+            }
+        }
+    }
 }

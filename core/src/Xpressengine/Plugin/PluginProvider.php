@@ -16,6 +16,7 @@ namespace Xpressengine\Plugin;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\RequestException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -138,6 +139,8 @@ class PluginProvider
         try {
             $infos = $this->findAll($ids);
         } catch (ConnectException $e) {
+            return false;
+        } catch (RequestException $e) {
             return false;
         }
 

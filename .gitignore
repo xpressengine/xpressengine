@@ -11,3 +11,4 @@ composer.lock
 /assets/jspm_packages/*
 !/assets/jspm_packages/*.*
 assets/jspm_packages/.*
+*.map

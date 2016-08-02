@@ -14,6 +14,11 @@
   font-style: normal;
 }
 
+.profile-wrap{  
+  font-family: '나눔고딕',NanumGothic,'맑은 고딕','Malgun Gothic','돋움',Dotum,'애플 SD 산돌고딕 Neo','Apple SD Gothic Neo',AppleGothic,Helvetica,sans-serif;
+  font-size: 13px;
+}
+
 .profile > .xe-container {
   max-width: none !important;
   padding-bottom: 0 !important;
@@ -39,7 +44,7 @@
   max-width: 560px;
   margin: 0 auto 40px;
   padding: 0 5%;
-  text-align: center;
+  text-align: center;  
 }
 .xe-profile .profile-img img,
 .xe-profile .profile-img canvas {

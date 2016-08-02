@@ -30,21 +30,21 @@ class Kernel extends ConsoleKernel
 	 * @var array
 	 */
 	protected $commands = [
-        \App\Console\Commands\Inspire::class,
-        \App\Console\Commands\XeInstall::class,
-        \App\Console\Commands\XeUpdate::class,
-        \App\Console\Commands\TrashEmpty::class,
-        \App\Console\Commands\Schema::class,
-        \App\Console\Commands\TranslationImport::class,
-        \App\Console\Commands\CacheClear::class,
-        \App\Console\Commands\StorageOptimize::class,
-        \App\Console\Commands\Site::class,
-        \App\Console\Commands\PluginMake::class,
-        \App\Console\Commands\PluginInstall::class,
-        \App\Console\Commands\PluginUpdate::class,
-        \App\Console\Commands\PluginUninstall::class,
-        \App\Console\Commands\PluginComposerSync::class,
-        \App\Console\Commands\ThemeMake::class,
+        Commands\Inspire::class,
+        Commands\XeInstall::class,
+        Commands\XeUpdate::class,
+        Commands\TrashEmpty::class,
+        Commands\Schema::class,
+        Commands\TranslationImport::class,
+        Commands\CacheClear::class,
+        Commands\StorageOptimize::class,
+        Commands\Site::class,
+        Commands\PluginMake::class,
+        Commands\PluginInstall::class,
+        Commands\PluginUpdate::class,
+        Commands\PluginUninstall::class,
+        Commands\PluginComposerSync::class,
+        Commands\ThemeMake::class,
 	];
 
 	/**
@@ -120,8 +120,8 @@ class Kernel extends ConsoleKernel
     protected function setCommandBeforeInstall()
     {
         $this->commands = array_intersect($this->commands, [
-            \App\Console\Commands\Inspire::class,
-            \App\Console\Commands\XeInstall::class
+            Commands\Inspire::class,
+            Commands\XeInstall::class
         ]);
     }
 
@@ -132,6 +132,6 @@ class Kernel extends ConsoleKernel
      */
     protected function setCommandAfterInstall()
     {
-        $this->commands = array_diff($this->commands, [\App\Console\Commands\XeInstall::class]);
+        $this->commands = array_diff($this->commands, [Commands\XeInstall::class]);
     }
 }

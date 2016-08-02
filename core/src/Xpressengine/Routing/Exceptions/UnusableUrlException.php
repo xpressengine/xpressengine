@@ -28,5 +28,5 @@ use Xpressengine\Routing\RoutingException;
  */
 class UnusableUrlException extends RoutingException
 {
-    protected $message = '":url" 은 사용할 수 없습니다.';
+    protected $message = '":url" can not be used.';
 }
