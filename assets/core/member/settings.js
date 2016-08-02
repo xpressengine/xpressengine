@@ -444,21 +444,21 @@ $(function () {
 
                 // 이메일 추가 요청
                 $.ajax({
-                    url: this.options.addUrl,
-                    type: "POST",
-                    dataType: 'json',
-                    data: {address: input},
-                    success: function (data, textStatus, jqXHR) {
-                        location.reload();
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        // add에 실패하면 오류 출력
-                        if(jqXHR.status == 422) {
-                          self.setStatus(self.ui.addEmailBox, false, jqXHR.responseJSON.address[0])
-                        } else {
-                          self.setStatus(self.ui.addEmailBox, false, jqXHR.responseJSON.message)
-                        }
+                  url: this.options.addUrl,
+                  type: "POST",
+                  dataType: 'json',
+                  data: {address: input},
+                  success: function (data, textStatus, jqXHR) {
+                    location.reload();
+                  },
+                  error: function (jqXHR, textStatus, errorThrown) {
+                    // add에 실패하면 오류 출력
+                    if (jqXHR.status == 422) {
+                      self.setStatus(self.ui.addEmailBox, false, jqXHR.responseJSON.address[0])
+                    } else {
+                      self.setStatus(self.ui.addEmailBox, false, jqXHR.responseJSON.message)
                     }
+                  }
                 });
             },
             confirm: function() {
