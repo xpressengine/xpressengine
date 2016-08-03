@@ -71,39 +71,75 @@
                 window.console.log("open config");
             },
             delWidget: function() {
-                var $column = $(this).closest("div[class^='xe-col-']:not(.xe-col-md-12)");
+                var $column = $(this).parents(".widgetarea").closest("div[class^='xe-col-']");
 
-                if(self.checkReducibleBlock($column)) {
+                if(self.checkReducibleBlock($column, $(this).closest(".widget"))) {
                     self.reduceBlockSize($column);
                 }
 
                 $(this).closest(".xe-row").remove();
                 
             },
-            checkReducibleBlock: function($column) {
+            /**
+             * @description
+             * [1]클릭된 widget의 widgetarea 체크
+             * [2]siblings 체크
+             * */
+            checkReducibleBlock: function($column, $widget) {
                 var check = false;
-                var widgetCnt = $column.find('.widget');
-                var widgetHeight = $column.find('.widget').eq(0).outerHeight();
+                var widgetCnt = $column.find('.widget').length;
+                var widgetareaHeight = $column.find(".widgetarea").outerHeight();
+                var widgetHeight = $widget.parent().outerHeight();
 
-                //TODO siblings도 체크 해야됨.
-                if((widgetHeight - 165) > 0 && (widgetHeight - ((widgetCnt - 1) * $column.find('.widget').eq(0).outerHeight())) > 165) {
+                if ((widgetareaHeight - 165) >= 140 && (widgetareaHeight - ((widgetCnt - 1) * widgetHeight)) > 165) {
                     check = true;
                 }
-                
-                // $(".editor > .xe-row").has($column).find(".widgetarea-row:last-child").not($column.parents(".xe-row")).not($column.closest(".widgetarea-row").siblings()).each(function() {
-                //     var $widgetarea = $(this).find(".widgetarea");
-                //     var widgetsCnt = $widgetarea.find(".widget").length;
-                //
-                //     if(widgetsCnt > 0) {
-                //
-                //     }
-                //
-                // });
+
+                if (check) {
+                    $(".editor > .xe-row").has($column).find(".widgetarea-row:last-child").not($column.parents(".xe-row")).not($column.closest(".widgetarea-row").siblings()).each(function() {
+                        var $widgetarea = $(this).find(".widgetarea");
+                        var widgetsCnt = $widgetarea.find(".widget").length;
+
+                        if(widgetsCnt > 0) {
+                            var widgetareaHeight = $widgetarea.outerHeight();
+
+                            if ((widgetareaHeight - 165) >= 140 && (widgetareaHeight - (widgetsCnt * widgetHeight)) > 165) {
+                                check = true;
+
+                            }else {
+                                check = false;
+                                return false;
+                            }
+
+                        }else {
+                            if($widgetarea.outerHeight() > 140) {
+                                check = true;
+
+                            }else {
+                                check = false;
+                                return false;
+                            }
+                        }
+                    });
+                }
+
+                console.log("check = ", check);
 
                 return check;
             },
             reduceBlockSize: function($column) {
-                var widgetHeight = $column.find('.widget').eq(0).outerHeight();
+                var $widgetarea = $column.find(".widgetarea");
+                var colWidgetHeight = $widgetarea.outerHeight();
+
+                $widgetarea.height(colWidgetHeight - 165).data("height", colWidgetHeight - 165);
+
+                $(".editor > .xe-row").has($column).find(".widgetarea-row:last-child").not($column.parents(".xe-row")).not($column.closest(".widgetarea-row").siblings()).each(function() {
+                    var $this = $(this);
+                    var $widgetarea = $this.find(".widgetarea"),
+                        widgetareaHeight = $widgetarea.outerHeight();
+
+                    $widgetarea.height(widgetareaHeight - 165).data("height", widgetareaHeight - 165);
+                });
             },
             increaseBlockSize: function($column) {
 
