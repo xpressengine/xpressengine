@@ -1,4 +1,6 @@
 (function(exports) {
+    'use strict';
+
     exports.DynamicLoadManager = function() {
         var _assets = {
             js: {}
@@ -6,31 +8,33 @@
         };
 
         return {
-            import: function(arrUrl, callback) {
-                var arr = [];
+            toDOM: function(html) {
+                var d=document,
+                    a = d.createElement("div"),
+                    b = d.createDocumentFragment(),
+                    i;
 
-                for(var i = 0, max = arrUrl.length; i < max; i += 1) {
-                    if(!_assets.js.hasOwnProperty(arrUrl[i])) {
-                        _assets.js[arrUrl[i]] = "";
-                    }
+                a.innerHTML = html;
 
-                    arr.push(System.import(arrUrl[i]));
+                while(i=a.firstChild) {
+                    b.appendChild(i);
                 }
 
-                Promise.all(arr).then(function(modules) {
-                    if(callback) {
-                        callback.apply(null, modules);
-                    }
-                });
+                return b;
             },
             jsLoadMultiple: function(arrjs) {
                 var html = "";
 
                 for(var i = 0, max = arrjs.length; i < max; i += 1) {
-                    html += "<script src='" + arrjs[i] + "'></script>";
+                    html += "<script src='" + arrjs[i] + "' type='text/javascript'></script>";
                 }
 
-                $("head").append(html);
+                var scripts = this.toDOM(html);
+
+
+                console.log(scripts);
+
+                document.head.appendChild(scripts);
             },
             jsLoad: function(url, load, error) {
                 var src = url.split('?')[0];
@@ -38,7 +42,7 @@
                 if(!_assets.js.hasOwnProperty(src)) {
                     var el = document.createElement( 'script' );
                     el.src = url;
-                    el.async = true;
+                    //el.async = true;
                     
                     if(load) {
                         el.onload = load;
@@ -62,17 +66,20 @@
                 var src = url.split("?")[0];
 
                 if(!_assets.css.hasOwnProperty(src)) {
-                    var $css = $('<link>', {rel: 'stylesheet', type: 'text/css', href: url});
+
+                    var link = document.createElement('link');
+                    el.src = url;
+                    el.async = true;
 
                     if(load) {
-                        $css.on('load', load)
+                        el.onload = load;
                     }
 
                     if(error) {
-                        $css.on('error', error)
+                        el.onerror = error;
                     }
 
-                    $('head').append($css);
+                    document.head.appendChild(link);
 
                     _assets.css[src] = "";
                 }else {
