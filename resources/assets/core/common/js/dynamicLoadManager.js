@@ -23,18 +23,32 @@
                 return b;
             },
             jsLoadMultiple: function(arrjs) {
-                var html = "";
+                // var html = "";
+                //
+                // for(var i = 0, max = arrjs.length; i < max; i += 1) {
+                //     html += "<script src='" + arrjs[i] + "' type='text/javascript'></script>";
+                // }
+                //
+                //
+                // var scripts = this.toDOM(html);
+                //
+                //
+                // console.log(scripts);
+                //
+                // document.head.appendChild(scripts);
+
+
+                var scripts = document.createDocumentFragment();
 
                 for(var i = 0, max = arrjs.length; i < max; i += 1) {
-                    html += "<script src='" + arrjs[i] + "' type='text/javascript'></script>";
+                    var script = document.createElement( 'script' );
+                    script.src = arrjs[i];
+
+                    scripts.appendChild(script);
                 }
 
-                var scripts = this.toDOM(html);
-
-
-                console.log(scripts);
-
                 document.head.appendChild(scripts);
+
             },
             jsLoad: function(url, load, error) {
 
@@ -43,7 +57,7 @@
                 if(!_assets.js.hasOwnProperty(src)) {
                     var el = document.createElement( 'script' );
                     el.src = url;
-                    //el.async = true;
+                    el.async = true;
                     
                     if(load) {
                         el.onload = load;
