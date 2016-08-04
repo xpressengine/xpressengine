@@ -180,7 +180,7 @@ class MenuController extends Controller
         $menu = $handler->get($menuId);
 
         $desktopTheme = Input::get('theme_desktop');
-        $mobileTheme = Input::get('theme_desktop');
+        $mobileTheme = Input::get('theme_mobile');
 
         $rules = [
             'menuTitle'=> 'required',
