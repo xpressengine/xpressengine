@@ -241,6 +241,10 @@
                     <th scope="row">Password</th>
                     <td><input type="password" class="xe-form-control" name="database_password" placeholder="<?=trans('inputDBPassword')?>"></td>
                 </tr>
+                <tr>
+                    <th scope="row">Table Prefix</th>
+                    <td><input type="text" class="xe-form-control" name="database_prefix" placeholder="<?=trans('inputDBPrefix')?>(default: xe)"></td>
+                </tr>
                 </tbody>
             </table>
             <h2>Web site Information</h2>

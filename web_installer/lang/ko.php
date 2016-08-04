@@ -34,6 +34,7 @@ return [
     'inputDBName' => '데이터베이스 명을 입력하세요.',
     'inputDBUser' => 'User 명을 입력하세요.',
     'inputDBPassword' => '비밀번호를 입력하세요.',
+    'inputDBPrefix' => '테이블 접두어를 입력하세요.',
     'inputAdminEmail' => '이메일을 입력하세요.',
     'inputAdminName' => '화면에 표시될 이름을 입력하세요.',
     'inputAdminPassword' => '비밀번호를 입력하세요.',
