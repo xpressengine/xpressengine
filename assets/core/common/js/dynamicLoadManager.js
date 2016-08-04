@@ -8,47 +8,14 @@
         };
 
         return {
-            toDOM: function(html) {
-                var d=document,
-                    a = d.createElement("div"),
-                    b = d.createDocumentFragment(),
-                    i;
-
-                a.innerHTML = html;
-
-                while(i=a.firstChild) {
-                    b.appendChild(i);
-                }
-
-                return b;
-            },
             jsLoadMultiple: function(arrjs) {
-                // var html = "";
-                //
-                // for(var i = 0, max = arrjs.length; i < max; i += 1) {
-                //     html += "<script src='" + arrjs[i] + "' type='text/javascript'></script>";
-                // }
-                //
-                //
-                // var scripts = this.toDOM(html);
-                //
-                //
-                // console.log(scripts);
-                //
-                // document.head.appendChild(scripts);
-
-
-                var scripts = document.createDocumentFragment();
+                var html = "";
 
                 for(var i = 0, max = arrjs.length; i < max; i += 1) {
-                    var script = document.createElement( 'script' );
-                    script.src = arrjs[i];
-
-                    scripts.appendChild(script);
+                    html += "<script src='" + arrjs[i] + "'></script>";
                 }
 
-                document.head.appendChild(scripts);
-
+                $("head").append(html);
             },
             jsLoad: function(url, load, error) {
 
@@ -58,7 +25,7 @@
                     var el = document.createElement( 'script' );
                     el.src = url;
                     el.async = true;
-                    
+
                     if(load) {
                         el.onload = load;
                     }
@@ -81,20 +48,17 @@
                 var src = url.split("?")[0];
 
                 if(!_assets.css.hasOwnProperty(src)) {
-
-                    var link = document.createElement('link');
-                    el.src = url;
-                    el.async = true;
+                    var $css = $('<link>', {rel: 'stylesheet', type: 'text/css', href: url});
 
                     if(load) {
-                        el.onload = load;
+                        $css.on('load', load)
                     }
 
                     if(error) {
-                        el.onerror = error;
+                        $css.on('error', error)
                     }
 
-                    document.head.appendChild(link);
+                    $('head').append($css);
 
                     _assets.css[src] = "";
                 }else {
