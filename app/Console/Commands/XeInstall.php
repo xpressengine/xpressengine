@@ -85,6 +85,7 @@ class XeInstall extends Command
             'port' => '3306',
             'username' => 'root',
             'password' => null,
+            'prefix' => 'xe'
         ],
     ];
 
@@ -445,6 +446,8 @@ class XeInstall extends Command
      */
     private function setDBInfo($dbInfo)
     {
+        $prefix = $this->ask("Table Prefix", $dbInfo['prefix']);
+
         $info = [
             'connections' => [
                 'mysql' => [
@@ -456,7 +459,7 @@ class XeInstall extends Command
                     'port'      => $dbInfo['port'],
                     'charset'   => 'utf8',
                     'collation' => 'utf8_unicode_ci',
-                    'prefix' => 'xe_',
+                    'prefix' => $prefix . '_',
                     'strict'    => false,
                 ],
             ]
