@@ -4,17 +4,17 @@
  *
  * PHP version 5
  *
- * @category  Module
- * @package   Xpressengine\Module
+ * @category  Menu
+ * @package   Xpressengine\Menu
  * @author    XE Developers <developers@xpressengine.com>
  * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link      https://xpressengine.io
  */
 
-namespace Xpressengine\Module;
+namespace Xpressengine\Menu;
 
-use Xpressengine\Module\Exceptions\NotFoundModuleException;
+use Xpressengine\Menu\Exceptions\NotFoundModuleException;
 use Xpressengine\Plugin\PluginRegister;
 
 /**
@@ -57,14 +57,12 @@ use Xpressengine\Plugin\PluginRegister;
  * $moduleObject = $menuHandler->getModuleObject($moduleId);
  * ```
  *
- * @category Module
- * @package  Xpressengine\Module
+ * @category Menu
+ * @package  Xpressengine\Menu
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
- *
- * @deprecated Use Xpressengine\Menu\ModuleHandler instead.
  */
 class ModuleHandler
 {

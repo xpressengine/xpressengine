@@ -14,15 +14,13 @@
 
 namespace Xpressengine\Menu;
 
-use Illuminate\Database\QueryException;
 use Xpressengine\Config\ConfigManager;
-use Xpressengine\Keygen\Keygen;
 use Xpressengine\Menu\Exceptions\CanNotDeleteMenuEntityHaveChildException;
 use Xpressengine\Menu\Exceptions\CanNotDeleteMenuItemHaveChildException;
 use Xpressengine\Menu\Exceptions\InvalidArgumentException;
 use Xpressengine\Menu\Models\Menu;
 use Xpressengine\Menu\Models\MenuItem;
-use Xpressengine\Module\ModuleHandler;
+use Xpressengine\Menu\ModuleHandler;
 use Xpressengine\Permission\Grant;
 use Xpressengine\Routing\RouteRepository;
 use Xpressengine\Support\Tree\NodePositionTrait;
