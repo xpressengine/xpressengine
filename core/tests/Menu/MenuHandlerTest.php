@@ -427,7 +427,7 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
         return [
             m::mock('Xpressengine\Menu\MenuRepository'),
             m::mock('Xpressengine\Config\ConfigManager'),
-            m::mock('Xpressengine\Module\ModuleHandler'),
+            m::mock('Xpressengine\Menu\ModuleHandler'),
             m::mock('Xpressengine\Routing\RouteRepository')
         ];
     }
