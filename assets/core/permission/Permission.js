@@ -281,5 +281,3 @@ var Permission = React.createClass({
 });
 
 
-
-//# sourceMappingURL=Permission.js.map

@@ -1,102 +1,65 @@
-var gulp = require("gulp"),
-    concat = require("gulp-concat"),
-    clean = require("gulp-clean"),
-    $ = require('gulp-load-plugins')(),
-    sourcemaps = require('gulp-sourcemaps');
-var runSequence = require('run-sequence');
-var elixir = require('laravel-elixir');
-var merge = require('merge-stream');
-var react = require('gulp-react');
 
-var config = {
-  isProduction: !!$.util.env.production
-  , useSourceMaps: !$.util.env.production
-};
+'use strict';
 
-/*
- |--------------------------------------------------------------------------
- | Elixir Asset Management
- |--------------------------------------------------------------------------
- |
- | Elixir provides a clean, fluent API for defining some basic Gulp tasks
- | for your Laravel application. By default, we are compiling the Sass
- | file for our application, as well as publishing vendor resources.
- |
- */
+import gulp from 'gulp';
+import plugins from 'gulp-load-plugins';
+import runSequence from 'run-sequence';
+import elixir from 'laravel-elixir';
+import merge from 'merge-stream';
+import settings from './resources/gulpTasks/settings';
+import config from './resources/gulpTasks/config';
+import taskJsx from './resources/gulpTasks/jsx';
 
-elixir(function (mix) {
-  mix.browserify('../core/menu/MenuTree.jsx', 'assets/vendor/menu/menu.js');
-});
-
-gulp.task('clean', function () {
-  return gulp.src('assets/core/common/js/xe.bundle.js')
-    .pipe(clean({force: true}));
-});
-
-// assets 재구성을 위한 임시 task
-elixir(function(mix) {
-  mix.copy('resources/assets/core', 'assets/core');
-});
+const $ = plugins();
 
 gulp.task('default', function(callback){
   runSequence(
-    'clean',
-    'copy-assets',
-    'assets:sass',
-    'jspm:component',
-    'jspm:menu',
-    'jspm:langbox',
-    'jspm:permission',
-    'jspm:xe',
-    callback);
+      'clean:assets',
+      'copy-assets',
+      'assets:sass',
+      'jspm:component',
+      'jspm:menu',
+      'jspm:langbox',
+      'jsx:permission',
+      'jspm:xe',
+      callback);
 });
 
-gulp.task('copy-assets', function () {
-  var ignore = $.filter(['**/*', '!**/*.scss']);
+gulp.task('clean:assets', settings['clean:assets']);
 
-  return gulp.src('./resources/assets/core/**')
-    .pipe($.plumber())
-    .pipe(ignore)
-    .pipe(gulp.dest('./assets/core'));
-});
+gulp.task('copy-assets', settings['copy:assets']);
 
-gulp.task('jspm', ['copy-assets'], function(callback){
-  runSequence(
-    'jspm:component',
-    'jspm:menu',
-    'jspm:langbox',
-    callback);
-});
+
+// // assets 재구성을 위한 임시 task
+// elixir(function(mix) {
+//   mix.copy('resources/assets/core', 'assets/core');
+// });
+
+
+// gulp.task('jspm', ['copy-assets'], function(callback){
+//   runSequence(
+//     'jspm:component',
+//     'jspm:menu',
+//     'jspm:langbox',
+//     callback);
+// });
 
 gulp.task('jspm:xe', function() {
   return gulp.src(['assets/core/common/js/xe.js', 'assets/core/common/js/translator.js', 'assets/core/common/js/xe.lang.js', 'assets/core/common/js/xe.progress.js', 'assets/core/common/js/xe.request.js', 'assets/core/common/js/xe.component.js'])
-    .pipe(concat('xe.bundle.js'))
+    .pipe($.concat('xe.bundle.js'))
     .pipe(gulp.dest('assets/core/common/js/'));
 });
 
-gulp.task('jspm:menu', function(){
-  return gulp.src('assets/core/menu/MenuTree.js')
-    .pipe($.plumber())
-    .pipe($.jspm({selfExecutingBundle: true, plugin: 'jsx'}))
-    .pipe($.rename('menu.js'))
-    .pipe(gulp.dest('assets/core/menu'));
-});
+gulp.task('jspm:menu', taskJsx['jspm:menu']);
+gulp.task('jspm:langbox', taskJsx['jspm:langbox']);
+gulp.task('jsx:permission', taskJsx['jsx:permission']);
 
-gulp.task('jspm:langbox', function(){
-  return gulp.src('assets/core/lang/LangEditorBox.js')
-    .pipe($.plumber())
-    .pipe($.jspm({selfExecutingBundle: true, plugin: 'jsx'}))
-    .pipe($.rename('LangEditorBox.bundle.js'))
-    .pipe(gulp.dest('assets/core/lang'))
-});
-
-gulp.task('jspm:permission', function() {
-  return gulp.src('assets/core/permission/*.jsx')
-    .pipe($.if(config.useSourceMaps, $.sourcemaps.init()))
-    .pipe($.plumber())
-    .pipe(react())
-    .pipe($.if(config.useSourceMaps, $.sourcemaps.write('.')))
-    .pipe(gulp.dest('assets/core/permission'))
+gulp.task('jsx', (callback) => {
+  runSequence(
+      'jspm:menu',
+      'jspm:langbox',
+      'jsx:permission',
+      callback);
 });
 
 gulp.task('jspm:component', function(){
@@ -129,10 +92,10 @@ gulp.task('csslint', function() {
 
 gulp.task('assets:sass', function () {
   return gulp.src('./resources/assets/**/*.scss')
-    .pipe($.if(config.useSourceMaps, sourcemaps.init()))
+    .pipe($.if(config.useSourceMaps, $.sourcemaps.init()))
     .pipe($.plumber())
     .pipe($.sass({outputStyle: 'expanded'}).on('error', $.sass.logError))
-    .pipe($.if(config.useSourceMaps, sourcemaps.write(".")))
+    .pipe($.if(config.useSourceMaps, $.sourcemaps.write(".")))
     .pipe(gulp.dest('./assets'));
 });
 
