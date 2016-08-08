@@ -9,7 +9,6 @@ return [
     'checkDirPermission' => '디렉토리 사용 권한을 체크합니다.',
     'checkPHPExtPDO' => 'PDO, pdo_mysql PHP 확장 기능이 필요합니다.',
     'checkPHPExtCURL' => 'cURL PHP 확장 기능이 필요합니다.',
-    'checkPHPExtMCRYPT' => 'MCrypt PHP 확장 기능이 필요합니다.',
     'checkPHPExtGD' => 'GD PHP 확장 기능이 필요합니다.',
     'checkPHPExtMBSTRING' => 'Mbstring PHP 확장 기능이 필요합니다.',
     'checkPHPExtOPENSSL' => 'OpenSSL PHP 확장 기능이 필요합니다.',

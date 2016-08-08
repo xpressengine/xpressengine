@@ -38,11 +38,7 @@
             case 'pdo' :
                 $result = extension_loaded('PDO') && extension_loaded('pdo_mysql');
                 break;
-
-            case "mcrypt" :
-                $result = extension_loaded('mcrypt');
-                break;
-
+            
             case "curl" :
                 $result = extension_loaded('curl');
                 break;
@@ -331,7 +327,6 @@
             check('<?=trans('checkDirPermission')?>', 'directoryPermission');
             check('<?=trans('checkPHPExtPDO')?>', 'pdo');
             check('<?=trans('checkPHPExtCURL')?>', 'curl');
-            check('<?=trans('checkPHPExtMCRYPT')?>', 'mcrypt');
             check('<?=trans('checkPHPExtGD')?>', 'gd');
             check('<?=trans('checkPHPExtMBSTRING')?>', 'mbstring');
             check('<?=trans('checkPHPExtOPENSSL')?>', 'openssl');

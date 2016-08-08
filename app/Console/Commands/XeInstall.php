@@ -228,7 +228,7 @@ class XeInstall extends Command
             throw new \Exception('PHP version is not available');
         }
 
-        $extensions = ['PDO', 'pdo_mysql', 'mcrypt', 'curl', 'gd', 'mbstring', 'openssl', 'zip'];
+        $extensions = ['PDO', 'pdo_mysql', 'curl', 'gd', 'mbstring', 'openssl', 'zip'];
         $result = [];
         foreach ($extensions as $ext) {
             $result[$ext] = extension_loaded($ext);

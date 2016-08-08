@@ -9,7 +9,6 @@ return [
     'checkDirPermission' => 'Check directory permission.',
     'checkPHPExtPDO' => 'PDO, pdo_mysql PHP Extension is required.',
     'checkPHPExtCURL' => 'cURL PHP Extension is required.',
-    'checkPHPExtMCRYPT' => 'MCrypt PHP Extension is required.',
     'checkPHPExtGD' => 'GD PHP Extension is required.',
     'checkPHPExtMBSTRING' => 'Mbstring PHP Extension is required.',
     'checkPHPExtOPENSSL' => 'OpenSSL PHP Extension is required.',
