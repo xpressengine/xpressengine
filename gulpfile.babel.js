@@ -19,7 +19,7 @@ gulp.task('default', function(callback){
       'jspm:menu',
       'jspm:langbox',
       'jsx:permission',
-      'jspm:component',
+      'jspm:admin',
       'jspm:xe',
       'assets:sass',
       callback);
@@ -30,7 +30,7 @@ gulp.task('clean:assets', settings['clean:assets']);
 gulp.task('copy:assets', settings['copy:assets']);
 
 gulp.task('jspm:xe', settings['jspm:xe']);
-gulp.task('jspm:component', settings['jspm:component']);
+gulp.task('jspm:admin', settings['jspm:admin']);
 // e: settings
 
 // s: react

@@ -13,14 +13,22 @@ module.exports = (() => {
     };
 
     return {
+        /**
+         * assets 삭제
+         * */
         'clean:assets': () => {
             return gulp.src('./assets/core')
                 .pipe($.clean({force: true}));
 
         },
+        /**
+         * ./resources/assets 에서 필요한 파일만 복사
+         * */
         'copy:assets': () => {
-            const ignore = $.filter([
+
+            let filter = [
                 '**/*',
+
                 '!resources/assets/core/menu/*',
                 '!**/*.scss',
                 '!resources/assets/core/lang/LangEditorBox.js',
@@ -28,20 +36,26 @@ module.exports = (() => {
                 '!resources/assets/core/permission/*.js',
                 '!resources/assets/core/settings/js/admin.js',
                 '!resources/assets/core/xe-ui-component/components',
+
                 'resources/assets/core/xe-ui-component/img/*',
                 'resources/assets/core/xe-ui-component/js/*',
                 'resources/assets/core/menu/classnames.js',
                 'resources/assets/core/menu/Tree.js'
+            ];
 
-            ]);
+            if(_config.isProduction) {
+                filter.push('!**/*.map');
+            }
 
             return gulp.src('resources/assets/core/**/*', {base: "./resources/assets/core"})
                 .pipe($.plumber())
-                .pipe(ignore)
+                .pipe($.filter(filter))
                 .pipe(gulp.dest('assets/core'));
-                //.pipe($.copy('assets/core'));
 
         },
+        /**
+         * xe bundling
+         * */
         'jspm:xe': () => {
             return gulp.src([
                     './assets/core/common/js/xe.js',
@@ -54,7 +68,10 @@ module.exports = (() => {
                 .pipe($.concat('xe.bundle.js'))
                 .pipe(gulp.dest('./assets/core/common/js/'));
         },
-        'jspm:component': () => {
+        /**
+         * admin bundling
+         * */
+        'jspm:admin': () => {
             return gulp.src('./resources/assets/core/settings/js/admin.js')
                 .pipe($.plumber())
                 .pipe($.jspm({selfExecutingBundle: true}))
