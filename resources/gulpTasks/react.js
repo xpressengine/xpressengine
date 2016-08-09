@@ -2,7 +2,7 @@ import gulp from 'gulp';
 import plugins from 'gulp-load-plugins';
 import react from 'gulp-react';
 import runSequence from 'run-sequence';
-import settings from 'settings';
+import settings from './settings';
 
 module.exports = (() => {
 
@@ -38,21 +38,27 @@ module.exports = (() => {
                 callback
             );
         },
+        /**
+         * langbox jsx변환 및 bundle
+         * */
         'jspm:langbox': () => {
             return gulp.src('resources/assets/core/lang/LangEditorBox.js')
                 .pipe($.plumber())
                 .pipe($.jspm({selfExecutingBundle: true, plugin: 'jsx'}))
                 .pipe($.rename('LangEditorBox.bundle.js'))
-                .pipe(gulp.dest('assets/core/lang'))
+                .pipe(gulp.dest('./assets/core/lang'))
 
         },
+        /**
+         * permission jsx변환
+         * */
         'jsx:permission': () => {
             return gulp.src('resources/assets/core/permission/*.jsx')
                 .pipe($.if(settings.getConfig().useSourceMaps, $.sourcemaps.init()))
                 .pipe($.plumber())
                 .pipe(react())
                 .pipe($.if(settings.getConfig().useSourceMaps, $.sourcemaps.write('.')))
-                .pipe(gulp.dest('assets/core/permission'))
+                .pipe(gulp.dest('./assets/core/permission'))
         }
     };
 })();

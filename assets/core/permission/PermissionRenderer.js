@@ -9,11 +9,11 @@ $('.__xe__uiobject_permission').each(function (i) {
     , vgroupAll = el.data('vgroupAll');
 
   React.render(
-    <Permission
-      key = {key}
-      memberSearchUrl = {memberUrl}
-      groupSearchUrl = {groupUrl}
-      permission = {data}
-      type = {type}
-      vgroupAll = {vgroupAll} />, this);
+    React.createElement(Permission, {
+      key: key, 
+      memberSearchUrl: memberUrl, 
+      groupSearchUrl: groupUrl, 
+      permission: data, 
+      type: type, 
+      vgroupAll: vgroupAll}), this);
 });
