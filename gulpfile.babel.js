@@ -15,7 +15,7 @@ const $ = plugins();
 gulp.task('default', function(callback){
   runSequence(
       'clean:assets',
-      'copy-assets',
+      'copy:assets',
       'jspm:menu',
       'jspm:langbox',
       'jsx:permission',

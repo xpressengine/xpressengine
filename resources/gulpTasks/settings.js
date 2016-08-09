@@ -55,7 +55,7 @@ module.exports = (() => {
                 .pipe(gulp.dest('./assets/core/common/js/'));
         },
         'jspm:component': () => {
-            return gulp.src('./assets/core/settings/js/admin.js')
+            return gulp.src('./resources/assets/core/settings/js/admin.js')
                 .pipe($.plumber())
                 .pipe($.jspm({selfExecutingBundle: true}))
                 .pipe($.rename('admin.bundle.js'))
