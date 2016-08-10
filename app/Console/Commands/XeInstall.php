@@ -111,6 +111,13 @@ class XeInstall extends Command
      */
     public function handle()
     {
+        // cache 가 활성화 되어있는 경우, 한번 읽은 파일은 한번의 요청처리 과정중
+        // 해당 파일을 변경하더라도 새로 읽지 않고 cache 된 파일내용을 이용하게 됨
+        // 설치 과정중 config 파일들이 생성된 후 오류 발생시 config 파일들이 남게 되고,
+        // 이 상태에서 재시도시 이전 파일이 읽혀지게되어 내용을 변경하였더라도 반영이 되지 않음
+        // cache disable 로 인해 성능이슈가 발생한다면 생성되었던 파일을 지우는 방식으로 변경
+        ini_set('opcache.enable', 0);
+
         $noInteraction = $this->option('no-interaction');
         $configFile = $this->option('config');
 
@@ -424,12 +431,6 @@ class XeInstall extends Command
         } catch (\Exception $e) {
             $this->output->error('Connection failed!! Check Your Database!');
             throw $e;
-        }
-
-        if ($count !== '0') {
-            $message = "database {$dbInfo['dbname']} is not empty. Please drop all tables in {$dbInfo['dbname']}";
-            $this->output->error($message);
-            throw new \Exception($message);
         }
 
         $this->line('Connection successful.');
