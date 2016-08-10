@@ -214,5 +214,3 @@ var PermissionExclude = React.createClass({
         );
     }
 });
-
-//# sourceMappingURL=PermissionExclude.js.map

@@ -61,5 +61,3 @@ var PermissionTagSuggestion = React.createClass({
         );
     }
 });
-
-//# sourceMappingURL=PermissionTagSuggestion.js.map
