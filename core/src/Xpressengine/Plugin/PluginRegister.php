@@ -79,12 +79,13 @@ class PluginRegister
      * register class
      * 플러그인의 composer.json 을 통해 등록하지 않을 때 사용
      *
-     * @param ComponentInterface $component component class name
+     * @param string $component component class name
      *
      * @return void
      */
     public function add($component)
     {
+        /** @var ComponentInterface $component */
         $id = $component::getId();
         $this->register->set($id, $component);
 
