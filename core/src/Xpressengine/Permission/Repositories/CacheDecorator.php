@@ -13,6 +13,8 @@
  */
 namespace Xpressengine\Permission\Repositories;
 
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Xpressengine\Permission\Permission;
 use Xpressengine\Permission\PermissionRepository;
 use Xpressengine\Support\CacheInterface;
@@ -51,6 +53,13 @@ class CacheDecorator implements PermissionRepository
     protected $prefix = 'permission';
 
     /**
+     * memory cache
+     *
+     * @var array
+     */
+    protected $bag = [];
+
+    /**
      * CacheDecorator constructor.
      *
      * @param PermissionRepository $repo  PermissionRepository instance
@@ -71,15 +80,11 @@ class CacheDecorator implements PermissionRepository
      */
     public function findByName($siteKey, $name)
     {
-        $key = $this->getCacheKey($siteKey, $name);
+        $data = $this->getData($siteKey, $this->getHead($name));
 
-        if (!$permission = $this->cache->get($key)) {
-            if ($permission = $this->repo->findByName($siteKey, $name)) {
-                $this->cache->put($key, $permission);
-            }
-        }
-
-        return $permission;
+        return Arr::first($data, function ($idx, $item) use ($name) {
+            return $item->name === $name;
+        });
     }
 
     /**
@@ -90,10 +95,9 @@ class CacheDecorator implements PermissionRepository
      */
     public function insert(Permission $item)
     {
-        $item = $this->repo->insert($item);
-        $this->cache->put($this->getCacheKey($item->siteKey, $item->name), $item);
+        $this->erase($item->siteKey, $item->name);
 
-        return $item;
+        return $this->repo->insert($item);
     }
 
     /**
@@ -104,10 +108,9 @@ class CacheDecorator implements PermissionRepository
      */
     public function update(Permission $item)
     {
-        $item = $this->repo->update($item);
-        $this->cache->put($this->getCacheKey($item->siteKey, $item->name), $item);
+        $this->erase($item->siteKey, $item->name);
 
-        return $item;
+        return $this->repo->update($item);
     }
 
     /**
@@ -118,7 +121,7 @@ class CacheDecorator implements PermissionRepository
      */
     public function delete(Permission $item)
     {
-        $this->forget($item);
+        $this->erase($item->siteKey, $item->name);
 
         return $this->repo->delete($item);
     }
@@ -126,39 +129,33 @@ class CacheDecorator implements PermissionRepository
     /**
      * Returns ancestor of item
      *
-     * @param Permission $item permission instance
+     * @param string $siteKey site key
+     * @param string $name    target name
      * @return array
      */
-    public function fetchAncestor(Permission $item)
+    public function fetchAncestor($siteKey, $name)
     {
-        $key = $this->getCacheKey($item->siteKey, $item->name, 'ancestor');
-        if (!$ancestors = $this->cache->get($key)) {
-            $ancestors = $this->repo->fetchAncestor($item);
-            if (!empty($ancestors)) {
-                $this->cache->put($key, $ancestors);
-            }
-        }
+        $data = $this->getData($siteKey, $this->getHead($name));
 
-        return $ancestors;
+        return Arr::where($data, function ($idx, $item) use ($name) {
+            return Str::startsWith($name, $item->name) && $name !== $item->name;
+        });
     }
 
     /**
      * Returns descendant of item
      *
-     * @param Permission $item permission instance
+     * @param string $siteKey site key
+     * @param string $name    target name
      * @return array
      */
-    public function fetchDescendant(Permission $item)
+    public function fetchDescendant($siteKey, $name)
     {
-        $key = $this->getCacheKey($item->siteKey, $item->name, 'descendant');
-        if (!$descendants = $this->cache->get($key)) {
-            $descendants = $this->repo->fetchDescendant($item);
-            if (!empty($descendants)) {
-                $this->cache->put($key, $descendants);
-            }
-        }
+        $data = $this->getData($siteKey, $this->getHead($name));
 
-        return $descendants;
+        return Arr::where($data, function ($idx, $item) use ($name) {
+            return Str::startsWith($item->name, $name) && $name !== $item->name;
+        });
     }
 
     /**
@@ -170,7 +167,7 @@ class CacheDecorator implements PermissionRepository
      */
     public function foster(Permission $item, $to)
     {
-        $this->forget($item);
+        $this->erase($item->siteKey, $item->name);
 
         $this->repo->foster($item, $to);
     }
@@ -184,34 +181,88 @@ class CacheDecorator implements PermissionRepository
      */
     public function affiliate(Permission $item, $to)
     {
-        $this->forget($item);
+        $this->erase($item->siteKey, $item->name);
 
         $this->repo->affiliate($item, $to);
     }
 
     /**
-     * Remove an item from the cache.
+     * get cached data
      *
-     * @param Permission $item permission instance
+     * @param string $siteKey site key
+     * @param string $head    root name
+     * @return array
+     */
+    protected function getData($siteKey, $head)
+    {
+        $key = $this->makeKey($siteKey, $head);
+
+        if (!isset($this->bag[$key])) {
+            $cacheKey = $this->getCacheKey($key);
+            if (!$data = $this->cache->get($cacheKey)) {
+                if (!$item = $this->repo->findByName($siteKey, $head)) {
+                    return [];
+                }
+
+                $descendant = $this->repo->fetchDescendant($siteKey, $head);
+                $data = array_merge([$item], $descendant);
+                $this->cache->put($cacheKey, $data);
+            }
+
+            $this->bag[$key] = $data;
+        }
+
+        return $this->bag[$key];
+    }
+
+    /**
+     * Remove cache data
+     *
+     * @param string $siteKey site key
+     * @param string $name    target name
      * @return void
      */
-    protected function forget(Permission $item)
+    protected function erase($siteKey, $name)
     {
-        $this->cache->forget($this->getCacheKey($item->siteKey, $item->name));
-        $this->cache->forget($this->getCacheKey($item->siteKey, $item->name, 'ancestor'));
-        $this->cache->forget($this->getCacheKey($item->siteKey, $item->name, 'descendant'));
+        $key = $this->makeKey($siteKey, $this->getHead($name));
+
+        unset($this->bag[$key]);
+        $this->cache->forget($this->getCacheKey($key));
+    }
+
+    /**
+     * parse name to head and segments
+     *
+     * @param string $name the name
+     * @return array
+     */
+    private function getHead($name)
+    {
+        $segments = explode('.', $name);
+
+        return reset($segments);
+    }
+
+    /**
+     * Make key by combination of site key and target name
+     *
+     * @param string $siteKey site key
+     * @param string $name    target name
+     * @return string
+     */
+    protected function makeKey($siteKey, $name)
+    {
+        return $siteKey . ':' . $name;
     }
 
     /**
      * String for cache key
      *
-     * @param string      $siteKey site key
-     * @param string      $name    permission name
-     * @param string|null $etc     etc keyword
+     * @param string $keyword keyword
      * @return string
      */
-    protected function getCacheKey($siteKey, $name, $etc = null)
+    protected function getCacheKey($keyword)
     {
-        return $this->prefix . '::' . $siteKey . '-' . $name . ($etc ? '_' . $etc : '');
+        return $this->prefix . '@' . $keyword;
     }
 }

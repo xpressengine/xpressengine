@@ -176,7 +176,7 @@ class PermissionHandler
      */
     protected function setAncestor(Permission $permission)
     {
-        $ancestors = $this->repo->fetchAncestor($permission);
+        $ancestors = $this->repo->fetchAncestor($permission->siteKey, $permission->name);
         usort($ancestors, function (Permission $a, Permission $b) {
             if ($a->getDepth() == $b->getDepth()) {
                 return 0;

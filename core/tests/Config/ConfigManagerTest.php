@@ -27,7 +27,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         $mockConfig->name = 'board.notice';
 
         $repo->shouldReceive('find')->once()->with('default', 'board.notice')->andReturnNull();
-        $repo->shouldReceive('fetchParent')->with('default', 'board.notice')->andReturn([]);
+        $repo->shouldReceive('fetchAncestor')->with('default', 'board.notice')->andReturn([]);
         $repo->shouldReceive('save')->once()->withAnyArgs()->andReturn($mockConfig);
 
         $validate = m::mock('Illuminate\Validation\Validator');
@@ -88,7 +88,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         $mockConfig->shouldReceive('setParent')->once()->with($ancestor)->andReturnNull();
 
         $repo->shouldReceive('find')->once()->with('default', 'board.notice')->andReturn($mockConfig);
-        $repo->shouldReceive('fetchParent')->with('default', 'board.notice')->andReturn([$ancestor]);
+        $repo->shouldReceive('fetchAncestor')->with('default', 'board.notice')->andReturn([$ancestor]);
 
         $instance = new ConfigManager($repo, $validator);
 
@@ -111,7 +111,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         $mockConfig->shouldReceive('setParent')->once()->with($ancestor)->andReturnNull();
 
         $repo->shouldReceive('find')->once()->with('default', 'board.notice')->andReturn($mockConfig);
-        $repo->shouldReceive('fetchParent')->with('default', 'board.notice')->andReturn([$ancestor]);
+        $repo->shouldReceive('fetchAncestor')->with('default', 'board.notice')->andReturn([$ancestor]);
 
         $instance = new ConfigManager($repo, $validator);
 
@@ -133,7 +133,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         $mockConfig->shouldReceive('setParent')->once()->with($ancestor)->andReturnNull();
 
         $repo->shouldReceive('find')->once()->with('default', 'board.notice')->andReturn($mockConfig);
-        $repo->shouldReceive('fetchParent')->with('default', 'board.notice')->andReturn([$ancestor]);
+        $repo->shouldReceive('fetchAncestor')->with('default', 'board.notice')->andReturn([$ancestor]);
 
         $instance = new ConfigManager($repo, $validator);
         $config = $instance->get('board.notice');
@@ -149,7 +149,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         $ancestor->name = 'board';
 
         $repo->shouldReceive('find')->once()->with('default', 'board.notice')->andReturnNull();
-        $repo->shouldReceive('fetchParent')->with('default', 'board.notice')->andReturn([$ancestor]);
+        $repo->shouldReceive('fetchAncestor')->with('default', 'board.notice')->andReturn([$ancestor]);
 
         $instance = new ConfigManager($repo, $validator);
         $config = $instance->getOrNew('board.notice');
@@ -182,7 +182,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         $mockConfig->shouldReceive('set')->with('listCount', 20)->andReturnNull();
 
         $repo->shouldReceive('find')->once()->with('default', 'board.notice')->andReturn($mockConfig);
-        $repo->shouldReceive('fetchParent')->with('default', 'board.notice')->andReturn([]);
+        $repo->shouldReceive('fetchAncestor')->with('default', 'board.notice')->andReturn([]);
         $repo->shouldReceive('save')->once()->with($mockConfig)->andReturn($mockConfig);
 
         $instance = new ConfigManager($repo, $validator);
@@ -200,7 +200,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
 
         $repo->shouldReceive('find')->twice()->with('default', 'board.notice')->andReturnNull();
 
-        $repo->shouldReceive('fetchParent')->with('default', 'board.notice')->andReturn([]);
+        $repo->shouldReceive('fetchAncestor')->with('default', 'board.notice')->andReturn([]);
         $repo->shouldReceive('save')->once()->withAnyArgs()->andReturn($mockConfig);
 
         $validate = m::mock('Illuminate\Validation\Validator');
@@ -224,7 +224,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         $mockConfig->shouldReceive('getPure')->with('listCount')->andReturn(20);
 
         $repo->shouldReceive('find')->once()->with('default', 'board.notice')->andReturn($mockConfig);
-        $repo->shouldReceive('fetchParent')->with('default', 'board.notice')->andReturn([]);
+        $repo->shouldReceive('fetchAncestor')->with('default', 'board.notice')->andReturn([]);
         $repo->shouldReceive('save')->once()->with($mockConfig)->andReturn($mockConfig);
 
         $mockDesc1 = m::mock('Xpressengine\Config\ConfigEntity');
@@ -234,7 +234,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         $mockDesc3 = m::mock('Xpressengine\Config\ConfigEntity');
         $mockDesc3->shouldReceive('set')->with('listCount', 20)->andReturnNull();
 
-        $repo->shouldReceive('fetchChildren')->with('default', 'board.notice')->andReturn([$mockDesc1, $mockDesc2, $mockDesc3]);
+        $repo->shouldReceive('fetchDescendant')->with('default', 'board.notice')->andReturn([$mockDesc1, $mockDesc2, $mockDesc3]);
 
         $repo->shouldReceive('save')->once()->with($mockDesc1)->andReturnNull();
         $repo->shouldReceive('save')->once()->with($mockDesc2)->andReturnNull();
@@ -263,7 +263,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         $mockConfig->shouldReceive('get')->once()->with('callable')->andReturn($func());
 
         $repo->shouldReceive('find')->once()->with('default', 'board.notice')->andReturn($mockConfig);
-        $repo->shouldReceive('fetchParent')->with('default', 'board.notice')->andReturn([]);
+        $repo->shouldReceive('fetchAncestor')->with('default', 'board.notice')->andReturn([]);
         $repo->shouldReceive('save')->once()->with($mockConfig)->andReturn($mockConfig);
 
         $instance = new ConfigManager($repo, $validator);
@@ -289,9 +289,9 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         $mockConfig->shouldReceive('get')->once()->with('downloadable')->andReturn(true);
 
         $repo->shouldReceive('find')->twice()->with('default', 'board.notice')->andReturnNull();
-        $repo->shouldReceive('fetchParent')->with('default', 'board.notice')->andReturn([]);
+        $repo->shouldReceive('fetchAncestor')->with('default', 'board.notice')->andReturn([]);
         $repo->shouldReceive('save')->once()->withAnyArgs()->andReturn($mockConfig);
-        $repo->shouldReceive('fetchChildren')->with('default', 'board.notice')->andReturn([]);
+        $repo->shouldReceive('fetchDescendant')->with('default', 'board.notice')->andReturn([]);
 
         $validate = m::mock('Illuminate\Validation\Validator');
         $validate->shouldReceive('fails')->andReturn(false);
@@ -334,9 +334,9 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         $mockConfig->shouldReceive('clear')->andReturnNull();
 
         $repo->shouldReceive('find')->once()->with('default', 'board.notice')->andReturn($mockConfig);
-        $repo->shouldReceive('fetchParent')->with('default', 'board.notice')->andReturn([]);
+        $repo->shouldReceive('fetchAncestor')->with('default', 'board.notice')->andReturn([]);
         $repo->shouldReceive('save')->once()->with($mockConfig)->andReturn($mockConfig);
-        $repo->shouldReceive('fetchChildren')->with('default', 'board.notice')->andReturn([]);
+        $repo->shouldReceive('fetchDescendant')->with('default', 'board.notice')->andReturn([]);
 
         $instance = new ConfigManager($repo, $validator);
 
@@ -355,7 +355,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         $mockConfig->name = 'board.notice';
 
         $repo->shouldReceive('find')->once()->with('default', 'board.notice')->andReturn($mockConfig);
-        $repo->shouldReceive('fetchParent')->with('default', 'board.notice')->andReturn([]);
+        $repo->shouldReceive('fetchAncestor')->with('default', 'board.notice')->andReturn([]);
         $repo->shouldReceive('save')->once()->with($mockConfig)->andReturn($mockConfig);
 
         $instance = new ConfigManager($repo, $validator);
@@ -400,7 +400,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         $mockDesc2 = m::mock('Xpressengine\Config\ConfigEntity');
         $mockDesc2->shouldReceive('clear')->once();
 
-        $repo->shouldReceive('fetchChildren')->once()->with('default', 'board.notice')->andReturn([$mockDesc1, $mockDesc2]);
+        $repo->shouldReceive('fetchDescendant')->once()->with('default', 'board.notice')->andReturn([$mockDesc1, $mockDesc2]);
         $repo->shouldReceive('save')->twice();
 
 
@@ -430,7 +430,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         $mockConfig->name = 'board.notice';
 
         $repo->shouldReceive('find')->once()->with('default', 'board.notice')->andReturn($mockConfig);
-        $repo->shouldReceive('fetchParent')->with('default', 'board.notice')->andReturn([]);
+        $repo->shouldReceive('fetchAncestor')->with('default', 'board.notice')->andReturn([]);
         $repo->shouldReceive('remove')->once()->with('default', 'board.notice')->andReturnNull();
 
         $instance = new ConfigManager($repo, $validator);
@@ -459,8 +459,8 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         $mockBD3->name = 'board.notice.bd1.sub1';
         $mockBD3->shouldReceive('getDepth')->andReturn(4);
 
-        $repo->shouldReceive('fetchChildren')->once()->with('default', 'board.notice')->andReturn([$mockBD1, $mockBD2, $mockBD3]);
-        $repo->shouldReceive('fetchParent')->andReturn([]);
+        $repo->shouldReceive('fetchDescendant')->once()->with('default', 'board.notice')->andReturn([$mockBD1, $mockBD2, $mockBD3]);
+        $repo->shouldReceive('fetchAncestor')->andReturn([]);
 
         $instance = new ConfigManager($repo, $validator);
 
@@ -581,7 +581,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         $mockConfig->shouldReceive('setParent')->once()->with($mockToConfig)->andReturnNull();
 
         $repo->shouldReceive('find')->once()->with('default', 'board.notice')->andReturn($mockConfig);
-        $repo->shouldReceive('fetchParent')->with('default', 'board.notice')->andReturn([$mockToConfig]);
+        $repo->shouldReceive('fetchAncestor')->with('default', 'board.notice')->andReturn([$mockToConfig]);
 
 
         $instance->move($mockConfig, 'board');
@@ -604,7 +604,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         $repo->shouldReceive('foster')->once()->with($mockConfig, null);
 
         $repo->shouldReceive('find')->once()->with('default', 'notice')->andReturn($mockConfig);
-        $repo->shouldReceive('fetchParent')->with('default', 'notice')->andReturn([]);
+        $repo->shouldReceive('fetchAncestor')->with('default', 'notice')->andReturn([]);
 
         $instance->move($mockConfig);
     }
@@ -630,7 +630,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         $mockConfig->shouldReceive('setParent')->once()->with($mockToConfig)->andReturnNull();
 
         $repo->shouldReceive('find')->once()->with('default', 'valid.to.notice')->andReturn($mockConfig);
-        $repo->shouldReceive('fetchParent')->with('default', 'valid.to.notice')->andReturn([$mockToConfig]);
+        $repo->shouldReceive('fetchAncestor')->with('default', 'valid.to.notice')->andReturn([$mockToConfig]);
 
         $instance->move($mockConfig, 'valid.to');
     }
@@ -638,7 +638,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
     private function getMocks()
     {
         return [
-            m::mock('Xpressengine\Config\Repositories\RepositoryInterface'),
+            m::mock('Xpressengine\Config\ConfigRepository'),
             m::mock('Xpressengine\Config\Validator'),
         ];
     }

@@ -14,6 +14,7 @@
 
 namespace Xpressengine\Config\Repositories;
 
+use Xpressengine\Config\ConfigRepository;
 use XpressEngine\Database\VirtualConnectionInterface;
 use Xpressengine\Config\ConfigEntity;
 
@@ -27,7 +28,7 @@ use Xpressengine\Config\ConfigEntity;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class DatabaseRepository implements RepositoryInterface
+class DatabaseRepository implements ConfigRepository
 {
     /**
      * using DB table name
@@ -80,7 +81,7 @@ class DatabaseRepository implements RepositoryInterface
      *
      * @return array
      */
-    public function fetchParent($siteKey, $name)
+    public function fetchAncestor($siteKey, $name)
     {
         $rows = $this->conn->table($this->table)
             ->where('siteKey', $siteKey)
@@ -103,7 +104,7 @@ class DatabaseRepository implements RepositoryInterface
      *
      * @return array
      */
-    public function fetchChildren($siteKey, $name)
+    public function fetchDescendant($siteKey, $name)
     {
         $rows = $this->conn->table($this->table)
             ->where('siteKey', $siteKey)
