@@ -35,7 +35,8 @@ class Form extends AbstractUIObject
                     $form->addClass($arg);
                     break;
                 case 'inputs':
-                    $this->appendInputs($form, $arg, array_get($args, 'value', []));
+                case 'fields':
+                    $this->appendFields($form, $arg, array_get($args, 'value', []));
                 default:
                     $form->attr($key, $arg);
                     break;
@@ -45,7 +46,7 @@ class Form extends AbstractUIObject
         return parent::render();
     }
 
-    private function appendInputs($form, $inputs, $values)
+    private function appendFields($form, $inputs, $values)
     {
         foreach ($inputs as $name => $arg) {
 
