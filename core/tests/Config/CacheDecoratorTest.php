@@ -23,22 +23,18 @@ class CacheDecoratorTest extends \PHPUnit_Framework_TestCase
         list($repo, $cache) = $this->getMocks();
         $instance = $this->getMock(CacheDecorator::class, ['getData'], [$repo, $cache]);
 
+        $mockItem1 = new \stdClass;
+        $mockItem1->name = 'foo';
+        $mockItem2 = m::mock('Xpressengine\Config\ConfigEntity');
+        $mockItem2->name = 'foo.bar';
         $instance->expects($this->at(0))->method('getData')->with('default', 'foo')->willReturn([
-            'foo' => [
-                'value' => new \stdClass,
-                'children' => [
-                    'foo.bar' => [
-                        'value' => m::mock('Xpressengine\Config\ConfigEntity'),
-                        'children' => []
-                    ]
-                ]
-            ]
+            $mockItem1, $mockItem2
         ]);
+
+        $mockItem3 = new \stdClass;
+        $mockItem3->name = 'baz';
         $instance->expects($this->at(1))->method('getData')->with('default', 'baz')->willReturn([
-            'baz' => [
-                'value' => new \stdClass,
-                'children' => []
-            ]
+            $mockItem3
         ]);
 
         $config = $instance->find('default', 'foo.bar');
@@ -53,16 +49,12 @@ class CacheDecoratorTest extends \PHPUnit_Framework_TestCase
         list($repo, $cache) = $this->getMocks();
         $instance = $this->getMock(CacheDecorator::class, ['getData'], [$repo, $cache]);
 
+        $mockItem1 = new \stdClass;
+        $mockItem1->name = 'foo';
+        $mockItem2 = m::mock('Xpressengine\Config\ConfigEntity');
+        $mockItem2->name = 'foo.bar';
         $instance->expects($this->once())->method('getData')->with('default', 'foo')->willReturn([
-            'foo' => [
-                'value' => new \stdClass,
-                'children' => [
-                    'foo.bar' => [
-                        'value' => m::mock('Xpressengine\Config\ConfigEntity'),
-                        'children' => []
-                    ]
-                ]
-            ]
+            $mockItem1, $mockItem2
         ]);
 
         $ancestor = $instance->fetchParent('default', 'foo.bar');
@@ -74,25 +66,16 @@ class CacheDecoratorTest extends \PHPUnit_Framework_TestCase
         list($repo, $cache) = $this->getMocks();
         $instance = $this->getMock(CacheDecorator::class, ['getData'], [$repo, $cache]);
 
+        $mockItem1 = m::mock('Xpressengine\Config\ConfigEntity');
+        $mockItem1->name = 'foo';
+        $mockItem2 = m::mock('Xpressengine\Config\ConfigEntity');
+        $mockItem2->name = 'foo.bar';
+        $mockItem3 = m::mock('Xpressengine\Config\ConfigEntity');
+        $mockItem3->name = 'foo.bar.baz';
+        $mockItem4 = m::mock('Xpressengine\Config\ConfigEntity');
+        $mockItem4->name = 'foo.bar.qux';
         $instance->expects($this->exactly(2))->method('getData')->with('default', 'foo')->willReturn([
-            'foo' => [
-                'value' => m::mock('Xpressengine\Config\ConfigEntity'),
-                'children' => [
-                    'foo.bar' => [
-                        'value' => m::mock('Xpressengine\Config\ConfigEntity'),
-                        'children' => [
-                            'foo.bar.baz' => [
-                                'value' => m::mock('Xpressengine\Config\ConfigEntity'),
-                                'children' => []
-                            ],
-                            'foo.bar.qux' => [
-                                'value' => m::mock('Xpressengine\Config\ConfigEntity'),
-                                'children' => []
-                            ]
-                        ]
-                    ],
-                ]
-            ]
+            $mockItem1, $mockItem2, $mockItem3, $mockItem4
         ]);
 
         $descendant = $instance->fetchChildren('default', 'foo.bar');
@@ -100,49 +83,6 @@ class CacheDecoratorTest extends \PHPUnit_Framework_TestCase
 
         $descendant = $instance->fetchChildren('default', 'foo');
         $this->assertEquals(3, count($descendant));
-    }
-
-    public function testMake()
-    {
-        list($repo, $cache) = $this->getMocks();
-        $instance = new CacheDecorator($repo, $cache);
-
-        $mockParent = m::mock('Xpressengine\Config\ConfigEntity');
-        $mockParent->shouldReceive('getDepth')->andReturn(1);
-        $mockParent->name = 'foo';
-
-        $mockCfg1 = m::mock('Xpressengine\Config\ConfigEntity');
-        $mockCfg1->shouldReceive('getDepth')->andReturn(2);
-        $mockCfg1->name = 'foo.bar';
-
-        $mockCfg2 = m::mock('Xpressengine\Config\ConfigEntity');
-        $mockCfg2->shouldReceive('getDepth')->andReturn(3);
-        $mockCfg2->name = 'foo.bar.baz';
-
-        $mockCfg3 = m::mock('Xpressengine\Config\ConfigEntity');
-        $mockCfg3->shouldReceive('getDepth')->andReturn(3);
-        $mockCfg3->name = 'foo.bar.qux';
-
-        $mockCfg4 = m::mock('Xpressengine\Config\ConfigEntity');
-        $mockCfg4->shouldReceive('getDepth')->andReturn(3);
-        $mockCfg4->name = 'foo.bar.var';
-
-        $data = $this->invokeMethod($instance, 'make', [$mockParent, [$mockCfg1, $mockCfg2, $mockCfg3, $mockCfg4]]);
-
-        $this->assertEquals('foo', array_keys($data)[0]);
-        $data = array_shift($data);
-        $this->assertEquals('foo.bar', array_keys($data['children'])[0]);
-        $data = array_shift($data['children']);
-        $this->assertEquals(3, count($data['children']));
-    }
-
-    private function invokeMethod($object, $method, $parameters)
-    {
-        $rfc = new \ReflectionClass($object);
-        $method = $rfc->getMethod($method);
-        $method->setAccessible(true);
-
-        return $method->invokeArgs($object, $parameters);
     }
     
     private function getMocks()
