@@ -318,6 +318,7 @@ class Storage
             }
         }
 
+        $file->getConnection()->table($file->getFileableTable())->where('fileId', $file->id)->delete();
         $this->files->delete($file);
 
         return $file->delete();
