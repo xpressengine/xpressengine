@@ -16,6 +16,7 @@ namespace Xpressengine\Config\Repositories;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Xpressengine\Config\ConfigRepository;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Support\CacheInterface;
 
@@ -30,12 +31,12 @@ use Xpressengine\Support\CacheInterface;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class CacheDecorator implements RepositoryInterface
+class CacheDecorator implements ConfigRepository
 {
     /**
      * repository instance
      *
-     * @var RepositoryInterface
+     * @var ConfigRepository
      */
     protected $repo;
 
@@ -63,10 +64,10 @@ class CacheDecorator implements RepositoryInterface
     /**
      * create instance
      *
-     * @param RepositoryInterface $repo  repository instance
-     * @param CacheInterface      $cache cache instance
+     * @param ConfigRepository $repo  repository instance
+     * @param CacheInterface   $cache cache instance
      */
-    public function __construct(RepositoryInterface $repo, CacheInterface $cache)
+    public function __construct(ConfigRepository $repo, CacheInterface $cache)
     {
         $this->repo = $repo;
         $this->cache = $cache;
@@ -95,7 +96,7 @@ class CacheDecorator implements RepositoryInterface
      * @param string $name    the name
      * @return array
      */
-    public function fetchParent($siteKey, $name)
+    public function fetchAncestor($siteKey, $name)
     {
         $data = $this->getData($siteKey, $this->getHead($name));
 
@@ -111,7 +112,7 @@ class CacheDecorator implements RepositoryInterface
      * @param string $name    the name
      * @return array
      */
-    public function fetchChildren($siteKey, $name)
+    public function fetchDescendant($siteKey, $name)
     {
         $data = $this->getData($siteKey, $this->getHead($name));
 
@@ -207,7 +208,7 @@ class CacheDecorator implements RepositoryInterface
                     return [];
                 }
 
-                $descendant = $this->repo->fetchChildren($siteKey, $head);
+                $descendant = $this->repo->fetchDescendant($siteKey, $head);
                 $data = array_merge([$config], $descendant);
                 $this->cache->put($cacheKey, $data);
             }

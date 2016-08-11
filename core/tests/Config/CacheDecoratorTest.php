@@ -44,7 +44,7 @@ class CacheDecoratorTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($config);
     }
 
-    public function testFetchParent()
+    public function testFetchAncestor()
     {
         list($repo, $cache) = $this->getMocks();
         $instance = $this->getMock(CacheDecorator::class, ['getData'], [$repo, $cache]);
@@ -57,11 +57,11 @@ class CacheDecoratorTest extends \PHPUnit_Framework_TestCase
             $mockItem1, $mockItem2
         ]);
 
-        $ancestor = $instance->fetchParent('default', 'foo.bar');
+        $ancestor = $instance->fetchAncestor('default', 'foo.bar');
         $this->assertInstanceOf('stdClass', $ancestor[0]);
     }
 
-    public function testFetchChildren()
+    public function testFetchDescendant()
     {
         list($repo, $cache) = $this->getMocks();
         $instance = $this->getMock(CacheDecorator::class, ['getData'], [$repo, $cache]);
@@ -78,17 +78,17 @@ class CacheDecoratorTest extends \PHPUnit_Framework_TestCase
             $mockItem1, $mockItem2, $mockItem3, $mockItem4
         ]);
 
-        $descendant = $instance->fetchChildren('default', 'foo.bar');
+        $descendant = $instance->fetchDescendant('default', 'foo.bar');
         $this->assertEquals(2, count($descendant));
 
-        $descendant = $instance->fetchChildren('default', 'foo');
+        $descendant = $instance->fetchDescendant('default', 'foo');
         $this->assertEquals(3, count($descendant));
     }
     
     private function getMocks()
     {
         return [
-            m::mock('Xpressengine\Config\Repositories\RepositoryInterface'),
+            m::mock('Xpressengine\Config\ConfigRepository'),
             m::mock('Xpressengine\Support\CacheInterface'),
         ];
     }
