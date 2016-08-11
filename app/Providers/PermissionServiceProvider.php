@@ -18,7 +18,6 @@ use Illuminate\Support\ServiceProvider;
 use Xpressengine\Permission\PermissionHandler;
 use Xpressengine\Permission\Repositories\CacheDecorator;
 use Xpressengine\Permission\Repositories\DatabaseRepository;
-use Xpressengine\Permission\Repositories\MemoryDecorator;
 use Xpressengine\Support\LaravelCache;
 use App\UIObjects\Permission\Permission as PermissionUIObject;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
@@ -71,7 +70,6 @@ class PermissionServiceProvider extends ServiceProvider
             if ($app['config']['app.debug'] !== true) {
                 $repo = new CacheDecorator($repo, new LaravelCache($app['cache.store']));
             }
-            $repo = new MemoryDecorator($repo);
 
             return new PermissionHandler($repo);
         });

@@ -125,10 +125,6 @@ class DatabaseRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         list($conn, $query) = $this->getMocks();
 
-        $mockRegistered = m::mock('Xpressengine\Permission\Permission');
-        $mockRegistered->shouldReceive('get')->with('siteKey')->andReturn('default');
-        $mockRegistered->shouldReceive('get')->with('name')->andReturn('board.notice.b1');
-
         $conn->shouldReceive('table')->andReturn($query);
         $query->shouldReceive('where')->once()->with('siteKey', 'default')->andReturn($query);
         $query->shouldReceive('whereRaw')->once()->with("'board.notice.b1' like concat(`name`, '.', '%')")->andReturn($query);
@@ -149,7 +145,7 @@ class DatabaseRepositoryTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $instance = new DatabaseRepository($conn);
-        $registereds = $instance->fetchAncestor($mockRegistered);
+        $registereds = $instance->fetchAncestor('default', 'board.notice.b1');
 
         $this->assertEquals(2, count($registereds));
 

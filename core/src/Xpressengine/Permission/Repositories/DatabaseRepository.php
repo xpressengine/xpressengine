@@ -129,16 +129,16 @@ class DatabaseRepository implements PermissionRepository
     /**
      * Returns ancestor of item
      *
-     * @param Permission $item permission instance
-     *
+     * @param string $siteKey site key
+     * @param string $name    target name
      * @return array
      */
-    public function fetchAncestor(Permission $item)
+    public function fetchAncestor($siteKey, $name)
     {
         $rows = $this->conn->table($this->table)
-            ->where('siteKey', $item->siteKey)
-            ->whereRaw("'" . $item->name . "' like concat(`name`, '.', '%')")
-            ->where('name', '<>', $item->name)->get();
+            ->where('siteKey', $siteKey)
+            ->whereRaw("'" . $name . "' like concat(`name`, '.', '%')")
+            ->where('name', '<>', $name)->get();
 
         $items = [];
         foreach ($rows as $row) {
@@ -151,15 +151,16 @@ class DatabaseRepository implements PermissionRepository
     /**
      * Returns descendant of item
      *
-     * @param Permission $item permission instance
+     * @param string $siteKey site key
+     * @param string $name    target name
      * @return array
      */
-    public function fetchDescendant(Permission $item)
+    public function fetchDescendant($siteKey, $name)
     {
         $rows = $this->conn->table($this->table)
-            ->where('siteKey', $item->siteKey)
-            ->where('name', 'like', $item->name . '.%')
-            ->where('name', '<>', $item->name)->get();
+            ->where('siteKey', $siteKey)
+            ->where('name', 'like', $name . '.%')
+            ->where('name', '<>', $name)->get();
 
         $items = [];
         foreach ($rows as $row) {
