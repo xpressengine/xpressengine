@@ -144,9 +144,11 @@ class DatabaseRouteRepositoryTest extends \PHPUnit_Framework_TestCase
         list($configs, $model) = $this->getMocks();
         $instance = $this->getMock(DatabaseRouteRepository::class, ['findByUrlAndSiteKey'], [$configs, $model]);
 
-        $configs->shouldReceive('get')->once()->with('xe.routing.fixedPrefix')->andReturn('plugin');
-        $configs->shouldReceive('get')->once()->with('xe.routing.settingsPrefix')->andReturn('settings');
-
+        $configs->shouldReceive('get')->once()->with('xe.routing')->andReturn([
+            'settingsPrefix' => 'settings',
+            'fixedPrefix' => 'plugin'
+        ]);
+        
         $instance->expects($this->once())->method('findByUrlAndSiteKey')->with('board', 'default')->willReturn(null);
 
 
