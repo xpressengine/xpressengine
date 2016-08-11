@@ -148,7 +148,9 @@ class PluginProvider
 
             list($vendor, $id) = explode('/', $data->name);
             $plugin = $plugins[$id];
-            $plugin->setRemoteData($data);
+            if($plugin->isDevelopMode() === false) {
+                $plugin->setRemoteData($data);
+            }
         }
 
         return true;

@@ -530,4 +530,16 @@ class PluginHandler
         }
         return $plugin->isActivated();
     }
+
+    /**
+     * 컴포넌트를 Register에 추가한다.
+     *
+     * @param string $component
+     *
+     * @return void
+     */
+    public function addComponent($component)
+    {
+        $this->register->add($component);
+    }
 }

@@ -287,5 +287,3 @@ var PermissionInclude = React.createClass({
         );
     }
 });
-
-//# sourceMappingURL=PermissionInclude.js.map

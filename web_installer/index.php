@@ -38,11 +38,7 @@
             case 'pdo' :
                 $result = extension_loaded('PDO') && extension_loaded('pdo_mysql');
                 break;
-
-            case "mcrypt" :
-                $result = extension_loaded('mcrypt');
-                break;
-
+            
             case "curl" :
                 $result = extension_loaded('curl');
                 break;
@@ -133,7 +129,7 @@
 
     <link rel="stylesheet" href="../assets/core/xe-ui-component/xe-ui-component.css">
 
-    <link rel="stylesheet" href="../assets/core/common/css/install.css">
+    <link rel="stylesheet" href="../assets/core/webinstaller/css/webinstaller.css">
     <link rel="stylesheet" href="//cdn.jsdelivr.net/xeicon/2.0.0/xeicon.min.css">
 </head>
 
@@ -241,6 +237,10 @@
                     <th scope="row">Password</th>
                     <td><input type="password" class="xe-form-control" name="database_password" placeholder="<?=trans('inputDBPassword')?>"></td>
                 </tr>
+                <tr>
+                    <th scope="row">Table Prefix</th>
+                    <td><input type="text" class="xe-form-control" name="database_prefix" placeholder="<?=trans('inputDBPrefix')?>(default: xe)"></td>
+                </tr>
                 </tbody>
             </table>
             <h2>Web site Information</h2>
@@ -327,7 +327,6 @@
             check('<?=trans('checkDirPermission')?>', 'directoryPermission');
             check('<?=trans('checkPHPExtPDO')?>', 'pdo');
             check('<?=trans('checkPHPExtCURL')?>', 'curl');
-            check('<?=trans('checkPHPExtMCRYPT')?>', 'mcrypt');
             check('<?=trans('checkPHPExtGD')?>', 'gd');
             check('<?=trans('checkPHPExtMBSTRING')?>', 'mbstring');
             check('<?=trans('checkPHPExtOPENSSL')?>', 'openssl');

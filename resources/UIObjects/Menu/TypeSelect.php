@@ -44,7 +44,7 @@ class TypeSelect extends AbstractUIObject
     {
         $args = $this->arguments;
 
-        /** @var \Xpressengine\Module\ModuleHandler $typeHandler */
+        /** @var \Xpressengine\Menu\ModuleHandler $typeHandler */
         $typeHandler = app('xe.module');
         $types = $typeHandler->getAllModuleInfo();
 
