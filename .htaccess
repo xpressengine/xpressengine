@@ -26,7 +26,7 @@
     RewriteRule ^web_installer web_installer/index.php [L]
 
     RewriteCond %{REQUEST_FILENAME} -f
-    RewriteRule \.php$ - [L,R=403]
+    RewriteRule \.php$ index.php [L]
 
     # Allow
     RewriteCond %{REQUEST_FILENAME} -f

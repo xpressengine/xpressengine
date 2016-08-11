@@ -24,7 +24,7 @@
                         </div>
                         @if($captcha->available() !== true)
                             <div class="alert alert-warning" role="alert">
-                                {{ xe_trans('xe::masAlertCaptchaAtLogin') }}
+                                {!! xe_trans('xe::masAlertCaptchaAtLogin') !!}
                             </div>
                         @endif
                     </div>

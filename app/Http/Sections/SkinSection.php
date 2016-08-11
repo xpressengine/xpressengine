@@ -21,7 +21,6 @@ class SkinSection extends Section
      *
      * @param string      $target
      * @param string|null $instanceId
-     * @param string|null $mode
      */
     public function __construct($target, $instanceId = null)
     {
@@ -34,7 +33,6 @@ class SkinSection extends Section
      *
      * @param $target
      * @param $instanceId
-     * @param $mode
      *
      * @return \Illuminate\Contracts\View\View
      */

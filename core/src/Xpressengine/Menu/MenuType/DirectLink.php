@@ -14,7 +14,7 @@
 
 namespace Xpressengine\Menu\MenuType;
 
-use Xpressengine\Module\AbstractModule;
+use Xpressengine\Menu\AbstractModule;
 
 /**
  * DirectLink

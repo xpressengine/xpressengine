@@ -220,7 +220,7 @@ if (function_exists('xe_trans') === false) {
         }
 
         try {
-            return new \Illuminate\View\Expression(app('xe.translator')->trans($id, $parameters, $domain, $locale));
+            return app('xe.translator')->trans($id, $parameters, $domain, $locale);
         } catch (Exception $e) {
             return $id;
         }

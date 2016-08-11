@@ -5,7 +5,6 @@
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-
 namespace App\UIObjects\Form;
 
 use PhpQuery\PhpQuery;
@@ -20,11 +19,9 @@ class Form extends AbstractUIObject
         $args = $this->arguments;
 
         PhpQuery::newDocument();
-        if(array_get($args,'action') === null) {
-            $this->template = '<div class="panel-group"></div>';
-        } else {
-            $this->template = '<form method="POST" enctype="multipart/form-data"></form>';
-        }
+
+        // action, style에 따라 다른 form을 생성
+        $this->initTemplate();
 
         $this->markup = PhpQuery::pq($this->template);
         $form = $this->markup;
@@ -35,7 +32,8 @@ class Form extends AbstractUIObject
                     $form->addClass($arg);
                     break;
                 case 'inputs':
-                    $this->appendInputs($form, $arg, array_get($args, 'value', []));
+                case 'fields':
+                    $this->appendFields($form, $arg, array_get($args, 'value', []));
                 default:
                     $form->attr($key, $arg);
                     break;
@@ -45,7 +43,25 @@ class Form extends AbstractUIObject
         return parent::render();
     }
 
-    private function appendInputs($form, $inputs, $values)
+    protected function initTemplate()
+    {
+        $args = $this->arguments;
+
+        // style = panel, fieldset
+        $style = array_get($args, 'style', 'panel');
+
+        if(array_get($args,'action') === null) {
+            if($style === 'fieldset') {
+                $this->template = '<div></div>';
+            } else {
+                $this->template = '<div class="panel-group"></div>';
+            }
+        } else {
+            $this->template = '<form method="POST" enctype="multipart/form-data"></form>';
+        }
+    }
+
+    private function appendFields($form, $inputs, $values)
     {
         foreach ($inputs as $name => $arg) {
 
@@ -66,7 +82,8 @@ class Form extends AbstractUIObject
             $sectionName = array_get($arg, '_section', '기본설정');
             unset($arg['_section']);
 
-            $section = $this->getSection($form, $sectionName);
+            $style = array_get($this->arguments, 'style', 'panel');
+            $section = $this->getSection($form, $sectionName, $style);
 
             array_set($arg, 'value', $value);
 
@@ -77,16 +94,24 @@ class Form extends AbstractUIObject
         }
     }
 
-    private function getSection($form, $sectionName)
+    private function getSection($form, $sectionName, $style = 'panel')
     {
         $classname = 'form-section-'.str_replace([' ', '.'], '-', $sectionName);
         if(count($form['.'.$classname]) === 0){
 
-            $section = sprintf('<div class="panel %s"><div class="panel-heading"><div class="pull-left"><h3>%s</h3></div></div><div class="panel-body"><div class="row"></div></div></div>', $classname, $sectionName);
+            if($style === 'fieldset') {
+                $section = sprintf('<fieldset class="%s"><legend>%s</legend></fieldset>', $classname, $sectionName);
+            } else {
+                $section = sprintf('<div class="panel %s"><div class="panel-heading"><div class="pull-left"><h3>%s</h3></div></div><div class="panel-body"><div class="row"></div></div></div>', $classname, $sectionName);
+            }
 
             $sectionEl = PhpQuery::pq($section)->appendTo($form);
         }
-        return $form['.'.$classname]['.panel-body .row'];
+        if($style === 'fieldset') {
+            return $form['.'.$classname];
+        } else {
+            return $form['.'.$classname]['.panel-body .row'];
+        }
     }
 
     private function wrapInput($name, $input)

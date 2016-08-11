@@ -45,6 +45,7 @@ class Kernel extends ConsoleKernel
         Commands\PluginUninstall::class,
         Commands\PluginComposerSync::class,
         Commands\ThemeMake::class,
+        Commands\SkinMake::class,
 	];
 
 	/**

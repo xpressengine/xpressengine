@@ -20,7 +20,6 @@ return [
     ],
 
     'settings' => [
-
         /*
         |--------------------------------------------------------------------------
         | Settings Page Theme
@@ -412,6 +411,10 @@ return [
             'error' => 'error/skin/xpressengine@default',
         ],
         'defaultSettingsSkins' => [
+        ],
+        'storage' => [
+            'disk' => 'local',
+            'path' => 'public/skin/'
         ]
     ],
 

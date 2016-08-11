@@ -19,6 +19,7 @@ use Illuminate\Support\ServiceProvider;
 use Xpressengine\Menu\MenuHandler;
 use Xpressengine\Menu\MenuItemPolicy;
 use Xpressengine\Menu\Models\MenuItem;
+use Xpressengine\Menu\ModuleHandler;
 use Xpressengine\Menu\Repositories\CacheDecorator;
 use Xpressengine\Menu\Repositories\EloquentRepository;
 use Xpressengine\Menu\Repositories\MemoryDecorator;
@@ -82,6 +83,12 @@ class MenuServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->singleton([ModuleHandler::class => 'xe.module'], function ($app) {
+            $register = $app['xe.pluginRegister'];
+            $proxyClass = $app['xe.interception']->proxy(ModuleHandler::class, 'XeModule');
+            return new $proxyClass($register);
+        });
+        
         $this->app->singleton([MenuHandler::class => 'xe.menu'], function ($app) {
             $repo = new EloquentRepository($app['xe.keygen']);
 

@@ -19,7 +19,7 @@ var PermissionExclude = React.createClass({
     },
     getDefaultProps: function () {
         return {
-            placeholder: 'Input member',
+            placeholder: XE.Lang.trans('xe::explainExcludeUser'),
             selectedMember: [],
             suggestions: []
         };
@@ -187,30 +187,30 @@ var PermissionExclude = React.createClass({
 
         var prefix = '@';
         var tagItems = this.props.selectedMember.map((function (tag, i) {
-            return (<PermissionTag key={tag.id} tag={tag} prefix={prefix} onDelete={this.handleDelete.bind(this, i)}
-                />);
+            return (React.createElement(PermissionTag, {key: tag.id, tag: tag, prefix: prefix, onDelete: this.handleDelete.bind(this, i)}
+                ));
         }).bind(this));
 
         var query = this.state.query.trim(),
             selectedIndex = this.state.selectedIndex,
             suggestions = this.state.suggestions,
             placeholder = this.props.placeholder;
-        return ( <div className="ReactTags__tags">
-                <div className="ReactTags__selected">
-                    {tagItems}
-                </div>
-                <div className="ReactTags__tagInput">
-                    <input type="text" ref="input" placeholder={placeholder}
-                           className="form-control" disabled={this.props.disabled}
-                           onChange={this.handleChange} onKeyDown={this.handleKeyDown}/>
-                    <PermissionTagSuggestion query={query}
-                                             suggestions={suggestions}
-                                             searchingCnt={this.state.searchingCnt}
-                                             selectedIndex={selectedIndex}
-                                             handleClick={this.handleSuggestionClick}
-                                             handleHover={this.handleSuggestionHover}/>
-                </div>
-            </div>
+        return ( React.createElement("div", {className: "ReactTags__tags"}, 
+                React.createElement("div", {className: "ReactTags__selected"}, 
+                    tagItems
+                ), 
+                React.createElement("div", {className: "ReactTags__tagInput"}, 
+                    React.createElement("input", {type: "text", ref: "input", placeholder: placeholder, 
+                           className: "form-control", disabled: this.props.disabled, 
+                           onChange: this.handleChange, onKeyDown: this.handleKeyDown}), 
+                    React.createElement(PermissionTagSuggestion, {query: query, 
+                                             suggestions: suggestions, 
+                                             searchingCnt: this.state.searchingCnt, 
+                                             selectedIndex: selectedIndex, 
+                                             handleClick: this.handleSuggestionClick, 
+                                             handleHover: this.handleSuggestionHover})
+                )
+            )
         );
     }
 });

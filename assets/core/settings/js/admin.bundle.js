@@ -3,6 +3,7 @@
 (["1"], [], true, function($__System) {
 var require = this.require, exports = this.exports, module = this.module;
 !function(e){function r(e,r){for(var n=e.split(".");n.length;)r=r[n.shift()];return r}function n(n){if("string"==typeof n)return r(n,e);if(!(n instanceof Array))throw new Error("Global exports must be a string or array.");for(var t={},o=!0,f=0;f<n.length;f++){var i=r(n[f],e);o&&(t["default"]=i,o=!1),t[n[f].split(".").pop()]=i}return t}function t(r){if(Object.keys)Object.keys(e).forEach(r);else for(var n in e)a.call(e,n)&&r(n)}function o(r){t(function(n){if(-1==l.call(s,n)){try{var t=e[n]}catch(o){s.push(n)}r(n,t)}})}var f,i=$__System,a=Object.prototype.hasOwnProperty,l=Array.prototype.indexOf||function(e){for(var r=0,n=this.length;n>r;r++)if(this[r]===e)return r;return-1},s=["_g","sessionStorage","localStorage","clipboardData","frames","frameElement","external","mozAnimationStartTime","webkitStorageInfo","webkitIndexedDB","mozInnerScreenY","mozInnerScreenX"];i.set("@@global-helpers",i.newModule({prepareGlobal:function(r,t,i){var a=e.define;e.define=void 0;var l;if(i){l={};for(var s in i)l[s]=e[s],e[s]=i[s]}return t||(f={},o(function(e,r){f[e]=r})),function(){var r;if(t)r=n(t);else{r={};var i,s;o(function(e,n){f[e]!==n&&"undefined"!=typeof n&&(r[e]=n,"undefined"!=typeof i?s||i===n||(s=!0):i=n)}),r=s?r:i}if(l)for(var u in l)e[u]=l[u];return e.define=a,r}}}))}("undefined"!=typeof self?self:global);
+!function(e){function n(e,n){e=e.replace(l,"");var r=e.match(u),t=(r[1].split(",")[n]||"require").replace(s,""),i=p[t]||(p[t]=new RegExp(a+t+f,"g"));i.lastIndex=0;for(var o,c=[];o=i.exec(e);)c.push(o[2]||o[3]);return c}function r(e,n,t,o){if("object"==typeof e&&!(e instanceof Array))return r.apply(null,Array.prototype.splice.call(arguments,1,arguments.length-1));if("string"==typeof e&&"function"==typeof n&&(e=[e]),!(e instanceof Array)){if("string"==typeof e){var l=i.get(e);return l.__useDefault?l["default"]:l}throw new TypeError("Invalid require")}for(var a=[],f=0;f<e.length;f++)a.push(i["import"](e[f],o));Promise.all(a).then(function(e){n&&n.apply(null,e)},t)}function t(t,l,a){"string"!=typeof t&&(a=l,l=t,t=null),l instanceof Array||(a=l,l=["require","exports","module"].splice(0,a.length)),"function"!=typeof a&&(a=function(e){return function(){return e}}(a)),void 0===l[l.length-1]&&l.pop();var f,u,s;-1!=(f=o.call(l,"require"))&&(l.splice(f,1),t||(l=l.concat(n(a.toString(),f)))),-1!=(u=o.call(l,"exports"))&&l.splice(u,1),-1!=(s=o.call(l,"module"))&&l.splice(s,1);var p={name:t,deps:l,execute:function(n,t,o){for(var p=[],c=0;c<l.length;c++)p.push(n(l[c]));o.uri=o.id,o.config=function(){},-1!=s&&p.splice(s,0,o),-1!=u&&p.splice(u,0,t),-1!=f&&p.splice(f,0,function(e,t,l){return"string"==typeof e&&"function"!=typeof t?n(e):r.call(i,e,t,l,o.id)});var d=a.apply(-1==u?e:t,p);return"undefined"==typeof d&&o&&(d=o.exports),"undefined"!=typeof d?d:void 0}};if(t)c.anonDefine||c.isBundle?c.anonDefine&&c.anonDefine.name&&(c.anonDefine=null):c.anonDefine=p,c.isBundle=!0,i.registerDynamic(p.name,p.deps,!1,p.execute);else{if(c.anonDefine&&!c.anonDefine.name)throw new Error("Multiple anonymous defines in module "+t);c.anonDefine=p}}var i=$__System,o=Array.prototype.indexOf||function(e){for(var n=0,r=this.length;r>n;n++)if(this[n]===e)return n;return-1},l=/(\/\*([\s\S]*?)\*\/|([^:]|^)\/\/(.*)$)/gm,a="(?:^|[^$_a-zA-Z\\xA0-\\uFFFF.])",f="\\s*\\(\\s*(\"([^\"]+)\"|'([^']+)')\\s*\\)",u=/\(([^\)]*)\)/,s=/^\s+|\s+$/g,p={};t.amd={};var c={isBundle:!1,anonDefine:null};i.amdDefine=t,i.amdRequire=r}("undefined"!=typeof self?self:global);
 $__System.registerDynamic("2", [], false, function($__require, $__exports, $__module) {
   var _retrieveGlobal = $__System.get("@@global-helpers").prepareGlobal($__module.id, null, null);
   (function() {
@@ -1592,79 +1593,75 @@ $__System.registerDynamic("2", [], false, function($__require, $__exports, $__mo
   return _retrieveGlobal();
 });
 
-$__System.registerDynamic("1", ["2"], true, function($__require, exports, module) {
-  ;
-  var define,
-      global = this,
-      GLOBAL = this;
-  (function(root, factory) {
-    if (typeof define === 'function' && define.amd) {
-      define(['exports', "github:twbs/bootstrap-sass@3.3.6/assets/javascripts/bootstrap.js"], function(exports) {
-        factory(exports, jQuery);
-      });
-    } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
-      factory(exports, $__require('2'));
-    } else {
-      factory({});
-    }
-  }(this, function(exports) {
-    $(document).ready(function() {
-      var $sidebar = $('.settings-nav-sidebar');
-      var $dim = $('.dim');
-      $sidebar.on('setting.sidebar.open', function() {
-        $sidebar.addClass('open');
-        $dim.show();
-        $('body').css('overflow', 'hidden');
-        $('html').css('position', 'fixed');
-      }).on('setting.sidebar.close', function() {
-        $sidebar.removeClass('open');
-        $dim.hide();
-        $('body').css('overflow', '');
-        $('html').css('position', '');
-      }).on('setting.sidebar.toggle', function() {
-        if ($(window).innerWidth() < 1068) {
-          $('body').removeClass("sidebar-collapse");
-          if ($sidebar.hasClass("open")) {
-            $sidebar.trigger('setting.sidebar.close');
-          } else {
-            $sidebar.trigger('setting.sidebar.open');
-          }
-        } else {
-          $('body').toggleClass("sidebar-collapse");
-        }
-      });
-      $dim.on('click', function() {
-        $sidebar.trigger('setting.sidebar.close');
-      });
-      $(".btn-slide").on('click', function() {
-        $sidebar.trigger('setting.sidebar.toggle');
-      });
-      $(document).on('click', '.snb-list', function(event) {
-        var $target = $(event.target);
-        var $subdepth = $target.closest('.sub-depth');
-        var $ul;
-        if ($.inArray('__xe_collapseMenu', $target[0].classList) > -1) {
-          $ul = $target.siblings('.sub-depth-list');
-        } else {
-          $ul = $target.parent().siblings('.sub-depth-list');
-        }
-        if ($ul.is(':visible')) {
-          $ul.find('.sub-depth-list').slideUp('fast');
-          $ul.find('.sub-depth').removeClass('open');
-          $ul.slideUp('fast');
-          $subdepth.removeClass('open');
-        } else {
-          var $parent = $subdepth.parent();
-          $parent.find('.sub-depth.open').removeClass('open');
-          $ul.slideDown('fast');
-          $subdepth.addClass('open');
-        }
-      });
+(function() {
+var define = $__System.amdDefine;
+(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define("1", ["exports", "2"], function(exports) {
+      factory(exports, jQuery);
     });
-  }));
-  return module.exports;
-});
+  } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
+    factory(exports, require("github:twbs/bootstrap-sass@3.3.6/assets/javascripts/bootstrap.js"));
+  } else {
+    factory({});
+  }
+}(this, function(exports) {
+  $(document).ready(function() {
+    var $sidebar = $('.settings-nav-sidebar');
+    var $dim = $('.dim');
+    $sidebar.on('setting.sidebar.open', function() {
+      $sidebar.addClass('open');
+      $dim.show();
+      $('body').css('overflow', 'hidden');
+      $('html').css('position', 'fixed');
+    }).on('setting.sidebar.close', function() {
+      $sidebar.removeClass('open');
+      $dim.hide();
+      $('body').css('overflow', '');
+      $('html').css('position', '');
+    }).on('setting.sidebar.toggle', function() {
+      if ($(window).innerWidth() < 1068) {
+        $('body').removeClass("sidebar-collapse");
+        if ($sidebar.hasClass("open")) {
+          $sidebar.trigger('setting.sidebar.close');
+        } else {
+          $sidebar.trigger('setting.sidebar.open');
+        }
+      } else {
+        $('body').toggleClass("sidebar-collapse");
+      }
+    });
+    $dim.on('click', function() {
+      $sidebar.trigger('setting.sidebar.close');
+    });
+    $(".btn-slide").on('click', function() {
+      $sidebar.trigger('setting.sidebar.toggle');
+    });
+    $(document).on('click', '.snb-list', function(event) {
+      var $target = $(event.target);
+      var $subdepth = $target.closest('.sub-depth');
+      var $ul;
+      if ($.inArray('__xe_collapseMenu', $target[0].classList) > -1) {
+        $ul = $target.siblings('.sub-depth-list');
+      } else {
+        $ul = $target.parent().siblings('.sub-depth-list');
+      }
+      if ($ul.is(':visible')) {
+        $ul.find('.sub-depth-list').slideUp('fast');
+        $ul.find('.sub-depth').removeClass('open');
+        $ul.slideUp('fast');
+        $subdepth.removeClass('open');
+      } else {
+        var $parent = $subdepth.parent();
+        $parent.find('.sub-depth.open').removeClass('open');
+        $ul.slideDown('fast');
+        $subdepth.addClass('open');
+      }
+    });
+  });
+}));
 
+})();
 })
 (function(factory) {
   factory();

@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /* CSS Document */
 /*reset css*/
 .profile-wrap dl,
@@ -11,6 +12,11 @@
 
 .profile-wrap .card-profile-infomation .profile-thumbnail em {
   font-style: normal;
+}
+
+.profile-wrap {
+  font-family: '나눔고딕',NanumGothic,'맑은 고딕','Malgun Gothic','돋움',Dotum,'애플 SD 산돌고딕 Neo','Apple SD Gothic Neo',AppleGothic,Helvetica,sans-serif;
+  font-size: 13px;
 }
 
 .profile > .xe-container {
@@ -322,5 +328,3 @@
     margin-bottom: 0;
   }
 }
-
-/*# sourceMappingURL=profile.css.map */

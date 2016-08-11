@@ -4279,6 +4279,38 @@ aside.open {
   margin-right: 4px;
 }
 
+.plugin-detail .swiper-pagination-switch {
+  width: 8px;
+  height: 8px;
+  display: inline-block;
+  margin: 0 5px;
+  border-radius: 100%;
+  background: #b5b7bd;
+  cursor: pointer;
+}
+
+.plugin-detail .swiper-active-switch {
+  background: #fff;
+  border: 1px solid #1677cb;
+}
+
+.plugin-detail .swiper-pagination {
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  position: absolute;
+  text-align: center;
+  -webkit-transition: 300ms;
+  -moz-transition: 300ms;
+  -o-transition: 300ms;
+  transition: 300ms;
+  -webkit-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  z-index: 10;
+}
+
 .plugin_tbl th, .plugin_tbl td {
   padding: 8px;
   line-height: 13px;
@@ -4451,6 +4483,7 @@ aside.open {
 .item-setting .table tbody tr > td {
   border-top: 1px solid #e0e0e0;
   background-color: #f8fafd;
+  white-space: nowrap;
 }
 
 .item-setting .table tbody tr > td:first-child {
@@ -4669,5 +4702,3 @@ aside.open {
     display: none;
   }
 }
-
-/*# sourceMappingURL=admin.css.map */

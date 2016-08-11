@@ -1,13 +1,9 @@
 @charset "UTF-8";
 /* CSS Document */
 /*reset css*/
-.blind {
-  position: absolute;
-  clip: rect(0 0 0 0);
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
+.setting-wrap {
+  font-family: '나눔고딕',NanumGothic,'맑은 고딕','Malgun Gothic','돋움',Dotum,'애플 SD 산돌고딕 Neo','Apple SD Gothic Neo',AppleGothic,Helvetica,sans-serif;
+  font-size: 13px;
 }
 
 .setting-card .acount-list,
@@ -600,5 +596,3 @@ li {
     left: 0;
   }
 }
-
-/*# sourceMappingURL=setting.css.map */
