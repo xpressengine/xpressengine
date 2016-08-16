@@ -108,6 +108,23 @@ abstract class GenericSkin extends AbstractSkin
         }
     }
 
+    protected function renderBlade($view = null)
+    {
+        if ($view === null) {
+            $view = $this->view;
+        }
+
+        return view(
+            $this->view($view),
+            $this->data,
+            [
+                '_skin' => static::class,
+                '_config' => $this->config
+            ]
+        );
+    }
+
+
     /**
      * 스킨 설정을 위한 화면에 출력될 html 반환
      *

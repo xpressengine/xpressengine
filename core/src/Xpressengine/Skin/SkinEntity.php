@@ -127,10 +127,24 @@ class SkinEntity implements Arrayable, Jsonable
      * @param array $config skin config
      *
      * @return string|Renderable
+     *
+     * @deprecated use renderSetting instead
      */
     public function getSettingView($config = [])
     {
-        return $this->getObject()->getSettingView($config);
+        return $this->renderSetting($config);
+    }
+
+    /**
+     * get skin setting view
+     *
+     * @param array $args skin config
+     *
+     * @return string|Renderable
+     */
+    public function renderSetting(array $args = [])
+    {
+        return $this->getObject()->renderSetting($args);
     }
 
     /**

@@ -81,7 +81,10 @@ class SkinSection extends Section
                 }
             </script>"
         )->load();
-        \XeFrontend::js('assets/core/skin/section.js')->load();
+        \XeFrontend::js([
+            'assets/core/xe-ui-component/js/xe-page.js',
+            'assets/core/skin/section.js'
+        ])->load();
 
         return View::make(
             'skin.section',
