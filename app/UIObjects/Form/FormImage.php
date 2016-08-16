@@ -55,7 +55,7 @@ class FormImage extends AbstractUIObject
                 'assets/vendor/jQuery-File-Upload/js/jquery.fileupload-video.js',
                 'assets/vendor/jQuery-File-Upload/js/jquery.fileupload-validate.js',
             ]
-        )->appendTo('head')->load();
+        )->load();
 
         XeFrontend::css(
             [

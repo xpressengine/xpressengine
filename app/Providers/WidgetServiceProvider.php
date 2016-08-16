@@ -8,13 +8,13 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Xpressengine\UIObjects\Widget\WidgetGenerator;
-use Xpressengine\Widget\WidgetHandler;
-use Xpressengine\Widget\WidgetParser;
+use App\UIObjects\Widget\WidgetGenerator;
 use App\Widgets\ContentInfo;
 use App\Widgets\StorageSpace;
 use App\Widgets\SystemInfo;
+use Illuminate\Support\ServiceProvider;
+use Xpressengine\Widget\WidgetHandler;
+use Xpressengine\Widget\WidgetParser;
 
 /**
  * Class WidgetServiceProvider

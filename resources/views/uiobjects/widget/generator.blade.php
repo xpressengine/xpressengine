@@ -1,11 +1,11 @@
 <div class="widget-generator">
 
-    <form id="widgetForm" action="{{ route('settings.widget.generate') }}" method="post">
-        {{ uio('formSelect', ['label'=>'위젯', 'class'=>'__xe_select_widget', 'name'=>'widget', 'options'=>$widgets, 'selected'] ) }}
-        <div class="widget-form">
-            {{ $form }}
-        </div>
-    </form>
+    {{-- select widget --}}
+    {{ uio('formSelect', ['label'=>'위젯', 'class'=>'__xe_select_widget', 'name'=>'widget', 'options'=>$widgets] ) }}
+    <div class="widget-skins">
+    </div>
+    <div class="widget-form">
+    </div>
     <hr>
     <button type="button" class="btn btn-default __xe_generate_code">코드생성</button>
     <hr>

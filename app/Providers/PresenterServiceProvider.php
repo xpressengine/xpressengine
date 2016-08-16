@@ -48,7 +48,7 @@ class PresenterServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if (app()->runningInConsole() === false) {
+        if (app()->runningInConsole() === false && !request()->ajax()) {
             $this->app->booted(
                 function () {
 

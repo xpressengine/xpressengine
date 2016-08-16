@@ -6,7 +6,7 @@
  * @link        https://xpressengine.io
  */
 
-namespace Xpressengine\UIObjects\Widget;
+namespace App\UIObjects\Widget;
 
 use Xpressengine\UIObject\AbstractUIObject;
 
@@ -26,23 +26,24 @@ class WidgetGenerator extends AbstractUIObject
         $widgetList = $handler->getAll();
 
         $widgets = [];
+        $widgets[''] = '위젯을 선택하세요';
         foreach ($widgetList as $id => $class) {
             $widgets[$id] = $class::getTitle();
         }
 
-        if (!isset($args['selectedWidget'])) {
-            reset($widgetList);
-            $selectedWidgetId = key($widgetList);
-        } else {
-            $selectedWidgetId = array_get($args, 'selectedWidget');
-        }
+        //if (!isset($args['selectedWidget'])) {
+        //    reset($widgetList);
+        //    $selectedWidgetId = key($widgetList);
+        //} else {
+        //    $selectedWidgetId = array_get($args, 'selectedWidget');
+        //}
 
         // except skin setting
-        $form = $handler->setup($selectedWidgetId);
+        // $form = $handler->setup($selectedWidgetId);
 
         $this->loadFiles();
 
-        $this->template = view($this->view, compact('widgets', 'selectedWidgetId', 'form'))->render();
+        $this->template = view($this->view, compact('widgets'))->render();
 
         return parent::render();
     }
@@ -60,20 +61,39 @@ class WidgetGenerator extends AbstractUIObject
         $frontend->html('widget.generator')->content(
             "<script>
                 $(function($) {
-                    var url = '".route('settings.widget.setup')."';
+                    var url = { 
+                        'skin': '".route('settings.widget.skin')."'
+                    };
                     $('.__xe_select_widget').change(function(){
                         var widget = this.value;
-                        XE.page(url+'?widget='+widget,'.widget-form');
+                        $('.widget-form').empty();
+                        if(widget) {
+                            XE.page(url.skin+'?widget='+widget, '.widget-skins');
+                        } else {
+                            $('.widget-skins').empty();
+                        }
                     });
                     
-                    $('.__xe_generate_code').click(function(){
+                    // skin 선택시
+                    $('.widget-skins').on('change', '.__xe_select_widgetskin', function(){
                         var widget = this.value;
+                        if(widget) {
+                            var url = $(this).find('option:selected').data('url');
+                            XE.page(url,'.widget-form');
+                        }
+                    });
+                    
+                    // code 생성
+                    $('.__xe_generate_code').click(function(){
                         var form = $('#widgetForm');
+                        var data = $('#widgetForm').serializeArray();
+                        data.push({'name':'skin', 'value': $('#skinForm').serializeArray()});
+                        
                         $.ajax({
                           type : form.attr('method'),
                           url : form.attr('action'),
                           cache : false,
-                          data : form.serialize(),
+                          data : JSON.stringify(data),
                           dataType: 'json',
                           success : function (data) {
                             $('.__xe_widget_code').val(data.code);

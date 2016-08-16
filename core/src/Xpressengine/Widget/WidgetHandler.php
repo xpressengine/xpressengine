@@ -14,7 +14,6 @@
 
 namespace Xpressengine\Widget;
 
-use Closure;
 use Exception;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Contracts\View\Factory;
@@ -231,19 +230,45 @@ class WidgetHandler
     {
         $widget = $this->getInstance($widgetId);
 
-        $codeString = [
-            "<xewidget id='{$widgetId}'>".PHP_EOL
-        ];
-
         $inputs = $widget->resolveSetting($inputs);
 
+        return $this->generateXml('xewidget', $inputs);
+    }
+
+    /**
+     * xml string을 생성하여 반환한다. element명과 element의 attr, child elements 정보를 입력받는다.
+     *
+     * @param string $element
+     * @param array  $inputs
+     * @param int    $depth
+     *
+     * @return string
+     */
+    public function generateXml($element, $inputs, $depth = 0)
+    {
+        $attr = [];
+        $children = [];
+        $space = str_repeat('  ', $depth);
         foreach ($inputs as $k => $v) {
-            $paramString = sprintf("  <%s>%s</%s>".PHP_EOL, $k, $v, $k);
-            array_push($codeString, $paramString);
+            // attribute
+            if(strpos($k, '@') === 0) {
+                $attr[substr($k, 1)] = (string) $v;
+            } elseif (is_array($v)) {
+                $children[] = $this->generateXml($k, $v, $depth + 1);
+            } else {
+                $children[] = sprintf("  %s<%s>%s</%s>".PHP_EOL, $space, $k, $v, $k);
+            }
         }
 
-        $codeString[] = "</xewidget>";
+        $attrStr = '';
+        array_walk($attr, function($value, $key) use (&$attrStr) {
+            $attrStr .= ' '.$key.'="'.$value.'"';
+        });
 
-        return implode("", $codeString);
+        $xml = $space.'<'.$element.$attrStr.'>'.PHP_EOL
+               .implode('', $children)
+        .$space.'</'.$element.'>'.PHP_EOL;
+
+        return $xml;
     }
 }

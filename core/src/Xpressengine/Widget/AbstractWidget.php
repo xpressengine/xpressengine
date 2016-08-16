@@ -17,6 +17,7 @@ namespace Xpressengine\Widget;
 use Illuminate\Contracts\Support\Renderable;
 use Xpressengine\Plugin\ComponentInterface;
 use Xpressengine\Plugin\ComponentTrait;
+use Xpressengine\Skin\AbstractSkin;
 
 /**
  * 이 클래스는 Xpressengine 에서 Widget 구현할 때 필요한 추상클래스이다.
@@ -40,6 +41,8 @@ abstract class AbstractWidget implements ComponentInterface, Renderable
     public static $ratingWhiteList = ['super', 'manager', 'member', 'guest'];
 
     protected $config;
+
+    protected $data;
 
     public function __construct($config = null)
     {
@@ -71,7 +74,16 @@ abstract class AbstractWidget implements ComponentInterface, Renderable
      *
      * @return string
      */
-    abstract public function render();
+    public function render()
+    {
+        $skinId = array_get($this->config, 'skin.@attributes.id');
+        $skinConfig = array_get($this->config, 'skin');
+
+        /** @var AbstractSkin $skin */
+        $skin = app('xe.skin')->get($skinId, $skinConfig);
+
+        return $skin->setData($this->data)->setView('widget')->render();
+    }
 
     /**
      * getCodeCreationForm

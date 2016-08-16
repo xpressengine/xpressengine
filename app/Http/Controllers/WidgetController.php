@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Input;
 use View;
 use XePresenter;
+use Xpressengine\Skin\SkinEntity;
 use Xpressengine\Skin\SkinHandler;
 use Xpressengine\Widget\WidgetHandler;
 
@@ -35,10 +36,26 @@ class WidgetController extends Controller {
 
     public function generate(Request $request, WidgetHandler $widgetHandler)
     {
-        $id = $request->get('widget');
-        $inputs = $request->except('widget');
+        $data = $request->getContent();
 
-        $code = $widgetHandler->generateCode($id, $inputs);
+        $data = json_decode($data);
+
+        $inputs = [];
+        foreach ($data as $item) {
+            if(is_array($item->value)) {
+                $value = [];
+                foreach ($item->value as $sub) {
+                    $value[$sub->name] = e($sub->value);
+                }
+                $item->value = $value;
+            } else {
+                $inputs[$item->name] = e($item->value);
+            }
+        }
+
+        $widget = $inputs['@id'];
+
+        $code = $widgetHandler->generateCode($widget, $inputs);
         return XePresenter::makeApi([
             'code' => $code,
         ]);
@@ -46,47 +63,56 @@ class WidgetController extends Controller {
     }
 
     /**
-     * setup
+     * 주어진 위젯의 스킨 목록을 반환한다.
      *
+     * @param Request       $request
      * @param WidgetHandler $widgetHandler
+     * @param SkinHandler   $skinHandler
+     *
+     * @return void
+     */
+    public function skin(Request $request, WidgetHandler $widgetHandler, SkinHandler $skinHandler)
+    {
+        $this->validate($request, [
+            'widget' => 'required'
+        ]);
+
+        $widget = $request->get('widget');
+
+        $skins = $skinHandler->getList($widget);
+
+        return apiRender('widget.skins', compact('widget', 'skins'));
+    }
+
+    /**
+     * 주어진 위젯과 스킨에 대한 설정 폼을 반환한다.
+     *
+     * @param Request       $request
+     * @param WidgetHandler $widgetHandler
+     *
+     * @param SkinHandler   $skinHandler
      *
      * @return View
      */
     public function setup(Request $request, WidgetHandler $widgetHandler, SkinHandler $skinHandler)
     {
         $this->validate($request, [
-            'widget' => 'required'
+            'widget' => 'required',
         ]);
 
-        $id = $request->get('widget');
+        $widget = $request->get('widget');
+        $skin = $request->get('skin');
 
-        $skinList = $skinHandler->getList($id);
+        // widget form
+        $widgetForm = $widgetHandler->setup($widget);
 
-        $skins = [];
-        foreach ($skinList as $skin => $class) {
-            $skins[$skin] = $class::getTitle();
-        }
+        // skin form
+        $skin = $skinHandler->get($skin);
 
-        reset($skins);
-        $skinId = key($skins);
+        $skinForm = $skin->renderSetting();
 
-        // testcode;
-        $skins = ['test'=>'테스트스킨','real'=>'진짜스킨'];
-        $skinId = 'real';
+        return apiRender('widget.setup', compact('widget', 'skin', 'widgetForm', 'skinForm'));
 
-        $skinSelect = uio('formSelect', ['name'=>'skinId', 'label'=>'위젯스킨', 'class'=>'__xe_skin_select', 'selected'=>$skinId, 'options'=>$skins]);
-
-        $form = $widgetHandler->setup($id);
-
-        $output = $skinSelect . '<hr>' . $form;
-
-        return XePresenter::makeApi([
-             'result' => (string)$output,
-             'XE_ASSET_LOAD' => [
-                 'css' => \Xpressengine\Presenter\Html\Tags\CSSFile::getFileList(),
-                 'js' => \Xpressengine\Presenter\Html\Tags\JSFile::getFileList(),
-             ],
-         ]);
     }
 
     /**
