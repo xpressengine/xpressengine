@@ -2,7 +2,7 @@ import gulp from 'gulp';
 import plugins from 'gulp-load-plugins';
 import react from 'gulp-react';
 import runSequence from 'run-sequence';
-import settings from './settings';
+import taskSettings from './settings';
 
 module.exports = (() => {
 
@@ -54,10 +54,10 @@ module.exports = (() => {
          * */
         'jsx:permission': () => {
             return gulp.src('resources/assets/core/permission/*.jsx')
-                .pipe($.if(settings.getConfig().useSourceMaps, $.sourcemaps.init()))
+                .pipe($.if(taskSettings.getConfig().useSourceMaps, $.sourcemaps.init()))
                 .pipe($.plumber())
                 .pipe(react())
-                .pipe($.if(settings.getConfig().useSourceMaps, $.sourcemaps.write('.')))
+                .pipe($.if(taskSettings.getConfig().useSourceMaps, $.sourcemaps.write('.')))
                 .pipe(gulp.dest('./assets/core/permission'))
         }
     };
