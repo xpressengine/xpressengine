@@ -162,12 +162,25 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $instance = new Storage($handler, $auth, $keygen, $distributor, $temps);
 
         $mockFile = m::mock('Xpressengine\Storage\File');
+        $mockFile->shouldReceive('getAttribute')->with('id')->andReturn('foo');
         $mockFile->shouldReceive('getAttribute')->with('originId')->andReturnNull();
 
         $mockChild = m::mock('Xpressengine\Storage\File');
-        $mockChild->shouldReceive('getAttribute')->with('originId')->andReturn('origin-id');
+        $mockChild->shouldReceive('getAttribute')->with('id')->andReturn('bar');
+        $mockChild->shouldReceive('getAttribute')->with('originId')->andReturn('foo');
 
         $mockFile->shouldReceive('getRawDerives')->andReturn([$mockChild]);
+
+        $conn = m::mock('stdClass');
+        $conn->shouldReceive('table')->andReturnSelf();
+        $conn->shouldReceive('where')->once()->with('fileId', 'foo')->andReturnSelf();
+        $conn->shouldReceive('where')->once()->with('fileId', 'bar')->andReturnSelf();
+        $conn->shouldReceive('delete')->twice();
+
+        $mockFile->shouldReceive('getConnection')->andReturn($conn);
+        $mockFile->shouldReceive('getFileableTable')->andReturn('fileableTable');
+        $mockChild->shouldReceive('getConnection')->andReturn($conn);
+        $mockChild->shouldReceive('getFileableTable')->andReturn('fileableTable');
 
         $handler->shouldReceive('delete')->once()->with($mockChild)->andReturnNull();
         $handler->shouldReceive('delete')->once()->with($mockFile)->andReturnNull();

@@ -1,6 +1,6 @@
 <?php
 /**
- * Repository interface
+ * Config Repository
  *
  * PHP version 5
  *
@@ -12,9 +12,7 @@
  * @link        https://xpressengine.io
  */
 
-namespace Xpressengine\Config\Repositories;
-
-use Xpressengine\Config\ConfigEntity;
+namespace Xpressengine\Config;
 
 /**
  * 저장소에서 제공해야할 기능들을 정의
@@ -26,7 +24,7 @@ use Xpressengine\Config\ConfigEntity;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-interface RepositoryInterface
+interface ConfigRepository
 {
     /**
      * search getter
@@ -44,7 +42,7 @@ interface RepositoryInterface
      * @param string $name    the name
      * @return array
      */
-    public function fetchParent($siteKey, $name);
+    public function fetchAncestor($siteKey, $name);
 
     /**
      * search descendants getter
@@ -53,7 +51,7 @@ interface RepositoryInterface
      * @param string $name    the name
      * @return array
      */
-    public function fetchChildren($siteKey, $name);
+    public function fetchDescendant($siteKey, $name);
 
     /**
      * save

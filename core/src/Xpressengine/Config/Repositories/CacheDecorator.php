@@ -16,6 +16,7 @@ namespace Xpressengine\Config\Repositories;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Xpressengine\Config\ConfigRepository;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Support\CacheInterface;
 
@@ -30,12 +31,12 @@ use Xpressengine\Support\CacheInterface;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class CacheDecorator implements RepositoryInterface
+class CacheDecorator implements ConfigRepository
 {
     /**
      * repository instance
      *
-     * @var RepositoryInterface
+     * @var ConfigRepository
      */
     protected $repo;
 
@@ -63,10 +64,10 @@ class CacheDecorator implements RepositoryInterface
     /**
      * create instance
      *
-     * @param RepositoryInterface $repo  repository instance
-     * @param CacheInterface      $cache cache instance
+     * @param ConfigRepository $repo  repository instance
+     * @param CacheInterface   $cache cache instance
      */
-    public function __construct(RepositoryInterface $repo, CacheInterface $cache)
+    public function __construct(ConfigRepository $repo, CacheInterface $cache)
     {
         $this->repo = $repo;
         $this->cache = $cache;
@@ -81,33 +82,13 @@ class CacheDecorator implements RepositoryInterface
      */
     public function find($siteKey, $name)
     {
-        list($head, $segments) = $this->parseName($name);
-        $data = $this->getData($siteKey, $head);
+        $data = $this->getData($siteKey, $this->getHead($name));
 
-        return is_null($data) ? null : $this->retrieve($data, $segments);
+        return Arr::first($data, function ($idx, $item) use ($name) {
+            return $item->name === $name;
+        });
     }
-
-    /**
-     * Retrieve cache data
-     *
-     * @param array $data     config data
-     * @param array $segments name segments
-     * @return ConfigEntity|null
-     */
-    protected function retrieve(array $data, $segments)
-    {
-        foreach ($segments as $idx => $segment) {
-            $name = implode('.', array_slice($segments, 0, $idx + 1));
-            $data = &$data[$name];
-
-            if ($idx < count($segments) - 1) {
-                $data = &$data['children'];
-            }
-        }
-
-        return isset($data['value']) ? $data['value'] : null;
-    }
-
+    
     /**
      * search ancestors getter
      *
@@ -115,33 +96,13 @@ class CacheDecorator implements RepositoryInterface
      * @param string $name    the name
      * @return array
      */
-    public function fetchParent($siteKey, $name)
+    public function fetchAncestor($siteKey, $name)
     {
-        list($head, $segments) = $this->parseName($name);
-        $data = $this->getData($siteKey, $head);
+        $data = $this->getData($siteKey, $this->getHead($name));
 
-        return is_null($data) ? [] : $this->getParentRecursive($data, $name);
-    }
-
-    /**
-     * search ancestors recursive
-     *
-     * @param array  $tree data tree
-     * @param string $name the name
-     * @return array
-     */
-    private function getParentRecursive($tree, $name)
-    {
-        $arr = [];
-        foreach ($tree as $nodeName => $node) {
-            if (Str::startsWith($name, $nodeName) && $name !== $nodeName) {
-                $arr = array_merge([$node['value']], $this->getParentRecursive($node['children'], $name));
-
-                break;
-            }
-        }
-
-        return $arr;
+        return Arr::where($data, function ($idx, $item) use ($name) {
+            return Str::startsWith($name, $item->name) && $name !== $item->name;
+        });
     }
 
     /**
@@ -151,56 +112,15 @@ class CacheDecorator implements RepositoryInterface
      * @param string $name    the name
      * @return array
      */
-    public function fetchChildren($siteKey, $name)
+    public function fetchDescendant($siteKey, $name)
     {
-        list($head, $segments) = $this->parseName($name);
-        $data = $this->getData($siteKey, $head);
+        $data = $this->getData($siteKey, $this->getHead($name));
 
-        return is_null($data) ? [] : $this->getChildrenRecursive($data, $name);
+        return Arr::where($data, function ($idx, $item) use ($name) {
+            return Str::startsWith($item->name, $name) && $name !== $item->name;
+        });
     }
-
-    /**
-     * search descendants recursive
-     *
-     * @param array  $tree data tree
-     * @param string $name the name
-     * @return array
-     */
-    private function getChildrenRecursive($tree, $name)
-    {
-        $arr = [];
-        foreach ($tree as $nodeName => $node) {
-            if (Str::startsWith($name, $nodeName)) {
-                if ($name === $nodeName) {
-                    $arr = $this->flattenChildren($node['children']);
-                } else {
-                    $arr = $this->getChildrenRecursive($node['children'], $name);
-                }
-
-                break;
-            }
-        }
-
-        return $arr;
-    }
-
-    /**
-     * flatten children tree into a single level
-     *
-     * @param array $tree data tree
-     * @return array
-     */
-    private function flattenChildren($tree)
-    {
-        $arr = [];
-        foreach ($tree as $nodeName => $node) {
-            $arr[] = $node['value'];
-            $arr = array_merge($arr, $this->flattenChildren($node['children']));
-        }
-
-        return $arr;
-    }
-
+    
     /**
      * save
      *
@@ -275,7 +195,7 @@ class CacheDecorator implements RepositoryInterface
      *
      * @param string $siteKey site key
      * @param string $head    root name
-     * @return array|null
+     * @return array
      */
     protected function getData($siteKey, $head)
     {
@@ -285,11 +205,11 @@ class CacheDecorator implements RepositoryInterface
             $cacheKey = $this->getCacheKey($key);
             if (!$data = $this->cache->get($cacheKey)) {
                 if (!$config = $this->repo->find($siteKey, $head)) {
-                    return null;
+                    return [];
                 }
 
-                $descendant = $this->repo->fetchChildren($siteKey, $head);
-                $data = $this->make($config, $descendant);
+                $descendant = $this->repo->fetchDescendant($siteKey, $head);
+                $data = array_merge([$config], $descendant);
                 $this->cache->put($cacheKey, $data);
             }
 
@@ -297,32 +217,6 @@ class CacheDecorator implements RepositoryInterface
         }
 
         return $this->bag[$key];
-    }
-
-    /**
-     * Make data for cache store
-     *
-     * @param ConfigEntity   $parent parent config
-     * @param ConfigEntity[] $items  config list
-     * @return array
-     */
-    protected function make(ConfigEntity $parent, array $items)
-    {
-        $children = Arr::where($items, function ($key, $child) use ($parent) {
-            return $parent->getDepth() + 1 == $child->getDepth() && Str::startsWith($child->name, $parent->name);
-        });
-
-        $arr = [];
-        foreach ($children as $child) {
-            $arr = array_merge($arr, $this->make($child, $items));
-        }
-
-        return [
-            $parent->name => [
-                'value' => $parent,
-                'children' => $arr,
-            ]
-        ];
     }
 
     /**
@@ -334,8 +228,7 @@ class CacheDecorator implements RepositoryInterface
      */
     protected function erase($siteKey, $name)
     {
-        list($head, $segments) = $this->parseName($name);
-        $key = $this->makeKey($siteKey, $head);
+        $key = $this->makeKey($siteKey, $this->getHead($name));
 
         unset($this->bag[$key]);
         $this->cache->forget($this->getCacheKey($key));
@@ -347,11 +240,11 @@ class CacheDecorator implements RepositoryInterface
      * @param string $name the name
      * @return array
      */
-    private function parseName($name)
+    private function getHead($name)
     {
         $segments = explode('.', $name);
 
-        return [reset($segments), $segments];
+        return reset($segments);
     }
 
     /**
@@ -361,7 +254,7 @@ class CacheDecorator implements RepositoryInterface
      * @param string $name    config name
      * @return string
      */
-    public function makeKey($siteKey, $name)
+    protected function makeKey($siteKey, $name)
     {
         return $siteKey . ':' . $name;
     }

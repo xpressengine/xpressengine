@@ -236,9 +236,7 @@
                 }
 
                 if(jsLen > 0) {
-                    for(var i = 0, max = jsLen; i < max; i += 1) {
-                        DynamicLoadManager.jsLoad(js[i], loadDone, loadDone);
-                    }
+                    DynamicLoadManager.jsLoadMultiple(js, loadDone, loadDone);
                 }
 
                 if((cssLen + jsLen) === 0) {

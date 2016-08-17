@@ -42,11 +42,14 @@ class PermissionHandlerTest extends \PHPUnit_Framework_TestCase
         $instance = new PermissionHandler($repo);
 
         $mockPermission = m::mock('Xpressengine\Permission\Permission');
+        $mockPermission->shouldReceive('get')->with('siteKey')->andReturn('default');
+        $mockPermission->shouldReceive('get')->with('name')->andReturn('foo.var');
+
         $mockParent = m::mock('Xpressengine\Permission\Permission');
         $mockParent->shouldReceive('get')->with('siteKey')->andReturn('default');
-        $mockParent->shouldReceive('get')->with('name')->andReturn('plugin');
+        $mockParent->shouldReceive('get')->with('name')->andReturn('foo');
 
-        $repo->shouldReceive('fetchAncestor')->once()->with($mockPermission)->andReturn([$mockParent]);
+        $repo->shouldReceive('fetchAncestor')->once()->with('default', 'foo.var')->andReturn([$mockParent]);
 
         $mockPermission->shouldReceive('addParent')->once()->with($mockParent);
 
