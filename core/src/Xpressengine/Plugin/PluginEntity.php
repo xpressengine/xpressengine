@@ -329,7 +329,7 @@ class PluginEntity implements Arrayable, Jsonable
     public function needUpdateInstall()
     {
         $installedVersion = $this->getInstalledVersion();
-        return !$this->checkInstalled() || !$this->checkUpdated($installedVersion);
+        return !$this->checkInstalled($installedVersion) || !$this->checkUpdated($installedVersion);
     }
 
     /**
