@@ -8,11 +8,13 @@
         };
 
         return {
-            jsLoadMultiple: function(arrjs) {
+            jsLoadMultiple: function(arrjs, load, error) {
                 var html = "";
 
                 for(var i = 0, max = arrjs.length; i < max; i += 1) {
-                    html += "<script src='" + arrjs[i] + "'></script>";
+                    if(!_assets.js.hasOwnProperty(arrjs[i])) {
+                        html += "<script src='" + arrjs[i] + "' onload='" + load + "' onerror='" + error + "'></script>";
+                    }
                 }
 
                 $("head").append(html);
