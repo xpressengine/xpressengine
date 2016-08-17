@@ -56,9 +56,11 @@ namespace Xpressengine\Tests\Widget {
         /**
          * getSettingForm
          *
+         * @param array $args
+         *
          * @return string
          */
-        public function getCodeCreationForm()
+        public function renderSetting(array $args = [])
         {
             return 'fake Setup String';
         }
@@ -86,11 +88,11 @@ namespace Xpressengine\Tests\Widget {
         /**
          * render
          *
-         * @param array $args to render parameter array
-         *
          * @return mixed
+         * @internal param array $args to render parameter array
+         *
          */
-        public function render(array $args)
+        public function render()
         {
             $dummyView = m::mock('Illuminate\Contracts\Support\Renderable');
             $dummyView->shouldReceive('render')->andReturn('fake Render String');
@@ -158,11 +160,11 @@ namespace Xpressengine\Tests\Widget {
         }
 
         /**
-         * testCreate
+         * testRender
          *
          * @return void
          */
-        public function testCreate()
+        public function testRender()
         {
             $widgetHandler = new WidgetHandler($this->register, $this->guard, $this->factory, false);
 
@@ -175,17 +177,17 @@ namespace Xpressengine\Tests\Widget {
             $guard = $this->guard;
             $guard->shouldReceive('user')->andReturn($mockUser);
 
-            $fakeWidgetRenderString = $widgetHandler->create('testWidgetId', []);
+            $fakeWidgetRenderString = $widgetHandler->render('testWidgetId', []);
 
             $this->assertEquals('fake Render String', $fakeWidgetRenderString);
         }
 
         /**
-         * testCreateNoGuard
+         * testRenderNoGuard
          *
          * @return void
          */
-        public function testCreateNoGuard()
+        public function testRenderNoGuard()
         {
             $widgetHandler = new WidgetHandler($this->register, $this->guard, $this->factory, false);
 
@@ -198,17 +200,17 @@ namespace Xpressengine\Tests\Widget {
             $guard = $this->guard;
             $guard->shouldReceive('user')->andReturn($mockUser);
 
-            $fakeWidgetRenderString = $widgetHandler->create('testWidgetId', []);
+            $fakeWidgetRenderString = $widgetHandler->render('testWidgetId', []);
 
             $this->assertEquals('', $fakeWidgetRenderString);
         }
 
         /**
-         * testCreateExceptionOccurOnSuper
+         * testRenderExceptionOccurOnSuper
          *
          * @return void
          */
-        public function testCreateExceptionOccurOnSuper()
+        public function testRenderExceptionOccurOnSuper()
         {
             $widgetHandler = new WidgetHandler($this->register, $this->guard, $this->factory, false);
 
@@ -225,17 +227,17 @@ namespace Xpressengine\Tests\Widget {
             $view->shouldReceive('make')->andReturn($view);
             $view->shouldReceive('render')->andReturn('widget error occur!');
 
-            $fakeWidgetRenderString = $widgetHandler->create('testWidgetId', []);
+            $fakeWidgetRenderString = $widgetHandler->render('testWidgetId', []);
 
             $this->assertEquals('widget error occur!', $fakeWidgetRenderString);
         }
 
         /**
-         * testCreateExceptionOccurOnGuest
+         * testRenderExceptionOccurOnGuest
          *
          * @return void
          */
-        public function testCreateExceptionOccurOnGuest()
+        public function testRenderExceptionOccurOnGuest()
         {
             $widgetHandler = new WidgetHandler($this->register, $this->guard, $this->factory, false);
 
@@ -248,7 +250,7 @@ namespace Xpressengine\Tests\Widget {
             $guard = $this->guard;
             $guard->shouldReceive('user')->andReturn($mockUser);
 
-            $fakeWidgetRenderString = $widgetHandler->create('testWidgetId', []);
+            $fakeWidgetRenderString = $widgetHandler->render('testWidgetId', []);
 
             $this->assertEquals('', $fakeWidgetRenderString);
         }
@@ -258,14 +260,14 @@ namespace Xpressengine\Tests\Widget {
          *
          * @return void
          */
-        public function testSetUp()
-        {
+        public function testSetup()
+            {
             $widgetHandler = new WidgetHandler($this->register, $this->guard, $this->factory, false);
 
             $register = $this->register;
             $register->shouldReceive('get')->andReturn($this->fakeWidgetClassName);
 
-            $fakeWidgetSetupString = $widgetHandler->setUp('testWidgetId');
+            $fakeWidgetSetupString = $widgetHandler->setup('testWidgetId');
 
             $this->assertEquals('fake Setup String', $fakeWidgetSetupString);
 
@@ -285,7 +287,7 @@ namespace Xpressengine\Tests\Widget {
             $register = $this->register;
             $register->shouldReceive('get')->andReturn(null);
 
-            $fakeWidgetSetupString = $widgetHandler->setUp('testWidgetId');
+            $fakeWidgetSetupString = $widgetHandler->setup('testWidgetId');
 
         }
 
@@ -343,7 +345,7 @@ namespace Xpressengine\Tests\Widget {
                 'args3' => 'value3',
             ];
 
-            $resultString = $widgetHandler->getGeneratedCode($id, $inputs);
+            $resultString = $widgetHandler->generateCode($id, $inputs);
 
             $this->assertEquals("<xewidget id='fakeWidgetId'><param title='args1'>value1</param><param title='args2'>value2</param><param title='args3'>value3</param></xewidget>",
                 $resultString);

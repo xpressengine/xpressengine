@@ -20,7 +20,6 @@ return [
     ],
 
     'settings' => [
-
         /*
         |--------------------------------------------------------------------------
         | Settings Page Theme
@@ -400,6 +399,7 @@ return [
             'permission' => 'uiobject/xpressengine@permission',
             'themeSelect' => 'uiobject/xpressengine@themeSelect',
             'captcha' => 'uiobject/xpressengine@captcha',
+            'widget' => 'uiobject/xpressengine@widgetGenerator',
         ]
     ],
 
@@ -411,6 +411,10 @@ return [
             'error' => 'error/skin/xpressengine@default',
         ],
         'defaultSettingsSkins' => [
+        ],
+        'storage' => [
+            'disk' => 'local',
+            'path' => 'public/skin/'
         ]
     ],
 

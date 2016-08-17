@@ -79,6 +79,10 @@ class Html
     {
         $output = '';
 
+        if(static::$sorter === null) {
+            return $output;
+        }
+
         // get files by location
         // $list is assoc array(filename => Html instance)
         $list = array_get(static::$htmlList, $location, []);

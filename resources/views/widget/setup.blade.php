@@ -1,4 +1,10 @@
-<div class="col-md-12">
-@yield('setup')
-<button type="button" class="btn btn-default __xe_btn_getCode">Append</button>
-</div>
+<form id="widgetForm" action="{{ route('settings.widget.generate') }}" method="post">
+    <input type="hidden" name="@id" value="{{ $widget }}">
+    {!! $widgetForm !!}
+</form>
+<form id="skinForm" action="{{ route('settings.widget.generate') }}">
+    <input type="hidden" name="@id" value="{{ $skin->getId() }}">
+    {!! $skinForm !!}
+</form>
+
+

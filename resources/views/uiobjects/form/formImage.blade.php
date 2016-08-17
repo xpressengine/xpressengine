@@ -10,12 +10,12 @@
             <input class="__xe_file_{{ $seq }}" type="file" name="{{ array_get($args, 'name', 'image') }}"/>
         </a>
         <div class="__xe_file_preview_{{ $seq }}">
-            @if(isset($args['value']))
-                <img class="__thumbnail center-block" src="{{ asset(array_get($args,'value.path')) }}"
+            @if($src = array_get($args, 'value.path'))
+                <img class="__thumbnail center-block" src="{{ asset($src) }}"
                      style="max-width: 100%; width:{{ $args['width'] }}px; height:auto;">
             {{-- @deprecated: image 대신 value를 사용하는 것을 권장 --}}
-            @elseif(isset($args['image']))
-                <img class="__thumbnail center-block" src="{{ asset($args['image']) }}"
+            @elseif($src = array_get($args, 'image'))
+                <img class="__thumbnail center-block" src="{{ asset($src) }}"
                      style="max-width: 100%; width:{{ $args['width'] }}px; height:auto;">
             @endif
         </div>

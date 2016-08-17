@@ -1,4 +1,5 @@
 composer.lock
+composer.user.json
 /vendor
 !/assets/vendor
 .env

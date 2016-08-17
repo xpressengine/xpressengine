@@ -26,33 +26,23 @@ class ContentInfo extends AbstractWidget
     protected static $id = 'widget/xpressengine@contentInfo';
 
     /**
-     * init
+     * 위젯의 이름을 반환한다.
      *
-     * @return mixed
+     * @return string
      */
-    protected function init()
+    public static function getTitle()
     {
-        // TODO: Implement init() method.
-    }
-
-    /**
-     * getCodeCreationForm
-     *
-     * @return mixed
-     */
-    public function getCodeCreationForm()
-    {
-        // TODO: Implement getCodeCreationForm() method.
+        return '콘텐츠 현황 위젯';
     }
 
     /**
      * render
      *
-     * @param array $args to render parameter array
-     *
      * @return mixed
+     * @internal param array $args to render parameter array
+     *
      */
-    public function render(array $args)
+    public function render()
     {
         $viewData = [
             'totalDocument' => Document::count(),

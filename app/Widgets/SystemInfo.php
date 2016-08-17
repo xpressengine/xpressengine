@@ -25,35 +25,42 @@ class SystemInfo extends AbstractWidget
     protected static $id = 'widget/xpressengine@systemInfo';
 
     /**
-     * init
+     * 위젯의 이름을 반환한다.
      *
-     * @return mixed
+     * @return string
      */
-    protected function init()
+    public static function getTitle()
     {
-        // TODO: Implement init() method.
+        return '시스템 정보 위젯';
     }
 
     /**
      * getCodeCreationForm
      *
+     * @param array $args
+     *
      * @return mixed
      */
-    public function getCodeCreationForm()
+    public function renderSetting(array $args = [])
     {
-        // TODO: Implement getCodeCreationForm() method.
+        // TODO: Implement renderSetting() method.
+        $inputs = [
+            uio('formText', ['name'=>'title', 'label'=>'title']),
+            uio('formText', ['name'=>'description', 'label'=>'설명'])
+        ];
+
+        return implode('', $inputs);
     }
 
     /**
      * render
      *
-     * @param array $args to render parameter array
-     *
      * @return mixed
+     * @internal param array $args to render parameter array
+     *
      */
-    public function render(array $args)
+    public function render()
     {
-
         $request = app('request');
 
         $viewData = [

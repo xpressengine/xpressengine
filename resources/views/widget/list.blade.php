@@ -4,8 +4,8 @@
     <div class="col-md-12">
         <input type="hidden" name="targetId" id="targetId" value="{{$targetId}}">
         <div class="form-group">
-            <label for="">{{xe_trans('xe::selectWidget}}</label>
-            <p class="desc-text">{{xe_trans('xe::selectWidgetDescription')}}</p>
+            <label for="">{{ xe_trans('xe::selectWidget') }}</label>
+            <p class="desc-text">{{ xe_trans('xe::selectWidgetDescription') }}</p>
             <select id="widget" name="widget" class="form-control">
                 @foreach ($widgets as $id => $widget)
                     <option value="{{ $id }}" >

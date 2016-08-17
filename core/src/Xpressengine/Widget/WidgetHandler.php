@@ -14,7 +14,6 @@
 
 namespace Xpressengine\Widget;
 
-use Closure;
 use Exception;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Contracts\View\Factory;
@@ -139,17 +138,17 @@ class WidgetHandler
      *
      * @param string $widgetId widget id
      *
-     * @return mixed
+     * @return AbstractWidget
      * @throws Exception
      */
-    protected function getInstance($widgetId)
+    protected function getInstance($widgetId, $args = null)
     {
         $className = $this->getClassName($widgetId);
         if ($className === null) {
             throw new NotFoundWidgetException(['id' => $widgetId]);
         }
 
-        $instance = new $className();
+        $instance = new $className($args);
         return $instance;
     }
 
@@ -162,15 +161,15 @@ class WidgetHandler
      * @return mixed
      * @throws Exception
      */
-    public function create($widgetId, $args = [])
+    public function render($widgetId, $args = [])
     {
         $currentUserRating = $this->guard->user()->getRating();
 
         try {
-            $instance = $this->getInstance($widgetId);
+            $instance = $this->getInstance($widgetId, $args);
 
             if (in_array($currentUserRating, $instance::$ratingWhiteList)) {
-                $ret = $instance->render($args);
+                $ret = $instance->render();
                 if ($ret instanceof Renderable) {
                     $ret = $ret->render();
                 }
@@ -195,11 +194,10 @@ class WidgetHandler
      * @return mixed
      * @throws Exception
      */
-    public function setUp($widgetId)
+    public function setup($widgetId, $configs = [])
     {
         $instance = $this->getInstance($widgetId);
-
-        return $instance->getCodeCreationForm();
+        return $instance->renderSetting($configs);
     }
 
     /**
@@ -228,18 +226,49 @@ class WidgetHandler
      *
      * @return string
      */
-    public function getGeneratedCode($widgetId, array $inputs)
+    public function generateCode($widgetId, array $inputs)
     {
-        $codeString = [
-            "<xewidget id='{$widgetId}'>"
-        ];
+        $widget = $this->getInstance($widgetId);
+
+        $inputs = $widget->resolveSetting($inputs);
+
+        return $this->generateXml('xewidget', $inputs);
+    }
+
+    /**
+     * xml string을 생성하여 반환한다. element명과 element의 attr, child elements 정보를 입력받는다.
+     *
+     * @param string $element
+     * @param array  $inputs
+     * @param int    $depth
+     *
+     * @return string
+     */
+    public function generateXml($element, $inputs, $depth = 0)
+    {
+        $attr = [];
+        $children = [];
+        $space = str_repeat('  ', $depth);
         foreach ($inputs as $k => $v) {
-            $paramString = sprintf("<param title='%s'>%s</param>", $k, $v);
-            array_push($codeString, $paramString);
+            // attribute
+            if(strpos($k, '@') === 0) {
+                $attr[substr($k, 1)] = (string) $v;
+            } elseif (is_array($v)) {
+                $children[] = $this->generateXml($k, $v, $depth + 1);
+            } else {
+                $children[] = sprintf("  %s<%s>%s</%s>".PHP_EOL, $space, $k, $v, $k);
+            }
         }
 
-        $codeString[] = "</xewidget>";
+        $attrStr = '';
+        array_walk($attr, function($value, $key) use (&$attrStr) {
+            $attrStr .= ' '.$key.'="'.$value.'"';
+        });
 
-        return implode("", $codeString);
+        $xml = $space.'<'.$element.$attrStr.'>'.PHP_EOL
+               .implode('', $children)
+        .$space.'</'.$element.'>'.PHP_EOL;
+
+        return $xml;
     }
 }

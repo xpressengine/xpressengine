@@ -14,20 +14,21 @@ use ReflectionClass;
 use Symfony\Component\Process\Process;
 use Xpressengine\Plugin\PluginEntity;
 
-class ThemeMake extends Command
+class SkinMake extends Command
 {
-    protected $signature = 'make:theme
-                        {path : The path of theme directory started with plugin_id}
-                        {title : The title of the theme}
-                        {--id= : The path of theme class file}
-                        {--description= : The description of the theme}';
+    protected $signature = 'make:skin
+                        {path : The path of skin directory started with plugin_id}
+                        {target : The target id of this skin}
+                        {title : The title of the skin}
+                        {--id= : The path of skin class file}
+                        {--description= : The description of the skin}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create a new theme of XpressEngine';
+    protected $description = 'Create a new skin';
 
     /**
      * The filesystem instance.
@@ -65,48 +66,49 @@ class ThemeMake extends Command
         $pluginClass = new ReflectionClass($plugin->getClass());
         $namespace = $pluginClass->getNamespaceName();
 
-        // get theme info
+        // get skin info
         $path = $this->getPath();
-        $themeClass = studly_case(str_replace('/',' ',$path));
-        $themeFile = $this->getThemeFile($plugin, $path, $themeClass); // path_to_theme_dir/Theme.php
-        $themeId = $this->getThemeId($plugin, $themeClass); // myplugin@theme
-        $themeTitle = $this->getThemeTitle();
-        $description = $this->getThemeDescription($themeId, $plugin);
+        $skinClass = studly_case(basename($path)).'Skin';
+        $skinFile = $this->getSkinFile($plugin, $path, $skinClass); // path_to_skin_dir/Skin.php
+        $skinTarget = $this->getSkinTarget();
+        $skinId = $this->getSkinId($plugin, $skinClass, $skinTarget); // myplugin@skin
+        $skinTitle = $this->getSkinTitle();
+        $description = $this->getSkinDescription($skinId, $plugin);
 
         $this->attr = compact(
             'plugin',
             'path',
             'pluginClass',
             'namespace',
-            'themeClass',
-            'themeFile',
-            'themeId',
-            'themeTitle',
+            'skinClass',
+            'skinTarget',
+            'skinFile',
+            'skinId',
+            'skinTitle',
             'description'
         );
 
-        // print and confirm the information of theme
-        if($this->confirmInfo() === false){
+        // print and confirm the information of skin
+        if ($this->confirmInfo() === false) {
             return false;
         }
 
         try {
-            $this->copyThemeDirectory();
-            $this->makeThemeClass();
+            $this->copySkinDirectory();
+            $this->makeSkinClass();
 
             // composer.json 파일 수정
-            if($this->registerTheme() === false) {
+            if ($this->registerSkin() === false) {
                 throw new \Exception('Writing to composer.json file was failed.');
             }
 
             $this->runComposerDump($plugin->getPath());
-
         } catch (\Exception $e) {
             $this->clean();
             throw $e;
         }
 
-        $this->info("Theme is created successfully.");
+        $this->info("Skin is created successfully.");
 
         //$this->info("See ./plugins/$name directory. And open $url in your browser.");
         //$this->info("Input and modify your plugin information in ./plugins/$name/composer.json file.");
@@ -142,13 +144,20 @@ class ThemeMake extends Command
          * DummyNamespace
          * DummyClass
          * DummyPluginId
-         * DummyThemeDirname
+         * DummySkinDirname
         */
 
-        $this->replaceCode($code, 'DummyNamespace', $this->attr('namespace').'\\Theme')
-            ->replaceCode($code, 'DummyClass', $this->attr('themeClass'))
-            ->replaceCode($code, 'DummyPluginId', $this->attr('plugin')->getId())
-            ->replaceCode($code, 'DummyThemeDirname', $this->attr('path'));
+        $this->replaceCode($code, 'DummyNamespace', $this->attr('namespace').'\\Skin')->replaceCode(
+                $code,
+                'DummyClass',
+                $this->attr(
+                    'skinClass'
+                )
+            )->replaceCode($code, 'DummyPluginId', $this->attr('plugin')->getId())->replaceCode(
+                $code,
+                'DummySkinDirname',
+                $this->attr('path')
+            );
 
         return $code;
     }
@@ -179,36 +188,36 @@ class ThemeMake extends Command
     }
 
     /**
-     * getThemeId
+     * getSkinId
      *
      * @param PluginEntity $plugin
-     * @param              $class
+     * @param string       $class
+     * @param string       $skinTarget
      *
      * @return array|string
      * @throws \Exception
      * @internal param $file
-     *
      */
-    protected function getThemeId(PluginEntity $plugin, $class)
+    protected function getSkinId(PluginEntity $plugin, $class, $skinTarget)
     {
         $id = $this->option('id');
 
-        if(!$id) {
+        if (!$id) {
             $id = $plugin->getId().'@'.strtolower($class);
         } else {
-            if(strpos('theme/', $id) === 0) {
+            if (strpos('skin/', $id) === 0) {
                 $id = substr($id, 6);
             }
 
-            if(strpos($id, '@') === false) {
+            if (strpos($id, '@') === false) {
                 $id = $plugin->getId().'@'.$id;
             }
         }
 
-        $theme = \App::make('xe.theme')->getTheme('theme/'.$id);
+        $skin = \App::make('xe.skin')->get($skinTarget.'/skin/'.$id);
 
-        if($theme !== null) {
-            throw new \Exception("Theme[$theme] already exists.");
+        if ($skin !== null) {
+            throw new \Exception("Skin[$skin] already exists.");
         }
 
         return $id;
@@ -227,15 +236,15 @@ class ThemeMake extends Command
         list($plugin, $path) = explode('/', $path, 2);
 
         $plugin = app('xe.plugin')->getPlugin($plugin);
-        if($plugin === null) {
-            throw new \Exception("Unable to find a plugin to locate the theme file. plugin[$plugin] is not found.");
+        if ($plugin === null) {
+            throw new \Exception("Unable to find a plugin to locate the skin file. plugin[$plugin] is not found.");
         }
 
         return $plugin;
     }
 
     /**
-     * get theme directory
+     * get skin directory
      *
      * @param $file
      *
@@ -250,46 +259,56 @@ class ThemeMake extends Command
     }
 
     /**
-     * getThemeTitle
+     * getSkinTitle
      *
      * @return array|string
      */
-    protected function getThemeTitle()
+    protected function getSkinTitle()
     {
         return $this->argument('title');
     }
 
     /**
-     * getThemeDescription
+     * getSkinTarget
+     *
+     * @return array|string
+     */
+    protected function getSkinTarget()
+    {
+        return $this->argument('target');
+    }
+
+    /**
+     * getSkinDescription
      *
      * @param $id
      * @param $plugin
      *
      * @return array|string
      */
-    protected function getThemeDescription($id, PluginEntity $plugin)
+    protected function getSkinDescription($id, PluginEntity $plugin)
     {
         $description = $this->option('description');
-        if(!$description) {
-            $description = 'The Theme supported by '.ucfirst($plugin->getId()).' plugin.';
+        if (!$description) {
+            $description = 'The Skin supported by '.ucfirst($plugin->getId()).' plugin.';
         }
         return $description;
     }
 
     /**
-     * getThemeFile
+     * getSkinFile
      *
      * @param PluginEntity $plugin
      * @param              $path
-     * @param              $themeClass
+     * @param              $skinClass
      *
      * @return array|string
      * @throws \Exception
      */
-    protected function getThemeFile(PluginEntity $plugin, $path, $themeClass)
+    protected function getSkinFile(PluginEntity $plugin, $path, $skinClass)
     {
-        $path = $path."/$themeClass.php";
-        if(file_exists($plugin->getPath($path))) {
+        $path = $path."/$skinClass.php";
+        if (file_exists($plugin->getPath($path))) {
             throw new \Exception("file[$path] already exists.");
         }
         return $path;
@@ -300,30 +319,32 @@ class ThemeMake extends Command
      *
      * @return bool
      */
-    protected function confirmInfo() {
+    protected function confirmInfo()
+    {
         $this->info(
             sprintf(
-                "[New theme info]
+                "[New skin info]
   plugin:\t %s
   path:\t\t %s/%s
   class file:\t %s/%s
   class name:\t %s
-  id:\t\t theme/%s
+  id:\t\t %s/skin/%s
   title:\t %s
   description:\t %s",
                 $this->attr['plugin']->getId(),
                 $this->attr['plugin']->getId(),
                 $this->attr['path'],
                 $this->attr['plugin']->getId(),
-                $this->attr['themeFile'],
-                $this->attr['namespace'].'\\'.$this->attr['themeClass'],
-                $this->attr['themeId'],
-                $this->attr['themeTitle'],
+                $this->attr['skinFile'],
+                $this->attr['namespace'].'\\'.$this->attr['skinClass'],
+                $this->attr['skinTarget'],
+                $this->attr['skinId'],
+                $this->attr['skinTitle'],
                 $this->attr['description']
-              )
+            )
         );
 
-        while ($confirm = $this->ask('Do you want to add theme? [yes|no]')) {
+        while ($confirm = $this->ask('Do you want to add skin? [yes|no]')) {
             if ($confirm === 'yes') {
                 return true;
             } else {
@@ -333,17 +354,17 @@ class ThemeMake extends Command
     }
 
     /**
-     * makeThemeClass
+     * makeSkinClass
      *
      * @throws \Exception
      */
-    protected function makeThemeClass()
+    protected function makeSkinClass()
     {
         $plugin = $this->attr('plugin');
-        $themeFile = $this->attr('themeFile');
-        $path = $plugin->getPath($themeFile);
+        $skinFile = $this->attr('skinFile');
+        $path = $plugin->getPath($skinFile);
 
-        $code = $this->buildCode('theme/theme.stub');
+        $code = $this->buildCode('skin/skin.stub');
 
         $this->files->put($path, $code);
     }
@@ -381,7 +402,7 @@ class ThemeMake extends Command
     }
 
     /**
-     * registerTheme
+     * registerSkin
      *
      * @param $plugin
      * @param $id
@@ -393,21 +414,21 @@ class ThemeMake extends Command
      * @throws \Exception
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    protected function registerTheme()
+    protected function registerSkin()
     {
         $plugin = $this->attr('plugin');
-        $id = 'theme/'.$this->attr('themeId');
-        $class = $this->attr('namespace').'\\Theme\\'.$this->attr('themeClass');
-        $title = $this->attr('themeTitle');
+        $id = $this->attr('skinTarget').'/skin/'.$this->attr('skinId');
+        $class = $this->attr('namespace').'\\Skin\\'.$this->attr('skinClass');
+        $title = $this->attr('skinTitle');
         $description = $this->attr('description');
-        $themeFile = $this->attr('themeFile');
+        $skinFile = $this->attr('skinFile');
 
         // add component
         $composerStr = $this->files->get($plugin->getPath('composer.json'));
         $this->originComposerStr = $composerStr;
         $json = json_decode($composerStr);
         $component = data_get($json, 'extra.xpressengine.component');
-        if(isset($component->$id)) {
+        if (isset($component->$id)) {
             throw new \Exception(sprintf('component[%s] already exists.', $id));
         }
         $component->$id = new \stdClass();
@@ -418,10 +439,10 @@ class ThemeMake extends Command
 
         // add autoload
         $classmap = data_get($json, 'autoload.classmap', []);
-        if(!in_array($themeFile, $classmap)) {
-            $classmap[] = $themeFile;
+        if (!in_array($skinFile, $classmap)) {
+            $classmap[] = $skinFile;
         };
-        if(!isset($json->autoload)) {
+        if (!isset($json->autoload)) {
             $json->autoload = new \stdClass();
         }
         $json->autoload->classmap = $classmap;
@@ -446,14 +467,14 @@ class ThemeMake extends Command
         $plugin = $this->attr('plugin');
         $path = $this->attr('path');
 
-        // delete theme path
-        if(is_writable($plugin->getPath($path))) {
+        // delete skin path
+        if (is_writable($plugin->getPath($path))) {
             $this->files->deleteDirectory($plugin->getPath($path));
         }
 
         // unregister component from composer.json
         $composerFile = $plugin->getPath('composer.json');
-        if($this->originComposerStr !== null && is_writable($composerFile)) {
+        if ($this->originComposerStr !== null && is_writable($composerFile)) {
             $this->files->put($composerFile, $this->originComposerStr);
         }
     }
@@ -470,19 +491,16 @@ class ThemeMake extends Command
         return array_get($this->attr, $key);
     }
 
-    protected function copyThemeDirectory()
+    protected function copySkinDirectory()
     {
         $plugin = $this->attr('plugin');
         $path = $plugin->getPath($this->attr('path'));
 
-        if(!$this->files->copyDirectory(__DIR__.'/stubs/theme', $path)) {
-            throw new \Exception("Unable to create theme directory[$path]. please check permission.");
+        if (!$this->files->copyDirectory(__DIR__.'/stubs/skin', $path)) {
+            throw new \Exception("Unable to create skin directory[$path]. please check permission.");
         }
         rename($path.'/info.stub', $path.'/info.php');
-        rename($path.'/views/gnb.blade.stub', $path.'/views/gnb.blade.php');
-        rename($path.'/views/theme.blade.stub', $path.'/views/theme.blade.php');
-        unlink($path.'/theme.stub');
+        rename($path.'/views/index.blade.stub', $path.'/views/index.blade.php');
+        unlink($path.'/skin.stub');
     }
-
-
 }
