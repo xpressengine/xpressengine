@@ -26,6 +26,8 @@
                     var src = arrjs[i].split('?')[0];
 
                     if(!_assets.js.hasOwnProperty(src)) {
+                        _assets.js[src] = '';
+
                         $.ajax({
                             url: src,
                             async: false,
@@ -43,6 +45,10 @@
                             },
                             error: callbackObj.error
                         });
+                    }else {
+                        if(!!callbackObj.load) {
+                            callbackObj.load();
+                        }
                     }
                 }
 
@@ -67,7 +73,7 @@
 
                     document.head.appendChild(el);
 
-                    _assets.js[src] = "";
+                    _assets.js[src] = '';
 
                 }else {
                     if(load) {
