@@ -47,6 +47,12 @@ abstract class AbstractWidget implements ComponentInterface, Renderable
     public function __construct($config = null)
     {
         $this->config = $config;
+        $this->init();
+    }
+
+    protected function init()
+    {
+
     }
 
     /**
