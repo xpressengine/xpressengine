@@ -9,8 +9,18 @@
         };
 
         return {
-            jsLoadMultiple: function (arrjs, load, error) {
-                var html = "";
+            /**
+             * @param {array} arrjs
+             * @param {object}} callbackObj
+             * <pre>
+             *     - load
+             *     - error
+             *     - complete
+             * </pre>
+             * */
+            jsLoadMultiple: function (arrjs, callbackObj) {
+                var count = 0;
+                var callbackObj = callbackObj || {};
 
                 for(var i = 0, max = arrjs.length; i < max; i += 1) {
                     var src = arrjs[i].split('?')[0];
@@ -20,13 +30,23 @@
                             url: src,
                             async: false,
                             dataType: "script",
-                            success: load,
-                            error: error
+                            success: function() {
+                                count++;
+
+                                if(!!callbackObj.load) {
+                                    callbackObj.load();
+                                }
+
+                                if(count === arrjs.length && !!callbackObj.complete) {
+                                    callbackObj.complete();
+                                }
+                            },
+                            error: callbackObj.error
                         });
                     }
                 }
 
-                $("head").append(html);
+                //$("head").append(html);
             },
             jsLoad: function (url, load, error) {
 

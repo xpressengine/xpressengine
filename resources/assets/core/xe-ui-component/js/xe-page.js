@@ -236,7 +236,10 @@
                 }
 
                 if(jsLen > 0) {
-                    DynamicLoadManager.jsLoadMultiple(js, loadDone, loadDone);
+                    DynamicLoadManager.jsLoadMultiple(js, {
+                        load: loadDone,
+                        error: loadDone
+                    });
                 }
 
                 if((cssLen + jsLen) === 0) {
