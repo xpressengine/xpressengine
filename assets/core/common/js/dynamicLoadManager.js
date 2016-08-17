@@ -1,4 +1,5 @@
 (function(exports) {
+
     'use strict';
 
     exports.DynamicLoadManager = function() {
@@ -8,18 +9,26 @@
         };
 
         return {
-            jsLoadMultiple: function(arrjs, load, error) {
+            jsLoadMultiple: function (arrjs, load, error) {
                 var html = "";
 
                 for(var i = 0, max = arrjs.length; i < max; i += 1) {
-                    if(!_assets.js.hasOwnProperty(arrjs[i])) {
-                        html += "<script src='" + arrjs[i] + "' onload='" + load + "' onerror='" + error + "'></script>";
+                    var src = arrjs[i].split('?')[0];
+
+                    if(!_assets.js.hasOwnProperty(src)) {
+                        $.ajax({
+                            url: src,
+                            async: false,
+                            dataType: "script",
+                            success: load,
+                            error: error
+                        });
                     }
                 }
 
                 $("head").append(html);
             },
-            jsLoad: function(url, load, error) {
+            jsLoad: function (url, load, error) {
 
                 var src = url.split('?')[0];
 
@@ -46,7 +55,7 @@
                     }
                 }
             },
-            cssLoad: function(url, load, error) {
+            cssLoad: function (url, load, error) {
                 var src = url.split("?")[0];
 
                 if(!_assets.css.hasOwnProperty(src)) {
