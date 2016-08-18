@@ -37,7 +37,6 @@ class Translation
 {
     use AttributeTrait;
     use MinifyTrait;
-    use SortTrait;
     use TargetTrait;
     use EmptyStringTrait;
 

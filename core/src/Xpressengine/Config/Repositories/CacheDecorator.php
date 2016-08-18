@@ -14,6 +14,9 @@
 
 namespace Xpressengine\Config\Repositories;
 
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use Xpressengine\Config\ConfigRepository;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Support\CacheInterface;
 
@@ -28,8 +31,15 @@ use Xpressengine\Support\CacheInterface;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class CacheDecorator extends AbstractDecorator
+class CacheDecorator implements ConfigRepository
 {
+    /**
+     * repository instance
+     *
+     * @var ConfigRepository
+     */
+    protected $repo;
+
     /**
      * cache instance
      *
@@ -54,13 +64,12 @@ class CacheDecorator extends AbstractDecorator
     /**
      * create instance
      *
-     * @param RepositoryInterface $repo  repository instance
-     * @param CacheInterface      $cache cache instance
+     * @param ConfigRepository $repo  repository instance
+     * @param CacheInterface   $cache cache instance
      */
-    public function __construct(RepositoryInterface $repo, CacheInterface $cache)
+    public function __construct(ConfigRepository $repo, CacheInterface $cache)
     {
-        parent::__construct($repo);
-
+        $this->repo = $repo;
         $this->cache = $cache;
     }
 
@@ -73,107 +82,45 @@ class CacheDecorator extends AbstractDecorator
      */
     public function find($siteKey, $name)
     {
-        $key = $this->makeKey($siteKey, $name);
-        if (!isset($this->bag[$key]) || $this->bag[$key] === null) {
-            if (!$config = $this->retrieve($key)) {
-                if ($config = $this->repo->find($siteKey, $name)) {
-                    $this->put($config);
-                }
-            }
+        $data = $this->getData($siteKey, $this->getHead($name));
 
-            $this->bag[$key] = $config;
-        }
-
-        return $this->bag[$key];
+        return Arr::first($data, function ($idx, $item) use ($name) {
+            return $item->name === $name;
+        });
     }
-
+    
     /**
-     * Retrieve cache data
+     * search ancestors getter
      *
-     * @param string $key config name
-     * @return mixed
-     */
-    protected function retrieve($key)
-    {
-        $segments = explode('.', $key);
-        $head = reset($segments);
-
-        $cache = $this->getAll($head);
-
-        foreach ($segments as $idx => $segment) {
-            $cache = &$cache[$segment];
-            if ($idx < count($segments) - 1) {
-                $cache = &$cache['children'];
-            }
-        }
-
-        return isset($cache['value']) ? $cache['value'] : null;
-    }
-
-    /**
-     * All cache data by head keyword
-     *
-     * @param string $head head keyword
-     * @return mixed
-     */
-    protected function getAll($head)
-    {
-        return $this->cache->get($this->getCacheKey($head));
-    }
-
-    /**
-     * Store data to cache
-     *
-     * @param ConfigEntity $config config object
-     * @return void
-     */
-    protected function put(ConfigEntity $config)
-    {
-        $key = $this->makeKey($config->siteKey, $config->name);
-        $segments = explode('.', $key);
-        $head = reset($segments);
-
-        $cache = $this->getAll($head);
-        $cache = $this->make($cache, $segments, $config);
-
-        $this->cache->put($this->getCacheKey($head), $cache);
-    }
-
-    /**
-     * Make data for cache store
-     *
-     * @param array|null $arr      previous cache data
-     * @param array      $segments config name parse to array
-     * @param mixed      $val      value to be set
+     * @param string $siteKey site key
+     * @param string $name    the name
      * @return array
      */
-    protected function make($arr, $segments, $val)
+    public function fetchAncestor($siteKey, $name)
     {
-        if (is_array($arr) !== true) {
-            $arr = [];
-        }
+        $data = $this->getData($siteKey, $this->getHead($name));
 
-        $segment = array_shift($segments);
-        if (isset($arr[$segment]) !== true) {
-            $arr[$segment] = [
-                'value' => null,
-                'children' => []
-            ];
-        }
-
-        if (count($segments) > 0) {
-            $arr[$segment]['children'] = $this->make($arr[$segment]['children'], $segments, $val);
-        } else {
-            if ($val !== null) {
-                $arr[$segment]['value'] = $val;
-            } else {
-                unset($arr[$segment]);
-            }
-        }
-
-        return $arr;
+        return Arr::where($data, function ($idx, $item) use ($name) {
+            return Str::startsWith($name, $item->name) && $name !== $item->name;
+        });
     }
 
+    /**
+     * search descendants getter
+     *
+     * @param string $siteKey site key
+     * @param string $name    the name
+     * @return array
+     */
+    public function fetchDescendant($siteKey, $name)
+    {
+        $data = $this->getData($siteKey, $this->getHead($name));
+
+        return Arr::where($data, function ($idx, $item) use ($name) {
+            return Str::startsWith($item->name, $name) && $name !== $item->name;
+        });
+    }
+    
     /**
      * save
      *
@@ -182,50 +129,9 @@ class CacheDecorator extends AbstractDecorator
      */
     public function save(ConfigEntity $config)
     {
-        $this->put($config);
-        $this->bag[$this->makeKey($config->siteKey, $config->name)] = $config;
+        $this->erase($config->siteKey, $config->name);
 
         return $this->repo->save($config);
-    }
-
-    /**
-     * remove
-     *
-     * @param string $siteKey site key
-     * @param string $name    the name
-     * @return void
-     */
-    public function remove($siteKey, $name)
-    {
-        $this->repo->remove($siteKey, $name);
-
-        $this->erase($this->makeKey($siteKey, $name));
-    }
-
-    /**
-     * Remove cache data
-     *
-     * @param string $key config name
-     * @return void
-     */
-    protected function erase($key)
-    {
-        $segments = explode('.', $key);
-        $head = reset($segments);
-
-        if ($key == $head) {
-            $this->cache->forget($this->getCacheKey($head));
-        } else {
-            $cache = $this->make($this->getAll($head), $segments, null);
-
-            $this->cache->put($this->getCacheKey($head), $cache);
-        }
-
-        foreach ($this->bag as $k => $item) {
-            if (substr($k, 0, strlen($key)) == $key) {
-                unset($this->bag[$k]);
-            }
-        }
     }
 
     /**
@@ -237,12 +143,23 @@ class CacheDecorator extends AbstractDecorator
      */
     public function clearLike(ConfigEntity $config, $excepts = [])
     {
-        $this->repo->clearLike($config, $excepts);
+        $this->erase($config->siteKey, $config->name);
 
-        $key = $this->makeKey($config->siteKey, $config->name);
-        $this->erase($key);
-        $this->put($config);
-        $this->bag[$key] = $config;
+        $this->repo->clearLike($config, $excepts);
+    }
+
+    /**
+     * remove
+     *
+     * @param string $siteKey site key
+     * @param string $name    the name
+     * @return void
+     */
+    public function remove($siteKey, $name)
+    {
+        $this->erase($siteKey, $name);
+
+        $this->repo->remove($siteKey, $name);
     }
 
     /**
@@ -254,9 +171,9 @@ class CacheDecorator extends AbstractDecorator
      */
     public function foster(ConfigEntity $config, $to)
     {
-        $this->repo->foster($config, $to);
+        $this->erase($config->siteKey, $config->name);
 
-        $this->erase($this->makeKey($config->siteKey, $config->name));
+        $this->repo->foster($config, $to);
     }
 
     /**
@@ -268,9 +185,66 @@ class CacheDecorator extends AbstractDecorator
      */
     public function affiliate(ConfigEntity $config, $to)
     {
-        $this->repo->affiliate($config, $to);
+        $this->erase($config->siteKey, $config->name);
 
-        $this->erase($this->makeKey($config->siteKey, $config->name));
+        $this->repo->affiliate($config, $to);
+    }
+
+    /**
+     * get cached data
+     *
+     * @param string $siteKey site key
+     * @param string $head    root name
+     * @return array
+     */
+    protected function getData($siteKey, $head)
+    {
+        $key = $this->makeKey($siteKey, $head);
+
+        if (!isset($this->bag[$key])) {
+            $cacheKey = $this->getCacheKey($key);
+            if (!$data = $this->cache->get($cacheKey)) {
+                if (!$config = $this->repo->find($siteKey, $head)) {
+                    return [];
+                }
+
+                $descendant = $this->repo->fetchDescendant($siteKey, $head);
+                $data = array_merge([$config], $descendant);
+                $this->cache->put($cacheKey, $data);
+            }
+
+            $this->bag[$key] = $data;
+        }
+
+        return $this->bag[$key];
+    }
+
+    /**
+     * Remove cache data
+     *
+     * @param string $siteKey site key
+     * @param string $name    config name
+     * @return void
+     */
+    protected function erase($siteKey, $name)
+    {
+        $key = $this->makeKey($siteKey, $this->getHead($name));
+
+        unset($this->bag[$key]);
+        $this->cache->forget($this->getCacheKey($key));
+    }
+
+    /**
+     * parse name to head and segments
+     *
+     * @param string $name the name
+     * @return array
+     */
+    private function getHead($name)
+    {
+        $segments = explode('.', $name);
+
+        return reset($segments);
     }
 
     /**
@@ -280,7 +254,7 @@ class CacheDecorator extends AbstractDecorator
      * @param string $name    config name
      * @return string
      */
-    public function makeKey($siteKey, $name)
+    protected function makeKey($siteKey, $name)
     {
         return $siteKey . ':' . $name;
     }
@@ -288,11 +262,11 @@ class CacheDecorator extends AbstractDecorator
     /**
      * String for cache key
      *
-     * @param string $head head keyword
+     * @param string $keyword keyword
      * @return string
      */
-    protected function getCacheKey($head)
+    protected function getCacheKey($keyword)
     {
-        return $this->prefix . '@' . $head;
+        return $this->prefix . '@' . $keyword;
     }
 }

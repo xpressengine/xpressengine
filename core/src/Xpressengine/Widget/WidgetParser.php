@@ -38,7 +38,7 @@ namespace Xpressengine\Widget;
  * @package     Xpressengine\Widget
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
 class WidgetParser
@@ -68,34 +68,38 @@ class WidgetParser
      */
     public function parseXml($content)
     {
-        $widgetHandler = $this->widgetHandler;
-
-        $content = preg_replace_callback('/<xewidget (.*?)<\/xewidget>/s', function ($matches) use ($widgetHandler) {
-
-            try {
-                $widgetXmlString = $matches[0];
-                $simpleXmlObj = simplexml_load_string($widgetXmlString);
-
-                $widgetId = (string)$simpleXmlObj->attributes()->id;
-
-                $inputs = [];
-
-                foreach ($simpleXmlObj->param as $param) {
-                    $key = (string)$param['title'];
-                    $value = (string)$param[0];
-                    $inputs[$key] = $value;
-                }
-
-                $retString = $widgetHandler->create($widgetId, $inputs);
-                if ($retString !== null && !empty($retString)) {
-                    return $retString;
-                }
-            } catch (\Exception $e) {
-                return '';
-            }
-            return '';
-        }, $content);
+        $content = preg_replace_callback('/<xewidget (.*)<\/xewidget>/s', [$this, 'parseWidget'], $content);
 
         return $content;
+    }
+
+    protected function parseWidget($matches)
+    {
+        $widgetHandler = $this->widgetHandler;
+
+        try {
+            $widgetXmlString = $matches[0];
+            $simpleXmlObj = simplexml_load_string($widgetXmlString);
+
+            $widgetId = (string) $simpleXmlObj->attributes()->id;
+
+            $inputs = $this->xml2array($simpleXmlObj);
+
+            $retString = $widgetHandler->render($widgetId, $inputs);
+            if ($retString !== null && !empty($retString)) {
+                return $retString;
+            }
+        } catch (\Exception $e) {
+            return '';
+        }
+        return '';
+    }
+
+    protected function xml2array($xmlObject, $out = [])
+    {
+        foreach ((array) $xmlObject as $index => $node) {
+            $out[$index] = (is_object($node)) ? $this->xml2array($node) : $node;
+        }
+        return $out;
     }
 }

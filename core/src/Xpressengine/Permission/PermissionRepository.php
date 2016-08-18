@@ -62,18 +62,20 @@ interface PermissionRepository
     /**
      * Returns ancestor of item
      *
-     * @param Permission $item permission instance
+     * @param string $siteKey site key
+     * @param string $name    target name
      * @return array
      */
-    public function fetchAncestor(Permission $item);
+    public function fetchAncestor($siteKey, $name);
 
     /**
      * Returns descendant of item
      *
-     * @param Permission $item permission instance
+     * @param string $siteKey site key
+     * @param string $name    target name
      * @return array
      */
-    public function fetchDescendant(Permission $item);
+    public function fetchDescendant($siteKey, $name);
 
     /**
      * Parent Changing with descendant

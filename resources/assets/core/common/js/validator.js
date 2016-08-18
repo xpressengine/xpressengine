@@ -124,6 +124,15 @@
       }
       return true;
     },
+    alpha: function ($dst, parameters) {
+        var value = $dst.val(),
+            pattern = /[a-zA-Z]/;
+        if (!pattern.test(value)) {
+            Validator.error($dst, XE.Lang.trans('xe::validatorAlpha')); //TODO 번역 넣어야함
+            return false;
+        }
+        return true;
+    },
     alphanum: function ($dst, parameters) {
       var value = $dst.val(),
         pattern = /[^a-zA-Z0-9]/;
@@ -141,6 +150,48 @@
         return false;
       }
       return true;
+    },
+    max: function ($dst, parameters) {
+      var value = $dst.val();
+
+      if (value.length >= parseInt(parameters)) {
+          Validator.error($dst, XE.Lang.trans('xe::validatorMax')); //TODO 번역 넣어야함
+          return false;
+      }
+      return true;
+    },
+    email: function($dst, parameters) {
+      var val = $dst.val();
+      var re = /\w+@\w{2,}\.\w{2,}/;
+
+      if(!val.match(re)) {
+        Validator.error($dst, XE.Lang.trans('xe::validatorEmail')); //TODO 번역 넣어야함
+        return false;
+      }
+
+      return true;
+    },
+    url: function($dst, parameters) {
+      var val = $dst.val();
+      var re = /^https?:\/\/\S+/;
+
+      if(!val.match(re)) {
+        Validator.error($dst, XE.Lang.trans('xe::validatorUrl')); //TODO 번역 넣어야함
+        return false;
+      }
+
+      return true;
+    },
+    numeric: function($dst, parameters) {
+      var val = $dst.val();
+      var num = Number(val);
+
+      if (typeof num === 'number' && !isNaN(num) && typeof val !== 'boolean') {
+        return true;
+      } else {
+        Validator.error($dst, XE.Lang.trans('xe::validatorNumeric')); //TODO 번역 넣어야함
+        return false;
+      }
     },
     between: function ($dst, parameters) {
       var range = parameters.split(','),

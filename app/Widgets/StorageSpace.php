@@ -23,20 +23,26 @@ class StorageSpace extends AbstractWidget
 {
     protected static $id = 'widget/xpressengine@storageSpace';
 
-    protected function init()
+    /**
+     * 위젯의 이름을 반환한다.
+     *
+     * @return string
+     */
+    public static function getTitle()
     {
-        //
+        return '스토리지 위젯';
     }
 
     /**
      * render
      *
-     * @param array $args
-     *
      * @return string
+     * @internal param array $args
+     *
      */
-    public function render(array $args)
+    public function render()
     {
+        $args = $this->config;
         $limit = isset($args['limit']) ? $args['limit'] : 5;
 
         $disks = Config::get('filesystems.disks');
@@ -79,10 +85,13 @@ class StorageSpace extends AbstractWidget
     /**
      * getCodeCreationForm
      *
+     * @param array $args
+     *
      * @return mixed
      */
-    public function getCodeCreationForm()
+    public function renderSetting(array $args = [])
     {
-        //
+        return 'hello';
     }
+
 }

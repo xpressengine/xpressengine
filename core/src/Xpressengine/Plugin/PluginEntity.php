@@ -322,17 +322,14 @@ class PluginEntity implements Arrayable, Jsonable
     }
 
     /**
-     * 플러그인의 설치버전과 현재버전을 비교한다. 플러그인의 새로운 업데이트가 서버에 다운로드 되어 있는 상태인지 확인한다.
+     * 플러그인의 새로운 업데이트가 서버에 다운로드 되어 있는 상태인지 확인한다.
      *
      * @return boolean 설치가 필요할 경우 true를 반환
      */
     public function needUpdateInstall()
     {
         $installedVersion = $this->getInstalledVersion();
-        if ($installedVersion === $this->getVersion()) {
-            return false;
-        }
-        return !$this->checkInstalled() || !$this->checkUpdated($installedVersion);
+        return !$this->checkInstalled($installedVersion) || !$this->checkUpdated($installedVersion);
     }
 
     /**
@@ -718,5 +715,19 @@ class PluginEntity implements Arrayable, Jsonable
         if (file_exists($autoloadFile)) {
             require $autoloadFile;
         }
+    }
+
+    /**
+     * 개발모드 플러그인인지 검사한다. vendor 디렉토리를 가지고 있는지의 유무로 판단한다.
+     *
+     * @return bool
+     */
+    public function isDevelopMode()
+    {
+        $vendorDir = dirname($this->pluginFile).'/vendor';
+        if (file_exists($vendorDir)) {
+            return true;
+        }
+        return false;
     }
 }

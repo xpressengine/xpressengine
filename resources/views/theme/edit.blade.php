@@ -32,9 +32,26 @@
 
                 <textarea class="form-control" rows="30" name="content">{{ old('content', $editFile['content']) }}</textarea>
 
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#widgetModal">위젯 추가</button>
+
                 <button type="submit" class="btn btn-default">{{ xe_trans('xe::applyModified') }}</button>
             </form>
-
         </div>
     </div>
+
+    <div class="modal fade" id="widgetModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">위젯 추가</h4>
+                </div>
+                <div class="modal-body">
+                    {{ uio('widget', []) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     @endif

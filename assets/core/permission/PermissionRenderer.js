@@ -17,4 +17,3 @@ $('.__xe__uiobject_permission').each(function (i) {
       type: type, 
       vgroupAll: vgroupAll}), this);
 });
-//# sourceMappingURL=PermissionRenderer.js.map

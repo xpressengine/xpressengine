@@ -2740,13 +2740,13 @@ select[multiple].xe-input-lg,
   bottom: 0;
   left: 0;
   right: 0;
+  max-width: 560px;
+  margin: 4px auto 0;
   z-index: 1100;
 }
 
 .xe-toast-container .xe-alert {
   position: relative;
-  max-width: 560px;
-  margin: 4px auto 0;
   padding: 14px 40px 14px 20px;
   background-color: #3c414d;
   color: #fff;
@@ -2817,8 +2817,6 @@ select[multiple].xe-input-lg,
 @media (min-width: 768px) {
   .xe-toast-container {
     padding: 0 20px;
-  }
-  .xe-toast-container .xe-alert {
     max-width: 960px;
   }
 }
@@ -4872,5 +4870,3 @@ input[type="button"].xe-btn-block {
     display: none !important;
   }
 }
-
-/*# sourceMappingURL=xe-ui-component.css.map */

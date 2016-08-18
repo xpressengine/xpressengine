@@ -53,7 +53,7 @@ class ConfigServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('xe.config', function ($app) {
+        $this->app->singleton([ConfigManager::class => 'xe.config'], function ($app) {
             $repo = new DatabaseRepository($app['xe.db']->connection());
             
             if ($app['config']['app.debug'] !== true) {
@@ -66,9 +66,7 @@ class ConfigServiceProvider extends ServiceProvider
             $proxyClass = $app['xe.interception']->proxy(ConfigManager::class, 'XeConfig');
             $configManager = new $proxyClass($repo, new Validator($app['validator']));
             return $configManager;
-        }, true);
-
-        $this->app->bind('Xpressengine\Config\ConfigManager', 'xe.config');
+        });
     }
 
     /**

@@ -39,7 +39,7 @@ class DatabaseRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(10, $config->get('perPage'));
     }
 
-    public function testFetchParentReturnsConfigArray()
+    public function testFetchAncestorReturnsConfigArray()
     {
         list($conn) = $this->getMocks();
 
@@ -56,7 +56,7 @@ class DatabaseRepositoryTest extends \PHPUnit_Framework_TestCase
             ]
         ]);
 
-        $configs = $instance->fetchParent('default', 'board.instance1');
+        $configs = $instance->fetchAncestor('default', 'board.instance1');
 
         $this->assertEquals(1, count($configs));
 
@@ -65,7 +65,7 @@ class DatabaseRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(5, $configs[0]->get('perPage'));
     }
 
-    public function testFetchChildrenReturnsConfigArray()
+    public function testFetchDescendantReturnsConfigArray()
     {
         list($conn) = $this->getMocks();
 
@@ -82,7 +82,7 @@ class DatabaseRepositoryTest extends \PHPUnit_Framework_TestCase
             ]
         ]);
 
-        $configs = $instance->fetchChildren('default', 'board');
+        $configs = $instance->fetchDescendant('default', 'board');
 
         $this->assertEquals(1, count($configs));
 

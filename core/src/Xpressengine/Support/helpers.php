@@ -505,7 +505,7 @@ if (function_exists('widget') === false) {
      */
     function widget($id, $args = [], $callback = null)
     {
-        return app('xe.widget')->create($id, $args, $callback);
+        return new \Illuminate\View\Expression(app('xe.widget')->render($id, $args, $callback));
     }
 }
 

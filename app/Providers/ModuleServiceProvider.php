@@ -22,6 +22,8 @@ use Xpressengine\Module\ModuleHandler;
  *
  * @category Module
  * @package  Xpressengine\Module
+ *
+ * @deprecated
  */
 class ModuleServiceProvider extends ServiceProvider
 {
@@ -43,18 +45,18 @@ class ModuleServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(
-            'xe.module',
-            function ($app) {
-                $register = $app['xe.pluginRegister'];
-                $proxyClass = $app['xe.interception']->proxy(ModuleHandler::class, 'Module');
-                return new $proxyClass($register);
-            }
-        );
-
-        $this->app->bind(
-            'Xpressengine\Module\ModuleHandler',
-            'xe.module'
-        );
+//        $this->app->singleton(
+//            'xe.module',
+//            function ($app) {
+//                $register = $app['xe.pluginRegister'];
+//                $proxyClass = $app['xe.interception']->proxy(ModuleHandler::class, 'Module');
+//                return new $proxyClass($register);
+//            }
+//        );
+//
+//        $this->app->bind(
+//            'Xpressengine\Module\ModuleHandler',
+//            'xe.module'
+//        );
     }
 }

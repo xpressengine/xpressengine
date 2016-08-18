@@ -20,7 +20,6 @@ use Xpressengine\Config\Exceptions\InvalidArgumentException;
 use Xpressengine\Config\Exceptions\NoParentException;
 use Xpressengine\Config\Exceptions\NotExistsException;
 use Xpressengine\Config\Exceptions\ValidationException;
-use Xpressengine\Config\Repositories\RepositoryInterface;
 
 /**
  * # ConfigManager
@@ -97,7 +96,7 @@ class ConfigManager
     /**
      * repository instance
      *
-     * @var RepositoryInterface
+     * @var ConfigRepository
      */
     protected $repo;
 
@@ -118,10 +117,10 @@ class ConfigManager
     /**
      * constructor
      *
-     * @param RepositoryInterface $repo      repository instance
-     * @param Validator           $validator validator instance
+     * @param ConfigRepository $repo      repository instance
+     * @param Validator        $validator validator instance
      */
-    public function __construct(RepositoryInterface $repo, Validator $validator)
+    public function __construct(ConfigRepository $repo, Validator $validator)
     {
         $this->repo = $repo;
         $this->validator = $validator;
@@ -399,7 +398,7 @@ class ConfigManager
      */
     protected function convey(ConfigEntity $config, callable $filter = null, array $items = null)
     {
-        $descendants = $this->repo->fetchChildren($config->siteKey, $config->name);
+        $descendants = $this->repo->fetchDescendant($config->siteKey, $config->name);
 
         /** @var ConfigEntity $descendant */
         foreach ($descendants as $descendant) {
@@ -455,7 +454,7 @@ class ConfigManager
      */
     public function children(ConfigEntity $config)
     {
-        $descendants = $this->repo->fetchChildren($config->siteKey, $config->name);
+        $descendants = $this->repo->fetchDescendant($config->siteKey, $config->name);
 
         $children = [];
 
@@ -497,7 +496,7 @@ class ConfigManager
      */
     private function setAncestors(ConfigEntity $config)
     {
-        $ancestors = $this->repo->fetchParent($config->siteKey, $config->name);
+        $ancestors = $this->repo->fetchAncestor($config->siteKey, $config->name);
 
         $ancestors = $this->sort($ancestors, 'desc');
 

@@ -20,5 +20,3 @@ var PermissionTag = React.createClass({
 
     }
 });
-
-//# sourceMappingURL=PermissionTag.js.map

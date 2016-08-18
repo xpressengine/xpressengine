@@ -95,7 +95,7 @@ return [
     |
     */
 
-    'log' => env('APP_LOG', 'single'),
+    'log' => env('APP_LOG', 'daily'),
 
     /*
     |--------------------------------------------------------------------------
@@ -157,7 +157,7 @@ return [
 
         App\Providers\RoutingServiceProvider::class,
         App\Providers\MenuServiceProvider::class,
-        App\Providers\ModuleServiceProvider::class,
+//        App\Providers\ModuleServiceProvider::class,
         App\Providers\ConfigServiceProvider::class,
         App\Providers\DocumentServiceProvider::class,
         App\Providers\DatabaseServiceProvider::class,

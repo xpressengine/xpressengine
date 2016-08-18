@@ -135,15 +135,40 @@ abstract class AbstractSkin implements ComponentInterface, Renderable
     }
 
     /**
-     * 스킨 설정을 위한 화면에 출력될 html 반환
-     *
      * @param array $config skin config
      *
      * @return string|Renderable
+     *
+     * @deprecated use renderSetting instead
      */
     public function getSettingView($config = [])
     {
-        return '';
+        return $this->renderSetting($config);
+    }
+
+    /**
+     * 스킨 설정을 위한 화면에 출력될 html 반환
+     *
+     * @param array $args
+     *
+     * @return mixed
+     */
+    public function renderSetting(array $args = [])
+    {
+        return null;
+    }
+
+
+    /**
+     * @param array $config config data
+     *
+     * @return array
+     *
+     * @deprecated use resolveSetting instead
+     */
+    public function updateSetting(array $config)
+    {
+        return $this->resolveSetting($config);
     }
 
     /**
@@ -151,13 +176,13 @@ abstract class AbstractSkin implements ComponentInterface, Renderable
      * 사이트관리자가 스킨 설정 페이지에서 저장 요청을 할 경우, 스킨핸들러가 설정값을 저장하기 전에 이 메소드가 실행된다.
      * 설정값을 보완할 필요가 있을 경우 이 메소드에서 보완하여 다시 반환하면 된다.
      *
-     * @param array $config config data
+     * @param array $inputs
      *
      * @return array
      */
-    public function updateSetting(array $config)
+    public function resolveSetting(array $inputs = [])
     {
-        return $config;
+        return $inputs;
     }
 
     /**

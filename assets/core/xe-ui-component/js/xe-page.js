@@ -130,9 +130,9 @@
             getModalTemplate: function() {
                 return [
                     '<div class="xe-modal" data-use="xe-page">',
-                    '<div class="xe-modal-dialog ">',
-                    '<div class="xe-modal-content"></div>',
-                    '</div>',
+                        '<div class="xe-modal-dialog ">',
+                            '<div class="xe-modal-content"></div>',
+                        '</div>',
                     '</div>'
                 ].join("\n");
             },
@@ -236,21 +236,16 @@
                 }
 
                 if(jsLen > 0) {
-                    for(var i = 0, max = jsLen; i < max; i += 1) {
-                        DynamicLoadManager.jsLoad(js[i], loadDone, loadDone);
-                    }
+                    DynamicLoadManager.jsLoadMultiple(js, {
+                        load: loadDone,
+                        error: loadDone
+                    });
                 }
 
                 if((cssLen + jsLen) === 0) {
                     next();
                 }
             }
-            // , 공통에서 처리함
-            // error: function(data) {
-            //     XE.Progress.done();
-            //
-            //     XE.toast(data.type, data.message);
-            // }
         });
 
         XE.ajax(options);

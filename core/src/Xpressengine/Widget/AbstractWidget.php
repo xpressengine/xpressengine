@@ -14,8 +14,10 @@
 
 namespace Xpressengine\Widget;
 
+use Illuminate\Contracts\Support\Renderable;
 use Xpressengine\Plugin\ComponentInterface;
 use Xpressengine\Plugin\ComponentTrait;
+use Xpressengine\Skin\AbstractSkin;
 
 /**
  * 이 클래스는 Xpressengine 에서 Widget 구현할 때 필요한 추상클래스이다.
@@ -29,7 +31,7 @@ use Xpressengine\Plugin\ComponentTrait;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-abstract class AbstractWidget implements ComponentInterface
+abstract class AbstractWidget implements ComponentInterface, Renderable
 {
     use ComponentTrait;
 
@@ -38,47 +40,87 @@ abstract class AbstractWidget implements ComponentInterface
      */
     public static $ratingWhiteList = ['super', 'manager', 'member', 'guest'];
 
-    /**
-     * 생성자. 모든 Widget 동일한 방식으로 생성되어야 한다.
-     *
-     */
-    final public function __construct()
+    protected $config;
+
+    protected $data;
+
+    public function __construct($config = null)
     {
+        $this->config = $config;
         $this->init();
     }
 
-    /**
-     * init
-     *
-     * @return mixed
-     */
-    abstract protected function init();
+    protected function init()
+    {
+
+    }
 
     /**
-     * Return this widget is widget code creation able or unable
-     * codeCreationAble
-     * default value is false
+     * 위젯의 이름을 반환한다.
      *
-     * @return boolean
+     * @return string
      */
-    public static function codeCreationAble()
+    public static function getTitle()
     {
-        return false;
+        return static::getComponentInfo('name');
+    }
+
+    /**
+     * 위젯의 설명을 반환한다.
+     *
+     * @return string
+     */
+    public static function getDescription()
+    {
+        return static::getComponentInfo('description');
+    }
+
+    /**
+     * Get the evaluated contents of the object.
+     *
+     * @return string
+     */
+    public function render()
+    {
+        $skinId = array_get($this->config, 'skin.@attributes.id');
+        $skinConfig = array_get($this->config, 'skin');
+
+        /** @var AbstractSkin $skin */
+        $skin = app('xe.skin')->get($skinId, $skinConfig);
+
+        return $skin->setData($this->data)->setView('widget')->render();
     }
 
     /**
      * getCodeCreationForm
      *
+     * @param array $args
+     *
      * @return mixed
      */
-    abstract public function getCodeCreationForm();
+    public function renderSetting(array $args = [])
+    {
+        return null;
+    }
+
+    public function resolveSetting(array $inputs = [])
+    {
+        return $inputs;
+    }
 
     /**
-     * render
+     * set or get config info
      *
-     * @param array $args to render parameter array
+     * @param array|null $config
      *
-     * @return mixed
+     * @return array|void
      */
-    abstract public function render(array $args);
+    public function setting(array $config = null)
+    {
+        if($config !== null) {
+            $this->config = $config;
+        }
+        return $this->config;
+    }
+
 }
