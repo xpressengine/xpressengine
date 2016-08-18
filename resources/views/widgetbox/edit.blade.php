@@ -3,7 +3,11 @@
 {{ XeFrontend::js('/assets/core/widgetbox/js/widgetAdder.js')->appendTo("head")->load() }}
 
 {{ XeFrontend::css('http://cdn.jsdelivr.net/xeicon/2.0.0/xeicon.min.css')->load() }}
-{{ XeFrontend::css('/assets/core/widgetbox/css/widgetbox.css')->load() }}
+{{ XeFrontend::css([
+    '/assets/vendor/bootstrap/css/bootstrap.css',
+    '/assets/core/widgetbox/css/widgetbox.css',
+])->load() }}
+
 
 <div class="widget-wrap">
     <header>
@@ -158,93 +162,8 @@
     <!--widget layer  -->
     <!--[D] .open 추가 시 layer 펼침 -->
     <div class="widget-layer">
-        <h1>h1 위젯 타이틀</h1>
-        <button type="button" class="layer-close btnCloseLayer"><i class="xi-close"></i><span class="xe-sr-only">layer close</span></button>
-        <p>콘텐츠를 다양한 형태로 출력하는 위젯입니다. 아래 필요한 값들을 입력한 후 추가 버튼을 누르면 페이지 내에 위젯이 삽입됩니다.</p>
-        <div class="seciton">
-            <div class="xe-form-group">
-                <label class="xe-form-label">스킨</label>
-                <div class="xe-form-inline">
-                    <div class="xe-select-box xe-btn">
-                        <label>기본 스타일 스킨(xet_default)</label>
-                        <select>
-                            <option selected="selected">xe-select-box</option>
-                            <option>xe-select-boxxe-select-boxxe-select-box</option>
-                            <option>xe-select-box</option>
-                            <option>xe-select-boxxe-select-box</option>
-                            <option>xe-select-box</option>
-                        </select>
-                    </div>
-                    <button type="button" class="xe-btn">선택</button>
-                </div>
-            </div>
-            <div class="xe-form-group">
-                <label class="xe-form-label">위젯 타이틀 입력</label>
-                <input type="text" class="xe-form-control">
-                <p>서브텍스트를 넣을 수 있습니다.</p>
-            </div>
-            <div class="xe-form-group">
-                <label class="xe-form-label">스킨</label>
-                <div class="xe-form-inline">
-                    <input type="text" class="xe-form-control">
-                    <span>서브텍스트(인라인 스타일)</span>
-                </div>
-            </div>
-        </div>
-        <div class="seciton">
-            <h2>h2 섹션 제목 <button type="button" class="btn-section-close"><i class="xi-angle-down"></i><span class="xe-sr-only">section toggle</span></button></h2>
-            <div class="section-group">
-                <div class="xe-form-group">
-                    <label class="xe-form-label">스킨</label>
-                    <div class="xe-select-box xe-btn">
-                        <label>xe-select-box</label>
-                        <select>
-                            <option selected="selected">xe-select-box</option>
-                            <option>xe-select-boxxe-select-boxxe-select-box</option>
-                            <option>xe-select-box</option>
-                            <option>xe-select-boxxe-select-box</option>
-                            <option>xe-select-box</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="xe-form-group">
-                    <label class="xe-form-label">위젯 타이틀 입력</label>
-                    <input type="text" class="xe-form-control">
-                    <label class="xe-label">
-                        <input type="checkbox">
-                        <span class="xe-input-helper"></span>
-                        <span class="xe-label-text">체크박스</span>
-                    </label>
-                </div>
-            </div>
-        </div>
-        <div class="seciton">
-            <h2>h2 섹션 제목 <button type="button" class="btn-section-close"><i class="xi-angle-down"></i><span class="xe-sr-only">section toggle</span></button></h2>
-            <div class="section-group">
-                <div class="xe-form-group">
-                    <label class="xe-form-label">스킨</label>
-                    <div class="xe-select-box xe-btn">
-                        <label>xe-select-box</label>
-                        <select>
-                            <option selected="selected">xe-select-box</option>
-                            <option>xe-select-boxxe-select-boxxe-select-box</option>
-                            <option>xe-select-box</option>
-                            <option>xe-select-boxxe-select-box</option>
-                            <option>xe-select-box</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="xe-form-group">
-                    <label class="xe-form-label">위젯 타이틀 입력</label>
-                    <input type="text" class="xe-form-control">
-                    <label class="xe-label">
-                        <input type="checkbox">
-                        <span class="xe-input-helper"></span>
-                        <span class="xe-label-text">체크박스</span>
-                    </label>
-                </div>
-            </div>
-        </div>
+        {{ uio('widget') }}
+
         <div class="btn-center">
             <input type="hidden" id="widgetCode" value="{{ "<xewidget id='widget/banner' title='상단배너'><banner_count>2</banner_count><banner_size>2</banner_size></xewidget>" }}" />
             <button type="button" class="xe-btn xe-btn-secondary btnCloseLayer">취소</button>
@@ -255,28 +174,6 @@
 </div>
 <div class="dimd"></div>
 
-<!-- TODO:: feature/redefine-markup branch merge후 삭제 -->
-<style type="text/css">
-    .editor.layout-mobile {
-        max-width: 450px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    .editor.layout-mobile .xe-col-md-1
-    , .editor.layout-mobile .xe-col-md-2
-    , .editor.layout-mobile .xe-col-md-3
-    , .editor.layout-mobile .xe-col-md-4
-    , .editor.layout-mobile .xe-col-md-5
-    , .editor.layout-mobile .xe-col-md-6
-    , .editor.layout-mobile .xe-col-md-7
-    , .editor.layout-mobile .xe-col-md-8
-    , .editor.layout-mobile .xe-col-md-9
-    , .editor.layout-mobile .xe-col-md-10
-    , .editor.layout-mobile .xe-col-md-11
-    , .editor.layout-mobile .xe-col-md-12 {
-        width: 100%;
-    }
-</style>
 <script type="text/javascript">
     WidgetBox.init();
     WidgetSnb.init();

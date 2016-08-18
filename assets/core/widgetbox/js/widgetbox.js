@@ -35,38 +35,7 @@
             deselectAll: function() {
                 $(".selected").removeClass("selected");
             },
-            placeWidget: function() {
-                var widgetCode = $("#widgetCode").val(), 
-                    $widgetCode = $(widgetCode);
-
-                var $selected = $(".selected");
-
-                if($selected.length > 0) {
-                    var title = $widgetCode.attr("title");
-
-                    var widgetView = [
-                        '<div class="xe-row">',
-                            '<div class="xe-col-md-12">',
-                                '<div class="xe-well widget">',
-                                    '<strong>' + title + '</strong>',
-                                    '<div class="xe-pull-right widget-config-btn">',
-                                        '<a href="#" class="xe-btn xe-btn-link btnWidgetConfig"><i class="xi-cog"></i></a>',
-                                        '<button type="button" class="xe-btn xe-btn-link btnDelWidget"><i class="xi-trash"></i></button>',
-                                    '</div>',
-                                '</div>',
-                            '</div>',
-                        '</div>'
-                    ].join("\n");
-
-                    $selected.find(".widgetarea").append(widgetView);
-
-                    self.increaseBlockSize($selected);
-
-                }else {
-                    window.console.error("선택된 셀이 없음.");
-                }
-
-            },
+            
             openConfig: function() {
                 window.console.log("open config");
             },

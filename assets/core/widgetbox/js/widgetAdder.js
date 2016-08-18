@@ -1,9 +1,12 @@
 (function(exports, WidgetBox) {
+
+    'use strict';
+
     exports.WidgetAdder = (function() {
         var self;
 
         return {
-            init: function() {
+            init: function () {
                 self = this;
 
                 self.cache();
@@ -11,21 +14,59 @@
 
                 return this;
             },
-            cache: function() {
+            cache: function () {
                 self.$btnPlaceWidget = $(".btnPlaceWidget");
                 self.$btnCloseLayer = $(".btnCloseLayer");
             },
-            bindEvents: function() {
+            bindEvents: function () {
                 self.$btnPlaceWidget.on('click', function() {
-                    self.closeLayer();
-                    WidgetBox.placeWidget();
+                    if($(".__xe_widget_code").val() !== '') {
+                        self.closeLayer();
+                        self.placeWidget();
+                    }else {
+                        alert('위젯 코드를 생성해 주세요.');
+                    }
                 });
                 self.$btnCloseLayer.on('click', self.closeLayer);
             },
-            closeLayer: function() {
+            closeLayer: function () {
                 $(".widget-layer").removeClass("open");
                 $(".dimd").hide();
                 $("body").css("overflow", "");
+            },
+            placeWidget: function () {
+                var widgetCode = $(".__xe_widget_code").val(),
+                    $widgetCode = $(widgetCode);
+
+                var $selected = $(".selected");
+
+                if($selected.length > 0) {
+                    var widgetId = $widgetCode.attr("id");
+                    var widgetTitle = 'test title';//$widgetCode.attr("title");
+                    var widgetView = [
+                        '<div class="xe-row">',
+                            '<div class="xe-col-md-12">',
+                                '<div class="xe-well widget">',
+                                    '<strong>' + widgetTitle + '</strong>',
+                                    '<div class="xe-pull-right widget-config-btn">',
+                                        '<input type="hidden" class="widgetId" value="' + widgetId + '" />',
+                                        '<input type="hidden" class="widgetTitle" value="' + widgetTitle + '" />',
+                                        '<a href="#" class="xe-btn xe-btn-link btnWidgetConfig"><i class="xi-cog"></i></a>',
+                                        '<button type="button" class="xe-btn xe-btn-link btnDelWidget"><i class="xi-trash"></i></button>',
+                                    '</div>',
+                                '</div>',
+                            '</div>',
+                        '</div>'
+                    ].join("\n");
+
+                    $selected.find(".widgetarea").append(widgetView);
+
+                    WidgetBox.increaseBlockSize($selected);
+
+                }else {
+                    window.console.error("선택된 셀이 없음.");
+                }
+
             }
         }
     })();
