@@ -1,0 +1,179 @@
+/* The gallery overlay */
+
+#xe-galleryOverlay{
+    width:100%;
+    height:100%;
+    position:fixed;
+    top:0;
+    left:0;
+    opacity:0;
+    z-index:10;
+    background-color:#000;
+    overflow:hidden;
+    display:none;
+    -moz-transition:opacity 1s ease;
+    -webkit-transition:opacity 1s ease;
+    transition:opacity 1s ease;
+}
+
+/* This class will trigger the animation */
+
+#xe-galleryOverlay.visible{
+    opacity:1;
+}
+#xe-galleryOverlay:after{
+    position:absolute;
+    top:0;
+    left:0;
+    width: 100%;
+    height:80px;
+    background-image: linear-gradient(0deg,rgba(0,0,0,0),rgba(0,0,0,0.4));
+    content:"";
+}
+
+#xe-gallerySlider{
+    height:100%;
+    left:0;
+    top:0;
+    width:100%;
+    white-space: nowrap;
+    position:absolute;
+    -moz-transition:left 0.4s ease;
+    -webkit-transition:left 0.4s ease;
+    transition:left 0.4s ease;
+}
+
+#xe-gallerySlider .xe-placeholder{
+    background: url("../../../assets_temp/lightbox/preloader.gif") no-repeat center center;
+    height: 100%;
+    line-height: 1px;
+    text-align: center;
+    width:100%;
+    display:inline-block;
+}
+
+/* The before element moves the
+ * image halfway from the top */
+
+#xe-gallerySlider .xe-placeholder:before{
+    content: "";
+    display: inline-block;
+    height: 50%;
+    width: 1px;
+    margin-right:-1px;
+}
+
+#xe-gallerySlider .xe-placeholder img{
+    display: inline-block;
+    max-height: 100%;
+    max-width: 100%;
+    width:auto;
+    vertical-align: middle;
+}
+
+#xe-gallerySlider.rightSpring{
+    -moz-animation: rightSpring 0.3s;
+    -webkit-animation: rightSpring 0.3s;
+}
+
+#xe-gallerySlider.leftSpring{
+    -moz-animation: leftSpring 0.3s;
+    -webkit-animation: leftSpring 0.3s;
+}
+
+/* Firefox Keyframe Animations */
+
+@-moz-keyframes rightSpring{
+    0%{    margin-left:0px;}
+    50%{  margin-left:-30px;}
+    100%{  margin-left:0px;}
+}
+
+@-moz-keyframes leftSpring{
+    0%{    margin-left:0px;}
+    50%{  margin-left:30px;}
+    100%{  margin-left:0px;}
+}
+
+/* Safari and Chrome Keyframe Animations */
+
+@-webkit-keyframes rightSpring{
+    0%{    margin-left:0px;}
+    50%{  margin-left:-30px;}
+    100%{  margin-left:0px;}
+}
+
+@-webkit-keyframes leftSpring{
+    0%{    margin-left:0px;}
+    50%{  margin-left:30px;}
+    100%{  margin-left:0px;}
+}
+
+/* Arrows */
+
+#xe-prevArrow,#xe-nextArrow{
+    display: block;
+    border:none;
+    text-decoration:none;
+    cursor:pointer;
+    position:absolute;
+    width: 40%;
+    height: 100%;
+    top: 100px;
+    color: #fff;
+    font-size: 35px;
+    -moz-transition:opacity 0.2s ease;
+    -webkit-transition:opacity 0.2s ease;
+    transition:opacity 0.2s ease;
+    z-index: 99;
+    background: transparent 0 0 repeat scroll url("data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBR‌​AA7");
+}
+
+#xe-prevArrow i,
+#xe-nextArrow i{
+    display: none;
+    position: absolute;
+    top: 50%;
+    left:0;
+    width: 48px;
+    height: 48px;
+    margin-top: -124px;
+    border-radius: 2px;
+    background-color: #22252A;
+    text-align: center;
+    line-height: 48px;
+}
+
+#xe-prevArrow:hover i,
+#xe-nextArrow:hover i{
+    display: block
+}
+#xe-nextArrow i{
+    position: absolute;
+    top: 50%;
+    left:auto;
+    right:0
+}
+
+#xe-prevArrow{
+    left: 30px;
+}
+
+#xe-nextArrow{
+    right: 30px;
+}
+
+#btn-overlay-close{
+    display: block !important;
+    position:fixed;;
+    top:15px;
+    right: 15px;
+    width:50px;
+    height: 50px;
+    border:none;
+    background-color: transparent;
+    font-size : 24px;
+    color:#fff;
+    cursor: pointer;
+    z-index: 100000;
+}
