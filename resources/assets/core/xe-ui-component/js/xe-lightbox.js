@@ -7,18 +7,19 @@
  */
 
 /*
-<div class="thumbs">
-    <a href="http://owlgraphic.com/owlcarousel/demos/assets/fullimage1.jpg"><img src="http://owlgraphic.com/owlcarousel/demos/assets/fullimage1.jpg" width="120" height="120" alt="thumb"></a>
-    <a href="http://getuikit.com/docs/images/placeholder_800x600_3.jpg"><img src="http://getuikit.com/docs/images/placeholder_800x600_3.jpg" width="120" height="120" alt="thumb"></a>
-    <a href="http://owlgraphic.com/owlcarousel/demos/assets/fullimage3.jpg"><img src="http://owlgraphic.com/owlcarousel/demos/assets/fullimage3.jpg" width="120" height="120" alt="thumb"></a>
-    <a href="http://www.responsibletravel.co.kr/travel/layouts/ts_basic/img/bg_nanum.jpg"><img src="http://www.responsibletravel.co.kr/travel/layouts/ts_basic/img/bg_nanum.jpg" width="120" height="120" alt="thumb"></a>
-    <a href="http://getuikit.com/docs/images/placeholder_800x600_3.jpg"><img src="http://getuikit.com/docs/images/placeholder_800x600_3.jpg" width="120" height="120" alt="thumb"></a>
-    <a href="http://owlgraphic.com/owlcarousel/demos/assets/fullimage3.jpg"><img src="http://owlgraphic.com/owlcarousel/demos/assets/fullimage3.jpg" width="120" height="120" alt="thumb"></a>
-</div>
+ <div class="thumbs">
+ <a href="http://owlgraphic.com/owlcarousel/demos/assets/fullimage1.jpg"><img src="http://owlgraphic.com/owlcarousel/demos/assets/fullimage1.jpg" width="120" height="120" alt="thumb"></a>
+ <a href="http://getuikit.com/docs/images/placeholder_800x600_3.jpg"><img src="http://getuikit.com/docs/images/placeholder_800x600_3.jpg" width="120" height="120" alt="thumb"></a>
+ <a href="http://owlgraphic.com/owlcarousel/demos/assets/fullimage3.jpg"><img src="http://owlgraphic.com/owlcarousel/demos/assets/fullimage3.jpg" width="120" height="120" alt="thumb"></a>
+ <a href="http://www.responsibletravel.co.kr/travel/layouts/ts_basic/img/bg_nanum.jpg"><img src="http://www.responsibletravel.co.kr/travel/layouts/ts_basic/img/bg_nanum.jpg" width="120" height="120" alt="thumb"></a>
+ <a href="http://getuikit.com/docs/images/placeholder_800x600_3.jpg"><img src="http://getuikit.com/docs/images/placeholder_800x600_3.jpg" width="120" height="120" alt="thumb"></a>
+ <a href="http://owlgraphic.com/owlcarousel/demos/assets/fullimage3.jpg"><img src="http://owlgraphic.com/owlcarousel/demos/assets/fullimage3.jpg" width="120" height="120" alt="thumb"></a>
+ </div>
 
-XE.lightbox(selector, options);
-*/
-(function($, XE){
+ $(selector).lightbox(options);
+
+ */
+(function($){
 
     var overlay = $('<div id="xe-galleryOverlay">');
     var slider = $('<div id="xe-gallerySlider">');
@@ -27,10 +28,10 @@ XE.lightbox(selector, options);
     var overlayClose =$('<button id="btn-overlay-close"><i class="xi-close"></i></button>');
     var overlayVisible = false;
 
-    XE.lightbox = function(sel, options) {
+    $.fn.lightbox = function(options) {
         var placeholders = $([]);
         var index = 0;
-        var allitems = $(sel);
+        var allitems = this;
         var items = allitems;
 
         // Appending the markup to the page
@@ -309,4 +310,4 @@ XE.lightbox(selector, options);
         }
     };
 
-})(jQuery, XE);
+})(jQuery);
