@@ -1,5 +1,5 @@
 $(function($) {
-    $('.__xe_select_widget').change(function(){
+    $('.widget-generator .__xe_select_widget').change(function(){
         var widget = this.value;
         $('.widget-form').empty();
         var url = $('.widget-skins').data('url');
@@ -11,10 +11,11 @@ $(function($) {
     });
 
     // skin 선택시
-    $('.widget-skins').on('change', '.__xe_select_widgetskin', function(){
-        var widget = this.value;
+    $('.widget-generator').on('click', '.widget-skins .__xe_select_skin', function(){
+        var $widget = $('.widget-generator .widget-skins .__xe_select_widgetskin');
+        var widget = $widget.val();
         if(widget) {
-            var url = $(this).find('option:selected').data('url');
+            var url = $widget.find('option:selected').data('url');
             XE.page(url,'.widget-form');
         }
     });
