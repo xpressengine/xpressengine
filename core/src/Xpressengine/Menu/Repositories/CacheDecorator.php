@@ -73,16 +73,21 @@ class CacheDecorator implements MenuRepository
     public function find($id, $with = [])
     {
         $key = $this->getCacheKey($id);
+        $subKey = $this->getWithKey($with);
 
-        return $this->cache->has($key) ? $this->cache->get($key) : call_user_func(
-            function () use ($key, $id, $with) {
-                if ($menu = $this->repo->find($id, $with)) {
-                    $this->cache->put($key, $menu);
-                }
+        $data = $this->cache->get($key);
 
-                return $menu;
+        if (!$data || !isset($data[$subKey])) {
+            if ($menu = $this->repo->find($id, $with)) {
+                $data = $data ?: [];
+                $data[$subKey] = $menu;
+                $this->cache->put($key, $data);
             }
-        );
+        } else {
+            $menu = $data[$subKey];
+        }
+
+        return $menu;
     }
 
     /**
@@ -95,16 +100,22 @@ class CacheDecorator implements MenuRepository
     public function all($siteKey, $with = [])
     {
         $key = $this->getCacheKey($siteKey . '_all');
+        $subKey = $this->getWithKey($with);
 
-        return $this->cache->has($key) ? $this->cache->get($key) : call_user_func(
-            function () use ($key, $siteKey, $with) {
-                if ($menu = $this->repo->all($siteKey, $with)) {
-                    $this->cache->put($key, $menu);
-                }
+        $data = $this->cache->get($key);
 
-                return $menu;
+        if (!$data || !isset($data[$subKey])) {
+            $menus = $this->repo->all($siteKey, $with);
+            if (!empty($menus)) {
+                $data = $data ?: [];
+                $data[$subKey] = $menus;
+                $this->cache->put($key, $data);
             }
-        );
+        } else {
+            $menus = $data[$subKey];
+        }
+
+        return $menus;
     }
 
     /**
@@ -117,16 +128,21 @@ class CacheDecorator implements MenuRepository
     public function findItem($id, $with = [])
     {
         $key = $this->getItemCacheKey($id);
+        $subKey = $this->getWithKey($with);
 
-        return $this->cache->has($key) ? $this->cache->get($key) : call_user_func(
-            function () use ($key, $id, $with) {
-                if ($menu = $this->repo->findItem($id, $with)) {
-                    $this->cache->put($key, $menu);
-                }
+        $data = $this->cache->get($key);
 
-                return $menu;
+        if (!$data || !isset($data[$subKey])) {
+            if ($item = $this->repo->findItem($id, $with)) {
+                $data = $data ?: [];
+                $data[$subKey] = $item;
+                $this->cache->put($key, $data);
             }
-        );
+        } else {
+            $item = $data[$subKey];
+        }
+
+        return $item;
     }
 
     /**
@@ -138,14 +154,7 @@ class CacheDecorator implements MenuRepository
      */
     public function fetchInItem(array $ids, $with = [])
     {
-        $items = $this->repo->fetchInItem($ids, $with);
-
-        foreach ($items as $item) {
-            $key = $this->getItemCacheKey($item->getKey());
-            $this->cache->put($key, $item);
-        }
-
-        return $items;
+        return $this->repo->fetchInItem($ids, $with);
     }
 
     /**
@@ -156,12 +165,9 @@ class CacheDecorator implements MenuRepository
      */
     public function insert(Menu $menu)
     {
-        $menu = $this->repo->insert($menu);
+        $this->cache->forget($this->getCacheKey($menu->siteKey . '_all'));
 
-        $key = $this->getCacheKey($menu->getKey());
-        $this->cache->put($key, $menu);
-
-        return $menu;
+        return $this->repo->insert($menu);
     }
 
     /**
@@ -172,12 +178,10 @@ class CacheDecorator implements MenuRepository
      */
     public function update(Menu $menu)
     {
-        $menu = $this->repo->update($menu);
+        $this->cache->forget($this->getCacheKey($menu->siteKey . '_all'));
+        $this->cache->forget($this->getCacheKey($menu->getKey()));
 
-        $key = $this->getCacheKey($menu->getKey());
-        $this->cache->put($key, $menu);
-
-        return $menu;
+        return $this->repo->update($menu);
     }
 
     /**
@@ -188,8 +192,8 @@ class CacheDecorator implements MenuRepository
      */
     public function delete(Menu $menu)
     {
-        $key = $this->getCacheKey($menu->getKey());
-        $this->cache->forget($key);
+        $this->cache->forget($this->getCacheKey($menu->siteKey . '_all'));
+        $this->cache->forget($this->getCacheKey($menu->getKey()));
 
         return $this->repo->delete($menu);
     }
@@ -203,12 +207,10 @@ class CacheDecorator implements MenuRepository
      */
     public function increment(Menu $menu, $amount = 1)
     {
-        $result = $this->repo->increment($menu, $amount);
+        $this->cache->forget($this->getCacheKey($menu->siteKey . '_all'));
+        $this->cache->forget($this->getCacheKey($menu->getKey()));
 
-        $key = $this->getCacheKey($menu->getKey());
-        $this->cache->put($key, $menu);
-
-        return $result;
+        return $this->repo->increment($menu, $amount);
     }
 
     /**
@@ -219,12 +221,7 @@ class CacheDecorator implements MenuRepository
      */
     public function insertItem(MenuItem $item)
     {
-        $item = $this->repo->insertItem($item);
-
-        $key = $this->getItemCacheKey($item->getKey());
-        $this->cache->put($key, $item);
-
-        return $item;
+        return $this->repo->insertItem($item);
     }
 
     /**
@@ -235,12 +232,9 @@ class CacheDecorator implements MenuRepository
      */
     public function updateItem(MenuItem $item)
     {
-        $item = $this->repo->updateItem($item);
+        $this->cache->forget($this->getItemCacheKey($item->getKey()));
 
-        $key = $this->getItemCacheKey($item->getKey());
-        $this->cache->put($key, $item);
-
-        return $item;
+        return $this->repo->updateItem($item);
     }
 
     /**
@@ -251,8 +245,7 @@ class CacheDecorator implements MenuRepository
      */
     public function deleteItem(MenuItem $item)
     {
-        $key = $this->getItemCacheKey($item->getKey());
-        $this->cache->forget($key);
+        $this->cache->forget($this->getItemCacheKey($item->getKey()));
 
         return $this->repo->deleteItem($item);
     }
@@ -298,5 +291,20 @@ class CacheDecorator implements MenuRepository
     protected function getItemCacheKey($keyword)
     {
         return $this->prefix . 'item@' . $keyword;
+    }
+
+    /**
+     * Get sub key by relationship
+     *
+     * @param array $with relationships
+     * @return string
+     */
+    private function getWithKey($with = [])
+    {
+        if (empty($with)) {
+            return '_alone';
+        }
+
+        return implode('.', $with);
     }
 }
