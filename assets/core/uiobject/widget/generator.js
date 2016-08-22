@@ -1,23 +1,23 @@
 $(function($) {
-    $('.__xe_select_widget').change(function(){
-        var widget = this.value;
-        $('.widget-form').empty();
-        var url = $('.widget-skins').data('url');
-        if(widget) {
-            XE.page(url+'?widget='+widget, '.widget-skins');
-        } else {
-            $('.widget-skins').empty();
-        }
-    });
-
-    // skin 선택시
-    $('.widget-skins').on('change', '.__xe_select_widgetskin', function(){
-        var widget = this.value;
-        if(widget) {
-            var url = $(this).find('option:selected').data('url');
-            XE.page(url,'.widget-form');
-        }
-    });
+    // $('.__xe_select_widget').change(function(){
+    //     var widget = this.value;
+    //     $('.widget-form').empty();
+    //     var url = $('.widget-skins').data('url');
+    //     if(widget) {
+    //         XE.page(url+'?widget='+widget, '.widget-skins');
+    //     } else {
+    //         $('.widget-skins').empty();
+    //     }
+    // });
+    //
+    // // skin 선택시
+    // $('.widget-skins').on('change', '.__xe_select_widgetskin', function(){
+    //     var widget = this.value;
+    //     if(widget) {
+    //         var url = $(this).find('option:selected').data('url');
+    //         XE.page(url,'.widget-form');
+    //     }
+    // });
 
     // code 적용
     $('.__xe_setup_code').click(function(){
@@ -49,3 +49,56 @@ $(function($) {
         })
     });
 });
+
+;(function(exports, $) {
+
+    var self;
+
+    var WidgetGenerator = (function() {
+        return {
+            init: function() {
+                self = this;
+
+                self.bindEvents();
+                self.applyPlugins();
+
+                return self;
+            },
+            bindEvents: function() {
+                $(document).on('change', '.__xe_select_widget', self.changeWidgetSelect);
+                $(document).on('change', '.__xe_select_widgetskin', self.changeWidgetSkin);
+            },
+            applyPlugins: function() {
+                $.fn.widgetCodeGenerate = function() {
+
+                };
+
+                $.fn.widgetGenerate = function() {
+
+                };
+
+            },
+            changeWidgetSelect: function() {
+                var widget = this.value;
+                var url = $('.widget-skins').data('url');
+
+                $('.widget-form').empty();
+
+                if(widget) {
+                    XE.page(url+'?widget='+widget, '.widget-skins');
+                } else {
+                    $('.widget-skins').empty();
+                }
+            },
+            changeWidgetSkin: function() {
+                var widget = this.value;
+
+                if(widget) {
+                    var url = $(this).find('option:selected').data('url');
+                    XE.page(url,'.widget-form');
+                }
+            }
+        }
+    })().init();
+
+})(window, jQuery);

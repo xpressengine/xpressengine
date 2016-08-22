@@ -19,7 +19,6 @@ class WidgetGenerator extends AbstractUIObject
     public function render()
     {
         $args = $this->arguments;
-        $id = array_get($args, 'id', 'widget-generator-'.static::seq());
 
         $handler = \app('xe.widget');
 
@@ -42,6 +41,10 @@ class WidgetGenerator extends AbstractUIObject
         // $form = $handler->setup($selectedWidgetId);
 
         $this->loadFiles();
+
+
+        $id = array_get($args, 'id', 'widget-generator-'.static::seq());
+
 
         $this->template = view($this->view, compact('widgets', 'id'))->render();
 

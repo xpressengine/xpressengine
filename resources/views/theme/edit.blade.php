@@ -47,7 +47,7 @@
                     <h4 class="modal-title" id="myModalLabel">위젯 추가</h4>
                 </div>
                 <div class="modal-body">
-                    {{ uio('widget', []) }}
+                    {{ uio('widget', ['id'=>'widgetGen']) }}
                 </div>
             </div>
         </div>
