@@ -1,7 +1,9 @@
 <div class="widget-generator">
 
     {{-- select widget --}}
-    {{ uio('formSelect', ['label'=>'위젯', 'class'=>'__xe_select_widget', 'name'=>'widget', 'options'=>$widgets] ) }}
+    <div class="widget-selector">
+        {{ uio('formSelect', ['label'=>'위젯', 'class'=>'__xe_select_widget', 'name'=>'widget', 'options'=>$widgets] ) }}
+    </div>
     <div class="widget-skins">
     </div>
     <div class="widget-form">

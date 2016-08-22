@@ -79,11 +79,10 @@ class WidgetParser
 
         try {
             $widgetXmlString = $matches[0];
-            $simpleXmlObj = simplexml_load_string($widgetXmlString);
 
-            $widgetId = (string) $simpleXmlObj->attributes()->id;
+            $inputs = $this->parseCode($widgetXmlString);
 
-            $inputs = $this->xml2array($simpleXmlObj);
+            $widgetId = array_get($inputs, '@attributes.id');
 
             $retString = $widgetHandler->render($widgetId, $inputs);
             if ($retString !== null && !empty($retString)) {
@@ -93,6 +92,24 @@ class WidgetParser
             return '';
         }
         return '';
+    }
+
+    /**
+     * 위젯 코드를 php array로 반환한다.
+     *
+     * @param $code
+     *
+     * @return array
+     */
+    public function parseCode($code)
+    {
+        $simpleXmlObj = simplexml_load_string($code);
+
+        $widgetId = (string) $simpleXmlObj->attributes()->id;
+
+        $inputs = $this->xml2array($simpleXmlObj);
+
+        return $inputs;
     }
 
     protected function xml2array($xmlObject, $out = [])

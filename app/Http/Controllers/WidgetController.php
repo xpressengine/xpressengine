@@ -16,6 +16,7 @@ use XePresenter;
 use Xpressengine\Skin\SkinEntity;
 use Xpressengine\Skin\SkinHandler;
 use Xpressengine\Widget\WidgetHandler;
+use Xpressengine\Widget\WidgetParser;
 
 class WidgetController extends Controller {
 
@@ -112,7 +113,29 @@ class WidgetController extends Controller {
         $skinForm = $skin->renderSetting();
 
         return apiRender('widget.setup', compact('widget', 'skin', 'widgetForm', 'skinForm'));
+    }
 
+    public function setupByCode(Request $request, WidgetParser $widgetParser, WidgetHandler $widgetHandler, SkinHandler $skinHandler)
+    {
+        $this->validate($request, [
+            'code' => 'required',
+        ]);
+
+        $code = $request->get('code');
+
+        $inputs = $widgetParser->parseCode($code);
+
+        $widget = array_get($inputs, '@attributes.id');
+        // widget form
+        $widgetForm = $widgetHandler->setup($widget, $inputs);
+
+        // skin form
+        $skin = $skinHandler->get($skin);
+
+        $skinForm = $skin->renderSetting();
+
+
+        return apiRender('widget.setup-code', compact('widget', 'skin', 'widgetSelector', 'skinSelector', 'widgetForm', 'skinForm'));
     }
 
     /**
