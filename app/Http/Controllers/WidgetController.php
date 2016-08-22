@@ -48,7 +48,7 @@ class WidgetController extends Controller {
                 foreach ($item->value as $sub) {
                     $value[$sub->name] = e($sub->value);
                 }
-                $item->value = $value;
+                $inputs[$item->name] = $value;
             } else {
                 $inputs[$item->name] = e($item->value);
             }
@@ -95,7 +95,7 @@ class WidgetController extends Controller {
      *
      * @return View
      */
-    public function setup(Request $request, WidgetHandler $widgetHandler, SkinHandler $skinHandler)
+    public function form(Request $request, WidgetHandler $widgetHandler, SkinHandler $skinHandler)
     {
         $this->validate($request, [
             'widget' => 'required',
@@ -112,10 +112,20 @@ class WidgetController extends Controller {
 
         $skinForm = $skin->renderSetting();
 
-        return apiRender('widget.setup', compact('widget', 'skin', 'widgetForm', 'skinForm'));
+        return apiRender('widget.form', compact('widget', 'skin', 'widgetForm', 'skinForm'));
     }
 
-    public function setupByCode(Request $request, WidgetParser $widgetParser, WidgetHandler $widgetHandler, SkinHandler $skinHandler)
+    /**
+     * setup by code
+     *
+     * @param Request       $request
+     * @param WidgetParser  $widgetParser
+     * @param WidgetHandler $widgetHandler
+     * @param SkinHandler   $skinHandler
+     *
+     * @return mixed
+     */
+    public function setup(Request $request, WidgetParser $widgetParser, WidgetHandler $widgetHandler, SkinHandler $skinHandler)
     {
         $this->validate($request, [
             'code' => 'required',
@@ -126,16 +136,30 @@ class WidgetController extends Controller {
         $inputs = $widgetParser->parseCode($code);
 
         $widget = array_get($inputs, '@attributes.id');
+
+        // widget list
+        $widgetList = $widgetHandler->getAll();
+        $widgets = [];
+        $widgets[''] = '위젯을 선택하세요';
+        foreach ($widgetList as $id => $class) {
+            $widgets[$id] = $class::getTitle();
+        }
+
+        // skin list
+        $skins = $skinHandler->getList($widget);
+
         // widget form
         $widgetForm = $widgetHandler->setup($widget, $inputs);
 
         // skin form
-        $skin = $skinHandler->get($skin);
+        $skinConfig = array_get($inputs, 'skin');
+        if($skinConfig) {
+            $skin = array_get($skinConfig, '@attributes.id');
+            $skin = $skinHandler->get($skin);
+            $skinForm = $skin->renderSetting($skinConfig);
+        }
 
-        $skinForm = $skin->renderSetting();
-
-
-        return apiRender('widget.setup-code', compact('widget', 'skin', 'widgetSelector', 'skinSelector', 'widgetForm', 'skinForm'));
+        return apiRender('widget.setup', compact('widgets', 'widget', 'skins', 'skin', 'widgetSelector', 'skinSelector', 'widgetForm', 'skinForm'));
     }
 
     /**

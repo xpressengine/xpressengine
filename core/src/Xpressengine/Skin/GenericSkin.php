@@ -223,7 +223,7 @@ abstract class GenericSkin extends AbstractSkin
      */
     protected function makeConfigView(array $info, $old)
     {
-        return uio('form', ['style'=> 'fieldset', 'class' => $this->getId(), 'inputs' => $info, 'value' => $old]);
+        return uio('form', ['type'=> 'fieldset', 'class' => $this->getId(), 'inputs' => $info, 'value' => $old]);
     }
 
     /**
