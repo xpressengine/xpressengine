@@ -310,4 +310,12 @@
         }
     };
 
+    $(function() {
+        $('[data-toggle="xe-lightbox"]').each(function() {
+            var selector = $(this).data('selector');
+
+            $(this).find(' > ' + selector).lightbox();
+        });
+    });
+
 })(jQuery);
