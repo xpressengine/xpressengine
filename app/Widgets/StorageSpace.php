@@ -99,7 +99,7 @@ class StorageSpace extends AbstractWidget
                 ]
             ],
             'value' => $args,
-            'style' => 'fieldset'
+            'type' => 'fieldset'
         ]);
     }
 

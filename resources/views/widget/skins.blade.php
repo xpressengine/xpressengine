@@ -7,8 +7,8 @@
         @else
             <option value="">스킨을 선택하세요.</option>
         @endif
-        @foreach($skins as $skin => $entity)
-            <option value="{{ $skin }}" data-url="{{ route('settings.widget.setup', ['widget'=>$widget, 'skin'=>$skin]) }}">{{ $entity->getTitle() }}</option>
+        @foreach($skins as $id => $entity)
+            <option @if(isset($skin) && $skin->getId()===$id) selected @endif value="{{ $id }}" data-url="{{ route('settings.widget.form', ['widget'=>$widget, 'skin'=>$id]) }}">{{ $entity->getTitle() }}</option>
         @endforeach
     </select>
 </div>

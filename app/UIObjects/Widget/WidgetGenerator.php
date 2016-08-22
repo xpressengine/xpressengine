@@ -19,7 +19,7 @@ class WidgetGenerator extends AbstractUIObject
     public function render()
     {
         $args = $this->arguments;
-        $prefix = array_get($args, 'prefixName', 'theme_');
+        $id = array_get($args, 'id', 'widget-generator-'.static::seq());
 
         $handler = \app('xe.widget');
 
@@ -43,7 +43,7 @@ class WidgetGenerator extends AbstractUIObject
 
         $this->loadFiles();
 
-        $this->template = view($this->view, compact('widgets'))->render();
+        $this->template = view($this->view, compact('widgets', 'id'))->render();
 
         return parent::render();
     }
@@ -56,56 +56,11 @@ class WidgetGenerator extends AbstractUIObject
     protected function loadFiles()
     {
         $frontend = \app('xe.frontend');
-        $frontend->js('assets/core/xe-ui-component/js/xe-page.js')->load();
-
-        $frontend->html('widget.generator')->content(
-            "<script>
-                $(function($) {
-                    var url = { 
-                        'skin': '".route('settings.widget.skin')."'
-                    };
-                    $('.__xe_select_widget').change(function(){
-                        var widget = this.value;
-                        $('.widget-form').empty();
-                        if(widget) {
-                            XE.page(url.skin+'?widget='+widget, '.widget-skins');
-                        } else {
-                            $('.widget-skins').empty();
-                        }
-                    });
-                    
-                    // skin 선택시
-                    $('.widget-skins').on('change', '.__xe_select_widgetskin', function(){
-                        var widget = this.value;
-                        if(widget) {
-                            var url = $(this).find('option:selected').data('url');
-                            XE.page(url,'.widget-form');
-                        }
-                    });
-                    
-                    // code 생성
-                    $('.__xe_generate_code').click(function(){
-                        var form = $('#widgetForm');
-                        var data = $('#widgetForm').serializeArray();
-                        data.push({'name':'skin', 'value': $('#skinForm').serializeArray()});
-                        
-                        $.ajax({
-                          type : form.attr('method'),
-                          url : form.attr('action'),
-                          cache : false,
-                          data : JSON.stringify(data),
-                          dataType: 'json',
-                          success : function (data) {
-                            $('.__xe_widget_code').val(data.code);
-                          },
-                          error : function(data) {
-                            XE.toast(data.type, data.message);
-                          }
-                        })
-                    });
-                });
-            </script>"
+        $frontend->js(
+            [
+                'assets/core/xe-ui-component/js/xe-page.js',
+                'assets/core/uiobject/widget/generator.js'
+            ]
         )->load();
-
     }
 }
