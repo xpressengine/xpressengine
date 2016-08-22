@@ -16,7 +16,7 @@
             <strong class="ellipsis">{{ $skin->getTitle() }}</strong>
             <p class="ellipsis">{{ $skin->getDescription() }}</p>
             <div class="btn-right">
-                <button type="button" class="__xe_skin-setting-btn btn btn-link" data-url="{{ route('settings.skin.section.setting', ['skinId'=>$skin->getId(), 'instanceId'=>$skinInstanceId]) }}"><i class="xi-cog"></i><span class="hidden-xs">{{xe_trans('xe::settings')}}</span></button>
+                <button type="button" class="__xe_skin-setting-btn btn btn-link" data-toggle="xe-page-modal" data-url="{{ route('settings.skin.section.setting', ['skinId'=>$skin->getId(), 'instanceId'=>$skinInstanceId]) }}"><i class="xi-cog"></i><span class="hidden-xs">{{xe_trans('xe::settings')}}</span></button>
             </div>
         </div>
     </li>

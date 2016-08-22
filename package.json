@@ -17,6 +17,7 @@
     "gulp-filter": "^4.0.0",
     "gulp-if": "^2.0.1",
     "gulp-ignore": "^2.0.1",
+    "gulp-imagemin": "^3.0.3",
     "gulp-jscs": "^4.0.0",
     "gulp-jshint": "^2.0.1",
     "gulp-jspm": "^0.5.7",

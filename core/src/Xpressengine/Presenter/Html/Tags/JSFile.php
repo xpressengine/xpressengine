@@ -68,6 +68,10 @@ class JSFile
     {
         $output = '';
 
+        if(static::$sorter === null) {
+            return $output;
+        }
+
         // get files by location
         // $list is assoc array(filename => JSFile instance)
         $list = array_get(static::$fileList, $location, []);
@@ -96,6 +100,11 @@ class JSFile
     public static function getFileList($location = 'async.append', $minified = false)
     {
         $output = [];
+
+        if(static::$sorter === null) {
+            return $output;
+        }
+
         // get files by location
         // $list is assoc array(filename => JSFile instance)
         $list = array_get(static::$fileList, $location, []);

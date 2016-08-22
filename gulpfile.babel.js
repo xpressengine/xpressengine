@@ -4,15 +4,15 @@
 import gulp from 'gulp';
 import plugins from 'gulp-load-plugins';
 import runSequence from 'run-sequence';
-import elixir from 'laravel-elixir';
-import merge from 'merge-stream';
-import settings from './resources/gulpTasks/settings';
+
+import taskSettings from './resources/gulpTasks/settings';
 import taskReact from './resources/gulpTasks/react';
 import taskCss from './resources/gulpTasks/css';
+import taskImage from './resources/gulpTasks/image';
 
 const $ = plugins();
 
-gulp.task('default', function(callback){
+gulp.task('default', (callback) => {
   runSequence(
       'clean:assets',
       'copy:assets',
@@ -22,15 +22,16 @@ gulp.task('default', function(callback){
       'jspm:admin',
       'jspm:xe',
       'assets:sass',
+      'assets:image',
       callback);
 });
 
 // s: settings
-gulp.task('clean:assets', settings['clean:assets']);
-gulp.task('copy:assets', settings['copy:assets']);
+gulp.task('clean:assets', taskSettings['clean:assets']);
+gulp.task('copy:assets', taskSettings['copy:assets']);
 
-gulp.task('jspm:xe', settings['jspm:xe']);
-gulp.task('jspm:admin', settings['jspm:admin']);
+gulp.task('jspm:xe', taskSettings['jspm:xe']);
+gulp.task('jspm:admin', taskSettings['jspm:admin']);
 // e: settings
 
 // s: react
@@ -58,6 +59,10 @@ gulp.task('react', (callback) => {
 // s: css
 gulp.task('assets:sass', taskCss['assets:sass']);
 // e: css
+
+// s: image
+gulp.task('assets:image', taskImage['assets:image']);
+// e: image
 
 
 

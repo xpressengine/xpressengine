@@ -12,7 +12,22 @@ module.exports = (() => {
         , useSourceMaps: false//!$.util.env.production
     };
 
-    return {
+    let _filter = [
+        '**/*',
+        '!resources/assets/core/menu/*',
+        '!**/*.scss',
+        '!resources/assets/core/lang/LangEditorBox.js',
+        '!resources/assets/core/permission/*.jsx',
+        '!resources/assets/core/permission/*.js',
+        '!resources/assets/core/settings/js/admin.js',
+        '!resources/assets/core/xe-ui-component/components',
+        '!resources/assets/core/**/img/*',
+        'resources/assets/core/xe-ui-component/js/*',
+        'resources/assets/core/menu/classnames.js',
+        'resources/assets/core/menu/Tree.js'
+    ];
+
+    let self = {
         /**
          * assets 삭제
          * */
@@ -26,22 +41,7 @@ module.exports = (() => {
          * */
         'copy:assets': () => {
 
-            let filter = [
-                '**/*',
-
-                '!resources/assets/core/menu/*',
-                '!**/*.scss',
-                '!resources/assets/core/lang/LangEditorBox.js',
-                '!resources/assets/core/permission/*.jsx',
-                '!resources/assets/core/permission/*.js',
-                '!resources/assets/core/settings/js/admin.js',
-                '!resources/assets/core/xe-ui-component/components',
-
-                'resources/assets/core/xe-ui-component/img/*',
-                'resources/assets/core/xe-ui-component/js/*',
-                'resources/assets/core/menu/classnames.js',
-                'resources/assets/core/menu/Tree.js'
-            ];
+            let filters = self.getDefaultFilter();
 
             if(_config.isProduction) {
                 filter.push('!**/*.map');
@@ -49,7 +49,7 @@ module.exports = (() => {
 
             return gulp.src('resources/assets/core/**/*', {base: "./resources/assets/core"})
                 .pipe($.plumber())
-                .pipe($.filter(filter))
+                .pipe($.filter(filters))
                 .pipe(gulp.dest('assets/core'));
 
         },
@@ -78,8 +78,13 @@ module.exports = (() => {
                 .pipe($.rename('admin.bundle.js'))
                 .pipe(gulp.dest('./assets/core/settings/js'));
         },
+        getDefaultFilter: () => {
+            return Object.assign([], _filter);
+        },
         getConfig: () => {
             return _config;
         }
     };
+
+    return self
 })();

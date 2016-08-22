@@ -1,6 +1,6 @@
 import gulp from 'gulp';
 import plugins from 'gulp-load-plugins';
-import settings from './settings';
+import taskSettings from './settings';
 
 module.exports = (() => {
 
@@ -14,10 +14,10 @@ module.exports = (() => {
          * */
         'assets:sass': () => {
             return gulp.src('./resources/assets/**/*.scss')
-                .pipe($.if(settings.getConfig().useSourceMaps, $.sourcemaps.init()))
+                .pipe($.if(taskSettings.getConfig().useSourceMaps, $.sourcemaps.init()))
                 .pipe($.plumber())
                 .pipe($.sass({outputStyle: 'expanded'}).on('error', $.sass.logError))
-                .pipe($.if(settings.getConfig().useSourceMaps, $.sourcemaps.write(".")))
+                .pipe($.if(taskSettings.getConfig().useSourceMaps, $.sourcemaps.write(".")))
                 .pipe(gulp.dest('./assets'));
         }
     };

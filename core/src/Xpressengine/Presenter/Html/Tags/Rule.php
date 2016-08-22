@@ -28,7 +28,6 @@ class Rule
 {
     use AttributeTrait;
     use MinifyTrait;
-    use SortTrait;
     use TargetTrait;
     use EmptyStringTrait;
 

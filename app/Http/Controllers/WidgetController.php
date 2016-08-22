@@ -9,10 +9,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Sections\WidgetSection;
+use Illuminate\Http\Request;
 use Input;
 use View;
 use XePresenter;
+use Xpressengine\Skin\SkinEntity;
+use Xpressengine\Skin\SkinHandler;
 use Xpressengine\Widget\WidgetHandler;
+use Xpressengine\Widget\WidgetParser;
 
 class WidgetController extends Controller {
 
@@ -31,28 +35,107 @@ class WidgetController extends Controller {
         ]);
     }
 
-    public function generate(WidgetHandler $widgetHandler)
+    public function generate(Request $request, WidgetHandler $widgetHandler)
     {
-        $id = Input::get('widget');
-        $inputs = Input::except('widget');
-        return $widgetHandler->getGeneratedCode($id, $inputs);
+        $data = $request->getContent();
+
+        $data = json_decode($data);
+
+        $inputs = [];
+        foreach ($data as $item) {
+            if(is_array($item->value)) {
+                $value = [];
+                foreach ($item->value as $sub) {
+                    $value[$sub->name] = e($sub->value);
+                }
+                $item->value = $value;
+            } else {
+                $inputs[$item->name] = e($item->value);
+            }
+        }
+
+        $widget = $inputs['@id'];
+
+        $code = $widgetHandler->generateCode($widget, $inputs);
+        return XePresenter::makeApi([
+            'code' => $code,
+        ]);
 
     }
 
     /**
-     * setup
+     * 주어진 위젯의 스킨 목록을 반환한다.
      *
+     * @param Request       $request
      * @param WidgetHandler $widgetHandler
+     * @param SkinHandler   $skinHandler
+     *
+     * @return void
+     */
+    public function skin(Request $request, WidgetHandler $widgetHandler, SkinHandler $skinHandler)
+    {
+        $this->validate($request, [
+            'widget' => 'required'
+        ]);
+
+        $widget = $request->get('widget');
+
+        $skins = $skinHandler->getList($widget);
+
+        return apiRender('widget.skins', compact('widget', 'skins'));
+    }
+
+    /**
+     * 주어진 위젯과 스킨에 대한 설정 폼을 반환한다.
+     *
+     * @param Request       $request
+     * @param WidgetHandler $widgetHandler
+     *
+     * @param SkinHandler   $skinHandler
      *
      * @return View
      */
-    public function setup(WidgetHandler $widgetHandler)
+    public function setup(Request $request, WidgetHandler $widgetHandler, SkinHandler $skinHandler)
     {
-        $id = Input::get('widget');
+        $this->validate($request, [
+            'widget' => 'required',
+        ]);
 
-        $settingFormView = $widgetHandler->setUp($id);
+        $widget = $request->get('widget');
+        $skin = $request->get('skin');
 
-        return $settingFormView->render();
+        // widget form
+        $widgetForm = $widgetHandler->setup($widget);
+
+        // skin form
+        $skin = $skinHandler->get($skin);
+
+        $skinForm = $skin->renderSetting();
+
+        return apiRender('widget.setup', compact('widget', 'skin', 'widgetForm', 'skinForm'));
+    }
+
+    public function setupByCode(Request $request, WidgetParser $widgetParser, WidgetHandler $widgetHandler, SkinHandler $skinHandler)
+    {
+        $this->validate($request, [
+            'code' => 'required',
+        ]);
+
+        $code = $request->get('code');
+
+        $inputs = $widgetParser->parseCode($code);
+
+        $widget = array_get($inputs, '@attributes.id');
+        // widget form
+        $widgetForm = $widgetHandler->setup($widget, $inputs);
+
+        // skin form
+        $skin = $skinHandler->get($skin);
+
+        $skinForm = $skin->renderSetting();
+
+
+        return apiRender('widget.setup-code', compact('widget', 'skin', 'widgetSelector', 'skinSelector', 'widgetForm', 'skinForm'));
     }
 
     /**
@@ -67,7 +150,7 @@ class WidgetController extends Controller {
         $id = Input::get('widget');
         $args = Input::except('widget');
 
-        $render = $widgetHandler->create($id, $args);
+        $render = $widgetHandler->render($id, $args);
 
         return $render;
     }

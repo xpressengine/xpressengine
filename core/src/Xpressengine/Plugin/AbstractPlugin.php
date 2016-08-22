@@ -106,9 +106,6 @@ abstract class AbstractPlugin
      */
     public function checkInstalled($installedVersion = null)
     {
-        if ($installedVersion === null) {
-            return false;
-        }
         return true;
     }
 

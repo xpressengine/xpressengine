@@ -1,4 +1,5 @@
 (function(exports) {
+
     'use strict';
 
     exports.DynamicLoadManager = function() {
@@ -8,16 +9,52 @@
         };
 
         return {
-            jsLoadMultiple: function(arrjs) {
-                var html = "";
+            /**
+             * @param {array} arrjs
+             * @param {object}} callbackObj
+             * <pre>
+             *     - load
+             *     - error
+             *     - complete
+             * </pre>
+             * */
+            jsLoadMultiple: function (arrjs, callbackObj) {
+                var count = 0;
+                var callbackObj = callbackObj || {};
 
                 for(var i = 0, max = arrjs.length; i < max; i += 1) {
-                    html += "<script src='" + arrjs[i] + "'></script>";
+                    var src = arrjs[i].split('?')[0];
+
+                    if(!_assets.js.hasOwnProperty(src)) {
+                        _assets.js[src] = '';
+
+                        $.ajax({
+                            url: src,
+                            async: false,
+                            dataType: "script",
+                            success: function() {
+                                count++;
+
+                                if(!!callbackObj.load) {
+                                    callbackObj.load();
+                                }
+
+                                if(count === arrjs.length && !!callbackObj.complete) {
+                                    callbackObj.complete();
+                                }
+                            },
+                            error: callbackObj.error
+                        });
+                    }else {
+                        if(!!callbackObj.load) {
+                            callbackObj.load();
+                        }
+                    }
                 }
 
-                $("head").append(html);
+                //$("head").append(html);
             },
-            jsLoad: function(url, load, error) {
+            jsLoad: function (url, load, error) {
 
                 var src = url.split('?')[0];
 
@@ -36,7 +73,7 @@
 
                     document.head.appendChild(el);
 
-                    _assets.js[src] = "";
+                    _assets.js[src] = '';
 
                 }else {
                     if(load) {
@@ -44,7 +81,7 @@
                     }
                 }
             },
-            cssLoad: function(url, load, error) {
+            cssLoad: function (url, load, error) {
                 var src = url.split("?")[0];
 
                 if(!_assets.css.hasOwnProperty(src)) {
