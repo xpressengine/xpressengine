@@ -35,24 +35,6 @@ class SystemInfo extends AbstractWidget
     }
 
     /**
-     * getCodeCreationForm
-     *
-     * @param array $args
-     *
-     * @return mixed
-     */
-    public function renderSetting(array $args = [])
-    {
-        // TODO: Implement renderSetting() method.
-        $inputs = [
-            uio('formText', ['name'=>'title', 'label'=>'title']),
-            uio('formText', ['name'=>'description', 'label'=>'설명'])
-        ];
-
-        return implode('', $inputs);
-    }
-
-    /**
      * render
      *
      * @return mixed

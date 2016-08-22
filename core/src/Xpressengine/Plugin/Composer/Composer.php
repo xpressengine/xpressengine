@@ -46,10 +46,10 @@ class Composer
         'xpressengine-plugin/comment' => '0.9.2',
         'xpressengine-plugin/page' => '0.9.0',
         'xpressengine-plugin/news_client' => '0.9.0',
-        "xpressengine-plugin/google_analytics" => "0.9.0",
-        "xpressengine-plugin/orientator" => "0.9.0",
-        "xpressengine-plugin/external_page" => "0.9.0",
-        "xpressengine-plugin/social_login" => "0.9.2",
+        'xpressengine-plugin/google_analytics' => '0.9.0',
+        'xpressengine-plugin/orientator' => '0.9.0',
+        'xpressengine-plugin/external_page' => '0.9.0',
+        'xpressengine-plugin/social_login' => '0.9.2',
     ];
 
     /**
@@ -70,7 +70,11 @@ class Composer
         // XE가 설치돼 있지 않을 경우, base plugin require에 추가
         if (!file_exists(static::$installedFlagPath)) {
             foreach (static::$basePlugins as $plugin => $version) {
-                $writer->install($plugin, $version);
+                if($writer->get('replace.'.$plugin) === null) {
+                    $writer->install($plugin, $version);
+                } else {
+                    $event->getOutput()->writeln("xpressengine-installer: skip installation of existing plugin: $plugin");
+                }
             }
             static::applyRequire($writer);
             $writer->setFixMode();

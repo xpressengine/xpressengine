@@ -187,7 +187,15 @@ var Translator = (function(document, undefined) {
 
         if (undefined == _messages[_locale]) {
             if (undefined == _messages[localeFallback]) {
-                return id;
+                // s::CUSTOM::
+                var returnId = id;
+
+                if(id.split("xe::".toLowerCase()).length > 1) {
+                    returnId = id.split("xe::".toLowerCase())[1];
+                }
+
+                return returnId;
+                // e::CUSTOM::
             }
 
             _locale = localeFallback;
