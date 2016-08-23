@@ -38,7 +38,7 @@ class OpenGraphImporter extends AbstractImporter
         'title' => 'og:title',
         'description' => 'og:description',
         'author' => 'og:article:author',
-        'images' => 'og:image',
+        'image' => 'og:image',
         'image_width' => 'og:image:width',
         'image_height' => 'og:image:height'
     ];
