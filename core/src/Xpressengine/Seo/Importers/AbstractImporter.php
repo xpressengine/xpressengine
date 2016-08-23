@@ -94,6 +94,12 @@ abstract class AbstractImporter
                 continue;
             }
 
+            if($key === 'images') {
+                foreach($data[$key] as &$image) {
+                    $image = $image['url'];
+                }
+            }
+
             $this->addMeta($key, $data[$key]);
         }
     }
