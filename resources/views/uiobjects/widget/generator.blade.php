@@ -24,3 +24,8 @@
 
 </div>
 
+<script>
+    $(function() {
+        $('#widgetGen').widgetGenerator();
+    });
+</script>
