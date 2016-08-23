@@ -154,7 +154,6 @@ class MenuMigration implements Migration {
             }
             XeLang::save($menuTitle, $locale, $value, false);
         }
-
         $inputs = [
             'menuId' => $mainMenu->id,
             'parentId' => null,
