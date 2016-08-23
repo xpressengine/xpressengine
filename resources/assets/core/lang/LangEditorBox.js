@@ -61,7 +61,7 @@ var LangEditor = React.createClass({
           $.ajax({
             type: 'get',
             dataType: 'json',
-            url: '/' + XE.options.managePrefix + '/lang/lines/' + this.props.langKey,
+            url: xeBaseURL + '/' + XE.options.managePrefix + '/lang/lines/' + this.props.langKey,
             success: function(result) {
               if (this.isMounted()) { self.setLines(result); }
             }.bind(this)
