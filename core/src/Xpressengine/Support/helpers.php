@@ -136,6 +136,10 @@ if (function_exists('apiRender') === false) {
         $renderer->setData();
         $result = $renderer->renderSkin();
 
+        if($result instanceof \Illuminate\Contracts\Support\Renderable) {
+            $result = $result->render();
+        }
+
         return XePresenter::makeApi(
             [
                 'result' => (string) $result,

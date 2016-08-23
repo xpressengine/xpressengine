@@ -78,9 +78,11 @@ abstract class AbstractWidget implements ComponentInterface, Renderable
     /**
      * Get the evaluated contents of the object.
      *
+     * @param array $data
+     *
      * @return string
      */
-    public function render()
+    public function renderSkin(array $data)
     {
         $skinId = array_get($this->config, 'skin.@attributes.id');
         $skinConfig = array_get($this->config, 'skin');
@@ -88,7 +90,7 @@ abstract class AbstractWidget implements ComponentInterface, Renderable
         /** @var AbstractSkin $skin */
         $skin = app('xe.skin')->get($skinId, $skinConfig);
 
-        return $skin->setData($this->data)->setView('widget')->render();
+        return $skin->setData($data)->setView('widget')->render();
     }
 
     /**
