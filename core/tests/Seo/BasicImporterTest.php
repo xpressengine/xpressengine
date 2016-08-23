@@ -29,7 +29,7 @@ class BasicImporterTest extends \PHPUnit_Framework_TestCase
 
         $content = $this->invokeMethod($instance, 'makeCanonical', ['http://domain.com']);
         $frontend->shouldReceive('content')->once()->with($content)->andReturnSelf();
-        $frontend->shouldReceive('appendTo')->once()->with('head')->andReturnSelf();
+        $frontend->shouldReceive('prependTo')->once()->with('head')->andReturnSelf();
         $frontend->shouldReceive('load');
 
         $frontend->shouldReceive('meta')->andReturnSelf();

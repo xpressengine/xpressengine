@@ -39,6 +39,8 @@ class OpenGraphImporter extends AbstractImporter
         'description' => 'og:description',
         'author' => 'og:article:author',
         'images' => 'og:image',
+        'image_width' => 'og:image:width',
+        'image_height' => 'og:image:height'
     ];
 
     /**
@@ -55,5 +57,25 @@ class OpenGraphImporter extends AbstractImporter
      *
      * @var array
      */
-    protected $needHost = ['url', 'images'];
+    protected $needHost = ['url', 'image'];
+
+
+    public function exec(array $data)
+    {
+        if (isset($data['images'])) {
+            $images = $data['images'];
+            unset($data['images']);
+        }
+
+        parent::exec($data);
+
+        if (isset($images)) {
+            foreach($images as $image)
+            {
+                $this->addMeta('image', $image['url']);
+                if(isset($image['width'])) $this->addMeta('image_width', $image['width']);
+                if(isset($image['height'])) $this->addMeta('image_height', $image['height']);
+            }
+        }
+    }
 }
