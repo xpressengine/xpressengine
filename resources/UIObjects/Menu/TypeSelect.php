@@ -8,7 +8,6 @@
 
 namespace Xpressengine\UIObjects\Menu;
 
-use Xpressengine\Module\ModuleHandler;
 use Xpressengine\UIObject\AbstractUIObject;
 
 /**
