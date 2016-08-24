@@ -291,7 +291,7 @@
       return;
     } else {
       $.ajax({
-        url: '/toggleMenu',
+        url: xeBaseURL + '/toggleMenu',
         type: 'GET',
         dataType: 'json',
         data: {type: 'user', id: this.getUID()},

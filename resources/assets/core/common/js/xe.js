@@ -98,12 +98,6 @@
     return self.options.defaultLocale;
   }
 
-
-  // $.ajaxPrefilter(function(options, originalOptions, jqXHR ) {
-  //   $.extend(options, self.Request.options);
-  // });
-
-
   exports.XE = function() {
     return {
       initialize: initialize,
