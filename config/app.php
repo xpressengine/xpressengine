@@ -95,7 +95,7 @@ return [
     |
     */
 
-    'log' => env('APP_LOG', 'single'),
+    'log' => env('APP_LOG', 'daily'),
 
     /*
     |--------------------------------------------------------------------------
@@ -175,6 +175,7 @@ return [
         App\Providers\CategoryServiceProvider::class,
         App\Providers\CaptchaServiceProvider::class,
         App\Providers\WidgetServiceProvider::class,
+        App\Providers\WidgetBoxServiceProvider::class,
 
         App\Providers\CounterServiceProvider::class,
         App\Providers\TagServiceProvider::class,
@@ -263,6 +264,7 @@ return [
 
         'XeCategory' => App\Facades\XeCategory::class,
         'XeWidget' => App\Facades\XeWidget::class,
+        'XeWidgetBox' => App\Facades\XeWidgetBox::class,
         'XeCounter' => App\Facades\XeCounter::class,
         'XeTag' => App\Facades\XeTag::class,
         'XeToggleMenu' => App\Facades\XeToggleMenu::class,
