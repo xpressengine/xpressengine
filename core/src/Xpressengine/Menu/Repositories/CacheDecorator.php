@@ -301,6 +301,8 @@ class CacheDecorator implements MenuRepository
      */
     private function getWithKey($with = [])
     {
+        $with = !is_array($with) ? [$with] : $with;
+
         if (empty($with)) {
             return '_alone';
         }

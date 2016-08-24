@@ -39,16 +39,16 @@ class Composer
     protected static $installedFlagPath = 'storage/app/installed';
 
     public static $basePlugins = [
-        'xpressengine-plugin/alice' => '0.9.2',
+        'xpressengine-plugin/alice' => '0.9.3',
+        'xpressengine-plugin/board' => '0.9.4',
+        'xpressengine-plugin/ckeditor' => '0.9.3',
         'xpressengine-plugin/claim' => '0.9.2',
-        'xpressengine-plugin/board' => '0.9.2',
-        'xpressengine-plugin/ckeditor' => '0.9.2',
-        'xpressengine-plugin/comment' => '0.9.2',
-        'xpressengine-plugin/page' => '0.9.0',
-        'xpressengine-plugin/news_client' => '0.9.0',
+        'xpressengine-plugin/comment' => '0.9.3',
+        'xpressengine-plugin/external_page' => '0.9.3',
         'xpressengine-plugin/google_analytics' => '0.9.0',
-        'xpressengine-plugin/orientator' => '0.9.0',
-        'xpressengine-plugin/external_page' => '0.9.0',
+        'xpressengine-plugin/news_client' => '0.9.1',
+        'xpressengine-plugin/orientator' => '0.9.1',
+        'xpressengine-plugin/page' => '0.9.2',
         'xpressengine-plugin/social_login' => '0.9.2',
     ];
 
