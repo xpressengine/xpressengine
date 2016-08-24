@@ -1,16 +1,21 @@
 ;(function(exports, $) {
+
+    'use strict';
+
     var widgetForm = '#widgetForm';
     var skinForm = '#skinForm';
     var selectWidget = '.__xe_select_widget';
     var selectWidgetSkin = '.__xe_select_widgetskin';
     var widgetCodeSel = '.__xe_widget_code';
     var widgetInputs = '.widget-inputs';
+    var setupCode = '.__xe_setup_code';
+    var generateCode = '.__xe_generate_code';
     var self;
 
     var _applyPlugins = function () {
         $.fn.widgetGenerator = function (opt) {
 
-            var $container = $(this);
+            var $container = this;
             var isBinding = false;
 
             var _bindEvents = function () {
@@ -36,19 +41,19 @@
                     }
                 });
 
-                $container.on('click', function() {
+                $container.on('click', setupCode, function() {
                     var code = $(widgetCodeSel).val();
                     var url = $(widgetInputs).data('url');
 
-                    exports.WidgetCode.reset({
+                    WidgetCode.reset({
                         url: url,
                         target: '.widget-inputs',
                         code: code
                     });
                 });
 
-                $container.on('click', function() {
-                    exports.WidgetCode.generate({
+                $container.on('click', generateCode, function() {
+                    WidgetCode.generate({
                         widgetForm: '#widgetForm',
                         skinForm: '#skinForm'
                     });
@@ -61,8 +66,6 @@
                 _bindEvents();
             }
 
-            console.log(opt, opt === undefined, opt === 'undefined');
-
             switch(typeof opt) {
                 case 'string':
 
@@ -73,7 +76,7 @@
                             break;
 
                         case 'generate':
-                            exports.WidgetCode.generate({
+                            WidgetCode.generate({
                                 widgetForm: widgetForm,
                                 skinForm: skinForm
                             });
@@ -89,23 +92,21 @@
 
 
                     break;
-                case undefined:
-
-
+                case 'undefined':
                     break;
                 default:
                     console.error('widgetGenerator parameter error');
             }
 
             this.generate = function() {
-                exports.WidgetCode.generate({
+                WidgetCode.generate({
                     widgetForm: widgetForm,
                     skinForm: skinForm
                 });
             };
 
             this.reset = function() {
-                exports.WidgetCode.reset({
+                WidgetCode.reset({
                     url: $(widgetInputs).data('url'),
                     code: $(widgetCodeSel).val(),
                     target: widgetInputs
@@ -124,8 +125,9 @@
              *     - {string} widgetForm selector
              *     - {string} skinForm selector
              * </pre>
+             * @param {function} cb callback
              * */
-            generate: function (options) {
+            generate: function (options, cb) {
                 var $form = $(options.widgetForm);
                 var data = $form.serializeArray();
 
@@ -142,6 +144,10 @@
                     dataType: 'json',
                     success : function (data) {
                         $('.__xe_widget_code').val(data.code);
+
+                        if(cb) {
+                            cb();
+                        }
                     },
                     error : function(data) {
                         XE.toast(data.type, data.message);
@@ -177,9 +183,7 @@
                 return this;
             }
         }
-    });
-
-    exports.WidgetCode = WidgetCode().init();
+    })().init();
 
 })(window, jQuery);
 

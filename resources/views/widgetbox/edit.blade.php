@@ -162,7 +162,7 @@
     <!--widget layer  -->
     <!--[D] .open 추가 시 layer 펼침 -->
     <div class="widget-layer">
-        {{ uio('widget') }}
+        {{ uio('widget', ['id'=>'widgetGen', 'show_code'=>false]) }}
 
         <div class="btn-center">
             <input type="hidden" id="widgetCode" value="{{ "<xewidget id='widget/banner' title='상단배너'><banner_count>2</banner_count><banner_size>2</banner_size></xewidget>" }}" />
