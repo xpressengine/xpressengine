@@ -22,7 +22,7 @@ class WidgetGenerator extends AbstractUIObject
 
         $show_code = array_get($args, 'show_code', true);
 
-        $handler = \app('xe.widget');
+        $handler = app('xe.widget');
 
         $widgetList = $handler->getAll();
 

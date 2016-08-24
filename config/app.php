@@ -157,7 +157,6 @@ return [
 
         App\Providers\RoutingServiceProvider::class,
         App\Providers\MenuServiceProvider::class,
-//        App\Providers\ModuleServiceProvider::class,
         App\Providers\ConfigServiceProvider::class,
         App\Providers\DocumentServiceProvider::class,
         App\Providers\DatabaseServiceProvider::class,

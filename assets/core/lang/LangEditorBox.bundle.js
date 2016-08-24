@@ -69,7 +69,7 @@ $__System.registerDynamic("1", [], false, function($__require, $__exports, $__mo
               $.ajax({
                 type: 'get',
                 dataType: 'json',
-                url: '/' + XE.options.managePrefix + '/lang/lines/' + this.props.langKey,
+                url: xeBaseURL + '/' + XE.options.managePrefix + '/lang/lines/' + this.props.langKey,
                 success: function(result) {
                   if (this.isMounted()) {
                     self.setLines(result);

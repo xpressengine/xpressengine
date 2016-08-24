@@ -53,24 +53,29 @@ class SeoHandlerTest extends \PHPUnit_Framework_TestCase
             ->shouldAllowMockingProtectedMethods()
             ->makePartial();
 
+        $mockMeta = m::mock('stdClass');
+        $mockMeta->width = 200;
+        $mockMeta->height = 100;
+        $mockImage = m::mock('Xpressengine\Media\Models\Image');
+        $mockImage->shouldReceive('url')->once()->andReturn('/path/to/item/image');
+        $mockImage->shouldReceive('getAttribute')->with('meta')->andReturn($mockMeta);
+
         $mockItem = m::mock('Xpressengine\Seo\SeoUsable');
         $mockItem->shouldReceive('getUrl')->andReturn('http://someurl.com/path/name');
         $mockItem->shouldReceive('getDescription')->andReturn('sample description');
         $mockItem->shouldReceive('getKeyword')->andReturn(['test', 'sample']);
         $mockItem->shouldReceive('getAuthor')->andReturn('');
-        $mockItem->shouldReceive('getImages')->andReturn([]);
+        $mockItem->shouldReceive('getImages')->andReturn([$mockImage]);
 
         $instance->shouldReceive('makeTitle')->once()->with($mockItem)->andReturn('this is sparta!');
 
         $setting->shouldReceive('get')->once()->with('mainTitle')->andReturn('site name');
-//        $setting->shouldReceive('get')->once()->with('description')->andReturn('');
-//        $setting->shouldReceive('get')->once()->with('keywords')->andReturn('');
+       // $setting->shouldReceive('get')->once()->with('description')->andReturn('');
+       // $setting->shouldReceive('get')->once()->with('keywords')->andReturn('');
 
         $translator->shouldReceive('trans')->once()->with('site name')->andReturn('site name');
 
-        $mockImage = m::mock('Xpressengine\Media\Models\Image');
-        $mockImage->shouldReceive('url')->once()->andReturn('/path/to/image');
-        $setting->shouldReceive('getSiteImage')->once()->andReturn($mockImage);
+        $setting->shouldReceive('getSiteImage')->once()->andReturn('/path/to/site/image');
 
         $data = $this->invokeMethod($instance, 'resolveData', [$mockItem]);
 
@@ -81,8 +86,14 @@ class SeoHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('sample description', $data['description']);
         $this->assertEquals('test,sample', $data['keywords']);
         $this->assertFalse(isset($data['author']));
-        $this->assertEquals(1, count($data['images']));
-        $this->assertEquals('/path/to/image', reset($data['images']));
+        $this->assertEquals(2, count($data['images']));
+
+        $this->assertEquals([
+                'url' => '/path/to/item/image',
+                'width' => 200,
+                'height' => 100
+            ], reset($data['images']));
+        $this->assertEquals('/path/to/site/image', next($data['images'])['url']);
     }
 
     public function testMakeTitle()

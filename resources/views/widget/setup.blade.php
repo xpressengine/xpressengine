@@ -1,14 +1,20 @@
         {{-- select widget --}}
         <div class="widget-selector">
-            {{ uio('formSelect', ['label'=>'위젯', 'class'=>'__xe_select_widget', 'name'=>'widget', 'options'=>$widgets, 'selected'=>$widget] ) }}
+            {{ uio('formSelect',
+                ['label'=>'위젯', 'class'=>'__xe_select_widget', 'name'=>'widget', 'options'=>$widgets, 'selected'=>isset($widget)?$widget:null] )
+            }}
         </div>
 
         {{-- select skin --}}
         <div class="widget-skins" data-url="{{route('settings.widget.skin')}}">
+            @if(isset($skins))
             @include('widget.skins')
+            @endif
         </div>
 
         {{-- form fields --}}
         <div class="widget-form">
+            @if(isset($widgetForm))
             @include('widget.form')
+            @endif
         </div>

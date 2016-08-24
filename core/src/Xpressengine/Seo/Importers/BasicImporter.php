@@ -55,7 +55,7 @@ class BasicImporter extends AbstractImporter
     {
         $url = $this->extractUrl($data);
 
-        $this->frontend->html('canonical')->content($this->makeCanonical($url))->appendTo('head')->load();
+        $this->frontend->html('canonical')->content($this->makeCanonical($url))->prependTo('head')->load();
 
         parent::exec($data);
     }
