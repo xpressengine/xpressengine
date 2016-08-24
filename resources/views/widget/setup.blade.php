@@ -1,10 +1,14 @@
-<form id="widgetForm" action="{{ route('settings.widget.generate') }}" method="post">
-    <input type="hidden" name="@id" value="{{ $widget }}">
-    {!! $widgetForm !!}
-</form>
-<form id="skinForm" action="{{ route('settings.widget.generate') }}">
-    <input type="hidden" name="@id" value="{{ $skin->getId() }}">
-    {!! $skinForm !!}
-</form>
+        {{-- select widget --}}
+        <div class="widget-selector">
+            {{ uio('formSelect', ['label'=>'위젯', 'class'=>'__xe_select_widget', 'name'=>'widget', 'options'=>$widgets, 'selected'=>$widget] ) }}
+        </div>
 
+        {{-- select skin --}}
+        <div class="widget-skins" data-url="{{route('settings.widget.skin')}}">
+            @include('widget.skins')
+        </div>
 
+        {{-- form fields --}}
+        <div class="widget-form">
+            @include('widget.form')
+        </div>

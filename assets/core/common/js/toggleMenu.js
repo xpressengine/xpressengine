@@ -72,7 +72,7 @@ var ToggleMenu = React.createClass({
     this.setState({loaded: true});
 
     $.ajax({
-      url: '/plugin/toggleMenu',
+      url: xeBaseURL + '/plugin/toggleMenu',
       type: 'get',
       dataType: 'json',
       data: {type: this.props.type, id: this.props.identifier},

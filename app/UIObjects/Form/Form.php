@@ -47,8 +47,8 @@ class Form extends AbstractUIObject
     {
         $args = $this->arguments;
 
-        // style = panel, fieldset
-        $style = array_get($args, 'style', 'panel');
+        // style(type) = panel, fieldset
+        $style = array_get($args, 'type', 'panel');
 
         if(array_get($args,'action') === null) {
             if($style === 'fieldset') {
@@ -79,18 +79,21 @@ class Form extends AbstractUIObject
             $type = array_get($arg, '_type');
             unset($arg['_type']);
 
-            $sectionName = array_get($arg, '_section', '기본설정');
-            unset($arg['_section']);
-
-            $style = array_get($this->arguments, 'style', 'panel');
-            $section = $this->getSection($form, $sectionName, $style);
 
             array_set($arg, 'value', $value);
 
             $uio = 'form'.ucfirst($type);
             $input = uio($uio, $arg);
 
-            $this->wrapInput($name, $input)->appendTo($section);
+            $field = $this->wrapInput($name, $input);
+
+            $sectionName = array_get($arg, '_section');
+
+            unset($arg['_section']);
+
+            $style = array_get($this->arguments, 'type', 'panel');
+            $section = $this->getSection($form, $sectionName, $style);
+            $field->appendTo($section);
         }
     }
 
@@ -100,7 +103,7 @@ class Form extends AbstractUIObject
         if(count($form['.'.$classname]) === 0){
 
             if($style === 'fieldset') {
-                $section = sprintf('<fieldset class="%s"><legend>%s</legend></fieldset>', $classname, $sectionName);
+                $section = sprintf('<fieldset class="%s"><legend>%s</legend><div class="row"></div></fieldset>', $classname, $sectionName);
             } else {
                 $section = sprintf('<div class="panel %s"><div class="panel-heading"><div class="pull-left"><h3>%s</h3></div></div><div class="panel-body"><div class="row"></div></div></div>', $classname, $sectionName);
             }
@@ -108,7 +111,7 @@ class Form extends AbstractUIObject
             $sectionEl = PhpQuery::pq($section)->appendTo($form);
         }
         if($style === 'fieldset') {
-            return $form['.'.$classname];
+            return $form['.'.$classname]['.row'];
         } else {
             return $form['.'.$classname]['.panel-body .row'];
         }

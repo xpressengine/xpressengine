@@ -107,7 +107,7 @@
         },
         reqPost: function () {
             $.ajax({
-                url: '/temporary/store',
+                url: xeBaseURL + '/temporary/store',
                 type: 'post',
                 dataType: 'json',
                 data: this.getReqSerialize() + "&key=" + this.key,
@@ -122,7 +122,7 @@
         },
         reqPut: function () {
             $.ajax({
-                url: '/temporary/update/' + this.temporaryId,
+                url: xeBaseURL + '/temporary/update/' + this.temporaryId,
                 type: 'post',
                 dataType: 'json',
                 data: this.getReqSerialize(),
@@ -135,14 +135,14 @@
         },
         setAuto: function () {
             $.ajax({
-                url: '/temporary/setAuto',
+                url: xeBaseURL + '/temporary/setAuto',
                 type: 'post',
                 data: this.getReqSerialize() + "&key=" + this.key
             });
         },
         deleteAuto: function () {
             $.ajax({
-                url: '/temporary/destroyAuto',
+                url: xeBaseURL + '/temporary/destroyAuto',
                 type: 'post',
                 data: "key=" + this.key
             });
@@ -169,7 +169,7 @@
             }
 
             $.ajax({
-                url: '/temporary/destroy/' + id,
+                url: xeBaseURL + '/temporary/destroy/' + id,
                 type: 'post',
                 dataType: 'json'
             });
@@ -197,7 +197,7 @@
                 this.setState({loaded: false});
 
                 $.ajax({
-                    url: '/temporary',
+                    url: xeBaseURL + '/temporary',
                     type: 'get',
                     dataType: 'json',
                     data: {key: this.props.keyVal},

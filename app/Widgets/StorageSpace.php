@@ -91,7 +91,16 @@ class StorageSpace extends AbstractWidget
      */
     public function renderSetting(array $args = [])
     {
-        return 'hello';
+        return uio('form', [
+            'fields' => [
+                'limit' => [
+                    '_type' => 'text',
+                    'label' => '자릿수',
+                ]
+            ],
+            'value' => $args,
+            'type' => 'fieldset'
+        ]);
     }
 
 }
