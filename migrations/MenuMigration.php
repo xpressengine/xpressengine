@@ -174,7 +174,7 @@ class MenuMigration implements Migration {
 
         $item = $menuHandler->createItem($mainMenu, $inputs, $menuTypeInput);
 
-        $menuHandler->setMenuItemTheme($item, null, null);
+        $menuHandler->setMenuItemTheme($item, 'theme/alice@alice.1', 'theme/alice@alice.1');
         app('xe.permission')->register($menuHandler->permKeyString($item), new Grant);
 
 

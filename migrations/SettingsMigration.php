@@ -20,6 +20,8 @@ class SettingsMigration implements Migration {
     public function installed()
     {
         \DB::table('config')->insert(['name' => 'settings', 'vars' => '[]']);
+        \DB::table('permissions')->insert(['siteKey'=> 'default', 'name' => 'settings', 'grants' => '[]']);
+        \DB::table('permissions')->insert(['siteKey'=> 'default', 'name' => 'settings.user', 'grants' => '[]']);
     }
 
     public function update($installedVersion = null)
