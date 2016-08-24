@@ -13,7 +13,7 @@
     var self;
 
     var _applyPlugins = function () {
-        $.fn.widgetGenerator = function (opt) {
+        $.fn.widgetGenerator = function (opt, cb) {
 
             var $container = this;
             var isBinding = false;
@@ -29,6 +29,7 @@
                         XE.page(url+'?widget='+widget, '.widget-skins');
                     } else {
                         $('.widget-skins').empty();
+                        $(".__xe_widget_code").val('');
                     }
                 });
 
@@ -56,7 +57,7 @@
                     WidgetCode.generate({
                         widgetForm: '#widgetForm',
                         skinForm: '#skinForm'
-                    });
+                    }, cb);
                 });
 
                 isBinding = true;
@@ -79,7 +80,7 @@
                             WidgetCode.generate({
                                 widgetForm: widgetForm,
                                 skinForm: skinForm
-                            });
+                            }, cb);
                             break;
 
                         default:
@@ -98,11 +99,11 @@
                     console.error('widgetGenerator parameter error');
             }
 
-            this.generate = function() {
+            this.generate = function(cb) {
                 WidgetCode.generate({
                     widgetForm: widgetForm,
                     skinForm: skinForm
-                });
+                }, cb);
             };
 
             this.reset = function() {

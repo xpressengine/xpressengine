@@ -20,12 +20,14 @@
             },
             bindEvents: function () {
                 self.$btnPlaceWidget.on('click', function() {
-                    if($(".__xe_widget_code").val() !== '') {
-                        self.closeLayer();
-                        self.placeWidget();
-                    }else {
-                        alert('위젯 코드를 생성해 주세요.');
-                    }
+                    $("#widgetGen").widgetGenerator().generate(function() {
+                        if($(".__xe_widget_code").val() !== '') {
+                            self.closeLayer();
+                            self.placeWidget();
+                        }else {
+                            alert('위젯 코드가 생성되지 않았습니다.');
+                        }
+                    });
                 });
                 self.$btnCloseLayer.on('click', self.closeLayer);
             },
