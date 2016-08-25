@@ -32,6 +32,7 @@ class WidgetBox extends DynamicModel
 
     protected $fillable = [
         'id',
+        'title',
         'content',
         'options'
     ];

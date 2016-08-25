@@ -120,6 +120,6 @@ class Form extends AbstractUIObject
     private function wrapInput($name, $input)
     {
         $classname = 'form-col-'.str_replace([' ', '.'], '-', $name);
-        return PhpQuery::pq('<div class="col-md-6 '.$classname.'">'.(string)$input.'</div>');
+        return PhpQuery::pq('<div class="col-md-12 '.$classname.'">'.(string)$input.'</div>');
     }
 }

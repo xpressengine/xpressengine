@@ -8,7 +8,6 @@
     '/assets/core/widgetbox/css/widgetbox.css',
 ])->load() }}
 
-
 <div class="widget-wrap">
     <header>
         <h1><a href="#"><i class="xi-xpressengine"></i><span class="brand-title"><span class="xe-sr-only">xe3 widgetbox</span></span></a></h1>
@@ -19,8 +18,8 @@
     </header>
     <div class="widget-snb">
         <div class="snb-section">
-            <h2>메인 페이지</h2>
-            <p>메인 페이지의 위젯을 편집합니다.</p>
+            <h2>{{ $widgetbox->title }}</h2>
+            <p>{{ $widgetbox->title }} 위젯박스를 편집합니다.</p>
         </div>
         <div class="snb-section">
             <h3>Device mode <i class="xi-question-o" data-toggle="xe-tooltip" data-placement="bottom" title="모바일에서는 모든 셀이 12col을 차지하도록하여 추가 옵션을 지원 하지 않습니다."></i></h3>

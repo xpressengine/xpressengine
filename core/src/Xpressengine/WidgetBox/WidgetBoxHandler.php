@@ -65,9 +65,11 @@ class WidgetBoxHandler
             $options = json_encode($options);
         }
 
+        $title = array_get($data, 'title', $id);
+
         $content = array_get($data, 'content', '');
 
-        $this->repository->create(compact('id', 'content', 'options'));
+        $this->repository->create(compact('id', 'title', 'content', 'options'));
     }
 
     public function update($widgetbox, $widgetboxData = []){

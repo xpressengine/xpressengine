@@ -20,6 +20,7 @@ class WidgetboxMigration implements Migration {
             $table->engine = "InnoDB";
 
             $table->string('id', 100);
+            $table->string('title', 200);
             $table->text('content');
             $table->text('options');
             $table->timestamp('createdAt');

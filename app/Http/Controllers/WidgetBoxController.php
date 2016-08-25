@@ -11,41 +11,31 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use XeDB;
 use XePresenter;
+use Xpressengine\WidgetBox\WidgetBoxHandler;
 
 class WidgetBoxController extends Controller {
 
-    public function edit(Request $request, $boxId)
+    public function edit(Request $request, WidgetBoxHandler $handler, $boxId)
     {
 
         app('xe.theme')->selectBlankTheme();
 
-        //$widgetbox = WidgetBox::get($boxId);
-        $widgetbox = [
-            'id' => $boxId,
-            'title' => '메인페이지',
-            'content' => '',
-        ];
+        $widgetbox = $handler->find($boxId);
 
         return XePresenter::make('widgetbox.edit', compact('widgetbox'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request, WidgetBoxHandler $handler)
     {
         $this->validate($request, [
             'id' => 'required',
+            'title' => 'required'
         ]);
 
-        $data = [];
-        $data['id'] = $request->get('id');
-        $data['content'] = $request->get('content', '');
-
-        if($request->has('options')){
-            $data['options'] = $request->get('options', []);
-        }
+        $data = $request->only(['id', 'title', 'content', 'options']);
 
         XeDB::beginTransaction();
         try {
-            $handler = app('xe.widgetbox');
             $handler->create($data);
         } catch (\Exception $e) {
             XeDB::rollback();
@@ -56,7 +46,7 @@ class WidgetBoxController extends Controller {
         return XePresenter::makeApi();
     }
 
-    public function update(Request $request, $boxId)
+    public function update(Request $request, WidgetBoxHandler $handler, $boxId)
     {
         $this->validate($request, [
             'content' => 'required'
@@ -69,7 +59,7 @@ class WidgetBoxController extends Controller {
         }
         XeDB::beginTransaction();
         try {
-            app('xe.widgetbox')->update($boxId, $data);
+            $handler->update($boxId, $data);
         } catch (\Exception $e) {
             XeDB::rollback();
             throw $e;
