@@ -83,7 +83,7 @@
 <script type="text/javascript">
     $(function () {
         $('button.save').click(function (e) {
-            var url = '/settings/lang/save',
+            var url = xeBaseURL + '/settings/lang/save',
                     data = $(this).closest('form').serializeArray();
             $.ajax({
                 type: 'PUT', url: url, dataType: 'json', data: data,
