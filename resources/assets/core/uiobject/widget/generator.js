@@ -147,7 +147,7 @@
                         $('.__xe_widget_code').val(data.code);
 
                         if(cb) {
-                            cb();
+                            cb(data);
                         }
                     },
                     error : function(data) {

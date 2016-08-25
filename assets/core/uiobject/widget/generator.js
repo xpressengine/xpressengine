@@ -132,10 +132,13 @@
                 var $form = $(options.widgetForm);
                 var data = $form.serializeArray();
 
-                data.push({
-                    'name':'skin',
-                    'value': $(options.skinForm).serializeArray()
-                });
+                var skinForm = $(options.skinForm).serializeArray();
+                if(skinForm.length) {
+                    data.push({
+                        'name':'skin',
+                        'value': skinForm
+                    });
+                }
 
                 XE.ajax({
                     url : $form.attr('action'),
@@ -147,7 +150,7 @@
                         $('.__xe_widget_code').val(data.code);
 
                         if(cb) {
-                            cb();
+                            cb(data);
                         }
                     },
                     error : function(data) {

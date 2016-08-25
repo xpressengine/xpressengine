@@ -47,11 +47,34 @@
                     <h4 class="modal-title" id="myModalLabel">위젯 추가</h4>
                 </div>
                 <div class="modal-body">
-                    {{ uio('widget', ['id'=>'widgetGen']) }}
+                    {{ uio('widget', ['id'=>'widgetGen', 'show_code'=>false]) }}
+                </div>
+                <div class="xe-modal-footer">
+                    <button type="button" class="xe-btn xe-btn-secondary" data-dismiss="xe-modal">취소</button>
+                    <button type="button" class="xe-btn xe-btn-primary __xe_insert_widget" data-dismiss="xe-modal">추가</button>
                 </div>
             </div>
         </div>
     </div>
 
-
     @endif
+
+    {!!
+        XeFrontend::html('theme.insert-widget')->content("
+        <script>
+            $('.__xe_insert_widget').click(function(){
+                $('#widgetGen').widgetGenerator().generate(function(data){
+
+                    $('#widgetModal').modal('hide');
+
+                    // add code to textarea
+                    var txt = $('textarea[name=content]');
+                    var caretPos = txt[0].selectionStart;
+                    var textAreaTxt = txt.val();
+                    txt.val(textAreaTxt.substring(0, caretPos) + data.code + textAreaTxt.substring(caretPos) );
+
+                });
+            })
+        </script>
+        ")->load();
+    !!}
