@@ -1,25 +1,45 @@
 ;(function(exports) {
     'use strict';
 
+    var _options = {};
+
     exports.WidgetBox = (function() {
         var self = this;
 
         return {
-            init: function() {
+            init: function(options) {
                 self = this;
 
                 self.cache();
                 self.bindEvents();
 
+                _options = options || {};
+
                 return this;
             },
             cache: function() {
                 self.$editor = $(".editor");
+                self.$btnUpdatePage = $('.btnUpdatePage');
             },
             bindEvents: function() {
                 self.$editor.on("click", "div[class^='xe-col-']:not(:has(> .widget))", self.selectColumn);
                 self.$editor.on("click", ".btnWidgetConfig", self.openConfig);
                 self.$editor.on("click", ".btnDelWidget", self.delWidget);
+                self.$btnUpdatePage.on('click', self.updatePage);
+            },
+            updatePage: function() {
+                if(_options.updateUrl) {
+                    XE.ajax({
+                        url: _options.updateUrl,
+                        type: 'put',
+                        dataType: 'html',
+                        data: {
+                            content: self.$editor.html()
+                        }
+                    });
+                }else {
+                    console.error('update url이 없음');
+                }
             },
             selectColumn: function(e) {
                 e.stopPropagation();
@@ -35,9 +55,12 @@
             deselectAll: function() {
                 $(".selected").removeClass("selected");
             },
-            
             openConfig: function() {
-                window.console.log("open config");
+                var widgetCode = $(this).siblings('.widgetCode').val();
+
+                $("#widgetGen").widgetGenerator().reset(widgetCode, function() {
+                    WidgetSnb.toggleWidgetAddLayer();
+                });
             },
             delWidget: function() {
                 var $column = $(this).parents(".widgetarea").closest("div[class^='xe-col-']");
