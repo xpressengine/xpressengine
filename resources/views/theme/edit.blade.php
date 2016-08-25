@@ -50,8 +50,8 @@
                     {{ uio('widget', ['id'=>'widgetGen', 'show_code'=>false]) }}
                 </div>
                 <div class="xe-modal-footer">
-                    <button type="button" class="xe-btn xe-btn-secondary" data-dismiss="xe-modal">취소</button>
-                    <button type="button" class="xe-btn xe-btn-primary __xe_insert_widget" data-dismiss="xe-modal">추가</button>
+                    <button type="button" class="xe-btn xe-btn-secondary" data-dismiss="modal">취소</button>
+                    <button type="button" class="xe-btn xe-btn-primary __xe_insert_widget" data-dismiss="modal">추가</button>
                 </div>
             </div>
         </div>

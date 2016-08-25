@@ -5,9 +5,9 @@
 
     </div>
 
-    <hr>
 
     @if($show_code)
+    <hr>
     <button type="button" class="btn btn-default __xe_generate_code">코드생성</button>
     <hr>
     <div class="widget-code">

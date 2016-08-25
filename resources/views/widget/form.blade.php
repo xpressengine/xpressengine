@@ -1,4 +1,5 @@
 <p>위젯 설정</p>
+<hr>
 <form id="widgetForm" action="{{ route('settings.widget.generate') }}" method="post">
     <input type="hidden" name="@id" value="{{ $widget }}">
 

@@ -103,7 +103,8 @@ class Form extends AbstractUIObject
         if(count($form['.'.$classname]) === 0){
 
             if($style === 'fieldset') {
-                $section = sprintf('<fieldset class="%s"><legend>%s</legend><div class="row"></div></fieldset>', $classname, $sectionName);
+                $sectionName = $sectionName ? "<legend>$sectionName</legend>" : '';
+                $section = sprintf('<fieldset class="%s">%s<div class="row"></div></fieldset>', $classname, $sectionName);
             } else {
                 $section = sprintf('<div class="panel %s"><div class="panel-heading"><div class="pull-left"><h3>%s</h3></div></div><div class="panel-body"><div class="row"></div></div></div>', $classname, $sectionName);
             }
