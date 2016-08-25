@@ -30,27 +30,6 @@ class WidgetBoxController extends Controller {
         return XePresenter::make('widgetbox.edit', compact('widgetbox'));
     }
 
-    public function store(Request $request, WidgetBoxHandler $handler)
-    {
-        $this->validate($request, [
-            'id' => 'required',
-            'title' => 'required'
-        ]);
-
-        $data = $request->only(['id', 'title', 'content', 'options']);
-
-        XeDB::beginTransaction();
-        try {
-            $handler->create($data);
-        } catch (\Exception $e) {
-            XeDB::rollback();
-            throw $e;
-        }
-        XeDB::commit();
-
-        return XePresenter::makeApi();
-    }
-
     public function update(Request $request, WidgetBoxHandler $handler, $boxId)
     {
         $this->validate($request, [
@@ -70,6 +49,11 @@ class WidgetBoxController extends Controller {
             throw $e;
         }
         XeDB::commit();
+
+        return XePresenter::makeApi(['type' => 'success', 'message' => '위젯박스를 저장했습니다.']);
+
     }
+
+
 
 }
