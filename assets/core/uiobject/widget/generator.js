@@ -50,7 +50,7 @@
                         url: url,
                         target: '.widget-inputs',
                         code: code
-                    });
+                    }, cb);
                 });
 
                 $container.on('click', generateCode, function() {
@@ -72,6 +72,14 @@
 
                     //switch
                     switch(opt) {
+                        case 'init':
+                            $container.find('.__xe_select_widget').find('option:eq(0)').prop('selected', true);
+                            $container.find('.widget-skins').empty();
+                            $container.find('.widget-form').empty();
+                            $container.find('.__xe_widget_code').val('');
+
+                            break;
+
                         case 'code':
                             return $container.find(widgetCodeSel).val();
                             break;
@@ -90,8 +98,6 @@
                     break;
 
                 case 'object':
-
-
                     break;
                 case 'undefined':
                     break;
@@ -106,12 +112,12 @@
                 }, cb);
             };
 
-            this.reset = function() {
+            this.reset = function(code, cb) {
                 WidgetCode.reset({
                     url: $(widgetInputs).data('url'),
                     code: $(widgetCodeSel).val(),
                     target: widgetInputs
-                });
+                }, cb);
             };
 
             return this;
@@ -165,8 +171,9 @@
              *     - {string} target selector
              *     - {string} code
              * </pre>
+             * @param {function} cb callback
              * */
-            reset: function (options) {
+            reset: function (options, cb) {
                 DynamicLoadManager.jsLoad('/assets/core/xe-ui-component/js/xe-page.js', function() {
                     var url = options.url;
                     var code = options.code;
@@ -176,7 +183,7 @@
                         data: {
                             code: code
                         }
-                    });
+                    }, cb);
                 });
             },
             init: function() {

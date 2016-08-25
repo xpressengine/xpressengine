@@ -13,7 +13,7 @@
         <h1><a href="#"><i class="xi-xpressengine"></i><span class="brand-title"><span class="xe-sr-only">xe3 widgetbox</span></span></a></h1>
         <div class="xe-pull-right">
             <button type="button" class="xe-btn">미리보기</button>
-            <button type="button" class="xe-btn xe-btn-primary"><i class="xi-check"></i>저장</button>
+            <button type="button" class="xe-btn xe-btn-primary btnUpdatePage"><i class="xi-check"></i>저장</button>
         </div>
     </header>
     <div class="widget-snb">
@@ -146,14 +146,20 @@
             <h3>편집 영역 <i class="xi-question-o" data-toggle="xe-tooltip" data-placement="bottom" title="각 셀에 출력되는 번호는 셀이 출력되는 순서입니다. 생성된 위젯은 drag &amp; drop 으로 순서를 변경하거나  다른셀로 이동이 가능합니다.셀을 클릭하여 선택하거나 삭제가 가능합니다."></i></h3>
             <!-- editor area -->
             <div class="editor xe-container-fluid">
-                <div class="xe-row widgetarea-row">
+
+                @if ($widgetbox->content)
+                    {!! $widgetbox->content !!}
+                @else
+                    <div class="xe-row widgetarea-row">
                     <div class="xe-col-md-12">
                         <div class="widgetarea" data-height="140" style="height:140px">
                             <span class="order">0</span>
-                            {{--<div class="xe-row"></div>--}}
                         </div>
                     </div>
                 </div>
+
+                @endif
+
             </div>
             <!-- editor area -->
         </div>
@@ -173,8 +179,12 @@
 </div>
 <div class="dimd"></div>
 
-<script type="text/javascript">
-    WidgetBox.init();
+{{ XeFrontend::html('widgetbox')->content("
+<script type=\"text/javascript\">
+    WidgetBox.init({
+        updateUrl: '".route('widgetbox.update', ['boxId' => $widgetbox->id])."'
+    });
     WidgetSnb.init();
     WidgetAdder.init();
-</script>
+
+</script>")->load() }}
