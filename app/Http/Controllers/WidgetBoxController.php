@@ -11,6 +11,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use XeDB;
 use XePresenter;
+use Xpressengine\WidgetBox\Exceptions\NotFoundWidgetBoxException;
 use Xpressengine\WidgetBox\WidgetBoxHandler;
 
 class WidgetBoxController extends Controller {
@@ -21,6 +22,10 @@ class WidgetBoxController extends Controller {
         app('xe.theme')->selectBlankTheme();
 
         $widgetbox = $handler->find($boxId);
+
+        if($widgetbox === null) {
+            throw new NotFoundWidgetBoxException();
+        }
 
         return XePresenter::make('widgetbox.edit', compact('widgetbox'));
     }

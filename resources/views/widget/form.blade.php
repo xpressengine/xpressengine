@@ -6,9 +6,12 @@
 
     {!! $widgetForm !!}
 </form>
+
+@if($skinForm !== null)
 <p>스킨 설정</p>
 <hr>
 <form id="skinForm">
     <input type="hidden" name="@id" value="{{ $skin->getId() }}">
     {!! $skinForm !!}
 </form>
+@endif

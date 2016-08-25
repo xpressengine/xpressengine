@@ -109,9 +109,11 @@ class WidgetController extends Controller {
         $widgetForm = $widgetHandler->setup($widget);
 
         // skin form
-        $skin = $skinHandler->get($skin);
-
-        $skinForm = $skin->renderSetting();
+        $skinForm = null;
+        if($skin !== null) {
+            $skin = $skinHandler->get($skin);
+            $skinForm = $skin->renderSetting();
+        }
 
         return apiRender('widget.form', compact('widget', 'skin', 'widgetForm', 'skinForm'));
     }
