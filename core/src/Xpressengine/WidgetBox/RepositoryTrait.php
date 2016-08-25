@@ -12,7 +12,7 @@
  * @link        https://xpressengine.io
  */
 
-namespace Xpressengine\WidgetBox\Repositories;
+namespace Xpressengine\WidgetBox;
 
 use Xpressengine\Database\Eloquent\DynamicModel as Model;
 

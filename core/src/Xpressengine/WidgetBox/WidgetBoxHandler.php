@@ -14,7 +14,10 @@
 
 namespace Xpressengine\WidgetBox;
 
-use Xpressengine\User\Models\WidgetBox;
+use Xpressengine\WidgetBox\Exceptions\InvalidIDException;
+use Xpressengine\WidgetBox\Models\WidgetBox;
+use Xpressengine\WidgetBox\Exceptions\IDAlreadyExistsException;
+use Xpressengine\WidgetBox\Exceptions\IDNotFoundException;
 
 /**
  * @category Widget
@@ -41,16 +44,55 @@ class WidgetBoxHandler
         $this->repository = $repository;
     }
 
-    public function create($id, $options){
-        
+    public function create($data){
+
+        $id = array_get($data, 'id');
+
+        if($id === null) {
+            throw new IDNotFoundException();
+        }
+
+        if(str_contains($id, '.')) {
+            throw new InvalidIDException();
+        }
+
+        if($this->repository->find($id) !== null) {
+            throw new IDAlreadyExistsException();
+        }
+
+        $options = array_get($data, 'options', []);
+        if(is_array($options)) {
+            $options = json_encode($options);
+        }
+
+        $content = array_get($data, 'content', '');
+
+        $this->repository->create(compact('id', 'content', 'options'));
     }
 
-    public function update($id, WidgetBox $box){
-        
+    public function update($widgetbox, $widgetboxData = []){
+        if($widgetbox instanceof WidgetBox === false) {
+            $widgetbox = $this->repository->find($widgetbox);
+        }
+        return $this->repository->update($widgetbox, $widgetboxData);
     }
 
-    public function delete($box)
+    public function delete($widgetbox)
     {
 
     }
+
+    /**
+     * __call
+     *
+     * @param $name      string
+     * @param $arguments array
+     *
+     * @return mixed
+     */
+    function __call($name, $arguments)
+    {
+        return call_user_func_array([$this->repository, $name], $arguments);
+    }
+
 }

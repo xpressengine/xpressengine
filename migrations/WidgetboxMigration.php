@@ -19,7 +19,7 @@ class WidgetboxMigration implements Migration {
         Schema::create('widgetbox', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
-            $table->string('id', 36);
+            $table->string('id', 100);
             $table->text('content');
             $table->text('options');
             $table->timestamp('createdAt');

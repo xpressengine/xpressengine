@@ -9,7 +9,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Xpressengine\User\Models\WidgetBox;
+use Xpressengine\WidgetBox\Models\WidgetBox;
 use Xpressengine\WidgetBox\WidgetBoxHandler;
 use Xpressengine\WidgetBox\WidgetBoxRepository;
 
@@ -37,7 +37,7 @@ class WidgetBoxServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(
-            [WidgetBoxRepository::class => 'xe.widgetbox'],
+            [WidgetBoxHandler::class => 'xe.widgetbox'],
             function ($app) {
                 $proxyClass = $app['xe.interception']->proxy(WidgetBoxHandler::class, 'XeWidgetBox');
                 $widgetHandler = new $proxyClass(

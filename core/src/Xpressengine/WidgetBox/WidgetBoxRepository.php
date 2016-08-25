@@ -11,10 +11,9 @@
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link      https://xpressengine.io
  */
-
 namespace Xpressengine\WidgetBox;
 
-use Xpressengine\WidgetBox\Repositories\RepositoryTrait;
+use Xpressengine\WidgetBox\RepositoryTrait;
 
 /**
  * @category Widget
