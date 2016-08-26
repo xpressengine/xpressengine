@@ -16,12 +16,11 @@ use Xpressengine\WidgetBox\WidgetBoxHandler;
 
 class WidgetBoxController extends Controller {
 
-    public function edit(Request $request, WidgetBoxHandler $handler, $boxId)
+    public function edit(Request $request, WidgetBoxHandler $handler, $id)
     {
-
         app('xe.theme')->selectBlankTheme();
 
-        $widgetbox = $handler->find($boxId);
+        $widgetbox = $handler->find($id);
 
         if($widgetbox === null) {
             throw new NotFoundWidgetBoxException();
@@ -30,20 +29,21 @@ class WidgetBoxController extends Controller {
         return XePresenter::make('widgetbox.edit', compact('widgetbox'));
     }
 
-    public function update(Request $request, WidgetBoxHandler $handler, $boxId)
+    public function update(Request $request, WidgetBoxHandler $handler, $id)
     {
         $this->validate($request, [
             'content' => 'required'
         ]);
 
         $data = [];
-        $data['content'] = $request->get('content');
+        $data['content'] = $request->originInput('content');
+
         if($request->has('options')){
             $data['options'] = $request->get('options');
         }
         XeDB::beginTransaction();
         try {
-            $handler->update($boxId, $data);
+            $handler->update($id, $data);
         } catch (\Exception $e) {
             XeDB::rollback();
             throw $e;
@@ -54,6 +54,16 @@ class WidgetBoxController extends Controller {
 
     }
 
+    public function preview(Request $request, WidgetBoxHandler $handler)
+    {
+        $this->validate($request, [
+            'code' => 'required'
+        ]);
 
+        $code = $request->get('code');
+
+
+
+    }
 
 }

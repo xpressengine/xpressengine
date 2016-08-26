@@ -10,6 +10,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\WidgetBox\Models\WidgetBox;
+use App\UIObjects\WidgetBox\WidgetBox as WidgetBoxUIObject;
 use Xpressengine\WidgetBox\WidgetBoxHandler;
 use Xpressengine\WidgetBox\WidgetBoxRepository;
 
@@ -63,6 +64,8 @@ class WidgetBoxServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $registryManager = $this->app->make('xe.pluginRegister');
+        $registryManager->add(WidgetBoxUIObject::class);
     }
 
 

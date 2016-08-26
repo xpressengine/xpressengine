@@ -400,6 +400,7 @@ return [
             'themeSelect' => 'uiobject/xpressengine@themeSelect',
             'captcha' => 'uiobject/xpressengine@captcha',
             'widget' => 'uiobject/xpressengine@widgetGenerator',
+            'widgetbox' => 'uiobject/xpressengine@widgetbox',
         ]
     ],
 
