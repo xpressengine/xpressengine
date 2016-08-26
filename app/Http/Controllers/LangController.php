@@ -118,9 +118,9 @@ class LangController extends Controller
     private function withLines(&$searchList)
     {
         foreach ( $searchList as &$search ) {
-            $namespace = $search['namespace'];
-            $item = $search['item'];
-            $search['lines'] = $this->search(['namespace' => $namespace, 'item' => $item])->get();
+            $namespace = $search->namespace;
+            $item = $search->item;
+            $search->lines = $this->search(['namespace' => $namespace, 'item' => $item])->get();
         }
     }
 }

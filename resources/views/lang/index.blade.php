@@ -51,18 +51,18 @@
                 </div>
                 <div class="panel-body">
                     @foreach( $searchList as $search )
-                        <?php $keyString = ($search['namespace'] ? $search['namespace'].'::' : '').$search['item']; ?>
+                        <?php $keyString = ($search->namespace ? $search->namespace.'::' : '').$search->item; ?>
                     <form>
                     <div class="form-group">
                         <label for="item-title">{{ $keyString }}</label>
                         @include('lang.editorbox', [
                             'name' => $keyString,
                             'langKey' => $keyString,
-                            'lines' => $search['lines'],
-                            'multiline' => $search['multiline'],
+                            'lines' => $search->lines,
+                            'multiline' => $search->multiline,
                         ])
                         <div class="input-group clearfix">
-                            <button type="button" class="btn btn-primary pull-right save" data-line-id="{{ $search['id'] }}">
+                            <button type="button" class="btn btn-primary pull-right save" data-line-id="{{ $search->id }}">
                                 {{ XeLang::trans('lang::admin.editor.save') }}
                             </button>
                         </div>
