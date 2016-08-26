@@ -60,6 +60,6 @@ class WidgetBox extends AbstractUIObject
             $('#widgetbox-'+id).find('widgetbox-content').html(html);
         }
         </script>
-        ");
+        ")->load();
     }
 }
