@@ -11,7 +11,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use XeDB;
 use XePresenter;
+use Xpressengine\Widget\WidgetParser;
 use Xpressengine\WidgetBox\Exceptions\NotFoundWidgetBoxException;
+use Xpressengine\WidgetBox\Models\WidgetBox;
 use Xpressengine\WidgetBox\WidgetBoxHandler;
 
 class WidgetBoxController extends Controller {
@@ -20,6 +22,7 @@ class WidgetBoxController extends Controller {
     {
         app('xe.theme')->selectBlankTheme();
 
+        /** @var WidgetBox $widgetbox */
         $widgetbox = $handler->find($id);
 
         if($widgetbox === null) {
@@ -51,19 +54,49 @@ class WidgetBoxController extends Controller {
         XeDB::commit();
 
         return XePresenter::makeApi(['type' => 'success', 'message' => '위젯박스를 저장했습니다.']);
-
     }
 
-    public function preview(Request $request, WidgetBoxHandler $handler)
+    /**
+     * 주어진 id의 widgetbox의 code(content)를 반환한다.
+     *
+     * @param Request          $request
+     * @param WidgetBoxHandler $handler
+     * @param                  $id
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     */
+    public function code(Request $request, WidgetBoxHandler $handler, $id)
+    {
+        /** @var WidgetBox $widgetbox */
+        $widgetbox = $handler->find($id);
+
+        if($widgetbox === null) {
+            throw new NotFoundWidgetBoxException();
+        }
+
+        return XePresenter::makeApi(['code' => $widgetbox->content]);
+    }
+
+    /**
+     * 주어진 위젯박스 code(content)를 파싱하여 반환한다.
+     *
+     * @param Request      $request
+     * @param WidgetParser $parser
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     */
+    public function preview(Request $request, WidgetParser $parser)
     {
         $this->validate($request, [
             'code' => 'required'
         ]);
 
-        $code = $request->get('code');
+        // widgetbox code
+        $code = $request->originInput('code');
 
+        $content = $parser->parseXml($code);
 
-
+        return XePresenter::makeApi(compact('content'));
     }
 
 }

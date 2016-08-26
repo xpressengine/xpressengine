@@ -750,9 +750,10 @@ Route::group(['prefix' => 'editor'], function () {
 });
 
 Route::group(['prefix'=>'widgetbox'], function() {
-
     Route::post('preview', ['as' => 'widgetbox.preview', 'uses' => 'WidgetBoxController@preview']);
 
     Route::get('{id}', ['as' => 'widgetbox.edit', 'uses' => 'WidgetBoxController@edit']);
     Route::put('{id}', ['as' => 'widgetbox.update', 'uses' => 'WidgetBoxController@update']);
+
+    Route::get('{id}/code', ['as' => 'widgetbox.code', 'uses' => 'WidgetBoxController@code']);
 });
