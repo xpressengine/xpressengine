@@ -1,4 +1,5 @@
 ;(function(exports) {
+
     'use strict';
 
     var _options = {};
@@ -10,11 +11,11 @@
             init: function (options) {
                 self = this;
 
+                _options = options || {};
+
                 self.cache();
                 self.bindEvents();
                 self.loadContents();
-                
-                _options = options || {};
 
                 return this;
             },
@@ -29,25 +30,68 @@
                 self.$btnUpdatePage.on('click', self.updatePage);
             },
             loadContents: function () {
-                console.log(_options.codeUrl);
-                
                 XE.ajax({
                     url: _options.codeUrl,
                     type: 'get',
-                    dataType: 'html',
+                    dataType: 'json',
                     success: function (html) {
-                        console.log(html);
+                        var code = html.code;
+                        var content = '';
+
+                        if(code) {
+                            var $content = $(code);
+                            var $xeWidgets = $content.find('xewidget');
+
+                            $xeWidgets.each(function () {
+                                var $this = $(this);
+                                var $parent = $this.parent();
+                                var widgetCdoe = $this.wrap('<div />').parent().html().replace(/"/g, "'");
+                                var widgetTitle = $this.attr('title');
+                                var widgetView = WidgetAdder.getWidgetBoxView(widgetCdoe, widgetTitle);
+
+                                $parent.html(widgetView);
+                            });
+
+                            content = $content;
+                            
+                        }else {
+                            content = [
+                                '<div class="xe-row widgetarea-row">',
+                                    '<div class="xe-col-md-12">',
+                                        '<div class="widgetarea" data-height="140" style="height:140px">',
+                                            '<span class="order">0</span>',
+                                        '</div>',
+                                    '</div>',
+                                '</div>'
+                            ].join("\n");
+                        }
+
+                        self.$editor.html(content);
                     }
-                })
+                });
             },
             updatePage: function () {
                 if(_options.updateUrl) {
+
+                    var content = self.$editor.html();
+                    var $content = $(content);
+                    var $widgetCodes = $content.find('.widgetCode');
+
+                    $widgetCodes.each(function () {
+                        var $this = $(this);
+                        var widgetCode = $this.val();
+
+                        $this.closest('.xe-col-md-12').html(widgetCode);
+                    });
+
+                    content = $content.wrapAll('<div />').parent().html();
+
                     XE.ajax({
                         url: _options.updateUrl,
                         type: 'put',
                         dataType: 'json',
                         data: {
-                            content: self.$editor.html()
+                            content: content
                         },
                         success: function () {
                             XE.toast('success', '저장되었습니다');

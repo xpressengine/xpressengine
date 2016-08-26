@@ -45,20 +45,7 @@
 
                 if($selected.length > 0) {
                     var widgetTitle = $widgetCode.attr("title");
-                    var widgetView = [
-                        '<div class="xe-row">',
-                            '<div class="xe-col-md-12">',
-                                '<div class="xe-well widget">',
-                                    '<strong>' + widgetTitle + '</strong>',
-                                    '<div class="xe-pull-right widget-config-btn">',
-                                        '<input type="hidden" class="widgetCode" value="' + widgetCode + '" />',
-                                        '<a href="#" class="xe-btn xe-btn-link btnWidgetConfig"><i class="xi-cog"></i></a>',
-                                        '<button type="button" class="xe-btn xe-btn-link btnDelWidget"><i class="xi-trash"></i></button>',
-                                    '</div>',
-                                '</div>',
-                            '</div>',
-                        '</div>'
-                    ].join("\n");
+                    var widgetView = self.getWidgetBoxView(widgetCode, widgetTitle);
 
                     $selected.find(".widgetarea").append(widgetView);
 
@@ -68,6 +55,22 @@
                     window.console.error("선택된 셀이 없음.");
                 }
 
+            },
+            getWidgetBoxView: function(widgetCode, widgetTitle) {
+                return [
+                    '<div class="xe-row">',
+                        '<div class="xe-col-md-12">',
+                            '<div class="xe-well widget">',
+                                '<strong>' + widgetTitle + '</strong>',
+                                '<div class="xe-pull-right widget-config-btn">',
+                                    '<input type="hidden" class="widgetCode" value="' + widgetCode + '" />',
+                                    '<a href="#" class="xe-btn xe-btn-link btnWidgetConfig"><i class="xi-cog"></i></a>',
+                                    '<button type="button" class="xe-btn xe-btn-link btnDelWidget"><i class="xi-trash"></i></button>',
+                                '</div>',
+                            '</div>',
+                        '</div>',
+                    '</div>'
+                ].join("\n");
             }
         }
     })();

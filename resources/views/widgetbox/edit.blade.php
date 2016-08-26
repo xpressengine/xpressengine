@@ -160,22 +160,7 @@
                          title="각 셀에 출력되는 번호는 셀이 출력되는 순서입니다. 생성된 위젯은 drag &amp; drop 으로 순서를 변경하거나  다른셀로 이동이 가능합니다.셀을 클릭하여 선택하거나 삭제가 가능합니다."></i>
             </h3>
             <!-- editor area -->
-            <div class="editor xe-container-fluid">
-
-                @if ($widgetbox->content)
-                    {{--{!! $widgetbox->content !!}--}}
-                @else
-                    <div class="xe-row widgetarea-row">
-                        <div class="xe-col-md-12">
-                            <div class="widgetarea" data-height="140" style="height:140px">
-                                <span class="order">0</span>
-                            </div>
-                        </div>
-                    </div>
-
-                @endif
-
-            </div>
+            <div class="editor xe-container-fluid"></div>
             <!-- editor area -->
         </div>
     </div>
