@@ -115,7 +115,7 @@ class JsonRenderer implements RendererInterface, Jsonable
         } elseif (method_exists($data, 'getAttributes')) {
             return $data->getAttributes();
         } else {
-            return get_class($data);
+            return (array) $data;
         }
     }
 
