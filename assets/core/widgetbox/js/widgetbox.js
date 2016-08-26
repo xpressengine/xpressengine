@@ -7,62 +7,78 @@
         var self = this;
 
         return {
-            init: function(options) {
+            init: function (options) {
                 self = this;
 
                 self.cache();
                 self.bindEvents();
-
+                self.loadContents();
+                
                 _options = options || {};
 
                 return this;
             },
-            cache: function() {
+            cache: function () {
                 self.$editor = $(".editor");
                 self.$btnUpdatePage = $('.btnUpdatePage');
             },
-            bindEvents: function() {
+            bindEvents: function () {
                 self.$editor.on("click", "div[class^='xe-col-']:not(:has(> .widget))", self.selectColumn);
                 self.$editor.on("click", ".btnWidgetConfig", self.openConfig);
                 self.$editor.on("click", ".btnDelWidget", self.delWidget);
                 self.$btnUpdatePage.on('click', self.updatePage);
             },
-            updatePage: function() {
+            loadContents: function () {
+                console.log(_options.codeUrl);
+                
+                XE.ajax({
+                    url: _options.codeUrl,
+                    type: 'get',
+                    dataType: 'html',
+                    success: function (html) {
+                        console.log(html);
+                    }
+                })
+            },
+            updatePage: function () {
                 if(_options.updateUrl) {
                     XE.ajax({
                         url: _options.updateUrl,
                         type: 'put',
-                        dataType: 'html',
+                        dataType: 'json',
                         data: {
                             content: self.$editor.html()
+                        },
+                        success: function () {
+                            XE.toast('success', '저장되었습니다');
                         }
                     });
                 }else {
                     console.error('update url이 없음');
                 }
             },
-            selectColumn: function(e) {
+            selectColumn: function (e) {
                 e.stopPropagation();
 
                 $(".selected").removeClass("selected");
                 $(this).toggleClass("selected");
             },
-            setOrdering: function() {
+            setOrdering: function () {
                 $(".widgetarea").find(".order").each(function(i, ele) {
                     $(ele).text(i);
                 });
             },
-            deselectAll: function() {
+            deselectAll: function () {
                 $(".selected").removeClass("selected");
             },
-            openConfig: function() {
+            openConfig: function () {
                 var widgetCode = $(this).siblings('.widgetCode').val();
 
                 $("#widgetGen").widgetGenerator().reset(widgetCode, function() {
                     WidgetSnb.toggleWidgetAddLayer();
                 });
             },
-            delWidget: function() {
+            delWidget: function () {
                 var $column = $(this).parents(".widgetarea").closest("div[class^='xe-col-']");
 
                 if(self.checkReducibleBlock($column, $(this).closest(".widget"))) {
@@ -77,7 +93,7 @@
              * [1]클릭된 widget의 widgetarea 체크
              * [2]siblings 체크
              * */
-            checkReducibleBlock: function($column, $widget) {
+            checkReducibleBlock: function ($column, $widget) {
                 var check = false;
                 var widgetCnt = $column.find('.widget').length;
                 var widgetareaHeight = $column.find(".widgetarea").outerHeight();
@@ -119,7 +135,7 @@
 
                 return check;
             },
-            reduceBlockSize: function($column) {
+            reduceBlockSize: function ($column) {
                 var $widgetarea = $column.find(".widgetarea");
                 var colWidgetHeight = $widgetarea.outerHeight();
 
@@ -133,7 +149,7 @@
                     $widgetarea.height(widgetareaHeight - 165).data("height", widgetareaHeight - 165);
                 });
             },
-            increaseBlockSize: function($column) {
+            increaseBlockSize: function ($column) {
 
                 var $widgetarea = $column.find(".widgetarea"),
                     widgetHeight = $widgetarea.find(".widget").parent().outerHeight(),

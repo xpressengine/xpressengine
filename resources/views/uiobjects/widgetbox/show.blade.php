@@ -4,6 +4,6 @@
     </div>
     <hr>
     @if(auth()->user()->isAdmin())
-    <a href="{{ route('widgetbox.edit', ['id' => $id]) }}" target="_blank">편집</a>
+    <a href="#{{$id}}" target="_blank" onclick="window.open('{{route('widgetbox.edit', ['id' => $id])}}') ">편집</a>
     @endif
 </div>

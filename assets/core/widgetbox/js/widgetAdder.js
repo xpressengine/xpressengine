@@ -44,7 +44,6 @@
                 var widgetCode = widgetCode.replace(/"/g, "'");
 
                 if($selected.length > 0) {
-                    var widgetId = $widgetCode.attr("id");
                     var widgetTitle = $widgetCode.attr("title");
                     var widgetView = [
                         '<div class="xe-row">',
@@ -53,8 +52,6 @@
                                     '<strong>' + widgetTitle + '</strong>',
                                     '<div class="xe-pull-right widget-config-btn">',
                                         '<input type="hidden" class="widgetCode" value="' + widgetCode + '" />',
-                                        '<input type="hidden" class="widgetId" value="' + widgetId + '" />',
-                                        '<input type="hidden" class="widgetTitle" value="' + widgetTitle + '" />',
                                         '<a href="#" class="xe-btn xe-btn-link btnWidgetConfig"><i class="xi-cog"></i></a>',
                                         '<button type="button" class="xe-btn xe-btn-link btnDelWidget"><i class="xi-trash"></i></button>',
                                     '</div>',
