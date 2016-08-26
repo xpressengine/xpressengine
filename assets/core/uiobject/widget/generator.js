@@ -115,7 +115,7 @@
             this.reset = function(code, cb) {
                 WidgetCode.reset({
                     url: $(widgetInputs).data('url'),
-                    code: $(widgetCodeSel).val(),
+                    code: code,//$(widgetCodeSel).val(),
                     target: widgetInputs
                 }, cb);
             };
