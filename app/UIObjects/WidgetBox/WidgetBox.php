@@ -28,9 +28,9 @@ class WidgetBox extends AbstractUIObject
         $widgetbox = $handler->find($id);
 
         $content = $widgetbox->content;
-        if($content) {
+        /*if($content) {
             $content = $parser->parseXml($widgetbox->content);
-        }
+        }*/
 
         $this->loadFiles();
 
