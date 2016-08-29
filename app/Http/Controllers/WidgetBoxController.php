@@ -99,4 +99,20 @@ class WidgetBoxController extends Controller {
         return XePresenter::makeApi(compact('content'));
     }
 
+    //public function permission(Request $request, WidgetBoxHandler $handler, $id)
+    //{
+    //    $widgetbox = $handler->find($id);
+    //
+    //    return XePresenter::makeApi(
+    //        [
+    //            'result' => (string) $section,
+    //            'XE_ASSET_LOAD' => [
+    //                'css' => \Xpressengine\Presenter\Html\Tags\CSSFile::getFileList(),
+    //                'js' => \Xpressengine\Presenter\Html\Tags\JSFile::getFileList(),
+    //            ],
+    //        ]
+    //    );
+    //
+    //}
+
 }

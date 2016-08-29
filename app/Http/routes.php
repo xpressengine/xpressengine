@@ -756,4 +756,8 @@ Route::group(['prefix'=>'widgetbox'], function() {
     Route::put('{id}', ['as' => 'widgetbox.update', 'uses' => 'WidgetBoxController@update']);
 
     Route::get('{id}/code', ['as' => 'widgetbox.code', 'uses' => 'WidgetBoxController@code']);
+
+    Route::get('{id}/permission', ['as' => 'widgetbox.permission', 'uses' => 'WidgetBoxController@permission']);
+
+
 });

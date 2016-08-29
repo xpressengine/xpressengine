@@ -6,9 +6,10 @@
     {{ uio('formText', ['name'=>'@title', 'value'=> isset($title)?$title:'' , 'label'=>'위젯제목']) }}
 
     {!! $widgetForm !!}
+
 </form>
 
-@if($skinForm !== null)
+@if(isset($skinForm) && $skinForm !== null)
 <p>스킨 설정</p>
 <hr>
 <form id="skinForm">
