@@ -110,6 +110,10 @@
                         },
                         success: function () {
                             XE.toast('success', '저장되었습니다');
+
+                            if(window.opener) {
+                                window.opener.location.reload();
+                            }
                         }
                     });
                 }else {
