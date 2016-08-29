@@ -24,7 +24,7 @@
                 self.$btnUpdatePage = $('.btnUpdatePage');
             },
             bindEvents: function () {
-                self.$editor.on("click", "div[class^='xe-col-']:not(:has(> .widget))", self.selectColumn);
+                self.$editor.on("click", "div[class^='xe-col-']:not(:has(> .xe-row)):not(:has(> .widget))", self.selectColumn);
                 self.$editor.on("click", ".btnWidgetConfig", self.openConfig);
                 self.$editor.on("click", ".btnDelWidget", self.delWidget);
                 self.$btnUpdatePage.on('click', self.updatePage);
@@ -131,10 +131,13 @@
                 $(".selected").removeClass("selected");
             },
             openConfig: function () {
-                var widgetCode = $(this).siblings('.widgetCode').val();
+                var $this = $(this);
+                var widgetCode = $this.siblings('.widgetCode').val();
+                var $widget = $this.closest('.widget');
 
                 $("#widgetGen").widgetGenerator().reset(widgetCode, function() {
-                    WidgetSnb.toggleWidgetAddLayer();
+
+                    WidgetSnb.toggleWidgetAddLayer('modify', $('.widget').index($widget));
                 });
             },
             delWidget: function () {
