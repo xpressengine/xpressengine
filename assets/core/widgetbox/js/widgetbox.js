@@ -52,6 +52,18 @@
                                 $parent.html(widgetView);
                             });
 
+                            $content.find('.widgetarea').each(function () {
+                                var $this = $(this);
+
+                                if($this.find('>').length > 0) {
+                                    $('<span />', {
+                                        class: 'order'
+                                    }).insertBefore($this.find('>').eq(0));
+                                }else {
+                                    $this.html('<span class="order"></span>');
+                                }
+                            });
+
                             content = $content;
                             
                         }else {
@@ -67,6 +79,7 @@
                         }
 
                         self.$editor.html(content);
+                        self.setOrdering();
                     }
                 });
             },
@@ -83,6 +96,8 @@
 
                         $this.closest('.xe-col-md-12').html(widgetCode);
                     });
+
+                    $content.find('.order').remove();
 
                     content = $content.wrapAll('<div />').parent().html();
 
