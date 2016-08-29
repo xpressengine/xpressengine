@@ -154,11 +154,19 @@
                     self.addDivisionType();
                 }
             },
-            toggleWidgetAddLayer: function() {
+            toggleWidgetAddLayer: function(command, index) {
                 // close sidebar
                 if (!$('.widget-layer').hasClass("open")) {
 
                     if ($(".selected").length > 0) {
+
+                        //TODO :: 언어
+                        if(command === 'modify') {
+                            WidgetAdder.$btnPlaceWidget.data('index', index).text('수정');
+                        }else {
+                            WidgetAdder.$btnPlaceWidget.text('추가');
+                        }
+
                         $(".widget-layer").addClass("open");
                         $(".dimd").show();
                         $("body").css("overflow", "hidden");

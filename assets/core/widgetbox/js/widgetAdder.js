@@ -22,10 +22,9 @@
                 self.$btnPlaceWidget.on('click', function() {
                     $("#widgetGen").widgetGenerator().generate(function() {
                         if($(".__xe_widget_code").val() !== '') {
-                            self.closeLayer();
                             self.placeWidget($("#widgetGen").widgetGenerator('code'));
+                            self.closeLayer();
 
-                            $("#widgetGen").widgetGenerator('init');
                         }else {
                             alert('위젯 코드가 생성되지 않았습니다.');
                         }
@@ -37,24 +36,29 @@
                 $(".widget-layer").removeClass("open");
                 $(".dimd").hide();
                 $("body").css("overflow", "");
+                $("#widgetGen").widgetGenerator('init');
             },
             placeWidget: function (widgetCode) {
                 var $widgetCode = $(widgetCode);
                 var $selected = $(".selected");
                 var widgetCode = widgetCode.replace(/"/g, "'");
 
-                if($selected.length > 0) {
-                    var widgetTitle = $widgetCode.attr("title");
-                    var widgetView = self.getWidgetBoxView(widgetCode, widgetTitle);
+                var widgetTitle = $widgetCode.attr("title");
+                var widgetView = self.getWidgetBoxView(widgetCode, widgetTitle);
 
+                //TODO 언어
+                if(self.$btnPlaceWidget.text() === '수정') {
+                    var index = self.$btnPlaceWidget.data('index');
+                    $('.widget').eq(index).after(widgetView).remove();
+
+                    self.$btnPlaceWidget.removeData('index');
+
+                } else {
                     $selected.find(".widgetarea").append(widgetView);
 
-                    WidgetBox.increaseBlockSize($selected);
-
-                }else {
-                    window.console.error("선택된 셀이 없음.");
                 }
 
+                WidgetBox.increaseBlockSize($selected);
             },
             getWidgetBoxView: function(widgetCode, widgetTitle) {
                 return [

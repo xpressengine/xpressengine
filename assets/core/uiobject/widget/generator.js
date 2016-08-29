@@ -10,15 +10,18 @@
     var widgetInputs = '.widget-inputs';
     var setupCode = '.__xe_setup_code';
     var generateCode = '.__xe_generate_code';
+    var isBinding = false;
     var self;
 
     var _applyPlugins = function () {
         $.fn.widgetGenerator = function (opt, cb) {
 
             var $container = this;
-            var isBinding = false;
 
             var _bindEvents = function () {
+
+                console.log('eventBind');
+
                 $container.on('change', selectWidget, function() {
                     var widget = this.value;
                     var url = $('.widget-skins').data('url');
