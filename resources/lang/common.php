@@ -769,6 +769,10 @@ return [
         'ko' => '요청한 기능을 실행할 수 있는 권한이 없습니다.',
         'en' => 'You do not have permission to perform the requested function.',
     ],
+    'methodNotAllowed' => [
+        'ko' => '사용할 수 없는 요청 방식입니다.',
+        'en' => 'Request method not allowed.',
+    ],
     'fileAccessDenied' => [
         'ko' => '요청한 파일에 접근할 수 있는 권한이 없습니다.',
         'en' => 'You do not have permission to access the requested file.',
