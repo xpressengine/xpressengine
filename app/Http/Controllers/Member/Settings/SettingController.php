@@ -130,6 +130,14 @@ class SettingController extends Controller
     {
         $inputs = Input::except('_token');
 
+        if ($inputs['useCaptcha'] === 'true') {
+            $driver = config('captcha.driver');
+            $captcha = config("captcha.apis.$driver.siteKey");
+            if (!$captcha) {
+                throw new ConfigurationNotExistsException();
+            }
+        }
+
         $config = app('xe.config')->get('user.join');
 
         foreach ($inputs as $key => $val) {
