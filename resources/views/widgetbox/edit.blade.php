@@ -13,7 +13,7 @@
         <h1><a href="#"><i class="xi-xpressengine"></i><span class="brand-title"><span
                             class="xe-sr-only">xe3 widgetbox</span></span></a></h1>
         <div class="xe-pull-right">
-            <button type="button" class="xe-btn">미리보기</button>
+            <button type="button" class="xe-btn btnPreview">미리보기</button>
             <button type="button" class="xe-btn xe-btn-primary btnUpdatePage"><i class="xi-check"></i>저장</button>
         </div>
     </header>
@@ -183,6 +183,8 @@
 {{ XeFrontend::html('widgetbox')->content("
 <script type=\"text/javascript\">
     WidgetBox.init({
+        widgetboxId: '$widgetbox->id',
+        previewUrl: '".route('widgetbox.preview', ['id' => $widgetbox->id])."',
         codeUrl: '".route('widgetbox.code', ['id' => $widgetbox->id])."',
         updateUrl: '".route('widgetbox.update', ['id' => $widgetbox->id])."'
     });

@@ -20,8 +20,6 @@
 
             var _bindEvents = function () {
 
-                console.log('eventBind');
-
                 $container.on('change', selectWidget, function() {
                     var widget = this.value;
                     var url = $('.widget-skins').data('url');
