@@ -57,7 +57,7 @@ class WidgetBox extends AbstractUIObject
         $frontend->html('widgetbox.preview')->content("
         <script>
         function previewWidgetBox(id, html) {
-            $('#widgetbox-'+id).find('widgetbox-content').html(html);
+            $('#widgetbox-'+id).find('.widgetbox-content').html(html);
         }
         </script>
         ")->load();

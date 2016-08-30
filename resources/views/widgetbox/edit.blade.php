@@ -17,7 +17,7 @@
             @if($permission !== null)
             <button type="button" class="xe-btn __xe_btnPermission" data-target="#permission-modal" data-toggle="modal">권한설정</button>
             @endif
-            <button type="button" class="xe-btn">미리보기</button>
+            <button type="button" class="xe-btn btnPreview">미리보기</button>
             <button type="button" class="xe-btn xe-btn-primary btnUpdatePage"><i class="xi-check"></i>저장</button>
         </div>
     </header>
@@ -213,6 +213,8 @@
 {{ XeFrontend::html('widgetbox')->content("
 <script type=\"text/javascript\">
     WidgetBox.init({
+        widgetboxId: '$widgetbox->id',
+        previewUrl: '".route('widgetbox.preview', ['id' => $widgetbox->id])."',
         codeUrl: '".route('widgetbox.code', ['id' => $widgetbox->id])."',
         updateUrl: '".route('widgetbox.update', ['id' => $widgetbox->id])."'
     });
@@ -238,8 +240,8 @@
                 }
             });
 
-            return false;
-        })
+        return false;
+    })
 
     });
 </script>")->load() !!}

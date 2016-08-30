@@ -22,12 +22,14 @@
             cache: function () {
                 self.$editor = $(".editor");
                 self.$btnUpdatePage = $('.btnUpdatePage');
+                self.$btnPreview = $('.btnPreview');
             },
             bindEvents: function () {
                 self.$editor.on("click", "div[class^='xe-col-']:not(:has(> .xe-row)):not(:has(> .widget))", self.selectColumn);
                 self.$editor.on("click", ".btnWidgetConfig", self.openConfig);
                 self.$editor.on("click", ".btnDelWidget", self.delWidget);
                 self.$btnUpdatePage.on('click', self.updatePage);
+                self.$btnPreview.on('click', self.preview);
             },
             loadContents: function () {
                 XE.ajax({
@@ -83,23 +85,31 @@
                     }
                 });
             },
+            getWidgetEditorContent: function() {
+                return self.$editor.html();
+            },
+            getWidgetEditorConvertContent: function() {
+                var content = self.getWidgetEditorContent();
+                var $content = $(content);
+                var $widgetCodes = $content.find('.widgetCode');
+
+                $widgetCodes.each(function () {
+                    var $this = $(this);
+                    var widgetCode = $this.val();
+
+                    $this.closest('.xe-col-md-12').html(widgetCode);
+                });
+
+                $content.find('.order').remove();
+
+                content = $content.wrapAll('<div />').parent().html();
+
+                return content;
+            },
             updatePage: function () {
                 if(_options.updateUrl) {
 
-                    var content = self.$editor.html();
-                    var $content = $(content);
-                    var $widgetCodes = $content.find('.widgetCode');
-
-                    $widgetCodes.each(function () {
-                        var $this = $(this);
-                        var widgetCode = $this.val();
-
-                        $this.closest('.xe-col-md-12').html(widgetCode);
-                    });
-
-                    $content.find('.order').remove();
-
-                    content = $content.wrapAll('<div />').parent().html();
+                    var content = self.getWidgetEditorConvertContent();
 
                     XE.ajax({
                         url: _options.updateUrl,
@@ -110,10 +120,35 @@
                         },
                         success: function () {
                             XE.toast('success', '저장되었습니다');
+
+                            if(window.opener) {
+                                window.opener.location.reload();
+                            }
                         }
                     });
                 }else {
                     console.error('update url이 없음');
+                }
+            },
+            preview: function() {
+                if(window.opener) {
+                    var content = self.getWidgetEditorConvertContent();
+
+                    XE.ajax({
+                        url: _options.previewUrl,
+                        type: 'post',
+                        dataType: 'json',
+                        data: {
+                            code: content
+                        },
+                        success: function (res) {
+                            var content = res.content;
+
+                            if(content) {
+                                window.opener.previewWidgetBox(_options.widgetboxId, content);
+                            }
+                        }
+                    });
                 }
             },
             selectColumn: function (e) {
