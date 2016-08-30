@@ -1,6 +1,7 @@
 {{ XeFrontend::js('/assets/core/widgetbox/js/widgetbox.js')->appendTo("head")->load() }}
 {{ XeFrontend::js('/assets/core/widgetbox/js/widgetboxSnb.js')->appendTo("head")->load() }}
 {{ XeFrontend::js('/assets/core/widgetbox/js/widgetAdder.js')->appendTo("head")->load() }}
+{{ XeFrontend::js('assets/vendor/bootstrap/js/bootstrap.min.js')->load() }}
 
 {{ XeFrontend::css('http://cdn.jsdelivr.net/xeicon/2.0.0/xeicon.min.css')->load() }}
 {{ XeFrontend::css([
@@ -13,6 +14,9 @@
         <h1><a href="#"><i class="xi-xpressengine"></i><span class="brand-title"><span
                             class="xe-sr-only">xe3 widgetbox</span></span></a></h1>
         <div class="xe-pull-right">
+            @if($permission !== null)
+            <button type="button" class="xe-btn __xe_btnPermission" data-target="#permission-modal" data-toggle="modal">권한설정</button>
+            @endif
             <button type="button" class="xe-btn">미리보기</button>
             <button type="button" class="xe-btn xe-btn-primary btnUpdatePage"><i class="xi-check"></i>저장</button>
         </div>
@@ -178,6 +182,32 @@
     </div>
     <!--// widget layer  -->
 </div>
+
+@if($permission !== null)
+<div class="modal permission-modal fade" id="permission-modal">
+    <div class="modal-dialog modal-lg">
+        <form id="__xe_widgetboxPermission" action="{{ route('widgetbox.permission', ['id'=>$widgetbox->id]) }}">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">권한 설정</h4>
+            </div>
+
+            <div class="modal-body">
+                <p><strong>{{ $widgetbox->title }} 위젯박스</strong>를 편집할 수 있는 사용자를 지정합니다.</p>
+                <hr>
+                {{ uio('permission', $permission) }}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="xe-btn xe-btn-secondary" data-dismiss="modal">취소</button>
+                <button type="submit" class="xe-btn xe-btn-primary">저장</button>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
+@endif
+
 <div class="dimd"></div>
 
 {{ XeFrontend::html('widgetbox')->content("
@@ -190,3 +220,27 @@
     WidgetAdder.init();
 
 </script>")->load() }}
+
+@if($permission !== null)
+{!!  XeFrontend::html('widgetbox.permission')->content("<script>
+    $(function($) {
+        $('#__xe_widgetboxPermission').submit(function(){
+            var form = $(this);
+
+            $.ajax({
+                url: form.attr('action'),
+                type: 'POST',
+                data: form.serialize(),
+                dataType: 'json',
+                success: function (data) {
+                    XE.toast('success', data.message);
+                    $('#permission-modal').modal('hide');
+                }
+            });
+
+            return false;
+        })
+
+    });
+</script>")->load() !!}
+@endif

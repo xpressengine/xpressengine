@@ -11,37 +11,60 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use XeDB;
 use XePresenter;
+use Xpressengine\Permission\Instance;
+use Xpressengine\Permission\PermissionSupport;
+use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
 use Xpressengine\Widget\WidgetParser;
 use Xpressengine\WidgetBox\Exceptions\NotFoundWidgetBoxException;
 use Xpressengine\WidgetBox\Models\WidgetBox;
 use Xpressengine\WidgetBox\WidgetBoxHandler;
 
-class WidgetBoxController extends Controller {
+class WidgetBoxController extends Controller
+{
+
+    use PermissionSupport;
 
     public function edit(Request $request, WidgetBoxHandler $handler, $id)
     {
+
+        if (\Gate::denies('edit', new Instance('widgetbox.'.$id))) {
+            throw new AccessDeniedHttpException();
+        }
+
         app('xe.theme')->selectBlankTheme();
 
         /** @var WidgetBox $widgetbox */
         $widgetbox = $handler->find($id);
 
-        if($widgetbox === null) {
+        if ($widgetbox === null) {
             throw new NotFoundWidgetBoxException();
         }
 
-        return XePresenter::make('widgetbox.edit', compact('widgetbox'));
+        $permission = null;
+        if ($request->user()->isAdmin()) {
+            $permission = array_merge($this->getPermArguments('widgetbox.'.$id, ['edit'])['edit'], ['mode'=>null]);
+        }
+
+        return XePresenter::make('widgetbox.edit', compact('widgetbox', 'permission'));
     }
 
     public function update(Request $request, WidgetBoxHandler $handler, $id)
     {
-        $this->validate($request, [
-            'content' => 'required'
-        ]);
+        if (\Gate::denies('edit', new Instance('widgetbox.'.$id))) {
+            throw new AccessDeniedHttpException();
+        }
+
+        $this->validate(
+            $request,
+            [
+                'content' => 'required'
+            ]
+        );
 
         $data = [];
         $data['content'] = $request->originInput('content');
 
-        if($request->has('options')){
+        if ($request->has('options')) {
             $data['options'] = $request->get('options');
         }
         XeDB::beginTransaction();
@@ -61,16 +84,20 @@ class WidgetBoxController extends Controller {
      *
      * @param Request          $request
      * @param WidgetBoxHandler $handler
-     * @param                  $id
+     * @param string           $id
      *
      * @return \Xpressengine\Presenter\RendererInterface
      */
     public function code(Request $request, WidgetBoxHandler $handler, $id)
     {
+        if (\Gate::denies('edit', new Instance('widgetbox.'.$id))) {
+            throw new AccessDeniedHttpException();
+        }
+
         /** @var WidgetBox $widgetbox */
         $widgetbox = $handler->find($id);
 
-        if($widgetbox === null) {
+        if ($widgetbox === null) {
             throw new NotFoundWidgetBoxException();
         }
 
@@ -82,14 +109,22 @@ class WidgetBoxController extends Controller {
      *
      * @param Request      $request
      * @param WidgetParser $parser
+     * @param string       $id
      *
      * @return \Xpressengine\Presenter\RendererInterface
      */
-    public function preview(Request $request, WidgetParser $parser)
+    public function preview(Request $request, WidgetParser $parser, $id)
     {
-        $this->validate($request, [
-            'code' => 'required'
-        ]);
+        if (\Gate::denies('edit', new Instance('widgetbox.'.$id))) {
+            throw new AccessDeniedHttpException();
+        }
+
+        $this->validate(
+            $request,
+            [
+                'code' => 'required'
+            ]
+        );
 
         // widgetbox code
         $code = $request->originInput('code');
@@ -99,20 +134,13 @@ class WidgetBoxController extends Controller {
         return XePresenter::makeApi(compact('content'));
     }
 
-    //public function permission(Request $request, WidgetBoxHandler $handler, $id)
-    //{
-    //    $widgetbox = $handler->find($id);
-    //
-    //    return XePresenter::makeApi(
-    //        [
-    //            'result' => (string) $section,
-    //            'XE_ASSET_LOAD' => [
-    //                'css' => \Xpressengine\Presenter\Html\Tags\CSSFile::getFileList(),
-    //                'js' => \Xpressengine\Presenter\Html\Tags\JSFile::getFileList(),
-    //            ],
-    //        ]
-    //    );
-    //
-    //}
+    public function storePermission(Request $request, WidgetBoxHandler $handler, $id)
+    {
+        if(\Gate::denies('edit', new Instance('widgetbox.'.$id))) {
+            throw new AccessDeniedHttpException();
+        }
 
+        $this->permissionRegister($request, 'widgetbox.'.$id, ['edit']);
+        return XePresenter::makeApi(['type' => 'success', 'message' => '권한을 저장했습니다.']);
+    }
 }
