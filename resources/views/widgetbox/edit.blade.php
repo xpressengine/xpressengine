@@ -2,9 +2,12 @@
 {{ XeFrontend::js('/assets/core/widgetbox/js/widgetboxSnb.js')->appendTo("head")->load() }}
 {{ XeFrontend::js('/assets/core/widgetbox/js/widgetAdder.js')->appendTo("head")->load() }}
 {{ XeFrontend::js('assets/vendor/bootstrap/js/bootstrap.min.js')->load() }}
+{{ XeFrontend::js('assets/vendor/jqueryui/jquery-ui.js')->appendTo("head")->load() }}
+
 
 {{ XeFrontend::css('http://cdn.jsdelivr.net/xeicon/2.0.0/xeicon.min.css')->load() }}
 {{ XeFrontend::css([
+    '/assets/vendor/jqueryui/jquery-ui.css',
     '/assets/vendor/bootstrap/css/bootstrap.css',
     '/assets/core/widgetbox/css/widgetbox.css',
 ])->load() }}
@@ -246,3 +249,25 @@
     });
 </script>")->load() !!}
 @endif
+
+
+<script type="text/javascript">
+    $(function() {
+        setTimeout(function() {
+            $('.widgetarea > .xe-row').sortable();
+            console.log('srotable');
+            $('.widgetarea').droppable({
+
+                drop: function (e, ui) {
+                    var dropped = ui.draggable;
+                    var droppedOn = $(this);
+
+                    console.log(dropped, droppedOn);
+//                    $(this).append(dropped.clone().removeAttr('style').removeClass("item").addClass("item-container"));
+//                    dropped.remove();
+                }
+            });
+        }, 2000);
+
+    });
+</script>

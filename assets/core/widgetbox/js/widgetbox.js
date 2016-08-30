@@ -51,7 +51,7 @@
                                 var widgetTitle = $this.attr('title');
                                 var widgetView = WidgetAdder.getWidgetBoxView(widgetCdoe, widgetTitle);
 
-                                $parent.html(widgetView);
+                                $parent.html($(widgetView).find('.xe-col-md-12 >'));
                             });
 
                             $content.find('.widgetarea').each(function () {
