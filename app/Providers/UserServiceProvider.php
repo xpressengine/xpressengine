@@ -92,7 +92,7 @@ class UserServiceProvider extends ServiceProvider
     protected function registerAuth()
     {
         $this->app->singleton(
-            'xe.auth',
+            ['xe.auth' => GuardInterface::class],
             function ($app) {
                 $proxyClass = $app['xe.interception']->proxy(Guard::class, 'Auth');
                 return new $proxyClass(
@@ -100,7 +100,6 @@ class UserServiceProvider extends ServiceProvider
                 );
             }
         );
-        $this->app->bind(GuardInterface::class, 'xe.auth');
     }
 
     /**
@@ -260,7 +259,7 @@ class UserServiceProvider extends ServiceProvider
     private function registerHandler()
     {
         $this->app->singleton(
-            'xe.user',
+            ['xe.user' => UserHandler::class],
             function ($app) {
                 $proxyClass = $app['xe.interception']->proxy(UserHandler::class, 'XeUser');
 
@@ -279,7 +278,6 @@ class UserServiceProvider extends ServiceProvider
                 return $userHandler;
             }
         );
-        $this->app->bind(UserHandler::class, 'xe.user');
     }
 
     /**
@@ -299,12 +297,11 @@ class UserServiceProvider extends ServiceProvider
     protected function registerUserRepository()
     {
         $this->app->singleton(
-            'xe.users',
+            ['xe.users' => UserRepositoryInterface::class],
             function ($app) {
                 return new UserRepository(User::class);
             }
         );
-        $this->app->bind(UserRepositoryInterface::class, 'xe.users');
     }
 
     /**
@@ -315,12 +312,11 @@ class UserServiceProvider extends ServiceProvider
     private function registerAccoutRepository()
     {
         $this->app->singleton(
-            'xe.user.accounts',
+            ['xe.user.accounts' => UserAccountRepositoryInterface::class],
             function ($app) {
                 return new UserAccountRepository(UserAccount::class);
             }
         );
-        $this->app->bind(UserAccountRepositoryInterface::class, 'xe.user.accounts');
     }
 
     /**
@@ -331,12 +327,11 @@ class UserServiceProvider extends ServiceProvider
     protected function registerGroupRepository()
     {
         $this->app->singleton(
-            'xe.user.groups',
+            ['xe.user.groups' => UserGroupRepositoryInterface::class],
             function ($app) {
                 return new UserGroupRepository(UserGroup::class);
             }
         );
-        $this->app->bind(UserGroupRepositoryInterface::class, 'xe.user.groups');
     }
 
     /**
@@ -347,7 +342,7 @@ class UserServiceProvider extends ServiceProvider
     protected function registerVirtualGroupRepository()
     {
         $this->app->singleton(
-            'xe.user.virtualGroups',
+            ['xe.user.virtualGroups' => VirtualGroupRepositoryInterface::class],
             function ($app) {
                 /** @var Closure $vGroups */
                 $vGroups = $app['config']->get('xe.group.virtualGroup.all');
@@ -356,26 +351,23 @@ class UserServiceProvider extends ServiceProvider
                 return new VirtualGroupRepository($app['xe.users'], $vGroups(), $getter);
             }
         );
-        $this->app->bind(VirtualGroupRepositoryInterface::class, 'xe.user.virtualGroups');
     }
 
     private function registerMailRepository()
     {
         $this->app->singleton(
-            'xe.user.emails',
+            ['xe.user.emails' => UserEmailRepositoryInterface::class],
             function ($app) {
                 return new UserEmailRepository(UserEmail::class);
             }
         );
-        $this->app->bind(UserEmailRepositoryInterface::class, 'xe.user.emails');
 
         $this->app->singleton(
-            'xe.user.pendingEmails',
+            ['xe.user.pendingEmails' => PendingEmailRepositoryInterface::class],
             function ($app) {
                 return new PendingEmailRepository(PendingEmail::class);
             }
         );
-        $this->app->bind(PendingEmailRepositoryInterface::class, 'xe.user.pendingEmails');
     }
 
     /**

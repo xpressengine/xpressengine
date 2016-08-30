@@ -38,7 +38,7 @@ class WidgetBoxServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(
-            [WidgetBoxHandler::class => 'xe.widgetbox'],
+            ['xe.widgetbox' => WidgetBoxHandler::class],
             function ($app) {
                 $proxyClass = $app['xe.interception']->proxy(WidgetBoxHandler::class, 'XeWidgetBox');
                 $widgetHandler = new $proxyClass(
@@ -49,7 +49,7 @@ class WidgetBoxServiceProvider extends ServiceProvider
         );
 
         $this->app->singleton(
-            [WidgetBoxRepository::class => 'xe.widgetboxs'],
+            ['xe.widgetboxs' => WidgetBoxRepository::class],
             function ($app) {
                 return new WidgetBoxRepository(WidgetBox::class);
             }

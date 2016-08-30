@@ -83,7 +83,7 @@ class PluginServiceProvider extends ServiceProvider
     protected function registerPluginHandler()
     {
         $this->app->singleton(
-            [PluginHandler::class => 'xe.plugin'],
+            ['xe.plugin' => PluginHandler::class],
             function ($app) {
 
                 $pluginDir = base_path('plugins');
@@ -123,7 +123,7 @@ class PluginServiceProvider extends ServiceProvider
     protected function registerPluginProvider()
     {
         $this->app->singleton(
-            [PluginProvider::class => 'xe.plugin.provider'],
+            ['xe.plugin.provider' => PluginProvider::class],
             function ($app) {
                 $url = $app['config']->get('xe.plugin.api.url');
                 $auth = $app['config']->get('xe.plugin.api.auth');
@@ -136,7 +136,7 @@ class PluginServiceProvider extends ServiceProvider
     protected function registerComposerWriter()
     {
         $this->app->singleton(
-            [ComposerFileWriter::class => 'xe.plugin.writer'],
+            ['xe.plugin.writer' => ComposerFileWriter::class],
             function ($app) {
                 $writer = new ComposerFileWriter(storage_path('app/composer.plugins.json'), $app[PluginScanner::class], config('xe.plugin.packagist'));
                 return $writer;
@@ -171,6 +171,6 @@ class PluginServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return array('xe.plugin');
+        return ['xe.plugin'];
     }
 }

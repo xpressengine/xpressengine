@@ -30,7 +30,7 @@ class SkinServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(
-            'xe.skin',
+            ['xe.skin' => SkinHandler::class],
             function ($app) {
                 $skinInstanceStore = new SkinInstanceStore($app['xe.config']);
                 $defaultSkins = $app['config']->get('xe.skin.defaultSkins');
@@ -45,7 +45,6 @@ class SkinServiceProvider extends ServiceProvider
                 return $skinHandler;
             }
         );
-        $this->app->bind(SkinHandler::class, 'xe.skin');
     }
 
     public function boot()

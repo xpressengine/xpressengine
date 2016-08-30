@@ -33,7 +33,7 @@ class ThemeServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(
-            'xe.theme',
+            ['xe.theme' => ThemeHandler::class],
             function ($app) {
 
                 /** @var PluginRegister $register */
@@ -46,11 +46,6 @@ class ThemeServiceProvider extends ServiceProvider
 
                 return $themeHandler;
             }
-        );
-
-        $this->app->bind(
-            'Xpressengine\Theme\ThemeHandler',
-            'xe.theme'
         );
     }
 
