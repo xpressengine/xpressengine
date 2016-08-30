@@ -250,13 +250,27 @@
         // Show image in the slider
         function showImage(index){
 
+            var $ele = items.eq(index);
+            var src = "";
+
             // If the index is outside the bonds of the array
             if(index < 0 || index >= items.length){
                 return false;
             }
 
             // Call the load function with the href attribute of the item
-            loadImage(items.eq(index).attr('href'), function(){
+            switch($ele.get(0).tagName.toLowerCase()) {
+                case 'img':
+                    src = $ele.attr('src');
+                    break;
+
+                default:
+                    src = $ele.find('img').attr('src');
+                    break;
+
+            }
+
+            loadImage(src, function(){
                 placeholders.eq(index).html(this);
             });
         }
