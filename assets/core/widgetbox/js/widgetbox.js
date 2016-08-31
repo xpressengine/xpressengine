@@ -28,8 +28,42 @@
                 self.$editor.on("click", "div[class^='xe-col-']:not(:has(> .xe-row)):not(:has(> .widget))", self.selectColumn);
                 self.$editor.on("click", ".btnWidgetConfig", self.openConfig);
                 self.$editor.on("click", ".btnDelWidget", self.delWidget);
+                self.$editor.on('mouseenter', '.widgetarea', self.addDragDropEvents);
                 self.$btnUpdatePage.on('click', self.updatePage);
                 self.$btnPreview.on('click', self.preview);
+            },
+            addDragDropEvents: function() {
+                var $this = $(this);
+
+                if(!$this.hasClass('ui-sortable')) {
+                    $this.sortable({
+                        opacity: 0.5,
+                        start: function() {
+                            $('.widgetarea:not(.ui-droppable)').parent().droppable({
+                                greety: true,
+                                tolerance: "pointer",
+                                hoverClass: "dropzone",
+                                drop: function (e, ui) {
+                                    var $this = $(this);
+                                    var $dropped = ui.draggable;
+                                    var $widgetColumn = $dropped.closest('.widgetarea').parent();
+
+                                    $this.find('.widgetarea').append($dropped.clone().removeAttr('style'));
+                                    $dropped.remove();
+
+                                    self.selectColumn.call($this, $.Event());
+
+                                    if(self.checkReducibleBlock($widgetColumn, $dropped.find(".widget"))) {
+                                        self.reduceBlockSize($widgetColumn);
+                                    }
+
+                                    WidgetBox.increaseBlockSize($this);
+
+                                }
+                            });
+                        }
+                    }).disableSelection();
+                }
             },
             loadContents: function () {
                 XE.ajax({
@@ -100,9 +134,15 @@
                     $this.closest('.xe-col-md-12').html(widgetCode);
                 });
 
+                $content.find(".ui-sortable").removeClass("ui-sortable");
+                $content.find(".ui-droppable").removeClass("ui-droppable");
+                $content.find(".ui-sortable-handle").removeClass("ui-sortable-handle");
+                $content.find(".ui-sortable-helper").removeClass("ui-sortable-helper");
+
                 $content.find('.order').remove();
 
                 content = $content.wrapAll('<div />').parent().html();
+
 
                 return content;
             },
@@ -227,8 +267,6 @@
                         }
                     });
                 }
-
-                console.log("check = ", check);
 
                 return check;
             },

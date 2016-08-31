@@ -250,24 +250,12 @@
 </script>")->load() !!}
 @endif
 
+<style type="text/css" rel="stylesheet">
+    .dropzone {
+        background-color: #336699 !important;
+    }
+</style>
 
 <script type="text/javascript">
-    $(function() {
-        setTimeout(function() {
-            $('.widgetarea > .xe-row').sortable();
-            console.log('srotable');
-            $('.widgetarea').droppable({
 
-                drop: function (e, ui) {
-                    var dropped = ui.draggable;
-                    var droppedOn = $(this);
-
-                    console.log(dropped, droppedOn);
-//                    $(this).append(dropped.clone().removeAttr('style').removeClass("item").addClass("item-container"));
-//                    dropped.remove();
-                }
-            });
-        }, 2000);
-
-    });
 </script>

@@ -58,6 +58,8 @@
 
                 }
 
+                console.log($selected);
+
                 WidgetBox.increaseBlockSize($selected);
             },
             getWidgetBoxView: function(widgetCode, widgetTitle) {
