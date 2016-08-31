@@ -42,7 +42,8 @@ class WidgetBoxServiceProvider extends ServiceProvider
             function ($app) {
                 $proxyClass = $app['xe.interception']->proxy(WidgetBoxHandler::class, 'XeWidgetBox');
                 $widgetHandler = new $proxyClass(
-                    $app['xe.widgetboxs']
+                    $app['xe.widgetboxs'],
+                    $app['xe.permission']
                 );
                 return $widgetHandler;
             }

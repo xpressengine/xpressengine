@@ -14,6 +14,8 @@
 
 namespace Xpressengine\WidgetBox;
 
+use Xpressengine\Permission\Grant;
+use Xpressengine\Permission\PermissionHandler;
 use Xpressengine\WidgetBox\Exceptions\InvalidIDException;
 use Xpressengine\WidgetBox\Models\WidgetBox;
 use Xpressengine\WidgetBox\Exceptions\IDAlreadyExistsException;
@@ -35,13 +37,20 @@ class WidgetBoxHandler
     private $repository;
 
     /**
+     * @var PermissionHandler
+     */
+    private $permissionHandler;
+
+    /**
      * WidgetBoxHandler constructor.
      *
      * @param WidgetBoxRepository $repository
+     * @param PermissionHandler   $permissionHandler
      */
-    public function __construct(WidgetBoxRepository $repository)
+    public function __construct(WidgetBoxRepository $repository, PermissionHandler $permissionHandler)
     {
         $this->repository = $repository;
+        $this->permissionHandler = $permissionHandler;
     }
 
     public function create($data){
@@ -70,6 +79,7 @@ class WidgetBoxHandler
         $content = array_get($data, 'content', '');
 
         $this->repository->create(compact('id', 'title', 'content', 'options'));
+        $this->permissionHandler->register('widgetbox.'.$id, new Grant());
     }
 
     public function update($widgetbox, $widgetboxData = []){
