@@ -22,6 +22,10 @@ class TranslationServiceProvider extends ServiceProvider
 
     public function boot()
     {
+        $this->app['events']->listen('locale.changed', function($locale) {
+            $this->app['xe.translator']->setLocale($locale);
+        });
+
         $this->app['validator']->extend('LangRequired', function ($attribute, $value) {
             $fields = $this->app['request']->all();
             $protocol = 'xe_lang_preprocessor://';

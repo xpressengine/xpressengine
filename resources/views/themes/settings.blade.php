@@ -31,7 +31,7 @@
                         <ul>
                             @foreach ( XeLang::getLocales() as $locale )
                                 <li @if(XeLang::getLocale() == $locale) class="on" @endif>
-                                    <a href="/locale/{{ $locale }}"><i class="{{ $locale }} xe-flag" data-locale="{{ $locale }}"></i>{{ XeLang::getLocaleText($locale) }}</a>
+                                    <a href="{{ locale_url($locale) }}"><i class="{{ $locale }} xe-flag" data-locale="{{ $locale }}"></i>{{ XeLang::getLocaleText($locale) }}</a>
                                 </li>
                             @endforeach
                         </ul>

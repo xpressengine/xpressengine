@@ -251,6 +251,23 @@ if (function_exists('xe_trans_choice') === false) {
     }
 }
 
+if (function_exists('locale_url') === false) {
+    /**
+     * locale 변경을 위한 url생성
+     *
+     * @package Xpressengine\Translation
+     *
+     * @param string $locale 국가 코드
+     * @return string
+     */
+    function locale_url($locale)
+    {
+        app('request')->query->set('_l', $locale);
+
+        return app('request')->url() . '?' . http_build_query(app('request')->query->all());
+    }
+}
+
 if (function_exists('uio') === false) {
     /**
      * 주어진 타입의 AbstractUIObject 인스턴스를 생성하여 반환한다.

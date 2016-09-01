@@ -23,10 +23,6 @@ class LangPreprocessor
 
     public function handle(Request $request, Closure $next)
     {
-        app('events')->listen('locale.changed', function($locale) {
-            app('xe.translator')->setLocale($locale);
-        });
-
         // check locale at request & set locale
         $locale = $request->get('_l');
         if(!$locale) {
@@ -35,7 +31,7 @@ class LangPreprocessor
         app()->setLocale($locale);
         app('cookie')->queue(cookie()->forever('locale', $locale));
 
-        app('router')->matched(function($route, $request) use($locale) {
+        app('router')->matched(function($route, $request) use ($locale) {
             $key = self::class.'://'.$request->method().'/'.$route->getPath().'/'.$locale;
             app('xe.translator')->setCurrentCacheKey($key);
         });

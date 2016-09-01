@@ -19,13 +19,6 @@ use Illuminate\Contracts\Cookie\QueueingFactory as JarContract;
 
 class LangController extends Controller
 {
-    public function setLocale(JarContract $cookie, $locale)
-    {
-        $cookie->queue($cookie->forever('locale', $locale));
-
-        return Redirect::back();
-    }
-
     /**
      * 다국어 manage 페이지
      */

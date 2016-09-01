@@ -17,8 +17,6 @@
 |
 */
 
-Route::get('/locale/{locale}', 'LangController@setLocale');
-
 Route::settings(
     '/',
     function () {
