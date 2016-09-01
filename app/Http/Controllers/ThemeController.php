@@ -11,6 +11,7 @@ namespace App\Http\Controllers;
 use Xpressengine\Http\Request;
 use Xpressengine\Support\Exceptions\FileAccessDeniedHttpException;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
+use Xpressengine\Theme\Exceptions\NotSupportSettingException;
 use Xpressengine\Theme\ThemeEntityInterface;
 use Xpressengine\Theme\ThemeHandler;
 
@@ -101,6 +102,11 @@ class ThemeController extends Controller
         $instanceId = $request->get('theme');
         $title = $request->get('title');
         $theme = $themeHandler->getTheme($instanceId);
+
+        if(!$theme->hasSetting()) {
+            throw new NotSupportSettingException();
+        }
+
         $configs = $themeHandler->getThemeConfigList($theme->getId());
 
         $last = array_pop($configs);
@@ -113,7 +119,7 @@ class ThemeController extends Controller
 
         $themeHandler->setThemeConfig($newId, '_configTitle', $title);
 
-        return redirect()->route('settings.theme.config', ['theme'=>$newId])->with('alert', ['type' => 'success', 'message' => '생성되었습니다.']);;
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => '생성되었습니다.']);;
     }
 
     public function editSetting(Request $request, ThemeHandler $themeHandler)
@@ -124,6 +130,11 @@ class ThemeController extends Controller
 
         $themeId = $request->get('theme');
         $theme = $themeHandler->getTheme($themeId);
+
+        if(!$theme->hasSetting()) {
+            throw new NotSupportSettingException();
+        }
+
         $config = $theme->setting();
         $configs = $themeHandler->getThemeConfigList($theme->getId());
 
@@ -144,13 +155,17 @@ class ThemeController extends Controller
         $themeId = $request->get('theme');
         $theme = $themeHandler->getTheme($themeId);
 
+        if(!$theme->hasSetting()) {
+            throw new NotSupportSettingException();
+        }
+
         $configInfo = $request->only('_configTitle', '_configId');
 
         $inputs =  $request->except('_token');
         $inputs['_configId'] = $themeId;
 
         // 해당 테마에게 config를 가공할 수 있는 기회를 준다.
-        $config = $theme->updateSetting($inputs);
+        $config = $theme->resolveSetting($inputs);
 
         $config = array_merge($configInfo, $config);
 

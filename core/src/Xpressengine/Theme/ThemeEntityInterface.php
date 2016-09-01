@@ -87,7 +87,7 @@ interface ThemeEntityInterface extends Arrayable, Jsonable
      *
      * @return \Illuminate\Contracts\View\View|void
      */
-    public function getSettingView(ConfigEntity $config = null);
+    public function renderSetting(ConfigEntity $config = null);
 
     /**
      * updateConfig
@@ -96,7 +96,7 @@ interface ThemeEntityInterface extends Arrayable, Jsonable
      *
      * @return array
      */
-    public function updateSetting(array $config);
+    public function resolveSetting(array $config);
 
     /**
      * get and set config

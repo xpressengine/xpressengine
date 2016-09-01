@@ -2,32 +2,45 @@
 return [
     'view' => 'theme',
     'setting' => [
-        'spot_title' => [
+        'logo_title' => [
             '_type' => 'text',
-            '_section' => '기본설정',
-            'label' => '메인 문구',
+            '_section' => '로고 설정',
+            'label' => '로고 타이틀',
             'placeholder' => '로고 제목을 입력하세요',
             'description' => '로고 제목을 입력하세요',
         ],
+        'show_spot' => [
+            '_type' => 'select',
+            '_section' => '스팟 설정',
+            'label' => '스팟 출력 ',
+            'options' => [
+                'hide' => '출력 안 함',
+                'show' => '출력 함'
+            ]
+        ],
+        'spot_title' => [
+            '_type' => 'text',
+            '_section' => '스팟 설정',
+            'label' => '스팟 타이틀',
+            'placeholder' => '스팟에 출력할 제목을 입력하세요',
+            'description' => '스팟에 출력할 제목을 입력하세요',
+        ],
+        'spot_content' => [
+            '_type' => 'textarea',
+            '_section' => '스팟 설정',
+            'label' => '스팟 내용',
+            'placeholder' => '스팟에 출력할 내용을 입력하세요',
+            'description' => '스팟에 출력할 내용을 입력하세요',
+        ],
         'spot_image' => [
             '_type' => 'image',
-            '_section' => '기본설정',
-            'label' => '메인 이미지',
-            'description' => '로고 이미지를 등록하세요'
-        ],
-        'layout' => [
-            '_type' => 'select',
-            '_section' => '레이아웃',
-            'label' => '레이아웃',
-            'options' => [
-                'no_side' => '사이드바없음',
-                'left_side' => '좌측사이드바',
-                'right_side' => '우측사이드바',
-            ]
+            '_section' => '스팟 설정',
+            'label' => '스팟 이미지',
+            'description' => '스팟에 출력할 이미지를 등록하세요'
         ],
         'gnb' => [
             '_type' => 'menu',
-            '_section' => '메뉴',
+            '_section' => '메뉴 설정',
             'label' => '메인메뉴',
         ]
     ],

@@ -32,7 +32,7 @@ class ThemeMigration implements Migration
     public function init()
     {
         // set site default theme
-        $theme = ['desktop' => 'theme/alice@alice', 'mobile' => 'theme/alice@alice'];
+        $theme = ['desktop' => 'theme/alice@alice.0', 'mobile' => 'theme/alice@alice.0'];
         app('xe.theme')->setSiteTheme($theme);
 
         // set alice theme
@@ -68,7 +68,7 @@ class ThemeMigration implements Migration
 
         // for sub(기본)
         $default = [
-            '_configId' => 'theme/alice@alice',
+            '_configId' => 'theme/alice@alice.0',
             '_configTitle' => '기본',
             'colorset' => '',
             'contentAreaType' => 'xe-container',
@@ -85,15 +85,25 @@ class ThemeMigration implements Migration
             'footerLinkUrl' => [],
         ];
 
-        app('xe.theme')->setThemeConfig('theme/alice@alice', array_merge($default, $multiLines, $singleLines));
+        app('xe.theme')->setThemeConfig('theme/alice@alice.0', array_merge($default, $multiLines, $singleLines));
 
         // for main
         $main = [
             '_configId' => 'theme/alice@alice.1',
             '_configTitle' => '메인페이지용',
+            'colorset' => '',
             'contentAreaType' => 'xe-container-fluid',
             'layout' => 'main',
+            'slide1Image' => ['path' => 'plugins/alice/theme/assets/img/img_slide.jpg'],
+            'slide2Image' => ['path' => 'plugins/alice/theme/assets/img/img_slide2.jpg'],
+            'slide3Image' => ['path' => 'plugins/alice/theme/assets/img/img_slide3.jpg'],
+            'logoImage' => ['path' => null],
+            'headerPosition' => '',
             'headerColorset' => '',
+            'footerLogoImage' => ['path'=>null],
+            'useFooterLinks' => 'N',
+            'footerLinkIcon' => [],
+            'footerLinkUrl' => [],
         ];
 
         app('xe.theme')->setThemeConfig('theme/alice@alice.1', array_merge($default, $main, $multiLines, $singleLines));

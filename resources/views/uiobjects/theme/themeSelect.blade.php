@@ -9,7 +9,8 @@
                     <strong class="ellipsis">{{ $theme->getTitle() }}</strong>
                     <p>{{ $theme->getDescription() }}</p>
                     <div class="btn-right hidden-sm">
-                        <a href="#" class="btn btn-default">{{xe_trans('xe::addNewInstance')}}</a>
+
+                        <button @if(!$theme->hasSetting()) disabled @endif onclick="$('#addConfig [name=theme]').val('{{ $theme->getId() }}')" type="button" data-toggle="modal" data-target="#addConfig" class="btn btn-default">{{xe_trans('xe::addNewInstance')}}</button>
                         <a href="{{ route('settings.theme.edit', ['theme'=>$theme->getId()]) }}" target="_blank" class="btn btn-primary">{{xe_trans('xe::edit')}}</a>
                     </div>
                 </div>
@@ -27,7 +28,9 @@
                                 </div>
                                 <strong class="ellipsis">{{ $config->get('_configTitle', xe_trans('xe::default')) }}</strong>
                                 <div class="btn-right">
+                                    @if($theme->hasSetting())
                                     <a href="{{ route('settings.theme.setting', ['theme'=>$configId]) }}" target="_blank" class="btn btn-link"><i class="xi-cog"></i><span class="hidden-xs">{{xe_trans('xe::modify')}}</span></a>
+                                    @endif
                                     <a href="{{ url($previewLink.'preview_theme='.$configId) }}" target="_blank" class="btn btn-link"><i class="xi-magnifier"></i><span class="hidden-xs">{{xe_trans('xe::preview')}}</span></a>
                                 </div>
                             </li>
@@ -39,7 +42,30 @@
     </ul>
 </div>
 
-{{ XeFrontend::html('skin-section')->content("
+{{ XeFrontend::html('theme.config')->content('
+<div id="addConfig" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <form action="'.route('settings.theme.setting.create').'" method="POST">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">'.xe_trans('xe::addNewThemeInstance').'</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="theme" value="">
+                    '. csrf_field() .'
+                    '. uio('formText', ['label'=>xe_trans('xe::themeInstanceName'), 'name'=>'title']) .'
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">'.xe_trans('xe::cancel').'</button>
+                    <button type="submit" class="btn btn-primary">'.xe_trans('xe::add').'</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </form>
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+')->load() }}
+{{ XeFrontend::html('theme.selector')->content("
 <script>
     $(document).ready(function () {
         function deselectTheme(type) {
