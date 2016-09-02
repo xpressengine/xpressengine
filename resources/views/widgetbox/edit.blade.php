@@ -249,13 +249,3 @@
     });
 </script>")->load() !!}
 @endif
-
-<style type="text/css" rel="stylesheet">
-    .dropzone {
-        background-color: #336699 !important;
-    }
-</style>
-
-<script type="text/javascript">
-
-</script>

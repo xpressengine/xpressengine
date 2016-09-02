@@ -33,23 +33,43 @@
                 self.$btnPreview.on('click', self.preview);
             },
             addDragDropEvents: function() {
-                var $this = $(this);
 
-                if(!$this.hasClass('ui-sortable')) {
-                    $this.sortable({
-                        opacity: 0.5,
-                        start: function() {
-                            $('.widgetarea:not(.ui-droppable)').parent().droppable({
-                                greety: true,
-                                tolerance: "pointer",
-                                hoverClass: "dropzone",
-                                drop: function (e, ui) {
-                                    var $this = $(this);
-                                    var $dropped = ui.draggable;
-                                    var $widgetColumn = $dropped.closest('.widgetarea').parent();
+                $(".widgetarea:not(.ui-sortable)").sortable({
+                    opacity: 0.5,
+                    connectWith: '.widgetarea',
+                    items: '> .xe-row',
+                    change: function(e, ui) {
+                        var index = $('.dropzone').find('.xe-row.ui-sortable-handle').index(ui.placeholder);
 
-                                    $this.find('.widgetarea').append($dropped.clone().removeAttr('style'));
-                                    $dropped.remove();
+                        if(index >= 0) {
+                            self.index = index;
+                        }
+
+                        var width = ui.placeholder.width();
+
+                        ui.item.width(width);
+                    },
+                    start: function() {
+
+                        $('.widgetarea:not(.ui-droppable)').parent().droppable({
+                            greety: true,
+                            tolerance: "pointer",
+                            hoverClass: "dropzone",
+                            over: function () {
+                                var $dropzone = $('.dropzone');
+                                var dropzoneLen = $dropzone.length;
+
+                                if(dropzoneLen > 1) {
+                                    $dropzone.not(':eq(0)').removeClass('dropzone');
+                                }
+                            },
+                            drop: function (e, ui) {
+                                var $this = $(this).eq(0);
+                                var $dropped = ui.draggable;
+                                var $widgetColumn = $dropped.closest('.widgetarea').parent();
+
+                                if(self.$editor.find('.widgetarea').parent().index($widgetColumn) !== self.$editor.find('.widgetarea').parent().index($this)) {
+                                    var $cloneEle = $dropped.clone().removeAttr('style');
 
                                     self.selectColumn.call($this, $.Event());
 
@@ -57,13 +77,34 @@
                                         self.reduceBlockSize($widgetColumn);
                                     }
 
+                                    if($widgetColumn.find('.xe-row.ui-sortable-handle').length > 0) {
+                                        if(self.index === 0) {
+                                            $this.find('.widgetarea').prepend($cloneEle);
+
+                                        }else {
+                                            if($this.find('.widgetarea > .xe-row').length - 1 - self.index >= 0) {
+                                                $this.find('.widgetarea').find('.xe-row.ui-sortable-handle').eq(self.index).after($cloneEle);
+                                            }else {
+                                                $this.find('.widgetarea').append($cloneEle);
+                                            }
+                                        }
+
+                                    }else {
+                                        $this.find('.widgetarea').append($cloneEle);
+                                    }
+
+                                    $dropped.remove();
+
                                     WidgetBox.increaseBlockSize($this);
 
+                                    self.index = 0;
                                 }
-                            });
-                        }
-                    }).disableSelection();
-                }
+
+                            }
+                        });
+                    }
+                }).disableSelection();
+
             },
             loadContents: function () {
                 XE.ajax({
