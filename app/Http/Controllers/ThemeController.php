@@ -135,8 +135,8 @@ class ThemeController extends Controller
             throw new NotSupportSettingException();
         }
 
-        $config = $theme->setting();
         $configs = $themeHandler->getThemeConfigList($theme->getId());
+        $config = $theme->setting();
 
         $configList = [];
         foreach ($configs as $id => $item) {
