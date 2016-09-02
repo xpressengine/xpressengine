@@ -24,7 +24,8 @@ class ThemeMigration implements Migration
         \DB::table('config')->insert(
             [
                 ['name' => 'theme', 'vars' => '[]'],
-                ['name' => 'theme.settings', 'vars' => '[]']
+                ['name' => 'theme.settings', 'vars' => '[]'],
+                ['name' => 'theme.settings.theme/alice@alice', 'vars' => '[]']
             ]
         );
     }
