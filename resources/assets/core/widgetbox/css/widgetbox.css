@@ -314,6 +314,8 @@ header {
 /*# sourceMappingURL=widgetbox.css.map */
 
 .editor .dropzone {
-  color: #FFF;
   background-color: #336699 !important;
+}
+.editor .dropzone .order{
+  color: #FFF !important;
 }

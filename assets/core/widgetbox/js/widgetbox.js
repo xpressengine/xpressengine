@@ -45,9 +45,9 @@
                             self.index = index;
                         }
 
-                        var width = ui.placeholder.width();
+                        // var width = ui.placeholder.width();
 
-                        ui.item.width(width);
+                        // ui.item.width(width);
                     },
                     start: function() {
 
