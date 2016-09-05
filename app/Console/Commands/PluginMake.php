@@ -419,10 +419,10 @@ class PluginMake extends Command
     {
         $composer = $this->findComposer();
         $commands = [
-            $composer.' dump-autoload'
+            $composer.' dump-autoload -d '.$path
         ];
 
-        $process = new Process(implode(' && ', $commands), $path, null, null, null);
+        $process = new Process(implode(' && ', $commands), null, null, null, null);
 
         $output = $this->output;
 

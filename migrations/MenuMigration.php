@@ -86,7 +86,7 @@ class MenuMigration implements Migration {
         $menuHandler = app('xe.menu');
 
         // 기본 메뉴 config  설정 (theme)
-        $defaultMenuTheme = 'theme/alice@alice';
+        $defaultMenuTheme = 'theme/alice@alice.0';
 
         $mainMenu = $menuHandler->create([
             'title' => 'Main Menu',
@@ -233,7 +233,8 @@ class MenuMigration implements Migration {
     {
         /** @var ThemeHandler $themeHandler */
         $themeHandler = app('xe.theme');
-        $themeHandler->setThemeConfig('theme/alice@alice', 'mainMenu', $mainMenu );
+        $themeHandler->setThemeConfig('theme/alice@alice.0', 'mainMenu', $mainMenu );
+        $themeHandler->setThemeConfig('theme/alice@alice.1', 'mainMenu', $mainMenu );
     }
 
     /**

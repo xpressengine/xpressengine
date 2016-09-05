@@ -18,6 +18,7 @@ class FormTextArea extends AbstractUIObject
     protected $template = '<div class="form-group">
         <label for="" class="hidden"></label>
         <textarea class="form-control" rows="3" placeholder=""></textarea>
+        <p class="help-block"></p>
     </div>';
 
     public function render()
@@ -28,6 +29,7 @@ class FormTextArea extends AbstractUIObject
 
         $label    = $this->markup['label'];
         $textarea = $this->markup['textarea'];
+        $description = $this->markup['.help-block'];
 
         foreach ($args as $key => $arg) {
             switch ($key) {
@@ -36,6 +38,9 @@ class FormTextArea extends AbstractUIObject
                     break;
                 case 'label':
                     $label->removeClass('hidden')->html($arg);
+                    break;
+                case 'description':
+                    $description->html($arg);
                     break;
                 case 'value':
                     $textarea->html($arg);

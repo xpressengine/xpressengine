@@ -29,6 +29,9 @@ class BlankTheme extends AbstractTheme
     protected static $supportDesktop = true;
     protected static $supportMobile = true;
 
+    public static function hasSetting(){
+        return false;
+    }
 
     public static function getTitle()
     {

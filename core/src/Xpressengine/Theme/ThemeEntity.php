@@ -222,12 +222,12 @@ class ThemeEntity implements ThemeEntityInterface
      *
      * @return \Illuminate\Contracts\View\View|void
      */
-    public function getSettingView(ConfigEntity $config = null)
+    public function renderSetting(ConfigEntity $config = null)
     {
         if ($config === null) {
             $config = $this->setting();
         }
-        return $this->getObject()->getSettingView($config);
+        return $this->getObject()->renderSetting($config);
     }
 
     /**
@@ -237,9 +237,9 @@ class ThemeEntity implements ThemeEntityInterface
      *
      * @return array
      */
-    public function updateSetting(array $config)
+    public function resolveSetting(array $config)
     {
-        return $this->getObject()->updateSetting($config);
+        return $this->getObject()->resolveSetting($config);
     }
 
     /**

@@ -104,15 +104,6 @@ Route::group(
     }
 );
 
-Route::group(
-    ['prefix' => '@{member}'],
-    function () {
-        // profile
-        Route::get('/', ['as' => 'member.profile', 'uses' => 'Member\ProfileController@index']);
-        Route::post('/', ['as' => 'member.profile.update', 'uses' => 'Member\ProfileController@update']);
-    }
-);
-
 /*
  * member settings
  * */
