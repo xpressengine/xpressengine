@@ -3,6 +3,9 @@ var Permission = React.createClass({
     displayName: 'Permission',
 
     propTypes: {
+        groupSearchUrl: React.PropTypes.string,
+        memberSearchUrl: React.PropTypes.string,
+        key: React.PropTypes.string,
         permission: React.PropTypes.object,
         type: React.PropTypes.string
     },

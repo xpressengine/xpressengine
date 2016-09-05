@@ -37,7 +37,7 @@ var MenuItem = React.createClass({
 
   handleMouseDown: function (e){
     var nodeId = this.props.index.id;
-    var dom = this.refs.inner.getDOMNode();
+    var dom = ReactDOM.findDOMNode(this.refs.inner);
     this.props.mouseDown(nodeId, dom, e);
   },
 

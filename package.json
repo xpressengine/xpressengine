@@ -66,6 +66,7 @@
       "normalize.css": "github:necolas/normalize.css@^4.1.1",
       "react": "npm:react@^15.2.1",
       "react-dom": "npm:react-dom@^15.2.1",
+      "react-tag-input": "npm:react-tag-input@^4.3.1",
       "react-tools": "npm:react-tools@^0.13.3",
       "swiper2": "npm:swiper@^2",
       "twbs/bootstrap-sass": "github:twbs/bootstrap-sass@3.3.6",

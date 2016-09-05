@@ -23,7 +23,7 @@
 
 <script>
     System.import('xecore:/menu/menu').then(function(MenuTree){
-        React.render(
+        ReactDOM.render(
             React.createElement(MenuTree, {
                 baseUrl: "{{ route('settings.menu.index') }}",
                 home: "{{$home}}",

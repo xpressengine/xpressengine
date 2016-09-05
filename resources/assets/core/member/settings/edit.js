@@ -224,7 +224,7 @@ $(function () {
   });
 
   var $box = $('#__xe_emailSetting');
-  React.render(
+  ReactDOM.render(
     React.createElement(EmailBox, {url: url, userId: $box.data('userId'), email: $box.data('email')}),
     $box.get(0)
   );
