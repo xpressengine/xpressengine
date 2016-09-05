@@ -8,8 +8,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests;
-use XeStorage;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Xpressengine\Http\Request;
 use Xpressengine\Menu\MenuHandler;
 use Xpressengine\Permission\Grant;
@@ -45,41 +44,44 @@ class SettingsController extends Controller
 
     public function updateSetting(SiteHandler $siteHandler, ThemeHandler $themeHandler, Request $request)
     {
-        $newConfig = $request->only(['site_title', 'favicon']);
+        $inputs = $request->only(['site_title', 'favicon']);
         $oldConfig = $siteHandler->getSiteConfig();
 
         /* resolve site_title */
-        $oldConfig['site_title'] = $newConfig['site_title'];
+        $oldConfig['site_title'] = $inputs['site_title'];
 
         /* resolve favicon */
-        $uploaded = array_get($newConfig, 'favicon');
+        $uploaded = array_get($inputs, 'favicon');
+
+
         if ($uploaded !== null) {
-
-            // remove old favicon file
-            if ($oldId = $oldConfig->get('favicon.id')) {
-                $oldId = $oldConfig->get('favicon.id');
-                if($oldId !== null) {
-                    $oldFile = File::find($oldId);
-                    if($oldFile !== null) {
-                        app('xe.storage')->remove($oldFile);
-                    }
-                }
-            }
-
-            $saved = app('xe.storage')->upload($uploaded, 'filebox');
-            $favicon = [
-                'id'=>$saved->id,
-                'filename'=>$saved->clientname
-            ];
-
-            $media = app('xe.media');
-            $mediaFile = null;
-            if ($media->is($saved)) {
-                $mediaFile = $media->make($saved);
-                $favicon['path'] = $mediaFile->url();
-            }
+            $favicon = $this->saveFile($oldConfig, 'favicon', $uploaded, 'public/favicon/default');
             $oldConfig['favicon'] = $favicon;
+            // remove old favicon file
+            //if ($oldId = $oldConfig->get('favicon.id')) {
+            //    $oldId = $oldConfig->get('favicon.id');
+            //    if ($oldId !== null) {
+            //        $oldFile = File::find($oldId);
+            //        if ($oldFile !== null) {
+            //            app('xe.storage')->remove($oldFile);
+            //        }
+            //    }
+            //}
+            //
+            //$saved = app('xe.storage')->upload($uploaded, 'filebox');
+            //$favicon = [
+            //    'id' => $saved->id,
+            //    'filename' => $saved->clientname
+            //];
+            //
+            //$media = app('xe.media');
+            //$mediaFile = null;
+            //if ($media->is($saved)) {
+            //    $mediaFile = $media->make($saved);
+            //    $favicon['path'] = $mediaFile->url();
+            //}
         }
+
         $siteHandler->putSiteConfig($oldConfig);
 
         // resolve index instance
@@ -88,6 +90,51 @@ class SettingsController extends Controller
 
         return \Redirect::back()->with('alert', ['type' => 'success', 'message' => '저장되었습니다.']);
     }
+
+    /**
+     * setting 과정에서 upload되는 파일을 저장한다.
+     *
+     * @param              $oldSetting
+     * @param string       $key  config field key
+     * @param UploadedFile $file file
+     * @param string       $path
+     * @param string       $disk
+     *
+     * @return array
+     * @internal param string $configId config id
+     */
+    protected function saveFile($oldSetting, $key, UploadedFile $file, $path, $disk = 'local')
+    {
+        $oldFileId = $oldSetting->get("$key.id");
+
+        // remove old file
+        if ($oldFileId !== null) {
+            $oldFile = File::find($oldFileId);
+            if ($oldFile && file_exists($oldFile->getPathname())) {
+                app('xe.storage')->remove($oldFile);
+            }
+        }
+
+        // save new file
+        $file = app('xe.storage')->upload(
+            $file,
+            $path,
+            $disk
+        );
+        $saved = [
+            'id' => $file->id,
+            'filename' => $file->clientname
+        ];
+
+        $mediaFile = null;
+        if (app('xe.media')->is($file)) {
+            $mediaFile = app('xe.media')->make($file);
+            $saved['path'] = $mediaFile->url();
+        }
+
+        return $saved;
+    }
+
 
     public function updateTheme(ThemeHandler $themeHandler, Request $request)
     {
@@ -108,7 +155,7 @@ class SettingsController extends Controller
         foreach ($permissionGroups as $tab => &$group) {
             foreach ($group as $key => &$item) {
                 $permission = $permissionHandler->get('settings.'.$item['id']);
-                if($permission === null) {
+                if ($permission === null) {
                     $permission = $permissionHandler->register('settings.'.$item['id'], new Grant());
                 }
                 $item['id'] = 'settings.'.$item['id'];

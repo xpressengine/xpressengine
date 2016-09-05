@@ -15,14 +15,14 @@
                 <div id="collapseOne" class="panel-collapse collapse in">
                     <div class="panel-body">
 
-                        {{-- 샤이트 제목 --}}
+                        {{-- 사이트 제목 --}}
                         <div class="form-group">
                             <label>{{ xe_trans('xe::site')}} {{ xe_trans('xe::title') }}</label>
                             {!! uio('langText', ['placeholder'=>xe_trans('xe::inputBrowserTitle'), 'langKey'=>$config->get('site_title', null), 'name'=>'site_title']) !!}
                         </div>
 
                         {{-- 파비콘 --}}
-                        {!! uio('formFile', ['name' => 'favicon', 'label' => xe_trans('xe::favicon'), 'value' => $config->get('favicon'), 'width' => 80, 'height' => 80, 'types' => 'ico', 'fileuploadOptions' => [ 'maxFileSize' => 10000000 ] ]) !!}
+                        {!! uio('formFile', ['name' => 'favicon', 'label' => xe_trans('xe::favicon'), 'value' => $config->get('favicon'), 'width' => 80, 'height' => 80, 'types' => ['ico','png'], 'fileuploadOptions' => [ 'maxFileSize' => 10000000 ] ]) !!}
 
                         <div class="form-group">
                             <label for="__xe_index_instance">{{ xe_trans('xe::selectHomeMenu') }}</label>
