@@ -132,6 +132,10 @@ class FileLoader implements Loader
      */
     public function clear()
     {
+        if(!file_exists($this->path)) {
+            return;
+        }
+
         $files = scandir($this->path);
 
         foreach ($files as $file) {
