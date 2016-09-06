@@ -119,9 +119,6 @@ var Permission = React.createClass({
 
     render: function (){
         var self = this;
-
-        // var modeEnable = this.props.modeEnable;
-        // var modeTitle = this.props.type + 'Mode';
         var ratingTitle = this.props.type + 'Rating';
         var includeGroupTitle = this.props.type + 'Group';
         var includeMemberTitle = this.props.type + 'User';
@@ -208,12 +205,6 @@ var Permission = React.createClass({
                                                      onChangeRadio: self.inputChange}
                                 )
                             )
-                            // return <label><input type="radio"
-                            //                      disabled={controlDisabled}
-                            //                      name={ratingTitle} 
-                            //                      value={data.value}
-                            //                      checked={checked}
-                            //                      onChange={self.inputChange.bind(null, 'rating')}/> {data.name} &nbsp;</label>;
                         })
                     
                 ), 
