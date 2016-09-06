@@ -133,6 +133,9 @@ class Guard extends LaravelGuard implements GuardInterface
      */
     protected function checkSession()
     {
+        // disable checking session
+        return;
+
         if($this->session->isStarted() === false) {
             throw new AuthIsUnavailableException();
         }
