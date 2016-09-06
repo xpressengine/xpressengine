@@ -15,6 +15,7 @@
 namespace Xpressengine\User;
 
 use Illuminate\Auth\Guard as LaravelGuard;
+use Xpressengine\User\Exceptions\AuthIsUnavailableException;
 use Xpressengine\User\Models\Guest;
 
 /**
@@ -39,7 +40,9 @@ class Guard extends LaravelGuard implements GuardInterface
      */
     public function check()
     {
-        return $this->user() instanceof Guest ? false : true;
+        $this->checkSession();
+
+        return ! is_null(parent::user());
     }
 
     /**
@@ -50,12 +53,14 @@ class Guard extends LaravelGuard implements GuardInterface
      */
     public function user()
     {
+        $this->checkSession();
+
         $user = parent::user();
         if ($user === null) {
-            $user = $this->makeGuest();
+            return $this->makeGuest();
         }
 
-        return $this->user = $user;
+        return $user;
     }
 
     /**
@@ -65,6 +70,8 @@ class Guard extends LaravelGuard implements GuardInterface
      */
     public function id()
     {
+        $this->checkSession();
+
         if ($this->loggedOut) {
             return;
         }
@@ -117,5 +124,17 @@ class Guard extends LaravelGuard implements GuardInterface
     public function makeGuest()
     {
         return new Guest();
+    }
+
+    /**
+     * 세션이 준비되었는지 체크한다.
+     *
+     * @return void
+     */
+    protected function checkSession()
+    {
+        if($this->session->isStarted() === false) {
+            throw new AuthIsUnavailableException();
+        }
     }
 }

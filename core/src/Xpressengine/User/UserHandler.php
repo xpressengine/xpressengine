@@ -488,7 +488,6 @@ class UserHandler
         // join group
         $groupIds = array_get($data, 'groupId', []);
         if (count($groupIds) > 0) {
-            $groups = $this->groups()->whereIn('id', $groupIds)->get();
             $user->joinGroups($groupIds);
         }
 
