@@ -87,6 +87,10 @@ class FilesystemHandler implements ContentReaderInterface
      */
     public function delete(File $file)
     {
+        if (!$this->exists($file)) {
+            return false;
+        }
+
         return $this->getDisk($file->disk)->delete($file->getPathname());
     }
 
