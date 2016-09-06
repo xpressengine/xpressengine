@@ -119,9 +119,6 @@ var Permission = React.createClass({
 
     render: function (){
         var self = this;
-
-        var modeEnable = this.props.modeEnable;
-        var modeTitle = this.props.type + 'Mode';
         var ratingTitle = this.props.type + 'Rating';
         var includeGroupTitle = this.props.type + 'Group';
         var includeMemberTitle = this.props.type + 'User';
@@ -139,32 +136,12 @@ var Permission = React.createClass({
             }
         }
 
-        var modeOptions = [
-            {value: 'inherit', name: '상위 설정에 따름'}
-            , {value: 'manual', name: '직접 설정'}
-        ];
-
         var ratingOption = [
             {value: 'super', name: 'Super'}
             , {value: 'manager', name: 'Manager'}
             , {value: 'member', name: 'Member'}
             , {value: 'guest', name: 'Guest'}
         ];
-
-        var ModeSelectUI =
-            modeOptions.map(function (data) {
-                return <option value={data.value} key={data.value}>{data.name}</option>;
-            });
-
-        var RatingUI =
-            ratingOption.map(function (data) {
-                if (data.value == ratingValue)
-                    return <label><input type="radio" disabled={controlDisabled} name={ratingTitle} key={data.value} value={data.value} checked={true}
-                                  onChange={self.inputChange.bind(null, 'rating')}/> {data.name} &nbsp;</label>;
-                else
-                    return <label><input type="radio" disabled={controlDisabled} name={ratingTitle} key={data.value} value={data.value}
-                                  onChange={self.inputChange.bind(null, 'rating')}/> {data.name} &nbsp;</label>;
-            });
 
         var VGroupUI = this.props.vgroupAll.length < 1 ? null : this.props.vgroupAll.map(function (data) {
             var inputProps = {
@@ -205,34 +182,33 @@ var Permission = React.createClass({
             return member.id;
         });
 
-        var permissionTitle = this.props.type.replace(/\w+/g,
-            function(w){return w[0].toUpperCase() + w.slice(1).toLowerCase();});
-
-        var modeUI;
-
-        if(modeEnable)
-            modeUI = <p>
-                <label>
-                    Mode &nbsp;
-                    <i className="fa fa-info-circle" data-toggle="popover" data-content="권한의 모드를 설정합니다."
-                       data-original-title=""></i>
-                </label><br/>
-                <select name={modeTitle} value={modeValue} onChange={this.inputChange.bind(null, 'mode')}>
-                    {ModeSelectUI}
-                </select>
-            </p>;
-
         return (
             <div>
-                <p>
+                <div>
                     <label>
                         Rating &nbsp;
-                        <i className="fa fa-info-circle" data-toggle="popover" data-content="권한의 등급을 설정합니다."
-                           data-original-title=""></i>
-                    </label><br/>
-                    {RatingUI}
-                </p>
-                <p>
+                        <i className="fa fa-info-circle" data-toggle="popover" data-content="권한의 등급을 설정합니다."></i>
+                    </label>
+                    <br/>
+                    {
+                        ratingOption.map(function (data, i) {
+
+                            console.log(data);
+                            var checked = (data.value === ratingValue)? true : false;
+
+                            return (
+                                <PermissionRadioComp data={data}
+                                                     name={ratingTitle}
+                                                     isChekced={checked}
+                                                     controlDisabled={controlDisabled}
+                                                     key={i}
+                                                     onChangeRadio={self.inputChange}
+                                />
+                            )
+                        })
+                    }
+                </div>
+                <div>
                     <label>
                         Include Group and User&nbsp;
                         <i className="fa fa-info-circle" data-toggle="popover" data-content="포함하고자 하는 대상을 지정합니다."
@@ -251,7 +227,7 @@ var Permission = React.createClass({
                     <input type="hidden" name={includeGroupTitle} className="form-control" value={includeGroups}/>
                     <input type="hidden" name={includeMemberTitle} className="form-control" value={includeMembers}/>
 
-                </p>
+                </div>
                 {function () {
                     if (VGroupUI) {
                         return (
@@ -266,7 +242,7 @@ var Permission = React.createClass({
                         );
                     }
                 }.call(this)}
-                <p>
+                <div>
                     <label>
                         Exclude User &nbsp;
                         <i className="fa fa-info-circle" data-toggle="popover" data-content="제외하고자 하는 대상을 지정합니다."
@@ -280,7 +256,7 @@ var Permission = React.createClass({
                         handleAddition={this.handleExcludeAddition}
                         />
                     <input type="hidden" name={excludeMemberTitle} className="form-control" value={excludeMembers} />
-                </p>
+                </div>
             </div>
         );
     }

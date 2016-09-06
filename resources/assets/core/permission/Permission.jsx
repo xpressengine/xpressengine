@@ -153,22 +153,12 @@ var Permission = React.createClass({
             }
         }
 
-        // var modeOptions = [
-        //     {value: 'inherit', name: '상위 설정에 따름'}
-        //     , {value: 'manual', name: '직접 설정'}
-        // ];
-
         var ratingOption = [
             {value: 'super', name: XE.Lang.trans('xe::memberRatingAdministrator')}
             , {value: 'manager', name: XE.Lang.trans('xe::memberRatingManager')}
             , {value: 'member', name: XE.Lang.trans('xe::member')}
             , {value: 'guest', name: XE.Lang.trans('xe::guest')}
         ];
-
-        // var ModeSelectUI =
-        //     modeOptions.map(function (data) {
-        //         return <option value={data.value} key={data.value}>{data.name}</option>;
-        //     });
 
         var RatingUI =
             ratingOption.map(function (data) {
@@ -218,9 +208,6 @@ var Permission = React.createClass({
         var excludeMembers = this.state.excludeMembers.map(function (member) {
             return member.id;
         });
-
-        // var permissionTitle = this.props.type.replace(/\w+/g,
-        //     function(w){return w[0].toUpperCase() + w.slice(1).toLowerCase();});
 
         var modeUI;
 
