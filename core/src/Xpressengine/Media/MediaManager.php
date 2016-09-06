@@ -183,13 +183,7 @@ class MediaManager
      */
     public function make(File $file)
     {
-        foreach ($this->handlers as $handler) {
-            if ($handler->isAvailable($file->mime) === true) {
-                return $handler->make($file);
-            }
-        }
-
-        throw new NotAvailableException();
+        return $this->getHandlerByFile($file)->make($file);
     }
 
     /**

@@ -116,36 +116,16 @@ class MediaManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($instance->getFileType($mockFile2));
     }
 
-    public function testMakeThrownExceptionWhenGivenFileIsNotAvailable()
-    {
-        list($storage, $factory, $config) = $this->getMocks();
-        $instance = new MediaManager($storage, $factory, $config);
-        $this->beforeSetUp($instance);
-
-        $mockFile = m::mock('Xpressengine\Storage\File');
-        $mockFile->shouldReceive('getAttribute')->once()->with('mime')->andReturn('text/plain');
-
-        $this->handler->shouldReceive('isAvailable')->once()->with('text/plain')->andReturn(false);
-
-        try {
-            $instance->make($mockFile);
-
-            $this->assertTrue(false);
-        } catch (\Exception $e) {
-            $this->assertInstanceOf('Xpressengine\Media\Exceptions\NotAvailableException', $e);
-        }
-    }
-
     public function testMake()
     {
         list($storage, $factory, $config) = $this->getMocks();
-        $instance = new MediaManager($storage, $factory, $config);
+        $instance = m::mock(MediaManager::class, [$storage, $factory, $config])
+            ->shouldAllowMockingProtectedMethods()
+            ->makePartial();
         $this->beforeSetUp($instance);
 
         $mockFile = m::mock('Xpressengine\Storage\File');
-        $mockFile->shouldReceive('getAttribute')->once()->with('mime')->andReturn('image/jpeg');
-
-        $this->handler->shouldReceive('isAvailable')->once()->with('image/jpeg')->andReturn(true);
+        $instance->shouldReceive('getHandlerByFile')->once()->with($mockFile)->andReturn($this->handler);
         $this->handler->shouldReceive('make')->once()->with($mockFile);
 
         $instance->make($mockFile);
