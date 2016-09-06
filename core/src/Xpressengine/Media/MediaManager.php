@@ -193,6 +193,17 @@ class MediaManager
     }
 
     /**
+     * 파일을 미디어 타입으로 변환, 메타데이터는 생성하지 않음
+     *
+     * @param File $file file instance
+     * @return Media
+     */
+    public function cast(File $file)
+    {
+        return $this->getHandlerByFile($file)->createModel($file);
+    }
+
+    /**
      * 파일이 미디어 파일인지 확인
      *
      * @param File $file file instance
