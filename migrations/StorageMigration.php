@@ -12,7 +12,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Schema;
 use Xpressengine\Support\Migration;
 
-class StorageMigration implements Migration {
+class StorageMigration extends Migration {
 
     public function install()
     {
@@ -47,18 +47,5 @@ class StorageMigration implements Migration {
 
             $table->unique(['fileId', 'fileableId']);
         });
-    }
-
-    public function update($installedVersion = null)
-    {
-
-    }
-
-    public function checkInstalled()
-    {
-    }
-
-    public function checkUpdated($installedVersion = null)
-    {
     }
 }

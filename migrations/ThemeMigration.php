@@ -11,13 +11,8 @@ namespace Xpressengine\Migrations;
 use XeLang;
 use Xpressengine\Support\Migration;
 
-class ThemeMigration implements Migration
+class ThemeMigration extends Migration
 {
-
-    public function install()
-    {
-    }
-
     public function installed()
     {
         // init config
@@ -30,7 +25,7 @@ class ThemeMigration implements Migration
         );
     }
 
-    public function init()
+    public function initialized()
     {
         // set site default theme
         $theme = ['desktop' => 'theme/alice@alice.0', 'mobile' => 'theme/alice@alice.0'];
@@ -108,17 +103,5 @@ class ThemeMigration implements Migration
         ];
 
         app('xe.theme')->setThemeConfig('theme/alice@alice.1', array_merge($default, $main, $multiLines, $singleLines));
-    }
-
-    public function update($installedVersion = null)
-    {
-    }
-
-    public function checkInstalled()
-    {
-    }
-
-    public function checkUpdated($installedVersion = null)
-    {
     }
 }

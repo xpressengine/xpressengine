@@ -17,7 +17,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Schema;
 use Xpressengine\Support\Migration;
 
-class SiteMigration implements Migration {
+class SiteMigration extends Migration {
 
     public function install()
     {
@@ -36,17 +36,5 @@ class SiteMigration implements Migration {
         $url = \Config::get('app.url');
         $url = preg_replace('#^https?://#', '', $url);
         \DB::table('site')->insert(['host' => $url, 'siteKey' => 'default']);
-    }
-
-    public function update($installedVersion = null)
-    {
-    }
-
-    public function checkInstalled()
-    {
-    }
-
-    public function checkUpdated($installedVersion = null)
-    {
     }
 }

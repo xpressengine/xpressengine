@@ -12,7 +12,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Schema;
 use Xpressengine\Support\Migration;
 
-class TagMigration implements Migration {
+class TagMigration extends Migration {
 
     public function install()
     {
@@ -40,18 +40,5 @@ class TagMigration implements Migration {
 
             $table->unique(['tagId', 'taggableId']);
         });
-    }
-
-    public function update($installedVersion = null)
-    {
-
-    }
-
-    public function checkInstalled()
-    {
-    }
-
-    public function checkUpdated($installedVersion = null)
-    {
     }
 }

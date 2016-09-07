@@ -13,7 +13,7 @@ use Schema;
 use XeLang;
 use Xpressengine\Support\Migration;
 
-class TranslationMigration implements Migration {
+class TranslationMigration extends Migration {
 
     public function install()
     {
@@ -30,12 +30,6 @@ class TranslationMigration implements Migration {
         });
     }
 
-    public function installed()
-    {
-        // seeding
-        // 다국어 파일 내용을 db에 넣기
-    }
-
     public function init()
     {
         // initialize
@@ -45,10 +39,6 @@ class TranslationMigration implements Migration {
     public function update($installedVersion = null)
     {
         $this->init();
-    }
-
-    public function checkInstalled()
-    {
     }
 
     public function checkUpdated($installedVersion = null)

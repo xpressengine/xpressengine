@@ -12,7 +12,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Schema;
 use Xpressengine\Support\Migration;
 
-class PermissionMigration implements Migration {
+class PermissionMigration extends Migration {
 
     public function install()
     {
@@ -30,18 +30,5 @@ class PermissionMigration implements Migration {
 //            $table->unique(['siteKey', 'type', 'name']);
             $table->unique(['siteKey', 'name']);
         });
-    }
-
-    public function update($installedVersion = null)
-    {
-
-    }
-
-    public function checkInstalled()
-    {
-    }
-
-    public function checkUpdated($installedVersion = null)
-    {
     }
 }
