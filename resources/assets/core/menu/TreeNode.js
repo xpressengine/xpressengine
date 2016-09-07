@@ -9,7 +9,7 @@ var TreeNode = React.createClass({
     index: React.PropTypes.object,
     tree: React.PropTypes.object,
     home: React.PropTypes.string,
-    dragging: React.PropTypes.object,
+    dragging: React.PropTypes.string,
     onDragStart: React.PropTypes.func,
     onCollapse: React.PropTypes.func,
     getBaseUrl: React.PropTypes.func,
@@ -29,6 +29,7 @@ var TreeNode = React.createClass({
     var getBaseUrl = props.getBaseUrl;
     var onDragStart = props.onDragStart;
     var isDragging = props.isDragging;
+
     var isPlaceHolder = (index.id === dragging) || this.props.isPlaceHolder;
     if (index.children && index.children.length) {
       var childrenStyles = {};

@@ -54,7 +54,7 @@ var LangEditor = React.createClass({
   componentDidMount: function () {
     if (this.isMounted()) {
       var self = this;
-      var el = this.getDOMNode();
+      var el = ReactDOM.findDOMNode(this);
 
       if ( this.props.langKey ) {
         if ( this.state.lines.length == 0 ) {
@@ -148,7 +148,7 @@ window.langEditorBoxRender = function ($o) {
     lines = $o.data('lines'),
     autocomplete = $o.data('autocomplete');
 
-  React.render(<LangEditorBox name={name} langKey={langKey} multiline={multiline} lines={lines}
+  ReactDOM.render(<LangEditorBox name={name} langKey={langKey} multiline={multiline} lines={lines}
                               autocomplete={autocomplete}/>, $o[0]);
 };
 

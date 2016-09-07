@@ -78,7 +78,7 @@ var MenuSearchBar = React.createClass({
   },
 
   resetSearch: function () {
-    var input = this.refs.input.getDOMNode();
+    var input = ReactDOM.findDOMNode(this.refs.input);
 
     this.setState({
       query: '',
@@ -138,7 +138,7 @@ var MenuSearchBar = React.createClass({
   },
 
   selection: function (index) {
-    var input = this.refs.input.getDOMNode();
+    var input = ReactDOM.findDOMNode(this.refs.input);
 
     this.props.handleSearch(index.node);
 

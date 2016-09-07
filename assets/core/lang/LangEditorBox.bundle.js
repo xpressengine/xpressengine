@@ -63,7 +63,7 @@ $__System.registerDynamic("1", [], false, function($__require, $__exports, $__mo
       componentDidMount: function() {
         if (this.isMounted()) {
           var self = this;
-          var el = this.getDOMNode();
+          var el = ReactDOM.findDOMNode(this);
           if (this.props.langKey) {
             if (this.state.lines.length == 0) {
               $.ajax({
@@ -160,7 +160,7 @@ $__System.registerDynamic("1", [], false, function($__require, $__exports, $__mo
           multiline = $o.data('multiline'),
           lines = $o.data('lines'),
           autocomplete = $o.data('autocomplete');
-      React.render(React.createElement(LangEditorBox, {
+      ReactDOM.render(React.createElement(LangEditorBox, {
         name: name,
         langKey: langKey,
         multiline: multiline,

@@ -120,7 +120,7 @@ $__System.registerDynamic("3", ["2"], true, function($__require, exports, module
       return (node.entity && (node.entity == 'menu'));
     },
     resetSearch: function() {
-      var input = this.refs.input.getDOMNode();
+      var input = ReactDOM.findDOMNode(this.refs.input);
       this.setState({
         query: '',
         selectedIndex: -1,
@@ -168,7 +168,7 @@ $__System.registerDynamic("3", ["2"], true, function($__require, exports, module
       }
     },
     selection: function(index) {
-      var input = this.refs.input.getDOMNode();
+      var input = ReactDOM.findDOMNode(this.refs.input);
       this.props.handleSearch(index.node);
       this.setState({
         query: '',
@@ -299,7 +299,7 @@ $__System.registerDynamic("5", [], true, function($__require, exports, module) {
     },
     handleMouseDown: function(e) {
       var nodeId = this.props.index.id;
-      var dom = this.refs.inner.getDOMNode();
+      var dom = ReactDOM.findDOMNode(this.refs.inner);
       this.props.mouseDown(nodeId, dom, e);
     },
     onClickSetNode: function(node) {
@@ -394,7 +394,7 @@ $__System.registerDynamic("6", ["4", "5"], true, function($__require, exports, m
       index: React.PropTypes.object,
       tree: React.PropTypes.object,
       home: React.PropTypes.string,
-      dragging: React.PropTypes.object,
+      dragging: React.PropTypes.string,
       onDragStart: React.PropTypes.func,
       onCollapse: React.PropTypes.func,
       getBaseUrl: React.PropTypes.func,
