@@ -50,6 +50,7 @@ class Composer
         'xpressengine-plugin/orientator' => '0.9.1',
         'xpressengine-plugin/page' => '0.9.2',
         'xpressengine-plugin/social_login' => '0.9.2',
+        'xpressengine-plugin/emoticon' => '0.9.0',
     ];
 
     /**
