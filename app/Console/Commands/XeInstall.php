@@ -895,6 +895,12 @@ class XeInstall extends Command
                 $migration->init();
             }
         }
+
+        foreach ($this->migrations as $migration) {
+            if (method_exists($migration, 'initialized')) {
+                $migration->initialized();
+            }
+        }
     }
 
     /**

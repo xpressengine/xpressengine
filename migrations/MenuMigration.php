@@ -79,7 +79,7 @@ class MenuMigration implements Migration {
         \DB::table('config')->insert(['name' => 'site.default', 'vars' => '[]']);
     }
 
-    public function init()
+    public function initialized()
     {
         // 기본 메뉴 추가 (main) 추가.
         /** @var MenuHandler $menuHandler */
