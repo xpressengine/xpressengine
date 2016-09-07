@@ -12,7 +12,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Schema;
 use Xpressengine\Support\Migration;
 
-class CategoryMigration implements Migration {
+class CategoryMigration extends Migration {
 
     public function install()
     {
@@ -50,18 +50,5 @@ class CategoryMigration implements Migration {
             $table->index('ancestor');
             $table->index('descendant');
         });
-    }
-
-    public function update($installedVersion = null)
-    {
-
-    }
-
-    public function checkInstalled()
-    {
-    }
-
-    public function checkUpdated($installedVersion = null)
-    {
     }
 }

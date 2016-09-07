@@ -12,7 +12,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Schema;
 use Xpressengine\Support\Migration;
 
-class ConfigMigration implements Migration {
+class ConfigMigration extends Migration {
 
     public function install()
     {
@@ -24,18 +24,5 @@ class ConfigMigration implements Migration {
             $table->text('vars')->default('');
             $table->primary(['siteKey', 'name']);
         });
-    }
-
-    public function update($installedVersion = null)
-    {
-
-    }
-
-    public function checkInstalled()
-    {
-    }
-
-    public function checkUpdated($installedVersion = null)
-    {
     }
 }

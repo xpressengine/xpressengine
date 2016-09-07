@@ -15,7 +15,7 @@ use DB;
 use Xpressengine\Document\Models\Document;
 use Xpressengine\Support\Migration;
 
-class DocumentMigration implements Migration
+class DocumentMigration extends Migration
 {
     /**
      * install
@@ -136,33 +136,5 @@ class DocumentMigration implements Migration
             'name' => 'document',
             'vars' => '{"instanceId":0,"instanceName":0,"division":false,"revision":false,"comment":true,"assent":true,"nonmember":false,"reply":false}'
         ]);
-    }
-
-    /**
-     * update
-     *
-     * @param string $installedVersion version
-     */
-    public function update($installedVersion = null)
-    {
-
-    }
-
-    /**
-     * check install
-     *
-     * @return void
-     */
-    public function checkInstalled()
-    {
-    }
-
-    /**
-     * check update
-     *
-     * @param string $installedVersion version
-     */
-    public function checkUpdated($installedVersion = null)
-    {
     }
 }

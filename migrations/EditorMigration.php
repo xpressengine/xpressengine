@@ -13,52 +13,8 @@ use Xpressengine\Permission\Grant;
 use Xpressengine\Support\Migration;
 use Xpressengine\User\Rating;
 
-class EditorMigration implements Migration
+class EditorMigration extends Migration
 {
-
-    /**
-     * checkInstall
-     *
-     * @return mixed
-     */
-    public function checkInstalled()
-    {
-        // TODO: Implement checkInstalled() method.
-    }
-
-    /**
-     * install
-     *
-     * @return mixed
-     */
-    public function install()
-    {
-        // TODO: Implement install() method.
-    }
-
-    /**
-     * checkUpdate
-     *
-     * @param string $installedVersion current version
-     *
-     * @return mixed
-     */
-    public function checkUpdated($installedVersion = null)
-    {
-        // TODO: Implement checkUpdated() method.
-    }
-
-    /**
-     * update
-     *
-     * @param string $installedVersion current version
-     *
-     * @return mixed
-     */
-    public function update($installedVersion = null)
-    {
-        // TODO: Implement update() method.
-    }
 
     public function init()
     {

@@ -12,7 +12,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Schema;
 use Xpressengine\Support\Migration;
 
-class TemporaryMigration implements Migration {
+class TemporaryMigration extends Migration {
 
     public function install()
     {
@@ -29,18 +29,5 @@ class TemporaryMigration implements Migration {
 
             $table->primary('id');
         });
-    }
-
-    public function update($installedVersion = null)
-    {
-
-    }
-
-    public function checkInstalled()
-    {
-    }
-
-    public function checkUpdated($installedVersion = null)
-    {
     }
 }

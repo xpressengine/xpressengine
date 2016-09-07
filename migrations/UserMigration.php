@@ -12,7 +12,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Schema;
 use Xpressengine\Support\Migration;
 
-class UserMigration implements Migration {
+class UserMigration extends Migration {
 
     public function install()
     {
@@ -146,19 +146,5 @@ class UserMigration implements Migration {
 
         $joinConfig->set('joinGroup', $joinGroup->id);
         app('xe.config')->modify($joinConfig);
-
-    }
-
-    public function update($installedVersion = null)
-    {
-
-    }
-
-    public function checkInstalled()
-    {
-    }
-
-    public function checkUpdated($installedVersion = null)
-    {
     }
 }
