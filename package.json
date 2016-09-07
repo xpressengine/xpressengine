@@ -38,7 +38,9 @@
     "merge-stream": "^1.0.0",
     "run-sequence": "^1.1.5"
   },
-  "dependencies": {},
+  "dependencies": {
+    "gulp": "^3.9.1"
+  },
   "scripts": {
     "test": "jest"
   },
@@ -67,7 +69,6 @@
       "react": "npm:react@^15.2.1",
       "react-dom": "npm:react-dom@^15.2.1",
       "react-tag-input": "npm:react-tag-input@^4.3.1",
-      "react-tools": "npm:react-tools@^0.13.3",
       "swiper2": "npm:swiper@^2",
       "twbs/bootstrap-sass": "github:twbs/bootstrap-sass@3.3.6",
       "xedep-jquery": "npm:jquery@^2.2.2"

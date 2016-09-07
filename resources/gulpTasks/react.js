@@ -59,17 +59,6 @@ module.exports = (() => {
                 .pipe(react())
                 .pipe($.if(taskSettings.getConfig().useSourceMaps, $.sourcemaps.write('.')))
                 .pipe(gulp.dest('./assets/core/permission'))
-        },
-        /**
-         * boardTags jsx변환
-         * */
-        'jsx:plugins.board': () => {
-            return gulp.src('plugins/board/assets/js/*.jsx')
-                .pipe($.if(taskSettings.getConfig().useSourceMaps, $.sourcemaps.init()))
-                .pipe($.plumber())
-                .pipe(react())
-                .pipe($.if(taskSettings.getConfig().useSourceMaps, $.sourcemaps.write('.')))
-                .pipe(gulp.dest('./plugins/board/assets/js'))
         }
     };
 })();

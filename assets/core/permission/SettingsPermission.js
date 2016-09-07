@@ -192,8 +192,6 @@ var Permission = React.createClass({
                     React.createElement("br", null), 
                     
                         ratingOption.map(function (data, i) {
-
-                            console.log(data);
                             var checked = (data.value === ratingValue)? true : false;
 
                             return (
