@@ -142,7 +142,7 @@
                 ].join("\n");
             },
             execPageCheck: function(e) {
-                var $target = $(event.target);
+                var $target = $(e.target);
 
                 // close ToggleMenu
                 if ($target.closest('.xe-dropdown').length == 0) {
