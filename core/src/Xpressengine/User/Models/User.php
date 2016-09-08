@@ -323,11 +323,11 @@ class User extends DynamicModel implements UserInterface
     /**
      * add this user to groups
      *
-     * @param array $groups groups
+     * @param mixed $groups groups
      *
      * @return static
      */
-    public function joinGroups(array $groups)
+    public function joinGroups($groups)
     {
         // todo: increment group's count!!
         $this->groups()->attach($groups);
