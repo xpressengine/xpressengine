@@ -253,15 +253,14 @@ class Guest implements UserInterface
         return false;
     }
 
-
     /**
      * add this user to groups
      *
-     * @param array $groups groups
+     * @param mixed $groups groups
      *
      * @return static
      */
-    public function joinGroups(array $groups)
+    public function joinGroups($groups)
     {
         $this->throwNotSupportedException();
     }
