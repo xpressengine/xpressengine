@@ -222,17 +222,15 @@
                     data = data.data || {};
 
                 var next = function() {
-                    if(addType) {
-                        switch(addType) {
-                            case 'append':
-                                $target.append(html);
-                                break;
-                            case 'prepend':
-                                $target.prepend(html);
-                                break;
-                            default:
-                                $target.html(html);
-                        }
+                    switch(addType) {
+                        case 'append':
+                            $target.append(html);
+                            break;
+                        case 'prepend':
+                            $target.prepend(html);
+                            break;
+                        default:
+                            $target.html(html);
                     }
 
                     if(callback) {
