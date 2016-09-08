@@ -146,5 +146,9 @@ class UserMigration extends Migration {
 
         $joinConfig->set('joinGroup', $joinGroup->id);
         app('xe.config')->modify($joinConfig);
+
+        // set admin's group
+        auth()->user()->joinGroups($joinGroup);
+
     }
 }
