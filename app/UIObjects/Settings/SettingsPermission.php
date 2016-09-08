@@ -53,7 +53,7 @@ class SettingsPermission extends AbstractUIObject
         XeFrontend::js('/assets/core/permission/Permission.js')->unload();
 
         XeFrontend::js([
-            '/assets/core/permission/PermissionRadioComp.js',
+            
             '/assets/core/permission/SettingsPermission.js',
             '/assets/core/permission/PermissionTag.js'
 

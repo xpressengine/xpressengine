@@ -3,9 +3,6 @@ var Permission = React.createClass({
     displayName: 'Permission',
 
     propTypes: {
-        groupSearchUrl: React.PropTypes.string,
-        memberSearchUrl: React.PropTypes.string,
-        key: React.PropTypes.string,
         permission: React.PropTypes.object,
         type: React.PropTypes.string
     },
@@ -161,13 +158,22 @@ var Permission = React.createClass({
         ];
 
         var RatingUI =
-            ratingOption.map(function (data) {
+            ratingOption.map(function (data, i) {
                 if (data.value == ratingValue)
-                    return React.createElement("label", null, React.createElement("input", {type: "radio", disabled: controlDisabled, name: ratingTitle, key: data.value, value: data.value, checked: true, 
-                                         onChange: self.inputChange.bind(null, 'rating')}), data.name);
+                    return React.createElement(PermissionRadioComp, {data: data, 
+                                                name: ratingTitle, 
+                                                isChekced: true, 
+                                                controlDisabled: controlDisabled, 
+                                                key: i, 
+                                                onChangeRadio: self.inputChange.bind(null, 'rating')}
+                            )
                 else
-                    return React.createElement("label", null, React.createElement("input", {type: "radio", disabled: controlDisabled, name: ratingTitle, key: data.value, value: data.value, 
-                                         onChange: self.inputChange.bind(null, 'rating')}), data.name);
+                    return React.createElement(PermissionRadioComp, {data: data, 
+                                                name: ratingTitle, 
+                                                controlDisabled: controlDisabled, 
+                                                key: i, 
+                                                onChangeRadio: self.inputChange.bind(null, 'rating')}
+                           )
             });
 
         var VGroupUI = this.props.vgroupAll.length < 1 ? null : this.props.vgroupAll.map(function (data) {
