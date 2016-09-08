@@ -198,6 +198,8 @@
      * */
     var _page = function(options, callback) {
         var $target = options.target;
+        var addType = options.hasOwnProperty('addType')? options.addType : '';
+
         if (typeof $target == 'string') {
             $target = $($target);
         }
@@ -220,7 +222,18 @@
                     data = data.data || {};
 
                 var next = function() {
-                    $target.html(html);
+                    if(addType) {
+                        switch(addType) {
+                            case 'append':
+                                $target.append(html);
+                                break;
+                            case 'prepend':
+                                $target.prepend(html);
+                                break;
+                            default:
+                                $target.html(html);
+                        }
+                    }
 
                     if(callback) {
                         callback(data);
@@ -260,6 +273,7 @@
      * <pre>
      *     - data : request parameters
      *     - type : http method (get | post) default 'get'
+     *     - addType : 'append' | 'prepend' default 'jquery fn.html'
      * </pre>
      * @param {function} callback
      * @description
