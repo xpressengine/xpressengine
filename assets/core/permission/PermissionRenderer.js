@@ -8,12 +8,14 @@ $('.__xe__uiobject_permission').each(function (i) {
     , groupUrl = el.data('groupUrl')
     , vgroupAll = el.data('vgroupAll');
 
-  ReactDOM.render(
-    React.createElement(Permission, {
-      key: key, 
-      memberSearchUrl: memberUrl, 
-      groupSearchUrl: groupUrl, 
-      permission: data, 
-      type: type, 
-      vgroupAll: vgroupAll}), this);
+  System.amdRequire(['react', 'react-dom', 'Permission'], function(React, ReactDOM, Permission) {
+    ReactDOM.render(
+        React.createElement(Permission, {
+            key: key, 
+            memberSearchUrl: memberUrl, 
+            groupSearchUrl: groupUrl, 
+            permission: data, 
+            type: type, 
+            vgroupAll: vgroupAll}), this);
+  });
 });

@@ -42,12 +42,19 @@ System.config({
   },
 
   map: {
+    "Permission": "xecore:/permission/Permission",
+    "PermissionExclude": "xecore:/permission/PermissionExclude",
+    "PermissionInclude": "xecore:/permission/PermissionInclude",
+    "PermissionRadioComp": "xecore:/permission/PermissionRadioComp",
+    "PermissionTag": "xecore:/permission/PermissionTag",
+    "PermissionTagSuggestion": "xecore:/permission/PermissionTagSuggestion",
+    "SettingsPermission": "xecore:/permission/SettingsPermission",
     "blueimp-file-upload": "npm:blueimp-file-upload@9.12.1",
     "bootstrap-sass": "npm:bootstrap-sass@3.3.6",
     "buffer": "npm:buffer@4.6.0",
     "core-js": "npm:core-js@1.2.6",
     "css": "github:systemjs/plugin-css@0.1.21",
-    "jquery": "npm:jquery@2.2.3",
+    "jquery": "xevendor:/jquery/jquery.min",
     "jquery-migrate": "npm:jquery-migrate@1.4.0",
     "jquery-ui": "npm:jquery-ui@1.10.5",
     "jspm-loader-jsx": "npm:jspm-loader-jsx@0.0.7",
@@ -58,14 +65,17 @@ System.config({
     "react": "npm:react@15.3.1",
     "react-dom": "npm:react-dom@15.3.1",
     "react-tag-input": "npm:react-tag-input@4.3.1",
+    "react-tools": "npm:react-tools@0.13.3",
     "swiper2": "npm:swiper@2.7.6",
     "translator": "assets/core/common/js/translator",
     "twbs/bootstrap-sass": "github:twbs/bootstrap-sass@3.3.6",
-    "vendor:/jquery": "xevendor:/jquery/jquery",
+    "vendor:/jquery": "xevendor:/jquery/jquery.min",
     "vendor:/jquery-migrate": "xevendor:/jquery/jquery",
     "vendor:/jquery-ui": "xevendor:/jqueryui/jquery-ui",
     "vendor:/lodash": "xevendor:/lodash/lodash.min",
     "vendor:/moment": "xevendor:/moment/moment-with-locales.min",
+    "vendor:/react": "xevendor:/react-15.3.1/build/react",
+    "vendor:/react-dom": "xevendor:/react-15.3.1/build/react-dom",
     "xe.bundle": "assets/core/common/js/xe.bundle",
     "xe.component": "assets/core/common/js/xe.component",
     "xe.component.dropdown": "assets/core/xe-ui-component/js/xe-dropdown",
@@ -153,7 +163,7 @@ System.config({
     },
     "npm:asn1.js@4.8.0": {
       "assert": "github:jspm/nodelibs-assert@0.1.0",
-      "bn.js": "npm:bn.js@4.11.5",
+      "bn.js": "npm:bn.js@4.11.6",
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
       "fs": "github:jspm/nodelibs-fs@0.1.2",
       "inherits": "npm:inherits@2.0.1",
@@ -170,10 +180,10 @@ System.config({
       "process": "github:jspm/nodelibs-process@0.1.2",
       "systemjs-json": "github:systemjs/plugin-json@0.1.2"
     },
-    "npm:bn.js@4.11.5": {
+    "npm:bn.js@4.11.6": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0"
     },
-    "npm:brace-expansion@1.1.5": {
+    "npm:brace-expansion@1.1.6": {
       "balanced-match": "npm:balanced-match@0.4.2",
       "concat-map": "npm:concat-map@0.0.1"
     },
@@ -203,14 +213,14 @@ System.config({
       "inherits": "npm:inherits@2.0.1"
     },
     "npm:browserify-rsa@4.0.1": {
-      "bn.js": "npm:bn.js@4.11.5",
+      "bn.js": "npm:bn.js@4.11.6",
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
       "constants": "github:jspm/nodelibs-constants@0.1.0",
       "crypto": "github:jspm/nodelibs-crypto@0.1.0",
       "randombytes": "npm:randombytes@2.0.3"
     },
     "npm:browserify-sign@4.0.0": {
-      "bn.js": "npm:bn.js@4.11.5",
+      "bn.js": "npm:bn.js@4.11.6",
       "browserify-rsa": "npm:browserify-rsa@4.0.1",
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
       "create-hash": "npm:create-hash@1.1.2",
@@ -281,7 +291,7 @@ System.config({
       "events": "github:jspm/nodelibs-events@0.1.1",
       "fs": "github:jspm/nodelibs-fs@0.1.2",
       "glob": "npm:glob@5.0.15",
-      "graceful-fs": "npm:graceful-fs@4.1.4",
+      "graceful-fs": "npm:graceful-fs@4.1.6",
       "iconv-lite": "npm:iconv-lite@0.4.13",
       "mkdirp": "npm:mkdirp@0.5.1",
       "path": "github:jspm/nodelibs-path@0.1.0",
@@ -304,7 +314,7 @@ System.config({
       "buffer": "github:jspm/nodelibs-buffer@0.1.0"
     },
     "npm:create-ecdh@4.0.0": {
-      "bn.js": "npm:bn.js@4.11.5",
+      "bn.js": "npm:bn.js@4.11.6",
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
       "crypto": "github:jspm/nodelibs-crypto@0.1.0",
       "elliptic": "npm:elliptic@6.3.1"
@@ -348,7 +358,7 @@ System.config({
       "fs": "github:jspm/nodelibs-fs@0.1.2"
     },
     "npm:diffie-hellman@5.0.2": {
-      "bn.js": "npm:bn.js@4.11.5",
+      "bn.js": "npm:bn.js@4.11.6",
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
       "crypto": "github:jspm/nodelibs-crypto@0.1.0",
       "miller-rabin": "npm:miller-rabin@4.0.0",
@@ -365,8 +375,8 @@ System.config({
       "events": "github:jspm/nodelibs-events@0.1.1"
     },
     "npm:elliptic@6.3.1": {
-      "bn.js": "npm:bn.js@4.11.5",
-      "brorand": "npm:brorand@1.0.5",
+      "bn.js": "npm:bn.js@4.11.6",
+      "brorand": "npm:brorand@1.0.6",
       "hash.js": "npm:hash.js@1.0.3",
       "inherits": "npm:inherits@2.0.1",
       "systemjs-json": "github:systemjs/plugin-json@0.1.2"
@@ -413,14 +423,14 @@ System.config({
       "fs": "github:jspm/nodelibs-fs@0.1.2",
       "inflight": "npm:inflight@1.0.5",
       "inherits": "npm:inherits@2.0.1",
-      "minimatch": "npm:minimatch@3.0.2",
-      "once": "npm:once@1.3.3",
+      "minimatch": "npm:minimatch@3.0.3",
+      "once": "npm:once@1.4.0",
       "path": "github:jspm/nodelibs-path@0.1.0",
       "path-is-absolute": "npm:path-is-absolute@1.0.0",
       "process": "github:jspm/nodelibs-process@0.1.2",
       "util": "github:jspm/nodelibs-util@0.1.0"
     },
-    "npm:graceful-fs@4.1.4": {
+    "npm:graceful-fs@4.1.6": {
       "assert": "github:jspm/nodelibs-assert@0.1.0",
       "constants": "github:jspm/nodelibs-constants@0.1.0",
       "fs": "github:jspm/nodelibs-fs@0.1.2",
@@ -445,7 +455,7 @@ System.config({
       "systemjs-json": "github:systemjs/plugin-json@0.1.2"
     },
     "npm:inflight@1.0.5": {
-      "once": "npm:once@1.3.3",
+      "once": "npm:once@1.4.0",
       "process": "github:jspm/nodelibs-process@0.1.2",
       "wrappy": "npm:wrappy@1.0.2"
     },
@@ -502,11 +512,11 @@ System.config({
       "util": "github:jspm/nodelibs-util@0.1.0"
     },
     "npm:miller-rabin@4.0.0": {
-      "bn.js": "npm:bn.js@4.11.5",
-      "brorand": "npm:brorand@1.0.5"
+      "bn.js": "npm:bn.js@4.11.6",
+      "brorand": "npm:brorand@1.0.6"
     },
-    "npm:minimatch@3.0.2": {
-      "brace-expansion": "npm:brace-expansion@1.1.5",
+    "npm:minimatch@3.0.3": {
+      "brace-expansion": "npm:brace-expansion@1.1.6",
       "path": "github:jspm/nodelibs-path@0.1.0"
     },
     "npm:mkdirp@0.5.1": {
@@ -526,7 +536,7 @@ System.config({
       "util": "github:jspm/nodelibs-util@0.1.0",
       "zlib": "github:jspm/nodelibs-zlib@0.1.0"
     },
-    "npm:once@1.3.3": {
+    "npm:once@1.4.0": {
       "wrappy": "npm:wrappy@1.0.2"
     },
     "npm:os-browserify@0.1.2": {
@@ -577,7 +587,7 @@ System.config({
       "fs": "github:jspm/nodelibs-fs@0.1.2"
     },
     "npm:public-encrypt@4.0.0": {
-      "bn.js": "npm:bn.js@4.11.5",
+      "bn.js": "npm:bn.js@4.11.6",
       "browserify-rsa": "npm:browserify-rsa@4.0.1",
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
       "create-hash": "npm:create-hash@1.1.2",
