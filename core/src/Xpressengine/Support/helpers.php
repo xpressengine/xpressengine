@@ -407,37 +407,38 @@ if (!function_exists('menu_list')) {
         /** @var Xpressengine\Menu\Models\Menu $menu */
         if ($menu !== null) {
 
-            /**
-             * 보이지 않는(보기 권한이 없는) 메뉴는 제외시킨다.
-             *
-             * @param \Xpressengine\Menu\Models\MenuItem $item menu item
-             * @param \Xpressengine\Menu\Models\Menu     $menu menu
-             *
-             * @return null|\Xpressengine\Menu\Models\MenuItem
-             */
-            function removeInvisible($item, $menu)
-            {
+            if(!function_exists('removeInvisible')) {
 
-                // resolve item
-                if (Gate::denies('visible', [$item, $menu])) {
-                    return null;
-                }
+                /**
+                 * 보이지 않는(보기 권한이 없는) 메뉴는 제외시킨다.
+                 *
+                 * @param \Xpressengine\Menu\Models\MenuItem $item menu item
+                 * @param \Xpressengine\Menu\Models\Menu     $menu menu
+                 *
+                 * @return null|\Xpressengine\Menu\Models\MenuItem
+                 */
+                function removeInvisible($item, $menu)
+                {
 
-                // resolve child menuitems of item
-                $children = new \Illuminate\Support\Collection();
-                foreach ($item['children'] as $child) {
-                    if ($new = removeInvisible($child, $menu)) {
-                        if ($new) {
-                            $children[] = $new;
+                    // resolve item
+                    if (Gate::denies('visible', [$item, $menu])) {
+                        return null;
+                    }
+
+                    // resolve child menuitems of item
+                    $children = new \Illuminate\Support\Collection();
+                    foreach ($item['children'] as $child) {
+                        if ($new = removeInvisible($child, $menu)) {
+                            if ($new) {
+                                $children[] = $new;
+                            }
                         }
                     }
+                    $item['children'] = $children;
+
+                    return $item;
                 }
-                $item['children'] = $children;
-
-                return $item;
             }
-
-            ;
 
             $current = getCurrentInstanceId();
             if ($current !== null) {

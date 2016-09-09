@@ -103,11 +103,11 @@ interface UserInterface extends Authenticatable, CanResetPassword
     /**
      * add this user to groups
      *
-     * @param array $groups group names
+     * @param mixed $groups groups
      *
      * @return static
      */
-    public function joinGroups(array $groups);
+    public function joinGroups($groups);
 
     /**
      * leave groups
