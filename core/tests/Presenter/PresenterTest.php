@@ -11,6 +11,7 @@ namespace Xpressengine\Tests\Presenter;
 use Mockery as m;
 use PHPUnit_Framework_TestCase;
 use Xpressengine\Presenter\Presenter;
+use Xpressengine\Presenter\Presentable;
 
 /**
  * Class DocumentRepositoryTest
@@ -335,12 +336,12 @@ class PresenterTest extends PHPUnit_Framework_TestCase
         );
 
         $presenter->share('key', 'value');
-        $result = $presenter->getShared();
+        $result = $presenter->getData();
 
         $this->assertEquals('value', $result['key']);
 
         $presenter->share(['key1' => 'value1']);
-        $result = $presenter->getShared();
+        $result = $presenter->getData();
         $this->assertEquals('value1', $result['key1']);
     }
 
@@ -368,7 +369,7 @@ class PresenterTest extends PHPUnit_Framework_TestCase
         $method = $reflection->getMethod('get');
         $method->setAccessible(true);
 
-        $renderer = m::mock('Renderer', 'Xpressengine\Presenter\RendererInterface');
+        $renderer = m::mock('Renderer', Presentable::class);
         $presenter->shouldReceive('get')->andReturn($renderer);
 
         $id = 'id';
@@ -405,11 +406,11 @@ class PresenterTest extends PHPUnit_Framework_TestCase
             $view, $request, $theme, $skin, $settings, $instanceConfig
         );
 
-        $htmlRenderer = m::mock('HtmlRenderer', 'Xpressengine\Presenter\RendererInterface');
+        $htmlRenderer = m::mock('HtmlRenderer', Presentable::class);
         $presenter->register('html', function ($presenter) use ($htmlRenderer) {
             return new $htmlRenderer($presenter);
         });
-        $jsonRenderer = m::mock('JsonRenderer', 'Xpressengine\Presenter\RendererInterface');
+        $jsonRenderer = m::mock('JsonRenderer', Presentable::class);
         $presenter->register('json', function ($presenter) use ($jsonRenderer) {
             return new $jsonRenderer($presenter);
         });
@@ -447,11 +448,11 @@ class PresenterTest extends PHPUnit_Framework_TestCase
             $view, $request, $theme, $skin, $settings, $instanceConfig
         );
 
-        $htmlRenderer = m::mock('HtmlRenderer', 'Xpressengine\Presenter\RendererInterface');
+        $htmlRenderer = m::mock('HtmlRenderer', Presentable::class);
         $presenter->register('html', function ($presenter) use ($htmlRenderer) {
             return new $htmlRenderer($presenter);
         });
-        $jsonRenderer = m::mock('JsonRenderer', 'Xpressengine\Presenter\RendererInterface');
+        $jsonRenderer = m::mock('JsonRenderer', Presentable::class);
         $presenter->register('json', function ($presenter) use ($jsonRenderer) {
             return new $jsonRenderer($presenter);
         });

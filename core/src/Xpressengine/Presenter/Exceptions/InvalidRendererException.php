@@ -29,5 +29,5 @@ use Xpressengine\Presenter\PresenterException;
 class InvalidRendererException extends PresenterException
 {
     protected $message = '":name" renderer invalid.
-    Renderer must follow "Xpressengine\Presenter\RendererInterface" interface';
+    Renderer must follow "Xpressengine\Presenter\Presentable" interface';
 }

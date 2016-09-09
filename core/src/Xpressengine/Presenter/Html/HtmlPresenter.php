@@ -1,6 +1,6 @@
 <?php
 /**
- * HtmlRenderer
+ * HtmlPresenter
  *
  * PHP version 5
  *
@@ -23,7 +23,7 @@ use Xpressengine\Theme\ThemeEntityInterface;
 use Xpressengine\Widget\WidgetParser;
 
 /**
- * HtmlRenderer
+ * HtmlPresenter
  *
  * * html 으로 출력될 경우 사용
  * * Skin, Theme 를 출력할 수 있도록 지원
@@ -35,9 +35,8 @@ use Xpressengine\Widget\WidgetParser;
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
- * @deprecated As of 3.0.0-beta6 replaced by HtmlPresenter
  */
-class HtmlRenderer implements Presentable
+class HtmlPresenter implements Presentable
 {
     /**
      * 일반 출력할 때 사용할 wrapper
@@ -157,7 +156,7 @@ class HtmlRenderer implements Presentable
      */
     public function setData()
     {
-        $this->data = $this->presenter->getData();
+        $this->data = array_merge($this->presenter->getShared(), $this->presenter->getData());
         return $this;
     }
 
@@ -169,11 +168,8 @@ class HtmlRenderer implements Presentable
     public function render()
     {
         $this->setData();
-
         $this->seo->import($this->data);
-
         $viewFactory = $this->presenter->getViewFactory();
-
         $skinView = $this->renderSkin();
 
         // return only content(Skin)

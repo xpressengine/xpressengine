@@ -118,6 +118,12 @@ class Presenter
     protected $shared = [];
 
     /**
+     * Data that should be available at current presentable
+     *
+     * @var array
+     */
+    protected $data = [];
+    /**
      * is settings present
      *
      * @var bool
@@ -181,14 +187,14 @@ class Presenter
     protected $html = true;
 
     /**
-     * registered renderer class names
+     * registered presentable instance
      *
      * @var array
      */
-    protected $renderers = [];
+    protected $presentables = [];
 
     /**
-     * Create a new RendererManager instance.
+     * Create a new instance.
      *
      * @param ViewFactory     $viewFactory     view factory
      * @param Request         $request         Request instance
@@ -232,6 +238,7 @@ class Presenter
     {
         return $this->request;
     }
+
     /**
      * get menu config
      *
@@ -285,27 +292,26 @@ class Presenter
     }
 
     /**
-     * register renderer
+     * register presentable classes
      *
      * @param string  $format   format
-     * @param Closure $callback closure for get instance
+     * @param Closure $callback closure for get presentable instance
      * @return void
      */
     public function register($format, Closure $callback)
     {
-        $this->renderers[$format] = $callback;
+        $this->presentables[$format] = $callback;
     }
 
     /**
      * get renderer
      *
      * @param string $format renderer format
-     * @return RendererInterface
+     * @return Presentable
      */
-    public function getRenderer($format)
+    public function getPresenter($format)
     {
-        $renderer = call_user_func_array($this->renderers[$format], [$this]);
-        return $renderer;
+        return call_user_func_array($this->presentables[$format], [$this]);
     }
 
     /**
@@ -420,7 +426,7 @@ class Presenter
     public function make($id, array $data = [], array $mergeData = [], $html = true, $api = false)
     {
         $this->setUse($html, $api);
-        $this->shared = array_merge($this->shared, $data, $mergeData);
+        $this->data = array_merge($data, $mergeData);
         $this->id = $id;
 
         /** @var RendererInterface $renderer */
@@ -437,9 +443,6 @@ class Presenter
      */
     public function makeApi(array $data = [], array $mergeData = [])
     {
-        // api 는 현재 controller 의 데이터 만 출력
-        $this->shared = [];
-
         return $this->make(null, $data, $mergeData, false, true);
     }
 
@@ -483,18 +486,18 @@ class Presenter
      */
     public function getData()
     {
-        return $this->shared;
+        return $this->data;
     }
 
     /**
      * set shared data
      *
-     * @param array $shared shared
+     * @param array $data data
      * @return void
      */
-    public function setData(array $shared)
+    public function setData(array $data)
     {
-        $this->shared = $shared;
+        $this->data = $data;
     }
 
     /**
@@ -539,17 +542,20 @@ class Presenter
         // $this->request->ajax();
 
         $format = $this->request->format();
-        if ($this->isApproveFormat($format) === false) {
-            throw new NotApprovedFormatException(['name' => $format]);
-        }
+//        if ($this->isApproveFormat($format) === false) {
+//            throw new NotApprovedFormatException(['name' => $format]);
+//        }
 
-        if (isset($this->renderers[$format]) === false) {
+        if (isset($this->presentables[$format]) === false) {
             throw new NotFoundFormatException(['name' => $format]);
         }
 
-        $renderer = $this->getRenderer($format);
+        $renderer = $this->getPresenter($format);
 
-        if (is_subclass_of($renderer, 'Xpressengine\Presenter\RendererInterface') === false) {
+        if (
+            is_subclass_of($renderer, RendererInterface::class) === false &&
+            is_subclass_of($renderer, Presentable::class) === false
+        ) {
             throw new InvalidRendererException(['name' => get_class($renderer)]);
         }
 

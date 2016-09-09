@@ -131,10 +131,10 @@ if (function_exists('apiRender') === false) {
         XePresenter::setId($id);
         XePresenter::setData($data);
 
-        /** @var Xpressengine\Presenter\Html\HtmlRenderer $renderer */
-        $renderer = XePresenter::getRenderer('html');
-        $renderer->setData();
-        $result = $renderer->renderSkin();
+        /** @var Xpressengine\Presenter\Html\HtmlPresenter $presenter */
+        $presenter = XePresenter::getPresenter('html');
+        $presenter->setData();
+        $result = $presenter->renderSkin();
 
         if($result instanceof \Illuminate\Contracts\Support\Renderable) {
             $result = $result->render();

@@ -16,8 +16,8 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Presenter\Html\FrontendHandler;
-use Xpressengine\Presenter\Html\HtmlRenderer;
-use Xpressengine\Presenter\Json\JsonRenderer;
+use Xpressengine\Presenter\Html\HtmlPresenter;
+use Xpressengine\Presenter\Json\JsonPresenter;
 use Xpressengine\Presenter\Presenter;
 use Xpressengine\Routing\InstanceConfig;
 use Xpressengine\Storage\File;
@@ -89,24 +89,24 @@ class PresenterServiceProvider extends ServiceProvider
                 InstanceConfig::instance()
             );
 
-            HtmlRenderer::setCommonHtmlWrapper(app('config')['xe.HtmlWrapper.common']);
-            HtmlRenderer::setPopupHtmlWrapper(app('config')['xe.HtmlWrapper.popup']);
+            HtmlPresenter::setCommonHtmlWrapper(app('config')['xe.HtmlWrapper.common']);
+            HtmlPresenter::setPopupHtmlWrapper(app('config')['xe.HtmlWrapper.popup']);
 
-            /** @var \Xpressengine\Presenter\RendererInterface $proxyHtmlRenderer */
-            $proxyHtmlRenderer = $app['xe.interception']->proxy(HtmlRenderer::class, 'HtmlRenderer');
-            /** @var \Xpressengine\Presenter\RendererInterface $proxyJsonRenderer */
-            $proxyJsonRenderer = $app['xe.interception']->proxy(JsonRenderer::class, 'JsonRenderer');
+            /** @var \Xpressengine\Presenter\Presentable $htmlProxy */
+            $htmlProxy = $app['xe.interception']->proxy(HtmlPresenter::class, 'HtmlRenderer');
+            /** @var \Xpressengine\Presenter\Presentable $jsonProxy */
+            $jsonProxy = $app['xe.interception']->proxy(JsonPresenter::class, 'JsonRenderer');
 
             $presenter->register(
-                $proxyHtmlRenderer::format(),
-                function (Presenter $presenter) use ($proxyHtmlRenderer) {
-                    return new $proxyHtmlRenderer($presenter, app('xe.seo'), app('xe.widget.parser'));
+                $htmlProxy::format(),
+                function (Presenter $presenter) use ($htmlProxy) {
+                    return new $htmlProxy($presenter, app('xe.seo'), app('xe.widget.parser'));
                 }
             );
             $presenter->register(
-                $proxyJsonRenderer::format(),
-                function (Presenter $presenter) use ($proxyJsonRenderer) {
-                    return new $proxyJsonRenderer($presenter);
+                $jsonProxy::format(),
+                function (Presenter $presenter) use ($jsonProxy) {
+                    return new $jsonProxy($presenter);
                 }
             );
 

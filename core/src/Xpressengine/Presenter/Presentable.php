@@ -1,6 +1,6 @@
 <?php
 /**
- * RendererInterface
+ * Presentable
  *
  * PHP version 5
  *
@@ -14,11 +14,13 @@
 
 namespace Xpressengine\Presenter;
 
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Renderable;
 
 /**
- * RendererInterface
- * * Presenter 에서 사용 될 Renderer들을 위한 interface
+ * Presentable
+ *
+ * Presenter 에서 사용 될 Renderer들을 위한 interface
  *
  * @category  Presenter
  * @package   Xpressengine\Presenter
@@ -26,14 +28,21 @@ use Illuminate\Contracts\Support\Renderable;
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
- * @deprecated As of 3.0.0-beta6 replaced by PresentAble
  */
-interface RendererInterface extends Renderable
+interface Presentable extends Renderable, Arrayable
 {
     /**
-     * Illuminate\Http\Request::initializeFormats() 에서 정의된 formats 에서 하나의 format
+     * format
      *
+     * @see \Illuminate\Http\Request::initializeFormats()
      * @return string
      */
     public static function format();
+
+    /**
+     * Get the instance as an array.
+     *
+     * @return array
+     */
+    public function toArray();
 }

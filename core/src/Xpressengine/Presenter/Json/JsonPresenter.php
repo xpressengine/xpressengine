@@ -1,6 +1,6 @@
 <?php
 /**
- * JsonRenderer
+ * JsonPresenter
  *
  * PHP version 5
  *
@@ -22,7 +22,7 @@ use JsonSerializable;
 use Xpressengine\Interception\Proxy as InterceptionProxy;
 
 /**
- * JsonRenderer
+ * JsonPresenter
  *
  * * API 로 출력할 때 출력방식을 JSON 으로 선택한 경우 동작
  *
@@ -32,9 +32,8 @@ use Xpressengine\Interception\Proxy as InterceptionProxy;
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
- * @deprecated As of 3.0.0-beta6 replaced by JsonPresenter
  */
-class JsonRenderer implements Presentable, Jsonable
+class JsonPresenter implements Presentable, Jsonable
 {
     /**
      * @var Presenter
