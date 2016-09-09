@@ -62,4 +62,12 @@ abstract class AbstractHandler
      * @return string 이미지 content
      */
     abstract public function getPicture(Media $media);
+
+    /**
+     * Create model
+     *
+     * @param File $file file instance
+     * @return Media
+     */
+    abstract public function createModel(File $file);
 }

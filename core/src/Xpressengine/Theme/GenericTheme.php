@@ -91,6 +91,11 @@ abstract class GenericTheme extends AbstractTheme
         return static::$info;
     }
 
+    public static function hasSetting()
+    {
+        return static::info('setting') !== null;
+    }
+
     /**
      * Get the evaluated contents of the object.
      *
@@ -135,7 +140,7 @@ abstract class GenericTheme extends AbstractTheme
      *
      * @return \Illuminate\Contracts\View\View|void
      */
-    public function getSettingView(ConfigEntity $config = null)
+    public function renderSetting(ConfigEntity $config = null)
     {
         if ($config === null) {
             $config = $this->setting();
@@ -157,7 +162,7 @@ abstract class GenericTheme extends AbstractTheme
      *
      * @return array
      */
-    public function updateSetting(array $config)
+    public function resolveSetting(array $config)
     {
         $configId = array_get($config, '_configId');
 

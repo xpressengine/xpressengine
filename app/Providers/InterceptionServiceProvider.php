@@ -8,6 +8,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Interception\AdvisorCollection;
 use Xpressengine\Interception\InterceptionHandler;
@@ -44,6 +45,10 @@ class InterceptionServiceProvider extends ServiceProvider
                 $passes = [new ClassPass(), new MethodDefinitionPass()];
 
                 $generator = new ProxyGenerator($loader, $passes);
+
+                if($app->runningInConsole()) {
+                    $generator->clear();
+                }
 
                 $interceptionHandler = new InterceptionHandler($advisorCollection, $generator);
                 return $interceptionHandler;

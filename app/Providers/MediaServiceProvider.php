@@ -125,7 +125,7 @@ class MediaServiceProvider extends ServiceProvider
             $manager = $this->app['xe.media'];
             if ($manager->is($file)) {
                 if (!$file instanceof Media) {
-                    $file = $manager->make($file);
+                    $file = $manager->cast($file);
                 }
 
                 $manager->metaRemove($file);

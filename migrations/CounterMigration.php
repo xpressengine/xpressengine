@@ -12,7 +12,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Schema;
 use Xpressengine\Support\Migration;
 
-class CounterMigration implements Migration {
+class CounterMigration extends Migration {
 
     public function install()
     {
@@ -35,20 +35,4 @@ class CounterMigration implements Migration {
         \DB::table('config')->insert(['name' => 'counter', 'vars' => '{}']);
     }
 
-    public function installed()
-    {
-    }
-
-    public function update($installedVersion = null)
-    {
-
-    }
-
-    public function checkInstalled()
-    {
-    }
-
-    public function checkUpdated($installedVersion = null)
-    {
-    }
 }

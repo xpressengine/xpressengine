@@ -52,8 +52,12 @@ class SettingsPermission extends AbstractUIObject
 
         XeFrontend::js('/assets/core/permission/Permission.js')->unload();
 
+        XeFrontend::js([
+            
+            '/assets/core/permission/SettingsPermission.js',
+            '/assets/core/permission/PermissionTag.js'
 
-        XeFrontend::js('/assets/core/permission/SettingsPermission.js')->after('/assets/core/permission/PermissionTag.js')->load();
+        ])->load();
 
         return parent::render();
     }

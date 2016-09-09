@@ -8,7 +8,7 @@ $('.__xe__uiobject_permission').each(function (i) {
     , groupUrl = el.data('groupUrl')
     , vgroupAll = el.data('vgroupAll');
 
-  React.render(
+  ReactDOM.render(
     <Permission
       key = {key}
       memberSearchUrl = {memberUrl}

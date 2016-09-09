@@ -183,16 +183,16 @@ class AuthController extends Controller
         $address = $request->get('email');
         $code = $request->get('code');
 
-        // code가 없을 경우 인증 페이지 출력
-        if ($code === null) {
-            return \XePresenter::make('register_confirm');
-        }
-
         $email = $this->handler->pendingEmails()->findByAddress($address);
 
         if($email === null) {
             // todo: change exception to http exception
             throw new PendingEmailNotExistsException();
+        }
+
+        // code가 없을 경우 인증 페이지 출력
+        if ($code === null) {
+            return \XePresenter::make('register_confirm');
         }
 
         XeDB::beginTransaction();

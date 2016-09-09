@@ -49,6 +49,8 @@ class SettingController extends Controller
     /**
      * get Common setting
      *
+     * @param CaptchaManager $captcha
+     *
      * @return \Xpressengine\Presenter\RendererInterface
      */
     public function editCommon(CaptchaManager $captcha)
@@ -64,20 +66,17 @@ class SettingController extends Controller
     /**
      * update Common setting
      *
-     * @param Request $request
+     * @param Request        $request
+     * @param CaptchaManager $captcha
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function updateCommon(Request $request)
+    public function updateCommon(Request $request, CaptchaManager $captcha)
     {
         $inputs = $request->only(['useCaptcha', 'webmasterName', 'webmasterEmail', 'agreement', 'privacy']);
 
-        if ($inputs['useCaptcha'] === 'true') {
-            $driver = config('captcha.driver');
-            $captcha = config("captcha.apis.$driver.siteKey");
-            if (!$captcha) {
-                throw new ConfigurationNotExistsException();
-            }
+        if ($inputs['useCaptcha'] === 'true' && !$captcha->available()) {
+            throw new ConfigurationNotExistsException();
         }
 
         app('xe.config')->put('user.common', $inputs);
@@ -124,13 +123,19 @@ class SettingController extends Controller
     /**
      * update Join setting
      *
+     * @param CaptchaManager $captcha
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function updateJoin()
+    public function updateJoin(CaptchaManager $captcha)
     {
         $inputs = Input::except('_token');
 
         $config = app('xe.config')->get('user.join');
+
+        if ($inputs['useCaptcha'] === 'true' && !$captcha->available()) {
+            throw new ConfigurationNotExistsException();
+        }
 
         foreach ($inputs as $key => $val) {
             $config->set($key, $val);

@@ -183,13 +183,18 @@ class MediaManager
      */
     public function make(File $file)
     {
-        foreach ($this->handlers as $handler) {
-            if ($handler->isAvailable($file->mime) === true) {
-                return $handler->make($file);
-            }
-        }
+        return $this->getHandlerByFile($file)->make($file);
+    }
 
-        throw new NotAvailableException();
+    /**
+     * 파일을 미디어 타입으로 변환, 메타데이터는 생성하지 않음
+     *
+     * @param File $file file instance
+     * @return Media
+     */
+    public function cast(File $file)
+    {
+        return $this->getHandlerByFile($file)->createModel($file);
     }
 
     /**

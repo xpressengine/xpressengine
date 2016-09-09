@@ -150,11 +150,6 @@ var Permission = React.createClass({
             }
         }
 
-        // var modeOptions = [
-        //     {value: 'inherit', name: '상위 설정에 따름'}
-        //     , {value: 'manual', name: '직접 설정'}
-        // ];
-
         var ratingOption = [
             {value: 'super', name: XE.Lang.trans('xe::memberRatingAdministrator')}
             , {value: 'manager', name: XE.Lang.trans('xe::memberRatingManager')}
@@ -162,19 +157,23 @@ var Permission = React.createClass({
             , {value: 'guest', name: XE.Lang.trans('xe::guest')}
         ];
 
-        // var ModeSelectUI =
-        //     modeOptions.map(function (data) {
-        //         return <option value={data.value} key={data.value}>{data.name}</option>;
-        //     });
-
         var RatingUI =
-            ratingOption.map(function (data) {
+            ratingOption.map(function (data, i) {
                 if (data.value == ratingValue)
-                    return React.createElement("label", null, React.createElement("input", {type: "radio", disabled: controlDisabled, name: ratingTitle, key: data.value, value: data.value, checked: true, 
-                                         onChange: self.inputChange.bind(null, 'rating')}), data.name);
+                    return React.createElement(PermissionRadioComp, {data: data, 
+                                                name: ratingTitle, 
+                                                isChekced: true, 
+                                                controlDisabled: controlDisabled, 
+                                                key: i, 
+                                                onChangeRadio: self.inputChange.bind(null, 'rating')}
+                            )
                 else
-                    return React.createElement("label", null, React.createElement("input", {type: "radio", disabled: controlDisabled, name: ratingTitle, key: data.value, value: data.value, 
-                                         onChange: self.inputChange.bind(null, 'rating')}), data.name);
+                    return React.createElement(PermissionRadioComp, {data: data, 
+                                                name: ratingTitle, 
+                                                controlDisabled: controlDisabled, 
+                                                key: i, 
+                                                onChangeRadio: self.inputChange.bind(null, 'rating')}
+                           )
             });
 
         var VGroupUI = this.props.vgroupAll.length < 1 ? null : this.props.vgroupAll.map(function (data) {
@@ -215,9 +214,6 @@ var Permission = React.createClass({
         var excludeMembers = this.state.excludeMembers.map(function (member) {
             return member.id;
         });
-
-        // var permissionTitle = this.props.type.replace(/\w+/g,
-        //     function(w){return w[0].toUpperCase() + w.slice(1).toLowerCase();});
 
         var modeUI;
 

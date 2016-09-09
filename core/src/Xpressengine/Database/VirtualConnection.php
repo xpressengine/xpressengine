@@ -127,7 +127,7 @@ class VirtualConnection implements VirtualConnectionInterface
      *
      * @var int
      */
-    protected $fetchMode = PDO::FETCH_ASSOC;
+    protected $fetchMode = PDO::FETCH_OBJ;
 
     /**
      * Create instance

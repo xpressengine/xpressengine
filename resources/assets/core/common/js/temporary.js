@@ -69,12 +69,12 @@
 
             if ($(this.container).length < 1) {
                 $(this.elem).closest('form').after($container);
-                React.render(React.createElement(TemporaryReact.Modal, config), $container[0], callback);
+                ReactDOM.render(React.createElement(TemporaryReact.Modal, config), $container[0], callback);
             } else {
                 var collapseClass = this._collapseClass();
                 $container.addClass([collapseClass, 'collapse'].join(' '));
                 $(this.container).addClass([collapseClass, 'collapse', 'in'].join(' ')).after($container);
-                React.render(React.createElement(TemporaryReact.Collapse, $.extend(config, {collapseClass: collapseClass})), $container[0], callback);
+                ReactDOM.render(React.createElement(TemporaryReact.Collapse, $.extend(config, {collapseClass: collapseClass})), $container[0], callback);
             }
         },
         _collapseClass: function () {
@@ -219,17 +219,17 @@
         mixins: [TemporaryReact.mixin],
 
         toggle: function () {
-            $(this.getDOMNode()).modal('toggle');
+            $(ReactDOM.findDOMNode(this)).modal('toggle');
         },
 
         onApply: function (data) {
             this.props.onApply(data);
-            $(this.getDOMNode()).modal('hide');
+            $(ReactDOM.findDOMNode(this)).modal('hide');
         },
 
         componentDidMount: function () {
             var self = this;
-            $(this.getDOMNode()).on('show.bs.modal', function () {
+            $(ReactDOM.findDOMNode(this)).on('show.bs.modal', function () {
                 self.load();
             })
         },
@@ -282,7 +282,7 @@
 
         componentDidMount: function () {
             var self = this;
-            $(this.getDOMNode()).parent().on('show.bs.collapse', function () {
+            $(ReactDOM.findDOMNode(this)).parent().on('show.bs.collapse', function () {
                 self.load();
             })
         },

@@ -120,9 +120,9 @@ $(function () {
   });
   var EmailItem = React.createClass({
     componentDidMount: function () {
-      this.deleteBtn = $(React.findDOMNode(this.refs.deleteBtn));
-      this.deleteConfirmBtn = $(React.findDOMNode(this.refs.deleteConfirmBtn));
-      this.deleteCancelBtn = $(React.findDOMNode(this.refs.deleteCancelBtn));
+      this.deleteBtn = $(ReactDOM.findDOMNode(this.refs.deleteBtn));
+      this.deleteConfirmBtn = $(ReactDOM.findDOMNode(this.refs.deleteConfirmBtn));
+      this.deleteCancelBtn = $(ReactDOM.findDOMNode(this.refs.deleteCancelBtn));
     },
     handleChange: function (e) {
       this.props.onChange(this.props.mail.address)
@@ -191,7 +191,7 @@ $(function () {
   var EmailInserter = React.createClass({
     handleClick: function (e) {
       e.preventDefault();
-      var input = $(React.findDOMNode(this.refs.input));
+      var input = $(ReactDOM.findDOMNode(this.refs.input));
       var email = input.val();
       if (!email) {
         return;
@@ -224,7 +224,7 @@ $(function () {
   });
 
   var $box = $('#__xe_emailSetting');
-  React.render(
+  ReactDOM.render(
     React.createElement(EmailBox, {url: url, userId: $box.data('userId'), email: $box.data('email')}),
     $box.get(0)
   );

@@ -349,15 +349,24 @@ class ThemeHandler
     /**
      * 주어진 테마에 저장된 config data를 반환한다.
      *
-     * @param string $id theme id
+     * @param string| array $id     theme id
+     * @param bool          $create if $create is true and theme config do not exists, create theme config
      *
      * @return ConfigEntity
      */
-    public function getThemeConfig($id)
+    public function getThemeConfig($id, $create = false)
     {
-        $id = implode($this->configDelimiter, func_get_args());
+        if(is_string($id)) {
+            $id = [$id];
+        }
+        $id = implode($this->configDelimiter, $id);
         $configId = $this->getConfigId($id);
-        $config = $this->config->get($configId, true);
+
+        if($create && $this->hasThemeConfig($configId) === false) {
+            $config = $this->config->set($configId, []);
+        } else {
+            $config = $this->config->get($configId, true);
+        }
         return $config;
     }
 
@@ -397,9 +406,9 @@ class ThemeHandler
      */
     public function getThemeConfigList($id)
     {
-        $base = $this->getThemeConfig($id);
+        $base = $this->getThemeConfig($id, true);
+        $default = $this->getThemeConfig($id.'.0', true);
         $children = $this->config->children($base);
-        array_unshift($children, $base);
 
         $configs = [];
         foreach ($children as $config) {

@@ -216,7 +216,7 @@ var PermissionInclude = React.createClass({
         }
     },
     addTag: function (tag) {
-        var input = this.refs.input.getDOMNode();
+        var input = ReactDOM.findDOMNode(this.refs.input);
 
         // call method to add
         this.props.handleAddition(tag);
@@ -247,15 +247,21 @@ var PermissionInclude = React.createClass({
         var memberPrefix = "@";
 
         var groupTagItems = this.props.selectedGroup.map((function (tag, i) {
-            return (React.createElement(PermissionTag, {key: tag.id, tag: tag, prefix: groupPrefix, 
-                         onDelete: this.handleGroupDelete.bind(this, i)}
-                ));
+            return (
+                React.createElement(PermissionTag, {key: tag.id, 
+                               tag: tag, 
+                               prefix: groupPrefix, 
+                               onDelete: this.handleGroupDelete.bind(this, i)})
+            );
         }).bind(this));
 
         var memberTagItems = this.props.selectedMember.map((function (tag, i) {
-            return (React.createElement(PermissionTag, {key: tag.id, tag: tag, prefix: memberPrefix, 
-                         onDelete: this.handleMemberDelete.bind(this, i)}
-                ));
+            return (
+                React.createElement(PermissionTag, {key: tag.id, 
+                               tag: tag, 
+                               prefix: memberPrefix, 
+                               onDelete: this.handleMemberDelete.bind(this, i)})
+            );
         }).bind(this));
 
         var query = this.state.query.trim(),
@@ -264,25 +270,26 @@ var PermissionInclude = React.createClass({
             suggestions = this.state.suggestions,
             placeholder = this.props.placeholder;
 
-        return( React.createElement("div", {className: "ReactTags__tags"}, 
+        return(
+            React.createElement("div", {className: "ReactTags__tags"}, 
                 React.createElement("div", {className: "ReactTags__selected"}, 
                     groupTagItems
                 ), 
                 React.createElement("div", {className: "ReactTags__selected"}, 
                     memberTagItems
                 ), 
-                    React.createElement("div", {className: "ReactTags__tagInput"}, 
-                        React.createElement("input", {type: "text", ref: "input", placeholder: placeholder, 
-                               className: "form-control", disabled: this.props.disabled, 
-                               value: this.state.query, 
-                               onChange: this.handleChange, onKeyDown: this.handleKeyDown}), 
-                        React.createElement(PermissionTagSuggestion, {query: query, 
-                            suggestions: suggestions, 
-                                       searchingCnt: this.state.searchingCnt, 
-                            selectedIndex: selectedIndex, 
-                            handleClick: this.handleSuggestionClick, 
-                            handleHover: this.handleSuggestionHover})
-                    )
+                React.createElement("div", {className: "ReactTags__tagInput"}, 
+                    React.createElement("input", {type: "text", ref: "input", placeholder: placeholder, 
+                           className: "form-control", disabled: this.props.disabled, 
+                           value: this.state.query, 
+                           onChange: this.handleChange, onKeyDown: this.handleKeyDown}), 
+                    React.createElement(PermissionTagSuggestion, {query: query, 
+                        suggestions: suggestions, 
+                                   searchingCnt: this.state.searchingCnt, 
+                        selectedIndex: selectedIndex, 
+                        handleClick: this.handleSuggestionClick, 
+                        handleHover: this.handleSuggestionHover})
+                )
             )
         );
     }

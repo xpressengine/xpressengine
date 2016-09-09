@@ -12,7 +12,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Schema;
 use Xpressengine\Support\Migration;
 
-class RoutingMigration implements Migration {
+class RoutingMigration extends Migration {
 
     public function install()
     {
@@ -28,18 +28,5 @@ class RoutingMigration implements Migration {
 
             $table->unique('instanceId');
         });
-    }
-
-    public function update($installedVersion = null)
-    {
-
-    }
-
-    public function checkInstalled()
-    {
-    }
-
-    public function checkUpdated($installedVersion = null)
-    {
     }
 }

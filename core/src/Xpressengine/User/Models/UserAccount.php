@@ -40,6 +40,7 @@ class UserAccount extends DynamicModel implements AccountInterface
         'accountId',
         'provider',
         'token',
+        'tokenSecret',
         'data'
     ];
 

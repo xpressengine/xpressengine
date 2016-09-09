@@ -133,7 +133,9 @@ class TransCachedDatabase
                 ->where('item', $item)
                 ->where('locale', $locale)
                 ->first();
-            $value = $value['value'];
+            if ($value !== null) {
+                $value = $value->value;
+            }
 
             $this->transCache->set($namespace, $item, $locale, $value);
         }

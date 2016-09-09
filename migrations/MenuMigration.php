@@ -19,7 +19,7 @@ use Xpressengine\Support\Migration;
 use Xpressengine\Theme\ThemeHandler;
 use Xpressengine\Config\ConfigManager;
 
-class MenuMigration implements Migration {
+class MenuMigration extends Migration {
 
     public function install()
     {
@@ -79,14 +79,14 @@ class MenuMigration implements Migration {
         \DB::table('config')->insert(['name' => 'site.default', 'vars' => '[]']);
     }
 
-    public function init()
+    public function initialized()
     {
         // 기본 메뉴 추가 (main) 추가.
         /** @var MenuHandler $menuHandler */
         $menuHandler = app('xe.menu');
 
         // 기본 메뉴 config  설정 (theme)
-        $defaultMenuTheme = 'theme/alice@alice';
+        $defaultMenuTheme = 'theme/alice@alice.0';
 
         $mainMenu = $menuHandler->create([
             'title' => 'Main Menu',
@@ -233,36 +233,8 @@ class MenuMigration implements Migration {
     {
         /** @var ThemeHandler $themeHandler */
         $themeHandler = app('xe.theme');
-        $themeHandler->setThemeConfig('theme/alice@alice', 'mainMenu', $mainMenu );
-    }
-
-    /**
-     * update
-     *
-     * @param string $installedVersion
-     *
-     */
-    public function update($installedVersion = null)
-    {
-    }
-
-    /**
-     * checkInstall
-     *
-     * @return void
-     */
-    public function checkInstalled()
-    {
-    }
-
-    /**
-     * checkUpdate
-     *
-     * @param string $installedVersion
-     *
-     */
-    public function checkUpdated($installedVersion = null)
-    {
+        $themeHandler->setThemeConfig('theme/alice@alice.0', 'mainMenu', $mainMenu );
+        $themeHandler->setThemeConfig('theme/alice@alice.1', 'mainMenu', $mainMenu );
     }
 
     /**

@@ -157,7 +157,7 @@ var PermissionExclude = React.createClass({
         }
     },
     addTag: function (tag) {
-        var input = this.refs.input.getDOMNode();
+        var input = ReactDOM.findDOMNode(this.refs.input);
 
         // call method to add
         this.props.handleAddition(tag);

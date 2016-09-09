@@ -173,8 +173,8 @@ class PresenterServiceProvider extends ServiceProvider
             'assets/core/common/js/dynamicLoadManager.js',
             'assets/jspm_packages/system.js',
             'assets/systemjs.config.js',
-            'assets/vendor/react/react-with-addons.js',
-//            'assets/vendor/react/JSXTransformer.js', // @TODO 제거
+            'assets/vendor/react-15.3.1/build/react.js',
+            'assets/vendor/react-15.3.1/build/react-dom.js',
             'assets/vendor/jquery/jquery.min.js',
             'assets/core/common/js/xe.bundle.js'
         ])->appendTo('head.prepend')->load();

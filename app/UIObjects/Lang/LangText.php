@@ -36,7 +36,7 @@ class LangText extends AbstractUIObject
             ]
         )->load();
 
-        $langKey = htmlspecialchars($args['langKey'], ENT_QUOTES, 'UTF-8');
+        $langKey = htmlspecialchars(array_get($args, 'langKey', array_get($args, 'value')), ENT_QUOTES, 'UTF-8');
         $autocomplete = Config::get('xe.lang.autocomplete');
 
         return "<div class=\"lang-editor-box\""

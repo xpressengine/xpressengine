@@ -13,6 +13,7 @@ use Illuminate\Session\TokenMismatchException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Xpressengine\Plugin\Exceptions\PluginFileNotFoundException;
 use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
 use Xpressengine\Support\Exceptions\HttpXpressengineException;
@@ -66,6 +67,10 @@ class Handler extends ExceptionHandler
         elseif ($e instanceof NotFoundHttpException) {
             $responseException = new HttpXpressengineException([], Response::HTTP_NOT_FOUND);
             $responseException->setMessage(xe_trans('xe::pageNotFound'));
+        } // method now allowed
+        elseif ($e instanceof MethodNotAllowedHttpException) {
+            $responseException = new HttpXpressengineException([], Response::HTTP_METHOD_NOT_ALLOWED);
+            $responseException->setMessage(xe_trans('xe::methodNotAllowed'));
         } // access denied
         elseif ($e instanceof AccessDeniedHttpException) {
             // Redirect is not returned(redirection is not executed). only set current uri to session

@@ -12,7 +12,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Schema;
 use Xpressengine\Support\Migration;
 
-class UserMigration implements Migration {
+class UserMigration extends Migration {
 
     public function install()
     {
@@ -71,6 +71,7 @@ class UserMigration implements Migration {
             $table->string('email')->nullable();
             $table->char('provider', 20);
             $table->string('token', 500);
+            $table->string('tokenSecret', 500);
             $table->string('data');
             $table->timestamp('createdAt');
             $table->timestamp('updatedAt');
@@ -147,18 +148,8 @@ class UserMigration implements Migration {
         $joinConfig->set('joinGroup', $joinGroup->id);
         app('xe.config')->modify($joinConfig);
 
-    }
+        // set admin's group
+        auth()->user()->joinGroups($joinGroup);
 
-    public function update($installedVersion = null)
-    {
-
-    }
-
-    public function checkInstalled()
-    {
-    }
-
-    public function checkUpdated($installedVersion = null)
-    {
     }
 }

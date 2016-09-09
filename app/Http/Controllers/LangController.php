@@ -19,13 +19,6 @@ use Illuminate\Contracts\Cookie\QueueingFactory as JarContract;
 
 class LangController extends Controller
 {
-    public function setLocale(JarContract $cookie, $locale)
-    {
-        $cookie->queue($cookie->forever('locale', $locale));
-
-        return Redirect::back();
-    }
-
     /**
      * 다국어 manage 페이지
      */
@@ -118,9 +111,9 @@ class LangController extends Controller
     private function withLines(&$searchList)
     {
         foreach ( $searchList as &$search ) {
-            $namespace = $search['namespace'];
-            $item = $search['item'];
-            $search['lines'] = $this->search(['namespace' => $namespace, 'item' => $item])->get();
+            $namespace = $search->namespace;
+            $item = $search->item;
+            $search->lines = $this->search(['namespace' => $namespace, 'item' => $item])->get();
         }
     }
 }

@@ -16,9 +16,7 @@ gulp.task('default', (callback) => {
   runSequence(
       'clean:assets',
       'copy:assets',
-      'jspm:menu',
-      'jspm:langbox',
-      'jsx:permission',
+      'react',
       'jspm:admin',
       'jspm:xe',
       'assets:sass',
@@ -38,6 +36,7 @@ gulp.task('jspm:admin', taskSettings['jspm:admin']);
 gulp.task('jspm:menu', taskReact['jspm:menu']);
 gulp.task('jspm:langbox', taskReact['jspm:langbox']);
 gulp.task('jsx:permission', taskReact['jsx:permission']);
+
 gulp.task('watch:react', () => {
   return gulp.watch([
     './resources/assets/core/menu/**',
@@ -51,7 +50,6 @@ gulp.task('react', (callback) => {
       'jspm:menu',
       'jspm:langbox',
       'jsx:permission',
-      'watch:react',
       callback);
 });
 // e: react

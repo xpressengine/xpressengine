@@ -17,8 +17,6 @@
 |
 */
 
-Route::get('/locale/{locale}', 'LangController@setLocale');
-
 Route::settings(
     '/',
     function () {
@@ -97,15 +95,6 @@ Route::group(
 /*
  * member/profile
  * */
-Route::group(
-    ['prefix' => '@{member}'],
-    function () {
-        // profile
-        Route::get('/', ['as' => 'member.profile', 'uses' => 'Member\ProfileController@index']);
-        Route::post('/', ['as' => 'member.profile.update', 'uses' => 'Member\ProfileController@update']);
-    }
-);
-
 Route::group(
     ['prefix' => '@{member}'],
     function () {

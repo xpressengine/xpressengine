@@ -251,6 +251,23 @@ if (function_exists('xe_trans_choice') === false) {
     }
 }
 
+if (function_exists('locale_url') === false) {
+    /**
+     * locale 변경을 위한 url생성
+     *
+     * @package Xpressengine\Translation
+     *
+     * @param string $locale 국가 코드
+     * @return string
+     */
+    function locale_url($locale)
+    {
+        app('request')->query->set('_l', $locale);
+
+        return app('request')->url() . '?' . http_build_query(app('request')->query->all());
+    }
+}
+
 if (function_exists('uio') === false) {
     /**
      * 주어진 타입의 AbstractUIObject 인스턴스를 생성하여 반환한다.
@@ -390,37 +407,38 @@ if (!function_exists('menu_list')) {
         /** @var Xpressengine\Menu\Models\Menu $menu */
         if ($menu !== null) {
 
-            /**
-             * 보이지 않는(보기 권한이 없는) 메뉴는 제외시킨다.
-             *
-             * @param \Xpressengine\Menu\Models\MenuItem $item menu item
-             * @param \Xpressengine\Menu\Models\Menu     $menu menu
-             *
-             * @return null|\Xpressengine\Menu\Models\MenuItem
-             */
-            function removeInvisible($item, $menu)
-            {
+            if(!function_exists('removeInvisible')) {
 
-                // resolve item
-                if (Gate::denies('visible', [$item, $menu])) {
-                    return null;
-                }
+                /**
+                 * 보이지 않는(보기 권한이 없는) 메뉴는 제외시킨다.
+                 *
+                 * @param \Xpressengine\Menu\Models\MenuItem $item menu item
+                 * @param \Xpressengine\Menu\Models\Menu     $menu menu
+                 *
+                 * @return null|\Xpressengine\Menu\Models\MenuItem
+                 */
+                function removeInvisible($item, $menu)
+                {
 
-                // resolve child menuitems of item
-                $children = new \Illuminate\Support\Collection();
-                foreach ($item['children'] as $child) {
-                    if ($new = removeInvisible($child, $menu)) {
-                        if ($new) {
-                            $children[] = $new;
+                    // resolve item
+                    if (Gate::denies('visible', [$item, $menu])) {
+                        return null;
+                    }
+
+                    // resolve child menuitems of item
+                    $children = new \Illuminate\Support\Collection();
+                    foreach ($item['children'] as $child) {
+                        if ($new = removeInvisible($child, $menu)) {
+                            if ($new) {
+                                $children[] = $new;
+                            }
                         }
                     }
+                    $item['children'] = $children;
+
+                    return $item;
                 }
-                $item['children'] = $children;
-
-                return $item;
             }
-
-            ;
 
             $current = getCurrentInstanceId();
             if ($current !== null) {

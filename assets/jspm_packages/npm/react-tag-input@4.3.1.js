@@ -1,0 +1,1 @@
+module.exports = require("npm:react-tag-input@4.3.1/dist-modules/reactTags.js");
