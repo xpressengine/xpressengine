@@ -71,6 +71,7 @@ class UserMigration extends Migration {
             $table->string('email')->nullable();
             $table->char('provider', 20);
             $table->string('token', 500);
+            $table->string('tokenSecret', 500);
             $table->string('data');
             $table->timestamp('createdAt');
             $table->timestamp('updatedAt');
