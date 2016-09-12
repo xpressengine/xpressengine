@@ -1,4 +1,4 @@
-System.amdRequire(['react', 'react-dom', 'jquery', 'PermissionTagSuggestion', 'PermissionTag'], function(React, ReactDOM, $, PermissionTagSuggestion, PermissionTag) {
+System.amdDefine(['react', 'react-dom', 'jquery', 'PermissionTagSuggestion', 'PermissionTag'], function(React, ReactDOM, $, PermissionTagSuggestion, PermissionTag) {
     
     var Keys = {
         ENTER: 13,
@@ -296,7 +296,7 @@ System.amdRequire(['react', 'react-dom', 'jquery', 'PermissionTagSuggestion', 'P
             );
         }
     });
-    
+
     return PermissionInclude;
     
 });

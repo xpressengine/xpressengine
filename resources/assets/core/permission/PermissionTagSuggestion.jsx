@@ -1,4 +1,4 @@
-System.amdRequire(['react'], function(React) {
+System.amdDefine(['react'], function(React) {
     var MIN_QUERY_LENGTH = 2;
     var PermissionTagSuggestion = React.createClass({
         displayName: "PermissionTagSuggestion",
@@ -62,7 +62,7 @@ System.amdRequire(['react'], function(React) {
             );
         }
     });
-    
+
     return PermissionTagSuggestion;
 });
 

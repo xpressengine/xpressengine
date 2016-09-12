@@ -245,15 +245,6 @@
     "buffer": "github:jspm/nodelibs-buffer@^0.1.0",
     "crypto": "github:jspm/nodelibs-crypto@^0.1.0"
   },
-  "npm:pbkdf2@3.0.4": {
-    "create-hmac": "npm:create-hmac@^1.1.2",
-    "buffer": "github:jspm/nodelibs-buffer@^0.1.0",
-    "process": "github:jspm/nodelibs-process@^0.1.0",
-    "crypto": "github:jspm/nodelibs-crypto@^0.1.0",
-    "child_process": "github:jspm/nodelibs-child_process@^0.1.0",
-    "path": "github:jspm/nodelibs-path@^0.1.0",
-    "systemjs-json": "github:systemjs/plugin-json@^0.1.0"
-  },
   "npm:public-encrypt@4.0.0": {
     "bn.js": "npm:bn.js@^4.1.0",
     "browserify-rsa": "npm:browserify-rsa@^4.0.0",
@@ -616,17 +607,6 @@
     "process": "github:jspm/nodelibs-process@^0.1.0",
     "path": "github:jspm/nodelibs-path@^0.1.0"
   },
-  "npm:node-fetch@1.6.0": {
-    "encoding": "npm:encoding@^0.1.11",
-    "is-stream": "npm:is-stream@^1.0.1",
-    "stream": "github:jspm/nodelibs-stream@^0.1.0",
-    "buffer": "github:jspm/nodelibs-buffer@^0.1.0",
-    "util": "github:jspm/nodelibs-util@^0.1.0",
-    "url": "github:jspm/nodelibs-url@^0.1.0",
-    "http": "github:jspm/nodelibs-http@^1.7.0",
-    "https": "github:jspm/nodelibs-https@^0.1.0",
-    "zlib": "github:jspm/nodelibs-zlib@^0.1.0"
-  },
   "npm:disposables@1.0.1": {},
   "npm:redux@3.6.0": {
     "lodash": "npm:lodash@^4.2.1",
@@ -703,5 +683,22 @@
   "npm:bn.js@4.11.6": {
     "buffer": "github:jspm/nodelibs-buffer@^0.1.0"
   },
-  "npm:brorand@1.0.6": {}
+  "npm:brorand@1.0.6": {},
+  "npm:node-fetch@1.6.1": {
+    "encoding": "npm:encoding@^0.1.11",
+    "is-stream": "npm:is-stream@^1.0.1",
+    "util": "github:jspm/nodelibs-util@^0.1.0",
+    "stream": "github:jspm/nodelibs-stream@^0.1.0",
+    "buffer": "github:jspm/nodelibs-buffer@^0.1.0",
+    "url": "github:jspm/nodelibs-url@^0.1.0",
+    "http": "github:jspm/nodelibs-http@^1.7.0",
+    "https": "github:jspm/nodelibs-https@^0.1.0",
+    "zlib": "github:jspm/nodelibs-zlib@^0.1.0"
+  },
+  "npm:pbkdf2@3.0.5": {
+    "create-hmac": "npm:create-hmac@^1.1.2",
+    "buffer": "github:jspm/nodelibs-buffer@^0.1.0",
+    "process": "github:jspm/nodelibs-process@^0.1.0",
+    "crypto": "github:jspm/nodelibs-crypto@^0.1.0"
+  }
 }

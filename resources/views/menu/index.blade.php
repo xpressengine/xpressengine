@@ -22,18 +22,20 @@
 </div>
 
 <script>
-    System.import('xecore:/menu/menu').then(function(MenuTree){
-        ReactDOM.render(
-            React.createElement(MenuTree, {
-                baseUrl: "{{ route('settings.menu.index') }}",
-                home: "{{$home}}",
-                menus: {!! json_encode($menus) !!},
-                menuRoutes: {
-                    createMenu : '{{ route('settings.menu.create.menu') }}'
-                }
-            }, null),
-            document.getElementById("menuContainer")
-        );
+    System.amdRequire(['react', 'react-dom'], function(React, ReactDOM) {
+        System.import('xecore:/menu/menu').then(function(MenuTree){
+            ReactDOM.render(
+                    React.createElement(MenuTree, {
+                        baseUrl: "{{ route('settings.menu.index') }}",
+                        home: "{{$home}}",
+                        menus: {!! json_encode($menus) !!},
+                        menuRoutes: {
+                            createMenu : '{{ route('settings.menu.create.menu') }}'
+                        }
+                    }, null),
+                    document.getElementById("menuContainer")
+            );
+        });
     });
 </script>
 

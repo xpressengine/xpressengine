@@ -13,13 +13,13 @@ System.config({
       "xecore:/settings/js/admin.js"
     ],
     "xecore:/menu/menu.js": [
-      "xecore:/menu/MenuTree.jsx!github:floatdrop/plugin-jsx@1.2.1.js",
-      "xecore:/menu/MenuSearchBar.jsx!github:floatdrop/plugin-jsx@1.2.1.js",
-      "xecore:/menu/UITree.jsx!github:floatdrop/plugin-jsx@1.2.1.js",
-      "xecore:/menu/MenuSearchSuggestion.jsx!github:floatdrop/plugin-jsx@1.2.1.js",
-      "xecore:/menu/TreeNode.jsx!github:floatdrop/plugin-jsx@1.2.1.js",
-      "xecore:/menu/MenuEntity.jsx!github:floatdrop/plugin-jsx@1.2.1.js",
-      "xecore:/menu/MenuItem.jsx!github:floatdrop/plugin-jsx@1.2.1.js"
+      "xecore:/menu/MenuTree.js!github:floatdrop/plugin-jsx@1.2.1.js",
+      "xecore:/menu/MenuSearchBar.js!github:floatdrop/plugin-jsx@1.2.1.js",
+      "xecore:/menu/UITree.js!github:floatdrop/plugin-jsx@1.2.1.js",
+      "xecore:/menu/MenuSearchSuggestion.js!github:floatdrop/plugin-jsx@1.2.1.js",
+      "xecore:/menu/TreeNode.js!github:floatdrop/plugin-jsx@1.2.1.js",
+      "xecore:/menu/MenuEntity.js!github:floatdrop/plugin-jsx@1.2.1.js",
+      "xecore:/menu/MenuItem.js!github:floatdrop/plugin-jsx@1.2.1.js"
     ],
     "xecore:/common/js/xe.bundle.js": [
       "xecore:/common/js/xe.js",
@@ -35,20 +35,22 @@ System.config({
     "xecore:/*": {
       "format": "cjs"
     },
+    "xecore:/permission/*": {
+      "format": "amd"
+    },
     "xecore:/menu/menu.js": {
-      "format": "global",
-      "exports": "MenuTree"
+      "format": "amd"
     }
   },
 
   map: {
-    "Permission": "xecore:/permission/Permission",
-    "PermissionExclude": "xecore:/permission/PermissionExclude",
-    "PermissionInclude": "xecore:/permission/PermissionInclude",
-    "PermissionRadioComp": "xecore:/permission/PermissionRadioComp",
-    "PermissionTag": "xecore:/permission/PermissionTag",
-    "PermissionTagSuggestion": "xecore:/permission/PermissionTagSuggestion",
-    "SettingsPermission": "xecore:/permission/SettingsPermission",
+    "Permission": "assets/core/permission/Permission",
+    "PermissionExclude": "assets/core/permission/PermissionExclude",
+    "PermissionInclude": "assets/core/permission/PermissionInclude",
+    "PermissionRadioComp": "assets/core/permission/PermissionRadioComp",
+    "PermissionTag": "assets/core/permission/PermissionTag",
+    "PermissionTagSuggestion": "assets/core/permission/PermissionTagSuggestion",
+    "SettingsPermission": "assets/core/permission/SettingsPermission",
     "blueimp-file-upload": "npm:blueimp-file-upload@9.12.1",
     "bootstrap-sass": "npm:bootstrap-sass@3.3.6",
     "buffer": "npm:buffer@4.6.0",
@@ -343,7 +345,7 @@ System.config({
       "create-hmac": "npm:create-hmac@1.1.4",
       "diffie-hellman": "npm:diffie-hellman@5.0.2",
       "inherits": "npm:inherits@2.0.1",
-      "pbkdf2": "npm:pbkdf2@3.0.4",
+      "pbkdf2": "npm:pbkdf2@3.0.5",
       "public-encrypt": "npm:public-encrypt@4.0.0",
       "randombytes": "npm:randombytes@2.0.3"
     },
@@ -467,7 +469,7 @@ System.config({
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:isomorphic-fetch@2.2.1": {
-      "node-fetch": "npm:node-fetch@1.6.0",
+      "node-fetch": "npm:node-fetch@1.6.1",
       "whatwg-fetch": "npm:whatwg-fetch@1.0.0"
     },
     "npm:jquery-migrate@1.4.0": {
@@ -525,7 +527,7 @@ System.config({
       "path": "github:jspm/nodelibs-path@0.1.0",
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
-    "npm:node-fetch@1.6.0": {
+    "npm:node-fetch@1.6.1": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
       "encoding": "npm:encoding@0.1.12",
       "http": "github:jspm/nodelibs-http@1.7.1",
@@ -552,7 +554,7 @@ System.config({
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
       "create-hash": "npm:create-hash@1.1.2",
       "evp_bytestokey": "npm:evp_bytestokey@1.0.0",
-      "pbkdf2": "npm:pbkdf2@3.0.4",
+      "pbkdf2": "npm:pbkdf2@3.0.5",
       "systemjs-json": "github:systemjs/plugin-json@0.1.2"
     },
     "npm:pascal-case@1.1.2": {
@@ -565,14 +567,11 @@ System.config({
     "npm:path-is-absolute@1.0.0": {
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
-    "npm:pbkdf2@3.0.4": {
+    "npm:pbkdf2@3.0.5": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
-      "child_process": "github:jspm/nodelibs-child_process@0.1.0",
       "create-hmac": "npm:create-hmac@1.1.4",
       "crypto": "github:jspm/nodelibs-crypto@0.1.0",
-      "path": "github:jspm/nodelibs-path@0.1.0",
-      "process": "github:jspm/nodelibs-process@0.1.2",
-      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
+      "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:process-nextick-args@1.0.7": {
       "process": "github:jspm/nodelibs-process@0.1.2"

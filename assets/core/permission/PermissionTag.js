@@ -1,4 +1,4 @@
-System.amdRequire(['react'], function(React) {
+System.amdDefine(['react'], function(React) {
     var PermissionTag = React.createClass({
         displayName: 'PermissionTag',
 
@@ -21,6 +21,6 @@ System.amdRequire(['react'], function(React) {
 
         }
     });
-    
+
     return PermissionTag;
 });

@@ -1,4 +1,4 @@
-System.amdRequire(['react', 'PermissionInclude', 'PermissionExclude', 'PermissionRadioComp'], function(React, PermissionInclude, PermissionExclude, PermissionRadioComp) {
+System.amdDefine(['react', 'PermissionInclude', 'PermissionExclude', 'PermissionRadioComp'], function(React, PermissionInclude, PermissionExclude, PermissionRadioComp) {
     var Permission = React.createClass({
         displayName: 'Permission',
 
