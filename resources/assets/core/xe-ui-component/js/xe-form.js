@@ -41,7 +41,7 @@
                         delete options.success;
                     }
 
-                    if(_formCommon.isValidForm(options, callback)) {
+                    if(_formCommon.isValidForm(options)) {
                         XE.ajax(options);
                     }
 
