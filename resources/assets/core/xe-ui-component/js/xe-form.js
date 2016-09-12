@@ -30,7 +30,7 @@
                     var options = {
                         url: $this.attr('action')
                         , type: $this.attr("method")
-                        , param: $this.serialize()
+                        , data: $this.serialize()
                         , dataType: 'json'
                         , success: callbackFunc
                     };
@@ -39,7 +39,7 @@
                         delete options.success;
                     }
 
-                    if(_formCommon.isValidForm(options, callback)) {
+                    if(_formCommon.isValidForm(options)) {
                         XE.ajax(options);
                     }
 
