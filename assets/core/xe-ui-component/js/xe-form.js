@@ -20,9 +20,11 @@
 
                     var objStack = callback? callback.split(".") : [];
                     var callbackFunc = (objStack.length > 0)? window : '';
+                    var callbackObj = null;
 
                     if(objStack.length > 0) {
                         for(var i = 0, max = objStack.length; i < max; i += 1) {
+                            callbackObj = callbackFunc;
                             callbackFunc = callbackFunc[objStack[i]];
                         }
                     }
@@ -30,9 +32,9 @@
                     var options = {
                         url: $this.attr('action')
                         , type: $this.attr("method")
-                        , param: $this.serialize()
+                        , data: $this.serialize()
                         , dataType: 'json'
-                        , success: callbackFunc
+                        , success: callbackFunc.call(callbackObj)
                     };
 
                     if(callbackFunc === '') {

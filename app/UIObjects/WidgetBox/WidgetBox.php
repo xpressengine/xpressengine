@@ -27,15 +27,12 @@ class WidgetBox extends AbstractUIObject
 
         $widgetbox = $handler->find($id);
 
-        $content = $widgetbox->content;
-        /*if($content) {
-            $content = $parser->parseXml($widgetbox->content);
-        }*/
-
-        $this->loadFiles();
-
+        $content = null;
+        if($widgetbox) {
+            $content = $widgetbox->content;
+            $this->loadFiles();
+        }
         $this->template = view($this->view, compact('widgetbox', 'id', 'content'))->render();
-
         return parent::render();
     }
 

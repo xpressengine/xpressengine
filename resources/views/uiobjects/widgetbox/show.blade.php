@@ -1,9 +1,24 @@
 <div id="widgetbox-{{ $id }}">
-    <div class="widgetbox-content">
+    @if($widgetbox)
+        <div class="widgetbox-content">
         {!! $content !!}
-    </div>
-    <hr>
-    @if(auth()->user()->isAdmin())
-    <a href="{{route('widgetbox.edit', ['id' => $id])}}" target="_blank" onclick="window.open(this.href, 'widgetboxEditor', 'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no');return false">편집</a>
+        </div>
+        @if(auth()->user()->isAdmin())
+        <hr>
+        <div class="widget-controll">
+            <p>
+                <a href="{{route('widgetbox.edit', ['id' => $id])}}" target="_blank" onclick="window.open(this.href, 'widgetboxEditor', 'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no');return false">{{ $widgetbox->title }} 위젯박스 편집</a>
+            </p>
+        </div>
+        @endif
+    @else
+        @if(auth()->user()->isAdmin())
+
+        {{ app('xe.frontend')->js(['assets/core/xe-ui-component/js/xe-page.js', 'assets/core/xe-ui-component/js/xe-form.js'])->load() }}
+
+        <div class="widget-controll">
+        <p>위젯박스[{{ $id }}]를 찾을 수 없습니다. <a href="#" data-url="{{  route('widgetbox.create', ['id' => $id]) }}" data-toggle="xe-page-modal" >바로 생성하기</a></p>
+        </div>
+        @endif
     @endif
 </div>

@@ -9,12 +9,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Session\SessionManager;
 use XeDB;
 use XePresenter;
 use Xpressengine\Permission\Instance;
 use Xpressengine\Permission\PermissionSupport;
+use Xpressengine\Presenter\Html\FrontendHandler;
 use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
 use Xpressengine\Widget\WidgetParser;
+use Xpressengine\WidgetBox\Exceptions\IDAlreadyExistsException;
 use Xpressengine\WidgetBox\Exceptions\NotFoundWidgetBoxException;
 use Xpressengine\WidgetBox\Models\WidgetBox;
 use Xpressengine\WidgetBox\WidgetBoxHandler;
@@ -24,15 +27,53 @@ class WidgetBoxController extends Controller
 
     use PermissionSupport;
 
-    public function edit(Request $request, WidgetBoxHandler $handler, $id)
+    public function create(Request $request, WidgetBoxHandler $handler, FrontendHandler $frontend)
     {
+        $id = $request->get('id');
 
-        if (\Gate::denies('edit', new Instance('widgetbox.'.$id))) {
+        if (!$request->user()->isAdmin()) {
             throw new AccessDeniedHttpException();
         }
 
-        app('xe.theme')->selectBlankTheme();
+        $widgetbox = $handler->find($id);
+        if($widgetbox) {
+            throw new IDAlreadyExistsException();
+        }
 
+        $frontend->css('assets/vendor/bootstrap/css/bootstrap.min.css')->loadAsync();
+
+        return apiRender('widgetbox.create', compact('id'));
+    }
+
+    public function store(Request $request, WidgetBoxHandler $handler, SessionManager $session)
+    {
+
+        if (!$request->user()->isAdmin()) {
+            throw new AccessDeniedHttpException();
+        }
+
+        $this->validate($request, [
+            'id' => 'required',
+            'title' => 'required'
+        ]);
+
+        $inputs = $request->only(['id','title']);
+
+        $widgetbox = $handler->find($inputs['id']);
+        if($widgetbox) {
+            throw new IDAlreadyExistsException();
+        }
+
+        $widgetbox = $handler->create($inputs);
+
+        $session->flash('alert', ['type' => 'success', 'message' => '위젯박스가 생성되었습니다.']);
+
+        return XePresenter::makeApi(['type' => 'success', 'message' => '생성했습니다.']);
+
+    }
+
+    public function edit(Request $request, WidgetBoxHandler $handler, $id)
+    {
         /** @var WidgetBox $widgetbox */
         $widgetbox = $handler->find($id);
 
@@ -40,11 +81,17 @@ class WidgetBoxController extends Controller
             throw new NotFoundWidgetBoxException();
         }
 
-        $permission = null;
-        if ($request->user()->isAdmin()) {
-            $permission = array_merge($this->getPermArguments('widgetbox.'.$id, ['edit'])['edit'], ['mode'=>null]);
+        if (\Gate::denies('edit', new Instance('widgetbox.'.$id))) {
+            throw new AccessDeniedHttpException();
         }
 
+        app('xe.theme')->selectBlankTheme();
+
+
+        $permission = null;
+        if ($request->user()->isAdmin()) {
+            $permission = array_merge($this->getPermArguments('widgetbox.'.$id, ['edit'])['edit'], ['mode' => null]);
+        }
         return XePresenter::make('widgetbox.edit', compact('widgetbox', 'permission'));
     }
 
@@ -136,7 +183,7 @@ class WidgetBoxController extends Controller
 
     public function storePermission(Request $request, WidgetBoxHandler $handler, $id)
     {
-        if(\Gate::denies('edit', new Instance('widgetbox.'.$id))) {
+        if (\Gate::denies('edit', new Instance('widgetbox.'.$id))) {
             throw new AccessDeniedHttpException();
         }
 

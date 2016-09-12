@@ -16,6 +16,7 @@ namespace Xpressengine\WidgetBox;
 
 use Xpressengine\Permission\Grant;
 use Xpressengine\Permission\PermissionHandler;
+use Xpressengine\User\Rating;
 use Xpressengine\WidgetBox\Exceptions\InvalidIDException;
 use Xpressengine\WidgetBox\Models\WidgetBox;
 use Xpressengine\WidgetBox\Exceptions\IDAlreadyExistsException;
@@ -79,13 +80,23 @@ class WidgetBoxHandler
         $content = array_get($data, 'content', '');
 
         $this->repository->create(compact('id', 'title', 'content', 'options'));
-        $this->permissionHandler->register('widgetbox.'.$id, new Grant());
+
+        $grant = new Grant();
+        $grant->set('edit', [
+            Grant::RATING_TYPE => Rating::SUPER,
+            Grant::GROUP_TYPE => [],
+            Grant::USER_TYPE => [],
+            Grant::EXCEPT_TYPE => []
+        ]);
+
+        $this->permissionHandler->register('widgetbox.'.$id, $grant);
     }
 
     public function update($widgetbox, $widgetboxData = []){
         if($widgetbox instanceof WidgetBox === false) {
             $widgetbox = $this->repository->find($widgetbox);
         }
+
         return $this->repository->update($widgetbox, $widgetboxData);
     }
 
