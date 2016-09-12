@@ -62,7 +62,7 @@ class TranslationServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->app->singleton('xe.translator', function ($app) {
+        $this->app->singleton(['xe.translator' => Translator::class], function ($app) {
             $debug = $app['config']['app.debug'];
             $keyGen = $app['xe.keygen'];
             $cache = new TransCache($app['cache']->driver(), $debug);
@@ -74,11 +74,6 @@ class TranslationServiceProvider extends ServiceProvider
             $trans = new Translator($app['config']['xe.lang'], $keyGen, $db, $fileLoader, $urlLoader);
             return $trans;
         });
-
-        $this->app->bind(
-            'Xpressengine\Translation\Translator',
-            'xe.translator'
-        );
     }
 
     public function provides()

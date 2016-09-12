@@ -51,13 +51,11 @@ class CategoryServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('xe.category', function ($app) {
+        $this->app->singleton(['xe.category' => CategoryHandler::class], function ($app) {
             $proxyClass = $app['xe.interception']->proxy(CategoryHandler::class, 'XeCategory');
 
             return new $proxyClass;
         }, true);
-
-        $this->app->singleton(CategoryHandler::class, 'xe.category');
     }
 
     /**

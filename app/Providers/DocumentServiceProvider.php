@@ -63,7 +63,7 @@ class DocumentServiceProvider extends ServiceProvider
                 $app['xe.document.config']
             );
         });
-        $app->singleton('xe.document', function ($app) {
+        $app->singleton(['xe.document' => DocumentHandler::class], function ($app) {
             $documentHandlerClass = $app['xe.interception']->proxy(DocumentHandler::class, 'Document');
             $document = new $documentHandlerClass(
                 $app['xe.db']->connection('document'),
@@ -74,10 +74,5 @@ class DocumentServiceProvider extends ServiceProvider
 
             return $document;
         });
-
-        $app->bind(
-            DocumentHandler::class,
-            'xe.document'
-        );
     }
 }

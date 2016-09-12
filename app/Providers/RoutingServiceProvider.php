@@ -64,7 +64,7 @@ class RoutingServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(
-            [RouteRepository::class => 'xe.router'],
+            ['xe.router' => RouteRepository::class],
             function ($app) {
                 $repo = new DatabaseRouteRepository($app['config'], InstanceRoute::class);
 

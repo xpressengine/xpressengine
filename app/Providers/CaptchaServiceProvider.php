@@ -52,7 +52,7 @@ class CaptchaServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton([CaptchaManager::class => 'xe.captcha'], function ($app) {
+        $this->app->singleton(['xe.captcha' => CaptchaManager::class], function ($app) {
             $proxyClass = $app['xe.interception']->proxy(CaptchaManager::class, 'Captcha');
             $captchaManager = new $proxyClass($app);
             return $captchaManager;

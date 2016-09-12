@@ -53,7 +53,7 @@ class ConfigServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton([ConfigManager::class => 'xe.config'], function ($app) {
+        $this->app->singleton(['xe.config' => ConfigManager::class], function ($app) {
             $repo = new DatabaseRepository($app['xe.db']->connection());
             
             if ($app['config']['app.debug'] !== true) {

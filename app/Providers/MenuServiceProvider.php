@@ -83,13 +83,13 @@ class MenuServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton([ModuleHandler::class => 'xe.module'], function ($app) {
+        $this->app->singleton(['xe.module' => ModuleHandler::class], function ($app) {
             $register = $app['xe.pluginRegister'];
             $proxyClass = $app['xe.interception']->proxy(ModuleHandler::class, 'XeModule');
             return new $proxyClass($register);
         });
         
-        $this->app->singleton([MenuHandler::class => 'xe.menu'], function ($app) {
+        $this->app->singleton(['xe.menu' => MenuHandler::class], function ($app) {
             $repo = new EloquentRepository($app['xe.keygen']);
 
             if ($app['config']['app.debug'] !== true) {

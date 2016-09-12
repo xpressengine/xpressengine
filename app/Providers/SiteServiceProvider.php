@@ -57,7 +57,7 @@ class SiteServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(
-            ['Xpressengine\Site\SiteHandler' => 'xe.site'],
+            ['xe.site' => SiteHandler::class],
             function ($app) {
                 $config = $app['xe.config'];
                 $proxyClass = $app['xe.interception']->proxy(SiteHandler::class, 'XeSite');
