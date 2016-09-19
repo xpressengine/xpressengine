@@ -50,14 +50,14 @@ class SettingsPermission extends AbstractUIObject
         $settings[] = $this->generateBox($title, $content);
         $this->template = implode(PHP_EOL, $settings);
 
-        XeFrontend::js('/assets/core/permission/Permission.js')->unload();
+//        XeFrontend::js('/assets/core/permission/Permission.js')->unload();
 
-        XeFrontend::js([
-            
-            '/assets/core/permission/SettingsPermission.js',
-            '/assets/core/permission/PermissionTag.js'
-
-        ])->load();
+//        XeFrontend::js([
+//
+//            '/assets/core/permission/SettingsPermission.js',
+//            '/assets/core/permission/PermissionTag.js'
+//
+//        ])->load();
 
         return parent::render();
     }

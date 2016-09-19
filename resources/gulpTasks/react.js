@@ -1,6 +1,5 @@
 import gulp from 'gulp';
 import plugins from 'gulp-load-plugins';
-import react from 'gulp-react';
 import runSequence from 'run-sequence';
 import taskSettings from './settings';
 
@@ -12,10 +11,24 @@ module.exports = (() => {
 
     //menu jsx변환 및 bundle
     gulp.task('jspm:menu.bundle', () => {
-        return gulp.src('resources/assets/core/menu/MenuTree.js')
+        return gulp.src([
+                'resources/assets/core/menu/MenuEntity.js',
+                'resources/assets/core/menu/MenuItem.js',
+                'resources/assets/core/menu/TreeNode.js',
+                'resources/assets/core/menu/MenuSearchBar.js',
+                'resources/assets/core/menu/UITree.js',
+                'resources/assets/core/menu/MenuSearchBar.js',
+                'resources/assets/core/menu/MenuSearchSuggestion.js',
+                'resources/assets/core/menu/MenuTree.js'
+
+            ])
             .pipe($.plumber())
-            .pipe($.jspm({selfExecutingBundle: true, plugin: 'jsx'}))
-            .pipe($.rename('menu.js'))
+            .pipe($.react())
+            .pipe($.concat('menu.js'))
+            .pipe($.minify({ext: {
+                src:'-dev.js',
+                min:'.js'
+            }}))
             .pipe(gulp.dest('assets/core/menu'));
     });
 
@@ -56,7 +69,7 @@ module.exports = (() => {
             return gulp.src('resources/assets/core/permission/*.jsx')
                 .pipe($.if(taskSettings.getConfig().useSourceMaps, $.sourcemaps.init()))
                 .pipe($.plumber())
-                .pipe(react())
+                .pipe($.react())
                 .pipe($.if(taskSettings.getConfig().useSourceMaps, $.sourcemaps.write('.')))
                 .pipe(gulp.dest('./assets/core/permission'))
         }

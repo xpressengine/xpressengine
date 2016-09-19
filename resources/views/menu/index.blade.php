@@ -2,6 +2,7 @@
 {{ XeFrontend::js('/assets/vendor/lodash/lodash.min.js')->appendTo('head')->load() }}
 {{ XeFrontend::js('/assets/core/menu/Tree.js')->appendTo('head')->load() }}
 {{ XeFrontend::js('/assets/core/menu/classnames.js')->appendTo('head')->load() }}
+{{ XeFrontend::js('/assets/core/menu/menu.js')->appendTo('head')->load() }}
 
 @section('page_title',"<h2>".xe_trans('xe::siteMap')."</h2>")
 @section('page_description',xe_trans('xe::siteMapDescription'))
@@ -22,17 +23,17 @@
 </div>
 
 <script>
-    System.import('xecore:/menu/menu').then(function(MenuTree){
+    System.amdRequire(['vendor:/react', 'vendor:/react-dom', 'MenuTree'], function(React, ReactDOM, MenuTree) {
         ReactDOM.render(
-            React.createElement(MenuTree, {
-                baseUrl: "{{ route('settings.menu.index') }}",
-                home: "{{$home}}",
-                menus: {!! json_encode($menus) !!},
-                menuRoutes: {
-                    createMenu : '{{ route('settings.menu.create.menu') }}'
-                }
-            }, null),
-            document.getElementById("menuContainer")
+                React.createElement(MenuTree, {
+                    baseUrl: "{{ route('settings.menu.index') }}",
+                    home: "{{$home}}",
+                    menus: {!! json_encode($menus) !!},
+                    menuRoutes: {
+                        createMenu : '{{ route('settings.menu.create.menu') }}'
+                    }
+                }, null),
+                document.getElementById("menuContainer")
         );
     });
 </script>
