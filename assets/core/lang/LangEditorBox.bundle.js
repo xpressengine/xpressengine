@@ -6,7 +6,7 @@ var require = this.require, exports = this.exports, module = this.module;
 $__System.registerDynamic("1", [], false, function($__require, $__exports, $__module) {
   var _retrieveGlobal = $__System.get("@@global-helpers").prepareGlobal($__module.id, null, null);
   (function() {
-    System.amdRequire(['react', 'react-dom'], function(React, ReactDOM) {
+    System.amdRequire(['vendor:/react', 'vendor:/react-dom'], function(React, ReactDOM) {
       var LangEditorBox = React.createClass({
         displayName: "LangEditorBox",
         getDefaultProps: function() {

@@ -1,7 +1,7 @@
-System.amdDefine('TreeNode', ['react', 'MenuEntity', 'MenuItem'], function(React, MenuEntity, MenuItem) {
+System.amdDefine('TreeNode', ['vendor:/react', 'MenuEntity', 'MenuItem'], function(React, MenuEntity, MenuItem) {
 
   'use strict';
-  
+
   var TreeNode = React.createClass({
     displayName: 'TreeNode',
 

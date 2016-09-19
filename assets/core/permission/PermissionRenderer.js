@@ -1,4 +1,4 @@
-System.amdRequire(['react', 'react-dom', 'Permission'], function(React, ReactDOM, Permission) {
+System.amdRequire(['vendor:/react', 'vendor:/react-dom', 'Permission'], function(React, ReactDOM, Permission) {
 
   $('.__xe__uiobject_permission').each(function (i) {
       var el = $(this),

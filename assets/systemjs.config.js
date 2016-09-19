@@ -58,6 +58,7 @@ System.config({
     "react": "npm:react@15.3.1",
     "react-dom": "npm:react-dom@15.3.1",
     "react-tag-input": "npm:react-tag-input@4.3.1",
+    "vendor:/react-tag-input": "xevendor:/react-components/react-tag-input",
     "react-tools": "npm:react-tools@0.13.3",
     "swiper2": "npm:swiper@2.7.6",
     "translator": "assets/core/common/js/translator",

@@ -1,4 +1,4 @@
-System.amdRequire(['react', 'react-dom'], function(React, ReactDOM) {
+System.amdRequire(['vendor:/react', 'vendor:/react-dom'], function(React, ReactDOM) {
   var LangEditorBox = React.createClass({
     getDefaultProps: function () {
       return {

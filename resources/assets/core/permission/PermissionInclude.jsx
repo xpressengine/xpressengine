@@ -1,4 +1,4 @@
-System.amdDefine(['react', 'react-dom', 'jquery', 'PermissionTagSuggestion', 'PermissionTag'], function(React, ReactDOM, $, PermissionTagSuggestion, PermissionTag) {
+System.amdDefine(['vendor:/react', 'vendor:/react-dom', 'jquery', 'PermissionTagSuggestion', 'PermissionTag'], function(React, ReactDOM, $, PermissionTagSuggestion, PermissionTag) {
     
     var Keys = {
         ENTER: 13,

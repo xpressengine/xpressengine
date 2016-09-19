@@ -1,4 +1,4 @@
-System.amdDefine('MenuSearchSuggestion', ['react'], function(React) {
+System.amdDefine('MenuSearchSuggestion', ['vendor:/react'], function(React) {
 
   'use strict';
 

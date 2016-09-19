@@ -1,4 +1,4 @@
-System.amdDefine('MenuTree', ['react', 'MenuSearchBar', 'UITree'], function(React, MenuSearchBar, UITree) {
+System.amdDefine('MenuTree', ['vendor:/react', 'MenuSearchBar', 'UITree'], function(React, MenuSearchBar, UITree) {
 
   'use strict';
 

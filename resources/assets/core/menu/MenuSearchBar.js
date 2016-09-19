@@ -1,4 +1,4 @@
-System.amdDefine('MenuSearchBar', ['react', 'react-dom', 'MenuSearchSuggestion'], function(React, ReactDOM, MenuSearchSuggestion) {
+System.amdDefine('MenuSearchBar', ['vendor:/react', 'vendor:/react-dom', 'MenuSearchSuggestion'], function(React, ReactDOM, MenuSearchSuggestion) {
 
   'use strict';
 

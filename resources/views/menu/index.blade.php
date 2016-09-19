@@ -23,7 +23,7 @@
 </div>
 
 <script>
-    System.amdRequire(['react', 'react-dom', 'MenuTree'], function(React, ReactDOM, MenuTree) {
+    System.amdRequire(['vendor:/react', 'vendor:/react-dom', 'MenuTree'], function(React, ReactDOM, MenuTree) {
         ReactDOM.render(
                 React.createElement(MenuTree, {
                     baseUrl: "{{ route('settings.menu.index') }}",

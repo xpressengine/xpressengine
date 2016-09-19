@@ -1,4 +1,4 @@
-System.amdDefine(['react'], function(React) {
+System.amdDefine(['vendor:/react'], function(React) {
     var MIN_QUERY_LENGTH = 2;
     var PermissionTagSuggestion = React.createClass({
         displayName: "PermissionTagSuggestion",

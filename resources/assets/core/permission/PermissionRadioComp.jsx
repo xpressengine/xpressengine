@@ -1,4 +1,4 @@
-System.amdDefine(['react'], function(React) {
+System.amdDefine(['vendor:/react'], function(React) {
     var PermissionRadioComp = React.createClass({
         componentDidMount: function() {},
         render: function() {

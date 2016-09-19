@@ -1,4 +1,4 @@
-System.amdDefine('MenuEntity', ['react'], function(React) {
+System.amdDefine('MenuEntity', ['vendor:/react'], function(React) {
 
   'use strict';
   
@@ -44,7 +44,7 @@ System.amdDefine('MenuEntity', ['react'], function(React) {
 
   return MenuEntity;
 });
-System.amdDefine('MenuItem', ['react', 'react-dom'], function(React, ReactDOM) {
+System.amdDefine('MenuItem', ['vendor:/react', 'vendor:/react-dom'], function(React, ReactDOM) {
 
   'use strict';
 
@@ -186,10 +186,10 @@ System.amdDefine('MenuItem', ['react', 'react-dom'], function(React, ReactDOM) {
 
   return MenuItem;
 });
-System.amdDefine('TreeNode', ['react', 'MenuEntity', 'MenuItem'], function(React, MenuEntity, MenuItem) {
+System.amdDefine('TreeNode', ['vendor:/react', 'MenuEntity', 'MenuItem'], function(React, MenuEntity, MenuItem) {
 
   'use strict';
-  
+
   var TreeNode = React.createClass({
     displayName: 'TreeNode',
 
@@ -337,7 +337,7 @@ System.amdDefine('TreeNode', ['react', 'MenuEntity', 'MenuItem'], function(React
 
   return TreeNode;
 });
-System.amdDefine('MenuSearchBar', ['react', 'react-dom', 'MenuSearchSuggestion'], function(React, ReactDOM, MenuSearchSuggestion) {
+System.amdDefine('MenuSearchBar', ['vendor:/react', 'vendor:/react-dom', 'MenuSearchSuggestion'], function(React, ReactDOM, MenuSearchSuggestion) {
 
   'use strict';
 
@@ -544,7 +544,7 @@ System.amdDefine('MenuSearchBar', ['react', 'react-dom', 'MenuSearchSuggestion']
 
   return MenuSearchBar;
 });
-System.amdDefine('UITree', ['react', 'TreeNode'], function(React, TreeNode) {
+System.amdDefine('UITree', ['vendor:/react', 'TreeNode'], function(React, TreeNode) {
   var UITree = React.createClass({
     displayName: 'UITree',
 
@@ -902,7 +902,7 @@ System.amdDefine('UITree', ['react', 'TreeNode'], function(React, TreeNode) {
 
   return UITree;
 });
-System.amdDefine('MenuSearchSuggestion', ['react'], function(React) {
+System.amdDefine('MenuSearchSuggestion', ['vendor:/react'], function(React) {
 
   'use strict';
 
@@ -974,7 +974,7 @@ System.amdDefine('MenuSearchSuggestion', ['react'], function(React) {
 
   return MenuSearchSuggestion;
 });
-System.amdDefine('MenuTree', ['react', 'MenuSearchBar', 'UITree'], function(React, MenuSearchBar, UITree) {
+System.amdDefine('MenuTree', ['vendor:/react', 'MenuSearchBar', 'UITree'], function(React, MenuSearchBar, UITree) {
 
   'use strict';
 

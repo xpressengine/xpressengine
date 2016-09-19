@@ -1,4 +1,4 @@
-System.amdDefine('MenuItem', ['react', 'react-dom'], function(React, ReactDOM) {
+System.amdDefine('MenuItem', ['vendor:/react', 'vendor:/react-dom'], function(React, ReactDOM) {
 
   'use strict';
 

@@ -1,4 +1,4 @@
-System.amdDefine('MenuEntity', ['react'], function(React) {
+System.amdDefine('MenuEntity', ['vendor:/react'], function(React) {
 
   'use strict';
   
