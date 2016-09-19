@@ -1,4 +1,4 @@
-System.amdDefine('UITree', ['react', 'TreeNode'], function(React, UITree) {
+System.amdDefine('UITree', ['react', 'TreeNode'], function(React, TreeNode) {
   var UITree = React.createClass({
     displayName: 'UITree',
 

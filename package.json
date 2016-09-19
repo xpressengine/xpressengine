@@ -23,6 +23,7 @@
     "gulp-jspm": "^0.5.7",
     "gulp-jspm-assets": "^1.1.1",
     "gulp-load-plugins": "^1.2.0",
+    "gulp-minify": "0.0.14",
     "gulp-notify": "*",
     "gulp-plumber": "^1.1.0",
     "gulp-react": "^3.1.0",

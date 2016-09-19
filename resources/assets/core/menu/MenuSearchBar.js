@@ -1,4 +1,7 @@
 System.amdDefine('MenuSearchBar', ['react', 'react-dom', 'MenuSearchSuggestion'], function(React, ReactDOM, MenuSearchSuggestion) {
+
+  'use strict';
+
   var MenuSearchBar = React.createClass({
     displayName: 'MenuSearchBar',
 

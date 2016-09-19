@@ -1,4 +1,7 @@
 System.amdDefine('MenuSearchSuggestion', ['react'], function(React) {
+
+  'use strict';
+
   var MIN_QUERY_LENGTH = 2;
   var MenuSearchSuggestion = React.createClass({
     displayName: "MenuSearchSuggestion",

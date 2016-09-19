@@ -12,15 +12,6 @@ System.config({
     "xecore:/settings/js/admin.bundle.js": [
       "xecore:/settings/js/admin.js"
     ],
-    "xecore:/menu/menu.js": [
-      "xecore:/menu/MenuTree.js!github:floatdrop/plugin-jsx@1.2.1.js",
-      "xecore:/menu/MenuSearchBar.js!github:floatdrop/plugin-jsx@1.2.1.js",
-      "xecore:/menu/UITree.js!github:floatdrop/plugin-jsx@1.2.1.js",
-      "xecore:/menu/MenuSearchSuggestion.js!github:floatdrop/plugin-jsx@1.2.1.js",
-      "xecore:/menu/TreeNode.js!github:floatdrop/plugin-jsx@1.2.1.js",
-      "xecore:/menu/MenuEntity.js!github:floatdrop/plugin-jsx@1.2.1.js",
-      "xecore:/menu/MenuItem.js!github:floatdrop/plugin-jsx@1.2.1.js"
-    ],
     "xecore:/common/js/xe.bundle.js": [
       "xecore:/common/js/xe.js",
       "vendor:/lodash",
@@ -39,7 +30,7 @@ System.config({
       "format": "amd"
     },
     "xecore:/menu/menu.js": {
-      "format": "amd"
+      "format": "global"
     }
   },
 

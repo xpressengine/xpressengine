@@ -1,4 +1,7 @@
 System.amdDefine('MenuItem', ['react', 'react-dom'], function(React, ReactDOM) {
+
+  'use strict';
+
   var MenuItem = React.createClass({
     displayName: 'MenuItem',
 

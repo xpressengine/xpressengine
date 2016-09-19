@@ -1,4 +1,6 @@
 System.amdDefine('MenuEntity', ['react'], function(React) {
+
+  'use strict';
   
   var MenuEntity = React.createClass({
     displayName: 'MenuEntity',

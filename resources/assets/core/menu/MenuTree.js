@@ -1,5 +1,7 @@
 System.amdDefine('MenuTree', ['react', 'MenuSearchBar', 'UITree'], function(React, MenuSearchBar, UITree) {
-  
+
+  'use strict';
+
   var MenuTree = React.createClass({
     getInitialState: function () {
       return {
