@@ -19,6 +19,7 @@ use Xpressengine\Presenter\Html\FrontendHandler;
 use Xpressengine\Presenter\Html\HtmlPresenter;
 use Xpressengine\Presenter\Json\JsonPresenter;
 use Xpressengine\Presenter\Presenter;
+use Xpressengine\Presenter\Redirector;
 use Xpressengine\Routing\InstanceConfig;
 use Xpressengine\Storage\File;
 
@@ -39,6 +40,7 @@ class PresenterServiceProvider extends ServiceProvider
     {
         $this->registerPresenter();
         $this->registerFrontend();
+        $this->registerRedirector();
     }
 
     /**
@@ -142,6 +144,22 @@ class PresenterServiceProvider extends ServiceProvider
             \Xpressengine\Presenter\Html\Tags\Package::setHandler($frontendHandler);
 
             return $frontendHandler;
+        });
+    }
+
+    private function registerRedirector()
+    {
+        $this->app->singleton('xe.redirect', function ($app) {
+            $redirector = new Redirector($app['url']);
+
+            // If the session is set on the application instance, we'll inject it into
+            // the redirector instance. This allows the redirect responses to allow
+            // for the quite convenient "with" methods that flash to the session.
+            if (isset($app['session.store'])) {
+                $redirector->setSession($app['session.store']);
+            }
+
+            return $redirector;
         });
     }
 

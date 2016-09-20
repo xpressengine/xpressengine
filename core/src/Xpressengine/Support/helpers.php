@@ -112,6 +112,32 @@ if (function_exists('bytes') === false) {
     }
 }
 
+if (! function_exists('xeRedirect')) {
+    /**
+     * Get an instance of the redirector.
+     *
+     * @param  string|null  $to
+     * @param  int     $status
+     * @param  array   $headers
+     * @param  bool    $secure
+     * @param  array   $data
+     * @return \Xpressengine\Presenter\RedirectResponse|\Xpressengine\Presenter\Redirector
+     */
+    function xeRedirect($to = null, $status = 302, $headers = [], $secure = null, array $data = null)
+    {
+        if (is_null($to)) {
+            return app('xe.redirect');
+        }
+
+        /** @var \Xpressengine\Presenter\RedirectResponse $redirect */
+        $redirect = app('xe.redirect')->to($to, $status, $headers, $secure);
+        if ($data !== null) {
+            $redirect->setData($data);
+        }
+        return $redirect;
+    }
+}
+
 if (function_exists('apiRender') === false) {
     /**
      * XE.page() 를 사용하여 호출할 경우 render 된 html 반환

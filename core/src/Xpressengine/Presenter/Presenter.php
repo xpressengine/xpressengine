@@ -461,6 +461,21 @@ class Presenter
     }
 
     /**
+     * xeRedirect() 메소드와 같은 형태의 파라메터 사용
+     *
+     * @param null $to
+     * @param int $status
+     * @param array $headers
+     * @param null $secure
+     * @param array $data
+     * @return \Xpressengine\Presenter\RedirectResponse|\Xpressengine\Presenter\Redirector
+     */
+    public function redirect($to = null, $status = 302, $headers = [], $secure = null, $data = [])
+    {
+        return xeRedirect($to, $status, $headers, $secure, $data);
+    }
+
+    /**
      * get id
      *
      * @return string
