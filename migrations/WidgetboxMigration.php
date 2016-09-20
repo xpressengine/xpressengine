@@ -14,7 +14,7 @@ use Xpressengine\Permission\Grant;
 use Xpressengine\Permission\PermissionHandler;
 use Xpressengine\Support\Migration;
 
-class WidgetboxMigration implements Migration {
+class WidgetboxMigration extends Migration {
 
     public function install()
     {
