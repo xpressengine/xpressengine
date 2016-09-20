@@ -25,10 +25,9 @@ use Xpressengine\Presenter\PresenterException;
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
- * @deprecated As of 3.0.0-beta6 replaced by InvalidPresenterException
  */
-class InvalidRendererException extends PresenterException
+class InvalidPresenterException extends PresenterException
 {
-    protected $message = '":name" renderer invalid.
-    Renderer must follow "Xpressengine\Presenter\Presentable" interface';
+    protected $message = '":name" presenter invalid.
+    Presenter must follow "Xpressengine\Presenter\Presentable" interface';
 }

@@ -177,7 +177,7 @@ class HtmlPresenter implements Presentable
             return $skinView;
         }
 
-        // return popup type
+        // return popup type, without theme
         if ($this->presenter->getRenderType() == Presenter::RENDER_POPUP) {
             $baseTheme = $viewFactory->make(self::$popupHtmlWrapper);
             $baseTheme->content = $skinView;

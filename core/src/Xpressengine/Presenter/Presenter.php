@@ -15,9 +15,10 @@
 namespace Xpressengine\Presenter;
 
 use Illuminate\Http\Request;
-use Xpressengine\Presenter\Exceptions\InvalidRendererException;
-use Xpressengine\Presenter\Exceptions\NotApprovedFormatException;
+use Xpressengine\Presenter\Exceptions\InvalidPresenterException;
 use Xpressengine\Presenter\Exceptions\NotFoundFormatException;
+use Xpressengine\Presenter\Html\HtmlPresenter;
+use Xpressengine\Presenter\Json\JsonPresenter;
 use Xpressengine\Theme\ThemeHandler;
 use Xpressengine\Skin\SkinHandler;
 use Xpressengine\Settings\SettingsHandler;
@@ -538,28 +539,30 @@ class Presenter
      */
     protected function get()
     {
-        // is ajax call ? remove theme, skin html tags
-        // $this->request->ajax();
-
         $format = $this->request->format();
-//        if ($this->isApproveFormat($format) === false) {
-//            throw new NotApprovedFormatException(['name' => $format]);
-//        }
 
         if (isset($this->presentables[$format]) === false) {
             throw new NotFoundFormatException(['name' => $format]);
         }
 
-        $renderer = $this->getPresenter($format);
-
         if (
-            is_subclass_of($renderer, RendererInterface::class) === false &&
-            is_subclass_of($renderer, Presentable::class) === false
+            $format == HtmlPresenter::format() &&
+            $this->api === true &&
+            $this->html === false
         ) {
-            throw new InvalidRendererException(['name' => get_class($renderer)]);
+            $format = JsonPresenter::format();
         }
 
-        return $renderer;
+        $presenter = $this->getPresenter($format);
+
+        if (
+            is_subclass_of($presenter, RendererInterface::class) === false &&
+            is_subclass_of($presenter, Presentable::class) === false
+        ) {
+            throw new InvalidPresenterException(['name' => get_class($presenter)]);
+        }
+
+        return $presenter;
     }
 
     /**
