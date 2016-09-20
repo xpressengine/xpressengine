@@ -91,6 +91,8 @@ class Document extends DynamicModel
         'format' => 'int',
     ];
 
+    protected $hidden = ['email', 'certifyKey', 'ipaddress'];
+
     /**
      * @var bool use dynamic query
      */
