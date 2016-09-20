@@ -56,6 +56,11 @@ class UserGroup extends DynamicModel implements GroupInterface
         return $this->belongsToMany(User::class, 'user_group_user', 'groupId', 'userId');
     }
 
+    public function userCountRelation()
+    {
+        return $this->belongsToMany(User::class, 'user_group_user', 'groupId', 'userId')->selectRaw('groupId, count(*) as count')->groupBy('groupId');
+    }
+
     /**
      * add User to this group
      *
@@ -66,7 +71,6 @@ class UserGroup extends DynamicModel implements GroupInterface
     public function addUser(UserInterface $user)
     {
         $this->users()->save($user);
-        $this->increment('count');
         return $this;
     }
 
@@ -80,7 +84,19 @@ class UserGroup extends DynamicModel implements GroupInterface
     public function exceptUser(UserInterface $user)
     {
         $this->users()->detach($user->getId());
-        $this->decrement('count');
         return $this;
     }
+
+    public function getCountAttribute()
+    {
+        $userCount = $this->userCountRelation->first();
+        return $userCount?$userCount->count:0;
+    }
+
+    public function getUserCountAttribute()
+    {
+        return $this->count;
+    }
+
+
 }

@@ -88,6 +88,7 @@ class PermissionHandlerTest extends \PHPUnit_Framework_TestCase
         $mockParent->shouldReceive('get')->with('name')->andReturn('plugin');
 
         $repo->shouldReceive('findByName')->once()->with('default', 'plugin.dummy')->andReturnNull();
+        $repo->shouldReceive('findByName')->once()->with('default', 'plugin')->andReturn($mockParent);
         $repo->shouldReceive('fetchAncestor')->once()->andReturn([$mockParent]);
         $repo->shouldReceive('insert')->once()->with(m::on(function ($value) {
             return $value instanceof Permission;
@@ -117,6 +118,7 @@ class PermissionHandlerTest extends \PHPUnit_Framework_TestCase
 
         $instance->shouldReceive('getOrNew')->once()->with('plugin.dummy', 'default')->andReturn($mockPermission);
 
+        $repo->shouldReceive('findByName')->once()->with('default', 'plugin')->andReturn($mockParent);
         $repo->shouldReceive('update')->once()->with($mockPermission)->andReturn($mockPermission);
 
         $instance->register('plugin.dummy', $grant, 'default');
@@ -165,6 +167,7 @@ class PermissionHandlerTest extends \PHPUnit_Framework_TestCase
         $mockPermission = m::mock('Xpressengine\Permission\Permission');
         $mockPermission->shouldReceive('getParent')->andReturnNull();
         $mockPermission->shouldReceive('getDepth')->andReturn(2);
+        $mockPermission->shouldReceive('get')->with('name')->andReturn('plugin.name');
 
         try {
             $instance->move($mockPermission);

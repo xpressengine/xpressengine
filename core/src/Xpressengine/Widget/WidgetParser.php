@@ -68,7 +68,7 @@ class WidgetParser
      */
     public function parseXml($content)
     {
-        $content = preg_replace_callback('/<xewidget (.*)<\/xewidget>/s', [$this, 'parseWidget'], $content);
+        $content = preg_replace_callback('/<xewidget[^>]*>.*?<\/xewidget>/s', [$this, 'parseWidget'], $content);
 
         return $content;
     }

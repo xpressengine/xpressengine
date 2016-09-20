@@ -225,6 +225,14 @@ class PermissionHandler
     public function register($name, Grant $grant, $siteKey = 'default')
     {
         $permission = $this->getOrNew($name, $siteKey);
+
+        if (strrpos($name, '.') !== false) {
+            $pname = substr($name, 0, strrpos($name, '.'));
+            if (!$this->repo->findByName($siteKey, $pname)) {
+                throw new NoParentException(['name' => $name]);
+            }
+        }
+
         $permission->setGrant($grant);
 
         if ($permission->exists !== true) {
@@ -284,7 +292,7 @@ class PermissionHandler
 
         if ($parent === null) {
             if ($permission->getDepth() !== 1) {
-                throw new NoParentException();
+                throw new NoParentException(['name' => $permission->name]);
             }
 
             $this->repo->affiliate($permission, $to);

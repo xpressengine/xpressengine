@@ -30,7 +30,7 @@ class RegisterServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(
-            [Container::class => 'xe.register'],
+            ['xe.register' => Container::class],
             function ($app) {
                 $container = $app['xe.interception']->proxy(Container::class, 'XeRegister');
                 return new $container(Arr::class);

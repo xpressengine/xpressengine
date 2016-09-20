@@ -738,4 +738,17 @@ Route::group(['prefix' => 'editor'], function () {
     Route::get('mention', ['as' => 'editor.mention', 'uses' => 'EditorController@mention']);
 });
 
-Route::get('widgetbox/edit/{boxId}', ['as' => 'widgetbox.edit', 'uses' => 'WidgetBoxController@edit']);
+Route::group(['prefix'=>'widgetbox'], function() {
+
+    Route::get('create', ['as' => 'widgetbox.create', 'uses' => 'WidgetBoxController@create']);
+    Route::post('/', ['as' => 'widgetbox.store', 'uses' => 'WidgetBoxController@store']);
+
+    Route::get('{id}/edit', ['as' => 'widgetbox.edit', 'uses' => 'WidgetBoxController@edit']);
+    Route::put('{id}', ['as' => 'widgetbox.update', 'uses' => 'WidgetBoxController@update']);
+
+    Route::post('{id}/preview', ['as' => 'widgetbox.preview', 'uses' => 'WidgetBoxController@preview']);
+    Route::get('{id}/code', ['as' => 'widgetbox.code', 'uses' => 'WidgetBoxController@code']);
+
+    Route::post('{id}/permission', ['as' => 'widgetbox.permission', 'uses' => 'WidgetBoxController@storePermission']);
+
+});

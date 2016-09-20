@@ -312,3 +312,10 @@ header {
   color: #656973; }
 
 /*# sourceMappingURL=widgetbox.css.map */
+
+.editor .dropzone {
+  background-color: #336699 !important;
+}
+.editor .dropzone .order{
+  color: #FFF !important;
+}

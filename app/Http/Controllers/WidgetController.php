@@ -57,6 +57,7 @@ class WidgetController extends Controller {
         $widget = $inputs['@id'];
 
         $code = $widgetHandler->generateCode($widget, $inputs);
+
         return XePresenter::makeApi([
             'code' => $code,
         ]);
@@ -108,9 +109,11 @@ class WidgetController extends Controller {
         $widgetForm = $widgetHandler->setup($widget);
 
         // skin form
-        $skin = $skinHandler->get($skin);
-
-        $skinForm = $skin->renderSetting();
+        $skinForm = null;
+        if($skin !== null) {
+            $skin = $skinHandler->get($skin);
+            $skinForm = $skin->renderSetting();
+        }
 
         return apiRender('widget.form', compact('widget', 'skin', 'widgetForm', 'skinForm'));
     }
@@ -137,6 +140,8 @@ class WidgetController extends Controller {
 
         $widget = array_get($inputs, '@attributes.id');
 
+        $title = array_get($inputs, '@attributes.title', '');
+
         // widget list
         $widgetList = $widgetHandler->getAll();
         $widgets = [];
@@ -159,7 +164,7 @@ class WidgetController extends Controller {
             $skinForm = $skin->renderSetting($skinConfig);
         }
 
-        return apiRender('widget.setup', compact('widgets', 'widget', 'skins', 'skin', 'widgetSelector', 'skinSelector', 'widgetForm', 'skinForm'));
+        return apiRender('widget.setup', compact('widgets', 'widget', 'title', 'skins', 'skin', 'widgetSelector', 'skinSelector', 'widgetForm', 'skinForm'));
     }
 
     /**

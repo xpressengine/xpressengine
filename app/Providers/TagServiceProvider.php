@@ -51,13 +51,11 @@ class TagServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('xe.tag', function ($app) {
+        $this->app->singleton(['xe.tag' => TagHandler::class], function ($app) {
             $proxyClass = $app['xe.interception']->proxy(TagHandler::class, 'XeTag');
 
             return new $proxyClass(new Decomposer());
-        }, true);
-
-        $this->app->singleton(TagHandler::class, 'xe.tag');
+        });
     }
 
     /**

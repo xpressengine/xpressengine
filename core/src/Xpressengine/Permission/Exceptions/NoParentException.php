@@ -30,5 +30,5 @@ use Xpressengine\Permission\PermissionException;
  */
 class NoParentException extends PermissionException
 {
-    protected $message = '부모 객체가 존재 하지 않습니다.';
+    protected $message = '[:name] permission has not parent.';
 }

@@ -8,13 +8,13 @@
         {{-- select skin --}}
         <div class="widget-skins" data-url="{{route('settings.widget.skin')}}">
             @if(isset($skins))
-            @include('widget.skins')
+            @include('widget.skins', ['setup' => true])
             @endif
         </div>
 
         {{-- form fields --}}
         <div class="widget-form">
-            @if(isset($widgetForm))
+            @if(isset($widgetForm) && $widgetForm !== null)
             @include('widget.form')
             @endif
         </div>

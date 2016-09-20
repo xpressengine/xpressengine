@@ -65,7 +65,7 @@ class EditorServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(
-            [EditorHandler::class => 'xe.editor'],
+            ['xe.editor' => EditorHandler::class],
             function ($app) {
                 $editorHandler = $app['xe.interception']->proxy(EditorHandler::class, 'XeEditor');
                 /**

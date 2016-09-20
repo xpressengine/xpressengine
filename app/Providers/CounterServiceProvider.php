@@ -49,15 +49,9 @@ class CounterServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('xe.counter', function ($app) {
-
+        $this->app->singleton(['xe.counter' => Factory::class], function ($app) {
             return new Factory($app['xe.interception']);
         });
-
-        $this->app->bind(
-            'Xpressengine\Counter\Factory',
-            'xe.counter'
-        );
     }
 
     /**

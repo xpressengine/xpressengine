@@ -102,7 +102,7 @@ abstract class AbstractWidget implements ComponentInterface, Renderable
      */
     public function renderSetting(array $args = [])
     {
-        return null;
+        return '';
     }
 
     public function resolveSetting(array $inputs = [])

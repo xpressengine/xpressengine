@@ -40,7 +40,7 @@ class WidgetServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(
-            'xe.widget',
+            ['xe.widget' => WidgetHandler::class],
             function ($app) {
 
                 $proxyClass = $app['xe.interception']->proxy(WidgetHandler::class, 'XeWidget');
@@ -56,38 +56,12 @@ class WidgetServiceProvider extends ServiceProvider
         );
 
         $this->app->singleton(
-            'xe.widget.parser',
+            ['xe.widget.parser' => WidgetParser::class],
             function ($app) {
                 $handler = $app['xe.widget'];
                 return new WidgetParser($handler);
             }
         );
-
-        $this->app->bind(
-            'Xpressengine\Widget\WidgetHandler',
-            'xe.widget'
-        );
-
-        $this->app->bind(
-            'Xpressengine\Widget\WidgetParser',
-            'xe.widget.parser'
-        );
-
-        //intercept(
-        //    'HtmlRenderer@render',
-        //    'widget.replace',
-        //    function ($target) {
-        //        $htmlResponseString = $target();
-        //
-        //        /**
-        //         * @var WidgetParser $parser
-        //         */
-        //        $parser = app('xe.widget.parser');
-        //
-        //        $htmlResponseString = $parser->parseXml($htmlResponseString);
-        //        return $htmlResponseString;
-        //    }
-        //);
     }
 
     /**

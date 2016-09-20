@@ -66,7 +66,7 @@ class DatabaseServiceProvider extends ServiceProvider
             return ProxyManager::instance($app['xe.register']);
         });
 
-        $this->app->singleton('xe.db', function ($app) {
+        $this->app->singleton(['xe.db' => DatabaseHandler::class], function ($app) {
 
             $coupler = DatabaseCoupler::instance(
                 $app['db'],
@@ -81,10 +81,5 @@ class DatabaseServiceProvider extends ServiceProvider
                 $app['config']->get('xe.database')
             );
         });
-
-        $this->app->bind(
-            'Xpressengine\Database\DatabaseHandler',
-            'xe.db'
-        );
     }
 }
