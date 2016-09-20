@@ -199,7 +199,7 @@
     var _page = function(options, callback) {
         var $target = options.target;
         var addType = options.hasOwnProperty('addType')? options.addType : '';
-        
+
         if (typeof $target == 'string') {
             $target = $($target);
         }
@@ -212,7 +212,7 @@
                 data: options.data || {}
             };
 
-            var pageOptions = $.extend(defaultOptions, {
+            var options = $.extend(defaultOptions, {
                 success: function(data) {
                     var assets = data['XE_ASSET_LOAD'] || {},
                         css = assets['css'] || [],
@@ -260,7 +260,7 @@
                 }
             });
 
-            XE.ajax(pageOptions);
+            XE.ajax(options);
         });
     };
 

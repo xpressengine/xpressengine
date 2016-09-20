@@ -212,7 +212,7 @@
                 data: options.data || {}
             };
 
-            var pageOptions = $.extend(defaultOptions, {
+            var options = $.extend(defaultOptions, {
                 success: function(data) {
                     var assets = data['XE_ASSET_LOAD'] || {},
                         css = assets['css'] || [],
@@ -260,7 +260,7 @@
                 }
             });
 
-            XE.ajax(pageOptions);
+            XE.ajax(options);
         });
     };
 
