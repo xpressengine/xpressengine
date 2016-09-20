@@ -10,16 +10,15 @@
     var widgetInputs = '.widget-inputs';
     var setupCode = '.__xe_setup_code';
     var generateCode = '.__xe_generate_code';
-    var isBinding = false;
     var self;
 
     var _applyPlugins = function () {
         $.fn.widgetGenerator = function (opt, cb) {
 
             var $container = this;
+            var isBinding = false;
 
             var _bindEvents = function () {
-
                 $container.on('change', selectWidget, function() {
                     var widget = this.value;
                     var url = $('.widget-skins').data('url');
@@ -37,7 +36,7 @@
                 $container.on('change', selectWidgetSkin, function() {
                     var widget = this.value;
 
-                    if(widget !== 'select-skin') {
+                    if(widget) {
                         var url = $(this).find('option:selected').data('url');
                         XE.page(url, '.widget-form');
                     }
@@ -51,7 +50,7 @@
                         url: url,
                         target: '.widget-inputs',
                         code: code
-                    }, cb);
+                    });
                 });
 
                 $container.on('click', generateCode, function() {
@@ -73,14 +72,6 @@
 
                     //switch
                     switch(opt) {
-                        case 'init':
-                            $container.find('.__xe_select_widget').find('option:eq(0)').prop('selected', true);
-                            $container.find('.widget-skins').empty();
-                            $container.find('.widget-form').empty();
-                            $container.find('.__xe_widget_code').val('');
-
-                            break;
-
                         case 'code':
                             return $container.find(widgetCodeSel).val();
                             break;
@@ -99,6 +90,8 @@
                     break;
 
                 case 'object':
+
+
                     break;
                 case 'undefined':
                     break;
@@ -113,12 +106,12 @@
                 }, cb);
             };
 
-            this.reset = function(code, cb) {
+            this.reset = function() {
                 WidgetCode.reset({
                     url: $(widgetInputs).data('url'),
-                    code: code,//$(widgetCodeSel).val(),
+                    code: $(widgetCodeSel).val(),
                     target: widgetInputs
-                }, cb);
+                });
             };
 
             return this;
@@ -139,13 +132,10 @@
                 var $form = $(options.widgetForm);
                 var data = $form.serializeArray();
 
-                var skinForm = $(options.skinForm).serializeArray();
-                if(skinForm.length) {
-                    data.push({
-                        'name':'skin',
-                        'value': skinForm
-                    });
-                }
+                data.push({
+                    'name':'skin',
+                    'value': $(options.skinForm).serializeArray()
+                });
 
                 XE.ajax({
                     url : $form.attr('action'),
@@ -172,9 +162,8 @@
              *     - {string} target selector
              *     - {string} code
              * </pre>
-             * @param {function} cb callback
              * */
-            reset: function (options, cb) {
+            reset: function (options) {
                 DynamicLoadManager.jsLoad('/assets/core/xe-ui-component/js/xe-page.js', function() {
                     var url = options.url;
                     var code = options.code;
@@ -184,7 +173,7 @@
                         data: {
                             code: code
                         }
-                    }, cb);
+                    });
                 });
             },
             init: function() {

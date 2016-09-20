@@ -3,12 +3,31 @@
     'use strict';
 
     exports.DynamicLoadManager = function() {
+
+        var self;
         var _assets = {
             js: {}
             , css: {}
         };
 
         return {
+            init: function() {
+                var loc = exports.location;
+                var url = "assets/core/common/js/utils.js";
+                var baseURL = loc.protocol + '//' + loc.host + '/';
+                var el = document.createElement( 'script' );
+
+                el.src = baseURL + url;
+                el.async = true;
+
+                document.head.appendChild(el);
+
+                _assets.js[baseURL + url] = '';
+
+                self = this;
+
+                return this;
+            },
             /**
              * @param {array} arrjs
              * @param {object}} callbackObj
@@ -23,13 +42,13 @@
                 var callbackObj = callbackObj || {};
 
                 for(var i = 0, max = arrjs.length; i < max; i += 1) {
-                    var src = arrjs[i].split('?')[0];
+                    var src = Utils.asset(arrjs[i].split('?')[0]);
 
                     if(!_assets.js.hasOwnProperty(src)) {
                         _assets.js[src] = '';
 
                         $.ajax({
-                            url: src,
+                            url: Utils.asset(src),
                             async: false,
                             dataType: "script",
                             success: function() {
@@ -45,22 +64,22 @@
                             },
                             error: callbackObj.error
                         });
+
                     }else {
                         if(!!callbackObj.load) {
                             callbackObj.load();
                         }
                     }
                 }
-
-                //$("head").append(html);
             },
             jsLoad: function (url, load, error) {
-
-                var src = url.split('?')[0];
+                var src = Utils.asset(url.split('?')[0]);
 
                 if(!_assets.js.hasOwnProperty(src)) {
+
                     var el = document.createElement( 'script' );
-                    el.src = url;
+
+                    el.src = src;
                     el.async = true;
 
                     if(load) {
@@ -75,6 +94,7 @@
 
                     _assets.js[src] = '';
 
+
                 }else {
                     if(load) {
                         load();
@@ -82,10 +102,11 @@
                 }
             },
             cssLoad: function (url, load, error) {
-                var src = url.split("?")[0];
+                var src = Utils.asset(url.split("?")[0]);
 
                 if(!_assets.css.hasOwnProperty(src)) {
-                    var $css = $('<link>', {rel: 'stylesheet', type: 'text/css', href: url});
+
+                    var $css = $('<link>', {rel: 'stylesheet', type: 'text/css', href: src});
 
                     if(load) {
                         $css.on('load', load)
@@ -98,6 +119,7 @@
                     $('head').append($css);
 
                     _assets.css[src] = "";
+
                 }else {
                     if(load) {
                         load();
@@ -105,7 +127,8 @@
                 }
             }
         };
-    }();
+    }().init();
+
 })(window);
 
 //# sourceURL=dynamicLoadManager.js

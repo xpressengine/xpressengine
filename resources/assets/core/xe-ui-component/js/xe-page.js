@@ -204,63 +204,64 @@
             $target = $($target);
         }
 
-        var defaultOptions = {
-            url: options.url
-            , type: options.type || 'get'
-            , dataType: 'json'
-            , data: options.data || {}
-        };
+        DynamicLoadManager.jsLoad('/assets/core/common/js/utils.js', function() {
+            var defaultOptions = {
+                url: Utils.asset(options.url),
+                type: options.type || 'get',
+                dataType: 'json',
+                data: options.data || {}
+            };
 
-        var options = $.extend(defaultOptions, {
-            success: function(data) {
-                var assets = data['XE_ASSET_LOAD'] || {},
-                    css = assets['css'] || [],
-                    js = assets['js'] || [],
-                    html = data.result,
-                    cssLen = css.length,
-                    jsLen = js.length
-                    data = data.data || {};
+            var options = $.extend(defaultOptions, {
+                success: function(data) {
+                    var assets = data['XE_ASSET_LOAD'] || {},
+                        css = assets['css'] || [],
+                        js = assets['js'] || [],
+                        html = data.result,
+                        cssLen = css.length,
+                        jsLen = js.length,
+                        data = data.data || {};
 
-                var next = function() {
-                    switch(addType) {
-                        case 'append':
-                            $target.append(html);
-                            break;
-                        case 'prepend':
-                            $target.prepend(html);
-                            break;
-                        default:
-                            $target.html(html);
+                    var next = function() {
+                        switch(addType) {
+                            case 'append':
+                                $target.append(html);
+                                break;
+                            case 'prepend':
+                                $target.prepend(html);
+                                break;
+                            default:
+                                $target.html(html);
+                        }
+
+                        if(callback) {
+                            callback(data);
+                        }
+                    };
+
+                    var loadDone = _pageCommon.loadDone(cssLen, jsLen, next);
+
+                    if(cssLen > 0) {
+                        for(var i = 0, max = cssLen; i < max; i += 1) {
+                            DynamicLoadManager.cssLoad(css[i], loadDone, loadDone);
+                        }
                     }
 
-                    if(callback) {
-                        callback(data);
+                    if(jsLen > 0) {
+                        DynamicLoadManager.jsLoadMultiple(js, {
+                            load: loadDone,
+                            error: loadDone
+                        });
                     }
-                };
 
-                var loadDone = _pageCommon.loadDone(cssLen, jsLen, next);
-
-                if(cssLen > 0) {
-                    for(var i = 0, max = cssLen; i < max; i += 1) {
-                        DynamicLoadManager.cssLoad(css[i], loadDone, loadDone);
+                    if((cssLen + jsLen) === 0) {
+                        next();
                     }
                 }
+            });
 
-                if(jsLen > 0) {
-                    DynamicLoadManager.jsLoadMultiple(js, {
-                        load: loadDone,
-                        error: loadDone
-                    });
-                }
-
-                if((cssLen + jsLen) === 0) {
-                    next();
-                }
-            }
+            XE.ajax(options);
         });
-
-        XE.ajax(options);
-
     };
 
     /**
