@@ -10,6 +10,15 @@
     <div class="col-sm-12">
         <div class="panel-group" id="accordion">
             <div class="panel">
+                <div class="panel-body">
+                    <form action="{{ route('settings.plugins.install') }}" method="POST" data-submit="xe-ajax" data-callback="location.reload">
+                        {{ uio('formText', ['name'=>'pluginId', 'label'=>'플러그인아이디', 'placeholder' => '플러그인 아이디를 입력하세요']) }}
+                        <button type="submit" class="btn btn-default btn-primary">설치</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="panel">
                 {{-- heading --}}
                 <div class="panel-heading">
                     <div class="pull-left">
@@ -91,7 +100,7 @@
 
                             {{-- status info --}}
                             {{-- 업데이트가 다운로드 돼 있는 상태 --}}
-                            @if($plugin->needUpdateInstall())
+                            @if($plugin->needUpdateInstall() && $plugin->isActivated())
                             <div class="alert alert-danger" role="alert">
                                 <i class="xi-info-o txt_red"></i>{{ xe_trans('xe::newUpdateDownloaded') }}
                                 <a href="#" data-url="{{ route('settings.plugins.update', [$plugin->getId()]) }}" class="__xe_btn-update-plugin alert-link">{{ xe_trans('xe::applyUpdateNow') }}</a>
