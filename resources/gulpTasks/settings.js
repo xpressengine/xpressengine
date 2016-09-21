@@ -12,7 +12,7 @@ module.exports = (() => {
         , useSourceMaps: false//!$.util.env.production
     };
 
-    let _filter = [
+    const _filter = [
         '**/*',
         '!resources/assets/core/menu/*',
         '!**/*.scss',
@@ -24,7 +24,8 @@ module.exports = (() => {
         '!resources/assets/core/**/img/*',
         'resources/assets/core/xe-ui-component/js/*',
         'resources/assets/core/menu/classnames.js',
-        'resources/assets/core/menu/Tree.js'
+        'resources/assets/core/menu/Tree.js',
+        'resources/assets/core/widgetbox/js/*'
     ];
 
     let self = {

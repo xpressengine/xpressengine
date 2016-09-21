@@ -21,14 +21,36 @@
                 return bytes;
             },
             isURL: function(s) {
-                /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(s);
+                return /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(s);
             },
             asset: function(url) {
                 var loc = window.location;
-                var baseURL = (self.isURL(url))? xeBaseURL : loc.protocol + '//' + loc.host + '/';
-                var url = (url.substr(0, 1) === '/')? url.substr(1) : url;
+                var retURL = "";
 
-                return (baseURL.substr(-1) === '/')? baseURL + url : baseURL + '/' + url;
+                if(!self.isURL(url)) {
+                    if(xeBaseURL) {
+                        if(xeBaseURL.substr(-1) === '/') {
+                            retURL += xeBaseURL.substr(0, (xeBaseURL.length - 1));
+                        }else {
+                            retURL += xeBaseURL;
+                        }
+
+                    }else {
+                        retURL += loc.protocol + '//' + loc.host;
+                    }
+
+                    if(url.substr(0, 1) === '/') {
+                        retURL += url;
+                    }else {
+                        retURL += '/' + url;
+                    }
+
+                }else {
+                    retURL = url;
+
+                }
+
+                return retURL.split(/[?#]/)[0];
             }
         }
     }().init();
