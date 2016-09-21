@@ -10,15 +10,6 @@
     <div class="col-sm-12">
         <div class="panel-group" id="accordion">
             <div class="panel">
-                <div class="panel-body">
-                    <form action="{{ route('settings.plugins.install') }}" method="POST" data-submit="xe-ajax" data-callback="location.reload">
-                        {{ uio('formText', ['name'=>'pluginId', 'label'=>'플러그인아이디', 'placeholder' => '플러그인 아이디를 입력하세요']) }}
-                        <button type="submit" class="btn btn-default btn-primary">설치</button>
-                    </form>
-                </div>
-            </div>
-
-            <div class="panel">
                 {{-- heading --}}
                 <div class="panel-heading">
                     <div class="pull-left">
