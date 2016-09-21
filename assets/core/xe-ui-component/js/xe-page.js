@@ -36,7 +36,7 @@
                 if(!url
                     && $this.get(0).tagName === "A"
                     && $this.attr("href")) {
-                    data.url = $this.attr('href');
+                    url = $this.attr('href');
                 }
 
                 if(!url) {
@@ -71,7 +71,7 @@
                 if(!url
                     && $this.get(0).tagName === "A"
                     && $this.attr("href")) {
-                    data.url = $this.attr('href');
+                    url = $this.attr('href');
                 }
 
                 if(objStack.length > 0) {
@@ -104,7 +104,7 @@
                 if(!url
                     && $this.get(0).tagName === "A"
                     && $this.attr("href")) {
-                    data.url = $this.attr('href');
+                    url = $this.attr('href');
                 }
 
                 if(objStack.length > 0) {

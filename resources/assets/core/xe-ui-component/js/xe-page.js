@@ -36,7 +36,7 @@
                 if(!url
                     && $this.get(0).tagName === "A"
                     && $this.attr("href")) {
-                    data.url = $this.attr('href');
+                    url = $this.attr('href');
                 }
 
                 if(!url) {
@@ -71,7 +71,7 @@
                 if(!url
                     && $this.get(0).tagName === "A"
                     && $this.attr("href")) {
-                    data.url = $this.attr('href');
+                    url = $this.attr('href');
                 }
 
                 if(objStack.length > 0) {
@@ -104,7 +104,7 @@
                 if(!url
                     && $this.get(0).tagName === "A"
                     && $this.attr("href")) {
-                    data.url = $this.attr('href');
+                    url = $this.attr('href');
                 }
 
                 if(objStack.length > 0) {
@@ -359,6 +359,7 @@
      * <pre>
      *     - data : request parameters
      *     - type : http method (get | post) default 'get'
+     *     - side : dropdown-menu-right, dropdown-menu-left
      * </pre>
      * @param {function} callback
      * @description
