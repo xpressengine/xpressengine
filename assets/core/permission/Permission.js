@@ -169,9 +169,9 @@ System.amdDefine(['vendor:/react', 'vendor:/react-dom', 'jquery', 'PermissionRad
                         )
                     else
                         return React.createElement(PermissionRadioComp, {data: data, 
-                                                    name: ratingTitle,
-                                                    isChecked: false,
-                                                    controlDisabled: controlDisabled,
+                                                    name: ratingTitle, 
+                                                    isChecked: false, 
+                                                    controlDisabled: controlDisabled, 
                                                     key: i, 
                                                     onChangeRadio: self.inputChange.bind(null, 'rating')}
                         )

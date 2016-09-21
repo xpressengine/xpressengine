@@ -230,6 +230,12 @@
                             case 'prepend':
                                 $target.prepend(html);
                                 break;
+                            case 'after':
+                                $target.after(html);
+                                break;
+                            case 'before':
+                                $target.before(html);
+                                break;
                             default:
                                 $target.html(html);
                         }
@@ -359,6 +365,7 @@
      * <pre>
      *     - data : request parameters
      *     - type : http method (get | post) default 'get'
+     *     - side : dropdown-menu-right, dropdown-menu-left
      * </pre>
      * @param {function} callback
      * @description

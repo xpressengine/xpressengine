@@ -230,6 +230,12 @@
                             case 'prepend':
                                 $target.prepend(html);
                                 break;
+                            case 'after':
+                                $target.after(html);
+                                break;
+                            case 'before':
+                                $target.before(html);
+                                break;
                             default:
                                 $target.html(html);
                         }
