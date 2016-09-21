@@ -11,8 +11,8 @@ System.amdDefine(['vendor:/react'], function(React) {
                               onChange: this.inputChange}), " ", this.props.data.name, "  ")
             )
         },
-        changeHandler: function(e) {
-            this.props.onChangeRadio('radio', e);
+        inputChange: function(e) {
+            this.props.onChangeRadio(e.target.value);
         },
         prodTypes: {
             data: React.PropTypes.object,

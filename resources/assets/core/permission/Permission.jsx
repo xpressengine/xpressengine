@@ -69,8 +69,7 @@ System.amdDefine(['vendor:/react', 'vendor:/react-dom', 'jquery', 'PermissionRad
             });
         },
 
-        inputChange: function (key, event){
-            var value = event.target.value;
+        inputChange: function (key, value){
             var formData = this.state.formData;
 
             formData[key] = value;
@@ -163,7 +162,7 @@ System.amdDefine(['vendor:/react', 'vendor:/react-dom', 'jquery', 'PermissionRad
                     if (data.value == ratingValue)
                         return <PermissionRadioComp data={data}
                                                     name={ratingTitle}
-                                                    isChekced={true}
+                                                    isChecked={true}
                                                     controlDisabled={controlDisabled}
                                                     key={i}
                                                     onChangeRadio={self.inputChange.bind(null, 'rating')}
@@ -171,6 +170,7 @@ System.amdDefine(['vendor:/react', 'vendor:/react-dom', 'jquery', 'PermissionRad
                     else
                         return <PermissionRadioComp data={data}
                                                     name={ratingTitle}
+                                                    isChecked={false}
                                                     controlDisabled={controlDisabled}
                                                     key={i}
                                                     onChangeRadio={self.inputChange.bind(null, 'rating')}
