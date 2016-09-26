@@ -279,6 +279,37 @@ class Counter
     }
 
     /**
+     * put log
+     *
+     * @param string             $targetId target id
+     * @param UserInterface|null $user     user instance
+     * @param string             $option   counter option
+     * @param int                $point    point
+     * @return void
+     */
+    public function putPoint($targetId, UserInterface $user = null, $option = '', $point = 1)
+    {
+        $this->checkOption($option);
+        $this->checkGuest($user);
+
+        $query = $this->newModel()
+            ->where('targetId', $targetId)
+            ->where('counterName', $this->name)
+            ->where('counterOption', $point);
+        if ($user == null || $user instanceof Guest) {
+            $userId= '';
+        } else {
+            $userId = $user->getId();
+        }
+        $counterLog = $query->where('userId', $userId)->first();
+
+        if ($counterLog !== null) {
+            $counterLog->point = $point;
+            $counterLog->save();
+        }
+    }
+
+    /**
      * get users
      *
      * @param string $targetId target id
