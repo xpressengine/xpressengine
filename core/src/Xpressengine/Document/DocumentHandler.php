@@ -269,7 +269,7 @@ class DocumentHandler
         $doc->getConnection()->beginTransaction();
 
         $doc->pureContent = $doc->getPureContent($doc->content);
-        $doc->checkRequired($doc->toArray());
+        $doc->checkRequired($doc->getAttributes());
         $doc->save();
 
         $this->removeDivision($doc);
