@@ -137,6 +137,10 @@ class ModuleValidator implements ValidatorInterface
      */
     private function canReview(Route $route, Request $request)
     {
+        if (!is_null($route->getCompiled()->getHostRegex())) {
+            return false;
+        }
+
         $firstSegment = $request->segment(1);
 
         if ($firstSegment === null) {
