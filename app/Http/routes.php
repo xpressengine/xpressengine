@@ -565,8 +565,21 @@ Route::settings(
             ]
         );
 
+        Route::post(
+            '/',
+            [
+                'as' => 'settings.plugins.install',
+                'uses' => 'PluginController@install'
+            ]
+        );
+
+        Route::delete('operation', [
+            'as' => 'settings.plugins.operation.delete',
+            'uses' => 'PluginController@deleteOperation'
+        ]);
+
         Route::get(
-            '{pluginId?}',
+            '{pluginId}',
             [
                 'as' => 'settings.plugins.show',
                 'uses' => 'PluginController@show',
