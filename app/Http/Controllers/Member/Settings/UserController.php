@@ -81,7 +81,7 @@ class UserController extends Controller
             );
         }
 
-        $users = $query->paginate();
+        $users = $query->orderBy('createdAt', 'desc')->paginate();
 
         // get all groups
         $groups = $this->handler->groups()->all();
