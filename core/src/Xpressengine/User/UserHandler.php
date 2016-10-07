@@ -535,7 +535,7 @@ class UserHandler
         }
 
         // resolve group
-        $groups = array_get($userData, 'groupId', []);
+        $groups = array_get($userData, 'groupId');
 
         // email, displayName, introduction, password, status, rating
         $userData = array_except($userData, ['groupId', 'profileImgFile']);
@@ -547,15 +547,8 @@ class UserHandler
         $user->save();
 
         // join new group
-        $changes = $user->groups()->sync($groups);
-
-        $attachedList = $this->groups()->findMany($changes['attached']);
-        foreach ($attachedList as $attached) {
-            $attached->increment('count');
-        }
-        $detachedList = $this->groups()->findMany($changes['detached']);
-        foreach ($detachedList as $detached) {
-            $detached->decrement('count');
+        if($groups !== null) {
+            $changes = $user->groups()->sync($groups);
         }
 
         return $user;

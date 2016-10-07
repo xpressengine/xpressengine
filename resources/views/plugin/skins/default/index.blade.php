@@ -62,8 +62,7 @@
                     @foreach($plugins as $plugin)
 
                     <!--[D] 플러그인 비활성화  상태off, 업데이트 필요 시 update 클래스 추가 -->
-                    <li class="list-group-item @if($plugin->needUpdateInstall() || $plugin->hasUpdate())update @else __xe_no-update @endif @if( ! $plugin->isActivated() )off @endif">
-
+                    <li class="list-group-item @if( ! $plugin->isActivated() )off @endif">
                         <div class="left-group">
                             <a href="{{ route('settings.plugins.show', [$plugin->getId()]) }}" class="plugin-title">{{ $plugin->getTitle() }}</a>
                             <dl>
