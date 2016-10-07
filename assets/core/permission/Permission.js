@@ -1,5 +1,7 @@
 System.amdDefine(['vendor:/react', 'vendor:/react-dom', 'jquery', 'PermissionRadioComp', 'PermissionInclude', 'PermissionExclude'], function(React, ReactDOM, $, PermissionRadioComp, PermissionInclude, PermissionExclude) {
 
+    $.noConflict();
+
     var Permission = React.createClass({
         displayName: 'Permission',
 
