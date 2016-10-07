@@ -14,15 +14,17 @@
             var loc = exports.location;
             var url = "assets/core/common/js/utils.js";
             var baseURL = loc.protocol + '//' + loc.host + '/';
-            var el = document.createElement( 'script' );
 
-            el.src = baseURL + url;
-            el.async = true;
-            el.onload = cb;
+            if(!_assets.js.hasOwnProperty(baseURL + url)) {
+                var el = document.createElement( 'script' );
+                el.src = baseURL + url;
+                el.async = true;
+                el.onload = cb;
 
-            document.head.appendChild(el);
+                document.head.appendChild(el);
 
-            _assets.js[baseURL + url] = '';
+                _assets.js[baseURL + url] = '';
+            }
         };
 
         return {
