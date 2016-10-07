@@ -47,6 +47,16 @@ class WidgetboxMigration extends Migration {
         }
     }
 
+    public function initialized()
+    {
+        // dashboard setting
+        $handler = app('xe.widgetbox');
+        $dashboard = $handler->find('dashboard');
+        if($dashboard === null) {
+            $handler->create(['id'=>'dashboard', 'title'=>'dashboard']);
+        }
+    }
+
     protected function check()
     {
         // check table
@@ -54,7 +64,13 @@ class WidgetboxMigration extends Migration {
             return false;
         }
 
+        // check permission
         if(app('xe.permission')->get('widgetbox') === null) {
+            return false;
+        }
+
+        // check dashboard widgetbox
+        if(app('xe.widgetbox')->find('dashboard') === null) {
             return false;
         }
 
@@ -65,14 +81,10 @@ class WidgetboxMigration extends Migration {
     {
         $this->install();
         $this->init();
+        $this->initialized();
     }
 
     public function checkUpdated($installedVersion = null)
-    {
-        return $this->check();
-    }
-
-    public function checkInstalled()
     {
         return $this->check();
     }

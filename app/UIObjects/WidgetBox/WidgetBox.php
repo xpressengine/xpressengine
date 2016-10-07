@@ -20,12 +20,19 @@ class WidgetBox extends AbstractUIObject
     {
         $args = $this->arguments;
 
+        $widgetbox = null;
         $id = array_get($args, 'id');
+
+        if($id === null) {
+            $widgetbox = array_get($args, 'widgetbox');
+        }
 
         $handler = app('xe.widgetbox');
         $parser = app('xe.widget.parser');
 
-        $widgetbox = $handler->find($id);
+        if($widgetbox === null) {
+            $widgetbox = $handler->find($id);
+        }
 
         $content = null;
         if($widgetbox) {
