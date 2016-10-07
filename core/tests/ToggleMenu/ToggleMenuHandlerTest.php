@@ -31,7 +31,7 @@ class ToggleMenuHandlerTest extends \PHPUnit_Framework_TestCase
             ->andReturn(['someTypemenu/xe@somemenu1', 'someTypemenu/xe@somemenu2']);
 
         $cfg->shouldReceive('get')->once()->with('toggleMenu@someType.someInstance')->andReturnNull();
-        $cfg->shouldReceive('set')
+        $cfg->shouldReceive('put')
             ->once()
             ->with('toggleMenu@someType.someInstance', [])
             ->andReturn($mockConfig);
@@ -61,7 +61,7 @@ class ToggleMenuHandlerTest extends \PHPUnit_Framework_TestCase
             ->andReturn(['someTypemenu/xe@somemenu1', 'someTypemenu/xe@somemenu2']);
 
         $cfg->shouldReceive('get')->once()->with('toggleMenu@someType.someInstance')->andReturnNull();
-        $cfg->shouldReceive('set')
+        $cfg->shouldReceive('put')
             ->once()
             ->with('toggleMenu@someType.someInstance', [])
             ->andReturn($mockConfig);
@@ -96,7 +96,7 @@ class ToggleMenuHandlerTest extends \PHPUnit_Framework_TestCase
             ->andReturn(['someTypemenu/xe@somemenu1', 'someTypemenu/xe@somemenu2']);
 
         $cfg->shouldReceive('get')->once()->with('toggleMenu@someType.someInstance')->andReturnNull();
-        $cfg->shouldReceive('set')
+        $cfg->shouldReceive('put')
             ->once()
             ->with('toggleMenu@someType.someInstance', [])
             ->andReturn($mockConfig);
