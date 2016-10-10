@@ -25,6 +25,7 @@ $__System.registerDynamic("1", [], false, function($__require, $__exports, $__mo
             seq: LangEditor.seq,
             name: this.props.name,
             langKey: this.props.langKey,
+            requestUrl: this.props.requestUrl,
             multiline: this.props.multiline,
             lines: this.props.lines,
             autocomplete: this.props.autocomplete
@@ -33,7 +34,7 @@ $__System.registerDynamic("1", [], false, function($__require, $__exports, $__mo
       });
       var LangEditor = React.createClass({
         displayName: "LangEditor",
-        statics: {seq: 0},
+        statics: {seq: 0, searchUrl: ''},
         getInitialState: function() {
           var lines = this.props.lines || [];
           return {lines: lines};
@@ -68,7 +69,7 @@ $__System.registerDynamic("1", [], false, function($__require, $__exports, $__mo
                 $.ajax({
                   type: 'get',
                   dataType: 'json',
-                  url: xeBaseURL + '/' + XE.options.managePrefix + '/lang/lines/' + this.props.langKey,
+                  url: this.props.requestUrl,
                   success: function(result) {
                     if (this.isMounted()) {
                       self.setLines(result);
@@ -79,7 +80,8 @@ $__System.registerDynamic("1", [], false, function($__require, $__exports, $__mo
             }
             if (this.props.autocomplete) {
               $(el).find('input[type=text]:first,textarea:first').autocomplete({
-                source: '/' + XE.options.managePrefix + '/lang/search/' + XE.Lang.locales[0],
+                //source: '/' + XE.options.managePrefix + '/lang/search/' + XE.Lang.locales[0],
+                source: self.searchUrl,
                 minLength: 1,
                 focus: function(event, ui) {
                   event.preventDefault();
@@ -153,24 +155,22 @@ $__System.registerDynamic("1", [], false, function($__require, $__exports, $__mo
           }))));
         }
       });
-      window.langEditorBoxRender = function($o) {
-        var name = $o.data('name'),
-            langKey = $o.data('lang-key'),
-            multiline = $o.data('multiline'),
-            lines = $o.data('lines'),
-            autocomplete = $o.data('autocomplete');
-        ReactDOM.render(React.createElement(LangEditorBox, {
-          name: name,
-          langKey: langKey,
-          multiline: multiline,
-          lines: lines,
-          autocomplete: autocomplete
-        }), $o[0]);
+      window.langEditorBoxRender = function($boxes, searchUrl) {
+        LangEditor.searchUrl = searchUrl;
+        $boxes.each(function(){
+          var $box = $(this);
+          ReactDOM.render(React.createElement(LangEditorBox, {
+            name: $box.data('name'),
+            langKey: $box.data('lang-key'),
+            requestUrl: $box.data('request-url'),
+            multiline: $box.data('multiline'),
+            lines: $box.data('lines'),
+            autocomplete: $box.data('autocomplete')
+          }), this);
+        })
       };
       $(function() {
-        $('.lang-editor-box').each(function(i) {
-          langEditorBoxRender($(this));
-        });
+        langEditorBoxRender($('.lang-editor-box'), window.langSearchUrl);
         $(document).on('focus', '.lang-editor-box input, textarea', function() {
           var box = $(this).closest('.lang-editor-box');
           var el = box.find('.sub');
