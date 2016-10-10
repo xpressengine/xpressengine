@@ -573,6 +573,11 @@ Route::settings(
             ]
         );
 
+        Route::get('operation', [
+            'as' => 'settings.plugins.operation',
+            'uses' => 'PluginController@getOperation'
+        ]);
+
         Route::delete('operation', [
             'as' => 'settings.plugins.operation.delete',
             'uses' => 'PluginController@deleteOperation'

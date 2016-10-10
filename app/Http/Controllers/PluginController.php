@@ -54,20 +54,7 @@ class PluginController extends Controller
         $provider->sync($plugins);
         $componentTypes = $this->getComponentTypes();
 
-        $operation = $this->getPluginOperationInfo($writer);
-
-        if($operation !== null) {
-            $runnings = array_get($operation, 'runnings', []);
-            $runningsInfo = [];
-            if(!empty($runnings)) {
-                $package = key($runnings);
-                list(, $id) = explode('/', $package);
-                $version = current($runnings);
-                $runningsInfo[$package] = $provider->find($id);
-                $runningsInfo[$package]->pluginId = $id;
-            }
-            $operation['runningsInfo'] = $runningsInfo;
-        }
+        $operation = $this->getPluginOperationInfo($writer, $provider);
 
         return XePresenter::make('index', compact('plugins', 'componentTypes', 'operation'));
     }
@@ -75,15 +62,16 @@ class PluginController extends Controller
     /**
      * getPluginOperationInfo
      *
-     * @param $writer
+     * @param ComposerFileWriter $writer
+     * @param PluginProvider     $provider
      *
      * @return array
      */
-    private function getPluginOperationInfo($writer)
+    private function getPluginOperationInfo(ComposerFileWriter $writer, PluginProvider $provider)
     {
-        // status가 없거나 success일 경우, return void
-        $status = $writer->get('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_SUCCESSED);
-        if($status === ComposerFileWriter::STATUS_SUCCESSED) {
+        $status = $writer->get('xpressengine-plugin.operation.status');
+
+        if($status === null) {
             return null;
         }
 
@@ -99,12 +87,12 @@ class PluginController extends Controller
             $runnings = $writer->get("xpressengine-plugin.operation.uninstall", []);
         }
 
-        // 실행중인 operation이 없을 경우, return void
+        // operation이 없을 경우, return void
         if(empty($runnings)) {
             return null;
         }
 
-        // 실행중인 operation이 있다.
+        // operation이 있다.
 
         // expired 조사
         $deadline = $writer->get('xpressengine-plugin.operation.expiration_time');
@@ -116,12 +104,36 @@ class PluginController extends Controller
             }
         }
 
-        $failed = false;
-        if($expired === true) {
-            $failed = true;
+        $runningsInfo = [];
+        if(!empty($runnings)) {
+            $package = key($runnings);
+            list(, $id) = explode('/', $package);
+            $version = current($runnings);
+            $runningsInfo[$package] = $provider->find($id);
+            $runningsInfo[$package]->pluginId = $id;
         }
 
-        return compact('runnings', 'failed', 'runningMode', 'expired');
+        $changed = $writer->get('xpressengine-plugin.operation.changed', []);
+        foreach($changed as $type) {
+            foreach($type as $package => $version) {
+                list(, $id) = explode('/', $package);
+                if(!isset($runningsInfo[$package])) {
+                    $runningsInfo[$package] = $provider->find($id);
+                }
+            }
+        }
+
+        if ($status === ComposerFileWriter::STATUS_RUNNING && $expired === true) {
+            $status = 'expired';
+        }
+
+        return compact('runnings', 'status', 'runningMode', 'expired', 'changed', 'runningsInfo');
+    }
+
+    public function getOperation(ComposerFileWriter $writer, PluginProvider $provider)
+    {
+        $operation = $this->getPluginOperationInfo($writer, $provider);
+        return XePresenter::makeApi(compact('operation'));
     }
 
     public function deleteOperation(ComposerFileWriter $writer)
@@ -155,13 +167,13 @@ class PluginController extends Controller
         $name = $pluginData->name;
         $version = $pluginData->latest_release->version;
 
-        $operation = $this->getPluginOperationInfo($writer);
+        $operation = $this->getPluginOperationInfo($writer, $provider);
 
-        if ($operation) {
+        if ($operation['status'] === ComposerFileWriter::STATUS_RUNNING) {
             throw new HttpException(422, "이미 진행중인 요청이 있습니다.");
         }
 
-        $writer->reset();
+        $writer->reset()->cleanOperation();
         $writer->install($name, $version, Carbon::now()->addSeconds(150)->toDateTimeString())->write();
         $this->reserveInstall($writer, $name, $version);
 
@@ -207,11 +219,6 @@ class PluginController extends Controller
         }
 
         /** @var \Illuminate\Foundation\Application $app */
-        //app()->terminating(
-        //    function(){
-        //        sleep(5);
-        //    }
-        //);
         app()->terminating(
             function () use ($writer, $name, $version) {
                 auth()->logout();
@@ -242,10 +249,13 @@ class PluginController extends Controller
                 $outputText = $output->fetch();
                 file_put_contents(storage_path('logs/plugin.log'), $outputText);
 
+                $writer->load();
                 if($code !== 0) {
+                    $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_FAILED);
+                } else {
                     $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_SUCCESSED);
-                    $writer->write();
                 }
+                $writer->write();
 
                 Log::info(
                     "[plugin install] plugin installation finished. [exit code: $code, memory usage: ".memory_get_usage(

@@ -9,6 +9,11 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="panel-group" id="accordion">
+
+            @if($operation)
+                @include($_skin::view('operation'))
+            @endif
+
             <div class="panel">
                 {{-- heading --}}
                 <div class="panel-heading">
@@ -56,22 +61,17 @@
                         </div>
                     </div>
 
-                    @if(!$operation)
+                    @if(!$operation['status'] !== 'running')
                     <div class="pull-right">
                         <div class="btn-group">
                             <button type="button" data-toggle="modal" data-target="#installPlugin" class="btn btn-primary">새로 설치</button>
                         </div>
                     </div>
                     @endif
-
                 </div>
 
                 {{-- plugin list --}}
                 <ul class="list-group list-plugin">
-
-                @if($operation)
-                    @include($_skin::view('operation'))
-                @endif
 
                 @foreach($plugins as $plugin)
                     <!--[D] 플러그인 비활성화  상태off, 업데이트 필요 시 update 클래스 추가 -->

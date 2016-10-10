@@ -107,7 +107,7 @@ class Composer
 
         // XE가 설치돼 있지 않을 경우, resolve plugins
         $writer = self::getWriter($path);
-        $writer->resolvePlugins()->setFixMode()->write();
+        $writer->reset()->write();
     }
 
     /**

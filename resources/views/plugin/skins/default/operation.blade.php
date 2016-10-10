@@ -1,51 +1,43 @@
-@foreach($operation['runnings'] as $package => $version)
-<li class="list-group-item off __xe_operation">
-    <div class="left-group">
-        <a href="#" target="_blank" class="plugin-title">{{ data_get($operation['runningsInfo'], $package.'.title') }}</a>
-        <dl>
-            <dt class="sr-only">version</dt>
-            <dd>Version {{ $version }}</dd>
-            <dt class="sr-only">{{ xe_trans('xe::author') }}</dt>
-            <dt class="sr-only">{{ xe_trans('xe::installPath') }}</dt>
-            <dd>plugins/{{ data_get($operation['runningsInfo'], $package.'.pluginId') }}</dd>
-        </dl>
-    </div>
-    <div class="btn-right">
-        <span class="btn-link">
-            @if($operation['failed'])
-                설치실패
-                @if($operation['expired'])
-                    (제한시간 초과)
-                @endif
-            @else
-                설치중..
-            @endif
-        </span>
-    @if($operation['failed'])
-            <a class="btn-link __xe_deleteOperation" href="{{ route('settings.plugins.operation.delete') }}">삭제</a>
-        @endif
-    </div>
-</li>
-@endforeach
+<div class="panel">
+    <div class="panel-body">
+        <strong>최근작업</strong>
 
-{!! app('xe.frontend')->html('plugin.delete-operation')->content("
-<script>
-    $(function($) {
-        $('.__xe_deleteOperation').click(function(){
-            $.ajax({
-                url: this.href,
-                type: 'DELETE',
-                dataType: 'json',
-                success: function (data, textStatus, jqXHR) {
-                    XE.toast('success', data.message);
-                    $('.__xe_operation').remove();
-                },
-                error: function (data, textStatus, errorThrown) {
-                    XE.toast('fail', data.message);
-                }
-            });
-            return false;
-        })
-    });
-</script>
-")->load() !!}
+        @if($operation['status'] !== 'running')
+        <div class="pull-right">
+            <span class="btn-link">
+                삭제
+            </span>
+        </div>
+        @endif
+        <hr>
+        <label for="">작업</label>
+        @foreach($operation['runnings'] as $package => $version)
+        <p>{{ data_get($operation['runningsInfo'], $package.'.title') }}({{ data_get($operation['runningsInfo'], $package.'.pluginId') }}) ver.{{ $version }} {{ array_get(['install'=>'설치','update'=>'업데이트','uninstall'=>'삭제'], $operation['runningMode']) }}</p>
+        @endforeach
+
+        <label for="">상태</label>
+        <p>
+        @if($operation['status'] === 'successed')
+            성공
+        @elseif($operation['status'] === 'failed')
+            실패
+        @elseif($operation['status'] === 'expired')
+            실패(제한시간 초과)
+        @else
+            진행중
+        @endif
+        </p>
+
+        @if($operation['status'] === 'successed')
+        <label for="">변경내역</label>
+        @foreach($operation['changed'] as $mode => $plugins)
+        <p>
+            @foreach($plugins as $plugin => $version)
+                {{ $plugin }} ver.{{ $version }} {{ $mode }}
+            @endforeach
+        </p>
+        @endforeach
+        @endif
+
+    </div>
+</div>

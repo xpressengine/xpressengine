@@ -332,6 +332,7 @@ class ComposerFileWriter
     const STATUS_RUNNING   = 'running';
     const STATUS_SUCCESSED = 'successed';
     const STATUS_FAILED    = 'failed';
+    const STATUS_EXPIRED    = 'expired';
 
     /**
      * @var string
@@ -446,11 +447,21 @@ class ComposerFileWriter
         }
         array_set($this->data, 'require', $requires);
         array_set($this->data, 'replace', $replace);
-        array_set($this->data, 'xpressengine-plugin.operation', []);
 
         // set fix mode
         $this->setFixMode();
 
+        return $this;
+    }
+
+    /**
+     * 현재 실행중인 작업에 대한 정보를 초기화 한다.
+     *
+     * @return $this
+     */
+    public function cleanOperation()
+    {
+        array_set($this->data, 'xpressengine-plugin.operation', []);
         return $this;
     }
 
