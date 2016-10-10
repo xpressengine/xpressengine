@@ -135,7 +135,7 @@ class ToggleMenuHandler
         if (count($keys) > 0) {
             $config = ['activate' => $keys];
         }
-        return $this->cfg->set($this->getConfigKey($id, $instanceId), $config);
+        return $this->cfg->put($this->getConfigKey($id, $instanceId), $config);
     }
 
     /**

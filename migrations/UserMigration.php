@@ -115,7 +115,6 @@ class UserMigration extends Migration {
             $table->string('token')->index();
             $table->timestamp('created_at');
         });
-
     }
 
     public function installed()
@@ -150,6 +149,48 @@ class UserMigration extends Migration {
 
         // set admin's group
         auth()->user()->joinGroups($joinGroup);
-
     }
+
+    /**
+     * 서비스가 업데이트되었을 경우, update()메소드를 실행해야 하는지의 여부를 체크한다.
+     * update()메소드를 실행해야 한다면 false를 반환한다.
+     *
+     * @param string $installedVersion current version
+     *
+     * @return bool
+     */
+    public function checkUpdated($installedVersion = null)
+    {
+        // ver.3.0.0-beta.6
+        if (Schema::hasColumn('user_group', 'count')) {
+            return false;
+        }
+        if (!Schema::hasColumn('user_account', 'tokenSecret')) {
+            return false;
+        }
+    }
+
+    /**
+     * update 코드를 실행한다.
+     *
+     * @param string $installedVersion current version
+     *
+     * @return mixed
+     */
+    public function update($installedVersion = null)
+    {
+        // ver.3.0.0-beta.6
+        if (Schema::hasColumn('user_group', 'count')) {
+            Schema::table('user_group', function ($table) {
+                $table->dropColumn('count');
+            });
+        }
+        if (!Schema::hasColumn('user_account', 'tokenSecret')) {
+            Schema::table('user_account', function ($table) {
+                $table->string('tokenSecret', 500);
+            });
+        }
+    }
+
+
 }

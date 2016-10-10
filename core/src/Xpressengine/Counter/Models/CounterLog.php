@@ -43,6 +43,11 @@ class CounterLog extends DynamicModel
     protected $table = 'counter_log';
 
     /**
+     * @var bool
+     */
+    public $timestamps = false;
+
+    /**
      * User relationship
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
@@ -57,6 +62,7 @@ class CounterLog extends DynamicModel
      *
      * @param mixed $value value
      * @return $this
+     * @deprecated As of 3.0.0-beta6
      */
     public function setUpdatedAt($value)
     {

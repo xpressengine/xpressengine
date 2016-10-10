@@ -98,6 +98,8 @@ class TagHandler
      */
     public function set($taggableId, array $words, $instanceId = null)
     {
+        $words = array_unique($words);
+        
         $model = $this->createModel();
         $tags = $model->newQuery()->where('instanceId', $instanceId)->whereIn('word', $words)->get();
 

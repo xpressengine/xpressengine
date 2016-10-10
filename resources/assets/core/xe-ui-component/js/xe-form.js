@@ -34,7 +34,9 @@
                         , type: $this.attr("method")
                         , data: $this.serialize()
                         , dataType: 'json'
-                        , success: callbackFunc.call(callbackObj)
+                        , success: function(data, textStatus, jqXHR) {
+                            callbackFunc.call(callbackObj, data, textStatus, jqXHR)
+                        }
                     };
 
                     if(callbackFunc === '') {

@@ -49,9 +49,13 @@ class ModuleValidatorTest extends PHPUnit_Framework_TestCase
         $moduleValidator = new ModuleValidator();
         $moduleValidator->boot($routeRepo, $menuHandler, $themeHandler, $siteHandler);
 
+        $route->shouldReceive('getCompiled')->andReturnSelf();
+        $route->shouldReceive('getHostRegex')->andReturnNull();
+
         $request->shouldReceive('segment')->with(1)->andReturn('home');
         $route->shouldReceive('uri')->andReturn('');
         $route->shouldReceive('getAction')->andReturn([]);
+
 
         $result = $moduleValidator->matches($route, $request);
 
@@ -68,6 +72,9 @@ class ModuleValidatorTest extends PHPUnit_Framework_TestCase
         list($routeRepo, $menuHandler, $themeHandler, $siteHandler, $route, $request) = $this->getMocks();
         $moduleValidator = new ModuleValidator();
         $moduleValidator->boot($routeRepo, $menuHandler, $themeHandler, $siteHandler);
+
+        $route->shouldReceive('getCompiled')->andReturnSelf();
+        $route->shouldReceive('getHostRegex')->andReturnNull();
 
         $request->shouldReceive('segment')->with(1)->andReturn(null);
         $route->shouldReceive('getAction')->andReturn([
@@ -89,6 +96,9 @@ class ModuleValidatorTest extends PHPUnit_Framework_TestCase
         list($routeRepo, $menuHandler, $themeHandler, $siteHandler, $route, $request) = $this->getMocks();
         $moduleValidator = new ModuleValidator();
         $moduleValidator->boot($routeRepo, $menuHandler, $themeHandler, $siteHandler);
+
+        $route->shouldReceive('getCompiled')->andReturnSelf();
+        $route->shouldReceive('getHostRegex')->andReturnNull();
 
         $request->shouldReceive('segment')->with(1)->andReturn(null);
         $route->shouldReceive('getAction')->andReturn([
@@ -121,6 +131,9 @@ class ModuleValidatorTest extends PHPUnit_Framework_TestCase
         $moduleValidator = new ModuleValidator();
         $moduleValidator->boot($routeRepo, $menuHandler, $themeHandler, $siteHandler);
 
+        $route->shouldReceive('getCompiled')->andReturnSelf();
+        $route->shouldReceive('getHostRegex')->andReturnNull();
+
         $request->shouldReceive('segment')->with(1)->andReturn('home');
         $route->shouldReceive('uri')->andReturn('{module_pluginB_page}');
         $route->shouldReceive('getAction')->andReturn([
@@ -143,6 +156,9 @@ class ModuleValidatorTest extends PHPUnit_Framework_TestCase
         list($routeRepo, $menuHandler, $themeHandler, $siteHandler, $route, $request) = $this->getMocks();
         $moduleValidator = new ModuleValidator();
         $moduleValidator->boot($routeRepo, $menuHandler, $themeHandler, $siteHandler);
+
+        $route->shouldReceive('getCompiled')->andReturnSelf();
+        $route->shouldReceive('getHostRegex')->andReturnNull();
 
         $request->shouldReceive('segment')->with(1)->andReturn('home');
         $route->shouldReceive('uri')->andReturn('{module_pluginB_page}');
@@ -167,6 +183,9 @@ class ModuleValidatorTest extends PHPUnit_Framework_TestCase
         $moduleValidator = new ModuleValidator();
         $moduleValidator->boot($routeRepo, $menuHandler, $themeHandler, $siteHandler);
 
+        $route->shouldReceive('getCompiled')->andReturnSelf();
+        $route->shouldReceive('getHostRegex')->andReturnNull();
+        
         $request->shouldReceive('segment')->with(1)->andReturn('board');
         $route->shouldReceive('getAction')->andReturn([
             'as' => 'test.root.match',

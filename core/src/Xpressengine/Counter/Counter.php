@@ -198,6 +198,7 @@ class Counter
 
         $counterLog->point = $point;
         $counterLog->ipaddress = $this->request->ip();
+        $counterLog->createdAt = $counterLog->freshTimestamp();
 
         $counterLog->save();
     }
@@ -295,7 +296,7 @@ class Counter
         $query = $this->newModel()
             ->where('targetId', $targetId)
             ->where('counterName', $this->name)
-            ->where('counterOption', $point);
+            ->where('counterOption', $option);
         if ($user == null || $user instanceof Guest) {
             $userId= '';
         } else {

@@ -8,6 +8,5 @@
     </p>
 </div>
 <div class="xe-modal-footer">
-    <button type="button" class="xe-btn xe-btn-secondary" data-dismiss="xe-modal">취소</button>
-    <button type="button" class="xe-btn xe-btn-primary" data-dismiss="xe-modal">저장</button>
+    <button type="button" class="xe-btn xe-btn-secondary" data-dismiss="xe-modal">{{ xe_trans('xe::confirm') }}</button>
 </div>
