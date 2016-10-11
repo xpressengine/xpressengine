@@ -1,11 +1,11 @@
 <?php
 /**
- * This file is Temporary package service provider.
+ * This file is Draft package service provider.
  *
  * PHP version 5
  *
- * @category    Temporary
- * @package     Xpressengine\Temporary
+ * @category    Draft
+ * @package     Xpressengine\Draft
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -15,16 +15,16 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Xpressengine\Temporary\TemporaryHandler;
-use Xpressengine\Temporary\TemporaryRepository;
+use Xpressengine\Draft\DraftHandler;
+use Xpressengine\Draft\DraftRepository;
 
 /**
  * laravel 에서의 사용을 위한 등록 처리
  *
- * @category    Temporary
- * @package     Xpressengine\Temporary
+ * @category    Draft
+ * @package     Xpressengine\Draft
  */
-class TemporaryServiceProvider extends ServiceProvider
+class DraftServiceProvider extends ServiceProvider
 {
     /**
      * Indicates if loading of the provider is deferred.
@@ -51,11 +51,11 @@ class TemporaryServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(
-            'xe.temporary',
+            'xe.draft',
             function ($app) {
-                $proxyClass = $app['xe.interception']->proxy(TemporaryHandler::class, 'XeTemporary');
+                $proxyClass = $app['xe.interception']->proxy(DraftHandler::class, 'XeDraft');
                 return new $proxyClass(
-                    new TemporaryRepository($app['xe.db']->connection(), $app['xe.keygen']), $app['auth']
+                    new DraftRepository($app['xe.db']->connection(), $app['xe.keygen']), $app['auth']
                 );
             },
             true
@@ -69,6 +69,6 @@ class TemporaryServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return ['xe.temporary'];
+        return ['xe.draft'];
     }
 }
