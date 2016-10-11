@@ -75,6 +75,9 @@ class Composer
                     $event->getOutput()->writeln("xpressengine-installer: skip installation of existing plugin: $plugin");
                 }
             }
+            if (!defined('__XE_PLUGIN_MODE__')) {
+                define('__XE_PLUGIN_MODE__', true);
+            }
             static::applyRequire($writer);
             $event->getOutput()->writeln("xpressengine-installer: running in update mode");
         } else {
