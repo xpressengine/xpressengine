@@ -30,11 +30,7 @@ class ToggleMenuHandlerTest extends \PHPUnit_Framework_TestCase
             ->with('activate', [])
             ->andReturn(['someTypemenu/xe@somemenu1', 'someTypemenu/xe@somemenu2']);
 
-        $cfg->shouldReceive('get')->once()->with('toggleMenu@someType.someInstance')->andReturnNull();
-        $cfg->shouldReceive('put')
-            ->once()
-            ->with('toggleMenu@someType.someInstance', [])
-            ->andReturn($mockConfig);
+        $cfg->shouldReceive('getOrNew')->once()->with('toggleMenu@someType.someInstance')->andReturn($mockConfig);
 
         $register->shouldReceive('get')->once()->andReturn([
             'someTypemenu/xe@somemenu1' => ItemClass::class,
@@ -60,11 +56,7 @@ class ToggleMenuHandlerTest extends \PHPUnit_Framework_TestCase
             ->with('activate', [])
             ->andReturn(['someTypemenu/xe@somemenu1', 'someTypemenu/xe@somemenu2']);
 
-        $cfg->shouldReceive('get')->once()->with('toggleMenu@someType.someInstance')->andReturnNull();
-        $cfg->shouldReceive('put')
-            ->once()
-            ->with('toggleMenu@someType.someInstance', [])
-            ->andReturn($mockConfig);
+        $cfg->shouldReceive('getOrNew')->once()->with('toggleMenu@someType.someInstance')->andReturn($mockConfig);
 
         $register->shouldReceive('get')->once()->andReturn([
             'someTypemenu/xe@somemenu1' => ItemClass::class,
@@ -95,11 +87,7 @@ class ToggleMenuHandlerTest extends \PHPUnit_Framework_TestCase
             ->with('activate', [])
             ->andReturn(['someTypemenu/xe@somemenu1', 'someTypemenu/xe@somemenu2']);
 
-        $cfg->shouldReceive('get')->once()->with('toggleMenu@someType.someInstance')->andReturnNull();
-        $cfg->shouldReceive('put')
-            ->once()
-            ->with('toggleMenu@someType.someInstance', [])
-            ->andReturn($mockConfig);
+        $cfg->shouldReceive('getOrNew')->once()->with('toggleMenu@someType.someInstance')->andReturn($mockConfig);
 
         $register->shouldReceive('get')->twice()->andReturn([
             'someTypemenu/xe@somemenu1' => ItemClass::class,
