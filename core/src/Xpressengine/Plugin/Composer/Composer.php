@@ -76,7 +76,6 @@ class Composer
                 }
             }
             static::applyRequire($writer);
-            $writer->setFixMode();
             $event->getOutput()->writeln("xpressengine-installer: running in update mode");
         } else {
             static::applyRequire($writer);
