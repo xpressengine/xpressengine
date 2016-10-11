@@ -107,8 +107,12 @@ class Composer
     {
         $path = static::$composerFile;
 
-        // XE가 설치돼 있지 않을 경우, resolve plugins
         $writer = self::getWriter($path);
+
+        if (!file_exists(static::$installedFlagPath)) {
+            $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_SUCCESSED);
+        }
+
         $writer->reset()->write();
     }
 
