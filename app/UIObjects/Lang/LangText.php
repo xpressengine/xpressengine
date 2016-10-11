@@ -36,20 +36,22 @@ class LangText extends AbstractUIObject
             ]
         )->load();
 
+        $locale = app('xe.translator')->getLocale();
+        XeFrontend::html('lang.set-url')->content("
+            <script>
+                var langSearchUrl = '".route('settings.lang.search', ['locale'=>$locale])."';
+            </script>
+        ")->appendTo('head')->load();
+
         $langKey = htmlspecialchars(array_get($args, 'langKey', array_get($args, 'value')), ENT_QUOTES, 'UTF-8');
+        $url = route('settings.lang.lines.key', ['key'=>$langKey]);
         $autocomplete = Config::get('xe.lang.autocomplete');
 
         return "<div class=\"lang-editor-box\""
             . " data-name=\"{$args['name']}\""
             . " data-lang-key=\"{$langKey}\""
+            . " data-request-url=\"{$url}\""
             . " data-autocomplete=\"{$autocomplete}\"></div>";
     }
 
-    public static function boot()
-    {
-    }
-
-    public static function getSettingsURI()
-    {
-    }
 }

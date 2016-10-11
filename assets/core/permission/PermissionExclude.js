@@ -1,5 +1,7 @@
 System.amdDefine(['vendor:/react', 'vendor:/react-dom', 'jquery', 'PermissionTagSuggestion', 'PermissionTag'], function(React, ReactDOM, $, PermissionTagSuggestion, PermissionTag) {
 
+    $.noConflict();
+    
     var Keys = {
         ENTER: 13,
         TAB: 9,
