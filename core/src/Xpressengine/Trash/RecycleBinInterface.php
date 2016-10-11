@@ -1,6 +1,6 @@
 <?php
 /**
- * WasteInterface
+ * RecycleBinInterface
  *
  * PHP version 5
  *
@@ -15,8 +15,9 @@
 namespace Xpressengine\Trash;
 
 /**
- * WasteInterface
- * > 휴지통 패키지에 등록하기 위해서 이 인터페이스를 따라야 한다.
+ * RecycleBinInterface
+ *
+ * 휴지통 패키지에 등록하기 위해서 이 인터페이스를 따라야 한다.
  *
  * @category    Trash
  * @package     Xpressengine\Trash
@@ -24,14 +25,11 @@ namespace Xpressengine\Trash;
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
- * @deprecated  As of 3.0.0-beta7 replaced by RecycleBinInterface
  */
-interface WasteInterface
+interface RecycleBinInterface
 {
-
     /**
      * 휴지통 이름 반환
-     *
      *
      * @return string
      */
