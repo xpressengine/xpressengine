@@ -138,7 +138,7 @@ class PluginController extends Controller
 
     public function deleteOperation(ComposerFileWriter $writer)
     {
-        $writer->reset()->write();
+        $writer->reset()->cleanOperation()->write();
         return XePresenter::makeApi(['type' => 'success', 'message' => '삭제되었습니다.']);
     }
 
