@@ -129,7 +129,7 @@ class PluginInstall extends PluginCommand
 
         // composer.plugins.json 파일을 다시 읽어들인다.
         $writer->load();
-        if ($result !== 0) {
+        if (!isset($result) || $result !== 0) {
             $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_FAILED);
         } else {
             $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_SUCCESSED);
