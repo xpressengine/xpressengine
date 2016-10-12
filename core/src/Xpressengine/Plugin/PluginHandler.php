@@ -200,6 +200,7 @@ class PluginHandler
         $installedVersion = $entity->getInstalledVersion();
 
         // 플러그인의 컴포넌트 정보를 셋팅한다
+        $entity->getObject();
         $this->register->addByEntity($entity);
 
         $this->updatePlugin($pluginId, false);

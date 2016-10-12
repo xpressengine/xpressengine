@@ -853,7 +853,7 @@ return [
         'ko' => '자동저장',
         'en' => 'Auto Save',
     ],
-    'tempSave' => [
+    'draftSave' => [
         'ko' => '임시저장',
         'en' => 'Manual Save',
     ],

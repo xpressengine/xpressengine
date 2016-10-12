@@ -1,7 +1,7 @@
 (function ($) {
     'use strict'
 
-    function Temporary(elem, key, callback, withForm, container)
+    function Draft(elem, key, callback, withForm, container)
     {
         this.key = key;
         this.elem = elem;
@@ -11,7 +11,7 @@
 
         this.interval = null;
 
-        this.temporaryId = null;
+        this.draftId = null;
         this.component = null;
 
         this.uid = null;
@@ -26,12 +26,12 @@
         return this;
     }
 
-    Temporary.prototype = {
+    Draft.prototype = {
         init: function () {
             this.uid = this._getUid();
 
             var self = this;
-            $(this.elem).on('input.temporary', function () {
+            $(this.elem).on('input.draft', function () {
                 self.saveEventHandler();
             });
 
@@ -69,16 +69,16 @@
 
             if ($(this.container).length < 1) {
                 $(this.elem).closest('form').after($container);
-                ReactDOM.render(React.createElement(TemporaryReact.Modal, config), $container[0], callback);
+                ReactDOM.render(React.createElement(DraftReact.Modal, config), $container[0], callback);
             } else {
                 var collapseClass = this._collapseClass();
                 $container.addClass([collapseClass, 'collapse'].join(' '));
                 $(this.container).addClass([collapseClass, 'collapse', 'in'].join(' ')).after($container);
-                ReactDOM.render(React.createElement(TemporaryReact.Collapse, $.extend(config, {collapseClass: collapseClass})), $container[0], callback);
+                ReactDOM.render(React.createElement(DraftReact.Collapse, $.extend(config, {collapseClass: collapseClass})), $container[0], callback);
             }
         },
         _collapseClass: function () {
-            return '__xe_temporary_collapse_' + this.uid;
+            return '__xe_draft_collapse_' + this.uid;
         },
         saveEventHandler: function () {
             var self = this;
@@ -94,12 +94,12 @@
                 clearTimeout(this.interval);
             }
         },
-        tempSet: function () {
+        draftSet: function () {
             if ($.trim($(this.elem).val()) == '') {
                 return;
             }
 
-            if (this.temporaryId == null) {
+            if (this.draftId == null) {
                 this.reqPost();
             } else {
                 this.reqPut();
@@ -107,27 +107,27 @@
         },
         reqPost: function () {
             $.ajax({
-                url: xeBaseURL + '/temporary/store',
+                url: xeBaseURL + '/draft/store',
                 type: 'post',
                 dataType: 'json',
                 data: this.getReqSerialize() + "&key=" + this.key,
                 success: function (json) {
-                    if (json.temporaryId === null) {
+                    if (json.draftId === null) {
                         this.unsetId();
                     } else {
-                        this.setId(json.temporaryId);
+                        this.setId(json.draftId);
                     }
                 }.bind(this)
             });
         },
         reqPut: function () {
             $.ajax({
-                url: xeBaseURL + '/temporary/update/' + this.temporaryId,
+                url: xeBaseURL + '/draft/update/' + this.draftId,
                 type: 'post',
                 dataType: 'json',
                 data: this.getReqSerialize(),
                 success: function (json) {
-                    if (json.temporaryId === null) {
+                    if (json.draftId === null) {
                         this.unsetId();
                     }
                 }.bind(this)
@@ -135,14 +135,14 @@
         },
         setAuto: function () {
             $.ajax({
-                url: xeBaseURL + '/temporary/setAuto',
+                url: xeBaseURL + '/draft/setAuto',
                 type: 'post',
                 data: this.getReqSerialize() + "&key=" + this.key
             });
         },
         deleteAuto: function () {
             $.ajax({
-                url: xeBaseURL + '/temporary/destroyAuto',
+                url: xeBaseURL + '/draft/destroyAuto',
                 type: 'post',
                 data: "key=" + this.key
             });
@@ -158,31 +158,31 @@
             return data + '&rep=' + $(this.elem).attr('name');
         },
         reqDelete: function (id) {
-            id = id || this.temporaryId;
+            id = id || this.draftId;
 
             if (!id) {
                 return;
             }
 
-            if (id == this.temporaryId) {
-                this.temporaryId = null;
+            if (id == this.draftId) {
+                this.draftId = null;
             }
 
             $.ajax({
-                url: xeBaseURL + '/temporary/destroy/' + id,
+                url: xeBaseURL + '/draft/destroy/' + id,
                 type: 'post',
                 dataType: 'json'
             });
         },
         setId: function (id) {
-            this.temporaryId = id;
+            this.draftId = id;
         },
         unsetId: function () {
-            this.temporaryId = null;
+            this.draftId = null;
         }
     };
 
-    var TemporaryReact = {
+    var DraftReact = {
         mixin: {
             getInitialState: function () {
                 return {
@@ -197,7 +197,7 @@
                 this.setState({loaded: false});
 
                 $.ajax({
-                    url: xeBaseURL + '/temporary',
+                    url: xeBaseURL + '/draft',
                     type: 'get',
                     dataType: 'json',
                     data: {key: this.props.keyVal},
@@ -208,15 +208,15 @@
             },
             getItems: function () {
                 return this.state.items.map(function (item, i) {
-                    return React.createElement(TemporaryReact.Item, {key: item.id, data: item, onApply: this.onApply, onRemove: this.onRemove});
+                    return React.createElement(DraftReact.Item, {key: item.id, data: item, onApply: this.onApply, onRemove: this.onRemove});
                 }.bind(this));
             }
         }
     };
 
-    TemporaryReact.Modal = React.createClass({
+    DraftReact.Modal = React.createClass({
 
-        mixins: [TemporaryReact.mixin],
+        mixins: [DraftReact.mixin],
 
         toggle: function () {
             $(ReactDOM.findDOMNode(this)).modal('toggle');
@@ -244,7 +244,7 @@
                                 React.DOM.button({type: "button", className: "close", "data-dismiss": "modal", "aria-label": "Close"},
                                     React.DOM.span({"aria-hidden": "true", dangerouslySetInnerHTML: {__html: "&times;"}})
                                 ),
-                                React.DOM.h4({className: "modal-title"}, "Temporary")
+                                React.DOM.h4({className: "modal-title"}, "Draft")
                             ),
                             React.DOM.div({className: "modal-body"},
                                 function () {
@@ -253,7 +253,7 @@
                                             React.DOM.i({className: 'xi-spinner-1 xi-spin xi-4x'})
                                         );
                                     } else {
-                                        return React.createElement(TemporaryReact.Box, {items: this.getItems()});
+                                        return React.createElement(DraftReact.Box, {items: this.getItems()});
                                     }
                                 }.call(this)
                             ),
@@ -267,9 +267,9 @@
         }
     });
 
-    TemporaryReact.Collapse = React.createClass({
+    DraftReact.Collapse = React.createClass({
 
-        mixins: [TemporaryReact.mixin],
+        mixins: [DraftReact.mixin],
 
         toggle: function () {
             $('.' + this.props.collapseClass).collapse('toggle');
@@ -298,7 +298,7 @@
                                         React.DOM.i({className: 'xi-spinner-1 xi-spin xi-4x'})
                                     );
                                 } else {
-                                    return React.createElement(TemporaryReact.Box, {items: this.getItems()});
+                                    return React.createElement(DraftReact.Box, {items: this.getItems()});
                                 }
                             }.call(this)
                         )
@@ -308,11 +308,11 @@
         }
     });
 
-    TemporaryReact.Box = React.createClass({
+    DraftReact.Box = React.createClass({
 
         render: function () {
             return (
-                React.DOM.div({className: 'temp_save_list'},
+                React.DOM.div({className: 'draft_save_list'},
                     React.DOM.ul(null, this.props.items)
                 )
             );
@@ -320,7 +320,7 @@
     });
 
 
-    TemporaryReact.Item = React.createClass({
+    DraftReact.Item = React.createClass({
         getInitialState: function () {
             return {
                 removed: false
@@ -351,19 +351,19 @@
 
             return (
                 React.DOM.li(null,
-                    React.DOM.a({href: '#', className: 'temp_title', onClick: this.onApply},
+                    React.DOM.a({href: '#', className: 'draft_title', onClick: this.onApply},
                         $($.parseHTML(this.props.data.val)).text()
                     ),
-                    React.DOM.div({className: 'temp_info'},
+                    React.DOM.div({className: 'draft_info'},
                         function () {
                             if (this.props.data.isAuto == 1) {
-                                return React.DOM.span({className: 'temp_state'}, XE.Lang.trans('xe::autoSave'));
+                                return React.DOM.span({className: 'draft_state'}, XE.Lang.trans('xe::autoSave'));
                             } else {
-                                return React.DOM.span({className: 'temp_state v2'}, XE.Lang.trans('xe::tempSave'));
+                                return React.DOM.span({className: 'draft_state v2'}, XE.Lang.trans('xe::draftSave'));
                             }
                         }.call(this),
-                        React.DOM.span({className: 'temp_date'}, this.getDate()),
-                        React.DOM.a({href: '#', className: 'btn_temp_delete', onClick: this.onRemove},
+                        React.DOM.span({className: 'draft_date'}, this.getDate()),
+                        React.DOM.a({href: '#', className: 'btn_draft_delete', onClick: this.onRemove},
                             React.DOM.i({className: 'xi-close'})
                         )
                     )
@@ -437,7 +437,7 @@
         }
     };
 
-    $.fn['temporary'] = function (args) {
+    $.fn['draft'] = function (args) {
         var defaultArgs = {
             container: null,
             withForm: false,
@@ -451,19 +451,19 @@
             return false;
         }
 
-        var temp = new Temporary(this, args.key, args.callback, args.withForm, args.container);
+        var draft = new Draft(this, args.key, args.callback, args.withForm, args.container);
 
-        $(args.btnLoad).unbind('click.temporary').bind('click.temporary', function (e) {
+        $(args.btnLoad).unbind('click.draft').bind('click.draft', function (e) {
             e.preventDefault();
 
-            temp.toggle();
+            draft.toggle();
         });
-        $(args.btnSave).unbind('click.temporary').bind('click.temporary', function (e) {
+        $(args.btnSave).unbind('click.draft').bind('click.draft', function (e) {
             e.preventDefault();
-            
-            temp.tempSet();
+
+            draft.draftSet();
         });
 
-        return temp;
+        return draft;
     };
 })(jQuery);

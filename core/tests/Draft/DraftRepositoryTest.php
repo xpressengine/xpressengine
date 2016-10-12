@@ -6,12 +6,12 @@
  * @link      https://xpressengine.io
  */
 
-namespace Xpressengine\Tests\Temporary;
+namespace Xpressengine\Tests\Draft;
 
 use Mockery as m;
-use Xpressengine\Temporary\TemporaryRepository;
+use Xpressengine\Draft\DraftRepository;
 
-class TemporaryRepositoryTest extends \PHPUnit_Framework_TestCase
+class DraftRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     public function tearDown()
     {
@@ -21,7 +21,7 @@ class TemporaryRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testFind()
     {
         list($conn, $keygen, $query) = $this->getMocks();
-        $instance = new TemporaryRepository($conn, $keygen);
+        $instance = new DraftRepository($conn, $keygen);
 
         $conn->shouldReceive('table')->andReturn($query);
         $query->shouldReceive('where')->once()->with('id', 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx')->andReturnSelf();
@@ -32,9 +32,9 @@ class TemporaryRepositoryTest extends \PHPUnit_Framework_TestCase
             'etc' => 'a:1:{s:3:"foo";s:3:"bar";}'
         ]);
 
-        $temporary = $instance->find('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx');
+        $draft = $instance->find('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx');
 
-        $array = $temporary->jsonSerialize();
+        $array = $draft->jsonSerialize();
         $this->assertEquals('baz', $array['val']);
         $this->assertEquals('bar', $array['etc']['foo']);
     }
@@ -42,7 +42,7 @@ class TemporaryRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testFetch()
     {
         list($conn, $keygen, $query) = $this->getMocks();
-        $instance = new TemporaryRepository($conn, $keygen);
+        $instance = new DraftRepository($conn, $keygen);
 
         $conn->shouldReceive('table')->andReturn($query);
         $query->shouldReceive('where')->once()->with('userId', 'userId')->andReturnSelf();
@@ -62,17 +62,17 @@ class TemporaryRepositoryTest extends \PHPUnit_Framework_TestCase
             ]
         ]);
 
-        $temporaries = $instance->fetch(['userId' => 'userId', 'key' => 'someKey']);
+        $drafts = $instance->fetch(['userId' => 'userId', 'key' => 'someKey']);
 
-        $this->assertEquals(2, count($temporaries));
+        $this->assertEquals(2, count($drafts));
     }
 
     public function testInsert()
     {
         list($conn, $keygen, $query) = $this->getMocks();
-        $instance = new TemporaryRepository($conn, $keygen);
+        $instance = new DraftRepository($conn, $keygen);
 
-        $mockEntity = m::mock('Xpressengine\Temporary\TemporaryEntity');
+        $mockEntity = m::mock('Xpressengine\Draft\DraftEntity');
         $mockEntity->shouldReceive('getAttributes')->andReturn([
             'key' => 'someKey',
             'val' => 'baz',
@@ -89,18 +89,18 @@ class TemporaryRepositoryTest extends \PHPUnit_Framework_TestCase
             && $array['id'] === 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx';
         }));
 
-        $temporary = $instance->insert($mockEntity);
+        $draft = $instance->insert($mockEntity);
 
-        $this->assertEquals('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', $temporary->id);
-        $this->assertEquals('someKey', $temporary->key);
+        $this->assertEquals('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', $draft->id);
+        $this->assertEquals('someKey', $draft->key);
     }
 
     public function testUpdate()
     {
         list($conn, $keygen, $query) = $this->getMocks();
-        $instance = new TemporaryRepository($conn, $keygen);
+        $instance = new DraftRepository($conn, $keygen);
 
-        $mockEntity = m::mock('Xpressengine\Temporary\TemporaryEntity');
+        $mockEntity = m::mock('Xpressengine\Draft\DraftEntity');
         $mockEntity->shouldReceive('getDirty')->andReturn(['val' => 'qux', 'etc' => 'a:1:{s:3:"foo";s:3:"baz";}']);
         $mockEntity->shouldReceive('getOriginal')->andReturn([
             'id' => 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
@@ -117,18 +117,18 @@ class TemporaryRepositoryTest extends \PHPUnit_Framework_TestCase
             return $array['val'] === 'qux' && $array['etc'] === 'a:1:{s:3:"foo";s:3:"baz";}';
         }));
 
-        $temporary = $instance->update($mockEntity);
+        $draft = $instance->update($mockEntity);
 
-        $this->assertEquals('qux', $temporary->val);
-        $this->assertEquals('a:1:{s:3:"foo";s:3:"baz";}', $temporary->etc);
+        $this->assertEquals('qux', $draft->val);
+        $this->assertEquals('a:1:{s:3:"foo";s:3:"baz";}', $draft->etc);
     }
 
     public function testDelete()
     {
         list($conn, $keygen, $query) = $this->getMocks();
-        $instance = new TemporaryRepository($conn, $keygen);
+        $instance = new DraftRepository($conn, $keygen);
 
-        $mockEntity = m::mock('Xpressengine\Temporary\TemporaryEntity');
+        $mockEntity = m::mock('Xpressengine\Draft\DraftEntity');
         $mockEntity->shouldReceive('get')->with('id')->andReturn('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx');
 
         $conn->shouldReceive('table')->andReturn($query);

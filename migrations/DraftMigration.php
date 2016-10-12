@@ -12,11 +12,11 @@ use Illuminate\Database\Schema\Blueprint;
 use Schema;
 use Xpressengine\Support\Migration;
 
-class TemporaryMigration extends Migration {
+class DraftMigration extends Migration {
 
     public function install()
     {
-        Schema::create('temporary', function (Blueprint $table) {
+        Schema::create('draft', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
             $table->string('id', '36');
@@ -29,5 +29,23 @@ class TemporaryMigration extends Migration {
 
             $table->primary('id');
         });
+    }
+
+    public function update($installedVersion = null)
+    {
+        // 3.0.0-beta.6
+        if (Schema::hasTable('temporary') && !Schema::hasTable('draft')) {
+            Schema::rename('temporary', 'draft');
+        }
+    }
+
+    public function checkUpdated($installedVersion = null)
+    {
+        // 3.0.0-beta.6
+        if (Schema::hasTable('temporary') && !Schema::hasTable('draft')) {
+            return false;
+        }
+
+        return true;
     }
 }
