@@ -37,7 +37,6 @@ Route::settings(
         Route::get(
             '/',
             ['as' => 'settings.dashboard', 'uses' => 'DashboardController@index', 'settings_menu' => ['dashboard']]
-
         );
     }
 );

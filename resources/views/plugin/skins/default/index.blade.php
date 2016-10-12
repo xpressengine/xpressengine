@@ -11,7 +11,9 @@
         <div class="panel-group" id="accordion">
 
             @if($operation)
+                <div class="__xe_operation">
                 @include($_skin::view('operation'))
+                </div>
             @endif
 
             <div class="panel">
@@ -126,9 +128,7 @@
                             </a>
                         </div>
                     </li>
-
                     @endforeach
-
                 </ul>
             </div>
         </div>
@@ -163,3 +163,27 @@
     }
 </script>
 ")->load() !!}
+
+@if($operation && $operation['status'] === 'running')
+    {{ app('xe.frontend')->js('assets/core/xe-ui-component/js/xe-page.js')->load() }}
+    {!! app('xe.frontend')->html('plugin.get-operation')->content("
+    <script>
+        $(function($) {
+            setInterval(function(){
+                XE.page('".route('settings.plugins.operation')."', '.__xe_operation');
+            }, 3000);
+        });
+    </script>
+    ")->load() !!}
+@endif
+
+@if($operation && $operation['status'] !== 'running')
+{!! app('xe.frontend')->html('plugin.delete-operation')->content("
+<script>
+    window.deletePluginOperation = function (data, textStatus, jqXHR) {
+        XE.toast('success', data.message);
+        $('.__xe_operation').slideUp();
+    };
+</script>
+")->load() !!}
+@endif

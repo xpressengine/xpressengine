@@ -133,7 +133,7 @@ class PluginController extends Controller
     public function getOperation(ComposerFileWriter $writer, PluginProvider $provider)
     {
         $operation = $this->getPluginOperationInfo($writer, $provider);
-        return XePresenter::makeApi(compact('operation'));
+        return apiRender('operation', compact('operation'), compact('operation'));
     }
 
     public function deleteOperation(ComposerFileWriter $writer)
