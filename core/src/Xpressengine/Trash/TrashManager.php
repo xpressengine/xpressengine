@@ -60,7 +60,7 @@ use Xpressengine\Trash\Exceptions\NotFoundRecycleBinException;
  *
  * php artisan trash recycle-bin-name
  *
- * php artisan trash --names=recycle-bin-name1,recycle-bin-name2,..
+ * php artisan trash recycle-bin-name1,recycle-bin-name2,..
  *
  * ```
  *
@@ -71,7 +71,7 @@ use Xpressengine\Trash\Exceptions\NotFoundRecycleBinException;
  *
  * php artisan trash:clean recycle-bin-name
  *
- * php artisan trash:clean --names=recycle-bin-name1,recycle-bin-name2,..
+ * php artisan trash:clean recycle-bin-name1,recycle-bin-name2,..
  *
  * ```
  *
@@ -140,7 +140,7 @@ class TrashManager
      */
     public function get($name)
     {
-        $names = $this->names();
+        $names = $this->bins();
         if (empty($names[$name])) {
             throw new NotFoundRecycleBinException;
         }
@@ -153,19 +153,14 @@ class TrashManager
      *
      * @return array
      */
-    public function names()
+    public function bins()
     {
-        $bins = $this->gets();
-
-        $names = [];
-        foreach ($bins as $bin) {
-            $names[] = [
-                'name' => $bin::name(),
-                'bin' => $bin,
-            ];
+        $bins = [];
+        foreach ($this->gets() as $bin) {
+            $bins[$bin::name()] = $bin;
         }
 
-        return $names;
+        return $bins;
     }
 
     /**

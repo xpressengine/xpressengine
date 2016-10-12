@@ -20,7 +20,7 @@ use Symfony\Component\Console\Input\InputArgument;
 /**
  * TrashClean
  *
- * 등록된 휴지통(recycle bin)의 요약 정보를 확인합니다
+ * 등록된 휴지통(recycle bin)을 비웁니다.
  *
  * ## 명령어 사용
  *
