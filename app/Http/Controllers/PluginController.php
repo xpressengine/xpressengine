@@ -36,8 +36,12 @@ class PluginController extends Controller
         XePresenter::setSettingsSkinTargetId('plugins');
     }
 
-    public function index(Request $request, PluginHandler $handler, PluginProvider $provider, ComposerFileWriter $writer)
-    {
+    public function index(
+        Request $request,
+        PluginHandler $handler,
+        PluginProvider $provider,
+        ComposerFileWriter $writer
+    ) {
         // filter input
         $field = [];
         $field['component'] = $request->get('component');
@@ -54,85 +58,14 @@ class PluginController extends Controller
         $provider->sync($plugins);
         $componentTypes = $this->getComponentTypes();
 
-        $operation = $this->getPluginOperationInfo($writer, $provider);
+        $operation = $handler->getOperation($writer);
 
         return XePresenter::make('index', compact('plugins', 'componentTypes', 'operation'));
     }
 
-    /**
-     * getPluginOperationInfo
-     *
-     * @param ComposerFileWriter $writer
-     * @param PluginProvider     $provider
-     *
-     * @return array
-     */
-    private function getPluginOperationInfo(ComposerFileWriter $writer, PluginProvider $provider)
+    public function getOperation(PluginHandler $handler, ComposerFileWriter $writer)
     {
-        $status = $writer->get('xpressengine-plugin.operation.status');
-
-        if($status === null) {
-            return null;
-        }
-
-        $runnings = [];
-        $runningMode = 'install';
-        $runnings = $writer->get("xpressengine-plugin.operation.install", []);
-        if(empty($runnings)) {
-            $runningMode = 'update';
-            $runnings = $writer->get("xpressengine-plugin.operation.update", []);
-        }
-        if(empty($runnings)) {
-            $runningMode = 'uninstall';
-            $runnings = $writer->get("xpressengine-plugin.operation.uninstall", []);
-        }
-
-        // operation이 없을 경우, return void
-        if(empty($runnings)) {
-            return null;
-        }
-
-        // operation이 있다.
-
-        // expired 조사
-        $deadline = $writer->get('xpressengine-plugin.operation.expiration_time');
-        $expired = false;
-        if($deadline !== null) {
-            $deadline = Carbon::parse($deadline);
-            if($deadline->isPast()) {
-                $expired = true;
-            }
-        }
-
-        $runningsInfo = [];
-        if(!empty($runnings)) {
-            $package = key($runnings);
-            list(, $id) = explode('/', $package);
-            $version = current($runnings);
-            $runningsInfo[$package] = $provider->find($id);
-            $runningsInfo[$package]->pluginId = $id;
-        }
-
-        $changed = $writer->get('xpressengine-plugin.operation.changed', []);
-        foreach($changed as $type) {
-            foreach($type as $package => $version) {
-                list(, $id) = explode('/', $package);
-                if(!isset($runningsInfo[$package])) {
-                    $runningsInfo[$package] = $provider->find($id);
-                }
-            }
-        }
-
-        if ($status === ComposerFileWriter::STATUS_RUNNING && $expired === true) {
-            $status = 'expired';
-        }
-
-        return compact('runnings', 'status', 'runningMode', 'expired', 'changed', 'runningsInfo');
-    }
-
-    public function getOperation(ComposerFileWriter $writer, PluginProvider $provider)
-    {
-        $operation = $this->getPluginOperationInfo($writer, $provider);
+        $operation = $handler->getOperation($writer);
         return apiRender('operation', compact('operation'), compact('operation'));
     }
 
@@ -160,26 +93,29 @@ class PluginController extends Controller
         $pluginData = $provider->find($id);
 
         if ($pluginData === null) {
-            throw new HttpException(422, "Can not find the plugin(".$id.") that should be installed from the Market-place.");
+            throw new HttpException(
+                422,
+                "Can not find the plugin(".$id.") that should be installed from the Market-place."
+            );
         }
 
         $title = $pluginData->title;
         $name = $pluginData->name;
         $version = $pluginData->latest_release->version;
 
-        $operation = $this->getPluginOperationInfo($writer, $provider);
+        $operation = $handler->getOperation($writer);
 
         if ($operation['status'] === ComposerFileWriter::STATUS_RUNNING) {
             throw new HttpException(422, "이미 진행중인 요청이 있습니다.");
         }
 
+        $timeLimit = config('xe.plugin.operation.time_limit');
         $writer->reset()->cleanOperation();
-        $writer->install($name, $version, Carbon::now()->addSeconds(150)->toDateTimeString())->write();
-        $this->reserveInstall($writer, $name, $version);
+        $writer->install($name, $version, Carbon::now()->addSeconds($timeLimit)->toDateTimeString())->write();
+        $this->reserveOperation($writer, $name, $version, $timeLimit);
 
         $session->flash('alert', ['type' => 'success', 'message' => '새로운 플러그인을 설치중입니다.']);
         return XePresenter::makeApi(['type' => 'success', 'message' => '새로운 플러그인을 설치중입니다.']);
-
     }
 
     /**
@@ -188,11 +124,11 @@ class PluginController extends Controller
      * @param ComposerFileWriter $writer
      * @param string             $name
      * @param string             $version
-     *
+     * @param int                $timeLimit
      */
-    protected function reserveInstall(ComposerFileWriter $writer, $name, $version)
+    protected function reserveOperation(ComposerFileWriter $writer, $name, $version, $timeLimit)
     {
-        set_time_limit(150);
+        set_time_limit($timeLimit);
         ignore_user_abort(true);
         ini_set('allow_url_fopen', '1');
 
@@ -251,7 +187,7 @@ class PluginController extends Controller
                 file_put_contents(storage_path('logs/plugin.log'), $outputText);
 
                 $writer->load();
-                if($code !== 0) {
+                if ($code !== 0) {
                     $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_FAILED);
                 } else {
                     $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_SUCCESSED);

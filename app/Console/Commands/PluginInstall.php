@@ -99,26 +99,24 @@ class PluginInstall extends PluginCommand
         // 안내 멘트 출력
         if ($this->input->isInteractive() && $this->confirm(
                 // 위 플러그인을 다운로드하고 설치합니다. \r\n 위 플러그인이 의존하는 다른 플러그인이 함께 다운로드 될 수 있으며, 수분이 소요될수 있습니다.\r\n 플러그인을 설치하시겠습니까?
-                "Above plugin will be download and installed. \r\n Dependent plugins can be installed together. \r\n It can take up to a few minutes. Do you want to install the plugin?"
+                "Above plugin will be download and installed. \r\n Dependent plugins can be installed together. \r\n It may take up to a few minutes. Do you want to install the plugin?"
             ) === false
         ) {
             return;
         }
 
         // - plugins require info 갱신
-        $writer->resolvePlugins();
+        $writer->reset()->cleanOperation();
 
         // composer.plugins.json 업데이트
         // - require에 설치할 플러그인 추가
-        $writer->install($name, $version);
-
-        $writer->write();
+        $writer->install($name, $version, 0)->write();
 
         $vendorName = PluginHandler::PLUGIN_VENDOR_NAME;
 
         // composer update실행(composer update --prefer-lowest --with-dependencies xpressengine-plugin/*)
-        // composer update를 실행합니다. 최대 수분이 소요될 수 있습니다.
-        $this->warn('the composer update command running.. There is a maximum moisture is applied.');
+        // composer update를 실행합니다. 최대 수 분이 소요될 수 있습니다.
+        $this->warn('Composer update command is running.. It may take up to a few minutes.');
         $this->line(" composer update --prefer-lowest --with-dependencies $vendorName/*");
         try {
             $result = $this->runComposer(base_path(), "update --prefer-lowest --with-dependencies $vendorName/*");
@@ -127,10 +125,16 @@ class PluginInstall extends PluginCommand
         }
 
         // composer 실행을 마쳤습니다.
-        $this->warn('The execution of the composer is now complete.'.PHP_EOL);
+        $this->warn('Composer update command is finished.'.PHP_EOL);
 
         // composer.plugins.json 파일을 다시 읽어들인다.
-        $writer->reload();
+        $writer->load();
+        if ($result !== 0) {
+            $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_FAILED);
+        } else {
+            $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_SUCCESSED);
+        }
+        $writer->write();
 
         // changed plugin list 정보 출력
         $changed = $this->getChangedPlugins($writer);

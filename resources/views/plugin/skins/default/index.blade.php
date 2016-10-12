@@ -169,8 +169,12 @@
     {!! app('xe.frontend')->html('plugin.get-operation')->content("
     <script>
         $(function($) {
-            setInterval(function(){
-                XE.page('".route('settings.plugins.operation')."', '.__xe_operation');
+            var loadOperation = setInterval(function(){
+                XE.page('".route('settings.plugins.operation')."', '.__xe_operation', {}, function(data){
+                    if(data.operation.status != 'running') {
+                        clearInterval(loadOperation);
+                    }
+                });
             }, 3000);
         });
     </script>
