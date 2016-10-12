@@ -188,6 +188,7 @@ class PresenterServiceProvider extends ServiceProvider
         ])->load();
 
         $frontendHandler->js([
+            'assets/core/common/js/utils.js',
             'assets/core/common/js/dynamicLoadManager.js',
             'assets/jspm_packages/system.js',
             'assets/systemjs.config.js',

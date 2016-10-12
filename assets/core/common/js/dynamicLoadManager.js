@@ -10,22 +10,8 @@
             , css: {}
         };
 
-        var _loadUtils = function(cb) {
-            var loc = exports.location;
-            var url = "assets/core/common/js/utils.js";
-            var baseURL = loc.protocol + '//' + loc.host + '/';
-
-            if(!_assets.js.hasOwnProperty(baseURL + url)) {
-                var el = document.createElement( 'script' );
-                el.src = baseURL + url;
-                el.async = true;
-                el.onload = cb;
-
-                document.head.appendChild(el);
-
-                _assets.js[baseURL + url] = '';
-            }
-        };
+        _assets.js[xeBaseURL + 'assets/core/common/js/utils.js'];
+        _assets.js[xeBaseURL + 'assets/core/common/js/dynamicLoadManager.js'];
 
         return {
             init: function() {
@@ -46,97 +32,96 @@
                 var count = 0;
                 var callbackObj = callbackObj || {};
 
-                _loadUtils(function() {
-                    for(var i = 0, max = arrjs.length; i < max; i += 1) {
-                        var src = Utils.asset(arrjs[i]);
+                for(var i = 0, max = arrjs.length; i < max; i += 1) {
+                    var src = Utils.asset(arrjs[i]);
 
-                        if(!_assets.js.hasOwnProperty(src)) {
-                            _assets.js[src] = '';
+                    if(!_assets.js.hasOwnProperty(src)) {
+                        _assets.js[src] = '';
 
-                            $.ajax({
-                                url: src,
-                                async: false,
-                                dataType: "script",
-                                success: function() {
-                                    count++;
+                        $.ajax({
+                            url: src,
+                            async: false,
+                            dataType: "script",
+                            success: function() {
+                                count++;
 
-                                    if(!!callbackObj.load) {
-                                        callbackObj.load();
-                                    }
+                                if(!!callbackObj.load) {
+                                    callbackObj.load();
+                                }
 
-                                    if(count === arrjs.length && !!callbackObj.complete) {
-                                        callbackObj.complete();
-                                    }
-                                },
-                                error: callbackObj.error
-                            });
+                                if(count === arrjs.length && !!callbackObj.complete) {
+                                    callbackObj.complete();
+                                }
+                            },
+                            error: callbackObj.error
+                        });
 
-                        }else {
-                            if(!!callbackObj.load) {
-                                callbackObj.load();
-                            }
+                    }else {
+                        if(!!callbackObj.load) {
+                            callbackObj.load();
                         }
                     }
-                });
+                }
+
 
             },
             jsLoad: function (url, load, error) {
-                _loadUtils(function() {
-                    var src = Utils.asset(url);
 
-                    if(!_assets.js.hasOwnProperty(src)) {
+                var src = Utils.asset(url);
 
-                        var el = document.createElement( 'script' );
+                if(!_assets.js.hasOwnProperty(src)) {
 
-                        el.src = src;
-                        el.async = true;
+                    var el = document.createElement( 'script' );
 
-                        if(load) {
-                            el.onload = load;
-                        }
+                    el.src = src;
+                    el.async = true;
 
-                        if(error) {
-                            el.onerror = error;
-                        }
-
-                        document.head.appendChild(el);
-
-                        _assets.js[src] = '';
-
-
-                    }else {
-                        if(load) {
-                            load();
-                        }
+                    if(load) {
+                        el.onload = load;
                     }
-                });
+
+                    if(error) {
+                        el.onerror = error;
+                    }
+
+                    document.head.appendChild(el);
+
+                    _assets.js[src] = '';
+
+
+                }else {
+                    if(load) {
+                        load();
+                    }
+                }
+
             },
             cssLoad: function (url, load, error) {
-                _loadUtils(function() {
-                    var src = Utils.asset(url);
 
-                    if(!_assets.css.hasOwnProperty(src)) {
+                var src = Utils.asset(url);
 
-                        var $css = $('<link>', {rel: 'stylesheet', type: 'text/css', href: src});
+                if(!_assets.css.hasOwnProperty(src)) {
 
-                        if(load) {
-                            $css.on('load', load)
-                        }
+                    var $css = $('<link>', {rel: 'stylesheet', type: 'text/css', href: src});
 
-                        if(error) {
-                            $css.on('error', error)
-                        }
-
-                        $('head').append($css);
-
-                        _assets.css[src] = "";
-
-                    }else {
-                        if(load) {
-                            load();
-                        }
+                    if(load) {
+                        $css.on('load', load)
                     }
-                });
+
+                    if(error) {
+                        $css.on('error', error)
+                    }
+
+                    $('head').append($css);
+
+                    _assets.css[src] = "";
+
+                }else {
+                    if(load) {
+                        load();
+                    }
+                }
+
             }
         };
     }().init();
