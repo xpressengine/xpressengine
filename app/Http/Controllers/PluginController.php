@@ -194,6 +194,7 @@ class PluginController extends Controller
     {
         set_time_limit(150);
         ignore_user_abort(true);
+        ini_set('allow_url_fopen', '1');
 
         $memoryInBytes = function ($value) {
             $unit = strtolower(substr($value, -1, 1));
