@@ -31,11 +31,9 @@
             @if($operation['status'] === 'successed')
                 <label for="">변경내역</label>
                 @foreach($operation['changed'] as $mode => $plugins)
-                    <p>
-                        @foreach($plugins as $plugin => $version)
-                            {{ $plugin }} ver.{{ $version }} {{ $mode }}
-                        @endforeach
-                    </p>
+                    @foreach($plugins as $plugin => $version)
+                    <p>{{ $plugin }} ver.{{ $version }} {{ $mode }}</p>
+                    @endforeach
                 @endforeach
             @endif
         </div>

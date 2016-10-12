@@ -11,7 +11,7 @@
         <div class="panel-group" id="accordion">
 
             @if($operation)
-                <div class="__xe_operation">
+                <div class="__xe_operation" style="margin-bottom: 10px;">
                 @include($_skin::view('operation'))
                 </div>
             @endif
@@ -63,7 +63,7 @@
                         </div>
                     </div>
 
-                    @if(!$operation['status'] !== 'running')
+                    @if(!$operation || $operation['status'] !== 'running')
                     <div class="pull-right">
                         <div class="btn-group">
                             <button type="button" data-toggle="modal" data-target="#installPlugin" class="btn btn-primary">새로 설치</button>
