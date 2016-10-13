@@ -6,12 +6,12 @@
  * @link      https://xpressengine.io
  */
 
-namespace Xpressengine\Tests\Temporary;
+namespace Xpressengine\Tests\Draft;
 
 use Mockery as m;
-use Xpressengine\Temporary\TemporaryHandler;
+use Xpressengine\Draft\DraftHandler;
 
-class TemporaryHandlerTest extends \PHPUnit_Framework_TestCase
+class DraftHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function tearDown()
     {
@@ -21,10 +21,10 @@ class TemporaryHandlerTest extends \PHPUnit_Framework_TestCase
     public function testGet()
     {
         list($repo, $auth) = $this->getMocks();
-        $instance = new TemporaryHandler($repo, $auth);
+        $instance = new DraftHandler($repo, $auth);
 
-        $mockEntity1 = m::mock('Xpressengine\Temporary\TemporaryEntity');
-        $mockEntity2 = m::mock('Xpressengine\Temporary\TemporaryEntity');
+        $mockEntity1 = m::mock('Xpressengine\Draft\DraftEntity');
+        $mockEntity2 = m::mock('Xpressengine\Draft\DraftEntity');
 
         $mockUser = m::mock('Xpressengine\Member\Entities\MemberEntityInterface');
         $mockUser->shouldReceive('getId')->andReturn('userId');
@@ -34,29 +34,29 @@ class TemporaryHandlerTest extends \PHPUnit_Framework_TestCase
         $repo->shouldReceive('fetch')->once()->with(['userId' => 'userId', 'key' => 'someKey'])
             ->andReturn([$mockEntity1, $mockEntity2]);
 
-        $temporaries = $instance->get('someKey');
+        $drafts = $instance->get('someKey');
 
-        $this->assertEquals(2, count($temporaries));
+        $this->assertEquals(2, count($drafts));
     }
 
     public function testGetById()
     {
         list($repo, $auth) = $this->getMocks();
-        $instance = new TemporaryHandler($repo, $auth);
+        $instance = new DraftHandler($repo, $auth);
 
-        $mockEntity = m::mock('Xpressengine\Temporary\TemporaryEntity');
+        $mockEntity = m::mock('Xpressengine\Draft\DraftEntity');
 
         $repo->shouldReceive('find')->once()->with('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx')->andReturn($mockEntity);
 
-        $temporary = $instance->getById('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx');
+        $draft = $instance->getById('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx');
 
-        $this->assertEquals($mockEntity, $temporary);
+        $this->assertEquals($mockEntity, $draft);
     }
 
     public function testSet()
     {
         list($repo, $auth) = $this->getMocks();
-        $instance = new TemporaryHandler($repo, $auth);
+        $instance = new DraftHandler($repo, $auth);
 
         $mockUser = m::mock('Xpressengine\Member\Entities\MemberEntityInterface');
         $mockUser->shouldReceive('getId')->andReturn('userId');
@@ -79,7 +79,7 @@ class TemporaryHandlerTest extends \PHPUnit_Framework_TestCase
     public function testSetReturnsNullWhenUserIsGuest()
     {
         list($repo, $auth) = $this->getMocks();
-        $instance = new TemporaryHandler($repo, $auth);
+        $instance = new DraftHandler($repo, $auth);
 
         $mockUser = m::mock('Xpressengine\Member\Entities\MemberEntityInterface');
         $mockUser->shouldReceive('getId')->andReturn('userId');
@@ -95,14 +95,14 @@ class TemporaryHandlerTest extends \PHPUnit_Framework_TestCase
     public function testPut()
     {
         list($repo, $auth) = $this->getMocks();
-        $instance = new TemporaryHandler($repo, $auth);
+        $instance = new DraftHandler($repo, $auth);
 
         $repo->shouldReceive('find')->once()->with('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx')->andReturnNull();
 
         $this->assertNull($instance->put('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 'foo'));
 
 
-        $mockEntity = m::mock('Xpressengine\Temporary\TemporaryEntity');
+        $mockEntity = m::mock('Xpressengine\Draft\DraftEntity');
         $repo->shouldReceive('find')->once()->with('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx')->andReturn($mockEntity);
         $repo->shouldReceive('update')->once()->with($mockEntity)->andReturn($mockEntity);
 
@@ -112,9 +112,9 @@ class TemporaryHandlerTest extends \PHPUnit_Framework_TestCase
     public function testRemove()
     {
         list($repo, $auth) = $this->getMocks();
-        $instance = new TemporaryHandler($repo, $auth);
+        $instance = new DraftHandler($repo, $auth);
 
-        $mockEntity = m::mock('Xpressengine\Temporary\TemporaryEntity');
+        $mockEntity = m::mock('Xpressengine\Draft\DraftEntity');
 
         $repo->shouldReceive('delete')->once()->with($mockEntity);
 
@@ -124,10 +124,10 @@ class TemporaryHandlerTest extends \PHPUnit_Framework_TestCase
     public function testExists()
     {
         list($repo, $auth) = $this->getMocks();
-        $instance = new TemporaryHandler($repo, $auth);
+        $instance = new DraftHandler($repo, $auth);
 
-        $mockEntity1 = m::mock('Xpressengine\Temporary\TemporaryEntity');
-        $mockEntity2 = m::mock('Xpressengine\Temporary\TemporaryEntity');
+        $mockEntity1 = m::mock('Xpressengine\Draft\DraftEntity');
+        $mockEntity2 = m::mock('Xpressengine\Draft\DraftEntity');
 
         $mockUser = m::mock('Xpressengine\Member\Entities\MemberEntityInterface');
         $mockUser->shouldReceive('getId')->andReturn('userId');
@@ -142,7 +142,7 @@ class TemporaryHandlerTest extends \PHPUnit_Framework_TestCase
     private function getMocks()
     {
         return [
-            m::mock('Xpressengine\Temporary\TemporaryRepository'),
+            m::mock('Xpressengine\Draft\DraftRepository'),
             m::mock('Illuminate\Auth\AuthManager')
         ];
     }

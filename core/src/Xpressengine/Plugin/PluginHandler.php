@@ -199,6 +199,10 @@ class PluginHandler
         // 기존에 설치(활성화)된 적이 있는지 검사한다. 기존에 활성화된 적이 있다면 설치된 버전을 조회한다.
         $installedVersion = $entity->getInstalledVersion();
 
+        // 플러그인의 컴포넌트 정보를 셋팅한다
+        $entity->getObject();
+        $this->register->addByEntity($entity);
+
         $this->updatePlugin($pluginId, false);
 
         // 플러그인 활성화. 플러그인을 활성화할 때마다 각 플러그인의 activate() 메소드를 호출해준다.

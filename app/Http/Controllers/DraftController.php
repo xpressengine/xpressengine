@@ -10,18 +10,18 @@ namespace App\Http\Controllers;
 
 use Auth;
 use Input;
-use XeTemporary;
+use XeDraft;
 use XePresenter;
 
-class TemporaryController extends Controller
+class DraftController extends Controller
 {
     public function index()
     {
         if (Auth::guest() !== true) {
-            $temporaries = XeTemporary::get(Input::get('key'));
+            $drafts = XeDraft::get(Input::get('key'));
 
-            if (!empty($temporaries)) {
-                uasort($temporaries, function ($a, $b) {
+            if (!empty($drafts)) {
+                uasort($drafts, function ($a, $b) {
                     if ($a->createdAt == $b->createdAt) {
                         return 0;
                     }
@@ -29,7 +29,7 @@ class TemporaryController extends Controller
                 });
             }
 
-            return XePresenter::makeApi($temporaries);
+            return XePresenter::makeApi($drafts);
         }
     }
 
@@ -38,39 +38,39 @@ class TemporaryController extends Controller
         if (Auth::guest() !== true) {
             try {
                 $etc = Input::except(['_token', 'key', 'rep']);
-                $temporary = XeTemporary::set(Input::get('key'), Input::get(Input::get('rep')), $etc);
+                $draft = XeDraft::set(Input::get('key'), Input::get(Input::get('rep')), $etc);
             } catch (\Exception $e) {
                 echo $e->getMessage() . '|' . $e->getFile() . '|' . $e->getLine();
 
                 throw $e;
             }
 
-            return XePresenter::makeApi(['temporaryId' => $temporary->id]);
+            return XePresenter::makeApi(['draftId' => $draft->id]);
         }
 
-        return XePresenter::makeApi(['temporaryId' => null]);
+        return XePresenter::makeApi(['draftId' => null]);
     }
 
-    public function update($temporaryId)
+    public function update($draftId)
     {
         if (Auth::guest() !== true) {
-            if (($old = XeTemporary::getById($temporaryId)) && $old->userId == Auth::user()->getId()) {
+            if (($old = XeDraft::getById($draftId)) && $old->userId == Auth::user()->getId()) {
                 $etc = Input::except(['_token', 'rep']);
-                $temporary = XeTemporary::put($temporaryId, Input::get(Input::get('rep')), $etc);
+                $draft = XeDraft::put($draftId, Input::get(Input::get('rep')), $etc);
 
-                return XePresenter::makeApi(['temporaryId' => $temporary->id]);
+                return XePresenter::makeApi(['draftId' => $draft->id]);
             }
         }
 
-        return XePresenter::makeApi(['temporaryId' => null]);
+        return XePresenter::makeApi(['draftId' => null]);
     }
 
-    public function destroy($temporaryId)
+    public function destroy($draftId)
     {
         if (Auth::guest() !== true) {
-            if ($temporary = XeTemporary::getById($temporaryId)) {
-                if (Auth::user()->getId() == $temporary->userId) {
-                    XeTemporary::remove($temporary);
+            if ($draft = XeDraft::getById($draftId)) {
+                if (Auth::user()->getId() == $draft->userId) {
+                    XeDraft::remove($draft);
                 }
             }
         }
@@ -86,10 +86,10 @@ class TemporaryController extends Controller
 
         $etc = Input::except(['_token', 'key', 'rep']);
 
-        if ($temporary = XeTemporary::getAuto(Input::get('key'))) {
-            XeTemporary::put($temporary->id, Input::get(Input::get('rep')), $etc);
+        if ($draft = XeDraft::getAuto(Input::get('key'))) {
+            XeDraft::put($draft->id, Input::get(Input::get('rep')), $etc);
         } else {
-            XeTemporary::set(Input::get('key'), Input::get(Input::get('rep')), $etc, true);
+            XeDraft::set(Input::get('key'), Input::get(Input::get('rep')), $etc, true);
         }
     }
 
@@ -99,8 +99,8 @@ class TemporaryController extends Controller
             return null;
         }
 
-        if ($temporary = XeTemporary::getAuto(Input::get('key'))) {
-            XeTemporary::remove($temporary);
+        if ($draft = XeDraft::getAuto(Input::get('key'))) {
+            XeDraft::remove($draft);
         }
     }
 }

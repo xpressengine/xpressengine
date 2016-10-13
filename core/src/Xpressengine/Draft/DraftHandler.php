@@ -1,27 +1,27 @@
 <?php
 /**
- * This file is temporary handler class
+ * This file is draft handler class
  *
  * PHP version 5
  *
- * @category    Temporary
- * @package     Xpressengine\Temporary
+ * @category    Draft
+ * @package     Xpressengine\Draft
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
 
-namespace Xpressengine\Temporary;
+namespace Xpressengine\Draft;
 
 use Illuminate\Auth\AuthManager;
 
 /**
- * # TemporaryHandler
+ * # DraftHandler
  * 임시저장 데이터를 관리
  *
- * ### app binding : xe.temporary 로 바인딩 되어 있음
- * XeTemporary Facade 로 접근이 가능
+ * ### app binding : xe.draft 로 바인딩 되어 있음
+ * XeDraft Facade 로 접근이 가능
  *
  * ### Usage
  * 임시저장될 데이터는 key, value 형태로 등록되어집니다.
@@ -30,7 +30,7 @@ use Illuminate\Auth\AuthManager;
  * 배열로 함께 전달해야 합니다.
  *
  * ```php
- * XeTemporary::set('key string', 'it is test content', ['foo' => 'bar', 'baz' => 'qux']);
+ * XeDraft::set('key string', 'it is test content', ['foo' => 'bar', 'baz' => 'qux']);
  * ```
  *
  * 임시저장된 데이터를 가져올때는 등록시 사용했던 key 를 통해서 같은 키를 가지는
@@ -39,25 +39,25 @@ use Illuminate\Auth\AuthManager;
  *
  * ```php
  * // list
- * $dataList = XeTemporary::get('key string');
+ * $dataList = XeDraft::get('key string');
  *
  * // one
- * $data = XeTemporary::getById('id');
+ * $data = XeDraft::getById('id');
  * ```
  *
- * @category    Temporary
- * @package     Xpressengine\Temporary
+ * @category    Draft
+ * @package     Xpressengine\Draft
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class TemporaryHandler
+class DraftHandler
 {
     /**
      * Repository instance
      *
-     * @var TemporaryRepository
+     * @var DraftRepository
      */
     protected $repo;
 
@@ -71,10 +71,10 @@ class TemporaryHandler
     /**
      * Constructor
      *
-     * @param TemporaryRepository $repo Repository instance
+     * @param DraftRepository $repo Repository instance
      * @param AuthManager         $auth AuthManager instance
      */
-    public function __construct(TemporaryRepository $repo, AuthManager $auth)
+    public function __construct(DraftRepository $repo, AuthManager $auth)
     {
         $this->repo = $repo;
         $this->auth = $auth;
@@ -84,7 +84,7 @@ class TemporaryHandler
      * 임시저장 데이터들을 반환 함
      *
      * @param string $key 구분할 수 있는 키(중복가능)
-     * @return TemporaryEntity[]
+     * @return DraftEntity[]
      */
     public function get($key)
     {
@@ -98,7 +98,7 @@ class TemporaryHandler
      * 아이디에 해당 하는 데이터 반환
      *
      * @param string $id 임시저장 아이디
-     * @return TemporaryEntity
+     * @return DraftEntity
      */
     public function getById($id)
     {
@@ -109,7 +109,7 @@ class TemporaryHandler
      * 자동저장으로 저장된 데이터 반환
      *
      * @param string $key 구분할 수 있는 키
-     * @return TemporaryEntity
+     * @return DraftEntity
      */
     public function getAuto($key)
     {
@@ -129,7 +129,7 @@ class TemporaryHandler
      * @param mixed  $val    저장될 내용
      * @param array  $etc    기타 값들
      * @param bool   $isAuto 자동 저장 인지 여부
-     * @return TemporaryEntity
+     * @return DraftEntity
      */
     public function set($key, $val, array $etc = [], $isAuto = false)
     {
@@ -137,8 +137,8 @@ class TemporaryHandler
             return null;
         }
 
-        $temporary = new TemporaryEntity();
-        $temporary->fill([
+        $draft = new DraftEntity();
+        $draft->fill([
             'userId' => $this->auth->user()->getId(),
             'key' => $key,
             'val' => $val,
@@ -146,7 +146,7 @@ class TemporaryHandler
             'isAuto' => $isAuto ? 1 : 0
         ]);
 
-        return $this->repo->insert($temporary);
+        return $this->repo->insert($draft);
     }
 
     /**
@@ -155,29 +155,29 @@ class TemporaryHandler
      * @param string $id  임시저장 아이디
      * @param string $val 갱신될 data 값
      * @param array  $etc 기타 값들
-     * @return TemporaryEntity
+     * @return DraftEntity
      */
     public function put($id, $val, array $etc = [])
     {
-        if (($temporary = $this->getById($id)) === null) {
+        if (($draft = $this->getById($id)) === null) {
             return null;
         }
 
-        $temporary->val = $val;
-        $temporary->etc = serialize($etc);
+        $draft->val = $val;
+        $draft->etc = serialize($etc);
 
-        return $this->repo->update($temporary);
+        return $this->repo->update($draft);
     }
 
     /**
      * 임시저장 데이터 삭제
      *
-     * @param TemporaryEntity $temporary 임시저장 객체
+     * @param DraftEntity $draft 임시저장 객체
      * @return void
      */
-    public function remove(TemporaryEntity $temporary)
+    public function remove(DraftEntity $draft)
     {
-        $this->repo->delete($temporary);
+        $this->repo->delete($draft);
     }
 
     /**
