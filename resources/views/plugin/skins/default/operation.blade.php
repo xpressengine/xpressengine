@@ -11,9 +11,15 @@
             @endif
             <hr>
             <label for="">작업</label>
-            @foreach($operation['runnings'] as $package => $version)
-                <p>{{ data_get($operation['runningsInfo'], $package.'.title') }}({{ data_get($operation['runningsInfo'], $package.'.pluginId') }}) ver.{{ $version }} {{ array_get(['install'=>'설치','update'=>'업데이트','uninstall'=>'삭제'], $operation['runningMode']) }}</p>
-            @endforeach
+            @if($operation['runningMode'] !== 'uninstall')
+                @foreach($operation['runnings'] as $package => $version)
+                    <p>{{ data_get($operation['runningsInfo'], $package.'.title') }}({{ data_get($operation['runningsInfo'], $package.'.pluginId') }}) ver.{{ $version }} {{ array_get(['install'=>'설치','update'=>'업데이트','uninstall'=>'삭제'], $operation['runningMode']) }}</p>
+                @endforeach
+            @else
+                @foreach($operation['runnings'] as $package)
+                    <p>{{ data_get($operation['runningsInfo'], $package.'.title') }}({{ data_get($operation['runningsInfo'], $package.'.pluginId') }}) {{ array_get(['install'=>'설치','update'=>'업데이트','uninstall'=>'삭제'], $operation['runningMode']) }}</p>
+                @endforeach
+            @endif
 
             <label for="">상태</label>
             <p>

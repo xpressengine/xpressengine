@@ -576,9 +576,12 @@ class PluginHandler
 
         $runningsInfo = [];
         if(!empty($runnings)) {
-            $package = key($runnings);
+            if($runningMode === 'uninstall') {
+                $package = current($runnings);
+            } else {
+                $package = key($runnings);
+            }
             list(, $id) = explode('/', $package);
-            $version = current($runnings);
             $runningsInfo[$package] = $this->provider->find($id);
             $runningsInfo[$package]->pluginId = $id;
         }
