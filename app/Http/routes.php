@@ -752,3 +752,7 @@ Route::group(['prefix'=>'widgetbox'], function() {
     Route::post('{id}/permission', ['as' => 'widgetbox.permission', 'uses' => 'WidgetBoxController@storePermission']);
 
 });
+
+Route::group(['prefix' => 'captcha'], function () {
+    Route::get('naver/reissue', ['as' => 'captcha.naver.reissue', 'uses' => 'CaptchaController@naverReissue']);
+});

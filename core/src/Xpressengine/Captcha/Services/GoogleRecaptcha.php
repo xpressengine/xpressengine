@@ -12,11 +12,12 @@
  * @link        https://xpressengine.io
  */
 
-namespace Xpressengine\Captcha;
+namespace Xpressengine\Captcha\Services;
 
 use Illuminate\Http\Request;
 use ReCaptcha\ReCaptcha;
 use ReCaptcha\Response;
+use Xpressengine\Captcha\CaptchaInterface;
 use Xpressengine\Presenter\Html\FrontendHandler;
 
 /**
@@ -151,7 +152,7 @@ class GoogleRecaptcha implements CaptchaInterface
      */
     protected function create()
     {
-        if($this->captcha === null) {
+        if ($this->captcha === null) {
             $this->captcha = new ReCaptcha($this->secret);
         }
 
