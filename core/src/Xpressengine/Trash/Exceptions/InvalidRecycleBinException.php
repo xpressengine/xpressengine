@@ -1,6 +1,6 @@
 <?php
 /**
- * Exceptions
+ * InvalidRecycleBinException
  *
  * PHP version 5
  *
@@ -17,7 +17,7 @@ namespace Xpressengine\Trash\Exceptions;
 use Xpressengine\Trash\TrashException;
 
 /**
- * Repository Exception
+ * InvalidRecycleBinException
  *
  * @category    Trash
  * @package     Xpressengine\Trash
@@ -25,8 +25,7 @@ use Xpressengine\Trash\TrashException;
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
- * @deprecated  As of 3.0.0-beta7 replaced by InvalidRecycleBinException
  */
-class InvalidWasteException extends TrashException
+class InvalidRecycleBinException extends TrashException
 {
 }
