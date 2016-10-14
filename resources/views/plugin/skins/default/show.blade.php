@@ -83,6 +83,10 @@
                         <button type="button" data-toggle="modal" data-target="#deletePlugin" class="btn btn-danger">{{xe_trans('xe::delete')}}</button>
                     @endif
 
+                    @if($plugin->hasUpdate())
+                    <button type="button" data-toggle="modal" data-target="#downloadPluginUpdate" class="btn btn-primary">새버전 다운로드</button>
+                    @endif
+
                 </div>
                 <ul class="nav nav-pills nav-justified">
                     <li class="active"><a href="#details" data-toggle="tab" role="tab">Details</a></li>
@@ -250,6 +254,37 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">{{xe_trans('xe::cancel')}}</button>
                     <button type="submit" class="btn btn-primary">{{ xe_trans('xe::delete') }}</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </form>
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+@endif
+
+@if($plugin->hasUpdate())
+<div id="downloadPluginUpdate" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <form action="{{ route('settings.plugins.download', [$plugin->getId()]) }}" method="POST">
+            {{ csrf_field() }}
+            {{ method_field('PUT') }}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">플러그인 업데이트</h4>
+                </div>
+                <div class="modal-body">
+                    <label>현재 설치된 버전</label>
+                    <p>{{ $plugin->getVersion() }}</p>
+                    <label>업데이트 버전 버전</label>
+                    <p>{{ $plugin->getVersion() }}</p>
+                    <hr>
+                    <p>플러그인을 업데이트할 경우 의존관계에 있는 다른 플러그인이 같이 설치되거나 업데이트 될 수 있습니다.</p>
+                    <p>플러그인 업데이트 과정은 최대 수 분이 걸릴 수 있습니다.</p>
+                    <p>플러그인을 업데이트하시겠습니까?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{xe_trans('xe::cancel')}}</button>
+                    <button type="submit" class="btn btn-primary">{{ xe_trans('xe::update_plugin') }}</button>
                 </div>
             </div><!-- /.modal-content -->
         </form>

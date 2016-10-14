@@ -130,11 +130,17 @@ class PluginController extends Controller
             throw new HttpException(422, 'Plugin not found.');
         }
 
+        if($plugin->isActivated()) {
+            throw new HttpException(422, 'Plugin is not deactivated. Please deactivate the plugin.');
+        }
+
         $operation = $handler->getOperation($writer);
 
         if ($operation['status'] === ComposerFileWriter::STATUS_RUNNING) {
             throw new HttpException(422, "이미 진행중인 요청이 있습니다.");
         }
+
+        $plugin->uninstall();
 
         $timeLimit = config('xe.plugin.operation.time_limit');
         $writer->reset()->cleanOperation();
@@ -153,7 +159,7 @@ class PluginController extends Controller
      * @param ComposerFileWriter $writer
      * @param int                $timeLimit
      */
-    protected function reserveOperation(ComposerFileWriter $writer, $timeLimit)
+    protected function reserveOperation(ComposerFileWriter $writer, $timeLimit, $callback = null)
     {
         set_time_limit($timeLimit);
         ignore_user_abort(true);
@@ -184,7 +190,7 @@ class PluginController extends Controller
 
         /** @var \Illuminate\Foundation\Application $app */
         app()->terminating(
-            function () use ($writer) {
+            function () use ($writer, $callback) {
 
                 $pid = getmypid();
                 Log::info("[plugin operation] start running composer run [pid=$pid]");
@@ -210,6 +216,10 @@ class PluginController extends Controller
 
                 $outputText = $output->fetch();
                 file_put_contents(storage_path('logs/plugin.log'), $outputText);
+
+                if(is_callable($callback)) {
+                    $callback($code);
+                }
 
                 $writer->load();
                 if ($code !== 0) {
@@ -282,6 +292,54 @@ class PluginController extends Controller
 
         app('session.store')->flash('alert', ['type' => 'success', 'message' => '플러그인을 업데이트했습니다.']);
         return XePresenter::makeApi(['type' => 'success', 'message' => '플러그인을 업데이트했습니다.']);
+    }
+
+    public function putDownloadPlugin(
+        $pluginId,
+        PluginHandler $handler,
+        PluginProvider $provider,
+        ComposerFileWriter $writer,
+        InterceptionHandler $interceptionHandler,
+        SessionManager $session
+    ) {
+        $handler->getAllPlugins(true);
+        $plugin = $handler->getPlugin($pluginId);
+        if ($plugin === null) {
+            throw new HttpException(422, 'Plugin not found.');
+        }
+
+        // 자료실에서 플러그인 정보 조회
+        $pluginData = $provider->find($pluginId);
+
+        if ($pluginData === null) {
+            throw new HttpException(
+                422, "Can not find the plugin(".$pluginId.") that should be installed from the Market-place."
+            );
+        }
+
+        $title = $pluginData->title;
+        $name = $pluginData->name;
+        $version = $pluginData->latest_release->version;
+
+        $operation = $handler->getOperation($writer);
+
+        if ($operation['status'] === ComposerFileWriter::STATUS_RUNNING) {
+            throw new HttpException(422, "이미 진행중인 요청이 있습니다.");
+        }
+
+        $timeLimit = config('xe.plugin.operation.time_limit');
+        $writer->reset()->cleanOperation();
+        $writer->update($name, $version, Carbon::now()->addSeconds($timeLimit)->toDateTimeString())->write();
+        $this->reserveOperation($writer, $timeLimit, function($code) use ($plugin) {
+            if($code === 0 && $plugin->checkUpdated()) {
+                $plugin->update();
+            }
+        });
+
+        return redirect()->route('settings.plugins')->with(
+            'alert',
+            ['type' => 'success', 'message' => '플러그인의 새로운 버전을 다운로드하는 중입니다.']
+        );
     }
 
     /**

@@ -612,6 +612,13 @@ Route::settings(
                 'uses' => 'PluginController@putUpdatePlugin'
             ]
         );
+        Route::put(
+            '{pluginId}/download',
+            [
+                'as' => 'settings.plugins.download',
+                'uses' => 'PluginController@putDownloadPlugin'
+            ]
+        );
 
         Route::delete(
             '{pluginId}',

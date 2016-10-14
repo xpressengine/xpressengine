@@ -58,29 +58,34 @@ class PluginUpdate extends PluginCommand
         // 플러그인이 이미 설치돼 있는지 검사
         $plugin = $handler->getPlugin($id);
         if($plugin === null) {
-            throw new \Exception('Is a plug-ins that have not been installed.');
+            // 설치되어 있지 않은 플러그인입니다.
+            throw new \Exception('Plugin not found');
         }
 
         if(file_exists($plugin->getPath('vendor'))) {
-            throw new \Exception('It is a plug-in development mode. To remove a plug-in development mode, please delete the directory of direct plug-in.');
+            // 개발모드의 플러그인입니다. 개발모드의 플러그인은 업데이트 할 수 없습니다.
+            throw new \Exception('The plugin is in develop mode. Can\'t update plugin in develop mode.');
         }
 
         // 설치가능 환경인지 검사
         // - check writable of composer.plugin.json
         if(!is_writable($composerFile = storage_path('app/composer.plugins.json'))) {
-            throw new \Exception("[$composerFile] You do not have write access to the file. To install the plug-in, you must have write permission of this file.");
+            // [$composerFile] 파일에 쓰기 권한이 없습니다. 플러그인을 설치하기 위해서는 이 파일의 쓰기 권한이 있어야 합니다.
+            throw new \Exception("You have been denied permission to acccess [$composerFile] file. To update the plugin, you must have write permission to access this this file.");
         }
 
         // - check writable of plugins/ directory
         if(!is_writable($pluginDir = base_path('plugins'))) {
-            throw new \Exception("[$pluginDir] You do not have write permissions to the directory. In order to install the plug-in, you must have write permissions for this directory.");
+            // [$pluginDir] 디렉토리에 쓰기 권한이 없습니다. 플러그인을 설치하기 위해서는 이 디렉토리의 쓰기 권한이 있어야 합니다.
+            throw new \Exception("You have been denied permission to acccess [$pluginDir] directory. To update the plugin, you must have write permissions to access this directory.");
         }
 
         // 자료실에서 플러그인 정보 조회
         $pluginData = $provider->find($id);
 
         if($pluginData === null) {
-            throw new \Exception("Could not find the installation plug-in(".$id.") from the Market-place.");
+            // 설치할 플러그인[$id]을 자료실에서 찾지 못했습니다.
+            throw new \Exception("Can not find the plugin(".$id.") that should be updated from the Market-place.");
         }
 
         $title = $pluginData->title;
@@ -89,35 +94,37 @@ class PluginUpdate extends PluginCommand
         if($version) {
             $releaseData = $provider->findRelease($id, $version);
             if($releaseData === null) {
-                throw new \Exception("The version(".$version.") of the plug-in(".$id.") could not be found from the Market-place.");
+                // 플러그인[$id]의 버전[$version]을 자료실에서 찾지 못했습니다.
+                throw new \Exception("Can not find version(".$version.") of the plugin(".$id.") that should be updated from the Market-place.");
             }
         }
         $version = $version ?: $pluginData->latest_release->version;
 
         // 플러그인 정보 출력
-        $this->warn(PHP_EOL." Update plug-in information:");
+        // 업데이트 플러그인 정보
+        $this->warn(PHP_EOL." Information of the plugin that should be updated:");
         $this->line("  $title - $name: {$plugin->getVersion()} -> $version".PHP_EOL);
 
         // 안내 멘트 출력
         if($this->input->isInteractive() && $this->confirm(
-                "Updates to download the above plug-ins. \r\nThe above plug-ins can be downloaded together other plug-ins that are dependent, you may water it takes. \r\nDo you want to update the plug-ins?"
+                // 위 플러그인을 다운로드하고 업데이트합니다. \r\n 위 플러그인이 의존하는 다른 플러그인이 함께 다운로드 될 수 있으며, 수 분이 소요될수 있습니다.\r\n 플러그인을 업데이트하시겠습니까?"
+                "The new version of above plugin will be downloaded and installed. \r\n Dependent plugins can be installed together. \r\n It may take up to a few minutes. Do you want to update the plugin?"
             ) === false) {
             return;
         }
 
         // - plugins require info 갱신
-        $writer->resolvePlugins();
+        $writer->reset()->cleanOperation();
 
         // composer.plugins.json 업데이트
         // - require에 설치할 플러그인 추가
-        $writer->update($name, $version);
-
-        $writer->write();
+        $writer->update($name, $version, 0)->write();
 
         $vendorName = PluginHandler::PLUGIN_VENDOR_NAME;
 
         // composer update실행(composer update --prefer-lowest --with-dependencies xpressengine-plugin/plugin_id)
-        $this->warn('Run the composer update. There is a maximum moisture is applied.');
+        // composer update를 실행합니다. 최대 수분이 소요될 수 있습니다.
+        $this->warn('Composer update command is running.. It may take up to a few minutes.');
         $this->line(" composer update --prefer-lowest --with-dependencies $vendorName/*");
         try {
             $this->runComposer(base_path(), "update --prefer-lowest --with-dependencies $vendorName/*");
@@ -125,10 +132,17 @@ class PluginUpdate extends PluginCommand
             ;
         }
 
-        $this->warn('The execution of the composer is now complete.'.PHP_EOL);
+        // composer 실행을 마쳤습니다
+        $this->warn('Composer update command is finished.'.PHP_EOL);
 
         // composer.plugins.json 파일을 다시 읽어들인다.
-        $writer->reload();
+        $writer->load();
+        if (!isset($result) || $result !== 0) {
+            $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_FAILED);
+        } else {
+            $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_SUCCESSED);
+        }
+        $writer->write();
 
         // changed plugin list 정보 출력
         $changed = $this->getChangedPlugins($writer);
@@ -136,17 +150,21 @@ class PluginUpdate extends PluginCommand
 
         if (array_get($changed, 'updated.'.$name) === $version) {
             // 설치 성공 문구 출력
-            $this->output->success("$title - $name:$version Plug-in updated.");
+            // $title - $name:$version 플러그인을 업데이트했습니다.
+            $this->output->success("$title - $name:$version plugin is updated");
         } elseif (array_get($changed, 'updated.'.$name)) {
             $this->output->warning(
+                // $name:$version 플러그인을 업데이트하였으나 다른 버전으로 업데이트되었습니다. 플러그인 간의 의존관계로 인해 다른 버전으로 업데이트되었을 가능성이 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다.
                 "You update the plug-in of the \"".$name."\", but has now been updated on other versions(".$version."). Because of the dependencies between plug-ins, there is a possibility that has been updated in the other version. Please check the plug-in dependencies."
             );
         } elseif($plugin->getVersion() === $version) {
             $this->output->warning(
+                // 동일한 버전의 플러그인이 이미 설치되어 있으므로 업데이트가 되지 않았습니다.
                 "Because the plug-ins of the same version is installed, the update was not."
             );
         } else {
             $this->output->warning(
+                // $name:$version 플러그인을 업데이트하지 못했습니다. 플러그인 간의 의존관계로 인해 업데이트가 불가능할 수도 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다.
                 "Do not update the plug-in of the $name:$version. Update for the dependencies between plug-ins may become impossible. Please check the plug-in dependencies."
             );
         }
