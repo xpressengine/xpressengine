@@ -564,14 +564,6 @@ Route::settings(
             ]
         );
 
-        Route::post(
-            '/',
-            [
-                'as' => 'settings.plugins.install',
-                'uses' => 'PluginController@install'
-            ]
-        );
-
         Route::get('operation', [
             'as' => 'settings.plugins.operation',
             'uses' => 'PluginController@getOperation'
@@ -581,6 +573,14 @@ Route::settings(
             'as' => 'settings.plugins.operation.delete',
             'uses' => 'PluginController@deleteOperation'
         ]);
+
+        Route::post(
+            '/',
+            [
+                'as' => 'settings.plugins.install',
+                'uses' => 'PluginController@install'
+            ]
+        );
 
         Route::get(
             '{pluginId}',
@@ -612,6 +612,22 @@ Route::settings(
                 'uses' => 'PluginController@putUpdatePlugin'
             ]
         );
+        Route::put(
+            '{pluginId}/download',
+            [
+                'as' => 'settings.plugins.download',
+                'uses' => 'PluginController@putDownloadPlugin'
+            ]
+        );
+
+        Route::delete(
+            '{pluginId}',
+            [
+                'as' => 'settings.plugins.delete',
+                'uses' => 'PluginController@delete'
+            ]
+        );
+
     }
 );
 

@@ -99,10 +99,10 @@ class PluginInstall extends PluginCommand
         // 안내 멘트 출력
         if ($this->input->isInteractive() && $this->confirm(
                 // 위 플러그인을 다운로드하고 설치합니다. \r\n 위 플러그인이 의존하는 다른 플러그인이 함께 다운로드 될 수 있으며, 수분이 소요될수 있습니다.\r\n 플러그인을 설치하시겠습니까?
-                "Above plugin will be download and installed. \r\n Dependent plugins can be installed together. \r\n It may take up to a few minutes. Do you want to install the plugin?"
+                "Above plugin will be downloaded and installed. \r\n Dependent plugins can be installed together. \r\n It may take up to a few minutes. Do you want to install the plugin?"
             ) === false
         ) {
-            return;
+            return null;
         }
 
         // - plugins require info 갱신
@@ -129,7 +129,7 @@ class PluginInstall extends PluginCommand
 
         // composer.plugins.json 파일을 다시 읽어들인다.
         $writer->load();
-        if ($result !== 0) {
+        if (!isset($result) || $result !== 0) {
             $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_FAILED);
         } else {
             $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_SUCCESSED);

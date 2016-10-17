@@ -173,6 +173,7 @@
                 XE.page('".route('settings.plugins.operation')."', '.__xe_operation', {}, function(data){
                     if(data.operation.status != 'running') {
                         clearInterval(loadOperation);
+                        location.reload();
                     }
                 });
             }, 3000);
