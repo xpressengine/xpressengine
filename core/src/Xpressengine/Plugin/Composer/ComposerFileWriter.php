@@ -72,8 +72,8 @@ class ComposerFileWriter
         require_once(__DIR__.'/helpers.php');
         $this->scanner = $scanner;
         $this->path = $path;
-        $this->load();
         $this->packagistUrl = $packagistUrl;
+        $this->load();
     }
 
     /**
@@ -107,11 +107,6 @@ class ComposerFileWriter
         $data['xpressengine-plugin'] = [
             "path" => "storage/app/composer.plugins.json",
             "operation" => [],
-            //"install" => [],
-            //"update" => [],
-            //"uninstall" => [],
-            //"status"
-            //"changed" => []
         ];
 
         $this->data = $data;
