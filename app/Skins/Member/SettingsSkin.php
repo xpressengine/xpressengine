@@ -14,13 +14,13 @@
 
 namespace App\Skins\Member;
 
-use Xpressengine\Skin\BladeSkin;
+use Xpressengine\Skin\GenericSkin;
 
 /**
  * @category    Member
  * @package     Xpressengine\Member
  */
-class SettingsSkin extends BladeSkin
+class SettingsSkin extends GenericSkin
 {
 
     protected static $id = 'member/settings/skin/xpressengine@default';
@@ -30,7 +30,11 @@ class SettingsSkin extends BladeSkin
         'description' => 'Xpressengine의 기본 마이페이지 스킨입니다'
     ];
 
-    protected $path = 'member.skins.default.settings';
+    protected static $path = 'member.skins.default.settings';
+
+    protected static $info = [];
+
+    protected static $viewDir = '';
 
     /**
      * 만약 view 이름과 동일한 메소드명이 존재하면 그 메소드를 호출한다.

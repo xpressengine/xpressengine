@@ -1,6 +1,6 @@
 <?php
 /**
- * Exceptions
+ * NotFoundRecycleBinException
  *
  * PHP version 5
  *
@@ -11,13 +11,12 @@
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-
 namespace Xpressengine\Trash\Exceptions;
 
 use Xpressengine\Trash\TrashException;
 
 /**
- * Repository Exception
+ * NotFoundRecycleBinException
  *
  * @category    Trash
  * @package     Xpressengine\Trash
@@ -26,6 +25,7 @@ use Xpressengine\Trash\TrashException;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class NotFoundException extends TrashException
+class NotFoundRecycleBinException extends TrashException
 {
+
 }

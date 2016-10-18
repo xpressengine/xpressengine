@@ -32,7 +32,7 @@ class CaptchaManagerTest extends \PHPUnit_Framework_TestCase
 
         $driver = $instance->createGoogleDriver();
 
-        $this->assertInstanceOf('Xpressengine\Captcha\GoogleRecaptcha', $driver);
+        $this->assertInstanceOf('Xpressengine\Captcha\Services\GoogleRecaptcha', $driver);
     }
 
     public function testGetAndSetDefaultDriver()

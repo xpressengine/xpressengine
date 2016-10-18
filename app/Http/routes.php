@@ -186,6 +186,25 @@ Route::group(
                     }
                 );
 
+                // addition info action at edit
+                Route::group(
+                    ['prefix' => 'additions/{field}'],
+                    function () {
+                        Route::get(
+                            '/',
+                            ['as' => 'user.settings.additions.show', 'uses' => 'Member\UserController@showAdditionField']
+                        );
+                        Route::get(
+                            '/edit',
+                            ['as' => 'user.settings.additions.edit', 'uses' => 'Member\UserController@editAdditionField']
+                        );
+                        Route::put(
+                            '/',
+                            ['as' => 'user.settings.additions.update', 'uses' => 'Member\UserController@updateAdditionField']
+                        );
+                    }
+                );
+
                 Route::group(
                     ['prefix' => 'pending_mail'],
                     function () {
@@ -784,4 +803,8 @@ Route::group(['prefix'=>'widgetbox'], function() {
 
     Route::post('{id}/permission', ['as' => 'widgetbox.permission', 'uses' => 'WidgetBoxController@storePermission']);
 
+});
+
+Route::group(['prefix' => 'captcha'], function () {
+    Route::get('naver/reissue', ['as' => 'captcha.naver.reissue', 'uses' => 'CaptchaController@naverReissue']);
 });

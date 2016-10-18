@@ -9,7 +9,7 @@
 namespace Xpressengine\Tests\Captcha;
 
 use Mockery as m;
-use Xpressengine\Captcha\GoogleRecaptcha as Origin;
+use Xpressengine\Captcha\Services\GoogleRecaptcha as Origin;
 
 class GoogleRecaptchaTest extends \PHPUnit_Framework_TestCase
 {

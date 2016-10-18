@@ -17,76 +17,61 @@ namespace Xpressengine\Trash;
 use Xpressengine\Database\VirtualConnectionInterface;
 use Xpressengine\Register\Container;
 use Closure;
+use Xpressengine\Trash\Exceptions\NotFoundRecycleBinException;
 
 /**
- * # TrashManager
- * 이 클래스는 Xpressengine에서 사용되는 휴지통을 관리하고 처리한다.
- * 휴지통은 별도의 데이터를 담고 있지 않는다.
- * 이 클래스는 전체 휴지통을 공통의 인터페이스로 관리하고
- * 휴지통 비우는 작업을 처리하는데 목적이 있다.
- * * 각 패키지 또는 모듈은 휴지통을 갖을 수 있다.
- * * 각 패키지 또는 모듈은 휴지통을 비우기 위한 별도의 작업을 할 필요가 없으며
- * Trash 패키지가 휴지통 비우는 작업을 대신한다.
+ * TrashManager
+ *
+ * * Xpressengine에서 사용되는 휴지통을 관리하고 휴지통 비우기 처리
+ * * 휴지통은 별도의 데이터를 담고 있지 않고 휴지통을 비우는 요청이 발생할 경우 구현체를 실행함
+ * 실제 데이터를 삭제하는 과정은 각 구현체가 직접 처리
  *
  * ## TrashManager 에 휴지통 등록
  * ```php
  *
- * Trash::register(NAMESPACE\CLASS_NAME::class);
+ * XeTrash::register(NAME_SPACE\CLASS_NAME::class);
  *
  * ```
  *
- * ## 휴지통 정보 출력
+ * ## 휴지통 요약 정보 확인
  * ```php
  *
- * $trashes = Trash::gets();
- * foreach ($trashes as $trash) {
- *   echo $trash::summary();
+ * $bins = XeTrash::gets();
+ * foreach ($bins as $bin) {
+ *   echo $bin::summary();
  * }
  *
  * ```
  *
- * ## 휴지통 비우기
+ * ## 전체 휴지통 비우기
  * ```php
  *
- * Trash::clean();
- *
- * ```
- *
- *  $register = new Container();
- *
- *  // blue 테마를 Xpressengine의 theme로 등록할 경우 Key는 'theme|blue'로 지정할 수 있다.
- *  $register->add('theme/blue', 'Theme\Blue');
- *
- *  // 등록된 모든 테마 목록('theme')을 조회
- *  $registeredThemes = $register->get('theme'); // output: ['theme|blue' => 'Theme\Blue']
- *
- *  // key가 'theme|blue'인 요소를 조회
- *  $registeredThemes = $register->get('theme|blue'); // output: 'Theme\Blue'
+ * XeTrash::clean();
  *
  * ```
  *
  * # Command
- * * 휴지통을 위한 command를 제공합니다.
+ * * 휴지통을 위한 command 제공
  *
  * ## 휴지통 정보 확인
  * ```
  *
  * php artisan trash
  *
- * php artisan trash basket-name
+ * php artisan trash recycle-bin-name
  *
- * php artisan trash --names=basket-name1,basket-name2,..
+ * php artisan trash recycle-bin-name1,recycle-bin-name2,..
  *
  * ```
  *
  * ## 휴지통 비우기
  * ```
  *
- * php artisan trash clean
+ * php artisan trash:clean
  *
- * php artisan trash clean basket-name
+ * php artisan trash:clean recycle-bin-name
  *
- * php artisan trash clean --names=basket-name1,basket-name2,..
+ * php artisan trash:clean recycle-bin-name1,recycle-bin-name2,..
  *
  * ```
  *
@@ -138,9 +123,9 @@ class TrashManager
     }
 
     /**
-     * 휴지통 반환
+     * 전체 휴지통 반환
      *
-     * @return WasteInterface[]
+     * @return RecycleBinInterface[]
      */
     public function gets()
     {
@@ -148,51 +133,63 @@ class TrashManager
     }
 
     /**
+     * 휴지통 반환
+     *
+     * @param string $name name
+     * @return RecycleBinInterface
+     */
+    public function get($name)
+    {
+        $names = $this->bins();
+        if (empty($names[$name])) {
+            throw new NotFoundRecycleBinException;
+        }
+
+        return $names[$name];
+    }
+
+    /**
      * 휴지통 이름 반환
      *
      * @return array
      */
-    public function names()
+    public function bins()
     {
-        $wastes = $this->gets();
-
-        $names = [];
-        foreach ($wastes as $waste) {
-            $names[] = [
-                'name' => $waste::name(),
-                'waste' => $waste,
-            ];
+        $bins = [];
+        foreach ($this->gets() as $bin) {
+            $bins[$bin::name()] = $bin;
         }
 
-        return $names;
+        return $bins;
     }
 
     /**
      * 휴지통 비우기
      *
-     * @param array   $wastes   waste list
+     * @param array   $bins     bin list
      * @param Closure $callback call back
      * @return void
      */
-    public function clean($wastes = [], Closure $callback = null)
+    public function clean($bins = [], Closure $callback = null)
     {
-        if ($wastes == []) {
-            $wastes = $this->gets();
+        if ($bins == []) {
+            $bins = $this->gets();
         }
 
-        foreach ($wastes as $waste) {
-            if (is_subclass_of($waste, '\Xpressengine\Trash\WasteInterface') === false) {
-                throw new Exceptions\InvalidWasteException;
+        foreach ($bins as $bin) {
+            if (
+                is_subclass_of($bin, '\Xpressengine\Trash\RecycleBinInterface') === false
+                || is_subclass_of($bin, '\Xpressengine\Trash\RecycleBinInterface') === false
+            ) {
+                throw new Exceptions\InvalidRecycleBinException;
             }
         }
 
-        foreach ($wastes as $waste) {
-            /**
-             * Todo callback 을 어떻게 할지..
-             */
-            $ret = $waste::clean();
+        /** @var RecycleBinInterface $bin */
+        foreach ($bins as $bin) {
+            $bin::clean();
             if ($callback != null) {
-                call_user_func_array($callback, [$ret]);
+                call_user_func_array($callback, []);
             }
         }
     }
