@@ -57,7 +57,7 @@ module.exports = (() => {
         'jspm:langbox': () => {
             return gulp.src('resources/assets/core/lang/LangEditorBox.js')
                 .pipe($.plumber())
-                .pipe($.jspm({selfExecutingBundle: true, plugin: 'jsx'}))
+                .pipe($.react())
                 .pipe($.rename('LangEditorBox.bundle.js'))
                 .pipe(gulp.dest('./assets/core/lang'))
 
