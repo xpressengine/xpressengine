@@ -61,7 +61,7 @@
             </div>
             <div class="pull-right">
                     @if($plugin->isActivated())
-                        <form method="POST" action="{{ route('settings.plugins.deactivate', [$plugin->getId()]) }}" accept-charset="UTF-8" role="form">
+                        <form method="POST" action="{{ route('settings.plugins.deactivate', [$plugin->getId()]) }}" accept-charset="UTF-8" role="form" style="display: inline;">
                             {!! csrf_field() !!}
                             {!! method_field('PUT') !!}
                             <button class="btn btn-danger">{{xe_trans('xe::deactivation')}}</button>
@@ -75,7 +75,7 @@
                             <a href="{{ $plugin->getSettingsURI() }}" class="xe-btn xe-btn-default blue v2">{{xe_trans('xe::settings')}}</a>
                         @endif
                     @else
-                        <form method="POST" action="{{ route('settings.plugins.activate', [$plugin->getId()]) }}" accept-charset="UTF-8" role="form">
+                        <form method="POST" action="{{ route('settings.plugins.activate', [$plugin->getId()]) }}" accept-charset="UTF-8" role="form" style="display: inline;">
                             {!! csrf_field() !!}
                             {!! method_field('PUT') !!}
                             <button class="btn btn-default">{{xe_trans('xe::activation')}}</button>
@@ -249,7 +249,14 @@
                     <h4 class="modal-title">플러그인 삭제</h4>
                 </div>
                 <div class="modal-body">
-                    플러그인을 삭제하시겠습니까?
+                    @if($plugin->isDevelopMode())
+                    <p>플러그인을 삭제하시겠습니까?</p>
+                    <p>개발모드 플러그인의 경우, 플러그인 디렉토리는 삭제되지 않습니다. 플러그인 삭제후, 터미널이나 FTP에서 직접 플러그인 디렉토리를 삭제하시기 바랍니다.</p>
+                    @else
+                    <p>플러그인 삭제 과정은 최대 수 분이 걸릴 수 있습니다.</p>
+                    <p>플러그인을 삭제하시겠습니까?</p>
+                    @endif
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">{{xe_trans('xe::cancel')}}</button>
