@@ -106,6 +106,14 @@ li {
   border-top: 1px solid #e4e4e4;
 }
 
+.setting-group label,
+.setting-detail label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #2c2e37;
+}
+
 .setting-detail-content {
   overflow: inherit;
 }

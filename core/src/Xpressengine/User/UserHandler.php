@@ -515,7 +515,7 @@ class UserHandler
      * @param UserInterface $user     user
      * @param array         $userData user data
      *
-     * @return UserInterface|static
+     * @return UserInterface
      */
     public function update(UserInterface $user, $userData)
     {

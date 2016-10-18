@@ -36,6 +36,11 @@ abstract class GenericSkin extends AbstractSkin
     protected static $path = '';
 
     /**
+     * @var string 템플릿 파일 보관 디렉토리 경로
+     */
+    protected static $viewDir = 'views';
+
+    /**
      * @var array
      */
     protected static $info = null;
@@ -249,7 +254,8 @@ abstract class GenericSkin extends AbstractSkin
      */
     public static function view($view)
     {
-        $view = str_replace('/', '.', static::$path).".views.$view";
+        $dir = static::$viewDir ? '.'.static::$viewDir : '';
+        $view = str_replace('/', '.', static::$path)."$dir.$view";
         return $view;
     }
 

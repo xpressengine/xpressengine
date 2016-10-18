@@ -49,7 +49,7 @@
                             </div>
                         </div>
                         @if($captcha->available() !== true)
-                        <div class="alert alert-warning" role="alert">
+                        <div class="alert alert-warning" role="alert" style="margin-top:10px;">
                             {!! xe_trans('xe::msgAlertCaptchaAtJoin') !!}
                         </div>
                         @endif

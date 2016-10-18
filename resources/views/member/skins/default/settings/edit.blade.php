@@ -1,8 +1,8 @@
 <h1>{{ xe_trans('xe::privateInfoAndOptionSettings') }}</h1>
 <p>{{xe_trans('xe::privateInfoAndOptionSettingsDescription')}}</p>
 <div class="setting-card">
-    <h2>{{ xe_trans('xe::defaultSettings') }}</h2>
 
+    <h2>{{ xe_trans('xe::default') }} {{ xe_trans('xe::information') }}</h2>
     <div class="__xe_setting __xe_settingEmail" data-origin-email="{{ $user->email }}">
         <div class="setting-group">
             <!--[D] a 링크 클릭 시 뒤에 오는 setting-detail block 처리,같은 카드 내 block처리된 부분도 none 처리   -->
@@ -148,8 +148,22 @@
 
 
 <div class="setting-card">
-    <h2>{{ xe_trans('xe::deleteAccount') }}</h2>
+    <h2>부가 정보</h2>
+    @foreach($fieldTypes as $id => $fieldType)
 
+        <div class="__xe_setting __xe_settingAddition __xe_settingAddition-{{ $id }}">
+            <div class="setting-group">
+                @include($_skin::view('show-field', compact('id', 'fieldType', 'user')))
+            </div>
+            <div class="setting-detail" style="display: none;">
+            </div>
+        </div>
+
+    @endforeach
+</div>
+
+<div class="setting-card">
+    <h2>{{ xe_trans('xe::deleteAccount') }}</h2>
     <div class="__xe_setting __xe_settingLeave">
         <div class="setting-group setting-account">
             <div class="setting-group-content">
@@ -188,3 +202,29 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(function($) {
+
+        window.openSetting = function(data) {
+            var id = data.id;
+            $('.__xe_settingAddition-'+id+' .setting-group').hide();
+            $('.__xe_settingAddition-'+id+' .setting-detail').show();
+        }
+
+        window.closeSetting = function(data) {
+            var id = data.field;
+            var url = data.showUrl;
+            XE.page(url, '.__xe_settingAddition-'+id+' .setting-group', {}, function(){
+                $('.__xe_settingAddition-'+id+' .setting-group').show();
+                $('.__xe_settingAddition-'+id+' .setting-detail').hide();
+            })
+        }
+
+        $('.__xe_settingAddition').on('click', '.__xe_setting-close', function(){
+            var id = $(this).data('field');
+            var url = $(this).parents('form').attr('action');
+            closeSetting({field: id, url: url});
+        });
+    });
+</script>

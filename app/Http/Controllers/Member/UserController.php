@@ -115,7 +115,7 @@ class UserController extends Controller
         $menus = array_merge($settingsSection, $menus);
 
         // get Selected section
-        if(isset($menus[$section]) === false) {
+        if (isset($menus[$section]) === false) {
             throw new NotFoundHttpException();
         }
         $selectedSection = $menus[$section];
@@ -213,7 +213,7 @@ class UserController extends Controller
         $message = 'success';
         $target = null;
 
-        if($this->user->getAuthPassword() !== "") {
+        if ($this->user->getAuthPassword() !== "") {
 
             $credentials = [
                 'id' => $this->user->getId(),
@@ -231,7 +231,7 @@ class UserController extends Controller
 
         try {
             $this->handler->validatePassword($password);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             throw new HttpException(Response::HTTP_FORBIDDEN, '비밀번호 보안수준을 만족하지 못했습니다.', $e);
         }
 
@@ -375,7 +375,7 @@ class UserController extends Controller
         }
 
         // 이미 존재하는 이메일이 있는지 확인한다.
-        if($this->emails->findByAddress($input['address'])) {
+        if ($this->emails->findByAddress($input['address'])) {
             $e = new MailAlreadyExistsException();
             throw new HttpException(400, $e->getMessage(), $e);
         }
@@ -472,7 +472,7 @@ class UserController extends Controller
         $selected = null;
 
         $pendingEmail = $this->user->getPendingEmail();
-        if($pendingEmail !== null && $pendingEmail->getAddress() === $address) {
+        if ($pendingEmail !== null && $pendingEmail->getAddress() === $address) {
             $selected = $pendingEmail;
         } else {
             foreach ($this->user->emails as $mail) {
@@ -527,7 +527,7 @@ class UserController extends Controller
     {
         $confirm = $request->get('confirm_leave');
 
-        if($confirm !== 'Y') {
+        if ($confirm !== 'Y') {
             $e = new InvalidArgumentException();
             $e->setMessage('약관의 동의가 필요합니다.');
             throw $e;
@@ -566,9 +566,78 @@ class UserController extends Controller
         $passwordConfig = app('config')->get('xe.user.password');
         $passwordLevel = array_get($passwordConfig['levels'], $passwordConfig['default']);
 
+        app('xe.frontend')->js(
+            ['assets/core/xe-ui-component/js/xe-form.js', 'assets/core/xe-ui-component/js/xe-page.js']
+        )->load();
+
         /** @var SkinHandler $skinHandler */
         $skinHandler = app('xe.skin');
         $skin = $skinHandler->getAssigned('member/settings');
         return $skin->setView('edit')->setData(compact('user', 'fieldTypes', 'passwordLevel'));
     }
+
+    public function showAdditionField($field)
+    {
+        $dynamicField = app('xe.dynamicField');
+        $fieldType = $dynamicField->get('user', $field);
+
+        $user = $this->user;
+
+        /** @var SkinHandler $skinHandler */
+        $skinHandler = app('xe.skin');
+        $skin = $skinHandler->getAssigned('member/settings');
+        $id = $field;
+        $view = $skin->setView('show-field')->setData(compact('user', 'fieldType', 'id'))->render();
+
+        return XePresenter::makeApi(
+            [
+                'result' => (string) $view,
+                'data' => compact('id'),
+                'XE_ASSET_LOAD' => [
+                    'css' => \Xpressengine\Presenter\Html\Tags\CSSFile::getFileList(),
+                    'js' => \Xpressengine\Presenter\Html\Tags\JSFile::getFileList(),
+                ],
+            ]
+        );
+
+
+    }
+
+    public function editAdditionField($field)
+    {
+        $dynamicField = app('xe.dynamicField');
+        $fieldType = $dynamicField->get('user', $field);
+
+        $user = $this->user;
+
+        /** @var SkinHandler $skinHandler */
+        $skinHandler = app('xe.skin');
+        $skin = $skinHandler->getAssigned('member/settings');
+        $id = $field;
+        $view = $skin->setView('edit-field')->setData(compact('user', 'fieldType', 'id'))->render();
+
+        return XePresenter::makeApi(
+            [
+                'result' => (string) $view,
+                'data' => compact('id'),
+                'XE_ASSET_LOAD' => [
+                    'css' => \Xpressengine\Presenter\Html\Tags\CSSFile::getFileList('head.append'),
+                    'js' => \Xpressengine\Presenter\Html\Tags\JSFile::getFileList('body.append'),
+                ],
+            ]
+        );
+    }
+
+    public function updateAdditionField(Request $request, $field)
+    {
+        $inputs = $request->except('_token');
+        $user = $this->user;
+        $user = $this->handler->update($user, $inputs);
+        $showUrl = route('user.settings.additions.show', ['field' => $field]);
+
+        return XePresenter::makeApi(
+            ['type' => 'success', 'message' => 'success', 'field' => $field, 'showUrl' => $showUrl]
+        );
+    }
+
 }
