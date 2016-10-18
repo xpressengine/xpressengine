@@ -51,7 +51,6 @@ System.config({
     "jquery-migrate": "npm:jquery-migrate@1.4.0",
     "jquery-ui": "npm:jquery-ui@1.10.5",
     "jspm-loader-jsx": "npm:jspm-loader-jsx@0.0.7",
-    "jsx": "github:floatdrop/plugin-jsx@1.2.1",
     "lodash": "npm:lodash@4.15.0",
     "moment": "npm:moment@2.13.0",
     "normalize.css": "github:necolas/normalize.css@4.1.1",
@@ -80,9 +79,6 @@ System.config({
     "xe.request": "assets/core/common/js/xe.request",
     "xedep-jquery": "npm:jquery@2.2.3",
     "xedep-jquery-migrate": "npm:jquery-migrate@1.4.0",
-    "github:floatdrop/plugin-jsx@1.2.1": {
-      "react-tools": "npm:react-tools@0.13.3"
-    },
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.4.1"
     },
