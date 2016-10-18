@@ -14,9 +14,11 @@
 
 namespace Xpressengine\Plugin;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Application;
 use Xpressengine\Config\ConfigManager;
+use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\Exceptions\CannotDeleteActivatedPluginException;
 use Xpressengine\Plugin\Exceptions\PluginActivationFailedException;
 use Xpressengine\Plugin\Exceptions\PluginAlreadyActivatedException;
@@ -533,6 +535,72 @@ class PluginHandler
             return false;
         }
         return $plugin->isActivated();
+    }
+
+    public function getOperation(ComposerFileWriter $writer)
+    {
+        $status = $writer->get('xpressengine-plugin.operation.status');
+
+        if($status === null) {
+            return null;
+        }
+
+        $runnings = [];
+        $runningMode = 'install';
+        $runnings = $writer->get("xpressengine-plugin.operation.install", []);
+        if(empty($runnings)) {
+            $runningMode = 'update';
+            $runnings = $writer->get("xpressengine-plugin.operation.update", []);
+        }
+        if(empty($runnings)) {
+            $runningMode = 'uninstall';
+            $runnings = $writer->get("xpressengine-plugin.operation.uninstall", []);
+        }
+
+        // operation이 없을 경우, return void
+        if(empty($runnings)) {
+            return null;
+        }
+
+        // operation이 있다.
+
+        // expired 조사
+        $deadline = $writer->get('xpressengine-plugin.operation.expiration_time');
+        $expired = false;
+        if($deadline !== null) {
+            $deadline = Carbon::parse($deadline);
+            if($deadline->isPast()) {
+                $expired = true;
+            }
+        }
+
+        $runningsInfo = [];
+        if(!empty($runnings)) {
+            if($runningMode === 'uninstall') {
+                $package = current($runnings);
+            } else {
+                $package = key($runnings);
+            }
+            list(, $id) = explode('/', $package);
+            $runningsInfo[$package] = $this->provider->find($id);
+            $runningsInfo[$package]->pluginId = $id;
+        }
+
+        $changed = $writer->get('xpressengine-plugin.operation.changed', []);
+        foreach($changed as $type) {
+            foreach($type as $package => $version) {
+                list(, $id) = explode('/', $package);
+                if(!isset($runningsInfo[$package])) {
+                    $runningsInfo[$package] = $this->provider->find($id);
+                }
+            }
+        }
+
+        if ($status === ComposerFileWriter::STATUS_RUNNING && $expired === true) {
+            $status = 'expired';
+        }
+
+        return compact('runnings', 'status', 'runningMode', 'expired', 'changed', 'runningsInfo');
     }
 
     /**

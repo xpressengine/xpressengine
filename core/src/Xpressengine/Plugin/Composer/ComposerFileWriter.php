@@ -27,6 +27,10 @@ use Xpressengine\Plugin\PluginScanner;
  */
 class ComposerFileWriter
 {
+    const STATUS_RUNNING   = 'running';
+    const STATUS_SUCCESSED = 'successed';
+    const STATUS_FAILED    = 'failed';
+    const STATUS_EXPIRED    = 'expired';
 
     /**
      * @var string
@@ -68,8 +72,23 @@ class ComposerFileWriter
         require_once(__DIR__.'/helpers.php');
         $this->scanner = $scanner;
         $this->path = $path;
-        $this->reload();
         $this->packagistUrl = $packagistUrl;
+        $this->load();
+    }
+
+    /**
+     * json 파일의 내용을 메모리에 읽어온다.
+     *
+     * @return void
+     */
+    public function load()
+    {
+        if (!is_file($this->path)) {
+            $this->makeFile();
+        }
+
+        $str = file_get_contents($this->path);
+        $this->data = json_decode($str, true);
     }
 
     /**
@@ -87,10 +106,7 @@ class ComposerFileWriter
 
         $data['xpressengine-plugin'] = [
             "path" => "storage/app/composer.plugins.json",
-            "install" => [],
-            "update" => [],
-            "uninstall" => [],
-            "changed" => []
+            "operation" => [],
         ];
 
         $this->data = $data;
@@ -98,78 +114,78 @@ class ComposerFileWriter
     }
 
     /**
-     * reload plugin composer file
-     *
-     * @return void
-     */
-    public function reload()
-    {
-        if (!is_file($this->path)) {
-            $this->makeFile();
-        }
-
-        $str = file_get_contents($this->path);
-        $this->data = json_decode($str, true);
-    }
-
-    /**
-     * register plugin to install list
-     *
-     * @param string $name    package name of plugin
-     * @param string $version plugin version
-     *
-     * @return $this
-     */
-    public function install($name, $version)
-    {
-        array_set($this->data, "xpressengine-plugin.install.$name", $version);
-        return $this;
-    }
-
-    /**
-     * register plugin to update list
-     *
-     * @param string $name    package name of plugin
-     * @param string $version plugin version
-     *
-     * @return $this
-     */
-    public function update($name, $version)
-    {
-        array_set($this->data, "xpressengine-plugin.update.$name", $version);
-        return $this;
-    }
-
-    /**
-     * register plugin to uninstall list
-     *
-     * @param string $name package name of plugin
-     *
-     * @return $this
-     */
-    public function uninstall($name)
-    {
-        $uninstall = array_get($this->data, "xpressengine-plugin.uninstall", []);
-        if (!in_array($name, $uninstall)) {
-            $uninstall[] = $name;
-        }
-        array_set($this->data, "xpressengine-plugin.uninstall", $uninstall);
-        return $this;
-    }
-
-    /**
-     * reset plugin install/update/uninstall list
+     * 현재 설치된 플러그인들의 정보를 조회하여 반영한다.
      *
      * @return $this
      */
     public function reset()
     {
-        array_set($this->data, "xpressengine-plugin.install", []);
-        array_set($this->data, "xpressengine-plugin.update", []);
-        array_set($this->data, "xpressengine-plugin.uninstall", []);
+        // initialize
+        $requires = [];
+        $replace = [];
+        array_set($this->data, 'repositories', [['type' => 'composer', 'url' => $this->packagistUrl]]);
+
+        $dir = $this->scanner->getPluginDirectory();
+        $operation = '>=';
+
+        foreach ($this->scanner->scanDirectory() as $plugin) {
+
+            $name = array_get($plugin, 'metaData.name');
+            $version = array_get($plugin, 'metaData.version');
+            if (is_dir($dir.DIRECTORY_SEPARATOR.$plugin['id'].DIRECTORY_SEPARATOR.'vendor')) {
+                $replace[$name] = '*';
+                continue;
+            }
+            $requires[$name] = $operation.$version;
+        }
+        array_set($this->data, 'require', $requires);
+        array_set($this->data, 'replace', $replace);
+
+        // set fix mode
+        $this->setFixMode();
+
         return $this;
     }
 
+    /**
+     * 현재 실행중인 작업에 대한 정보를 초기화 한다.
+     *
+     * @return $this
+     */
+    public function cleanOperation()
+    {
+        array_set($this->data, 'xpressengine-plugin.operation', []);
+        return $this;
+    }
+
+    /**
+     * setFixMode
+     */
+    public function setFixMode()
+    {
+        $operation = '>=';
+        $requires = [];
+        foreach (array_get($this->data, 'require', []) as $package => $version) {
+            $requires[$package] = str_replace($operation, '', $version);
+        }
+        array_set($this->data, 'require', $requires);
+        array_set($this->data, 'xpressengine-plugin.mode', 'plugins-fixed');
+    }
+
+    /**
+     * setUpdateMode
+     */
+    public function setUpdateMode()
+    {
+        $operation = '>=';
+        $requires = [];
+        foreach (array_get($this->data, 'require', []) as $package => $version) {
+            $requires[$package] = $operation.str_replace($operation, '', $version);
+        }
+        array_set($this->data, 'require', $requires);
+        array_set($this->data, 'xpressengine-plugin.mode', 'plugins-update');
+        array_set($this->data, "xpressengine-plugin.operation.status", ComposerFileWriter::STATUS_RUNNING);
+    }
 
     /**
      * add plugin to require
@@ -199,30 +215,62 @@ class ComposerFileWriter
     }
 
     /**
-     * 현재 다운로드 되어 있는 플러그인 중에 require되어 있거나 vendor가 있는 플러그인을 제외한 플러그인의 composer.json 정보를 require시킨다.
+     * register plugin to install list
+     *
+     * @param string $name        package name of plugin
+     * @param string $version     plugin version
+     * @param string $expiredTime deadline
      *
      * @return $this
      */
-    public function resolvePlugins()
+    public function install($name, $version, $expiredTime)
     {
-        $requires = [];
-        $replace = [];
-
-        $dir = $this->scanner->getPluginDirectory();
-
-        foreach ($this->scanner->scanDirectory() as $plugin) {
-
-            $name = array_get($plugin, 'metaData.name');
-            $version = array_get($plugin, 'metaData.version');
-            if (is_dir($dir.DIRECTORY_SEPARATOR.$plugin['id'].DIRECTORY_SEPARATOR.'vendor')) {
-                $replace[$name] = '*';
-                continue;
-            }
-            $requires[$name] = $version;
+        array_set($this->data, "xpressengine-plugin.operation.install.$name", $version);
+        if($expiredTime) {
+            array_set($this->data, "xpressengine-plugin.operation.expiration_time", $expiredTime);
+        } else {
+            array_set($this->data, "xpressengine-plugin.operation.expiration_time", null);
         }
-        array_set($this->data, 'require', $requires);
-        array_set($this->data, 'replace', $replace);
 
+        $this->setUpdateMode();
+        return $this;
+    }
+
+    /**
+     * register plugin to update list
+     *
+     * @param string $name        package name of plugin
+     * @param string $version     plugin version
+     * @param string $expiredTime deadline
+     *
+     * @return $this
+     */
+    public function update($name, $version, $expiredTime)
+    {
+        array_set($this->data, "xpressengine-plugin.operation.update.$name", $version);
+        array_set($this->data, "xpressengine-plugin.operation.expiration_time", $expiredTime);
+
+        $this->setUpdateMode();
+        return $this;
+    }
+
+    /**
+     * register plugin to uninstall list
+     *
+     * @param string $name package name of plugin
+     * @param string $expiredTime deadline*
+     * @return $this
+     */
+    public function uninstall($name, $expiredTime)
+    {
+        $uninstall = array_get($this->data, "xpressengine-plugin.operation.uninstall", []);
+        if (!in_array($name, $uninstall)) {
+            $uninstall[] = $name;
+        }
+        array_set($this->data, "xpressengine-plugin.operation.uninstall", $uninstall);
+        array_set($this->data, "xpressengine-plugin.operation.expiration_time", $expiredTime);
+
+        $this->setUpdateMode();
         return $this;
     }
 
@@ -240,49 +288,6 @@ class ComposerFileWriter
             $json = \Composer\Json\JsonFormatter::format($json, true, true);
         }
         file_put_contents($this->path, $json);
-    }
-
-    /**
-     * setUpdateMode
-     *
-     * @return $this
-     */
-    public function setUpdateMode()
-    {
-        $operation = '>=';
-        $requires = [];
-        foreach (array_get($this->data, 'require', []) as $package => $version) {
-            $requires[$package] = $operation.str_replace($operation, '', $version);
-        }
-        array_set($this->data, 'require', $requires);
-
-        array_set($this->data, 'repositories', [['type' => 'composer', 'url' => $this->packagistUrl]]);
-        array_set($this->data, 'xpressengine-plugin.mode', 'plugins-update');
-        array_set($this->data, 'xpressengine-plugin.changed', []);
-
-        return $this;
-    }
-
-    /**
-     * setFixMode
-     *
-     * @return $this
-     */
-    public function setFixMode()
-    {
-        $operation = '>=';
-        $requires = [];
-        foreach (array_get($this->data, 'require', []) as $package => $version) {
-            $requires[$package] = str_replace($operation, '', $version);
-        }
-        array_set($this->data, 'require', $requires);
-
-        array_set($this->data, 'repositories', [['type' => 'composer', 'url' => $this->packagistUrl]]);
-        array_set($this->data, 'xpressengine-plugin.mode', 'plugins-fixed');
-
-        $this->reset();
-
-        return $this;
     }
 
     /**

@@ -14,13 +14,13 @@
 
 namespace App\Skins\Plugin;
 
-use Xpressengine\Skin\BladeSkin;
+use Xpressengine\Skin\GenericSkin;
 
 /**
  * @category    Plugin
  * @package     App\Skins\Plugin
  */
-class PluginSettingsSkin extends BladeSkin
+class PluginSettingsSkin extends GenericSkin
 {
 
     protected static $id = 'plugins/settingsSkin/xpressengine@default';
@@ -30,7 +30,20 @@ class PluginSettingsSkin extends BladeSkin
         'description' => 'Xpressengine의 기본 플러그인 설정페이지 스킨입니다'
     ];
 
-    protected $path = 'plugin.skins.default';
+    /**
+     * @var array
+     */
+    protected static $info = [];
+
+    /**
+     * @var string
+     */
+    protected static $path = 'plugin.skins.default';
+
+    /**
+     * @var string
+     */
+    protected static $viewDir = '';
 
     /**
      * listView
@@ -40,6 +53,8 @@ class PluginSettingsSkin extends BladeSkin
     protected function index()
     {
         $this->loadDefault();
+
+        app('xe.frontend')->js('assets/core/xe-ui-component/js/xe-form.js')->load();
 
         app('xe.frontend')->html('plugins.updateList')->content("
         <script>

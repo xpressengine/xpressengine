@@ -21,23 +21,23 @@
                         {{-- author info --}}
                         <dl>
 
-                        @if($author = $plugin->getAuthor())
+                    @if($author = $plugin->getAuthor())
 
-                            {{-- author name --}}
-                            <dt class="sr-only">{{xe_trans('xe::author')}}</dt>
-                            <dd>
-                                <i class="xi-user"></i>
-                                @if($email = array_get($author, 'email'))
+                        {{-- author name --}}
+                        <dt class="sr-only">{{xe_trans('xe::author')}}</dt>
+                        <dd>
+                            <i class="xi-user"></i>
+                            @if($email = array_get($author, 'email'))
                                 <a href="mailto:{{ $email }}">
                                     {{ '@'.array_get($author, 'name', '') }}
                                 </a>
-                                @else
-                                    {{ '@'.array_get($author, 'name', '') }}
-                                @endif
-                            </dd>
+                            @else
+                                {{ '@'.array_get($author, 'name', '') }}
+                            @endif
+                        </dd>
 
-                            {{-- author homepage --}}
-                            @if($homepage = array_get($author, 'homepage'))
+                        {{-- author homepage --}}
+                        @if($homepage = array_get($author, 'homepage'))
                             <dt class="sr-only">{{xe_trans('xe::author')}}</dt>
                             <dd>
                                 <i class="xi-clip"></i>
@@ -45,21 +45,21 @@
                                     {{ $homepage }}
                                 </a>
                             </dd>
-                            @endif
-
                         @endif
 
-                            {{-- author source--}}
-                            @if($source = $plugin->getSupport('source'))
-                            <dt class="sr-only">Source</dt>
-                                <a href="{{ $source }}" target="_blank">{{ $source }}</a>
-                            </dd>
-                            @endif
+                    @endif
+
+                    {{-- author source--}}
+                    @if($source = $plugin->getSupport('source'))
+                        <dt class="sr-only">Source</dt>
+                        <a href="{{ $source }}" target="_blank">{{ $source }}</a>
+                        </dd>
+                        @endif
                         </dl>
 
-                    </div>
                 </div>
-                <div class="pull-right">
+            </div>
+            <div class="pull-right">
                     @if($plugin->isActivated())
                         <form method="POST" action="{{ route('settings.plugins.deactivate', [$plugin->getId()]) }}" accept-charset="UTF-8" role="form">
                             {!! csrf_field() !!}
@@ -74,13 +74,17 @@
                         @if($plugin->getSettingsURI())
                             <a href="{{ $plugin->getSettingsURI() }}" class="xe-btn xe-btn-default blue v2">{{xe_trans('xe::settings')}}</a>
                         @endif
-
                     @else
                         <form method="POST" action="{{ route('settings.plugins.activate', [$plugin->getId()]) }}" accept-charset="UTF-8" role="form">
                             {!! csrf_field() !!}
                             {!! method_field('PUT') !!}
                             <button class="btn btn-default">{{xe_trans('xe::activation')}}</button>
                         </form>
+                        <button type="button" data-toggle="modal" data-target="#deletePlugin" class="btn btn-danger">{{xe_trans('xe::delete')}}</button>
+                    @endif
+
+                    @if($plugin->hasUpdate())
+                    <button type="button" data-toggle="modal" data-target="#downloadPluginUpdate" class="btn btn-primary">새버전 다운로드</button>
                     @endif
 
                 </div>
@@ -233,3 +237,57 @@
 </div>
 <!--//어드민 컨텐츠 영역 -->
 
+@if(!$plugin->isActivated())
+<div id="deletePlugin" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <form action="{{ route('settings.plugins.delete', [$plugin->getId()]) }}" method="POST">
+            {{ csrf_field() }}
+            {{ method_field('DELETE') }}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">플러그인 삭제</h4>
+                </div>
+                <div class="modal-body">
+                    플러그인을 삭제하시겠습니까?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{xe_trans('xe::cancel')}}</button>
+                    <button type="submit" class="btn btn-primary">{{ xe_trans('xe::delete') }}</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </form>
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+@endif
+
+@if($plugin->hasUpdate())
+<div id="downloadPluginUpdate" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <form action="{{ route('settings.plugins.download', [$plugin->getId()]) }}" method="POST">
+            {{ csrf_field() }}
+            {{ method_field('PUT') }}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">플러그인 업데이트</h4>
+                </div>
+                <div class="modal-body">
+                    <label>현재 설치된 버전</label>
+                    <p>{{ $plugin->getVersion() }}</p>
+                    <label>업데이트 버전 버전</label>
+                    <p>{{ $plugin->getVersion() }}</p>
+                    <hr>
+                    <p>플러그인을 업데이트할 경우 의존관계에 있는 다른 플러그인이 같이 설치되거나 업데이트 될 수 있습니다.</p>
+                    <p>플러그인 업데이트 과정은 최대 수 분이 걸릴 수 있습니다.</p>
+                    <p>플러그인을 업데이트하시겠습니까?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{xe_trans('xe::cancel')}}</button>
+                    <button type="submit" class="btn btn-primary">{{ xe_trans('xe::update_plugin') }}</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </form>
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+@endif
