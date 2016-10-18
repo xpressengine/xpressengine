@@ -134,13 +134,20 @@ class PluginController extends Controller
             throw new HttpException(422, 'Plugin is not deactivated. Please deactivate the plugin.');
         }
 
-        $operation = $handler->getOperation($writer);
+        if($plugin->isDevelopMode()) {
+            $handler->uninstallPlugin($pluginId);
+            return redirect()->route('settings.plugins')->with(
+                'alert',
+                ['type' => 'success', 'message' => '플러그인을 삭제하였습니다.']
+            );
+        }
 
+        $operation = $handler->getOperation($writer);
         if ($operation['status'] === ComposerFileWriter::STATUS_RUNNING) {
             throw new HttpException(422, "이미 진행중인 요청이 있습니다.");
         }
 
-        $plugin->uninstall();
+        $handler->uninstallPlugin($pluginId);
 
         $timeLimit = config('xe.plugin.operation.time_limit');
         $writer->reset()->cleanOperation();
@@ -262,7 +269,7 @@ class PluginController extends Controller
             throw $e;
         }
 
-        return Redirect::route('settings.plugins')->withAlert(['type' => 'success', 'message' => '플러그인을 켰습니다.']);
+        return Redirect::back()->withAlert(['type' => 'success', 'message' => '플러그인을 켰습니다.']);
     }
 
     public function putDeactivatePlugin($pluginId, PluginHandler $handler, InterceptionHandler $interceptionHandler)
@@ -276,7 +283,7 @@ class PluginController extends Controller
             throw $e;
         }
 
-        return Redirect::route('settings.plugins')->withAlert(['type' => 'success', 'message' => '플러그인을 껐습니다.']);
+        return Redirect::back()->withAlert(['type' => 'success', 'message' => '플러그인을 껐습니다.']);
     }
 
     public function putUpdatePlugin($pluginId, PluginHandler $handler, InterceptionHandler $interceptionHandler)

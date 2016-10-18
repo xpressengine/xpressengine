@@ -28,6 +28,13 @@
                         <div class="btn-group">
                             <button class="btn btn-default __xe_btn-show-update">{{ xe_trans('xe::updateList') }}</button>
                         </div>
+
+                        @if(!$operation || $operation['status'] !== 'running')
+                        <div class="btn-group">
+                            <button type="button" data-toggle="modal" data-target="#installPlugin" class="btn btn-primary">새로 설치</button>
+                        </div>
+                        @endif
+
                     </div>
 
                     {{-- filter --}}
@@ -62,14 +69,6 @@
                             </form>
                         </div>
                     </div>
-
-                    @if(!$operation || $operation['status'] !== 'running')
-                    <div class="pull-right">
-                        <div class="btn-group">
-                            <button type="button" data-toggle="modal" data-target="#installPlugin" class="btn btn-primary">새로 설치</button>
-                        </div>
-                    </div>
-                    @endif
                 </div>
 
                 {{-- plugin list --}}

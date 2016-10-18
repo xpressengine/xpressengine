@@ -5,7 +5,7 @@
             @if($operation['status'] !== 'running')
                 <div class="pull-right">
                     <form action="{{ route('settings.plugins.operation.delete') }}" method="DELETE" data-submit="xe-ajax" data-callback="deletePluginOperation">
-                        <button class="btn-link" type="submit">삭제</button>
+                        <button class="btn-link" type="submit">내역 삭제</button>
                     </form>
                 </div>
             @endif

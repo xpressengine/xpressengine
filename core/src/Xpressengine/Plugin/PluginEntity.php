@@ -172,7 +172,7 @@ class PluginEntity implements Arrayable, Jsonable
     public function getPath($path = '')
     {
         $pluginObj = $this->getObject();
-        return $pluginObj->getPath($path);
+        return $pluginObj->path($path);
     }
 
     /**
