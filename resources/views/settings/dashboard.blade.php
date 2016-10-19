@@ -5,7 +5,7 @@
 @section('page_description')
 @stop
 
-{{ uio('widgetbox', ['id' => $widgetbox->id]) }}
+{{ uio('widgetbox', ['id' => $widgetbox->id, 'link'=>'Dashboard 편집']) }}
 
 {{--<div class="row">
     <div class="col-md-6 _card" data-card-id="1">

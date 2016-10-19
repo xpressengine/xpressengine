@@ -36,7 +36,7 @@
                 $container.on('change', selectWidgetSkin, function() {
                     var widget = this.value;
 
-                    if(widget) {
+                    if(widget !== 'select-skin') {
                         var url = $(this).find('option:selected').data('url');
                         XE.page(url, '.widget-form');
                     }
@@ -187,4 +187,3 @@
     })().init();
 
 })(window, jQuery);
-

@@ -16,14 +16,15 @@ class DashboardController extends Controller
 
     public function index(WidgetBoxHandler $handler)
     {
-        $widgetboxPrefix = 'dashboard@';
+        $widgetboxPrefix = 'dashboard-';
         $userId = auth()->id();
 
         $id = $widgetboxPrefix.$userId;
 
         $widgetbox = $handler->find($id);
         if($widgetbox === null) {
-            $widgetbox = $handler->create(['id'=>$id, 'title'=>'dashboard', 'content'=> '']);
+            $dashboard = $handler->find('dashboard');
+            $widgetbox = $handler->create(['id'=>$id, 'title'=>'Dashboard', 'content'=> $dashboard->content]);
         }
 
         \XeFrontend::title('XpressEngine3 Settings');

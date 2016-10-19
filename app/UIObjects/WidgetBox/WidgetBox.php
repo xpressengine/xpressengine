@@ -39,7 +39,10 @@ class WidgetBox extends AbstractUIObject
             $content = $widgetbox->content;
             $this->loadFiles();
         }
-        $this->template = view($this->view, compact('widgetbox', 'id', 'content'))->render();
+
+        $link = array_get($args, 'link');
+
+        $this->template = view($this->view, compact('widgetbox', 'id', 'content', 'link'))->render();
         return parent::render();
     }
 
