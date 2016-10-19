@@ -37,7 +37,6 @@ Route::settings(
         Route::get(
             '/',
             ['as' => 'settings.dashboard', 'uses' => 'DashboardController@index', 'settings_menu' => ['dashboard']]
-
         );
     }
 );
@@ -45,11 +44,11 @@ Route::settings(
 Route::settings(
     'lang',
     function () {
-        Route::get('lines/{key}', ['as' => 'manage.lang.lines.key', 'uses' => 'LangController@getLinesWithKey']);
-        Route::get('search/{locale}', ['as' => 'manage.lang.search', 'uses' => 'LangController@searchKeyword']);
-        Route::put('save', ['as' => 'manage.lang.save', 'uses' => 'LangController@save']);
+        Route::get('lines/{key}', ['as' => 'settings.lang.lines.key', 'uses' => 'LangController@getLinesWithKey']);
+        Route::get('search/{locale}', ['as' => 'settings.lang.search', 'uses' => 'LangController@searchKeyword']);
+        Route::put('save', ['as' => 'settings.lang.save', 'uses' => 'LangController@save']);
         Route::get('/', [
-                'as' => 'manage.lang.index',
+                'as' => 'settings.lang.index',
                 'uses' => 'LangController@index',
                 'settings_menu' => ['lang.default']
         ]);
@@ -183,6 +182,25 @@ Route::group(
                         Route::post(
                             'delete',
                             ['as' => 'member.settings.mail.delete', 'uses' => 'Member\UserController@deleteMail']
+                        );
+                    }
+                );
+
+                // addition info action at edit
+                Route::group(
+                    ['prefix' => 'additions/{field}'],
+                    function () {
+                        Route::get(
+                            '/',
+                            ['as' => 'user.settings.additions.show', 'uses' => 'Member\UserController@showAdditionField']
+                        );
+                        Route::get(
+                            '/edit',
+                            ['as' => 'user.settings.additions.edit', 'uses' => 'Member\UserController@editAdditionField']
+                        );
+                        Route::put(
+                            '/',
+                            ['as' => 'user.settings.additions.update', 'uses' => 'Member\UserController@updateAdditionField']
                         );
                     }
                 );
@@ -565,8 +583,26 @@ Route::settings(
             ]
         );
 
+        Route::get('operation', [
+            'as' => 'settings.plugins.operation',
+            'uses' => 'PluginController@getOperation'
+        ]);
+
+        Route::delete('operation', [
+            'as' => 'settings.plugins.operation.delete',
+            'uses' => 'PluginController@deleteOperation'
+        ]);
+
+        Route::post(
+            '/',
+            [
+                'as' => 'settings.plugins.install',
+                'uses' => 'PluginController@install'
+            ]
+        );
+
         Route::get(
-            '{pluginId?}',
+            '{pluginId}',
             [
                 'as' => 'settings.plugins.show',
                 'uses' => 'PluginController@show',
@@ -595,6 +631,22 @@ Route::settings(
                 'uses' => 'PluginController@putUpdatePlugin'
             ]
         );
+        Route::put(
+            '{pluginId}/download',
+            [
+                'as' => 'settings.plugins.download',
+                'uses' => 'PluginController@putDownloadPlugin'
+            ]
+        );
+
+        Route::delete(
+            '{pluginId}',
+            [
+                'as' => 'settings.plugins.delete',
+                'uses' => 'PluginController@delete'
+            ]
+        );
+
     }
 );
 
@@ -653,16 +705,16 @@ Route::group(['prefix' => 'fieldType'], function () {
     Route::get('/storeCategory', ['as' => 'fieldType.storeCategory', 'uses' => 'FieldTypeController@storeCategory']);
 });
 
-Route::group(['prefix' => 'temporary'], function () {
-    Route::get('/', ['as' => 'temporary.index', 'uses' => 'TemporaryController@index']);
-    Route::post('store', ['as' => 'temporary.store', 'uses' => 'TemporaryController@store']);
-    Route::post('update/{temporaryId}', ['as' => 'temporary.update', 'uses' => 'TemporaryController@update'])
-        ->where('temporaryId', '[0-9a-z\-]+');
-    Route::post('destroy/{temporaryId}', ['as' => 'temporary.destroy', 'uses' => 'TemporaryController@destroy'])
-        ->where('temporaryId', '[0-9a-z\-]+');
+Route::group(['prefix' => 'draft'], function () {
+    Route::get('/', ['as' => 'draft.index', 'uses' => 'DraftController@index']);
+    Route::post('store', ['as' => 'draft.store', 'uses' => 'DraftController@store']);
+    Route::post('update/{draftId}', ['as' => 'draft.update', 'uses' => 'DraftController@update'])
+        ->where('draftId', '[0-9a-z\-]+');
+    Route::post('destroy/{draftId}', ['as' => 'draft.destroy', 'uses' => 'DraftController@destroy'])
+        ->where('draftId', '[0-9a-z\-]+');
 
-    Route::post('setAuto', ['as' => 'temporary.setAuto', 'uses' => 'TemporaryController@setAuto']);
-    Route::post('destroyAuto', ['as' => 'temporary.destroyAuto', 'uses' => 'TemporaryController@destroyAuto']);
+    Route::post('setAuto', ['as' => 'draft.setAuto', 'uses' => 'DraftController@setAuto']);
+    Route::post('destroyAuto', ['as' => 'draft.destroyAuto', 'uses' => 'DraftController@destroyAuto']);
 });
 
 Route::settings('widget', function () {
@@ -751,4 +803,8 @@ Route::group(['prefix'=>'widgetbox'], function() {
 
     Route::post('{id}/permission', ['as' => 'widgetbox.permission', 'uses' => 'WidgetBoxController@storePermission']);
 
+});
+
+Route::group(['prefix' => 'captcha'], function () {
+    Route::get('naver/reissue', ['as' => 'captcha.naver.reissue', 'uses' => 'CaptchaController@naverReissue']);
 });

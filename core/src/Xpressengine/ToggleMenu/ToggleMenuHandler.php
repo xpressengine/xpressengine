@@ -131,11 +131,17 @@ class ToggleMenuHandler
      */
     public function setActivates($id, $instanceId = null, array $keys = [])
     {
+        $configKey = $this->getConfigKey($id, $instanceId);
         $config = [];
         if (count($keys) > 0) {
             $config = ['activate' => $keys];
         }
-        return $this->cfg->put($this->getConfigKey($id, $instanceId), $config);
+
+        if (!$this->cfg->get($configKey)) {
+            return $this->cfg->add($configKey, $config);
+        }
+
+        return $this->cfg->put($configKey, $config);
     }
 
     /**
@@ -147,9 +153,7 @@ class ToggleMenuHandler
      */
     public function getActivated($id, $instanceId = null)
     {
-        if (($config = $this->cfg->get($this->getConfigKey($id, $instanceId))) === null) {
-            $config = $this->setActivates($id, $instanceId);
-        }
+        $config = $this->cfg->getOrNew($this->getConfigKey($id, $instanceId));
         $keys = $config->get('activate', []);
 
         $activated = array_intersect_key($this->all($id), array_flip($keys));

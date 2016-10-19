@@ -29,7 +29,7 @@ use Xpressengine\Plugin\PluginHandler as Plugin;
  * @method void deactivate($installedVersion = null)
  * @method void install()
  * @method boolean checkInstalled($currentVersion = null)
- * @method void update($currentVersion = null)
+ * @method void update()
  * @method boolean checkUpdated($currentVersion = null)
  * @method void uninstall()
  * @method string getSettingsURI()
@@ -172,7 +172,7 @@ class PluginEntity implements Arrayable, Jsonable
     public function getPath($path = '')
     {
         $pluginObj = $this->getObject();
-        return $pluginObj->getPath($path);
+        return $pluginObj->path($path);
     }
 
     /**
@@ -319,6 +319,16 @@ class PluginEntity implements Arrayable, Jsonable
     public function setRemoteData($data)
     {
         $this->remoteData = $data;
+    }
+
+    /**
+     * 자료실에 등록된 플러그인의 정보가 설정돼 있을 경우 반환한다.
+     *
+     * @return null
+     */
+    public function getRemoteData()
+    {
+        return $this->remoteData;
     }
 
     /**

@@ -853,7 +853,7 @@ return [
         'ko' => '자동저장',
         'en' => 'Auto Save',
     ],
-    'tempSave' => [
+    'draftSave' => [
         'ko' => '임시저장',
         'en' => 'Manual Save',
     ],
@@ -1965,5 +1965,17 @@ return [
     'includeVGroup' => [
         'ko' => '포함할 가상그룹',
         'en' => 'Include Virtual Group'
+    ],
+    'refresh' => [
+        'ko' => '새로고침',
+        'en' => 'Refresh'
+    ],
+    'enterAsShownInTheImage' => [
+        'ko' => '이미지를 보이는 대로 입력해주세요.',
+        'en' => 'Enter as shown in the image.'
+    ],
+    'automaticInputTextPrevention' => [
+        'ko' => '자동입력 방지문자',
+        'en' => 'Automatic input text prevention'
     ],
 ];

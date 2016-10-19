@@ -65,20 +65,20 @@ class Composer
         $path = static::$composerFile;
         $writer = self::getWriter($path);
 
-        // composer.plugins.json 파일이 존재하지 않을 경우 초기화
-        $writer->resolvePlugins()->write();
-
         // XE가 설치돼 있지 않을 경우, base plugin require에 추가
         if (!file_exists(static::$installedFlagPath)) {
+            $writer->reset();
             foreach (static::$basePlugins as $plugin => $version) {
                 if($writer->get('replace.'.$plugin) === null) {
-                    $writer->install($plugin, $version);
+                    $writer->install($plugin, $version, date("Y-m-d H:i:s"));
                 } else {
                     $event->getOutput()->writeln("xpressengine-installer: skip installation of existing plugin: $plugin");
                 }
             }
+            if (!defined('__XE_PLUGIN_MODE__')) {
+                define('__XE_PLUGIN_MODE__', true);
+            }
             static::applyRequire($writer);
-            $writer->setFixMode();
             $event->getOutput()->writeln("xpressengine-installer: running in update mode");
         } else {
             static::applyRequire($writer);
@@ -107,9 +107,13 @@ class Composer
     {
         $path = static::$composerFile;
 
-        // XE가 설치돼 있지 않을 경우, resolve plugins
         $writer = self::getWriter($path);
-        $writer->resolvePlugins()->setFixMode()->write();
+
+        if (!file_exists(static::$installedFlagPath)) {
+            $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_SUCCESSED);
+        }
+
+        $writer->reset()->write();
     }
 
     /**
@@ -138,15 +142,15 @@ class Composer
      */
     private static function applyRequire(ComposerFileWriter $writer)
     {
-        $installs = $writer->get('xpressengine-plugin.install', []);
+        $installs = $writer->get('xpressengine-plugin.operation.install', []);
         foreach ($installs as $name => $version) {
             $writer->addRequire($name, $version);
         }
-        $updates = $writer->get('xpressengine-plugin.update', []);
+        $updates = $writer->get('xpressengine-plugin.operation.update', []);
         foreach ($updates as $name => $version) {
             $writer->addRequire($name, $version);
         }
-        $uninstalls = $writer->get('xpressengine-plugin.uninstall', []);
+        $uninstalls = $writer->get('xpressengine-plugin.operation.uninstall', []);
         foreach ($uninstalls as $name) {
             $writer->removeRequire($name);
         }
@@ -164,9 +168,13 @@ class Composer
         if ($event->getInput()->hasArgument('packages')) {
             $packages = $event->getInput()->getArgument('packages');
             $packages = array_shift($packages);
-            return ($packages && strpos($packages, 'xpressengine-plugin') === 0);
-        } else {
-            return false;
+            if ($packages && strpos($packages, 'xpressengine-plugin') === 0) {
+                if (!defined('__XE_PLUGIN_MODE__')) {
+                    define('__XE_PLUGIN_MODE__', true);
+                }
+                return true;
+            }
         }
+        return false;
     }
 }

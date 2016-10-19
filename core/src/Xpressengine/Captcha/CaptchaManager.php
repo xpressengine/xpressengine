@@ -15,6 +15,8 @@
 namespace Xpressengine\Captcha;
 
 use Illuminate\Support\Manager;
+use Xpressengine\Captcha\Services\GoogleRecaptcha;
+use Xpressengine\Captcha\Services\NaverCaptcha;
 
 /**
  * # CaptchaManager
@@ -22,22 +24,21 @@ use Illuminate\Support\Manager;
  * 사용할 captcha 객체를 제공해 줌.
  *
  * ### app binding : xe.captcha 로 바인딩 되어 있음
- * `Captcha` Facade 로 접근 가능
  *
  * ### Usage
  * * front 에 작성
  * ```html
  * <div>
- *  <?php echo Captcha::render(); ?>
+ *  <?php echo app('xe.captcha')->render(); ?>
  * </div>
  * ```
  *
  * * 검증 처리
  * ```php
- * if (Captcha::verify() === true) {
+ * if (app('xe.captcha')->verify() === true) {
  *      // 성공 처리 코드
  * } else {
- *      $errors = Captcha::errors();
+ *      $errors = app('xe.captcha')->errors();
  * }
  * ```
  *
@@ -64,6 +65,25 @@ class CaptchaManager extends Manager
             $config['secret'],
             $this->app['request'],
             $this->app['xe.frontend']
+        );
+    }
+
+    /**
+     * Create google reCAPTCHA driver
+     *
+     * @return NaverCaptcha
+     */
+    public function createNaverDriver()
+    {
+        $config = $this->getConfig('naver');
+
+        return new NaverCaptcha(
+            $config['clientId'],
+            $config['secret'],
+            $this->app['request'],
+            $this->app['xe.frontend'],
+            $this->app['view'],
+            isset($config['timeout']) ? $config['timeout'] : 0
         );
     }
 

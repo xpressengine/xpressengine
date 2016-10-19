@@ -180,7 +180,7 @@ return [
         App\Providers\TagServiceProvider::class,
 
         App\Providers\ToggleMenuServiceProvider::class,
-        App\Providers\TemporaryServiceProvider::class,
+        App\Providers\DraftServiceProvider::class,
 
         App\Providers\TrashServiceProvider::class,
 
@@ -267,7 +267,7 @@ return [
         'XeCounter' => App\Facades\XeCounter::class,
         'XeTag' => App\Facades\XeTag::class,
         'XeToggleMenu' => App\Facades\XeToggleMenu::class,
-        'XeTemporary' => App\Facades\XeTemporary::class,
+        'XeDraft' => App\Facades\XeDraft::class,
         'XeTrash' => App\Facades\XeTrash::class,
         'XeMedia' => App\Facades\XeMedia::class,
 
