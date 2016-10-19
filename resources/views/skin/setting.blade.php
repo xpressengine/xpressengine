@@ -1,4 +1,4 @@
-<form action="{{ route('settings.skin.section.setting') }}" method="POST">
+<form class="__xe_skin_form" action="{{ route('settings.skin.section.setting') }}" method="POST">
     <input type="hidden" name="skinId" value="{{ $skinId }}">
     <input type="hidden" name="instanceId" value="{{ $skinInstanceId }}">
     <input type="hidden" name="_token" value="{{ csrf_token() }}">

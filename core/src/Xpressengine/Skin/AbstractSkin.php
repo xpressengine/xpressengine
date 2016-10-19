@@ -139,7 +139,7 @@ abstract class AbstractSkin implements ComponentInterface, Renderable
      *
      * @return string|Renderable
      *
-     * @deprecated use renderSetting instead
+     * @deprecated  use renderSetting instead
      */
     public function getSettingView($config = [])
     {
