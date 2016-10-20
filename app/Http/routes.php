@@ -37,7 +37,6 @@ Route::settings(
         Route::get(
             '/',
             ['as' => 'settings.dashboard', 'uses' => 'DashboardController@index', 'settings_menu' => ['dashboard']]
-
         );
     }
 );
@@ -584,8 +583,26 @@ Route::settings(
             ]
         );
 
+        Route::get('operation', [
+            'as' => 'settings.plugins.operation',
+            'uses' => 'PluginController@getOperation'
+        ]);
+
+        Route::delete('operation', [
+            'as' => 'settings.plugins.operation.delete',
+            'uses' => 'PluginController@deleteOperation'
+        ]);
+
+        Route::post(
+            '/',
+            [
+                'as' => 'settings.plugins.install',
+                'uses' => 'PluginController@install'
+            ]
+        );
+
         Route::get(
-            '{pluginId?}',
+            '{pluginId}',
             [
                 'as' => 'settings.plugins.show',
                 'uses' => 'PluginController@show',
@@ -614,6 +631,22 @@ Route::settings(
                 'uses' => 'PluginController@putUpdatePlugin'
             ]
         );
+        Route::put(
+            '{pluginId}/download',
+            [
+                'as' => 'settings.plugins.download',
+                'uses' => 'PluginController@putDownloadPlugin'
+            ]
+        );
+
+        Route::delete(
+            '{pluginId}',
+            [
+                'as' => 'settings.plugins.delete',
+                'uses' => 'PluginController@delete'
+            ]
+        );
+
     }
 );
 

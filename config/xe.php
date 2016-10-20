@@ -377,7 +377,10 @@ return [
         'api' => [
             'url' => 'https://xpressengine.io/plugins/api/1.0'
         ],
-        'packagist' => 'https://xpressengine.io'
+        'packagist' => 'https://xpressengine.io',
+        'operation' => [
+            'time_limit' => 1200
+        ]
     ],
 
     'uiobject' => [

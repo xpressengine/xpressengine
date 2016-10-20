@@ -9,6 +9,13 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="panel-group" id="accordion">
+
+            @if($operation)
+                <div class="__xe_operation" style="margin-bottom: 10px;">
+                @include($_skin::view('operation'))
+                </div>
+            @endif
+
             <div class="panel">
                 {{-- heading --}}
                 <div class="panel-heading">
@@ -21,7 +28,15 @@
                         <div class="btn-group">
                             <button class="btn btn-default __xe_btn-show-update">{{ xe_trans('xe::updateList') }}</button>
                         </div>
+
+                        @if(!$operation || $operation['status'] !== 'running')
+                        <div class="btn-group">
+                            <button type="button" data-toggle="modal" data-target="#installPlugin" class="btn btn-primary">새로 설치</button>
+                        </div>
+                        @endif
+
                     </div>
+
                     {{-- filter --}}
                     <div class="pull-right">
                         <div class="input-group search-group">
@@ -59,8 +74,7 @@
                 {{-- plugin list --}}
                 <ul class="list-group list-plugin">
 
-                    @foreach($plugins as $plugin)
-
+                @foreach($plugins as $plugin)
                     <!--[D] 플러그인 비활성화  상태off, 업데이트 필요 시 update 클래스 추가 -->
                     <li class="list-group-item @if( ! $plugin->isActivated() )off @endif">
                         <div class="left-group">
@@ -113,12 +127,67 @@
                             </a>
                         </div>
                     </li>
-
                     @endforeach
-
                 </ul>
             </div>
         </div>
     </div>
 </div>
 
+<div id="installPlugin" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <form action="{{ route('settings.plugins.install') }}" method="POST" data-submit="xe-ajax" data-callback="checkPluginInstall">
+            {{ csrf_field() }}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">플러그인 설치</h4>
+                </div>
+                <div class="modal-body">
+                    {{ uio('formText', ['name'=>'pluginId', 'label'=>'플러그인아이디', 'placeholder' => '새로 설치할 플러그인의 아이디를 입력하세요']) }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{xe_trans('xe::cancel')}}</button>
+                    <button type="submit" class="btn btn-primary">설치</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </form>
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+{!! app('xe.frontend')->html('plugin.install.check')->content("
+<script>
+    var checkPluginInstall = function (data) {
+        location.reload();
+    }
+</script>
+")->load() !!}
+
+@if($operation && $operation['status'] === 'running')
+    {{ app('xe.frontend')->js('assets/core/xe-ui-component/js/xe-page.js')->load() }}
+    {!! app('xe.frontend')->html('plugin.get-operation')->content("
+    <script>
+        $(function($) {
+            var loadOperation = setInterval(function(){
+                XE.page('".route('settings.plugins.operation')."', '.__xe_operation', {}, function(data){
+                    if(data.operation.status != 'running') {
+                        clearInterval(loadOperation);
+                        location.reload();
+                    }
+                });
+            }, 3000);
+        });
+    </script>
+    ")->load() !!}
+@endif
+
+@if($operation && $operation['status'] !== 'running')
+{!! app('xe.frontend')->html('plugin.delete-operation')->content("
+<script>
+    window.deletePluginOperation = function (data, textStatus, jqXHR) {
+        XE.toast('success', data.message);
+        $('.__xe_operation').slideUp();
+    };
+</script>
+")->load() !!}
+@endif
