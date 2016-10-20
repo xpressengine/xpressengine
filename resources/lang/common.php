@@ -1781,7 +1781,7 @@ return [
         'en' => 'Site default theme',
     ],
     'siteDefaultThemeDescription' => [
-        'ko' => '지정된 테마가 출력할 테마를 지정하세요. 데스크탑과 모바일에서 사용할 테마를 각각 선택할 수 있습니다.',
+        'ko' => '사이트에서 기본으로 출력할 데스크탑/모바일용 테마를 지정하세요. 별도로 테마를 지정하지 않은 웹페이지에서 사용됩니다.',
         'en' => 'Please specify a theme to print a specified theme. Themes can be selected for use in desktop and mobile respectively.',
     ],
     'themeSettingsDescription' => [
