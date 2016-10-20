@@ -53,7 +53,64 @@ class WidgetboxMigration extends Migration {
         $handler = app('xe.widgetbox');
         $dashboard = $handler->find('dashboard');
         if($dashboard === null) {
-            $handler->create(['id'=>'dashboard', 'title'=>'dashboard']);
+            $handler->create(['id'=>'dashboard', 'title'=>'dashboard', 'content'=>'<div class="xe-row"><div class="xe-col-md-6">
+<div class="xe-row widgetarea-row">
+<div class="xe-col-md-12">
+<div class="widgetarea" data-height="140">
+
+<div class="xe-row">
+<div class="xe-col-md-12"><xewidget id="widget/xpressengine@systemInfo" title="System Info">
+  <skin>
+  </skin>
+</xewidget>
+</div>
+</div></div>
+</div>
+</div>
+</div><div class="xe-col-md-6">
+<div class="xe-row widgetarea-row">
+<div class="xe-col-md-12">
+<div class="widgetarea" data-height="140">
+
+<div class="xe-row">
+<div class="xe-col-md-12"><xewidget id="widget/xpressengine@storageSpace" title="Storage 사용량">
+  <limit>5</limit>
+  <skin>
+  </skin>
+</xewidget>
+</div>
+</div></div>
+</div>
+</div>
+</div></div><div class="xe-row"><div class="xe-col-md-6">
+<div class="xe-row widgetarea-row">
+<div class="xe-col-md-12">
+<div class="widgetarea" data-height="140">
+
+<div class="xe-row">
+<div class="xe-col-md-12"><xewidget id="widget/xpressengine@contentInfo" title="Content Info">
+  <skin>
+  </skin>
+</xewidget>
+</div>
+</div></div>
+</div>
+</div>
+</div><div class="xe-col-md-6">
+<div class="xe-row widgetarea-row">
+<div class="xe-col-md-12 selected">
+<div class="widgetarea" data-height="140">
+
+<div class="xe-row">
+<div class="xe-col-md-12"><xewidget id="widget/news_client@news" title="News">
+  <skin>
+  </skin>
+</xewidget>
+</div>
+</div></div>
+</div>
+</div>
+</div></div>']);
         }
     }
 

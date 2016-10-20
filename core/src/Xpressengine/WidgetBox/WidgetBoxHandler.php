@@ -109,9 +109,18 @@ class WidgetBoxHandler
         return $this->repository->update($widgetbox, $widgetboxData);
     }
 
+    /**
+     * delete widgetbox
+     *
+     * @param WidgetBox $widgetbox
+     *
+     * @return void
+     */
     public function delete($widgetbox)
     {
-
+        $widgetbox = $this->repository->find($widgetbox);
+        $this->permissionHandler->destroy('widgetbox.'.$widgetbox->id);
+        $widgetbox->delete();
     }
 
     /**
