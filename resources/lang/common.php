@@ -1978,4 +1978,8 @@ return [
         'ko' => '자동입력 방지문자',
         'en' => 'Automatic input text prevention'
     ],
+    'skinNotSupportSetting' => [
+        'ko' => '설정을 지원하지 않는 스킨입니다.',
+        'en' => ''
+    ],
 ];
