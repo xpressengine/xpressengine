@@ -215,22 +215,6 @@ h6 {
   margin: 16px auto;
 }
 
-.member .naver-captcha {
-  margin: 16px auto;
-}
-
-.member .naver-captcha img {
-  vertical-align: middle;
-  margin:5px 0;
-}
-
-.member .naver-captcha .btn-refresh {
-  width: 110px;
-  height: 90px;
-  background-color: #fff;
-  border: 1px solid #dcdde0;
-}
-
 .member .xe-btn-primary,
 .member .xe-btn.xe-btn-link {
   margin-bottom: 16px;

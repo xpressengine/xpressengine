@@ -74,6 +74,7 @@ System.config({
     "xe.component.dropdown": "assets/core/xe-ui-component/js/xe-dropdown",
     "xe.component.modal": "assets/core/xe-ui-component/js/xe-modal",
     "xe.component.tooltip": "assets/core/xe-ui-component/js/xe-tooltip",
+    "xe.component.transition": "assets/core/xe-ui-component/js/xe-transition",
     "xe.lang": "assets/core/common/js/xe.lang",
     "xe.progress": "assets/core/common/js/xe.progress",
     "xe.request": "assets/core/common/js/xe.request",

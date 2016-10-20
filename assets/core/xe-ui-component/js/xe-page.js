@@ -130,9 +130,9 @@
             getModalTemplate: function() {
                 return [
                     '<div class="xe-modal" data-use="xe-page">',
-                    '<div class="xe-modal-dialog ">',
-                    '<div class="xe-modal-content"></div>',
-                    '</div>',
+                        '<div class="xe-modal-dialog ">',
+                            '<div class="xe-modal-content"></div>',
+                        '</div>',
                     '</div>'
                 ].join("\n");
             },

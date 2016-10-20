@@ -1473,22 +1473,27 @@ $(function() {
   });
 
   $(document).on('boot.xe.dropdown', '[data-toggle=xe-dropdown]', function() {
+    var $this = $(this);
     System.import("xe.component.dropdown").then(function() {
-      $('[data-toggle=xe-dropdown]').xeDropdown();
+      $this.xeDropdown();
     });
   });
 
   $(document).on('boot.xe.modal', '[data-toggle=xe-modal]', function() {
+    var $this = $(this);
+    System.import("xe.component.transition");
     System.import("xe.component.modal").then(function() {
-      //$('[data-toggle=xe-modal]').xeModal();
 
     });
   });
 
   $(document).on('boot.xe.tooltip', '[data-toggle=xe-tooltip]', function() {
+    var $this = $(this);
+    System.import("xe.component.transition");
     System.import("xe.component.tooltip").then(function() {
-      $('[data-toggle=xe-tooltip]').xeTooltip();
+      $this.xeTooltip();
     });
+
   });
 
   XE.Component.boot();
@@ -1501,13 +1506,13 @@ $(function() {
   $.fn.xeModal = function(options) {
     var $el = this;
 
-    System.import("xe.component.modal").then(function() {
+    System.import('xe.component.transition');
+    System.import('xe.component.modal', function() {
       $el.xeModal(options);
     });
 
-    if($('link[href*="assets/core/xe-ui-component/xe-ui-component.css"]').length == 0) {
-      XE.cssLoad("/assets/core/xe-ui-component/xe-ui-component.css");
-    }
+    XE.cssLoad("/assets/core/xe-ui-component/xe-ui-component.css");
+
   };
 
   // xeDropdown ======================================================
@@ -1518,22 +1523,22 @@ $(function() {
       $el.xeDropdown(options);
     });
 
-    if($('link[href*="assets/core/xe-ui-component/xe-ui-component.css"]').length == 0) {
-      XE.cssLoad("/assets/core/xe-ui-component/xe-ui-component.css");
-    }
+    XE.cssLoad("/assets/core/xe-ui-component/xe-ui-component.css");
+
   };
 
   // xeTooltip =======================================================
   $.fn.xeTooltip = function(options) {
     var $el = this;
 
+    System.import("xe.component.transition");
     System.import("xe.component.tooltip").then(function() {
       $el.xeTooltip(options);
     });
 
-    if($('link[href*="assets/core/xe-ui-component/xe-ui-component.css"]').length == 0) {
-      XE.cssLoad("/assets/core/xe-ui-component/xe-ui-component.css");
-    }
+
+    XE.cssLoad("/assets/core/xe-ui-component/xe-ui-component.css");
+
   };
 
 })(jQuery);
