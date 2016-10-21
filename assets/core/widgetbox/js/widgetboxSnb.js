@@ -67,7 +67,7 @@
                 self.appendDivisionType(appendDivision);
 
                 //tooltip
-                self.$tooltips.xeTooltip();
+                // self.$tooltips.xeTooltip();
             },
             toggleSection: function() {
                 var $section = $(this).parents(".seciton");
@@ -125,7 +125,6 @@
                 }
             },
             appendDivisionType: function(types) {
-                //self.$selectDivision
 
                 var html = "";
 
@@ -279,14 +278,14 @@
                             $wdigetareaRow = $selected.parents(".widgetarea-row"),
                             selectedHeight = $wdigetareaRow.find(".widgetarea").height();
 
-                        $wdigetareaRow.find(".widgetarea").height(140).data("height", 140);
+                        $wdigetareaRow.find(".widgetarea").setHeight(140);
 
                         if((selectedHeight - 165) > 140) {
-                            $wdigetareaRow.next().find(".widgetarea").height(selectedHeight - 165).data("height", selectedHeight - 165);
+                            $wdigetareaRow.next().find(".widgetarea").setHeight(selectedHeight - 165);
                         }else {
 
                             var wHeight = $wdigetareaRow.next().find(".widgetarea").height();
-                            $wdigetareaRow.next().find(".widgetarea").height(wHeight).data("height", wHeight);
+                            $wdigetareaRow.next().find(".widgetarea").setHeight(wHeight);
                         }
 
                     }else {
@@ -300,8 +299,7 @@
                                     $lastTarget = $this.find(".widgetarea:last"),
                                     height = $lastTarget.height() + 165;
 
-
-                                $lastTarget.height(height).data("height", height);
+                                $lastTarget.setHeight(height);
                             });
                         });
                     }
@@ -357,7 +355,7 @@
                             if(lastWidgetareaRowHeight > height) {
                                 var resetHeight = lastWidgetareaRowHeight - height - 25;
 
-                                $widgetarea.height(resetHeight).data("height", resetHeight);
+                                $widgetarea.setHeight(resetHeight);
                             }
                         });
 
@@ -373,7 +371,6 @@
                          * 4)row라면 last row에 있는 컬럽을 늘림
                          * 5)col이라면 col하위의 last row의 col을 늘림
                          * */
-                        //var targetHeight = $selected.find(".widgetarea").data("height");
                         var targetHeight = $selected.find(".widgetarea").height();
 
                         if($selectedParentRow.siblings().length > 0) {
@@ -388,7 +385,7 @@
                                         widgetareaHeight = $widgetarea.height(),
                                         resetHeight = widgetareaHeight + targetHeight + 25;
 
-                                    $widgetarea.height(resetHeight).data("height", resetHeight);
+                                    $widgetarea.setHeight(resetHeight);
                                 });
                             }else {
                                 //$combineRow가 .widgetarea-row 일때
@@ -396,7 +393,7 @@
                                     widgetareaHeight = $widgetarea.height(),
                                     resetHeight = widgetareaHeight + targetHeight + 25;
 
-                                $widgetarea.height(resetHeight).data("height", resetHeight);
+                                $widgetarea.setHeight(resetHeight);
                             }
 
                         }else {
@@ -538,7 +535,7 @@
                                         var height = $widgetarea.height() - 165;
 
                                         if (!$widgetarea.attr("reduce")) {
-                                            $widgetarea.data("height", height).height(height).attr("reduce", true);
+                                            $widgetarea.setHeight(height).attr("reduce", true);
                                         }
 
                                     }
