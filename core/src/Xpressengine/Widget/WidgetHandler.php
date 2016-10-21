@@ -130,7 +130,7 @@ class WidgetHandler
      */
     public function getClassName($widgetId)
     {
-        return $this->register->get(fullWidgetId($widgetId));
+        return $this->register->get($this->fullWidgetId($widgetId));
     }
 
     /**
@@ -271,4 +271,14 @@ class WidgetHandler
 
         return $xml;
     }
+
+    protected function fullWidgetId($widgetId)
+    {
+        if (stripos($widgetId, 'widget/') !== false) {
+            return $widgetId;
+        } else {
+            return 'widget/'.$widgetId;
+        }
+    }
+
 }
