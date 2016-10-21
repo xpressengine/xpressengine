@@ -537,28 +537,35 @@ class PluginHandler
         return $plugin->isActivated();
     }
 
+    /**
+     * 현재 진행중인 플러그인 설치 작업 내역을 반환한다.
+     *
+     * @param ComposerFileWriter $writer
+     *
+     * @return array|null
+     */
     public function getOperation(ComposerFileWriter $writer)
     {
         $status = $writer->get('xpressengine-plugin.operation.status');
 
-        if($status === null) {
+        if ($status === null) {
             return null;
         }
 
         $runnings = [];
         $runningMode = 'install';
         $runnings = $writer->get("xpressengine-plugin.operation.install", []);
-        if(empty($runnings)) {
+        if (empty($runnings)) {
             $runningMode = 'update';
             $runnings = $writer->get("xpressengine-plugin.operation.update", []);
         }
-        if(empty($runnings)) {
+        if (empty($runnings)) {
             $runningMode = 'uninstall';
             $runnings = $writer->get("xpressengine-plugin.operation.uninstall", []);
         }
 
         // operation이 없을 경우, return void
-        if(empty($runnings)) {
+        if (empty($runnings)) {
             return null;
         }
 
@@ -567,16 +574,16 @@ class PluginHandler
         // expired 조사
         $deadline = $writer->get('xpressengine-plugin.operation.expiration_time');
         $expired = false;
-        if($deadline !== null) {
+        if ($deadline !== null) {
             $deadline = Carbon::parse($deadline);
-            if($deadline->isPast()) {
+            if ($deadline->isPast()) {
                 $expired = true;
             }
         }
 
         $runningsInfo = [];
-        if(!empty($runnings)) {
-            if($runningMode === 'uninstall') {
+        if (!empty($runnings)) {
+            if ($runningMode === 'uninstall') {
                 $package = current($runnings);
             } else {
                 $package = key($runnings);
@@ -587,10 +594,10 @@ class PluginHandler
         }
 
         $changed = $writer->get('xpressengine-plugin.operation.changed', []);
-        foreach($changed as $type) {
-            foreach($type as $package => $version) {
+        foreach ($changed as $type) {
+            foreach ($type as $package => $version) {
                 list(, $id) = explode('/', $package);
-                if(!isset($runningsInfo[$package])) {
+                if (!isset($runningsInfo[$package])) {
                     $runningsInfo[$package] = $this->provider->find($id);
                 }
             }

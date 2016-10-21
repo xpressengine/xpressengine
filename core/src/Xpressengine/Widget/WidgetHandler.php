@@ -70,12 +70,11 @@ use Xpressengine\Widget\Exceptions\NotFoundWidgetException;
  * $handler->getGeneratedCode($id, array $inputs)
  * ```
  *
-
- * @category Widget
- * @package  Xpressengine\Widget
+ * @category    Widget
+ * @package     Xpressengine\Widget
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
 class WidgetHandler
@@ -137,9 +136,9 @@ class WidgetHandler
      * getInstance
      *
      * @param string $widgetId widget id
+     * @param null   $args     widget config data
      *
      * @return AbstractWidget
-     * @throws Exception
      */
     protected function getInstance($widgetId, $args = null)
     {
@@ -187,12 +186,12 @@ class WidgetHandler
     }
 
     /**
-     * setUp
+     * render widget setting form
      *
      * @param string $widgetId widget id
+     * @param array  $configs  widget config data
      *
      * @return mixed
-     * @throws Exception
      */
     public function setup($widgetId, $configs = [])
     {
@@ -201,7 +200,7 @@ class WidgetHandler
     }
 
     /**
-     * 등록된 모든 Widget 목록을 반환한다.
+     * retrive all of registered widget
      *
      * @param callable $filter filter
      *
@@ -219,10 +218,10 @@ class WidgetHandler
     }
 
     /**
-     * getGeneratedCode
+     * generate widget code by widget id and config given
      *
      * @param string $widgetId widget id
-     * @param array  $inputs   to generate widget custom xml parameter array
+     * @param array  $inputs   widget config data
      *
      * @return string
      */
@@ -238,9 +237,9 @@ class WidgetHandler
     /**
      * xml string을 생성하여 반환한다. element명과 element의 attr, child elements 정보를 입력받는다.
      *
-     * @param string $element
-     * @param array  $inputs
-     * @param int    $depth
+     * @param string $element xml element명
+     * @param array  $inputs  설정값 또는 하위설정 데이터
+     * @param int    $depth   들여쓰기 레벨
      *
      * @return string
      */
@@ -251,7 +250,7 @@ class WidgetHandler
         $space = str_repeat('  ', $depth);
         foreach ($inputs as $k => $v) {
             // attribute
-            if(strpos($k, '@') === 0) {
+            if (strpos($k, '@') === 0) {
                 $attr[substr($k, 1)] = (string) $v;
             } elseif (is_array($v)) {
                 $children[] = $this->generateXml($k, $v, $depth + 1);
@@ -261,13 +260,14 @@ class WidgetHandler
         }
 
         $attrStr = '';
-        array_walk($attr, function($value, $key) use (&$attrStr) {
-            $attrStr .= ' '.$key.'="'.$value.'"';
-        });
+        array_walk(
+            $attr,
+            function ($value, $key) use (&$attrStr) {
+                $attrStr .= ' '.$key.'="'.$value.'"';
+            }
+        );
 
-        $xml = $space.'<'.$element.$attrStr.'>'.PHP_EOL
-               .implode('', $children)
-        .$space.'</'.$element.'>'.PHP_EOL;
+        $xml = $space.'<'.$element.$attrStr.'>'.PHP_EOL.implode('', $children).$space.'</'.$element.'>'.PHP_EOL;
 
         return $xml;
     }
@@ -280,5 +280,4 @@ class WidgetHandler
             return 'widget/'.$widgetId;
         }
     }
-
 }

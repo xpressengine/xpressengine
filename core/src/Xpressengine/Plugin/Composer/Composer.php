@@ -69,10 +69,12 @@ class Composer
         if (!file_exists(static::$installedFlagPath)) {
             $writer->reset();
             foreach (static::$basePlugins as $plugin => $version) {
-                if($writer->get('replace.'.$plugin) === null) {
+                if ($writer->get('replace.'.$plugin) === null) {
                     $writer->install($plugin, $version, date("Y-m-d H:i:s"));
                 } else {
-                    $event->getOutput()->writeln("xpressengine-installer: skip installation of existing plugin: $plugin");
+                    $event->getOutput()->writeln(
+                        "xpressengine-installer: skip installation of existing plugin: $plugin"
+                    );
                 }
             }
             if (!defined('__XE_PLUGIN_MODE__')) {

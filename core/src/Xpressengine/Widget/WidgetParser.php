@@ -73,6 +73,13 @@ class WidgetParser
         return $content;
     }
 
+    /**
+     * 주어진 하나의 위젯 코드를 분석하고, 위젯을 출력한다.
+     *
+     * @param array $matches 위젯 코드
+     *
+     * @return mixed|string
+     */
     protected function parseWidget($matches)
     {
         $widgetHandler = $this->widgetHandler;
@@ -97,7 +104,7 @@ class WidgetParser
     /**
      * 위젯 코드를 php array로 반환한다.
      *
-     * @param $code
+     * @param string $code 위젯코드 php 배열 데이터로 변환한다.
      *
      * @return array
      */
@@ -112,6 +119,14 @@ class WidgetParser
         return $inputs;
     }
 
+    /**
+     * xml 데이터를 배열로 변환한다.
+     *
+     * @param  \SimpleXMLElement|\SimpleXMLElement[] $xmlObject xml object
+     * @param array                                  $out       변환한 데이터를 답을 배열
+     *
+     * @return array
+     */
     protected function xml2array($xmlObject, $out = [])
     {
         foreach ((array) $xmlObject as $index => $node) {
