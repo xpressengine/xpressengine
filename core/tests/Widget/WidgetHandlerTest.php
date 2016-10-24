@@ -321,7 +321,7 @@ namespace Xpressengine\Tests\Widget {
             $register->shouldReceive('get')->andReturn(['Xpressengine\Tests\Widget\FakeWidget']);
 
             $filter = function ($widgetClassname) {
-                return $widgetClassname::codeCreationAble();
+                return false;
             };
 
             $fakeWidgets = $widgetHandler->getAll($filter);
@@ -345,9 +345,17 @@ namespace Xpressengine\Tests\Widget {
                 'args3' => 'value3',
             ];
 
+            $this->register->shouldReceive('get')->with('widget/'.$id)->andReturn($this->fakeWidgetClassName);
             $resultString = $widgetHandler->generateCode($id, $inputs);
 
-            $this->assertEquals("<xewidget id='fakeWidgetId'><param title='args1'>value1</param><param title='args2'>value2</param><param title='args3'>value3</param></xewidget>",
+            $expected = "<xewidget>
+  <args1>value1</args1>
+  <args2>value2</args2>
+  <args3>value3</args3>
+</xewidget>
+";
+
+            $this->assertEquals($expected,
                 $resultString);
         }
 

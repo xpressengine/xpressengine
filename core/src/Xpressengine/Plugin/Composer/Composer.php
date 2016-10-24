@@ -39,17 +39,17 @@ class Composer
     protected static $installedFlagPath = 'storage/app/installed';
 
     public static $basePlugins = [
-        'xpressengine-plugin/alice' => '0.9.3',
-        'xpressengine-plugin/board' => '0.9.6',
-        'xpressengine-plugin/ckeditor' => '0.9.4',
+        'xpressengine-plugin/alice' => '0.9.4',
+        'xpressengine-plugin/board' => '0.9.7',
+        'xpressengine-plugin/ckeditor' => '0.9.5',
         'xpressengine-plugin/claim' => '0.9.2',
-        'xpressengine-plugin/comment' => '0.9.4',
+        'xpressengine-plugin/comment' => '0.9.5',
         'xpressengine-plugin/external_page' => '0.9.3',
         'xpressengine-plugin/google_analytics' => '0.9.2',
         'xpressengine-plugin/news_client' => '0.9.3',
         'xpressengine-plugin/orientator' => '0.9.1',
         'xpressengine-plugin/page' => '0.9.2',
-        'xpressengine-plugin/social_login' => '0.9.4',
+        'xpressengine-plugin/social_login' => '0.9.5',
         'xpressengine-plugin/emoticon' => '0.9.0',
     ];
 
@@ -69,10 +69,12 @@ class Composer
         if (!file_exists(static::$installedFlagPath)) {
             $writer->reset();
             foreach (static::$basePlugins as $plugin => $version) {
-                if($writer->get('replace.'.$plugin) === null) {
+                if ($writer->get('replace.'.$plugin) === null) {
                     $writer->install($plugin, $version, date("Y-m-d H:i:s"));
                 } else {
-                    $event->getOutput()->writeln("xpressengine-installer: skip installation of existing plugin: $plugin");
+                    $event->getOutput()->writeln(
+                        "xpressengine-installer: skip installation of existing plugin: $plugin"
+                    );
                 }
             }
             if (!defined('__XE_PLUGIN_MODE__')) {

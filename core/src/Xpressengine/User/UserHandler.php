@@ -494,14 +494,17 @@ class UserHandler
         // insert accounts
         if (isset($data['account'])) {
             $accountData = $data['account'];
-            $account = $this->accounts()->create($user, [
-                'userId' => $user->id,
-                'accountId' => array_get($accountData, 'accountId'),
-                'email' => array_get($accountData, 'email', array_get($data, 'email')),
-                'provider' => array_get($accountData, 'provider'),
-                'data' => array_get($accountData, 'data'),
-                'token' => array_get($accountData, 'token'),
-            ]);
+            $account = $this->accounts()->create(
+                $user,
+                [
+                    'userId' => $user->id,
+                    'accountId' => array_get($accountData, 'accountId'),
+                    'email' => array_get($accountData, 'email', array_get($data, 'email')),
+                    'provider' => array_get($accountData, 'provider'),
+                    'data' => array_get($accountData, 'data'),
+                    'token' => array_get($accountData, 'token'),
+                ]
+            );
             $user->accounts()->save($account);
         }
 
@@ -547,7 +550,7 @@ class UserHandler
         $user->save();
 
         // join new group
-        if($groups !== null) {
+        if ($groups !== null) {
             $changes = $user->groups()->sync($groups);
         }
 
@@ -585,7 +588,6 @@ class UserHandler
             $user->groups()->detach();
             $user->delete();
         }
-
         // todo: remove profile image
     }
 
