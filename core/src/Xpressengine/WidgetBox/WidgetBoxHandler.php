@@ -146,5 +146,4 @@ class WidgetBoxHandler
     {
         return call_user_func_array([$this->repository, $name], $arguments);
     }
-
 }
