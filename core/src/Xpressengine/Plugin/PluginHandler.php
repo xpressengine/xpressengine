@@ -540,7 +540,7 @@ class PluginHandler
     /**
      * 현재 진행중인 플러그인 설치 작업 내역을 반환한다.
      *
-     * @param ComposerFileWriter $writer
+     * @param ComposerFileWriter $writer composer file writer
      *
      * @return array|null
      */
@@ -613,7 +613,7 @@ class PluginHandler
     /**
      * 컴포넌트를 Register에 추가한다.
      *
-     * @param string $component
+     * @param string $component component class name
      *
      * @return void
      */

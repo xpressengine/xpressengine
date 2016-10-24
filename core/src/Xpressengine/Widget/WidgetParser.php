@@ -14,6 +14,8 @@
 
 namespace Xpressengine\Widget;
 
+use SimpleXMLElement;
+
 /**
  * WidgetParser
  * Widget 코드(custom xml)를 html 로 렌더링 하기 위한 파서
@@ -122,8 +124,8 @@ class WidgetParser
     /**
      * xml 데이터를 배열로 변환한다.
      *
-     * @param  \SimpleXMLElement|\SimpleXMLElement[] $xmlObject xml object
-     * @param array                                  $out       변환한 데이터를 답을 배열
+     * @param SimpleXMLElement|SimpleXMLElement[] $xmlObject xml object
+     * @param array                               $out       변환한 데이터를 답을 배열
      *
      * @return array
      */

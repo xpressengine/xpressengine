@@ -123,7 +123,7 @@ abstract class GenericSkin extends AbstractSkin
     /**
      * 블레이드 템플릿을 사용하여 스킨을 출력한다.
      *
-     * @param null $view
+     * @param null|string $view view name
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|null
      */

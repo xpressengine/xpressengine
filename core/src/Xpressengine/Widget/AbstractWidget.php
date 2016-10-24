@@ -47,7 +47,7 @@ abstract class AbstractWidget implements ComponentInterface, Renderable
     /**
      * AbstractWidget constructor.
      *
-     * @param array|null $config
+     * @param array|null $config widget config data
      */
     public function __construct($config = null)
     {
@@ -140,5 +140,4 @@ abstract class AbstractWidget implements ComponentInterface, Renderable
         }
         return $this->config;
     }
-
 }

@@ -272,6 +272,13 @@ class WidgetHandler
         return $xml;
     }
 
+    /**
+     * prefix를 포함한 완전한 widget id를 반환한다.
+     *
+     * @param string $widgetId widget id
+     *
+     * @return string
+     */
     protected function fullWidgetId($widgetId)
     {
         if (stripos($widgetId, 'widget/') !== false) {
