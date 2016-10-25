@@ -139,9 +139,9 @@
                     //TODO span 160px기준 col-1 당 13px 임시로..
                     html += [
                         '<li>',
-                            '<a href="#" data-type="' + v + '" data-display="' + display + '">',
-                                spans,
-                            '</a>',
+                        '<a href="#" data-type="' + v + '" data-display="' + display + '">',
+                        spans,
+                        '</a>',
                         '</li>'
                     ].join("\n");
                 });
@@ -186,12 +186,12 @@
 
                 if(mode === 'mobile') {
                     //layout-mobile
-                    
+
                     self.$editor.addClass("layout-mobile");
                 }else {
                     self.$editor.removeClass("layout-mobile");
                 }
-                
+
                 _settings.mode = mode;
             },
             selectDivisionType: function() {
@@ -220,9 +220,6 @@
                         case 'horizontal' :
                             self.divideHorizontal();
                             break;
-
-                        default:
-                            window.console.error("type error.");
                     }
                 }
             },
@@ -241,13 +238,13 @@
                     columns.forEach(function(v, i) {
                         html += [
                             '<div class="xe-col-md-' + v + '">',
-                                '<div class="xe-row widgetarea-row">',
-                                    '<div class="xe-col-md-12">',
-                                        '<div class="widgetarea" data-height="' + height + '" style="height:' + height + 'px">',
-                                            '<span class="order"></span>',
-                                        '</div>',
-                                    '</div>',
-                                '</div>',
+                            '<div class="xe-row widgetarea-row">',
+                            '<div class="xe-col-md-12">',
+                            '<div class="widgetarea" data-height="' + height + '" style="height:' + height + 'px">',
+                            '<span class="order"></span>',
+                            '</div>',
+                            '</div>',
+                            '</div>',
                             '</div>'
                         ].join("\n");
                     });
@@ -256,6 +253,8 @@
 
                     WidgetBox.deselectAll();
                     WidgetBox.setOrdering();
+                } else {
+                    alert('셀을 선택하세요.');
                 }
             },
             divideHorizontal: function() {
@@ -265,11 +264,11 @@
                 if($selected.length > 0) {
                     $widgetAreaRow.after([
                         '<div class="xe-row widgetarea-row">',
-                            '<div class="xe-col-md-12">',
-                                '<div class="widgetarea" data-height="140" style="height:140px">',
-                                    '<span class="order"></span>',
-                                '</div>',
-                            '</div>',
+                        '<div class="xe-col-md-12">',
+                        '<div class="widgetarea" data-height="140" style="height:140px">',
+                        '<span class="order"></span>',
+                        '</div>',
+                        '</div>',
                         '</div>',
                     ].join("\n"));
 
@@ -306,16 +305,18 @@
 
                     WidgetBox.deselectAll();
                     WidgetBox.setOrdering();
+                } else {
+                    alert('셀을 선택하세요.');
                 }
             },
             addRow: function() {
                 self.$editor.append([
                     '<div class="xe-row widgetarea-row">',
-                        '<div class="xe-col-md-12">',
-                            '<div class="widgetarea" data-height="140" style="height:140px">',
-                                '<span class="order"></span>',
-                            '</div>',
-                        '</div>',
+                    '<div class="xe-col-md-12">',
+                    '<div class="widgetarea" data-height="140" style="height:140px">',
+                    '<span class="order"></span>',
+                    '</div>',
+                    '</div>',
                     '</div>'
                 ].join("\n"));
             },
@@ -453,9 +454,6 @@
                     if($divCol.length > 0 && _deletable) {
                         var $siblingCols = $divCol.siblings();
 
-
-
-
                         _deletable = self.checkRowChildBlock($siblingCols, targetHeight);
 
                         $divCol = $divCol.parent().closest("div[class^='xe-col-']:not(.xe-col-md-12)");
@@ -465,9 +463,6 @@
                         break;
                     }
                 }
-
-
-                window.console.log(":: deletable :: " + _deletable);
 
                 return _deletable;
 
@@ -523,7 +518,7 @@
                         var $targetPiece = $(this);
 
                         if($targetPiece.find("> .xe-row").length > 1) {
-                            window.console.log("row");
+
 
                         }else {
                             if($targetPiece.find(".widgetarea-row:last-child:not(:has(.selected))").length > 0) {
