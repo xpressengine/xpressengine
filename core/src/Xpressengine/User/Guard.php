@@ -42,7 +42,7 @@ class Guard extends LaravelGuard implements GuardInterface
     {
         $this->checkSession();
 
-        return ! is_null(parent::user());
+        return !is_null(parent::user());
     }
 
     /**
@@ -136,7 +136,7 @@ class Guard extends LaravelGuard implements GuardInterface
         // disable checking session
         return;
 
-        if($this->session->isStarted() === false) {
+        if ($this->session->isStarted() === false) {
             throw new AuthIsUnavailableException();
         }
     }

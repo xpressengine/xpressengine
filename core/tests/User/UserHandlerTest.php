@@ -157,11 +157,6 @@ class UserHandlerTest extends \PHPUnit_Framework_TestCase
         $user = $this->makeUser();
         $user->shouldReceive('joinGroups')->with(['bar','baz'])->andReturnSelf();
 
-        /** @var Mockery\MockInterface $groups */
-        $groups = $handler->groups();
-        $groups->shouldReceive('whereIn')->once()->with('id', ['bar','baz'])->andReturnSelf();
-        $groups->shouldReceive('get')->once()->andReturn([]);
-
         $users->shouldReceive('create')
             ->once()
             ->with(['displayName' => 'foo', 'password' => 'encrypted'])
@@ -492,10 +487,8 @@ class UserHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateWhenDisplayNameisEqual()
     {
-        $changes = ['attached'=>[], 'detached'=>[]];
         $user = $this->makeUser();
         $user->shouldReceive('getAttribute')->once()->with('displayName')->andReturn('origin name');
-        $user->shouldReceive('groups->sync')->once()->andReturn($changes);
         $user->shouldReceive('setAttribute')->once()->with('displayName', 'origin name')->andReturnSelf();
         $user->shouldReceive('setAttribute')->once()->with('password', 'encrypted password')->andReturnSelf();
         $user->shouldReceive('save')->once()->andReturnSelf();
@@ -513,7 +506,6 @@ class UserHandlerTest extends \PHPUnit_Framework_TestCase
         $validator->shouldReceive('make')->once()->andReturn($validate);
 
         $groups = $this->getGroups();
-        $groups->shouldReceive('findMany')->twice()->with([])->andReturn([]);
 
         /** @var Mockery\MockInterface $handler */
         $handler = $this->getHandler(null, null, $groups, null, null, null, $hasher, $validator);
@@ -529,10 +521,8 @@ class UserHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateWhenDisplayNameisDifferent()
     {
-        $changes = ['attached'=>[], 'detached'=>[]];
         $user = $this->makeUser();
         $user->shouldReceive('getAttribute')->once()->with('displayName')->andReturn('origin name');
-        $user->shouldReceive('groups->sync')->once()->andReturn($changes);
         $user->shouldReceive('setAttribute')->once()->with('displayName', 'new name')->andReturnSelf();
         $user->shouldReceive('setAttribute')->once()->with('password', 'encrypted password')->andReturnSelf();
         $user->shouldReceive('save')->once()->andReturnSelf();
@@ -550,7 +540,6 @@ class UserHandlerTest extends \PHPUnit_Framework_TestCase
         $validator->shouldReceive('make')->twice()->andReturn($validate);
 
         $groups = $this->getGroups();
-        $groups->shouldReceive('findMany')->twice()->with([])->andReturn([]);
 
         /** @var Mockery\MockInterface $users */
         $users = $this->getUsers();

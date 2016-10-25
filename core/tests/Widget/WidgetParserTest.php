@@ -14,11 +14,10 @@
 
 namespace Xpressengine\Tests\Widget;
 
+use Mockery as m;
 use Mockery\MockInterface;
 use PHPUnit_Framework_TestCase;
-use Mockery as m;
 use Xpressengine\Widget\WidgetParser;
-use Xpressengine\Widget\WidgetHandler;
 
 /**
  * Class WidgetParserTest
@@ -96,7 +95,13 @@ class WidgetParserTest extends PHPUnit_Framework_TestCase
         $handler = $this->handler;
         $parser = $this->parser;
 
-        $handler->shouldReceive('create')->andReturn("<p>widget</p>");
+        $inputs = [
+            '@attributes' => [
+                'id' => 'xpressengine@iconBar'
+            ]
+        ];
+
+        $handler->shouldReceive('render')->with('xpressengine@iconBar', $inputs)->andReturn("<p>widget</p>");
 
         $testString = '<xewidget id="xpressengine@iconBar"></xewidget>';
         $resultString = $parser->parseXml($testString);
@@ -115,9 +120,15 @@ class WidgetParserTest extends PHPUnit_Framework_TestCase
         $handler = $this->handler;
         $parser = $this->parser;
 
-        $handler->shouldReceive('create')->andReturn("<p>widget</p>");
+        $inputs = [
+            '@attributes' => [
+                'id' => 'xpressengine@iconBar'
+            ],
+            'title' => '최근 가입회원'
+        ];
+        $handler->shouldReceive('render')->with('xpressengine@iconBar', $inputs)->andReturn("<p>widget</p>");
 
-        $testString = '<xewidget id="xpressengine@iconBar"><param title="title">최근 가입회원</param></xewidget>';
+        $testString = '<xewidget id="xpressengine@iconBar"><title>최근 가입회원</title></xewidget>';
         $resultString = $parser->parseXml($testString);
 
 

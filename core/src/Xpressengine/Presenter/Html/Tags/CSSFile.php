@@ -68,7 +68,7 @@ class CSSFile
     {
         $output = '';
 
-        if(static::$sorter === null) {
+        if (static::$sorter === null) {
             return $output;
         }
 
@@ -102,7 +102,7 @@ class CSSFile
     {
         $output = [];
 
-        if(static::$sorter === null) {
+        if (static::$sorter === null) {
             return $output;
         }
 

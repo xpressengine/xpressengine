@@ -91,6 +91,11 @@ abstract class GenericTheme extends AbstractTheme
         return static::$info;
     }
 
+    /**
+     * 이 테마가 설정페이지를 제공하는 테마인지 조회한다.
+     *
+     * @return bool
+     */
     public static function hasSetting()
     {
         return static::info('setting') !== null;

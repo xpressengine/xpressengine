@@ -356,13 +356,13 @@ class ThemeHandler
      */
     public function getThemeConfig($id, $create = false)
     {
-        if(is_string($id)) {
+        if (is_string($id)) {
             $id = [$id];
         }
         $id = implode($this->configDelimiter, $id);
         $configId = $this->getConfigId($id);
 
-        if($create && $this->hasThemeConfig($configId) === false) {
+        if ($create && $this->hasThemeConfig($configId) === false) {
             $config = $this->config->set($configId, []);
         } else {
             $config = $this->config->get($configId, true);
