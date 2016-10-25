@@ -395,6 +395,12 @@
                                     resetHeight = widgetareaHeight + targetHeight + 25;
 
                                 $widgetarea.setHeight(resetHeight);
+
+                                // var $column = $widgetarea.closest("div[class^='xe-col-']");
+
+                                // if(WidgetBox.checkReducibleBlock($column, $siblingCol.closest(".widget"))) {
+                                // WidgetBox.reduceBlockSize($column);
+                                // }
                             }
 
                         }else {
@@ -414,8 +420,9 @@
                         $siblingCol.removeAttr('class').addClass('xe-col-md-' + size);
 
                         if($siblingCol.siblings().length === 0) {
-                            $siblingCol.closest(".xe-row").parent().append(siblingColHtml);
-                            $siblingCol.closest(".xe-row").remove();
+
+                            // $siblingCol.closest(".xe-row").parent();.append(siblingColHtml);
+                            // $siblingCol.closest(".xe-row").remove()
                         }
 
                     }else {

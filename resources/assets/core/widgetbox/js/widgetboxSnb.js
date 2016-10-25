@@ -139,9 +139,9 @@
                     //TODO span 160px기준 col-1 당 13px 임시로..
                     html += [
                         '<li>',
-                            '<a href="#" data-type="' + v + '" data-display="' + display + '">',
-                                spans,
-                            '</a>',
+                        '<a href="#" data-type="' + v + '" data-display="' + display + '">',
+                        spans,
+                        '</a>',
                         '</li>'
                     ].join("\n");
                 });
@@ -186,12 +186,12 @@
 
                 if(mode === 'mobile') {
                     //layout-mobile
-                    
+
                     self.$editor.addClass("layout-mobile");
                 }else {
                     self.$editor.removeClass("layout-mobile");
                 }
-                
+
                 _settings.mode = mode;
             },
             selectDivisionType: function() {
@@ -238,13 +238,13 @@
                     columns.forEach(function(v, i) {
                         html += [
                             '<div class="xe-col-md-' + v + '">',
-                                '<div class="xe-row widgetarea-row">',
-                                    '<div class="xe-col-md-12">',
-                                        '<div class="widgetarea" data-height="' + height + '" style="height:' + height + 'px">',
-                                            '<span class="order"></span>',
-                                        '</div>',
-                                    '</div>',
-                                '</div>',
+                            '<div class="xe-row widgetarea-row">',
+                            '<div class="xe-col-md-12">',
+                            '<div class="widgetarea" data-height="' + height + '" style="height:' + height + 'px">',
+                            '<span class="order"></span>',
+                            '</div>',
+                            '</div>',
+                            '</div>',
                             '</div>'
                         ].join("\n");
                     });
@@ -264,11 +264,11 @@
                 if($selected.length > 0) {
                     $widgetAreaRow.after([
                         '<div class="xe-row widgetarea-row">',
-                            '<div class="xe-col-md-12">',
-                                '<div class="widgetarea" data-height="140" style="height:140px">',
-                                    '<span class="order"></span>',
-                                '</div>',
-                            '</div>',
+                        '<div class="xe-col-md-12">',
+                        '<div class="widgetarea" data-height="140" style="height:140px">',
+                        '<span class="order"></span>',
+                        '</div>',
+                        '</div>',
                         '</div>',
                     ].join("\n"));
 
@@ -312,11 +312,11 @@
             addRow: function() {
                 self.$editor.append([
                     '<div class="xe-row widgetarea-row">',
-                        '<div class="xe-col-md-12">',
-                            '<div class="widgetarea" data-height="140" style="height:140px">',
-                                '<span class="order"></span>',
-                            '</div>',
-                        '</div>',
+                    '<div class="xe-col-md-12">',
+                    '<div class="widgetarea" data-height="140" style="height:140px">',
+                    '<span class="order"></span>',
+                    '</div>',
+                    '</div>',
                     '</div>'
                 ].join("\n"));
             },
@@ -395,6 +395,12 @@
                                     resetHeight = widgetareaHeight + targetHeight + 25;
 
                                 $widgetarea.setHeight(resetHeight);
+
+                                // var $column = $widgetarea.closest("div[class^='xe-col-']");
+
+                                // if(WidgetBox.checkReducibleBlock($column, $siblingCol.closest(".widget"))) {
+                                // WidgetBox.reduceBlockSize($column);
+                                // }
                             }
 
                         }else {
@@ -414,8 +420,9 @@
                         $siblingCol.removeAttr('class').addClass('xe-col-md-' + size);
 
                         if($siblingCol.siblings().length === 0) {
-                            $siblingCol.closest(".xe-row").parent().append(siblingColHtml);
-                            $siblingCol.closest(".xe-row").remove();
+
+                            // $siblingCol.closest(".xe-row").parent();.append(siblingColHtml);
+                            // $siblingCol.closest(".xe-row").remove()
                         }
 
                     }else {
