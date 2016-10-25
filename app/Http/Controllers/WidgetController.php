@@ -38,7 +38,6 @@ class WidgetController extends Controller {
     public function generate(Request $request, WidgetHandler $widgetHandler)
     {
         $data = $request->getContent();
-
         $data = json_decode($data);
 
         $inputs = [];
@@ -158,10 +157,12 @@ class WidgetController extends Controller {
 
         // skin form
         $skinConfig = array_get($inputs, 'skin');
-        if($skinConfig) {
+        if($skinConfig && array_has($skinConfig, '@attributes.id')) {
             $skin = array_get($skinConfig, '@attributes.id');
             $skin = $skinHandler->get($skin);
             $skinForm = $skin->renderSetting($skinConfig);
+        } else {
+            $skinConfig = null;
         }
 
         return apiRender('widget.setup', compact('widgets', 'widget', 'title', 'skins', 'skin', 'widgetSelector', 'skinSelector', 'widgetForm', 'skinForm'));

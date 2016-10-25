@@ -721,7 +721,7 @@ Route::settings('widget', function () {
     Route::get('list', ['as' => 'settings.widget.list', 'uses' => 'WidgetController@index']);
     Route::get('skin', ['as' => 'settings.widget.skin', 'uses' => 'WidgetController@skin']);
     Route::get('form', ['as' => 'settings.widget.form', 'uses' => 'WidgetController@form']);
-    Route::get('setup', ['as' => 'settings.widget.setup', 'uses' => 'WidgetController@setup']);
+    Route::post('setup', ['as' => 'settings.widget.setup', 'uses' => 'WidgetController@setup']);
 
     Route::get('render', ['as' => 'settings.widget.render', 'uses' => 'WidgetController@render']);
     Route::post('generate', ['as' => 'settings.widget.generate', 'uses' => 'WidgetController@generate']);

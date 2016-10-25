@@ -10,6 +10,7 @@ namespace App\Providers;
 
 use App\UIObjects\Widget\WidgetGenerator;
 use App\Widgets\ContentInfo;
+use App\Widgets\HtmlWidget;
 use App\Widgets\StorageSpace;
 use App\Widgets\SystemInfo;
 use Illuminate\Support\ServiceProvider;
@@ -97,6 +98,7 @@ class WidgetServiceProvider extends ServiceProvider
         $pluginRegister->add(StorageSpace::class);
         $pluginRegister->add(ContentInfo::class);
         $pluginRegister->add(SystemInfo::class);
+        $pluginRegister->add(HtmlWidget::class);
     }
 
     protected function registerUIObject()
