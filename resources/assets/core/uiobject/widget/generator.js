@@ -106,11 +106,12 @@
                 }, cb);
             };
 
-            this.reset = function() {
+            this.reset = function(code, callback) {
                 WidgetCode.reset({
                     url: $(widgetInputs).data('url'),
-                    code: $(widgetCodeSel).val(),
-                    target: widgetInputs
+                    code: code,
+                    target: widgetInputs,
+                    callback: callback
                 });
             };
 
@@ -170,10 +171,11 @@
                     var target = options.target;
 
                     XE.page(url, target, {
+                        type: 'post',
                         data: {
-                            code: code
+                            code: code,
                         }
-                    });
+                    }, options.callback);
                 });
             },
             init: function() {

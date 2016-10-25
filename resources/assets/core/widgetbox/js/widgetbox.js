@@ -140,8 +140,9 @@
                                 var widgetCdoe = $this.wrap('<div />').parent().html().replace(/"/g, "'");
                                 var widgetTitle = $this.attr('title');
                                 var widgetView = WidgetAdder.getWidgetBoxView(widgetCdoe, widgetTitle);
-
-                                $parent.html($(widgetView).find('.xe-col-md-12 >'));
+                                var $widgetView = $(widgetView).find('.xe-col-md-12 >');
+                                $widgetView.find(".widgetCode").val(widgetCdoe);
+                                $parent.html($widgetView);
                             });
 
                             $content.find('.widgetarea').each(function () {
@@ -157,15 +158,15 @@
                             });
 
                             content = $content;
-                            
+
                         }else {
                             content = [
                                 '<div class="xe-row widgetarea-row">',
-                                    '<div class="xe-col-md-12">',
-                                        '<div class="widgetarea" data-height="140" style="height:140px">',
-                                            '<span class="order">0</span>',
-                                        '</div>',
-                                    '</div>',
+                                '<div class="xe-col-md-12">',
+                                '<div class="widgetarea" data-height="140" style="height:140px">',
+                                '<span class="order">0</span>',
+                                '</div>',
+                                '</div>',
                                 '</div>'
                             ].join("\n");
                         }
@@ -280,7 +281,7 @@
                 }
 
                 $(this).closest(".xe-row").remove();
-                
+
             },
             /**
              * @description

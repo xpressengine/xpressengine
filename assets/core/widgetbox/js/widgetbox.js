@@ -140,8 +140,9 @@
                                 var widgetCdoe = $this.wrap('<div />').parent().html().replace(/"/g, "'");
                                 var widgetTitle = $this.attr('title');
                                 var widgetView = WidgetAdder.getWidgetBoxView(widgetCdoe, widgetTitle);
-
-                                $parent.html($(widgetView).find('.xe-col-md-12 >'));
+                                var $widgetView = $(widgetView).find('.xe-col-md-12 >');
+                                $widgetView.find(".widgetCode").val(widgetCdoe);
+                                $parent.html($widgetView);
                             });
 
                             $content.find('.widgetarea').each(function () {

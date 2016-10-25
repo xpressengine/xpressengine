@@ -58,6 +58,8 @@
 
                 }
 
+                $selected.find(".widgetarea .widgetCode").val(widgetCode);
+
                 WidgetBox.increaseBlockSize($selected);
             },
             getWidgetBoxView: function(widgetCode, widgetTitle) {
