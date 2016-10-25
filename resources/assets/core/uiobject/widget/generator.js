@@ -82,9 +82,6 @@
                                 skinForm: skinForm
                             }, cb);
                             break;
-
-                        default:
-                            console.error('widgetGenerator parameter error');
                     }
 
                     break;
@@ -95,8 +92,6 @@
                     break;
                 case 'undefined':
                     break;
-                default:
-                    console.error('widgetGenerator parameter error');
             }
 
             this.generate = function(cb) {

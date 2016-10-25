@@ -49,52 +49,6 @@
             <h3>셀관리 <i class="xi-question-o" data-toggle="xe-tooltip" data-placement="bottom"
                        title="편집영역에 셀 레이아웃을 추가하거나 셀을 선택하여 수직/수평으로 분할하여 레이아웃을 편집할 수 있습니다."></i></h3>
             <div class="cell-config-btn">
-                <div class="xe-form-group">
-                    <div class="xe-btn-group">
-                        <!--[D] 셀 선택 후 텍스트 교체 ex)셀 레이아웃 삽입 => 3X2,  개발 미적용 시 버튼 제거-->
-                        <button type="button" class="xe-btn xe-btn-sm xe-btn-primary" data-toggle="xe-dropdown"><i
-                                    class="xi-grid"></i>셀 레이아웃 삽입
-                        </button>
-                        <div class="xe-dropdown-menu drag-cell">
-                            <ul>
-                                <li class="hover"><span class="cell"></span></li>
-                                <li class="hover"><span class="cell"></span></li>
-                                <li class="hover"><span class="cell"></span></li>
-                                <li><span class="cell"></span></li>
-                                <li><span class="cell"></span></li>
-                                <li><span class="cell"></span></li>
-                                <li class="hover"><span class="cell"></span></li>
-                                <li class="hover"><span class="cell"></span></li>
-                                <li class="hover"><span class="cell"></span></li>
-                                <li><span class="cell"></span></li>
-                                <li><span class="cell"></span></li>
-                                <li><span class="cell"></span></li>
-                                <li><span class="cell"></span></li>
-                                <li><span class="cell"></span></li>
-                                <li><span class="cell"></span></li>
-                                <li><span class="cell"></span></li>
-                                <li><span class="cell"></span></li>
-                                <li><span class="cell"></span></li>
-                                <li><span class="cell"></span></li>
-                                <li><span class="cell"></span></li>
-                                <li><span class="cell"></span></li>
-                                <li><span class="cell"></span></li>
-                                <li><span class="cell"></span></li>
-                                <li><span class="cell"></span></li>
-                                <li><span class="cell"></span></li>
-                                <li><span class="cell"></span></li>
-                                <li><span class="cell"></span></li>
-                                <li><span class="cell"></span></li>
-                                <li><span class="cell"></span></li>
-                                <li><span class="cell"></span></li>
-                            </ul>
-                            <button type="button" class="xe-btn xe-btn-sm">취소</button>
-                            <button type="button" class="xe-btn xe-btn-primary xe-btn-sm">확인</button>
-                        </div>
-                    </div>
-
-                    <button type="button" class="xe-btn xe-btn-sm xe-btn-primary-outline" id="btnAddRow">셀추가</button>
-                </div>
                 <div class="xe-form-inline">
                     <div class="xe-form-group">
                         <!--[D] 기본 dropdown 구조에서 .vertical-list 추가-->
@@ -144,6 +98,7 @@
                                 </div>
                             </div>
                         </div>
+                        <button type="button" class="xe-btn xe-btn-sm xe-btn-primary-outline" id="btnAddRow">셀추가</button>
                     </div>
                 </div>
                 <div>

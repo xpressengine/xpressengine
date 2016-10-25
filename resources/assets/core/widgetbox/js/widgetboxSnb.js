@@ -220,9 +220,6 @@
                         case 'horizontal' :
                             self.divideHorizontal();
                             break;
-
-                        default:
-                            window.console.error("type error.");
                     }
                 }
             },
@@ -256,6 +253,8 @@
 
                     WidgetBox.deselectAll();
                     WidgetBox.setOrdering();
+                } else {
+                    alert('셀을 선택하세요.');
                 }
             },
             divideHorizontal: function() {
@@ -306,6 +305,8 @@
 
                     WidgetBox.deselectAll();
                     WidgetBox.setOrdering();
+                } else {
+                    alert('셀을 선택하세요.');
                 }
             },
             addRow: function() {
@@ -453,9 +454,6 @@
                     if($divCol.length > 0 && _deletable) {
                         var $siblingCols = $divCol.siblings();
 
-
-
-
                         _deletable = self.checkRowChildBlock($siblingCols, targetHeight);
 
                         $divCol = $divCol.parent().closest("div[class^='xe-col-']:not(.xe-col-md-12)");
@@ -465,9 +463,6 @@
                         break;
                     }
                 }
-
-
-                window.console.log(":: deletable :: " + _deletable);
 
                 return _deletable;
 
@@ -523,7 +518,7 @@
                         var $targetPiece = $(this);
 
                         if($targetPiece.find("> .xe-row").length > 1) {
-                            window.console.log("row");
+
 
                         }else {
                             if($targetPiece.find(".widgetarea-row:last-child:not(:has(.selected))").length > 0) {
