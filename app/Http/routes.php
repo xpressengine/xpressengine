@@ -383,7 +383,7 @@ Route::settings(
         );
 
         Route::get(
-            'searchMember/{keyword?}',
+            'search/{keyword?}',
             ['as' => 'settings.user.search', 'uses' => 'User\Settings\UserController@search']
         );
     }

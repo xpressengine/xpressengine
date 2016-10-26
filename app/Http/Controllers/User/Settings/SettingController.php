@@ -58,7 +58,7 @@ class SettingController extends Controller
         $config = app('xe.config')->get('user.common');
 
         return XePresenter::make(
-            'member.settings.setting.common',
+            'user.settings.setting.common',
             compact('config', 'captcha')
         );
     }
@@ -98,7 +98,7 @@ class SettingController extends Controller
         $profileSkinSection = new SkinSection('member/profile');
 
         return XePresenter::make(
-            'member.settings.setting.skin',
+            'user.settings.setting.skin',
             compact('authSkinSection', 'settingsSkinSection', 'profileSkinSection')
         );
     }
@@ -115,7 +115,7 @@ class SettingController extends Controller
         $config = app('xe.config')->get('user.join');
 
         return XePresenter::make(
-            'member.settings.setting.join',
+            'user.settings.setting.join',
             compact('config','captcha')
         );
     }
@@ -156,7 +156,7 @@ class SettingController extends Controller
         $dynamicFieldSection = new DynamicFieldSection('user', $connection, false);
 
         return XePresenter::make(
-            'member.settings.setting.field',
+            'user.settings.setting.field',
             compact('dynamicFieldSection')
         );
     }
@@ -171,7 +171,7 @@ class SettingController extends Controller
         $toggleMenuSection = new ToggleMenuSection('user');
 
         return XePresenter::make(
-            'member.settings.setting.usermenu',
+            'user.settings.setting.usermenu',
             compact('toggleMenuSection')
         );
     }

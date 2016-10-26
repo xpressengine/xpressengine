@@ -42,7 +42,7 @@ class GroupController extends Controller
         $config = app('xe.config')->get('user.join');
         $joinGroup = $config->get('joinGroup');
 
-        return XePresenter::make('member.settings.group.index', compact('groups', 'joinGroup'));
+        return XePresenter::make('user.settings.group.index', compact('groups', 'joinGroup'));
     }
 
     /**
@@ -52,7 +52,7 @@ class GroupController extends Controller
      */
     public function create()
     {
-        return XePresenter::make('member.settings.group.create');
+        return XePresenter::make('user.settings.group.create');
     }
 
     /**
@@ -91,7 +91,7 @@ class GroupController extends Controller
     public function edit($id)
     {
         $group = $this->groups->find($id);
-        return XePresenter::make('member.settings.group.edit', compact('group'));
+        return XePresenter::make('user.settings.group.edit', compact('group'));
     }
 
     /**

@@ -30,7 +30,7 @@ class SettingsSkin extends GenericSkin
         'description' => 'Xpressengine의 기본 마이페이지 스킨입니다'
     ];
 
-    protected static $path = 'member.skins.default.settings';
+    protected static $path = 'user.skins.default.settings';
 
     protected static $info = [];
 
@@ -63,7 +63,7 @@ class SettingsSkin extends GenericSkin
     {
         $useEmailConfirm = app('xe.user')->usingEmailConfirm();
 
-        app('xe.frontend')->html('member.settings.loadScript')->content(
+        app('xe.frontend')->html('user.settings.loadScript')->content(
             "<script>
             $(function () {
                 $('.__xe_setting.__xe_settingDisplayName').xeDisplayNameSetting({
