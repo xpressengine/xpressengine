@@ -6,7 +6,7 @@
  * @link        https://xpressengine.io
  */
 
-namespace App\Http\Controllers\Member;
+namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Auth;
@@ -100,7 +100,7 @@ class ProfileController extends Controller
         }
         XeDB::commit();
 
-        return redirect()->route('member.profile', [$user->getId()])->with(
+        return redirect()->route('user.profile', [$user->getId()])->with(
             'alert',
             [
                 'type' => 'success',

@@ -6,7 +6,7 @@
  * @link        https://xpressengine.io
  */
 
-namespace App\Http\Controllers\Member;
+namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Auth;

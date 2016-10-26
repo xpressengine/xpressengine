@@ -116,7 +116,7 @@ class Permission extends AbstractUIObject
     protected function loadReactComponent($container, $title, $jsonRet)
     {
 
-        $memberSearchUrl = route('settings.member.search');
+        $memberSearchUrl = route('settings.user.search');
         $groupSearchUrl = route('manage.group.search');
         $vgroupAll = app('xe.user.virtualGroups')->all();
 

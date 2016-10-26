@@ -108,7 +108,7 @@ use Xpressengine\Support\Tree\Tree;
  *     'member',
  *     function () {
  *         Route::get('{id}/edit', [
- *            'as' => 'settings.member.edit',
+ *            'as' => 'settings.user.edit',
  *            'uses' => 'Member\Settings\UserController@getEdit',
  *            'permission' => 'member.edit',
  *         ]

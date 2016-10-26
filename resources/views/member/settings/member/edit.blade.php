@@ -1,6 +1,6 @@
 
 <div class="row">
-    <form class="form" name="fMemberEdit" method="post" action="{{ route('settings.member.edit', [$user->id]) }}" enctype="multipart/form-data">
+    <form class="form" name="fMemberEdit" method="post" action="{{ route('settings.user.edit', [$user->id]) }}" enctype="multipart/form-data">
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
     <div class="col-sm-12">
         <div class="panel-group">
@@ -63,7 +63,7 @@
                 </div>
                 <div class="panel-footer">
                     <div class="pull-right">
-                        <a href="{{ route('settings.member.index') }}" class="btn btn-default btn-lg">{{xe_trans('xe::cancel')}}</a>
+                        <a href="{{ route('settings.user.index') }}" class="btn btn-default btn-lg">{{xe_trans('xe::cancel')}}</a>
                         <button type="submit" class="btn btn-primary btn-lg">{{xe_trans('xe::save')}}</button>
                     </div>
                 </div>
@@ -76,9 +76,9 @@
 <script>
 var url = {
     'mail': {
-        'list': "{{ route('settings.member.mail.list') }}",
-        'add': "{{ route('settings.member.mail.add') }}",
-        'delete': "{{ route('settings.member.mail.delete') }}"
+        'list': "{{ route('settings.user.mail.list') }}",
+        'add': "{{ route('settings.user.mail.add') }}",
+        'delete': "{{ route('settings.user.mail.delete') }}"
     }
 };
 </script>

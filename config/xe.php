@@ -53,78 +53,78 @@ return [
                 'description' => '',
                 'ordering' => 100
             ],
-            'member' => [
+            'user' => [
                 'title' => 'xe::member',
                 'description' => '',
                 'display' => true,
                 'ordering' => 3000
             ],
-            'member.list' => [
+            'user.list' => [
                 'title' => 'xe::memberList',
                 'description' => '',
                 'display' => true,
                 'ordering' => 100
             ],
-            'member.create' => [
+            'user.create' => [
                 'title' => 'xe::addMember',
                 'description' => '신규회원을 추가합니다.',
                 'display' => false,
                 'ordering' => 200
             ],
-            'member.edit' => [
+            'user.edit' => [
                 'title' => 'xe::editMember',
                 'description' => '회원정보를 수정합니다',
                 'display' => false,
                 'ordering' => 200
             ],
-            'member.group' => [
+            'user.group' => [
                 'title' => 'xe::group',
                 'description' => '',
                 'ordering' => 200
             ],
-            'member.group.create' => [
+            'user.group.create' => [
                 'title' => '새그룹 추가',
                 'description' => '',
                 'display' => false,
                 'ordering' => 100
             ],
-            'member.group.edit' => [
+            'user.group.edit' => [
                 'title' => '그룹 수정',
                 'description' => '',
                 'display' => false,
                 'ordering' => 200
             ],
-            'member.setting' => [
+            'user.setting' => [
                 'title' => 'xe::settings',
                 'description' => '',
                 'display' => true,
                 'ordering' => 400
             ],
-            'member.setting.default' => [
+            'user.setting.default' => [
                 'title' => 'xe::defaultSettings',
                 'description' => '',
                 'display' => true,
                 'ordering' => 100
             ],
-            'member.setting.join' => [
+            'user.setting.join' => [
                 'title' => 'xe::joinSettings',
                 'description' => '',
                 'display' => true,
                 'ordering' => 200
             ],
-            'member.setting.skin' => [
+            'user.setting.skin' => [
                 'title' => 'xe::skinSettings',
                 'description' => '',
                 'display' => true,
                 'ordering' => 300
             ],
-            'member.setting.field' => [
+            'user.setting.field' => [
                 'title' => 'xe::dynamicFieldSettings',
                 'description' => '',
                 'display' => true,
                 'ordering' => 400
             ],
-            'member.setting.menu' => [
+            'user.setting.menu' => [
                 'title' => 'xe::toggleMenuSettings',
                 'description' => '',
                 'display' => true,

@@ -177,7 +177,7 @@
             </div>
         </div>
         <div class="setting-detail" style="display: none;">
-            <form method="post" class="__xe_form" action="{{ route('member.settings.leave') }}">
+            <form method="post" class="__xe_form" action="{{ route('user.settings.leave') }}">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <div class="setting-detail-content">
                     <p>{{xe_trans('xe::accountDeleteCaution')}}</p>

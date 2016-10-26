@@ -6,7 +6,7 @@
  * @link        https://xpressengine.io
  */
 
-namespace App\Http\Controllers\Member\Settings;
+namespace App\Http\Controllers\User\Settings;
 
 use App\Http\Controllers\Controller;
 use Exception;

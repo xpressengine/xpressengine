@@ -6,7 +6,7 @@
  * @link        https://xpressengine.io
  */
 
-namespace App\Http\Controllers\Member\Settings;
+namespace App\Http\Controllers\User\Settings;
 
 use App\Http\Controllers\Controller;
 use Exception;
@@ -161,7 +161,7 @@ class UserController extends Controller
         }
         XeDB::commit();
 
-        return redirect()->route('settings.member.index')->with(
+        return redirect()->route('settings.user.index')->with(
             'alert',
             ['type' => 'success', 'message' => '추가되었습니다.']
         );
@@ -426,7 +426,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws Exception
      */
-    public function deleteMember()
+    public function deleteUser()
     {
         $userIds = Input::get('userId', []);
 

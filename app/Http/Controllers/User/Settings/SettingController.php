@@ -12,7 +12,7 @@
  * @link        https://xpressengine.io
  */
 
-namespace App\Http\Controllers\Member\Settings;
+namespace App\Http\Controllers\User\Settings;
 
 use App\Http\Controllers\Controller;
 use App\Http\Sections\DynamicFieldSection;
@@ -27,7 +27,7 @@ use App\Http\Sections\SkinSection;
 
 /**
  * @category
- * @package     App\Http\Controllers\Member
+ * @package     App\Http\Controllers\User
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
