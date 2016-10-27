@@ -312,10 +312,17 @@ class SettingsHandler
             // 만약 route에 permission 정보가 있고, 그 permission을 현재 member가 통과하지 못하면 display=false로 지정한다.
             $permissions = array_get($route->getAction(), 'permission', []);
             $visible = false;
-            if (!$isSuper) {
+            if (false && !$isSuper) {
                 foreach ((array) $permissions as $permissionId) {
                     // todo: implementing
-                    $instance = new Instance('settings'.$permissionId);
+                    $instance = new Instance('settings.'.$permissionId);
+
+                    $perm = app('xe.permission')->get($instance->getName(), $instance->getSiteKey());
+                    if($perm === null) {
+                        $visible = false;
+                        continue;
+                    }
+
                     if ($this->gate->allows('access', $instance)) {
                         $visible = true;
                     }

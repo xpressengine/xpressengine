@@ -5,7 +5,6 @@
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-
 namespace App\Http\Controllers\User\Settings;
 
 use App\Http\Controllers\Controller;

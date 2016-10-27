@@ -556,7 +556,7 @@ Route::settings(
     }
 );
 
-/* theme package */
+/* theme  */
 Route::settings(
     'theme',
     function () {
@@ -570,83 +570,85 @@ Route::settings(
     }
 );
 
-/* plugin package */
+/* plugin  */
 Route::settings(
     'plugins',
     function () {
-        Route::get(
-            '/',
-            [
-                'as' => 'settings.plugins',
-                'uses' => 'PluginController@index',
-                'settings_menu' => ['plugin.list']
-            ]
-        );
+        Route::group(['permission' => 'plugin'], function() {
 
-        Route::get('operation', [
-            'as' => 'settings.plugins.operation',
-            'uses' => 'PluginController@getOperation'
-        ]);
+            Route::get(
+                '/',
+                [
+                    'as' => 'settings.plugins',
+                    'uses' => 'PluginController@index',
+                    'settings_menu' => ['plugin.list']
+                ]
+            );
 
-        Route::delete('operation', [
-            'as' => 'settings.plugins.operation.delete',
-            'uses' => 'PluginController@deleteOperation'
-        ]);
+            Route::get('operation', [
+                'as' => 'settings.plugins.operation',
+                'uses' => 'PluginController@getOperation'
+            ]);
 
-        Route::post(
-            '/',
-            [
-                'as' => 'settings.plugins.install',
-                'uses' => 'PluginController@install'
-            ]
-        );
+            Route::delete('operation', [
+                'as' => 'settings.plugins.operation.delete',
+                'uses' => 'PluginController@deleteOperation'
+            ]);
 
-        Route::get(
-            '{pluginId}',
-            [
-                'as' => 'settings.plugins.show',
-                'uses' => 'PluginController@show',
-                'settings_menu' => ['plugin.list.detail']
-            ]
-        );
+            Route::post(
+                '/',
+                [
+                    'as' => 'settings.plugins.install',
+                    'uses' => 'PluginController@install'
+                ]
+            );
 
-        Route::put(
-            '{pluginId}/activate',
-            [
-                'as' => 'settings.plugins.activate',
-                'uses' => 'PluginController@putActivatePlugin'
-            ]
-        );
-        Route::put(
-            '{pluginId}/deactivate',
-            [
-                'as' => 'settings.plugins.deactivate',
-                'uses' => 'PluginController@putDeactivatePlugin'
-            ]
-        );
-        Route::put(
-            '{pluginId}/update',
-            [
-                'as' => 'settings.plugins.update',
-                'uses' => 'PluginController@putUpdatePlugin'
-            ]
-        );
-        Route::put(
-            '{pluginId}/download',
-            [
-                'as' => 'settings.plugins.download',
-                'uses' => 'PluginController@putDownloadPlugin'
-            ]
-        );
+            Route::get(
+                '{pluginId}',
+                [
+                    'as' => 'settings.plugins.show',
+                    'uses' => 'PluginController@show',
+                    'settings_menu' => ['plugin.list.detail']
+                ]
+            );
 
-        Route::delete(
-            '{pluginId}',
-            [
-                'as' => 'settings.plugins.delete',
-                'uses' => 'PluginController@delete'
-            ]
-        );
+            Route::put(
+                '{pluginId}/activate',
+                [
+                    'as' => 'settings.plugins.activate',
+                    'uses' => 'PluginController@putActivatePlugin'
+                ]
+            );
+            Route::put(
+                '{pluginId}/deactivate',
+                [
+                    'as' => 'settings.plugins.deactivate',
+                    'uses' => 'PluginController@putDeactivatePlugin'
+                ]
+            );
+            Route::put(
+                '{pluginId}/update',
+                [
+                    'as' => 'settings.plugins.update',
+                    'uses' => 'PluginController@putUpdatePlugin'
+                ]
+            );
+            Route::put(
+                '{pluginId}/download',
+                [
+                    'as' => 'settings.plugins.download',
+                    'uses' => 'PluginController@putDownloadPlugin'
+                ]
+            );
 
+            Route::delete(
+                '{pluginId}',
+                [
+                    'as' => 'settings.plugins.delete',
+                    'uses' => 'PluginController@delete'
+                ]
+            );
+        });
     }
 );
 
@@ -744,7 +746,7 @@ Route::settings('trash', function () {
     Route::post('/clean', ['as' => 'manage.trash.clean', 'uses' => 'TrashController@clean']);
 });
 
-/* skin package */
+/* skin  */
 Route::settings(
     'skin',
     function () {

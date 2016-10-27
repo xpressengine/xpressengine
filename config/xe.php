@@ -175,7 +175,7 @@ return [
             'setting.seo' => [
                 'title' => 'xe::SEOSettings',
                 'display' => true,
-                'description' => 'SEO를 설정 합니다',
+                'description' => 'SEO를 설정합니다',
                 'ordering' => 8000
             ],
             'lang' => [
@@ -187,7 +187,7 @@ return [
             'lang.default' => [
                 'title' => 'xe::multiLangSettings',
                 'display' => true,
-                'description' => '다국어를 설정 합니다',
+                'description' => '다국어를 설정합니다',
                 'ordering' => 100
             ],
         ]
