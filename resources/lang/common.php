@@ -1090,7 +1090,7 @@ return [
         'ko' => '컴포넌트',
         'en' => 'Component'
     ],
-    'installPath' => [
+    'Path' => [
         'ko' => '설치경로',
         'en' => 'Install path'
     ],
@@ -1981,5 +1981,38 @@ return [
     'skinNotSupportSetting' => [
         'ko' => '설정을 지원하지 않는 스킨입니다.',
         'en' => ''
+    ],
+    'newVersion' => [
+        'ko' => '새버전',
+    ],
+    'confirmDeletePlugin' => [
+        'ko' => '플러그인을 삭제하시겠습니까?',
+    ],
+    'alertDeleteDevelopModePlugin' => [
+        'ko' => '주의: 개발모드 플러그인의 경우, 플러그인 디렉토리는 삭제되지 않습니다. 플러그인 삭제후, 터미널이나 FTP에서 직접 플러그인 디렉토리를 삭제하시기 바랍니다.',
+    ],
+    'alertDeletePlugin' => [
+        'ko' => '플러그인 삭제 과정은 최대 수 분이 걸릴 수 있습니다.',
+    ],
+    'alertUpdatePlugin' => [
+        'ko' => '플러그인을 업데이트할 경우 의존관계에 있는 다른 플러그인이 같이 설치되거나 업데이트 될 수 있으며, 플러그인 업데이트 과정은 최대 수 분이 걸릴 수 있습니다.',
+    ],
+    'confirmUpdatePlugin' => [
+        'ko' => '플러그인을 업데이트하시겠습니까?',
+    ],
+    'currentInstalledVersion' => [
+        'ko' => '현재 설치된 버전',
+    ],
+    'installNewPlugin' => [
+        'ko' => '새 플러그인 설치',
+    ],
+    'inputNewPluginId' => [
+        'ko' => '새로 설치할 플러그인의 아이디를 입력하세요',
+    ],
+    'install' => [
+        'ko' => '설치하기',
+    ],
+    'pluginId' => [
+        'ko' => '플러그인 아이디',
     ],
 ];

@@ -1,5 +1,5 @@
 @section('page_title')
-    <h2>DashBoard</h2>
+    <h2>{{ xe_trans('xe::dashBoard') }}</h2>
 @stop
 
 @section('page_description')

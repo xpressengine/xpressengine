@@ -83,15 +83,14 @@
                         <button type="button" data-toggle="modal" data-target="#deletePlugin" class="btn btn-danger">{{xe_trans('xe::delete')}}</button>
                     @endif
 
-                    @if($plugin->hasUpdate())
-                    <button type="button" data-toggle="modal" data-target="#downloadPluginUpdate" class="btn btn-primary">새버전 다운로드</button>
+                    @if(true || $plugin->hasUpdate())
+                    <button type="button" data-toggle="modal" data-target="#downloadPluginUpdate" class="btn btn-primary">{{ xe_trans('xe::newVersion') }} {{ xe_trans('xe::download') }}</button>
                     @endif
 
                 </div>
                 <ul class="nav nav-pills nav-justified">
                     <li class="active"><a href="#details" data-toggle="tab" role="tab">Details</a></li>
                     <li><a href="#readme" data-toggle="tab" role="tab">Documentation</a></li>
-                    {{--<li><a href="#support" data-toggle="tab" role="tab">지원</a></li>--}}
                     <li><a href="#changelog" data-toggle="tab" role="tab">Change Log</a></li>
                 </ul>
             </div>
@@ -246,15 +245,15 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">플러그인 삭제</h4>
+                    <h4 class="modal-title">{{ xe_trans('xe::plugin') }} {{ xe_trans('xe::delete') }}</h4>
                 </div>
                 <div class="modal-body">
                     @if($plugin->isDevelopMode())
-                    <p>플러그인을 삭제하시겠습니까?</p>
-                    <p>개발모드 플러그인의 경우, 플러그인 디렉토리는 삭제되지 않습니다. 플러그인 삭제후, 터미널이나 FTP에서 직접 플러그인 디렉토리를 삭제하시기 바랍니다.</p>
+                    <p>{{ xe_trans('xe::alertDeleteDevelopModePlugin') }}</p>
+                    <p>{{ xe_trans('xe::confirmDeletePlugin') }}</p>
                     @else
-                    <p>플러그인 삭제 과정은 최대 수 분이 걸릴 수 있습니다.</p>
-                    <p>플러그인을 삭제하시겠습니까?</p>
+                    <p>{{ xe_trans('xe::alertDeletePlugin') }}</p>
+                    <p>{{ xe_trans('xe::confirmDeletePlugin') }}</p>
                     @endif
 
                 </div>
@@ -269,7 +268,7 @@
 @endif
 
 @if($plugin->hasUpdate())
-<div id="downloadPluginUpdate" class="modal fade" tabindex="-1" role="dialog">
+<div id="downloadPluginUpdate" class="modal fade in" tabindex="-1" role="dialog">
     <div class="modal-dialog">
         <form action="{{ route('settings.plugins.download', [$plugin->getId()]) }}" method="POST">
             {{ csrf_field() }}
@@ -277,17 +276,16 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">플러그인 업데이트</h4>
+                    <h4 class="modal-title">{{ xe_trans('xe::plugin') }} {{ xe_trans('xe::update') }}</h4>
                 </div>
                 <div class="modal-body">
-                    <label>현재 설치된 버전</label>
+                    <label>{{ xe_trans('xe::currentInstalledVersion') }}</label>
                     <p>{{ $plugin->getVersion() }}</p>
-                    <label>업데이트 버전 버전</label>
+                    <label>{{ xe_trans('xe::update') }} {{ xe_trans('xe::version') }}</label>
                     <p>{{ $plugin->getVersion() }}</p>
                     <hr>
-                    <p>플러그인을 업데이트할 경우 의존관계에 있는 다른 플러그인이 같이 설치되거나 업데이트 될 수 있습니다.</p>
-                    <p>플러그인 업데이트 과정은 최대 수 분이 걸릴 수 있습니다.</p>
-                    <p>플러그인을 업데이트하시겠습니까?</p>
+                    <p>{{ xe_trans('xe::alertUpdatePlugin') }}</p>
+                    <p>{{ xe_trans('xe::confirmUpdatePlugin') }}</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">{{xe_trans('xe::cancel')}}</button>
