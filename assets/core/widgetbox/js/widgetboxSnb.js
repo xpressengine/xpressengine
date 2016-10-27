@@ -67,7 +67,7 @@
                 self.appendDivisionType(appendDivision);
 
                 //tooltip
-                self.$tooltips.xeTooltip();
+                // self.$tooltips.xeTooltip();
             },
             toggleSection: function() {
                 var $section = $(this).parents(".seciton");

@@ -17,6 +17,7 @@
 
                     var $this = $(this);
                     var callback = $this.data('callback');
+                    var validate = $this.data('validate');
 
                     var objStack = callback? callback.split(".") : [];
                     var callbackFunc = (objStack.length > 0)? window : '';
@@ -44,6 +45,11 @@
                     }
 
                     if(_formCommon.isValidForm(options)) {
+
+                        if(validate == true) {
+                            XE.formValidate($this);
+                        }
+
                         XE.ajax(options);
                     }
 
