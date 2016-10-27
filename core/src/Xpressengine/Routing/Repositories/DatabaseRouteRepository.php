@@ -39,7 +39,7 @@ class DatabaseRouteRepository implements RouteRepository
     public $protectedUrl = [
         'locale',
         'auth',
-        'member',
+        'user',
         'file',
         'tag',
         'fieldType',

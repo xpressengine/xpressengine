@@ -14,7 +14,7 @@ class ProfileBgImage extends ProfileImage
 {
     protected static $id = 'uiobject/xpressengine@profileBgImage';
 
-    protected $view = 'uiobjects.member.profileBgImage';
+    protected $view = 'uiobjects.user.profileBgImage';
 
     public static function boot()
     {

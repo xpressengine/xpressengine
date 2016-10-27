@@ -5,8 +5,7 @@
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-
-namespace App\Http\Controllers\Member\Settings;
+namespace App\Http\Controllers\User\Settings;
 
 use App\Http\Controllers\Controller;
 use Exception;
@@ -90,7 +89,7 @@ class UserController extends Controller
         if ($group !== null) {
             $selectedGroup = $this->handler->groups()->find($group);
         }
-        return XePresenter::make('member.settings.member.index', compact('users', 'groups', 'selectedGroup'));
+        return XePresenter::make('user.settings.user.index', compact('users', 'groups', 'selectedGroup'));
     }
 
     /**
@@ -126,7 +125,7 @@ class UserController extends Controller
         $dynamicField = app('xe.dynamicField');
         $fieldTypes = $dynamicField->gets('user');
 
-        return XePresenter::make('member.settings.member.create', compact('ratings', 'groups', 'status', 'fieldTypes'));
+        return XePresenter::make('user.settings.user.create', compact('ratings', 'groups', 'status', 'fieldTypes'));
     }
 
     /**
@@ -161,7 +160,7 @@ class UserController extends Controller
         }
         XeDB::commit();
 
-        return redirect()->route('settings.member.index')->with(
+        return redirect()->route('settings.user.index')->with(
             'alert',
             ['type' => 'success', 'message' => '추가되었습니다.']
         );
@@ -230,7 +229,7 @@ class UserController extends Controller
             }
         }
         return XePresenter::make(
-            'member.settings.member.edit',
+            'user.settings.user.edit',
             compact(
                 'user',
                 'ratings',
@@ -426,7 +425,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws Exception
      */
-    public function deleteMember()
+    public function deleteUser()
     {
         $userIds = Input::get('userId', []);
 
@@ -443,7 +442,7 @@ class UserController extends Controller
     }
 
     /**
-     * searchMember
+     * search user
      *
      * @param null $keyword
      *
@@ -458,11 +457,11 @@ class UserController extends Controller
             return XePresenter::makeApi([]);
         }
 
-        $matchedMemberList = $users->query()->where('displayName', 'like', '%'.$keyword.'%')->paginate( null,
+        $matchedUserList = $users->query()->where('displayName', 'like', '%'.$keyword.'%')->paginate( null,
             ['id', 'displayName', 'email']
         )->items();
 
-        return XePresenter::makeApi($matchedMemberList);
+        return XePresenter::makeApi($matchedUserList);
     }
 
     /**

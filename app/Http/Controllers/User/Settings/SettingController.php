@@ -12,7 +12,7 @@
  * @link        https://xpressengine.io
  */
 
-namespace App\Http\Controllers\Member\Settings;
+namespace App\Http\Controllers\User\Settings;
 
 use App\Http\Controllers\Controller;
 use App\Http\Sections\DynamicFieldSection;
@@ -27,7 +27,7 @@ use App\Http\Sections\SkinSection;
 
 /**
  * @category
- * @package     App\Http\Controllers\Member
+ * @package     App\Http\Controllers\User
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -58,7 +58,7 @@ class SettingController extends Controller
         $config = app('xe.config')->get('user.common');
 
         return XePresenter::make(
-            'member.settings.setting.common',
+            'user.settings.setting.common',
             compact('config', 'captcha')
         );
     }
@@ -98,7 +98,7 @@ class SettingController extends Controller
         $profileSkinSection = new SkinSection('member/profile');
 
         return XePresenter::make(
-            'member.settings.setting.skin',
+            'user.settings.setting.skin',
             compact('authSkinSection', 'settingsSkinSection', 'profileSkinSection')
         );
     }
@@ -115,7 +115,7 @@ class SettingController extends Controller
         $config = app('xe.config')->get('user.join');
 
         return XePresenter::make(
-            'member.settings.setting.join',
+            'user.settings.setting.join',
             compact('config','captcha')
         );
     }
@@ -156,7 +156,7 @@ class SettingController extends Controller
         $dynamicFieldSection = new DynamicFieldSection('user', $connection, false);
 
         return XePresenter::make(
-            'member.settings.setting.field',
+            'user.settings.setting.field',
             compact('dynamicFieldSection')
         );
     }
@@ -171,7 +171,7 @@ class SettingController extends Controller
         $toggleMenuSection = new ToggleMenuSection('user');
 
         return XePresenter::make(
-            'member.settings.setting.usermenu',
+            'user.settings.setting.usermenu',
             compact('toggleMenuSection')
         );
     }

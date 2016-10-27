@@ -30,7 +30,7 @@ class SettingsSkin extends GenericSkin
         'description' => 'Xpressengine의 기본 마이페이지 스킨입니다'
     ];
 
-    protected static $path = 'member.skins.default.settings';
+    protected static $path = 'user.skins.default.settings';
 
     protected static $info = [];
 
@@ -63,28 +63,28 @@ class SettingsSkin extends GenericSkin
     {
         $useEmailConfirm = app('xe.user')->usingEmailConfirm();
 
-        app('xe.frontend')->html('member.settings.loadScript')->content(
+        app('xe.frontend')->html('user.settings.loadScript')->content(
             "<script>
             $(function () {
                 $('.__xe_setting.__xe_settingDisplayName').xeDisplayNameSetting({
-                    checkUrl: '".route('member.settings.name.check')."',
-                    saveUrl: '".route('member.settings.name.update')."'
+                    checkUrl: '".route('user.settings.name.check')."',
+                    saveUrl: '".route('user.settings.name.update')."'
                 });
                 $('.__xe_setting.__xe_settingPassword').xePasswordSetting({
-                    checkUrl: '".route('member.settings.password.check')."',
-                    saveUrl: '".route('member.settings.password.update')."'
+                    checkUrl: '".route('user.settings.password.check')."',
+                    saveUrl: '".route('user.settings.password.update')."'
                 });
                 $('.__xe_setting.__xe_settingEmail').xeEmailSetting({
-                    addUrl: '".route('member.settings.mail.add')."',
-                    saveUrl: '".route('member.settings.mail.update')."',
-                    deleteUrl: '".route('member.settings.mail.delete')."',
-                    confirmUrl: '".route('member.settings.mail.confirm')."',
-                    deletePendingUrl: '".route('member.settings.pending_mail.delete')."',
-                    resendPendingUrl: '".route('member.settings.pending_mail.resend')."',
+                    addUrl: '".route('user.settings.mail.add')."',
+                    saveUrl: '".route('user.settings.mail.update')."',
+                    deleteUrl: '".route('user.settings.mail.delete')."',
+                    confirmUrl: '".route('user.settings.mail.confirm')."',
+                    deletePendingUrl: '".route('user.settings.pending_mail.delete')."',
+                    resendPendingUrl: '".route('user.settings.pending_mail.resend')."',
                     useEmailConfirm: ".($useEmailConfirm ? 'true' : 'false')."
                 });
                 $('.__xe_setting.__xe_settingLeave').xeLeaveSetting({
-                    saveUrl: '".route('member.settings.leave')."'
+                    saveUrl: '".route('user.settings.leave')."'
                 });
             });
             </script>"
