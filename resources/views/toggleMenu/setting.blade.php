@@ -19,6 +19,7 @@
             </colgroup>
             <tbody>
             @forelse($items as $key => $data)
+                @if($data['item'] != 1)
                 <tr>
                     <td>
                         <button class="btn handler"><i class="xi-bullet-point"></i></button>
@@ -37,6 +38,7 @@
                         </div>
                     </td>
                 </tr>
+                @endif
             @empty
                 <tr>
                     <td>{{ xe_trans('xe::noMenu') }}</td>
