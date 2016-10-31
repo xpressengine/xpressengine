@@ -56,8 +56,7 @@
                     $('.widget').eq(index).find('.widgetCode').val(widgetCode)
                     
                 } else {
-                    $selected.find(".widgetarea").append(widgetView).find('.widgetarea .widgetCode:last').val(widgetCode);
-
+                    $selected.find(".widgetarea").append(widgetView).find('.widgetCode:last').val(widgetCode);
                 }
 
                 WidgetBox.increaseBlockSize($selected);
