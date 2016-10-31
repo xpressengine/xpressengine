@@ -59,10 +59,10 @@ class DefaultSkin extends AbstractSkin
      * 수정 form 에 추가될 html 코드 리턴
      * return html tag string
      *
-     * @param array $inputs parameters
+     * @param array $args parameters
      * @return string
      */
-    public function edit(array $inputs)
+    public function edit(array $args)
     {
         $config = $this->config;
         $text = '';
@@ -80,10 +80,10 @@ class DefaultSkin extends AbstractSkin
      * 조회 시 사용 될 html 코드 리턴
      * return html tag string
      *
-     * @param array $inputs parameters
+     * @param array $args parameters
      * @return string
      */
-    public function show(array $inputs)
+    public function show(array $args)
     {
         $config = $this->config;
         $text = '';
