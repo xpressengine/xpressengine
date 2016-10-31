@@ -82,7 +82,7 @@ $(function() {
     var $el = this;
 
     System.import('xe.component.transition');
-    System.import('xe.component.modal', function() {
+    System.import('xe.component.modal').then(function() {
       $el.xeModal(options);
     });
 

@@ -36,9 +36,9 @@
 
   Validator.check = function ($frm) {
     var ruleName = this.getRuleName($frm),
-      rules = this.rules[ruleName],
-      self = this,
-      alertType = $frm.data('rule-alert-type');
+        rules = this.rules[ruleName],
+        self = this,
+        alertType = $frm.data('rule-alert-type');
 
     if (alertType == undefined) {
       alertType = 'form';
@@ -54,11 +54,11 @@
 
   Validator.checkRuleContainers = function ($frm) {
     var self = this,
-      containers = $frm.find('[data-rule]');
+        containers = $frm.find('[data-rule]');
 
     $.each(containers, function (index, container) {
       var ruleName = $(container).data('rule'),
-        rules = self.rules[ruleName];
+          rules = self.rules[ruleName];
 
       $.each(rules, function (name, rule) {
         self.validate($frm, name, rule);
@@ -66,14 +66,29 @@
     });
   };
 
+  Validator.formValidate = function($form) {
+    var self = this;
+
+    Validator.alertType = $form.data('rule-alert-type') || 'toast';
+    self.errorClear($form);
+
+    $form.find('[data-valid]').each(function() {
+      var $this = $(this);
+      var rule = $this.data('valid');
+      var name = $this.attr('name');
+
+      self.validate($form, name, rule);
+    });
+  };
+
   Validator.validate = function ($frm, name, rule) {
     var parts = rule.split('|'),
-      self = this;
+        self = this;
 
     $.each(parts, function (index, part) {
       var res = part.split(':'),
-        command = res[0].toLowerCase(),
-        parameters = res[1];
+          command = res[0].toLowerCase(),
+          parameters = res[1];
 
       if (typeof self.validators[command] === 'function') {
         var $dst = $frm.find('[name="' + name + '"]');
@@ -116,6 +131,29 @@
 
 
   Validator.validators = {
+    checked: function($dst, parameters) {
+      var name = $dst.attr('name');
+      var min = parameters.split('-')[0];
+      var max = parameters.split('-')[1];
+
+      var checkedLenth = $dst.clone().wrap('<div />').parent().find(':checked').length;
+
+      if(checkedLenth < parseInt(min, 10) || checkedLenth > parseInt(max, 10)) {
+
+        var messageType = 'xe::validatorChecked';
+
+        if(!max) {
+          messageType = 'xe::validatorCheckedMin';
+        }else if(min == 0) {
+          messageType = 'xe::validatorCheckedMax';
+        }
+
+        Validator.error($dst, XE.Lang.trans(messageType));
+        return false;
+      }
+
+      return true;
+    },
     required: function ($dst, parameters) {
       var value = $dst.val();
       if (value === '') {
@@ -125,17 +163,17 @@
       return true;
     },
     alpha: function ($dst, parameters) {
-        var value = $dst.val(),
-            pattern = /[a-zA-Z]/;
-        if (!pattern.test(value)) {
-            Validator.error($dst, XE.Lang.trans('xe::validatorAlpha')); //TODO 번역 넣어야함
-            return false;
-        }
-        return true;
+      var value = $dst.val(),
+          pattern = /[a-zA-Z]/;
+      if (!pattern.test(value)) {
+        Validator.error($dst, XE.Lang.trans('xe::validatorAlpha')); //TODO 번역 넣어야함
+        return false;
+      }
+      return true;
     },
     alphanum: function ($dst, parameters) {
       var value = $dst.val(),
-        pattern = /[^a-zA-Z0-9]/;
+          pattern = /[^a-zA-Z0-9]/;
       if (pattern.test(value) === true) {
         Validator.error($dst, XE.Lang.trans('xe::validatorAlphanum'));
         return false;
@@ -155,8 +193,8 @@
       var value = $dst.val();
 
       if (value.length >= parseInt(parameters)) {
-          Validator.error($dst, XE.Lang.trans('xe::validatorMax')); //TODO 번역 넣어야함
-          return false;
+        Validator.error($dst, XE.Lang.trans('xe::validatorMax')); //TODO 번역 넣어야함
+        return false;
       }
       return true;
     },
@@ -195,7 +233,7 @@
     },
     between: function ($dst, parameters) {
       var range = parameters.split(','),
-        value = $dst.val();
+          value = $dst.val();
 
       // 등록된 내용이 없으면 체크 안함
       if (value.length == 0) {
@@ -211,8 +249,3 @@
 
   return Validator;
 }));
-
-
-// define([], function(XE) {
-
-// }(XE));
