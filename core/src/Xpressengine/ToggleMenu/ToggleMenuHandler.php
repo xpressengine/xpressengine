@@ -162,7 +162,7 @@ class ToggleMenuHandler
         $activated = array_merge(array_flip($keys), $activated);
 
         return array_filter($activated, function ($val) {
-            return !empty($val);
+            return class_exists($val);
         });
     }
 
