@@ -311,7 +311,7 @@ class User extends DynamicModel implements UserInterface
      */
     public function getAccountByProvider($provider)
     {
-        foreach ($this->$this->getAttribute('accounts') as $account) {
+        foreach ($this->getAttribute('accounts') as $account) {
             if ($account->provider === $provider) {
                 return $account;
             }

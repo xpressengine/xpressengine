@@ -31,7 +31,7 @@ class AuthSkin extends BladeSkin
         'description' => 'Xpressengine의 기본 회원인증페이지 스킨입니다'
     ];
 
-    protected $path = 'member.skins.default.auth';
+    protected $path = 'user.skins.default.auth';
 
     /**
      * @inheritdoc

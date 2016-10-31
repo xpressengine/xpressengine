@@ -99,6 +99,10 @@ class SettingsMiddleware
         }
 
         $route = $request->route();
+        if($route->getName() === 'settings.dashboard' && $user->getRating() === Rating::MANAGER) {
+            return;
+        }
+
         $permissionId = array_get($route->getAction(), 'permission');
 
         if ($permissionId === null) {

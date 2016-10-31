@@ -29,7 +29,7 @@ class ProfileSkin extends BladeSkin
         'description' => 'Xpressengine의 기본 프로필페이지 스킨입니다'
     ];
 
-    protected $path = 'member.skins.default.profile';
+    protected $path = 'user.skins.default.profile';
 
     public function render()
     {

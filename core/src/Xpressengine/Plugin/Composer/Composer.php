@@ -112,7 +112,7 @@ class Composer
         $writer = self::getWriter($path);
 
         if (!file_exists(static::$installedFlagPath)) {
-            $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_SUCCESSED);
+            $writer->cleanOperation();
         }
 
         $writer->reset()->write();

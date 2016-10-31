@@ -7,7 +7,7 @@
                         <h3 class="panel-title">{{xe_trans('xe::memberList')}}</h3>
                     </div>
                     <div class="pull-right">
-                        <a href="{{ route('settings.member.create') }}" class="btn btn-primary"><i class="xi-plus"></i><span>{{xe_trans('xe::addNewMember')}}</span></a>
+                        <a href="{{ route('settings.user.create') }}" class="btn btn-primary"><i class="xi-plus"></i><span>{{xe_trans('xe::addNewMember')}}</span></a>
                     </div>
                 </div>
 
@@ -20,14 +20,14 @@
                             </button>
                             <ul class="dropdown-menu" role="menu">
                                 <li><strong>{{xe_trans('xe::approve')}}/{{xe_trans('xe::deny')}}</strong></li>
-                                <li @if(!Input::get('status')) class="active" @endif><a href="{{ route('settings.member.index', Input::except('status') ) }}">{{xe_trans('xe::all')}}</a></li>
-                                <li @if(Input::get('status') === \XeUser::STATUS_ACTIVATED) class="active" @endif><a href="{{ route('settings.member.index', array_merge(Input::all(), ['status'=> \XeUser::STATUS_ACTIVATED] )) }}">{{xe_trans('xe::permitted')}}</a></li>
-                                <li @if(Input::get('status') === \XeUser::STATUS_DENIED) class="active" @endif><a href="{{ route('settings.member.index', array_merge(Input::all(), ['status'=> \XeUser::STATUS_DENIED] )) }}">{{xe_trans('xe::rejected')}}</a></li>
+                                <li @if(!Input::get('status')) class="active" @endif><a href="{{ route('settings.user.index', Input::except('status') ) }}">{{xe_trans('xe::all')}}</a></li>
+                                <li @if(Input::get('status') === \XeUser::STATUS_ACTIVATED) class="active" @endif><a href="{{ route('settings.user.index', array_merge(Input::all(), ['status'=> \XeUser::STATUS_ACTIVATED] )) }}">{{xe_trans('xe::permitted')}}</a></li>
+                                <li @if(Input::get('status') === \XeUser::STATUS_DENIED) class="active" @endif><a href="{{ route('settings.user.index', array_merge(Input::all(), ['status'=> \XeUser::STATUS_DENIED] )) }}">{{xe_trans('xe::rejected')}}</a></li>
                                 <li class="divider"></li>
                                 <li><strong>{{xe_trans('xe::group')}}</strong></li>
-                                <li @if(!Input::get('group'))class="active"@endif><a href="{{ route('settings.member.index', Input::except(['group'])) }}"><span>{{xe_trans('xe::allGroup')}}</span></a></li>
+                                <li @if(!Input::get('group'))class="active"@endif><a href="{{ route('settings.user.index', Input::except(['group'])) }}"><span>{{xe_trans('xe::allGroup')}}</span></a></li>
                                 @foreach($groups as $key => $group)
-                                <li @if(Input::get('group') === $group->id)class="active"@endif><a href="{{ route('settings.member.index', array_merge( Input::all(), ['group'=> $group->id] )) }}">{{ $group->name }}</a></li>
+                                <li @if(Input::get('group') === $group->id)class="active"@endif><a href="{{ route('settings.user.index', array_merge( Input::all(), ['group'=> $group->id] )) }}">{{ $group->name }}</a></li>
                                 @endforeach
                             </ul>
                         </div>
@@ -37,7 +37,7 @@
                     </div>
                     <div class="pull-right">
                         <div class="input-group search-group">
-                            <form method="GET" action="{{ route('settings.member.index') }}" accept-charset="UTF-8" role="form" id="_search-form">
+                            <form method="GET" action="{{ route('settings.user.index') }}" accept-charset="UTF-8" role="form" id="_search-form">
                                 <div class="input-group-btn">
                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                         <span class="__xe_selectedKeyfield">
@@ -72,7 +72,7 @@
 
                 </div>
                 <div class="table-responsive">
-                <form id="__xe_fList" method="post" action="{{ route('settings.member.destroy') }}">
+                <form id="__xe_fList" method="post" action="{{ route('settings.user.destroy') }}">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <table class="table">
                         <thead>
@@ -119,7 +119,7 @@
                                 <label class="label label-green">{{xe_trans('xe::permitted')}}</label>
                                 @endif
                             </td>
-                            <td><a href="{{ route('settings.member.edit', ['id' => $user->getId()]) }}" class="btn btn-default">{{xe_trans('xe::management')}}</a></td>
+                            <td><a href="{{ route('settings.user.edit', ['id' => $user->getId()]) }}" class="btn btn-default">{{xe_trans('xe::management')}}</a></td>
                         </tr>
                         @endforeach
                         </tbody>

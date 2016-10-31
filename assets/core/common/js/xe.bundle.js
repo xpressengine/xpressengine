@@ -84,9 +84,9 @@
     });
   }
 
-  function validate($form) {
+  function formValidate($form) {
     System.import('xecore:/common/js/validator').then(function (validator) {
-      validator.validate($form);
+      validator.formValidate($form);
     });
   }
 
@@ -110,7 +110,7 @@
       toastByStatus: toastByStatus,
       formError: formError,
       formErrorClear: formErrorClear,
-      validate: validate,
+      formValidate: formValidate,
       getLocale: getLocale,
       getDefaultLocale: getDefaultLocale,
 
@@ -1507,7 +1507,7 @@ $(function() {
     var $el = this;
 
     System.import('xe.component.transition');
-    System.import('xe.component.modal', function() {
+    System.import('xe.component.modal').then(function() {
       $el.xeModal(options);
     });
 

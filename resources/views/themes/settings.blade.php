@@ -15,8 +15,8 @@
                     <!--[D] a 클릭 시 하위메뉴 none/block로 처리-->
                     <div class="transition dropdown-menu">
                         <ul>
-                            <li><a href="{{ route('member.profile', ['member' => auth()->id()]) }}">{{ xe_trans('xe::myProfile') }}</a></li>
-                            <li><a href="{{ route('member.settings') }}">{{ xe_trans('xe::mySettings') }}</a></li>
+                            <li><a href="{{ route('user.profile', ['user' => auth()->id()]) }}">{{ xe_trans('xe::myProfile') }}</a></li>
+                            <li><a href="{{ route('user.settings') }}">{{ xe_trans('xe::mySettings') }}</a></li>
                             <li><a href="{{ route('logout') }}">{{ xe_trans('xe::logout') }}</a></li>
                         </ul>
                     </div>

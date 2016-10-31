@@ -15,7 +15,7 @@ class ProfileImage extends FormImage
 {
     protected static $id = 'uiobject/xpressengine@profileImage';
 
-    protected $view = 'uiobjects.member.profileImage';
+    protected $view = 'uiobjects.user.profileImage';
 
     public static function boot()
     {

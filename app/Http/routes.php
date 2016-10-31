@@ -55,10 +55,10 @@ Route::settings(
     }
 );
 
-/* member */
+/* user */
 
 /*
- * member/auth
+ * user/auth
  * */
 Route::group(
     ['prefix' => 'auth'],
@@ -92,25 +92,25 @@ Route::group(
 );
 
 /*
- * member/profile
+ * user/profile
  * */
 Route::group(
-    ['prefix' => '@{member}'],
+    ['prefix' => '@{user}'],
     function () {
         // profile
-        Route::get('/', ['as' => 'member.profile', 'uses' => 'Member\ProfileController@index']);
-        Route::post('/', ['as' => 'member.profile.update', 'uses' => 'Member\ProfileController@update']);
+        Route::get('/', ['as' => 'user.profile', 'uses' => 'User\ProfileController@index']);
+        Route::post('/', ['as' => 'user.profile.update', 'uses' => 'User\ProfileController@update']);
     }
 );
 
 /*
- * member settings
+ * user settings
  * */
 Route::group(
     ['prefix' => 'user'],
     function () {
 
-        Route::get('/{section?}', ['as' => 'member.settings', 'uses' => 'Member\UserController@show']);
+        Route::get('/{section?}', ['as' => 'user.settings', 'uses' => 'User\UserController@show']);
 
         // settings secton
         Route::group(
@@ -122,8 +122,8 @@ Route::group(
                         Route::post(
                         '/',
                             [
-                                'as' => 'member.settings.name.update',
-                                'uses' => 'Member\UserController@updateDisplayName'
+                                'as' => 'user.settings.name.update',
+                                'uses' => 'User\UserController@updateDisplayName'
                             ]
                         );
 
@@ -131,8 +131,8 @@ Route::group(
                         Route::post(
                             'check',
                             [
-                                'as' => 'member.settings.name.check',
-                                'uses' => 'Member\UserController@validateDisplayName'
+                                'as' => 'user.settings.name.check',
+                                'uses' => 'User\UserController@validateDisplayName'
                             ]
                         );
                     }
@@ -144,16 +144,16 @@ Route::group(
                         Route::post(
                             '/',
                             [
-                                'as' => 'member.settings.password.update',
-                                'uses' => 'Member\UserController@updatePassword'
+                                'as' => 'user.settings.password.update',
+                                'uses' => 'User\UserController@updatePassword'
                             ]
                         );
                         // check password is valid
                         Route::post(
                             'check',
                             [
-                                'as' => 'member.settings.password.check',
-                                'uses' => 'Member\UserController@validatePassword'
+                                'as' => 'user.settings.password.check',
+                                'uses' => 'User\UserController@validatePassword'
                             ]
                         );
                     }
@@ -165,23 +165,23 @@ Route::group(
                     function () {
                         Route::get(
                             'list',
-                            ['as' => 'member.settings.mail.list', 'uses' => 'Member\UserController@getMailList']
+                            ['as' => 'user.settings.mail.list', 'uses' => 'User\UserController@getMailList']
                         );
                         Route::post(
                             'add',
-                            ['as' => 'member.settings.mail.add', 'uses' => 'Member\UserController@addMail']
+                            ['as' => 'user.settings.mail.add', 'uses' => 'User\UserController@addMail']
                         );
                         Route::post(
                             'update',
-                            ['as' => 'member.settings.mail.update', 'uses' => 'Member\UserController@updateMainMail']
+                            ['as' => 'user.settings.mail.update', 'uses' => 'User\UserController@updateMainMail']
                         );
                         Route::post(
                             'confirm',
-                            ['as' => 'member.settings.mail.confirm', 'uses' => 'Member\UserController@confirmMail']
+                            ['as' => 'user.settings.mail.confirm', 'uses' => 'User\UserController@confirmMail']
                         );
                         Route::post(
                             'delete',
-                            ['as' => 'member.settings.mail.delete', 'uses' => 'Member\UserController@deleteMail']
+                            ['as' => 'user.settings.mail.delete', 'uses' => 'User\UserController@deleteMail']
                         );
                     }
                 );
@@ -192,15 +192,15 @@ Route::group(
                     function () {
                         Route::get(
                             '/',
-                            ['as' => 'user.settings.additions.show', 'uses' => 'Member\UserController@showAdditionField']
+                            ['as' => 'user.settings.additions.show', 'uses' => 'User\UserController@showAdditionField']
                         );
                         Route::get(
                             '/edit',
-                            ['as' => 'user.settings.additions.edit', 'uses' => 'Member\UserController@editAdditionField']
+                            ['as' => 'user.settings.additions.edit', 'uses' => 'User\UserController@editAdditionField']
                         );
                         Route::put(
                             '/',
-                            ['as' => 'user.settings.additions.update', 'uses' => 'Member\UserController@updateAdditionField']
+                            ['as' => 'user.settings.additions.update', 'uses' => 'User\UserController@updateAdditionField']
                         );
                     }
                 );
@@ -211,15 +211,15 @@ Route::group(
                         Route::post(
                             'delete',
                             [
-                                'as' => 'member.settings.pending_mail.delete',
-                                'uses' => 'Member\UserController@deletePendingMail'
+                                'as' => 'user.settings.pending_mail.delete',
+                                'uses' => 'User\UserController@deletePendingMail'
                             ]
                         );
                         Route::post(
                             'resend',
                             [
-                                'as' => 'member.settings.pending_mail.resend',
-                                'uses' => 'Member\UserController@resendPendingMail'
+                                'as' => 'user.settings.pending_mail.resend',
+                                'uses' => 'User\UserController@resendPendingMail'
                             ]
                         );
                     }
@@ -231,8 +231,8 @@ Route::group(
                         Route::post(
                             '/',
                             [
-                                'as' => 'member.settings.leave',
-                                'uses' => 'Member\UserController@leave'
+                                'as' => 'user.settings.leave',
+                                'uses' => 'User\UserController@leave'
                             ]
                         );
                     }
@@ -254,9 +254,9 @@ Route::settings(
         Route::get(
             '/',
             [
-                'as' => 'settings.member.index',
-                'uses' => 'Member\Settings\UserController@index',
-                'settings_menu' => 'member.list',
+                'as' => 'settings.user.index',
+                'uses' => 'User\Settings\UserController@index',
+                'settings_menu' => 'user.list',
                 'permission' => 'user.list'
             ]
         );
@@ -264,52 +264,52 @@ Route::settings(
         // create
         Route::get('create',
                    [
-                       'as' => 'settings.member.create',
-                       'uses' => 'Member\Settings\UserController@create',
-                       'settings_menu' => 'member.create'
+                       'as' => 'settings.user.create',
+                       'uses' => 'User\Settings\UserController@create',
+                       'settings_menu' => 'user.create'
                    ]
         );
         Route::post(
             'store',
-            ['as' => 'settings.member.store', 'uses' => 'Member\Settings\UserController@store']
+            ['as' => 'settings.user.store', 'uses' => 'User\Settings\UserController@store']
         );
 
         Route::get(
             '{id}/edit',
             [
-                'as' => 'settings.member.edit',
-                'uses' => 'Member\Settings\UserController@edit',
-                'settings_menu' => 'member.edit',
+                'as' => 'settings.user.edit',
+                'uses' => 'User\Settings\UserController@edit',
+                'settings_menu' => 'user.edit',
                 'permission' => 'user.edit',
 
             ]
         )->where('id', '[0-9a-z\-]+');
 
-        Route::post('{id}/edit', ['as' => 'settings.member.edit', 'uses' => 'Member\Settings\UserController@update'])
+        Route::post('{id}/edit', ['as' => 'settings.user.edit', 'uses' => 'User\Settings\UserController@update'])
             ->where('id', '[0-9a-z\-]+');
 
         // mail action at edit
         Route::get(
             'mail/list',
-            ['as' => 'settings.member.mail.list', 'uses' => 'Member\Settings\UserController@getMailList']
+            ['as' => 'settings.user.mail.list', 'uses' => 'User\Settings\UserController@getMailList']
         );
         Route::post(
             'mail/add',
-            ['as' => 'settings.member.mail.add', 'uses' => 'Member\Settings\UserController@postAddMail']
+            ['as' => 'settings.user.mail.add', 'uses' => 'User\Settings\UserController@postAddMail']
         );
         Route::post(
             'mail/delete',
-            ['as' => 'settings.member.mail.delete', 'uses' => 'Member\Settings\UserController@postDeleteMail']
+            ['as' => 'settings.user.mail.delete', 'uses' => 'User\Settings\UserController@postDeleteMail']
         );
         Route::post(
             'mail/confirm',
-            ['as' => 'settings.member.mail.confirm', 'uses' => 'Member\Settings\UserController@postConfirmMail']
+            ['as' => 'settings.user.mail.confirm', 'uses' => 'User\Settings\UserController@postConfirmMail']
         );
 
         // delete
         Route::delete(
             'destroy',
-            ['as' => 'settings.member.destroy', 'uses' => 'Member\Settings\UserController@deleteMember']
+            ['as' => 'settings.user.destroy', 'uses' => 'User\Settings\UserController@deleteUser']
         );
 
         // setting
@@ -320,23 +320,23 @@ Route::settings(
                 Route::get(
                     '/',
                     [
-                        'as' => 'settings.member.setting',
-                        'uses' => 'Member\Settings\SettingController@editCommon',
-                        'settings_menu' => 'member.setting.default',
+                        'as' => 'settings.user.setting',
+                        'uses' => 'User\Settings\SettingController@editCommon',
+                        'settings_menu' => 'user.setting.default',
                         'permission' => 'user.setting'
                     ]
                 );
                 Route::post(
                     '/',
-                    ['as' => 'settings.member.setting', 'uses' => 'Member\Settings\SettingController@updateCommon']
+                    ['as' => 'settings.user.setting', 'uses' => 'User\Settings\SettingController@updateCommon']
                 );
 
                 Route::get(
                     'join',
                     [
-                        'as' => 'settings.member.setting.join',
-                        'uses' => 'Member\Settings\SettingController@editJoin',
-                        'settings_menu' => 'member.setting.join',
+                        'as' => 'settings.user.setting.join',
+                        'uses' => 'User\Settings\SettingController@editJoin',
+                        'settings_menu' => 'user.setting.join',
                         'permission' => 'user.setting'
                     ]
                 );
@@ -344,17 +344,17 @@ Route::settings(
                 Route::post(
                     'join',
                     [
-                        'as' => 'settings.member.setting.join',
-                        'uses' => 'Member\Settings\SettingController@updateJoin'
+                        'as' => 'settings.user.setting.join',
+                        'uses' => 'User\Settings\SettingController@updateJoin'
                     ]
                 );
 
                 Route::get(
                     'skin',
                     [
-                        'as' => 'settings.member.setting.skin',
-                        'uses' => 'Member\Settings\SettingController@editSkin',
-                        'settings_menu' => 'member.setting.skin',
+                        'as' => 'settings.user.setting.skin',
+                        'uses' => 'User\Settings\SettingController@editSkin',
+                        'settings_menu' => 'user.setting.skin',
                         'permission' => 'user.setting'
                     ]
                 );
@@ -362,9 +362,9 @@ Route::settings(
                 Route::get(
                     'field',
                     [
-                        'as' => 'settings.member.setting.field',
-                        'uses' => 'Member\Settings\SettingController@editField',
-                        'settings_menu' => 'member.setting.field',
+                        'as' => 'settings.user.setting.field',
+                        'uses' => 'User\Settings\SettingController@editField',
+                        'settings_menu' => 'user.setting.field',
                         'permission' => 'user.setting'
                     ]
                 );
@@ -372,9 +372,9 @@ Route::settings(
                 Route::get(
                     'togglemenu',
                     [
-                        'as' => 'settings.member.setting.menu',
-                        'uses' => 'Member\Settings\SettingController@editToggleMenu',
-                        'settings_menu' => 'member.setting.menu',
+                        'as' => 'settings.user.setting.menu',
+                        'uses' => 'User\Settings\SettingController@editToggleMenu',
+                        'settings_menu' => 'user.setting.menu',
                         'permission' => 'user.setting'
                     ]
                 );
@@ -383,14 +383,14 @@ Route::settings(
         );
 
         Route::get(
-            'searchMember/{keyword?}',
-            ['as' => 'settings.member.search', 'uses' => 'Member\Settings\UserController@search']
+            'search/{keyword?}',
+            ['as' => 'settings.user.search', 'uses' => 'User\Settings\UserController@search']
         );
     }
 );
 
 /*
- * member group
+ * user group
  * */
 Route::settings(
     'group',
@@ -398,7 +398,7 @@ Route::settings(
 
         Route::get(
             'searchGroup/{keyword?}',
-            ['as' => 'manage.group.search', 'uses' => 'Member\Settings\GroupController@search']
+            ['as' => 'manage.group.search', 'uses' => 'User\Settings\GroupController@search']
         );
 
         // list
@@ -406,34 +406,34 @@ Route::settings(
             '/',
             [
                 'as' => 'manage.group.index',
-                'uses' => 'Member\Settings\GroupController@index',
-                'settings_menu' => ['member.group']
+                'uses' => 'User\Settings\GroupController@index',
+                'settings_menu' => ['user.group']
             ]
         );
 
         // create
-        Route::get('create', ['as' => 'manage.group.create', 'uses' => 'Member\Settings\GroupController@create', 'settings_menu' => ['member.group.create']]);
-        Route::post('create', ['as' => 'manage.group.create', 'uses' => 'Member\Settings\GroupController@store']);
+        Route::get('create', ['as' => 'manage.group.create', 'uses' => 'User\Settings\GroupController@create', 'settings_menu' => ['user.group.create']]);
+        Route::post('create', ['as' => 'manage.group.create', 'uses' => 'User\Settings\GroupController@store']);
 
         // edit
         Route::get(
             '{id}/edit',
             [
                 'as' => 'manage.group.edit',
-                'uses' => 'Member\Settings\GroupController@edit',
-                'settings_menu' => ['member.group.edit']
+                'uses' => 'User\Settings\GroupController@edit',
+                'settings_menu' => ['user.group.edit']
             ]
         )->where('id', '[0-9a-z\-]+');
-        Route::post('{id}/edit', ['as' => 'manage.group.edit', 'uses' => 'Member\Settings\GroupController@update'])
+        Route::post('{id}/edit', ['as' => 'manage.group.edit', 'uses' => 'User\Settings\GroupController@update'])
             ->where('id', '[0-9a-z\-]+');
 
-        Route::post('update/join', ['as' => 'manage.group.update.join', 'uses' => 'Member\Settings\GroupController@updateJoinGroup'])
+        Route::post('update/join', ['as' => 'manage.group.update.join', 'uses' => 'User\Settings\GroupController@updateJoinGroup'])
             ->where('id', '[0-9a-z\-]+');
 
         // delete
         Route::delete(
             'destroy',
-            ['as' => 'manage.group.destroy', 'uses' => 'Member\Settings\GroupController@destroy']
+            ['as' => 'manage.group.destroy', 'uses' => 'User\Settings\GroupController@destroy']
         );
     }
 );
@@ -556,7 +556,7 @@ Route::settings(
     }
 );
 
-/* theme package */
+/* theme  */
 Route::settings(
     'theme',
     function () {
@@ -570,83 +570,85 @@ Route::settings(
     }
 );
 
-/* plugin package */
+/* plugin  */
 Route::settings(
     'plugins',
     function () {
-        Route::get(
-            '/',
-            [
-                'as' => 'settings.plugins',
-                'uses' => 'PluginController@index',
-                'settings_menu' => ['plugin.list']
-            ]
-        );
+        Route::group(['permission' => 'plugin'], function() {
 
-        Route::get('operation', [
-            'as' => 'settings.plugins.operation',
-            'uses' => 'PluginController@getOperation'
-        ]);
+            Route::get(
+                '/',
+                [
+                    'as' => 'settings.plugins',
+                    'uses' => 'PluginController@index',
+                    'settings_menu' => ['plugin.list']
+                ]
+            );
 
-        Route::delete('operation', [
-            'as' => 'settings.plugins.operation.delete',
-            'uses' => 'PluginController@deleteOperation'
-        ]);
+            Route::get('operation', [
+                'as' => 'settings.plugins.operation',
+                'uses' => 'PluginController@getOperation'
+            ]);
 
-        Route::post(
-            '/',
-            [
-                'as' => 'settings.plugins.install',
-                'uses' => 'PluginController@install'
-            ]
-        );
+            Route::delete('operation', [
+                'as' => 'settings.plugins.operation.delete',
+                'uses' => 'PluginController@deleteOperation'
+            ]);
 
-        Route::get(
-            '{pluginId}',
-            [
-                'as' => 'settings.plugins.show',
-                'uses' => 'PluginController@show',
-                'settings_menu' => ['plugin.list.detail']
-            ]
-        );
+            Route::post(
+                '/',
+                [
+                    'as' => 'settings.plugins.install',
+                    'uses' => 'PluginController@install'
+                ]
+            );
 
-        Route::put(
-            '{pluginId}/activate',
-            [
-                'as' => 'settings.plugins.activate',
-                'uses' => 'PluginController@putActivatePlugin'
-            ]
-        );
-        Route::put(
-            '{pluginId}/deactivate',
-            [
-                'as' => 'settings.plugins.deactivate',
-                'uses' => 'PluginController@putDeactivatePlugin'
-            ]
-        );
-        Route::put(
-            '{pluginId}/update',
-            [
-                'as' => 'settings.plugins.update',
-                'uses' => 'PluginController@putUpdatePlugin'
-            ]
-        );
-        Route::put(
-            '{pluginId}/download',
-            [
-                'as' => 'settings.plugins.download',
-                'uses' => 'PluginController@putDownloadPlugin'
-            ]
-        );
+            Route::get(
+                '{pluginId}',
+                [
+                    'as' => 'settings.plugins.show',
+                    'uses' => 'PluginController@show',
+                    'settings_menu' => ['plugin.list.detail']
+                ]
+            );
 
-        Route::delete(
-            '{pluginId}',
-            [
-                'as' => 'settings.plugins.delete',
-                'uses' => 'PluginController@delete'
-            ]
-        );
+            Route::put(
+                '{pluginId}/activate',
+                [
+                    'as' => 'settings.plugins.activate',
+                    'uses' => 'PluginController@putActivatePlugin'
+                ]
+            );
+            Route::put(
+                '{pluginId}/deactivate',
+                [
+                    'as' => 'settings.plugins.deactivate',
+                    'uses' => 'PluginController@putDeactivatePlugin'
+                ]
+            );
+            Route::put(
+                '{pluginId}/update',
+                [
+                    'as' => 'settings.plugins.update',
+                    'uses' => 'PluginController@putUpdatePlugin'
+                ]
+            );
+            Route::put(
+                '{pluginId}/download',
+                [
+                    'as' => 'settings.plugins.download',
+                    'uses' => 'PluginController@putDownloadPlugin'
+                ]
+            );
 
+            Route::delete(
+                '{pluginId}',
+                [
+                    'as' => 'settings.plugins.delete',
+                    'uses' => 'PluginController@delete'
+                ]
+            );
+        });
     }
 );
 
@@ -744,7 +746,7 @@ Route::settings('trash', function () {
     Route::post('/clean', ['as' => 'manage.trash.clean', 'uses' => 'TrashController@clean']);
 });
 
-/* skin package */
+/* skin  */
 Route::settings(
     'skin',
     function () {

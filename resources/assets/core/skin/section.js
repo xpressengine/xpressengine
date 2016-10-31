@@ -23,13 +23,12 @@ $(function ($) {
     });
   })
 
-  $('.skin-setting-list .__xe_skin-setting-btn').click(function(){
-    var url = $(this).data('url');
-    modalPage(url)
-  })
+  // $('.skin-setting-list .__xe_skin-setting-btn').click(function(){
+  //   var url = $(this).data('url');
+  //   modalPage(url)
+  // })
 
-
-  $('.__xe_skin-modal').on('submit', 'form', function(){
+  $(document).on('submit', 'form.__xe_skin_form', function(){
     var $form = $(this);
     var $modal = $('#skinModal');
 
