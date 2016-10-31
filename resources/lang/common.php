@@ -1947,16 +1947,16 @@ return [
         'en' => ''
     ],
     'includeUserOrGroup' => [
-        'ko' => '포함할 그룹 또는 사용자',
-        'en' => 'Include User or Group'
+        'ko' => '포함할 그룹 또는 사용자 (예시 : @사용자아이디, %그룹_이름)',
+        'en' => 'Include User or Group (ex : @user_id, %group_name)'
     ],
     'explainIncludeUserOrGroup' => [
         'ko' => '포함할 그룹이나 사용자를 입력하세요.',
         'en' => 'Input user or group'
     ],
     'excludeUser' => [
-        'ko' => '제외할 사용자',
-        'en' => 'Exclude User'
+        'ko' => '제외할 사용자 (예시 : @사용자아이디)',
+        'en' => 'Exclude User (ex : @user_id)'
     ],
     'explainExcludeUser' => [
         'ko' => '제외할 사용자를 입력하세요',
