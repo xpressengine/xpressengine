@@ -83,7 +83,7 @@
                         <button type="button" data-toggle="modal" data-target="#deletePlugin" class="btn btn-danger">{{xe_trans('xe::delete')}}</button>
                     @endif
 
-                    @if(true || $plugin->hasUpdate())
+                    @if($plugin->hasUpdate())
                     <button type="button" data-toggle="modal" data-target="#downloadPluginUpdate" class="btn btn-primary">{{ xe_trans('xe::newVersion') }} {{ xe_trans('xe::download') }}</button>
                     @endif
 

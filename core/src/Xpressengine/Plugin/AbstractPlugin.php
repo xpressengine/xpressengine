@@ -98,28 +98,21 @@ abstract class AbstractPlugin
 
     /**
      * 해당 플러그인이 설치된 상태라면 true, 설치되어있지 않다면 false를 반환한다.
-     * 이 메소드를 구현하지 않았다면 기본적으로 XE에 설치되었던 기록에 기반하여 판단한다.
-     *
-     * @param string $installedVersion 이 플러그인의 현재 설치된 버전정보
+     * 이 메소드를 구현하지 않았다면 기본적으로 XE에 설치된 것으로 간주한다.
      *
      * @return boolean 플러그인의 설치 유무
      */
-    public function checkInstalled($installedVersion = null)
+    public function checkInstalled()
     {
-        if ($installedVersion === null) {
-            return false;
-        }
         return true;
     }
 
     /**
      * 플러그인을 업데이트한다. 플러그인의 소스코드가 XpressEngine에 적용돼 있는 버전보다 최신일 경우 실행된다.
      *
-     * @param string|null $installedVersion 현재 XpressEngine에 설치된 플러그인의 버전정보
-     *
      * @return void
      */
-    public function update($installedVersion = null)
+    public function update()
     {
     }
 
@@ -127,11 +120,9 @@ abstract class AbstractPlugin
      * 해당 플러그인이 최신 상태로 업데이트가 된 상태라면 true, 업데이트가 필요한 상태라면 false를 반환함.
      * 이 메소드를 구현하지 않았다면 기본적으로 최신업데이트 상태임(true)을 반환함.
      *
-     * @param string $installedVersion 현재 설치된 버전
-     *
      * @return boolean 플러그인의 설치 유무,
      */
-    public function checkUpdated($installedVersion = null)
+    public function checkUpdated()
     {
         return true;
     }
