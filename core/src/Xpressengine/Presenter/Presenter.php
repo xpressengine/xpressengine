@@ -463,11 +463,11 @@ class Presenter
     /**
      * xeRedirect() 메소드와 같은 형태의 파라메터 사용
      *
-     * @param null $to
-     * @param int $status
-     * @param array $headers
-     * @param null $secure
-     * @param array $data
+     * @param null  $to      redirect url
+     * @param int   $status  status code
+     * @param array $headers header
+     * @param null  $secure  secure
+     * @param array $data    data
      * @return \Xpressengine\Presenter\RedirectResponse|\Xpressengine\Presenter\Redirector
      */
     public function redirect($to = null, $status = 302, $headers = [], $secure = null, $data = [])
@@ -560,20 +560,16 @@ class Presenter
             throw new NotFoundFormatException(['name' => $format]);
         }
 
-        if (
-            $format == HtmlPresenter::format() &&
+        if ($format == HtmlPresenter::format() &&
             $this->api === true &&
-            $this->html === false
-        ) {
+            $this->html === false) {
             $format = JsonPresenter::format();
         }
 
         $presenter = $this->getPresenter($format);
 
-        if (
-            is_subclass_of($presenter, RendererInterface::class) === false &&
-            is_subclass_of($presenter, Presentable::class) === false
-        ) {
+        if (is_subclass_of($presenter, RendererInterface::class) === false &&
+            is_subclass_of($presenter, Presentable::class) === false) {
             throw new InvalidPresenterException(['name' => get_class($presenter)]);
         }
 

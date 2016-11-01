@@ -27,7 +27,8 @@ use Symfony\Component\HttpFoundation\Request;
  * ```php
  * xeRedirect()->to(...)->setData(['item' => $item]);
  * ```
- * > 요청 포멧이 html인 경우는 redirect 처리되고 json일 경우는 setData 의 데이터를 json으로 반환
+ * > 요청 포멧이 html인 경우는 redirect 처리되고 json일 경우는
+ * setData 의 데이터를 json으로 반환
  *
  * @category  Presenter
  * @package   Xpressengine\Presenter
@@ -44,7 +45,7 @@ class RedirectResponse extends BaseRedirectResponse
     /**
      * set data
      *
-     * @param array $data
+     * @param array $data data
      * @return $this
      */
     public function setData(array $data = [])
@@ -57,7 +58,7 @@ class RedirectResponse extends BaseRedirectResponse
     /**
      * 요청 포멧이 html 이 아닐 경우 redirect 하지 않고 데이터 형식으로 결과 출력
      *
-     * @param Request $request
+     * @param Request $request request
      * @return mixed
      */
     public function prepare(Request $request)
