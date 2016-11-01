@@ -39,7 +39,11 @@
     "run-sequence": "^1.1.5"
   },
   "dependencies": {
-    "gulp": "^3.9.1"
+    "babel-loader": "^6.2.7",
+    "gulp": "^3.9.1",
+    "handlebars-loader": "^1.4.0",
+    "path": "^0.12.7",
+    "webpack": "^1.13.3"
   },
   "scripts": {
     "test": "jest"
