@@ -1,41 +1,46 @@
 var path = require('path');
 var webpack = require('webpack');
 
+//todo menu
+
 module.exports = {
-    devtool: 'cheap-module-eval-source-map',
+    //devtool: 'cheap-module-source-map',
     entry: {
-        'permission': [
-            __dirname + '/resources/assets/core/permission/Permission',
-            __dirname + '/resources/assets/core/permission/PermissionExclude',
-            __dirname + '/resources/assets/core/permission/PermissionInclude',
-            __dirname + '/resources/assets/core/permission/PermissionRadioComp',
-            __dirname + '/resources/assets/core/permission/PermissionRenderer',
-            __dirname + '/resources/assets/core/permission/PermissionTag',
-            __dirname + '/resources/assets/core/permission/PermissionTagSuggestion',
-            __dirname + '/resources/assets/core/permission/SettingsPermission'
-        ]
+        'assets/core/permission/permission': [
+            __dirname + '/resources/assets/core/permission/Permission.jsx',
+            __dirname + '/resources/assets/core/permission/PermissionExclude.jsx',
+            __dirname + '/resources/assets/core/permission/PermissionInclude.jsx',
+            __dirname + '/resources/assets/core/permission/PermissionRadioComp.jsx',
+            __dirname + '/resources/assets/core/permission/PermissionRenderer.jsx',
+            __dirname + '/resources/assets/core/permission/PermissionTag.jsx',
+            __dirname + '/resources/assets/core/permission/PermissionTagSuggestion.jsx',
+            __dirname + '/resources/assets/core/permission/SettingsPermission.jsx'
+        ],
+        'assets/core/lang/LangEditorBox': __dirname + '/resources/assets/core/lang/LangEditorBox.js'
     },
     output: {
-        path: path.join(__dirname, 'assets/core/permission'),
-        filename: '[name].js'
+        path: path.join(__dirname, './'),
+        filename: '[name].bundle.js'
     },
     plugins: [
-
+        new webpack.optimize.UglifyJsPlugin({minimize: true, compress: {warnings: false}}),   //uglify, minify
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NoErrorsPlugin(),
+        new webpack.DefinePlugin({
+            "process.env": {
+                NODE_ENV: JSON.stringify("production")
+            }
+        })
     ],
     module: {
         loaders: [
             {
-                test: /\/resoureces\/assets\/core\/.jsx?$/,
+                test: /(\.js|\.jsx)$/,
                 loader: 'babel-loader',
                 exclude: /node_modules/,
                 query: {
                     presets: ['es2015', 'react']
                 }
-            },
-            {
-                test: /\.css$/,
-                exclude: /node_modules/,
-                loaders: ['style-loader', 'css-loader', 'postcss-loader']
             }
         ]
     },

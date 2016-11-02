@@ -33,23 +33,23 @@ gulp.task('jspm:admin', taskSettings['jspm:admin']);
 // e: settings
 
 // s: react
-gulp.task('jspm:menu', taskReact['jspm:menu']);
-gulp.task('jspm:langbox', taskReact['jspm:langbox']);
-gulp.task('jsx:permission', taskReact['jsx:permission']);
+// gulp.task('jspm:menu', taskReact['jspm:menu']);
+// gulp.task('jspm:langbox', taskReact['jspm:langbox']);
+// gulp.task('jsx:permission', taskReact['jsx:permission']);
 
 gulp.task('watch:react', () => {
   return gulp.watch([
-    './resources/assets/core/menu/**',
-    './resources/assets/core/lang/**',
-    './resources/assets/core/permission/**'
+    // './resources/assets/core/menu/**',
+    // './resources/assets/core/lang/**',
+    // './resources/assets/core/permission/**'
   ], ['react']);
 });
 
 gulp.task('react', (callback) => {
   runSequence(
-      'jspm:menu',
-      'jspm:langbox',
-      'jsx:permission',
+      // 'jspm:menu',
+      // 'jspm:langbox',
+      // 'jsx:permission',
       callback);
 });
 // e: react
