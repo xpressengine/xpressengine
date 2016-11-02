@@ -23,8 +23,9 @@ use Xpressengine\Trash\Exceptions\NotFoundRecycleBinException;
  * TrashManager
  *
  * * Xpressengine에서 사용되는 휴지통을 관리하고 휴지통 비우기 처리
- * * 휴지통은 별도의 데이터를 담고 있지 않고 휴지통을 비우는 요청이 발생할 경우 구현체를 실행함
- * 실제 데이터를 삭제하는 과정은 각 구현체가 직접 처리
+ * * 휴지통은 별도의 데이터를 담고 있지 않고 휴지통을 비우는 요청이 발생할 경우
+ * 구현체를 실행함
+ * * 실제 데이터를 삭제하는 과정은 각 구현체가 직접 처리
  *
  * ## TrashManager 에 휴지통 등록
  * ```php
@@ -177,10 +178,8 @@ class TrashManager
         }
 
         foreach ($bins as $bin) {
-            if (
-                is_subclass_of($bin, '\Xpressengine\Trash\RecycleBinInterface') === false
-                || is_subclass_of($bin, '\Xpressengine\Trash\RecycleBinInterface') === false
-            ) {
+            if (is_subclass_of($bin, '\Xpressengine\Trash\RecycleBinInterface') === false ||
+                is_subclass_of($bin, '\Xpressengine\Trash\RecycleBinInterface') === false) {
                 throw new Exceptions\InvalidRecycleBinException;
             }
         }
