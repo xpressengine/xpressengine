@@ -65,13 +65,13 @@ module.exports = (() => {
         /**
          * permission jsx변환
          * */
-        'jsx:permission': () => {
-            return gulp.src('resources/assets/core/permission/*.jsx')
-                .pipe($.if(taskSettings.getConfig().useSourceMaps, $.sourcemaps.init()))
-                .pipe($.plumber())
-                .pipe($.react())
-                .pipe($.if(taskSettings.getConfig().useSourceMaps, $.sourcemaps.write('.')))
-                .pipe(gulp.dest('./assets/core/permission'))
-        }
+        // 'jsx:permission': () => {
+        //     return gulp.src('resources/assets/core/permission/*.jsx')
+        //         .pipe($.if(taskSettings.getConfig().useSourceMaps, $.sourcemaps.init()))
+        //         .pipe($.plumber())
+        //         .pipe($.react())
+        //         .pipe($.if(taskSettings.getConfig().useSourceMaps, $.sourcemaps.write('.')))
+        //         .pipe(gulp.dest('./assets/core/permission'))
+        // }
     };
 })();
