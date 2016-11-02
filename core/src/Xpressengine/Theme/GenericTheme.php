@@ -37,6 +37,11 @@ abstract class GenericTheme extends AbstractTheme
     protected static $path = null;
 
     /**
+     * @var string 템플릿 파일을 저장하고 있는 디렉토리의 경로, 테마 디렉토리내 상대경로를 지정해야 한다.
+     */
+    protected static $viewsDir = "views";
+
+    /**
      * @var array
      */
     protected static $info = null;
@@ -125,15 +130,12 @@ abstract class GenericTheme extends AbstractTheme
      */
     public function getEditFiles()
     {
-        $path = base_path($this->getPath().DIRECTORY_SEPARATOR);
+        $path = base_path($this->getPath());
         $editable = $this->info('editable');
 
         $files = [];
-        foreach ($editable as $type => $list) {
-            $files[$type] = [];
-            foreach ($list as $file) {
-                $files[$type][$file] = $path.DIRECTORY_SEPARATOR.$type.DIRECTORY_SEPARATOR.$file;
-            }
+        foreach ($editable as $file) {
+            $files[$file] = $path.DIRECTORY_SEPARATOR.static::$viewsDir.DIRECTORY_SEPARATOR.$file;
         }
         return $files;
     }
@@ -276,7 +278,16 @@ abstract class GenericTheme extends AbstractTheme
      */
     public static function view($view)
     {
-        $view = str_replace('/', '.', static::$path).".views.$view";
+        $view = str_replace('/', '.', static::$path).".".static::$viewsDir.".$view";
+
+        $handler = static::$handler;
+
+        view()->composer($view, function(\Illuminate\View\View $viewObj) use ($handler) {
+            if($handler->hasCache($viewObj->getPath())) {
+                $viewObj->setPath($handler->getCachePath($viewObj->getPath()));
+            }
+        });
+
         return $view;
     }
 }

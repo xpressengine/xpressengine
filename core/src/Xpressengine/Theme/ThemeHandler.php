@@ -38,6 +38,8 @@ class ThemeHandler
 
     public $configDelimiter = '.';
 
+    protected $cachePath = '';
+
     /**
      * @var string Theme config를 조회/저장할 때 Config 저장소에서 사용될 key
      */
@@ -114,6 +116,23 @@ class ThemeHandler
     public function setMobileResolver(Closure $callback)
     {
         $this->mobileResolver = $callback;
+    }
+
+    public function setCachePath($path)
+    {
+        $this->cachePath = $path;
+    }
+
+    public function getCachePath($path)
+    {
+        $cachePath = $this->cachePath.'/'.md5($path);
+        return $cachePath;
+    }
+
+    public function hasCache($path)
+    {
+        $cachePath = $this->getCachePath($path);
+        return file_exists($cachePath);
     }
 
     /**
