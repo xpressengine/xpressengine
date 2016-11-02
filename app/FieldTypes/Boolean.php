@@ -19,49 +19,56 @@ class Boolean extends AbstractType
 {
     protected static $id = 'FieldType/xpressengine@Boolean';
 
-    // 네임스페이스 이름..
-    protected $name = 'Boolean';
-    protected $description = 'true or false 값을 등록합니다.';
-
     /**
-     * boot
+     * get field type name
      *
-     * @return void
+     * @return string
      */
-    public static function boot()
+    public function name()
     {
-        app('xe.pluginRegister')->add(DefaultSkin::class);
-        DefaultSkin::boot();
+        return 'Boolean';
     }
 
     /**
-     * 스키마 구성을 위한 database column 설정
+     * get field type description
      *
-     * @return void
+     * @return string
      */
-    public function setColumns()
+    public function description()
     {
-        $this->columns['boolean'] = (new ColumnEntity('boolean', ColumnDataType::BOOLEAN));
+        return 'true or false 값을 등록합니다.';
     }
 
     /**
-     * 사용자 페이지 입력할 때 적용될 rule 정의
+     * return columns
      *
-     * @return void
+     * @return ColumnEntity[]
      */
-    public function setRules()
+    public function getColumns()
     {
-        //
+        return [
+            'boolean' => (new ColumnEntity('boolean', ColumnDataType::BOOLEAN)),
+        ];
     }
 
     /**
-     * 다이나믹필스 생성할 때 타입 설정에 적용될 rule 정의
+     * return rules
      *
-     * @return void
+     * @return array
      */
-    public function setSettingsRules()
+    public function getRules()
     {
-        //
+        return [];
+    }
+
+    /**
+     * 다이나믹필스 생성할 때 타입 설정에 적용될 rule 반환
+     *
+     * @return array
+     */
+    public function getSettingsRules()
+    {
+        return [];
     }
 
     /**
@@ -75,4 +82,5 @@ class Boolean extends AbstractType
     {
         return View::make('dynamicField/boolean/createType', ['config' => $config])->render();
     }
+
 }

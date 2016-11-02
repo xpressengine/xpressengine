@@ -14,7 +14,6 @@ use Xpressengine\Database\DynamicQuery;
 use Xpressengine\DynamicField\AbstractType;
 use Xpressengine\DynamicField\ColumnDataType;
 use Xpressengine\DynamicField\ColumnEntity;
-use App\FieldSkins\Address\DefaultSkin;
 
 class Address extends AbstractType
 {
@@ -23,52 +22,62 @@ class Address extends AbstractType
      */
     protected static $id = 'FieldType/xpressengine@Address';
 
-    protected $name = 'Address';
-    protected $description = '';
-
     /**
-     * boot
+     * get field type name
      *
-     * @return void
+     * @return string
      */
-    public static function boot()
+    public function name()
     {
-        app('xe.pluginRegister')->add(DefaultSkin::class);
-        DefaultSkin::boot();
+        return 'Address';
     }
 
     /**
-     * 스키마 구성을 위한 database column 설정
+     * get field type description
      *
-     * @return void
+     * @return string
      */
-    public function setColumns()
+    public function description()
     {
-        $this->columns['postcode'] = (new ColumnEntity('postcode', ColumnDataType::STRING))->setParams([8]);
-        $this->columns['address1'] = (new ColumnEntity('address1', ColumnDataType::STRING))->setParams([255]);
-        $this->columns['address2'] = (new ColumnEntity('address2', ColumnDataType::STRING))->setParams([255]);
+        return '';
     }
 
     /**
-     * 사용자 페이지 입력할 때 적용될 rule 정의
+     * return columns
      *
-     * @return void
+     * @return ColumnEntity[]
      */
-    public function setRules()
+    public function getColumns()
     {
-        $this->rules = ['postcode' => 'required'];
-        $this->rules = ['address1' => 'required'];
-        $this->rules = ['address2' => 'required'];
+        return [
+            'postcode' => (new ColumnEntity('postcode', ColumnDataType::STRING))->setParams([8]),
+            'address1' => (new ColumnEntity('address1', ColumnDataType::STRING))->setParams([255]),
+            'address2' => (new ColumnEntity('address2', ColumnDataType::STRING))->setParams([255]),
+        ];
     }
 
     /**
-     * 다이나믹필스 생성할 때 타입 설정에 적용될 rule 정의
+     * return rules
      *
-     * @return void
+     * @return array
      */
-    public function setSettingsRules()
+    public function getRules()
     {
-        // TODO: Implement setSettingsRules() method.
+        return [
+            'postcode' => 'required',
+            'address1' => 'required',
+            'address2' => 'required'
+        ];
+    }
+
+    /**
+     * 다이나믹필스 생성할 때 타입 설정에 적용될 rule 반환
+     *
+     * @return array
+     */
+    public function getSettingsRules()
+    {
+        return [];
     }
 
     /**
@@ -80,7 +89,7 @@ class Address extends AbstractType
      */
     public function getSettingsView(ConfigEntity $config = null)
     {
-        // TODO: Implement getSettingsView() method.
+        return '';
     }
 
     /**
@@ -105,4 +114,5 @@ class Address extends AbstractType
 
         return $query;
     }
+
 }
