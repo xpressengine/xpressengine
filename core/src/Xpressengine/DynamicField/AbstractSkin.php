@@ -57,68 +57,57 @@ abstract class AbstractSkin implements ComponentInterface
      *
      * @var array
      */
-    protected $settingsRules = [];
+    protected $settingsRules;
 
     /**
-     * 다이나믹필스 생성할 때 스킨 설정에 적용될 rule 정의
+     * view file directory path
      *
-     * @return void
+     * @var
      */
-    abstract public function setSettingsRules();
+    protected $path;
 
     /**
-     * Dynamic Field 설정 페이지에서 skin 설정 등록 페이지 반환
-     * return html tag string
+     * path delimiter
      *
-     * @param ConfigEntity $config dynamic field config entity
+     * @var string
+     */
+    protected $delimiter = '/';
+
+    /**
+     * output glue
+     * default space
+     *
+     * @var string
+     */
+    protected $glue = ' ';
+
+    /**
+     * merge data
+     *
+     * @var array
+     */
+    protected $mergeData = [];
+
+    /**
+     * get name of skin
+     *
      * @return string
      */
-    abstract public function settings(ConfigEntity $config = null);
+    abstract public function name();
 
     /**
-     * 등록 form 에 추가될 html 코드 리턴
-     * return html tag string
+     * get view file directory path
      *
-     * @param array $inputs parameters
      * @return string
      */
-    abstract public function create(array $inputs);
+    abstract public function getPath();
 
     /**
-     * 수정 form 에 추가될 html 코드 리턴
-     * return html tag string
+     * 다이나믹필스 생성할 때 스킨 설정에 적용될 rule 반환
      *
-     * @param array $inputs parameters
-     * @return string
+     * @return array
      */
-    abstract public function edit(array $inputs);
-
-    /**
-     * 조회 시 사용 될 html 코드 리턴
-     * return html tag string
-     *
-     * @param array $inputs parameters
-     * @return string
-     */
-    abstract public function show(array $inputs);
-
-    /**
-     * 리스트에서 검색 시 검색 form 에 사용될 html 코드 리턴
-     * return html tag string
-     *
-     * @param array $inputs parameters
-     * @return string
-     */
-    abstract public function search(array $inputs);
-
-    /**
-     * 데이터 출력
-     *
-     * @param string $name dynamic field name
-     * @param array  $args 데이터
-     * @return mixed
-     */
-    abstract public function output($name, array $args);
+    abstract public function getSettingsRules();
 
     /**
      * boot
@@ -137,16 +126,9 @@ abstract class AbstractSkin implements ComponentInterface
     public function __construct(DynamicFieldHandler $handler)
     {
         $this->handler = $handler;
-    }
-
-    /**
-     * get widget name
-     *
-     * @return string
-     */
-    public function name()
-    {
-        return $this->name;
+        $this->name = $this->name();
+        $this->settingsRules = $this->getSettingsRules();
+        $this->path = $this->getPath();
     }
 
     /**
@@ -158,6 +140,197 @@ abstract class AbstractSkin implements ComponentInterface
     public function setConfig(ConfigEntity $config)
     {
         $this->config = $config;
+    }
+
+
+    /**
+     * get view file directory path
+     *
+     * @param string $name view name
+     * @return string
+     */
+    public function getViewPath($name = '')
+    {
+        if ($name !== '') {
+            $name = $this->delimiter . ltrim($name, $this->delimiter);
+        }
+        return $this->path . $name;
+    }
+
+    /**
+     * get field type
+     *
+     * @return AbstractType
+     */
+    protected function getType()
+    {
+        return $this->handler->getRegisterHandler()->getType($this->handler, $this->config->get('typeId'));
+    }
+
+    protected function filter(array $args)
+    {
+        $data = [];
+        $key = [];
+        foreach ($this->getType()->getColumns() as $columnName =>$columns) {
+            $dataName = $this->config->get('id') . ucfirst(camel_case('_' . $columnName));
+            $key[$columnName] = $dataName;
+            if (isset($args[$dataName])) {
+                $data[$columnName] = $args[$dataName];
+            } else {
+                $data[$columnName] = '';
+            }
+        }
+
+        return [$data, $key];
+    }
+
+    /**
+     * add merge data
+     *
+     * @param array $data
+     * @return void
+     */
+    public function addMergeData(array $data)
+    {
+        $this->mergeData = array_merge($data, $this->mergeData);
+    }
+
+    /**
+     * set merge data
+     * 
+     * @param array $data
+     * @return void
+     */
+    public function setMergeData(array $data)
+    {
+        $this->mergeData = $data;
+    }
+    
+    /**
+     * 등록 form 에 추가될 html 코드 반환
+     * return html tag string
+     *
+     * @param array $args      arguments
+     * @return \Illuminate\View\View
+     */
+    public function create(array $args)
+    {
+        $viewFactory = $this->handler->getViewFactory();
+
+        list($data, $key) = $this->filter($args);
+
+        return $viewFactory->make($this->getViewPath('create'), [
+            'config' => $this->config,
+            'data' => array_merge($data, $this->mergeData),
+            'key' => $key,
+        ])->render();
+    }
+
+    /**
+     * 수정 form 에 추가될 html 코드 반환
+     * return html tag string
+     *
+     * @param array $args      arguments
+     * @return \Illuminate\View\View
+     */
+    public function edit(array $args)
+    {
+        list($data, $key) = $this->filter($args);
+
+        $viewFactory = $this->handler->getViewFactory();
+        return $viewFactory->make($this->getViewPath('edit'), [
+            'config' => $this->config,
+            'data' => array_merge($data, $this->mergeData),
+            'key' => $key,
+        ])->render();
+    }
+
+    /**
+     * 조회할 때 사용 될 html 코드 반환
+     * return html tag string
+     *
+     * @param array $args      arguments
+     * @return \Illuminate\View\View
+     */
+    public function show(array $args)
+    {
+        list($data, $key) = $this->filter($args);
+
+        $viewFactory = $this->handler->getViewFactory();
+        return $viewFactory->make($this->getViewPath('show'), [
+            'config' => $this->config,
+            'data' => array_merge($data, $this->mergeData),
+            'key' => $key,
+        ])->render();
+    }
+
+    /**
+     * 리스트에서 검색할 때 검색 form 에 사용될 html 코드 반환
+     * return html tag string
+     *
+     * @param array $args      arguments
+     * @return string
+     */
+    public function search(array $args)
+    {
+        if ($this->config->get('searchable') !== true) {
+            return '';
+        }
+
+        list($data, $key) = $this->filter($args);
+
+        $viewFactory = $this->handler->getViewFactory();
+        return $viewFactory->make($this->getViewPath('search'), [
+            'config' => $this->config,
+            'data' => array_merge($data, $this->mergeData),
+            'key' => $key,
+        ])->render();
+    }
+
+    /**
+     * 데이터 출력
+     *
+     * @param string $id   dynamic field name
+     * @param array  $args arguments
+     * @return string|null
+     */
+    public function output($id, array $args)
+    {
+        $data = [];
+        foreach ($this->getType()->getColumns() as $columnName =>$columns) {
+            $dataName = $id . ucfirst(camel_case('_' . $columnName));
+            if (isset($args[$dataName])) {
+                $data[$dataName] = $args[$dataName];
+            } else {
+                $data[$dataName] = '';
+            }
+        }
+        if (count($data) == 0) {
+            return null;
+        }
+
+        $output = implode($this->glue, $data);
+
+        if (trim($output) == '') {
+            return null;
+        }
+
+        return $output;
+    }
+
+    /**
+     * Dynamic Field 설정 페이지에서 skin 설정 등록 페이지 반환
+     * return html tag string
+     *
+     * @param ConfigEntity $config dynamic field config entity
+     * @return string
+     */
+    public function settings(ConfigEntity $config = null)
+    {
+        $viewFactory = $this->handler->getViewFactory();
+        return $viewFactory->make($this->getViewPath('settings'), [
+            'config' => $config,
+        ])->render();
     }
 
     /**
@@ -189,15 +362,5 @@ abstract class AbstractSkin implements ComponentInterface
      */
     public function delete(array $wheres)
     {
-    }
-
-    /**
-     * get setting rules
-     *
-     * @return array
-     */
-    public function getSettingsRules()
-    {
-        return $this->settingsRules;
     }
 }

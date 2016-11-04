@@ -1,3 +1,3 @@
-@if($item != null && !empty($item->word))
-<span>{{ xe_trans($item->word) }}</span>
+@if($data['categoryItem'] != null && !empty($data['categoryItem']->word))
+<span>{{ xe_trans($data['categoryItem']->word) }}</span>
 @endif

@@ -1,4 +1,4 @@
 <span>
-    {{ $inputs[$config->get('id') . 'Address1'] }}
-    {{ $inputs[$config->get('id') . 'Address2'] }}
+    {{ $data['address1'] }}
+    {{ $data['address2'] }}
 </span>
