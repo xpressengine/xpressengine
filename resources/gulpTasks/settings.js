@@ -16,7 +16,7 @@ module.exports = (() => {
         '**/*',
         '!resources/assets/core/menu/*',
         '!**/*.scss',
-        '!resources/assets/core/lang/LangEditorBox.js',
+        '!resources/assets/core/lang/langEditorBox.js',
         '!resources/assets/core/permission/*.jsx',
         '!resources/assets/core/permission/*.js',
         '!resources/assets/core/settings/js/admin.js',

@@ -20,7 +20,6 @@ module.exports = (() => {
                 'resources/assets/core/menu/MenuSearchBar.js',
                 'resources/assets/core/menu/MenuSearchSuggestion.js',
                 'resources/assets/core/menu/MenuTree.js'
-
             ])
             .pipe($.plumber())
             .pipe($.react())

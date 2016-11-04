@@ -1,7 +1,7 @@
 {{ XeFrontend::css(
 [
 '/assets/vendor/jqueryui/jquery-ui.min.css',
-'/assets/core/lang/LangEditorBox.css',
+'/assets/core/lang/langEditorBox.css',
 '/assets/core/xe-ui-component/xe-ui-component.css'
 ]
 )->load() }}
@@ -13,7 +13,7 @@
 [
 '/assets/vendor/jqueryui/jquery-ui.min.js',
 '/assets/vendor/expanding/expanding.js',
-'/assets/core/lang/LangEditorBox.bundle.js'
+'/assets/core/lang/langEditorBox.bundle.js'
 ]
 )->appendTo('head')->load() }}
 
