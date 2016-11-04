@@ -22,6 +22,7 @@ namespace Xpressengine\DynamicField;
 
 use Xpressengine\Database\VirtualConnectionInterface;
 use Xpressengine\Config\ConfigEntity;
+use Illuminate\View\Factory as ViewFactory;
 
 /**
  * DynamicFieldHandler
@@ -64,7 +65,6 @@ use Xpressengine\Config\ConfigEntity;
  */
 class DynamicFieldHandler
 {
-
     const CONFIG_NAME = 'DynamicField';
 
     /**
@@ -85,6 +85,11 @@ class DynamicFieldHandler
     protected $registerHandler;
 
     /**
+     * @var ViewFactory
+     */
+    protected $viewFactory;
+
+    /**
      * create instance
      *
      * @param VirtualConnectionInterface $connection      database connection
@@ -94,11 +99,13 @@ class DynamicFieldHandler
     public function __construct(
         VirtualConnectionInterface $connection,
         ConfigHandler $configHandler,
-        RegisterHandler $registerHandler
+        RegisterHandler $registerHandler,
+        ViewFactory $viewFactory
     ) {
         $this->connection = $connection;
         $this->configHandler = $configHandler;
         $this->registerHandler = $registerHandler;
+        $this->viewFactory = $viewFactory;
     }
 
     /**
@@ -119,6 +126,15 @@ class DynamicFieldHandler
     public function getRegisterHandler()
     {
         return $this->registerHandler;
+    }
+    /**
+     * get ViewFactory
+     *
+     * @return ViewFactory
+     */
+    public function getViewFactory()
+    {
+        return $this->viewFactory;
     }
 
     /**
