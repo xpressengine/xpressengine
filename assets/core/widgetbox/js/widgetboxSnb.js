@@ -125,7 +125,6 @@
                 }
             },
             appendDivisionType: function(types) {
-                //self.$selectDivision
 
                 var html = "";
 
@@ -140,9 +139,9 @@
                     //TODO span 160px기준 col-1 당 13px 임시로..
                     html += [
                         '<li>',
-                            '<a href="#" data-type="' + v + '" data-display="' + display + '">',
-                                spans,
-                            '</a>',
+                        '<a href="#" data-type="' + v + '" data-display="' + display + '">',
+                        spans,
+                        '</a>',
                         '</li>'
                     ].join("\n");
                 });
@@ -187,12 +186,12 @@
 
                 if(mode === 'mobile') {
                     //layout-mobile
-                    
+
                     self.$editor.addClass("layout-mobile");
                 }else {
                     self.$editor.removeClass("layout-mobile");
                 }
-                
+
                 _settings.mode = mode;
             },
             selectDivisionType: function() {
@@ -221,9 +220,6 @@
                         case 'horizontal' :
                             self.divideHorizontal();
                             break;
-
-                        default:
-                            window.console.error("type error.");
                     }
                 }
             },
@@ -242,13 +238,13 @@
                     columns.forEach(function(v, i) {
                         html += [
                             '<div class="xe-col-md-' + v + '">',
-                                '<div class="xe-row widgetarea-row">',
-                                    '<div class="xe-col-md-12">',
-                                        '<div class="widgetarea" data-height="' + height + '" style="height:' + height + 'px">',
-                                            '<span class="order"></span>',
-                                        '</div>',
-                                    '</div>',
-                                '</div>',
+                            '<div class="xe-row widgetarea-row">',
+                            '<div class="xe-col-md-12">',
+                            '<div class="widgetarea" data-height="' + height + '" style="height:' + height + 'px">',
+                            '<span class="order"></span>',
+                            '</div>',
+                            '</div>',
+                            '</div>',
                             '</div>'
                         ].join("\n");
                     });
@@ -257,6 +253,8 @@
 
                     WidgetBox.deselectAll();
                     WidgetBox.setOrdering();
+                } else {
+                    alert('셀을 선택하세요.');
                 }
             },
             divideHorizontal: function() {
@@ -266,11 +264,11 @@
                 if($selected.length > 0) {
                     $widgetAreaRow.after([
                         '<div class="xe-row widgetarea-row">',
-                            '<div class="xe-col-md-12">',
-                                '<div class="widgetarea" data-height="140" style="height:140px">',
-                                    '<span class="order"></span>',
-                                '</div>',
-                            '</div>',
+                        '<div class="xe-col-md-12">',
+                        '<div class="widgetarea" data-height="140" style="height:140px">',
+                        '<span class="order"></span>',
+                        '</div>',
+                        '</div>',
                         '</div>',
                     ].join("\n"));
 
@@ -279,14 +277,14 @@
                             $wdigetareaRow = $selected.parents(".widgetarea-row"),
                             selectedHeight = $wdigetareaRow.find(".widgetarea").height();
 
-                        $wdigetareaRow.find(".widgetarea").height(140).data("height", 140);
+                        $wdigetareaRow.find(".widgetarea").setHeight(140);
 
                         if((selectedHeight - 165) > 140) {
-                            $wdigetareaRow.next().find(".widgetarea").height(selectedHeight - 165).data("height", selectedHeight - 165);
+                            $wdigetareaRow.next().find(".widgetarea").setHeight(selectedHeight - 165);
                         }else {
 
                             var wHeight = $wdigetareaRow.next().find(".widgetarea").height();
-                            $wdigetareaRow.next().find(".widgetarea").height(wHeight).data("height", wHeight);
+                            $wdigetareaRow.next().find(".widgetarea").setHeight(wHeight);
                         }
 
                     }else {
@@ -300,24 +298,25 @@
                                     $lastTarget = $this.find(".widgetarea:last"),
                                     height = $lastTarget.height() + 165;
 
-
-                                $lastTarget.height(height).data("height", height);
+                                $lastTarget.setHeight(height);
                             });
                         });
                     }
 
                     WidgetBox.deselectAll();
                     WidgetBox.setOrdering();
+                } else {
+                    alert('셀을 선택하세요.');
                 }
             },
             addRow: function() {
                 self.$editor.append([
                     '<div class="xe-row widgetarea-row">',
-                        '<div class="xe-col-md-12">',
-                            '<div class="widgetarea" data-height="140" style="height:140px">',
-                                '<span class="order"></span>',
-                            '</div>',
-                        '</div>',
+                    '<div class="xe-col-md-12">',
+                    '<div class="widgetarea" data-height="140" style="height:140px">',
+                    '<span class="order"></span>',
+                    '</div>',
+                    '</div>',
                     '</div>'
                 ].join("\n"));
             },
@@ -357,7 +356,7 @@
                             if(lastWidgetareaRowHeight > height) {
                                 var resetHeight = lastWidgetareaRowHeight - height - 25;
 
-                                $widgetarea.height(resetHeight).data("height", resetHeight);
+                                $widgetarea.setHeight(resetHeight);
                             }
                         });
 
@@ -373,7 +372,6 @@
                          * 4)row라면 last row에 있는 컬럽을 늘림
                          * 5)col이라면 col하위의 last row의 col을 늘림
                          * */
-                        //var targetHeight = $selected.find(".widgetarea").data("height");
                         var targetHeight = $selected.find(".widgetarea").height();
 
                         if($selectedParentRow.siblings().length > 0) {
@@ -388,7 +386,7 @@
                                         widgetareaHeight = $widgetarea.height(),
                                         resetHeight = widgetareaHeight + targetHeight + 25;
 
-                                    $widgetarea.height(resetHeight).data("height", resetHeight);
+                                    $widgetarea.setHeight(resetHeight);
                                 });
                             }else {
                                 //$combineRow가 .widgetarea-row 일때
@@ -396,7 +394,13 @@
                                     widgetareaHeight = $widgetarea.height(),
                                     resetHeight = widgetareaHeight + targetHeight + 25;
 
-                                $widgetarea.height(resetHeight).data("height", resetHeight);
+                                $widgetarea.setHeight(resetHeight);
+
+                                // var $column = $widgetarea.closest("div[class^='xe-col-']");
+
+                                // if(WidgetBox.checkReducibleBlock($column, $siblingCol.closest(".widget"))) {
+                                // WidgetBox.reduceBlockSize($column);
+                                // }
                             }
 
                         }else {
@@ -416,8 +420,9 @@
                         $siblingCol.removeAttr('class').addClass('xe-col-md-' + size);
 
                         if($siblingCol.siblings().length === 0) {
-                            $siblingCol.closest(".xe-row").parent().append(siblingColHtml);
-                            $siblingCol.closest(".xe-row").remove();
+
+                            // $siblingCol.closest(".xe-row").parent();.append(siblingColHtml);
+                            // $siblingCol.closest(".xe-row").remove()
                         }
 
                     }else {
@@ -456,9 +461,6 @@
                     if($divCol.length > 0 && _deletable) {
                         var $siblingCols = $divCol.siblings();
 
-
-
-
                         _deletable = self.checkRowChildBlock($siblingCols, targetHeight);
 
                         $divCol = $divCol.parent().closest("div[class^='xe-col-']:not(.xe-col-md-12)");
@@ -468,9 +470,6 @@
                         break;
                     }
                 }
-
-
-                window.console.log(":: deletable :: " + _deletable);
 
                 return _deletable;
 
@@ -526,7 +525,7 @@
                         var $targetPiece = $(this);
 
                         if($targetPiece.find("> .xe-row").length > 1) {
-                            window.console.log("row");
+
 
                         }else {
                             if($targetPiece.find(".widgetarea-row:last-child:not(:has(.selected))").length > 0) {
@@ -538,7 +537,7 @@
                                         var height = $widgetarea.height() - 165;
 
                                         if (!$widgetarea.attr("reduce")) {
-                                            $widgetarea.data("height", height).height(height).attr("reduce", true);
+                                            $widgetarea.setHeight(height).attr("reduce", true);
                                         }
 
                                     }

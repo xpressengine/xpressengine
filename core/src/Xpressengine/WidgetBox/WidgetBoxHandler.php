@@ -63,7 +63,6 @@ class WidgetBoxHandler
      */
     public function create($data)
     {
-
         $id = array_get($data, 'id');
 
         if ($id === null) {
@@ -87,7 +86,7 @@ class WidgetBoxHandler
 
         $content = array_get($data, 'content', '');
 
-        $this->repository->create(compact('id', 'title', 'content', 'options'));
+        $widgetbox = $this->repository->create(compact('id', 'title', 'content', 'options'));
 
         $grant = new Grant();
         $grant->set(
@@ -101,6 +100,8 @@ class WidgetBoxHandler
         );
 
         $this->permissionHandler->register('widgetbox.'.$id, $grant);
+
+        return $widgetbox;
     }
 
     /**

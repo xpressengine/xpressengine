@@ -475,11 +475,7 @@ class UserServiceProvider extends ServiceProvider
             'user.edit' => [
                 'title' => '회원정보 수정',
                 'tab' => '회원'
-            ],
-            'user.setting' => [
-                'title' => '회원 설정',
-                'tab' => '회원'
-            ],
+            ]
         ];
         $register = $this->app->make('xe.register');
         foreach ($permissions as $id => $permission) {

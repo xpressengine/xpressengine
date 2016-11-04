@@ -11,34 +11,34 @@
     @else
     <div class="row">
         <div class="col-md-2">
-            <ul class="nav nav-pills nav-stacked">
-                @foreach($files as $fileType => $typedFiles)
-                <li role="presentation"><strong>{{ $fileType }}</strong></li>
-                    @foreach($typedFiles as $name => $path)
+            <ul class="nav nav-pills nav-stacked" style="margin-bottom: 10px;">
+                @foreach($files as $name => $path)
                 <li role="presentation" @if($name === $editFile['fileName'])class="active"@endif>
-                    <a href="{{ route('settings.theme.edit', ['theme' => $theme->getId(), 'type' => $fileType, 'file' => $name]) }}">{{ $name }}</a>
+                    <a href="{{ route('settings.theme.edit', ['theme' => $theme->getId(), 'file' => $name]) }}">{{ $name }}</a>
                 </li>
-                    @endforeach
                 @endforeach
             </ul>
         </div>
         <div class="col-md-10">
-            <p>{{ $editFile['fileName'] }}</p>
+            <p>
+                {{ $editFile['fileName'] }}
+            </p>
             <form role="form" action="{{ route('settings.theme.edit') }}" method="post" id="_theme">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="theme" value="{{ $theme->getId() }}">
-                <input type="hidden" name="type" value="{{ $type }}">
                 <input type="hidden" name="file" value="{{ $editFile['fileName'] }}">
 
-                <textarea class="form-control" rows="30" name="content">{{ old('content', $editFile['content']) }}</textarea>
+                <textarea class="form-control" rows="30" name="content" @if(request('view_origin') === 'Y') readonly="readonly" @endif>{{ old('content', $editFile['content']) }}</textarea>
 
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#widgetModal">위젯 추가</button>
-
-                <button type="submit" class="btn btn-default">{{ xe_trans('xe::applyModified') }}</button>
+                <div class="pull-right" style="margin-top:10px;">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#widgetModal">위젯 추가</button>
+                    <button type="submit" class="btn btn-default">{{ xe_trans('xe::applyModified') }}</button>
+                </div>
             </form>
         </div>
     </div>
 
+    {{-- widget modal --}}
     <div class="modal fade" id="widgetModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">

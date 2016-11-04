@@ -323,7 +323,6 @@ Route::settings(
                         'as' => 'settings.user.setting',
                         'uses' => 'User\Settings\SettingController@editCommon',
                         'settings_menu' => 'user.setting.default',
-                        'permission' => 'user.setting'
                     ]
                 );
                 Route::post(
@@ -337,7 +336,6 @@ Route::settings(
                         'as' => 'settings.user.setting.join',
                         'uses' => 'User\Settings\SettingController@editJoin',
                         'settings_menu' => 'user.setting.join',
-                        'permission' => 'user.setting'
                     ]
                 );
 
@@ -355,7 +353,6 @@ Route::settings(
                         'as' => 'settings.user.setting.skin',
                         'uses' => 'User\Settings\SettingController@editSkin',
                         'settings_menu' => 'user.setting.skin',
-                        'permission' => 'user.setting'
                     ]
                 );
 
@@ -365,7 +362,6 @@ Route::settings(
                         'as' => 'settings.user.setting.field',
                         'uses' => 'User\Settings\SettingController@editField',
                         'settings_menu' => 'user.setting.field',
-                        'permission' => 'user.setting'
                     ]
                 );
 
@@ -375,7 +371,6 @@ Route::settings(
                         'as' => 'settings.user.setting.menu',
                         'uses' => 'User\Settings\SettingController@editToggleMenu',
                         'settings_menu' => 'user.setting.menu',
-                        'permission' => 'user.setting'
                     ]
                 );
 
@@ -526,7 +521,6 @@ Route::settings(
             'menus/{menuId}/items',
             ['as' => 'settings.menu.store.item', 'uses' => 'MenuController@storeItem']
         );
-
         Route::get(
             'menus/{menuId}/items/{itemId}',
             ['as' => 'settings.menu.edit.item', 'uses' => 'MenuController@editItem']
@@ -723,7 +717,7 @@ Route::settings('widget', function () {
     Route::get('list', ['as' => 'settings.widget.list', 'uses' => 'WidgetController@index']);
     Route::get('skin', ['as' => 'settings.widget.skin', 'uses' => 'WidgetController@skin']);
     Route::get('form', ['as' => 'settings.widget.form', 'uses' => 'WidgetController@form']);
-    Route::get('setup', ['as' => 'settings.widget.setup', 'uses' => 'WidgetController@setup']);
+    Route::post('setup', ['as' => 'settings.widget.setup', 'uses' => 'WidgetController@setup']);
 
     Route::get('render', ['as' => 'settings.widget.render', 'uses' => 'WidgetController@render']);
     Route::post('generate', ['as' => 'settings.widget.generate', 'uses' => 'WidgetController@generate']);

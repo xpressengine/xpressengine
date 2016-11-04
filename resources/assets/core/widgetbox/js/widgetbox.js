@@ -1,3 +1,11 @@
+;(function() {
+    $.fn.setHeight = function(height) {
+        this.height(height).data('height', height).attr('data-height', height);
+
+        return this;
+    };
+})();
+
 ;(function(exports) {
 
     'use strict';
@@ -119,14 +127,22 @@
                             var $content = $(code);
                             var $xeWidgets = $content.find('xewidget');
 
+                            $content.find('[data-height]').each(function() {
+                                var $this = $(this);
+                                var height = $this.data('height');
+
+                                $this.height(height).data('height', height).attr('data-height', height);
+                            });
+
                             $xeWidgets.each(function () {
                                 var $this = $(this);
                                 var $parent = $this.parent();
                                 var widgetCdoe = $this.wrap('<div />').parent().html().replace(/"/g, "'");
                                 var widgetTitle = $this.attr('title');
                                 var widgetView = WidgetAdder.getWidgetBoxView(widgetCdoe, widgetTitle);
-
-                                $parent.html($(widgetView).find('.xe-col-md-12 >'));
+                                var $widgetView = $(widgetView).find('.xe-col-md-12 >');
+                                $widgetView.find(".widgetCode").val(widgetCdoe);
+                                $parent.html($widgetView);
                             });
 
                             $content.find('.widgetarea').each(function () {
@@ -142,15 +158,15 @@
                             });
 
                             content = $content;
-                            
+
                         }else {
                             content = [
                                 '<div class="xe-row widgetarea-row">',
-                                    '<div class="xe-col-md-12">',
-                                        '<div class="widgetarea" data-height="140" style="height:140px">',
-                                            '<span class="order">0</span>',
-                                        '</div>',
-                                    '</div>',
+                                '<div class="xe-col-md-12">',
+                                '<div class="widgetarea" data-height="140" style="height:140px">',
+                                '<span class="order">0</span>',
+                                '</div>',
+                                '</div>',
                                 '</div>'
                             ].join("\n");
                         }
@@ -175,6 +191,7 @@
                     $this.closest('.xe-col-md-12').html(widgetCode);
                 });
 
+                $content.find('[style*="height"]').removeAttr('style');
                 $content.find(".ui-sortable").removeClass("ui-sortable");
                 $content.find(".ui-droppable").removeClass("ui-droppable");
                 $content.find(".ui-sortable-handle").removeClass("ui-sortable-handle");
@@ -264,7 +281,7 @@
                 }
 
                 $(this).closest(".xe-row").remove();
-                
+
             },
             /**
              * @description
@@ -315,14 +332,14 @@
                 var $widgetarea = $column.find(".widgetarea");
                 var colWidgetHeight = $widgetarea.outerHeight();
 
-                $widgetarea.height(colWidgetHeight - 165).data("height", colWidgetHeight - 165);
+                $widgetarea.setHeight(colWidgetHeight - 165);
 
                 $(".editor > .xe-row").has($column).find(".widgetarea-row:last-child").not($column.parents(".xe-row")).not($column.closest(".widgetarea-row").siblings()).each(function() {
                     var $this = $(this);
                     var $widgetarea = $this.find(".widgetarea"),
                         widgetareaHeight = $widgetarea.outerHeight();
 
-                    $widgetarea.height(widgetareaHeight - 165).data("height", widgetareaHeight - 165);
+                    $widgetarea.setHeight(widgetareaHeight - 165);
                 });
             },
             increaseBlockSize: function ($column) {
@@ -334,14 +351,13 @@
                 //해당 박스에 위젯이 들어갈 공간이 없을 경우
                 if($widgetarea.outerHeight() < widgetHeight * widgetCnt) {
                     var widgetareaHeight = $column.find(".widgetarea").outerHeight();
-                    $column.find(".widgetarea").height((widgetareaHeight + 165)).data("height", (widgetareaHeight + 165));
-
+                    $column.find(".widgetarea").setHeight(widgetareaHeight + 165);
 
                     $(".editor > .xe-row:has(.selected)").find(".widgetarea-row:last-child:not(:has(.selected))").not($(".selected").closest(".widgetarea-row").siblings()).each(function() {
                         var $widgetarea = $(this).find(".widgetarea");
                         var widgetareaHeight = $widgetarea.outerHeight();
 
-                        $widgetarea.height(widgetareaHeight + 165).data("height", (widgetareaHeight + 165));
+                        $widgetarea.setHeight(widgetareaHeight + 165);
                     });
                 }
             }

@@ -36,7 +36,7 @@
                 $container.on('change', selectWidgetSkin, function() {
                     var widget = this.value;
 
-                    if(widget) {
+                    if(widget !== 'select-skin') {
                         var url = $(this).find('option:selected').data('url');
                         XE.page(url, '.widget-form');
                     }
@@ -82,9 +82,6 @@
                                 skinForm: skinForm
                             }, cb);
                             break;
-
-                        default:
-                            console.error('widgetGenerator parameter error');
                     }
 
                     break;
@@ -95,8 +92,6 @@
                     break;
                 case 'undefined':
                     break;
-                default:
-                    console.error('widgetGenerator parameter error');
             }
 
             this.generate = function(cb) {
@@ -106,11 +101,12 @@
                 }, cb);
             };
 
-            this.reset = function() {
+            this.reset = function(code, callback) {
                 WidgetCode.reset({
                     url: $(widgetInputs).data('url'),
-                    code: $(widgetCodeSel).val(),
-                    target: widgetInputs
+                    code: code,
+                    target: widgetInputs,
+                    callback: callback
                 });
             };
 
@@ -170,10 +166,11 @@
                     var target = options.target;
 
                     XE.page(url, target, {
+                        type: 'post',
                         data: {
-                            code: code
+                            code: code,
                         }
-                    });
+                    }, options.callback);
                 });
             },
             init: function() {
@@ -187,4 +184,3 @@
     })().init();
 
 })(window, jQuery);
-
