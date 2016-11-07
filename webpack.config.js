@@ -6,41 +6,43 @@ var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
 var prodConfig = require('./webpack.prod.config');
 var devConfig = require('./webpack.dev.config');
 
-var path = {
+var pathInfo = {
     permission: path.resolve(__dirname, '/resources/assets/core/permission'),
     menu: path.resolve(__dirname, '/resources/assets/core/menu'),
     lang: path.resolve(__dirname, '/resources/assets/core/lang')
 };
+
+console.log('path', path);
 
 var common = {
     //devtool: 'cheap-module-source-map',
     entry: {
         'vendor': ['react', 'react-dom', 'jquery'],
         'assets/core/permission/permission': [
-            path.permission + '/Permission.jsx',
-            path.permission + '/PermissionExclude.jsx',
-            path.permission + '/PermissionInclude.jsx',
-            path.permission + '/PermissionRadioComp.jsx',
-            path.permission + '/PermissionRenderer.jsx',
-            path.permission + '/PermissionTag.jsx',
-            path.permission + '/PermissionTagSuggestion.jsx',
-            path.permission + '/SettingsPermission.jsx'
+            pathInfo.permission + '/Permission.jsx',
+            pathInfo.permission + '/PermissionExclude.jsx',
+            pathInfo.permission + '/PermissionInclude.jsx',
+            pathInfo.permission + '/PermissionRadioComp.jsx',
+            pathInfo.permission + '/PermissionRenderer.jsx',
+            pathInfo.permission + '/PermissionTag.jsx',
+            pathInfo.permission + '/PermissionTagSuggestion.jsx',
+            pathInfo.permission + '/SettingsPermission.jsx'
         ],
         'assets/core/menu/menu': [
-            path.menu + '/MenuRenderer.js',
-            path.menu + '/MenuEntity.js',
-            path.menu + '/MenuItem.js',
-            path.menu + '/TreeNode.js',
-            path.menu + '/MenuSearchBar.js',
-            path.menu + '/UITree.js',
-            path.menu + '/MenuSearchBar.js',
-            path.menu + '/MenuSearchSuggestion.js',
-            path.menu + '/MenuTree.js'
+            pathInfo.menu + '/MenuRenderer.js',
+            pathInfo.menu + '/MenuEntity.js',
+            pathInfo.menu + '/MenuItem.js',
+            pathInfo.menu + '/TreeNode.js',
+            pathInfo.menu + '/MenuSearchBar.js',
+            pathInfo.menu + '/UITree.js',
+            pathInfo.menu + '/MenuSearchBar.js',
+            pathInfo.menu + '/MenuSearchSuggestion.js',
+            pathInfo.menu + '/MenuTree.js'
         ],
         'assets/core/lang/langEditorBox': path.lang + '/LangEditorBox.js'
     },
     output: {
-        path: path.join(__dirname, './'),
+        path: path.resolve(__dirname, './'),
         filename: '[name].bundle.js'
     },
     plugins: [
