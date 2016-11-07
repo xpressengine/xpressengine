@@ -1,6 +1,3 @@
-
-'use strict';
-
 import gulp from 'gulp';
 import plugins from 'gulp-load-plugins';
 import runSequence from 'run-sequence';
@@ -37,3 +34,9 @@ gulp.task('assets:sass', taskCss['assets:sass']);
 // s: image
 gulp.task('assets:image', taskImage['assets:image']);
 // e: image
+
+gulp.task("sass:watch", () => {
+  return gulp.watch([
+    './resources/assets/**/*.scss'
+  ], ["assets:sass"]);
+});
