@@ -342,7 +342,6 @@ abstract class AbstractType implements ComponentInterface
                     /**
                      * @var ColumnEntity $column
                      */
-                    \Log::info($self->getColumns());
                     foreach ($self->getColumns() as $column) {
                         $column->add($table, $self->config->get('id') . '_');
                     }
