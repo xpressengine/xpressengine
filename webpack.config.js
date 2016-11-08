@@ -1,23 +1,24 @@
 var path = require('path');
 var webpack = require('webpack');
 var webpackMerge = require('webpack-merge');
+var $ = require('gulp-load-plugins')();
+
 var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
 
 var prodConfig = require('./webpack.prod.config');
 var devConfig = require('./webpack.dev.config');
 
 var pathInfo = {
-    permission: path.resolve(__dirname, '/resources/assets/core/permission'),
-    menu: path.resolve(__dirname, '/resources/assets/core/menu'),
-    lang: path.resolve(__dirname, '/resources/assets/core/lang')
+    core: path.join(__dirname, '/assets/core'),
+    permission: path.join(__dirname, '/resources/assets/core/permission'),
+    menu: path.join(__dirname, '/resources/assets/core/menu'),
+    lang: path.join(__dirname, '/resources/assets/core/lang')
 };
 
-console.log('path', path);
+var target = !!$.util.env.production;
 
 var common = {
-    //devtool: 'cheap-module-source-map',
     entry: {
-        'vendor': ['react', 'react-dom', 'jquery'],
         'assets/core/permission/permission': [
             pathInfo.permission + '/Permission.jsx',
             pathInfo.permission + '/PermissionExclude.jsx',
@@ -39,25 +40,23 @@ var common = {
             pathInfo.menu + '/MenuSearchSuggestion.js',
             pathInfo.menu + '/MenuTree.js'
         ],
-        'assets/core/lang/langEditorBox': path.lang + '/LangEditorBox.js'
+        'assets/core/lang/langEditorBox': pathInfo.lang + '/LangEditorBox.js'
     },
     output: {
         path: path.resolve(__dirname, './'),
-        filename: '[name].bundle.js'
+        filename: '[name].bundle.js',
+        libraryTarget: 'umd'
     },
     plugins: [
-        new webpack.optimize.UglifyJsPlugin({minimize: true, compress: {warnings: false}}),   //uglify, minify
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoErrorsPlugin(),
-        new webpack.DefinePlugin({
-            "process.env": {
-                NODE_ENV: JSON.stringify("production")  //production -> 파일 용량 작아짐. warning 제거
-            }
-        }),
-        new CommonsChunkPlugin({
-            name: "vendor",
-            filename: "assets/vendor/vendor.js",
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'react',
+            filename: 'assets/vendor/react.bundle.js',
             minChunks: Infinity,
+            chunks: [
+                'react', 'react-dom'
+            ]
         })
     ],
     module: {
@@ -82,7 +81,7 @@ var common = {
 
 var config;
 
-if(target === 'build') {
+if(target) {
     config = webpackMerge(common, prodConfig)
 } else {
     config = webpackMerge(common, devConfig)

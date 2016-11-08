@@ -1,10 +1,14 @@
 import gulp from 'gulp';
 import plugins from 'gulp-load-plugins';
 import runSequence from 'run-sequence';
+import events from 'events';
 
 import taskSettings from './resources/gulpTasks/settings';
 import taskCss from './resources/gulpTasks/css';
 import taskImage from './resources/gulpTasks/image';
+import taskWebpack from './resources/gulpTasks/webpack';
+
+events.EventEmitter.defaultMaxListeners = Infinity;
 
 const $ = plugins();
 
@@ -16,6 +20,7 @@ gulp.task('default', (callback) => {
       'jspm:xe',
       'assets:sass',
       'assets:image',
+      'webpack:react',
       callback);
 });
 
@@ -34,6 +39,8 @@ gulp.task('assets:sass', taskCss['assets:sass']);
 // s: image
 gulp.task('assets:image', taskImage['assets:image']);
 // e: image
+
+gulp.task('webpack:react', taskWebpack['webpack:react']);
 
 gulp.task("sass:watch", () => {
   return gulp.watch([

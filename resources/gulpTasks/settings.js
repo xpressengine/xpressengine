@@ -45,7 +45,7 @@ module.exports = (() => {
             let filters = self.getDefaultFilter();
 
             if(_config.isProduction) {
-                filter.push('!**/*.map');
+                _filter.push('!**/*.map');
             }
 
             return gulp.src('resources/assets/core/**/*', {base: "./resources/assets/core"})
