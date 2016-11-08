@@ -104,7 +104,7 @@ class Address extends AbstractType
     public function wheres(DynamicQuery $query, array $params)
     {
         $config = $this->config;
-        foreach ($this->columns() as $column) {
+        foreach ($this->getColumns() as $column) {
             $key = camel_case($config->get('id') . '_' . $column->name);
 
             if (isset($params[$key]) && $params[$key] != '') {
