@@ -43,7 +43,6 @@
     "babel-preset-react": "^6.16.0",
     "clean-webpack-plugin": "^0.1.14",
     "gulp": "^3.9.1",
-    "gulp-webpack": "^1.5.0",
     "handlebars-loader": "^1.4.0",
     "path": "^0.12.7",
     "react": "^15.3.2",
