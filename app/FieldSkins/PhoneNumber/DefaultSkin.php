@@ -6,7 +6,7 @@
  * @link        https://xpressengine.io
  */
 
-namespace App\FieldSkins\Number;
+namespace App\FieldSkins\PhoneNumber;
 
 use Xpressengine\DynamicField\AbstractSkin;
 use Xpressengine\Config\ConfigEntity;
@@ -14,7 +14,7 @@ use View;
 
 class DefaultSkin extends AbstractSkin
 {
-    protected static $id = 'FieldType/xpressengine@Number/FieldSkin/xpressengine@NumberDefault';
+    protected static $id = 'FieldType/xpressengine@PhoneNumber/FieldSkin/xpressengine@PhoneNumberDefault';
 
     /**
      * get name of skin
@@ -23,7 +23,7 @@ class DefaultSkin extends AbstractSkin
      */
     public function name()
     {
-        return 'Number default';
+        return 'Phone Number default';
     }
 
     /**
@@ -43,6 +43,6 @@ class DefaultSkin extends AbstractSkin
      */
     public function getPath()
     {
-        return 'dynamicField/number/default';
+        return 'dynamicField/phoneNumber/default';
     }
 }

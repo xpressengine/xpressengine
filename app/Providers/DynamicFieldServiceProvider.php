@@ -14,6 +14,7 @@
 
 namespace App\Providers;
 
+use App\FieldTypes\PhoneNumber;
 use Illuminate\Support\ServiceProvider;
 use App;
 use XeRegister;
@@ -32,6 +33,7 @@ use App\FieldSkins\Number\DefaultSkin as NumberDefault;
 use App\FieldSkins\Text\DefaultSkin as TextDefault;
 use App\FieldSkins\Boolean\DefaultSkin as BooleanDefault;
 use App\FieldSkins\Address\DefaultSkin as AddressDefault;
+use App\FieldSkins\PhoneNumber\DefaultSkin as PhoneNumberDefault;
 
 /**
  * laravel service provider
@@ -67,6 +69,7 @@ class DynamicFieldServiceProvider extends ServiceProvider
         $registerHandler->add(Text::class);
         $registerHandler->add(Boolean::class);
         $registerHandler->add(Address::class);
+        $registerHandler->add(PhoneNumber::class);
     }
 
     private function registerFieldDefaultSkin()
@@ -78,6 +81,7 @@ class DynamicFieldServiceProvider extends ServiceProvider
         $registerHandler->add(TextDefault::class);
         $registerHandler->add(BooleanDefault::class);
         $registerHandler->add(AddressDefault::class);
+        $registerHandler->add(PhoneNumberDefault::class);
     }
 
     /**

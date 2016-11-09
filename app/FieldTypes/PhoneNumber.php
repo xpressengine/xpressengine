@@ -4,6 +4,7 @@
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
+ * @see         https://ko.wikipedia.org/wiki/대한민국의_전화번호_체계
  */
 
 namespace App\FieldTypes;
@@ -13,13 +14,11 @@ use Xpressengine\DynamicField\ColumnEntity;
 use Xpressengine\DynamicField\ColumnDataType;
 use Xpressengine\Config\ConfigEntity;
 use XeRegister;
-use Xpressengine\DynamicField\DynamicFieldHandler;
-use App\FieldSkins\Number\DefaultSkin;
 use View;
 
-class Number extends AbstractType
+class PhoneNumber extends AbstractType
 {
-    protected static $id = 'FieldType/xpressengine@Number';
+    protected static $id = 'FieldType/xpressengine@PhoneNumber';
 
     /**
      * get field type name
@@ -28,7 +27,7 @@ class Number extends AbstractType
      */
     public function name()
     {
-        return 'Number';
+        return 'Phone Number';
     }
 
     /**
@@ -38,7 +37,7 @@ class Number extends AbstractType
      */
     public function description()
     {
-        return '숫자를 등록합니다.';
+        return '전화번호를 등록합니다.';
     }
 
     /**
@@ -49,7 +48,8 @@ class Number extends AbstractType
     public function getColumns()
     {
         return [
-            'num' => (new ColumnEntity('num', ColumnDataType::INTEGER)),
+            'phoneNumber' => (new ColumnEntity('phoneNumber', ColumnDataType::STRING, 30)),
+            'entities' => (new ColumnEntity('entities', ColumnDataType::TEXT)),
         ];
     }
 
@@ -60,7 +60,8 @@ class Number extends AbstractType
      */
     public function getRules()
     {
-        return ['num' => 'numeric'];
+        // register phoneNumber rule
+        return ['phoneNumber' => 'phoneNumber'];
     }
 
     /**
@@ -82,7 +83,7 @@ class Number extends AbstractType
      */
     public function getSettingsView(ConfigEntity $config = null)
     {
-        return View::make('dynamicField/number/createType', ['config' => $config,])->render();
+        return View::make('dynamicField/phoneNumber/createType', ['config' => $config,])->render();
     }
 }
 
