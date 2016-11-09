@@ -1,6 +1,6 @@
 <?php
 /**
- * MemoryDecorator
+ * AbstractDecorator.php
  *
  * PHP version 5
  *
@@ -11,6 +11,7 @@
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link      https://xpressengine.io
  */
+
 namespace Xpressengine\Menu\Repositories;
 
 use Xpressengine\Menu\MenuRepository;
@@ -18,7 +19,7 @@ use Xpressengine\Menu\Models\Menu;
 use Xpressengine\Menu\Models\MenuItem;
 
 /**
- * Class MemoryDecorator
+ * Abstract class AbstractDecorator
  *
  * @category  Menu
  * @package   Xpressengine\Menu
@@ -27,15 +28,24 @@ use Xpressengine\Menu\Models\MenuItem;
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link      https://xpressengine.io
  */
-class MemoryDecorator extends AbstractDecorator
+abstract class AbstractDecorator implements MenuRepository
 {
     /**
-     * Data bag
+     * MenuRepository instance
      *
-     * @var array
+     * @var MenuRepository
      */
-    protected $bag = [];
+    protected $repo;
 
+    /**
+     * AbstractDecorator constructor.
+     *
+     * @param MenuRepository $repo MenuRepository instance
+     */
+    public function __construct(MenuRepository $repo)
+    {
+        $this->repo = $repo;
+    }
     /**
      * Find a menu
      *
@@ -45,16 +55,7 @@ class MemoryDecorator extends AbstractDecorator
      */
     public function find($id, $with = [])
     {
-        $key = $this->getWithKey($with);
-
-        if (!isset($this->bag[$id])) {
-            $this->bag[$id] = [];
-        }
-        if (!isset($this->bag[$id][$key])) {
-            $this->bag[$id][$key] = $this->repo->find($id, $with);
-        }
-
-        return $this->bag[$id][$key];
+        return $this->repo->find($id, $with);
     }
 
     /**
@@ -66,20 +67,42 @@ class MemoryDecorator extends AbstractDecorator
      */
     public function all($siteKey, $with = [])
     {
-        $key = $this->getWithKey($with);
+        return $this->repo->all($siteKey, $with);
+    }
 
-        $menus = $this->repo->all($siteKey, $with);
-        foreach ($menus as $menu) {
-            $id = $menu->getKey();
-            if (!isset($this->bag[$id])) {
-                $this->bag[$id] = [];
-            }
-            if (!isset($this->bag[$id][$key])) {
-                $this->bag[$id][$key] = $menu;
-            }
-        }
+    /**
+     * Find a menu item
+     *
+     * @param string $id   menu item identifier
+     * @param array  $with relation
+     * @return MenuItem
+     */
+    public function findItem($id, $with = [])
+    {
+        return $this->repo->findItem($id, $with);
+    }
 
-        return $menus;
+    /**
+     * Get menu items by identifier list
+     *
+     * @param array $ids  menu item identifier
+     * @param array $with relation
+     * @return MenuItem[]
+     */
+    public function fetchInItem(array $ids, $with = [])
+    {
+        return $this->repo->fetchInItem($ids, $with);
+    }
+
+    /**
+     * Insert menu
+     *
+     * @param Menu $menu menu instance
+     * @return Menu
+     */
+    public function insert(Menu $menu)
+    {
+        return $this->repo->insert($menu);
     }
 
     /**
@@ -90,8 +113,6 @@ class MemoryDecorator extends AbstractDecorator
      */
     public function update(Menu $menu)
     {
-        unset($this->bag[$menu->getKey()]);
-
         return $this->repo->update($menu);
     }
 
@@ -103,8 +124,6 @@ class MemoryDecorator extends AbstractDecorator
      */
     public function delete(Menu $menu)
     {
-        unset($this->bag[$menu->getKey()]);
-        
         return $this->repo->delete($menu);
     }
 
@@ -117,9 +136,18 @@ class MemoryDecorator extends AbstractDecorator
      */
     public function increment(Menu $menu, $amount = 1)
     {
-        unset($this->bag[$menu->getKey()]);
-
         return $this->repo->increment($menu, $amount);
+    }
+
+    /**
+     * Insert menu item
+     *
+     * @param MenuItem $item menu item instance
+     * @return MenuItem
+     */
+    public function insertItem(MenuItem $item)
+    {
+        return $this->repo->insertItem($item);
     }
 
     /**
@@ -130,8 +158,6 @@ class MemoryDecorator extends AbstractDecorator
      */
     public function updateItem(MenuItem $item)
     {
-        unset($this->bag[$item->menu->getKey()]);
-
         return $this->repo->updateItem($item);
     }
 
@@ -143,8 +169,6 @@ class MemoryDecorator extends AbstractDecorator
      */
     public function deleteItem(MenuItem $item)
     {
-        unset($this->bag[$item->menu->getKey()]);
-
         return $this->repo->deleteItem($item);
     }
 
@@ -167,22 +191,5 @@ class MemoryDecorator extends AbstractDecorator
     public function createItemModel(Menu $menu = null)
     {
         return $this->repo->createItemModel($menu);
-    }
-
-    /**
-     * Get sub key by relationship
-     *
-     * @param array $with relationships
-     * @return string
-     */
-    private function getWithKey($with = [])
-    {
-        $with = !is_array($with) ? [$with] : $with;
-
-        if (empty($with)) {
-            return '_alone';
-        }
-
-        return implode('.', $with);
     }
 }

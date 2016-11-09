@@ -28,7 +28,7 @@ use Xpressengine\Support\CacheInterface;
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link      https://xpressengine.io
  */
-class CacheDecorator implements MenuRepository
+class CacheDecorator extends AbstractDecorator
 {
     /**
      * MenuRepository instance
@@ -59,7 +59,8 @@ class CacheDecorator implements MenuRepository
      */
     public function __construct(MenuRepository $repo, CacheInterface $cache)
     {
-        $this->repo = $repo;
+        parent::__construct($repo);
+
         $this->cache = $cache;
     }
 
@@ -119,45 +120,6 @@ class CacheDecorator implements MenuRepository
     }
 
     /**
-     * Find a menu item
-     *
-     * @param string $id   menu item identifier
-     * @param array  $with relation
-     * @return MenuItem
-     */
-    public function findItem($id, $with = [])
-    {
-        $key = $this->getItemCacheKey($id);
-        $subKey = $this->getWithKey($with);
-
-        $data = $this->cache->get($key);
-
-        if (!$data || !isset($data[$subKey])) {
-            if ($item = $this->repo->findItem($id, $with)) {
-                $data = $data ?: [];
-                $data[$subKey] = $item;
-                $this->cache->put($key, $data);
-            }
-        } else {
-            $item = $data[$subKey];
-        }
-
-        return $item;
-    }
-
-    /**
-     * Get menu items by identifier list
-     *
-     * @param array $ids  menu item identifier
-     * @param array $with relation
-     * @return MenuItem[]
-     */
-    public function fetchInItem(array $ids, $with = [])
-    {
-        return $this->repo->fetchInItem($ids, $with);
-    }
-
-    /**
      * Insert menu
      *
      * @param Menu $menu menu instance
@@ -214,17 +176,6 @@ class CacheDecorator implements MenuRepository
     }
 
     /**
-     * Insert menu item
-     *
-     * @param MenuItem $item menu item instance
-     * @return MenuItem
-     */
-    public function insertItem(MenuItem $item)
-    {
-        return $this->repo->insertItem($item);
-    }
-
-    /**
      * Update menu item
      *
      * @param MenuItem $item menu item instance
@@ -232,7 +183,7 @@ class CacheDecorator implements MenuRepository
      */
     public function updateItem(MenuItem $item)
     {
-        $this->cache->forget($this->getItemCacheKey($item->getKey()));
+        $this->cache->forget($this->getCacheKey($item->menu->getKey()));
 
         return $this->repo->updateItem($item);
     }
@@ -245,7 +196,7 @@ class CacheDecorator implements MenuRepository
      */
     public function deleteItem(MenuItem $item)
     {
-        $this->cache->forget($this->getItemCacheKey($item->getKey()));
+        $this->cache->forget($this->getCacheKey($item->menu->getKey()));
 
         return $this->repo->deleteItem($item);
     }
@@ -280,17 +231,6 @@ class CacheDecorator implements MenuRepository
     protected function getCacheKey($keyword)
     {
         return $this->prefix . '@' . $keyword;
-    }
-
-    /**
-     * String for item cache key
-     *
-     * @param string $keyword keyword
-     * @return string
-     */
-    protected function getItemCacheKey($keyword)
-    {
-        return $this->prefix . 'item@' . $keyword;
     }
 
     /**

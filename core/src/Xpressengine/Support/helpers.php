@@ -394,11 +394,8 @@ if (!function_exists('current_menu')) {
      */
     function current_menu()
     {
-        $id = getCurrentInstanceId();
-        if ($id !== null) {
-            return app('xe.menu')->getItem($id);
-        }
-        return null;
+        $instanceConfig = Xpressengine\Routing\InstanceConfig::instance();
+        return $instanceConfig->getMenuItem();
     }
 }
 
