@@ -327,11 +327,6 @@ class DynamicFieldHandler
      */
     public function getRules(ConfigEntity $config)
     {
-        // 필수 입력이 아니면 처리하지 않음
-        if ($config->get('required') === false) {
-            return [];
-        }
-
         $type = $this->getByConfig($config);
 
         $rules = [];
