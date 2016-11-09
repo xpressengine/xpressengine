@@ -394,11 +394,8 @@ if (!function_exists('current_menu')) {
      */
     function current_menu()
     {
-        $id = getCurrentInstanceId();
-        if ($id !== null) {
-            return app('xe.menu')->getItem($id);
-        }
-        return null;
+        $instanceConfig = Xpressengine\Routing\InstanceConfig::instance();
+        return $instanceConfig->getMenuItem();
     }
 }
 
@@ -656,5 +653,19 @@ if (!function_exists('compile')) {
     function compile($instanceId, $content, $htmlable = false)
     {
         return app('xe.editor')->compile($instanceId, $content, $htmlable);
+    }
+}
+
+if (!function_exists('purify')) {
+    /**
+     * @package Xpressengine\Editor
+     *
+     * @param string $content content
+     * @return string
+     */
+    function purify($content)
+    {
+        $purifier = new \Xpressengine\Support\Purifier();
+        return $purifier->purify($content);
     }
 }

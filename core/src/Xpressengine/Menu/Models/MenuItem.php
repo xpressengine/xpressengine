@@ -24,6 +24,10 @@ use Xpressengine\Routing\InstanceRoute;
  *
  * @category  Menu
  * @package   Xpressengine\Menu
+ * @author    XE Developers <developers@xpressengine.com>
+ * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link      https://xpressengine.io
  *
  * @property string $id          자동 생성된 고유한 식별자
  * @property string $menuId      소속된 MenuEntity 의 ID
@@ -37,10 +41,7 @@ use Xpressengine\Routing\InstanceRoute;
  * @property bool   $activated   활성/비활성 유무
  * @property string $type        해당 메뉴의 type
  * @property int    $ordering    정렬을 위한 순서
- * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link        https://xpressengine.io
+ * @property Menu   $menu        객체가 속한 메뉴
  */
 class MenuItem extends CategoryItem
 {

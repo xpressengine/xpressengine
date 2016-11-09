@@ -167,11 +167,17 @@ abstract class AbstractSkin implements ComponentInterface
         return $this->handler->getRegisterHandler()->getType($this->handler, $this->config->get('typeId'));
     }
 
+    /**
+     * arguments filter
+     *
+     * @param array $args arguments
+     * @return array
+     */
     protected function filter(array $args)
     {
         $data = [];
         $key = [];
-        foreach ($this->getType()->getColumns() as $columnName =>$columns) {
+        foreach ($this->getType()->getColumns() as $columnName => $columns) {
             $dataName = $this->config->get('id') . ucfirst(camel_case('_' . $columnName));
             $key[$columnName] = $dataName;
             if (isset($args[$dataName])) {
@@ -187,7 +193,7 @@ abstract class AbstractSkin implements ComponentInterface
     /**
      * add merge data
      *
-     * @param array $data
+     * @param array $data data
      * @return void
      */
     public function addMergeData(array $data)
@@ -197,8 +203,8 @@ abstract class AbstractSkin implements ComponentInterface
 
     /**
      * set merge data
-     * 
-     * @param array $data
+     *
+     * @param array $data data
      * @return void
      */
     public function setMergeData(array $data)
@@ -210,7 +216,7 @@ abstract class AbstractSkin implements ComponentInterface
      * 등록 form 에 추가될 html 코드 반환
      * return html tag string
      *
-     * @param array $args      arguments
+     * @param array $args arguments
      * @return \Illuminate\View\View
      */
     public function create(array $args)
@@ -230,7 +236,7 @@ abstract class AbstractSkin implements ComponentInterface
      * 수정 form 에 추가될 html 코드 반환
      * return html tag string
      *
-     * @param array $args      arguments
+     * @param array $args arguments
      * @return \Illuminate\View\View
      */
     public function edit(array $args)
@@ -249,7 +255,7 @@ abstract class AbstractSkin implements ComponentInterface
      * 조회할 때 사용 될 html 코드 반환
      * return html tag string
      *
-     * @param array $args      arguments
+     * @param array $args arguments
      * @return \Illuminate\View\View
      */
     public function show(array $args)
@@ -268,7 +274,7 @@ abstract class AbstractSkin implements ComponentInterface
      * 리스트에서 검색할 때 검색 form 에 사용될 html 코드 반환
      * return html tag string
      *
-     * @param array $args      arguments
+     * @param array $args arguments
      * @return string
      */
     public function search(array $args)
@@ -297,7 +303,7 @@ abstract class AbstractSkin implements ComponentInterface
     public function output($id, array $args)
     {
         $data = [];
-        foreach ($this->getType()->getColumns() as $columnName =>$columns) {
+        foreach ($this->getType()->getColumns() as $columnName => $columns) {
             $dataName = $id . ucfirst(camel_case('_' . $columnName));
             if (isset($args[$dataName])) {
                 $data[$dataName] = $args[$dataName];

@@ -4,6 +4,7 @@
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
+ * @see         https://ko.wikipedia.org/wiki/대한민국의_전화번호_체계
  */
 
 namespace App\FieldTypes;
@@ -13,13 +14,19 @@ use Xpressengine\DynamicField\ColumnEntity;
 use Xpressengine\DynamicField\ColumnDataType;
 use Xpressengine\Config\ConfigEntity;
 use XeRegister;
-use Xpressengine\DynamicField\DynamicFieldHandler;
-use App\FieldSkins\Number\DefaultSkin;
 use View;
 
-class Number extends AbstractType
+class CellPhoneNumber extends AbstractType
 {
-    protected static $id = 'FieldType/xpressengine@Number';
+    /**
+     * @var string
+     */
+    protected static $id = 'FieldType/xpressengine@CellPhoneNumber';
+
+    /**
+     * @var bool
+     */
+    protected static $loaded = false;
 
     /**
      * get field type name
@@ -28,7 +35,7 @@ class Number extends AbstractType
      */
     public function name()
     {
-        return 'Number';
+        return 'Cell phone number';
     }
 
     /**
@@ -38,7 +45,7 @@ class Number extends AbstractType
      */
     public function description()
     {
-        return '숫자를 등록합니다.';
+        return '휴대폰 번호를 등록합니다.';
     }
 
     /**
@@ -49,7 +56,8 @@ class Number extends AbstractType
     public function getColumns()
     {
         return [
-            'num' => (new ColumnEntity('num', ColumnDataType::INTEGER)),
+            'cellPhoneNumber' => (new ColumnEntity('cellPhoneNumber', ColumnDataType::STRING, 30)),
+            'entities' => (new ColumnEntity('entities', ColumnDataType::TEXT)),
         ];
     }
 
@@ -60,7 +68,12 @@ class Number extends AbstractType
      */
     public function getRules()
     {
-        return ['num' => 'numeric'];
+        if (static::$loaded === false) {
+            static::$loaded = true;
+            $this->registerValidator();
+        }
+        // register cellPhoneNumber rule
+        return ['cellPhoneNumber' => 'cell_phone_number'];
     }
 
     /**
@@ -82,7 +95,23 @@ class Number extends AbstractType
      */
     public function getSettingsView(ConfigEntity $config = null)
     {
-        return View::make('dynamicField/number/createType', ['config' => $config,])->render();
+        return View::make('dynamicField/cellPhoneNumber/createType', ['config' => $config,])->render();
+    }
+
+    /**
+     * register phone number validator
+     *
+     * @return void
+     */
+    protected function registerValidator()
+    {
+        app('validator')->extend('cell_phone_number', function ($attribute, $value, $parameters) {
+            $value = str_replace(['-', ' '], '', $value);
+
+            if (is_numeric($value) === false) {
+                return false;
+            }
+        }, xe_trans('mngCellPhoneNumberValidate'));
     }
 }
 

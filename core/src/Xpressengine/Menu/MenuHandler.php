@@ -312,7 +312,6 @@ class MenuHandler
 
         $this->setHierarchy($item);
         $this->setOrder($item);
-        $this->repo->increment($menu);
 
         $this->storeMenuType($item, $menuTypeInput);
 

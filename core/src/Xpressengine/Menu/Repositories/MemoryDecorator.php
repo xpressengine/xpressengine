@@ -27,38 +27,14 @@ use Xpressengine\Menu\Models\MenuItem;
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link      https://xpressengine.io
  */
-class MemoryDecorator implements MenuRepository
+class MemoryDecorator extends AbstractDecorator
 {
-    /**
-     * MenuRepository instance
-     *
-     * @var MenuRepository
-     */
-    protected $repo;
-
     /**
      * Data bag
      *
      * @var array
      */
     protected $bag = [];
-
-    /**
-     * Data bag
-     *
-     * @var array
-     */
-    protected $itemBag = [];
-
-    /**
-     * MemoryDecorator constructor.
-     *
-     * @param MenuRepository $repo MenuRepository instance
-     */
-    public function __construct(MenuRepository $repo)
-    {
-        $this->repo = $repo;
-    }
 
     /**
      * Find a menu
@@ -69,11 +45,16 @@ class MemoryDecorator implements MenuRepository
      */
     public function find($id, $with = [])
     {
+        $key = $this->getWithKey($with);
+
         if (!isset($this->bag[$id])) {
-            $this->bag[$id] = $this->repo->find($id, $with);
+            $this->bag[$id] = [];
+        }
+        if (!isset($this->bag[$id][$key])) {
+            $this->bag[$id][$key] = $this->repo->find($id, $with);
         }
 
-        return $this->bag[$id];
+        return $this->bag[$id][$key];
     }
 
     /**
@@ -85,60 +66,20 @@ class MemoryDecorator implements MenuRepository
      */
     public function all($siteKey, $with = [])
     {
+        $key = $this->getWithKey($with);
+
         $menus = $this->repo->all($siteKey, $with);
         foreach ($menus as $menu) {
-            $this->bag[$menu->getKey()] = $menu;
+            $id = $menu->getKey();
+            if (!isset($this->bag[$id])) {
+                $this->bag[$id] = [];
+            }
+            if (!isset($this->bag[$id][$key])) {
+                $this->bag[$id][$key] = $menu;
+            }
         }
 
         return $menus;
-    }
-
-    /**
-     * Find a menu item
-     *
-     * @param string $id   menu item identifier
-     * @param array  $with relation
-     * @return MenuItem
-     */
-    public function findItem($id, $with = [])
-    {
-        if (!isset($this->itemBag[$id])) {
-            $this->itemBag[$id] = $this->repo->findItem($id, $with);
-        }
-
-        return $this->itemBag[$id];
-    }
-
-    /**
-     * Get menu items by identifier list
-     *
-     * @param array $ids  menu item identifier
-     * @param array $with relation
-     * @return MenuItem[]
-     */
-    public function fetchInItem(array $ids, $with = [])
-    {
-        $items = $this->repo->fetchInItem($ids, $with);
-
-        foreach ($items as $item) {
-            $this->bag[$item->getKey()] = $item;
-        }
-
-        return $items;
-    }
-
-    /**
-     * Insert menu
-     *
-     * @param Menu $menu menu instance
-     * @return Menu
-     */
-    public function insert(Menu $menu)
-    {
-        $menu = $this->repo->insert($menu);
-        $this->bag[$menu->getKey()] = $menu;
-
-        return $menu;
     }
 
     /**
@@ -149,10 +90,9 @@ class MemoryDecorator implements MenuRepository
      */
     public function update(Menu $menu)
     {
-        $menu = $this->repo->update($menu);
-        $this->bag[$menu->getKey()] = $menu;
+        unset($this->bag[$menu->getKey()]);
 
-        return $menu;
+        return $this->repo->update($menu);
     }
 
     /**
@@ -169,21 +109,6 @@ class MemoryDecorator implements MenuRepository
     }
 
     /**
-     * Increment item count
-     *
-     * @param Menu $menu   menu instance
-     * @param int  $amount amount
-     * @return bool
-     */
-    public function increment(Menu $menu, $amount = 1)
-    {
-        $result = $this->repo->increment($menu, $amount);
-        $this->bag[$menu->getKey()] = $menu;
-
-        return $result;
-    }
-
-    /**
      * Insert menu item
      *
      * @param MenuItem $item menu item instance
@@ -191,10 +116,9 @@ class MemoryDecorator implements MenuRepository
      */
     public function insertItem(MenuItem $item)
     {
-        $item = $this->repo->insertItem($item);
-        $this->itemBag[$item->getKey()] = $item;
+        unset($this->bag[$item->menu->getKey()]);
 
-        return $item;
+        return $this->repo->insertItem($item);
     }
 
     /**
@@ -205,10 +129,9 @@ class MemoryDecorator implements MenuRepository
      */
     public function updateItem(MenuItem $item)
     {
-        $item = $this->repo->updateItem($item);
-        $this->itemBag[$item->getKey()] = $item;
+        unset($this->bag[$item->menu->getKey()]);
 
-        return $item;
+        return $this->repo->updateItem($item);
     }
 
     /**
@@ -219,7 +142,7 @@ class MemoryDecorator implements MenuRepository
      */
     public function deleteItem(MenuItem $item)
     {
-        unset($this->itemBag[$item->getKey()]);
+        unset($this->bag[$item->menu->getKey()]);
 
         return $this->repo->deleteItem($item);
     }
@@ -243,5 +166,22 @@ class MemoryDecorator implements MenuRepository
     public function createItemModel(Menu $menu = null)
     {
         return $this->repo->createItemModel($menu);
+    }
+
+    /**
+     * Get sub key by relationship
+     *
+     * @param array $with relationships
+     * @return string
+     */
+    private function getWithKey($with = [])
+    {
+        $with = !is_array($with) ? [$with] : $with;
+
+        if (empty($with)) {
+            return '_alone';
+        }
+
+        return implode('.', $with);
     }
 }

@@ -2015,4 +2015,8 @@ return [
     'pluginId' => [
         'ko' => '플러그인 아이디',
     ],
+    'mngCellPhoneNumberValidate' => [
+        'ko' => '[:attribute] 는 핸드폰 번호 형식이 아닙니다.',
+        'en' => 'The [:attribute] must be a cell phone number.',
+    ],
 ];

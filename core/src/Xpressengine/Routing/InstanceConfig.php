@@ -14,17 +14,18 @@
 
 namespace Xpressengine\Routing;
 
+use Xpressengine\Menu\Models\MenuItem;
 use Xpressengine\Support\Singleton;
 
 /**
  * InstanceConfig
  *
- * @category Menu
- * @package  Xpressengine\Menu
- * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @category  Routing
+ * @package   Xpressengine\Routing
+ * @author    XE Developers <developers@xpressengine.com>
+ * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link        https://xpressengine.io
+ * @link      https://xpressengine.io
  */
 class InstanceConfig extends Singleton
 {
@@ -32,24 +33,31 @@ class InstanceConfig extends Singleton
     /**
      * @var string $theme
      */
-    public $theme;
+    private $theme;
 
     /**
      * @var string $instanceId
      */
-    public $instanceId;
+    private $instanceId;
 
     /**
      * @var string $url
      */
-    public $url;
+    private $url;
 
     /**
      * @var string $module
      */
-    public $module;
+    private $module;
 
     /**
+     * @var MenuItem $menuItem
+     */
+    private $menuItem;
+
+    /**
+     * Get theme component id
+     *
      * @return string
      */
     public function getTheme()
@@ -58,44 +66,9 @@ class InstanceConfig extends Singleton
     }
 
     /**
-     * @return string
-     */
-    public function getInstanceId()
-    {
-        return $this->instanceId;
-    }
-
-    /**
-     * @param string $instanceId instance id
+     * Set theme component id
      *
-     * @return void
-     */
-    public function setInstanceId($instanceId)
-    {
-        $this->instanceId = $instanceId;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUrl()
-    {
-        return $this->url;
-    }
-
-    /**
-     * @param string $url url of instanceRoute
-     *
-     * @return void
-     */
-    public function setUrl($url)
-    {
-        $this->url = $url;
-    }
-
-    /**
      * @param string $theme theme of instanceRoute
-     *
      * @return void
      */
     public function setTheme($theme)
@@ -104,6 +77,50 @@ class InstanceConfig extends Singleton
     }
 
     /**
+     * Get instance id
+     *
+     * @return string
+     */
+    public function getInstanceId()
+    {
+        return $this->instanceId;
+    }
+
+    /**
+     * Set instance id
+     *
+     * @param string $instanceId instance id
+     * @return void
+     */
+    public function setInstanceId($instanceId)
+    {
+        $this->instanceId = $instanceId;
+    }
+
+    /**
+     * Get first url segment
+     *
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * Set first url segment
+     *
+     * @param string $url url of instanceRoute
+     * @return void
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+    }
+
+    /**
+     * Get module id
+     *
      * @return string
      */
     public function getModule()
@@ -112,12 +129,34 @@ class InstanceConfig extends Singleton
     }
 
     /**
-     * @param string $module module id
+     * Set module id
      *
+     * @param string $module module id
      * @return void
      */
     public function setModule($module)
     {
         $this->module = $module;
+    }
+
+    /**
+     * Get menu item instance
+     *
+     * @return MenuItem
+     */
+    public function getMenuItem()
+    {
+        return $this->menuItem;
+    }
+
+    /**
+     * Set menu item instance
+     *
+     * @param MenuItem $item menu item instance
+     * @return void
+     */
+    public function setMenuItem(MenuItem $item)
+    {
+        $this->menuItem = $item;
     }
 }

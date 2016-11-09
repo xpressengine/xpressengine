@@ -95,6 +95,7 @@ class DynamicFieldHandler
      * @param VirtualConnectionInterface $connection      database connection
      * @param ConfigHandler              $configHandler   config handler
      * @param RegisterHandler            $registerHandler register handler
+     * @param ViewFactory                $viewFactory     view factory
      */
     public function __construct(
         VirtualConnectionInterface $connection,
@@ -326,11 +327,6 @@ class DynamicFieldHandler
      */
     public function getRules(ConfigEntity $config)
     {
-        // 필수 입력이 아니면 처리하지 않음
-        if ($config->get('required') === false) {
-            return [];
-        }
-
         $type = $this->getByConfig($config);
 
         $rules = [];

@@ -27,11 +27,13 @@ use App\FieldTypes\Number;
 use App\FieldTypes\Text;
 use App\FieldTypes\Boolean;
 use App\FieldTypes\Address;
+use App\FieldTypes\CellPhoneNumber;
 use App\FieldSkins\Category\DefaultSkin as CategoryDefault;
 use App\FieldSkins\Number\DefaultSkin as NumberDefault;
 use App\FieldSkins\Text\DefaultSkin as TextDefault;
 use App\FieldSkins\Boolean\DefaultSkin as BooleanDefault;
 use App\FieldSkins\Address\DefaultSkin as AddressDefault;
+use App\FieldSkins\CellPhoneNumber\DefaultSkin as CellPhoneNumberDefault;
 
 /**
  * laravel service provider
@@ -67,6 +69,7 @@ class DynamicFieldServiceProvider extends ServiceProvider
         $registerHandler->add(Text::class);
         $registerHandler->add(Boolean::class);
         $registerHandler->add(Address::class);
+        $registerHandler->add(CellPhoneNumber::class);
     }
 
     private function registerFieldDefaultSkin()
@@ -78,6 +81,7 @@ class DynamicFieldServiceProvider extends ServiceProvider
         $registerHandler->add(TextDefault::class);
         $registerHandler->add(BooleanDefault::class);
         $registerHandler->add(AddressDefault::class);
+        $registerHandler->add(CellPhoneNumberDefault::class);
     }
 
     /**

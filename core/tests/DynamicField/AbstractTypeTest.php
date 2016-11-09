@@ -17,6 +17,10 @@ namespace Xpressengine\Tests\DynamicField;
 
 use Mockery as m;
 use PHPUnit_Framework_TestCase;
+use Xpressengine\Config\ConfigEntity;
+use Xpressengine\DynamicField\AbstractSkin;
+use Xpressengine\DynamicField\AbstractType;
+use Xpressengine\DynamicField\ColumnEntity;
 
 /**
  * AbstractTypeTest
@@ -63,48 +67,17 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function testGetProperty()
+    public function testAbstracts()
     {
         $handler = $this->handler;
+        $typeInstance = new TestType($handler);
 
-        $typeInstance = m::mock('Xpressengine\DynamicField\AbstractType', [$handler])
-            ->shouldAllowMockingProtectedMethods()->makePartial();
-
-        $typeInstance->shouldReceive('setColumns');
-        $typeInstance->shouldReceive('setRules');
-        $typeInstance->shouldReceive('setSettingsRules');
-
-        $typeInstance::boot();
-
-        $reflection = new \ReflectionClass(get_class($typeInstance));
-        $property = $reflection->getProperty('name');
-        $property->setAccessible(true);
-        $property->setValue($typeInstance, 'name');
         $this->assertEquals('name', $typeInstance->name());
-
-        $reflection = new \ReflectionClass(get_class($typeInstance));
-        $property = $reflection->getProperty('description');
-        $property->setAccessible(true);
-        $property->setValue($typeInstance, 'description');
         $this->assertEquals('description', $typeInstance->description());
-
-        $reflection = new \ReflectionClass(get_class($typeInstance));
-        $property = $reflection->getProperty('columns');
-        $property->setAccessible(true);
-        $property->setValue($typeInstance, ['columns']);
-        $this->assertEquals(['columns'], $typeInstance->columns());
-
-        $reflection = new \ReflectionClass(get_class($typeInstance));
-        $property = $reflection->getProperty('rules');
-        $property->setAccessible(true);
-        $property->setValue($typeInstance, ['rules']);
+        $this->assertInstanceOf('Xpressengine\DynamicField\ColumnEntity', $typeInstance->getColumns()[0]);
         $this->assertEquals(['rules'], $typeInstance->getRules());
-
-        $reflection = new \ReflectionClass(get_class($typeInstance));
-        $property = $reflection->getProperty('settingsRules');
-        $property->setAccessible(true);
-        $property->setValue($typeInstance, ['settingsRules']);
-        $this->assertEquals(['settingsRules'], $typeInstance->getSettingsRules());
+        $this->assertEquals(['settings_rules'], $typeInstance->getSettingsRules());
+        $this->assertEquals('', $typeInstance->getSettingsView());
     }
 
     /**
@@ -115,13 +88,11 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
     public function testSkin()
     {
         $handler = $this->handler;
-
-        $typeInstance = m::mock('Xpressengine\DynamicField\AbstractType', [$handler])
-            ->shouldAllowMockingProtectedMethods()->makePartial();
-
-        $skinInstance = m::mock('Xpressengine\DynamicField\AbstractSkin');
+        $typeInstance = new TestType($handler);
+        $skinInstance = new TestSkin($handler);
 
         $typeInstance->setSkin($skinInstance);
+
         $this->assertInstanceOf('Xpressengine\DynamicField\AbstractSkin', $typeInstance->getSkin());
     }
 
@@ -133,9 +104,7 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
     public function testConfig()
     {
         $handler = $this->handler;
-
-        $typeInstance = m::mock('Xpressengine\DynamicField\AbstractType', [$handler])
-            ->shouldAllowMockingProtectedMethods()->makePartial();
+        $typeInstance = new TestType($handler);
 
         $config = m::mock('Xpressengine\Config\ConfigEntity');
 
@@ -151,17 +120,7 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
     public function testCreateByCreateTableMethod()
     {
         $handler = $this->handler;
-
-        $typeInstance = m::mock('Xpressengine\DynamicField\AbstractType', [$handler])
-            ->shouldAllowMockingProtectedMethods()->makePartial();
-
-        $addColumn = m::mock('Xpressengine\DynamicField\ColumnEntity');
-        $addColumn->shouldReceive('add');
-
-        $reflection = new \ReflectionClass(get_class($typeInstance));
-        $property = $reflection->getProperty('columns');
-        $property->setAccessible(true);
-        $property->setValue($typeInstance, [$addColumn]);
+        $typeInstance = new TestType($handler);
 
         $config = m::mock('Xpressengine\Config\ConfigEntity');
         $config->shouldReceive('get')->with('id')->andReturn('id');
@@ -216,18 +175,7 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
     public function testCreateByTAlertTableMethod()
     {
         $handler = $this->handler;
-
-        $typeInstance = m::mock('Xpressengine\DynamicField\AbstractType', [$handler])
-            ->shouldAllowMockingProtectedMethods()->makePartial();
-
-        $addColumn = m::mock('Xpressengine\DynamicField\ColumnEntity');
-        $addColumn->shouldReceive('add');
-        $addColumn->shouldReceive('get')->with('name');
-
-        $reflection = new \ReflectionClass(get_class($typeInstance));
-        $property = $reflection->getProperty('columns');
-        $property->setAccessible(true);
-        $property->setValue($typeInstance, [$addColumn]);
+        $typeInstance = new TestType($handler);
 
         $config = m::mock('Xpressengine\Config\ConfigEntity');
         $config->shouldReceive('get')->with('id')->andReturn('id');
@@ -282,10 +230,13 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
      */
     public function testDropByDropTableMethod()
     {
-        $handler = $this->handler;
+//        $handler = $this->handler;
+//
+//        $typeInstance = m::mock('Xpressengine\DynamicField\AbstractType', [$handler])
+//            ->shouldAllowMockingProtectedMethods()->makePartial();
 
-        $typeInstance = m::mock('Xpressengine\DynamicField\AbstractType', [$handler])
-            ->shouldAllowMockingProtectedMethods()->makePartial();
+        $handler = $this->handler;
+        $typeInstance = new TestType($handler);
 
         $config = m::mock('Xpressengine\Config\ConfigEntity');
         $config->shouldReceive('get')->with('id')->andReturn('id');
@@ -319,10 +270,13 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
      */
     public function testDropByAlterTableMethod()
     {
-        $handler = $this->handler;
+//        $handler = $this->handler;
+//
+//        $typeInstance = m::mock('Xpressengine\DynamicField\AbstractType', [$handler])
+//            ->shouldAllowMockingProtectedMethods()->makePartial();
 
-        $typeInstance = m::mock('Xpressengine\DynamicField\AbstractType', [$handler])
-            ->shouldAllowMockingProtectedMethods()->makePartial();
+        $handler = $this->handler;
+        $typeInstance = new TestType($handler);
 
         $config = m::mock('Xpressengine\Config\ConfigEntity');
         $config->shouldReceive('get')->with('id')->andReturn('id');
@@ -377,19 +331,13 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
      */
     public function testInsert()
     {
+//        $handler = $this->handler;
+//
+//        $typeInstance = m::mock('Xpressengine\DynamicField\AbstractType', [$handler])
+//            ->shouldAllowMockingProtectedMethods()->makePartial();
+
         $handler = $this->handler;
-
-        $typeInstance = m::mock('Xpressengine\DynamicField\AbstractType', [$handler])
-            ->shouldAllowMockingProtectedMethods()->makePartial();
-
-        $addColumn = m::mock('Xpressengine\DynamicField\ColumnEntity');
-        $addColumn->shouldReceive('add');
-        $addColumn->shouldReceive('get')->with('name')->andReturn('add1');
-
-        $reflection = new \ReflectionClass(get_class($typeInstance));
-        $property = $reflection->getProperty('columns');
-        $property->setAccessible(true);
-        $property->setValue($typeInstance, [$addColumn]);
+        $typeInstance = new TestType($handler);
 
         $config = m::mock('Xpressengine\Config\ConfigEntity');
         $config->shouldReceive('get')->with('id')->andReturn('instanceId');
@@ -412,7 +360,7 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
 
         $args = [
             'id' => 'id',
-            'instanceIdAdd1' => 'value',
+            'instanceIdId' => 'value',
         ];
         $typeInstance->insert($args);
     }
@@ -424,19 +372,13 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdate()
     {
+//        $handler = $this->handler;
+//
+//        $typeInstance = m::mock('Xpressengine\DynamicField\AbstractType', [$handler])
+//            ->shouldAllowMockingProtectedMethods()->makePartial();
+
         $handler = $this->handler;
-
-        $typeInstance = m::mock('Xpressengine\DynamicField\AbstractType', [$handler])
-            ->shouldAllowMockingProtectedMethods()->makePartial();
-
-        $addColumn = m::mock('Xpressengine\DynamicField\ColumnEntity');
-        $addColumn->shouldReceive('add');
-        $addColumn->shouldReceive('get')->with('name')->andReturn('add1');
-
-        $reflection = new \ReflectionClass(get_class($typeInstance));
-        $property = $reflection->getProperty('columns');
-        $property->setAccessible(true);
-        $property->setValue($typeInstance, [$addColumn]);
+        $typeInstance = new TestType($handler);
 
         $config = m::mock('Xpressengine\Config\ConfigEntity');
         $config->shouldReceive('get')->with('id')->andReturn('instanceId');
@@ -462,7 +404,7 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
 
         $args = [
             'id' => 'id',
-            'instanceIdAdd1' => 'value',
+            'instanceIdId' => 'value',
         ];
         $typeInstance->update($args, [
             ['column' => 'id', 'operator' => '=', 'value' => 'id']
@@ -483,18 +425,7 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
     public function testDelete()
     {
         $handler = $this->handler;
-
-        $typeInstance = m::mock('Xpressengine\DynamicField\AbstractType', [$handler])
-            ->shouldAllowMockingProtectedMethods()->makePartial();
-
-        $addColumn = m::mock('Xpressengine\DynamicField\ColumnEntity');
-        $addColumn->name = 'add1';
-        $addColumn->shouldReceive('add');
-
-        $reflection = new \ReflectionClass(get_class($typeInstance));
-        $property = $reflection->getProperty('columns');
-        $property->setAccessible(true);
-        $property->setValue($typeInstance, [$addColumn]);
+        $typeInstance = new TestType($handler);
 
         $config = m::mock('Xpressengine\Config\ConfigEntity');
         $config->shouldReceive('get')->with('id')->andReturn('instanceId');
@@ -529,9 +460,7 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
     public function testGet()
     {
         $handler = $this->handler;
-
-        $typeInstance = m::mock('Xpressengine\DynamicField\AbstractType', [$handler])
-            ->shouldAllowMockingProtectedMethods()->makePartial();
+        $typeInstance = new TestType($handler);
 
         $config = m::mock('Xpressengine\Config\ConfigEntity');
         $config->shouldReceive('get')->with('id')->andReturn('instanceId');
@@ -573,18 +502,7 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
     public function testWheres()
     {
         $handler = $this->handler;
-
-        $typeInstance = m::mock('Xpressengine\DynamicField\AbstractType', [$handler])
-            ->shouldAllowMockingProtectedMethods()->makePartial();
-
-        $addColumn = m::mock('Xpressengine\DynamicField\ColumnEntity');
-        $addColumn->shouldReceive('add');
-        $addColumn->shouldReceive('get')->with('name')->andReturn('add1');
-
-        $reflection = new \ReflectionClass(get_class($typeInstance));
-        $property = $reflection->getProperty('columns');
-        $property->setAccessible(true);
-        $property->setValue($typeInstance, [$addColumn]);
+        $typeInstance = new TestType($handler);
 
         $config = m::mock('Xpressengine\Config\ConfigEntity');
         $config->shouldReceive('get')->with('id')->andReturn('instanceId');
@@ -598,7 +516,7 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
 
         $params = [
             'id' => 'id',
-            'instanceIdAdd1' => 'value',
+            'instanceIdId' => 'value',
         ];
 
         $this->assertInstanceOf('Xpressengine\Database\DynamicQuery', $typeInstance->wheres($query, $params));
@@ -612,18 +530,7 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
     public function testOrders()
     {
         $handler = $this->handler;
-
-        $typeInstance = m::mock('Xpressengine\DynamicField\AbstractType', [$handler])
-            ->shouldAllowMockingProtectedMethods()->makePartial();
-
-        $addColumn = m::mock('Xpressengine\DynamicField\ColumnEntity');
-        $addColumn->shouldReceive('get')->with('name')->andReturn('add1');
-        $addColumn->shouldReceive('add');
-
-        $reflection = new \ReflectionClass(get_class($typeInstance));
-        $property = $reflection->getProperty('columns');
-        $property->setAccessible(true);
-        $property->setValue($typeInstance, [$addColumn]);
+        $typeInstance = new TestType($handler);
 
         $config = m::mock('Xpressengine\Config\ConfigEntity');
         $config->shouldReceive('get')->with('id')->andReturn('instanceId');
@@ -636,7 +543,7 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
         $query->shouldReceive('orderBy')->andReturnSelf();
 
         $params = [
-            'instanceIdAdd1' => 'desc',
+            'instanceIdId' => 'desc',
         ];
         $this->assertInstanceOf('Xpressengine\Database\DynamicQuery', $typeInstance->orders($query, $params));
     }
@@ -649,18 +556,7 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
     public function testInsertRevision()
     {
         $handler = $this->handler;
-
-        $typeInstance = m::mock('Xpressengine\DynamicField\AbstractType', [$handler])
-            ->shouldAllowMockingProtectedMethods()->makePartial();
-
-        $addColumn = m::mock('Xpressengine\DynamicField\ColumnEntity');
-        $addColumn->shouldReceive('get')->with('name')->andReturn('add1');
-        $addColumn->shouldReceive('add');
-
-        $reflection = new \ReflectionClass(get_class($typeInstance));
-        $property = $reflection->getProperty('columns');
-        $property->setAccessible(true);
-        $property->setValue($typeInstance, [$addColumn]);
+        $typeInstance = new TestType($handler);
 
         $config = m::mock('Xpressengine\Config\ConfigEntity');
         $config->shouldReceive('get')->with('id')->andReturn('instanceId');
@@ -685,7 +581,7 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
             'id' => 'id',
             'revisionId' => 'revisionId',
             'revisionNo' => 'revisionNo',
-            'instanceIdAdd1' => 'value',
+            'instanceIdId' => 'value',
         ];
         $typeInstance->insertRevision($args);
     }
@@ -698,9 +594,7 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
     public function testJoinRevision()
     {
         $handler = $this->handler;
-
-        $typeInstance = m::mock('Xpressengine\DynamicField\AbstractType', [$handler])
-            ->shouldAllowMockingProtectedMethods()->makePartial();
+        $typeInstance = new TestType($handler);
 
         $config = m::mock('Xpressengine\Config\ConfigEntity');
         $config->shouldReceive('get')->with('id')->andReturn('instanceId');
@@ -739,9 +633,113 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
     public function testSettingsURI()
     {
         $handler = $this->handler;
-        $typeInstance = m::mock('Xpressengine\DynamicField\AbstractType', [$handler])
-            ->shouldAllowMockingProtectedMethods()->makePartial();
+        $typeInstance = new TestType($handler);
 
         $this->assertNull($typeInstance::getSettingsURI());
+    }
+}
+
+class TestType extends AbstractType
+{
+
+    /**
+     * get field type name
+     *
+     * @return string
+     */
+    public function name()
+    {
+        return 'name';
+    }
+
+    /**
+     * get field type description
+     *
+     * @return string
+     */
+    public function description()
+    {
+        return 'description';
+    }
+
+    /**
+     * return columns
+     *
+     * @return ColumnEntity[]
+     */
+    public function getColumns()
+    {
+        $column = m::mock('Xpressengine\DynamicField\ColumnEntity');
+        $column->shouldReceive('add');
+        $column->shouldReceive('get')->with('name')->andReturn('id');
+        $column->shouldReceive('drop');
+
+        return [$column];
+    }
+
+    /**
+     * return rules
+     *
+     * @return array
+     */
+    public function getRules()
+    {
+        return ['rules'];
+    }
+
+    /**
+     * 다이나믹필스 생성할 때 타입 설정에 적용될 rule 반환
+     *
+     * @return array
+     */
+    public function getSettingsRules()
+    {
+        return ['settings_rules'];
+    }
+
+    /**
+     * Dynamic Field 설정 페이지에서 각 fieldType 에 필요한 설정 등록 페이지 반환
+     * return html tag string
+     *
+     * @param ConfigEntity $config config entity
+     * @return string
+     */
+    public function getSettingsView(ConfigEntity $config = null)
+    {
+        return '';
+    }
+}
+
+class testSkin extends AbstractSkin
+{
+
+    /**
+     * get name of skin
+     *
+     * @return string
+     */
+    public function name()
+    {
+        return 'skin_name';
+    }
+
+    /**
+     * get view file directory path
+     *
+     * @return string
+     */
+    public function getPath()
+    {
+        return 'skin_path';
+    }
+
+    /**
+     * 다이나믹필스 생성할 때 스킨 설정에 적용될 rule 반환
+     *
+     * @return array
+     */
+    public function getSettingsRules()
+    {
+        return ['skin_setting_rules'];
     }
 }
