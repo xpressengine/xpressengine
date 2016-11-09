@@ -658,3 +658,17 @@ if (!function_exists('compile')) {
         return app('xe.editor')->compile($instanceId, $content, $htmlable);
     }
 }
+
+if (!function_exists('purify')) {
+    /**
+     * @package Xpressengine\Editor
+     *
+     * @param string $content content
+     * @return string
+     */
+    function purify($content)
+    {
+        $purifier = new \Xpressengine\Support\Purifier();
+        return $purifier->purify($content);
+    }
+}
