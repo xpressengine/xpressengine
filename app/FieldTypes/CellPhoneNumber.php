@@ -16,9 +16,17 @@ use Xpressengine\Config\ConfigEntity;
 use XeRegister;
 use View;
 
-class PhoneNumber extends AbstractType
+class CellPhoneNumber extends AbstractType
 {
-    protected static $id = 'FieldType/xpressengine@PhoneNumber';
+    /**
+     * @var string
+     */
+    protected static $id = 'FieldType/xpressengine@CellPhoneNumber';
+
+    /**
+     * @var bool
+     */
+    protected static $loaded = false;
 
     /**
      * get field type name
@@ -27,7 +35,7 @@ class PhoneNumber extends AbstractType
      */
     public function name()
     {
-        return 'Phone Number';
+        return 'Cell phone number';
     }
 
     /**
@@ -37,7 +45,7 @@ class PhoneNumber extends AbstractType
      */
     public function description()
     {
-        return '전화번호를 등록합니다.';
+        return '휴대폰 번호를 등록합니다.';
     }
 
     /**
@@ -48,7 +56,7 @@ class PhoneNumber extends AbstractType
     public function getColumns()
     {
         return [
-            'phoneNumber' => (new ColumnEntity('phoneNumber', ColumnDataType::STRING, 30)),
+            'cellPhoneNumber' => (new ColumnEntity('cellPhoneNumber', ColumnDataType::STRING, 30)),
             'entities' => (new ColumnEntity('entities', ColumnDataType::TEXT)),
         ];
     }
@@ -60,8 +68,12 @@ class PhoneNumber extends AbstractType
      */
     public function getRules()
     {
-        // register phoneNumber rule
-        return ['phoneNumber' => 'phoneNumber'];
+        if (static::$loaded === false) {
+            static::$loaded = true;
+            $this->registerValidator();
+        }
+        // register cellPhoneNumber rule
+        return ['cellPhoneNumber' => 'cell_phone_number'];
     }
 
     /**
@@ -83,7 +95,23 @@ class PhoneNumber extends AbstractType
      */
     public function getSettingsView(ConfigEntity $config = null)
     {
-        return View::make('dynamicField/phoneNumber/createType', ['config' => $config,])->render();
+        return View::make('dynamicField/cellPhoneNumber/createType', ['config' => $config,])->render();
+    }
+
+    /**
+     * register phone number validator
+     *
+     * @return void
+     */
+    protected function registerValidator()
+    {
+        app('validator')->extend('cell_phone_number', function ($attribute, $value, $parameters) {
+            $value = str_replace(['-', ' '], '', $value);
+
+            if (is_numeric($value) === false) {
+                return false;
+            }
+        }, xe_trans('mngCellPhoneNumberValidate'));
     }
 }
 
