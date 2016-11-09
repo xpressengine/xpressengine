@@ -9,6 +9,8 @@ var prodConfig = require('./webpack.prod.config');
 var devConfig = require('./webpack.dev.config');
 
 var pathInfo = {
+    vendor: path.join(__dirname, '/assets/vendor'),
+    node: path.join(__dirname, '/node_modules'),
     core: path.join(__dirname, '/assets/core'),
     permission: path.join(__dirname, '/resources/assets/core/permission'),
     menu: path.join(__dirname, '/resources/assets/core/menu'),
@@ -19,6 +21,7 @@ var target = !!$.util.env.production;
 
 var common = {
     entry: {
+        'assets/vendor/vendor': ['react', 'react-dom'],
         'assets/core/permission/permission': [
             pathInfo.permission + '/Permission.jsx',
             pathInfo.permission + '/PermissionExclude.jsx',
@@ -44,19 +47,14 @@ var common = {
     },
     output: {
         path: path.resolve(__dirname, './'),
-        filename: '[name].bundle.js',
-        libraryTarget: 'umd'
+        filename: '[name].bundle.js'
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoErrorsPlugin(),
         new webpack.optimize.CommonsChunkPlugin({
             name: 'react',
-            filename: 'assets/vendor/react.bundle.js',
-            minChunks: Infinity,
-            chunks: [
-                'react', 'react-dom'
-            ]
+            filename: 'assets/vendor/vendor.bundle.js'
         })
     ],
     module: {
@@ -73,11 +71,14 @@ var common = {
         ]
     },
     resolve: {
-        extensions: ['', '.js', '.jsx'],
-        alias: {}
+        alias: {
+            vendor: pathInfo.vendor + '/vendor.bundle',
+            react: pathInfo.node + '/react',
+            'react-dom': pathInfo.node + '/react-dom'
+        },
+        extensions: ['', '.js', '.jsx']
     }
 };
-
 
 var config;
 

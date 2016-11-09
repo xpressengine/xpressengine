@@ -36,7 +36,8 @@ class Permission extends AbstractUIObject
     {
         XeFrontend::js('/assets/vendor/lodash/lodash.min.js')->load();
         XeFrontend::js([
-            '/assets/core/permission/permission.bundle.js',
+            '/assets/vendor/vendor.bundle.js',
+            '/assets/core/permission/permission.bundle.js'
         ])->load();
 
         XeFrontend::css('/assets/core/permission/permission.css')->load();
