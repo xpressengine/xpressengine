@@ -69,7 +69,7 @@ class DynamicFieldServiceProvider extends ServiceProvider
         $registerHandler->add(Text::class);
         $registerHandler->add(Boolean::class);
         $registerHandler->add(Address::class);
-        $registerHandler->add(PhoneNumber::class);
+        //$registerHandler->add(PhoneNumber::class);
     }
 
     private function registerFieldDefaultSkin()
@@ -81,7 +81,7 @@ class DynamicFieldServiceProvider extends ServiceProvider
         $registerHandler->add(TextDefault::class);
         $registerHandler->add(BooleanDefault::class);
         $registerHandler->add(AddressDefault::class);
-        $registerHandler->add(PhoneNumberDefault::class);
+        //$registerHandler->add(PhoneNumberDefault::class);
     }
 
     /**
