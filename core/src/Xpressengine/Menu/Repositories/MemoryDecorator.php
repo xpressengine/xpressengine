@@ -109,17 +109,16 @@ class MemoryDecorator extends AbstractDecorator
     }
 
     /**
-     * Increment item count
+     * Insert menu item
      *
-     * @param Menu $menu   menu instance
-     * @param int  $amount amount
-     * @return bool
+     * @param MenuItem $item menu item instance
+     * @return MenuItem
      */
-    public function increment(Menu $menu, $amount = 1)
+    public function insertItem(MenuItem $item)
     {
-        unset($this->bag[$menu->getKey()]);
+        unset($this->bag[$item->menu->getKey()]);
 
-        return $this->repo->increment($menu, $amount);
+        return $this->repo->insertItem($item);
     }
 
     /**

@@ -128,18 +128,6 @@ abstract class AbstractDecorator implements MenuRepository
     }
 
     /**
-     * Increment item count
-     *
-     * @param Menu $menu   menu instance
-     * @param int  $amount amount
-     * @return bool
-     */
-    public function increment(Menu $menu, $amount = 1)
-    {
-        return $this->repo->increment($menu, $amount);
-    }
-
-    /**
      * Insert menu item
      *
      * @param MenuItem $item menu item instance

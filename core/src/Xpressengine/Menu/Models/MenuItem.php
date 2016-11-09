@@ -41,6 +41,7 @@ use Xpressengine\Routing\InstanceRoute;
  * @property bool   $activated   활성/비활성 유무
  * @property string $type        해당 메뉴의 type
  * @property int    $ordering    정렬을 위한 순서
+ * @property Menu   $menu        객체가 속한 메뉴
  */
 class MenuItem extends CategoryItem
 {
