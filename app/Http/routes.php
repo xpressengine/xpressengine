@@ -186,25 +186,6 @@ Route::group(
                     }
                 );
 
-                // addition info action at edit
-                Route::group(
-                    ['prefix' => 'additions/{field}'],
-                    function () {
-                        Route::get(
-                            '/',
-                            ['as' => 'user.settings.additions.show', 'uses' => 'User\UserController@showAdditionField']
-                        );
-                        Route::get(
-                            '/edit',
-                            ['as' => 'user.settings.additions.edit', 'uses' => 'User\UserController@editAdditionField']
-                        );
-                        Route::put(
-                            '/',
-                            ['as' => 'user.settings.additions.update', 'uses' => 'User\UserController@updateAdditionField']
-                        );
-                    }
-                );
-
                 Route::group(
                     ['prefix' => 'pending_mail'],
                     function () {
@@ -221,6 +202,25 @@ Route::group(
                                 'as' => 'user.settings.pending_mail.resend',
                                 'uses' => 'User\UserController@resendPendingMail'
                             ]
+                        );
+                    }
+                );
+
+                // addition info action at edit
+                Route::group(
+                    ['prefix' => 'additions/{field}'],
+                    function () {
+                        Route::get(
+                            '/',
+                            ['as' => 'user.settings.additions.show', 'uses' => 'User\UserController@showAdditionField']
+                        );
+                        Route::get(
+                            '/edit',
+                            ['as' => 'user.settings.additions.edit', 'uses' => 'User\UserController@editAdditionField']
+                        );
+                        Route::put(
+                            '/',
+                            ['as' => 'user.settings.additions.update', 'uses' => 'User\UserController@updateAdditionField']
                         );
                     }
                 );

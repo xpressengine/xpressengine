@@ -41,9 +41,6 @@ $(function ($) {
       success : function (data) {
         $modal.xeModal('hide');
         XE.toast(data.type, data.message);
-      },
-      error : function(data) {
-        XE.toast(data.type, data.message);
       }
     });
     return false;
