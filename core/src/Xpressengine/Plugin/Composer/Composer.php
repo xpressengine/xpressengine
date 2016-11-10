@@ -51,6 +51,7 @@ class Composer
         'xpressengine-plugin/page' => '0.9.2',
         'xpressengine-plugin/social_login' => '0.9.5',
         'xpressengine-plugin/emoticon' => '0.9.0',
+        'xpressengine-plugin/widget_page' => '0.9.0'
     ];
 
     /**
