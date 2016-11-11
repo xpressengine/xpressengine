@@ -78,11 +78,13 @@ class Purifier
      * set purifier config
      *
      * @param HTMLPurifier_Config $config config
-     * @return HTMLPurifier_Config
+     * @return $this
      */
     public function set(HTMLPurifier_Config $config)
     {
-        return $this->config = $config;
+        $this->config = $config;
+
+        return $this;
     }
 
     /**

@@ -675,11 +675,16 @@ if (!function_exists('purify')) {
      * @package Xpressengine\Editor
      *
      * @param string $content content
-     * @return string
+     * @return \Xpressengine\Support\Purifier|string
      */
-    function purify($content)
+    function purify($content = null)
     {
         $purifier = new \Xpressengine\Support\Purifier();
+        if (!$content) {
+            return $purifier;
+        }
+
         return $purifier->purify($content);
     }
+
 }
