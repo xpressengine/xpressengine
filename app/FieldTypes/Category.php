@@ -32,49 +32,56 @@ class Category extends AbstractType
      */
     protected static $id = 'FieldType/xpressengine@Category';
 
-    // 네임스페이스 이름..
-    protected $name = 'Category';
-    protected $description = '1차 카테고리를 생성합니다.';
-
     /**
-     * boot
+     * get field type name
      *
-     * @return void
+     * @return string
      */
-    public static function boot()
+    public function name()
     {
-        app('xe.pluginRegister')->add(DefaultSkin::class);
-        DefaultSkin::boot();
+        return 'Category';
     }
 
     /**
-     * 스키마 구성을 위한 database column 설정
+     * get field type description
      *
-     * @return void
+     * @return string
      */
-    public function setColumns()
+    public function description()
     {
-        $this->columns['itemId'] = (new ColumnEntity('itemId', ColumnDataType::STRING))->setParams([255]);
+        return '1차 카테고리를 생성합니다.';
     }
 
     /**
-     * 사용자 페이지 입력할 때 적용될 rule 정의
+     * return columns
      *
-     * @return void
+     * @return ColumnEntity[]
      */
-    public function setRules()
+    public function getColumns()
     {
-        $this->rules = ['itemId' => 'required'];
+        return [
+            'itemId' => (new ColumnEntity('itemId', ColumnDataType::STRING))->setParams([255]),
+        ];
     }
 
     /**
-     * 다이나믹필스 생성할 때 타입 설정에 적용될 rule 정의
+     * return rules
      *
-     * @return void
+     * @return array
      */
-    public function setSettingsRules()
+    public function getRules()
     {
-        $this->settingsRules = ['categoryId' => 'required'];
+        return ['itemId' => 'required'];
+    }
+
+    /**
+     * 다이나믹필스 생성할 때 타입 설정에 적용될 rule 반환
+     *
+     * @return array
+     */
+    public function getSettingsRules()
+    {
+        return ['categoryId' => 'required'];
     }
 
     /**

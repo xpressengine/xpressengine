@@ -394,11 +394,8 @@ if (!function_exists('current_menu')) {
      */
     function current_menu()
     {
-        $id = getCurrentInstanceId();
-        if ($id !== null) {
-            return app('xe.menu')->getItem($id);
-        }
-        return null;
+        $instanceConfig = Xpressengine\Routing\InstanceConfig::instance();
+        return $instanceConfig->getMenuItem();
     }
 }
 
@@ -557,58 +554,6 @@ if (function_exists('widget') === false) {
     }
 }
 
-if (function_exists('setupWidget') === false) {
-    /**
-     * setupWidget
-     *
-     * @package Xpressengine\Widget
-     *
-     * @param string $id widget id
-     *
-     * @return mixed
-     */
-    function setupWidget($id)
-    {
-        return app('xe.widget')->setup($id);
-    }
-}
-
-if (!function_exists('shortWidgetId')) {
-    /**
-     * Generate a short Menu Type Id
-     *
-     * @package Xpressengine\Widget
-     *
-     * @param  string $widgetId widget id
-     *
-     * @return string
-     */
-    function shortWidgetId($widgetId)
-    {
-        return str_ireplace('widget/', '', $widgetId);
-    }
-}
-
-if (!function_exists('fullWidgetId')) {
-    /**
-     * Get a full Menu Type Id
-     *
-     * @package Xpressengine\Widget
-     *
-     * @param  string $widgetId widget id
-     *
-     * @return string
-     */
-    function fullWidgetId($widgetId)
-    {
-        if (stripos($widgetId, 'widget/') !== false) {
-            return $widgetId;
-        } else {
-            return 'widget/'.$widgetId;
-        }
-    }
-}
-
 if (function_exists('df') === false) {
     /**
      * @package Xpressengine\DynamicField
@@ -708,5 +653,19 @@ if (!function_exists('compile')) {
     function compile($instanceId, $content, $htmlable = false)
     {
         return app('xe.editor')->compile($instanceId, $content, $htmlable);
+    }
+}
+
+if (!function_exists('purify')) {
+    /**
+     * @package Xpressengine\Editor
+     *
+     * @param string $content content
+     * @return string
+     */
+    function purify($content)
+    {
+        $purifier = new \Xpressengine\Support\Purifier();
+        return $purifier->purify($content);
     }
 }

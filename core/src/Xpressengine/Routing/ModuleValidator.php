@@ -221,6 +221,7 @@ class ModuleValidator implements ValidatorInterface
         $instanceConfig->setInstanceId($instanceId);
         $instanceConfig->setModule($module);
         $instanceConfig->setUrl($url);
+        $instanceConfig->setMenuItem($item);
 
         $themeHandler = $this->themeHandler;
         $themeHandler->selectTheme($theme);

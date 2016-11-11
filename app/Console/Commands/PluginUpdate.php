@@ -127,7 +127,7 @@ class PluginUpdate extends PluginCommand
         $this->warn('Composer update command is running.. It may take up to a few minutes.');
         $this->line(" composer update --prefer-lowest --with-dependencies $vendorName/*");
         try {
-            $this->runComposer(base_path(), "update --prefer-lowest --with-dependencies $vendorName/*");
+            $result = $this->runComposer(base_path(), "update --prefer-lowest --with-dependencies $vendorName/*");
         } catch (\Exception $e) {
             ;
         }

@@ -151,7 +151,7 @@ class PresenterTest extends PHPUnit_Framework_TestCase
         });
 
         $reflection = new \ReflectionClass(get_class($presenter));
-        $property = $reflection->getProperty('renderers');
+        $property = $reflection->getProperty('presentables');
         $property->setAccessible(true);
         $result = $property->getValue($presenter);
 
@@ -336,12 +336,12 @@ class PresenterTest extends PHPUnit_Framework_TestCase
         );
 
         $presenter->share('key', 'value');
-        $result = $presenter->getData();
+        $result = $presenter->getShared();
 
         $this->assertEquals('value', $result['key']);
 
         $presenter->share(['key1' => 'value1']);
-        $result = $presenter->getData();
+        $result = $presenter->getShared();
         $this->assertEquals('value1', $result['key1']);
     }
 
@@ -430,38 +430,6 @@ class PresenterTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * test get not approved format
-     *
-     * @expectedException \Xpressengine\Presenter\Exceptions\NotApprovedFormatException
-     * @return void
-     */
-    public function testGetNotApprovedFormat()
-    {
-        $request = $this->request;
-        $view = $this->view;
-        $theme = $this->theme;
-        $skin = $this->skin;
-        $settings = $this->settings;
-        $instanceConfig = $this->instanceConfig;
-
-        $presenter = new Presenter(
-            $view, $request, $theme, $skin, $settings, $instanceConfig
-        );
-
-        $htmlRenderer = m::mock('HtmlRenderer', Presentable::class);
-        $presenter->register('html', function ($presenter) use ($htmlRenderer) {
-            return new $htmlRenderer($presenter);
-        });
-        $jsonRenderer = m::mock('JsonRenderer', Presentable::class);
-        $presenter->register('json', function ($presenter) use ($jsonRenderer) {
-            return new $jsonRenderer($presenter);
-        });
-
-        $request->shouldReceive('format')->once()->andReturn('json');
-        $this->invokeMethod($presenter, 'get');
-    }
-
-    /**
      * test get not found format
      *
      * @expectedException \Xpressengine\Presenter\Exceptions\NotFoundFormatException
@@ -488,10 +456,10 @@ class PresenterTest extends PHPUnit_Framework_TestCase
     /**
      * test get invalid renderer
      *
-     * @expectedException \Xpressengine\Presenter\Exceptions\InvalidRendererException
+     * @expectedException \Xpressengine\Presenter\Exceptions\InvalidPresenterException
      * @return void
      */
-    public function testGetInvalidRenderer()
+    public function testGetInvalidPresenter()
     {
         $request = $this->request;
         $view = $this->view;
@@ -504,9 +472,9 @@ class PresenterTest extends PHPUnit_Framework_TestCase
             $view, $request, $theme, $skin, $settings, $instanceConfig
         );
 
-        $htmlRenderer = m::mock('HtmlRenderer');
-        $presenter->register('html', function ($presenter) use ($htmlRenderer) {
-            return new $htmlRenderer($presenter);
+        $htmlPresenter = m::mock('HtmlPresenter');
+        $presenter->register('html', function ($presenter) use ($htmlPresenter) {
+            return new $htmlPresenter($presenter);
         });
 
         $request->shouldReceive('format')->once()->andReturn('html');

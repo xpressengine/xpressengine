@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="panel-group">
-        <form id="fSetting" class="form" method="post" action="{{ route('settings.member.setting.join') }}">
+        <form id="fSetting" class="form" method="post" action="{{ route('settings.user.setting.join') }}">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <div class="panel">
                 <div class="panel-heading">

@@ -26,15 +26,23 @@ use Xpressengine\Database\Eloquent\DynamicModel;
  */
 class WidgetBox extends DynamicModel
 {
+    /**
+     * @var string table name
+     */
     protected $table = 'widgetbox';
 
+    /**
+     * @var bool
+     */
     public $incrementing = false;
 
+    /**
+     * @var array
+     */
     protected $fillable = [
         'id',
         'title',
         'content',
         'options'
     ];
-
 }

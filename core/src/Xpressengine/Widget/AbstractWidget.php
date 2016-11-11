@@ -44,15 +44,24 @@ abstract class AbstractWidget implements ComponentInterface, Renderable
 
     protected $data;
 
+    /**
+     * AbstractWidget constructor.
+     *
+     * @param array|null $config widget config data
+     */
     public function __construct($config = null)
     {
         $this->config = $config;
         $this->init();
     }
 
+    /**
+     * 위젯을 생성할 때 필요한 초기화 작업을 여기에 작성하세요.
+     *
+     * @return void
+     */
     protected function init()
     {
-
     }
 
     /**
@@ -76,9 +85,9 @@ abstract class AbstractWidget implements ComponentInterface, Renderable
     }
 
     /**
-     * Get the evaluated contents of the object.
+     * 지정된 스킨을 통해 widget을 출력한다.
      *
-     * @param array $data
+     * @param array $data 스킨에 전달할 데이터
      *
      * @return string
      */
@@ -94,35 +103,41 @@ abstract class AbstractWidget implements ComponentInterface, Renderable
     }
 
     /**
-     * getCodeCreationForm
+     * 위젯 설정 페이지에 출력할 폼을 출력한다.
      *
-     * @param array $args
+     * @param array $args 설정값
      *
-     * @return mixed
+     * @return string
      */
     public function renderSetting(array $args = [])
     {
         return '';
     }
 
+    /**
+     * 사용자가 위젯 설정 페이지에 입력한 설정값을 저장하기 전에 전처리 한다.
+     *
+     * @param array $inputs 사용자가 입력한 설정값
+     *
+     * @return array
+     */
     public function resolveSetting(array $inputs = [])
     {
         return $inputs;
     }
 
     /**
-     * set or get config info
+     * 현재 위젯에 지정된 설정값을 조회하거나, 저장한다.
      *
-     * @param array|null $config
+     * @param array|null $config 저장할 설정값, null일 경우 이 메소드는 저장된 설정값을 반환한다.
      *
      * @return array|void
      */
     public function setting(array $config = null)
     {
-        if($config !== null) {
+        if ($config !== null) {
             $this->config = $config;
         }
         return $this->config;
     }
-
 }

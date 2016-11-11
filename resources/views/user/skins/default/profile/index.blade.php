@@ -7,7 +7,7 @@
             <!--기본프로필 -->
             <div class="profile xe-profile __xe_profileBox">
                 @if($grant['modify'])
-                    <form class="form" name="fMemberEdit" method="post" action="{{ route('member.profile.update', [$user->getId()]) }}" enctype="multipart/form-data">
+                    <form class="form" name="fMemberEdit" method="post" action="{{ route('user.profile.update', [$user->getId()]) }}" enctype="multipart/form-data">
                         {!! csrf_field() !!}
                         @endif
                         <dl>

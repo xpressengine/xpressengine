@@ -1,5 +1,5 @@
 
-    <form class="form" name="fMemberCreate" method="post" action="{{ route('settings.member.store') }}" enctype="multipart/form-data">
+    <form class="form" name="fMemberCreate" method="post" action="{{ route('settings.user.store') }}" enctype="multipart/form-data">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
         <div class="row">

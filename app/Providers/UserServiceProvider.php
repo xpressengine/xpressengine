@@ -469,17 +469,13 @@ class UserServiceProvider extends ServiceProvider
     {
         $permissions = [
             'user.list' => [
-                'title' => '회원정보보기',
-                'tab' => '회원관리'
+                'title' => '회원정보 보기',
+                'tab' => '회원'
             ],
             'user.edit' => [
-                'title' => '회원정보수정',
-                'tab' => '회원관리'
-            ],
-            'user.setting' => [
-                'title' => '회원설정',
-                'tab' => '회원관리'
-            ],
+                'title' => '회원정보 수정',
+                'tab' => '회원'
+            ]
         ];
         $register = $this->app->make('xe.register');
         foreach ($permissions as $id => $permission) {

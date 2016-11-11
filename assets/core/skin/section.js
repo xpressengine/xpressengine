@@ -23,11 +23,10 @@ $(function ($) {
     });
   })
 
-  $('.skin-setting-list .__xe_skin-setting-btn').click(function(){
-    var url = $(this).data('url');
-    modalPage(url)
-  })
-
+  // $('.skin-setting-list .__xe_skin-setting-btn').click(function(){
+  //   var url = $(this).data('url');
+  //   modalPage(url)
+  // })
 
   $(document).on('submit', 'form.__xe_skin_form', function(){
     var $form = $(this);
@@ -41,9 +40,6 @@ $(function ($) {
       dataType: 'json',
       success : function (data) {
         $modal.xeModal('hide');
-        XE.toast(data.type, data.message);
-      },
-      error : function(data) {
         XE.toast(data.type, data.message);
       }
     });

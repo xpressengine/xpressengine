@@ -2,7 +2,7 @@
     <div class="col-sm-12">
         <div class="panel-group">
             <div class="panel">
-            <form id="fSetting" method="post" action="{{ route('settings.member.setting') }}">
+            <form id="fSetting" method="post" action="{{ route('settings.user.setting') }}">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <div class="panel-heading">
                     <div class="pull-left">

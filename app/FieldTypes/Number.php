@@ -21,49 +21,56 @@ class Number extends AbstractType
 {
     protected static $id = 'FieldType/xpressengine@Number';
 
-    // 네임스페이스 이름..
-    protected $name = 'Number';
-    protected $description = '숫자를 등록합니다.';
-
     /**
-     * boot
+     * get field type name
      *
-     * @return void
+     * @return string
      */
-    public static function boot()
+    public function name()
     {
-        app('xe.pluginRegister')->add(DefaultSkin::class);
-        DefaultSkin::boot();
+        return 'Number';
     }
 
     /**
-     * 스키마 구성을 위한 database column 설정
+     * get field type description
      *
-     * @return void
+     * @return string
      */
-    public function setColumns()
+    public function description()
     {
-        $this->columns['num'] = (new ColumnEntity('num', ColumnDataType::INTEGER));
+        return '숫자를 등록합니다.';
     }
 
     /**
-     * 사용자 페이지 입력할 때 적용될 rule 정의
+     * return columns
      *
-     * @return void
+     * @return ColumnEntity[]
      */
-    public function setRules()
+    public function getColumns()
     {
-        $this->rules = ['num' => 'numeric'];
+        return [
+            'num' => (new ColumnEntity('num', ColumnDataType::INTEGER)),
+        ];
     }
 
     /**
-     * 다이나믹필스 생성할 때 타입 설정에 적용될 rule 정의
+     * return rules
      *
-     * @return void
+     * @return array
      */
-    public function setSettingsRules()
+    public function getRules()
     {
-        // TODO: Implement setSettingsRules() method.
+        return ['num' => 'numeric'];
+    }
+
+    /**
+     * 다이나믹필스 생성할 때 타입 설정에 적용될 rule 반환
+     *
+     * @return array
+     */
+    public function getSettingsRules()
+    {
+        return [];
     }
 
     /**
@@ -76,50 +83,6 @@ class Number extends AbstractType
     public function getSettingsView(ConfigEntity $config = null)
     {
         return View::make('dynamicField/number/createType', ['config' => $config,])->render();
-    }
-
-    /**
-     * @param array $args
-     */
-    public function insert(array $args)
-    {
-        $config = $this->config;
-        $key = $config->get('dynamicFieldName').'Num';
-        if (isset($args[$key]) && $args[$key] !== '') {
-            // 숫자만 입력 가능 하요~
-            if (is_numeric($args[$key]) === false) {
-                throw new \Exception;
-            }
-        }
-
-        parent::insert($args);
-    }
-
-    /**
-     * @param ConfigEntity $config
-     * @param DynamicFieldHandler $handler
-     * @param array $args
-     * @param array $wheres
-     * @throws \Exception
-     */
-    public function update(array $args, array $wheres) {
-        $config = $this->config;
-
-        $key = $config->get('dynamicFieldName').'Num';
-        if (isset($args[$key]) && $args[$key] !== '') {
-            // 숫자만 입력 가능 하요~
-            if (is_numeric($args[$key]) === false) {
-                throw new \Exception;
-            }
-        }
-
-        parent::update($args, $wheres);
-
-    }
-
-    public static function getSettingsURI()
-    {
-
     }
 }
 

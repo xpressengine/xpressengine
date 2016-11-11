@@ -1,0 +1,1 @@
+<input name="{{$key['cellPhoneNumber']}}" class="form-control __xe_df __xe_df_cellPhoneNumber __xe_df_cellPhoneNumber_{{$config->get('id')}}" value="{{$data['cellPhoneNumber']}}" placeholder="{{xe_trans($config->get('label'))}}"/>

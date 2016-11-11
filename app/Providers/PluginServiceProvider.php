@@ -162,7 +162,24 @@ class PluginServiceProvider extends ServiceProvider
 
         // register skin for Plugin settings page
         $this->app->make('xe.pluginRegister')->add(PluginSettingsSkin::class);
+
+        $this->registerSettingsPermissions();
     }
+
+    private function registerSettingsPermissions()
+    {
+        $permissions = [
+            'plugin' => [
+                'title' => '플러그인 관리',
+                'tab' => '플러그인'
+            ]
+        ];
+        $register = $this->app->make('xe.register');
+        foreach ($permissions as $id => $permission) {
+            $register->push('settings/permission', $id, $permission);
+        }
+    }
+
 
     /**
      * Get the services provided by the provider.

@@ -29,7 +29,6 @@ use Xpressengine\Plugin\PluginRegister;
  */
 class RegisterHandler
 {
-
     const FIELD_TYPE = 'FieldType';
     const FIELD_SKIN = 'FieldSkin';
 
@@ -70,9 +69,6 @@ class RegisterHandler
     public function getType(Handler $handler, $id)
     {
         $instance = $this->get($handler, $id);
-        $instance->setColumns();
-        $instance->setRules();
-        $instance->setSettingsRules();
         return $instance;
     }
 
@@ -86,7 +82,6 @@ class RegisterHandler
     public function getSkin(Handler $handler, $id)
     {
         $instance = $this->get($handler, $id);
-        $instance->setSettingsRules();
         return $instance;
     }
 

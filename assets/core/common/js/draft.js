@@ -460,7 +460,7 @@
         });
         $(args.btnSave).unbind('click.draft').bind('click.draft', function (e) {
             e.preventDefault();
-
+            
             draft.draftSet();
         });
 

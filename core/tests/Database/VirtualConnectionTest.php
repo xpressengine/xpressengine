@@ -71,7 +71,7 @@ class VirtualConnectionTest extends PHPUnit_Framework_TestCase
 
         $mode = $connector->getFetchMode();
 
-        $this->assertEquals(PDO::FETCH_ASSOC, $mode);
+        $this->assertEquals(PDO::FETCH_OBJ, $mode);
 
         $connector->setFetchMode(PDO::FETCH_NUM);
 

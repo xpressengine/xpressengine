@@ -28,7 +28,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">{{ $config->get('logo_title', 'Xpressengine') }}</a>
+            <a class="navbar-brand" href="{{ url() }}">{{ $config->get('logo_title', 'Xpressengine') }}</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
 
@@ -39,8 +39,8 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ auth()->user()->getDisplayName() }} <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="{{ route('member.profile', ['member'=> auth()->id()]) }}">Profile</a></li>
-                            <li><a href="{{ route('member.settings') }}">My Settings</a></li>
+                            <li><a href="{{ route('user.profile', ['user'=> auth()->id()]) }}">Profile</a></li>
+                            <li><a href="{{ route('user.settings') }}">My Settings</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="{{ route('logout') }}">logout</a></li>
                         </ul>

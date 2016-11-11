@@ -56,9 +56,16 @@ class UserGroup extends DynamicModel implements GroupInterface
         return $this->belongsToMany(User::class, 'user_group_user', 'groupId', 'userId');
     }
 
+    /**
+     * set relationship for user count
+     *
+     * @return mixed
+     */
     public function userCountRelation()
     {
-        return $this->belongsToMany(User::class, 'user_group_user', 'groupId', 'userId')->selectRaw('groupId, count(*) as count')->groupBy('groupId');
+        return $this->belongsToMany(User::class, 'user_group_user', 'groupId', 'userId')->selectRaw(
+            'groupId, count(*) as count'
+        )->groupBy('groupId');
     }
 
     /**
@@ -87,16 +94,26 @@ class UserGroup extends DynamicModel implements GroupInterface
         return $this;
     }
 
+    /**
+     * get user count
+     *
+     * @return int
+     *
+     * @deprecated use getUserCountAttribute instead
+     */
     public function getCountAttribute()
     {
         $userCount = $this->userCountRelation->first();
-        return $userCount?$userCount->count:0;
+        return $userCount ? $userCount->count : 0;
     }
 
+    /**
+     * get user count
+     *
+     * @return int
+     */
     public function getUserCountAttribute()
     {
         return $this->count;
     }
-
-
 }

@@ -30,7 +30,7 @@ class ComposerFileWriter
     const STATUS_RUNNING   = 'running';
     const STATUS_SUCCESSED = 'successed';
     const STATUS_FAILED    = 'failed';
-    const STATUS_EXPIRED    = 'expired';
+    const STATUS_EXPIRED   = 'expired';
 
     /**
      * @var string
@@ -160,6 +160,8 @@ class ComposerFileWriter
 
     /**
      * setFixMode
+     *
+     * @return void
      */
     public function setFixMode()
     {
@@ -174,6 +176,8 @@ class ComposerFileWriter
 
     /**
      * setUpdateMode
+     *
+     * @return void
      */
     public function setUpdateMode()
     {
@@ -226,7 +230,7 @@ class ComposerFileWriter
     public function install($name, $version, $expiredTime)
     {
         array_set($this->data, "xpressengine-plugin.operation.install.$name", $version);
-        if($expiredTime) {
+        if ($expiredTime) {
             array_set($this->data, "xpressengine-plugin.operation.expiration_time", $expiredTime);
         } else {
             array_set($this->data, "xpressengine-plugin.operation.expiration_time", null);
@@ -257,8 +261,9 @@ class ComposerFileWriter
     /**
      * register plugin to uninstall list
      *
-     * @param string $name package name of plugin
+     * @param string $name        package name of plugin
      * @param string $expiredTime deadline*
+     *
      * @return $this
      */
     public function uninstall($name, $expiredTime)

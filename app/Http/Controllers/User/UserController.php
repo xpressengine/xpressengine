@@ -6,7 +6,7 @@
  * @link        https://xpressengine.io
  */
 
-namespace App\Http\Controllers\Member;
+namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Auth;
@@ -160,7 +160,6 @@ class UserController extends Controller
             ['type' => 'success', 'message' => 'success', 'displayName' => $displayName]
         );
     }
-
 
     /**
      * validate DisplayName
@@ -599,8 +598,6 @@ class UserController extends Controller
                 ],
             ]
         );
-
-
     }
 
     public function editAdditionField($field)
@@ -639,5 +636,4 @@ class UserController extends Controller
             ['type' => 'success', 'message' => 'success', 'field' => $field, 'showUrl' => $showUrl]
         );
     }
-
 }

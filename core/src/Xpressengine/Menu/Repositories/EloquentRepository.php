@@ -172,18 +172,6 @@ class EloquentRepository implements MenuRepository
     }
 
     /**
-     * Increment item count
-     *
-     * @param Menu $menu   menu instance
-     * @param int  $amount amount
-     * @return bool
-     */
-    public function increment(Menu $menu, $amount = 1)
-    {
-        return $menu->increment($menu->getCountName(), $amount) > 0;
-    }
-
-    /**
      * Insert menu item
      *
      * @param MenuItem $item menu item instance
@@ -196,6 +184,8 @@ class EloquentRepository implements MenuRepository
             try {
                 $item->{$item->getKeyName()} = $this->generateNewId();
                 $item->save();
+
+                $item->menu->increment($item->menu->getCountName());
 
                 break;
             } catch (QueryException $e) {
@@ -231,6 +221,8 @@ class EloquentRepository implements MenuRepository
      */
     public function deleteItem(MenuItem $item)
     {
+        $item->menu->decrement($item->menu->getCountName());
+
         return $item->delete();
     }
 

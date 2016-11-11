@@ -89,15 +89,6 @@ interface MenuRepository
     public function delete(Menu $menu);
 
     /**
-     * Increment item count
-     *
-     * @param Menu $menu   menu instance
-     * @param int  $amount amount
-     * @return bool
-     */
-    public function increment(Menu $menu, $amount = 1);
-
-    /**
      * Insert menu item
      *
      * @param MenuItem $item menu item instance

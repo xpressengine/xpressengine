@@ -61,7 +61,7 @@ abstract class AbstractType implements ComponentInterface
      * database table's column
      * ColumnEntity 의 array
      *
-     * @var array
+     * @var ColumnEntity[]
      */
     protected $columns = [];
 
@@ -90,25 +90,39 @@ abstract class AbstractType implements ComponentInterface
     protected $skin;
 
     /**
-     * 스키마 구성을 위한 database column 설정
+     * get field type name
      *
-     * @return void
+     * @return string
      */
-    abstract public function setColumns();
+    abstract public function name();
 
     /**
-     * 사용자 페이지 입력할 때 적용될 rule 정의
+     * get field type description
      *
-     * @return void
+     * @return string
      */
-    abstract public function setRules();
+    abstract public function description();
 
     /**
-     * 다이나믹필스 생성할 때 타입 설정에 적용될 rule 정의
+     * return columns
      *
-     * @return void
+     * @return ColumnEntity[]
      */
-    abstract public function setSettingsRules();
+    abstract public function getColumns();
+
+    /**
+     * return rules
+     *
+     * @return array
+     */
+    abstract public function getRules();
+
+    /**
+     * 다이나믹필스 생성할 때 타입 설정에 적용될 rule 반환
+     *
+     * @return array
+     */
+    abstract public function getSettingsRules();
 
     /**
      * Dynamic Field 설정 페이지에서 각 fieldType 에 필요한 설정 등록 페이지 반환
@@ -137,56 +151,11 @@ abstract class AbstractType implements ComponentInterface
     public function __construct(DynamicFieldHandler $handler)
     {
         $this->handler = $handler;
-    }
-
-    /**
-     * get field type name
-     *
-     * @return string
-     */
-    public function name()
-    {
-        return $this->name;
-    }
-
-    /**
-     * get field type description
-     *
-     * @return string
-     */
-    public function description()
-    {
-        return $this->description;
-    }
-
-    /**
-     * return columns
-     *
-     * @return array
-     */
-    public function columns()
-    {
-        return $this->columns;
-    }
-
-    /**
-     * return rules
-     *
-     * @return array
-     */
-    public function getRules()
-    {
-        return $this->rules;
-    }
-
-    /**
-     * get setting rules
-     *
-     * @return array
-     */
-    public function getSettingsRules()
-    {
-        return $this->settingsRules;
+        $this->name = $this->name();
+        $this->description = $this->description();
+        $this->columns = $this->getColumns();
+        $this->rules = $this->getRules();
+        $this->settingsRules = $this->getSettingsRules();
     }
 
     /**
@@ -265,7 +234,7 @@ abstract class AbstractType implements ComponentInterface
                 /**
                  * @var ColumnEntity $addColumn
                  */
-                foreach ($self->columns() as $addColumn) {
+                foreach ($self->getColumns() as $addColumn) {
                     $addColumn->add($table, $self->config->get('id') . '_');
                 }
                 $table->primary(array($column->name), 'primaryKey');
@@ -296,8 +265,8 @@ abstract class AbstractType implements ComponentInterface
                     /**
                      * @var ColumnEntity $addColumn
                      */
-                    foreach ($self->columns() as $addColumn) {
-                        $addColumn->add($table);
+                    foreach ($self->getColumns() as $addColumn) {
+                        $addColumn->add($table, $self->config->get('id') . '_');
                     }
 
                     $table->primary(array('revisionId'), 'primaryKey');
@@ -325,7 +294,7 @@ abstract class AbstractType implements ComponentInterface
             throw new Exceptions\NotExistRevisionTableException;
         }
 
-        foreach ($self->columns() as $column) {
+        foreach ($self->getColumns() as $column) {
             if ($schema->hasColumn($tableName, $column->name) === true) {
                 throw new Exceptions\AlreadyExistColumnException;
             }
@@ -336,7 +305,7 @@ abstract class AbstractType implements ComponentInterface
                 /**
                  * @var ColumnEntity $column
                  */
-                foreach ($self->columns() as $column) {
+                foreach ($self->getColumns() as $column) {
                     $column->add($table, $self->config->get('id') . '_');
                 }
             }
@@ -362,7 +331,7 @@ abstract class AbstractType implements ComponentInterface
                 throw new Exceptions\NotExistRevisionTableException;
             }
 
-            foreach ($self->columns() as $column) {
+            foreach ($self->getColumns() as $column) {
                 if ($schema->hasColumn($tableName, $column->name) === true) {
                     throw new Exceptions\AlreadyExistColumnException;
                 }
@@ -373,8 +342,8 @@ abstract class AbstractType implements ComponentInterface
                     /**
                      * @var ColumnEntity $column
                      */
-                    foreach ($self->columns() as $column) {
-                        $column->add($table);
+                    foreach ($self->getColumns() as $column) {
+                        $column->add($table, $self->config->get('id') . '_');
                     }
                 }
             );
@@ -439,7 +408,7 @@ abstract class AbstractType implements ComponentInterface
             throw new Exceptions\NotExistRevisionTableException;
         }
 
-        foreach ($this->columns() as $column) {
+        foreach ($this->getColumns() as $column) {
             if ($schema->hasColumn($tableName, $column->name) === true) {
                 throw new Exceptions\AlreadyExistColumnException;
             }
@@ -450,7 +419,7 @@ abstract class AbstractType implements ComponentInterface
                 /**
                  * @var ColumnEntity $column
                  */
-                foreach ($self->columns() as $column) {
+                foreach ($self->getColumns() as $column) {
                     $column->drop($table, $self->config->get('id') . '_');
                 }
             }
@@ -462,7 +431,7 @@ abstract class AbstractType implements ComponentInterface
                 throw new Exceptions\NotExistRevisionTableException;
             }
 
-            foreach ($self->columns() as $column) {
+            foreach ($self->getColumns() as $column) {
                 if ($schema->hasColumn($tableName, $column->name) === true) {
                     throw new Exceptions\AlreadyExistColumnException;
                 }
@@ -473,7 +442,7 @@ abstract class AbstractType implements ComponentInterface
                     /**
                      * @var ColumnEntity $column
                      */
-                    foreach ($self->columns() as $column) {
+                    foreach ($self->getColumns() as $column) {
                         $column->drop($table);
                     }
                 }
@@ -497,7 +466,7 @@ abstract class AbstractType implements ComponentInterface
 
         $insertParam = [];
         $insertParam['dynamicFieldTargetId'] = $args[$config->get('joinColumnName')];
-        foreach ($this->columns() as $column) {
+        foreach ($this->getColumns() as $column) {
                 $key = camel_case($config->get('id') . '_' . $column->name);
 
             if ($config->get('required') && (isset($args[$key]) === false || $args[$key] === '')) {
@@ -560,7 +529,7 @@ abstract class AbstractType implements ComponentInterface
 
         $updateParam = [];
 
-        foreach ($this->columns() as $column) {
+        foreach ($this->getColumns() as $column) {
             $key = camel_case($config->get('id') . '_' . $column->name);
             if ($config->get('required') && (isset($args[$key]) === true && $args[$key] === '')) {
                 throw new Exceptions\RequiredParameterException(['name' => $key]);
@@ -677,7 +646,7 @@ abstract class AbstractType implements ComponentInterface
     public function wheres(DynamicQuery $query, array $params)
     {
         $config = $this->config;
-        foreach ($this->columns() as $column) {
+        foreach ($this->getColumns() as $column) {
             $key = camel_case($config->get('id') . '_' . $column->name);
 
             if (isset($params[$key]) && $params[$key] != '') {
@@ -698,7 +667,7 @@ abstract class AbstractType implements ComponentInterface
     public function orders(DynamicQuery $query, array $params)
     {
         $config = $this->config;
-        foreach ($this->columns() as $column) {
+        foreach ($this->getColumns() as $column) {
             $key = camel_case($config->get('id') . '_' . $column->name);
 
             if (isset($params[$key])) {
@@ -725,7 +694,7 @@ abstract class AbstractType implements ComponentInterface
         $insertParam['dynamicFieldTargetId'] = $args['id'];
         $insertParam['revisionId'] = $args['revisionId'];
         $insertParam['revisionNo'] = $args['revisionNo'];
-        foreach ($this->columns() as $column) {
+        foreach ($this->getColumns() as $column) {
             $key = camel_case($this->config->get('id') . '_' . $column->name);
 
             if ($this->config->get('required') && (isset($args[$key]) === false || $args[$key] === '')) {

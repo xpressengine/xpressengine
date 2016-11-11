@@ -19,6 +19,15 @@
             <div class="panel">
                 {{-- heading --}}
                 <div class="panel-heading">
+                    <div class="pull-right">
+                        @if(!$operation || $operation['status'] !== 'running')
+                            <div class="btn-group">
+                                <button type="button" data-toggle="modal" data-target="#installPlugin" class="btn btn-primary">{{ xe_trans('xe::installNewPlugin') }}</button>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+                <div class="panel-heading">
                     <div class="pull-left">
                         <div class="btn-group">
                             <a href="{{ route('settings.plugins', Input::except('status')) }}" class="btn btn-default @if(Input::get('status') === null) btn-primary @endif">{{ xe_trans('xe::all') }}</a>
@@ -28,13 +37,6 @@
                         <div class="btn-group">
                             <button class="btn btn-default __xe_btn-show-update">{{ xe_trans('xe::updateList') }}</button>
                         </div>
-
-                        @if(!$operation || $operation['status'] !== 'running')
-                        <div class="btn-group">
-                            <button type="button" data-toggle="modal" data-target="#installPlugin" class="btn btn-primary">새로 설치</button>
-                        </div>
-                        @endif
-
                     </div>
 
                     {{-- filter --}}
@@ -112,7 +114,7 @@
                             @elseif($plugin->hasUpdate())
                                 <div class="alert alert-danger" role="alert">
                                     <i class="xi-info-o"></i>{{ xe_trans('xe::hasNewUpdate') }}
-                                    <a href="{{ config('xe.plugin.store.detail_url').'/'.$plugin->getId() }}" class="alert-link" target="_blank">Version {{ $plugin->getLatestVersion() }} {{ xe_trans('xe::details') }}</a> {{ xe_trans('xe::or') }} <a href="#" class="alert-link">지금 업데이트 다운로드하기</a>
+                                    <a href="{{ config('xe.plugin.store.detail_url').'/'.$plugin->getId() }}" class="alert-link" target="_blank">{{ xe_trans('xe::version') }} {{ $plugin->getLatestVersion() }} {{ xe_trans('xe::details') }}</a> {{ xe_trans('xe::or') }} <a href="{{ route('settings.plugins.show', [$plugin->getId()]) }}" class="alert-link">{{ xe_trans('xe::update_plugin') }}</a>
                                 </div>
                             @endif
 
@@ -141,14 +143,14 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">플러그인 설치</h4>
+                    <h4 class="modal-title">{{ xe_trans('xe::installNewPlugin') }}</h4>
                 </div>
                 <div class="modal-body">
-                    {{ uio('formText', ['name'=>'pluginId', 'label'=>'플러그인아이디', 'placeholder' => '새로 설치할 플러그인의 아이디를 입력하세요']) }}
+                    {{ uio('formText', ['name'=>'pluginId', 'label'=>xe_trans('xe::pluginId'), 'placeholder' => xe_trans('xe::inputNewPluginId')]) }}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">{{xe_trans('xe::cancel')}}</button>
-                    <button type="submit" class="btn btn-primary">설치</button>
+                    <button type="submit" class="btn btn-primary">{{ xe_trans('xe::install') }}</button>
                 </div>
             </div><!-- /.modal-content -->
         </form>

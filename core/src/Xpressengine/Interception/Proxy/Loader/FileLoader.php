@@ -102,6 +102,8 @@ class FileLoader implements Loader
         if (filemtime($targetPath) < filemtime($proxyPath)) {
             return true;
         }
+
+        return false;
     }
 
     /**
@@ -132,7 +134,7 @@ class FileLoader implements Loader
      */
     public function clear()
     {
-        if(!file_exists($this->path)) {
+        if (!file_exists($this->path)) {
             return;
         }
 

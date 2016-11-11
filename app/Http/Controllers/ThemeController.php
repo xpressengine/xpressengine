@@ -18,11 +18,10 @@ use Xpressengine\Theme\ThemeHandler;
 class ThemeController extends Controller
 {
 
-    public function edit(Request $request)
+    public function edit(Request $request, ThemeHandler $themeHandler)
     {
         $themeId = $request->get('theme');
         $fileName = $request->get('file');
-        $type = $request->get('type', 'views');
 
         // TODO: validate themeid, fileName
         if($themeId === null) {
@@ -47,30 +46,32 @@ class ThemeController extends Controller
         }
 
         if ($fileName === null) {
-            $fileName = key($files[$type]);
+            $fileName = key($files);
         }
 
-        if (!is_writable($files[$type][$fileName])) {
-            \View::share('_alert', [
-                'type' => 'danger',
-                'message' => '파일을 수정할 권한이 없습니다. 웹서버의 계정이 편집할 파일의 쓰기(w)권한을 가지고 있어야 합니다.'
-            ]);
-        }
+        $filePath = realpath($files[$fileName]);
 
-        $fileContent = file_get_contents($files[$type][$fileName]);
         $editFile = [
             'fileName' => $fileName,
-            'path' => $files[$type][$fileName],
-            'content' => $fileContent
+            'path' => $filePath,
         ];
+
+        if($themeHandler->hasCache($filePath)) {
+            $editFile['hasCache'] = true;
+            $fileContent = file_get_contents($themeHandler->getCachePath($filePath));
+        } else {
+            $editFile['hasCache'] = false;
+            $fileContent = file_get_contents($filePath);
+        }
+
+        $editFile['content'] = $fileContent;
 
         return \XePresenter::make(
             'theme.edit',
             [
                 'theme' => $theme,
                 'files' => $files,
-                'editFile' => $editFile,
-                'type' => $type
+                'editFile' => $editFile
             ]
         );
     }
@@ -79,17 +80,21 @@ class ThemeController extends Controller
     {
         $themeId = $request->get('theme');
         $fileName = $request->get('file');
-        $type = $request->get('type', 'template');
 
         $content = $request->get('content');
 
         $theme = $themeHandler->getTheme($themeId);
         $files = $theme->getEditFiles();
 
-        $filePath = $files[$type][$fileName];
+        $filePath = realpath($files[$fileName]);
+
+        $cachePath = $themeHandler->getCachePath($filePath);
+
+        $cacheDir = dirname($cachePath);
+        \File::makeDirectory($cacheDir, 0755, true, true);
 
         try {
-            file_put_contents($filePath, $content);
+            file_put_contents($cachePath, $content);
         } catch (\Exception $e) {
             throw new FileAccessDeniedHttpException();
         }

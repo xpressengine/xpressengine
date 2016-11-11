@@ -173,13 +173,7 @@ class InstanceManager
     protected function dropDivisionTable(ConfigEntity $config)
     {
         if ($config->get('division') === true) {
-            $this->connection->getSchemaBuilder()->drop(
-                sprintf(
-                    "%s%s",
-                    $this->connection->getTablePrefix(),
-                    $this->getDivisionTableName($config)
-                )
-            );
+            $this->connection->getSchemaBuilder()->drop($this->getDivisionTableName($config));
         }
     }
 }

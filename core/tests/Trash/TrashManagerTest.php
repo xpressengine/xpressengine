@@ -10,8 +10,8 @@ namespace Xpressengine\Tests\Trash;
 
 use Mockery as M;
 use PHPUnit_Framework_TestCase;
+use Xpressengine\Trash\RecycleBinInterface;
 use Xpressengine\Trash\TrashManager;
-use Xpressengine\Trash\WasteInterface;
 
 /**
  * Class TrashManagerTest
@@ -45,22 +45,26 @@ class TrashManagerTest extends PHPUnit_Framework_TestCase
         $container->shouldReceive('push');
         $container->shouldReceive('set');
         $container->shouldReceive('get')->andReturn([
-            Waste::class
+            Bin::class
         ]);
 
         $conn = m::mock('Xpressengine\Database\VirtualConnectionInterface');
 
         $trash = new TrashManager($container, $conn);
 
-        $trash->register(Waste::class);
+        $trash->register(Bin::class);
 
         $this->assertEquals(1, count($trash->gets()));
 
-        $this->assertEquals('test', $trash->names()[0]['name']);
+        $bin = $trash->get('test');
+        $this->assertEquals('test', $bin::name());
+
+        $bins = $trash->bins();
+        $this->assertEquals(Bin::class, $bins['test']);
 
         $trash->clean();
 
-        $trash->clean([Waste::class]);
+        $trash->clean([Bin::class]);
     }
 
 }
@@ -73,7 +77,7 @@ class TrashManagerTest extends PHPUnit_Framework_TestCase
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class Waste implements WasteInterface
+class Bin implements RecycleBinInterface
 {
 
     /**

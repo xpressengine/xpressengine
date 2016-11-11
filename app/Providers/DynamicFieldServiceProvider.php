@@ -27,6 +27,13 @@ use App\FieldTypes\Number;
 use App\FieldTypes\Text;
 use App\FieldTypes\Boolean;
 use App\FieldTypes\Address;
+use App\FieldTypes\CellPhoneNumber;
+use App\FieldSkins\Category\DefaultSkin as CategoryDefault;
+use App\FieldSkins\Number\DefaultSkin as NumberDefault;
+use App\FieldSkins\Text\DefaultSkin as TextDefault;
+use App\FieldSkins\Boolean\DefaultSkin as BooleanDefault;
+use App\FieldSkins\Address\DefaultSkin as AddressDefault;
+use App\FieldSkins\CellPhoneNumber\DefaultSkin as CellPhoneNumberDefault;
 
 /**
  * laravel service provider
@@ -45,6 +52,7 @@ class DynamicFieldServiceProvider extends ServiceProvider
     {
         app('xe.db.proxy')->register(new DatabaseProxy(App::make('xe.dynamicField')));
         $this->registerFieldType();
+        $this->registerFieldDefaultSkin();
     }
 
     /**
@@ -61,6 +69,19 @@ class DynamicFieldServiceProvider extends ServiceProvider
         $registerHandler->add(Text::class);
         $registerHandler->add(Boolean::class);
         $registerHandler->add(Address::class);
+        $registerHandler->add(CellPhoneNumber::class);
+    }
+
+    private function registerFieldDefaultSkin()
+    {
+        $registerHandler = app('xe.dynamicField')->getRegisterHandler();
+
+        $registerHandler->add(CategoryDefault::class);
+        $registerHandler->add(NumberDefault::class);
+        $registerHandler->add(TextDefault::class);
+        $registerHandler->add(BooleanDefault::class);
+        $registerHandler->add(AddressDefault::class);
+        $registerHandler->add(CellPhoneNumberDefault::class);
     }
 
     /**
@@ -78,7 +99,8 @@ class DynamicFieldServiceProvider extends ServiceProvider
             return new $proxyClass(
                 $connection,
                 new ConfigHandler($connection, $app['xe.config']),
-                new RegisterHandler($this->app['xe.pluginRegister'])
+                new RegisterHandler($this->app['xe.pluginRegister']),
+                $app['view']
             );
         });
 
