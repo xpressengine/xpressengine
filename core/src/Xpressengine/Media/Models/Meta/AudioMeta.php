@@ -41,6 +41,13 @@ class AudioMeta extends Meta
     protected $guarded = ['id', 'fileId'];
 
     /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = ['audio' => 'array'];
+
+    /**
      * The foreign key name for the model.
      *
      * @var string

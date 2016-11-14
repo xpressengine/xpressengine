@@ -624,6 +624,20 @@ if (function_exists('plugins_path') === false) {
     }
 }
 
+if (! function_exists('app_storage_path')) {
+    /**
+     * Get the path to the storage folder.
+     *
+     * @param  string  $path
+     * @return string
+     */
+    function app_storage_path($path = '')
+    {
+        $path = trim($path, DIRECTORY_SEPARATOR);
+        return storage_path('app').($path ? DIRECTORY_SEPARATOR.$path : $path);
+    }
+}
+
 if (!function_exists('editor')) {
     /**
      * @package Xpressengine\Editor
@@ -661,11 +675,16 @@ if (!function_exists('purify')) {
      * @package Xpressengine\Editor
      *
      * @param string $content content
-     * @return string
+     * @return \Xpressengine\Support\Purifier|string
      */
-    function purify($content)
+    function purify($content = null)
     {
         $purifier = new \Xpressengine\Support\Purifier();
+        if (!$content) {
+            return $purifier;
+        }
+
         return $purifier->purify($content);
     }
+
 }

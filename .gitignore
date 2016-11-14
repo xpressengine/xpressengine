@@ -1,4 +1,5 @@
 composer.lock
+yarn.lock
 composer.user.json
 /vendor
 !/assets/vendor

@@ -25,12 +25,6 @@ System.config({
   meta: {
     "xecore:/*": {
       "format": "cjs"
-    },
-    "xecore:/permission/*": {
-      "format": "amd"
-    },
-    "xecore:/menu/menu.js": {
-      "format": "global"
     }
   },
 
