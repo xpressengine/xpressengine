@@ -1170,6 +1170,14 @@ return [
         'ko' => '기본 설정',
         'en' => 'Default settings'
     ],
+    'themeSettings' => [
+        'ko' => '기본 테마 설정',
+        'en' => 'Default Theme settings'
+    ],
+    'themeEdit' => [
+        'ko' => '테마 편집',
+        'en' => 'Edit Theme'
+    ],
     'privateInfoAndOptionSettings' => [
         'ko' => '개인정보 및 옵션 관리',
         'en' => 'Private Informations & Options'
@@ -2018,5 +2026,11 @@ return [
     'mngCellPhoneNumberValidate' => [
         'ko' => '[:attribute] 는 핸드폰 번호 형식이 아닙니다.',
         'en' => 'The [:attribute] must be a cell phone number.',
+    ],
+    'edited' => [
+        'ko' => '편집됨',
+    ],
+    'resetToOrigin' => [
+        'ko' => '원본으로 되돌리기',
     ],
 ];

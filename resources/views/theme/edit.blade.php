@@ -20,9 +20,17 @@
             </ul>
         </div>
         <div class="col-md-10">
-            <p>
-                {{ $editFile['fileName'] }}
-            </p>
+            <div class="clearfix" style="margin-bottom: 10px;">
+                <h5 class="pull-left">
+                    {{ $editFile['fileName'] }}
+                    @if($editFile['hasCache'])
+                        ({{ xe_trans('xe::edited') }})
+                    @endif
+                </h5>
+                @if($editFile['hasCache'])
+                    <button type="button" class="pull-right btn btn-sm btn-primary" data-toggle="modal" data-target="#resetModal">{{ xe_trans('xe::resetToOrigin') }}</button>
+                @endif
+            </div>
             <form role="form" action="{{ route('settings.theme.edit') }}" method="post" id="_theme">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="theme" value="{{ $theme->getId() }}">
@@ -50,12 +58,37 @@
                     {{ uio('widget', ['id'=>'widgetGen', 'show_code'=>false]) }}
                 </div>
                 <div class="xe-modal-footer">
-                    <button type="button" class="xe-btn xe-btn-secondary" data-dismiss="modal">취소</button>
-                    <button type="button" class="xe-btn xe-btn-primary __xe_insert_widget" data-dismiss="modal">추가</button>
+                    <button type="button" class="xe-btn xe-btn-secondary" data-dismiss="modal">{{ xe_trans('xe::cancel') }}</button>
+                    <button type="button" class="xe-btn xe-btn-primary __xe_insert_widget" data-dismiss="modal">{{ xe_trans('xe::insert') }}</button>
                 </div>
             </div>
         </div>
     </div>
+
+        @if($editFile['hasCache'])
+        <div class="modal fade" id="resetModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form role="form" action="{{ route('settings.theme.edit', ['reset'=>'Y']) }}" method="post" id="_theme">
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="theme" value="{{ $theme->getId() }}">
+                        <input type="hidden" name="file" value="{{ $editFile['fileName'] }}">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">파일의 내용을 원본으로 되돌립니다</h4>
+                        </div>
+                        <div class="modal-body">
+                            편집했던 내용을 모두 잃습니다. 원본으로 되돌리시겠습니까?
+                        </div>
+                        <div class="xe-modal-footer">
+                            <button type="button" class="xe-btn xe-btn-secondary" data-dismiss="modal">{{ xe_trans('xe::cancel') }}</button>
+                            <button type="submit" class="xe-btn xe-btn-primary">{{ xe_trans('xe::confirm') }}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        @endif
 
     @endif
 

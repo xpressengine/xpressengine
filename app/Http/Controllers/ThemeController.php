@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers;
 
+use File;
 use Xpressengine\Http\Request;
 use Xpressengine\Support\Exceptions\FileAccessDeniedHttpException;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
@@ -80,6 +81,7 @@ class ThemeController extends Controller
     {
         $themeId = $request->get('theme');
         $fileName = $request->get('file');
+        $reset = $request->get('reset');
 
         $content = $request->get('content');
 
@@ -91,10 +93,14 @@ class ThemeController extends Controller
         $cachePath = $themeHandler->getCachePath($filePath);
 
         $cacheDir = dirname($cachePath);
-        \File::makeDirectory($cacheDir, 0755, true, true);
+        File::makeDirectory($cacheDir, 0755, true, true);
 
         try {
-            file_put_contents($cachePath, $content);
+            if($reset === 'Y') {
+                File::delete($cachePath);
+            } else {
+                file_put_contents($cachePath, $content);
+            }
         } catch (\Exception $e) {
             throw new FileAccessDeniedHttpException();
         }

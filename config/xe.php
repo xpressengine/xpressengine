@@ -166,11 +166,23 @@ return [
                 'description' => '',
                 'ordering' => 100
             ],
+            'setting.theme' => [
+                'title' => 'xe::themeSettings',
+                'display' => true,
+                'description' => '',
+                'ordering' => 200
+            ],
+            'setting.theme.edit' => [
+                'title' => 'xe::themeEdit',
+                'display' => false,
+                'description' => '',
+                'ordering' => 200
+            ],
             'setting.permission' => [
                 'title' => 'xe::settingsPermissionSettings',
                 'display' => true,
                 'description' => '',
-                'ordering' => 200
+                'ordering' => 300
             ],
             'setting.seo' => [
                 'title' => 'xe::SEOSettings',
