@@ -574,7 +574,7 @@ class PluginHandler
         // expired 조사
         $deadline = $writer->get('xpressengine-plugin.operation.expiration_time');
         $expired = false;
-        if ($deadline !== null) {
+        if ($deadline !== null && $deadline !== 0) {
             $deadline = Carbon::parse($deadline);
             if ($deadline->isPast()) {
                 $expired = true;
