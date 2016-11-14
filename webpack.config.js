@@ -12,6 +12,7 @@ var pathInfo = {
     vendor: path.join(__dirname, '/assets/vendor'),
     node: path.join(__dirname, '/node_modules'),
     core: path.join(__dirname, '/assets/core'),
+    common: path.join(__dirname, '/resources/assets/core/common'),
     permission: path.join(__dirname, '/resources/assets/core/permission'),
     menu: path.join(__dirname, '/resources/assets/core/menu'),
     lang: path.join(__dirname, '/resources/assets/core/lang')
@@ -43,7 +44,8 @@ var common = {
             pathInfo.menu + '/MenuSearchSuggestion.js',
             pathInfo.menu + '/MenuTree.js'
         ],
-        'assets/core/lang/langEditorBox': pathInfo.lang + '/LangEditorBox.js'
+        'assets/core/lang/langEditorBox': pathInfo.lang + '/LangEditorBox.js',
+        'assets/core/common/js/toggleMenu': pathInfo.common + '/js/toggleMenu'
     },
     output: {
         path: path.resolve(__dirname, './'),
