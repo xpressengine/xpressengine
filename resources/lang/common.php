@@ -2033,4 +2033,12 @@ return [
     'resetToOrigin' => [
         'ko' => '원본으로 되돌리기',
     ],
+    'accessPermission' => [
+        'ko' => '접근 권한',
+        'en' => 'Access permission',
+    ],
+    'visiblePermission' => [
+        'ko' => '노출 권한',
+        'en' => 'Visible permission',
+    ],
 ];
