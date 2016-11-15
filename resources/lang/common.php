@@ -1043,7 +1043,7 @@ return [
         'en' => 'Edit Menu Basic Permission'
     ],
     'selectItemType' => [
-        'ko' => '아이템 권한 선택',
+        'ko' => '아이템 타입 선택',
         'en' => 'Select New Item Type'
     ],
     'selectItemTypeDescription' => [
