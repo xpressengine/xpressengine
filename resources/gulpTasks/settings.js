@@ -54,6 +54,21 @@ module.exports = (() => {
                 .pipe(gulp.dest('assets/core'));
 
         },
+        'assets:chunk': () => {
+            return gulp.src([
+                'assets/core/common/js/utils.js',
+                'assets/core/common/js/dynamicLoadManager.js',
+                'assets/jspm_packages/system.js',
+                'assets/systemjs.config.js',
+                'assets/vendor/jquery/jquery.min.js',
+                'assets/core/common/js/xe.bundle.js'
+            ])
+            .pipe($.plumber())
+            .pipe($.concat('bundle.js'))
+            .pipe($.uglify())
+            .pipe(gulp.dest('assets'));
+            
+        },
         /**
          * xe bundling
          * */

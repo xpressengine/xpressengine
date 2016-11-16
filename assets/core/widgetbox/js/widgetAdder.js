@@ -54,7 +54,7 @@
                     self.$btnPlaceWidget.removeData('index');
 
                     $('.widget').eq(index).find('.widgetCode').val(widgetCode)
-
+                    
                 } else {
                     $selected.find(".widgetarea").append(widgetView).find('.widgetCode:last').val(widgetCode);
                 }

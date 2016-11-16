@@ -158,15 +158,15 @@
                             });
 
                             content = $content;
-                            
+
                         }else {
                             content = [
                                 '<div class="xe-row widgetarea-row">',
-                                    '<div class="xe-col-md-12">',
-                                        '<div class="widgetarea" data-height="140" style="height:140px">',
-                                            '<span class="order">0</span>',
-                                        '</div>',
-                                    '</div>',
+                                '<div class="xe-col-md-12">',
+                                '<div class="widgetarea" data-height="140" style="height:140px">',
+                                '<span class="order">0</span>',
+                                '</div>',
+                                '</div>',
                                 '</div>'
                             ].join("\n");
                         }
@@ -281,7 +281,7 @@
                 }
 
                 $(this).closest(".xe-row").remove();
-                
+
             },
             /**
              * @description
