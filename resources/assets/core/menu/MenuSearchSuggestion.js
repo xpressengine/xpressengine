@@ -3,7 +3,7 @@ import React from 'react';
 const MIN_QUERY_LENGTH = 2;
 
 export default React.createClass({
-  displayName: "MenuSearchSuggestion",
+  displayName: 'MenuSearchSuggestion',
 
   propTypes: {
     query: React.PropTypes.string.isRequired,
@@ -11,18 +11,19 @@ export default React.createClass({
     handleHover: React.PropTypes.func.isRequired,
     searchingCnt: React.PropTypes.number,
     suggestions: React.PropTypes.array,
-    selectedIndex: React.PropTypes.number
+    selectedIndex: React.PropTypes.number,
   },
   markIt: function (item, query) {
 
-    var escapedRegex = query.trim().replace(/[-\\^$*+?.()|[\]{}]/g, "\\$&");
-    var r = RegExp(escapedRegex, "gi");
+    var escapedRegex = query.trim().replace(/[-\\^$*+?.()|[\]{}]/g, '\\$&');
+    var r = RegExp(escapedRegex, 'gi');
     var itemName = item.node.title;
     if (!this.isMenuEntity(item.node)) {
       itemName = XE.Lang.trans(item.node.title);
     }
+
     return {
-      __html: itemName.replace(r, "<em>$&</em>")
+      __html: itemName.replace(r, '<em>$&</em>'),
     };
   },
 
@@ -41,8 +42,8 @@ export default React.createClass({
               onClick={props.handleClick.bind(null, i)}
               onMouseOver={props.handleHover.bind(null, i)}
               className={cx({
-                        on : i == props.selectedIndex
-                    })}
+                        on: i == props.selectedIndex,
+                      })}
           >
             <a href="#"
                dangerouslySetInnerHTML={this.markIt(item, props.query)}
@@ -64,5 +65,5 @@ export default React.createClass({
           </ul>
         </div>
     );
-  }
+  },
 });

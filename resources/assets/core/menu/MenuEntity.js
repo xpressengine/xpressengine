@@ -6,7 +6,7 @@ export default React.createClass({
   propTypes: {
     index: React.PropTypes.object,
     onCollapse: React.PropTypes.func,
-    getBaseUrl: React.PropTypes.func
+    getBaseUrl: React.PropTypes.func,
   },
 
   handleCollapse: function (e) {
@@ -23,7 +23,7 @@ export default React.createClass({
 
     // trans
     var trans = {
-      addItem: XE.Lang.trans('xe::addItem')
+      addItem: XE.Lang.trans('xe::addItem'),
     };
 
     var nodeId = 'xe_tree_node_' + node.id;
@@ -37,5 +37,5 @@ export default React.createClass({
           </div>
         </div>
     );
-  }
+  },
 });

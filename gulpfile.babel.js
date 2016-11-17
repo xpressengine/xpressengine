@@ -2,7 +2,6 @@ import gulp from 'gulp';
 import plugins from 'gulp-load-plugins';
 import runSequence from 'run-sequence';
 import events from 'events';
-
 import taskSettings from './resources/gulpTasks/settings';
 import taskCss from './resources/gulpTasks/css';
 import taskImage from './resources/gulpTasks/image';
@@ -14,18 +13,20 @@ const $ = plugins();
 
 gulp.task('default', (callback) => {
   runSequence(
-      'clean:assets',
-      'copy:assets',
-      'jspm:admin',
-      'jspm:xe',
-      'assets:sass',
-      'assets:image',
-      'webpack:react',
-      'assets:chunk',
-      callback);
+    'jscs',
+    'clean:assets',
+    'copy:assets',
+    'jspm:admin',
+    'jspm:xe',
+    'assets:sass',
+    'assets:image',
+    'webpack:react',
+    'assets:chunk',
+    callback);
 });
 
 // s: settings
+gulp.task('jscs', taskSettings['jscs']);
 gulp.task('clean:assets', taskSettings['clean:assets']);
 gulp.task('copy:assets', taskSettings['copy:assets']);
 
@@ -45,8 +46,8 @@ gulp.task('assets:image', taskImage['assets:image']);
 
 gulp.task('webpack:react', taskWebpack['webpack:react']);
 
-gulp.task("sass:watch", () => {
+gulp.task('sass:watch', () => {
   return gulp.watch([
-    './resources/assets/**/*.scss'
-  ], ["assets:sass"]);
+   './resources/assets/**/*.scss',
+  ], ['assets:sass']);
 });

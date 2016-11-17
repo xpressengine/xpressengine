@@ -2175,7 +2175,7 @@ var define = $__System.amdDefine;
       factory(exports, jQuery);
     });
   } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
-    factory(exports, require("github:twbs/bootstrap-sass@3.3.6/assets/javascripts/bootstrap.js"));
+    factory(exports, require('github:twbs/bootstrap-sass@3.3.6/assets/javascripts/bootstrap.js'));
   } else {
     factory({});
   }
@@ -2195,20 +2195,20 @@ var define = $__System.amdDefine;
       $('html').css('position', '');
     }).on('setting.sidebar.toggle', function() {
       if ($(window).innerWidth() < 1068) {
-        $('body').removeClass("sidebar-collapse");
-        if ($sidebar.hasClass("open")) {
+        $('body').removeClass('sidebar-collapse');
+        if ($sidebar.hasClass('open')) {
           $sidebar.trigger('setting.sidebar.close');
         } else {
           $sidebar.trigger('setting.sidebar.open');
         }
       } else {
-        $('body').toggleClass("sidebar-collapse");
+        $('body').toggleClass('sidebar-collapse');
       }
     });
     $dim.on('click', function() {
       $sidebar.trigger('setting.sidebar.close');
     });
-    $(".btn-slide").on('click', function() {
+    $('.btn-slide').on('click', function() {
       $sidebar.trigger('setting.sidebar.toggle');
     });
     $(document).on('click', '.snb-list', function(event) {

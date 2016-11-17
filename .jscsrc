@@ -1,0 +1,26 @@
+{
+    "preset": "airbnb",
+    "requireCurlyBraces": null, // or false
+    "maxErrors": null,
+    "maximumLineLength": null,
+    "excludeFiles": [
+        "./app/**",
+        "./bootstrap/**",
+        "./config/**",
+        "./core/**",
+        "./database/**",
+        "./migrations/**",
+        "./plugins/**",
+        "./storage/**",
+        "./test/**",
+        "./vendor/**",
+        "./web_installer/**",
+        "./gulpfile.babel.js",
+        "./webpack.config.js",
+        "./webpack.dev.config.js",
+        "./webpack.prod.config.js",
+        "!(.png|.jpg|.git)"
+    ],
+    "fileExtensions": [".js", ".jsx"],
+    "fix": true
+}

@@ -1,6 +1,7 @@
 (function (root, factory) {
-  module.exports = factory(require('xecore:/common/js/validator'));
+module.exports = factory(require('xecore:/common/js/validator'));
 }(this, function (validator) {
+
   var DynamicField = function () {
     this.group = '';
     this.databaseName = '';
@@ -39,22 +40,27 @@
         $langBox.addClass('lang-editor-box');
         langEditorBoxRender($langBox);
       });
+
       this.container.on('click', '.__xe_btn_submit', function () {
         self.store(this);
       });
+
       this.container.on('click', '.__xe_btn_close', function () {
         self.close(this);
       });
+
       this.container.on('click', '.__xe_btn_edit', function (e) {
         e.preventDefault();
         self.closeAll();
         self.edit(this);
       });
+
       this.container.on('click', '.__xe_btn_delete', function (e) {
         e.preventDefault();
         self.destroy(this);
         self.closeAll();
       });
+
       this.container.on('change', '.__xe_type_id', function (e) {
         var typeId = $(this).val(),
           frm = $(this).closest('form');
@@ -65,6 +71,7 @@
 
         self.getSkinOption(frm);
       });
+
       this.container.on('change', '.__xe_skin_id', function (e) {
         var frm = $(this).closest('form');
         self.getAdditionalConfigure(frm);
@@ -93,7 +100,7 @@
     };
 
     this.getList = function () {
-      var params = {group: this.group},
+      var params = { group: this.group },
         self = this;
 
       var jqxhr = XE.ajax({
@@ -101,7 +108,7 @@
         type: 'get',
         dataType: 'json',
         data: params,
-        url: this.urls.base
+        url: this.urls.base,
       });
 
       jqxhr.done(function (data, textStatus, jqxhr) {
@@ -129,7 +136,7 @@
       row.find('td.__xe_column_label').html(data.label);
       row.find('td.__xe_column_typeName').html(data.typeName);
       row.find('td.__xe_column_skinName').html(data.skinName);
-      row.find('td.__xe_column_use').html(data.use == true ? 'True' : 'False')
+      row.find('td.__xe_column_use').html(data.use == true ? 'True' : 'False');
 
       if (this.container.find('.__xe_tbody').find('.__xe_row_' + data.id).length != 0) {
         this.container.find('.__xe_tbody').find('.__xe_row_' + data.id).replaceWith(row.show());
@@ -143,6 +150,7 @@
     this.removeRow = function (id) {
       this.container.find('.__xe_tbody').find('.__xe_row_' + id).remove();
     };
+
     this.edit = function (o) {
       var tr = $(o).closest('tr'),
         id = tr.data('id'),
@@ -159,7 +167,7 @@
 
       tr.after(edit);
 
-      var params = {group: this.group, id: id},
+      var params = { group: this.group, id: id },
         self = this;
 
       XE.ajax({
@@ -190,7 +198,7 @@
           frm.find('[data-name="required"]').prop('checked', self.checkBox(response.config.required));
 
           self.getSkinOption(frm);
-        }
+        },
       });
     };
 
@@ -209,14 +217,14 @@
       return checked;
     };
 
-
     this.destroy = function (o) {
       if (confirm('이동작은 되돌릴 수 없습니다. 계속하시겠습니까?') === false) {
         return;
       }
+
       var tr = $(o).closest('tr'),
         id = tr.data('id'),
-        params = {group: this.group, databaseName: this.databaseName, id: id},
+        params = { group: this.group, databaseName: this.databaseName, id: id },
         self = this;
 
       XE.ajax({
@@ -231,8 +239,9 @@
           if (response.id == response.updateid) {
             self.openStep('close');
           }
+
           self.removeRow(id);
-        }
+        },
       });
     };
 
@@ -252,7 +261,7 @@
         url: this.urls.getSkinOption,
         success: function (response) {
           self.skinOptions(frm, response.skins, response.skinId);
-        }
+        },
       });
     };
 
@@ -264,6 +273,7 @@
         var option = $('<option>').attr('value', key).text(skins[key]);
         select.append(option);
       }
+
       if (selected != undefined && selected != '') {
         select.val(selected);
       }
@@ -286,7 +296,7 @@
           self.setValidateRule($form, response.rules);
 
           $form.find('.__xe_additional_configure').html(response.configure);
-        }
+        },
       });
     };
 
@@ -295,7 +305,7 @@
       var self = this;
 
       try {
-        this.validateCheck($form)
+        this.validateCheck($form);
       } catch (e) {
         return;
       }
@@ -309,7 +319,7 @@
         success: function (response) {
           self.addrow(response);
           self.close(o);
-        }
+        },
       });
     };
 

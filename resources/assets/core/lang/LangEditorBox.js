@@ -8,9 +8,10 @@ var LangEditorBox = React.createClass({
       langKey: '',
       multiline: false,
       lines: [],
-      autocomplete: false
+      autocomplete: false,
     };
   },
+
   render: function () {
     LangEditor.seq++;
     return (
@@ -24,24 +25,26 @@ var LangEditorBox = React.createClass({
             autocomplete={this.props.autocomplete}
         />
     );
-  }
+  },
 });
 
 var LangEditor = React.createClass({
-  statics: {seq: 0},
+  statics: { seq: 0 },
   getInitialState: function () {
     var lines = this.props.lines || [];
-    return {lines: lines};
+    return { lines: lines };
   },
+
   setLines: function (lines) {
     var self = this;
-    self.setState({lines: lines});
+    self.setState({ lines: lines });
     XE.Lang.locales.map(function (locale) {
       var selector = '#input-' + self.props.seq + '-' + locale,
           value = self.getValueFromLinesWithLocale(locale);
       $(selector).val(value);
     });
   },
+
   getValueFromLinesWithLocale: function (locale) {
     var lines = this.state.lines,
         i = lines.length,
@@ -52,22 +55,24 @@ var LangEditor = React.createClass({
         return l['value'];
       }
     }
-    return "";
+
+    return '';
   },
+
   componentDidMount: function () {
     if (this.isMounted()) {
       var self = this;
       var el = ReactDOM.findDOMNode(this);
 
-      if ( this.props.langKey ) {
-        if ( this.state.lines.length == 0 ) {
+      if (this.props.langKey) {
+        if (this.state.lines.length == 0) {
           $.ajax({
             type: 'get',
             dataType: 'json',
             url: xeBaseURL + '/' + XE.options.managePrefix + '/lang/lines/' + this.props.langKey,
-            success: function(result) {
+            success: function (result) {
               if (this.isMounted()) { self.setLines(result); }
-            }.bind(this)
+            }.bind(this),
           });
         }
       }
@@ -76,8 +81,9 @@ var LangEditor = React.createClass({
         $(el).find('input[type=text]:first,textarea:first').autocomplete({
           source: '/' + XE.options.managePrefix + '/lang/search/' + XE.Lang.locales[0],
           minLength: 1,
-          focus: function(event, ui) { event.preventDefault(); },
-          select: function(event, ui) { self.setLines(ui.item.lines); }
+          focus: function (event, ui) { event.preventDefault(); },
+
+          select: function (event, ui) { self.setLines(ui.item.lines); },
         });
       }
     }
@@ -99,8 +105,10 @@ var LangEditor = React.createClass({
     } else {
       edit = <textarea className="form-control" id={id} name={name} defaultValue={value}/>;
     }
+
     return edit;
   },
+
   render: function () {
     var self = this,
         locale = XE.Lang.locales[0],
@@ -114,7 +122,10 @@ var LangEditor = React.createClass({
         : null;
 
     return (
-        <div className={inputClass}>
+        
+
+
+<div className={inputClass}>
           <input type="hidden" name="xe_use_request_preprocessor" value="Y"/>
           <input type="hidden" name={resource + '/name'} defaultValue={this.props.name}/>
           <input type="hidden" name={resource + '/key'} defaultValue={this.props.langKey}/>
@@ -141,7 +152,7 @@ var LangEditor = React.createClass({
           </div>
         </div>
     );
-  }
+  },
 });
 
 window.langEditorBoxRender = function ($o) {
@@ -171,8 +182,8 @@ $(function () {
     }
   });
 
-  System.import('xecore:/common/js/validator').then(function(validator) {
-    validator.put("langrequired", function ($dst, parameters) {
+  System.import('xecore:/common/js/validator').then(function (validator) {
+    validator.put('langrequired', function ($dst, parameters) {
       var $input = $dst.closest('.lang-editor-box').find("input[name^='xe_lang_preprocessor']:not(:hidden):first");
 
       return validator.validators.required($input, parameters);

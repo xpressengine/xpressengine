@@ -20,12 +20,12 @@ export default React.createClass({
     getSearchedNode: React.PropTypes.func,
     setSearchedNode: React.PropTypes.func,
 
-    moveNode: React.PropTypes.func
+    moveNode: React.PropTypes.func,
   },
 
   getDefaultProps: function () {
     return {
-      paddingLeft: 48
+      paddingLeft: 48,
     };
   },
 
@@ -55,8 +55,8 @@ export default React.createClass({
         w: null,
         h: null,
         originalParent: null,
-        targetParent: null
-      }
+        targetParent: null,
+      },
     };
   },
 
@@ -70,7 +70,7 @@ export default React.createClass({
       var draggingStyles = {
         top: dragging.y,
         left: dragging.x,
-        width: dragging.w
+        width: dragging.w,
       };
 
       return (
@@ -126,6 +126,7 @@ export default React.createClass({
           isDragging={false}
       />;
     });
+
     return (
         <div className="menu-content" id="uitree">
           {draggingDom}
@@ -140,7 +141,7 @@ export default React.createClass({
     if (node.entity && node.entity == 'menu')
       return;
     this.setState({
-      tempTree: new Tree(tree.obj)
+      tempTree: new Tree(tree.obj),
     });
 
     this.dragging = {
@@ -152,7 +153,7 @@ export default React.createClass({
       originalParent: tree.get(id).parentId,
       targetParent: tree.get(id).parentId,
       originalOrdering: tree.get(id).ordering,
-      lastOrdering: tree.get(id).ordering
+      lastOrdering: tree.get(id).ordering,
     };
 
     this._startX = dom.offsetLeft;
@@ -170,7 +171,7 @@ export default React.createClass({
   drag: function (e) {
     if (this._start) {
       this.setState({
-        dragging: this.dragging
+        dragging: this.dragging,
       });
       this._start = false;
     }
@@ -189,7 +190,7 @@ export default React.createClass({
 
     var pos = {
       x: _startX + e.clientX - _offsetX,
-      y: _startY + e.clientY - _offsetY
+      y: _startY + e.clientY - _offsetY,
     };
     dragging.x = pos.x;
     dragging.y = pos.y;
@@ -207,6 +208,7 @@ export default React.createClass({
         newIndex = tree.move(index.id, index.prev, 'append');
       }
     }
+
     if (newIndex) {
       index = newIndex;
       newIndex.collapsed = collapsed;
@@ -245,9 +247,10 @@ export default React.createClass({
       dragging.lastOrdering = newIndex.ordering;
 
     }
+
     this.setState({
       tree: tree,
-      dragging: dragging
+      dragging: dragging,
     });
   },
 
@@ -259,7 +262,7 @@ export default React.createClass({
       BACKSPACE: 8,
       UP_ARROW: 38,
       DOWN_ARROW: 40,
-      ESCAPE: 27
+      ESCAPE: 27,
     };
 
     if (e.keyCode === Keys.ESCAPE) {
@@ -284,8 +287,8 @@ export default React.createClass({
         w: null,
         h: null,
         originalParent: null,
-        targetParent: null
-      }
+        targetParent: null,
+      },
     });
 
     var dragging = this.dragging;
@@ -298,7 +301,7 @@ export default React.createClass({
               {
                 id: dragging.id,
                 parent: dragging.targetParent,
-                position: dragging.lastOrdering
+                position: dragging.lastOrdering,
               }
           );
       }
@@ -307,11 +310,10 @@ export default React.createClass({
           {
             id: dragging.id,
             parent: dragging.targetParent,
-            position: dragging.lastOrdering
+            position: dragging.lastOrdering,
           }
       );
     }
-
 
     document.body.removeEventListener('mousemove', this.drag);
     document.body.removeEventListener('mouseup', this.dragEnd);
@@ -335,8 +337,8 @@ export default React.createClass({
         w: null,
         h: null,
         originalParent: null,
-        targetParent: null
-      }
+        targetParent: null,
+      },
     });
 
   },
@@ -351,7 +353,7 @@ export default React.createClass({
 
     tree.updateNodesPosition();
     this.setState({
-      tree: tree
+      tree: tree,
     });
-  }
+  },
 });

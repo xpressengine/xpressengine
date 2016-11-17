@@ -1,8 +1,9 @@
 import React from 'react';
 
 export default React.createClass({
-    componentDidMount: function() {},
-    render: function() {
+    componentDidMount: function () {},
+
+    render: function () {
         return (
             <label><input type="radio"
                           disabled={this.props.controlDisabled}
@@ -10,16 +11,18 @@ export default React.createClass({
                           value={this.props.data.value}
                           checked={this.props.isChecked}
                           onChange={this.inputChange}/> {this.props.data.name} &nbsp;</label>
-        )
-    },
-    inputChange: function(e) {
+        );
+      },
+
+    inputChange: function (e) {
         this.props.onChangeRadio(e.target.value);
-    },
+      },
+
     prodTypes: {
         data: React.PropTypes.object,
         onChangeRadio: React.PropTypes.function,
         isChecked: React.PropTypes.boolean,
         controlDisabled: React.PropTypes.boolean,
-        name: React.PropTypes.string
-    }
-});
+        name: React.PropTypes.string,
+      },
+  });
