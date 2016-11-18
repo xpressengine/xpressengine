@@ -1,6 +1,7 @@
 (function (root, factory) {
-  module.exports = factory();
+module.exports = factory();
 }(this, function () {
+
   'use strict';
 
   var Validator = {};
@@ -43,6 +44,7 @@
     if (alertType == undefined) {
       alertType = 'form';
     }
+
     self.alertType = alertType;
 
     $.each(rules, function (name, rule) {
@@ -66,13 +68,13 @@
     });
   };
 
-  Validator.formValidate = function($form) {
+  Validator.formValidate = function ($form) {
     var self = this;
 
     Validator.alertType = $form.data('rule-alert-type') || 'toast';
     self.errorClear($form);
 
-    $form.find('[data-valid]').each(function() {
+    $form.find('[data-valid]').each(function () {
       var $this = $(this);
       var rule = $this.data('valid');
       var name = $this.attr('name');
@@ -122,6 +124,7 @@
         if (typeName == undefined) {
           typeName = $element.attr('name');
         }
+
         message = '[' + typeName + '] ' + message;
         griper.toast($element, message);
       });
@@ -129,22 +132,21 @@
 
   };
 
-
   Validator.validators = {
-    checked: function($dst, parameters) {
+    checked: function ($dst, parameters) {
       var name = $dst.attr('name');
       var min = parameters.split('-')[0];
       var max = parameters.split('-')[1];
 
       var checkedLenth = $dst.clone().wrap('<div />').parent().find(':checked').length;
 
-      if(checkedLenth < parseInt(min, 10) || checkedLenth > parseInt(max, 10)) {
+      if (checkedLenth < parseInt(min, 10) || checkedLenth > parseInt(max, 10)) {
 
         var messageType = 'xe::validatorChecked';
 
-        if(!max) {
+        if (!max) {
           messageType = 'xe::validatorCheckedMin';
-        }else if(min == 0) {
+        }else if (min == 0) {
           messageType = 'xe::validatorCheckedMax';
         }
 
@@ -154,14 +156,17 @@
 
       return true;
     },
+
     required: function ($dst, parameters) {
       var value = $dst.val();
       if (value === '') {
         Validator.error($dst, XE.Lang.trans('xe::validatorRequired'));
         return false;
       }
+
       return true;
     },
+
     alpha: function ($dst, parameters) {
       var value = $dst.val(),
           pattern = /[a-zA-Z]/;
@@ -169,8 +174,10 @@
         Validator.error($dst, XE.Lang.trans('xe::validatorAlpha')); //TODO 번역 넣어야함
         return false;
       }
+
       return true;
     },
+
     alphanum: function ($dst, parameters) {
       var value = $dst.val(),
           pattern = /[^a-zA-Z0-9]/;
@@ -178,17 +185,21 @@
         Validator.error($dst, XE.Lang.trans('xe::validatorAlphanum'));
         return false;
       }
+
       return true;
     },
+
     min: function ($dst, parameters) {
       var value = $dst.val();
 
       if (value.length <= parseInt(parameters)) {
-        Validator.error($dst, XE.Lang.transChoice('xe::validatorMin', parameters, {charCount: parameters}));
+        Validator.error($dst, XE.Lang.transChoice('xe::validatorMin', parameters, { charCount: parameters }));
         return false;
       }
+
       return true;
     },
+
     max: function ($dst, parameters) {
       var value = $dst.val();
 
@@ -196,31 +207,35 @@
         Validator.error($dst, XE.Lang.trans('xe::validatorMax')); //TODO 번역 넣어야함
         return false;
       }
+
       return true;
     },
-    email: function($dst, parameters) {
+
+    email: function ($dst, parameters) {
       var val = $dst.val();
       var re = /\w+@\w{2,}\.\w{2,}/;
 
-      if(!val.match(re)) {
+      if (!val.match(re)) {
         Validator.error($dst, XE.Lang.trans('xe::validatorEmail')); //TODO 번역 넣어야함
         return false;
       }
 
       return true;
     },
-    url: function($dst, parameters) {
+
+    url: function ($dst, parameters) {
       var val = $dst.val();
       var re = /^https?:\/\/\S+/;
 
-      if(!val.match(re)) {
+      if (!val.match(re)) {
         Validator.error($dst, XE.Lang.trans('xe::validatorUrl')); //TODO 번역 넣어야함
         return false;
       }
 
       return true;
     },
-    numeric: function($dst, parameters) {
+
+    numeric: function ($dst, parameters) {
       var val = $dst.val();
       var num = Number(val);
 
@@ -231,6 +246,7 @@
         return false;
       }
     },
+
     between: function ($dst, parameters) {
       var range = parameters.split(','),
           value = $dst.val();
@@ -241,10 +257,10 @@
       }
 
       if (value.length <= parseInt(range[0]) || value.length >= parseInt(range[1])) {
-        Validator.error($dst, XE.Lang.trans('xe::validatorBetween', {between: parameters}));
+        Validator.error($dst, XE.Lang.trans('xe::validatorBetween', { between: parameters }));
         return false;
       }
-    }
+    },
   };
 
   return Validator;

@@ -10,36 +10,39 @@ export default React.createClass({
     tree: React.PropTypes.object,
     placeholder: React.PropTypes.string,
     handleSearch: React.PropTypes.func,
-    menuRoutes: React.PropTypes.object
+    menuRoutes: React.PropTypes.object,
   },
   getDefaultProps: function () {
     return {
       placeholder: 'Search...',
-      tree: new Tree({})
+      tree: new Tree({}),
     };
   },
+
   componentDidMount: function () {
   },
+
   getInitialState: function () {
     return {
       query: '',
       suggestions: [],
       selectedIndex: -1,
       selectionMode: false,
-      searchingCnt: 0
+      searchingCnt: 0,
     };
   },
+
   handleChange: function (e) {
     var query = e.target.value.trim();
     this.setState({
-      query: query
+      query: query,
     });
 
     this.searchMenu(query);
     if (query.length == 0) {
       this.setState({
         suggestions: [],
-        searchingCnt: 0
+        searchingCnt: 0,
       });
     }
   },
@@ -51,7 +54,7 @@ export default React.createClass({
     var tree = this.props.tree;
 
     this.setState({
-      searchingCnt: searchingCnt
+      searchingCnt: searchingCnt,
     });
 
     suggestions = _.filter(tree.indexes, function (index) {
@@ -62,6 +65,7 @@ export default React.createClass({
       if (!self.isMenuEntity(index.node)) {
         title = XE.Lang.trans(index.node.title);
       }
+
       return !!(title && title.indexOf(keyword) !== -1);
     });
 
@@ -70,7 +74,7 @@ export default React.createClass({
     self.setState(
         {
           suggestions: suggestions,
-          searchingCnt: searchingCnt
+          searchingCnt: searchingCnt,
         }
     );
 
@@ -87,7 +91,7 @@ export default React.createClass({
       query: '',
       selectedIndex: -1,
       selectionMode: false,
-      suggestions: []
+      suggestions: [],
     });
 
     input.value = '';
@@ -120,12 +124,12 @@ export default React.createClass({
       if (selectedIndex <= 0) {
         this.setState({
           selectedIndex: this.state.suggestions.length - 1,
-          selectionMode: true
+          selectionMode: true,
         });
       } else {
         this.setState({
           selectedIndex: selectedIndex - 1,
-          selectionMode: true
+          selectionMode: true,
         });
       }
     }
@@ -135,7 +139,7 @@ export default React.createClass({
       e.preventDefault();
       this.setState({
         selectedIndex: (this.state.selectedIndex + 1) % suggestions.length,
-        selectionMode: true
+        selectionMode: true,
       });
     }
   },
@@ -148,20 +152,22 @@ export default React.createClass({
     this.setState({
       query: '',
       selectionMode: false,
-      selectedIndex: -1
+      selectedIndex: -1,
     });
 
     input.value = '';
     input.focus();
   },
+
   handleSuggestionClick: function handleSuggestionClick(i, e) {
     e.preventDefault();
     this.selection(this.state.suggestions[i]);
   },
+
   handleSuggestionHover: function handleSuggestionHover(i, e) {
     this.setState({
       selectedIndex: i,
-      selectionMode: true
+      selectionMode: true,
     });
   },
 
@@ -170,19 +176,19 @@ export default React.createClass({
     var query = this.state.query.trim(),
         selectedIndex = this.state.selectedIndex,
         suggestions = this.state.suggestions,
-        placeholder = this.props.placeholder
+        placeholder = this.props.placeholder;
     var trans = {
-      addMenu: XE.Lang.trans('xe::addMenu')
+      addMenu: XE.Lang.trans('xe::addMenu'),
     };
 
     return (
         <div className="panel-heading">
           <div className="pull-left">
             <div className={cx({
-                "input-group" : true,
-                "search-group" : true,
-                open : query.length > 0
-            })}>
+                'input-group': true,
+                'search-group': true,
+                open: query.length > 0,
+              })}>
               <input type="text" className="form-control" aria-label="Text input with dropdown button"
                      placeholder={placeholder} ref="input" onChange={this.handleChange} onKeyDown={this.handleKeyDown}/>
               <button className="btn-link" onClick={this.resetSearch}>
@@ -201,5 +207,5 @@ export default React.createClass({
           </div>
         </div>
     );
-  }
+  },
 });

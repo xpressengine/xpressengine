@@ -9,7 +9,7 @@ $(function ($) {
     var $introView = $('.__xe_introView');
     var $introInput = $('.__xe_introInput');
 
-    $editBtn.click(function(){
+    $editBtn.click(function () {
         $box.addClass('edit');
         $saveBtn.show();
         $cancelBtn.show();
@@ -19,9 +19,9 @@ $(function ($) {
         $introView.hide();
         $introInput.show();
         return false;
-    })
+      });
 
-    $cancelBtn.click(function(){
+    $cancelBtn.click(function () {
         $box.removeClass('edit');
         $saveBtn.hide();
         $cancelBtn.hide();
@@ -31,8 +31,7 @@ $(function ($) {
         $introView.show();
         $introInput.hide();
         return false;
-    })
+      });
 
-
-});
+  });
 

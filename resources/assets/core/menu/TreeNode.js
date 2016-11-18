@@ -18,7 +18,7 @@ let TreeNode = React.createClass({
     getSelectedNode: React.PropTypes.func,
     setSelectedNode: React.PropTypes.func,
     getSearchedNode: React.PropTypes.func,
-    setSearchedNode: React.PropTypes.func
+    setSearchedNode: React.PropTypes.func,
   },
 
   renderChildren: function () {
@@ -37,7 +37,7 @@ let TreeNode = React.createClass({
       var children = index.children;
       if (index.collapsed) {
         var searched = props.getSearchedNode();
-        if ((searched === null ) || (index.id != searched.menuId)) {
+        if ((searched === null) || (index.id != searched.menuId)) {
           childrenStyles.display = 'none';
         } else {
           index.collapsed = !index.collapsed;
@@ -71,11 +71,12 @@ let TreeNode = React.createClass({
             />
         );
       });
+
       return (
           <div className={cx({
                 'item-container': true,
-                'move': isDragging
-                })} style={childrenStyles}>
+                move: isDragging,
+              })} style={childrenStyles}>
             {childNodes}
           </div>
       );
@@ -106,11 +107,11 @@ let TreeNode = React.createClass({
     } else {
       return (
           <div className={cx({
-                    'node' : true,
-                    'item' : true,
-                    'copy' : isPlaceHolder,
-                    'off' : (node.activated !== 1)
-                    })}>
+                    node: true,
+                    item: true,
+                    copy: isPlaceHolder,
+                    off: (node.activated !== 1),
+                  })}>
             <MenuItem
                 index={index}
                 home={home}
@@ -145,7 +146,7 @@ let TreeNode = React.createClass({
     var index = props.index;
     var dragging = props.dragging;
     return ((index.id === dragging) || props.isPlaceHolder);
-  }
+  },
 });
 
 export default TreeNode;

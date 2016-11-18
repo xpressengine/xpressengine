@@ -7,13 +7,14 @@ export default React.createClass({
   getInitialState: function () {
     return {
       rawTree: this.props.menus,
-      dataTree: new Tree({title: "root", items: this.props.menus}),
+      dataTree: new Tree({ title: 'root', items: this.props.menus }),
       selected: null,
       searched: null,
       home: this.props.home,
-      menuRoutes: this.props.menuRoutes
+      menuRoutes: this.props.menuRoutes,
     };
   },
+
   componentDidMount: function () {
     this.state.dataTree.movementFilter = this.movementFilter;
   },
@@ -24,7 +25,7 @@ export default React.createClass({
 
   setSearchedNode: function (node) {
     this.setState({
-      searched: node
+      searched: node,
     });
   },
 
@@ -34,7 +35,7 @@ export default React.createClass({
 
   setSelectedNode: function (node) {
     this.setState({
-      selected: node
+      selected: node,
     });
   },
 
@@ -58,11 +59,13 @@ export default React.createClass({
           if (!newDestIndex.collapsed) {
             param.placement = 'append';
           }
+
           return param;
         } else {
           return;
         }
       }
+
       return param;
     } else {
 
@@ -71,6 +74,7 @@ export default React.createClass({
           return;
         }
       }
+
       return param;
     }
   },
@@ -85,11 +89,11 @@ export default React.createClass({
       data: {
         itemId: target.id,
         parent: target.parent,
-        ordering: target.position
+        ordering: target.position,
       },
       success: function (data) {
         XE.toast('success', 'Item moved');
-      }.bind(this)
+      }.bind(this),
     });
 
   },
@@ -102,22 +106,22 @@ export default React.createClass({
     var homeItemUrl = this.props.baseUrl + '/setHome';
     var oldHome = this.state.home;
 
-    this.setState({home: node.id});
+    this.setState({ home: node.id });
     XE.ajax({
       url: homeItemUrl,
       context: $('#uitree'),
       type: 'put',
       dataType: 'json',
       data: {
-        itemId: node.id
+        itemId: node.id,
       },
       success: function (data) {
         XE.toast('success', node.title + ' is home!');
       }.bind(this),
       error: function (data) {
         XE.toast('error', 'home setting was failed!');
-        this.setState({home: oldHome});
-      }.bind(this)
+        this.setState({ home: oldHome });
+      }.bind(this),
     });
   },
 
@@ -145,5 +149,5 @@ export default React.createClass({
 
   isMenuEntity: function (node) {
     return (node.entity && (node.entity == 'menu'));
-  }
+  },
 });

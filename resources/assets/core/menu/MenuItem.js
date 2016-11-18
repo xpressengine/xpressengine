@@ -12,11 +12,11 @@ export default React.createClass({
     mouseDown: React.PropTypes.func,
 
     getSelectedNode: React.PropTypes.func,
-    setSelectedNode: React.PropTypes.func
+    setSelectedNode: React.PropTypes.func,
   },
 
   onClickLink: function (node) {
-    if (node.type !== "xpressengine@directLink") {
+    if (node.type !== 'xpressengine@directLink') {
       location.href = '/' + node.url;
     } else {
       location.href = node.url;
@@ -28,23 +28,23 @@ export default React.createClass({
     var node = this.props.index.node;
     if (searched === node) {
       $('html, body').animate({
-        scrollTop: $('#xe_tree_node_' + node.id).offset().top - 20
+        scrollTop: $('#xe_tree_node_' + node.id).offset().top - 20,
       }, 500);
       this.props.setSearchedNode(null);
     }
   },
 
-  onClickHome: function (node){
+  onClickHome: function (node) {
     this.props.clickHome(node);
   },
 
-  handleMouseDown: function (e){
+  handleMouseDown: function (e) {
     var nodeId = this.props.index.id;
     var dom = ReactDOM.findDOMNode(this.refs.inner);
     this.props.mouseDown(nodeId, dom, e);
   },
 
-  onClickSetNode: function (node){
+  onClickSetNode: function (node) {
 
     var selected = this.props.getSelectedNode();
 
@@ -68,7 +68,7 @@ export default React.createClass({
       goLink: XE.Lang.trans('xe::goLink'),
     };
 
-    if (node.type !== "xpressengine@directLink") {
+    if (node.type !== 'xpressengine@directLink') {
       if (node.id == this.props.home) {
         url = '/';
       } else {
@@ -99,7 +99,7 @@ export default React.createClass({
     var controlElement;
     var selected = this.props.getSelectedNode();
     if (selected == node) {
-      controlElement = <div className="visible-xs more-area" style={{display:"block"}}>
+      controlElement = <div className="visible-xs more-area" style={{ display: 'block' }}>
         <button className="btn" type="button"
                 onClick={this.onClickHome.bind(null, node)}>{trans.setHome}</button>
         <a href={url} className="btn">{trans.goLink}</a>
@@ -134,5 +134,5 @@ export default React.createClass({
           {controlElement}
         </div>
     );
-  }
+  },
 });

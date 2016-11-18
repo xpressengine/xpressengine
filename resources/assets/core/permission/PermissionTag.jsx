@@ -6,9 +6,9 @@ export default React.createClass({
     propTypes: {
         prefix: React.PropTypes.string,
         onDelete: React.PropTypes.func.isRequired,
-        tag: React.PropTypes.object.isRequired
-    },
-    render: function() {
+        tag: React.PropTypes.object.isRequired,
+      },
+    render: function () {
         var tag = this.props.tag;
         var label = tag.displayName || tag.name;
         label = this.props.prefix + label;
@@ -19,6 +19,5 @@ export default React.createClass({
         </span>
         );
 
-
-    }
-});
+      },
+  });

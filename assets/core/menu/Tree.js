@@ -1,6 +1,6 @@
 function Tree(obj) {
   this.cnt = 0;
-  this.obj = obj || {items: []};
+  this.obj = obj || { items: [] };
   this.indexes = {};
   this.nodes = {};
   this.build(this.obj);
@@ -19,7 +19,7 @@ proto.build = function (obj) {
 
   obj.depth = depth;
 
-  var index = {id: indexId, node: obj, ordering: indexOrdering, children: [], collapsed: obj.collapsed, depth: depth};
+  var index = { id: indexId, node: obj, ordering: indexOrdering, children: [], collapsed: obj.collapsed, depth: depth };
   indexes[indexId + ''] = index;
   nodes[obj.id] = this.cnt;
   this.cnt++;
@@ -100,7 +100,6 @@ proto.removeIndex = function (index) {
   }
 };
 
-
 proto.remove = function (id) {
   var index = this.getIndex(id);
   var node = this.get(id);
@@ -124,6 +123,7 @@ proto.updateChildren = function (children) {
     if (i > 0) {
       index.prev = children[i - 1];
     }
+
     if (i < children.length - 1) {
       index.next = children[i + 1];
     }
@@ -144,6 +144,7 @@ proto.insert = function (obj, parentId, i) {
   if (parentNode.items.constructor == Array) {
     parentNode.items = {};
   }
+
   parentIndex.children = parentIndex.children || [];
 
   _.forEach(parentNode.items, function (item) {
@@ -158,6 +159,7 @@ proto.insert = function (obj, parentId, i) {
   if (parentIndex.parent) {
     this.updateChildren(this.getIndex(parentIndex.parent).children);
   }
+
   return index;
 };
 
@@ -209,6 +211,7 @@ proto.updateNodesPosition = function () {
         node.top = top++;
         node.left = left;
       }
+
       if (node.children && node.children.length) {
         height += walk(node.children, node, left + 1, collapsed || node.collapsed);
       } else {
@@ -232,7 +235,7 @@ proto.move = function (fromId, toId, placement) {
         fromId: fromId,
         toId: toId,
         placement: placement,
-        tree: this
+        tree: this,
       }
     );
 
@@ -249,14 +252,11 @@ proto.move = function (fromId, toId, placement) {
   var index = null;
   if (placement === 'before') {
     index = this.insertBefore(obj, toId);
-  }
-  else if (placement === 'after') {
+  } else if (placement === 'after') {
     index = this.insertAfter(obj, toId);
-  }
-  else if (placement === 'prepend') {
+  } else if (placement === 'prepend') {
     index = this.prepend(obj, toId);
-  }
-  else if (placement === 'append') {
+  } else if (placement === 'append') {
     index = this.append(obj, toId);
   }
 

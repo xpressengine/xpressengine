@@ -1,4 +1,4 @@
-(function(exports) {
+(function (exports) {
   var instances = [];
   var cssLoaded = false;
 
@@ -19,6 +19,7 @@
     if (count != undefined) {
       count = parseInt(count);
     }
+
     return count;
   }
 
@@ -26,6 +27,7 @@
     if (parseInt(count) < 0) {
       count = 0;
     }
+
     $context.attr('data-progress-count', count);
   }
 
@@ -36,17 +38,16 @@
           type = $context.data('progress-type') === undefined ? 'default' : $context.data('progress-type'),
           showSpinner = type !== 'nospin';
 
-
       if ($context.attr('id') !== undefined) {
         parent = '#' + $context.attr('id');
-      } else if($context.selector !== undefined) {
+      } else if ($context.selector !== undefined) {
         parent = $context.selector;
       }
 
       progress.configure({
         parent: parent,
         type:  type,
-        showSpinner: showSpinner
+        showSpinner: showSpinner,
       });
       instances.push(progress);
       var instanceId = instances.length - 1;
@@ -60,7 +61,7 @@
   }
 
   function attachInstance($context) {
-    $context.bind('progressStart', function(e) {
+    $context.bind('progressStart', function (e) {
       e.stopPropagation();
       var count = getCount($context) + 1;
       setCount($context, count);
@@ -70,7 +71,7 @@
 
     });
 
-    $context.bind('progressDone', function(e) {
+    $context.bind('progressDone', function (e) {
       e.stopPropagation();
 
       var count = getCount($(this)) - 1;
@@ -86,7 +87,7 @@
   /**
    * progress bar 없이 spinner 만 사용
    */
-  var xeSpinner = function() {
+  var xeSpinner = function () {
 
   };
 
@@ -112,8 +113,8 @@
       parent: 'body',
       template: {
         default: '<div class="bar" role="bar"><div class="peg"></div></div><div class="spinner" role="spinner"><div class="spinner-icon"></div></div>',
-        cover: '<div class="cover" role="bar"><div class="peg"></div></div><div class="spinner spinner-center" role="spinner"><div class="spinner-icon"></div></div>'
-      }
+        cover: '<div class="cover" role="bar"><div class="peg"></div></div><div class="spinner spinner-center" role="spinner"><div class="spinner-icon"></div></div>',
+      },
     };
 
     this.$progress = null;
@@ -124,19 +125,19 @@
     this.instanceId = null;
     this.time = null;
 
-    this.setInstanceId = function(instanceId) {
-      this.instanceId = instanceId
+    this.setInstanceId = function (instanceId) {
+      this.instanceId = instanceId;
     };
 
-    this.configure = function(options) {
+    this.configure = function (options) {
       $.extend(this.settings, options);
     };
 
-    this.getTime = function() {
+    this.getTime = function () {
       return this.time;
     };
 
-    this.start = function() {
+    this.start = function () {
       if (!this.status) {
         this.time = new Date().getTime();
         this.set(0);
@@ -144,8 +145,8 @@
 
       var self = this;
 
-      var work = function() {
-        setTimeout(function() {
+      var work = function () {
+        setTimeout(function () {
           if (!self.status) return;
           self.trickle();
           work();
@@ -157,7 +158,7 @@
       return this;
     };
 
-    this.done = function(time, force) {
+    this.done = function (time, force) {
       if (this.time != time) {
         return this;
       }
@@ -167,7 +168,7 @@
       return this.inc(0.3 + 0.5 * Math.random()).set(1);
     };
 
-    this.inc = function(amount) {
+    this.inc = function (amount) {
       var n = this.status;
 
       if (!n) {
@@ -182,7 +183,7 @@
       }
     };
 
-    this.set = function(n) {
+    this.set = function (n) {
       var started = this.isStarted();
 
       n = clamp(n, this.settings.minimum, 1);
@@ -196,7 +197,7 @@
       // $progress.offsetWidth; /* Repaint */
       var self = this,
           time = this.getTime();
-      XE.Progress.queue(function(next) {
+      XE.Progress.queue(function (next) {
         // Set positionUsing if it hasn't already been set
         if (self.settings.positionUsing === '') self.settings.positionUsing = self.getPositioningCSS();
 
@@ -207,16 +208,16 @@
           // Fade out
           XE.Progress.css(self.$progress, {
             transition: 'none',
-            opacity: 1
+            opacity: 1,
           });
           //$progress.offsetWidth; /* Repaint */
 
-          setTimeout(function() {
+          setTimeout(function () {
             XE.Progress.css(self.$progress, {
               transition: 'all ' + speed + 'ms linear',
-              opacity: 0
+              opacity: 0,
             });
-            setTimeout(function() {
+            setTimeout(function () {
               self.remove(time);
               next();
             }, speed);
@@ -225,15 +226,16 @@
           setTimeout(next, speed);
         }
       });
+
       return this;
     };
 
-    this.isStarted = function() {
+    this.isStarted = function () {
       return typeof this.status === 'number';
     };
 
-    this.promise = function($promise) {
-      if (!$promise || $promise.state() === "resolved") {
+    this.promise = function ($promise) {
+      if (!$promise || $promise.state() === 'resolved') {
         return this;
       }
 
@@ -245,7 +247,7 @@
       this.current++;
 
       var self = this;
-      $promise.always(function() {
+      $promise.always(function () {
         self.current--;
         if (self.current === 0) {
           self.initial = 0;
@@ -258,11 +260,11 @@
       return this;
     };
 
-    this.trickle = function() {
+    this.trickle = function () {
       return this.inc(Math.random() * this.settings.trickleRate);
     };
 
-    this.render = function(fromStart) {
+    this.render = function (fromStart) {
       //if (this.isRendered()) {
       //    return $(this.settings.parent).children('.xe-progress');
       //}
@@ -276,6 +278,7 @@
       if (this.settings.template[this.settings.type] === undefined) {
         this.settings.type = 'default';
       }
+
       $progress.html(this.settings.template[this.settings.type]);
 
       var $bar      = $progress.find(this.settings.barSelector),
@@ -288,7 +291,7 @@
 
       XE.Progress.css($bar, {
         transition: 'all 0 linear',
-        transform: 'translate3d(' + perc + '%,0,0)'
+        transform: 'translate3d(' + perc + '%,0,0)',
       });
 
       if (!this.settings.showSpinner) {
@@ -296,7 +299,7 @@
         $spinner && $spinner.remove();
       }
 
-      $parent.addClass('xe-progress-'+this.settings.type);
+      $parent.addClass('xe-progress-' + this.settings.type);
       if ($parent.is('body') === false) {
         $parent.addClass('xe-progress-custom-parent');
       }
@@ -310,15 +313,14 @@
     /**
      * Removes the element. Opposite of render().
      */
-    this.remove = function(time) {
+    this.remove = function (time) {
       this.done(time);
 
-      $(this.settings.parent).removeClass('xe-progress-custom-parent xe-progress-'+this.settings.type);
+      $(this.settings.parent).removeClass('xe-progress-custom-parent xe-progress-' + this.settings.type);
 
       if (this.$progress != null) {
         this.$progress.remove();
       }
-
 
       this.$progress = null;
       this.$bar = null;
@@ -327,7 +329,7 @@
     /**
      * Checks if the progress bar is rendered.
      */
-    this.isRendered = function() {
+    this.isRendered = function () {
       //return !!$(this.settings.parent).children('.xe-progress').length;
       return this.$progress !== null;
     };
@@ -335,7 +337,7 @@
     /**
      * Determine which positioning CSS rule to use.
      */
-    this.getPositioningCSS = function() {
+    this.getPositioningCSS = function () {
       var bodyStyle = document.body.style;
 
       // Sniff prefixes
@@ -354,7 +356,7 @@
         // Browsers without translate() support, e.g. IE7-8
         return 'margin';
       }
-    }
+    };
   };
 
 
@@ -372,35 +374,34 @@
     return (-1 + n) * 100;
   }
 
-
-
   function barPositionCSS(n, speed, ease, Settings) {
     var barCSS;
 
     if (Settings.positionUsing === 'translate3d') {
-      barCSS = { transform: 'translate3d('+toBarPerc(n)+'%,0,0)' };
+      barCSS = { transform: 'translate3d(' + toBarPerc(n) + '%,0,0)' };
     } else if (Settings.positionUsing === 'translate') {
-      barCSS = { transform: 'translate('+toBarPerc(n)+'%,0)' };
+      barCSS = { transform: 'translate(' + toBarPerc(n) + '%,0)' };
     } else {
-      barCSS = { 'margin-left': toBarPerc(n)+'%' };
+      barCSS = { 'margin-left': toBarPerc(n) + '%' };
     }
 
-    barCSS.transition = 'all '+speed+'ms '+ease;
+    barCSS.transition = 'all ' + speed + 'ms ' + ease;
 
     return barCSS;
   }
 
-  exports.XE.Progress = function() {
+  exports.XE.Progress = function () {
 
     return {
-      cssLoad: function() {
+      cssLoad: function () {
         if (cssLoaded === false) {
           cssLoaded = true;
           XE.cssLoad('/assets/core/common/css/progress.css'); // @TODO
         }
       },
-      start: function(context) {
-        if($('link[href*="assets/core/common/css/progress.css"]').length == 0) {
+
+      start: function (context) {
+        if ($('link[href*="assets/core/common/css/progress.css"]').length == 0) {
           XE.cssLoad('/assets/core/common/css/progress.css'); // @TODO
         }
 
@@ -413,21 +414,22 @@
 
         $context.trigger('progressStart');
       },
-      done: function(context) {
+
+      done: function (context) {
         var $context = $(context);
         if ($context.context === undefined) {
           $context = $('body');
         }
 
         $context.trigger('progressDone');
-      }
-    }
+      },
+    };
   }();
 })(window);
 
 
 //queue
-(function(exports, Progress) {
+(function (exports, Progress) {
   var pending = [];
 
   function next() {
@@ -437,7 +439,7 @@
     }
   }
 
-  Progress.queue = function(fn) {
+  Progress.queue = function (fn) {
     pending.push(fn);
     if (pending.length == 1) next();
   };
@@ -445,13 +447,13 @@
 })(window, XE.Progress);
 
 //css
-(function(exports, Progress) {
+(function (exports, Progress) {
 
-  var cssPrefixes = [ 'Webkit', 'O', 'Moz', 'ms' ],
+  var cssPrefixes = ['Webkit', 'O', 'Moz', 'ms'],
       cssProps    = {};
 
   function camelCase(string) {
-    return string.replace(/^-ms-/, 'ms-').replace(/-([\da-z])/gi, function(match, letter) {
+    return string.replace(/^-ms-/, 'ms-').replace(/-([\da-z])/gi, function (match, letter) {
       return letter.toUpperCase();
     });
   }
@@ -483,8 +485,8 @@
     }
   }
 
-  Progress.css = function() {
-    return function(element, properties) {
+  Progress.css = function () {
+    return function (element, properties) {
       var args = arguments,
           prop,
           value;
@@ -498,5 +500,5 @@
         applyCss(element, args[1], args[2]);
       }
     };
-  }
+  };
 })(window, XE.Progress);

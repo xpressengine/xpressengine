@@ -7,11 +7,7 @@ $('.__xe__uiobject_permission').each(function (i) {
   var el = $(this),
     data = el.data('data');
 
-  var key = el.data('key')
-      , type = el.data('type')
-      , memberUrl = el.data('memberUrl')
-      , groupUrl = el.data('groupUrl')
-      , vgroupAll = el.data('vgroupAll');
+  var key = el.data('key'), type = el.data('type'), memberUrl = el.data('memberUrl'), groupUrl = el.data('groupUrl'), vgroupAll = el.data('vgroupAll');
 
   ReactDOM.render(
       <Permission
@@ -20,7 +16,6 @@ $('.__xe__uiobject_permission').each(function (i) {
           groupSearchUrl = {groupUrl}
           permission = {data}
           type = {type}
-          vgroupAll = {vgroupAll} />
-      , this
-  )
+          vgroupAll = {vgroupAll} />, this
+  );
 });
