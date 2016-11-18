@@ -469,10 +469,13 @@ class MenuHandler
             $item->parentId = $parent->getKey();
         }
 
+        // 캐시를 사용하는 경우 기존 메뉴를 대상으로 하는 캐시의 갱신이 필요하여
+        // 변경전 업데이트를 수행함
+        $this->repo->update($item->menu);
         $item->{$item->getAggregatorKeyName()} = $menu->getKey();
+        $item->setRelation('menu', $menu);
         $item = $this->repo->updateItem($item);
 
-        // todo: 캐시 갱신 점검
         // 연관 객체 정보들이 변경 되었으므로 객채를 갱신 함
         return $this->repo->findItem($item->getKey());
     }

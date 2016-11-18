@@ -168,6 +168,7 @@ class CacheDecorator implements PermissionRepository
     public function foster(Permission $item, $to)
     {
         $this->erase($item->siteKey, $item->name);
+        $this->erase($item->siteKey, $to);
 
         $this->repo->foster($item, $to);
     }
@@ -182,6 +183,7 @@ class CacheDecorator implements PermissionRepository
     public function affiliate(Permission $item, $to)
     {
         $this->erase($item->siteKey, $item->name);
+        $this->erase($item->siteKey, $to);
 
         $this->repo->affiliate($item, $to);
     }

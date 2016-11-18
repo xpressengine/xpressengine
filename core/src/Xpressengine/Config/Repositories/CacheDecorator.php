@@ -172,6 +172,7 @@ class CacheDecorator implements ConfigRepository
     public function foster(ConfigEntity $config, $to)
     {
         $this->erase($config->siteKey, $config->name);
+        $this->erase($config->siteKey, $to);
 
         $this->repo->foster($config, $to);
     }
@@ -186,6 +187,7 @@ class CacheDecorator implements ConfigRepository
     public function affiliate(ConfigEntity $config, $to)
     {
         $this->erase($config->siteKey, $config->name);
+        $this->erase($config->siteKey, $to);
 
         $this->repo->affiliate($config, $to);
     }
