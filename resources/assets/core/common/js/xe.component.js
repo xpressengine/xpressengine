@@ -1,19 +1,17 @@
-(function (exports) {
-  exports.XE.Component = function () {
-    return {
-      timeago: function () {
-        $('[data-xe-timeago]').trigger('boot.xe.timeago');
-      },
+XE.Component = (function (exports) {
+  return {
+    timeago: function () {
+      $('[data-xe-timeago]').trigger('boot.xe.timeago');
+    },
 
-      boot: function () {
-        this.timeago();
-        $('[data-toggle=xe-dropdown]').trigger('boot.xe.dropdown');
-        $('[data-toggle=xe-modal]').trigger('boot.xe.modal');
-        $('[data-toggle=xe-tooltip]').trigger('boot.xe.tooltip');
-        $('[data-toggle=dropdown]').trigger('boot.dropdown');
-      },
-    };
-  }();
+    boot: function () {
+      this.timeago();
+      $('[data-toggle=xe-dropdown]').trigger('boot.xe.dropdown');
+      $('[data-toggle=xe-modal]').trigger('boot.xe.modal');
+      $('[data-toggle=xe-tooltip]').trigger('boot.xe.tooltip');
+      $('[data-toggle=dropdown]').trigger('boot.dropdown');
+    },
+  };
 })(window);
 
 $(function () {
@@ -78,11 +76,11 @@ $(function () {
 
   // xeModal =========================================================
   $.fn.xeModal = function (options) {
-    var $el = this;
+    var _this = this;
 
     System.import('xe.component.transition');
     System.import('xe.component.modal').then(function () {
-      $el.xeModal(options);
+      _this.xeModal(options);
     });
 
     XE.cssLoad('/assets/core/xe-ui-component/xe-ui-component.css');
@@ -91,10 +89,10 @@ $(function () {
 
   // xeDropdown ======================================================
   $.fn.xeDropdown = function (options) {
-    var $el = this;
+    var _this = this;
 
     System.import('xe.component.dropdown').then(function () {
-      $el.xeDropdown(options);
+      _this.xeDropdown(options);
     });
 
     XE.cssLoad('/assets/core/xe-ui-component/xe-ui-component.css');
@@ -103,11 +101,11 @@ $(function () {
 
   // xeTooltip =======================================================
   $.fn.xeTooltip = function (options) {
-    var $el = this;
+    var _this = this;
 
     System.import('xe.component.transition');
     System.import('xe.component.tooltip').then(function () {
-      $el.xeTooltip(options);
+      _this.xeTooltip(options);
     });
 
     XE.cssLoad('/assets/core/xe-ui-component/xe-ui-component.css');

@@ -18,17 +18,17 @@ if (typeof define === 'function' && define.amd) {
   var $ = jQuery = window.jQuery;
 
   var XeUserMenu = function (element, options) {
-    this.type       = null;
-    this.options    = null;
-    this.enabled    = null;
-    this.timeout    = null;
+    this.type = null;
+    this.options = null;
+    this.enabled = null;
+    this.timeout = null;
     this.hoverState = null;
-    this.$element   = null;
+    this.$element = null;
 
     this.init('usermenu', element, options);
   };
 
-  XeUserMenu.VERSION  = '1.0.0';
+  XeUserMenu.VERSION = '1.0.0';
 
   XeUserMenu.TRANSITION_DURATION = 150;
 
@@ -49,10 +49,10 @@ if (typeof define === 'function' && define.amd) {
   };
 
   XeUserMenu.prototype.init = function (type, element, options) {
-    this.enabled   = true;
-    this.type      = type;
-    this.$element  = $(element);
-    this.options   = this.getOptions(options);
+    this.enabled = true;
+    this.type = type;
+    this.$element = $(element);
+    this.options = this.getOptions(options);
     this.$viewport = this.options.viewport && $(this.options.viewport.selector || this.options.viewport);
 
     if (this.$element[0] instanceof document.constructor && !this.options.selector) {
@@ -71,10 +71,10 @@ if (typeof define === 'function' && define.amd) {
       if (trigger == 'click') {
         this.$element.on('click.' + this.type, this.options.selector, $.proxy(this.toggle, this));
       } else if (trigger != 'manual') {
-        var eventIn  = trigger == 'hover' ? 'mouseenter' : 'focusin';
+        var eventIn = trigger == 'hover' ? 'mouseenter' : 'focusin';
         var eventOut = trigger == 'hover' ? 'mouseleave' : 'focusout';
 
-        this.$element.on(eventIn  + '.' + this.type, this.options.selector, $.proxy(this.enter, this));
+        this.$element.on(eventIn + '.' + this.type, this.options.selector, $.proxy(this.enter, this));
         this.$element.on(eventOut + '.' + this.type, this.options.selector, $.proxy(this.leave, this));
       }
     }
@@ -98,7 +98,7 @@ if (typeof define === 'function' && define.amd) {
   };
 
   XeUserMenu.prototype.getDelegateOptions = function () {
-    var options  = {};
+    var options = {};
     var defaults = this.getDefaults();
 
     this._options && $.each(this._options, function (key, value) {
@@ -162,7 +162,7 @@ if (typeof define === 'function' && define.amd) {
 
       var inDom = $.contains(this.$element[0].ownerDocument.documentElement, this.$element[0]);
       if (e.isDefaultPrevented() || !inDom) return;
-      var that = this;
+      var _this = this;
 
       var $menubox = this.menubox();
 
@@ -215,11 +215,11 @@ if (typeof define === 'function' && define.amd) {
         this.applyPlacement(calculatedOffset, placement);
 
         var complete = function () {
-          var prevHoverState = that.hoverState;
-          that.$element.trigger('shown.xe.' + that.type);
-          that.hoverState = null;
+          var prevHoverState = _this.hoverState;
+          _this.$element.trigger('shown.xe.' + _this.type);
+          _this.hoverState = null;
 
-          if (prevHoverState == 'out') that.leave(that);
+          if (prevHoverState == 'out') _this.leave(_this);
         };
 
         $.support.transition && this.$menubox.hasClass('fade') ?
@@ -235,8 +235,8 @@ if (typeof define === 'function' && define.amd) {
   };
 
   XeUserMenu.prototype.applyPlacement = function (offset, placement) {
-    var $menubox   = this.menubox();
-    var width  = $menubox[0].offsetWidth;
+    var $menubox = this.menubox();
+    var width = $menubox[0].offsetWidth;
     var height = $menubox[0].offsetHeight;
 
     // manually read margins because getBoundingClientRect includes difference
@@ -244,10 +244,10 @@ if (typeof define === 'function' && define.amd) {
     var marginLeft = parseInt($menubox.css('margin-left'), 10);
 
     // we must check for NaN for ie 8/9
-    if (isNaN(marginTop))  marginTop  = 0;
+    if (isNaN(marginTop))  marginTop = 0;
     if (isNaN(marginLeft)) marginLeft = 0;
 
-    offset.top  = offset.top  + marginTop;
+    offset.top = offset.top + marginTop;
     offset.left = offset.left + marginLeft;
 
     // $.fn.offset doesn't round pixel values
@@ -264,7 +264,7 @@ if (typeof define === 'function' && define.amd) {
     $menubox.addClass('in');
 
     // check to see if placing tip in new offset caused the tip to resize itself
-    var actualWidth  = $menubox[0].offsetWidth;
+    var actualWidth = $menubox[0].offsetWidth;
     var actualHeight = $menubox[0].offsetHeight;
 
     if (placement == 'top' && actualHeight != height) {
@@ -276,18 +276,18 @@ if (typeof define === 'function' && define.amd) {
     if (delta.left) offset.left += delta.left;
     else offset.top += delta.top;
 
-    var isVertical          = /top|bottom/.test(placement);
+    var isVertical = /top|bottom/.test(placement);
 
     $menubox.offset(offset);
   };
 
   XeUserMenu.prototype.setContent = function ($menubox, callback) {
 
-    var self = this;
+    var _this = this;
     var ul = $menubox.find('ul.xe-dropdown-menu-list');
     $menubox.removeClass('fade in top bottom left right');
 
-    if (self.menuGenerated) {
+    if (_this.menuGenerated) {
       callback();
       return;
     } else {
@@ -298,10 +298,10 @@ if (typeof define === 'function' && define.amd) {
         data: { type: 'user', id: this.getUID() },
         success: function (data) {
           data.forEach(function (item) {
-            ul.append(self.generateMenuItem(item));
+            ul.append(_this.generateMenuItem(item));
           });
 
-          self.menuGenerated = true;
+          _this.menuGenerated = true;
           callback();
         },
       });
@@ -315,35 +315,39 @@ if (typeof define === 'function' && define.amd) {
 
     var attr;
     switch (item.type) {
-      case 'func' :
-        attr = { href: '#', onClick: function (e) {
-            (eval(item.action))(item.data);
-            e.preventDefault();
-          }.bind(this), };
-      break;
-      case 'exec' :
-        attr = { href: '#', onClick: function (e) {
-            eval(item.action);
-            e.preventDefault();
-          }.bind(this), };
-      break;
-      case 'link' :
-        attr = { href: item.action };
-      break;
-    }
+    case 'func' :
+      attr = {
+        href: '#', onClick: function (e) {
+          (eval(item.action))(item.data);
+          e.preventDefault();
+        }.bind(this),
+      };
+    break;
+    case 'exec' :
+      attr = {
+        href: '#', onClick: function (e) {
+          eval(item.action);
+          e.preventDefault();
+        }.bind(this),
+      };
+    break;
+    case 'link' :
+      attr = { href: item.action };
+    break;
+  }
     return $('<li>').addClass(item.class).append($('<a></a>').attr(attr).text(item.text));
   };
 
   XeUserMenu.prototype.hide = function (callback) {
-    var that = this;
+    var _this = this;
     var $menubox = $(this.$menubox);
-    var e    = $.Event('hide.xe.' + this.type);
+    var e = $.Event('hide.xe.' + this.type);
 
     function complete() {
-      if (that.hoverState != 'in') $menubox.detach();
-      that.$element
+      if (_this.hoverState != 'in') $menubox.detach();
+      _this.$element
         .removeAttr('aria-describedby')
-        .trigger('hidden.xe.' + that.type);
+        .trigger('hidden.xe.' + _this.type);
       callback && callback();
     }
 
@@ -365,29 +369,44 @@ if (typeof define === 'function' && define.amd) {
   };
 
   XeUserMenu.prototype.getPosition = function ($element) {
-    $element   = $element || this.$element;
+    $element = $element || this.$element;
 
-    var el     = $element[0];
+    var el = $element[0];
     var isBody = el.tagName == 'BODY';
 
-    var elRect    = el.getBoundingClientRect();
+    var elRect = el.getBoundingClientRect();
     if (elRect.width == null) {
       // width and height are missing in IE8, so compute them manually; see https://github.com/twbs/bootstrap/issues/14093
-      elRect = $.extend({}, elRect, { width: elRect.right - elRect.left, height: elRect.bottom - elRect.top });
+      elRect = $.extend({}, elRect, {
+        width: elRect.right - elRect.left,
+        height: elRect.bottom - elRect.top,
+      });
     }
 
-    var elOffset  = isBody ? { top: 0, left: 0 } : $element.offset();
-    var scroll    = { scroll: isBody ? document.documentElement.scrollTop || document.body.scrollTop : $element.scrollTop() };
+    var elOffset = isBody ? { top: 0, left: 0 } : $element.offset();
+    var scroll = { scroll: isBody ? document.documentElement.scrollTop || document.body.scrollTop : $element.scrollTop() };
     var outerDims = isBody ? { width: $(window).width(), height: $(window).height() } : null;
 
     return $.extend({}, elRect, scroll, outerDims, elOffset);
   };
 
   XeUserMenu.prototype.getCalculatedOffset = function (placement, pos, actualWidth, actualHeight) {
-    return placement == 'bottom' ? { top: pos.top + pos.height,   left: pos.left + pos.width / 2 - actualWidth / 2 } :
-      placement == 'top'    ? { top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2 } :
-        placement == 'left'   ? { top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth } :
-          /* placement == 'right' */ { top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width };
+    return placement == 'bottom' ? {
+      top: pos.top + pos.height,
+      left: pos.left + pos.width / 2 - actualWidth / 2,
+    } :
+      placement == 'top' ? {
+      top: pos.top - actualHeight,
+      left: pos.left + pos.width / 2 - actualWidth / 2,
+    } :
+        placement == 'left' ? {
+        top: pos.top + pos.height / 2 - actualHeight / 2,
+        left: pos.left - actualWidth,
+      } :
+          /* placement == 'right' */ {
+        top: pos.top + pos.height / 2 - actualHeight / 2,
+        left: pos.left + pos.width,
+      };
 
   };
 
@@ -399,7 +418,7 @@ if (typeof define === 'function' && define.amd) {
     var viewportDimensions = this.getPosition(this.$viewport);
 
     if (/right|left/.test(placement)) {
-      var topEdgeOffset    = pos.top - viewportPadding - viewportDimensions.scroll;
+      var topEdgeOffset = pos.top - viewportPadding - viewportDimensions.scroll;
       var bottomEdgeOffset = pos.top + viewportPadding - viewportDimensions.scroll + actualHeight;
       if (topEdgeOffset < viewportDimensions.top) { // top overflow
         delta.top = viewportDimensions.top - topEdgeOffset;
@@ -407,7 +426,7 @@ if (typeof define === 'function' && define.amd) {
         delta.top = viewportDimensions.top + viewportDimensions.height - bottomEdgeOffset;
       }
     } else {
-      var leftEdgeOffset  = pos.left - viewportPadding;
+      var leftEdgeOffset = pos.left - viewportPadding;
       var rightEdgeOffset = pos.left + viewportPadding + actualWidth;
       if (leftEdgeOffset < viewportDimensions.left) { // left overflow
         delta.left = viewportDimensions.left - leftEdgeOffset;
@@ -441,8 +460,10 @@ if (typeof define === 'function' && define.amd) {
 
   /* toggle은 항상 root container를 this로 가짐 */
   XeUserMenu.prototype.toggle = function (e) {
-    var self = this;
-    var root = this;
+    var _this = this;
+    var self = _this;
+    var root = _this;
+
     if (e) {
       self = $(e.currentTarget).data('xe.' + this.type);
       if (!self) {
@@ -467,17 +488,17 @@ if (typeof define === 'function' && define.amd) {
   };
 
   XeUserMenu.prototype.destroy = function () {
-    var that = this;
+    var _this = this;
     clearTimeout(this.timeout);
     this.hide(function () {
-      that.$element.off('.' + that.type).removeData('xe.' + that.type);
+      _this.$element.off('.' + _this.type).removeData('xe.' + _this.type);
     });
   };
 
   function Plugin(option) {
     return this.each(function () {
-      var $this   = $(this);
-      var data    = $this.data('xe.usermenu');
+      var $this = $(this);
+      var data = $this.data('xe.usermenu');
       var options = typeof option == 'object' && option;
 
       if (!data && /destroy|hide/.test(option)) return;
@@ -488,9 +509,8 @@ if (typeof define === 'function' && define.amd) {
 
   var old = $.fn.xeUserMenu;
 
-  $.fn.xeUserMenu             = Plugin;
+  $.fn.xeUserMenu = Plugin;
   $.fn.xeUserMenu.Constructor = XeUserMenu;
-
 
   // TOOLTIP NO CONFLICT
   // ===================
@@ -503,6 +523,11 @@ if (typeof define === 'function' && define.amd) {
   // APPLY TO STANDARD DROPDOWN ELEMENTS
   // ===================================
 
-  $(document).xeUserMenu({ selector: '[data-toggle=xeUserMenu]', container: 'body', trigger: 'click', placement: 'buttom' });
+  $(document).xeUserMenu({
+    selector: '[data-toggle=xeUserMenu]',
+    container: 'body',
+    trigger: 'click',
+    placement: 'buttom',
+  });
 
 }));

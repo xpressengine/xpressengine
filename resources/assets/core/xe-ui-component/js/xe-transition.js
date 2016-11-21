@@ -8,7 +8,7 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
-+function ($) {
+(function ($) {
   'use strict';
 
   // CSS TRANSITION SUPPORT (Shoutout: http://www.modernizr.com/)
@@ -36,27 +36,31 @@
   // http://blog.alexmaccaw.com/css-transitions
   $.fn.emulateTransitionEnd = function (duration) {
     var called = false;
-    var $el = this;
-    $(this).one('xeTransitionEnd', function () { called = true; });
+    var _this = this;
+    $(this).one('xeTransitionEnd', function () {
+      called = true;
+    });
 
-    var callback = function () { if (!called) $($el).trigger($.support.transition.end); };
+    var callback = function () {
+      if (!called) $(_this).trigger($.support.transition.end);
+    };
 
     setTimeout(callback, duration);
     return this;
   };
 
-  $(function () {
-    $.support.transition = transitionEnd();
+})(jQuery);
 
-    if (!$.support.transition) return;
+$(function () {
+  $.support.transition = transitionEnd();
 
-    $.event.special.xeTransitionEnd = {
-      bindType: $.support.transition.end,
-      delegateType: $.support.transition.end,
-      handle: function (e) {
-        if ($(e.target).is(this)) return e.handleObj.handler.apply(this, arguments);
-      },
-    };
-  });
+  if (!$.support.transition) return;
 
-}(jQuery);
+  $.event.special.xeTransitionEnd = {
+    bindType: $.support.transition.end,
+    delegateType: $.support.transition.end,
+    handle: function (e) {
+      if ($(e.target).is(this)) return e.handleObj.handler.apply(this, arguments);
+    },
+  };
+});

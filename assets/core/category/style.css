@@ -6,6 +6,7 @@ ol.item-box, ol.item-box ol {
 ol.item-box, ol.item-box-new {
     -webkit-padding-start: 0;
 }
+
 .item-box li .panel {
     border: 1px solid #d4d4d4;
     -webkit-border-radius: 4px;
@@ -13,6 +14,7 @@ ol.item-box, ol.item-box-new {
     border-radius: 4px;
     margin: 2px;
 }
+
 .item-box li .panel header {
     cursor: pointer;
 }
@@ -20,31 +22,39 @@ ol.item-box, ol.item-box-new {
 .item-box li .panel:hover {
     border-color: #aaaaaa;
 }
-.item-box .panel-default,.item-box .panel-default .panel-heading {
+
+.item-box .panel-default, .item-box .panel-default .panel-heading {
     background-color: #FFF;
 }
+
 .item-box .panel-heading {
     padding: 10px 5px;
     border-bottom: 0;
 }
-.item-box .panel-heading .head-bth{
+
+.item-box .panel-heading .head-bth {
     float: left;
     width: 25px;
     text-align: center;
 }
+
 .item-box li .panel.active {
     border-color: #0073D1;
 }
+
 .item-box li .panel.active .panel-heading {
     background-color: #0073D1;
     color: #FFF;
 }
+
 .item-box li .panel .panel-collapse {
     border-top: 1px solid #d4d4d4;
 }
+
 .item-box .placeholder {
     border: 1px dashed #4183C4;
 }
+
 .item-box li .panel.active .panel-heading .toggle-btns > span.active {
     -webkit-border-radius: 50px;
     -moz-border-radius: 50px;
@@ -52,7 +62,6 @@ ol.item-box, ol.item-box-new {
     background-color: #F4FF14;
     color: #0e0e0e;
 }
-
 
 ol.item-box-new .panel-default .panel-heading {
     background-color: #2b2e37;

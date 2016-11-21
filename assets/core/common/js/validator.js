@@ -1,267 +1,267 @@
-(function (root, factory) {
-module.exports = factory();
-}(this, function () {
+(function(root, factory) {
+	module.exports = factory();
+}(this, function() {
 
-  'use strict';
+	'use strict';
 
-  var Validator = {};
-  Validator.rules = {};
-  Validator.alertType = 'form';
+	var Validator = {};
+	Validator.rules = {};
+	Validator.alertType = 'form';
 
-  Validator.setRules = function (ruleName, rules) {
-    if (this.rules[ruleName] != undefined) {
-      this.rules[ruleName] = $.extend(rules, this.rules[ruleName]);
-    } else {
-      this.rules[ruleName] = rules;
+	Validator.setRules = function(ruleName, rules) {
+		if (this.rules[ruleName] != undefined) {
+			this.rules[ruleName] = $.extend(rules, this.rules[ruleName]);
+		} else {
+			this.rules[ruleName] = rules;
 
-      // init form check event listner
-      this.init(ruleName);
-    }
-  };
+			// init form check event listner
+			this.init(ruleName);
+		}
+	};
 
-  // validator 를 set 하면서 submit event listener 를 등록한다.
-  Validator.init = function (ruleName) {
-    $('[data-rule="' + ruleName + '"]').on('submit', function (event) {
-      try {
-        Validator.check($(this));
-      } catch (e) {
-        // validation 체크하면서 에러가 발생한 경우 다른 이벤트는 처리하지 않음
-        event.preventDefault();
-      }
-    });
-  };
+	// validator 를 set 하면서 submit event listener 를 등록한다.
+	Validator.init = function(ruleName) {
+		$('[data-rule="' + ruleName + '"]').on('submit', function(event) {
+			try {
+				Validator.check($(this));
+			} catch (e) {
+				// validation 체크하면서 에러가 발생한 경우 다른 이벤트는 처리하지 않음
+				event.preventDefault();
+			}
+		});
+	};
 
-  Validator.getRuleName = function ($frm) {
-    return $frm.data('rule');
-  };
+	Validator.getRuleName = function($frm) {
+		return $frm.data('rule');
+	};
 
-  Validator.check = function ($frm) {
-    var ruleName = this.getRuleName($frm),
-        rules = this.rules[ruleName],
-        self = this,
-        alertType = $frm.data('rule-alert-type');
+	Validator.check = function($frm) {
+		var ruleName = this.getRuleName($frm),
+				rules = this.rules[ruleName],
+				self = this,
+				alertType = $frm.data('rule-alert-type');
 
-    if (alertType == undefined) {
-      alertType = 'form';
-    }
+		if (alertType == undefined) {
+			alertType = 'form';
+		}
 
-    self.alertType = alertType;
+		self.alertType = alertType;
 
-    $.each(rules, function (name, rule) {
-      self.validate($frm, name, rule);
-    });
+		$.each(rules, function(name, rule) {
+			self.validate($frm, name, rule);
+		});
 
-    this.checkRuleContainers($frm);
-  };
+		this.checkRuleContainers($frm);
+	};
 
-  Validator.checkRuleContainers = function ($frm) {
-    var self = this,
-        containers = $frm.find('[data-rule]');
+	Validator.checkRuleContainers = function($frm) {
+		var self = this,
+				containers = $frm.find('[data-rule]');
 
-    $.each(containers, function (index, container) {
-      var ruleName = $(container).data('rule'),
-          rules = self.rules[ruleName];
+		$.each(containers, function(index, container) {
+			var ruleName = $(container).data('rule'),
+					rules = self.rules[ruleName];
 
-      $.each(rules, function (name, rule) {
-        self.validate($frm, name, rule);
-      });
-    });
-  };
+			$.each(rules, function(name, rule) {
+				self.validate($frm, name, rule);
+			});
+		});
+	};
 
-  Validator.formValidate = function ($form) {
-    var self = this;
+	Validator.formValidate = function($form) {
+		var self = this;
 
-    Validator.alertType = $form.data('rule-alert-type') || 'toast';
-    self.errorClear($form);
+		Validator.alertType = $form.data('rule-alert-type') || 'toast';
+		self.errorClear($form);
 
-    $form.find('[data-valid]').each(function () {
-      var $this = $(this);
-      var rule = $this.data('valid');
-      var name = $this.attr('name');
+		$form.find('[data-valid]').each(function() {
+			var $this = $(this);
+			var rule = $this.data('valid');
+			var name = $this.attr('name');
 
-      self.validate($form, name, rule);
-    });
-  };
+			self.validate($form, name, rule);
+		});
+	};
 
-  Validator.validate = function ($frm, name, rule) {
-    var parts = rule.split('|'),
-        self = this;
+	Validator.validate = function($frm, name, rule) {
+		var parts = rule.split('|'),
+				self = this;
 
-    $.each(parts, function (index, part) {
-      var res = part.split(':'),
-          command = res[0].toLowerCase(),
-          parameters = res[1];
+		$.each(parts, function(index, part) {
+			var res = part.split(':'),
+					command = res[0].toLowerCase(),
+					parameters = res[1];
 
-      if (typeof self.validators[command] === 'function') {
-        var $dst = $frm.find('[name="' + name + '"]');
-        self.errorClear($frm);
-        if (self.validators[command]($dst, parameters) === false) {
-          throw Error('Validation error.');
-        }
-      }
-    });
-  };
+			if (typeof self.validators[command] === 'function') {
+				var $dst = $frm.find('[name="' + name + '"]');
+				self.errorClear($frm);
+				if (self.validators[command]($dst, parameters) === false) {
+					throw Error('Validation error.');
+				}
+			}
+		});
+	};
 
-  // validator 추가
-  Validator.put = function (name, callback) {
-    this.validators[name] = callback;
-  };
+	// validator 추가
+	Validator.put = function(name, callback) {
+		this.validators[name] = callback;
+	};
 
-  Validator.errorClear = function ($form) {
-    System.import('xecore:/common/js/griper').then(function (griper) {
-      griper.form.fn.clear($form);
-    });
-  };
+	Validator.errorClear = function($form) {
+		System.import('xecore:/common/js/griper').then(function(griper) {
+			griper.form.fn.clear($form);
+		});
+	};
 
-  Validator.error = function ($element, message) {
-    if (this.alertType == 'form') {
-      System.import('xecore:/common/js/griper').then(function (griper) {
-        griper.form($element, message);
-      });
-    } else if (this.alertType == 'toast') {
-      System.import('xecore:/common/js/griper').then(function (griper) {
-        var typeName = $element.attr('placeholder');
-        if (typeName == undefined) {
-          typeName = $element.attr('name');
-        }
+	Validator.error = function($element, message) {
+		if (this.alertType == 'form') {
+			System.import('xecore:/common/js/griper').then(function(griper) {
+				griper.form($element, message);
+			});
+		} else if (this.alertType == 'toast') {
+			System.import('xecore:/common/js/griper').then(function(griper) {
+				var typeName = $element.attr('placeholder');
+				if (typeName == undefined) {
+					typeName = $element.attr('name');
+				}
 
-        message = '[' + typeName + '] ' + message;
-        griper.toast($element, message);
-      });
-    }
+				message = '[' + typeName + '] ' + message;
+				griper.toast($element, message);
+			});
+		}
 
-  };
+	};
 
-  Validator.validators = {
-    checked: function ($dst, parameters) {
-      var name = $dst.attr('name');
-      var min = parameters.split('-')[0];
-      var max = parameters.split('-')[1];
+	Validator.validators = {
+		checked: function($dst, parameters) {
+			var name = $dst.attr('name');
+			var min = parameters.split('-')[0];
+			var max = parameters.split('-')[1];
 
-      var checkedLenth = $dst.clone().wrap('<div />').parent().find(':checked').length;
+			var checkedLenth = $dst.clone().wrap('<div />').parent().find(':checked').length;
 
-      if (checkedLenth < parseInt(min, 10) || checkedLenth > parseInt(max, 10)) {
+			if (checkedLenth < parseInt(min, 10) || checkedLenth > parseInt(max, 10)) {
 
-        var messageType = 'xe::validatorChecked';
+				var messageType = 'xe::validatorChecked';
 
-        if (!max) {
-          messageType = 'xe::validatorCheckedMin';
-        }else if (min == 0) {
-          messageType = 'xe::validatorCheckedMax';
-        }
+				if (!max) {
+					messageType = 'xe::validatorCheckedMin';
+				} else if (min == 0) {
+					messageType = 'xe::validatorCheckedMax';
+				}
 
-        Validator.error($dst, XE.Lang.trans(messageType));
-        return false;
-      }
+				Validator.error($dst, XE.Lang.trans(messageType));
+				return false;
+			}
 
-      return true;
-    },
+			return true;
+		},
 
-    required: function ($dst, parameters) {
-      var value = $dst.val();
-      if (value === '') {
-        Validator.error($dst, XE.Lang.trans('xe::validatorRequired'));
-        return false;
-      }
+		required: function($dst, parameters) {
+			var value = $dst.val();
+			if (value === '') {
+				Validator.error($dst, XE.Lang.trans('xe::validatorRequired'));
+				return false;
+			}
 
-      return true;
-    },
+			return true;
+		},
 
-    alpha: function ($dst, parameters) {
-      var value = $dst.val(),
-          pattern = /[a-zA-Z]/;
-      if (!pattern.test(value)) {
-        Validator.error($dst, XE.Lang.trans('xe::validatorAlpha')); //TODO 번역 넣어야함
-        return false;
-      }
+		alpha: function($dst, parameters) {
+			var value = $dst.val(),
+					pattern = /[a-zA-Z]/;
+			if (!pattern.test(value)) {
+				Validator.error($dst, XE.Lang.trans('xe::validatorAlpha')); //TODO 번역 넣어야함
+				return false;
+			}
 
-      return true;
-    },
+			return true;
+		},
 
-    alphanum: function ($dst, parameters) {
-      var value = $dst.val(),
-          pattern = /[^a-zA-Z0-9]/;
-      if (pattern.test(value) === true) {
-        Validator.error($dst, XE.Lang.trans('xe::validatorAlphanum'));
-        return false;
-      }
+		alphanum: function($dst, parameters) {
+			var value = $dst.val(),
+					pattern = /[^a-zA-Z0-9]/;
+			if (pattern.test(value) === true) {
+				Validator.error($dst, XE.Lang.trans('xe::validatorAlphanum'));
+				return false;
+			}
 
-      return true;
-    },
+			return true;
+		},
 
-    min: function ($dst, parameters) {
-      var value = $dst.val();
+		min: function($dst, parameters) {
+			var value = $dst.val();
 
-      if (value.length <= parseInt(parameters)) {
-        Validator.error($dst, XE.Lang.transChoice('xe::validatorMin', parameters, { charCount: parameters }));
-        return false;
-      }
+			if (value.length <= parseInt(parameters)) {
+				Validator.error($dst, XE.Lang.transChoice('xe::validatorMin', parameters, {charCount: parameters}));
+				return false;
+			}
 
-      return true;
-    },
+			return true;
+		},
 
-    max: function ($dst, parameters) {
-      var value = $dst.val();
+		max: function($dst, parameters) {
+			var value = $dst.val();
 
-      if (value.length >= parseInt(parameters)) {
-        Validator.error($dst, XE.Lang.trans('xe::validatorMax')); //TODO 번역 넣어야함
-        return false;
-      }
+			if (value.length >= parseInt(parameters)) {
+				Validator.error($dst, XE.Lang.trans('xe::validatorMax')); //TODO 번역 넣어야함
+				return false;
+			}
 
-      return true;
-    },
+			return true;
+		},
 
-    email: function ($dst, parameters) {
-      var val = $dst.val();
-      var re = /\w+@\w{2,}\.\w{2,}/;
+		email: function($dst, parameters) {
+			var val = $dst.val();
+			var re = /\w+@\w{2,}\.\w{2,}/;
 
-      if (!val.match(re)) {
-        Validator.error($dst, XE.Lang.trans('xe::validatorEmail')); //TODO 번역 넣어야함
-        return false;
-      }
+			if (!val.match(re)) {
+				Validator.error($dst, XE.Lang.trans('xe::validatorEmail')); //TODO 번역 넣어야함
+				return false;
+			}
 
-      return true;
-    },
+			return true;
+		},
 
-    url: function ($dst, parameters) {
-      var val = $dst.val();
-      var re = /^https?:\/\/\S+/;
+		url: function($dst, parameters) {
+			var val = $dst.val();
+			var re = /^https?:\/\/\S+/;
 
-      if (!val.match(re)) {
-        Validator.error($dst, XE.Lang.trans('xe::validatorUrl')); //TODO 번역 넣어야함
-        return false;
-      }
+			if (!val.match(re)) {
+				Validator.error($dst, XE.Lang.trans('xe::validatorUrl')); //TODO 번역 넣어야함
+				return false;
+			}
 
-      return true;
-    },
+			return true;
+		},
 
-    numeric: function ($dst, parameters) {
-      var val = $dst.val();
-      var num = Number(val);
+		numeric: function($dst, parameters) {
+			var val = $dst.val();
+			var num = Number(val);
 
-      if (typeof num === 'number' && !isNaN(num) && typeof val !== 'boolean') {
-        return true;
-      } else {
-        Validator.error($dst, XE.Lang.trans('xe::validatorNumeric')); //TODO 번역 넣어야함
-        return false;
-      }
-    },
+			if (typeof num === 'number' && !isNaN(num) && typeof val !== 'boolean') {
+				return true;
+			} else {
+				Validator.error($dst, XE.Lang.trans('xe::validatorNumeric')); //TODO 번역 넣어야함
+				return false;
+			}
+		},
 
-    between: function ($dst, parameters) {
-      var range = parameters.split(','),
-          value = $dst.val();
+		between: function($dst, parameters) {
+			var range = parameters.split(','),
+					value = $dst.val();
 
-      // 등록된 내용이 없으면 체크 안함
-      if (value.length == 0) {
-        return true;
-      }
+			// 등록된 내용이 없으면 체크 안함
+			if (value.length == 0) {
+				return true;
+			}
 
-      if (value.length <= parseInt(range[0]) || value.length >= parseInt(range[1])) {
-        Validator.error($dst, XE.Lang.trans('xe::validatorBetween', { between: parameters }));
-        return false;
-      }
-    },
-  };
+			if (value.length <= parseInt(range[0]) || value.length >= parseInt(range[1])) {
+				Validator.error($dst, XE.Lang.trans('xe::validatorBetween', {between: parameters}));
+				return false;
+			}
+		},
+	};
 
-  return Validator;
+	return Validator;
 }));

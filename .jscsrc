@@ -19,7 +19,13 @@
         "./webpack.config.js",
         "./webpack.dev.config.js",
         "./webpack.prod.config.js",
-        "!(.png|.jpg|.git)"
+        "./resources/gulpTasks/**",
+        "./**/*.png",
+        "./**/*.jpg",
+        "./**/*.gif",
+        "./**/*.scss",
+        "./**/*.css",
+        "./resources/assets/core/xe-ui-component/js/xe-lightbox.js"
     ],
     "fileExtensions": [".js", ".jsx"],
     "fix": true

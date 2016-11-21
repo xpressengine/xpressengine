@@ -21,14 +21,14 @@
  */
 (function ($) {
 
-var overlay = $('<div id="xe-galleryOverlay">');
-var slider = $('<div id="xe-gallerySlider">');
-var prevArrow = $('<a id="xe-prevArrow"><i class="xi-angle-left-thin"></i></a>');
-var nextArrow = $('<a id="xe-nextArrow"><i class="xi-angle-right-thin"></i></a>');
-var overlayClose = $('<button id="btn-overlay-close"><i class="xi-close"></i></button>');
-var overlayVisible = false;
+  var overlay = $('<div id="xe-galleryOverlay">');
+  var slider = $('<div id="xe-gallerySlider">');
+  var prevArrow = $('<a id="xe-prevArrow"><i class="xi-angle-left-thin"></i></a>');
+  var nextArrow = $('<a id="xe-nextArrow"><i class="xi-angle-right-thin"></i></a>');
+  var overlayClose = $('<button id="btn-overlay-close"><i class="xi-close"></i></button>');
+  var overlayVisible = false;
 
-$.fn.lightbox = function (options) {
+  $.fn.lightbox = function (options) {
     var placeholders = $([]);
     var index = 0;
     var allitems = this;
@@ -40,109 +40,109 @@ $.fn.lightbox = function (options) {
 
     // Creating a placeholder for each image
     items.each(function () {
-        placeholders = placeholders.add($('<div class="xe-placeholder">'));
-      });
+      placeholders = placeholders.add($('<div class="xe-placeholder">'));
+    });
 
     // Hide the gallery if the background is touched / clicked
     slider.append(placeholders).on('click', function (e) {
 
-        //if(!$(e.target).is('img')){
-        //	hideOverlay();
-        //}
-      });
+      //if(!$(e.target).is('img')){
+      //	hideOverlay();
+      //}
+    });
 
     // Listen for touch events on the body and check if they
     // originated in #xe-gallerySlider img - the images in the slider.
     $('body').on('touchstart', '#xe-gallerySlider img', function (e) {
 
-        var touch = e.originalEvent,
-            startX = touch.changedTouches[0].pageX;
+      var touch = e.originalEvent,
+        startX = touch.changedTouches[0].pageX;
 
-        slider.on('touchmove', function (e) {
+      slider.on('touchmove', function (e) {
 
-            e.preventDefault();
+        e.preventDefault();
 
-            touch = e.originalEvent.touches[0] ||
-                e.originalEvent.changedTouches[0];
+        touch = e.originalEvent.touches[0] ||
+          e.originalEvent.changedTouches[0];
 
-            if (touch.pageX - startX > 10) {
+        if (touch.pageX - startX > 10) {
 
-              slider.off('touchmove');
-              showPrevious();
-            } else if (touch.pageX - startX < -10) {
+          slider.off('touchmove');
+          showPrevious();
+        } else if (touch.pageX - startX < -10) {
 
-              slider.off('touchmove');
-              showNext();
-            }
-          });
-
-        // Return false to prevent image
-        // highlighting on Android
-        return false;
-
-      }).on('touchend', function () {
-
-        slider.off('touchmove');
-
+          slider.off('touchmove');
+          showNext();
+        }
       });
+
+      // Return false to prevent image
+      // highlighting on Android
+      return false;
+
+    }).on('touchend', function () {
+
+      slider.off('touchmove');
+
+    });
 
     // Listening for clicks on the thumbnails
     items.on('click', function (e) {
 
-        e.preventDefault();
+      e.preventDefault();
 
-        var $this = $(this),
-            galleryName,
-            selectorType,
-            $closestGallery = $this.parent().closest('[data-gallery]');
+      var $this = $(this),
+        galleryName,
+        selectorType,
+        $closestGallery = $this.parent().closest('[data-gallery]');
 
-        // Find gallery name and change items object to only have
-        // that gallery
+      // Find gallery name and change items object to only have
+      // that gallery
 
-        //If gallery name given to each item
-        if ($this.attr('data-gallery')) {
+      //If gallery name given to each item
+      if ($this.attr('data-gallery')) {
 
-          galleryName = $this.attr('data-gallery');
-          selectorType = 'item';
+        galleryName = $this.attr('data-gallery');
+        selectorType = 'item';
 
-          //If gallery name given to some ancestor
-        } else if ($closestGallery.length) {
+        //If gallery name given to some ancestor
+      } else if ($closestGallery.length) {
 
-          galleryName = $closestGallery.attr('data-gallery');
-          selectorType = 'ancestor';
+        galleryName = $closestGallery.attr('data-gallery');
+        selectorType = 'ancestor';
 
-        }
+      }
 
-        //These statements kept seperate in case elements have data-gallery on both
-        //items and ancestor. Ancestor will always win because of above statments.
-        if (galleryName && selectorType == 'item') {
+      //These statements kept seperate in case elements have data-gallery on both
+      //items and ancestor. Ancestor will always win because of above statments.
+      if (galleryName && selectorType == 'item') {
 
-          items = $('[data-gallery=' + galleryName + ']');
+        items = $('[data-gallery=' + galleryName + ']');
 
-        } else if (galleryName && selectorType == 'ancestor') {
+      } else if (galleryName && selectorType == 'ancestor') {
 
-          //Filter to check if item has an ancestory with data-gallery attribute
-          items = items.filter(function () {
+        //Filter to check if item has an ancestory with data-gallery attribute
+        items = items.filter(function () {
 
-              return $(this).parent().closest('[data-gallery]').length;
+          return $(this).parent().closest('[data-gallery]').length;
 
-            });
+        });
 
-        }
+      }
 
-        // Find the position of this image
-        // in the collection
-        index = items.index(this);
-        showOverlay(index);
-        showImage(index);
+      // Find the position of this image
+      // in the collection
+      index = items.index(this);
+      showOverlay(index);
+      showImage(index);
 
-        // Preload the next image
-        preload(index + 1);
+      // Preload the next image
+      preload(index + 1);
 
-        // Preload the previous
-        preload(index - 1);
+      // Preload the previous
+      preload(index - 1);
 
-      });
+    });
 
     // If the browser does not have support
     // for touch, display the arrows
@@ -150,39 +150,39 @@ $.fn.lightbox = function (options) {
       overlay.append(prevArrow).append(nextArrow).append(overlayClose);
 
       prevArrow.click(function (e) {
-          e.preventDefault();
-          showPrevious();
-        });
+        e.preventDefault();
+        showPrevious();
+      });
 
       nextArrow.click(function (e) {
-          e.preventDefault();
-          showNext();
-        });
+        e.preventDefault();
+        showNext();
+      });
 
       overlayClose.click(function (e) {
-          hideOverlay();
-        });
+        hideOverlay();
+      });
     }
 
     if (('ontouchstart' in window)) {
       overlay.append(overlayClose);
       overlayClose.click(function (e) {
-          hideOverlay();
-        });
+        hideOverlay();
+      });
     }
 
     // Listen for arrow keys
     $(window).bind('keydown', function (e) {
 
-        if (e.keyCode == 37) {
-          showPrevious();
-        } else if (e.keyCode == 39) {
-          showNext();
-        } else if (e.keyCode == 27) { //esc
-          hideOverlay();
-        }
+      if (e.keyCode == 37) {
+        showPrevious();
+      } else if (e.keyCode == 39) {
+        showNext();
+      } else if (e.keyCode == 27) { //esc
+        hideOverlay();
+      }
 
-      });
+    });
 
 
     /* Private functions */
@@ -197,9 +197,9 @@ $.fn.lightbox = function (options) {
       overlay.show();
 
       setTimeout(function () {
-          // Trigger the opacity CSS transition
-          overlay.addClass('visible');
-        }, 100);
+        // Trigger the opacity CSS transition
+        overlay.addClass('visible');
+      }, 100);
 
       // Move the slider to the correct image
       offsetSlider(index);
@@ -236,8 +236,8 @@ $.fn.lightbox = function (options) {
     function preload(index) {
 
       setTimeout(function () {
-          showImage(index);
-        }, 1000);
+        showImage(index);
+      }, 1000);
     }
 
     // Show image in the slider
@@ -253,19 +253,19 @@ $.fn.lightbox = function (options) {
 
       // Call the load function with the href attribute of the item
       switch ($ele.get(0).tagName.toLowerCase()) {
-      case 'img':
-        src = $ele.attr('src');
-      break;
+        case 'img':
+          src = $ele.attr('src');
+          break;
 
-      default:
-        src = $ele.find('img').attr('src');
-      break;
+        default:
+          src = $ele.find('img').attr('src');
+          break;
 
-    }
+      }
 
       loadImage(src, function () {
-          placeholders.eq(index).html(this);
-        });
+        placeholders.eq(index).html(this);
+      });
     }
 
     // Load the image and execute a callback function.
@@ -274,8 +274,8 @@ $.fn.lightbox = function (options) {
     function loadImage(src, callback) {
 
       var img = $('<img>').on('load', function () {
-          callback.call(img);
-        });
+        callback.call(img);
+      });
 
       img.attr('src', src);
     }
@@ -291,8 +291,8 @@ $.fn.lightbox = function (options) {
         // Trigger the spring animation
         slider.addClass('rightSpring');
         setTimeout(function () {
-            slider.removeClass('rightSpring');
-          }, 500);
+          slider.removeClass('rightSpring');
+        }, 500);
       }
     }
 
@@ -307,18 +307,18 @@ $.fn.lightbox = function (options) {
         // Trigger the spring animation
         slider.addClass('leftSpring');
         setTimeout(function () {
-            slider.removeClass('leftSpring');
-          }, 500);
+          slider.removeClass('leftSpring');
+        }, 500);
       }
     }
   };
 
-$(function () {
+  $(function () {
     $('[data-toggle="xe-lightbox"]').each(function () {
-        var selector = $(this).data('selector');
+      var selector = $(this).data('selector');
 
-        $(this).find(' > ' + selector).lightbox();
-      });
+      $(this).find(' > ' + selector).lightbox();
+    });
   });
 
 })(jQuery);

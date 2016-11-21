@@ -1,130 +1,130 @@
-(function (exports) {
+(function(exports) {
 
-'use strict';
+	'use strict';
 
-exports.DynamicLoadManager = function () {
+	exports.DynamicLoadManager = function() {
 
-    var self;
-    var _assets = {
-        js: {}, css: {},
-      };
+		var self;
+		var _assets = {
+			js: {}, css: {},
+		};
 
-    _assets.js[xeBaseURL + 'assets/core/common/js/utils.js'];
-    _assets.js[xeBaseURL + 'assets/core/common/js/dynamicLoadManager.js'];
+		_assets.js[xeBaseURL + 'assets/core/common/js/utils.js'];
+		_assets.js[xeBaseURL + 'assets/core/common/js/dynamicLoadManager.js'];
 
-    return {
-        init: function () {
-            self = this;
+		return {
+			init: function() {
+				self = this;
 
-            return this;
-          },
-        /**
-         * @param {array} arrjs
-         * @param {object}} callbackObj
-         * <pre>
-         *     - load
-         *     - error
-         *     - complete
-         * </pre>
-         * */
-        jsLoadMultiple: function (arrjs, callbackObj) {
-            var count = 0;
-            var callbackObj = callbackObj || {};
+				return this;
+			},
+			/**
+			 * @param {array} arrjs
+			 * @param {object}} callbackObj
+			 * <pre>
+			 *     - load
+			 *     - error
+			 *     - complete
+			 * </pre>
+			 * */
+			jsLoadMultiple: function(arrjs, callbackObj) {
+				var count = 0;
+				var callbackObj = callbackObj || {};
 
-            for (var i = 0, max = arrjs.length; i < max; i += 1) {
-              var src = Utils.asset(arrjs[i]);
+				for (var i = 0, max = arrjs.length; i < max; i += 1) {
+					var src = Utils.asset(arrjs[i]);
 
-              if (!_assets.js.hasOwnProperty(src)) {
-                _assets.js[src] = '';
+					if (!_assets.js.hasOwnProperty(src)) {
+						_assets.js[src] = '';
 
-                $.ajax({
-                    url: src,
-                    async: false,
-                    dataType: 'script',
-                    success: function () {
-                        count++;
+						$.ajax({
+							url: src,
+							async: false,
+							dataType: 'script',
+							success: function() {
+								count++;
 
-                        if (!!callbackObj.load) {
-                          callbackObj.load();
-                        }
+								if (!!callbackObj.load) {
+									callbackObj.load();
+								}
 
-                        if (count === arrjs.length && !!callbackObj.complete) {
-                          callbackObj.complete();
-                        }
-                      },
+								if (count === arrjs.length && !!callbackObj.complete) {
+									callbackObj.complete();
+								}
+							},
 
-                    error: callbackObj.error,
-                  });
+							error: callbackObj.error,
+						});
 
-              }else {
-                if (!!callbackObj.load) {
-                  callbackObj.load();
-                }
-              }
-            }
+					} else {
+						if (!!callbackObj.load) {
+							callbackObj.load();
+						}
+					}
+				}
 
-          },
+			},
 
-        jsLoad: function (url, load, error) {
+			jsLoad: function(url, load, error) {
 
-            var src = Utils.asset(url);
+				var src = Utils.asset(url);
 
-            if (!_assets.js.hasOwnProperty(src)) {
+				if (!_assets.js.hasOwnProperty(src)) {
 
-              var el = document.createElement('script');
+					var el = document.createElement('script');
 
-              el.src = src;
-              el.async = true;
+					el.src = src;
+					el.async = true;
 
-              if (load) {
-                el.onload = load;
-              }
+					if (load) {
+						el.onload = load;
+					}
 
-              if (error) {
-                el.onerror = error;
-              }
+					if (error) {
+						el.onerror = error;
+					}
 
-              document.head.appendChild(el);
+					document.head.appendChild(el);
 
-              _assets.js[src] = '';
+					_assets.js[src] = '';
 
-            }else {
-              if (load) {
-                load();
-              }
-            }
+				} else {
+					if (load) {
+						load();
+					}
+				}
 
-          },
+			},
 
-        cssLoad: function (url, load, error) {
+			cssLoad: function(url, load, error) {
 
-            var src = Utils.asset(url);
+				var src = Utils.asset(url);
 
-            if (!_assets.css.hasOwnProperty(src)) {
+				if (!_assets.css.hasOwnProperty(src)) {
 
-              var $css = $('<link>', { rel: 'stylesheet', type: 'text/css', href: src });
+					var $css = $('<link>', {rel: 'stylesheet', type: 'text/css', href: src});
 
-              if (load) {
-                $css.on('load', load);
-              }
+					if (load) {
+						$css.on('load', load);
+					}
 
-              if (error) {
-                $css.on('error', error);
-              }
+					if (error) {
+						$css.on('error', error);
+					}
 
-              $('head').append($css);
+					$('head').append($css);
 
-              _assets.css[src] = '';
+					_assets.css[src] = '';
 
-            }else {
-              if (load) {
-                load();
-              }
-            }
+				} else {
+					if (load) {
+						load();
+					}
+				}
 
-          },
-      };
-  }().init();
+			},
+		};
+	}().init();
 
 })(window);
 
