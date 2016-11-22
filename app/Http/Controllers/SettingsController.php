@@ -21,7 +21,7 @@ use Xpressengine\Theme\ThemeHandler;
 class SettingsController extends Controller
 {
 
-    public function editSetting(SiteHandler $siteHandler, ThemeHandler $themeHandler, MenuHandler $menuHandler)
+    public function editSetting(SiteHandler $siteHandler, MenuHandler $menuHandler)
     {
         $config = app('xe.site')->getSiteConfig();
 
@@ -29,15 +29,25 @@ class SettingsController extends Controller
         $indexInstance = $siteHandler->getHomeInstanceId();
 
         $menus = $menuHandler->getAll($siteKey, 'items');
-        $selectedTheme = $themeHandler->getSiteThemeId();
 
         return \XePresenter::make(
             'settings.setting',
             compact(
                 'config',
-                'selectedTheme',
                 'menus',
                 'indexInstance'
+            )
+        );
+    }
+
+    public function editTheme(ThemeHandler $themeHandler)
+    {
+        $selectedTheme = $themeHandler->getSiteThemeId();
+
+        return \XePresenter::make(
+            'settings.theme',
+            compact(
+                'selectedTheme'
             )
         );
     }

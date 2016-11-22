@@ -111,7 +111,6 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
 
         $repo->shouldReceive('createItemModel')->with($mockMenu)->andReturn($mockMenuItem);
         $repo->shouldReceive('insertItem')->once()->with($mockMenuItem)->andReturn($mockMenuItem);
-        $repo->shouldReceive('increment')->once()->with($mockMenu);
 
         $instance->expects($this->once())->method('setHierarchy')->with($mockMenuItem);
         $instance->expects($this->once())->method('setOrder')->with($mockMenuItem);
@@ -165,7 +164,6 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
         $mockRelate->shouldReceive('detach')->once()->with($mockMenuItem);
 
         $mockMenuItem->shouldReceive('ancestors')->andReturn($mockRelate);
-//        $mockMenuItem->shouldReceive('delete')->once();
         $repo->shouldReceive('deleteItem')->once()->with($mockMenuItem)->andReturn(true);
 
         $instance->expects($this->once())->method('destroyMenuType')->with($mockMenuItem);
@@ -227,7 +225,9 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
         $mockMenuItem->shouldReceive('getParentIdName')->andReturn('parentId');
         $mockMenuItem->shouldReceive('getAttribute')->with('parentId')->andReturn('pid');
         $mockMenuItem->shouldReceive('getKey')->andReturn('itemKey');
+        $mockMenuItem->shouldReceive('getAttribute')->with('menu')->andReturn($mockMenu);
         $mockMenuItem->shouldReceive('getAggregatorKeyName')->andReturn('menuId');
+        $mockMenuItem->shouldReceive('setRelation')->with('menu', $mockMenu);
 
         $mockMenuItemNewParent = m::mock('Xpressengine\Menu\Models\MenuItem');
         $mockMenuItemNewParent->shouldReceive('getAttribute')->with('menu')->andReturn($mockMenu);
@@ -243,6 +243,8 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
         $mockMenuItem->shouldReceive('setAttribute')->with('parentId', null);
 
         $instance->expects($this->once())->method('linkHierarchy')->with($mockMenuItem, $mockMenuItemNewParent);
+
+        $repo->shouldReceive('update')->once();
 
         $mockMenuItem->shouldReceive('setAttribute')->with('menuId', 'menuKey');
         $repo->shouldReceive('updateItem')->once()->with($mockMenuItem)->andReturn($mockMenuItem);

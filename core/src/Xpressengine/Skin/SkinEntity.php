@@ -154,9 +154,9 @@ class SkinEntity implements Arrayable, Jsonable
      *
      * @return array
      */
-    public function updateSetting(array $config)
+    public function resolveSetting(array $config)
     {
-        return $this->getObject()->updateSetting($config);
+        return $this->getObject()->resolveSetting($config);
     }
 
     /**

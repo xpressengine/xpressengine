@@ -9,9 +9,6 @@ module.exports = (() => {
     const $ = plugins();
 
     return {
-        /**
-         * menu jsx변환 및 bundle, 일부 파일 copy
-         * */
         'assets:sass': () => {
             return gulp.src('./resources/assets/**/*.scss')
                 .pipe($.if(taskSettings.getConfig().useSourceMaps, $.sourcemaps.init()))

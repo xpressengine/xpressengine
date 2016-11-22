@@ -1,151 +1,153 @@
-System.amdDefine('MenuTree', ['vendor:/react', 'MenuSearchBar', 'UITree'], function(React, MenuSearchBar, UITree) {
+import React from 'react';
 
-  'use strict';
+import MenuSearchBar from './MenuSearchBar';
+import UITree from './UITree';
 
-  var MenuTree = React.createClass({
-    getInitialState: function () {
-      return {
-        rawTree: this.props.menus,
-        dataTree: new Tree({title: "root", items: this.props.menus}),
-        selected: null,
-        searched: null,
-        home: this.props.home,
-        menuRoutes: this.props.menuRoutes
-      };
-    },
-    componentDidMount: function () {
-      this.state.dataTree.movementFilter = this.movementFilter;
-    },
+export default React.createClass({
+  getInitialState: function () {
+    return {
+      rawTree: this.props.menus,
+      dataTree: new Tree({ title: 'root', items: this.props.menus }),
+      selected: null,
+      searched: null,
+      home: this.props.home,
+      menuRoutes: this.props.menuRoutes,
+    };
+  },
 
-    getSearchedNode: function () {
-      return this.state.searched;
-    },
+  componentDidMount: function () {
+    this.state.dataTree.movementFilter = this.movementFilter;
+  },
 
-    setSearchedNode: function (node) {
-      this.setState({
-        searched: node
-      });
-    },
+  getSearchedNode: function () {
+    return this.state.searched;
+  },
 
-    getSelectedNode: function () {
-      return this.state.selected;
-    },
+  setSearchedNode: function (node) {
+    this.setState({
+      searched: node,
+    });
+  },
 
-    setSelectedNode: function (node) {
-      this.setState({
-        selected: node
-      });
-    },
+  getSelectedNode: function () {
+    return this.state.selected;
+  },
 
-    movementFilter: function (param) {
-      var tree = param.tree;
+  setSelectedNode: function (node) {
+    this.setState({
+      selected: node,
+    });
+  },
 
-      var destNode = tree.get(param.toId);
-      var destIndex = tree.getIndex(param.toId);
-      var srcNode = tree.get(param.fromId);
+  movementFilter: function (param) {
+    var tree = param.tree;
 
-      if (this.isMenuEntity(srcNode)) return;
+    var destNode = tree.get(param.toId);
+    var destIndex = tree.getIndex(param.toId);
+    var srcNode = tree.get(param.fromId);
 
-      if (this.isMenuEntity(destNode)) {
-        if (param.placement == 'after') {
-          param.placement = 'prepend';
+    if (this.isMenuEntity(srcNode)) return;
+
+    if (this.isMenuEntity(destNode)) {
+      if (param.placement == 'after') {
+        param.placement = 'prepend';
+        return param;
+      } else if (param.placement == 'before') {
+        if (destIndex.prev && destIndex.prev != null) {
+          var newDestIndex = tree.getIndex(destIndex.prev);
+          param.toId = destIndex.prev;
+          if (!newDestIndex.collapsed) {
+            param.placement = 'append';
+          }
+
           return param;
-        } else if (param.placement == 'before') {
-          if (destIndex.prev && destIndex.prev != null) {
-            var newDestIndex = tree.getIndex(destIndex.prev);
-            param.toId = destIndex.prev;
-            if (!newDestIndex.collapsed) {
-              param.placement = 'append';
-            }
-            return param;
-          } else {
-            return;
-          }
+        } else {
+          return;
         }
-        return param;
-      } else {
-
-        if ((param.placement == 'append') || (param.placement == 'prepend')) {
-          if (destIndex.depth > MaxDepth) {
-            return;
-          }
-        }
-        return param;
       }
-    },
 
-    moveMenuItem: function (target) {
-      var moveItemUrl = this.props.baseUrl + '/moveItem';
-      XE.ajax({
-        url: moveItemUrl,
-        context: $('#uitree'),
-        type: 'put',
-        dataType: 'json',
-        data: {
-          itemId: target.id,
-          parent: target.parent,
-          ordering: target.position
-        },
-        success: function (data) {
-          XE.toast('success', 'Item moved');
-        }.bind(this)
-      });
+      return param;
+    } else {
 
-    },
+      if ((param.placement == 'append') || (param.placement == 'prepend')) {
+        if (destIndex.depth > MaxDepth) {
+          return;
+        }
+      }
 
-    getBaseUrl: function () {
-      return this.props.baseUrl;
-    },
+      return param;
+    }
+  },
 
-    onClickHome: function (node) {
-      var homeItemUrl = this.props.baseUrl + '/setHome';
-      var oldHome = this.state.home;
+  moveMenuItem: function (target) {
+    var moveItemUrl = this.props.baseUrl + '/moveItem';
+    XE.ajax({
+      url: moveItemUrl,
+      context: $('#uitree'),
+      type: 'put',
+      dataType: 'json',
+      data: {
+        itemId: target.id,
+        parent: target.parent,
+        ordering: target.position,
+      },
+      success: function (data) {
+        XE.toast('success', 'Item moved');
+      }.bind(this),
+    });
 
-      this.setState({home: node.id});
-      XE.ajax({
-        url: homeItemUrl,
-        context: $('#uitree'),
-        type: 'put',
-        dataType: 'json',
-        data: {
-          itemId: node.id
-        },
-        success: function (data) {
-          XE.toast('success', node.title + ' is home!');
-        }.bind(this),
-        error: function (data) {
-          XE.toast('error', 'home setting was failed!');
-          this.setState({home: oldHome});
-        }.bind(this)
-      });
-    },
+  },
 
-    render: function () {
-      return (
-          <div className="col-sm-12">
-            <div className="panel">
-              <MenuSearchBar tree={this.state.dataTree} handleSearch={this.setSearchedNode} menuRoutes={this.state.menuRoutes}/>
-              <div className="panel-body">
-                <UITree paddingLeft={25}
-                        tree={this.state.dataTree}
-                        home={this.state.home}
-                        getBaseUrl={this.getBaseUrl}
-                        clickHome={this.onClickHome}
-                        getSearchedNode={this.getSearchedNode}
-                        setSearchedNode={this.setSearchedNode}
-                        getSelectedNode={this.getSelectedNode}
-                        setSelectedNode={this.setSelectedNode}
-                        moveNode={this.moveMenuItem}/>
-              </div>
+  getBaseUrl: function () {
+    return this.props.baseUrl;
+  },
+
+  onClickHome: function (node) {
+    var homeItemUrl = this.props.baseUrl + '/setHome';
+    var oldHome = this.state.home;
+
+    this.setState({ home: node.id });
+    XE.ajax({
+      url: homeItemUrl,
+      context: $('#uitree'),
+      type: 'put',
+      dataType: 'json',
+      data: {
+        itemId: node.id,
+      },
+      success: function (data) {
+        XE.toast('success', node.title + ' is home!');
+      }.bind(this),
+      error: function (data) {
+        XE.toast('error', 'home setting was failed!');
+        this.setState({ home: oldHome });
+      }.bind(this),
+    });
+  },
+
+  render: function () {
+    return (
+        <div className="col-sm-12">
+          <div className="panel">
+            <MenuSearchBar tree={this.state.dataTree} handleSearch={this.setSearchedNode} menuRoutes={this.state.menuRoutes}/>
+            <div className="panel-body">
+              <UITree paddingLeft={25}
+                      tree={this.state.dataTree}
+                      home={this.state.home}
+                      getBaseUrl={this.getBaseUrl}
+                      clickHome={this.onClickHome}
+                      getSearchedNode={this.getSearchedNode}
+                      setSearchedNode={this.setSearchedNode}
+                      getSelectedNode={this.getSelectedNode}
+                      setSelectedNode={this.setSelectedNode}
+                      moveNode={this.moveMenuItem}/>
             </div>
           </div>
-      );
-    },
+        </div>
+    );
+  },
 
-    isMenuEntity: function (node) {
-      return (node.entity && (node.entity == 'menu'));
-    }
-  });
-
-  return MenuTree;
+  isMenuEntity: function (node) {
+    return (node.entity && (node.entity == 'menu'));
+  },
 });

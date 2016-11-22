@@ -186,25 +186,6 @@ Route::group(
                     }
                 );
 
-                // addition info action at edit
-                Route::group(
-                    ['prefix' => 'additions/{field}'],
-                    function () {
-                        Route::get(
-                            '/',
-                            ['as' => 'user.settings.additions.show', 'uses' => 'User\UserController@showAdditionField']
-                        );
-                        Route::get(
-                            '/edit',
-                            ['as' => 'user.settings.additions.edit', 'uses' => 'User\UserController@editAdditionField']
-                        );
-                        Route::put(
-                            '/',
-                            ['as' => 'user.settings.additions.update', 'uses' => 'User\UserController@updateAdditionField']
-                        );
-                    }
-                );
-
                 Route::group(
                     ['prefix' => 'pending_mail'],
                     function () {
@@ -221,6 +202,25 @@ Route::group(
                                 'as' => 'user.settings.pending_mail.resend',
                                 'uses' => 'User\UserController@resendPendingMail'
                             ]
+                        );
+                    }
+                );
+
+                // addition info action at edit
+                Route::group(
+                    ['prefix' => 'additions/{field}'],
+                    function () {
+                        Route::get(
+                            '/',
+                            ['as' => 'user.settings.additions.show', 'uses' => 'User\UserController@showAdditionField']
+                        );
+                        Route::get(
+                            '/edit',
+                            ['as' => 'user.settings.additions.edit', 'uses' => 'User\UserController@editAdditionField']
+                        );
+                        Route::put(
+                            '/',
+                            ['as' => 'user.settings.additions.update', 'uses' => 'User\UserController@updateAdditionField']
                         );
                     }
                 );
@@ -467,7 +467,15 @@ Route::settings(
         );
         Route::post('store', ['as' => 'settings.setting.update', 'uses' => 'SettingsController@updateSetting']);
 
-        Route::post('store/theme', ['as' => 'settings.setting.theme', 'uses' => 'SettingsController@updateTheme']);
+        Route::get(
+            'theme',
+            [
+                'as' => 'settings.setting.theme',
+                'uses' => 'SettingsController@editTheme',
+                'settings_menu' => ['setting.theme']
+            ]
+        );
+        Route::post('theme', ['as' => 'settings.setting.theme', 'uses' => 'SettingsController@updateTheme']);
 
         Route::get(
             'permissions',
@@ -574,7 +582,7 @@ Route::settings(
 Route::settings(
     'theme',
     function () {
-        Route::get('edit', ['as' => 'settings.theme.edit', 'uses' => 'ThemeController@edit']);
+        Route::get('edit', ['as' => 'settings.theme.edit', 'uses' => 'ThemeController@edit', 'settings_menu'=>'setting.theme.edit']);
         Route::post('edit', ['as' => 'settings.theme.edit', 'uses' => 'ThemeController@update']);
 
         Route::get('setting', ['as' => 'settings.theme.setting', 'uses' => 'ThemeController@editSetting']);

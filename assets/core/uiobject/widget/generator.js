@@ -1,4 +1,4 @@
-;(function(exports, $) {
+;(function (exports, $) {
 
     'use strict';
 
@@ -19,102 +19,101 @@
             var isBinding = false;
 
             var _bindEvents = function () {
-                $container.on('change', selectWidget, function() {
+                $container.on('change', selectWidget, function () {
                     var widget = this.value;
                     var url = $('.widget-skins').data('url');
 
                     $('.widget-form').empty();
 
-                    if(widget) {
-                        XE.page(url+'?widget='+widget, '.widget-skins');
+                    if (widget) {
+                      XE.page(url + '?widget=' + widget, '.widget-skins');
                     } else {
-                        $('.widget-skins').empty();
-                        $(".__xe_widget_code").val('');
+                      $('.widget-skins').empty();
+                      $('.__xe_widget_code').val('');
                     }
-                });
+                  });
 
-                $container.on('change', selectWidgetSkin, function() {
+                $container.on('change', selectWidgetSkin, function () {
                     var widget = this.value;
 
-                    if(widget !== 'select-skin') {
-                        var url = $(this).find('option:selected').data('url');
-                        XE.page(url, '.widget-form');
+                    if (widget !== 'select-skin') {
+                      var url = $(this).find('option:selected').data('url');
+                      XE.page(url, '.widget-form');
                     }
-                });
+                  });
 
-                $container.on('click', setupCode, function() {
+                $container.on('click', setupCode, function () {
                     var code = $(widgetCodeSel).val();
                     var url = $(widgetInputs).data('url');
 
                     WidgetCode.reset({
                         url: url,
                         target: '.widget-inputs',
-                        code: code
-                    });
-                });
+                        code: code,
+                      });
+                  });
 
-                $container.on('click', generateCode, function() {
+                $container.on('click', generateCode, function () {
                     WidgetCode.generate({
                         widgetForm: '#widgetForm',
-                        skinForm: '#skinForm'
-                    }, cb);
-                });
+                        skinForm: '#skinForm',
+                      }, cb);
+                  });
 
                 isBinding = true;
-            };
+              };
 
-            if(!isBinding) {
-                _bindEvents();
+            if (!isBinding) {
+              _bindEvents();
             }
 
-            switch(typeof opt) {
-                case 'string':
+            switch (typeof opt) {
+            case 'string':
 
-                    //switch
-                    switch(opt) {
-                        case 'code':
-                            return $container.find(widgetCodeSel).val();
-                            break;
+              //switch
+              switch (opt) {
+              case 'code':
+                return $container.find(widgetCodeSel).val();
+              break;
 
-                        case 'generate':
-                            WidgetCode.generate({
-                                widgetForm: widgetForm,
-                                skinForm: skinForm
-                            }, cb);
-                            break;
-                    }
-
-                    break;
-
-                case 'object':
-
-
-                    break;
-                case 'undefined':
-                    break;
-            }
-
-            this.generate = function(cb) {
+              case 'generate':
                 WidgetCode.generate({
                     widgetForm: widgetForm,
-                    skinForm: skinForm
-                }, cb);
-            };
+                    skinForm: skinForm,
+                  }, cb);
+              break;
+            }
 
-            this.reset = function(code, callback) {
+            break;
+
+            case 'object':
+
+            break;
+            case 'undefined':
+            break;
+          }
+
+            this.generate = function (cb) {
+                WidgetCode.generate({
+                    widgetForm: widgetForm,
+                    skinForm: skinForm,
+                  }, cb);
+              };
+
+            this.reset = function (code, callback) {
                 WidgetCode.reset({
                     url: $(widgetInputs).data('url'),
                     code: code,
                     target: widgetInputs,
-                    callback: callback
-                });
-            };
+                    callback: callback,
+                  });
+              };
 
             return this;
-        };
-    };
+          };
+      };
 
-    var WidgetCode = (function() {
+    var WidgetCode = (function () {
         return {
             /**
              * @param {object} options
@@ -129,28 +128,29 @@
                 var data = $form.serializeArray();
 
                 data.push({
-                    'name':'skin',
-                    'value': $(options.skinForm).serializeArray()
-                });
+                    name: 'skin',
+                    value: $(options.skinForm).serializeArray(),
+                  });
 
                 XE.ajax({
-                    url : $form.attr('action'),
-                    type : $form.attr('method'),
-                    cache : false,
-                    data : JSON.stringify(data),
+                    url: $form.attr('action'),
+                    type: $form.attr('method'),
+                    cache: false,
+                    data: JSON.stringify(data),
                     dataType: 'json',
-                    success : function (data) {
+                    success: function (data) {
                         $('.__xe_widget_code').val(data.code);
 
-                        if(cb) {
-                            cb(data);
+                        if (cb) {
+                          cb(data);
                         }
-                    },
-                    error : function(data) {
+                      },
+
+                    error: function (data) {
                         XE.toast(data.type, data.message);
-                    }
-                });
-            },
+                      },
+                  });
+              },
             /**
              * @param {object} options
              * <pre>
@@ -160,7 +160,7 @@
              * </pre>
              * */
             reset: function (options) {
-                DynamicLoadManager.jsLoad('/assets/core/xe-ui-component/js/xe-page.js', function() {
+                DynamicLoadManager.jsLoad('/assets/core/xe-ui-component/js/xe-page.js', function () {
                     var url = options.url;
                     var code = options.code;
                     var target = options.target;
@@ -169,18 +169,19 @@
                         type: 'post',
                         data: {
                             code: code,
-                        }
-                    }, options.callback);
-                });
-            },
-            init: function() {
+                          },
+                      }, options.callback);
+                  });
+              },
+
+            init: function () {
                 self = this;
 
                 _applyPlugins();
 
                 return this;
-            }
-        }
-    })().init();
+              },
+          };
+      })().init();
 
-})(window, jQuery);
+  })(window, jQuery);

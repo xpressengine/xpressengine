@@ -41,6 +41,16 @@ class VideoMeta extends Meta
     protected $guarded = ['id', 'fileId'];
 
     /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'audio' => 'array',
+        'video' => 'array'
+    ];
+
+    /**
      * The foreign key name for the model.
      *
      * @var string

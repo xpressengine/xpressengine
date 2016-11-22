@@ -161,7 +161,6 @@ class UserController extends Controller
         );
     }
 
-
     /**
      * validate DisplayName
      *
@@ -599,8 +598,6 @@ class UserController extends Controller
                 ],
             ]
         );
-
-
     }
 
     public function editAdditionField($field)
@@ -639,5 +636,4 @@ class UserController extends Controller
             ['type' => 'success', 'message' => 'success', 'field' => $field, 'showUrl' => $showUrl]
         );
     }
-
 }

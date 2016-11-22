@@ -124,13 +124,15 @@ class WidgetBoxHandler
     /**
      * 위젯박스를 삭제한다.
      *
-     * @param WidgetBox $widgetbox 삭제할 위젯박스
+     * @param WidgetBox|string $widgetbox 삭제할 위젯박스
      *
      * @return void
      */
     public function delete($widgetbox)
     {
-        $widgetbox = $this->repository->find($widgetbox);
+        if(is_string($widgetbox)) {
+            $widgetbox = $this->repository->find($widgetbox);
+        }
         $this->permissionHandler->destroy('widgetbox.'.$widgetbox->id);
         $widgetbox->delete();
     }

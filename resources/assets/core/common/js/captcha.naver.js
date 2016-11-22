@@ -7,6 +7,6 @@ var naverReissue = function (i, k) {
         success: function (json) {
             $(k).val(json.key);
             $(i).attr('src', json.img);
-        }
-    });
-};
+          },
+      });
+  };

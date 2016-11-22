@@ -100,7 +100,7 @@ class SkinController extends Controller
         $skin = $skinHandler->get($skinId);
 
         // 각 스킨에게 config값을 전처리 할 기회를 준다.
-        $config = $skin->updateSetting($config);
+        $config = $skin->resolveSetting($config);
 
         $skin->setting($config);
 
