@@ -49,6 +49,7 @@ class Purifier
         $this->config = HTMLPurifier_Config::createDefault();
         $this->config->loadArray([
             'Core.Encoding' => 'UTF-8',
+            'Cache.SerializerPath' => storage_path('framework/htmlpurifier/support'),
             'HTML.Doctype'             => 'XHTML 1.0 Strict',
             'HTML.Allowed'             => 'div,b,strong,i,em,a[href|title],ul,ol,li,p[style]' .
                 ',br,span[style|class|data-download-link|contenteditable]' .

@@ -4,7 +4,7 @@ return [
     'encoding' => 'UTF-8',
     'finalize' => true,
     'preload'  => false,
-    'cachePath' => storage_path('framework/htmlpurifier'),
+    'cachePath' => storage_path('framework/htmlpurifier/middleware'),
     'settings' => [
         'default' => [
             'HTML.Doctype'             => 'XHTML 1.0 Strict',
