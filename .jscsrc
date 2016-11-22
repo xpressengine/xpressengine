@@ -24,8 +24,7 @@
         "./**/*.jpg",
         "./**/*.gif",
         "./**/*.scss",
-        "./**/*.css",
-        "./resources/assets/core/xe-ui-component/js/xe-lightbox.js"
+        "./**/*.css"
     ],
     "fileExtensions": [".js", ".jsx"],
     "fix": true
