@@ -48,6 +48,7 @@ Tree.prototype = {
 
     $(this.treeBox).nestedSortable({
       forcePlaceholderSize: true,
+
       // handle: 'header',
       handle: '.handler',
       cancel: '',
@@ -59,13 +60,14 @@ Tree.prototype = {
       tolerance: 'pointer',
       toleranceElement: '> div',
       isTree: true,
+
       // startCollapsed: true,
       relocate: function (e, locate) {
         this.move(locate.item[0]);
       }.bind(this),
       isAllowed: function ($placeholder, $parent, $item) {
         if ($parent && $parent.data('is_loading') === true) {
-         return false;
+          return false;
         }
 
         return true;
@@ -75,6 +77,7 @@ Tree.prototype = {
     this.drawNew();
 
     this.attachToggleChildren();
+
     // this.attachActive();
     this.attachToggleBtns();
 
@@ -86,7 +89,7 @@ Tree.prototype = {
   },
 
   drawNew: function () {
-    var self = this;
+    var _this = this;
 
     var $item = $('<div>').addClass(this.newBoxClass + ' panel-heading').append(
       $('<div>').addClass('pull-left').append(
@@ -103,13 +106,13 @@ Tree.prototype = {
     ).append(itemMaker.getBody());
 
     $('.__xe_btn_new', $item).click(function () {
-      self.closeBodyAll();
+      _this.closeBodyAll();
 
       if (!$item.hasClass('open')) {
-        var $form = formProvider.make('create', null, self.onCreate.bind(self));
+        var $form = formProvider.make('create', null, _this.onCreate.bind(_this));
         $('.__xe_content_body', $item).empty().append($form);
         $form.find('.lang-editor-box').each(function () {
-         langEditorBoxRender($(this));
+          langEditorBoxRender($(this));
         });
 
         $item.addClass('open');
@@ -166,7 +169,7 @@ Tree.prototype = {
       success: function () {
         var $parent = $('#' + itemMaker.makeIdAttr(parentInfo.item_id));
         if ($parent.data('is_loaded') !== true) {
-         $('> .__xe_item_block .__xe_btn_toggle_children', $parent).trigger('click');
+          $('> .__xe_item_block .__xe_btn_toggle_children', $parent).trigger('click');
         }
       },
     });
@@ -175,7 +178,7 @@ Tree.prototype = {
   onRemove: function (e, data) {
     $('#' + itemMaker.makeIdAttr(data.id)).hide();
 
-    var self = this;
+    var _this = this;
     XE.ajax({
       url: this.urls.remove,
       type: 'post',
@@ -183,7 +186,7 @@ Tree.prototype = {
       data: { id: data.id },
       success: function () {
         $('#' + itemMaker.makeIdAttr(data.id)).remove();
-        self.repo.remove(data.id);
+        _this.repo.remove(data.id);
       },
 
       error: function () {
@@ -194,8 +197,9 @@ Tree.prototype = {
 
   onCreate: function (e, form) {
     e.preventDefault();
-    var self = this;
+    var _this = this;
     var data = this.serializeObject(form);
+
     // todo: validation 임시 제거
     // if (!data.word || $.trim(data.word) == '') {
     //     XE.toast('warning', XE.Lang.trans('xe::required', {name: XE.Lang.trans('xe::word')}));
@@ -211,18 +215,18 @@ Tree.prototype = {
       data: data,
       success: function (node) {
         if (data.parentId) {
-         var $parent = $('#' + itemMaker.makeIdAttr(data.parentId));
-         self.closeBody($parent);
-         if ($parent.data('is_loaded') !== true) {
-          $('> .__xe_item_block .__xe_btn_toggle_children', $parent).trigger('click');
-          return;
-         }
+          var $parent = $('#' + itemMaker.makeIdAttr(data.parentId));
+          _this.closeBody($parent);
+          if ($parent.data('is_loaded') !== true) {
+            $('> .__xe_item_block .__xe_btn_toggle_children', $parent).trigger('click');
+            return;
+          }
         }
 
         // create new form close
-        $('> .' + self.newBoxClass, self.container).removeClass('open');
+        $('> .' + _this.newBoxClass, _this.container).removeClass('open');
 
-        self.add(node, data.parentId);
+        _this.add(node, data.parentId);
       },
 
       complete: function () {
@@ -233,7 +237,7 @@ Tree.prototype = {
 
   onEdit: function (e, form) {
     e.preventDefault();
-    var self = this;
+    var _this = this;
     var data = this.serializeObject(form);
 
     if (!data.id || $.trim(data.id) == '') {
@@ -257,9 +261,9 @@ Tree.prototype = {
       success: function (node) {
         var $item = $('#' + itemMaker.makeIdAttr(node.id));
         $('> .__xe_item_block .__xe_word', $item).text(node.readableWord);
-        self.repo.set(node);
+        _this.repo.set(node);
 
-        self.closeBody($item);
+        _this.closeBody($item);
       },
 
       complete: function () {
@@ -269,8 +273,9 @@ Tree.prototype = {
   },
 
   serializeObject: function (form) {
-    var fields = $(form).serializeArray(),
-      obj = {};
+    var fields = $(form).serializeArray();
+    var obj = {};
+
     $.each(fields, function (i, field) {
       obj[field.name] = field.value;
     });
@@ -320,7 +325,8 @@ Tree.prototype = {
   },
 
   getBreadcrumbs: function (id) {
-    var info = this.getNestedInfo(id), breadcrumbs = [];
+    var info = this.getNestedInfo(id);
+    var breadcrumbs = [];
 
     if (info.parent_id !== null) {
       breadcrumbs = this.getBreadcrumbs(info.parent_id);
@@ -332,7 +338,7 @@ Tree.prototype = {
   },
 
   attachToggleChildren: function () {
-    var self = this;
+    var _this = this;
 
     $(this.treeBox).on('click', '.__xe_btn_toggle_children', function (e) {
       e.stopPropagation();
@@ -348,46 +354,46 @@ Tree.prototype = {
 
       if ($item.data('is_loaded') !== true) {
         $item.data('is_loading', true);
-        self.load(id, function (nodes) {
-         if ($(self.getChildrenBox(id)).is('ul') !== true) {
-          $('<ul>').appendTo('#' + itemMaker.makeIdAttr(id));
-         }
+        _this.load(id, function (nodes) {
+          if ($(_this.getChildrenBox(id)).is('ul') !== true) {
+            $('<ul>').appendTo('#' + itemMaker.makeIdAttr(id));
+          }
 
-         for (var i in nodes) {
-          self.add(nodes[i], id);
-         }
+          for (var i in nodes) {
+            _this.add(nodes[i], id);
+          }
 
-         $item.data('is_loaded', true);
-         $item.data('is_loading', false);
+          $item.data('is_loaded', true);
+          $item.data('is_loading', false);
 
-         self.setToggleChildrenIcon($item);
+          _this.setToggleChildrenIcon($item);
         });
       }
 
-      self.setToggleChildrenIcon($item);
+      _this.setToggleChildrenIcon($item);
     });
   },
 
   attachToggleBtns: function () {
-    var self = this;
+    var _this = this;
 
     $(this.treeBox).on('click', '.__xe_toggle-btns > .btn', function () {
       if ($(this).hasClass('on')) {
-        self.closeBody($(this).closest('li'));
+        _this.closeBody($(this).closest('li'));
         return;
       }
 
-      $('.__xe_toggle-btns > .btn', self.treeBox).removeClass('on');
+      $('.__xe_toggle-btns > .btn', _this.treeBox).removeClass('on');
       $(this).addClass('on');
 
-      $('.item', self.treeBox).removeClass('open');
+      $('.item', _this.treeBox).removeClass('open');
       $(this).closest('li').addClass('open');
 
       var action = $(this).data('action');
-      var submitHandler = action === 'child' ? self.onCreate : self.onEdit;
+      var submitHandler = action === 'child' ? _this.onCreate : _this.onEdit;
       var id = itemMaker.extractId($(this).closest('li')[0]);
 
-      var $form = formProvider.make(action, self.repo.get(id), submitHandler.bind(self), self.onRemove.bind(self));
+      var $form = formProvider.make(action, _this.repo.get(id), submitHandler.bind(_this), _this.onRemove.bind(_this));
 
       $('.__xe_content_body', $(this).closest('.__xe_item_block')).empty().append($form);
       $form.find('.lang-editor-box').each(function () {
@@ -402,9 +408,9 @@ Tree.prototype = {
   },
 
   closeBodyAll: function () {
-    var self = this;
+    var _this = this;
     $(this.treeBox).find('li.open').each(function () {
-      self.closeBody($(this));
+      _this.closeBody($(this));
     });
   },
 

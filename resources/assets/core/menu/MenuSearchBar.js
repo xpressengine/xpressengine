@@ -4,211 +4,212 @@ import ReactDOM from 'react-dom';
 import MenuSearchSuggestion from './MenuSearchSuggestion';
 
 export default React.createClass({
-	displayName: 'MenuSearchBar',
+  displayName: 'MenuSearchBar',
 
-	propTypes: {
-		tree: React.PropTypes.object,
-		placeholder: React.PropTypes.string,
-		handleSearch: React.PropTypes.func,
-		menuRoutes: React.PropTypes.object,
-	},
-	getDefaultProps: function() {
-		return {
-			placeholder: 'Search...',
-			tree: new Tree({}),
-		};
-	},
+  propTypes: {
+    tree: React.PropTypes.object,
+    placeholder: React.PropTypes.string,
+    handleSearch: React.PropTypes.func,
+    menuRoutes: React.PropTypes.object,
+  },
+  getDefaultProps: function () {
+    return {
+      placeholder: 'Search...',
+      tree: new Tree({}),
+    };
+  },
 
-	componentDidMount: function() {
-	},
+  componentDidMount: function () {
+  },
 
-	getInitialState: function() {
-		return {
-			query: '',
-			suggestions: [],
-			selectedIndex: -1,
-			selectionMode: false,
-			searchingCnt: 0,
-		};
-	},
+  getInitialState: function () {
+    return {
+      query: '',
+      suggestions: [],
+      selectedIndex: -1,
+      selectionMode: false,
+      searchingCnt: 0,
+    };
+  },
 
-	handleChange: function(e) {
-		var query = e.target.value.trim();
-		this.setState({
-			query: query,
-		});
+  handleChange: function (e) {
+    var query = e.target.value.trim();
+    this.setState({
+      query: query,
+    });
 
-		this.searchMenu(query);
-		if (query.length == 0) {
-			this.setState({
-				suggestions: [],
-				searchingCnt: 0,
-			});
-		}
-	},
+    this.searchMenu(query);
+    if (query.length == 0) {
+      this.setState({
+        suggestions: [],
+        searchingCnt: 0,
+      });
+    }
+  },
 
-	searchMenu: function(keyword) {
-		var self = this;
-		var searchingCnt = this.state.searchingCnt + 1;
-		var suggestions;
-		var tree = this.props.tree;
+  searchMenu: function (keyword) {
+    var _this = this;
+    var searchingCnt = this.state.searchingCnt + 1;
+    var suggestions;
+    var tree = this.props.tree;
 
-		this.setState({
-			searchingCnt: searchingCnt,
-		});
+    this.setState({
+      searchingCnt: searchingCnt,
+    });
 
-		suggestions = _.filter(tree.indexes, function(index) {
+    suggestions = _.filter(tree.indexes, function (index) {
 
-			if (index.id == 0) return false;
+      if (index.id == 0) return false;
 
-			var title = index.node.title;
-			if (!self.isMenuEntity(index.node)) {
-				title = XE.Lang.trans(index.node.title);
-			}
+      var title = index.node.title;
+      if (!_this.isMenuEntity(index.node)) {
+        title = XE.Lang.trans(index.node.title);
+      }
 
-			return !!(title && title.indexOf(keyword) !== -1);
-		});
+      return !!(title && title.indexOf(keyword) !== -1);
+    });
 
-		searchingCnt = this.state.searchingCnt;
-		searchingCnt = searchingCnt - 1;
-		self.setState(
-				{
-					suggestions: suggestions,
-					searchingCnt: searchingCnt,
-				}
-		);
+    searchingCnt = this.state.searchingCnt;
+    searchingCnt = searchingCnt - 1;
+    _this.setState(
+      {
+      suggestions: suggestions,
+      searchingCnt: searchingCnt,
+    }
+    );
 
-	},
+  },
 
-	isMenuEntity: function(node) {
-		return (node.entity && (node.entity == 'menu'));
-	},
+  isMenuEntity: function (node) {
+    return (node.entity && (node.entity == 'menu'));
+  },
 
-	resetSearch: function() {
-		var input = ReactDOM.findDOMNode(this.refs.input);
+  resetSearch: function () {
+    var input = ReactDOM.findDOMNode(this.refs.input);
 
-		this.setState({
-			query: '',
-			selectedIndex: -1,
-			selectionMode: false,
-			suggestions: [],
-		});
+    this.setState({
+      query: '',
+      selectedIndex: -1,
+      selectionMode: false,
+      suggestions: [],
+    });
 
-		input.value = '';
-		input.focus();
-	},
+    input.value = '';
+    input.focus();
+  },
 
-	handleKeyDown: function handleKeyDown(e) {
-		var _state = this.state;
-		var query = _state.query;
-		var selectedIndex = _state.selectedIndex;
-		var suggestions = _state.suggestions;
+  handleKeyDown: function handleKeyDown(e) {
+    var _state = this.state;
+    var query = _state.query;
+    var selectedIndex = _state.selectedIndex;
+    var suggestions = _state.suggestions;
 
-		// hide suggestions menu on escape
-		if (e.keyCode === Keys.ESCAPE) {
-			e.preventDefault();
-			this.resetSearch();
-		}
+    // hide suggestions menu on escape
+    if (e.keyCode === Keys.ESCAPE) {
+      e.preventDefault();
+      this.resetSearch();
+    }
 
-		if ((e.keyCode === Keys.ENTER || e.keyCode === Keys.TAB) && query != '') {
-			e.preventDefault();
-			if (this.state.selectionMode) {
-				this.selection(this.state.suggestions[this.state.selectedIndex]);
-			}
-		}
+    if ((e.keyCode === Keys.ENTER || e.keyCode === Keys.TAB) && query != '') {
+      e.preventDefault();
+      if (this.state.selectionMode) {
+        this.selection(this.state.suggestions[this.state.selectedIndex]);
+      }
+    }
 
-		// up arrow
-		if (e.keyCode === Keys.UP_ARROW) {
-			e.preventDefault();
-			// last item, cycle to the top
-			if (selectedIndex <= 0) {
-				this.setState({
-					selectedIndex: this.state.suggestions.length - 1,
-					selectionMode: true,
-				});
-			} else {
-				this.setState({
-					selectedIndex: selectedIndex - 1,
-					selectionMode: true,
-				});
-			}
-		}
+    // up arrow
+    if (e.keyCode === Keys.UP_ARROW) {
+      e.preventDefault();
 
-		// down arrow
-		if (e.keyCode === Keys.DOWN_ARROW) {
-			e.preventDefault();
-			this.setState({
-				selectedIndex: (this.state.selectedIndex + 1) % suggestions.length,
-				selectionMode: true,
-			});
-		}
-	},
+      // last item, cycle to the top
+      if (selectedIndex <= 0) {
+        this.setState({
+          selectedIndex: this.state.suggestions.length - 1,
+          selectionMode: true,
+        });
+      } else {
+        this.setState({
+          selectedIndex: selectedIndex - 1,
+          selectionMode: true,
+        });
+      }
+    }
 
-	selection: function(index) {
-		var input = ReactDOM.findDOMNode(this.refs.input);
+    // down arrow
+    if (e.keyCode === Keys.DOWN_ARROW) {
+      e.preventDefault();
+      this.setState({
+        selectedIndex: (this.state.selectedIndex + 1) % suggestions.length,
+        selectionMode: true,
+      });
+    }
+  },
 
-		this.props.handleSearch(index.node);
+  selection: function (index) {
+    var input = ReactDOM.findDOMNode(this.refs.input);
 
-		this.setState({
-			query: '',
-			selectionMode: false,
-			selectedIndex: -1,
-		});
+    this.props.handleSearch(index.node);
 
-		input.value = '';
-		input.focus();
-	},
+    this.setState({
+      query: '',
+      selectionMode: false,
+      selectedIndex: -1,
+    });
 
-	handleSuggestionClick: function handleSuggestionClick(i, e) {
-		e.preventDefault();
-		this.selection(this.state.suggestions[i]);
-	},
+    input.value = '';
+    input.focus();
+  },
 
-	handleSuggestionHover: function handleSuggestionHover(i, e) {
-		this.setState({
-			selectedIndex: i,
-			selectionMode: true,
-		});
-	},
+  handleSuggestionClick: function handleSuggestionClick(i, e) {
+    e.preventDefault();
+    this.selection(this.state.suggestions[i]);
+  },
 
-	render: function render() {
+  handleSuggestionHover: function handleSuggestionHover(i, e) {
+    this.setState({
+      selectedIndex: i,
+      selectionMode: true,
+    });
+  },
 
-		var query = this.state.query.trim(),
-				selectedIndex = this.state.selectedIndex,
-				suggestions = this.state.suggestions,
-				placeholder = this.props.placeholder;
-		var trans = {
-			addMenu: XE.Lang.trans('xe::addMenu'),
-		};
+  render: function render() {
 
-		return (
-				<div className="panel-heading">
+    var query = this.state.query.trim();
+    var selectedIndex = this.state.selectedIndex;
+    var suggestions = this.state.suggestions;
+    var placeholder = this.props.placeholder;
+    var trans = {
+      addMenu: XE.Lang.trans('xe::addMenu'),
+    };
+
+    return (
+      <div className="panel-heading">
 					<div className="pull-left">
 						<div className={cx({
-                'input-group': true,
-                'search-group': true,
-                open: query.length > 0,
-              })}>
+                  'input-group': true,
+                  'search-group': true,
+                  open: query.length > 0,
+                })}>
 							<input type="text" className="form-control"
-										 aria-label="Text input with dropdown button"
-										 placeholder={placeholder} ref="input" onChange={this.handleChange}
-										 onKeyDown={this.handleKeyDown}/>
+             aria-label="Text input with dropdown button"
+             placeholder={placeholder} ref="input" onChange={this.handleChange}
+             onKeyDown={this.handleKeyDown}/>
 							<button className="btn-link" onClick={this.resetSearch}>
 								<i className="xi-magnifier"></i><span className="sr-only">검색</span>
 							</button>
 
 							<MenuSearchSuggestion query={query}
-																		suggestions={suggestions}
-																		selectedIndex={selectedIndex}
-																		handleClick={this.handleSuggestionClick}
-																		handleHover={this.handleSuggestionHover}/>
+                    suggestions={suggestions}
+                    selectedIndex={selectedIndex}
+                    handleClick={this.handleSuggestionClick}
+                    handleHover={this.handleSuggestionHover}/>
 						</div>
 					</div>
 					<div className="pull-right">
 						<a href={this.props.menuRoutes.createMenu} className="btn btn-primary pull-right"><i
-								className="xi-plus"></i> {trans.addMenu}</a>
+          className="xi-plus"></i> {trans.addMenu}</a>
 					</div>
 				</div>
-		);
-	},
+    );
+  },
 });

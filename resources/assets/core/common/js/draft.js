@@ -29,9 +29,9 @@ Draft.prototype = {
   init: function () {
     this.uid = this._getUid();
 
-    var self = this;
+    var _this = this;
     $(this.elem).on('input.draft', function () {
-      self.saveEventHandler();
+      _this.saveEventHandler();
     });
 
     this.appendComponent();
@@ -48,27 +48,27 @@ Draft.prototype = {
 
   appendComponent: function () {
 
-    var self = this;
+    var _this = this;
 
     var onApply = function (data) {
-      self.setId(data.id);
+      _this.setId(data.id);
 
       var values = data.etc;
-      values[$(self.elem).attr('name')] = data.val;
+      values[$(_this.elem).attr('name')] = data.val;
 
-      dataSetter.init($(self.elem).closest('form')[0], values);
-      self.callback(values);
+      dataSetter.init($(_this.elem).closest('form')[0], values);
+      _this.callback(values);
     };
 
     var onRemove = function (data) {
-      self.reqDelete(data.id);
+      _this.reqDelete(data.id);
     };
 
-    var $container = $('<div>'),
-      config = { keyVal: this.key, onApply: onApply, onRemove: onRemove },
-      callback = function () {
-        self.component = this;
-      };
+    var $container = $('<div>');
+    var config = { keyVal: this.key, onApply: onApply, onRemove: onRemove };
+    var callback = function () {
+      _this.component = this;
+    };
 
     if ($(this.container).length < 1) {
       $(this.elem).closest('form').after($container);
@@ -86,12 +86,12 @@ Draft.prototype = {
   },
 
   saveEventHandler: function () {
-    var self = this;
+    var _this = this;
     this.intervalClear();
 
     this.interval = setTimeout(function () {
-      self.setAuto();
-      self.intervalClear();
+      _this.setAuto();
+      _this.intervalClear();
     }, 3000);
   },
 
@@ -251,9 +251,9 @@ DraftReact.Modal = React.createClass({
   },
 
   componentDidMount: function () {
-    var self = this;
+    var _this = this;
     $(ReactDOM.findDOMNode(this)).on('show.bs.modal', function () {
-      self.load();
+      _this.load();
     });
   },
 
@@ -278,7 +278,7 @@ DraftReact.Modal = React.createClass({
               React.DOM.h4({ className: 'modal-title' }, 'Draft')
             ),
             React.DOM.div({ className: 'modal-body' },
-              function () {
+              (function () {
                 if (this.state.loaded !== true) {
                   return React.DOM.div({ className: 'text-center' },
                     React.DOM.i({ className: 'xi-spinner-1 xi-spin xi-4x' })
@@ -286,7 +286,7 @@ DraftReact.Modal = React.createClass({
                 } else {
                   return React.createElement(DraftReact.Box, { items: this.getItems() });
                 }
-              }.call(this)
+              }.call(this))
             ),
             React.DOM.div({ className: 'modal-footer' },
               React.DOM.button({
@@ -316,9 +316,9 @@ DraftReact.Collapse = React.createClass({
   },
 
   componentDidMount: function () {
-    var self = this;
+    var _this = this;
     $(ReactDOM.findDOMNode(this)).parent().on('show.bs.collapse', function () {
-      self.load();
+      _this.load();
     });
   },
 
@@ -327,7 +327,7 @@ DraftReact.Collapse = React.createClass({
       React.DOM.div({ className: '' },
         React.DOM.div({ className: 'panel panel-default' },
           React.DOM.div({ className: 'panel-body' },
-            function () {
+            (function () {
               if (this.state.loaded !== true) {
                 return React.DOM.div({ className: 'text-center' },
                   React.DOM.i({ className: 'xi-spinner-1 xi-spin xi-4x' })
@@ -335,7 +335,7 @@ DraftReact.Collapse = React.createClass({
               } else {
                 return React.createElement(DraftReact.Box, { items: this.getItems() });
               }
-            }.call(this)
+            }.call(this))
           )
         )
       )
@@ -389,13 +389,13 @@ DraftReact.Item = React.createClass({
           $($.parseHTML(this.props.data.val)).text()
         ),
         React.DOM.div({ className: 'draft_info' },
-          function () {
+          (function () {
             if (this.props.data.isAuto == 1) {
               return React.DOM.span({ className: 'draft_state' }, XE.Lang.trans('xe::autoSave'));
             } else {
               return React.DOM.span({ className: 'draft_state v2' }, XE.Lang.trans('xe::draftSave'));
             }
-          }.call(this),
+          }.call(this)),
           React.DOM.span({ className: 'draft_date' }, this.getDate()),
           React.DOM.a({ href: '#', className: 'btn_draft_delete', onClick: this.onRemove },
             React.DOM.i({ className: 'xi-close' })
@@ -477,7 +477,7 @@ var dataSetter = {
   },
 };
 
-$.fn['draft'] = function (args) {
+$.fn.draft = function (args) {
   var defaultArgs = {
     container: null,
     withForm: false,
