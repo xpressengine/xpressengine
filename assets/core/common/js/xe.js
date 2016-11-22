@@ -1,126 +1,116 @@
-(function(exports) {
-	'use strict';
+var XE = (function (exports) {
+  'use strict';
 
-	var self;
+  var _this;
 
-	/**
-	 * @description
-	 * <pre>
-	 *     XE module initialize
-	 * </pre>
-	 * */
-	function initialize() {
-		self = this;
+  function ajax(url, options) {
+    if (typeof url === 'object') {
+      options = $.extend({}, _this.Request.options, url);
+      url = undefined;
+    } else {
+      options = $.extend({}, options, _this.Request.options, { url: url });
+      url = undefined;
+    }
 
-		return this;
-	}
+    return $.ajax(url, options);
+  }
 
-	function ajax(url, options) {
-		if (typeof url === 'object') {
-			options = $.extend({}, self.Request.options, url);
-			url = undefined;
-		} else {
-			options = $.extend({}, options, self.Request.options, {url: url});
-			url = undefined;
-		}
+  /**
+    * @param {object} options
+    * */
+  function setup(options) {
+    _this.options.loginUserId = options.loginUserId;
+    _this.Request.setup({
+      headers: {
+        'X-CSRF-TOKEN': options['X-CSRF-TOKEN'],
+      },
+    });
 
-		return $.ajax(url, options);
-	}
+  }
 
-	/**
-	 * @param {object} options
-	 * */
-	function setup(options) {
-		self.options.loginUserId = options.loginUserId;
-		self.Request.setup({
-			headers: {
-				'X-CSRF-TOKEN': options['X-CSRF-TOKEN'],
-			},
-		});
+  /**
+    * @param {object} options
+    * */
+  function configure(options) {
+    $.extend(_this.options, options);
+  }
 
-	}
+  // @DEPRECATED
+  function cssLoad(url) {
+    DynamicLoadManager.cssLoad(url);
+  }
 
-	/**
-	 * @param {object} options
-	 * */
-	function configure(options) {
-		$.extend(self.options, options);
-	}
+  function jsLoad(url) {
+    DynamicLoadManager.jsLoad(url);
+  }
 
-// @DEPRECATED
-	function cssLoad(url) {
-		DynamicLoadManager.cssLoad(url);
-	}
+  function toast(type, message) {
+    if (type == '') {
+      type = 'danger';
+    }
 
-	function jsLoad(url) {
-		DynamicLoadManager.jsLoad(url);
-	}
+    System.import('xecore:/common/js/griper').then(function (griper) {
+      return griper.toast(type, message);
+    });
+  }
 
-	function toast(type, message) {
-		if (type == '') {
-			type = 'danger';
-		}
+  function toastByStatus(status, message) {
+    System.import('xecore:/common/js/griper').then(function (griper) {
+      return griper.toast(griper.toast.fn.statusToType(status), message);
+    });
+  }
 
-		System.import('xecore:/common/js/griper').then(function(griper) {
-			return griper.toast(type, message);
-		});
-	}
+  function formError($element, message) {
+    System.import('xecore:/common/js/griper').then(function (griper) {
+      return griper.form($element, message);
+    });
+  }
 
-	function toastByStatus(status, message) {
-		System.import('xecore:/common/js/griper').then(function(griper) {
-			return griper.toast(griper.toast.fn.statusToType(status), message);
-		});
-	}
+  function formErrorClear($form) {
+    System.import('xecore:/common/js/griper').then(function (griper) {
+      return griper.form.fn.clear($form);
+    });
+  }
 
-	function formError($element, message) {
-		System.import('xecore:/common/js/griper').then(function(griper) {
-			return griper.form($element, message);
-		});
-	}
+  function formValidate($form) {
+    System.import('xecore:/common/js/validator').then(function (validator) {
+      validator.formValidate($form);
+    });
+  }
 
-	function formErrorClear($form) {
-		System.import('xecore:/common/js/griper').then(function(griper) {
-			return griper.form.fn.clear($form);
-		});
-	}
+  function getLocale() {
+    return _this.options.locale;
+  }
 
-	function formValidate($form) {
-		System.import('xecore:/common/js/validator').then(function(validator) {
-			validator.formValidate($form);
-		});
-	}
+  function getDefaultLocale() {
+    return _this.options.defaultLocale;
+  }
 
-	function getLocale() {
-		return self.options.locale;
-	}
+  return {
+    init: function () {
+      _this = this;
 
-	function getDefaultLocale() {
-		return self.options.defaultLocale;
-	}
+      return this;
+    },
 
-	exports.XE = function() {
-		return {
-			initialize: initialize,
-			ajax: ajax,
-			setup: setup,
-			configure: configure,
-			cssLoad: cssLoad,
-			jsLoad: jsLoad,
-			toast: toast,
-			toastByStatus: toastByStatus,
-			formError: formError,
-			formErrorClear: formErrorClear,
-			formValidate: formValidate,
-			getLocale: getLocale,
-			getDefaultLocale: getDefaultLocale,
+    ajax: ajax,
+    setup: setup,
+    configure: configure,
+    cssLoad: cssLoad,
+    jsLoad: jsLoad,
+    toast: toast,
+    toastByStatus: toastByStatus,
+    formError: formError,
+    formErrorClear: formErrorClear,
+    formValidate: formValidate,
+    getLocale: getLocale,
+    getDefaultLocale: getDefaultLocale,
 
-			options: {},
+    options: {},
 
-			Lang: '',
-			Progress: '',
-			Request: '',
-			Component: '',
-		}.initialize();
-	}();
-
-})(window);
+    Lang: '',
+    Progress: '',
+    Request: '',
+    Component: '',
+  };
+})().init(window);

@@ -1,8 +1,14 @@
 var Utils = (function (exports) {
 
-  var _this = this;
+  var _this;
 
   return {
+    init: function () {
+      _this = this;
+
+      return this;
+    },
+
     isImage: function (mime) {
       return $.inArray(mime, ['image/jpg', 'image/jpeg', 'image/png', 'image/gif']) === -1 ? false : true;
     },
@@ -58,5 +64,5 @@ var Utils = (function (exports) {
 
       return retURL.split(/[?#]/)[0];
     },
-  };
+  }.init();
 })(window);

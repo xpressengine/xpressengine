@@ -83,7 +83,7 @@ if (typeof define === 'function' && define.amd) {
       }
 
       var $alert = $(this.options.template);
-      $alertattr('data-expire-time', expireTime).addClass(type);
+      $alert.attr('data-expire-time', expireTime).addClass(type);
       $alert.append(message);
 
       exports.toast.fn.container().append($alert);

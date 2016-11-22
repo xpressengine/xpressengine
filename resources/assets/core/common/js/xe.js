@@ -1,7 +1,7 @@
 var XE = (function (exports) {
   'use strict';
 
-  var _this = this;
+  var _this;
 
   function ajax(url, options) {
     if (typeof url === 'object') {
@@ -87,6 +87,12 @@ var XE = (function (exports) {
   }
 
   return {
+    init: function () {
+      _this = this;
+
+      return this;
+    },
+
     ajax: ajax,
     setup: setup,
     configure: configure,
@@ -107,4 +113,4 @@ var XE = (function (exports) {
     Request: '',
     Component: '',
   };
-})(window);
+})().init(window);
