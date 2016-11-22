@@ -239,10 +239,30 @@ Route::group(
                 );
             }
         );
-
     }
 );
 
+/*
+ * policies for site, user
+ * */
+Route::group(
+    ['prefix' => 'policies'],
+    function () {
+        // 개인정보 처리 방침
+        Route::get('privacy', ['as' => 'policies.privacy', 'uses' => 'User\PolicyController@privacy']);
+
+        // 약관
+        Route::group(
+            ['prefix' => 'terms'],
+            function() {
+                // 서비스
+                Route::get('service', ['as' => 'policies.terms.service', 'uses' => 'User\PolicyController@service']);
+            }
+        );
+
+
+    }
+);
 /*
  * settings/user
  * */
