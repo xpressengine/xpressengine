@@ -1,131 +1,127 @@
-(function (exports) {
+var DynamicLoadManager = (function (exports) {
 
-'use strict';
+  'use strict';
 
-exports.DynamicLoadManager = function () {
+  var _this;
+  var _assets = {
+    js: {}, css: {},
+  };
 
-    var self;
-    var _assets = {
-        js: {}, css: {},
-      };
+  _assets.js[xeBaseURL + 'assets/core/common/js/utils.js'];
+  _assets.js[xeBaseURL + 'assets/core/common/js/dynamicLoadManager.js'];
 
-    _assets.js[xeBaseURL + 'assets/core/common/js/utils.js'];
-    _assets.js[xeBaseURL + 'assets/core/common/js/dynamicLoadManager.js'];
+  return {
+    init: function () {
+      _this = this;
 
-    return {
-        init: function () {
-            self = this;
+      return this;
+    },
+    /**
+     * @param {array} arrjs
+     * @param {object}} callbackObj
+     * <pre>
+     *     - load
+     *     - error
+     *     - complete
+     * </pre>
+     * */
+    jsLoadMultiple: function (arrjs, callbackObj) {
+      var count = 0;
+      var callbackObj = callbackObj || {};
 
-            return this;
-          },
-        /**
-         * @param {array} arrjs
-         * @param {object}} callbackObj
-         * <pre>
-         *     - load
-         *     - error
-         *     - complete
-         * </pre>
-         * */
-        jsLoadMultiple: function (arrjs, callbackObj) {
-            var count = 0;
-            var callbackObj = callbackObj || {};
+      for (var i = 0, max = arrjs.length; i < max; i += 1) {
+        var src = Utils.asset(arrjs[i]);
 
-            for (var i = 0, max = arrjs.length; i < max; i += 1) {
-              var src = Utils.asset(arrjs[i]);
+        if (!_assets.js.hasOwnProperty(src)) {
+          _assets.js[src] = '';
 
-              if (!_assets.js.hasOwnProperty(src)) {
-                _assets.js[src] = '';
+          $.ajax({
+            url: src,
+            async: false,
+            dataType: 'script',
+            success: function () {
+              count++;
 
-                $.ajax({
-                    url: src,
-                    async: false,
-                    dataType: 'script',
-                    success: function () {
-                        count++;
-
-                        if (!!callbackObj.load) {
-                          callbackObj.load();
-                        }
-
-                        if (count === arrjs.length && !!callbackObj.complete) {
-                          callbackObj.complete();
-                        }
-                      },
-
-                    error: callbackObj.error,
-                  });
-
-              }else {
-                if (!!callbackObj.load) {
-                  callbackObj.load();
-                }
-              }
-            }
-
-          },
-
-        jsLoad: function (url, load, error) {
-
-            var src = Utils.asset(url);
-
-            if (!_assets.js.hasOwnProperty(src)) {
-
-              var el = document.createElement('script');
-
-              el.src = src;
-              el.async = true;
-
-              if (load) {
-                el.onload = load;
+              if (!!callbackObj.load) {
+                callbackObj.load();
               }
 
-              if (error) {
-                el.onerror = error;
+              if (count === arrjs.length && !!callbackObj.complete) {
+                callbackObj.complete();
               }
+            },
 
-              document.head.appendChild(el);
+            error: callbackObj.error,
+          });
 
-              _assets.js[src] = '';
+        } else {
+          if (!!callbackObj.load) {
+            callbackObj.load();
+          }
+        }
+      }
 
-            }else {
-              if (load) {
-                load();
-              }
-            }
+    },
 
-          },
+    jsLoad: function (url, load, error) {
 
-        cssLoad: function (url, load, error) {
+      var src = Utils.asset(url);
 
-            var src = Utils.asset(url);
+      if (!_assets.js.hasOwnProperty(src)) {
 
-            if (!_assets.css.hasOwnProperty(src)) {
+        var el = document.createElement('script');
 
-              var $css = $('<link>', { rel: 'stylesheet', type: 'text/css', href: src });
+        el.src = src;
+        el.async = true;
 
-              if (load) {
-                $css.on('load', load);
-              }
+        if (load) {
+          el.onload = load;
+        }
 
-              if (error) {
-                $css.on('error', error);
-              }
+        if (error) {
+          el.onerror = error;
+        }
 
-              $('head').append($css);
+        document.head.appendChild(el);
 
-              _assets.css[src] = '';
+        _assets.js[src] = '';
 
-            }else {
-              if (load) {
-                load();
-              }
-            }
+      } else {
+        if (load) {
+          load();
+        }
+      }
 
-          },
-      };
-  }().init();
+    },
 
+    cssLoad: function (url, load, error) {
+
+      var src = Utils.asset(url);
+
+      if (!_assets.css.hasOwnProperty(src)) {
+
+        var $css = $('<link>', { rel: 'stylesheet', type: 'text/css', href: src });
+
+        if (load) {
+          $css.on('load', load);
+        }
+
+        if (error) {
+          $css.on('error', error);
+        }
+
+        $('head').append($css);
+
+        _assets.css[src] = '';
+
+      } else {
+        if (load) {
+          load();
+        }
+      }
+
+    },
+  }.init();
 })(window);
 
 //# sourceURL=dynamicLoadManager.js

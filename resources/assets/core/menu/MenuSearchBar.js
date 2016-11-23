@@ -48,7 +48,7 @@ export default React.createClass({
   },
 
   searchMenu: function (keyword) {
-    var self = this;
+    var _this = this;
     var searchingCnt = this.state.searchingCnt + 1;
     var suggestions;
     var tree = this.props.tree;
@@ -62,7 +62,7 @@ export default React.createClass({
       if (index.id == 0) return false;
 
       var title = index.node.title;
-      if (!self.isMenuEntity(index.node)) {
+      if (!_this.isMenuEntity(index.node)) {
         title = XE.Lang.trans(index.node.title);
       }
 
@@ -71,11 +71,11 @@ export default React.createClass({
 
     searchingCnt = this.state.searchingCnt;
     searchingCnt = searchingCnt - 1;
-    self.setState(
-        {
-          suggestions: suggestions,
-          searchingCnt: searchingCnt,
-        }
+    _this.setState(
+      {
+      suggestions: suggestions,
+      searchingCnt: searchingCnt,
+    }
     );
 
   },
@@ -120,6 +120,7 @@ export default React.createClass({
     // up arrow
     if (e.keyCode === Keys.UP_ARROW) {
       e.preventDefault();
+
       // last item, cycle to the top
       if (selectedIndex <= 0) {
         this.setState({
@@ -173,39 +174,42 @@ export default React.createClass({
 
   render: function render() {
 
-    var query = this.state.query.trim(),
-        selectedIndex = this.state.selectedIndex,
-        suggestions = this.state.suggestions,
-        placeholder = this.props.placeholder;
+    var query = this.state.query.trim();
+    var selectedIndex = this.state.selectedIndex;
+    var suggestions = this.state.suggestions;
+    var placeholder = this.props.placeholder;
     var trans = {
       addMenu: XE.Lang.trans('xe::addMenu'),
     };
 
     return (
-        <div className="panel-heading">
-          <div className="pull-left">
-            <div className={cx({
-                'input-group': true,
-                'search-group': true,
-                open: query.length > 0,
-              })}>
-              <input type="text" className="form-control" aria-label="Text input with dropdown button"
-                     placeholder={placeholder} ref="input" onChange={this.handleChange} onKeyDown={this.handleKeyDown}/>
-              <button className="btn-link" onClick={this.resetSearch}>
-                <i className="xi-magnifier"></i><span className="sr-only">검색</span>
-              </button>
+      <div className="panel-heading">
+					<div className="pull-left">
+						<div className={cx({
+                  'input-group': true,
+                  'search-group': true,
+                  open: query.length > 0,
+                })}>
+							<input type="text" className="form-control"
+             aria-label="Text input with dropdown button"
+             placeholder={placeholder} ref="input" onChange={this.handleChange}
+             onKeyDown={this.handleKeyDown}/>
+							<button className="btn-link" onClick={this.resetSearch}>
+								<i className="xi-magnifier"></i><span className="sr-only">검색</span>
+							</button>
 
-              <MenuSearchSuggestion query={query}
-                                    suggestions={suggestions}
-                                    selectedIndex={selectedIndex}
-                                    handleClick={this.handleSuggestionClick}
-                                    handleHover={this.handleSuggestionHover}/>
-            </div>
-          </div>
-          <div className="pull-right">
-            <a href={this.props.menuRoutes.createMenu} className="btn btn-primary pull-right"><i className="xi-plus"></i> {trans.addMenu}</a>
-          </div>
-        </div>
+							<MenuSearchSuggestion query={query}
+                    suggestions={suggestions}
+                    selectedIndex={selectedIndex}
+                    handleClick={this.handleSuggestionClick}
+                    handleHover={this.handleSuggestionHover}/>
+						</div>
+					</div>
+					<div className="pull-right">
+						<a href={this.props.menuRoutes.createMenu} className="btn btn-primary pull-right"><i
+          className="xi-plus"></i> {trans.addMenu}</a>
+					</div>
+				</div>
     );
   },
 });

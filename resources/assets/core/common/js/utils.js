@@ -1,57 +1,68 @@
-;(function (exports) {
-    exports.Utils = function () {
-        var self;
+var Utils = (function (exports) {
 
-        return {
-            init: function () {
-                self = this;
+  var _this;
 
-                return this;
-              },
+  return {
+    init: function () {
+      _this = this;
 
-            isImage: function (mime) {
-                return $.inArray(mime, ['image/jpg', 'image/jpeg', 'image/png', 'image/gif']) === -1 ? false : true;
-              },
+      return this;
+    },
 
-            formatSizeUnits: function (bytes) {
-                if (bytes >= 1073741824) {bytes = (bytes / 1073741824).toFixed(2) + 'GB';} else if (bytes >= 1048576)    {bytes = (bytes / 1048576).toFixed(2) + 'MB';} else if (bytes >= 1024)       {bytes = (bytes / 1024).toFixed(2) + 'KB';} else if (bytes > 1)           {bytes = bytes + 'bytes';} else if (bytes == 1)          {bytes = bytes + 'byte';} else {bytes = '0MB';}
+    isImage: function (mime) {
+      return $.inArray(mime, ['image/jpg', 'image/jpeg', 'image/png', 'image/gif']) === -1 ? false : true;
+    },
 
-                return bytes;
-              },
+    formatSizeUnits: function (bytes) {
+      if (bytes >= 1073741824) {
+        bytes = (bytes / 1073741824).toFixed(2) + 'GB';
+      } else if (bytes >= 1048576) {
+        bytes = (bytes / 1048576).toFixed(2) + 'MB';
+      } else if (bytes >= 1024) {
+        bytes = (bytes / 1024).toFixed(2) + 'KB';
+      } else if (bytes > 1) {
+        bytes = bytes + 'bytes';
+      } else if (bytes == 1) {
+        bytes = bytes + 'byte';
+      } else {
+        bytes = '0MB';
+      }
 
-            isURL: function (s) {
-                return /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(s);
-              },
+      return bytes;
+    },
 
-            asset: function (url) {
-                var loc = window.location;
-                var retURL = '';
+    isURL: function (s) {
+      return /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(s);
+    },
 
-                if (!self.isURL(url)) {
-                  if (xeBaseURL) {
-                    if (xeBaseURL.substr(-1) === '/') {
-                      retURL += xeBaseURL.substr(0, (xeBaseURL.length - 1));
-                    }else {
-                      retURL += xeBaseURL;
-                    }
+    asset: function (url) {
+      var loc = window.location;
+      var retURL = '';
 
-                  }else {
-                    retURL += loc.protocol + '//' + loc.host;
-                  }
+      if (!_this.isURL(url)) {
+        if (xeBaseURL) {
+          if (xeBaseURL.substr(-1) === '/') {
+            retURL += xeBaseURL.substr(0, (xeBaseURL.length - 1));
+          } else {
+            retURL += xeBaseURL;
+          }
 
-                  if (url.substr(0, 1) === '/') {
-                    retURL += url;
-                  }else {
-                    retURL += '/' + url;
-                  }
+        } else {
+          retURL += loc.protocol + '//' + loc.host;
+        }
 
-                }else {
-                  retURL = url;
+        if (url.substr(0, 1) === '/') {
+          retURL += url;
+        } else {
+          retURL += '/' + url;
+        }
 
-                }
+      } else {
+        retURL = url;
 
-                return retURL.split(/[?#]/)[0];
-              },
-          };
-      }().init();
-  })(window);
+      }
+
+      return retURL.split(/[?#]/)[0];
+    },
+  }.init();
+})(window);

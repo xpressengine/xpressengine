@@ -74,21 +74,21 @@ export default React.createClass({
       };
 
       return (
-          <div className="m-draggable move" style={draggingStyles}>
-            <TreeNode
-                getBaseUrl={this.props.getBaseUrl}
-                clickHome={this.props.clickHome}
-                getSelectedNode={this.props.getSelectedNode}
-                setSelectedNode={this.props.setSelectedNode}
-                getSearchedNode={this.props.getSearchedNode}
-                setSearchedNode={this.props.setSearchedNode}
-                tree={tree}
-                home={home}
-                index={draggingIndex}
-                key={dragging.id}
-                isDragging={true}
-            />
-          </div>
+        <div className="m-draggable move" style={draggingStyles}>
+						<TreeNode
+           getBaseUrl={this.props.getBaseUrl}
+           clickHome={this.props.clickHome}
+           getSelectedNode={this.props.getSelectedNode}
+           setSelectedNode={this.props.setSelectedNode}
+           getSearchedNode={this.props.getSearchedNode}
+           setSearchedNode={this.props.setSearchedNode}
+           tree={tree}
+           home={home}
+           index={draggingIndex}
+           key={dragging.id}
+           isDragging={true}
+         />
+					</div>
       );
     }
 
@@ -99,39 +99,39 @@ export default React.createClass({
     var tree = this.state.tree;
     var dragging = this.state.dragging;
     var draggingDom = this.getDraggingDom();
-    var that = this;
+    var _this = this;
     var home = this.props.home;
 
     var rootIndex = tree.getIndex(0);
 
     var treeItems = rootIndex.children.map(function (data) {
       return <TreeNode
-          tree={tree}
-          home={home}
-          index={tree.getIndex(data)}
-          getBaseUrl={that.props.getBaseUrl}
-          clickHome={that.props.clickHome}
+        tree={tree}
+        home={home}
+        index={tree.getIndex(data)}
+        getBaseUrl={_this.props.getBaseUrl}
+        clickHome={_this.props.clickHome}
 
-          getSelectedNode={that.props.getSelectedNode}
-          setSelectedNode={that.props.setSelectedNode}
+        getSelectedNode={_this.props.getSelectedNode}
+        setSelectedNode={_this.props.setSelectedNode}
 
-          getSearchedNode={that.props.getSearchedNode}
-          setSearchedNode={that.props.setSearchedNode}
+        getSearchedNode={_this.props.getSearchedNode}
+        setSearchedNode={_this.props.setSearchedNode}
 
-          key={data}
+        key={data}
 
-          onDragStart={that.dragStart}
-          onCollapse={that.toggleCollapse}
-          dragging={dragging && dragging.id}
-          isDragging={false}
+        onDragStart={_this.dragStart}
+        onCollapse={_this.toggleCollapse}
+        dragging={dragging && dragging.id}
+        isDragging={false}
       />;
     });
 
     return (
-        <div className="menu-content" id="uitree">
-          {draggingDom}
-          {treeItems}
-        </div>
+      <div className="menu-content" id="uitree">
+					{draggingDom}
+					{treeItems}
+				</div>
     );
   },
 
@@ -139,7 +139,7 @@ export default React.createClass({
     var tree = this.state.tree;
     var node = tree.get(id);
     if (node.entity && node.entity == 'menu')
-      return;
+     return;
     this.setState({
       tempTree: new Tree(tree.obj),
     });
@@ -297,21 +297,21 @@ export default React.createClass({
       if (dragging.originalOrdering != dragging.lastOrdering) {
         var targetNode = this.state.tree.get(dragging.id);
         if (targetNode.entity != 'menu')
-          this.props.moveNode(
-              {
-                id: dragging.id,
-                parent: dragging.targetParent,
-                position: dragging.lastOrdering,
-              }
-          );
-      }
-    } else {
-      this.props.moveNode(
-          {
+         this.props.moveNode(
+           {
             id: dragging.id,
             parent: dragging.targetParent,
             position: dragging.lastOrdering,
           }
+         );
+      }
+    } else {
+      this.props.moveNode(
+        {
+        id: dragging.id,
+        parent: dragging.targetParent,
+        position: dragging.lastOrdering,
+      }
       );
     }
 

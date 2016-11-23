@@ -19,7 +19,12 @@
         "./webpack.config.js",
         "./webpack.dev.config.js",
         "./webpack.prod.config.js",
-        "!(.png|.jpg|.git)"
+        "./resources/gulpTasks/**",
+        "./**/*.png",
+        "./**/*.jpg",
+        "./**/*.gif",
+        "./**/*.scss",
+        "./**/*.css"
     ],
     "fileExtensions": [".js", ".jsx"],
     "fix": true

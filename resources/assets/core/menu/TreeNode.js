@@ -47,38 +47,38 @@ let TreeNode = React.createClass({
       var childNodes = children.map(function (child) {
         var childIndex = tree.getIndex(child);
         return (
-            <TreeNode
-                tree={tree}
-                index={childIndex}
-                key={childIndex.id}
+          <TreeNode
+            tree={tree}
+            index={childIndex}
+            key={childIndex.id}
 
-                dragging={dragging}
-                home={home}
+            dragging={dragging}
+            home={home}
 
-                onDragStart={onDragStart}
-                isDragging={isDragging}
-                isPlaceHolder={isPlaceHolder}
+            onDragStart={onDragStart}
+            isDragging={isDragging}
+            isPlaceHolder={isPlaceHolder}
 
-                clickHome={props.clickHome}
+            clickHome={props.clickHome}
 
-                getSelectedNode={props.getSelectedNode}
-                setSelectedNode={props.setSelectedNode}
+            getSelectedNode={props.getSelectedNode}
+            setSelectedNode={props.setSelectedNode}
 
-                getSearchedNode={props.getSearchedNode}
-                setSearchedNode={props.setSearchedNode}
+            getSearchedNode={props.getSearchedNode}
+            setSearchedNode={props.setSearchedNode}
 
-                getBaseUrl={getBaseUrl}
-            />
+            getBaseUrl={getBaseUrl}
+          />
         );
       });
 
       return (
-          <div className={cx({
-                'item-container': true,
-                move: isDragging,
-              })} style={childrenStyles}>
-            {childNodes}
-          </div>
+        <div className={cx({
+                  'item-container': true,
+                  move: isDragging,
+                })} style={childrenStyles}>
+						{childNodes}
+					</div>
       );
     }
 
@@ -95,38 +95,38 @@ let TreeNode = React.createClass({
 
     if (this.isMenuEntity(node)) {
       return (
-          <div className="menu-type">
-            <MenuEntity
-                index={index}
-                getBaseUrl={props.getBaseUrl}
-                onCollapse={props.onCollapse}
-            />
-            {this.renderChildren()}
-          </div>
+        <div className="menu-type">
+						<MenuEntity
+           index={index}
+           getBaseUrl={props.getBaseUrl}
+           onCollapse={props.onCollapse}
+         />
+						{this.renderChildren()}
+					</div>
       );
     } else {
       return (
-          <div className={cx({
-                    node: true,
-                    item: true,
-                    copy: isPlaceHolder,
-                    off: (node.activated !== 1),
-                  })}>
-            <MenuItem
-                index={index}
-                home={home}
-                getBaseUrl={props.getBaseUrl}
-                clickHome={props.clickHome}
-                mouseDown={this.handleMouseDown}
+        <div className={cx({
+                      node: true,
+                      item: true,
+                      copy: isPlaceHolder,
+                      off: (node.activated !== 1),
+                    })}>
+						<MenuItem
+           index={index}
+           home={home}
+           getBaseUrl={props.getBaseUrl}
+           clickHome={props.clickHome}
+           mouseDown={this.handleMouseDown}
 
-                getSelectedNode={props.getSelectedNode}
-                setSelectedNode={props.setSelectedNode}
+           getSelectedNode={props.getSelectedNode}
+           setSelectedNode={props.setSelectedNode}
 
-                getSearchedNode={props.getSearchedNode}
-                setSearchedNode={props.setSearchedNode}
-            />
-            {this.renderChildren()}
-          </div>
+           getSearchedNode={props.getSearchedNode}
+           setSearchedNode={props.setSearchedNode}
+         />
+						{this.renderChildren()}
+					</div>
 
       );
     }

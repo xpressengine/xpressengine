@@ -4,18 +4,22 @@ import ReactDOM from 'react-dom';
 import Permission from './Permission';
 
 $('.__xe__uiobject_permission').each(function (i) {
-  var el = $(this),
-    data = el.data('data');
+  var $this = $(this);
+  var data = $this.data('data');
 
-  var key = el.data('key'), type = el.data('type'), memberUrl = el.data('memberUrl'), groupUrl = el.data('groupUrl'), vgroupAll = el.data('vgroupAll');
+  var key = $this.data('key');
+  var type = $this.data('type');
+  var memberUrl = $this.data('memberUrl');
+  var groupUrl = $this.data('groupUrl');
+  var vgroupAll = $this.data('vgroupAll');
 
   ReactDOM.render(
-      <Permission
-          key = {key}
-          memberSearchUrl = {memberUrl}
-          groupSearchUrl = {groupUrl}
-          permission = {data}
-          type = {type}
-          vgroupAll = {vgroupAll} />, this
+    <Permission
+      key={key}
+      memberSearchUrl={memberUrl}
+      groupSearchUrl={groupUrl}
+      permission={data}
+      type={type}
+      vgroupAll={vgroupAll}/>, this
   );
 });

@@ -33,10 +33,10 @@
 
   function setInstance($context, instance) {
     if (getInstance($context) === null) {
-      var progress = new XeProgress(),
-          parent = 'body',
-          type = $context.data('progress-type') === undefined ? 'default' : $context.data('progress-type'),
-          showSpinner = type !== 'nospin';
+      var progress = new XeProgress();
+      var parent = 'body';
+      var type = $context.data('progress-type') === undefined ? 'default' : $context.data('progress-type');
+      var showSpinner = type !== 'nospin';
 
       if ($context.attr('id') !== undefined) {
         parent = '#' + $context.attr('id');
@@ -46,7 +46,7 @@
 
       progress.configure({
         parent: parent,
-        type:  type,
+        type: type,
         showSpinner: showSpinner,
       });
       instances.push(progress);
@@ -82,7 +82,6 @@
       }
     });
   }
-
 
   /**
    * progress bar 없이 spinner 만 사용
@@ -120,7 +119,7 @@
     this.$progress = null;
     this.$bar = null;
     this.status = null;
-    this.initial =  0;
+    this.initial = 0;
     this.current = 0;
     this.instanceId = null;
     this.time = null;
@@ -143,14 +142,14 @@
         this.set(0);
       }
 
-      var self = this;
+      var _this = this;
 
       var work = function () {
         setTimeout(function () {
-          if (!self.status) return;
-          self.trickle();
+          if (!_this.status) return;
+          _this.trickle();
           work();
-        }, self.settings.trickleSpeed);
+        }, _this.settings.trickleSpeed);
       };
 
       if (this.settings.trickle) work();
@@ -189,36 +188,36 @@
       n = clamp(n, this.settings.minimum, 1);
       this.status = (n === 1 ? null : n);
 
-      var $progress = this.render(!started),
-          $bar      = this.$bar,
-          speed    = this.settings.speed,
-          ease     = this.settings.easing;
+      var $progress = this.render(!started);
+      var $bar = this.$bar;
+      var speed = this.settings.speed;
+      var ease = this.settings.easing;
 
       // $progress.offsetWidth; /* Repaint */
-      var self = this,
-          time = this.getTime();
+      var _this = this;
+      var time = this.getTime();
+
       XE.Progress.queue(function (next) {
         // Set positionUsing if it hasn't already been set
-        if (self.settings.positionUsing === '') self.settings.positionUsing = self.getPositioningCSS();
+        if (_this.settings.positionUsing === '') _this.settings.positionUsing = _this.getPositioningCSS();
 
         // Add transition
-        XE.Progress.css(self.$bar, barPositionCSS(n, speed, ease, self.settings));
+        XE.Progress.css(_this.$bar, barPositionCSS(n, speed, ease, _this.settings));
 
         if (n === 1) {
           // Fade out
-          XE.Progress.css(self.$progress, {
+          XE.Progress.css(_this.$progress, {
             transition: 'none',
             opacity: 1,
           });
-          //$progress.offsetWidth; /* Repaint */
 
           setTimeout(function () {
-            XE.Progress.css(self.$progress, {
+            XE.Progress.css(_this.$progress, {
               transition: 'all ' + speed + 'ms linear',
               opacity: 0,
             });
             setTimeout(function () {
-              self.remove(time);
+              _this.remove(time);
               next();
             }, speed);
           }, speed);
@@ -246,14 +245,14 @@
       this.initial++;
       this.current++;
 
-      var self = this;
+      var _this = this;
       $promise.always(function () {
-        self.current--;
-        if (self.current === 0) {
-          self.initial = 0;
-          self.done(this.time);
+        _this.current--;
+        if (_this.current === 0) {
+          _this.initial = 0;
+          _this.done(this.time);
         } else {
-          self.set((self.initial - self.current) / self.initial);
+          _this.set((_this.initial - _this.current) / _this.initial);
         }
       });
 
@@ -281,10 +280,10 @@
 
       $progress.html(this.settings.template[this.settings.type]);
 
-      var $bar      = $progress.find(this.settings.barSelector),
-          perc     = fromStart ? '-100' : toBarPerc(this.status || 0),
-          $parent   = $(this.settings.parent),
-          $spinner;
+      var $bar = $progress.find(this.settings.barSelector);
+      var perc = fromStart ? '-100' : toBarPerc(this.status || 0);
+      var $parent = $(this.settings.parent);
+      var $spinner;
 
       $bar.attr('title-name', this.instanceId);
       this.$bar = $bar;
@@ -342,9 +341,9 @@
 
       // Sniff prefixes
       var vendorPrefix = ('WebkitTransform' in bodyStyle) ? 'Webkit' :
-          ('MozTransform' in bodyStyle) ? 'Moz' :
-              ('msTransform' in bodyStyle) ? 'ms' :
-                  ('OTransform' in bodyStyle) ? 'O' : '';
+        ('MozTransform' in bodyStyle) ? 'Moz' :
+          ('msTransform' in bodyStyle) ? 'ms' :
+            ('OTransform' in bodyStyle) ? 'O' : '';
 
       if (vendorPrefix + 'Perspective' in bodyStyle) {
         // Modern browsers with 3D support, e.g. Webkit, IE10
@@ -358,8 +357,6 @@
       }
     };
   };
-
-
 
   /**
    * Helpers
@@ -390,43 +387,39 @@
     return barCSS;
   }
 
-  exports.XE.Progress = function () {
+  exports.XE.Progress = {
+    cssLoad: function () {
+      if (cssLoaded === false) {
+        cssLoaded = true;
+        XE.cssLoad('/assets/core/common/css/progress.css'); // @TODO
+      }
+    },
 
-    return {
-      cssLoad: function () {
-        if (cssLoaded === false) {
-          cssLoaded = true;
-          XE.cssLoad('/assets/core/common/css/progress.css'); // @TODO
-        }
-      },
+    start: function (context) {
+      if ($('link[href*="assets/core/common/css/progress.css"]').length == 0) {
+        XE.cssLoad('/assets/core/common/css/progress.css'); // @TODO
+      }
 
-      start: function (context) {
-        if ($('link[href*="assets/core/common/css/progress.css"]').length == 0) {
-          XE.cssLoad('/assets/core/common/css/progress.css'); // @TODO
-        }
+      var $context = $(context);
+      if ($context.context === undefined) {
+        $context = $('body');
+      }
 
-        var $context = $(context);
-        if ($context.context === undefined) {
-          $context = $('body');
-        }
+      setInstance($context);
 
-        setInstance($context);
+      $context.trigger('progressStart');
+    },
 
-        $context.trigger('progressStart');
-      },
+    done: function (context) {
+      var $context = $(context);
+      if ($context.context === undefined) {
+        $context = $('body');
+      }
 
-      done: function (context) {
-        var $context = $(context);
-        if ($context.context === undefined) {
-          $context = $('body');
-        }
-
-        $context.trigger('progressDone');
-      },
-    };
-  }();
+      $context.trigger('progressDone');
+    },
+  };
 })(window);
-
 
 //queue
 (function (exports, Progress) {
@@ -449,8 +442,8 @@
 //css
 (function (exports, Progress) {
 
-  var cssPrefixes = ['Webkit', 'O', 'Moz', 'ms'],
-      cssProps    = {};
+  var cssPrefixes = ['Webkit', 'O', 'Moz', 'ms'];
+  var cssProps = {};
 
   function camelCase(string) {
     return string.replace(/^-ms-/, 'ms-').replace(/-([\da-z])/gi, function (match, letter) {
@@ -462,9 +455,10 @@
     var style = document.body.style;
     if (name in style) return name;
 
-    var i = cssPrefixes.length,
-        capName = name.charAt(0).toUpperCase() + name.slice(1),
-        vendorName;
+    var i = cssPrefixes.length;
+    var capName = name.charAt(0).toUpperCase() + name.slice(1);
+    var vendorName;
+
     while (i--) {
       vendorName = cssPrefixes[i] + capName;
       if (vendorName in style) return vendorName;
@@ -487,9 +481,9 @@
 
   Progress.css = function () {
     return function (element, properties) {
-      var args = arguments,
-          prop,
-          value;
+      var args = arguments;
+      var prop;
+      var value;
 
       if (args.length == 2) {
         for (prop in properties) {

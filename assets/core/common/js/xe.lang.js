@@ -1,6 +1,5 @@
 //xe.lang.js
-(function (exports) {
-exports.XE.Lang = function () {
+XE.Lang = (function (exports) {
   var Translator = exports.Translator;
   var _items = {
     af: 'af-ZA',
@@ -85,15 +84,11 @@ exports.XE.Lang = function () {
     zu: 'zu-ZA',
   };
 
+  Translator.placeHolderPrefix = ':';
+  Translator.placeHolderSuffix = '';
+
   return {
     locales: [],
-    init: function () {
-      Translator.placeHolderPrefix = ':';
-      Translator.placeHolderSuffix = '';
-
-      return this;
-    },
-
     set: function (items) {
       //$.extend(_items, items);
       $.each(items, function (key, value) {
@@ -122,6 +117,6 @@ exports.XE.Lang = function () {
     transChoice: function (id, number, parameters) {
       return Translator.transChoice(id, number, parameters);
     },
-  }.init();
-}();
+  };
+
 })(window);

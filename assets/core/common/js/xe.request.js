@@ -1,6 +1,5 @@
-(function (exports, Progress) {
-exports.XE.Request = function () {
-  var self;
+XE.Request = (function (Progress) {
+  var _this;
 
   var _options = {
     headers: {
@@ -17,14 +16,13 @@ exports.XE.Request = function () {
     XE.Progress.done();
 
     if (!settings.hasOwnProperty('error')) {
-      self.error(jqxhr, settings, thrownError);
+      _this.error(jqxhr, settings, thrownError);
     }
   });
 
   return {
     init: function () {
-      self = this;
-
+      _this = this;
       return this;
     },
 
@@ -43,8 +41,8 @@ exports.XE.Request = function () {
     },
 
     error: function (jqxhr, settings, thrownError) {
-      var status = jqxhr.status,
-          errorMessage = 'Not defined error message (' + status + ')';
+      var status = jqxhr.status;
+      var errorMessage = 'Not defined error message (' + status + ')';
 
       // @TODO dataType 에 따라 메시지 획득 방식을 추가 해야함.
       if (settings.dataType == 'json') {
@@ -57,5 +55,5 @@ exports.XE.Request = function () {
       window.XE.toastByStatus(status, errorMessage);
     },
   }.init();
-}();
-})(window, XE.Progress);
+
+})(XE.Progress);

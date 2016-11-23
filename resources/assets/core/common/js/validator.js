@@ -36,66 +36,66 @@ module.exports = factory();
   };
 
   Validator.check = function ($frm) {
-    var ruleName = this.getRuleName($frm),
-        rules = this.rules[ruleName],
-        self = this,
-        alertType = $frm.data('rule-alert-type');
+    var ruleName = this.getRuleName($frm);
+    var rules = this.rules[ruleName];
+    var _this = this;
+    var alertType = $frm.data('rule-alert-type');
 
     if (alertType == undefined) {
       alertType = 'form';
     }
 
-    self.alertType = alertType;
+    _this.alertType = alertType;
 
     $.each(rules, function (name, rule) {
-      self.validate($frm, name, rule);
+      _this.validate($frm, name, rule);
     });
 
     this.checkRuleContainers($frm);
   };
 
   Validator.checkRuleContainers = function ($frm) {
-    var self = this,
-        containers = $frm.find('[data-rule]');
+    var _this = this;
+    var containers = $frm.find('[data-rule]');
 
     $.each(containers, function (index, container) {
-      var ruleName = $(container).data('rule'),
-          rules = self.rules[ruleName];
+      var ruleName = $(container).data('rule');
+      var rules = _this.rules[ruleName];
 
       $.each(rules, function (name, rule) {
-        self.validate($frm, name, rule);
+        _this.validate($frm, name, rule);
       });
     });
   };
 
   Validator.formValidate = function ($form) {
-    var self = this;
+    var _this = this;
 
     Validator.alertType = $form.data('rule-alert-type') || 'toast';
-    self.errorClear($form);
+    _this.errorClear($form);
 
     $form.find('[data-valid]').each(function () {
       var $this = $(this);
       var rule = $this.data('valid');
       var name = $this.attr('name');
 
-      self.validate($form, name, rule);
+      _this.validate($form, name, rule);
     });
   };
 
   Validator.validate = function ($frm, name, rule) {
-    var parts = rule.split('|'),
-        self = this;
+    var parts = rule.split('|');
+    var _this = this;
 
     $.each(parts, function (index, part) {
-      var res = part.split(':'),
-          command = res[0].toLowerCase(),
-          parameters = res[1];
+      var res = part.split(':');
+      var command = res[0].toLowerCase();
+      var parameters = res[1];
 
-      if (typeof self.validators[command] === 'function') {
+      if (typeof _this.validators[command] === 'function') {
         var $dst = $frm.find('[name="' + name + '"]');
-        self.errorClear($frm);
-        if (self.validators[command]($dst, parameters) === false) {
+        _this.errorClear($frm);
+        if (_this.validators[command]($dst, parameters) === false) {
           throw Error('Validation error.');
         }
       }
@@ -146,7 +146,7 @@ module.exports = factory();
 
         if (!max) {
           messageType = 'xe::validatorCheckedMin';
-        }else if (min == 0) {
+        } else if (min == 0) {
           messageType = 'xe::validatorCheckedMax';
         }
 
@@ -168,8 +168,9 @@ module.exports = factory();
     },
 
     alpha: function ($dst, parameters) {
-      var value = $dst.val(),
-          pattern = /[a-zA-Z]/;
+      var value = $dst.val();
+      var pattern = /[a-zA-Z]/;
+
       if (!pattern.test(value)) {
         Validator.error($dst, XE.Lang.trans('xe::validatorAlpha')); //TODO 번역 넣어야함
         return false;
@@ -179,8 +180,9 @@ module.exports = factory();
     },
 
     alphanum: function ($dst, parameters) {
-      var value = $dst.val(),
-          pattern = /[^a-zA-Z0-9]/;
+      var value = $dst.val();
+      var pattern = /[^a-zA-Z0-9]/;
+
       if (pattern.test(value) === true) {
         Validator.error($dst, XE.Lang.trans('xe::validatorAlphanum'));
         return false;
@@ -248,8 +250,8 @@ module.exports = factory();
     },
 
     between: function ($dst, parameters) {
-      var range = parameters.split(','),
-          value = $dst.val();
+      var range = parameters.split(',');
+      var value = $dst.val();
 
       // 등록된 내용이 없으면 체크 안함
       if (value.length == 0) {

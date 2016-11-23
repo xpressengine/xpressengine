@@ -37,33 +37,33 @@ export default React.createClass({
     var suggestions = this.props.suggestions.map((function (item, i) {
       return (
 
-          <li
-              key={i}
-              onClick={props.handleClick.bind(null, i)}
-              onMouseOver={props.handleHover.bind(null, i)}
-              className={cx({
-                        on: i == props.selectedIndex,
-                      })}
-          >
-            <a href="#"
-               dangerouslySetInnerHTML={this.markIt(item, props.query)}
-            />
-          </li>
+        <li
+          key={i}
+          onClick={props.handleClick.bind(null, i)}
+          onMouseOver={props.handleHover.bind(null, i)}
+          className={cx({
+                          on: i == props.selectedIndex,
+                        })}
+        >
+						<a href="#"
+           dangerouslySetInnerHTML={this.markIt(item, props.query)}
+         />
+					</li>
       );
     }).bind(this));
 
     if ((suggestions && suggestions.length === 0) || props.query.length < MIN_QUERY_LENGTH) {
       return (
-          <div className="search-list"/>
+        <div className="search-list"/>
       );
     }
 
     return (
-        <div className="search-list">
-          <ul>
-            {suggestions}
-          </ul>
-        </div>
+      <div className="search-list">
+					<ul>
+						{suggestions}
+					</ul>
+				</div>
     );
   },
 });

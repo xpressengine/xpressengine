@@ -15,15 +15,15 @@ var LangEditorBox = React.createClass({
   render: function () {
     LangEditor.seq++;
     return (
-        <LangEditor
-            key={LangEditor.seq}
-            seq={LangEditor.seq}
-            name={this.props.name}
-            langKey={this.props.langKey}
-            multiline={this.props.multiline}
-            lines={this.props.lines}
-            autocomplete={this.props.autocomplete}
-        />
+      <LangEditor
+        key={LangEditor.seq}
+        seq={LangEditor.seq}
+        name={this.props.name}
+        langKey={this.props.langKey}
+        multiline={this.props.multiline}
+        lines={this.props.lines}
+        autocomplete={this.props.autocomplete}
+      />
     );
   },
 });
@@ -36,23 +36,24 @@ var LangEditor = React.createClass({
   },
 
   setLines: function (lines) {
-    var self = this;
-    self.setState({ lines: lines });
+    var _this = this;
+    _this.setState({ lines: lines });
     XE.Lang.locales.map(function (locale) {
-      var selector = '#input-' + self.props.seq + '-' + locale,
-          value = self.getValueFromLinesWithLocale(locale);
+      var selector = '#input-' + _this.props.seq + '-' + locale;
+      var value = _this.getValueFromLinesWithLocale(locale);
       $(selector).val(value);
     });
   },
 
   getValueFromLinesWithLocale: function (locale) {
-    var lines = this.state.lines,
-        i = lines.length,
-        l = {};
+    var lines = this.state.lines;
+    var i = lines.length;
+    var l = {};
+
     while (i--) {
       l = lines[i];
-      if (l['locale'] == locale) {
-        return l['value'];
+      if (l.locale == locale) {
+        return l.value;
       }
     }
 
@@ -61,7 +62,7 @@ var LangEditor = React.createClass({
 
   componentDidMount: function () {
     if (this.isMounted()) {
-      var self = this;
+      var _this = this;
       var el = ReactDOM.findDOMNode(this);
 
       if (this.props.langKey) {
@@ -71,7 +72,9 @@ var LangEditor = React.createClass({
             dataType: 'json',
             url: xeBaseURL + '/' + XE.options.managePrefix + '/lang/lines/' + this.props.langKey,
             success: function (result) {
-              if (this.isMounted()) { self.setLines(result); }
+              if (this.isMounted()) {
+                _this.setLines(result);
+              }
             }.bind(this),
           });
         }
@@ -81,24 +84,22 @@ var LangEditor = React.createClass({
         $(el).find('input[type=text]:first,textarea:first').autocomplete({
           source: '/' + XE.options.managePrefix + '/lang/search/' + XE.Lang.locales[0],
           minLength: 1,
-          focus: function (event, ui) { event.preventDefault(); },
+          focus: function (event, ui) {
+            event.preventDefault();
+          },
 
-          select: function (event, ui) { self.setLines(ui.item.lines); },
+          select: function (event, ui) {
+            _this.setLines(ui.item.lines);
+          },
         });
       }
     }
   },
-  // getFlagClass: function (locale) {
-  //     var code = XE.Lang.getLangCode(locale),
-  //         arr = code.split('-'),
-  //         keyword = arr[1].toLowerCase();
-  //
-  //     return 'flag ' + keyword;
-  // },
+
   getEditor: function (resource, locale, value) {
-    var edit = null,
-        id = ('input-' + this.props.seq + '-' + locale),
-        name = (resource + '/locale/' + locale);
+    var edit = null;
+    var id = ('input' + this.props.seq + '-' + locale);
+    var name = (resource + '/locale/' + locale);
 
     if (!this.props.multiline) {
       edit = <input type="text" className="form-control" id={id} name={name} defaultValue={value}/>;
@@ -110,60 +111,58 @@ var LangEditor = React.createClass({
   },
 
   render: function () {
-    var self = this,
-        locale = XE.Lang.locales[0],
-        fallback = XE.Lang.locales.slice(1),
-        resource = 'xe_lang_preprocessor://lang/seq/' + this.props.seq,
-        value = this.getValueFromLinesWithLocale(locale),
-        inputClass = this.props.multiline ? 'textarea' : 'text';
+    var _this = this;
+    var locale = XE.Lang.locales[0];
+    var fallback = XE.Lang.locales.slice(1);
+    var resource = 'xe_lang_preprocessor://lang/seq/' + this.props.seq;
+    var value = this.getValueFromLinesWithLocale(locale);
+    var inputClass = this.props.multiline ? 'textarea' : 'text';
 
     var multiline = this.props.multiline
-        ? <input type="hidden" name={resource + '/multiline'} defaultValue='true'/>
-        : null;
+      ? <input type="hidden" name={resource + '/multiline'} defaultValue='true'/>
+      : null;
 
     return (
-        
-
-
-<div className={inputClass}>
-          <input type="hidden" name="xe_use_request_preprocessor" value="Y"/>
-          <input type="hidden" name={resource + '/name'} defaultValue={this.props.name}/>
-          <input type="hidden" name={resource + '/key'} defaultValue={this.props.langKey}/>
-          {multiline}
-          <input type="hidden" name={this.props.name} defaultValue={this.props.langKey}/>
-          <div key={locale} className="input-group">
-            {self.getEditor(resource, locale, value)}
-              <span className="input-group-addon">
-              <span className="flag-code"><i className={locale + ' xe-flag'}></i>{locale}</span>
-              </span>
-          </div>
-          <div className="sub">
-            {fallback.map(function (locale, i) {
-              var value = self.getValueFromLinesWithLocale(locale);
-              return (
-                  <div key={locale} className="input-group">
-                    {self.getEditor(resource, locale, value)}
-                  <span className="input-group-addon">
-                  <span className="flag-code"><i className={locale + ' xe-flag'}></i>{locale}</span>
-                  </span>
-                  </div>
-              );
-            })}
-          </div>
+      <div className={inputClass}>
+        <input type="hidden" name="xe_use_request_preprocessor" value="Y"/>
+        <input type="hidden" name={resource + '/name'} defaultValue={this.props.name}/>
+        <input type="hidden" name={resource + '/key'} defaultValue={this.props.langKey}/>
+        {multiline}
+        <input type="hidden" name={this.props.name} defaultValue={this.props.langKey}/>
+        <div key={locale} className="input-group">
+          {_this.getEditor(resource, locale, value)}
+            <span className="input-group-addon">
+            <span className="flag-code"><i className={locale + ' xe-flag'}></i>{locale}</span>
+            </span>
         </div>
+        <div className="sub">
+          {
+            fallback.map(function (locale, i) {
+              var value = _this.getValueFromLinesWithLocale(locale);
+              return (
+                <div key={locale} className="input-group">
+                        {_this.getEditor(resource, locale, value)}
+                      <span className="input-group-addon">
+                      <span className="flag-code"><i className={locale + ' xe-flag'}></i>{locale}</span>
+                      </span>
+                      </div>
+              );
+            })
+          }
+        </div>
+      </div>
     );
   },
 });
 
 window.langEditorBoxRender = function ($o) {
-  var name = $o.data('name'),
-      langKey = $o.data('lang-key'),
-      multiline = $o.data('multiline'),
-      lines = $o.data('lines'),
-      autocomplete = $o.data('autocomplete');
+  var name = $o.data('name');
+  var langKey = $o.data('lang-key');
+  var multiline = $o.data('multiline');
+  var lines = $o.data('lines');
+  var autocomplete = $o.data('autocomplete');
 
-  ReactDOM.render(<LangEditorBox name={name} langKey={langKey} multiline={multiline} lines={lines}
-                                 autocomplete={autocomplete}/>, $o[0]);
+  ReactDOM.render(<LangEditorBox name={name} langKey={langKey} multiline={multiline} lines={lines} autocomplete={autocomplete}/>, $o[0]);
 };
 
 $(function () {

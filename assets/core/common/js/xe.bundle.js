@@ -1,106 +1,98 @@
-(function (exports) {
-'use strict';
+var XE = (function (exports) {
+  'use strict';
 
-var self;
+  var _this;
 
-/**
-   * @description
-   * <pre>
-   *     XE module initialize
-   * </pre>
-   * */
-function initialize() {
-  self = this;
+  function ajax(url, options) {
+    if (typeof url === 'object') {
+      options = $.extend({}, _this.Request.options, url);
+      url = undefined;
+    } else {
+      options = $.extend({}, options, _this.Request.options, { url: url });
+      url = undefined;
+    }
 
-  return this;
-}
-
-function ajax(url, options) {
-  if (typeof url === 'object') {
-    options = $.extend({}, self.Request.options, url);
-    url = undefined;
-  } else {
-    options = $.extend({}, options, self.Request.options, { url: url });
-    url = undefined;
+    return $.ajax(url, options);
   }
 
-  return $.ajax(url, options);
-}
+  /**
+    * @param {object} options
+    * */
+  function setup(options) {
+    _this.options.loginUserId = options.loginUserId;
+    _this.Request.setup({
+      headers: {
+        'X-CSRF-TOKEN': options['X-CSRF-TOKEN'],
+      },
+    });
 
-/**
-   * @param {object} options
-   * */
-function setup(options) {
-  self.options.loginUserId = options.loginUserId;
-  self.Request.setup({
-    headers: {
-      'X-CSRF-TOKEN': options['X-CSRF-TOKEN'],
-    },
-  });
-
-}
-
-/**
-   * @param {object} options
-   * */
-function configure(options) {
-  $.extend(self.options, options);
-}
-
-// @DEPRECATED
-function cssLoad(url) {
-  DynamicLoadManager.cssLoad(url);
-}
-
-function jsLoad(url) {
-  DynamicLoadManager.jsLoad(url);
-}
-
-function toast(type, message) {
-  if (type == '') {
-    type = 'danger';
   }
 
-  System.import('xecore:/common/js/griper').then(function (griper) {
-    return griper.toast(type, message);
-  });
-}
+  /**
+    * @param {object} options
+    * */
+  function configure(options) {
+    $.extend(_this.options, options);
+  }
 
-function toastByStatus(status, message) {
-  System.import('xecore:/common/js/griper').then(function (griper) {
-    return griper.toast(griper.toast.fn.statusToType(status), message);
-  });
-}
+  // @DEPRECATED
+  function cssLoad(url) {
+    DynamicLoadManager.cssLoad(url);
+  }
 
-function formError($element, message) {
-  System.import('xecore:/common/js/griper').then(function (griper) {
-    return griper.form($element, message);
-  });
-}
+  function jsLoad(url) {
+    DynamicLoadManager.jsLoad(url);
+  }
 
-function formErrorClear($form) {
-  System.import('xecore:/common/js/griper').then(function (griper) {
-    return griper.form.fn.clear($form);
-  });
-}
+  function toast(type, message) {
+    if (type == '') {
+      type = 'danger';
+    }
 
-function formValidate($form) {
-  System.import('xecore:/common/js/validator').then(function (validator) {
-    validator.formValidate($form);
-  });
-}
+    System.import('xecore:/common/js/griper').then(function (griper) {
+      return griper.toast(type, message);
+    });
+  }
 
-function getLocale() {
-  return self.options.locale;
-}
+  function toastByStatus(status, message) {
+    System.import('xecore:/common/js/griper').then(function (griper) {
+      return griper.toast(griper.toast.fn.statusToType(status), message);
+    });
+  }
 
-function getDefaultLocale() {
-  return self.options.defaultLocale;
-}
+  function formError($element, message) {
+    System.import('xecore:/common/js/griper').then(function (griper) {
+      return griper.form($element, message);
+    });
+  }
 
-exports.XE = function () {
+  function formErrorClear($form) {
+    System.import('xecore:/common/js/griper').then(function (griper) {
+      return griper.form.fn.clear($form);
+    });
+  }
+
+  function formValidate($form) {
+    System.import('xecore:/common/js/validator').then(function (validator) {
+      validator.formValidate($form);
+    });
+  }
+
+  function getLocale() {
+    return _this.options.locale;
+  }
+
+  function getDefaultLocale() {
+    return _this.options.defaultLocale;
+  }
+
   return {
-    initialize: initialize,
+    init: function () {
+      _this = this;
+
+      return this;
+    },
+
     ajax: ajax,
     setup: setup,
     configure: configure,
@@ -120,10 +112,8 @@ exports.XE = function () {
     Progress: '',
     Request: '',
     Component: '',
-  }.initialize();
-}();
-
-})(window);
+  };
+})().init(window);
 
 /*!
  * William DURAND <william.durand1@gmail.com>
@@ -148,10 +138,10 @@ var Translator = (function (document, undefined) {
    * @return {String}             A human readable message
    * @api private
    */
-  function replace_placeholders(message, placeholders) {
-    var _i,
-     _prefix = Translator.placeHolderPrefix,
-     _suffix = Translator.placeHolderSuffix;
+  function replacePlaceholders(message, placeholders) {
+    var _i;
+    var _prefix = Translator.placeHolderPrefix;
+    var _suffix = Translator.placeHolderSuffix;
 
     for (_i in placeholders) {
       var _r = new RegExp(_prefix + _i + _suffix, 'g');
@@ -176,12 +166,12 @@ var Translator = (function (document, undefined) {
    * @return {String}                 The right message if found, `undefined` otherwise
    * @api private
    */
-  function get_message(id, domain, locale, currentLocale, localeFallback) {
-    var _locale = locale || currentLocale || localeFallback,
-     _domain = domain;
+  function getMessage(id, domain, locale, currentLocale, localeFallback) {
+    var _locale = locale || currentLocale || localeFallback;
+    var _domain = domain;
 
-    if (undefined == _messages[_locale]) {
-      if (undefined == _messages[localeFallback]) {
+    if (_messages[_locale] == undefined) {
+      if (_messages[localeFallback] == undefined) {
         // s::CUSTOM::
         var returnId = id;
 
@@ -190,16 +180,15 @@ var Translator = (function (document, undefined) {
         }
 
         return returnId;
-        // e::CUSTOM::
       }
 
       _locale = localeFallback;
     }
 
-    if (undefined === _domain || null === _domain) {
+    if (_domain === undefined || _domain === null) {
       for (var i = 0; i < _domains.length; i++) {
-        if (has_message(_locale, _domains[i], id) ||
-         has_message(localeFallback, _domains[i], id)) {
+        if (hasMessage(_locale, _domains[i], id) ||
+          hasMessage(localeFallback, _domains[i], id)) {
           _domain = _domains[i];
 
           break;
@@ -207,11 +196,14 @@ var Translator = (function (document, undefined) {
       }
     }
 
-    if (has_message(_locale, _domain, id)) {
+    if (hasMessage(_locale, _domain, id)) {
       return _messages[_locale][_domain][id];
     }
 
-    var _length, _parts, _last, _lastLength;
+    var _length;
+    var _parts;
+    var _last;
+    var _lastLength;
 
     while (_locale.length > 2) {
       _length = _locale.length;
@@ -219,18 +211,18 @@ var Translator = (function (document, undefined) {
       _last = _parts[_parts.length - 1];
       _lastLength = _last.length;
 
-      if (1 === _parts.length) {
+      if (_parts.length === 1) {
         break;
       }
 
       _locale = _locale.substring(0, _length - (_lastLength + 1));
 
-      if (has_message(_locale, _domain, id)) {
+      if (hasMessage(_locale, _domain, id)) {
         return _messages[_locale][_domain][id];
       }
     }
 
-    if (has_message(localeFallback, _domain, id)) {
+    if (hasMessage(localeFallback, _domain, id)) {
       return _messages[localeFallback][_domain][id];
     }
 
@@ -248,16 +240,16 @@ var Translator = (function (document, undefined) {
    *                      `               false` otherwise
    * @api private
    */
-  function has_message(locale, domain, id) {
-    if (undefined == _messages[locale]) {
+  function hasMessage(locale, domain, id) {
+    if (_messages[locale] == undefined) {
       return false;
     }
 
-    if (undefined == _messages[locale][domain]) {
+    if (_messages[locale][domain] == undefined) {
       return false;
     }
 
-    if (undefined == _messages[locale][domain][id]) {
+    if (_messages[locale][domain][id] == undefined) {
       return false;
     }
 
@@ -291,12 +283,12 @@ var Translator = (function (document, undefined) {
    * @api private
    */
   function pluralize(message, number, locale) {
-    var _p,
-     _e,
-     _explicitRules = [],
-     _standardRules = [],
-     _parts = message.split(Translator.pluralSeparator),
-     _matches = [];
+    var _p;
+    var _e;
+    var _explicitRules = [];
+    var _standardRules = [];
+    var _parts = message.split(Translator.pluralSeparator);
+    var _matches = [];
 
     for (_p = 0; _p < _parts.length; _p++) {
       var _part = _parts[_p];
@@ -317,8 +309,8 @@ var Translator = (function (document, undefined) {
         _matches = _e.match(_iPluralRegex);
 
         if (_matches[1]) {
-          var _ns = _matches[2].split(','),
-           _n;
+          var _ns = _matches[2].split(',');
+          var _n;
 
           for (_n in _ns) {
             if (number == _ns[_n]) {
@@ -326,18 +318,18 @@ var Translator = (function (document, undefined) {
             }
           }
         } else {
-          var _leftNumber = convert_number(_matches[4]);
-          var _rightNumber = convert_number(_matches[5]);
+          var _leftNumber = convertNumber(_matches[4]);
+          var _rightNumber = convertNumber(_matches[5]);
 
-          if (('[' === _matches[3] ? number >= _leftNumber : number > _leftNumber) &&
-           (']' === _matches[6] ? number <= _rightNumber : number < _rightNumber)) {
+          if ((_matches[3] === '[' ? number >= _leftNumber : number > _leftNumber) &&
+            (_matches[6] === ']' ? number <= _rightNumber : number < _rightNumber)) {
             return _explicitRules[_e];
           }
         }
       }
     }
 
-    return _standardRules[plural_position(number, locale)] || _standardRules[0] || undefined;
+    return _standardRules[pluralPosition(number, locale)] || _standardRules[0] || undefined;
   }
 
   /**
@@ -350,10 +342,10 @@ var Translator = (function (document, undefined) {
    * @return {Number}         The int value of the number
    * @api private
    */
-  function convert_number(number) {
-    if ('-Inf' === number) {
+  function convertNumber(number) {
+    if (number === '-Inf') {
       return Number.NEGATIVE_INFINITY;
-    } else if ('+Inf' === number || 'Inf' === number) {
+    } else if (number === '+Inf' || number === 'Inf') {
       return Number.POSITIVE_INFINITY;
     }
 
@@ -370,10 +362,10 @@ var Translator = (function (document, undefined) {
    * @return {Number}        The plural position
    * @api private
    */
-  function plural_position(number, locale) {
+  function pluralPosition(number, locale) {
     var _locale = locale;
 
-    if ('pt_BR' === _locale) {
+    if (_locale === 'pt_BR') {
       _locale = 'xbr';
     }
 
@@ -535,7 +527,7 @@ var Translator = (function (document, undefined) {
    * @return {String}     The current application's locale
    * @api private
    */
-  function get_current_locale() {
+  function getCurrentLocale() {
     return document.documentElement.lang.replace('-', '_');
   }
 
@@ -546,7 +538,7 @@ var Translator = (function (document, undefined) {
      * @type {String}
      * @api public
      */
-    locale: get_current_locale(),
+    locale: getCurrentLocale(),
 
     /**
      * Fallback locale.
@@ -599,8 +591,8 @@ var Translator = (function (document, undefined) {
      * @api public
      */
     add: function (id, message, domain, locale) {
-      var _locale = locale || this.locale || this.fallback,
-       _domain = domain || this.defaultDomain;
+      var _locale = locale || this.locale || this.fallback;
+      var _domain = domain || this.defaultDomain;
 
       if (!_messages[_locale]) {
         _messages[_locale] = {};
@@ -612,13 +604,12 @@ var Translator = (function (document, undefined) {
 
       _messages[_locale][_domain][id] = message;
 
-      if (false === exists(_domains, _domain)) {
+      if (exists(_domains, _domain) === false) {
         _domains.push(_domain);
       }
 
       return this;
     },
-
 
     /**
      * Translates the given message.
@@ -631,15 +622,15 @@ var Translator = (function (document, undefined) {
      * @api public
      */
     trans: function (id, parameters, domain, locale) {
-      var _message = get_message(
-       id,
-       domain,
-       locale,
-       this.locale,
-       this.fallback
+      var _message = getMessage(
+        id,
+        domain,
+        locale,
+        this.locale,
+        this.fallback
       );
 
-      return replace_placeholders(_message, parameters || {});
+      return replacePlaceholders(_message, parameters || {});
     },
 
     /**
@@ -654,25 +645,25 @@ var Translator = (function (document, undefined) {
      * @api public
      */
     transChoice: function (id, number, parameters, domain, locale) {
-      var _message = get_message(
-       id,
-       domain,
-       locale,
-       this.locale,
-       this.fallback
+      var _message = getMessage(
+        id,
+        domain,
+        locale,
+        this.locale,
+        this.fallback
       );
 
       var _number = parseInt(number, 10);
 
-      if (undefined != _message && !isNaN(_number)) {
+      if (_message && !isNaN(_number) != undefined) {
         _message = pluralize(
-         _message,
-         _number,
-         locale || this.locale || this.fallback
+          _message,
+          _number,
+          locale || this.locale || this.fallback
         );
       }
 
-      return replace_placeholders(_message, parameters || {});
+      return replacePlaceholders(_message, parameters || {});
     },
 
     /**
@@ -718,7 +709,7 @@ var Translator = (function (document, undefined) {
     reset: function () {
       _messages = {};
       _domains = [];
-      this.locale = get_current_locale();
+      this.locale = getCurrentLocale();
     },
   };
 })(document, undefined);
@@ -743,8 +734,7 @@ if (typeof exports !== 'undefined') {
 }
 
 //xe.lang.js
-(function (exports) {
-exports.XE.Lang = function () {
+XE.Lang = (function (exports) {
   var Translator = exports.Translator;
   var _items = {
     af: 'af-ZA',
@@ -829,15 +819,11 @@ exports.XE.Lang = function () {
     zu: 'zu-ZA',
   };
 
+  Translator.placeHolderPrefix = ':';
+  Translator.placeHolderSuffix = '';
+
   return {
     locales: [],
-    init: function () {
-      Translator.placeHolderPrefix = ':';
-      Translator.placeHolderSuffix = '';
-
-      return this;
-    },
-
     set: function (items) {
       //$.extend(_items, items);
       $.each(items, function (key, value) {
@@ -866,8 +852,8 @@ exports.XE.Lang = function () {
     transChoice: function (id, number, parameters) {
       return Translator.transChoice(id, number, parameters);
     },
-  }.init();
-}();
+  };
+
 })(window);
 
 (function (exports) {
@@ -905,10 +891,10 @@ exports.XE.Lang = function () {
 
   function setInstance($context, instance) {
     if (getInstance($context) === null) {
-      var progress = new XeProgress(),
-          parent = 'body',
-          type = $context.data('progress-type') === undefined ? 'default' : $context.data('progress-type'),
-          showSpinner = type !== 'nospin';
+      var progress = new XeProgress();
+      var parent = 'body';
+      var type = $context.data('progress-type') === undefined ? 'default' : $context.data('progress-type');
+      var showSpinner = type !== 'nospin';
 
       if ($context.attr('id') !== undefined) {
         parent = '#' + $context.attr('id');
@@ -918,7 +904,7 @@ exports.XE.Lang = function () {
 
       progress.configure({
         parent: parent,
-        type:  type,
+        type: type,
         showSpinner: showSpinner,
       });
       instances.push(progress);
@@ -954,7 +940,6 @@ exports.XE.Lang = function () {
       }
     });
   }
-
 
   /**
    * progress bar 없이 spinner 만 사용
@@ -992,7 +977,7 @@ exports.XE.Lang = function () {
     this.$progress = null;
     this.$bar = null;
     this.status = null;
-    this.initial =  0;
+    this.initial = 0;
     this.current = 0;
     this.instanceId = null;
     this.time = null;
@@ -1015,14 +1000,14 @@ exports.XE.Lang = function () {
         this.set(0);
       }
 
-      var self = this;
+      var _this = this;
 
       var work = function () {
         setTimeout(function () {
-          if (!self.status) return;
-          self.trickle();
+          if (!_this.status) return;
+          _this.trickle();
           work();
-        }, self.settings.trickleSpeed);
+        }, _this.settings.trickleSpeed);
       };
 
       if (this.settings.trickle) work();
@@ -1061,36 +1046,36 @@ exports.XE.Lang = function () {
       n = clamp(n, this.settings.minimum, 1);
       this.status = (n === 1 ? null : n);
 
-      var $progress = this.render(!started),
-          $bar      = this.$bar,
-          speed    = this.settings.speed,
-          ease     = this.settings.easing;
+      var $progress = this.render(!started);
+      var $bar = this.$bar;
+      var speed = this.settings.speed;
+      var ease = this.settings.easing;
 
       // $progress.offsetWidth; /* Repaint */
-      var self = this,
-          time = this.getTime();
+      var _this = this;
+      var time = this.getTime();
+
       XE.Progress.queue(function (next) {
         // Set positionUsing if it hasn't already been set
-        if (self.settings.positionUsing === '') self.settings.positionUsing = self.getPositioningCSS();
+        if (_this.settings.positionUsing === '') _this.settings.positionUsing = _this.getPositioningCSS();
 
         // Add transition
-        XE.Progress.css(self.$bar, barPositionCSS(n, speed, ease, self.settings));
+        XE.Progress.css(_this.$bar, barPositionCSS(n, speed, ease, _this.settings));
 
         if (n === 1) {
           // Fade out
-          XE.Progress.css(self.$progress, {
+          XE.Progress.css(_this.$progress, {
             transition: 'none',
             opacity: 1,
           });
-          //$progress.offsetWidth; /* Repaint */
 
           setTimeout(function () {
-            XE.Progress.css(self.$progress, {
+            XE.Progress.css(_this.$progress, {
               transition: 'all ' + speed + 'ms linear',
               opacity: 0,
             });
             setTimeout(function () {
-              self.remove(time);
+              _this.remove(time);
               next();
             }, speed);
           }, speed);
@@ -1118,14 +1103,14 @@ exports.XE.Lang = function () {
       this.initial++;
       this.current++;
 
-      var self = this;
+      var _this = this;
       $promise.always(function () {
-        self.current--;
-        if (self.current === 0) {
-          self.initial = 0;
-          self.done(this.time);
+        _this.current--;
+        if (_this.current === 0) {
+          _this.initial = 0;
+          _this.done(this.time);
         } else {
-          self.set((self.initial - self.current) / self.initial);
+          _this.set((_this.initial - _this.current) / _this.initial);
         }
       });
 
@@ -1153,10 +1138,10 @@ exports.XE.Lang = function () {
 
       $progress.html(this.settings.template[this.settings.type]);
 
-      var $bar      = $progress.find(this.settings.barSelector),
-          perc     = fromStart ? '-100' : toBarPerc(this.status || 0),
-          $parent   = $(this.settings.parent),
-          $spinner;
+      var $bar = $progress.find(this.settings.barSelector);
+      var perc = fromStart ? '-100' : toBarPerc(this.status || 0);
+      var $parent = $(this.settings.parent);
+      var $spinner;
 
       $bar.attr('title-name', this.instanceId);
       this.$bar = $bar;
@@ -1214,9 +1199,9 @@ exports.XE.Lang = function () {
 
       // Sniff prefixes
       var vendorPrefix = ('WebkitTransform' in bodyStyle) ? 'Webkit' :
-          ('MozTransform' in bodyStyle) ? 'Moz' :
-              ('msTransform' in bodyStyle) ? 'ms' :
-                  ('OTransform' in bodyStyle) ? 'O' : '';
+        ('MozTransform' in bodyStyle) ? 'Moz' :
+          ('msTransform' in bodyStyle) ? 'ms' :
+            ('OTransform' in bodyStyle) ? 'O' : '';
 
       if (vendorPrefix + 'Perspective' in bodyStyle) {
         // Modern browsers with 3D support, e.g. Webkit, IE10
@@ -1230,8 +1215,6 @@ exports.XE.Lang = function () {
       }
     };
   };
-
-
 
   /**
    * Helpers
@@ -1262,43 +1245,39 @@ exports.XE.Lang = function () {
     return barCSS;
   }
 
-  exports.XE.Progress = function () {
+  exports.XE.Progress = {
+    cssLoad: function () {
+      if (cssLoaded === false) {
+        cssLoaded = true;
+        XE.cssLoad('/assets/core/common/css/progress.css'); // @TODO
+      }
+    },
 
-    return {
-      cssLoad: function () {
-        if (cssLoaded === false) {
-          cssLoaded = true;
-          XE.cssLoad('/assets/core/common/css/progress.css'); // @TODO
-        }
-      },
+    start: function (context) {
+      if ($('link[href*="assets/core/common/css/progress.css"]').length == 0) {
+        XE.cssLoad('/assets/core/common/css/progress.css'); // @TODO
+      }
 
-      start: function (context) {
-        if ($('link[href*="assets/core/common/css/progress.css"]').length == 0) {
-          XE.cssLoad('/assets/core/common/css/progress.css'); // @TODO
-        }
+      var $context = $(context);
+      if ($context.context === undefined) {
+        $context = $('body');
+      }
 
-        var $context = $(context);
-        if ($context.context === undefined) {
-          $context = $('body');
-        }
+      setInstance($context);
 
-        setInstance($context);
+      $context.trigger('progressStart');
+    },
 
-        $context.trigger('progressStart');
-      },
+    done: function (context) {
+      var $context = $(context);
+      if ($context.context === undefined) {
+        $context = $('body');
+      }
 
-      done: function (context) {
-        var $context = $(context);
-        if ($context.context === undefined) {
-          $context = $('body');
-        }
-
-        $context.trigger('progressDone');
-      },
-    };
-  }();
+      $context.trigger('progressDone');
+    },
+  };
 })(window);
-
 
 //queue
 (function (exports, Progress) {
@@ -1321,8 +1300,8 @@ exports.XE.Lang = function () {
 //css
 (function (exports, Progress) {
 
-  var cssPrefixes = ['Webkit', 'O', 'Moz', 'ms'],
-      cssProps    = {};
+  var cssPrefixes = ['Webkit', 'O', 'Moz', 'ms'];
+  var cssProps = {};
 
   function camelCase(string) {
     return string.replace(/^-ms-/, 'ms-').replace(/-([\da-z])/gi, function (match, letter) {
@@ -1334,9 +1313,10 @@ exports.XE.Lang = function () {
     var style = document.body.style;
     if (name in style) return name;
 
-    var i = cssPrefixes.length,
-        capName = name.charAt(0).toUpperCase() + name.slice(1),
-        vendorName;
+    var i = cssPrefixes.length;
+    var capName = name.charAt(0).toUpperCase() + name.slice(1);
+    var vendorName;
+
     while (i--) {
       vendorName = cssPrefixes[i] + capName;
       if (vendorName in style) return vendorName;
@@ -1359,9 +1339,9 @@ exports.XE.Lang = function () {
 
   Progress.css = function () {
     return function (element, properties) {
-      var args = arguments,
-          prop,
-          value;
+      var args = arguments;
+      var prop;
+      var value;
 
       if (args.length == 2) {
         for (prop in properties) {
@@ -1375,9 +1355,8 @@ exports.XE.Lang = function () {
   };
 })(window, XE.Progress);
 
-(function (exports, Progress) {
-exports.XE.Request = function () {
-  var self;
+XE.Request = (function (Progress) {
+  var _this;
 
   var _options = {
     headers: {
@@ -1394,14 +1373,13 @@ exports.XE.Request = function () {
     XE.Progress.done();
 
     if (!settings.hasOwnProperty('error')) {
-      self.error(jqxhr, settings, thrownError);
+      _this.error(jqxhr, settings, thrownError);
     }
   });
 
   return {
     init: function () {
-      self = this;
-
+      _this = this;
       return this;
     },
 
@@ -1420,8 +1398,8 @@ exports.XE.Request = function () {
     },
 
     error: function (jqxhr, settings, thrownError) {
-      var status = jqxhr.status,
-          errorMessage = 'Not defined error message (' + status + ')';
+      var status = jqxhr.status;
+      var errorMessage = 'Not defined error message (' + status + ')';
 
       // @TODO dataType 에 따라 메시지 획득 방식을 추가 해야함.
       if (settings.dataType == 'json') {
@@ -1434,25 +1412,23 @@ exports.XE.Request = function () {
       window.XE.toastByStatus(status, errorMessage);
     },
   }.init();
-}();
-})(window, XE.Progress);
 
-(function (exports) {
-  exports.XE.Component = function () {
-    return {
-      timeago: function () {
-        $('[data-xe-timeago]').trigger('boot.xe.timeago');
-      },
+})(XE.Progress);
 
-      boot: function () {
-        this.timeago();
-        $('[data-toggle=xe-dropdown]').trigger('boot.xe.dropdown');
-        $('[data-toggle=xe-modal]').trigger('boot.xe.modal');
-        $('[data-toggle=xe-tooltip]').trigger('boot.xe.tooltip');
-        $('[data-toggle=dropdown]').trigger('boot.dropdown');
-      },
-    };
-  }();
+XE.Component = (function (exports) {
+  return {
+    timeago: function () {
+      $('[data-xe-timeago]').trigger('boot.xe.timeago');
+    },
+
+    boot: function () {
+      this.timeago();
+      $('[data-toggle=xe-dropdown]').trigger('boot.xe.dropdown');
+      $('[data-toggle=xe-modal]').trigger('boot.xe.modal');
+      $('[data-toggle=xe-tooltip]').trigger('boot.xe.tooltip');
+      $('[data-toggle=dropdown]').trigger('boot.dropdown');
+    },
+  };
 })(window);
 
 $(function () {
@@ -1517,11 +1493,11 @@ $(function () {
 
   // xeModal =========================================================
   $.fn.xeModal = function (options) {
-    var $el = this;
+    var _this = this;
 
     System.import('xe.component.transition');
     System.import('xe.component.modal').then(function () {
-      $el.xeModal(options);
+      _this.xeModal(options);
     });
 
     XE.cssLoad('/assets/core/xe-ui-component/xe-ui-component.css');
@@ -1530,10 +1506,10 @@ $(function () {
 
   // xeDropdown ======================================================
   $.fn.xeDropdown = function (options) {
-    var $el = this;
+    var _this = this;
 
     System.import('xe.component.dropdown').then(function () {
-      $el.xeDropdown(options);
+      _this.xeDropdown(options);
     });
 
     XE.cssLoad('/assets/core/xe-ui-component/xe-ui-component.css');
@@ -1542,11 +1518,11 @@ $(function () {
 
   // xeTooltip =======================================================
   $.fn.xeTooltip = function (options) {
-    var $el = this;
+    var _this = this;
 
     System.import('xe.component.transition');
     System.import('xe.component.tooltip').then(function () {
-      $el.xeTooltip(options);
+      _this.xeTooltip(options);
     });
 
     XE.cssLoad('/assets/core/xe-ui-component/xe-ui-component.css');

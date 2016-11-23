@@ -28,14 +28,15 @@ export default React.createClass({
 
     var nodeId = 'xe_tree_node_' + node.id;
     return (
-        <div className="panel-heading" id={nodeId}>
-          <div className="pull-left">
-            <a href={nodeUrl}><h3><i className="xi-folder"></i>{node.title}</h3></a>
-          </div>
-          <div className="pull-right">
-            <a href={addItemUrl} className="btn btn-primary"><i className="xi-plus"></i><span>{trans.addItem}</span></a>
-          </div>
-        </div>
+      <div className="panel-heading" id={nodeId}>
+					<div className="pull-left">
+						<a href={nodeUrl}><h3><i className="xi-folder"></i>{node.title}</h3></a>
+					</div>
+					<div className="pull-right">
+						<a href={addItemUrl} className="btn btn-primary"><i
+          className="xi-plus"></i><span>{trans.addItem}</span></a>
+					</div>
+				</div>
     );
   },
 });

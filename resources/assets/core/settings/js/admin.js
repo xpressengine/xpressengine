@@ -2,8 +2,8 @@
 if (typeof define === 'function' && define.amd) {
   // AMD
   define([
-    'exports',
-    'github:twbs/bootstrap-sass@3.3.6/assets/javascripts/bootstrap.js',
+   'exports',
+   'github:twbs/bootstrap-sass@3.3.6/assets/javascripts/bootstrap.js',
   ], function (exports) {
     factory(exports, jQuery);
   });
@@ -60,7 +60,7 @@ if (typeof define === 'function' && define.amd) {
 
       if ($.inArray('__xe_collapseMenu', $target[0].classList) > -1) {
         $ul = $target.siblings('.sub-depth-list');
-      }else {
+      } else {
         $ul = $target.parent().siblings('.sub-depth-list');
       }
 
@@ -72,6 +72,7 @@ if (typeof define === 'function' && define.amd) {
         $subdepth.removeClass('open');
       } else {
         var $parent = $subdepth.parent();
+
         // $parent.find('.sub-depth.open>.sub-depth-list').slideUp('fast');
         $parent.find('.sub-depth.open').removeClass('open');
 

@@ -81,9 +81,11 @@ export default React.createClass({
 
   moveMenuItem: function (target) {
     var moveItemUrl = this.props.baseUrl + '/moveItem';
+    var $context = $('#uitree');
+
     XE.ajax({
       url: moveItemUrl,
-      context: $('#uitree'),
+      context: $context,
       type: 'put',
       dataType: 'json',
       data: {
@@ -105,11 +107,12 @@ export default React.createClass({
   onClickHome: function (node) {
     var homeItemUrl = this.props.baseUrl + '/setHome';
     var oldHome = this.state.home;
+    var $context = $('#uitree');
 
     this.setState({ home: node.id });
     XE.ajax({
       url: homeItemUrl,
-      context: $('#uitree'),
+      context: $context,
       type: 'put',
       dataType: 'json',
       data: {
@@ -127,23 +130,24 @@ export default React.createClass({
 
   render: function () {
     return (
-        <div className="col-sm-12">
-          <div className="panel">
-            <MenuSearchBar tree={this.state.dataTree} handleSearch={this.setSearchedNode} menuRoutes={this.state.menuRoutes}/>
-            <div className="panel-body">
-              <UITree paddingLeft={25}
-                      tree={this.state.dataTree}
-                      home={this.state.home}
-                      getBaseUrl={this.getBaseUrl}
-                      clickHome={this.onClickHome}
-                      getSearchedNode={this.getSearchedNode}
-                      setSearchedNode={this.setSearchedNode}
-                      getSelectedNode={this.getSelectedNode}
-                      setSelectedNode={this.setSelectedNode}
-                      moveNode={this.moveMenuItem}/>
-            </div>
-          </div>
-        </div>
+      <div className="col-sm-12">
+					<div className="panel">
+						<MenuSearchBar tree={this.state.dataTree} handleSearch={this.setSearchedNode}
+                menuRoutes={this.state.menuRoutes}/>
+						<div className="panel-body">
+							<UITree paddingLeft={25}
+             tree={this.state.dataTree}
+             home={this.state.home}
+             getBaseUrl={this.getBaseUrl}
+             clickHome={this.onClickHome}
+             getSearchedNode={this.getSearchedNode}
+             setSearchedNode={this.setSearchedNode}
+             getSelectedNode={this.getSelectedNode}
+             setSelectedNode={this.setSelectedNode}
+             moveNode={this.moveMenuItem}/>
+						</div>
+					</div>
+				</div>
     );
   },
 

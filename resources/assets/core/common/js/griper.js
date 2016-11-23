@@ -22,9 +22,21 @@ if (typeof define === 'function' && define.amd) {
     },
     toast: {
       classSet: {
-        danger: 'xe-danger', positive: 'xe-positive', warning: 'xe-warning', success: 'xe-success', fail: 'xe-fail', error: 'xe-danger', info: 'xe-positive',
+        danger: 'xe-danger',
+        positive: 'xe-positive',
+        warning: 'xe-warning',
+        success: 'xe-success',
+        fail: 'xe-fail',
+        error: 'xe-danger',
+        info: 'xe-positive',
       },
-      expireTimes: { 'xe-danger': 0, 'xe-positive': 5, 'xe-warning': 10, 'xe-success': 2, 'xe-fail': 5 },
+      expireTimes: {
+        'xe-danger': 0,
+        'xe-positive': 5,
+        'xe-warning': 10,
+        'xe-success': 2,
+        'xe-fail': 5,
+      },
       status: { 500: 'xe-danger', 401: 'xe-warning' },
       template: '<div class="alert-dismissable xe-alert" style="display:none;"><button type="button" class="__xe_close xe-btn-alert-close" aria-label="Close"><i class="xi-close"></i></button>' +
       '<span class="message"></span></div>',
@@ -44,10 +56,11 @@ if (typeof define === 'function' && define.amd) {
   };
 
   exports.toast = function (type, message) {
-    this.toast.fn.add(type, message);;
+    this.toast.fn.add(type, message);
+    ;
   };
 
-  var toast_box = null;
+  var $toastBox = null;
   exports.toast.fn = exports.toast.prototype = {
     constructor: exports.toast,
     options: exports.options.toast,
@@ -66,15 +79,15 @@ if (typeof define === 'function' && define.amd) {
       var type = this.options.classSet[type] || 'xe-danger';
 
       if (this.options.expireTimes[type] != 0) {
-        expireTime = parseInt(new Date().getTime() / 1000)  + this.options.expireTimes[type];
+        expireTime = parseInt(new Date().getTime() / 1000) + this.options.expireTimes[type];
       }
 
-      var alert = $(this.options.template);
-      alert.attr('data-expire-time', expireTime).addClass(type);
-      alert.append(message);
+      var $alert = $(this.options.template);
+      $alert.attr('data-expire-time', expireTime).addClass(type);
+      $alert.append(message);
 
-      exports.toast.fn.container().append(alert);
-      this.show(alert);
+      exports.toast.fn.container().append($alert);
+      this.show($alert);
     },
 
     show: function (alert) {
@@ -88,12 +101,12 @@ if (typeof define === 'function' && define.amd) {
     },
 
     container: function () {
-      if (toast_box != null) {
-        return toast_box;
+      if ($toastBox != null) {
+        return $toastBox;
       }
 
-      toast_box = $(exports.options.toastContainer.boxTemplate);
-      var container = $(exports.options.toastContainer.template).append(toast_box);
+      $toastBox = $(exports.options.toastContainer.boxTemplate);
+      var container = $(exports.options.toastContainer.template).append($toastBox);
       $('body').append(container);
 
       container.on('click', 'button.__xe_close', function (e) {
@@ -103,17 +116,17 @@ if (typeof define === 'function' && define.amd) {
 
       setInterval(function () {
         var time = parseInt(new Date().getTime() / 1000);
-        toast_box
-            .find('div.xe-alert')
-            .each(function () {
-              var expireTime = parseInt($(this).data('expire-time'));
-              if (expireTime != 0 && time > expireTime) {
-                exports.toast.fn.destroy($(this));
-              }
-            });
+        $toastBox
+          .find('div.xe-alert')
+          .each(function () {
+            var expireTime = parseInt($(this).data('expire-time'));
+            if (expireTime != 0 && time > expireTime) {
+              exports.toast.fn.destroy($(this));
+            }
+          });
       }, 1000);
 
-      return toast_box;
+      return $toastBox;
     },
   };
 
@@ -136,15 +149,15 @@ if (typeof define === 'function' && define.amd) {
       // $group 이 1 보다 클땐 어찌 될지 모르겠음...
       if ($group.length == 1) {
         $group.append(
-            $('<' + this.options.tags.message + '>')
-                .addClass(this.options.classes.message.join(' '))
-                .text(message)
+          $('<' + this.options.tags.message + '>')
+            .addClass(this.options.classes.message.join(' '))
+            .text(message)
         );
       } else if ($group.length == 0) {
         $element.after(
-            $('<' + this.options.tags.message + '>')
-                .addClass(this.options.classes.message.join(' '))
-                .text(message)
+          $('<' + this.options.tags.message + '>')
+            .addClass(this.options.classes.message.join(' '))
+            .text(message)
         );
       }
     },

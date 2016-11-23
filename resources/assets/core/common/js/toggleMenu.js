@@ -21,9 +21,15 @@ var ToggleMenu = React.createClass({
   getItems: function () {
 
     if (this.state.items.length < 1 && this.state.firstLoaded === false) {
-      return React.createElement('li', { className: 'xe-dropdown-header', onClick: this.onClick }, 'Loading...');
+      return React.createElement('li', {
+        className: 'xe-dropdown-header',
+        onClick: this.onClick,
+      }, 'Loading...');
     } else if (this.state.items.length < 1) {
-      return React.createElement('li', { className: 'xe-dropdown-header', onClick: this.onClick }, '항목이 없습니다.');
+      return React.createElement('li', {
+        className: 'xe-dropdown-header',
+        onClick: this.onClick,
+      }, '항목이 없습니다.');
     } else {
       return this.state.items.map(function (item, i) {
         var props = $.extend({}, item, {
@@ -50,7 +56,12 @@ var ToggleMenu = React.createClass({
       classes = temp.join(' ');
     }
 
-    var props = { className: classes, 'data-toggle': 'xe-dropdown', 'aria-expanded': 'false', onClick: this.onClick };
+    var props = {
+      className: classes,
+      'data-toggle': 'xe-dropdown',
+      'aria-expanded': 'false',
+      onClick: this.onClick,
+    };
 
     if (this.props.html) {
       $.extend(props, { dangerouslySetInnerHTML: { __html: this.props.html } });
@@ -59,9 +70,9 @@ var ToggleMenu = React.createClass({
     }
 
     return React.DOM.i(props,
-        this.getIcon(),
-        ' ',
-        this.props.text
+      this.getIcon(),
+      ' ',
+      this.props.text
     );
   },
 
@@ -91,13 +102,13 @@ var ToggleMenu = React.createClass({
 
   render: function () {
     return (
-        React.DOM.span({ className: this.isActive(), ref: 'dropdown' },
-            this.getBody(),
-            React.DOM.ul({
-              className: 'xe-dropdown-menu' + ((this.props.align === 'right') ? ' xe-dropdown-menu-right' : ''),
-              role: 'menu',
-            }, this.getItems())
-        )
+      React.DOM.span({ className: this.isActive(), ref: 'dropdown' },
+        this.getBody(),
+        React.DOM.ul({
+        className: 'xe-dropdown-menu' + ((this.props.align === 'right') ? ' xe-dropdown-menu-right' : ''),
+        role: 'menu',
+      }, this.getItems())
+      )
     );
   },
 });
@@ -116,36 +127,39 @@ ToggleMenu.Item = React.createClass({
 
   render: function () {
     if (this.props.type == 'raw') {
-      return React.DOM.li({ onClick: this.itemClick, dangerouslySetInnerHTML: { __html: this.props.action } }, null);
+      return React.DOM.li({
+        onClick: this.itemClick,
+        dangerouslySetInnerHTML: { __html: this.props.action },
+      }, null);
     }
 
     var attr;
     switch (this.props.type) {
-      case 'func' :
-        attr = {
-          href: '#', onClick: function (e) {
-            (eval(this.props.action))(this.props.data);
-            e.preventDefault();
-          }.bind(this),
-        };
-      break;
-      case 'exec' :
-        attr = {
-          href: '#', onClick: function (e) {
-            eval(this.props.action);
-            e.preventDefault();
-          }.bind(this),
-        };
-      break;
-      case 'link' :
-        attr = { href: this.props.action };
-      break;
-    }
+    case 'func' :
+      attr = {
+        href: '#', onClick: function (e) {
+          (eval(this.props.action))(this.props.data);
+          e.preventDefault();
+        }.bind(this),
+      };
+    break;
+    case 'exec' :
+      attr = {
+        href: '#', onClick: function (e) {
+          eval(this.props.action);
+          e.preventDefault();
+        }.bind(this),
+      };
+    break;
+    case 'link' :
+      attr = { href: this.props.action };
+    break;
+  }
 
     return (
-        React.DOM.li({ className: this.props.class, onClick: this.itemClick },
-            React.DOM.a(attr, this.props.text)
-        )
+      React.DOM.li({ className: this.props.class, onClick: this.itemClick },
+        React.DOM.a(attr, this.props.text)
+      )
     );
   },
 });

@@ -21,10 +21,10 @@ var Translator = (function (document, undefined) {
    * @return {String}             A human readable message
    * @api private
    */
-  function replace_placeholders(message, placeholders) {
-    var _i,
-     _prefix = Translator.placeHolderPrefix,
-     _suffix = Translator.placeHolderSuffix;
+  function replacePlaceholders(message, placeholders) {
+    var _i;
+    var _prefix = Translator.placeHolderPrefix;
+    var _suffix = Translator.placeHolderSuffix;
 
     for (_i in placeholders) {
       var _r = new RegExp(_prefix + _i + _suffix, 'g');
@@ -49,12 +49,12 @@ var Translator = (function (document, undefined) {
    * @return {String}                 The right message if found, `undefined` otherwise
    * @api private
    */
-  function get_message(id, domain, locale, currentLocale, localeFallback) {
-    var _locale = locale || currentLocale || localeFallback,
-     _domain = domain;
+  function getMessage(id, domain, locale, currentLocale, localeFallback) {
+    var _locale = locale || currentLocale || localeFallback;
+    var _domain = domain;
 
-    if (undefined == _messages[_locale]) {
-      if (undefined == _messages[localeFallback]) {
+    if (_messages[_locale] == undefined) {
+      if (_messages[localeFallback] == undefined) {
         // s::CUSTOM::
         var returnId = id;
 
@@ -63,16 +63,15 @@ var Translator = (function (document, undefined) {
         }
 
         return returnId;
-        // e::CUSTOM::
       }
 
       _locale = localeFallback;
     }
 
-    if (undefined === _domain || null === _domain) {
+    if (_domain === undefined || _domain === null) {
       for (var i = 0; i < _domains.length; i++) {
-        if (has_message(_locale, _domains[i], id) ||
-         has_message(localeFallback, _domains[i], id)) {
+        if (hasMessage(_locale, _domains[i], id) ||
+          hasMessage(localeFallback, _domains[i], id)) {
           _domain = _domains[i];
 
           break;
@@ -80,11 +79,14 @@ var Translator = (function (document, undefined) {
       }
     }
 
-    if (has_message(_locale, _domain, id)) {
+    if (hasMessage(_locale, _domain, id)) {
       return _messages[_locale][_domain][id];
     }
 
-    var _length, _parts, _last, _lastLength;
+    var _length;
+    var _parts;
+    var _last;
+    var _lastLength;
 
     while (_locale.length > 2) {
       _length = _locale.length;
@@ -92,18 +94,18 @@ var Translator = (function (document, undefined) {
       _last = _parts[_parts.length - 1];
       _lastLength = _last.length;
 
-      if (1 === _parts.length) {
+      if (_parts.length === 1) {
         break;
       }
 
       _locale = _locale.substring(0, _length - (_lastLength + 1));
 
-      if (has_message(_locale, _domain, id)) {
+      if (hasMessage(_locale, _domain, id)) {
         return _messages[_locale][_domain][id];
       }
     }
 
-    if (has_message(localeFallback, _domain, id)) {
+    if (hasMessage(localeFallback, _domain, id)) {
       return _messages[localeFallback][_domain][id];
     }
 
@@ -121,16 +123,16 @@ var Translator = (function (document, undefined) {
    *                      `               false` otherwise
    * @api private
    */
-  function has_message(locale, domain, id) {
-    if (undefined == _messages[locale]) {
+  function hasMessage(locale, domain, id) {
+    if (_messages[locale] == undefined) {
       return false;
     }
 
-    if (undefined == _messages[locale][domain]) {
+    if (_messages[locale][domain] == undefined) {
       return false;
     }
 
-    if (undefined == _messages[locale][domain][id]) {
+    if (_messages[locale][domain][id] == undefined) {
       return false;
     }
 
@@ -164,12 +166,12 @@ var Translator = (function (document, undefined) {
    * @api private
    */
   function pluralize(message, number, locale) {
-    var _p,
-     _e,
-     _explicitRules = [],
-     _standardRules = [],
-     _parts = message.split(Translator.pluralSeparator),
-     _matches = [];
+    var _p;
+    var _e;
+    var _explicitRules = [];
+    var _standardRules = [];
+    var _parts = message.split(Translator.pluralSeparator);
+    var _matches = [];
 
     for (_p = 0; _p < _parts.length; _p++) {
       var _part = _parts[_p];
@@ -190,8 +192,8 @@ var Translator = (function (document, undefined) {
         _matches = _e.match(_iPluralRegex);
 
         if (_matches[1]) {
-          var _ns = _matches[2].split(','),
-           _n;
+          var _ns = _matches[2].split(',');
+          var _n;
 
           for (_n in _ns) {
             if (number == _ns[_n]) {
@@ -199,18 +201,18 @@ var Translator = (function (document, undefined) {
             }
           }
         } else {
-          var _leftNumber = convert_number(_matches[4]);
-          var _rightNumber = convert_number(_matches[5]);
+          var _leftNumber = convertNumber(_matches[4]);
+          var _rightNumber = convertNumber(_matches[5]);
 
-          if (('[' === _matches[3] ? number >= _leftNumber : number > _leftNumber) &&
-           (']' === _matches[6] ? number <= _rightNumber : number < _rightNumber)) {
+          if ((_matches[3] === '[' ? number >= _leftNumber : number > _leftNumber) &&
+            (_matches[6] === ']' ? number <= _rightNumber : number < _rightNumber)) {
             return _explicitRules[_e];
           }
         }
       }
     }
 
-    return _standardRules[plural_position(number, locale)] || _standardRules[0] || undefined;
+    return _standardRules[pluralPosition(number, locale)] || _standardRules[0] || undefined;
   }
 
   /**
@@ -223,10 +225,10 @@ var Translator = (function (document, undefined) {
    * @return {Number}         The int value of the number
    * @api private
    */
-  function convert_number(number) {
-    if ('-Inf' === number) {
+  function convertNumber(number) {
+    if (number === '-Inf') {
       return Number.NEGATIVE_INFINITY;
-    } else if ('+Inf' === number || 'Inf' === number) {
+    } else if (number === '+Inf' || number === 'Inf') {
       return Number.POSITIVE_INFINITY;
     }
 
@@ -243,10 +245,10 @@ var Translator = (function (document, undefined) {
    * @return {Number}        The plural position
    * @api private
    */
-  function plural_position(number, locale) {
+  function pluralPosition(number, locale) {
     var _locale = locale;
 
-    if ('pt_BR' === _locale) {
+    if (_locale === 'pt_BR') {
       _locale = 'xbr';
     }
 
@@ -408,7 +410,7 @@ var Translator = (function (document, undefined) {
    * @return {String}     The current application's locale
    * @api private
    */
-  function get_current_locale() {
+  function getCurrentLocale() {
     return document.documentElement.lang.replace('-', '_');
   }
 
@@ -419,7 +421,7 @@ var Translator = (function (document, undefined) {
      * @type {String}
      * @api public
      */
-    locale: get_current_locale(),
+    locale: getCurrentLocale(),
 
     /**
      * Fallback locale.
@@ -472,8 +474,8 @@ var Translator = (function (document, undefined) {
      * @api public
      */
     add: function (id, message, domain, locale) {
-      var _locale = locale || this.locale || this.fallback,
-       _domain = domain || this.defaultDomain;
+      var _locale = locale || this.locale || this.fallback;
+      var _domain = domain || this.defaultDomain;
 
       if (!_messages[_locale]) {
         _messages[_locale] = {};
@@ -485,13 +487,12 @@ var Translator = (function (document, undefined) {
 
       _messages[_locale][_domain][id] = message;
 
-      if (false === exists(_domains, _domain)) {
+      if (exists(_domains, _domain) === false) {
         _domains.push(_domain);
       }
 
       return this;
     },
-
 
     /**
      * Translates the given message.
@@ -504,15 +505,15 @@ var Translator = (function (document, undefined) {
      * @api public
      */
     trans: function (id, parameters, domain, locale) {
-      var _message = get_message(
-       id,
-       domain,
-       locale,
-       this.locale,
-       this.fallback
+      var _message = getMessage(
+        id,
+        domain,
+        locale,
+        this.locale,
+        this.fallback
       );
 
-      return replace_placeholders(_message, parameters || {});
+      return replacePlaceholders(_message, parameters || {});
     },
 
     /**
@@ -527,25 +528,25 @@ var Translator = (function (document, undefined) {
      * @api public
      */
     transChoice: function (id, number, parameters, domain, locale) {
-      var _message = get_message(
-       id,
-       domain,
-       locale,
-       this.locale,
-       this.fallback
+      var _message = getMessage(
+        id,
+        domain,
+        locale,
+        this.locale,
+        this.fallback
       );
 
       var _number = parseInt(number, 10);
 
-      if (undefined != _message && !isNaN(_number)) {
+      if (_message && !isNaN(_number) != undefined) {
         _message = pluralize(
-         _message,
-         _number,
-         locale || this.locale || this.fallback
+          _message,
+          _number,
+          locale || this.locale || this.fallback
         );
       }
 
-      return replace_placeholders(_message, parameters || {});
+      return replacePlaceholders(_message, parameters || {});
     },
 
     /**
@@ -591,7 +592,7 @@ var Translator = (function (document, undefined) {
     reset: function () {
       _messages = {};
       _domains = [];
-      this.locale = get_current_locale();
+      this.locale = getCurrentLocale();
     },
   };
 })(document, undefined);
