@@ -1,24 +1,25 @@
-System.amdRequire(['vendor:/react', 'vendor:/react-dom', 'Permission'], function(React, ReactDOM, Permission) {
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-  $('.__xe__uiobject_permission').each(function (i) {
-      var el = $(this),
-        data = el.data('data');
+import Permission from './Permission';
 
-      var key = el.data('key')
-          , type = el.data('type')
-          , memberUrl = el.data('memberUrl')
-          , groupUrl = el.data('groupUrl')
-          , vgroupAll = el.data('vgroupAll');
+$('.__xe__uiobject_permission').each(function (i) {
+  var $this = $(this);
+  var data = $this.data('data');
 
-      ReactDOM.render(
-          <Permission
-              key = {key}
-              memberSearchUrl = {memberUrl}
-              groupSearchUrl = {groupUrl}
-              permission = {data}
-              type = {type}
-              vgroupAll = {vgroupAll} />
-          , this
-      )
-  });
+  var key = $this.data('key');
+  var type = $this.data('type');
+  var memberUrl = $this.data('memberUrl');
+  var groupUrl = $this.data('groupUrl');
+  var vgroupAll = $this.data('vgroupAll');
+
+  ReactDOM.render(
+    <Permission
+      key={key}
+      memberSearchUrl={memberUrl}
+      groupSearchUrl={groupUrl}
+      permission={data}
+      type={type}
+      vgroupAll={vgroupAll}/>, this
+  );
 });

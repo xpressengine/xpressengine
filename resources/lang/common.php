@@ -1043,7 +1043,7 @@ return [
         'en' => 'Edit Menu Basic Permission'
     ],
     'selectItemType' => [
-        'ko' => '아이템 권한 선택',
+        'ko' => '아이템 타입 선택',
         'en' => 'Select New Item Type'
     ],
     'selectItemTypeDescription' => [
@@ -1169,6 +1169,14 @@ return [
     'defaultSettings' => [
         'ko' => '기본 설정',
         'en' => 'Default settings'
+    ],
+    'themeSettings' => [
+        'ko' => '테마 설정',
+        'en' => 'Theme settings'
+    ],
+    'themeEdit' => [
+        'ko' => '테마 편집',
+        'en' => 'Edit Theme'
     ],
     'privateInfoAndOptionSettings' => [
         'ko' => '개인정보 및 옵션 관리',
@@ -1784,6 +1792,10 @@ return [
         'ko' => '사이트에서 기본으로 출력할 데스크탑/모바일용 테마를 지정하세요. 별도로 테마를 지정하지 않은 웹페이지에서 사용됩니다.',
         'en' => 'Please specify a theme to print a specified theme. Themes can be selected for use in desktop and mobile respectively.',
     ],
+    'theme' => [
+        'ko' => '테마',
+        'en' => 'Theme',
+    ],
     'themeSettingsDescription' => [
         'ko' => '테마를 설정합니다.',
         'en' => 'Set the theme.',
@@ -2018,5 +2030,19 @@ return [
     'mngCellPhoneNumberValidate' => [
         'ko' => '[:attribute] 는 핸드폰 번호 형식이 아닙니다.',
         'en' => 'The [:attribute] must be a cell phone number.',
+    ],
+    'edited' => [
+        'ko' => '편집됨',
+    ],
+    'resetToOrigin' => [
+        'ko' => '원본으로 되돌리기',
+    ],
+    'accessPermission' => [
+        'ko' => '접근 권한',
+        'en' => 'Access permission',
+    ],
+    'visiblePermission' => [
+        'ko' => '노출 권한',
+        'en' => 'Visible permission',
     ],
 ];

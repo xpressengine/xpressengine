@@ -50,7 +50,7 @@ class LangController extends Controller
             'selected_keyword' => $keyword,
             'namespaces' => $namespaces,
             'searchList' => $searchList,
-            'pagination' => $pagination
+            'pagination' => $pagination->appends($request->except([$pagination->getPageName()]))
         ]);
     }
 

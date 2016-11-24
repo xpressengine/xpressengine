@@ -49,12 +49,7 @@ return [
         'desktop' => true
     ],
     'editable' => [
-        'views' => [
-            'theme.blade.php',
-            'gnb.blade.php',
-        ],
-        'assets' => [
-            'css/theme.css'
-        ]
+        'theme.blade.php',
+        'gnb.blade.php'
     ]
 ];

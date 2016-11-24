@@ -22,10 +22,12 @@
                 </div>
                 <div class="panel-body">
                     <div class="form-group">
+                        <label>{{ xe_trans('xe::accessPermission') }}</label>
                         {!! uio('permission', $access) !!}
                     </div>
                     <hr/>
                     <div class="form-group">
+                        <label>{{ xe_trans('xe::visiblePermission') }}</label>
                         {!! uio('permission', $visible) !!}
                     </div>
                 </div>

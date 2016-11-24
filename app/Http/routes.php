@@ -239,10 +239,30 @@ Route::group(
                 );
             }
         );
-
     }
 );
 
+/*
+ * policies for site, user
+ * */
+Route::group(
+    ['prefix' => 'policies'],
+    function () {
+        // 개인정보 처리 방침
+        Route::get('privacy', ['as' => 'policies.privacy', 'uses' => 'User\PolicyController@privacy']);
+
+        // 약관
+        Route::group(
+            ['prefix' => 'terms'],
+            function() {
+                // 서비스
+                Route::get('service', ['as' => 'policies.terms.service', 'uses' => 'User\PolicyController@service']);
+            }
+        );
+
+
+    }
+);
 /*
  * settings/user
  * */
@@ -447,7 +467,15 @@ Route::settings(
         );
         Route::post('store', ['as' => 'settings.setting.update', 'uses' => 'SettingsController@updateSetting']);
 
-        Route::post('store/theme', ['as' => 'settings.setting.theme', 'uses' => 'SettingsController@updateTheme']);
+        Route::get(
+            'theme',
+            [
+                'as' => 'settings.setting.theme',
+                'uses' => 'SettingsController@editTheme',
+                'settings_menu' => ['setting.theme']
+            ]
+        );
+        Route::post('theme', ['as' => 'settings.setting.theme', 'uses' => 'SettingsController@updateTheme']);
 
         Route::get(
             'permissions',
@@ -554,7 +582,7 @@ Route::settings(
 Route::settings(
     'theme',
     function () {
-        Route::get('edit', ['as' => 'settings.theme.edit', 'uses' => 'ThemeController@edit']);
+        Route::get('edit', ['as' => 'settings.theme.edit', 'uses' => 'ThemeController@edit', 'settings_menu'=>'setting.theme.edit']);
         Route::post('edit', ['as' => 'settings.theme.edit', 'uses' => 'ThemeController@update']);
 
         Route::get('setting', ['as' => 'settings.theme.setting', 'uses' => 'ThemeController@editSetting']);

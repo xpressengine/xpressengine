@@ -1,69 +1,70 @@
-System.amdDefine(['vendor:/react'], function(React) {
-    var MIN_QUERY_LENGTH = 2;
-    var PermissionTagSuggestion = React.createClass({
-        displayName: "PermissionTagSuggestion",
+import React from 'react';
 
-        propTypes: {
-            query: React.PropTypes.string.isRequired,
-            selectedIndex: React.PropTypes.number.isRequired,
-            suggestions: React.PropTypes.array.isRequired,
-            handleClick: React.PropTypes.func.isRequired,
-            handleHover: React.PropTypes.func.isRequired,
-            searchingCnt: React.PropTypes.number
-        },
-        markIt: function (item, query) {
+const MIN_QUERY_LENGTH = 2;
 
-            var escapedRegex = query.trim().replace(/[-\\^$*+?.()|[\]{}]/g, "\\$&");
-            var r = RegExp(escapedRegex, "gi");
-            var itemName = item.displayName || item.name;
-            return {
-                __html: itemName.replace(r, "<mark>$&</mark>")
-            };
-        },
-        render: function () {
-            var props = this.props;
-            var suggestionList;
-            var searching;
-            var suggestions;
-            if(this.props.searchingCnt > 0) {
-                searching = <ul><li>Searching ... <span className="spinner" role="spinner"><span className="spinner-icon"></span></span></li></ul>;
-            }else{
-                suggestions = props.suggestions.map((function (item, i) {
-                    return (
+export default React.createClass({
+  displayName: 'PermissionTagSuggestion',
 
-                        <li
-                            key={i}
-                            onClick={props.handleClick.bind(null, i)}
-                            onMouseOver={props.handleHover.bind(null, i)}
-                            className={i == props.selectedIndex ? "active" : "" }
-                        >
-                    <span
-                        dangerouslySetInnerHTML={this.markIt(item, props.query)}
-                    />
-                        </li>
+  propTypes: {
+    query: React.PropTypes.string.isRequired,
+    selectedIndex: React.PropTypes.number.isRequired,
+    suggestions: React.PropTypes.array.isRequired,
+    handleClick: React.PropTypes.func.isRequired,
+    handleHover: React.PropTypes.func.isRequired,
+    searchingCnt: React.PropTypes.number,
+  },
+  markIt: function (item, query) {
 
-                    );
-                }).bind(this));
-            }
+    var escapedRegex = query.trim().replace(/[-\\^$*+?.()|[\]{}]/g, '\\$&');
+    var r = RegExp(escapedRegex, 'gi');
+    var itemName = item.displayName || item.name;
+    return {
+      __html: itemName.replace(r, '<mark>$&</mark>'),
+    };
+  },
 
-            suggestionList = <ul>{suggestions}</ul>;
+  render: function () {
+    var props = this.props;
+    var suggestionList;
+    var searching;
+    var suggestions;
+    if (this.props.searchingCnt > 0) {
+      searching = <ul>
+				<li>Searching ... <span className="spinner" role="spinner"><span
+         className="spinner-icon"></span></span></li>
+			</ul>;
+    } else {
+      suggestions = props.suggestions.map((function (item, i) {
+        return (
 
-            if ((suggestions && suggestions.length === 0) || props.query.length < MIN_QUERY_LENGTH) {
-                return (
-                    <div className="ReactTags__suggestions"/>
-                );
-            }
+          <li
+            key={i}
+            onClick={props.handleClick.bind(null, i)}
+            onMouseOver={props.handleHover.bind(null, i)}
+            className={i == props.selectedIndex ? 'active' : '' }
+          >
+                <span
+              dangerouslySetInnerHTML={this.markIt(item, props.query)}
+            />
+						</li>
 
-            return (
-                <div className="ReactTags__suggestions">
-                    {searching}
-                    {suggestionList}
-                </div>
-            );
-        }
-    });
+        );
+      }).bind(this));
+    }
 
-    return PermissionTagSuggestion;
+    suggestionList = <ul>{suggestions}</ul>;
+
+    if ((suggestions && suggestions.length === 0) || props.query.length < MIN_QUERY_LENGTH) {
+      return (
+        <div className="ReactTags__suggestions"/>
+      );
+    }
+
+    return (
+      <div className="ReactTags__suggestions">
+					{searching}
+					{suggestionList}
+				</div>
+    );
+  },
 });
-
-

@@ -1,27 +1,14 @@
-(function(exports) {
+var XE = (function (exports) {
   'use strict';
 
-  var self;
-
-  /**
-   * @description
-   * <pre>
-   *     XE module initialize
-   * </pre>
-   * */
-  function initialize() {
-    self = this;
-
-    return this;
-  }
-
+  var _this;
 
   function ajax(url, options) {
-    if ( typeof url === "object" ) {
-      options = $.extend({}, self.Request.options, url);
+    if (typeof url === 'object') {
+      options = $.extend({}, _this.Request.options, url);
       url = undefined;
     } else {
-      options = $.extend({}, options, self.Request.options, {url: url});
+      options = $.extend({}, options, _this.Request.options, { url: url });
       url = undefined;
     }
 
@@ -29,23 +16,23 @@
   }
 
   /**
-   * @param {object} options
-   * */
+    * @param {object} options
+    * */
   function setup(options) {
-    self.options.loginUserId = options.loginUserId;
-    self.Request.setup({
+    _this.options.loginUserId = options.loginUserId;
+    _this.Request.setup({
       headers: {
-        'X-CSRF-TOKEN': options['X-CSRF-TOKEN']
-      }
+        'X-CSRF-TOKEN': options['X-CSRF-TOKEN'],
+      },
     });
 
   }
 
   /**
-   * @param {object} options
-   * */
+    * @param {object} options
+    * */
   function configure(options) {
-    $.extend(self.options, options);
+    $.extend(_this.options, options);
   }
 
   // @DEPRECATED
@@ -61,6 +48,7 @@
     if (type == '') {
       type = 'danger';
     }
+
     System.import('xecore:/common/js/griper').then(function (griper) {
       return griper.toast(type, message);
     });
@@ -91,36 +79,38 @@
   }
 
   function getLocale() {
-    return self.options.locale;
+    return _this.options.locale;
   }
 
   function getDefaultLocale() {
-    return self.options.defaultLocale;
+    return _this.options.defaultLocale;
   }
 
-  exports.XE = function() {
-    return {
-      initialize: initialize,
-      ajax: ajax,
-      setup: setup,
-      configure: configure,
-      cssLoad: cssLoad,
-      jsLoad: jsLoad,
-      toast: toast,
-      toastByStatus: toastByStatus,
-      formError: formError,
-      formErrorClear: formErrorClear,
-      formValidate: formValidate,
-      getLocale: getLocale,
-      getDefaultLocale: getDefaultLocale,
+  return {
+    init: function () {
+      _this = this;
 
-      options: {},
+      return this;
+    },
 
-      Lang: '',
-      Progress: '',
-      Request: '',
-      Component: ''
-    }.initialize();
-  }();
+    ajax: ajax,
+    setup: setup,
+    configure: configure,
+    cssLoad: cssLoad,
+    jsLoad: jsLoad,
+    toast: toast,
+    toastByStatus: toastByStatus,
+    formError: formError,
+    formErrorClear: formErrorClear,
+    formValidate: formValidate,
+    getLocale: getLocale,
+    getDefaultLocale: getDefaultLocale,
 
-})(window);
+    options: {},
+
+    Lang: '',
+    Progress: '',
+    Request: '',
+    Component: '',
+  };
+})().init(window);

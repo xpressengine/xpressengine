@@ -40,8 +40,8 @@ class Composer
 
     public static $basePlugins = [
         'xpressengine-plugin/alice' => '0.9.5',
-        'xpressengine-plugin/board' => '0.9.8',
-        'xpressengine-plugin/ckeditor' => '0.9.6',
+        'xpressengine-plugin/board' => '0.9.9',
+        'xpressengine-plugin/ckeditor' => '0.9.7',
         'xpressengine-plugin/claim' => '0.9.2',
         'xpressengine-plugin/comment' => '0.9.6',
         'xpressengine-plugin/external_page' => '0.9.3',

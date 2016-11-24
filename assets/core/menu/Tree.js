@@ -1,6 +1,6 @@
 function Tree(obj) {
   this.cnt = 0;
-  this.obj = obj || {items: []};
+  this.obj = obj || { items: [] };
   this.indexes = {};
   this.nodes = {};
   this.build(this.obj);
@@ -11,7 +11,7 @@ var proto = Tree.prototype;
 proto.build = function (obj) {
   var indexes = this.indexes;
   var nodes = this.nodes;
-  var self = this;
+  var _this = this;
 
   var indexId = obj.id || this.cnt;
   var indexOrdering = obj.ordering || 0;
@@ -19,7 +19,14 @@ proto.build = function (obj) {
 
   obj.depth = depth;
 
-  var index = {id: indexId, node: obj, ordering: indexOrdering, children: [], collapsed: obj.collapsed, depth: depth};
+  var index = {
+    id: indexId,
+    node: obj,
+    ordering: indexOrdering,
+    children: [],
+    collapsed: obj.collapsed,
+    depth: depth,
+  };
   indexes[indexId + ''] = index;
   nodes[obj.id] = this.cnt;
   this.cnt++;
@@ -43,9 +50,9 @@ proto.build = function (obj) {
       if (parent) index.parent = parent.id;
 
       indexes[obj.id + ''] = index;
-      nodes[obj.id] = self.cnt;
+      nodes[obj.id] = _this.cnt;
       children.push(obj.id);
-      self.cnt++;
+      _this.cnt++;
 
       if (obj.items && obj.items.constructor == Object) {
         walk(obj.items, index, depth);
@@ -53,14 +60,14 @@ proto.build = function (obj) {
     });
 
     children.sort(function (a, b) {
-      a = self.getIndex(a);
-      b = self.getIndex(b);
+      a = _this.getIndex(a);
+      b = _this.getIndex(b);
       if (a.ordering > b.ordering)
-        return 1;
+       return 1;
       else if (a.ordering < b.ordering)
-        return -1;
+       return -1;
       else
-        return 0;
+       return 0;
     });
 
     parent.children = children;
@@ -87,19 +94,18 @@ proto.get = function (id) {
 };
 
 proto.removeIndex = function (index) {
-  var self = this;
+  var _this = this;
   del(index);
 
   function del(index) {
-    delete self.indexes[index.id + ''];
+    delete _this.indexes[index.id + ''];
     if (index.children && index.children.length) {
       index.children.forEach(function (child) {
-        del(self.getIndex(child));
+        del(_this.getIndex(child));
       });
     }
   }
 };
-
 
 proto.remove = function (id) {
   var index = this.getIndex(id);
@@ -124,6 +130,7 @@ proto.updateChildren = function (children) {
     if (i > 0) {
       index.prev = children[i - 1];
     }
+
     if (i < children.length - 1) {
       index.next = children[i + 1];
     }
@@ -144,6 +151,7 @@ proto.insert = function (obj, parentId, i) {
   if (parentNode.items.constructor == Array) {
     parentNode.items = {};
   }
+
   parentIndex.children = parentIndex.children || [];
 
   _.forEach(parentNode.items, function (item) {
@@ -158,6 +166,7 @@ proto.insert = function (obj, parentId, i) {
   if (parentIndex.parent) {
     this.updateChildren(this.getIndex(parentIndex.parent).children);
   }
+
   return index;
 };
 
@@ -189,7 +198,7 @@ proto.updateNodesPosition = function () {
   var top = 0;
   var left = 1;
   var root = this.getIndex(0);
-  var self = this;
+  var _this = this;
 
   root.top = top++;
   root.left = left++;
@@ -201,7 +210,7 @@ proto.updateNodesPosition = function () {
   function walk(children, parent, left, collapsed) {
     var height = 1;
     children.forEach(function (id) {
-      var node = self.getIndex(id);
+      var node = _this.getIndex(id);
       if (collapsed) {
         node.top = null;
         node.left = null;
@@ -209,6 +218,7 @@ proto.updateNodesPosition = function () {
         node.top = top++;
         node.left = left;
       }
+
       if (node.children && node.children.length) {
         height += walk(node.children, node, left + 1, collapsed || node.collapsed);
       } else {
@@ -229,11 +239,11 @@ proto.move = function (fromId, toId, placement) {
   if (this.movementFilter) {
     var result = this.movementFilter(
       {
-        fromId: fromId,
-        toId: toId,
-        placement: placement,
-        tree: this
-      }
+      fromId: fromId,
+      toId: toId,
+      placement: placement,
+      tree: this,
+    }
     );
 
     if (!result) {
@@ -249,14 +259,11 @@ proto.move = function (fromId, toId, placement) {
   var index = null;
   if (placement === 'before') {
     index = this.insertBefore(obj, toId);
-  }
-  else if (placement === 'after') {
+  } else if (placement === 'after') {
     index = this.insertAfter(obj, toId);
-  }
-  else if (placement === 'prepend') {
+  } else if (placement === 'prepend') {
     index = this.prepend(obj, toId);
-  }
-  else if (placement === 'append') {
+  } else if (placement === 'append') {
     index = this.append(obj, toId);
   }
 

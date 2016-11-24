@@ -17,13 +17,13 @@
 
       var argType = typeof arg;
 
-      if ('string' === argType || 'number' === argType) {
+      if (argType === 'string' || argType === 'number') {
         classes += ' ' + arg;
 
       } else if (Array.isArray(arg)) {
         classes += ' ' + classNames.apply(null, arg);
 
-      } else if ('object' === argType) {
+      } else if (argType === 'object') {
         for (var key in arg) {
           if (arg.hasOwnProperty(key) && arg[key]) {
             classes += ' ' + key;
@@ -47,6 +47,5 @@
   }
 
 }());
-
 
 var cx = classNames;
