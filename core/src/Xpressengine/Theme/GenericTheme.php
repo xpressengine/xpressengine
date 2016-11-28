@@ -209,8 +209,8 @@ abstract class GenericTheme extends AbstractTheme
         // save new file
         $file = app('xe.storage')->upload(
             $file,
-            config('xe.theme.upload.path').$configId,
-            config('xe.theme.upload.disk')
+            config('xe.theme.storage.path').$configId,
+            config('xe.theme.storage.disk')
         );
         $saved = [
             'id' => $file->id,
