@@ -12,6 +12,8 @@ var pathInfo = {
   vendor: path.join(__dirname, '/assets/vendor'),
   node: path.join(__dirname, '/node_modules'),
   core: path.join(__dirname, '/assets/core'),
+  member: path.join(__dirname, '/resources/assets/core/member'),
+  settings: path.join(__dirname, '/resources/assets/core/settings'),
   common: path.join(__dirname, '/resources/assets/core/common'),
   permission: path.join(__dirname, '/resources/assets/core/permission'),
   menu: path.join(__dirname, '/resources/assets/core/menu'),
@@ -22,8 +24,8 @@ var target = !!$.util.env.production;
 
 var common = {
   entry: {
-    'assets/vendor/vendor': ['react', 'react-dom'],
-    'assets/core/permission/permission': [
+    'assets/vendor/vendor.bundle': ['react', 'react-dom'],
+    'assets/core/permission/permission.bundle': [
      pathInfo.permission + '/Permission.jsx',
      pathInfo.permission + '/PermissionExclude.jsx',
      pathInfo.permission + '/PermissionInclude.jsx',
@@ -33,7 +35,7 @@ var common = {
      pathInfo.permission + '/PermissionTagSuggestion.jsx',
      pathInfo.permission + '/SettingsPermission.jsx',
     ],
-    'assets/core/menu/menu': [
+    'assets/core/menu/menu.bundle': [
      pathInfo.menu + '/MenuRenderer.js',
      pathInfo.menu + '/MenuEntity.js',
      pathInfo.menu + '/MenuItem.js',
@@ -44,20 +46,43 @@ var common = {
      pathInfo.menu + '/MenuSearchSuggestion.js',
      pathInfo.menu + '/MenuTree.js',
     ],
-    'assets/core/lang/langEditorBox': pathInfo.lang + '/LangEditorBox.js',
+
+    'assets/core/common/js/xe': [
+      pathInfo.common + '/js/xe.js'
+    ],
+
+    'assets/core/common/js/xe.bundle': [
+      // pathInfo.common + '/js/xe.js',
+      pathInfo.common + '/js/xe.lang.js',
+      pathInfo.common + '/js/xe.progress.js',
+      pathInfo.common + '/js/xe.request.js',
+      pathInfo.common + '/js/xe.component.js',
+    ],
+
+    'assets/core/lang/langEditorBox.bundle': pathInfo.lang + '/LangEditorBox.js',
+    'assets/core/common/js/griper': pathInfo.common + '/js/griper',
+    'assets/core/common/js/validator': pathInfo.common + '/js/validator',
     'assets/core/common/js/toggleMenu': pathInfo.common + '/js/toggleMenu',
+    'assets/core/common/js/dynamicField': pathInfo.common + '/js/dynamicField',
+    'assets/core/common/js/storeCategory': pathInfo.common + '/js/storeCategory.js',
+    'assets/core/common/js/rule': pathInfo.common + '/js/rule.js',
+    'assets/core/member/settings/edit': pathInfo.member + '/settings/edit.js',
+    'assets/core/settings/js/admin.bundle': pathInfo.settings + '/js/admin.js',
   },
   output: {
     path: path.resolve(__dirname, './'),
-    filename: '[name].bundle.js',
+    filename: '[name].js',
   },
   plugins: [
-   new webpack.HotModuleReplacementPlugin(),
-   new webpack.NoErrorsPlugin(),
-   new webpack.optimize.CommonsChunkPlugin({
-    name: 'react',
-    filename: 'assets/vendor/vendor.bundle.js',
-  }),
+    new webpack.NoErrorsPlugin(),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'react',
+      filename: 'assets/vendor/vendor.bundle.js',
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'xe',
+      filename: 'assets/core/common/js/xe.bundle.js',
+    }),
   ],
   module: {
     loaders: [
@@ -74,11 +99,25 @@ var common = {
   },
   resolve: {
     alias: {
-      vendor: pathInfo.vendor + '/vendor.bundle',
-      react: pathInfo.node + '/react',
+      'xe': pathInfo.core + '/common/js/xe.js',
+      'griper': pathInfo.core + '/common/js/griper.js',
+      'validator': pathInfo.core + '/common/js/validator.js',
+
+      'xe-transition': pathInfo.core + '/xe-ui-component/js/xe-transition.js',
+      'xe-dropdown': pathInfo.core + '/xe-ui-component/js/xe-dropdown.js',
+      'xe-modal': pathInfo.core + '/xe-ui-component/js/xe-modal.js',
+      'xe-tooltip': pathInfo.core + '/xe-ui-component/js/xe-tooltip.js',
+
+      'vendor': pathInfo.vendor + '/vendor.bundle.js',
+      'react': pathInfo.node + '/react',
       'react-dom': pathInfo.node + '/react-dom',
     },
     extensions: ['', '.js', '.jsx'],
+  },
+  externals: {
+    window: 'window',
+    jquery: 'jQuery',
+    $: 'jQuery'
   },
 };
 

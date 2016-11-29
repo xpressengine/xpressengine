@@ -1,6 +1,5 @@
 //xe.lang.js
-XE.Lang = (function (exports) {
-  var Translator = exports.Translator;
+export default (function () {
   var _items = {
     af: 'af-ZA',
     ar: 'ar-SA',
@@ -119,4 +118,4 @@ XE.Lang = (function (exports) {
     },
   };
 
-})(window);
+})();

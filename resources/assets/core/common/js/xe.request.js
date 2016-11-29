@@ -1,4 +1,7 @@
-XE.Request = (function (Progress) {
+import Progress from './xe.progress';
+import XE from './xe';
+
+export default (function () {
   var _this;
 
   var _options = {
@@ -13,7 +16,7 @@ XE.Request = (function (Progress) {
   }).ajaxComplete(function (event, jqxhr, settings) {
     Progress.done(settings.context == undefined ? $('body') : settings.context);
   }).ajaxError(function (event, jqxhr, settings, thrownError) {
-    XE.Progress.done();
+    Progress.done();
 
     if (!settings.hasOwnProperty('error')) {
       _this.error(jqxhr, settings, thrownError);
@@ -52,8 +55,7 @@ XE.Request = (function (Progress) {
       }
 
       // @FIXME 의존성
-      window.XE.toastByStatus(status, errorMessage);
+      XE.toastByStatus(status, errorMessage);
     },
   }.init();
-
-})(XE.Progress);
+})();

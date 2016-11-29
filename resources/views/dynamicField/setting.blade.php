@@ -1,3 +1,5 @@
+{{ XeFrontend::js('/assets/core/common/js/dynamicField.js')->appendTo('body')->load() }}
+
 <div id="__xe_container_DF_setting_{{$group}}" class="table-responsive">
     <table class="table">
         <caption>DynamicField Manager</caption>
@@ -101,17 +103,16 @@
 </div>
 
 <script>
-    System.import('xecore:/common/js/dynamicField').then(function(dynamicField) {
-        var instance = new dynamicField();
-
-        instance.init("{{$group}}", "{{$databaseName}}", {
+    var dynamicFieldData = {
+        group: "{{$group}}",
+        databaseName: "{{$databaseName}}",
+        routes: {
             base: "{{ route('manage.dynamicField.index') }}",
             update: "{{ route('manage.dynamicField.update') }}",
             getEditInfo: "{{ route('manage.dynamicField.getEditInfo') }}",
             destroy: "{{ route('manage.dynamicField.destroy') }}",
             getSkinOption: "{{ route('manage.dynamicField.getSkinOption') }}",
             getAdditionalConfigure: "{{ route('manage.dynamicField.getAdditionalConfigure') }}"
-        });
-        instance.getList();
-    });
+        }
+    };
 </script>

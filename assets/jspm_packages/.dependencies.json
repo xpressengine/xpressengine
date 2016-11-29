@@ -10,10 +10,6 @@
     "systemjs-json": "github:systemjs/plugin-json@^0.1.0",
     "process": "github:jspm/nodelibs-process@^0.1.0"
   },
-  "github:floatdrop/plugin-jsx@1.2.1": {
-    "react-tools": "npm:react-tools@^0.13.0"
-  },
-  "github:twbs/bootstrap-sass@3.3.6": {},
   "npm:react-tools@0.13.3": {
     "commoner": "npm:commoner@^0.10.0",
     "jstransform": "npm:jstransform@^10.1.0",
@@ -371,7 +367,6 @@
     "fs": "github:jspm/nodelibs-fs@^0.1.0"
   },
   "npm:base64-js@1.1.2": {},
-  "npm:bootstrap-sass@3.3.6": {},
   "npm:buffer@4.6.0": {
     "base64-js": "npm:base64-js@^1.0.2",
     "ieee754": "npm:ieee754@^1.1.4",

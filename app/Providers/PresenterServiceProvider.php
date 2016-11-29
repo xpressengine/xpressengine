@@ -193,8 +193,9 @@ class PresenterServiceProvider extends ServiceProvider
 //            'assets/jspm_packages/system.js',
 //            'assets/systemjs.config.js',
 //            'assets/vendor/jquery/jquery.min.js',
-//            'assets/core/common/js/xe.bundle.js'
-            'assets/bundle.js'
+            'assets/bundle.js',
+            'assets/core/common/js/xe.bundle.js',
+            'assets/core/common/js/xe.js',
         ])->appendTo('head.prepend')->load();
 
         $frontendHandler->js('assets/core/common/js/usermenu.js')->load(); // @TODO 제거
