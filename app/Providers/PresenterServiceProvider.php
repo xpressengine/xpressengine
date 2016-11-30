@@ -193,6 +193,7 @@ class PresenterServiceProvider extends ServiceProvider
 //            'assets/jspm_packages/system.js',
 //            'assets/systemjs.config.js',
 //            'assets/vendor/jquery/jquery.min.js',
+            'assets/vendor/vendor.bundle.js',
             'assets/bundle.js',
             'assets/core/common/js/xe.bundle.js',
             'assets/core/common/js/xe.js',

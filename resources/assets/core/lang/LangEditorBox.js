@@ -100,7 +100,7 @@ var LangEditor = React.createClass({
 
   getEditor: function (resource, locale, value) {
     var edit = null;
-    var id = ('input' + this.props.seq + '-' + locale);
+    var id = ('input-' + this.props.seq + '-' + locale);
     var name = (resource + '/locale/' + locale);
 
     if (!this.props.multiline) {

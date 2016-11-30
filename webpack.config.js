@@ -20,11 +20,12 @@ var pathInfo = {
   lang: path.join(__dirname, '/resources/assets/core/lang'),
 };
 
-var target = !!$.util.env.production;
+var target = (process.env.npm_lifecycle_event === 'build')? true : !!$.util.env.production;
 
 var common = {
   entry: {
-    'assets/vendor/vendor.bundle': ['react', 'react-dom'],
+    // 'vendor': ['react', 'react-dom', 'jquery', 'moment'],
+    // 'vendor': ['react', 'react-dom'],
     'assets/core/permission/permission.bundle': [
      pathInfo.permission + '/Permission.jsx',
      pathInfo.permission + '/PermissionExclude.jsx',
@@ -74,15 +75,11 @@ var common = {
     filename: '[name].js',
   },
   plugins: [
-    new webpack.NoErrorsPlugin(),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'react',
-      filename: 'assets/vendor/vendor.bundle.js',
-    }),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'xe',
-      filename: 'assets/core/common/js/xe.bundle.js',
-    }),
+    // new CommonsChunkPlugin({
+    //   name: 'vendor',
+    //   filename: 'assets/vendor/vendor.bundle.js',
+    //   minChunks: Infinity,
+    // }),
   ],
   module: {
     loaders: [
@@ -109,15 +106,14 @@ var common = {
       'xe-tooltip': pathInfo.core + '/xe-ui-component/js/xe-tooltip.js',
 
       'vendor': pathInfo.vendor + '/vendor.bundle.js',
-      'react': pathInfo.node + '/react',
-      'react-dom': pathInfo.node + '/react-dom',
     },
     extensions: ['', '.js', '.jsx'],
   },
   externals: {
     window: 'window',
-    jquery: 'jQuery',
-    $: 'jQuery'
+    // $: "jquery",
+    // jQuery: "jquery",
+    // "window.jQuery": "jquery",
   },
 };
 

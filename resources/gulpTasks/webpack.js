@@ -11,7 +11,6 @@ module.exports = (() => {
     'webpack:react': (callback) => {
       webpack(webpackConfig, (err, stats) => {
         if (err) {
-          console.log('err', err);
           throw new gutil.PluginError('webpack', err);
         }
 
