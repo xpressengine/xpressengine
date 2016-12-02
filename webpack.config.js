@@ -24,8 +24,7 @@ var target = (process.env.npm_lifecycle_event === 'build')? true : !!$.util.env.
 
 var common = {
   entry: {
-    // 'vendor': ['react', 'react-dom', 'jquery', 'moment'],
-    // 'vendor': ['react', 'react-dom'],
+    'vendor': ['react', 'react-dom', 'moment'],
     'assets/core/permission/permission.bundle': [
      pathInfo.permission + '/Permission.jsx',
      pathInfo.permission + '/PermissionExclude.jsx',
@@ -71,11 +70,7 @@ var common = {
     filename: '[name].js',
   },
   plugins: [
-    // new CommonsChunkPlugin({
-    //   name: 'vendor',
-    //   filename: 'assets/vendor/vendor.bundle.js',
-    //   minChunks: Infinity,
-    // }),
+    new CommonsChunkPlugin('vendor', 'assets/vendor/vendor.bundle.js'),
   ],
   module: {
     loaders: [
@@ -107,9 +102,6 @@ var common = {
   },
   externals: {
     window: 'window',
-    // $: "jquery",
-    // jQuery: "jquery",
-    // "window.jQuery": "jquery",
   },
 };
 
