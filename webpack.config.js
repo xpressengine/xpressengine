@@ -48,12 +48,8 @@ var common = {
      pathInfo.menu + '/MenuTree.js',
     ],
 
-    'assets/core/common/js/xe': [
-      pathInfo.common + '/js/xe.js'
-    ],
-
     'assets/core/common/js/xe.bundle': [
-      // pathInfo.common + '/js/xe.js',
+      pathInfo.common + '/js/xe.js',
       pathInfo.common + '/js/xe.lang.js',
       pathInfo.common + '/js/xe.progress.js',
       pathInfo.common + '/js/xe.request.js',

@@ -1,5 +1,4 @@
 import Progress from './xe.progress';
-import XE from './xe';
 
 export default (function () {
   var _this;
