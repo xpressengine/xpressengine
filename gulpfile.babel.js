@@ -20,7 +20,7 @@ gulp.task('default', (callback) => {
     // 'jspm:xe',
     'assets:sass',
     'assets:image',
-    'webpack:react',
+    'webpack',
     'assets:chunk',
     callback);
 });
@@ -44,7 +44,7 @@ gulp.task('assets:sass', taskCss['assets:sass']);
 gulp.task('assets:image', taskImage['assets:image']);
 // e: image
 
-gulp.task('webpack:react', taskWebpack['webpack:react']);
+gulp.task('webpack', taskWebpack['webpack']);
 
 gulp.task('sass:watch', () => {
   return gulp.watch([
