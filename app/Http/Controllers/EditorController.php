@@ -21,6 +21,7 @@ use Xpressengine\Tag\TagHandler;
 use Auth;
 use Gate;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Xpressengine\User\Models\User;
 
 class EditorController extends Controller
 {

@@ -1,1 +1,0 @@
-module.exports = require("npm:react-dnd-html5-backend@2.1.2/lib/index.js");

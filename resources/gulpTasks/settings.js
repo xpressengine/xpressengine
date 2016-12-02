@@ -8,7 +8,7 @@ module.exports = (() => {
   const $ = plugins();
 
   let _config = {
-    isProduction: !!$.util.env.production, useSourceMaps: false,//!$.util.env.production
+    isProduction: !!$.util.env.production, useSourceMaps: false,
   };
 
   const _filter = [
@@ -21,6 +21,12 @@ module.exports = (() => {
    '!resources/assets/core/settings/js/admin.js',
    '!resources/assets/core/xe-ui-component/components',
    '!resources/assets/core/**/img/*',
+   '!resources/assets/core/common/js/rule.js',
+   '!resources/assets/core/common/js/storeCategory.js',
+   '!resources/assets/core/common/js/dynamicField.js',
+   '!resources/assets/core/common/js/xe.js',
+   '!resources/assets/core/common/js/toggleMenu.js',
+   '!resources/assets/core/member/settings/edit.js',
    'resources/assets/core/xe-ui-component/js/*',
    'resources/assets/core/menu/classnames.js',
    'resources/assets/core/menu/Tree.js',
@@ -58,41 +64,13 @@ module.exports = (() => {
       return gulp.src([
          'assets/core/common/js/utils.js',
          'assets/core/common/js/dynamicLoadManager.js',
-         'assets/jspm_packages/system.js',
-         'assets/systemjs.config.js',
+          'assets/core/common//js/translator.js',
          'assets/vendor/jquery/jquery.min.js',
-         'assets/core/common/js/xe.bundle.js',
         ])
         .pipe($.plumber())
-        .pipe($.concat('bundle.js'))
         .pipe($.uglify())
+        .pipe($.concat('bundle.js'))
         .pipe(gulp.dest('assets'));
-
-    },
-    /**
-     * xe bundling
-     * */
-    'jspm:xe': () => {
-      return gulp.src([
-         './assets/core/common/js/xe.js',
-         './assets/core/common/js/translator.js',
-         './assets/core/common/js/xe.lang.js',
-         './assets/core/common/js/xe.progress.js',
-         './assets/core/common/js/xe.request.js',
-         './assets/core/common/js/xe.component.js',
-        ])
-        .pipe($.concat('xe.bundle.js'))
-        .pipe(gulp.dest('./assets/core/common/js/'));
-    },
-    /**
-     * admin bundling
-     * */
-    'jspm:admin': () => {
-      return gulp.src('./resources/assets/core/settings/js/admin.js')
-        .pipe($.plumber())
-        .pipe($.jspm({ selfExecutingBundle: true }))
-        .pipe($.rename('admin.bundle.js'))
-        .pipe(gulp.dest('./assets/core/settings/js'));
     },
 
     jscs: () => {

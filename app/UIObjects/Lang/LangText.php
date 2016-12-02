@@ -23,7 +23,7 @@ class LangText extends AbstractUIObject
         XeFrontend::js(
             [
                 '/assets/vendor/jqueryui/jquery-ui.js',
-                '/assets/vendor/vendor.bundle.js',
+//                '/assets/vendor/vendor.bundle.js',
                 '/assets/vendor/expanding/expanding.js',
                 '/assets/core/lang/langEditorBox.bundle.js'
             ]

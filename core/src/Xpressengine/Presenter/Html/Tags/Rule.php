@@ -131,8 +131,7 @@ class Rule
     public function render()
     {
         $rule = sprintf(
-            "System.import('xecore:/common/js/validator')"
-            .'.then(function(validator) { validator.setRules("%s", %s); });',
+            "var ruleSet = { ruleName: \"%s\", rules: %s }",
             $this->ruleName,
             json_enc($this->rules)
         ).PHP_EOL;

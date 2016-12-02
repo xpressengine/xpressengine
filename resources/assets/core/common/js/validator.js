@@ -1,8 +1,8 @@
-(function (root, factory) {
-module.exports = factory();
-}(this, function () {
+import griper from 'griper';
 
-  'use strict';
+(function (root, factory) {
+  module.exports = factory();
+}(this, function () {
 
   var Validator = {};
   Validator.rules = {};
@@ -108,26 +108,22 @@ module.exports = factory();
   };
 
   Validator.errorClear = function ($form) {
-    System.import('xecore:/common/js/griper').then(function (griper) {
-      griper.form.fn.clear($form);
-    });
+    griper.form.fn.clear($form);
   };
 
   Validator.error = function ($element, message) {
     if (this.alertType == 'form') {
-      System.import('xecore:/common/js/griper').then(function (griper) {
-        griper.form($element, message);
-      });
-    } else if (this.alertType == 'toast') {
-      System.import('xecore:/common/js/griper').then(function (griper) {
-        var typeName = $element.attr('placeholder');
-        if (typeName == undefined) {
-          typeName = $element.attr('name');
-        }
+      griper.form($element, message);
 
-        message = '[' + typeName + '] ' + message;
-        griper.toast($element, message);
-      });
+    } else if (this.alertType == 'toast') {
+      var typeName = $element.attr('placeholder');
+      if (typeName == undefined) {
+        typeName = $element.attr('name');
+      }
+
+      message = '[' + typeName + '] ' + message;
+      griper.toast($element, message);
+
     }
 
   };
@@ -266,4 +262,5 @@ module.exports = factory();
   };
 
   return Validator;
+
 }));

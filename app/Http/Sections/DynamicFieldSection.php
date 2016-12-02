@@ -109,7 +109,7 @@ class DynamicFieldSection extends Section
         XeFrontend::js('/assets/vendor/jqueryui/jquery-ui.js')->appendTo('head')->load();
         XeFrontend::css('/assets/vendor/jqueryui/jquery-ui.css')->load();
         XeFrontend::js('/assets/vendor/expanding/expanding.js')->appendTo('head')->load();
-        XeFrontend::js('/assets/vendor/vendor.bundle.js')->appendTo('head')->load();
+//        XeFrontend::js('/assets/vendor/vendor.bundle.js')->appendTo('head')->load();
         XeFrontend::js('/assets/core/lang/langEditorBox.bundle.js')->appendTo('head')->load();
         XeFrontend::css('/assets/core/lang/langEditorBox.css')->load();
         XeFrontend::css('/assets/core/xe-ui-component/xe-ui-component.css')->load();

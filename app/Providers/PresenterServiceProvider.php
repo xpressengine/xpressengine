@@ -188,13 +188,9 @@ class PresenterServiceProvider extends ServiceProvider
         ])->load();
 
         $frontendHandler->js([
-//            'assets/core/common/js/utils.js',
-//            'assets/core/common/js/dynamicLoadManager.js',
-//            'assets/jspm_packages/system.js',
-//            'assets/systemjs.config.js',
-//            'assets/vendor/jquery/jquery.min.js',
-//            'assets/core/common/js/xe.bundle.js'
-            'assets/bundle.js'
+            'assets/vendor/vendor.bundle.js',
+            'assets/bundle.js',
+            'assets/core/common/js/xe.bundle.js',
         ])->appendTo('head.prepend')->load();
 
         $frontendHandler->js('assets/core/common/js/usermenu.js')->load(); // @TODO 제거

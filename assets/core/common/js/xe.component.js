@@ -1,4 +1,11 @@
-XE.Component = (function (exports) {
+import moment from 'moment';
+import 'xe-transition';
+import 'xe-modal';
+import 'xe-dropdown';
+import 'xe-tooltip';
+import griper from 'griper';
+
+var Component = (function (exports) {
   return {
     timeago: function () {
       $('[data-xe-timeago]').trigger('boot.xe.timeago');
@@ -14,6 +21,8 @@ XE.Component = (function (exports) {
   };
 })(window);
 
+DynamicLoadManager.cssLoad('/assets/core/xe-ui-component/xe-ui-component.css');
+
 $(function () {
   /*
    * @Component Timeago
@@ -21,95 +30,67 @@ $(function () {
    * <span data-xe-timeago="{timestmap|ISO8601}">2016-04-04 07:05:44</span>
    * <span data-xe-timeago="{timestmap|ISO8601}" title="2016-04-04 07:05:44" />3 Hours ago</span>
    */
-  System.import('vendor:/moment').then(function (moment) {
-    moment.locale(XE.getLocale());
-  });
+
+  moment.locale(XE.getLocale());
 
   $(document).on('boot.xe.timeago', '[data-xe-timeago]', function () {
     var $this = $(this);
     if ($this.data().xeTimeagoCalled === true) false;
 
-    System.import('vendor:/moment').then(function (moment) {
-      var dataDate = $this.data('xe-timeago');
-      var isTimestamp = (parseInt(dataDate) == dataDate);
+    var dataDate = $this.data('xe-timeago');
+    var isTimestamp = (parseInt(dataDate) == dataDate);
 
-      if (isTimestamp) {
-        dataDate = moment.unix(dataDate);
-      } else {
-        dataDate = moment(dataDate);
-      }
+    if (isTimestamp) {
+      dataDate = moment.unix(dataDate);
+    } else {
+      dataDate = moment(dataDate);
+    }
 
-      $this.text(dataDate.fromNow());
-      $this.data().xeTimeagoCalled = true;
-    });
+    $this.text(dataDate.fromNow());
+    $this.data().xeTimeagoCalled = true;
+
   });
 
   $(document).on('boot.xe.dropdown', '[data-toggle=xe-dropdown]', function () {
     var $this = $(this);
-    System.import('xe.component.dropdown').then(function () {
-      $this.xeDropdown();
-    });
+    $this.xeDropdown();
   });
 
   $(document).on('boot.xe.modal', '[data-toggle=xe-modal]', function () {
     var $this = $(this);
-    System.import('xe.component.transition');
-    System.import('xe.component.modal').then(function () {
 
-    });
   });
 
   $(document).on('boot.xe.tooltip', '[data-toggle=xe-tooltip]', function () {
     var $this = $(this);
-    System.import('xe.component.transition');
-    System.import('xe.component.tooltip').then(function () {
-      $this.xeTooltip();
-    });
-
+    $this.xeTooltip();
   });
 
-  XE.Component.boot();
-
+  Component.boot();
 });
 
-(function ($) {
+// // xeModal =========================================================
+// $.fn.xeModal = function (options) {
+//   var _this = this;
+//
+//   _this.xeModal(options);
+//   DynamicLoadManager.cssLoad('/assets/core/xe-ui-component/xe-ui-component.css');
+// };
+//
+// // xeDropdown ======================================================
+// $.fn.xeDropdown = function (options) {
+//   var _this = this;
+//
+//   _this.xeDropdown(options);
+//   DynamicLoadManager.cssLoad('/assets/core/xe-ui-component/xe-ui-component.css');
+// };
+//
+// // xeTooltip =======================================================
+// $.fn.xeTooltip = function (options) {
+//   var _this = this;
+//
+//   _this.xeTooltip(options);
+//   DynamicLoadManager.cssLoad('/assets/core/xe-ui-component/xe-ui-component.css');
+// };
 
-  // xeModal =========================================================
-  $.fn.xeModal = function (options) {
-    var _this = this;
-
-    System.import('xe.component.transition');
-    System.import('xe.component.modal').then(function () {
-      _this.xeModal(options);
-    });
-
-    XE.cssLoad('/assets/core/xe-ui-component/xe-ui-component.css');
-
-  };
-
-  // xeDropdown ======================================================
-  $.fn.xeDropdown = function (options) {
-    var _this = this;
-
-    System.import('xe.component.dropdown').then(function () {
-      _this.xeDropdown(options);
-    });
-
-    XE.cssLoad('/assets/core/xe-ui-component/xe-ui-component.css');
-
-  };
-
-  // xeTooltip =======================================================
-  $.fn.xeTooltip = function (options) {
-    var _this = this;
-
-    System.import('xe.component.transition');
-    System.import('xe.component.tooltip').then(function () {
-      _this.xeTooltip(options);
-    });
-
-    XE.cssLoad('/assets/core/xe-ui-component/xe-ui-component.css');
-
-  };
-
-})(jQuery);
+export default Component;
