@@ -192,7 +192,7 @@ class RoutingServiceProvider extends ServiceProvider
         static $seq = 1;
         $instanceMacro = function ($key, Closure $callback, $routeOptions = null) use (&$seq) {
 
-            $pattern = '{instanceGroup'.$seq.'}';
+            $pattern = '{instanceGroup'.$seq++.'}';
             $attributes = [
                 'prefix' => $pattern,
                 'module' => $key,
