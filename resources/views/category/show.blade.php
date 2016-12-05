@@ -13,7 +13,6 @@
 [
 '/assets/vendor/jqueryui/jquery-ui.min.js',
 '/assets/vendor/expanding/expanding.js',
-'/assets/vendor/vendor.bundle.js'.
 '/assets/core/lang/langEditorBox.bundle.js'
 ]
 )->appendTo('head')->load() }}

@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import validator from 'validator';
+
 var LangEditorBox = React.createClass({
   getDefaultProps: function () {
     return {
@@ -181,12 +183,10 @@ $(function () {
     }
   });
 
-  System.import('xecore:/common/js/validator').then(function (validator) {
-    validator.put('langrequired', function ($dst, parameters) {
-      var $input = $dst.closest('.lang-editor-box').find("input[name^='xe_lang_preprocessor']:not(:hidden):first");
+  validator.put('langrequired', function ($dst, parameters) {
+    var $input = $dst.closest('.lang-editor-box').find("input[name^='xe_lang_preprocessor']:not(:hidden):first");
 
-      return validator.validators.required($input, parameters);
-    });
+    return validator.validators.required($input, parameters);
   });
 });
 

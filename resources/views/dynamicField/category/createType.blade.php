@@ -1,38 +1,11 @@
 @if ($config == null)
 	<script>
-		var storeCategory = function(obj) {
-			var params = {},
-					id = $(obj).closest('form').find('[name="id"]').val();
-
-			if (id == '') {
-				System.import('xecore:/common/js/griper').then(function (griper) {
-					griper.form($(obj), 'You must first create a category ID.');
-				});
-				return;
-			} else {
-				System.import('xecore:/common/js/griper').then(function (griper) {
-					griper.form.fn.clear($(obj).closest('form'));
-				});
-			}
-
-			params['categoryName'] = id;
-
-			XE.ajax({
-				type: 'post',
-				dataType: 'json',
-				data: params,
-				url: '{{route('fieldType.storeCategory')}}',
-				success: function(data) {
-					var section = $(obj).closest('.__xe_df_category');
-					section.find('[name="categoryId"]').val(data.id);
-					section.find('button').hide();
-					section.append(
-							$('<a>').text('{{xe_trans('xe::categoryManagement')}}').prop('target', '_blank').prop('href', '/settings/category/'+data.id)
-					);
-				}
-			});
-		}
+		var storeCategory = {
+			url: "{{route('fieldType.storeCategory')}}",
+			text: "{{xe_trans('xe::categoryManagement')}}"
+		};
 	</script>
+	{{ XeFrontend::js('/assets/core/common/js/storeCategory.js')->load() }}
 @endif
 
 <div class="form-group __xe_df_category">

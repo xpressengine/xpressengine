@@ -16,8 +16,8 @@ gulp.task('default', (callback) => {
     'jscs',
     'clean:assets',
     'copy:assets',
-    'jspm:admin',
-    'jspm:xe',
+    // 'jspm:admin',
+    // 'jspm:xe',
     'assets:sass',
     'assets:image',
     'webpack:react',
@@ -30,8 +30,8 @@ gulp.task('jscs', taskSettings['jscs']);
 gulp.task('clean:assets', taskSettings['clean:assets']);
 gulp.task('copy:assets', taskSettings['copy:assets']);
 
-gulp.task('jspm:xe', taskSettings['jspm:xe']);
-gulp.task('jspm:admin', taskSettings['jspm:admin']);
+// gulp.task('jspm:xe', taskSettings['jspm:xe']);
+// gulp.task('jspm:admin', taskSettings['jspm:admin']);
 
 gulp.task('assets:chunk', taskSettings['assets:chunk']);
 // e: settings

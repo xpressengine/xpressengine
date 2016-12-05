@@ -596,22 +596,3 @@ var Translator = (function (document, undefined) {
     },
   };
 })(document, undefined);
-
-if (typeof window.define === 'function' && window.define.amd) {
-  window.define('translator', [], function () {
-    return Translator;
-  });
-}
-
-if (typeof System.amdDefine === 'function') {
-  System.amdDefine('translator', [], function () {
-    return Translator;
-  });
-}
-
-// Export the Translator object for Node.js
-if (typeof exports !== 'undefined') {
-  if (typeof module !== 'undefined' && module.exports) {
-    module.exports = Translator;
-  }
-}

@@ -4,6 +4,7 @@
     "babel-jest": "*",
     "babel-register": "^6.11.6",
     "babelify": "^7.1.0",
+    "bootstrap-sass": "^3.3.7",
     "gulp": "^3.9.0",
     "gulp-babel": "^6.1.2",
     "gulp-clean": "^0.3.2",
@@ -26,7 +27,7 @@
     "gulp-plumber": "^1.1.0",
     "gulp-react": "^3.1.0",
     "gulp-rename": "^1.2.2",
-    "gulp-sass": "^2.2.0",
+    "gulp-sass": "^2.3.2",
     "gulp-sass-lint": "^1.2.0",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^1.5.3",
@@ -42,9 +43,14 @@
     "babel-loader": "^6.2.7",
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-react": "^6.16.0",
+    "bootstrap": "^3.3.7",
     "clean-webpack-plugin": "^0.1.14",
     "gulp": "^3.9.1",
     "handlebars-loader": "^1.4.0",
+    "imports-loader": "^0.6.5",
+    "jquery": "^3.1.1",
+    "moment": "^2.17.0",
+    "normalize.css": "^4.1.1",
     "path": "^0.12.7",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
@@ -53,40 +59,14 @@
     "webpack-merge": "^0.15.0"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "dev": "gulp",
+    "build": "gulp --production"
   },
   "jest": {
     "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
     "unmockedModulePathPatterns": [
       "<rootDir>/node_modules/react"
     ]
-  },
-  "jspm": {
-    "directories": {
-      "packages": "assets/jspm_packages"
-    },
-    "configFile": "assets/systemjs.config.js",
-    "dependencies": {
-      "blueimp-file-upload": "npm:blueimp-file-upload@^9.12.1",
-      "bootstrap-sass": "github:twbs/bootstrap-sass@^3.3.6",
-      "buffer": "npm:buffer@^4.5.1",
-      "jquery": "npm:jquery@^2.2.2",
-      "jquery-migrate": "npm:jquery-migrate@^1.4.0",
-      "jquery-ui": "npm:jquery-ui@^1.10.5",
-      "jspm-loader-jsx": "npm:jspm-loader-jsx@^0.0.7",
-      "lodash": "npm:lodash@^4.7.0",
-      "moment": "npm:moment@^2.12.0",
-      "normalize.css": "github:necolas/normalize.css@^4.1.1",
-      "react": "npm:react@^15.3.1",
-      "react-dom": "npm:react-dom@^15.3.1",
-      "react-tag-input": "npm:react-tag-input@^4.3.1",
-      "react-tools": "npm:react-tools@^0.13.3",
-      "swiper2": "npm:swiper@^2",
-      "twbs/bootstrap-sass": "github:twbs/bootstrap-sass@3.3.6",
-      "xedep-jquery": "npm:jquery@^2.2.2"
-    },
-    "devDependencies": {
-      "css": "github:systemjs/plugin-css@^0.1.21"
-    }
   }
 }
