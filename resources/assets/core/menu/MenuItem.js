@@ -74,6 +74,9 @@ export default React.createClass({
       } else {
         url = '/' + node.url;
       }
+
+      url = Utils.getUri(xeBaseURL + url);
+
     } else {
       url = node.url;
     }

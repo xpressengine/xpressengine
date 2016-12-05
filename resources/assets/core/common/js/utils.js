@@ -64,5 +64,20 @@ var Utils = (function (exports) {
 
       return retURL.split(/[?#]/)[0];
     },
+
+    getUri: function (url) {
+      var path = url.split(window.location.protocol + '//')[1];
+      var returnUri;
+
+      if (path.indexOf('/') === -1) {
+        returnUri = '/';
+
+      } else {
+        returnUri = path.substr(path.indexOf('/'));
+
+      }
+
+      return returnUri;
+    },
   }.init();
 })(window);
