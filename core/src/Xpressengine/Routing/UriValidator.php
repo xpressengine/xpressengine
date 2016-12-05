@@ -45,7 +45,8 @@ class UriValidator implements ValidatorInterface
     {
         $path = $request->path() == '/' ? '/' : '/' . $request->path();
         $firstSegment = $request->segment(1);
-        if ($firstSegment === null) {
+        $uri = $route->uri();
+        if (strpos($uri, '{instanceGroup') === 0 && $firstSegment === null) {
             return true;
         } else {
             return preg_match($route->getCompiled()->getRegex(), rawurldecode($path));
