@@ -41,7 +41,7 @@ class RoutingServiceProvider extends ServiceProvider
 {
 
     /**
-     * 주요 역활은 ModuleValidator 의 boot 를 실행.
+     * 주요 역할은 ModuleValidator의 boot를 실행.
      *
      * @return void
      */
@@ -192,7 +192,7 @@ class RoutingServiceProvider extends ServiceProvider
         static $seq = 1;
         $instanceMacro = function ($key, Closure $callback, $routeOptions = null) use (&$seq) {
 
-            $pattern = '{instanceGroup'.$seq++.'}';
+            $pattern = '{instanceGroup'.$seq.'}';
             $attributes = [
                 'prefix' => $pattern,
                 'module' => $key,
@@ -208,8 +208,10 @@ class RoutingServiceProvider extends ServiceProvider
                 }
             }
 
-            $this->group($attributes, $callback);
-
+            $router = $this;
+            app('events')->listen('router.before', function($request, $response) use ($router, $attributes, $callback) {
+                $router->group($attributes, $callback);
+            });
         };
 
         $router->macro('instance', $instanceMacro);

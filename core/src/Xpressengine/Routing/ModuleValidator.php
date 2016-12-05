@@ -141,14 +141,9 @@ class ModuleValidator implements ValidatorInterface
             return false;
         }
 
-        $firstSegment = $request->segment(1);
-
-        if ($firstSegment === null) {
-            return true;
-        }
-
         $uri = $route->uri();
-        if (strpos($uri, '{') === false) {
+
+        if(strpos($uri, '{instanceGroup') !== 0) {
             return false;
         }
 
