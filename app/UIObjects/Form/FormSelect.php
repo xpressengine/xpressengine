@@ -44,7 +44,11 @@ class FormSelect extends AbstractUIObject
                     $labelEl->removeClass('hidden')->html($arg);
                     break;
                 case 'options':
-                    foreach ($arg as $value => $option) {
+                    $options = $arg;
+                    if(is_callable($options)) {
+                        $options = $options();
+                    }
+                    foreach ($options as $value => $option) {
                         if (is_array($option) === false) {
                             $text = $option;
                             if(is_string($value) === false) {
