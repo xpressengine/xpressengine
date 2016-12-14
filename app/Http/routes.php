@@ -584,6 +584,8 @@ Route::settings(
     function () {
         Route::get('edit', ['as' => 'settings.theme.edit', 'uses' => 'ThemeController@edit', 'settings_menu'=>'setting.theme.edit']);
         Route::post('edit', ['as' => 'settings.theme.edit', 'uses' => 'ThemeController@update']);
+        Route::put('edit-auth', ['as' => 'settings.theme.edit.auth', 'uses' => 'ThemeController@auth']);
+
 
         Route::get('setting', ['as' => 'settings.theme.setting', 'uses' => 'ThemeController@editSetting']);
         Route::post('setting', ['as' => 'settings.theme.setting', 'uses' => 'ThemeController@updateSetting']);

@@ -251,13 +251,9 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
         $credentials['status'] = \XeUser::STATUS_ACTIVATED;
 
-        try {
-            if ($this->auth->attempt($credentials, $request->has('remember'))) {
-                $this->redirectPath = $request->get('redirectUrl');
-                return redirect()->intended($this->redirectPath());
-            }
-        } catch (\Exception $e) {
-            throw $e;
+        if ($this->auth->attempt($credentials, $request->has('remember'))) {
+            $this->redirectPath = $request->get('redirectUrl');
+            return redirect()->intended($this->redirectPath());
         }
 
         return redirect($this->loginPath())
