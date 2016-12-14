@@ -9,7 +9,6 @@
 namespace App\Http\Controllers;
 
 use File;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Xpressengine\Http\Request;
 use Xpressengine\Support\Exceptions\FileAccessDeniedHttpException;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
