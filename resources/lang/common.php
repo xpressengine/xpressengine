@@ -885,6 +885,7 @@ return [
         'ko' => '대시보드',
         'en' => 'DashBoard'
     ],
+
     // 메뉴 Admin
     'siteMap' => [
         'ko' => '사이트맵',
@@ -2050,5 +2051,9 @@ return [
     ],
     'enterPasswordForEditingTheme' => [
         'ko' => '테마 편집은 보안상 비밀번호 인증이 필요합니다. 로그인 한 계정의 비밀번호를 입력해주세요.',
+    ],
+    'editDashboard' => [
+        'ko' => '대시보드 편집',
+        'en' => 'Edit Dashboard'
     ],
 ];
