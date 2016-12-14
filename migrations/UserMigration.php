@@ -28,8 +28,8 @@ class UserMigration extends Migration {
             $table->text('introduction')->default(null)->nullable();
             $table->string('profileImageId', 36)->nullable();
             $table->string('rememberToken', 255)->nullable();
-            $table->timestamp('createdAt');
-            $table->timestamp('updatedAt');
+            $table->timestamp('createdAt')->index();
+            $table->timestamp('updatedAt')->index();
             $table->timestamp('passwordUpdatedAt');
 
             $table->primary('id');
@@ -42,8 +42,8 @@ class UserMigration extends Migration {
             $table->string('name');
             $table->string('description', 1000);
             $table->integer('count')->default(0);
-            $table->integer('order')->default(0);
-            $table->timestamp('createdAt');
+            $table->integer('order')->default(0)->index();
+            $table->timestamp('createdAt')->index();
             $table->timestamp('updatedAt');
 
             $table->primary('id');
@@ -86,7 +86,7 @@ class UserMigration extends Migration {
             $table->increments('id');
             $table->string('userId', 36);
             $table->string('address');
-            $table->timestamp('createdAt');
+            $table->timestamp('createdAt')->index();
             $table->timestamp('updatedAt');
 
             $table->index('userId');
@@ -100,7 +100,7 @@ class UserMigration extends Migration {
             $table->string('userId', 36);
             $table->string('address');
             $table->string('confirmationCode')->nullable();
-            $table->timestamp('createdAt');
+            $table->timestamp('createdAt')->index();
             $table->timestamp('updatedAt');
 
             $table->index('userId');
