@@ -48,7 +48,7 @@ class SystemInfo extends AbstractWidget
         $viewData = [
             'serverSoftware' => $request->server("SERVER_SOFTWARE"),
             'phpVersion' => phpversion(),
-            'debugMode' => $request->server("APP_DEBUG"),
+            'debugMode' => config('app.debug') ? 'Yes' : 'No',
             'cacheDriver' => config('cache.default'),
             'documentRoot' => $request->server("DOCUMENT_ROOT"),
             'maintenanceMode' => app()->isDownForMaintenance(),
