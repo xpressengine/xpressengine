@@ -211,7 +211,7 @@ $(function () {
     handleClick: function (e) {
       e.preventDefault();
       var $input = $(ReactDOM.findDOMNode(this.refs.input));
-      var email = input.val();
+      var email = $input.val();
       if (!email) {
         return;
       }
