@@ -15,8 +15,9 @@
     position: relative;
     min-height: 100px;
     padding: 15px 200px 15px 15px;
-    margin-right: 20px;
+    // margin-right: 20px;
     border-top:1px solid #e4e4e4;
+    background-color: #f5f6fe;
     img{
       position: absolute;
       top:15px;
@@ -29,11 +30,11 @@
       margin-top: 10px;
       font-size: 18px;
       font-weight: normal;
-    }    
+    }
   }
   .btn-right{
     position: absolute;
-    right:0;
+    right: 20px;
     top:50%;
     margin-top:-16px;
     .btn{
@@ -50,9 +51,6 @@
       position: relative;
       border-top:1px solid #e4e4e4;
       @include clearfix;
-      &.on{
-        border-left:2px solid $brand-primary;
-      }
       .skin-select-btn{
         float: left;
         height: 100%;
@@ -73,9 +71,6 @@
               margin-right: 3px;
             }
           }
-        }
-        +.skin-select-btn{
-          background-color: #F9FAFE;
         }
       }
       strong{

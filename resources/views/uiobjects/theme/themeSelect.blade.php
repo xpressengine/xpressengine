@@ -8,8 +8,7 @@
                     <img src="{{ asset($theme->getScreenshot() ? : 'assets/core/common/img/default_image_196x140.jpg') }}" alt="screenshot" class="hidden-xs" width="98" height="70">
                     <strong class="ellipsis">{{ $theme->getTitle() }}</strong>
                     <p>{{ $theme->getDescription() }}</p>
-                    <div class="btn-right hidden-sm">
-
+                    <div class="btn-right">
                         <button @if(!$theme->hasSetting()) disabled @endif onclick="$('#addConfig [name=theme]').val('{{ $theme->getId() }}')" type="button" data-toggle="modal" data-target="#addConfig" class="btn btn-default">{{xe_trans('xe::addNewInstance')}}</button>
                         <a href="{{ route('settings.theme.edit', ['theme'=>$theme->getId()]) }}" target="_blank" class="btn btn-primary">{{xe_trans('xe::edit')}}</a>
                     </div>

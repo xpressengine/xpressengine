@@ -29,9 +29,6 @@ To install XE3, refer to the following guide. [Install guide](http://xpressengin
 ## Maintainers
 @akasima @bnu @findstar @jhyeon1010 @khongchi @ngleader
 
-## Contributors
-http://xpressengine.io/contributors
-
 ## Documentation
 * Documentation Site (Korean) : http://xpressengine.io/docs/
 

@@ -313,6 +313,7 @@ aside {
       }
     }
     > li a {
+      overflow: hidden;
       height: 48px;
       padding: 0 54px 0 24px;
       line-height: 48px;
@@ -320,6 +321,8 @@ aside {
       background-color: #2A2A2A;
       font-size: 14px;
       color: #b5b7bd;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
   .sub-depth{
@@ -664,8 +667,8 @@ aside {
   }
   .label {
     margin-right: 4px;
-  }  
-  .swiper-pagination-switch {    
+  }
+  .swiper-pagination-switch {
     width: 8px;
     height: 8px;
     display: inline-block;
@@ -674,10 +677,10 @@ aside {
     background: #b5b7bd;
     cursor: pointer;
   }
-  .swiper-active-switch {    
+  .swiper-active-switch {
     background: #fff;
     border: 1px solid #1677cb;
-  }  
+  }
   .swiper-pagination {
     bottom: 0;
     left: 0;
@@ -693,7 +696,7 @@ aside {
     -o-transform: translate3d(0,0,0);
     transform: translate3d(0,0,0);
     z-index: 10;
-  }    
+  }
 }
 
 .plugin_tbl {

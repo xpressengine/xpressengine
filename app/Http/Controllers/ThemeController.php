@@ -19,8 +19,33 @@ use Xpressengine\Theme\ThemeHandler;
 class ThemeController extends Controller
 {
 
+    public function auth(Request $request, ThemeHandler $themeHandler)
+    {
+        $this->validate($request, [
+            'password' => 'required'
+        ]);
+
+        $credentials = [];
+        $credentials['id'] = auth()->id();
+        $credentials['password'] = $request->get('password');
+        $credentials['status'] = \XeUser::STATUS_ACTIVATED;
+
+        if (auth()->attempt($credentials, false, false)) {
+            session(['theme.editable' => true]);
+        }
+
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => '인증되었습니다.']);
+    }
+
     public function edit(Request $request, ThemeHandler $themeHandler)
     {
+        $editable = session('theme.editable');
+        if(!$editable) {
+            return \XePresenter::make(
+                'theme.edit-auth'
+            );
+        }
+
         $themeId = $request->get('theme');
         $fileName = $request->get('file');
 
@@ -79,6 +104,12 @@ class ThemeController extends Controller
 
     public function update(Request $request, ThemeHandler $themeHandler)
     {
+
+        $editable = session('theme.editable');
+        if(!$editable) {
+            return redirect()->back()->with('alert', ['type' => 'danger', 'message' => xe_trans('xe::needAuthForEditingTheme')])->withInput();
+        }
+
         $themeId = $request->get('theme');
         $fileName = $request->get('file');
         $reset = $request->get('reset');
