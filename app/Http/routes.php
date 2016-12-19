@@ -728,7 +728,6 @@ Route::settings('dynamicField', function () {
 
 Route::group(['prefix' => 'fieldType'], function () {
     Route::post('/storeCategory', ['as' => 'fieldType.storeCategory', 'uses' => 'FieldTypeController@storeCategory']);
-    Route::get('/storeCategory', ['as' => 'fieldType.storeCategory', 'uses' => 'FieldTypeController@storeCategory']);
 });
 
 Route::group(['prefix' => 'draft'], function () {
