@@ -147,14 +147,17 @@ abstract class AbstractSkin implements ComponentInterface
      * get view file directory path
      *
      * @param string $name view name
+     * @param string $path view path
      * @return string
      */
-    public function getViewPath($name = '')
+    public function getViewPath($name, $path = null)
     {
-        if ($name !== '') {
-            $name = $this->delimiter . ltrim($name, $this->delimiter);
+        $name = $this->delimiter . ltrim($name, $this->delimiter);
+
+        if ($path === null) {
+            $path = $this->path;
         }
-        return $this->path . $name;
+        return $path . $name;
     }
 
     /**
