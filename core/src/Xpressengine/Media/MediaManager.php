@@ -243,13 +243,15 @@ class MediaManager
     /**
      * 섬네일 생성
      *
-     * @param Media       $media media instance
-     * @param string|null $type  섬네일 생성 방식
+     * @param Media       $media      media instance
+     * @param string|null $type       섬네일 생성 방식
+     * @param array|null  $dimensions 섬네일 크기
      * @return Collection|Image[]
      */
-    public function createThumbnails(Media $media, $type = null)
+    public function createThumbnails(Media $media, $type = null, array $dimensions = null)
     {
         $type = strtolower($type ?: $this->config['type']);
+        $dimensions = $dimensions ?: $this->config['dimensions'];
         $handler = $this->getHandlerByMedia($media);
 
         if (!$content = $handler->getPicture($media)) {
@@ -257,7 +259,7 @@ class MediaManager
         }
 
         $thumbnails = [];
-        foreach ($this->config['dimensions'] as $code => $dimension) {
+        foreach ($dimensions as $code => $dimension) {
             $command = $this->factory->make($type);
             $command->setDimension(new Dimension($dimension['width'], $dimension['height']));
 
