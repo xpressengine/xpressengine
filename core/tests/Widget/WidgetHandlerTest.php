@@ -360,31 +360,6 @@ namespace Xpressengine\Tests\Widget {
         }
 
         /**
-         * testShortWidgetId
-         *
-         * @return void
-         */
-        public function testShortWidgetId()
-        {
-            $shortWidgetId = shortWidgetId('widget/xpressengine@testWidgetId');
-            $this->assertEquals('xpressengine@testWidgetId', $shortWidgetId);
-        }
-
-        /**
-         * testFullWidgetId
-         *
-         * @return void
-         */
-        public function testFullWidgetId()
-        {
-            $fullWidgetId1 = fullWidgetId('xpressengine@testWidgetId');
-            $fullWidgetId2 = fullWidgetId('widget/xpressengine@testWidgetId');
-
-            $this->assertEquals('widget/xpressengine@testWidgetId', $fullWidgetId1);
-            $this->assertEquals('widget/xpressengine@testWidgetId', $fullWidgetId2);
-        }
-
-        /**
          * setUp
          *
          * @return void
