@@ -1,11 +1,11 @@
 import griper from 'griper';
 
-$('#btnCreateCategory').on('click', () => {
-  var _this = this;
+$('#btnCreateCategory').on('click', (e) => {
+  var _this = e.target;
   var id = $(_this).closest('form').find('[name="id"]').val();
   var params = {};
 
-  if (id == '') {
+  if (!id) {
     griper.form($(_this), 'You must first create a category ID.');
 
     return;
