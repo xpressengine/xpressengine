@@ -1,15 +1,16 @@
 import griper from 'griper';
 
-var storeCategory = function (obj) {
+$('#btnCreateCategory').on('click', () => {
+  var _this = this;
+  var id = $(_this).closest('form').find('[name="id"]').val();
   var params = {};
-  var id = $(obj).closest('form').find('[name="id"]').val();
 
   if (id == '') {
-    griper.form($(obj), 'You must first create a category ID.');
+    griper.form($(_this), 'You must first create a category ID.');
 
     return;
   } else {
-    griper.form.fn.clear($(obj).closest('form'));
+    griper.form.fn.clear($(_this).closest('form'));
   }
 
   params.categoryName = id;
@@ -18,14 +19,14 @@ var storeCategory = function (obj) {
     type: 'post',
     dataType: 'json',
     data: params,
-    url: storeCategory.url,
+    url: storeCategoryInfo.url,
     success: function (data) {
-      var section = $(obj).closest('.__xe_df_category');
+      var section = $(_this).closest('.__xe_df_category');
       section.find('[name="categoryId"]').val(data.id);
       section.find('button').hide();
       section.append(
-       $('<a>').text(storeCategory.text).prop('target', '_blank').prop('href', '/settings/category/' + data.id)
-     );
+        $('<a>').text(storeCategoryInfo.text).prop('target', '_blank').prop('href', '/settings/category/' + data.id)
+      );
     },
   });
-};
+});
