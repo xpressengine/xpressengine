@@ -127,13 +127,16 @@ class Translator extends NamespacedItemResolver implements TranslatorInterface
     }
 
     /**
-     * 로케일에 해당하는 문자열 반환
+     * 로케일에 해당하는 문자열 반환, 지정된 로케일이 없을 경우 현재 지정된 로케일을 사용
      *
      * @param string $locale 선택 로케일
      * @return string
      */
-    public function getLocaleText($locale)
+    public function getLocaleText($locale = null)
     {
+        if($locale === null) {
+            $locale = $this->getLocale();
+        }
         return isset($this->texts[$locale]) ? $this->texts[$locale] : $locale;
     }
 
