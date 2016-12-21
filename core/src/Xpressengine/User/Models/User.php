@@ -54,7 +54,9 @@ class User extends DynamicModel implements UserInterface
         'passwordUpdatedAt'
     ];
 
-    protected $hidden = ['password'];
+    protected $hidden = ['password', 'rememberToken'];
+
+    protected $appends = ['profileImage'];
 
     /**
      * @var \Closure 회원의 프로필 이미지 Resolver.
@@ -133,6 +135,11 @@ class User extends DynamicModel implements UserInterface
     public function pendingEmail()
     {
         return $this->hasOne(PendingEmail::class, 'userId');
+    }
+
+    public function getProfileImageAttribute()
+    {
+        return $this->getProfileImage();
     }
 
     /**
