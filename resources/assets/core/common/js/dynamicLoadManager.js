@@ -67,7 +67,7 @@ var DynamicLoadManager = (function (exports) {
 
       var src = Utils.asset(url);
 
-      if (!_assets.js.hasOwnProperty(src)) {
+      if (!_assets.js.hasOwnProperty(src) && !$('script[src*=' + src + ']').length) {
 
         var el = document.createElement('script');
 
@@ -98,7 +98,7 @@ var DynamicLoadManager = (function (exports) {
 
       var src = Utils.asset(url);
 
-      if (!_assets.css.hasOwnProperty(src)) {
+      if (!_assets.css.hasOwnProperty(src) && !$('link[href*=' + src + ']').length) {
 
         var $css = $('<link>', { rel: 'stylesheet', type: 'text/css', href: src });
 
