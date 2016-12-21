@@ -79,6 +79,7 @@ class ThemeMigration extends Migration
             'useFooterLinks' => 'N',
             'footerLinkIcon' => [],
             'footerLinkUrl' => [],
+            'useMultiLang' => 'Y'
         ];
 
         app('xe.theme')->setThemeConfig('theme/alice@alice.0', array_merge($default, $multiLines, $singleLines));
