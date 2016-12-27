@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>Theme - xe-ui-component</title>
+
+    <!-- core -->
+    <!-- core -->
+    <link href="../../../assets/core/common/css/xe-common.css" rel="stylesheet" media="all">
+    <link href="../../../assets/core/xe-ui-component/xe-ui-component.css" rel="stylesheet" media="all">
+    <link href="http://cdn.jsdelivr.net/xeicon/2.0.0/xeicon.min.css" rel="stylesheet" media="all">
+    <script>var xeBaseURL = '../../../';</script>
+    <script src="../../../assets/core/common/js/dynamicLoadManager.js"></script>
+    <script src="../../../assets/jspm_packages/system.js"></script>
+    <script src="../../../assets/systemjs.config.js"></script>
+    <script src="../../../assets/vendor/jquery/jquery.min.js"></script>
+    <script src="../../../assets/core/common/js/xe.bundle.js"></script>
+
+    <!-- additional -->
+    <link href="./sample/css/layout.css" rel="stylesheet" media="all">
+    <link href="./sample/css/prism.css" rel="stylesheet" media="all">
+    <script src="./sample/js/layout.js"></script>
+    <script src="./sample/js/prism.js"></script>
+    <script src="../../../assets/core/xe-ui-component/js/xe-lightbox.js"></script>
+    <style type="text/css">
+        .xe-btn {
+          margin-top: 20px;
+        }
+    </style>
+</head>
+<body class="body sub-skin desktop">
+    <div class="main-wrap transition">
+        <div class="sub-content xe-container ui-contents">
+            <!-- sub content area -->
+            <h2>loading</h2>
+            <p> </p>
+            <ul class="index-list">
+                <li><a href="#example">Type1</a></li>
+                <li><a href="#example">Type2</a></li>
+            </ul>
+            <h3><a href="#loading" name="loading">type1</a></h3>
+            <div class="xe-row">
+                <div class="xe-col-md-4">
+                    <p>
+                      html/css 를 이용한 로딩 아이콘입니다. <br>
+                      (ie9 를 대응하기 위하여 css 핵이 사용하였습니다.) <br>
+                      z-index 가 101로 적용하였으며 dim 와 같이 사용할수 있습니다. <br>
+                      화면 중앙에 사용시 xe-loading 에 xe-fixed 클래스를 추가 부탁드립니다.
+                    </p>
+                </div>
+                <div class="xe-col-md-8">
+                    <pre><code class="language-markup">
+&lt;div class=&quot;xe-loading&quot;&gt;
+  &lt;div class=&quot;xe-loading-inner&quot;&gt;
+    &lt;span class=&quot;xe-sr-only&quot;&gt;불러오는중&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+                    </code></pre>
+                    <div class="xe-example">
+                      <div class="xe-loading">
+                        <div class="xe-loading-inner">
+                          <span class="xe-sr-only">불러오는중</span>
+                        </div>
+                      </div>
+                      <br>
+                      <button type="button" class="xe-btn xe-btn">xe-fixed 추가</button>
+                    </div>
+                </div>
+            </div>
+            
+            <h3><a href="#loading" name="loading">type2</a></h3>
+            <div class="xe-row">
+                <div class="xe-col-md-4">
+                    <p>
+                    </p>
+                </div>
+                <div class="xe-col-md-8">
+                    <pre><code class="language-markup">
+&lt;div class=&quot;xe-loading2&quot;&gt;
+  &lt;div class=&quot;xe-loading-inner&quot;&gt;
+    &lt;span class=&quot;xe-sr-only&quot;&gt;불러오는중&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+                    </code></pre>
+                    <div class="xe-example">
+                      <div class="xe-loading2">
+                        <div class="xe-loading-inner">
+                          <span class="xe-sr-only">불러오는중</span>
+                        </div>
+                      </div>
+                      <br>
+                      <button type="button" class="xe-btn xe-btn">xe-fixed 추가</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="dim"></div>
+<script>
+  $('.xe-btn').on('click', function (){
+    $('.xe-loading, .xe-loading2').removeClass('xe-fixed');
+    $(this).prev().prev().toggleClass('xe-fixed');
+    $('.dim').css('display', 'block');
+  });
+  $('.dim').on('click', function (){
+    $('.xe-loading, .xe-loading2').removeClass('xe-fixed');
+    $(this).css('display', 'none');
+  });
+</script>
+</body>
+</html>
