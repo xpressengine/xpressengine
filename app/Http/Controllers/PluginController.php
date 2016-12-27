@@ -165,6 +165,7 @@ class PluginController extends Controller
      *
      * @param ComposerFileWriter $writer
      * @param int                $timeLimit
+     * @param null               $callback
      */
     protected function reserveOperation(ComposerFileWriter $writer, $timeLimit, $callback = null)
     {

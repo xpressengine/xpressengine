@@ -13,8 +13,12 @@
  */
 namespace Xpressengine\Plugin\Composer;
 
+use Composer\EventDispatcher\Event as InitEvent;
+use Composer\Installer\InstallerEvent;
 use Composer\Plugin\CommandEvent;
 use Composer\Script\Event;
+use Composer\Script\Event as ScriptEvent;
+use Xpressengine\Installer\XpressengineInstaller;
 use Xpressengine\Plugin\MetaFileReader;
 use Xpressengine\Plugin\PluginScanner;
 
@@ -38,6 +42,8 @@ class Composer
 
     protected static $installedFlagPath = 'storage/app/installed';
 
+    public static $isPluginMode = false;
+
     public static $basePlugins = [
         'xpressengine-plugin/alice' => '0.9.5',
         'xpressengine-plugin/board' => '0.9.10',
@@ -54,6 +60,14 @@ class Composer
         'xpressengine-plugin/widget_page' => '0.9.0'
     ];
 
+    protected static $enabled;
+    public static $changed = [];
+
+    public static function init(InitEvent $event)
+    {
+        //dd($event);
+    }
+
     /**
      * composer가 실행될 때 호출된다. composer.plugins.json 파일이 있는지 조사하고, 생성한다.
      *
@@ -61,14 +75,17 @@ class Composer
      *
      * @return void
      */
-    public static function init(CommandEvent $event)
+    public static function command(CommandEvent $event)
     {
         $path = static::$composerFile;
         $writer = self::getWriter($path);
+        $writer->reset();
 
         // XE가 설치돼 있지 않을 경우, base plugin require에 추가
         if (!file_exists(static::$installedFlagPath)) {
-            $writer->reset();
+            if (!defined('__XE_PLUGIN_MODE__')) {
+                define('__XE_PLUGIN_MODE__', true);
+            }
             foreach (static::$basePlugins as $plugin => $version) {
                 if ($writer->get('replace.'.$plugin) === null) {
                     $writer->install($plugin, $version, date("Y-m-d H:i:s"));
@@ -78,16 +95,16 @@ class Composer
                     );
                 }
             }
-            if (!defined('__XE_PLUGIN_MODE__')) {
-                define('__XE_PLUGIN_MODE__', true);
-            }
             static::applyRequire($writer);
-            $event->getOutput()->writeln("xpressengine-installer: running in update mode");
+            $event->getOutput()->writeln("xpressengine-installer: running in initialize mode");
         } else {
-            static::applyRequire($writer);
-            if (static::isUpdateMode($event)) {
+
+            // 플러그인 명령을 실행한 경우
+            if (defined('__XE_PLUGIN_MODE__')) {
+                static::applyRequire($writer);
                 $writer->setUpdateMode();
                 $event->getOutput()->writeln("xpressengine-installer: running in update mode");
+            // composer를 직접 실행한 경우
             } else {
                 $writer->setFixMode();
                 $event->getOutput()->writeln("xpressengine-installer: running in fix mode");
@@ -96,6 +113,46 @@ class Composer
         $writer->write();
 
         $event->getOutput()->writeln("xpressengine-installer: Plugin composer file[$path] is written");
+    }
+
+    public static function preDependencySolve(InstallerEvent $event)
+    {
+        //if(defined('__XE_PLUGIN_MODE__')) {
+        //    return;
+        //}
+        //
+        //$argc = array_get($GLOBALS, 'argc', 0);
+        //if($argc > 1) {
+        //    $packages = $GLOBALS['argv'][$argc - 1];
+        //    if(strpos($packages, 'xpressengine-plugin') !== 0) {
+        //        throw new \Exception("xpressengine-installer: check file[".static::$composerFile."]. this file is not correct");
+        //    }
+        //}
+    }
+
+    public static function postDependencySolve(InstallerEvent $event)
+    {
+        //if(defined('__XE_PLUGIN_MODE__')) {
+        //    return;
+        //}
+        //
+        //$extra = $event->getComposer()->getPackage()->getExtra();
+        //
+        //$uninstall = array_get($extra, 'xpressengine-plugin.operation.uninstall', []);
+        //foreach ($event->getOperations() as $operation) {
+        //    /** @var UpdateOperation $operation */
+        //    if (is_subclass_of($operation, UpdateOperation::class) || is_subclass_of($operation, InstallOperation::class)) {
+        //        $target = $operation->getInitialPackage();
+        //        if(in_array($target->getName(), $uninstall)) {
+        //            throw new \Exception('xpressengine-installer: To install or update the package requested to delete is not allowed.', 66);
+        //        }
+        //    }
+        //}
+    }
+
+    public static function preUpdateOrInstall(ScriptEvent $event)
+    {
+        //dd($event);
     }
 
     /**
@@ -114,8 +171,9 @@ class Composer
 
         if (!file_exists(static::$installedFlagPath)) {
             $writer->cleanOperation();
+        } else {
+            $writer->set('xpressengine-plugin.operation.changed', XpressengineInstaller::$changed);
         }
-
         $writer->reset()->write();
     }
 

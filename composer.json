@@ -20,7 +20,7 @@
     "require": {
         "php": ">=5.5.9",
         "wikimedia/composer-merge-plugin": "~1.3",
-        "xpressengine/installer": "dev-refactoring-plugin",
+        "xpressengine/installer": "dev-develop",
         "laravel/framework": "5.1.*",
         "composer/composer": "~1.2.0",
         "wittiws/phpquery": "dev-master",
@@ -79,14 +79,23 @@
         ]
     },
     "scripts": {
-        "command": [
+        "init": [
             "Xpressengine\\Plugin\\Composer\\Composer::init"
         ],
-        "post-root-package-install": [
-            "php -r \"copy('.env.example', '.env');\""
+        "command": [
+            "Xpressengine\\Plugin\\Composer\\Composer::command"
         ],
-        "post-create-project-cmd": [
-            "php artisan key:generate"
+        "pre-dependencies-solving": [
+            "Xpressengine\\Plugin\\Composer\\Composer::preDependencySolve"
+        ],
+        "post-dependencies-solving": [
+            "Xpressengine\\Plugin\\Composer\\Composer::postDependencySolve"
+        ],
+        "pre-update-cmd": [
+            "Xpressengine\\Plugin\\Composer\\Composer::preUpdateOrInstall"
+        ],
+        "pre-install-cmd": [
+            "Xpressengine\\Plugin\\Composer\\Composer::preUpdateOrInstall"
         ],
         "post-install-cmd": [
             "Xpressengine\\Plugin\\Composer\\Composer::postUpdate",
@@ -97,6 +106,12 @@
             "Xpressengine\\Plugin\\Composer\\Composer::postUpdate",
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
             "php artisan optimize"
+        ],
+        "post-root-package-install": [
+            "php -r \"copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "php artisan key:generate"
         ]
     },
     "config": {

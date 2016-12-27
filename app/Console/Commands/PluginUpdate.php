@@ -127,7 +127,13 @@ class PluginUpdate extends PluginCommand
         $this->warn('Composer update command is running.. It may take up to a few minutes.');
         $this->line(" composer update --prefer-lowest --with-dependencies $vendorName/*");
         try {
-            $result = $this->runComposer(base_path(), "update --prefer-lowest --with-dependencies $vendorName/*");
+            $result = $this->runComposer([
+                                             'command' => 'update',
+                                             "--prefer-lowest",
+                                             "--with-dependencies",
+                                             '--working-dir' => base_path(),
+                                             'packages' => ["$vendorName/*"]
+                                         ]);
         } catch (\Exception $e) {
             ;
         }
@@ -155,17 +161,17 @@ class PluginUpdate extends PluginCommand
         } elseif (array_get($changed, 'updated.'.$name)) {
             $this->output->warning(
                 // $name:$version 플러그인을 업데이트하였으나 다른 버전으로 업데이트되었습니다. 플러그인 간의 의존관계로 인해 다른 버전으로 업데이트되었을 가능성이 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다.
-                "You update the plug-in of the \"".$name."\", but has now been updated on other versions(".$version."). Because of the dependencies between plug-ins, there is a possibility that has been updated in the other version. Please check the plug-in dependencies."
+                "The plugin[".$name."] install successed. But another version[".$version."] is installed. Because of dependencies between plugins, it is possible that they have been updated to a different version. Please check the plugin dependencies."
             );
         } elseif($plugin->getVersion() === $version) {
             $this->output->warning(
                 // 동일한 버전의 플러그인이 이미 설치되어 있으므로 업데이트가 되지 않았습니다.
-                "Because the plug-ins of the same version is installed, the update was not."
+                "Plugin update skipped. Because the same version of plugin already was installed"
             );
         } else {
             $this->output->warning(
                 // $name:$version 플러그인을 업데이트하지 못했습니다. 플러그인 간의 의존관계로 인해 업데이트가 불가능할 수도 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다.
-                "Do not update the plug-in of the $name:$version. Update for the dependencies between plug-ins may become impossible. Please check the plug-in dependencies."
+                "Plugin update failed. It may have failed due to dependencies between plugins. Please check the plugin dependencies."
             );
         }
     }

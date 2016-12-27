@@ -99,13 +99,11 @@ class PluginUninstall extends PluginCommand
         // 플러그인 uninstall 실행
         $handler->uninstallPlugin($id);
 
-        // - dependent plugins 갱신
-        $writer->resolvePlugins();
+        // - plugins require info 갱신
+        $writer->reset()->cleanOperation();
 
         // - require에서 삭제할 플러그인 제거
-        $writer->uninstall($name);
-
-        $writer->write();
+        $writer->uninstall($name, 0)->write();
 
         $vendorName = PluginHandler::PLUGIN_VENDOR_NAME;
 
@@ -115,7 +113,13 @@ class PluginUninstall extends PluginCommand
         $this->line(" composer update --prefer-lowest --with-dependencies $vendorName/$id");
 
         try {
-            $result = $this->runComposer(base_path(), "update --prefer-lowest --with-dependencies $vendorName/$id");
+            $result = $this->runComposer([
+                                             'command' => 'update',
+                                             "--prefer-lowest",
+                                             "--with-dependencies",
+                                             '--working-dir' => base_path(),
+                                             'packages' => ["$vendorName/$id"]
+                                         ]);
         } catch (\Exception $e) {
             ;
         }
