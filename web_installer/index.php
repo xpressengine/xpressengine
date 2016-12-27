@@ -128,8 +128,8 @@
     <script src="../assets/core/common/js/dynamicLoadManager.js" type="text/javascript"></script>
     <script src="../assets/vendor/jquery/jquery.min.js"></script>
 
-    <script src="../assets/jspm_packages/system.js"></script>
-    <script src="../assets/systemjs.config.js"></script>
+    <script src="../assets/vendor/vendor.bundle.js" type="text/javascript"></script>
+    <script src="../assets/bundle.js" type="text/javascript"></script>
     <script src="../assets/core/common/js/xe.bundle.js"></script>
 
     <link rel="stylesheet" href="../assets/core/xe-ui-component/xe-ui-component.css">
