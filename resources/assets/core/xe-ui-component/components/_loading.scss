@@ -1,0 +1,144 @@
+//
+// loading
+// --------------------------------------------------
+
+@mixin loadinglayout($type, $delay, $bgcolor) {
+  content: "";
+  position: absolute;
+  @if $type == type {
+    width: 10px;
+    height: 10px;
+    background-color: #eae7e4;
+    -webkit-animation: keyframesloading 0.6s infinite both;
+    animation: keyframesloading 0.6s infinite both;
+    -webkit-animation-delay: $delay;
+    animation-delay: $delay;
+  } @else if $type == type2 {
+    top: 0;
+    width: 5px;
+    height: 12px;
+    background-color: $bgcolor;
+    -webkit-animation: keyframesloading2 1s infinite both;
+    animation: keyframesloading2 1s infinite both;
+    -webkit-animation-delay: $delay;
+    animation-delay: $delay;
+  }
+  z-index: 101;
+}
+@mixin xe-fixed() {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 101;
+}
+
+// Base class
+.xe-loading {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  &:before {
+    @include loadinglayout(type, 0, #eae7e4);
+    top: 0;
+    right: 0;
+  }
+  .xe-loading-inner {
+    @include loadinglayout(type, 150ms, #eae7e4);
+    bottom: 0;
+    right: 0;
+    &:before {
+      @include loadinglayout(type, 300ms, #eae7e4);
+      bottom: 0;
+      left: -14px;
+    }
+    &:after {
+      @include loadinglayout(type, 450ms, #eae7e4);
+      top: -14px;
+      left: -14px;
+    }
+  }
+  &.xe-fixed {
+    @include xe-fixed();
+  }
+}
+// Base class
+.xe-loading2 {
+  position: relative;
+  width: 19px;
+  height: 22px;
+  background: transparent;
+  &:before {
+    @include loadinglayout(type2, 0, #33ffcd);
+    left:: 0;
+  }
+  .xe-loading-inner {
+    position: absolute;
+    top: 0;
+    left: 7px;
+    &:after {
+      @include loadinglayout(type2, 100ms, #9bffe7);
+      left: 0;
+    }
+    &:before {
+      @include loadinglayout(type2, 200ms, #d9d9d9);
+      left: 7px;
+    }
+  }
+  &.xe-fixed {
+    @include xe-fixed();
+  }
+}
+
+@keyframes keyframesloading {
+  from, to, 60%{ background: #eae7e4}
+  65%, 70% { background: #2e2f34}
+  75%, 100% { background: #6e7078}
+}
+
+@keyframes keyframesloading2 {
+  from, to{ transform: translateY(0)}
+  50%{ transform: translateY(10px)}
+}
+
+// IE9 CSS
+.xe-loading-inner {
+  display: none\0;
+}
+.xe-loading,.xe-loading2 {
+  &:before {
+    display: none\0;
+  }
+}
+.xe-loading {
+  background: url(img/square.gif) 0 0 no-repeat\0;
+}
+.xe-loading2 {
+  height: 30px\0;
+  background: url(img/stick.gif) 0 0 no-repeat\0;
+}
+@media all and (-ms-high-contrast:none){
+ .xe-loading-inner {
+   display: block\0;
+ }
+ .xe-loading,.xe-loading2 {
+   &:before {
+     display: block\0;
+   }
+ }
+ .xe-loading {
+   background: transparent\0;
+ }
+ .xe-loading2 {
+   height: 30px\0;
+   background: transparent\0;
+ }
+ 
+}
+
+
+
+
+
+
