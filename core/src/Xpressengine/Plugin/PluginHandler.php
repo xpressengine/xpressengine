@@ -406,8 +406,9 @@ class PluginHandler
                 /** @var PluginEntity $plugin */
                 $installedVersion = $plugin->getInstalledVersion();
                 $sourceVersion = $plugin->getVersion();
-                if ($sourceVersion !== $installedVersion) {
-                    if ($plugin->checkInstalled($installedVersion) && $plugin->checkUpdated($installedVersion)) {
+
+                if ($plugin->getStatus() == static::STATUS_ACTIVATED && $sourceVersion !== $installedVersion) {
+                    if ($plugin->checkInstalled() && $plugin->checkUpdated()) {
                         $this->setPluginStatus(
                             $plugin->getId(),
                             ['version' => $sourceVersion, 'status' => $plugin->getStatus()]
