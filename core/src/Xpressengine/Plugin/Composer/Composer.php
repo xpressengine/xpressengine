@@ -13,11 +13,8 @@
  */
 namespace Xpressengine\Plugin\Composer;
 
-use Composer\EventDispatcher\Event as InitEvent;
-use Composer\Installer\InstallerEvent;
 use Composer\Plugin\CommandEvent;
 use Composer\Script\Event;
-use Composer\Script\Event as ScriptEvent;
 use Xpressengine\Installer\XpressengineInstaller;
 use Xpressengine\Plugin\MetaFileReader;
 use Xpressengine\Plugin\PluginScanner;
@@ -63,11 +60,6 @@ class Composer
     protected static $enabled;
     public static $changed = [];
 
-    public static function init(InitEvent $event)
-    {
-        //dd($event);
-    }
-
     /**
      * composer가 실행될 때 호출된다. composer.plugins.json 파일이 있는지 조사하고, 생성한다.
      *
@@ -77,6 +69,10 @@ class Composer
      */
     public static function command(CommandEvent $event)
     {
+        if (!in_array($event->getCommandName(), ['update', 'install'])) {
+            return;
+        }
+
         $path = static::$composerFile;
         $writer = self::getWriter($path);
         $writer->reset();
@@ -113,46 +109,6 @@ class Composer
         $writer->write();
 
         $event->getOutput()->writeln("xpressengine-installer: Plugin composer file[$path] is written");
-    }
-
-    public static function preDependencySolve(InstallerEvent $event)
-    {
-        //if(defined('__XE_PLUGIN_MODE__')) {
-        //    return;
-        //}
-        //
-        //$argc = array_get($GLOBALS, 'argc', 0);
-        //if($argc > 1) {
-        //    $packages = $GLOBALS['argv'][$argc - 1];
-        //    if(strpos($packages, 'xpressengine-plugin') !== 0) {
-        //        throw new \Exception("xpressengine-installer: check file[".static::$composerFile."]. this file is not correct");
-        //    }
-        //}
-    }
-
-    public static function postDependencySolve(InstallerEvent $event)
-    {
-        //if(defined('__XE_PLUGIN_MODE__')) {
-        //    return;
-        //}
-        //
-        //$extra = $event->getComposer()->getPackage()->getExtra();
-        //
-        //$uninstall = array_get($extra, 'xpressengine-plugin.operation.uninstall', []);
-        //foreach ($event->getOperations() as $operation) {
-        //    /** @var UpdateOperation $operation */
-        //    if (is_subclass_of($operation, UpdateOperation::class) || is_subclass_of($operation, InstallOperation::class)) {
-        //        $target = $operation->getInitialPackage();
-        //        if(in_array($target->getName(), $uninstall)) {
-        //            throw new \Exception('xpressengine-installer: To install or update the package requested to delete is not allowed.', 66);
-        //        }
-        //    }
-        //}
-    }
-
-    public static function preUpdateOrInstall(ScriptEvent $event)
-    {
-        //dd($event);
     }
 
     /**

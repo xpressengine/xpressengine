@@ -79,17 +79,8 @@
         ]
     },
     "scripts": {
-        "init": [
-            "Xpressengine\\Plugin\\Composer\\Composer::init"
-        ],
         "command": [
             "Xpressengine\\Plugin\\Composer\\Composer::command"
-        ],
-        "pre-dependencies-solving": [
-            "Xpressengine\\Plugin\\Composer\\Composer::preDependencySolve"
-        ],
-        "post-dependencies-solving": [
-            "Xpressengine\\Plugin\\Composer\\Composer::postDependencySolve"
         ],
         "pre-update-cmd": [
             "Xpressengine\\Plugin\\Composer\\Composer::preUpdateOrInstall"
