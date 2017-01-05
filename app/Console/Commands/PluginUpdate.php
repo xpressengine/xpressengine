@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Process\Process;
+use Xpressengine\Plugin\Composer\Composer;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
@@ -121,6 +122,9 @@ class PluginUpdate extends PluginCommand
         $writer->update($name, $version, 0)->write();
 
         $vendorName = PluginHandler::PLUGIN_VENDOR_NAME;
+
+        Composer::setPackagistToken(config('xe.plugin.packagist.token'));
+        Composer::setPackagistUrl(config('xe.plugin.packagist.url'));
 
         // composer update실행(composer update --prefer-lowest --with-dependencies xpressengine-plugin/plugin_id)
         // composer update를 실행합니다. 최대 수분이 소요될 수 있습니다.

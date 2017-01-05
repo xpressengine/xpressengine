@@ -88,6 +88,9 @@
         "pre-install-cmd": [
             "Xpressengine\\Plugin\\Composer\\Composer::preUpdateOrInstall"
         ],
+        "post-dependencies-solving": [
+            "Xpressengine\\Plugin\\Composer\\Composer::postDependenciesSolving"
+        ],
         "post-install-cmd": [
             "Xpressengine\\Plugin\\Composer\\Composer::postUpdate",
             "Illuminate\\Foundation\\ComposerScripts::postInstall",

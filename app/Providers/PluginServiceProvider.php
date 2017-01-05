@@ -138,7 +138,7 @@ class PluginServiceProvider extends ServiceProvider
         $this->app->singleton(
             ['xe.plugin.writer' => ComposerFileWriter::class],
             function ($app) {
-                $writer = new ComposerFileWriter(storage_path('app/composer.plugins.json'), $app[PluginScanner::class], config('xe.plugin.packagist'));
+                $writer = new ComposerFileWriter(storage_path('app/composer.plugins.json'), $app[PluginScanner::class], config('xe.plugin.packagist.url'));
                 return $writer;
             }
         );

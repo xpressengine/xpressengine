@@ -389,7 +389,10 @@ return [
         'api' => [
             'url' => 'https://xpressengine.io/plugins/api/1.0'
         ],
-        'packagist' => 'https://xpressengine.io',
+        'packagist' => [
+            'url' => 'https://xpressengine.io',
+            'token' => null
+        ],
         'operation' => [
             'time_limit' => 1200
         ]

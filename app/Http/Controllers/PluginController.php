@@ -20,6 +20,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use XePresenter;
 use Xpressengine\Http\Request;
 use Xpressengine\Interception\InterceptionHandler;
+use Xpressengine\Plugin\Composer\Composer;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
@@ -214,6 +215,10 @@ class PluginController extends Controller
                         'packages' => ["$vendorName/*"]
                     ]
                 );
+
+                Composer::setPackagistToken(config('xe.plugin.packagist.token'));
+                Composer::setPackagistUrl(config('xe.plugin.packagist.url'));
+
                 $output = new BufferedOutput();
                 $application = new Application();
                 $application->setAutoExit(false); // prevent `$application->run` method from exitting the script

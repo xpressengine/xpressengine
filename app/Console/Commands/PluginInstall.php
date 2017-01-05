@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Xpressengine\Plugin\Composer\Composer;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
@@ -113,6 +114,9 @@ class PluginInstall extends PluginCommand
         $writer->install($name, $version, 0)->write();
 
         $vendorName = PluginHandler::PLUGIN_VENDOR_NAME;
+
+        Composer::setPackagistToken(config('xe.plugin.packagist.token'));
+        Composer::setPackagistUrl(config('xe.plugin.packagist.url'));
 
         // composer update실행(composer update --prefer-lowest --with-dependencies xpressengine-plugin/*)
         // composer update를 실행합니다. 최대 수 분이 소요될 수 있습니다.

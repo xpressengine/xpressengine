@@ -13,6 +13,7 @@
  */
 namespace Xpressengine\Plugin\Composer;
 
+use Composer\Installer\InstallerEvent;
 use Composer\Plugin\CommandEvent;
 use Composer\Script\Event;
 use Xpressengine\Installer\XpressengineInstaller;
@@ -34,6 +35,8 @@ class Composer
     protected static $pluginsDir = 'plugins';
 
     protected static $packagistUrl = 'https://xpressengine.io';
+
+    protected static $packagistToken = null;
 
     protected static $composerFile = 'storage/app/composer.plugins.json';
 
@@ -58,7 +61,24 @@ class Composer
     ];
 
     protected static $enabled;
+
     public static $changed = [];
+
+    /**
+     * @param string $ackagistUrl
+     */
+    public static function setPackagistUrl($ackagistUrl)
+    {
+        self::$packagistUrl = $ackagistUrl;
+    }
+
+    /**
+     * @param null $packagistToken
+     */
+    public static function setPackagistToken($packagistToken)
+    {
+        self::$packagistToken = $packagistToken;
+    }
 
     /**
      * composer가 실행될 때 호출된다. composer.plugins.json 파일이 있는지 조사하고, 생성한다.
@@ -109,6 +129,21 @@ class Composer
         $writer->write();
 
         $event->getOutput()->writeln("xpressengine-installer: Plugin composer file[$path] is written");
+    }
+
+    /**
+     * preUpdateOrInstall
+     *
+     * @param Event $event
+     *
+     * @return void
+     */
+    public static function preUpdateOrInstall(Event $event)
+    {
+    }
+
+    public static function postDependenciesSolving(InstallerEvent $event)
+    {
     }
 
     /**
