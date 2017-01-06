@@ -144,6 +144,10 @@ class Composer
 
     public static function postDependenciesSolving(InstallerEvent $event)
     {
+        $io = $event->getIO();
+        $host = parse_url(static::$packagistUrl, PHP_URL_HOST);
+        $token = static::$packagistToken;
+        $io->setAuthentication($host, $token);
     }
 
     /**
