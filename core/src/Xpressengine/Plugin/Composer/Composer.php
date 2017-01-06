@@ -45,10 +45,10 @@ class Composer
     public static $isPluginMode = false;
 
     public static $basePlugins = [
-        'xpressengine-plugin/alice' => '0.9.5',
-        'xpressengine-plugin/board' => '0.9.10',
+        'xpressengine-plugin/alice' => '0.9.6',
+        'xpressengine-plugin/board' => '0.9.11',
         'xpressengine-plugin/ckeditor' => '0.9.8',
-        'xpressengine-plugin/claim' => '0.9.2',
+        'xpressengine-plugin/claim' => '0.9.3',
         'xpressengine-plugin/comment' => '0.9.6',
         'xpressengine-plugin/external_page' => '0.9.4',
         'xpressengine-plugin/google_analytics' => '0.9.2',
