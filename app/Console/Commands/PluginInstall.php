@@ -122,18 +122,16 @@ class PluginInstall extends PluginCommand
         // composer update를 실행합니다. 최대 수 분이 소요될 수 있습니다.
         $this->warn('Composer update command is running.. It may take up to a few minutes.');
         $this->line(" composer update --prefer-lowest --with-dependencies $vendorName/*");
-        try {
-            $result = $this->runComposer([
-                                             'command' => 'update',
-                                             "--prefer-lowest",
-                                             "--with-dependencies",
-                                             '--working-dir' => base_path(),
-                                             '--verbose' => '3',
-                                             'packages' => ["$vendorName/*"]
-                                         ]);
-        } catch (\Exception $e) {
-            ;
-        }
+        $result = $this->runComposer(
+            [
+                'command' => 'update',
+                "--prefer-lowest",
+                "--with-dependencies",
+                '--working-dir' => base_path(),
+                '--verbose' => '3',
+                'packages' => ["$vendorName/*"]
+            ]
+        );
 
         // composer 실행을 마쳤습니다.
         $this->warn('Composer update command is finished.'.PHP_EOL);
