@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use Xpressengine\Plugin\Composer\Composer;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
-use Xpressengine\Plugin\Exceptions\CannotDeleteActivatedPluginException;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
 
@@ -115,18 +114,15 @@ class PluginUninstall extends PluginCommand
         // composer update를 실행합니다. 최대 수분이 소요될 수 있습니다.
         $this->warn('Composer update command is running.. It may take up to a few minutes.');
         $this->line(" composer update --prefer-lowest --with-dependencies $vendorName/$id");
-
-        try {
-            $result = $this->runComposer([
-                                             'command' => 'update',
-                                             "--prefer-lowest",
-                                             "--with-dependencies",
-                                             '--working-dir' => base_path(),
-                                             'packages' => ["$vendorName/$id"]
-                                         ]);
-        } catch (\Exception $e) {
-            ;
-        }
+        $result = $this->runComposer(
+            [
+                'command' => 'update',
+                "--prefer-lowest",
+                "--with-dependencies",
+                '--working-dir' => base_path(),
+                'packages' => ["$vendorName/$id"]
+            ]
+        );
 
         // composer 실행을 마쳤습니다.
         $this->warn('Composer update command is finished.'.PHP_EOL);
