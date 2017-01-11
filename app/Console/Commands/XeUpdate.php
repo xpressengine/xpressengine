@@ -3,9 +3,6 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Process\Process;
 use Xpressengine\Interception\InterceptionHandler;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Support\Migration;
@@ -92,11 +89,7 @@ class XeUpdate extends Command
         if(!$this->option('skip-composer')) {
             $this->output->section('Composer update command is running.. It may take up to a few minutes.');
             $this->line(" composer update");
-            try {
-                $this->runComposer(base_path(), "update");
-            } catch (\Exception $e) {
-                ;
-            }
+            $result = $this->runComposer(['command' => 'update']);
         }
 
         // migration
