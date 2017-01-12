@@ -2019,6 +2019,9 @@ return [
     'installNewPlugin' => [
         'ko' => '새 플러그인 설치',
     ],
+    'installPlugin' => [
+        'ko' => '플러그인 설치',
+    ],
     'inputNewPluginId' => [
         'ko' => '새로 설치할 플러그인의 아이디를 입력하세요',
     ],

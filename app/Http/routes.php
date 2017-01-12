@@ -609,6 +609,15 @@ Route::settings(
                 ]
             );
 
+            Route::get(
+                'install',
+                [
+                    'as' => 'settings.plugins.install',
+                    'uses' => 'PluginController@getInstall',
+                    'settings_menu' => ['plugin.install']
+                ]
+            );
+
             Route::get('operation', [
                 'as' => 'settings.plugins.operation',
                 'uses' => 'PluginController@getOperation'
@@ -623,7 +632,7 @@ Route::settings(
                 '/',
                 [
                     'as' => 'settings.plugins.install',
-                    'uses' => 'PluginController@install'
+                    'uses' => 'PluginController@postInstall'
                 ]
             );
 

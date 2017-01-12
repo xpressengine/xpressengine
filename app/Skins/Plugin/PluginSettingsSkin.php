@@ -46,14 +46,25 @@ class PluginSettingsSkin extends GenericSkin
     protected static $viewDir = '';
 
     /**
+     * 스킨을 출력한다.
+     * 만약 view 이름과 동일한 메소드명이 존재하면 그 메소드를 호출한다.
+     *
+     * @return string
+     */
+    public function render()
+    {
+        $this->loadDefault();
+        return parent::render();
+    }
+
+
+    /**
      * listView
      *
      * @return \Illuminate\View\View
      */
     protected function index()
     {
-        $this->loadDefault();
-
         app('xe.frontend')->js('assets/core/xe-ui-component/js/xe-form.js')->load();
 
         app('xe.frontend')->html('plugins.updateList')->content("
@@ -76,8 +87,6 @@ class PluginSettingsSkin extends GenericSkin
      */
     protected function show()
     {
-        $this->loadDefault();
-
         app('xe.frontend')->js([
            'assets/vendor/swiper2/idangerous.swiper.js',
            'assets/core/plugin/js/plugin.js'
@@ -126,6 +135,7 @@ class PluginSettingsSkin extends GenericSkin
             'uiobject' => 'primary',
             'FieldType' => 'default',
             'FieldSkin' => 'default',
+            'toggleMenu' => 'default',
         ]);
     }
 

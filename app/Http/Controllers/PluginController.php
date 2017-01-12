@@ -10,7 +10,9 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use Composer\Console\Application;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Session\SessionManager;
+use Illuminate\Support\Collection;
 use Log;
 use Redirect;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -76,7 +78,24 @@ class PluginController extends Controller
         return XePresenter::makeApi(['type' => 'success', 'message' => '삭제되었습니다.']);
     }
 
-    public function install(
+    public function getInstall(Request $request, PluginProvider $provider)
+    {
+        $query = $request->get('q');
+        if($query) {
+            $query = explode(' ', $query);
+        }
+
+        $componentTypes = $this->getComponentTypes();
+
+        $packages = $provider->search($query, $request->get('page', 1));
+
+        $items = new Collection($packages->data);
+        $plugins = new LengthAwarePaginator($items, $packages->total, $packages->per_page, $packages->current_page);
+
+        return XePresenter::make('install', compact('plugins', 'componentTypes'));
+    }
+
+    public function postInstall(
         Request $request,
         PluginHandler $handler,
         PluginProvider $provider,
@@ -258,6 +277,10 @@ class PluginController extends Controller
         $componentTypes = $this->getComponentTypes();
 
         $plugin = $handler->getPlugin($pluginId);
+
+        if($plugin === null) {
+            throw new HttpException(404, '플러그인이 존재하지 않습니다.');
+        }
 
         $provider->sync($plugin);
 
