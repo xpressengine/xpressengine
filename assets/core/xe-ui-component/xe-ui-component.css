@@ -4892,16 +4892,6 @@ input[type="button"].xe-btn-block {
   opacity: 1;
 }
 
-#xe-galleryOverlay:after {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 80px;
-  background-image: linear-gradient(0deg, transparent, rgba(0, 0, 0, 0.4));
-  content: "";
-}
-
 /* This class will trigger the animation */
 #xe-gallerySlider {
   height: 100%;
@@ -4916,7 +4906,6 @@ input[type="button"].xe-btn-block {
 }
 
 #xe-gallerySlider .xe-placeholder {
-  background: url("../../../assets_temp/lightbox/preloader.gif") no-repeat center center;
   height: 100%;
   line-height: 1px;
   text-align: center;
