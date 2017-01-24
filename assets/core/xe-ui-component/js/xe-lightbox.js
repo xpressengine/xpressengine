@@ -26,8 +26,8 @@
 (function ($) {
   var $overlay = $('<div id="xe-galleryOverlay">');
   var $slider = $('<div id="xe-gallerySlider">');
-  var $prevArrow = $(); //$('<a id="xe-$prevArrow"><i class="xi-angle-left-thin"></i></a>'); //버튼 영역 임시 제거 TODO 추후 추가되어야함.
-  var $nextArrow = $(); //$('<a id="xe-$nextArrow"><i class="xi-angle-right-thin"></i></a>');//버튼 영역 임시 제거 TODO 추후 추가되어야함.
+  var $prevArrow = $('<a id="xe-prevArrow"><i class="xi-angle-left-thin"></i></a>'); //버튼 영역 임시 제거 TODO 추후 추가되어야함.
+  var $nextArrow = $('<a id="xe-nextArrow"><i class="xi-angle-right-thin"></i></a>');//버튼 영역 임시 제거 TODO 추후 추가되어야함.
   var $overlayClose = $('<button id="btn-overlay-close"><i class="xi-close"></i></button>');
   var $overlayVisible = false;
 
@@ -48,11 +48,11 @@
 
     // Hide the gallery if the background is touched / clicked
     $slider.append($placeholders).on('click', function (e) {
-      var $target = $(e.target);
-
-      if ($target.hasClass('xe-placeholder')) {
-        hideOverlay();
-      }
+      // var $target = $(e.target);
+      //
+      // if ($target.hasClass('xe-placeholder')) {
+      //   hideOverlay();
+      // }
     });
 
     // Listen for touch events on the body and check if they
