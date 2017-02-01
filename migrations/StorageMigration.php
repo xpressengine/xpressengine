@@ -23,9 +23,9 @@ class StorageMigration extends Migration {
             $table->string('id', 36);
             $table->string('originId', 36)->nullable();
             $table->string('userId', 36)->nullable();
-            $table->string('disk', 20);
-            $table->string('path');
-            $table->string('filename', 100);
+            $table->string('disk', 20)->charset('latin1');
+            $table->string('path')->charset('latin1');
+            $table->string('filename', 100)->charset('latin1');
             $table->string('clientname', 100);
             $table->string('mime', 50);
             $table->integer('size');

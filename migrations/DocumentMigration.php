@@ -33,7 +33,7 @@ class DocumentMigration extends Migration
         Schema::create($table, function (Blueprint $table) {
             $table->engine = "InnoDB";
 
-            $table->string('id', 255);
+            $table->string('id', 36);
             $table = $this->setColumns($table);
 
             $table->primary(array('id'));
@@ -44,10 +44,10 @@ class DocumentMigration extends Migration
             Schema::create($revision, function (Blueprint $table) {
                 $table->engine = "InnoDB";
 
-                $table->string('revisionId', 255);
+                $table->string('revisionId', 36);
                 $table->integer('revisionNo')->default(0);
 
-                $table->string('id', 255);
+                $table->string('id', 36);
                 $table = $this->setColumns($table);
 
                 $table->primary(array('revisionId'));
@@ -65,7 +65,7 @@ class DocumentMigration extends Migration
         $schema->create($table, function (Blueprint $table) {
             $table->engine = "InnoDB";
 
-            $table->string('id', 255);
+            $table->string('id', 36);
             $table = $this->setColumns($table);
 
             $table->primary(array('id'));
@@ -78,17 +78,17 @@ class DocumentMigration extends Migration
      */
     private function setColumns(Blueprint $table)
     {
-        $table->string('parentId', 255)->default('');
+        $table->string('parentId', 36)->default('');
 
-        $table->string('instanceId', 255)->default('');
-        $table->string('type', 255)->default('');
+        $table->string('instanceId', 36)->default('');
+        $table->string('type', 36)->default('');
 
         // users
         $table->string('userType', '16')->default('normal');
-        $table->string('userId', 255);
-        $table->string('writer', 255);
+        $table->string('userId', 36);
+        $table->string('writer', 200);
         $table->string('email')->nullable();  // 비회원 작성일때 email 받기?
-        $table->string('certifyKey', 255); // nonmember document's password
+        $table->string('certifyKey', 200); // nonmember document's password
 
         // count
         $table->integer('readCount')->default(0);
@@ -104,9 +104,9 @@ class DocumentMigration extends Migration
         $table->integer('format')->default(Document::FORMAT_HTML);
 
         // search
-        $table->string('locale', 255)->default('');
+        $table->string('locale', 4)->default('');
 
-        $table->string('title', 255);
+        $table->string('title', 200);
         $table->text('content');
         $table->text('pureContent');
 
@@ -116,7 +116,7 @@ class DocumentMigration extends Migration
         $table->timestamp('deletedAt')->nullable();
 
         $table->string('head', 50);
-        $table->string('reply', 200);
+        $table->string('reply', 150);
         $table->string('ipaddress', 16);
 
         $table->index('createdAt');
