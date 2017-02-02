@@ -184,7 +184,7 @@ $(function () {
       }
 
       if (input == this.options.originName) {
-        this.setStatus(false, '현재 회원 이름입니다');
+        this.setStatus(true, '현재 회원 이름입니다');
         return false;
       }
 
@@ -262,7 +262,7 @@ $(function () {
         confirmBox: $this.find('.__xe_passwordConfirm'),
         inputCurrent: $this.find('[name=currentPassword]'),
         inputNew: $this.find('[name=password]'),
-        inputConfirm: $this.find('[name=passwordConfirmation]'),
+        inputConfirm: $this.find('[name=password_confirmation]'),
       };
       this.ui.inputNew.focusout($.proxy(this.check, this));
       this.ui.inputConfirm.focusout($.proxy(this.checkConfirm, this));
@@ -294,9 +294,9 @@ $(function () {
         type: 'POST',
         dataType: 'json',
         data: {
-          currentPassword: currentPassword,
+          current_password: currentPassword,
           password: password,
-          passwordConfirmation: passwordConfirmation,
+          password_confirmation: passwordConfirmation,
         },
         success: function (data, textStatus, jqXHR) {
           // save에 성공하면 새로고침
@@ -305,7 +305,7 @@ $(function () {
           } else {
             if (data.target == 'password') {
               _this.setStatus(_this.ui.newBox, false, data.message);
-            } else if (data.target == 'currentPassword') {
+            } else if (data.target == 'current_password') {
               _this.setStatus(_this.ui.currentBox, false, data.message);
             } else {
               _this.setStatus(_this.ui.confirmBox, false, data.message);
@@ -655,7 +655,7 @@ $(function () {
         return;
       }
 
-      form.submit();
+      this.ui.form.submit();
 
     },
   }
