@@ -35,7 +35,8 @@ $.fn.lightbox = function (options) {
   var $placeholders = $([]);
   var index = 0;
   var $this = $(this);
-  var $items = $this.find(' > ');
+  var targetSelector = $this.data('selector');
+  var $items = targetSelector ? $this.find(targetSelector) : $this.find('img');
 
   // Appending the markup to the page
   $overlay.hide().appendTo('body');
