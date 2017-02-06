@@ -106,7 +106,7 @@ class DocumentMigration extends Migration
         // search
         $table->string('locale', 4)->default('');
 
-        $table->string('title', 200);
+        $table->string('title', 180);
         $table->text('content');
         $table->text('pureContent');
 
