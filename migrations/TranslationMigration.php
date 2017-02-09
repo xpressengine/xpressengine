@@ -21,9 +21,9 @@ class TranslationMigration extends Migration {
             $table->engine = "InnoDB";
 
             $table->increments('id');
-            $table->string('namespace')->charset('latin1')->index();
-            $table->string('item')->charset('latin1')->index();
-            $table->string('locale')->charset('latin1')->index();
+            $table->string('namespace', 50)->index();
+            $table->string('item', 100)->index();
+            $table->string('locale', 6)->index();
             $table->text('value');
             $table->boolean('multiline')->default(false);
             $table->unique(array('namespace', 'item', 'locale'));
