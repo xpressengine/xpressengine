@@ -115,11 +115,11 @@ abstract class GenericTheme extends AbstractTheme
     {
         $config = $this->setting();
 
-        $theme = static::class;
+        $theme = $_theme = static::class;
 
         $view = $this->view($this->info('view', 'theme'));
 
-        return static::$handler->getViewFactory()->make($view, compact('config', 'theme'));
+        return static::$handler->getViewFactory()->make($view, compact('config', '_theme', 'theme'));
     }
 
     /**

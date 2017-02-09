@@ -17,15 +17,16 @@
   &.visible {
     opacity: 1;
   }
-  &:after {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 80px;
-    background-image: linear-gradient(0deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.4));
-    content: "";
-  }
+  //최승만 수정. 버튼 영역 클릭이 되지 않는 상태
+  //&:after {
+  //  position: absolute;
+  //  top: 0;
+  //  left: 0;
+  //  width: 100%;
+  //  height: 80px;
+  //  background-image: linear-gradient(0deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.4));
+  //  content: "";
+  //}
 }
 
 /* This class will trigger the animation */
@@ -41,7 +42,8 @@
   -webkit-transition: left 0.4s ease;
   transition: left 0.4s ease;
   .xe-placeholder {
-    background: url("../../../assets_temp/lightbox/preloader.gif") no-repeat center center;
+    //최승만 수정. TODO 추후 수정되어야함 파일이 없어서 오류 콘솔
+    //background: url("../../../assets_temp/lightbox/preloader.gif") no-repeat center center;
     height: 100%;
     line-height: 1px;
     text-align: center;

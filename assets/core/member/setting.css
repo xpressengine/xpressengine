@@ -315,12 +315,6 @@ li {
   color: #2c8beb !important;
 }
 
-.setting-card.login-connect .xe-btn xe-btn-text {
-  margin: 0 12px 0 0;
-  color: #2c8beb;
-  font-size: 15px;
-}
-
 .setting-card .setting-detail-content .text-red {
   color: #db2828 !important;
   font-size: 13px;
@@ -328,10 +322,6 @@ li {
 
 .setting-group .xe-form-control + .text-blue {
   margin-top: 6px;
-}
-
-.setting-group .text-red + .xe-btn xe-btn-text {
-  margin-left: 10px;
 }
 
 .setting-group .xe-form-control.margin {
@@ -360,12 +350,6 @@ li {
 
 .setting-card .xe-btn-group-all {
   margin: 24px 0 24px 16px;
-}
-
-.setting-card .xe-input-group .xe-btn xe-btn-text {
-  height: auto;
-  line-height: inherit;
-  padding: 0;
 }
 
 .btn-group.text-group button {
@@ -415,23 +399,6 @@ li {
   cursor: pointer;
 }
 
-.snb {
-  display: block;
-  position: fixed;
-  left: -240px;
-  top: 0;
-  bottom: 0;
-  width: 240px;
-  height: auto;
-  padding-top: 60px;
-  z-index: 1100;
-  box-sizing: border-box;
-  overflow: hidden;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  background: url(bg_set_snb.gif) 0 0 repeat-y;
-}
-
 .setting-wrap .snb-list {
   display: none;
   position: absolute;
@@ -451,7 +418,7 @@ li {
   left: 20px;
   width: 16px;
   height: 9px;
-  background: url(ico_menu_arrow.png) 0 0 no-repeat;
+  background: url(img/ico_menu_arrow.png) 0 0 no-repeat;
   background-size: 16px 9px;
   content: "";
 }
