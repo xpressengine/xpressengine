@@ -59,7 +59,7 @@ class AuthController extends Controller
         XeTheme::selectSiteTheme();
         XePresenter::setSkinTargetId('member/auth');
 
-        $this->middleware('guest', ['except' => ['getLogout', 'getConfirm']]);
+        $this->middleware('guest', ['except' => ['getLogin', 'getLogout', 'getConfirm']]);
     }
 
     /**
@@ -216,6 +216,10 @@ class AuthController extends Controller
     {
         $redirectUrl = $this->redirectPath = $request->get('redirectUrl', $urlGenerator->previous());
 
+        if(auth()->check()) {
+            return redirect($redirectUrl);
+        }
+
         // common config
         $config = app('xe.config')->get('user.common');
 
@@ -276,8 +280,10 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getLogout()
+    public function getLogout(UrlGenerator $urlGenerator, Request $request)
     {
+        $redirectUrl = $this->redirectAfterLogout = $request->get('redirectUrl', $urlGenerator->previous());
+
         $this->auth->logout();
 
         return redirect(property_exists($this, 'redirectAfterLogout') ? $this->redirectAfterLogout : '/');
