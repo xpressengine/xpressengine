@@ -1,0 +1,54 @@
+/*필요 추가 설정*/
+
+/*기본 형태*/
+.xe-form-sum {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  margin: 0;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+.xe-form-sum + .xe-form-control {
+  display: inline-block;
+  width: 95%; /*width는 앞에 텍스트영역이 구체화 하면다면 확실하게 정할수 있을듯합니다 */
+  margin-left: 80px;
+}
+
+.xe-form-sum.right {
+  left: auto;
+  right: 0;
+}
+
+.xe-form-sum.right + .xe-form-control {
+  width: 95%; /*width는 앞에 텍스트영역이 구체화 하면다면 확실하게 정할수 있을듯합니다 */
+  margin-right: 80px;
+  margin-left: 0;
+}
+/* inner 형태 */
+.xe-form-sum.inner {
+  left: 10px;
+}
+.xe-form-sum.inner.right {
+  right: 10px;
+}
+.xe-form-sum.inner + .xe-form-control {
+  display: block;
+  width: 100%;
+  margin-left: 0;
+  padding-left: 100px;
+}
+
+.xe-form-sum.inner.right {
+  left: auto;
+  right: 10px;
+}
+.xe-form-sum.inner.right + .xe-form-control {
+  display: block;
+  width: 100%;
+  margin-left: 0;
+  padding-left: 16px;
+  padding-right: 100px;
+}
