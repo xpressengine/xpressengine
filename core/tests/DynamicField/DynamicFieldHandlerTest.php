@@ -10,6 +10,9 @@ namespace Xpressengine\Tests\DynamicField;
 
 use Mockery as m;
 use PHPUnit_Framework_TestCase;
+use Xpressengine\Config\ConfigEntity;
+use Xpressengine\DynamicField\AbstractSkin;
+use Xpressengine\DynamicField\AbstractType;
 use Xpressengine\DynamicField\DynamicFieldHandler;
 
 /**
@@ -441,24 +444,129 @@ class DynamicFieldHandlerTest extends PHPUnit_Framework_TestCase
             $conn, $configHandler, $registerHandler, $view
         ])->shouldAllowMockingProtectedMethods()->makePartial();
 
+        $id = 'id';
         $config = $this->getConfigEntity();
-        $config->shouldReceive('get')->once()->with('required')->andReturn(false);
+        $config->shouldReceive('get')->with('required')->andReturn(false);
+        $config->shouldReceive('get')->with('typeId')->andReturn(TestType2::getId());
+        $config->shouldReceive('get')->with('skinId')->andReturn(TestSkin2::getId());
+        $config->shouldReceive('get')->with('id')->andReturn($id);
+
+        $type2 = new TestType2($handler);
+        $skin2 = new TestSkin2($handler);
+        $registerHandler->shouldReceive('getType')->andReturn($type2);
+        $registerHandler->shouldReceive('getSkin')->andReturn($skin2);
 
         $result =$handler->getRules($config);
-        $this->assertEquals([], $result);
-
-        $config->shouldReceive('get')->with('id')->andReturn('id');
-
-        $type = m::mock('Type', 'Xpressengine\DynamicField\AbstractType');
-        $type->shouldReceive('getRules')->andReturn([
-            'column' => 'rule',
-        ]);
-
-        $handler->shouldReceive('getByConfig')->andReturn($type);
-
-        $config->shouldReceive('get')->once()->with('required')->andReturn(true);
-        $result = $handler->getRules($config);
-
-        $this->assertEquals('rule', $result['idColumn']);
+        $this->assertEquals('required', $result[$id . 'F1']);
     }
 }
+
+class TestType2 extends AbstractType
+{
+    static protected $id = 'typeId';
+
+    /**
+     * get field type name
+     *
+     * @return string
+     */
+    public function name()
+    {
+        return 'name';
+    }
+
+    /**
+     * get field type description
+     *
+     * @return string
+     */
+    public function description()
+    {
+        return 'description';
+    }
+
+    /**
+     * return columns
+     *
+     * @return \Xpressengine\DynamicField\ColumnEntity[]
+     */
+    public function getColumns()
+    {
+        $column = m::mock('Xpressengine\DynamicField\ColumnEntity');
+        $column->shouldReceive('add');
+        $column->shouldReceive('get')->with('name')->andReturn('id');
+        $column->shouldReceive('drop');
+
+        return [$column];
+    }
+
+    /**
+     * return rules
+     *
+     * @return array
+     */
+    public function getRules()
+    {
+        return [
+            'f1' => 'required',
+        ];
+    }
+
+    /**
+     * 다이나믹필스 생성할 때 타입 설정에 적용될 rule 반환
+     *
+     * @return array
+     */
+    public function getSettingsRules()
+    {
+        return ['settings_rules'];
+    }
+
+    /**
+     * Dynamic Field 설정 페이지에서 각 fieldType 에 필요한 설정 등록 페이지 반환
+     * return html tag string
+     *
+     * @param ConfigEntity $config config entity
+     * @return string
+     */
+    public function getSettingsView(ConfigEntity $config = null)
+    {
+        return '';
+    }
+}
+
+class TestSkin2 extends AbstractSkin
+{
+    static protected $id = 'skinId';
+
+    /**
+     * get name of skin
+     *
+     * @return string
+     */
+    public function name()
+    {
+        return 'skin_name';
+    }
+
+    /**
+     * get view file directory path
+     *
+     * @return string
+     */
+    public function getPath()
+    {
+        return 'skin_path';
+    }
+
+    /**
+     * 다이나믹필스 생성할 때 스킨 설정에 적용될 rule 반환
+     *
+     * @return array
+     */
+    public function getSettingsRules()
+    {
+        return ['skin_setting_rules'];
+    }
+}
+
