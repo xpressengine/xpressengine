@@ -62,11 +62,11 @@ class Composer
     ];
 
     /**
-     * @param string $ackagistUrl
+     * @param string $packagistUrl
      */
-    public static function setPackagistUrl($ackagistUrl)
+    public static function setPackagistUrl($packagistUrl)
     {
-        self::$packagistUrl = $ackagistUrl;
+        self::$packagistUrl = $packagistUrl;
     }
 
     /**
