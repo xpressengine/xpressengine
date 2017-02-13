@@ -125,7 +125,7 @@ class PluginInstall extends PluginCommand
         $result = $this->runComposer(
             [
                 'command' => 'update',
-                "--prefer-lowest",
+                "--prefer-lowest" => true,
                 "--with-dependencies",
                 '--working-dir' => base_path(),
                 '--verbose' => '3',

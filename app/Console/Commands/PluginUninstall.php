@@ -117,7 +117,7 @@ class PluginUninstall extends PluginCommand
         $result = $this->runComposer(
             [
                 'command' => 'update',
-                "--prefer-lowest",
+                "--prefer-lowest" => true,
                 "--with-dependencies",
                 '--working-dir' => base_path(),
                 'packages' => ["$vendorName/$id"]

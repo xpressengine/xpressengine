@@ -281,8 +281,8 @@
                 <div class="modal-body">
                     <label>{{ xe_trans('xe::currentInstalledVersion') }}</label>
                     <p>{{ $plugin->getVersion() }}</p>
-                    <label>{{ xe_trans('xe::update') }} {{ xe_trans('xe::version') }}</label>
-                    <p>{{ $plugin->getVersion() }}</p>
+                    <label>{{ xe_trans('xe::update_plugin') }} {{ xe_trans('xe::version') }}</label>
+                    <p>{{ $plugin->getLatestVersion() }}</p>
                     <hr>
                     <p>{{ xe_trans('xe::alertUpdatePlugin') }}</p>
                     <p>{{ xe_trans('xe::confirmUpdatePlugin') }}</p>

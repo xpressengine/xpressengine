@@ -209,7 +209,7 @@ class PluginController extends Controller
                 $input = new ArrayInput(
                     [
                         'command' => 'update',
-                        "--prefer-lowest",
+                        "--prefer-lowest" => true,
                         "--with-dependencies",
                         '--working-dir' => base_path(),
                         'packages' => ["$vendorName/*"]
@@ -235,6 +235,8 @@ class PluginController extends Controller
                 }
 
                 $writer->load();
+
+
                 if ($code !== 0) {
                     $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_FAILED);
                 } else {

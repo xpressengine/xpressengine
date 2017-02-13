@@ -130,7 +130,8 @@ class PluginUpdate extends PluginCommand
         $result = $this->runComposer(
             [
                 'command' => 'update',
-                "--prefer-lowest",
+                "--prefer-lowest" => true,
+                "--verbose" => 3,
                 "--with-dependencies",
                 '--working-dir' => base_path(),
                 'packages' => ["$vendorName/*"]
