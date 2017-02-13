@@ -158,7 +158,7 @@
    * */
   $.fn.limitText = function (options) {
     return this.each(function () {
-      var Component = new TextLimiter(this, options);
+      var Component = new TextLimiter(this, options || {});
 
       Component.init();
     });
