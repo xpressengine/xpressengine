@@ -1,5 +1,4 @@
 (function (exports, WidgetBox) {
-
 'use strict';
 
 exports.WidgetAdder = (function () {
@@ -31,6 +30,14 @@ exports.WidgetAdder = (function () {
             alert('위젯 코드가 생성되지 않았습니다.');
           }
         });
+      });
+
+      $('#widgetGen').on('keydown', '.__xe_widget-title', function (e) {
+
+        //form요소에서 input요소 하나만 있을경우 submit되는 이슈
+        if (e.keyCode === 13) {
+          return false;
+        }
       });
 
       _this.$btnCloseLayer.on('click', _this.closeLayer);
@@ -69,18 +76,18 @@ exports.WidgetAdder = (function () {
 
     getWidgetBoxView: function (widgetCode, widgetTitle) {
       return [
-       '<div class="xe-row">',
-       '<div class="xe-col-md-12">',
-       '<div class="xe-well widget">',
-       '<strong>' + widgetTitle + '</strong>',
-       '<div class="xe-pull-right widget-config-btn">',
-       '<input type="hidden" class="widgetCode" value="' + widgetCode + '" />',
-       '<a href="#" class="xe-btn xe-btn-link btnWidgetConfig"><i class="xi-cog"></i></a>',
-       '<button type="button" class="xe-btn xe-btn-link btnDelWidget"><i class="xi-trash"></i></button>',
-       '</div>',
-       '</div>',
-       '</div>',
-       '</div>',
+        '<div class="xe-row">',
+        '<div class="xe-col-md-12">',
+        '<div class="xe-well widget">',
+        '<strong>' + widgetTitle + '</strong>',
+        '<div class="xe-pull-right widget-config-btn">',
+        '<input type="hidden" class="widgetCode" value="' + widgetCode + '" />',
+        '<a href="#" class="xe-btn xe-btn-link btnWidgetConfig"><i class="xi-cog"></i></a>',
+        '<button type="button" class="xe-btn xe-btn-link btnDelWidget"><i class="xi-trash"></i></button>',
+        '</div>',
+        '</div>',
+        '</div>',
+        '</div>',
       ].join('\n');
     },
   };

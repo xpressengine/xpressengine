@@ -125,16 +125,14 @@
           case 'inner':
             var $limitBox = $(limitBox).addClass('inner');
 
-            this.$element
-              .addClass('xe-form-control').wrapAll('<div class="xe-form-group" />').before($limitBox);
+            this.$element.addClass('xe-form-control').wrapAll('<div class="xe-form-group" />').before($limitBox);
 
           break;
 
           case 'outer':
             var $limitBox = $(limitBox);
 
-            this.$element
-              .addClass('xe-form-control').wrapAll('<div class="xe-form-group" />').before($limitBox);
+            this.$element.addClass('xe-form-control').wrapAll('<div class="xe-form-group" />').before($limitBox);
 
           break;
 
