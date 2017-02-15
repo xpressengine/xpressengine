@@ -20,7 +20,7 @@
                             <br/>
                             {{xe_trans('xe::menuItemDeleteCaution')}}
                         @else
-                            {!! xe_trans('xe::menuItemDeleteCautionHaveItems', ['count' => $item->countSubItems()]) !!}
+                            {!! xe_trans('xe::menuItemDeleteCautionHaveItems', ['count' => $item->getDescendantCount()]) !!}
                         @endif
                     </div>
                 </div>
