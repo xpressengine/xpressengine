@@ -217,7 +217,7 @@ class AuthController extends Controller
         $redirectUrl = $this->redirectPath = $request->get('redirectUrl', $urlGenerator->previous());
 
         if(auth()->check()) {
-            return redirect($redirectUrl);
+            return redirect($request->get('redirectUrl', '/'));
         }
 
         // common config

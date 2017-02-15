@@ -45,11 +45,11 @@ class Composer
     public static $isPluginMode = false;
 
     public static $basePlugins = [
-        'xpressengine-plugin/alice' => '0.9.6',
-        'xpressengine-plugin/board' => '0.9.11',
-        'xpressengine-plugin/ckeditor' => '0.9.8',
+        'xpressengine-plugin/alice' => '0.9.7',
+        'xpressengine-plugin/board' => '0.9.13',
+        'xpressengine-plugin/ckeditor' => '0.9.9',
         'xpressengine-plugin/claim' => '0.9.3',
-        'xpressengine-plugin/comment' => '0.9.6',
+        'xpressengine-plugin/comment' => '0.9.7',
         'xpressengine-plugin/external_page' => '0.9.4',
         'xpressengine-plugin/google_analytics' => '0.9.2',
         'xpressengine-plugin/news_client' => '0.9.3',
@@ -59,10 +59,6 @@ class Composer
         'xpressengine-plugin/emoticon' => '0.9.0',
         'xpressengine-plugin/widget_page' => '0.9.0'
     ];
-
-    protected static $enabled;
-
-    public static $changed = [];
 
     /**
      * @param string $ackagistUrl
