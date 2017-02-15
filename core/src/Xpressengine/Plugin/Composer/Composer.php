@@ -16,6 +16,7 @@ namespace Xpressengine\Plugin\Composer;
 use Composer\Installer\InstallerEvent;
 use Composer\Plugin\CommandEvent;
 use Composer\Script\Event;
+use Illuminate\Foundation\Application;
 use Xpressengine\Installer\XpressengineInstaller;
 use Xpressengine\Plugin\MetaFileReader;
 use Xpressengine\Plugin\PluginScanner;
@@ -162,6 +163,8 @@ class Composer
             $writer->set('xpressengine-plugin.operation.changed', XpressengineInstaller::$changed);
         }
         $writer->reset()->write();
+
+        static::clearCompiled();
     }
 
     /**
@@ -225,4 +228,25 @@ class Composer
         }
         return false;
     }
+
+    /**
+     * Clear the cached Laravel bootstrapping files.
+     *
+     * @return void
+     */
+    protected static function clearCompiled()
+    {
+        if(!$laravel = Application::getInstance()) {
+            $laravel = new Application(getcwd());
+        }
+
+        if (file_exists($compiledPath = $laravel->getCachedCompilePath())) {
+            @unlink($compiledPath);
+        }
+
+        if (file_exists($servicesPath = $laravel->getCachedServicesPath())) {
+            @unlink($servicesPath);
+        }
+    }
+
 }
