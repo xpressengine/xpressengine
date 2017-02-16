@@ -140,6 +140,9 @@
             if (cb) {
               cb(data);
             }
+
+            $('.widget-form').empty();
+            $(selectWidget).find('option:eq(0)').prop('selected', 'selected').trigger('change');
           },
 
           error: function (data) {
