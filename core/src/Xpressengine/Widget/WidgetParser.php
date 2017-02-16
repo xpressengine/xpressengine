@@ -132,7 +132,8 @@ class WidgetParser
     protected function xml2array($xmlObject, $out = [])
     {
         foreach ((array) $xmlObject as $index => $node) {
-            $out[$index] = (is_object($node)) ? $this->xml2array($node) : $node;
+            $value = (is_object($node)) ? $this->xml2array($node) : $node;
+            $out[$index] = $value ? : '';
         }
         return $out;
     }
