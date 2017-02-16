@@ -16,6 +16,7 @@ namespace Xpressengine\Plugin\Composer;
 use Composer\Installer\InstallerEvent;
 use Composer\Plugin\CommandEvent;
 use Composer\Script\Event;
+use Illuminate\Foundation\Application;
 use Xpressengine\Installer\XpressengineInstaller;
 use Xpressengine\Plugin\MetaFileReader;
 use Xpressengine\Plugin\PluginScanner;
@@ -45,11 +46,11 @@ class Composer
     public static $isPluginMode = false;
 
     public static $basePlugins = [
-        'xpressengine-plugin/alice' => '0.9.6',
-        'xpressengine-plugin/board' => '0.9.11',
-        'xpressengine-plugin/ckeditor' => '0.9.8',
+        'xpressengine-plugin/alice' => '0.9.7',
+        'xpressengine-plugin/board' => '0.9.13',
+        'xpressengine-plugin/ckeditor' => '0.9.9',
         'xpressengine-plugin/claim' => '0.9.3',
-        'xpressengine-plugin/comment' => '0.9.6',
+        'xpressengine-plugin/comment' => '0.9.7',
         'xpressengine-plugin/external_page' => '0.9.4',
         'xpressengine-plugin/google_analytics' => '0.9.2',
         'xpressengine-plugin/news_client' => '0.9.3',
@@ -59,10 +60,6 @@ class Composer
         'xpressengine-plugin/emoticon' => '0.9.0',
         'xpressengine-plugin/widget_page' => '0.9.0'
     ];
-
-    protected static $enabled;
-
-    public static $changed = [];
 
     /**
      * @param string $ackagistUrl
@@ -166,6 +163,8 @@ class Composer
             $writer->set('xpressengine-plugin.operation.changed', XpressengineInstaller::$changed);
         }
         $writer->reset()->write();
+
+        static::clearCompiled();
     }
 
     /**
@@ -229,4 +228,25 @@ class Composer
         }
         return false;
     }
+
+    /**
+     * Clear the cached Laravel bootstrapping files.
+     *
+     * @return void
+     */
+    protected static function clearCompiled()
+    {
+        if(!$laravel = Application::getInstance()) {
+            $laravel = new Application(getcwd());
+        }
+
+        if (file_exists($compiledPath = $laravel->getCachedCompilePath())) {
+            @unlink($compiledPath);
+        }
+
+        if (file_exists($servicesPath = $laravel->getCachedServicesPath())) {
+            @unlink($servicesPath);
+        }
+    }
+
 }

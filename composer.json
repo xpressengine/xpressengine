@@ -93,12 +93,10 @@
         ],
         "post-install-cmd": [
             "Xpressengine\\Plugin\\Composer\\Composer::postUpdate",
-            "Illuminate\\Foundation\\ComposerScripts::postInstall",
             "php artisan optimize"
         ],
         "post-update-cmd": [
             "Xpressengine\\Plugin\\Composer\\Composer::postUpdate",
-            "Illuminate\\Foundation\\ComposerScripts::postUpdate",
             "php artisan optimize"
         ],
         "post-root-package-install": [

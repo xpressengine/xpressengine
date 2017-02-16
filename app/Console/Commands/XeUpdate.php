@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Filesystem\Filesystem;
 use Xpressengine\Interception\InterceptionHandler;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Support\Migration;
@@ -74,12 +75,12 @@ class XeUpdate extends Command
         $this->output->text("  $installedVersion -> ".__XE_VERSION__);
 
         // confirm
-        if($this->confirm(
+        if($this->input->isInteractive() && $this->confirm(
                 // Xpressengine ver.".__XE_VERSION__."을 업데이트합니다. 최대 수분이 소요될 수 있습니다.\r\n 업데이트 하시겠습니까?
                 "The Xpressengine ver.".__XE_VERSION__." will be updated. It may take up to a few minutes. \r\nDo you want to update?"
             ) === false
         ) {
-            //return;
+            return;
         }
 
         // 플러그인 업데이트 잠금
@@ -94,7 +95,7 @@ class XeUpdate extends Command
 
         // migration
         $this->output->section('Running migration..');
-        $this->migrateCore($installedVersion, __XE_VERSION__);
+        $this->migrateCore($installedVersion);
 
         // clear proxy
         $interceptionHandler->clearProxies();
@@ -109,9 +110,9 @@ class XeUpdate extends Command
     /**
      * migrateCore
      *
-     * @return void
+     * @param $installedVersion
      */
-    private function migrateCore($installedVersion, $newVersion)
+    private function migrateCore($installedVersion)
     {
         /** @var Filesystem $filesystem */
         $filesystem = app('files');
