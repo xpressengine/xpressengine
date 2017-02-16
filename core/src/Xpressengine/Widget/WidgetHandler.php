@@ -254,6 +254,8 @@ class WidgetHandler
                 $attr[substr($k, 1)] = (string) $v;
             } elseif (is_array($v)) {
                 $children[] = $this->generateXml($k, $v, $depth + 1);
+            } elseif (is_numeric($k)) {
+                $children[] = sprintf("  %s<item>%s</item>".PHP_EOL, $space, $v);
             } else {
                 $children[] = sprintf("  %s<%s>%s</%s>".PHP_EOL, $space, $k, $v, $k);
             }
