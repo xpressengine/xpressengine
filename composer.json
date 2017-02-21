@@ -38,6 +38,12 @@
         "mockery/mockery": "0.9.*",
         "barryvdh/laravel-debugbar": "^2.2"
     },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://xpressengine.io"
+        }
+    ],
     "extra": {
       "merge-plugin": {
         "include": [

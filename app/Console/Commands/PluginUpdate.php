@@ -120,9 +120,6 @@ class PluginUpdate extends PluginCommand
 
         $vendorName = PluginHandler::PLUGIN_VENDOR_NAME;
 
-        Composer::setPackagistToken(config('xe.plugin.packagist.token'));
-        Composer::setPackagistUrl(config('xe.plugin.packagist.url'));
-
         // composer update실행(composer update --prefer-lowest --with-dependencies xpressengine-plugin/plugin_id)
         // composer update를 실행합니다. 최대 수분이 소요될 수 있습니다.
         $this->warn('Composer update command is running.. It may take up to a few minutes.');

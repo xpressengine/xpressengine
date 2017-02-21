@@ -31,19 +31,17 @@ use Xpressengine\Plugin\PluginScanner;
  */
 class Composer
 {
-    protected static $metaFileName = 'composer.json';
+    protected static $composerFile = 'composer.json';
 
     protected static $pluginsDir = 'plugins';
 
-    protected static $packagistUrl = 'https://xpressengine.io';
+    protected static $packagistUrl = null;
 
     protected static $packagistToken = null;
 
-    protected static $composerFile = 'storage/app/composer.plugins.json';
+    protected static $pluginComposerFile = 'storage/app/composer.plugins.json';
 
     protected static $installedFlagPath = 'storage/app/installed';
-
-    public static $isPluginMode = false;
 
     public static $basePlugins = [
         'xpressengine-plugin/alice' => '0.9.7',
@@ -70,11 +68,11 @@ class Composer
     }
 
     /**
-     * @param null $packagistToken
+     * @param null $authToken
      */
-    public static function setPackagistToken($packagistToken)
+    public static function setPackagistToken($authToken)
     {
-        self::$packagistToken = $packagistToken;
+        self::$packagistToken = $authToken;
     }
 
     /**
@@ -90,7 +88,9 @@ class Composer
             return;
         }
 
-        $path = static::$composerFile;
+        static::loadConfig();
+
+        $path = static::$pluginComposerFile;
         $writer = self::getWriter($path);
         $writer->reset();
 
@@ -141,6 +141,12 @@ class Composer
 
     public static function postDependenciesSolving(InstallerEvent $event)
     {
+        if(static::$packagistUrl !== null && static::$packagistToken !== null) {
+            $io = $event->getIO();
+            $host = parse_url(static::$packagistUrl, PHP_URL_HOST);
+            $token = static::$packagistToken;
+            $io->setAuthentication($host, $token);
+        }
     }
 
     /**
@@ -153,7 +159,7 @@ class Composer
      */
     public static function postUpdate(Event $event)
     {
-        $path = static::$composerFile;
+        $path = static::$pluginComposerFile;
 
         $writer = self::getWriter($path);
 
@@ -177,9 +183,9 @@ class Composer
      */
     protected static function getWriter($path)
     {
-        $reader = new MetaFileReader(static::$metaFileName);
+        $reader = new MetaFileReader(static::$composerFile);
         $scanner = new PluginScanner($reader, static::$pluginsDir);
-        $writer = new ComposerFileWriter($path, $scanner, static::$packagistUrl);
+        $writer = new ComposerFileWriter($path, $scanner);
 
         return $writer;
     }
@@ -247,6 +253,10 @@ class Composer
         if (file_exists($servicesPath = $laravel->getCachedServicesPath())) {
             @unlink($servicesPath);
         }
+    }
+
+    private static function loadConfig()
+    {
     }
 
 }

@@ -383,15 +383,12 @@ return [
     ],
 
     'plugin' => [
-        'store' => [
-            'detail_url' => 'https://xpressengine.io/plugins/detail',
-        ],
         'api' => [
-            'url' => 'https://xpressengine.io/plugins/api/1.0'
+            'url' => 'https://store.xpressengine.io/api/1.2'
         ],
         'packagist' => [
-            'url' => 'https://xpressengine.io',
-            'token' => null
+            'url' => 'https://store.xpressengine.io',
+            'site_token' => null
         ],
         'operation' => [
             'time_limit' => 1200

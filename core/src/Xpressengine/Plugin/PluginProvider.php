@@ -53,6 +53,22 @@ class PluginProvider
         $this->auth = $auth;
     }
 
+    public function search($keyword = null, $page = 1, $count = 10)
+    {
+        $url = 'plugins/search';
+        $q = implode(',', (array) $keyword);
+
+        try {
+            $response = $this->request($url, compact('q','page','count'));
+        } catch (ClientException $e) {
+            if ($e->getCode() === Response::HTTP_NOT_FOUND) {
+                return null;
+            }
+            throw $e;
+        }
+        return $response;
+    }
+
     /**
      * 자료실에서 주어진 아이디의 자료를 조회한다.
      *
@@ -62,7 +78,7 @@ class PluginProvider
      */
     public function find($id)
     {
-        $url = $id;
+        $url = 'plugins/show/'.$id;
         try {
             $response = $this->request($url);
         } catch (ClientException $e) {
@@ -71,7 +87,6 @@ class PluginProvider
             }
             throw $e;
         }
-
         return $response;
     }
 
@@ -84,7 +99,7 @@ class PluginProvider
      */
     public function findAll(array $ids)
     {
-        $url = 'list';
+        $url = 'plugins/find';
         $queries = ['name' => implode(',', $ids)];
 
         try {
@@ -110,7 +125,7 @@ class PluginProvider
     public function findRelease($id, $version)
     {
 
-        $url = "$id/releases/$version";
+        $url = "plugins/show/$id/releases/$version";
         try {
             $response = $this->request($url);
         } catch (ClientException $e) {

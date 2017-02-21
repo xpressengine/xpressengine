@@ -236,7 +236,6 @@ class PluginController extends Controller
 
                 $writer->load();
 
-
                 if ($code !== 0) {
                     $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_FAILED);
                 } else {

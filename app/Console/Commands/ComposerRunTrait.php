@@ -17,6 +17,7 @@ namespace App\Console\Commands;
 use Composer\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Process\Process;
+use Xpressengine\Plugin\Composer\Composer;
 
 trait ComposerRunTrait
 {
@@ -63,6 +64,10 @@ trait ComposerRunTrait
         if (!defined('__XE_PLUGIN_MODE__')) {
             define('__XE_PLUGIN_MODE__', true);
         }
+
+        Composer::setPackagistToken(config('xe.plugin.packagist.site_token'));
+        Composer::setPackagistUrl(config('xe.plugin.packagist.url'));
+
         $code = $application->run($input);
         return $code;
 

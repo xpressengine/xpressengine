@@ -48,11 +48,6 @@ class ComposerFileWriter
     private $scanner;
 
     /**
-     * @var string
-     */
-    private $packagistUrl;
-
-    /**
      * @return string
      */
     public function getPath()
@@ -65,14 +60,12 @@ class ComposerFileWriter
      *
      * @param string        $path         path of plugin composer file
      * @param PluginScanner $scanner      plugin scanner
-     * @param string        $packagistUrl packagist url
      */
-    public function __construct($path, PluginScanner $scanner, $packagistUrl)
+    public function __construct($path, PluginScanner $scanner)
     {
         require_once(__DIR__.'/helpers.php');
         $this->scanner = $scanner;
         $this->path = $path;
-        $this->packagistUrl = $packagistUrl;
         $this->load();
     }
 
@@ -99,8 +92,6 @@ class ComposerFileWriter
     public function makeFile()
     {
         $data = [];
-        $data['repositories'] = [];
-        $data['repositories'][] = ['type' => 'composer', 'url' => $this->packagistUrl];
 
         $data['require'] = [];
 
@@ -123,7 +114,6 @@ class ComposerFileWriter
         // initialize
         $requires = [];
         $replace = [];
-        array_set($this->data, 'repositories', [['type' => 'composer', 'url' => $this->packagistUrl]]);
 
         $dir = $this->scanner->getPluginDirectory();
         $operation = '>=';
