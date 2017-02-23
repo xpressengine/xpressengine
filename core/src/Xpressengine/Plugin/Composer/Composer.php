@@ -88,8 +88,6 @@ class Composer
             return;
         }
 
-        static::loadConfig();
-
         $path = static::$pluginComposerFile;
         $writer = self::getWriter($path);
         $writer->reset();
@@ -170,6 +168,7 @@ class Composer
         }
         $writer->reset()->write();
 
+        require_once $event->getComposer()->getConfig()->get('vendor-dir').'/autoload.php';
         static::clearCompiled();
     }
 
@@ -242,6 +241,7 @@ class Composer
      */
     protected static function clearCompiled()
     {
+
         if(!$laravel = Application::getInstance()) {
             $laravel = new Application(getcwd());
         }
@@ -253,10 +253,6 @@ class Composer
         if (file_exists($servicesPath = $laravel->getCachedServicesPath())) {
             @unlink($servicesPath);
         }
-    }
-
-    private static function loadConfig()
-    {
     }
 
 }
