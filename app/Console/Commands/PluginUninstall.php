@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use Xpressengine\Plugin\Composer\Composer;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
@@ -115,8 +114,10 @@ class PluginUninstall extends PluginCommand
             [
                 'command' => 'update',
                 "--prefer-lowest" => true,
-                "--with-dependencies",
+                "--with-dependencies" => true,
+                "--quiet" => true,
                 '--working-dir' => base_path(),
+                /*'--verbose' => '3',*/
                 'packages' => ["$vendorName/$id"]
             ]
         );

@@ -35,10 +35,19 @@
             </p>
 
             @if($operation['status'] === 'successed')
-                <label for="">변경내역</label>
+                <label for="">변경 내역</label>
                 @foreach($operation['changed'] as $mode => $plugins)
                     @foreach($plugins as $plugin => $version)
                     <p>{{ $plugin }} ver.{{ $version }} {{ $mode }}</p>
+                    @endforeach
+                @endforeach
+            @elseif($operation['status'] === 'failed')
+                <label for="">실패 내역</label>
+                @foreach($operation['failed'] as $mode => $plugins)
+                    @foreach($plugins as $plugin => $code)
+                        <p>{{ $plugin }} {{ $mode.' failed: ' }} {{ array_get([
+                            '403' => 'This is paid plugin. You need to buy it in the Market-place.'
+                        ], $code) }}</p>
                     @endforeach
                 @endforeach
             @endif

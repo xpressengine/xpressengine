@@ -604,11 +604,21 @@ class PluginHandler
             }
         }
 
+        $failed = $writer->get('xpressengine-plugin.operation.failed', []);
+        foreach ($failed as $type) {
+            foreach ($type as $package => $version) {
+                list(, $id) = explode('/', $package);
+                if (!isset($runningsInfo[$package])) {
+                    $runningsInfo[$package] = $this->provider->find($id);
+                }
+            }
+        }
+
         if ($status === ComposerFileWriter::STATUS_RUNNING && $expired === true) {
             $status = 'expired';
         }
 
-        return compact('runnings', 'status', 'runningMode', 'expired', 'changed', 'runningsInfo');
+        return compact('runnings', 'status', 'runningMode', 'expired', 'changed', 'failed', 'runningsInfo');
     }
 
     /**
