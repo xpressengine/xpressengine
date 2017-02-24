@@ -46,6 +46,7 @@
                 @foreach($operation['failed'] as $mode => $plugins)
                     @foreach($plugins as $plugin => $code)
                         <p>{{ $plugin }} {{ $mode.' failed: ' }} {{ array_get([
+                            '401' => 'This is paid plugin. If you have already purchased this plugin, check the \'site_token\' field in your setting file(config/production/xe.php).',
                             '403' => 'This is paid plugin. You need to buy it in the Market-place.'
                         ], $code) }}</p>
                     @endforeach

@@ -155,7 +155,8 @@ class PluginCommand extends Command
     protected function printFailedPlugins(array $failed)
     {
         $codes = [
-            '403' => 'This is paid plugin. You need to buy it in the Market-place.'
+            '401' => 'This is paid plugin. If you have already purchased this plugin, check the \'site_token\' field in your setting file(config/production/xe.php).',
+            '403' => 'This is paid plugin. You need to buy it in the Market-place.',
         ];
         if (count($failed['install'])) {
             $this->warn('Install failed plugins:');
