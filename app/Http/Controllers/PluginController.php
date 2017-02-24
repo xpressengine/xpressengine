@@ -217,7 +217,7 @@ class PluginController extends Controller
                     ]
                 );
 
-                Composer::setPackagistToken(config('xe.plugin.packagist.token'));
+                Composer::setPackagistToken(config('xe.plugin.packagist.site_token'));
                 Composer::setPackagistUrl(config('xe.plugin.packagist.url'));
 
                 $output = new BufferedOutput();
