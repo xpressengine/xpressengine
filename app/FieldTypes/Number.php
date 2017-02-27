@@ -19,7 +19,7 @@ use View;
 
 class Number extends AbstractType
 {
-    protected static $id = 'FieldType/xpressengine@Number';
+    protected static $id = 'fieldType/xpressengine@Number';
 
     /**
      * get field type name
