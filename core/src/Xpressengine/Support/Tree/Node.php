@@ -61,9 +61,10 @@ abstract class Node extends DynamicModel implements NodeInterface
     /**
      * Ancestors relationship
      *
+     * @param bool $without without self node when value is true
      * @return BelongsToMany
      */
-    public function ancestors()
+    public function ancestors($without = true)
     {
         $relation = $this->belongsToMany(
             static::class,
@@ -72,7 +73,10 @@ abstract class Node extends DynamicModel implements NodeInterface
             $this->getAncestorName()
         )->withPivot($this->getDepthName());
 
-        $relation->wherePivot($this->getDepthName(), '!=', 0);
+        if ($without) {
+            $relation->wherePivot($this->getDepthName(), '!=', 0);
+        }
+
 
         return $relation;
     }
@@ -80,9 +84,10 @@ abstract class Node extends DynamicModel implements NodeInterface
     /**
      * Descendants relationship
      *
+     * @param bool $without without self node when value is true
      * @return BelongsToMany
      */
-    public function descendants()
+    public function descendants($without = true)
     {
         $relation = $this->belongsToMany(
             static::class,
@@ -91,7 +96,9 @@ abstract class Node extends DynamicModel implements NodeInterface
             $this->getDescendantName()
         )->withPivot($this->getDepthName());
 
-        $relation->wherePivot($this->getDepthName(), '!=', 0);
+        if ($without) {
+            $relation->wherePivot($this->getDepthName(), '!=', 0);
+        }
 
         return $relation;
     }
