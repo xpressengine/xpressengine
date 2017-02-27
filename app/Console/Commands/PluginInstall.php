@@ -125,7 +125,7 @@ class PluginInstall extends PluginCommand
                 'command' => 'update',
                 "--prefer-lowest" => true,
                 "--with-dependencies" => true,
-                "--quiet" => true,
+                //"--quiet" => true,
                 '--working-dir' => base_path(),
                 /*'--verbose' => '3',*/
                 'packages' => ["$vendorName/*"]
