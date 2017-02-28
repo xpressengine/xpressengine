@@ -17,7 +17,7 @@ use View;
 
 class Boolean extends AbstractType
 {
-    protected static $id = 'FieldType/xpressengine@Boolean';
+    protected static $id = 'fieldType/xpressengine@Boolean';
 
     /**
      * get field type name

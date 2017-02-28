@@ -29,8 +29,8 @@ use Xpressengine\Plugin\PluginRegister;
  */
 class RegisterHandler
 {
-    const FIELD_TYPE = 'FieldType';
-    const FIELD_SKIN = 'FieldSkin';
+    const FIELD_TYPE = 'fieldType';
+    const FIELD_SKIN = 'fieldSkin';
 
     /**
      * @var PluginRegister

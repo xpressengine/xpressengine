@@ -21,7 +21,7 @@ class CellPhoneNumber extends AbstractType
     /**
      * @var string
      */
-    protected static $id = 'FieldType/xpressengine@CellPhoneNumber';
+    protected static $id = 'fieldType/xpressengine@CellPhoneNumber';
 
     /**
      * @var bool

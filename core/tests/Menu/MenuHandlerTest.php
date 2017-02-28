@@ -161,9 +161,9 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
         $mockMenuItem->shouldReceive('getDescendantCount')->andReturn(0);
 
         $mockRelate = m::mock('stdClass');
-        $mockRelate->shouldReceive('detach')->once()->with($mockMenuItem);
+        $mockRelate->shouldReceive('detach')->once();
 
-        $mockMenuItem->shouldReceive('ancestors')->andReturn($mockRelate);
+        $mockMenuItem->shouldReceive('ancestors')->once()->with(false)->andReturn($mockRelate);
         $repo->shouldReceive('deleteItem')->once()->with($mockMenuItem)->andReturn(true);
 
         $instance->expects($this->once())->method('destroyMenuType')->with($mockMenuItem);

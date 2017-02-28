@@ -14,7 +14,7 @@ use View;
 
 class DefaultSkin extends AbstractSkin
 {
-    protected static $id = 'FieldType/xpressengine@Text/FieldSkin/xpressengine@TextDefault';
+    protected static $id = 'fieldType/xpressengine@Text/fieldSkin/xpressengine@TextDefault';
     protected $name = 'Text default';
     protected $description = '문자열 디폴트 스킨';
 

@@ -17,7 +17,7 @@ use XeCategory;
 
 class DefaultSkin extends AbstractSkin
 {
-    protected static $id = 'FieldType/xpressengine@Category/FieldSkin/xpressengine@default';
+    protected static $id = 'fieldType/xpressengine@Category/fieldSkin/xpressengine@default';
 
     /**
      * get name of skin

@@ -420,7 +420,7 @@ class MenuHandler
             throw new CanNotDeleteMenuItemHaveChildException;
         }
 
-        $item->ancestors()->detach($item);
+        $item->ancestors(false)->detach();
         $this->destroyMenuType($item);
 
         return $this->repo->deleteItem($item);

@@ -16,7 +16,7 @@ use XeFrontend;
 
 class DefaultSkin extends AbstractSkin
 {
-    protected static $id = 'FieldType/xpressengine@Address/FieldSkin/xpressengine@default';
+    protected static $id = 'fieldType/xpressengine@Address/fieldSkin/xpressengine@default';
 
     protected static $loaded = false;
 

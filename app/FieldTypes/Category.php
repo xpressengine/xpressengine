@@ -30,7 +30,7 @@ class Category extends AbstractType
     /**
      * @var string
      */
-    protected static $id = 'FieldType/xpressengine@Category';
+    protected static $id = 'fieldType/xpressengine@Category';
 
     /**
      * get field type name
