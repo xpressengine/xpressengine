@@ -119,7 +119,7 @@
         <div class="setting-detail" style="display: none;">
             <div class="setting-detail-content">
                 <p>{{ xe_trans('xe::changePassword') }}</p>
-                <em class="text-gray2">{{ $passwordLevel['description'] }}</em>
+                <em class="text-gray2">{{ xe_trans($passwordLevel['description']) }}</em>
                 <div class="password-content __xe_currentPassword" @if(!$user->password) style="display: none;" @endif>
                     <p class="txt_pw">{{ xe_trans('xe::currentPassword') }}</p>
                     <input type="password" class="xe-form-control" name="current_password">

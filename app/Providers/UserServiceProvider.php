@@ -229,6 +229,9 @@ class UserServiceProvider extends ServiceProvider
         // extend xe auth
         $this->extendAuth();
 
+        // set config for validation of password, displayname
+        $this->configValidation();
+
         // register validation extension for email prefix
         $this->extendValidator();
 
@@ -405,6 +408,75 @@ class UserServiceProvider extends ServiceProvider
                 return $app['xe.auth'];
             }
         );
+    }
+
+    private function configValidation()
+    {
+        // set password validation to config
+        $passwordLevels =  [
+            'weak' => [
+                'title' => 'xe::weak',
+                'validate' => function ($password) {
+                    return strlen($password) >= 4;
+                },
+                'description' => 'xe::passwordStrengthStrongDescription'
+            ],
+            'normal' => [
+                'title' => 'xe::normal',
+                'validate' => function ($password) {
+                    if (!preg_match_all(
+                        '$\S*(?=\S{6,})(?=\S*[a-zA-Z])(?=\S*[\d])\S*$',
+                        $password
+                    )
+                    ) {
+                        return false;
+                    }
+                    return true;
+                },
+                'description' => 'xe::passwordStrengthStrongDescription'
+            ],
+            'strong' => [
+                'title' => 'xe::strong',
+                'validate' => function ($password) {
+                    if (!preg_match_all(
+                        '$\S*(?=\S{8,})(?=\S*[a-zA-Z])(?=\S*[\d])(?=\S*[\W])\S*$',
+                        $password
+                    )
+                    ) {
+                        return false;
+                    }
+                    return true;
+                },
+                'description' => 'xe::passwordStrengthStrongDescription'
+            ]
+        ];
+        app('config')->set('xe.user.password.levels', $passwordLevels);
+
+        // set display name validation to config
+        app('config')->set('xe.user.displayName.validate', function ($value) {
+            if (!is_string($value) && !is_numeric($value)) {
+                return false;
+            }
+
+            if (str_contains($value, "  ")) {
+                return false;
+            }
+
+            $byte = strlen($value);
+            $multiByte = mb_strlen($value);
+
+            if ($byte === $multiByte) {
+                if ($byte < 3) {
+                    return false;
+                }
+            } else {
+                if ($multiByte < 2) {
+                    return false;
+                }
+            }
+            return preg_match('/^[\pL\pM\pN][. \pL\pM\pN_-]*[\pL\pM\pN]$/u', $value);
+        });
+
     }
 
     /**
