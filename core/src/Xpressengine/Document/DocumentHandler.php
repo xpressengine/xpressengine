@@ -383,7 +383,7 @@ class DocumentHandler
             $originConfig = $this->configHandler->getOrDefault($doc->getOriginal('instanceId'));
             if ($originConfig->get('division') === true) {
                 /** @var DynamicQuery $query */
-                $query = $this->newModel();
+                $query = $this->newModel()->getQuery();
                 $query->from($this->instanceManager->getDivisionTableName($originConfig));
                 $query->delete($doc->id);
             }

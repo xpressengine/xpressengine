@@ -16,6 +16,7 @@ namespace Xpressengine\Document\Models;
 
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Database\Eloquent\DynamicModel;
+use Xpressengine\Document\DocumentHandler;
 use Xpressengine\Document\Exceptions\NotAllowedTypeException;
 use Xpressengine\Document\Exceptions\ParentDocumentNotFoundException;
 use Xpressengine\Document\Exceptions\ReplyLimitationException;
@@ -178,6 +179,41 @@ class Document extends DynamicModel
         self::PUBLISHED_WAITING,
         self::PUBLISHED_REJECTED,
     ];
+
+    /**
+     * division 테이블로 변경
+     *
+     * @param string $instanceId instance id
+     * @return Document
+     */
+    static public function division($instanceId)
+    {
+        /** @var Document $instance */
+        $instance = new static;
+        $instance->setDivision($instanceId);
+
+        return $instance;
+    }
+
+    /**
+     * division 테이블 이름 변경
+     *
+     * @param $instanceId
+     * @return $this
+     */
+    public function setDivision($instanceId)
+    {
+        /** @var DocumentHandler $handler */
+        $handler = app('xe.document');
+
+        $config = $handler->getConfig($instanceId);
+        if ($config !== null && $config->get('division') === true) {
+            $tableName = $handler->getInstanceManager()->getDivisionTableName($config);
+            $this->setTable($tableName);
+        }
+
+        return $this;
+    }
 
     /**
      * user relationship
