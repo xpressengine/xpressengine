@@ -17,11 +17,9 @@ namespace Xpressengine\Document\Models;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Database\Eloquent\DynamicModel;
 use Xpressengine\Document\Exceptions\NotAllowedTypeException;
-use Xpressengine\Document\Exceptions\DocumentNotFoundException;
 use Xpressengine\Document\Exceptions\ParentDocumentNotFoundException;
 use Xpressengine\Document\Exceptions\ReplyLimitationException;
 use Xpressengine\Document\Exceptions\ValueRequiredException;
-use Illuminate\Database\Eloquent\Builder as OriginBuilder;
 
 /**
  * Document
@@ -197,6 +195,7 @@ class Document extends DynamicModel
      * @param ConfigEntity $config document config entity
      * @param string|null  $table  table name
      * @return void
+     * @deprecated
      */
     public function setConfig(ConfigEntity $config, $table = null)
     {
@@ -208,67 +207,6 @@ class Document extends DynamicModel
         ]);
         if ($table !== null) {
             $this->table = $table;
-        }
-    }
-
-    /**
-     * Perform a model insert operation.
-     *
-     * @param OriginBuilder $query   Illuminate database eloquent builder
-     * @param array         $options options
-     * @return bool
-     */
-    protected function performInsert(OriginBuilder $query, array $options = [])
-    {
-        $result = parent::performInsert($query, $options);
-
-        if ($this->division === true) {
-            $clone = clone $query;
-            $clone->useProxy(false);
-            $clone->getQuery()->from = self::TABLE_NAME;
-            $clone->insert($this->attributes);
-        }
-
-        return $result;
-    }
-
-    /**
-     * Perform a model update operation.
-     *
-     * @param OriginBuilder $query   Illuminate database eloquent builder
-     * @param array         $options options
-     * @return bool
-     */
-    protected function performUpdate(OriginBuilder $query, array $options = [])
-    {
-        $result = parent::performUpdate($query, $options);
-
-        if ($this->division === true) {
-            $clone = clone $query;
-            $clone->useProxy(false);
-            $clone->getQuery()->from = self::TABLE_NAME;
-            $dirty = $this->getDirty();
-            if (count($dirty) > 0) {
-                $numRows = $clone->update($dirty);
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * Perform a model delete operation.
-     *
-     * @return void
-     */
-    protected function performDeleteOnModel()
-    {
-        parent::performDeleteOnModel();
-
-        if ($this->division === true) {
-            $clone = clone $this;
-            $clone->table = static::TABLE_NAME;
-            $clone->setKeysForSaveQuery($clone->newQueryWithoutScopes())->delete();
         }
     }
 
@@ -620,5 +558,28 @@ class Document extends DynamicModel
             $this->setStatus(self::STATUS_PUBLIC);
         }
         return $this;
+    }
+
+    /**
+     * Fire the given event for the model.
+     * Document 를 확장해서 사용하는 모델의 이벤트를 실행
+     *
+     * @param  string  $event
+     * @param  bool  $halt
+     * @return mixed
+     */
+    protected function fireModelEvent($event, $halt = true)
+    {
+        $documentDispatcher = Document::getEventDispatcher();
+        if (isset($documentDispatcher)) {
+            $documentEvent = "eloquent.{$event}: " . Document::class;
+            $method = $halt ? 'until' : 'fire';
+            Document::getEventDispatcher()->$method($documentEvent, $this);
+        }
+
+        $class = static::class;
+        if ($class != Document::class) {
+            return parent::fireModelEvent($event, $halt);
+        }
     }
 }

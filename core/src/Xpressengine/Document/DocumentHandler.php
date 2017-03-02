@@ -15,6 +15,7 @@
 namespace Xpressengine\Document;
 
 use Illuminate\Http\Request;
+use Xpressengine\Database\DynamicQuery;
 use Xpressengine\Document\Exceptions\DocumentNotFoundException;
 use Xpressengine\Document\Models\Document;
 use Xpressengine\Document\Models\Revision;
@@ -26,7 +27,7 @@ use Xpressengine\Database\VirtualConnectionInterface as VirtualConnection;
  *
  * * 문서 등록, 수정, 삭제 할 때 intercept 할 수 있음
  * Document Model 자체적으로 CRUD 할 때 intercept 를 제공할 수 없는 문제 해결
- * * Division 처리 및 DyanmciQuery 관련 작업을 위해 Document Model 에 config 를 설정해야하고
+ * * Division 처리 및 DynamciQuery 관련 작업을 위해 Document Model 에 config 를 설정해야하고
  * 이 설정을 위해 getModel() setModelConfig() 메소드가 있음
  * * Division(테이블 분할)은 Document Model 에서 처리됨.
  * * Document Model 을 이용해 Database CRUD 처리를 직접하는 경우
@@ -237,7 +238,9 @@ class DocumentHandler
      */
     public function add(array $attributes)
     {
-        $doc = $this->getModel($attributes['instanceId']);
+        // get model 할 때 인스턴스만 생성하고 config, instanceId 정보 없이도 division 처리 될 수 있도록
+        //$doc = $this->getModel($attributes['instanceId']);
+        $doc = $this->newModel();
 
         $doc->getConnection()->beginTransaction();
 
@@ -269,10 +272,11 @@ class DocumentHandler
         $doc->getConnection()->beginTransaction();
 
         $doc->pureContent = $doc->getPureContent($doc->content);
+        if ($doc->ipaddress == '') {
+            $doc->ipaddress = $this->request->ip();
+        }
         $doc->checkRequired($doc->getAttributes());
         $doc->save();
-
-        $this->removeDivision($doc);
 
         $this->addRevision($doc);
 
@@ -289,7 +293,11 @@ class DocumentHandler
      */
     public function addRevision(Document $doc)
     {
-        $config = $this->getConfig($doc->instanceId);
+        $instanceId = $doc->instanceId;
+        if ($instanceId === null || $instanceId == '') {
+            return false;
+        }
+        $config = $this->getConfig($instanceId);
         if ($config === null) {
             return false;
         }
@@ -304,7 +312,8 @@ class DocumentHandler
         }
 
         // insert to revision database table
-        $revisionDoc = $this->newRevisionModel(array_merge($doc->getDynamicAttributes(), $doc->getAttributes()));
+        $revisionDoc = $this->newRevisionModel();
+        $revisionDoc->fill(array_merge($doc->getDynamicAttributes(), $doc->getAttributes()));
         $revisionDoc->setProxyOptions([
             'id' => $config->get('instanceId'),
             'group' => $config->get('group'),
@@ -317,27 +326,124 @@ class DocumentHandler
     }
 
     /**
-     * 인스턴스 아이디가 변경된 경우 이전 인스턴스의 디비전 테이블 데이터 삭제
+     *
+     * @param Document $doc
+     * @param ConfigEntity $config
+     * @return string
+     */
+    protected function pivotDivisionTable(Document $doc, ConfigEntity $config)
+    {
+        return $doc->table == Document::TABLE_NAME ?
+            $this->instanceManager->getDivisionTableName($config) :
+            Document::TABLE_NAME;
+    }
+
+    /**
+     * add division
      *
      * @param Document $doc document model
-     * @return void
+     * @return bool
      */
-    protected function removeDivision(Document $doc)
+    public function addDivision(Document $doc)
     {
-        $originConfig = null;
-        /** @var Document $originDoc */
-        $originDoc = $this->getModel()->find($doc->id);
-        if ($originDoc->instanceId != $doc->instanceId) {
-            $originConfig = $this->configHandler->getOrDefault($originDoc->instanceId);
+        $instanceId = $doc->instanceId;
+        if ($instanceId === null || $instanceId == '') {
+            return false;
+        }
+        $config = $this->getConfig($instanceId);
+        if ($config === null) {
+            return false;
+        }
+        if ($config->get('division') !== true) {
+            return false;
         }
 
-        if ($originConfig != null && $originConfig->get('division') === true) {
-            if ($doc->getOriginal('instanceId') != $doc->getAttribute('instanceId')) {
-                $division = $this->newModel();
-                $division->setTable($this->getDivisionTableName($originConfig));
-                $division->delete($doc->id);
+        $query = $doc->newQuery()->getQuery();
+        /** @var DynamicQuery $clone */
+        $clone = clone $query;
+        $clone->useProxy(false);
+        $clone->from($this->pivotDivisionTable($doc, $config));
+        $clone->insert($doc->toArray());
+
+        return true;
+    }
+
+    /**
+     * put division
+     *
+     * @param Document $doc document model
+     * @return bool
+     */
+    public function putDivision(Document $doc)
+    {
+        $instanceId = $doc->instanceId;
+
+        // 인스턴스를 변경할 경우 이전의 division 테이블 row 삭제
+        if ($instanceId != $doc->getOriginal('instanceId')) {
+            $originConfig = $this->configHandler->getOrDefault($doc->getOriginal('instanceId'));
+            if ($originConfig->get('division') === true) {
+                /** @var DynamicQuery $query */
+                $query = $this->newModel();
+                $query->from($this->instanceManager->getDivisionTableName($originConfig));
+                $query->delete($doc->id);
             }
         }
+
+        if ($instanceId === null || $instanceId == '') {
+            return false;
+        }
+        $config = $this->getConfig($instanceId);
+        if ($config === null) {
+            return false;
+        }
+        if ($config->get('division') !== true) {
+            return false;
+        }
+
+        // 인스턴스가 변경되었다면 insert, 그렇지 않으면 update
+        if ($instanceId != $doc->getOriginal('instanceId')) {
+            $this->addDivision($doc);
+        } else {
+            $query = $doc->newQuery()->getQuery();
+            /** @var DynamicQuery $clone */
+            $clone = clone $query;
+            $clone->useProxy(false);
+            $clone->from($this->pivotDivisionTable($doc, $config));
+            $dirty = $doc->getDirty();
+            if (count($dirty) > 0) {
+                $clone->where('id', '=', $doc->id)->update($dirty);
+            }
+
+        }
+        return true;
+    }
+
+    /**
+     * remove division
+     *
+     * @param Document $doc document model
+     * @return bool
+     */
+    public function removeDivision(Document $doc)
+    {
+        $instanceId = $doc->instanceId;
+        if ($instanceId === null || $instanceId == '') {
+            return false;
+        }
+        $config = $this->getConfig($instanceId);
+        if ($config === null) {
+            return false;
+        }
+        if ($config->get('division') !== true) {
+            return false;
+        }
+
+        /** @var DynamicQuery $query */
+        $query = $this->newModel();
+        $query->from($this->pivotDivisionTable($doc, $config));
+        $query->delete($doc->id);
+
+        return true;
     }
 
     /**
@@ -373,6 +479,7 @@ class DocumentHandler
      *
      * @param ConfigEntity $config config entity
      * @return string
+     * @deprecated
      */
     public function getDivisionTableName(ConfigEntity $config)
     {
@@ -386,6 +493,7 @@ class DocumentHandler
      *
      * @param string $instanceId document instance id
      * @return Document
+     * @deprecated
      */
     public function getModel($instanceId = null)
     {
@@ -397,7 +505,6 @@ class DocumentHandler
 
     /**
      * create document model
-     * config 없이 모델을 직접 생성할 경우 문제가 발생하므로 접근을 제한함
      *
      * @return Document
      */
@@ -433,11 +540,12 @@ class DocumentHandler
      * @param Document $doc        document model
      * @param string   $instanceId document instance id
      * @return Document
+     * @deprecated
      */
     public function setModelConfig(Document $doc, $instanceId)
     {
         $config = $this->getConfig($instanceId);
-        $doc->setConfig($config, $this->getDivisionTableName($config));
+        $doc->setConfig($config, $this->instanceManager->getDivisionTableName($config));
         return $doc;
     }
 
@@ -450,7 +558,11 @@ class DocumentHandler
      */
     public function get($id, $instanceId = null)
     {
-        $doc = $this->getModel($instanceId)->find($id);
+        $doc = $this->newModel();
+        if ($instanceId !== null) {
+            $doc->where('instanceId', '=', $instanceId);
+        }
+        $doc->where('id', '=', $id)->first();
         if ($doc == null) {
             throw new DocumentNotFoundException;
         }
