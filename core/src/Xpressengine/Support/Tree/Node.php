@@ -264,14 +264,14 @@ abstract class Node extends DynamicModel implements NodeInterface
     }
 
     /**
-     * Get primary key array for breadcrumbs
+     * Get node model for breadcrumbs
      *
-     * @return array
+     * @return Collection
      */
     public function getBreadcrumbs()
     {
         if ($this->parent) {
-            return array_merge($this->parent->getBreadcrumbs(), [$this->getKey()]);
+            return $this->parent->getBreadcrumbs()->push($this);
         }
 
         return $this->ancestors->sort(function ($a, $b) {
@@ -283,7 +283,7 @@ abstract class Node extends DynamicModel implements NodeInterface
             }
 
             return $aDepth > $bDepth ? -1 : 1;
-        })->push($this)->pluck($this->getKeyName())->toArray();
+        })->push($this);
     }
 
     /**
