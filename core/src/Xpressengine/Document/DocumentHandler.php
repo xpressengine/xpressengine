@@ -439,10 +439,9 @@ class DocumentHandler
         }
 
         /** @var DynamicQuery $query */
-        $query = $this->newModel();
+        $query = $this->newModel()->getQuery();
         $query->from($this->pivotDivisionTable($doc, $config));
         $query->delete($doc->id);
-
         return true;
     }
 
@@ -455,7 +454,6 @@ class DocumentHandler
     public function remove(Document $doc)
     {
         $this->conn->beginTransaction();
-
         $result = $doc->delete();
 
         $this->conn->commit();
