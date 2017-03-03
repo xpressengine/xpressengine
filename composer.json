@@ -41,7 +41,7 @@
     "repositories": [
         {
             "type": "composer",
-            "url": "https://xpressengine.io"
+            "url": "https://store.xpressengine.io"
         }
     ],
     "extra": {

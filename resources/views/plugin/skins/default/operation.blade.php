@@ -13,7 +13,12 @@
             <label for="">작업</label>
             @if($operation['runningMode'] !== 'uninstall')
                 @foreach($operation['runnings'] as $package => $version)
+                    @if(data_get($operation['runningsInfo'], $package))
                     <p>{{ data_get($operation['runningsInfo'], $package.'.title') }}({{ data_get($operation['runningsInfo'], $package.'.pluginId') }}) ver.{{ $version }} {{ array_get(['install'=>'설치','update'=>'업데이트','uninstall'=>'삭제'], $operation['runningMode']) }}</p>
+                    @else
+                    <p>{{ $package }} ver.{{ $version }} {{ array_get(['install'=>'설치','update'=>'업데이트','uninstall'=>'삭제'], $operation['runningMode']) }}</p>
+                    @endif
+
                 @endforeach
             @else
                 @foreach($operation['runnings'] as $package)

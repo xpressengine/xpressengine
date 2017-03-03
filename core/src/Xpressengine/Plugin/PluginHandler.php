@@ -590,8 +590,11 @@ class PluginHandler
                 $package = key($runnings);
             }
             list(, $id) = explode('/', $package);
-            $runningsInfo[$package] = $this->provider->find($id);
-            $runningsInfo[$package]->pluginId = $id;
+            $info = $this->provider->find($id);
+            if($info !== null) {
+                $runningsInfo[$package] = $info;
+                $runningsInfo[$package]->pluginId = $id;
+            }
         }
 
         $changed = $writer->get('xpressengine-plugin.operation.changed', []);
