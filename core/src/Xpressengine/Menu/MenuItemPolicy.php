@@ -72,6 +72,7 @@ class MenuItemPolicy extends Policy
     {
         $menu = $menu ?: $item->menu;
 
-        return array_merge([$menu->getKey()], $item->getBreadcrumbs());
+        $breadcrumbs = $item->getBreadcrumbs();
+        return array_merge([$menu->getKey()], $breadcrumbs->modelKeys());
     }
 }
