@@ -27,8 +27,9 @@ use Xpressengine\Database\VirtualConnectionInterface as VirtualConnection;
  *
  * * 문서 등록, 수정, 삭제 할 때 intercept 할 수 있음
  * Document Model 자체적으로 CRUD 할 때 intercept 를 제공할 수 없는 문제 해결
- * * Division 처리 및 DynamciQuery 관련 작업을 위해 Document Model 에 config 를 설정해야하고
- * 이 설정을 위해 getModel() setModelConfig() 메소드가 있음
+ * * ~Division 처리 및 DynamicQuery 관련 작업을 위해 Document Model 에 config 를 설정해야하고
+ * 이 설정을 위해 getModel() setModelConfig() 메소드가 있음~
+ * * Division 된 테이블을 사용하기 위해서 Document::division() 메소드에 인스턴스 아이디 주입
  * * Division(테이블 분할)은 Document Model 에서 처리됨.
  * * Document Model 을 이용해 Database CRUD 처리를 직접하는 경우
  * revision 에 대한 처리를 할 수 없으며 intercept 할 수 없음
@@ -52,8 +53,7 @@ use Xpressengine\Database\VirtualConnectionInterface as VirtualConnection;
  *
  * ### 문서 수정
  * ```php
- * $model = XeDocument::getModel('instance-id');
- * $doc = $model->find('document-id');
+ * $doc = Document::find('document-id');
  *
  * $doc->title = 'changed title';
  *
@@ -62,21 +62,20 @@ use Xpressengine\Database\VirtualConnectionInterface as VirtualConnection;
  *
  * ### 문서 삭제
  * ```php
- * $model = XeDocument::getModel('instance-id');
- * $doc = $model->find('document-id');
+ * $doc = Document::find('document-id');
  *
  * XeDocument::remove($doc);
  * ```
  *
  * ### 문서 조회
  * ```php
- * $model = XeDocument::getModel('instance-id');
- * $doc = $model->find('document-id');
+ * $doc = Document::find('document-id');
  *
  * $doc = XeDocument::get('document-id', 'instance-id');
  *
- * // instance id 를 넘겨주지 않으면 항상 documents table 에서 조회
- * $doc = XeDocument::get('document-id');
+ * // 모델에 division 을 설정하면 분리된 테이블 사용
+ * $model = Document::division('instanceId');
+ * $doc = $model->get('document-id');
  * ```
  *
  * ### 문서 수 조회
@@ -84,8 +83,8 @@ use Xpressengine\Database\VirtualConnectionInterface as VirtualConnection;
  * // 전체 문서 수 조회회
  * $count = Document::count();
  *
- * // 인스턴스의 전체 문서 수 조회
- * $model = XeDocument::getModel('instance-id');
+ * // division 된 테이블에서 인스턴스의 전체 문서 수 조회
+ * $model = Document::division('instance-id');
  * $count = $model->count('instance-id');
  * ```
  *
@@ -93,9 +92,11 @@ use Xpressengine\Database\VirtualConnectionInterface as VirtualConnection;
  * ```php
  * $perPage = 10;
  *
- * $model = XeDocument::getModel('instance-id');
+ * $paginate = Document::paginate($perPage);
  *
- * $model->paginate($perPage);
+ * // division 된 테이블에서 조회
+ * $model = Document::division('instance-id');
+ * $paginate = $model->paginate($perPage);
  * ```
  *
  * @category    Document
@@ -238,8 +239,6 @@ class DocumentHandler
      */
     public function add(array $attributes)
     {
-        // get model 할 때 인스턴스만 생성하고 config, instanceId 정보 없이도 division 처리 될 수 있도록
-        //$doc = $this->getModel($attributes['instanceId']);
         $doc = $this->newModel();
 
         $doc->getConnection()->beginTransaction();
@@ -560,11 +559,11 @@ class DocumentHandler
      */
     public function get($id, $instanceId = null)
     {
-        $doc = $this->newModel();
+        $model = $this->newModel();
         if ($instanceId !== null) {
-            $doc->where('instanceId', '=', $instanceId);
+            $model->where('instanceId', '=', $instanceId);
         }
-        $doc->where('id', '=', $id)->first();
+        $doc = $model->where('id', '=', $id)->first();
         if ($doc == null) {
             throw new DocumentNotFoundException;
         }

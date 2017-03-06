@@ -28,7 +28,7 @@ class DocumentHandlerTest extends PHPUnit_Framework_TestCase
     protected $instanceManager;
     protected $request;
 
-        /**
+    /**
      * tear down
      *
      * @return void
@@ -180,7 +180,7 @@ class DocumentHandlerTest extends PHPUnit_Framework_TestCase
         $this->request->shouldReceive('ip')->andReturn('127.0.0.1');
 
         $this->instanceManager->shouldReceive('getDivisionTableName')
-            ->once()->with($configEntity)->andReturn('new-division-table-name');
+            ->with($configEntity)->andReturn('new-division-table-name');
         $handler = $this->getHandler();
 
         $attributes = [
@@ -204,6 +204,7 @@ class DocumentHandlerTest extends PHPUnit_Framework_TestCase
         $revisionModel->shouldReceive('max')->andReturn(1);
         $revisionModel->shouldReceive('setProxyOptions');
         $revisionModel->shouldReceive('setAttribute');
+        $revisionModel->shouldReceive('fill');
         $revisionModel->shouldReceive('save');
 
         $handler->shouldReceive('newModel')->andReturn($docModel);
@@ -238,7 +239,7 @@ class DocumentHandlerTest extends PHPUnit_Framework_TestCase
         $this->request->shouldReceive('ip')->andReturn('127.0.0.1');
 
         $this->instanceManager->shouldReceive('getDivisionTableName')
-            ->once()->with($configEntity)->andReturn('new-division-table-name');
+            ->with($configEntity)->andReturn('new-division-table-name');
         $handler = $this->getHandler();
 
         $attributes = [
@@ -257,6 +258,7 @@ class DocumentHandlerTest extends PHPUnit_Framework_TestCase
         $docModel->shouldReceive('save');
         $docModel->shouldReceive('getDynamicAttributes')->andReturn([]);
         $docModel->shouldReceive('getAttributes')->andReturn($attributes);
+        $docModel->shouldReceive('getAttribute')->with('ipaddress')->andReturn('127.0.0.1');
         $docModel->shouldReceive('setAttribute');
         $docModel->shouldReceive('getPureContent')->andReturn($content);
         $docModel->shouldReceive('setAttribute')->with('pureContent', $content);
@@ -268,6 +270,7 @@ class DocumentHandlerTest extends PHPUnit_Framework_TestCase
         $revisionModel->shouldReceive('max')->andReturn(1);
         $revisionModel->shouldReceive('setProxyOptions');
         $revisionModel->shouldReceive('setAttribute');
+        $revisionModel->shouldReceive('fill');
         $revisionModel->shouldReceive('save');
 
         $handler->shouldReceive('newModel')->andReturn($docModel);
@@ -286,7 +289,7 @@ class DocumentHandlerTest extends PHPUnit_Framework_TestCase
      */
     public function testPutWithDifferentInstanceId()
     {
-        $originInstanceId = 'origin-instanc-id';
+        $originInstanceId = 'origin-instance-id';
         $originDivisionTableName = 'origin-division-table-name';
 
         $docId = 'document-id';
@@ -331,6 +334,7 @@ class DocumentHandlerTest extends PHPUnit_Framework_TestCase
         $docModel->shouldReceive('getAttribute')->with('instanceId')->andReturn($instanceId);
         $docModel->shouldReceive('getAttribute')->with('content')->andReturn($content);
         $docModel->shouldReceive('setAttribute')->with('pureContent', $content);
+        $docModel->shouldReceive('getAttribute')->with('ipaddress')->andReturn('127.0.0.1');
         $docModel->shouldReceive('getPureContent')->andReturn($content);
         $docModel->shouldReceive('checkRequired');
         $docModel->shouldReceive('toArray')->andReturn($attributes);
@@ -352,6 +356,7 @@ class DocumentHandlerTest extends PHPUnit_Framework_TestCase
         $revisionModel = $this->getRevisionModel();
         $revisionModel->shouldReceive('where')->andReturnSelf();
         $revisionModel->shouldReceive('max')->andReturn(1);
+        $revisionModel->shouldReceive('fill');
         $revisionModel->shouldReceive('setProxyOptions');
         $revisionModel->shouldReceive('setAttribute');
         $revisionModel->shouldReceive('save');
@@ -393,8 +398,9 @@ class DocumentHandlerTest extends PHPUnit_Framework_TestCase
         $handler = $this->getHandler();
 
         $docModel = $this->getDocModel();
-        $docModel->shouldReceive('find')->andReturn($docModel);
-        $handler->shouldReceive('getModel')->andReturn($docModel);
+        $docModel->shouldReceive('where')->andReturn($docModel);
+        $docModel->shouldReceive('first')->andReturn($docModel);
+        $handler->shouldReceive('newModel')->andReturn($docModel);
 
         $doc = $handler->get($docId, $instanceId);
 
@@ -415,8 +421,9 @@ class DocumentHandlerTest extends PHPUnit_Framework_TestCase
         $handler = $this->getHandler();
 
         $docModel = $this->getDocModel();
-        $docModel->shouldReceive('find')->andReturn(null);
-        $handler->shouldReceive('getModel')->andReturn($docModel);
+        $docModel->shouldReceive('where')->andReturn($docModel);
+        $docModel->shouldReceive('first')->andReturn(null);
+        $handler->shouldReceive('newModel')->andReturn($docModel);
 
         $handler->get($docId, $instanceId);
     }
