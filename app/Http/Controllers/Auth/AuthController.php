@@ -220,10 +220,13 @@ class AuthController extends Controller
             return redirect($request->get('redirectUrl', '/'));
         }
 
+        app('session.store')->put('url.intended', $redirectUrl);
+
         // common config
         $config = app('xe.config')->get('user.common');
 
         $loginRuleName = 'login';
+
         \XeFrontend::rule($loginRuleName, [
             'email' => 'required|email_prefix',
             'password' => 'required'
