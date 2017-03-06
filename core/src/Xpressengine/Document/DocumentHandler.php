@@ -363,7 +363,11 @@ class DocumentHandler
         $clone = clone $query;
         $clone->useProxy(false);
         $clone->from($this->pivotDivisionTable($doc, $config));
-        $clone->insert($doc->toArray());
+        $params = $doc->toArray();
+        $params['email'] = $doc->email;
+        $params['certifyKey'] = $doc->certifyKey;
+        $params['ipaddress'] = $doc->ipaddress;
+        $clone->insert($params);
 
         return true;
     }
