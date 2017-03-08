@@ -204,7 +204,14 @@ class Storage
         }
 
         $id = $this->keygen->generate();
-        $name = $name ?: $this->makeFilename($uploaded->getClientOriginalName());
+        if ($name === null) {
+            $name = sprintf(
+                '%s.%s',
+                $this->makeFilename($uploaded->getClientOriginalName()),
+                $uploaded->getClientOriginalExtension()
+            );
+        }
+
         $path = $this->makePath($id, $path);
 
         $disk = $disk ?: $this->distributor->allot($uploaded);
