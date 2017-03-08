@@ -122,7 +122,7 @@ class PluginHandlerTest extends \PHPUnit_Framework_TestCase
         $entity->shouldReceive('getObject')->withNoArgs()->andReturn($plugin);
         $entity->shouldReceive('getVersion')->withNoArgs()->andReturn('1.0');
         $entity->shouldReceive('getInstalledVersion')->withNoArgs()->andReturn('0.9');
-        $entity->shouldReceive('checkInstalled')->with('0.9')->andReturn(true);
+        $entity->shouldReceive('checkInstalled')->withNoArgs()->andReturn(true);
         $entity->shouldReceive('checkUpdated')->with('0.9')->andReturn(true);
         $entity->shouldReceive('activate')->with('0.9')->andReturn(true);
 
