@@ -215,5 +215,19 @@ class ThemeController extends Controller
 
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => '저장되었습니다.']);
     }
+
+    public function deleteSetting(Request $request, ThemeHandler $themeHandler) {
+        $themeId = $request->get('theme');
+        $theme = $themeHandler->getTheme($themeId);
+        $config = $theme->setting();
+
+        $theme->deleteSetting($config);
+
+        $themeHandler->deleteThemeConfig($themeId);
+
+        return redirect()->route('settings.setting.theme')->with('alert', ['type' => 'success', 'message' => '삭제되었습니다.']);
+
+    }
+
 }
 

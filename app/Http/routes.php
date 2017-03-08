@@ -588,7 +588,8 @@ Route::settings(
 
 
         Route::get('setting', ['as' => 'settings.theme.setting', 'uses' => 'ThemeController@editSetting']);
-        Route::post('setting', ['as' => 'settings.theme.setting', 'uses' => 'ThemeController@updateSetting']);
+        Route::put('setting', ['as' => 'settings.theme.setting', 'uses' => 'ThemeController@updateSetting']);
+        Route::delete('setting', ['as' => 'settings.theme.setting', 'uses' => 'ThemeController@deleteSetting']);
 
         Route::post('setting/create', ['as' => 'settings.theme.setting.create', 'uses' => 'ThemeController@createSetting']);
     }

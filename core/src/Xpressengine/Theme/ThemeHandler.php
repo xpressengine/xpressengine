@@ -417,6 +417,18 @@ class ThemeHandler
     }
 
     /**
+     * 주어진 테마의 config data를 삭제한다.
+     *
+     * @param string $id    theme id
+     *
+     * @return void
+     */
+    public function deleteThemeConfig($id){
+        $configId = $this->getConfigId($id);
+        $this->config->removeByName($configId);
+    }
+
+    /**
      * 주어진 테마에 저장된 모든 config data를 반환한다.
      *
      * @param string $id theme id

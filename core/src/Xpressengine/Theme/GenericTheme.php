@@ -210,8 +210,11 @@ abstract class GenericTheme extends AbstractTheme
         $file = app('xe.storage')->upload(
             $file,
             config('xe.theme.storage.path').$configId,
+            $key,
             config('xe.theme.storage.disk')
         );
+        app('xe.storage')->bind($configId, $file);
+
         $saved = [
             'id' => $file->id,
             'filename' => $file->clientname
@@ -224,6 +227,24 @@ abstract class GenericTheme extends AbstractTheme
         }
 
         return $saved;
+    }
+
+    /**
+     * 삭제할 테마 설정에서 업로드했던 파일들을 삭제한다.
+     *
+     * @param ConfigEntity $config config data
+     *
+     * @return void
+     */
+    public function deleteSetting(ConfigEntity $config)
+    {
+        $configId = $config->get('_configId');
+
+        // delete saved files
+        $files = File::getByFileable($configId);
+        foreach ($files as $file) {
+            app('xe.storage')->remove($file);
+        }
     }
 
     /**
