@@ -35,7 +35,7 @@ class InstallServiceProvider extends ServiceProvider
     public function boot()
     {
         Route::get('/', function() {
-            return redirect('/web_installer');
+            return redirect('/web_installer/index.php');
         });
 
         Route::post('/install/post', '\App\Http\Controllers\InstallController@install');
