@@ -66,6 +66,7 @@ class UriValidatorTest extends PHPUnit_Framework_TestCase
         $request = $this->request;
         $request->shouldReceive('path')->andReturn('/');
         $request->shouldReceive('segment')->with(1)->andReturn(null);
+        $route->shouldReceive('uri')->andReturn('{instanceGroup}');
 
         $uriValidator = $this->uriValidator;
 
@@ -93,6 +94,7 @@ class UriValidatorTest extends PHPUnit_Framework_TestCase
         $request = $this->request;
         $request->shouldReceive('path')->andReturn('home');
         $request->shouldReceive('segment')->with(1)->andReturn('home');
+        $route->shouldReceive('uri')->andReturn('{instanceGroup}');
 
         $uriValidator = $this->uriValidator;
 
