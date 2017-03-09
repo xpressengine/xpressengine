@@ -19,7 +19,7 @@
             <div class="auth-group">
                 <label for="pwd" class="sr-only">{{xe_trans('xe::password')}}</label>
                 <input type="password" id="pwd" class="xe-form-control" placeholder="{{xe_trans('xe::enterPassword')}}" name="password">
-                <em class="text-message">{{ $passwordLevel['description'] }}</em>
+                <em class="text-message">{{ xe_trans($passwordLevel['description']) }}</em>
                 {{--<!-- <em class="text-message">올바른 비밀번호가 아닙니다.</em> -->--}}
             </div>
             <div class="auth-group {{--success--}}">
