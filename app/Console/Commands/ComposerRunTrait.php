@@ -64,7 +64,9 @@ trait ComposerRunTrait
         $input = new ArrayInput($inputs);
         $application = new Application();
         $application->setAutoExit(false); // prevent `$application->run` method from exitting the script
-        if (!defined('__XE_PLUGIN_MODE__')) {
+
+
+        if ($updateMode && !defined('__XE_PLUGIN_MODE__')) {
             define('__XE_PLUGIN_MODE__', true);
         }
 
