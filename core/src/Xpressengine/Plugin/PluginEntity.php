@@ -500,7 +500,7 @@ class PluginEntity implements Arrayable, Jsonable
     public function getStoreLink()
     {
         if ($this->hasRemoteData()) {
-            return data_get($this->remoteData, 'url');
+            return data_get($this->remoteData, 'link');
         }
         return '';
     }
