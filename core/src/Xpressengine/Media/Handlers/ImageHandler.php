@@ -90,14 +90,23 @@ class ImageHandler extends AbstractHandler
         $thumbnailer = $this->makeThumbnailer();
         $content = $thumbnailer->setOrigin($origin)->addCommand($command)->generate();
 
+        $name = implode('_', [
+            $command->getName(),
+            $command->getDimension()->getWidth() . 'x' . $command->getDimension()->getHeight(),
+            hash('sha1', $content),
+        ]);
+
+        if ($originId !== null) {
+            $file = File::find($originId);
+            $parts = pathinfo($file->filename);
+            if (isset($parts['extension']) && $parts['extension'] != '') {
+                $name = sprintf('%s.%s', $name, $parts['extension']);
+            }
+        }
         $file = $this->storage->create(
             $content,
             $path ?: '',
-            implode('_', [
-                $command->getName(),
-                $command->getDimension()->getWidth() . 'x' . $command->getDimension()->getHeight(),
-                hash('sha1', $content),
-            ]),
+            $name,
             $disk,
             $originId
         );

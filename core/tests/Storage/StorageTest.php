@@ -31,6 +31,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $uploaded->shouldReceive('getPathname')->andReturn(__DIR__ . '/sample.png');
         $uploaded->shouldReceive('getMimeType')->andReturn('image/png');
         $uploaded->shouldReceive('getSize')->andReturn(123456);
+        $uploaded->shouldReceive('getClientOriginalExtension')->andReturn('png');
 
         $distributor->shouldReceive('allot')->once()->with($uploaded)->andReturn('local');
 
@@ -85,6 +86,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $uploaded->shouldReceive('isValid')->andReturn(true);
         $uploaded->shouldReceive('getClientOriginalName')->andReturn('foo.jpg');
         $uploaded->shouldReceive('getPathname')->andReturn(__DIR__ . '/sample.png');
+        $uploaded->shouldReceive('getClientOriginalExtension')->andReturn('png');
 
         $keygen->shouldReceive('generate')->once()->andReturn('made-key');
 
