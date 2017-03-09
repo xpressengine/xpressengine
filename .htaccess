@@ -1,4 +1,3 @@
-php_value default_charset UTF-8
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews
@@ -44,3 +43,10 @@ php_value default_charset UTF-8
     # Standard routes
     RewriteRule ^ index.php [L]
 </IfModule>
+
+## You may need to uncomment the following line for some hosting environments
+#php_value default_charset UTF-8
+#<IfModule mod_url.c>
+#CheckURL On
+#ServerEncoding UTF-8
+#</IfModule>
