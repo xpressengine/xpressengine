@@ -520,7 +520,7 @@ class UserServiceProvider extends ServiceProvider
             function ($attribute, $value, $parameters) use ($validate) {
                 return $validate($value);
             },
-            $level['description']
+            xe_trans($level['description'])
         );
     }
 
