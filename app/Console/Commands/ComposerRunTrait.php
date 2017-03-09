@@ -25,12 +25,15 @@ trait ComposerRunTrait
     /**
      * runComposer
      *
-     * @param $path
-     * @param $command
+     * @param      $inputs
+     * @param bool $updateMode
      *
      * @return int
+     * @internal param $path
+     * @internal param $command
+     *
      */
-    protected function runComposer($inputs)
+    protected function runComposer($inputs, $updateMode = true)
     {
         ignore_user_abort(true);
         ini_set('allow_url_fopen', '1');

@@ -90,7 +90,7 @@ class XeUpdate extends Command
         if(!$this->option('skip-composer')) {
             $this->output->section('Composer update command is running.. It may take up to a few minutes.');
             $this->line(" composer update");
-            $result = $this->runComposer(['command' => 'update']);
+            $result = $this->runComposer(['command' => 'update'], false);
         }
 
         // migration
