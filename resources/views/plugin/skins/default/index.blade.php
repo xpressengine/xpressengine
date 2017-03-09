@@ -114,7 +114,7 @@
                             @elseif($plugin->hasUpdate())
                                 <div class="alert alert-danger" role="alert">
                                     <i class="xi-info-o"></i>{{ xe_trans('xe::hasNewUpdate') }}
-                                    <a href="{{ config('xe.plugin.store.detail_url').'/'.$plugin->getId() }}" class="alert-link" target="_blank">{{ xe_trans('xe::version') }} {{ $plugin->getLatestVersion() }} {{ xe_trans('xe::details') }}</a> {{ xe_trans('xe::or') }} <a href="{{ route('settings.plugins.show', [$plugin->getId()]) }}" class="alert-link">{{ xe_trans('xe::update_plugin') }}</a>
+                                    <a href="{{ $plugin->getStoreLink() }}" class="alert-link" target="_blank">{{ xe_trans('xe::version') }} {{ $plugin->getLatestVersion() }} {{ xe_trans('xe::details') }}</a> {{ xe_trans('xe::or') }} <a href="{{ route('settings.plugins.show', [$plugin->getId()]) }}" class="alert-link">{{ xe_trans('xe::update_plugin') }}</a>
                                 </div>
                             @endif
 
