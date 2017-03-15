@@ -2059,4 +2059,8 @@ return [
         'ko' => '대시보드 편집',
         'en' => 'Edit Dashboard'
     ],
+    'additionalInfo' => [
+        'ko' => '부가 정보',
+        'en' => 'additional information'
+    ],
 ];
