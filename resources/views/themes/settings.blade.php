@@ -58,7 +58,7 @@
                         @if($top->isSelected() && $top->hasVisibleChild())open @endif
                         @if($top->isSelected() && !$top->hasVisibleChild())on @endif"
                     >
-                        <a href="{{ $top->link()?:'#'}}" @if(!$top->link()) class="__xe_collapseMenu" @endif><i class="{{data_get($top, 'icon', 'xi-bars')}}"></i>{{xe_trans($top->title)}}</a>
+                        <a href="{{ $top->link()?:'#'}}" @if($top->hasVisibleChild()) class="__xe_collapseMenu" @endif><i class="{{data_get($top, 'icon', 'xi-bars')}}"></i>{{xe_trans($top->title)}}</a>
 
                         @if($top->hasVisibleChild())
                         <button type="button" class="btn-link toggle __xe_collapseMenu"><i class="xi-angle-right-thin"></i></button>
@@ -99,6 +99,7 @@
                     </li>
                 @endif
             @endforeach
+        </ul>
     </aside>
 
     <div id="content" class="transition">

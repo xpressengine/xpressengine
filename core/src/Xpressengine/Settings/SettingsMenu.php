@@ -54,6 +54,11 @@ class SettingsMenu extends Entity implements NodeInterface, JsonSerializable
      */
     protected $breadCrumbs = [];
 
+    /**
+     * @var boolean 출력할 하위 메뉴가 있는지의 여부
+     */
+    protected $hasVisibleChild = null;
+
 
     /**
      * @var Route
@@ -116,17 +121,22 @@ class SettingsMenu extends Entity implements NodeInterface, JsonSerializable
      */
     public function hasVisibleChild()
     {
+
+        if($this->hasVisibleChild !== null) {
+            return $this->hasVisibleChild;
+        }
+
         if (count($this->childItems) <= 0) {
-            return false;
+            return $this->hasVisibleChild = false;
         }
 
         foreach ($this->childItems as $item) {
             if ($item->display === true) {
-                return true;
+                return $this->hasVisibleChild = true;
             }
         }
 
-        return false;
+        return $this->hasVisibleChild = false;
     }
 
     /**
