@@ -77,6 +77,7 @@ class ModuleValidatorTest extends PHPUnit_Framework_TestCase
         $route->shouldReceive('getHostRegex')->andReturnNull();
 
         $request->shouldReceive('segment')->with(1)->andReturn(null);
+        $route->shouldReceive('uri')->andReturn('{instanceGroup}');
         $route->shouldReceive('getAction')->andReturn([
             'module' => 'module/pluginB@page'
         ]);
@@ -101,6 +102,7 @@ class ModuleValidatorTest extends PHPUnit_Framework_TestCase
         $route->shouldReceive('getHostRegex')->andReturnNull();
 
         $request->shouldReceive('segment')->with(1)->andReturn(null);
+        $route->shouldReceive('uri')->andReturn('{instanceGroup}');
         $route->shouldReceive('getAction')->andReturn([
             'as' => 'test.root.match',
             'module' => 'module/xpressengine@board'
@@ -134,7 +136,7 @@ class ModuleValidatorTest extends PHPUnit_Framework_TestCase
         $route->shouldReceive('getCompiled')->andReturnSelf();
         $route->shouldReceive('getHostRegex')->andReturnNull();
 
-        $request->shouldReceive('segment')->with(1)->andReturn('home');
+        $request->shouldReceive('segment')->with(1)->andReturn('aboutus');
         $route->shouldReceive('uri')->andReturn('{module_pluginB_page}');
         $route->shouldReceive('getAction')->andReturn([
             'module' => 'module/pluginB@page'
@@ -142,7 +144,7 @@ class ModuleValidatorTest extends PHPUnit_Framework_TestCase
 
         $result = $moduleValidator->matches($route, $request);
 
-        $this->assertEquals(false, $result);
+        $this->assertEquals(true, $result);
 
     }
 

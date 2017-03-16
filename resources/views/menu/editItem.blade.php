@@ -77,7 +77,7 @@
                                 <option value="_self" {{ ($item->target === "_self")? "selected":"" }}>
                                     {{xe_trans('xe::itemTargetOption_sameFrame')}}
                                 </option>
-                                <option value="_black" {{ ($item->target === "_black")? "selected":"" }}>
+                                <option value="_blank" {{ ($item->target === "_blank")? "selected":"" }}>
                                     {{xe_trans('xe::itemTargetOption_newWindow')}}
                                 </option>
                                 <option value="_parent" {{ ($item->target === "_parent")? "selected":"" }}>

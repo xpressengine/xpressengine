@@ -17,7 +17,7 @@ use View;
 
 class Text extends AbstractType
 {
-    protected static $id = 'FieldType/xpressengine@Text';
+    protected static $id = 'fieldType/xpressengine@Text';
 
     /**
      * get field type name

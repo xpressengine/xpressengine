@@ -52,7 +52,7 @@ class FilesystemHandlerTest extends \PHPUnit_Framework_TestCase
 
 
         $mockFile = m::mock('Xpressengine\Storage\File');
-        $mockFile->shouldReceive('getAttribute')->once()->with('disk')->andReturn('local');
+        $mockFile->shouldReceive('getAttribute')->with('disk')->andReturn('local');
         $mockFile->shouldReceive('getPathname')->andReturn('attached/filenamestring');
 
         $mockFilesystem = m::mock('Illuminate\Contracts\Filesystem\Filesystem');
@@ -60,9 +60,12 @@ class FilesystemHandlerTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->with('attached/filenamestring')
             ->andReturnNull();
+        $mockFilesystem->shouldReceive('exists')
+            ->once()
+            ->with('attached/filenamestring')
+            ->andReturn(true);
 
-        $filesystem->shouldReceive('disk')->once()->with('local')->andReturn($mockFilesystem);
-
+        $filesystem->shouldReceive('disk')->with('local')->andReturn($mockFilesystem);
 
         $instance->delete($mockFile);
     }

@@ -38,6 +38,12 @@
         "mockery/mockery": "0.9.*",
         "barryvdh/laravel-debugbar": "^2.2"
     },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://store.xpressengine.io"
+        }
+    ],
     "extra": {
       "merge-plugin": {
         "include": [
@@ -93,12 +99,10 @@
         ],
         "post-install-cmd": [
             "Xpressengine\\Plugin\\Composer\\Composer::postUpdate",
-            "Illuminate\\Foundation\\ComposerScripts::postInstall",
             "php artisan optimize"
         ],
         "post-update-cmd": [
             "Xpressengine\\Plugin\\Composer\\Composer::postUpdate",
-            "Illuminate\\Foundation\\ComposerScripts::postUpdate",
             "php artisan optimize"
         ],
         "post-root-package-install": [

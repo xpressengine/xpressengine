@@ -61,9 +61,10 @@ abstract class Node extends DynamicModel implements NodeInterface
     /**
      * Ancestors relationship
      *
+     * @param bool $without without self node when value is true
      * @return BelongsToMany
      */
-    public function ancestors()
+    public function ancestors($without = true)
     {
         $relation = $this->belongsToMany(
             static::class,
@@ -72,7 +73,10 @@ abstract class Node extends DynamicModel implements NodeInterface
             $this->getAncestorName()
         )->withPivot($this->getDepthName());
 
-        $relation->wherePivot($this->getDepthName(), '!=', 0);
+        if ($without) {
+            $relation->wherePivot($this->getDepthName(), '!=', 0);
+        }
+
 
         return $relation;
     }
@@ -80,9 +84,10 @@ abstract class Node extends DynamicModel implements NodeInterface
     /**
      * Descendants relationship
      *
+     * @param bool $without without self node when value is true
      * @return BelongsToMany
      */
-    public function descendants()
+    public function descendants($without = true)
     {
         $relation = $this->belongsToMany(
             static::class,
@@ -91,7 +96,9 @@ abstract class Node extends DynamicModel implements NodeInterface
             $this->getDescendantName()
         )->withPivot($this->getDepthName());
 
-        $relation->wherePivot($this->getDepthName(), '!=', 0);
+        if ($without) {
+            $relation->wherePivot($this->getDepthName(), '!=', 0);
+        }
 
         return $relation;
     }
@@ -257,14 +264,14 @@ abstract class Node extends DynamicModel implements NodeInterface
     }
 
     /**
-     * Get primary key array for breadcrumbs
+     * Get node model for breadcrumbs
      *
-     * @return array
+     * @return Collection
      */
     public function getBreadcrumbs()
     {
         if ($this->parent) {
-            return array_merge($this->parent->getBreadcrumbs(), [$this->getKey()]);
+            return $this->parent->getBreadcrumbs()->push($this);
         }
 
         return $this->ancestors->sort(function ($a, $b) {
@@ -276,7 +283,7 @@ abstract class Node extends DynamicModel implements NodeInterface
             }
 
             return $aDepth > $bDepth ? -1 : 1;
-        })->push($this)->pluck($this->getKeyName())->toArray();
+        })->push($this);
     }
 
     /**

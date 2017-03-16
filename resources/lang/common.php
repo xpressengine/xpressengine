@@ -1829,6 +1829,9 @@ return [
         'ko' => '이 테마는 편집을 지원하지 않습니다.',
         'en' => 'This theme does not support editing.',
     ],
+    'confirmThemeDelete' => [
+        'ko' => '삭제한 테마 설정은 되돌릴 수 없습니다. 이 테마 설정을 삭제하시겠습니까? ',
+    ],
     'emptyTrash' => [
         'ko' => '휴지통 비우기',
         'en' => 'Empty Trash',
@@ -2058,5 +2061,9 @@ return [
     'editDashboard' => [
         'ko' => '대시보드 편집',
         'en' => 'Edit Dashboard'
+    ],
+    'additionalInfo' => [
+        'ko' => '부가 정보',
+        'en' => 'additional information'
     ],
 ];

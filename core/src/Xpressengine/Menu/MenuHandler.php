@@ -420,7 +420,7 @@ class MenuHandler
             throw new CanNotDeleteMenuItemHaveChildException;
         }
 
-        $item->ancestors()->detach($item);
+        $item->ancestors(false)->detach();
         $this->destroyMenuType($item);
 
         return $this->repo->deleteItem($item);
@@ -626,7 +626,8 @@ class MenuHandler
     protected function menuKeyString($value)
     {
         if ($value instanceof MenuItem) {
-            $string = $value->menu->getKey() . '.' . implode('.', $value->getBreadcrumbs());
+            $breadcrumbs = $value->getBreadcrumbs();
+            $string = $value->menu->getKey() . '.' . implode('.', $breadcrumbs->modelKeys());
         } else {
             $string = $value;
         }
@@ -664,7 +665,9 @@ class MenuHandler
      */
     public function permKeyString(MenuItem $item)
     {
-        return $item->menu->getKey() . '.' . implode('.', $item->getBreadcrumbs());
+        $breadcrumbs = $item->getBreadcrumbs();
+
+        return $item->menu->getKey() . '.' . implode('.', $breadcrumbs->modelKeys());
     }
 
     /**

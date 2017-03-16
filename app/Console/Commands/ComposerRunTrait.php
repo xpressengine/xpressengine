@@ -17,6 +17,7 @@ namespace App\Console\Commands;
 use Composer\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Process\Process;
+use Xpressengine\Plugin\Composer\Composer;
 
 trait ComposerRunTrait
 {
@@ -24,12 +25,15 @@ trait ComposerRunTrait
     /**
      * runComposer
      *
-     * @param $path
-     * @param $command
+     * @param      $inputs
+     * @param bool $updateMode
      *
      * @return int
+     * @internal param $path
+     * @internal param $command
+     *
      */
-    protected function runComposer($inputs)
+    protected function runComposer($inputs, $updateMode = true)
     {
         ignore_user_abort(true);
         ini_set('allow_url_fopen', '1');
@@ -60,9 +64,15 @@ trait ComposerRunTrait
         $input = new ArrayInput($inputs);
         $application = new Application();
         $application->setAutoExit(false); // prevent `$application->run` method from exitting the script
-        if (!defined('__XE_PLUGIN_MODE__')) {
+
+
+        if ($updateMode && !defined('__XE_PLUGIN_MODE__')) {
             define('__XE_PLUGIN_MODE__', true);
         }
+
+        Composer::setPackagistToken(config('xe.plugin.packagist.site_token'));
+        Composer::setPackagistUrl(config('xe.plugin.packagist.url'));
+
         $code = $application->run($input);
         return $code;
 

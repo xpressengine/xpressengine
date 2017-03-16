@@ -692,7 +692,7 @@ class UserHandler
             $messages = $validate->messages();
             $message = current($messages->get('password'));
             $e = new InvalidArgumentException();
-            $e->setMessage($message);
+            $e->setMessage(xe_trans($message));
             throw $e;
         }
 

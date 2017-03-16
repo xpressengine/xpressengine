@@ -21,7 +21,7 @@
                 <label for="chk" role="button"><input type="checkbox" class="__xe_keep_login" id="chk" name="remember"> <span>{{xe_trans('xe::keepLogin')}}</span></label>
                 <a href="{{ route('auth.reset') }}" class="pull-right">{{xe_trans('xe::forgotPassword')}}</a>
                 <!--[D] 체크 시 하단메시지 노출-->
-                <div class="auth-noti" id="__xe_infoRemember" style=";">
+                <div class="auth-noti" id="__xe_infoRemember" style="display: none;">
                     <p>{{xe_trans('xe::keepLoginDescription')}}</p>
                 </div>
             </div>

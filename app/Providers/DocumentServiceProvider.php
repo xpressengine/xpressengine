@@ -16,9 +16,11 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Document\ConfigHandler;
+use Xpressengine\Document\DatabaseProxy;
 use Xpressengine\Document\DocumentHandler;
 use Xpressengine\Document\InstanceManager;
 use Xpressengine\Document\Models\Document;
+use XeDocument;
 
 /**
  * laravel service provider
@@ -38,6 +40,30 @@ class DocumentServiceProvider extends ServiceProvider
         // reply 설정을 위해 create event listener 등록
         Document::creating(function (Document $model) {
             $model->setReply();
+        });
+
+        Document::created(function (Document $model) {
+            $instanceId = $model->getAttribute('instanceId');
+            if ($instanceId === null || $instanceId == '') {
+                return;
+            }
+            XeDocument::addDivision($model);
+        });
+
+        Document::updated(function (Document $model) {
+            $instanceId = $model->getAttribute('instanceId');
+            if ($instanceId === null || $instanceId == '') {
+                return;
+            }
+            XeDocument::putDivision($model);
+        });
+
+        Document::deleting(function (Document $model) {
+            $instanceId = $model->getAttribute('instanceId');
+            if ($instanceId === null || $instanceId == '') {
+                return;
+            }
+            XeDocument::removeDivision($model);
         });
     }
 

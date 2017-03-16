@@ -20,7 +20,7 @@ class Address extends AbstractType
     /**
      * @var string
      */
-    protected static $id = 'FieldType/xpressengine@Address';
+    protected static $id = 'fieldType/xpressengine@Address';
 
     /**
      * get field type name

@@ -39,7 +39,7 @@ class TransCachedDatabaseTest extends PHPUnit_Framework_TestCase
         $cache->shouldReceive('flush');
 
         $conn = $this->getConn();
-        $conn->shouldReceive('first')->andReturn(['value' => 'message']);
+        $conn->shouldReceive('first')->andReturn((object)['value' => 'message']);
         $conn->shouldReceive('count')->andReturnValues([0, 1]);
 
         $langData = new LangData();
@@ -47,7 +47,7 @@ class TransCachedDatabaseTest extends PHPUnit_Framework_TestCase
         $cachedDb = new TransCachedDatabase($cache, $conn);
         $cachedDb->putLangData('ns', $langData);
         $cachedDb->putLangData('ns', $langData);
-        $this->assertSame('message', $cachedDb->getLine('ns', 'locale', 'item'));
+        $this->assertSame('message', $cachedDb->getLine('ns', 'item', 'locale'));
     }
 
     public function testGetLine()
@@ -57,7 +57,7 @@ class TransCachedDatabaseTest extends PHPUnit_Framework_TestCase
         $cache->shouldReceive('set');
 
         $conn = $this->getConn();
-        $conn->shouldReceive('first')->andReturn(['value' => 'message']);
+        $conn->shouldReceive('first')->andReturn((object)['value' => 'message']);
 
         $cachedDb = new TransCachedDatabase($cache, $conn);
         $cachedDb->putLangData('ns', new LangData());

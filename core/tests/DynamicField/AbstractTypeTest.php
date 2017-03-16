@@ -710,7 +710,7 @@ class TestType extends AbstractType
     }
 }
 
-class testSkin extends AbstractSkin
+class TestSkin extends AbstractSkin
 {
 
     /**

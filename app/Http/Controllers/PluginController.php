@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use XePresenter;
 use Xpressengine\Http\Request;
+use Xpressengine\Installer\XpressengineInstaller;
 use Xpressengine\Interception\InterceptionHandler;
 use Xpressengine\Plugin\Composer\Composer;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
@@ -228,14 +229,14 @@ class PluginController extends Controller
                 $input = new ArrayInput(
                     [
                         'command' => 'update',
-                        "--prefer-lowest",
-                        "--with-dependencies",
+                        "--prefer-lowest" => true,
+                        "--with-dependencies" => true,
                         '--working-dir' => base_path(),
                         'packages' => ["$vendorName/*"]
                     ]
                 );
 
-                Composer::setPackagistToken(config('xe.plugin.packagist.token'));
+                Composer::setPackagistToken(config('xe.plugin.packagist.site_token'));
                 Composer::setPackagistUrl(config('xe.plugin.packagist.url'));
 
                 $output = new BufferedOutput();
@@ -244,25 +245,27 @@ class PluginController extends Controller
                 if (!defined('__XE_PLUGIN_MODE__')) {
                     define('__XE_PLUGIN_MODE__', true);
                 }
-                $code = $application->run($input, $output);
+                $result = $application->run($input, $output);
 
                 $outputText = $output->fetch();
                 file_put_contents(storage_path('logs/plugin.log'), $outputText);
 
                 if(is_callable($callback)) {
-                    $callback($code);
+                    $callback($result);
                 }
 
                 $writer->load();
-                if ($code !== 0) {
+
+                if ($result !== 0) {
                     $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_FAILED);
+                    $writer->set('xpressengine-plugin.operation.failed', XpressengineInstaller::$failed);
                 } else {
                     $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_SUCCESSED);
                 }
                 $writer->write();
 
                 Log::info(
-                    "[plugin operation] plugin operation finished. [exit code: $code, memory usage: ".memory_get_usage(
+                    "[plugin operation] plugin operation finished. [exit code: $result, memory usage: ".memory_get_usage(
                     )."]"
                 );
             }

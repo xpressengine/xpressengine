@@ -16,6 +16,7 @@ namespace Xpressengine\Plugin\Composer;
 use Composer\Installer\InstallerEvent;
 use Composer\Plugin\CommandEvent;
 use Composer\Script\Event;
+use Illuminate\Foundation\Application;
 use Xpressengine\Installer\XpressengineInstaller;
 use Xpressengine\Plugin\MetaFileReader;
 use Xpressengine\Plugin\PluginScanner;
@@ -30,54 +31,48 @@ use Xpressengine\Plugin\PluginScanner;
  */
 class Composer
 {
-    protected static $metaFileName = 'composer.json';
+    protected static $composerFile = 'composer.json';
 
     protected static $pluginsDir = 'plugins';
 
-    protected static $packagistUrl = 'https://xpressengine.io';
+    protected static $packagistUrl = null;
 
     protected static $packagistToken = null;
 
-    protected static $composerFile = 'storage/app/composer.plugins.json';
+    protected static $pluginComposerFile = 'storage/app/composer.plugins.json';
 
     protected static $installedFlagPath = 'storage/app/installed';
 
-    public static $isPluginMode = false;
-
     public static $basePlugins = [
-        'xpressengine-plugin/alice' => '0.9.6',
-        'xpressengine-plugin/board' => '0.9.11',
-        'xpressengine-plugin/ckeditor' => '0.9.8',
+        'xpressengine-plugin/alice' => '0.9.8',
+        'xpressengine-plugin/board' => '0.9.14',
+        'xpressengine-plugin/ckeditor' => '0.9.10',
         'xpressengine-plugin/claim' => '0.9.3',
-        'xpressengine-plugin/comment' => '0.9.6',
+        'xpressengine-plugin/comment' => '0.9.8',
         'xpressengine-plugin/external_page' => '0.9.4',
         'xpressengine-plugin/google_analytics' => '0.9.2',
         'xpressengine-plugin/news_client' => '0.9.3',
         'xpressengine-plugin/orientator' => '0.9.1',
         'xpressengine-plugin/page' => '0.9.2',
-        'xpressengine-plugin/social_login' => '0.9.7',
+        'xpressengine-plugin/social_login' => '0.9.8',
         'xpressengine-plugin/emoticon' => '0.9.0',
         'xpressengine-plugin/widget_page' => '0.9.0'
     ];
 
-    protected static $enabled;
-
-    public static $changed = [];
-
     /**
-     * @param string $ackagistUrl
+     * @param string $packagistUrl
      */
-    public static function setPackagistUrl($ackagistUrl)
+    public static function setPackagistUrl($packagistUrl)
     {
-        self::$packagistUrl = $ackagistUrl;
+        self::$packagistUrl = $packagistUrl;
     }
 
     /**
-     * @param null $packagistToken
+     * @param null $authToken
      */
-    public static function setPackagistToken($packagistToken)
+    public static function setPackagistToken($authToken)
     {
-        self::$packagistToken = $packagistToken;
+        self::$packagistToken = $authToken;
     }
 
     /**
@@ -93,7 +88,7 @@ class Composer
             return;
         }
 
-        $path = static::$composerFile;
+        $path = static::$pluginComposerFile;
         $writer = self::getWriter($path);
         $writer->reset();
 
@@ -144,10 +139,12 @@ class Composer
 
     public static function postDependenciesSolving(InstallerEvent $event)
     {
-        $io = $event->getIO();
-        $host = parse_url(static::$packagistUrl, PHP_URL_HOST);
-        $token = static::$packagistToken;
-        $io->setAuthentication($host, $token);
+        if(static::$packagistUrl !== null && static::$packagistToken !== null) {
+            $io = $event->getIO();
+            $host = parse_url(static::$packagistUrl, PHP_URL_HOST);
+            $token = static::$packagistToken;
+            $io->setAuthentication($host, $token);
+        }
     }
 
     /**
@@ -160,7 +157,7 @@ class Composer
      */
     public static function postUpdate(Event $event)
     {
-        $path = static::$composerFile;
+        $path = static::$pluginComposerFile;
 
         $writer = self::getWriter($path);
 
@@ -170,6 +167,9 @@ class Composer
             $writer->set('xpressengine-plugin.operation.changed', XpressengineInstaller::$changed);
         }
         $writer->reset()->write();
+
+        require_once $event->getComposer()->getConfig()->get('vendor-dir').'/autoload.php';
+        static::clearCompiled();
     }
 
     /**
@@ -182,9 +182,9 @@ class Composer
      */
     protected static function getWriter($path)
     {
-        $reader = new MetaFileReader(static::$metaFileName);
+        $reader = new MetaFileReader(static::$composerFile);
         $scanner = new PluginScanner($reader, static::$pluginsDir);
-        $writer = new ComposerFileWriter($path, $scanner, static::$packagistUrl);
+        $writer = new ComposerFileWriter($path, $scanner);
 
         return $writer;
     }
@@ -233,4 +233,26 @@ class Composer
         }
         return false;
     }
+
+    /**
+     * Clear the cached Laravel bootstrapping files.
+     *
+     * @return void
+     */
+    protected static function clearCompiled()
+    {
+
+        if(!$laravel = Application::getInstance()) {
+            $laravel = new Application(getcwd());
+        }
+
+        if (file_exists($compiledPath = $laravel->getCachedCompilePath())) {
+            @unlink($compiledPath);
+        }
+
+        if (file_exists($servicesPath = $laravel->getCachedServicesPath())) {
+            @unlink($servicesPath);
+        }
+    }
+
 }

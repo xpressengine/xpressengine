@@ -140,23 +140,7 @@ abstract class AbstractTheme implements ComponentInterface, Renderable
     }
 
     /**
-     * 테마 설정 페이지에서 입력된 설정값이 저장되기 전 필요한 처리한다.
-     * 사이트관리자가 테마 설정 페이지에서 저장 요청을 할 경우, 테마핸들러가 설정값을 저장하기 전에 이 메소드가 실행된다.
-     * 설정값을 보완할 필요가 있을 경우 이 메소드에서 보완하여 다시 반환하면 된다.
-     *
-     * @param array $config pure config data
-     *
-     * @return array
-     *
-     * @deprecated use resolveSetting instead
-     */
-    public function updateSetting(array $config)
-    {
-        $this->resolveSetting($config);
-    }
-
-    /**
-     * 테마 설정 페이지에서 입력된 설정값이 저장되기 전 필요한 처리한다.
+     * 테마 설정 페이지에서 입력된 설정값이 저장되기 전 필요한 작업을 처리한다.
      * 사이트관리자가 테마 설정 페이지에서 저장 요청을 할 경우, 테마핸들러가 설정값을 저장하기 전에 이 메소드가 실행된다.
      * 설정값을 보완할 필요가 있을 경우 이 메소드에서 보완하여 다시 반환하면 된다.
      *
@@ -167,6 +151,19 @@ abstract class AbstractTheme implements ComponentInterface, Renderable
     public function resolveSetting(array $config)
     {
         return $config;
+    }
+
+    /**
+     * 생성된 테마 설정을 삭제하기 전 필요한 작업을 처리한다.
+     * 사이트 관리자가 테마 설정 페이지에서 삭제 요청을 할 경우, 테마핸들러가 설정값을 삭제하기 전에 이 메소드가 실행된다.
+     *
+     * @param ConfigEntity $config
+     *
+     * @return void
+     */
+    public function deleteSetting(ConfigEntity $config)
+    {
+        return;
     }
 
     /**

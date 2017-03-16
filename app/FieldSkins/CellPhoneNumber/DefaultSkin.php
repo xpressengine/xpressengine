@@ -14,7 +14,7 @@ use View;
 
 class DefaultSkin extends AbstractSkin
 {
-    protected static $id = 'FieldType/xpressengine@CellPhoneNumber/FieldSkin/xpressengine@CellPhoneNumberDefault';
+    protected static $id = 'fieldType/xpressengine@CellPhoneNumber/fieldSkin/xpressengine@CellPhoneNumberDefault';
 
     /**
      * get name of skin

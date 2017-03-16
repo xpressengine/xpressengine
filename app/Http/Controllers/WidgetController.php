@@ -42,17 +42,25 @@ class WidgetController extends Controller {
 
         $inputs = [];
         foreach ($data as $item) {
-            if(is_array($item->value)) {
+            if (is_array($item->value)) {
                 $value = [];
                 foreach ($item->value as $sub) {
                     $value[$sub->name] = e($sub->value);
                 }
                 $inputs[$item->name] = $value;
             } else {
-                $inputs[$item->name] = e($item->value);
+                if (substr($item->name, -2) == '[]') {
+                    $name = substr($item->name, 0, -2);
+                    if (isset($inputs[$name]) === false) {
+                        $inputs[$name] = [];
+                    }
+                    $len = count($inputs[$name]);
+                    $inputs[$name][$len] = $item->value;
+                } else {
+                    $inputs[$item->name] = e($item->value);
+                }
             }
         }
-
         $widget = $inputs['@id'];
 
         $code = $widgetHandler->generateCode($widget, $inputs);

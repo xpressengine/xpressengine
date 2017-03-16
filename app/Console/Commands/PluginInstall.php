@@ -1,8 +1,7 @@
 <?php
-
 namespace App\Console\Commands;
 
-use Xpressengine\Plugin\Composer\Composer;
+use Xpressengine\Installer\XpressengineInstaller;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
@@ -115,20 +114,19 @@ class PluginInstall extends PluginCommand
 
         $vendorName = PluginHandler::PLUGIN_VENDOR_NAME;
 
-        Composer::setPackagistToken(config('xe.plugin.packagist.token'));
-        Composer::setPackagistUrl(config('xe.plugin.packagist.url'));
-
         // composer update실행(composer update --prefer-lowest --with-dependencies xpressengine-plugin/*)
         // composer update를 실행합니다. 최대 수 분이 소요될 수 있습니다.
-        $this->warn('Composer update command is running.. It may take up to a few minutes.');
+        $this->warn(' Composer update command is running.. It may take up to a few minutes.');
         $this->line(" composer update --prefer-lowest --with-dependencies $vendorName/*");
+
         $result = $this->runComposer(
             [
                 'command' => 'update',
-                "--prefer-lowest",
-                "--with-dependencies",
+                "--prefer-lowest" => true,
+                "--with-dependencies" => true,
+                //"--quiet" => true,
                 '--working-dir' => base_path(),
-                '--verbose' => '3',
+                /*'--verbose' => '3',*/
                 'packages' => ["$vendorName/*"]
             ]
         );
@@ -139,8 +137,11 @@ class PluginInstall extends PluginCommand
         // composer.plugins.json 파일을 다시 읽어들인다.
         $writer->load();
         if (!isset($result) || $result !== 0) {
+            $result = false;
             $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_FAILED);
+            $writer->set('xpressengine-plugin.operation.failed', XpressengineInstaller::$failed);
         } else {
+            $result = true;
             $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_SUCCESSED);
         }
         $writer->write();
@@ -149,20 +150,33 @@ class PluginInstall extends PluginCommand
         $changed = $this->getChangedPlugins($writer);
         $this->printChangedPlugins($changed);
 
-        if (array_get($changed, 'installed.'.$name) === $version) {
-            // 설치 성공 문구 출력
-            // $title - $name:$version 플러그인을 설치했습니다.
-            $this->output->success("$title - $name:$version plugin is installed");
-        } elseif (array_get($changed, 'installed.'.$name)) {
-            $this->output->success(
+        if($result) {
+            if (array_get($changed, 'installed.'.$name) === $version) {
+                // 설치 성공 문구 출력
+                // $title - $name:$version 플러그인을 설치했습니다.
+                $this->output->success("$title - $name:$version plugin is installed");
+            } elseif (array_get($changed, 'installed.'.$name)) {
+                $this->output->success(
                 // $name 플러그인을 설치하였으나 다른 버전(".array_get($changed, 'installed.'.$name).")으로 설치되었습니다. 플러그인 간의 의존관계로 인해 다른 버전으로 설치되었을 가능성이 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다.
-                "$name plugin is installed, but installed version(".array_get($changed, 'installed.'.$name).") is defferent to requested because the dependencies between plugins. Please check the plugin's dependencies."
-            );
-        } else {
-            $this->output->error(
+                    "$name plugin is installed, but installed version(".array_get($changed, 'installed.'.$name).") is defferent to requested because the dependencies between plugins. Please check the plugin's dependencies."
+                );
+            } else {
+                $this->output->error(
                 // $name:$version 플러그인을 설치하지 못했습니다. 플러그인 간의 의존관계로 인해 설치가 불가능할 수도 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다.
-                "Installation failed. Because of the dependencies between plugins, Installation may not be able to success. Please check the plugin's dependencies."
-            );
+                    "Installation failed. Because of the dependencies between plugins, Installation may not be able to success. Please check the plugin's dependencies."
+                );
+            }
+        } else {
+            // 설치 실패한 플러그인을 가져온다.
+            $failed = $this->getFailedPlugins($writer);
+            $this->printFailedPlugins($failed);
+
+            if(!empty($failed['install']) || !empty($failed['updated'])) {
+                $this->output->error(
+                    "Installation failed due to paid plugins that I did not purchase."
+                );
+            }
+
         }
     }
 }

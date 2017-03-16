@@ -133,17 +133,6 @@ class DynamicQuery extends Builder
     }
 
     /**
-     * get illuminate database query builder
-     *
-     * @return \Illuminate\Database\Query\Builder
-     * @deprecated
-     */
-    public function getQuery()
-    {
-        return $this->query;
-    }
-
-    /**
      * get table schema
      *
      * @return array

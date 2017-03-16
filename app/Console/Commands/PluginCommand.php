@@ -97,6 +97,22 @@ class PluginCommand extends Command
         return $changed;
     }
 
+    /**
+     * getChanged
+     *
+     * @param ComposerFileWriter $writer
+     *
+     * @return array
+     */
+    protected function getFailedPlugins(ComposerFileWriter $writer)
+    {
+        $failed = [];
+        $failed['install'] = $writer->get('xpressengine-plugin.operation.failed.install', []);
+        $failed['update'] = $writer->get('xpressengine-plugin.operation.failed.update', []);
+        $failed['uninstall'] = $writer->get('xpressengine-plugin.operation.failed.uninstall', []);
+        return $failed;
+    }
+
 
     /**
      * printChangedPlugins
@@ -127,6 +143,41 @@ class PluginCommand extends Command
                 $this->line("  $p:$v");
             }
         }
+    }
+
+    /**
+     * printFailedPlugins
+     *
+     * @param array $failed
+     *
+     * @return void
+     */
+    protected function printFailedPlugins(array $failed)
+    {
+        $codes = [
+            '401' => 'This is paid plugin. If you have already purchased this plugin, check the \'site_token\' field in your setting file(config/production/xe.php).',
+            '403' => 'This is paid plugin. You need to buy it in the Market-place.',
+        ];
+        if (count($failed['install'])) {
+            $this->warn('Install failed plugins:');
+            foreach ($failed['install'] as $p => $c) {
+                $this->line("  $p: ".$codes[$c]);
+            }
+        }
+
+        if (count($failed['update'])) {
+            $this->warn('Update failed plugins:');
+            foreach ($failed['update'] as $p => $c) {
+                $this->line("  $p: ".$codes[$c]);
+            }
+        }
+
+        //if (count($failed['uninstall'])) {
+        //    $this->warn('Uninstall failed plugins:');
+        //    foreach ($failed['uninstall'] as $p => $c) {
+        //        $this->line("  $p: ".$codes[$c]);
+        //    }
+        //}
     }
 
 }

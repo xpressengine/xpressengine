@@ -493,6 +493,19 @@ class PluginEntity implements Arrayable, Jsonable
     }
 
     /**
+     * getStoreLink
+     *
+     * @return string
+     */
+    public function getStoreLink()
+    {
+        if ($this->hasRemoteData()) {
+            return data_get($this->remoteData, 'link');
+        }
+        return '';
+    }
+
+    /**
      * 플러그인의 이름을 조회한다. 이름은 composer에서 사용하는 패키지명과 일치한다.
      *
      * @return string

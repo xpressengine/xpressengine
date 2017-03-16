@@ -234,70 +234,11 @@ return [
             'name' => 'UnKnown'
         ],
         'displayName' => [
-            'validate' => function ($value) {
-                if (!is_string($value) && !is_numeric($value)) {
-                    return false;
-                }
-
-                if (str_contains($value, "  ")) {
-                    return false;
-                }
-
-                $byte = strlen($value);
-                $multiByte = mb_strlen($value);
-
-                if ($byte === $multiByte) {
-                    if ($byte < 3) {
-                        return false;
-                    }
-                } else {
-                    if ($multiByte < 2) {
-                        return false;
-                    }
-                }
-
-                return preg_match('/^[\pL\pM\pN][. \pL\pM\pN_-]*[\pL\pM\pN]$/u', $value);
-            },
+            'validate' => null
         ],
         'password' => [
-            'default' => 'normal',
-            'levels' => [
-                'low' => [
-                    'title' => '낮음',
-                    'validate' => function ($password) {
-                        return strlen($password) >= 4;
-                    },
-                    'description' => '비밀번호는 4자 이상이어야 합니다.'
-                ],
-                'normal' => [
-                    'title' => '보통',
-                    'validate' => function ($password) {
-                        if (!preg_match_all(
-                            '$\S*(?=\S{6,})(?=\S*[a-zA-Z])(?=\S*[\d])\S*$',
-                            $password
-                        )
-                        ) {
-                            return false;
-                        }
-                        return true;
-                    },
-                    'description' => '비밀번호는 6자리 이상이어야 하며 영문과 숫자를 반드시 포함해야 합니다.'
-                ],
-                'high' => [
-                    'title' => '높음',
-                    'validate' => function ($password) {
-                        if (!preg_match_all(
-                            '$\S*(?=\S{8,})(?=\S*[a-zA-Z])(?=\S*[\d])(?=\S*[\W])\S*$',
-                            $password
-                        )
-                        ) {
-                            return false;
-                        }
-                        return true;
-                    },
-                    'description' => '비밀번호는 8자리 이상이어야 하며 영문과 숫자, 특수문자를 반드시 포함해야 합니다.'
-                ]
-            ]
+            'default' => 'normal', /* weak, normal, strong */
+            'levels' => []
         ],
         'profileImage' => [
             'default' => 'assets/core/member/img/default_avatar.jpg',
@@ -389,15 +330,12 @@ return [
     ],
 
     'plugin' => [
-        'store' => [
-            'detail_url' => 'https://xpressengine.io/plugins/detail',
-        ],
         'api' => [
-            'url' => 'https://xpressengine.io/plugins/api/1.0'
+            'url' => 'https://store.xpressengine.io/api/1.2'
         ],
         'packagist' => [
-            'url' => 'https://xpressengine.io',
-            'token' => null
+            'url' => 'https://store.xpressengine.io',
+            'site_token' => null
         ],
         'operation' => [
             'time_limit' => 1200

@@ -41,7 +41,6 @@ class UserMigration extends Migration {
             $table->string('id', 36);
             $table->string('name');
             $table->string('description', 1000);
-            $table->integer('count')->default(0);
             $table->integer('order')->default(0)->index();
             $table->timestamp('createdAt')->index();
             $table->timestamp('updatedAt');

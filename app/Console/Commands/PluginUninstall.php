@@ -1,8 +1,6 @@
 <?php
-
 namespace App\Console\Commands;
 
-use Xpressengine\Plugin\Composer\Composer;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
@@ -107,9 +105,6 @@ class PluginUninstall extends PluginCommand
 
         $vendorName = PluginHandler::PLUGIN_VENDOR_NAME;
 
-        Composer::setPackagistToken(config('xe.plugin.packagist.token'));
-        Composer::setPackagistUrl(config('xe.plugin.packagist.url'));
-
         // composer update실행(composer update --prefer-lowest --with-dependencies xpressengine-plugin/*)
         // composer update를 실행합니다. 최대 수분이 소요될 수 있습니다.
         $this->warn('Composer update command is running.. It may take up to a few minutes.');
@@ -117,9 +112,11 @@ class PluginUninstall extends PluginCommand
         $result = $this->runComposer(
             [
                 'command' => 'update',
-                "--prefer-lowest",
-                "--with-dependencies",
+                "--prefer-lowest" => true,
+                "--with-dependencies" => true,
+                //"--quiet" => true,
                 '--working-dir' => base_path(),
+                /*'--verbose' => '3',*/
                 'packages' => ["$vendorName/$id"]
             ]
         );

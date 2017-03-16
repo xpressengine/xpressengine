@@ -13,7 +13,12 @@
             <label for="">작업</label>
             @if($operation['runningMode'] !== 'uninstall')
                 @foreach($operation['runnings'] as $package => $version)
+                    @if(data_get($operation['runningsInfo'], $package))
                     <p>{{ data_get($operation['runningsInfo'], $package.'.title') }}({{ data_get($operation['runningsInfo'], $package.'.pluginId') }}) ver.{{ $version }} {{ array_get(['install'=>'설치','update'=>'업데이트','uninstall'=>'삭제'], $operation['runningMode']) }}</p>
+                    @else
+                    <p>{{ $package }} ver.{{ $version }} {{ array_get(['install'=>'설치','update'=>'업데이트','uninstall'=>'삭제'], $operation['runningMode']) }}</p>
+                    @endif
+
                 @endforeach
             @else
                 @foreach($operation['runnings'] as $package)
@@ -35,10 +40,20 @@
             </p>
 
             @if($operation['status'] === 'successed')
-                <label for="">변경내역</label>
+                <label for="">변경 내역</label>
                 @foreach($operation['changed'] as $mode => $plugins)
                     @foreach($plugins as $plugin => $version)
                     <p>{{ $plugin }} ver.{{ $version }} {{ $mode }}</p>
+                    @endforeach
+                @endforeach
+            @elseif($operation['status'] === 'failed')
+                <label for="">실패 내역</label>
+                @foreach($operation['failed'] as $mode => $plugins)
+                    @foreach($plugins as $plugin => $code)
+                        <p>{{ $plugin }} {{ $mode.' failed: ' }} {{ array_get([
+                            '401' => 'This is paid plugin. If you have already purchased this plugin, check the \'site_token\' field in your setting file(config/production/xe.php).',
+                            '403' => 'This is paid plugin. You need to buy it in the Market-place.'
+                        ], $code) }}</p>
                     @endforeach
                 @endforeach
             @endif
