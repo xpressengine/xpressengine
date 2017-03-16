@@ -69,6 +69,10 @@ $(document).ready(function () {
       $ul = $target.parent().siblings('.sub-depth-list');
     }
 
+    if ($ul.length === 0) {
+      return true;
+    }
+
     if ($ul.is(':visible')) {
       $ul.find('.sub-depth-list').slideUp('fast');
       $ul.find('.sub-depth').removeClass('open');
@@ -84,5 +88,7 @@ $(document).ready(function () {
       $ul.slideDown('fast');
       $subdepth.addClass('open');
     }
+
+    return false;
   });
 });
