@@ -40,7 +40,6 @@ var common = {
      pathInfo.menu + '/MenuEntity.js',
      pathInfo.menu + '/MenuItem.js',
      pathInfo.menu + '/TreeNode.js',
-     pathInfo.menu + '/MenuSearchBar.js',
      pathInfo.menu + '/UITree.js',
      pathInfo.menu + '/MenuSearchBar.js',
      pathInfo.menu + '/MenuSearchSuggestion.js',
@@ -70,7 +69,7 @@ var common = {
     filename: '[name].js',
   },
   plugins: [
-    new CommonsChunkPlugin('vendor', 'assets/vendor/vendor.bundle.js'),
+    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'assets/vendor/vendor.bundle.js' })
   ],
   module: {
     loaders: [
@@ -98,7 +97,7 @@ var common = {
 
       'vendor': pathInfo.vendor + '/vendor.bundle.js',
     },
-    extensions: ['', '.js', '.jsx'],
+    extensions: ['.js', '.jsx'],
   },
   externals: {
     window: 'window',
