@@ -154,6 +154,12 @@ return [
                 'description' => '',
                 'ordering' => 100
             ],
+            'plugin.setting' => [
+                'title' => 'xe::settings',
+                'display' => true,
+                'description' => '',
+                'ordering' => 300
+            ],
             'setting' => [
                 'title' => 'xe::settings',
                 'display' => true,
