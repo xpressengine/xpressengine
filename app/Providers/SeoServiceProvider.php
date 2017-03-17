@@ -8,7 +8,9 @@
 
 namespace App\Providers;
 
+use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\ServiceProvider;
+use Xpressengine\Seo\Importers\AbstractImporter;
 use Xpressengine\Seo\Importers\TwitterCardImporter;
 use Xpressengine\Seo\SeoHandler;
 use Xpressengine\Seo\Setting;
@@ -31,7 +33,7 @@ class SeoServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        AbstractImporter::setUrlGenerator($this->app[UrlGenerator::class]);
     }
 
     /**

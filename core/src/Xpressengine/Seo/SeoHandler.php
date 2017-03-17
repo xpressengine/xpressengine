@@ -187,7 +187,7 @@ class SeoHandler
         foreach ($data['images'] as &$image) {
             if (is_string($image)) {
                 $image = ['url' => $image];
-            } else if ($image instanceof Media) {
+            } elseif ($image instanceof Media) {
                 $image = [
                     'url' => $image->url(),
                     'width' => $image->meta->width,

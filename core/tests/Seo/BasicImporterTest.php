@@ -20,14 +20,22 @@ class BasicImporterTest extends \PHPUnit_Framework_TestCase
 
     public function testExec()
     {
-        list($frontend, $request) = $this->getMocks();
+        list($frontend, $request, $urlGenerator) = $this->getMocks();
         $instance = new BasicImporter($frontend, $request);
+        BasicImporter::setUrlGenerator($urlGenerator);
 
         $frontend->shouldReceive('html')->once()->with('canonical')->andReturnSelf();
 
-        $request->shouldReceive('fullUrl')->twice()->andReturn('http://domain.com');
+//        $request->shouldReceive('fullUrl')->twice()->andReturn('http://domain.com');
+        $request->shouldReceive('getBaseUrl')->andReturn('');
+        $request->shouldReceive('getPathInfo')->andReturn('/path');
+        $request->shouldReceive('getQueryString')->andReturnNull();
+        $urlGenerator->shouldReceive('to')->twice()->with('/path')->andReturn('http://domain.com/path');
 
-        $content = $this->invokeMethod($instance, 'makeCanonical', ['http://domain.com']);
+        $urlGenerator->shouldReceive('asset')->twice()->with('http://domain.com/path')
+            ->andReturn('http://domain.com/path');
+
+        $content = $this->invokeMethod($instance, 'makeCanonical', ['http://domain.com/path']);
         $frontend->shouldReceive('content')->once()->with($content)->andReturnSelf();
         $frontend->shouldReceive('prependTo')->once()->with('head')->andReturnSelf();
         $frontend->shouldReceive('load');
@@ -58,7 +66,8 @@ class BasicImporterTest extends \PHPUnit_Framework_TestCase
     {
         return [
             m::mock('Xpressengine\Presenter\Html\FrontendHandler'),
-            m::mock('Illuminate\Http\Request')
+            m::mock('Illuminate\Http\Request'),
+            m::mock('Illuminate\Contracts\Routing\UrlGenerator'),
         ];
     }
 }

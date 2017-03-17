@@ -17,6 +17,7 @@ namespace Xpressengine\Seo\Importers;
 use Illuminate\Http\Request;
 use Xpressengine\Presenter\Html\FrontendHandler;
 use Illuminate\Support\Str;
+use Illuminate\Contracts\Routing\UrlGenerator;
 
 /**
  * AbstractImport class
@@ -65,7 +66,12 @@ abstract class AbstractImporter
      */
     protected $needHost = [];
 
-//    private static $counter = 0;
+    /**
+     * UrlGenerator instance
+     *
+     * @var UrlGenerator $urlGenerator
+     */
+    protected static $urlGenerator;
 
     /**
      * Constructor
@@ -94,8 +100,8 @@ abstract class AbstractImporter
                 continue;
             }
 
-            if($key === 'images') {
-                foreach($data[$key] as &$image) {
+            if ($key === 'images') {
+                foreach ($data[$key] as &$image) {
                     $image = $image['url'];
                 }
             }
@@ -112,7 +118,16 @@ abstract class AbstractImporter
      */
     protected function extractUrl(array $data)
     {
-        return isset($data['url']) ? $data['url'] : $this->request->fullUrl();
+        return isset($data['url']) ? $data['url'] : call_user_func(
+            function (UrlGenerator $urlGenerator, Request $request) {
+                $url = $urlGenerator->to($request->getBaseUrl().$request->getPathInfo());
+                $query = $request->getQueryString();
+
+                return $query ? $url . '?' . $query : $url;
+            },
+            static::$urlGenerator,
+            $this->request
+        );
     }
 
     /**
@@ -130,7 +145,6 @@ abstract class AbstractImporter
             $content = array_key_exists($key, $this->cuts) ? $this->substr($content, $this->cuts[$key]) : $content;
             $content = in_array($key, $this->needHost) ? $this->prependHost($content) : $content;
 
-//            $this->frontend->meta($this->makeName())
             $this->frontend->meta()
                 ->property($this->metaItems[$key])
                 ->content($content)
@@ -160,15 +174,27 @@ abstract class AbstractImporter
      */
     protected function prependHost($url)
     {
-        if (preg_match('/^(http[s]?\:\/\/)([^\/]+)/i', $url, $matches) === 0) {
-            return $this->request->root() . '/' . ltrim($url, '/');
-        }
-
-        return $url;
+        return static::$urlGenerator->asset($url);
     }
 
-//    private function makeName()
-//    {
-//        return 'seo_meta_' . self::$counter++;
-//    }
+    /**
+     * Set url generator instance
+     *
+     * @param UrlGenerator $urlGenerator UrlGenerator instance
+     * @return void
+     */
+    public static function setUrlGenerator(UrlGenerator $urlGenerator)
+    {
+        static::$urlGenerator = $urlGenerator;
+    }
+
+    /**
+     * Get url generator instance
+     *
+     * @return UrlGenerator
+     */
+    public static function getUrlGenerator()
+    {
+        return static::$urlGenerator;
+    }
 }

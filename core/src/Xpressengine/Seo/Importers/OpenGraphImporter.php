@@ -60,6 +60,12 @@ class OpenGraphImporter extends AbstractImporter
     protected $needHost = ['url', 'image'];
 
 
+    /**
+     * Execute import job
+     *
+     * @param array $data data array
+     * @return void
+     */
     public function exec(array $data)
     {
         if (isset($data['images'])) {
@@ -70,11 +76,14 @@ class OpenGraphImporter extends AbstractImporter
         parent::exec($data);
 
         if (isset($images)) {
-            foreach($images as $image)
-            {
+            foreach ($images as $image) {
                 $this->addMeta('image', $image['url']);
-                if(isset($image['width'])) $this->addMeta('image_width', $image['width']);
-                if(isset($image['height'])) $this->addMeta('image_height', $image['height']);
+                if (isset($image['width'])) {
+                    $this->addMeta('image_width', $image['width']);
+                }
+                if (isset($image['height'])) {
+                    $this->addMeta('image_height', $image['height']);
+                }
             }
         }
     }
