@@ -20,9 +20,12 @@ class OpenGraphImporterTest extends \PHPUnit_Framework_TestCase
 
     public function testExec()
     {
-        list($frontend, $urlRoot) = $this->getMocks();
+        list($frontend, $urlRoot, $urlGenerator) = $this->getMocks();
         $instance = new OpenGraphImporter($frontend, $urlRoot);
+        OpenGraphImporter::setUrlGenerator($urlGenerator);
 
+        $urlGenerator->shouldReceive('asset')->once()->with('http://domain.com/path/name')
+            ->andReturn('http://domain.com/path/name');
 
         $frontend->shouldReceive('meta')->andReturnSelf();
         $frontend->shouldReceive('property')->once()->with('og:type')->andReturnSelf();
@@ -52,7 +55,8 @@ class OpenGraphImporterTest extends \PHPUnit_Framework_TestCase
     {
         return [
             m::mock('Xpressengine\Presenter\Html\FrontendHandler'),
-            m::mock('Illuminate\Http\Request')
+            m::mock('Illuminate\Http\Request'),
+            m::mock('Illuminate\Contracts\Routing\UrlGenerator'),
         ];
     }
 }

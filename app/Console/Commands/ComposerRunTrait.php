@@ -75,18 +75,6 @@ trait ComposerRunTrait
 
         $code = $application->run($input);
         return $code;
-
-        //$composer = $this->findComposer();
-        //
-        //$process = new Process($composer.' '.$command, $path, null, null, null);
-        //
-        //$output = $this->getOutput();
-        //
-        //return $process->run(
-        //    function ($type, $line) use ($output) {
-        //        $output->write($line);
-        //    }
-        //);
     }
 
     /**

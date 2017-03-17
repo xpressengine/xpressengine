@@ -160,6 +160,12 @@ return [
                 'description' => '',
                 'ordering' => 200
             ],
+            'plugin.setting' => [
+                'title' => 'xe::settings',
+                'display' => true,
+                'description' => '',
+                'ordering' => 300
+            ],
             'setting' => [
                 'title' => 'xe::settings',
                 'display' => true,

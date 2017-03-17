@@ -601,6 +601,28 @@ Route::settings(
     function () {
         Route::group(['permission' => 'plugin'], function() {
 
+            // plugin setting
+            Route::group(['prefix'=>'setting'], function(){
+                Route::get(
+                    '/',
+                    [
+                        'as' => 'settings.plugins.setting.show',
+                        'uses' => 'PluginSettingsController@show',
+                        'settings_menu' => 'plugin.setting'
+                    ]
+                );
+
+                Route::put(
+                    '/',
+                    [
+                        'as' => 'settings.plugins.setting.update',
+                        'uses' => 'PluginSettingsController@update'
+                    ]
+                );
+
+            });
+
+
             Route::get(
                 '/',
                 [
@@ -682,6 +704,11 @@ Route::settings(
                     'uses' => 'PluginController@delete'
                 ]
             );
+
+
+
+
+
         });
     }
 );
