@@ -60,17 +60,7 @@ class PluginInstall extends PluginCommand
         }
 
         // 설치가능 환경인지 검사
-        // - check writable of composer.plugin.json
-        if (!is_writable($composerFile = storage_path('app/composer.plugins.json'))) {
-            // [$composerFile] 파일에 쓰기 권한이 없습니다. 플러그인을 설치하기 위해서는 이 파일의 쓰기 권한이 있어야 합니다.
-            throw new \Exception("You have been denied permission to acccess [$composerFile] file. To install the plugin, you must have write permission to access this this file.");
-        }
-
-        // - check writable of plugins/ directory
-        if (!is_writable($pluginDir = base_path('plugins'))) {
-            // [$pluginDir] 디렉토리에 쓰기 권한이 없습니다. 플러그인을 설치하기 위해서는 이 디렉토리의 쓰기 권한이 있어야 합니다.
-            throw new \Exception("You have been denied permission to acccess [$pluginDir] directory. To install the plugin, you must have write permissions to access this directory.");
-        }
+        $this->prepareComposer();
 
         // 자료실에서 플러그인 정보 조회
         $pluginData = $provider->find($id);

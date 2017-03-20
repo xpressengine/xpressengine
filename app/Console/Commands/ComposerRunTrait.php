@@ -15,12 +15,82 @@
 namespace App\Console\Commands;
 
 use Composer\Console\Application;
+use Composer\Util\Platform;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Process\Process;
 use Xpressengine\Plugin\Composer\Composer;
 
 trait ComposerRunTrait
 {
+
+    protected function prepareComposer()
+    {
+
+        $files = [
+            storage_path('app/composer.plugins.json'),
+            base_path('composer.lock'),
+            base_path('plugins/'),
+            base_path('vendor/'),
+            base_path('vendor/composer/installed.json'),
+        ];
+
+        // file permission check
+        $this->warn(' Checking file permission: ');
+
+        foreach ($files as $file) {
+            $type = is_dir($file) ? 'directory' : 'file';
+            $this->output->write(" $file - ");
+
+            if (!is_writable($file)) {
+                // [$file] 파일에 쓰기 권한이 없습니다. 플러그인을 설치하기 위해서는 이 파일의 쓰기 권한이 있어야 합니다.
+                throw new \Exception("You have been denied permission to acccess [$file] $type. To install the plugin, you must have write permission to access this this $type.");
+            } else {
+                $this->info("passed");
+            }
+        }
+
+        // composer home check
+        $this->checkComposerHome();
+    }
+    /**
+     * checkComposerHome
+     *
+     * @return void
+     * @throws \Exception
+     */
+    protected function checkComposerHome()
+    {
+        $this->line('');
+        $this->warn(" Checking COMPOSER_HOME environment variable: ");
+
+        $config = app('xe.config')->get('plugin');
+        $home = $config->get('composer_home');
+
+        if ($home) {
+            putenv("COMPOSER_HOME=$home");
+        } else {
+            $home = getenv('COMPOSER_HOME');
+        }
+
+        if (Platform::isWindows()) {
+            if (!getenv('APPDATA')) {
+                throw new \Exception(
+                    "COMPOSER_HOME environment variable must be set for composer to run correctly. set the variable to ".route('settings.plugins.setting.show')
+                );
+            }
+        }
+
+        if (!$home) {
+            $home = getenv('HOME');
+            if (!$home) {
+                throw new \Exception(
+                    "COMPOSER_HOME environment variable must be set for composer to run correctly. set the variable to ".route('settings.plugins.setting.show')
+                );
+            }
+        }
+
+        $this->info("  passed");
+    }
 
     /**
      * runComposer
@@ -76,19 +146,4 @@ trait ComposerRunTrait
         $code = $application->run($input);
         return $code;
     }
-
-    /**
-     * findComposer
-     *
-     * @return string
-     */
-    protected function findComposer()
-    {
-        if (file_exists(getcwd().'/composer.phar')) {
-            return '"'.PHP_BINARY.'" composer.phar';
-        }
-
-        return 'composer';
-    }
-
 }

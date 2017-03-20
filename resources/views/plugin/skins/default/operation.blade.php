@@ -37,7 +37,19 @@
                 @else
                     진행중
                 @endif
+
+                @if($operation['log'])
+                <button type="button" class="xe-btn btn-link" data-toggle="collapse" aria-expanded="false" data-target=".operation-log">콘솔보기</button>
+                @endif
             </p>
+
+            @if($operation['log'])
+            <div class="collapse operation-log">
+                <div class="well">
+                    {!! nl2br(array_get($operation,'log')) !!}
+                </div>
+            </div>
+            @endif
 
             @if($operation['status'] === 'successed')
                 <label for="">변경 내역</label>

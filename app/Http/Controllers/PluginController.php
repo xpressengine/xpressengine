@@ -14,7 +14,7 @@ use Illuminate\Session\SessionManager;
 use Log;
 use Redirect;
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use XePresenter;
@@ -113,6 +113,7 @@ class PluginController extends Controller
         $timeLimit = config('xe.plugin.operation.time_limit');
         $writer->reset()->cleanOperation();
         $writer->install($name, $version, Carbon::now()->addSeconds($timeLimit)->toDateTimeString())->write();
+
         $this->reserveOperation($writer, $timeLimit);
 
         $session->flash('alert', ['type' => 'success', 'message' => '새로운 플러그인을 설치중입니다.']);
@@ -132,11 +133,11 @@ class PluginController extends Controller
             throw new HttpException(422, 'Plugin not found.');
         }
 
-        if($plugin->isActivated()) {
+        if ($plugin->isActivated()) {
             throw new HttpException(422, 'Plugin is not deactivated. Please deactivate the plugin.');
         }
 
-        if($plugin->isDevelopMode()) {
+        if ($plugin->isDevelopMode()) {
             $handler->uninstallPlugin($pluginId);
             return redirect()->route('settings.plugins')->with(
                 'alert',
@@ -167,6 +168,7 @@ class PluginController extends Controller
      *
      * @param ComposerFileWriter $writer
      * @param int                $timeLimit
+     * @param string             $logFileName
      * @param null               $callback
      */
     protected function reserveOperation(ComposerFileWriter $writer, $timeLimit, $callback = null)
@@ -188,7 +190,6 @@ class PluginController extends Controller
                 case 'k':
                     $value *= 1024;
             }
-
             return $value;
         };
 
@@ -213,6 +214,7 @@ class PluginController extends Controller
                         "--prefer-lowest" => true,
                         "--with-dependencies" => true,
                         '--working-dir' => base_path(),
+                        '--verbose' => 1,
                         'packages' => ["$vendorName/*"]
                     ]
                 );
@@ -220,7 +222,12 @@ class PluginController extends Controller
                 Composer::setPackagistToken(config('xe.plugin.packagist.site_token'));
                 Composer::setPackagistUrl(config('xe.plugin.packagist.url'));
 
-                $output = new BufferedOutput();
+                $startTime = Carbon::now()->format('YmdHis');
+                $logFileName = "logs/plugin-$startTime.log";
+                $writer->set('xpressengine-plugin.operation.log', $logFileName);
+                $writer->write();
+
+                $output = new StreamOutput(fopen(storage_path($logFileName), 'a', false));
                 $application = new Application();
                 $application->setAutoExit(false); // prevent `$application->run` method from exitting the script
                 if (!defined('__XE_PLUGIN_MODE__')) {
@@ -228,10 +235,10 @@ class PluginController extends Controller
                 }
                 $result = $application->run($input, $output);
 
-                $outputText = $output->fetch();
-                file_put_contents(storage_path('logs/plugin.log'), $outputText);
+                //$outputText = $output->fetch();
+                //file_put_contents(storage_path('logs/plugin.log'), $outputText);
 
-                if(is_callable($callback)) {
+                if (is_callable($callback)) {
                     $callback($result);
                 }
 
@@ -346,11 +353,15 @@ class PluginController extends Controller
         $timeLimit = config('xe.plugin.operation.time_limit');
         $writer->reset()->cleanOperation();
         $writer->update($name, $version, Carbon::now()->addSeconds($timeLimit)->toDateTimeString())->write();
-        $this->reserveOperation($writer, $timeLimit, function($code) use ($plugin) {
-            if($code === 0 && $plugin->checkUpdated()) {
-                $plugin->update();
+        $this->reserveOperation(
+            $writer,
+            $timeLimit,
+            function ($code) use ($plugin) {
+                if ($code === 0 && $plugin->checkUpdated()) {
+                    $plugin->update();
+                }
             }
-        });
+        );
 
         return redirect()->route('settings.plugins')->with(
             'alert',
