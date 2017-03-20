@@ -40,7 +40,6 @@ var common = {
      pathInfo.menu + '/MenuEntity.js',
      pathInfo.menu + '/MenuItem.js',
      pathInfo.menu + '/TreeNode.js',
-     pathInfo.menu + '/MenuSearchBar.js',
      pathInfo.menu + '/UITree.js',
      pathInfo.menu + '/MenuSearchBar.js',
      pathInfo.menu + '/MenuSearchSuggestion.js',
@@ -70,18 +69,25 @@ var common = {
     filename: '[name].js',
   },
   plugins: [
-    new CommonsChunkPlugin('vendor', 'assets/vendor/vendor.bundle.js'),
+    new CommonsChunkPlugin({
+      name: 'vendor',
+      filename: 'assets/vendor/vendor.bundle.js'
+    }),
   ],
   module: {
-    loaders: [
+    rules: [
      {
-      test: /(\.js|\.jsx)$/,
-      loader: 'babel-loader',
-      exclude: /node_modules/,
-      query: {
-        presets: ['es2015', 'react'],
-        cacheDirectory: true,
-      },
+       test: /(\.js|\.jsx)$/,
+       exclude: /node_modules/,
+       use: {
+         loader: 'babel-loader',
+         options: {
+           cacheDirectory: true,
+           presets: ['es2015', 'react'],
+         },
+       },
+
+
     },
     ],
   },
@@ -98,7 +104,7 @@ var common = {
 
       'vendor': pathInfo.vendor + '/vendor.bundle.js',
     },
-    extensions: ['', '.js', '.jsx'],
+    extensions: ['.js', '.jsx'],
   },
   externals: {
     window: 'window',
