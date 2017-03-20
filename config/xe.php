@@ -334,8 +334,7 @@ return [
             'url' => 'https://store.xpressengine.io/api/1.2'
         ],
         'packagist' => [
-            'url' => 'https://store.xpressengine.io',
-            'site_token' => null
+            'url' => 'https://store.xpressengine.io'
         ],
         'operation' => [
             'time_limit' => 1200
