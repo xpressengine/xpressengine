@@ -11,11 +11,17 @@ export default (function () {
 
   // @FIXME
   $(document).ajaxSend(function (event, jqxhr, settings) {
-    Progress.start(settings.context == undefined ? $('body') : settings.context);
+    if (settings.useXeSpinner) {
+      Progress.start(settings.context == undefined ? $('body') : settings.context);
+    }
   }).ajaxComplete(function (event, jqxhr, settings) {
-    Progress.done(settings.context == undefined ? $('body') : settings.context);
+    if (settings.useXeSpinner) {
+      Progress.done(settings.context == undefined ? $('body') : settings.context);
+    }
   }).ajaxError(function (event, jqxhr, settings, thrownError) {
-    Progress.done();
+    if (settings.useXeSpinner) {
+      Progress.done();
+    }
 
     if (!settings.hasOwnProperty('error')) {
       _this.error(jqxhr, settings, thrownError);
