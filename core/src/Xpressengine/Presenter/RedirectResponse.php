@@ -63,7 +63,7 @@ class RedirectResponse extends BaseRedirectResponse
      */
     public function prepare(Request $request)
     {
-        if ($request->getRequestFormat() === 'json') {
+        if ($request->format() === 'json') {
             return new JsonResponse(array_merge(
                 $this->data,
                 ['links' => [
