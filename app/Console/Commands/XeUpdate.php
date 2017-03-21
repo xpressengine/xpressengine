@@ -84,6 +84,7 @@ class XeUpdate extends Command
         }
 
         // 플러그인 업데이트 잠금
+        unlink($writer->getPath());
         $writer->reset()->write();
 
         // composer update실행(composer update --no-dev)
