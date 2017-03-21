@@ -10,6 +10,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use Composer\Console\Application;
+use Composer\Util\Platform;
 use Illuminate\Session\SessionManager;
 use Log;
 use Redirect;
@@ -173,6 +174,8 @@ class PluginController extends Controller
      */
     protected function reserveOperation(ComposerFileWriter $writer, $timeLimit, $callback = null)
     {
+        $this->prepareComposer();
+
         set_time_limit($timeLimit);
         ignore_user_abort(true);
         ini_set('allow_url_fopen', '1');
@@ -259,6 +262,66 @@ class PluginController extends Controller
             }
         );
     }
+
+    protected function prepareComposer()
+    {
+
+        $files = [
+            storage_path('app/composer.plugins.json'),
+            base_path('composer.lock'),
+            base_path('plugins/'),
+            base_path('vendor/'),
+            base_path('vendor/composer/installed.json'),
+        ];
+
+        // file permission check
+
+        foreach ($files as $file) {
+            $type = is_dir($file) ? '디렉토리' : '파일';
+
+            if (!is_writable($file)) {
+                throw new HttpException(500, "[$file] {$type}의 쓰기 권한이 없습니다. 플러그인을 설치하기 위해서는 이 {$type}의 쓰기 권한이 있어야 합니다");
+            }
+        }
+
+        // composer home check
+        $this->checkComposerHome();
+    }
+    /**
+     * checkComposerHome
+     *
+     * @return void
+     * @throws \Exception
+     */
+    protected function checkComposerHome()
+    {
+        $config = app('xe.config')->get('plugin');
+        $home = $config->get('composer_home');
+
+        if ($home) {
+            putenv("COMPOSER_HOME=$home");
+        } else {
+            $home = getenv('COMPOSER_HOME');
+        }
+
+        if (Platform::isWindows()) {
+            if (!getenv('APPDATA')) {
+                throw new HttpException(500,
+                    'COMPOSER_HOME 환경변수가 설정되어 있지 않습니다. <a href="'.route('settings.plugins.setting.show').'">플러그인 설정</a>에서 설정할 수 있습니다.'
+                );
+            }
+        }
+
+        if (!$home) {
+            $home = getenv('HOME');
+            if (!$home) {
+                throw new HttpException(500,
+                    'COMPOSER_HOME 환경변수가 설정되어 있지 않습니다. <a href="'.route('settings.plugins.setting.show').'">플러그인 설정</a>에서 설정할 수 있습니다.'
+                );
+            }
+        }
+    }
+
 
     public function show($pluginId, PluginHandler $handler, PluginProvider $provider)
     {
