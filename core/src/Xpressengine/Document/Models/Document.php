@@ -186,7 +186,7 @@ class Document extends DynamicModel
      * @param string $instanceId instance id
      * @return Document
      */
-    static public function division($instanceId)
+    public static function division($instanceId)
     {
         /** @var Document $instance */
         $instance = new static;
@@ -198,7 +198,7 @@ class Document extends DynamicModel
     /**
      * division 테이블 이름 변경
      *
-     * @param $instanceId
+     * @param string $instanceId instance id
      * @return $this
      */
     public function setDivision($instanceId)
@@ -600,8 +600,8 @@ class Document extends DynamicModel
      * Fire the given event for the model.
      * Document 를 확장해서 사용하는 모델의 이벤트를 실행
      *
-     * @param  string  $event
-     * @param  bool  $halt
+     * @param string $event event
+     * @param bool   $halt  halt
      * @return mixed
      */
     protected function fireModelEvent($event, $halt = true)

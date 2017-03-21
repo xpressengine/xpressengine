@@ -325,9 +325,10 @@ class DocumentHandler
     }
 
     /**
+     * pivot division table name
      *
-     * @param Document $doc
-     * @param ConfigEntity $config
+     * @param Document     $doc    document model
+     * @param ConfigEntity $config document config
      * @return string
      */
     protected function pivotDivisionTable(Document $doc, ConfigEntity $config)

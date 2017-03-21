@@ -143,7 +143,7 @@ class ModuleValidator implements ValidatorInterface
 
         $uri = $route->uri();
 
-        if(strpos($uri, '{instanceGroup') !== 0) {
+        if (strpos($uri, '{instanceGroup') !== 0) {
             return false;
         }
 
