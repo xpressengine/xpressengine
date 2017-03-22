@@ -15,12 +15,12 @@
 namespace Xpressengine\Document;
 
 use Illuminate\Http\Request;
+use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Database\DynamicQuery;
+use Xpressengine\Database\VirtualConnectionInterface as VirtualConnection;
 use Xpressengine\Document\Exceptions\DocumentNotFoundException;
 use Xpressengine\Document\Models\Document;
 use Xpressengine\Document\Models\Revision;
-use Xpressengine\Config\ConfigEntity;
-use Xpressengine\Database\VirtualConnectionInterface as VirtualConnection;
 
 /**
  * DocumentHandler
@@ -325,9 +325,11 @@ class DocumentHandler
     }
 
     /**
+     * pivot Division Table
      *
-     * @param Document $doc
+     * @param Document     $doc
      * @param ConfigEntity $config
+     *
      * @return string
      */
     protected function pivotDivisionTable(Document $doc, ConfigEntity $config)
