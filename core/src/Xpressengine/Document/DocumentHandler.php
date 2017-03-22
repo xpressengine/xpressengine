@@ -327,8 +327,8 @@ class DocumentHandler
     /**
      * pivot Division Table
      *
-     * @param Document     $doc
-     * @param ConfigEntity $config
+     * @param Document     $doc    document entity
+     * @param ConfigEntity $config config entity
      *
      * @return string
      */
