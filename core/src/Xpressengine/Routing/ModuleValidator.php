@@ -15,9 +15,9 @@
 namespace Xpressengine\Routing;
 
 use Illuminate\Http\Request;
-use Xpressengine\Http\Request as XeRequest;
-use Illuminate\Routing\Route;
 use Illuminate\Routing\Matching\ValidatorInterface;
+use Illuminate\Routing\Route;
+use Xpressengine\Http\Request as XeRequest;
 use Xpressengine\Menu\MenuHandler;
 use Xpressengine\Site\SiteHandler;
 use Xpressengine\Theme\ThemeHandler;
@@ -143,7 +143,7 @@ class ModuleValidator implements ValidatorInterface
 
         $uri = $route->uri();
 
-        if(strpos($uri, '{instanceGroup') !== 0) {
+        if (strpos($uri, '{instanceGroup') !== 0) {
             return false;
         }
 

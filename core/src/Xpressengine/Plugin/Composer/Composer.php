@@ -153,7 +153,7 @@ class Composer
      */
     public static function postDependenciesSolving(InstallerEvent $event)
     {
-        if(static::$packagistUrl !== null && static::$packagistToken !== null) {
+        if (static::$packagistUrl !== null && static::$packagistToken !== null) {
             $io = $event->getIO();
             $host = parse_url(static::$packagistUrl, PHP_URL_HOST);
             $token = static::$packagistToken;
