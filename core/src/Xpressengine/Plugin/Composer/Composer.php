@@ -60,7 +60,11 @@ class Composer
     ];
 
     /**
-     * @param string $packagistUrl
+     * set target packagist url
+     *
+     * @param string $packagistUrl target packagist url
+     *
+     * @return void
      */
     public static function setPackagistUrl($packagistUrl)
     {
@@ -68,7 +72,11 @@ class Composer
     }
 
     /**
-     * @param null $authToken
+     * set packagist auth token
+     *
+     * @param string $authToken auth token(site token)
+     *
+     * @return void
      */
     public static function setPackagistToken($authToken)
     {
@@ -109,7 +117,6 @@ class Composer
             static::applyRequire($writer);
             $event->getOutput()->writeln("xpressengine-installer: running in initialize mode");
         } else {
-
             // 플러그인 명령을 실행한 경우
             if (defined('__XE_PLUGIN_MODE__')) {
                 static::applyRequire($writer);
@@ -129,7 +136,7 @@ class Composer
     /**
      * preUpdateOrInstall
      *
-     * @param Event $event
+     * @param Event $event event object
      *
      * @return void
      */
@@ -137,6 +144,13 @@ class Composer
     {
     }
 
+    /**
+     * postDependenciesSolving
+     *
+     * @param InstallerEvent $event event object
+     *
+     * @return void
+     */
     public static function postDependenciesSolving(InstallerEvent $event)
     {
         if(static::$packagistUrl !== null && static::$packagistToken !== null) {
@@ -213,36 +227,13 @@ class Composer
     }
 
     /**
-     * 플러그인 커맨드를 통해 composer가 실행된 상태인지 조사한다.
-     *
-     * @param CommandEvent $event composer가 제공하는 event
-     *
-     * @return bool
-     */
-    private static function isUpdateMode(CommandEvent $event)
-    {
-        if ($event->getInput()->hasArgument('packages')) {
-            $packages = $event->getInput()->getArgument('packages');
-            $packages = array_shift($packages);
-            if ($packages && strpos($packages, 'xpressengine-plugin') === 0) {
-                if (!defined('__XE_PLUGIN_MODE__')) {
-                    define('__XE_PLUGIN_MODE__', true);
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * Clear the cached Laravel bootstrapping files.
      *
      * @return void
      */
     protected static function clearCompiled()
     {
-
-        if(!$laravel = Application::getInstance()) {
+        if (!$laravel = Application::getInstance()) {
             $laravel = new Application(getcwd());
         }
 
@@ -254,5 +245,4 @@ class Composer
             @unlink($servicesPath);
         }
     }
-
 }

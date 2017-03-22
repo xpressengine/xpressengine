@@ -303,11 +303,14 @@ abstract class GenericTheme extends AbstractTheme
 
         $handler = static::$handler;
 
-        view()->composer($view, function(\Illuminate\View\View $viewObj) use ($handler) {
-            if($handler->hasCache($viewObj->getPath())) {
-                $viewObj->setPath($handler->getCachePath($viewObj->getPath()));
+        view()->composer(
+            $view,
+            function (\Illuminate\View\View $viewObj) use ($handler) {
+                if ($handler->hasCache($viewObj->getPath())) {
+                    $viewObj->setPath($handler->getCachePath($viewObj->getPath()));
+                }
             }
-        });
+        );
 
         return $view;
     }

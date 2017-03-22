@@ -272,7 +272,6 @@ class MediaManager
                     $this->config['path'],
                     $media->getOriginKey()
                 );
-
         }
 
         return new Collection($thumbnails);

@@ -14,9 +14,9 @@
 
 namespace Xpressengine\Settings;
 
+use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Routing\Route;
 use Illuminate\Routing\Router;
-use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Permission\Instance;
@@ -318,7 +318,7 @@ class SettingsHandler
                     $instance = new Instance('settings.'.$permissionId);
 
                     $perm = app('xe.permission')->get($instance->getName(), $instance->getSiteKey());
-                    if($perm === null) {
+                    if ($perm === null) {
                         $visible = false;
                         continue;
                     }

@@ -53,13 +53,22 @@ class PluginProvider
         $this->auth = $auth;
     }
 
+    /**
+     * search plugin by keyword
+     *
+     * @param null $keyword keyword for searching
+     * @param int  $page    search result page number
+     * @param int  $count   limit
+     *
+     * @return mixed|null
+     */
     public function search($keyword = null, $page = 1, $count = 10)
     {
         $url = 'plugins/search';
         $q = implode(',', (array) $keyword);
 
         try {
-            $response = $this->request($url, compact('q','page','count'));
+            $response = $this->request($url, compact('q', 'page', 'count'));
         } catch (ClientException $e) {
             if ($e->getCode() === Response::HTTP_NOT_FOUND) {
                 return null;
@@ -160,7 +169,6 @@ class PluginProvider
         }
 
         foreach ($infos as $data) {
-
             list($vendor, $id) = explode('/', $data->name);
             $plugin = $plugins[$id];
             if ($plugin->isDevelopMode() === false) {

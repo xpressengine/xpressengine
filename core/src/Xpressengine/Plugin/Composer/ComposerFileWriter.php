@@ -58,8 +58,8 @@ class ComposerFileWriter
     /**
      * ComposerFileWriter constructor.
      *
-     * @param string        $path         path of plugin composer file
-     * @param PluginScanner $scanner      plugin scanner
+     * @param string        $path    path of plugin composer file
+     * @param PluginScanner $scanner plugin scanner
      */
     public function __construct($path, PluginScanner $scanner)
     {
@@ -119,7 +119,6 @@ class ComposerFileWriter
         $operation = '>=';
 
         foreach ($this->scanner->scanDirectory() as $plugin) {
-
             $name = array_get($plugin, 'metaData.name');
             $version = array_get($plugin, 'metaData.version');
             if (is_dir($dir.DIRECTORY_SEPARATOR.$plugin['id'].DIRECTORY_SEPARATOR.'vendor')) {

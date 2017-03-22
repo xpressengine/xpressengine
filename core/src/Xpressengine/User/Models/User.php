@@ -137,6 +137,11 @@ class User extends DynamicModel implements UserInterface
         return $this->hasOne(PendingEmail::class, 'userId');
     }
 
+    /**
+     * Get profile_image
+     *
+     * @return string
+     */
     public function getProfileImageAttribute()
     {
         return $this->getProfileImage();

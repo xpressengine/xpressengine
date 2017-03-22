@@ -15,14 +15,14 @@
 namespace Xpressengine\Settings;
 
 use Closure;
+use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\Request;
 use Xpressengine\Permission\Instance;
-use Xpressengine\User\Models\Guest;
-use Xpressengine\User\Rating;
 use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
 use Xpressengine\Theme\ThemeHandler;
-use Illuminate\Contracts\Auth\Access\Gate as GateContract;
+use Xpressengine\User\Models\Guest;
+use Xpressengine\User\Rating;
 
 /**
  * 이 클래스는 Xpressengine에서 route middleware로 작동한다.
@@ -99,7 +99,7 @@ class SettingsMiddleware
         }
 
         $route = $request->route();
-        if($route->getName() === 'settings.dashboard' && $user->getRating() === Rating::MANAGER) {
+        if ($route->getName() === 'settings.dashboard' && $user->getRating() === Rating::MANAGER) {
             return;
         }
 

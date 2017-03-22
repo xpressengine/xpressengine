@@ -72,7 +72,7 @@ class DraftHandler
      * Constructor
      *
      * @param DraftRepository $repo Repository instance
-     * @param AuthManager         $auth AuthManager instance
+     * @param AuthManager     $auth AuthManager instance
      */
     public function __construct(DraftRepository $repo, AuthManager $auth)
     {

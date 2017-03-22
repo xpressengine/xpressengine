@@ -27,7 +27,7 @@ trait EmptyStringTrait
      *
      * @return string
      */
-    function __toString()
+    public function __toString()
     {
         return '';
     }

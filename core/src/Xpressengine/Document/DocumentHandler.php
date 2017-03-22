@@ -325,10 +325,9 @@ class DocumentHandler
     }
 
     /**
-     * pivot division table name
      *
-     * @param Document     $doc    document model
-     * @param ConfigEntity $config document config
+     * @param Document $doc
+     * @param ConfigEntity $config
      * @return string
      */
     protected function pivotDivisionTable(Document $doc, ConfigEntity $config)
@@ -417,8 +416,8 @@ class DocumentHandler
             if (count($dirty) > 0) {
                 $clone->where('id', '=', $doc->id)->update($dirty);
             }
-
         }
+
         return true;
     }
 

@@ -130,7 +130,7 @@ class WidgetBoxHandler
      */
     public function delete($widgetbox)
     {
-        if(is_string($widgetbox)) {
+        if (is_string($widgetbox)) {
             $widgetbox = $this->repository->find($widgetbox);
         }
         $this->permissionHandler->destroy('widgetbox.'.$widgetbox->id);
