@@ -64,7 +64,7 @@ module.exports = (() => {
       return gulp.src([
          'assets/core/common/js/utils.js',
          'assets/core/common/js/dynamicLoadManager.js',
-          'assets/core/common//js/translator.js',
+         'assets/core/common/js/translator.js',
          'assets/vendor/jquery/jquery.min.js',
         ])
         .pipe($.plumber())
