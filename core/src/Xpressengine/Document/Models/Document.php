@@ -226,27 +226,6 @@ class Document extends DynamicModel
     }
 
     /**
-     * set config
-     *
-     * @param ConfigEntity $config document config entity
-     * @param string|null  $table  table name
-     * @return void
-     * @deprecated
-     */
-    public function setConfig(ConfigEntity $config, $table = null)
-    {
-        $this->config = $config;
-        $this->division = $config->get('division');
-        $this->setProxyOptions([
-            'id' => $config->get('instanceId'),
-            'group' => $config->get('group'),
-        ]);
-        if ($table !== null) {
-            $this->table = $table;
-        }
-    }
-
-    /**
      * Check required attributes
      *
      * @param array $attributes attributes

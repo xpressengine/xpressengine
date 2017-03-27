@@ -478,35 +478,6 @@ class DocumentHandler
     }
 
     /**
-     * get division table name
-     *
-     * @param ConfigEntity $config config entity
-     * @return string
-     * @deprecated
-     */
-    public function getDivisionTableName(ConfigEntity $config)
-    {
-        return $this->instanceManager->getDivisionTableName($config);
-    }
-
-    /**
-     * Proxy, Division 관련 설정이 된 Document model 반환
-     * Document 는 config 를 설정해야 정상 사용 가능함
-     * document model 를 직접 반환하지 않음
-     *
-     * @param string $instanceId document instance id
-     * @return Document
-     * @deprecated
-     */
-    public function getModel($instanceId = null)
-    {
-        $config = $this->getConfig($instanceId);
-        $doc = $this->newModel();
-        $doc->setConfig($config, $this->getDivisionTableName($config));
-        return $doc;
-    }
-
-    /**
      * create document model
      *
      * @return Document
@@ -535,21 +506,6 @@ class DocumentHandler
     protected function newRevisionModel(array $attributes = [])
     {
         return new $this->revisionModel($attributes);
-    }
-
-    /**
-     * set model's config
-     *
-     * @param Document $doc        document model
-     * @param string   $instanceId document instance id
-     * @return Document
-     * @deprecated
-     */
-    public function setModelConfig(Document $doc, $instanceId)
-    {
-        $config = $this->getConfig($instanceId);
-        $doc->setConfig($config, $this->instanceManager->getDivisionTableName($config));
-        return $doc;
     }
 
     /**
