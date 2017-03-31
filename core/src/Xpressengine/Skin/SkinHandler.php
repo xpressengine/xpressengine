@@ -265,6 +265,25 @@ class SkinHandler
     }
 
     /**
+     * 해당 id의 스킨이 등록돼 있는지 검사
+     *
+     * @param string $id skin id
+     *
+     * @return bool
+     */
+    public function has($id)
+    {
+        $className = $this->register->get($id);
+        if ($className === null) {
+            return false;
+        }
+        if (class_exists($className) === false) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * 주어진 타겟에 등록된 스킨의 목록을 조회하여 반환한다.
      *
      * @param string|string[] $target     조회할 스킨 target
@@ -350,7 +369,7 @@ class SkinHandler
         $skinId = $this->store->getSelectedSkin($storeKey, $mode);
 
         // 지정된 스킨이 없을 경우, 해당 타겟에 지정된 기본 스킨을 선택한다.
-        if ($skinId === null) {
+        if ($skinId === null || !$this->has($skinId)) {
             $skinId = array_get($this->defaultSkins, $target, null);
         }
 
