@@ -39,7 +39,7 @@ trait ComposerRunTrait
 
         foreach ($files as $file) {
             $type = is_dir($file) ? 'directory' : 'file';
-            $this->output->write(" $file - ");
+            $this->getOutput()->write(" $file - ");
 
             if (!is_writable($file)) {
                 // [$file] 파일에 쓰기 권한이 없습니다. 플러그인을 설치하기 위해서는 이 파일의 쓰기 권한이 있어야 합니다.
