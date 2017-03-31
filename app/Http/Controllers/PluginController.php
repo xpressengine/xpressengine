@@ -115,7 +115,7 @@ class PluginController extends Controller
         $writer->reset()->cleanOperation();
         $writer->install($name, $version, Carbon::now()->addSeconds($timeLimit)->toDateTimeString())->write();
 
-        $this->reserveOperation($writer, $timeLimit);
+        $this->reserveOperation($writer, $timeLimit, $pluginData);
 
         $session->flash('alert', ['type' => 'success', 'message' => '새로운 플러그인을 설치중입니다.']);
         return XePresenter::makeApi(['type' => 'success', 'message' => '새로운 플러그인을 설치중입니다.']);
@@ -172,7 +172,7 @@ class PluginController extends Controller
      * @param string             $logFileName
      * @param null               $callback
      */
-    protected function reserveOperation(ComposerFileWriter $writer, $timeLimit, $callback = null)
+    protected function reserveOperation(ComposerFileWriter $writer, $timeLimit, $pluginData, $callback = null)
     {
         $this->prepareComposer();
 
@@ -204,7 +204,7 @@ class PluginController extends Controller
 
         /** @var \Illuminate\Foundation\Application $app */
         app()->terminating(
-            function () use ($writer, $callback) {
+            function () use ($writer, $pluginData, $callback) {
 
                 $pid = getmypid();
                 Log::info("[plugin operation] start running composer run [pid=$pid]");
@@ -218,7 +218,7 @@ class PluginController extends Controller
                         "--with-dependencies" => true,
                         '--working-dir' => base_path(),
                         '--verbose' => 1,
-                        'packages' => ["$vendorName/*"]
+                        'packages' => ["$vendorName/*", $pluginData->name]
                     ]
                 );
 
@@ -419,6 +419,7 @@ class PluginController extends Controller
         $this->reserveOperation(
             $writer,
             $timeLimit,
+            $pluginData,
             function ($code) use ($plugin) {
                 if ($code === 0 && $plugin->checkUpdated()) {
                     $plugin->update();
