@@ -4,7 +4,7 @@ $(function ($) {
     var $btn = $(this);
     var url = $btn.data('skinAssignLink');
     $.ajax({
-      type: 'post',
+      type: 'put',
       url: url,
       dataType: 'json',
       success: function (data) {
