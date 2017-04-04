@@ -217,24 +217,25 @@ class SeoHandler
      */
     protected function makeTitle(SeoUsable $item = null)
     {
-        $globalTitle = $this->frontend->output('title');
-        if ($this->setting->get('mainTitle', '') != '') {
-            $globalTitle = $this->setting->get('mainTitle', '');
+        $siteTitle = $this->frontend->output('title');
+        $mainTitle = $this->setting->get('mainTitle');
+        if ($mainTitle != '') {
+            $siteTitle = $mainTitle;
         }
 
         if ($item) {
-            $title = $item->getTitle() . ' - ' . $this->translator->trans($globalTitle);
+            $title = $item->getTitle() . ' - ' . $this->translator->trans($siteTitle);
             $this->frontend->title($title);
             return $title;
         }
 
-        if ($this->setting->get('mainTitle', '') == '' &&
-            $this->translator->trans($this->setting->get('subTitle')) == '') {
-            return $this->translator->trans($globalTitle);
+        $subTitle = $this->setting->get('subTitle');
+        if ($mainTitle == '' && $subTitle == '') {
+            return $this->translator->trans($siteTitle);
         } else {
             return implode(' - ', [
-                $this->translator->trans($this->setting->get('mainTitle')),
-                $this->translator->trans($this->setting->get('subTitle'))
+                $this->translator->trans($mainTitle),
+                $this->translator->trans($subTitle)
             ]);
         }
     }
