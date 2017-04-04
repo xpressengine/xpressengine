@@ -52,7 +52,8 @@ class SeoServiceProvider extends ServiceProvider
                     new TwitterCardImporter($app['xe.frontend'], $app['request'], $setting->get('twitterUsername')),
                 ],
                 $setting,
-                $app['xe.translator']
+                $app['xe.translator'],
+                $app['xe.frontend']
             );
         }, true);
 
