@@ -33,7 +33,16 @@ class SettingsTheme extends AbstractTheme
         $siteTitle = app('xe.site')->getSiteConfigValue('site_title');
         $siteTitle = $siteTitle !== null ? xe_trans($siteTitle) : 'XpressEngine';
         $selectedMenu = \XeSettings::getSelectedMenu($isSuper);
-        return view()->make('themes.settings', compact('menu', 'selectedMenu', 'user', 'siteTitle'));
+
+        $installedVersion = file_get_contents(base_path('storage/app/installed'));
+        if(__XE_VERSION__ !== $installedVersion) {
+            app('xe.frontend')->js([
+                'assets/core/xe-ui-component/js/xe-page.js',
+                'assets/core/xe-ui-component/js/xe-form.js'
+            ])->load();
+        }
+
+        return view()->make('themes.settings', compact('menu', 'selectedMenu', 'user', 'siteTitle', 'installedVersion'));
     }
 
     /**

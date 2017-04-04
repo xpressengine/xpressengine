@@ -118,15 +118,15 @@ class UserController extends Controller
         if (isset($menus[$section]) === false) {
             throw new NotFoundHttpException();
         }
+
+        $menus[$section]['selected'] = true;
         $selectedSection = $menus[$section];
-        if ($selectedSection === null) {
-            $selectedSection = reset($menus);
-        }
 
         // get current user
         $user = $this->user;
 
         $content = $selectedSection['content'];
+        $selectedSection['selected'] = true;
         $tabContent = $content instanceof \Closure ? $content($user) : $content;
 
         return XePresenter::make('index', compact('user', 'menus', 'tabContent'));

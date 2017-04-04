@@ -123,7 +123,7 @@ class XeUpdate extends Command
             $name = lcfirst(str_replace('Migration', '', basename($file, '.php')));
 
             $class = "\\Xpressengine\\Migrations\\".basename($file, '.php');
-            $this->migrations[] = $migration = new $class();
+            $migration = new $class();
             /** @var Migration $migration */
             $this->output->write(" updating $name.. ");
             if($migration->checkUpdated($installedVersion) === false) {
