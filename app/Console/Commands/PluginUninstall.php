@@ -104,7 +104,6 @@ class PluginUninstall extends PluginCommand
         $result = $this->runComposer(
             [
                 'command' => 'update',
-                "--prefer-lowest" => true,
                 "--with-dependencies" => true,
                 //"--quiet" => true,
                 '--working-dir' => base_path(),

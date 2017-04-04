@@ -27,6 +27,7 @@ use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
 use Xpressengine\Support\Exceptions\XpressengineException;
+use Xpressengine\Support\Migration;
 
 class PluginController extends Controller
 {
@@ -156,7 +157,9 @@ class PluginController extends Controller
         $timeLimit = config('xe.plugin.operation.time_limit');
         $writer->reset()->cleanOperation();
         $writer->uninstall($plugin->getName(), Carbon::now()->addSeconds($timeLimit)->toDateTimeString())->write();
-        $this->reserveOperation($writer, $timeLimit);
+
+        $pluginData = ['name' => $plugin->getName()];
+        $this->reserveOperation($writer, $timeLimit, (object)$pluginData);
 
         return redirect()->route('settings.plugins')->with(
             'alert',
@@ -174,7 +177,87 @@ class PluginController extends Controller
      */
     protected function reserveOperation(ComposerFileWriter $writer, $timeLimit, $pluginData, $callback = null)
     {
-        $this->prepareComposer();
+        $this->prepareComposer($timeLimit);
+
+        /** @var \Illuminate\Foundation\Application $app */
+        app()->terminating(
+            function () use ($writer, $pluginData, $callback) {
+
+                $pid = getmypid();
+                Log::info("[plugin operation] start running composer run [pid=$pid]");
+
+                $vendorName = PluginHandler::PLUGIN_VENDOR_NAME;
+                $input = new ArrayInput(
+                    [
+                        'command' => 'update',
+                        "--with-dependencies" => true,
+                        '--working-dir' => base_path(),
+                        '--verbose' => 1,
+                        'packages' => [$pluginData->name]
+                    ]
+                );
+
+                Composer::setPackagistToken(config('xe.plugin.packagist.site_token'));
+                Composer::setPackagistUrl(config('xe.plugin.packagist.url'));
+
+                $startTime = Carbon::now()->format('YmdHis');
+                $logFileName = "logs/plugin-$startTime.log";
+                $writer->set('xpressengine-plugin.operation.log', $logFileName);
+                $writer->write();
+
+                $output = new StreamOutput(fopen(storage_path($logFileName), 'a', false));
+                $application = new Application();
+                $application->setAutoExit(false); // prevent `$application->run` method from exitting the script
+                if (!defined('__XE_PLUGIN_MODE__')) {
+                    define('__XE_PLUGIN_MODE__', true);
+                }
+                $result = $application->run($input, $output);
+
+                if (is_callable($callback)) {
+                    $callback($result);
+                }
+
+                $writer->load();
+
+                if ($result !== 0) {
+                    $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_FAILED);
+                    $writer->set('xpressengine-plugin.operation.failed', XpressengineInstaller::$failed);
+                } else {
+                    $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_SUCCESSED);
+                }
+                $writer->write();
+
+                Log::info(
+                    "[plugin operation] plugin operation finished. [exit code: $result, memory usage: ".memory_get_usage(
+                    )."]"
+                );
+            }
+        );
+    }
+
+    protected function prepareComposer($timeLimit)
+    {
+
+        $files = [
+            storage_path('app/composer.plugins.json'),
+            base_path('composer.lock'),
+            base_path('plugins/'),
+            base_path('vendor/'),
+            base_path('vendor/composer/installed.json'),
+        ];
+
+        // file permission check
+
+        foreach ($files as $file) {
+            $type = is_dir($file) ? '디렉토리' : '파일';
+
+            if (!is_writable($file)) {
+                throw new HttpException(500, "[$file] {$type}의 쓰기 권한이 없습니다. 플러그인을 설치하기 위해서는 이 {$type}의 쓰기 권한이 있어야 합니다");
+            }
+        }
+
+        // composer home check
+        $this->checkComposerHome();
 
         set_time_limit($timeLimit);
         ignore_user_abort(true);
@@ -202,91 +285,10 @@ class PluginController extends Controller
             ini_set('memory_limit', '1G');
         }
 
-        /** @var \Illuminate\Foundation\Application $app */
-        app()->terminating(
-            function () use ($writer, $pluginData, $callback) {
 
-                $pid = getmypid();
-                Log::info("[plugin operation] start running composer run [pid=$pid]");
 
-                // call `composer install` command programmatically
-                $vendorName = PluginHandler::PLUGIN_VENDOR_NAME;
-                $input = new ArrayInput(
-                    [
-                        'command' => 'update',
-                        "--prefer-lowest" => true,
-                        "--with-dependencies" => true,
-                        '--working-dir' => base_path(),
-                        '--verbose' => 1,
-                        'packages' => ["$vendorName/*", $pluginData->name]
-                    ]
-                );
-
-                Composer::setPackagistToken(config('xe.plugin.packagist.site_token'));
-                Composer::setPackagistUrl(config('xe.plugin.packagist.url'));
-
-                $startTime = Carbon::now()->format('YmdHis');
-                $logFileName = "logs/plugin-$startTime.log";
-                $writer->set('xpressengine-plugin.operation.log', $logFileName);
-                $writer->write();
-
-                $output = new StreamOutput(fopen(storage_path($logFileName), 'a', false));
-                $application = new Application();
-                $application->setAutoExit(false); // prevent `$application->run` method from exitting the script
-                if (!defined('__XE_PLUGIN_MODE__')) {
-                    define('__XE_PLUGIN_MODE__', true);
-                }
-                $result = $application->run($input, $output);
-
-                //$outputText = $output->fetch();
-                //file_put_contents(storage_path('logs/plugin.log'), $outputText);
-
-                if (is_callable($callback)) {
-                    $callback($result);
-                }
-
-                $writer->load();
-
-                if ($result !== 0) {
-                    $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_FAILED);
-                    $writer->set('xpressengine-plugin.operation.failed', XpressengineInstaller::$failed);
-                } else {
-                    $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_SUCCESSED);
-                }
-                $writer->write();
-
-                Log::info(
-                    "[plugin operation] plugin operation finished. [exit code: $result, memory usage: ".memory_get_usage(
-                    )."]"
-                );
-            }
-        );
     }
 
-    protected function prepareComposer()
-    {
-
-        $files = [
-            storage_path('app/composer.plugins.json'),
-            base_path('composer.lock'),
-            base_path('plugins/'),
-            base_path('vendor/'),
-            base_path('vendor/composer/installed.json'),
-        ];
-
-        // file permission check
-
-        foreach ($files as $file) {
-            $type = is_dir($file) ? '디렉토리' : '파일';
-
-            if (!is_writable($file)) {
-                throw new HttpException(500, "[$file] {$type}의 쓰기 권한이 없습니다. 플러그인을 설치하기 위해서는 이 {$type}의 쓰기 권한이 있어야 합니다");
-            }
-        }
-
-        // composer home check
-        $this->checkComposerHome();
-    }
     /**
      * checkComposerHome
      *
@@ -321,7 +323,6 @@ class PluginController extends Controller
             }
         }
     }
-
 
     public function show($pluginId, PluginHandler $handler, PluginProvider $provider)
     {
@@ -432,6 +433,7 @@ class PluginController extends Controller
             ['type' => 'success', 'message' => '플러그인의 새로운 버전을 다운로드하는 중입니다.']
         );
     }
+
 
     /**
      * getComponentTypes

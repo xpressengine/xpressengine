@@ -689,6 +689,14 @@ return [
         'ko' => '플러그인',
         'en' => 'Plugin',
     ],
+    'pluginAndUpdate' => [
+        'ko' => '플러그인 & 업데이트',
+        'en' => 'Plugin & Update',
+    ],
+    'coreUpdate' => [
+        'ko' => 'XE3 업데이트',
+        'en' => 'XE3 Update',
+    ],
     'dynamicField' => [
         'ko' => '확장 필드',
         'en' => 'Dynamic Field',

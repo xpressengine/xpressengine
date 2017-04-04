@@ -595,6 +595,29 @@ Route::settings(
     }
 );
 
+Route::settings('update', function(){
+
+    Route::get('/', [
+        'as' => 'settings.coreupdate.show',
+        'uses' => 'UpdateController@show',
+        'settings_menu' => 'plugin.core-update'
+    ]);
+    Route::put('/', [
+        'as' => 'settings.coreupdate.update',
+        'uses' => 'UpdateController@update'
+    ]);
+
+    Route::get('operation', [
+        'as' => 'settings.coreupdate.operation',
+        'uses' => 'UpdateController@showOperation'
+    ]);
+
+    Route::delete('operation', [
+        'as' => 'settings.coreupdate.operation.delete',
+        'uses' => 'UpdateController@deleteOperation'
+    ]);
+});
+
 /* plugin  */
 Route::settings(
     'plugins',
