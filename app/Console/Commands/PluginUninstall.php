@@ -100,7 +100,7 @@ class PluginUninstall extends PluginCommand
         // composer update실행(composer update --prefer-lowest --with-dependencies xpressengine-plugin/*)
         // composer update를 실행합니다. 최대 수분이 소요될 수 있습니다.
         $this->warn('Composer update command is running.. It may take up to a few minutes.');
-        $this->line(" composer update --prefer-lowest --with-dependencies $vendorName/$id");
+        $this->line(" composer update --prefer-lowest --with-dependencies $name");
         $result = $this->runComposer(
             [
                 'command' => 'update',
@@ -109,7 +109,7 @@ class PluginUninstall extends PluginCommand
                 //"--quiet" => true,
                 '--working-dir' => base_path(),
                 /*'--verbose' => '3',*/
-                'packages' => ["$vendorName/$id"]
+                'packages' => [$name]
             ]
         );
 

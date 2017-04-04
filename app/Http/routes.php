@@ -803,7 +803,7 @@ Route::settings(
     function () {
         Route::get('/section', ['as' => 'settings.skin.section.setting', 'uses' => 'SkinController@getSetting']);
         Route::post('/section', ['as' => 'settings.skin.section.setting', 'uses' => 'SkinController@postSetting']);
-        Route::post('/assign', ['as' => 'settings.skin.section.assign', 'uses' => 'SkinController@postAssign']);
+        Route::put('/assign', ['as' => 'settings.skin.section.assign', 'uses' => 'SkinController@putAssign']);
     }
 );
 
