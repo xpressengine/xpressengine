@@ -18,6 +18,7 @@ class FormCheckbox extends AbstractUIObject
     protected $template = '<div class="form-group">
         <label for="" class="hidden"></label>
         <div class="checkbox"></div>
+        <p class="help-block"></p>
     </div>';
 
     protected $box;
@@ -35,8 +36,14 @@ class FormCheckbox extends AbstractUIObject
         $nameGlobal = array_get($args, 'name');
 
         $labelText = array_get($args, 'label');
+        $description = array_get($args, 'description');
+
         if($labelText !== null) {
             $label->removeClass('hidden')->html($labelText);
+        }
+
+        if($description !== null) {
+            $this->markup['.help-block']->html($description);
         }
 
         // checkbox가 따로 있을 경우

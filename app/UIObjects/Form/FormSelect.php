@@ -19,6 +19,7 @@ class FormSelect extends AbstractUIObject
         <label for="" class="hidden"></label>
         <select class="form-control" name="" id="">
         </select>
+        <p class="help-block"></p>
     </div>';
 
     public function render()
@@ -67,6 +68,9 @@ class FormSelect extends AbstractUIObject
                         $optionEl = PhpQuery::pq("<option value=\"$value\" $selected \">$text</option>");
                         $selectEl->append($optionEl);
                     }
+                    break;
+                case 'description':
+                    $this->markup['.help-block']->html(array_get($args, $key));
                     break;
 
                 case 'id':

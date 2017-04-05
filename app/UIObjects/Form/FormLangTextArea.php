@@ -30,12 +30,14 @@ class FormLangTextArea extends AbstractUIObject
         }
 
         $content = uio('langTextArea', $args);
+        $description = array_get($args, 'description');
 
         return sprintf('
             <div class="form-group">
                 %s
                 %s
+                <p class="help-block">%s</p>
             </div>
-        ', $label, $content);
+        ', $label, $content, $description);
     }
 }
