@@ -366,7 +366,7 @@ class DocumentHandler
         $clone->from($this->pivotDivisionTable($doc, $config));
         $params = $doc->toArray();
         $params['email'] = $doc->email;
-        $params['certifyKey'] = $doc->certifyKey;
+        $params['certifyKey'] = $doc->certifyKey == null ? : '';
         $params['ipaddress'] = $doc->ipaddress;
         $clone->insert($params);
 
