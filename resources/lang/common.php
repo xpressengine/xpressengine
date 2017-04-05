@@ -1228,6 +1228,10 @@ return [
         'ko' => '삭제하시겠습니까?',
         'en' => 'Delete?'
     ],
+    'msgDelete' => [
+        'ko' => '삭제되었습니다.',
+        'en' => 'Delete?'
+    ],
     'pendingEmail' => [
         'ko' => '등록 대기중인 이메일',
         'en' => 'Pending Email'
@@ -1368,6 +1372,9 @@ return [
     'editMember' => [
         'ko' => '회원 수정',
         'en' => 'Edit member'
+    ],
+    'confirmDeleteUsers' => [
+        'ko' => '아래의 회원을 삭제합니다. 삭제된 회원은 복구할 수 없습니다. 삭제하시겠습니까?',
     ],
     'toggleMenu' => [
         'ko' => '토글 메뉴',
