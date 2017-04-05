@@ -24,17 +24,6 @@
                         {{-- 파비콘 --}}
                         {!! uio('formFile', ['name' => 'favicon', 'label' => xe_trans('xe::favicon'), 'value' => $config->get('favicon'), 'width' => 80, 'height' => 80, 'types' => ['ico','png'], 'fileuploadOptions' => [ 'maxFileSize' => 10000000 ] ]) !!}
 
-                        <div class="form-group">
-                            <label for="__xe_index_instance">{{ xe_trans('xe::selectHomeMenu') }}</label>
-                            <select class="form-control" name="indexInstance" id="indexInstance">
-                                @foreach($menus as $menu)
-                                    @foreach($menu->items as $item)
-                                        <option value="{{$item->id}}" {{ ($item->id == $indexInstance)?"selected":"" }}>{{xe_trans($item->title)}}</option>
-                                    @endforeach
-                                @endforeach
-                            </select>
-                        </div>
-
                     </div>
                     <div class="panel-footer">
                         <div class="pull-right">

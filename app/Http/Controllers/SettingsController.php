@@ -10,7 +10,6 @@ namespace App\Http\Controllers;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Xpressengine\Http\Request;
-use Xpressengine\Menu\MenuHandler;
 use Xpressengine\Permission\Grant;
 use Xpressengine\Permission\PermissionHandler;
 use Xpressengine\Settings\SettingsHandler;
@@ -21,21 +20,14 @@ use Xpressengine\Theme\ThemeHandler;
 class SettingsController extends Controller
 {
 
-    public function editSetting(SiteHandler $siteHandler, MenuHandler $menuHandler)
+    public function editSetting()
     {
         $config = app('xe.site')->getSiteConfig();
-
-        $siteKey = $siteHandler->getCurrentSiteKey();
-        $indexInstance = $siteHandler->getHomeInstanceId();
-
-        $menus = $menuHandler->getAll($siteKey, 'items');
 
         return \XePresenter::make(
             'settings.setting',
             compact(
-                'config',
-                'menus',
-                'indexInstance'
+                'config'
             )
         );
     }
@@ -52,7 +44,7 @@ class SettingsController extends Controller
         );
     }
 
-    public function updateSetting(SiteHandler $siteHandler, ThemeHandler $themeHandler, Request $request)
+    public function updateSetting(SiteHandler $siteHandler, Request $request)
     {
         $inputs = $request->only(['site_title', 'favicon']);
         $oldConfig = $siteHandler->getSiteConfig();
@@ -93,10 +85,6 @@ class SettingsController extends Controller
         }
 
         $siteHandler->putSiteConfig($oldConfig);
-
-        // resolve index instance
-        $indexInstance = $request->get('indexInstance');
-        $siteHandler->setHomeInstanceId($indexInstance);
 
         return \Redirect::back()->with('alert', ['type' => 'success', 'message' => '저장되었습니다.']);
     }
