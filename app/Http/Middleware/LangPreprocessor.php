@@ -26,7 +26,7 @@ class LangPreprocessor
         // check locale at request & set locale
         $locale = $request->get('_l');
         if(!$locale) {
-            $locale = $request->cookie('locale', app('xe.translator')->getLocale());
+            $locale = $request->cookie('locale') ?: app('xe.translator')->getLocale();
         }
         app()->setLocale($locale);
         app('cookie')->queue(cookie()->forever('locale', $locale));

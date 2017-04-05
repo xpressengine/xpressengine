@@ -18,6 +18,7 @@ class FormPassword extends AbstractUIObject
     protected $template = '<div class="form-group">
         <label for="" class="hidden"></label>
         <input type="password" class="form-control" id="" placeholder="">
+        <p class="help-block"></p>
     </div>';
 
     public function render()
@@ -36,6 +37,9 @@ class FormPassword extends AbstractUIObject
                     break;
                 case 'label':
                     $label->removeClass('hidden')->html($arg);
+                    break;
+                case 'description':
+                    $this->markup['.help-block']->html(array_get($args, $key));
                     break;
                 case 'id':
                     $label->attr('for', $arg);
