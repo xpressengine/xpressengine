@@ -83,7 +83,7 @@ class TransCachedDatabase
      * @param string $item      아이템
      * @param string $locale    로케일
      * @param string $value     번역문
-     * @param string $multiLine 멀티라인 지원 여부
+     * @param bool   $multiLine 멀티라인 지원 여부
      * @return void
      */
     public function putLine($namespace, $item, $locale, $value, $multiLine = false)
