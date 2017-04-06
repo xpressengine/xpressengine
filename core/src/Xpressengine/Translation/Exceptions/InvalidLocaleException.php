@@ -1,6 +1,6 @@
 <?php
 /**
- * Class Translation
+ * Class InvalidLocaleException
  *
  * PHP version 5
  *
@@ -12,12 +12,12 @@
  * @link        https://xpressengine.io
  */
 
-namespace Xpressengine\Translation\Loaders;
+namespace Xpressengine\Translation\Exceptions;
 
-use Xpressengine\Translation\LangData;
+use Xpressengine\Translation\TranslationException;
 
 /**
- * 다국어 데이터를 load 할 수 있는 클래스
+ * locale 이 유효하지 않은 경우
  *
  * @category    Translation
  * @package     Xpressengine\Translation
@@ -26,13 +26,7 @@ use Xpressengine\Translation\LangData;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-interface LoaderInterface
+class InvalidLocaleException extends TranslationException
 {
-    /**
-     * Load the messages by given source
-     *
-     * @param string $source 데이터 소스
-     * @return LangData
-     */
-    public function load($source);
+    protected $message = 'Invalid locale.';
 }

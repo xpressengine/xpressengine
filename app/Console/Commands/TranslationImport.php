@@ -19,6 +19,7 @@ use Xpressengine\Database\VirtualConnectionInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Xpressengine\Database\DatabaseHandler;
+use Xpressengine\Translation\LaravelLangData;
 use Xpressengine\Translation\Translator;
 
 /**
@@ -73,8 +74,8 @@ class TranslationImport extends Command
      */
     public function fire()
     {
-        $name = $this->input->getArgument('name');
-        $path = $this->input->getOption('path');
+        $name = $this->argument('name');
+        $path = $this->option('path');
 
         if ($path && !file_exists(base_path($path))) {
             $this->error(sprintf('Not exists [%s]', base_path($path)));
@@ -100,10 +101,50 @@ class TranslationImport extends Command
         }
 
         foreach ($files as $file) {
-            $this->translator->putFromLangDataSource($this->getNamespace($name), $file);
+            $this->translator->putFromLangDataSource($name, $file);
+        }
+
+        if ($name === 'xe') {
+            $this->importLaravel();
         }
 
         $this->info('Language import complete!');
+    }
+
+    /**
+     * Import laravel language data
+     *
+     * @return void
+     */
+    protected function importLaravel()
+    {
+        $path = $this->laravel->langPath();
+        $dir = dir($path);
+        $langData = new LaravelLangData();
+        while ($entry = $dir->read()) {
+            if (in_array($entry, ['vendor', '.', '..']) || !is_dir($path . DIRECTORY_SEPARATOR . $entry)) {
+                continue;
+            }
+
+            $langData->setLocale($entry);
+            $data = [];
+
+            $localePath = $path . DIRECTORY_SEPARATOR . $entry;
+            $localeDir = dir($localePath);
+            while ($groupFile = $localeDir->read()) {
+                $pathname = $localePath . DIRECTORY_SEPARATOR . $groupFile;
+                if (is_dir($pathname) || !preg_match('#\.(php)$#i', $groupFile)) {
+                    continue;
+                }
+                $group = substr($groupFile, 0, -4);
+
+                $data[$group] = $this->laravel['files']->getRequire($pathname);
+            }
+
+            $langData->setData($data);
+        }
+
+        $this->translator->putLangData($this->translator->getLaravelNamespace(), $langData);
     }
 
     /**
@@ -112,25 +153,14 @@ class TranslationImport extends Command
      * @param string|null $name
      * @return string
      */
-    protected function getLangsDir($name = null)
+    protected function getLangsDir($name)
     {
-        if (!$name) {
+        if ($name === 'xe') {
             // core language
             return base_path('resources') . DIRECTORY_SEPARATOR . 'lang';
         }
 
         return base_path('plugins') . DIRECTORY_SEPARATOR . $name . DIRECTORY_SEPARATOR . 'langs';
-    }
-
-    /**
-     * Get the namespace for the package
-     *
-     * @param string|null $name
-     * @return string
-     */
-    protected function getNamespace($name = null)
-    {
-        return $name ?: 'xe';
     }
 
     /**
@@ -141,7 +171,7 @@ class TranslationImport extends Command
     protected function getArguments()
     {
         return [
-            ['name', InputArgument::OPTIONAL, 'The name of the plugin'],
+            ['name', InputArgument::OPTIONAL, 'The name of the plugin', 'xe'],
         ];
     }
 

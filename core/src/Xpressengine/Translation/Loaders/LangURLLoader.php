@@ -31,6 +31,8 @@ use Xpressengine\Translation\LangData;
 class LangURLLoader implements LoaderInterface
 {
     /**
+     * Load the messages by given source
+     *
      * @param string $source 데이터 소스
      * @return LangData
      */

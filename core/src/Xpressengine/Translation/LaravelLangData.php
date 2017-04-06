@@ -1,6 +1,6 @@
 <?php
 /**
- * Class Translation
+ * LaravelLangData.php
  *
  * PHP version 5
  *
@@ -14,8 +14,10 @@
 
 namespace Xpressengine\Translation;
 
+use Xpressengine\Translation\Exceptions\InvalidLocaleException;
+
 /**
- * 다국어 key 에서 namespace 와 item 을 분리하는 클래스
+ * Class LaravelLangData
  *
  * @category    Translation
  * @package     Xpressengine\Translation
@@ -24,40 +26,35 @@ namespace Xpressengine\Translation;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class NamespacedItemResolver
+class LaravelLangData extends LangData
 {
-    protected $parsed = [];
-
-    protected $laravelNamespace = 'laravel';
+    protected $locale;
 
     /**
-     * Parse a key into namespace and item
-     *
-     * @param string $key 다국어 키
-     * @return array
+     * @param array $data 다국어 데이터
+     * @return void
      */
-    public function parseKey($key)
+    public function setData($data)
     {
-        if (isset($this->parsed[$key])) {
-            return $this->parsed[$key];
+        if (!$this->locale) {
+            throw new InvalidLocaleException();
         }
 
-        if (strpos($key, '::') === false) {
-            $parsed = [$this->laravelNamespace, $key];
-        } else {
-            $parsed = explode('::', $key);
+        foreach (array_dot($data) as $key => $value) {
+            $this->setLine($key, $this->locale, $value);
         }
-
-        return $this->parsed[$key] = $parsed;
     }
 
     /**
-     * Get the Laravel's language namespace
+     * Set current locale.
      *
-     * @return string
+     * @param string $locale locale
+     * @return $this
      */
-    public function getLaravelNamespace()
+    public function setLocale($locale)
     {
-        return $this->laravelNamespace;
+        $this->locale = $locale;
+
+        return $this;
     }
 }

@@ -28,5 +28,5 @@ use Xpressengine\Translation\TranslationException;
  */
 class EmptyLocaleException extends TranslationException
 {
-    protected $message = 'locale 목록이 비어있습니다.';
+    protected $message = 'Locales is empty.';
 }
