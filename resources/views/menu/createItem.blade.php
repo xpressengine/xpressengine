@@ -31,15 +31,20 @@
                         </label>
                     </div>
                 </div>
+
                 <div class="form-group">
                     <label for="item-url">
-                        Item Url
+                        Item URL
+                        @if(!$menuType::isRouteAble())
+                            <small>ex) http://www.xpressengine.io</small>
+                        @endif
                     </label>
-
-                    @if($menuType::isRouteAble())
-                    <em class="txt_blue">/</em>
-                    @endif
-                    <input type="text" id="item-url" name="itemUrl" class="form-control" value="{{Request::old('itemUrl')}}"/>
+                    <div class="input-group">
+                        @if($menuType::isRouteAble())
+                            <span class="input-group-addon" id="basic-addon1">/</span>
+                        @endif
+                        <input type="text" id="item-url" name="itemUrl" class="form-control" value="{{Request::old('itemUrl')}}" aria-describedby="basic-addon1">
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="item-title">Item Title</label>
@@ -125,10 +130,11 @@
             </div>
         </div>
 
+        @if ($menuType::isRouteAble())
         <div class="panel">
             <div class="panel-heading">
                 <div class="pull-left">
-                    <h3 class="panel-title">Theme<small>{{xe_trans('xe::menuThemeDescription')}}</small></h3>
+                    <h3 class="panel-title">{{xe_trans('xe::theme')}}<small>{{xe_trans('xe::menuThemeDescription')}}</small></h3>
                 </div>
                 <div class="pull-right">
                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="btn-link panel-toggle pull-right"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">{{xe_trans('xe::fold')}}</span></a>
@@ -150,13 +156,15 @@
                 </div>
             </div>
         </div>
+        @endif
+
+        {!! uio('menuType', ['menuType' => $menuType, 'action' => 'createMenuForm','param' => []]) !!}
+
         <div class="pull-right">
             <a href="{{ route('settings.menu.select.types')}}" class="btn btn-default">{{xe_trans('xe::cancel')}}</a>
             <button type="submit" class="btn btn-primary">{{xe_trans('xe::submit')}}</button>
         </div>
     </div>
-
-    {!! uio('menuType', $menuTypeArgs) !!}
 
 </form>
 <script>

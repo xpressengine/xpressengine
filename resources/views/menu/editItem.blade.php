@@ -45,7 +45,12 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="item-url">Item url</label>
+                            <label for="item-url">
+                                Item URL
+                                @if( $menuType !== null && !$menuType::isRouteAble())
+                                    <small>ex) http://www.xpressengine.io</small>
+                                @endif
+                            </label>
                             <div class="input-group">
                                 @if( $menuType !== null && $menuType::isRouteAble())
                                 <span class="input-group-addon" id="basic-addon1">/</span>
@@ -162,35 +167,35 @@
             </div>
         </div>
 
-        <div class="panel-group">
-            <div class="panel">
+        @if ($menuType !== null && $menuType::isRouteAble())
+        <div class="panel">
+            <div class="panel-heading">
+                <div class="pull-left">
+                    <h3 class="panel-title">{{xe_trans('xe::theme')}}<small>{{xe_trans('xe::menuThemeDescription')}}</small></h3>
+                </div>
+                <div class="pull-right">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="btn-link panel-toggle pull-right"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">{{xe_trans('xe::fold')}}</span></a>
+                </div>
+            </div>
+
+            <div id="collapseTwo" class="panel-collapse collapse in">
                 <div class="panel-heading">
                     <div class="pull-left">
-                        <h3 class="panel-title">{{xe_trans('xe::theme')}}<small>{{xe_trans('xe::menuThemeDescription')}}</small></h3>
-                    </div>
-                    <div class="pull-right">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="btn-link panel-toggle pull-right"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">{{xe_trans('xe::fold')}}</span></a>
-                    </div>
-                </div>
-
-                <div id="collapseTwo" class="panel-collapse collapse in">
-                    <div class="panel-heading">
-                        <div class="pull-left">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" name="parentTheme" id="parentTheme" value="1"
-                                    @if($parentThemeMode) checked @endif>
-                                    <label for="parentTheme" class="inpt_chk">{{xe_trans('xe::menuThemeInheritMode')}}</label>
-                                </label>
-                            </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="parentTheme" id="parentTheme" value="1"
+                                @if($parentThemeMode) checked @endif>
+                                <label for="parentTheme" class="inpt_chk">{{xe_trans('xe::menuThemeInheritMode')}}</label>
+                            </label>
                         </div>
                     </div>
-                    <div id="themeSelect" @if($parentThemeMode) style="display:none" @endif>
-                        {!! uio('themeSelect', ['selectedTheme' => ['desktop' => $itemConfig->get('desktopTheme'), 'mobile' => $itemConfig->get('mobileTheme')]]) !!}
-                    </div>
+                </div>
+                <div id="themeSelect" @if($parentThemeMode) style="display:none" @endif>
+                    {!! uio('themeSelect', ['selectedTheme' => ['desktop' => $itemConfig->get('desktopTheme'), 'mobile' => $itemConfig->get('mobileTheme')]]) !!}
                 </div>
             </div>
         </div>
+        @endif
 
         @if($menuType !== null)
             {!! uio('menuType', ['menuType' => $menuType, 'action' => 'editMenuForm', 'param' => $item->id ]) !!}
