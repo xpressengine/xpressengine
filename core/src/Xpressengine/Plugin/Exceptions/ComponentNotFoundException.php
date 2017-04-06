@@ -26,8 +26,7 @@ use Xpressengine\Plugin\PluginException;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class NotImplementedException extends PluginException
+class ComponentNotFoundException extends PluginException
 {
-    //protected $message = '":className" class must implements \Xpressengine\Plugin\ComponentInterface.';
-    protected $message = 'xe::interfaceNotImplemented';
+    protected $message = 'xe::componentNotFound';
 }

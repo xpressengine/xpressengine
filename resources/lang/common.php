@@ -810,8 +810,12 @@ return [
         'en' => 'Please enter at least :charCount character.|Please enter at least :charCount characters.',
     ],
     'interfaceNotImplemented' => [
-        'ko' => '플러그인 인터페이스에 오류가 있습니다 ":className" 을 확인하세요',
-        'en' => 'Check ":className" class implements plugin interface.',
+        'ko' => '":className" 클래스는 반드시 \Xpressengine\Plugin\ComponentInterface를 구현해야 합니다',
+        'en' => '":className" class must implements \Xpressengine\Plugin\ComponentInterface.',
+    ],
+    'componentNotFound' => [
+        'ko' => '":className" 클래스를 ":pluginId" 플러그인에서 찾을 수 없습니다. 플러그인이 제대로 설치되지 않았거나, 개발모드 플러그인일 경우 autoload가 제대로 설정되지 않았을 수 있습니다.',
+        'en' => '":className" class not found',
     ],
     'wrongInput' => [
         'ko' => '잘못 입력되었습니다.',
