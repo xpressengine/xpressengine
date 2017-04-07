@@ -28,5 +28,5 @@ use Xpressengine\Plugin\PluginException;
  */
 class ComponentNotFoundException extends PluginException
 {
-    protected $message = 'xe::componentNotFound';
+    protected $message = '":className" class not found in ":pluginId" plugin';
 }

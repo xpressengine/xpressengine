@@ -28,6 +28,5 @@ use Xpressengine\Plugin\PluginException;
  */
 class NotImplementedException extends PluginException
 {
-    //protected $message = '":className" class must implements \Xpressengine\Plugin\ComponentInterface.';
-    protected $message = 'xe::interfaceNotImplemented';
+    protected $message = '":className" class must implements \Xpressengine\Plugin\ComponentInterface.';
 }

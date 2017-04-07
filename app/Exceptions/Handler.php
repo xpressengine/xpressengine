@@ -42,11 +42,6 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $e)
     {
-        if($e instanceof XpressengineException) {
-            $message = xe_trans($e->getMessage(), $e->getArgs());
-            $e->setMessage($message);
-        }
-
         return parent::report($e);
     }
 
@@ -104,9 +99,8 @@ class Handler extends ExceptionHandler
             } elseif ($message == $e->getMessage()) {
                 $message = $e->getMessage();
             }
-            $responseException->setMessage($message);
         } else {
-            $responseException = new HttpXpressengineException([], Response::HTTP_INTERNAL_SERVER_ERROR);
+            $responseException = new HttpXpressengineException([], Response::HTTP_INTERNAL_SERVER_ERROR, $e);
             $responseException->setMessage(xe_trans('xe::systemError'));
         }
 
