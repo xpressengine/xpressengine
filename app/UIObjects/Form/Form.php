@@ -61,10 +61,23 @@ class Form extends AbstractUIObject
         }
     }
 
-    private function appendFields($form, $inputs, $values)
+    private function appendFields($form, $inputs, $values, $globals = [])
     {
+
+        if(array_keys($inputs) === range(0, count($inputs) - 1)) {
+            foreach ($inputs as $sectionItem) {
+                $globals['_section'] = array_get($sectionItem, 'section');
+                $fields = array_get($sectionItem, 'fields');
+                $this->appendFields($form, $fields, $values, $globals);
+            }
+            return;
+        }
+
+        /** @var string $name field name attr */
         foreach ($inputs as $name => $arg) {
 
+            // name 필드가 배열 형식(name[number])인지 체크
+            // 배열 형식일 경우, value는 name => [xx, xx, xx] 형식으로 전달된다고 가정.
             preg_match("/^([^[]+)\\[(.+)\\]$/", $name, $m);
             if(!empty($m)) {
                 $seq = (int)$m[2];
@@ -87,19 +100,26 @@ class Form extends AbstractUIObject
 
             $field = $this->wrapInput($name, $input);
 
-            $sectionName = array_get($arg, '_section');
+            $sectionInfo = array_get($arg, '_section', array_get($globals, '_section'));
 
             unset($arg['_section']);
 
             $style = array_get($this->arguments, 'type', 'panel');
-            $section = $this->getSection($form, $sectionName, $style);
+            $section = $this->getSection($form, $sectionInfo, $style);
             $field->appendTo($section);
         }
     }
 
-    private function getSection($form, $sectionName, $style = 'panel')
+    private function getSection($form, $sectionInfo, $style = 'panel')
     {
-        $classname = 'form-section-'.str_replace([' ', '.'], '-', $sectionName);
+        if(is_string($sectionInfo)) {
+            $sectionName = $sectionInfo;
+            $classname = 'form-section-'.str_replace([' ', '.'], '-', $sectionName);
+        } elseif(is_array($sectionInfo)) {
+            $sectionName = array_get($sectionInfo, 'title');
+            $classname = array_get($sectionInfo, 'class');
+        }
+
         if(count($form['.'.$classname]) === 0){
 
             if($style === 'fieldset') {

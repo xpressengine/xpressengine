@@ -27,7 +27,6 @@ use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
 use Xpressengine\Support\Exceptions\XpressengineException;
-use Xpressengine\Support\Migration;
 
 class PluginController extends Controller
 {
