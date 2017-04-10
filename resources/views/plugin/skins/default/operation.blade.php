@@ -44,7 +44,7 @@
             </p>
 
             @if($operation['log'])
-            <div class="collapse operation-log">
+            <div class="collapse operation-log @if($operation['status'] == 'running') in @endif ">
                 <div class="well">
                     {!! nl2br(array_get($operation,'log')) !!}
                 </div>
