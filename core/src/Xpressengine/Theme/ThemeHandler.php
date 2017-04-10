@@ -469,6 +469,8 @@ class ThemeHandler
             $configs[$id] = $config;
         }
 
+        ksort($configs, SORT_NATURAL);
+
         return $configs;
     }
 
