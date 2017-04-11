@@ -97,6 +97,12 @@ class PluginSettingsSkin extends GenericSkin
         return $this->renderBlade();
     }
 
+    protected function installIndex()
+    {
+        app('xe.frontend')->js('assets/core/plugin/js/plugin-install.js')->appendTo('head')->load();
+        return $this->renderBlade();
+    }
+
     protected function loadDefault()
     {
         app('xe.frontend')->html('plugins.loadTooltip')->content("<script>

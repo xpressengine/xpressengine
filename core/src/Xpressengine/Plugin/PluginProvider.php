@@ -78,6 +78,21 @@ class PluginProvider
         return $response;
     }
 
+    public function purchased($site_token)
+    {
+        $url = 'plugins/purchased';
+
+        try {
+            $response = $this->request($url, compact('site_token'));
+        } catch (ClientException $e) {
+            if ($e->getCode() === Response::HTTP_NOT_FOUND) {
+                return null;
+            }
+            throw $e;
+        }
+        return $response;
+    }
+
     /**
      * 자료실에서 주어진 아이디의 자료를 조회한다.
      *

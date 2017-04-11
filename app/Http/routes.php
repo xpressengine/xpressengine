@@ -629,6 +629,30 @@ Route::settings(
     function () {
         Route::group(['permission' => 'plugin'], function() {
 
+            Route::group(['prefix' => 'install'], function() {
+
+                Route::get(
+                    '/',
+                    [
+                        'as' => 'settings.plugins.install.index',
+                        'uses' => 'PluginInstallController@index',
+                        'settings_menu' => 'plugin.install'
+                    ]
+                );
+
+                Route::get(
+                    'items',
+                    [
+                        'as' => 'settings.plugins.install.items',
+                        'uses' => 'PluginInstallController@items'
+                    ]
+                );
+
+
+
+            });
+
+
             // plugin setting
             Route::group(['prefix'=>'setting'], function(){
                 Route::get(
@@ -639,7 +663,6 @@ Route::settings(
                         'settings_menu' => 'plugin.setting'
                     ]
                 );
-
                 Route::put(
                     '/',
                     [
@@ -650,22 +673,12 @@ Route::settings(
 
             });
 
-
             Route::get(
                 '/',
                 [
                     'as' => 'settings.plugins',
                     'uses' => 'PluginController@index',
                     'settings_menu' => ['plugin.list']
-                ]
-            );
-
-            Route::get(
-                'install',
-                [
-                    'as' => 'settings.plugins.install',
-                    'uses' => 'PluginController@getInstall',
-                    'settings_menu' => 'plugin.install'
                 ]
             );
 
