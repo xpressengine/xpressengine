@@ -19,6 +19,7 @@ class MenuSelect extends AbstractUIObject
     protected $template = '<div class="form-group">
             <label for="" class="hidden"></label>
             <select class="form-control" id="" name=""></select>
+            <p class="help-block hidden"></p>
     </div>';
 
     public function render()
@@ -29,6 +30,7 @@ class MenuSelect extends AbstractUIObject
 
         $label = $this->markup['label'];
         $select = $this->markup['select'];
+        $description = $this->markup['.help-block'];
 
         // label
         if (isset($args['label'])) {
@@ -43,6 +45,10 @@ class MenuSelect extends AbstractUIObject
         // name
         if (isset($args['name'])) {
             $select->attr('name', $args['name']);
+        }
+        // description
+        if (isset($args['description'])) {
+            $description->removeClass('hidden')->html($args['description']);
         }
 
         $menus = XeMenu::getAll(XeSite::getCurrentSiteKey());
