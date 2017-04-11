@@ -156,13 +156,13 @@ abstract class GenericTheme extends AbstractTheme
 
         $assets = $this->info('setting.assets');
 
-        if(array_has($assets, 'js')) {
+        if (array_has($assets, 'js')) {
             foreach ($assets['js'] as $js) {
                 app('xe.frontend')->js(static::asset($js))->load();
             }
         }
 
-        if(array_has($assets, 'css')) {
+        if (array_has($assets, 'css')) {
             foreach ($assets['css'] as $css) {
                 app('xe.frontend')->css(static::asset($css))->load();
             }
