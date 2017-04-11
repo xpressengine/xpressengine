@@ -8,6 +8,7 @@
 
 namespace App\Providers;
 
+use App\Skins\Plugin\PluginSettingsSkin;
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Plugin\Cache\ArrayPluginCache;
 use Xpressengine\Plugin\Cache\FilePluginCache;
@@ -19,7 +20,6 @@ use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
 use Xpressengine\Plugin\PluginRegister;
 use Xpressengine\Plugin\PluginScanner;
-use App\Skins\Plugin\PluginSettingsSkin;
 
 class PluginServiceProvider extends ServiceProvider
 {

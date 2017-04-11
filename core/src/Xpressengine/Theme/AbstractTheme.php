@@ -157,7 +157,7 @@ abstract class AbstractTheme implements ComponentInterface, Renderable
      * 생성된 테마 설정을 삭제하기 전 필요한 작업을 처리한다.
      * 사이트 관리자가 테마 설정 페이지에서 삭제 요청을 할 경우, 테마핸들러가 설정값을 삭제하기 전에 이 메소드가 실행된다.
      *
-     * @param ConfigEntity $config
+     * @param ConfigEntity $config 삭제될 설정 정보
      *
      * @return void
      */

@@ -135,6 +135,5 @@ class Thumbnailer
         }
 
         return $thumb;
-
     }
 }

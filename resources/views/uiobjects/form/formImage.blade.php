@@ -20,6 +20,7 @@
             @endif
         </div>
     </div>
+    <p class="help-block">{{ array_get($args, 'description') }}</p>
 </div>
 
 <script>

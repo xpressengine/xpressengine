@@ -48,6 +48,7 @@ class PluginCommand extends Command
     protected function init(PluginHandler $handler, PluginProvider $provider, ComposerFileWriter $writer)
     {
         $this->handler = $handler;
+        $this->handler->getAllPlugins(true);
         $this->provider = $provider;
         $this->writer = $writer;
     }

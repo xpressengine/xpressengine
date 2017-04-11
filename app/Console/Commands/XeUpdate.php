@@ -83,6 +83,8 @@ class XeUpdate extends Command
         }
 
         // 플러그인 업데이트 잠금
+        unlink($writer->getPath());
+        $writer->load();
         $writer->reset()->write();
 
         // composer update실행(composer update --no-dev)
@@ -121,7 +123,7 @@ class XeUpdate extends Command
             $name = lcfirst(str_replace('Migration', '', basename($file, '.php')));
 
             $class = "\\Xpressengine\\Migrations\\".basename($file, '.php');
-            $this->migrations[] = $migration = new $class();
+            $migration = new $class();
             /** @var Migration $migration */
             $this->output->write(" updating $name.. ");
             if($migration->checkUpdated($installedVersion) === false) {

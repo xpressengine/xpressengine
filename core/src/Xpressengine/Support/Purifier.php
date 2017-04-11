@@ -51,7 +51,7 @@ class Purifier
             'Core.Encoding' => 'UTF-8',
             'Cache.SerializerPath' => storage_path('framework/htmlpurifier/support'),
             'HTML.Doctype'             => 'XHTML 1.0 Strict',
-            'HTML.Allowed'             => 'div,b,strong,i,em,a[href|title],ul,ol,li,p[style]' .
+            'HTML.Allowed'             => 'div,b,strong,i,em,a[href|title],ul,ol,li,p[style],h1,h2,h3,h4,hr' .
                 ',br,span[style|class|data-download-link|contenteditable]' .
                 ',img[width|height|alt|src],table[summary],tbody,th[abbr],tr,td[abbr]',
             'CSS.AllowedProperties'    => 'font,font-size,font-weight,font-style,font-family' .

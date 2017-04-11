@@ -69,18 +69,25 @@ var common = {
     filename: '[name].js',
   },
   plugins: [
-    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'assets/vendor/vendor.bundle.js' })
+    new CommonsChunkPlugin({
+      name: 'vendor',
+      filename: 'assets/vendor/vendor.bundle.js'
+    }),
   ],
   module: {
-    loaders: [
+    rules: [
      {
-      test: /(\.js|\.jsx)$/,
-      loader: 'babel-loader',
-      exclude: /node_modules/,
-      query: {
-        presets: ['es2015', 'react'],
-        cacheDirectory: true,
-      },
+       test: /(\.js|\.jsx)$/,
+       exclude: /node_modules/,
+       use: {
+         loader: 'babel-loader',
+         options: {
+           cacheDirectory: true,
+           presets: ['es2015', 'react'],
+         },
+       },
+
+
     },
     ],
   },

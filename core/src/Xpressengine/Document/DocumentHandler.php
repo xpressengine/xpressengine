@@ -15,12 +15,12 @@
 namespace Xpressengine\Document;
 
 use Illuminate\Http\Request;
+use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Database\DynamicQuery;
+use Xpressengine\Database\VirtualConnectionInterface as VirtualConnection;
 use Xpressengine\Document\Exceptions\DocumentNotFoundException;
 use Xpressengine\Document\Models\Document;
 use Xpressengine\Document\Models\Revision;
-use Xpressengine\Config\ConfigEntity;
-use Xpressengine\Database\VirtualConnectionInterface as VirtualConnection;
 
 /**
  * DocumentHandler
@@ -325,9 +325,11 @@ class DocumentHandler
     }
 
     /**
+     * pivot Division Table
      *
-     * @param Document $doc
-     * @param ConfigEntity $config
+     * @param Document     $doc    document entity
+     * @param ConfigEntity $config config entity
+     *
      * @return string
      */
     protected function pivotDivisionTable(Document $doc, ConfigEntity $config)
@@ -364,7 +366,7 @@ class DocumentHandler
         $clone->from($this->pivotDivisionTable($doc, $config));
         $params = $doc->toArray();
         $params['email'] = $doc->email;
-        $params['certifyKey'] = $doc->certifyKey == null ? : '';
+        $params['certifyKey'] = $doc->certifyKey !== null ? $doc->certifyKey : '';
         $params['ipaddress'] = $doc->ipaddress;
         $clone->insert($params);
 
@@ -416,8 +418,8 @@ class DocumentHandler
             if (count($dirty) > 0) {
                 $clone->where('id', '=', $doc->id)->update($dirty);
             }
-
         }
+
         return true;
     }
 
@@ -476,35 +478,6 @@ class DocumentHandler
     }
 
     /**
-     * get division table name
-     *
-     * @param ConfigEntity $config config entity
-     * @return string
-     * @deprecated
-     */
-    public function getDivisionTableName(ConfigEntity $config)
-    {
-        return $this->instanceManager->getDivisionTableName($config);
-    }
-
-    /**
-     * Proxy, Division 관련 설정이 된 Document model 반환
-     * Document 는 config 를 설정해야 정상 사용 가능함
-     * document model 를 직접 반환하지 않음
-     *
-     * @param string $instanceId document instance id
-     * @return Document
-     * @deprecated
-     */
-    public function getModel($instanceId = null)
-    {
-        $config = $this->getConfig($instanceId);
-        $doc = $this->newModel();
-        $doc->setConfig($config, $this->getDivisionTableName($config));
-        return $doc;
-    }
-
-    /**
      * create document model
      *
      * @return Document
@@ -533,21 +506,6 @@ class DocumentHandler
     protected function newRevisionModel(array $attributes = [])
     {
         return new $this->revisionModel($attributes);
-    }
-
-    /**
-     * set model's config
-     *
-     * @param Document $doc        document model
-     * @param string   $instanceId document instance id
-     * @return Document
-     * @deprecated
-     */
-    public function setModelConfig(Document $doc, $instanceId)
-    {
-        $config = $this->getConfig($instanceId);
-        $doc->setConfig($config, $this->instanceManager->getDivisionTableName($config));
-        return $doc;
     }
 
     /**

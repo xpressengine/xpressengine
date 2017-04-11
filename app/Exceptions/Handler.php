@@ -92,16 +92,15 @@ class Handler extends ExceptionHandler
                 $cache->store('plugins')->flush();
                 Event::fire('cache:cleared', ['plugins']);
             }
-            $responseException = new HttpXpressengineException([], Response::HTTP_INTERNAL_SERVER_ERROR);
+            $responseException = new HttpXpressengineException([], Response::HTTP_INTERNAL_SERVER_ERROR, $e);
             $message = xe_trans($e->getMessage(), $e->getArgs());
             if ('' === $message) {
                 $message = get_class($e);
             } elseif ($message == $e->getMessage()) {
                 $message = $e->getMessage();
             }
-            $responseException->setMessage($message);
         } else {
-            $responseException = new HttpXpressengineException([], Response::HTTP_INTERNAL_SERVER_ERROR);
+            $responseException = new HttpXpressengineException([], Response::HTTP_INTERNAL_SERVER_ERROR, $e);
             $responseException->setMessage(xe_trans('xe::systemError'));
         }
 
@@ -182,6 +181,6 @@ class Handler extends ExceptionHandler
                 $responseException->getStatusCode()
             );
         }
-        return $this->toIlluminateResponse($this->convertExceptionToResponse($e), $e);
+        return $this->toIlluminateResponse($this->convertExceptionToResponse($responseException), $e);
     }
 }

@@ -26,9 +26,13 @@ namespace Xpressengine\Translation;
  */
 class NamespacedItemResolver
 {
-    protected $parsed = array();
+    protected $parsed = [];
+
+    protected $laravelNamespace = 'laravel';
 
     /**
+     * Parse a key into namespace and item
+     *
      * @param string $key 다국어 키
      * @return array
      */
@@ -39,11 +43,21 @@ class NamespacedItemResolver
         }
 
         if (strpos($key, '::') === false) {
-            $parsed = array('', $key);
+            $parsed = [$this->laravelNamespace, $key];
         } else {
             $parsed = explode('::', $key);
         }
 
         return $this->parsed[$key] = $parsed;
+    }
+
+    /**
+     * Get the Laravel's language namespace
+     *
+     * @return string
+     */
+    public function getLaravelNamespace()
+    {
+        return $this->laravelNamespace;
     }
 }

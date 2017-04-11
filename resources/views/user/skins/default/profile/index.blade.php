@@ -42,13 +42,6 @@
                                     <input class="__xe_introInput" style="display: none;" type="text" name="introduction" placeholder="{{xe_trans('xe::enterIntroduction')}}" value="{{ $user->introduction }}">
                                 @endif
                             </dd>
-
-                            {{--<dt class="xe-sr-only">연동한 소셜로그인 정보</dt>
-                            <dd class="connect-sns">
-                                <!--[D] sns 클릭 시 연동된 sns페이지로 이동 -->
-                                <a href="#"><i class="xi-twitter"></i></a>
-                                <a href="#"><i class="xi-github"></i></a>
-                            </dd>--}}
                         </dl>
 
                         @if($grant['modify'])
@@ -65,6 +58,12 @@
 
             </div>
             <!--//기본프로필 -->
+
+            <div class="card-wrap">
+                <div class="xe-container">
+                    {{ uio('widgetbox', ['id' => 'user-profile', 'link'=> xe_trans('xe::edit')]) }}
+                </div>
+            </div>
 
         </div>
         <!-- //content area -->

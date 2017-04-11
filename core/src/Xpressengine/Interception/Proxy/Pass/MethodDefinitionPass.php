@@ -132,7 +132,6 @@ BODY;
         return \$ret;
     }
 BODY;
-
         }
         return $body;
     }

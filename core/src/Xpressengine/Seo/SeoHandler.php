@@ -15,6 +15,7 @@
 namespace Xpressengine\Seo;
 
 use Xpressengine\Media\Models\Media;
+use Xpressengine\Presenter\Html\FrontendHandler;
 use Xpressengine\User\UserInterface;
 use Xpressengine\Seo\Importers\AbstractImporter;
 use Xpressengine\Translation\Translator;
@@ -84,6 +85,13 @@ class SeoHandler
     protected $translator;
 
     /**
+     * FrontendHandler instance
+     *
+     * @var FrontendHandler
+     */
+    protected $frontend;
+
+    /**
      * Will be executed
      *
      * @var bool
@@ -103,12 +111,14 @@ class SeoHandler
      * @param AbstractImporter[] $importers  Importer instances
      * @param Setting            $setting    Setting instances
      * @param Translator         $translator Translator instances
+     * @param FrontendHandler    $frontend   Frontend instance
      */
-    public function __construct(array $importers, Setting $setting, Translator $translator)
+    public function __construct(array $importers, Setting $setting, Translator $translator, FrontendHandler $frontend)
     {
         $this->importers = $importers;
         $this->setting = $setting;
         $this->translator = $translator;
+        $this->frontend = $frontend;
     }
 
     /**
@@ -207,14 +217,27 @@ class SeoHandler
      */
     protected function makeTitle(SeoUsable $item = null)
     {
-        if ($item) {
-            return $item->getTitle() . ' - ' . $this->translator->trans($this->setting->get('mainTitle'));
+        $siteTitle = $this->frontend->output('title');
+        $mainTitle = $this->setting->get('mainTitle');
+        if ($mainTitle != '') {
+            $siteTitle = $mainTitle;
         }
 
-        return implode(' - ', [
-            $this->translator->trans($this->setting->get('mainTitle')),
-            $this->translator->trans($this->setting->get('subTitle'))
-        ]);
+        if ($item) {
+            $title = $item->getTitle() . ' - ' . $this->translator->trans($siteTitle);
+            $this->frontend->title($title);
+            return $title;
+        }
+
+        $subTitle = $this->setting->get('subTitle');
+        if ($mainTitle == '' && $subTitle == '') {
+            return $this->translator->trans($siteTitle);
+        } else {
+            return implode(' - ', [
+                $this->translator->trans($mainTitle),
+                $this->translator->trans($subTitle)
+            ]);
+        }
     }
 
     /**

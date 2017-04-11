@@ -118,17 +118,38 @@ class ThemeHandler
         $this->mobileResolver = $callback;
     }
 
+    /**
+     * set view cache path
+     *
+     * @param string $path cache path
+     *
+     * @return void
+     */
     public function setCachePath($path)
     {
         $this->cachePath = $path;
     }
 
+    /**
+     * retrieve view cache path
+     *
+     * @param string $path cache path
+     *
+     * @return string
+     */
     public function getCachePath($path)
     {
         $cachePath = $this->cachePath.'/'.md5($path);
         return $cachePath;
     }
 
+    /**
+     * check whether has cache or not
+     *
+     * @param string $path cache path
+     *
+     * @return bool
+     */
     public function hasCache($path)
     {
         $cachePath = $this->getCachePath($path);
@@ -419,11 +440,12 @@ class ThemeHandler
     /**
      * 주어진 테마의 config data를 삭제한다.
      *
-     * @param string $id    theme id
+     * @param string $id theme id
      *
      * @return void
      */
-    public function deleteThemeConfig($id){
+    public function deleteThemeConfig($id)
+    {
         $configId = $this->getConfigId($id);
         $this->config->removeByName($configId);
     }
@@ -446,6 +468,8 @@ class ThemeHandler
             $id = str_replace($this->getConfigId(''), '', $config->name);
             $configs[$id] = $config;
         }
+
+        ksort($configs, SORT_NATURAL);
 
         return $configs;
     }

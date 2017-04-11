@@ -153,6 +153,21 @@ abstract class GenericTheme extends AbstractTheme
             $config = $this->setting();
         }
         $view = $this->info('setting', 'setting');
+
+        $assets = $this->info('setting.assets');
+
+        if (array_has($assets, 'js')) {
+            foreach ($assets['js'] as $js) {
+                app('xe.frontend')->js(static::asset($js))->load();
+            }
+        }
+
+        if (array_has($assets, 'css')) {
+            foreach ($assets['css'] as $css) {
+                app('xe.frontend')->css(static::asset($css))->load();
+            }
+        }
+
         $theme = static::class;
 
         if (is_string($view)) {
@@ -303,11 +318,14 @@ abstract class GenericTheme extends AbstractTheme
 
         $handler = static::$handler;
 
-        view()->composer($view, function(\Illuminate\View\View $viewObj) use ($handler) {
-            if($handler->hasCache($viewObj->getPath())) {
-                $viewObj->setPath($handler->getCachePath($viewObj->getPath()));
+        view()->composer(
+            $view,
+            function (\Illuminate\View\View $viewObj) use ($handler) {
+                if ($handler->hasCache($viewObj->getPath())) {
+                    $viewObj->setPath($handler->getCachePath($viewObj->getPath()));
+                }
             }
-        });
+        );
 
         return $view;
     }

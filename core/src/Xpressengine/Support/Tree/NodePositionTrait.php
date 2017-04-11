@@ -16,6 +16,7 @@ namespace Xpressengine\Support\Tree;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\Expression;
+use Illuminate\Support\Arr;
 
 /**
  * Trait NodePositionTrait
@@ -79,7 +80,7 @@ trait NodePositionTrait
             ->where("d.{$ancestor}", $item->getKey())
             ->get(['rel.' . $item->getKeyName()]);
 
-        $ids = array_column($rows, $item->getKeyName());
+        $ids = Arr::pluck($rows, $item->getKeyName());
 
         return $conn->table($table)->whereIn($item->getKeyName(), $ids)->delete();
     }

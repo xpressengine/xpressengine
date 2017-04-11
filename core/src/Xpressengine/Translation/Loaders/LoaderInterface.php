@@ -14,6 +14,8 @@
 
 namespace Xpressengine\Translation\Loaders;
 
+use Xpressengine\Translation\LangData;
+
 /**
  * 다국어 데이터를 load 할 수 있는 클래스
  *
@@ -27,6 +29,8 @@ namespace Xpressengine\Translation\Loaders;
 interface LoaderInterface
 {
     /**
+     * Load the messages by given source
+     *
      * @param string $source 데이터 소스
      * @return LangData
      */

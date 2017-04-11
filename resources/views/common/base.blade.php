@@ -26,11 +26,12 @@
     <script type="text/javascript">
         XE.setup({
             'X-CSRF-TOKEN': '{!! csrf_token() !!}',
-            loginUserId: '{{ Auth::check() ? Auth::user()->getId() : ''}}'
+            loginUserId: '{{ Auth::check() ? Auth::user()->getId() : ''}}',
+            useXeSpinner: true
         });
 
         XE.configure({
-            locale: '{{ session()->get('locale') ?: app('xe.translator')->getLocale() }}',
+            locale: '{{ Request::cookie('locale') ?: app('xe.translator')->getLocale() }}',
             defaultLocale: '{{ app('xe.translator')->getLocale() }}',
             @if (in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER]))
             managePrefix: '{{ app('config')['xe.routing.settingsPrefix'] }}'

@@ -55,7 +55,6 @@ abstract class Migration
      */
     public function init()
     {
-
     }
 
     /**
@@ -65,7 +64,6 @@ abstract class Migration
      */
     public function initialized()
     {
-
     }
 
     /**

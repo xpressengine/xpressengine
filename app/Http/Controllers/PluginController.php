@@ -10,13 +10,12 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use Composer\Console\Application;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Composer\Util\Platform;
 use Illuminate\Session\SessionManager;
-use Illuminate\Support\Collection;
 use Log;
 use Redirect;
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use XePresenter;
@@ -79,24 +78,7 @@ class PluginController extends Controller
         return XePresenter::makeApi(['type' => 'success', 'message' => '삭제되었습니다.']);
     }
 
-    public function getInstall(Request $request, PluginProvider $provider)
-    {
-        $query = $request->get('q');
-        if($query) {
-            $query = explode(' ', $query);
-        }
-
-        $componentTypes = $this->getComponentTypes();
-
-        $packages = $provider->search($query, $request->get('page', 1));
-
-        $items = new Collection($packages->data);
-        $plugins = new LengthAwarePaginator($items, $packages->total, $packages->per_page, $packages->current_page);
-
-        return XePresenter::make('install', compact('plugins', 'componentTypes'));
-    }
-
-    public function postInstall(
+    public function install(
         Request $request,
         PluginHandler $handler,
         PluginProvider $provider,
@@ -132,7 +114,8 @@ class PluginController extends Controller
         $timeLimit = config('xe.plugin.operation.time_limit');
         $writer->reset()->cleanOperation();
         $writer->install($name, $version, Carbon::now()->addSeconds($timeLimit)->toDateTimeString())->write();
-        $this->reserveOperation($writer, $timeLimit);
+
+        $this->reserveOperation($writer, $timeLimit, $pluginData);
 
         $session->flash('alert', ['type' => 'success', 'message' => '새로운 플러그인을 설치중입니다.']);
         return XePresenter::makeApi(['type' => 'success', 'message' => '새로운 플러그인을 설치중입니다.']);
@@ -151,11 +134,11 @@ class PluginController extends Controller
             throw new HttpException(422, 'Plugin not found.');
         }
 
-        if($plugin->isActivated()) {
+        if ($plugin->isActivated()) {
             throw new HttpException(422, 'Plugin is not deactivated. Please deactivate the plugin.');
         }
 
-        if($plugin->isDevelopMode()) {
+        if ($plugin->isDevelopMode()) {
             $handler->uninstallPlugin($pluginId);
             return redirect()->route('settings.plugins')->with(
                 'alert',
@@ -173,7 +156,9 @@ class PluginController extends Controller
         $timeLimit = config('xe.plugin.operation.time_limit');
         $writer->reset()->cleanOperation();
         $writer->uninstall($plugin->getName(), Carbon::now()->addSeconds($timeLimit)->toDateTimeString())->write();
-        $this->reserveOperation($writer, $timeLimit);
+
+        $pluginData = ['name' => $plugin->getName()];
+        $this->reserveOperation($writer, $timeLimit, (object)$pluginData);
 
         return redirect()->route('settings.plugins')->with(
             'alert',
@@ -186,60 +171,40 @@ class PluginController extends Controller
      *
      * @param ComposerFileWriter $writer
      * @param int                $timeLimit
+     * @param string             $logFileName
      * @param null               $callback
      */
-    protected function reserveOperation(ComposerFileWriter $writer, $timeLimit, $callback = null)
+    protected function reserveOperation(ComposerFileWriter $writer, $timeLimit, $pluginData, $callback = null)
     {
-        set_time_limit($timeLimit);
-        ignore_user_abort(true);
-        ini_set('allow_url_fopen', '1');
-
-        $memoryInBytes = function ($value) {
-            $unit = strtolower(substr($value, -1, 1));
-            $value = (int) $value;
-            switch ($unit) {
-                case 'g':
-                    $value *= 1024;
-                // no break (cumulative multiplier)
-                case 'm':
-                    $value *= 1024;
-                // no break (cumulative multiplier)
-                case 'k':
-                    $value *= 1024;
-            }
-
-            return $value;
-        };
-
-        $memoryLimit = trim(ini_get('memory_limit'));
-        // Increase memory_limit if it is lower than 1GB
-        if ($memoryLimit != -1 && $memoryInBytes($memoryLimit) < 1024 * 1024 * 1024) {
-            ini_set('memory_limit', '1G');
-        }
+        $this->prepareComposer($timeLimit);
 
         /** @var \Illuminate\Foundation\Application $app */
         app()->terminating(
-            function () use ($writer, $callback) {
+            function () use ($writer, $pluginData, $callback) {
 
                 $pid = getmypid();
                 Log::info("[plugin operation] start running composer run [pid=$pid]");
 
-                // call `composer install` command programmatically
                 $vendorName = PluginHandler::PLUGIN_VENDOR_NAME;
                 $input = new ArrayInput(
                     [
                         'command' => 'update',
-                        "--prefer-lowest" => true,
                         "--with-dependencies" => true,
                         '--working-dir' => base_path(),
-                        'packages' => ["$vendorName/*"]
+                        '--verbose' => 1,
+                        'packages' => [$pluginData->name]
                     ]
                 );
 
                 Composer::setPackagistToken(config('xe.plugin.packagist.site_token'));
                 Composer::setPackagistUrl(config('xe.plugin.packagist.url'));
 
-                $output = new BufferedOutput();
+                $startTime = Carbon::now()->format('YmdHis');
+                $logFileName = "logs/plugin-$startTime.log";
+                $writer->set('xpressengine-plugin.operation.log', $logFileName);
+                $writer->write();
+
+                $output = new StreamOutput(fopen(storage_path($logFileName), 'a', false));
                 $application = new Application();
                 $application->setAutoExit(false); // prevent `$application->run` method from exitting the script
                 if (!defined('__XE_PLUGIN_MODE__')) {
@@ -247,10 +212,7 @@ class PluginController extends Controller
                 }
                 $result = $application->run($input, $output);
 
-                $outputText = $output->fetch();
-                file_put_contents(storage_path('logs/plugin.log'), $outputText);
-
-                if(is_callable($callback)) {
+                if (is_callable($callback)) {
                     $callback($result);
                 }
 
@@ -272,6 +234,95 @@ class PluginController extends Controller
         );
     }
 
+    protected function prepareComposer($timeLimit)
+    {
+
+        $files = [
+            storage_path('app/composer.plugins.json'),
+            base_path('composer.lock'),
+            base_path('plugins/'),
+            base_path('vendor/'),
+            base_path('vendor/composer/installed.json'),
+        ];
+
+        // file permission check
+
+        foreach ($files as $file) {
+            $type = is_dir($file) ? '디렉토리' : '파일';
+
+            if (!is_writable($file)) {
+                throw new HttpException(500, "[$file] {$type}의 쓰기 권한이 없습니다. 플러그인을 설치하기 위해서는 이 {$type}의 쓰기 권한이 있어야 합니다");
+            }
+        }
+
+        // composer home check
+        $this->checkComposerHome();
+
+        set_time_limit($timeLimit);
+        ignore_user_abort(true);
+        ini_set('allow_url_fopen', '1');
+
+        $memoryInBytes = function ($value) {
+            $unit = strtolower(substr($value, -1, 1));
+            $value = (int) $value;
+            switch ($unit) {
+                case 'g':
+                    $value *= 1024;
+                // no break (cumulative multiplier)
+                case 'm':
+                    $value *= 1024;
+                // no break (cumulative multiplier)
+                case 'k':
+                    $value *= 1024;
+            }
+            return $value;
+        };
+
+        $memoryLimit = trim(ini_get('memory_limit'));
+        // Increase memory_limit if it is lower than 1GB
+        if ($memoryLimit != -1 && $memoryInBytes($memoryLimit) < 1024 * 1024 * 1024) {
+            ini_set('memory_limit', '1G');
+        }
+
+
+
+    }
+
+    /**
+     * checkComposerHome
+     *
+     * @return void
+     * @throws \Exception
+     */
+    protected function checkComposerHome()
+    {
+        $config = app('xe.config')->get('plugin');
+        $home = $config->get('composer_home');
+
+        if ($home) {
+            putenv("COMPOSER_HOME=$home");
+        } else {
+            $home = getenv('COMPOSER_HOME');
+        }
+
+        if (Platform::isWindows()) {
+            if (!getenv('APPDATA')) {
+                throw new HttpException(500,
+                    'COMPOSER_HOME 환경변수가 설정되어 있지 않습니다. <a href="'.route('settings.plugins.setting.show').'">플러그인 설정</a>에서 설정할 수 있습니다.'
+                );
+            }
+        }
+
+        if (!$home) {
+            $home = getenv('HOME');
+            if (!$home) {
+                throw new HttpException(500,
+                    'COMPOSER_HOME 환경변수가 설정되어 있지 않습니다. <a href="'.route('settings.plugins.setting.show').'">플러그인 설정</a>에서 설정할 수 있습니다.'
+                );
+            }
+        }
+    }
+
     public function show($pluginId, PluginHandler $handler, PluginProvider $provider)
     {
         // refresh plugin cache
@@ -280,10 +331,6 @@ class PluginController extends Controller
         $componentTypes = $this->getComponentTypes();
 
         $plugin = $handler->getPlugin($pluginId);
-
-        if($plugin === null) {
-            throw new HttpException(404, '플러그인이 존재하지 않습니다.');
-        }
 
         $provider->sync($plugin);
 
@@ -369,17 +416,23 @@ class PluginController extends Controller
         $timeLimit = config('xe.plugin.operation.time_limit');
         $writer->reset()->cleanOperation();
         $writer->update($name, $version, Carbon::now()->addSeconds($timeLimit)->toDateTimeString())->write();
-        $this->reserveOperation($writer, $timeLimit, function($code) use ($plugin) {
-            if($code === 0 && $plugin->checkUpdated()) {
-                $plugin->update();
+        $this->reserveOperation(
+            $writer,
+            $timeLimit,
+            $pluginData,
+            function ($code) use ($plugin) {
+                if ($code === 0 && $plugin->checkUpdated()) {
+                    $plugin->update();
+                }
             }
-        });
+        );
 
         return redirect()->route('settings.plugins')->with(
             'alert',
             ['type' => 'success', 'message' => '플러그인의 새로운 버전을 다운로드하는 중입니다.']
         );
     }
+
 
     /**
      * getComponentTypes

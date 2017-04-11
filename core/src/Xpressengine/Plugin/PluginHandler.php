@@ -591,7 +591,7 @@ class PluginHandler
             }
             list(, $id) = explode('/', $package);
             $info = $this->provider->find($id);
-            if($info !== null) {
+            if ($info !== null) {
                 $runningsInfo[$package] = $info;
                 $runningsInfo[$package]->pluginId = $id;
             }
@@ -621,7 +621,15 @@ class PluginHandler
             $status = 'expired';
         }
 
-        return compact('runnings', 'status', 'runningMode', 'expired', 'changed', 'failed', 'runningsInfo');
+        $logFile = $writer->get('xpressengine-plugin.operation.log');
+
+        if ($logFile) {
+            $log = file_get_contents(storage_path($logFile));
+        } else {
+            $log = null;
+        }
+
+        return compact('runnings', 'status', 'runningMode', 'expired', 'changed', 'failed', 'runningsInfo', 'log');
     }
 
     /**

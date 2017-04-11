@@ -1,3 +1,5 @@
+{{ app('xe.frontend')->js('assets/core/xe-ui-component/js/xe-page.js')->load() }}
+
 <div class="row">
     <div class="col-sm-12">
         <div class="panel-group">
@@ -72,8 +74,6 @@
 
                 </div>
                 <div class="table-responsive">
-                <form id="__xe_fList" method="post" action="{{ route('settings.user.destroy') }}">
-                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <table class="table">
                         <thead>
                         <tr>
@@ -90,13 +90,12 @@
                         <tbody>
                         @foreach($users as $user)
                         <tr>
-                            <td><input name="userId" class="__xe_checkbox" type="checkbox" value="{{ $user->getId() }}" @if($user->rating === \Xpressengine\User\Rating::SUPER) disabled @endif></td>
+                            <td><input name="userId[]" class="__xe_checkbox" type="checkbox" value="{{ $user->getId() }}" @if($user->rating === \Xpressengine\User\Rating::SUPER) disabled @endif></td>
                             <td>
                                 <img data-toggle="xeUserMenu" data-user-id="{{ $user->getId() }}" src="{{ $user->getProfileImage() }}" width="30" height="30" alt="{{xe_trans('xe::profileImage')}}" class="member-profile">
                                 <a href="#" data-toggle="xeUserMenu" data-user-id="{{ $user->getId() }}" data-text="{{ $user->getDisplayName() }}">{{ $user->getDisplayName() }}</a></i>
                             </td>
                             <td>
-
                                 @if(count($user->accounts))
                                     @foreach($user->accounts as $account)
                                         <span data-toggle="tooltip" class="badge grey {{ $account->provider }}" title="{{ $account->provider }}"><i class="xi-{{ $account->provider }}"></i></span>
@@ -124,7 +123,6 @@
                         @endforeach
                         </tbody>
                     </table>
-                </form>
                 </div>
                 @if($pagination = $users->render())
                 <div class="panel-footer">
@@ -196,9 +194,20 @@
                 if (!$('input.__xe_checkbox:checked').is('input')) {
                     return false;
                 }
-                var $f = $('#__xe_fList');
-                $('<input type="hidden" name="_method" value="DELETE">').prependTo($f);
-                $f.submit();
+
+                var userIds = $('input.__xe_checkbox:checked').map(function() {
+                    return this.value;
+                }).get().join();
+
+                var options = {
+                    'data' : {
+                        'userIds': userIds
+                    }
+                };
+
+                XE.pageModal('{{ route('settings.user.delete') }}', options);
+
+                console.log(userIds);
             }
         }
     })().init();

@@ -1,34 +1,32 @@
 <?php
 /**
- * InvalidRendererException
+ *  This file is part of the Xpressengine package.
  *
  * PHP version 5
  *
- * @category    Database
- * @package     Xpressengine\Database
+ * @category    Plugin
+ * @package     Xpressengine\Plugin
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
 
-namespace Xpressengine\Presenter\Exceptions;
+namespace Xpressengine\Plugin\Exceptions;
 
-use Xpressengine\Presenter\PresenterException;
+use Xpressengine\Plugin\PluginException;
 
 /**
- * InvalidRendererException
+ * NotImplementedException Class
  *
- * @category    Presenter
- * @package     Xpressengine\Presenter
+ * @category    Plugin
+ * @package     Xpressengine\Plugin
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
- * @deprecated As of 3.0.0-beta6 replaced by InvalidPresenterException
  */
-class InvalidRendererException extends PresenterException
+class ComponentNotFoundException extends PluginException
 {
-    protected $message = '":name" renderer invalid.
-    Renderer must follow "Xpressengine\Presenter\Presentable" interface';
+    protected $message = '":className" class not found in ":pluginId" plugin';
 }

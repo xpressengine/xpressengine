@@ -48,6 +48,7 @@ function setup(options) {
     headers: {
       'X-CSRF-TOKEN': options['X-CSRF-TOKEN'],
     },
+    useXeSpinner: (options.useXeSpinner) ? true : false,
   });
 
 }

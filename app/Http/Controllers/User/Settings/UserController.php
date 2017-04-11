@@ -11,9 +11,11 @@ use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Input;
-use XePresenter;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use XeDB;
+use XePresenter;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
 use Xpressengine\User\Exceptions\EmailNotFoundException;
 use Xpressengine\User\Exceptions\MailAlreadyExistsException;
@@ -419,15 +421,26 @@ class UserController extends Controller
         return XePresenter::makeApi(['type' => 'success', 'address' => $address]);
     }
 
+    public function deletePage(Request $request)
+    {
+        $userIds = $request->get('userIds');
+
+        $userIds = explode(',', $userIds);
+
+        $users = $this->handler->users()->whereIn('id', $userIds)->where('rating', '<>', Rating::SUPER)->get();
+
+        return apiRender('user.settings.user.delete', compact('users'));
+    }
+
     /**
      * delete user
      *
      * @return \Illuminate\Http\RedirectResponse
      * @throws Exception
      */
-    public function deleteUser()
+    public function destroy(Request $request)
     {
-        $userIds = Input::get('userId', []);
+        $userIds = $request->get('userId', []);
 
         XeDB::beginTransaction();
         try {
@@ -438,7 +451,7 @@ class UserController extends Controller
         }
         XeDB::commit();
 
-        return redirect()->back()->with('alert', ['type' => 'success', 'message' => '삭제되었습니다.']);
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::msgDelete')]);
     }
 
     /**

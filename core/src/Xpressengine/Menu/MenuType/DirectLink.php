@@ -15,6 +15,8 @@
 namespace Xpressengine\Menu\MenuType;
 
 use Xpressengine\Menu\AbstractModule;
+use Xpressengine\Menu\Exceptions\InvalidArgumentException;
+use Illuminate\Contracts\Validation\Factory as FactoryContract;
 
 /**
  * DirectLink
@@ -44,6 +46,11 @@ class DirectLink extends AbstractModule
     ];
 
     /**
+     * @var FactoryContract $validation FactoryContract instance
+     */
+    protected static $validation;
+
+    /**
      * 생성 폼 처리
      * @return string
      */
@@ -64,7 +71,7 @@ class DirectLink extends AbstractModule
      */
     public function storeMenu($instanceId, $menuTypeParams, $itemParams)
     {
-        // nothing
+        $this->checkValid($itemParams);
     }
 
     /**
@@ -92,7 +99,7 @@ class DirectLink extends AbstractModule
      */
     public function updateMenu($instanceId, $menuTypeParams, $itemParams)
     {
-        // nothing
+        $this->checkValid($itemParams);
     }
 
     /**
@@ -173,5 +180,45 @@ class DirectLink extends AbstractModule
     public function getTypeItem($id)
     {
         return null;
+    }
+
+    /**
+     * Determine if the given parameters is valid
+     *
+     * @param array $params parameters
+     * @return void
+     */
+    protected function checkValid($params)
+    {
+        /** @var \Illuminate\Validation\Validator $validator */
+        $validator = static::$validation->make($params, ['url' => 'url']);
+
+        if ($validator->fails()) {
+            $e = new InvalidArgumentException();
+            $e->setMessage($validator->errors()->first());
+
+            throw $e;
+        }
+    }
+
+    /**
+     * Set validation factory
+     *
+     * @param FactoryContract $validation validation factory instance
+     * @return void
+     */
+    public static function setValidation(FactoryContract $validation)
+    {
+        static::$validation = $validation;
+    }
+
+    /**
+     * Return validation factory
+     *
+     * @return FactoryContract
+     */
+    public static function getValidation()
+    {
+        return static::$validation;
     }
 }

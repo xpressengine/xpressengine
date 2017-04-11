@@ -14,13 +14,13 @@
 
 namespace Xpressengine\DynamicField;
 
-use Xpressengine\Config\ConfigEntity;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Database\Schema\Blueprint;
+use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Database\DynamicQuery;
-use Xpressengine\Plugin\ComponentTrait;
 use Xpressengine\Plugin\ComponentInterface;
+use Xpressengine\Plugin\ComponentTrait;
 
 /**
  * AbstractType
@@ -140,7 +140,6 @@ abstract class AbstractType implements ComponentInterface
      */
     public static function boot()
     {
-
     }
 
     /**

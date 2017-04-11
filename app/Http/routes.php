@@ -289,24 +289,11 @@ Route::settings(
                        'settings_menu' => 'user.create'
                    ]
         );
+
         Route::post(
-            'store',
+            '/',
             ['as' => 'settings.user.store', 'uses' => 'User\Settings\UserController@store']
         );
-
-        Route::get(
-            '{id}/edit',
-            [
-                'as' => 'settings.user.edit',
-                'uses' => 'User\Settings\UserController@edit',
-                'settings_menu' => 'user.edit',
-                'permission' => 'user.edit',
-
-            ]
-        )->where('id', '[0-9a-z\-]+');
-
-        Route::post('{id}/edit', ['as' => 'settings.user.edit', 'uses' => 'User\Settings\UserController@update'])
-            ->where('id', '[0-9a-z\-]+');
 
         // mail action at edit
         Route::get(
@@ -326,11 +313,29 @@ Route::settings(
             ['as' => 'settings.user.mail.confirm', 'uses' => 'User\Settings\UserController@postConfirmMail']
         );
 
-        // delete
-        Route::delete(
-            'destroy',
-            ['as' => 'settings.user.destroy', 'uses' => 'User\Settings\UserController@deleteUser']
+        // page to delete users
+        Route::get(
+            'delete',
+            ['as' => 'settings.user.delete', 'uses' => 'User\Settings\UserController@deletePage']
         );
+
+        // delete users
+        Route::delete(
+            '/',
+            ['as' => 'settings.user.destroy', 'uses' => 'User\Settings\UserController@destroy']
+        );
+        Route::get(
+            '{id}/edit',
+            [
+                'as' => 'settings.user.edit',
+                'uses' => 'User\Settings\UserController@edit',
+                'settings_menu' => 'user.edit',
+                'permission' => 'user.edit',
+
+            ]
+        );
+
+        Route::put('{id}', ['as' => 'settings.user.update', 'uses' => 'User\Settings\UserController@update']);
 
         // setting
         Route::group(
@@ -595,6 +600,29 @@ Route::settings(
     }
 );
 
+Route::settings('update', function(){
+
+    Route::get('/', [
+        'as' => 'settings.coreupdate.show',
+        'uses' => 'UpdateController@show',
+        'settings_menu' => 'plugin.core-update'
+    ]);
+    Route::put('/', [
+        'as' => 'settings.coreupdate.update',
+        'uses' => 'UpdateController@update'
+    ]);
+
+    Route::get('operation', [
+        'as' => 'settings.coreupdate.operation',
+        'uses' => 'UpdateController@showOperation'
+    ]);
+
+    Route::delete('operation', [
+        'as' => 'settings.coreupdate.operation.delete',
+        'uses' => 'UpdateController@deleteOperation'
+    ]);
+});
+
 /* plugin  */
 Route::settings(
     'plugins',
@@ -812,7 +840,7 @@ Route::settings(
     function () {
         Route::get('/section', ['as' => 'settings.skin.section.setting', 'uses' => 'SkinController@getSetting']);
         Route::post('/section', ['as' => 'settings.skin.section.setting', 'uses' => 'SkinController@postSetting']);
-        Route::post('/assign', ['as' => 'settings.skin.section.assign', 'uses' => 'SkinController@postAssign']);
+        Route::put('/assign', ['as' => 'settings.skin.section.assign', 'uses' => 'SkinController@putAssign']);
     }
 );
 

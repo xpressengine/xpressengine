@@ -372,11 +372,6 @@ class MenuController extends Controller
                 'maxDepth' => $menuMaxDepth,
                 'parent' => $parent,
                 'selectedType' => $selectedMenuType,
-                'menuTypeArgs' => [
-                    'menuType' => $menuTypeObj,
-                    'action' => 'createMenuForm',
-                    'param' => []
-                ],
                 'menuConfig' => $menuConfig
             ]
         );

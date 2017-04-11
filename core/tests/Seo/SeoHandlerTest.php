@@ -20,8 +20,8 @@ class SeoHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testImport()
     {
-        list($importers, $setting, $translator) = $this->getMocks();
-        $instance = m::mock(SeoHandler::class, [$importers, $setting, $translator])
+        list($importers, $setting, $translator, $frontend) = $this->getMocks();
+        $instance = m::mock(SeoHandler::class, [$importers, $setting, $translator, $frontend])
             ->shouldAllowMockingProtectedMethods()
             ->makePartial();
 
@@ -48,8 +48,8 @@ class SeoHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testResolveData()
     {
-        list($importers, $setting, $translator) = $this->getMocks();
-        $instance = m::mock(SeoHandler::class, [$importers, $setting, $translator])
+        list($importers, $setting, $translator, $frontend) = $this->getMocks();
+        $instance = m::mock(SeoHandler::class, [$importers, $setting, $translator, $frontend])
             ->shouldAllowMockingProtectedMethods()
             ->makePartial();
 
@@ -98,8 +98,8 @@ class SeoHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testMakeTitle()
     {
-        list($importers, $setting, $translator) = $this->getMocks();
-        $instance = new SeoHandler($importers, $setting, $translator);
+        list($importers, $setting, $translator, $frontend) = $this->getMocks();
+        $instance = new SeoHandler($importers, $setting, $translator, $frontend);
 
         $mockItem = m::mock('Xpressengine\Seo\SeoUsable');
         $mockItem->shouldReceive('getTitle')->once()->andReturn('item title');
@@ -109,6 +109,9 @@ class SeoHandlerTest extends \PHPUnit_Framework_TestCase
 
         $translator->shouldReceive('trans')->twice()->with('main title')->andReturn('main title');
         $translator->shouldReceive('trans')->once()->with('sub title')->andReturn('sub title');
+
+        $frontend->shouldReceive('output')->with('title')->andReturn('site title');
+        $frontend->shouldReceive('title');
 
         $title = $this->invokeMethod($instance, 'makeTitle', [$mockItem]);
         $this->assertEquals('item title - main title', $title);
@@ -133,7 +136,8 @@ class SeoHandlerTest extends \PHPUnit_Framework_TestCase
                 m::mock('Xpressengine\Seo\Importers\AbstractImporter')
             ],
             m::mock('Xpressengine\Seo\Setting'),
-            m::mock('Xpressengine\Translation\Translator')
+            m::mock('Xpressengine\Translation\Translator'),
+            m::mock('Xpressengine\Presenter\Html\FrontendHandler')
         ];
     }
 }

@@ -219,7 +219,6 @@ class DatabaseProxy implements ProxyInterface
                 } else {
                     $type->get($query);
                 }
-
             } else {
                 // is alter table
             }
@@ -248,7 +247,6 @@ class DatabaseProxy implements ProxyInterface
                 } else {
                     $query = $type->first($query);
                 }
-
             } else {
                 // is alter table
             }

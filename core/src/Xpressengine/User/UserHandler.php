@@ -503,6 +503,7 @@ class UserHandler
                     'provider' => array_get($accountData, 'provider'),
                     'data' => array_get($accountData, 'data'),
                     'token' => array_get($accountData, 'token'),
+                    'tokenSecret' => array_get($accountData, 'tokenSecret'),
                 ]
             );
             $user->accounts()->save($account);

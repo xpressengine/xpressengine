@@ -137,16 +137,22 @@ return [
                 'ordering' => 4000
             ],
             'plugin' => [
-                'title' => 'xe::plugin',
+                'title' => 'xe::pluginAndUpdate',
                 'display' => true,
                 'description' => '',
                 'ordering' => 5000
+            ],
+            'plugin.core-update' => [
+                'title' => 'xe::coreUpdate',
+                'display' => true,
+                'description' => '',
+                'ordering' => 100
             ],
             'plugin.list' => [
                 'title' => 'xe::pluginList',
                 'display' => true,
                 'description' => '',
-                'ordering' => 100
+                'ordering' => 200
             ],
             'plugin.list.detail' => [
                 'title' => 'xe::pluginDetails',
@@ -190,6 +196,7 @@ return [
                 'description' => '',
                 'ordering' => 200
             ],
+
             'setting.permission' => [
                 'title' => 'xe::settingsPermissionSettings',
                 'display' => true,
@@ -340,8 +347,7 @@ return [
             'url' => 'https://store.xpressengine.io/api/1.2'
         ],
         'packagist' => [
-            'url' => 'https://store.xpressengine.io',
-            'site_token' => null
+            'url' => 'https://store.xpressengine.io'
         ],
         'operation' => [
             'time_limit' => 1200

@@ -15,7 +15,6 @@
 namespace Xpressengine\User;
 
 use Illuminate\Auth\EloquentUserProvider;
-use Xpressengine\User\Authenticatable;
 
 /**
  * 이 클래스는 Auth(Guard)에 회원정보를 제공하는 역할을 한다.
@@ -52,7 +51,6 @@ class UserProvider extends EloquentUserProvider
 
         // retrieve by email
         if (isset($where['email'])) {
-
             $email = $where['email'];
 
             // only prefix given

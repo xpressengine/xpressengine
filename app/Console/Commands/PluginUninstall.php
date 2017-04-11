@@ -54,17 +54,8 @@ class PluginUninstall extends PluginCommand
         }
 
         // 설치가능 환경인지 검사
-        // - check writable of composer.plugin.json
-        if(!is_writable($composerFile = storage_path('app/composer.plugins.json'))) {
-            // [$pluginDir] 파일에 쓰기 권한이 없습니다. 플러그인을 삭제하기 위해서는 이 파일의 쓰기 권한이 있어야 합니다.
-            throw new \Exception("You have been denied permission to acccess [$composerFile] file. To uninstall the plugin, you must have write permission to access this this file.");
-        }
+        $this->prepareComposer();
 
-        // - check writable of plugins/ directory
-        if(!is_writable($pluginDir = base_path('plugins'))) {
-            // [$pluginDir] 디렉토리에 쓰기 권한이 없습니다. 플러그인을 삭제하기 위해서는 이 디렉토리의 쓰기 권한이 있어야 합니다.
-            throw new \Exception("You have been denied permission to acccess [$pluginDir] directory. To uninstall the plugin, you must have write permissions to access this directory.");
-        }
 
         $title = $plugin->getTitle();
         $name = $plugin->getName();
@@ -108,16 +99,15 @@ class PluginUninstall extends PluginCommand
         // composer update실행(composer update --prefer-lowest --with-dependencies xpressengine-plugin/*)
         // composer update를 실행합니다. 최대 수분이 소요될 수 있습니다.
         $this->warn('Composer update command is running.. It may take up to a few minutes.');
-        $this->line(" composer update --prefer-lowest --with-dependencies $vendorName/$id");
+        $this->line(" composer update --prefer-lowest --with-dependencies $name");
         $result = $this->runComposer(
             [
                 'command' => 'update',
-                "--prefer-lowest" => true,
                 "--with-dependencies" => true,
                 //"--quiet" => true,
                 '--working-dir' => base_path(),
                 /*'--verbose' => '3',*/
-                'packages' => ["$vendorName/$id"]
+                'packages' => [$name]
             ]
         );
 

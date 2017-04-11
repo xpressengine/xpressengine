@@ -10,6 +10,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Validation\Validator;
 use Xpressengine\Translation\Loaders\LangFileLoader;
 use Xpressengine\Translation\Loaders\LangURLLoader;
 use Xpressengine\Translation\TransCache;
@@ -18,7 +19,7 @@ use Xpressengine\Translation\Translator;
 
 class TranslationServiceProvider extends ServiceProvider
 {
-    protected $defer = false;
+    protected $defer = true;
 
     public function boot()
     {
@@ -73,6 +74,12 @@ class TranslationServiceProvider extends ServiceProvider
 
             $trans = new Translator($app['config']['xe.lang'], $keyGen, $db, $fileLoader, $urlLoader);
             return $trans;
+        });
+
+        $this->app->resolving('validator', function ($instance, $app) {
+            $instance->resolver(function ($translator, $data, $rules, $messages, $customAttributes) use ($app){
+                return new Validator($app['xe.translator'], $data, $rules, $messages, $customAttributes);
+            });
         });
     }
 

@@ -44,7 +44,7 @@
 {{ XeFrontend::html('theme.config')->content('
 <div id="addConfig" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog">
-        <form action="'.route('settings.theme.setting.create').'" method="POST">
+        <form action="'.route('settings.theme.setting.create').'" method="POST" onsubmit="$(\'.__xe_submit_btn\').button(\'loading\')">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -57,7 +57,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">'.xe_trans('xe::cancel').'</button>
-                    <button type="submit" class="btn btn-primary">'.xe_trans('xe::add').'</button>
+                    <button type="submit" class="btn btn-primary __xe_submit_btn" data-loading-text="추가중..">'.xe_trans('xe::add').'</button>
                 </div>
             </div><!-- /.modal-content -->
         </form>

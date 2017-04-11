@@ -10,7 +10,7 @@ namespace Xpressengine\Tests\Presenter;
 
 use Mockery as m;
 use PHPUnit_Framework_TestCase;
-use Xpressengine\Presenter\Html\HtmlRenderer;
+use Xpressengine\Presenter\Html\HtmlPresenter;
 
 /**
  * HtmlRendererTest
@@ -20,7 +20,7 @@ use Xpressengine\Presenter\Html\HtmlRenderer;
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class HtmlRendererTest extends PHPUnit_Framework_TestCase
+class HtmlPresenterTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var m\MockInterface|\Xpressengine\Presenter\Presenter
@@ -74,7 +74,7 @@ class HtmlRendererTest extends PHPUnit_Framework_TestCase
         $seo = $this->seo;
         $widgetParser = $this->widgetParser;
 
-        $renderer = new HtmlRenderer($presenter, $seo, $widgetParser);
+        $renderer = new HtmlPresenter($presenter, $seo, $widgetParser);
 
         $presenter->shouldReceive('getSkinTargetId')->andReturn('skinTargetId');
         $presenter->shouldReceive('getId')->andReturn('id');
@@ -88,6 +88,7 @@ class HtmlRendererTest extends PHPUnit_Framework_TestCase
                 'key2-2' => 'value2-2',
             ],
         ]);
+        $presenter->shouldReceive('getShared')->andReturn([]);
 
         $renderer->setCommonHtmlWrapper('name');
         $renderer->setPopupHtmlWrapper('name');
@@ -142,6 +143,7 @@ class HtmlRendererTest extends PHPUnit_Framework_TestCase
         $presenter->shouldReceive('getSkinHandler')->andReturn($skin);
         $presenter->shouldReceive('getThemeHandler')->andReturn($theme);
         $presenter->shouldReceive('getViewFactory')->andReturn($view);
+
 
         $widgetParser->shouldReceive('parseXml');
 

@@ -127,14 +127,15 @@ class Translator extends NamespacedItemResolver implements TranslatorInterface
     }
 
     /**
-     * 로케일에 해당하는 문자열 반환, 지정된 로케일이 없을 경우 현재 지정된 로케일을 사용
+     * 로케일에 해당하는 문자열 반환
+     * 지정된 로케일이 없을 경우 현재 지정된 로케일을 사용
      *
      * @param string $locale 선택 로케일
      * @return string
      */
     public function getLocaleText($locale = null)
     {
-        if($locale === null) {
+        if ($locale === null) {
             $locale = $this->getLocale();
         }
         return isset($this->texts[$locale]) ? $this->texts[$locale] : $locale;
@@ -306,7 +307,7 @@ class Translator extends NamespacedItemResolver implements TranslatorInterface
      * 먼저 해석하여 정확도를 높여줍니다.
      *
      * @param array $replace 변경 데이터
-     * @return array
+     * @return array|Collection
      */
     protected function sortReplacements(array $replace)
     {
@@ -339,7 +340,19 @@ class Translator extends NamespacedItemResolver implements TranslatorInterface
                 $loader = $this->fileLoader;
                 break;
         }
-        $langData = $loader->load($source);
+
+        $this->putLangData($namespace, $loader->load($source));
+    }
+
+    /**
+     * language data 를 주어진 네임스페이스로 저장합니다
+     *
+     * @param string   $namespace namespace
+     * @param LangData $langData  LangData instance
+     * @return void
+     */
+    public function putLangData($namespace, LangData $langData)
+    {
         $this->cachedDb->putLangData($namespace, $langData);
     }
 
@@ -405,7 +418,7 @@ class Translator extends NamespacedItemResolver implements TranslatorInterface
      *
      * @param string $key LangPreprocessor 에서 생성한 키
      * @return array|null
-     * @see App\Http\Middleware\LangPreprocessor
+     * @see \App\Http\Middleware\LangPreprocessor
      */
     public function parsePreprocessor($key)
     {

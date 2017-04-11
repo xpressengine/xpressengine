@@ -10,7 +10,7 @@ namespace Xpressengine\Tests\Presenter;
 
 use Mockery as m;
 use PHPUnit_Framework_TestCase;
-use Xpressengine\Presenter\Json\JsonRenderer;
+use Xpressengine\Presenter\Json\JsonPresenter;
 
 /**
  * JsonRendererTest
@@ -20,7 +20,7 @@ use Xpressengine\Presenter\Json\JsonRenderer;
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class JsonRendererTest extends PHPUnit_Framework_TestCase
+class JsonPresenterTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var m\MockInterface|\Xpressengine\Presenter\Presenter
@@ -57,7 +57,7 @@ class JsonRendererTest extends PHPUnit_Framework_TestCase
     public function testRenderer()
     {
         $presenter = $this->presenter;
-        $renderer = new JsonRenderer($presenter);
+        $renderer = new JsonPresenter($presenter);
 
         $presenter->shouldReceive('getData')->andReturn([
             'key1' => 'value1',

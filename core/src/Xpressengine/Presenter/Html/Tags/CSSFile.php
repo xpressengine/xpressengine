@@ -239,8 +239,8 @@ class CSSFile
         }
 
         $prev = null;
-        foreach ((array) $this->files as $file) {
 
+        foreach ((array) $this->files as $file) {
             // add file to output list
             static::$fileList = array_add(static::$fileList, $this->location, []);
 

@@ -190,7 +190,8 @@ namespace Xpressengine\Tests\User {
                     'email' => 'foo@bar.com',
                     'provider' => 'baz',
                     'data' => [],
-                    'token' => 'token'
+                    'token' => 'token',
+                    'tokenSecret' => 'tokenSecret',
                 ]
             ];
 
@@ -214,7 +215,8 @@ namespace Xpressengine\Tests\User {
                 'email' => 'foo@bar.com',
                 'provider' => 'baz',
                 'data' => [],
-                'token' => 'token'
+                'token' => 'token',
+                'tokenSecret' => 'tokenSecret',
             ])->andReturn($account);
 
             $users->shouldReceive('create')
@@ -449,6 +451,7 @@ namespace Xpressengine\Tests\User {
                     'provider' => 'foo',
                     'data' => 'foo',
                     'token' => 'foo',
+                    'tokenSecret' => 'foo',
                 ]
             ];
 

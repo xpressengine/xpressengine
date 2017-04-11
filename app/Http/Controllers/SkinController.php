@@ -18,7 +18,7 @@ use Xpressengine\Support\Exceptions\InvalidArgumentException;
 class SkinController extends Controller
 {
     // 기본정보 보기
-    public function postAssign(Request $request, SkinHandler $skinHandler)
+    public function putAssign(Request $request, SkinHandler $skinHandler)
     {
         $validation = Validator::make(
             $request->all(),

@@ -44,23 +44,27 @@ class Composer
     protected static $installedFlagPath = 'storage/app/installed';
 
     public static $basePlugins = [
-        'xpressengine-plugin/alice' => '0.9.8',
-        'xpressengine-plugin/board' => '0.9.14',
-        'xpressengine-plugin/ckeditor' => '0.9.10',
+        'xpressengine-plugin/alice' => '0.9.9',
+        'xpressengine-plugin/board' => '0.9.17',
+        'xpressengine-plugin/ckeditor' => '0.9.12',
         'xpressengine-plugin/claim' => '0.9.3',
-        'xpressengine-plugin/comment' => '0.9.8',
+        'xpressengine-plugin/comment' => '0.9.10',
         'xpressengine-plugin/external_page' => '0.9.4',
         'xpressengine-plugin/google_analytics' => '0.9.2',
         'xpressengine-plugin/news_client' => '0.9.3',
         'xpressengine-plugin/orientator' => '0.9.1',
-        'xpressengine-plugin/page' => '0.9.2',
-        'xpressengine-plugin/social_login' => '0.9.8',
-        'xpressengine-plugin/emoticon' => '0.9.0',
+        'xpressengine-plugin/page' => '0.9.3',
+        'xpressengine-plugin/social_login' => '0.9.11',
+        'xpressengine-plugin/emoticon' => '0.9.1',
         'xpressengine-plugin/widget_page' => '0.9.0'
     ];
 
     /**
-     * @param string $packagistUrl
+     * set target packagist url
+     *
+     * @param string $packagistUrl target packagist url
+     *
+     * @return void
      */
     public static function setPackagistUrl($packagistUrl)
     {
@@ -68,7 +72,11 @@ class Composer
     }
 
     /**
-     * @param null $authToken
+     * set packagist auth token
+     *
+     * @param string $authToken auth token(site token)
+     *
+     * @return void
      */
     public static function setPackagistToken($authToken)
     {
@@ -109,7 +117,6 @@ class Composer
             static::applyRequire($writer);
             $event->getOutput()->writeln("xpressengine-installer: running in initialize mode");
         } else {
-
             // 플러그인 명령을 실행한 경우
             if (defined('__XE_PLUGIN_MODE__')) {
                 static::applyRequire($writer);
@@ -129,7 +136,7 @@ class Composer
     /**
      * preUpdateOrInstall
      *
-     * @param Event $event
+     * @param Event $event event object
      *
      * @return void
      */
@@ -137,9 +144,16 @@ class Composer
     {
     }
 
+    /**
+     * postDependenciesSolving
+     *
+     * @param InstallerEvent $event event object
+     *
+     * @return void
+     */
     public static function postDependenciesSolving(InstallerEvent $event)
     {
-        if(static::$packagistUrl !== null && static::$packagistToken !== null) {
+        if (static::$packagistUrl !== null && static::$packagistToken !== null) {
             $io = $event->getIO();
             $host = parse_url(static::$packagistUrl, PHP_URL_HOST);
             $token = static::$packagistToken;
@@ -213,36 +227,13 @@ class Composer
     }
 
     /**
-     * 플러그인 커맨드를 통해 composer가 실행된 상태인지 조사한다.
-     *
-     * @param CommandEvent $event composer가 제공하는 event
-     *
-     * @return bool
-     */
-    private static function isUpdateMode(CommandEvent $event)
-    {
-        if ($event->getInput()->hasArgument('packages')) {
-            $packages = $event->getInput()->getArgument('packages');
-            $packages = array_shift($packages);
-            if ($packages && strpos($packages, 'xpressengine-plugin') === 0) {
-                if (!defined('__XE_PLUGIN_MODE__')) {
-                    define('__XE_PLUGIN_MODE__', true);
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * Clear the cached Laravel bootstrapping files.
      *
      * @return void
      */
     protected static function clearCompiled()
     {
-
-        if(!$laravel = Application::getInstance()) {
+        if (!$laravel = Application::getInstance()) {
             $laravel = new Application(getcwd());
         }
 
@@ -254,5 +245,4 @@ class Composer
             @unlink($servicesPath);
         }
     }
-
 }

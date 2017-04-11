@@ -54,8 +54,8 @@ if (function_exists('json_format') === false) {
      * 주어진 json string을 보기 편하게 정리한다.
      *
      * @param  string $json            json string
-     * @param  bool   $unescapeUnicode Un escape unicode
-     * @param  bool   $unescapeSlashes Un escape slashes
+     * @param  bool   $unescapeUnicode Unescape unicode
+     * @param  bool   $unescapeSlashes Unescape slashes
      *
      * @return string
      */
@@ -116,11 +116,12 @@ if (! function_exists('xeRedirect')) {
     /**
      * Get an instance of the redirector.
      *
-     * @param  string|null  $to
-     * @param  int     $status
-     * @param  array   $headers
-     * @param  bool    $secure
-     * @param  array   $data
+     * @param  string|null $to      url for redirect
+     * @param  int         $status  status code
+     * @param  array       $headers headers
+     * @param  bool        $secure  secure mode
+     * @param  array       $data    data
+     *
      * @return \Xpressengine\Presenter\RedirectResponse|\Xpressengine\Presenter\Redirector
      */
     function xeRedirect($to = null, $status = 302, $headers = [], $secure = null, array $data = null)
@@ -162,7 +163,7 @@ if (function_exists('apiRender') === false) {
         $presenter->setData();
         $result = $presenter->renderSkin();
 
-        if($result instanceof \Illuminate\Contracts\Support\Renderable) {
+        if ($result instanceof \Illuminate\Contracts\Support\Renderable) {
             $result = $result->render();
         }
 
@@ -429,8 +430,7 @@ if (!function_exists('menu_list')) {
 
         /** @var Xpressengine\Menu\Models\Menu $menu */
         if ($menu !== null) {
-
-            if(!function_exists('removeInvisible')) {
+            if (!function_exists('removeInvisible')) {
 
                 /**
                  * 보이지 않는(보기 권한이 없는) 메뉴는 제외시킨다.
@@ -628,7 +628,8 @@ if (! function_exists('app_storage_path')) {
     /**
      * Get the path to the storage folder.
      *
-     * @param  string  $path
+     * @param  string $path sub path
+     *
      * @return string
      */
     function app_storage_path($path = '')

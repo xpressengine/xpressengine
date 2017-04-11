@@ -14,6 +14,9 @@
 
 namespace Xpressengine\Plugin;
 
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Xpressengine\Plugin\Exceptions\ComponentNotFoundException;
+use Xpressengine\Plugin\Exceptions\NotImplementedException;
 use Xpressengine\Register\Container;
 
 /**
@@ -70,6 +73,7 @@ class PluginRegister
 
         foreach ($componentList as $id => $info) {
             $info['id'] = $id;
+            $info['plugin'] = $entity;
             $this->setComponentInfo($info);
             $this->add($info['class']);
         }
@@ -189,8 +193,12 @@ class PluginRegister
     {
         /** @var \Xpressengine\Plugin\ComponentInterface $class */
         $class = $info['class'];
+
+        if (!class_exists($class)) {
+            throw new ComponentNotFoundException(['className' => $class, 'pluginId' => $info['plugin']->getId()]);
+        }
         if (!is_subclass_of($class, ComponentInterface::class)) {
-            throw new Exceptions\NotImplementedException(['className' => $class]);
+            throw new NotImplementedException(['className' => $class]);
         }
 
         $class::setId($info['id']);

@@ -32,6 +32,8 @@ class LangFileLoader implements LoaderInterface
     private $files;
 
     /**
+     * LangFileLoader constructor.
+     *
      * @param Filesystem $files 라라벨 파일 시스템
      */
     public function __construct(Filesystem $files)
@@ -40,6 +42,8 @@ class LangFileLoader implements LoaderInterface
     }
 
     /**
+     * Load the messages by given source
+     *
      * @param string $source 데이터 소스
      * @return LangData
      */
