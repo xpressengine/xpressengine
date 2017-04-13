@@ -370,7 +370,7 @@ class User extends DynamicModel implements UserInterface
      */
     public function setLoginTime($time = null)
     {
-        if($time === null) {
+        if ($time === null) {
             $time = new Carbon;
         }
         $this->loginAt = $time;
