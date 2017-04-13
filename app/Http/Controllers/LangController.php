@@ -76,6 +76,25 @@ class LangController extends Controller
     }
 
     /**
+     * 다국어 에디터가 ajax로 값을 읽은 경우 하나의 요청으로 여러개 키 처리
+     */
+    public function getLinesMany(Request $request)
+    {
+        $keys = $request->get('keys');
+        if (is_array($keys) === false) {
+            $keys = [$request->get('keys')];
+        }
+
+        $fetch = [];
+        foreach ($keys as $key) {
+            list($namespace, $item) = XeLang::parseKey($key);
+            $fetch[$key] = $this->search(['namespace' => $namespace, 'item' => $item])->get();
+        }
+
+        return XePresenter::makeApi($fetch);
+    }
+
+    /**
      * 다국어 편집 에디터에서 저장시 실행
      *
      * 미들웨어 수준에서 미리 저장되기 때문에 별다른 작업 없음
