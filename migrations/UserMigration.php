@@ -28,6 +28,7 @@ class UserMigration extends Migration {
             $table->text('introduction')->default(null)->nullable();
             $table->string('profileImageId', 36)->nullable();
             $table->string('rememberToken', 255)->nullable();
+            $table->timestamp('loginAt');
             $table->timestamp('createdAt')->index();
             $table->timestamp('updatedAt')->index();
             $table->timestamp('passwordUpdatedAt');
@@ -160,13 +161,8 @@ class UserMigration extends Migration {
      */
     public function checkUpdated($installedVersion = null)
     {
-        // ver.3.0.0-beta.6
-        if (Schema::hasColumn('user_group', 'count')) {
-            return false;
-        }
-        if (!Schema::hasColumn('user_account', 'tokenSecret')) {
-            return false;
-        }
+        // ver.3.0.0-beta.17
+        return Schema::hasColumn('user', 'loginAt');
     }
 
     /**
@@ -187,6 +183,13 @@ class UserMigration extends Migration {
         if (!Schema::hasColumn('user_account', 'tokenSecret')) {
             Schema::table('user_account', function ($table) {
                 $table->string('tokenSecret', 500);
+            });
+        }
+
+        // ver.3.0.0-beta.17
+        if(!Schema::hasColumn('user', 'loginAt')) {
+            Schema::table('user', function ($table) {
+                $table->timestamp('loginAt');
             });
         }
     }

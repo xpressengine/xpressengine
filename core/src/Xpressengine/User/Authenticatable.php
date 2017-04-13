@@ -36,4 +36,13 @@ interface Authenticatable extends BaseAuthenticatable
      * @return void
      */
     public function setEmailForPasswordReset($email);
+
+    /**
+     * 최종 로그인 시간을 기록한다.
+     *
+     * @param mixed $time 로그인 시간
+     *
+     * @return void
+     */
+    public function setLoginTime($time = null);
 }

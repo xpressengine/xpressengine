@@ -287,4 +287,16 @@ class UnknownUser implements UserInterface
     {
         $this->throwNotSupportedException();
     }
+
+    /**
+     * 최종 로그인 시간을 기록한다.
+     *
+     * @param mixed $time 로그인 시간
+     *
+     * @return void
+     */
+    public function setLoginTime($time = null)
+    {
+        $this->throwNotSupportedException();
+    }
 }
