@@ -15,6 +15,7 @@
 namespace Xpressengine\User;
 
 use Illuminate\Auth\Guard as LaravelGuard;
+use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 use Xpressengine\User\Exceptions\AuthIsUnavailableException;
 use Xpressengine\User\Models\Guest;
 
@@ -84,6 +85,25 @@ class Guard extends LaravelGuard implements GuardInterface
 
         return $id;
     }
+
+    /**
+     * Log a user into the application.
+     *
+     * @param  UserContract $user     user entity
+     * @param  bool         $remember remember flag
+     *
+     * @return void
+     */
+    public function login(UserContract $user, $remember = false)
+    {
+        parent::login($user, $remember);
+
+        if ($user instanceof Authenticatable) {
+            $user->setLoginTime();
+            $this->provider->updateLoginTime($user);
+        }
+    }
+
 
     /**
      * 현재 로그인한 사용자를 로그아웃 시킨다.
