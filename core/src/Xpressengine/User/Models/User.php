@@ -43,7 +43,8 @@ class User extends DynamicModel implements UserInterface
     protected $dynamic = true;
 
     protected $dates = [
-        'passwordUpdatedAt'
+        'passwordUpdatedAt',
+        'loginAt'
     ];
 
     protected $fillable = [

@@ -11,7 +11,6 @@ use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Input;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use XeDB;
@@ -21,6 +20,7 @@ use Xpressengine\User\Exceptions\EmailNotFoundException;
 use Xpressengine\User\Exceptions\MailAlreadyExistsException;
 use Xpressengine\User\Rating;
 use Xpressengine\User\Repositories\UserRepository;
+use Xpressengine\User\UserException;
 use Xpressengine\User\UserHandler;
 use Xpressengine\User\UserInterface;
 
@@ -281,6 +281,9 @@ class UserController extends Controller
         XeDB::beginTransaction();
         try {
             $this->handler->update($user, $userData);
+        } catch (UserException $e) {
+            XeDB::rollback();
+            throw new HttpException('400', $e->getMessage());
         } catch (\Exception $e) {
             XeDB::rollback();
             throw $e;
@@ -337,7 +340,7 @@ class UserController extends Controller
 
         XeDB::beginTransaction();
         try {
-            $email = $this->handler->emails()->create($user, $request->only('address', 'userId'));
+            $email = $this->handler->createEmail($user, compact('address'));
         } catch (Exception $e) {
             XeDB::rollBack();
             throw $e;
