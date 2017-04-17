@@ -24,8 +24,8 @@ class SiteMigration extends Migration {
         Schema::create('site', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
-            $table->string('siteKey');
-            $table->string('host');
+            $table->string('siteKey')->comment('site key');
+            $table->string('host')->commet('host');
 
             $table->primary('siteKey');
         });

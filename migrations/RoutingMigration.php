@@ -17,14 +17,15 @@ class RoutingMigration extends Migration {
     public function install()
     {
         Schema::create('instance_route', function (Blueprint $table) {
+            // instance route information. creating when creating menu items.
             $table->engine = "InnoDB";
 
-            $table->increments('id');
-            $table->string('url');
-            $table->string('module');
-            $table->string('instanceId');
-            $table->string('menuId');
-            $table->string('siteKey');
+            $table->increments('id')->comment('ID');
+            $table->string('url')->comment('URL');
+            $table->string('module')->comment('module ID');
+            $table->string('instanceId')->comment('instance ID. menu item ID');
+            $table->string('menuId')->comment('menu ID. menu ID');
+            $table->string('siteKey')->comment('site key. for multi web site support.');
 
             $table->unique('instanceId');
         });

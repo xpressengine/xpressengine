@@ -20,9 +20,9 @@ class StorageMigration extends Migration {
         Schema::create('files', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
-            $table->string('id', 36);
-            $table->string('originId', 36)->nullable();
-            $table->string('userId', 36)->nullable();
+            $table->string('id', 36)->comment('file ID');
+            $table->string('originId', 36)->nullable()->comment('original file ID');
+            $table->string('userId', 36)->nullable()->comment('');
             $table->string('disk', 20)->charset('latin1');
             $table->string('path')->charset('latin1');
             $table->string('filename', 100)->charset('latin1');
@@ -40,10 +40,11 @@ class StorageMigration extends Migration {
         });
 
         Schema::create('fileables', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('fileId', 36);
-            $table->string('fileableId', 36);
-            $table->timestamp('createdAt');
+            // mapping a file to target. If Document uploaded a file, [fileableId] is document ID.
+            $table->increments('id')->comment('ID');
+            $table->string('fileId', 36)->comment('file ID');
+            $table->string('fileableId', 36)->comment('target ID. If Document uploaded a file, [fileableId] is document ID.');
+            $table->timestamp('createdAt')->comment('date of created');
 
             $table->unique(['fileId', 'fileableId']);
         });
