@@ -83,7 +83,7 @@
 }
 
 .xe-dropdown.outline-off > .xe-btn,
-.xe-dropup.outline-off > .xe-btn, 
+.xe-dropup.outline-off > .xe-btn,
 .xe-select-box.outline-off.xe-btn {
   border: none;
 }
@@ -127,11 +127,11 @@
 }
 
 .xe-dropdown-menu li {
-  > a {    
+  > a {
     display: block;
     position: relative;
     padding: 8px 15px;
-    color: #2c2e37;        
+    color: #2c2e37;
     text-align: left;
     line-height: $line-height-base;
     &:hover {
@@ -157,7 +157,7 @@
     left: 0;
     width: 100%;
     height: 34px;
-    font-size: 14px;    
+    font-size: 14px;
     opacity: 0;
     filter: alpha(opacity = 0);
     -webkit-appearance: menulist-button;
@@ -261,3 +261,39 @@
   border-right: $caret-width-base solid transparent;
   border-left:  $caret-width-base solid transparent;
 }
+
+
+.ly_popup_profile {
+  display: none;
+  position: absolute;
+  z-index: 25;
+  &.open {
+    display: block;
+  }
+  ul {
+    min-width: 140px;
+    padding: 8px 0;
+    border: 1px solid #bebebe;
+    border-radius: 4px;
+    background-color: #fff;
+    list-style: none;
+  }
+  li {
+    height: 30px;
+    > a {
+      overflow: hidden;
+      display: block;
+      height: 100%;
+      padding: 0 16px;
+      font-size: 14px;
+      line-height: 30px;
+      color: #2c2e37;
+      text-decoration: none;
+      &:hover {
+        background-color: #f4f4f4;
+      }
+    }
+  }
+}
+
+  

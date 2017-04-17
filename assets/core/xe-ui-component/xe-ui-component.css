@@ -4301,6 +4301,39 @@ input[type="button"].xe-btn-block {
   border-left: 4px solid transparent;
 }
 
+.ly_popup_profile {
+  display: none;
+  position: absolute;
+  z-index: 25;
+}
+
+.ly_popup_profile ul {
+  min-width: 140px;
+  padding: 8px 0;
+  border: 1px solid #bebebe;
+  border-radius: 4px;
+  background-color: #fff;
+  list-style: none;
+}
+
+.ly_popup_profile li {
+  height: 30px;
+}
+
+.ly_popup_profile li > a {
+  overflow: hidden;
+  display: block;
+  height: 100%;
+  padding: 0 16px;
+  font-size: 14px;
+  line-height: 30px;
+  color: #2c2e37;
+}
+
+.ly_popup_profile li > a:hover {
+  background-color: #f4f4f4;
+}
+
 .xe-input-group {
   position: relative;
   display: table;
