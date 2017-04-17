@@ -893,6 +893,10 @@ return [
         'ko' => '가입일',
         'en' => 'Sign up date',
     ],
+    'latestLogin' => [
+        'ko' => '최근 로그인',
+        'en' => 'latest login',
+    ],
     'dashBoard' => [
         'ko' => '대시보드',
         'en' => 'DashBoard'
