@@ -25,12 +25,12 @@ class WidgetboxMigration extends Migration {
                 function (Blueprint $table) {
                     $table->engine = "InnoDB";
 
-                    $table->string('id', 100);
-                    $table->string('title', 200);
-                    $table->text('content');
-                    $table->text('options');
-                    $table->timestamp('createdAt');
-                    $table->timestamp('updatedAt');
+                    $table->string('id', 100)->comment('ID');
+                    $table->string('title', 200)->comment('widget box title');
+                    $table->text('content')->comment('widget information. HTML string');
+                    $table->text('options')->comment('options');
+                    $table->timestamp('createdAt')->comment('date of created');
+                    $table->timestamp('updatedAt')->comment('date of updated');
                     $table->primary('id');
                 }
             );

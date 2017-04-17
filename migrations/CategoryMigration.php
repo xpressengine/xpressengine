@@ -17,34 +17,37 @@ class CategoryMigration extends Migration {
     public function install()
     {
         Schema::create('category', function (Blueprint $table) {
+            // category item group
             $table->engine = "InnoDB";
 
-            $table->increments('id');
-            $table->string('name', 100);
-            $table->integer('count');
+            $table->increments('id')->comment('ID');
+            $table->string('name', 100)->comment('category name');
+            $table->integer('count')->comment('The count of category item');
         });
 
         Schema::create('category_item', function (Blueprint $table) {
+            // category item
             $table->engine = "InnoDB";
 
-            $table->increments('id');
-            $table->integer('categoryId');
-            $table->integer('parentId')->nullable();
-            $table->string('word', 250);
-            $table->text('description');
-            $table->integer('ordering');
+            $table->increments('id')->comment('ID');
+            $table->integer('categoryId')->comment('category ID.');
+            $table->integer('parentId')->nullable()->comment('parent ID. parent category item ID.');
+            $table->string('word', 250)->comment('string of category item. It can be code of translation information.');
+            $table->text('description')->comment('description of category item. It can be code of translation information.');
+            $table->integer('ordering')->comment('ordering number of category item sort.');
 
             $table->index('categoryId');
             $table->index('parentId');
         });
 
         Schema::create('category_closure', function (Blueprint $table) {
+            // category item tree information
             $table->engine = "InnoDB";
 
-            $table->bigIncrements('id');
-            $table->bigInteger('ancestor');
-            $table->bigInteger('descendant');
-            $table->tinyInteger('depth');
+            $table->bigIncrements('id')->comment('ID');
+            $table->bigInteger('ancestor')->comment('parent category item ID');
+            $table->bigInteger('descendant')->comment('child category item ID');
+            $table->tinyInteger('depth')->comment('depth');
 
             $table->unique(['ancestor', 'descendant']);
             $table->index('ancestor');

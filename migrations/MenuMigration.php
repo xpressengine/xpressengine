@@ -24,48 +24,51 @@ class MenuMigration extends Migration {
     public function install()
     {
         Schema::create('menu', function (Blueprint $table) {
+            // menu item group
             $table->engine = "InnoDB";
 
-            $table->string('id', 8);
-            $table->string('title');
-            $table->string('siteKey');
-            $table->text('description')->nullable();
-            $table->integer('count');
+            $table->string('id', 8)->comment('ID');
+            $table->string('title')->comment('menu title');
+            $table->string('siteKey')->comment('site key. for multi web site support.');
+            $table->text('description')->nullable()->comment('description');
+            $table->integer('count')->comment('number of menu item');
 
             $table->primary('id');
         });
 
         Schema::create('menu_item', function (Blueprint $table) {
+            // menu item
             $table->engine = "InnoDB";
 
-            $table->string('id', 8);
-            $table->string('menuId');
-            $table->string('parentId')->nullable();
-            $table->string('title');
-            $table->string('url');
-            $table->text('description')->nullable();
-            $table->string('target');
-            $table->string('type');
-            $table->string('basicImageId', 36);
-            $table->string('hoverImageId', 36);
-            $table->string('selectedImageId', 36);
-            $table->string('mBasicImageId', 36);
-            $table->string('mHoverImageId', 36);
-            $table->string('mSelectedImageId', 36);
-            $table->integer('ordering');
-            $table->boolean('activated');
-            $table->string('options');
+            $table->string('id', 8)->comment('ID');
+            $table->string('menuId')->comment('menu ID');
+            $table->string('parentId')->nullable()->comment('parent ID. parent menu item ID.');
+            $table->string('title')->comment('menu title. It can be code of translation information.');
+            $table->string('url')->comment('URL');
+            $table->text('description')->nullable()->comment('menu description. It can be code of translation information.');
+            $table->string('target')->comment('HTML <a> tag target attribute value');
+            $table->string('type')->comment('Module Type. Module ID of registered this menu item.');
+            $table->string('basicImageId', 36)->comment('image menu item setting');
+            $table->string('hoverImageId', 36)->comment('image menu item setting');
+            $table->string('selectedImageId', 36)->comment('image menu item setting');
+            $table->string('mBasicImageId', 36)->comment('image menu item setting');
+            $table->string('mHoverImageId', 36)->comment('image menu item setting');
+            $table->string('mSelectedImageId', 36)->comment('image menu item setting');
+            $table->integer('ordering')->comment('ordering number of menu item sort.');
+            $table->boolean('activated')->comment('value of menu item activating');
+            $table->string('options')->comment('options');
 
             $table->primary('id');
         });
 
         Schema::create('menu_closure', function (Blueprint $table) {
+            // menu item tree information
             $table->engine = "InnoDB";
 
-            $table->increments('id');
-            $table->string('ancestor');
-            $table->string('descendant');
-            $table->integer('depth');
+            $table->increments('id')->comment('ID');
+            $table->string('ancestor')->comment('parent menu item ID');
+            $table->string('descendant')->comment('child menu item ID');
+            $table->integer('depth')->comment('depth');
         });
 
     }

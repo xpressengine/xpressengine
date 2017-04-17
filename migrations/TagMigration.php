@@ -19,24 +19,25 @@ class TagMigration extends Migration {
         Schema::create('tags', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
-            $table->increments('id');
-            $table->string('instanceId')->nullable();
-            $table->string('word', 100);
-            $table->string('decomposed');
-            $table->integer('count');
+            $table->increments('id')->comment('tag ID');
+            $table->string('instanceId')->nullable()->comment('instance ID');
+            $table->string('word', 100)->comment('tag');
+            $table->string('decomposed')->comment('decomposed. for auto complete.');
+            $table->integer('count')->comment('Number of same tag registrations');
 
             $table->index('instanceId');
             $table->index('decomposed');
         });
 
         Schema::create('taggables', function (Blueprint $table) {
+            // mapping a tag to target. If Document saved a tag, [taggableId] is document ID.
             $table->engine = "InnoDB";
 
-            $table->increments('id');
-            $table->integer('tagId');
-            $table->string('taggableId', 36);
-            $table->integer('position');
-            $table->timestamp('createdAt');
+            $table->increments('id')->comment('ID');
+            $table->integer('tagId')->comment('tag ID');
+            $table->string('taggableId', 36)->comment('target ID. If Document saved a tag, [taggableId] is document ID.');
+            $table->integer('position')->comment('position number within same [taggableId]');
+            $table->timestamp('createdAt')->comment('date of created');
 
             $table->unique(['tagId', 'taggableId']);
         });

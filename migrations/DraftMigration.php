@@ -19,13 +19,13 @@ class DraftMigration extends Migration {
         Schema::create('draft', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
-            $table->string('id', '36');
-            $table->string('userId', '36');
-            $table->string('key');
-            $table->text('val');
-            $table->mediumText('etc');
-            $table->boolean('isAuto');
-            $table->timestamp('createdAt');
+            $table->string('id', '36')->comment('ID');
+            $table->string('userId', '36')->comment('user ID');
+            $table->string('key')->comment('key');
+            $table->text('val')->comment('val');
+            $table->mediumText('etc')->comment('etc');
+            $table->boolean('isAuto')->comment('is auto saved');
+            $table->timestamp('createdAt')->comment('date of created');
 
             $table->primary('id');
         });
