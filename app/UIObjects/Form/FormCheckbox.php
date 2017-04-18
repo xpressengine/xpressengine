@@ -16,8 +16,7 @@ class FormCheckbox extends AbstractUIObject
     protected static $id = 'uiobject/xpressengine@formCheckbox';
 
     protected $template = '<div class="form-group">
-        <label for="" class="hidden"></label>
-        <div class="checkbox"></div>
+        <div class="checkboxWrap"></div>
         <p class="help-block"></p>
     </div>';
 
@@ -28,49 +27,86 @@ class FormCheckbox extends AbstractUIObject
         $args = $this->arguments;
         PhpQuery::newDocument();
         $this->markup = PhpQuery::pq($this->template);
+        $this->box = $this->markup['.checkboxWrap'];
 
-        $label = $this->markup['label'];
-        $this->box = $this->markup['.checkbox'];
-
-        $checkboxes = array_get($args, 'checkboxes');
         $nameGlobal = array_get($args, 'name');
+        $checkboxes = null;
+        $args = array_set($args, 'name', $nameGlobal.'[]');
+        $values = array_get($args, 'value', null);
 
-        $labelText = array_get($args, 'label');
-        $description = array_get($args, 'description');
+        foreach ($args as $key => $arg) {
+            switch ($key) {
+                case 'checkboxes':
+                case 'options':
+                    $checkboxes = $arg;
+                    break;
 
-        if($labelText !== null) {
-            $label->removeClass('hidden')->html($labelText);
-        }
+                case 'description':
+                    $this->markup['.help-block']->html(array_get($args, $key));
+                    break;
 
-        if($description !== null) {
-            $this->markup['.help-block']->html($description);
-        }
+                case 'id':
+                    $this->box->attr('id', $arg);
+                    break;
 
-        // checkbox가 따로 있을 경우
-        if($checkboxes !== null) {
-            foreach((array) $checkboxes as $arg){
-                $checkboxObj = PhpQuery::pq(
-                    "<label class=\"checkbox-inline\"><input type=\"checkbox\"><span></span></label>"
-                );
-                $arg = array_add($arg, 'name', $nameGlobal.'[]');
-                $this->appendCheckbox($checkboxObj, $arg);
+                default:
+                    break;
+
             }
-        // checkbox가 따로 없을 경우
-        } else {
-            $checkboxObj = PhpQuery::pq("<input type=\"checkbox\">");
+        }
+
+        foreach ($checkboxes as $itemKey => $itemValue) {
+            $checkboxMarkup = PhpQuery::pq("<div class=\"checkbox\"><label class=\"hidden\"><input type=\"checkbox\" value=\"\"></label></div>");
+            $checkbox = $checkboxMarkup->find('input');
+            $label = $checkboxMarkup->find('label');
+            $text = null;
+            $value = null;
+            $checked = '';
+
+            if (!is_array($itemValue)) {
+                $text = $itemValue;
+                $value = $itemKey;
+                $checked = '';
+
+            } else {
+                $value = array_get($itemValue, 'value');
+                $text = array_get($itemValue, 'text');
+                $checked = array_get($itemValue, 'checked');
+
+            }
+
+            if($values != null && in_array($value, $values)) {
+                $checked = true;
+            }
+
+            $checkbox->val($value);
+            $label->append($text);
+
+            if(is_callable($itemValue)) {
+                $itemValue = $itemValue();
+            }
+
+            if($checked) {
+                $checkbox->attr('checked', 'checked');
+            }
+
             foreach ($args as $key => $arg) {
-                switch ($key) {
+                switch($key) {
                     case 'class':
-                        $checkboxObj->addClass($arg);
+                        $checkbox->addClass($arg);
                         break;
-                    case 'id':
-                        $label->attr('for', $arg);
-                        // pass to default
+
+                    case 'label':
+                        $label->removeClass('hidden')->append($arg);
+                        break;
+
                     default:
-                        $checkboxObj->attr($key, $arg);
+                        $checkbox->attr($key, $arg);
                         break;
                 }
             }
+
+            $this->box->append($checkboxMarkup);
         }
 
 
@@ -84,32 +120,4 @@ class FormCheckbox extends AbstractUIObject
     public static function getSettingsURI()
     {
     }
-
-    /**
-     * appendCheckbox
-     *
-     * @param $args
-     * @param $dom
-     *
-     * @return void
-     */
-    protected function appendCheckbox($dom, $args)
-    {
-        foreach ($args as $key => $arg) {
-            switch ($key) {
-                case 'class':
-                    $dom['input']->addClass('class', $arg);
-                    break;
-                case 'label':
-                    break;
-                case 'text':
-                    $dom['span']->text($arg);
-                    break;
-                default:
-                    $dom['input']->attr($key, $arg);
-                    break;
-            }
-        }
-        $this->box->append($dom);
-}
 }
