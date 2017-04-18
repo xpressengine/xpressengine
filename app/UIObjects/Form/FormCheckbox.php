@@ -31,6 +31,7 @@ class FormCheckbox extends AbstractUIObject
 
         $nameGlobal = array_get($args, 'name');
         $checkboxes = null;
+
         $args = array_set($args, 'name', $nameGlobal.'[]');
         $values = array_get($args, 'value', null);
 
@@ -88,6 +89,8 @@ class FormCheckbox extends AbstractUIObject
 
             if($checked) {
                 $checkbox->attr('checked', 'checked');
+            } else {
+                $checkbox->removeAttr('checked');
             }
 
             foreach ($args as $key => $arg) {
