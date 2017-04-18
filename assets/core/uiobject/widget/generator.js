@@ -121,7 +121,7 @@
        * */
       generate: function (options, cb) {
         var $form = $(options.widgetForm);
-        var data = $form.serializeArray();
+        var data = $form.serialize();
 
         data.push({
           name: 'skin',
@@ -132,7 +132,7 @@
           url: $form.attr('action'),
           type: $form.attr('method'),
           cache: false,
-          data: JSON.stringify(data),
+          data: data,
           dataType: 'json',
           success: function (data) {
             $('.__xe_widget_code').val(data.code);
