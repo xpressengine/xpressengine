@@ -35,18 +35,18 @@ class SiteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $site = null;
         if (app()->runningInConsole() === false) {
             /** @var Request $request */
             $request = app('request');
             $host = $request->getHttpHost();
-
             $host = $host.str_replace('/index.php','',$request->server('SCRIPT_NAME'));
-
-            if (!$site = Site::where('host', $host)->first()) {
-                $site = Site::where('siteKey', 'default')->first();
-            }
-            app('xe.site')->setCurrentSite($site);
+            $site = Site::where('host', $host)->first();
         }
+        if ($site === null) {
+            $site = Site::where('siteKey', 'default')->first();
+        }
+        app('xe.site')->setCurrentSite($site);
     }
 
     /**
