@@ -99,7 +99,13 @@ class PluginSettingsSkin extends GenericSkin
 
     protected function installIndex()
     {
-        app('xe.frontend')->js('assets/core/plugin/js/plugin-install.js')->appendTo('head')->load();
+        app('xe.frontend')->js(
+            [
+                'assets/core/xe-ui-component/js/xe-page.js',
+                'assets/core/xe-ui-component/js/xe-form.js',
+                'assets/core/plugin/js/plugin-install.js'
+            ]
+        )->load();
         return $this->renderBlade();
     }
 
