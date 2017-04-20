@@ -376,4 +376,21 @@ class User extends DynamicModel implements UserInterface
         }
         $this->loginAt = $time;
     }
+
+    /**
+     * loginAt 처리, loginAt이 지정되지 않았을 경우, null을 반환하도록 처리한다.
+     *
+     * @param string $value date time string
+     *
+     * @return Carbon|null
+     */
+    public function getLoginAtAttribute($value)
+    {
+        $at = $this->asDateTime($value);
+        if ($at->timestamp <= 0) {
+            return null;
+        }
+
+        return $at;
+    }
 }
