@@ -16,6 +16,7 @@ class FormCheckbox extends AbstractUIObject
     protected static $id = 'uiobject/xpressengine@formCheckbox';
 
     protected $template = '<div class="form-group">
+        <label for="" class="hidden"></label>
         <div class="checkboxWrap"></div>
         <p class="help-block"></p>
     </div>';
@@ -34,6 +35,11 @@ class FormCheckbox extends AbstractUIObject
 
         $args = array_set($args, 'name', $nameGlobal.'[]');
         $values = array_get($args, 'value', null);
+        $groupLavel = array_get($args, 'label');
+
+        if($groupLavel) {
+            $this->markup['label']->removeClass('hidden')->append($groupLavel);
+        }
 
         foreach ($args as $key => $arg) {
             switch ($key) {

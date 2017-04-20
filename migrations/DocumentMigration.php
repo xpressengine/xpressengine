@@ -49,7 +49,7 @@ class DocumentMigration extends Migration
                 $table->engine = "InnoDB";
 
                 $table->string('revisionId', 36)->comment('revision ID');
-                $table->integer('revisionNo')->default(0)->comment('number of revision version. It starts with 0 and increases when added.');
+                $table->integer('revisionNo')->default(0)->comment('revision version number. It starts with 0 and increases when added.');
 
                 $table->string('id', 36)->comment('document ID');
                 $table = $this->setColumns($table);
@@ -93,22 +93,22 @@ class DocumentMigration extends Migration
         // users
         $table->string('userType', '16')->default('normal')->comment('User Type. Type of document writer. user/guest/anonymity/normal');
         $table->string('userId', 36)->comment('User ID. User ID of document writer. If userType is guest or anonymity it can be empty string.');
-        $table->string('writer', 200)->comment('Name of document writer. It is usually a User displayName. It can be differ if userType is guest or anonymity.');
+        $table->string('writer', 200)->comment('document writer name. It is usually a User displayName. It can be differ if userType is guest or anonymity.');
         $table->string('email')->nullable()->comment('Email. It is usually Null. It registered if userType is guest.');
         $table->string('certifyKey', 200)->comment('Certify key. It is usually empty string. It registered if userType is guest.');
 
         // count
-        $table->integer('readCount')->default(0)->comment('number of document read');
-        $table->integer('commentCount')->default(0)->comment('number of commented registered');
-        $table->integer('assentCount')->default(0)->comment('number of assent. The count for assent type.');
-        $table->integer('dissentCount')->default(0)->comment('number of dissent. The count for dissent type.');
+        $table->integer('readCount')->default(0)->comment('document read count');
+        $table->integer('commentCount')->default(0)->comment('commented registered counter');
+        $table->integer('assentCount')->default(0)->comment('assent count. The count for assent type.');
+        $table->integer('dissentCount')->default(0)->comment('dissent count. The count for dissent type.');
 
         // display contents config values
-        $table->integer('approved')->default(Document::APPROVED_APPROVED)->comment('status of approved. 0:rejected/10:waiting/30:approved');
-        $table->integer('published')->default(Document::PUBLISHED_PUBLISHED)->comment('status of published. 0:rejected/10:waiting/20:reserved/30:published');
-        $table->integer('status')->default(Document::STATUS_PUBLIC)->comment('status of document. 0:trash/10:temporary/20:private/30:public/50:notice');
-        $table->integer('display')->default(Document::DISPLAY_VISIBLE)->comment('status of display. 0:hidden/10:secret/20:visible');
-        $table->integer('format')->default(Document::FORMAT_HTML)->comment('format of document content. 0:none/10:HTML');
+        $table->integer('approved')->default(Document::APPROVED_APPROVED)->comment('approved status. 0:rejected/10:waiting/30:approved');
+        $table->integer('published')->default(Document::PUBLISHED_PUBLISHED)->comment('published status. 0:rejected/10:waiting/20:reserved/30:published');
+        $table->integer('status')->default(Document::STATUS_PUBLIC)->comment('document status. 0:trash/10:temporary/20:private/30:public/50:notice');
+        $table->integer('display')->default(Document::DISPLAY_VISIBLE)->comment('display status. 0:hidden/10:secret/20:visible');
+        $table->integer('format')->default(Document::FORMAT_HTML)->comment('document content format. 0:none/10:HTML');
 
         // search
         $table->string('locale', 4)->default('')->comment('locale information. Empty string if not set. ko:korean/en:english/...');
@@ -117,10 +117,10 @@ class DocumentMigration extends Migration
         $table->text('content')->comment('document content');
         $table->text('pureContent')->comment('document pure content. There is content for human readable(HTML removed). It using for fulltext search.');
 
-        $table->timestamp('createdAt')->comment('date of document created');
-        $table->timestamp('updatedAt')->comment('date of document updated');
-        $table->timestamp('publishedAt')->nullable()->comment('date of document published');
-        $table->timestamp('deletedAt')->nullable()->comment('date of document deleted. for soft delete');
+        $table->timestamp('createdAt')->comment('document created date');
+        $table->timestamp('updatedAt')->comment('document updated date');
+        $table->timestamp('publishedAt')->nullable()->comment('document published date');
+        $table->timestamp('deletedAt')->nullable()->comment('document deleted date. for soft delete.');
 
         $table->string('head', 50)->comment('document order. It using for document list sorting. Enables sorting of parent-child relationship documents.');
         $table->string('reply', 150)->comment('string for sorting parent-child documents');
