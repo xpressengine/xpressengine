@@ -28,7 +28,7 @@
                             {!! uio('formTextarea', ['id'=>'__xe_introduction', 'label'=>xe_trans('xe::introduction'), 'placeholder'=>xe_trans('xe::enterIntroduction'), 'value'=> $user->introduction, 'name'=>'introduction']) !!}
 
                             {{-- password --}}
-                            {!! uio('formPassword', ['id'=>'__xe_password', 'label'=>xe_trans('xe::password'), 'placeholder'=>xe_trans('xe::enterPassowrd'), 'name'=>'password']) !!}
+                            {!! uio('formPassword', ['id'=>'__xe_password', 'label'=>xe_trans('xe::password'), 'placeholder'=>xe_trans('xe::enterPassword'), 'name'=>'word', 'autocomplete'=>"new-password"]) !!}
 
                             {{-- status --}}
                             {!! uio('formSelect', ['id'=>'__xe_status', 'label'=>xe_trans('xe::status'), 'name'=>'status', 'options'=> $status]) !!}
