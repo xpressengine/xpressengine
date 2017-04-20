@@ -25,7 +25,7 @@ class DraftMigration extends Migration {
             $table->text('val')->comment('val');
             $table->mediumText('etc')->comment('etc');
             $table->boolean('isAuto')->comment('is auto saved');
-            $table->timestamp('createdAt')->comment('date of created');
+            $table->timestamp('createdAt')->comment('created date');
 
             $table->primary('id');
         });

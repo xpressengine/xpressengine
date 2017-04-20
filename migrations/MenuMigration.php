@@ -54,7 +54,7 @@ class MenuMigration extends Migration {
             $table->string('mBasicImageId', 36)->comment('image menu item setting');
             $table->string('mHoverImageId', 36)->comment('image menu item setting');
             $table->string('mSelectedImageId', 36)->comment('image menu item setting');
-            $table->integer('ordering')->comment('ordering number of menu item sort.');
+            $table->integer('ordering')->comment('ordering number for menu item sort.');
             $table->boolean('activated')->comment('value of menu item activating');
             $table->string('options')->comment('options');
 

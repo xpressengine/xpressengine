@@ -24,8 +24,8 @@ class PermissionMigration extends Migration {
 //            $table->string('type', 20);
             $table->string('name')->comment('permission name');
             $table->text('grants')->comment('grant information. JSON data type.');
-            $table->timestamp('createdAt')->comment('date of created');
-            $table->timestamp('updatedAt')->comment('date of updated');
+            $table->timestamp('createdAt')->comment('created date');
+            $table->timestamp('updatedAt')->comment('updated date');
 
 //            $table->unique(['siteKey', 'type', 'name']);
             $table->unique(['siteKey', 'name']);

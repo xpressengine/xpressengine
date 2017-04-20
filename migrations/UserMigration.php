@@ -29,9 +29,9 @@ class UserMigration extends Migration {
             $table->string('profileImageId', 36)->nullable()->comment('profile image file ID');
             $table->string('rememberToken', 255)->nullable()->comment('token for keep login');
             $table->timestamp('loginAt')->comment('login date');
-            $table->timestamp('createdAt')->index()->comment('date of created');
-            $table->timestamp('updatedAt')->index()->comment('date of updated');
-            $table->timestamp('passwordUpdatedAt')->comment('date of password updated');
+            $table->timestamp('createdAt')->index()->comment('created date');
+            $table->timestamp('updatedAt')->index()->comment('updated date');
+            $table->timestamp('passwordUpdatedAt')->comment('password updated date');
 
             $table->primary('id');
         });
@@ -43,8 +43,8 @@ class UserMigration extends Migration {
             $table->string('name')->comment('group name');
             $table->string('description', 1000)->comment('group description');
             $table->integer('order')->default(0)->index()->comment('order number');
-            $table->timestamp('createdAt')->index()->comment('date of created');
-            $table->timestamp('updatedAt')->comment('date of updated');
+            $table->timestamp('createdAt')->index()->comment('created date');
+            $table->timestamp('updatedAt')->comment('updated date');
 
             $table->primary('id');
         });
@@ -56,7 +56,7 @@ class UserMigration extends Migration {
             $table->increments('id')->comment('ID');
             $table->string('groupId', 36)->comment('group ID');
             $table->string('userId', 36)->comment('user ID');
-            $table->timestamp('createdAt')->comment('date of created');
+            $table->timestamp('createdAt')->comment('created date');
 
             $table->unique(['groupId','userId']);
             $table->index('groupId');
@@ -75,8 +75,8 @@ class UserMigration extends Migration {
             $table->string('token', 500)->comment('token');
             $table->string('tokenSecret', 500)->comment('token secret');
             $table->string('data')->comment('provider data');
-            $table->timestamp('createdAt')->comment('date of created');
-            $table->timestamp('updatedAt')->comment('date of updated');
+            $table->timestamp('createdAt')->comment('created date');
+            $table->timestamp('updatedAt')->comment('updated date');
 
             $table->primary('id');
             $table->unique(['provider','accountId']);
@@ -88,8 +88,8 @@ class UserMigration extends Migration {
             $table->increments('id')->comment('ID');
             $table->string('userId', 36)->comment('user ID');
             $table->string('address')->comment('email address');
-            $table->timestamp('createdAt')->index()->comment('date of created');
-            $table->timestamp('updatedAt')->comment('date of updated');
+            $table->timestamp('createdAt')->index()->comment('created date');
+            $table->timestamp('updatedAt')->comment('updated date');
 
             $table->index('userId');
             $table->index('address');
@@ -103,8 +103,8 @@ class UserMigration extends Migration {
             $table->string('userId', 36)->comment('user ID');
             $table->string('address')->comment('email address');
             $table->string('confirmationCode')->nullable()->comment('confirmation code');
-            $table->timestamp('createdAt')->index()->comment('date of created');
-            $table->timestamp('updatedAt')->comment('date of updated');
+            $table->timestamp('createdAt')->index()->comment('created date');
+            $table->timestamp('updatedAt')->comment('updated date');
 
             $table->index('userId');
             $table->index('address');
@@ -117,7 +117,7 @@ class UserMigration extends Migration {
             $table->increments('id')->comment('ID');
             $table->string('email')->index()->comment('email address');
             $table->string('token')->index()->comment('token');
-            $table->timestamp('created_at');
+            $table->timestamp('created_at')->comment('created date');
         });
     }
 

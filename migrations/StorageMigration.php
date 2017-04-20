@@ -22,17 +22,17 @@ class StorageMigration extends Migration {
 
             $table->string('id', 36)->comment('file ID');
             $table->string('originId', 36)->nullable()->comment('original file ID');
-            $table->string('userId', 36)->nullable()->comment('');
-            $table->string('disk', 20)->charset('latin1');
-            $table->string('path')->charset('latin1');
-            $table->string('filename', 100)->charset('latin1');
-            $table->string('clientname', 100);
-            $table->string('mime', 50);
-            $table->integer('size');
-            $table->integer('useCount')->default(0);
-            $table->integer('downloadCount')->default(0);
-            $table->timestamp('createdAt');
-            $table->timestamp('updatedAt');
+            $table->string('userId', 36)->nullable()->comment('own user ID');
+            $table->string('disk', 20)->charset('latin1')->comment('storage locale.');
+            $table->string('path')->charset('latin1')->comment('registered file path. without name');
+            $table->string('filename', 100)->charset('latin1')->comment('registered file name. without extension');
+            $table->string('clientname', 100)->comment('original file name');
+            $table->string('mime', 50)->comment('mime type');
+            $table->integer('size')->comment('file size');
+            $table->integer('useCount')->default(0)->comment('use count. how much used in the system.');
+            $table->integer('downloadCount')->default(0)->comment('download count');
+            $table->timestamp('createdAt')->comment('created date');
+            $table->timestamp('updatedAt')->comment('updated date');
 
             $table->primary('id');
             $table->unique(['disk', 'path', 'filename'], 'findKey');
@@ -44,7 +44,7 @@ class StorageMigration extends Migration {
             $table->increments('id')->comment('ID');
             $table->string('fileId', 36)->comment('file ID');
             $table->string('fileableId', 36)->comment('target ID. If Document uploaded a file, [fileableId] is document ID.');
-            $table->timestamp('createdAt')->comment('date of created');
+            $table->timestamp('createdAt')->comment('created date');
 
             $table->unique(['fileId', 'fileableId']);
         });
