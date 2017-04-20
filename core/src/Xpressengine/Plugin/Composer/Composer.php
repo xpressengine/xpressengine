@@ -48,7 +48,7 @@ class Composer
         'xpressengine-plugin/board' => '0.9.17',
         'xpressengine-plugin/ckeditor' => '0.9.13',
         'xpressengine-plugin/claim' => '0.9.3',
-        'xpressengine-plugin/comment' => '0.9.10',
+        'xpressengine-plugin/comment' => '0.9.11',
         'xpressengine-plugin/external_page' => '0.9.4',
         'xpressengine-plugin/google_analytics' => '0.9.2',
         'xpressengine-plugin/news_client' => '0.9.3',
