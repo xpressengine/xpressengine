@@ -108,7 +108,7 @@
                             <td>{{ data_get($user, 'email', xe_trans('xe::empty')) }}</td>
                             <td>{!! $user->createdAt->format('y-m-d') !!}</td>
                             <td>
-                                @if(isset($user->loginAt))
+                                @if($user->loginAt !== null)
                                 {!! $user->loginAt->format('y-m-d') !!}
                                 @else
                                 -
