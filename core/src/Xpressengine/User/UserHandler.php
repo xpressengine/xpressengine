@@ -879,6 +879,16 @@ class UserHandler
         return array_merge($this->settingsSections, $menus ?: []);
     }
 
+    public function getRegisterSections()
+    {
+        return $this->container->get('user/register/section', []);
+    }
+
+    public function getRegisterForms()
+    {
+        return $this->container->get('user/register/form');
+    }
+
     /**
      * __call
      *

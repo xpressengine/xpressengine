@@ -9,9 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\UrlGenerator;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use XeDB;
 use XePresenter;
 use XeTheme;
-use XeDB;
 use Xpressengine\User\EmailBrokerInterface;
 use Xpressengine\User\Exceptions\JoinNotAllowedException;
 use Xpressengine\User\Exceptions\PendingEmailNotExistsException;
@@ -67,7 +67,47 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getRegister()
+    public function getRegister(UserHandler $handler)
+    {
+        $this->checkJoinable();
+
+        $config = app('xe.config')->get('user.join');
+
+
+        if ($config->get('useEmailCertify')) {
+            $section = [
+                'email' => [
+                    'title' => '이메일 인증으로 회원가입하기',
+                    'content' => function () {
+
+                        $skinHandler = app('xe.skin');
+                        $skin = $skinHandler->getAssigned('member/auth');
+                        return $skin->setView('register-section')->render();
+                    }
+                ]
+            ];
+
+            app('xe.register')->add('user/register/section', $section);
+        }
+
+        $sections = $handler->getRegisterSections();
+
+        if(! count($sections)) {
+            return redirect()->route('auth.register.form');
+        }
+
+        // join config
+        $config = app('xe.config')->get('user.join');
+
+        return \XePresenter::make('register', compact('config', 'sections'));
+    }
+
+    /**
+     * Show the application registration form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getRegisterForm()
     {
         $this->checkJoinable();
 
@@ -82,7 +122,7 @@ class AuthController extends Controller
         // join config
         $config = app('xe.config')->get('user.join');
 
-        return \XePresenter::make('register', compact('config', 'fieldTypes', 'passwordLevel'));
+        return \XePresenter::make('register-form', compact('config', 'fieldTypes', 'passwordLevel'));
     }
 
     /**

@@ -70,6 +70,8 @@ Route::group(
 
         // register
         Route::get('register', ['as' => 'auth.register', 'uses' => 'Auth\AuthController@getRegister']);
+
+        Route::get('register-form', ['as' => 'auth.register.form', 'uses' => 'Auth\AuthController@getRegisterForm']);
         Route::post('register', ['as' => 'auth.register', 'uses' => 'Auth\AuthController@postRegister']);
 
         // email confirm
