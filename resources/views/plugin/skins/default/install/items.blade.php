@@ -22,18 +22,20 @@
         </div>
     </div>
 
-    {{-- plugin list --}}
-    @if($plugins->count())
-        <ul class="list-group list-plugin">
-        @foreach($plugins as $plugin)
-            @include($_skin::view('install.item'))
-        @endforeach
-    </ul>
-    @else
-        <div class="panel-body">
-            <p>조회된 플러그인이 없습니다.</p>
-        </div>
-    @endif
+    <div class="panel-body">
+        {{-- plugin list --}}
+        @if($plugins->count())
+            <ul class="list-group list-plugin">
+                @foreach($plugins as $plugin)
+                    @include($_skin::view('install.item'))
+                @endforeach
+            </ul>
+        @else
+            <div class="panel-body">
+                <p>조회된 플러그인이 없습니다.</p>
+            </div>
+        @endif
+    </div>
 
     @if(!request()->has('filter') && $plugins->hasPages() )
     <div class="panel-footer">

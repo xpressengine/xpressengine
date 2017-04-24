@@ -22,4 +22,9 @@
             <span class="label label-{{ array_get($color, $component->type, 'default') }}" title="{{ $component->name }}" data-toggle="tooltip">{{ $component->type }}</span>
         @endforeach
     </div>
+    <div class="btn-right">
+        <a href="#" class="btn-link">
+            {{ xe_trans('xe::showDetails') }}
+        </a>
+    </div>
 </li>
