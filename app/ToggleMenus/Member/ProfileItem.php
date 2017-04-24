@@ -32,7 +32,7 @@ class ProfileItem extends UserToggleMenu
         $user = app('xe.users')->find($this->identifier);
         $link = route('user.profile', $user->getId());
         $profileImage = $user->getProfileImage();
-        $content = sprintf('<a href="%s"><img src="%s" width="96" height="96"><br>프로필보기</a>', $link, $profileImage, $user->getDisplayName());
+        $content = sprintf('<a href="%s">프로필보기</a>', $link);
         return $content;
     }
 

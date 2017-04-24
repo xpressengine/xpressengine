@@ -8,6 +8,7 @@
 
 namespace App\Providers;
 
+
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Plugin\PluginRegister;
 use Xpressengine\UIObject\UIObjectHandler;
@@ -21,6 +22,7 @@ use App\UIObjects\Form\FormPassword;
 use App\UIObjects\Form\FormSelect;
 use App\UIObjects\Form\FormText;
 use App\UIObjects\Form\FormTextArea;
+use App\UIObjects\Form\FormColorpicker;
 use App\UIObjects\Lang\LangText;
 use App\UIObjects\Lang\LangTextArea;
 use App\UIObjects\Member\ProfileBgImage;
@@ -92,6 +94,7 @@ class UIObjectServiceProvider extends ServiceProvider
         $register->add(FormCheckbox::class);
         $register->add(FormImage::class);
         $register->add(FormFile::class);
+        $register->add(FormColorpicker::class);
 
         $register->add(ProfileImage::class);
         $register->add(ProfileBgImage::class);

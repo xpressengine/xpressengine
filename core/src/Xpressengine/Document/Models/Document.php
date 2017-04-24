@@ -212,6 +212,9 @@ class Document extends DynamicModel
             $this->setTable($tableName);
         }
 
+        // proxy 설정 처리 (DynamicField)
+        $this->setProxyOptions($handler->proxyOption($config));
+
         return $this;
     }
 

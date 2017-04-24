@@ -251,6 +251,7 @@ class DocumentHandler
 
         $doc->checkRequired($attributes);
         $doc->fill($attributes);
+        $doc->setProxyOptions($this->proxyOption($this->getConfig($attributes['instanceId'])));
         $doc->save();
 
         $this->addRevision($doc);
@@ -275,6 +276,7 @@ class DocumentHandler
             $doc->ipaddress = $this->request->ip();
         }
         $doc->checkRequired($doc->getAttributes());
+        $doc->setProxyOptions($this->proxyOption($this->getConfig($doc->instanceId)));
         $doc->save();
 
         $this->addRevision($doc);
@@ -459,6 +461,7 @@ class DocumentHandler
     public function remove(Document $doc)
     {
         $this->conn->beginTransaction();
+        $doc->setProxyOptions($this->proxyOption($this->getConfig($doc->instanceId)));
         $result = $doc->delete();
 
         $this->conn->commit();

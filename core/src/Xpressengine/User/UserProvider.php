@@ -57,9 +57,12 @@ class UserProvider extends EloquentUserProvider
             if (!str_contains($email, '@')) {
                 $emailPrefix = $email;
 
-                $query = $query->whereHas('emails', function ($q) use ($emailPrefix) {
-                    $q->where('address', 'like', $emailPrefix.'@%');
-                })->get();
+                $query = $query->whereHas(
+                    'emails',
+                    function ($q) use ($emailPrefix) {
+                        $q->where('address', 'like', $emailPrefix.'@%');
+                    }
+                )->get();
 
                 if (count($query) === 1) {
                     $user = $query->first();
@@ -67,9 +70,12 @@ class UserProvider extends EloquentUserProvider
                     return null;
                 }
             } else {
-                $user = $query->whereHas('emails', function ($q) use ($email) {
-                    $q->where('address', $email);
-                })->first();
+                $user = $query->whereHas(
+                    'emails',
+                    function ($q) use ($email) {
+                        $q->where('address', $email);
+                    }
+                )->first();
             }
 
             unset($where['email']);
@@ -105,5 +111,19 @@ class UserProvider extends EloquentUserProvider
         }
 
         return $user;
+    }
+
+    /**
+     * update user's login time
+     *
+     * @param Authenticatable $user user
+     * @param mixed           $time login time
+     *
+     * @return void
+     */
+    public function updateLoginTime(Authenticatable $user, $time = null)
+    {
+        $user->setLoginTime($time);
+        $user->save();
     }
 }

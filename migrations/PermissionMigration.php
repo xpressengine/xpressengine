@@ -19,13 +19,13 @@ class PermissionMigration extends Migration {
         Schema::create('permissions', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
-            $table->increments('id');
-            $table->string('siteKey', 50)->default('default');
+            $table->increments('id')->comment('ID');
+            $table->string('siteKey', 50)->default('default')->comment('site key. for multi web site support.');
 //            $table->string('type', 20);
-            $table->string('name');
-            $table->text('grants');
-            $table->timestamp('createdAt');
-            $table->timestamp('updatedAt');
+            $table->string('name')->comment('permission name');
+            $table->text('grants')->comment('grant information. JSON data type.');
+            $table->timestamp('createdAt')->comment('created date');
+            $table->timestamp('updatedAt')->comment('updated date');
 
 //            $table->unique(['siteKey', 'type', 'name']);
             $table->unique(['siteKey', 'name']);

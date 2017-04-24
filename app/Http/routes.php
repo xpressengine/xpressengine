@@ -44,6 +44,7 @@ Route::settings(
 Route::settings(
     'lang',
     function () {
+        Route::get('lines/many', ['as' => 'settings.lang.lines.many', 'uses' => 'LangController@getLinesMany']);
         Route::get('lines/{key}', ['as' => 'settings.lang.lines.key', 'uses' => 'LangController@getLinesWithKey']);
         Route::get('search/{locale}', ['as' => 'settings.lang.search', 'uses' => 'LangController@searchKeyword']);
         Route::put('save', ['as' => 'settings.lang.save', 'uses' => 'LangController@save']);

@@ -82,6 +82,7 @@
                             <th scope="col">{{xe_trans('xe::account')}}</th>
                             <th scope="col">{{xe_trans('xe::email')}}</th>
                             <th scope="col">{{xe_trans('xe::signUpDate')}}</th>
+                            <th scope="col">{{xe_trans('xe::latestLogin')}}</th>
                             <th scope="col">{{xe_trans('xe::memberGroup')}}</th>
                             <th scope="col">{{xe_trans('xe::status')}}</th>
                             <th scope="col">{{xe_trans('xe::management')}}</th>
@@ -106,6 +107,13 @@
                             </td>
                             <td>{{ data_get($user, 'email', xe_trans('xe::empty')) }}</td>
                             <td>{!! $user->createdAt->format('y-m-d') !!}</td>
+                            <td>
+                                @if($user->loginAt !== null)
+                                {!! $user->loginAt->format('y-m-d') !!}
+                                @else
+                                -
+                                @endif
+                            </td>
                             <td>
                                 @if($user->groups !== null)
                                     {{ implode(', ', array_pluck($user->groups, 'name')) }}

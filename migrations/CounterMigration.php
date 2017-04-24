@@ -19,14 +19,14 @@ class CounterMigration extends Migration {
         Schema::create('counter_log', function ($table) {
             $table->engine = "InnoDB";
 
-            $table->bigIncrements('id');
-            $table->string('counterName', 36);
-            $table->string('counterOption', 36);
-            $table->string('targetId', 36);
-            $table->string('userId', 36);
-            $table->integer('point')->default(1);
-            $table->string('ipaddress', 16);
-            $table->timestamp('createdAt');
+            $table->bigIncrements('id')->comment('ID');
+            $table->string('counterName', 36)->comment('counter name');
+            $table->string('counterOption', 36)->comment('counter option');
+            $table->string('targetId', 36)->comment('target ID');
+            $table->string('userId', 36)->comment('user ID');
+            $table->integer('point')->default(1)->comment('point');
+            $table->string('ipaddress', 16)->comment('IP address');
+            $table->timestamp('createdAt')->comment('created date');
 
             $table->index(['targetId', 'userId']);
             $table->index(['targetId', 'counterName']);

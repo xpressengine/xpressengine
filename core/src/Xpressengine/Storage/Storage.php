@@ -298,6 +298,14 @@ class Storage
 
         $name = $name ?: $file->clientname;
 
+        /**
+         * google chrome download issue
+         * https://github.com/xpressengine/plugin-board/issues/110
+         *
+         * comma(,) change to space
+         */
+        $name = str_replace(',', ' ', $name);
+
         header('Content-Description: File Transfer');
         header('Content-Type: application/octet-stream');
         header(sprintf('Content-Disposition: attachment; filename=%s', $name));

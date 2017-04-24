@@ -139,7 +139,7 @@
     <div class="footer">
         <span>Copyright ©2015 <a href="http://xpressengine.io">XpressEngine.</a> All rights reserved.</span>
         <em class="pull-r">Version {{ __XE_VERSION__ }} @if($installedVersion !== __XE_VERSION__)
-                (installed Version: {{ $installedVersion }} - <a href="{{ route('settings.coreupdate.show') }}" data-toggle="xe-page-modal">update XE</a>) @endif </em>
+                (installed Version: {{ $installedVersion }} - <a href="{{ route('settings.coreupdate.show') }}">update XE</a>) @endif </em>
     </div>
 </div>
 <div class="dim"></div>

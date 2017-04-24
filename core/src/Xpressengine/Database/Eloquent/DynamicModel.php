@@ -60,7 +60,6 @@ abstract class DynamicModel extends Model
      */
     protected $dynamic = false;
 
-
     /**
      * dynamic mode 애서 사용될 attributes
      *

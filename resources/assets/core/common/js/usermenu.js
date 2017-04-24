@@ -1,16 +1,16 @@
 (function (root, factory) {
-if (typeof define === 'function' && define.amd) {
-  // AMD
-  define(['exports'], function (exports) {
+  if (typeof define === 'function' && define.amd) {
+    // AMD
+    define(['exports'], function (exports) {
+      factory(exports);
+    });
+  } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
+    // CommonJS
     factory(exports);
-  });
-} else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
-  // CommonJS
-  factory(exports);
-} else {
-  // Browser globals
-  factory({});
-}
+  } else {
+    // Browser globals
+    factory({});
+  }
 }(this, function (exports) {
 
   'use strict';
@@ -36,7 +36,7 @@ if (typeof define === 'function' && define.amd) {
     animation: true,
     placement: 'top',
     selector: false,
-    template: '<div class="xe-dropdown v2 open" style="width: 200px"><div class="xe-dropdown-menu"><ul class="xe-dropdown-menu-list"></ul></div></div>',
+    template: '<div class="ly_popup_profile xe-user-toggle-menu"><ul class="user_toggle_list"></ul></div>',
     trigger: 'hover focus',
     title: '',
     delay: 0,
@@ -110,7 +110,7 @@ if (typeof define === 'function' && define.amd) {
 
   XeUserMenu.prototype.enter = function (obj) {
     var self = obj instanceof this.constructor ?
-      obj : $(obj.currentTarget).data('xe.' + this.type);
+        obj : $(obj.currentTarget).data('xe.' + this.type);
 
     if (self && self.$menubox && self.$menubox.is(':visible')) {
       self.hoverState = 'in';
@@ -136,7 +136,7 @@ if (typeof define === 'function' && define.amd) {
 
   XeUserMenu.prototype.leave = function (obj) {
     var self = obj instanceof this.constructor ?
-      obj : $(obj.currentTarget).data('xe.' + this.type);
+        obj : $(obj.currentTarget).data('xe.' + this.type);
 
     if (!self) {
       self = new this.constructor(obj.currentTarget, this.getDelegateOptions());
@@ -175,18 +175,18 @@ if (typeof define === 'function' && define.amd) {
         if (this.options.animation) $menubox.addClass('fade');
 
         var placement = typeof this.options.placement == 'function' ?
-          this.options.placement.call(this, $menubox[0], this.$element[0]) :
-          this.options.placement;
+            this.options.placement.call(this, $menubox[0], this.$element[0]) :
+            this.options.placement;
 
         var autoToken = /\s?auto?\s?/i;
         var autoPlace = autoToken.test(placement);
         if (autoPlace) placement = placement.replace(autoToken, '') || 'top';
 
         $menubox
-          .detach()
-          .css({ top: 0, left: 0, display: 'block' })
-          .addClass(placement)
-          .data('xe.' + this.type, this);
+            .detach()
+            .css({ top: 0, left: 0, display: 'block' })
+            .addClass(placement)
+            .data('xe.' + this.type, this);
 
         this.options.container ? $menubox.appendTo(this.options.container) : $menubox.insertAfter(this.$element);
 
@@ -200,14 +200,14 @@ if (typeof define === 'function' && define.amd) {
           var containerDim = this.getPosition($container);
 
           placement = placement == 'bottom' && pos.bottom + actualHeight > containerDim.bottom ? 'top' :
-            placement == 'top' && pos.top - actualHeight < containerDim.top ? 'bottom' :
-              placement == 'right' && pos.right + actualWidth > containerDim.width ? 'left' :
-                placement == 'left' && pos.left - actualWidth < containerDim.left ? 'right' :
-                  placement;
+              placement == 'top' && pos.top - actualHeight < containerDim.top ? 'bottom' :
+                  placement == 'right' && pos.right + actualWidth > containerDim.width ? 'left' :
+                      placement == 'left' && pos.left - actualWidth < containerDim.left ? 'right' :
+                          placement;
 
           $menubox
-            .removeClass(orgPlacement)
-            .addClass(placement);
+              .removeClass(orgPlacement)
+              .addClass(placement);
         }
 
         var calculatedOffset = this.getCalculatedOffset(placement, pos, actualWidth, actualHeight);
@@ -223,10 +223,10 @@ if (typeof define === 'function' && define.amd) {
         };
 
         $.support.transition && this.$menubox.hasClass('fade') ?
-          $menubox
-            .one('bsTransitionEnd', complete)
-            .emulateTransitionEnd(XeUserMenu.TRANSITION_DURATION) :
-          complete();
+            $menubox
+                .one('bsTransitionEnd', complete)
+                .emulateTransitionEnd(XeUserMenu.TRANSITION_DURATION) :
+            complete();
       };
 
       this.setContent($menubox, $.proxy(contentGenerated, this));
@@ -284,7 +284,7 @@ if (typeof define === 'function' && define.amd) {
   XeUserMenu.prototype.setContent = function ($menubox, callback) {
 
     var _this = this;
-    var ul = $menubox.find('ul.xe-dropdown-menu-list');
+    var ul = $menubox.find('ul.user_toggle_list');
     $menubox.removeClass('fade in top bottom left right');
 
     if (_this.menuGenerated) {
@@ -315,26 +315,26 @@ if (typeof define === 'function' && define.amd) {
 
     var attr;
     switch (item.type) {
-    case 'func' :
-      attr = {
-        href: '#', onClick: function (e) {
-          (eval(item.action))(item.data);
-          e.preventDefault();
-        }.bind(this),
-      };
-    break;
-    case 'exec' :
-      attr = {
-        href: '#', onClick: function (e) {
-          eval(item.action);
-          e.preventDefault();
-        }.bind(this),
-      };
-    break;
-    case 'link' :
-      attr = { href: item.action };
-    break;
-  }
+      case 'func' :
+        attr = {
+          href: '#', onClick: function (e) {
+            (eval(item.action))(item.data);
+            e.preventDefault();
+          }.bind(this),
+        };
+        break;
+      case 'exec' :
+        attr = {
+          href: '#', onClick: function (e) {
+            eval(item.action);
+            e.preventDefault();
+          }.bind(this),
+        };
+        break;
+      case 'link' :
+        attr = { href: item.action };
+        break;
+    }
     return $('<li>').addClass(item.class).append($('<a></a>').attr(attr).text(item.text));
   };
 
@@ -346,8 +346,8 @@ if (typeof define === 'function' && define.amd) {
     function complete() {
       if (_this.hoverState != 'in') $menubox.detach();
       _this.$element
-        .removeAttr('aria-describedby')
-        .trigger('hidden.xe.' + _this.type);
+          .removeAttr('aria-describedby')
+          .trigger('hidden.xe.' + _this.type);
       callback && callback();
     }
 
@@ -358,10 +358,10 @@ if (typeof define === 'function' && define.amd) {
     $menubox.removeClass('in');
 
     $.support.transition && $menubox.hasClass('fade') ?
-      $menubox
-        .one('bsTransitionEnd', complete)
-        .emulateTransitionEnd(XeUserMenu.TRANSITION_DURATION) :
-      complete();
+        $menubox
+            .one('bsTransitionEnd', complete)
+            .emulateTransitionEnd(XeUserMenu.TRANSITION_DURATION) :
+        complete();
 
     this.hoverState = null;
 
@@ -395,18 +395,18 @@ if (typeof define === 'function' && define.amd) {
       top: pos.top + pos.height,
       left: pos.left + pos.width / 2 - actualWidth / 2,
     } :
-      placement == 'top' ? {
-      top: pos.top - actualHeight,
-      left: pos.left + pos.width / 2 - actualWidth / 2,
-    } :
-        placement == 'left' ? {
-        top: pos.top + pos.height / 2 - actualHeight / 2,
-        left: pos.left - actualWidth,
-      } :
-          /* placement == 'right' */ {
-        top: pos.top + pos.height / 2 - actualHeight / 2,
-        left: pos.left + pos.width,
-      };
+        placement == 'top' ? {
+          top: pos.top - actualHeight,
+          left: pos.left + pos.width / 2 - actualWidth / 2,
+        } :
+            placement == 'left' ? {
+              top: pos.top + pos.height / 2 - actualHeight / 2,
+              left: pos.left - actualWidth,
+            } :
+                /* placement == 'right' */ {
+              top: pos.top + pos.height / 2 - actualHeight / 2,
+              left: pos.left + pos.width,
+            };
 
   };
 
@@ -527,7 +527,7 @@ if (typeof define === 'function' && define.amd) {
     selector: '[data-toggle=xeUserMenu]',
     container: 'body',
     trigger: 'click',
-    placement: 'buttom',
+    placement: 'bottom auto'
   });
 
 }));

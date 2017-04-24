@@ -19,7 +19,7 @@
                                         {{-- email --}}
                                         {!! XeUI::formText(['id'=>'__xe_email', 'label'=>xe_trans('xe::email'), 'placeholder'=>xe_trans('xe::enterEmail'), 'value'=> old('email'), 'name'=>'email']) !!}
                                         {{-- password --}}
-                                        {!! XeUI::formPassword(['id'=>'__xe_password', 'label'=>xe_trans('xe::password'), 'placeholder'=>xe_trans('xe::enterPassword'), 'name'=>'password']) !!}
+                                        {!! XeUI::formPassword(['id'=>'__xe_password', 'label'=>xe_trans('xe::password'), 'placeholder'=>xe_trans('xe::enterPassword'), 'name'=>'password', 'autocomplete'=>"new-password"]) !!}
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">

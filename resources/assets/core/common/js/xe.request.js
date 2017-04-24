@@ -53,7 +53,17 @@ export default (function () {
       var errorMessage = 'Not defined error message (' + status + ')';
 
       // @TODO dataType 에 따라 메시지 획득 방식을 추가 해야함.
-      if (settings.dataType == 'json') {
+      if (jqxhr.status == 422) {
+        var list = $.parseJSON(jqxhr.responseText);
+
+        errorMessage = '';
+        errorMessage += '<ul>';
+        for (var i = 0, max = list.length; i < max; i += 1) {
+          errorMessage += '<li>' + list[i] + '</li>';
+        }
+
+        errorMessage += '</ul>';
+      } else if (settings.dataType == 'json') {
         errorMessage = $.parseJSON(jqxhr.responseText).message;
       } else {
         errorMessage = jqxhr.statusText;

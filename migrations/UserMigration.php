@@ -19,18 +19,19 @@ class UserMigration extends Migration {
         Schema::create('user', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
-            $table->string('id', 36);
-            $table->string('displayName', 255)->unique();
-            $table->string('email', 255)->nullable();
-            $table->string('password', 255)->nullable();
-            $table->string('rating', 15)->default('member');
-            $table->char('status', 20);
-            $table->text('introduction')->default(null)->nullable();
-            $table->string('profileImageId', 36)->nullable();
-            $table->string('rememberToken', 255)->nullable();
-            $table->timestamp('createdAt')->index();
-            $table->timestamp('updatedAt')->index();
-            $table->timestamp('passwordUpdatedAt');
+            $table->string('id', 36)->comment('user ID');
+            $table->string('displayName', 255)->unique()->comment('display name.');
+            $table->string('email', 255)->nullable()->comment('email');
+            $table->string('password', 255)->nullable()->comment('password');
+            $table->string('rating', 15)->default('member')->comment('user rating. guest/member/manager/super');
+            $table->char('status', 20)->comment('account status. activated/deactivated');
+            $table->text('introduction')->default(null)->nullable()->comment('user introduction');
+            $table->string('profileImageId', 36)->nullable()->comment('profile image file ID');
+            $table->string('rememberToken', 255)->nullable()->comment('token for keep login');
+            $table->timestamp('loginAt')->comment('login date');
+            $table->timestamp('createdAt')->index()->comment('created date');
+            $table->timestamp('updatedAt')->index()->comment('updated date');
+            $table->timestamp('passwordUpdatedAt')->comment('password updated date');
 
             $table->primary('id');
         });
@@ -38,23 +39,24 @@ class UserMigration extends Migration {
         Schema::create('user_group', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
-            $table->string('id', 36);
-            $table->string('name');
-            $table->string('description', 1000);
-            $table->integer('order')->default(0)->index();
-            $table->timestamp('createdAt')->index();
-            $table->timestamp('updatedAt');
+            $table->string('id', 36)->comment('group ID');
+            $table->string('name')->comment('group name');
+            $table->string('description', 1000)->comment('group description');
+            $table->integer('order')->default(0)->index()->comment('order number');
+            $table->timestamp('createdAt')->index()->comment('created date');
+            $table->timestamp('updatedAt')->comment('updated date');
 
             $table->primary('id');
         });
 
         Schema::create('user_group_user', function (Blueprint $table) {
+            // user IDs included in the use group
             $table->engine = "InnoDB";
 
-            $table->increments('id');
-            $table->string('groupId', 36);
-            $table->string('userId', 36);
-            $table->timestamp('createdAt');
+            $table->increments('id')->comment('ID');
+            $table->string('groupId', 36)->comment('group ID');
+            $table->string('userId', 36)->comment('user ID');
+            $table->timestamp('createdAt')->comment('created date');
 
             $table->unique(['groupId','userId']);
             $table->index('groupId');
@@ -62,18 +64,19 @@ class UserMigration extends Migration {
         });
 
         Schema::create('user_account', function (Blueprint $table) {
+            // user account. Login via account information provided by other providers. As like OAuth.
             $table->engine = "InnoDB";
 
-            $table->string('id', 36);
-            $table->string('userId');
-            $table->string('accountId');
-            $table->string('email')->nullable();
-            $table->char('provider', 20);
-            $table->string('token', 500);
-            $table->string('tokenSecret', 500);
-            $table->string('data');
-            $table->timestamp('createdAt');
-            $table->timestamp('updatedAt');
+            $table->string('id', 36)->comment('ID');
+            $table->string('userId')->comment('user ID');
+            $table->string('accountId')->comment('account Id');
+            $table->string('email')->nullable()->comment('email');
+            $table->char('provider', 20)->comment('OAuth provider. naver/twitter/facebook/...');
+            $table->string('token', 500)->comment('token');
+            $table->string('tokenSecret', 500)->comment('token secret');
+            $table->string('data')->comment('provider data');
+            $table->timestamp('createdAt')->comment('created date');
+            $table->timestamp('updatedAt')->comment('updated date');
 
             $table->primary('id');
             $table->unique(['provider','accountId']);
@@ -82,37 +85,39 @@ class UserMigration extends Migration {
         Schema::create('user_email', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
-            $table->increments('id');
-            $table->string('userId', 36);
-            $table->string('address');
-            $table->timestamp('createdAt')->index();
-            $table->timestamp('updatedAt');
+            $table->increments('id')->comment('ID');
+            $table->string('userId', 36)->comment('user ID');
+            $table->string('address')->comment('email address');
+            $table->timestamp('createdAt')->index()->comment('created date');
+            $table->timestamp('updatedAt')->comment('updated date');
 
             $table->index('userId');
             $table->index('address');
         });
 
         Schema::create('user_pending_email', function (Blueprint $table) {
+            // email confirm
             $table->engine = "InnoDB";
 
-            $table->increments('id');
-            $table->string('userId', 36);
-            $table->string('address');
-            $table->string('confirmationCode')->nullable();
-            $table->timestamp('createdAt')->index();
-            $table->timestamp('updatedAt');
+            $table->increments('id')->comment('ID');
+            $table->string('userId', 36)->comment('user ID');
+            $table->string('address')->comment('email address');
+            $table->string('confirmationCode')->nullable()->comment('confirmation code');
+            $table->timestamp('createdAt')->index()->comment('created date');
+            $table->timestamp('updatedAt')->comment('updated date');
 
             $table->index('userId');
             $table->index('address');
         });
 
         Schema::create('password_resets', function (Blueprint $table) {
+            // find account password
             $table->engine = "InnoDB";
 
-            $table->increments('id');
-            $table->string('email')->index();
-            $table->string('token')->index();
-            $table->timestamp('created_at');
+            $table->increments('id')->comment('ID');
+            $table->string('email')->index()->comment('email address');
+            $table->string('token')->index()->comment('token');
+            $table->timestamp('created_at')->comment('created date');
         });
     }
 
@@ -160,13 +165,8 @@ class UserMigration extends Migration {
      */
     public function checkUpdated($installedVersion = null)
     {
-        // ver.3.0.0-beta.6
-        if (Schema::hasColumn('user_group', 'count')) {
-            return false;
-        }
-        if (!Schema::hasColumn('user_account', 'tokenSecret')) {
-            return false;
-        }
+        // ver.3.0.0-beta.17
+        return Schema::hasColumn('user', 'loginAt');
     }
 
     /**
@@ -187,6 +187,13 @@ class UserMigration extends Migration {
         if (!Schema::hasColumn('user_account', 'tokenSecret')) {
             Schema::table('user_account', function ($table) {
                 $table->string('tokenSecret', 500);
+            });
+        }
+
+        // ver.3.0.0-beta.17
+        if(!Schema::hasColumn('user', 'loginAt')) {
+            Schema::table('user', function ($table) {
+                $table->timestamp('loginAt');
             });
         }
     }

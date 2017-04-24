@@ -14,6 +14,7 @@
 
 namespace Xpressengine\User\Models;
 
+use Carbon\Carbon;
 use Closure;
 use Xpressengine\Database\Eloquent\DynamicModel;
 use Xpressengine\User\Rating;
@@ -42,7 +43,8 @@ class User extends DynamicModel implements UserInterface
     protected $dynamic = true;
 
     protected $dates = [
-        'passwordUpdatedAt'
+        'passwordUpdatedAt',
+        'loginAt'
     ];
 
     protected $fillable = [
@@ -358,5 +360,37 @@ class User extends DynamicModel implements UserInterface
         // todo: decrement group's count!!
         $this->groups()->detach($groups);
         return $this;
+    }
+
+    /**
+     * 최종 로그인 시간을 기록한다.
+     *
+     * @param mixed $time 로그인 시간
+     *
+     * @return void
+     */
+    public function setLoginTime($time = null)
+    {
+        if ($time === null) {
+            $time = new Carbon;
+        }
+        $this->loginAt = $time;
+    }
+
+    /**
+     * loginAt 처리, loginAt이 지정되지 않았을 경우, null을 반환하도록 처리한다.
+     *
+     * @param string $value date time string
+     *
+     * @return Carbon|null
+     */
+    public function getLoginAtAttribute($value)
+    {
+        $at = $this->asDateTime($value);
+        if ($at->timestamp <= 0) {
+            return null;
+        }
+
+        return $at;
     }
 }
