@@ -36,7 +36,7 @@ if (typeof define === 'function' && define.amd) {
     animation: true,
     placement: 'top',
     selector: false,
-    template: '<div class="xe-dropdown v2 open" style="width: 200px"><div class="xe-dropdown-menu"><ul class="xe-dropdown-menu-list"></ul></div></div>',
+    template: '<div class="ly_popup_profile xe-user-toggle-menu"><ul class="user_toggle_list"></ul></div>',
     trigger: 'hover focus',
     title: '',
     delay: 0,
@@ -284,7 +284,7 @@ if (typeof define === 'function' && define.amd) {
   XeUserMenu.prototype.setContent = function ($menubox, callback) {
 
     var _this = this;
-    var ul = $menubox.find('ul.xe-dropdown-menu-list');
+    var ul = $menubox.find('ul.user_toggle_list');
     $menubox.removeClass('fade in top bottom left right');
 
     if (_this.menuGenerated) {
@@ -527,7 +527,7 @@ if (typeof define === 'function' && define.amd) {
     selector: '[data-toggle=xeUserMenu]',
     container: 'body',
     trigger: 'click',
-    placement: 'buttom',
+    placement: 'bottom auto'
   });
 
 }));
