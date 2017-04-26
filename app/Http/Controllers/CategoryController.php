@@ -15,6 +15,7 @@ use XeCategory;
 use Xpressengine\Category\Models\Category;
 use Xpressengine\Category\Models\CategoryItem;
 use Xpressengine\Http\Request;
+use Xpressengine\Support\Caster;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
 use Xpressengine\Translation\Translator;
 
@@ -22,7 +23,7 @@ class CategoryController extends Controller
 {
     public function show($id)
     {
-        $category = Category::find($id);
+        $category = XeCategory::find($id);
 
         if ($category === null) {
             throw new InvalidArgumentHttpException;
@@ -34,13 +35,13 @@ class CategoryController extends Controller
     public function storeItem(Translator $translator, Request $request, $id)
     {
         /** @var Category $category */
-        $category = Category::find($id);
+        $category = XeCategory::find($id);
 
         DB::beginTransaction();
 
         try {
             /** @var CategoryItem $item */
-            $item = XeCategory::createItem($category, $request->all());
+            $item = XeCategory::itemCreate($category, $request->all());
         } catch (Exception $e) {
             DB::rollBack();
 
@@ -57,13 +58,12 @@ class CategoryController extends Controller
     public function updateItem(Translator $translator, Request $request, $id)
     {
         /** @var CategoryItem $item */
-        if (!$item = CategoryItem::find($request->get('id'))) {
+        $item = XeCategory::itemFind($request->get('id'));
+        if (!$item || $item->category->id !== Caster::cast($id)) {
             throw new InvalidArgumentHttpException;
         }
 
-        $item->fill($request->all());
-
-        XeCategory::putItem($item);
+        XeCategory::itemUpdate($item, $request->all());
 
         $multiLang = $translator->getPreprocessorValues($request->all(), session()->get('locale'));
         $item->readableWord = $multiLang['word'];
@@ -74,14 +74,15 @@ class CategoryController extends Controller
     public function destroyItem(Request $request, $id)
     {
         /** @var CategoryItem $item */
-        if (!$item = CategoryItem::find($request->get('id'))) {
+        $item = XeCategory::itemFind($request->get('id'));
+        if (!$item || $item->category->id !== Caster::cast($id)) {
             throw new InvalidArgumentHttpException;
         }
 
         DB::beginTransaction();
 
         try {
-            XeCategory::removeItem($item);
+            XeCategory::itemDelete($item);
 
         } catch (Exception $e) {
             DB::rollBack();
@@ -94,11 +95,12 @@ class CategoryController extends Controller
     public function moveItem(Request $request, $id)
     {
         /** @var CategoryItem $item */
-        if (!$item = CategoryItem::find($request->get('id'))) {
+        $item = XeCategory::itemFind($request->get('id'));
+        if (!$item || $item->category->id !== Caster::cast($id)) {
             throw new InvalidArgumentHttpException;
         }
 
-        $parent = CategoryItem::find($request->get('parentId'));
+        $parent = XeCategory::itemFind($request->get('parentId'));
 
         DB::beginTransaction();
 
@@ -116,10 +118,11 @@ class CategoryController extends Controller
     public function children(Request $request, $id)
     {
         if ($request->get('id') === null) {
-            $children = Category::find($id)->getProgenitors();
+            $children = XeCategory::find($id)->getProgenitors();
         } else {
             /** @var CategoryItem $item */
-            if (!$item = CategoryItem::find($request->get('id'))) {
+            $item = XeCategory::itemFind($request->get('id'));
+            if (!$item || $item->category->id !== Caster::cast($id)) {
                 throw new InvalidArgumentHttpException;
             }
 

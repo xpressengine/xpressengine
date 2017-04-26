@@ -57,7 +57,14 @@ class CategoryItem extends Node
      *
      * @var array
      */
-    protected $fillable = ['parentId', 'word', 'description'];
+    protected $fillable = ['categoryId', 'parentId', 'word', 'description'];
+
+    /**
+     * The class name of aggregator
+     *
+     * @var string
+     */
+    protected static $aggregator;
 
     /**
      * Alias aggregator
@@ -161,7 +168,7 @@ class CategoryItem extends Node
      */
     public function getAggregatorModel()
     {
-        return Category::class;
+        return static::$aggregator;
     }
 
     /**
@@ -172,5 +179,16 @@ class CategoryItem extends Node
     public function getAggregatorKeyName()
     {
         return 'categoryId';
+    }
+
+    /**
+     * Set the aggregator model name for model
+     *
+     * @param string $model model name
+     * @return void
+     */
+    public static function setAggregatorModel($model)
+    {
+        static::$aggregator = '\\' . ltrim($model, '\\');
     }
 }
