@@ -97,7 +97,7 @@ class ImageHandler extends AbstractHandler
         ]);
 
         if ($originId !== null) {
-            $file = File::find($originId);
+            $file = $this->storage->find($originId);
             $parts = pathinfo($file->filename);
             if (isset($parts['extension']) && $parts['extension'] != '') {
                 $name = sprintf('%s.%s', $name, $parts['extension']);

@@ -57,6 +57,32 @@ trait EloquentRepositoryTrait
     }
 
     /**
+     * Increment a column's value by a given amount.
+     *
+     * @param Model  $item   item
+     * @param string $column column
+     * @param int    $amount amount
+     * @return int
+     */
+    public function increment(Model $item, $column, $amount = 1)
+    {
+        return $item->increment($column, $amount);
+    }
+
+    /**
+     * Decrement a column's value by a given amount.
+     *
+     * @param Model  $item   item
+     * @param string $column column
+     * @param int    $amount amount
+     * @return int
+     */
+    public function decrement(Model $item, $column, $amount = 1)
+    {
+        return $item->decrement($column, $amount);
+    }
+
+    /**
      * The name of Category model class
      *
      * @return string

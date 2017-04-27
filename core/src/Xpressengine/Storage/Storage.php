@@ -122,6 +122,13 @@ use Carbon\Carbon;
 class Storage
 {
     /**
+     * file repository instance
+     *
+     * @var FileRepository
+     */
+    protected $repo;
+
+    /**
      * filesystem handler instance
      *
      * @var FilesystemHandler
@@ -159,6 +166,7 @@ class Storage
     /**
      * constructor
      *
+     * @param FileRepository    $repo        file repository instance
      * @param FilesystemHandler $files       filesystem handler instance
      * @param Authenticator     $auth        Authenticator instance
      * @param Keygen            $keygen      key generator instance
@@ -166,12 +174,14 @@ class Storage
      * @param TempFileCreator   $tempFiles   temporary file creator instance
      */
     public function __construct(
+        FileRepository $repo,
         FilesystemHandler $files,
         Authenticator $auth,
         Keygen $keygen,
         Distributor $distributor,
         TempFileCreator $tempFiles
     ) {
+        $this->repo = $repo;
         $this->files = $files;
         $this->auth = $auth;
         $this->keygen = $keygen;
@@ -221,19 +231,15 @@ class Storage
             throw new WritingFailException;
         }
 
-        $file = $this->createModel();
-        $file->id = $id;
-        $file->userId = $user->getId();
-        $file->disk = $disk;
-        $file->path = $path;
-        $file->filename = $name;
-        $file->clientname = $uploaded->getClientOriginalName();
-        $file->mime = $uploaded->getMimeType();
-        $file->size = $uploaded->getSize();
-
-        $file->save();
-
-        return $file;
+        return $this->repo->create([
+            'userId' => $user->getId(),
+            'disk' => $disk,
+            'path' => $path,
+            'filename' => $name,
+            'clientname' => $uploaded->getClientOriginalName(),
+            'mime' => $uploaded->getMimeType(),
+            'size' => $uploaded->getSize(),
+        ], $id);
     }
 
     /**
@@ -260,21 +266,17 @@ class Storage
             throw new WritingFailException;
         }
 
-        $file = $this->createModel();
-        $file->id = $id;
-        $file->userId = $user->getId();
-        $file->disk = $disk;
-        $file->path = $path;
-        $file->filename = $name;
-        $file->clientname = $name;
-        $file->mime = $tempFile->getMimeType();
-        $file->size = $tempFile->getSize();
+        $file = $this->repo->create([
+            'userId' => $user->getId(),
+            'disk' => $disk,
+            'path' => $path,
+            'filename' => $name,
+            'clientname' => $name,
+            'mime' => $tempFile->getMimeType(),
+            'size' => $tempFile->getSize(),
+            'originId' => $originId,
+        ], $id);
 
-        if ($originId !== null) {
-            $file->originId = $originId;
-        }
-
-        $file->save();
         $tempFile->destroy();
 
         return $file;
@@ -319,24 +321,37 @@ class Storage
     }
 
     /**
-     * remove file
+     * delete file
      *
      * @param File $file file instance
      * @return bool
      */
-    public function remove(File $file)
+    public function delete(File $file)
     {
         // 파일이 원본일 경우 동적으로 생성된 파일 모두 삭제 처리 함
         if ($file->originId === null) {
             foreach ($file->getRawDerives() as $child) {
-                $this->remove($child);
+                $this->delete($child);
             }
         }
 
         $file->getConnection()->table($file->getFileableTable())->where('fileId', $file->id)->delete();
         $this->files->delete($file);
 
-        return $file->delete();
+        return $this->repo->delete($file);
+    }
+
+    /**
+     * delete file. alias for delete
+     *
+     * @param File $file file instance
+     * @return bool
+     *
+     * @deprecated since beta.17. Use delete instead.
+     */
+    public function remove(File $file)
+    {
+        return $this->delete($file);
     }
 
     /**
@@ -354,7 +369,7 @@ class Storage
             'createdAt' => Carbon::now()
         ]);
 
-        $file->increment('useCount');
+        $this->repo->increment($file, 'useCount');
     }
 
     /**
@@ -387,11 +402,10 @@ class Storage
             ->where('fileableId', $fileableId)
             ->delete();
 
-        $file->useCount--;
-        if ($remove === true && $file->useCount < 1) {
-            $this->remove($file);
+        if ($remove === true && $file->useCount - 1 < 1) {
+            $this->delete($file);
         } else {
-            $file->save();
+            $this->repo->decrement($file, 'useCount');
         }
     }
 
@@ -399,15 +413,15 @@ class Storage
      * unset all fileable's files to fileable
      *
      * @param string $fileableId fileable identifier
+     * @param bool   $remove     remove file when given true
      * @return void
      */
-    public function unBindAll($fileableId)
+    public function unBindAll($fileableId, $remove = false)
     {
-        $model = $this->createModel();
-        $files = $model::getByFileable($fileableId);
+        $files = $this->repo->fetchByFileable($fileableId);
 
         foreach ($files as $file) {
-            $this->unBind($fileableId, $file, true);
+            $this->unBind($fileableId, $file, $remove);
         }
     }
 
@@ -422,9 +436,8 @@ class Storage
     {
         $fileIds = is_array($fileIds) ? $fileIds : [$fileIds];
 
-        $model = $this->createModel();
-        $files = $model->newQuery()->whereIn('id', $fileIds)->get();
-        $olds = $model->getByFileable($fileableId)->getDictionary();
+        $files = $this->repo->fetchIn($fileIds);
+        $olds = $this->repo->fetchByFileable($fileableId)->getDictionary();
 
         foreach ($files as $file) {
             if (!isset($olds[$file->getKey()])) {
@@ -469,84 +482,6 @@ class Storage
     }
 
     /**
-     * mime 별 파일 용량 정보 반환
-     *
-     * @param callable $scope 검색 조건
-     * @return array ex.) [mime => bytes]
-     */
-    public function bytesByMime(callable $scope = null)
-    {
-        $model = $this->createModel();
-        $query = $model->getConnection()->table($model->getTable());
-
-        if ($scope) {
-            call_user_func($scope, $query);
-        }
-
-        $rows = $query->groupBy('mime')
-            ->select(['mime', new Expression('sum(`size`) as amount')])
-            ->get();
-
-        $array = [];
-        foreach ($rows as $row) {
-            $row = (array)$row;
-            $array[$row['mime']] = $row['amount'];
-        }
-
-        return $array;
-    }
-
-    /**
-     * mime 별 파일 갯수 반환
-     *
-     * @param callable $scope 검색 조건
-     * @return array ex.) [mime => count]
-     */
-    public function countByMime(callable $scope = null)
-    {
-        $model = $this->createModel();
-        $query = $model->getConnection()->table($model->getTable());
-
-        if ($scope) {
-            call_user_func($scope, $query);
-        }
-
-        $rows = $query->groupBy('mime')
-            ->select(['mime', new Expression('count(*) as cnt')])
-            ->get();
-
-        $array = [];
-        foreach ($rows as $row) {
-            $row = (array)$row;
-            $array[$row['mime']] = $row['cnt'];
-        }
-
-        return $array;
-    }
-
-    /**
-     * Returns model class
-     *
-     * @return string
-     */
-    public function getModel()
-    {
-        return File::class;
-    }
-
-    /**
-     * create file model
-     *
-     * @return File
-     */
-    public function createModel()
-    {
-        $class = $this->getModel();
-
-        return new $class;
-    }
-
-    /**
      * file system handler instance
      *
      * @return FilesystemHandler
@@ -585,5 +520,17 @@ class Storage
     public function getTempFileCreator()
     {
         return $this->tempFiles;
+    }
+
+    /**
+     * __call
+     *
+     * @param string $name      method name
+     * @param array  $arguments arguments
+     * @return mixed
+     */
+    public function __call($name, $arguments)
+    {
+        return call_user_func_array([$this->repo, $name], $arguments);
     }
 }

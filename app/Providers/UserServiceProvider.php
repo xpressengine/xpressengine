@@ -21,7 +21,6 @@ use Illuminate\Contracts\Validation\Factory as Validator;
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Media\MediaManager;
 use Xpressengine\Media\Thumbnailer;
-use Xpressengine\Storage\File;
 use Xpressengine\Storage\Storage;
 use App\ToggleMenus\Member\ProfileItem;
 use Xpressengine\User\EmailBroker;
@@ -565,7 +564,7 @@ class UserServiceProvider extends ServiceProvider
                 try {
                     if($imageId !== null) {
                         /** @var Storage $storage */
-                        $file = File::find($imageId);
+                        $file = $storage->find($imageId);
 
                         if ($file !== null) {
                             /** @var MediaManager $media */
