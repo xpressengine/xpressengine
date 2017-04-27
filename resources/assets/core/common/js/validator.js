@@ -1,4 +1,5 @@
 import griper from 'griper';
+import moment from 'moment';
 
 (function (root, factory) {
   module.exports = factory();
@@ -129,6 +130,17 @@ import griper from 'griper';
   };
 
   Validator.validators = {
+    accepted: function ($dst, parameters) {
+      var value = $dst.val();
+
+      if (['yes', 'on', 1, true].indexOf(value) === -1) {
+        Validator.error($dst, XE.Lang.trans('xe::validatorAccepted'));
+        return false;
+      }
+
+      return true;
+    },
+
     checked: function ($dst, parameters) {
       var name = $dst.attr('name');
       var min = parameters.split('-')[0];
@@ -176,11 +188,198 @@ import griper from 'griper';
     },
 
     alphanum: function ($dst, parameters) {
+      Validator.validators.alpha_num($dst, parameters);
+    },
+
+    alpha_num: function ($dst, parameters) {
       var value = $dst.val();
       var pattern = /[^a-zA-Z0-9]/;
 
       if (pattern.test(value) === true) {
         Validator.error($dst, XE.Lang.trans('xe::validatorAlphanum'));
+        return false;
+      }
+
+      return true;
+    },
+
+    alpha_dash: function ($dst, parameters) {
+      var value = $dst.val();
+      var pattern = /[^a-zA-Z0-9\-\_]/;
+
+      if (pattern.test(value)) {
+        Validator.error($dst, XE.Lang.trans('xe::validatorAlphaDash'));
+        return false;
+      }
+
+      return true;
+    },
+
+    array: function ($dst, parameters) {
+      if (Array.isArray($dst.val())) {
+        Validator.error($dst, XE.Lang.trans('xe::validatorArray'));
+        return false;
+      }
+
+      return true;
+    },
+
+    boolean: function ($dst, parameters) {
+      var value = $dst.val();
+
+      if ([1, 0, '1', '0', true, false, 'true', 'false'].indexOf(value) === -1) {
+        Validator.error($dst, XE.Lang.trans('xe::validatorBoolean'));
+        return false;
+      }
+
+      return true;
+    },
+
+    date: function ($dst, parameters) {
+      if (!Utils.strtotime($dst.val())) {
+        Validator.error($dst, XE.Lang.trans('xe::validatorDate'));
+        return false;
+      }
+
+      return true;
+    },
+
+    date_format: function ($dst, parameters) {
+      //moment('2015-04-03', 'yyyy-mm-dd').isValid()
+      if (!moment($dst.val(), parameters).isValid()) {
+        Validator.error($dst, XE.Lang.trans('xe::validatorDateFormat'));
+        return false;
+      }
+
+      return true;
+    },
+
+    digits: function ($dst, parameters) {
+      var pattern = /[^0-9]/;
+      var size = parseInt(parameters);
+
+      if (pattern.test(value) || $dst.val().toString().length !== size) {
+        Validator.error($dst, XE.Lang.trans('xe::validatorDigits'));
+        return false;
+      }
+
+      return true;
+    },
+
+    digits_between: function ($dst, parameters) {
+      var range = parameters.split(',');
+      var size = $dst.val().toString().length;
+
+      if (range[0] > size && size < range[1]) {
+        Validator.error($dst, XE.Lang.trans('xe::validatorDigitsBetween'));
+        return false;
+      }
+
+      return true;
+    },
+
+    filled: function ($dst, parameters) {
+      if ($dst.val() === '') {
+        Validator.error($dst, XE.Lang.trans('xe::validatorFilled'));
+        return false;
+      }
+
+      return true;
+    },
+
+    integer: function ($dst) {
+      var value = $dst.val();
+
+      if (typeof value !== 'number' || isNaN(value) || Math.floor(value) !== value || !$.isNumeric(value)) {
+        Validator.error($dst, XE.Lang.trans('xe::validatorInteger'));
+        return false;
+      }
+
+      return true;
+    },
+
+    ip: function ($dst) {
+      var value = $dst.val();
+      var exp = /^(1|2)?\d?\d([.](1|2)?\d?\d){3}$/;
+
+      if (!exp.test(value)) {
+        Validator.error($dst, XE.Lang.trans('xe::validatorIp'));
+        return false;
+      }
+
+      return true;
+    },
+
+    ipv4: function ($dst) {
+      var value = $dst.val();
+      var exp = /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$|^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$/;
+
+      if (!exp.test(value)) {
+        Validator.error($dst, XE.Lang.trans('xe::validatorIpv4'));
+        return false;
+      }
+
+      return true;
+    },
+
+    ipv6: function ($dst) {
+      var value = $dst.val();
+      var exp = /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$|^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$/;
+
+      if (!exp.test(value)) {
+        Validator.error($dst, XE.Lang.trans('xe::validatorIpv4'));
+        return false;
+      }
+
+      return true;
+    },
+
+    mimes: function ($dst, parameters) {
+      var value = $dst.val();
+      var exts = parameters.split(',');
+
+      if (!value || exts.indexOf(value.split('.').pop()) === -1) {
+        Validator.error($dst, XE.Lang.trans('xe::validatorMimes'));
+        return false;
+      }
+
+      return true;
+    },
+
+    nullable: function ($dst) {
+      var value = $dst.val();
+
+      if (value != null) {
+        Validator.error($dst, XE.Lang.trans('xe::validatorNullable'));
+        return false;
+      }
+
+      return true;
+    },
+
+    regex: function ($dst, pattern) {
+
+      if (!pattern.text($dst.val())) {
+        Validator.error($dst, XE.Lang.trans('xe::validatorRegex'));
+        return false;
+      }
+
+      return true;
+    },
+
+    json: function ($dst) {
+      try {
+        JSON.parse($dst.val());
+        return true;
+
+      }catch (e) {
+        return false;
+      }
+    },
+
+    string: function ($dst) {
+      if (typeof $dst.val() !== 'string') {
+        Validator.error($dst, XE.Lang.trans('xe::validatorString'));
         return false;
       }
 
