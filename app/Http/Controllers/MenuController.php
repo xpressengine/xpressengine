@@ -329,7 +329,7 @@ class MenuController extends Controller
         }
 
         $siteKey = XeSite::getCurrentSiteKey();
-        $menuTypeObj = app('xe.module')->getModuleObject($selectedMenuType);
+        $menuTypeObj = XeMenu::getModuleHandler()->getModuleObject($selectedMenuType);
         $menuMaxDepth = config('xe.menu.maxDepth');
 
         return XePresenter::make(
@@ -430,7 +430,7 @@ class MenuController extends Controller
         }
 
         try {
-            $menuType = app('xe.module')->getModuleObject($item->type);
+            $menuType = XeMenu::getModuleHandler()->getModuleObject($item->type);
         } catch (NotFoundModuleException $e) {
             $menuType = null;
         }
@@ -567,7 +567,7 @@ class MenuController extends Controller
             throw new InvalidArgumentHttpException(400);
         }
 
-        $menuType = app('xe.module')->getModuleObject($item->type);
+        $menuType = XeMenu::getModuleHandler()->getModuleObject($item->type);
 
         return XePresenter::make(
             'menu.deleteItem',
@@ -636,7 +636,7 @@ class MenuController extends Controller
         }
 
         try {
-            $menuType = app('xe.module')->getModuleObject($item->type);
+            $menuType = XeMenu::getModuleHandler()->getModuleObject($item->type);
         } catch (NotFoundModuleException $e) {
             $menuType = null;
         }
