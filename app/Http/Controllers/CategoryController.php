@@ -10,6 +10,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use Exception;
+use XeLang;
 use XePresenter;
 use XeCategory;
 use Xpressengine\Category\Models\Category;
@@ -17,7 +18,6 @@ use Xpressengine\Category\Models\CategoryItem;
 use Xpressengine\Http\Request;
 use Xpressengine\Support\Caster;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
-use Xpressengine\Translation\Translator;
 
 class CategoryController extends Controller
 {
@@ -32,7 +32,7 @@ class CategoryController extends Controller
         return XePresenter::make('category.show', compact('category'));
     }
 
-    public function storeItem(Translator $translator, Request $request, $id)
+    public function storeItem(Request $request, $id)
     {
         /** @var Category $category */
         $category = XeCategory::find($id);
@@ -49,13 +49,13 @@ class CategoryController extends Controller
         }
         DB::commit();
 
-        $multiLang = $translator->getPreprocessorValues($request->all(), session()->get('locale'));
+        $multiLang = XeLang::getPreprocessorValues($request->all(), session()->get('locale'));
         $item->readableWord = $multiLang['word'];
 
         return XePresenter::makeApi($item->toArray());
     }
 
-    public function updateItem(Translator $translator, Request $request, $id)
+    public function updateItem(Request $request, $id)
     {
         /** @var CategoryItem $item */
         $item = XeCategory::itemFind($request->get('id'));
@@ -65,7 +65,7 @@ class CategoryController extends Controller
 
         XeCategory::itemUpdate($item, $request->all());
 
-        $multiLang = $translator->getPreprocessorValues($request->all(), session()->get('locale'));
+        $multiLang = XeLang::getPreprocessorValues($request->all(), session()->get('locale'));
         $item->readableWord = $multiLang['word'];
 
         return XePresenter::makeApi($item->toArray());

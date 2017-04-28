@@ -9,16 +9,16 @@
 namespace App\Http\Controllers;
 
 use Auth;
-use Input;
 use XeDraft;
 use XePresenter;
+use Xpressengine\Http\Request;
 
 class DraftController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         if (Auth::guest() !== true) {
-            $drafts = XeDraft::get(Input::get('key'));
+            $drafts = XeDraft::get($request->get('key'));
 
             if (!empty($drafts)) {
                 uasort($drafts, function ($a, $b) {
@@ -33,12 +33,12 @@ class DraftController extends Controller
         }
     }
 
-    public function store()
+    public function store(Request $request)
     {
         if (Auth::guest() !== true) {
             try {
-                $etc = Input::except(['_token', 'key', 'rep']);
-                $draft = XeDraft::set(Input::get('key'), Input::get(Input::get('rep')), $etc);
+                $etc = $request->except(['_token', 'key', 'rep']);
+                $draft = XeDraft::set($request->get('key'), $request->get($request->get('rep')), $etc);
             } catch (\Exception $e) {
                 echo $e->getMessage() . '|' . $e->getFile() . '|' . $e->getLine();
 
@@ -51,12 +51,12 @@ class DraftController extends Controller
         return XePresenter::makeApi(['draftId' => null]);
     }
 
-    public function update($draftId)
+    public function update(Request $request, $draftId)
     {
         if (Auth::guest() !== true) {
             if (($old = XeDraft::getById($draftId)) && $old->userId == Auth::user()->getId()) {
-                $etc = Input::except(['_token', 'rep']);
-                $draft = XeDraft::put($draftId, Input::get(Input::get('rep')), $etc);
+                $etc = $request->except(['_token', 'rep']);
+                $draft = XeDraft::put($draftId, $request->get($request->get('rep')), $etc);
 
                 return XePresenter::makeApi(['draftId' => $draft->id]);
             }
@@ -78,28 +78,28 @@ class DraftController extends Controller
         return XePresenter::makeApi(['result' => true]);
     }
 
-    public function setAuto()
+    public function setAuto(Request $request)
     {
         if (Auth::guest() === true) {
             return null;
         }
 
-        $etc = Input::except(['_token', 'key', 'rep']);
+        $etc = $request->except(['_token', 'key', 'rep']);
 
-        if ($draft = XeDraft::getAuto(Input::get('key'))) {
-            XeDraft::put($draft->id, Input::get(Input::get('rep')), $etc);
+        if ($draft = XeDraft::getAuto($request->get('key'))) {
+            XeDraft::put($draft->id, $request->get($request->get('rep')), $etc);
         } else {
-            XeDraft::set(Input::get('key'), Input::get(Input::get('rep')), $etc, true);
+            XeDraft::set($request->get('key'), $request->get($request->get('rep')), $etc, true);
         }
     }
 
-    public function destroyAuto()
+    public function destroyAuto(Request $request)
     {
         if (Auth::guest() === true) {
             return null;
         }
 
-        if ($draft = XeDraft::getAuto(Input::get('key'))) {
+        if ($draft = XeDraft::getAuto($request->get('key'))) {
             XeDraft::remove($draft);
         }
     }
