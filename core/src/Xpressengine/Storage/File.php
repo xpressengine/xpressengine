@@ -57,6 +57,13 @@ class File extends DynamicModel
     protected $fileableTable = 'fileables';
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['originId', 'userId', 'disk', 'path', 'filename', 'clientname', 'mime', 'size'];
+
+    /**
      * Indicates if the IDs are auto-incrementing.
      *
      * @var bool
@@ -64,9 +71,9 @@ class File extends DynamicModel
     public $incrementing = false;
 
     /**
-     * The ContentReader instance
+     * The file content reader
      *
-     * @var ContentReaderInterface
+     * @var callable
      */
     protected static $reader;
 
@@ -94,7 +101,7 @@ class File extends DynamicModel
      */
     public function getContent()
     {
-        return static::$reader->read($this);
+        return call_user_func(static::$reader, $this);
     }
 
     /**
@@ -158,6 +165,8 @@ class File extends DynamicModel
      *
      * @param string $fileableId fileable identifier
      * @return Collection|static[]
+     *
+     * @deprecated since beta.17. Use XeStorage::fetchByFileable instead.
      */
     public static function getByFileable($fileableId)
     {
@@ -173,10 +182,10 @@ class File extends DynamicModel
     /**
      * Set the ContentReader instance
      *
-     * @param ContentReaderInterface $reader content reader instance
+     * @param callable $reader file content reader
      * @return void
      */
-    public static function setContentReader(ContentReaderInterface $reader)
+    public static function setContentReader(callable $reader)
     {
         static::$reader = $reader;
     }

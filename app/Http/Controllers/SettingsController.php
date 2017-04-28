@@ -63,7 +63,7 @@ class SettingsController extends Controller
             //if ($oldId = $oldConfig->get('favicon.id')) {
             //    $oldId = $oldConfig->get('favicon.id');
             //    if ($oldId !== null) {
-            //        $oldFile = File::find($oldId);
+            //        $oldFile = app('xe.storage')->find($oldId);
             //        if ($oldFile !== null) {
             //            app('xe.storage')->remove($oldFile);
             //        }
@@ -107,7 +107,7 @@ class SettingsController extends Controller
 
         // remove old file
         if ($oldFileId !== null) {
-            $oldFile = File::find($oldFileId);
+            $oldFile = app('xe.storage')->find($oldFileId);
             if ($oldFile && file_exists($oldFile->getPathname())) {
                 app('xe.storage')->remove($oldFile);
             }

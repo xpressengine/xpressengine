@@ -93,9 +93,8 @@ class SettingTest extends \PHPUnit_Framework_TestCase
         $mockFile = m::mock('Xpressengine\Storage\File');
         $mockImage = m::mock('Xpressengine\Media\Models\Image');
 
-        $mockFile->shouldReceive('getByFileable')->with($id)->andReturn([$mockFile]);
+        $storage->shouldReceive('fetchByFileable')->with($id)->andReturn([$mockFile]);
 
-        $storage->shouldReceive('createModel')->andReturn($mockFile);
         $media->shouldReceive('make')->once()->with($mockFile)->andReturn($mockImage);
 
         $image = $instance->getSiteImage();
@@ -116,7 +115,7 @@ class SettingTest extends \PHPUnit_Framework_TestCase
 
         $instance->shouldReceive('get')->with('uuid')->andReturn($id);
 
-        $storage->shouldReceive('unBindAll')->once()->with($id);
+        $storage->shouldReceive('unBindAll')->once()->with($id, true);
         $storage->shouldReceive('bind')->once()->with($id, $mockImage);
 
         $instance->setSiteImage($mockImage);

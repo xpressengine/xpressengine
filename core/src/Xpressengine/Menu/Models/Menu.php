@@ -65,6 +65,8 @@ class Menu extends Category
     /**
      * Item model class
      *
+     * todo: see Category class
+     *
      * @var string
      */
     protected static $itemModel = MenuItem::class;

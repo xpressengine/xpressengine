@@ -34,7 +34,6 @@ use Xpressengine\Menu\ModuleHandler;
 use Xpressengine\Permission\PermissionSupport;
 use Xpressengine\Presenter\RendererInterface;
 use Xpressengine\Site\SiteHandler;
-use Xpressengine\Storage\File;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
 
 /**
@@ -577,14 +576,14 @@ class MenuController extends Controller
             $image = XeMedia::make(XeStorage::upload($uploadImg, 'public/menu'));
             XeStorage::bind($item->getKey(), $image);
 
-            if ($item->{$columnKeyName} !== null) {
+            if (!empty($item->{$columnKeyName})) {
                 XeStorage::unBind($item->getKey(), $item->{$name});
             }
 
             $item->{$columnKeyName} = $image->getKey();
         } else {
             $key = 'remove' . ucfirst($name);
-            if (Input::get($key) && $item->{$columnKeyName} !== null) {
+            if (Input::get($key) && !empty($item->{$columnKeyName})) {
                 XeStorage::unBind($item->getKey(), $item->{$name});
                 $item->{$columnKeyName} = null;
             }
@@ -644,8 +643,8 @@ class MenuController extends Controller
         try {
             $handler->removeItem($item);
 
-            foreach (File::getByFileable($item->getKey()) as $file) {
-                XeStorage::unBind($item->getKey(), $file);
+            foreach (XeStorage::fetchByFileable($item->getKey()) as $file) {
+                XeStorage::unBind($item->getKey(), $file, true);
             }
 
             $handler->deleteMenuItemTheme($item);

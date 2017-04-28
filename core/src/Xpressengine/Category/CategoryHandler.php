@@ -14,12 +14,17 @@
 
 namespace Xpressengine\Category;
 
+use Illuminate\Support\Str;
+use Illuminate\Support\Traits\Macroable;
 use Xpressengine\Category\Exceptions\UnableMoveToSelfException;
 use Xpressengine\Category\Models\Category;
 use Xpressengine\Category\Models\CategoryItem;
+use Xpressengine\Category\Repositories\CategoryItemRepository;
+use Xpressengine\Category\Repositories\CategoryRepository;
 use Xpressengine\Support\Tree\NodePositionTrait;
 
 /**
+ * todo: docblock remove or update
  * # CategoryHandler
  * 여러단어들로 구성된 카테고리 처리를 담당
  *
@@ -65,43 +70,46 @@ use Xpressengine\Support\Tree\NodePositionTrait;
  */
 class CategoryHandler
 {
-    use NodePositionTrait;
+    use NodePositionTrait, Macroable;
 
     /**
-     * Model class
+     * CategoryRepository instance
      *
-     * @var string
+     * @var CategoryRepository
      */
-    protected $model = Category::class;
+    protected $cates;
 
     /**
-     * Create new category
+     * CategoryItemRepository instance
      *
-     * @param array $inputs attributes for created
-     * @return Category
+     * @var CategoryItemRepository
      */
-    public function create(array $inputs)
+    protected $items;
+
+    /**
+     * CategoryHandler constructor.
+     *
+     * @param CategoryRepository     $cates CategoryRepository instance
+     * @param CategoryItemRepository $items CategoryItemRepository instance
+     */
+    public function __construct(CategoryRepository $cates, CategoryItemRepository $items)
     {
-        $category = $this->createModel();
-        $category->fill($inputs);
-        $category->save();
-
-        return $category;
+        $this->cates = $cates;
+        $this->items = $items;
     }
 
     /**
      * Update category
      *
      * @param Category $category category instance
+     * @param array    $data     attributes
      * @return Category
+     *
+     * @deprecated since beta.17. use update instead.
      */
-    public function put(Category $category)
+    public function put(Category $category, array $data = [])
     {
-        if ($category->isDirty()) {
-            $category->save();
-        }
-
-        return $category;
+        return $this->cates->update($category, $data);
     }
 
     /**
@@ -109,27 +117,41 @@ class CategoryHandler
      *
      * @param Category $category category instance
      * @return bool
+     *
+     * @deprecated since beta.17. use delete instead.
      */
     public function remove(Category $category)
     {
+        return $this->delete($category);
+    }
+
+    /**
+     * Delete category
+     *
+     * @param Category $category category instance
+     * @return bool
+     */
+    public function delete(Category $category)
+    {
         foreach ($category->getProgenitors() as $item) {
-            $this->removeItem($item);
+            $this->deleteItem($item);
         }
 
-        return $category->delete();
+        return $this->cates->delete($category);
     }
 
     /**
      * Create a new category item
      *
      * @param Category $category category instance
-     * @param array    $inputs   item attributes for created
+     * @param array    $data     item attributes for created
      * @return CategoryItem
      */
-    public function createItem(Category $category, array $inputs)
+    public function itemCreate(Category $category, array $data)
     {
+        $model = $this->createItemModel();
         /** @var CategoryItem $item */
-        $item = $category->items()->create($inputs);
+        $item = $this->items->create(array_merge($data, [$model->getAggregatorKeyName() => $category->getKey()]));
 
         $this->setHierarchy($item);
         $this->setOrder($item);
@@ -138,6 +160,18 @@ class CategoryHandler
         $category->increment($category->getCountName());
 
         return $item;
+    }
+
+    /**
+     * Create a new category item, alias for itemCreate
+     *
+     * @param Category $category category instance
+     * @param array    $data     item attributes for created
+     * @return CategoryItem
+     */
+    public function createItem(Category $category, array $data)
+    {
+        return $this->itemCreate($category, $data);
     }
 
     /**
@@ -168,20 +202,44 @@ class CategoryHandler
      * Modify item information
      *
      * @param CategoryItem $item item object
+     * @param array        $data attribute data
+     * @return CategoryItem
+     *
+     * @deprecated since beta.17. use itemUpdate instead.
+     */
+    public function putItem(CategoryItem $item, array $data = [])
+    {
+        return $this->itemUpdate($item, $data);
+    }
+
+    /**
+     * Modify item information
+     *
+     * @param CategoryItem $item item object
+     * @param array        $data attribute data
      * @return CategoryItem
      */
-    public function putItem(CategoryItem $item)
+    public function itemUpdate(CategoryItem $item, array $data = [])
     {
-        if ($item->isDirty($parentIdName = $item->getParentIdName())) {
-            // 내용 수정시 부모 키 변경은 허용하지 않음
-            // 부모 키가 변경되는 경우는 반드시 moveTo, setOrder 를
-            // 통해 처리되야 함
-            $item->{$parentIdName} = $item->getOriginal($parentIdName);
-        }
-
-        $item->save();
+        $parentIdName = $item->getParentIdName();
+        // 내용 수정시 부모 키 변경은 허용하지 않음
+        // 부모 키가 변경되는 경우는 반드시 moveTo, setOrder 를
+        // 통해 처리되야 함
+        $this->items->update($item, array_merge($data, [$parentIdName => $item->getOriginal($parentIdName)]));
 
         return $item;
+    }
+
+    /**
+     * Modify item information, alias for itemUpdate
+     *
+     * @param CategoryItem $item item object
+     * @param array        $data attribute data
+     * @return CategoryItem
+     */
+    public function updateItem(CategoryItem $item, array $data = [])
+    {
+        return $this->itemUpdate($item, $data);
     }
 
     /**
@@ -190,22 +248,29 @@ class CategoryHandler
      * @param CategoryItem $item  item object
      * @param bool         $force if true then remove all descendant
      * @return bool
+     *
+     * @deprecated since beta.17. use itemDelete instead.
      */
     public function removeItem(CategoryItem $item, $force = true)
+    {
+        return $this->itemDelete($item, $force);
+    }
+
+    /**
+     * Delete single item or all descendant
+     *
+     * @param CategoryItem $item  item object
+     * @param bool         $force if true then remove all descendant
+     * @return bool
+     */
+    public function itemDelete(CategoryItem $item, $force = true)
     {
         $count = 1;
 
         /** @var CategoryItem $desc */
         foreach ($item->descendants as $desc) {
             if ($force === true) {
-                $desc->ancestors()->detach();
-                $desc->descendants()->detach();
-
-                $desc->ancestors()->newPivotStatement()
-                    ->where($desc->getDescendantName(), $desc->getKey())->where($desc->getDepthName(), 0)
-                    ->delete();
-
-                $desc->delete();
+                $this->itemRawDelete($desc);
                 $count++;
             } else {
                 // 하위 아이템을 삭제하지 않는 경우
@@ -219,17 +284,45 @@ class CategoryHandler
 
                 $parentId = ($parent = $item->getParent()) ? $parent->getKey() : null;
 
-                $desc->{$desc->getParentIdName()} = $parentId;
-                $desc->save();
+                $this->items->update($desc, [$desc->getParentIdName() => $parentId]);
             }
         }
 
-        $result = $item->delete();
+        $result = $this->itemRawDelete($item);
 
         // 아이템이 삭제되면 아이템이 속해있던 카테고리 그룹의 아이템 수량을 감소 시킴
         $item->category->decrement('count', $count);
 
         return $result;
+    }
+
+    /**
+     * Delete single item or all descendant, alias for itemDelete
+     *
+     * @param CategoryItem $item  item object
+     * @param bool         $force if true then remove all descendant
+     * @return bool
+     */
+    public function deleteItem(CategoryItem $item, $force = true)
+    {
+        return $this->itemDelete($item, $force);
+    }
+
+    /**
+     * Raw delete item
+     *
+     * @param CategoryItem $item item instance
+     * @return bool|null
+     */
+    protected function itemRawDelete(CategoryItem $item)
+    {
+        $item->ancestors()->detach();
+        $item->descendants()->detach();
+        $item->ancestors()->newPivotStatement()
+            ->where($item->getDescendantName(), $item->getKey())->where($item->getDepthName(), 0)
+            ->delete();
+
+        return $this->items->delete($item);
     }
 
     /**
@@ -270,49 +363,29 @@ class CategoryHandler
     }
 
     /**
-     * The name of Category model class
-     *
-     * @return string
-     */
-    public function getModel()
-    {
-        return $this->model;
-    }
-
-    /**
-     * Set the name of Category model
-     *
-     * @param string $model model class
-     * @return void
-     */
-    public function setModel($model)
-    {
-        $this->model = '\\' . ltrim($model, '\\');
-    }
-
-    /**
-     * Create model instance
-     *
-     * @return Category
-     */
-    public function createModel()
-    {
-        $class = $this->getModel();
-
-        return new $class;
-    }
-
-    /**
      * Create new category item model
      *
-     * @param Category $category category instance
+     * @return CategoryItem
+     */
+    public function createItemModel()
+    {
+        return $this->items->createModel();
+    }
+
+    /**
+     * __call
+     *
+     * @param string $name      method name
+     * @param array  $arguments arguments
      * @return mixed
      */
-    public function createItemModel(Category $category = null)
+    public function __call($name, $arguments)
     {
-        $category = $category ?: $this->createModel();
-        $class = $category->getItemModel();
+        if (Str::startsWith($name, 'item')) {
+            $method = Str::camel(Str::substr($name, 4));
+            return call_user_func_array([$this->items, $method], $arguments);
+        }
 
-        return new $class;
+        return call_user_func_array([$this->cates, $name], $arguments);
     }
 }

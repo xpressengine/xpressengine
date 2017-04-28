@@ -215,7 +215,7 @@ abstract class GenericTheme extends AbstractTheme
 
         // remove old file
         if ($oldFileId !== null) {
-            $oldFile = File::find($oldFileId);
+            $oldFile = app('xe.storage')->find($oldFileId);
             if ($oldFile) {
                 app('xe.storage')->remove($oldFile);
             }
@@ -256,7 +256,7 @@ abstract class GenericTheme extends AbstractTheme
         $configId = $config->get('_configId');
 
         // delete saved files
-        $files = File::getByFileable($configId);
+        $files = app('xe.storage')->fetchByFileable($configId);
         foreach ($files as $file) {
             app('xe.storage')->remove($file);
         }

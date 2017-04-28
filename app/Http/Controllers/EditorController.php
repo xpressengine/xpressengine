@@ -1,27 +1,25 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Http\Sections\SkinSection;
 use Illuminate\Http\Response;
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Editor\EditorHandler;
 use Xpressengine\Http\Request;
 use XeMenu;
 use XePresenter;
+use XeUser;
+use XeStorage;
 use Xpressengine\Media\MediaManager;
 use Xpressengine\Media\Models\Image;
 use Xpressengine\Permission\Instance;
 use Xpressengine\Permission\PermissionSupport;
 use Xpressengine\Presenter\RendererInterface;
-use Xpressengine\Storage\File;
-use Xpressengine\Storage\Storage;
 use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
 use Xpressengine\Support\Exceptions\InvalidArgumentException;
 use Xpressengine\Tag\TagHandler;
 use Auth;
 use Gate;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Xpressengine\User\Models\User;
 
 class EditorController extends Controller
 {
@@ -102,7 +100,6 @@ class EditorController extends Controller
      *
      * @param Request       $request      request
      * @param EditorHandler $handler      editor handler
-     * @param Storage       $storage      storage
      * @param MediaManager  $mediaManager media manager
      * @param string        $instanceId   instance id
      * @return RendererInterface
@@ -110,7 +107,6 @@ class EditorController extends Controller
     public function fileUpload(
         Request $request,
         EditorHandler $handler,
-        Storage $storage,
         MediaManager $mediaManager,
         $instanceId
     ) {
@@ -154,7 +150,7 @@ class EditorController extends Controller
             );
         }
 
-        $file = $storage->upload($uploadedFile, EditorHandler::FILE_UPLOAD_PATH);
+        $file = XeStorage::upload($uploadedFile, EditorHandler::FILE_UPLOAD_PATH);
 
         $media = null;
         $thumbnails = null;
@@ -191,7 +187,7 @@ class EditorController extends Controller
             throw new InvalidArgumentException;
         }
 
-        $file = File::find($id);
+        $file = XeStorage::find($id);
 
         /** @var \Xpressengine\Media\MediaManager $mediaManager */
         $mediaManager = app('xe.media');
@@ -215,14 +211,13 @@ class EditorController extends Controller
      * file download
      *
      * @param EditorHandler $handler    editor handler
-     * @param Storage       $storage    storage
      * @param string        $instanceId instance id
      * @param string        $id
      * @return void
      */
-    public function fileDownload(EditorHandler $handler, Storage $storage, $instanceId, $id)
+    public function fileDownload(EditorHandler $handler, $instanceId, $id)
     {
-        if (empty($id) || !$file = File::find($id)) {
+        if (empty($id) || !$file = XeStorage::find($id)) {
             throw new InvalidArgumentException;
         }
 
@@ -230,20 +225,19 @@ class EditorController extends Controller
             throw new AccessDeniedHttpException;
         }
 
-        $storage->download($file);
+        XeStorage::download($file);
     }
 
     /**
      * file destory
      *
-     * @param Storage $storage
      * @param string  $instanceId
      * @param string  $id
      * @return RendererInterface
      */
-    public function fileDestroy(Storage $storage, $instanceId, $id)
+    public function fileDestroy($instanceId, $id)
     {
-        if (empty($id) || !$file = File::find($id)) {
+        if (empty($id) || !$file = XeStorage::find($id)) {
             throw new InvalidArgumentException;
         }
 
@@ -252,7 +246,7 @@ class EditorController extends Controller
         }
 
         try {
-            $result = $storage->remove($file);
+            $result = XeStorage::delete($file);
         } catch (\Exception $e) {
             $result = false;
         }
@@ -295,7 +289,7 @@ class EditorController extends Controller
         $suggestions = [];
 
         $string = $request->get('string');
-        $users = User::where('displayName', 'like', $string . '%')->where('id', '<>', Auth::user()->getId())->get();
+        $users = XeUser::where('displayName', 'like', $string . '%')->where('id', '<>', Auth::user()->getId())->get();
         foreach ($users as $user) {
             $suggestions[] = [
                 'id' => $user->getId(),

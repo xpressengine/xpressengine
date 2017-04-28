@@ -158,8 +158,7 @@ class Setting
     public function getSiteImage()
     {
         if (!$this->image && $this->get('uuid')) {
-            $class = $this->storage->createModel();
-            $files = $class->getByFileable($this->get('uuid'));
+            $files = $this->storage->fetchByFileable($this->get('uuid'));
 
             if (count($files) > 0) {
                 $file = $files instanceof Collection ? $files->first() : current($files);
@@ -178,7 +177,7 @@ class Setting
      */
     public function setSiteImage(Image $image)
     {
-        $this->storage->unBindAll($this->get('uuid'));
+        $this->storage->unBindAll($this->get('uuid'), true);
         $this->storage->bind($this->get('uuid'), $image);
 
         $this->image = $image;

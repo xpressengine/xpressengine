@@ -94,10 +94,10 @@ class UserImageHandler
 
         // remove old profile image
         if (!empty($user->profileImageId)) {
-            $file = File::find($user->profileImageId);
+            $file = $this->storage->find($user->profileImageId);
             if ($file !== null) {
                 try {
-                    $this->storage->remove($file);
+                    $this->storage->delete($file);
                 } catch (\Exception $e) {
                     ;
                 }
