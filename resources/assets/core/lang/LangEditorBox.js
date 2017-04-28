@@ -150,10 +150,12 @@ $(function () {
 
   let langKeys = [];
   let langObj = {};
+  let langs = [];
+  let idx = 0;
 
   if ($('.lang-editor-box').length > 0) {
 
-    $('.lang-editor-box').each(function () {
+    $('.lang-editor-box').each(function (key, i) {
       let $this = $(this);
 
       let name = $this.data('name');
@@ -162,16 +164,30 @@ $(function () {
       let lines = $this.data('lines');
       let autocomplete = $this.data('autocomplete');
 
-      langObj[langKey] = {
+      // langObj[langKey] = {
+      //   name,
+      //   langKey,
+      //   multiline,
+      //   lines,
+      //   autocomplete,
+      //   target: $this[0],
+      // };
+      //
+
+      if (langKey) {
+        langKeys.push(langKey);
+      }
+
+      langs.push({
         name,
         langKey,
         multiline,
         lines,
         autocomplete,
         target: $this[0],
-      };
+      });
 
-      langKeys.push(langKey);
+      idx++;
     });
 
     if (langKeys.length > 0) {
@@ -184,13 +200,21 @@ $(function () {
         },
         success: function (result) {
           $.each(result, (key, arr) => {
-            langObj[key].lines = arr;
+            $.each(langs, function () {
+              if (key === this.langKey) {
+                this.lines = arr;
+              }
+            });
           });
 
-          for (var prop in langObj) {
-            langEditorBoxRender(langObj[prop]);
-          }
+          $.each(langs, function () {
+            langEditorBoxRender(this);
+          });
         },
+      });
+    } else {
+      $.each(langs, function () {
+        langEditorBoxRender(this);
       });
     }
   }
