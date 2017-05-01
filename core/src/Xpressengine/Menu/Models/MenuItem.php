@@ -103,6 +103,13 @@ class MenuItem extends CategoryItem
     ];
 
     /**
+     * todo: see CategoryItem class
+     *
+     * @var string
+     */
+    protected static $aggregator = Menu::class;
+
+    /**
      * Alias aggregator
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -263,16 +270,6 @@ class MenuItem extends CategoryItem
         $method = $rfc->getParentClass()->getParentClass()->getMethod('getChildren');
 
         return $method->invoke($this);
-    }
-
-    /**
-     * Get the aggregator model name for model
-     *
-     * @return string
-     */
-    public function getAggregatorModel()
-    {
-        return Menu::class;
     }
 
     /**
