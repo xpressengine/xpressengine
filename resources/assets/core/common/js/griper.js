@@ -57,7 +57,6 @@ if (typeof define === 'function' && define.amd) {
 
   exports.toast = function (type, message) {
     this.toast.fn.add(type, message);
-    ;
   };
 
   var $toastBox = null;
@@ -83,7 +82,7 @@ if (typeof define === 'function' && define.amd) {
       }
 
       var $alert = $(this.options.template);
-      $alert.attr('data-expire-time', expireTime).addClass(type);
+      $alert.attr('data-expire-time', expireTime).addClass(type).find('.message').remove();
       $alert.append(message);
 
       exports.toast.fn.container().append($alert);
