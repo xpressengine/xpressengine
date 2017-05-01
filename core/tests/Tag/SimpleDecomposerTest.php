@@ -9,9 +9,9 @@
 namespace Xpressengine\Tests\Tag;
 
 use Mockery as m;
-use Xpressengine\Tag\Decomposer;
+use Xpressengine\Tag\SimpleDecomposer;
 
-class DecomposerTest extends \PHPUnit_Framework_TestCase
+class SimpleDecomposerTest extends \PHPUnit_Framework_TestCase
 {
     public function tearDown()
     {
@@ -20,7 +20,7 @@ class DecomposerTest extends \PHPUnit_Framework_TestCase
 
     public function testExecute()
     {
-        $instance = new Decomposer();
+        $instance = new SimpleDecomposer();
 
         $this->assertEquals('ㄱㅏㄴㅏㄷㅏ', $instance->execute('가나다'));
         $this->assertEquals('ㄱㅏabㄴㅏcㄷㅏde', $instance->execute('가ab나c다de'));
