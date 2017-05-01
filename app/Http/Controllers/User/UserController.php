@@ -387,7 +387,7 @@ class UserController extends Controller
             if ($useEmailConfirm) {
                 /** @var EmailBroker $broker */
                 $broker = app('xe.auth.email');
-                $broker->sendEmailForConfirmation($mail);
+                $broker->sendEmailForConfirmation($mail, 'emails.add-email');
             }
         } catch (\Exception $e) {
             XeDB::rollback();
@@ -450,7 +450,7 @@ class UserController extends Controller
 
         /** @var EmailBroker $broker */
         $broker = app('xe.auth.email');
-        $broker->sendEmailForConfirmation($pendingMail);
+        $broker->sendEmailForConfirmation($pendingMail, 'emails.add-email');
 
         return XePresenter::makeApi(['message' => '재전송하였습니다.']);
     }

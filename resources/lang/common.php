@@ -1261,8 +1261,8 @@ return [
         'en' => 'To complete your membership you need to email authentication, please check the :email , please enter your authorization code.'
     ],
     'msgEmailConfirm' => [
-        'ko' => '<p>저희 사이트에 가입해주셔서 감사합니다.</p><p>요청하신 회원가입을 완료하기 위한 인증번호입니다.<br>인증페이지에서 아래의 인증번호를 입력하거나, 인증버튼을 누르면 인증이 완료됩니다.</p>',
-        'en' => '<p>Welcome to join.</p><p>To complete finishing sign up, input below confirmation code to confirmation page or click below button.</p>'
+        'ko' => '<p>회원가입을 위해 이메일 인증을 진행합니다.</p><p>회원가입 페이지에서 아래의 인증코드를 입력하거나, 인증 버튼을 누르면 인증이 완료됩니다.</p>',
+        'en' => '<p>Welcome to join.</p><p>To complete finishing sign up, input below confirmation code to register page or click below button.</p>'
     ],
     'confirmCode' => [
         'ko' => '인증 코드',

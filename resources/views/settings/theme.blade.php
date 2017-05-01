@@ -5,7 +5,7 @@
             <form role="form" action="{{ route('settings.setting.theme') }}" method="post" id="__xe_settingForm" enctype="multipart/form-data">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <div class="panel-heading">
-                    <div class="pull-left">
+                    <div class="pull-left">f
                         <h3 class="panel-title">{{xe_trans('xe::siteDefaultTheme')}} <small>{{xe_trans('xe::siteDefaultThemeDescription')}}</small></h3>
                     </div>
                     <div class="pull-right">

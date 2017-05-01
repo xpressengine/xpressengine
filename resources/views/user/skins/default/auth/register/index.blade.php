@@ -3,9 +3,7 @@
     <h1>{{xe_trans('xe::signUp')}}</h1>
 
     @foreach($sections as $section)
-        @if($content = array_get($section, 'content'))
-        {!! $content() !!}
-        @endif
+        {!! $section() !!}
     @endforeach
 
     <p class="auth-text">{{xe_trans('xe::alreadyHaveAccount')}} <a href="{{ route('login') }}">{{xe_trans('xe::login')}}</a></p>

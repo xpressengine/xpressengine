@@ -43,9 +43,9 @@ class EmailBrokerTest extends \PHPUnit_Framework_TestCase
         $mailer = $this->makeMailer();
         $mailer->shouldReceive('send')->with('view', compact('mail'), Mockery::on($validator))->andReturnNull();
 
-        $broker = new EmailBroker($userHandler, $mailer, 'view');
+        $broker = new EmailBroker($userHandler, $mailer);
 
-        $this->assertNull($broker->sendEmailForConfirmation($mail));
+        $this->assertNull($broker->sendEmailForConfirmation($mail, 'view'));
     }
 
     public function testConfirmEmailSuccess()

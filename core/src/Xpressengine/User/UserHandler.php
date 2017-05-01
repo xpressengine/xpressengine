@@ -16,6 +16,7 @@ namespace Xpressengine\User;
 
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Validation\Factory as Validator;
+use Illuminate\Support\Fluent;
 use Xpressengine\Register\Container;
 use Xpressengine\Support\Exceptions\InvalidArgumentException;
 use Xpressengine\User\Exceptions\AccountAlreadyExistsException;
@@ -287,7 +288,6 @@ use Xpressengine\User\Repositories\UserRepositoryInterface;
  */
 class UserHandler
 {
-
     /**
      * 차단된 회원의 상태
      */
@@ -472,16 +472,16 @@ class UserHandler
         }
         $user = $this->users()->create($userData);
 
-        // insert mail
+        // insert mail, delete pending mail
         if (isset($userData['email'])) {
             $mailData = [
                 'userId' => $user->id,
                 'address' => $user->email,
             ];
-            if ($this->useEmailConfirm === false || array_get($data, 'emailConfirmed', false)) {
-                $mail = $this->emails()->create($user, $mailData);
-            } else {
-                $mail = $this->pendingEmails()->create($user, $mailData);
+            $mail = $this->emails()->create($user, $mailData);
+            $pendingEmail = $this->pendingEmails()->findByUserId($user->id);
+            if($pendingEmail !== null) {
+                $this->deleteEmail($pendingEmail);
             }
         }
 
@@ -613,7 +613,7 @@ class UserHandler
             throw $e;
         }
 
-        // email, displayName 중복검사
+        // email 검사
         if (isset($data['email'])) {
             if ($this->emails()->findByAddress($data['email']) !== null) {
                 throw new MailAlreadyExistsException();
@@ -636,7 +636,6 @@ class UserHandler
                 throw new AccountAlreadyExistsException();
             }
         }
-
         return true;
     }
 
@@ -879,14 +878,70 @@ class UserHandler
         return array_merge($this->settingsSections, $menus ?: []);
     }
 
-    public function getRegisterSections()
+    public function getRegisterGuards()
     {
-        return $this->container->get('user/register/section', []);
+        return $this->container->get('user/register/guard', []);
     }
 
-    public function getRegisterForms()
+    public function resolveRegister($token, $request)
     {
-        return $this->container->get('user/register/form');
+        $resolvers = $this->container->get('user/register/resolver', []);
+        $data = new Fluent();
+        foreach ($resolvers as $resolver) {
+            $data = $resolver($token, $request, $data);
+        }
+
+        return $data;
+    }
+
+    public function getRegisterForms($token, $shared)
+    {
+        return $this->container->get('user/register/form', []);
+    }
+
+    public function validateRegister($token, $request)
+    {
+        $validators = $this->container->get('user/register/validator', []);
+
+        foreach($validators as $validator) {
+            $validator($token, $request);
+        }
+        return true;
+    }
+
+    /**
+     * storeRegisterToken
+     *
+     * @param string $guard
+     * @param array  $tokenData
+     *
+     * @return mixed
+     */
+    public function storeRegisterToken($guard, $tokenData) {
+        $id = app('xe.keygen')->generate();
+
+        $token = [
+            'id' => $id,
+            'guard' => $guard,
+            'data' => $tokenData
+        ];
+        app('session.store')->set('register-token', $token);
+
+        $token = new Fluent($tokenData);
+        $token->id = $id;
+        $token->guard = $guard;
+        return $token;
+    }
+
+    public function getRegisterToken($tokenId) {
+        $token = app('session.store')->get('register-token');
+        if($tokenId === $token['id']) {
+            $obj = new Fluent($token['data']);
+            $obj->id = $token['id'];
+            $obj->guard = $token['guard'];
+            return $obj;
+        }
+        return null;
     }
 
     /**
