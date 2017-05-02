@@ -82,7 +82,7 @@ class AuthController extends Controller
             return $this->getRegisterForm($request);
         }
 
-        $sections = $handler->getRegisterGuards();
+        $sections = $handler->getRegisterSections();
         if (!count($sections)) {
             return $this->getRegisterForm($request);
         }

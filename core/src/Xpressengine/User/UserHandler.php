@@ -455,15 +455,15 @@ class UserHandler
      *
      * @return UserInterface 신규 등록된 회원정보
      */
-    public function create(array $data)
+    public function create(array $data, $token = null)
     {
 
-        $this->validateForCreate($data);
+        $this->validateForCreate($data, $token);
 
         /* 회원가입 절차 */
         $userData = array_except(
             $data,
-            ['emailConfirmed', 'groupId', 'password_confirmation', 'account']
+            ['emailConfirmed', 'groupId', 'password_confirmation', 'account', '_token']
         );
 
         // insert user
@@ -599,7 +599,7 @@ class UserHandler
      *
      * @return bool 유효성검사 결과, 통과할 경우 true, 실패할 경우 false
      */
-    public function validateForCreate(array $data)
+    public function validateForCreate(array $data, $token = null)
     {
         // 필수 요소 검사
         if (!isset($data['status'], $data['rating'], $data['displayName'])) {
@@ -615,9 +615,7 @@ class UserHandler
 
         // email 검사
         if (isset($data['email'])) {
-            if ($this->emails()->findByAddress($data['email']) !== null) {
-                throw new MailAlreadyExistsException();
-            }
+            $this->validateEmail($data['email']);
         }
 
         // displayName 검사
@@ -668,8 +666,14 @@ class UserHandler
         if ($this->users()->where(['displayName' => $name])->first() !== null) {
             throw new DisplayNameAlreadyExistsException();
         }
-
         return true;
+    }
+
+    public function validateEmail($email)
+    {
+        if ($this->emails()->findByAddress($email) !== null) {
+            throw new MailAlreadyExistsException();
+        }
     }
 
     /**
@@ -878,35 +882,14 @@ class UserHandler
         return array_merge($this->settingsSections, $menus ?: []);
     }
 
-    public function getRegisterGuards()
+    public function getRegisterSections()
     {
-        return $this->container->get('user/register/guard', []);
+        return $this->container->get('user/register/section', []);
     }
 
-    public function resolveRegister($token, $request)
-    {
-        $resolvers = $this->container->get('user/register/resolver', []);
-        $data = new Fluent();
-        foreach ($resolvers as $resolver) {
-            $data = $resolver($token, $request, $data);
-        }
-
-        return $data;
-    }
-
-    public function getRegisterForms($token, $shared)
+    public function getRegisterForms($token)
     {
         return $this->container->get('user/register/form', []);
-    }
-
-    public function validateRegister($token, $request)
-    {
-        $validators = $this->container->get('user/register/validator', []);
-
-        foreach($validators as $validator) {
-            $validator($token, $request);
-        }
-        return true;
     }
 
     /**
@@ -942,6 +925,11 @@ class UserHandler
             return $obj;
         }
         return null;
+    }
+
+    public function deleteRegisterToken($tokenId)
+    {
+        app('session.store')->forget('register-token');
     }
 
     /**

@@ -1,7 +1,6 @@
 <?php namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\RegisterGuards\EmailRegisterGuard;
 use Exception;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Auth\RedirectsUsers;
@@ -12,11 +11,11 @@ use XeDB;
 use XePresenter;
 use XeTheme;
 use Xpressengine\User\EmailBrokerInterface;
+use Xpressengine\User\EmailInterface;
 use Xpressengine\User\Exceptions\JoinNotAllowedException;
 use Xpressengine\User\Exceptions\PendingEmailNotExistsException;
 use Xpressengine\User\Models\User;
 use Xpressengine\User\Rating;
-use Xpressengine\User\RegisterGuard;
 use Xpressengine\User\UserHandler;
 
 class RegisterController extends Controller
@@ -70,7 +69,7 @@ class RegisterController extends Controller
             return $this->getRegisterForm($request);
         }
 
-        $sections = $handler->getRegisterGuards();
+        $sections = $handler->getRegisterSections();
         if (!count($sections)) {
             $token = $this->handler->storeRegisterToken('direct', []);
             return redirect()->route('auth.register', ['token' => $token->id]);
@@ -97,8 +96,6 @@ class RegisterController extends Controller
         if($token === null) {
             throw new HttpException(400, '정상적인 토큰이 아닙니다.');
         }
-
-        $shared = $this->handler->resolveRegister($token, $request);
 
         // 기본정보 form 추가
         app('xe.register')->push('user/register/form', 'default-info', function ($data) {
@@ -167,9 +164,9 @@ class RegisterController extends Controller
             );
         }
 
-        $forms = $this->handler->getRegisterForms($shared, $token);
+        $forms = $this->handler->getRegisterForms($token);
 
-        return \XePresenter::make('register.create', compact('config', 'shared', 'forms', 'register_token'));
+        return \XePresenter::make('register.create', compact('config', 'forms', 'register_token'));
     }
 
     /**
@@ -190,17 +187,18 @@ class RegisterController extends Controller
 
         $email = $request->get('email');
 
-        if ($this->handler->emails()->findByAddress($email) !== null) {
+        try {
+            $this->handler->validateEmail($email);
+        } catch (\Exception $e) {
             throw new HttpException(400, '이미 등록된 이메일입니다.');
         }
 
-        $mailData = ['address'=>$email, 'userId' => app('xe.keygen')->generate()];
-
         if ($mail = $this->handler->pendingEmails()->findByAddress($email)) {
-            ;
+            $this->emailBroker->sendEmailForConfirmation($mail, 'emails.register');
         } else {
             \DB::beginTransaction();
             try {
+                $mailData = ['address'=>$email, 'userId' => app('xe.keygen')->generate()];
                 $user = new User();
                 $user->id = $mailData['userId'];
                 $mail = $this->handler->pendingEmails()->create($user, $mailData);
@@ -236,7 +234,7 @@ class RegisterController extends Controller
             $request, [
                 'email' => 'email',
                 'displayName' => 'required',
-                'password' => 'required|confirmed|password',
+                'password' => 'confirmed|password',
                 'agree' => 'required|accepted',
                 'register_token' => 'required'
             ]
@@ -244,22 +242,27 @@ class RegisterController extends Controller
 
         $tokenId = $request->get('register_token');
         $token = $this->handler->getRegisterToken($tokenId);
-        $this->handler->validateRegister($token, $request);
 
-        // resolve data
-        $userData = $request->except('_token');
-        $userData['rating'] = Rating::MEMBER;
-        $userData['status'] = \XeUser::STATUS_ACTIVATED;
+        if($token === null) {
+            throw new HttpException(400, '잘못된 가입 토큰입니다.');
+        }
+
+        $userData = $request->all();
 
         // set default join group
         $config = app('xe.config')->get('user.join');
         $joinGroup = $config->get('joinGroup');
-        array_add($userData, 'groupId', []);
-        $userData['groupId'][] = $joinGroup;
+        if($joinGroup !== null) {
+            $userData['groupId'] = [$joinGroup];
+        }
+
+        $userData['rating'] = Rating::MEMBER;
+        $userData['status'] = \XeUser::STATUS_ACTIVATED;
 
         XeDB::beginTransaction();
         try {
-            $user = $this->handler->create($userData);
+            $user = $this->handler->create($userData, $token);
+            $this->handler->deleteRegisterToken($tokenId);
         } catch (\Exception $e) {
             XeDB::rollback();
             throw $e;
@@ -343,15 +346,13 @@ class RegisterController extends Controller
      *
      * @param $config
      *
-     * @return RegisterGuard
      */
     protected function addEmailRegister()
     {
         if ($this->useEmailConfirm()) {
-            $emailGuard = new EmailRegisterGuard();
 
             app('xe.register')->push(
-                'user/register/guard',
+                'user/register/section',
                 'email',
                 function () {
                     $skinHandler = app('xe.skin');
@@ -359,53 +360,59 @@ class RegisterController extends Controller
                     return $skin->setView('register.sections.email')->render();
                 }
             );
-            app('xe.register')->push(
-                'user/register/resolver',
-                'email',
-                function ($token, $request, $shared) use ($emailGuard) {
-                    $code = $request->get('code');
-                    if($token->guard === 'email') {
-                        if($code !== null) {
-                            $this->checkPendingEmail($token->email, $code);
-                        }
-                        $shared->email = $token->email;
-                    }
-                    return $shared;
-                }
-            );
+
             app('xe.register')->push(
                 'user/register/form',
                 'email',
-                function ($data, $token) {
+                function ($token) {
                     if ($token->guard !== 'email') {
                         return null;
                     }
-
                     $code = request()->get('code');
 
                     if($code !== null) {
                         $this->checkPendingEmail($token->email, $code);
                     }
 
+                    app('xe.frontend')->html('email.setter')->content("
+                    <script>
+                        $('input[name=email]').attr('readonly','readonly').val('{$token->email}');
+                    </script>
+                    ")->load();
+
                     $skinHandler = app('xe.skin');
                     $skin = $skinHandler->getAssigned('member/auth');
-                    return $skin->setView('register.forms.confirm')->setData(compact('data', 'code'))->render();
+                    return $skin->setView('register.forms.confirm')->setData(compact('token', 'code'))->render();
                 }
             );
-            app('xe.register')->push(
-                'user/register/validator',
-                'email',
-                function ($token, $request) use ($emailGuard) {
-                    if($token->guard === 'email') {
-                        $code = $request->get('code');
-                        $email = $this->checkPendingEmail($token->email, $code);
-                    }
-                    $request['id'] = $email->userId;
-                    return true;
-                }
-            );
+            intercept('XeUser@validateForCreate', 'register.email.validator', function($target, $data, $token = null) {
 
-            return $emailGuard;
+                if($token->guard === 'email') {
+                    $code = array_get($data, 'code');
+                    $email = $this->checkPendingEmail($token->email, $code);
+                    $data['id'] = $email->userId;
+                }
+
+                return $target($data, $token);
+            });
         }
+    }
+
+    /**
+     * checkPendingEmail
+     *
+     * @param $email
+     * @param $code
+     *
+     * @return EmailInterface
+     */
+    protected function checkPendingEmail($email, $code)
+    {
+        $emailEntity = app('xe.user')->pendingEmails()->findByAddress($email);
+        if ($emailEntity->getConfirmationCode() !== $code) {
+            throw new HttpException(400, '잘못된 이메일 인증 코드입니다.');
+        }
+
+        return $emailEntity;
     }
 }

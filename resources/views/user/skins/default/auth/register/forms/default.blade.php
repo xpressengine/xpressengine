@@ -2,11 +2,7 @@
 
 <div class="auth-group {{--wrong--}}">
     <label for="email" class="sr-only">{{xe_trans('xe::email')}}</label>
-    @if($email = data_get($data, 'email'))
-    <input type="text" id="email" class="xe-form-control" placeholder="{{xe_trans('xe::enterEmail')}}" name="email" value="{{ $email }}" readonly>
-    @else
     <input type="text" id="email" class="xe-form-control" placeholder="{{xe_trans('xe::enterEmail')}}" name="email" value="{{ old('email') }}">
-    @endif
 
     {{--<em class="text-message">잘못된 이메일 형식입니다.</em>--}}
 </div>
