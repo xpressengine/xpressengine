@@ -882,9 +882,9 @@ class UserHandler
         return array_merge($this->settingsSections, $menus ?: []);
     }
 
-    public function getRegisterSections()
+    public function getRegisterGuards()
     {
-        return $this->container->get('user/register/section', []);
+        return $this->container->get('user/register/guard', []);
     }
 
     public function getRegisterForms($token)

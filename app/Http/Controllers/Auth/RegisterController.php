@@ -69,13 +69,13 @@ class RegisterController extends Controller
             return $this->getRegisterForm($request);
         }
 
-        $sections = $handler->getRegisterSections();
-        if (!count($sections)) {
+        $guards = $handler->getRegisterGuards();
+        if (!count($guards)) {
             $token = $this->handler->storeRegisterToken('direct', []);
             return redirect()->route('auth.register', ['token' => $token->id]);
         }
 
-        return \XePresenter::make('register.index', compact('config', 'sections'));
+        return \XePresenter::make('register.index', compact('config', 'guards'));
     }
 
     /**
@@ -352,7 +352,7 @@ class RegisterController extends Controller
         if ($this->useEmailConfirm()) {
 
             app('xe.register')->push(
-                'user/register/section',
+                'user/register/guard',
                 'email',
                 function () {
                     $skinHandler = app('xe.skin');
