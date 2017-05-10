@@ -121,15 +121,18 @@ export default (function () {
         type: 'json',
         data: parameters,
         success: function (res) {
-          var data = {};
+          var message = id.split('::')[1];
 
-          for(var i = 0, max = res.length; i < max; i += 1) {
-            if(res[i].locale == _this.locales[0]) {
-              data = res[i];
+          if (res.length > 0) {
+            for (var i = 0, max = res.length; i < max; i += 1) {
+              if (res[i].locale == _this.locales[0]) {
+                data = res[i].value;
+                break;
+              }
             }
           }
 
-          callback(data);
+          callback(message);
         },
       });
     },
