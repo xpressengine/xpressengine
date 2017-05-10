@@ -114,7 +114,7 @@ export default React.createClass({
     return (
       <div className="item-content" ref="inner" id={nodeId}>
 					<button className="btn handler" onMouseDown={this.handleMouseDown}>
-						<i className="xi-bullet-point"></i>
+						<i className="xi-drag-vertical"></i>
 					</button>
 					<div className="item-info">
 						<i className="xi-paper"></i>
