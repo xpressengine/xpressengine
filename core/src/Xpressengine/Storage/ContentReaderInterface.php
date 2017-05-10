@@ -22,6 +22,8 @@ namespace Xpressengine\Storage;
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
+ *
+ * @deprecated since beta.17. Not used
  */
 interface ContentReaderInterface
 {

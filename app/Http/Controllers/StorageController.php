@@ -8,13 +8,13 @@
 
 namespace App\Http\Controllers;
 
-use Xpressengine\Storage\File;
+use XeStorage;
 
 class StorageController extends Controller
 {
     public function file($id)
     {
-        $file = File::find($id);
+        $file = XeStorage::find($id);
 
         header('Content-type: ' . $file->mime);
 

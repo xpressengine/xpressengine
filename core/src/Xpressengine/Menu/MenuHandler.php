@@ -697,4 +697,14 @@ class MenuHandler
 
         return $this->getInstanceSettingURI($item);
     }
+
+    /**
+     * Get ModuleHandler instance
+     *
+     * @return ModuleHandler
+     */
+    public function getModuleHandler()
+    {
+        return $this->modules;
+    }
 }

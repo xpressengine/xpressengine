@@ -42,7 +42,7 @@ class ToggleMenuSection extends Section
 
         $typeIdable = str_replace(['/', '@'], '_', $this->type);
 
-        return View::make('toggleMenu.setting', [
+        return view('toggleMenu.setting', [
             'items' => $items,
             'type' => $this->type,
             'instanceId' => $this->instanceId,

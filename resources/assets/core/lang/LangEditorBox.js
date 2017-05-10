@@ -67,21 +67,6 @@ var LangEditor = React.createClass({
       var _this = this;
       var el = ReactDOM.findDOMNode(this);
 
-      if (this.props.langKey) {
-        if (this.state.lines.length == 0) {
-          $.ajax({
-            type: 'get',
-            dataType: 'json',
-            url: xeBaseURL + '/' + XE.options.managePrefix + '/lang/lines/' + this.props.langKey,
-            success: function (result) {
-              if (this.isMounted()) {
-                _this.setLines(result);
-              }
-            }.bind(this),
-          });
-        }
-      }
-
       if (this.props.autocomplete) {
         $(el).find('input[type=text]:first,textarea:first').autocomplete({
           source: '/' + XE.options.managePrefix + '/lang/search/' + XE.Lang.locales[0],
@@ -157,20 +142,82 @@ var LangEditor = React.createClass({
   },
 });
 
-window.langEditorBoxRender = function ($o) {
-  var name = $o.data('name');
-  var langKey = $o.data('lang-key');
-  var multiline = $o.data('multiline');
-  var lines = $o.data('lines');
-  var autocomplete = $o.data('autocomplete');
-
-  ReactDOM.render(<LangEditorBox name={name} langKey={langKey} multiline={multiline} lines={lines} autocomplete={autocomplete}/>, $o[0]);
+window.langEditorBoxRender = function ({ name, langKey, multiline, lines, autocomplete, target }) {
+  ReactDOM.render(<LangEditorBox name={name} langKey={langKey} multiline={multiline} lines={lines} autocomplete={autocomplete}/>, target);
 };
 
 $(function () {
-  $('.lang-editor-box').each(function (i) {
-    langEditorBoxRender($(this));
-  });
+
+  let langKeys = [];
+  let langObj = {};
+  let langs = [];
+  let idx = 0;
+
+  if ($('.lang-editor-box').length > 0) {
+
+    $('.lang-editor-box').each(function (key, i) {
+      let $this = $(this);
+
+      let name = $this.data('name');
+      let langKey = $this.data('lang-key');
+      let multiline = $this.data('multiline');
+      let lines = $this.data('lines');
+      let autocomplete = $this.data('autocomplete');
+
+      // langObj[langKey] = {
+      //   name,
+      //   langKey,
+      //   multiline,
+      //   lines,
+      //   autocomplete,
+      //   target: $this[0],
+      // };
+      //
+
+      if (langKey) {
+        langKeys.push(langKey);
+      }
+
+      langs.push({
+        name,
+        langKey,
+        multiline,
+        lines,
+        autocomplete,
+        target: $this[0],
+      });
+
+      idx++;
+    });
+
+    if (langKeys.length > 0) {
+      XE.ajax({
+        type: 'get',
+        dataType: 'json',
+        url: xeBaseURL + '/' + XE.options.managePrefix + '/lang/lines/many',
+        data: {
+          keys: langKeys,
+        },
+        success: function (result) {
+          $.each(result, (key, arr) => {
+            $.each(langs, function () {
+              if (key === this.langKey) {
+                this.lines = arr;
+              }
+            });
+          });
+
+          $.each(langs, function () {
+            langEditorBoxRender(this);
+          });
+        },
+      });
+    } else {
+      $.each(langs, function () {
+        langEditorBoxRender(this);
+      });
+    }
+  }
 
   $(document).on('focus', '.lang-editor-box input, textarea', function () {
     var box = $(this).closest('.lang-editor-box');

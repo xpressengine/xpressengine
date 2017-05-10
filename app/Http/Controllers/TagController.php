@@ -9,24 +9,14 @@
 namespace App\Http\Controllers;
 
 use XePresenter;
+use XeTag;
+use Xpressengine\Http\Request;
 
 class TagController extends Controller
 {
-    protected $tag;
-
-    public function __construct()
+    public function autoComplete(Request $request)
     {
-        $this->tag = \App::make('xe.tag');
-    }
-
-    public function autoComplete()
-    {
-        $terms = $this->tag->autoCompletion(\Input::get('string'));
-
-        $words = [];
-        foreach ($terms as $tagEntity) {
-            $words[] = $tagEntity->word;
-        }
+        $words = XeTag::similarWord($request->get('string'));
 
         return XePresenter::makeApi($words);
     }

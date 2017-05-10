@@ -1,36 +1,33 @@
 <?php
+
 /**
- * Decomposer.php
+ * CategoryRepository.php
  *
  * PHP version 5
  *
- * @category    Tag
- * @package     Xpressengine\Tag
+ * @category    Category
+ * @package     Xpressengine\Category
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
 
-namespace Xpressengine\Tag;
+namespace Xpressengine\Category\Repositories;
+
+use Xpressengine\Support\EloquentRepositoryTrait;
 
 /**
- * Interface Decomposer
+ * Class CategoryRepository
  *
- * @category    Tag
- * @package     Xpressengine\Tag
+ * @category    Category
+ * @package     Xpressengine\Category
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-interface Decomposer
+class CategoryRepository
 {
-    /**
-     * Execute decomposing
-     *
-     * @param string $string string whatever
-     * @return string
-     */
-    public function execute($string);
+    use EloquentRepositoryTrait;
 }

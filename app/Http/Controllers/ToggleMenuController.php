@@ -11,15 +11,16 @@ namespace App\Http\Controllers;
 use XeToggleMenu;
 use Input;
 use XePresenter;
+use Xpressengine\Http\Request;
 use Xpressengine\ToggleMenu\AbstractToggleMenu;
 
 class ToggleMenuController extends Controller
 {
-    public function get()
+    public function get(Request $request)
     {
-        $type = Input::get('type');
-        $id = Input::get('id');
-        $instanceId = Input::get('instanceId');
+        $type = $request->get('type');
+        $id = $request->get('id');
+        $instanceId = $request->get('instanceId');
 
         $data = [];
         /** @var AbstractToggleMenu $item */
@@ -40,11 +41,11 @@ class ToggleMenuController extends Controller
         return XePresenter::makeApi($data);
     }
 
-    public function getPage()
+    public function getPage(Request $request)
     {
-        $type = Input::get('type');
-        $id = Input::get('id');
-        $instanceId = Input::get('instanceId');
+        $type = $request->get('type');
+        $id = $request->get('id');
+        $instanceId = $request->get('instanceId');
 
         $items = [];
         /** @var AbstractToggleMenu $item */
@@ -66,18 +67,18 @@ class ToggleMenuController extends Controller
         return apiRender('toggleMenu.get', ['items' => $items]);
     }
 
-    public function postSetting()
+    public function postSetting(Request $request)
     {
-        // check is manager
+        $this->validate($request, ['type' => 'required']);
 
-        $type = Input::get('type');
-        $instanceId = Input::get('instanceId');
-        $activates = Input::get('items', []);
+        $type = $request->get('type');
+        $instanceId = $request->get('instanceId');
+        $activates = $request->get('items', []);
 
         XeToggleMenu::setActivates($type, $instanceId, $activates);
 
-        if (Input::get('redirect') != null) {
-            return redirect(Input::get('redirect'));
+        if ($request->get('redirect') != null) {
+            return redirect($request->get('redirect'));
         } else {
             return redirect()->route('manage.menu.list.menu');
         }
