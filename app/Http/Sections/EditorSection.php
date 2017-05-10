@@ -2,7 +2,7 @@
 namespace App\Http\Sections;
 
 use View;
-use Xpressengine\Editor\EditorHandler;
+use XeEditor;
 
 class EditorSection extends Section
 {
@@ -20,13 +20,8 @@ class EditorSection extends Section
      */
     public function render()
     {
-        /**
-         * @var EditorHandler $handler
-         */
-        $handler = app('xe.editor');
-
-        $editors = $handler->getAll();
-        $selected = $handler->get($this->instanceId);
+        $editors = XeEditor::getAll();
+        $selected = XeEditor::get($this->instanceId);
 
         return view('editor.section', [
             'instanceId' => $this->instanceId,

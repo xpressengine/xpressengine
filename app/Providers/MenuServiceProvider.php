@@ -84,6 +84,10 @@ class MenuServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        /**
+         * todo: since beta.17
+         * ModuleHandler 는 MenuHandler 를 통해 사용가능 하도록 변경
+         */
         $this->app->singleton(['xe.module' => ModuleHandler::class], function ($app) {
             $register = $app['xe.pluginRegister'];
             $proxyClass = $app['xe.interception']->proxy(ModuleHandler::class, 'XeModule');

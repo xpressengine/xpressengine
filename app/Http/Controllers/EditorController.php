@@ -1,38 +1,39 @@
 <?php
 namespace App\Http\Controllers;
 
+use Auth;
+use Gate;
 use Illuminate\Http\Response;
-use Xpressengine\Config\ConfigManager;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Xpressengine\Editor\EditorHandler;
 use Xpressengine\Http\Request;
-use XeMenu;
-use XePresenter;
-use XeUser;
-use XeStorage;
-use Xpressengine\Media\MediaManager;
 use Xpressengine\Media\Models\Image;
 use Xpressengine\Permission\Instance;
 use Xpressengine\Permission\PermissionSupport;
 use Xpressengine\Presenter\RendererInterface;
 use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
 use Xpressengine\Support\Exceptions\InvalidArgumentException;
-use Xpressengine\Tag\TagHandler;
-use Auth;
-use Gate;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use XeConfig;
+use XeEditor;
+use XeMenu;
+use XeMedia;
+use XePresenter;
+use XeUser;
+use XeStorage;
+use XeTag;
 
 class EditorController extends Controller
 {
     use PermissionSupport;
     
-    public function setting(EditorHandler $handler, Request $request, $instanceId)
+    public function setting(Request $request, $instanceId)
     {
         $editorId = $request->get('editorId');
         if (empty($editorId)) {
             $editorId = null;
         }
 
-        $handler->setInstance($instanceId, $editorId);
+        XeEditor::setInstance($instanceId, $editorId);
 
         if (!$url = XeMenu::getInstanceSettingURIByItemId($instanceId)) {
             return redirect()->back();
@@ -41,11 +42,11 @@ class EditorController extends Controller
         }
     }
 
-    public function getDetailSetting(EditorHandler $handler, ConfigManager $configs, $instanceId)
+    public function getDetailSetting($instanceId)
     {
-        $config = $configs->getOrNew($handler->getConfigKey($instanceId));
+        $config = XeConfig::getOrNew(XeEditor::getConfigKey($instanceId));
 
-        $tools = $handler->getToolAll();
+        $tools = XeEditor::getToolAll();
 
         $toolIds = $config->get('tools', []);
         $activated = array_intersect_key($tools, array_flip($toolIds));
@@ -64,14 +65,14 @@ class EditorController extends Controller
             'instanceId' => $instanceId,
             'config' => $config,
             'permArgs' => $this->getPermArguments(
-                $handler->getPermKey($instanceId),
+                XeEditor::getPermKey($instanceId),
                 ['html', 'tool', 'upload', 'download']
             ),
             'items' => $items,
         ]);
     }
 
-    public function postDetailSetting(Request $request, EditorHandler $handler, ConfigManager $configs, $instanceId)
+    public function postDetailSetting(Request $request, $instanceId)
     {
         $this->validate($request, [
             'height' => 'required|numeric',
@@ -79,7 +80,7 @@ class EditorController extends Controller
             'fileMaxSize' => 'numeric',
             'attachMaxSize' => 'numeric',
         ]);
-        $configs->set($handler->getConfigKey($instanceId), [
+        XeConfig::set(XeEditor::getConfigKey($instanceId), [
             'height' => $request->get('height'),
             'fontSize' => $request->get('fontSize'),
             'fontFamily' => empty($request->get('fontFamily')) ? null : $request->get('fontFamily'),
@@ -90,7 +91,7 @@ class EditorController extends Controller
             'tools' => $request->get('tools', [])
         ]);
 
-        $this->permissionRegister($request, $handler->getPermKey($instanceId), ['html', 'tool', 'upload', 'download']);
+        $this->permissionRegister($request, XeEditor::getPermKey($instanceId), ['html', 'tool', 'upload', 'download']);
 
         return redirect()->route('settings.editor.setting.detail', $instanceId);
     }
@@ -99,17 +100,11 @@ class EditorController extends Controller
      * file upload
      *
      * @param Request       $request      request
-     * @param EditorHandler $handler      editor handler
-     * @param MediaManager  $mediaManager media manager
      * @param string        $instanceId   instance id
      * @return RendererInterface
      */
-    public function fileUpload(
-        Request $request,
-        EditorHandler $handler,
-        MediaManager $mediaManager,
-        $instanceId
-    ) {
+    public function fileUpload(Request $request, $instanceId)
+    {
         $uploadedFile = null;
         if ($request->file('file') !== null) {
             $uploadedFile = $request->file('file');
@@ -121,9 +116,9 @@ class EditorController extends Controller
             throw new InvalidArgumentException;
         }
 
-        $config = $handler->get($instanceId)->getConfig();
+        $config = XeEditor::get($instanceId)->getConfig();
 
-        if (!$config->get('uploadActive') || Gate::denies('upload', new Instance($handler->getPermKey($instanceId)))) {
+        if (!$config->get('uploadActive') || Gate::denies('upload', new Instance(XeEditor::getPermKey($instanceId)))) {
             throw new AccessDeniedHttpException;
         }
 
@@ -154,9 +149,9 @@ class EditorController extends Controller
 
         $media = null;
         $thumbnails = null;
-        if ($mediaManager->is($file) === true) {
-            $media = $mediaManager->make($file);
-            $thumbnails = $mediaManager->createThumbnails($media, EditorHandler::THUMBNAIL_TYPE);
+        if (XeMedia::is($file) === true) {
+            $media = XeMedia::make($file);
+            $thumbnails = XeMedia::createThumbnails($media, EditorHandler::THUMBNAIL_TYPE);
 
             $media = $media->toArray();
 
@@ -175,13 +170,12 @@ class EditorController extends Controller
     /**
      * get file source
      *
-     * @param EditorHandler $handler    editor handler
      * @param string        $instanceId instance id
      * @param string        $id         document id
      * @return void
      * @throws InvalidArgumentException
      */
-    public function fileSource(EditorHandler $handler, $instanceId, $id)
+    public function fileSource($instanceId, $id)
     {
         if (empty($id)) {
             throw new InvalidArgumentException;
@@ -189,15 +183,13 @@ class EditorController extends Controller
 
         $file = XeStorage::find($id);
 
-        /** @var \Xpressengine\Media\MediaManager $mediaManager */
-        $mediaManager = app('xe.media');
-        if ($mediaManager->is($file) === true) {
+        if (XeMedia::is($file) === true) {
             $dimension = 'L';
             if (\Agent::isMobile() === true) {
                 $dimension = 'M';
             }
             $media = Image::getThumbnail(
-                $mediaManager->make($file),
+                XeMedia::make($file),
                 EditorHandler::THUMBNAIL_TYPE,
                 $dimension
             );
@@ -210,18 +202,17 @@ class EditorController extends Controller
     /**
      * file download
      *
-     * @param EditorHandler $handler    editor handler
      * @param string        $instanceId instance id
      * @param string        $id
      * @return void
      */
-    public function fileDownload(EditorHandler $handler, $instanceId, $id)
+    public function fileDownload($instanceId, $id)
     {
         if (empty($id) || !$file = XeStorage::find($id)) {
             throw new InvalidArgumentException;
         }
 
-        if (Gate::denies('download', new Instance($handler->getPermKey($instanceId)))) {
+        if (Gate::denies('download', new Instance(XeEditor::getPermKey($instanceId)))) {
             throw new AccessDeniedHttpException;
         }
 
@@ -260,12 +251,11 @@ class EditorController extends Controller
      * 해시태그 suggestion 리스트
      *
      * @param Request $request
-     * @param TagHandler $tag
      * @return mixed
      */
-    public function hashTag(Request $request, TagHandler $tag)
+    public function hashTag(Request $request)
     {
-        $tags = $tag->similar($request->get('string'));
+        $tags = XeTag::similar($request->get('string'));
 
         $suggestions = [];
         foreach ($tags as $tag) {
