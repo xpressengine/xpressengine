@@ -389,7 +389,9 @@ class UserController extends Controller
             if ($useEmailConfirm) {
                 /** @var EmailBroker $broker */
                 $broker = app('xe.auth.email');
-                $broker->sendEmailForAddingEmail($mail, 'emails.add-email');
+                $broker->sendEmailForAddingEmail($mail, 'emails.add-email', function ($m) {
+                    $m->subject(xe_trans(app('xe.site')->getSiteConfig()->get('site_title')).' '.xe_trans('xe::emailConfirm'));
+                });
             }
         } catch (\Exception $e) {
             XeDB::rollback();
@@ -452,7 +454,9 @@ class UserController extends Controller
 
         /** @var EmailBroker $broker */
         $broker = app('xe.auth.email');
-        $broker->sendEmailForAddingEmail($pendingMail, 'emails.add-email');
+        $broker->sendEmailForAddingEmail($pendingMail, 'emails.add-email', function ($m) {
+            $m->subject(xe_trans(app('xe.site')->getSiteConfig()->get('site_title')).' '.xe_trans('xe::emailConfirm'));
+        });
 
         return XePresenter::makeApi(['message' => '재전송하였습니다.']);
     }

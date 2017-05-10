@@ -1322,8 +1322,12 @@ return [
         'en' => 'Change password'
     ],
     'changePasswordDescription' => [
-        'ko' => '암호를 재설정합니다. 새로운 암호를 입력해주세요.',
+        'ko' => '비밀번호를 재설정합니다. 새로운 비밀번호를 입력해주세요.',
         'en' => 'To reset your password. Please enter a new password.'
+    ],
+    'linkForPasswordReset' => [
+        'ko' => '비밀번호 재설정 링크',
+        'en' => 'Your Password Reset Link'
     ],
     'currentPassword' => [
         'ko' => '현재 비밀번호',
@@ -1677,7 +1681,7 @@ return [
         'en' => 'Email / User name',
     ],
     'forgotPassword' => [
-        'ko' => '암호를 잊었습니까?',
+        'ko' => '비밀번호를 잊었습니까?',
         'en' => 'Forgot password?',
     ],
     'forgotPasswordDescription' => [
@@ -1697,7 +1701,7 @@ return [
         'en' => 'Please check your email.',
     ],
     'checkFindPasswordEmailDescription' => [
-        'ko' => ':email 으로 암호를 새로 만드는 방법에 대한 지침이 포함된 메일이 전송되었습니다.',
+        'ko' => ':email 으로 비밀번호를 새로 만드는 방법에 대한 지침이 포함된 메일이 전송되었습니다.',
         'en' => 'This e-mail with instructions on how to create a new password has been sent to the :email.',
     ],
     'keepLogin' => [

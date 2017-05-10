@@ -413,7 +413,7 @@ class UserServiceProvider extends ServiceProvider
                 'validate' => function ($password) {
                     return strlen($password) >= 4;
                 },
-                'description' => 'xe::passwordStrengthStrongDescription'
+                'description' => 'xe::passwordStrengthWeakDescription'
             ],
             'normal' => [
                 'title' => 'xe::normal',
@@ -427,7 +427,7 @@ class UserServiceProvider extends ServiceProvider
                     }
                     return true;
                 },
-                'description' => 'xe::passwordStrengthStrongDescription'
+                'description' => 'xe::passwordStrengthNormalDescription'
             ],
             'strong' => [
                 'title' => 'xe::strong',
