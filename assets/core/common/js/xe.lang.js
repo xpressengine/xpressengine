@@ -113,6 +113,27 @@ export default (function () {
       return Translator.trans(id, parameters);
     },
 
+    requestTrans: function (id, parameters, callback) {
+      var _this = this;
+
+      XE.ajax({
+        url: xeBaseURL + '/' + XE.options.managePrefix + '/lang/lines/' + id,
+        type: 'json',
+        data: parameters,
+        success: function (res) {
+          var data = {};
+
+          for(var i = 0, max = res.length; i < max; i += 1) {
+            if(res[i].locale == _this.locales[0]) {
+              data = res[i];
+            }
+          }
+
+          callback(data);
+        },
+      });
+    },
+
     transChoice: function (id, number, parameters) {
       return Translator.transChoice(id, number, parameters);
     },
