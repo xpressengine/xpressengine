@@ -64,7 +64,7 @@
                                         <i class="xi-magnifier"></i><span class="sr-only">{{xe_trans('xe::search')}}</span>
                                     </button>
                                 </div>
-                                @foreach(Input::except(['keyfield','keyword']) as $name => $value)
+                                @foreach(Input::except(['keyfield','keyword','page']) as $name => $value)
                                     <input type="hidden" name="{{ $name }}" value="{{ $value }}">
                                 @endforeach
                                 <input type="hidden" class="__xe_keyfield" name="keyfield" value="{{ Input::get('keyfield') }}">

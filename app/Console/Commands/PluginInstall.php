@@ -108,7 +108,7 @@ class PluginInstall extends PluginCommand
         // composer update실행(composer update --prefer-lowest --with-dependencies xpressengine-plugin/*)
         // composer update를 실행합니다. 최대 수 분이 소요될 수 있습니다.
         $this->warn(' Composer update command is running.. It may take up to a few minutes.');
-        $this->line(" composer update --prefer-lowest --with-dependencies $vendorName/* $name");
+        $this->line(" composer update --with-dependencies $vendorName/* $name");
 
         $result = $this->runComposer(
             [
@@ -124,17 +124,7 @@ class PluginInstall extends PluginCommand
         // composer 실행을 마쳤습니다.
         $this->warn('Composer update command is finished.'.PHP_EOL);
 
-        // composer.plugins.json 파일을 다시 읽어들인다.
-        $writer->load();
-        if (!isset($result) || $result !== 0) {
-            $result = false;
-            $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_FAILED);
-            $writer->set('xpressengine-plugin.operation.failed', XpressengineInstaller::$failed);
-        } else {
-            $result = true;
-            $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_SUCCESSED);
-        }
-        $writer->write();
+        $result = $this->writeResult($writer, $result);
 
         // changed plugin list 정보 출력
         $changed = $this->getChangedPlugins($writer);

@@ -120,7 +120,12 @@ class Composer
             // 플러그인 명령을 실행한 경우
             if (defined('__XE_PLUGIN_MODE__')) {
                 static::applyRequire($writer);
-                $writer->setUpdateMode();
+
+                $installs = $writer->get('xpressengine-plugin.operation.install', []);
+                $updates = $writer->get('xpressengine-plugin.operation.update', []);
+                $fixes = array_keys($installs) + array_keys($updates);
+
+                $writer->setUpdateMode($fixes);
                 $event->getOutput()->writeln("xpressengine-installer: running in update mode");
             // composer를 직접 실행한 경우
             } else {

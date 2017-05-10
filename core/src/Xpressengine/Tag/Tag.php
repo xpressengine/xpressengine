@@ -60,10 +60,26 @@ class Tag extends DynamicModel
     protected $guarded = ['id', 'count'];
 
     /**
+     * Used count of model
+     *
+     * @return int
+     */
+    public function getCount()
+    {
+        if (array_key_exists('cnt', $this->getAttributes())) {
+            return $this->getAttribute('cnt');
+        } else {
+            return $this->getAttribute('count');
+        }
+    }
+
+    /**
      * Returns tags of the taggable
      *
      * @param string $taggableId taggable id
      * @return Collection|static[]
+     *
+     * @deprecated since beta.17. use TagRepository::fetchByTaggable (XeTag::fetchByTaggable) instead.
      */
     public static function getByTaggable($taggableId)
     {
@@ -83,6 +99,8 @@ class Tag extends DynamicModel
      * @param string|null $instanceId instance id
      * @param int         $take       take count
      * @return Collection|static[]
+     *
+     * @deprecated since beta.17. use TagRepository::fetchPopular (XeTag::fetchPopular) instead.
      */
     public static function getPopular($instanceId = null, $take = 15)
     {
@@ -97,25 +115,14 @@ class Tag extends DynamicModel
         return $query->get();
     }
 
-    /**
-     * Used count of model
-     *
-     * @return int
-     */
-    public function getCount()
-    {
-        if (array_key_exists('cnt', $this->getAttributes())) {
-            return $this->getAttribute('cnt');
-        } else {
-            return $this->getAttribute('count');
-        }
-    }
 
     /**
      * Returns most popular tags in whole
      *
      * @param int $take take count
      * @return Collection|static[]
+     *
+     * @deprecated since beta.17. use TagRepository::fetchPopularWhole (XeTag::fetchPopularWhole) instead.
      */
     public static function getPopularWhole($take = 15)
     {
@@ -130,6 +137,8 @@ class Tag extends DynamicModel
      * @param string|null           $instanceId instance id
      * @param int                   $take       take count
      * @return Collection|static[]
+     *
+     * @deprecated since beta.17. use TagRepository::fetchPopularPeriod (XeTag::fetchPopularPeriod) instead.
      */
     public static function getPopularPeriod($since, $until = null, $instanceId = null, $take = 15)
     {
@@ -159,6 +168,8 @@ class Tag extends DynamicModel
      * @param \DateTime|string      $since begin date
      * @param \DateTime|string|null $until end date
      * @return void
+     *
+     * @deprecated since beta.17.
      */
     private function wherePeriod(Builder $query, $since, $until = null)
     {
@@ -176,6 +187,8 @@ class Tag extends DynamicModel
      * @param \DateTime|string|null $until end date
      * @param int                   $take  take count
      * @return Collection|static[]
+     *
+     * @deprecated since beta.17. use TagRepository::fetchPopularPeriodWhole (XeTag::fetchPopularPeriodWhole) instead.
      */
     public static function getPopularPeriodWhole($since, $until = null, $take = 15)
     {
