@@ -22,7 +22,7 @@
         "wikimedia/composer-merge-plugin": "1.3.1",
         "xpressengine/installer": "dev-develop",
         "laravel/framework": "5.1.*",
-        "composer/composer": "~1.2.0",
+        "composer/composer": "1.4.1",
         "wittiws/phpquery": "dev-master",
         "james-heinrich/getid3": "1.9.*",
         "ramsey/uuid": "2.8.*",

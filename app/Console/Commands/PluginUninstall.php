@@ -97,10 +97,9 @@ class PluginUninstall extends PluginCommand
 
         $vendorName = PluginHandler::PLUGIN_VENDOR_NAME;
 
-        // composer update실행(composer update --prefer-lowest --with-dependencies xpressengine-plugin/*)
         // composer update를 실행합니다. 최대 수분이 소요될 수 있습니다.
         $this->warn('Composer update command is running.. It may take up to a few minutes.');
-        $this->line(" composer update --prefer-lowest --with-dependencies $name");
+        $this->line(" composer update --with-dependencies $name");
         $result = $this->runComposer(
             [
                 'command' => 'update',
@@ -115,8 +114,7 @@ class PluginUninstall extends PluginCommand
         // composer 실행을 마쳤습니다.
         $this->warn('Composer update command is finished.'.PHP_EOL);
 
-        // composer.plugins.json 파일을 다시 읽어들인다.
-        $writer->load();
+        $result = $this->writeResult($writer, $result);
 
         // changed plugin list 정보 출력
         $changed = $this->getChangedPlugins($writer);

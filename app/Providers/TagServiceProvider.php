@@ -15,7 +15,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Xpressengine\Tag\Decomposer;
+use Xpressengine\Tag\SimpleDecomposer;
+use Xpressengine\Tag\Tag;
 use Xpressengine\Tag\TagHandler;
 use Xpressengine\Tag\TagRepository;
 
@@ -41,7 +42,7 @@ class TagServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        TagRepository::setModel(Tag::class);
     }
 
     /**
@@ -54,7 +55,7 @@ class TagServiceProvider extends ServiceProvider
         $this->app->singleton(['xe.tag' => TagHandler::class], function ($app) {
             $proxyClass = $app['xe.interception']->proxy(TagHandler::class, 'XeTag');
 
-            return new $proxyClass(new Decomposer());
+            return new $proxyClass(new TagRepository, new SimpleDecomposer);
         });
     }
 
