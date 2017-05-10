@@ -2086,4 +2086,55 @@ return [
         'ko' => '부가 정보',
         'en' => 'additional information'
     ],
+    'accountAlreadyExists' => [
+        'ko' => '이미 등록된 계정정보입니다.',
+        'en' => 'Account already exists.'
+    ],
+    'alreadyConfirmedEmail' => [
+        'ko' => '이미 인증된 이메일입니다.',
+        'en' => 'Already Confirmed email.'
+    ],
+    'cannotDeleteMainEmailOfUser' => [
+        'ko' => '대표이메일은 삭제할 수 없습니다.',
+        'en' => 'Cannot delete main email of user'
+    ],
+    'emailAlreadyExists' => [
+        'ko' => '이미 존재하는 이메일입니다.',
+        'en' => 'Email already exists'
+    ],
+    'displayNameAlreadyExists' => [
+        'ko' => '이미 사용중인 회원 이름입니다.',
+        'en' => 'Display name already exists.'
+    ],
+    'invalidDisplayName' => [
+        'ko' => '회원이름 형식이 잘못되었습니다.',
+    ],
+    'cannotDeleteSuperUser' => [
+        'ko' => '최고 권한을 가진 회원은 삭제할 수 없습니다.',
+        'en' => 'Can not delete the user having \'super\' rating'
+    ],
+    'emailNotFound' => [
+        'ko' => '존재하지 않는 이메일입니다.',
+        'en' => 'Email not Found.'
+    ],
+    'invalidConfirmationCode' => [
+        'ko' => '인증코드가 틀렸습니다.',
+        'en' => 'Invalid confirmation code.'
+    ],
+    'joinNotAllowed' => [
+        'ko' => '관리자가 회원가입을 허용하지 않습니다.',
+        'en' => 'Join not allowed by Administrator',
+    ],
+    'pendingEmailAlreadyExists' => [
+        'ko' => '이미 인증 요청중인 이메일이 있습니다.',
+        'en' => 'Pending email already exists.',
+    ],
+    'pendingEmailNotExists' => [
+        'ko' => '인증 요청중인 이메일이 없습니다.',
+        'en' => 'Pending email not exists.',
+    ],
+    'userNotFound' => [
+        'ko' => '해당 회원을 찾을 수 없습니다.',
+        'en' => 'User not found.',
+    ],
 ];

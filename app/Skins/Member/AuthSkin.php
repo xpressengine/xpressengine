@@ -23,7 +23,7 @@ use Xpressengine\Skin\BladeSkin;
 class AuthSkin extends BladeSkin
 {
 
-    protected static $id = 'member/auth/skin/xpressengine@default';
+    protected static $id = 'user/auth/skin/xpressengine@default';
 
     protected static $componentInfo = [
         'name' => '기본 회원인증페이지 스킨',

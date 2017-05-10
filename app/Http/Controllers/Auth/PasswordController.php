@@ -59,7 +59,7 @@ class PasswordController extends Controller {
         $this->handler = app('xe.user');
 
         XeTheme::selectSiteTheme();
-        XePresenter::setSkinTargetId('member/auth');
+        XePresenter::setSkinTargetId('user/auth');
 
         $this->middleware('guest');
     }

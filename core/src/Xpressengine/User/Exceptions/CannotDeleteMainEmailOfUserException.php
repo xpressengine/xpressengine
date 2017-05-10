@@ -28,5 +28,5 @@ use Xpressengine\User\UserException;
  */
 class CannotDeleteMainEmailOfUserException extends UserException
 {
-    protected $message = '대표이메일은 삭제할 수 없습니다.';
+    protected $message = 'Cannot delete main email of user';
 }

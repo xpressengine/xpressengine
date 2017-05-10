@@ -56,7 +56,7 @@
                                                             <tbody>
                                                             <tr>
                                                                 <td height="42" style="text-align:center">
-                                                                    <a href="{{ route('auth.register', ['type'=>'email', 'email' => $mail->address, 'code' => $mail->confirmationCode]) }}" target="_blank" style="display:block;height:42px;font-size:15px;color:#fff;text-decoration:none;line-height:42px;font-family:NanumBarunGothic,'나눔고딕',NanumGothic,dotum,'돋움',Helvetica;">{{ xe_trans('xe::confirmation') }}</a>
+                                                                    <a href="{{ route('auth.register', ['token' => $token, 'code' => $mail->confirmationCode]) }}" target="_blank" style="display:block;height:42px;font-size:15px;color:#fff;text-decoration:none;line-height:42px;font-family:NanumBarunGothic,'나눔고딕',NanumGothic,dotum,'돋움',Helvetica;">{{ xe_trans('xe::confirmation') }}</a>
                                                                 </td>
                                                             </tr>
                                                             </tbody>

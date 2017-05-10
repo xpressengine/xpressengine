@@ -21,11 +21,13 @@ use XeTheme;
 use Xpressengine\Skin\SkinHandler;
 use Xpressengine\Support\Exceptions\InvalidArgumentException;
 use Xpressengine\User\EmailBroker;
+use Xpressengine\User\Exceptions\CannotDeleteMainEmailOfUserException;
 use Xpressengine\User\Exceptions\DisplayNameAlreadyExistsException;
 use Xpressengine\User\Exceptions\InvalidConfirmationCodeException;
-use Xpressengine\User\Exceptions\MailAlreadyExistsException;
+use Xpressengine\User\Exceptions\EmailAlreadyExistsException;
 use Xpressengine\User\Exceptions\PendingEmailAlreadyExistsException;
 use Xpressengine\User\Exceptions\PendingEmailNotExistsException;
+use Xpressengine\User\HttpUserException;
 use Xpressengine\User\Repositories\PendingEmailRepositoryInterface;
 use Xpressengine\User\Repositories\UserAccountRepositoryInterface;
 use Xpressengine\User\Repositories\UserEmailRepositoryInterface;
@@ -84,7 +86,7 @@ class UserController extends Controller
         $this->user = app('auth')->user();
 
         XeTheme::selectSiteTheme();
-        XePresenter::setSkinTargetId('member/settings');
+        XePresenter::setSkinTargetId('user/settings');
         $this->middleware('auth');
     }
 
@@ -369,17 +371,17 @@ class UserController extends Controller
         if ($useEmailConfirm) {
             if ($this->user->getPendingEmail() !== null) {
                 $e = new PendingEmailAlreadyExistsException();
-                throw new HttpException(400, $e->getMessage(), $e);
+
             }
         }
 
         // 이미 존재하는 이메일이 있는지 확인한다.
-        if ($this->emails->findByAddress($input['address'])) {
-            $e = new MailAlreadyExistsException();
-            throw new HttpException(400, $e->getMessage(), $e);
+        try {
+            $this->handler->validateEmail($input['address']);
+        } catch (EmailAlreadyExistsException $e) {
+            throw new HttpException(400, xe_trans('xe::emailAlreadyExists'), $e);
         }
 
-        //array_set($input, 'userId', $this->user->getId());
         XeDB::beginTransaction();
         try {
             $mail = $this->handler->createEmail($this->user, $input, !$useEmailConfirm);
@@ -387,7 +389,7 @@ class UserController extends Controller
             if ($useEmailConfirm) {
                 /** @var EmailBroker $broker */
                 $broker = app('xe.auth.email');
-                $broker->sendEmailForConfirmation($mail, 'emails.add-email');
+                $broker->sendEmailForAddingEmail($mail, 'emails.add-email');
             }
         } catch (\Exception $e) {
             XeDB::rollback();
@@ -450,7 +452,7 @@ class UserController extends Controller
 
         /** @var EmailBroker $broker */
         $broker = app('xe.auth.email');
-        $broker->sendEmailForConfirmation($pendingMail, 'emails.add-email');
+        $broker->sendEmailForAddingEmail($pendingMail, 'emails.add-email');
 
         return XePresenter::makeApi(['message' => '재전송하였습니다.']);
     }
@@ -492,6 +494,11 @@ class UserController extends Controller
         XeDB::beginTransaction();
         try {
             $this->handler->deleteEmail($selected);
+        } catch (CannotDeleteMainEmailOfUserException $e) {
+            XeDB::rollback();
+            $e = new HttpUserException([], 400, $e);
+            $e->setMessage('xe::cannotDeleteMainEmailOfUser');
+            throw $e;
         } catch (\Exception $e) {
             XeDB::rollback();
             throw $e;
@@ -571,7 +578,7 @@ class UserController extends Controller
 
         /** @var SkinHandler $skinHandler */
         $skinHandler = app('xe.skin');
-        $skin = $skinHandler->getAssigned('member/settings');
+        $skin = $skinHandler->getAssigned('user/settings');
         return $skin->setView('edit')->setData(compact('user', 'fieldTypes', 'passwordLevel'));
     }
 
@@ -584,7 +591,7 @@ class UserController extends Controller
 
         /** @var SkinHandler $skinHandler */
         $skinHandler = app('xe.skin');
-        $skin = $skinHandler->getAssigned('member/settings');
+        $skin = $skinHandler->getAssigned('user/settings');
         $id = $field;
         $view = $skin->setView('show-field')->setData(compact('user', 'fieldType', 'id'))->render();
 
@@ -609,7 +616,7 @@ class UserController extends Controller
 
         /** @var SkinHandler $skinHandler */
         $skinHandler = app('xe.skin');
-        $skin = $skinHandler->getAssigned('member/settings');
+        $skin = $skinHandler->getAssigned('user/settings');
         $id = $field;
         $view = $skin->setView('edit-field')->setData(compact('user', 'fieldType', 'id'))->render();
 

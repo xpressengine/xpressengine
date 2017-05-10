@@ -26,5 +26,5 @@ use Xpressengine\User\UserException;
  */
 class UserNotFoundException extends UserException
 {
-    protected $message = '해당 회원을 찾을 수 없습니다.';
+    protected $message = 'User not found.';
 }

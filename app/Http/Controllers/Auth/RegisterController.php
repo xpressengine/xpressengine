@@ -12,8 +12,6 @@ use XePresenter;
 use XeTheme;
 use Xpressengine\User\EmailBrokerInterface;
 use Xpressengine\User\EmailInterface;
-use Xpressengine\User\Exceptions\JoinNotAllowedException;
-use Xpressengine\User\Exceptions\PendingEmailNotExistsException;
 use Xpressengine\User\Models\User;
 use Xpressengine\User\Rating;
 use Xpressengine\User\UserHandler;
@@ -46,7 +44,7 @@ class RegisterController extends Controller
         $this->emailBroker = app('xe.auth.email');
 
         XeTheme::selectSiteTheme();
-        XePresenter::setSkinTargetId('member/auth');
+        XePresenter::setSkinTargetId('user/auth');
 
         $this->middleware('guest', ['except' => ['getLogin', 'getLogout', 'getConfirm']]);
     }
@@ -58,7 +56,9 @@ class RegisterController extends Controller
      */
     public function getRegister(Request $request, UserHandler $handler)
     {
-        $this->checkJoinable();
+        if(!$this->checkJoinable()) {
+            return redirect()->back()->with(['alert'=>['type'=>'danger', 'message'=> xe_trans('xe::joinNotAllowed')]]);
+        }
 
         $config = app('xe.config')->get('user.join');
         $this->addEmailRegister();
@@ -100,7 +100,7 @@ class RegisterController extends Controller
         // 기본정보 form 추가
         app('xe.register')->push('user/register/form', 'default-info', function ($data) {
             $skinHandler = app('xe.skin');
-            $skin = $skinHandler->getAssigned('member/auth');
+            $skin = $skinHandler->getAssigned('user/auth');
             // password configuration
             $passwordConfig = app('config')->get('xe.user.password');
             $passwordLevel = array_get($passwordConfig['levels'], $passwordConfig['default']);
@@ -116,7 +116,7 @@ class RegisterController extends Controller
                 $fieldTypes = $dynamicField->gets('user');
 
                 $skinHandler = app('xe.skin');
-                $skin = $skinHandler->getAssigned('member/auth');
+                $skin = $skinHandler->getAssigned('user/auth');
 
                 $html = '';
                 foreach ($fieldTypes as $id => $fieldType) {
@@ -149,7 +149,7 @@ class RegisterController extends Controller
                 ")->load();
 
             $skinHandler = app('xe.skin');
-            $skin = $skinHandler->getAssigned('member/auth');
+            $skin = $skinHandler->getAssigned('user/auth');
             return $skin->setView('register.forms.agreements')->setData(compact('data'))->render();
         });
 
@@ -193,16 +193,15 @@ class RegisterController extends Controller
             throw new HttpException(400, '이미 등록된 이메일입니다.');
         }
 
-        if ($mail = $this->handler->pendingEmails()->findByAddress($email)) {
-            $this->emailBroker->sendEmailForConfirmation($mail, 'emails.register');
-        } else {
+        $mail = $this->handler->pendingEmails()->findByAddress($email);
+
+        if ($mail === null) {
             \DB::beginTransaction();
             try {
                 $mailData = ['address'=>$email, 'userId' => app('xe.keygen')->generate()];
                 $user = new User();
                 $user->id = $mailData['userId'];
-                $mail = $this->handler->pendingEmails()->create($user, $mailData);
-                $this->emailBroker->sendEmailForConfirmation($mail, 'emails.register');
+                $mail = $this->handler->createEmail($user, $mailData, false);
             } catch (\Exception $e) {
                 \DB::rollBack();
                 throw $e;
@@ -211,6 +210,7 @@ class RegisterController extends Controller
         }
 
         $token = $this->handler->storeRegisterToken('email', ['email' => $email, 'userId' => $mail->userId]);
+        $this->emailBroker->sendEmailForRegister($mail, $token, 'emails.register');
 
         return redirect()->route('auth.register', ['token'=>$token['id']])->with(['alert'=>['type'=>'success', 'message' => '인증 이메일이 전송되었습니다.']]);
     }
@@ -225,7 +225,10 @@ class RegisterController extends Controller
     public function postRegister(Request $request)
     {
         // validation
-        $this->checkJoinable();
+        if(!$this->checkJoinable()) {
+            return redirect()->back()->with(['alert'=>['type'=>'danger', 'message'=> xe_trans('xe::joinNotAllowed')]]);
+        }
+
         $this->checkCaptcha('join');
 
         $this->addEmailRegister();
@@ -274,54 +277,15 @@ class RegisterController extends Controller
         return redirect($this->redirectPath());
     }
 
-    public function getConfirm(Request $request)
-    {
-        // validation
-        $this->validate(
-            $request,
-            [
-                'email' => 'required|email',
-            ]
-        );
-
-        $address = $request->get('email');
-        $code = $request->get('code');
-
-        $email = $this->handler->pendingEmails()->findByAddress($address);
-
-        if($email === null) {
-            // todo: change exception to http exception
-            throw new PendingEmailNotExistsException();
-        }
-
-        // code가 없을 경우 인증 페이지 출력
-        if ($code === null) {
-            return \XePresenter::make('register_confirm');
-        }
-
-        XeDB::beginTransaction();
-        try {
-            $this->emailBroker->confirmEmail($email, $code);
-        } catch (Exception $e) {
-            XeDB::rollback();
-            throw $e;
-        }
-        XeDB::commit();
-
-        return redirect('/')->with('alert', ['type' => 'success', 'message' => '인증되었습니다. 로그인하시기 바랍니다.']);
-    }
-
     /**
      * checkJoinable
      *
-     * @return mixed
+     * @return boolean
      */
     protected function checkJoinable()
     {
         $config = app('xe.config')->get('user.join');
-        if ($config->get('joinable') !== true) {
-            throw new JoinNotAllowedException();
-        }
+        return $config->get('joinable') === true;
     }
 
     protected function checkCaptcha($action)
@@ -356,7 +320,7 @@ class RegisterController extends Controller
                 'email',
                 function () {
                     $skinHandler = app('xe.skin');
-                    $skin = $skinHandler->getAssigned('member/auth');
+                    $skin = $skinHandler->getAssigned('user/auth');
                     return $skin->setView('register.sections.email')->render();
                 }
             );
@@ -381,7 +345,7 @@ class RegisterController extends Controller
                     ")->load();
 
                     $skinHandler = app('xe.skin');
-                    $skin = $skinHandler->getAssigned('member/auth');
+                    $skin = $skinHandler->getAssigned('user/auth');
                     return $skin->setView('register.forms.confirm')->setData(compact('token', 'code'))->render();
                 }
             );

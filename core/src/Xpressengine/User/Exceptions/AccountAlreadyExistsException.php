@@ -28,5 +28,5 @@ use Xpressengine\User\UserException;
  */
 class AccountAlreadyExistsException extends UserException
 {
-
+    protected $message = 'Account already exists.';
 }

@@ -14,7 +14,7 @@
 
 namespace Xpressengine\User\Exceptions;
 
-use Xpressengine\User\UserException;
+use Xpressengine\User\HttpUserException;
 
 /**
  * 존재하지 않는 등록 대기 이메일을 조회할 경우 발생하는 Exception
@@ -26,7 +26,8 @@ use Xpressengine\User\UserException;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class PendingEmailNotExistsException extends UserException
+class PendingEmailNotExistsException extends HttpUserException
 {
-    protected $message = '인증 요청중인 이메일이 없습니다.';
+    protected $statusCode = 400;
+    protected $message = 'xe::pendingEmailNotExists';
 }

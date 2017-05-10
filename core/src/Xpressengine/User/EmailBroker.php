@@ -58,14 +58,36 @@ class EmailBroker implements EmailBrokerInterface
     }
 
     /**
-     * 이메일 인증을 위한 이메일을 전송한다.
+     * 회원가입시 이메일 인증을 위한 이메일을 전송한다.
+     *
+     * @param EmailInterface $mail     전송할 이메일 정보
+     * @param string         $token    회원가입 토큰 id
+     * @param string         $view     이메일 전송시 사용할 템플릿
+     * @param null|Closure   $callback 이메일 전송할 때 처리할 로직
+     */
+    public function sendEmailForRegister(EmailInterface $mail, $token, $view, $callback = null)
+    {
+        $this->mailer->send(
+            $view,
+            compact('mail', 'token'),
+            function ($m) use ($mail, $callback) {
+                $m->to($mail->getAddress());
+
+                if (!is_null($callback)) {
+                    call_user_func($callback, $m, $mail);
+                }
+            }
+        );
+    }
+
+    /**
+     * 기존 회원이 이메일 추가시 이메일 인증을 위한 이메일을 전송한다.
      *
      * @param EmailInterface $mail     전송할 이메일 정보
      * @param string         $view     이메일 전송시 사용할 템플릿
      * @param null|Closure   $callback 이메일 전송할 때 처리할 로직
-     *
      */
-    public function sendEmailForConfirmation(EmailInterface $mail, $view, $callback = null)
+    public function sendEmailForAddingEmail(EmailInterface $mail, $view, $callback = null)
     {
         $this->mailer->send(
             $view,
@@ -79,6 +101,7 @@ class EmailBroker implements EmailBrokerInterface
             }
         );
     }
+
 
     /**
      * 주어진 이메일의 인증코드를 검사한다.

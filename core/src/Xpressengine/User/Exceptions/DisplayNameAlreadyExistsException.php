@@ -28,5 +28,5 @@ use Xpressengine\User\UserException;
  */
 class DisplayNameAlreadyExistsException extends UserException
 {
-    protected $message = '이미 사용중인 회원 이름입니다.';
+    protected $message = 'Display name already exists.';
 }

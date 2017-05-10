@@ -76,7 +76,7 @@ Route::group(
         Route::post('register', ['as' => 'auth.register.store', 'uses' => 'Auth\RegisterController@postRegister']); // for store
 
         // email confirm
-        Route::get('confirm', ['as' => 'auth.confirm', 'uses' => 'Auth\RegisterController@getConfirm']); // confirm email
+        Route::get('confirm', ['as' => 'auth.confirm', 'uses' => 'Auth\AuthController@getConfirm']); // confirm email
 
         // logout
         Route::get('logout', ['as' => 'logout', 'uses' => 'Auth\AuthController@getLogout']);

@@ -73,6 +73,7 @@ class UserEmailRepository implements UserEmailRepositoryInterface
      */
     public function findByAddress($address)
     {
+        /** @var EmailInterface $email */
         $email = $this->query()->where('address', $address)->first();
         return $email;
     }

@@ -13,10 +13,7 @@ use XeDB;
 use XePresenter;
 use XeTheme;
 use Xpressengine\User\EmailBrokerInterface;
-use Xpressengine\User\Exceptions\JoinNotAllowedException;
 use Xpressengine\User\Exceptions\PendingEmailNotExistsException;
-use Xpressengine\User\Models\User;
-use Xpressengine\User\Rating;
 use Xpressengine\User\UserHandler;
 
 class AuthController extends Controller
@@ -60,7 +57,8 @@ class AuthController extends Controller
         XeTheme::selectSiteTheme();
         XePresenter::setSkinTargetId('user/auth');
 
-        $this->middleware('guest', ['except' => ['getLogin', 'getLogout', 'getConfirm']]);
+        $this->middleware('auth', ['only' => ['getConfirm', 'getLogout']]);
+        $this->middleware('guest', ['except' => ['getConfirm', 'getLogout']]);
     }
 
     public function getAgreement(){
@@ -79,6 +77,14 @@ class AuthController extends Controller
         return apiRender('privacy', compact('privacy'));
     }
 
+    /**
+     * 이메일 인증 페이지. 사용자가 개인 설정에서 이메일을 추가했을 때, 전송되는 이메일의 링크를 통해 이 페이지에 접근한다.
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Xpressengine\Presenter\RendererInterface
+     * @throws Exception
+     */
     public function getConfirm(Request $request)
     {
         // validation
@@ -99,9 +105,9 @@ class AuthController extends Controller
             throw new PendingEmailNotExistsException();
         }
 
-        // code가 없을 경우 인증 페이지 출력
+        // code가 없을 경우 이메일 인증 페이지 출력
         if ($code === null) {
-            return \XePresenter::make('register_confirm');
+            return \XePresenter::make('email');
         }
 
         XeDB::beginTransaction();
@@ -113,7 +119,7 @@ class AuthController extends Controller
         }
         XeDB::commit();
 
-        return redirect('/')->with('alert', ['type' => 'success', 'message' => '인증되었습니다. 로그인하시기 바랍니다.']);
+        return redirect('/')->with('alert', ['type' => 'success', 'message' => '인증되었습니다.']);
     }
 
     /**
@@ -224,19 +230,6 @@ class AuthController extends Controller
     public function loginPath()
     {
         return property_exists($this, 'loginPath') ? $this->loginPath : '/auth/login';
-    }
-
-    /**
-     * checkJoinable
-     *
-     * @return mixed
-     */
-    protected function checkJoinable()
-    {
-        $config = app('xe.config')->get('user.join');
-        if ($config->get('joinable') !== true) {
-            throw new JoinNotAllowedException();
-        }
     }
 
     protected function checkCaptcha($action)

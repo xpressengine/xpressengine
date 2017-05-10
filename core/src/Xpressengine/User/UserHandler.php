@@ -22,7 +22,10 @@ use Xpressengine\Support\Exceptions\InvalidArgumentException;
 use Xpressengine\User\Exceptions\AccountAlreadyExistsException;
 use Xpressengine\User\Exceptions\CannotDeleteUserHavingSuperRatingException;
 use Xpressengine\User\Exceptions\DisplayNameAlreadyExistsException;
-use Xpressengine\User\Exceptions\MailAlreadyExistsException;
+use Xpressengine\User\Exceptions\EmailAlreadyExistsException;
+use Xpressengine\User\Exceptions\InvalidAccountInfoException;
+use Xpressengine\User\Exceptions\InvalidDisplayNameException;
+use Xpressengine\User\Exceptions\InvalidPasswordException;
 use Xpressengine\User\Repositories\PendingEmailRepositoryInterface;
 use Xpressengine\User\Repositories\UserAccountRepositoryInterface;
 use Xpressengine\User\Repositories\UserEmailRepositoryInterface;
@@ -598,6 +601,8 @@ class UserHandler
      * @param array $data 회원의 정보
      *
      * @return bool 유효성검사 결과, 통과할 경우 true, 실패할 경우 false
+     * @throws AccountAlreadyExistsException
+     * @throws InvalidArgumentException
      */
     public function validateForCreate(array $data, $token = null)
     {
@@ -608,9 +613,7 @@ class UserHandler
 
         // email이나 account중 하나는 반드시 있어야 한다.
         if (!isset($data['email']) && !isset($data['account'])) {
-            $e = new InvalidArgumentException();
-            $e->setMessage('email이나 account중 하나가 반드시 있어야 합니다.');
-            throw $e;
+            throw new InvalidArgumentException();
         }
 
         // email 검사
@@ -625,9 +628,7 @@ class UserHandler
         if (isset($data['account'])) {
             $account = $data['account'];
             if (!isset($account['accountId'], $account['provider'], $account['data'], $account['token'])) {
-                $e = new InvalidArgumentException();
-                $e->setMessage('account 정보가 올바르지 않습니다.');
-                throw $e;
+                throw new InvalidAccountInfoException();
             }
 
             if ($this->accounts()->where(array_only($account, ['accountId', 'provider']))->first() !== null) {
@@ -646,21 +647,19 @@ class UserHandler
      */
     public function validateDisplayName($name)
     {
-        if ($name === null || empty($name)) {
-            $e = new InvalidArgumentException();
-            $e->setMessage('회원이름은 공백이 될 수 없습니다.');
-            throw $e;
+        if (empty($name)) {
+            $name = null;
         }
 
         $validate = $this->validator->make(
             ['name' => $name],
-            ['name' => ['display_name']]
+            ['name' => ['display_name', 'required']]
         );
 
         if ($validate->fails()) {
-            $e = new InvalidArgumentException();
-            $e->setMessage('회원이름 형식이 잘못되었습니다.');
-            throw $e;
+            $messages = $validate->messages();
+            $message = current($messages->get('name'));
+            throw new InvalidDisplayNameException(compact('message'));
         }
 
         if ($this->users()->where(['displayName' => $name])->first() !== null) {
@@ -669,10 +668,10 @@ class UserHandler
         return true;
     }
 
-    public function validateEmail($email)
+    public function validateEmail($address)
     {
-        if ($this->emails()->findByAddress($email) !== null) {
-            throw new MailAlreadyExistsException();
+        if ($this->emails()->findByAddress($address) !== null) {
+            throw new EmailAlreadyExistsException();
         }
     }
 
@@ -695,8 +694,8 @@ class UserHandler
         if ($validate->fails()) {
             $messages = $validate->messages();
             $message = current($messages->get('password'));
-            $e = new InvalidArgumentException();
-            $e->setMessage(xe_trans($message));
+            $e = new InvalidPasswordException(compact('message'));
+            $e->setMessage($message);
             throw $e;
         }
 
@@ -812,7 +811,7 @@ class UserHandler
     public function deleteEmail(EmailInterface $email)
     {
         if ($email->isConfirmed()) {
-            return $this->emails()->delete($email);
+                return $this->emails()->delete($email);
         } else {
             return $this->pendingEmails()->delete($email);
         }

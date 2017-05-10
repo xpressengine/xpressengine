@@ -17,7 +17,7 @@ use XeDB;
 use XePresenter;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
 use Xpressengine\User\Exceptions\EmailNotFoundException;
-use Xpressengine\User\Exceptions\MailAlreadyExistsException;
+use Xpressengine\User\Exceptions\EmailAlreadyExistsException;
 use Xpressengine\User\Rating;
 use Xpressengine\User\Repositories\UserRepository;
 use Xpressengine\User\UserException;
@@ -332,8 +332,10 @@ class UserController extends Controller
         $userId = $request->get('userId');
         $address = $request->get('address');
 
-        if ($this->handler->emails()->findByAddress($address)) {
-            throw new MailAlreadyExistsException();
+        try {
+            $this->handler->validateEmail($address);
+        } catch (EmailAlreadyExistsException $e) {
+            throw new HttpException(400, xe_trans('xe::emailAlreadyExists'), $e);
         }
 
         $user = $this->handler->users()->find($userId);
@@ -373,11 +375,11 @@ class UserController extends Controller
 
         XeDB::beginTransaction();
         try {
-            // create pending email
-            $email = $this->handler->emails()->create($user, compact('address'));
+            // create email
+            $email = $this->handler->createEmail($user, compact('address'));
 
             // remove pending email
-            $this->handler->pendingEmails()->delete($pendingEmail);
+            $this->handler->deleteEmail($pendingEmail);
         } catch (Exception $e) {
             XeDB::rollBack();
             throw $e;
@@ -414,7 +416,7 @@ class UserController extends Controller
 
         XeDB::beginTransaction();
         try {
-            $this->handler->emails()->delete($mail);
+            $this->handler->deleteEmail($mail);
         } catch (Exception $e) {
             XeDB::rollBack();
             throw $e;

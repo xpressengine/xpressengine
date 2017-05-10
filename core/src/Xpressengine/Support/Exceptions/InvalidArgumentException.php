@@ -29,5 +29,5 @@ class InvalidArgumentException extends XpressengineException
     /**
      * @var string exception code
      */
-    protected $message = '잘못된 요청입니다.';
+    protected $message = 'invalid argument(s).';
 }
