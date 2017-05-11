@@ -392,7 +392,7 @@ class MenuMigration extends Migration {
 						</div>
 						<div class="xe-col-sm-6">
 							<div class="start-guide">
-								<i class="xi-windows-text"></i>
+								<i class="xi-browser-text"></i>
 								<dl>
 									<dt>테마 디자인 변경하기</dt>
 									<dd>XE3는 별도의 테마 디자인을 제공합니다. 레이아웃 디자인은 <a href="'.route('settings.setting.edit').'">사이트관리 > 설정 > 사이트 기본설정</a>에서 변경할 수 있습니다. </dd>
@@ -610,7 +610,7 @@ class MenuMigration extends Migration {
 						</div>
 						<div class="xe-col-sm-6">
 							<div class="start-guide">
-								<i class="xi-windows-text"></i>
+								<i class="xi-browser-text"></i>
 								<dl>
 									<dt>To change the theme of the design</dt>
 									<dd>XE3 offers the design of another theme. Layout design can be changed in the  <a href="'.route('settings.setting.edit').'">Site Management > Configuration > Basic settings of site</a>. </dd>

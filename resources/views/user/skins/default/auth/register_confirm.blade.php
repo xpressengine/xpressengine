@@ -13,7 +13,7 @@
             <div class="auth-group {{--wrong--}}">
                 <label for="code" class="sr-only">{{xe_trans('xe::confirmCode')}}</label>
                 <input type="text" id="code" class="xe-form-control" placeholder="{{xe_trans('xe::confirmCode')}}" name="code">
-                <button class="btn-eye on" style="display:none"><i class="xi-eye"></i><i class="xi-eye-slash"></i>
+                <button class="btn-eye on" style="display:none"><i class="xi-eye"></i><i class="xi-eye-off"></i>
                 </button>
             </div>
             <button type="submit" class="xe-btn xe-btn-primary">{{xe_trans('xe::send')}}</button>
