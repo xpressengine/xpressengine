@@ -5,7 +5,7 @@
 {{ XeFrontend::js('assets/vendor/jqueryui/jquery-ui.js')->appendTo("head")->load() }}
 
 
-{{ XeFrontend::css('http://cdn.jsdelivr.net/xeicon/2.0.0/xeicon.min.css')->load() }}
+{{ XeFrontend::css('assets/vendor/XEIcon/xeicon.min.css')->load() }}
 {{ XeFrontend::css([
     '/assets/vendor/jqueryui/jquery-ui.css',
     '/assets/vendor/bootstrap/css/bootstrap.css',
