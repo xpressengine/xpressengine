@@ -171,6 +171,9 @@ class AuthController extends Controller
         $this->checkCaptcha('login');
 
         $credentials = $request->only('email', 'password');
+
+        $credentials['email'] = trim($credentials['email']);
+
         $credentials['status'] = \XeUser::STATUS_ACTIVATED;
 
         if ($this->auth->attempt($credentials, $request->has('remember'))) {
