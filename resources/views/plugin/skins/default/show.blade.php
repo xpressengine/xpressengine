@@ -40,7 +40,7 @@
                         @if($homepage = array_get($author, 'homepage'))
                             <dt class="sr-only">{{xe_trans('xe::author')}}</dt>
                             <dd>
-                                <i class="xi-clip"></i>
+                                <i class="xi-paperclip"></i>
                                 <a href="{{ $homepage }}">
                                     {{ $homepage }}
                                 </a>

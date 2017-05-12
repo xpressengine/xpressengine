@@ -195,7 +195,7 @@ export default React.createClass({
              placeholder={placeholder} ref="input" onChange={this.handleChange}
              onKeyDown={this.handleKeyDown}/>
 							<button className="btn-link" onClick={this.resetSearch}>
-								<i className="xi-magnifier"></i><span className="sr-only">검색</span>
+								<i className="xi-search"></i><span className="sr-only">검색</span>
 							</button>
 
 							<MenuSearchSuggestion query={query}

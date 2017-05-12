@@ -30,7 +30,7 @@
                                     @if($theme->hasSetting())
                                     <a href="{{ route('settings.theme.setting', ['theme'=>$configId]) }}" target="_blank" class="btn btn-link"><i class="xi-cog"></i><span class="hidden-xs">{{xe_trans('xe::modify')}}</span></a>
                                     @endif
-                                    <a href="{{ url($previewLink.'preview_theme='.$configId) }}" target="_blank" class="btn btn-link"><i class="xi-magnifier"></i><span class="hidden-xs">{{xe_trans('xe::preview')}}</span></a>
+                                    <a href="{{ url($previewLink.'preview_theme='.$configId) }}" target="_blank" class="btn btn-link"><i class="xi-search"></i><span class="hidden-xs">{{xe_trans('xe::preview')}}</span></a>
                                 </div>
                             </li>
                         @endforeach

@@ -74,6 +74,7 @@ class SkinMake extends Command
         $skinId = $this->getSkinId($plugin, $skinClass, $skinTarget); // myplugin@skin
         $skinTitle = $this->getSkinTitle();
         $description = $this->getSkinDescription($skinId, $plugin);
+        $skinNamespace = $this->getSkinNamespaceName($namespace);
 
         $this->attr = compact(
             'plugin',
@@ -85,7 +86,8 @@ class SkinMake extends Command
             'skinFile',
             'skinId',
             'skinTitle',
-            'description'
+            'description',
+            'skinNamespace'
         );
 
         // print and confirm the information of skin
@@ -147,7 +149,7 @@ class SkinMake extends Command
          * DummySkinDirname
         */
 
-        $this->replaceCode($code, 'DummyNamespace', $this->attr('namespace').'\\Skin')->replaceCode(
+        $this->replaceCode($code, 'DummyNamespace', $this->attr('skinNamespace'))->replaceCode(
                 $code,
                 'DummyClass',
                 $this->attr(
@@ -315,6 +317,15 @@ class SkinMake extends Command
     }
 
     /**
+     * @param $namespace
+     * @return string
+     */
+    protected function getSkinNamespaceName($namespace)
+    {
+        return $namespace.'\\Skins';
+    }
+
+    /**
      * confirmInfo
      *
      * @return bool
@@ -336,7 +347,7 @@ class SkinMake extends Command
                 $this->attr['path'],
                 $this->attr['plugin']->getId(),
                 $this->attr['skinFile'],
-                $this->attr['namespace'].'\\'.$this->attr['skinClass'],
+                $this->attr['skinNamespace'].'\\'.$this->attr['skinClass'],
                 $this->attr['skinTarget'],
                 $this->attr['skinId'],
                 $this->attr['skinTitle'],
@@ -418,7 +429,7 @@ class SkinMake extends Command
     {
         $plugin = $this->attr('plugin');
         $id = $this->attr('skinTarget').'/skin/'.$this->attr('skinId');
-        $class = $this->attr('namespace').'\\Skin\\'.$this->attr('skinClass');
+        $class = $this->attr('skinNamespace').'\\'.$this->attr('skinClass');
         $title = $this->attr('skinTitle');
         $description = $this->attr('description');
         $skinFile = $this->attr('skinFile');
