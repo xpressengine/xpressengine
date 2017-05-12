@@ -65,7 +65,7 @@
                                 <div class="search-input-group">
                                     <input type="text" class="form-control" aria-label="Text input with dropdown button" placeholder="{{ xe_trans('xe::enterKeyword') }}" name="query" value="{{ Input::get('query') }}">
                                     <button class="btn-link">
-                                        <i class="xi-magnifier"></i><span class="sr-only">{{xe_trans('xe::search')}}</span>
+                                        <i class="xi-search"></i><span class="sr-only">{{xe_trans('xe::search')}}</span>
                                     </button>
                                 </div>
                             </form>

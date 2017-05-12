@@ -26,7 +26,7 @@
                 <label for="pwd2" class="sr-only">{{xe_trans('xe::passwordConfirm')}}</label>
                 <input type="password" id="pwd2" class="xe-form-control" placeholder="{{xe_trans('xe::passwordConfirm')}}" name="password_confirmation">
                 <!-- 버튼 on 클래스로 아이콘 스타일 제어 -->
-                {{--<button type="button" class="btn-eye on"><i class="xi-eye"></i><i class="xi-eye-slash"></i></button>--}}
+                {{--<button type="button" class="btn-eye on"><i class="xi-eye"></i><i class="xi-eye-off"></i></button>--}}
                 {{--<em class="text-message">비밀번호 확인</em>--}}
                 <!-- <em class="text-message">비밀번호가 일치하지 않습니다.</em> -->
             </div>

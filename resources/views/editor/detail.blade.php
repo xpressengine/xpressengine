@@ -203,7 +203,7 @@
                         <ul class="list-group item-setting">
                             @foreach ($items as $id => $item)
                                 <li class="list-group-item">
-                                    <button class="btn handler"><i class="xi-bullet-point"></i></button>
+                                    <button class="btn handler"><i class="xi-drag-vertical"></i></button>
                                     <em class="item-title">{{ $item['class']::getComponentInfo('name') }}</em>
                                     <span class="item-subtext">{{ $item['class']::getComponentInfo('description') }}</span>
                                     <div class="xe-btn-toggle pull-right">

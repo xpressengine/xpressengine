@@ -22,7 +22,7 @@
                 @if($data['item'] != 1)
                 <tr>
                     <td>
-                        <button class="btn handler"><i class="xi-bullet-point"></i></button>
+                        <button class="btn handler"><i class="xi-drag-vertical"></i></button>
                         <em class="item-title">{{ $data['item']::getTitle() }}</em>
                     </td>
                     <td>
