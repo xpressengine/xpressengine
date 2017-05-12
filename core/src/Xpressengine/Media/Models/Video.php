@@ -21,6 +21,10 @@ use Xpressengine\Media\Models\Meta\VideoMeta;
  *
  * @category    Media
  * @package     Xpressengine\Media
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  *
  * @property int $id
  * @property string $fileId
@@ -28,10 +32,6 @@ use Xpressengine\Media\Models\Meta\VideoMeta;
  * @property array $video
  * @property int $playtime
  * @property int $bitrate
- * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link        https://xpressengine.io
  */
 class Video extends Media
 {

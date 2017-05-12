@@ -15,13 +15,14 @@
 namespace Xpressengine\Media;
 
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Str;
 use Xpressengine\Media\Coordinators\Dimension;
 use Xpressengine\Media\Exceptions\NotAvailableException;
 use Xpressengine\Media\Exceptions\UnknownTypeException;
 use Xpressengine\Media\Models\Media;
 use Xpressengine\Media\Models\Image;
 use Xpressengine\Storage\File;
-use Xpressengine\Media\Handlers\AbstractHandler;
+use Xpressengine\Media\Handlers\MediaHandler;
 use Xpressengine\Storage\Storage;
 
 /**
@@ -96,7 +97,7 @@ class MediaManager
     /**
      * media handlers
      *
-     * @var AbstractHandler[]
+     * @var MediaHandler[]
      */
     protected $handlers = [];
 
@@ -118,7 +119,7 @@ class MediaManager
      * Returns handler
      *
      * @param string $type media type
-     * @return AbstractHandler
+     * @return MediaHandler
      * @throws UnknownTypeException
      */
     public function getHandler($type)
@@ -134,7 +135,7 @@ class MediaManager
      * Returns handler by storage File instance
      *
      * @param File $file file instance
-     * @return AbstractHandler
+     * @return MediaHandler
      * @throws UnknownTypeException
      */
     public function getHandlerByFile(File $file)
@@ -167,7 +168,7 @@ class MediaManager
      * Returns handler by storage Media instance
      *
      * @param Media $media media instance
-     * @return AbstractHandler
+     * @return MediaHandler
      */
     public function getHandlerByMedia(Media $media)
     {
@@ -194,7 +195,7 @@ class MediaManager
      */
     public function cast(File $file)
     {
-        return $this->getHandlerByFile($file)->createModel($file);
+        return $this->getHandlerByFile($file)->makeModel($file);
     }
 
     /**
@@ -220,11 +221,24 @@ class MediaManager
      * @param Media $media media instance
      * @return bool
      */
+    public function delete(Media $media)
+    {
+        $this->metaDelete($media);
+
+        return $this->storage->delete($media);
+    }
+
+    /**
+     * 미디어 삭제
+     *
+     * @param Media $media media instance
+     * @return bool
+     *
+     * @deprecated since beta.17. Use delete instead.
+     */
     public function remove(Media $media)
     {
-        $this->metaRemove($media);
-
-        return $this->storage->remove($media);
+        return $this->delete($media);
     }
 
     /**
@@ -233,11 +247,24 @@ class MediaManager
      * @param Media $media media instance
      * @return void
      */
-    public function metaRemove(Media $media)
+    public function metaDelete(Media $media)
     {
         if ($media->meta) {
             $media->meta->delete();
         }
+    }
+
+    /**
+     * Meta data 삭제
+     *
+     * @param Media $media media instance
+     * @return void
+     *
+     * @deprecated since beta.17. Use metaDelete instead.
+     */
+    public function metaRemove(Media $media)
+    {
+        $this->metaDelete($media);
     }
 
     /**
@@ -300,12 +327,30 @@ class MediaManager
      * is() method 를 통해 파일이 미디어 인지 판별할 수 있어야 하므로
      * 각각의 handler 들은 활성화된 상태로 전달 받도록 함
      *
-     * @param string          $type    media type
-     * @param AbstractHandler $handler media handler
+     * @param string       $type    media type
+     * @param MediaHandler $handler media handler
      * @return void
      */
-    public function extend($type, AbstractHandler $handler)
+    public function extend($type, MediaHandler $handler)
     {
         $this->handlers[$type] = $handler;
+    }
+
+    /**
+     * __call
+     *
+     * @param string     $name      method name
+     * @param array|null $arguments arguments
+     * @return MediaHandler|null
+     */
+    public function __call($name, $arguments)
+    {
+        $name = Str::singular($name);
+
+        if (!array_key_exists($name, $this->handlers)) {
+            return null;
+        }
+
+        return $this->handlers[$name];
     }
 }

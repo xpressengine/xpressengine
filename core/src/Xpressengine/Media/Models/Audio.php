@@ -21,16 +21,16 @@ use Xpressengine\Media\Models\Meta\AudioMeta;
  *
  * @category    Media
  * @package     Xpressengine\Media
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  *
  * @property int $id
  * @property string $fileId
  * @property array $audio
  * @property int $playtime
  * @property int $bitrate
- * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link        https://xpressengine.io
  */
 class Audio extends Media
 {

@@ -20,11 +20,15 @@ class AudioHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testMakeThrownExceptionWhenNotAvailable()
     {
-        list($storage, $reader, $temp) = $this->getMocks();
-        $instance = new AudioHandler($storage, $reader, $temp);
+        list($repo, $reader, $temp) = $this->getMocks();
+        $instance = m::mock(AudioHandler::class, [$repo, $reader, $temp])
+            ->shouldAllowMockingProtectedMethods()
+            ->makePartial();
 
         $mockFile = m::mock('Xpressengine\Storage\File');
         $mockFile->shouldReceive('getAttribute')->with('mime')->andReturn('image/jpeg');
+
+        $instance->shouldReceive('isAvailable')->once()->with('image/jpeg')->andReturn(false);
 
         try {
             $instance->make($mockFile);
@@ -37,8 +41,8 @@ class AudioHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testMake()
     {
-        list($storage, $reader, $temp) = $this->getMocks();
-        $instance = m::mock(AudioHandler::class, [$storage, $reader, $temp])
+        list($repo, $reader, $temp) = $this->getMocks();
+        $instance = m::mock(AudioHandler::class, [$repo, $reader, $temp])
             ->shouldAllowMockingProtectedMethods()
             ->makePartial();
 
@@ -61,7 +65,7 @@ class AudioHandlerTest extends \PHPUnit_Framework_TestCase
         $mockAudio->shouldReceive('setRelation')->once()->with('meta', $mockRelate)->andReturnSelf();
 
         $instance->shouldReceive('isAvailable')->once()->andReturn(true);
-        $instance->shouldReceive('createModel')->once()->with($mockFile)->andReturn($mockAudio);
+        $instance->shouldReceive('makeModel')->once()->with($mockFile)->andReturn($mockAudio);
         $instance->shouldReceive('extractInformation')->once()->with($mockAudio)->andReturn([
             ['streams' => 'some val', 'another' => 'another val'], 100, 12345
         ]);
@@ -73,8 +77,8 @@ class AudioHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testExtractInformation()
     {
-        list($storage, $reader, $temp) = $this->getMocks();
-        $instance = new AudioHandler($storage, $reader, $temp);
+        list($repo, $reader, $temp) = $this->getMocks();
+        $instance = new AudioHandler($repo, $reader, $temp);
 
         $id = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx';
 
@@ -114,7 +118,7 @@ class AudioHandlerTest extends \PHPUnit_Framework_TestCase
     private function getMocks()
     {
         return [
-            m::mock('Xpressengine\Storage\Storage'),
+            m::mock('Xpressengine\Media\Repositories\AudioRepository'),
             m::mock('getID3'),
             m::mock('Xpressengine\Storage\TempFileCreator'),
         ];
