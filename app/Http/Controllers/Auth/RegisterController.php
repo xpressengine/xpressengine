@@ -210,7 +210,9 @@ class RegisterController extends Controller
         }
 
         $token = $this->handler->storeRegisterToken('email', ['email' => $email, 'userId' => $mail->userId]);
-        $this->emailBroker->sendEmailForRegister($mail, $token, 'emails.register');
+        $this->emailBroker->sendEmailForRegister($mail, $token, 'emails.register', function ($m) {
+            $m->subject(xe_trans(app('xe.site')->getSiteConfig()->get('site_title')).' '.xe_trans('xe::emailConfirm'));
+        });
 
         return redirect()->route('auth.register', ['token'=>$token['id']])->with(['alert'=>['type'=>'success', 'message' => '인증 이메일이 전송되었습니다.']]);
     }

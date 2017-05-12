@@ -881,12 +881,20 @@ return [
         'ko' => '로그인',
         'en' => 'Login'
     ],
+    'doLogin' => [
+        'ko' => '계정에 로그인',
+        'en' => 'Login'
+    ],
     'logout' => [
         'ko' => '로그아웃',
         'en' => 'Logout'
     ],
     'signUp' => [
         'ko' => '회원 가입',
+        'en' => 'Sign up',
+    ],
+    'doSignUp' => [
+        'ko' => '회원 가입하기',
         'en' => 'Sign up',
     ],
     'signUpDate' => [
@@ -1256,13 +1264,32 @@ return [
         'ko' => '이메일 인증',
         'en' => 'Email confirm'
     ],
-    'emailConfirmDescription' => [
-        'ko' => '회원가입을 완료하려면 이메일 인증을 해야 합니다. :email 을 확인하신후, 인증 코드를 입력해주세요.',
-        'en' => 'To complete your membership you need to email authentication, please check the :email , please enter your authorization code.'
+    'confirmEmailForAddEmailDescription' => [
+        'ko' => '<p>이메일을 추가하기 위해 이메일 인증을 진행합니다.</p><p>개인설정 페이지에서 아래의 인증 코드를 입력하거나, 인증 버튼을 누르십시오.</p>'
     ],
-    'msgEmailConfirm' => [
-        'ko' => '<p>회원가입을 위해 이메일 인증을 진행합니다.</p><p>회원가입 페이지에서 아래의 인증코드를 입력하거나, 인증 버튼을 누르면 인증이 완료됩니다.</p>',
-        'en' => '<p>Welcome to join.</p><p>To complete finishing sign up, input below confirmation code to register page or click below button.</p>'
+    'registerByEmailConfirm' => [
+        'ko' => '이메일 인증으로 회원가입하기',
+        'en' => 'Register by Email confirmation'
+    ],
+    'registerByEmailConfirmDescription' => [
+        'ko' => '이메일 인증을 통해 가입할 수 있습니다. 인증 코드를 전송받을 이메일 주소를 입력하세요.',
+    ],
+    'sendConfirmationEmail' => [
+        'ko' => '인증 이메일 전송',
+    ],
+    'inputEmailConfirmCode' => [
+        'ko' => '이메일 인증 코드 입력',
+        'en' => 'Input email confirmation code',
+    ],
+    'inputEmailConfirmCodeDescription' => [
+        'ko' => ':email로 인증 이메일이 전송되었습니다. 회원가입을 계속하시려면 인증 이메일에 명시된 인증코드를 입력하시거나, 이메일에서 [회원가입 계속하기] 링크를 클릭하세요.',
+    ],
+    'confirmEmailForRegisterDescription' => [
+        'ko' => '<p>회원가입을 위해 이메일 인증을 진행합니다.</p><p>회원가입 페이지에서 아래의 인증코드를 입력하거나, [회원가입 계속하기] 버튼을 누르면 인증이 완료됩니다.</p>',
+    ],
+    'continueSigningUp' => [
+        'ko' => '회원가입 계속하기',
+        'en' => 'Continue signing up'
     ],
     'confirmCode' => [
         'ko' => '인증 코드',

@@ -26,6 +26,7 @@ use Xpressengine\User\Exceptions\EmailAlreadyExistsException;
 use Xpressengine\User\Exceptions\InvalidAccountInfoException;
 use Xpressengine\User\Exceptions\InvalidDisplayNameException;
 use Xpressengine\User\Exceptions\InvalidPasswordException;
+use Xpressengine\User\Models\UserAccount;
 use Xpressengine\User\Repositories\PendingEmailRepositoryInterface;
 use Xpressengine\User\Repositories\UserAccountRepositoryInterface;
 use Xpressengine\User\Repositories\UserEmailRepositoryInterface;
@@ -823,11 +824,11 @@ class UserHandler
      * @param UserInterface $user user
      * @param array         $data data
      *
-     * @return void
+     * @return AccountInterface
      */
     public function createAccount(UserInterface $user, array $data)
     {
-        $this->accounts()->create($user, $data);
+        return $this->accounts()->create($user, $data);
     }
 
     /**

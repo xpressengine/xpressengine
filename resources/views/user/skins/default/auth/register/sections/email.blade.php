@@ -1,9 +1,14 @@
-<h3>이메일 인증으로 회원가입하기</h3>
+<h4>{{ xe_trans('xe::registerByEmailConfirm') }}</h4>
 
-<div class="confirmEmail">
-    <form action="{{ route('auth.register.confirm') }}" method="post">
+<form action="{{ route('auth.register.confirm') }}" method="post">
+    <div class="auth-group">
+
         {{ csrf_field() }}
-        {{ uio('formText', ['name'=>'email', 'label'=>'이메일', 'description'=>'인증을 완료한 후, 회원 등록될 때 입력하신 이메일 정보로 등록됩니다']) }}
-        <button type="submit">인증메일 전송</button>
-    </form>
-</div>
+
+        <label for="email" class="xe-sr-only">{{xe_trans('xe::email')}}</label>
+        <input type="text" id="email" class="xe-form-control" placeholder="{{xe_trans('xe::email')}}" name="email" value="{{ old('email') }}">
+        <em class="text-message">{{ xe_trans('xe::registerByEmailConfirmDescription') }}</em>
+
+    </div>
+    <button type="submit" class="xe-btn xe-btn-primary xe-btn-block">{{ xe_trans('xe::sendConfirmationEmail') }}</button>
+</form>

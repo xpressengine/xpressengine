@@ -14,7 +14,7 @@
         </tr>
         <tr>
             <td style="font-family:NanumBarunGothic,'나눔고딕',NanumGothic,dotum,'돋움',Helvetica;line-height:34px;vertical-align:top;color:#2c2e37;font-size:16px">
-                {!!  xe_trans('xe::msgEmailConfirm') !!}
+                {!!  xe_trans('xe::confirmEmailForRegisterDescription') !!}
             </td>
         </tr>
         <tr>
@@ -47,7 +47,7 @@
                                 <tr>
                                     <td colspan="2" align="center">
                                         <!--[D]  텍스트 사이즈에 따라 width 변경해야 함 or 300px 미만의 넉넉한 사이즈로 지정-->
-                                        <div style="display:inline-block;width:100px;max-width:100%;vertical-align:top; margin:0 auto">
+                                        <div style="display:inline-block;width:150px;max-width:100%;vertical-align:top; margin:0 auto">
                                             <table style="table-layout:fixed;width:100%;text-align:center" border="0" cellpadding="0" cellspacing="0">
                                                 <tbody>
                                                 <tr>
@@ -56,7 +56,7 @@
                                                             <tbody>
                                                             <tr>
                                                                 <td height="42" style="text-align:center">
-                                                                    <a href="{{ route('auth.register', ['token' => $token, 'code' => $mail->confirmationCode]) }}" target="_blank" style="display:block;height:42px;font-size:15px;color:#fff;text-decoration:none;line-height:42px;font-family:NanumBarunGothic,'나눔고딕',NanumGothic,dotum,'돋움',Helvetica;">{{ xe_trans('xe::confirmation') }}</a>
+                                                                    <a href="{{ route('auth.register', ['token' => $token->id, 'code' => $mail->confirmationCode]) }}" target="_blank" style="display:block;height:42px;font-size:15px;color:#fff;text-decoration:none;line-height:42px;font-family:NanumBarunGothic,'나눔고딕',NanumGothic,dotum,'돋움',Helvetica;">{{ xe_trans('xe::continueSigningUp') }}</a>
                                                                 </td>
                                                             </tr>
                                                             </tbody>

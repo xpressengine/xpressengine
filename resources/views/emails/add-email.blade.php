@@ -14,8 +14,7 @@
         </tr>
         <tr>
             <td style="font-family:NanumBarunGothic,'나눔고딕',NanumGothic,dotum,'돋움',Helvetica;line-height:34px;vertical-align:top;color:#2c2e37;font-size:16px">
-                <p>이메일을 추가하기 위해 이메일 인증을 진행합니다.</p>
-                <p>인증페이지에서 아래의 인증번호를 입력하거나, 인증버튼을 누르면 인증이 완료됩니다.</p>
+                {!! xe_trans('xe::confirmEmailForAddEmailDescription') !!}
             </td>
         </tr>
         <tr>

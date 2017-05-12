@@ -6,7 +6,7 @@
                 <div class="side-menu xe-col-sm-3">
                     <div class="menu-open">
                         <button class="xe-menu-toggle" type="button">
-                            <span class="sr-only">Toggle navigation</span>
+                            <span class="xe-sr-only">Toggle navigation</span>
                             <span class="icon-bar"></span>
                             <span class="icon-bar v2"></span>
                             <span class="icon-bar"></span>

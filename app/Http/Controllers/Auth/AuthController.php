@@ -13,6 +13,7 @@ use XeDB;
 use XePresenter;
 use XeTheme;
 use Xpressengine\User\EmailBrokerInterface;
+use Xpressengine\User\Exceptions\InvalidConfirmationCodeException;
 use Xpressengine\User\Exceptions\PendingEmailNotExistsException;
 use Xpressengine\User\UserHandler;
 
@@ -92,6 +93,7 @@ class AuthController extends Controller
             $request,
             [
                 'email' => 'required|email',
+                'code' => 'required',
             ]
         );
 
@@ -105,14 +107,12 @@ class AuthController extends Controller
             throw new PendingEmailNotExistsException();
         }
 
-        // code가 없을 경우 이메일 인증 페이지 출력
-        if ($code === null) {
-            return \XePresenter::make('email');
-        }
-
         XeDB::beginTransaction();
         try {
             $this->emailBroker->confirmEmail($email, $code);
+        } catch (InvalidConfirmationCodeException $e) {
+            XeDB::rollback();
+            throw new HttpException(Response::HTTP_FORBIDDEN, xe_trans('xe::invalidConfirmationCode'), $e);
         } catch (Exception $e) {
             XeDB::rollback();
             throw $e;
