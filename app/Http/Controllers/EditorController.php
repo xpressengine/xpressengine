@@ -8,6 +8,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Xpressengine\Editor\EditorHandler;
 use Xpressengine\Http\Request;
 use Xpressengine\Media\Models\Image;
+use Xpressengine\Media\Models\Media;
 use Xpressengine\Permission\Instance;
 use Xpressengine\Permission\PermissionSupport;
 use Xpressengine\Presenter\RendererInterface;
@@ -188,7 +189,7 @@ class EditorController extends Controller
             if (\Agent::isMobile() === true) {
                 $dimension = 'M';
             }
-            $media = Image::getThumbnail(
+            $media = XeMedia::images()->getThumbnail(
                 XeMedia::make($file),
                 EditorHandler::THUMBNAIL_TYPE,
                 $dimension

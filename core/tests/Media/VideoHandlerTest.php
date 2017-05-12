@@ -20,8 +20,8 @@ class VideoHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPictureThrownExceptionWhenGivenMediaIsNotVideo()
     {
-        list($storage, $reader, $temp, $extension, $fromSecond) = $this->getMocks();
-        $instance = new VideoHandler($storage, $reader, $temp, $extension, $fromSecond);
+        list($repo, $reader, $temp, $extension, $fromSecond) = $this->getMocks();
+        $instance = new VideoHandler($repo, $reader, $temp, $extension, $fromSecond);
 
         $mockImage = m::mock('Xpressengine\Media\Models\Image');
 
@@ -36,8 +36,8 @@ class VideoHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPicture()
     {
-        list($storage, $reader, $temp, $extension, $fromSecond) = $this->getMocks();
-        $instance = new VideoHandler($storage, $reader, $temp, $extension, $fromSecond);
+        list($repo, $reader, $temp, $extension, $fromSecond) = $this->getMocks();
+        $instance = new VideoHandler($repo, $reader, $temp, $extension, $fromSecond);
 
         $mockVideo = m::mock('Xpressengine\Media\Models\Video');
         $mockVideo->shouldReceive('getContent')->andReturn('content');
@@ -49,8 +49,8 @@ class VideoHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testMakeThrownExceptionWhenGivenFileNotAvailable()
     {
-        list($storage, $reader, $temp, $extension, $fromSecond) = $this->getMocks();
-        $instance = m::mock(VideoHandler::class, [$storage, $reader, $temp, $extension, $fromSecond])
+        list($repo, $reader, $temp, $extension, $fromSecond) = $this->getMocks();
+        $instance = m::mock(VideoHandler::class, [$repo, $reader, $temp, $extension, $fromSecond])
             ->shouldAllowMockingProtectedMethods()
             ->makePartial();
 
@@ -70,8 +70,8 @@ class VideoHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testMake()
     {
-        list($storage, $reader, $temp, $extension, $fromSecond) = $this->getMocks();
-        $instance = m::mock(VideoHandler::class, [$storage, $reader, $temp, $extension, $fromSecond])
+        list($repo, $reader, $temp, $extension, $fromSecond) = $this->getMocks();
+        $instance = m::mock(VideoHandler::class, [$repo, $reader, $temp, $extension, $fromSecond])
             ->shouldAllowMockingProtectedMethods()
             ->makePartial();
 
@@ -97,7 +97,7 @@ class VideoHandlerTest extends \PHPUnit_Framework_TestCase
         $mockVideo->shouldReceive('setRelation')->once()->with('meta', $mockRelate)->andReturnSelf();
 
         $instance->shouldReceive('isAvailable')->once()->with('video/mp4')->andReturn(true);
-        $instance->shouldReceive('createModel')->once()->with($mockFile)->andReturn($mockVideo);
+        $instance->shouldReceive('makeModel')->once()->with($mockFile)->andReturn($mockVideo);
         $instance->shouldReceive('extractInformation')->once()->with($mockVideo)->andReturn([
             ['streams' => true],
             ['var1' => 'val1', 'var2' => 'val2' ],
@@ -113,8 +113,8 @@ class VideoHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testExtractInformation()
     {
-        list($storage, $reader, $temp, $extension, $fromSecond) = $this->getMocks();
-        $instance = new VideoHandler($storage, $reader, $temp, $extension, $fromSecond);
+        list($repo, $reader, $temp, $extension, $fromSecond) = $this->getMocks();
+        $instance = new VideoHandler($repo, $reader, $temp, $extension, $fromSecond);
 
         $mockVideo = m::mock('Xpressengine\Media\Models\Video');
         $mockVideo->shouldReceive('getContent')->andReturn('content');
@@ -148,7 +148,7 @@ class VideoHandlerTest extends \PHPUnit_Framework_TestCase
     private function getMocks()
     {
         return [
-            m::mock('Xpressengine\Storage\Storage'),
+            m::mock('Xpressengine\Media\Repositories\VideoRepository'),
             m::mock('getID3'),
             m::mock('Xpressengine\Storage\TempFileCreator'),
             m::mock('Xpressengine\Media\Extensions\ExtensionInterface'),

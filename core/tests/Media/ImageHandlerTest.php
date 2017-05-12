@@ -20,8 +20,8 @@ class ImageHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPictureThrownExceptionWhenNotImage()
     {
-        list($storage) = $this->getMocks();
-        $instance = new ImageHandler($storage);
+        list($repo, $storage) = $this->getMocks();
+        $instance = new ImageHandler($repo, $storage);
 
         $mockMedia = m::mock('Xpressengine\Media\Models\Media');
 
@@ -36,8 +36,8 @@ class ImageHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPicture()
     {
-        list($storage) = $this->getMocks();
-        $instance = new ImageHandler($storage);
+        list($repo, $storage) = $this->getMocks();
+        $instance = new ImageHandler($repo, $storage);
 
         $mockImage = m::mock('Xpressengine\Media\Models\Image');
         $mockImage->shouldReceive('getContent')->andReturn('content');
@@ -47,8 +47,8 @@ class ImageHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateThumbnails()
     {
-        list($storage) = $this->getMocks();
-        $instance = m::mock(ImageHandler::class, [$storage])
+        list($repo, $storage) = $this->getMocks();
+        $instance = m::mock(ImageHandler::class, [$repo, $storage])
             ->shouldAllowMockingProtectedMethods()
             ->makePartial();
 
@@ -77,18 +77,25 @@ class ImageHandlerTest extends \PHPUnit_Framework_TestCase
             null
         )->andReturn($mockThumbFile);
 
-        $instance->shouldReceive('make')->once()->with($mockThumbFile, ['type' => 'letter', 'code' => null]);
+        $mockThumbImg = m::mock('Xpressengine\Media\Models\Image');
+
+        $instance->shouldReceive('makeModel')->once()->with($mockThumbFile)->andReturn($mockThumbImg);
+        $instance->shouldReceive('setMetaData')->once()->with($mockThumbImg, ['type' => 'letter', 'code' => null]);
 
         $instance->createThumbnails($imageContent, $mockCommand);
     }
 
     public function testMakeThrownExceptionWhenGivenFileIsNotAvailable()
     {
-        list($storage) = $this->getMocks();
-        $instance = new ImageHandler($storage);
+        list($repo, $storage) = $this->getMocks();
+        $instance = m::mock(ImageHandler::class, [$repo, $storage])
+            ->shouldAllowMockingProtectedMethods()
+            ->makePartial();
 
         $mockFile = m::mock('Xpressengine\Storage\File');
         $mockFile->shouldReceive('getAttribute')->with('mime')->once()->andReturn('text/plain');
+
+        $instance->shouldReceive('isAvailable')->once()->with('text/plain')->andReturn(false);
 
         try {
             $instance->make($mockFile);
@@ -101,14 +108,31 @@ class ImageHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testMake()
     {
-        list($storage) = $this->getMocks();
-        $instance = m::mock(ImageHandler::class, [$storage])
+        list($repo, $storage) = $this->getMocks();
+        $instance = m::mock(ImageHandler::class, [$repo, $storage])
             ->shouldAllowMockingProtectedMethods()
             ->makePartial();
 
         $mockFile = m::mock('Xpressengine\Storage\File');
         $mockFile->shouldReceive('getAttribute')->once()->with('mime')->andReturn('image/jpeg');
-//        $mockFile->shouldReceive('getId')->andReturn('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx');
+        $instance->shouldReceive('isAvailable')->with('image/jpeg')->andReturn(true);
+
+        $mockImage = m::mock('Xpressengine\Media\Models\Image');
+
+        $instance->shouldReceive('makeModel')->with($mockFile)->andReturn($mockImage);
+        $instance->shouldReceive('setMetaData')->with($mockImage);
+
+        $instance->make($mockFile);
+    }
+
+    public function testSetMetaData()
+    {
+        list($repo, $storage) = $this->getMocks();
+        $instance = m::mock(ImageHandler::class, [$repo, $storage])
+            ->shouldAllowMockingProtectedMethods()
+            ->makePartial();
+
+        $mockImage = m::mock('Xpressengine\Media\Models\Image');
 
         $mockMeta = m::mock('stdClass');
         $mockMeta->shouldReceive('create')->once()->with([
@@ -116,21 +140,28 @@ class ImageHandlerTest extends \PHPUnit_Framework_TestCase
             'height' => 300,
             'type' => 'test'
         ])->andReturnSelf();
-        $mockImage = m::mock('Xpressengine\Media\Models\Image');
+
         $mockImage->shouldReceive('getAttribute')->with('meta')->andReturnNull();
         $mockImage->shouldReceive('meta')->andReturn($mockMeta);
         $mockImage->shouldReceive('setRelation')->once()->with('meta', $mockMeta)->andReturnSelf();
 
-        $instance->shouldReceive('createModel')->with($mockFile)->andReturn($mockImage);
         $instance->shouldReceive('extractDimension')->once()->with($mockImage)->andReturn([200, 300]);
 
+        $this->invokeMethod($instance, 'setMetaData', [$mockImage, ['type' => 'test']]);
+    }
 
-        $instance->make($mockFile, ['type' => 'test']);
+    private function invokeMethod($object, $method, $arguments)
+    {
+        $rfm = new \ReflectionMethod($object, $method);
+        $rfm->setAccessible(true);
+
+        return $rfm->invokeArgs($object, $arguments);
     }
 
     private function getMocks()
     {
         return [
+            m::mock('Xpressengine\Media\Repositories\ImageRepository'),
             m::mock('Xpressengine\Storage\Storage'),
         ];
     }

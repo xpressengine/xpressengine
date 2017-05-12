@@ -22,6 +22,10 @@ use Xpressengine\Media\Models\Meta\ImageMeta;
  *
  * @category    Media
  * @package     Xpressengine\Media
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  *
  * @property int $id
  * @property string $fileId
@@ -29,10 +33,6 @@ use Xpressengine\Media\Models\Meta\ImageMeta;
  * @property string $code
  * @property int $width
  * @property int $height
- * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link        https://xpressengine.io
  */
 class Image extends Media
 {
@@ -61,6 +61,8 @@ class Image extends Media
      * @param string $dimension   dimension code
      * @param bool   $defaultSelf if set true, returns self when thumbnail not exists
      * @return Image|null
+     *
+     * @deprecated since beta.17. Use ImageRepository::getThumbnail instead.
      */
     public static function getThumbnail(Media $media, $type, $dimension, $defaultSelf = true)
     {
@@ -78,6 +80,8 @@ class Image extends Media
      * @param Media       $media media instance
      * @param null|string $type  thumbnail make type
      * @return Image[]
+     *
+     * @deprecated since beta.17. Use ImageRepository::getThumbnails instead.
      */
     public static function getThumbnails(Media $media, $type = null)
     {
