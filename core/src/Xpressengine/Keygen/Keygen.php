@@ -38,19 +38,7 @@ use Rhumsaa\Uuid\Exception\UnsatisfiedDependencyException;
 use Xpressengine\Keygen\Exceptions\UnknownGeneratorVersionException;
 
 /**
- * # Keygen
- * 이 클래스는 unique id를 생성하는 라이브러리를 wrapping 하여
- * DI를 가능하게 하고 생성방식 변경시 수정 요소를 최소화 할 수 있도록 함.
- *
- * ### app binding : xe.keygen 으로 바인딩 되어 있음
- *
- * ### 사용
- * ```php
- * $keygen = App::make('xe.keygen');
- * $uuid = $keygen->generate();
- * ```
- *
- * 생성된 id 는 `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` 형식을 가짐
+ * Class Keygen
  *
  * @category    Keygen
  * @package     Xpressengine\Keygen

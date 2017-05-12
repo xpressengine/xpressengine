@@ -20,49 +20,7 @@ use Xpressengine\Config\Exceptions\InvalidArgumentException;
 use Xpressengine\Site\Exceptions\CanNotUseDomainException;
 
 /**
- * SiteHandler
- * Site 를 관리하는 클래스
- *
- * ## app binding
- * * xe.site 으로 바인딩 되어 있음
- * * XeSite Facade 제공
- *
- * ## 사용법
- *
- * ### 현재의 Site 객체를 획득
- *
- * ```php
- * XeSite::getCurrentSite()
- * ```
- *
- * ### 현재의 Site 객체를 지정
- *
- * ```php
- * XeSite::setCurrentSite(Site $site)
- * ```
- *
- * ### 현재의 SiteKey 획득
- * * 현재 사이트 객체에서 사이트 키를 가져옴.
- * * 편의를 위해서 제공
- *
- * ```php
- * XeSite::getCurrentSiteKey()
- * ```
- *
- * ### Site 의 ConfigEntity 획득
- * * siteKey 에 해당하는 설정 정보 가져옴
- * * siteKey 를 전달하지 않는 경우에는 defaultSiteKey 가 적용됨
- *
- * ```php
- * XeSite::getSiteConfig($siteKey = null)
- * ```
- *
- * ### Site 의 ConfigEntity 업데이트
- * * siteKey 에 해당하는 ConfigEntity 수정
- *
- * ```php
- * XeSite::putSiteConfig(ConfigEntity $config)
- * ```
+ * Class SiteHandler
  *
  * @category    Site
  * @package     Xpressengine\Site

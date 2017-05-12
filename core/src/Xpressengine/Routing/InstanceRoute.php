@@ -22,16 +22,16 @@ use Xpressengine\Site\Site;
  *
  * @category Routing
  * @package  Xpressengine\Routing
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
  *
  * @property string $url        url
  * @property string $module     module id
  * @property string $instanceId instance Id
  * @property string $menuId     menu id
  * @property string $siteKey    site key
- * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link        https://xpressengine.io
  */
 class InstanceRoute extends DynamicModel
 {

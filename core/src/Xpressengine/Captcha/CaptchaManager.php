@@ -19,28 +19,7 @@ use Xpressengine\Captcha\Services\GoogleRecaptcha;
 use Xpressengine\Captcha\Services\NaverCaptcha;
 
 /**
- * # CaptchaManager
- *
- * 사용할 captcha 객체를 제공해 줌.
- *
- * ### app binding : xe.captcha 로 바인딩 되어 있음
- *
- * ### Usage
- * * front 에 작성
- * ```html
- * <div>
- *  <?php echo app('xe.captcha')->render(); ?>
- * </div>
- * ```
- *
- * * 검증 처리
- * ```php
- * if (app('xe.captcha')->verify() === true) {
- *      // 성공 처리 코드
- * } else {
- *      $errors = app('xe.captcha')->errors();
- * }
- * ```
+ * Class CaptchaManager
  *
  * @category    Captcha
  * @package     Xpressengine\Captcha

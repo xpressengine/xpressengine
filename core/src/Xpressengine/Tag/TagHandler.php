@@ -19,41 +19,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\QueryException;
 
 /**
- * # TagHandler
- * Tag 패키지는 등록, 삭제, 관련데이터 처리를 담당하고
- * 자동완성을 위한 기능이 제공됨.
- *
- * ### app binding : xe.tag 로 바인딩 되어 있음
- * `XeTag` Facade 로 접근이 가능
- *
- * ### 등록 및 반환
- * ```php
- *  // 등록
- *  XeTag::set('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', ['word1', 'word2', 'word3']);
- *  // 각각의 인스턴스를 구분하고자 하는 경우 위해 대상의 인스턴스 아이디를 전달하면 됩니다.
- *  XeTag::set('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', ['word1', 'word2', 'word3'], '인스턴스 아이디');
- *  // 반환
- *  $tags = Tag::getByTaggable('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx');
- * ```
- *
- * ### 자동 완성
- * 단어를 쉽게 완성할 수 있도록 기존에 등록된 단어중 입력중인 문자와 유사한 단어들을
- * 검색하여 반환해줍니다.
- * ```php
- *  $tags = XeTag::similar('ap');
- *  // result: app, application, apm, append, apple ...
- *  특정 인스턴스에서만 검색하고자 하는 경우 인스턴스 아이디를 인자로 넘겨주면 됩니다.
- *  $tags = XeTag::similar('ap', 10, '인스턴스 아이디');
- * ```
- *
- * ### 인기태그
- * 어떤 태그가 많이 사용되는지 알수 있습니다.
- * ```php
- *  // 전체
- *  $tags = Tag::getPopular();
- *  // 기간별
- *  $tags = Tag::getPopularPeriod('시작일', '종료일');
- * ```
+ * Class TagHandler
  *
  * @category    Tag
  * @package     Xpressengine\Tag

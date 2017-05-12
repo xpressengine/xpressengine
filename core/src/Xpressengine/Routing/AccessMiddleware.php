@@ -22,11 +22,7 @@ use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 
 /**
- * 이 클래스 Xpressengine 에서 route middle ware 로 동작한다.
- * Instance 로 연결된 Instance Route 에 접근하는 경우에 접근 권한이 있는지 확인한다.
- * AccessMiddleware 는 route::instance 로 등록된 경우를 위해서 middleware 역활을 수행한다
- * route::instance 로 등록된 경우에는 instance route - menu 로직을 수행하므로
- * 관련 instance route 와 menu 의 정보를 취합하여 Access 권한을 확인한다.
+ * Class AccessMiddleware
  *
  * @category    Routing
  * @package     Xpressengine\Routing

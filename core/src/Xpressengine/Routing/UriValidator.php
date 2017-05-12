@@ -14,11 +14,9 @@
 
 namespace Xpressengine\Routing;
 
-use Illuminate\Http\Request as LaravelRequest;
 use Illuminate\Routing\Matching\ValidatorInterface;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
-use Illuminate\Routing\Route as LaravelRoute;
 
 /**
  * Class UriValidator
@@ -27,7 +25,7 @@ use Illuminate\Routing\Route as LaravelRoute;
  * @package     Xpressengine\Routing
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
 class UriValidator implements ValidatorInterface
@@ -36,8 +34,8 @@ class UriValidator implements ValidatorInterface
     /**
      * Validate a given rule against a route and request.
      *
-     * @param  LaravelRoute   $route   illuminate route
-     * @param  LaravelRequest $request illuminate request
+     * @param  Route   $route   illuminate route
+     * @param  Request $request illuminate request
      *
      * @return bool
      */
