@@ -41,7 +41,7 @@
                                     <div class="search-input-group">
                                         <input type="text" class="form-control" name="keyword" aria-label="Text input with dropdown button" placeholder="{{xe_trans('xe::enterKeyword')}}" value="{{ $selected_keyword }}">
                                         <button class="btn-link" id="btn-search" type="submit">
-                                            <i class="xi-magnifier"></i><span class="sr-only">{{ XeLang::trans('lang::admin.search-short') }}</span>
+                                            <i class="xi-search"></i><span class="sr-only">{{ XeLang::trans('lang::admin.search-short') }}</span>
                                         </button>
                                     </div>
                                 {{--</div>--}}

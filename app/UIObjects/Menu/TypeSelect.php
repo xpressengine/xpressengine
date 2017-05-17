@@ -42,9 +42,7 @@ class TypeSelect extends AbstractUIObject
     {
         $args = $this->arguments;
 
-        /** @var \Xpressengine\Menu\ModuleHandler $typeHandler */
-        $typeHandler = app('xe.module');
-        $types = $typeHandler->getAllModuleInfo();
+        $types = app('xe.menu')->getModuleHandler()->getAllModuleInfo();
 
         $selectedTypeId = array_get($args, 'selectedType', static::$defaultSelectedId);
 

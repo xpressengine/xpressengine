@@ -59,7 +59,7 @@ class DefaultSkin extends AbstractSkin
      */
     public function create(array $args)
     {
-        $category = Category::find($this->config->get('categoryId'));
+        $category = XeCategory::find($this->config->get('categoryId'));
         $this->addMergeData(['categoryItems' => $category->items]);
 
         return parent::create($args);
@@ -74,11 +74,11 @@ class DefaultSkin extends AbstractSkin
      */
     public function edit(array $args)
     {
-        $category = Category::find($this->config->get('categoryId'));
+        $category = XeCategory::find($this->config->get('categoryId'));
 
         $item = null;
         if (isset($args[$this->config->get('id') . 'ItemId'])) {
-            $item = CategoryItem::find($args[$this->config->get('id') . 'ItemId']);
+            $item = XeCategory::itemFind($args[$this->config->get('id') . 'ItemId']);
         }
 
         $this->addMergeData([
@@ -100,7 +100,7 @@ class DefaultSkin extends AbstractSkin
     {
         $item = null;
         if (isset($args[$this->config->get('id') . 'ItemId'])) {
-            $item = CategoryItem::find($args[$this->config->get('id') . 'ItemId']);
+            $item = XeCategory::itemFind($args[$this->config->get('id') . 'ItemId']);
         }
 
         $this->addMergeData([
@@ -119,11 +119,11 @@ class DefaultSkin extends AbstractSkin
      */
     public function search(array $args)
     {
-        $category = Category::find($this->config->get('categoryId'));
+        $category = XeCategory::find($this->config->get('categoryId'));
 
         $item = null;
         if (isset($args[$this->config->get('id') . 'ItemId'])) {
-            $item = CategoryItem::find($args[$this->config->get('id') . 'ItemId']);
+            $item = XeCategory::itemFind($args[$this->config->get('id') . 'ItemId']);
         }
 
         $this->addMergeData([
@@ -252,7 +252,7 @@ class DefaultSkin extends AbstractSkin
             return null;
         }
 
-        return xe_trans(CategoryItem::find($args[$key])->word);
+        return xe_trans(XeCategory::itemFind($args[$key])->word);
     }
 
 }

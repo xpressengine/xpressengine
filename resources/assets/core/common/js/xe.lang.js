@@ -113,6 +113,30 @@ export default (function () {
       return Translator.trans(id, parameters);
     },
 
+    requestTrans: function (id, parameters, callback) {
+      var _this = this;
+
+      XE.ajax({
+        url: xeBaseURL + '/' + XE.options.managePrefix + '/lang/lines/' + id,
+        type: 'json',
+        data: parameters,
+        success: function (res) {
+          var message = id.split('::')[1];
+
+          if (res.length > 0) {
+            for (var i = 0, max = res.length; i < max; i += 1) {
+              if (res[i].locale == _this.locales[0]) {
+                data = res[i].value;
+                break;
+              }
+            }
+          }
+
+          callback(message);
+        },
+      });
+    },
+
     transChoice: function (id, number, parameters) {
       return Translator.transChoice(id, number, parameters);
     },

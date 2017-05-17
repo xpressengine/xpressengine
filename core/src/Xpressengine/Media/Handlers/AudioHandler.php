@@ -17,9 +17,9 @@ namespace Xpressengine\Media\Handlers;
 use Xpressengine\Media\Exceptions\NotAvailableException;
 use Xpressengine\Media\Models\Media;
 use Xpressengine\Media\Models\Audio;
+use Xpressengine\Media\Repositories\AudioRepository;
 use Xpressengine\Storage\TempFileCreator;
 use Xpressengine\Storage\File;
-use Xpressengine\Storage\Storage;
 
 /**
  * Class AudioHandler
@@ -33,13 +33,6 @@ use Xpressengine\Storage\Storage;
  */
 class AudioHandler extends AbstractHandler
 {
-    /**
-     * Storage instance
-     *
-     * @var Storage
-     */
-    protected $storage;
-
     /**
      * Media reader instance
      *
@@ -57,13 +50,14 @@ class AudioHandler extends AbstractHandler
     /**
      * Constructor
      *
-     * @param Storage         $storage Storage instance
-     * @param \getID3         $reader  Media reader instance
-     * @param TempFileCreator $temp    TempFileCreator instance
+     * @param AudioRepository $repo   AudioRepository instance
+     * @param \getID3         $reader Media reader instance
+     * @param TempFileCreator $temp   TempFileCreator instance
      */
-    public function __construct(Storage $storage, \getID3 $reader, TempFileCreator $temp)
+    public function __construct(AudioRepository $repo, \getID3 $reader, TempFileCreator $temp)
     {
-        $this->storage = $storage;
+        parent::__construct($repo);
+
         $this->reader = $reader;
         $this->temp = $temp;
     }
@@ -80,18 +74,6 @@ class AudioHandler extends AbstractHandler
     }
 
     /**
-     * 각 미디어 타입에서 사용가능한 확장자 반환
-     *
-     * @return array
-     */
-    public function getAvailableMimes()
-    {
-        $class = $this->getModel();
-
-        return $class::getMimes();
-    }
-
-    /**
      * media 객체로 반환
      *
      * @param File $file file instance
@@ -104,7 +86,7 @@ class AudioHandler extends AbstractHandler
             throw new NotAvailableException();
         }
 
-        $audio = $this->createModel($file);
+        $audio = $this->makeModel($file);
         if (!$audio->meta) {
             list($audioData, $playtime, $bitrate) = $this->extractInformation($audio);
 
@@ -139,28 +121,5 @@ class AudioHandler extends AbstractHandler
         }
 
         return [$info['audio'], $info['playtime_seconds'], $info['bitrate']];
-    }
-
-    /**
-     * Returns model class
-     *
-     * @return string
-     */
-    public function getModel()
-    {
-        return Audio::class;
-    }
-
-    /**
-     * Create model
-     *
-     * @param File $file file instance
-     * @return Audio
-     */
-    public function createModel(File $file)
-    {
-        $class = $this->getModel();
-
-        return $class::make($file);
     }
 }

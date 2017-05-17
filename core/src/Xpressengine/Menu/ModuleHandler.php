@@ -18,44 +18,7 @@ use Xpressengine\Menu\Exceptions\NotFoundModuleException;
 use Xpressengine\Plugin\PluginRegister;
 
 /**
- * ModuleHandler
- * MenuItem 을 생성할 때 Module 을 관리하고 처리하는 역활
- * RouteInstance 와 밀접한 관계가 있으며 Plugin Module 이 대상이 된다
- *
- * ## app binding : xe.module 으로 바인딩 되어 있음
- * Module Facade 로 접근이 가능함.
- *
- * ## 사용법
- *
- * ### 전체 Module 조회
- * * Register 를 통해 모든 Module 들을 조회한다
- *
- * ```php
- * $allModules = $handler->getAll();
- * ```
- *
- * ### 전체 Module 의 정보 조회
- * * getAll()을 통해 조회된 내역들을 바탕으로 Module class 들의 정보를 조회
- *
- * ```php
- * $allModules = $handler->getAllModuleInfo();
- * ```
- *
- * ### ModuleClassName 조회
- * * Module Id 를 전달하여 ClassName 조회
- *
- * * 찾고자 하는 Module 의 Id 를 인자로 전달
- * ```php
- * $className = $menuHandler->getModuleClassName($moduleId);
- * ```
- *
- * ### ModuleClass 의 인스턴스화한 Object 획득
- * * Module Id(Module Id) 를 전달하여 인스턴스한 Object 를 획득
- *
- * * 찾고자 하는 Module 의 Id 를 인자로 전달
- * ```php
- * $moduleObject = $menuHandler->getModuleObject($moduleId);
- * ```
+ * Class ModuleHandler
  *
  * @category Menu
  * @package  Xpressengine\Menu

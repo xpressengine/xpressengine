@@ -19,6 +19,7 @@ use Xpressengine\Media\Exceptions\WrongInstanceException;
 use Xpressengine\Media\Exceptions\NotAvailableException;
 use Xpressengine\Media\Models\Image;
 use Xpressengine\Media\Models\Media;
+use Xpressengine\Media\Repositories\ImageRepository;
 use Xpressengine\Media\Thumbnailer;
 use Xpressengine\Storage\File;
 use Xpressengine\Storage\Storage;
@@ -45,10 +46,13 @@ class ImageHandler extends AbstractHandler
     /**
      * Constructor
      *
-     * @param Storage $storage Storage instance
+     * @param ImageRepository $repo    ImageRepository instance
+     * @param Storage         $storage Storage instance
      */
-    public function __construct(Storage $storage)
+    public function __construct(ImageRepository $repo, Storage $storage)
     {
+        parent::__construct($repo);
+
         $this->storage = $storage;
     }
 
@@ -97,7 +101,7 @@ class ImageHandler extends AbstractHandler
         ]);
 
         if ($originId !== null) {
-            $file = File::find($originId);
+            $file = $this->storage->find($originId);
             $parts = pathinfo($file->filename);
             if (isset($parts['extension']) && $parts['extension'] != '') {
                 $name = sprintf('%s.%s', $name, $parts['extension']);
@@ -111,36 +115,40 @@ class ImageHandler extends AbstractHandler
             $originId
         );
 
-        return $this->make($file, ['type' => $command->getName(), 'code' => $code]);
-    }
+        $image = $this->makeModel($file);
+        $this->setMetaData($image, ['type' => $command->getName(), 'code' => $code]);
 
-    /**
-     * 각 미디어 타입에서 사용가능한 확장자 반환
-     *
-     * @return array
-     */
-    public function getAvailableMimes()
-    {
-        $class = $this->getModel();
-
-        return $class::getMimes();
+        return $image;
     }
 
     /**
      * media 객체로 반환
      *
-     * @param File  $file    file instance
-     * @param array $addInfo additional information
+     * @param File $file file instance
      * @return Image
      * @throws NotAvailableException
      */
-    public function make(File $file, array $addInfo = [])
+    public function make(File $file)
     {
         if ($this->isAvailable($file->mime) !== true) {
             throw new NotAvailableException();
         }
 
-        $image = $this->createModel($file);
+        $image = $this->makeModel($file);
+        $this->setMetaData($image);
+
+        return $image;
+    }
+
+    /**
+     * Set meta data for image
+     *
+     * @param Image $image   image instance
+     * @param array $addInfo additional information
+     * @return void
+     */
+    protected function setMetaData(Image $image, array $addInfo = [])
+    {
         if (!$image->meta) {
             list($width, $height) = $this->extractDimension($image);
 
@@ -151,8 +159,6 @@ class ImageHandler extends AbstractHandler
 
             $image->setRelation('meta', $meta);
         }
-
-        return $image;
     }
 
     /**
@@ -174,28 +180,5 @@ class ImageHandler extends AbstractHandler
     protected function makeThumbnailer()
     {
         return new Thumbnailer();
-    }
-
-    /**
-     * Returns model class
-     *
-     * @return string
-     */
-    public function getModel()
-    {
-        return Image::class;
-    }
-
-    /**
-     * Create model
-     *
-     * @param File $file file instance
-     * @return Image
-     */
-    public function createModel(File $file)
-    {
-        $class = $this->getModel();
-
-        return $class::make($file);
     }
 }

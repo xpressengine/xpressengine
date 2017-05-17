@@ -17,25 +17,11 @@ class CategoryHandlerTest extends \PHPUnit_Framework_TestCase
     {
         m::close();
     }
-
-    public function testCreate()
+    
+    public function testDelete()
     {
-        $instance = $this->getMock(CategoryHandler::class, ['createModel']);
-
-        $mockModel = m::mock('Xpressengine\Category\Models\Category');
-        $instance->expects($this->once())->method('createModel')->willReturn($mockModel);
-
-        $mockModel->shouldReceive('fill')->once()->with(['word' => 'first']);
-        $mockModel->shouldReceive('save')->once();
-
-        $category = $instance->create(['word' => 'first']);
-
-        $this->assertInstanceOf('Xpressengine\Category\Models\Category', $category);
-    }
-
-    public function testRemove()
-    {
-        $instance = m::mock(CategoryHandler::class)
+        list($cateRepo, $itemRepo) = $this->getMocks();
+        $instance = m::mock(CategoryHandler::class, [$cateRepo, $itemRepo])
             ->shouldAllowMockingProtectedMethods()
             ->makePartial();
 
@@ -43,71 +29,84 @@ class CategoryHandlerTest extends \PHPUnit_Framework_TestCase
         $mockItem2 = m::mock('Xpressengine\Category\Models\CategoryItem');
         $mockModel = m::mock('Xpressengine\Category\Models\Category');
         $mockModel->shouldReceive('getProgenitors')->andReturn([$mockItem1, $mockItem2]);
-        $mockModel->shouldReceive('delete')->andReturn(true);
+        $cateRepo->shouldReceive('delete')->once()->with($mockModel)->andReturn(true);
 
-        $instance->shouldReceive('removeItem')->once()->with($mockItem1)->andReturnNull();
-        $instance->shouldReceive('removeItem')->once()->with($mockItem2)->andReturnNull();
+        $instance->shouldReceive('deleteItem')->once()->with($mockItem1)->andReturnNull();
+        $instance->shouldReceive('deleteItem')->once()->with($mockItem2)->andReturnNull();
 
-        $instance->remove($mockModel);
+        $instance->delete($mockModel);
     }
 
-    public function testCreateItem()
+    public function testItemUpdate()
     {
-        // todo
-    }
-
-    public function testPutItem()
-    {
-        $instance = new CategoryHandler();
+        list($cateRepo, $itemRepo) = $this->getMocks();
+        $instance = new CategoryHandler($cateRepo, $itemRepo);
 
         $mockItem = m::mock('Xpressengine\Category\Models\CategoryItem');
-        $mockItem->shouldReceive('isDirty')->once()->with('parentId')->andReturn(true);
+//        $mockItem->shouldReceive('isDirty')->once()->with('parentId')->andReturn(true);
         $mockItem->shouldReceive('getParentIdName')->andReturn('parentId');
         $mockItem->shouldReceive('getOriginal')->with('parentId')->andReturn(1);
-        $mockItem->shouldReceive('setAttribute')->with('parentId', 1);
-        $mockItem->shouldReceive('save')->andReturnNull();
+//        $mockItem->shouldReceive('setAttribute')->with('parentId', 1);
+//        $mockItem->shouldReceive('save')->andReturnNull();
+        $itemRepo->shouldReceive('update')->once()->with($mockItem, ['word' => 'test', 'parentId' => 1]);
 
-        $item = $instance->putItem($mockItem);
+        $item = $instance->itemUpdate($mockItem, ['word' => 'test']);
 
         $this->assertInstanceOf('Xpressengine\Category\Models\CategoryItem', $item);
     }
 
-    public function testRemoveItemForceTrue()
+    public function testItemRawDelete()
     {
-        $instance = new CategoryHandler();
+        list($cateRepo, $itemRepo) = $this->getMocks();
+        $instance = new CategoryHandler($cateRepo, $itemRepo);
+
+        $mockItem = m::mock('Xpressengine\Category\Models\CategoryItem');
+
+        $mockItem->shouldReceive('getKey')->andReturn(2);
+        $mockItem->shouldReceive('getDescendantName')->andReturn('descendant');
+        $mockItem->shouldReceive('getDepthName')->andReturn('depth');
+        $mockItem->shouldReceive('ancestors')->andReturnSelf();
+        $mockItem->shouldReceive('descendants')->andReturnSelf();
+        $mockItem->shouldReceive('detach')->twice()->andReturnNull();
+        $mockItem->shouldReceive('newPivotStatement')->once()->andReturnSelf();
+        $mockItem->shouldReceive('where')->once()->with('descendant', 2)->andReturnSelf();
+        $mockItem->shouldReceive('where')->once()->with('depth', 0)->andReturnSelf();
+        $mockItem->shouldReceive('delete')->once()->andReturn(true);
+
+        $itemRepo->shouldReceive('delete')->once()->with($mockItem)->andReturn(true);
+
+        $this->invokeMethod($instance, 'itemRawDelete', [$mockItem]);
+    }
+
+    public function testItemDeleteForceTrue()
+    {
+        list($cateRepo, $itemRepo) = $this->getMocks();
+        $instance = m::mock(CategoryHandler::class, [$cateRepo, $itemRepo])
+            ->shouldAllowMockingProtectedMethods()
+            ->makePartial();
 
         $mockItem = m::mock('Xpressengine\Category\Models\CategoryItem');
 
         $mockDesc1 = m::mock('Xpressengine\Category\Models\CategoryItem');
-        $mockDesc1->shouldReceive('getKey')->andReturn(2);
-        $mockDesc1->shouldReceive('getDescendantName')->andReturn('descendant');
-        $mockDesc1->shouldReceive('getDepthName')->andReturn('depth');
-
-        $mockDesc1->shouldReceive('ancestors')->andReturnSelf();
-        $mockDesc1->shouldReceive('descendants')->andReturnSelf();
-
-        $mockDesc1->shouldReceive('detach')->twice()->andReturnNull();
-
-        $mockDesc1->shouldReceive('newPivotStatement')->once()->andReturnSelf();
-        $mockDesc1->shouldReceive('where')->once()->with('descendant', 2)->andReturnSelf();
-        $mockDesc1->shouldReceive('where')->once()->with('depth', 0)->andReturnSelf();
-
-        $mockDesc1->shouldReceive('delete')->twice()->andReturn(true);
+        $instance->shouldReceive('itemRawDelete')->once()->with($mockDesc1)->andReturn(true);
 
         $mockItem->shouldReceive('getAttribute')->with('descendants')->andReturn([$mockDesc1]);
-        $mockItem->shouldReceive('delete')->andReturn(true);
+        $instance->shouldReceive('itemRawDelete')->once()->with($mockItem)->andReturn(true);
 
         $mockModel = m::mock('Xpressengine\Category\Models\Category')->shouldAllowMockingProtectedMethods();
         $mockModel->shouldReceive('decrement')->once()->with('count', 2)->andReturnNull();
 
         $mockItem->shouldReceive('getAttribute')->with('category')->andReturn($mockModel);
 
-        $instance->removeItem($mockItem, true);
+        $instance->itemDelete($mockItem, true);
     }
 
     public function testRemoveItemForceFalse()
     {
-        $instance = new CategoryHandler();
+        list($cateRepo, $itemRepo) = $this->getMocks();
+        $instance = m::mock(CategoryHandler::class, [$cateRepo, $itemRepo])
+            ->shouldAllowMockingProtectedMethods()
+            ->makePartial();
 
         $mockItem = m::mock('Xpressengine\Category\Models\CategoryItem');
         $mockItem->shouldReceive('getKey')->andReturn(1);
@@ -126,11 +125,11 @@ class CategoryHandlerTest extends \PHPUnit_Framework_TestCase
         $mockDesc1->shouldReceive('where')->once()->with('ancestor', '!=', 1)->andReturnSelf();
         $mockDesc1->shouldReceive('where')->once()->with('depth', '>', 0)->andReturnSelf();
         $mockDesc1->shouldReceive('decrement')->once()->with('depth')->andReturnNull();
-        $mockDesc1->shouldReceive('save')->once()->andReturnNull();
+        $itemRepo->shouldReceive('update')->once()->with($mockDesc1, ['parentId' => null]);
         $mockDesc1->shouldReceive('setAttribute');
 
         $mockItem->shouldReceive('getAttribute')->with('descendants')->andReturn([$mockDesc1]);
-        $mockItem->shouldReceive('delete')->andReturn(true);
+        $instance->shouldReceive('itemRawDelete')->once()->with($mockItem)->andReturn(true);
 
         $mockModel = m::mock('Xpressengine\Category\Models\Category')->shouldAllowMockingProtectedMethods();
         $mockModel->shouldReceive('decrement')->once()->with('count', 1)->andReturnNull();
@@ -142,7 +141,8 @@ class CategoryHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testMoveToThorwsExceptionWhenGivenParentIsSelf()
     {
-        $instance = new CategoryHandler();
+        list($cateRepo, $itemRepo) = $this->getMocks();
+        $instance = new CategoryHandler($cateRepo, $itemRepo);
 
         $mockItem = m::mock('Xpressengine\Category\Models\CategoryItem');
         $mockItem->shouldReceive('getKey')->andReturn(1);
@@ -163,7 +163,8 @@ class CategoryHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testMoveTo()
     {
-        $instance = $this->getMock(CategoryHandler::class, ['linkHierarchy', 'unlinkHierarchy']);
+        list($cateRepo, $itemRepo) = $this->getMocks();
+        $instance = $this->getMock(CategoryHandler::class, ['linkHierarchy', 'unlinkHierarchy'], [$cateRepo, $itemRepo]);
 
         $mockItem = m::mock('Xpressengine\Category\Models\CategoryItem');
         $mockItem->shouldReceive('getParentIdName')->andReturn('parentId');
@@ -179,8 +180,6 @@ class CategoryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $mockItem->shouldReceive('getParent')->andReturn($mockOldParent);
 
-//        $instance->shouldReceive('unlinkHierarchy')->once()->with($mockItem, $mockOldParent)->andReturnNull();
-//        $instance->shouldReceive('linkHierarchy')->once()->with($mockItem, $mockParent)->andReturnNull();
         $instance->expects($this->once())->method('unlinkHierarchy')->with($mockItem, $mockOldParent);
         $instance->expects($this->once())->method('linkHierarchy')->with($mockItem, $mockParent);
 
@@ -193,7 +192,8 @@ class CategoryHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testSetOrder()
     {
-        $instance = new CategoryHandler();
+        list($cateRepo, $itemRepo) = $this->getMocks();
+        $instance = new CategoryHandler($cateRepo, $itemRepo);
 
         $collection = m::mock('Illuminate\Database\Eloquent\Collection');
         $collection->shouldReceive('filter')->once()->with(m::on(function () { return true; }))->andReturnSelf();
@@ -228,14 +228,23 @@ class CategoryHandlerTest extends \PHPUnit_Framework_TestCase
             return true;
         }))->andReturnSelf();
 
-        $invoke = function (&$object, $methodName, array $parameters = array()) {
-            $reflection = new \ReflectionClass(get_class($object));
-            $method = $reflection->getMethod($methodName);
-            $method->setAccessible(true);
+        $this->invokeMethod($instance, 'setOrder', [$mockItem, 1]);
+    }
 
-            return $method->invokeArgs($object, $parameters);
-        };
+    private function invokeMethod(&$object, $methodName, array $parameters = array())
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $method = $reflection->getMethod($methodName);
+        $method->setAccessible(true);
 
-        $invoke($instance, 'setOrder', [$mockItem, 1]);
+        return $method->invokeArgs($object, $parameters);
+    }
+
+    protected function getMocks()
+    {
+        return [
+            m::mock('Xpressengine\Category\Repositories\CategoryRepository'),
+            m::mock('Xpressengine\Category\Repositories\CategoryItemRepository')
+        ];
     }
 }

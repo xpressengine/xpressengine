@@ -343,8 +343,7 @@ class EditorHandler
     public function getFiles($targetId)
     {
         $data = [];
-        $fileClass = $this->storage->getModel();
-        $files = $fileClass::getByFileable($targetId);
+        $files = $this->storage->fetchByFileable($targetId);
         foreach ($files as $file) {
             $thumbnails = null;
             if ($this->mediaManager->is($file)) {

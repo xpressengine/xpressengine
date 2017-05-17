@@ -25,92 +25,7 @@ use Xpressengine\Storage\Exceptions\WritingFailException;
 use Carbon\Carbon;
 
 /**
- * # Storage
- * 패키지의 메인클래스로 저장소에 파일의 저장을 요청하고 파일의 정보를
- * 데이터베이스등에 저장, 또는 정보를 요청하는 기능을 수행함
- *
- * ### app binding : xe.storage 으로 바인딩 되어 있음
- * `XeStorage` Facade 로 접근이 가능
- *
- * ### 파일 저장
- * 업로드된 파일을 저장하는 경우 `Request` 에서 반환하는
- * `Symfony\Component\HttpFoundation\File\UploadedFile` 객체를 전달 해야 합니다.
- *
- * ```php
- * $uploadFile = Input::file('file');
- * $file = XeStorage::upload($uploadFile, 'dir/path');
- * ```
- *
- * 업로드 되는 파일의 이름을 별도로 지정하고 싶은 경우 3번째 인자로
- * 지정하고 싶은 이름을 넣어 주면 됩니다.
- *
- * ```php
- * XeStorage::upload($uploadFile, 'dir/path', 'new_name');
- * ```
- *
- * 저장되는 저장소를 지정하고 싶은 경우 4번째 인자로
- * config 에 설정된 저장소 중 하나를 함께 전달 하면 됩니다.
- *
- * ```php
- * XeStorage::upload($uploadFile, 'dir/path', 'new_name', 's3');
- * ```
- *
- * file content 를 직접 저장시킬 수 도 있습니다.
- * 이때는 `create` 메서드를 사용합니다.
- *
- * ```
- * $content = file_get_content('path/to/file');
- *
- * XeStorage::create($content, 'dir/path', 'filename');
- * ```
- *
- * 또한 `create` 메서드를 통해 부모 자식관계를 형성할 수 있습니다.
- * 이때는 5번째 인자로 부모에 해당하는 파일의 아이디를 전달하면 됩니다.
- *
- * ```php
- * XeStorage::create($content, 'dir/path', 'filename', null, 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx');
- * ```
- *
- * ### 다운로드
- * 다운로드 시에는 `download` 메서드에 파일객체를 전달하면 됩니다.
- * 이때 다운로드 되는 파일명을 변경하고자 하는 경우 변경할 이름도 함께 전달해야합니다.
- *
- * ```
- * XeStorage::download($file, 'new_filename');
- * ```
- *
- * ### 연결
- * Storage 는 특정 대상이 파일을 소유하는 형태가 아닌
- * 파일을 특정대상과 연결하는 방식으로 제공 됩니다.
- *
- * 특정 대상으로 부터 파일 업로드 후 연결 처리를 하기위해 다음과 같이 사용해야 합니다.
- *
- * ```php
- * $uploadFile = Input::file('file');
- * $file = XeStorage::upload($file, 'dir/path');
- *
- * XeStorage::bind('target id', $file);
- * ```
- *
- * 연결을 끊는 동작은 `unBind`를 이용합니다.
- *
- * ```php
- * XeStorage::unBind('target id', $file);
- * ```
- *
- * 이때 파일에 연결된 대상이 더이상 존재하지 않는 경우 삭제를 원한다면
- * 삭제처리를 하도록 추가 정보를 전달합니다.
- *
- * ```php
- * XeStorage::unBind('target id', $file, true);
- * ```
- *
- * ### file 의 url
- * 미디어 객채의 url 은 UrlMaker 를 통해 제공됨
- * 이때 filesystem config 의 각 저장소별 설정에서 url 항목이
- * 작성되어진 경우 해당 항목을 이용해 직접 저장소의 파일에 접근할 수
- * 있는 url 을 제공하고 그렇지 않은경우 내부 시스템을 통해 제공되는
- * url 을 제공함
+ * Class Storage
  *
  * @category    Storage
  * @package     Xpressengine\Storage
@@ -121,6 +36,13 @@ use Carbon\Carbon;
  */
 class Storage
 {
+    /**
+     * file repository instance
+     *
+     * @var FileRepository
+     */
+    protected $repo;
+
     /**
      * filesystem handler instance
      *
@@ -159,6 +81,7 @@ class Storage
     /**
      * constructor
      *
+     * @param FileRepository    $repo        file repository instance
      * @param FilesystemHandler $files       filesystem handler instance
      * @param Authenticator     $auth        Authenticator instance
      * @param Keygen            $keygen      key generator instance
@@ -166,12 +89,14 @@ class Storage
      * @param TempFileCreator   $tempFiles   temporary file creator instance
      */
     public function __construct(
+        FileRepository $repo,
         FilesystemHandler $files,
         Authenticator $auth,
         Keygen $keygen,
         Distributor $distributor,
         TempFileCreator $tempFiles
     ) {
+        $this->repo = $repo;
         $this->files = $files;
         $this->auth = $auth;
         $this->keygen = $keygen;
@@ -221,19 +146,15 @@ class Storage
             throw new WritingFailException;
         }
 
-        $file = $this->createModel();
-        $file->id = $id;
-        $file->userId = $user->getId();
-        $file->disk = $disk;
-        $file->path = $path;
-        $file->filename = $name;
-        $file->clientname = $uploaded->getClientOriginalName();
-        $file->mime = $uploaded->getMimeType();
-        $file->size = $uploaded->getSize();
-
-        $file->save();
-
-        return $file;
+        return $this->repo->create([
+            'userId' => $user->getId(),
+            'disk' => $disk,
+            'path' => $path,
+            'filename' => $name,
+            'clientname' => $uploaded->getClientOriginalName(),
+            'mime' => $uploaded->getMimeType(),
+            'size' => $uploaded->getSize(),
+        ], $id);
     }
 
     /**
@@ -260,21 +181,17 @@ class Storage
             throw new WritingFailException;
         }
 
-        $file = $this->createModel();
-        $file->id = $id;
-        $file->userId = $user->getId();
-        $file->disk = $disk;
-        $file->path = $path;
-        $file->filename = $name;
-        $file->clientname = $name;
-        $file->mime = $tempFile->getMimeType();
-        $file->size = $tempFile->getSize();
+        $file = $this->repo->create([
+            'userId' => $user->getId(),
+            'disk' => $disk,
+            'path' => $path,
+            'filename' => $name,
+            'clientname' => $name,
+            'mime' => $tempFile->getMimeType(),
+            'size' => $tempFile->getSize(),
+            'originId' => $originId,
+        ], $id);
 
-        if ($originId !== null) {
-            $file->originId = $originId;
-        }
-
-        $file->save();
         $tempFile->destroy();
 
         return $file;
@@ -319,24 +236,37 @@ class Storage
     }
 
     /**
-     * remove file
+     * delete file
      *
      * @param File $file file instance
      * @return bool
      */
-    public function remove(File $file)
+    public function delete(File $file)
     {
         // 파일이 원본일 경우 동적으로 생성된 파일 모두 삭제 처리 함
         if ($file->originId === null) {
             foreach ($file->getRawDerives() as $child) {
-                $this->remove($child);
+                $this->delete($child);
             }
         }
 
         $file->getConnection()->table($file->getFileableTable())->where('fileId', $file->id)->delete();
         $this->files->delete($file);
 
-        return $file->delete();
+        return $this->repo->delete($file);
+    }
+
+    /**
+     * delete file. alias for delete
+     *
+     * @param File $file file instance
+     * @return bool
+     *
+     * @deprecated since beta.17. Use delete instead.
+     */
+    public function remove(File $file)
+    {
+        return $this->delete($file);
     }
 
     /**
@@ -354,7 +284,7 @@ class Storage
             'createdAt' => Carbon::now()
         ]);
 
-        $file->increment('useCount');
+        $this->repo->increment($file, 'useCount');
     }
 
     /**
@@ -387,11 +317,10 @@ class Storage
             ->where('fileableId', $fileableId)
             ->delete();
 
-        $file->useCount--;
-        if ($remove === true && $file->useCount < 1) {
-            $this->remove($file);
+        if ($remove === true && $file->useCount - 1 < 1) {
+            $this->delete($file);
         } else {
-            $file->save();
+            $this->repo->decrement($file, 'useCount');
         }
     }
 
@@ -399,15 +328,15 @@ class Storage
      * unset all fileable's files to fileable
      *
      * @param string $fileableId fileable identifier
+     * @param bool   $remove     remove file when given true
      * @return void
      */
-    public function unBindAll($fileableId)
+    public function unBindAll($fileableId, $remove = false)
     {
-        $model = $this->createModel();
-        $files = $model::getByFileable($fileableId);
+        $files = $this->repo->fetchByFileable($fileableId);
 
         foreach ($files as $file) {
-            $this->unBind($fileableId, $file, true);
+            $this->unBind($fileableId, $file, $remove);
         }
     }
 
@@ -422,9 +351,8 @@ class Storage
     {
         $fileIds = is_array($fileIds) ? $fileIds : [$fileIds];
 
-        $model = $this->createModel();
-        $files = $model->newQuery()->whereIn('id', $fileIds)->get();
-        $olds = $model->getByFileable($fileableId)->getDictionary();
+        $files = $this->repo->fetchIn($fileIds);
+        $olds = $this->repo->fetchByFileable($fileableId)->getDictionary();
 
         foreach ($files as $file) {
             if (!isset($olds[$file->getKey()])) {
@@ -469,84 +397,6 @@ class Storage
     }
 
     /**
-     * mime 별 파일 용량 정보 반환
-     *
-     * @param callable $scope 검색 조건
-     * @return array ex.) [mime => bytes]
-     */
-    public function bytesByMime(callable $scope = null)
-    {
-        $model = $this->createModel();
-        $query = $model->getConnection()->table($model->getTable());
-
-        if ($scope) {
-            call_user_func($scope, $query);
-        }
-
-        $rows = $query->groupBy('mime')
-            ->select(['mime', new Expression('sum(`size`) as amount')])
-            ->get();
-
-        $array = [];
-        foreach ($rows as $row) {
-            $row = (array)$row;
-            $array[$row['mime']] = $row['amount'];
-        }
-
-        return $array;
-    }
-
-    /**
-     * mime 별 파일 갯수 반환
-     *
-     * @param callable $scope 검색 조건
-     * @return array ex.) [mime => count]
-     */
-    public function countByMime(callable $scope = null)
-    {
-        $model = $this->createModel();
-        $query = $model->getConnection()->table($model->getTable());
-
-        if ($scope) {
-            call_user_func($scope, $query);
-        }
-
-        $rows = $query->groupBy('mime')
-            ->select(['mime', new Expression('count(*) as cnt')])
-            ->get();
-
-        $array = [];
-        foreach ($rows as $row) {
-            $row = (array)$row;
-            $array[$row['mime']] = $row['cnt'];
-        }
-
-        return $array;
-    }
-
-    /**
-     * Returns model class
-     *
-     * @return string
-     */
-    public function getModel()
-    {
-        return File::class;
-    }
-
-    /**
-     * create file model
-     *
-     * @return File
-     */
-    public function createModel()
-    {
-        $class = $this->getModel();
-
-        return new $class;
-    }
-
-    /**
      * file system handler instance
      *
      * @return FilesystemHandler
@@ -585,5 +435,17 @@ class Storage
     public function getTempFileCreator()
     {
         return $this->tempFiles;
+    }
+
+    /**
+     * __call
+     *
+     * @param string $name      method name
+     * @param array  $arguments arguments
+     * @return mixed
+     */
+    public function __call($name, $arguments)
+    {
+        return call_user_func_array([$this->repo, $name], $arguments);
     }
 }

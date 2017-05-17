@@ -8,14 +8,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use XePresenter;
 use XeStorage;
 use XeMedia;
 use XeFrontend;
-use Symfony\Component\HttpFoundation\Response;
-use Validator;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use XeSEO;
+use Xpressengine\Http\Request;
 
 class SeoController extends Controller
 {
@@ -26,7 +24,7 @@ class SeoController extends Controller
         XeFrontend::rule($ruleName, $this->getRules());
 
         return XePresenter::make('seo.setting', [
-            'setting' => app('xe.seo')->getSetting(),
+            'setting' => XeSEO::getSetting(),
             'ruleName' => $ruleName
         ]);
     }
@@ -42,7 +40,7 @@ class SeoController extends Controller
             'description',
             'twitterUsername',
         ]);
-        $setting = app('xe.seo')->getSetting();
+        $setting = XeSEO::getSetting();
         $setting->set($inputs);
 
         if ($request->file('siteImage') !== null) {
@@ -60,26 +58,5 @@ class SeoController extends Controller
             'mainTitle' => 'LangRequired',
             'keywords' => 'Required',
         ];
-    }
-
-    /**
-     * Validate the given request with the given rules.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  array  $rules
-     * @param  array  $messages
-     * @param  array  $customAttributes
-     * @return void
-     * @throws HttpException
-     */
-    public function validate(Request $request, array $rules, array $messages = [], array $customAttributes = [])
-    {
-        /** @var \Illuminate\Validation\Validator $validator */
-        $validator = Validator::make($request->all(), $rules, $messages, $customAttributes);
-
-        if ($validator->fails()) {
-            $request->flash();
-            throw new HttpException(Response::HTTP_NOT_ACCEPTABLE, $validator->errors()->first());
-        }
     }
 }

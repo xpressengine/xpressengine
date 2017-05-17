@@ -6,7 +6,7 @@
 
     <!-- META -->
     <meta charset="utf-8">
-    <meta name="Generator" content="XpressEngine">
+    <meta name="Generator" content="XpressEngine3">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     {!! XeFrontend::output('meta') !!}
 

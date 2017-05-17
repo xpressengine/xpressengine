@@ -55,7 +55,7 @@ class Category extends Aggregator
      *
      * @var string
      */
-    protected static $itemModel = CategoryItem::class;
+    protected static $itemModel;
 
     /**
      * Get category items of root level
@@ -64,9 +64,19 @@ class Category extends Aggregator
      */
     public function getProgenitors()
     {
-        $class = $this->getItemModel();
+        $class = $this->itemClass();
 
         return $class::progenitors($this)->get();
+    }
+
+    /**
+     * Get the node item class
+     *
+     * @return string
+     */
+    public function itemClass()
+    {
+        return static::getItemModel();
     }
 
     /**
@@ -85,7 +95,7 @@ class Category extends Aggregator
      *
      * @return string
      */
-    public function getItemModel()
+    public static function getItemModel()
     {
         return static::$itemModel;
     }

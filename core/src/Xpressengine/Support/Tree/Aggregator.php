@@ -45,7 +45,7 @@ abstract class Aggregator extends DynamicModel
      */
     public function items()
     {
-        return $this->hasMany($this->getItemModel(), $this->getForeignKey());
+        return $this->hasMany($this->itemClass(), $this->getForeignKey());
     }
 
     /**
@@ -63,11 +63,11 @@ abstract class Aggregator extends DynamicModel
     }
 
     /**
-     * Get the node item model
+     * Get the node item class
      *
      * @return string
      */
-    abstract public function getItemModel();
+    abstract public function itemClass();
 
     /**
      * Get the default foreign key name for the model.

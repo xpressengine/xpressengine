@@ -61,10 +61,10 @@
                                 <div class="search-input-group">
                                     <input type="text" name="keyword" class="form-control" aria-label="Text input with dropdown button" placeholder="{{xe_trans('xe::enterKeyword')}}" value="{{ Input::get('keyword') }}">
                                     <button type="submit" class="btn-link">
-                                        <i class="xi-magnifier"></i><span class="sr-only">{{xe_trans('xe::search')}}</span>
+                                        <i class="xi-search"></i><span class="sr-only">{{xe_trans('xe::search')}}</span>
                                     </button>
                                 </div>
-                                @foreach(Input::except(['keyfield','keyword']) as $name => $value)
+                                @foreach(Input::except(['keyfield','keyword','page']) as $name => $value)
                                     <input type="hidden" name="{{ $name }}" value="{{ $value }}">
                                 @endforeach
                                 <input type="hidden" class="__xe_keyfield" name="keyfield" value="{{ Input::get('keyfield') }}">

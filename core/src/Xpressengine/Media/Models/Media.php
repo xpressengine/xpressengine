@@ -36,13 +36,6 @@ abstract class Media extends File
     const TYPE_AUDIO = 'audio';
 
     /**
-     * The attributes that aren't mass assignable.
-     *
-     * @var array
-     */
-    protected $guarded = [];
-
-    /**
      * Available mime type
      *
      * @var array
@@ -57,9 +50,13 @@ abstract class Media extends File
      */
     public static function make(File $file)
     {
-        $model = new static($file->getAttributes());
+        $model = new static();
 
-        $model->exists = true;
+        foreach ($file->getAttributes() as $key => $val) {
+            $model->{$key} = $val;
+        }
+
+        $model->exists = $file->exists;
 
         return $model;
     }

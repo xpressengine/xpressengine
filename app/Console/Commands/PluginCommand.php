@@ -14,6 +14,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Xpressengine\Installer\XpressengineInstaller;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
@@ -80,6 +81,30 @@ class PluginCommand extends Command
     {
         $this->handler->getAllPlugins(true);
         $this->handler->updatePlugin($pluginId);
+    }
+
+    /**
+     * writeResult
+     *
+     * @param ComposerFileWriter $writer
+     * @param                    $result
+     *
+     * @return bool
+     */
+    protected function writeResult(ComposerFileWriter $writer, $result)
+    {
+        // composer.plugins.json 파일을 다시 읽어들인다.
+        $writer->load();
+        if (!isset($result) || $result !== 0) {
+            $result = false;
+            $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_FAILED);
+            $writer->set('xpressengine-plugin.operation.failed', XpressengineInstaller::$failed);
+        } else {
+            $result = true;
+            $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_SUCCESSED);
+        }
+        $writer->write();
+        return $result;
     }
 
     /**

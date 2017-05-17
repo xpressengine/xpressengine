@@ -16,6 +16,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Storage\File;
+use Xpressengine\Storage\FileRepository;
 use Xpressengine\Storage\FilesystemHandler;
 use Xpressengine\Storage\RoundRobinDistributor;
 use Xpressengine\Storage\Storage;
@@ -44,8 +45,11 @@ class StorageServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        File::setContentReader($this->app['xe.storage']->getFilesystemHandler());
+        File::setContentReader(function (File $file) {
+            return $this->app['xe.storage']->getFilesystemHandler()->read($file);
+        });
         File::setUrlMaker($this->app['xe.storage.url']);
+        FileRepository::setModel(File::class);
     }
 
     /**
@@ -55,32 +59,31 @@ class StorageServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('xe.storage.temp', function ($app) {
+        $this->app->singleton('xe.storage.temp', function ($app) {
             return new TempFileCreator();
-        }, true);
+        });
 
-        $this->app->bind('xe.storage', function ($app) {
+        $this->app->singleton(['xe.storage' => Storage::class], function ($app) {
             $distributor = new RoundRobinDistributor($app['config']['filesystems'], $app['xe.db']->connection());
 
             $proxyClass = $app['xe.interception']->proxy(Storage::class, 'XeStorage');
 
             return new $proxyClass(
+                new FileRepository,
                 new FilesystemHandler($app['filesystem'], $distributor),
                 $app['xe.auth'],
                 $app['xe.keygen'],
                 $distributor,
                 $app['xe.storage.temp']
             );
-        }, true);
+        });
 
-        $this->app->bind(Storage::class, 'xe.storage');
-
-        $this->app->bind('xe.storage.url', function ($app) {
+        $this->app->singleton(['xe.storage.url' => UrlMaker::class], function ($app) {
             return new UrlMaker(
                 $app['Illuminate\Contracts\Routing\UrlGenerator'],
                 $app['config']['filesystems.disks']
             );
-        }, true);
+        });
 
         intercept(
             'XeSettings@getManageMenu',

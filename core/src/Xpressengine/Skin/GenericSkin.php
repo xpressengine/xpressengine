@@ -206,7 +206,7 @@ abstract class GenericSkin extends AbstractSkin
 
         // remove old file
         if ($oldFileId !== null) {
-            $oldFile = File::find($oldFileId);
+            $oldFile = app('xe.storage')->find($oldFileId);
             if ($oldFile) {
                 app('xe.storage')->remove($oldFile);
             }

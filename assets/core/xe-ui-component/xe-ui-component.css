@@ -4307,6 +4307,10 @@ input[type="button"].xe-btn-block {
   z-index: 25;
 }
 
+.ly_popup_profile.open {
+  display: block;
+}
+
 .ly_popup_profile ul {
   min-width: 140px;
   padding: 8px 0;
@@ -4328,6 +4332,7 @@ input[type="button"].xe-btn-block {
   font-size: 14px;
   line-height: 30px;
   color: #2c2e37;
+  text-decoration: none;
 }
 
 .ly_popup_profile li > a:hover {

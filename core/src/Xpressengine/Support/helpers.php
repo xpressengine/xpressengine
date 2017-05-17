@@ -532,7 +532,7 @@ if (!function_exists('moduleClass')) {
      */
     function moduleClass($moduleId)
     {
-        return app('xe.module')->getModuleClassName(fullModuleId($moduleId));
+        return app('xe.menu')->getModuleHandler()->getModuleClassName(fullModuleId($moduleId));
     }
 }
 

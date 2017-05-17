@@ -384,12 +384,12 @@ h6 {
   background-color: transparent;
 }
 
-.member .auth-group .btn-eye .xi-eye-slash,
+.member .auth-group .btn-eye .xi-eye-off,
 .member .auth-group .btn-eye.on .xi-eye {
   display: none;
 }
 
-.member .auth-group .btn-eye.on .xi-eye-slash {
+.member .auth-group .btn-eye.on .xi-eye-off {
   display: block;
 }
 

@@ -15,53 +15,18 @@
 namespace Xpressengine\Media;
 
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Str;
 use Xpressengine\Media\Coordinators\Dimension;
 use Xpressengine\Media\Exceptions\NotAvailableException;
 use Xpressengine\Media\Exceptions\UnknownTypeException;
 use Xpressengine\Media\Models\Media;
 use Xpressengine\Media\Models\Image;
 use Xpressengine\Storage\File;
-use Xpressengine\Media\Handlers\AbstractHandler;
+use Xpressengine\Media\Handlers\MediaHandler;
 use Xpressengine\Storage\Storage;
 
 /**
- * # MediaManager
- * 미디어파일(이미지, 동영상) 형식에 맞는 handler 를 연결해주고
- * 섬네일 생성 및 제공 등의 역할을 수행 함
- *
- * ### app binding : xe.media 으로 바인딩 되어 있음
- * `XeMedia` Facade 로 접근이 가능
- *
- * ### 미디어 파일 확인 및 캐스팅
- * ```php
- * if (XeMedia::is($file)) {
- *      $media = XeMedia::make($file);
- * }
- * ```
- *
- * ### 섬네일 생성
- * * 지원되는 섬네일 생성 타입
- *  - `fit` : 지정된 사이즈에 꽉차고 넘치는 영역은 무시
- *  - `letter` : 지정된 사이즈안에 이미지가 모두 들어가도록 생성
- *  - `widen` : 가로 기준으로 생성
- *  - `heighten` : 세로 기준으로 생성
- *  - `stretch` : 비율을 무시하고 지정된 사이즈로 변경
- *  - `spill` : 지정된 사이즈에 꽉차고 넘치는 영역을 보존
- *  - `crop` : 지정된 좌표로부터 지정된 사이즈만큼 잘라냄
- *
- * ```php
- * $thumbnails = XeMedia::createThumbnails($file, 'letter');
- * ```
- *
- * 두번째 인자로 타입을 전달하지 않으면
- * config 에 설정된 타입으로 생성
- * > `crop` 의 경우 별도의 좌표가 필요하기 때문에
- * 자동 섬네일 생성 사용에 추천되지 않음
- *
- * ### 원본 미디어를 통한 섬네일 반환
- * ```php
- * $thumbnails = Image::getThumbnails($media);
- * ```
+ * Class MediaManager
  *
  * @category    Media
  * @package     Xpressengine\Media
@@ -96,7 +61,7 @@ class MediaManager
     /**
      * media handlers
      *
-     * @var AbstractHandler[]
+     * @var MediaHandler[]
      */
     protected $handlers = [];
 
@@ -118,7 +83,7 @@ class MediaManager
      * Returns handler
      *
      * @param string $type media type
-     * @return AbstractHandler
+     * @return MediaHandler
      * @throws UnknownTypeException
      */
     public function getHandler($type)
@@ -134,7 +99,7 @@ class MediaManager
      * Returns handler by storage File instance
      *
      * @param File $file file instance
-     * @return AbstractHandler
+     * @return MediaHandler
      * @throws UnknownTypeException
      */
     public function getHandlerByFile(File $file)
@@ -167,7 +132,7 @@ class MediaManager
      * Returns handler by storage Media instance
      *
      * @param Media $media media instance
-     * @return AbstractHandler
+     * @return MediaHandler
      */
     public function getHandlerByMedia(Media $media)
     {
@@ -194,7 +159,7 @@ class MediaManager
      */
     public function cast(File $file)
     {
-        return $this->getHandlerByFile($file)->createModel($file);
+        return $this->getHandlerByFile($file)->makeModel($file);
     }
 
     /**
@@ -220,11 +185,24 @@ class MediaManager
      * @param Media $media media instance
      * @return bool
      */
+    public function delete(Media $media)
+    {
+        $this->metaDelete($media);
+
+        return $this->storage->delete($media);
+    }
+
+    /**
+     * 미디어 삭제
+     *
+     * @param Media $media media instance
+     * @return bool
+     *
+     * @deprecated since beta.17. Use delete instead.
+     */
     public function remove(Media $media)
     {
-        $this->metaRemove($media);
-
-        return $this->storage->remove($media);
+        return $this->delete($media);
     }
 
     /**
@@ -233,11 +211,24 @@ class MediaManager
      * @param Media $media media instance
      * @return void
      */
-    public function metaRemove(Media $media)
+    public function metaDelete(Media $media)
     {
         if ($media->meta) {
             $media->meta->delete();
         }
+    }
+
+    /**
+     * Meta data 삭제
+     *
+     * @param Media $media media instance
+     * @return void
+     *
+     * @deprecated since beta.17. Use metaDelete instead.
+     */
+    public function metaRemove(Media $media)
+    {
+        $this->metaDelete($media);
     }
 
     /**
@@ -300,12 +291,30 @@ class MediaManager
      * is() method 를 통해 파일이 미디어 인지 판별할 수 있어야 하므로
      * 각각의 handler 들은 활성화된 상태로 전달 받도록 함
      *
-     * @param string          $type    media type
-     * @param AbstractHandler $handler media handler
+     * @param string       $type    media type
+     * @param MediaHandler $handler media handler
      * @return void
      */
-    public function extend($type, AbstractHandler $handler)
+    public function extend($type, MediaHandler $handler)
     {
         $this->handlers[$type] = $handler;
+    }
+
+    /**
+     * __call
+     *
+     * @param string     $name      method name
+     * @param array|null $arguments arguments
+     * @return MediaHandler|null
+     */
+    public function __call($name, $arguments)
+    {
+        $name = Str::singular($name);
+
+        if (!array_key_exists($name, $this->handlers)) {
+            return null;
+        }
+
+        return $this->handlers[$name];
     }
 }

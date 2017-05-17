@@ -18,13 +18,13 @@
             <div class="auth-group {{--wrong--}}">
                 <label for="pwd" class="sr-only">{{xe_trans('xe::password')}}</label>
                 <input type="password" id="pwd" class="xe-form-control" placeholder="{{xe_trans('xe::password')}}" name="password">
-                <button class="btn-eye on" style="display:none"><i class="xi-eye"></i><i class="xi-eye-slash"></i>
+                <button class="btn-eye on" style="display:none"><i class="xi-eye"></i><i class="xi-eye-off"></i>
                 </button>
             </div>
             <div class="auth-group {{--wrong--}}">
                 <label for="pwd2" class="sr-only">{{xe_trans('xe::passwordConfirm')}}</label>
                 <input type="password" id="pwd2" class="xe-form-control" placeholder="{{xe_trans('xe::passwordConfirm')}}" name="password_confirmation">
-                <button class="btn-eye on"><i class="xi-eye"></i><i class="xi-eye-slash"></i></button>
+                <button class="btn-eye on"><i class="xi-eye"></i><i class="xi-eye-off"></i></button>
                 {{--<em class="text-message">비밀번호가 일치하지 않습니다.</em>--}}
                 <em class="text-message normal">{{xe_trans('xe::passwordStrengthNormalDescription')}}</em>
             </div>
