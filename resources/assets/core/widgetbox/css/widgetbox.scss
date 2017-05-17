@@ -19,7 +19,7 @@ body, input, textarea, select, table, .dt_sl {
 }
 
 /*layout*/
-.widget-wrap{  
+.widget-wrap{
   background-color: #FAFAFA;
   min-width: 680px;
   .xe-btn-primary{
@@ -28,11 +28,11 @@ body, input, textarea, select, table, .dt_sl {
   }
   .xe-btn-primary-outline{
     border-color: $widget-primary-color;
-    &:hover {    
+    &:hover {
       background-color: $widget-primary-color;
       border-color: $widget-primary-color;
     }
-  }  
+  }
   
   .xe-label > input {
     &[type="checkbox"]:hover + .xe-input-helper, &[type="radio"]:hover + .xe-input-helper {
@@ -48,16 +48,16 @@ body, input, textarea, select, table, .dt_sl {
         background-color: $widget-primary-color;
       }
     }
-  } 
+  }
 }
 
 header{
   height: 60px;
   padding:0 20px;
   background-color: #fff;
-  border-bottom: 1px solid #e5e5e5;  
+  border-bottom: 1px solid #e5e5e5;
   h1 {
-    display: inline-block;    
+    display: inline-block;
     font-size: 33px;
     line-height: 66px;
     a {
@@ -95,7 +95,7 @@ header{
   color: #656973;
   .snb-section{
     padding:20px 20px 37px 20px;
-    border-top:1px solid #e5e5e5;    
+    border-top:1px solid #e5e5e5;
     .cell-config-btn{
       .xe-btn{
         margin-right: 2px;
@@ -109,7 +109,7 @@ header{
         border-bottom-right-radius: 0;
         border-top-right-radius: 0;
         margin-right: 0;
-      }      
+      }
     }
     h2,
     h3{
@@ -118,14 +118,14 @@ header{
       color: #2c2e37;
     }
     h3{
-      font-size: 15px;      
+      font-size: 15px;
       i{
         font-size: 18px;
         vertical-align: bottom;
         color: #656973;
       }
     }
-    .xe-form-group{      
+    .xe-form-group{
       margin-bottom: 10px;
     }
     .xe-form-inline{
@@ -133,7 +133,7 @@ header{
       .xe-form-group{
         margin-bottom: 0;
       }
-    }    
+    }
     .text-horizontal{
       display: inline-block;
       background: url(../img/ico_horizontal.png) 0 50% no-repeat;
@@ -147,7 +147,6 @@ header{
         padding-bottom: 2px;
       }
     }
-    
     .xe-dropdown-menu.drag-cell{
       width: 200px;
       padding:20px;
@@ -160,7 +159,7 @@ header{
         }
       }
       li{
-        display: inline-block;        
+        display: inline-block;
         font-size: 0;
         span{
           display: block;
@@ -177,8 +176,8 @@ header{
           }
         }
       }
-    }    
-  }  
+    }
+  }
   
   .xe-btn-group.vertical-list{
     text-align: center;
@@ -188,7 +187,7 @@ header{
       padding-left: 20px;
     }
     .xe-dropdown-menu{
-      width: auto;      
+      width: auto;
       padding: 7px 15px 15px 15px;
       li{
         font-size: 0;
@@ -206,21 +205,21 @@ header{
               &::after{
                 background-color: #5779D9;
               }
-            }  
+            }
           }
           >span{
             padding: 0;
             >em{
               display:block;
-              position: relative;        
+              position: relative;
               height: 22px;
               margin-left: 5px;
               background-color: #C8C9CC;
-              border: 1px solid #AFB0B3;            
+              border: 1px solid #AFB0B3;
               font-size: 12px;
-              line-height: 22px;           
+              line-height: 22px;
               font-style: normal;
-            }            
+            }
             &::after{
               position: absolute;
               left: 2px;
@@ -232,28 +231,28 @@ header{
             }
             &:first-of-type{
               em{
-                margin-left: 0;                
+                margin-left: 0;
               }
               &::after{
                 background-color: transparent;
               }
             }
-          }  
-        }        
-      } 
+          }
+        }
+      }
     }
     .xe-input-group{
       margin-top: 7px;
       .xe-form-control{
         width: 120px;
-      }  
-    }    
+      }
+    }
   }
 }
 
-.widget-container{  
+.widget-container{
   margin-left: 315px;
-  padding:20px 15px 100px;  
+  padding:20px 15px 100px;
   background-color: #FAFAFA;
   .widget-content{
     h3{
@@ -292,7 +291,7 @@ header{
   padding: 30px;
   background-color: #fff;
   z-index: 100;
-  color:#656973;  
+  color:#656973;
   font-size: 13px;
   -webkit-transition: all 0.3s ease;
   transition: all 0.3s ease;
@@ -306,19 +305,19 @@ header{
     line-height: 19px;
   }
   h1{
-    margin:0 0 25px 0;    
+    margin:0 0 25px 0;
     font-size: 24px;
     font-weight: normal;
     color:#2D2D35;
   }
   h2{
     position: relative;
-    margin:0 0 15px 0;    
+    margin:0 0 15px 0;
     padding-bottom:5px;
     font-weight: normal;
     font-size: 20px;
-    color:$widget-primary-color;    
-    border-bottom: 1px solid #e5e5e5;    
+    color:$widget-primary-color;
+    border-bottom: 1px solid #e5e5e5;
     .btn-section-close{
       position: absolute;
       right:0;
@@ -327,15 +326,15 @@ header{
       border-color: transparent;
       cursor: pointer;
       color: #656973;
-      font-size: 18px;      
+      font-size: 18px;
     }
-  }  
+  }
   
   .seciton{
     margin-top:35px;
-    &.close .btn-section-close i{      
+    &.close .btn-section-close i{
       -webkit-transform: rotate(180deg);
-      transform: rotate(180deg);       
+      transform: rotate(180deg);
     }
   }
   
@@ -360,7 +359,7 @@ header{
         margin-left: 0;
       }
     }
-  }  
+  }
 }
 
 
@@ -440,4 +439,81 @@ header{
 }
 .editor .dropzone .order{
   color: #FFF !important;
+}
+.widget-margin {
+  position: relative;
+  width: 160px;
+  &:after {
+    content: "px";
+    position: absolute;
+    top: 9px;
+    right: 10px;
+    font-size: 12px;
+    z-index: 3;
+  }
+  .widget-margin-type {
+    display: inline-block;
+    padding: 6px 10px;
+    margin: 0 -1px 0 0;
+    border: 1px solid #bbbcbf;
+    font-weight: normal;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    font-size: 14px;
+    line-height: 1.42857;
+    border-radius: 2px;
+    color: #333;
+  }
+  .inner-box {
+    position: relative;
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+    margin-right: 6px;
+    padding: 2px 0 0 2px;
+    border: 1px solid #999;
+    transform: translateY(2px);
+    i {
+      display: block;
+      width: 7px;
+      height: 7px;
+      border: 1px solid #999;
+    }
+    &:before, &:after {
+      position: absolute;
+      content: "";
+      background-color: #999;
+    }
+    &.top:before {
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+    }
+    &.bottom:before {
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+    }
+    &.left:before {
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+    }
+    &.left:after {
+      top: 0;
+      right: 0;
+      width: 3px;
+      height: 100%;
+    }
+  }
+  .xe-form-control {
+    height: 33px;
+    padding: 6px 32px 10px 6px;
+    border-color: #bbbcbf;
+    text-align: right;
+  }
 }
