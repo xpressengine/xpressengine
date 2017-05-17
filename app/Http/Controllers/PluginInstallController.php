@@ -31,7 +31,8 @@ class PluginInstallController extends Controller
     {
         $componentTypes = $this->getComponentTypes();
 
-        $packages = $provider->search();
+        $packages = $provider->search(null, 1, 1);
+
 
         $items = new Collection($packages->data);
         $plugins = new LengthAwarePaginator($items, $packages->total, $packages->per_page, $packages->current_page);
@@ -42,6 +43,7 @@ class PluginInstallController extends Controller
 
     public function items(Request $request, PluginProvider $provider)
     {
+        $page = $request->get('page', 1);
         $filter = $request->get('filter', '');
         if ($filter === 'purchased') {
             $config = app('xe.config')->get('plugin');
@@ -57,8 +59,8 @@ class PluginInstallController extends Controller
             $q = $query = $request->get('q');
             if($query) {
                 $query = explode(' ', $query);
-                $packages = $provider->search($query, $request->get('page', 1));
             }
+            $packages = $provider->search($query, $request->get('page', $page, 1), 2);
             $items = new Collection($packages->data);
             $plugins = new LengthAwarePaginator($items, $packages->total, $packages->per_page, $packages->current_page);
             $plugins->setPath(route('settings.plugins.install.items'));

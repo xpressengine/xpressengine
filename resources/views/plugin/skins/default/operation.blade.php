@@ -11,20 +11,22 @@
             @endif
             <hr>
             <label for="">작업</label>
-            @if($operation['runningMode'] !== 'uninstall')
-                @foreach($operation['runnings'] as $package => $version)
-                    @if(data_get($operation['runningsInfo'], $package))
-                    <p>{{ data_get($operation['runningsInfo'], $package.'.title') }}({{ data_get($operation['runningsInfo'], $package.'.pluginId') }}) ver.{{ $version }} {{ array_get(['install'=>'설치','update'=>'업데이트','uninstall'=>'삭제'], $operation['runningMode']) }}</p>
-                    @else
-                    <p>{{ $package }} ver.{{ $version }} {{ array_get(['install'=>'설치','update'=>'업데이트','uninstall'=>'삭제'], $operation['runningMode']) }}</p>
-                    @endif
+                @foreach($operation['targets'] as $name => $package)
 
+                    @if($package['operation'] === 'uninstall')
+                        @if(data_get($operation['infos'], $name))
+                        <p>{{ data_get($operation['infos'], $name.'.title') }}({{ $package['id'] }}) 삭제</p>
+                        @else
+                        <p>{{ $name }} 삭제</p>
+                        @endif
+                    @else
+                        @if(data_get($operation['infos'], $name))
+                            <p>{{ data_get($operation['infos'], $name.'.title') }}({{ $package['id'] }}) ver.{{ $package['version'] }} {{ array_get(['install'=>'설치','update'=>'업데이트'], $package['operation']) }}</p>
+                        @else
+                            <p>{{ $name }} ver.{{ $package['version'] }} {{ array_get(['install'=>'설치','update'=>'업데이트'], $package['operation']) }}</p>
+                        @endif
+                    @endif
                 @endforeach
-            @else
-                @foreach($operation['runnings'] as $package)
-                    <p>{{ data_get($operation['runningsInfo'], $package.'.title') }}({{ data_get($operation['runningsInfo'], $package.'.pluginId') }}) {{ array_get(['install'=>'설치','update'=>'업데이트','uninstall'=>'삭제'], $operation['runningMode']) }}</p>
-                @endforeach
-            @endif
 
             <label for="">상태</label>
             <p>

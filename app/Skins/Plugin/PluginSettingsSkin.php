@@ -57,6 +57,15 @@ class PluginSettingsSkin extends GenericSkin
         return parent::render();
     }
 
+    protected function indexFetched()
+    {
+        return $this->index();
+    }
+
+    protected function indexSelfInstalled()
+    {
+        return $this->index();
+    }
 
     /**
      * listView
@@ -66,6 +75,7 @@ class PluginSettingsSkin extends GenericSkin
     protected function index()
     {
         app('xe.frontend')->js('assets/core/xe-ui-component/js/xe-form.js')->load();
+        app('xe.frontend')->js('assets/core/xe-ui-component/js/xe-page.js')->load();
 
         app('xe.frontend')->html('plugins.updateList')->content("
         <script>

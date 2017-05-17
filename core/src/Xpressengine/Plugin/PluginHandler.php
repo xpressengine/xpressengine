@@ -553,20 +553,33 @@ class PluginHandler
             return null;
         }
 
-        $runnings = [];
-        $runningMode = 'install';
-        $runnings = $writer->get("xpressengine-plugin.operation.install", []);
-        if (empty($runnings)) {
-            $runningMode = 'update';
-            $runnings = $writer->get("xpressengine-plugin.operation.update", []);
+        $targets = [];
+        $installs = $writer->get("xpressengine-plugin.operation.install", []);
+        foreach ($installs as $p => $v) {
+            $targets[$p] = [
+                'version' => $v,
+                'operation' => 'install',
+                'id' => explode('/', $p)[1]
+            ];
         }
-        if (empty($runnings)) {
-            $runningMode = 'uninstall';
-            $runnings = $writer->get("xpressengine-plugin.operation.uninstall", []);
+        $updates = $writer->get("xpressengine-plugin.operation.update", []);
+        foreach ($updates as $p => $v) {
+            $targets[$p] = [
+                'version' => $v,
+                'operation' => 'update',
+                'id' => explode('/', $p)[1]
+            ];
+        }
+        $uninstalls = $writer->get("xpressengine-plugin.operation.uninstall", []);
+        foreach ($uninstalls as $p) {
+            $targets[$p] = [
+                'operation' => 'uninstall',
+                'id' => explode('/', $p)[1]
+            ];
         }
 
         // operation이 없을 경우, return void
-        if (empty($runnings)) {
+        if (empty($targets)) {
             return null;
         }
 
@@ -582,27 +595,14 @@ class PluginHandler
             }
         }
 
-        $runningsInfo = [];
-        if (!empty($runnings)) {
-            if ($runningMode === 'uninstall') {
-                $package = current($runnings);
-            } else {
-                $package = key($runnings);
-            }
-            list(, $id) = explode('/', $package);
-            $info = $this->provider->find($id);
-            if ($info !== null) {
-                $runningsInfo[$package] = $info;
-                $runningsInfo[$package]->pluginId = $id;
-            }
-        }
+        $ids = array_pluck($targets, 'id');
 
         $changed = $writer->get('xpressengine-plugin.operation.changed', []);
         foreach ($changed as $type) {
             foreach ($type as $package => $version) {
                 list(, $id) = explode('/', $package);
-                if (!isset($runningsInfo[$package])) {
-                    $runningsInfo[$package] = $this->provider->find($id);
+                if (!in_array($id, $ids)) {
+                    $ids[] = $id;
                 }
             }
         }
@@ -611,10 +611,16 @@ class PluginHandler
         foreach ($failed as $type) {
             foreach ($type as $package => $version) {
                 list(, $id) = explode('/', $package);
-                if (!isset($runningsInfo[$package])) {
-                    $runningsInfo[$package] = $this->provider->find($id);
+                if (!in_array($id, $ids)) {
+                    $ids[] = $id;
                 }
             }
+        }
+
+        $found = $this->provider->findAll($ids);
+        $infos = [];
+        foreach ($found as $info) {
+            $infos[$info->name] = $info;
         }
 
         if ($status === ComposerFileWriter::STATUS_RUNNING && $expired === true) {
@@ -629,7 +635,7 @@ class PluginHandler
             $log = null;
         }
 
-        return compact('runnings', 'status', 'runningMode', 'expired', 'changed', 'failed', 'runningsInfo', 'log');
+        return compact('targets', 'status', 'expired', 'changed', 'failed', 'infos', 'log');
     }
 
     /**

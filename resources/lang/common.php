@@ -1460,6 +1460,14 @@ return [
         'ko' => '플러그인 목록',
         'en' => 'Plugin list',
     ],
+    'fetchedPlugin' => [
+        'ko' => '자료실 플러그인',
+        'en' => 'Fetched plugins from Market',
+    ],
+    'selfInstalledPlugin' => [
+        'ko' => '직접 설치한 플러그인',
+        'en' => 'Self-installed plugins',
+    ],
     'pluginListDescription' => [
         'ko' => '등록된 플러그인 목록을 볼 수 있습니다.',
         'en' => 'You can view the list of registered plug-ins.',

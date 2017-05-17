@@ -1,4 +1,7 @@
 <li class="list-group-item @if( ! $plugin->isActivated() )off @endif">
+    <div class="text-right">
+        <input type="checkbox" value="{{ $plugin->getId() }}" class="__xe_checkbox">
+    </div>
     <div class="left-group">
         <a href="{{ route('settings.plugins.show', [$plugin->getId()]) }}" class="plugin-title">{{ $plugin->getTitle() }}</a>
         <dl>
