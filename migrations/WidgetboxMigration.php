@@ -112,6 +112,11 @@ class WidgetboxMigration extends Migration {
 </div>
 </div></div>']);
         }
+
+        $userProfile = $handler->find('user-profile');
+        if($userProfile === null) {
+            $handler->create(['id'=>'user-profile', 'title'=>'User Profile']);
+        }
     }
 
     protected function check()
@@ -128,6 +133,11 @@ class WidgetboxMigration extends Migration {
 
         // check dashboard widgetbox
         if(app('xe.widgetbox')->find('dashboard') === null) {
+            return false;
+        }
+
+        // check user-profile widgetbox
+        if(app('xe.widgetbox')->find('user-profile') === null) {
             return false;
         }
 

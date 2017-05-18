@@ -112,6 +112,8 @@ class Form extends AbstractUIObject
 
     private function getSection($form, $sectionInfo, $style = 'panel')
     {
+        $sectionName = null;
+        $classname = 'default';
         if(is_string($sectionInfo)) {
             $sectionName = $sectionInfo;
             $classname = 'form-section-'.str_replace([' ', '.'], '-', $sectionName);
@@ -126,7 +128,11 @@ class Form extends AbstractUIObject
                 $sectionName = $sectionName ? "<legend>$sectionName</legend>" : '';
                 $section = sprintf('<fieldset class="%s">%s<div class="row"></div></fieldset>', $classname, $sectionName);
             } else {
-                $section = sprintf('<div class="panel %s"><div class="panel-heading"><div class="pull-left"><h3>%s</h3></div></div><div class="panel-body"><div class="row"></div></div></div>', $classname, $sectionName);
+                if($sectionName) {
+                    $section = sprintf('<div class="panel %s"><div class="panel-heading"><div class="pull-left"><h3>%s</h3></div></div><div class="panel-body"><div class="row"></div></div></div>', $classname, $sectionName);
+                } else {
+                    $section = sprintf('<div class="panel %s"><div class="panel-body"><div class="row"></div></div></div>', $classname);
+                }
             }
 
             $sectionEl = PhpQuery::pq($section)->appendTo($form);
