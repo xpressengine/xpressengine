@@ -31,10 +31,11 @@
   };
 
   var _applyPlugins = function () {
+
+    var isBinding = false;
     $.fn.widgetGenerator = function (opt, cb) {
 
       var _this = this;
-      var isBinding = false;
 
       var _bindEvents = function () {
         _this.on('change', selectWidget, function () {
