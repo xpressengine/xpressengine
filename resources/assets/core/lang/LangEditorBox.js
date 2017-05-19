@@ -147,6 +147,10 @@ window.langEditorBoxRender = function ({ name, langKey, multiline, lines, autoco
 };
 
 $(function () {
+  renderLangEditorBox();
+});
+
+function renderLangEditorBox() {
 
   let langKeys = [];
   let langObj = {};
@@ -219,21 +223,21 @@ $(function () {
     }
   }
 
-  $(document).on('focus', '.lang-editor-box input, textarea', function () {
-    var box = $(this).closest('.lang-editor-box');
-    var el = box.find('.sub');
-    if ($(el).is(':hidden')) {
-      $(el).slideDown('fast');
-
-      // todo: 기능 점검
-      // $(box).find('textarea').expanding();
-    }
-  });
-
   validator.put('langrequired', function ($dst, parameters) {
     var $input = $dst.closest('.lang-editor-box').find("input[name^='xe_lang_preprocessor']:not(:hidden):first");
 
     return validator.validators.required($input, parameters);
   });
+}
+
+$(document).on('focus', '.lang-editor-box input, textarea', function () {
+  var box = $(this).closest('.lang-editor-box');
+  var el = box.find('.sub');
+  if ($(el).is(':hidden')) {
+    $(el).slideDown('fast');
+
+    // todo: 기능 점검
+    // $(box).find('textarea').expanding();
+  }
 });
 
