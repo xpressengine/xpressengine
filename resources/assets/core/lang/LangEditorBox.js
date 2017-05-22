@@ -67,6 +67,21 @@ var LangEditor = React.createClass({
       var _this = this;
       var el = ReactDOM.findDOMNode(this);
 
+      if (this.props.langKey) {
+        if (this.state.lines.length == 0) {
+          $.ajax({
+            type: 'get',
+            dataType: 'json',
+            url: xeBaseURL + '/' + XE.options.managePrefix + '/lang/lines/' + this.props.langKey,
+            success: function (result) {
+              if (this.isMounted()) {
+                _this.setLines(result);
+              }
+            }.bind(this),
+          });
+        }
+      }
+
       if (this.props.autocomplete) {
         $(el).find('input[type=text]:first,textarea:first').autocomplete({
           source: '/' + XE.options.managePrefix + '/lang/search/' + XE.Lang.locales[0],
@@ -128,11 +143,11 @@ var LangEditor = React.createClass({
               var value = _this.getValueFromLinesWithLocale(locale);
               return (
                 <div key={locale} className="input-group">
-                        {_this.getEditor(resource, locale, value)}
+                  {_this.getEditor(resource, locale, value)}
                       <span className="input-group-addon">
                       <span className="flag-code"><i className={locale + ' xe-flag'}></i>{locale}</span>
                       </span>
-                      </div>
+                </div>
               );
             })
           }
