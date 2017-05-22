@@ -43,9 +43,8 @@ class HtmlWidget extends AbstractWidget
      */
     public function render()
     {
-        $request = app('request');
-
-        return htmlspecialchars_decode(array_get($this->config, 'content'));
+        $content = htmlspecialchars_decode(array_get($this->config, 'content'));
+        return $this->renderSkin(compact('content'));
     }
 
     /**
@@ -71,9 +70,9 @@ class HtmlWidget extends AbstractWidget
     {
         $content = array_get($inputs, 'content');
         //$content = '<![CDATA['.$content.']]>';
+        $content = htmlspecialchars($content);
         array_set($inputs, 'content', $content);
         return $inputs;
     }
-
 
 }
