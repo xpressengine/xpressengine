@@ -18,41 +18,10 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
         m::close();
     }
 
-    public function testCreate()
+    public function testDeleteMenu()
     {
-        list($repo, $configs, $modules,  $routes) = $this->getMocks();
-        $instance = new MenuHandler($repo, $configs, $modules,  $routes);
-
-
-        $mockMenu = m::mock('Xpressengine\Menu\Models\Menu');
-        $mockMenu->shouldReceive('fill')->once()->with([
-            'title' => 'test title',
-            'description' => 'test description'
-        ]);
-        $repo->shouldReceive('createModel')->andReturn($mockMenu);
-        $repo->shouldReceive('insert')->with($mockMenu)->andReturn($mockMenu);
-
-        $menu = $instance->create([
-            'title' => 'test title',
-            'description' => 'test description'
-        ]);
-    }
-
-    public function testPut()
-    {
-        list($repo, $configs, $modules,  $routes) = $this->getMocks();
-        $instance = new MenuHandler($repo, $configs, $modules,  $routes);
-
-        $mockMenu = m::mock('Xpressengine\Menu\Models\Menu');
-        $repo->shouldReceive('update')->with($mockMenu)->andReturn($mockMenu);
-
-        $instance->put($mockMenu);
-    }
-
-    public function testRemove()
-    {
-        list($repo, $configs, $modules,  $routes) = $this->getMocks();
-        $instance = $this->getMock(MenuHandler::class, ['deleteMenuTheme'], [$repo, $configs, $modules,  $routes]);
+        list($menus, $items, $configs, $modules,  $routes) = $this->getMocks();
+        $instance = $this->getMock(MenuHandler::class, ['deleteMenuTheme'], [$menus, $items, $configs, $modules,  $routes]);
 
         $collection = m::mock('stdClass');
         $collection->shouldReceive('count')->andReturn(0);
@@ -62,15 +31,15 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
 
         $instance->expects($this->once())->method('deleteMenuTheme');
 
-        $repo->shouldReceive('delete')->with($mockMenu)->andReturn(true);
+        $menus->shouldReceive('delete')->with($mockMenu)->andReturn(true);
 
-        $instance->remove($mockMenu);
+        $instance->deleteMenu($mockMenu);
     }
 
     public function testRemoveThrowsExceptionWhenHasItem()
     {
-        list($repo, $configs, $modules,  $routes) = $this->getMocks();
-        $instance = $this->getMock(MenuHandler::class, ['deleteMenuTheme'], [$repo, $configs, $modules,  $routes]);
+        list($menus, $items, $configs, $modules,  $routes) = $this->getMocks();
+        $instance = $this->getMock(MenuHandler::class, ['deleteMenuTheme'], [$menus, $items, $configs, $modules,  $routes]);
 
         $collection = m::mock('stdClass');
         $collection->shouldReceive('count')->andReturn(1);
@@ -79,7 +48,7 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
         $mockMenu->shouldReceive('getAttribute')->with('items')->andReturn($collection);
 
         try {
-            $instance->remove($mockMenu);
+            $instance->deleteMenu($mockMenu);
 
             $this->assertTrue(false);
         } catch (\Exception $e) {
@@ -89,28 +58,28 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateItem()
     {
-        list($repo, $configs, $modules,  $routes) = $this->getMocks();
+        list($menus, $items, $configs, $modules,  $routes) = $this->getMocks();
         $instance = $this->getMock(
             MenuHandler::class,
             ['setHierarchy', 'setOrder', 'storeMenuType'],
-            [$repo, $configs, $modules,  $routes]
+            [$menus, $items, $configs, $modules,  $routes]
         );
 
         $mockMenu = m::mock('Xpressengine\Menu\Models\Menu')->shouldAllowMockingProtectedMethods();
         $mockMenu->shouldReceive('getKey')->andReturn('menuKey');
 
         $mockMenuItem = m::mock('Xpressengine\Menu\Models\MenuItem');
-        $mockMenuItem->shouldReceive('fill')->with([
+        $mockMenuItem->shouldReceive('getAggregatorKeyName')->andReturn('menuId');
+//        $mockMenuItem->shouldReceive('setAttribute')->once()->with('menuId', 'menuKey');
+
+        $items->shouldReceive('createModel')->with()->andReturn($mockMenuItem);
+        $items->shouldReceive('create')->once()->with([
             'parentId' => 'pid',
             'title' => 'test title',
             'url' => 'test_url',
             'ordering' => 1,
-        ]);
-        $mockMenuItem->shouldReceive('getAggregatorKeyName')->andReturn('menuId');
-        $mockMenuItem->shouldReceive('setAttribute')->once()->with('menuId', 'menuKey');
-
-        $repo->shouldReceive('createItemModel')->with($mockMenu)->andReturn($mockMenuItem);
-        $repo->shouldReceive('insertItem')->once()->with($mockMenuItem)->andReturn($mockMenuItem);
+            'menuId' => 'menuKey'
+        ])->andReturn($mockMenuItem);
 
         $instance->expects($this->once())->method('setHierarchy')->with($mockMenuItem);
         $instance->expects($this->once())->method('setOrder')->with($mockMenuItem);
@@ -126,35 +95,30 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Xpressengine\Menu\Models\MenuItem', $item);
     }
 
-    public function testPutItem()
+    public function testUpdateItem()
     {
-        list($repo, $configs, $modules,  $routes) = $this->getMocks();
+        list($menus, $items, $configs, $modules,  $routes) = $this->getMocks();
         $instance = $this->getMock(
             MenuHandler::class,
             ['updateMenuType'],
-            [$repo, $configs, $modules,  $routes]
+            [$menus, $items, $configs, $modules,  $routes]
         );
 
         $mockMenuItem = m::mock('Xpressengine\Menu\Models\MenuItem');
-        $mockMenuItem->shouldReceive('isDirty')->once()->with('parentId')->andReturn(true);
-        $mockMenuItem->shouldReceive('getParentIdName')->andReturn('parentId');
-        $mockMenuItem->shouldReceive('getOriginal')->with('parentId')->andReturn('1');
-        $mockMenuItem->shouldReceive('setAttribute')->once()->with('parentId', '1');
-
-        $repo->shouldReceive('updateItem')->once()->with($mockMenuItem)->andReturn($mockMenuItem);
+        $items->shouldReceive('update')->once()->with($mockMenuItem, ['title' => 'test title'])->andReturn($mockMenuItem);
 
         $instance->expects($this->once())->method('updateMenuType')->with($mockMenuItem, ['foo' => 'var']);
 
-        $instance->putItem($mockMenuItem, ['foo' => 'var']);
+        $instance->updateItem($mockMenuItem, ['title' => 'test title'], ['foo' => 'var']);
     }
 
-    public function testRemoveItem()
+    public function testDeleteItem()
     {
-        list($repo, $configs, $modules,  $routes) = $this->getMocks();
+        list($menus, $items, $configs, $modules,  $routes) = $this->getMocks();
         $instance = $this->getMock(
             MenuHandler::class,
-            ['destroyMenuType'],
-            [$repo, $configs, $modules,  $routes]
+            ['deleteMenuType'],
+            [$menus, $items, $configs, $modules,  $routes]
         );
 
         $mockMenuItem = m::mock('Xpressengine\Menu\Models\MenuItem');
@@ -164,23 +128,23 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
         $mockRelate->shouldReceive('detach')->once();
 
         $mockMenuItem->shouldReceive('ancestors')->once()->with(false)->andReturn($mockRelate);
-        $repo->shouldReceive('deleteItem')->once()->with($mockMenuItem)->andReturn(true);
+        $items->shouldReceive('delete')->once()->with($mockMenuItem)->andReturn(true);
 
-        $instance->expects($this->once())->method('destroyMenuType')->with($mockMenuItem);
+        $instance->expects($this->once())->method('deleteMenuType')->with($mockMenuItem);
 
-        $instance->removeItem($mockMenuItem);
+        $instance->deleteItem($mockMenuItem);
     }
 
-    public function testRemoveItemThrowsExceptionWhenHasItem()
+    public function testDeleteItemThrowsExceptionWhenHasItem()
     {
-        list($repo, $configs, $modules,  $routes) = $this->getMocks();
-        $instance = new MenuHandler($repo, $configs, $modules,  $routes);
+        list($menus, $items, $configs, $modules,  $routes) = $this->getMocks();
+        $instance = new MenuHandler($menus, $items, $configs, $modules,  $routes);
 
         $mockMenuItem = m::mock('Xpressengine\Menu\Models\MenuItem');
         $mockMenuItem->shouldReceive('getDescendantCount')->andReturn(1);
 
         try {
-            $instance->removeItem($mockMenuItem);
+            $instance->deleteItem($mockMenuItem);
 
             $this->assertTrue(false);
         } catch (\Exception $e) {
@@ -190,8 +154,8 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testSetOrder()
     {
-        list($repo, $configs, $modules,  $routes) = $this->getMocks();
-        $instance = new MenuHandler($repo, $configs, $modules,  $routes);
+        list($menus, $items, $configs, $modules,  $routes) = $this->getMocks();
+        $instance = new MenuHandler($menus, $items, $configs, $modules,  $routes);
 
         $collection = m::mock('stdClass');
         $collection->shouldReceive('filter')->andReturn($collection);
@@ -215,8 +179,8 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testMoveItem()
     {
-        list($repo, $configs, $modules,  $routes) = $this->getMocks();
-        $instance = $this->getMock(MenuHandler::class, ['unlinkHierarchy', 'linkHierarchy'], [$repo, $configs, $modules,  $routes]);
+        list($menus, $items, $configs, $modules,  $routes) = $this->getMocks();
+        $instance = $this->getMock(MenuHandler::class, ['unlinkHierarchy', 'linkHierarchy'], [$menus, $items, $configs, $modules,  $routes]);
 
         $mockMenu = m::mock('Xpressengine\Menu\Models\Menu');
         $mockMenu->shouldReceive('getKey')->andReturn('menuKey');
@@ -237,27 +201,25 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
 
         $mockMenuItemOldParent = m::mock('Xpressengine\Menu\Models\MenuItem');
 
-        $repo->shouldReceive('findItem')->once()->with('pid')->andReturn($mockMenuItemOldParent);
+        $items->shouldReceive('find')->once()->with('pid')->andReturn($mockMenuItemOldParent);
         $instance->expects($this->once())->method('unlinkHierarchy')->with($mockMenuItem, $mockMenuItemOldParent);
 
         $mockMenuItem->shouldReceive('setAttribute')->with('parentId', null);
 
         $instance->expects($this->once())->method('linkHierarchy')->with($mockMenuItem, $mockMenuItemNewParent);
 
-        $repo->shouldReceive('update')->once();
-
         $mockMenuItem->shouldReceive('setAttribute')->with('menuId', 'menuKey');
-        $repo->shouldReceive('updateItem')->once()->with($mockMenuItem)->andReturn($mockMenuItem);
+        $items->shouldReceive('update')->once()->with($mockMenuItem)->andReturn($mockMenuItem);
         
-        $repo->shouldReceive('findItem')->once()->with('itemKey')->andReturn($mockMenuItem);
+        $items->shouldReceive('find')->once()->with('itemKey')->andReturn($mockMenuItem);
 
         $instance->moveItem($mockMenu, $mockMenuItem, $mockMenuItemNewParent);
     }
 
     public function testSetMenuTheme()
     {
-        list($repo, $configs, $modules,  $routes) = $this->getMocks();
-        $instance = $this->getMock(MenuHandler::class, ['menuKeyString'], [$repo, $configs, $modules,  $routes]);
+        list($menus, $items, $configs, $modules,  $routes) = $this->getMocks();
+        $instance = $this->getMock(MenuHandler::class, ['menuKeyString'], [$menus, $items, $configs, $modules,  $routes]);
 
         $mockMenu = m::mock('Xpressengine\Menu\Models\Menu');
         $mockMenu->shouldReceive('getKey')->andReturn('menuKey');
@@ -274,8 +236,8 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMenuTheme()
     {
-        list($repo, $configs, $modules,  $routes) = $this->getMocks();
-        $instance = $this->getMock(MenuHandler::class, ['menuKeyString'], [$repo, $configs, $modules,  $routes]);
+        list($menus, $items, $configs, $modules,  $routes) = $this->getMocks();
+        $instance = $this->getMock(MenuHandler::class, ['menuKeyString'], [$menus, $items, $configs, $modules,  $routes]);
 
         $mockMenu = m::mock('Xpressengine\Menu\Models\Menu');
         $mockMenu->shouldReceive('getKey')->andReturn('menuKey');
@@ -291,8 +253,8 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateMenuTheme()
     {
-        list($repo, $configs, $modules,  $routes) = $this->getMocks();
-        $instance = $this->getMock(MenuHandler::class, ['menuKeyString'], [$repo, $configs, $modules,  $routes]);
+        list($menus, $items, $configs, $modules,  $routes) = $this->getMocks();
+        $instance = $this->getMock(MenuHandler::class, ['menuKeyString'], [$menus, $items, $configs, $modules,  $routes]);
 
         $mockMenu = m::mock('Xpressengine\Menu\Models\Menu');
         $mockMenu->shouldReceive('getKey')->andReturn('menuKey');
@@ -312,8 +274,8 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testDeleteMenuTheme()
     {
-        list($repo, $configs, $modules,  $routes) = $this->getMocks();
-        $instance = $this->getMock(MenuHandler::class, ['menuKeyString'], [$repo, $configs, $modules,  $routes]);
+        list($menus, $items, $configs, $modules,  $routes) = $this->getMocks();
+        $instance = $this->getMock(MenuHandler::class, ['menuKeyString'], [$menus, $items, $configs, $modules,  $routes]);
 
         $mockMenu = m::mock('Xpressengine\Menu\Models\Menu');
         $mockMenu->shouldReceive('getKey')->andReturn('menuKey');
@@ -327,8 +289,8 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testSetMenuItemTheme()
     {
-        list($repo, $configs, $modules,  $routes) = $this->getMocks();
-        $instance = $this->getMock(MenuHandler::class, ['menuKeyString'], [$repo, $configs, $modules,  $routes]);
+        list($menus, $items, $configs, $modules,  $routes) = $this->getMocks();
+        $instance = $this->getMock(MenuHandler::class, ['menuKeyString'], [$menus, $items, $configs, $modules,  $routes]);
 
         $mockMenuItem = m::mock('Xpressengine\Menu\Models\MenuItem');
 
@@ -344,8 +306,8 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMenuItemTheme()
     {
-        list($repo, $configs, $modules,  $routes) = $this->getMocks();
-        $instance = $this->getMock(MenuHandler::class, ['menuKeyString'], [$repo, $configs, $modules,  $routes]);
+        list($menus, $items, $configs, $modules,  $routes) = $this->getMocks();
+        $instance = $this->getMock(MenuHandler::class, ['menuKeyString'], [$menus, $items, $configs, $modules,  $routes]);
 
         $mockMenuItem = m::mock('Xpressengine\Menu\Models\MenuItem');
 
@@ -360,8 +322,8 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateMenuItemTheme()
     {
-        list($repo, $configs, $modules,  $routes) = $this->getMocks();
-        $instance = $this->getMock(MenuHandler::class, ['menuKeyString'], [$repo, $configs, $modules,  $routes]);
+        list($menus, $items, $configs, $modules,  $routes) = $this->getMocks();
+        $instance = $this->getMock(MenuHandler::class, ['menuKeyString'], [$menus, $items, $configs, $modules,  $routes]);
 
         $mockMenuItem = m::mock('Xpressengine\Menu\Models\MenuItem');
 
@@ -380,8 +342,8 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testDeleteMenuItemTheme()
     {
-        list($repo, $configs, $modules,  $routes) = $this->getMocks();
-        $instance = $this->getMock(MenuHandler::class, ['menuKeyString'], [$repo, $configs, $modules,  $routes]);
+        list($menus, $items, $configs, $modules,  $routes) = $this->getMocks();
+        $instance = $this->getMock(MenuHandler::class, ['menuKeyString'], [$menus, $items, $configs, $modules,  $routes]);
 
         $mockMenuItem = m::mock('Xpressengine\Menu\Models\MenuItem');
 
@@ -394,8 +356,8 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testMoveItemConfig()
     {
-        list($repo, $configs, $modules,  $routes) = $this->getMocks();
-        $instance = $this->getMock(MenuHandler::class, ['menuKeyString'], [$repo, $configs, $modules,  $routes]);
+        list($menus, $items, $configs, $modules,  $routes) = $this->getMocks();
+        $instance = $this->getMock(MenuHandler::class, ['menuKeyString'], [$menus, $items, $configs, $modules,  $routes]);
 
         $mockBefore = m::mock('Xpressengine\Menu\Models\MenuItem');
         $mockAfter = m::mock('Xpressengine\Menu\Models\MenuItem');
@@ -427,7 +389,8 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
     private function getMocks()
     {
         return [
-            m::mock('Xpressengine\Menu\MenuRepository'),
+            m::mock('Xpressengine\Menu\Repositories\MenuRepository'),
+            m::mock('Xpressengine\Menu\Repositories\MenuItemRepository'),
             m::mock('Xpressengine\Config\ConfigManager'),
             m::mock('Xpressengine\Menu\ModuleHandler'),
             m::mock('Xpressengine\Routing\RouteRepository')

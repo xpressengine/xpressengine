@@ -199,7 +199,7 @@ class ModuleValidator implements ValidatorInterface
      */
     private function setInstanceConfig(InstanceRoute $instanceRoute, XeRequest $request)
     {
-        $item = $this->menuHandler->getItem($instanceRoute->instanceId);
+        $item = $this->menuHandler->items()->find($instanceRoute->instanceId);
         $menuConfig = $this->menuHandler->getMenuItemTheme($item);
         if ($request->isMobile()) {
             $theme = $menuConfig->get('mobileTheme');

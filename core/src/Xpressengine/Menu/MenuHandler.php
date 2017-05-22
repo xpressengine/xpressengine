@@ -20,7 +20,8 @@ use Xpressengine\Menu\Exceptions\CanNotDeleteMenuItemHaveChildException;
 use Xpressengine\Menu\Exceptions\InvalidArgumentException;
 use Xpressengine\Menu\Models\Menu;
 use Xpressengine\Menu\Models\MenuItem;
-use Xpressengine\Menu\ModuleHandler;
+use Xpressengine\Menu\Repositories\MenuItemRepository;
+use Xpressengine\Menu\Repositories\MenuRepository;
 use Xpressengine\Permission\Grant;
 use Xpressengine\Routing\RouteRepository;
 use Xpressengine\Support\Tree\NodePositionTrait;
@@ -40,18 +41,18 @@ class MenuHandler
     use NodePositionTrait;
 
     /**
-     * Model class
-     *
-     * @var string
-     */
-    protected $model = Menu::class;
-
-    /**
      * MenuRepository instance
      *
      * @var MenuRepository
      */
-    protected $repo;
+    protected $menus;
+
+    /**
+     * MenuItemRepository instance
+     *
+     * @var MenuItemRepository
+     */
+    protected $items;
 
     /**
      * ConfigManager instance
@@ -105,18 +106,21 @@ class MenuHandler
     /**
      * MenuHandler constructor.
      *
-     * @param MenuRepository  $repo    MenuRepository instance
-     * @param ConfigManager   $configs ConfigManager instance
-     * @param ModuleHandler   $modules ModuleHandler instance
-     * @param RouteRepository $routes  RouteRepository instance
+     * @param MenuRepository     $menus   MenuRepository instance
+     * @param MenuItemRepository $items   MenuItemRepository instance
+     * @param ConfigManager      $configs ConfigManager instance
+     * @param ModuleHandler      $modules ModuleHandler instance
+     * @param RouteRepository    $routes  RouteRepository instance
      */
     public function __construct(
-        MenuRepository $repo,
+        MenuRepository $menus,
+        MenuItemRepository $items,
         ConfigManager $configs,
         ModuleHandler $modules,
         RouteRepository $routes
     ) {
-        $this->repo = $repo;
+        $this->menus = $menus;
+        $this->items = $items;
         $this->configs = $configs;
         $this->modules = $modules;
         $this->routes = $routes;
@@ -128,10 +132,12 @@ class MenuHandler
      * @param string $id   menu identifier
      * @param array  $with relation
      * @return Menu
+     *
+     * @deprecated since beta.17. Use MenuRepository::findWith instead.
      */
     public function get($id, $with = [])
     {
-        return $this->repo->find($id, $with);
+        return $this->menus->findWith($id, $with);
     }
 
     /**
@@ -140,35 +146,76 @@ class MenuHandler
      * @param string $siteKey site key
      * @param array  $with    relation
      * @return Menu[]
+     *
+     * @deprecated since beta.17. Use MenuRepository::fetchBySiteKey instead.
      */
     public function getAll($siteKey, $with = [])
     {
-        return $this->repo->all($siteKey, $with);
+        return $this->menus->fetchBySiteKey($siteKey, $with);
     }
 
     /**
      * Create new menu
      *
-     * @param array $inputs attributes
+     * @param array $attributes attributes
+     * @return Menu
+     *
+     * @deprecated since beta.17. Use createMenu instead.
+     */
+    public function create(array $attributes)
+    {
+        return $this->createMenu($attributes);
+    }
+
+    /**
+     * Create new menu
+     *
+     * @param array $attributes attributes
      * @return Menu
      */
-    public function create(array $inputs)
+    public function createMenu(array $attributes)
     {
-        $menu = $this->repo->createModel();
-        $menu->fill($inputs);
-
-        return $this->repo->insert($menu);
+        return $this->menus->create($attributes);
     }
 
     /**
      * Update category
      *
-     * @param Menu $menu menu instance
+     * @param Menu  $menu       menu instance
+     * @param array $attributes attributes
+     * @return Menu
+     *
+     * @deprecated since beta.17. Use updateMenu instead.
+     */
+    public function put(Menu $menu, array $attributes = [])
+    {
+        return $this->updateMenu($menu, $attributes);
+    }
+
+    /**
+     * Update category
+     *
+     * @param Menu  $menu       menu instance
+     * @param array $attributes attributes
      * @return Menu
      */
-    public function put(Menu $menu)
+    public function updateMenu(Menu $menu, array $attributes = [])
     {
-        return $this->repo->update($menu);
+        return $this->menus->update($menu, $attributes);
+    }
+
+    /**
+     * Delete menu
+     *
+     * @param Menu $menu menu instance
+     * @return bool
+     * @throws CanNotDeleteMenuEntityHaveChildException
+     *
+     * @deprecated since beta.17. Use deleteMenu instead.
+     */
+    public function remove(Menu $menu)
+    {
+        return $this->deleteMenu($menu);
     }
 
     /**
@@ -178,7 +225,7 @@ class MenuHandler
      * @return bool
      * @throws CanNotDeleteMenuEntityHaveChildException
      */
-    public function remove(Menu $menu)
+    public function deleteMenu(Menu $menu)
     {
         if ($menu->items->count() > 0) {
             throw new CanNotDeleteMenuEntityHaveChildException;
@@ -186,7 +233,7 @@ class MenuHandler
 
         $this->deleteMenuTheme($menu);
 
-        return $this->repo->delete($menu);
+        return $this->menus->delete($menu);
     }
 
     /**
@@ -195,10 +242,12 @@ class MenuHandler
      * @param string $id   menu item identifier
      * @param array  $with relation
      * @return MenuItem
+     *
+     * @deprecated since beta.17. Use MenuItemRepository::find instead.
      */
     public function getItem($id, $with = [])
     {
-        return $this->repo->findItem($id, $with);
+        return $this->items->find($id);
     }
 
     /**
@@ -207,28 +256,27 @@ class MenuHandler
      * @param array $ids  menu item identifier list
      * @param array $with relation
      * @return MenuItem[]
+     *
+     * @deprecated since beta.17. Use MenuItemRepository::fetchIn instead.
      */
     public function getItemIn($ids, $with = [])
     {
-        return $this->repo->fetchInItem((array)$ids, $with);
+        return $this->items->fetchIn((array)$ids, $with);
     }
 
     /**
      * Create new menu item
      *
      * @param Menu  $menu          menu instance
-     * @param array $inputs        item's attributes
+     * @param array $attributes    item's attributes
      * @param array $menuTypeInput input for menu type module
      * @return MenuItem
      */
-    public function createItem(Menu $menu, array $inputs, array $menuTypeInput = [])
+    public function createItem(Menu $menu, array $attributes, array $menuTypeInput = [])
     {
+        $model = $this->items->createModel();
         /** @var MenuItem $item */
-        $item = $this->repo->createItemModel($menu);
-        $item->fill($inputs);
-        $item->{$item->getAggregatorKeyName()} = $menu->getKey();
-
-        $item = $this->repo->insertItem($item);
+        $item = $this->items->create(array_merge($attributes, [$model->getAggregatorKeyName() => $menu->getKey()]));
 
         $this->setHierarchy($item);
         $this->setOrder($item);
@@ -254,7 +302,7 @@ class MenuHandler
         }
 
         if ($item->{$item->getParentIdName()}) {
-            $parent = $this->repo->findItem($item->{$item->getParentIdName()});
+            $parent = $this->items->find($item->{$item->getParentIdName()});
 
             $this->linkHierarchy($item, $parent);
         }
@@ -290,17 +338,25 @@ class MenuHandler
      * @param MenuItem $item          item instance
      * @param array    $menuTypeInput input for menu type module
      * @return MenuItem
+     *
+     * @deprecated since beta.17. Use updateItem instead.
      */
-    public function putItem(MenuItem $item, array $menuTypeInput)
+    public function putItem(MenuItem $item, array $menuTypeInput = [])
     {
-        if ($item->isDirty($parentIdName = $item->getParentIdName())) {
-            // 내용 수정시 부모 키 변경은 허용하지 않음
-            // 부모 키가 변경되는 경우는 반드시 moveItem, setOrder 를
-            // 통해 처리되야 함
-            $item->{$parentIdName} = $item->getOriginal($parentIdName);
-        }
+        return $this->updateItem($item, [], $menuTypeInput);
+    }
 
-        $item = $this->repo->updateItem($item);
+    /**
+     * Update menu item
+     *
+     * @param MenuItem $item          item instance
+     * @param array    $attributes    attributes
+     * @param array    $menuTypeInput input for menu type module
+     * @return MenuItem
+     */
+    public function updateItem(MenuItem $item, array $attributes, array $menuTypeInput = [])
+    {
+        $this->items->update($item, $attributes);
 
         $this->updateMenuType($item, $menuTypeInput);
 
@@ -333,26 +389,40 @@ class MenuHandler
      * @param MenuItem $item item instance
      * @return bool|null
      * @throws CanNotDeleteMenuItemHaveChildException
+     *
+     * @deprecated since beta.17. Use deleteItem instead.
      */
     public function removeItem(MenuItem $item)
+    {
+        return $this->deleteItem($item);
+    }
+
+    /**
+     * Delete menu item
+     *
+     * @param MenuItem $item item instance
+     * @return bool|null
+     * @throws CanNotDeleteMenuItemHaveChildException
+     */
+    public function deleteItem(MenuItem $item)
     {
         if ($item->getDescendantCount() > 0) {
             throw new CanNotDeleteMenuItemHaveChildException;
         }
 
         $item->ancestors(false)->detach();
-        $this->destroyMenuType($item);
+        $this->deleteMenuType($item);
 
-        return $this->repo->deleteItem($item);
+        return $this->items->delete($item);
     }
 
     /**
-     * Destroy menu type associated with the menu item.
+     * Delete menu type associated with the menu item.
      *
      * @param MenuItem $item menu item instance
      * @return void
      */
-    protected function destroyMenuType(MenuItem $item)
+    protected function deleteMenuType(MenuItem $item)
     {
         $menuTypeObj = $this->modules->getModuleObject($item->type);
         $menuTypeObj->deleteMenu($item->getKey());
@@ -379,25 +449,22 @@ class MenuHandler
         }
 
         if ($item->{$item->getParentIdName()}) {
-            $oldParent = $this->repo->findItem($item->{$item->getParentIdName()});
+            $oldParent = $this->items->find($item->{$item->getParentIdName()});
             $this->unlinkHierarchy($item, $oldParent);
             $item->{$item->getParentIdName()} = null;
         }
 
         if ($parent) {
             $this->linkHierarchy($item, $parent);
-            $item->parentId = $parent->getKey();
+            $item->{$item->getParentIdName()} = $parent->getKey();
         }
 
-        // 캐시를 사용하는 경우 기존 메뉴를 대상으로 하는 캐시의 갱신이 필요하여
-        // 변경전 업데이트를 수행함
-        $this->repo->update($item->menu);
         $item->{$item->getAggregatorKeyName()} = $menu->getKey();
         $item->setRelation('menu', $menu);
-        $item = $this->repo->updateItem($item);
+        $item = $this->items->update($item);
 
         // 연관 객체 정보들이 변경 되었으므로 객채를 갱신 함
-        return $this->repo->findItem($item->getKey());
+        return $this->items->find($item->getKey());
     }
 
     /**
@@ -611,7 +678,7 @@ class MenuHandler
      */
     public function getInstanceSettingURIByItemId($itemId)
     {
-        if (!$item = $this->repo->findItem($itemId)) {
+        if (!$item = $this->items->find($itemId)) {
             return null;
         }
 
@@ -626,5 +693,25 @@ class MenuHandler
     public function getModuleHandler()
     {
         return $this->modules;
+    }
+
+    /**
+     * Get MenuRepository instance
+     *
+     * @return MenuRepository
+     */
+    public function menus()
+    {
+        return $this->menus;
+    }
+
+    /**
+     * Get MenuItemRepository instance
+     *
+     * @return MenuItemRepository
+     */
+    public function items()
+    {
+        return $this->items;
     }
 }
