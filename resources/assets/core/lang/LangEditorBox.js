@@ -142,8 +142,28 @@ var LangEditor = React.createClass({
   },
 });
 
-window.langEditorBoxRender = function ({ name, langKey, multiline, lines, autocomplete, target }) {
-  ReactDOM.render(<LangEditorBox name={name} langKey={langKey} multiline={multiline} lines={lines} autocomplete={autocomplete}/>, target);
+window.langEditorBoxRender = function ($data, type) {
+  if (type === 'obj') {
+    //{ name, langKey, multiline, lines, autocomplete, target }
+    let name = $data.name;
+    let langKey = $data.langKey;
+    let multiline = $data.multiline;
+    let lines = $data.lines;
+    let autocomplete = $data.autocomplete;
+    let target = $data.target;
+
+    ReactDOM.render(<LangEditorBox name={name} langKey={langKey} multiline={multiline} lines={lines} autocomplete={autocomplete}/>, target);
+
+  } else {
+    var name = $data.data('name');
+    var langKey = $data.data('lang-key');
+    var multiline = $data.data('multiline');
+    var lines = $data.data('lines');
+    var autocomplete = $data.data('autocomplete');
+
+    ReactDOM.render(<LangEditorBox name={name} langKey={langKey} multiline={multiline} lines={lines} autocomplete={autocomplete}/>, $data[0]);
+  }
+
 };
 
 $(function () {
@@ -212,13 +232,13 @@ function renderLangEditorBox() {
           });
 
           $.each(langs, function () {
-            langEditorBoxRender(this);
+            langEditorBoxRender(this, 'obj');
           });
         },
       });
     } else {
       $.each(langs, function () {
-        langEditorBoxRender(this);
+        langEditorBoxRender(this, 'obj');
       });
     }
   }
