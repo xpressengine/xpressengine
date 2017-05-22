@@ -7,13 +7,15 @@
 
     {!! $widgetForm !!}
 
+    <input type="hidden" name="@skin-id" value="{{ $skin->getId() }}">
+    @if(isset($skinForm) && $skinForm !== null)
+    <p>스킨 설정</p>
+    <hr>
+    <div id="skinForm">
+        {!! $skinForm !!}
+    </div>
+    @endif
+
+
 </form>
 
-@if(isset($skinForm) && $skinForm !== null)
-<p>스킨 설정</p>
-<hr>
-<form id="skinForm">
-    <input type="hidden" name="@id" value="{{ $skin->getId() }}">
-    {!! $skinForm !!}
-</form>
-@endif

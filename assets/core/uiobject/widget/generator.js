@@ -12,11 +12,30 @@
   var generateCode = '.__xe_generate_code';
   var _this;
 
+  $.fn.serializeObject = function () {
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function () {
+      if (o[this.name]) {
+        if (!o[this.name].push) {
+          o[this.name] = [o[this.name]];
+        }
+
+        o[this.name].push(this.value || '');
+      } else {
+        o[this.name] = this.value || '';
+      }
+    });
+
+    return o;
+  };
+
   var _applyPlugins = function () {
+
+    var isBinding = false;
     $.fn.widgetGenerator = function (opt, cb) {
 
       var _this = this;
-      var isBinding = false;
 
       var _bindEvents = function () {
         _this.on('change', selectWidget, function () {
@@ -122,11 +141,6 @@
       generate: function (options, cb) {
         var $form = $(options.widgetForm);
         var data = $form.serialize();
-
-        data.push({
-          name: 'skin',
-          value: $(options.skinForm).serializeArray(),
-        });
 
         XE.ajax({
           url: $form.attr('action'),

@@ -37,31 +37,33 @@ class WidgetController extends Controller {
 
     public function generate(Request $request, WidgetHandler $widgetHandler)
     {
-        $data = $request->getContent();
-        $data = json_decode($data);
+        //$data = $request->getContent();
+        //$data = json_decode($data);
 
-        $inputs = [];
-        foreach ($data as $item) {
-            if (is_array($item->value)) {
-                $value = [];
-                foreach ($item->value as $sub) {
-                    $value[$sub->name] = e($sub->value);
-                }
-                $inputs[$item->name] = $value;
-            } else {
-                if (substr($item->name, -2) == '[]') {
-                    $name = substr($item->name, 0, -2);
-                    if (isset($inputs[$name]) === false) {
-                        $inputs[$name] = [];
-                    }
-                    $len = count($inputs[$name]);
-                    $inputs[$name][$len] = $item->value;
-                } else {
-                    $inputs[$item->name] = e($item->value);
-                }
-            }
-        }
-        $widget = $inputs['@id'];
+        //$inputs = [];
+        //foreach ($data as $item) {
+        //    if (is_array($item->value)) {
+        //        $value = [];
+        //        foreach ($item->value as $sub) {
+        //            $value[$sub->name] = e($sub->value);
+        //        }
+        //        $inputs[$item->name] = $value;
+        //    } else {
+        //        if (substr($item->name, -2) == '[]') {
+        //            $name = substr($item->name, 0, -2);
+        //            if (isset($inputs[$name]) === false) {
+        //                $inputs[$name] = [];
+        //            }
+        //            $len = count($inputs[$name]);
+        //            $inputs[$name][$len] = $item->value;
+        //        } else {
+        //            $inputs[$item->name] = e($item->value);
+        //        }
+        //    }
+        //}
+
+        $inputs = $request->except('_token');
+        $widget = array_get($inputs, '@id');
 
         $code = $widgetHandler->generateCode($widget, $inputs);
 
@@ -164,14 +166,9 @@ class WidgetController extends Controller {
         $widgetForm = $widgetHandler->setup($widget, $inputs);
 
         // skin form
-        $skinConfig = array_get($inputs, 'skin');
-        if($skinConfig && array_has($skinConfig, '@attributes.id')) {
-            $skin = array_get($skinConfig, '@attributes.id');
-            $skin = $skinHandler->get($skin);
-            $skinForm = $skin->renderSetting($skinConfig);
-        } else {
-            $skinConfig = null;
-        }
+        $skin = array_get($inputs, '@attributes.skin-id');
+        $skin = $skinHandler->get($skin);
+        $skinForm = $skin->renderSetting($inputs);
 
         return apiRender('widget.setup', compact('widgets', 'widget', 'title', 'skins', 'skin', 'widgetSelector', 'skinSelector', 'widgetForm', 'skinForm'));
     }
