@@ -247,7 +247,7 @@ class WidgetHandler
     {
         $attr = [];
         $children = [];
-        $space = str_repeat('  ', $depth);
+        $space = '';//str_repeat('  ', $depth);
         foreach ($inputs as $k => $v) {
             // attribute
             if (strpos($k, '@') === 0) {
@@ -255,9 +255,9 @@ class WidgetHandler
             } elseif (is_array($v)) {
                 $children[] = $this->generateXml($k, $v, $depth + 1);
             } elseif (is_numeric($k)) {
-                $children[] = sprintf("  %s<item>%s</item>".PHP_EOL, $space, $v);
+                $children[] = sprintf("%s<item>%s</item>", $space, $v);
             } else {
-                $children[] = sprintf("  %s<%s>%s</%s>".PHP_EOL, $space, $k, $v, $k);
+                $children[] = sprintf("%s<%s>%s</%s>", $space, $k, $v, $k);
             }
         }
 
@@ -269,7 +269,7 @@ class WidgetHandler
             }
         );
 
-        $xml = $space.'<'.$element.$attrStr.'>'.PHP_EOL.implode('', $children).$space.'</'.$element.'>'.PHP_EOL;
+        $xml = $space.'<'.$element.$attrStr.'>'.implode('', $children).$space.'</'.$element.'>';
 
         return $xml;
     }

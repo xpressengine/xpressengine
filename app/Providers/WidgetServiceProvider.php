@@ -8,6 +8,10 @@
 
 namespace App\Providers;
 
+use App\Skins\Widget\ContentInfoSkin;
+use App\Skins\Widget\HtmlWidgetSkin;
+use App\Skins\Widget\StorageSpaceSkin;
+use App\Skins\Widget\SystemInfoSkin;
 use App\UIObjects\Widget\WidgetGenerator;
 use App\Widgets\ContentInfo;
 use App\Widgets\HtmlWidget;
@@ -73,6 +77,7 @@ class WidgetServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerWidgets();
+        $this->registerWidgetSkins();
         $this->registerUIObject();
     }
 
@@ -94,11 +99,20 @@ class WidgetServiceProvider extends ServiceProvider
      */
     protected function registerWidgets()
     {
-        $pluginRegister = $this->app['xe.pluginRegister'];
-        $pluginRegister->add(StorageSpace::class);
-        $pluginRegister->add(ContentInfo::class);
-        $pluginRegister->add(SystemInfo::class);
-        $pluginRegister->add(HtmlWidget::class);
+        $register = $this->app['xe.pluginRegister'];
+        $register->add(StorageSpace::class);
+        $register->add(ContentInfo::class);
+        $register->add(SystemInfo::class);
+        $register->add(HtmlWidget::class);
+    }
+
+    protected function registerWidgetSkins()
+    {
+        $register = $this->app['xe.pluginRegister'];
+        $register->add(SystemInfoSkin::class);
+        $register->add(ContentInfoSkin::class);
+        $register->add(StorageSpaceSkin::class);
+        $register->add(HtmlWidgetSkin::class);
     }
 
     protected function registerUIObject()
