@@ -16,6 +16,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Category\CategoryHandler;
+use Xpressengine\Category\EventListener;
 use Xpressengine\Category\Models\Category;
 use Xpressengine\Category\Models\CategoryItem;
 use Xpressengine\Category\Repositories\CategoryItemRepository;
@@ -48,6 +49,8 @@ class CategoryServiceProvider extends ServiceProvider
         });
         CategoryRepository::setModel(Category::class);
         CategoryItemRepository::setModel(CategoryItem::class);
+
+        $this->app['events']->subscribe(EventListener::class);
     }
 
     /**
@@ -62,7 +65,7 @@ class CategoryServiceProvider extends ServiceProvider
 
             return new $proxyClass(
                 new CategoryRepository,
-                new CategoryItemRepository
+                new CategoryItemRepository($app['events'])
             );
         }, true);
     }
