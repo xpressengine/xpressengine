@@ -24,42 +24,7 @@ use Xpressengine\Category\Repositories\CategoryRepository;
 use Xpressengine\Support\Tree\NodePositionTrait;
 
 /**
- * todo: docblock remove or update
- * # CategoryHandler
- * 여러단어들로 구성된 카테고리 처리를 담당
- *
- * ### app binding : xe.category 로 바인딩 되어 있음
- * `XeCategory` Facade 로 접근 가능
- *
- * ### 카테고리 생성
- * ```php
- *  // 신규 카테고리 그룹 생성
- *  $category = XeCategory::create();
- *  // 카테고리 그룹에 아이템 추가
- *  $item = XeCategory::createItem($category, ['word' => '단어', 'description' => '설명']);
- *  // 특정 단어의 하위 노드로 등록하고자 할땐
- *  // 부모에 해당하는 아이템의 고유키를 넘겨주면 됩니다.
- *  $child = XeCategory::createItem($category, ['word' => '자식', 'parentId' => 1]);
- * ```
- *
- * ### 카테고리 사용
- * ```php
- *  // 최상위 레벨 아이템 목록
- *  $items = $category->getProgenitors();
- *  // 특정 아이템의 하위 노드 아이템 목록
- *  $item = CategoryItem::find($id);
- *  $children = $item->getChildren();
- *  // 상위 노드 아이템
- *  $parent = $item->getParent();
- *  // 트리 구조의 자손 아이템
- *  $tree = $item->getDescendantTree();
- * ```
- *
- * 전체를 tree collection 으로 반환 받을수도 있습니다.
- * ```php
- *  $category = Category::get($id);
- *  $tree = $category->getTree();
- * ```
+ * Class CategoryHandler
  *
  * @category    Category
  * @package     Xpressengine\Category

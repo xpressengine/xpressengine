@@ -24,7 +24,13 @@ use Xpressengine\Media\Handlers\ImageHandler;
 use Xpressengine\Media\Handlers\VideoHandler;
 use Xpressengine\Media\MediaManager;
 use Intervention\Image\ImageManager;
+use Xpressengine\Media\Models\Audio;
+use Xpressengine\Media\Models\Image;
 use Xpressengine\Media\Models\Media;
+use Xpressengine\Media\Models\Video;
+use Xpressengine\Media\Repositories\AudioRepository;
+use Xpressengine\Media\Repositories\ImageRepository;
+use Xpressengine\Media\Repositories\VideoRepository;
 use Xpressengine\Media\Thumbnailer;
 
 /**
@@ -50,6 +56,10 @@ class MediaServiceProvider extends ServiceProvider
     public function boot()
     {
         Thumbnailer::setManager(new ImageManager());
+
+        ImageRepository::setModel(Image::class);
+        VideoRepository::setModel(Video::class);
+        AudioRepository::setModel(Audio::class);
     }
 
     /**
@@ -64,7 +74,7 @@ class MediaServiceProvider extends ServiceProvider
             $proxyClass = $app['xe.interception']->proxy(MediaManager::class, 'XeMedia');
             $mediaManager = new $proxyClass($app['xe.storage'], new CommandFactory(), $config['thumbnail']);
 
-            $mediaManager->extend(Media::TYPE_IMAGE, new ImageHandler($app['xe.storage']));
+            $mediaManager->extend(Media::TYPE_IMAGE, new ImageHandler(new ImageRepository(), $app['xe.storage']));
 
             $extensionName = isset($config['videoExtensionDefault']) ? $config['videoExtensionDefault'] : 'dummy';
             $method = 'create' . ucfirst($extensionName) . 'Extension';
@@ -75,7 +85,7 @@ class MediaServiceProvider extends ServiceProvider
             }
             $extension = $this->{$method}($config);
             $mediaManager->extend(Media::TYPE_VIDEO, new VideoHandler(
-                $app['xe.storage'],
+                new VideoRepository(),
                 new \getID3(),
                 $app['xe.storage.temp'],
                 $extension,
@@ -83,7 +93,7 @@ class MediaServiceProvider extends ServiceProvider
             ));
 
             $mediaManager->extend(Media::TYPE_AUDIO, new AudioHandler(
-                $app['xe.storage'],
+                new AudioRepository(),
                 new \getID3(),
                 $app['xe.storage.temp']
             ));
@@ -119,7 +129,7 @@ class MediaServiceProvider extends ServiceProvider
 
     private function registerEvent()
     {
-        intercept('XeStorage@remove', 'media.remove', function ($target, $file) {
+        intercept('XeStorage@delete', 'media.delete', function ($target, $file) {
 
             /** @var MediaManager $manager */
             $manager = $this->app['xe.media'];
@@ -128,7 +138,7 @@ class MediaServiceProvider extends ServiceProvider
                     $file = $manager->cast($file);
                 }
 
-                $manager->metaRemove($file);
+                $manager->metaDelete($file);
             }
 
             return $target($file);

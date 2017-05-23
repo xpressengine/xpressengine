@@ -22,6 +22,7 @@ use Xpressengine\User\Repositories\UserGroupRepositoryInterface;
 use Xpressengine\User\UserHandler;
 use Xpressengine\User\UserImageHandler;
 use Xpressengine\User\UserInterface;
+use Xpressengine\WidgetBox\WidgetBoxHandler;
 
 class ProfileController extends Controller
 {
@@ -51,12 +52,14 @@ class ProfileController extends Controller
     }
 
     // 기본정보 보기
-    public function index($user)
+    public function index($user, WidgetBoxHandler $handler)
     {
         $user = $this->retreiveUser($user);
         $grant = $this->getGrant($user);
 
-        return XePresenter::make('index', compact('user', 'grant'));
+        $widgetbox = $handler->find('user-profile');
+
+        return XePresenter::make('index', compact('user', 'grant', 'widgetbox'));
     }
 
     public function update($userId, Request $request)

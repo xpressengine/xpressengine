@@ -19,9 +19,9 @@ use Xpressengine\Media\Exceptions\NotAvailableException;
 use Xpressengine\Media\Extensions\ExtensionInterface;
 use Xpressengine\Media\Models\Media;
 use Xpressengine\Media\Models\Video;
+use Xpressengine\Media\Repositories\VideoRepository;
 use Xpressengine\Storage\TempFileCreator;
 use Xpressengine\Storage\File;
-use Xpressengine\Storage\Storage;
 
 /**
  * Class VideoHandler
@@ -35,13 +35,6 @@ use Xpressengine\Storage\Storage;
  */
 class VideoHandler extends AbstractHandler
 {
-    /**
-     * Storage instance
-     *
-     * @var Storage
-     */
-    protected $storage;
-
     /**
      * Media reader instance
      *
@@ -73,20 +66,21 @@ class VideoHandler extends AbstractHandler
     /**
      * Constructor
      *
-     * @param Storage            $storage    Storage instance
+     * @param VideoRepository    $repo       VideoRepository instance
      * @param \getID3            $reader     Media reader instance
      * @param TempFileCreator    $temp       TempFileCreator instance
      * @param ExtensionInterface $extension  Extension instance
      * @param int                $fromSecond time second for snapshot
      */
     public function __construct(
-        Storage $storage,
+        VideoRepository $repo,
         \getID3 $reader,
         TempFileCreator $temp,
         ExtensionInterface $extension,
         $fromSecond = 10
     ) {
-        $this->storage = $storage;
+        parent::__construct($repo);
+
         $this->reader = $reader;
         $this->temp = $temp;
         $this->extension = $extension;
@@ -112,18 +106,6 @@ class VideoHandler extends AbstractHandler
     }
 
     /**
-     * 각 미디어 타입에서 사용가능한 확장자 반환
-     *
-     * @return array
-     */
-    public function getAvailableMimes()
-    {
-        $class = $this->getModel();
-
-        return $class::getMimes();
-    }
-
-    /**
      * media 객체로 반환
      *
      * @param File $file file instance
@@ -136,7 +118,7 @@ class VideoHandler extends AbstractHandler
             throw new NotAvailableException();
         }
 
-        $video = $this->createModel($file);
+        $video = $this->makeModel($file);
         if (!$video->meta) {
             list($audioData, $videoData, $playtime, $bitrate) = $this->extractInformation($video);
 
@@ -172,29 +154,6 @@ class VideoHandler extends AbstractHandler
         }
 
         return [$info['audio'], $info['video'], $info['playtime_seconds'], $info['bitrate']];
-    }
-
-    /**
-     * Returns model class
-     *
-     * @return string
-     */
-    public function getModel()
-    {
-        return Video::class;
-    }
-
-    /**
-     * Create model
-     *
-     * @param File $file file instance
-     * @return Video
-     */
-    public function createModel(File $file)
-    {
-        $class = $this->getModel();
-
-        return $class::make($file);
     }
 
     /**

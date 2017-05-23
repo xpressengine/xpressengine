@@ -13,7 +13,7 @@ XE3 은 Composer를 비롯한 Modern 한 PHP를 기반으로 하고 있습니다
 ## Laravel Framework 를 기반으로 합니다.
 Laravel 은 가장 모던한 php 프레임워크중 하나로 전세계 php 프레임워크 중에 가장 인기있는 프레임워크입니다. 유연한 구조와, 검증된 소스들이 많이 있습니다. Laravel 프레임워크를 기반으로한 XE3 에서는 라라벨의 모든 기능과 자체적인 CMS 기능 모두가 활용 가능합니다. Laravel 에 대한 보다 자세한 사항은 한글 메뉴얼을 참고하시면 도움이 됩니다. 
 
-* [Laravel Documentation (Korean)](http://xpressengine.github.io/laravel-korean-docs/)
+* [Laravel Documentation (Korean)](https://laravel.kr/docs/)
 
 ## 서버 필요사항
 * PHP version 5.5.9 이상 
@@ -33,7 +33,7 @@ XE3을 설치하기 위해서는 다음의 가이드를 참고하십시오. [인
 http://xpressengine.io/contributors
 
 ## 매뉴얼                                                                   
-* 한글 매뉴얼 : http://xpressengine.io/docs/
+* 한글 매뉴얼 : https://xpressengine.gitbooks.io/xpressengine-manual/
 
 ## 지원
 * 공식 사이트 : http://xpressengine.io/

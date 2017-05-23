@@ -135,7 +135,7 @@
     <link rel="stylesheet" href="../assets/core/xe-ui-component/xe-ui-component.css">
 
     <link rel="stylesheet" href="../assets/core/webinstaller/css/webinstaller.css">
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/xeicon/2.0.0/xeicon.min.css">
+    <link rel="stylesheet" href="../assets/vendor/XEIcon/xeicon.min.css">
 </head>
 
 <body>

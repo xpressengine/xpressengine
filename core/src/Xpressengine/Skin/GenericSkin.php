@@ -156,10 +156,12 @@ abstract class GenericSkin extends AbstractSkin
         if ($config === null) {
             $config = $this->setting();
         }
-        $view = $this->info('setting', 'setting');
+        $view = $this->info('setting');
         $_skin = static::class;
 
-        if (is_string($view)) {
+        if (is_null($view)) {
+            return null;
+        } elseif (is_string($view)) {
             return view($this->view($view), compact('config', '_skin'));
         } elseif (is_array($view)) {
             return $this->makeConfigView($view, $config);

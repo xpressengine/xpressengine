@@ -58,12 +58,13 @@
 
             </div>
             <!--//기본프로필 -->
-
+            @if($widgetbox)
             <div class="card-wrap">
                 <div class="xe-container">
                     {{ uio('widgetbox', ['id' => 'user-profile', 'link'=> xe_trans('xe::edit')]) }}
                 </div>
             </div>
+            @endif
 
         </div>
         <!-- //content area -->

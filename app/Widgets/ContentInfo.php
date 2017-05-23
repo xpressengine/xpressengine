@@ -48,8 +48,11 @@ class ContentInfo extends AbstractWidget
             'totalDocument' => Document::count(),
             'totalMember' => XeUser::users()->count(),
         ];
-        return View::make('widget.widgets.contentInfo.show', [
-            'viewData' => $viewData,
-        ]);
+
+        return $this->renderSkin(
+            [
+                'viewData' => $viewData,
+            ]
+        );
     }
 }

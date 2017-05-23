@@ -1,6 +1,6 @@
 <?php
 /**
- * Class Translation
+ * Translation.php
  *
  * PHP version 5
  *
@@ -22,6 +22,7 @@ use Xpressengine\Translation\Exceptions\EmptyLocaleException;
 use Xpressengine\Translation\Loaders\LoaderInterface;
 
 /**
+ * Class Translator
  * @category    Translation
  * @package     Xpressengine\Translation
  * @author      XE Developers <developers@xpressengine.com>

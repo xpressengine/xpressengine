@@ -3,6 +3,15 @@ import ReactDOM from 'react-dom';
 
 import validator from 'validator';
 
+/**
+ * 다국어 입력 컴포넌트를 만드는 방식 2가지
+ * 1)DOM data속성을 사용하여 document ready상태일 경우 ajax로 한번에 다국어를 요청하여 컴포넌트를 만든다.
+ * - ajax이후 langEditorBoxRender 사용시 type이 'obj'로 들어감.
+ *
+ * 2)langEditorBoxRender:fn 외부에서 직접호출하여 컴포넌트를 만든다
+ * - 컴포넌트 state에 다국어 정보가 없으면 하나의 컴포넌트에 대한 다국어 정보를 ajax로 요청하여 상태를 갱신한다.
+ * */
+
 var LangEditorBox = React.createClass({
   getDefaultProps: function () {
     return {
@@ -67,6 +76,21 @@ var LangEditor = React.createClass({
       var _this = this;
       var el = ReactDOM.findDOMNode(this);
 
+      if (this.props.langKey) {
+        if (this.state.lines.length == 0) {
+          $.ajax({
+            type: 'get',
+            dataType: 'json',
+            url: xeBaseURL + '/' + XE.options.managePrefix + '/lang/lines/' + this.props.langKey,
+            success: function (result) {
+              if (this.isMounted()) {
+                _this.setLines(result);
+              }
+            }.bind(this),
+          });
+        }
+      }
+
       if (this.props.autocomplete) {
         $(el).find('input[type=text]:first,textarea:first').autocomplete({
           source: '/' + XE.options.managePrefix + '/lang/search/' + XE.Lang.locales[0],
@@ -128,11 +152,11 @@ var LangEditor = React.createClass({
               var value = _this.getValueFromLinesWithLocale(locale);
               return (
                 <div key={locale} className="input-group">
-                        {_this.getEditor(resource, locale, value)}
+                  {_this.getEditor(resource, locale, value)}
                       <span className="input-group-addon">
                       <span className="flag-code"><i className={locale + ' xe-flag'}></i>{locale}</span>
                       </span>
-                      </div>
+                </div>
               );
             })
           }
@@ -142,11 +166,35 @@ var LangEditor = React.createClass({
   },
 });
 
-window.langEditorBoxRender = function ({ name, langKey, multiline, lines, autocomplete, target }) {
-  ReactDOM.render(<LangEditorBox name={name} langKey={langKey} multiline={multiline} lines={lines} autocomplete={autocomplete}/>, target);
+window.langEditorBoxRender = function ($data, type) {
+  if (type === 'obj') {
+    //{ name, langKey, multiline, lines, autocomplete, target }
+    let name = $data.name;
+    let langKey = $data.langKey;
+    let multiline = $data.multiline;
+    let lines = $data.lines;
+    let autocomplete = $data.autocomplete;
+    let target = $data.target;
+
+    ReactDOM.render(<LangEditorBox name={name} langKey={langKey} multiline={multiline} lines={lines} autocomplete={autocomplete}/>, target);
+
+  } else {
+    var name = $data.data('name');
+    var langKey = $data.data('lang-key');
+    var multiline = $data.data('multiline');
+    var lines = $data.data('lines');
+    var autocomplete = $data.data('autocomplete');
+
+    ReactDOM.render(<LangEditorBox name={name} langKey={langKey} multiline={multiline} lines={lines} autocomplete={autocomplete}/>, $data[0]);
+  }
+
 };
 
 $(function () {
+  renderLangEditorBox();
+});
+
+function renderLangEditorBox() {
 
   let langKeys = [];
   let langObj = {};
@@ -208,32 +256,32 @@ $(function () {
           });
 
           $.each(langs, function () {
-            langEditorBoxRender(this);
+            langEditorBoxRender(this, 'obj');
           });
         },
       });
     } else {
       $.each(langs, function () {
-        langEditorBoxRender(this);
+        langEditorBoxRender(this, 'obj');
       });
     }
   }
-
-  $(document).on('focus', '.lang-editor-box input, textarea', function () {
-    var box = $(this).closest('.lang-editor-box');
-    var el = box.find('.sub');
-    if ($(el).is(':hidden')) {
-      $(el).slideDown('fast');
-
-      // todo: 기능 점검
-      // $(box).find('textarea').expanding();
-    }
-  });
 
   validator.put('langrequired', function ($dst, parameters) {
     var $input = $dst.closest('.lang-editor-box').find("input[name^='xe_lang_preprocessor']:not(:hidden):first");
 
     return validator.validators.required($input, parameters);
   });
+}
+
+$(document).on('focus', '.lang-editor-box input, textarea', function () {
+  var box = $(this).closest('.lang-editor-box');
+  var el = box.find('.sub');
+  if ($(el).is(':hidden')) {
+    $(el).slideDown('fast');
+
+    // todo: 기능 점검
+    // $(box).find('textarea').expanding();
+  }
 });
 

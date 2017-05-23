@@ -55,8 +55,10 @@ class SystemInfo extends AbstractWidget
             'timeZone' => Config::get('app.timezone')
         ];
 
-        return View::make('widget.widgets.systemInfo.show', [
-            'viewData' => $viewData,
-        ]);
+        return $this->renderSkin(
+            [
+                'viewData' => $viewData,
+            ]
+        );
     }
 }

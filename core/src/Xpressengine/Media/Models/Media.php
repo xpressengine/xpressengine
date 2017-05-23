@@ -56,7 +56,7 @@ abstract class Media extends File
             $model->{$key} = $val;
         }
 
-        $model->exists = true;
+        $model->exists = $file->exists;
 
         return $model;
     }

@@ -478,7 +478,7 @@ var itemMaker = {
       .append(
         $('<div>').addClass('item-content __xe_item_block')
           .append(
-            $('<button>').addClass('btn handler').append($('<i>').addClass('xi-bullet-point'))
+            $('<button>').addClass('btn handler').append($('<i>').addClass('xi-drag-vertical'))
           )
           .append(this.getHeader(data))
           .append(this.getBtns())

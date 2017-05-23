@@ -25,9 +25,11 @@ trait EloquentRepositoryTrait
     /**
      * Xpressengine\Database\Eloquent\DynamicModel를 상속받은 class의 이름이어야 한다
      *
-     * @var string model name.
+     * repository 를 상속받아 사용할 경우를 위해 배열형태로 저장함
+     *
+     * @var array model names.
      */
-    protected static $model;
+    protected static $models = [];
 
     /**
      * update
@@ -89,7 +91,7 @@ trait EloquentRepositoryTrait
      */
     public static function getModel()
     {
-        return static::$model;
+        return static::$models[get_called_class()];
     }
 
     /**
@@ -100,7 +102,7 @@ trait EloquentRepositoryTrait
      */
     public static function setModel($model)
     {
-        static::$model = '\\' . ltrim($model, '\\');
+        static::$models[get_called_class()] = '\\' . ltrim($model, '\\');
     }
 
     /**

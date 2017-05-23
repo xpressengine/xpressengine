@@ -17,33 +17,7 @@ namespace Xpressengine\Draft;
 use Illuminate\Auth\AuthManager;
 
 /**
- * # DraftHandler
- * 임시저장 데이터를 관리
- *
- * ### app binding : xe.draft 로 바인딩 되어 있음
- * XeDraft Facade 로 접근이 가능
- *
- * ### Usage
- * 임시저장될 데이터는 key, value 형태로 등록되어집니다.
- * 이때 key 는 구분할 수 있는 문자열으로, 중복이 가능합니다.
- * 등록되어질 내용이 value 이외에 추가적으로 더 있을 경우
- * 배열로 함께 전달해야 합니다.
- *
- * ```php
- * XeDraft::set('key string', 'it is test content', ['foo' => 'bar', 'baz' => 'qux']);
- * ```
- *
- * 임시저장된 데이터를 가져올때는 등록시 사용했던 key 를 통해서 같은 키를 가지는
- * 데이터 목록을 반환 받을 수 도 있고, 등록시 생성된 id 를 통해 한개의
- * 데이터만 반환 받을 수 도 있습니다.
- *
- * ```php
- * // list
- * $dataList = XeDraft::get('key string');
- *
- * // one
- * $data = XeDraft::getById('id');
- * ```
+ * Class DraftHandler
  *
  * @category    Draft
  * @package     Xpressengine\Draft
