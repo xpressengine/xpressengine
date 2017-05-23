@@ -14,6 +14,7 @@ use Xpressengine\User\EmailBrokerInterface;
 use Xpressengine\User\EmailInterface;
 use Xpressengine\User\Models\User;
 use Xpressengine\User\Rating;
+use Xpressengine\User\Repositories\RegisterTokenRepository;
 use Xpressengine\User\UserHandler;
 
 class RegisterController extends Controller
@@ -54,7 +55,7 @@ class RegisterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getRegister(Request $request, UserHandler $handler)
+    public function getRegister(Request $request, UserHandler $handler, RegisterTokenRepository $tokenRepository)
     {
         if(!$this->checkJoinable()) {
             return redirect()->back()->with(['alert'=>['type'=>'danger', 'message'=> xe_trans('xe::joinNotAllowed')]]);
@@ -71,7 +72,7 @@ class RegisterController extends Controller
 
         $guards = $handler->getRegisterGuards();
         if (!count($guards)) {
-            $token = $this->handler->storeRegisterToken('direct', []);
+            $token = $tokenRepository->create('direct', []);
             return redirect()->route('auth.register', ['token' => $token->id]);
         }
 
@@ -81,7 +82,7 @@ class RegisterController extends Controller
     /**
      * Show the application registration form.
      *
-     * @param Request $request
+     * @param Request                 $request
      *
      * @return Response
      */
@@ -91,7 +92,8 @@ class RegisterController extends Controller
 
         $tokenId = $request->get('token');
 
-        $register_token = $token = $this->handler->getRegisterToken($tokenId);
+        $tokenRepository = app('xe.user.register.tokens');
+        $register_token = $token = $tokenRepository->find($tokenId);
 
         if($token === null) {
             throw new HttpException(400, '정상적인 토큰이 아닙니다.');
@@ -177,7 +179,7 @@ class RegisterController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws Exception
      */
-    public function postRegisterConfirm(Request $request)
+    public function postRegisterConfirm(Request $request, RegisterTokenRepository $tokenRepository)
     {
         $this->validate($request, [
             'email' => 'required|email'
@@ -209,7 +211,7 @@ class RegisterController extends Controller
             \DB::commit();
         }
 
-        $token = $this->handler->storeRegisterToken('email', ['email' => $email, 'userId' => $mail->userId]);
+        $token = $tokenRepository->create('email', ['email' => $email, 'userId' => $mail->userId]);
         $this->emailBroker->sendEmailForRegister($mail, $token, 'emails.register', function ($m) {
             $m->subject(xe_trans(app('xe.site')->getSiteConfig()->get('site_title')).' '.xe_trans('xe::emailConfirm'));
         });
@@ -224,7 +226,7 @@ class RegisterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function postRegister(Request $request)
+    public function postRegister(Request $request, RegisterTokenRepository $tokenRepository)
     {
         // validation
         if(!$this->checkJoinable()) {
@@ -246,7 +248,7 @@ class RegisterController extends Controller
         );
 
         $tokenId = $request->get('register_token');
-        $token = $this->handler->getRegisterToken($tokenId);
+        $token = $tokenRepository->find($tokenId);
 
         if($token === null) {
             throw new HttpException(400, '잘못된 가입 토큰입니다.');
@@ -267,7 +269,7 @@ class RegisterController extends Controller
         XeDB::beginTransaction();
         try {
             $user = $this->handler->create($userData, $token);
-            $this->handler->deleteRegisterToken($tokenId);
+            $tokenRepository->delete($tokenId);
         } catch (\Exception $e) {
             XeDB::rollback();
             throw $e;

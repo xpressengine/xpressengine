@@ -505,7 +505,6 @@ class UserHandler
                     'accountId' => array_get($accountData, 'accountId'),
                     'email' => array_get($accountData, 'email', array_get($data, 'email')),
                     'provider' => array_get($accountData, 'provider'),
-                    'data' => array_get($accountData, 'data'),
                     'token' => array_get($accountData, 'token'),
                     'tokenSecret' => array_get($accountData, 'tokenSecret'),
                 ]
@@ -628,7 +627,7 @@ class UserHandler
         // account 검사
         if (isset($data['account'])) {
             $account = $data['account'];
-            if (!isset($account['accountId'], $account['provider'], $account['data'], $account['token'])) {
+            if (!isset($account['accountId'], $account['provider'], $account['token'])) {
                 throw new InvalidAccountInfoException();
             }
 

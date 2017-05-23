@@ -64,6 +64,11 @@ return [
 		'expire' => 60,
 	],
 
+	'register' => [
+		'table'  => 'user_register_token',
+		'expire' => 60,
+	],
+
     'confirm' => [
         'email' => 'emails.confirm'
     ]

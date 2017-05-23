@@ -35,7 +35,6 @@ class UserMigration extends Migration {
 
             $table->primary('id');
         });
-
         Schema::create('user_group', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
@@ -74,7 +73,6 @@ class UserMigration extends Migration {
             $table->char('provider', 20)->comment('OAuth provider. naver/twitter/facebook/...');
             $table->string('token', 500)->comment('token');
             $table->string('tokenSecret', 500)->comment('token secret');
-            $table->string('data')->comment('provider data');
             $table->timestamp('createdAt')->comment('created date');
             $table->timestamp('updatedAt')->comment('updated date');
 
@@ -120,18 +118,15 @@ class UserMigration extends Migration {
             $table->timestamp('created_at')->comment('created date');
         });
 
-
         Schema::create('user_register_token', function (Blueprint $table) {
             // find account password
             $table->engine = "InnoDB";
 
             $table->string('id', 36)->comment('user ID');
             $table->string('guard', 100)->comment('the guard creating token');
-            $table->string('data')->comment('token data');
+            $table->text('data')->comment('token data');
             $table->timestamp('createdAt')->comment('created date');
         });
-
-
 
     }
 
@@ -179,8 +174,8 @@ class UserMigration extends Migration {
      */
     public function checkUpdated($installedVersion = null)
     {
-        // ver.3.0.0-beta.17
-        return Schema::hasColumn('user', 'loginAt');
+        // ver.3.0.0-rc
+        return Schema::hasTable('user_register_token');
     }
 
     /**
@@ -215,11 +210,22 @@ class UserMigration extends Migration {
         if (Schema::hasTable('password_resets')) {
             Schema::rename('password_resets', 'user_password_resets');
         }
+        if (Schema::hasColumn('user_account', 'data')) {
+            Schema::table('user_account', function ($table) {
+                $table->dropColumn('data');
+            });
+        }
+        if (!Schema::hasTable('user_register_token')) {
+            Schema::create('user_register_token', function (Blueprint $table) {
+                // find account password
+                $table->engine = "InnoDB";
 
-
-
-
-
+                $table->string('id', 36)->comment('user ID');
+                $table->string('guard', 100)->comment('the guard creating token');
+                $table->text('data')->comment('token data');
+                $table->timestamp('createdAt')->comment('created date');
+            });
+        }
 
     }
 

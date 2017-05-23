@@ -233,7 +233,6 @@ namespace Xpressengine\Tests\User {
                 'accountId' => 'bar',
                 'email' => 'foo@bar.com',
                 'provider' => 'baz',
-                'data' => [],
                 'token' => 'token',
                 'tokenSecret' => 'tokenSecret',
             ])->andReturn($account);

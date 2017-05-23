@@ -67,9 +67,9 @@ class RegisterTokenRepository
      * Create a new token record.
      *
      * @param string $guard
-     * @param array $data
+     * @param array  $data
      *
-     * @return Fluent
+     * @return Fluent token entity
      */
     public function create($guard, $data)
     {
@@ -80,42 +80,50 @@ class RegisterTokenRepository
 
         $payload = ['id' => $id, 'guard' => $guard, 'data' => serialize($data), 'createdAt' => new Carbon];
 
-        $this->getTable()->insert($payload);
+        $result = $this->getTable()->insert($payload);
 
         $token = $this->resolveToken($id, $guard, $data);
 
         return $token;
     }
 
+    /**
+     * find token
+     *
+     * @param string $id token id
+     *
+     * @return Fluent|null token
+     */
     public function find($id)
     {
         $token = (array) $this->getTable()->where('id', $id)->first();
 
-        if($token === null || $this->tokenExpired($token)) {
+        if ($token === null || $this->tokenExpired($token)) {
             return null;
         }
         $token = $this->resolveToken($token['id'], $token['guard'], @unserialize($token['data']));
         return $token;
-
     }
 
     /**
      * Determine if a token record exists and is valid.
      *
-     * @param  string  $token
+     * @param string $id token id
+     *
      * @return bool
      */
     public function exists($id)
     {
         $token = (array) $this->getTable()->where('id', $id)->first();
 
-        return $token && ! $this->tokenExpired($token);
+        return $token && !$this->tokenExpired($token);
     }
 
     /**
      * Determine if the token has expired.
      *
-     * @param  array  $token
+     * @param  array $token token info
+     *
      * @return bool
      */
     private function tokenExpired($token)
@@ -138,12 +146,13 @@ class RegisterTokenRepository
     /**
      * Delete a token record by token.
      *
-     * @param  string  $token
+     * @param string $id token id
+     *
      * @return void
      */
-    public function delete($token)
+    public function delete($id)
     {
-        $this->getTable()->where('id', $token)->delete();
+        $this->getTable()->where('id', $id)->delete();
     }
 
     /**
@@ -159,7 +168,7 @@ class RegisterTokenRepository
     }
 
     /**
-     * Create a new register-token
+     * Create a new token id
      *
      * @return string
      */
@@ -189,11 +198,11 @@ class RegisterTokenRepository
     }
 
     /**
-     * resolveToken
+     * convert token info to token entity
      *
-     * @param $id
-     * @param $guard
-     * @param $data
+     * @param string $id    token id
+     * @param string $guard the guard creating token
+     * @param array  $data  token data
      *
      * @return Fluent
      */
@@ -203,5 +212,5 @@ class RegisterTokenRepository
         $token->id = $id;
         $token->guard = $guard;
         return $token;
-}
+    }
 }
