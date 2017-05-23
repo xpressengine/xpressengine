@@ -166,14 +166,16 @@ class ComposerFileWriter
     /**
      * setUpdateMode
      *
-     * @param array $fixedList
+     * @param array $fixedList the list of version fixed plugins
+     *
+     * @return void
      */
     public function setUpdateMode($fixedList = [])
     {
         $operation = '>=';
         $requires = [];
         foreach (array_get($this->data, 'require', []) as $package => $version) {
-            if(in_array($package, $fixedList)) {
+            if (in_array($package, $fixedList)) {
                 $requires[$package] = str_replace($operation, '', $version);
             } else {
                 $requires[$package] = $operation.str_replace($operation, '', $version);

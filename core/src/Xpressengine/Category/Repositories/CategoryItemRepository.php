@@ -14,6 +14,8 @@
 
 namespace Xpressengine\Category\Repositories;
 
+use Illuminate\Contracts\Events\Dispatcher;
+use Xpressengine\Category\Models\CategoryItem;
 use Xpressengine\Support\EloquentRepositoryTrait;
 
 /**
@@ -28,7 +30,16 @@ use Xpressengine\Support\EloquentRepositoryTrait;
  */
 class CategoryItemRepository
 {
-    use EloquentRepositoryTrait;
+    use EloquentRepositoryTrait {
+        delete as traitDelete;
+    }
+
+    /**
+     * Event dispatcher instance
+     *
+     * @var Dispatcher
+     */
+    protected $dispatcher;
 
     /**
      * Category model class provider
@@ -36,6 +47,68 @@ class CategoryItemRepository
      * @var callable
      */
     protected static $provider;
+
+    /**
+     * CategoryItemRepository constructor.
+     *
+     * @param Dispatcher $dispatcher Event dispatcher instance
+     */
+    public function __construct(Dispatcher $dispatcher)
+    {
+        $this->dispatcher = $dispatcher;
+    }
+
+    /**
+     * Create category item
+     *
+     * @param array $attributes attributes
+     * @return CategoryItem
+     */
+    public function create(array $attributes = [])
+    {
+        $item = $this->createModel()->create($attributes);
+        $item->ancestors()->attach($item->getKey(), [$item->getDepthName() => 0]);
+        $this->dispatcher->fire('xe.category.categoryitem.created', $item);
+
+        return $item;
+    }
+
+    /**
+     * Delete a category item
+     *
+     * @param CategoryItem $item category item
+     * @return bool|null
+     */
+    public function delete(CategoryItem $item)
+    {
+        $item->ancestors(false)->detach();
+//        $item->descendants(false)->detach();
+
+        $result = $this->traitDelete($item);
+        $this->dispatcher->fire('xe.category.categoryitem.deleted', $item);
+
+        return $result;
+    }
+
+    /**
+     * Exclude object from ancestors of item
+     *
+     * @param CategoryItem $item     category item
+     * @param CategoryItem $excluded to be excluded category item
+     * @return void
+     */
+    public function exclude(CategoryItem $item, CategoryItem $excluded)
+    {
+        $item->descendants()->newPivotStatement()
+            ->where($item->getDescendantName(), $item->getKey())
+            ->where($item->getAncestorName(), '!=', $excluded->getKey())
+            ->where($item->getDepthName(), '>', 0)
+            ->decrement($item->getDepthName());
+
+        $parentId = ($parent = $item->getParent()) ? $parent->getKey() : null;
+
+        $this->update($item, [$item->getParentIdName() => $parentId]);
+    }
 
     /**
      * The name of Category model class

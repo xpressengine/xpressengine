@@ -74,12 +74,14 @@ class StorageSpace extends AbstractWidget
             ]);
         }
 
-        return View::make('widget.widgets.storageSpace.show', [
-            'list' => array_filter($list, function ($item) {
-                return !empty($item['bytes']);
-            }),
-            'total' => $total
-        ])->render();
+        return $this->renderSkin(
+            [
+                'list' => array_filter($list, function ($item) {
+                    return !empty($item['bytes']);
+                }),
+                'total' => $total
+            ]
+        );
     }
 
     /**

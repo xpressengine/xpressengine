@@ -64,7 +64,7 @@ class StorageOptimize extends Command
                 }
 
                 foreach ($files as $file) {
-                    $this->storage->remove($file);
+                    $this->storage->delete($file);
                 }
 
                 sleep(1);
@@ -88,7 +88,7 @@ class StorageOptimize extends Command
 
     private function intercept()
     {
-        intercept('XeStorage@remove', 'storage.optimize.log', function ($target, $file) {
+        intercept('XeStorage@delete', 'storage.optimize.log', function ($target, $file) {
 
             $this->bag[] = $file;
 
@@ -101,7 +101,7 @@ class StorageOptimize extends Command
         $verbosity = $this->getOutput()->getVerbosity();
 
         if ($verbosity > 1) {
-            $this->comment('Removed:');
+            $this->comment('Deleted:');
         }
 
         foreach ($this->bag as $file) {

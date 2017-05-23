@@ -483,3 +483,91 @@ header > .xe-pull-right .xe-btn.xe-btn-link {
 .editor .dropzone .order {
   color: #FFF !important;
 }
+
+.widget-margin {
+  position: relative;
+  width: 160px;
+}
+
+.widget-margin:after {
+  content: "px";
+  position: absolute;
+  top: 9px;
+  right: 10px;
+  font-size: 12px;
+  z-index: 3;
+}
+
+.widget-margin .widget-margin-type {
+  display: inline-block;
+  padding: 6px 10px;
+  margin: 0 -1px 0 0;
+  border: 1px solid #bbbcbf;
+  font-weight: normal;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+  font-size: 14px;
+  line-height: 1.42857;
+  border-radius: 2px;
+  color: #333;
+}
+
+.widget-margin .inner-box {
+  position: relative;
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  margin-right: 6px;
+  padding: 2px 0 0 2px;
+  border: 1px solid #999;
+  transform: translateY(2px);
+}
+
+.widget-margin .inner-box i {
+  display: block;
+  width: 7px;
+  height: 7px;
+  border: 1px solid #999;
+}
+
+.widget-margin .inner-box:before, .widget-margin .inner-box:after {
+  position: absolute;
+  content: "";
+  background-color: #999;
+}
+
+.widget-margin .inner-box.top:before {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+}
+
+.widget-margin .inner-box.bottom:before {
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+}
+
+.widget-margin .inner-box.left:before {
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+}
+
+.widget-margin .inner-box.left:after {
+  top: 0;
+  right: 0;
+  width: 3px;
+  height: 100%;
+}
+
+.widget-margin .xe-form-control {
+  height: 33px;
+  padding: 6px 32px 10px 6px;
+  border-color: #bbbcbf;
+  text-align: right;
+}

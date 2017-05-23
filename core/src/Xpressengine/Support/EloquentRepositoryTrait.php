@@ -14,7 +14,7 @@
 
 namespace Xpressengine\Support;
 
-use Xpressengine\Database\Eloquent\DynamicModel as Model;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * @category    Support
@@ -23,7 +23,7 @@ use Xpressengine\Database\Eloquent\DynamicModel as Model;
 trait EloquentRepositoryTrait
 {
     /**
-     * Xpressengine\Database\Eloquent\DynamicModel를 상속받은 class의 이름이어야 한다
+     * model class name
      *
      * repository 를 상속받아 사용할 경우를 위해 배열형태로 저장함
      *
