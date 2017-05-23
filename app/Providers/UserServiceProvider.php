@@ -35,6 +35,7 @@ use Xpressengine\User\Models\UserEmail;
 use Xpressengine\User\Models\UserGroup;
 use Xpressengine\User\Repositories\PendingEmailRepository;
 use Xpressengine\User\Repositories\PendingEmailRepositoryInterface;
+use Xpressengine\User\Repositories\RegisterTokenRepository;
 use Xpressengine\User\Repositories\UserAccountRepository;
 use Xpressengine\User\Repositories\UserAccountRepositoryInterface;
 use Xpressengine\User\Repositories\UserEmailRepository;
@@ -180,6 +181,7 @@ class UserServiceProvider extends ServiceProvider
      */
     protected function registerTokenRepository()
     {
+        // register password-token repository
         $this->app->singleton(
             'auth.password.tokens',
             function ($app) {
@@ -195,6 +197,25 @@ class UserServiceProvider extends ServiceProvider
                 $expire = $app['config']->get('auth.password.expire', 60);
 
                 return new DatabaseTokenRepository($connection, $table, $key, $expire);
+            }
+        );
+
+        // register register-token repository
+        $this->app->singleton(
+            'auth.register.tokens',
+            function ($app) {
+                $connection = $app['db']->connection('user');
+
+                // The database token repository is an implementation of the token repository
+                // interface, and is responsible for the actual storing of auth tokens and
+                // their e-mail addresses. We will inject this table and hash key to it.
+                $table = $app['config']['auth.password.table'];
+
+                $keygen = $app['xe.keygen'];
+
+                $expire = $app['config']->get('auth.password.expire', 60);
+
+                return new RegisterTokenRepository($connection, $keygen, $table, $expire);
             }
         );
     }

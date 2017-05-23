@@ -110,7 +110,7 @@ class UserMigration extends Migration {
             $table->index('address');
         });
 
-        Schema::create('password_resets', function (Blueprint $table) {
+        Schema::create('user_password_resets', function (Blueprint $table) {
             // find account password
             $table->engine = "InnoDB";
 
@@ -119,6 +119,20 @@ class UserMigration extends Migration {
             $table->string('token')->index()->comment('token');
             $table->timestamp('created_at')->comment('created date');
         });
+
+
+        Schema::create('user_register_token', function (Blueprint $table) {
+            // find account password
+            $table->engine = "InnoDB";
+
+            $table->string('id', 36)->comment('user ID');
+            $table->string('guard', 100)->comment('the guard creating token');
+            $table->string('data')->comment('token data');
+            $table->timestamp('createdAt')->comment('created date');
+        });
+
+
+
     }
 
     public function installed()
@@ -191,11 +205,22 @@ class UserMigration extends Migration {
         }
 
         // ver.3.0.0-beta.17
-        if(!Schema::hasColumn('user', 'loginAt')) {
+        if (!Schema::hasColumn('user', 'loginAt')) {
             Schema::table('user', function ($table) {
                 $table->timestamp('loginAt');
             });
         }
+
+        // ver.3.0.0-rc
+        if (Schema::hasTable('password_resets')) {
+            Schema::rename('password_resets', 'user_password_resets');
+        }
+
+
+
+
+
+
     }
 
 
