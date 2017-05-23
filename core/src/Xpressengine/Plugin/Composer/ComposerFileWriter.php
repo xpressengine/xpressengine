@@ -166,7 +166,7 @@ class ComposerFileWriter
     /**
      * setUpdateMode
      *
-     * @param array $fixedList  the list of version fixed plugins
+     * @param array $fixedList the list of version fixed plugins
      *
      * @return void
      */
