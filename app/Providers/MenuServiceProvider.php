@@ -16,14 +16,15 @@ namespace App\Providers;
 
 use App\UIObjects\Menu\MenuSelect;
 use Illuminate\Support\ServiceProvider;
+use Xpressengine\Menu\EventListener;
 use Xpressengine\Menu\MenuHandler;
 use Xpressengine\Menu\MenuItemPolicy;
+use Xpressengine\Menu\Models\Menu;
 use Xpressengine\Menu\Models\MenuItem;
 use Xpressengine\Menu\ModuleHandler;
-use Xpressengine\Menu\Repositories\CacheDecorator;
-use Xpressengine\Menu\Repositories\EloquentRepository;
-use Xpressengine\Menu\Repositories\MemoryDecorator;
-use Xpressengine\Support\LaravelCache;
+use Xpressengine\Menu\Repositories\IdentifierGenerator;
+use Xpressengine\Menu\Repositories\MenuItemRepository;
+use Xpressengine\Menu\Repositories\MenuRepository;
 use App\UIObjects\Menu\MenuType;
 use Xpressengine\Menu\MenuType\DirectLink;
 use App\UIObjects\Menu\TypeSelect;
@@ -48,6 +49,14 @@ class MenuServiceProvider extends ServiceProvider
      */
     public function boot(GateContract $gate)
     {
+        MenuItemRepository::setMenuModelProvider(function () {
+            return MenuRepository::getModel();
+        });
+        MenuRepository::setModel(Menu::class);
+        MenuItemRepository::setModel(MenuItem::class);
+
+        $this->app['events']->subscribe(EventListener::class);
+
         $pluginRegister = $this->app['xe.pluginRegister'];
 
         $pluginRegister->add(MenuType::class);
@@ -95,14 +104,11 @@ class MenuServiceProvider extends ServiceProvider
         });
         
         $this->app->singleton(['xe.menu' => MenuHandler::class], function ($app) {
-            $repo = new EloquentRepository($app['xe.keygen']);
-
-            if ($app['config']['app.debug'] !== true) {
-                $repo = new CacheDecorator($repo, new LaravelCache($app['cache.store']));
-            }
+            $generator = new IdentifierGenerator($app['xe.keygen']);
 
             return new MenuHandler(
-                new MemoryDecorator($repo),
+                new MenuRepository($generator),
+                new MenuItemRepository($generator, $app['events']),
                 $app['xe.config'],
                 $app['xe.module'],
                 $app['xe.router']

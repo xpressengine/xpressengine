@@ -2,7 +2,7 @@
 
 @extends('menu.layout')
 @section('menuContent')
-<form action="{{ route('settings.menu.store.item', $menu->id) }}" method="post">
+<form action="{{ route('settings.menu.store.item', $menu->id) }}" method="post" enctype="multipart/form-data">
     <input type="hidden" name="_token" value="{{ Session::token() }}"/>
     <input type="hidden" name="selectedType" value="{{ $selectedType }}"/>
     <input type="hidden" name="siteKey" value="{{ $siteKey }}"/>
