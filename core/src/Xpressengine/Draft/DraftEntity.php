@@ -31,13 +31,13 @@ class DraftEntity extends Entity
     protected $guarded = ['id'];
 
     /**
-     * json 으로 인코딩시 변환될 속성 값들을 반환
+     * Convert the entity instance to an array.
      *
      * @return array
      */
-    public function jsonSerialize()
+    public function toArray()
     {
-        $array = $this->toArray();
+        $array = parent::toArray();
         $array['etc'] = unserialize($array['etc']);
 
         return $array;
