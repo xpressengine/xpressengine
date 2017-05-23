@@ -99,6 +99,8 @@ class MenuItemRepository
                 $model->{$model->getKeyName()} = $this->generator->generateId();
                 $model->save();
 
+                $model->ancestors()->attach($model->getKey(), [$model->getDepthName() => 0]);
+
                 $this->clearCache();
 
                 $this->dispatcher->fire('xe.menu.menuitem.created', $model);
@@ -122,6 +124,8 @@ class MenuItemRepository
      */
     public function delete(MenuItem $item)
     {
+        $item->ancestors(false)->detach();
+
         $result = $this->traitDelete($item);
         $this->dispatcher->fire('xe.menu.menuitem.deleted', $item);
 

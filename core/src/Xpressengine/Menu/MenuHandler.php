@@ -294,13 +294,6 @@ class MenuHandler
      */
     protected function setHierarchy(MenuItem $item)
     {
-        // 이미 존재하는 경우 hierarchy 정보를 새로 등록하지 않음
-        try {
-            $item->ancestors()->attach($item->getKey(), [$item->getDepthName() => 0]);
-        } catch (\Exception $e) {
-            return;
-        }
-
         if ($item->{$item->getParentIdName()}) {
             $parent = $this->items->find($item->{$item->getParentIdName()});
 
@@ -356,7 +349,14 @@ class MenuHandler
      */
     public function updateItem(MenuItem $item, array $attributes, array $menuTypeInput = [])
     {
-        $this->items->update($item, $attributes);
+        $parentIdName = $item->getParentIdName();
+        // 내용 수정시 부모 키 변경은 허용하지 않음
+        // 부모 키가 변경되는 경우는 반드시 moveTo, setOrder 를
+        // 통해 처리되야 함
+        $item = $this->items->update($item, array_merge(
+            $attributes,
+            [$parentIdName => $item->getOriginal($parentIdName)]
+        ));
 
         $this->updateMenuType($item, $menuTypeInput);
 
@@ -410,7 +410,6 @@ class MenuHandler
             throw new CanNotDeleteMenuItemHaveChildException;
         }
 
-        $item->ancestors(false)->detach();
         $this->deleteMenuType($item);
 
         return $this->items->delete($item);

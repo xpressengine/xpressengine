@@ -105,7 +105,10 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $mockMenuItem = m::mock('Xpressengine\Menu\Models\MenuItem');
-        $items->shouldReceive('update')->once()->with($mockMenuItem, ['title' => 'test title'])->andReturn($mockMenuItem);
+        $mockMenuItem->shouldReceive('getParentIdName')->andReturn('parentId');
+        $mockMenuItem->shouldReceive('getOriginal')->with('parentId')->andReturn('parent_id');
+        $items->shouldReceive('update')->once()
+            ->with($mockMenuItem, ['title' => 'test title', 'parentId' => 'parent_id'])->andReturn($mockMenuItem);
 
         $instance->expects($this->once())->method('updateMenuType')->with($mockMenuItem, ['foo' => 'var']);
 
@@ -124,10 +127,6 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
         $mockMenuItem = m::mock('Xpressengine\Menu\Models\MenuItem');
         $mockMenuItem->shouldReceive('getDescendantCount')->andReturn(0);
 
-        $mockRelate = m::mock('stdClass');
-        $mockRelate->shouldReceive('detach')->once();
-
-        $mockMenuItem->shouldReceive('ancestors')->once()->with(false)->andReturn($mockRelate);
         $items->shouldReceive('delete')->once()->with($mockMenuItem)->andReturn(true);
 
         $instance->expects($this->once())->method('deleteMenuType')->with($mockMenuItem);
