@@ -91,7 +91,7 @@ class MenuMigration extends Migration {
         // 기본 메뉴 config  설정 (theme)
         $defaultMenuTheme = 'theme/alice@alice.0';
 
-        $mainMenu = $menuHandler->create([
+        $mainMenu = $menuHandler->createMenu([
             'title' => 'Main Menu',
             'description' => 'Main Menu',
             'siteKey' => 'default'

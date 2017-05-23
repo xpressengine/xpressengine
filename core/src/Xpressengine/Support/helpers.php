@@ -415,7 +415,7 @@ if (!function_exists('menu_list')) {
     {
         $menu = null;
         if ($menuId !== null) {
-            $menu = app('xe.menu')->get(
+            $menu = XeMenu::menus()->findWith(
                 $menuId,
                 [
                     'items.basicImage',
@@ -532,7 +532,7 @@ if (!function_exists('moduleClass')) {
      */
     function moduleClass($moduleId)
     {
-        return app('xe.menu')->getModuleHandler()->getModuleClassName(fullModuleId($moduleId));
+        return XeMenu::getModuleHandler()->getModuleClassName(fullModuleId($moduleId));
     }
 }
 

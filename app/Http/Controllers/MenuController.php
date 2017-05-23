@@ -55,7 +55,7 @@ class MenuController extends Controller
     public function index()
     {
         $siteKey = XeSite::getCurrentSiteKey();
-        $menus = XeMenu::getAll($siteKey);
+        $menus = XeMenu::menus()->fetchBySiteKey($siteKey, 'items')->getDictionary();
         $homeMenuId = XeSite::getHomeInstanceId();
         $menuMaxDepth = config('xe.menu.maxDepth');
 
@@ -114,7 +114,7 @@ class MenuController extends Controller
 
         XeDB::beginTransaction();
         try {
-            $menu = XeMenu::create([
+            $menu = XeMenu::createMenu([
                 'title' => $request->get('menuTitle'),
                 'description' => $request->get('menuDescription'),
                 'siteKey' => $request->get('siteKey')
@@ -144,7 +144,7 @@ class MenuController extends Controller
      */
     public function edit($menuId)
     {
-        $menu = XeMenu::get($menuId);
+        $menu = XeMenu::menus()->find($menuId);
         $menuConfig = XeMenu::getMenuTheme($menu);
 
         return XePresenter::make('menu.edit', ['menu' => $menu, 'config' => $menuConfig]);
@@ -161,7 +161,7 @@ class MenuController extends Controller
      */
     public function update(Request $request, $menuId)
     {
-        $menu = XeMenu::get($menuId);
+        $menu = XeMenu::menus()->find($menuId);
 
         $desktopTheme = $request->get('theme_desktop');
         $mobileTheme = $request->get('theme_mobile');
@@ -177,10 +177,10 @@ class MenuController extends Controller
         XeDB::beginTransaction();
 
         try {
-            $menu->title = $request->get('menuTitle');
-            $menu->description = $request->get('menuDescription');
-
-            XeMenu::put($menu);
+            XeMenu::updateMenu($menu, [
+                'title' => $request->get('menuTitle'),
+                'description' => $request->get('menuDescription'),
+            ]);
             XeMenu::updateMenuTheme($menu, $desktopTheme, $mobileTheme);
 
         } catch (Exception $e) {
@@ -203,7 +203,7 @@ class MenuController extends Controller
      */
     public function permit($menuId)
     {
-        $menu = XeMenu::get($menuId, 'items');
+        $menu = XeMenu::menus()->find($menuId);
 
         return XePresenter::make(
             'menu.delete',
@@ -224,9 +224,9 @@ class MenuController extends Controller
         XeDB::beginTransaction();
 
         try {
-            $menu = XeMenu::get($menuId);
+            $menu = XeMenu::menus()->find($menuId);
 
-            XeMenu::remove($menu);
+            XeMenu::deleteMenu($menu);
             $this->permissionUnregister($menu->getKey());
         } catch (Exception $e) {
             XeDB::rollback();
@@ -248,7 +248,7 @@ class MenuController extends Controller
      */
     public function editMenuPermission($menuId)
     {
-        $menu = XeMenu::get($menuId);
+        $menu = XeMenu::menus()->find($menuId);
 
         $permArgs = $this->getPermArguments($menu->getKey(), [MenuHandler::ACCESS, MenuHandler::VISIBLE]);
 
@@ -272,7 +272,7 @@ class MenuController extends Controller
         XeDB::beginTransaction();
 
         try {
-            $menu = XeMenu::get($menuId);
+            $menu = XeMenu::menus()->find($menuId);
 
             $this->permissionRegister($request, $menu->getKey(), [MenuHandler::ACCESS, MenuHandler::VISIBLE]);
         } catch (Exception $e) {
@@ -317,7 +317,7 @@ class MenuController extends Controller
      */
     public function createItem(Request $request, $menuId)
     {
-        $menu = XeMenu::get($menuId);
+        $menu = XeMenu::menus()->find($menuId);
         $menuConfig = XeMenu::getMenuTheme($menu);
 
         $parent = $request->get('parent');
@@ -359,7 +359,7 @@ class MenuController extends Controller
     {
         XeDB::beginTransaction();
 
-        $menu = XeMenu::get($menuId);
+        $menu = XeMenu::menus()->find($menuId);
 
         try {
             $inputs = $request->except(['_token', 'theme_desktop', 'theme_mobile']);
@@ -386,14 +386,14 @@ class MenuController extends Controller
             ], $menuTypeInput);
 
             // link image 등록
-            $this->registerItemImage($request, $item, 'basicImage');
-            $this->registerItemImage($request, $item, 'hoverImage');
-            $this->registerItemImage($request, $item, 'selectedImage');
-            $this->registerItemImage($request, $item, 'mBasicImage');
-            $this->registerItemImage($request, $item, 'mHoverImage');
-            $this->registerItemImage($request, $item, 'mSelectedImage');
-
-            XeMenu::putItem($item, $menuTypeInput);
+            XeMenu::updateItem($item, [
+                $this->getItemImageKeyName('basicImage') => $this->registerItemImage($request, $item, 'basicImage'),
+                $this->getItemImageKeyName('hoverImage') => $this->registerItemImage($request, $item, 'hoverImage'),
+                $this->getItemImageKeyName('selectedImage') => $this->registerItemImage($request, $item, 'selectedImage'),
+                $this->getItemImageKeyName('mBasicImage') => $this->registerItemImage($request, $item, 'mBasicImage'),
+                $this->getItemImageKeyName('mHoverImage') => $this->registerItemImage($request, $item, 'mHoverImage'),
+                $this->getItemImageKeyName('mSelectedImage') => $this->registerItemImage($request, $item, 'mSelectedImage')
+            ], $menuTypeInput);
 
             XeMenu::setMenuItemTheme($item, $desktopTheme, $mobileTheme);
             $this->permissionRegisterGrant(XeMenu::permKeyString($item), null, $menu->siteKey);
@@ -420,10 +420,7 @@ class MenuController extends Controller
      */
     public function editItem($menuId, $itemId)
     {
-        $item = XeMenu::getItem($itemId, [
-            'basicImage', 'hoverImage', 'selectedImage',
-            'mBasicImage', 'mHoverImage', 'mSelectedImage'
-        ]);
+        $item = XeMenu::items()->find($itemId);
         $menu = $item->menu;
         if ($menu->getKey() !== $menuId) {
             throw new InvalidArgumentHttpException(400);
@@ -479,7 +476,7 @@ class MenuController extends Controller
         try {
             $inputs = $request->except(['_token', 'theme_desktop', 'theme_mobile']);
 
-            $item = XeMenu::getItem($itemId);
+            $item = XeMenu::items()->find($itemId);
             $menu = $item->menu;
             if ($menu->getKey() !== $menuId) {
                 throw new InvalidArgumentHttpException(400);
@@ -496,24 +493,20 @@ class MenuController extends Controller
 
             list($itemInput, $menuTypeInput) = $this->inputClassify($inputs);
 
-            $item->fill([
+            XeMenu::updateItem($item, [
                 'title' => $itemInput['itemTitle'],
                 'url' => $itemInput['itemUrl'],
                 'description' => $itemInput['itemDescription'],
                 'target' => $itemInput['itemTarget'],
                 'ordering' => $itemInput['itemOrdering'],
                 'activated' => array_get($itemInput, 'itemActivated', '0'),
-            ]);
-
-            // link image 등록
-            $this->registerItemImage($request, $item, 'basicImage');
-            $this->registerItemImage($request, $item, 'hoverImage');
-            $this->registerItemImage($request, $item, 'selectedImage');
-            $this->registerItemImage($request, $item, 'mBasicImage');
-            $this->registerItemImage($request, $item, 'mHoverImage');
-            $this->registerItemImage($request, $item, 'mSelectedImage');
-
-            XeMenu::putItem($item, $menuTypeInput);
+                $this->getItemImageKeyName('basicImage') => $this->registerItemImage($request, $item, 'basicImage'),
+                $this->getItemImageKeyName('hoverImage') => $this->registerItemImage($request, $item, 'hoverImage'),
+                $this->getItemImageKeyName('selectedImage') => $this->registerItemImage($request, $item, 'selectedImage'),
+                $this->getItemImageKeyName('mBasicImage') => $this->registerItemImage($request, $item, 'mBasicImage'),
+                $this->getItemImageKeyName('mHoverImage') => $this->registerItemImage($request, $item, 'mHoverImage'),
+                $this->getItemImageKeyName('mSelectedImage') => $this->registerItemImage($request, $item, 'mSelectedImage')
+            ], $menuTypeInput);
 
             XeMenu::updateMenuItemTheme($item, $desktopTheme, $mobileTheme);
 
@@ -529,26 +522,34 @@ class MenuController extends Controller
 
     }
 
+    protected function getItemImageKeyName($name)
+    {
+        return $name . 'Id';
+    }
+
     protected function registerItemImage(Request $request, MenuItem $item, $name)
     {
-        $columnKeyName = $name . 'Id';
+        $columnKeyName = $this->getItemImageKeyName($name);
 
         if ($uploadImg = $request->file($name)) {
             $image = XeMedia::make(XeStorage::upload($uploadImg, 'public/menu'));
             XeStorage::bind($item->getKey(), $image);
 
             if (!empty($item->{$columnKeyName})) {
-                XeStorage::unBind($item->getKey(), $item->{$name});
+                XeStorage::unBind($item->getKey(), $item->{$name}, true);
             }
 
-            $item->{$columnKeyName} = $image->getKey();
-        } else {
-            $key = 'remove' . ucfirst($name);
-            if ($request->get($key) && !empty($item->{$columnKeyName})) {
-                XeStorage::unBind($item->getKey(), $item->{$name});
-                $item->{$columnKeyName} = null;
-            }
+            return $image->getKey();
         }
+
+        $key = 'remove' . ucfirst($name);
+        if ($request->get($key) && !empty($item->{$columnKeyName})) {
+            XeStorage::unBind($item->getKey(), $item->{$name}, true);
+
+            return null;
+        }
+
+        return $item->{$columnKeyName};
     }
 
     /**
@@ -561,7 +562,7 @@ class MenuController extends Controller
      */
     public function permitItem($menuId, $itemId)
     {
-        $item = XeMenu::getItem($itemId);
+        $item = XeMenu::items()->find($itemId);
         $menu = $item->menu;
         if ($menu->getKey() !== $menuId) {
             throw new InvalidArgumentHttpException(400);
@@ -591,7 +592,7 @@ class MenuController extends Controller
      */
     public function destroyItem($menuId, $itemId)
     {
-        $item = XeMenu::getItem($itemId);
+        $item = XeMenu::items()->find($itemId);
         $menu = $item->menu;
         if ($menu->getKey() !== $menuId) {
             throw new InvalidArgumentHttpException(400);
@@ -599,7 +600,7 @@ class MenuController extends Controller
 
         XeDB::beginTransaction();
         try {
-            XeMenu::removeItem($item);
+            XeMenu::deleteItem($item);
 
             foreach (XeStorage::fetchByFileable($item->getKey()) as $file) {
                 XeStorage::unBind($item->getKey(), $file, true);
@@ -629,7 +630,7 @@ class MenuController extends Controller
      */
     public function editItemPermission($menuId, $itemId)
     {
-        $item = XeMenu::getItem($itemId);
+        $item = XeMenu::items()->find($itemId);
         $menu = $item->menu;
         if ($menu->getKey() !== $menuId) {
             throw new InvalidArgumentHttpException(400);
@@ -670,7 +671,7 @@ class MenuController extends Controller
         XeDB::beginTransaction();
 
         try {
-            $item = XeMenu::getItem($itemId);
+            $item = XeMenu::items()->find($itemId);
             $menu = $item->menu;
             if ($menu->getKey() !== $menuId) {
                 throw new InvalidArgumentHttpException(400);
@@ -711,10 +712,10 @@ class MenuController extends Controller
 
         try {
 
-            $item = XeMenu::getItem($itemId);
+            $item = XeMenu::items()->find($itemId);
             /** @var Menu $menu */
-            if (!$parent = XeMenu::getItem($parentId)) {
-                $menu = XeMenu::get($parentId);
+            if (!$parent = XeMenu::items()->find($parentId)) {
+                $menu = XeMenu::menus()->find($parentId);
             } else {
                 $menu = $parent->menu;
             }

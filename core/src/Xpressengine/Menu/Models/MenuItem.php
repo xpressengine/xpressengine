@@ -84,7 +84,10 @@ class MenuItem extends CategoryItem
      *
      * @var array
      */
-    protected $fillable = ['parentId', 'title', 'url', 'description', 'target', 'type' , 'ordering', 'activated'];
+    protected $fillable = [
+        'menuId', 'parentId', 'title', 'url', 'description', 'target', 'type' , 'ordering', 'activated',
+        'basicImageId', 'hoverImageId', 'selectedImageId', 'mBasicImageId', 'mHoverImageId', 'mSelectedImageId',
+    ];
 
     /**
      * Indicates if the model selected.

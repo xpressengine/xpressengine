@@ -51,7 +51,7 @@ class MenuSelect extends AbstractUIObject
             $description->removeClass('hidden')->html($args['description']);
         }
 
-        $menus = XeMenu::getAll(XeSite::getCurrentSiteKey());
+        $menus = XeMenu::menus()->fetchBySiteKey(XeSite::getCurrentSiteKey());
         foreach ($menus as $menu) {
             $option = PhpQuery::pq('<option></option>');
             $option->appendTo($select)->attr('value', $menu->id)->html($menu->title);
