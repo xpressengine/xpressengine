@@ -10,14 +10,7 @@
     <div class="col-sm-12">
         <div class="panel-group" id="accordion">
 
-            <div class="panel">
-                <div class="panel-body">
-                    <ul class="nav nav-pills">
-                        <li role="presentation" @if($installType === 'fetched') class="active"@endif><a href="{{ route('settings.plugins') }}">자료실 플러그인</a></li>
-                        <li role="presentation" @if($installType === 'self-installed') class="active"@endif><a href="{{ route('settings.plugins.self') }}">직접 설치한 플러그인</a></li>
-                    </ul>
-                </div>
-            </div>
+            @include($_skin::view('index.tab'))
 
             @if($operation)
                 <div class="__xe_operation" style="margin-bottom: 10px;">
@@ -80,6 +73,8 @@
                                 <button type="button" class="btn btn-default dropdown-toggle __xe_manage_plugin" data-toggle="dropdown" aria-expanded="false" disabled="disabled">선택된 플러그인을 ... <span class="caret"></span></button>
                                 <ul class="dropdown-menu" role="menu">
                                     <li>
+                                        <a href="{{ route('settings.plugins.activate-page') }}" class="__xe_activate_plugin"><span>켜기</span></a>
+                                        <a href="{{ route('settings.plugins.deactivate-page') }}" class="__xe_deactivate_plugin"><span>끄기</span></a>
                                         <a href="{{ route('settings.plugins.delete-page') }}" class="__xe_remove_plugin"><span>삭제</span></a>
                                     </li>
                                 </ul>

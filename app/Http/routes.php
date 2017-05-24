@@ -601,6 +601,7 @@ Route::settings(
     }
 );
 
+/* core update */
 Route::settings('update', function(){
 
     Route::get('/', [
@@ -742,6 +743,18 @@ Route::settings(
             Route::put('/', [
                 'as' => 'settings.plugins.download',
                 'uses' => 'PluginController@download'
+            ]);
+
+            // GET: plugins/activate-page
+            Route::get('activate-page', [
+                'as' => 'settings.plugins.activate-page',
+                'uses' => 'PluginController@getActivate'
+            ]);
+
+            // PUT: plugins
+            Route::put('/', [
+                'as' => 'settings.plugins.activate',
+                'uses' => 'PluginController@activate'
             ]);
 
 

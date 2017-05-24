@@ -79,7 +79,7 @@ class PluginController extends Controller
         $filtered = $collection->fetch($field);
         $plugins = $collection->fetchByInstallType($installType, $filtered);
 
-        $provider->sync($plugins);
+        // $provider->sync($plugins);
 
         $componentTypes = $this->getComponentTypes();
 
@@ -95,7 +95,7 @@ class PluginController extends Controller
     public function getOperation(PluginHandler $handler, ComposerFileWriter $writer)
     {
         $operation = $handler->getOperation($writer);
-        return apiRender('operation', compact('operation'), compact('operation'));
+        return apiRender('index.operation', compact('operation'), compact('operation'));
     }
 
     public function deleteOperation(ComposerFileWriter $writer)
