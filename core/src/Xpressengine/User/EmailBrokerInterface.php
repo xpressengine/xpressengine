@@ -31,14 +31,37 @@ use Closure;
 interface EmailBrokerInterface
 {
     /**
-     * 이메일 인증 요청 메일을 전송한다.
+     * 회원가입시 이메일 인증을 위한 이메일을 전송한다.
      *
      * @param EmailInterface $mail     전송할 이메일 정보
+     * @param string         $token    회원가입 토큰 id
+     * @param string         $view     이메일 전송시 사용할 템플릿
      * @param null|Closure   $callback 이메일 전송할 때 처리할 로직
      *
      * @return void
      */
-    public function sendEmailForConfirmation(EmailInterface $mail, $callback = null);
+    public function sendEmailForRegister(EmailInterface $mail, $token, $view, $callback = null);
+
+    /**
+     * 기존 회원이 이메일 추가시 이메일 인증을 위한 이메일을 전송한다.
+     *
+     * @param EmailInterface $mail     전송할 이메일 정보
+     * @param string         $view     이메일 전송시 사용할 템플릿
+     * @param null|Closure   $callback 이메일 전송할 때 처리할 로직
+     *
+     * @return void
+     */
+    public function sendEmailForAddingEmail(EmailInterface $mail, $view, $callback = null);
+
+    /**
+     * 주어진 이메일의 인증코드를 검사한다.
+     *
+     * @param EmailInterface $mail 인증할 이메일 정보
+     * @param string         $code 인증코드
+     *
+     * @return bool 주어진 이메일에 등록된 인증코드가 일치할 경우 true, 일치하지 않으면 false를 반환한다.
+     */
+    public function validateConfirmCode(EmailInterface $mail, $code);
 
     /**
      * 이메일을 인증처리 한다.

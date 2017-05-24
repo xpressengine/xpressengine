@@ -11,6 +11,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Auth;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use XePresenter;
 use XeTheme;
 use XeDB;
@@ -47,7 +48,7 @@ class ProfileController extends Controller
         $this->handler = app('xe.user');
 
         XeTheme::selectSiteTheme();
-        XePresenter::setSkinTargetId('member/profile');
+        XePresenter::setSkinTargetId('user/profile');
     }
 
     // 기본정보 보기
@@ -73,10 +74,8 @@ class ProfileController extends Controller
 
         // member validation
         /** @var UserInterface $user */
-        $user = $this->handler->users()->find($userId);
-        if ($user === null) {
-            throw new UserNotFoundException();
-        }
+        $user = $this->retreiveUser($userId);
+        $userId = $user->getId();
 
         $displayName = $request->get('displayName');
         $introduction = $request->get('introduction');
@@ -123,11 +122,12 @@ class ProfileController extends Controller
     {
         $user = $this->handler->users()->find($id);
         if ($user === null) {
-            $user = $this->handler->users()->where(['displayName' => $id]);
+            $user = $this->handler->users()->where(['displayName' => $id])->first();
         }
 
         if ($user === null) {
-            throw new UserNotFoundException();
+            $e = new UserNotFoundException();
+            throw new HttpException(404, xe_trans('xe::userNotFound'), $e);
         }
 
         return $user;

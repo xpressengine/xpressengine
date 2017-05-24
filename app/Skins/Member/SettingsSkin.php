@@ -23,7 +23,7 @@ use Xpressengine\Skin\GenericSkin;
 class SettingsSkin extends GenericSkin
 {
 
-    protected static $id = 'member/settings/skin/xpressengine@default';
+    protected static $id = 'user/settings/skin/xpressengine@default';
 
     protected static $componentInfo = [
         'name' => '기본 마이페이지 스킨',

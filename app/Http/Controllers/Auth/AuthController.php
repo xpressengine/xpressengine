@@ -9,13 +9,12 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\UrlGenerator;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use XeDB;
 use XePresenter;
 use XeTheme;
-use XeDB;
 use Xpressengine\User\EmailBrokerInterface;
-use Xpressengine\User\Exceptions\JoinNotAllowedException;
+use Xpressengine\User\Exceptions\InvalidConfirmationCodeException;
 use Xpressengine\User\Exceptions\PendingEmailNotExistsException;
-use Xpressengine\User\Rating;
 use Xpressengine\User\UserHandler;
 
 class AuthController extends Controller
@@ -57,101 +56,10 @@ class AuthController extends Controller
         $this->emailBroker = app('xe.auth.email');
 
         XeTheme::selectSiteTheme();
-        XePresenter::setSkinTargetId('member/auth');
+        XePresenter::setSkinTargetId('user/auth');
 
-        $this->middleware('guest', ['except' => ['getLogin', 'getLogout', 'getConfirm']]);
-    }
-
-    /**
-     * Show the application registration form.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function getRegister()
-    {
-        $this->checkJoinable();
-
-        // password configuration
-        $passwordConfig = app('config')->get('xe.user.password');
-        $passwordLevel = array_get($passwordConfig['levels'], $passwordConfig['default']);
-
-        // dynamic field
-        $dynamicField = app('xe.dynamicField');
-        $fieldTypes = $dynamicField->gets('user');
-
-        // join config
-        $config = app('xe.config')->get('user.join');
-
-        return \XePresenter::make('register', compact('config', 'fieldTypes', 'passwordLevel'));
-    }
-
-    /**
-     * Handle a registration request for the application.
-     *
-     * @param  \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function postRegister(Request $request)
-    {
-
-        // validation
-        $this->checkJoinable();
-        $this->checkCaptcha('join');
-
-        $this->validate(
-            $request, [
-                'email' => 'email|required',
-                'displayName' => 'required',
-                'password' => 'required|confirmed|password',
-                'agree' => 'required',
-            ]
-        );
-
-        // resolve data
-        $userData = $request->except('_token', 'agree');
-        $userData['rating'] = Rating::MEMBER;
-        $userData['status'] = \XeUser::STATUS_ACTIVATED;
-
-        // set default join group
-        $config = app('xe.config')->get('user.join');
-        $joinGroup = $config->get('joinGroup');
-        array_add($userData, 'groupId', []);
-        $userData['groupId'][] = $joinGroup;
-
-        unset($userData['password_confirmation']);
-
-        XeDB::beginTransaction();
-        try {
-            $user = $this->handler->create($userData);
-
-            // if email confirmation enabled, send email for confirm
-            if ($this->useEmailConfirm() !== false) {
-                $mail = $user->getPendingEmail();
-                try {
-                    /** @var EmailBrokerInterface $broker */
-                    $this->emailBroker->sendEmailForConfirmation($mail);
-                } catch (Exception $e) {
-                    throw $e;
-                }
-
-                XeDB::commit();
-                // redirect to email confirm info page
-                return redirect()
-                    ->route('auth.confirm', ['email' => $user->email])
-                    ->with('alert', ['type' => 'info', 'message' => '회원가입이 정상적으로 처리되었습니다. 회원계정을 활성화하려면 이메일 인증을 하셔야 합니다.']);
-            }
-
-        } catch (\Exception $e) {
-            XeDB::rollback();
-            throw $e;
-        }
-        XeDB::commit();
-
-
-        // login and redirect
-        $this->auth->login($user);
-        return redirect($this->redirectPath());
+        $this->middleware('auth', ['only' => ['getConfirm', 'getLogout']]);
+        $this->middleware('guest', ['except' => ['getConfirm', 'getLogout']]);
     }
 
     public function getAgreement(){
@@ -170,6 +78,14 @@ class AuthController extends Controller
         return apiRender('privacy', compact('privacy'));
     }
 
+    /**
+     * 이메일 인증 페이지. 사용자가 개인 설정에서 이메일을 추가했을 때, 전송되는 이메일의 링크를 통해 이 페이지에 접근한다.
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Xpressengine\Presenter\RendererInterface
+     * @throws Exception
+     */
     public function getConfirm(Request $request)
     {
         // validation
@@ -177,6 +93,7 @@ class AuthController extends Controller
             $request,
             [
                 'email' => 'required|email',
+                'code' => 'required',
             ]
         );
 
@@ -190,21 +107,19 @@ class AuthController extends Controller
             throw new PendingEmailNotExistsException();
         }
 
-        // code가 없을 경우 인증 페이지 출력
-        if ($code === null) {
-            return \XePresenter::make('register_confirm');
-        }
-
         XeDB::beginTransaction();
         try {
             $this->emailBroker->confirmEmail($email, $code);
+        } catch (InvalidConfirmationCodeException $e) {
+            XeDB::rollback();
+            throw new HttpException(Response::HTTP_FORBIDDEN, xe_trans('xe::invalidConfirmationCode'), $e);
         } catch (Exception $e) {
             XeDB::rollback();
             throw $e;
         }
         XeDB::commit();
 
-        return redirect('/')->with('alert', ['type' => 'success', 'message' => '인증되었습니다. 로그인하시기 바랍니다.']);
+        return redirect('/')->with('alert', ['type' => 'success', 'message' => '인증되었습니다.']);
     }
 
     /**
@@ -256,6 +171,9 @@ class AuthController extends Controller
         $this->checkCaptcha('login');
 
         $credentials = $request->only('email', 'password');
+
+        $credentials['email'] = trim($credentials['email']);
+
         $credentials['status'] = \XeUser::STATUS_ACTIVATED;
 
         if ($this->auth->attempt($credentials, $request->has('remember'))) {
@@ -278,6 +196,7 @@ class AuthController extends Controller
         return 'These credentials do not match our records.';
     }
 
+
     /**
      * Log the user out of the application.
      *
@@ -291,7 +210,6 @@ class AuthController extends Controller
 
         return redirect(property_exists($this, 'redirectAfterLogout') ? $this->redirectAfterLogout : '/');
     }
-
 
     /**
      * Get the post register / login redirect path.
@@ -315,19 +233,6 @@ class AuthController extends Controller
     public function loginPath()
     {
         return property_exists($this, 'loginPath') ? $this->loginPath : '/auth/login';
-    }
-
-    /**
-     * checkJoinable
-     *
-     * @return mixed
-     */
-    protected function checkJoinable()
-    {
-        $config = app('xe.config')->get('user.join');
-        if ($config->get('joinable') !== true) {
-            throw new JoinNotAllowedException();
-        }
     }
 
     protected function checkCaptcha($action)

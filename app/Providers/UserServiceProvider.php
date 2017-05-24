@@ -35,6 +35,7 @@ use Xpressengine\User\Models\UserEmail;
 use Xpressengine\User\Models\UserGroup;
 use Xpressengine\User\Repositories\PendingEmailRepository;
 use Xpressengine\User\Repositories\PendingEmailRepositoryInterface;
+use Xpressengine\User\Repositories\RegisterTokenRepository;
 use Xpressengine\User\Repositories\UserAccountRepository;
 use Xpressengine\User\Repositories\UserAccountRepositoryInterface;
 use Xpressengine\User\Repositories\UserEmailRepository;
@@ -151,12 +152,7 @@ class UserServiceProvider extends ServiceProvider
         $this->app->singleton(
             'xe.auth.email',
             function ($app) {
-                $view = $app['config']['auth.confirm.email'];
-
-                // The password broker uses a token repository to validate tokens and send user
-                // password e-mails, as well as validating that password reset process as an
-                // aggregate service of sorts providing a convenient interface for resets.
-                return new EmailBroker($app['xe.user'], $app['mailer'], $view);
+                return new EmailBroker($app['xe.user'], $app['mailer']);
             }
         );
     }
@@ -185,6 +181,7 @@ class UserServiceProvider extends ServiceProvider
      */
     protected function registerTokenRepository()
     {
+        // register password-token repository
         $this->app->singleton(
             'auth.password.tokens',
             function ($app) {
@@ -200,6 +197,25 @@ class UserServiceProvider extends ServiceProvider
                 $expire = $app['config']->get('auth.password.expire', 60);
 
                 return new DatabaseTokenRepository($connection, $table, $key, $expire);
+            }
+        );
+
+        // register register-token repository
+        $this->app->singleton(
+            ['xe.user.register.tokens' => RegisterTokenRepository::class],
+            function ($app) {
+                $connection = $app['xe.db']->connection('user');
+
+                // The database token repository is an implementation of the token repository
+                // interface, and is responsible for the actual storing of auth tokens and
+                // their e-mail addresses. We will inject this table and hash key to it.
+                $table = $app['config']['auth.register.table'];
+
+                $keygen = $app['xe.keygen'];
+
+                $expire = $app['config']->get('auth.register.expire', 60);
+
+                return new RegisterTokenRepository($connection, $keygen, $table, $expire);
             }
         );
     }
@@ -384,6 +400,7 @@ class UserServiceProvider extends ServiceProvider
             'xe.auth.password',
             'xe.auth.email',
             'xe.auth.tokens',
+            'xe.user.register.tokens',
             'xe.user',
             'xe.users',
             'xe.user.groups',
@@ -418,7 +435,7 @@ class UserServiceProvider extends ServiceProvider
                 'validate' => function ($password) {
                     return strlen($password) >= 4;
                 },
-                'description' => 'xe::passwordStrengthStrongDescription'
+                'description' => 'xe::passwordStrengthWeakDescription'
             ],
             'normal' => [
                 'title' => 'xe::normal',
@@ -432,7 +449,7 @@ class UserServiceProvider extends ServiceProvider
                     }
                     return true;
                 },
-                'description' => 'xe::passwordStrengthStrongDescription'
+                'description' => 'xe::passwordStrengthNormalDescription'
             ],
             'strong' => [
                 'title' => 'xe::strong',

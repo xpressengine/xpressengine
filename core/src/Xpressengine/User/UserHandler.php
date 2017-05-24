@@ -16,12 +16,16 @@ namespace Xpressengine\User;
 
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Validation\Factory as Validator;
+use Illuminate\Support\Fluent;
 use Xpressengine\Register\Container;
 use Xpressengine\Support\Exceptions\InvalidArgumentException;
 use Xpressengine\User\Exceptions\AccountAlreadyExistsException;
 use Xpressengine\User\Exceptions\CannotDeleteUserHavingSuperRatingException;
 use Xpressengine\User\Exceptions\DisplayNameAlreadyExistsException;
-use Xpressengine\User\Exceptions\MailAlreadyExistsException;
+use Xpressengine\User\Exceptions\EmailAlreadyExistsException;
+use Xpressengine\User\Exceptions\InvalidAccountInfoException;
+use Xpressengine\User\Exceptions\InvalidDisplayNameException;
+use Xpressengine\User\Exceptions\InvalidPasswordException;
 use Xpressengine\User\Repositories\PendingEmailRepositoryInterface;
 use Xpressengine\User\Repositories\UserAccountRepositoryInterface;
 use Xpressengine\User\Repositories\UserEmailRepositoryInterface;
@@ -287,7 +291,6 @@ use Xpressengine\User\Repositories\UserRepositoryInterface;
  */
 class UserHandler
 {
-
     /**
      * 차단된 회원의 상태
      */
@@ -451,19 +454,20 @@ class UserHandler
     /**
      * 주어진 정보로 신규회원을 등록한다. 회원정보에 대한 유효성검사도 병행하며, 회원관련 정보(그룹, 이메일, 등록대기 이메일, 계정)도 동시에 추가한다.
      *
-     * @param array $data 신규회원 정보
+     * @param array       $data  신규회원 정보
+     * @param null|Fluent $token register-token
      *
      * @return UserInterface 신규 등록된 회원정보
      */
-    public function create(array $data)
+    public function create(array $data, $token = null)
     {
 
-        $this->validateForCreate($data);
+        $this->validateForCreate($data, $token);
 
         /* 회원가입 절차 */
         $userData = array_except(
             $data,
-            ['emailConfirmed', 'groupId', 'password_confirmation', 'account']
+            ['emailConfirmed', 'groupId', 'password_confirmation', 'account', '_token']
         );
 
         // insert user
@@ -472,16 +476,16 @@ class UserHandler
         }
         $user = $this->users()->create($userData);
 
-        // insert mail
+        // insert mail, delete pending mail
         if (isset($userData['email'])) {
             $mailData = [
                 'userId' => $user->id,
                 'address' => $user->email,
             ];
-            if ($this->useEmailConfirm === false || array_get($data, 'emailConfirmed', false)) {
-                $mail = $this->emails()->create($user, $mailData);
-            } else {
-                $mail = $this->pendingEmails()->create($user, $mailData);
+            $this->emails()->create($user, $mailData);
+            $pendingEmail = $this->pendingEmails()->findByUserId($user->id);
+            if ($pendingEmail !== null) {
+                $this->deleteEmail($pendingEmail);
             }
         }
 
@@ -501,7 +505,6 @@ class UserHandler
                     'accountId' => array_get($accountData, 'accountId'),
                     'email' => array_get($accountData, 'email', array_get($data, 'email')),
                     'provider' => array_get($accountData, 'provider'),
-                    'data' => array_get($accountData, 'data'),
                     'token' => array_get($accountData, 'token'),
                     'tokenSecret' => array_get($accountData, 'tokenSecret'),
                 ]
@@ -552,7 +555,7 @@ class UserHandler
 
         // join new group
         if ($groups !== null) {
-            $changes = $user->groups()->sync($groups);
+            $user->groups()->sync($groups);
         }
 
         return $user;
@@ -595,11 +598,12 @@ class UserHandler
     /**
      * 신규회원의 정보를 유효성 검사한다.
      *
-     * @param array $data 회원의 정보
+     * @param array       $data  회원의 정보
+     * @param null|Fluent $token register-token
      *
      * @return bool 유효성검사 결과, 통과할 경우 true, 실패할 경우 false
      */
-    public function validateForCreate(array $data)
+    public function validateForCreate(array $data, $token = null)
     {
         // 필수 요소 검사
         if (!isset($data['status'], $data['rating'], $data['displayName'])) {
@@ -608,16 +612,12 @@ class UserHandler
 
         // email이나 account중 하나는 반드시 있어야 한다.
         if (!isset($data['email']) && !isset($data['account'])) {
-            $e = new InvalidArgumentException();
-            $e->setMessage('email이나 account중 하나가 반드시 있어야 합니다.');
-            throw $e;
+            throw new InvalidArgumentException();
         }
 
-        // email, displayName 중복검사
+        // email 검사
         if (isset($data['email'])) {
-            if ($this->emails()->findByAddress($data['email']) !== null) {
-                throw new MailAlreadyExistsException();
-            }
+            $this->validateEmail($data['email']);
         }
 
         // displayName 검사
@@ -626,17 +626,14 @@ class UserHandler
         // account 검사
         if (isset($data['account'])) {
             $account = $data['account'];
-            if (!isset($account['accountId'], $account['provider'], $account['data'], $account['token'])) {
-                $e = new InvalidArgumentException();
-                $e->setMessage('account 정보가 올바르지 않습니다.');
-                throw $e;
+            if (!isset($account['accountId'], $account['provider'], $account['token'])) {
+                throw new InvalidAccountInfoException();
             }
 
             if ($this->accounts()->where(array_only($account, ['accountId', 'provider']))->first() !== null) {
                 throw new AccountAlreadyExistsException();
             }
         }
-
         return true;
     }
 
@@ -649,28 +646,39 @@ class UserHandler
      */
     public function validateDisplayName($name)
     {
-        if ($name === null || empty($name)) {
-            $e = new InvalidArgumentException();
-            $e->setMessage('회원이름은 공백이 될 수 없습니다.');
-            throw $e;
+        if (empty($name)) {
+            $name = null;
         }
 
         $validate = $this->validator->make(
             ['name' => $name],
-            ['name' => ['display_name']]
+            ['name' => ['display_name', 'required']]
         );
 
         if ($validate->fails()) {
-            $e = new InvalidArgumentException();
-            $e->setMessage('회원이름 형식이 잘못되었습니다.');
-            throw $e;
+            $messages = $validate->messages();
+            $message = current($messages->get('name'));
+            throw new InvalidDisplayNameException(compact('message'));
         }
 
         if ($this->users()->where(['displayName' => $name])->first() !== null) {
             throw new DisplayNameAlreadyExistsException();
         }
-
         return true;
+    }
+
+    /**
+     * validateEmail
+     *
+     * @param string $address email address
+     *
+     * @return void
+     */
+    public function validateEmail($address)
+    {
+        if ($this->emails()->findByAddress($address) !== null) {
+            throw new EmailAlreadyExistsException();
+        }
     }
 
     /**
@@ -692,8 +700,8 @@ class UserHandler
         if ($validate->fails()) {
             $messages = $validate->messages();
             $message = current($messages->get('password'));
-            $e = new InvalidArgumentException();
-            $e->setMessage(xe_trans($message));
+            $e = new InvalidPasswordException(compact('message'));
+            $e->setMessage($message);
             throw $e;
         }
 
@@ -821,11 +829,11 @@ class UserHandler
      * @param UserInterface $user user
      * @param array         $data data
      *
-     * @return void
+     * @return AccountInterface
      */
     public function createAccount(UserInterface $user, array $data)
     {
-        $this->accounts()->create($user, $data);
+        return $this->accounts()->create($user, $data);
     }
 
     /**
@@ -877,6 +885,28 @@ class UserHandler
     {
         $menus = $this->container->get('user/settings/section');
         return array_merge($this->settingsSections, $menus ?: []);
+    }
+
+    /**
+     * 회원가입 인증도구 목록을 반환한다.
+     *
+     * @return array
+     */
+    public function getRegisterGuards()
+    {
+        return $this->container->get('user/register/guard', []);
+    }
+
+    /**
+     * 회원가입시 회원가입 정보 입력 페이지에서 사용자에게 출력할 입력폼 목록을 반환한다.
+     *
+     * @param Fluent $token register-token
+     *
+     * @return mixed
+     */
+    public function getRegisterForms($token)
+    {
+        return $this->container->get('user/register/form', []);
     }
 
     /**

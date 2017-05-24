@@ -17,7 +17,6 @@ namespace Xpressengine\User;
 use Closure;
 use Illuminate\Contracts\Mail\Mailer;
 use Xpressengine\User\Exceptions\InvalidConfirmationCodeException;
-use Xpressengine\User\Exceptions\PendingEmailNotExistsException;
 
 /**
  * 이 클래스는 Xpressengine에서 이메일 인증 처리를 수행하는 클래스이다.
@@ -40,13 +39,6 @@ class EmailBroker implements EmailBrokerInterface
     protected $mailer;
 
     /**
-     * 이메일 인증 메일을 전송할 때 사용할 view id
-     *
-     * @var string
-     */
-    protected $view;
-
-    /**
      * @var UserHandler
      */
     private $handler;
@@ -56,31 +48,30 @@ class EmailBroker implements EmailBrokerInterface
      *
      * @param UserHandler $handler handler
      * @param Mailer      $mailer  mail sender
-     * @param string      $view    mail 전송시 사용할 view 파일
      */
     public function __construct(
         UserHandler $handler,
-        Mailer $mailer,
-        $view
+        Mailer $mailer
     ) {
         $this->mailer = $mailer;
-        $this->view = $view;
         $this->handler = $handler;
     }
 
     /**
-     * 이메일 인증을 위한 이메일을 전송한다.
+     * 회원가입시 이메일 인증을 위한 이메일을 전송한다.
      *
      * @param EmailInterface $mail     전송할 이메일 정보
+     * @param string         $token    회원가입 토큰 id
+     * @param string         $view     이메일 전송시 사용할 템플릿
      * @param null|Closure   $callback 이메일 전송할 때 처리할 로직
      *
      * @return void
      */
-    public function sendEmailForConfirmation(EmailInterface $mail, $callback = null)
+    public function sendEmailForRegister(EmailInterface $mail, $token, $view, $callback = null)
     {
         $this->mailer->send(
-            $this->view,
-            compact('mail'),
+            $view,
+            compact('mail', 'token'),
             function ($m) use ($mail, $callback) {
                 $m->to($mail->getAddress());
 
@@ -92,6 +83,31 @@ class EmailBroker implements EmailBrokerInterface
     }
 
     /**
+     * 기존 회원이 이메일 추가시 이메일 인증을 위한 이메일을 전송한다.
+     *
+     * @param EmailInterface $mail     전송할 이메일 정보
+     * @param string         $view     이메일 전송시 사용할 템플릿
+     * @param null|Closure   $callback 이메일 전송할 때 처리할 로직
+     *
+     * @return void
+     */
+    public function sendEmailForAddingEmail(EmailInterface $mail, $view, $callback = null)
+    {
+        $this->mailer->send(
+            $view,
+            compact('mail'),
+            function ($m) use ($mail, $callback) {
+                $m->to($mail->getAddress());
+
+                if (!is_null($callback)) {
+                    call_user_func($callback, $m, $mail);
+                }
+            }
+        );
+    }
+
+
+    /**
      * 주어진 이메일의 인증코드를 검사한다.
      *
      * @param EmailInterface $mail 인증할 이메일 정보
@@ -99,7 +115,7 @@ class EmailBroker implements EmailBrokerInterface
      *
      * @return bool 주어진 이메일에 등록된 인증코드가 일치할 경우 true, 일치하지 않으면 false를 반환한다.
      */
-    protected function validateConfirmCode(EmailInterface $mail, $code)
+    public function validateConfirmCode(EmailInterface $mail, $code)
     {
         return $mail->getConfirmationCode() === $code;
     }

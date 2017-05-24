@@ -28,5 +28,5 @@ use Xpressengine\User\UserException;
  */
 class InvalidPasswordException extends UserException
 {
-
+    protected $message = 'Invalid password. :message';
 }

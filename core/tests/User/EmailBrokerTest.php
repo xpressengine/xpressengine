@@ -23,13 +23,15 @@ class EmailBrokerTest extends \PHPUnit_Framework_TestCase
     }
 
 
-    public function testSendEmailForConfirmationSuccess()
+    public function testSendEmailForRegisterSuccess()
     {
         $mail = Mockery::mock(EmailInterface::class);
         $mail->shouldReceive('getAddress')->once()->andReturnSelf();
 
         $message = Mockery::mock(\Illuminate\Mail\Message::class);
         $message->shouldReceive('to')->once()->with($mail)->andReturnNull();
+
+        $token = 'token';
 
         /** @var UserHandler $userHandler */
         $userHandler = $this->makeHandler();
@@ -41,11 +43,11 @@ class EmailBrokerTest extends \PHPUnit_Framework_TestCase
 
         /** @var Mailer $mailer */
         $mailer = $this->makeMailer();
-        $mailer->shouldReceive('send')->with('view', compact('mail'), Mockery::on($validator))->andReturnNull();
+        $mailer->shouldReceive('send')->with('view', compact('mail','token'), Mockery::on($validator))->andReturnNull();
 
-        $broker = new EmailBroker($userHandler, $mailer, 'view');
+        $broker = new EmailBroker($userHandler, $mailer);
 
-        $this->assertNull($broker->sendEmailForConfirmation($mail));
+        $this->assertNull($broker->sendEmailForRegister($mail, $token, 'view'));
     }
 
     public function testConfirmEmailSuccess()

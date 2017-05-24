@@ -91,11 +91,11 @@ class SettingController extends Controller
      */
     public function editSkin()
     {
-        $authSkinSection = new SkinSection('member/auth');
+        $authSkinSection = new SkinSection('user/auth');
 
-        $settingsSkinSection = new SkinSection('member/settings');
+        $settingsSkinSection = new SkinSection('user/settings');
 
-        $profileSkinSection = new SkinSection('member/profile');
+        $profileSkinSection = new SkinSection('user/profile');
 
         return XePresenter::make(
             'user.settings.setting.skin',

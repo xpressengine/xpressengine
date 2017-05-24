@@ -18,9 +18,7 @@ use Illuminate\Console\Command;
 use InvalidArgumentException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
-use Xpressengine\Site\Exceptions\NotFoundSiteException;
 use Xpressengine\Site\SiteHandler;
-use Xpressengine\Site\Site as SiteModel;
 
 /**
  * Class Site
@@ -76,18 +74,14 @@ class Site extends Command
         try {
             $host = $this->validateHost($host);
 
-            /** @var SiteModel $site */
-            $site = SiteModel::find($siteKey);
-            $site->host = $host;
-
-            $handler->put($site);
-
-            $this->comment($this->description);
-
-        } catch (NotFoundSiteException $e) {
-            $this->comment("Cannot find site information. (find key :{$siteKey})");
+            if ($site = $handler->find($siteKey)) {
+                $handler->update($site, ['host' => $host]);
+                $this->comment($this->description);
+            } else {
+                $this->error("Cannot find site information. (find key :{$siteKey})");
+            }
         } catch (InvalidArgumentException $e) {
-            $this->comment("{$host} is incorrect host format. ex) example.com ");
+            $this->error("{$host} is incorrect host format. ex) example.com ");
         }
     }
 
@@ -98,9 +92,7 @@ class Site extends Command
      */
     protected function getArguments()
     {
-        return [
-            ['action', InputArgument::OPTIONAL, '"list" Get site list. "update" Changing site host information.', 'list'],
-        ];
+        return [];
     }
 
     /**

@@ -59,7 +59,7 @@ class PasswordController extends Controller {
         $this->handler = app('xe.user');
 
         XeTheme::selectSiteTheme();
-        XePresenter::setSkinTargetId('member/auth');
+        XePresenter::setSkinTargetId('user/auth');
 
         $this->middleware('guest');
     }
@@ -118,7 +118,7 @@ class PasswordController extends Controller {
      */
     protected function getEmailSubject()
     {
-        return isset($this->subject) ? $this->subject : 'Your Password Reset Link';
+        return xe_trans(app('xe.site')->getSiteConfig()->get('site_title')).' '.xe_trans('xe::linkForPasswordReset');
     }
 
     /**
@@ -160,8 +160,6 @@ class PasswordController extends Controller {
         $response = $this->passwords->reset(
             $credentials,
             function ($user, $password) {
-                $password = bcrypt($password);
-
                 $this->handler->update($user, compact('password'));
 
                 $this->auth->login($user);
@@ -179,7 +177,7 @@ class PasswordController extends Controller {
                 $passwordLevel = array_get($passwordConfig['levels'], $passwordConfig['default']);
                 return redirect()->back()
                                  ->withInput($request->only('email'))
-                                 ->with('alert', ['type' => 'danger', 'message' => $passwordLevel['description']]);
+                                 ->with('alert', ['type' => 'danger', 'message' => xe_trans($passwordLevel['description'])]);
         }
     }
 

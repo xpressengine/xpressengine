@@ -1,15 +1,16 @@
 import React from 'react';
-
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import PermissionInclude from './PermissionInclude';
 import PermissionExclude from './PermissionExclude';
 import PermissionRadioComp from './PermissionRadioComp';
 
-export default React.createClass({
+export default createReactClass({
   displayName: 'Permission',
 
   propTypes: {
-    permission: React.PropTypes.object,
-    type: React.PropTypes.string,
+    permission: PropTypes.object,
+    type: PropTypes.string,
   },
 
   getDefaultProps: function () {

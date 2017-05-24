@@ -1,24 +1,25 @@
 import React from 'react';
-
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import MenuEntity from './MenuEntity';
 import MenuItem from './MenuItem';
 
-let TreeNode = React.createClass({
+let TreeNode = createReactClass({
   displayName: 'TreeNode',
 
   propTypes: {
-    index: React.PropTypes.object,
-    tree: React.PropTypes.object,
-    home: React.PropTypes.string,
-    dragging: React.PropTypes.string,
-    onDragStart: React.PropTypes.func,
-    onCollapse: React.PropTypes.func,
-    getBaseUrl: React.PropTypes.func,
-    clickHome: React.PropTypes.func,
-    getSelectedNode: React.PropTypes.func,
-    setSelectedNode: React.PropTypes.func,
-    getSearchedNode: React.PropTypes.func,
-    setSearchedNode: React.PropTypes.func,
+    index: PropTypes.object,
+    tree: PropTypes.object,
+    home: PropTypes.string,
+    dragging: PropTypes.string,
+    onDragStart: PropTypes.func,
+    onCollapse: PropTypes.func,
+    getBaseUrl: PropTypes.func,
+    clickHome: PropTypes.func,
+    getSelectedNode: PropTypes.func,
+    setSelectedNode: PropTypes.func,
+    getSearchedNode: PropTypes.func,
+    setSearchedNode: PropTypes.func,
   },
 
   renderChildren: function () {

@@ -14,7 +14,7 @@
 
 namespace Xpressengine\User\Exceptions;
 
-use Xpressengine\User\UserException;
+use Xpressengine\User\HttpUserException;
 
 /**
  * 존재하지 않는 이메일을 사용하려고 할 경우 발생하는 Exception
@@ -26,7 +26,7 @@ use Xpressengine\User\UserException;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class EmailNotFoundException extends UserException
+class EmailNotFoundException extends HttpUserException
 {
-    protected $message = '존재하지 않는 이메일입니다';
+    protected $message = 'xe::emailNotFound';
 }

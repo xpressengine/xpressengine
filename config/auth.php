@@ -60,7 +60,12 @@ return [
 
 	'password' => [
 		'email'  => 'emails.password',
-		'table'  => 'password_resets',
+		'table'  => 'user_password_resets',
+		'expire' => 60,
+	],
+
+	'register' => [
+		'table'  => 'user_register_token',
 		'expire' => 60,
 	],
 

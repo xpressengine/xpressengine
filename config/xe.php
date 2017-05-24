@@ -393,9 +393,9 @@ return [
 
     'skin' => [
         'defaultSkins' => [
-            'member/auth' => 'member/auth/skin/xpressengine@default',
-            'member/profile' => 'member/profile/skin/xpressengine@default',
-            'member/settings' => 'member/settings/skin/xpressengine@default',
+            'user/auth' => 'user/auth/skin/xpressengine@default',
+            'user/profile' => 'user/profile/skin/xpressengine@default',
+            'user/settings' => 'user/settings/skin/xpressengine@default',
             'error' => 'error/skin/xpressengine@default',
         ],
         'defaultSettingsSkins' => [

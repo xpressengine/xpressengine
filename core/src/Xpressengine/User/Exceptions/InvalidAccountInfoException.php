@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is already exists input mail address exception.
+ * This file is invalid password exception.
  *
  * PHP version 5
  *
@@ -17,7 +17,7 @@ namespace Xpressengine\User\Exceptions;
 use Xpressengine\User\UserException;
 
 /**
- * 이미 존재하는 이메일을 추가하려고 할 때 발생하는 Exception
+ * 표시이름이 룰에 맞지 않는 경우 발생하는 Exception
  *
  * @category    User
  * @package     Xpressengine\User
@@ -26,7 +26,7 @@ use Xpressengine\User\UserException;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class MailAlreadyExistsException extends UserException
+class InvalidAccountInfoException extends UserException
 {
-    protected $message = '이미 존재하는 이메일입니다';
+    protected $message = 'Invalid account information.';
 }

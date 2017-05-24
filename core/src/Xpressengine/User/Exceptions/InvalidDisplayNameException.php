@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is already exists input mail address exception.
+ * This file is invalid password exception.
  *
  * PHP version 5
  *
@@ -17,7 +17,7 @@ namespace Xpressengine\User\Exceptions;
 use Xpressengine\User\UserException;
 
 /**
- * ID 필드가 존재하지 않는 엔터티를 수정하거나 삭제하려고 할 때 발생하는 예외 클래스
+ * 표시이름이 룰에 맞지 않는 경우 발생하는 Exception
  *
  * @category    User
  * @package     Xpressengine\User
@@ -26,7 +26,7 @@ use Xpressengine\User\UserException;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class IDNotFoundException extends UserException
+class InvalidDisplayNameException extends UserException
 {
-    protected $message = 'ID필드가 지정되어 있지 않습니다.';
+    protected $message = 'Invalid display name. :message';
 }

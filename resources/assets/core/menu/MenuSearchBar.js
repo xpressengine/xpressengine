@@ -1,16 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import MenuSearchSuggestion from './MenuSearchSuggestion';
 
-export default React.createClass({
+export default createReactClass({
   displayName: 'MenuSearchBar',
 
   propTypes: {
-    tree: React.PropTypes.object,
-    placeholder: React.PropTypes.string,
-    handleSearch: React.PropTypes.func,
-    menuRoutes: React.PropTypes.object,
+    tree: PropTypes.object,
+    placeholder: PropTypes.string,
+    handleSearch: PropTypes.func,
+    menuRoutes: PropTypes.object,
   },
   getDefaultProps: function () {
     return {
