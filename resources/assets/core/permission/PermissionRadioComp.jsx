@@ -1,6 +1,8 @@
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 
-export default React.createClass({
+export default createReactClass({
   render: function () {
     return (
       <label><input type="radio"
@@ -17,10 +19,10 @@ export default React.createClass({
   },
 
   prodTypes: {
-    data: React.PropTypes.object,
-    onChangeRadio: React.PropTypes.function,
-    isChecked: React.PropTypes.boolean,
-    controlDisabled: React.PropTypes.boolean,
-    name: React.PropTypes.string,
+    data: PropTypes.object,
+    onChangeRadio: PropTypes.function,
+    isChecked: PropTypes.boolean,
+    controlDisabled: PropTypes.boolean,
+    name: PropTypes.string,
   },
 });
