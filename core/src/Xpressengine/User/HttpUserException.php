@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is invalid credentials exception.
+ * This file is User package exception.
  *
  * PHP version 5
  *
@@ -12,12 +12,13 @@
  * @link        https://xpressengine.io
  */
 
-namespace Xpressengine\User\Exceptions;
+namespace Xpressengine\User;
 
-use Xpressengine\User\UserException;
+use Xpressengine\Support\Exceptions\HttpXpressengineException;
+use Xpressengine\Support\Exceptions\XpressengineException;
 
 /**
- * 로그인을 위한 계정정보가 유효하지 않을 때 발생하는 Exception
+ * Xpressengine User 패키지의 메인 exception
  *
  * @category    User
  * @package     Xpressengine\User
@@ -26,7 +27,7 @@ use Xpressengine\User\UserException;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class InvalidCredentialsException extends UserException
+class HttpUserException extends HttpXpressengineException
 {
 
 }

@@ -881,12 +881,20 @@ return [
         'ko' => '로그인',
         'en' => 'Login'
     ],
+    'doLogin' => [
+        'ko' => '계정에 로그인',
+        'en' => 'Login'
+    ],
     'logout' => [
         'ko' => '로그아웃',
         'en' => 'Logout'
     ],
     'signUp' => [
         'ko' => '회원 가입',
+        'en' => 'Sign up',
+    ],
+    'doSignUp' => [
+        'ko' => '회원 가입하기',
         'en' => 'Sign up',
     ],
     'signUpDate' => [
@@ -1256,13 +1264,32 @@ return [
         'ko' => '이메일 인증',
         'en' => 'Email confirm'
     ],
-    'emailConfirmDescription' => [
-        'ko' => '회원가입을 완료하려면 이메일 인증을 해야 합니다. :email 을 확인하신후, 인증 코드를 입력해주세요.',
-        'en' => 'To complete your membership you need to email authentication, please check the :email , please enter your authorization code.'
+    'confirmEmailForAddEmailDescription' => [
+        'ko' => '<p>이메일을 추가하기 위해 이메일 인증을 진행합니다.</p><p>개인설정 페이지에서 아래의 인증 코드를 입력하거나, 인증 버튼을 누르십시오.</p>'
     ],
-    'msgEmailConfirm' => [
-        'ko' => '<p>저희 사이트에 가입해주셔서 감사합니다.</p><p>요청하신 회원가입을 완료하기 위한 인증번호입니다.<br>인증페이지에서 아래의 인증번호를 입력하거나, 인증버튼을 누르면 인증이 완료됩니다.</p>',
-        'en' => '<p>Welcome to join.</p><p>To complete finishing sign up, input below confirmation code to confirmation page or click below button.</p>'
+    'registerByEmailConfirm' => [
+        'ko' => '이메일 인증으로 회원가입하기',
+        'en' => 'Register by Email confirmation'
+    ],
+    'registerByEmailConfirmDescription' => [
+        'ko' => '이메일 인증을 통해 가입할 수 있습니다. 인증 코드를 전송받을 이메일 주소를 입력하세요.',
+    ],
+    'sendConfirmationEmail' => [
+        'ko' => '인증 이메일 전송',
+    ],
+    'inputEmailConfirmCode' => [
+        'ko' => '이메일 인증 코드 입력',
+        'en' => 'Input email confirmation code',
+    ],
+    'inputEmailConfirmCodeDescription' => [
+        'ko' => ':email로 인증 이메일이 전송되었습니다. 회원가입을 계속하시려면 인증 이메일에 명시된 인증코드를 입력하시거나, 이메일에서 [회원가입 계속하기] 링크를 클릭하세요.',
+    ],
+    'confirmEmailForRegisterDescription' => [
+        'ko' => '<p>회원가입을 위해 이메일 인증을 진행합니다.</p><p>회원가입 페이지에서 아래의 인증코드를 입력하거나, [회원가입 계속하기] 버튼을 누르십시오.</p>',
+    ],
+    'continueSigningUp' => [
+        'ko' => '회원가입 계속하기',
+        'en' => 'Continue signing up'
     ],
     'confirmCode' => [
         'ko' => '인증 코드',
@@ -1322,8 +1349,12 @@ return [
         'en' => 'Change password'
     ],
     'changePasswordDescription' => [
-        'ko' => '암호를 재설정합니다. 새로운 암호를 입력해주세요.',
+        'ko' => '비밀번호를 재설정합니다. 새로운 비밀번호를 입력해주세요.',
         'en' => 'To reset your password. Please enter a new password.'
+    ],
+    'linkForPasswordReset' => [
+        'ko' => '비밀번호 재설정 링크',
+        'en' => 'Your Password Reset Link'
     ],
     'currentPassword' => [
         'ko' => '현재 비밀번호',
@@ -1677,7 +1708,7 @@ return [
         'en' => 'Email / User name',
     ],
     'forgotPassword' => [
-        'ko' => '암호를 잊었습니까?',
+        'ko' => '비밀번호를 잊었습니까?',
         'en' => 'Forgot password?',
     ],
     'forgotPasswordDescription' => [
@@ -1697,7 +1728,7 @@ return [
         'en' => 'Please check your email.',
     ],
     'checkFindPasswordEmailDescription' => [
-        'ko' => ':email 으로 암호를 새로 만드는 방법에 대한 지침이 포함된 메일이 전송되었습니다.',
+        'ko' => ':email 으로 비밀번호를 새로 만드는 방법에 대한 지침이 포함된 메일이 전송되었습니다.',
         'en' => 'This e-mail with instructions on how to create a new password has been sent to the :email.',
     ],
     'keepLogin' => [
@@ -2085,5 +2116,56 @@ return [
     'additionalInfo' => [
         'ko' => '부가 정보',
         'en' => 'additional information'
+    ],
+    'accountAlreadyExists' => [
+        'ko' => '이미 등록된 계정정보입니다.',
+        'en' => 'Account already exists.'
+    ],
+    'alreadyConfirmedEmail' => [
+        'ko' => '이미 인증된 이메일입니다.',
+        'en' => 'Already Confirmed email.'
+    ],
+    'cannotDeleteMainEmailOfUser' => [
+        'ko' => '대표이메일은 삭제할 수 없습니다.',
+        'en' => 'Cannot delete main email of user'
+    ],
+    'emailAlreadyExists' => [
+        'ko' => '이미 존재하는 이메일입니다.',
+        'en' => 'Email already exists'
+    ],
+    'displayNameAlreadyExists' => [
+        'ko' => '이미 사용중인 회원 이름입니다.',
+        'en' => 'Display name already exists.'
+    ],
+    'invalidDisplayName' => [
+        'ko' => '회원이름 형식이 잘못되었습니다.',
+    ],
+    'cannotDeleteSuperUser' => [
+        'ko' => '최고 권한을 가진 회원은 삭제할 수 없습니다.',
+        'en' => 'Can not delete the user having \'super\' rating'
+    ],
+    'emailNotFound' => [
+        'ko' => '존재하지 않는 이메일입니다.',
+        'en' => 'Email not Found.'
+    ],
+    'invalidConfirmationCode' => [
+        'ko' => '인증코드가 틀렸습니다.',
+        'en' => 'Invalid confirmation code.'
+    ],
+    'joinNotAllowed' => [
+        'ko' => '관리자가 회원가입을 허용하지 않습니다.',
+        'en' => 'Join not allowed by Administrator',
+    ],
+    'pendingEmailAlreadyExists' => [
+        'ko' => '이미 인증 요청중인 이메일이 있습니다.',
+        'en' => 'Pending email already exists.',
+    ],
+    'pendingEmailNotExists' => [
+        'ko' => '인증 요청중인 이메일이 없습니다.',
+        'en' => 'Pending email not exists.',
+    ],
+    'userNotFound' => [
+        'ko' => '해당 회원을 찾을 수 없습니다.',
+        'en' => 'User not found.',
     ],
 ];

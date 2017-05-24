@@ -2,7 +2,6 @@
 
 use Event;
 use RuntimeException;
-use XeTheme;
 use XePresenter;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;

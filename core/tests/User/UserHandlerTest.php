@@ -19,6 +19,7 @@ namespace Xpressengine\Tests\User {
     use Illuminate\Contracts\Hashing\Hasher;
     use Illuminate\Contracts\Validation\Factory;
     use Illuminate\Contracts\Validation\Validator;
+    use Illuminate\Support\Fluent;
     use Illuminate\Support\MessageBag;
     use Mockery;
     use Xpressengine\Register\Container;
@@ -89,7 +90,7 @@ namespace Xpressengine\Tests\User {
             $users = $handler->users();
             $user = $this->makeUser();
             $user->shouldReceive('getAttribute')->once()->with('email')->andReturn('foo@bar.com');
-            $user->shouldReceive('getAttribute')->once()->with('id')->andReturn('baz');
+            $user->shouldReceive('getAttribute')->twice()->with('id')->andReturn('baz');
 
             $users->shouldReceive('create')
                 ->once()
@@ -103,6 +104,14 @@ namespace Xpressengine\Tests\User {
                 ->once()
                 ->with($user, ['userId' => 'baz', 'address' => 'foo@bar.com'])
                 ->andReturn($email);
+
+            /** @var Mockery\MockInterface $emails */
+            $pendingEmails = $handler->pendingEmails();
+            $email = $this->makeEmail();
+            $pendingEmails->shouldReceive('findByUserId')
+                ->once()
+                ->with('baz')
+                ->andReturnNull();
 
             $this->assertEquals($user, $handler->create($data));
         }
@@ -127,20 +136,30 @@ namespace Xpressengine\Tests\User {
             $users = $handler->users();
             $user = $this->makeUser();
             $user->shouldReceive('getAttribute')->once()->with('email')->andReturn('foo@bar.com');
-            $user->shouldReceive('getAttribute')->once()->with('id')->andReturn('baz');
+            $user->shouldReceive('getAttribute')->twice()->with('id')->andReturn('baz');
 
             $users->shouldReceive('create')
                 ->once()
                 ->with(['displayName' => 'foo', 'password' => 'encrypted', 'email'=>'foo@bar.com'])
                 ->andReturn($user);
 
+
             /** @var Mockery\MockInterface $emails */
-            $emails = $handler->pendingEmails();
+            $emails = $handler->emails();
             $email = $this->makeEmail();
             $emails->shouldReceive('create')
                 ->once()
                 ->with($user, ['userId' => 'baz', 'address' => 'foo@bar.com'])
                 ->andReturn($email);
+
+
+            /** @var Mockery\MockInterface $emails */
+            $pendingEmails = $handler->pendingEmails();
+            $email = $this->makeEmail();
+            $pendingEmails->shouldReceive('findByUserId')
+                ->once()
+                ->with('baz')
+                ->andReturnNull();
 
             $this->assertEquals($user, $handler->create($data));
         }
@@ -214,7 +233,6 @@ namespace Xpressengine\Tests\User {
                 'accountId' => 'bar',
                 'email' => 'foo@bar.com',
                 'provider' => 'baz',
-                'data' => [],
                 'token' => 'token',
                 'tokenSecret' => 'tokenSecret',
             ])->andReturn($account);
@@ -257,7 +275,7 @@ namespace Xpressengine\Tests\User {
         }
 
         /**
-         * @expectedException \Xpressengine\User\Exceptions\MailAlreadyExistsException
+         * @expectedException \Xpressengine\User\Exceptions\EmailAlreadyExistsException
          */
         public function testValidateForCreateWithExistingEmail()
         {
@@ -283,18 +301,30 @@ namespace Xpressengine\Tests\User {
         }
 
         /**
-         * @expectedException \Xpressengine\Support\Exceptions\InvalidArgumentException
+         * @expectedException \Xpressengine\User\Exceptions\InvalidDisplayNameException
+         * @expectedExceptionMessage Invalid display name. error_message
          */
         public function testValidateForCreateWithEmptyDisplayName()
         {
+            $messages = Mockery::mock(MessageBag::class);
+            $messages->shouldReceive('get')->with('name')->andReturn(['error_message']);
+            $validate = Mockery::mock(
+                Validator::class, [
+                'fails' => true,
+                'messages' => $messages
+            ]);
+            $validator = $this->getValidator();
+            $validator->shouldReceive('make')->once()->andReturn($validate);
+
             /** @var UserHandler $handler */
-            $handler = $this->getHandler();
+            $handler = $this->getHandler(null, null, null, null, null, null, null, $validator);
 
             $email = 'foo@xpressengine.com';
 
             /** @var Mockery\MockInterface $emails */
             $emails = $handler->emails();
             $emails->shouldReceive('findByAddress')->once()->with($email)->andReturnNull();
+
 
             $data = [
                 'rating' => Rating::MEMBER,
@@ -307,13 +337,17 @@ namespace Xpressengine\Tests\User {
         }
 
         /**
-         * @expectedException \Xpressengine\Support\Exceptions\InvalidArgumentException
+         * @expectedException \Xpressengine\User\Exceptions\InvalidDisplayNameException
+         * @expectedExceptionMessage Invalid display name. error_message
          */
         public function testValidateForCreateWithInvalidDisplayName()
         {
+            $messages = Mockery::mock(MessageBag::class);
+            $messages->shouldReceive('get')->with('name')->andReturn(['error_message']);
             $validate = Mockery::mock(
                 Validator::class, [
-                'fails' => true
+                'fails' => true,
+                'messages' => $messages
             ]);
             $validator = $this->getValidator();
             $validator->shouldReceive('make')->once()->andReturn($validate);
@@ -374,7 +408,7 @@ namespace Xpressengine\Tests\User {
         }
 
         /**
-         * @expectedException \Xpressengine\Support\Exceptions\InvalidArgumentException
+         * @expectedException \Xpressengine\User\Exceptions\InvalidAccountInfoException
          */
         public function testValidateForCreateWithInvalidAccount()
         {
@@ -476,8 +510,9 @@ namespace Xpressengine\Tests\User {
         }
 
         /**
-         * @expectedException \Xpressengine\Support\Exceptions\InvalidArgumentException
+         * @expectedException \Xpressengine\User\Exceptions\InvalidPasswordException
          * @expectedExceptionMessage error_message
+         * @expectedExceptionMessage Invalid password. error_message
          */
         public function testValidatePasswordWhenFail()
         {

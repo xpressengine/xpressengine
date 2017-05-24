@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is blocked joining system exception.
+ * This file is already exists input mail address exception.
  *
  * PHP version 5
  *
@@ -17,7 +17,7 @@ namespace Xpressengine\User\Exceptions;
 use Xpressengine\User\UserException;
 
 /**
- * 회원가입을 할 수 없을 때 발생하는 Exception
+ * 이미 존재하는 이메일을 추가하려고 할 때 발생하는 Exception
  *
  * @category    User
  * @package     Xpressengine\User
@@ -26,7 +26,7 @@ use Xpressengine\User\UserException;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class JoinNotAllowedException extends UserException
+class EmailAlreadyExistsException extends UserException
 {
-    protected $message = '관리자가 회원가입을 허용하지 않습니다.';
+    protected $message = 'Email already exists';
 }

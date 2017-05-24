@@ -117,7 +117,7 @@ use Xpressengine\Skin\Exceptions\SkinNotFoundException;
  * $member = Auth::user();
  *
  * // 회원 프로필 페이지에서 사용하기로 지정된 스킨 가져오기
- * target = 'member/profile';
+ * target = 'user/profile';
  * $skin = XeSkin::getAssigned($target, 'mobile');
  *
  * // 또는 (skin id를 직접 지정)

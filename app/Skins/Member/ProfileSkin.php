@@ -22,7 +22,7 @@ use Xpressengine\Skin\BladeSkin;
  */
 class ProfileSkin extends BladeSkin
 {
-    protected static $id = 'member/profile/skin/xpressengine@default';
+    protected static $id = 'user/profile/skin/xpressengine@default';
 
     protected static $componentInfo = [
         'name' => '기본 프로필페이지 스킨',
