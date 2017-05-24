@@ -458,9 +458,10 @@ class MenuHandler
             $item->{$item->getParentIdName()} = $parent->getKey();
         }
 
-        $item->{$item->getAggregatorKeyName()} = $menu->getKey();
-        $item->setRelation('menu', $menu);
-        $item = $this->items->update($item);
+        $item = $this->items->update($item, [$item->getAggregatorKeyName() => $menu->getKey()]);
+        foreach ($item->descendants as $desc) {
+            $this->items->update($desc, [$desc->getAggregatorKeyName() => $menu->getKey()]);
+        }
 
         // 연관 객체 정보들이 변경 되었으므로 객채를 갱신 함
         return $this->items->find($item->getKey());

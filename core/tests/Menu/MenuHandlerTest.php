@@ -207,8 +207,8 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
 
         $instance->expects($this->once())->method('linkHierarchy')->with($mockMenuItem, $mockMenuItemNewParent);
 
-        $mockMenuItem->shouldReceive('setAttribute')->with('menuId', 'menuKey');
-        $items->shouldReceive('update')->once()->with($mockMenuItem)->andReturn($mockMenuItem);
+        $items->shouldReceive('update')->once()->with($mockMenuItem, ['menuId' => 'menuKey'])->andReturn($mockMenuItem);
+        $mockMenuItem->shouldReceive('getAttribute')->with('descendants')->andReturn([]);
         
         $items->shouldReceive('find')->once()->with('itemKey')->andReturn($mockMenuItem);
 
