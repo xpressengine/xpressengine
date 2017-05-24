@@ -28,5 +28,5 @@ use Xpressengine\User\UserException;
  */
 class AlreadyConfirmedEmailException extends UserException
 {
-    protected $message = '이미 인증된 이메일입니다.';
+    protected $message = 'Already Confirmed email.';
 }

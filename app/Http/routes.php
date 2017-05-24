@@ -69,11 +69,14 @@ Route::group(
         Route::post('login', ['as' => 'login', 'uses' => 'Auth\AuthController@postLogin']);
 
         // register
-        Route::get('register', ['as' => 'auth.register', 'uses' => 'Auth\AuthController@getRegister']);
-        Route::post('register', ['as' => 'auth.register', 'uses' => 'Auth\AuthController@postRegister']);
+        Route::get('register', ['as' => 'auth.register', 'uses' => 'Auth\RegisterController@getRegister']); // for select method to confirm user
+        Route::post('register/confirm', ['as' => 'auth.register.confirm', 'uses' => 'Auth\RegisterController@postRegisterConfirm']); // 인증 이메일 입력, 인증 코드 입력
+
+        // Route::get('register/create', ['as' => 'auth.register.create', 'uses' => 'Auth\RegisterController@getRegisterForm']); // for create form
+        Route::post('register', ['as' => 'auth.register.store', 'uses' => 'Auth\RegisterController@postRegister']); // for store
 
         // email confirm
-        Route::get('confirm', ['as' => 'auth.confirm', 'uses' => 'Auth\AuthController@getConfirm']);
+        Route::get('confirm', ['as' => 'auth.confirm', 'uses' => 'Auth\AuthController@getConfirm']); // confirm email
 
         // logout
         Route::get('logout', ['as' => 'logout', 'uses' => 'Auth\AuthController@getLogout']);

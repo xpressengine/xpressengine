@@ -28,5 +28,5 @@ use Xpressengine\User\UserException;
  */
 class CannotDeleteUserHavingSuperRatingException extends UserException
 {
-    protected $message = '최고 권한을 가진 회원은 삭제할 수 없습니다.';
+    protected $message = 'Can not delete the user having \'super\' rating';
 }

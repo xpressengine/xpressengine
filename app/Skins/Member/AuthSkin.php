@@ -14,7 +14,6 @@
 
 namespace App\Skins\Member;
 
-use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Skin\BladeSkin;
 
 /**
@@ -24,7 +23,7 @@ use Xpressengine\Skin\BladeSkin;
 class AuthSkin extends BladeSkin
 {
 
-    protected static $id = 'member/auth/skin/xpressengine@default';
+    protected static $id = 'user/auth/skin/xpressengine@default';
 
     protected static $componentInfo = [
         'name' => '기본 회원인증페이지 스킨',
@@ -43,10 +42,25 @@ class AuthSkin extends BladeSkin
         return parent::render();
     }
 
-    protected function register()
+    protected function registerIndex()
     {
-        app('xe.frontend')->js('assets/core/xe-ui-component/js/xe-page.js')->load();
-        return $this->renderBlade('register');
+        app('xe.frontend')->js(
+            [
+                'assets/core/xe-ui-component/js/xe-page.js',
+                'assets/core/xe-ui-component/js/xe-form.js'
+            ]
+        )->load();
+        return $this->renderBlade('register.index');
+    }
+    protected function registerCreate()
+    {
+        app('xe.frontend')->js(
+            [
+                'assets/core/xe-ui-component/js/xe-page.js',
+                'assets/core/xe-ui-component/js/xe-form.js'
+            ]
+        )->load();
+        return $this->renderBlade('register.create');
     }
 
     /**

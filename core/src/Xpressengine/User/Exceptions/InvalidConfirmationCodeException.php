@@ -28,5 +28,5 @@ use Xpressengine\User\UserException;
  */
 class InvalidConfirmationCodeException extends UserException
 {
-    protected $message = '인증코드가 틀렸습니다.';
+    protected $message = 'Invalid confirmation code.';
 }
