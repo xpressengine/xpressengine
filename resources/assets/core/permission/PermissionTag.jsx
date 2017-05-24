@@ -1,12 +1,14 @@
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 
-export default React.createClass({
+export default createReactClass({
   displayName: 'PermissionTag',
 
   propTypes: {
-    prefix: React.PropTypes.string,
-    onDelete: React.PropTypes.func.isRequired,
-    tag: React.PropTypes.object.isRequired,
+    prefix: PropTypes.string,
+    onDelete: PropTypes.func.isRequired,
+    tag: PropTypes.object.isRequired,
   },
   render: function () {
     var tag = this.props.tag;

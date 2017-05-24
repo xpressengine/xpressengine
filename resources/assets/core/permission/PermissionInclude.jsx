@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import PermissionTagSuggestion from './PermissionTagSuggestion';
 import PermissionTag from './PermissionTag';
 
@@ -13,19 +14,19 @@ const Keys = {
   ESCAPE: 27,
 };
 
-export default React.createClass({
+export default createReactClass({
   displayName: 'PermissionInclude',
 
   propTypes: {
-    selectedGroup: React.PropTypes.array,
-    selectedMember: React.PropTypes.array,
-    placeholder: React.PropTypes.string,
-    suggestion: React.PropTypes.array,
+    selectedGroup: PropTypes.array,
+    selectedMember: PropTypes.array,
+    placeholder: PropTypes.string,
+    suggestion: PropTypes.array,
 
-    groups: React.PropTypes.array,
-    handleGroupDelete: React.PropTypes.func.isRequired,
-    handleMemberDelete: React.PropTypes.func.isRequired,
-    handleAddition: React.PropTypes.func.isRequired,
+    groups: PropTypes.array,
+    handleGroupDelete: PropTypes.func.isRequired,
+    handleMemberDelete: PropTypes.func.isRequired,
+    handleAddition: PropTypes.func.isRequired,
   },
   getDefaultProps: function () {
     return {

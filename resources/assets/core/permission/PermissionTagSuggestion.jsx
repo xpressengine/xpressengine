@@ -1,17 +1,19 @@
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 
 const MIN_QUERY_LENGTH = 2;
 
-export default React.createClass({
+export default createReactClass({
   displayName: 'PermissionTagSuggestion',
 
   propTypes: {
-    query: React.PropTypes.string.isRequired,
-    selectedIndex: React.PropTypes.number.isRequired,
-    suggestions: React.PropTypes.array.isRequired,
-    handleClick: React.PropTypes.func.isRequired,
-    handleHover: React.PropTypes.func.isRequired,
-    searchingCnt: React.PropTypes.number,
+    query: PropTypes.string.isRequired,
+    selectedIndex: PropTypes.number.isRequired,
+    suggestions: PropTypes.array.isRequired,
+    handleClick: PropTypes.func.isRequired,
+    handleHover: PropTypes.func.isRequired,
+    searchingCnt: PropTypes.number,
   },
   markIt: function (item, query) {
 

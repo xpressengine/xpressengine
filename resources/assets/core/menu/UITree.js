@@ -1,26 +1,28 @@
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import TreeNode from './TreeNode';
 
-export default React.createClass({
+export default createReactClass({
   displayName: 'UITree',
 
   propTypes: {
-    tree: React.PropTypes.object,
-    home: React.PropTypes.string,
+    tree: PropTypes.object,
+    home: PropTypes.string,
 
-    paddingLeft: React.PropTypes.number,
+    paddingLeft: PropTypes.number,
 
-    getBaseUrl: React.PropTypes.func,
+    getBaseUrl: PropTypes.func,
 
-    clickHome: React.PropTypes.func,
+    clickHome: PropTypes.func,
 
-    getSelectedNode: React.PropTypes.func,
-    setSelectedNode: React.PropTypes.func,
+    getSelectedNode: PropTypes.func,
+    setSelectedNode: PropTypes.func,
 
-    getSearchedNode: React.PropTypes.func,
-    setSearchedNode: React.PropTypes.func,
+    getSearchedNode: PropTypes.func,
+    setSearchedNode: PropTypes.func,
 
-    moveNode: React.PropTypes.func,
+    moveNode: PropTypes.func,
   },
 
   getDefaultProps: function () {

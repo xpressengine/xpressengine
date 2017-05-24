@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
+import createReactClass from 'create-react-class';
 import validator from 'validator';
 
 /**
@@ -12,7 +12,7 @@ import validator from 'validator';
  * - 컴포넌트 state에 다국어 정보가 없으면 하나의 컴포넌트에 대한 다국어 정보를 ajax로 요청하여 상태를 갱신한다.
  * */
 
-var LangEditorBox = React.createClass({
+var LangEditorBox = createReactClass({
   getDefaultProps: function () {
     return {
       name: '',
@@ -39,7 +39,7 @@ var LangEditorBox = React.createClass({
   },
 });
 
-var LangEditor = React.createClass({
+var LangEditor = createReactClass({
   statics: { seq: 0 },
   getInitialState: function () {
     var lines = this.props.lines || [];
@@ -72,39 +72,40 @@ var LangEditor = React.createClass({
   },
 
   componentDidMount: function () {
-    if (this.isMounted()) {
-      var _this = this;
-      var el = ReactDOM.findDOMNode(this);
+    // if (this.isMounted()) {
+    var _this = this;
+    var el = ReactDOM.findDOMNode(this);
 
-      if (this.props.langKey) {
-        if (this.state.lines.length == 0) {
-          $.ajax({
-            type: 'get',
-            dataType: 'json',
-            url: xeBaseURL + '/' + XE.options.managePrefix + '/lang/lines/' + this.props.langKey,
-            success: function (result) {
-              if (this.isMounted()) {
-                _this.setLines(result);
-              }
-            }.bind(this),
-          });
-        }
-      }
+    if (this.props.langKey) {
+      if (this.state.lines.length == 0) {
+        $.ajax({
+          type: 'get',
+          dataType: 'json',
+          url: xeBaseURL + '/' + XE.options.managePrefix + '/lang/lines/' + this.props.langKey,
+          success: function (result) {
+            // if (this.isMounted()) {
+            _this.setLines(result);
 
-      if (this.props.autocomplete) {
-        $(el).find('input[type=text]:first,textarea:first').autocomplete({
-          source: '/' + XE.options.managePrefix + '/lang/search/' + XE.Lang.locales[0],
-          minLength: 1,
-          focus: function (event, ui) {
-            event.preventDefault();
-          },
-
-          select: function (event, ui) {
-            _this.setLines(ui.item.lines);
-          },
+            // }
+          }.bind(this),
         });
       }
     }
+
+    if (this.props.autocomplete) {
+      $(el).find('input[type=text]:first,textarea:first').autocomplete({
+        source: '/' + XE.options.managePrefix + '/lang/search/' + XE.Lang.locales[0],
+        minLength: 1,
+        focus: function (event, ui) {
+          event.preventDefault();
+        },
+
+        select: function (event, ui) {
+          _this.setLines(ui.item.lines);
+        },
+      });
+    }
+    // }
   },
 
   getEditor: function (resource, locale, value) {

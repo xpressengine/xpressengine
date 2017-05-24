@@ -1,12 +1,14 @@
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 
-export default React.createClass({
+export default createReactClass({
   displayName: 'MenuEntity',
 
   propTypes: {
-    index: React.PropTypes.object,
-    onCollapse: React.PropTypes.func,
-    getBaseUrl: React.PropTypes.func,
+    index: PropTypes.object,
+    onCollapse: PropTypes.func,
+    getBaseUrl: PropTypes.func,
   },
 
   handleCollapse: function (e) {

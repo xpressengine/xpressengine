@@ -1,18 +1,20 @@
 import React from 'react';
+import createReactClass from 'create-react-class';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 
-export default React.createClass({
+export default createReactClass({
   displayName: 'MenuItem',
 
   propTypes: {
-    index: React.PropTypes.object,
-    home: React.PropTypes.string,
-    getBaseUrl: React.PropTypes.func,
-    clickHome: React.PropTypes.func,
-    mouseDown: React.PropTypes.func,
+    index: PropTypes.object,
+    home: PropTypes.string,
+    getBaseUrl: PropTypes.func,
+    clickHome: PropTypes.func,
+    mouseDown: PropTypes.func,
 
-    getSelectedNode: React.PropTypes.func,
-    setSelectedNode: React.PropTypes.func,
+    getSelectedNode: PropTypes.func,
+    setSelectedNode: PropTypes.func,
   },
 
   onClickLink: function (node) {

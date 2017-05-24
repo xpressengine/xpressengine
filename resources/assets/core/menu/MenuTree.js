@@ -1,9 +1,9 @@
 import React from 'react';
-
+import createReactClass from 'create-react-class';
 import MenuSearchBar from './MenuSearchBar';
 import UITree from './UITree';
 
-export default React.createClass({
+export default createReactClass({
   getInitialState: function () {
     return {
       rawTree: this.props.menus,
@@ -98,7 +98,7 @@ export default React.createClass({
         var node = tree.get(target.id);
         var parentNode = tree.get(target.parent);
         node.menuId = parentNode.entity == 'menu' ? target.parent : parentNode.menuId;
-        this.setState({dataTree: tree});
+        this.setState({ dataTree: tree });
         XE.toast('success', 'Item moved');
       }.bind(this),
     });
