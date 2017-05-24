@@ -37,6 +37,8 @@ interface EmailBrokerInterface
      * @param string         $token    회원가입 토큰 id
      * @param string         $view     이메일 전송시 사용할 템플릿
      * @param null|Closure   $callback 이메일 전송할 때 처리할 로직
+     *
+     * @return void
      */
     public function sendEmailForRegister(EmailInterface $mail, $token, $view, $callback = null);
 
@@ -46,6 +48,8 @@ interface EmailBrokerInterface
      * @param EmailInterface $mail     전송할 이메일 정보
      * @param string         $view     이메일 전송시 사용할 템플릿
      * @param null|Closure   $callback 이메일 전송할 때 처리할 로직
+     *
+     * @return void
      */
     public function sendEmailForAddingEmail(EmailInterface $mail, $view, $callback = null);
 
