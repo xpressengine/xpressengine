@@ -1,17 +1,19 @@
 import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 
 const MIN_QUERY_LENGTH = 2;
 
-export default React.createClass({
+export default createReactClass({
   displayName: 'MenuSearchSuggestion',
 
   propTypes: {
-    query: React.PropTypes.string.isRequired,
-    handleClick: React.PropTypes.func.isRequired,
-    handleHover: React.PropTypes.func.isRequired,
-    searchingCnt: React.PropTypes.number,
-    suggestions: React.PropTypes.array,
-    selectedIndex: React.PropTypes.number,
+    query: PropTypes.string.isRequired,
+    handleClick: PropTypes.func.isRequired,
+    handleHover: PropTypes.func.isRequired,
+    searchingCnt: PropTypes.number,
+    suggestions: PropTypes.array,
+    selectedIndex: PropTypes.number,
   },
   markIt: function (item, query) {
 
