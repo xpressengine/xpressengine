@@ -49,6 +49,13 @@ class Site extends DynamicModel
     protected $primaryKey = 'siteKey';
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['siteKey', 'host'];
+
+    /**
      * Indicates if the IDs are auto-incrementing.
      *
      * @var bool

@@ -15,9 +15,8 @@
 namespace Xpressengine\Site;
 
 use Xpressengine\Config\ConfigEntity;
-use Xpressengine\Config\ConfigManager as Config;
+use Xpressengine\Config\ConfigManager;
 use Xpressengine\Config\Exceptions\InvalidArgumentException;
-use Xpressengine\Site\Exceptions\CanNotUseDomainException;
 
 /**
  * Class SiteHandler
@@ -32,11 +31,14 @@ use Xpressengine\Site\Exceptions\CanNotUseDomainException;
 class SiteHandler
 {
     /**
-     * @var Config
+     * @var SiteRepository
+     */
+    protected $repo;
+
+    /**
+     * @var ConfigManager
      */
     protected $config;
-
-    protected $model = Site::class;
 
     /**
      * @var Site
@@ -46,10 +48,12 @@ class SiteHandler
     /**
      * SiteHandler constructor.
      *
-     * @param Config $config xpressengine config manager
+     * @param SiteRepository $repo   SiteRepository instance
+     * @param ConfigManager  $config ConfigManager instance
      */
-    public function __construct(Config $config)
+    public function __construct(SiteRepository $repo, ConfigManager $config)
     {
+        $this->repo = $repo;
         $this->config = $config;
     }
 
@@ -197,20 +201,13 @@ class SiteHandler
      * add
      *
      * @param array $inputs input array
-     *
      * @return Site
+     *
+     * @deprecated since beta.17. Use SiteRepository::create instead.
      */
     public function add(array $inputs)
     {
-        $this->checkUsableDomain($inputs['host']);
-
-        /** @var Site $site */
-        $site = $this->createModel();
-        $site->siteKey = $inputs['siteKey'];
-        $site->host = $inputs['host'];
-        $site->save();
-
-        return $site;
+        return $this->repo->create($inputs);
     }
 
     /**
@@ -219,14 +216,12 @@ class SiteHandler
      * @param Site $site site object
      *
      * @return Site
+     *
+     * @deprecated since beta.17. Use SiteRepository::update instead.
      */
     public function put(Site $site)
     {
-        if ($site->isDirty()) {
-            $site->save();
-        }
-
-        return $site;
+        return $this->repo->update($site, []);
     }
 
     /**
@@ -234,63 +229,24 @@ class SiteHandler
      *
      * @param string $host site host
      *
-     * @return void
+     * @return bool|int
+     *
+     * @deprecated since beta.17. Use SiteRepository::deleteByHost instead.
      */
     public function remove($host)
     {
-        $model = $this->createModel();
-        /** @var Site $site */
-        if ($site = $model->newQuery()->where('host', $host)->get()) {
-            $site->delete();
-        }
+        return $this->repo->deleteByHost($host);
     }
 
     /**
-     * checkUsableDomain
+     * __call
      *
-     * @param string $host site host
-     *
-     * @return void
-     * @throws CanNotUseDomainException
+     * @param string $name      method name
+     * @param array  $arguments arguments
+     * @return mixed
      */
-    protected function checkUsableDomain($host)
+    public function __call($name, $arguments)
     {
-        $model = $this->createModel();
-        if ($model->newQuery()->where('host', $host)->exists()) {
-            throw new CanNotUseDomainException(['host' => $host]);
-        }
-    }
-
-    /**
-     * Create new site model
-     *
-     * @return string
-     */
-    public function createModel()
-    {
-        $class = $this->getModel();
-
-        return new $class;
-    }
-
-    /**
-     * Get site model
-     *
-     * @return string
-     */
-    public function getModel()
-    {
-        return $this->model;
-    }
-
-    /**
-     * Set site model
-     *
-     * @param string $model model class
-     * @return void
-     */
-    public function setModel($model)
-    {
-        $this->model = '\\' . ltrim($model, '\\');
+        return call_user_func_array([$this->repo, $name], $arguments);
     }
 }

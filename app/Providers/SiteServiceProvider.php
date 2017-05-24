@@ -18,6 +18,7 @@ use Illuminate\Support\ServiceProvider;
 use Xpressengine\Http\Request;
 use Xpressengine\Site\Site;
 use Xpressengine\Site\SiteHandler;
+use Xpressengine\Site\SiteRepository;
 
 /**
  * Site Service Provider
@@ -35,18 +36,18 @@ class SiteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        SiteRepository::setModel(Site::class);
+
         $site = null;
-        if (app()->runningInConsole() === false) {
+        if ($this->app->runningInConsole() === false) {
             /** @var Request $request */
-            $request = app('request');
+            $request = $this->app['request'];
             $host = $request->getHttpHost();
             $host = $host.str_replace('/index.php','',$request->server('SCRIPT_NAME'));
-            $site = Site::where('host', $host)->first();
+            $site = $this->app['xe.site']->findBy('host', $host);
         }
-        if ($site === null) {
-            $site = Site::where('siteKey', 'default')->first();
-        }
-        app('xe.site')->setCurrentSite($site);
+        $site = $site ?: $this->app['xe.site']->findBy('siteKey', 'default');
+        $this->app['xe.site']->setCurrentSite($site);
     }
 
     /**
@@ -59,9 +60,8 @@ class SiteServiceProvider extends ServiceProvider
         $this->app->singleton(
             ['xe.site' => SiteHandler::class],
             function ($app) {
-                $config = $app['xe.config'];
                 $proxyClass = $app['xe.interception']->proxy(SiteHandler::class, 'XeSite');
-                return new $proxyClass($config);
+                return new $proxyClass(new SiteRepository(), $app['xe.config']);
             }
         );
     }
