@@ -97,9 +97,7 @@ export default React.createClass({
         var tree = this.state.dataTree;
         var node = tree.get(target.id);
         var parentNode = tree.get(target.parent);
-        if (parentNode.entity == 'menu') {
-          node.menuId = target.parent;
-        }
+        node.menuId = parentNode.entity == 'menu' ? target.parent : parentNode.menuId;
         this.setState({dataTree: tree});
         XE.toast('success', 'Item moved');
       }.bind(this),
