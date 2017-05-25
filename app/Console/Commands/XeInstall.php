@@ -52,6 +52,7 @@ class XeInstall extends Command
         'orientator',
         'page',
         'news_client',
+        'Widget page',
     ];
 
     /**
