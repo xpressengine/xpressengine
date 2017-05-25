@@ -97,12 +97,41 @@ export default createReactClass({
         var tree = this.state.dataTree;
         var node = tree.get(target.id);
         var parentNode = tree.get(target.parent);
+
         node.menuId = parentNode.entity == 'menu' ? target.parent : parentNode.menuId;
-        this.setState({ dataTree: tree });
+
+        this.setState(function (state) {
+          state.dataTree[target.id] = node;
+        });
+
+        if (target.children && target.children.length > 0) {
+          this.setChildMenuId(target);
+        }
+
         XE.toast('success', 'Item moved');
       }.bind(this),
     });
 
+  },
+
+  setChildMenuId: function (target) {
+    var tree = this.state.dataTree;
+
+    if (target.children && target.children.length > 0) {
+      for (var i = 0, max = target.children.length; i < max; i += 1) {
+        if (tree.indexes[target.id].node.menuId !== tree.indexes[target.children[i]].node.menuId) {
+          var childNode = tree.get(target.children[i]);
+
+          childNode.menuId = tree.indexes[target.id].node.menuId;
+
+          this.setState(function (state, props) {
+            state.dataTree[target.children[i]] = childNode;
+          });
+
+          this.setChildMenuId(tree.indexes[target.children[i]]);
+        }
+      }
+    }
   },
 
   getBaseUrl: function () {

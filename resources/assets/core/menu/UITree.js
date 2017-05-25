@@ -247,7 +247,7 @@ export default createReactClass({
       var newParent = tree.get(newIndex.parent);
       dragging.targetParent = newParent.id;
       dragging.lastOrdering = newIndex.ordering;
-
+      dragging.children = newIndex.children;
     }
 
     this.setState({
@@ -308,13 +308,21 @@ export default createReactClass({
          );
       }
     } else {
-      this.props.moveNode(
-        {
-        id: dragging.id,
-        parent: dragging.targetParent,
-        position: dragging.lastOrdering,
+      if (dragging.children.length > 0) {
+        this.props.moveNode({
+          id: dragging.id,
+          parent: dragging.targetParent,
+          position: dragging.lastOrdering,
+          children: dragging.children,
+        });
+
+      } else {
+        this.props.moveNode({
+          id: dragging.id,
+          parent: dragging.targetParent,
+          position: dragging.lastOrdering,
+        });
       }
-      );
     }
 
     document.body.removeEventListener('mousemove', this.drag);
