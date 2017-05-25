@@ -49,7 +49,7 @@ class XeInstall extends Command
         'claim',
         'ckeditor',
         'comment',
-        'external_page',
+        'orientator',
         'page',
         'news_client',
     ];
