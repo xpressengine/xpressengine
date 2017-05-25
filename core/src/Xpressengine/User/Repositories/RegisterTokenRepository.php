@@ -19,6 +19,16 @@ use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Fluent;
 use Xpressengine\Keygen\Keygen;
 
+/**
+ * 회원가입시 회원가입 자격을 인증하는 register token의 Repository
+ *
+ * @category    User
+ * @package     Xpressengine\User
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class RegisterTokenRepository
 {
     /**
@@ -50,10 +60,10 @@ class RegisterTokenRepository
     /**
      * Create a new token repository instance.
      *
-     * @param \Illuminate\Database\ConnectionInterface $connection
-     * @param Keygen                                   $keygen
-     * @param string                                   $table
-     * @param int                                      $expires
+     * @param ConnectionInterface $connection db connection
+     * @param Keygen              $keygen     token id generator
+     * @param string              $table      token table name
+     * @param int                 $expires    duration that token is valid
      */
     public function __construct(ConnectionInterface $connection, Keygen $keygen, $table, $expires = 60)
     {
@@ -66,8 +76,8 @@ class RegisterTokenRepository
     /**
      * Create a new token record.
      *
-     * @param string $guard
-     * @param array  $data
+     * @param string $guard register guard
+     * @param array  $data  token data
      *
      * @return Fluent token entity
      */

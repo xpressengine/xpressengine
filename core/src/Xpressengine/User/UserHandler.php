@@ -26,7 +26,6 @@ use Xpressengine\User\Exceptions\EmailAlreadyExistsException;
 use Xpressengine\User\Exceptions\InvalidAccountInfoException;
 use Xpressengine\User\Exceptions\InvalidDisplayNameException;
 use Xpressengine\User\Exceptions\InvalidPasswordException;
-use Xpressengine\User\Models\UserAccount;
 use Xpressengine\User\Repositories\PendingEmailRepositoryInterface;
 use Xpressengine\User\Repositories\UserAccountRepositoryInterface;
 use Xpressengine\User\Repositories\UserEmailRepositoryInterface;
@@ -455,7 +454,8 @@ class UserHandler
     /**
      * 주어진 정보로 신규회원을 등록한다. 회원정보에 대한 유효성검사도 병행하며, 회원관련 정보(그룹, 이메일, 등록대기 이메일, 계정)도 동시에 추가한다.
      *
-     * @param array $data 신규회원 정보
+     * @param array       $data  신규회원 정보
+     * @param null|Fluent $token register-token
      *
      * @return UserInterface 신규 등록된 회원정보
      */
@@ -482,9 +482,9 @@ class UserHandler
                 'userId' => $user->id,
                 'address' => $user->email,
             ];
-            $mail = $this->emails()->create($user, $mailData);
+            $this->emails()->create($user, $mailData);
             $pendingEmail = $this->pendingEmails()->findByUserId($user->id);
-            if($pendingEmail !== null) {
+            if ($pendingEmail !== null) {
                 $this->deleteEmail($pendingEmail);
             }
         }
@@ -555,7 +555,7 @@ class UserHandler
 
         // join new group
         if ($groups !== null) {
-            $changes = $user->groups()->sync($groups);
+            $user->groups()->sync($groups);
         }
 
         return $user;
@@ -598,11 +598,10 @@ class UserHandler
     /**
      * 신규회원의 정보를 유효성 검사한다.
      *
-     * @param array $data 회원의 정보
+     * @param array       $data  회원의 정보
+     * @param null|Fluent $token register-token
      *
      * @return bool 유효성검사 결과, 통과할 경우 true, 실패할 경우 false
-     * @throws AccountAlreadyExistsException
-     * @throws InvalidArgumentException
      */
     public function validateForCreate(array $data, $token = null)
     {
@@ -668,6 +667,13 @@ class UserHandler
         return true;
     }
 
+    /**
+     * validateEmail
+     *
+     * @param string $address email address
+     *
+     * @return void
+     */
     public function validateEmail($address)
     {
         if ($this->emails()->findByAddress($address) !== null) {
@@ -811,7 +817,7 @@ class UserHandler
     public function deleteEmail(EmailInterface $email)
     {
         if ($email->isConfirmed()) {
-                return $this->emails()->delete($email);
+            return $this->emails()->delete($email);
         } else {
             return $this->pendingEmails()->delete($email);
         }
@@ -881,54 +887,26 @@ class UserHandler
         return array_merge($this->settingsSections, $menus ?: []);
     }
 
+    /**
+     * 회원가입 인증도구 목록을 반환한다.
+     *
+     * @return array
+     */
     public function getRegisterGuards()
     {
         return $this->container->get('user/register/guard', []);
     }
 
-    public function getRegisterForms($token)
-    {
-        return $this->container->get('user/register/form', []);
-    }
-
     /**
-     * storeRegisterToken
+     * 회원가입시 회원가입 정보 입력 페이지에서 사용자에게 출력할 입력폼 목록을 반환한다.
      *
-     * @param string $guard
-     * @param array  $tokenData
+     * @param Fluent $token register-token
      *
      * @return mixed
      */
-    public function storeRegisterToken($guard, $tokenData) {
-        $id = app('xe.keygen')->generate();
-
-        $token = [
-            'id' => $id,
-            'guard' => $guard,
-            'data' => $tokenData
-        ];
-        app('session.store')->set('register-token', $token);
-
-        $token = new Fluent($tokenData);
-        $token->id = $id;
-        $token->guard = $guard;
-        return $token;
-    }
-
-    public function getRegisterToken($tokenId) {
-        $token = app('session.store')->get('register-token');
-        if($tokenId === $token['id']) {
-            $obj = new Fluent($token['data']);
-            $obj->id = $token['id'];
-            $obj->guard = $token['guard'];
-            return $obj;
-        }
-        return null;
-    }
-
-    public function deleteRegisterToken($tokenId)
+    public function getRegisterForms($token)
     {
-        app('session.store')->forget('register-token');
+        return $this->container->get('user/register/form', []);
     }
 
     /**
