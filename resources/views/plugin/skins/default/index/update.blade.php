@@ -1,4 +1,4 @@
-<form action="{{ route('settings.plugins.download') }}" method="post">
+<form action="{{ route('settings.plugins.manage.update') }}" method="post">
     {{ csrf_field() }}
     {{ method_field('put') }}
 

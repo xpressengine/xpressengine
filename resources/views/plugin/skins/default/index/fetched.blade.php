@@ -68,14 +68,14 @@
                         </div>
                         <div class="col-md-5 col-sm-12 text-right">
                             <button type="button" data-toggle="modal" data-target="#installPlugin" class="btn btn-primary">{{ xe_trans('xe::installNewPlugin') }}</button>
-                            <a href="{{ route('settings.plugins.update-page') }}" class="btn btn-default __xe_update_plugin"><span>{{ xe_trans('xe::update_plugin') }}</span></a>
+                            <a href="{{ route('settings.plugins.manage.update') }}" class="btn btn-default __xe_update_plugin"><span>{{ xe_trans('xe::update_plugin') }}</span></a>
                             <div class="btn-group">
                                 <button type="button" class="btn btn-default dropdown-toggle __xe_manage_plugin" data-toggle="dropdown" aria-expanded="false" disabled="disabled">선택된 플러그인을 ... <span class="caret"></span></button>
                                 <ul class="dropdown-menu" role="menu">
                                     <li>
-                                        <a href="{{ route('settings.plugins.activate-page') }}" class="__xe_activate_plugin"><span>켜기</span></a>
-                                        <a href="{{ route('settings.plugins.deactivate-page') }}" class="__xe_deactivate_plugin"><span>끄기</span></a>
-                                        <a href="{{ route('settings.plugins.delete-page') }}" class="__xe_remove_plugin"><span>삭제</span></a>
+                                        <a href="{{ route('settings.plugins.manage.activate') }}" class="__xe_activate_plugin"><span>켜기</span></a>
+                                        <a href="{{ route('settings.plugins.manage.deactivate') }}" class="__xe_deactivate_plugin"><span>끄기</span></a>
+                                        <a href="{{ route('settings.plugins.manage.delete') }}" class="__xe_remove_plugin"><span>삭제</span></a>
                                     </li>
                                 </ul>
                             </div>
@@ -158,65 +158,104 @@
 <script type="text/javascript">
     $(function($) {
 
-        var PluginList = (function() {
-        var self;
+        var PluginManager = (function() {
 
-        return {
-            init: function() {
-                self = this;
+            var self;
 
-                self.cache();
-                self.bindEvents();
+            return {
+                init: function() {
+                    self = this;
 
-                return this;
-            },
-            cache: function() {
-                self.$manage = $('.__xe_manage_plugin');
-                self.$update = $('.__xe_update_plugin');
-                self.$remove = $('.__xe_remove_plugin');
-                self.$checkboxes = $('.__xe_checkbox');
-            },
-            bindEvents: function() {
-                self.$checkboxes.on('change', self.checked);
-                self.$remove.on('click', self.remove);
-                self.$update.on('click', self.update);
-            },
-            checked: function(e) {
-                $checked = $('.__xe_checkbox:checked');
-                if($checked.length) {
-                    self.$manage.removeAttr('disabled');
-                } else {
-                    self.$manage.attr('disabled', 'disabled');
-                }
-            },
-            remove: function() {
-                if (!$('input.__xe_checkbox:checked').is('input')) {
+                    self.cache();
+                    self.bindEvents();
+                    self.reset();
+                    return this;
+                },
+                cache: function() {
+                    self.$manage = $('.__xe_manage_plugin');
+                    self.$update = $('.__xe_update_plugin');
+                    self.$remove = $('.__xe_remove_plugin');
+                    self.$activate = $('.__xe_activate_plugin');
+                    self.$deactivate = $('.__xe_deactivate_plugin');
+                    self.$checkboxes = $('.__xe_checkbox');
+                },
+                bindEvents: function() {
+                    self.$checkboxes.on('change', self.check);
+                    self.$remove.on('click', self.remove);
+                    self.$activate.on('click', self.activate);
+                    self.$deactivate.on('click', self.deactivate);
+                    self.$update.on('click', self.update);
+                },
+                reset: function() {
+                    $checked = $('.__xe_checkbox:checked');
+                    if($checked.length) {
+                        self.$manage.removeAttr('disabled');
+                    } else {
+                        self.$manage.attr('disabled', 'disabled');
+                    }
+                },
+                check: function(e) {
+                    self.reset();
+                },
+                checkedList: function() {
+                    return $('input.__xe_checkbox:checked').map(function() {
+                        return this.value;
+                    }).get();
+                },
+                remove: function() {
+
+                    var pluginIds = self.checkedList();
+                    if(pluginIds.length === 0) {
+                        return false;
+                    }
+                    var options = {
+                        'data' : {
+                            'pluginIds': pluginIds.join()
+                        }
+                    };
+                    var url = self.$remove.attr('href');
+                    XE.pageModal(url, options);
+
+                    return false;
+                },
+                activate: function() {
+                    var pluginIds = self.checkedList();
+                    if(pluginIds.length === 0) {
+                        return false;
+                    }
+                    var options = {
+                        'data' : {
+                            'pluginIds': pluginIds.join()
+                        }
+                    };
+                    var url = self.$activate.attr('href');
+                    XE.pageModal(url, options);
+
+                    return false;
+                },
+                deactivate: function() {
+
+                    var pluginIds = self.checkedList();
+                    if(pluginIds.length === 0) {
+                        return false;
+                    }
+                    var options = {
+                        'data' : {
+                            'pluginIds': pluginIds.join()
+                        }
+                    };
+                    var url = self.$deactivate.attr('href');
+                    XE.pageModal(url, options);
+
+                    return false;
+                },
+                update: function() {
+                    var url = self.$update.attr('href');
+                    XE.pageModal(url);
+
                     return false;
                 }
-
-                var pluginIds = $('input.__xe_checkbox:checked').map(function() {
-                    return this.value;
-                }).get().join();
-
-                var options = {
-                    'data' : {
-                        'pluginIds': pluginIds
-                    }
-                };
-
-                var url = self.$remove.attr('href');
-                XE.pageModal(url, options);
-
-                return false;
-            },
-            update: function() {
-
-                var url = self.$update.attr('href');
-                XE.pageModal(url);
-
-                return false;
             }
-        }
-    })().init();
+        })().init();
     });
 </script>

@@ -62,13 +62,20 @@ class PluginProvider
      *
      * @return mixed|null
      */
-    public function search($keyword = null, $page = 1, $count = 10)
+    public function search($filters = [], $page = 1, $count = 10)
     {
         $url = 'plugins/search';
-        $q = implode(',', (array) $keyword);
+
+        $query = array_get($filters, 'query');
+        $q = implode(',', (array) $query);
+
+        $collection = array_get($filters, 'collection');
+
+        $order = array_get($filters, 'order');
+        $order_type = array_get($filters, 'order_type');
 
         try {
-            $response = $this->request($url, compact('q', 'page', 'count'));
+            $response = $this->request($url, compact('q', 'page', 'count', 'collection', 'order', 'order_type'));
         } catch (ClientException $e) {
             if ($e->getCode() === Response::HTTP_NOT_FOUND) {
                 return null;

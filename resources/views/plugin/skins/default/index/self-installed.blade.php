@@ -19,12 +19,12 @@
                     <div class="row">
 
                         <div class="col-md-7 col-sm-12">
-                            <form method="GET" action="{{ route('settings.plugins.self') }}" accept-charset="UTF-8" role="form" id="_search-form" class="form-inline">
+                            <form method="GET" action="{{ route('settings.plugins', ['install_type'=>'self-installed']) }}" accept-charset="UTF-8" role="form" id="_search-form" class="form-inline">
                                 <div class="form-group">
                                     <div class="btn-group">
-                                        <a href="{{ route('settings.plugins.self', Input::except('status')) }}" class="btn btn-default @if(Input::get('status') === null) btn-primary @endif">{{ xe_trans('xe::all') }}</a>
-                                        <a href="{{ route('settings.plugins.self', array_merge(Input::all(), ['status'=> XePlugin::STATUS_ACTIVATED] )) }}" class="btn btn-default @if(Input::get('status') === XePlugin::STATUS_ACTIVATED) btn-primary @endif">{{ xe_trans('xe::enabled') }}</a>
-                                        <a href="{{ route('settings.plugins.self', array_merge(Input::all(), ['status'=> XePlugin::STATUS_DEACTIVATED] )) }}" class="btn btn-default @if(Input::get('status') === XePlugin::STATUS_DEACTIVATED) btn-primary @endif">{{ xe_trans('xe::disabled') }}</a>
+                                        <a href="{{ route('settings.plugins', Input::except('status')) }}" class="btn btn-default @if(Input::get('status') === null) btn-primary @endif">{{ xe_trans('xe::all') }}</a>
+                                        <a href="{{ route('settings.plugins', array_merge(Input::all(), ['status'=> XePlugin::STATUS_ACTIVATED] )) }}" class="btn btn-default @if(Input::get('status') === XePlugin::STATUS_ACTIVATED) btn-primary @endif">{{ xe_trans('xe::enabled') }}</a>
+                                        <a href="{{ route('settings.plugins', array_merge(Input::all(), ['status'=> XePlugin::STATUS_DEACTIVATED] )) }}" class="btn btn-default @if(Input::get('status') === XePlugin::STATUS_DEACTIVATED) btn-primary @endif">{{ xe_trans('xe::disabled') }}</a>
                                     </div>
                                     {{--<button class="btn btn-default __xe_btn-show-update">{{ xe_trans('xe::updateList') }}</button>--}}
                                 </div>
@@ -38,11 +38,11 @@
                                             </button>
                                             <ul class="dropdown-menu" role="menu">
                                                 <li>
-                                                    <a href="{{ route('settings.plugins.self', Input::except(['component'])) }}"><span>{{ xe_trans('xe::all') }} {{ xe_trans('xe::component') }}</span></a>
+                                                    <a href="{{ route('settings.plugins', Input::except(['component'])) }}"><span>{{ xe_trans('xe::all') }} {{ xe_trans('xe::component') }}</span></a>
                                                 </li>
                                                 @foreach($componentTypes as $type => $typeText)
                                                     <li>
-                                                        <a href="{{ route('settings.plugins.self', array_merge( Input::all(), ['component'=> $type] )) }}"><span @if(Input::get('component') === $type)class="text-muted"@endif  >{{ $typeText }}</span></a>
+                                                        <a href="{{ route('settings.plugins', array_merge( Input::all(), ['component'=> $type] )) }}"><span @if(Input::get('component') === $type)class="text-muted"@endif  >{{ $typeText }}</span></a>
                                                     </li>
                                                 @endforeach
                                             </ul>
@@ -66,7 +66,7 @@
                                 <button type="button" class="btn btn-default dropdown-toggle __xe_manage_plugin" data-toggle="dropdown" aria-expanded="false" disabled="disabled">선택된 플러그인을 ... <span class="caret"></span></button>
                                 <ul class="dropdown-menu" role="menu">
                                     <li>
-                                        <a href="{{ route('settings.plugins.delete-page') }}" class="__xe_remove_plugin"><span>삭제</span></a>
+                                        <a href="{{ route('settings.plugins.manage.delete') }}" class="__xe_remove_plugin"><span>삭제</span></a>
                                     </li>
                                 </ul>
                             </div>

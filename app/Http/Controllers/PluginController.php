@@ -40,31 +40,15 @@ class PluginController extends Controller
         XePresenter::setSettingsSkinTargetId('plugins');
     }
 
-    public function indexFetched(
-        Request $request,
-        PluginHandler $handler,
-        PluginProvider $provider,
-        ComposerFileWriter $writer
-    ) {
-        return $this->index($request, $handler, $provider, $writer, 'fetched');
-    }
-
-    public function indexSelfInstalled(
-        Request $request,
-        PluginHandler $handler,
-        PluginProvider $provider,
-        ComposerFileWriter $writer
-    ) {
-        return $this->index($request, $handler, $provider, $writer, 'self-installed');
-    }
-
     protected function index(
         Request $request,
         PluginHandler $handler,
         PluginProvider $provider,
-        ComposerFileWriter $writer,
-        $installType
+        ComposerFileWriter $writer
     ) {
+
+        $installType = $request->get('install_type', 'fetched');
+
         // filter input
         $field = [];
         $field['component'] = $request->get('component');
@@ -83,13 +67,12 @@ class PluginController extends Controller
 
         $componentTypes = $this->getComponentTypes();
 
-        if($installType === 'fetched') {
+        if ($installType === 'fetched') {
             $operation = $handler->getOperation($writer);
             return XePresenter::make('index.fetched', compact('plugins', 'componentTypes', 'operation', 'installType'));
         } else {
             return XePresenter::make('index.self-installed', compact('plugins', 'componentTypes', 'installType'));
         }
-
     }
 
     public function getOperation(PluginHandler $handler, ComposerFileWriter $writer)
@@ -104,7 +87,7 @@ class PluginController extends Controller
         return XePresenter::makeApi(['type' => 'success', 'message' => '삭제되었습니다.']);
     }
 
-    public function getDelete(Request $request, ComposerFileWriter $writer, PluginHandler $handler)
+    public function getDelete(Request $request, PluginHandler $handler)
     {
         $pluginIds = $request->get('pluginIds');
         $pluginIds = explode(',', $pluginIds);
@@ -129,7 +112,6 @@ class PluginController extends Controller
         $handler->getAllPlugins(true);
 
         $pluginIds = $request->get('pluginId');
-        //$pluginIds = explode(',', $pluginIds);
 
         $collection = $handler->getAllPlugins(true);
 
@@ -166,50 +148,82 @@ class PluginController extends Controller
         );
     }
 
-    //public function delete(
-    //    Request $request,
-    //    PluginHandler $handler,
-    //    PluginProvider $provider,
-    //    ComposerFileWriter $writer,
-    //    $pluginId
-    //) {
-    //    $handler->getAllPlugins(true);
-    //    $plugin = $handler->getPlugin($pluginId);
-    //    if ($plugin === null) {
-    //        throw new HttpException(422, 'Plugin not found.');
-    //    }
-    //
-    //    if ($plugin->isActivated()) {
-    //        throw new HttpException(422, 'Plugin is not deactivated. Please deactivate the plugin.');
-    //    }
-    //
-    //    if ($plugin->isDevelopMode()) {
-    //        $handler->uninstallPlugin($pluginId);
-    //        return redirect()->route('settings.plugins')->with(
-    //            'alert',
-    //            ['type' => 'success', 'message' => '플러그인을 삭제하였습니다.']
-    //        );
-    //    }
-    //
-    //    $operation = $handler->getOperation($writer);
-    //    if ($operation['status'] === ComposerFileWriter::STATUS_RUNNING) {
-    //        throw new HttpException(422, "이미 진행중인 요청이 있습니다.");
-    //    }
-    //
-    //    $handler->uninstallPlugin($pluginId);
-    //
-    //    $timeLimit = config('xe.plugin.operation.time_limit');
-    //    $writer->reset()->cleanOperation();
-    //    $writer->uninstall($plugin->getName(), Carbon::now()->addSeconds($timeLimit)->toDateTimeString())->write();
-    //
-    //    $pluginData = ['name' => $plugin->getName()];
-    //    $this->reserveOperation($writer, $timeLimit, (object)$pluginData);
-    //
-    //    return redirect()->route('settings.plugins')->with(
-    //        'alert',
-    //        ['type' => 'success', 'message' => '플러그인을 삭제중입니다.']
-    //    );
-    //}
+
+    public function getActivate(Request $request, PluginHandler $handler)
+    {
+        $pluginIds = $request->get('pluginIds');
+        $pluginIds = explode(',', $pluginIds);
+
+        $collection = $handler->getAllPlugins(true);
+        $plugins = $collection->getList($pluginIds);
+
+        return apiRender('index.activate', compact('plugins'));
+    }
+
+    public function activate(Request $request, PluginHandler $handler, InterceptionHandler $interceptionHandler)
+    {
+        $handler->getAllPlugins(true);
+
+        $pluginIds = $request->get('pluginId');
+        $collection = $handler->getAllPlugins(true);
+        $plugins = $collection->getList($pluginIds);
+
+        try {
+            foreach ($plugins as $plugin) {
+                if ($plugin === null) {
+                    throw new HttpException(422, 'Plugin not found.');
+                }
+                if (!$plugin->isActivated()) {
+                    $handler->activatePlugin($plugin->getId());
+                }
+            }
+            $interceptionHandler->clearProxies();
+        } catch (XpressengineException $e) {
+            throw new HttpException(Response::HTTP_FORBIDDEN, $e->getMessage(), $e);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+
+        return Redirect::back()->withAlert(['type' => 'success', 'message' => '플러그인을 켰습니다.']);
+    }
+
+    public function getDeactivate(Request $request, PluginHandler $handler)
+    {
+        $pluginIds = $request->get('pluginId');
+        $pluginIds = explode(',', $pluginIds);
+
+        $collection = $handler->getAllPlugins(true);
+        $plugins = $collection->getList($pluginIds);
+
+        return apiRender('index.deactivate', compact('plugins'));
+    }
+
+    public function deactivate(Request $request, PluginHandler $handler, InterceptionHandler $interceptionHandler)
+    {
+        $handler->getAllPlugins(true);
+
+        $pluginIds = $request->get('pluginIds');
+        $collection = $handler->getAllPlugins(true);
+        $plugins = $collection->getList($pluginIds);
+
+        try {
+            foreach ($plugins as $plugin) {
+                if ($plugin === null) {
+                    throw new HttpException(422, 'Plugin not found.');
+                }
+                if ($plugin->isActivated()) {
+                    $handler->deactivatePlugin($plugin->getId());
+                }
+            }
+            $interceptionHandler->clearProxies();
+        } catch (XpressengineException $e) {
+            throw new HttpException(Response::HTTP_FORBIDDEN, $e->getMessage(), $e);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+
+        return Redirect::back()->withAlert(['type' => 'success', 'message' => '플러그인을 껐습니다.']);
+    }
 
     public function getDownload(
         Request $request,
@@ -540,59 +554,6 @@ class PluginController extends Controller
         app('session.store')->flash('alert', ['type' => 'success', 'message' => '플러그인을 업데이트했습니다.']);
         return XePresenter::makeApi(['type' => 'success', 'message' => '플러그인을 업데이트했습니다.']);
     }
-
-    //public function putDownloadPlugin(
-    //    $pluginId,
-    //    PluginHandler $handler,
-    //    PluginProvider $provider,
-    //    ComposerFileWriter $writer,
-    //    InterceptionHandler $interceptionHandler,
-    //    SessionManager $session
-    //) {
-    //    $handler->getAllPlugins(true);
-    //    $plugin = $handler->getPlugin($pluginId);
-    //    if ($plugin === null) {
-    //        throw new HttpException(422, 'Plugin not found.');
-    //    }
-    //
-    //    // 자료실에서 플러그인 정보 조회
-    //    $pluginData = $provider->find($pluginId);
-    //
-    //    if ($pluginData === null) {
-    //        throw new HttpException(
-    //            422, "Can not find the plugin(".$pluginId.") that should be installed from the Market-place."
-    //        );
-    //    }
-    //
-    //    $title = $pluginData->title;
-    //    $name = $pluginData->name;
-    //    $version = $pluginData->latest_release->version;
-    //
-    //    $operation = $handler->getOperation($writer);
-    //
-    //    if ($operation['status'] === ComposerFileWriter::STATUS_RUNNING) {
-    //        throw new HttpException(422, "이미 진행중인 요청이 있습니다.");
-    //    }
-    //
-    //    $timeLimit = config('xe.plugin.operation.time_limit');
-    //    $writer->reset()->cleanOperation();
-    //    $writer->update($name, $version, Carbon::now()->addSeconds($timeLimit)->toDateTimeString())->write();
-    //    $this->reserveOperation(
-    //        $writer,
-    //        $timeLimit,
-    //        [$pluginData],
-    //        function ($code) use ($plugin) {
-    //            if ($code === 0 && $plugin->checkUpdated()) {
-    //                $plugin->update();
-    //            }
-    //        }
-    //    );
-    //
-    //    return redirect()->route('settings.plugins')->with(
-    //        'alert',
-    //        ['type' => 'success', 'message' => '플러그인의 새로운 버전을 다운로드하는 중입니다.']
-    //    );
-    //}
 
 
     /**

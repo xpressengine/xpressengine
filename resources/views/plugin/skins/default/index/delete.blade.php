@@ -1,6 +1,5 @@
-<form action="{{ route('settings.plugins.destroy') }}" method="post">
+<form action="{{ route('settings.plugins.manage.delete') }}" method="post">
     {{ csrf_field() }}
-    {{ method_field('delete') }}
 
     <div class="xe-modal-header">
         <button type="button" class="btn-close" data-dismiss="xe-modal" aria-label="Close"><i class="xi-close"></i></button>

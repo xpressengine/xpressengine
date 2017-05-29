@@ -1,4 +1,14 @@
 <li class="list-group-item">
+    <div class="text-right">
+        @if($handler->getPlugin(data_get($plugin, 'plugin_id')))
+            설치됨
+        @else
+            <label>
+                <input type="checkbox" value="{{ data_get($plugin, 'plugin_id') }}" class="__xe_checkbox" data-title="{{ data_get($plugin, 'title') }}" data-id="{{ data_get($plugin, 'plugin_id') }}">
+                설치
+            </label>
+        @endif
+    </div>
     <div class="left-group">
         <a href="{{ data_get($plugin, 'link') }}" class="plugin-title">{{ data_get($plugin, 'title') }}</a>
         <dl>
@@ -23,8 +33,12 @@
         @endforeach
     </div>
     <div class="btn-right">
+        @if(data_get($plugin, 'price') === 0)
+            Free
+        @else
         <a href="#" class="btn-link">
-            {{ xe_trans('xe::showDetails') }}
+            ￦{{ number_format(data_get($plugin, 'price')) }} 구매하기
         </a>
+        @endif
     </div>
 </li>

@@ -14,6 +14,7 @@ use Illuminate\Support\Collection;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use XePresenter;
 use Xpressengine\Http\Request;
+use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
 
 class PluginInstallController extends Controller
@@ -27,48 +28,76 @@ class PluginInstallController extends Controller
         XePresenter::setSettingsSkinTargetId('plugins');
     }
 
-    public function index(Request $request, PluginProvider $provider)
+    public function index(Request $request, PluginProvider $provider, PluginHandler $handler)
     {
         $componentTypes = $this->getComponentTypes();
 
-        $packages = $provider->search(null, 1, 1);
+        $filter = 'top';
 
+        $packages = $provider->search(['collection' => $filter], 1, 10);
+
+        $handler->getAllPlugins(true);
 
         $items = new Collection($packages->data);
+
         $plugins = new LengthAwarePaginator($items, $packages->total, $packages->per_page, $packages->current_page);
+
         $plugins->setPath(route('settings.plugins.install.items'));
 
-        return XePresenter::make('install.index', compact('plugins', 'componentTypes'));
+        return XePresenter::make('install.index', compact('plugins', 'componentTypes', 'handler', 'filter'));
     }
 
-    public function items(Request $request, PluginProvider $provider)
+    public function items(Request $request, PluginProvider $provider, PluginHandler $handler)
     {
         $page = $request->get('page', 1);
-        $filter = $request->get('filter', '');
-        if ($filter === 'purchased') {
+        $q = $query = $request->get('q');
+        $filter = $request->get('filter');
+        $plugins = null;
+        if ($query) {
+            $query = explode(' ', $query);
+            $filter = null;
+            $packages = $provider->search(['query' => $query], $page, 10);
+        } elseif ($filter === 'purchased') {
             $config = app('xe.config')->get('plugin');
             $site_token = $config->get('site_token');
-
-            if(!$site_token) {
-                throw new HttpException(Response::HTTP_BAD_REQUEST, '자료실에서 구매시 사용한 사이트토큰 정보를 저장해야 구매한 플러그인 목록을 볼 수 있습니다.');
+            if (!$site_token) {
+                throw new HttpException(
+                    Response::HTTP_BAD_REQUEST,
+                    '자료실에서 구매시 사용한 사이트토큰 정보를 저장해야 구매한 플러그인 목록을 볼 수 있습니다.'
+                );
             }
-            $packages = $provider->purchased($site_token);
+            try {
+                $packages = $provider->purchased($site_token);
+            } catch (\Exception $e) {
+                throw new HttpException(
+                    Response::HTTP_BAD_REQUEST,
+                    '사이트 토큰 정보가 잘못되었습니다.'
+                );
+            }
             $plugins = new Collection($packages);
-
         } else {
-            $q = $query = $request->get('q');
-            if($query) {
-                $query = explode(' ', $query);
+            if ($filter === 'top') {
+                $collection = $filter;
+            } elseif ($filter === 'popular') {
+                $order = 'downloadeds';
+                $order_type = 'desc';
             }
-            $packages = $provider->search($query, $request->get('page', $page, 1), 2);
+            $filters = compact('collection', 'order', 'order_type');
+            $packages = $provider->search($filters, $page, 10);
+        }
+
+        if (!$plugins) {
             $items = new Collection($packages->data);
             $plugins = new LengthAwarePaginator($items, $packages->total, $packages->per_page, $packages->current_page);
             $plugins->setPath(route('settings.plugins.install.items'));
+            $plugins->addQuery('filter', $filter);
+            $plugins->addQuery('q', $q);
         }
 
+        $handler->getAllPlugins(true);
         $componentTypes = $this->getComponentTypes();
 
-        return apiRender('install.items', compact('plugins', 'componentTypes', 'q'));
+        return apiRender('install.items', compact('plugins', 'componentTypes', 'q', 'handler', 'filter'));
     }
 
 
