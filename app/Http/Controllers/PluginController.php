@@ -78,7 +78,7 @@ class PluginController extends Controller
     public function getOperation(PluginHandler $handler, ComposerFileWriter $writer)
     {
         $operation = $handler->getOperation($writer);
-        return apiRender('index.operation', compact('operation'), compact('operation'));
+        return apiRender('operation', compact('operation'), compact('operation'));
     }
 
     public function deleteOperation(ComposerFileWriter $writer)
@@ -89,7 +89,7 @@ class PluginController extends Controller
 
     public function getDelete(Request $request, PluginHandler $handler)
     {
-        $pluginIds = $request->get('pluginIds');
+        $pluginIds = $request->get('pluginId');
         $pluginIds = explode(',', $pluginIds);
 
         $collection = $handler->getAllPlugins(true);
@@ -151,7 +151,7 @@ class PluginController extends Controller
 
     public function getActivate(Request $request, PluginHandler $handler)
     {
-        $pluginIds = $request->get('pluginIds');
+        $pluginIds = $request->get('pluginId');
         $pluginIds = explode(',', $pluginIds);
 
         $collection = $handler->getAllPlugins(true);
@@ -202,7 +202,7 @@ class PluginController extends Controller
     {
         $handler->getAllPlugins(true);
 
-        $pluginIds = $request->get('pluginIds');
+        $pluginIds = $request->get('pluginId');
         $collection = $handler->getAllPlugins(true);
         $plugins = $collection->getList($pluginIds);
 
@@ -308,25 +308,6 @@ class PluginController extends Controller
         ComposerFileWriter $writer,
         SessionManager $session
     ) {
-        $id = $request->get('pluginId');
-
-        $handler->getAllPlugins(true);
-        if ($handler->getPlugin($id) !== null) {
-            throw new HttpException(422, 'Plugin already installed.');
-        }
-
-        // 자료실에서 플러그인 정보 조회
-        $pluginData = $provider->find($id);
-
-        if ($pluginData === null) {
-            throw new HttpException(
-                422, "Can not find the plugin(".$id.") that should be installed from the Market-place."
-            );
-        }
-
-        $title = $pluginData->title;
-        $name = $pluginData->name;
-        $version = $pluginData->latest_release->version;
 
         $operation = $handler->getOperation($writer);
 
@@ -334,14 +315,33 @@ class PluginController extends Controller
             throw new HttpException(422, "이미 진행중인 요청이 있습니다.");
         }
 
+        $pluginIds = $request->get('pluginId');
+
+        $handler->getAllPlugins(true);
+
+        // 자료실에서 플러그인 정보 조회
+        $pluginsData = $provider->findAll($pluginIds);
+
+        if ($pluginsData === null) {
+            throw new HttpException(
+                422, "Can not find the plugin that should be installed from the Market-place."
+            );
+        }
+
         $timeLimit = config('xe.plugin.operation.time_limit');
         $writer->reset()->cleanOperation();
-        $writer->install($name, $version, Carbon::now()->addSeconds($timeLimit)->toDateTimeString())->write();
 
-        $this->reserveOperation($writer, $timeLimit, [$pluginData]);
+        $packages = [];
+        foreach ($pluginsData as $pluginData) {
+            $name = $pluginData->name;
+            $version = $pluginData->latest_release->version;
+            $writer->install($name, $version, Carbon::now()->addSeconds($timeLimit)->toDateTimeString());
+            $packages[] = $name;
+        }
+        $writer->write();
+        $this->reserveOperation($writer, $timeLimit, $packages);
 
-        $session->flash('alert', ['type' => 'success', 'message' => '새로운 플러그인을 설치중입니다.']);
-        return XePresenter::makeApi(['type' => 'success', 'message' => '새로운 플러그인을 설치중입니다.']);
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => '새로운 플러그인을 설치중입니다.']);
     }
 
     /**

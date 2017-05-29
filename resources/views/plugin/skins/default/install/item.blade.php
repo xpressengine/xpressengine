@@ -2,11 +2,13 @@
     <div class="text-right">
         @if($handler->getPlugin(data_get($plugin, 'plugin_id')))
             설치됨
-        @else
+        @elseif(data_get($plugin, 'is_free') || data_get($plugin, 'is_purchased'))
             <label>
                 <input type="checkbox" value="{{ data_get($plugin, 'plugin_id') }}" class="__xe_checkbox" data-title="{{ data_get($plugin, 'title') }}" data-id="{{ data_get($plugin, 'plugin_id') }}">
-                설치
+                설치 @if(data_get($plugin, 'is_purchased'))(구매한 플러그인) @endif
             </label>
+        @elseif(data_get($plugin, 'is_purchased') === false)
+            구매하러 가기
         @endif
     </div>
     <div class="left-group">
@@ -36,8 +38,11 @@
         @if(data_get($plugin, 'price') === 0)
             Free
         @else
+        ￦{{ number_format(data_get($plugin, 'price')) }}
         <a href="#" class="btn-link">
-            ￦{{ number_format(data_get($plugin, 'price')) }} 구매하기
+            @if(data_get($plugin, 'is_purchased', false) === false)
+            구매하기
+            @endif
         </a>
         @endif
     </div>

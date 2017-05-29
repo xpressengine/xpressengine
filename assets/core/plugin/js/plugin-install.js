@@ -8,19 +8,20 @@ $(document).ready(function () {
       checked: [],
       init: function () {
         self = this;
-
         self.cache();
         self.bindEvents();
         return this;
       },
       cache: function () {
         self.$installbox = $('.__xe_install_list');
+        self.$form = $('#__xe_install_form');
         self.$list = $('.__xe_install_list ul');
         self.$items = $('.__xe_plugin_items');
       },
       bindEvents: function () {
         self.$items.on('change', '.__xe_checkbox', self.check);
         self.$list.on('change', 'input', self.check);
+        self.$form.on('submit', self.install);
       },
       reset: function () {
         self.$items.find('.__xe_checkbox').each(function(i){
@@ -54,7 +55,7 @@ $(document).ready(function () {
       },
       add: function (id, title) {
         if (self.$list.find('input[value=' + id + ']').length == 0) {
-          self.$list.append('<li><label><input type="checkbox" data-id="' + id + '" data-title="' + title + '" value="' + id + '" checked>' + title + '</label></li>')
+          self.$list.append('<li><label><input name="pluginId[]" type="checkbox" data-id="' + id + '" data-title="' + title + '" value="' + id + '" checked>' + title + '</label></li>')
         }
       },
       remove: function (id, title) {
@@ -68,18 +69,15 @@ $(document).ready(function () {
         }
       },
       install: function () {
-        var pluginIds = self.checkedList();
-        if (pluginIds.length === 0) {
+        if (self.$list.find('input').length == 0) {
           return false;
         }
-        var options = {
-          'data': {
-            'pluginIds': pluginIds.join()
-          }
-        };
-        var url = self.$activate.attr('href');
-        XE.pageModal(url, options);
+        
+        var count = $('.__xe_selected_count').text();
 
+        if (confirm(count + '개의 플러그인을 설치하시겠습니까?')) {
+          return true;
+        }
         return false;
       },
     }
@@ -96,6 +94,10 @@ $(document).ready(function () {
     }, PluginInstallManager.reset)
 
   });
+
+  $('.__xe_install_form').submit(function(){
+
+  })
 
   $(document).on('click', '.__xe_plugin_items_link a', function (e) {
     e.preventDefault();

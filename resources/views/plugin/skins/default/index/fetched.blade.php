@@ -67,7 +67,7 @@
                             </form>
                         </div>
                         <div class="col-md-5 col-sm-12 text-right">
-                            <button type="button" data-toggle="modal" data-target="#installPlugin" class="btn btn-primary">{{ xe_trans('xe::installNewPlugin') }}</button>
+                            <a href="{{ route('settings.plugins.install') }}" class="btn btn-primary">{{ xe_trans('xe::installNewPlugin') }}</a>
                             <a href="{{ route('settings.plugins.manage.update') }}" class="btn btn-default __xe_update_plugin"><span>{{ xe_trans('xe::update_plugin') }}</span></a>
                             <div class="btn-group">
                                 <button type="button" class="btn btn-default dropdown-toggle __xe_manage_plugin" data-toggle="dropdown" aria-expanded="false" disabled="disabled">선택된 플러그인을 ... <span class="caret"></span></button>
@@ -97,26 +97,6 @@
     </div>
 </div>
 
-<div id="installPlugin" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog">
-        <form action="{{ route('settings.plugins.install') }}" method="POST" data-submit="xe-ajax" data-callback="checkPluginInstall">
-            {{ csrf_field() }}
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">{{ xe_trans('xe::installNewPlugin') }}</h4>
-                </div>
-                <div class="modal-body">
-                    {{ uio('formText', ['name'=>'pluginId', 'label'=>xe_trans('xe::pluginId'), 'placeholder' => xe_trans('xe::inputNewPluginId')]) }}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">{{xe_trans('xe::cancel')}}</button>
-                    <button type="submit" class="btn btn-primary">{{ xe_trans('xe::install') }}</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </form>
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
 
 {!! app('xe.frontend')->html('plugin.install.check')->content("
 <script>
@@ -210,7 +190,7 @@
                     }
                     var options = {
                         'data' : {
-                            'pluginIds': pluginIds.join()
+                            'pluginId': pluginIds.join()
                         }
                     };
                     var url = self.$remove.attr('href');
@@ -225,7 +205,7 @@
                     }
                     var options = {
                         'data' : {
-                            'pluginIds': pluginIds.join()
+                            'pluginId': pluginIds.join()
                         }
                     };
                     var url = self.$activate.attr('href');
@@ -241,7 +221,7 @@
                     }
                     var options = {
                         'data' : {
-                            'pluginIds': pluginIds.join()
+                            'pluginId': pluginIds.join()
                         }
                     };
                     var url = self.$deactivate.attr('href');

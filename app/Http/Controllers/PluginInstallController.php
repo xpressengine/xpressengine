@@ -14,6 +14,7 @@ use Illuminate\Support\Collection;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use XePresenter;
 use Xpressengine\Http\Request;
+use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
 
@@ -28,7 +29,7 @@ class PluginInstallController extends Controller
         XePresenter::setSettingsSkinTargetId('plugins');
     }
 
-    public function index(Request $request, PluginProvider $provider, PluginHandler $handler)
+    public function index(Request $request, PluginProvider $provider, PluginHandler $handler, ComposerFileWriter $writer)
     {
         $componentTypes = $this->getComponentTypes();
 
@@ -44,7 +45,9 @@ class PluginInstallController extends Controller
 
         $plugins->setPath(route('settings.plugins.install.items'));
 
-        return XePresenter::make('install.index', compact('plugins', 'componentTypes', 'handler', 'filter'));
+        $operation = $handler->getOperation($writer);
+
+        return XePresenter::make('install.index', compact('plugins', 'componentTypes', 'handler', 'filter', 'operation'));
     }
 
     public function items(Request $request, PluginProvider $provider, PluginHandler $handler)
@@ -53,13 +56,15 @@ class PluginInstallController extends Controller
         $q = $query = $request->get('q');
         $filter = $request->get('filter');
         $plugins = null;
+
+        $config = app('xe.config')->get('plugin');
+        $site_token = $config->get('site_token');
+
         if ($query) {
             $query = explode(' ', $query);
             $filter = null;
-            $packages = $provider->search(['query' => $query], $page, 10);
+            $packages = $provider->search(compact('query', 'site_token'), $page, 10);
         } elseif ($filter === 'purchased') {
-            $config = app('xe.config')->get('plugin');
-            $site_token = $config->get('site_token');
             if (!$site_token) {
                 throw new HttpException(
                     Response::HTTP_BAD_REQUEST,
@@ -82,7 +87,7 @@ class PluginInstallController extends Controller
                 $order = 'downloadeds';
                 $order_type = 'desc';
             }
-            $filters = compact('collection', 'order', 'order_type');
+            $filters = compact('collection', 'order', 'order_type', 'site_token');
             $packages = $provider->search($filters, $page, 10);
         }
 
@@ -99,8 +104,6 @@ class PluginInstallController extends Controller
 
         return apiRender('install.items', compact('plugins', 'componentTypes', 'q', 'handler', 'filter'));
     }
-
-
 
     /**
      * getComponentTypes

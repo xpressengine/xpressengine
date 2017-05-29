@@ -74,8 +74,10 @@ class PluginProvider
         $order = array_get($filters, 'order');
         $order_type = array_get($filters, 'order_type');
 
+        $site_token = array_get($filters, 'site_token');
+
         try {
-            $response = $this->request($url, compact('q', 'page', 'count', 'collection', 'order', 'order_type'));
+            $response = $this->request($url, compact('q', 'page', 'count', 'collection', 'order', 'order_type', 'site_token'));
         } catch (ClientException $e) {
             if ($e->getCode() === Response::HTTP_NOT_FOUND) {
                 return null;

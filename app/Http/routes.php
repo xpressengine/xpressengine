@@ -669,7 +669,7 @@ Route::settings(
                     '/',
                     [
                         'as' => 'settings.plugins.install',
-                        'uses' => 'PluginController@postInstall'
+                        'uses' => 'PluginController@install'
                     ]
                 );
 
