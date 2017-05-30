@@ -39,7 +39,7 @@
                             {!!  uio('formImage', [
                                 'name' => 'profileImgFile',
                                 'label' => xe_trans('xe::profileImage') . " <small>(Size ".$profileImgSize['width']."x".$profileImgSize['height'].")</small>",
-                                'image' => $user->getProfileImage(),
+                                'value' => ['path' => $user->getProfileImage()],
                                 'width' => $profileImgSize['width'],
                                 'height' => $profileImgSize['height']
                             ]) !!}

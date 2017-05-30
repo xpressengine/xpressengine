@@ -16,7 +16,6 @@ namespace Xpressengine\Theme;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Xpressengine\Config\ConfigEntity;
-use Xpressengine\Storage\File;
 
 /**
  * 이 클래스는 Xpressengine에서 테마를 간편하게 구현할 수 있도록 제공하는 클래스이다. 특정 디렉토리에 지정된 형식에 맞게 테마에 필요한 파일들을 구성한 후,
@@ -192,6 +191,9 @@ abstract class GenericTheme extends AbstractTheme
         foreach ($config as $key => $item) {
             if ($item instanceof UploadedFile) {
                 array_set($config, $key, $this->saveFile($configId, $key, $item));
+            } elseif ($item === '__delete_file__') {
+                $this->removeFile($key);
+                $config[$key] = null;
             } elseif ($item === null) {
                 unset($config[$key]);
             }
@@ -217,7 +219,7 @@ abstract class GenericTheme extends AbstractTheme
         if ($oldFileId !== null) {
             $oldFile = app('xe.storage')->find($oldFileId);
             if ($oldFile) {
-                app('xe.storage')->remove($oldFile);
+                app('xe.storage')->delete($oldFile);
             }
         }
 
@@ -245,6 +247,27 @@ abstract class GenericTheme extends AbstractTheme
     }
 
     /**
+     * setting 과정에서 upload되는 파일을 저장한다.
+     *
+     * @param string $key config field key
+     *
+     * @return array
+     */
+    protected function removeFile($key)
+    {
+        $oldSetting = $this->setting();
+        $oldFileId = $oldSetting->get("$key.id");
+
+        // remove old file
+        if ($oldFileId !== null) {
+            $oldFile = app('xe.storage')->find($oldFileId);
+            if ($oldFile) {
+                app('xe.storage')->delete($oldFile);
+            }
+        }
+    }
+
+    /**
      * 삭제할 테마 설정에서 업로드했던 파일들을 삭제한다.
      *
      * @param ConfigEntity $config config data
@@ -258,7 +281,7 @@ abstract class GenericTheme extends AbstractTheme
         // delete saved files
         $files = app('xe.storage')->fetchByFileable($configId);
         foreach ($files as $file) {
-            app('xe.storage')->remove($file);
+            app('xe.storage')->delete($file);
         }
     }
 
