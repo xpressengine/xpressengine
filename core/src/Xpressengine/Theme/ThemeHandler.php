@@ -172,7 +172,7 @@ class ThemeHandler
      *
      * @param string $id 지정할 테마의 id
      *
-     * @return null
+     * @return void
      */
     public function selectTheme($id)
     {
@@ -382,8 +382,7 @@ class ThemeHandler
     public function hasThemeConfig($id)
     {
         $id = implode($this->configDelimiter, func_get_args());
-        $configId = $this->getConfigId($id);
-        return $this->config->get($configId) !== null;
+        return $this->config->get($id) !== null;
     }
 
     /**
@@ -460,7 +459,6 @@ class ThemeHandler
     public function getThemeConfigList($id)
     {
         $base = $this->getThemeConfig($id, true);
-        $default = $this->getThemeConfig($id.'.0', true);
         $children = $this->config->children($base);
 
         $configs = [];
