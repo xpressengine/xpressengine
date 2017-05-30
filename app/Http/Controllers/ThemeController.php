@@ -173,19 +173,13 @@ class ThemeController extends Controller
         $themeId = $request->get('theme');
         $theme = $themeHandler->getTheme($themeId);
 
-        if(!$theme->hasSetting()) {
+        if (!$theme->hasSetting()) {
             throw new NotSupportSettingException();
         }
 
-        $configs = $themeHandler->getThemeConfigList($theme->getId());
         $config = $theme->setting();
 
-        $configList = [];
-        foreach ($configs as $id => $item) {
-            $configList[$id] = $item->get('_configTitle', '기본');
-        }
-
-        return \XePresenter::make('theme.config', compact('theme', 'config', 'configList'));
+        return \XePresenter::make('theme.config', compact('theme', 'config'));
     }
 
     public function updateSetting(Request $request, ThemeHandler $themeHandler)
@@ -203,7 +197,7 @@ class ThemeController extends Controller
 
         $configInfo = $request->only('_configTitle', '_configId');
 
-        $inputs =  $request->except('_token');
+        $inputs =  $request->except('_token', '_method');
         $inputs['_configId'] = $themeId;
 
         // 해당 테마에게 config를 가공할 수 있는 기회를 준다.

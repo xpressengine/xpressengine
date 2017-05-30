@@ -185,6 +185,9 @@ abstract class GenericSkin extends AbstractSkin
         foreach ($inputs as $key => $item) {
             if ($item instanceof UploadedFile) {
                 array_set($inputs, $key, $this->saveFile($configId, $key, $item));
+            } elseif ($item === '__delete_file__') {
+                $this->removeFile($key);
+                $inputs[$key] = null;
             } elseif ($item === null) {
                 unset($inputs[$key]);
             }
@@ -210,7 +213,7 @@ abstract class GenericSkin extends AbstractSkin
         if ($oldFileId !== null) {
             $oldFile = app('xe.storage')->find($oldFileId);
             if ($oldFile) {
-                app('xe.storage')->remove($oldFile);
+                app('xe.storage')->delete($oldFile);
             }
         }
 
@@ -232,6 +235,28 @@ abstract class GenericSkin extends AbstractSkin
         }
 
         return $saved;
+    }
+
+
+    /**
+     * setting 과정에서 upload되는 파일을 저장한다.
+     *
+     * @param string $key config field key
+     *
+     * @return array
+     */
+    protected function removeFile($key)
+    {
+        $oldSetting = $this->setting();
+        $oldFileId = $oldSetting->get("$key.id");
+
+        // remove old file
+        if ($oldFileId !== null) {
+            $oldFile = app('xe.storage')->find($oldFileId);
+            if ($oldFile) {
+                app('xe.storage')->delete($oldFile);
+            }
+        }
     }
 
     /**

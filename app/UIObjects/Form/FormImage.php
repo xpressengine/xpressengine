@@ -25,8 +25,8 @@ class FormImage extends AbstractUIObject
         $seq  = $this->seq();
 
         // set width, height
-        $args = array_add($args, 'width', 420);
-        $args = array_add($args, 'height', 420);
+        $args = array_add($args, 'width', 10000);
+        $args = array_add($args, 'height', 10000);
 
         // render template
         $this->template = \View::make($this->view, ['args' => $args, 'seq' => $seq])->render();
