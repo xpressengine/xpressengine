@@ -10,6 +10,12 @@
         <input type="hidden" name="instanceId" value="{{ $instanceId }}">
     @endif
 
+    <div class="checkbox" style="margin-bottom: 10px;">
+        <label>
+            <input type="checkbox" name="inherit" value="1" {{ $inherit ? 'checked' : '' }}> {{ xe_trans('xe::inheritMode') }}
+        </label>
+    </div>
+
     <div class="table-responsive item-setting">
         <table class="table table-sortable">
             <colgroup>
@@ -48,10 +54,8 @@
         </table>
     </div>
 
-    <div class="panel-footer">
-        <div class="pull-right">
-            <button type="submit" class="btn btn-primary btn-lg">{{ xe_trans('xe::save') }}</button>
-        </div>
+    <div class="pull-right" style="margin-top: 10px;">
+        <button type="submit" class="btn btn-primary btn-lg">{{ xe_trans('xe::save') }}</button>
     </div>
 
 </form>
@@ -77,5 +81,15 @@
         $('#__xe_toggleMenu_{{$typeIdable}}_{{$instanceId}}').submit(function () {
             $('<input>').attr('type', 'hidden').attr('name', 'redirect').val(location.href).appendTo(this);
         });
+        $('input[name="inherit"]:checkbox', '#__xe_toggleMenu_{{$typeIdable}}_{{$instanceId}}').change(function () {
+            var $chkboxs = $(this).closest('form').find('input:checkbox').not(this);
+            if ($(this).is(':checked')) {
+                $(".table-sortable tbody").sortable('disable');
+                $chkboxs.prop('disabled', true);
+            } else {
+                $(".table-sortable tbody").sortable('enable');
+                $chkboxs.prop('disabled', false);
+            }
+        }).triggerHandler('change');
     });
 </script>

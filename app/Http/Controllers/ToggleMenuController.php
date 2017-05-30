@@ -75,7 +75,11 @@ class ToggleMenuController extends Controller
         $instanceId = $request->get('instanceId');
         $activates = $request->get('items', []);
 
-        XeToggleMenu::setActivates($type, $instanceId, $activates);
+        if ($request->get('inherit')) {
+            XeToggleMenu::setInherit($type, $instanceId);
+        } else {
+            XeToggleMenu::setActivates($type, $instanceId, $activates);
+        }
 
         if ($request->get('redirect') != null) {
             return redirect($request->get('redirect'));
