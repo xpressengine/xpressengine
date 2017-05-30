@@ -203,7 +203,7 @@ class ThemeController extends Controller
 
         $configInfo = $request->only('_configTitle', '_configId');
 
-        $inputs =  $request->except('_token');
+        $inputs =  $request->except('_token', '_method');
         $inputs['_configId'] = $themeId;
 
         // 해당 테마에게 config를 가공할 수 있는 기회를 준다.
