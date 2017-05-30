@@ -43,6 +43,7 @@ class ToggleMenuSection extends Section
         $typeIdable = str_replace(['/', '@'], '_', $this->type);
 
         return view('toggleMenu.setting', [
+            'inherit' => XeToggleMenu::isInherit($this->type, $this->instanceId),
             'items' => $items,
             'type' => $this->type,
             'instanceId' => $this->instanceId,

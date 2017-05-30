@@ -100,6 +100,34 @@ class ToggleMenuHandler
     }
 
     /**
+     * 상속 모드로 설정
+     *
+     * @param string $id         target plugin id
+     * @param string $instanceId instance id
+     * @return void
+     */
+    public function setInherit($id, $instanceId)
+    {
+        $configKey = $this->getConfigKey($id, $instanceId);
+        if ($instanceId && $config = $this->cfg->get($configKey)) {
+            $this->cfg->put($configKey, []);
+        }
+    }
+
+    /**
+     * 상속 모드인지 확인
+     *
+     * @param string $id         target plugin id
+     * @param string $instanceId instance id
+     * @return bool
+     */
+    public function isInherit($id, $instanceId)
+    {
+        $config = $this->cfg->getOrNew($this->getConfigKey($id, $instanceId));
+        return $instanceId && $config->getPure('activate') === null;
+    }
+
+    /**
      * 사용할 아이템들을 설정에 저장
      *
      * @param string      $id         target plugin id
@@ -110,10 +138,7 @@ class ToggleMenuHandler
     public function setActivates($id, $instanceId = null, array $keys = [])
     {
         $configKey = $this->getConfigKey($id, $instanceId);
-        $config = [];
-        if (count($keys) > 0) {
-            $config = ['activate' => $keys];
-        }
+        $config = ['activate' => $keys];
 
         if (!$this->cfg->get($configKey)) {
             return $this->cfg->add($configKey, $config);
