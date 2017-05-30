@@ -32,14 +32,50 @@ use Xpressengine\Translation\Loaders\LoaderInterface;
  */
 class Translator extends NamespacedItemResolver implements TranslatorInterface
 {
+    /**
+     * @var array
+     */
     protected $locales = [];
+
+    /**
+     * @var array
+     */
     protected $texts = [];
+
+    /**
+     * @var Keygen
+     */
     protected $keyGen;
+
+    /**
+     * @var TransCachedDatabase
+     */
     protected $cachedDb;
+
+    /**
+     * @var LoaderInterface
+     */
     protected $fileLoader;
+
+    /**
+     * @var LoaderInterface
+     */
     protected $urlLoader;
+
+    /**
+     * @var string
+     */
     protected $userKeyPrefix = 'user';
+
+    /**
+     * @var string
+     */
     protected $preprocessorProtocol = 'xe_lang_preprocessor://';
+
+    /**
+     * @var array
+     */
+    protected static $aliases = [];
 
     /**
      * @param array               $config     설정
@@ -278,6 +314,7 @@ class Translator extends NamespacedItemResolver implements TranslatorInterface
      */
     protected function getLine($namespace, $item, $locale, array $replace)
     {
+        $namespace = $this->getOriginNamespace($namespace);
         $line = $this->cachedDb->getLine($namespace, $item, $locale);
 
         return $this->makeReplacements($line, $replace);
@@ -468,5 +505,28 @@ class Translator extends NamespacedItemResolver implements TranslatorInterface
         }
 
         return $values;
+    }
+
+    /**
+     * alias namespace 를 등록합니다
+     *
+     * @param string $origin origin namespace
+     * @param string $alias  alias namespace
+     * @return void
+     */
+    public static function alias($origin, $alias)
+    {
+        static::$aliases[$alias] = $origin;
+    }
+
+    /**
+     * 주어진 namespace 의 원래 이름을 반환합니다
+     *
+     * @param string $namespace namespace
+     * @return string
+     */
+    protected function getOriginNamespace($namespace)
+    {
+        return isset(static::$aliases[$namespace]) ? static::$aliases[$namespace] : $namespace;
     }
 }
