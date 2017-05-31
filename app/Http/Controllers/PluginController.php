@@ -10,6 +10,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use Composer\Console\Application;
+use Composer\Json\JsonFormatter;
 use Composer\Util\Platform;
 use Illuminate\Session\SessionManager;
 use Log;
@@ -363,14 +364,15 @@ class PluginController extends Controller
                 $pid = getmypid();
                 Log::info("[plugin operation] start running composer run [pid=$pid]");
 
+                $params = [
+                    'command' => 'update',
+                    "--with-dependencies" => true,
+                    '--working-dir' => base_path(),
+                    '--verbose' => 1,
+                    'packages' => $packages
+                ];
                 $input = new ArrayInput(
-                    [
-                        'command' => 'update',
-                        "--with-dependencies" => true,
-                        '--working-dir' => base_path(),
-                        '--verbose' => 1,
-                        'packages' => $packages
-                    ]
+                    $params
                 );
 
                 Composer::setPackagistToken(config('xe.plugin.packagist.site_token'));
@@ -378,6 +380,9 @@ class PluginController extends Controller
 
                 $startTime = Carbon::now()->format('YmdHis');
                 $logFileName = "logs/plugin-$startTime.log";
+
+                file_put_contents(storage_path($logFileName), JsonFormatter::format(json_encode($params), true, true).PHP_EOL);
+
                 $writer->set('xpressengine-plugin.operation.log', $logFileName);
                 $writer->write();
 
@@ -551,8 +556,8 @@ class PluginController extends Controller
             throw $e;
         }
 
-        app('session.store')->flash('alert', ['type' => 'success', 'message' => '플러그인을 업데이트했습니다.']);
-        return XePresenter::makeApi(['type' => 'success', 'message' => '플러그인을 업데이트했습니다.']);
+        app('session.store')->flash('alert', ['type' => 'success', 'message' => '플러그인의 수정사항을 적용했습니다.']);
+        return XePresenter::makeApi(['type' => 'success', 'message' => '플러그인의 수정사항을 적용했습니다.']);
     }
 
 

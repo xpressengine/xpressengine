@@ -1119,8 +1119,8 @@ return [
         'ko' => '설치경로',
         'en' => 'Install path'
     ],
-    'newUpdateDownloaded' => [
-        'ko' => '새로운 업데이트가 다운로드 되었습니다.',
+    'pluginIsChanged' => [
+        'ko' => '플러그인이 수정되었습니다.',
         'en' => 'Update was downloaded.'
     ],
     'changeLog' => [
@@ -1144,7 +1144,7 @@ return [
         'en' => 'update'
     ],
     'applyUpdateNow' => [
-        'ko' => '지금 업데이트 적용하기.',
+        'ko' => '지금 수정사항 적용하기.',
         'en' => 'Apply downloaded update now.'
     ],
     'hasNewUpdate' => [

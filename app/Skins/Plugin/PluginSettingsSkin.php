@@ -76,16 +76,12 @@ class PluginSettingsSkin extends GenericSkin
     {
         app('xe.frontend')->js('assets/core/xe-ui-component/js/xe-form.js')->load();
         app('xe.frontend')->js('assets/core/xe-ui-component/js/xe-page.js')->load();
-
-        app('xe.frontend')->html('plugins.updateList')->content("
-        <script>
-            $(function (){
-                $('.__xe_btn-show-update').click(function(){
-                    $(this).toggleClass('btn-primary');
-                    $('ul.list-plugin li.list-group-item.__xe_no-update').toggleClass('hidden');
-                })
-            });
-        </script>")->load();
+        app('xe.frontend')->js('assets/core/plugin/js/plugin-index.js')->before(
+            [
+                'assets/core/xe-ui-component/js/xe-page.js',
+                'assets/core/xe-ui-component/js/xe-form.js'
+            ]
+        )->load();
 
         return $this->renderBlade();
     }
@@ -109,11 +105,12 @@ class PluginSettingsSkin extends GenericSkin
 
     protected function installIndex()
     {
-        app('xe.frontend')->js(
+        app('xe.frontend')->js('assets/core/xe-ui-component/js/xe-form.js')->load();
+        app('xe.frontend')->js('assets/core/xe-ui-component/js/xe-page.js')->load();
+        app('xe.frontend')->js('assets/core/plugin/js/plugin-install.js')->before(
             [
                 'assets/core/xe-ui-component/js/xe-page.js',
-                'assets/core/xe-ui-component/js/xe-form.js',
-                'assets/core/plugin/js/plugin-install.js'
+                'assets/core/xe-ui-component/js/xe-form.js'
             ]
         )->load();
         return $this->renderBlade();
@@ -124,26 +121,6 @@ class PluginSettingsSkin extends GenericSkin
         app('xe.frontend')->html('plugins.loadTooltip')->content("<script>
             $(function () {
               $('[data-toggle=tooltip]').tooltip()
-            })
-        </script>")->load();
-
-        app('xe.frontend')->html('plugins.updatePlugin')->content("<script>
-            $(function () {
-              $('.__xe_btn-update-plugin').click(function(){
-                var url = $(this).data('url');
-                $.ajax({
-                  type : 'put',
-                  url : url,
-                  dataType: 'json',
-                  success : function (data) {
-                    location.reload();
-                  },
-                  error : function(data) {
-                    XE.toast(data.type, data.message);
-                  }
-                });
-                return false;
-              })
             })
         </script>")->load();
 

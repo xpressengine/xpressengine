@@ -14,14 +14,16 @@ $(document).ready(function () {
       },
       cache: function () {
         self.$installbox = $('.__xe_install_list');
-        self.$form = $('#__xe_install_form');
+        self.$installForm = $('#__xe_install_form');
         self.$list = $('.__xe_install_list ul');
         self.$items = $('.__xe_plugin_items');
       },
       bindEvents: function () {
-        self.$items.on('change', '.__xe_checkbox', self.check);
         self.$list.on('change', 'input', self.check);
-        self.$form.on('submit', self.install);
+        self.$installForm.on('submit', self.install);
+        self.$items.on('change', '.__xe_checkbox', self.check);
+        self.$items.on('submit', 'form[data-submit=xe-plugin-items]', self.search)
+        self.$items.on('click', '.__xe_plugin_items_link a', self.paging)
       },
       reset: function () {
         self.$items.find('.__xe_checkbox').each(function(i){
@@ -68,6 +70,17 @@ $(document).ready(function () {
           inputInItems.removeAttr('checked');
         }
       },
+      search: function(e) {
+        e.preventDefault();
+        var $this = $(this);
+        XE.page($this.attr('action'), '.__xe_plugin_items', {
+          data: $this.serialize(),
+        }, self.reset)
+      },
+      paging: function(e) {
+        e.preventDefault();
+        XE.page(this.href, '.__xe_plugin_items', [], self.reset);
+      },
       install: function () {
         if (self.$list.find('input').length == 0) {
           return false;
@@ -82,28 +95,4 @@ $(document).ready(function () {
       },
     }
   })().init();
-
-
-  $(document).on('submit', 'form[data-submit=xe-plugin-items]', function (e) {
-    e.preventDefault();
-
-    var $this = $(this);
-
-    XE.page($this.attr('action'), '.__xe_plugin_items', {
-        data: $this.serialize(),
-    }, PluginInstallManager.reset)
-
-  });
-
-  $('.__xe_install_form').submit(function(){
-
-  })
-
-  $(document).on('click', '.__xe_plugin_items_link a', function (e) {
-    e.preventDefault();
-
-    XE.page(this.href, '.__xe_plugin_items', [], PluginInstallManager.reset);
-  })
-
-
 });

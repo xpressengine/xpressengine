@@ -16,7 +16,7 @@
                             <div class="col-sm-9">
                                 <p><span class="__xe_selected_count">0</span>의 플러그인이 선택되었습니다.</p>
                                 <div class="well">
-                                    <ul>
+                                    <ul class="list-unstyled">
 
                                     </ul>
                                 </div>
@@ -38,40 +38,3 @@
         </div>
     </div>
 </div>
-
-{!! app('xe.frontend')->html('plugin.install.check')->content("
-<script>
-    var checkPluginInstall = function (data) {
-        location.reload();
-    }
-</script>
-")->load() !!}
-
-@if($operation && $operation['status'] === 'running')
-    {{ app('xe.frontend')->js('assets/core/xe-ui-component/js/xe-page.js')->load() }}
-    {!! app('xe.frontend')->html('plugin.get-operation')->content("
-    <script>
-        $(function($) {
-            var loadOperation = setInterval(function(){
-                XE.page('".route('settings.plugins.operation')."', '.__xe_operation', {}, function(data){
-                    if(data.operation.status != 'running') {
-                        clearInterval(loadOperation);
-                        location.reload();
-                    }
-                });
-            }, 3000);
-        });
-    </script>
-    ")->load() !!}
-@endif
-
-@if($operation && $operation['status'] !== 'running')
-    {!! app('xe.frontend')->html('plugin.delete-operation')->content("
-    <script>
-        window.deletePluginOperation = function (data, textStatus, jqXHR) {
-            XE.toast('success', data.message);
-            $('.__xe_operation').slideUp();
-        };
-    </script>
-    ")->load() !!}
-@endif

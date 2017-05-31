@@ -14,14 +14,19 @@
 
         <hr>
 
-        <ul>
+        <ul class="list-unstyled">
             @foreach($plugins as $plugin)
                 <li>
-                    {{ $plugin->getTitle() }}({{ $plugin->getId() }})
-                    <input type="hidden" name="pluginId[]" value="{{ $plugin->getId() }}">
+                    <label>
+                        <input type="checkbox" name="pluginId[]" value="{{ $plugin->getId() }}" @if(!$plugin->isActivated()) checked @endif>
+                        {{ $plugin->getTitle() }}({{ $plugin->getId() }}) @if($plugin->isActivated())- 활성화 되어 있음 @endif
+                    </label>
+
                 </li>
             @endforeach
         </ul>
+
+        <hr>
 
     </div>
     <div class="xe-modal-footer">

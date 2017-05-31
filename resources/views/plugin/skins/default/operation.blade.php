@@ -74,3 +74,30 @@
         </div>
     </div>
 
+
+
+    @if($operation['status'] === 'running')
+        {!! app('xe.frontend')->html('plugin.get-operation')->content("
+        <script>
+            $(function($) {
+                var loadOperation = setInterval(function(){
+                    XE.page('".route('settings.plugins.operation')."', '.__xe_operation', {}, function(data){
+                        if(data.operation.status != 'running') {
+                            clearInterval(loadOperation);
+                            location.reload();
+                        }
+                    });
+                }, 3000);
+            });
+        </script>
+        ")->load() !!}
+    @else
+        {!! app('xe.frontend')->html('plugin.delete-operation')->content("
+        <script>
+            window.deletePluginOperation = function (data, textStatus, jqXHR) {
+                XE.toast('success', data.message);
+                $('.__xe_operation').slideUp();
+            };
+        </script>
+        ")->load() !!}
+    @endif

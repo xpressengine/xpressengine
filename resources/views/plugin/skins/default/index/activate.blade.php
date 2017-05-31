@@ -8,20 +8,22 @@
     <div class="xe-modal-body">
 
         <p>
-            아래 플러그인을 활성화시키겠습니까?
+            아래 플러그인을 활성화하시겠습니까?
         </p>
 
         <hr>
 
-        <ul>
+        <ul class="list-unstyled">
             @foreach($plugins as $plugin)
-
                 <li>
-                    {{ $plugin->getTitle() }}({{ $plugin->getId() }})
                     @if($plugin->isActivated())
-                     - 이미 활성화되어 있음
+                        <input type="checkbox" disabled checked>
+                        {{ $plugin->getTitle() }}({{ $plugin->getId() }}) - 이미 활성화되어 있음
                     @else
-                        <input type="hidden" name="pluginId[]" value="{{ $plugin->getId() }}">
+                        <label>
+                            <input type="checkbox" name="pluginId[]" value="{{ $plugin->getId() }}" checked>
+                            {{ $plugin->getTitle() }}({{ $plugin->getId() }})
+                        </label>
                     @endif
                 </li>
 

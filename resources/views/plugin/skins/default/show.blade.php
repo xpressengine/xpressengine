@@ -80,11 +80,6 @@
                             {!! method_field('PUT') !!}
                             <button class="btn btn-default">{{xe_trans('xe::activation')}}</button>
                         </form>
-                        <button type="button" data-toggle="modal" data-target="#deletePlugin" class="btn btn-danger">{{xe_trans('xe::delete')}}</button>
-                    @endif
-
-                    @if($plugin->hasUpdate())
-                    <button type="button" data-toggle="modal" data-target="#downloadPluginUpdate" class="btn btn-primary">{{ xe_trans('xe::newVersion') }} {{ xe_trans('xe::download') }}</button>
                     @endif
 
                 </div>
@@ -235,33 +230,3 @@
     </div>
 </div>
 <!--//어드민 컨텐츠 영역 -->
-
-@if($plugin->hasUpdate())
-<div id="downloadPluginUpdate" class="modal fade in" tabindex="-1" role="dialog">
-    <div class="modal-dialog">
-        <form action="{{ route('settings.plugins.download', [$plugin->getId()]) }}" method="POST">
-            {{ csrf_field() }}
-            {{ method_field('PUT') }}
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">{{ xe_trans('xe::plugin') }} {{ xe_trans('xe::update') }}</h4>
-                </div>
-                <div class="modal-body">
-                    <label>{{ xe_trans('xe::currentInstalledVersion') }}</label>
-                    <p>{{ $plugin->getVersion() }}</p>
-                    <label>{{ xe_trans('xe::update_plugin') }} {{ xe_trans('xe::version') }}</label>
-                    <p>{{ $plugin->getLatestVersion() }}</p>
-                    <hr>
-                    <p>{{ xe_trans('xe::alertUpdatePlugin') }}</p>
-                    <p>{{ xe_trans('xe::confirmUpdatePlugin') }}</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">{{xe_trans('xe::cancel')}}</button>
-                    <button type="submit" class="btn btn-primary">{{ xe_trans('xe::update_plugin') }}</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </form>
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-@endif

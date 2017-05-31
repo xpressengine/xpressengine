@@ -16,11 +16,13 @@
 
         <hr>
 
-        <ul>
+        <ul class="list-unstyled">
             @foreach($plugins as $plugin)
                 <li>
-                    {{ $plugin->getTitle() }}({{ $plugin->getId() }}) ver.{{ $plugin->getVersion() }} => ver.{{ $plugin->getLatestVersion() }}
-                    <input type="hidden" name="pluginId[]" value="{{ $plugin->getId() }}">
+                    <label>
+                        <input type="checkbox" name="pluginId[]" value="{{ $plugin->getId() }}" checked>
+                        {{ $plugin->getTitle() }}({{ $plugin->getId() }}) ver.{{ $plugin->getVersion() }} => ver.{{ $plugin->getLatestVersion() }}
+                    </label>
                 </li>
             @endforeach
         </ul>
