@@ -51,9 +51,9 @@ class Purifier
             'Core.Encoding' => 'UTF-8',
             'Cache.SerializerPath' => storage_path('framework/htmlpurifier/support'),
             'HTML.Doctype'             => 'XHTML 1.0 Strict',
-            'HTML.Allowed'             => 'div,b,strong,i,em,a[href|title],ul,ol,li,p[style],h1,h2,h3,h4,hr' .
-                ',br,span[style|class|data-download-link|contenteditable]' .
-                ',img[style|width|height|alt|src],table[summary],tbody,th[abbr],tr,td[abbr]',
+            'HTML.Allowed'             => 'div[xe-tool-id],b,strong,i,em,a[href|title],ul,ol,li,p[style],h1,h2,h3,h4' .
+                ',hr,br,span[style|class|data-download-link|contenteditable|xe-tool-id]' .
+                ',img[style|width|height|alt|src|xe-tool-id],table[summary],tbody,th[abbr],tr,td[abbr]',
             'CSS.AllowedProperties'    => 'font,font-size,font-weight,font-style,font-family' .
                 ',text-decoration,padding-left,color,background-color,text-align,width,height',
             'AutoFormat.AutoParagraph' => true,
@@ -63,6 +63,9 @@ class Purifier
         $def = $this->config->getHTMLDefinition(true);
         $def->addAttribute('span', 'data-download-link', 'Text');
         $def->addAttribute('span', 'contenteditable', 'Text');
+        $def->addAttribute('div', 'xe-tool-id', 'Text');
+        $def->addAttribute('span', 'xe-tool-id', 'Text');
+        $def->addAttribute('img', 'xe-tool-id', 'Text');
     }
 
     /**

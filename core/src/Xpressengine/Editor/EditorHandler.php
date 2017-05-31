@@ -307,7 +307,7 @@ class EditorHandler
     protected function compileTools($instanceId, $content)
     {
         return preg_replace_callback(
-            '!<(?:(div)|img)([^>]*)' . $this->selectorName . '=([^>]*)>(?(1)(.*?)</div>)!is',
+            '!<(?:(div)|span|img)([^>]*)' . $this->selectorName . '=([^>]*)>(?(1)(.*?)</div>)!is',
             function ($match) use ($instanceId) {
                 $script = " {$match[2]} {$this->selectorName}={$match[3]}";
                 $script = preg_replace('/([\w:-]+)\s*=(?:\s*(["\']))?((?(2).*?|[^ ]+))\2/i', '\1="\3"', $script);
