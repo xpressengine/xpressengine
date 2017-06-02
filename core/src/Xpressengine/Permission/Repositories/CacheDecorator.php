@@ -138,7 +138,7 @@ class CacheDecorator implements PermissionRepository
         $data = $this->getData($siteKey, $this->getHead($name));
 
         return Arr::where($data, function ($idx, $item) use ($name) {
-            return Str::startsWith($name, $item->name) && $name !== $item->name;
+            return Str::startsWith($name, $item->name.'.') && $name !== $item->name;
         });
     }
 
@@ -154,7 +154,7 @@ class CacheDecorator implements PermissionRepository
         $data = $this->getData($siteKey, $this->getHead($name));
 
         return Arr::where($data, function ($idx, $item) use ($name) {
-            return Str::startsWith($item->name, $name) && $name !== $item->name;
+            return Str::startsWith($item->name, $name.'.') && $name !== $item->name;
         });
     }
 
