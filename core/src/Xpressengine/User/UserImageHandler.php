@@ -18,7 +18,6 @@ use Closure;
 use Intervention\Image\ImageManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Xpressengine\Media\MediaManager;
-use Xpressengine\Storage\File;
 use Xpressengine\Storage\Storage;
 
 /**

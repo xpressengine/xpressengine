@@ -17,46 +17,7 @@ namespace Xpressengine\Register;
 use Xpressengine\Register\Exceptions\ValueMustBeArrayException;
 
 /**
- * 이 클래스는 Key Value 의 저장소를 제공합니다.
- * 인터페이스 구성은 Illuminate\Config\Repository 와 유사합니다.
- *
- * 내부 아이템을 구성하기 위해서 Illuminate\Support\Arr 을 사용합니다.
- * 이에 따라 key 를 구분할 때 dot(점, '.') 을 사용합니다.
- * key 구성은 Illuminate config 사용에 대해서 검색하세요.
- *
- * Register 는 CoreRegister, PluginRegister, PluginRegistryManager 를 통해서 사용됩니다.
- *
- * ## 사용
- *
- * ### set()
- * * key 를 이용해서 value 를 등록합니다.
- * ```php
- * Register->set('key', $mixedValue);
- * ```
- * > 'key' 이미 있는경우 Exception 이 발생합니다.
- *
- * * key 를 array 로 사용
- * ```php
- * Register->set([
- * 'key1' => $mixedValue1,
- * 'key2' => $mixedValue2,
- * ]);
- * ```
- * > key 유무에 상관없이 새로 등록됩니다.
- *
- * ### add()
- * * key 를 이용해서 value 를 등록합니다.
- * ```php
- * Register->set('key', $mixedValue);
- * ```
- *  > 'key' 가 없ㅇ면Exception 이 발생합니다.
- *
- * ### has()
- * * key 가 있는지 체크합니다.
- *
- * ### get()
- * * 'key' 의 정보를 반환합니다.
- *
+ * Class Container. 이 클래스는 Key Value의 저장소를 제공합니다.
  *
  * @category    Register
  * @package     Xpressengine\Register

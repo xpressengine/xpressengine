@@ -23,6 +23,8 @@ use Xpressengine\WidgetBox\Exceptions\InvalidIDException;
 use Xpressengine\WidgetBox\Models\WidgetBox;
 
 /**
+ * WidgetBoxHandler
+ *
  * @category    WidgetBox
  * @package     Xpressengine\WidgetBox
  * @author      XE Developers <developers@xpressengine.com>

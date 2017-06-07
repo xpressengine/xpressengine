@@ -14,7 +14,6 @@
 
 namespace Xpressengine\Plugin;
 
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Xpressengine\Plugin\Exceptions\ComponentNotFoundException;
 use Xpressengine\Plugin\Exceptions\NotImplementedException;
 use Xpressengine\Register\Container;
