@@ -51,8 +51,8 @@ class Purifier
             'Core.Encoding' => 'UTF-8',
             'Cache.SerializerPath' => storage_path('framework/htmlpurifier/support'),
             'HTML.Doctype'             => 'XHTML 1.0 Strict',
-            'HTML.Allowed'             => 'div[xe-tool-id|xe-tool-data],b,strong,i,em,a[href|title],ul,ol,li,p[style],h1,h2,h3,h4' .
-                ',hr,br,span[style|class|data-download-link|contenteditable|xe-tool-id]' .
+            'HTML.Allowed'             => 'div[xe-tool-id|xe-tool-data],b,strong,i,em,a[href|title],ul,ol,li,p[style]'.
+                ',h1,h2,h3,h4,hr,br,span[style|class|data-download-link|contenteditable|xe-tool-id]' .
                 ',img[style|width|height|alt|src|xe-tool-id],table[summary],tbody,th[abbr],tr,td[abbr]',
             'CSS.AllowedProperties'    => 'font,font-size,font-weight,font-style,font-family' .
                 ',text-decoration,padding-left,color,background-color,text-align,width,height',
