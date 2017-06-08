@@ -54,6 +54,11 @@ class PluginCommand extends Command
         $this->writer = $writer;
     }
 
+    protected function clear()
+    {
+        app('xe.interception')->clearProxies();
+    }
+
     /**
      * activatePlugin
      *

@@ -8,11 +8,9 @@
 
 namespace App\Providers;
 
-use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Interception\AdvisorCollection;
 use Xpressengine\Interception\InterceptionHandler;
-use Xpressengine\Interception\Proxy\Loader\EvalLoader;
 use Xpressengine\Interception\Proxy\Loader\FileLoader;
 use Xpressengine\Interception\Proxy\Pass\ClassPass;
 use Xpressengine\Interception\Proxy\Pass\MethodDefinitionPass;
@@ -46,7 +44,7 @@ class InterceptionServiceProvider extends ServiceProvider
 
                 $generator = new ProxyGenerator($loader, $passes);
 
-                if($app->runningInConsole()) {
+                if ($app->runningInConsole() && $app['config']->get('app.debug')) {
                     $generator->clear();
                 }
 

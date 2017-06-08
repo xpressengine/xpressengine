@@ -158,5 +158,6 @@ class PluginInstall extends PluginCommand
             }
 
         }
+        $this->clear();
     }
 }

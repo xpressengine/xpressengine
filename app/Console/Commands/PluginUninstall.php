@@ -120,7 +120,7 @@ class PluginUninstall extends PluginCommand
         $changed = $this->getChangedPlugins($writer);
         $this->printChangedPlugins($changed);
 
-        if(array_has($changed, 'uninstalled.'.$name)) {
+        if (array_has($changed, 'uninstalled.'.$name)) {
             // 삭제 성공 문구 출력
             // $title - $name:$version 플러그인을 삭제하였습니다.
             $this->output->success("$title - $name:$version Plugin is uninstalled.");
@@ -128,6 +128,7 @@ class PluginUninstall extends PluginCommand
             // $name:$version 플러그인을 삭제하지 못했습니다. 플러그인 간의 의존관계로 인해 삭제가 불가능할 수도 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다.
             $this->output->error("Uninstall failed. Because of the dependencies between plugins, Uninstall may not be able to success. Please check the plugin's dependencies.");
         }
+        $this->clear();
 
     }
 
