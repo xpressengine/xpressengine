@@ -299,7 +299,6 @@ class UserHandler
             } else {
                 $userData['profileImageId'] = $this->imageHandler->updateUserProfileImage($user, $profileFile);
             }
-
         }
 
         // resolve group
