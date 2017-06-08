@@ -49,7 +49,7 @@ class Composer
         'xpressengine-plugin/ckeditor' => '0.9.14',
         'xpressengine-plugin/claim' => '0.9.3',
         'xpressengine-plugin/comment' => '0.9.12',
-        'xpressengine-plugin/news_client' => '0.9.3',
+        'xpressengine-plugin/news_client' => '0.9.4',
         'xpressengine-plugin/orientator' => '0.9.1',
         'xpressengine-plugin/page' => '0.9.5',
         'xpressengine-plugin/widget_page' => '0.9.0'
