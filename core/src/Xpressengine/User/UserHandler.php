@@ -290,9 +290,16 @@ class UserHandler
         }
 
         // resolve profileImage
-        if (!empty($userData['profileImgFile'])) {
+        if (array_get($userData, 'profileImgFile', false) !== false) {
             $profileFile = $userData['profileImgFile'];
-            $userData['profileImageId'] = $this->imageHandler->updateUserProfileImage($user, $profileFile);
+
+            if ($profileFile === null) {
+                $this->imageHandler->removeUserProfileImage($user);
+                $userData['profileImageId'] = null;
+            } else {
+                $userData['profileImageId'] = $this->imageHandler->updateUserProfileImage($user, $profileFile);
+            }
+
         }
 
         // resolve group

@@ -16,8 +16,8 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use XeDB;
 use XePresenter;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
-use Xpressengine\User\Exceptions\EmailNotFoundException;
 use Xpressengine\User\Exceptions\EmailAlreadyExistsException;
+use Xpressengine\User\Exceptions\EmailNotFoundException;
 use Xpressengine\User\Rating;
 use Xpressengine\User\Repositories\UserRepository;
 use Xpressengine\User\UserException;
@@ -277,6 +277,10 @@ class UserController extends Controller
         );
 
         $userData = $request->except('_token');
+
+        if (array_get($userData, 'profileImgFile') === '__delete_file__') {
+            $userData['profileImgFile'] = null;
+        }
 
         XeDB::beginTransaction();
         try {

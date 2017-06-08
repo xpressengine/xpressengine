@@ -92,6 +92,24 @@ class UserImageHandler
         $image = $image->fit($size['width'], $size['height']);
 
         // remove old profile image
+        $this->removeUserProfileImage($user);
+
+        // save image to storage
+        $id = $user->getId();
+        $file = $this->storage->create($image->encode()->getEncoded(), $path."/$id", $id, $disk);
+
+        return $file->id;
+    }
+
+    /**
+     * 기존에 등록돼 있던 회원의 프로필 이미지를 삭제한다.
+     *
+     * @param UserInterface $user 프로필 이미지를 삭제할 회원
+     *
+     * @return void
+     */
+    public function removeUserProfileImage(UserInterface $user)
+    {
         if (!empty($user->profileImageId)) {
             $file = $this->storage->find($user->profileImageId);
             if ($file !== null) {
@@ -102,11 +120,5 @@ class UserImageHandler
                 }
             }
         }
-
-        // save image to storage
-        $id = $user->getId();
-        $file = $this->storage->create($image->encode()->getEncoded(), $path."/$id", $id, $disk);
-
-        return $file->id;
     }
 }
