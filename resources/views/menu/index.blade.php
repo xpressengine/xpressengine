@@ -20,5 +20,6 @@
     var MaxDepth = parseInt('{{ $maxDepth }}');
     var nodeLeftPadding = 48;
 </script>
+
 <div class="row" id="menuContainer" data-url="{{ route('settings.menu.index') }}" data-home="{{$home}}" data-menus='{{ json_encode($menus) }}' data-createmenu='{{ route('settings.menu.create.menu') }}'>
 </div>
