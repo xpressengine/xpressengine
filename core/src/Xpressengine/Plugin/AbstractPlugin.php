@@ -161,20 +161,6 @@ abstract class AbstractPlugin
      * @param string $path path
      *
      * @return string
-     * @deprecated use path() instead
-     */
-    public static function getPath($path = '')
-    {
-        return static::path($path);
-    }
-
-    /**
-     * 해당 플러그인의 설치 경로를 반환한다.
-     * path가 주어질 경우, 주어진 path정보를 추가하여 반환한다.
-     *
-     * @param string $path path
-     *
-     * @return string
      */
     public static function path($path = '')
     {
