@@ -20,12 +20,24 @@ var Item = (function () {
     getItems: function (items) {
       var temp = '';
 
+      temp += '<div class="item-container">';
+
       for (var prop in items) {
         var item = items[prop];
         var move = (item.items && item.items.length > 0) ? 'move' : '';
+        var url = item.url;
 
-        if (item.parentId) {
-          temp += '<div class="item-container">';
+        if (item.type !== 'xpressengine@directLink') {
+          if (item.id == _home) {
+            url = '/';
+          } else {
+            url = '/' + url;
+          }
+
+          url = Utils.getUri(xeBaseURL + url);
+
+        } else {
+          url = url;
         }
 
         temp += '<div class="item ' + move + '">';
@@ -36,24 +48,24 @@ var Item = (function () {
         temp +=       '<dl>';
         temp +=         '<dt class="sr-only">' + XE.Lang.trans(item.title) + '</dt>';
         temp +=         '<dd class="ellipsis"><a href="' + _url + '/' + item.menuId + '/items/' + item.id + '">' + XE.Lang.trans(item.title) + '</a></dd>';
-        temp +=         '<dt class="sr-only">/' + item.url + '</dt>';
-        temp +=         '<dd class="text-blue ellipsis"><a href="/' + item.url + '">/' + item.url + '</a><em>[' + item.type + ']</em></dd>';
+        temp +=         '<dt class="sr-only">' + url + '</dt>';
+        temp +=         '<dd class="text-blue ellipsis"><a href="' + url + '">' + url + '</a><em>[' + item.type + ']</em></dd>';
         temp +=       '</dl>';
         temp +=     '</div>';
         temp +=   '</div>';
 
-        if (item.items && item.items.length > 0) {
+        if (item.items && typeof item.items == 'object') {
           temp += _this.getItems(item.items);
         }
 
         temp += '</div>';
 
-        if (item.parentId) {
-          temp += '</div>';
-        }
       }
 
+      temp += '</div>';
+
       return temp;
+      //}
     },
   }.init();
 })();

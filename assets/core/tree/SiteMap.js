@@ -8,12 +8,14 @@
   return {
     init: function () {
       _this = this;
-      
+
       //menu 생성
       this.appendDefaultTemplate();
 
       //Search bar 생성
       SearchHead.init(_$wrap.find('.searchWrap'), _menus);
+
+      this.runSortable();
 
       return this;
     },
@@ -46,6 +48,33 @@
       }
 
       return menu.join('\n');
+    },
+
+    runSortable: function () {
+      _$wrap.find('.menu-type').nestedSortable({
+        forcePlaceholderSize: true,
+        helper:	'clone',
+        handle: '.item-content .handler',
+        items: '.item',
+        listType: 'div',
+        opacity: .6,
+        placeholder: 'item copy',
+        isTree: true,
+        cancel: '',
+        relocate: function (e, locate) {
+          console.log(e, locate);
+        },
+
+        isAllowed: function (placeholder, placeholderParent, currentItem) {
+          console.log(placeholderParent);
+          if (placeholderParent && placeholderParent.is('.menu-type') ||
+              placeholderParent && placeholderParent.is('.item-container')) {
+            return true;
+          } else {
+            return false;
+          }
+        },
+      });
     },
 
     appendDefaultTemplate: function () {
