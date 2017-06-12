@@ -6,7 +6,9 @@
                     <h3>{{xe_trans('xe::memberToggleMenu')}}</h3>
                     <p class="help-block">{{xe_trans('xe::memberToggleMenuDescription')}}</p>
                 </div>
-                {!! $toggleMenuSection !!}
+                <div class="panel-body">
+                    {!! $toggleMenuSection !!}
+                </div>
             </div>
         </div>
     </div>

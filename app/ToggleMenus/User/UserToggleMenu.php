@@ -12,13 +12,13 @@
  * @link        https://xpressengine.io
  */
 
-namespace App\ToggleMenus\Member;
+namespace App\ToggleMenus\User;
 
 use Xpressengine\ToggleMenu\AbstractToggleMenu as BaseToggleMenu;
 
 /**
  * @category
- * @package     App\ToggleMenus\Member
+ * @package     App\ToggleMenus\User
  */
 abstract class UserToggleMenu extends BaseToggleMenu
 {
@@ -31,5 +31,4 @@ abstract class UserToggleMenu extends BaseToggleMenu
     {
         return static::getComponentInfo('description');
     }
-
 }

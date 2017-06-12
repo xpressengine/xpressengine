@@ -259,7 +259,7 @@ class RegisterController extends Controller
         // set default join group
         $config = app('xe.config')->get('user.join');
         $joinGroup = $config->get('joinGroup');
-        if($joinGroup !== null) {
+        if ($joinGroup !== null) {
             $userData['groupId'] = [$joinGroup];
         }
 
