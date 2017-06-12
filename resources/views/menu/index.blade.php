@@ -1,9 +1,16 @@
 {{ XeFrontend::css('/assets/core/settings/css/admin_menu.css')->load() }}
 {{--{{ XeFrontend::js('/assets/vendor/vendor.bundle.js')->appendTo('head')->load() }}--}}
 {{ XeFrontend::js('/assets/vendor/lodash/lodash.min.js')->appendTo('head')->load() }}
-{{ XeFrontend::js('/assets/core/menu/Tree.js')->appendTo('head')->load() }}
-{{ XeFrontend::js('/assets/core/menu/classnames.js')->appendTo('head')->load() }}
-{{ XeFrontend::js('/assets/core/menu/menu.bundle.js')->appendTo('head')->load() }}
+{{--{{ XeFrontend::js('/assets/core/menu/Tree.js')->appendTo('head')->load() }}--}}
+{{--{{ XeFrontend::js('/assets/core/menu/classnames.js')->appendTo('head')->load() }}--}}
+{{--{{ XeFrontend::js('/assets/core/menu/menu.bundle.js')->appendTo('head')->load() }}--}}
+
+{{ XeFrontend::js('/assets/vendor/jqueryui/jquery-ui.min.js')->appendTo('body')->load() }}
+{{ XeFrontend::js('/assets/vendor/nestedSortable/jquery.mjs.nestedSortable.js')->appendTo('body')->load() }}
+{{ XeFrontend::js('/assets/core/tree/SearchHead.js')->appendTo('body')->load() }}
+{{ XeFrontend::js('/assets/core/tree/Menu.js')->appendTo('body')->load() }}
+{{ XeFrontend::js('/assets/core/tree/Item.js')->appendTo('body')->load() }}
+{{ XeFrontend::js('/assets/core/tree/SiteMap.js')->appendTo('body')->load() }}
 
 @section('page_title',"<h2>".xe_trans('xe::siteMap')."</h2>")
 @section('page_description',xe_trans('xe::siteMapDescription'))
