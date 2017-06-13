@@ -110,16 +110,15 @@ class UIObjectHandler
     public function __call($alias, $params)
     {
         $args = $params[0];
-        $callback = isset($params[1]) ? $params[1] : null;
 
-        return $this->create($alias, $args, $callback);
+        return $this->create($alias, $args);
     }
 
     /**
      * 주어진 타입의 AbstractUIObject 인스턴스를 생성하여 반환한다.
      *
-     * @param string $id       UIObject의 id, 또는 alias
-     * @param mixed  $args     UIObject를 생성할 때 전달할 argument
+     * @param string $id   UIObject의 id, 또는 alias
+     * @param mixed  $args UIObject를 생성할 때 전달할 argument
      *
      * @return \Xpressengine\UIObject\AbstractUIObject 생성된 AbstractUIObject
      */

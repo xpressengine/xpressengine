@@ -301,8 +301,8 @@ if (function_exists('uio') === false) {
      *
      * @package Xpressengine\UIObject
      *
-     * @param string $id       UIObject의 id, 또는 alias
-     * @param mixed  $args     UIObject를 생성할 때 전달할 argument
+     * @param string $id   UIObject의 id, 또는 alias
+     * @param mixed  $args UIObject를 생성할 때 전달할 argument
      *
      * @return \Xpressengine\UIObject\AbstractUIObject 생성된 AbstractUIObject
      * @throws Exception
