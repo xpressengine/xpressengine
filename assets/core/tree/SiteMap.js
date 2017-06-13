@@ -4,6 +4,7 @@
   var _menus = $('#menuContainer').data('menus');
   var _menusUrl = $('#menuContainer').data('createmenu');
   var _home = $('#menuContainer').data('home');
+  var _url = $('#menuContainer').data('url');
 
   return {
     init: function () {
@@ -20,6 +21,10 @@
       return this;
     },
 
+    /**
+     * @description sitemap페이지에서 사용되는 기본 dom 템플릿
+     * @return htmlstring
+     * */
     getTemplate: function () {
       return [
        '<div class="col-sm-12">',
@@ -40,7 +45,7 @@
 
       for (var prop in menus) {
         menu = menu.concat([
-         '<div class="menu-type">',
+         '<div class="menu-type" data-parent="' + prop + '">',
             Menu.render(menus[prop], _menusUrl),
             Item.render(menus[prop].items, _menusUrl, _home),
          '</div>',
@@ -51,6 +56,10 @@
     },
 
     runSortable: function () {
+      var parentId;
+      var ordering;
+      var itemId;
+
       _$wrap.find('.item-container').nestedSortable({
         connectWith: '.item-container',
         forcePlaceholderSize: true,
@@ -73,17 +82,36 @@
         tolerance: 'pointer',
         toleranceElement: '> div',
         relocate: function (e, locate) {
-          console.log('relocate', e, locate);
+          console.log('relocate');
+        },
+
+        receive: function (e, ui) {
+          console.log('receive');
         },
 
         start: function (e, ui) {
-          console.log('start', e, ui);
+          var $item = $(ui.item);
+          var itemData = $item.find('> .item-content').data('item');
+
+          parentId = itemData.parentId;
+          ordering = itemData.ordering;
+          itemId = itemData.id;
         },
 
         stop: function (e, ui) {
-          //ordering
-          //parentId
-          console.log('stop', e, ui);
+          var $item = $(ui.item);
+          var $parentItem = $item.parents('li.item').eq(0);
+          var moveParentId = ($parentItem.length > 0) ? $parentItem.find('> .item-content').data('item').id : $item.parents('.menu-type').data('parent');
+          var moveOrdering = $item.closest('ul').addClass('item-container').find('> li.item').index($item);
+
+          if (parentId !== moveParentId || ordering !== moveOrdering) {
+            _this.updateNode({
+              item: $item,
+              itemId: itemId,
+              parentId: moveParentId,
+              ordering: moveOrdering,
+            });
+          }
         },
 
         isAllowed: function (placeholder, placeholderParent, currentItem) {
@@ -94,6 +122,79 @@
 
     appendDefaultTemplate: function () {
       _$wrap.append(this.getTemplate());
+    },
+    /**
+     * @param {object} obj
+     * <pre>
+     *   item: jquery object. move된 NODE
+     *   itemId: node id
+     *   parentId: parent node id
+     *   ordering: node ordering
+     * </pre>
+     * @description 변경된 Node를 업데이트 한다
+     * */
+    updateNode: function (obj) {
+      XE.ajax({
+        url: _url + '/moveItem',
+        context: $('.menu-content'),
+        type: 'put',
+        dataType: 'json',
+        data: {
+          itemId: obj.itemId,
+          parent: obj.parentId,
+          ordering: obj.ordering,
+        },
+        success: function (data) {
+          var itemData = obj.item.find('> .item-content').data('item');
+          var currentMenuId = obj.item.parents('.menu-type').data('parent');
+
+          itemData.parentId = (obj.parentId) ? obj.parentId : null;
+          itemData.ordering = obj.ordering;
+
+          obj.item.find('> .item-content').attr('data-item', JSON.stringify(itemData));
+
+          if (itemData.menuId != currentMenuId) {
+            _this.updateMenuId(obj.item, currentMenuId);
+          }
+
+          $('.menu-type').each(function () {
+            var $this = $(this);
+
+            if ($this.find('.item-container').length === 0) {
+              $this.append('<ul class="item-container ui-sortable"></ul>');
+            }
+          });
+
+          XE.toast('success', 'Item moved');
+        },
+      });
+    },
+    /**
+     * @description
+     * <pre>
+     *   - 하위 노드를 찾아가며 menuId를 변경한다
+     *   - 재귀
+     * </pre>
+     * */
+    updateMenuId: function ($item, menuId) {
+      var itemData = $item.find('> .item-content').data('item');
+      var $link = $item.find('> .item-content .item-info .ellipsis:eq(0) a');
+      var href = $link.attr('href');
+      var stdParsing = '/menu/menus/';
+
+      var arrLinks = href.split(stdParsing);
+      var secLinks = arrLinks[1].split('/');
+      secLinks[0] = menuId;
+
+      var link = arrLinks[0] + stdParsing + secLinks.join('/');
+
+      itemData.menuId = menuId;
+      $item.find('> .item-content').attr('data-item', JSON.stringify(itemData));
+      $link.attr('href', link);
+
+      if ($item.find('> .item-container > .item').length > 0) {
+        _this.updateMenuId($item.find('> .item-container > .item'), menuId);
+      }
     },
   }.init();
 })();
