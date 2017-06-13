@@ -29,7 +29,7 @@ class FormImage extends AbstractUIObject
         $args = array_add($args, 'height', 10000);
 
         // render template
-        $this->template = \View::make($this->view, ['args' => $args, 'seq' => $seq])->render();
+        $this->template = view($this->view, ['args' => $args, 'seq' => $seq])->render();
 
         return parent::render();
     }

@@ -8,29 +8,22 @@
 
 namespace App\UIObjects\Form;
 
-use PhpQuery\PhpQuery;
 use Xpressengine\UIObject\AbstractUIObject;
+use Xpressengine\UIObject\Element;
 
 class FormSelect extends AbstractUIObject
 {
     protected static $id = 'uiobject/xpressengine@formSelect';
 
-    protected $template = '<div class="form-group">
-        <label for="" class="hidden"></label>
-        <select class="form-control" name="" id="">
-        </select>
-        <p class="help-block"></p>
-    </div>';
-
     public function render()
     {
         $args = $this->arguments;
-        PhpQuery::newDocument();
 
-        $this->markup = PhpQuery::pq($this->template);
+        $box = new Element('div', ['class'=>'form-group']);
+        $label = new Element('label', ['class' => 'hidden']);
+        $select = new Element('select', ['class'=>'form-control']);
+        $description = new Element('p', ['class'=>'help-block']);
 
-        $labelEl = $this->markup['label'];
-        $selectEl = $this->markup['select'];
         $selectedValue = array_get($args, 'selected', null);
         if ($selectedValue === null) {
             $selectedValue = array_get($args, 'value', null);
@@ -39,23 +32,22 @@ class FormSelect extends AbstractUIObject
         foreach ($args as $key => $arg) {
             switch ($key) {
                 case 'class':
-                    $selectEl->addClass($arg);
+                    $select->addClass($arg);
                     break;
                 case 'label':
-                    $labelEl->removeClass('hidden')->html($arg);
+                    $label->removeClass('hidden')->html($arg);
                     break;
                 case 'options':
                     $options = $arg;
-                    if(is_callable($options)) {
+                    if (is_callable($options)) {
                         $options = $options();
                     }
                     foreach ($options as $value => $option) {
                         if (is_array($option) === false) {
                             $text = $option;
-                            if(is_string($value) === false) {
+                            if (is_string($value) === false) {
                                 $value = $option;
                             }
-                            $selected = '';
                         } else {
                             $value = array_get($option, 'value', $value);
                             $text = array_get($option, 'text', $value);
@@ -65,33 +57,27 @@ class FormSelect extends AbstractUIObject
                         } else {
                             $selected = $value === $selectedValue ? 'selected="selected"' : '';
                         }
-                        $optionEl = PhpQuery::pq("<option value=\"$value\" $selected \">$text</option>");
-                        $selectEl->append($optionEl);
+                        $optionEl = "<option value=\"$value\" $selected \">$text</option>";
+                        $select->append($optionEl);
                     }
                     break;
                 case 'description':
-                    $this->markup['.help-block']->html(array_get($args, $key));
+                    $description->html(array_get($args, $key));
                     break;
 
                 case 'id':
-                    $labelEl->attr('for', $arg);
+                    $label->attr('for', $arg);
                     // pass to default
                 default:
-                    if(is_string($arg)){
-                        $selectEl->attr($key, $arg);
+                    if (is_string($arg)) {
+                        $select->attr($key, $arg);
                     }
                     break;
             }
         }
 
+        $this->template = $box->append([$label, $select, $description])->render();
+
         return parent::render();
-    }
-
-    public static function boot()
-    {
-    }
-
-    public static function getSettingsURI()
-    {
     }
 }

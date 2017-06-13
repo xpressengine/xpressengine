@@ -16,15 +16,6 @@ class ProfileBgImage extends ProfileImage
 
     protected $view = 'uiobjects.user.profileBgImage';
 
-    public static function boot()
-    {
-        // TODO: Implement boot() method.
-    }
-
-    public static function getSettingsURI()
-    {
-    }
-
     /**
      * loadFiles
      *
