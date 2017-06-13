@@ -141,6 +141,15 @@ abstract class AbstractPlugin
      *
      * @return void
      */
+    public function register()
+    {
+    }
+
+    /**
+     * 이 메소드는 활성화(activate) 된 플러그인이 부트될 때 항상 실행된다.
+     *
+     * @return void
+     */
     abstract public function boot();
 
     /**
