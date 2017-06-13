@@ -51,28 +51,43 @@
     },
 
     runSortable: function () {
-      _$wrap.find('.menu-type').nestedSortable({
+      _$wrap.find('.item-container').nestedSortable({
+        connectWith: '.item-container',
         forcePlaceholderSize: true,
         helper:	'clone',
         handle: '.item-content .handler',
-        items: '.item',
-        listType: 'div',
-        opacity: .6,
-        placeholder: 'item copy',
+        listType: 'ul',
+        items: 'li',
+        opacity: 0.6,
+        placeholder: {
+          element: function (e, ui) {
+            return '<li class="item copy"><div class="item-content"></div></li>';
+          },
+
+          update: function () {
+            return;
+          },
+        },
         isTree: true,
         cancel: '',
+        tolerance: 'pointer',
+        toleranceElement: '> div',
         relocate: function (e, locate) {
-          console.log(e, locate);
+          console.log('relocate', e, locate);
+        },
+
+        start: function (e, ui) {
+          console.log('start', e, ui);
+        },
+
+        stop: function (e, ui) {
+          //ordering
+          //parentId
+          console.log('stop', e, ui);
         },
 
         isAllowed: function (placeholder, placeholderParent, currentItem) {
-          console.log(placeholderParent);
-          if (placeholderParent && placeholderParent.is('.menu-type') ||
-              placeholderParent && placeholderParent.is('.item-container')) {
-            return true;
-          } else {
-            return false;
-          }
+          return true;
         },
       });
     },

@@ -20,7 +20,9 @@ var Item = (function () {
     getItems: function (items) {
       var temp = '';
 
-      temp += '<div class="item-container">';
+      if (items && items.length != 0) {
+        temp += '<ul class="item-container">';
+      }
 
       for (var prop in items) {
         var item = items[prop];
@@ -40,29 +42,31 @@ var Item = (function () {
           url = url;
         }
 
-        temp += '<div class="item ' + move + '">';
-        temp +=   '<div class="item-content">';
-        temp +=     '<button class="btn handler"><i class="xi-drag-vertical"></i></button>';
-        temp +=     '<div class="item-info">';
-        temp +=       '<i class="xi-paper"></i>';
-        temp +=       '<dl>';
-        temp +=         '<dt class="sr-only">' + XE.Lang.trans(item.title) + '</dt>';
-        temp +=         '<dd class="ellipsis"><a href="' + _url + '/' + item.menuId + '/items/' + item.id + '">' + XE.Lang.trans(item.title) + '</a></dd>';
-        temp +=         '<dt class="sr-only">' + url + '</dt>';
-        temp +=         '<dd class="text-blue ellipsis"><a href="' + url + '">' + url + '</a><em>[' + item.type + ']</em></dd>';
-        temp +=       '</dl>';
-        temp +=     '</div>';
-        temp +=   '</div>';
+        temp += "<li class='item " + move + "'>";
+        temp +=   "<div class='item-content' data-item='" + JSON.stringify(item) + "'>";
+        temp +=     "<button class='btn handler'><i class='xi-drag-vertical'></i></button>";
+        temp +=     "<div class='item-info'>";
+        temp +=       "<i class='xi-paper'></i>";
+        temp +=       "<dl>";
+        temp +=         "<dt class='sr-only'>" + XE.Lang.trans(item.title) + "</dt>";
+        temp +=         "<dd class='ellipsis'><a href='" + _url + "/" + item.menuId + "/items/" + item.id + "'>" + XE.Lang.trans(item.title) + "</a></dd>";
+        temp +=         "<dt class='sr-only'>" + url + "</dt>";
+        temp +=         "<dd class='text-blue ellipsis'><a href='" + url + "'>" + url + "</a><em>[" + item.type + "]</em></dd>";
+        temp +=       "</dl>";
+        temp +=     "</div>";
+        temp +=   "</div>";
 
-        if (item.items && typeof item.items == 'object') {
+        if (item.items && item.items instanceof Object) {
           temp += _this.getItems(item.items);
         }
 
-        temp += '</div>';
+        temp += '</liv>';
 
       }
 
-      temp += '</div>';
+      if (items && items.length != 0) {
+        temp += '</ul>';
+      }
 
       return temp;
       //}
