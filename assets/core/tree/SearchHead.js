@@ -2,12 +2,19 @@ var SearchHead = (function () {
   var _this;
   var _data = {};
   var _$parent = $();
+  var _searchData = [];
 
   return {
     init: function ($parent, data) {
       _this = this;
       _data = data;
       _$parent = $parent;
+
+      for (var prop in data) {
+        var items = data[prop].items;
+
+        this.makeSearchData(items);
+      }
 
       this.render();
       this.cache();
@@ -41,10 +48,58 @@ var SearchHead = (function () {
     cache: function (data) {
       this.$searchInput = $('.search-group > input');
       this.$btnLink = $('.btn-link');
+      this.$searchList = $('.search-list');
     },
 
     bindEvents: function () {
       this.$searchInput.on('keyup', this.search);
+    },
+
+    makeSearchData: function (items) {
+      if (items && items instanceof Object) {
+        for (var prop in items) {
+          var item = items[prop];
+
+          _searchData.push({
+            id: item.id,
+            title: XE.Lang.trans(item.title),
+          });
+
+          _this.makeSearchData(item.items);
+        }
+      }
+    },
+
+    search: function (e) {
+      var value = e.target.value;
+      var list = '';
+
+      if (value.length > 1) {
+        var suggestion = [];
+
+        $.each(_searchData, function (idx, obj) {
+          if (obj.title.indexOf(value) != -1) {
+            suggestion.push(obj);
+          }
+        });
+
+        if (suggestion.length > 0) {
+          list += '<ul>';
+
+          $.each(suggestion, function (idx, obj) {
+            var title = obj.title.split(value).join('<em>' + value + '</em>');
+
+            list +=   '<li>' + title + '</li>';
+          });
+
+          list += '</ul>';
+
+          _this.$searchList.html(list);
+        }
+
+      } else {
+        _this.$searchList.empty();
+      }
     },
   };
 })();

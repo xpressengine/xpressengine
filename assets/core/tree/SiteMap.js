@@ -5,6 +5,7 @@
   var _menusUrl = $('#menuContainer').data('createmenu');
   var _home = $('#menuContainer').data('home');
   var _url = $('#menuContainer').data('url');
+  var _loading = false;
 
   return {
     init: function () {
@@ -17,6 +18,7 @@
       SearchHead.init(_$wrap.find('.searchWrap'), _menus);
 
       this.runSortable();
+      this.bindEvents();
 
       return this;
     },
@@ -47,12 +49,68 @@
         menu = menu.concat([
          '<div class="menu-type" data-parent="' + prop + '">',
             Menu.render(menus[prop], _menusUrl),
-            Item.render(menus[prop].items, _menusUrl, _home),
+            Item.render({
+              items: menus[prop].items,
+              url: _menusUrl,
+              home: _home,
+              type: 'sitemap',
+            }),
          '</div>',
         ]);
       }
 
       return menu.join('\n');
+    },
+
+    bindEvents: function () {
+      $('.btn-more').on('click', function () {
+        var $moreArea = $(this).parents('.item-content').find('.more-area');
+
+        if ($moreArea.hasClass('on')) {
+          $moreArea.removeClass('on').css('cssText', 'display: none !important');
+        } else {
+          $('.more-area').removeClass('on').css('cssText', 'display: none !important');
+          $moreArea.addClass('on').css('cssText', 'display: block !important');
+        }
+      });
+
+      $('.btn-sethome').on('click', function () {
+        var $this = $(this);
+
+        if (!$this.hasClass('home-on')) {
+
+          var $currentHome = $('.home-on');
+          var selectedItemData = $this.closest('.item-content').data('item');
+
+          $currentHome.removeClass('home-on');
+          $this.addClass('home-on');
+
+          _loading = true;
+
+          XE.ajax({
+            url: _url + '/setHome',
+            context: $('.menu-content'),
+            type: 'put',
+            dataType: 'json',
+            data: {
+              itemId: selectedItemData.id,
+            },
+            success: function (data) {
+              XE.toast('success', XE.Lang.trans(selectedItemData.title) + ' is home!');
+
+              _loading = false;
+            },
+
+            error: function (data) {
+              XE.toast('error', 'home setting was failed!');
+              $currentHome.addClass('home-on');
+              $this.removeClass('home-on');
+            },
+          });
+        }
+
+      });
+
     },
 
     runSortable: function () {
@@ -104,7 +162,7 @@
           var moveParentId = ($parentItem.length > 0) ? $parentItem.find('> .item-content').data('item').id : $item.parents('.menu-type').data('parent');
           var moveOrdering = $item.closest('ul').addClass('item-container').find('> li.item').index($item);
 
-          if (parentId !== moveParentId || ordering !== moveOrdering) {
+          if (parentId !== moveParentId && !_loading || ordering !== moveOrdering && !_loading) {
             _this.updateNode({
               item: $item,
               itemId: itemId,
@@ -115,7 +173,11 @@
         },
 
         isAllowed: function (placeholder, placeholderParent, currentItem) {
-          return true;
+          if (_loading) {
+            return false;
+          } else {
+            return true;
+          }
         },
       });
     },
@@ -134,6 +196,8 @@
      * @description 변경된 Node를 업데이트 한다
      * */
     updateNode: function (obj) {
+      _loading = true;
+
       XE.ajax({
         url: _url + '/moveItem',
         context: $('.menu-content'),
@@ -157,15 +221,9 @@
             _this.updateMenuId(obj.item, currentMenuId);
           }
 
-          $('.menu-type').each(function () {
-            var $this = $(this);
-
-            if ($this.find('.item-container').length === 0) {
-              $this.append('<ul class="item-container ui-sortable"></ul>');
-            }
-          });
-
           XE.toast('success', 'Item moved');
+
+          _loading = false;
         },
       });
     },
