@@ -15,7 +15,7 @@
       this.appendDefaultTemplate();
 
       //Search bar 생성
-      SearchHead.init(_$wrap.find('.searchWrap'), _menus);
+      SearchHead.init(_$wrap.find('.searchWrap'), _menus, _menusUrl);
 
       this.runSortable();
       this.bindEvents();
@@ -127,8 +127,8 @@
         items: 'li',
         opacity: 0.6,
         placeholder: {
-          element: function (e, ui) {
-            return '<li class="item copy"><div class="item-content"></div></li>';
+          element: function ($target) {
+            return $target.clone().addClass('copy').show().wrapAll('<div />').parent().html();
           },
 
           update: function () {

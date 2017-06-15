@@ -1,13 +1,15 @@
 var SearchHead = (function () {
   var _this;
   var _data = {};
+  var _createMenuUrl;
   var _$parent = $();
   var _searchData = [];
 
   return {
-    init: function ($parent, data) {
+    init: function ($parent, data, createMenuUrl) {
       _this = this;
       _data = data;
+      _createMenuUrl = createMenuUrl;
       _$parent = $parent;
 
       for (var prop in data) {
@@ -33,7 +35,7 @@ var SearchHead = (function () {
           '</div>',
         '</div>',
         '<div class="pull-right">',
-          '<a href="' + _data.menus + '" class="btn btn-primary pull-right">',
+          '<a href="' + _createMenuUrl + '" class="btn btn-primary pull-right">',
             '<i class="xi-plus"></i>',
             '메뉴 추가',
           '</a>',

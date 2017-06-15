@@ -1,3 +1,7 @@
-/**
- * Created by seungman on 2017. 6. 9..
- */
+var TitleHead = (function () {
+  return {
+    render: function (data, url) {
+      return [].join('\n');
+    },
+  };
+})();
