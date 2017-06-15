@@ -210,7 +210,7 @@ class PluginHandler
         try {
             $entity->activate($installedVersion);
         } catch (\Exception $e) {
-            throw new PluginActivationFailedException();
+            throw new PluginActivationFailedException([], null, $e);
         }
 
         $entity->setStatus(static::STATUS_ACTIVATED);
