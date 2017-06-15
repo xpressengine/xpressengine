@@ -18,6 +18,9 @@
       SearchHead.init(_$wrap.find('.searchWrap'), _menus, _menusUrl);
 
       this.runSortable();
+
+      //Tree.run()
+
       this.bindEvents();
 
       return this;
@@ -42,18 +45,58 @@
       ].join('\n');
     },
 
+    getNodeTemplate: function (item) {
+      // var move = (item.items && item.items.length > 0) ? 'move' : '';
+      var url = item.url;
+      var homeOn = '';
+
+      if (item.type !== 'xpressengine@directLink') {
+        if (item.id == _home) {
+          url = '/';
+          homeOn = 'home-on';
+
+        } else {
+          url = '/' + url;
+        }
+
+        url = Utils.getUri(xeBaseURL + url);
+
+      } else {
+        url = url;
+      }
+
+      var temp = '';
+      temp +=     "<div class='item-info'>";
+      temp +=       "<i class='xi-paper'></i>";
+      temp +=       '<dl>';
+      temp +=         "<dt class='sr-only'>" + XE.Lang.trans(item.title) + '</dt>';
+      temp +=         "<dd class='ellipsis'><a href='" + _menusUrl + '/' + item.menuId + '/items/' + item.id + "'>" + XE.Lang.trans(item.title) + '</a></dd>';
+      temp +=         "<dt class='sr-only'>" + url + '</dt>';
+      temp +=         "<dd class='text-blue ellipsis'><a href='" + url + "'>" + url + '</a><em>[' + item.type + ']</em></dd>';
+      temp +=       '</dl>';
+      temp +=     '</div>';
+      temp +=     '<div class="btn-group pull-right">';
+      temp +=       '<button type="button" class="btn-more visible-xs"><i class="xi-ellipsis-v"></i></button>';
+      temp +=       '<button type="button" class="btn btn-link btn-sethome hidden-xs ' + homeOn + '"><i class="xi-home"></i></button>';
+      temp +=     '</div>';
+      temp +=     '<div class="visible-xs more-area" style="display: none !important;">';
+      temp +=       '<button class="btn btn-sethome" type="button">' + XE.Lang.trans('xe::setHome') + '</button><a href="' + url + '" class="btn">' + XE.Lang.trans('xe::goLink') + '</a>';
+      temp +=     '</div>';
+
+      return temp;
+    },
+
     generateDom: function (menus) {
       var menu = [];
 
       for (var prop in menus) {
         menu = menu.concat([
-         '<div class="menu-type" data-parent="' + prop + '">',
+         '<div class="menu-type">',
             Menu.render(menus[prop], _menusUrl),
-            Item.render({
+            Tree.getItemsTemplate({
+              rootId: prop,
               items: menus[prop].items,
-              url: _menusUrl,
-              home: _home,
-              type: 'sitemap',
+              nodeTemplate: _this.getNodeTemplate,
             }),
          '</div>',
         ]);
@@ -114,72 +157,12 @@
     },
 
     runSortable: function () {
-      var parentId;
-      var ordering;
-      var itemId;
+      var config = {
+        update: _this.updateNode,
+      };
 
-      _$wrap.find('.item-container').nestedSortable({
-        connectWith: '.item-container',
-        forcePlaceholderSize: true,
-        helper:	'clone',
-        handle: '.item-content .handler',
-        listType: 'ul',
-        items: 'li',
-        opacity: 0.6,
-        placeholder: {
-          element: function ($target) {
-            return $target.clone().addClass('copy').show().wrapAll('<div />').parent().html();
-          },
+      Tree.run(_$wrap, config);
 
-          update: function () {
-            return;
-          },
-        },
-        isTree: true,
-        cancel: '',
-        tolerance: 'pointer',
-        toleranceElement: '> div',
-        relocate: function (e, locate) {
-          console.log('relocate');
-        },
-
-        receive: function (e, ui) {
-          console.log('receive');
-        },
-
-        start: function (e, ui) {
-          var $item = $(ui.item);
-          var itemData = $item.find('> .item-content').data('item');
-
-          parentId = itemData.parentId;
-          ordering = itemData.ordering;
-          itemId = itemData.id;
-        },
-
-        stop: function (e, ui) {
-          var $item = $(ui.item);
-          var $parentItem = $item.parents('li.item').eq(0);
-          var moveParentId = ($parentItem.length > 0) ? $parentItem.find('> .item-content').data('item').id : $item.parents('.menu-type').data('parent');
-          var moveOrdering = $item.closest('ul').addClass('item-container').find('> li.item').index($item);
-
-          if (parentId !== moveParentId && !_loading || ordering !== moveOrdering && !_loading) {
-            _this.updateNode({
-              item: $item,
-              itemId: itemId,
-              parentId: moveParentId,
-              ordering: moveOrdering,
-            });
-          }
-        },
-
-        isAllowed: function (placeholder, placeholderParent, currentItem) {
-          if (_loading) {
-            return false;
-          } else {
-            return true;
-          }
-        },
-      });
     },
 
     appendDefaultTemplate: function () {
@@ -210,7 +193,7 @@
         },
         success: function (data) {
           var itemData = obj.item.find('> .item-content').data('item');
-          var currentMenuId = obj.item.parents('.menu-type').data('parent');
+          var currentMenuId = (obj.item.parents('.item').length > 0)? obj.item.parents('.item').parents('.item-container:last()').data('parent') : obj.item.parent().data('parent');
 
           itemData.parentId = (obj.parentId) ? obj.parentId : null;
           itemData.ordering = obj.ordering;

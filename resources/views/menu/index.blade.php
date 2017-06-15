@@ -10,6 +10,7 @@
 {{ XeFrontend::js('/assets/core/tree/SearchHead.js')->appendTo('body')->load() }}
 {{ XeFrontend::js('/assets/core/tree/Menu.js')->appendTo('body')->load() }}
 {{ XeFrontend::js('/assets/core/tree/Item.js')->appendTo('body')->load() }}
+{{ XeFrontend::js('/assets/core/tree/Tree.js')->appendTo('body')->load() }}
 {{ XeFrontend::js('/assets/core/tree/SiteMap.js')->appendTo('body')->load() }}
 
 @section('page_title',"<h2>".xe_trans('xe::siteMap')."</h2>")
