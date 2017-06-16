@@ -20,7 +20,7 @@ var Item = (function () {
       var temp = '';
 
       if (items && items.length != 0 || isRoot) {
-        if (isRoot) {
+        if (isRoot && rootId) {
           temp += '<ul class="item-container" data-parent="' + rootId + '">';
         } else {
           temp += '<ul class="item-container">';

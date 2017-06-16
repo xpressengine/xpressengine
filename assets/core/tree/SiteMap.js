@@ -5,7 +5,6 @@
   var _menusUrl = $('#menuContainer').data('createmenu');
   var _home = $('#menuContainer').data('home');
   var _url = $('#menuContainer').data('url');
-  var _loading = false;
 
   return {
     init: function () {
@@ -128,7 +127,7 @@
           $currentHome.removeClass('home-on');
           $this.addClass('home-on');
 
-          _loading = true;
+          Tree.setPrevent(true);
 
           XE.ajax({
             url: _url + '/setHome',
@@ -141,7 +140,7 @@
             success: function (data) {
               XE.toast('success', XE.Lang.trans(selectedItemData.title) + ' is home!');
 
-              _loading = false;
+              Tree.setPrevent(false);
             },
 
             error: function (data) {
@@ -179,7 +178,7 @@
      * @description 변경된 Node를 업데이트 한다
      * */
     updateNode: function (obj) {
-      _loading = true;
+      Tree.setPrevent(true);
 
       XE.ajax({
         url: _url + '/moveItem',
@@ -193,7 +192,7 @@
         },
         success: function (data) {
           var itemData = obj.item.find('> .item-content').data('item');
-          var currentMenuId = (obj.item.parents('.item').length > 0)? obj.item.parents('.item').parents('.item-container:last()').data('parent') : obj.item.parent().data('parent');
+          var currentMenuId = (obj.item.parents('.item').length > 0) ? obj.item.parents('.item').parents('.item-container:last()').data('parent') : obj.item.parent().data('parent');
 
           itemData.parentId = (obj.parentId) ? obj.parentId : null;
           itemData.ordering = obj.ordering;
@@ -206,7 +205,7 @@
 
           XE.toast('success', 'Item moved');
 
-          _loading = false;
+          Tree.setPrevent(false);
         },
       });
     },

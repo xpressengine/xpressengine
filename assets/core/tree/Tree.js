@@ -26,7 +26,7 @@ var Tree = (function () {
      * @param {boolean} flag
      * @description Tree 이동 방지
      * */
-    setAllow: function (flag) {
+    setPrevent: function (flag) {
       _prevent = flag;
     },
 

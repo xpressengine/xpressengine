@@ -18,7 +18,10 @@
 )->appendTo('head')->load() }}
 
 {{ XeFrontend::js('/assets/vendor/nestedSortable/jquery.mjs.nestedSortable.js')->appendTo('head')->load() }}
-{{ XeFrontend::js('/assets/core/category/tree.js')->appendTo('head')->load() }}
+{{ XeFrontend::js('/assets/core/tree/Item.js')->appendTo('body')->load() }}
+{{ XeFrontend::js('/assets/core/tree/Tree.js')->appendTo('body')->load() }}
+{{ XeFrontend::js('/assets/core/tree/Category.js')->appendTo('body')->load() }}
+{{--{{ XeFrontend::js('/assets/core/category/tree.js')->appendTo('head')->load() }}--}}
 
 {{ XeFrontend::translation([
     'xe::required',
@@ -47,12 +50,12 @@
     }
 </style>
 
-<div id="__xe_category-tree-container">
+<div id="__xe_category-tree-container" class="panel board-category">
 </div>
 
 <script type="text/javascript">
     $(function () {
-        categoryTree.init($('#__xe_category-tree-container'), {
+        Category.init({
             load: '{{ route('manage.category.edit.item.children', ['id' => $category->id]) }}',
             add: '{{ route('manage.category.edit.item.store', ['id' => $category->id]) }}',
             modify: '{{ route('manage.category.edit.item.update', ['id' => $category->id]) }}',
@@ -60,5 +63,14 @@
             move: '{{ route('manage.category.edit.item.move', ['id' => $category->id]) }}'
         });
     });
+    {{--$(function () {--}}
+        {{--categoryTree.init($('#__xe_category-tree-container'), {--}}
+            {{--load: '{{ route('manage.category.edit.item.children', ['id' => $category->id]) }}',--}}
+            {{--add: '{{ route('manage.category.edit.item.store', ['id' => $category->id]) }}',--}}
+            {{--modify: '{{ route('manage.category.edit.item.update', ['id' => $category->id]) }}',--}}
+            {{--remove: '{{ route('manage.category.edit.item.destroy', ['id' => $category->id]) }}',--}}
+            {{--move: '{{ route('manage.category.edit.item.move', ['id' => $category->id]) }}'--}}
+        {{--});--}}
+    {{--});--}}
 
 </script>
