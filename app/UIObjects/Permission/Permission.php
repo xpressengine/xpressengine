@@ -67,25 +67,6 @@ class Permission extends AbstractUIObject
         return parent::render();
     }
 
-    /**
-     * boot
-     *
-     * @return void
-     */
-    public static function boot()
-    {
-        // TODO: Implement boot() method.
-    }
-
-    /**
-     * getSettingsURI
-     *
-     * @return void
-     */
-    public static function getSettingsURI()
-    {
-    }
-
     protected function getPermissionJsonString($grant, $inheritMode)
     {
         $permissionValueArray = [];

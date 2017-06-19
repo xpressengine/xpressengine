@@ -8,9 +8,7 @@
 
 namespace App\UIObjects\Menu;
 
-use PhpQuery\PhpQuery;
 use Xpressengine\Menu\MenuEntity;
-use ReflectionClass;
 use Xpressengine\UIObject\AbstractUIObject;
 
 /**
@@ -44,24 +42,5 @@ class MenuType extends AbstractUIObject
         $this->template = view('uiobjects/menu/menuType', compact('content'))->render();
         $this->template = $content;
         return parent::render();
-    }
-
-    /**
-     * boot
-     *
-     * @return void
-     */
-    public static function boot()
-    {
-        // TODO: Implement boot() method.
-    }
-
-    /**
-     * getSettingsURI
-     *
-     * @return void
-     */
-    public static function getSettingsURI()
-    {
     }
 }

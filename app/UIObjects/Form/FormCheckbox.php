@@ -8,38 +8,26 @@
 
 namespace App\UIObjects\Form;
 
-use PhpQuery\PhpQuery;
 use Xpressengine\UIObject\AbstractUIObject;
+use Xpressengine\UIObject\Element;
 
 class FormCheckbox extends AbstractUIObject
 {
     protected static $id = 'uiobject/xpressengine@formCheckbox';
 
-    protected $template = '<div class="form-group">
-        <label for="" class="hidden"></label>
-        <div class="checkboxWrap"></div>
-        <p class="help-block"></p>
-    </div>';
-
-    protected $box;
-
     public function render()
     {
         $args = $this->arguments;
-        PhpQuery::newDocument();
-        $this->markup = PhpQuery::pq($this->template);
-        $this->box = $this->markup['.checkboxWrap'];
+
+        $container = new Element('div', ['class'=>'form-group']);
+        $containerLavel = new Element('label', ['class' => 'hidden']);
+        $checkboxWrapper = new Element('div', ['class'=>'checkboxWrap']);
+        $description = new Element('p', ['class'=>'help-block']);
 
         $nameGlobal = array_get($args, 'name');
         $checkboxes = null;
 
-        $args = array_set($args, 'name', $nameGlobal.'[]');
         $values = array_get($args, 'value', null);
-        $groupLavel = array_get($args, 'label');
-
-        if($groupLavel) {
-            $this->markup['label']->removeClass('hidden')->append($groupLavel);
-        }
 
         foreach ($args as $key => $arg) {
             switch ($key) {
@@ -48,85 +36,61 @@ class FormCheckbox extends AbstractUIObject
                     $checkboxes = $arg;
                     break;
 
+                case 'label':
+                    $containerLavel->removeClass('hidden')->html($arg);
+                    break;
+
                 case 'description':
-                    $this->markup['.help-block']->html(array_get($args, $key));
+                    $description->html($arg);
                     break;
 
                 case 'id':
-                    $this->box->attr('id', $arg);
+                    $checkboxWrapper->attr('id', $arg);
                     break;
-
                 default:
                     break;
-
             }
         }
 
+        // make checkboxes
         foreach ($checkboxes as $itemKey => $itemValue) {
-            $checkboxMarkup = PhpQuery::pq("<div class=\"checkbox\"><label class=\"hidden\"><input type=\"checkbox\" value=\"\"></label></div>");
-            $checkbox = $checkboxMarkup->find('input');
-            $label = $checkboxMarkup->find('label');
-            $text = null;
-            $value = null;
-            $checked = '';
+            $box = new Element('div', ['class'=>'checkbox']);
+            $label = new Element('label');
+            $checkbox = new Element('input', ['type'=>'checkbox']);
 
+            $itemValue = value($itemValue);
+
+            // $itemValue == title
             if (!is_array($itemValue)) {
                 $text = $itemValue;
                 $value = $itemKey;
-                $checked = '';
-
+                $checked = false;
             } else {
-                $value = array_get($itemValue, 'value');
                 $text = array_get($itemValue, 'text');
-                $checked = array_get($itemValue, 'checked');
-
+                $value = array_get($itemValue, 'value');
+                $checked = array_get($itemValue, 'checked', false);
             }
 
-            if($values != null && in_array($value, $values)) {
+            if ($values != null && in_array($value, $values)) {
                 $checked = true;
             }
 
-            $checkbox->val($value);
-            $label->append($text);
+            $checkbox->attr('value', $value);
+            $checkbox->attr('name', $nameGlobal.'[]');
 
-            if(is_callable($itemValue)) {
-                $itemValue = $itemValue();
-            }
-
-            if($checked) {
+            if ($checked) {
                 $checkbox->attr('checked', 'checked');
             } else {
                 $checkbox->removeAttr('checked');
             }
 
-            foreach ($args as $key => $arg) {
-                switch($key) {
-                    case 'class':
-                        $checkbox->addClass($arg);
-                        break;
-
-                    case 'label':
-                        $label->removeClass('hidden')->append($arg);
-                        break;
-
-                    default:
-                        $checkbox->attr($key, $arg);
-                        break;
-                }
-            }
-
-            $this->box->append($checkboxMarkup);
+            $label->append([$checkbox,$text]);
+            $box->append($label);
+            $checkboxWrapper->append($box);
         }
 
+        $this->template = $container->append([$containerLavel, $checkboxWrapper, $description])->render();
 
         return parent::render();
-    }
-
-    public static function boot()
-    {
-    }
-
-    public static function getSettingsURI()
-    {
     }
 }

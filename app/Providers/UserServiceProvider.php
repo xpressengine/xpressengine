@@ -22,7 +22,8 @@ use Illuminate\Support\ServiceProvider;
 use Xpressengine\Media\MediaManager;
 use Xpressengine\Media\Thumbnailer;
 use Xpressengine\Storage\Storage;
-use App\ToggleMenus\Member\ProfileItem;
+use App\ToggleMenus\User\ProfileItem;
+use App\ToggleMenus\User\ManageItem;
 use Xpressengine\User\EmailBroker;
 use Xpressengine\User\Guard;
 use Xpressengine\User\GuardInterface;
@@ -267,6 +268,7 @@ class UserServiceProvider extends ServiceProvider
     protected function registerToggleMenu()
     {
         $this->app['xe.pluginRegister']->add(ProfileItem::class);
+        $this->app['xe.pluginRegister']->add(ManageItem::class);
     }
 
     /**

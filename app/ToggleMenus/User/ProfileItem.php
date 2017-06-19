@@ -6,34 +6,32 @@
  * @link        https://xpressengine.io
  */
 
-namespace App\ToggleMenus\Member;
+namespace App\ToggleMenus\User;
 
 class ProfileItem extends UserToggleMenu
 {
-    protected static $id = 'user/toggleMenu/xpressengine@raw';
+    protected static $id = 'user/toggleMenu/xpressengine@profile';
 
     protected static $componentInfo = [
         'name' => '프로필',
-        'description' => '회원의 프로필 이미지를 출력하고 프로필 페이지로 이동합니다.'
+        'description' => '회원의 프로필 페이지로 이동합니다.'
     ];
 
     public function getText()
     {
-        return '프로필 보기';
+        return '프로필보기';
     }
+
+
 
     public function getType()
     {
-        return static::MENUTYPE_RAW;
+        return static::MENUTYPE_LINK;
     }
 
     public function getAction()
     {
-        $user = app('xe.users')->find($this->identifier);
-        $link = route('user.profile', $user->getId());
-        $profileImage = $user->getProfileImage();
-        $content = sprintf('<a href="%s">프로필보기</a>', $link);
-        return $content;
+        return route('user.profile', $this->identifier);
     }
 
     public function getScript()
