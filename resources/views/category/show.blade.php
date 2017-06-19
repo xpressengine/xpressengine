@@ -63,14 +63,4 @@
             move: '{{ route('manage.category.edit.item.move', ['id' => $category->id]) }}'
         });
     });
-    {{--$(function () {--}}
-        {{--categoryTree.init($('#__xe_category-tree-container'), {--}}
-            {{--load: '{{ route('manage.category.edit.item.children', ['id' => $category->id]) }}',--}}
-            {{--add: '{{ route('manage.category.edit.item.store', ['id' => $category->id]) }}',--}}
-            {{--modify: '{{ route('manage.category.edit.item.update', ['id' => $category->id]) }}',--}}
-            {{--remove: '{{ route('manage.category.edit.item.destroy', ['id' => $category->id]) }}',--}}
-            {{--move: '{{ route('manage.category.edit.item.move', ['id' => $category->id]) }}'--}}
-        {{--});--}}
-    {{--});--}}
-
 </script>

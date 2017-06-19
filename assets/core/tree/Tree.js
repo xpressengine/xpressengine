@@ -151,6 +151,24 @@ var Tree = (function () {
       $target.find('.item-container').nestedSortable(defaultOptions);
     },
 
+    /**
+     * @param {jquery object} $container
+     * @oaram {object} obj
+     * <pre>
+     *   rootId: tree root id
+     *   nodeTemplate: item안에 생성할 html
+     *   items
+     * </pre>
+     * @param {function} fn callback
+     * */
+    add: function ($container, obj, fn) {
+      $container.append(_this.getItemsTemplate(obj));
+
+      if (fn && typeof fn === 'function') {
+        fn();
+      }
+    },
+
     isObject: function (obj) {
       return (obj && obj instanceof Object) ? true : false;
     },
