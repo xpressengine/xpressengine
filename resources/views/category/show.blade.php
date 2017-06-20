@@ -11,7 +11,7 @@
 
 {{ XeFrontend::js(
 [
-'/assets/vendor/jqueryui/jquery-ui.min.js',
+'/assets/vendor/jqueryui/jquery-ui.sortable.js',
 '/assets/vendor/expanding/expanding.js',
 '/assets/core/lang/langEditorBox.bundle.js'
 ]

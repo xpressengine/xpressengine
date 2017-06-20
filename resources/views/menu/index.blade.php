@@ -5,7 +5,7 @@
 {{--{{ XeFrontend::js('/assets/core/menu/classnames.js')->appendTo('head')->load() }}--}}
 {{--{{ XeFrontend::js('/assets/core/menu/menu.bundle.js')->appendTo('head')->load() }}--}}
 
-{{ XeFrontend::js('/assets/vendor/jqueryui/jquery-ui.min.js')->appendTo('body')->load() }}
+{{ XeFrontend::js('/assets/vendor/jqueryui/jquery-ui.sortable.js')->appendTo('body')->load() }}
 {{ XeFrontend::js('/assets/vendor/nestedSortable/jquery.mjs.nestedSortable.js')->appendTo('body')->load() }}
 {{ XeFrontend::js('/assets/core/tree/SearchHead.js')->appendTo('body')->load() }}
 {{ XeFrontend::js('/assets/core/tree/Menu.js')->appendTo('body')->load() }}

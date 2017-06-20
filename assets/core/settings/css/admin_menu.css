@@ -41,8 +41,8 @@
   color: #FBBD08;
 }
 
-.menu-type > .item-container {
-  min-height: 10px;
+.menu-type > .item-container:empty {
+  min-height: 3px;
 }
 
 .menu-type .btn-link.pull-left {
@@ -184,7 +184,6 @@
 
 .item > .item-content + .item-container {
   margin-left: 24px;
-  min-height: 10px;
 }
 
 .item > .item-content + .item-container + .item-container {
