@@ -5,6 +5,13 @@ var SearchHead = (function () {
   var _$parent = $();
   var _searchData = [];
 
+  var _suggestionData = [];
+
+  var _focus = {
+    currentIndex: -1,
+    status: 'close',
+  };
+
   return {
     init: function ($parent, data, createMenuUrl) {
       _this = this;
@@ -30,7 +37,7 @@ var SearchHead = (function () {
         '<div class="pull-left">',
           '<div class="input-group search-group">',
             '<input type="text" class="form-control" aria-label="Text input with dropdown button" placeholder="Search...">',
-            '<button class="btn-link"><i class="xi-search"></i><span class="sr-only">검색</span></button>',
+            '<button class="btn-link btnSearch"><i class="xi-search"></i><span class="sr-only">검색</span></button>',
             '<div class="search-list"></div>',
           '</div>',
         '</div>',
@@ -48,6 +55,7 @@ var SearchHead = (function () {
     },
 
     cache: function (data) {
+      this.$searchGroup = $('.search-group');
       this.$searchInput = $('.search-group > input');
       this.$btnLink = $('.btn-link');
       this.$searchList = $('.search-list');
@@ -55,6 +63,62 @@ var SearchHead = (function () {
 
     bindEvents: function () {
       this.$searchInput.on('keyup', this.search);
+
+      _$parent.on('click', '.btnSearch', function () {
+        if (_focus.status === 'open' && _focus.currentIndex >= 0) {
+          _this.moveToSelectedItem();
+        }
+      });
+
+      _$parent.on('mouseenter', '.search-list li', function (e) {
+        var $target = $(e.target);
+        var index = _$parent.find('.search-list li').index($(this));
+
+        _this.setFocus(index);
+      });
+
+      $(document).on('keydown', function (e) {
+        var keyCode = e.keyCode;
+
+        if (_focus.status === 'open') {
+          switch (keyCode) {
+            case 40:
+            case 38:
+              e.preventDefault();
+
+              break;
+          }
+        }
+      });
+
+      $(document).on('keyup', function (e) {
+        e.preventDefault();
+
+        var keyCode = e.keyCode;
+
+        if (_focus.status === 'open') {
+          switch (keyCode) {
+            //down
+            case 40:
+              _this.setFocus(++_focus.currentIndex);
+
+              break;
+
+            //up
+            case 38:
+              if (_focus.currentIndex != -1) {
+                _this.setFocus(--_focus.currentIndex);
+              }
+
+            case 13:
+              if (_focus.status === 'open' && _focus.currentIndex >= 0) {
+                _this.moveToSelectedItem();
+              }
+
+              break;
+          }
+        }
+      });
     },
 
     makeSearchData: function (items) {
@@ -85,23 +149,76 @@ var SearchHead = (function () {
           }
         });
 
+        _suggestionData = suggestion;
+
         if (suggestion.length > 0) {
           list += '<ul>';
 
           $.each(suggestion, function (idx, obj) {
             var title = obj.title.split(value).join('<em>' + value + '</em>');
 
-            list +=   '<li>' + title + '</li>';
+            list +=   '<li data-id="' + obj.id + '"><a href="#">' + title + '</a></li>';
           });
 
           list += '</ul>';
 
           _this.$searchList.html(list);
+
+          _this.toggleSuggestionByStatus('open');
         }
 
       } else {
-        _this.$searchList.empty();
+        _this.toggleSuggestionByStatus('close');
       }
+    },
+
+    toggleSuggestionByStatus: function (status) {
+      switch (status) {
+        case 'open':
+          _this.$searchGroup.addClass('open');
+          _focus.status = 'open';
+
+          break;
+
+        case 'close':
+          _this.$searchGroup.removeClass('open');
+          _this.$searchList.empty();
+          _suggestionData = [];
+          _focus.currentIndex = -1;
+          _focus.status = 'close';
+
+          break;
+      }
+    },
+
+    setFocus: function (index) {
+      var $list = _this.$searchList.find('li');
+      var currentIndex = index;
+
+      $list.removeClass('on');
+
+      if (index >= 0) {
+        _this.$searchInput.blur();
+
+        if (currentIndex > ($list.length - 1)) {
+          currentIndex = 0;
+        }
+
+        $list.eq(currentIndex).addClass('on');
+
+        _focus.currentIndex = currentIndex;
+
+      } else {
+        _this.$searchInput.focus();
+      }
+
+    },
+
+    moveToSelectedItem: function () {
+      var id = _$parent.find('li.on').data('id');
+
+      $(document).scrollTop($('#item_' + id).offset().top);
+      _this.toggleSuggestionByStatus('close');
     },
   };
 })();
