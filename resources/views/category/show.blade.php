@@ -43,13 +43,6 @@
     {{xe_trans('xe::categoryModifyDescription', ['name' => xe_trans($category->name)])}}
 @endsection
 
-<style type="text/css">
-    .item.copy{
-        background-color: #CAD9EA;
-        border: 1px dashed #76AFE8;
-    }
-</style>
-
 <div id="__xe_category-tree-container" class="panel board-category">
 </div>
 

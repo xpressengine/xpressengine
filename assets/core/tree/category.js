@@ -21,6 +21,7 @@ var Category = (function () {
       this.bindEvents();
       this.load({
         $parent: $('.__category_body'),
+        isRoot: true,
       });
 
       _$wrap.find('.lang-editor-box').each(function () {
@@ -311,20 +312,24 @@ var Category = (function () {
         dataType: 'json',
         data: item,
         success: function (data) {
+          $('button').prop('disabled', false);
+
           switch (item.type) {
             case 'add':
-
               var $container = (item.hasOwnProperty('parentId')) ? $('#item_' + item.parentId) : $('.__category_body > .item-container');
 
               if ($container.hasClass('open')) {
                 $container.removeClass('open');
               }
 
-              //+아이테 추가
-              if ($container.hasClass('.item-container')) {
+              //+아이템 추가
+              if ($container.hasClass('item-container')) {
                 Tree.add($container, {
-                  items: data,
+                  nested: false,
+                  items: [data],
                   nodeTemplate: _this.getNodeTemplate,
+                }, function () {
+                  _$wrap.find('.btnClose').trigger('click');
                 });
 
               //하위 추가, 수정
@@ -332,14 +337,16 @@ var Category = (function () {
                 switch ($container.find('> .item-content .__xe_btn_toggle_children').data('status')) {
                   case 'open':
                     Tree.add($container, {
-                      items: data,
+                      nested: true,
+                      items: [data],
                       nodeTemplate: _this.getNodeTemplate,
                     });
                     break;
 
                   case 'close':
                     Tree.add($container, {
-                      items: data,
+                      nested: true,
+                      items: [data],
                       nodeTemplate: _this.getNodeTemplate,
                     });
                     $container.find('> .item-content .__xe_btn_toggle_children').trigger('click');
@@ -352,6 +359,11 @@ var Category = (function () {
 
               break;
             case 'modify':
+              var $item = $('#item_' + item.id);
+
+              $item.find('> .item-content').data({ item: data });
+              $item.find('> .item-content .__xe_word').text(data.readableWord);
+              $item.find('> .item-content .btnEditCategory').trigger('click');
 
               break;
           }
@@ -385,15 +397,26 @@ var Category = (function () {
           }
 
           if (nodes.length > 0) {
-            $parent.find('> .item-container').remove();
+            var filterNodes = {};
+
+            if ($parent.find('.item').length > 0) {
+              $parent.find('.item').each(function () {
+                filterNodes[$(this).find('.item-content').data('item').id] = true;
+              });
+            }
+
+            nodes = nodes.filter(function (v, k) {
+              return !filterNodes.hasOwnProperty(v.id);
+            });
+
             $parent.append(Tree.getItemsTemplate({
               items: nodes,
               nodeTemplate: _this.getNodeTemplate,
             }));
+          }
 
-            if (!id) {
-              _this.runSortable();
-            }
+          if (params.isRoot) {
+            _this.runSortable();
           }
         },
       });
@@ -443,6 +466,10 @@ var Category = (function () {
             obj.item.find('> .item-content').attr('data-item', JSON.stringify(itemData));
           }
 
+        },
+
+        complete: function () {
+          Tree.setPrevent(false);
         },
       });
     },

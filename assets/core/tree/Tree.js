@@ -148,21 +148,37 @@ var Tree = (function () {
         };
       }
 
-      $target.find('.item-container').nestedSortable(defaultOptions);
+      if ($target.find('.item-container').length > 0) {
+        $target.find('.item-container').nestedSortable(defaultOptions);
+
+      } else {
+        var container = [
+          '<ul class="item-container"></ul>',
+        ];
+
+        $target.append(container);
+        $target.find('.item-container').nestedSortable(defaultOptions);
+      }
+
     },
 
     /**
      * @param {jquery object} $container
      * @oaram {object} obj
      * <pre>
-     *   rootId: tree root id
      *   nodeTemplate: item안에 생성할 html
-     *   items
+     *   item
+     *   nested - 하위 depth 노드일 경우 ul.item-container를 포함하여 append. 아닐 경우 li.item만 append
      * </pre>
      * @param {function} fn callback
      * */
     add: function ($container, obj, fn) {
-      $container.append(_this.getItemsTemplate(obj));
+
+      if (obj.nested) {
+        $container.append(Item.getTemplate(obj));
+      } else {
+        $container.append(Item.makeItem(obj.items, obj.nodeTemplate));
+      }
 
       if (fn && typeof fn === 'function') {
         fn();
