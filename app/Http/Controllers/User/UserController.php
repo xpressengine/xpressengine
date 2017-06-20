@@ -20,6 +20,7 @@ use XePresenter;
 use XeTheme;
 use Xpressengine\Skin\SkinHandler;
 use Xpressengine\Support\Exceptions\InvalidArgumentException;
+use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
 use Xpressengine\User\EmailBroker;
 use Xpressengine\User\Exceptions\CannotDeleteMainEmailOfUserException;
 use Xpressengine\User\Exceptions\DisplayNameAlreadyExistsException;
@@ -424,7 +425,7 @@ class UserController extends Controller
         try {
             app('xe.auth.email')->confirmEmail($pendingMail, $code);
         } catch (InvalidConfirmationCodeException $e) {
-            $e = new InvalidArgumentException();
+            $e = new InvalidArgumentHttpException();
             $e->setMessage('잘못된 인증 코드입니다. 인증 코드를 확인하시고 다시 입력해주세요.');
             throw $e;
         } catch (\Exception $e) {

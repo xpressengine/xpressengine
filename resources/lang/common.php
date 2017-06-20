@@ -1253,8 +1253,8 @@ return [
         'en' => 'Pending Email'
     ],
     'checkEmailForConfirmCode' => [
-        'ko' => '인증코드를 확인하려면 <span class="txt_gray">:email</span>에서 이메일을 확인해 주세요.',
-        'en' => 'Check your confirm code in <span class="txt_gray">:email</span>.'
+        'ko' => '인증코드를 확인하려면 <span class="text_gray">:email</span>에서 이메일을 확인해 주세요.',
+        'en' => 'Check your confirm code in <span class="text_gray">:email</span>.'
     ],
     'confirmation' => [
         'ko' => '인증',
