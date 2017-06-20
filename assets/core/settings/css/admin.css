@@ -4685,7 +4685,7 @@ aside.open {
   font-style: normal;
 }
 
-.search-list .active a, .search-list .active a:hover, .search-list .active a:focus {
+.search-list .on a, .search-list .on a:hover, .search-list .on a:focus {
   color: #fff;
   text-decoration: none;
   outline: 0;

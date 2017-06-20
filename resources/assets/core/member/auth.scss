@@ -305,24 +305,36 @@ h6 {
   margin: 8px auto 16px;
 }
 .member .auth-sns.v2 li {
+  position: relative;
   display: block;
 }
 .member .auth-sns.v2 li a {
   display: block;
-  width: 230px;
+  width: 270px;
+  height: 48px;
   margin-bottom: 8px;
-  padding: 0 16px;
-  border-radius: 20px;
+  padding: 0 14px;
+  border-radius: 2px;
   color: #fff;
   font-size: 14px;
-  line-height: 40px;
+  line-height: 48px;
   text-align: left;
 }
-
+.member .auth-sns.v2 li a:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 55px;
+  width: 1px;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.1);
+}
 .member .auth-sns.v2 li a i {
+  font-size: 30px;
   line-height: inherit;
   vertical-align: middle;
-  margin-right: 7px;
+  margin-right: 28px;
+  transform: translateY(-2px);
 }
 
 .member .auth-group .btn-eye {

@@ -366,6 +366,7 @@ h6 {
   line-height: 48px;
   text-align: left;
 }
+
 .member .auth-sns.v2 li a:before {
   content: "";
   position: absolute;
@@ -374,15 +375,13 @@ h6 {
   width: 1px;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.1);
-
 }
+
 .member .auth-sns.v2 li a i {
   font-size: 30px;
   line-height: inherit;
   vertical-align: middle;
   margin-right: 28px;
-  -webkit-transform: translateY(-2px);
-  -ms-transform: translateY(-2px);
   transform: translateY(-2px);
 }
 
