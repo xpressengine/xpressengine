@@ -110,6 +110,8 @@ var SearchHead = (function () {
                 _this.setFocus(--_focus.currentIndex);
               }
 
+              break;
+
             case 13:
               if (_focus.status === 'open' && _focus.currentIndex >= 0) {
                 _this.moveToSelectedItem();
