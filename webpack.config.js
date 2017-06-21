@@ -35,16 +35,6 @@ var common = {
      pathInfo.permission + '/PermissionTagSuggestion.jsx',
      pathInfo.permission + '/SettingsPermission.jsx',
     ],
-    'assets/core/menu/menu.bundle': [
-     pathInfo.menu + '/MenuRenderer.js',
-     pathInfo.menu + '/MenuEntity.js',
-     pathInfo.menu + '/MenuItem.js',
-     pathInfo.menu + '/TreeNode.js',
-     pathInfo.menu + '/UITree.js',
-     pathInfo.menu + '/MenuSearchBar.js',
-     pathInfo.menu + '/MenuSearchSuggestion.js',
-     pathInfo.menu + '/MenuTree.js',
-    ],
 
     'assets/core/common/js/xe.bundle': [
       pathInfo.common + '/js/xe.js',
