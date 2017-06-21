@@ -114,7 +114,7 @@ var ToggleMenu = createReactClass({
   },
 });
 
-ToggleMenu.Item = React.createClass({
+ToggleMenu.Item = createReactClass({
 
   componentWillMount: function () {
     if (this.props.script && $('script[src="' + this.props.script + '"]').is('script') !== true) {
