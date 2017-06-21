@@ -3,14 +3,6 @@ var Category = (function () {
   var _$wrap = $('#__xe_category-tree-container');
   var _config = {};
 
-  /***
-    load: '{{ route('manage.category.edit.item.children', ['id' => $category->id]) }}',
-    add: '{{ route('manage.category.edit.item.store', ['id' => $category->id]) }}',
-    modify: '{{ route('manage.category.edit.item.update', ['id' => $category->id]) }}',
-    remove: '{{ route('manage.category.edit.item.destroy', ['id' => $category->id]) }}',
-    move: '{{ route('manage.category.edit.item.move', ['id' => $category->id]) }}'
-    */
-
   return {
     init: function (config) {
       _this = this;
@@ -117,7 +109,7 @@ var Category = (function () {
 
         if (!$this.data('open')) {
           var formData = {
-            title: '편집',
+            title: XE.Lang.trans('xe::edit'), //편집
             wordLangKey: item.word,
             descriptionLangKey: item.description,
             removeButton: true,
@@ -153,7 +145,7 @@ var Category = (function () {
 
         if (!$this.data('open')) {
           var formData = {
-            title: '하위 목록 생성',
+            title: XE.Lang.trans('xe::createChild'), //하위 목록 생성
             saveButton: true,
             type: 'add',
             parentId: $this.closest('.item-content').data('item').id,
@@ -189,10 +181,10 @@ var Category = (function () {
             '<h3 class="panel-title">카테고리</h3>',
           '</div>',
           '<div class="pull-right">',
-            '<button class="btn btn-primary btnOpenForm"><i class="xi-plus"></i><span>아이템 추가</span></button>',
+            '<button class="btn btn-primary btnOpenForm"><i class="xi-plus"></i><span>' + XE.Lang.trans('xe::addItem') + '</span></button>',
           '</div>',
           '<div class="panel panel-edit __xe_content_body">',
-            _this.getFormTemplate({ title: '생성', closeButton: true, saveButton: true, type: 'add' }),
+            _this.getFormTemplate({ title: XE.Lang.trans('xe::create'), closeButton: true, saveButton: true, type: 'add' }),
           '</div>',
         '</div>',
         '<div class="panel-body __category_body">',
@@ -214,11 +206,11 @@ var Category = (function () {
       template +=   '</div>';
       template +=   '<div class="panel-body">';
       template +=     '<div class="form-group">';
-      template +=       '<label>단어</label>';
+      template +=       '<label>' + XE.Lang.trans('xe::word') + '</label>';
       template +=       '<div class="lang-editor-box" data-name="word" data-autocomplete="false" ' + wordKeyProp + '></div>';
       template +=     '</div>';
       template +=     '<div class="form-group">';
-      template +=       '<label>설명</label>';
+      template +=       '<label>' + XE.Lang.trans('xe::description') + '</label>';
       template +=       '<div class="lang-editor-box" data-name="description" data-autocomplete="false" data-multiline="true" ' + descriptionKeyProp + '></div>';
       template +=     '</div>';
       template +=   '</div>';
@@ -228,15 +220,15 @@ var Category = (function () {
       template +=   '<div class="pull-right">';
 
       if (obj.closeButton) {
-        template +=   '<button type="button" class="btn btn-default btnClose">닫기</button>';
+        template +=   '<button type="button" class="btn btn-default btnClose">' + XE.Lang.trans('xe::close') + '</button>';
       }
 
       if (obj.removeButton) {
-        template +=   '<button type="button" class="btn btn-default btnRemoveCategory">삭제</button>';
+        template +=   '<button type="button" class="btn btn-default btnRemoveCategory">' + XE.Lang.trans('xe::delete') + '</button>';
       }
 
       if (obj.saveButton) {
-        template +=   '<button type="button" class="btn btn-primary btnSaveCategory">저장</button>';
+        template +=   '<button type="button" class="btn btn-primary btnSaveCategory">' + XE.Lang.trans('xe::save') + '</button>';
       }
 
       template +=   '</div>';

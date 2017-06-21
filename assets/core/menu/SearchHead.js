@@ -44,7 +44,7 @@ var SearchHead = (function () {
         '<div class="pull-right">',
           '<a href="' + _createMenuUrl + '" class="btn btn-primary pull-right">',
             '<i class="xi-plus"></i>',
-            '메뉴 추가',
+            XE.Lang.trans('xe::addMenu'),
           '</a>',
         '</div>',
       ].join('\n');
