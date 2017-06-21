@@ -1,6 +1,5 @@
 {{ XeFrontend::css(
 [
-'/assets/vendor/jqueryui/jquery-ui.min.css',
 '/assets/core/lang/langEditorBox.css',
 '/assets/core/xe-ui-component/xe-ui-component.css'
 ]
@@ -11,16 +10,13 @@
 
 {{ XeFrontend::js(
 [
-'/assets/vendor/jqueryui/jquery-ui.sortable.js',
 '/assets/vendor/expanding/expanding.js',
 '/assets/core/lang/langEditorBox.bundle.js'
 ]
 )->appendTo('head')->load() }}
 
-{{ XeFrontend::js('/assets/vendor/nestedSortable/jquery.mjs.nestedSortable.js')->appendTo('head')->load() }}
-{{ XeFrontend::js('/assets/core/tree/Item.js')->appendTo('body')->load() }}
-{{ XeFrontend::js('/assets/core/tree/Tree.js')->appendTo('body')->load() }}
-{{ XeFrontend::js('/assets/core/tree/Category.js')->appendTo('body')->load() }}
+{{ XeFrontend::js('/assets/core/common/js/xe.tree.js')->appendTo('body')->load() }}
+{{ XeFrontend::js('/assets/core/category/Category.js')->appendTo('body')->load() }}
 {{--{{ XeFrontend::js('/assets/core/category/tree.js')->appendTo('head')->load() }}--}}
 
 {{ XeFrontend::translation([

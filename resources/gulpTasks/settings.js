@@ -13,7 +13,6 @@ module.exports = (() => {
 
   const _filter = [
    '**/*',
-   '!resources/assets/core/menu/*',
    '!**/*.scss',
    '!resources/assets/core/lang/LangEditorBox.js',
    '!resources/assets/core/permission/*.jsx',
@@ -27,9 +26,12 @@ module.exports = (() => {
    '!resources/assets/core/common/js/xe.js',
    '!resources/assets/core/common/js/toggleMenu.js',
    '!resources/assets/core/member/settings/edit.js',
+   '!resources/assets/core/tree/**.js',
    'resources/assets/core/xe-ui-component/js/*',
-   'resources/assets/core/menu/classnames.js',
-   'resources/assets/core/menu/Tree.js',
+   'resources/assets/core/category/Category.js',
+   'resources/assets/core/menu/Menu.js',
+   'resources/assets/core/menu/SearchHead.js',
+   'resources/assets/core/menu/SiteMap.js',
    'resources/assets/core/widgetbox/js/*',
   ];
 
@@ -71,6 +73,19 @@ module.exports = (() => {
         .pipe($.uglify())
         .pipe($.concat('bundle.js'))
         .pipe(gulp.dest('assets'));
+    },
+
+    'assets:tree': () => {
+      return gulp.src([
+          'assets/vendor/jqueryui/jquery-ui.sortable.js',
+          'assets/vendor/nestedSortable/jquery.mjs.nestedSortable.js',
+          'resources/assets/core/tree/Item.js',
+          'resources/assets/core/tree/Tree.js',
+        ])
+        .pipe($.plumber())
+        .pipe($.uglify())
+        .pipe($.concat('xe.tree.js'))
+        .pipe(gulp.dest('assets/core/common/js'));
     },
 
     jscs: () => {

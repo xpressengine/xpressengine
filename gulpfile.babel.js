@@ -18,6 +18,7 @@ gulp.task('default', (callback) => {
     'copy:assets',
     // 'jspm:admin',
     // 'jspm:xe',
+    'assets:tree',
     'assets:sass',
     'assets:image',
     'webpack',
@@ -34,6 +35,7 @@ gulp.task('copy:assets', taskSettings['copy:assets']);
 // gulp.task('jspm:admin', taskSettings['jspm:admin']);
 
 gulp.task('assets:chunk', taskSettings['assets:chunk']);
+gulp.task('assets:tree', taskSettings['assets:tree']);
 // e: settings
 
 // s: css
