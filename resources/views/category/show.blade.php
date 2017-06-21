@@ -29,6 +29,8 @@
     'xe::word',
     'xe::description',
     'xe::save',
+    'xe::delete',
+    'xe::close',
 ]) }}
 
 @section('page_title')
