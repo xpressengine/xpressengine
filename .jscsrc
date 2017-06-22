@@ -24,7 +24,8 @@
         "./**/*.jpg",
         "./**/*.gif",
         "./**/*.scss",
-        "./**/*.css"
+        "./**/*.css",
+        "./resources/assets/core/tree/**"
     ],
     "fileExtensions": [".js", ".jsx"],
     "fix": true

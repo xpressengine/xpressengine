@@ -43,6 +43,9 @@
       color: #FBBD08;
     }
   }
+  > .item-container:empty {
+    min-height: 3px;
+  }
   .btn-link.pull-left {
     width: 40px;
     height: 40px;

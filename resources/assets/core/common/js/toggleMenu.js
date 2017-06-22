@@ -3,8 +3,9 @@
  */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 
-var ToggleMenu = React.createClass({
+var ToggleMenu = createReactClass({
 
   getInitialState: function () {
     return {
@@ -113,7 +114,7 @@ var ToggleMenu = React.createClass({
   },
 });
 
-ToggleMenu.Item = React.createClass({
+ToggleMenu.Item = createReactClass({
 
   componentWillMount: function () {
     if (this.props.script && $('script[src="' + this.props.script + '"]').is('script') !== true) {

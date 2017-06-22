@@ -41,6 +41,10 @@
   color: #FBBD08;
 }
 
+.menu-type > .item-container:empty {
+  min-height: 3px;
+}
+
 .menu-type .btn-link.pull-left {
   width: 40px;
   height: 40px;
