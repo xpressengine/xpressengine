@@ -216,8 +216,10 @@ class XeInstall extends Command
         $this->disableDebugMode();
 
         // change directory permissions
-        $this->info('[Setup Directory Permission]');
-        $this->stepDirPermission();
+        if(!windows_os()) {
+            $this->info('[Setup Directory Permission]');
+            $this->stepDirPermission();
+        }
 
         $this->stepAgreeCollectEnv();
 
