@@ -219,9 +219,9 @@ if (function_exists('intercept') === false) {
      *
      * @package Xpressengine\Interception
      *
-     * @param string|string[]       $pointCut advice가 실행되기를 바라는 대상 클래스와 메소드, {CLASS명}@{METHOD명}의 형식이어야 한다.
-     * @param string|array $name     advisor의 이름 및 우선순위 지정을 위한 array
-     * @param Closure      $advice   실행될 Closure
+     * @param string|string[] $pointCut advice가 실행되기를 바라는 대상 클래스와 메소드, {CLASS명}@{METHOD명}의 형식이어야 한다.
+     * @param string|array    $name     advisor의 이름 및 우선순위 지정을 위한 array
+     * @param Closure         $advice   실행될 Closure
      *
      * @return void
      */
