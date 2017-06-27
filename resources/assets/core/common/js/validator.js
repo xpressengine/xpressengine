@@ -97,7 +97,7 @@ import moment from 'moment';
         var $dst = $frm.find('[name="' + name + '"]');
         _this.errorClear($frm);
         if (_this.validators[command]($dst, parameters) === false) {
-          throw Error('Validation error.');
+          //throw Error('Validation error.');
         }
       }
     });

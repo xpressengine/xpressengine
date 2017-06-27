@@ -20,6 +20,7 @@ var XE = {
   getLocale: getLocale,
   getDefaultLocale: getDefaultLocale,
 
+  validator: validator,
   options: {},
 
   Lang: Lang,
