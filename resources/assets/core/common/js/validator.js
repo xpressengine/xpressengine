@@ -1,6 +1,8 @@
 import griper from 'griper';
 import moment from 'moment';
 
+//var ruleSet = { ruleName: "analyticsSetting", rules: {"profileId":"numeric","keyFile":"ga_json","trackingId":"required"} }
+
 (function (root, factory) {
   module.exports = factory();
 }(this, function () {
@@ -97,7 +99,7 @@ import moment from 'moment';
         var $dst = $frm.find('[name="' + name + '"]');
         _this.errorClear($frm);
         if (_this.validators[command]($dst, parameters) === false) {
-          //throw Error('Validation error.');
+          throw Error('Validation error.');
         }
       }
     });
@@ -460,6 +462,15 @@ import moment from 'moment';
     },
   };
 
+  $(function () {
+    $('form[data-rule]').each(function () {
+      if (window.hasOwnProperty('ruleSet')) {
+        Validator.setRules(ruleSet.ruleName, ruleSet.rules);
+      }
+    });
+  });
+
   return Validator;
 
 }));
+
