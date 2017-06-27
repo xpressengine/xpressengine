@@ -9,11 +9,13 @@
 namespace App\Providers;
 
 use App\Skins\Widget\ContentInfoSkin;
+use App\Skins\Widget\DownloadRankSkin;
 use App\Skins\Widget\HtmlWidgetSkin;
 use App\Skins\Widget\StorageSpaceSkin;
 use App\Skins\Widget\SystemInfoSkin;
 use App\UIObjects\Widget\WidgetGenerator;
 use App\Widgets\ContentInfo;
+use App\Widgets\DownloadRank;
 use App\Widgets\HtmlWidget;
 use App\Widgets\StorageSpace;
 use App\Widgets\SystemInfo;
@@ -104,6 +106,7 @@ class WidgetServiceProvider extends ServiceProvider
         $register->add(ContentInfo::class);
         $register->add(SystemInfo::class);
         $register->add(HtmlWidget::class);
+        $register->add(DownloadRank::class);
     }
 
     protected function registerWidgetSkins()
@@ -113,6 +116,7 @@ class WidgetServiceProvider extends ServiceProvider
         $register->add(ContentInfoSkin::class);
         $register->add(StorageSpaceSkin::class);
         $register->add(HtmlWidgetSkin::class);
+        $register->add(DownloadRankSkin::class);
     }
 
     protected function registerUIObject()
