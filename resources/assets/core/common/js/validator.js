@@ -146,7 +146,7 @@ import moment from 'moment';
 
     if (replaceStrMap && Object.keys(replaceStrMap).length > 0) {
       $.each(replaceStrMap, function (key, val) {
-        message = message.replace(key, val);
+        message = message.replace(":" + key, val);
       });
     }
 
