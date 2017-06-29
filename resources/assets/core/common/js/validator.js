@@ -142,7 +142,13 @@ import moment from 'moment';
     griper.form.fn.clear($form);
   };
 
-  Validator.error = function ($element, message) {
+  Validator.error = function ($element, message, replaceStrMap) {
+
+    if (replaceStrMap && Object.keys(replaceStrMap).length > 0) {
+      $.each(replaceStrMap, function (key, val) {
+        message = message.replace(key, val);
+      });
+    }
 
     if (this.alertType == 'form') {
       griper.form($element, message);
