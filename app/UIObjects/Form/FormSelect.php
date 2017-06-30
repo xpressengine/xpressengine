@@ -57,7 +57,7 @@ class FormSelect extends AbstractUIObject
                         } else {
                             $selected = $value === $selectedValue ? 'selected="selected"' : '';
                         }
-                        $optionEl = "<option value=\"$value\" $selected \">$text</option>";
+                        $optionEl = "<option value=\"$value\" $selected>$text</option>";
                         $select->append($optionEl);
                     }
                     break;

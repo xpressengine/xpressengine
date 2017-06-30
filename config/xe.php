@@ -367,6 +367,7 @@ return [
             'menuType' => 'uiobject/xpressengine@menuType',
             'permission' => 'uiobject/xpressengine@permission',
             'themeSelect' => 'uiobject/xpressengine@themeSelect',
+            'skinSelect' => 'uiobject/xpressengine@skinSelect',
             'captcha' => 'uiobject/xpressengine@captcha',
             'widget' => 'uiobject/xpressengine@widgetGenerator',
             'widgetbox' => 'uiobject/xpressengine@widgetbox',

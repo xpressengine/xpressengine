@@ -32,10 +32,10 @@ class EditorServiceProvider extends ServiceProvider
             $fileClass = $this->app['xe.storage']->getModel();
             $files = $fileClass::whereIn('id', $ids)->get();
 
-            $imgClass = $this->app['xe.media']->getHandler(Media::TYPE_IMAGE)->getModel();
+            $handler = $this->app['xe.media']->getHandler(Media::TYPE_IMAGE);
             $images = [];
             foreach ($files as $file) {
-                $images[] = $imgClass::getThumbnail(
+                $images[] = $handler->getThumbnail(
                     $this->app['xe.media']->make($file),
                     EditorHandler::THUMBNAIL_TYPE,
                     $dimension

@@ -8,6 +8,7 @@
 
 namespace App\Providers;
 
+use App\UIObjects\Skin\SkinSelect;
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Skin\SkinHandler;
 use Xpressengine\Skin\SkinInstanceStore;
@@ -50,6 +51,14 @@ class SkinServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->app['xe.pluginRegister']->add(\App\Skins\Error\DefaultErrorSkin::class);
+        $this->registerSkinListUIObject();
+    }
+
+    private function registerSkinListUIObject()
+    {
+        /** @var PluginRegister $registryManager */
+        $registryManager = $this->app['xe.pluginRegister'];
+        $registryManager->add(SkinSelect::class);
     }
 
     /**
