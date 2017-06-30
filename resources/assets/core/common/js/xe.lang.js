@@ -119,20 +119,55 @@ export default (function () {
       XE.ajax({
         url: xeBaseURL + '/' + XE.options.managePrefix + '/lang/lines/' + id,
         type: 'json',
+        type: 'get',
         data: parameters,
         success: function (res) {
           var message = id.split('::')[1];
+          var data;
 
           if (res.length > 0) {
             for (var i = 0, max = res.length; i < max; i += 1) {
-              if (res[i].locale == _this.locales[0]) {
+              if (res[i].locale == XE.Lang.locales[0]) {
                 data = res[i].value;
                 break;
               }
             }
           }
 
-          callback(message);
+          callback(message, data);
+        },
+      });
+    },
+
+    requestTransAll: function (langKeys, callback) {
+      XE.ajax({
+        type: 'get',
+        dataType: 'json',
+        url: xeBaseURL + '/' + XE.options.managePrefix + '/lang/lines/many',
+        data: {
+          keys: langKeys,
+        },
+        useXeSpinner: false,
+        success: function (res) {
+          var result = {};
+
+          $.each(res, (key, arr) => {
+            $.each(arr, function () {
+              if (this.locale === XE.Lang.locales[0]) {
+                result[key] = this.value;
+              }
+            });
+          });
+
+          if (Object.keys(result).length > 0) {
+            $.each(result, function (key, value) {
+              Translator.add(key, value);
+            });
+          }
+
+          if (callback) {
+            callback(res, result);
+          }
         },
       });
     },

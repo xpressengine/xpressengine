@@ -4,6 +4,7 @@ import Lang from './xe.lang';
 import Component from './xe.component';
 import Request from './xe.request';
 import window from 'window';
+import validator from 'validator';
 
 var XE = {
   ajax: ajax,
@@ -19,6 +20,7 @@ var XE = {
   getLocale: getLocale,
   getDefaultLocale: getDefaultLocale,
 
+  validator: validator,
   options: {},
 
   Lang: Lang,
