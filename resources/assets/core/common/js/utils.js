@@ -31,6 +31,22 @@ var Utils = (function (exports) {
       return bytes;
     },
 
+    sizeFormatToBytes: function (str) {
+      if (str.indexOf('GB') != -1) {
+        bytes = parseFloat(str) * 1024 * 1024 * 1024;
+      } else if (str.indexOf('MB') != -1) {
+        bytes = parseFloat(str) * 1024 * 1024;
+      } else if (str.indexOf('KB') != -1) {
+        bytes = parseFloat(str) * 1024;
+      } else if (str.indexOf('bytes') != -1) {
+        bytes = parseFloat(str);
+      } else if (str.indexOf('byte') != -1) {
+        bytes = parseFloat(str);
+      }
+
+      return bytes;
+    },
+
     isURL: function (s) {
       return /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(s);
     },
