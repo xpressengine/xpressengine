@@ -16,6 +16,9 @@ namespace Xpressengine\User;
 
 use Illuminate\Auth\Guard as LaravelGuard;
 use Illuminate\Contracts\Auth\Authenticatable as UserContract;
+use Illuminate\Contracts\Auth\UserProvider;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Xpressengine\User\Exceptions\AuthIsUnavailableException;
 use Xpressengine\User\Models\Guest;
 
@@ -33,7 +36,86 @@ use Xpressengine\User\Models\Guest;
  */
 class Guard extends LaravelGuard implements GuardInterface
 {
+    /**
+     * @var array admin auth config
+     */
+    private $adminAuthConfig;
 
+    /**
+     * Create a new authentication guard.
+     *
+     * @param  UserProvider     $provider        user provider
+     * @param  SessionInterface $session         session store
+     * @param  array            $adminAuthConfig adminauth config
+     * @param  Request          $request         request
+     *
+     * @return void
+     */
+    public function __construct(
+        UserProvider $provider,
+        SessionInterface $session,
+        $adminAuthConfig,
+        Request $request = null
+    ) {
+        $this->adminAuthConfig = $adminAuthConfig;
+        parent::__construct($provider, $session, $request);
+    }
+
+    /**
+     * 관리자 인증 검사
+     *
+     * @param bool $refresh 인증 세션 시간 갱신 여부
+     *
+     * @return mixed
+     */
+    public function checkAdminAuth($refresh = false)
+    {
+        $key = $this->adminAuthConfig['session'];
+        $expire = $this->adminAuthConfig['expire'];
+        if ($expire === 0) {
+            return true;
+        }
+
+        $now = time();
+        $timeout = $this->session->get($key, false);
+        if ($timeout !== false && $timeout > $now) {
+            if ($refresh) {
+                $this->refreshAdminAuth();
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 관리자 인증 시도
+     *
+     * @param array $credentials 인증 정보
+     *
+     * @return mixed
+     */
+    public function attemptAdminAuth($credentials)
+    {
+        if ($this->checkAdminAuth(true)) {
+            return true;
+        }
+        $password = $credentials['password'];
+
+        if ($password && $this->adminAuthConfig['password'] === $password) {
+            $this->refreshAdminAuth();
+            return true;
+        }
+        return false;
+    }
+
+    protected function refreshAdminAuth()
+    {
+        $key = $this->adminAuthConfig['session'];
+        $expire = $this->adminAuthConfig['expire'];
+        $time = time() + ($expire * 60);
+        $this->session->set($key, $time);
+    }
+    
     /**
      * 현재 사용자의 로그인 여부를 체크한다.
      *
@@ -104,7 +186,6 @@ class Guard extends LaravelGuard implements GuardInterface
         }
     }
 
-
     /**
      * 현재 로그인한 사용자를 로그아웃 시킨다.
      *
@@ -160,4 +241,5 @@ class Guard extends LaravelGuard implements GuardInterface
             throw new AuthIsUnavailableException();
         }
     }
+
 }

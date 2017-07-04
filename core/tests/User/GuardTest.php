@@ -76,8 +76,8 @@ class GuardTest extends \PHPUnit_Framework_TestCase {
 
     public function testLogoutRemovesSessionTokenAndRememberMeCookie()
     {
-        list($session, $provider, $request, $cookie) = $this->getMocks();
-        $mock = $this->getMock(Guard::class, ['refreshRememberToken', 'clearUserDataFromStorage'], [$provider, $session, $request]);
+        list($session, $provider, $adminAuth, $request) = $this->getMocks();
+        $mock = $this->getMock(Guard::class, ['refreshRememberToken', 'clearUserDataFromStorage'], [$provider, $session, $adminAuth, $request]);
         $mock->setCookieJar($cookies = m::mock(CookieJar::class));
 
         $user = m::mock(\Illuminate\Contracts\Auth\Authenticatable::class);
@@ -93,8 +93,8 @@ class GuardTest extends \PHPUnit_Framework_TestCase {
 
     protected function getGuard()
     {
-        list($session, $provider, $request, $cookie) = $this->getMocks();
-        return new Guard($provider, $session, $request);
+        list($session, $provider, $adminAuth, $request) = $this->getMocks();
+        return new Guard($provider, $session, $adminAuth, $request);
     }
 
     protected function getMocks()
@@ -102,8 +102,8 @@ class GuardTest extends \PHPUnit_Framework_TestCase {
         return [
             m::mock(\Symfony\Component\HttpFoundation\Session\SessionInterface::class),
             m::mock(\Illuminate\Contracts\Auth\UserProvider::class),
+            ['session'=>'auth.admin', 'expire'=>30, 'password'=>'password'],
             Request::create('/', 'GET'),
-            m::mock(\Illuminate\Cookie\CookieJar::class),
         ];
     }
 }
