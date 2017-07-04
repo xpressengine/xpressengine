@@ -17,7 +17,7 @@ use Xpressengine\Plugin\PluginEntity;
 class SkinMake extends Command
 {
     protected $signature = 'make:skin
-                        {path : The path of skin directory started with plugin_id}
+                        {path : The path of theme directory started with "plugins/"}
                         {target : The target id of this skin}
                         {title : The title of the skin}
                         {--id= : The path of skin class file}
@@ -28,7 +28,7 @@ class SkinMake extends Command
      *
      * @var string
      */
-    protected $description = 'Create a new skin';
+    protected $description = 'Create a new skin of XpressEngine';
 
     /**
      * The filesystem instance.
@@ -235,7 +235,7 @@ class SkinMake extends Command
     protected function getPlugin()
     {
         $path = $this->argument('path');
-        list($plugin, $path) = explode('/', $path, 2);
+        list($pluginsDir, $plugin, $path) = explode('/', $path, 3);
 
         $plugin = app('xe.plugin')->getPlugin($plugin);
         if ($plugin === null) {
@@ -255,7 +255,7 @@ class SkinMake extends Command
     protected function getPath()
     {
         $path = $this->argument('path');
-        list($plugin, $path) = explode('/', $path, 2);
+        list($pluginsDir, $plugin, $path) = explode('/', $path, 3);
 
         return $path;
     }
