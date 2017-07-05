@@ -13,8 +13,7 @@
  */
 namespace Xpressengine\Storage;
 
-use Illuminate\Database\Query\Expression;
-use Illuminate\Support\Collection;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Xpressengine\User\UserInterface;
 use Xpressengine\User\GuardInterface as Authenticator;
@@ -79,6 +78,13 @@ class Storage
     protected $tempFiles;
 
     /**
+     * ResponseFactory instance
+     *
+     * @var ResponseFactory
+     */
+    protected $response;
+
+    /**
      * constructor
      *
      * @param FileRepository    $repo        file repository instance
@@ -87,6 +93,7 @@ class Storage
      * @param Keygen            $keygen      key generator instance
      * @param Distributor       $distributor distributor instance
      * @param TempFileCreator   $tempFiles   temporary file creator instance
+     * @param ResponseFactory   $response    ResponseFactory instance
      */
     public function __construct(
         FileRepository $repo,
@@ -94,7 +101,8 @@ class Storage
         Authenticator $auth,
         Keygen $keygen,
         Distributor $distributor,
-        TempFileCreator $tempFiles
+        TempFileCreator $tempFiles,
+        ResponseFactory $response
     ) {
         $this->repo = $repo;
         $this->files = $files;
@@ -102,6 +110,7 @@ class Storage
         $this->keygen = $keygen;
         $this->distributor = $distributor;
         $this->tempFiles = $tempFiles;
+        $this->response = $response;
     }
 
     /**
@@ -202,7 +211,7 @@ class Storage
      *
      * @param File        $file file instance
      * @param string|null $name name of be downloaded file
-     * @return void
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      * @throws FileDoesNotExistException
      */
     public function download(File $file, $name = null)
@@ -223,16 +232,10 @@ class Storage
          */
         $name = str_replace(',', ' ', $name);
 
-        header('Content-Description: File Transfer');
-        header('Content-Type: application/octet-stream');
-        header(sprintf('Content-Disposition: attachment; filename=%s', $name));
-        header("Content-Transfer-Encoding: binary");
-        header('Expires: 0');
-        header('Cache-Control: must-revalidate');
-        header('Pragma: public');
-        header('Content-Length: ' . $file->size);
+        $response = $this->response->download($this->tempFiles->create($file->getContent()), $name);
+        $response->deleteFileAfterSend(true);
 
-        file_put_contents('php://output', $file->getContent());
+        return $response;
     }
 
     /**

@@ -205,7 +205,7 @@ class EditorController extends Controller
      *
      * @param string        $instanceId instance id
      * @param string        $id
-     * @return void
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
     public function fileDownload($instanceId, $id)
     {
@@ -217,7 +217,7 @@ class EditorController extends Controller
             throw new AccessDeniedHttpException;
         }
 
-        XeStorage::download($file);
+        return XeStorage::download($file);
     }
 
     /**
