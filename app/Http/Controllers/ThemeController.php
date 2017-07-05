@@ -145,7 +145,7 @@ class ThemeController extends Controller
         $title = $request->get('title');
         $theme = $themeHandler->getTheme($instanceId);
 
-        if(!$theme->hasSetting()) {
+        if (!$theme->hasSetting()) {
             throw new NotSupportSettingException();
         }
 

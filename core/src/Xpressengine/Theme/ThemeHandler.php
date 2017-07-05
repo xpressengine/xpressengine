@@ -459,6 +459,7 @@ class ThemeHandler
     public function getThemeConfigList($id)
     {
         $base = $this->getThemeConfig($id, true);
+        $default = $this->getThemeConfig($id.'.0', true);
         $children = $this->config->children($base);
 
         $configs = [];

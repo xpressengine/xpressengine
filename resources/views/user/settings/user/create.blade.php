@@ -22,17 +22,11 @@
                                         {!! XeUI::formPassword(['id'=>'__xe_password', 'label'=>xe_trans('xe::password'), 'placeholder'=>xe_trans('xe::enterPassword'), 'name'=>'password', 'autocomplete'=>"new-password"]) !!}
                                 </div>
                                 <div class="col-sm-6">
-                                    <div class="form-group">
                                         {{-- status --}}
                                         {!! XeUI::formSelect(['id'=>'__xe_status', 'label'=>xe_trans('xe::status'), 'name'=>'status', 'options'=> $status]) !!}
-                                    </div>
-                                    <div class="form-group">
                                         {{-- rating --}}
                                         {!! XeUI::formSelect(['id'=>'__xe_rating', 'label'=>xe_trans('xe::memberRating'), 'name'=>'rating', 'options'=> $ratings]) !!}
-                                    </div>
-                                    <div class="form-group">
                                         {!! XeUI::formCheckbox(['id'=>'__xe_rating', 'label'=>xe_trans('xe::group'), 'name'=>'groupId', 'checkboxes'=> $groups]) !!}
-                                    </div>
                                 </div>
                                 <div class="col-sm-12">
                                     @foreach($fieldTypes as $fieldType)

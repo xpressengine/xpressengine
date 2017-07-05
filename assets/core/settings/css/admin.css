@@ -3870,6 +3870,10 @@ aside .list-title {
   font-size: 12px;
 }
 
+aside .snb-list li {
+  line-height: 0;
+}
+
 aside .snb-list li a {
   display: block;
   position: relative;
