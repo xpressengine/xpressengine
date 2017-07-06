@@ -14,6 +14,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Storage\File;
 use Xpressengine\Storage\FileRepository;
@@ -74,7 +75,8 @@ class StorageServiceProvider extends ServiceProvider
                 $app['xe.auth'],
                 $app['xe.keygen'],
                 $distributor,
-                $app['xe.storage.temp']
+                $app['xe.storage.temp'],
+                $app[ResponseFactory::class]
             );
         });
 
