@@ -3,22 +3,12 @@
 return [
     'encoding' => 'UTF-8',
     'finalize' => true,
-    'preload'  => false,
     'cachePath' => storage_path('framework/htmlpurifier/middleware'),
     'settings' => [
         'default' => [
-            'HTML.Doctype'             => 'XHTML 1.0 Strict',
-            'HTML.Allowed'             => 'div,b,strong,i,em,a[href|title],ul,ol,li,p[style],br,span[style|class|data-download-link|contenteditable],img[width|height|alt|src]',
-            'CSS.AllowedProperties'    => 'font,font-size,font-weight,font-style,font-family,text-decoration,padding-left,color,background-color,text-align',
+            'HTML.AllowedModules' => 'CommonAttributes,Hypertext,Image,List,StyleAttribute,Tables,Text,Structure,Legacy,NonXMLCommonAttributes,XMLCommonAttributes',
             'AutoFormat.AutoParagraph' => true,
-            'AutoFormat.RemoveEmpty'   => true
-        ],
-        'test' => [
-            'Attr.EnableID' => true
-        ],
-        "youtube" => [
-            "HTML.SafeIframe" => 'true',
-            "URI.SafeIframeRegexp" => "%^(http://|https://|//)(www.youtube.com/embed/|player.vimeo.com/video/)%",
-        ],
+            'AutoFormat.RemoveEmpty' => true
+        ]
     ],
 ];
