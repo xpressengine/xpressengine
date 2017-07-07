@@ -32,8 +32,9 @@ class Widget extends HTMLPurifier_HTMLModule
 
     /**
      * setup HTMLModule
-     * @param HTMLPurifier_Config $config config
      * @see http://htmlpurifier.org/doxygen/html/classHTMLPurifier__Config.html
+     * @param HTMLPurifier_Config $config config
+     * @return void
      */
     public function setup($config)
     {
