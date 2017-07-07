@@ -32,7 +32,7 @@ class Widget extends HTMLPurifier_HTMLModule
 
     public function setup($config)
     {
-        $this->addElement('xewidget', 'Block',  'Empty',  'Common', array(
+        $this->addElement('xewidget', 'Block', 'Empty', 'Common', array(
             'id' => 'ID',
             'skin-id' => 'ID',
             'title' => 'Text'

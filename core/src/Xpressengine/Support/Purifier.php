@@ -95,7 +95,7 @@ class Purifier
      *
      * @see http://htmlpurifier.org/doxygen/html/classHTMLPurifier__HTMLModule.html
      *
-     * @param $module string module
+     * @param string $module module
      * @return void
      */
     public function allowModule($module)
@@ -111,7 +111,7 @@ class Purifier
      *
      * @see http://htmlpurifier.org/doxygen/html/classHTMLPurifier__HTMLModule.html
      *
-     * @param $module string module
+     * @param string $module module
      * @return void
      */
     public function disallowModule($module)
