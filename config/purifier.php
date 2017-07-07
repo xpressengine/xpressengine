@@ -6,7 +6,8 @@ return [
     'cachePath' => storage_path('framework/htmlpurifier/middleware'),
     'settings' => [
         'default' => [
-            'HTML.AllowedModules' => 'CommonAttributes,Hypertext,Image,List,StyleAttribute,Tables,Text,Structure,Legacy,NonXMLCommonAttributes,XMLCommonAttributes',
+            'HTML.AllowedModules' => 'CommonAttributes,Hypertext,Image,List,StyleAttribute,Tables'.
+                ',Text,Structure,Legacy,NonXMLCommonAttributes,XMLCommonAttributes',
             'AutoFormat.AutoParagraph' => true,
             'AutoFormat.RemoveEmpty' => true
         ]

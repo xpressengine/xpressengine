@@ -58,7 +58,9 @@ class Purifier
             [
                 'Core.Encoding' => $app['config']['purifier.encoding'],
                 'Cache.SerializerPath' => $app['config']['purifier.cachePath'],
-                'HTML.AllowedModules' => 'CommonAttributes,Hypertext,Image,List,Nofollow,StyleAttribute,Tables,Text,Legacy,Presentation,Structure,NonXMLCommonAttributes,XMLCommonAttributes',
+                'HTML.AllowedModules' => 'CommonAttributes,Hypertext,Image,List,Nofollow'.
+                    ',StyleAttribute,Tables,Text,Legacy,Presentation,Structure,NonXMLCommonAttributes'.
+                    ',XMLCommonAttributes',
                 'AutoFormat.AutoParagraph' => false,
                 'AutoFormat.RemoveEmpty' => false
             ]
@@ -90,9 +92,11 @@ class Purifier
 
     /**
      * HTMLModule 로드
-     * 
-     * @param $module string
+     *
      * @see http://htmlpurifier.org/doxygen/html/classHTMLPurifier__HTMLModule.html
+     *
+     * @param $module string module
+     * @return void
      */
     public function allowModule($module)
     {
@@ -104,9 +108,11 @@ class Purifier
 
     /**
      * HTMLModule 제거, 비활성
-     * 
-     * @param $module string
+     *
      * @see http://htmlpurifier.org/doxygen/html/classHTMLPurifier__HTMLModule.html
+     *
+     * @param $module string module
+     * @return void
      */
     public function disallowModule($module)
     {
@@ -118,8 +124,9 @@ class Purifier
 
     /**
      * HTMLPurifier 설정을 추가 변경할 수 없도록 제한
-     * 
+     *
      * @see HTMLPurifier_Config::finalize()
+     * @return void
      */
     public function finalize()
     {
@@ -128,12 +135,14 @@ class Purifier
 
     /**
      * HTML이 권한이 부여된 자가 작성한 콘텐츠 등 제한을 조금 더 허용하는 수준으로 설정
-     * 
+     *
      * Purifier HTML, CSS 허용 범위가 제한되어 있을 수 있으며, 속성에 대한 값이나 형식, 최대 값 등이 해당될 수 있음.
      * 특정 속성의 사용, 범위 및 값의 제한이 발생하는 경우 이 메소드를 호출하여 제한을 해제할 수 있음.
-     * 
+     *
      * @see http://htmlpurifier.org/live/configdoc/plain.html#HTML.Trusted
      * @see http://htmlpurifier.org/live/configdoc/plain.html#CSS.Trusted
+     *
+     * @return void
      */
     public function trusted()
     {
@@ -152,10 +161,10 @@ class Purifier
         $htmlDef = $this->config->getHTMLDefinition(true);
         $allowedModules = $this->config->get('HTML.AllowedModules');
 
-        if(in_array('XeEditorTool', $allowedModules)) {
+        if (in_array('XeEditorTool', $allowedModules)) {
             $htmlDef->manager->addModule(new EditorTool());
         }
-        if(in_array('XeWidget', $allowedModules)) {
+        if (in_array('XeWidget', $allowedModules)) {
             $htmlDef->manager->addModule(new Widget());
         }
 
