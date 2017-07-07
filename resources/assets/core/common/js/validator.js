@@ -19,7 +19,7 @@ import moment from 'moment';
       var ruleList = v.split('|');
 
       $.each(ruleList, function (idx, val) {
-        var langKey = val.split(':')[0];
+        var langKey = val.split(':')[0].toLowerCase();
 
         if (!Translator.hasMessage('validation.' + langKey) && !langMap.hasOwnProperty(langKey)) {
           langMap[langKey] = '';
