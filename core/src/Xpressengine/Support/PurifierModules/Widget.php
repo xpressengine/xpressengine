@@ -30,6 +30,11 @@ class Widget extends HTMLPurifier_HTMLModule
 {
     public $name = 'XeWidget';
 
+    /**
+     * setup HTMLModule
+     * @param HTMLPurifier_Config $config config
+     * @see http://htmlpurifier.org/doxygen/html/classHTMLPurifier__Config.html
+     */
     public function setup($config)
     {
         $this->addElement('xewidget', 'Block', 'Empty', 'Common', array(
