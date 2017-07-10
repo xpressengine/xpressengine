@@ -12,10 +12,12 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Xpressengine\Http\Request;
 use Xpressengine\Permission\Grant;
 use Xpressengine\Permission\PermissionHandler;
+use Xpressengine\Settings\AdminLog\LogHandler;
 use Xpressengine\Settings\SettingsHandler;
 use Xpressengine\Site\SiteHandler;
-use Xpressengine\Storage\File;
 use Xpressengine\Theme\ThemeHandler;
+use Xpressengine\User\Rating;
+use Xpressengine\User\UserHandler;
 
 class SettingsController extends Controller
 {
@@ -32,18 +34,6 @@ class SettingsController extends Controller
         );
     }
 
-    public function editTheme(ThemeHandler $themeHandler)
-    {
-        $selectedTheme = $themeHandler->getSiteThemeId();
-
-        return \XePresenter::make(
-            'settings.theme',
-            compact(
-                'selectedTheme'
-            )
-        );
-    }
-
     public function updateSetting(SiteHandler $siteHandler, Request $request)
     {
         $inputs = $request->only(['site_title', 'favicon']);
@@ -55,33 +45,9 @@ class SettingsController extends Controller
         /* resolve favicon */
         $uploaded = array_get($inputs, 'favicon');
 
-
         if ($uploaded !== null) {
             $favicon = $this->saveFile($oldConfig, 'favicon', $uploaded, 'public/favicon/default');
             $oldConfig['favicon'] = $favicon;
-            // remove old favicon file
-            //if ($oldId = $oldConfig->get('favicon.id')) {
-            //    $oldId = $oldConfig->get('favicon.id');
-            //    if ($oldId !== null) {
-            //        $oldFile = app('xe.storage')->find($oldId);
-            //        if ($oldFile !== null) {
-            //            app('xe.storage')->remove($oldFile);
-            //        }
-            //    }
-            //}
-            //
-            //$saved = app('xe.storage')->upload($uploaded, 'filebox');
-            //$favicon = [
-            //    'id' => $saved->id,
-            //    'filename' => $saved->clientname
-            //];
-            //
-            //$media = app('xe.media');
-            //$mediaFile = null;
-            //if ($media->is($saved)) {
-            //    $mediaFile = $media->make($saved);
-            //    $favicon['path'] = $mediaFile->url();
-            //}
         }
 
         $siteHandler->putSiteConfig($oldConfig);
@@ -133,6 +99,17 @@ class SettingsController extends Controller
         return $saved;
     }
 
+    public function editTheme(ThemeHandler $themeHandler)
+    {
+        $selectedTheme = $themeHandler->getSiteThemeId();
+
+        return \XePresenter::make(
+            'settings.theme',
+            compact(
+                'selectedTheme'
+            )
+        );
+    }
 
     public function updateTheme(ThemeHandler $themeHandler, Request $request)
     {
@@ -216,6 +193,33 @@ class SettingsController extends Controller
 
         $ret = explode(',', $param);
         return array_filter($ret);
+    }
+
+    public function indexLog(Request $request, LogHandler $handler, UserHandler $userHandler)
+    {
+        $loggers = $handler->getLoggers();
+        $query = $handler->query()->with('user')->orderBy('createdAt', 'desc');
+
+        $type = $request->get('type');
+        if ($type) {
+            $query->where('type', $type);
+        }
+
+        $userId = $request->get('user_id');
+        if ($userId) {
+            $query->where('userId', $userId);
+        }
+
+        $logs = $query->paginate(20);
+
+        $admins = $userHandler->whereIn('rating', [Rating::MANAGER, Rating::SUPER])->get();
+        return \XePresenter::make('settings.logs.index', compact('loggers', 'logs', 'admins'));
+    }
+
+    public function showLog(LogHandler $handler, $id)
+    {
+        $log = $handler->find($id);
+        return apiRender('settings.logs.show', compact('log'));
     }
 
 }

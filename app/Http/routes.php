@@ -530,6 +530,27 @@ Route::settings(
                 'uses' => 'SettingsController@updatePermission'
             ]
         );
+
+        Route::get(
+            'logs',
+            [
+                'as' => 'settings.setting.log.index',
+                'uses' => 'SettingsController@indexLog',
+                'settings_menu' => 'setting.admin-log',
+                'middleware' => 'admin'
+            ]
+        );
+
+        Route::get(
+            'logs/{id}',
+            [
+                'as' => 'settings.setting.log.show',
+                'uses' => 'SettingsController@showLog',
+                'middleware' => 'admin'
+            ]
+        );
+
+
     }
 );
 

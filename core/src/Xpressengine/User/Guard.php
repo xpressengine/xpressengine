@@ -115,6 +115,12 @@ class Guard extends LaravelGuard implements GuardInterface
         $time = time() + ($expire * 60);
         $this->session->set($key, $time);
     }
+
+    protected function clearAdminAuth()
+    {
+        $key = $this->adminAuthConfig['session'];
+        $this->session->remove($key);
+    }
     
     /**
      * 현재 사용자의 로그인 여부를 체크한다.
@@ -199,6 +205,7 @@ class Guard extends LaravelGuard implements GuardInterface
         // so any further processing can be done. This allows the developer to be
         // listening for anytime a user signs out of this application manually.
         $this->clearUserDataFromStorage();
+        $this->clearAdminAuth();
 
         if ($this->check()) {
             $this->refreshRememberToken($user);

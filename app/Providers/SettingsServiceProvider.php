@@ -8,13 +8,17 @@
 
 namespace App\Providers;
 
+use App\Themes\DefaultSettings;
+use App\Themes\SettingsTheme;
+use App\UIObjects\Settings\SettingsPermission;
 use Illuminate\Support\ServiceProvider;
+use Xpressengine\Register\Container;
+use Xpressengine\Settings\AdminLog\Loggers\UserLogger;
+use Xpressengine\Settings\AdminLog\LogHandler;
+use Xpressengine\Settings\AdminLog\Models\Log;
+use Xpressengine\Settings\AdminLog\Repositories\LogRepository;
 use Xpressengine\Settings\SettingsHandler;
 use Xpressengine\Settings\SettingsMenuPermission;
-use Xpressengine\Permission\Factory as PermissionFactory;
-use App\Themes\SettingsTheme;
-use App\Themes\DefaultSettings;
-use App\UIObjects\Settings\SettingsPermission;
 
 class SettingsServiceProvider extends ServiceProvider
 {
@@ -47,21 +51,41 @@ class SettingsServiceProvider extends ServiceProvider
                 return $handler;
             }
         );
+
+        // register for admin log
+        $this->app->singleton(
+            'xe.adminlogs',
+            function ($app) {
+                $repo = $app['xe.interception']->proxy(LogRepository::class);
+                $repo = new $repo(Log::class);
+                return $repo;
+            }
+        );
+
+        $this->app->singleton(
+            ['xe.adminlog' => LogHandler::class],
+            function ($app) {
+                $handler = $app['xe.interception']->proxy(LogHandler::class, 'XeAdminLog');
+                $handler = new $handler($app['xe.register'], $app['xe.adminlogs']);
+                return $handler;
+            }
+        );
     }
 
     public function boot()
     {
-        $app = $this->app;
-
         // register default manage theme.
         $this->registerDefaultTheme();
 
         // register settings menus;
         $this->registerSettingsMenus();
 
-        // register settings permission type
-//        $this->registerSettingsPermissionType();
+        // register settings permission uiobject
         $this->registerPermissionUIObject();
+
+        $this->registerDefaultLoggers();
+
+        $this->setDetailResolverForLog();
     }
 
     /**
@@ -73,18 +97,6 @@ class SettingsServiceProvider extends ServiceProvider
     {
         return ['xe.settings'];
     }
-
-//    private function registerSettingsPermissionType()
-//    {
-//        /** @var PermissionFactory $permissionFactory */
-//        $permissionFactory = $this->app['xe.permission'];
-//        $permissionFactory->extend(
-//            'settings',
-//            function ($target, $user, $registered) {
-//                return new SettingsMenuPermission($user, $registered);
-//            }
-//        );
-//    }
 
     private function registerPermissionUIObject()
     {
@@ -110,5 +122,24 @@ class SettingsServiceProvider extends ServiceProvider
         foreach ($menus as $id => $menu) {
             $register->push('settings/menu', $id, $menu);
         }
+    }
+
+    private function registerDefaultLoggers()
+    {
+        /** @var Container $register */
+        $register = $this->app['xe.register'];
+        $register->push('admin/logger', UserLogger::$id, UserLogger::class);
+    }
+
+    private function setDetailResolverForLog()
+    {
+        /** @var LogHandler $handler */
+        $handler = $this->app['xe.adminlog'];
+        Log::setDetailResolver(
+            function ($log) use ($handler) {
+                $logger = $handler->getLogger($log->type);
+                return $logger->renderDetail($log);
+            }
+        );
     }
 }
