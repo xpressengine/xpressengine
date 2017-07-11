@@ -4,22 +4,53 @@
     </div>
     <div class="xe-modal-body">
         <dl>
-            <dt>date</dt>
-            <dl> {{ $log->createdAt->format('y.m.d H:i:s') }} </dl>
-            <dt>summary</dt>
-            <dl> {{ $log->summary }} </dl>
-            <dt>detail</dt>
-            <dl> {{ $log->detail }} </dl>
-            <dt>method</dt>
-            <dl> {{ $log->method }} </dl>
-            <dt>url</dt>
-            <dl> {{ $log->url }} </dl>
-            <dt>user</dt>
-            <dl> {{ $log->user->getDisplayName() }} </dl>
-            <dt>parameters</dt>
-            <dl> {{ json_encode($log->parameters) }} </dl>
-            <dt>ipaddress</dt>
-            <dl> {{ $log->ipaddress }} </dl>
+            <div class="panel panel-default">
+                <div class="panel-heading">date</div>
+                <div class="panel-body"> {{ $log->createdAt->format('y.m.d H:i:s') }} </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">summary</div>
+                <div class="panel-body"> {{ $log->summary }} </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">detail</div>
+                <div class="panel-body"> {{ $log->detail }} </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">method</div>
+                <div class="panel-body"> {{ $log->method }} </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">url</div>
+                <div class="panel-body"> {{ $log->url }} </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">user</div>
+                <div class="panel-body"> {{ $log->user->getDisplayName() }} </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">parameters</div>
+                <div class="panel-body">
+                    @if(count($log->parameters))
+                        <table class="table table-bordered">
+                            @foreach($log->parameters as $key => $value)
+                                <tr>
+                                    <th>
+                                        {{ $key }}
+                                    </th>
+                                    <td>
+                                        {{ $value }}
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    @endif
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">ipaddress</div>
+                <div class="panel-body"> {{ $log->ipaddress }} </div>
+            </div>
         </dl>
     </div>
     <div class="xe-modal-footer">

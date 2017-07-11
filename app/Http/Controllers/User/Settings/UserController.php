@@ -72,7 +72,7 @@ class UserController extends Controller
         $field = $request->get('keyfield', 'email,displayName');
         $field = ($field === '') ? 'email,displayName' : $field;
 
-        if ($keyword = $request->get('keyword')) {
+        if ($keyword = trim($request->get('keyword'))) {
             $query = $query->where(
                 function (Builder $q) use ($field, $keyword) {
                     foreach (explode(',', $field) as $f) {

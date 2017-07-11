@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\Eloquent\Builder;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Xpressengine\Http\Request;
 use Xpressengine\Permission\Grant;
@@ -210,6 +211,20 @@ class SettingsController extends Controller
             $query->where('userId', $userId);
         }
 
+        // resolve search keyword
+        // keyfield가 지정되지 않을 경우 url, summary를 대상으로 검색함
+        $field = $request->get('keyfield', 'url,summary');
+        $field = ($field === '') ? 'url,summary' : $field;
+
+        if ($keyword = trim($request->get('keyword'))) {
+            $query->where(
+                function (Builder $q) use ($field, $keyword) {
+                    foreach (explode(',', $field) as $f) {
+                        $q->orWhere($f, 'like', '%'.$keyword.'%');
+                    };
+                }
+            );
+        }
         $logs = $query->paginate(20);
 
         $admins = $userHandler->whereIn('rating', [Rating::MANAGER, Rating::SUPER])->get();

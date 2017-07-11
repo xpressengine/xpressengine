@@ -69,7 +69,7 @@ abstract class AbstractLogger
             'userId' => $request->user()->getId(),
             'method' => $request->method(),
             'url' => $request->fullUrl(),
-            'parameters' => $request->all(),
+            'parameters' => $request->except('_method', '_token'),
             'summary' => '',
             'data' => [],
             'ipaddress' => $request->ip()

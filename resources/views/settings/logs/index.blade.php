@@ -44,40 +44,43 @@
                             @yield('admin-select')
                         </div>
                     </div>
-                    {{--<div class="pull-right">--}}
-                        {{--<div class="input-group search-group">--}}
-                            {{--<form method="GET" action="{{ route('settings.setting.log.index') }}" accept-charset="UTF-8" role="form" id="_search-form">--}}
-                                {{--<div class="input-group-btn">--}}
-                                    {{--<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">--}}
-                                        {{--<span class="__xe_selectedKeyfield">--}}
-                                        {{--@if(Input::get('keyfield')==='displayName')--}}
-                                            {{--{{xe_trans('xe::name')}}--}}
-                                        {{--@elseif(Input::get('keyfield')==='email')--}}
-                                            {{--{{xe_trans('xe::email')}}--}}
-                                        {{--@else--}}
-                                            {{--{{xe_trans('xe::select')}}--}}
-                                        {{--@endif--}}
-                                        {{--</span>--}}
-                                        {{--<span class="caret"></span>--}}
-                                    {{--</button>--}}
-                                    {{--<ul class="dropdown-menu" role="menu">--}}
-                                        {{--<li><a href="#" class="__xe_selectKeyfield" data-value="displayName">{{xe_trans('xe::name')}}</a></li>--}}
-                                        {{--<li><a href="#" class="__xe_selectKeyfield" data-value="email">{{xe_trans('xe::email')}}</a></li>--}}
-                                    {{--</ul>--}}
-                                {{--</div>--}}
-                                {{--<div class="search-input-group">--}}
-                                    {{--<input type="text" name="keyword" class="form-control" aria-label="Text input with dropdown button" placeholder="{{xe_trans('xe::enterKeyword')}}" value="{{ Input::get('keyword') }}">--}}
-                                    {{--<button type="submit" class="btn-link">--}}
-                                        {{--<i class="xi-search"></i><span class="sr-only">{{xe_trans('xe::search')}}</span>--}}
-                                    {{--</button>--}}
-                                {{--</div>--}}
-                                {{--@foreach(Input::except(['keyfield','keyword','page']) as $name => $value)--}}
-                                    {{--<input type="hidden" name="{{ $name }}" value="{{ $value }}">--}}
-                                {{--@endforeach--}}
-                                {{--<input type="hidden" class="__xe_keyfield" name="keyfield" value="{{ Input::get('keyfield') }}">--}}
-                            {{--</form>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
+                    <div class="pull-right">
+                        <div class="input-group search-group">
+                            <form method="GET" action="{{ route('settings.setting.log.index') }}" accept-charset="UTF-8" role="form" id="_search-form">
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                        <span class="__xe_selectedKeyfield">
+                                        @if(request()->get('keyfield')==='url')
+                                            URL
+                                        @elseif(request()->get('keyfield')==='summary')
+                                            요약
+                                        @elseif(request()->get('keyfield')==='ipaddress')
+                                            IP주소
+                                        @else
+                                            선택
+                                        @endif
+                                        </span>
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a href="#" class="__xe_selectKeyfield" data-value="url">URL</a></li>
+                                        <li><a href="#" class="__xe_selectKeyfield" data-value="summary">요약</a></li>
+                                        <li><a href="#" class="__xe_selectKeyfield" data-value="ipaddress">IP주소</a></li>
+                                    </ul>
+                                </div>
+                                <div class="search-input-group">
+                                    <input type="text" name="keyword" class="form-control" aria-label="Text input with dropdown button" placeholder="{{xe_trans('xe::enterKeyword')}}" value="{{ request()->get('keyword') }}">
+                                    <button type="submit" class="btn-link">
+                                        <i class="xi-search"></i><span class="sr-only">{{xe_trans('xe::search')}}</span>
+                                    </button>
+                                </div>
+                                @foreach(request()->except(['keyfield','keyword','page']) as $name => $value)
+                                    <input type="hidden" name="{{ $name }}" value="{{ $value }}">
+                                @endforeach
+                                <input type="hidden" class="__xe_keyfield" name="keyfield" value="{{ request()->get('keyfield') }}">
+                            </form>
+                        </div>
+                    </div>
 
                 </div>
                 <div class="table-responsive">
@@ -103,7 +106,7 @@
                                 {{ $log->type }}
                                 @endif
                             </td>
-                            <td>{{ $log->user->getDisplayName() }}</td>
+                            <td><a href="#" data-toggle="xeUserMenu" data-user-id="{{ $log->user->getId() }}" >{{ $log->user->getDisplayName() }}</a></td>
                             <td>{{ $log->summary }}</td>
                             <td><a class="xe-btn xe-btn-link" href="{{ route('settings.setting.log.show', ['id'=>$log->id]) }}" data-toggle="xe-page-modal">보기</a></td>
                             <td>{{ $log->ipaddress }}</td>
@@ -125,3 +128,53 @@
         </div>
     </div>
 </div>
+
+
+<script type="text/javascript">
+
+    var LogList = (function() {
+        var self;
+
+        return {
+            init: function() {
+                self = this;
+
+                self.cache();
+                self.bindEvents();
+
+                return this;
+            },
+            cache: function() {
+                self.$selectKeyfield = $('.__xe_selectKeyfield');
+                self.$selectedKeyfield = $('.__xe_selectedKeyfield');
+                self.$keyfield = $('.__xe_keyfield');
+                self.$remove = $('.__xe_remove');
+                self.$tooltip = $('[data-toggle=tooltip]');
+                self.$dropdownToggle = $('.dropdown-toggle');
+            },
+            bindEvents: function() {
+                //tooltip;
+                self.$tooltip.tooltip();
+
+                //dropdown toggle
+                self.$dropdownToggle.dropdown();
+
+                self.$selectKeyfield.on('click', self.selectKeyfield);
+                self.$remove.on('click', self.remove);
+            },
+            selectKeyfield: function(e) {
+                e.preventDefault();
+
+                var $this = $(this),
+                    val = $this.attr('data-value'),
+                    name = $this.text();
+
+                self.$selectedKeyfield.text(name);
+                self.$keyfield.val(val);
+
+            },
+            remove: function() {
+            }
+        }
+    })().init();
+</script>
