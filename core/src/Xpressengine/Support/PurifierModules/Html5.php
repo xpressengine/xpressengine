@@ -35,6 +35,7 @@ class Html5 extends HTMLPurifier_HTMLModule
      *
      * @see http://htmlpurifier.org/doxygen/html/classHTMLPurifier__Config.html
      * @param HTMLPurifier_Config $config config
+     * @return void
      */
     public function setup($config)
     {
