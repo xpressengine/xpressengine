@@ -289,9 +289,9 @@ if (function_exists('locale_url') === false) {
      */
     function locale_url($locale)
     {
-        app('request')->query->set('_l', $locale);
-
-        return app('request')->url() . '?' . http_build_query(app('request')->query->all());
+        $queries = app('request')->query->all();
+        array_set($queries, '_l', $locale);
+        return app('request')->url() . '?' . http_build_query($queries);
     }
 }
 

@@ -71,12 +71,12 @@ function jsLoad(url) {
   DynamicLoadManager.jsLoad(url);
 }
 
-function toast(type, message) {
+function toast(type, message, pos) {
   if (type == '') {
     type = 'danger';
   }
 
-  griper.toast(type, message);
+  griper.toast(type, message, pos);
 }
 
 function toastByStatus(status, message) {
