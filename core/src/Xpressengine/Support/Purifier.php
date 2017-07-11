@@ -16,8 +16,7 @@ namespace Xpressengine\Support;
 
 use HTMLPurifier;
 use HTMLPurifier_Config;
-use Xpressengine\Support\PurifierModules\EditorTool;
-use Xpressengine\Support\PurifierModules\Widget;
+use Xpressengine\Support\PurifierModules;
 
 /**
  * HTML 을 전달하는 에디터를 사용할 경우 사이트에서 사용하는 Purifier 와 다른
@@ -162,10 +161,13 @@ class Purifier
         $allowedModules = $this->config->get('HTML.AllowedModules');
 
         if (in_array('XeEditorTool', $allowedModules)) {
-            $htmlDef->manager->addModule(new EditorTool());
+            $htmlDef->manager->addModule(new PurifierModules\EditorTool());
+        }
+        if (in_array('HTML5', $allowedModules)) {
+            $htmlDef->manager->addModule(new PurifierModules\Html5());
         }
         if (in_array('XeWidget', $allowedModules)) {
-            $htmlDef->manager->addModule(new Widget());
+            $htmlDef->manager->addModule(new PurifierModules\Widget());
         }
 
         $this->finalize();
