@@ -102,11 +102,6 @@ class Purifier
     {
         $this->modules[] = $module;
         $this->modules = array_unique($this->modules);
-
-//        $modules = $this->config->get('HTML.AllowedModules');
-//        $modules[$module] = true;
-//
-//        $this->config->set('HTML.AllowedModules', $modules);
     }
 
     /**
@@ -123,10 +118,6 @@ class Purifier
         if ($key !== false) {
             unset($this->modules[$key]);
         }
-//        $modules = $this->config->get('HTML.AllowedModules');
-//        unset($modules[$module]);
-//
-//        $this->config->set('HTML.AllowedModules', $modules);
     }
 
     /**
