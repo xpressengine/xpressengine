@@ -12,12 +12,12 @@
  * @link        https://xpressengine.io
  */
 
-namespace Xpressengine\Support\PurifierModules;
+namespace Xpressengine\Editor\PurifierModules;
 
 use HTMLPurifier_HTMLModule;
 
 /**
- * HTML에서 위젯 코드를 유지하기위한 허용 필터
+ * 에디터에서 사용하는 에디터툴의 추가 속성을 허용하기 위한 필터 추가
  *
  * @category    Support
  * @package     Xpressengine\Support
@@ -26,22 +26,14 @@ use HTMLPurifier_HTMLModule;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class Widget extends HTMLPurifier_HTMLModule
+class EditorTool extends HTMLPurifier_HTMLModule
 {
-    public $name = 'XeWidget';
+    public $name = 'XeEditorTool';
 
-    /**
-     * setup HTMLModule
-     * @see http://htmlpurifier.org/doxygen/html/classHTMLPurifier__Config.html
-     * @param HTMLPurifier_Config $config config
-     * @return void
-     */
-    public function setup($config)
-    {
-        $this->addElement('xewidget', 'Block', 'Empty', 'Common', array(
-            'id' => 'ID',
-            'skin-id' => 'ID',
-            'title' => 'Text'
-        ));
-    }
+    public $attr_collections = array(
+        'Core' => array(
+            'xe-tool-id' => 'Text',
+            'xe-tool-data' => 'CDATA'
+        )
+    );
 }
