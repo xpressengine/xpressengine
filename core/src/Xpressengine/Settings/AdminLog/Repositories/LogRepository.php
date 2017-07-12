@@ -14,6 +14,8 @@
 
 namespace Xpressengine\Settings\AdminLog\Repositories;
 
+use Xpressengine\Settings\AdminLog\Models\Log;
+
 /**
  * 어드민 접속 로그를 저장하는 Repository
  *
@@ -42,6 +44,13 @@ class LogRepository
         $this->setModel($model);
     }
 
+    /**
+     * create log
+     *
+     * @param array $data log data
+     *
+     * @return mixed
+     */
     public function create(array $data)
     {
         $model = $this->createModel();
@@ -51,12 +60,12 @@ class LogRepository
     /**
      * update
      *
-     * @param Model $item item
+     * @param Log   $item item
      * @param array $data data
      *
-     * @return Model
+     * @return Log
      */
-    public function update(Model $item, array $data = [])
+    public function update(Log $item, array $data = [])
     {
         $item->update($data);
         return $item;
@@ -65,12 +74,12 @@ class LogRepository
     /**
      * delete
      *
-     * @param Model $item item
+     * @param Log $item item
      *
      * @return bool|null
      * @throws \Exception
      */
-    public function delete(Model $item)
+    public function delete(Log $item)
     {
         return $item->delete();
     }
@@ -99,7 +108,7 @@ class LogRepository
     /**
      * Create model instance
      *
-     * @return Model
+     * @return Log
      */
     public function createModel()
     {
@@ -109,7 +118,7 @@ class LogRepository
     }
 
     /**
-     * query
+     * get query
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */

@@ -19,7 +19,6 @@ use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 use Illuminate\Contracts\Auth\UserProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Xpressengine\User\Exceptions\AuthIsUnavailableException;
 use Xpressengine\User\Models\Guest;
 
 /**
@@ -108,6 +107,11 @@ class Guard extends LaravelGuard implements GuardInterface
         return false;
     }
 
+    /**
+     * 관리자 인증 상태 세션의 유효기간 갱신
+     *
+     * @return void
+     */
     protected function refreshAdminAuth()
     {
         $key = $this->adminAuthConfig['session'];
@@ -116,12 +120,17 @@ class Guard extends LaravelGuard implements GuardInterface
         $this->session->set($key, $time);
     }
 
+    /**
+     * 관리자 인증 상태 세션의 유효기간 갱신 삭제
+     *
+     * @return void
+     */
     protected function clearAdminAuth()
     {
         $key = $this->adminAuthConfig['session'];
         $this->session->remove($key);
     }
-    
+
     /**
      * 현재 사용자의 로그인 여부를 체크한다.
      *
@@ -144,6 +153,7 @@ class Guard extends LaravelGuard implements GuardInterface
     {
         $this->checkSession();
 
+        /** @var UserInterface $user */
         $user = parent::user();
         if ($user === null) {
             return $this->makeGuest();
@@ -155,14 +165,14 @@ class Guard extends LaravelGuard implements GuardInterface
     /**
      * 현재 로그인한 사용자의 id를 반환한다.
      *
-     * @return string|void 로그인 사용자의 id
+     * @return mixed 로그인 사용자의 id
      */
     public function id()
     {
         $this->checkSession();
 
         if ($this->loggedOut) {
-            return;
+            return null;
         }
 
         $id = $this->session->get($this->getName(), $this->getRecallerId());
@@ -244,9 +254,8 @@ class Guard extends LaravelGuard implements GuardInterface
         // disable checking session
         return;
 
-        if ($this->session->isStarted() === false) {
-            throw new AuthIsUnavailableException();
-        }
+        //if ($this->session->isStarted() === false) {
+        //    throw new AuthIsUnavailableException();
+        //}
     }
-
 }

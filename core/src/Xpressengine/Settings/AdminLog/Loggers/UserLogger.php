@@ -38,7 +38,7 @@ class UserLogger extends AbstractLogger
     /**
      * run logging request
      *
-     * @param Request $request
+     * @param Request $request incoming request
      *
      * @return void
      */
@@ -48,6 +48,13 @@ class UserLogger extends AbstractLogger
         $run($request);
     }
 
+    /**
+     * matches
+     *
+     * @param Request $request incoming request
+     *
+     * @return boolean
+     */
     public function matches(Request $request)
     {
         /*
@@ -137,6 +144,13 @@ class UserLogger extends AbstractLogger
         return $matched ? true : false;
     }
 
+    /**
+     * render log entity to html
+     *
+     * @param Log $log log entity
+     *
+     * @return string
+     */
     public function renderDetail(Log $log)
     {
         $list = [

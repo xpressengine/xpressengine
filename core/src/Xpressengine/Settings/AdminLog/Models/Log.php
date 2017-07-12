@@ -13,6 +13,7 @@
  */
 namespace Xpressengine\Settings\AdminLog\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Xpressengine\Database\Eloquent\DynamicModel;
 use Xpressengine\User\Models\User;
 
@@ -46,16 +47,33 @@ class Log extends DynamicModel
         'type', 'userId', 'method', 'url', 'parameters', 'summary', 'data', 'ipaddress', 'createdAt'
     ];
 
+    /**
+     * set log detail info resolver
+     *
+     * @param \Closure $resolver resolver
+     *
+     * @return void
+     */
     public static function setDetailResolver(\Closure $resolver)
     {
         static::$detailResolver = $resolver;
     }
 
+    /**
+     * user relation
+     *
+     * @return BelongsTo
+     */
     public function user()
     {
         return $this->belongsTo(User::class, 'userId');
     }
 
+    /**
+     * define detail accessor
+     *
+     * @return mixed
+     */
     public function getDetailAttribute()
     {
         $resolver = static::$detailResolver;

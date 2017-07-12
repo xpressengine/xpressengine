@@ -47,21 +47,49 @@ abstract class AbstractLogger
     /**
      * run logging request
      *
-     * @param Request $request
+     * @param Request $request incoming request
      *
      * @return void
      */
     abstract public function run(Request $request);
 
+    /**
+     * matches
+     *
+     * @param Request $request incoming request
+     *
+     * @return boolean
+     */
     abstract public function matches(Request $request);
 
+    /**
+     * render log entity to html
+     *
+     * @param Log $log log entity
+     *
+     * @return string
+     */
     abstract public function renderDetail(Log $log);
 
+    /**
+     * store log to database
+     *
+     * @param array $data log information
+     *
+     * @return void
+     */
     protected function log($data)
     {
         $this->handler->log($data);
     }
 
+    /**
+     * make log data from request
+     *
+     * @param Request $request imcoming request
+     *
+     * @return array
+     */
     protected function loadRequest(Request $request)
     {
         return [

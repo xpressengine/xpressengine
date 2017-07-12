@@ -48,6 +48,7 @@ class LogHandler
     /**
      * LogHandler constructor.
      *
+     * @param Container     $register   xe register
      * @param LogRepository $repository log repository
      */
     public function __construct(Container $register, LogRepository $repository)
@@ -56,13 +57,18 @@ class LogHandler
         $this->register = $register;
     }
 
+    /**
+     * get Repository
+     *
+     * @return LogRepository
+     */
     public function getRepository()
     {
         return $this->repository;
     }
 
     /**
-     * getLoggers
+     * get list of registered logger's id
      *
      * @return string[] logger id list
      */
@@ -72,15 +78,20 @@ class LogHandler
         return $loggers;
     }
 
+    /**
+     * get Loggers(id => class name)
+     *
+     * @return array
+     */
     public function getLoggers()
     {
         return $this->register->get('admin/logger', []);
     }
 
     /**
-     * getLogger
+     * get Logger instance
      *
-     * @param $id
+     * @param string $id logger id
      *
      * @return AbstractLogger
      */
@@ -115,16 +126,14 @@ class LogHandler
     /**
      * is triggered when invoking inaccessible methods in an object context.
      *
-     * @param $name      string
-     * @param $arguments array
+     * @param string $name      method name
+     * @param array  $arguments arguments
      *
      * @return mixed
-     * @link http://php.net/manual/en/language.oop5.overloading.php#language.oop5.overloading.methods
      */
-    function __call($name, $arguments)
+    public function __call($name, $arguments)
     {
         $logs = $this->repository;
         return call_user_func_array([$logs, $name], $arguments);
     }
-
 }
