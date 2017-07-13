@@ -68,6 +68,19 @@
                                 </div>
                             </div>
 
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <div class="clearfix">
+                                            <label>
+                                                CSS
+                                                <small>{{ xe_trans('xe::explainStylesheet') }}</small>
+                                            </label>
+                                        </div>
+                                        <input type="text" class="form-control" name="stylesheet" value="{{ $config->get('stylesheet') }}" placeholder="Ex) plugin/myplugin/assets/some.css">
+                                    </div>
+                                </div>
+                            </div>
 
                             <div class="panel">
                                 <div class="panel-heading">

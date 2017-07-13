@@ -85,6 +85,7 @@ class EditorController extends Controller
             'height' => $request->get('height'),
             'fontSize' => $request->get('fontSize'),
             'fontFamily' => empty($request->get('fontFamily')) ? null : $request->get('fontFamily'),
+            'stylesheet' => $request->get('stylesheet'),
             'uploadActive' => !!$request->get('uploadActive', false),
             'fileMaxSize' => $request->get('fileMaxSize', 0),
             'attachMaxSize' => $request->get('attachMaxSize', 0),
