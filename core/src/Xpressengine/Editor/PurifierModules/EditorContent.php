@@ -17,7 +17,7 @@ namespace Xpressengine\Editor\PurifierModules;
 use HTMLPurifier_HTMLModule;
 
 /**
- * 에디터에서 사용하는 에디터툴의 추가 속성을 허용하기 위한 필터 추가
+ * 에디터와 연계하거나 활용을 위해 콘텐츠에 대해 특정한 속성을 허용
  *
  * @category    Support
  * @package     Xpressengine\Support
@@ -26,12 +26,15 @@ use HTMLPurifier_HTMLModule;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class EditorTool extends HTMLPurifier_HTMLModule
+class EditorContent extends HTMLPurifier_HTMLModule
 {
-    public $name = 'XeEditorTool';
+    public $name = 'XeEditorConent';
 
     public $attr_collections = array(
         'Core' => array(
+            //  첨부 파일
+            'xe-file-id' => 'Text',
+            // 에디터 툴
             'xe-tool-id' => 'Text',
             'xe-tool-data' => 'CDATA'
         )

@@ -16,7 +16,7 @@ namespace Xpressengine\Support;
 
 use HTMLPurifier;
 use HTMLPurifier_Config;
-use Xpressengine\Editor\PurifierModules\EditorTool;
+use Xpressengine\Editor\PurifierModules\EditorContent;
 use Xpressengine\Support\PurifierModules;
 use Xpressengine\Widget\PurifierModules\Widget;
 
@@ -90,29 +90,68 @@ class Purifier
         return $this;
     }
 
+
     /**
      * HTMLModule 로드
      *
      * @see http://htmlpurifier.org/doxygen/html/classHTMLPurifier__HTMLModule.html
-     *
-     * @param string $module module class
-     * @return void
+     * @param string $module module
+     * @return boid
      */
     public function allowModule($module)
     {
-        $this->modules[] = $module;
-        $this->modules = array_unique($this->modules);
+        if (class_exists($module)) {
+            $this->addHtmlDefinition($module);
+        } else {
+            $modules = $this->config->get('HTML.AllowedModules');
+            $modules[$module] = true;
+
+            $this->config->set('HTML.AllowedModules', $modules);
+        }
     }
 
     /**
      * HTMLModule 제거, 비활성
      *
      * @see http://htmlpurifier.org/doxygen/html/classHTMLPurifier__HTMLModule.html
-     *
      * @param string $module module
      * @return void
      */
     public function disallowModule($module)
+    {
+        if (class_exists($module)) {
+            $this->removeHtmlDefinition($module);
+        } else {
+            $modules = $this->config->get('HTML.AllowedModules');
+            unset($modules[$module]);
+            $this->config->set('HTML.AllowedModules', $modules);
+        }
+    }
+
+    /**
+     * HTMLPurifier HTMLModule 추가 로드
+     * `\HTMLPurifier_HTMLModule`로 정의된 추가 확장
+     *
+     * @see http://htmlpurifier.org/doxygen/html/classHTMLPurifier__HTMLModule.html
+     *
+     * @param string $module module class
+     * @return void
+     */
+    private function addHtmlDefinition($module)
+    {
+        $this->modules[] = $module;
+        $this->modules = array_unique($this->modules);
+    }
+
+    /**
+     * HTMLPurifier HTMLModule 제거
+     *
+     * @see http://htmlpurifier.org/doxygen/html/classHTMLPurifier__HTMLModule.html
+     *
+     * @param string $module module
+     * @return void
+     */
+    private function removeHtmlDefinition($module)
     {
         $key = array_search($module, $this->modules);
         if ($key !== false) {
@@ -163,8 +202,11 @@ class Purifier
             if (!class_exists($module)) {
                 $allowedModules = $this->config->get('HTML.AllowedModules');
 
+                if (array_key_exists('XeEditorContent', $allowedModules)) {
+                    $htmlDef->manager->addModule(new EditorContent());
+                }
                 if (array_key_exists('XeEditorTool', $allowedModules)) {
-                    $htmlDef->manager->addModule(new EditorTool());
+                    $htmlDef->manager->addModule(new EditorContent());
                 }
                 if (array_key_exists('HTML5', $allowedModules)) {
                     $htmlDef->manager->addModule(new PurifierModules\Html5());
