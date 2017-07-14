@@ -13,6 +13,14 @@ var Utils = (function (exports) {
       return $.inArray(mime, ['image/jpg', 'image/jpeg', 'image/png', 'image/gif']) === -1 ? false : true;
     },
 
+    isVideo: function (mime) {
+      return $.inArray(mime, ['video/mp4', 'video/webm', 'video/ogg']) === -1 ? false : true;
+    },
+
+    isAudio: function (mime) {
+      return $.inArray(mime, ['audio/mpeg', 'audio/ogg', 'audio/wav']) === -1 ? false : true;
+    },
+
     formatSizeUnits: function (bytes) {
       if (bytes >= 1073741824) {
         bytes = (bytes / 1073741824).toFixed(2) + 'GB';
