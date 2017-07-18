@@ -16,8 +16,9 @@ namespace Xpressengine\Support;
 
 use HTMLPurifier;
 use HTMLPurifier_Config;
-use Xpressengine\Support\PurifierModules\EditorTool;
-use Xpressengine\Support\PurifierModules\Widget;
+use Xpressengine\Editor\PurifierModules\EditorContent;
+use Xpressengine\Support\PurifierModules;
+use Xpressengine\Widget\PurifierModules\Widget;
 
 /**
  * HTML 을 전달하는 에디터를 사용할 경우 사이트에서 사용하는 Purifier 와 다른
@@ -40,8 +41,7 @@ class Purifier
     /**
      * @var array
      */
-    public $default = [
-    ];
+    public $modules = [];
 
     /**
      * Purifier constructor
@@ -90,36 +90,73 @@ class Purifier
         return $this;
     }
 
+
     /**
      * HTMLModule 로드
      *
      * @see http://htmlpurifier.org/doxygen/html/classHTMLPurifier__HTMLModule.html
-     *
      * @param string $module module
-     * @return void
+     * @return boid
      */
     public function allowModule($module)
     {
-        $modules = $this->config->get('HTML.AllowedModules');
-        $modules[$module] = true;
+        if (class_exists($module)) {
+            $this->addHtmlDefinition($module);
+        } else {
+            $modules = $this->config->get('HTML.AllowedModules');
+            $modules[$module] = true;
 
-        $this->config->set('HTML.AllowedModules', $modules);
+            $this->config->set('HTML.AllowedModules', $modules);
+        }
     }
 
     /**
      * HTMLModule 제거, 비활성
      *
      * @see http://htmlpurifier.org/doxygen/html/classHTMLPurifier__HTMLModule.html
-     *
      * @param string $module module
      * @return void
      */
     public function disallowModule($module)
     {
-        $modules = $this->config->get('HTML.AllowedModules');
-        unset($modules[$module]);
+        if (class_exists($module)) {
+            $this->removeHtmlDefinition($module);
+        } else {
+            $modules = $this->config->get('HTML.AllowedModules');
+            unset($modules[$module]);
+            $this->config->set('HTML.AllowedModules', $modules);
+        }
+    }
 
-        $this->config->set('HTML.AllowedModules', $modules);
+    /**
+     * HTMLPurifier HTMLModule 추가 로드
+     * `\HTMLPurifier_HTMLModule`로 정의된 추가 확장
+     *
+     * @see http://htmlpurifier.org/doxygen/html/classHTMLPurifier__HTMLModule.html
+     *
+     * @param string $module module class
+     * @return void
+     */
+    private function addHtmlDefinition($module)
+    {
+        $this->modules[] = $module;
+        $this->modules = array_unique($this->modules);
+    }
+
+    /**
+     * HTMLPurifier HTMLModule 제거
+     *
+     * @see http://htmlpurifier.org/doxygen/html/classHTMLPurifier__HTMLModule.html
+     *
+     * @param string $module module
+     * @return void
+     */
+    private function removeHtmlDefinition($module)
+    {
+        $key = array_search($module, $this->modules);
+        if ($key !== false) {
+            unset($this->modules[$key]);
+        }
     }
 
     /**
@@ -159,13 +196,30 @@ class Purifier
     public function purify($content)
     {
         $htmlDef = $this->config->getHTMLDefinition(true);
-        $allowedModules = $this->config->get('HTML.AllowedModules');
 
-        if (in_array('XeEditorTool', $allowedModules)) {
-            $htmlDef->manager->addModule(new EditorTool());
-        }
-        if (in_array('XeWidget', $allowedModules)) {
-            $htmlDef->manager->addModule(new Widget());
+        foreach ($this->modules as $module) {
+            /* @deprecated 기존 코드처리를 위한 임시 코드 */
+            if (!class_exists($module)) {
+                $allowedModules = $this->config->get('HTML.AllowedModules');
+
+                if (array_key_exists('XeEditorContent', $allowedModules)) {
+                    $htmlDef->manager->addModule(new EditorContent());
+                }
+                if (array_key_exists('XeEditorTool', $allowedModules)) {
+                    $htmlDef->manager->addModule(new EditorContent());
+                }
+                if (array_key_exists('HTML5', $allowedModules)) {
+                    $htmlDef->manager->addModule(new PurifierModules\Html5());
+                }
+                if (array_key_exists('XeWidget', $allowedModules)) {
+                    $htmlDef->manager->addModule(new Widget());
+                }
+
+                continue;
+            }
+            /* @deprecated end */
+
+            $htmlDef->manager->addModule(new $module());
         }
 
         $this->finalize();
