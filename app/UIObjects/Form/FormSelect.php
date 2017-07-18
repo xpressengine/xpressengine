@@ -64,7 +64,14 @@ class FormSelect extends AbstractUIObject
                 case 'description':
                     $description->html(array_get($args, $key));
                     break;
-
+                case 'name':
+                    $nameSegs = explode('.', $arg);
+                    $name = array_shift($nameSegs);
+                    foreach ($nameSegs as $seg) {
+                        $name .= "[$seg]";
+                    }
+                    $select->attr($key, $name);
+                    break;
                 case 'id':
                     $label->attr('for', $arg);
                     // pass to default
