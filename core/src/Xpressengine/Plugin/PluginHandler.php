@@ -419,7 +419,7 @@ class PluginHandler
     public function getAllPlugins($refresh = false)
     {
         if ($refresh === true) {
-            $this->plugins->initialize(true);
+            $this->refreshPlugins();
 
             // 각 플러그인의 설치된 버전과 실제버전이 다르고, 별도의 install이나 update가 필요없을 경우, 설치된 버전정보를 갱신한다.
             foreach ($this->plugins->getList() as $plugin) {
@@ -440,6 +440,11 @@ class PluginHandler
         }
 
         return $this->plugins;
+    }
+
+    public function refreshPlugins()
+    {
+        $this->plugins->initialize(true);
     }
 
     /**
