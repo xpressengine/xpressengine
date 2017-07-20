@@ -17,7 +17,7 @@ namespace Xpressengine\Support\PurifierModules;
 use HTMLPurifier_HTMLModule;
 
 /**
- * HTML에서 위젯 코드를 유지하기위한 허용 필터
+ * HTML5 태그 지원
  *
  * @category    Support
  * @package     Xpressengine\Support
@@ -26,22 +26,33 @@ use HTMLPurifier_HTMLModule;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class Widget extends HTMLPurifier_HTMLModule
+class Html5 extends HTMLPurifier_HTMLModule
 {
-    public $name = 'XeWidget';
+    public $name = 'HTML5';
 
     /**
-     * setup HTMLModule
+     * setup Add HTML5 tags
+     *
      * @see http://htmlpurifier.org/doxygen/html/classHTMLPurifier__Config.html
      * @param HTMLPurifier_Config $config config
      * @return void
      */
     public function setup($config)
     {
-        $this->addElement('xewidget', 'Block', 'Empty', 'Common', array(
-            'id' => 'ID',
-            'skin-id' => 'ID',
-            'title' => 'Text'
+        $this->addElement('video', 'Block', 'Flow', 'Common', array(
+            'src'      => 'URI',
+            'width'    => 'Length',
+            'height'   => 'Length',
+            'controls' => 'Bool',
+            'reload' => 'Bool'
+        ));
+        $this->addElement('audio', 'Block', 'Flow', 'Common', array(
+            'src'      => 'URI',
+            'controls' => 'Bool',
+        ));
+        $this->addElement('source', 'Block', 'Empty', 'Common', array(
+            'src' => 'URI',
+            'type' => 'Text'
         ));
     }
 }

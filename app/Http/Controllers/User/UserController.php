@@ -26,6 +26,7 @@ use Xpressengine\User\Exceptions\CannotDeleteMainEmailOfUserException;
 use Xpressengine\User\Exceptions\DisplayNameAlreadyExistsException;
 use Xpressengine\User\Exceptions\InvalidConfirmationCodeException;
 use Xpressengine\User\Exceptions\EmailAlreadyExistsException;
+use Xpressengine\User\Exceptions\InvalidDisplayNameException;
 use Xpressengine\User\Exceptions\PendingEmailAlreadyExistsException;
 use Xpressengine\User\Exceptions\PendingEmailNotExistsException;
 use Xpressengine\User\HttpUserException;
@@ -184,9 +185,9 @@ class UserController extends Controller
         } catch (DisplayNameAlreadyExistsException $e) {
             $valid = false;
             $message = $e->getMessage();
-        } catch (InvalidArgumentException $e) {
+        } catch (InvalidDisplayNameException $e) {
             $valid = false;
-            $message = $e->getMessage();
+            $message = xe_trans('xe::invalidDisplayName');
         } catch (\Exception $e) {
             throw $e;
         }

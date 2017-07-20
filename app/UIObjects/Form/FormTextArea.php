@@ -38,6 +38,14 @@ class FormTextArea extends AbstractUIObject
                 case 'value':
                     $textarea->html($arg);
                     break;
+                case 'name':
+                    $nameSegs = explode('.', $arg);
+                    $name = array_shift($nameSegs);
+                    foreach ($nameSegs as $seg) {
+                        $name .= "[$seg]";
+                    }
+                    $textarea->attr($key, $name);
+                    break;
                 case 'id':
                     $label->attr('for', $arg);
                     // pass to default

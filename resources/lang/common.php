@@ -1942,6 +1942,10 @@ return [
         'ko' => '콤마(,)로 여러 글꼴을 지정할 수 있습니다.',
         'en' => 'Fonts are separated by a comma(,).',
     ],
+    'explainStylesheet' => [
+        'ko' => '에디터에 적용할 css 파일 경로를 입력하세요.',
+        'en' => 'Input the css file path for editor.',
+    ],
     'htmlEditPermission' => [
         'ko' => 'HTML 편집 권한',
         'en' => 'HTML permission',

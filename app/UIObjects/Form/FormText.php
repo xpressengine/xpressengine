@@ -35,6 +35,14 @@ class FormText extends AbstractUIObject
                 case 'description':
                     $description->html($arg);
                     break;
+                case 'name':
+                    $nameSegs = explode('.', $arg);
+                    $name = array_shift($nameSegs);
+                    foreach ($nameSegs as $seg) {
+                        $name .= "[$seg]";
+                    }
+                    $input->attr($key, $name);
+                    break;
                 case 'id':
                     $label->attr('for', $arg);
                     // pass to default

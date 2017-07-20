@@ -642,7 +642,7 @@ class PluginHandler
 
         $logFile = $writer->get('xpressengine-plugin.operation.log');
 
-        if ($logFile) {
+        if ($logFile && file_exists(storage_path($logFile))) {
             $log = file_get_contents(storage_path($logFile));
         } else {
             $log = null;
