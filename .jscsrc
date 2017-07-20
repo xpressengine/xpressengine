@@ -25,7 +25,8 @@
         "./**/*.gif",
         "./**/*.scss",
         "./**/*.css",
-        "./resources/assets/core/tree/**"
+        "./resources/assets/core/tree/**",
+        "./resources/assets/core/xe-ui-component/js/**"
     ],
     "fileExtensions": [".js", ".jsx"],
     "fix": true
