@@ -442,6 +442,11 @@ class PluginHandler
         return $this->plugins;
     }
 
+    /**
+     * 설치된 플러그인 목록 캐시를 갱신한다.
+     *
+     * @return void
+     */
     public function refreshPlugins()
     {
         $this->plugins->initialize(true);
