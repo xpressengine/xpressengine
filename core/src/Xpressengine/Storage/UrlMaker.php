@@ -101,7 +101,9 @@ class UrlMaker
         $config = $this->getConfig($file->disk);
 
         if (isset($config['url']) === true) {
-            return rtrim($config['url'], '/') . '/' . ltrim($file->getPathname(), '/');
+            return $this->urlGenerator->asset(
+                rtrim($config['url'], '/') . '/' . ltrim($file->getPathname(), '/')
+            );
         }
 
         return null;

@@ -56,9 +56,12 @@ class UrlMakerTest extends \PHPUnit_Framework_TestCase
         $mockFile->shouldReceive('getAttribute')->once()->with('disk')->andReturn('local');
         $mockFile->shouldReceive('getPathname')->once()->andReturn('/file/path/name');
 
+        $urlGenerator->shouldReceive('asset')->once()->with('/storage/app/file/path/name')
+            ->andReturn('http://domain.com/storage/app/file/path/name');
+
         $url = $this->invokeMethod($instance, 'getUrl', [$mockFile]);
 
-        $this->assertEquals('/storage/app/file/path/name', $url);
+        $this->assertEquals('http://domain.com/storage/app/file/path/name', $url);
 
         $mockFile = m::mock('Xpressengine\Storage\File');
         $mockFile->shouldReceive('getAttribute')->once()->with('disk')->andReturn('local2');
