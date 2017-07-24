@@ -13,6 +13,7 @@
  */
 namespace Xpressengine\Editor;
 
+use Illuminate\Support\Arr;
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Editor\Exceptions\EditorNotFoundException;
 use Xpressengine\Media\MediaManager;
@@ -283,6 +284,29 @@ class EditorHandler
     }
 
     /**
+     * Set tools for specific instance
+     *
+     * @param string $instanceId instance id
+     * @param array  $tools      tool component ids
+     * @return void
+     */
+    public function setTools($instanceId, array $tools)
+    {
+        $this->setConfig($instanceId, ['tools' => $tools]);
+    }
+
+    /**
+     * Get tools for specific instance
+     *
+     * @param string $instanceId instance id
+     * @return string[]
+     */
+    public function getTools($instanceId)
+    {
+        return $this->getConfig($instanceId)->get('tools', []);
+    }
+
+    /**
      * Compile the raw content to be useful
      *
      * @param string $instanceId instance id
@@ -359,12 +383,35 @@ class EditorHandler
     }
 
     /**
+     * Set the config for specific instance
+     *
+     * @param string $instanceId instance id
+     * @param array  $data       config data
+     * @return \Xpressengine\Config\ConfigEntity
+     */
+    public function setConfig($instanceId, array $data)
+    {
+        return $this->configManager->set($this->getConfigKey($instanceId), $data);
+    }
+
+    /**
+     * Get the config for specific instance
+     *
+     * @param string $instanceId instance id
+     * @return \Xpressengine\Config\ConfigEntity
+     */
+    public function getConfig($instanceId)
+    {
+        return $this->configManager->getOrNew($this->getConfigKey($instanceId));
+    }
+
+    /**
      * Get a key string for the config
      *
      * @param string $instanceId instance identifier
      * @return string
      */
-    public function getConfigKey($instanceId)
+    protected function getConfigKey($instanceId)
     {
         return static::CONFIG_NAME . '.' . $instanceId;
     }

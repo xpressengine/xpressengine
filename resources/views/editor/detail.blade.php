@@ -1,14 +1,6 @@
-@section('page_title')
-    <h2>{{ xe_trans('xe::editorSetting') }}</h2>
-@endsection
+@include('editor._title')
 
-@section('page_description')
-    <small>{{ xe_trans('xe::descEditorSetting') }}</small>
-@endsection
-
-@section('content_bread_crumbs')
-
-@endsection
+@include('editor._tab', ['_active' => 'detail', 'instanceId' => $instanceId])
 
 <div class="panel-group" role="tablist" aria-multiselectable="true">
     <div class="panel">
@@ -81,29 +73,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="panel">
-                                <div class="panel-heading">
-                                    <div class="pull-left">
-                                        <h4 class="panel-title">{{ xe_trans('xe::htmlEditPermission') }}</h4>
-                                    </div>
-                                </div>
-                                <div class="panel-body">
-                                    {!! uio('permission', $permArgs['html']) !!}
-                                </div>
-                            </div>
-
-                            <div class="panel">
-                                <div class="panel-heading">
-                                    <div class="pull-left">
-                                        <h4 class="panel-title">{{ xe_trans('xe::basicToolUsePermission') }}</h4>
-                                    </div>
-                                </div>
-                                <div class="panel-body">
-                                    {!! uio('permission', $permArgs['tool']) !!}
-                                </div>
-                            </div>
-
 
                         </div>
                     </div>
@@ -181,60 +150,7 @@
                                 </div>
                             </div>
 
-                            <div class="panel">
-                                <div class="panel-heading">
-                                    <div class="pull-left">
-                                        <h4 class="panel-title">{{ xe_trans('xe::uploadPermission') }}</h4>
-                                    </div>
-                                </div>
-                                <div class="panel-body">
-                                    {!! uio('permission', $permArgs['upload']) !!}
-                                </div>
-                            </div>
-
-                            <div class="panel">
-                                <div class="panel-heading">
-                                    <div class="pull-left">
-                                        <h4 class="panel-title">{{ xe_trans('xe::downloadPermission') }}</h4>
-                                    </div>
-                                </div>
-                                <div class="panel-body">
-                                    {!! uio('permission', $permArgs['download']) !!}
-                                </div>
-                            </div>
-
                         </div>
-                    </div>
-
-                    <div class="panel">
-                        <div class="panel-heading">
-                            <div class="pull-left">
-                                <h4 class="panel-title">{{ xe_trans('xe::addTools') }}</h4>
-                            </div>
-                        </div>
-
-                        <ul class="list-group item-setting">
-                            @foreach ($items as $id => $item)
-                                <li class="list-group-item">
-                                    <button class="btn handler"><i class="xi-drag-vertical"></i></button>
-                                    <em class="item-title">{{ $item['class']::getComponentInfo('name') }}</em>
-                                    <span class="item-subtext">{{ $item['class']::getComponentInfo('description') }}</span>
-                                    <div class="xe-btn-toggle pull-right">
-                                        <label>
-                                            <span class="sr-only">toggle</span>
-                                            <input type="checkbox" name="tools[]" value="{{ $id }}" {{$item['activated'] ? 'checked' : ''}}>
-                                            <span class="toggle"></span>
-                                        </label>
-                                    </div>
-                                    <div class="pull-right">
-                                        @if($uri = $item['class']::getInstanceSettingURI($instanceId))
-                                            <a href="{{ $uri }}">{{ xe_trans('xe::setup') }}</a>
-                                        @endif
-                                    </div>
-                                </li>
-                            @endforeach
-                        </ul>
-
                     </div>
 
                 </div>
