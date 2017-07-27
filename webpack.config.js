@@ -18,6 +18,7 @@ var pathInfo = {
   permission: path.join(__dirname, '/resources/assets/core/permission'),
   menu: path.join(__dirname, '/resources/assets/core/menu'),
   lang: path.join(__dirname, '/resources/assets/core/lang'),
+  comp: path.join(__dirname, '/resources/assets/core/xe-ui-component'),
 };
 
 var target = (process.env.npm_lifecycle_event === 'build')? true : !!$.util.env.production;
@@ -42,6 +43,10 @@ var common = {
       pathInfo.common + '/js/xe.progress.js',
       pathInfo.common + '/js/xe.request.js',
       pathInfo.common + '/js/xe.component.js',
+    ],
+
+    'assets/core/xe-ui-component/js/xe-chart': [
+      pathInfo.comp + '/js/xe-chart.js',
     ],
 
     'assets/core/lang/langEditorBox.bundle': pathInfo.lang + '/LangEditorBox.js',
