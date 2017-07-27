@@ -28,6 +28,9 @@ class XeChart {
     this.options = obj.options || {}
   }
 
+  /**
+   * @description 그래프를 그린다.
+   * */
   draw () {
     const chartOptions = $.extend(true, {}, this.getDefaultOptions(), {
       bindto: this.selector,
@@ -39,17 +42,76 @@ class XeChart {
     this.chart = c3.generate(chartOptions);
   }
 
+  /**
+   * @description 그래프를 삭제한다.
+   * */
   destroy () {
     this.chart.destroy();
   }
 
+  /**
+   * @param {object} labels
+   * <pre>
+   *   - x
+   *   - y
+   * </pre>
+   * @description 그래프 상의 x, y축의 명칭을 변경한다.
+   * */
   setLabel (labels) {
-    this.chart.lables({
-      x: labels.x,
-      y: labels.y
+    this.chart.axis.labels(labels);
+  }
+
+  /**
+   * @param {object} dimension
+   * <pre>
+   *   - width
+   *   - height
+   * </pre>
+   * @param {boolean} isPercentage
+   * */
+  resize (dimension, isPercentage) {
+
+    var sizeObj = {};
+
+    if(dimension.hasOwnProperty('width')) {
+      if(isPercentage) {
+        var fullWidth = $(this.selector).width();
+
+        sizeObj.width = fullWidth * dimension.width / 100;
+      } else {
+        sizeObj.width = dimension.width;
+      }
+    }
+
+    if(dimension.hasOwnProperty('height')) {
+      sizeObj.height = dimension.height;
+    }
+
+    this.chart.resize(sizeObj);
+  }
+
+  /**
+   * @param {object} c3 load data
+   * @description 차트에 데이터를 로드한다.
+   * */
+  load (data) {
+    this.chart.load(data);
+  }
+
+  /**
+   * @param {array} ids
+   * @description 차트 데이터를 제거한다.
+   * */
+  unload (ids) {
+    this.chart.unload({
+      ids
     });
   }
 
+  /**
+   * @param {string} title
+   * @description 그래프 타이틀을 설정한다.
+   * */
   setTitle (title) {
     if($(this.selector).find('svg > text.c3-title').length > 0) {
       $(this.selector).find('svg > text').text(title)
@@ -64,6 +126,10 @@ class XeChart {
     }
   }
 
+  /**
+   * @description chartType에 의한 기본 옵션을 반환한다.
+   * @return {object} options
+   * */
   getDefaultOptions() {
     const chartType = this.chartType;
     let options = {};
@@ -110,6 +176,33 @@ class XeChart {
           data: {
             type: 'pie',
           },
+          tooltip: {
+            contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
+              var $$ = this, config = $$.config,
+                titleFormat = config.tooltip_format_title || defaultTitleFormat,
+                nameFormat = config.tooltip_format_name || function (name) { return name; },
+                valueFormat = config.tooltip_format_value || defaultValueFormat,
+                text, i, title, value, name, bgcolor;
+              for (i = 0; i < d.length; i++) {
+                if (! (d[i] && (d[i].value || d[i].value === 0))) { continue; }
+
+                if (! text) {
+                  title = titleFormat ? titleFormat(d[i].x) : d[i].x;
+                  text = "<table class='" + $$.CLASS.tooltip + "'>" + (title || title === 0 ? "<tr><th colspan='2'>" + title + "</th></tr>" : "");
+                }
+
+                name = nameFormat(d[i].name);
+                value = valueFormat(d[i].value, d[i].ratio, d[i].id, d[i].index);
+                bgcolor = $$.levelColor ? $$.levelColor(d[i].value) : color(d[i].id);
+
+                text += "<tr class='" + $$.CLASS.tooltipName + "-" + d[i].id + "'>";
+                text += "<td class='name'><span style='background-color:" + bgcolor + "'></span>" + name + "</td>";
+                text += "<td class='value'>" + d[i].value + " (" +value + ")</td>";
+                text += "</tr>";
+              }
+              return text + "</table>";
+            }
+          }
         };
         break;
       case 'donut':
@@ -119,6 +212,33 @@ class XeChart {
           },
           donut: {
             title: ""
+          },
+          tooltip: {
+            contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
+              var $$ = this, config = $$.config,
+                titleFormat = config.tooltip_format_title || defaultTitleFormat,
+                nameFormat = config.tooltip_format_name || function (name) { return name; },
+                valueFormat = config.tooltip_format_value || defaultValueFormat,
+                text, i, title, value, name, bgcolor;
+              for (i = 0; i < d.length; i++) {
+                if (! (d[i] && (d[i].value || d[i].value === 0))) { continue; }
+
+                if (! text) {
+                  title = titleFormat ? titleFormat(d[i].x) : d[i].x;
+                  text = "<table class='" + $$.CLASS.tooltip + "'>" + (title || title === 0 ? "<tr><th colspan='2'>" + title + "</th></tr>" : "");
+                }
+
+                name = nameFormat(d[i].name);
+                value = valueFormat(d[i].value, d[i].ratio, d[i].id, d[i].index);
+                bgcolor = $$.levelColor ? $$.levelColor(d[i].value) : color(d[i].id);
+
+                text += "<tr class='" + $$.CLASS.tooltipName + "-" + d[i].id + "'>";
+                text += "<td class='name'><span style='background-color:" + bgcolor + "'></span>" + name + "</td>";
+                text += "<td class='value'>" + d[i].value + " (" +value + ")</td>";
+                text += "</tr>";
+              }
+              return text + "</table>";
+            }
           }
         };
         break;
