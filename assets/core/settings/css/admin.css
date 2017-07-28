@@ -5953,7 +5953,7 @@ aside.open {
   .list-install li {
     display: inline-block;
     width: 160px;
-    margin: 0 17px 15px;
+    margin: 0 15px 15px;
     padding-left: 0;
   }
   .list-install img {
@@ -6023,6 +6023,11 @@ aside.open {
   }
   .plugin-detail .plugin-summary:after {
     clear: none;
+  }
+  .plugin-detail .plugin-title {
+    margin: 0 0 40px;
+    padding: 0;
+    border: none;
   }
 }
 

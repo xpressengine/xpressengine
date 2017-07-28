@@ -2323,9 +2323,8 @@ aside {
     padding: 0 0 5px;
     li {
       display: inline-block;
-      // flex: 0 1 auto;
       width: 160px;
-      margin: 0 17px 15px;
+      margin: 0 15px 15px;
       padding-left: 0;
     }
     img {
@@ -2403,7 +2402,11 @@ aside {
   .plugin-detail .plugin-summary:after {
     clear:none;
   }
-  
+  .plugin-detail .plugin-title {
+    margin: 0 0 40px;
+    padding: 0;
+    border: none;
+  }
 }
 
 @media (min-width: 1068px) {
