@@ -797,9 +797,9 @@
 <script>
 $(document).ready(function() {
 function loadCheckFunc(headUrl, asideUrl, footUrl) {
-    // $('header').load( headUrl );
-    // $('aside').load( asideUrl );
-    // $('.footer').load( footUrl );
+    $('header').load( headUrl );
+    $('aside').load( asideUrl );
+    $('.footer').load( footUrl );
 }
 function init_include() {
     loadCheckFunc('00_header.html', '00_aside.html', '00_footer.html');
