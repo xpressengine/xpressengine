@@ -77,6 +77,7 @@ class GuardTest extends \PHPUnit_Framework_TestCase {
     public function testLogoutRemovesSessionTokenAndRememberMeCookie()
     {
         list($session, $provider, $adminAuth, $request) = $this->getMocks();
+
         $mock = $this->getMock(Guard::class, ['refreshRememberToken', 'clearUserDataFromStorage'], [$provider, $session, $adminAuth, $request]);
         $mock->setCookieJar($cookies = m::mock(CookieJar::class));
 
@@ -84,6 +85,9 @@ class GuardTest extends \PHPUnit_Framework_TestCase {
 
         $mock->expects($this->once())->method('clearUserDataFromStorage')->will($this->returnValue(null));
         $mock->expects($this->once())->method('refreshRememberToken')->with($user)->will($this->returnValue(null));
+
+        /** @var m\MockInterface $session */
+        $session->shouldReceive('remove')->once()->with('auth.admin')->andReturnNull();
 
         $mock->setUser($user);
         $mock->logout();
