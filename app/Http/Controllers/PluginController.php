@@ -63,7 +63,9 @@ class PluginController extends Controller
 
         $operation = $handler->getOperation($writer);
 
-        return XePresenter::make('index', compact('plugins', 'componentTypes', 'operation'));
+        $unresolvedComponents = $handler->getUnresolvedComponents();
+
+        return XePresenter::make('index', compact('plugins', 'componentTypes', 'operation', 'unresolvedComponents'));
     }
 
     public function getOperation(PluginHandler $handler, ComposerFileWriter $writer)
@@ -338,7 +340,9 @@ class PluginController extends Controller
 
         $provider->sync($plugin);
 
-        return XePresenter::make('show', compact('plugin', 'componentTypes'));
+        $unresolvedComponents = $handler->getUnresolvedComponents($pluginId);
+
+        return XePresenter::make('show', compact('plugin', 'componentTypes', 'unresolvedComponents'));
     }
 
     public function putActivatePlugin($pluginId, PluginHandler $handler, InterceptionHandler $interceptionHandler)
