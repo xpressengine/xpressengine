@@ -80,7 +80,7 @@ return [
     */
     'admin' => [
         'session' => 'auth.admin',
-        'expire' => 30,
+        'expire' => 0,
         'password' => ''
     ]
 
