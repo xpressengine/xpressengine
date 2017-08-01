@@ -125,6 +125,8 @@ class PluginUpdate extends PluginCommand
             ]
         );
 
+        $handler->refreshPlugins();
+
         // composer 실행을 마쳤습니다
         $this->warn('Composer update command is finished.'.PHP_EOL);
 

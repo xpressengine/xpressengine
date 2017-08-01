@@ -45,11 +45,57 @@ class EditorController extends Controller
 
     public function getDetailSetting($instanceId)
     {
-        $config = XeConfig::getOrNew(XeEditor::getConfigKey($instanceId));
+        return XePresenter::make('editor.detail', [
+            'instanceId' => $instanceId,
+            'config' => XeEditor::getConfig($instanceId),
+        ]);
+    }
 
+    public function postDetailSetting(Request $request, $instanceId)
+    {
+        $this->validate($request, [
+            'height' => 'required|numeric',
+            'fontSize' => 'required',
+            'fileMaxSize' => 'numeric',
+            'attachMaxSize' => 'numeric',
+        ]);
+        XeEditor::setConfig($instanceId, [
+            'height' => $request->get('height'),
+            'fontSize' => $request->get('fontSize'),
+            'fontFamily' => empty($request->get('fontFamily')) ? null : $request->get('fontFamily'),
+            'stylesheet' => $request->get('stylesheet'),
+            'uploadActive' => !!$request->get('uploadActive', false),
+            'fileMaxSize' => $request->get('fileMaxSize', 0),
+            'attachMaxSize' => $request->get('attachMaxSize', 0),
+            'extensions' => empty($request->get('extensions')) ? null : strtolower($request->get('extensions')),
+        ]);
+
+        return redirect()->back();
+    }
+
+    public function getPermSetting($instanceId)
+    {
+        return XePresenter::make('editor.perm', [
+            'instanceId' => $instanceId,
+            'permArgs' => $this->getPermArguments(
+                XeEditor::getPermKey($instanceId),
+                ['html', 'tool', 'upload', 'download']
+            ),
+        ]);
+    }
+
+    public function postPermSetting(Request $request, $instanceId)
+    {
+        $this->permissionRegister($request, XeEditor::getPermKey($instanceId), ['html', 'tool', 'upload', 'download']);
+
+        return redirect()->back();
+    }
+
+    public function getToolSetting($instanceId)
+    {
         $tools = XeEditor::getToolAll();
 
-        $toolIds = $config->get('tools', []);
+        $toolIds = XeEditor::getTools($instanceId);
         $activated = array_intersect_key($tools, array_flip($toolIds));
         $activated = array_merge(array_flip($toolIds), $activated);
         $deactivated = array_diff_key($tools, array_flip($toolIds));
@@ -62,40 +108,17 @@ class EditorController extends Controller
             $items[$key] = ['class' => $item, 'activated' => false];
         }
 
-        return XePresenter::make('editor.detail', [
+        return XePresenter::make('editor.tool', [
             'instanceId' => $instanceId,
-            'config' => $config,
-            'permArgs' => $this->getPermArguments(
-                XeEditor::getPermKey($instanceId),
-                ['html', 'tool', 'upload', 'download']
-            ),
             'items' => $items,
         ]);
     }
 
-    public function postDetailSetting(Request $request, $instanceId)
+    public function postToolSetting(Request $request, $instanceId)
     {
-        $this->validate($request, [
-            'height' => 'required|numeric',
-            'fontSize' => 'required',
-            'fileMaxSize' => 'numeric',
-            'attachMaxSize' => 'numeric',
-        ]);
-        XeConfig::set(XeEditor::getConfigKey($instanceId), [
-            'height' => $request->get('height'),
-            'fontSize' => $request->get('fontSize'),
-            'fontFamily' => empty($request->get('fontFamily')) ? null : $request->get('fontFamily'),
-            'stylesheet' => $request->get('stylesheet'),
-            'uploadActive' => !!$request->get('uploadActive', false),
-            'fileMaxSize' => $request->get('fileMaxSize', 0),
-            'attachMaxSize' => $request->get('attachMaxSize', 0),
-            'extensions' => empty($request->get('extensions')) ? null : strtolower($request->get('extensions')),
-            'tools' => $request->get('tools', [])
-        ]);
+        XeEditor::setTools($instanceId, $request->get('tools', []));
 
-        $this->permissionRegister($request, XeEditor::getPermKey($instanceId), ['html', 'tool', 'upload', 'download']);
-
-        return redirect()->route('settings.editor.setting.detail', $instanceId);
+        return redirect()->back();
     }
 
     /**

@@ -178,6 +178,24 @@ class PluginHandler
     }
 
     /**
+     * get Unresolved Components
+     *
+     * @param string|null $plugin target plugin
+     *
+     * @return array
+     */
+    public function getUnresolvedComponents($plugin = null)
+    {
+        $unresolved = $this->register->getUnresolvedComponents();
+
+        if ($plugin) {
+            return array_get($unresolved, $plugin, []);
+        }
+
+        return $unresolved;
+    }
+
+    /**
      * 주어진 플러그인을 활성화한다. 활성화된 플러그인 목록은 XE에 저장된다.
      *
      * @param string $pluginId 활성화 할 플러그인의 id
@@ -403,7 +421,7 @@ class PluginHandler
         $pluginObj = $entity->getObject();
 
         // boot plugin's components
-        $entity->bootComponents();
+        $entity->bootComponents($this->register);
 
         // boot plugin
         $pluginObj->boot();
@@ -419,7 +437,7 @@ class PluginHandler
     public function getAllPlugins($refresh = false)
     {
         if ($refresh === true) {
-            $this->plugins->initialize(true);
+            $this->refreshPlugins();
 
             // 각 플러그인의 설치된 버전과 실제버전이 다르고, 별도의 install이나 update가 필요없을 경우, 설치된 버전정보를 갱신한다.
             foreach ($this->plugins->getList() as $plugin) {
@@ -440,6 +458,16 @@ class PluginHandler
         }
 
         return $this->plugins;
+    }
+
+    /**
+     * 설치된 플러그인 목록 캐시를 갱신한다.
+     *
+     * @return void
+     */
+    public function refreshPlugins()
+    {
+        $this->plugins->initialize(true);
     }
 
     /**

@@ -172,6 +172,9 @@
               WidgetAdder.$btnPlaceWidget.data('index', index).text('수정');
             } else {
               WidgetAdder.$btnPlaceWidget.text('추가');
+
+              $('.widget-form').empty();
+              $('.__xe_select_widget').find('option:eq(0)').prop('selected', 'selected').trigger('change');
             }
 
             $('.widget-layer').addClass('open');

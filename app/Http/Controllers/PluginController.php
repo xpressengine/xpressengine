@@ -63,7 +63,9 @@ class PluginController extends Controller
 
         $operation = $handler->getOperation($writer);
 
-        return XePresenter::make('index', compact('plugins', 'componentTypes', 'operation'));
+        $unresolvedComponents = $handler->getUnresolvedComponents();
+
+        return XePresenter::make('index', compact('plugins', 'componentTypes', 'operation', 'unresolvedComponents'));
     }
 
     public function getOperation(PluginHandler $handler, ComposerFileWriter $writer)
@@ -115,7 +117,7 @@ class PluginController extends Controller
         $writer->reset()->cleanOperation();
         $writer->install($name, $version, Carbon::now()->addSeconds($timeLimit)->toDateTimeString())->write();
 
-        $this->reserveOperation($writer, $timeLimit, $pluginData);
+        $this->reserveOperation($handler, $writer, $timeLimit, $pluginData);
 
         $session->flash('alert', ['type' => 'success', 'message' => '새로운 플러그인을 설치중입니다.']);
         return XePresenter::makeApi(['type' => 'success', 'message' => '새로운 플러그인을 설치중입니다.']);
@@ -158,7 +160,7 @@ class PluginController extends Controller
         $writer->uninstall($plugin->getName(), Carbon::now()->addSeconds($timeLimit)->toDateTimeString())->write();
 
         $pluginData = ['name' => $plugin->getName()];
-        $this->reserveOperation($writer, $timeLimit, (object)$pluginData);
+        $this->reserveOperation($handler, $writer, $timeLimit, (object)$pluginData);
 
         return redirect()->route('settings.plugins')->with(
             'alert',
@@ -174,13 +176,13 @@ class PluginController extends Controller
      * @param string             $logFileName
      * @param null               $callback
      */
-    protected function reserveOperation(ComposerFileWriter $writer, $timeLimit, $pluginData, $callback = null)
+    protected function reserveOperation(PluginHandler $handler, ComposerFileWriter $writer, $timeLimit, $pluginData, $callback = null)
     {
         $this->prepareComposer($timeLimit);
 
         /** @var \Illuminate\Foundation\Application $app */
         app()->terminating(
-            function () use ($writer, $pluginData, $callback) {
+            function () use ($handler, $writer, $pluginData, $callback) {
 
                 $pid = getmypid();
                 Log::info("[plugin operation] start running composer run [pid=$pid]");
@@ -212,6 +214,8 @@ class PluginController extends Controller
                 }
                 $result = $application->run($input, $output);
 
+                $handler->refreshPlugins();
+
                 if (is_callable($callback)) {
                     $callback($result);
                 }
@@ -225,6 +229,8 @@ class PluginController extends Controller
                     $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_SUCCESSED);
                 }
                 $writer->write();
+
+
 
                 Log::info(
                     "[plugin operation] plugin operation finished. [exit code: $result, memory usage: ".memory_get_usage(
@@ -334,7 +340,9 @@ class PluginController extends Controller
 
         $provider->sync($plugin);
 
-        return XePresenter::make('show', compact('plugin', 'componentTypes'));
+        $unresolvedComponents = $handler->getUnresolvedComponents($pluginId);
+
+        return XePresenter::make('show', compact('plugin', 'componentTypes', 'unresolvedComponents'));
     }
 
     public function putActivatePlugin($pluginId, PluginHandler $handler, InterceptionHandler $interceptionHandler)
@@ -417,6 +425,7 @@ class PluginController extends Controller
         $writer->reset()->cleanOperation();
         $writer->update($name, $version, Carbon::now()->addSeconds($timeLimit)->toDateTimeString())->write();
         $this->reserveOperation(
+            $handler,
             $writer,
             $timeLimit,
             $pluginData,

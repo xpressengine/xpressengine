@@ -907,6 +907,12 @@ Route::settings('editor', function () {
     Route::post('setting/{instanceId}', ['as' => 'settings.editor.setting', 'uses' => 'EditorController@setting']);
     Route::get('setting/{instanceId}/detail', ['as' => 'settings.editor.setting.detail', 'uses' => 'EditorController@getDetailSetting']);
     Route::post('setting/{instanceId}/detail', ['as' => 'settings.editor.setting.detail', 'uses' => 'EditorController@postDetailSetting']);
+
+    Route::get('setting/{instanceId}/perm', ['as' => 'settings.editor.setting.perm', 'uses' => 'EditorController@getPermSetting']);
+    Route::post('setting/{instanceId}/perm', ['as' => 'settings.editor.setting.perm', 'uses' => 'EditorController@postPermSetting']);
+
+    Route::get('setting/{instanceId}/tool', ['as' => 'settings.editor.setting.tool', 'uses' => 'EditorController@getToolSetting']);
+    Route::post('setting/{instanceId}/tool', ['as' => 'settings.editor.setting.tool', 'uses' => 'EditorController@postToolSetting']);
 });
 
 Route::group(['prefix' => 'editor'], function () {
