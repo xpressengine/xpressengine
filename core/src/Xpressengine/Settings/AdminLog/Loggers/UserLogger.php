@@ -149,50 +149,10 @@ class UserLogger extends AbstractLogger
      *
      * @param Log $log log entity
      *
-     * @return string
+     * @return string|null
      */
     public function renderDetail(Log $log)
     {
-        $list = [
-            'GET' => [
-                'settings.user.index' => function (Log $log) {
-                    return 'hi';
-                },
-                'settings.user.edit' => function (Log $log) {
-                    return 'hi';
-                },
-            ],
-            'POST' => [
-                'settings.user.create' => function (Log $log) {
-                    return 'hi';
-                },
-                'settings.user.mail.add' => function (Log $log) {
-                    return 'hi';
-                },
-                'settings.user.mail.delete' => function (Log $log) {
-                    return 'hi';
-                },
-                'settings.user.mail.confirm' => function (Log $log) {
-                    return 'hi';
-                },
-            ],
-            'PUT' => [
-                'settings.user.update' => function (Log $log) {
-                    return 'hi';
-                },
-            ],
-            'DELETE' => [
-                'settings.user.destroy' => function (Log $log) {
-                    return 'hi';
-                },
-            ]
-        ];
-
-        $method = strtoupper($log->method);
-        $name = $log->data['route'];
-
-        $matched = array_get(array_get($list, $method, []), $name);
-
-        return $matched($log);
+        return null;
     }
 }

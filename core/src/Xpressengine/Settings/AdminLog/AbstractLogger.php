@@ -67,7 +67,7 @@ abstract class AbstractLogger
      *
      * @param Log $log log entity
      *
-     * @return string
+     * @return string|null
      */
     abstract public function renderDetail(Log $log);
 
