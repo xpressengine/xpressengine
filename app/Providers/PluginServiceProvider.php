@@ -158,16 +158,7 @@ class PluginServiceProvider extends ServiceProvider
                 /** @var PluginHandler $pluginHandler */
                 $pluginHandler = $this->app['xe.plugin'];
 
-                if ($this->app->runningInConsole()) {
-                    $pluginHandler->refreshPlugins();
-                }
-
-                try {
-                    $pluginHandler->bootPlugins();
-                } catch (ComponentNotFoundException $e) {
-                    $pluginHandler->refreshPlugins();
-                    throw $e;
-                }
+                $pluginHandler->bootPlugins();
             }
         );
 
