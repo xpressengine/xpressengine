@@ -45,7 +45,9 @@ class UserLogger extends AbstractLogger
     public function run(Request $request)
     {
         $run = $this->matched;
-        $run($request);
+        if ($run !== null) {
+            $run($request);
+        }
     }
 
     /**
@@ -139,7 +141,10 @@ class UserLogger extends AbstractLogger
         $method = strtoupper($request->method());
         $name = $request->route()->getName();
 
-        $this->matched = $matched = array_get(array_get($list, $method, []), $name);
+        $matched = false;
+        if ($name !== null) {
+            $this->matched = $matched = array_get(array_get($list, $method, []), $name);
+        }
 
         return $matched ? true : false;
     }
