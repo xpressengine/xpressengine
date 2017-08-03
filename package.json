@@ -46,7 +46,6 @@
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.24.1",
     "bootstrap": "^3.3.7",
-    "c3": "^0.4.14",
     "clean-webpack-plugin": "^0.1.14",
     "create-react-class": "^15.5.3",
     "gulp": "^3.9.1",
