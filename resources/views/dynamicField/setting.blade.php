@@ -51,7 +51,7 @@
                 </div>
                 <div class="xe-modal-footer">
                     <button type="button" class="xe-btn xe-btn-secondary __xe_btn_close" data-dismiss="xe-modal">{{xe_trans('xe::cancel')}}</button>
-                    <button type="button" class="xe-btn xe-btn-primary __xe_btn_submit" data-dismiss="xe-modal">{{xe_trans('xe::submit')}}</button>
+                    <button type="button" class="xe-btn xe-btn-primary __xe_btn_submit">{{xe_trans('xe::submit')}}</button>
                 </div>
             </div>
         </div>
