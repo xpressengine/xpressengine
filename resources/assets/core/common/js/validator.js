@@ -19,19 +19,21 @@ import moment from 'moment';
       var ruleList = v.split('|');
 
       $.each(ruleList, function (idx, val) {
+        /**
+         * langKey must changed to camelcase
+           */
         var langKey = val.split(':')[0].toLowerCase();
 
-        if (!Translator.hasMessage('validation.' + langKey) && !langMap.hasOwnProperty(langKey)) {
+        if (!Translator.hasMessage('xe::validator' + langKey) && !langMap.hasOwnProperty(langKey)) {
           langMap[langKey] = '';
 
-          if (['min', 'max', 'between'].indexOf(langKey) != -1) {
-            lang.push('validation.' + langKey + '.numeric');
-            lang.push('validation.' + langKey + '.string');
-            lang.push('validation.' + langKey + '.file');
+          if (['Min', 'Max', 'Between'].indexOf(langKey) != -1) {
+            lang.push('xe::validator' + langKey + '.numeric');
+            lang.push('xe::validator' + langKey + '.string');
+            lang.push('xe::validator' + langKey + '.file');
           } else {
-            lang.push('validation.' + langKey);
+            lang.push('xe::validator' + langKey);
           }
-
         }
       });
     });
@@ -165,7 +167,7 @@ import moment from 'moment';
       var value = $dst.val();
 
       if (['yes', 'on', 1, true].indexOf(value) === -1) {
-        Validator.error($dst, XE.Lang.trans('validation.accepted', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
+        Validator.error($dst, XE.Lang.trans('xe::validatorAccepted', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
         return false;
       }
 
@@ -199,7 +201,7 @@ import moment from 'moment';
     required: function ($dst, parameters) {
       var value = $dst.val();
       if (value === '') {
-        Validator.error($dst, XE.Lang.trans('validation.required', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
+        Validator.error($dst, XE.Lang.trans('xe::validatorRequired', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
         return false;
       }
 
@@ -211,7 +213,7 @@ import moment from 'moment';
       var pattern = /[a-zA-Z]/;
 
       if (!pattern.test(value)) {
-        Validator.error($dst, XE.Lang.trans('validation.alpha', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
+        Validator.error($dst, XE.Lang.trans('xe::validatorAlpha', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
         return false;
       }
 
@@ -227,7 +229,7 @@ import moment from 'moment';
       var pattern = /[^a-zA-Z0-9]/;
 
       if (pattern.test(value) === true) {
-        Validator.error($dst, XE.Lang.trans('validation.alpha_num', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
+        Validator.error($dst, XE.Lang.trans('xe::validatorAlphanum', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
         return false;
       }
 
@@ -239,7 +241,7 @@ import moment from 'moment';
       var pattern = /[^a-zA-Z0-9\-\_]/;
 
       if (pattern.test(value)) {
-        Validator.error($dst, XE.Lang.trans('validation.alpha_dash', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
+        Validator.error($dst, XE.Lang.trans('xe::validatorAlphadash', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
         return false;
       }
 
@@ -248,7 +250,7 @@ import moment from 'moment';
 
     array: function ($dst, parameters) {
       if (Array.isArray($dst.val())) {
-        Validator.error($dst, XE.Lang.trans('validation.array', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
+        Validator.error($dst, XE.Lang.trans('xe::validatorArray', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
         return false;
       }
 
@@ -259,7 +261,7 @@ import moment from 'moment';
       var value = $dst.val();
 
       if ([1, 0, '1', '0', true, false, 'true', 'false'].indexOf(value) === -1) {
-        Validator.error($dst, XE.Lang.trans('validation.boolean', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
+        Validator.error($dst, XE.Lang.trans('xe::validatorBoolean', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
         return false;
       }
 
@@ -268,7 +270,7 @@ import moment from 'moment';
 
     date: function ($dst, parameters) {
       if (!Utils.strtotime($dst.val())) {
-        Validator.error($dst, XE.Lang.trans('validation.date', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
+        Validator.error($dst, XE.Lang.trans('xe::validatorDate', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
         return false;
       }
 
@@ -278,7 +280,7 @@ import moment from 'moment';
     date_format: function ($dst, parameters) {
       //moment('2015-04-03', 'yyyy-mm-dd').isValid()
       if (!moment($dst.val(), parameters).isValid()) {
-        Validator.error($dst, XE.Lang.trans('validation.date_format', {
+        Validator.error($dst, XE.Lang.trans('xe::validatorDateformat', {
           attribute: $dst.data('valid-name') || $dst.attr('name'),
           format: parameters,
         }));
@@ -293,7 +295,7 @@ import moment from 'moment';
       var size = parseInt(parameters);
 
       if (pattern.test(value) || $dst.val().toString().length !== size) {
-        Validator.error($dst, XE.Lang.trans('validation.digits', {
+        Validator.error($dst, XE.Lang.trans('xe::validatorDigits', {
           attribute: $dst.data('valid-name') || $dst.attr('name'),
           digits: Utils.addCommas(size),
         }));
@@ -308,7 +310,7 @@ import moment from 'moment';
       var size = $dst.val().toString().length;
 
       if (range[0] > size && size < range[1]) {
-        Validator.error($dst, XE.Lang.trans('validation.digits_between', {
+        Validator.error($dst, XE.Lang.trans('xe::validatorDigitsBetween', {
           attribute: $dst.data('valid-name') || $dst.attr('name'),
           min: Utils.addCommas(range[0]),
           max: Utils.addCommas(range[1]),
@@ -322,7 +324,7 @@ import moment from 'moment';
 
     filled: function ($dst, parameters) {
       if ($dst.val() === '') {
-        Validator.error($dst, XE.Lang.trans('validation.filled', { attribute: $dst.attr('name') }));
+        Validator.error($dst, XE.Lang.trans('xe::validatorFilled', { attribute: $dst.attr('name') }));
         return false;
       }
 
@@ -333,7 +335,7 @@ import moment from 'moment';
       var value = $dst.val();
 
       if (typeof value !== 'number' || isNaN(value) || Math.floor(value) !== value || !$.isNumeric(value)) {
-        Validator.error($dst, XE.Lang.trans('validation.integer', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
+        Validator.error($dst, XE.Lang.trans('xe::validatorInteger', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
         return false;
       }
 
@@ -345,7 +347,7 @@ import moment from 'moment';
       var exp = /^(1|2)?\d?\d([.](1|2)?\d?\d){3}$/;
 
       if (!exp.test(value)) {
-        Validator.error($dst, XE.Lang.trans('validation.ip', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
+        Validator.error($dst, XE.Lang.trans('xe::validatorIp', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
         return false;
       }
 
@@ -381,7 +383,7 @@ import moment from 'moment';
       var exts = parameters.split(',');
 
       if (value === '' || exts.indexOf(value.split('.').pop()) === -1) {
-        Validator.error($dst, XE.Lang.trans('validation.mimes', {
+        Validator.error($dst, XE.Lang.trans('xe::validatorMimes', {
           attribute: $dst.data('valid-name') || $dst.attr('name'),
           values: '[' + parameters + ']',
         }));
@@ -405,7 +407,7 @@ import moment from 'moment';
     regex: function ($dst, pattern) {
 
       if (!pattern.text($dst.val())) {
-        Validator.error($dst, XE.Lang.trans('validation.regex', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
+        Validator.error($dst, XE.Lang.trans('xe::validatorRegex', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
         return false;
       }
 
@@ -418,14 +420,14 @@ import moment from 'moment';
         return true;
 
       }catch (e) {
-        Validator.error($dst, XE.Lang.trans('validation.json', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
+        Validator.error($dst, XE.Lang.trans('xe::validatorJson', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
         return false;
       }
     },
 
     string: function ($dst) {
       if (typeof $dst.val() !== 'string') {
-        Validator.error($dst, XE.Lang.trans('validation.string', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
+        Validator.error($dst, XE.Lang.trans('xe::validatorString', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
         return false;
       }
 
@@ -439,7 +441,7 @@ import moment from 'moment';
       switch (type) {
         case 'numeric':
           if (parseInt(value) <= parseInt(parameters)) {
-            Validator.error($dst, XE.Lang.trans('validation.min.numeric', {
+            Validator.error($dst, XE.Lang.trans('xe::validatorMinNumeric', {
               attribute: $dst.data('valid-name') || $dst.attr('name'),
               min: Utils.addCommas(parameters),
             }));
@@ -451,7 +453,7 @@ import moment from 'moment';
 
         case 'file':
           if ($dst[0].files[0] && ($dst[0].files[0].size / 1024) <= parseInt(parameters)) {
-            Validator.error($dst, XE.Lang.trans('validation.min.file', {
+            Validator.error($dst, XE.Lang.trans('xe::validatorMinFile', {
               attribute: $dst.data('valid-name') || $dst.attr('name'),
               min: Utils.addCommas(parameters),
             }));
@@ -463,7 +465,7 @@ import moment from 'moment';
 
         case 'string':
           if (value.length <= parseInt(parameters)) {
-            Validator.error($dst, XE.Lang.trans('validation.min.string', {
+            Validator.error($dst, XE.Lang.trans('xe::validatorMinString', {
               attribute: $dst.data('valid-name') || $dst.attr('name'),
               min: Utils.addCommas(parameters),
             }));
@@ -490,7 +492,7 @@ import moment from 'moment';
       switch (type) {
         case 'numeric':
           if (parseInt(value) >= parseInt(parameters)) {
-            Validator.error($dst, XE.Lang.trans('validation.max.numeric', {
+            Validator.error($dst, XE.Lang.trans('xe::validatorMaxNumeric', {
               attribute: $dst.data('valid-name') || $dst.attr('name'),
               max: Utils.addCommas(parameters),
             }));
@@ -502,7 +504,7 @@ import moment from 'moment';
 
         case 'file':
           if ($dst[0].files[0] && ($dst[0].files[0].size / 1024) >= parseInt(parameters)) {
-            Validator.error($dst, XE.Lang.trans('validation.max.file', {
+            Validator.error($dst, XE.Lang.trans('xe::validatorMaxFile', {
               attribute: $dst.data('valid-name') || $dst.attr('name'),
               max: Utils.addCommas(parameters),
             }));
@@ -514,7 +516,7 @@ import moment from 'moment';
 
         case 'string':
           if (value.length >= parseInt(parameters)) {
-            Validator.error($dst, XE.Lang.trans('validation.max.string', {
+            Validator.error($dst, XE.Lang.trans('xe::validatorMaxString', {
               attribute: $dst.data('valid-name') || $dst.attr('name'),
               max: Utils.addCommas(parameters),
             }));
@@ -534,7 +536,7 @@ import moment from 'moment';
       var re = /\w+@\w{2,}\.\w{2,}/;
 
       if (!val.match(re)) {
-        Validator.error($dst, XE.Lang.trans('validation.email', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
+        Validator.error($dst, XE.Lang.trans('xe::validatorEmail', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
         return false;
       }
 
@@ -546,7 +548,7 @@ import moment from 'moment';
       var re = /^https?:\/\/\S+/;
 
       if (!val.match(re)) {
-        Validator.error($dst, XE.Lang.trans('validation.url', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
+        Validator.error($dst, XE.Lang.trans('xe::validatorUrl', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
         return false;
       }
 
@@ -560,7 +562,7 @@ import moment from 'moment';
       if (typeof num === 'number' && !isNaN(num) && typeof val !== 'boolean') {
         return true;
       } else {
-        Validator.error($dst, XE.Lang.trans('validation.numeric', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
+        Validator.error($dst, XE.Lang.trans('xe::validatorNumeric', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
         return false;
       }
     },
@@ -573,7 +575,7 @@ import moment from 'moment';
       switch (type) {
         case 'numeric':
           if (!$.isNumeric(value) || parseInt(value) < parseInt(range[0]) || parseInt(value) > parseInt(range[1])) {
-            Validator.error($dst, XE.Lang.trans('validation.between.numeric', {
+            Validator.error($dst, XE.Lang.trans('xe::validatorBetweenNumeric', {
               attribute: $dst.data('valid-name') || $dst.attr('name'),
               min: Utils.addCommas(range[0]),
               max: Utils.addCommas(range[1]),
@@ -586,7 +588,7 @@ import moment from 'moment';
 
         case 'file':
           if ($dst[0].files[0] && ((($dst[0].files[0].size / 1024) < range[0]) || (($dst[0].files[0].size / 1024) > range[1]))) {
-            Validator.error($dst, XE.Lang.trans('validation.between.file', {
+            Validator.error($dst, XE.Lang.trans('xe::validatorBetweenFile', {
               attribute: $dst.data('valid-name') || $dst.attr('name'),
               min: Utils.addCommas(range[0]),
               max: Utils.addCommas(range[1]),
@@ -599,7 +601,7 @@ import moment from 'moment';
 
         case 'string':
           if (value.length < range[0] || value.length > range[1]) {
-            Validator.error($dst, XE.Lang.trans('validation.between.string', {
+            Validator.error($dst, XE.Lang.trans('xe::validatorBetweenString', {
               attribute: $dst.data('valid-name') || $dst.attr('name'),
               min: Utils.addCommas(range[0]),
               max: Utils.addCommas(range[1]),
