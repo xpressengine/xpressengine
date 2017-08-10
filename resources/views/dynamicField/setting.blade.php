@@ -1,6 +1,10 @@
 {{ XeFrontend::js('/assets/core/common/js/dynamicField.js')->appendTo('body')->load() }}
 
 <div id="__xe_container_DF_setting_{{$group}}" class="table-responsive">
+    <div class="pull-right">
+        <button class="btn btn-primary __xe_btn_add" data-toggle="xe-modal">add</button>
+    </div>
+
     <table class="table">
         <caption>DynamicField Manager</caption>
         <thead>
@@ -25,20 +29,32 @@
             <td class="__xe_column_use"></td>
             <td>
                 <a class="text-light-blue __xe_btn_edit" href="#">Edit</a>
-                {{--<button type="button" class="btn btn-default __xe_btn_edit">Edit</button>--}}
             </td>
             <td>
                 <a class="text-red __xe_btn_delete" href="#">Delete</a>
-                {{--<button type="button" class="btn btn-default __xe_btn_delete">Delete</button>--}}
             </td>
         </tr>
         </tbody>
     </table>
 
-
-    <button class="btn btn-primary __xe_btn_add">add</button>
-
-    <div class="more-info __xe_add_form_section __xe_form_container">
+    <!-- Modal -->
+    <div class="xe-modal fade __xe_df_modal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="xe-modal">&times;</button>
+                    <h4 class="modal-title">{{xe_trans('xe::dynamicField')}}</h4>
+                </div>
+                <div class="modal-body">
+                    <p><!-- form --></p>
+                </div>
+                <div class="xe-modal-footer">
+                    <button type="button" class="xe-btn xe-btn-secondary __xe_btn_close" data-dismiss="xe-modal">{{xe_trans('xe::cancel')}}</button>
+                    <button type="button" class="xe-btn xe-btn-primary __xe_btn_submit">{{xe_trans('xe::submit')}}</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <form class="__xe_add_form" action="{{ route('manage.dynamicField.store') }}" style="display:none" data-rule="dynamicFieldSection">
@@ -92,12 +108,6 @@
             </div>
         </div>
         <div class="step __xe_additional_configure">
-        </div>
-        <div class="step">
-            <div>
-                <button type="button" class="btn btn-default __xe_btn_close"> Close </button>
-                <button type="button" class="btn btn-primary __xe_btn_submit"> Submit </button>
-            </div>
         </div>
     </form>
 </div>

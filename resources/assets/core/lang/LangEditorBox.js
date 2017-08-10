@@ -105,7 +105,6 @@ var LangEditor = createReactClass({
         },
       });
     }
-    // }
   },
 
   getEditor: function (resource, locale, value) {

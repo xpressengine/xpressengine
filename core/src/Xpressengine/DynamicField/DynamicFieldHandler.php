@@ -187,7 +187,7 @@ class DynamicFieldHandler
         $group = $config->get('group');
         $id = $config->get('id');
         if ($group == null || $id == null) {
-            throw new Exceptions\InvalidConfigException;
+            throw new Exceptions\InvalidConfigException(['group' => $group, 'id' => $id]);
         }
         if ($this->configHandler->get($group, $id) !== null) {
             throw new Exceptions\AlreadyExistException;
