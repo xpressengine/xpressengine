@@ -80,7 +80,7 @@
         <div class="step">
             <div class="form-group">
                 <label for="">Label</label>
-                <div class="dynamic-lang-editor-box" data-name="label" data-lang-key=""></div>
+                <div class="dynamic-lang-editor-box" data-name="label" data-lang-key="" data-valid-name="Label"></div>
             </div>
             <div class="form-group">
                 <input type="hidden" name="use" value="true" />
