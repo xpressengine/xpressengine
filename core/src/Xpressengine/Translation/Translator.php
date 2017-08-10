@@ -533,6 +533,7 @@ class Translator extends NamespacedItemResolver implements TranslatorInterface
     /**
      * Import laravel language data
      *
+     * @param string $path lang path
      * @return void
      */
     public function importLaravel($path)
