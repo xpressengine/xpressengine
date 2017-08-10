@@ -21,6 +21,10 @@ import moment from 'moment';
       $.each(ruleList, function (idx, val) {
         var langKey = val.split(':')[0].toLowerCase();
 
+        if (langKey === 'langrequired') {
+          langKey = 'required';
+        }
+
         if (!Translator.hasMessage('validation.' + langKey) && !langMap.hasOwnProperty(langKey)) {
           langMap[langKey] = '';
 
