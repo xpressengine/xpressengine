@@ -529,4 +529,40 @@ class Translator extends NamespacedItemResolver implements TranslatorInterface
     {
         return isset(static::$aliases[$namespace]) ? static::$aliases[$namespace] : $namespace;
     }
+
+    /**
+     * Import laravel language data
+     *
+     * @param string $path lang path
+     * @return void
+     */
+    public function importLaravel($path)
+    {
+        $dir = dir($path);
+        $langData = new LaravelLangData();
+        while ($entry = $dir->read()) {
+            if (in_array($entry, ['vendor', '.', '..']) || !is_dir($path . DIRECTORY_SEPARATOR . $entry)) {
+                continue;
+            }
+
+            $langData->setLocale($entry);
+            $data = [];
+
+            $localePath = $path . DIRECTORY_SEPARATOR . $entry;
+            $localeDir = dir($localePath);
+            while ($groupFile = $localeDir->read()) {
+                $pathname = $localePath . DIRECTORY_SEPARATOR . $groupFile;
+                if (is_dir($pathname) || !preg_match('#\.(php)$#i', $groupFile)) {
+                    continue;
+                }
+                $group = substr($groupFile, 0, -4);
+
+                $data[$group] = require $pathname;
+            }
+
+            $langData->setData($data);
+        }
+
+        $this->putLangData($this->getLaravelNamespace(), $langData);
+    }
 }
