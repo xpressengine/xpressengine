@@ -72,8 +72,13 @@ function setInstance($context, instance) {
 
     if ($context.attr('id') !== undefined) {
       parent = '#' + $context.attr('id');
-    } else if ($context.selector !== undefined) {
+    } else if ($context.selector) {
       parent = $context.selector;
+    } else {
+      var cnt = getCount($context) || 0;
+
+      $context.attr('data-progress-idx', cnt);
+      parent = '[data-progress-idx=' + cnt + ']';
     }
 
     progress.configure({
