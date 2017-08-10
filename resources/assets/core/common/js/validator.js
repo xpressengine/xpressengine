@@ -219,15 +219,24 @@ import moment from 'moment';
     },
 
     alphanum: function ($dst, parameters) {
-      Validator.validators.alpha_num($dst, parameters);
+      return Validator.validators.alpha_num($dst, parameters, true);
     },
 
-    alpha_num: function ($dst, parameters) {
+    alpha_num: function ($dst, parameters, trigger) {
       var value = $dst.val();
       var pattern = /[^a-zA-Z0-9]/;
 
       if (pattern.test(value) === true) {
-        Validator.error($dst, XE.Lang.trans('validation.alpha_num', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
+        var langKey = '';
+
+        if (trigger) {
+          langKey = 'validation.alphanum';
+        } else {
+          langKey = 'validation.alpha_num';
+        }
+
+        Validator.error($dst, XE.Lang.trans(langKey, { attribute: $dst.data('valid-name') || $dst.attr('name') }));
+
         return false;
       }
 
