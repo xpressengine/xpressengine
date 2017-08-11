@@ -153,8 +153,6 @@ abstract class AbstractType implements ComponentInterface
         $this->name = $this->name();
         $this->description = $this->description();
         $this->columns = $this->getColumns();
-        $this->rules = $this->getRules();
-        $this->settingsRules = $this->getSettingsRules();
     }
 
     /**
