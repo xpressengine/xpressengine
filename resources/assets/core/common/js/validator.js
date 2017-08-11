@@ -122,6 +122,8 @@ import moment from 'moment';
     var parts = rule.split('|');
     var _this = this;
 
+    $frm.data('valid-result', true);
+
     $.each(parts, function (index, part) {
       var res = part.split(':');
       var command = res[0].toLowerCase();
@@ -131,7 +133,9 @@ import moment from 'moment';
         var $dst = $frm.find('[name="' + name + '"]');
         _this.errorClear($frm);
         if (_this.validators[command]($dst, parameters) === false) {
+          $frm.data('valid-result', false);
           throw Error('Validation error.');
+
         }
       }
     });
