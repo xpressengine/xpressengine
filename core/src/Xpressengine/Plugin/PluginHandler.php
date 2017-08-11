@@ -359,6 +359,8 @@ class PluginHandler
             throw new CannotDeleteActivatedPluginException();
         }
 
+        $this->registerPlugin($entity);
+
         $entity->getObject()->uninstall();
 
         // status list에서 해당 플러그인 정보를 삭제한다.
