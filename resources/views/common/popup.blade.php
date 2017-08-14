@@ -32,6 +32,7 @@
         XE.configure({
             locale: '{{ session()->get('locale') ?: app('xe.translator')->getLocale() }}',
             defaultLocale: '{{ app('xe.translator')->getLocale() }}',
+            fixedPrefix: '{{ app('config')['xe.routing.fixedPrefix'] }}',
             @if (in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER]))
                 managePrefix: '{{ app('config')['xe.routing.settingsPrefix'] }}'
             @endif

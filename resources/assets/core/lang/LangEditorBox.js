@@ -81,7 +81,7 @@ var LangEditor = createReactClass({
         $.ajax({
           type: 'get',
           dataType: 'json',
-          url: xeBaseURL + '/' + XE.options.managePrefix + '/lang/lines/' + this.props.langKey,
+          url: xeBaseURL + '/' + XE.options.fixedPrefix + '/lang/lines/' + this.props.langKey,
           success: function (result) {
             // if (this.isMounted()) {
             _this.setLines(result);
@@ -94,7 +94,7 @@ var LangEditor = createReactClass({
 
     if (this.props.autocomplete) {
       $(el).find('input[type=text]:first,textarea:first').autocomplete({
-        source: '/' + XE.options.managePrefix + '/lang/search/' + XE.Lang.locales[0],
+        source: '/' + XE.options.fixedPrefix + '/lang/search/' + XE.Lang.locales[0],
         minLength: 1,
         focus: function (event, ui) {
           event.preventDefault();
@@ -242,7 +242,7 @@ function renderLangEditorBox() {
       XE.ajax({
         type: 'get',
         dataType: 'json',
-        url: xeBaseURL + '/' + XE.options.managePrefix + '/lang/lines/many',
+        url: xeBaseURL + '/' + XE.options.fixedPrefix + '/lang/lines/many',
         data: {
           keys: langKeys,
         },

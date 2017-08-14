@@ -44,15 +44,31 @@ Route::settings(
 Route::settings(
     'lang',
     function () {
+        /**
+         * move to Route::fixed('lang' ...)
+         *
+         * @deprecated start
+         */
         Route::get('lines/many', ['as' => 'settings.lang.lines.many', 'uses' => 'LangController@getLinesMany']);
         Route::get('lines/{key}', ['as' => 'settings.lang.lines.key', 'uses' => 'LangController@getLinesWithKey']);
         Route::get('search/{locale}', ['as' => 'settings.lang.search', 'uses' => 'LangController@searchKeyword']);
+        /**
+         * @deprecated end
+         */
         Route::put('save', ['as' => 'settings.lang.save', 'uses' => 'LangController@save']);
         Route::get('/', [
             'as' => 'settings.lang.index',
             'uses' => 'LangController@index',
             'settings_menu' => ['lang.default']
         ]);
+    }
+);
+
+Route::fixed(
+    'lang', function() {
+        Route::get('lines/many', ['as' => 'settings.lang.lines.many', 'uses' => 'LangController@getLinesMany']);
+        Route::get('lines/{key}', ['as' => 'settings.lang.lines.key', 'uses' => 'LangController@getLinesWithKey']);
+        Route::get('search/{locale}', ['as' => 'settings.lang.search', 'uses' => 'LangController@searchKeyword']);
     }
 );
 
