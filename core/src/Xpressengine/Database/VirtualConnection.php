@@ -17,6 +17,8 @@ namespace Xpressengine\Database;
 use Illuminate\Database\Connection;
 use PDO;
 use Closure;
+use Exception;
+use Throwable;
 
 /**
  * VirtualConnection
@@ -480,13 +482,30 @@ class VirtualConnection implements VirtualConnectionInterface
     /**
      * Execute a Closure within a transaction.
      *
-     * @param \Closure $callback closure
+     * @param Closure $callback closure
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
+     * @throws Throwable
      */
     public function transaction(Closure $callback)
     {
-        return $this->getConnection('transaction')->transaction($callback);
+        $this->beginTransaction();
+
+        try {
+            $result = $callback($this);
+
+            $this->commit();
+        } catch (Exception $e) {
+            $this->rollBack();
+
+            throw $e;
+        } catch (Throwable $e) {
+            $this->rollBack();
+
+            throw $e;
+        }
+
+        return $result;
     }
 
     /**
