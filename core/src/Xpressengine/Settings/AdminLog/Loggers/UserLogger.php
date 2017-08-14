@@ -139,13 +139,15 @@ class UserLogger extends AbstractLogger
         ];
 
         $method = strtoupper($request->method());
-        $name = $request->route()->getName();
+        $route = $request->route();
 
         $matched = false;
-        if ($name !== null) {
-            $this->matched = $matched = array_get(array_get($list, $method, []), $name);
+        if ($route !== null) {
+            $name = $request->route()->getName();
+            if ($name !== null) {
+                $this->matched = $matched = array_get(array_get($list, $method, []), $name);
+            }
         }
-
         return $matched ? true : false;
     }
 
