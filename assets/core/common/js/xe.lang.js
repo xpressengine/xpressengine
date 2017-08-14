@@ -117,7 +117,7 @@ export default (function () {
       var _this = this;
 
       XE.ajax({
-        url: xeBaseURL + '/' + XE.options.managePrefix + '/lang/lines/' + id,
+        url: xeBaseURL + '/' + XE.options.fixedPrefix + '/lang/lines/' + id,
         type: 'json',
         type: 'get',
         data: parameters,
@@ -143,7 +143,7 @@ export default (function () {
       XE.ajax({
         type: 'get',
         dataType: 'json',
-        url: xeBaseURL + '/' + XE.options.managePrefix + '/lang/lines/many',
+        url: xeBaseURL + '/' + XE.options.fixedPrefix + '/lang/lines/many',
         data: {
           keys: langKeys,
         },
