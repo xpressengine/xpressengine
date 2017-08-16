@@ -62,7 +62,8 @@ class Purifier
                     ',StyleAttribute,Tables,Text,Legacy,Presentation,Structure,NonXMLCommonAttributes'.
                     ',XMLCommonAttributes',
                 'AutoFormat.AutoParagraph' => false,
-                'AutoFormat.RemoveEmpty' => false
+                'AutoFormat.RemoveEmpty' => false,
+                'Attr.EnableID' => true
             ]
         ));
     }
