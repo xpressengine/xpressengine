@@ -20,7 +20,6 @@ module.exports = (() => {
    '!resources/assets/core/settings/js/admin.js',
    '!resources/assets/core/xe-ui-component/components',
    '!resources/assets/core/**/img/*',
-   '!resources/assets/core/common/js/rule.js',
    '!resources/assets/core/common/js/storeCategory.js',
    '!resources/assets/core/common/js/dynamicField.js',
    '!resources/assets/core/common/js/xe.js',

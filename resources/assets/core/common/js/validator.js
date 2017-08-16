@@ -131,6 +131,7 @@ import moment from 'moment';
 
       if (typeof _this.validators[command] === 'function') {
         var $dst = $frm.find('[name="' + name + '"]');
+
         _this.errorClear($frm);
         if (_this.validators[command]($dst, parameters) === false) {
           $frm.data('valid-result', false);
@@ -168,9 +169,27 @@ import moment from 'moment';
 
   };
 
+  Validator.getValue = function ($ele) {
+    var value = '';
+
+    if ($ele[0].tagName === 'SELECT') {
+      $ele.find('option:selected').val();
+
+    } else if ($ele.is('input[type=checkbox]')) {
+      if ($ele.is(':checked')) {
+        value = $ele.val();
+      }
+
+    } else {
+      value = $ele.val();
+    }
+
+    return value;
+  };
+
   Validator.validators = {
     accepted: function ($dst, parameters) {
-      var value = $dst.val();
+      var value = Validator.getValue($dst);
 
       if (['yes', 'on', 1, true].indexOf(value) === -1) {
         Validator.error($dst, XE.Lang.trans('validation.accepted', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
@@ -205,7 +224,8 @@ import moment from 'moment';
     },
 
     required: function ($dst, parameters) {
-      var value = $dst.val();
+      var value = Validator.getValue($dst);
+
       if (value === '') {
         Validator.error($dst, XE.Lang.trans('validation.required', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
         return false;
@@ -215,7 +235,7 @@ import moment from 'moment';
     },
 
     alpha: function ($dst, parameters) {
-      var value = $dst.val();
+      var value = Validator.getValue($dst);
       var pattern = /[a-zA-Z]/;
 
       if (!pattern.test(value)) {
@@ -231,7 +251,7 @@ import moment from 'moment';
     },
 
     alpha_num: function ($dst, parameters, trigger) {
-      var value = $dst.val();
+      var value = Validator.getValue($dst);
       var pattern = /[^a-zA-Z0-9]/;
 
       if (pattern.test(value) === true) {
@@ -252,7 +272,7 @@ import moment from 'moment';
     },
 
     alpha_dash: function ($dst, parameters) {
-      var value = $dst.val();
+      var value = Validator.getValue($dst);
       var pattern = /[^a-zA-Z0-9\-\_]/;
 
       if (pattern.test(value)) {
@@ -264,7 +284,7 @@ import moment from 'moment';
     },
 
     array: function ($dst, parameters) {
-      if (Array.isArray($dst.val())) {
+      if (Array.isArray(Validator.getValue($dst))) {
         Validator.error($dst, XE.Lang.trans('validation.array', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
         return false;
       }
@@ -273,7 +293,7 @@ import moment from 'moment';
     },
 
     boolean: function ($dst, parameters) {
-      var value = $dst.val();
+      var value = Validator.getValue($dst);
 
       if ([1, 0, '1', '0', true, false, 'true', 'false'].indexOf(value) === -1) {
         Validator.error($dst, XE.Lang.trans('validation.boolean', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
@@ -284,7 +304,7 @@ import moment from 'moment';
     },
 
     date: function ($dst, parameters) {
-      if (!Utils.strtotime($dst.val())) {
+      if (!Utils.strtotime(Validator.getValue($dst))) {
         Validator.error($dst, XE.Lang.trans('validation.date', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
         return false;
       }
@@ -294,7 +314,7 @@ import moment from 'moment';
 
     date_format: function ($dst, parameters) {
       //moment('2015-04-03', 'yyyy-mm-dd').isValid()
-      if (!moment($dst.val(), parameters).isValid()) {
+      if (!moment(Validator.getValue($dst), parameters).isValid()) {
         Validator.error($dst, XE.Lang.trans('validation.date_format', {
           attribute: $dst.data('valid-name') || $dst.attr('name'),
           format: parameters,
@@ -306,6 +326,7 @@ import moment from 'moment';
     },
 
     digits: function ($dst, parameters) {
+      var value = Validator.getValue($dst);
       var pattern = /[^0-9]/;
       var size = parseInt(parameters);
 
@@ -321,8 +342,9 @@ import moment from 'moment';
     },
 
     digits_between: function ($dst, parameters) {
+      var value = Validator.getValue($dst);
       var range = parameters.split(',');
-      var size = $dst.val().toString().length;
+      var size = value.toString().length;
 
       if (range[0] > size && size < range[1]) {
         Validator.error($dst, XE.Lang.trans('validation.digits_between', {
@@ -338,7 +360,7 @@ import moment from 'moment';
     },
 
     filled: function ($dst, parameters) {
-      if ($dst.val() === '') {
+      if (Validator.getValue($dst) === '') {
         Validator.error($dst, XE.Lang.trans('validation.filled', { attribute: $dst.attr('name') }));
         return false;
       }
@@ -347,7 +369,7 @@ import moment from 'moment';
     },
 
     integer: function ($dst) {
-      var value = $dst.val();
+      var value = Validator.getValue($dst);
 
       if (typeof value !== 'number' || isNaN(value) || Math.floor(value) !== value || !$.isNumeric(value)) {
         Validator.error($dst, XE.Lang.trans('validation.integer', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
@@ -358,7 +380,7 @@ import moment from 'moment';
     },
 
     ip: function ($dst) {
-      var value = $dst.val();
+      var value = Validator.getValue($dst);
       var exp = /^(1|2)?\d?\d([.](1|2)?\d?\d){3}$/;
 
       if (!exp.test(value)) {
@@ -394,7 +416,7 @@ import moment from 'moment';
     // },
 
     mimes: function ($dst, parameters) {
-      var value = $dst.val();
+      var value = Validator.getValue($dst);
       var exts = parameters.split(',');
 
       if (value === '' || exts.indexOf(value.split('.').pop()) === -1) {
@@ -421,7 +443,7 @@ import moment from 'moment';
 
     regex: function ($dst, pattern) {
 
-      if (!pattern.text($dst.val())) {
+      if (!pattern.text(Validator.getValue($dst))) {
         Validator.error($dst, XE.Lang.trans('validation.regex', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
         return false;
       }
@@ -431,7 +453,7 @@ import moment from 'moment';
 
     json: function ($dst) {
       try {
-        JSON.parse($dst.val());
+        JSON.parse(Validator.getValue($dst));
         return true;
 
       }catch (e) {
@@ -441,7 +463,7 @@ import moment from 'moment';
     },
 
     string: function ($dst) {
-      if (typeof $dst.val() !== 'string') {
+      if (typeof Validator.getValue($dst) !== 'string') {
         Validator.error($dst, XE.Lang.trans('validation.string', { attribute: $dst.data('valid-name') || $dst.attr('name') }));
         return false;
       }
@@ -450,7 +472,7 @@ import moment from 'moment';
     },
 
     min: function ($dst, parameters) {
-      var value = $dst.val();
+      var value = Validator.getValue($dst);
       var type = $dst.data('valid-type');
 
       switch (type) {
@@ -501,7 +523,7 @@ import moment from 'moment';
     },
 
     max: function ($dst, parameters) {
-      var value = $dst.val();
+      var value = Validator.getValue($dst);
       var type = $dst.data('valid-type');
 
       switch (type) {
@@ -547,7 +569,7 @@ import moment from 'moment';
     },
 
     email: function ($dst, parameters) {
-      var val = $dst.val();
+      var val = Validator.getValue($dst);
       var re = /\w+@\w{2,}\.\w{2,}/;
 
       if (!val.match(re)) {
@@ -559,7 +581,7 @@ import moment from 'moment';
     },
 
     url: function ($dst, parameters) {
-      var val = $dst.val();
+      var val = Validator.getValue($dst);
       var re = /^https?:\/\/\S+/;
 
       if (!val.match(re)) {
@@ -571,7 +593,7 @@ import moment from 'moment';
     },
 
     numeric: function ($dst, parameters) {
-      var val = $dst.val();
+      var val = Validator.getValue($dst);
       var num = Number(val);
 
       if (typeof num === 'number' && !isNaN(num) && typeof val !== 'boolean') {
@@ -584,7 +606,7 @@ import moment from 'moment';
 
     between: function ($dst, parameters) {
       var range = parameters.split(',');
-      var value = $dst.val();
+      var value = Validator.getValue($dst);
       var type = $dst.data('valid-type');
 
       switch (type) {
