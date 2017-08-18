@@ -22,6 +22,7 @@ use Xpressengine\Database\DatabaseHandler;
 use Xpressengine\Database\ProxyManager;
 use Xpressengine\Database\TransactionHandler;
 use Xpressengine\Database\Eloquent\DynamicModel;
+use Xpressengine\Database\VirtualConnection;
 
 /**
  * laravel service provider
@@ -50,6 +51,8 @@ class DatabaseServiceProvider extends ServiceProvider
         DynamicModel::setKeyGen(app('xe.keygen'));
         DynamicModel::setConnectionResolver($this->app['xe.db']);
         DynamicModel::setEventDispatcher($this->app['events']);
+
+        VirtualConnection::setCache($this->app['cache']->driver('schema'));
     }
 
     /**
@@ -70,8 +73,7 @@ class DatabaseServiceProvider extends ServiceProvider
             $coupler = DatabaseCoupler::instance(
                 $app['db'],
                 TransactionHandler::instance(),
-                $app['xe.db.proxy'],
-                $app['cache']->driver('schema')
+                $app['xe.db.proxy']
             );
 
             $proxyClass = $app['xe.interception']->proxy(DatabaseHandler::class, 'XeDB');

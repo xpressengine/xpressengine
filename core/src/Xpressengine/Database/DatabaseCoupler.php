@@ -14,7 +14,6 @@
 
 namespace Xpressengine\Database;
 
-use Illuminate\Contracts\Cache\Repository as CacheContract;
 use Illuminate\Database\DatabaseManager;
 
 /**
@@ -49,11 +48,6 @@ class DatabaseCoupler
     protected $proxy;
 
     /**
-     * @var CacheContract
-     */
-    protected $cache;
-
-    /**
      * list of VirtualConnection
      *
      * @var VirtualConnectionInterface[]
@@ -73,18 +67,15 @@ class DatabaseCoupler
      * @param DatabaseManager    $databaseManager database manager
      * @param TransactionHandler $transaction     transaction handler
      * @param ProxyManager       $proxy           proxy manager
-     * @param CacheContract      $cache           cache
      */
     private function __construct(
         DatabaseManager $databaseManager,
         TransactionHandler $transaction,
-        ProxyManager $proxy,
-        CacheContract $cache
+        ProxyManager $proxy
     ) {
         $this->databaseManager = $databaseManager;
         $this->transaction = $transaction;
         $this->proxy = $proxy;
-        $this->cache = $cache;
     }
 
     /**
@@ -115,16 +106,14 @@ class DatabaseCoupler
      * @param DatabaseManager    $databaseManager database manager
      * @param TransactionHandler $transaction     transaction handler
      * @param ProxyManager       $proxy           proxy manager
-     * @param CacheContract      $cache           cache
      * @return DatabaseCoupler
      */
     public static function instance(
         DatabaseManager $databaseManager,
         TransactionHandler $transaction,
-        ProxyManager $proxy,
-        CacheContract $cache
+        ProxyManager $proxy
     ) {
-        self::$instance = new static($databaseManager, $transaction, $proxy, $cache);
+        self::$instance = new static($databaseManager, $transaction, $proxy);
 
         return self::$instance;
     }
@@ -157,16 +146,6 @@ class DatabaseCoupler
     public function getTransaction()
     {
         return $this->transaction;
-    }
-
-    /**
-     * get cache
-     *
-     * @return CacheContract
-     */
-    public function getCache()
-    {
-        return $this->cache;
     }
 
     /**

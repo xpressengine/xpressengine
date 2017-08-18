@@ -14,6 +14,7 @@
 
 namespace Xpressengine\Database;
 
+use Illuminate\Contracts\Cache\Repository as CacheContract;
 use Illuminate\Database\Connection;
 use PDO;
 use Closure;
@@ -130,6 +131,20 @@ class VirtualConnection implements VirtualConnectionInterface
      * @var int
      */
     protected $fetchMode = PDO::FETCH_OBJ;
+
+    /**
+     * Cache store instance
+     *
+     * @var CacheContract
+     */
+    protected static $cache;
+
+    /**
+     * The number of minutes to store cache items.
+     *
+     * @var int
+     */
+    protected $minutes = 60;
 
     /**
      * Create instance
@@ -578,7 +593,7 @@ class VirtualConnection implements VirtualConnectionInterface
      */
     public function getSchema($table)
     {
-        $cache = $this->coupler->getCache();
+        $cache = static::getCache();
 
         if ($cache->has($table) === false) {
             $this->setSchemaCache($table);
@@ -598,7 +613,7 @@ class VirtualConnection implements VirtualConnectionInterface
      */
     public function setSchemaCache($table, $force = false)
     {
-        $cache = $this->coupler->getCache();
+        $cache = static::getCache();
 
         if ($force === true) {
             $cache->forget($table);
@@ -609,8 +624,40 @@ class VirtualConnection implements VirtualConnectionInterface
             return false;
         }
 
-        $cache->put($table, $schema);
+        $cache->put($table, $schema, $this->minutes);
         return true;
+    }
+
+    /**
+     * Set the cache store.
+     *
+     * @param CacheContract $cache cache instance
+     * @return void
+     */
+    public static function setCache(CacheContract $cache)
+    {
+        static::$cache = $cache;
+    }
+
+    /**
+     * Get the cache store.
+     *
+     * @return CacheContract|null
+     */
+    public static function getCache()
+    {
+        return static::$cache;
+    }
+
+    /**
+     * Set the number of minutes to store cache items.
+     *
+     * @param int $minutes number of minutes
+     * @return void
+     */
+    public function setCacheExpire($minutes)
+    {
+        $this->minutes = $minutes;
     }
 
     /**
