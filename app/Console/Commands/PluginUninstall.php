@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Xpressengine\Interception\InterceptionHandler;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
@@ -27,15 +28,20 @@ class PluginUninstall extends PluginCommand
     /**
      * Execute the console command.
      *
-     * @param PluginHandler      $handler
-     * @param PluginProvider     $provider
-     * @param ComposerFileWriter $writer
+     * @param PluginHandler       $handler
+     * @param PluginProvider      $provider
+     * @param ComposerFileWriter  $writer
+     * @param InterceptionHandler $interceptionHandler
      *
      * @return bool|null
      * @throws \Exception
      */
-    public function fire(PluginHandler $handler, PluginProvider $provider, ComposerFileWriter $writer)
-    {
+    public function fire(
+        PluginHandler $handler,
+        PluginProvider $provider,
+        ComposerFileWriter $writer,
+        InterceptionHandler $interceptionHandler
+    ) {
         $this->init($handler, $provider, $writer);
 
         // php artisan plugin:uninstall <plugin name>
@@ -112,6 +118,7 @@ class PluginUninstall extends PluginCommand
         );
 
         $handler->refreshPlugins();
+        $interceptionHandler->clearProxies();
 
         // composer 실행을 마쳤습니다.
         $this->warn('Composer update command is finished.'.PHP_EOL);
