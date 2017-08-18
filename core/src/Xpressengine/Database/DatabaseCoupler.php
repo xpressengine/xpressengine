@@ -14,8 +14,8 @@
 
 namespace Xpressengine\Database;
 
+use Illuminate\Contracts\Cache\Repository as CacheContract;
 use Illuminate\Database\DatabaseManager;
-use Xpressengine\Support\CacheInterface;
 
 /**
  * DatabaseCoupler
@@ -49,7 +49,7 @@ class DatabaseCoupler
     protected $proxy;
 
     /**
-     * @var CacheInterface
+     * @var CacheContract
      */
     protected $cache;
 
@@ -73,13 +73,13 @@ class DatabaseCoupler
      * @param DatabaseManager    $databaseManager database manager
      * @param TransactionHandler $transaction     transaction handler
      * @param ProxyManager       $proxy           proxy manager
-     * @param CacheInterface     $cache           cache
+     * @param CacheContract      $cache           cache
      */
     private function __construct(
         DatabaseManager $databaseManager,
         TransactionHandler $transaction,
         ProxyManager $proxy,
-        CacheInterface $cache
+        CacheContract $cache
     ) {
         $this->databaseManager = $databaseManager;
         $this->transaction = $transaction;
@@ -115,14 +115,14 @@ class DatabaseCoupler
      * @param DatabaseManager    $databaseManager database manager
      * @param TransactionHandler $transaction     transaction handler
      * @param ProxyManager       $proxy           proxy manager
-     * @param CacheInterface     $cache           cache
+     * @param CacheContract      $cache           cache
      * @return DatabaseCoupler
      */
     public static function instance(
         DatabaseManager $databaseManager,
         TransactionHandler $transaction,
         ProxyManager $proxy,
-        CacheInterface $cache
+        CacheContract $cache
     ) {
         self::$instance = new static($databaseManager, $transaction, $proxy, $cache);
 
@@ -162,7 +162,7 @@ class DatabaseCoupler
     /**
      * get cache
      *
-     * @return CacheInterface
+     * @return CacheContract
      */
     public function getCache()
     {

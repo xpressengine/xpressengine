@@ -22,7 +22,6 @@ use Xpressengine\Database\DatabaseHandler;
 use Xpressengine\Database\ProxyManager;
 use Xpressengine\Database\TransactionHandler;
 use Xpressengine\Database\Eloquent\DynamicModel;
-use Xpressengine\Support\LaravelCache;
 
 /**
  * laravel service provider
@@ -72,7 +71,7 @@ class DatabaseServiceProvider extends ServiceProvider
                 $app['db'],
                 TransactionHandler::instance(),
                 $app['xe.db.proxy'],
-                new LaravelCache($app['cache']->driver('schema'))
+                $app['cache']->driver('schema')
             );
 
             $proxyClass = $app['xe.interception']->proxy(DatabaseHandler::class, 'XeDB');

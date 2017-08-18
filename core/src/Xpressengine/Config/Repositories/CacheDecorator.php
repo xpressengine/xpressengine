@@ -14,11 +14,11 @@
 
 namespace Xpressengine\Config\Repositories;
 
+use Illuminate\Contracts\Cache\Repository as CacheContract;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Xpressengine\Config\ConfigRepository;
 use Xpressengine\Config\ConfigEntity;
-use Xpressengine\Support\CacheInterface;
 
 /**
  * 저장소를 wrapping 하여 cache 에 있는 정보는
@@ -43,9 +43,16 @@ class CacheDecorator implements ConfigRepository
     /**
      * cache instance
      *
-     * @var CacheInterface
+     * @var CacheContract
      */
     protected $cache;
+
+    /**
+     * expire time
+     *
+     * @var int
+     */
+    protected $minutes;
 
     /**
      * Prefix for cache key
@@ -64,13 +71,15 @@ class CacheDecorator implements ConfigRepository
     /**
      * create instance
      *
-     * @param ConfigRepository $repo  repository instance
-     * @param CacheInterface   $cache cache instance
+     * @param ConfigRepository $repo    repository instance
+     * @param CacheContract    $cache   cache instance
+     * @param int              $minutes expire time
      */
-    public function __construct(ConfigRepository $repo, CacheInterface $cache)
+    public function __construct(ConfigRepository $repo, CacheContract $cache, $minutes = 60)
     {
         $this->repo = $repo;
         $this->cache = $cache;
+        $this->minutes = $minutes;
     }
 
     /**
@@ -212,7 +221,7 @@ class CacheDecorator implements ConfigRepository
 
                 $descendant = $this->repo->fetchDescendant($siteKey, $head);
                 $data = array_merge([$config], $descendant);
-                $this->cache->put($cacheKey, $data);
+                $this->cache->put($cacheKey, $data, $this->minutes);
             }
 
             $this->bag[$key] = $data;
@@ -240,7 +249,7 @@ class CacheDecorator implements ConfigRepository
      * parse name to head and segments
      *
      * @param string $name the name
-     * @return array
+     * @return string
      */
     private function getHead($name)
     {

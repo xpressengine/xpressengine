@@ -48,7 +48,7 @@ class DatabaseCouplerTest extends PHPUnit_Framework_TestCase
 
         $proxyManager = m::mock('Xpressengine\Database\ProxyManager');
 
-        $cache = m::mock('Xpressengine\Support\CacheInterface');
+        $cache = m::mock('Illuminate\Contracts\Cache\Repository');
 
         /**
          * @var \Illuminate\Database\DatabaseManager $databaseManager
@@ -88,7 +88,7 @@ class DatabaseCouplerTest extends PHPUnit_Framework_TestCase
 
         $proxyManager = m::mock('Xpressengine\Database\ProxyManager');
 
-        $cache = m::mock('Xpressengine\Support\CacheInterface');
+        $cache = m::mock('Illuminate\Contracts\Cache\Repository');
 
         /**
          * @var \Illuminate\Database\DatabaseManager $databaseManager
