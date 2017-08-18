@@ -3,29 +3,28 @@ import * as d3 from 'd3';
 import window from 'window';
 
 /**
- * customOptions
- * - data
- *  - color: {
- *    data1: '#000000'
- *  }
- *
- *
- *
- * options
- * - chartType
- * - categories
+ * @class
  * */
-
 class XeChart {
 
   chart;
 
+  /**
+   * @param {string} chartType 차트 타입
+   * @param {object} obj
+   * <pre>
+   *   - selector : 차트를 생성할 wrapper selector
+   *   - data : chart data
+   *   - customOptions : c3 차트생성 오브젝트
+   *   -
+   * </pre>
+   * @description XeChart 생성.
+   * */
   constructor(chartType, obj) {
     this.selector = obj.selector;
     this.chartType = chartType;
     this.data = obj.data;
     this.customOptions = obj.customOptions || {};
-    this.options = obj.options || {}
   }
 
   /**

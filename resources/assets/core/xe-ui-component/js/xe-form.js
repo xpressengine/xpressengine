@@ -1,5 +1,6 @@
-/*
- <form action=... method=... data-callback=... data-submit="xe-ajax"></form>
+/**
+ * @namespace XE
+ * <form action=... method=... data-callback=... data-submit="xe-ajax"></form>
  */
 ;(function (XE) {
 

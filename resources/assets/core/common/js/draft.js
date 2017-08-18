@@ -1,6 +1,9 @@
 (function ($) {
 'use strict'
 
+/**
+ * @class
+ * */
 function Draft(elem, key, callback, withForm, container) {
   this.key = key;
   this.elem = elem;

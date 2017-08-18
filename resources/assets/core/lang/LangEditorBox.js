@@ -11,7 +11,6 @@ import validator from 'validator';
  * 2)langEditorBoxRender:fn 외부에서 직접호출하여 컴포넌트를 만든다
  * - 컴포넌트 state에 다국어 정보가 없으면 하나의 컴포넌트에 대한 다국어 정보를 ajax로 요청하여 상태를 갱신한다.
  * */
-
 var LangEditorBox = createReactClass({
   getDefaultProps: function () {
     return {
@@ -167,6 +166,11 @@ var LangEditor = createReactClass({
   },
 });
 
+/**
+ * target element에 LangEditorBox를 랜더링함.
+ * @global
+ * @function langEditorBoxRender
+ * */
 window.langEditorBoxRender = function ($data, type) {
   if (type === 'obj') {
     //{ name, langKey, multiline, lines, autocomplete, target }

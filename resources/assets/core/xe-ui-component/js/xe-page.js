@@ -1,3 +1,6 @@
+/**
+ * @namespace XE
+ * */
 ;(function ($, exports, XE, DynamicLoadManager) {
   var _this = this;
 
@@ -283,7 +286,8 @@
   };
 
   /**
-   *
+   * selecor영역에 html을 로드하여 보여준다. html 랜더링 전에 assets파일들의 로드가 선행된다.
+   * @memberof XE
    * @param {string} url
    * @param {string} target selector
    * @param {object} options
@@ -295,8 +299,6 @@
    * @param {function} callback
    * @description
    * <pre>
-   *     selecor영역에 html을 로드하여 보여준다. html 랜더링 전에 assets파일들의 로드가 선행된다.
-   *
    *     동작 순서
    *     1)css로드 + js로드
    *     2)html string append
@@ -319,6 +321,8 @@
   };
 
   /**
+   * modal을 실행하여 .xe-modal-content 영역에 html을 로드하여 보여준다. html 랜더링 전에 assets파일들의 로드가 선행된다.
+   * @memberof XE
    * @param {string} url
    * @param {object} options
    * <pre>
@@ -328,8 +332,6 @@
    * @param {function} callback
    * @description
    * <pre>
-   *     modal을 실행하여 .xe-modal-content 영역에 html을 로드하여 보여준다. html 랜더링 전에 assets파일들의 로드가 선행된다.
-   *
    *     동작 순서
    *     1)css로드 + js로드
    *     2)html string append
@@ -371,6 +373,8 @@
   };
 
   /**
+   * 실행하여 .xe-toggle-menu-items 영역에 html을 로드하고 .xe-toggle-popup 을 보여준다. html 랜더링 전에 assets파일들의 로드가 선행된다.
+   * @memberof XE
    * @param {string} url
    * @param {object} $this
    * @param {object} options
@@ -382,8 +386,6 @@
    * @param {function} callback
    * @description
    * <pre>
-   *     실행하여 .xe-toggle-menu-items 영역에 html을 로드하고 .xe-toggle-popup 을 보여준다. html 랜더링 전에 assets파일들의 로드가 선행된다.
-   *
    *     동작 순서
    *     1)css로드 + js로드
    *     2)html string append

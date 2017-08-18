@@ -80,7 +80,7 @@ if (typeof define === 'function' && define.amd) {
     options: exports.options.toast,
     statusToType: function (status) {
       var type = this.options.status[status];
-      return type === undefined ? 'xe-danger' : type;
+      return type === undefined ? 'danger' : type.split('-')[1];
     },
 
     add: function (type, message, pos) {

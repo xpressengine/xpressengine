@@ -1,16 +1,27 @@
 import griper from 'griper';
 import moment from 'moment';
 
-//var ruleSet = { ruleName: "analyticsSetting", rules: {"profileId":"numeric","keyFile":"ga_json","trackingId":"required"} }
-
+/**
+ * @module validator
+ * */
 (function (root, factory) {
   module.exports = factory();
 }(this, function () {
 
+  /**
+   * @namespace Validator
+   * @alias Validator
+   * */
   var Validator = {};
   Validator.rules = {};
   Validator.alertType = 'form';
 
+  /**
+   * 룰을 세팅한다.
+   * @member
+   * @param {string} ruleName
+   * @param {object} rules
+   * */
   Validator.setRules = function (ruleName, rules) {
 
     var lang = [];

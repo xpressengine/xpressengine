@@ -53,41 +53,6 @@
 
 <body class="{{ XeFrontend::output('bodyClass') }}">
 
-{{--<script src="assets/core/xe-ui-component/js/xe-chart.js"></script>--}}
-
-{{--<div id="chart1"></div>--}}
-
-{{--<script type="text/javascript">--}}
-    {{--$(function () {--}}
-        {{--var customOptions = {--}}
-            {{--axis: {--}}
-                {{--x: {--}}
-                    {{--type: 'category',--}}
-                    {{--categories: ['상품1', '상품2','상품3','상품4','상품5','상품6']--}}
-                {{--}--}}
-            {{--}--}}
-        {{--};--}}
-        {{--var data = [--}}
-            {{--['data1', 300, 350, 300, 0, 0, 0],--}}
-            {{--['data2', 130, 100, 140, 200, 150, 50]--}}
-        {{--];--}}
-
-        {{--var chart1 = new XeChart('bar', {--}}
-            {{--selector: '#chart1',--}}
-            {{--data: data,--}}
-            {{--customOptions: customOptions--}}
-        {{--});--}}
-
-        {{--console.log(chart1);--}}
-
-        {{--chart1.draw();--}}
-
-{{--//        setTimeout(function () {--}}
-{{--//            chart1.destroy();--}}
-{{--//        }, 3000);--}}
-    {{--})--}}
-{{--</script>--}}
-
 <!-- JS at body.prepend -->
 {!! XeFrontend::output('js', 'body.prepend') !!}
 

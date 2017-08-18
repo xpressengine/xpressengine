@@ -1,28 +1,40 @@
+/**
+ * @namespace Tree
+ * */
 var Tree = (function () {
+  /** @private */
   var _this;
+  /** @private */
   var _prevent = false;
 
   return {
+    /**
+     * Tree를 초기화한다.
+     * @memberof Tree
+     * */
     init: function () {
       _this = this;
 
       return this;
     },
 
-    /***
-       * @param {object} obj
-       * <pre>
-       *   rootId: tree root id
-       *   nodeTemplate: item안에 생성할 html
-       *   items: Tree 구성 데이터
-       * </pre>
-       * @return {string} items html
-       */
+    /**
+     *
+     * @memberof Tree
+     * @param {object} obj
+     * <pre>
+     *   rootId: tree root id
+     *   nodeTemplate: item안에 생성할 html
+     *   items: Tree 구성 데이터
+     * </pre>
+     * @return {string} items html
+     */
     getItemsTemplate: function (obj) {
       return Item.getTemplate(obj);
     },
 
     /**
+     * @memberof Tree
      * @param {boolean} flag
      * @description Tree 이동 방지
      * */
@@ -31,7 +43,8 @@ var Tree = (function () {
     },
 
     /**
-     * @param {jquery object} $target tree구성의 wrapper
+     * @memberof Tree
+     * @param {object} $target tree구성의 wrapper
      * @param {object} config
      * <pre>
      *   추가옵션
@@ -163,7 +176,8 @@ var Tree = (function () {
     },
 
     /**
-     * @param {jquery object} $container
+     * @memberof Tree
+     * @param {object} $container
      * @oaram {object} obj
      * <pre>
      *   nodeTemplate: item안에 생성할 html
@@ -184,11 +198,17 @@ var Tree = (function () {
         fn();
       }
     },
-
+    /**
+     * @memberof Tree
+     * @param {object} obj
+     * */
     isObject: function (obj) {
       return (obj && obj instanceof Object) ? true : false;
     },
-
+    /**
+     * @memberof Tree
+     * @param {function} fn
+     * */
     isFunction: function (fn) {
       return (typeof fn === 'function') ? true : false;
     },

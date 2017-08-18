@@ -1,63 +1,131 @@
+/**
+ * @module Editor
+ * */
 (function (exports) {
   'use strict';
 
   var editorSet = {};
   var editorOptionSet = {};
 
+  /**
+   * @class InstanceObj
+   * @param {string} editorName
+   * @param {string} sel selector
+   * @param {object} editorOptions
+   * @param {array} toolInfoList 에디터에 추가될 tool 정보 리스트
+   * */
   var InstanceObj = function (editorName, sel, editorOptions, toolInfoList) {
+
+    /** @private */
     var _options = {
       editorOptions: editorOptions,
       toolInfoList: toolInfoList,
     };
 
+    /** @public */
     this.editorName = editorName;
+    /** @public */
     this.selector = sel;
+    /** @public */
     this.props = {};
+    /**
+     * 에디터 옵션을 반환한다.
+     * @public
+     * @method
+     * */
     this.getOptions = function () {
       return _options;
     };
+
   };
 
+  /**
+   * @lends InstanceObj.prototype
+   * */
   InstanceObj.prototype = {
+    /**
+     * 생성된 instance를 반환한다InstanceObj.
+     * @method
+     * @return {object}
+     * */
     getInstance: function () {
       return editorSet[this.editorName].editorList[this.selector];
     },
-
+    /**
+     * 에디터에 작성된 컨텐츠를 반환한다.
+     * @method
+     * @return {string}
+     * */
     getContents: function () {
       return editorSet[this.editorName].interfaces.getContents.call(this.getInstance());
     },
-
+    /**
+     * 에디터에 내용을 입력한다.
+     * @method
+     * @param {string} text
+     * */
     setContents: function (text) {
       editorSet[this.editorName].interfaces.setContents.call(this.getInstance(), text);
     },
-
+    /**
+     * 에디터에 내용을 입력한다.
+     * @method
+     * @param {string} text
+     * */
     addContents: function (text) {
       editorSet[this.editorName].interfaces.addContents.call(this.getInstance(), text);
     },
-
+    /**
+     * 생성된 instance에 property를 등록한다.
+     * @method
+     * @param {object} obj
+     * */
     addProps: function (obj) {
       for (var o in obj) {
         this.getInstance().props[o] = obj[o];
       }
     },
-
+    /**
+     * 에디터에 툴을 추가한다.
+     * @method
+     * @param {array} toolInstanceList
+     * */
     addTools: function (toolInstanceList) {
       editorSet[this.editorName].interfaces.addTools.call(this.getInstance(), this.getOptions().toolInfoList, toolInstanceList);
     },
-
+    /**
+     * 구현된 에디터에 이벤트를 할당한다.
+     * @method
+     * @param {string} eventName
+     * @param {function} callback event callback
+     * */
     on: function (eventName, callback) {
       editorSet[this.editorName].interfaces.on.call(this.getInstance(), eventName, callback);
     },
-
+    /**
+     * 구현된 에디터 파일 업로드 기능을 호춣한다.
+     * @method
+     * @param {object} customOptions
+     * */
     renderFileUploader: function (customOptions) {
       editorSet[this.editorName].interfaces.renderFileUploader.call(this.getInstance(), customOptions);
     },
-
+    /**
+     * 구현된 에디터 reset 함수를 호출한다.
+     * @method
+     * @param {object} customOptions
+     * */
     reset: function () {
       editorSet[this.editorName].interfaces.reset.call(this.getInstance());
     },
   };
 
+  /**
+   * @class Editor
+   * @memberof module:Editor
+   * @param {object} editorSettings
+   * @param {object}interfaces
+   * */
   var Editor = function (editorSettings, interfaces) {
     this.name = editorSettings.name;
     this.configs = editorSettings.configs;
@@ -79,6 +147,14 @@
   Editor.prototype = {
     configs: {},
     interfaces: {},
+    /**
+     * 에디터를 생성 및 툴을 추가한다.
+     * @memberof Editor
+     * @param {string} sel selector
+     * @param {object} options
+     * @param {object} editorOptions
+     * @param {array} toolInfoList
+     * */
     create: function (sel, options, editorOptions, toolInfoList) {
       var editorOptions = editorOptions || {};
       var toolInfoList = toolInfoList || [];
@@ -113,16 +189,35 @@
     },
   };
 
+  /**
+   * @class Tools
+   * @memberof module:Editor
+   * */
   var Tools = function (obj) {
     for (var o in obj) {
       this[o] = obj[o];
     }
   };
 
+  /** @private */
   var toolsSet = {};
 
+  /**
+   * @namespace XEeditor
+   * @property tool.define {function} tool을 정의 한다.
+   * @property tool.get {function} tool 정보를 반환한다.
+   * */
   var XEeditor = (function () {
     return {
+      /**
+       * 에디터를 정의한다.
+       * @memberof XEeditor
+       * @param {object} obj
+       * <pre>
+       *   - editorSettings : 에디터 설정 정보
+       *   - interfaces : 구현된 에디터 인터페이스
+       * </pre>
+       * */
       define: function (obj) {
         var editorSettings = obj.editorSettings;
         var interfaces = obj.interfaces;
@@ -132,7 +227,12 @@
           editorSet[editorSettings.name] = new Editor(editorSettings, interfaces);
         }
       },
-
+      /**
+       * 에디터를 반환한다.
+       * @memberof XEeditor
+       * @param {string} name
+       * @return {object}
+       * */
       getEditor: function (name) {
         return editorSet[name];
       },
@@ -148,17 +248,35 @@
           return toolsSet[id];
         },
       },
+      /**
+       * 컨텐츠에 tool id를 xe-tool-id attribute에 할당하여 반환한다.
+       * @memberof XEeditor
+       * @param {string} content
+       * @param {string} id
+       * @return {string} HTML markup string
+       * */
       attachDomId: function (content, id) {
         return $(content).attr('xe-tool-id', id).clone().wrapAll('<div/>').parent().html();
       },
-
+      /**
+       *
+       * @memberof XEeditor
+       * @param {string} id
+       * @return {string} HTML selector string
+       * */
       getDomSelector: function (id) {
         return '[xe-tool-id="' + id + '"]';
       },
     };
   })();
 
+  /**
+   * @namespace Validation
+   * @memberof module:Editor
+   * */
   var Validation = (function () {
+
+    /** @private */
     var requireOptions = {
       editorSettings: [
         'name',
@@ -178,6 +296,9 @@
     };
 
     return {
+      /**
+       * @memberof Validation
+       * */
       isValidBeforeCreateInstance: function (sel, toolIdList, editorParent) {
         if (!sel) {
           console.error('error: 중복 editor id. (' + sel + ')');

@@ -1,18 +1,33 @@
+/**
+ * @namespace SearchHead
+ * */
 var SearchHead = (function () {
+  /** @private */
   var _this;
+  /** @private */
   var _data = {};
+  /** @private */
   var _createMenuUrl;
+  /** @private */
   var _$parent = $();
+  /** @private */
   var _searchData = [];
-
+  /** @private */
   var _suggestionData = [];
-
+  /** @private */
   var _focus = {
     currentIndex: -1,
     status: 'close',
   };
 
   return {
+    /**
+     * 사이트맵 검색 UI를 초기화한다.
+     * @memberof SearchHead
+     * @param {element} $parent
+     * @param {object} data
+     * @param {string} createMenuUrl
+     * */
     init: function ($parent, data, createMenuUrl) {
       _this = this;
       _data = data;
@@ -31,7 +46,11 @@ var SearchHead = (function () {
 
       return this;
     },
-
+    /**
+     * 기본템플릿을 리턴한다.
+     * @memberof SearchHead
+     * @return {string}
+     * */
     getTemplate: function () {
       return [
         '<div class="pull-left">',
@@ -49,18 +68,28 @@ var SearchHead = (function () {
         '</div>',
       ].join('\n');
     },
-
+    /**
+     * 화면에 렌더링한다.
+     * @memberof SearchHead
+     * @param {element} $parent
+     * */
     render: function ($parent) {
       _$parent.append(_this.getTemplate());
     },
-
-    cache: function (data) {
+    /**
+     * jquery element를 캐싱한다.
+     * @memberof SearchHead
+     * */
+    cache: function () {
       this.$searchGroup = $('.search-group');
       this.$searchInput = $('.search-group > input');
       this.$btnLink = $('.btn-link');
       this.$searchList = $('.search-list');
     },
-
+    /**
+     * 이벤트 핸들러를 등록한다.
+     * @memberof SearchHead
+     * */
     bindEvents: function () {
       this.$searchInput.on('keyup', this.search);
 
@@ -122,7 +151,11 @@ var SearchHead = (function () {
         }
       });
     },
-
+    /**
+     * 검색 데이터를 만든다.
+     * @memberof SearchHead
+     * @param {object} items
+     * */
     makeSearchData: function (items) {
       if (items && items instanceof Object) {
         for (var prop in items) {
@@ -137,7 +170,11 @@ var SearchHead = (function () {
         }
       }
     },
-
+    /**
+     * suggestion UI를 만든다.
+     * @memberof SearchHead
+     * @param {object} e
+     * */
     search: function (e) {
       var value = e.target.value;
       var list = '';
@@ -173,7 +210,11 @@ var SearchHead = (function () {
         _this.toggleSuggestionByStatus('close');
       }
     },
-
+    /**
+     * status에 따른 suggestion UI를 토글링한다.
+     * @memberof SearchHead
+     * @param {string} status
+     * */
     toggleSuggestionByStatus: function (status) {
       switch (status) {
         case 'open':
@@ -192,7 +233,11 @@ var SearchHead = (function () {
           break;
       }
     },
-
+    /**
+     * 포커스를 위치한다.
+     * @memberof SearchHead
+     * @param {number} index
+     * */
     setFocus: function (index) {
       var $list = _this.$searchList.find('li');
       var currentIndex = index;
@@ -215,7 +260,10 @@ var SearchHead = (function () {
       }
 
     },
-
+    /**
+     * 선택한 item으로 스크롤을 이동한다.
+     * @memberof SearchHead
+     * */
     moveToSelectedItem: function () {
       var id = _$parent.find('li.on').data('id');
 

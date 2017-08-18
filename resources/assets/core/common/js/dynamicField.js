@@ -1,5 +1,8 @@
 import validator from 'validator';
 
+/**
+ * @class
+ * */
 var DynamicField = function () {
   this.group = '';
   this.databaseName = '';
@@ -8,7 +11,7 @@ var DynamicField = function () {
   this.urls = {
     base: null,
   };
-
+  
   this.init = function (group, databaseName, urls) {
     this.group = group;
     this.databaseName = databaseName;

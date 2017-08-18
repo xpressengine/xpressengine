@@ -1,8 +1,13 @@
 import Progress from './xe.progress';
 
+/**
+ * @module Request
+ * */
 export default (function () {
+  /** @private */
   var _this;
 
+  /** @private */
   var _options = {
     headers: {
       'X-CSRF-TOKEN': null,
@@ -29,25 +34,57 @@ export default (function () {
   });
 
   return {
+    /**
+     * Request module 초기화한다.
+     * @method
+     * @return this
+     * */
     init: function () {
       _this = this;
       return this;
     },
 
+    /**
+     * @public
+     * */
     options: _options,
+    /**
+     * ajax 옵션을 세팅한다.
+     * @param {object} options jQuery ajax options
+     * */
     setup: function (options) {
       $.extend(_options, options);
       $.ajaxSetup(_options);
     },
 
+    /**
+     * ajax를 method get 방식으로 호출한다.
+     * @param {string} url
+     * @param {object} data
+     * @param {function} callback
+     * @param {string} type
+     * */
     get: function (url, data, callback, type) {
       return $.get(url, data, callback, type);
     },
 
+    /**
+     * ajax를 method post 방식으로 호출한다.
+     * @param {string} url
+     * @param {object} data
+     * @param {function} callback
+     * @param {string} type
+     * */
     post: function (url, data, callback, type) {
       return $.post(url, data, callback, type);
     },
 
+    /**
+     * ajax 오류 메시지를 노출한다.
+     * @param {object} jqxhr
+     * @param {object} settings
+     * @params {object} thrownError
+     * */
     error: function (jqxhr, settings, thrownError) {
       var status = jqxhr.status;
       var errorMessage = 'Not defined error message (' + status + ')';

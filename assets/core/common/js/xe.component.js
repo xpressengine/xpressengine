@@ -3,14 +3,23 @@ import 'xe-transition';
 import 'xe-modal';
 import 'xe-dropdown';
 import 'xe-tooltip';
-import griper from 'griper';
 
+/**
+ * @module Component
+ * */
 var Component = (function (exports) {
   return {
+    /**
+     * 시간 설정을 바인딩한다.
+     * @memberof module:Component
+     * */
     timeago: function () {
       $('[data-xe-timeago]').trigger('boot.xe.timeago');
     },
-
+    /**
+     * DOM에 지정된 selector가 있을 경우 컴포넌트를 바인딩한다.
+     * @memberof module:Component
+     * */
     boot: function () {
       this.timeago();
       $('[data-toggle=xe-dropdown]').trigger('boot.xe.dropdown');
