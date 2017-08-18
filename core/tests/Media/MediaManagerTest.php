@@ -102,6 +102,7 @@ class MediaManagerTest extends \PHPUnit_Framework_TestCase
         $this->beforeSetUp($instance);
 
         $mockFile1 = m::mock('Xpressengine\Storage\File');
+        $mockFile1->shouldReceive('hasMacro')->andReturn(false);
         $mockFile1->shouldReceive('getAttribute')->once()->with('mime')->andReturn('image/jpeg');
 
         $this->handler->shouldReceive('isAvailable')->once()->with('image/jpeg')->andReturn(true);
@@ -109,6 +110,7 @@ class MediaManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(Media::TYPE_IMAGE, $instance->getFileType($mockFile1));
 
         $mockFile2 = m::mock('Xpressengine\Storage\File');
+        $mockFile2->shouldReceive('hasMacro')->andReturn(false);
         $mockFile2->shouldReceive('getAttribute')->once()->with('mime')->andReturn('text/plain');
 
         $this->handler->shouldReceive('isAvailable')->once()->with('text/plain')->andReturn(false);
@@ -138,6 +140,7 @@ class MediaManagerTest extends \PHPUnit_Framework_TestCase
         $this->beforeSetUp($instance);
 
         $mockFile1 = m::mock('Xpressengine\Storage\File');
+        $mockFile1->shouldReceive('hasMacro')->andReturn(false);
         $mockFile1->shouldReceive('getAttribute')->once()->with('mime')->andReturn('image/jpeg');
 
         $this->handler->shouldReceive('isAvailable')->once()->with('image/jpeg')->andReturn(true);
@@ -145,6 +148,7 @@ class MediaManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($instance->is($mockFile1));
 
         $mockFile2 = m::mock('Xpressengine\Storage\File');
+        $mockFile2->shouldReceive('hasMacro')->andReturn(false);
         $mockFile2->shouldReceive('getAttribute')->once()->with('mime')->andReturn('text/plain');
 
         $this->handler->shouldReceive('isAvailable')->once()->with('text/plain')->andReturn(false);

@@ -108,6 +108,7 @@ class DatabaseRouteRepositoryTest extends \PHPUnit_Framework_TestCase
         $instance = $this->getMock(DatabaseRouteRepository::class, ['validateUrl'], [$configs, $model]);
 
         $mockRoute = m::mock('Xpressengine\Routing\InstanceRoute');
+        $mockRoute->shouldReceive('hasMacro')->andReturn(false);
         $mockRoute->shouldReceive('getAttribute')->with('siteKey')->andReturn('default');
         $mockRoute->shouldReceive('getAttribute')->with('url')->andReturn('board');
         $mockRoute->shouldReceive('getAttribute')->with('exists')->andReturn(false);
@@ -124,6 +125,7 @@ class DatabaseRouteRepositoryTest extends \PHPUnit_Framework_TestCase
         $instance = $this->getMock(DatabaseRouteRepository::class, ['validateUrl'], [$configs, $model]);
 
         $mockRoute = m::mock('Xpressengine\Routing\InstanceRoute');
+        $mockRoute->shouldReceive('hasMacro')->andReturn(false);
         $mockRoute->shouldReceive('getAttribute')->with('siteKey')->andReturn('default');
         $mockRoute->shouldReceive('getAttribute')->with('url')->andReturn('board');
         $mockRoute->shouldReceive('getAttribute')->with('exists')->andReturn(false);

@@ -13,11 +13,11 @@
  */
 namespace Xpressengine\Permission\Repositories;
 
+use Illuminate\Contracts\Cache\Repository as CacheContract;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Xpressengine\Permission\Permission;
 use Xpressengine\Permission\PermissionRepository;
-use Xpressengine\Support\CacheInterface;
 
 /**
  * Class CacheDecorator
@@ -41,9 +41,16 @@ class CacheDecorator implements PermissionRepository
     /**
      * Cache instance
      *
-     * @var CacheInterface
+     * @var CacheContract
      */
     protected $cache;
+
+    /**
+     * expire time
+     *
+     * @var int
+     */
+    protected $minutes;
 
     /**
      * Prefix for cache key
@@ -62,13 +69,15 @@ class CacheDecorator implements PermissionRepository
     /**
      * CacheDecorator constructor.
      *
-     * @param PermissionRepository $repo  PermissionRepository instance
-     * @param CacheInterface       $cache Cache instance
+     * @param PermissionRepository $repo    PermissionRepository instance
+     * @param CacheContract        $cache   Cache instance
+     * @param int                  $minutes expire time
      */
-    public function __construct(PermissionRepository $repo, CacheInterface $cache)
+    public function __construct(PermissionRepository $repo, CacheContract $cache, $minutes = 60)
     {
         $this->repo = $repo;
         $this->cache = $cache;
+        $this->minutes = $minutes;
     }
 
     /**
@@ -208,7 +217,7 @@ class CacheDecorator implements PermissionRepository
 
                 $descendant = $this->repo->fetchDescendant($siteKey, $head);
                 $data = array_merge([$item], $descendant);
-                $this->cache->put($cacheKey, $data);
+                $this->cache->put($cacheKey, $data, $this->minutes);
             }
 
             $this->bag[$key] = $data;
@@ -236,7 +245,7 @@ class CacheDecorator implements PermissionRepository
      * parse name to head and segments
      *
      * @param string $name the name
-     * @return array
+     * @return string
      */
     private function getHead($name)
     {

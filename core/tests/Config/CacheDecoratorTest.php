@@ -89,7 +89,7 @@ class CacheDecoratorTest extends \PHPUnit_Framework_TestCase
     {
         return [
             m::mock('Xpressengine\Config\ConfigRepository'),
-            m::mock('Xpressengine\Support\CacheInterface'),
+            m::mock('Illuminate\Contracts\Cache\Repository'),
         ];
     }
 }
