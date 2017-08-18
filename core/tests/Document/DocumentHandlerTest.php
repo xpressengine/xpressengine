@@ -198,6 +198,7 @@ class DocumentHandlerTest extends PHPUnit_Framework_TestCase
         $docModel->shouldReceive('fill');
         $docModel->shouldReceive('save');
         $docModel->shouldReceive('getDynamicAttributes')->andReturn([]);
+        $docModel->shouldReceive('hasMacro')->andReturn(false);
         $docModel->shouldReceive('getAttributes')->andReturn($attributes);
 
         $revisionModel = $this->getRevisionModel();
@@ -259,6 +260,7 @@ class DocumentHandlerTest extends PHPUnit_Framework_TestCase
         $docModel->shouldReceive('fill');
         $docModel->shouldReceive('save');
         $docModel->shouldReceive('getDynamicAttributes')->andReturn([]);
+        $docModel->shouldReceive('hasMacro')->andReturn(false);
         $docModel->shouldReceive('getAttributes')->andReturn($attributes);
         $docModel->shouldReceive('getAttribute')->with('ipaddress')->andReturn('127.0.0.1');
         $docModel->shouldReceive('setAttribute');
@@ -344,9 +346,11 @@ class DocumentHandlerTest extends PHPUnit_Framework_TestCase
         $docModel->shouldReceive('save');
         $docModel->shouldReceive('getOriginal')->with('instanceId')->andReturn($originInstanceId);
         $docModel->shouldReceive('getDynamicAttributes')->andReturn([]);
+        $docModel->shouldReceive('hasMacro')->andReturn(false);
         $docModel->shouldReceive('getAttributes')->andReturn($attributes);
 
         $orgModel = $this->getDocModel();
+        $orgModel->shouldReceive('hasMacro')->andReturn(false);
         $orgModel->shouldReceive('getAttribute')->with('id')->andReturn($docId);
         $orgModel->shouldReceive('getAttribute')->with('instanceId')->andReturn($originInstanceId);
 
@@ -391,6 +395,7 @@ class DocumentHandlerTest extends PHPUnit_Framework_TestCase
         $this->configHandler->shouldReceive('getOrDefault')->with($instanceId)->andReturn($configEntity);
 
         $docModel = $this->getDocModel();
+        $docModel->shouldReceive('hasMacro')->andReturn(false);
         $docModel->shouldReceive('getAttribute')->with('instanceId')->andReturn($instanceId);
         $docModel->shouldReceive('setProxyOptions');
         $docModel->shouldReceive('delete')->andReturn(1);

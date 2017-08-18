@@ -93,6 +93,7 @@ class ImageHandlerTest extends \PHPUnit_Framework_TestCase
             ->makePartial();
 
         $mockFile = m::mock('Xpressengine\Storage\File');
+        $mockFile->shouldReceive('hasMacro')->andReturn(false);
         $mockFile->shouldReceive('getAttribute')->with('mime')->once()->andReturn('text/plain');
 
         $instance->shouldReceive('isAvailable')->once()->with('text/plain')->andReturn(false);
@@ -114,6 +115,7 @@ class ImageHandlerTest extends \PHPUnit_Framework_TestCase
             ->makePartial();
 
         $mockFile = m::mock('Xpressengine\Storage\File');
+        $mockFile->shouldReceive('hasMacro')->andReturn(false);
         $mockFile->shouldReceive('getAttribute')->once()->with('mime')->andReturn('image/jpeg');
         $instance->shouldReceive('isAvailable')->with('image/jpeg')->andReturn(true);
 
@@ -141,6 +143,7 @@ class ImageHandlerTest extends \PHPUnit_Framework_TestCase
             'type' => 'test'
         ])->andReturnSelf();
 
+        $mockImage->shouldReceive('hasMacro')->andReturn(false);
         $mockImage->shouldReceive('getAttribute')->with('meta')->andReturnNull();
         $mockImage->shouldReceive('meta')->andReturn($mockMeta);
         $mockImage->shouldReceive('setRelation')->once()->with('meta', $mockMeta)->andReturnSelf();

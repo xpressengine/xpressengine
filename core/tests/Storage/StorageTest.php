@@ -179,10 +179,12 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $instance = new Storage($repo, $handler, $auth, $keygen, $distributor, $temps, $response);
 
         $mockFile = m::mock('Xpressengine\Storage\File');
+        $mockFile->shouldReceive('hasMacro')->andReturn(false);
         $mockFile->shouldReceive('getAttribute')->with('id')->andReturn('foo');
         $mockFile->shouldReceive('getAttribute')->with('originId')->andReturnNull();
 
         $mockChild = m::mock('Xpressengine\Storage\File');
+        $mockChild->shouldReceive('hasMacro')->andReturn(false);
         $mockChild->shouldReceive('getAttribute')->with('id')->andReturn('bar');
         $mockChild->shouldReceive('getAttribute')->with('originId')->andReturn('foo');
 
@@ -250,6 +252,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $mockConn->shouldReceive('where')->once()->with('fileableId', 'fileable-id')->andReturnSelf();
         $mockConn->shouldReceive('delete')->once()->andReturn(1);
 
+        $mockFile->shouldReceive('hasMacro')->andReturn(false);
         $mockFile->shouldReceive('getAttribute')->with('useCount')->andReturn(1);
         $repo->shouldReceive('decrement')->andReturn(true);
 
@@ -273,6 +276,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $mockConn->shouldReceive('where')->once()->with('fileableId', 'fileable-id')->andReturnSelf();
         $mockConn->shouldReceive('delete')->once()->andReturn(1);
 
+        $mockFile->shouldReceive('hasMacro')->andReturn(false);
         $mockFile->shouldReceive('getAttribute')->with('useCount')->andReturn(1);
 
         $instance->expects($this->once())->method('delete')->with($mockFile)->willReturn(true);

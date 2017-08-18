@@ -97,11 +97,13 @@ class UserEmailRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testDeleteWhenEmailIsMainEmail()
     {
         $user = $this->makeUser();
+        $user->shouldReceive('hasMacro')->andReturn(false);
         $user->shouldReceive('getAttribute')->with('email')->once()->andReturn('foo@email.com');
 
         $repo = $this->makeRepository();
 
         $email = $this->makeEmail();
+        $email->shouldReceive('hasMacro')->andReturn(false);
         $email->shouldReceive('getAttribute')->with('user')->once()->andReturn($user);
         //$email->shouldReceive('delete')->once()->withNoArgs()->andReturn(2);
         $email->shouldReceive('getAddress')->once()->withNoArgs()->andReturn('foo@email.com');
@@ -113,11 +115,13 @@ class UserEmailRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testDelete()
     {
         $user = $this->makeUser();
+        $user->shouldReceive('hasMacro')->andReturn(false);
         $user->shouldReceive('getAttribute')->with('email')->once()->andReturn('foo@email.com');
 
         $repo = $this->makeRepository();
 
         $email = $this->makeEmail();
+        $email->shouldReceive('hasMacro')->andReturn(false);
         $email->shouldReceive('getAttribute')->with('user')->once()->andReturn($user);
         $email->shouldReceive('delete')->once()->withNoArgs()->andReturn(2);
         $email->shouldReceive('getAddress')->once()->withNoArgs()->andReturn('bar@email.com');
