@@ -58,6 +58,7 @@ class SeoHandlerTest extends \PHPUnit_Framework_TestCase
         $mockMeta->height = 100;
         $mockImage = m::mock('Xpressengine\Media\Models\Image');
         $mockImage->shouldReceive('url')->once()->andReturn('/path/to/item/image');
+        $mockImage->shouldReceive('hasMacro')->andReturn(false);
         $mockImage->shouldReceive('getAttribute')->with('meta')->andReturn($mockMeta);
 
         $mockItem = m::mock('Xpressengine\Seo\SeoUsable');

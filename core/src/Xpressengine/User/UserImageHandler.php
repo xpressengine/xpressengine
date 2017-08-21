@@ -16,7 +16,7 @@ namespace Xpressengine\User;
 
 use Closure;
 use Intervention\Image\ImageManager;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\File\File;
 use Xpressengine\Media\MediaManager;
 use Xpressengine\Storage\Storage;
 
@@ -75,11 +75,11 @@ class UserImageHandler
      * 회원의 프로필 이미지를 등록한다.
      *
      * @param UserInterface $user        프로필 이미지를 등록할 회원
-     * @param UploadedFile  $profileFile 프로필 이미지 파일
+     * @param File|string   $profileFile 프로필 이미지 파일
      *
      * @return string 등록한 프로필이미지 ID
      */
-    public function updateUserProfileImage(UserInterface $user, UploadedFile $profileFile)
+    public function updateUserProfileImage(UserInterface $user, $profileFile)
     {
         $disk = array_get($this->profileImgConfig, 'storage.disk');
         $path = array_get($this->profileImgConfig, 'storage.path');
@@ -88,7 +88,7 @@ class UserImageHandler
         // make fitted image
         /** @var ImageManager $imageManager */
         $imageManager = call_user_func($this->imageManagerResolver);
-        $image = $imageManager->make($profileFile->getRealPath());
+        $image = $imageManager->make($profileFile);
         $image = $image->fit($size['width'], $size['height']);
 
         // remove old profile image

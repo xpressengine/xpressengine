@@ -178,6 +178,24 @@ class PluginHandler
     }
 
     /**
+     * get Unresolved Components
+     *
+     * @param string|null $plugin target plugin
+     *
+     * @return array
+     */
+    public function getUnresolvedComponents($plugin = null)
+    {
+        $unresolved = $this->register->getUnresolvedComponents();
+
+        if ($plugin) {
+            return array_get($unresolved, $plugin, []);
+        }
+
+        return $unresolved;
+    }
+
+    /**
      * 주어진 플러그인을 활성화한다. 활성화된 플러그인 목록은 XE에 저장된다.
      *
      * @param string $pluginId 활성화 할 플러그인의 id
@@ -341,6 +359,8 @@ class PluginHandler
             throw new CannotDeleteActivatedPluginException();
         }
 
+        $this->registerPlugin($entity);
+
         $entity->getObject()->uninstall();
 
         // status list에서 해당 플러그인 정보를 삭제한다.
@@ -403,7 +423,7 @@ class PluginHandler
         $pluginObj = $entity->getObject();
 
         // boot plugin's components
-        $entity->bootComponents();
+        $entity->bootComponents($this->register);
 
         // boot plugin
         $pluginObj->boot();

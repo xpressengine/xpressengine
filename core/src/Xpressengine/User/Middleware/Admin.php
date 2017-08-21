@@ -1,0 +1,80 @@
+<?php
+/**
+ * This file is account interface
+ *
+ * PHP version 5
+ *
+ * @category    User
+ * @package     Xpressengine\User
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
+namespace Xpressengine\User\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+use Xpressengine\User\GuardInterface as Guard;
+
+/**
+ * 관리자 2단계 인증 미들웨어
+ *
+ * @category    User
+ * @package     Xpressengine\User
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
+class Admin
+{
+    /**
+     * The Guard implementation.
+     *
+     * @var Guard
+     */
+    protected $auth;
+
+    /**
+     * Create a new middleware instance.
+     *
+     * @param  Guard $auth authmanager
+     *
+     * @return void
+     */
+    public function __construct(Guard $auth)
+    {
+        $this->auth = $auth;
+    }
+
+    /**
+     * Handle an incoming request.
+     *
+     * @param  Request $request request
+     * @param  Closure $next    next middleware caller
+     *
+     * @return mixed
+     */
+    public function handle($request, Closure $next)
+    {
+
+        if (!$this->auth->check()) {
+            if ($request->ajax()) {
+                return response('Unauthorized.', 401);
+            } else {
+                return redirect()->guest('auth/login');
+            }
+        }
+
+        if (!$this->auth->checkAdminAuth(true)) {
+            if ($request->ajax()) {
+                return response('Unauthorized.', 401);
+            } else {
+                return redirect()->route('auth.admin', ['redirectUrl' => $request->fullUrl()]);
+            }
+        }
+
+        return $next($request);
+    }
+}

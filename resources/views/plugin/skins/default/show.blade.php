@@ -5,6 +5,18 @@
 <!--어드민 컨텐츠 영역 col-sm-"n" n:1~12에 따라 그리드 사용가능-->
 <div class="row">
     <div class="col-sm-12">
+
+        @if(count($unresolvedComponents))
+            <div class="alert alert-warning" role="alert" style="margin-top:10px;">
+                <p><i class="xi-info-o txt_red"></i> 정상적으로 등록되지 않은 컴포넌트가 있습니다. XE가 정상적으로 작동하지 않을 수 있습니다.</p>
+                <ul class="list-unstyled">
+                @foreach($unresolvedComponents as $cId => $info)
+                    {{ $cId }}
+                @endforeach
+                </ul>
+            </div>
+        @endif
+
         <div class="panel plugin-detail">
             <div class="panel-heading">
                 <div class="pull-left">

@@ -33,6 +33,7 @@
         XE.configure({
             locale: '{{ Request::cookie('locale') ?: app('xe.translator')->getLocale() }}',
             defaultLocale: '{{ app('xe.translator')->getLocale() }}',
+            fixedPrefix: '{{ app('config')['xe.routing.fixedPrefix'] }}',
             @if (in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER]))
             managePrefix: '{{ app('config')['xe.routing.settingsPrefix'] }}'
             @endif
@@ -47,8 +48,6 @@
 
     <!-- CUSTOM TAGS -->
     {!! XeFrontend::output('html', 'head.append') !!}
-
-
 </head>
 
 <body class="{{ XeFrontend::output('bodyClass') }}">

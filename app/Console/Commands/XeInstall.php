@@ -871,6 +871,16 @@ class XeInstall extends Command
         ];
         $this->configFileGenerate('mail', $info);
 
+        // create auth-admin config
+        $info = [
+            'admin' => [
+                'session' => 'auth.admin',
+                'expire' => 30,
+                'password' => $config['password']
+            ],
+        ];
+        $this->configFileGenerate('auth', $info);
+
         // login admin
         /** @var Guard $auth */
         $auth = app('auth');

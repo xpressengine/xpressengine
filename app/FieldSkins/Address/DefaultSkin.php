@@ -50,18 +50,6 @@ class DefaultSkin extends AbstractSkin
         return 'dynamicField/address/default';
     }
 
-//    /**
-//     * Dynamic Field 설정 페이지에서 skin 설정 등록 페이지 반환
-//     * return html tag string
-//     *
-//     * @param ConfigEntity $config dynamic field config entity
-//     * @return string
-//     */
-//    public function settings(ConfigEntity $config = null, $view = 'dynamicField/address/default/createSkin')
-//    {
-//        return View::make($view, ['config' => $config,])->render();
-//    }
-
     protected function appendScript()
     {
         XeFrontend::html('dynamicField.address')->content('
@@ -120,7 +108,7 @@ class DefaultSkin extends AbstractSkin
             $(\'#\'+fieldId+\'-daumPostcodeWrap\').show();
         }
     </script>
-            ')->appendTo('body.prepend')->load();;
+            ')->appendTo('body.prepend')->load();
     }
 
     /**

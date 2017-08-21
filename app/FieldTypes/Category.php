@@ -71,7 +71,12 @@ class Category extends AbstractType
      */
     public function getRules()
     {
-        return ['itemId' => 'required'];
+        $required = '';
+        if ($this->config->get('required') === true) {
+            $required = 'required';
+        }
+
+        return ['itemId' => $required];
     }
 
     /**

@@ -17,7 +17,6 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Config\Validator;
-use Xpressengine\Support\LaravelCache;
 use Xpressengine\Config\Repositories\DatabaseRepository;
 use Xpressengine\Config\Repositories\CacheDecorator;
 
@@ -59,7 +58,7 @@ class ConfigServiceProvider extends ServiceProvider
             if ($app['config']['app.debug'] !== true) {
                 $repo = new CacheDecorator(
                     $repo,
-                    new LaravelCache($app['cache.store'])
+                    $app['cache.store']
                 );
             }
 

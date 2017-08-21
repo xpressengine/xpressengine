@@ -36,4 +36,22 @@ interface GuardInterface extends GuardContract
      * @return Guest
      */
     public function makeGuest();
+
+    /**
+     * 관리자 인증 검사
+     *
+     * @param bool $refresh 인증 세션 시간 갱신 여부
+     *
+     * @return mixed
+     */
+    public function checkAdminAuth($refresh = false);
+
+    /**
+     * 관리자 인증 시도
+     *
+     * @param array $credentials 인증 정보
+     *
+     * @return mixed
+     */
+    public function attemptAdminAuth($credentials);
 }

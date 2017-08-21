@@ -44,15 +44,31 @@ Route::settings(
 Route::settings(
     'lang',
     function () {
+        /**
+         * move to Route::fixed('lang' ...)
+         *
+         * @deprecated start
+         */
         Route::get('lines/many', ['as' => 'settings.lang.lines.many', 'uses' => 'LangController@getLinesMany']);
         Route::get('lines/{key}', ['as' => 'settings.lang.lines.key', 'uses' => 'LangController@getLinesWithKey']);
         Route::get('search/{locale}', ['as' => 'settings.lang.search', 'uses' => 'LangController@searchKeyword']);
+        /**
+         * @deprecated end
+         */
         Route::put('save', ['as' => 'settings.lang.save', 'uses' => 'LangController@save']);
         Route::get('/', [
-                'as' => 'settings.lang.index',
-                'uses' => 'LangController@index',
-                'settings_menu' => ['lang.default']
+            'as' => 'settings.lang.index',
+            'uses' => 'LangController@index',
+            'settings_menu' => ['lang.default']
         ]);
+    }
+);
+
+Route::fixed(
+    'lang', function() {
+        Route::get('lines/many', ['as' => 'settings.lang.lines.many', 'uses' => 'LangController@getLinesMany']);
+        Route::get('lines/{key}', ['as' => 'settings.lang.lines.key', 'uses' => 'LangController@getLinesWithKey']);
+        Route::get('search/{locale}', ['as' => 'settings.lang.search', 'uses' => 'LangController@searchKeyword']);
     }
 );
 
@@ -92,6 +108,10 @@ Route::group(
         // agreement, privacy
         Route::get('agreement', ['as' => 'auth.agreement', 'uses' => 'Auth\AuthController@getAgreement']);
         Route::get('privacy', ['as' => 'auth.privacy', 'uses' => 'Auth\AuthController@getPrivacy']);
+
+        // admin auth
+        Route::get('admin', ['as' => 'auth.admin', 'uses' => 'Auth\AuthController@getAdminAuth']);
+        Route::post('admin', ['as' => 'auth.admin', 'uses' => 'Auth\AuthController@postAdminAuth']);
     }
 );
 
@@ -124,7 +144,7 @@ Route::group(
                     ['prefix' => 'name'],
                     function () {
                         Route::post(
-                        '/',
+                            '/',
                             [
                                 'as' => 'user.settings.name.update',
                                 'uses' => 'User\UserController@updateDisplayName'
@@ -274,72 +294,75 @@ Route::settings(
     'user',
     function () {
 
-        // index
-        Route::get(
-            '/',
-            [
-                'as' => 'settings.user.index',
-                'uses' => 'User\Settings\UserController@index',
-                'settings_menu' => 'user.list',
-                'permission' => 'user.list'
-            ]
-        );
+        Route::group(['middleware' => ['admin']], function() {
+            // index
+            Route::get(
+                '/',
+                [
+                    'as' => 'settings.user.index',
+                    'uses' => 'User\Settings\UserController@index',
+                    'settings_menu' => 'user.list',
+                    'permission' => 'user.list'
+                ]
+            );
 
-        // create
-        Route::get('create',
-                   [
-                       'as' => 'settings.user.create',
-                       'uses' => 'User\Settings\UserController@create',
-                       'settings_menu' => 'user.create'
-                   ]
-        );
+            // create
+            Route::get(
+                'create',
+                [
+                    'as' => 'settings.user.create',
+                    'uses' => 'User\Settings\UserController@create',
+                    'settings_menu' => 'user.create'
+                ]
+            );
 
-        Route::post(
-            '/',
-            ['as' => 'settings.user.store', 'uses' => 'User\Settings\UserController@store']
-        );
+            Route::post(
+                '/',
+                ['as' => 'settings.user.store', 'uses' => 'User\Settings\UserController@store']
+            );
 
-        // mail action at edit
-        Route::get(
-            'mail/list',
-            ['as' => 'settings.user.mail.list', 'uses' => 'User\Settings\UserController@getMailList']
-        );
-        Route::post(
-            'mail/add',
-            ['as' => 'settings.user.mail.add', 'uses' => 'User\Settings\UserController@postAddMail']
-        );
-        Route::post(
-            'mail/delete',
-            ['as' => 'settings.user.mail.delete', 'uses' => 'User\Settings\UserController@postDeleteMail']
-        );
-        Route::post(
-            'mail/confirm',
-            ['as' => 'settings.user.mail.confirm', 'uses' => 'User\Settings\UserController@postConfirmMail']
-        );
+            // mail action at edit
+            Route::get(
+                'mail/list',
+                ['as' => 'settings.user.mail.list', 'uses' => 'User\Settings\UserController@getMailList']
+            );
+            Route::post(
+                'mail/add',
+                ['as' => 'settings.user.mail.add', 'uses' => 'User\Settings\UserController@postAddMail']
+            );
+            Route::post(
+                'mail/delete',
+                ['as' => 'settings.user.mail.delete', 'uses' => 'User\Settings\UserController@postDeleteMail']
+            );
+            Route::post(
+                'mail/confirm',
+                ['as' => 'settings.user.mail.confirm', 'uses' => 'User\Settings\UserController@postConfirmMail']
+            );
 
-        // page to delete users
-        Route::get(
-            'delete',
-            ['as' => 'settings.user.delete', 'uses' => 'User\Settings\UserController@deletePage']
-        );
+            // page to delete users
+            Route::get(
+                'delete',
+                ['as' => 'settings.user.delete', 'uses' => 'User\Settings\UserController@deletePage']
+            );
 
-        // delete users
-        Route::delete(
-            '/',
-            ['as' => 'settings.user.destroy', 'uses' => 'User\Settings\UserController@destroy']
-        );
-        Route::get(
-            '{id}/edit',
-            [
-                'as' => 'settings.user.edit',
-                'uses' => 'User\Settings\UserController@edit',
-                'settings_menu' => 'user.edit',
-                'permission' => 'user.edit',
+            // delete users
+            Route::delete(
+                '/',
+                ['as' => 'settings.user.destroy', 'uses' => 'User\Settings\UserController@destroy']
+            );
+            Route::get(
+                '{id}/edit',
+                [
+                    'as' => 'settings.user.edit',
+                    'uses' => 'User\Settings\UserController@edit',
+                    'settings_menu' => 'user.edit',
+                    'permission' => 'user.edit',
 
-            ]
-        );
-
-        Route::put('{id}', ['as' => 'settings.user.update', 'uses' => 'User\Settings\UserController@update']);
+                ]
+            );
+            // update user
+            Route::put('{id}', ['as' => 'settings.user.update', 'uses' => 'User\Settings\UserController@update']);
+        });
 
         // setting
         Route::group(
@@ -502,6 +525,27 @@ Route::settings(
                 'uses' => 'SettingsController@updatePermission'
             ]
         );
+
+        Route::get(
+            'logs',
+            [
+                'as' => 'settings.setting.log.index',
+                'uses' => 'SettingsController@indexLog',
+                'settings_menu' => 'setting.admin-log',
+                'middleware' => 'admin'
+            ]
+        );
+
+        Route::get(
+            'logs/{id}',
+            [
+                'as' => 'settings.setting.log.show',
+                'uses' => 'SettingsController@showLog',
+                'middleware' => 'admin'
+            ]
+        );
+
+
     }
 );
 
@@ -591,16 +635,31 @@ Route::settings(
 Route::settings(
     'theme',
     function () {
-        Route::get('edit', ['as' => 'settings.theme.edit', 'uses' => 'ThemeController@edit', 'settings_menu'=>'setting.theme.edit']);
-        Route::post('edit', ['as' => 'settings.theme.edit', 'uses' => 'ThemeController@update']);
-        Route::put('edit-auth', ['as' => 'settings.theme.edit.auth', 'uses' => 'ThemeController@auth']);
+
+        Route::group(
+            ['middleware' => ['admin']],
+            function () {
+                Route::get(
+                    'edit',
+                    [
+                        'as' => 'settings.theme.edit',
+                        'uses' => 'ThemeController@edit',
+                        'settings_menu' => 'setting.theme.edit',
+                    ]
+                );
+                Route::post('edit', ['as' => 'settings.theme.edit', 'uses' => 'ThemeController@update']);
+            }
+        );
 
 
         Route::get('setting', ['as' => 'settings.theme.setting', 'uses' => 'ThemeController@editSetting']);
         Route::put('setting', ['as' => 'settings.theme.setting', 'uses' => 'ThemeController@updateSetting']);
         Route::delete('setting', ['as' => 'settings.theme.setting', 'uses' => 'ThemeController@deleteSetting']);
 
-        Route::post('setting/create', ['as' => 'settings.theme.setting.create', 'uses' => 'ThemeController@createSetting']);
+        Route::post(
+            'setting/create',
+            ['as' => 'settings.theme.setting.create', 'uses' => 'ThemeController@createSetting']
+        );
     }
 );
 

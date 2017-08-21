@@ -45,17 +45,12 @@ var common = {
       pathInfo.common + '/js/xe.component.js',
     ],
 
-    'assets/core/xe-ui-component/js/xe-chart': [
-      pathInfo.comp + '/js/xe-chart.js',
-    ],
-
     'assets/core/lang/langEditorBox.bundle': pathInfo.lang + '/LangEditorBox.js',
     'assets/core/common/js/griper': pathInfo.common + '/js/griper',
     'assets/core/common/js/validator': pathInfo.common + '/js/validator',
     'assets/core/common/js/toggleMenu': pathInfo.common + '/js/toggleMenu',
     'assets/core/common/js/dynamicField': pathInfo.common + '/js/dynamicField',
     'assets/core/common/js/storeCategory': pathInfo.common + '/js/storeCategory.js',
-    'assets/core/common/js/rule': pathInfo.common + '/js/rule.js',
     'assets/core/member/settings/edit': pathInfo.member + '/settings/edit.js',
     'assets/core/settings/js/admin.bundle': pathInfo.settings + '/js/admin.js',
   },

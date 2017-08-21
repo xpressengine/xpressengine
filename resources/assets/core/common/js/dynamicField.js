@@ -19,13 +19,13 @@ var DynamicField = function () {
     this.containerName = '__xe_container_DF_setting_' + group;
     this.$container = $('#' + this.containerName);
     this.$container.$form = this.$container.find('.__xe_add_form');
-    this.$container.$addForm = this.$container.find('.__xe_add_form_section');
+    this.$container.$modal = this.$container.find('.__xe_df_modal');
+    this.$container.$modal.$body = this.$container.$modal.find('.modal-body');
 
     this.attachEvent();
 
     this.closeAll = function () {
-      this.$container.find('.__xe_form_edit').remove();
-      this.$container.$addForm.find('form').remove();
+      this.$container.$modal.xeModal('hide');
     };
   };
 
@@ -33,10 +33,11 @@ var DynamicField = function () {
     var _this = this;
 
     this.$container.on('click', '.__xe_btn_add', function () {
-      _this.closeAll();
-      _this.$container.$addForm.html(_this.formClone());
 
-      var $langBox = _this.$container.$addForm.find('.dynamic-lang-editor-box');
+      _this.$container.$modal.$body.html(_this.formClone());
+      _this.$container.$modal.xeModal('show');
+
+      var $langBox = _this.$container.$modal.find('.dynamic-lang-editor-box');
 
       $langBox.addClass('lang-editor-box');
       langEditorBoxRender($langBox);
@@ -93,11 +94,9 @@ var DynamicField = function () {
   this.close = function (o) {
     var frm = $(o).closest('form');
 
-    if (frm.data('isEdit') === '1') {
-      frm.closest('tr.more-info-area').remove();
-    } else {
-      frm.remove();
-    }
+    frm.remove();
+
+    this.$container.$modal.xeModal('hide');
   };
 
   this.getList = function () {
@@ -155,21 +154,18 @@ var DynamicField = function () {
   this.edit = function (o) {
     var tr = $(o).closest('tr');
     var id = tr.data('id');
-    var tbody = $(o).closest('tbody');
-    var colspanCount = $(o).closest('table').find('thead th');
-    var edit = $('<tr>').addClass('more-info-area __xe_form_edit').append($('<td>').addClass('__xe_form_container').prop('colspan', colspanCount.length));
-    var frm = this.formClone();
 
-    edit.find('td').html(frm);
+    var frm = this.formClone();
     frm.data('isEdit', '1');
     frm.attr('action', this.urls.update);
-
-    tr.after(edit);
+    this.$container.$modal.$body.html(frm);
+    this.$container.$modal.xeModal('show');
 
     var params = { group: this.group, id: id };
     var _this = this;
 
     XE.ajax({
+      context: this.$container.$modal.$body[0],
       type: 'get',
       dataType: 'json',
       data: params,
@@ -254,6 +250,7 @@ var DynamicField = function () {
     }
 
     XE.ajax({
+      context: this.$container.$modal.$body[0],
       type: 'get',
       dataType: 'json',
       data: params,
@@ -287,6 +284,7 @@ var DynamicField = function () {
     var _this = this;
 
     XE.ajax({
+      context: this.$container.$modal.$body[0],
       type: 'get',
       dataType: 'json',
       data: params,
@@ -300,7 +298,7 @@ var DynamicField = function () {
   };
 
   this.store = function (o) {
-    var $form = $(o).closest('form');
+    var $form = this.$container.$modal.$body.find('form');
     var _this = this;
 
     try {
@@ -310,7 +308,9 @@ var DynamicField = function () {
     }
 
     var params = $form.serialize();
+
     XE.ajax({
+      context: this.$container.$modal.$body[0],
       type: 'post',
       dataType: 'json',
       data: params,

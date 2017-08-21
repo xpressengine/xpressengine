@@ -27,6 +27,7 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
         $collection->shouldReceive('count')->andReturn(0);
 
         $mockMenu = m::mock('Xpressengine\Menu\Models\Menu');
+        $mockMenu->shouldReceive('hasMacro')->andReturn(false);
         $mockMenu->shouldReceive('getAttribute')->with('items')->andReturn($collection);
 
         $instance->expects($this->once())->method('deleteMenuTheme');
@@ -45,6 +46,7 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
         $collection->shouldReceive('count')->andReturn(1);
 
         $mockMenu = m::mock('Xpressengine\Menu\Models\Menu');
+        $mockMenu->shouldReceive('hasMacro')->andReturn(false);
         $mockMenu->shouldReceive('getAttribute')->with('items')->andReturn($collection);
 
         try {
@@ -186,6 +188,7 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
 
         $mockMenuItem = m::mock('Xpressengine\Menu\Models\MenuItem');
         $mockMenuItem->shouldReceive('getParentIdName')->andReturn('parentId');
+        $mockMenuItem->shouldReceive('hasMacro')->andReturn(false);
         $mockMenuItem->shouldReceive('getAttribute')->with('parentId')->andReturn('pid');
         $mockMenuItem->shouldReceive('getKey')->andReturn('itemKey');
         $mockMenuItem->shouldReceive('getAttribute')->with('menu')->andReturn($mockMenu);
@@ -193,6 +196,7 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
         $mockMenuItem->shouldReceive('setRelation')->with('menu', $mockMenu);
 
         $mockMenuItemNewParent = m::mock('Xpressengine\Menu\Models\MenuItem');
+        $mockMenuItemNewParent->shouldReceive('hasMacro')->andReturn(false);
         $mockMenuItemNewParent->shouldReceive('getAttribute')->with('menu')->andReturn($mockMenu);
         $mockMenuItemNewParent->shouldReceive('getKey')->andReturn('pnid');
 
@@ -208,6 +212,7 @@ class MenuHandlerTest extends \PHPUnit_Framework_TestCase
         $instance->expects($this->once())->method('linkHierarchy')->with($mockMenuItem, $mockMenuItemNewParent);
 
         $items->shouldReceive('update')->once()->with($mockMenuItem, ['menuId' => 'menuKey'])->andReturn($mockMenuItem);
+        $mockMenuItem->shouldReceive('hasMacro')->andReturn(false);
         $mockMenuItem->shouldReceive('getAttribute')->with('descendants')->andReturn([]);
         
         $items->shouldReceive('find')->once()->with('itemKey')->andReturn($mockMenuItem);

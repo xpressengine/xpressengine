@@ -60,7 +60,12 @@ class Number extends AbstractType
      */
     public function getRules()
     {
-        return ['num' => 'numeric'];
+        $required = '';
+        if ($this->config->get('required') === true) {
+            $required = 'required|';
+        }
+
+        return ['num' => $required . 'numeric'];
     }
 
     /**

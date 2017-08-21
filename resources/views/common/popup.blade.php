@@ -20,6 +20,7 @@
     {!! XeFrontend::output('css') !!}
 
     <!-- JS at head.prepend -->
+    <script>var xeBaseURL = '{{  url() }}';</script>
     {!! XeFrontend::output('js', 'head.prepend') !!}
 
     <script type="text/javascript">
@@ -31,6 +32,7 @@
         XE.configure({
             locale: '{{ session()->get('locale') ?: app('xe.translator')->getLocale() }}',
             defaultLocale: '{{ app('xe.translator')->getLocale() }}',
+            fixedPrefix: '{{ app('config')['xe.routing.fixedPrefix'] }}',
             @if (in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER]))
                 managePrefix: '{{ app('config')['xe.routing.settingsPrefix'] }}'
             @endif

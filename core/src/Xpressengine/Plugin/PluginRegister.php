@@ -49,6 +49,15 @@ class PluginRegister
      */
     protected $register;
 
+
+    /**
+     * unresolved entity list
+     *
+     * @var array
+     */
+    protected $unresolvedComponents = [];
+
+
     /**
      * PluginRegister constructor.
      *
@@ -57,6 +66,16 @@ class PluginRegister
     public function __construct(Container $register)
     {
         $this->register = $register;
+    }
+
+    /**
+     * get Unresolved Components
+     *
+     * @return array component info
+     */
+    public function getUnresolvedComponents()
+    {
+        return $this->unresolvedComponents;
     }
 
     /**
@@ -73,10 +92,18 @@ class PluginRegister
         foreach ($componentList as $id => $info) {
             $info['id'] = $id;
             $info['plugin'] = $entity;
-            $this->setComponentInfo($info);
-            $this->add($info['class']);
+            try {
+                $this->setComponentInfo($info);
+                $this->add($info['class']);
+            } catch (ComponentNotFoundException $e) {
+                array_set($this->unresolvedComponents[$entity->getId()], $id, $info);
+            } catch (NotImplementedException $e) {
+                $this->unresolvedComponents[$entity->getId()] = $info;
+            }
         }
     }
+
+
 
     /**
      * register class
