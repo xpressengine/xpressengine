@@ -50,7 +50,7 @@ class PluginUpdate extends PluginCommand
         ComposerFileWriter $writer,
         InterceptionHandler $interceptionHandler
     ) {
-        $this->init($handler, $provider, $writer);
+        $this->init($handler, $provider, $writer, $interceptionHandler);
 
         // php artisan plugin:update <plugin name> [<version>]
 
@@ -100,8 +100,8 @@ class PluginUpdate extends PluginCommand
 
         // 안내 멘트 출력
         if($this->input->isInteractive() && $this->confirm(
-                // 위 플러그인을 다운로드하고 업데이트합니다. \r\n 위 플러그인이 의존하는 다른 플러그인이 함께 다운로드 될 수 있으며, 수 분이 소요될수 있습니다.\r\n 플러그인을 업데이트하시겠습니까?"
-                "The new version of above plugin will be downloaded and installed. \r\n Dependent plugins can be installed together. \r\n It may take up to a few minutes. Do you want to update the plugin?"
+                // 위 플러그인의 새버전을 다운로드합니다. \r\n 위 플러그인이 의존하는 다른 플러그인이 함께 다운로드 될 수 있으며, 수 분이 소요될수 있습니다.\r\n 플러그인을 다운로드하시겠습니까?"
+                "The new version of above plugin will be downloaded. \r\n Dependent plugins can be installed together. \r\n It may take up to a few minutes. Do you want to download the plugin?"
             ) === false) {
             return;
         }
@@ -129,9 +129,6 @@ class PluginUpdate extends PluginCommand
             ]
         );
 
-        $handler->refreshPlugins();
-        $interceptionHandler->clearProxies();
-
         // composer 실행을 마쳤습니다
         $this->warn('Composer update command is finished.'.PHP_EOL);
 
@@ -149,17 +146,17 @@ class PluginUpdate extends PluginCommand
                 $this->output->success("$title - $name:$version plugin is updated");
             } elseif (array_get($changed, 'updated.'.$name)) {
                 $this->output->warning(
-                // $name:$version 플러그인을 업데이트하였으나 다른 버전으로 업데이트되었습니다. 플러그인 간의 의존관계로 인해 다른 버전으로 업데이트되었을 가능성이 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다.
+                    // $name:$version 플러그인을 업데이트하였으나 다른 버전으로 업데이트되었습니다. 플러그인 간의 의존관계로 인해 다른 버전으로 업데이트되었을 가능성이 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다.
                     "The plugin[".$name."] install successed. But another version[".$version."] is installed. Because of dependencies between plugins, it is possible that they have been updated to a different version. Please check the plugin dependencies."
                 );
             } elseif ($plugin->getVersion() === $version) {
                 $this->output->warning(
-                // 동일한 버전의 플러그인이 이미 설치되어 있으므로 업데이트가 되지 않았습니다.
+                    // 동일한 버전의 플러그인이 이미 설치되어 있으므로 업데이트가 되지 않았습니다.
                     "Plugin update skipped. Because the same version of plugin already was installed"
                 );
             } else {
                 $this->output->warning(
-                // $name:$version 플러그인을 업데이트하지 못했습니다. 플러그인 간의 의존관계로 인해 업데이트가 불가능할 수도 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다.
+                    // $name:$version 플러그인을 업데이트하지 못했습니다. 플러그인 간의 의존관계로 인해 업데이트가 불가능할 수도 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다.
                     "Plugin update failed. It may have failed due to dependencies between plugins. Please check the plugin dependencies."
                 );
             }
