@@ -29,8 +29,6 @@
                                 <img src="{{$plugin->getIcon()}}" width="100" height="100" alt="{{$plugin->getTitle()}}">
                             @endif
                         </div>
-
-                        {{-- author info --}}
                         <dl>
 
                     @if($author = $plugin->getAuthor())
@@ -198,19 +196,29 @@
                                 <tbody>
                                 @foreach($componentTypes as $type => $typeText)
                                     @foreach($plugin->getComponentList($type) as $key => $component)
-                                        @if($class = $component['class'])
-                                            @if(class_exists($class))
-                                                <tr>
-                                                    <td>
-                                                        {{ $class::getComponentInfo('name') }}
-                                                        @if($plugin->isActivated() && $class::getSettingsUri() !== null)
-                                                            <a href="{{ $class::getSettingsUri()}}" class="btn_plugin_cog"><i class="xi-cog"></i></a>
-                                                        @endif
-                                                    </td>
-                                                    <td><span class="label label-green">{{ $typeText }}</span></td>
-                                                    <td>{{ $class::getComponentInfo('description') }}</td>
-                                                </tr>
+                                        @if($plugin->isActivated())
+                                            @if($class = $component['class'])
+                                                @if(class_exists($class))
+                                                    <tr>
+                                                        <td>
+                                                            {{ $class::getComponentInfo('name') }}
+                                                            @if($class::getSettingsUri() !== null)
+                                                                <a href="{{ $class::getSettingsUri()}}" class="btn_plugin_cog"><i class="xi-cog"></i></a>
+                                                            @endif
+                                                        </td>
+                                                        <td><span class="label label-green">{{ $typeText }}</span></td>
+                                                        <td>{{ $class::getComponentInfo('description') }}</td>
+                                                    </tr>
+                                                @endif
                                             @endif
+                                        @else
+                                            <tr>
+                                                <td>
+                                                    {{ $component['name'] }}
+                                                </td>
+                                                <td><span class="label label-green">{{ $typeText }}</span></td>
+                                                <td>{{ $component['description'] }}</td>
+                                            </tr>
                                         @endif
                                     @endforeach
                                 @endforeach
