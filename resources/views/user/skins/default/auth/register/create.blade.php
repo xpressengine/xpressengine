@@ -8,7 +8,7 @@
             <legend>{{xe_trans('xe::signUp')}}</legend>
 
             @foreach($forms as $form)
-                {!! $form($register_token) !!}
+                {!! $form['render']($register_token) !!}
             @endforeach
 
             <button type="submit" class="xe-btn xe-btn-primary xe-btn-block">{{xe_trans('xe::signUp')}}</button>

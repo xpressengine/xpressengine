@@ -16,14 +16,14 @@ namespace App\Http\Controllers\User\Settings;
 
 use App\Http\Controllers\Controller;
 use App\Http\Sections\DynamicFieldSection;
+use App\Http\Sections\SkinSection;
 use App\Http\Sections\ToggleMenuSection;
-use Config;
 use Input;
 use XePresenter;
 use Xpressengine\Captcha\CaptchaManager;
 use Xpressengine\Captcha\Exceptions\ConfigurationNotExistsException;
 use Xpressengine\Http\Request;
-use App\Http\Sections\SkinSection;
+use Xpressengine\User\UserHandler;
 
 /**
  * @category
@@ -110,15 +110,48 @@ class SettingController extends Controller
      *
      * @return \Xpressengine\Presenter\RendererInterface
      */
-    public function editJoin(CaptchaManager $captcha)
+    public function editJoin(CaptchaManager $captcha, UserHandler $handler)
     {
         $config = app('xe.config')->get('user.join');
 
+        $allGuards = $handler->getRegisterGuards();
+        $activated = $config->get('guards', []);
+        $guards = [];
+
+        foreach ($activated as $id) {
+            if (array_has($allGuards, $id)) {
+                $guards[$id] = $allGuards[$id];
+                $guards[$id]['activated'] = true;
+                unset($allGuards[$id]);
+            }
+        }
+        foreach ($allGuards as $id => $guard) {
+            $guards[$id] = $guard;
+            $guards[$id]['activated'] = false;
+        }
+
+        $allForms = $handler->getRegisterForms();
+        $activated = $config->get('forms', []);
+        $forms = [];
+
+        foreach ($activated as $id) {
+            if (array_has($allForms, $id)) {
+                $forms[$id] = $allForms[$id];
+                $forms[$id]['activated'] = true;
+                unset($allForms[$id]);
+            }
+        }
+        foreach ($allForms as $id => $form) {
+            $forms[$id] = $form;
+            $forms[$id]['activated'] = false;
+        }
+
         return XePresenter::make(
             'user.settings.setting.join',
-            compact('config','captcha')
+            compact('config','captcha', 'forms', 'guards')
         );
     }
+
 
     /**
      * update Join setting
@@ -130,6 +163,9 @@ class SettingController extends Controller
     public function updateJoin(CaptchaManager $captcha)
     {
         $inputs = Input::except('_token');
+
+        $inputs['guards'] = array_keys(array_get($inputs, 'guards', []));
+        $inputs['forms'] = array_keys(array_get($inputs, 'forms', []));
 
         $config = app('xe.config')->get('user.join');
 

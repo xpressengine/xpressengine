@@ -660,11 +660,9 @@ class UserHandler
     /**
      * 회원가입시 회원가입 정보 입력 페이지에서 사용자에게 출력할 입력폼 목록을 반환한다.
      *
-     * @param Fluent $token register-token
-     *
      * @return mixed
      */
-    public function getRegisterForms($token)
+    public function getRegisterForms()
     {
         return $this->container->get('user/register/form', []);
     }

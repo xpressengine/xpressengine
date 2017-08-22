@@ -8,10 +8,10 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use XeDB;
-use XePresenter;
-use XeTheme;
 use XeDynamicField;
 use XeFrontend;
+use XePresenter;
+use XeTheme;
 use Xpressengine\User\EmailBrokerInterface;
 use Xpressengine\User\EmailInterface;
 use Xpressengine\User\Models\User;
@@ -97,78 +97,25 @@ class RegisterController extends Controller
         $tokenRepository = app('xe.user.register.tokens');
         $register_token = $token = $tokenRepository->find($tokenId);
 
-        if($token === null) {
-            throw new HttpException(400, '정상적인 토큰이 아닙니다.');
+        if ($token === null) {
+            throw new HttpException(400, '유효기간이 만료되었거나 정상적인 토큰이 아닙니다. 다시 인증 받으시기 바랍니다.');
         }
 
-        // 기본정보 form 추가
-        app('xe.register')->push('user/register/form', 'default-info', function ($data) {
-            $skinHandler = app('xe.skin');
-            $skin = $skinHandler->getAssigned('user/auth');
-            // password configuration
-            $passwordConfig = app('config')->get('xe.user.password');
-            $passwordLevel = array_get($passwordConfig['levels'], $passwordConfig['default']);
-            return $skin->setView('register.forms.default')->setData(compact('data', 'passwordLevel'))->render();
-        });
+        $allForms = $this->handler->getRegisterForms();
+        $activated = $config->get('forms', []);
+        $forms = [];
 
-        // dynamic field form 추가
-        app('xe.register')->push(
-            'user/register/form',
-            'dynamic-fields',
-            function ($data) use ($request) {
-                $dynamicField = app('xe.dynamicField');
-                $fieldTypes = $dynamicField->gets('user');
-
-                $skinHandler = app('xe.skin');
-                $skin = $skinHandler->getAssigned('user/auth');
-
-                $html = '';
-                foreach ($fieldTypes as $id => $fieldType) {
-                    $html .= sprintf(
-                        '<div class="control-group">%s</div>',
-                        $fieldType->getSkin()->create($request->all())
-                    );
-                }
-
-                return $skin->setView('register.forms.dfields')->setData(compact('data', 'html'))->render();
+        foreach ($activated as $id) {
+            if (array_has($allForms, $id)) {
+                $forms[$id] = $allForms[$id];
+                $forms[$id]['activated'] = true;
+                unset($allForms[$id]);
             }
-        );
-
-        // agreement form 추가
-        app('xe.register')->push('user/register/form', 'agreements', function ($data) {
-
-            app('xe.frontend')->html('auth.register')->content("
-                    <script>
-                        $(function($) {
-                            $('.__xe_btn_privacy').click(function(){
-                                XE.pageModal('".route('auth.privacy')."');
-                                return false;
-                            });
-                            $('.__xe_btn_agreement').click(function(){
-                                XE.pageModal('".route('auth.agreement')."');
-                                return false;
-                            })
-                        });
-                    </script>
-                ")->load();
-
-            $skinHandler = app('xe.skin');
-            $skin = $skinHandler->getAssigned('user/auth');
-            return $skin->setView('register.forms.agreements')->setData(compact('data'))->render();
-        });
-
-        // captcha form 추가
-        if ($config['useCaptcha'] === true) {
-            app('xe.register')->push(
-                'user/register/form',
-                'captcha',
-                function ($data) {
-                    return uio('captcha');
-                }
-            );
         }
-
-        $forms = $this->handler->getRegisterForms($token);
+        foreach ($allForms as $id => $form) {
+            $forms[$id] = $form;
+            $forms[$id]['activated'] = false;
+        }
 
         $rules = [
             'email' => 'email',
@@ -349,50 +296,41 @@ class RegisterController extends Controller
     {
         if ($this->useEmailConfirm()) {
 
-            app('xe.register')->push(
-                'user/register/guard',
-                'email',
-                function () {
-                    $skinHandler = app('xe.skin');
-                    $skin = $skinHandler->getAssigned('user/auth');
-                    return $skin->setView('register.sections.email')->render();
-                }
-            );
+            //app('xe.register')->push(
+            //    'user/register/guard',
+            //    'email',
+            //    function () {
+            //        $skinHandler = app('xe.skin');
+            //        $skin = $skinHandler->getAssigned('user/auth');
+            //        return $skin->setView('register.sections.email')->render();
+            //    }
+            //);
+            //
+            //app('xe.register')->push(
+            //    'user/register/form',
+            //    'email',
+            //    function ($token) {
+            //        if ($token->guard !== 'email') {
+            //            return null;
+            //        }
+            //        $code = request()->get('code');
+            //
+            //        if($code !== null) {
+            //            $this->checkPendingEmail($token->email, $code);
+            //        }
+            //
+            //        app('xe.frontend')->html('email.setter')->content("
+            //        <script>
+            //            $('input[name=email]').attr('readonly','readonly').val('{$token->email}');
+            //        </script>
+            //        ")->load();
+            //
+            //        $skinHandler = app('xe.skin');
+            //        $skin = $skinHandler->getAssigned('user/auth');
+            //        return $skin->setView('register.forms.confirm')->setData(compact('token', 'code'))->render();
+            //    }
+            //);
 
-            app('xe.register')->push(
-                'user/register/form',
-                'email',
-                function ($token) {
-                    if ($token->guard !== 'email') {
-                        return null;
-                    }
-                    $code = request()->get('code');
-
-                    if($code !== null) {
-                        $this->checkPendingEmail($token->email, $code);
-                    }
-
-                    app('xe.frontend')->html('email.setter')->content("
-                    <script>
-                        $('input[name=email]').attr('readonly','readonly').val('{$token->email}');
-                    </script>
-                    ")->load();
-
-                    $skinHandler = app('xe.skin');
-                    $skin = $skinHandler->getAssigned('user/auth');
-                    return $skin->setView('register.forms.confirm')->setData(compact('token', 'code'))->render();
-                }
-            );
-            intercept('XeUser@validateForCreate', 'register.email.validator', function($target, $data, $token = null) {
-
-                if($token->guard === 'email') {
-                    $code = array_get($data, 'code');
-                    $email = $this->checkPendingEmail($token->email, $code);
-                    $data['id'] = $email->userId;
-                }
-
-                return $target($data, $token);
-            });
         }
     }
 

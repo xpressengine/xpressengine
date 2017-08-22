@@ -11,7 +11,7 @@
                 </div>
                 <div class="panel-body">
                     <div class="form-group">
-                        <label for="item-url">{{xe_trans('xe::permitSignUp')}}</label>
+                        <label>{{xe_trans('xe::permitSignUp')}}</label>
                         <div class="list-group-item">
                             <div class="radio">
                                 <label>
@@ -24,7 +24,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="item-url">{{xe_trans('xe::useEmailConfirm')}}</label>
+                        <label>{{xe_trans('xe::useEmailConfirm')}}</label>
                         <div class="list-group-item">
                             <div class="radio">
                                 <label>
@@ -37,7 +37,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="item-url">{{xe_trans('xe::useSignUpCaptcha')}}</label>
+                        <label>{{xe_trans('xe::useSignUpCaptcha')}}</label>
                         <div class="list-group-item">
                             <div class="radio">
                                 <label>
@@ -54,6 +54,21 @@
                         </div>
                         @endif
                     </div>
+
+                    <div class="form-group">
+                        <label>회원가입 인증방식</label>
+                        <div class="list-group-item">
+                            @include('user.settings.setting.guards')
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>회원가입 폼양식</label>
+                        <div class="list-group-item">
+                            @include('user.settings.setting.forms')
+                        </div>
+                    </div>
+
                 </div>
                 <div class="panel-footer">
                     <div class="pull-right">
