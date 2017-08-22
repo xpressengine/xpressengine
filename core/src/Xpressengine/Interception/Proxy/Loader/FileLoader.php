@@ -103,6 +103,7 @@ class FileLoader implements Loader
             return true;
         }
 
+        \Log::debug('proxy is expired > '.$proxyPath);
         return false;
     }
 
