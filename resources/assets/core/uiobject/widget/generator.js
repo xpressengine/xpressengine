@@ -1,3 +1,4 @@
+/** @name		jQuery widgetGenerator plugin */
 ;(function (exports, $) {
 
     'use strict';

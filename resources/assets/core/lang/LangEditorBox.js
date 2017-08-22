@@ -4,12 +4,16 @@ import createReactClass from 'create-react-class';
 import validator from 'validator';
 
 /**
+ * @private
+ * @description
+ * <pre>
  * 다국어 입력 컴포넌트를 만드는 방식 2가지
  * 1)DOM data속성을 사용하여 document ready상태일 경우 ajax로 한번에 다국어를 요청하여 컴포넌트를 만든다.
  * - ajax이후 langEditorBoxRender 사용시 type이 'obj'로 들어감.
  *
  * 2)langEditorBoxRender:fn 외부에서 직접호출하여 컴포넌트를 만든다
  * - 컴포넌트 state에 다국어 정보가 없으면 하나의 컴포넌트에 대한 다국어 정보를 ajax로 요청하여 상태를 갱신한다.
+ * </pre>
  * */
 var LangEditorBox = createReactClass({
   getDefaultProps: function () {

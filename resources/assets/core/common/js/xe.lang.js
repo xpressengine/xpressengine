@@ -1,7 +1,6 @@
 /**
  * Lang module
  * @module Lang
- * @namespace XE.Lang
  * */
 export default (function () {
 
@@ -94,14 +93,14 @@ export default (function () {
 
   return {
     /**
-     * @memberof XE.Lang
+     * @memberof module:Lang
      * @type {array}
      * */
     locales: [],
 
     /**
      * 번역리스트를 Translator 객체에 담는다.
-     * @memberof XE.Lang
+     * @memberof module:Lang
      * @param {object} items
      * */
     set: function (items) {
@@ -114,7 +113,7 @@ export default (function () {
 
     /**
      * Locale을 세팅한다.
-     * @memberof XE.Lang
+     * @memberof module:Lang
      * @param {locales} locales
      * */
     setLocales: function (locales) {
@@ -124,7 +123,7 @@ export default (function () {
 
     /**
      * language code를 반환한다.
-     * @memberof XE.Lang
+     * @memberof module:Lang
      * @param {string} locale
      * @return {string}
      * */
@@ -134,7 +133,7 @@ export default (function () {
 
     /**
      * 현재 선택된 locale 정보를 반환한다.
-     * @memberof XE.Lang
+     * @memberof module:Lang
      * @return {string}
      * */
     getCurrentLocale: function () {
@@ -143,7 +142,7 @@ export default (function () {
 
     /**
      * 등록된 번역 id에 대한 번역 메시지를 반환한다.
-     * @memberof XE.Lang
+     * @memberof module:Lang
      * @param {string} id
      * @param {object} parameters
      * @return {string}
@@ -154,7 +153,7 @@ export default (function () {
 
     /**
      * 동적으로 번역 id에 해당하는 메시지를 가져와 callback으로 반환한다.
-     * @memberof XE.Lang
+     * @memberof module:Lang
      * @param {string} id
      * @param {object} parameters
      * @param {function} callback
@@ -187,7 +186,7 @@ export default (function () {
 
     /**
      * id list로 번역리스트를 요청한다.
-     * @memberof XE.Lang
+     * @memberof module:Lang
      * @param {array} langKeys
      * @param {function} callback
      * */
@@ -226,7 +225,7 @@ export default (function () {
 
     /**
      * number에 따라 번역을 선택하여 주어진 메시지를 전달한다.
-     * @memberof XE.Lang
+     * @memberof module:Lang
      * @param {string} id
      * @param {number} number
      * @param {object} parameters

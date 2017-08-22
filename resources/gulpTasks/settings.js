@@ -111,7 +111,7 @@ module.exports = (() => {
         gulp.src('./resources/doc')
         .pipe($.clean({ force: true }))
         ,
-        gulp.src('./resources/assets/core/**/*.js')
+        gulp.src(['./resources/assets/core/**/*.js', './resources/assets/core/**/*.jsx'])
         .pipe(jsdoc({
           "opts": {
             "destination": "./resources/doc"

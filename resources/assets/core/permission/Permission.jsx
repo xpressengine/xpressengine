@@ -5,24 +5,48 @@ import PermissionRadioComp from './PermissionRadioComp';
 import PermissionInclude from './PermissionInclude';
 import PermissionExclude from './PermissionExclude';
 
+/**
+ * Permission React Component
+ * @namespace Permission
+ * */
 export default createReactClass({
+  /**
+   * @memberof Permission
+   * @prop {string} displayName
+   * */
   displayName: 'Permission',
-
+  /**
+   * @memberof Permission
+   * @prop {object} propTypes
+   * @prop {object} propTypes.permission
+   * @prop {string} propTypes.type
+   * */
   propTypes: {
     permission: PropTypes.object,
     type: PropTypes.string,
   },
-
+  /**
+   * default props를 리턴한다.
+   * @memberof Permission
+   * @return {object}
+   * */
   getDefaultProps: function () {
     return {
       modeEnable: false,
     };
   },
-
+  /**
+   * @memberof Permission
+   * */
   getInitialState: function () {
     return this.init(this.props);
   },
-
+  /**
+   * Permission을 초기화한다.
+   * @memberof Permission
+   * @param {object} props
+   * @return {object}
+   * */
   init: function (props) {
     var permission = props.permission;
 
@@ -54,9 +78,9 @@ export default createReactClass({
     };
   },
 
-  componentDidMount: function () {
-  },
-
+  /**
+   * @memberof Permission
+   * */
   componentDidUpdate: function (prevProps) {
     var permission = this.props.permission;
     if (permission !== prevProps.permission) {
@@ -64,8 +88,11 @@ export default createReactClass({
     }
 
   },
-
-  modeChange: function (event) {
+  /**
+   * 상위설정 mode 변경
+   * @memberof Permission
+   * */
+  modeChange: function () {
     var formData = this.state.formData;
 
     formData.mode = formData.mode === 'inherit' ? 'manual' : 'inherit';
@@ -74,7 +101,12 @@ export default createReactClass({
       formData: formData,
     });
   },
-
+  /**
+   * key에 해당하는 state를 value값으로 업데이트 한다.
+   * @memberof Permission
+   * @param {string} key
+   * @param {string} value
+   * */
   inputChange: function (key, value) {
     var formData = this.state.formData;
 
@@ -84,25 +116,41 @@ export default createReactClass({
       formData: formData,
     });
   },
-
+  /**
+   * 포함할 그룹을 삭제한다.
+   * @memberof Permission
+   * @param {number} i
+   * */
   handleIncludeGroupDelete: function (i) {
     var tags = this.state.includeGroups;
     tags.splice(i, 1);
     this.setState({ includeGroups: tags });
   },
-
+  /**
+   * 포함할 멤버를 삭제한다.
+   * @memberof Permission
+   * @param {number} i
+   * */
   handleIncludeMemberDelete: function (i) {
     var tags = this.state.includeMembers;
     tags.splice(i, 1);
     this.setState({ includeMembers: tags });
   },
-
+  /**
+   * 제외할 사용자를 삭제한다.
+   * @memberof Permission
+   * @param {number} i
+   * */
   handleExcludeMemberDelete: function (i) {
     var tags = this.state.excludeMembers;
     tags.splice(i, 1);
     this.setState({ excludeMembers: tags });
   },
-
+  /**
+    * 포함할 사용자, 그룹을 추가한다.
+    * @memberof Permission
+    * @param {object} tag
+    * */
   handleIncludeAddition: function (tag) {
     var includeGroups = this.state.includeGroups;
     var includeMembers = this.state.includeMembers;
@@ -125,7 +173,11 @@ export default createReactClass({
       }
     }
   },
-
+  /**
+   * 제외할 사용자를 추가한다.
+   * @memberof Permission
+   * @param {object} tag
+   * */
   handleExcludeAddition: function (tag) {
     var tags = this.state.excludeMembers;
     var finded = _.find(tags, { id: tag.id });
@@ -135,7 +187,9 @@ export default createReactClass({
       this.setState({ excludeMembers: tags });
     }
   },
-
+  /**
+   * @memberof Permission
+   * */
   render: function () {
     var _this = this;
 

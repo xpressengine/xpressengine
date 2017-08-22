@@ -10,11 +10,17 @@ if (typeof define === 'function' && define.amd) {
 }(this, function (exports) {
 
   'use strict';
-
+  /**
+   * @module griper
+   * */
   var $ = jQuery = window.jQuery;
 
   DynamicLoadManager.cssLoad('/assets/core/common/css/griper.css');
 
+  /**
+   * @memberof module:griper
+   * @property {object} options
+   * */
   exports.options = {
     toastContainer: {
       template: '<div class="__xe_toast_container xe-toast-container"></div>',
@@ -55,6 +61,12 @@ if (typeof define === 'function' && define.amd) {
     },
   };
 
+  /**
+   * @memberof module:griper
+   * @param {string} type
+   * @param {string} messagge
+   * @param {string} pos
+   * */
   exports.toast = function (type, message, pos) {
     var position = '';
 
