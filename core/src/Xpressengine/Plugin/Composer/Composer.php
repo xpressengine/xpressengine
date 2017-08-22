@@ -43,6 +43,8 @@ class Composer
 
     protected static $installedFlagPath = 'storage/app/installed';
 
+    protected static $interceptionProxyDirectory = 'storage/app/interception';
+
     public static $basePlugins = [
         'xpressengine-plugin/alice' => '0.9.12',
         'xpressengine-plugin/board' => '0.9.20',
@@ -182,6 +184,13 @@ class Composer
             $writer->set('xpressengine-plugin.operation.changed', XpressengineInstaller::$changed);
         }
         $writer->reset()->write();
+
+        $files = glob(static::$interceptionProxyDirectory.'/*');
+        foreach ($files as $file) {
+            if (is_file($file)) {
+                unlink($file);
+            }
+        }
 
         require_once $event->getComposer()->getConfig()->get('vendor-dir').'/autoload.php';
         static::clearCompiled();
