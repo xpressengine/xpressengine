@@ -236,7 +236,7 @@ import moment from 'moment';
     var value = '';
 
     if ($ele[0].tagName === 'SELECT') {
-      $ele.find('option:selected').val();
+      value = $ele.find('option:selected').val();
 
     } else if ($ele.is('input[type=checkbox]')) {
       if ($ele.is(':checked')) {

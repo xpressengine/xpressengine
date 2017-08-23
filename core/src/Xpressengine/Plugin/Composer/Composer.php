@@ -16,6 +16,7 @@ namespace Xpressengine\Plugin\Composer;
 use Composer\Installer\InstallerEvent;
 use Composer\Plugin\CommandEvent;
 use Composer\Script\Event;
+use FilesystemIterator;
 use Illuminate\Foundation\Application;
 use Xpressengine\Installer\XpressengineInstaller;
 use Xpressengine\Plugin\MetaFileReader;
@@ -42,6 +43,10 @@ class Composer
     protected static $pluginComposerFile = 'storage/app/composer.plugins.json';
 
     protected static $installedFlagPath = 'storage/app/installed';
+
+    protected static $interceptionProxyDirectory = 'storage/app/interception';
+
+    protected static $pluginCacheDirectory = 'storage/framework/plugins';
 
     public static $basePlugins = [
         'xpressengine-plugin/alice' => '0.9.12',
@@ -183,6 +188,12 @@ class Composer
         }
         $writer->reset()->write();
 
+        // interception proxy 갱신
+        static::deleteDirectory(static::$interceptionProxyDirectory, true);
+
+        // plugin cache 갱신
+        static::deleteDirectory(static::$pluginCacheDirectory, true);
+
         require_once $event->getComposer()->getConfig()->get('vendor-dir').'/autoload.php';
         static::clearCompiled();
     }
@@ -245,5 +256,32 @@ class Composer
         if (file_exists($servicesPath = $laravel->getCachedServicesPath())) {
             @unlink($servicesPath);
         }
+    }
+
+    /**
+     * delete Directory
+     *
+     * @param string $directory directory
+     * @param bool   $preserve  preserve
+     *
+     * @return bool
+     */
+    protected static function deleteDirectory($directory, $preserve = false)
+    {
+        if (!is_dir($directory)) {
+            return false;
+        }
+        $items = new FilesystemIterator($directory);
+        foreach ($items as $item) {
+            if ($item->isDir() && !$item->isLink()) {
+                static::deleteDirectory($item->getPathname());
+            } else {
+                @unlink($item->getPathname());
+            }
+        }
+        if (! $preserve) {
+            @rmdir($directory);
+        }
+        return true;
     }
 }

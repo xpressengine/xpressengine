@@ -15,6 +15,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Xpressengine\Installer\XpressengineInstaller;
+use Xpressengine\Interception\InterceptionHandler;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
@@ -42,21 +43,32 @@ class PluginCommand extends Command
     protected $provider;
 
     /**
+     * @var InterceptionHandler
+     */
+    protected $interceptionHandler;
+
+    /**
      * @var ComposerFileWriter
      */
     protected $writer;
 
-    protected function init(PluginHandler $handler, PluginProvider $provider, ComposerFileWriter $writer)
-    {
+    protected function init(
+        PluginHandler $handler,
+        PluginProvider $provider,
+        ComposerFileWriter $writer,
+        InterceptionHandler $interceptionHandler
+    ) {
         $this->handler = $handler;
         $this->handler->getAllPlugins(true);
         $this->provider = $provider;
         $this->writer = $writer;
+        $this->interceptionHandler = $interceptionHandler;
     }
 
     protected function clear()
     {
-        app('xe.interception')->clearProxies();
+        $this->handler->refreshPlugins();
+        $this->interceptionHandler->clearProxies();
     }
 
     /**

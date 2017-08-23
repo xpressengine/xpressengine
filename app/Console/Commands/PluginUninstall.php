@@ -42,7 +42,7 @@ class PluginUninstall extends PluginCommand
         ComposerFileWriter $writer,
         InterceptionHandler $interceptionHandler
     ) {
-        $this->init($handler, $provider, $writer);
+        $this->init($handler, $provider, $writer, $interceptionHandler);
 
         // php artisan plugin:uninstall <plugin name>
 
@@ -50,19 +50,17 @@ class PluginUninstall extends PluginCommand
 
         // 플러그인이 설치돼 있는지 검사
         $plugin = $handler->getPlugin($id);
-        if($plugin === null) {
+        if ($plugin === null) {
             // 설치되어 있지 않은 플러그인입니다
             throw new \Exception('Plugin not found');
         }
 
-        if(file_exists($plugin->getPath('vendor'))) {
-            // 개발모드의 플러그인입니다. 개발모드의 플러그인을 삭제하려면 직접 플러그인 디렉토리를 삭제하시기 바랍니다.
-            throw new \Exception('The plugin is in develop mode. To remove a plugin development mode, please delete the directory of plug-in directly.');
+        $isDevelopMode = file_exists($plugin->getPath('vendor'));
+
+        if (!$isDevelopMode) {
+            // 실행가능 환경인지 검사
+            $this->prepareComposer();
         }
-
-        // 설치가능 환경인지 검사
-        $this->prepareComposer();
-
 
         $title = $plugin->getTitle();
         $name = $plugin->getName();
@@ -95,48 +93,53 @@ class PluginUninstall extends PluginCommand
         // 플러그인 uninstall 실행
         $handler->uninstallPlugin($id);
 
-        // - plugins require info 갱신
-        $writer->reset()->cleanOperation();
-
-        // - require에서 삭제할 플러그인 제거
-        $writer->uninstall($name, 0)->write();
-
-        $vendorName = PluginHandler::PLUGIN_VENDOR_NAME;
-
-        // composer update를 실행합니다. 최대 수분이 소요될 수 있습니다.
-        $this->warn('Composer update command is running.. It may take up to a few minutes.');
-        $this->line(" composer update --with-dependencies $name");
-        $result = $this->runComposer(
-            [
-                'command' => 'update',
-                "--with-dependencies" => true,
-                //"--quiet" => true,
-                '--working-dir' => base_path(),
-                /*'--verbose' => '3',*/
-                'packages' => [$name]
-            ]
-        );
-
-        $handler->refreshPlugins();
-        $interceptionHandler->clearProxies();
-
-        // composer 실행을 마쳤습니다.
-        $this->warn('Composer update command is finished.'.PHP_EOL);
-
-        $result = $this->writeResult($writer, $result);
-
-        // changed plugin list 정보 출력
-        $changed = $this->getChangedPlugins($writer);
-        $this->printChangedPlugins($changed);
-
-        if (array_has($changed, 'uninstalled.'.$name)) {
-            // 삭제 성공 문구 출력
-            // $title - $name:$version 플러그인을 삭제하였습니다.
+        if ($isDevelopMode) {
+            // 개발모드의 플러그인입니다. 플러그인 디렉토리를 삭제하려면 직접 플러그인 디렉토리를 삭제하시기 바랍니다.
+            $this->output->block("The plugin is in develop mode. To remove directory of the plugin, After this command is executed, please delete the directory of plug-in manually.", 'WARNING', 'fg=black;bg=yellow', ' ', true);
             $this->output->success("$title - $name:$version Plugin is uninstalled.");
         } else {
-            // $name:$version 플러그인을 삭제하지 못했습니다. 플러그인 간의 의존관계로 인해 삭제가 불가능할 수도 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다.
-            $this->output->error("Uninstall failed. Because of the dependencies between plugins, Uninstall may not be able to success. Please check the plugin's dependencies.");
+
+            // - plugins require info 갱신
+            $writer->reset()->cleanOperation();
+
+            // - require에서 삭제할 플러그인 제거
+            $writer->uninstall($name, 0)->write();
+
+            $vendorName = PluginHandler::PLUGIN_VENDOR_NAME;
+
+            // composer update를 실행합니다. 최대 수분이 소요될 수 있습니다.
+            $this->warn('Composer update command is running.. It may take up to a few minutes.');
+            $this->line(" composer update --with-dependencies $name");
+            $result = $this->runComposer(
+                [
+                    'command' => 'update',
+                    "--with-dependencies" => true,
+                    //"--quiet" => true,
+                    '--working-dir' => base_path(),
+                    /*'--verbose' => '3',*/
+                    'packages' => [$name]
+                ]
+            );
+
+            // composer 실행을 마쳤습니다.
+            $this->warn('Composer update command is finished.'.PHP_EOL);
+
+            $result = $this->writeResult($writer, $result);
+
+            // changed plugin list 정보 출력
+            $changed = $this->getChangedPlugins($writer);
+            $this->printChangedPlugins($changed);
+
+            if (array_has($changed, 'uninstalled.'.$name)) {
+                // 삭제 성공 문구 출력
+                // $title - $name:$version 플러그인을 삭제하였습니다.
+                $this->output->success("$title - $name:$version Plugin is uninstalled.");
+            } else {
+                // $name:$version 플러그인을 삭제하지 못했습니다. 플러그인 간의 의존관계로 인해 삭제가 불가능할 수도 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다.
+                $this->output->error("Uninstall failed. Because of the dependencies between plugins, Uninstall may not be able to success. Please check the plugin's dependencies.");
+            }
         }
+
         $this->clear();
 
     }
