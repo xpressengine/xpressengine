@@ -89,6 +89,7 @@ namespace Xpressengine\Tests\User {
             /** @var Mockery\MockInterface $users */
             $users = $handler->users();
             $user = $this->makeUser();
+            $user->shouldReceive('hasMacro')->andReturn(false);
             $user->shouldReceive('getAttribute')->once()->with('email')->andReturn('foo@bar.com');
             $user->shouldReceive('getAttribute')->twice()->with('id')->andReturn('baz');
 
@@ -135,6 +136,7 @@ namespace Xpressengine\Tests\User {
             /** @var Mockery\MockInterface $users */
             $users = $handler->users();
             $user = $this->makeUser();
+            $user->shouldReceive('hasMacro')->andReturn(false);
             $user->shouldReceive('getAttribute')->once()->with('email')->andReturn('foo@bar.com');
             $user->shouldReceive('getAttribute')->twice()->with('id')->andReturn('baz');
 
@@ -219,6 +221,7 @@ namespace Xpressengine\Tests\User {
             /** @var Mockery\MockInterface $users */
             $users = $handler->users();
             $user = $this->makeUser();
+            $user->shouldReceive('hasMacro')->andReturn(false);
             $user->shouldReceive('getAttribute')->once()->with('id')->andReturn('baz');
 
             $hasMany = Mockery::mock(\Illuminate\Database\Eloquent\Relations\HasMany::class);
@@ -534,6 +537,7 @@ namespace Xpressengine\Tests\User {
         public function testUpdateWhenDisplayNameisEqual()
         {
             $user = $this->makeUser();
+            $user->shouldReceive('hasMacro')->andReturn(false);
             $user->shouldReceive('getAttribute')->once()->with('displayName')->andReturn('origin name');
             $user->shouldReceive('setAttribute')->once()->with('displayName', 'origin name')->andReturnSelf();
             $user->shouldReceive('setAttribute')->once()->with('password', 'encrypted password')->andReturnSelf();
@@ -568,6 +572,7 @@ namespace Xpressengine\Tests\User {
         public function testUpdateWhenDisplayNameisDifferent()
         {
             $user = $this->makeUser();
+            $user->shouldReceive('hasMacro')->andReturn(false);
             $user->shouldReceive('getAttribute')->once()->with('displayName')->andReturn('origin name');
             $user->shouldReceive('setAttribute')->once()->with('displayName', 'new name')->andReturnSelf();
             $user->shouldReceive('setAttribute')->once()->with('password', 'encrypted password')->andReturnSelf();

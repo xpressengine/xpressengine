@@ -55,6 +55,7 @@ class VideoHandlerTest extends \PHPUnit_Framework_TestCase
             ->makePartial();
 
         $mockFile = m::mock('Xpressengine\Storage\File');
+        $mockFile->shouldReceive('hasMacro')->andReturn(false);
         $mockFile->shouldReceive('getAttribute')->with('mime')->andReturn('text/plain');
 
         $instance->shouldReceive('isAvailable')->once()->with('text/plain')->andReturn(false);
@@ -76,6 +77,7 @@ class VideoHandlerTest extends \PHPUnit_Framework_TestCase
             ->makePartial();
 
         $mockFile = m::mock('Xpressengine\Storage\File');
+        $mockFile->shouldReceive('hasMacro')->andReturn(false);
         $mockFile->shouldReceive('getAttribute')->with('mime')->andReturn('video/mp4');
 
         $mockRelate = m::mock('stdClass');
@@ -92,6 +94,7 @@ class VideoHandlerTest extends \PHPUnit_Framework_TestCase
         ])->andReturnSelf();
 
         $mockVideo = m::mock('Xpressengine\Media\Models\Video');
+        $mockVideo->shouldReceive('hasMacro')->andReturn(false);
         $mockVideo->shouldReceive('getAttribute')->with('meta')->andReturnNull();
         $mockVideo->shouldReceive('meta')->andReturn($mockRelate);
         $mockVideo->shouldReceive('setRelation')->once()->with('meta', $mockRelate)->andReturnSelf();

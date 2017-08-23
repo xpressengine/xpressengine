@@ -40,26 +40,6 @@ class CaptchaUIObject extends AbstractUIObject
     protected static $manager;
 
     /**
-     * To do on boot
-     *
-     * @return void
-     */
-    public static function boot()
-    {
-        // nothing to do
-    }
-
-    /**
-     * Url for component management
-     *
-     * @return void
-     */
-    public static function getSettingsURI()
-    {
-        // nothing to do
-    }
-
-    /**
      * Rendered current object
      *
      * @return string

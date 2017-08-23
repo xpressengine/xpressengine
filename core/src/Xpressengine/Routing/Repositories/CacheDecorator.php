@@ -14,9 +14,9 @@
 
 namespace Xpressengine\Routing\Repositories;
 
+use Illuminate\Contracts\Cache\Repository as CacheContract;
 use Xpressengine\Routing\InstanceRoute;
 use Xpressengine\Routing\RouteRepository;
-use Xpressengine\Support\CacheInterface;
 
 /**
  * Class CacheDecorator
@@ -40,9 +40,16 @@ class CacheDecorator implements RouteRepository
     /**
      * Cache instance
      *
-     * @var CacheInterface
+     * @var CacheContract
      */
     protected $cache;
+
+    /**
+     * expire time
+     *
+     * @var int
+     */
+    protected $minutes;
 
     /**
      * Prefix for cache key
@@ -54,13 +61,15 @@ class CacheDecorator implements RouteRepository
     /**
      * CacheDecorator constructor.
      *
-     * @param RouteRepository $repo  Repository instance
-     * @param CacheInterface  $cache Cache instance
+     * @param RouteRepository $repo    Repository instance
+     * @param CacheContract   $cache   Cache instance
+     * @param int             $minutes expire time
      */
-    public function __construct(RouteRepository $repo, CacheInterface $cache)
+    public function __construct(RouteRepository $repo, CacheContract $cache, $minutes = 60)
     {
         $this->repo = $repo;
         $this->cache = $cache;
+        $this->minutes = $minutes;
     }
 
     /**
@@ -75,7 +84,7 @@ class CacheDecorator implements RouteRepository
         $routes = $this->cache->has($key) ? $this->cache->get($key) : call_user_func(function () use ($key) {
             $routes = $this->repo->all();
             if (count($routes) > 1) {
-                $this->cache->put($key, $routes);
+                $this->cache->put($key, $routes, $this->minutes);
             }
 
             return $routes;
@@ -114,8 +123,8 @@ class CacheDecorator implements RouteRepository
      */
     protected function cachingItem(InstanceRoute $route)
     {
-        $this->cache->put($this->getCacheKey($route->siteKey . '_' . $route->url), $route);
-        $this->cache->put($this->getCacheKey($route->instanceId), $route);
+        $this->cache->put($this->getCacheKey($route->siteKey . '_' . $route->url), $route, $this->minutes);
+        $this->cache->put($this->getCacheKey($route->instanceId), $route, $this->minutes);
     }
 
     /**
@@ -152,7 +161,7 @@ class CacheDecorator implements RouteRepository
         $routes = $this->cache->has($key) ? $this->cache->get($key) : call_user_func(function () use ($siteKey, $key) {
             $routes = $this->repo->fetchBySiteKey($siteKey);
             if (count($routes) > 0) {
-                $this->cache->put($key, $routes);
+                $this->cache->put($key, $routes, $this->minutes);
             }
 
             return $routes;
@@ -174,7 +183,7 @@ class CacheDecorator implements RouteRepository
         $routes = $this->cache->has($key) ? $this->cache->get($key) : call_user_func(function () use ($module, $key) {
             $routes = $this->repo->fetchByModule($module);
             if (count($routes) > 0) {
-                $this->cache->put($key, $routes);
+                $this->cache->put($key, $routes, $this->minutes);
             }
 
             return $routes;

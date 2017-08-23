@@ -58,7 +58,12 @@ class Boolean extends AbstractType
      */
     public function getRules()
     {
-        return [];
+        $required = '';
+        if ($this->config->get('required') === true) {
+            $required = 'required';
+        }
+
+        return ['boolean' => $required];
     }
 
     /**

@@ -8,8 +8,6 @@
 
 namespace Xpressengine\Tests\UIObject;
 
-use Mockery;
-use Mockery\Mock;
 use Xpressengine\UIObject\AbstractUIObject;
 
 class AbstractUIObjectTest extends \PHPUnit_Framework_TestCase {
@@ -37,55 +35,9 @@ class AbstractUIObjectTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    public function testRenderWithCallback()
-    {
-        $markup = Mockery::mock('\PhpQuery\PhpQueryObject');
-        $markup->testKey = 'test';
-        Mockery::mock('alias:PhpQuery', '\PhpQuery\PhpQuery', [
-            'newDocument' => null,
-            'pq' => $markup
-        ]);
-
-        $uio = new TestUIObject([], function(&$m) use ($markup) {
-            $this->assertEquals($markup->testKey, $markup->testKey);
-            $m = '<div>markup</div>';
-        });
-
-        $this->assertEquals('<div>markup</div>', $uio->render());
-
-    }
-
-
-    public function testToString()
-    {
-        $markup = Mockery::mock('\PhpQuery\PhpQueryObject');
-        $markup->testKey = 'test';
-        Mockery::mock('alias:PhpQuery', '\PhpQuery\PhpQuery', [
-            'newDocument' => null,
-            'pq' => $markup
-        ]);
-
-        $uio = new TestUIObject([], function(&$m) use ($markup) {
-            $this->assertEquals($markup->testKey, $markup->testKey);
-            $m = '<div>markup</div>';
-        });
-
-        $this->assertEquals('<div>markup</div>', (string) $uio);
-
-    }
-
 }
 
 class TestUIObject extends AbstractUIObject
 {
-
     protected $template = '<div>template</div>';
-
-    public static function boot()
-    {
-    }
-
-    public static function getSettingsURI()
-    {
-    }
 }

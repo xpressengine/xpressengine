@@ -8,7 +8,8 @@
   left: 0;
   right: 0;
   max-width: 560px;
-  margin: 4px auto 0;
+  /*margin: 4px auto 0;*/
+  margin: 0 auto;
   z-index: 1100;
   .xe-alert {
     position: relative;
@@ -19,6 +20,7 @@
     line-height: 20px;
     text-align: left;
     border-radius: 2px;
+    margin: 4px 0;
     &.xe-warning {
       background-color: $brand-warning;      
     }
@@ -73,7 +75,8 @@
 
 @media (min-width: 768px) {
   .xe-toast-container {
-    padding: 0 20px;
+    /*padding: 0 20px;*/
+    padding: 0 10px;
     max-width: 960px;
     .xe-alert {
     }

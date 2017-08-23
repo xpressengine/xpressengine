@@ -28,5 +28,5 @@ use Xpressengine\DynamicField\DynamicFieldException;
  */
 class InvalidConfigException extends DynamicFieldException
 {
-    protected $message = 'Invalid dynamic field config.';
+    protected $message = 'Invalid dynamic field config. group has [:group] and id has [:id]';
 }

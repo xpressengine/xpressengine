@@ -1,0 +1,21 @@
+#!/usr/bin/env php
+<?php
+
+/*
+|--------------------------------------------------------------------------
+| post-merge hook 
+|--------------------------------------------------------------------------
+|
+| Remove interception proxy class files.
+| To install, copy to .git/hooks folder, rename with 'post-merge' and `chmod +x post-merge`
+|
+*/
+
+$files = glob('storage/app/interception/*'); 
+foreach ($files as $file) { 
+  if (is_file($file)) {
+    unlink($file); 
+  }
+}
+
+exit(0);

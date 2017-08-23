@@ -13,7 +13,6 @@ use Xpressengine\Category\Models\CategoryItem;
 use Xpressengine\DynamicField\AbstractSkin;
 use Xpressengine\Config\ConfigEntity;
 use View;
-use XeCategory;
 
 class DefaultSkin extends AbstractSkin
 {
@@ -59,7 +58,7 @@ class DefaultSkin extends AbstractSkin
      */
     public function create(array $args)
     {
-        $category = XeCategory::find($this->config->get('categoryId'));
+        $category = Category::find($this->config->get('categoryId'));
         $this->addMergeData(['categoryItems' => $category->items]);
 
         return parent::create($args);
@@ -74,11 +73,11 @@ class DefaultSkin extends AbstractSkin
      */
     public function edit(array $args)
     {
-        $category = XeCategory::find($this->config->get('categoryId'));
+        $category = Category::find($this->config->get('categoryId'));
 
         $item = null;
         if (isset($args[$this->config->get('id') . 'ItemId'])) {
-            $item = XeCategory::itemFind($args[$this->config->get('id') . 'ItemId']);
+            $item = CategoryItem::itemFind($args[$this->config->get('id') . 'ItemId']);
         }
 
         $this->addMergeData([
@@ -100,7 +99,7 @@ class DefaultSkin extends AbstractSkin
     {
         $item = null;
         if (isset($args[$this->config->get('id') . 'ItemId'])) {
-            $item = XeCategory::itemFind($args[$this->config->get('id') . 'ItemId']);
+            $item = CategoryItem::itemFind($args[$this->config->get('id') . 'ItemId']);
         }
 
         $this->addMergeData([
@@ -119,11 +118,12 @@ class DefaultSkin extends AbstractSkin
      */
     public function search(array $args)
     {
-        $category = XeCategory::find($this->config->get('categoryId'));
+        $category = Category::find($this->config->get('categoryId'));
 
         $item = null;
+
         if (isset($args[$this->config->get('id') . 'ItemId'])) {
-            $item = XeCategory::itemFind($args[$this->config->get('id') . 'ItemId']);
+            $item = CategoryItem::itemFind($args[$this->config->get('id') . 'ItemId']);
         }
 
         $this->addMergeData([
@@ -133,113 +133,6 @@ class DefaultSkin extends AbstractSkin
 
         return parent::search($args);
     }
-
-//    /**
-//     * @param ConfigEntity|null $config
-//     * @param string $view
-//     * @return mixed
-//     */
-//    public function settings(ConfigEntity $config = null, $view = 'dynamicField/category/default/createSkin')
-//    {
-//        return View::make($view, ['config' => $config,])->render();
-//    }
-
-//    /**
-//     * @param array $inputs
-//     * @param string $view
-//     * @return mixed
-//     */
-//    public function create(array $inputs, $view = 'dynamicField/category/default/create')
-//    {
-//        $config = $this->config;
-//        $category = Category::find($config->get('categoryId'));
-//        $items = $category->items;
-//
-//        return View::make($view, [
-//            'config' => $config,
-//            'items' => $items,
-//        ])->render();
-//    }
-
-//    /**
-//     * @param array $args
-//     * @param string $view
-//     * @return mixed
-//     */
-//    public function edit(array $args, $view = 'dynamicField/category/default/edit')
-//    {
-//        $config = $this->config;
-//        $category = Category::find($config->get('categoryId'));
-//        $items = $category->items;
-//
-//        $itemId = '';
-//        $item = '';
-//        if (isset($args[$config->get('id') . 'ItemId'])) {
-//            $itemId = $args[$config->get('id') . 'ItemId'];
-//            $item = CategoryItem::find($itemId);
-//        }
-//
-//        return View::make($view, [
-//            'config' => $config,
-//            'items' => $items,
-//            'itemId' => $itemId,
-//            'item' => $item,
-//        ])->render();
-//    }
-//
-//    /**
-//     * @param array $args
-//     * @param string $view
-//     * @return mixed
-//     */
-//    public function show(array $args, $view = 'dynamicField/category/default/show')
-//    {
-//        $config = $this->config;
-//        $item = '';
-//        if (isset($args[$config->get('id') . 'ItemId'])) {
-//            $itemId = $args[$config->get('id') . 'ItemId'];
-//            $item = CategoryItem::find($itemId);
-//        }
-//
-//        return View::make($view, [
-//            'config' => $config,
-//            'item' => $item,
-//        ])->render();
-//    }
-//
-//    /**
-//     * get search
-//     *
-//     * @param array $inputs
-//     * @param string $view
-//     * @return string
-//     */
-//    public function search(array $inputs, $view = 'dynamicField/category/default/search')
-//    {
-//        $config = $this->config;
-//        if ($config->get('searchable') !== true) {
-//            return '';
-//        }
-//
-//        $category = Category::find($config->get('categoryId'));
-//        $items = $category->items;
-//
-//        $key = $config->get('id').'ItemId';
-//
-//        $itemId = '';
-//        $item = '';
-//        if (isset($inputs[$key])) {
-//            $itemId = $inputs[$key];
-//            $item = CategoryItem::find($itemId);
-//        }
-
-//        return View::make($view, [
-//            'config' => $config,
-//            'items' => $items,
-//            'itemId' => $itemId,
-//            'item' => $item,
-//        ])->render();
-//    }
 
     /**
      * @param string $name
@@ -252,7 +145,7 @@ class DefaultSkin extends AbstractSkin
             return null;
         }
 
-        return xe_trans(XeCategory::itemFind($args[$key])->word);
+        return xe_trans(CategoryItem::itemFind($args[$key])->word);
     }
 
 }

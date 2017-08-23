@@ -29,7 +29,6 @@ use Xpressengine\Routing\Repositories\MemoryDecorator;
 use Xpressengine\Routing\RouteCollection;
 use Xpressengine\Routing\RouteRepository;
 use Xpressengine\Routing\UriValidator;
-use Xpressengine\Support\LaravelCache;
 
 /**
  * Routing Service Provider
@@ -69,7 +68,7 @@ class RoutingServiceProvider extends ServiceProvider
                 $repo = new DatabaseRouteRepository($app['config'], InstanceRoute::class);
 
                 if (env('APP_DEBUG') != true) {
-                    $repo = new CacheDecorator($repo, new LaravelCache($app['cache.store']));
+                    $repo = new CacheDecorator($repo, $app['cache.store']);
                 }
 
                 return new MemoryDecorator($repo);

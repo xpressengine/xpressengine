@@ -17,6 +17,7 @@ class FilesystemHandlerTest extends \PHPUnit_Framework_TestCase
         $instance = new FilesystemHandler($filesystem);
 
         $mockFile = m::mock('Xpressengine\Storage\File');
+        $mockFile->shouldReceive('hasMacro')->andReturn(false);
         $mockFile->shouldReceive('getAttribute')->once()->with('disk')->andReturn('local');
         $mockFile->shouldReceive('getPathname')->andReturn('attached/filenamestring');
 
@@ -52,6 +53,7 @@ class FilesystemHandlerTest extends \PHPUnit_Framework_TestCase
 
 
         $mockFile = m::mock('Xpressengine\Storage\File');
+        $mockFile->shouldReceive('hasMacro')->andReturn(false);
         $mockFile->shouldReceive('getAttribute')->with('disk')->andReturn('local');
         $mockFile->shouldReceive('getPathname')->andReturn('attached/filenamestring');
 
@@ -76,6 +78,7 @@ class FilesystemHandlerTest extends \PHPUnit_Framework_TestCase
         $instance = new FilesystemHandler($filesystem);
 
         $mockFile = m::mock('Xpressengine\Storage\File');
+        $mockFile->shouldReceive('hasMacro')->andReturn(false);
         $mockFile->shouldReceive('getAttribute')->once()->with('disk')->andReturn('local');
         $mockFile->shouldReceive('getPathname')->andReturn('attached/filenamestring');
 

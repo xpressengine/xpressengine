@@ -32,14 +32,50 @@ use Xpressengine\Translation\Loaders\LoaderInterface;
  */
 class Translator extends NamespacedItemResolver implements TranslatorInterface
 {
+    /**
+     * @var array
+     */
     protected $locales = [];
+
+    /**
+     * @var array
+     */
     protected $texts = [];
+
+    /**
+     * @var Keygen
+     */
     protected $keyGen;
+
+    /**
+     * @var TransCachedDatabase
+     */
     protected $cachedDb;
+
+    /**
+     * @var LoaderInterface
+     */
     protected $fileLoader;
+
+    /**
+     * @var LoaderInterface
+     */
     protected $urlLoader;
+
+    /**
+     * @var string
+     */
     protected $userKeyPrefix = 'user';
+
+    /**
+     * @var string
+     */
     protected $preprocessorProtocol = 'xe_lang_preprocessor://';
+
+    /**
+     * @var array
+     */
+    protected static $aliases = [];
 
     /**
      * @param array               $config     설정
@@ -278,6 +314,7 @@ class Translator extends NamespacedItemResolver implements TranslatorInterface
      */
     protected function getLine($namespace, $item, $locale, array $replace)
     {
+        $namespace = $this->getOriginNamespace($namespace);
         $line = $this->cachedDb->getLine($namespace, $item, $locale);
 
         return $this->makeReplacements($line, $replace);
@@ -468,5 +505,64 @@ class Translator extends NamespacedItemResolver implements TranslatorInterface
         }
 
         return $values;
+    }
+
+    /**
+     * alias namespace 를 등록합니다
+     *
+     * @param string $origin origin namespace
+     * @param string $alias  alias namespace
+     * @return void
+     */
+    public static function alias($origin, $alias)
+    {
+        static::$aliases[$alias] = $origin;
+    }
+
+    /**
+     * 주어진 namespace 의 원래 이름을 반환합니다
+     *
+     * @param string $namespace namespace
+     * @return string
+     */
+    protected function getOriginNamespace($namespace)
+    {
+        return isset(static::$aliases[$namespace]) ? static::$aliases[$namespace] : $namespace;
+    }
+
+    /**
+     * Import laravel language data
+     *
+     * @param string $path lang path
+     * @return void
+     */
+    public function importLaravel($path)
+    {
+        $dir = dir($path);
+        $langData = new LaravelLangData();
+        while ($entry = $dir->read()) {
+            if (in_array($entry, ['vendor', '.', '..']) || !is_dir($path . DIRECTORY_SEPARATOR . $entry)) {
+                continue;
+            }
+
+            $langData->setLocale($entry);
+            $data = [];
+
+            $localePath = $path . DIRECTORY_SEPARATOR . $entry;
+            $localeDir = dir($localePath);
+            while ($groupFile = $localeDir->read()) {
+                $pathname = $localePath . DIRECTORY_SEPARATOR . $groupFile;
+                if (is_dir($pathname) || !preg_match('#\.(php)$#i', $groupFile)) {
+                    continue;
+                }
+                $group = substr($groupFile, 0, -4);
+
+                $data[$group] = require $pathname;
+            }
+
+            $langData->setData($data);
+        }
+
+        $this->putLangData($this->getLaravelNamespace(), $langData);
     }
 }

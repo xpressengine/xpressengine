@@ -141,6 +141,15 @@ abstract class AbstractPlugin
      *
      * @return void
      */
+    public function register()
+    {
+    }
+
+    /**
+     * 이 메소드는 활성화(activate) 된 플러그인이 부트될 때 항상 실행된다.
+     *
+     * @return void
+     */
     abstract public function boot();
 
     /**
@@ -152,20 +161,6 @@ abstract class AbstractPlugin
     public function getSettingsURI()
     {
         return null;
-    }
-
-    /**
-     * 해당 플러그인의 설치 경로를 반환한다.
-     * path가 주어질 경우, 주어진 path정보를 추가하여 반환한다.
-     *
-     * @param string $path path
-     *
-     * @return string
-     * @deprecated use path() instead
-     */
-    public static function getPath($path = '')
-    {
-        return static::path($path);
     }
 
     /**

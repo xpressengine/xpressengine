@@ -14,7 +14,9 @@
 
 namespace Xpressengine\Database\Eloquent;
 
+use Closure;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Xpressengine\Database\DynamicQuery;
 use Illuminate\Database\ConnectionResolverInterface as Resolver;
 use Xpressengine\Database\Exceptions\KeyGeneratorNotFoundException;
@@ -49,6 +51,13 @@ abstract class DynamicModel extends Model
      * @var Resolver
      */
     protected static $resolver;
+
+    /**
+     * The registered macros.
+     *
+     * @var array
+     */
+    protected static $macros = [];
 
     /**
      * @var array proxy options for database proxy
@@ -300,5 +309,91 @@ abstract class DynamicModel extends Model
         }
 
         return parent::save($options);
+    }
+
+    /**
+     * Register a custom macro.
+     *
+     * @param string   $name  macro name
+     * @param callable $macro callable
+     * @return void
+     */
+    public static function macro($name, callable $macro)
+    {
+        array_set(static::$macros, static::class . '.' . $name, $macro);
+    }
+
+    /**
+     * Checks if macro is registered.
+     *
+     * @param string $name macro name
+     * @return bool
+     */
+    public static function hasMacro($name)
+    {
+        return array_get(static::$macros, static::class . '.' . $name);
+    }
+
+    /**
+     * call macro
+     * @param string $name       macro name
+     * @param array  $parameters parameters
+     * @return mixed
+     */
+    public function callMacro($name, $parameters = [])
+    {
+        $macro = array_get(static::$macros, static::class . '.' . $name);
+        if ($macro instanceof Closure) {
+            return call_user_func_array($macro->bindTo($this, get_class($this)), $parameters);
+        } else {
+            return call_user_func_array($macro, $parameters);
+        }
+    }
+
+    /**
+     * get macro value
+     *
+     * @param string $name macro name
+     * @return mixed
+     */
+    public function getMacroValue($name)
+    {
+        $result = $this->callMacro($name);
+        if ($result instanceof Relation) {
+            $result = $result->getResults();
+        }
+
+        return $result;
+    }
+
+    /**
+     * Handle dynamic method calls into the model.
+     *
+     * @param string $method     method
+     * @param array  $parameters parameters
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+        if (static::hasMacro($method)) {
+            return $this->callMacro($method, $parameters);
+        }
+
+        return parent::__call($method, $parameters);
+    }
+
+    /**
+     * Dynamically retrieve attributes on the model.
+     *
+     * @param string $key key
+     * @return mixed
+     */
+    public function __get($key)
+    {
+        if (static::hasMacro($key)) {
+            return $this->getMacroValue($key);
+        }
+
+        return parent::__get($key);
     }
 }

@@ -17,18 +17,18 @@
         var a = this.serializeArray();
         $.each(a, function () {
             if (o[this.name]) {
-                if (!o[this.name].push) {
-                    o[this.name] = [o[this.name]];
-                }
+              if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+              }
 
-                o[this.name].push(this.value || '');
+              o[this.name].push(this.value || '');
             } else {
-                o[this.name] = this.value || '';
+              o[this.name] = this.value || '';
             }
-        });
+          });
 
         return o;
-    };
+      };
 
     var _applyPlugins = function () {
 
@@ -45,21 +45,21 @@
                     $('.widget-form').empty();
 
                     if (widget) {
-                        XE.page(url + '?widget=' + widget, '.widget-skins');
+                      XE.page(url + '?widget=' + widget, '.widget-skins');
                     } else {
-                        $('.widget-skins').empty();
-                        $('.__xe_widget_code').val('');
+                      $('.widget-skins').empty();
+                      $('.__xe_widget_code').val('');
                     }
-                });
+                  });
 
                 _this.on('change', selectWidgetSkin, function () {
                     var widget = this.value;
 
                     if (widget !== 'select-skin') {
-                        var url = $(this).find('option:selected').data('url');
-                        XE.page(url, '.widget-form');
+                      var url = $(this).find('option:selected').data('url');
+                      XE.page(url, '.widget-form');
                     }
-                });
+                  });
 
                 _this.on('click', setupCode, function () {
                     var code = $(widgetCodeSel).val();
@@ -69,51 +69,51 @@
                         url: url,
                         target: '.widget-inputs',
                         code: code,
-                    });
-                });
+                      });
+                  });
 
                 _this.on('click', generateCode, function () {
                     WidgetCode.generate({
                         widgetForm: '#widgetForm',
                         skinForm: '#skinForm',
-                    }, cb);
-                });
+                      }, cb);
+                  });
 
                 isBinding = true;
-            };
+              };
 
             if (!isBinding) {
-                _bindEvents();
+              _bindEvents();
             }
 
             switch (typeof opt) {
-                case 'string':
+            case 'string':
 
-                    //switch
-                    switch (opt) {
-                        case 'code':
-                            return _this.find(widgetCodeSel).val();
-                            break;
+              //switch
+              switch (opt) {
+              case 'code':
+                return _this.find(widgetCodeSel).val();
+              break;
 
-                        case 'generate':
-                            WidgetCode.generate({
-                                widgetForm: widgetForm,
-                                skinForm: skinForm,
-                            }, cb);
-                            break;
-
-                    }
-
-                    break;
+              case 'generate':
+                WidgetCode.generate({
+                    widgetForm: widgetForm,
+                    skinForm: skinForm,
+                  }, cb);
+              break;
 
             }
+
+            break;
+
+          }
 
             this.generate = function (cb) {
                 WidgetCode.generate({
                     widgetForm: widgetForm,
                     skinForm: skinForm,
-                }, cb);
-            };
+                  }, cb);
+              };
 
             this.reset = function (code, callback) {
                 WidgetCode.reset({
@@ -121,12 +121,12 @@
                     code: code,
                     target: widgetInputs,
                     callback: callback,
-                });
-            };
+                  });
+              };
 
             return this;
-        };
-    };
+          };
+      };
 
     var WidgetCode = (function () {
         return {
@@ -152,18 +152,18 @@
                         $('.__xe_widget_code').val(data.code);
 
                         if (cb) {
-                            cb(data);
+                          cb(data);
                         }
 
                         $('.widget-form').empty();
                         $(selectWidget).find('option:eq(0)').prop('selected', 'selected').trigger('change');
-                    },
+                      },
 
                     error: function (data) {
                         XE.toast(data.type, data.message);
-                    },
-                });
-            },
+                      },
+                  });
+              },
             /**
              * @param {object} options
              * <pre>
@@ -182,10 +182,10 @@
                         type: 'post',
                         data: {
                             code: code,
-                        },
-                    }, options.callback);
-                });
-            },
+                          },
+                      }, options.callback);
+                  });
+              },
 
             init: function () {
                 _this = this;
@@ -193,8 +193,8 @@
                 _applyPlugins();
 
                 return this;
-            },
-        };
-    })().init();
+              },
+          };
+      })().init();
 
-})(window, jQuery);
+  })(window, jQuery);

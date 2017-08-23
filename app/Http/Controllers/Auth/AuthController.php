@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Controller;
 use Exception;
-use Illuminate\Contracts\Auth\Guard;
+use Xpressengine\User\Guard;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Http\Request;
@@ -12,6 +12,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use XeDB;
 use XePresenter;
 use XeTheme;
+use Xpressengine\Theme\ThemeHandler;
 use Xpressengine\User\EmailBrokerInterface;
 use Xpressengine\User\Exceptions\InvalidConfirmationCodeException;
 use Xpressengine\User\Exceptions\PendingEmailNotExistsException;
@@ -58,8 +59,8 @@ class AuthController extends Controller
         XeTheme::selectSiteTheme();
         XePresenter::setSkinTargetId('user/auth');
 
-        $this->middleware('auth', ['only' => ['getConfirm', 'getLogout']]);
-        $this->middleware('guest', ['except' => ['getConfirm', 'getLogout']]);
+        $this->middleware('auth', ['only' => ['getConfirm', 'getLogout', 'getAdminAuth', 'postAdminAuth']]);
+        $this->middleware('guest', ['except' => ['getConfirm', 'getLogout', 'getAdminAuth', 'postAdminAuth']]);
     }
 
     public function getAgreement(){
@@ -209,6 +210,40 @@ class AuthController extends Controller
         $this->auth->logout();
 
         return redirect(property_exists($this, 'redirectAfterLogout') ? $this->redirectAfterLogout : '/');
+    }
+
+    /**
+     * getAdminAuth
+     *
+     * @param ThemeHandler $themeHandler
+     * @param UrlGenerator $urlGenerator
+     * @param Request      $request
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     */
+    public function getAdminAuth(ThemeHandler $themeHandler, UrlGenerator $urlGenerator, Request $request)
+    {
+        $themeHandler->selectBlankTheme();
+
+        $redirectUrl = $this->redirectPath = $request->get('redirectUrl', $urlGenerator->previous());
+
+        return \XePresenter::make('admin', compact('redirectUrl'));
+    }
+
+    public function postAdminAuth(Request $request)
+    {
+        $this->validate($request, [
+            'password' => 'required'
+        ]);
+
+        $credentials = $request->only('password');
+
+        if ($this->auth->attemptAdminAuth($credentials)) {
+            $redirectUrl = $request->get('redirectUrl');
+            return redirect()->intended($redirectUrl);
+        }
+
+        return redirect()->back()->with('alert', ['type' => 'failed', 'message' => '입력하신 암호가 틀렸습니다.']);
     }
 
     /**

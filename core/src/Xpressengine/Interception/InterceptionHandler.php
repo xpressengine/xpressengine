@@ -13,6 +13,10 @@
  */
 namespace Xpressengine\Interception;
 
+use Xpressengine\Interception\Proxy\Loader\Loader;
+use Xpressengine\Interception\Proxy\Pass\Pass;
+use Xpressengine\Interception\Proxy\ProxyGenerator;
+
 /**
  * 이 라이브러리는 AOP(aspect-oriented programming)을 구현한 라이브러리이며 이 클래스는 프로그램 내에서
  * AOP를 관리하는 역할을 한다.
@@ -23,19 +27,6 @@ namespace Xpressengine\Interception;
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
- */
-use Xpressengine\Interception\Proxy\Loader\Loader;
-use Xpressengine\Interception\Proxy\Pass\Pass;
-use Xpressengine\Interception\Proxy\ProxyGenerator;
-
-/**
- * @category    Interception
- * @package     Xpressengine\Interception
- * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link        https://xpressengine.io
- * @description
  */
 class InterceptionHandler
 {

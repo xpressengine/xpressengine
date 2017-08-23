@@ -1253,8 +1253,8 @@ return [
         'en' => 'Pending Email'
     ],
     'checkEmailForConfirmCode' => [
-        'ko' => '인증코드를 확인하려면 <span class="txt_gray">:email</span>에서 이메일을 확인해 주세요.',
-        'en' => 'Check your confirm code in <span class="txt_gray">:email</span>.'
+        'ko' => '인증코드를 확인하려면 <span class="text_gray">:email</span>에서 이메일을 확인해 주세요.',
+        'en' => 'Check your confirm code in <span class="text_gray">:email</span>.'
     ],
     'confirmation' => [
         'ko' => '인증',
@@ -1950,6 +1950,10 @@ return [
         'ko' => '콤마(,)로 여러 글꼴을 지정할 수 있습니다.',
         'en' => 'Fonts are separated by a comma(,).',
     ],
+    'explainStylesheet' => [
+        'ko' => '에디터에 적용할 css 파일 경로를 입력하세요.',
+        'en' => 'Input the css file path for editor.',
+    ],
     'htmlEditPermission' => [
         'ko' => 'HTML 편집 권한',
         'en' => 'HTML permission',
@@ -2178,5 +2182,14 @@ return [
     'userNotFound' => [
         'ko' => '해당 회원을 찾을 수 없습니다.',
         'en' => 'User not found.',
+    ],
+    'msgAdminAuth' => [
+        'ko' => '요청하신 페이지에 접근하기 위해서는 별도의 관리자 암호를 입력하셔야 합니다.',
+    ],
+    'msgAdminAuthDetail' => [
+        'ko' => '권한을 가진 관리자일지라도 보안상 중요한 페이지에 접근하기 위해서는 별도의 관리자 암호를 입력하셔야 합니다. 관리자 암호는 사이트 최고 관리자에게 문의하십시오.',
+    ],
+    'adminLog' => [
+        'ko' => '관리자 접근 로그',
     ],
 ];

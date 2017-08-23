@@ -45,12 +45,17 @@ trait PermissionSupport
 
         $arguments = [];
         foreach ($abilities as $ability) {
-            $arguments[$ability] = [
-                'mode' => $mode($ability),
+            $argument = [
                 'grant' => $permission[$ability],
                 'title' => $ability,
                 'groups' => $groups,
             ];
+
+            if ($permission->getParent()) {
+                $argument = array_merge($argument, ['mode' => $mode($ability)]);
+            }
+
+            $arguments[$ability] = $argument;
         }
 
         return $arguments;

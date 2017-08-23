@@ -55,11 +55,26 @@ if (typeof define === 'function' && define.amd) {
     },
   };
 
-  exports.toast = function (type, message) {
-    this.toast.fn.add(type, message);
+  exports.toast = function (type, message, pos) {
+    var position = '';
+
+    if (navigator.userAgent.toLowerCase().indexOf('mobile') != -1) {
+      if (pos && pos.indexOf('top') != -1) {
+        position = 'top';
+      } else {
+        position = 'bottom';
+      }
+    } else {
+      position = pos || 'bottom';
+
+    }
+
+    this.toast.fn.add(type, message, position);
   };
 
   var $toastBox = null;
+  var toastBoxMap = {};
+
   exports.toast.fn = exports.toast.prototype = {
     constructor: exports.toast,
     options: exports.options.toast,
@@ -68,12 +83,12 @@ if (typeof define === 'function' && define.amd) {
       return type === undefined ? 'xe-danger' : type;
     },
 
-    add: function (type, message) {
-      exports.toast.fn.create(type, message);
+    add: function (type, message, pos) {
+      exports.toast.fn.create(type, message, pos);
       return this;
     },
 
-    create: function (type, message) {
+    create: function (type, message, pos) {
       var expireTime = 0;
       var type = this.options.classSet[type] || 'xe-danger';
 
@@ -85,7 +100,12 @@ if (typeof define === 'function' && define.amd) {
       $alert.attr('data-expire-time', expireTime).addClass(type).find('.message').remove();
       $alert.append(message);
 
-      exports.toast.fn.container().append($alert);
+      if (pos && pos.indexOf('top') != -1) {
+        exports.toast.fn.container(pos).prepend($alert);
+      } else {
+        exports.toast.fn.container(pos).append($alert);
+      }
+
       this.show($alert);
     },
 
@@ -99,13 +119,88 @@ if (typeof define === 'function' && define.amd) {
       });
     },
 
-    container: function () {
-      if ($toastBox != null) {
-        return $toastBox;
+    container: function (pos) {
+      if (toastBoxMap.hasOwnProperty(pos)) {
+        return toastBoxMap[pos];
+      }
+
+      var cssJSON = {};
+      var direction = 'up';
+
+      if (!pos) {
+        pos = 'bottom';
+      }
+
+      switch (pos) {
+        case 'top':
+          $.extend(cssJSON, {
+            top: 0,
+            bottom: 'initial',
+            margin: '0 auto',
+          });
+          break;
+
+        case 'topLeft':
+          $.extend(cssJSON, {
+            margin: 0,
+            top: 0,
+            left: 0,
+            right: 'initial',
+            bottom: 'initial',
+            minWidth: '50%',
+          });
+          break;
+
+        case 'topRight':
+          $.extend(cssJSON, {
+            margin: 0,
+            top: 0,
+            right: 0,
+            left: 'initial',
+            bottom: 'initial',
+            minWidth: '50%',
+          });
+          break;
+
+        case 'bottom':
+          $.extend(cssJSON, {
+            bottom: 0,
+            left: 0,
+            right: 0,
+            top: 'initial',
+            margin: '0 auto',
+          });
+          break;
+
+        case 'bottomLeft':
+          $.extend(cssJSON, {
+            margin: 0,
+            bottom: 0,
+            left: 0,
+            right: 'initial',
+            top: 'initial',
+            minWidth: '50%',
+          });
+          break;
+
+        case 'bottomRight':
+          $.extend(cssJSON, {
+            margin: 0,
+            bottom: 0,
+            left: 'initial',
+            right: 0,
+            top: 'initial',
+            minWidth: '50%',
+          });
+          break;
       }
 
       $toastBox = $(exports.options.toastContainer.boxTemplate);
-      var container = $(exports.options.toastContainer.template).append($toastBox);
+
+      var container = $(exports.options.toastContainer.template).append($toastBox).css(cssJSON);
+
+      toastBoxMap[pos] = $toastBox;
+
       $('body').append(container);
 
       container.on('click', 'button.__xe_close', function (e) {
@@ -113,17 +208,24 @@ if (typeof define === 'function' && define.amd) {
         e.preventDefault();
       });
 
-      setInterval(function () {
-        var time = parseInt(new Date().getTime() / 1000);
-        $toastBox
-          .find('div.xe-alert')
-          .each(function () {
-            var expireTime = parseInt($(this).data('expire-time'));
-            if (expireTime != 0 && time > expireTime) {
-              exports.toast.fn.destroy($(this));
-            }
-          });
-      }, 1000);
+      var timeChecker = function ($box) {
+        var interval;
+        return function () {
+          interval = setInterval(function () {
+            var time = parseInt(new Date().getTime() / 1000);
+            $box
+              .find('div.xe-alert')
+              .each(function () {
+                var expireTime = parseInt($(this).data('expire-time'));
+                if (expireTime != 0 && time > expireTime) {
+                  exports.toast.fn.destroy($(this));
+                }
+              });
+          }, 1000);
+        };
+      };
+
+      timeChecker($toastBox)();
 
       return $toastBox;
     },

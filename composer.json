@@ -23,7 +23,6 @@
         "xpressengine/installer": "dev-develop",
         "laravel/framework": "5.1.*",
         "composer/composer": "1.4.1",
-        "wittiws/phpquery": "dev-master",
         "james-heinrich/getid3": "1.9.*",
         "ramsey/uuid": "2.8.*",
         "google/recaptcha": "~1.1",
@@ -36,7 +35,7 @@
         "fzaninotto/faker": "~1.4",
         "phpunit/phpunit": "~4.0",
         "mockery/mockery": "0.9.*",
-        "barryvdh/laravel-debugbar": "^2.2"
+        "barryvdh/laravel-debugbar": "~2.3.0"
     },
     "repositories": [
         {

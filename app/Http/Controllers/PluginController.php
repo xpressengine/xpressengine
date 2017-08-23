@@ -68,11 +68,13 @@ class PluginController extends Controller
 
         $componentTypes = $this->getComponentTypes();
 
+        $unresolvedComponents = $handler->getUnresolvedComponents();
+
         if ($installType === 'fetched') {
             $operation = $handler->getOperation($writer);
-            return XePresenter::make('index.fetched', compact('plugins', 'componentTypes', 'operation', 'installType'));
+            return XePresenter::make('index.fetched', compact('plugins', 'componentTypes', 'operation', 'installType', 'unresolvedComponents'));
         } else {
-            return XePresenter::make('index.self-installed', compact('plugins', 'componentTypes', 'installType'));
+            return XePresenter::make('index.self-installed', compact('plugins', 'componentTypes', 'installType', 'unresolvedComponents'));
         }
     }
 
@@ -282,6 +284,7 @@ class PluginController extends Controller
         }
 
         $this->reserveOperation(
+            $handler,
             $writer,
             $timeLimit,
             $packages,
@@ -308,7 +311,8 @@ class PluginController extends Controller
         PluginProvider $provider,
         ComposerFileWriter $writer,
         SessionManager $session
-    ) {
+    )
+    {
 
         $operation = $handler->getOperation($writer);
 
@@ -340,7 +344,7 @@ class PluginController extends Controller
             $packages[] = $name;
         }
         $writer->write();
-        $this->reserveOperation($writer, $timeLimit, $packages);
+        $this->reserveOperation($handler, $writer, $timeLimit, $packages);
 
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => '새로운 플러그인을 설치중입니다.']);
     }
@@ -353,14 +357,13 @@ class PluginController extends Controller
      * @param array              $packages
      * @param null               $callback
      */
-    protected function reserveOperation(ComposerFileWriter $writer, $timeLimit, $packages, $callback = null)
+    protected function reserveOperation(PluginHandler $handler, ComposerFileWriter $writer, $timeLimit, $packages, $callback = null)
     {
         $this->prepareComposer($timeLimit);
 
         /** @var \Illuminate\Foundation\Application $app */
         app()->terminating(
-            function () use ($writer, $packages, $callback) {
-
+            function () use ($handler, $writer, $packages, $callback) {
                 $pid = getmypid();
                 Log::info("[plugin operation] start running composer run [pid=$pid]");
 
@@ -393,6 +396,8 @@ class PluginController extends Controller
                     define('__XE_PLUGIN_MODE__', true);
                 }
                 $result = $application->run($input, $output);
+
+                $handler->refreshPlugins();
 
                 if (is_callable($callback)) {
                     $callback($result);
@@ -514,7 +519,9 @@ class PluginController extends Controller
 
         $provider->sync($plugin);
 
-        return XePresenter::make('show', compact('plugin', 'componentTypes'));
+        $unresolvedComponents = $handler->getUnresolvedComponents($pluginId);
+
+        return XePresenter::make('show', compact('plugin', 'componentTypes', 'unresolvedComponents'));
     }
 
     public function putActivatePlugin($pluginId, PluginHandler $handler, InterceptionHandler $interceptionHandler)

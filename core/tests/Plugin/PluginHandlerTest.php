@@ -32,7 +32,6 @@ class PluginHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAllPlugins()
     {
-
         $handler = $this->getHandler();
         $this->assertInstanceOf(PluginCollection::class, $handler->getAllPlugins());
 
@@ -114,9 +113,11 @@ class PluginHandlerTest extends \PHPUnit_Framework_TestCase
         $plugins = $this->makeCollection();
 
         $plugin = Mockery::mock('\Xpressengine\Plugin\AbstractPlugin');
+        $plugin->shouldReceive('register')->withNoArgs()->andReturnNull();
+
 
         $entity = $this->makeEntity();
-        $entity->shouldReceive('getStatus')->once()->withNoArgs()->andReturn(PluginHandler::STATUS_DEACTIVATED);
+        $entity->shouldReceive('getStatus')->twice()->withNoArgs()->andReturn(PluginHandler::STATUS_DEACTIVATED);
         $entity->shouldReceive('setStatus')->once()->withArgs(['activated'])->andReturnNull();
         $entity->shouldReceive('setInstalledVersion')->once()->with('1.0')->andReturnNull();
         $entity->shouldReceive('getObject')->withNoArgs()->andReturn($plugin);
@@ -125,10 +126,11 @@ class PluginHandlerTest extends \PHPUnit_Framework_TestCase
         $entity->shouldReceive('checkInstalled')->withNoArgs()->andReturn(true);
         $entity->shouldReceive('checkUpdated')->with('0.9')->andReturn(true);
         $entity->shouldReceive('activate')->with('0.9')->andReturn(true);
+        $entity->shouldReceive('getId')->withNoArgs()->andReturn($pluginId);
 
         $plugins->shouldReceive('get')->with($pluginId)->andReturn($entity);
 
-        $handler = $this->getHandler(null, $plugins);
+        $handler = $this->getHandler(null, $plugins, null, null, null);
         $config = $this->setConfig($handler);
         $config->shouldReceive('getVal')->with('plugin.list', [])->once()->andReturn([
            $pluginId => []
@@ -232,7 +234,8 @@ class PluginHandlerTest extends \PHPUnit_Framework_TestCase
     private function makeApp()
     {
         return Mockery::mock('\Illuminate\Foundation\Application', [
-            'singleton' => null
+            'singleton' => null,
+            'instance' => null,
         ]);
     }
 

@@ -413,7 +413,6 @@ $(function () {
         mailList: $this.find('.__xe_mailList'),
         addEmailBox: $this.find('.__xe_addEmailBox'),
         addBtn: $this.find('.__xe_addBtn'),
-        addCancelBtn: $this.find('.__xe_addCancelBtn'),
         addMessage: $this.find('.__xe_message'),
         addInput: $this.find('.__xe_addInput'),
         confirmEmailBox: $this.find('.__xe_confirmEmailBox'),

@@ -594,5 +594,9 @@ var Translator = (function (document, undefined) {
       _domains = [];
       this.locale = getCurrentLocale();
     },
+
+    hasMessage: function (id) {
+      return hasMessage(this.locale, 'messages', id);
+    },
   };
 })(document, undefined);

@@ -214,8 +214,6 @@
                 };
 
                 XE.pageModal('{{ route('settings.user.delete') }}', options);
-
-                console.log(userIds);
             }
         }
     })().init();

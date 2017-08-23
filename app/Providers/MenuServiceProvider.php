@@ -82,8 +82,6 @@ class MenuServiceProvider extends ServiceProvider
             }
             return $title;
         });
-
-        DirectLink::setValidation($this->app['validator']);
     }
 
     /**

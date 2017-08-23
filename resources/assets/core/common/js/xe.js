@@ -4,6 +4,7 @@ import Lang from './xe.lang';
 import Component from './xe.component';
 import Request from './xe.request';
 import window from 'window';
+import validator from 'validator';
 
 var XE = {
   ajax: ajax,
@@ -19,6 +20,7 @@ var XE = {
   getLocale: getLocale,
   getDefaultLocale: getDefaultLocale,
 
+  validator: validator,
   options: {},
 
   Lang: Lang,
@@ -69,12 +71,12 @@ function jsLoad(url) {
   DynamicLoadManager.jsLoad(url);
 }
 
-function toast(type, message) {
+function toast(type, message, pos) {
   if (type == '') {
     type = 'danger';
   }
 
-  griper.toast(type, message);
+  griper.toast(type, message, pos);
 }
 
 function toastByStatus(status, message) {

@@ -13,6 +13,14 @@ var Utils = (function (exports) {
       return $.inArray(mime, ['image/jpg', 'image/jpeg', 'image/png', 'image/gif']) === -1 ? false : true;
     },
 
+    isVideo: function (mime) {
+      return $.inArray(mime, ['video/mp4', 'video/webm', 'video/ogg']) === -1 ? false : true;
+    },
+
+    isAudio: function (mime) {
+      return $.inArray(mime, ['audio/mpeg', 'audio/ogg', 'audio/wav']) === -1 ? false : true;
+    },
+
     formatSizeUnits: function (bytes) {
       if (bytes >= 1073741824) {
         bytes = (bytes / 1073741824).toFixed(2) + 'GB';
@@ -26,6 +34,22 @@ var Utils = (function (exports) {
         bytes = bytes + 'byte';
       } else {
         bytes = '0MB';
+      }
+
+      return bytes;
+    },
+
+    sizeFormatToBytes: function (str) {
+      if (str.indexOf('GB') != -1) {
+        bytes = parseFloat(str) * 1024 * 1024 * 1024;
+      } else if (str.indexOf('MB') != -1) {
+        bytes = parseFloat(str) * 1024 * 1024;
+      } else if (str.indexOf('KB') != -1) {
+        bytes = parseFloat(str) * 1024;
+      } else if (str.indexOf('bytes') != -1) {
+        bytes = parseFloat(str);
+      } else if (str.indexOf('byte') != -1) {
+        bytes = parseFloat(str);
       }
 
       return bytes;
@@ -369,6 +393,44 @@ var Utils = (function (exports) {
       }
 
       return (date.getTime() / 1000);
+    },
+
+    addCommas: function (str) {
+      var parts = (str + '').split('.'),
+        main = parts[0],
+        len = main.length,
+        output = '',
+        first = main.charAt(0),
+        i;
+
+      if (str.split(',').length > 1) {
+        return str;
+      }
+
+      if (first === '-') {
+        main = main.slice(1);
+        len = main.length;
+      } else {
+        first = '';
+      }
+
+      i = len - 1;
+      while (i >= 0) {
+        output = main.charAt(i) + output;
+        if ((len - i) % 3 === 0 && i > 0) {
+          output = ',' + output;
+        }
+
+        --i;
+      }
+      // put sign back
+      output = first + output;
+      // put decimal part back
+      if (parts.length > 1) {
+        output += '.' + parts[1];
+      }
+
+      return output;
     },
 
   }.init();

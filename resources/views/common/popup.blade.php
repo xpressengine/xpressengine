@@ -6,7 +6,7 @@
 
     <!-- META -->
     <meta charset="utf-8">
-    <meta name="Generator" content="XpressEngine">
+    <meta name="Generator" content="XpressEngine 3">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     {!! XeFrontend::output('meta') !!}
 
@@ -20,6 +20,7 @@
     {!! XeFrontend::output('css') !!}
 
     <!-- JS at head.prepend -->
+    <script>var xeBaseURL = '{{  url() }}';</script>
     {!! XeFrontend::output('js', 'head.prepend') !!}
 
     <script type="text/javascript">
@@ -31,6 +32,7 @@
         XE.configure({
             locale: '{{ session()->get('locale') ?: app('xe.translator')->getLocale() }}',
             defaultLocale: '{{ app('xe.translator')->getLocale() }}',
+            fixedPrefix: '{{ app('config')['xe.routing.fixedPrefix'] }}',
             @if (in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER]))
                 managePrefix: '{{ app('config')['xe.routing.settingsPrefix'] }}'
             @endif

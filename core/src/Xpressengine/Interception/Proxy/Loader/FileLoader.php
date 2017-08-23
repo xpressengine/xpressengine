@@ -103,6 +103,7 @@ class FileLoader implements Loader
             return true;
         }
 
+        \Log::debug('proxy is expired > '.$proxyPath);
         return false;
     }
 
@@ -142,7 +143,7 @@ class FileLoader implements Loader
 
         foreach ($files as $file) {
             if (strpos($file, '.') !== 0) {
-                unlink($this->path.'/'.$file);
+                @unlink($this->path.'/'.$file);
             }
         }
     }

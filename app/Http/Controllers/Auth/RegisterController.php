@@ -10,6 +10,8 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use XeDB;
 use XePresenter;
 use XeTheme;
+use XeDynamicField;
+use XeFrontend;
 use Xpressengine\User\EmailBrokerInterface;
 use Xpressengine\User\EmailInterface;
 use Xpressengine\User\Models\User;
@@ -168,6 +170,25 @@ class RegisterController extends Controller
 
         $forms = $this->handler->getRegisterForms($token);
 
+        $rules = [
+            'email' => 'email',
+            'displayName' => 'required',
+            'password' => 'confirmed|password',
+            'agree' => 'required|accepted',
+            'register_token' => 'required'
+        ];
+
+        /** @var \Xpressengine\DynamicField\ConfigHandler $dynamicFieldConfigHandler */
+        $dynamicFieldConfigHandler = XeDynamicField::getConfigHandler();
+        $dynamicFieldConfigs = $dynamicFieldConfigHandler->gets('user');
+        /** @var \Xpressengine\Config\ConfigEntity $dynamicFieldConfig */
+        foreach ($dynamicFieldConfigs as $dynamicFieldConfig) {
+            /** @var \Xpressengine\DynamicField\AbstractType $type */
+            $rules = array_merge($rules, XeDynamicField::getRules($dynamicFieldConfig));
+        }
+
+        XeFrontend::rule('join', $rules);
+
         return \XePresenter::make('register.create', compact('config', 'forms', 'register_token'));
     }
 
@@ -237,15 +258,24 @@ class RegisterController extends Controller
 
         $this->addEmailRegister();
 
-        $this->validate(
-            $request, [
-                'email' => 'email',
-                'displayName' => 'required',
-                'password' => 'confirmed|password',
-                'agree' => 'required|accepted',
-                'register_token' => 'required'
-            ]
-        );
+        $rules = [
+            'email' => 'email',
+            'displayName' => 'required',
+            'password' => 'confirmed|password',
+            'agree' => 'required|accepted',
+            'register_token' => 'required'
+        ];
+
+        /** @var \Xpressengine\DynamicField\ConfigHandler $dynamicFieldConfigHandler */
+        $dynamicFieldConfigHandler = XeDynamicField::getConfigHandler();
+        $dynamicFieldConfigs = $dynamicFieldConfigHandler->gets('user');
+        /** @var \Xpressengine\Config\ConfigEntity $dynamicFieldConfig */
+        foreach ($dynamicFieldConfigs as $dynamicFieldConfig) {
+            /** @var \Xpressengine\DynamicField\AbstractType $type */
+            $rules = array_merge($rules, XeDynamicField::getRules($dynamicFieldConfig));
+        }
+
+        $this->validate($request, $rules);
 
         $tokenId = $request->get('register_token');
         $token = $tokenRepository->find($tokenId);
@@ -259,7 +289,7 @@ class RegisterController extends Controller
         // set default join group
         $config = app('xe.config')->get('user.join');
         $joinGroup = $config->get('joinGroup');
-        if($joinGroup !== null) {
+        if ($joinGroup !== null) {
             $userData['groupId'] = [$joinGroup];
         }
 

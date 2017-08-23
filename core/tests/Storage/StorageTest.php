@@ -13,8 +13,8 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
     public function testUploadReturnsFileInstanceWhenFileIsValid()
     {
-        list($repo, $handler, $auth, $keygen, $distributor, $temps) = $this->getMocks();
-        $instance = new Storage($repo, $handler, $auth, $keygen, $distributor, $temps);
+        list($repo, $handler, $auth, $keygen, $distributor, $temps, $response) = $this->getMocks();
+        $instance = new Storage($repo, $handler, $auth, $keygen, $distributor, $temps, $response);
 
         $mockFile = m::mock('Xpressengine\Storage\File');
 
@@ -63,8 +63,8 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
     public function testUploadThrownExceptionWhenFileIsInvalid()
     {
-        list($repo, $handler, $auth, $keygen, $distributor, $temps) = $this->getMocks();
-        $instance = new Storage($repo, $handler, $auth, $keygen, $distributor, $temps);
+        list($repo, $handler, $auth, $keygen, $distributor, $temps, $response) = $this->getMocks();
+        $instance = new Storage($repo, $handler, $auth, $keygen, $distributor, $temps, $response);
 
         $uploaded = m::mock('Symfony\Component\HttpFoundation\File\UploadedFile');
         $uploaded->shouldReceive('isValid')->andReturn(false);
@@ -82,8 +82,8 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
     public function testUploadThrownExceptionWhenWritingFail()
     {
-        list($repo, $handler, $auth, $keygen, $distributor, $temps) = $this->getMocks();
-        $instance = new Storage($repo, $handler, $auth, $keygen, $distributor, $temps);
+        list($repo, $handler, $auth, $keygen, $distributor, $temps, $response) = $this->getMocks();
+        $instance = new Storage($repo, $handler, $auth, $keygen, $distributor, $temps, $response);
 
         $resource = file_get_contents(__DIR__ . '/sample.png');
 
@@ -116,8 +116,8 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
     public function testCreate()
     {
-        list($repo, $handler, $auth, $keygen, $distributor, $temps) = $this->getMocks();
-        $instance = new Storage($repo, $handler, $auth, $keygen, $distributor, $temps);
+        list($repo, $handler, $auth, $keygen, $distributor, $temps, $response) = $this->getMocks();
+        $instance = new Storage($repo, $handler, $auth, $keygen, $distributor, $temps, $response);
 
         $mockFile = m::mock('Xpressengine\Storage\File');
 
@@ -158,8 +158,8 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
     public function testDownloadThrownExceptionWhenFileNotExists()
     {
-        list($repo, $handler, $auth, $keygen, $distributor, $temps) = $this->getMocks();
-        $instance = new Storage($repo, $handler, $auth, $keygen, $distributor, $temps);
+        list($repo, $handler, $auth, $keygen, $distributor, $temps, $response) = $this->getMocks();
+        $instance = new Storage($repo, $handler, $auth, $keygen, $distributor, $temps, $response);
 
         $mockFile = m::mock('Xpressengine\Storage\File');
 
@@ -175,14 +175,16 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
     public function testDelete()
     {
-        list($repo, $handler, $auth, $keygen, $distributor, $temps) = $this->getMocks();
-        $instance = new Storage($repo, $handler, $auth, $keygen, $distributor, $temps);
+        list($repo, $handler, $auth, $keygen, $distributor, $temps, $response) = $this->getMocks();
+        $instance = new Storage($repo, $handler, $auth, $keygen, $distributor, $temps, $response);
 
         $mockFile = m::mock('Xpressengine\Storage\File');
+        $mockFile->shouldReceive('hasMacro')->andReturn(false);
         $mockFile->shouldReceive('getAttribute')->with('id')->andReturn('foo');
         $mockFile->shouldReceive('getAttribute')->with('originId')->andReturnNull();
 
         $mockChild = m::mock('Xpressengine\Storage\File');
+        $mockChild->shouldReceive('hasMacro')->andReturn(false);
         $mockChild->shouldReceive('getAttribute')->with('id')->andReturn('bar');
         $mockChild->shouldReceive('getAttribute')->with('originId')->andReturn('foo');
 
@@ -212,8 +214,8 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
     public function testBind()
     {
-        list($repo, $handler, $auth, $keygen, $distributor, $temps) = $this->getMocks();
-        $instance = new Storage($repo, $handler, $auth, $keygen, $distributor, $temps);
+        list($repo, $handler, $auth, $keygen, $distributor, $temps, $response) = $this->getMocks();
+        $instance = new Storage($repo, $handler, $auth, $keygen, $distributor, $temps, $response);
 
         $mockFile = m::mock('Xpressengine\Storage\File')->shouldAllowMockingProtectedMethods();
         $mockConn = m::mock('stdClass');
@@ -235,8 +237,8 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
     public function testUnBindNotRemovedFileWhenFlagFalse()
     {
-        list($repo, $handler, $auth, $keygen, $distributor, $temps) = $this->getMocks();
-        $instance = new Storage($repo, $handler, $auth, $keygen, $distributor, $temps);
+        list($repo, $handler, $auth, $keygen, $distributor, $temps, $response) = $this->getMocks();
+        $instance = new Storage($repo, $handler, $auth, $keygen, $distributor, $temps, $response);
 
         $mockFile = m::mock('Xpressengine\Storage\File');
         $mockConn = m::mock('stdClass');
@@ -250,6 +252,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $mockConn->shouldReceive('where')->once()->with('fileableId', 'fileable-id')->andReturnSelf();
         $mockConn->shouldReceive('delete')->once()->andReturn(1);
 
+        $mockFile->shouldReceive('hasMacro')->andReturn(false);
         $mockFile->shouldReceive('getAttribute')->with('useCount')->andReturn(1);
         $repo->shouldReceive('decrement')->andReturn(true);
 
@@ -258,8 +261,8 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
     public function testUnBindWillRemovedFileWhenFlagTrue()
     {
-        list($repo, $handler, $auth, $keygen, $distributor, $temps) = $this->getMocks();
-        $instance = $this->getMock(Storage::class, ['delete'], [$repo, $handler, $auth, $keygen, $distributor, $temps]);
+        list($repo, $handler, $auth, $keygen, $distributor, $temps, $response) = $this->getMocks();
+        $instance = $this->getMock(Storage::class, ['delete'], [$repo, $handler, $auth, $keygen, $distributor, $temps, $response]);
 
         $mockFile = m::mock('Xpressengine\Storage\File');
         $mockConn = m::mock('stdClass');
@@ -273,6 +276,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $mockConn->shouldReceive('where')->once()->with('fileableId', 'fileable-id')->andReturnSelf();
         $mockConn->shouldReceive('delete')->once()->andReturn(1);
 
+        $mockFile->shouldReceive('hasMacro')->andReturn(false);
         $mockFile->shouldReceive('getAttribute')->with('useCount')->andReturn(1);
 
         $instance->expects($this->once())->method('delete')->with($mockFile)->willReturn(true);
@@ -289,6 +293,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             m::mock('Xpressengine\Keygen\Keygen'),
             m::mock('Xpressengine\Storage\Distributor'),
             m::mock('Xpressengine\Storage\TempFileCreator'),
+            m::mock('Illuminate\Contracts\Routing\ResponseFactory'),
         ];
     }
 }

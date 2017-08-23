@@ -74,15 +74,6 @@ class FormFile extends AbstractUIObject
         return parent::render();
     }
 
-    public static function boot()
-    {
-        // TODO: Implement boot() method.
-    }
-
-    public static function getSettingsURI()
-    {
-    }
-
     /**
      * loadFiles
      *

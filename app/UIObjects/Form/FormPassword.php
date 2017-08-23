@@ -8,56 +8,14 @@
 
 namespace App\UIObjects\Form;
 
-use PhpQuery\PhpQuery;
-use Xpressengine\UIObject\AbstractUIObject;
-
-class FormPassword extends AbstractUIObject
+class FormPassword extends FormText
 {
     protected static $id = 'uiobject/xpressengine@formPassword';
 
-    protected $template = '<div class="form-group">
-        <label for="" class="hidden"></label>
-        <input type="password" class="form-control" id="" placeholder="">
-        <p class="help-block"></p>
-    </div>';
-
     public function render()
     {
-        $args = $this->arguments;
-        PhpQuery::newDocument();
-        $this->markup = PhpQuery::pq($this->template);
-
-        $label = $this->markup['label'];
-        $input = $this->markup['input'];
-
-        foreach ($args as $key => $arg) {
-            switch ($key) {
-                case 'class':
-                    $input->addClass($arg);
-                    break;
-                case 'label':
-                    $label->removeClass('hidden')->html($arg);
-                    break;
-                case 'description':
-                    $this->markup['.help-block']->html(array_get($args, $key));
-                    break;
-                case 'id':
-                    $label->attr('for', $arg);
-                    // pass to default
-                default:
-                    $input->attr($key, $arg);
-                    break;
-            }
-        }
+        $this->arguments['type'] = 'password';
 
         return parent::render();
-    }
-
-    public static function boot()
-    {
-    }
-
-    public static function getSettingsURI()
-    {
     }
 }

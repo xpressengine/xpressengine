@@ -47,9 +47,6 @@
                         <div class="form-group">
                             <label for="item-url">
                                 Item URL
-                                @if( $menuType !== null && !$menuType::isRouteAble())
-                                    <small>ex) http://www.xpressengine.io</small>
-                                @endif
                             </label>
                             <div class="input-group">
                                 @if( $menuType !== null && $menuType::isRouteAble())
