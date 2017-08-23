@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import PermissionTagSuggestion from './PermissionTagSuggestion';
 import PermissionTag from './PermissionTag';
 
+/**@private*/
 const Keys = {
   ENTER: 13,
   TAB: 9,
@@ -101,7 +102,7 @@ export default createReactClass({
     }
   },
   /**
-   * 멤버를 AJAX요청하여 상태를 업데이트한다.
+   * suggestion을 AJAX요청하여 상태를 업데이트한다.
    * @memberof PermissionExclude
    * @param {string} keyword
    * */
@@ -245,7 +246,9 @@ export default createReactClass({
       selectionMode: true,
     });
   },
-
+  /**
+   * @memberof PermissionExclude
+   * */
   render: function () {
 
     var prefix = '@';

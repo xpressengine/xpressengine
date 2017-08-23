@@ -229,7 +229,24 @@
       getEditor: function (name) {
         return editorSet[name];
       },
-
+      /**
+       * @memberof XEeditor
+       * @prop {object} tools
+       * @prop {function} define
+       * <pre>
+       *   tool을 정의한다.
+       *
+       *   arguments
+       *   - obj : object
+       * </pre>
+       * @prop {function} get
+       * <pre>
+       *   tool을 리턴한다.
+       *
+       *   arguments
+       *   - id : string
+       * </pre>
+       * */
       tools: {
         define: function (obj) {
           if (Validation.isValidToolsObject(obj)) {

@@ -121,12 +121,6 @@ module.exports = (() => {
 
       return merged;
     },
-
-    'doc:test': () => {
-      return gulp.src('./resources/assets/core/test.js')
-      // return gulp.src('./resources/assets/core/common/js/xe.js')
-        .pipe(jsdoc());
-    }
   };
 
   return self;

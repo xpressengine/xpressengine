@@ -32,8 +32,6 @@ gulp.task('copy:assets', taskSettings['copy:assets']);
 gulp.task('assets:chunk', taskSettings['assets:chunk']);
 gulp.task('assets:tree', taskSettings['assets:tree']);
 
-gulp.task('doc:test', taskSettings['doc:test']);
-
 gulp.task('doc:core', taskSettings['doc:core']);
 // e: settings
 

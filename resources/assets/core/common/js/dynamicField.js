@@ -11,7 +11,13 @@ var DynamicField = function () {
   this.urls = {
     base: null,
   };
-  
+
+  /**
+   * DynamicField를 초기화 한다.
+   * @param {string} group
+   * @param {string} databaseName
+   * @param {object} urls
+   * */
   this.init = function (group, databaseName, urls) {
     this.group = group;
     this.databaseName = databaseName;
@@ -28,7 +34,9 @@ var DynamicField = function () {
       this.$container.$modal.xeModal('hide');
     };
   };
-
+  /**
+   * 이벤트 핸들러를 등록한다.
+   * */
   this.attachEvent = function () {
     var _this = this;
 
@@ -86,11 +94,18 @@ var DynamicField = function () {
     });
 
   };
-
+  /**
+   * container를 리턴한다.
+   * @param {jQuery} frm
+   * @return {jQuery}
+   * */
   this.getFormContainer = function (frm) {
     return frm.closest('.__xe_form_container');
   };
-
+  /**
+   * modal을 close한다.
+   * @param {jQuery} o
+   * */
   this.close = function (o) {
     var frm = $(o).closest('form');
 
@@ -98,7 +113,9 @@ var DynamicField = function () {
 
     this.$container.$modal.xeModal('hide');
   };
-
+  /**
+   * group 리스트를 요청한다.
+   * */
   this.getList = function () {
     var params = { group: this.group };
     var _this = this;
@@ -119,13 +136,19 @@ var DynamicField = function () {
       }
     });
   };
-
+  /**
+   * form을 복사하여 리턴한다.
+   * @return {jQuery} $form
+   * */
   this.formClone = function () {
     var $form = this.$container.$form.clone().removeClass('__xe_add_form');
     $form.show();
     return $form;
   };
-
+  /**
+   * 리스트 테이블에 row를 추가한다.
+   * @param {object} data
+   * */
   this.addrow = function (data) {
     var row = this.$container.find('.__xe_row').clone();
     row.removeClass('__xe_row');
@@ -146,11 +169,17 @@ var DynamicField = function () {
     }
 
   };
-
+  /**
+   * row를 삭제한다.
+   * @param {string} id
+   * */
   this.removeRow = function (id) {
     this.$container.find('.__xe_tbody').find('.__xe_row_' + id).remove();
   };
-
+  /**
+   * row를 수정한다.
+   * @param {jQuery} o
+   * */
   this.edit = function (o) {
     var tr = $(o).closest('tr');
     var id = tr.data('id');
@@ -196,7 +225,10 @@ var DynamicField = function () {
       },
     });
   };
-
+  /**
+   * 파라미터 boolean값이 true일 경우 true, false일 경우 false를 리턴한다
+   * @param {string|boolean} data
+   * */
   this.checkBox = function (data) {
     var checked = false;
     if (data == undefined) {
@@ -211,7 +243,10 @@ var DynamicField = function () {
 
     return checked;
   };
-
+  /**
+   * row 삭제 요청을 한다.
+   * @param {jQuery} o
+   * */
   this.destroy = function (o) {
     if (confirm('이동작은 되돌릴 수 없습니다. 계속하시겠습니까?') === false) {
       return;
@@ -239,7 +274,10 @@ var DynamicField = function () {
       },
     });
   };
-
+  /**
+   * 스킨 옵션을 요청한다.
+   * @param {jQuery} frm
+   * */
   this.getSkinOption = function (frm) {
     var params = frm.serialize();
     var _this = this;
@@ -260,7 +298,12 @@ var DynamicField = function () {
       },
     });
   };
-
+  /**
+   * 스킨옵션 selectbox를 구성한다.
+   * @param {jQuery} frm
+   * @param {object} skins
+   * @param {string} selected
+   * */
   this.skinOptions = function (frm, skins, selected) {
     var select = frm.find('[name="skinId"]');
     select.find('option').remove();
@@ -278,7 +321,10 @@ var DynamicField = function () {
 
     this.getAdditionalConfigure(frm);
   };
-
+  /**
+   * 필드마다 추가설정을 로드한다.
+   * @param {jQuery} $form
+   * */
   this.getAdditionalConfigure = function ($form) {
     var params = $form.serialize();
     var _this = this;
@@ -296,7 +342,10 @@ var DynamicField = function () {
       },
     });
   };
-
+  /**
+   * 확장필드를 등록한다.
+   * @param {jQuery} o
+   * */
   this.store = function (o) {
     var $form = this.$container.$modal.$body.find('form');
     var _this = this;
@@ -321,14 +370,21 @@ var DynamicField = function () {
       },
     });
   };
-
+  /**
+   * 폼 요소에 validation rule을 등록한다.
+   * @param {jQuery} $form
+   * @param {object} addRules
+   * */
   this.setValidateRule = function ($form, addRules) {
     var ruleName = validator.getRuleName($form);
     if (addRules != undefined && ruleName != undefined) {
       validator.setRules(ruleName, addRules);
     }
   };
-
+  /**
+   * 폼 요소에 validation을 체크한다.
+   * @param {jQuery} $form
+   * */
   this.validateCheck = function ($form) {
     validator.check($form);
   };

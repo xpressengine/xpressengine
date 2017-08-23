@@ -28,7 +28,14 @@ function Draft(elem, key, callback, withForm, container) {
   return this;
 }
 
+/**
+ * @lends Draft
+ * */
 Draft.prototype = {
+  /**
+   * 초기화한다.
+   * @function
+   * */
   init: function () {
     this.uid = this._getUid();
 

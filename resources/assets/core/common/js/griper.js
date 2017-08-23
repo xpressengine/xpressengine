@@ -19,8 +19,9 @@ if (typeof define === 'function' && define.amd) {
 
   /**
    * @memberof module:griper
-   * @property {object} options
-   * */
+   * @name options
+   * @prop {object} options
+    * */
   exports.options = {
     toastContainer: {
       template: '<div class="__xe_toast_container xe-toast-container"></div>',
@@ -63,6 +64,8 @@ if (typeof define === 'function' && define.amd) {
 
   /**
    * @memberof module:griper
+   * @name toast
+   * @function
    * @param {string} type
    * @param {string} messagge
    * @param {string} pos
@@ -243,6 +246,13 @@ if (typeof define === 'function' && define.amd) {
     },
   };
 
+  /**
+   * @memberof module:griper
+   * @name form
+   * @function
+   * @param {jQuery} $element
+   * @param {string} message
+   * */
   exports.form = function ($element, message) {
     exports.form.fn.putByElement($element, message);
   };
