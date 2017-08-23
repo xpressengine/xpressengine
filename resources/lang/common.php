@@ -1803,6 +1803,14 @@ return [
         'ko' => '비활성화',
         'en' => 'Deactivation',
     ],
+    'activatedPlugin' => [
+        'ko' => '활성화된 플러그인',
+        'en' => 'Activated Plugin',
+    ],
+    'deactivatedPlugin' => [
+        'ko' => '비활성화된 플러그인',
+        'en' => 'Deactivated Plugin',
+    ],
     'menuDeleteCaution' => [
         'ko' => '메뉴 삭제하면 다시 복구할 수 없습니다.',
         'en' => 'When you remove the menu can not be recovered.',

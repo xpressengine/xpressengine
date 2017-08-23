@@ -16,9 +16,11 @@ $(document).ready(function () {
           self.$remove = $('.__xe_remove_plugin');
           self.$activate = $('.__xe_activate_plugin');
           self.$deactivate = $('.__xe_deactivate_plugin');
+          self.$checkAll = $('.__xe_check_all');
           self.$checkboxes = $('.__xe_checkbox');
         },
         bindEvents: function() {
+          self.$checkAll.on('click', self.checkAll);
           self.$checkboxes.on('change', self.check);
           self.$remove.on('click', self.remove);
           self.$activate.on('click', self.activate);
@@ -28,10 +30,20 @@ $(document).ready(function () {
         reset: function() {
           $checked = $('.__xe_checkbox:checked');
           if($checked.length) {
-            self.$manage.removeAttr('disabled');
+            $('.__xe_controll_btn .btn').removeAttr('disabled');
           } else {
-            self.$manage.attr('disabled', 'disabled');
+              $('.__xe_controll_btn .btn').attr('disabled', 'disabled');
           }
+        },
+        checkAll: function(e) {
+          if($(this).hasClass('on')) {
+              $(this).removeClass('on');
+              $('.__xe_checkbox').prop('checked', false);
+          } else {
+              $(this).addClass('on');
+              $('.__xe_checkbox').prop('checked', true);
+          }
+          self.reset();
         },
         check: function(e) {
           self.reset();
