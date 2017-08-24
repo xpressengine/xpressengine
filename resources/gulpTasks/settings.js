@@ -108,13 +108,13 @@ module.exports = (() => {
 
     'doc:core': () => {
       var merged = stream(
-        gulp.src('./resources/doc')
+        gulp.src('./resources/jsdoc')
         .pipe($.clean({ force: true }))
         ,
         gulp.src(['./resources/assets/core/**/*.js', './resources/assets/core/**/*.jsx'])
         .pipe(jsdoc({
           "opts": {
-            "destination": "./resources/doc"
+            "destination": "./resources/jsdoc"
           }
         }))
       );
