@@ -527,7 +527,7 @@
     selector: '[data-toggle=xeUserMenu]',
     container: 'body',
     trigger: 'click',
-    placement: 'bottom auto'
+    placement: 'bottom auto',
   });
 
 }));

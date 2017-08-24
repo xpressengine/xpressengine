@@ -1,3 +1,6 @@
+/**
+ * @name		jQuery xeDropdown plugin
+ * */
 ;(function () {
   // DROPDOWN CLASS DEFINITION
   // =========================

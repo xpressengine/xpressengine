@@ -10,11 +10,18 @@ if (typeof define === 'function' && define.amd) {
 }(this, function (exports) {
 
   'use strict';
-
+  /**
+   * @module griper
+   * */
   var $ = jQuery = window.jQuery;
 
   DynamicLoadManager.cssLoad('/assets/core/common/css/griper.css');
 
+  /**
+   * @memberof module:griper
+   * @name options
+   * @prop {object} options
+    * */
   exports.options = {
     toastContainer: {
       template: '<div class="__xe_toast_container xe-toast-container"></div>',
@@ -55,6 +62,14 @@ if (typeof define === 'function' && define.amd) {
     },
   };
 
+  /**
+   * @memberof module:griper
+   * @name toast
+   * @function
+   * @param {string} type
+   * @param {string} messagge
+   * @param {string} pos
+   * */
   exports.toast = function (type, message, pos) {
     var position = '';
 
@@ -80,7 +95,7 @@ if (typeof define === 'function' && define.amd) {
     options: exports.options.toast,
     statusToType: function (status) {
       var type = this.options.status[status];
-      return type === undefined ? 'xe-danger' : type;
+      return type === undefined ? 'danger' : type.split('-')[1];
     },
 
     add: function (type, message, pos) {
@@ -231,6 +246,13 @@ if (typeof define === 'function' && define.amd) {
     },
   };
 
+  /**
+   * @memberof module:griper
+   * @name form
+   * @function
+   * @param {jQuery} $element
+   * @param {string} message
+   * */
   exports.form = function ($element, message) {
     exports.form.fn.putByElement($element, message);
   };

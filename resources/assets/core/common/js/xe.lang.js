@@ -1,5 +1,10 @@
-//xe.lang.js
+/**
+ * Lang module
+ * @module Lang
+ * */
 export default (function () {
+
+  /** @private */
   var _items = {
     af: 'af-ZA',
     ar: 'ar-SA',
@@ -87,7 +92,17 @@ export default (function () {
   Translator.placeHolderSuffix = '';
 
   return {
+    /**
+     * @memberof module:Lang
+     * @type {array}
+     * */
     locales: [],
+
+    /**
+     * 번역리스트를 Translator 객체에 담는다.
+     * @memberof module:Lang
+     * @param {object} items
+     * */
     set: function (items) {
       //$.extend(_items, items);
       $.each(items, function (key, value) {
@@ -96,23 +111,53 @@ export default (function () {
 
     },
 
+    /**
+     * Locale을 세팅한다.
+     * @memberof module:Lang
+     * @param {locales} locales
+     * */
     setLocales: function (locales) {
       this.locales = locales;
       Translator.locale = (locales.length > 0) ? locales[0] : 'en';
     },
 
+    /**
+     * language code를 반환한다.
+     * @memberof module:Lang
+     * @param {string} locale
+     * @return {string}
+     * */
     getLangCode: function (locale) {
       return locale ? _items[locale] : _items;
     },
 
+    /**
+     * 현재 선택된 locale 정보를 반환한다.
+     * @memberof module:Lang
+     * @return {string}
+     * */
     getCurrentLocale: function () {
       return this.locales[0];
     },
 
+    /**
+     * 등록된 번역 id에 대한 번역 메시지를 반환한다.
+     * @memberof module:Lang
+     * @param {string} id
+     * @param {object} parameters
+     * @return {string}
+     * */
     trans: function (id, parameters) {
       return Translator.trans(id, parameters);
     },
 
+    /**
+     * 동적으로 번역 id에 해당하는 메시지를 가져와 callback으로 반환한다.
+     * @memberof module:Lang
+     * @param {string} id
+     * @param {object} parameters
+     * @param {function} callback
+     * */
     requestTrans: function (id, parameters, callback) {
       var _this = this;
 
@@ -139,6 +184,12 @@ export default (function () {
       });
     },
 
+    /**
+     * id list로 번역리스트를 요청한다.
+     * @memberof module:Lang
+     * @param {array} langKeys
+     * @param {function} callback
+     * */
     requestTransAll: function (langKeys, callback) {
       XE.ajax({
         type: 'get',
@@ -172,6 +223,13 @@ export default (function () {
       });
     },
 
+    /**
+     * number에 따라 번역을 선택하여 주어진 메시지를 전달한다.
+     * @memberof module:Lang
+     * @param {string} id
+     * @param {number} number
+     * @param {object} parameters
+     * */
     transChoice: function (id, number, parameters) {
       return Translator.transChoice(id, number, parameters);
     },

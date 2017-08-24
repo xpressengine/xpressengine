@@ -12,10 +12,18 @@
 
   var _options = {};
 
+  /**
+   * @namespace WidgetBox
+   * */
   exports.WidgetBox = (function () {
     var _this = this;
 
     return {
+      /**
+       * 위젯박스 페이지를 초기화한다.
+       * @memberof WidgetBox
+       * @return {object}
+       * */
       init: function (options) {
         _this = this;
 
@@ -27,13 +35,19 @@
 
         return this;
       },
-
+      /**
+       * 페이지에서 사용되는 jquery object를 캐싱한다.
+       * @memberof WidgetBox
+       * */
       cache: function () {
         _this.$editor = $('.editor');
         _this.$btnUpdatePage = $('.btnUpdatePage');
         _this.$btnPreview = $('.btnPreview');
       },
-
+      /**
+       * 페이지에서 사용되는 이벤트 핸들러를 정의한다.
+       * @memberof WidgetBox
+       * */
       bindEvents: function () {
         _this.$editor.on('click', "div[class^='xe-col-']:not(:has(> .xe-row)):not(:has(> .widget))", _this.selectColumn);
         _this.$editor.on('click', '.btnWidgetConfig', _this.openConfig);
@@ -42,7 +56,10 @@
         _this.$btnUpdatePage.on('click', _this.updatePage);
         _this.$btnPreview.on('click', _this.preview);
       },
-
+      /**
+       * 위젯을 셀에서 드래그 할때 코드를 정의.
+       * @memberof WidgetBox
+       * */
       addDragDropEvents: function () {
 
         $('.widgetarea:not(.ui-sortable)').sortable({
@@ -119,7 +136,10 @@
         }).disableSelection();
 
       },
-
+      /**
+       * 위젯 박스 페이지를 ajax로 요청한다.
+       * @memberof WidgetBox
+       * */
       loadContents: function () {
         XE.ajax({
           url: _options.codeUrl,
@@ -182,11 +202,19 @@
           },
         });
       },
-
+      /**
+       * 위젯박스 컨텐츠를 리턴한다.
+       * @memberof WidgetBox
+       * @return {string}
+       * */
       getWidgetEditorContent: function () {
         return _this.$editor.html();
       },
-
+      /**
+       * 저장할 위젯 가공 컨텐츠를 리턴한다.
+       * @memberof WidgetBox
+       * @return {string}
+       * */
       getWidgetEditorConvertContent: function () {
         var content = _this.getWidgetEditorContent();
         var $content = $(content);
@@ -211,7 +239,10 @@
 
         return content;
       },
-
+      /**
+       * 위젯 페이지를 저장한다.
+       * @memberof WidgetBox
+       * */
       updatePage: function () {
         if (_options.updateUrl) {
 
@@ -236,7 +267,10 @@
           console.error('update url이 없음');
         }
       },
-
+      /**
+       * 미리보기를 실행한다.
+       * @memberof WidgetBox
+       * */
       preview: function () {
         if (window.opener) {
           var content = _this.getWidgetEditorConvertContent();
@@ -258,24 +292,36 @@
           });
         }
       },
-
+      /**
+       * 선택한 셀을 표시한다.
+       * @memberof WidgetBox
+       * */
       selectColumn: function (e) {
         e.stopPropagation();
 
         $('.selected').removeClass('selected');
         $(this).toggleClass('selected');
       },
-
+      /**
+       * 각 셀들에 정렬 정보를 표시한다.
+       * @memberof WidgetBox
+       * */
       setOrdering: function () {
         $('.widgetarea').find('.order').each(function (i, ele) {
           $(ele).text(i);
         });
       },
-
+      /**
+       * 선택한 셀을 deselect한다.
+       * @memberof WidgetBox
+       * */
       deselectAll: function () {
         $('.selected').removeClass('selected');
       },
-
+      /**
+       * 설정 레이어를 오픈한다.
+       * @memberof WidgetBox
+       * */
       openConfig: function () {
         var $this = $(this);
         var widgetCode = $this.siblings('.widgetCode').val();
@@ -286,7 +332,10 @@
           WidgetSnb.toggleWidgetAddLayer('modify', $('.widget').index($widget));
         });
       },
-
+      /**
+       * 위젯박스에 표시된 위젯을 삭제한다.
+       * @memberof WidgetBox
+       * */
       delWidget: function () {
         var $column = $(this).parents('.widgetarea').closest("div[class^='xe-col-']");
 
@@ -298,6 +347,11 @@
 
       },
       /**
+       * 삭제 될수 있는 셀인지 체크한다.
+       * @memberof WidgetBox
+       * @param {element} $column
+       * @param {element} $widget
+       * @return {boolean}
        * @description
        * [1]클릭된 widget의 widgetarea 체크
        * [2]siblings 체크
@@ -342,7 +396,11 @@
 
         return check;
       },
-
+      /**
+       * 셀의 높이값을 줄인다.
+       * @param {element} $column
+       * @memberof WidgetBox
+       * */
       reduceBlockSize: function ($column) {
         var $widgetarea = $column.find('.widgetarea');
         var colWidgetHeight = $widgetarea.outerHeight();
@@ -357,7 +415,11 @@
           $widgetarea.setHeight(widgetareaHeight - 165);
         });
       },
-
+      /**
+       * 셀의 높이값을 늘린다.
+       * @param {element} $column
+       * @memberof WidgetBox
+       * */
       increaseBlockSize: function ($column) {
 
         var $widgetarea = $column.find('.widgetarea');

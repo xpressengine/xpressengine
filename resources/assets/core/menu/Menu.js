@@ -1,6 +1,13 @@
+/**
+ * @namespace Menu
+ * */
 var Menu = (function () {
 
   return {
+    /**
+     *
+     * @memberof Menu
+     * */
     render: function (data, url) {
       return [
        '<div class="panel-heading">',

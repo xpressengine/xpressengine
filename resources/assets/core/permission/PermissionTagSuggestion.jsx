@@ -2,11 +2,23 @@ import React from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 
+/**@private*/
 const MIN_QUERY_LENGTH = 2;
 
+/**
+ * PermissionTagSuggestion React Component
+ * @namespace PermissionTagSuggestion
+ * */
 export default createReactClass({
+  /**
+   * @memberof PermissionTagSuggestion
+   * @prop {string} displayName
+   * */
   displayName: 'PermissionTagSuggestion',
 
+  /**
+   * @memberof PermissionTagSuggestion
+   * */
   propTypes: {
     query: PropTypes.string.isRequired,
     selectedIndex: PropTypes.number.isRequired,
@@ -15,6 +27,13 @@ export default createReactClass({
     handleHover: PropTypes.func.isRequired,
     searchingCnt: PropTypes.number,
   },
+  /**
+   * tag suggestion 마크업을 리턴한다.
+   * @memberof PermissionTagSuggestion
+   * @param {object} item
+   * @param {string} query
+   * @return {object}
+   * */
   markIt: function (item, query) {
 
     var escapedRegex = query.trim().replace(/[-\\^$*+?.()|[\]{}]/g, '\\$&');
@@ -24,7 +43,9 @@ export default createReactClass({
       __html: itemName.replace(r, '<mark>$&</mark>'),
     };
   },
-
+  /**
+   * @memberof PermissionTagSuggestion
+   * */
   render: function () {
     var props = this.props;
     var suggestionList;

@@ -1,26 +1,55 @@
+/**
+ * @namespace Utils
+ * @global
+ * */
 var Utils = (function (exports) {
 
+  /** @private */
   var _this;
 
   return {
+    /**
+     * initilize
+     * @memberof Utils
+     * */
     init: function () {
       _this = this;
 
       return this;
     },
-
+    /**
+     * image mime type의 결과를 리턴한다.
+     * @memberof Utils
+     * @param {string} mime
+     * @return {boolean}
+     * */
     isImage: function (mime) {
       return $.inArray(mime, ['image/jpg', 'image/jpeg', 'image/png', 'image/gif']) === -1 ? false : true;
     },
-
+    /**
+     * video mime type의 결과를 리턴한다.
+     * @memberof Utils
+     * @param {string} mime
+     * @return {boolean}
+     * */
     isVideo: function (mime) {
       return $.inArray(mime, ['video/mp4', 'video/webm', 'video/ogg']) === -1 ? false : true;
     },
-
+    /**
+     * audio mime type의 결과를 리턴한다.
+     * @memberof Utils
+     * @param {string} mime
+     * @return {boolean}
+     * */
     isAudio: function (mime) {
       return $.inArray(mime, ['audio/mpeg', 'audio/ogg', 'audio/wav']) === -1 ? false : true;
     },
-
+    /**
+     * 파일 사이즈 포멧을 변경하여 리턴한다.
+     * @memberof Utils
+     * @param {number} bytes
+     * @return {string}
+     * */
     formatSizeUnits: function (bytes) {
       if (bytes >= 1073741824) {
         bytes = (bytes / 1073741824).toFixed(2) + 'GB';
@@ -38,7 +67,12 @@ var Utils = (function (exports) {
 
       return bytes;
     },
-
+    /**
+     * GB, MB, KB, bytes, byte로 정의된 파일 크기를 byte단위로 리턴한다.
+     * @memberof Utils
+     * @param {string} str
+     * @return {number}
+     * */
     sizeFormatToBytes: function (str) {
       if (str.indexOf('GB') != -1) {
         bytes = parseFloat(str) * 1024 * 1024 * 1024;
@@ -54,11 +88,21 @@ var Utils = (function (exports) {
 
       return bytes;
     },
-
+    /**
+     * URL문자열인지의 결과를 리턴한다.
+     * @memberof Utils
+     * @param {string} s
+     * @return {boolean}
+     * */
     isURL: function (s) {
       return /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(s);
     },
-
+    /**
+     * full url을 리턴한다.
+     * @memberof Utils
+     * @param {string} url
+     * @return {string}
+     * */
     asset: function (url) {
       var loc = window.location;
       var retURL = '';
@@ -88,7 +132,12 @@ var Utils = (function (exports) {
 
       return retURL.split(/[?#]/)[0];
     },
-
+    /**
+     * uri를 리턴한다.
+     * @memberof Utils
+     * @param {string} url
+     * @return {string}
+     * */
     getUri: function (url) {
       var path = url.split(window.location.protocol + '//')[1];
       var returnUri;
@@ -103,7 +152,13 @@ var Utils = (function (exports) {
 
       return returnUri;
     },
-
+    /**
+     * 날짜문자열을 timestamp값으로 리턴한다.
+     * @memberof Utils
+     * @param {string} text
+     * @param {number} now
+     * @return {number}
+     * */
     strtotime: function strtotime(text, now) {
       //  discuss at: http://locutus.io/php/strtotime/
       // original by: Caio Ariede (http://caioariede.com)
@@ -145,14 +200,17 @@ var Utils = (function (exports) {
       var regex;
       var i;
       var fail = false;
+
       if (!text) {
         return fail;
       }
+
       // Unecessary spaces
       text = text.replace(/^\s+|\s+$/g, '')
         .replace(/\s{2,}/g, ' ')
         .replace(/[\t\r\n]/g, '')
         .toLowerCase();
+
       // in contrast to php, js Date.parse function interprets:
       // dates given as yyyy-mm-dd as in timezone: UTC,
       // dates with "." or "-" as MDY instead of DMY
@@ -173,6 +231,7 @@ var Utils = (function (exports) {
         if (match[1] > 1901) {
           switch (match[2]) {
             case '-':
+
               // YYYY-M-D
               if (match[3] > 12 || match[5] > 31) {
                 return fail;
@@ -181,9 +240,11 @@ var Utils = (function (exports) {
               return new Date(match[1], parseInt(match[3], 10) - 1, match[5],
                   match[6] || 0, match[7] || 0, match[8] || 0, match[9] || 0) / 1000;
             case '.':
+
               // YYYY.M.D is not parsed by strtotime()
               return fail;
             case '/':
+
               // YYYY/M/D
               if (match[3] > 12 || match[5] > 31) {
                 return fail;
@@ -195,6 +256,7 @@ var Utils = (function (exports) {
         } else if (match[5] > 1901) {
           switch (match[2]) {
             case '-':
+
               // D-M-YYYY
               if (match[3] > 12 || match[1] > 31) {
                 return fail;
@@ -203,6 +265,7 @@ var Utils = (function (exports) {
               return new Date(match[5], parseInt(match[3], 10) - 1, match[1],
                   match[6] || 0, match[7] || 0, match[8] || 0, match[9] || 0) / 1000;
             case '.':
+
               // D.M.YYYY
               if (match[3] > 12 || match[1] > 31) {
                 return fail;
@@ -211,6 +274,7 @@ var Utils = (function (exports) {
               return new Date(match[5], parseInt(match[3], 10) - 1, match[1],
                   match[6] || 0, match[7] || 0, match[8] || 0, match[9] || 0) / 1000;
             case '/':
+
               // M/D/YYYY
               if (match[1] > 12 || match[3] > 31) {
                 return fail;
@@ -222,6 +286,7 @@ var Utils = (function (exports) {
         } else {
           switch (match[2]) {
             case '-':
+
               // YY-M-D
               if (match[3] > 12 || match[5] > 31 || (match[1] < 70 && match[1] > 38)) {
                 return fail;
@@ -231,6 +296,7 @@ var Utils = (function (exports) {
               return new Date(year, parseInt(match[3], 10) - 1, match[5],
                   match[6] || 0, match[7] || 0, match[8] || 0, match[9] || 0) / 1000;
             case '.':
+
               // D.M.YY or H.MM.SS
               if (match[5] >= 70) {
                 // D.M.YY
@@ -252,9 +318,11 @@ var Utils = (function (exports) {
                 return new Date(today.getFullYear(), today.getMonth(), today.getDate(),
                     match[1] || 0, match[3] || 0, match[5] || 0, match[9] || 0) / 1000;
               }
+
               // invalid format, cannot be parsed
               return fail;
             case '/':
+
               // M/D/YY
               if (match[1] > 12 || match[3] > 31 || (match[5] < 70 && match[5] > 38)) {
                 return fail;
@@ -264,6 +332,7 @@ var Utils = (function (exports) {
               return new Date(year, parseInt(match[1], 10) - 1, match[3],
                   match[6] || 0, match[7] || 0, match[8] || 0, match[9] || 0) / 1000;
             case ':':
+
               // HH:MM:SS
               if (match[1] > 23 || match[3] > 59 || match[5] > 59) {
                 return fail;
@@ -275,6 +344,7 @@ var Utils = (function (exports) {
           }
         }
       }
+
       // other formats and "now" should be parsed by Date.parse()
       if (text === 'now') {
         return now === null || isNaN(now)
@@ -285,6 +355,7 @@ var Utils = (function (exports) {
       if (!isNaN(parsed = Date.parse(text))) {
         return parsed / 1000 | 0;
       }
+
       // Browsers !== Chrome have problems parsing ISO 8601 date strings, as they do
       // not accept lower case characters, space, or shortened time zones.
       // Therefore, fix these problems and try again.
@@ -394,14 +465,19 @@ var Utils = (function (exports) {
 
       return (date.getTime() / 1000);
     },
-
+    /**
+     * 3자릿수마다 콤마(,)를 추가하여 리턴합니다.
+     * @memberof Utils
+     * @param {string} str
+     * @return {string}
+     * */
     addCommas: function (str) {
-      var parts = (str + '').split('.'),
-        main = parts[0],
-        len = main.length,
-        output = '',
-        first = main.charAt(0),
-        i;
+      var parts = (str + '').split('.');
+      var main = parts[0];
+      var len = main.length;
+      var output = '';
+      var first = main.charAt(0);
+      var i;
 
       if (str.split(',').length > 1) {
         return str;
@@ -423,8 +499,10 @@ var Utils = (function (exports) {
 
         --i;
       }
+
       // put sign back
       output = first + output;
+
       // put decimal part back
       if (parts.length > 1) {
         output += '.' + parts[1];

@@ -1,6 +1,7 @@
 /*!
  * William DURAND <william.durand1@gmail.com>
  * MIT Licensed
+ * @namespace Translator
  */
 var Translator = (function (document, undefined) {
   'use strict';
@@ -16,6 +17,7 @@ var Translator = (function (document, undefined) {
    *
    * **WARNING:** used placeholders are removed.
    *
+   * @private
    * @param {String} message      The translated message
    * @param {Object} placeholders The placeholders to replace
    * @return {String}             A human readable message
@@ -41,6 +43,7 @@ var Translator = (function (document, undefined) {
    * Get the message based on its id, its domain, and its locale. If domain or
    * locale are not specified, it will try to find the message using fallbacks.
    *
+   * @private
    * @param {String} id               The message id
    * @param {String} domain           The domain for the message or null to guess it
    * @param {String} locale           The locale or null to use the default
@@ -116,6 +119,7 @@ var Translator = (function (document, undefined) {
    * Just look for a specific locale / domain / id if the message is available,
    * helpful for message availability validation
    *
+   * @private
    * @param {String} locale           The locale
    * @param {String} domain           The domain for the message
    * @param {String} id               The message id
@@ -159,6 +163,7 @@ var Translator = (function (document, undefined) {
    * The two methods can also be mixed:
    *     {0} There is no apples|one: There is one apple|more: There is %count% apples
    *
+   * @private
    * @param {String} message  The message id
    * @param {Number} number   The number to use to find the indice of the message
    * @param {String} locale   The locale
@@ -221,6 +226,7 @@ var Translator = (function (document, undefined) {
    * Convert number as String, "Inf" and "-Inf"
    * values to number values.
    *
+   * @private
    * @param {String} number   A literal number
    * @return {Number}         The int value of the number
    * @api private
@@ -240,6 +246,7 @@ var Translator = (function (document, undefined) {
    *
    * Returns the plural position to use for the given locale and number.
    *
+   * @private
    * @param {Number} number  The number to use to find the indice of the message
    * @param {String} locale  The locale
    * @return {Number}        The plural position
@@ -387,8 +394,9 @@ var Translator = (function (document, undefined) {
   }
 
   /**
-   * @type {Array}        An array
-   * @type {String}       An element to compare
+   * @private
+   * @type {Array}
+   * @type {String}
    * @return {Boolean}    Return `true` if `array` contains `element`,
    *                      `false` otherwise
    * @api private
@@ -407,6 +415,7 @@ var Translator = (function (document, undefined) {
    * Get the current application's locale based on the `lang` attribute
    * on the `html` tag.
    *
+   * @private
    * @return {String}     The current application's locale
    * @api private
    */
@@ -418,6 +427,7 @@ var Translator = (function (document, undefined) {
     /**
      * The current locale.
      *
+     * @memberof Translator
      * @type {String}
      * @api public
      */
@@ -426,6 +436,7 @@ var Translator = (function (document, undefined) {
     /**
      * Fallback locale.
      *
+     * @memberof Translator
      * @type {String}
      * @api public
      */
@@ -434,6 +445,7 @@ var Translator = (function (document, undefined) {
     /**
      * Placeholder prefix.
      *
+     * @memberof Translator
      * @type {String}
      * @api public
      */
@@ -442,6 +454,7 @@ var Translator = (function (document, undefined) {
     /**
      * Placeholder suffix.
      *
+     * @memberof Translator
      * @type {String}
      * @api public
      */
@@ -450,6 +463,7 @@ var Translator = (function (document, undefined) {
     /**
      * Default domain.
      *
+     * @memberof Translator
      * @type {String}
      * @api public
      */
@@ -458,6 +472,7 @@ var Translator = (function (document, undefined) {
     /**
      * Plural separator.
      *
+     * @memberof Translator
      * @type {String}
      * @api public
      */
@@ -466,6 +481,7 @@ var Translator = (function (document, undefined) {
     /**
      * Adds a translation entry.
      *
+     * @memberof Translator
      * @param {String} id         The message id
      * @param {String} message    The message to register for the given id
      * @param {String} [domain]   The domain for the message or null to use the default
@@ -497,6 +513,7 @@ var Translator = (function (document, undefined) {
     /**
      * Translates the given message.
      *
+     * @memberof Translator
      * @param {String} id               The message id
      * @param {Object} [parameters]     An array of parameters for the message
      * @param {String} [domain]         The domain for the message or null to guess it
@@ -519,6 +536,7 @@ var Translator = (function (document, undefined) {
     /**
      * Translates the given choice message by choosing a translation according to a number.
      *
+     * @memberof Translator
      * @param {String} id               The message id
      * @param {Number} number           The number to use to find the indice of the message
      * @param {Object} [parameters]     An array of parameters for the message
@@ -552,6 +570,7 @@ var Translator = (function (document, undefined) {
     /**
      * Loads translations from JSON.
      *
+     * @memberof Translator
      * @param {String} data     A JSON string or object literal
      * @return {Object}         Translator
      * @api public
@@ -587,6 +606,7 @@ var Translator = (function (document, undefined) {
     },
 
     /**
+     * @memberof Translator
      * @api public
      */
     reset: function () {
@@ -594,7 +614,11 @@ var Translator = (function (document, undefined) {
       _domains = [];
       this.locale = getCurrentLocale();
     },
-
+    /**
+     * @memberof Translator
+     * @param {string} id
+     * @return {string}
+     * */
     hasMessage: function (id) {
       return hasMessage(this.locale, 'messages', id);
     },
