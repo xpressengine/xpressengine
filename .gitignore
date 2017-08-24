@@ -9,4 +9,5 @@ composer.user.json
 .DS_Store
 /plugins
 /node_modules
+/resources/jsdoc
 *.map
