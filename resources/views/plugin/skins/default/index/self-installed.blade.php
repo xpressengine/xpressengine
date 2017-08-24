@@ -6,11 +6,11 @@
     <p class="sub-text">{{ xe_trans('xe::pluginListDescription') }}</p>
 @stop
 
+@include($_skin::view('index.tab'))
+
 <div class="row">
     <div class="col-sm-12">
         <div class="panel-group" id="accordion">
-
-            @include($_skin::view('index.tab'))
 
             <div class="panel">
                 {{-- heading --}}
