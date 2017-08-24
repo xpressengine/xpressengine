@@ -6,30 +6,32 @@
         <strong class="xe-modal-title">{{ xe_trans('xe::plugin') }} {{ xe_trans('xe::deactivate') }}</strong>
     </div>
     <div class="xe-modal-body">
+        <div class="xe-lypop-plugin">
+            <p class="xe-lypop-plugin-text">
+                아래 플러그인을 비활성화하시겠습니까? <br>
+                플러그인을 비활성화할 경우, 사이트가 정상적으로 작동하지 않을수도 있습니다.
+            </p>
+            <div class="xe-lypop-plugin-check version">
 
-        <p>
-            아래 플러그인을 비활성화하시겠습니까? <br>
-            플러그인을 비활성화할 경우, 사이트가 정상적으로 작동하지 않을수도 있습니다.
-        </p>
+                @foreach($plugins as $plugin)
 
-        <hr>
-
-        <ul class="list-unstyled">
-            @foreach($plugins as $plugin)
-                <li>
-                    @if($plugin->isActivated())
-                        <label>
-                            <input type="checkbox" name="pluginId[]" value="{{ $plugin->getId() }}" checked>
-                            {{ $plugin->getTitle() }}({{ $plugin->getId() }})
+                    @if(!$plugin->isActivated())
+                        <label class="xe-label">
+                            <input type="checkbox" disabled checked>
+                            <span class="xe-input-helper"></span>
+                            <div class="xe-label-text"><span>{{ $plugin->getTitle() }}</span><b>({{ $plugin->getId() }})</b> 이미 비활성화 되어 있음</div>
                         </label>
                     @else
-                        <input type="checkbox" disabled checked>
-                        {{ $plugin->getTitle() }}({{ $plugin->getId() }}) - 이미 비활성화되어 있음
+                        <label class="xe-label">
+                            <input type="checkbox" name="pluginId[]" value="{{ $plugin->getId() }}" checked>
+                            <span class="xe-input-helper"></span>
+                            <div class="xe-label-text"><span>{{ $plugin->getTitle() }}</span><b>({{ $plugin->getId() }})</b></div>
+                        </label>
                     @endif
-                </li>
-            @endforeach
-        </ul>
+                @endforeach
 
+            </div>
+        </div>
     </div>
     <div class="xe-modal-footer">
         <button type="button" class="xe-btn xe-btn-secondary" data-dismiss="xe-modal">{{ xe_trans('xe::cancel') }}</button>

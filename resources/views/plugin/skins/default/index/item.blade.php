@@ -56,8 +56,5 @@
             <a class="btn-link"
                href="{{ $plugin->getSettingsURI() }}">{{ xe_trans('xe::settings') }}</a>
         @endif
-        <a href="{{ route('settings.plugins.show', [$plugin->getId()]) }}" class="btn-link">
-            {{ xe_trans('xe::showDetails') }}
-        </a>
     </div>
 </li>
