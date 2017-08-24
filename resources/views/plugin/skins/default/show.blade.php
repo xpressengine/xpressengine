@@ -5,6 +5,18 @@
 <!--어드민 컨텐츠 영역 col-sm-"n" n:1~12에 따라 그리드 사용가능-->
 <div class="row">
     <div class="col-sm-12">
+
+        @if(count($unresolvedComponents))
+            <div class="alert alert-warning" role="alert" style="margin-top:10px;">
+                <p><i class="xi-info-o txt_red"></i> 정상적으로 등록되지 않은 컴포넌트가 있습니다. XE가 정상적으로 작동하지 않을 수 있습니다.</p>
+                <ul class="list-unstyled">
+                @foreach($unresolvedComponents as $cId => $info)
+                    {{ $cId }}
+                @endforeach
+                </ul>
+            </div>
+        @endif
+
         <div class="panel plugin-detail">
             <div class="panel-heading">
                 <div class="pull-left">
@@ -17,8 +29,6 @@
                                 <img src="{{$plugin->getIcon()}}" width="100" height="100" alt="{{$plugin->getTitle()}}">
                             @endif
                         </div>
-
-                        {{-- author info --}}
                         <dl>
 
                     @if($author = $plugin->getAuthor())
@@ -181,19 +191,29 @@
                                 <tbody>
                                 @foreach($componentTypes as $type => $typeText)
                                     @foreach($plugin->getComponentList($type) as $key => $component)
-                                        @if($class = $component['class'])
-                                            @if(class_exists($class))
-                                                <tr>
-                                                    <td>
-                                                        {{ $class::getComponentInfo('name') }}
-                                                        @if($plugin->isActivated() && $class::getSettingsUri() !== null)
-                                                            <a href="{{ $class::getSettingsUri()}}" class="btn_plugin_cog"><i class="xi-cog"></i></a>
-                                                        @endif
-                                                    </td>
-                                                    <td><span class="label label-green">{{ $typeText }}</span></td>
-                                                    <td>{{ $class::getComponentInfo('description') }}</td>
-                                                </tr>
+                                        @if($plugin->isActivated())
+                                            @if($class = $component['class'])
+                                                @if(class_exists($class))
+                                                    <tr>
+                                                        <td>
+                                                            {{ $class::getComponentInfo('name') }}
+                                                            @if($class::getSettingsUri() !== null)
+                                                                <a href="{{ $class::getSettingsUri()}}" class="btn_plugin_cog"><i class="xi-cog"></i></a>
+                                                            @endif
+                                                        </td>
+                                                        <td><span class="label label-green">{{ $typeText }}</span></td>
+                                                        <td>{{ $class::getComponentInfo('description') }}</td>
+                                                    </tr>
+                                                @endif
                                             @endif
+                                        @else
+                                            <tr>
+                                                <td>
+                                                    {{ $component['name'] }}
+                                                </td>
+                                                <td><span class="label label-green">{{ $typeText }}</span></td>
+                                                <td>{{ $component['description'] }}</td>
+                                            </tr>
                                         @endif
                                     @endforeach
                                 @endforeach

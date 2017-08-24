@@ -72,8 +72,13 @@ class CellPhoneNumber extends AbstractType
             static::$loaded = true;
             $this->registerValidator();
         }
-        // register cellPhoneNumber rule
-        return ['cellPhoneNumber' => 'cell_phone_number'];
+
+        $required = '';
+        if ($this->config->get('required') === true) {
+            $required = 'required|';
+        }
+
+        return ['cellPhoneNumber' => $required . 'cell_phone'];
     }
 
     /**
@@ -101,17 +106,37 @@ class CellPhoneNumber extends AbstractType
     /**
      * register phone number validator
      *
-     * @return void
+     * @return bool
      */
     protected function registerValidator()
     {
-        app('validator')->extend('cell_phone_number', function ($attribute, $value, $parameters) {
+        app('validator')->extend('cell_phone', function ($attribute, $value) {
             $value = str_replace(['-', ' '], '', $value);
 
             if (is_numeric($value) === false) {
                 return false;
             }
-        }, xe_trans('mngCellPhoneNumberValidate'));
+
+            $len = strlen($value);
+            if ($len != 10 && $len != 11) {
+                return false;
+            }
+
+            $area = substr($value, 0, 3);
+            $exchange = substr($value, 3, $len-7);
+            $suffix = substr($value, -4);
+
+            $areas = ['010', '011', '016', '017', '018', '019'];
+            if (in_array($area, $areas) === false) {
+                return false;
+            }
+
+            if (substr($exchange, 0, 1) == '0') {
+                return false;
+            }
+
+            return true;
+        }, xe_trans('xe::mngCellPhoneNumberValidate'));
     }
 }
 

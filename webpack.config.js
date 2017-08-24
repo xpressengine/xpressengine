@@ -18,6 +18,7 @@ var pathInfo = {
   permission: path.join(__dirname, '/resources/assets/core/permission'),
   menu: path.join(__dirname, '/resources/assets/core/menu'),
   lang: path.join(__dirname, '/resources/assets/core/lang'),
+  comp: path.join(__dirname, '/resources/assets/core/xe-ui-component'),
 };
 
 var target = (process.env.npm_lifecycle_event === 'build')? true : !!$.util.env.production;
@@ -35,16 +36,6 @@ var common = {
      pathInfo.permission + '/PermissionTagSuggestion.jsx',
      pathInfo.permission + '/SettingsPermission.jsx',
     ],
-    'assets/core/menu/menu.bundle': [
-     pathInfo.menu + '/MenuRenderer.js',
-     pathInfo.menu + '/MenuEntity.js',
-     pathInfo.menu + '/MenuItem.js',
-     pathInfo.menu + '/TreeNode.js',
-     pathInfo.menu + '/UITree.js',
-     pathInfo.menu + '/MenuSearchBar.js',
-     pathInfo.menu + '/MenuSearchSuggestion.js',
-     pathInfo.menu + '/MenuTree.js',
-    ],
 
     'assets/core/common/js/xe.bundle': [
       pathInfo.common + '/js/xe.js',
@@ -60,7 +51,6 @@ var common = {
     'assets/core/common/js/toggleMenu': pathInfo.common + '/js/toggleMenu',
     'assets/core/common/js/dynamicField': pathInfo.common + '/js/dynamicField',
     'assets/core/common/js/storeCategory': pathInfo.common + '/js/storeCategory.js',
-    'assets/core/common/js/rule': pathInfo.common + '/js/rule.js',
     'assets/core/member/settings/edit': pathInfo.member + '/settings/edit.js',
     'assets/core/settings/js/admin.bundle': pathInfo.settings + '/js/admin.js',
   },

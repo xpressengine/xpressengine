@@ -27,6 +27,7 @@ class TagHandlerTest extends \PHPUnit_Framework_TestCase
 
         $mockTagExists1 = m::mock('Xpressengine\Tag\Tag');
         $mockTagExists1->shouldReceive('getKey')->andReturn(1);
+        $mockTagExists1->shouldReceive('hasMacro')->andReturn(false);
         $mockTagExists1->shouldReceive('getAttribute')->with('word')->andReturn('laravel');
         $mockTagExists1->shouldReceive('offsetExists')->andReturn(true);
         $mockTagExists1->shouldReceive('offsetGet')->with('word')->andReturn('laravel');
@@ -45,6 +46,7 @@ class TagHandlerTest extends \PHPUnit_Framework_TestCase
         $decomposer->shouldReceive('execute')->once()->with('xpressengine')->andReturn('xpressengine');
         $mockTagNew = m::mock('Xpressengine\Tag\Tag');
         $mockTagNew->shouldReceive('getKey')->andReturn(5);
+        $mockTagNew->shouldReceive('hasMacro')->andReturn(false);
         $mockTagNew->shouldReceive('getAttribute')->with('word')->andReturn('xpressengine');
 
         $repo->shouldReceive('create')->once()->with([

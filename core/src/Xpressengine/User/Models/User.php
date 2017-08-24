@@ -386,6 +386,10 @@ class User extends DynamicModel implements UserInterface
      */
     public function getLoginAtAttribute($value)
     {
+        if ($value === null) {
+            return null;
+        }
+        
         $at = $this->asDateTime($value);
         if ($at->timestamp <= 0) {
             return null;

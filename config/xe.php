@@ -208,12 +208,17 @@ return [
                 'description' => '',
                 'ordering' => 200
             ],
-
             'setting.permission' => [
                 'title' => 'xe::settingsPermissionSettings',
                 'display' => true,
                 'description' => '',
                 'ordering' => 300
+            ],
+            'setting.admin-log' => [
+                'title' => 'xe::adminLog',
+                'display' => true,
+                'description' => '관리자 권한을 가진 회원이 실행한 작업을 볼 수 있습니다.',
+                'ordering' => 400
             ],
             'setting.seo' => [
                 'title' => 'xe::SEOSettings',
@@ -224,7 +229,7 @@ return [
             'lang' => [
                 'title' => 'xe::multiLang',
                 'display' => true,
-                'description' => 'blah blah~',
+                'description' => '',
                 'ordering' => 7000
             ],
             'lang.default' => [
@@ -385,6 +390,7 @@ return [
             'menuType' => 'uiobject/xpressengine@menuType',
             'permission' => 'uiobject/xpressengine@permission',
             'themeSelect' => 'uiobject/xpressengine@themeSelect',
+            'skinSelect' => 'uiobject/xpressengine@skinSelect',
             'captcha' => 'uiobject/xpressengine@captcha',
             'widget' => 'uiobject/xpressengine@widgetGenerator',
             'widgetbox' => 'uiobject/xpressengine@widgetbox',

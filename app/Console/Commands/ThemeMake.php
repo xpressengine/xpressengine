@@ -17,7 +17,7 @@ use Xpressengine\Plugin\PluginEntity;
 class ThemeMake extends Command
 {
     protected $signature = 'make:theme
-                        {path : The path of theme directory started with plugin_id}
+                        {path : The path of theme directory started with "plugins/"}
                         {title : The title of the theme}
                         {--id= : The path of theme class file}
                         {--description= : The description of the theme}';
@@ -224,7 +224,7 @@ class ThemeMake extends Command
     protected function getPlugin()
     {
         $path = $this->argument('path');
-        list($plugin, $path) = explode('/', $path, 2);
+        list($pluginsDir, $plugin, $path) = explode('/', $path, 3);
 
         $plugin = app('xe.plugin')->getPlugin($plugin);
         if($plugin === null) {
@@ -244,7 +244,7 @@ class ThemeMake extends Command
     protected function getPath()
     {
         $path = $this->argument('path');
-        list($plugin, $path) = explode('/', $path, 2);
+        list($pluginsDir, $plugin, $path) = explode('/', $path, 3);
 
         return $path;
     }

@@ -219,9 +219,9 @@ if (function_exists('intercept') === false) {
      *
      * @package Xpressengine\Interception
      *
-     * @param string       $pointCut advice가 실행되기를 바라는 대상 클래스와 메소드, {CLASS명}@{METHOD명}의 형식이어야 한다.
-     * @param string|array $name     advisor의 이름 및 우선순위 지정을 위한 array
-     * @param Closure      $advice   실행될 Closure
+     * @param string|string[] $pointCut advice가 실행되기를 바라는 대상 클래스와 메소드, {CLASS명}@{METHOD명}의 형식이어야 한다.
+     * @param string|array    $name     advisor의 이름 및 우선순위 지정을 위한 array
+     * @param Closure         $advice   실행될 Closure
      *
      * @return void
      */
@@ -289,9 +289,9 @@ if (function_exists('locale_url') === false) {
      */
     function locale_url($locale)
     {
-        app('request')->query->set('_l', $locale);
-
-        return app('request')->url() . '?' . http_build_query(app('request')->query->all());
+        $queries = app('request')->query->all();
+        array_set($queries, '_l', $locale);
+        return app('request')->url() . '?' . http_build_query($queries);
     }
 }
 
@@ -301,25 +301,16 @@ if (function_exists('uio') === false) {
      *
      * @package Xpressengine\UIObject
      *
-     * @param string $id       UIObject의 id, 또는 alias
-     * @param mixed  $args     UIObject를 생성할 때 전달할 argument
-     * @param null   $callback UIObject의 출력을 변경하려고 할 때 사용된다. 만약 callback이 지정돼 있으면 UIObject가 출력될 때,
-     *                         callback을 한번 실행후 출력한다.
-     *                         이 때 callback은 파라메터로 출력될 html의 PhpQueryObject 인스턴스를 전달받는다.
-     *                         ```php
-     *                         uio('phone', $data, function(PhpQueryObject $markup) {
-     *                         $firstNum = $markup['input:first'];
-     *                         $firstNum->val('010');
-     *                         }
-     *                         ```
+     * @param string $id   UIObject의 id, 또는 alias
+     * @param mixed  $args UIObject를 생성할 때 전달할 argument
      *
      * @return \Xpressengine\UIObject\AbstractUIObject 생성된 AbstractUIObject
      * @throws Exception
      */
-    function uio($id, $args = [], $callback = null)
+    function uio($id, $args = [])
     {
         try {
-            return XeUI::create($id, $args, $callback)->render();
+            return XeUI::create($id, $args)->render();
         } catch (\Xpressengine\UIObject\Exceptions\UIObjectNotFoundException $e) {
             if (config('app.debug') === true) {
                 return "UI오브젝트[$id]를 찾을 수 없습니다";

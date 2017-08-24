@@ -178,6 +178,24 @@ class PluginHandler
     }
 
     /**
+     * get Unresolved Components
+     *
+     * @param string|null $plugin target plugin
+     *
+     * @return array
+     */
+    public function getUnresolvedComponents($plugin = null)
+    {
+        $unresolved = $this->register->getUnresolvedComponents();
+
+        if ($plugin) {
+            return array_get($unresolved, $plugin, []);
+        }
+
+        return $unresolved;
+    }
+
+    /**
      * 주어진 플러그인을 활성화한다. 활성화된 플러그인 목록은 XE에 저장된다.
      *
      * @param string $pluginId 활성화 할 플러그인의 id
@@ -203,7 +221,6 @@ class PluginHandler
 
         // 플러그인의 컴포넌트 정보를 셋팅한다
         $entity->getObject();
-        $this->register->addByEntity($entity);
 
         $this->updatePlugin($pluginId, false);
 
@@ -211,7 +228,7 @@ class PluginHandler
         try {
             $entity->activate($installedVersion);
         } catch (\Exception $e) {
-            throw new PluginActivationFailedException();
+            throw new PluginActivationFailedException([], null, $e);
         }
 
         $entity->setStatus(static::STATUS_ACTIVATED);
@@ -279,7 +296,7 @@ class PluginHandler
     }
 
     /**
-     * 플러그인을 업데이트한다. 내부적으로는 단순히 플러그인을 다시 activate 시킨다.
+     * 플러그인을 업데이트한다.
      *
      * @param string $pluginId     업데이트할 플러그인의 아이디
      * @param bool   $updateStatus true일 경우, 업데이트한 플러그인의 상태를 status에 업데이트한다.
@@ -295,10 +312,10 @@ class PluginHandler
             throw new PluginNotFoundException(['pluginName' => $pluginId]);
         }
 
-        // 플러그인이 이미 활성화되어있는 상태인지 체크한다.
-        /*if ($entity->getStatus() === static::STATUS_ACTIVATED) {
-            throw new PluginAlreadyActivatedException();
-        }*/
+        // 플러그인이 이미 활성화되어있지 않다면 register
+        if ($entity->getStatus() !== static::STATUS_ACTIVATED) {
+            $this->registerPlugin($entity);
+        }
 
         // 기존에 설치(활성화)된 적이 있다면 설치된 버전을 조사한다.
         $installedVersion = $entity->getInstalledVersion();
@@ -342,6 +359,8 @@ class PluginHandler
             throw new CannotDeleteActivatedPluginException();
         }
 
+        $this->registerPlugin($entity);
+
         $entity->getObject()->uninstall();
 
         // status list에서 해당 플러그인 정보를 삭제한다.
@@ -359,10 +378,37 @@ class PluginHandler
     public function bootPlugins()
     {
         foreach ($this->getActivatedPlugins() as $entity) {
+            $this->registerPlugin($entity);
+        }
+
+        foreach ($this->getActivatedPlugins() as $entity) {
             $this->bootingPlugin = $entity->getId();
 
             $this->bootPlugin($entity);
         }
+    }
+
+    /**
+     * 플러그인에서 제공하는 요소들을 바인딩한다.
+     *
+     * @param PluginEntity $entity 플러그인
+     *
+     * @return void
+     */
+    public function registerPlugin(PluginEntity $entity)
+    {
+        $pluginObj = $entity->getObject();
+
+        // register plugin's components
+        $this->register->addByEntity($entity);
+
+        // bind plugin to application
+        $this->app->instance(get_class($pluginObj), $pluginObj);
+
+        // boot plugin
+        $pluginObj->register();
+
+        $this->registerViewNamespace($entity);
     }
 
     /**
@@ -376,17 +422,11 @@ class PluginHandler
     {
         $pluginObj = $entity->getObject();
 
-        // register & boot plugin's components
-        $this->register->addByEntity($entity);
-        $entity->bootComponents();
-
-        // bind plugin to application
-        $this->app->instance(get_class($pluginObj), $pluginObj);
+        // boot plugin's components
+        $entity->bootComponents($this->register);
 
         // boot plugin
         $pluginObj->boot();
-
-        $this->registerViewNamespace($entity);
     }
 
     /**
@@ -399,7 +439,7 @@ class PluginHandler
     public function getAllPlugins($refresh = false)
     {
         if ($refresh === true) {
-            $this->plugins->initialize(true);
+            $this->refreshPlugins();
 
             // 각 플러그인의 설치된 버전과 실제버전이 다르고, 별도의 install이나 update가 필요없을 경우, 설치된 버전정보를 갱신한다.
             foreach ($this->plugins->getList() as $plugin) {
@@ -420,6 +460,16 @@ class PluginHandler
         }
 
         return $this->plugins;
+    }
+
+    /**
+     * 설치된 플러그인 목록 캐시를 갱신한다.
+     *
+     * @return void
+     */
+    public function refreshPlugins()
+    {
+        $this->plugins->initialize(true);
     }
 
     /**
@@ -491,7 +541,7 @@ class PluginHandler
      * 상태정보에는 status, version 필드가 있으며, 둘중 하나만 선택해서 갱신할 수도 있다.
      *
      * @param string $pluginId plugin id
-     * @param string $field    'version' or 'status'
+     * @param array  $field    'version' or 'status'
      * @param null   $status   value of field
      *
      * @return void
@@ -629,7 +679,7 @@ class PluginHandler
 
         $logFile = $writer->get('xpressengine-plugin.operation.log');
 
-        if ($logFile) {
+        if ($logFile && file_exists(storage_path($logFile))) {
             $log = file_get_contents(storage_path($logFile));
         } else {
             $log = null;

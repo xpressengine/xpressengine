@@ -1,7 +1,7 @@
 <?php
 namespace App\Console\Commands;
 
-use Xpressengine\Installer\XpressengineInstaller;
+use Xpressengine\Interception\InterceptionHandler;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
@@ -36,16 +36,21 @@ class PluginInstall extends PluginCommand
     /**
      * Execute the console command.
      *
-     * @param PluginHandler      $handler
-     * @param PluginProvider     $provider
-     * @param ComposerFileWriter $writer
+     * @param PluginHandler       $handler
+     * @param PluginProvider      $provider
+     * @param ComposerFileWriter  $writer
+     * @param InterceptionHandler $interceptionHandler
      *
      * @return bool|null
      * @throws \Exception
      */
-    public function fire(PluginHandler $handler, PluginProvider $provider, ComposerFileWriter $writer)
-    {
-        $this->init($handler, $provider, $writer);
+    public function fire(
+        PluginHandler $handler,
+        PluginProvider $provider,
+        ComposerFileWriter $writer,
+        InterceptionHandler $interceptionHandler
+    ) {
+        $this->init($handler, $provider, $writer, $interceptionHandler);
 
         // php artisan plugin:install <plugin name> [<version>]
 
@@ -88,8 +93,8 @@ class PluginInstall extends PluginCommand
 
         // 안내 멘트 출력
         if ($this->input->isInteractive() && $this->confirm(
-                // 위 플러그인을 다운로드하고 설치합니다. \r\n 위 플러그인이 의존하는 다른 플러그인이 함께 다운로드 될 수 있으며, 수분이 소요될수 있습니다.\r\n 플러그인을 설치하시겠습니까?
-                "Above plugin will be downloaded and installed. \r\n Dependent plugins can be installed together. \r\n It may take up to a few minutes. Do you want to install the plugin?"
+                // 위 플러그인을 다운로드합니다. \r\n 위 플러그인이 의존하는 다른 플러그인이 함께 다운로드 될 수 있으며, 수분이 소요될수 있습니다.\r\n 플러그인을 다운로드 하시겠습니까?
+                "Above plugin will be downloaded. \r\n Dependent plugins can be downloaded together. \r\n It may take up to a few minutes. Do you want to download the plugin?"
             ) === false
         ) {
             return null;
@@ -157,5 +162,6 @@ class PluginInstall extends PluginCommand
             }
 
         }
+        $this->clear();
     }
 }

@@ -25,10 +25,6 @@ use Xpressengine\Widget\WidgetParser;
 /**
  * HtmlPresenter
  *
- * * html 으로 출력될 경우 사용
- * * Skin, Theme 를 출력할 수 있도록 지원
- *
- *
  * @category  Presenter
  * @package   Xpressengine\Presenter
  * @author      XE Developers <developers@xpressengine.com>

@@ -1,6 +1,5 @@
 {{ XeFrontend::css(
 [
-'/assets/vendor/jqueryui/jquery-ui.min.css',
 '/assets/core/lang/langEditorBox.css',
 '/assets/core/xe-ui-component/xe-ui-component.css'
 ]
@@ -11,14 +10,14 @@
 
 {{ XeFrontend::js(
 [
-'/assets/vendor/jqueryui/jquery-ui.min.js',
 '/assets/vendor/expanding/expanding.js',
 '/assets/core/lang/langEditorBox.bundle.js'
 ]
 )->appendTo('head')->load() }}
 
-{{ XeFrontend::js('/assets/vendor/nestedSortable/jquery.mjs.nestedSortable.js')->appendTo('head')->load() }}
-{{ XeFrontend::js('/assets/core/category/tree.js')->appendTo('head')->load() }}
+{{ XeFrontend::js('/assets/core/common/js/xe.tree.js')->appendTo('body')->load() }}
+{{ XeFrontend::js('/assets/core/category/Category.js')->appendTo('body')->load() }}
+{{--{{ XeFrontend::js('/assets/core/category/tree.js')->appendTo('head')->load() }}--}}
 
 {{ XeFrontend::translation([
     'xe::required',
@@ -30,6 +29,8 @@
     'xe::word',
     'xe::description',
     'xe::save',
+    'xe::delete',
+    'xe::close',
 ]) }}
 
 @section('page_title')
@@ -40,19 +41,12 @@
     {{xe_trans('xe::categoryModifyDescription', ['name' => xe_trans($category->name)])}}
 @endsection
 
-<style type="text/css">
-    .item.copy{
-        background-color: #CAD9EA;
-        border: 1px dashed #76AFE8;
-    }
-</style>
-
-<div id="__xe_category-tree-container">
+<div id="__xe_category-tree-container" class="panel board-category">
 </div>
 
 <script type="text/javascript">
     $(function () {
-        categoryTree.init($('#__xe_category-tree-container'), {
+        Category.init({
             load: '{{ route('manage.category.edit.item.children', ['id' => $category->id]) }}',
             add: '{{ route('manage.category.edit.item.store', ['id' => $category->id]) }}',
             modify: '{{ route('manage.category.edit.item.update', ['id' => $category->id]) }}',
@@ -60,5 +54,4 @@
             move: '{{ route('manage.category.edit.item.move', ['id' => $category->id]) }}'
         });
     });
-
 </script>

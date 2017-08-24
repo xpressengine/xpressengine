@@ -35,6 +35,8 @@ class PurifierServiceProvider extends ServiceProvider
         $this->app->bind('purifier', function ($app) {
 
             $config = HTMLPurifier_Config::createDefault();
+            $config->autoFinalize = $app['config']['purifier.finalize'];
+
             $config->loadArray(array_merge(
                 [
                     'Core.Encoding' => $app['config']['purifier.encoding'],
@@ -42,10 +44,6 @@ class PurifierServiceProvider extends ServiceProvider
                 ],
                 $app['config']['purifier.settings.default']
             ));
-
-            $def = $config->getHTMLDefinition(true);
-            $def->addAttribute('span', 'data-download-link', 'Text');
-            $def->addAttribute('span', 'contenteditable', 'Text');
 
             return new HTMLPurifier($config);
         });

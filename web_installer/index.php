@@ -43,6 +43,10 @@
                 $result = extension_loaded('curl');
                 break;
 
+            case "fileinfo" :
+                $result = extension_loaded('fileinfo');
+                break;
+
             case "gd" :
                 $result = extension_loaded('gd');
                 break;
@@ -332,6 +336,7 @@
             check('<?=trans('checkDirPermission')?>', 'directoryPermission');
             check('<?=trans('checkPHPExtPDO')?>', 'pdo');
             check('<?=trans('checkPHPExtCURL')?>', 'curl');
+            check('<?=trans('checkPHPExtFILEINFO')?>', 'fileinfo');
             check('<?=trans('checkPHPExtGD')?>', 'gd');
             check('<?=trans('checkPHPExtMBSTRING')?>', 'mbstring');
             check('<?=trans('checkPHPExtOPENSSL')?>', 'openssl');

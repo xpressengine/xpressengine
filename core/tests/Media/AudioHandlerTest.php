@@ -26,6 +26,7 @@ class AudioHandlerTest extends \PHPUnit_Framework_TestCase
             ->makePartial();
 
         $mockFile = m::mock('Xpressengine\Storage\File');
+        $mockFile->shouldReceive('hasMacro')->andReturn(false);
         $mockFile->shouldReceive('getAttribute')->with('mime')->andReturn('image/jpeg');
 
         $instance->shouldReceive('isAvailable')->once()->with('image/jpeg')->andReturn(false);
@@ -47,6 +48,7 @@ class AudioHandlerTest extends \PHPUnit_Framework_TestCase
             ->makePartial();
 
         $mockFile = m::mock('Xpressengine\Storage\File');
+        $mockFile->shouldReceive('hasMacro')->andReturn(false);
         $mockFile->shouldReceive('getAttribute')->with('mime')->andReturn('audio/wav');
 
         $mockRelate = m::mock('stdClass');
@@ -60,6 +62,7 @@ class AudioHandlerTest extends \PHPUnit_Framework_TestCase
         ])->andReturnSelf();
 
         $mockAudio = m::mock('Xpressengine\Media\Models\Audio');
+        $mockAudio->shouldReceive('hasMacro')->andReturn(false);
         $mockAudio->shouldReceive('getAttribute')->with('meta')->andReturnNull();
         $mockAudio->shouldReceive('meta')->andReturn($mockRelate);
         $mockAudio->shouldReceive('setRelation')->once()->with('meta', $mockRelate)->andReturnSelf();

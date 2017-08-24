@@ -31,11 +31,15 @@
             }
           }
 
+          var formData = new FormData($this[0]);
+
           var options = {
             url: $this.attr('action'),
             type: $this.attr('method'),
-            data: $this.serialize(),
+            data: formData,
             dataType: 'json',
+            contentType: false,
+            processData: false,
             success: function (data, textStatus, jqXHR) {
               callbackFunc.call(callbackObj, data, textStatus, jqXHR);
             },

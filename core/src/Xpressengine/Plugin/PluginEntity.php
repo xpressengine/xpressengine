@@ -635,14 +635,18 @@ class PluginEntity implements Arrayable, Jsonable
     /**
      * call component boot interface
      *
+     * @param PluginRegister $container plugin register
+     *
      * @return void
      */
-    public function bootComponents()
+    public function bootComponents(PluginRegister $container)
     {
         foreach ($this->getComponentList() as $id => $info) {
             /** @var \Xpressengine\Plugin\ComponentInterface $class */
-            $class = $info['class'];
-            $class::boot();
+            $class = $container->get($id);
+            if ($class !== null) {
+                $class::boot();
+            }
         }
     }
 

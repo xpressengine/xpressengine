@@ -98,6 +98,7 @@ class UserRepositoryTest extends \PHPUnit_Framework_TestCase
         $repo = $this->makeRepository();
 
         $user = $this->makeUser();
+        $user->shouldReceive('hasMacro')->andReturn(false);
         $user->shouldReceive('getAttribute')->with('password')->once()->andReturn('secret');
 
         $user->shouldReceive('isDirty')->once()->with('password')->andReturn(false);
@@ -121,6 +122,7 @@ class UserRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $user = $this->makeUser();
 
+        $user->shouldReceive('hasMacro')->andReturn(false);
         $user->shouldReceive('getAttribute')->once()->andReturn('secret2');
 
         $user->shouldReceive('isDirty')->once()->with('password')->andReturn(false);

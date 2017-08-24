@@ -62,6 +62,7 @@ class CategoryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $mockItem = m::mock('Xpressengine\Category\Models\CategoryItem');
         $mockDesc1 = m::mock('Xpressengine\Category\Models\CategoryItem');
+        $mockItem->shouldReceive('hasMacro')->andReturn(false);
         $mockItem->shouldReceive('getAttribute')->with('descendants')->andReturn([$mockDesc1]);
 
         $itemRepo->shouldReceive('delete')->once()->with($mockDesc1);
@@ -83,6 +84,7 @@ class CategoryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $mockItem = m::mock('Xpressengine\Category\Models\CategoryItem');
         $mockDesc1 = m::mock('Xpressengine\Category\Models\CategoryItem');
+        $mockItem->shouldReceive('hasMacro')->andReturn(false);
         $mockItem->shouldReceive('getAttribute')->with('descendants')->andReturn([$mockDesc1]);
 
         $itemRepo->shouldReceive('exclude')->once()->with($mockDesc1, $mockItem);

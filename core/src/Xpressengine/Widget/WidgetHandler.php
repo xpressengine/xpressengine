@@ -25,51 +25,6 @@ use Xpressengine\Widget\Exceptions\NotFoundWidgetException;
  * WidgetHandler
  * Widget 을 관리하는 클래스
  *
- * ## app binding
- * * xe.widget 으로 바인딩 되어 있음
- * * Widget Facade 제공
- *
- * ## 생성자에서 필요한 항목들
- * * PluginRegister $register - 등록된 위젯 정보를 획득하기 위한 plugin register
- * * GuardInterface $guard - 위젯을 render 할 때 현재 접속한 사용자의 권한을 확인하기 위한 guard
- * * Factory $view - 렌더링을 하기위한 view factory
- *
- * ## 사용법
- *
- * ### Widget Id 에 해당하는 클래스 이름 획득
- *
- * ```php
- * $handler->getClassName($id)
- * ```
- *
- * ### Widget Id 에 해당하는 위젯 HTML 렌더링 코드 반환
- * * widget id 와 렌러링에 필요한 arguments param array 를 인자로 전달
- *
- * ```php
- * $handler->create($id, $args = [])
- * ```
- *
- * ### Widget Id 에 설정 view form 반환
- * * 위젯 코드를 생성하기 위한 설정 화면에 대한 view form 반환
- *
- * ```php
- * $handler->setUp($id);
- * ```
- *
- * ### 원하는 위젯 class List 반환
- * * filter 를 전달하여 원하는 widget class 정보를 획득한다
- *
- * ```php
- * $handler->getAll(callable $filter = null);
- * ```
- *
- * ### Widget Id 에 해당하는 위젯 코드(custom xml)을 획득한다
- * * widget id 와 렌러링에 필요한 arguments param array 를 인자로 전달
- *
- * ```php
- * $handler->getGeneratedCode($id, array $inputs)
- * ```
- *
  * @category    Widget
  * @package     Xpressengine\Widget
  * @author      XE Developers <developers@xpressengine.com>

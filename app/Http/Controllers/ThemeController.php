@@ -19,38 +19,13 @@ use Xpressengine\Theme\ThemeHandler;
 class ThemeController extends Controller
 {
 
-    public function auth(Request $request, ThemeHandler $themeHandler)
-    {
-        $this->validate($request, [
-            'password' => 'required'
-        ]);
-
-        $credentials = [];
-        $credentials['id'] = auth()->id();
-        $credentials['password'] = $request->get('password');
-        $credentials['status'] = \XeUser::STATUS_ACTIVATED;
-
-        if (auth()->attempt($credentials, false, false)) {
-            session(['theme.editable' => true]);
-        }
-
-        return redirect()->back()->with('alert', ['type' => 'success', 'message' => '인증되었습니다.']);
-    }
-
     public function edit(Request $request, ThemeHandler $themeHandler)
     {
-        $editable = session('theme.editable');
-        if(!$editable) {
-            return \XePresenter::make(
-                'theme.edit-auth'
-            );
-        }
-
         $themeId = $request->get('theme');
         $fileName = $request->get('file');
 
         // TODO: validate themeid, fileName
-        if($themeId === null) {
+        if ($themeId === null) {
             $e = new InvalidArgumentHttpException();
             $e->setMessage('잘못된 요청입니다.');
             throw $e;
@@ -61,7 +36,7 @@ class ThemeController extends Controller
         /** @var ThemeEntityInterface $theme */
         $files = $theme->getEditFiles();
 
-        if(empty($files)) {
+        if (empty($files)) {
             return \XePresenter::make(
                 'theme.edit',
                 [
@@ -82,7 +57,7 @@ class ThemeController extends Controller
             'path' => $filePath,
         ];
 
-        if($themeHandler->hasCache($filePath)) {
+        if ($themeHandler->hasCache($filePath)) {
             $editFile['hasCache'] = true;
             $fileContent = file_get_contents($themeHandler->getCachePath($filePath));
         } else {
@@ -104,12 +79,6 @@ class ThemeController extends Controller
 
     public function update(Request $request, ThemeHandler $themeHandler)
     {
-
-        $editable = session('theme.editable');
-        if(!$editable) {
-            return redirect()->back()->with('alert', ['type' => 'danger', 'message' => xe_trans('xe::needAuthForEditingTheme')])->withInput();
-        }
-
         $themeId = $request->get('theme');
         $fileName = $request->get('file');
         $reset = $request->get('reset');
@@ -127,7 +96,7 @@ class ThemeController extends Controller
         File::makeDirectory($cacheDir, 0755, true, true);
 
         try {
-            if($reset === 'Y') {
+            if ($reset === 'Y') {
                 File::delete($cachePath);
             } else {
                 file_put_contents($cachePath, $content);
@@ -145,7 +114,7 @@ class ThemeController extends Controller
         $title = $request->get('title');
         $theme = $themeHandler->getTheme($instanceId);
 
-        if(!$theme->hasSetting()) {
+        if (!$theme->hasSetting()) {
             throw new NotSupportSettingException();
         }
 

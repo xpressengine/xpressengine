@@ -85,7 +85,7 @@ class AdvisorCollection
         $this->advisorArr[$name] = $advisor;
 
         foreach ($pointCutStrList as $pointCutStr) {
-            list($class, $method) = explode('@', $pointCutStr);
+            list($class, $method) = explode('@', trim($pointCutStr, '\\'));
 
             if (isset($this->aliases[$class])) {
                 //$pointCutStr = $this->aliases[$class].'@'.$method;

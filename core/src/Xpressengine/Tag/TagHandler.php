@@ -104,16 +104,26 @@ class TagHandler
      */
     private function multisort($std, $tags)
     {
-        $std = array_values($std);
+        $std = array_map([$this, 'nonNumeric'], array_values($std));
+        $words = array_map(function ($tag) {
+            return $this->nonNumeric($tag->word);
+        }, $tags);
 
-        $words = [];
-        foreach ($tags as $tag) {
-            $words[] = $tag->word;
-        }
         $index = array_merge(array_flip($words), array_flip($std));
         array_multisort($index, $tags);
 
         return $tags;
+    }
+
+    /**
+     * Convert to non numeric string
+     *
+     * @param string|int $v string
+     * @return string
+     */
+    private function nonNumeric($v)
+    {
+        return is_numeric($v) ? '_'.$v : $v;
     }
 
     /**

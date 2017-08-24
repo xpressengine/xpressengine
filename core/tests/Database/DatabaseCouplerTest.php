@@ -48,14 +48,12 @@ class DatabaseCouplerTest extends PHPUnit_Framework_TestCase
 
         $proxyManager = m::mock('Xpressengine\Database\ProxyManager');
 
-        $cache = m::mock('Xpressengine\Support\CacheInterface');
-
         /**
          * @var \Illuminate\Database\DatabaseManager $databaseManager
          * @var \Xpressengine\Database\TransactionHandler $transactionHandler
          * @var \Xpressengine\Database\ProxyManager $proxyManager
          */
-        $coupler = DatabaseCoupler::instance($databaseManager, $transactionHandler, $proxyManager, $cache);
+        $coupler = DatabaseCoupler::instance($databaseManager, $transactionHandler, $proxyManager);
 
         $this->assertInstanceOf('Illuminate\Database\DatabaseManager', $coupler->databaseManager());
         $this->assertInstanceOf('Xpressengine\Database\ProxyManager', $coupler->getProxy());
@@ -88,14 +86,12 @@ class DatabaseCouplerTest extends PHPUnit_Framework_TestCase
 
         $proxyManager = m::mock('Xpressengine\Database\ProxyManager');
 
-        $cache = m::mock('Xpressengine\Support\CacheInterface');
-
         /**
          * @var \Illuminate\Database\DatabaseManager $databaseManager
          * @var \Xpressengine\Database\TransactionHandler $transactionHandler
          * @var \Xpressengine\Database\ProxyManager $proxyManager
          */
-        $coupler = DatabaseCoupler::instance($databaseManager, $transactionHandler, $proxyManager, $cache);
+        $coupler = DatabaseCoupler::instance($databaseManager, $transactionHandler, $proxyManager);
 
         $newConnector = m::mock('Xpressengine\Database\VirtualConnection');
         $newConnector->shouldReceive('getName')->andReturn('default');

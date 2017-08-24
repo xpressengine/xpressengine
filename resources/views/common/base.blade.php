@@ -6,7 +6,7 @@
 
     <!-- META -->
     <meta charset="utf-8">
-    <meta name="Generator" content="XpressEngine3">
+    <meta name="Generator" content="XpressEngine 3">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     {!! XeFrontend::output('meta') !!}
 
@@ -33,6 +33,7 @@
         XE.configure({
             locale: '{{ Request::cookie('locale') ?: app('xe.translator')->getLocale() }}',
             defaultLocale: '{{ app('xe.translator')->getLocale() }}',
+            fixedPrefix: '{{ app('config')['xe.routing.fixedPrefix'] }}',
             @if (in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER]))
             managePrefix: '{{ app('config')['xe.routing.settingsPrefix'] }}'
             @endif

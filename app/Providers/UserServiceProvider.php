@@ -22,10 +22,12 @@ use Illuminate\Support\ServiceProvider;
 use Xpressengine\Media\MediaManager;
 use Xpressengine\Media\Thumbnailer;
 use Xpressengine\Storage\Storage;
-use App\ToggleMenus\Member\ProfileItem;
+use App\ToggleMenus\User\ProfileItem;
+use App\ToggleMenus\User\ManageItem;
 use Xpressengine\User\EmailBroker;
 use Xpressengine\User\Guard;
 use Xpressengine\User\GuardInterface;
+use Xpressengine\User\Middleware\Admin;
 use Xpressengine\User\Models\Guest;
 use Xpressengine\User\Models\PendingEmail;
 use Xpressengine\User\Models\UnknownUser;
@@ -94,9 +96,10 @@ class UserServiceProvider extends ServiceProvider
         $this->app->singleton(
             ['xe.auth' => GuardInterface::class],
             function ($app) {
+                $adminAuth = $app['config']->get('auth.admin');
                 $proxyClass = $app['xe.interception']->proxy(Guard::class, 'Auth');
                 return new $proxyClass(
-                    new UserProvider($app['hash'], User::class), $app['session.store'], $app['request']
+                    new UserProvider($app['hash'], User::class), $app['session.store'], $adminAuth, $app['request']
                 );
             }
         );
@@ -255,6 +258,9 @@ class UserServiceProvider extends ServiceProvider
 
         $this->registerSettingsPermissions();
 
+        // register admin middleware
+        $this->app['router']->middleware('admin', Admin::class);
+
         // register toggle menu
         $this->registerToggleMenu();
     }
@@ -267,6 +273,7 @@ class UserServiceProvider extends ServiceProvider
     protected function registerToggleMenu()
     {
         $this->app['xe.pluginRegister']->add(ProfileItem::class);
+        $this->app['xe.pluginRegister']->add(ManageItem::class);
     }
 
     /**

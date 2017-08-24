@@ -17,15 +17,6 @@ class ProfileImage extends FormImage
 
     protected $view = 'uiobjects.user.profileImage';
 
-    public static function boot()
-    {
-        // TODO: Implement boot() method.
-    }
-
-    public static function getSettingsURI()
-    {
-    }
-
     /**
      * loadFiles
      *

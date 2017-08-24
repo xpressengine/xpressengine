@@ -14,11 +14,8 @@
 
 namespace Xpressengine\UIObject;
 
-use Closure;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\View\Expression;
-use PhpQuery\PhpQuery;
-use PhpQuery\PhpQueryObject;
 use Xpressengine\Plugin\ComponentInterface;
 use Xpressengine\Plugin\ComponentTrait;
 
@@ -40,13 +37,6 @@ abstract class AbstractUIObject implements Renderable, ComponentInterface
     public static $sequence = 0;
 
     /**
-     * @var Closure|null UIObject가 출력(render)될 때, callback이 지정돼 있을 경우, 이 callback을 한번 실행한 후 출력된다.
-     *                   만약 UIObject의 출력에 변화를 주고 싶을 경우, callback을 사용하여 출력되는 값을 변경할 수 있다.
-     *                   이 callback은 파라메터로 출력될 html(PhpQueryObject)을 전달 받는다. html을 변경하면 변경한 html이 출력된다.
-     */
-    protected $callback;
-
-    /**
      * @var array UIObject 생성시 첫번째 인자로 받는 파라메터
      */
     protected $arguments;
@@ -55,11 +45,6 @@ abstract class AbstractUIObject implements Renderable, ComponentInterface
      * @var string UIObject가 기본적으로 가지고 있는 html
      */
     protected $template;
-
-    /**
-     * @var PhpQueryObject|null 출력될 html의 PhpQueryObject
-     */
-    protected $markup;
 
     /**
      * get sequence number
@@ -74,12 +59,10 @@ abstract class AbstractUIObject implements Renderable, ComponentInterface
     /**
      * 생성자. 모든 UIObject는 동일한 방식으로 생성되어야 한다.
      *
-     * @param mixed   $args     UIObject의 출력에 필요한 변수
-     * @param Closure $callback UIObject가 출력될 때 실행될 callback
+     * @param mixed $args UIObject의 출력에 필요한 변수
      */
-    final public function __construct($args = [], $callback = null)
+    final public function __construct($args = [])
     {
-        $this->callback = $callback;
         $this->arguments = $args;
     }
 
@@ -90,18 +73,7 @@ abstract class AbstractUIObject implements Renderable, ComponentInterface
      */
     public function render()
     {
-        if (is_callable($this->callback)) {
-            $callback = $this->callback;
-
-            if ($this->markup === null) {
-                PhpQuery::newDocument();
-                $this->markup = PhpQuery::pq($this->template);
-            }
-            $callback($this->markup);
-        }
-
-        $viewStr = $this->markup === null ? $this->template : (string)$this->markup;
-        return new Expression($viewStr);
+        return new Expression($this->template);
     }
 
     /**

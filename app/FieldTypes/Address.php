@@ -63,10 +63,15 @@ class Address extends AbstractType
      */
     public function getRules()
     {
+        $required = '';
+        if ($this->config->get('required') === true) {
+            $required = 'required';
+        }
+
         return [
-            'postcode' => 'required',
-            'address1' => 'required',
-            'address2' => 'required'
+            'postcode' => $required,
+            'address1' => $required,
+            'address2' => $required,
         ];
     }
 

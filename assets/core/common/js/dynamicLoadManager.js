@@ -55,8 +55,13 @@ var DynamicLoadManager = (function (exports) {
           });
 
         } else {
+          count++;
           if (!!callbackObj.load) {
             callbackObj.load();
+          }
+
+          if (count === arrjs.length && !!callbackObj.complete) {
+            callbackObj.complete();
           }
         }
       }

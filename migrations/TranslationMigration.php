@@ -35,6 +35,7 @@ class TranslationMigration extends Migration {
     {
         // initialize
         app('xe.translator')->putFromLangDataSource('xe', app()->langPath()."/common.php");
+        app('xe.translator')->importLaravel(app()->langPath());
     }
 
     public function update($installedVersion = null)

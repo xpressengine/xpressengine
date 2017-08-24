@@ -216,8 +216,10 @@ class XeInstall extends Command
         $this->disableDebugMode();
 
         // change directory permissions
-        $this->info('[Setup Directory Permission]');
-        $this->stepDirPermission();
+        if(!windows_os()) {
+            $this->info('[Setup Directory Permission]');
+            $this->stepDirPermission();
+        }
 
         $this->stepAgreeCollectEnv();
 
@@ -237,7 +239,7 @@ class XeInstall extends Command
             throw new \Exception('PHP version is not available');
         }
 
-        $extensions = ['PDO', 'pdo_mysql', 'curl', 'gd', 'mbstring', 'openssl', 'zip'];
+        $extensions = ['PDO', 'pdo_mysql', 'curl', 'fileinfo', 'gd', 'mbstring', 'openssl', 'zip'];
         $result = [];
         foreach ($extensions as $ext) {
             $result[$ext] = extension_loaded($ext);
@@ -868,6 +870,16 @@ class XeInstall extends Command
             ],
         ];
         $this->configFileGenerate('mail', $info);
+
+        // create auth-admin config
+        $info = [
+            'admin' => [
+                'session' => 'auth.admin',
+                'expire' => 30,
+                'password' => $config['password']
+            ],
+        ];
+        $this->configFileGenerate('auth', $info);
 
         // login admin
         /** @var Guard $auth */

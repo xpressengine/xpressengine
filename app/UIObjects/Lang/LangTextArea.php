@@ -36,12 +36,4 @@ class LangTextArea extends AbstractUIObject
             . " data-multiline=\"true\""
             . " data-autocomplete=\"{$autocomplete}\"></div>";
     }
-
-    public static function boot()
-    {
-    }
-
-    public static function getSettingsURI()
-    {
-    }
 }
