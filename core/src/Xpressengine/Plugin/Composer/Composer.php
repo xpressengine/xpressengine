@@ -276,10 +276,12 @@ class Composer
             if ($item->isDir() && !$item->isLink()) {
                 static::deleteDirectory($item->getPathname());
             } else {
-                @unlink($item->getPathname());
+                if (strpos($item->getFilename(), '.') !== 0) {
+                    @unlink($item->getPathname());
+                }
             }
         }
-        if (! $preserve) {
+        if (!$preserve) {
             @rmdir($directory);
         }
         return true;
