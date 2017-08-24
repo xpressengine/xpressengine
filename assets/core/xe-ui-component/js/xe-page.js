@@ -164,6 +164,7 @@
   })();
 
   /**
+   * @private
    * @description validtion
    * */
   var _validation = (function () {
@@ -201,6 +202,7 @@
   })();
 
   /**
+   * @private
    * @param {object} options
    * <pre>
    *     - target   : {string} css selector

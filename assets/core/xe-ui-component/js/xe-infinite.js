@@ -27,9 +27,9 @@ var XeInfinite = (function () {
      *   - wrapper {string} selector
 		 *   - template {string}
      *   - data {array}
-		 *   - loadRowCount {number} 스크롤되는 요소의 row갯수
+		 *   - loadRowCount {number} onGetRows를 호출하기전 체크. 스크롤시 남아있는 row의 갯수. loadRowCount갯수만큼 스크롤이 남을 경우 onGetRows를 호출한다.
 		 *   - rowHeight {number} row height
-		 *   - onGetRows {function} 스크롤중 데이터를 요청해야 할 경우 호출될 메소드. 인자로 grid 객체를 넘겨준다.
+		 *   - onGetRows {function} 스크롤중 데이터를 요청해야 할 경우 호출될 메소드.
      * </pre>
 		 * @param {object} customOptions slickgrid custom options
      * */

@@ -106,7 +106,7 @@ module.exports = (() => {
       return _config;
     },
 
-    'doc:core': () => {
+    'jsdoc': () => {
       var merged = stream(
         gulp.src('./resources/jsdoc')
         .pipe($.clean({ force: true }))

@@ -1,7 +1,3 @@
-/**
- * @namespace XE
- * <form action=... method=... data-callback=... data-submit="xe-ajax"></form>
- */
 ;(function (XE) {
 
   var _formCommon = (function () {

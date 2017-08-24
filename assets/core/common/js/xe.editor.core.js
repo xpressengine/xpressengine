@@ -1,6 +1,3 @@
-/**
- * @module Editor
- * */
 (function (exports) {
   'use strict';
 
@@ -8,7 +5,8 @@
   var editorOptionSet = {};
 
   /**
-   * @class InstanceObj
+   * @private
+   * @class
    * @param {string} editorName
    * @param {string} sel selector
    * @param {object} editorOptions
@@ -39,9 +37,6 @@
 
   };
 
-  /**
-   * @lends InstanceObj.prototype
-   * */
   InstanceObj.prototype = {
     /**
      * 생성된 instance를 반환한다InstanceObj.
@@ -121,8 +116,8 @@
   };
 
   /**
+   * @private
    * @class Editor
-   * @memberof module:Editor
    * @param {object} editorSettings
    * @param {object}interfaces
    * */
@@ -190,8 +185,8 @@
   };
 
   /**
+   * @private
    * @class Tools
-   * @memberof module:Editor
    * */
   var Tools = function (obj) {
     for (var o in obj) {
@@ -204,8 +199,6 @@
 
   /**
    * @namespace XEeditor
-   * @property tool.define {function} tool을 정의 한다.
-   * @property tool.get {function} tool 정보를 반환한다.
    * */
   var XEeditor = (function () {
     return {
@@ -236,7 +229,24 @@
       getEditor: function (name) {
         return editorSet[name];
       },
-
+      /**
+       * @memberof XEeditor
+       * @prop {object} tools
+       * @prop {function} define
+       * <pre>
+       *   tool을 정의한다.
+       *
+       *   arguments
+       *   - obj : object
+       * </pre>
+       * @prop {function} get
+       * <pre>
+       *   tool을 리턴한다.
+       *
+       *   arguments
+       *   - id : string
+       * </pre>
+       * */
       tools: {
         define: function (obj) {
           if (Validation.isValidToolsObject(obj)) {
@@ -271,8 +281,7 @@
   })();
 
   /**
-   * @namespace Validation
-   * @memberof module:Editor
+   * @private
    * */
   var Validation = (function () {
 
@@ -296,9 +305,6 @@
     };
 
     return {
-      /**
-       * @memberof Validation
-       * */
       isValidBeforeCreateInstance: function (sel, toolIdList, editorParent) {
         if (!sel) {
           console.error('error: 중복 editor id. (' + sel + ')');

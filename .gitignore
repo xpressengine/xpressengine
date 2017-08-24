@@ -9,8 +9,4 @@ composer.user.json
 .DS_Store
 /plugins
 /node_modules
-/bower_components
-/assets/jspm_packages/*
-!/assets/jspm_packages/*.*
-assets/jspm_packages/.*
 *.map
