@@ -1,4 +1,4 @@
-<div class="admin-tab container-fluid">
+<div class="admin-tab">
     <div class="row">
         <div class="col-sm-12">
             <div class="panel">
