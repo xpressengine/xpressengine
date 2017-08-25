@@ -1,6 +1,5 @@
 <form action="{{ route('settings.plugins.manage.update') }}" method="post">
     {{ csrf_field() }}
-    {{ method_field('put') }}
 
     <div class="xe-modal-header">
         <button type="button" class="btn-close" data-dismiss="xe-modal" aria-label="Close"><i class="xi-close"></i></button>
@@ -9,29 +8,34 @@
     <div class="xe-modal-body">
 
         @if(count($plugins))
-        <p>
-            아래 플러그인을 업데이트합니다. 업데이트하는 플러그인에서 의존하는 다른 플러그인이 같이 설치될 수 있습니다.<br>
-            업데이트 과정은 수분이상 소요될 수 있습니다. 업데이트하시겠습니까?
-        </p>
-
-        <hr>
-
-        <ul class="list-unstyled">
-            @foreach($plugins as $plugin)
-                <li>
-                    <label>
-                        <input type="checkbox" name="pluginId[]" value="{{ $plugin->getId() }}" checked>
-                        {{ $plugin->getTitle() }}({{ $plugin->getId() }}) ver.{{ $plugin->getVersion() }} => ver.{{ $plugin->getLatestVersion() }}
-                    </label>
-                </li>
-            @endforeach
-        </ul>
+        <div class="xe-lypop-plugin">
+            <p class="xe-lypop-plugin-text">
+                아래 플러그인을 업데이트합니다. 업데이트하는 플러그인에서 의존하는 다른 플러그인이 같이 설치될 수 있습니다.
+                업데이트 과정은 수분이상 소요될 수 있습니다. <br>
+                업데이트하시겠습니까?
+            </p>
+            <div class="xe-lypop-plugin-check version">
+                @foreach($plugins as $plugin)
+                <label class="xe-label">
+                    <input type="checkbox" name="pluginId[]" value="{{ $plugin->getId() }}" checked>
+                    <span class="xe-input-helper"></span>
+                    <div class="xe-label-text"><span>{{ $plugin->getTitle() }}</span><b>({{ $plugin->getId() }})</b>
+                        <dl>
+                            <dt class="xe-sr-only">현제 버전</dt>
+                            <dd>ver.{{ $plugin->getVersion() }} <i class="xi-long-arrow-right"></i></dd>
+                            <dt class="xe-sr-only">다음버전</dt>
+                            <dd>ver.{{ $plugin->getLatestVersion() }}</dd>
+                        </dl>
+                    </div>
+                </label>
+                @endforeach
+            </div>
+        </div>
         @else
         <p>
             업데이트할 플러그인이 없습니다 모든 플러그인이 최신 버전입니다.
         </p>
         @endif
-
     </div>
     <div class="xe-modal-footer">
         <button type="button" class="xe-btn xe-btn-secondary" data-dismiss="xe-modal">{{ xe_trans('xe::cancel') }}</button>
