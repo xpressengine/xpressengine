@@ -49,12 +49,16 @@
         <div class="row">
           <div class="col-sm-12">
             <div class="panel">
+              <button class="admin-tab-left" style="display:none"><i class="xi-angle-left"></i><span class="xe-sr-only">처음으로 이동</span></button>
+              
               <ul class="admin-tab-list">
                 <li><a href="#">검색결과</a></li>
                 <li class="on"><a href="#">추천</a></li>
                 <li><a href="#">인기</a></li>
                 <li><a href="#">내가 구매한</a></li>
               </ul>
+              
+              <button class="admin-tab-right"><i class="xi-angle-right"></i><span class="xe-sr-only">끝으로 이동</span></button>
             </div>
           </div>
         </div>
@@ -244,6 +248,47 @@ function init_include() {
     loadCheckFunc('00_header.html', '00_aside.html', '00_footer.html');
 }
 init_include();
+
+
+// admin-tab
+var targetElement = document.getElementsByClassName('admin-tab-list')[0],
+    targetElementInner = targetElement.childNodes,
+    tmpwidth = 18;
+    tabLeft = document.getElementsByClassName('admin-tab-left')[0],
+    tabRight = document.getElementsByClassName('admin-tab-right')[0];
+
+for(i = 0; i < targetElementInner.length; i++ ) {
+  if( !isNaN(targetElementInner[i].offsetWidth) ) {
+    var tmpmargin = targetElementInner[i].currentStyle || window.getComputedStyle(targetElementInner[i]),
+    regExp = /(\-|[0-9])+(.[0-9]+)?/g,
+    targetMargin = Number(regExp.exec(tmpmargin.marginLeft)[0]);
+    tmpwidth += targetElementInner[i].offsetWidth;
+    tmpwidth += targetMargin;
+  }
+}
+
+tabLeft.addEventListener('click', function (){
+  targetElement.scrollLeft = 0;
+  this.style.display = "none";
+  tabRight.style.display = "block";
+});
+tabRight.addEventListener('click', function (){
+  targetElement.scrollLeft = tmpwidth;
+  this.style.display = "none";
+  tabLeft.style.display = "block";
+});
+targetElement.addEventListener('scroll', function(){
+  
+  var targetCenter = ((targetElement.offsetWidth - tmpwidth) / 2) * -1;
+  if ( targetElement.scrollLeft <= targetCenter) {
+    tabLeft.style.display = "none";
+    tabRight.style.display = "block";
+  } else {
+    tabRight.style.display = "none";
+    tabLeft.style.display = "block";
+  }
+});
+
 });
 </script>
 </body>
