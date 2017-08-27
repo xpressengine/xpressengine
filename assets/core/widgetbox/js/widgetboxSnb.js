@@ -1,6 +1,8 @@
 ;(function (exports, WidgetBox) {
   'use strict';
-
+  /**
+   * @namespace WidgetSnb
+   * */
   exports.WidgetSnb = (function () {
     var _this;
     var _settings = {
@@ -12,6 +14,10 @@
     var _deletable = true;
 
     return {
+      /**
+       * WidgetSnb를 초기화한다.
+       * @memberof WidgetSnb
+       * */
       init: function () {
         _this = this;
         _this.cache();
@@ -20,7 +26,10 @@
 
         return this;
       },
-
+      /**
+       * jquery element cache
+       * @memberof WidgetSnb
+       * */
       cache: function () {
         _this.$editor = $('.editor');
         _this.$selectDivision = $('#selectDivision');
@@ -37,7 +46,10 @@
         _this.$sectionClose = $('.btn-section-close');
 
       },
-
+      /**
+       * 이벤트를 바인딩한다.
+       * @memberof WidgetSnb
+       * */
       bindEvents: function () {
         _this.$btnMode.on('click', _this.selectMode);
         _this.$selectDivision.on('click', 'li > a', _this.selectDivisionType);
@@ -50,7 +62,10 @@
         _this.$btnAddDivisionType.on('click', _this.addDivisionType);
         _this.$sectionClose.on('click', _this.toggleSection);
       },
-
+      /**
+       * 로컬스토리지에 저장된 커스텀 분할 타입을 로드한다.
+       * @memberof WidgetSnb
+       * */
       settings: function () {
         var locDivitionType = JSON.parse(localStorage.getItem('divisionType') || '[]');
         var appendDivision = [];
@@ -72,14 +87,20 @@
         //tooltip
         // _this.$tooltips.xeTooltip();
       },
-
+      /**
+       * section-group을 토글링한다.
+       * @memberof WidgetSnb
+       * */
       toggleSection: function () {
         var $section = $(this).parents('.seciton');
 
         $section.children('.section-group').toggle();
         $section.toggleClass('close');
       },
-
+      /**
+       * 분할타입을 추가한다.
+       * @memberof WidgetSnb
+       * */
       addDivisionType: function () {
         var divisionType = _this.$inputVerticalSize.val();
 
@@ -129,7 +150,11 @@
 
         }
       },
-
+      /**
+       * 분할타입을 화면에 랜더링한다.
+       * @memberof WidgetSnb
+       * @param {array} types
+       * */
       appendDivisionType: function (types) {
 
         var html = '';
@@ -160,7 +185,12 @@
           _this.addDivisionType();
         }
       },
-
+      /**
+       * 위젯을 추가하는 레이어를 토글링한다.
+       * @memberof WidgetSnb
+       * @param {string} command
+       * @param {number} index
+       * */
       toggleWidgetAddLayer: function (command, index) {
         // close sidebar
         if (!$('.widget-layer').hasClass('open')) {
@@ -189,7 +219,10 @@
           $('aside').removeClass('open');
         }
       },
-
+      /**
+       * 데스크탑, 모바일의 화면으로 보여준다.
+       * @memberof WidgetSnb
+       * */
       selectMode: function () {
         var $this = $(this);
         var mode = $this.data('mode');
@@ -216,7 +249,9 @@
 
         _this.divideVertical();
       },
-
+      /**
+       * @memberof WidgetSnb
+       * */
       divide: function () {
         var direction = $(this).data('direction'); //horizontal or vertical
         var $selected = $('.selected');
@@ -237,7 +272,10 @@
           }
         }
       },
-
+      /**
+       * 선택된 셀을 수직분할 한다.
+       * @memberof WidgetSnb
+       * */
       divideVertical: function () {
         var columns = _settings.divisionType.split('|');
         var $selected = $('.selected');
@@ -272,7 +310,10 @@
           alert('셀을 선택하세요.');
         }
       },
-
+      /**
+       * 선택된 셀을 가로분할 한다.
+       * @memberof WidgetSnb
+       * */
       divideHorizontal: function () {
         var $selected = $('.selected');
         var $widgetAreaRow = $selected.parents('.widgetarea-row');
@@ -325,7 +366,10 @@
           alert('셀을 선택하세요.');
         }
       },
-
+      /**
+       * row를 추가한다.
+       * @memberof WidgetSnb
+       * */
       addRow: function () {
         _this.$editor.append([
           '<div class="xe-row widgetarea-row">',
@@ -337,7 +381,10 @@
           '</div>',
         ].join('\n'));
       },
-
+      /**
+       * 선택된 셀을 삭제한다.
+       * @memberof WidgetSnb
+       * */
       removeBlock: function () {
 
         var $selected = $('.selected');
@@ -457,15 +504,16 @@
         WidgetBox.setOrdering();
       },
       /**
-       * TODO
-       * @param {jquery element} $selected 선택된 column
+       * 삭제될 수 있는 블럭인지 체크한다.
+       * @memberof WidgetSnb
+       * @param {object} $selected 선택된 column
        * @description
        * <pre>
        *     - 삭제 될수 있는 block인지 상, 하, 좌, 우 합쳐져야하는 요소인지 확인
        *     1)줄어들어야 하는 height 수치 필요 (상하 병합 되면서 수치가 늘어날수 있음)
        *     2)상위 dom으로 올라가며 확인
        * </pre>
-       * @return {boolean} deletable
+       * @return {boolean} 
        * */
       checkRowBlock: function ($selected) {
 
@@ -494,8 +542,9 @@
 
       },
       /**
-       * TODO
-       * @description 하위 dom을 내려가며 확인
+       * 하위 dom을 내려가며 삭제될 수 있는 블럭인지 확인한다.
+       * @memberof WidgetSnb
+       * @return {boolean}
        * */
       checkRowChildBlock: function ($cols, targetHeight) {
 
@@ -535,7 +584,11 @@
 
         return _deletable;
       },
-
+      /**
+       * 셀의 height를 줄인다.
+       * @memberof WidgetSnb
+       * @param {element} $target
+       * */
       reduceBlock: function ($target) {
         if ($target.length > 0) {
 

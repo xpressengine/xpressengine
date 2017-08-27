@@ -1,10 +1,18 @@
 (function (exports, WidgetBox) {
 'use strict';
 
+/**
+ * @namespace WidgetAddr
+ * */
 exports.WidgetAdder = (function () {
   var _this;
 
   return {
+    /**
+     * 위젯 설정페이지를 초기화한다.
+     * @return {object}
+     * @memberof WidgetAddr
+     * */
     init: function () {
       _this = this;
 
@@ -13,12 +21,18 @@ exports.WidgetAdder = (function () {
 
       return this;
     },
-
+    /**
+     * 위젯 설정페이지에서 사용되는 jquery element를 캐싱한다.
+     * @memberof WidgetAddr
+     * */
     cache: function () {
       _this.$btnPlaceWidget = $('.btnPlaceWidget');
       _this.$btnCloseLayer = $('.btnCloseLayer');
     },
-
+    /**
+     * 위젯 설정페이지에서 사용되는 이벤트를 정의한다.
+     * @memberof WidgetAddr
+     * */
     bindEvents: function () {
       _this.$btnPlaceWidget.on('click', function () {
         $('#widgetGen').widgetGenerator().generate(function () {
@@ -42,14 +56,21 @@ exports.WidgetAdder = (function () {
 
       _this.$btnCloseLayer.on('click', _this.closeLayer);
     },
-
+    /**
+     * 위젯 설정페이지를 닫는다.
+     * @memberof WidgetAddr
+     * */
     closeLayer: function () {
       $('.widget-layer').removeClass('open');
       $('.dimd').hide();
       $('body').css('overflow', '');
       $('#widgetGen').widgetGenerator('init');
     },
-
+    /**
+     * 설정된 위젯을 선택된 위젯박스에 위치한다.
+     * @memberof WidgetAddr
+     * @param {string} widgetCode
+     * */
     placeWidget: function (widgetCode) {
       var $widgetCode = $(widgetCode);
       var $selected = $('.selected');
@@ -73,7 +94,13 @@ exports.WidgetAdder = (function () {
 
       WidgetBox.increaseBlockSize($selected);
     },
-
+    /**
+     * 위젯박스에 위치할 위젯 설정 템플릿을 리턴한다.
+     * @memberof WidgetAddr
+     * @param {string} widgetCode
+     * @param {string} widgetTitle
+     * @return {string}
+     * */
     getWidgetBoxView: function (widgetCode, widgetTitle) {
       return [
         '<div class="xe-row">',

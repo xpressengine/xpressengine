@@ -1,14 +1,29 @@
+/**
+ * @module Progress
+ * */
+
+/** @private */
 var instances = [];
+/** @private */
 var cssLoaded = false;
 
 var Progress = {
+  /**
+   * css를 로드한다.
+   * @memberof module:Progress
+   * @deprecated
+   * */
   cssLoad: function () {
     if (cssLoaded === false) {
       cssLoaded = true;
       DynamicLoadManager.cssLoad('/assets/core/common/css/progress.css'); // @TODO
     }
   },
-
+  /**
+   * progress를 그린다.
+   * @memberof module:Progress
+   * @param {Element} context
+   * */
   start: function (context) {
     if ($('link[href*="assets/core/common/css/progress.css"]').length == 0) {
       DynamicLoadManager.cssLoad('/assets/core/common/css/progress.css'); // @TODO
@@ -23,7 +38,11 @@ var Progress = {
 
     $context.trigger('progressStart');
   },
-
+  /**
+   * progress를 종료한다.
+   * @memberof module:Progress
+   * @param {Element} context
+   * */
   done: function (context) {
     var $context = $(context);
     if ($context.context === undefined) {
@@ -34,6 +53,7 @@ var Progress = {
   },
 };
 
+/** @private */
 function getInstance($context) {
   var instanceId = $context.attr('data-progress-instance');
 
@@ -45,6 +65,7 @@ function getInstance($context) {
   return instance;
 }
 
+/** @private */
 function getCount($context) {
   var count = $context.attr('data-progress-count');
 
@@ -55,6 +76,7 @@ function getCount($context) {
   return count;
 }
 
+/** @private */
 function setCount($context, count) {
   if (parseInt(count) < 0) {
     count = 0;
@@ -63,6 +85,7 @@ function setCount($context, count) {
   $context.attr('data-progress-count', count);
 }
 
+/** @private */
 function setInstance($context, instance) {
   if (getInstance($context) === null) {
     var progress = new XeProgress();
@@ -97,6 +120,7 @@ function setInstance($context, instance) {
   }
 }
 
+/** @private */
 function attachInstance($context) {
   $context.bind('progressStart', function (e) {
     e.stopPropagation();
@@ -121,17 +145,11 @@ function attachInstance($context) {
 }
 
 /**
- * progress bar 없이 spinner 만 사용
- */
-var xeSpinner = function () {
-
-};
-
-/**
  * NProgress, (c) 2013, 2014 Rico Sta. Cruz - http://ricostacruz.com/nprogress
  * @license MIT
  *
  * NProgress 모듈을 instance 화 할 수 있도록 하기위해 수정함
+ * @private
  * */
 function XeProgress() {
   this.settings = {
@@ -397,6 +415,7 @@ function XeProgress() {
 
 /**
  * Helpers
+ * @private
  */
 function clamp(n, min, max) {
   if (n < min) return min;
@@ -404,10 +423,12 @@ function clamp(n, min, max) {
   return n;
 }
 
+/** @private */
 function toBarPerc(n) {
   return (-1 + n) * 100;
 }
 
+/** @private */
 function barPositionCSS(n, speed, ease, Settings) {
   var barCSS;
 
@@ -424,9 +445,10 @@ function barPositionCSS(n, speed, ease, Settings) {
   return barCSS;
 }
 
-//queue
+/** @private */
 var pending = [];
 
+/** @private */
 function next() {
   var fn = pending.shift();
   if (fn) {
@@ -434,21 +456,29 @@ function next() {
   }
 }
 
+/**
+ * callback을 queue에 담는다.
+ * @memberof module:Progress
+ * @param {function} fn
+ * */
 Progress.queue = function (fn) {
   pending.push(fn);
   if (pending.length == 1) next();
 };
 
-//css
+/** @private */
 var cssPrefixes = ['Webkit', 'O', 'Moz', 'ms'];
+/** @private */
 var cssProps = {};
 
+/** @private */
 function camelCase(string) {
   return string.replace(/^-ms-/, 'ms-').replace(/-([\da-z])/gi, function (match, letter) {
     return letter.toUpperCase();
   });
 }
 
+/** @private */
 function getVendorProp(name) {
   var style = document.body.style;
   if (name in style) return name;
@@ -465,11 +495,13 @@ function getVendorProp(name) {
   return name;
 }
 
+/** @private */
 function getStyleProp(name) {
   name = camelCase(name);
   return cssProps[name] || (cssProps[name] = getVendorProp(name));
 }
 
+/** @private */
 function applyCss(element, prop, value) {
   prop = getStyleProp(prop);
   if (element) {
@@ -477,6 +509,12 @@ function applyCss(element, prop, value) {
   }
 }
 
+/**
+ * element에 properties 스타일을 추가한다.
+ * @memberof module:Progress
+ * @param {Element} element
+ * @param {object} properties
+ * */
 Progress.css = function () {
   return function (element, properties) {
     var args = arguments;

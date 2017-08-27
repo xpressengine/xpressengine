@@ -5,6 +5,9 @@
 import React from 'react';
 import createReactClass from 'create-react-class';
 
+/**
+ * @namespace ToggleMenu
+ * */
 var ToggleMenu = createReactClass({
 
   getInitialState: function () {

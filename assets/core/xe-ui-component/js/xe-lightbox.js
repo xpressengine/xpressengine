@@ -1,9 +1,5 @@
 /**
- * @name		jQuery touchTouch plugin
- * @author		Martin Angelov
- * @version 	1.0
- * @url			http://tutorialzine.com/2012/04/mobile-touch-gallery/
- * @license		MIT License
+ * @name		jQuery lightbox plugin
  */
 /*
  <div class="images" data-toggle="xe-lightbox" data-selector="img">

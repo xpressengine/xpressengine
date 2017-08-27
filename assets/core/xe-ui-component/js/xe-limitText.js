@@ -1,3 +1,6 @@
+/**
+ * @name		jQuery limitText plugin
+ * */
 ;(function () {
   var TextLimiter = function (element, options) {
     var limit = options.limit || 30;
@@ -93,6 +96,7 @@
       },
 
       /**
+       * @private
        * @param {object} data
        * <pre>
        *   currentValue: 기존값
@@ -143,6 +147,9 @@
   };
 
   /**
+   *
+   * @external "jQuery.fn"
+   * @function external:"jQuery.fn".limitText
    * @param options {object}
    * <pre>
    * - limit: 100 default 30,

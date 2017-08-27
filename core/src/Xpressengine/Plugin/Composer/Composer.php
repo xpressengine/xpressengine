@@ -49,12 +49,12 @@ class Composer
     protected static $pluginCacheDirectory = 'storage/framework/plugins';
 
     public static $basePlugins = [
-        'xpressengine-plugin/alice' => '0.9.12',
-        'xpressengine-plugin/board' => '0.9.20',
-        'xpressengine-plugin/ckeditor' => '0.9.18',
-        'xpressengine-plugin/claim' => '0.9.3',
-        'xpressengine-plugin/comment' => '0.9.14',
-        'xpressengine-plugin/news_client' => '0.9.4',
+        'xpressengine-plugin/alice' => '0.9.13',
+        'xpressengine-plugin/board' => '0.9.21',
+        'xpressengine-plugin/ckeditor' => '0.9.19',
+        'xpressengine-plugin/claim' => '0.9.4',
+        'xpressengine-plugin/comment' => '0.9.15',
+        'xpressengine-plugin/news_client' => '0.9.5',
         'xpressengine-plugin/orientator' => '0.9.1',
         'xpressengine-plugin/page' => '0.9.5',
         'xpressengine-plugin/widget_page' => '0.9.0'
@@ -276,10 +276,12 @@ class Composer
             if ($item->isDir() && !$item->isLink()) {
                 static::deleteDirectory($item->getPathname());
             } else {
-                @unlink($item->getPathname());
+                if (strpos($item->getFilename(), '.') !== 0) {
+                    @unlink($item->getPathname());
+                }
             }
         }
-        if (! $preserve) {
+        if (!$preserve) {
             @rmdir($directory);
         }
         return true;

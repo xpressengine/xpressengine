@@ -1,8 +1,43 @@
-XEeditor.define({
+/**
+ * @class XEtextarea
+ * */
+XEeditor.define(/** @lends XEtextarea */{
+  /**
+   * @prop {object} editorSettings
+   * @prop {string} editorSettings.name
+   * @prop {object} editorSettings.config
+   * */
   editorSettings: {
     name: 'XEtextarea',
     configs: {},
   },
+  /**
+   * @prop {object} interfaces
+   * @prop {function(selector,options)} interfaces.initialize
+   * <pre>
+   *   arguments
+   *   - selector : string
+   *   - options : object
+   * </pre>
+   * @prop {function} interfaces.getContents 에디터 컨텐츠를 리턴한다.
+   * @prop {function} interfaces.setContents 에디터에 컨텐츠를 덮어쓴다.
+   * <pre>
+   *   arguments
+   *   - text : string
+   * </pre>
+   * @prop {function} interfaces.addContents 에디터에 컨텐츠를 추가한다.
+   * <pre>
+   *   arguments
+   *   - text : string
+   * </pre>
+   * @prop {function} interfaces.on 에디터에 이벤트 핸들러를 추가한다.
+   * <pre>
+   *   arguments
+   *   - eventName : string
+   *   - callback : function
+   * </pre>
+   * @prop {function} interfaces.reset 에디터 컨텐츠를 초기화한다.
+   * */
   interfaces: {
     initialize: function (selector, options) {
 

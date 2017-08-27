@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import PermissionTagSuggestion from './PermissionTagSuggestion';
 import PermissionTag from './PermissionTag';
 
+/**@private*/
 const Keys = {
   ENTER: 13,
   TAB: 9,
@@ -14,9 +15,26 @@ const Keys = {
   ESCAPE: 27,
 };
 
+/**
+ * PermissionExclude React Component
+ * @namespace PermissionExclude
+ * */
 export default createReactClass({
+  /**
+   * @memberof PermissionExclude
+   * @prop {string} displayName
+   * */
   displayName: 'PermissionExclude',
 
+  /**
+   * @memberof PermissionExclude
+   * @prop {object} propTypes
+   * @prop {array} propTypes.selectedMember
+   * @prop {string} propTypes.placeholder
+   * @prop {array} propTypes.suggestions
+   * @prop {boolean} propTypes.handleDelete
+   * @prop {boolean} propTypes.handleAddition
+   * */
   propTypes: {
     selectedMember: PropTypes.array,
     placeholder: PropTypes.string,
@@ -24,6 +42,10 @@ export default createReactClass({
     handleDelete: PropTypes.func.isRequired,
     handleAddition: PropTypes.func.isRequired,
   },
+  /**
+   * @memberof PermissionExclude
+   * @return {object}
+   * */
   getDefaultProps: function () {
     return {
       placeholder: XE.Lang.trans('xe::explainExcludeUser'),
@@ -31,10 +53,10 @@ export default createReactClass({
       suggestions: [],
     };
   },
-
-  componentDidMount: function () {
-  },
-
+  /**
+   * @memberof PermissionExclude
+   * @return {object}
+   * */
   getInitialState: function () {
     return {
       suggestions: [],
@@ -44,12 +66,20 @@ export default createReactClass({
       searchingCnt: 0,
     };
   },
-
-  handleDelete: function (i, e) {
+  /**
+   * 상위컴포넌트의 handleDelete를 호출한다.
+   * @memberof PermissionExclude
+   * @param {number} i
+   * */
+  handleDelete: function (i) {
     this.props.handleDelete(i);
     this.setState({ query: '' });
   },
-
+  /**
+   * input상태를 업데이트한다.
+   * @memberof PermissionExclude
+   * @param {event} e
+   * */
   handleChange: function (e) {
     var query = e.target.value.trim();
 
@@ -71,7 +101,11 @@ export default createReactClass({
       });
     }
   },
-
+  /**
+   * suggestion을 AJAX요청하여 상태를 업데이트한다.
+   * @memberof PermissionExclude
+   * @param {string} keyword
+   * */
   searchMember: function (keyword) {
 
     var searchMemberUrl = this.props.searchMemberUrl;
@@ -109,7 +143,11 @@ export default createReactClass({
     });
 
   },
-
+  /**
+   * keydown event handler
+   * @memberof PermissionExclude
+   * @param {event} e
+   * */
   handleKeyDown: function (e) {
     var _state = this.state;
     var query = _state.query;
@@ -167,7 +205,11 @@ export default createReactClass({
       });
     }
   },
-
+  /**
+   * 태그를 추가한다.
+   * @memberof PermissionExclude
+   * @param {object} tag
+   * */
   addTag: function (tag) {
     var input = ReactDOM.findDOMNode(this.refs.input);
 
@@ -185,18 +227,28 @@ export default createReactClass({
     input.value = '';
     input.focus();
   },
-
+  /**
+   * suggestion click시 태그를 추가한다.
+   * @memberof PermissionExclude
+   * @param {object} tag
+   * */
   handleSuggestionClick: function (i, e) {
     this.addTag(this.state.suggestions[i]);
   },
-
+  /**
+   * suggestion hover시 selected상태를 변경한다.
+   * @memberof PermissionExclude
+   * @param {number} i
+   * */
   handleSuggestionHover: function (i, e) {
     this.setState({
       selectedIndex: i,
       selectionMode: true,
     });
   },
-
+  /**
+   * @memberof PermissionExclude
+   * */
   render: function () {
 
     var prefix = '@';
