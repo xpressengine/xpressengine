@@ -39,7 +39,7 @@ class AdvisorCollection
     /**
      * @var string[] 추가된 advisor name의 목록, 이 목록은 point cut을 정렬돼 있다.
      */
-    protected $advisorMap = null;
+    public $advisorMap = null;
 
 
     /**
@@ -169,7 +169,11 @@ class AdvisorCollection
         $this->aliases[$alias] = $class;
 
         if (isset($this->advisorMap->$alias)) {
-            $this->advisorMap->$class = $this->advisorMap->$alias;
+            foreach ($this->advisorMap->$alias as $method => $value) {
+                foreach ($value->advisorArr as $advisor) {
+                    $this->advisorMap->$class->$method->advisorArr[] = $advisor;
+                }
+            }
             unset($this->advisorMap->$alias);
         }
     }
