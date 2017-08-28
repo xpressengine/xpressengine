@@ -169,6 +169,8 @@ class SettingController extends Controller
 
         $config = app('xe.config')->get('user.join');
 
+        $inputs['guard_forced'] = $inputs['guard_forced'] === 'true';
+
         if ($inputs['useCaptcha'] === 'true' && !$captcha->available()) {
             throw new ConfigurationNotExistsException();
         }

@@ -58,6 +58,10 @@
                     <div class="form-group">
                         <label>회원가입 인증방식</label>
                         <div class="list-group-item">
+                            {{ uio('formSelect', ['name'=>'guard_forced', 'description'=>'"인증없이 가입 불가"를 선택하면 아래 인증절차중 하나를 선택해야 가입할 수 있습니다', 'options'=>[
+                            'false' => '인증없이 가입 허용', 'true' => '인증없이 가입 불가'
+                            ],'value' => ($config->get('guard_forced') ? 'true' : 'false')]) }}
+                            <hr>
                             @include('user.settings.setting.guards')
                         </div>
                     </div>

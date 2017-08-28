@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Auth\RedirectsUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Fluent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use XeDB;
 use XeDynamicField;
@@ -64,18 +65,40 @@ class RegisterController extends Controller
         }
 
         $config = app('xe.config')->get('user.join');
-        $this->addEmailRegister();
 
         // token 검사, token이 존재할 경우 form을 출력
         $token = $request->get('token');
+
+        if($token === 'free') {
+            if($config->get('guard_forced', false)) {
+                throw new HttpException('400', '잘못된 접근입니다');
+            } else {
+                return $this->getRegisterForm($request);
+            }
+        }
+
         if ($token !== null) {
             return $this->getRegisterForm($request);
         }
 
+        // guard가 없을 경우 바로 회원가입폼 출력
         $guards = $handler->getRegisterGuards();
-        if (!count($guards)) {
-            $token = $tokenRepository->create('direct', []);
-            return redirect()->route('auth.register', ['token' => $token->id]);
+
+
+        $allGuards = $this->handler->getRegisterGuards();
+        $activated = $config->get('guards', []);
+        $guards = [];
+
+        foreach ($activated as $id) {
+            if (array_has($allGuards, $id)) {
+                $guards[$id] = $allGuards[$id];
+                $guards[$id]['activated'] = true;
+                unset($allGuards[$id]);
+            }
+        }
+        foreach ($allGuards as $id => $guard) {
+            $guards[$id] = $guard;
+            $guards[$id]['activated'] = false;
         }
 
         return \XePresenter::make('register.index', compact('config', 'guards'));
@@ -95,10 +118,16 @@ class RegisterController extends Controller
         $tokenId = $request->get('token');
 
         $tokenRepository = app('xe.user.register.tokens');
-        $register_token = $token = $tokenRepository->find($tokenId);
-
-        if ($token === null) {
-            throw new HttpException(400, '유효기간이 만료되었거나 정상적인 토큰이 아닙니다. 다시 인증 받으시기 바랍니다.');
+        if($tokenId === 'free') {
+            if($config->get('register_forced')) {
+                throw new HttpException(400, '잘못된 접근입니다.');
+            }
+            $register_token = app('xe.user.register.tokens')->create('free', []);
+        } else {
+            $register_token = $token = $tokenRepository->find($tokenId);
+            if ($token === null) {
+                throw new HttpException(400, '유효기간이 만료되었거나 정상적인 토큰이 아닙니다. 다시 인증 받으시기 바랍니다.');
+            }
         }
 
         $allForms = $this->handler->getRegisterForms();
@@ -284,54 +313,6 @@ class RegisterController extends Controller
     {
         $config = app('xe.config')->get('user.join');
         return $config->get('useEmailCertify', true);
-    }
-
-    /**
-     * addEmailRegisterSection
-     *
-     * @param $config
-     *
-     */
-    protected function addEmailRegister()
-    {
-        if ($this->useEmailConfirm()) {
-
-            //app('xe.register')->push(
-            //    'user/register/guard',
-            //    'email',
-            //    function () {
-            //        $skinHandler = app('xe.skin');
-            //        $skin = $skinHandler->getAssigned('user/auth');
-            //        return $skin->setView('register.sections.email')->render();
-            //    }
-            //);
-            //
-            //app('xe.register')->push(
-            //    'user/register/form',
-            //    'email',
-            //    function ($token) {
-            //        if ($token->guard !== 'email') {
-            //            return null;
-            //        }
-            //        $code = request()->get('code');
-            //
-            //        if($code !== null) {
-            //            $this->checkPendingEmail($token->email, $code);
-            //        }
-            //
-            //        app('xe.frontend')->html('email.setter')->content("
-            //        <script>
-            //            $('input[name=email]').attr('readonly','readonly').val('{$token->email}');
-            //        </script>
-            //        ")->load();
-            //
-            //        $skinHandler = app('xe.skin');
-            //        $skin = $skinHandler->getAssigned('user/auth');
-            //        return $skin->setView('register.forms.confirm')->setData(compact('token', 'code'))->render();
-            //    }
-            //);
-
-        }
     }
 
     /**

@@ -611,14 +611,19 @@ class UserServiceProvider extends ServiceProvider
 
     protected function addRegisterGuardAndForm()
     {
+
+        // email register guard
         $this->app['xe.register']->push(
             'user/register/guard',
             'email',
             [
                 'title' => '이메일 인증',
-                'description' => '사용자의 이메일로 인증정보를 전송하여 인증합니다.',
-                'forced' => true,
+                'description' => '사용자의 이메일로 인증정보를 전송하여 인증합니다. "인증없이 가입 허용"을 사용할 경우 비활성화됩니다.',
                 'render' => function () {
+                    $config = app('xe.config')->get('user.join');
+                    if($config->get('guard_forced') === false) {
+                        return;
+                    }
                     $skinHandler = app('xe.skin');
                     $skin = $skinHandler->getAssigned('user/auth');
                     return $skin->setView('register.sections.email')->render();
@@ -626,6 +631,7 @@ class UserServiceProvider extends ServiceProvider
             ]
         );
 
+        // email register form
         $this->app['xe.register']->push(
             'user/register/form',
             'email',
@@ -754,6 +760,7 @@ class UserServiceProvider extends ServiceProvider
             ]
         );
 
+        // email validation
         intercept(
             'XeUser@validateForCreate',
             'register.email.validator',
