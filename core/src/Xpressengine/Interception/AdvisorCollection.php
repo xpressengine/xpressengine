@@ -39,7 +39,7 @@ class AdvisorCollection
     /**
      * @var string[] 추가된 advisor name의 목록, 이 목록은 point cut을 정렬돼 있다.
      */
-    public $advisorMap = null;
+    protected $advisorMap = null;
 
 
     /**
