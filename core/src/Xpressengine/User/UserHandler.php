@@ -346,13 +346,15 @@ class UserHandler
         // delete user's accounts
         $this->accounts()->deleteByUserIds($userIds);
 
-        // resolve group
         foreach ($users as $user) {
             // except user from user's groups
             $user->groups()->detach();
             $user->delete();
+
+            // remove profle image
+            $this->imageHandler->removeUserProfileImage($user);
         }
-        // todo: remove profile image
+
     }
 
     /**
