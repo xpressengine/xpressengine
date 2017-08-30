@@ -354,7 +354,6 @@ class UserHandler
             // remove profle image
             $this->imageHandler->removeUserProfileImage($user);
         }
-
     }
 
     /**
