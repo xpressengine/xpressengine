@@ -457,6 +457,8 @@ class PluginController extends Controller
             'settingsTheme' => '관리페이지테마',
             'widget' => '위젯',
             'module' => '모듈',
+            'editor' => '에디터',
+            'editortool' => '에디터툴',
             'uiobject' => 'UI오브젝트',
             'FieldType' => '다이나믹필드',
             'FieldSkin' => '다이나믹필드스킨',
