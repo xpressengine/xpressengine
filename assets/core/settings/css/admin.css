@@ -6313,6 +6313,46 @@ aside.open {
   }
 }
 
+@media (min-width: 992px) {
+  .xe-modal-plugin-detail {
+    width: 991px;
+  }
+  .plugin-detail .dev-list .dev-info {
+    max-width: 160px;
+  }
+  .plugin-detail .dev-list .dev-info a.link-dev {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .plugin-detail .second-info .link-more.v2 {
+    position: absolute;
+    right: 0;
+    top: 20px;
+  }
+  .plugin-detail .plugin-document .plugin-desc button {
+    width: auto;
+    padding: 0 12px;
+    font-size: 13px;
+  }
+  .plugin-detail .plugin-img img {
+    width: 160px;
+    height: 160px;
+  }
+  .plugin-detail .plugin-summary,
+  .plugin-detail .plugin-summary.v2 {
+    margin-left: 180px;
+  }
+  .plugin-detail .plugin-summary:after {
+    clear: none;
+  }
+  .plugin-detail .plugin-title {
+    margin: 0 0 40px;
+    padding: 0;
+    border: none;
+  }
+}
+
 @media (min-width: 1068px) {
   /* desktop */
   header .btn-slide {
