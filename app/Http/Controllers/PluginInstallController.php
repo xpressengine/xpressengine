@@ -99,10 +99,14 @@ class PluginInstallController extends Controller
             $plugins->addQuery('q', $q);
         }
 
+        if($query) {
+            $filter = 'search';
+        }
+
         $handler->getAllPlugins(true);
         $componentTypes = $this->getComponentTypes();
 
-        return apiRender('install.items', compact('plugins', 'componentTypes', 'q', 'handler', 'filter'));
+        return apiRender('install.items', compact('plugins', 'componentTypes', 'q', 'handler', 'filter'), compact('filter'));
     }
 
     /**

@@ -1,49 +1,32 @@
-<li class="list-group-item">
-    <div class="text-right">
-        @if($handler->getPlugin(data_get($plugin, 'plugin_id')))
-            설치됨
-        @elseif(data_get($plugin, 'is_free') || data_get($plugin, 'is_purchased'))
-            <label>
-                <input type="checkbox" value="{{ data_get($plugin, 'plugin_id') }}" class="__xe_checkbox" data-title="{{ data_get($plugin, 'title') }}" data-id="{{ data_get($plugin, 'plugin_id') }}">
-                설치 @if(data_get($plugin, 'is_purchased'))(구매한 플러그인) @endif
-            </label>
-        @elseif(data_get($plugin, 'is_purchased') === false)
-            구매하러 가기
-        @endif
-    </div>
-    <div class="left-group">
-        <a href="{{ data_get($plugin, 'link') }}" class="plugin-title">{{ data_get($plugin, 'title') }}</a>
-        <dl>
-            <dt class="sr-only">version</dt>
-            <dd>Version {{ data_get($plugin, 'latest_release.version') }}</dd>
-            <dt class="sr-only">{{ xe_trans('xe::author') }}</dt>
-            <dd>By
-                @if($authors = data_get($plugin, 'latest_release.authors', []))
-                    @foreach($authors as $author)
-                        {{ data_get($author, 'name') }}
-                    @endforeach
+<li>
+    <img src="{{ data_get($plugin, 'icon') }}" alt="">
+    <div class="list-install-caption">
+        <label class="xe-label">
+            <input type="checkbox" @if($handler->getPlugin(data_get($plugin, 'plugin_id'))) disabled @else value="{{ data_get($plugin, 'plugin_id') }}" class="__xe_checkbox" data-title="{{ data_get($plugin, 'title') }}" data-id="{{ data_get($plugin, 'plugin_id') }}" @endif>
+            <span class="xe-input-helper"></span>
+            <span class="xe-label-text">{{ data_get($plugin, 'title') }}</span>
+        </label>
+        <div class="list-install-caption-bottom">
+            <p class="list-install-text">Version {{ data_get($plugin, 'latest_release.version') }}</p>
+            <p class="list-install-text">
+                @if(data_get($plugin, 'is_free'))
+                    Free
+                @else
+                    ￦{{ number_format(data_get($plugin, 'price')) }}
                 @endif
-            </dd>
-            <dt class="sr-only">{{ xe_trans('xe::installPath') }}</dt>
-            <dd>plugins/{{ data_get($plugin, 'plugin_id') }}</dd>
-        </dl>
-        <p class="ellipsis">{{ data_get($plugin, 'description') }}</p>
+            <p class="list-install-text">
+                @if($handler->getPlugin(data_get($plugin, 'plugin_id')))
+                    설치 완료
+                @else
+                    미설치
+                @endif
 
-        {{-- component list --}}
-        @foreach(data_get($plugin, 'latest_release.components') as $key => $component)
-            <span class="label label-{{ array_get($color, $component->type, 'default') }}" title="{{ $component->name }}" data-toggle="tooltip">{{ $component->type }}</span>
-        @endforeach
-    </div>
-    <div class="btn-right">
-        @if(data_get($plugin, 'price') === 0)
-            Free
-        @else
-        ￦{{ number_format(data_get($plugin, 'price')) }}
-        <a href="#" class="btn-link">
-            @if(data_get($plugin, 'is_purchased', false) === false)
-            구매하기
-            @endif
-        </a>
-        @endif
+                @if(data_get($plugin, 'is_purchased'))
+                    (구매한 플러그인)
+                @elseif(data_get($plugin, 'is_free') === false)
+                    <a href="{{ data_get($plugin, 'link') }}" class="btn-link">구매하기</a>
+                @endif
+            </p>
+        </div>
     </div>
 </li>
