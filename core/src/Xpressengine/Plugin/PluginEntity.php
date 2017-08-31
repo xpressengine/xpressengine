@@ -370,6 +370,19 @@ class PluginEntity implements Arrayable, Jsonable
     }
 
     /**
+     * get all released versions
+     *
+     * @return array
+     */
+    public function getVersions()
+    {
+        if ($this->hasRemoteData()) {
+            return data_get($this->remoteData, 'releases');
+        }
+        return [];
+    }
+
+    /**
      * 플러그인의 메타정보를 지정한다.
      *
      * @param array $data 메타정보

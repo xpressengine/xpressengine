@@ -25,7 +25,6 @@ use Xpressengine\Installer\XpressengineInstaller;
 use Xpressengine\Interception\InterceptionHandler;
 use Xpressengine\Plugin\Composer\Composer;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
-use Xpressengine\Plugin\PluginEntity;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginProvider;
 use Xpressengine\Support\Exceptions\XpressengineException;
@@ -261,42 +260,38 @@ class PluginController extends Controller
             throw new HttpException(422, "이미 진행중인 요청이 있습니다.");
         }
 
+        $plugins = $request->get('plugin');
+
         $collection = $handler->getAllPlugins(true);
         $fetched = $collection->fetchByInstallType('fetched');
 
         $provider->sync($fetched);
 
-        /** @var PluginEntity[] $plugins */
-        $plugins = array_where(
-            $fetched,
-            function ($key, $plugin) {
-                return $plugin->hasUpdate();
-            }
-        );
-
         $timeLimit = config('xe.plugin.operation.time_limit');
         $writer->reset()->cleanOperation();
 
         $packages = [];
-        foreach ($plugins as $plugin) {
-            $writer->update($plugin->getName(), $plugin->getLatestVersion(), Carbon::now()->addSeconds($timeLimit)->toDateTimeString())->write();
-            $packages[] = $plugin->getName();
+        foreach ($plugins as $id => $info) {
+            if(array_get($info, 'update', false)) {
+                $plugin = $fetched[$id];
+                $writer->update(
+                    $plugin->getName(),
+                    array_get($info, 'version'),
+                    Carbon::now()->addSeconds($timeLimit)->toDateTimeString()
+                )->write();
+                $packages[] = $plugin->getName();
+            }
+        }
+
+        if (empty($packages)) {
+            throw new HttpException(422, "선택된 플러그인이 없습니다.");
         }
 
         $this->reserveOperation(
             $handler,
             $writer,
             $timeLimit,
-            $packages,
-            function ($code) use ($plugins) {
-                if($code === 0) {
-                    foreach ($plugins as $plugin) {
-                        if ($plugin->checkUpdated()) {
-                            $plugin->update();
-                        }
-                    }
-                }
-            }
+            $packages
         );
 
         return redirect()->route('settings.plugins')->with(
