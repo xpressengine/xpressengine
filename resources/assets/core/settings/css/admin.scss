@@ -1026,9 +1026,8 @@ aside {
 .admin-tab {
   $start-color: rgba(255,255,255,0);
   $end-color: rgba(255,255,255,1);
-  .panel {
+  &.panel {
     position: relative;
-    border-radius: 2px;
     border: 1px solid #e0e0e0;
   }
   &-list {
@@ -1210,10 +1209,9 @@ aside {
   } // xe-lypop-plugin-check
 }// xe-lypop-plugin
 .admin-choice {
-  .panel {
+  &.panel {
     position: relative;
     padding: 0 10px 15px;
-    border-radius: 2px;
     border: 1px solid #e0e0e0;
   }
   &-count {
@@ -1552,7 +1550,7 @@ aside {
     } // xe-lypop-plugin
   }
   .admin-choice {
-    .panel {
+    &.panel {
       padding: 0 20px;
     }
     &-count {
