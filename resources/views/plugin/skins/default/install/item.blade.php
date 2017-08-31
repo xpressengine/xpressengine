@@ -24,7 +24,7 @@
                 @if(data_get($plugin, 'is_purchased'))
                     (구매한 플러그인)
                 @elseif(data_get($plugin, 'is_free') === false)
-                    <a href="{{ data_get($plugin, 'link') }}" class="btn-link">구매하기</a>
+                    <a href="{{ data_get($plugin, 'link') }}" class="btn-link" target="_blank">구매하러 가기</a>
                 @endif
             </p>
         </div>
