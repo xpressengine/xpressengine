@@ -66,9 +66,10 @@ class PluginInstallController extends Controller
             $packages = $provider->search(compact('query', 'site_token'), $page, 10);
         } elseif ($filter === 'purchased') {
             if (!$site_token) {
+                $link = route('settings.plugins.setting.show');
                 throw new HttpException(
                     Response::HTTP_BAD_REQUEST,
-                    '자료실에서 구매시 사용한 사이트토큰 정보를 저장해야 구매한 플러그인 목록을 볼 수 있습니다.'
+                    '자료실에서 구매시 사용한 사이트토큰 정보를 저장해야 구매한 플러그인 목록을 볼 수 있습니다. <a href="'.$link.'">설정하러 가기</a>'
                 );
             }
             try {
