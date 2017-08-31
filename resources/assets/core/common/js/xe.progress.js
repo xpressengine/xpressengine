@@ -91,6 +91,7 @@ function setInstance($context, instance) {
     var progress = new XeProgress();
     var parent = 'body';
     var type = $context.data('progress-type') === undefined ? 'default' : $context.data('progress-type');
+    var bgcolor = $context.data('progress-bgcolor');
     var showSpinner = type !== 'nospin';
 
     if ($context.attr('id') !== undefined) {
@@ -108,6 +109,7 @@ function setInstance($context, instance) {
       parent: parent,
       type: type,
       showSpinner: showSpinner,
+      bgcolor: bgcolor,
     });
     instances.push(progress);
     var instanceId = instances.length - 1;
@@ -164,6 +166,7 @@ function XeProgress() {
     showSpinner: true,
     barSelector: '[role="bar"]',
     spinnerSelector: '[role="spinner"]',
+    bgcolor: '',
     parent: 'body',
     template: {
       default: '<div class="bar" role="bar"><div class="peg"></div></div><div class="spinner" role="spinner"><div class="spinner-icon"></div></div>',
@@ -333,7 +336,13 @@ function XeProgress() {
       this.settings.type = 'default';
     }
 
-    $progress.html(this.settings.template[this.settings.type]);
+    var $template = $(this.settings.template[this.settings.type]);
+
+    if (this.settings.bgcolor) {
+      $template.eq(0).css('background', this.settings.bgcolor);
+    }
+
+    $progress.html($template);
 
     var $bar = $progress.find(this.settings.barSelector);
     var perc = fromStart ? '-100' : toBarPerc(this.status || 0);
