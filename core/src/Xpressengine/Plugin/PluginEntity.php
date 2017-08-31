@@ -772,6 +772,11 @@ class PluginEntity implements Arrayable, Jsonable
         return false;
     }
 
+    /**
+     * 직접 설치한 플러그인인지 검사한다. vendor 디렉토리를 가지고 있는지의 유무로 판단한다.
+     *
+     * @return bool
+     */
     public function isSelfInstalled()
     {
         $vendorDir = dirname($this->pluginFile).'/vendor';

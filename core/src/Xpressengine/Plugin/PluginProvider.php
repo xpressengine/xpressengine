@@ -56,7 +56,7 @@ class PluginProvider
     /**
      * search plugin by keyword
      *
-     * @param null $keyword keyword for searching
+     * @param null $filters filters for searching
      * @param int  $page    search result page number
      * @param int  $count   limit
      *
@@ -77,7 +77,10 @@ class PluginProvider
         $site_token = array_get($filters, 'site_token');
 
         try {
-            $response = $this->request($url, compact('q', 'page', 'count', 'collection', 'order', 'order_type', 'site_token'));
+            $response = $this->request(
+                $url,
+                compact('q', 'page', 'count', 'collection', 'order', 'order_type', 'site_token')
+            );
         } catch (ClientException $e) {
             if ($e->getCode() === Response::HTTP_NOT_FOUND) {
                 return null;
@@ -87,6 +90,13 @@ class PluginProvider
         return $response;
     }
 
+    /**
+     * retrieve purchased plugin list
+     *
+     * @param string $site_token site_token
+     *
+     * @return mixed|null
+     */
     public function purchased($site_token)
     {
         $url = 'plugins/purchased';
