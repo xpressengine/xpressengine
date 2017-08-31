@@ -44,10 +44,6 @@ class InterceptionServiceProvider extends ServiceProvider
 
                 $generator = new ProxyGenerator($loader, $passes);
 
-                if ($app['config']->get('app.debug')) {
-                    $generator->clear();
-                }
-
                 $interceptionHandler = new InterceptionHandler($advisorCollection, $generator);
                 return $interceptionHandler;
             }
