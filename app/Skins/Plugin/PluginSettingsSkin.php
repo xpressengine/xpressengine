@@ -124,6 +124,8 @@ class PluginSettingsSkin extends GenericSkin
             'widget' => 'danger',
             'module' => 'danger',
             'uiobject' => 'primary',
+            'editor' => 'primary',
+            'editortool' => 'primary',
             'FieldType' => 'default',
             'FieldSkin' => 'default',
         ]);
