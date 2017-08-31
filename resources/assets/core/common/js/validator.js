@@ -1,16 +1,23 @@
 import griper from 'griper';
 import moment from 'moment';
 
-//var ruleSet = { ruleName: "analyticsSetting", rules: {"profileId":"numeric","keyFile":"ga_json","trackingId":"required"} }
-
 (function (root, factory) {
   module.exports = factory();
 }(this, function () {
 
+  /**
+   * @module validator
+   * */
   var Validator = {};
   Validator.rules = {};
   Validator.alertType = 'form';
 
+  /**
+   * 룰을 세팅한다.
+   * @memberof module:validator
+   * @param {string} ruleName
+   * @param {object} rules
+   * */
   Validator.setRules = function (ruleName, rules) {
 
     var lang = [];
@@ -54,7 +61,11 @@ import moment from 'moment';
     }
   };
 
-  // validator 를 set 하면서 submit event listener 를 등록한다.
+  /**
+   * validator 를 set 하면서 submit event listener 를 등록한다.
+   * @memberof module:validator
+   * @param {string} ruleName
+   * */
   Validator.init = function (ruleName) {
     $('[data-rule="' + ruleName + '"]').on('submit', function (event) {
       try {
@@ -66,10 +77,21 @@ import moment from 'moment';
     });
   };
 
+  /**
+   * 폼요소의 룰명을 리턴한다.
+   * @memberof module:validator
+   * @param {jQuery} $frm jQuery form element
+   * @return {string}
+   * */
   Validator.getRuleName = function ($frm) {
     return $frm.data('rule');
   };
 
+  /**
+   * 폼에 정의 된 룰을 실행한다.
+   * @memberof module:validator
+   * @param {jQuery} $frm jQuery form element
+   * */
   Validator.check = function ($frm) {
     var ruleName = this.getRuleName($frm);
     var rules = this.rules[ruleName];
@@ -89,6 +111,11 @@ import moment from 'moment';
     this.checkRuleContainers($frm);
   };
 
+  /**
+   * 폼에 정의 된 룰을 실행한다.
+   * @memberof module:validator
+   * @param {jQuery} $frm jQuery form element
+   * */
   Validator.checkRuleContainers = function ($frm) {
     var _this = this;
     var containers = $frm.find('[data-rule]');
@@ -103,6 +130,11 @@ import moment from 'moment';
     });
   };
 
+  /**
+   * 폼안의 요소에 정의된 룰을 실행한다.
+   * @memberof module:validator
+   * @param {jQuery} $frm jQuery form element
+   * */
   Validator.formValidate = function ($form) {
     var _this = this;
 
@@ -118,6 +150,14 @@ import moment from 'moment';
     });
   };
 
+  /**
+   * 폼 내의 name요소에 대한 rule을 실행한다.
+   * @memberof module:validator
+   * @param {jQuery} $frm jQuery form element
+   * @param {string} name
+   * @param {string} rule
+   * @throws {Error} validation 실패시
+   * */
   Validator.validate = function ($frm, name, rule) {
     var parts = rule.split('|');
     var _this = this;
@@ -142,15 +182,32 @@ import moment from 'moment';
     });
   };
 
-  // validator 추가
+  /**
+   * validator 추가
+   * @memberof module:validator
+   * @param {string} name validatior name
+   * @param {function} callback validation 실패시 호출
+   * */
   Validator.put = function (name, callback) {
     this.validators[name] = callback;
   };
 
+  /**
+   * validation 메시지 제거
+   * @memberof module:validator
+   * @param {jQuery} $form jQuery form element
+   * */
   Validator.errorClear = function ($form) {
     griper.form.fn.clear($form);
   };
 
+  /**
+   * validation 실패 메시지를 노출한다.
+   * @memberof module:validator
+   * @param {jQuery} $element
+   * @param {string} message
+   * @param {object} replaceStrMap
+   * */
   Validator.error = function ($element, message, replaceStrMap) {
 
     if (replaceStrMap && Object.keys(replaceStrMap).length > 0) {
@@ -169,6 +226,12 @@ import moment from 'moment';
 
   };
 
+  /**
+   * validation 엘리먼트 요소의 value를 리턴한다.
+   * @memberof module:validator
+   * @param {jQuery} $ele
+   * @return {string}
+   * */
   Validator.getValue = function ($ele) {
     var value = '';
 
@@ -187,6 +250,37 @@ import moment from 'moment';
     return value;
   };
 
+  /**
+   * validation 실패 메시지를 노출한다.
+   * @memberof module:validator
+   * @property {object} validator
+   * @property {function} validator.accepted
+   * @property {function} validator.checked
+   * @property {function} validator.required
+   * @property {function} validator.alpha
+   * @property {function} validator.alphanum
+   * @property {function} validator.alpha_num
+   * @property {function} validator.alpha_dash
+   * @property {function} validator.array
+   * @property {function} validator.boolean
+   * @property {function} validator.date
+   * @property {function} validator.date_format
+   * @property {function} validator.digits
+   * @property {function} validator.digits_between
+   * @property {function} validator.filled
+   * @property {function} validator.integer
+   * @property {function} validator.ip
+   * @property {function} validator.mimes
+   * @property {function} validator.regex
+   * @property {function} validator.json
+   * @property {function} validator.string
+   * @property {function} validator.min
+   * @property {function} validator.max
+   * @property {function} validator.email
+   * @property {function} validator.url
+   * @property {function} validator.numeric
+   * @property {function} validator.between
+   * */
   Validator.validators = {
     accepted: function ($dst, parameters) {
       var value = Validator.getValue($dst);

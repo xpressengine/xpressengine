@@ -1,3 +1,6 @@
+/**
+ * @namespace DynamicLoadManager
+ * */
 var DynamicLoadManager = (function (exports) {
 
   'use strict';
@@ -17,6 +20,8 @@ var DynamicLoadManager = (function (exports) {
       return this;
     },
     /**
+     * 여러개의 js 파일을 동적으로 로드합니다.
+     * @memberof DynamicLoadManager
      * @param {array} arrjs
      * @param {object}} callbackObj
      * <pre>
@@ -68,6 +73,13 @@ var DynamicLoadManager = (function (exports) {
 
     },
 
+    /**
+     * js 파일을 동적으로 로드합니다.
+     * @memberof DynamicLoadManager
+     * @param {string} url
+     * @param {function} load
+     * @param {function} error
+     * */
     jsLoad: function (url, load, error) {
 
       var src = Utils.asset(url);
@@ -99,6 +111,13 @@ var DynamicLoadManager = (function (exports) {
 
     },
 
+    /**
+     * css 파일을 동적으로 로드합니다.
+     * @memberof DynamicLoadManager
+     * @param {string} url
+     * @param {function} load
+     * @param {function} error
+     * */
     cssLoad: function (url, load, error) {
 
       var src = Utils.asset(url);

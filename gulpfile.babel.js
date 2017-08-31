@@ -16,8 +16,6 @@ gulp.task('default', (callback) => {
     'jscs',
     'clean:assets',
     'copy:assets',
-    // 'jspm:admin',
-    // 'jspm:xe',
     'assets:tree',
     'assets:sass',
     'assets:image',
@@ -31,11 +29,10 @@ gulp.task('jscs', taskSettings['jscs']);
 gulp.task('clean:assets', taskSettings['clean:assets']);
 gulp.task('copy:assets', taskSettings['copy:assets']);
 
-// gulp.task('jspm:xe', taskSettings['jspm:xe']);
-// gulp.task('jspm:admin', taskSettings['jspm:admin']);
-
 gulp.task('assets:chunk', taskSettings['assets:chunk']);
 gulp.task('assets:tree', taskSettings['assets:tree']);
+
+gulp.task('jsdoc', taskSettings['jsdoc']);
 // e: settings
 
 // s: css
@@ -53,3 +50,5 @@ gulp.task('sass:watch', () => {
    './resources/assets/**/*.scss',
   ], ['assets:sass']);
 });
+
+

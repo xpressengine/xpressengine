@@ -1,4 +1,7 @@
-(function () {
+/**
+ * @namespace SiteMap
+ * */
+var SiteMap = (function () {
   var _this;
   var _$wrap = $('#menuContainer');
   var _menus = $('#menuContainer').data('menus');
@@ -7,6 +10,11 @@
   var _url = $('#menuContainer').data('url');
 
   return {
+    /**
+     * SiteMap 초기설정을 한다.
+     * @memberof SiteMap
+     * @return {object}
+     * */
     init: function () {
       _this = this;
 
@@ -26,7 +34,8 @@
     },
 
     /**
-     * @description sitemap페이지에서 사용되는 기본 dom 템플릿
+     * sitemap페이지에서 사용되는 기본 dom 템플릿을 리턴한다.
+     * @memberof SiteMap
      * @return htmlstring
      * */
     getTemplate: function () {
@@ -43,7 +52,12 @@
        '</div>',
       ].join('\n');
     },
-
+    /**
+     * Node 템플릿을 리턴한다.
+     * @memberof SiteMap
+     * @param {object} item
+     * @return {string}
+     * */
     getNodeTemplate: function (item) {
       // var move = (item.items && item.items.length > 0) ? 'move' : '';
       var url = item.url;
@@ -84,7 +98,12 @@
 
       return temp;
     },
-
+    /**
+     * Menu에 사용되는 HTML을 만든다.
+     * @memberof SiteMap
+     * @param {object} menus
+     * @return {string}
+     * */
     generateDom: function (menus) {
       var menu = [];
 
@@ -103,7 +122,10 @@
 
       return menu.join('\n');
     },
-
+    /**
+     * 사이트맵에서 사용되는 이벤트 핸들러를 등록한다.
+     * @memberof SiteMap
+     * */
     bindEvents: function () {
       $('.btn-more').on('click', function () {
         var $moreArea = $(this).parents('.item-content').find('.more-area');
@@ -154,7 +176,10 @@
       });
 
     },
-
+    /**
+     * Tree를 구성한다.
+     * @memberof SiteMap
+     * */
     runSortable: function () {
       var config = {
         update: _this.updateNode,
@@ -163,11 +188,16 @@
       Tree.run(_$wrap, config);
 
     },
-
+    /**
+     * 기본템플릿을 구성한다.
+     * @memberof SiteMap
+     * */
     appendDefaultTemplate: function () {
       _$wrap.append(this.getTemplate());
     },
     /**
+     * Node정보를 저장한다.
+     * @memberof SiteMap
      * @param {object} obj
      * <pre>
      *   item: jquery object. move된 NODE
@@ -210,6 +240,10 @@
       });
     },
     /**
+     * UI상의 MenuId를 업데이트한다.
+     * @memberof SiteMap
+     * @param {element} $item
+     * @param {string} menuId
      * @description
      * <pre>
      *   - 하위 노드를 찾아가며 menuId를 변경한다

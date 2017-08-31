@@ -1,3 +1,6 @@
+/**
+ * @name		jQuery xeModal plugin
+ * */
 ;(function () {
   // MODAL CLASS DEFINITION
   // ======================

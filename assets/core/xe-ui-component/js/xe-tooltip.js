@@ -1,3 +1,6 @@
+/**
+ * @name		jQuery xeTooltip plugin
+ * */
 ;(function ($) {
   // TOOLTIP PUBLIC CLASS DEFINITION
   // ===============================

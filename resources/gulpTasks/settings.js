@@ -1,5 +1,7 @@
 import gulp from 'gulp';
 import plugins from 'gulp-load-plugins';
+import jsdoc from 'gulp-jsdoc3';
+import stream from 'merge-stream';
 
 module.exports = (() => {
 
@@ -102,6 +104,22 @@ module.exports = (() => {
 
     getConfig: () => {
       return _config;
+    },
+
+    'jsdoc': () => {
+      var merged = stream(
+        gulp.src('./resources/jsdoc')
+        .pipe($.clean({ force: true }))
+        ,
+        gulp.src(['./resources/assets/core/**/*.js', './resources/assets/core/**/*.jsx'])
+        .pipe(jsdoc({
+          "opts": {
+            "destination": "./resources/jsdoc"
+          }
+        }))
+      );
+
+      return merged;
     },
   };
 

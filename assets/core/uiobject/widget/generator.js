@@ -1,3 +1,4 @@
+/** @name		jQuery widgetGenerator plugin */
 ;(function (exports, $) {
 
     'use strict';
@@ -131,6 +132,7 @@
     var WidgetCode = (function () {
         return {
             /**
+             * @private
              * @param {object} options
              * <pre>
              *     - {string} widgetForm selector
@@ -165,6 +167,7 @@
                   });
               },
             /**
+             * @private
              * @param {object} options
              * <pre>
              *     - {string} url
