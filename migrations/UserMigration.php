@@ -135,7 +135,7 @@ class UserMigration extends Migration {
         \DB::table('config')->insert([
                                          ['name' => 'user', 'vars' => '[]'],
                                          ['name' => 'user.common', 'vars' => '{"secureLevel":"low","useCaptcha":false,"webmasterName":"webmaster","webmasterEmail":"webmaster@domain.com","agreement":"","privacy":""}'],
-                                         ['name' => 'user.join', 'vars' => '{"joinable":true,"useEmailCertify":false,"useCaptcha":false}'],
+                                         ['name' => 'user.join', 'vars' => '{"joinable":true}'],
                                          ['name' => 'toggleMenu@user', 'vars' => '{"activate":["user/toggleMenu/xpressengine@raw"]}']
                                      ]);
     }
@@ -174,8 +174,17 @@ class UserMigration extends Migration {
      */
     public function checkUpdated($installedVersion = null)
     {
-        // ver.3.0.0-rc
-        return Schema::hasTable('user_register_token');
+        // ver.3.0.0-beta.18
+        if (!Schema::hasTable('user_register_token')) {
+            return false;
+        }
+
+        // ver.3.0.0-beta.24
+        $joinConfig = app('xe.config')->get('user.join');
+        $config = $joinConfig->getPureAll();
+        if (array_has($config, 'useEmailCertify') || array_has($config, 'useCaptcha')) {
+            return false;
+        }
     }
 
     /**
@@ -206,7 +215,7 @@ class UserMigration extends Migration {
             });
         }
 
-        // ver.3.0.0-rc
+        // ver.3.0.0-beta.18
         if (Schema::hasTable('password_resets')) {
             Schema::rename('password_resets', 'user_password_resets');
         }
@@ -226,6 +235,30 @@ class UserMigration extends Migration {
                 $table->timestamp('createdAt')->comment('created date');
             });
         }
+
+        // ver.3.0.0-beta.24
+        $joinConfig = app('xe.config')->get('user.join');
+
+        $use = $joinConfig->get('useEmailCertify');
+        if ($use !== null) {
+            $guards = $joinConfig->get('guards', []);
+            if ($use && !in_array('email', $guards)) {
+                array_unshift($guards, 'email');
+            }
+            $joinConfig->set('useEmailCertify', null);
+            $joinConfig->set('guard_forced', $use);
+            app('xe.config')->modify($joinConfig);
+        }
+        $use = $joinConfig->get('useCaptcha');
+        if ($use !== null) {
+            $guards = $joinConfig->get('guards', []);
+            if ($use && !in_array('captcha', $guards)) {
+                array_unshift($guards, 'captcha');
+            }
+            $joinConfig->set('useCaptcha', null);
+            app('xe.config')->modify($joinConfig);
+        }
+
 
     }
 

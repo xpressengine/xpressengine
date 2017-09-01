@@ -171,9 +171,9 @@ class SettingController extends Controller
 
         $inputs['guard_forced'] = $inputs['guard_forced'] === 'true';
 
-        if ($inputs['useCaptcha'] === 'true' && !$captcha->available()) {
-            throw new ConfigurationNotExistsException();
-        }
+        //if ($inputs['useCaptcha'] === 'true' && !$captcha->available()) {
+        //    throw new ConfigurationNotExistsException();
+        //}
 
         foreach ($inputs as $key => $val) {
             $config->set($key, $val);

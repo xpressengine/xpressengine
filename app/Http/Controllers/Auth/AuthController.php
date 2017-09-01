@@ -280,10 +280,4 @@ class AuthController extends Controller
             }
         }
     }
-
-    protected function useEmailConfirm()
-    {
-        $config = app('xe.config')->get('user.join');
-        return $config->get('useEmailCertify', true);
-    }
 }

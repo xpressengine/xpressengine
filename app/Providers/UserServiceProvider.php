@@ -293,6 +293,8 @@ class UserServiceProvider extends ServiceProvider
             function ($app) {
                 $proxyClass = $app['xe.interception']->proxy(UserHandler::class, 'XeUser');
 
+                $joinConfig = app('xe.config')->get('user.join');
+
                 $userHandler = new $proxyClass(
                     $app['xe.users'],
                     $app['xe.user.accounts'],
@@ -303,7 +305,7 @@ class UserServiceProvider extends ServiceProvider
                     $app['hash'],
                     $app['validator'],
                     $app['xe.register'],
-                    $app['xe.config']->getVal('user.join.useEmailCertify', false)
+                    in_array('email', $joinConfig->get('guards', []))
                 );
                 return $userHandler;
             }
