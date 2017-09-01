@@ -5997,6 +5997,7 @@ aside.open {
 }
 
 .list-install .xe-label {
+  display: inline-block;
   margin: 0;
 }
 
@@ -6006,12 +6007,14 @@ aside.open {
   left: -128px;
 }
 
-.list-install .xe-label-text {
+.list-install-title {
   display: -webkit-box;
   overflow: hidden;
   max-width: 100%;
   height: 40px;
   padding: 0;
+  color: #333;
+  font-weight: bold;
   white-space: normal;
   text-overflow: ellipsis;
   -webkit-line-clamp: 2;
@@ -6196,7 +6199,7 @@ aside.open {
   }
   .panel-group .panel-heading .pull-left {
     float: left !important;
-    margin: 65px 0 17px;
+    margin: 17px 0;
   }
   .panel-group .panel-heading .pull-right {
     float: right !important;
@@ -6297,7 +6300,7 @@ aside.open {
     top: inherit;
     left: inherit;
   }
-  .list-install .xe-label-text {
+  .list-install-title {
     display: inline-block;
     max-width: 135px;
     height: auto;
