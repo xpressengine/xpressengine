@@ -1275,23 +1275,26 @@ aside {
     }
   }
   .xe-label {
+    display: inline-block;
     margin: 0;
     > input[type="checkbox"] + .xe-input-helper {
       position: absolute;
       top: 0;
       left: -128px;
     }
-    &-text {
-      display: -webkit-box;
-      overflow:hidden;
-      max-width: 100%;
-      height: 40px;
-      padding: 0;
-      white-space: normal;
-      text-overflow: ellipsis;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-    }
+  }
+  &-title {
+    display: -webkit-box;
+    overflow:hidden;
+    max-width: 100%;
+    height: 40px;
+    padding: 0;
+    color: #333;
+    font-weight: bold;
+    white-space: normal;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
   &-text {
     padding: 0 ;
@@ -1486,7 +1489,7 @@ aside {
     .panel-heading {
       .pull-left {
         float: left !important;
-        margin: 65px 0 17px;
+        margin: 17px 0;
       }
       .pull-right {
         float: right !important;
@@ -1600,14 +1603,14 @@ aside {
         top: inherit;
         left: inherit;
       }
-      &-text {
-        display: inline-block;
-        max-width: 135px;
-        height: auto;
-        margin-left: 5px;
-        white-space: nowrap;
-        vertical-align: middle
-      }
+    }
+    &-title {
+      display: inline-block;
+      max-width: 135px;
+      height: auto;
+      margin-left: 5px;
+      white-space: nowrap;
+      vertical-align: middle
     }
   }
   .plugin-detail .plugin-img img {
