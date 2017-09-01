@@ -373,13 +373,20 @@ class PluginController extends Controller
                     $params
                 );
 
-                Composer::setPackagistToken(config('xe.plugin.packagist.site_token'));
+                $config = app('xe.config')->get('plugin');
+                $siteToken = $config->get('site_token');
+                if ($siteToken) {
+                    Composer::setPackagistToken($siteToken);
+                }
                 Composer::setPackagistUrl(config('xe.plugin.packagist.url'));
 
                 $startTime = Carbon::now()->format('YmdHis');
                 $logFileName = "logs/plugin-$startTime.log";
 
-                file_put_contents(storage_path($logFileName), JsonFormatter::format(json_encode($params), true, true).PHP_EOL);
+                file_put_contents(
+                    storage_path($logFileName),
+                    JsonFormatter::format(json_encode($params), true, true).PHP_EOL
+                );
 
                 $writer->set('xpressengine-plugin.operation.log', $logFileName);
                 $writer->write();
