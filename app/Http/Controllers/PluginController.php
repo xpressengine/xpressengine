@@ -142,7 +142,7 @@ class PluginController extends Controller
             }
         }
 
-        $this->reserveOperation($writer, $timeLimit, $packages);
+        $this->reserveOperation($handler, $writer, $timeLimit, $packages);
 
         return redirect()->route('settings.plugins')->with(
             'alert',
