@@ -15,7 +15,7 @@
                     </div>
                     <div id="collapseOne" class="panel-collapse collapse in">
                         <div class="panel-body">
-                            {{ uio('formText', ['name'=>'site_token', 'value'=>old('site_token', $config->get('site_token')), 'label'=>'사이트 토큰', 'description'=>'XE3 공식 자료실에 등록하신 사이트의 토큰을 입력하세요. 자료실에서 구매한 유료 플러그인을 설치할 때 필요합니다.']) }}
+                            {{ uio('formText', ['name'=>'site_token', 'value'=>old('site_token', $config->get('site_token')), 'label'=>'사이트 토큰', 'description'=>'<a href="https://store.xpressengine.io" target="_blank">XE3 공식 자료실</a>에 등록하신 사이트의 토큰을 입력하세요. 자료실에서 구매한 유료 플러그인을 설치할 때 필요합니다.']) }}
                             @if(!getenv('COMPOSER_HOME') && !getenv('HOME'))
                             {{ uio('formText', ['name'=>'composer_home', 'value'=>old('composer_home', $config->get('composer_home')), 'label'=>'컴포저 홈 디렉토리', 'description'=>'플러그인을 설치할 때 컴포저를 사용합니다. 서버에 설치한 컴포저의 홈디렉토리를 지정하셔야 정상적으로 설치됩니다.']) }}
                             @endif

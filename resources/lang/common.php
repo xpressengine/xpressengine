@@ -1119,8 +1119,8 @@ return [
         'ko' => '설치경로',
         'en' => 'Install path'
     ],
-    'newUpdateDownloaded' => [
-        'ko' => '새로운 업데이트가 다운로드 되었습니다.',
+    'pluginIsChanged' => [
+        'ko' => '플러그인이 수정되었습니다.',
         'en' => 'Update was downloaded.'
     ],
     'changeLog' => [
@@ -1144,7 +1144,7 @@ return [
         'en' => 'update'
     ],
     'applyUpdateNow' => [
-        'ko' => '지금 업데이트 적용하기.',
+        'ko' => '지금 수정사항 적용하기.',
         'en' => 'Apply downloaded update now.'
     ],
     'hasNewUpdate' => [
@@ -1491,6 +1491,14 @@ return [
         'ko' => '플러그인 목록',
         'en' => 'Plugin list',
     ],
+    'fetchedPlugin' => [
+        'ko' => '자료실 플러그인',
+        'en' => 'Fetched plugins from Market',
+    ],
+    'selfInstalledPlugin' => [
+        'ko' => '직접 설치한 플러그인',
+        'en' => 'Self-installed plugins',
+    ],
     'pluginListDescription' => [
         'ko' => '등록된 플러그인 목록을 볼 수 있습니다.',
         'en' => 'You can view the list of registered plug-ins.',
@@ -1795,6 +1803,14 @@ return [
         'ko' => '비활성화',
         'en' => 'Deactivation',
     ],
+    'activatedPlugin' => [
+        'ko' => '활성화된 플러그인',
+        'en' => 'Activated Plugin',
+    ],
+    'deactivatedPlugin' => [
+        'ko' => '비활성화된 플러그인',
+        'en' => 'Deactivated Plugin',
+    ],
     'menuDeleteCaution' => [
         'ko' => '메뉴 삭제하면 다시 복구할 수 없습니다.',
         'en' => 'When you remove the menu can not be recovered.',
@@ -2079,6 +2095,9 @@ return [
     ],
     'installNewPlugin' => [
         'ko' => '새 플러그인 설치',
+    ],
+    'installPlugin' => [
+        'ko' => '플러그인 설치',
     ],
     'inputNewPluginId' => [
         'ko' => '새로 설치할 플러그인의 아이디를 입력하세요',

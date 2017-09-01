@@ -370,6 +370,19 @@ class PluginEntity implements Arrayable, Jsonable
     }
 
     /**
+     * get all released versions
+     *
+     * @return array
+     */
+    public function getVersions()
+    {
+        if ($this->hasRemoteData()) {
+            return data_get($this->remoteData, 'releases');
+        }
+        return [];
+    }
+
+    /**
      * 플러그인의 메타정보를 지정한다.
      *
      * @param array $data 메타정보
@@ -748,8 +761,23 @@ class PluginEntity implements Arrayable, Jsonable
      * 개발모드 플러그인인지 검사한다. vendor 디렉토리를 가지고 있는지의 유무로 판단한다.
      *
      * @return bool
+     * @deprecated use self::isSelfInstalled() instead
      */
     public function isDevelopMode()
+    {
+        $vendorDir = dirname($this->pluginFile).'/vendor';
+        if (file_exists($vendorDir)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 직접 설치한 플러그인인지 검사한다. vendor 디렉토리를 가지고 있는지의 유무로 판단한다.
+     *
+     * @return bool
+     */
+    public function isSelfInstalled()
     {
         $vendorDir = dirname($this->pluginFile).'/vendor';
         if (file_exists($vendorDir)) {

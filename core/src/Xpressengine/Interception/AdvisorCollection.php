@@ -169,7 +169,11 @@ class AdvisorCollection
         $this->aliases[$alias] = $class;
 
         if (isset($this->advisorMap->$alias)) {
-            $this->advisorMap->$class = $this->advisorMap->$alias;
+            foreach ($this->advisorMap->$alias as $method => $value) {
+                foreach ($value->advisorArr as $advisor) {
+                    $this->advisorMap->$class->$method->advisorArr[] = $advisor;
+                }
+            }
             unset($this->advisorMap->$alias);
         }
     }

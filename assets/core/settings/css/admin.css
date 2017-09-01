@@ -3588,6 +3588,1056 @@ a.thumbnail.active {
   color: #777777;
 }
 
+.xe-modal-plugin {
+  overflow-y: scroll;
+}
+
+.xe-modal-plugin-detail .xe-modal-header {
+  background-color: #323232;
+}
+
+.xe-modal-plugin-detail .xe-modal-content {
+  border-color: #323232;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-summary h2,
+.xe-modal-plugin-detail .plugin-detail .second-info > li h3,
+.xe-modal-plugin-detail .plugin-detail .plugin-document h3,
+.xe-modal-plugin-detail .plugin-detail .plugin-summary dd {
+  padding: 0;
+  margin: 0;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-title {
+  margin: 0 0 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #DBDADF;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-img {
+  float: left;
+  margin-bottom: 15px;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-img img {
+  width: 100px;
+  height: 100px;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-summary {
+  margin-left: 110px;
+  font-size: 13px;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-summary.v2 {
+  margin-left: 0;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-summary:after {
+  display: table;
+  content: "";
+  clear: both;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-summary h2 {
+  font-size: 20px;
+  font-weight: normal;
+  line-height: 1.25em;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-summary h2 .xe-badge {
+  min-height: 1.5em;
+  margin-left: 9px;
+  padding: .2em 0.7em;
+  line-height: 1.2em;
+  vertical-align: middle;
+  font-size: 11px;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-title h3 {
+  margin: 25px 0 17px;
+  font-size: 18px;
+  color: #434a53;
+  font-weight: normal;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-summary dl {
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-summary .plugin-install {
+  margin: 6px 0 8px;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-summary .plugin-install dd {
+  color: #696e7a;
+  font-size: 14px;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-summary .plugin-count dd {
+  float: left;
+  margin: 0 20px 10px 0;
+  color: #696e7a;
+  font-size: 14px;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-summary .plugin-count dd i {
+  margin-right: 5px;
+  font-size: 16px;
+  vertical-align: middle;
+}
+
+.xe-modal-plugin-detail .plugin-install .plugin-install-link {
+  color: #2388ee;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-summary .plugin-count dd .btn-like {
+  color: #696e7a;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-summary .plugin-count dd .btn-like.on .xi-heart-o,
+.xe-modal-plugin-detail .plugin-detail .plugin-summary .plugin-count dd .btn-like:not(.on) .xi-heart {
+  display: none;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-summary .plugin-count dd .btn-like {
+  color: #696e7a;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-summary .plugin-count dd .btn-like:hover,
+.xe-modal-plugin-detail .plugin-detail .plugin-summary .plugin-count dd .btn-like.on {
+  color: #2c8beb;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-summary .plugin-count dd .btn-like.ing i {
+  -webkit-animation-name: like-loading;
+  -o-animation-name: like-loading;
+  animation-name: like-loading;
+  animation-duration: 0.5s;
+  -webkit-animation-direction: alternate;
+  -o-animation-direction: alternate;
+  animation-direction: alternate;
+  -webkit-animation-iteration-count: infinite;
+  -o-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+  -webkit-animation-timing-function: ease-out;
+  -o-animation-timing-function: ease-out;
+  animation-timing-function: ease-out;
+}
+
+@keyframes like-loading {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-summary .text-gray {
+  font-size: 11px;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-summary .desc {
+  margin: 0 0 35px;
+  color: #696e7a;
+  font-size: 14px;
+  line-height: 23px;
+}
+
+.xe-modal-plugin-detail .plugin-tabs {
+  position: relative;
+}
+
+.xe-modal-plugin-detail .plugin-tabs:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.xe-modal-plugin-detail .plugin-tabs::after {
+  /* subtle gradient layer on top right - to indicate it's possible to scroll */
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 60px;
+  width: 50px;
+  z-index: 1;
+  pointer-events: none;
+  visibility: visible;
+  opacity: 1;
+  -webkit-transition: opacity .3s 0s, visibility 0s 0s;
+  transition: opacity .3s 0s, visibility 0s 0s;
+}
+
+.xe-modal-plugin-detail .no-cssgradients .plugin-tabs::after {
+  display: none;
+}
+
+.xe-modal-plugin-detail .plugin-tabs.is-ended::after {
+  /* class added in jQuery - remove the gradient layer when it's no longer possible to scroll */
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: opacity .3s 0s, visibility 0s .3s;
+  transition: opacity .3s 0s, visibility 0s .3s;
+}
+
+.xe-modal-plugin-detail .plugin-tabs nav {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 35px;
+}
+
+.xe-modal-plugin-detail .plugin-tabs-navigation {
+  width: 100%;
+  display: table;
+  padding: 0;
+}
+
+.xe-modal-plugin-detail .plugin-tabs-navigation li {
+  display: table-cell;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.xe-modal-plugin-detail .plugin-tabs-navigation a {
+  position: relative;
+  display: block;
+  border-bottom: 2px solid #DCDDE0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: normal;
+  padding: 0 20px;
+  line-height: 35px;
+  color: #696e7a;
+  font-size: 14px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.xe-modal-plugin-detail .plugin-tabs-navigation a:hover {
+  text-decoration: none;
+}
+
+.xe-modal-plugin-detail .no-touch .plugin-tabs-navigation a:hover,
+.xe-modal-plugin-detail .plugin-tabs-navigation a.selected {
+  color: #2388ee;
+  border-bottom: 2px solid #2388ee;
+}
+
+.xe-modal-plugin-detail .plugin-tabs-navigation a::before {
+  /* icons */
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  margin-left: -10px;
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+}
+
+.xe-modal-plugin-detail .plugin-tabs-content {
+  height: auto !important;
+  padding: 0;
+}
+
+.xe-modal-plugin-detail .plugin-tabs-content li.plugin-tabs-content-item {
+  display: none;
+}
+
+.xe-modal-plugin-detail .plugin-tabs-content li.plugin-tabs-content-item.selected {
+  display: block;
+  -webkit-animation: plugin-fade-in .5s;
+  animation: plugin-fade-in .5s;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-document {
+  font-size: 14px;
+  color: #696e7a;
+  line-height: 23px;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-document img,
+.xe-modal-plugin-detail .plugin-detail .plugin-document h3,
+.xe-modal-plugin-detail .plugin-detail .plugin-document p {
+  margin-bottom: 17px;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-document h3 {
+  font-size: 18px;
+  color: #434a53;
+  font-weight: normal;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-document img {
+  width: 100%;
+  border: 1px solid #DBDBDB;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-document ul {
+  margin: 0;
+  padding: 0;
+  margin-left: 15px;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-document .plugin-desc button {
+  width: 34px;
+  height: 30px;
+  margin-right: 8px;
+  padding: 4px 0 0 0;
+  border: 1px solid #D7D7DA;
+  background-color: transparent;
+  border-radius: 2px;
+  font-size: 19px;
+  color: #656972;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-document .plugin-desc em {
+  font-style: normal;
+  color: #323335;
+}
+
+.xe-modal-plugin-detail .plugin-detail .screenshot {
+  width: 100%;
+  overflow-y: hidden;
+  overflow-x: auto;
+  margin-bottom: 50px;
+}
+
+.xe-modal-plugin-detail .plugin-detail .screenshot.xe-example .images {
+  white-space: nowrap;
+}
+
+.xe-modal-plugin-detail .plugin-detail .screenshot.xe-example .images_wrap {
+  position: relative;
+  display: inline-block;
+  margin: 5px;
+}
+
+.xe-modal-plugin-detail .plugin-detail .screenshot.xe-example .btn-images-remove {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  background-color: #fff;
+  border: 1px solid #DCDCDE;
+  border-radius: 2px;
+  outline: none;
+  text-align: center;
+  color: #B7B8BD;
+}
+
+.xe-modal-plugin-detail .plugin-detail .screenshot.xe-example .images img {
+  height: 160px;
+  width: auto;
+  margin: 0;
+  cursor: pointer;
+  vertical-align: top;
+}
+
+.xe-modal-plugin-detail .plugin-detail .screenshot.xe-example .images img:after {
+  content: "";
+  clear: both;
+  overflow: auto;
+}
+
+.xe-modal-plugin-detail .plugin-detail .second-info {
+  margin-top: 20px;
+  padding: 0;
+  border-top: 1px solid #e4e4e4;
+}
+
+.xe-modal-plugin-detail .plugin-detail .second-info ul {
+  padding: 0;
+}
+
+.xe-modal-plugin-detail .plugin-detail .second-info > li {
+  list-style-type: none;
+}
+
+.xe-modal-plugin-detail .plugin-detail .second-info > li h3 {
+  color: #878b93;
+  font-size: 13px;
+}
+
+.xe-modal-plugin-detail .plugin-detail .second-info .btn-plugin-active {
+  width: 100%;
+}
+
+.xe-modal-plugin-detail .plugin-detail .second-info .btn-plugin-active i {
+  margin-right: 4px;
+}
+
+.xe-modal-plugin-detail .plugin-detail .second-info .btn-plugin-active.active {
+  background-color: #d9534f;
+  border-color: #d9534f;
+}
+
+.xe-modal-plugin-detail .plugin-detail .second-info .btn-plugin-active .text-deactive,
+.xe-modal-plugin-detail .plugin-detail .second-info .btn-plugin-active.active .text-install {
+  display: none;
+}
+
+.xe-modal-plugin-detail .plugin-detail .second-info .btn-plugin-active.active .text-deactive {
+  display: block;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-dev .maker-group .layer-dev .btn-layer-close:hover {
+  background-color: #f6f7f8;
+}
+
+.xe-modal-plugin-detail .plugin-detail .xe-select-box {
+  background-color: #2388EE;
+  border: none;
+}
+
+.xe-modal-plugin-detail .plugin-detail .xe-select-box:hover {
+  background-color: #2388EE;
+}
+
+.xe-modal-plugin-detail .plugin-detail .xe-select-box label {
+  color: #fff;
+}
+
+.xe-modal-plugin-detail .plugin-detail .xe-select-box.xe-btn:after {
+  border-color: #fff transparent transparent transparent;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-dev .xe-select-box {
+  float: right;
+  margin-top: 25px;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-dev .xe-select-box label {
+  top: 4px;
+  font-weight: normal;
+  color: #fff;
+}
+
+.xe-modal-plugin-detail .plugin-detail .second-info > li {
+  position: relative;
+  padding: 20px 0;
+  border-bottom: 1px solid #e4e4e4;
+  font-size: 13px;
+}
+
+.xe-modal-plugin-detail .plugin-detail .second-info > li h3 {
+  margin-bottom: 10px;
+  color: #434a53;
+  font-weight: normal;
+  font-size: 16px;
+}
+
+.xe-modal-plugin-detail .plugin-detail .second-info > li h3.xe-hidden-lg {
+  margin-bottom: 0;
+}
+
+.xe-modal-plugin-detail .plugin-detail .second-info .maker-add {
+  margin-bottom: 10px;
+}
+
+.xe-modal-plugin-detail .plugin-detail .dev-list li,
+.xe-modal-plugin-detail .plugin-manage .dev-list li {
+  overflow: hidden;
+  margin-bottom: 10px;
+  white-space: nowrap;
+}
+
+.xe-modal-plugin-detail .plugin-manage .dev-list li {
+  margin-top: 10px;
+}
+
+.xe-modal-plugin-detail .plugin-detail .dev-list img {
+  float: left;
+  border-radius: 2px;
+}
+
+.xe-modal-plugin-detail .plugin-manage .dev-list img {
+  width: 35px;
+  height: 35px;
+  border-radius: 4px;
+}
+
+.xe-modal-plugin-detail .plugin-detail .dev-list .dev-info {
+  position: relative;
+  margin-left: 50px;
+}
+
+.xe-modal-plugin-detail .plugin-detail .dev-list .dev-info {
+  display: inline-block;
+  margin-left: 10px;
+  padding-right: 30px;
+}
+
+.xe-modal-plugin-detail .plugin-detail .dev-list button {
+  position: absolute;
+  right: 0;
+  top: 4px;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  background-color: transparent;
+  border: 1px solid #D1D1D4;
+  border-radius: 2px;
+  text-align: center;
+  color: #878b93;
+  line-height: 22px;
+}
+
+.xe-modal-plugin-detail .plugin-detail .dev-list button:hover {
+  border-color: #909090;
+}
+
+.xe-modal-plugin-detail .plugin-detail .dev-list .dev-info a {
+  display: block;
+  margin-top: 5px;
+  color: #878b93;
+}
+
+.xe-modal-plugin-detail .plugin-detail .dev-list .dev-info a.link-dev {
+  margin-top: 0;
+  color: #434a53;
+}
+
+.xe-modal-plugin-detail .plugin-manage .dev-list .dev-info a.link-dev {
+  display: table-cell;
+  height: 100%;
+  vertical-align: middle;
+}
+
+.xe-modal-plugin-detail .plugin-detail .second-info .link-more {
+  display: block;
+  text-align: right;
+  text-decoration: none;
+}
+
+.xe-modal-plugin-detail .plugin-detail .second-info .info-table th,
+.xe-modal-plugin-detail .plugin-detail .second-info .info-table td {
+  padding: 7px 0;
+  vertical-align: top;
+  line-height: 18px;
+  font-size: 13px;
+}
+
+.xe-modal-plugin-detail .plugin-detail .second-info .info-table th {
+  min-width: 80px;
+  font-weight: normal;
+}
+
+.xe-modal-plugin-detail .plugin-detail .second-info .info-table a:hover {
+  text-decoration: underline;
+}
+
+.xe-modal-plugin-detail .plugin-detail .second-info .info-table .link-plugin {
+  display: block;
+}
+
+.xe-modal-plugin-detail .plugin-detail .second-info .info-table .text-gray {
+  color: #878b93;
+}
+
+.xe-modal-plugin-detail .plugin-detail .second-info .tag-list li,
+.xe-modal-plugin-detail .plugin-detail .second-info .component-list li {
+  display: inline-block;
+  margin: 0 2px 5px 0;
+}
+
+.xe-modal-plugin-detail .plugin-detail .second-info .component-list li .xe-badge {
+  border-radius: 2px;
+  color: #fff;
+}
+
+.xe-modal-plugin-detail .plugin-manage .plugin-info {
+  padding: 17px 20px;
+  border-top: 1px solid #DBDBDD;
+}
+
+.xe-modal-plugin-detail .plugin-manage .plugin-info th {
+  width: 100px;
+  padding: 5px 0;
+  text-align: left;
+  font-size: 13px;
+  color: #434a53;
+}
+
+.xe-modal-plugin-detail .plugin-manage .plugin-info td {
+  font-size: 13px;
+  color: #878b93;
+}
+
+.xe-modal-plugin-detail .plugin-manage .plugin-info.v2 {
+  padding: 40px 0;
+  border-top: 0;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-manage .plugin-info.v2 {
+  padding-top: 0;
+  border-top: none;
+}
+
+.xe-modal-plugin-detail .plugin-manage .plugin-info.v2 td {
+  font-size: 14px;
+}
+
+.xe-modal-plugin-detail .plugin-manage .xe-table-responsive {
+  border: 1px solid #ddd;
+  white-space: nowrap;
+}
+
+.xe-modal-plugin-detail .plugin-manage .xe-table > thead > tr > th:after {
+  background-color: transparent;
+}
+
+.xe-modal-plugin-detail .plugin-manage .xe-table > thead > tr > th {
+  border-bottom: 2px solid #ddd;
+}
+
+.xe-modal-plugin-detail .plugin-manage .xe-table > thead:first-child > tr:first-child > th {
+  border-top-color: transparent;
+}
+
+.xe-modal-plugin-detail .plugin-manage .xe-table th,
+.xe-modal-plugin-detail .plugin-manage .xe-table td,
+.xe-modal-plugin-detail .plugin-manage .report-table .xe-table .text-left {
+  text-align: left;
+}
+
+.xe-modal-plugin-detail .plugin-detail .plugin-manage .xe-table td,
+.xe-modal-plugin-detail .plugin-detail .plugin-manage .xe-table th {
+  padding: 6px;
+  font-size: 12px;
+}
+
+.xe-modal-plugin-detail .plugin-manage .report-table .xe-table th,
+.xe-modal-plugin-detail .plugin-manage .report-table .xe-table td {
+  text-align: center;
+}
+
+.xe-modal-plugin-detail .plugin-manage .xe-table .report-result {
+  display: none;
+}
+
+.xe-modal-plugin-detail .plugin-manage .xe-table .report-result > td {
+  padding-top: 0;
+  border-top-color: transparent;
+}
+
+.xe-modal-plugin-detail .plugin-manage .xe-table .report-result .report-result-content {
+  padding: 15px;
+  background-color: #E9F3FD;
+  border: 1px solid #D5E8FB;
+  border-radius: 4px;
+}
+
+.xe-modal-plugin-detail .plugin-manage .xe-table .report-result .report-result-content ul {
+  padding-left: 25px;
+}
+
+.xe-modal-plugin-detail .plugin-manage .xe-table .report-result .report-result-content ul li {
+  color: #878b93;
+}
+
+.xe-modal-plugin-detail .plugin-manage .xe-table .result-toggle {
+  position: relative;
+  margin-left: 20px;
+  padding: 0 11px 0 0;
+  background-color: transparent;
+  border: none;
+  color: #2c8beb;
+  border-bottom: 1px solid #2c8beb;
+  outline: none;
+}
+
+.xe-modal-plugin-detail .plugin-manage .xe-table .result-toggle span + span,
+.xe-modal-plugin-detail .plugin-manage .xe-table .result-toggle.open span {
+  display: none;
+}
+
+.xe-modal-plugin-detail .plugin-manage .xe-table .result-toggle.open span + span {
+  display: block;
+}
+
+.xe-modal-plugin-detail .plugin-manage .xe-table .result-toggle:after {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  margin-top: -6px;
+  border-right: 1px solid #2c8beb;
+  border-bottom: 1px solid #2c8beb;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+  content: "";
+}
+
+.xe-modal-plugin-detail .plugin-manage .xe-table .result-toggle.open:after {
+  margin-top: -3px;
+  -webkit-transform: rotate(-135deg);
+  transform: rotate(-135deg);
+}
+
+.xe-modal-plugin-detail .xo-text-blue {
+  color: #2c8beb !important;
+}
+
+.xe-modal-plugin-detail .comment-write-title {
+  display: inline-block;
+  font-size: 14px;
+  margin: 4px 0 0;
+  padding: 0;
+}
+
+.xe-modal-plugin-detail .comment-write .xe-star-point {
+  display: inline-block;
+  padding: 0 0 0 15px;
+  vertical-align: -1px;
+}
+
+.xe-modal-plugin-detail .xe-star-point ul {
+  padding: 0;
+}
+
+.xe-modal-plugin-detail .xe-star-point li {
+  display: inline-block;
+}
+
+.xe-modal-plugin-detail .xe-star-point button {
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+  border: 0;
+}
+
+.xe-modal-plugin-detail .xe-star-point i {
+  color: #f0ad4e;
+  font-size: 14px;
+}
+
+.xe-modal-plugin-detail .xe-star-point i:first-of-type,
+.xe-modal-plugin-detail .xe-star-point .active i:last-of-type {
+  display: none;
+}
+
+.xe-modal-plugin-detail .xe-star-point .active i:first-of-type {
+  display: block;
+}
+
+.xe-modal-plugin-detail .comment-write-input .markdown-btn button {
+  width: auto;
+}
+
+.xe-modal-plugin-detail .markdown-btn {
+  margin: 14px 0 -1px;
+}
+
+.xe-modal-plugin-detail .markdown-btn button {
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
+  position: relative;
+  display: inline-block;
+  width: auto;
+  margin-right: -3px;
+  padding: 8px 13px;
+  border: 1px solid transparent;
+  border-bottom-width: 0;
+  border-radius: 3px 3px 0 0;
+  background-color: transparent;
+  font-size: 12px;
+  outline: none;
+}
+
+.xe-modal-plugin-detail .markdown-btn button.active {
+  z-index: 2;
+  border-color: #dcdde0;
+  background-color: #fff;
+  color: #2c8beb;
+}
+
+.xe-modal-plugin-detail .markdown-editor .markdown-preview,
+.xe-modal-plugin-detail .markdown-editor .markdown-input {
+  display: none;
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 100%;
+  height: 127px;
+  padding: 8px 10px;
+  border: 1px solid #dcdde0;
+  line-height: 23px;
+  font-size: 14px;
+  resize: vertical;
+  word-break: break-all;
+  outline: 0;
+}
+
+.xe-modal-plugin-detail .markdown-editor .markdown-preview {
+  min-height: 127px;
+  height: auto;
+}
+
+.xe-modal-plugin-detail .markdown-editor .markdown-caption {
+  margin: 5px 0 18px 10px;
+  padding: 0;
+  font-size: 14px;
+  color: #696e7a;
+}
+
+.xe-modal-plugin-detail .comment-write-btn .xe-btn-primary {
+  background-color: #76b4f2;
+  border-color: #76b4f2;
+}
+
+.xe-modal-plugin-detail .comment-write button {
+  width: 100%;
+}
+
+.xe-modal-plugin-detail .comment-list > ul {
+  position: relative;
+  padding-bottom: 1px;
+  margin-top: 50px;
+  padding: 0;
+  list-style-type: none;
+}
+
+.xe-modal-plugin-detail .comment-list > ul > li {
+  position: relative;
+  padding-top: 20px;
+}
+
+.xe-modal-plugin-detail .comment-list > ul > li:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 1px;
+  background-color: #dcdde0;
+}
+
+.xe-modal-plugin-detail .comment-list > ul:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background-color: #dcdde0;
+}
+
+.xe-modal-plugin-detail .comment-list-btn {
+  position: absolute;
+  top: 17px;
+  right: 0;
+}
+
+.xe-modal-plugin-detail .comment-list-btn button {
+  padding: 3px;
+  background-color: transparent;
+  border: 0;
+  font-size: 14px;
+  color: #a8abb0;
+}
+
+.xe-modal-plugin-detail .comment-list-infor {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #aaa;
+}
+
+.xe-modal-plugin-detail .comment-list-infor-id {
+  padding-right: 2px;
+}
+
+.xe-modal-plugin-detail .comment-list-infor-date {
+  position: relative;
+  padding-left: 6px;
+}
+
+.xe-modal-plugin-detail .comment-list-infor-date:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 2px;
+  width: 1px;
+  height: 8px;
+  background-color: #aaa;
+}
+
+.xe-modal-plugin-detail .xe-modal .comment-list-text {
+  margin: 20px 0;
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.xe-modal-plugin-detail .comment-list-btn-more {
+  margin-top: 10px;
+  text-align: right;
+}
+
+.xe-modal-plugin-detail .comment-list-btn-more button {
+  padding: 0;
+  margin: 0;
+}
+
+.xe-modal-plugin-detail .comment-list-btn-more button:before {
+  content: "...";
+}
+
+.xe-modal-plugin-detail .plugin-update {
+  padding-bottom: 20px;
+  border-left: 4px solid #2388ee;
+  color: #434a53;
+  font-size: 14px;
+}
+
+.xe-modal-plugin-detail .plugin-update-article {
+  position: relative;
+  padding: 17px 25px;
+}
+
+.xe-modal-plugin-detail .plugin-update-article:before {
+  content: "";
+  position: absolute;
+  top: 20px;
+  left: -10px;
+  width: 16px;
+  height: 16px;
+  background-color: #fff;
+  border: 3px solid #2388ee;
+  border-radius: 100%;
+  color: #434a53;
+}
+
+.xe-modal-plugin-detail .plugin-update-article strong {
+  display: inline-block;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.xe-modal-plugin-detail .plugin-update-article em {
+  display: inline-block;
+  margin-bottom: 10px;
+  color: #8e8e93;
+  font-size: 13px;
+  font-style: normal;
+}
+
+.xe-modal-plugin-detail .plugin-update-article p,
+.xe-modal-plugin-detail .plugin-update-article ul li {
+  margin: 5px 0;
+  font-size: 13px;
+  line-height: 18px;
+  color: #696e7a;
+}
+
+.xe-modal-plugin-detail .plugin-update-article ul {
+  padding-left: 20px;
+}
+
+.xe-modal-plugin-detail .plugin-update-article .xe-star-point ul {
+  padding-left: 0;
+}
+
+.xe-modal-plugin-detail .plugin-update-article li {
+  list-style-type: disc;
+}
+
+.xe-modal-plugin-detail .plugin-update-article li:last-child {
+  margin-bottom: 0;
+}
+
+.xe-modal-plugin-detail .plugin-update a {
+  margin: 5px 0;
+  text-decoration: underline;
+}
+
+.xe-modal-plugin-detail .plugin-update-article .xe-btn-modify {
+  margin-top: 10px;
+  padding: 5px 10px;
+  color: #2c8beb;
+}
+
+@media (min-width: 768px) {
+  .xe-modal-plugin-detail .plugin-detail .nav-justified {
+    clear: both;
+    border: none;
+  }
+  .xe-modal-plugin-detail .plugin-detail .nav-justified li {
+    border: 1px solid #696E7A;
+    border-width: 1px 1px 1px 0;
+  }
+  .xe-modal-plugin-detail .plugin-detail .nav-justified li:first-child {
+    border-left: 1px solid #696E7A;
+  }
+  .xe-modal-plugin-detail .plugin-detail .nav-justified li a {
+    text-align: center;
+    color: #696e7a;
+  }
+  .xe-modal-plugin-detail .plugin-detail .nav-justified li.active {
+    background-color: #696E7A;
+    color: #fff;
+  }
+  .xe-modal-plugin-detail .plugin-detail .nav-justified li.active a {
+    color: #fff;
+  }
+  .xe-modal-plugin-detail .plugin-detail .nav-justified li:hover a {
+    background-color: #F4F6F9;
+    color: #696e7a;
+  }
+  .xe-modal-plugin-detail .plugin-detail .nav-justified li.active:hover a {
+    background-color: #696E7A;
+    color: #fff;
+  }
+  .xe-modal-plugin-detail .plugin-detail .plugin-summary {
+    margin-left: 135px;
+  }
+}
+
+@media (min-width: 992px) {
+  .xe-modal-plugin-detail {
+    width: 991px;
+  }
+  .xe-modal-plugin-detail .plugin-detail .dev-list .dev-info {
+    max-width: 160px;
+  }
+  .xe-modal-plugin-detail .plugin-detail .dev-list .dev-info a.link-dev {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .xe-modal-plugin-detail .plugin-detail .second-info .link-more.v2 {
+    position: absolute;
+    right: 0;
+    top: 20px;
+  }
+  .xe-modal-plugin-detail .plugin-detail .plugin-document .plugin-desc button {
+    width: auto;
+    padding: 0 12px;
+    font-size: 13px;
+  }
+  .xe-modal-plugin-detail .plugin-detail .plugin-img img {
+    width: 160px;
+    height: 160px;
+  }
+  .xe-modal-plugin-detail .plugin-detail .plugin-summary,
+  .xe-modal-plugin-detail .plugin-detail .plugin-summary.v2 {
+    margin-left: 180px;
+  }
+  .xe-modal-plugin-detail .plugin-detail .plugin-summary:after {
+    clear: none;
+  }
+  .xe-modal-plugin-detail .plugin-detail .plugin-title {
+    margin: 0 0 40px;
+    padding: 0;
+    border: none;
+  }
+}
+
 /*reset, helper class*/
 .logo-area h1, aside ul, header .right-menu ul, aside .list-title, .title-area h2, .title-area .tit_bottom ul, .normal-list, .item-container {
   margin: 0;
@@ -4093,7 +5143,7 @@ aside.open {
 
 .panel > .list-group.list-plugin li {
   overflow: hidden;
-  padding: 16px 26px;
+  padding: 14px 20px;
   border-left: 2px solid #2C8BEB;
   font-size: 13px;
 }
@@ -4321,10 +5371,6 @@ aside.open {
 .plugin_tbl th, .plugin_tbl td {
   padding: 8px;
   line-height: 13px;
-}
-
-.plugin-detail .table > thead > tr > th {
-  border-bottom: 1px solid #e4e4e4;
 }
 
 .board-category {
@@ -4641,6 +5687,417 @@ aside.open {
   border: 1px solid #e0e0e0;
 }
 
+.panel-group .panel-heading .pull-left {
+  float: none !important;
+  margin: 0;
+}
+
+.panel-group .panel-heading .pull-right {
+  float: none !important;
+  margin: 0;
+}
+
+.panel-group .panel-heading .btn.on {
+  border-color: #6f8dff;
+  background-color: #6f8dff;
+  color: #fff;
+}
+
+.panel-group .list-plugin .list-group-item-checkbox {
+  display: inline-block;
+  margin: 6px 16px 0 0;
+  vertical-align: top;
+}
+
+.panel-group .list-plugin .list-group-item-checkbox label {
+  margin: 0;
+}
+
+.admin-tab.panel {
+  position: relative;
+  border: 1px solid #e0e0e0;
+}
+
+.admin-tab-list {
+  padding-left: 18px;
+  margin-bottom: 0;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.admin-tab-list li {
+  display: inline-block;
+  height: auto;
+}
+
+.admin-tab-list li + li {
+  margin-left: 40px;
+}
+
+.admin-tab-list a {
+  position: relative;
+  display: block;
+  padding: 20px 0 19px;
+  border-bottom: 3px solid #fff;
+  font-size: 20px;
+  color: #b5b7bd;
+  text-decoration: none;
+}
+
+.admin-tab-list a:hover {
+  text-decoration: none;
+}
+
+.admin-tab-list .on a {
+  color: #434a53;
+  border-bottom: 3px solid #6f8dff;
+}
+
+.admin-tab-left, .admin-tab-right {
+  display: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border: 0;
+  color: #6f8dff;
+  font-size: 18px;
+  z-index: 1;
+}
+
+.admin-tab-left {
+  left: 0;
+  background: -webkit-linear-gradient(left, white 70%, rgba(255, 255, 255, 0));
+  background: -o-linear-gradient(right, white 70%, rgba(255, 255, 255, 0));
+  background: -moz-linear-gradient(right, white 70%, rgba(255, 255, 255, 0));
+  background: linear-gradient(to right, white 70%, rgba(255, 255, 255, 0));
+}
+
+.admin-tab-right {
+  right: 0;
+  background: -webkit-linear-gradient(left, rgba(255, 255, 255, 0), white 40%);
+  background: -o-linear-gradient(right, rgba(255, 255, 255, 0), white 40%);
+  background: -moz-linear-gradient(right, rgba(255, 255, 255, 0), white 40%);
+  background: linear-gradient(to right, rgba(255, 255, 255, 0), white 40%);
+}
+
+.admin-nav {
+  margin: 0 -15px;
+  padding: 12px 20px;
+  border-top: 1px solid #e4e4e4;
+}
+
+.admin-nav ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.admin-nav li {
+  display: inline-block;
+}
+
+.admin-nav a {
+  margin: 0 5px 0 0;
+  color: #000;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.admin-nav i {
+  font-size: 11px;
+}
+
+.search-btn-group .xe-btn {
+  padding: 6px 16px;
+}
+
+.search-btn-group .xe-btn-install {
+  margin-right: 4px;
+  border-color: #6f8dff;
+  background-color: #6f8dff;
+  color: #fff;
+}
+
+.search-btn-group .xe-btn-install i {
+  margin-right: 5px;
+  font-size: 17px;
+  vertical-align: -3px;
+}
+
+.search-group .search-group-filter {
+  position: relative;
+  margin: 20px 0 0;
+  padding: 0;
+  vertical-align: top;
+}
+
+.search-group .search-group-filter:after {
+  right: 12px;
+}
+
+.search-group .search-group-filter button {
+  position: relative;
+  width: 100%;
+  text-align: left;
+}
+
+.search-group .search-group-filter .label {
+  color: #000;
+}
+
+.search-group .input-group-btn {
+  margin-left: 8px;
+}
+
+.search-group .search-input-group .form-control {
+  height: 33px;
+  margin-left: -1px;
+}
+
+.xe-lypop-plugin {
+  margin-bottom: 15px;
+}
+
+.xe-lypop-plugin-text {
+  padding-top: 5px;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.xe-lypop-plugin-check {
+  margin-top: 15px;
+  padding: 0px 20px 9px;
+  border: 1px solid #e5e5e5;
+  background-color: #f8f8fa;
+}
+
+.xe-lypop-plugin-check dl {
+  margin: 0;
+}
+
+.xe-lypop-plugin-check dt {
+  margin: 18px 0 12px;
+  font-size: 14px;
+  color: #434a53;
+}
+
+.xe-lypop-plugin-check dd {
+  color: #777;
+}
+
+.xe-lypop-plugin-check .xe-label-text {
+  max-width: 100%;
+  font-weight: normal;
+  line-height: 15px;
+}
+
+.xe-lypop-plugin-check .xe-label-text span {
+  overflow: hidden;
+  display: inline-block;
+  max-width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.xe-lypop-plugin-check.version .xe-label {
+  margin: 15px 0 15px;
+}
+
+.xe-lypop-plugin-check.version .xe-label:first-child {
+  margin-top: 20px;
+}
+
+.xe-lypop-plugin-check.version dd {
+  display: inline-block;
+}
+
+.xe-lypop-plugin-check.version dd:last-child {
+  color: #2c8beb;
+}
+
+.xe-lypop-plugin-check.version .xi-long-arrow-right {
+  margin-right: 2px;
+}
+
+.admin-choice.panel {
+  position: relative;
+  padding: 0 10px 15px;
+  border: 1px solid #e0e0e0;
+}
+
+.admin-choice-count {
+  margin: 15px 0;
+  padding: 0;
+  font-size: 16px;
+  color: #343a53;
+}
+
+.admin-choice-list {
+  margin: 0 0 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.admin-choice .xe-label-text {
+  padding-left: 28px;
+  font-size: 14px;
+  color: #2c8bec;
+}
+
+.admin-choice .xe-btn-install {
+  width: 100%;
+}
+
+.panel-heading-search {
+  position: relative;
+  margin: 20px 0;
+}
+
+.panel-heading-search-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  border: 0;
+  background-color: transparent;
+}
+
+.list-install {
+  padding: 0 10px 5px;
+  margin-top: -1px;
+  border-top: 1px solid #fff;
+  list-style-type: none;
+}
+
+.list-install li {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding-left: 24px;
+  margin-bottom: 15px;
+  white-space: nowrap;
+}
+
+.list-install img {
+  width: 100px;
+  height: 100px;
+  vertical-align: top;
+}
+
+.list-install-caption {
+  display: inline-block;
+  width: calc(100% - 110px);
+}
+
+.list-install-caption-bottom {
+  position: absolute;
+  bottom: 0;
+  color: #8e8e93;
+}
+
+.list-install .xe-label {
+  margin: 0;
+}
+
+.list-install .xe-label > input[type="checkbox"] + .xe-input-helper {
+  position: absolute;
+  top: 0;
+  left: -128px;
+}
+
+.list-install .xe-label-text {
+  display: -webkit-box;
+  overflow: hidden;
+  max-width: 100%;
+  height: 40px;
+  padding: 0;
+  white-space: normal;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.list-install-text {
+  padding: 0;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.plugin-paging {
+  padding: 14px 15px;
+  border: 1px solid #e5e5e5;
+  border-top-width: 0;
+  background-color: #f8f8fa;
+}
+
+.plugin-paging .xe-btn {
+  color: #6f9bff;
+}
+
+.plugin-paging .active, .plugin-paging .xe-btn:hover {
+  background-color: #6f8dff;
+  color: #fff;
+  border-color: #6f8dff;
+}
+
+@media (max-width: 767px) {
+  .panel-group .panel-heading .caret {
+    position: absolute;
+    top: 14px;
+    right: 10px;
+  }
+  .panel-group .panel-heading .search-btn-group {
+    display: flex;
+    margin-top: 20px;
+  }
+  .panel-group .panel-heading .search-btn-group button {
+    flex: 1;
+  }
+  .panel-group .panel-heading .search-btn-group button + button {
+    margin-left: 10px;
+  }
+  .panel-group .panel-heading .input-group-btn {
+    width: 100%;
+    margin: 15px 0 0;
+  }
+  .panel-group .panel-heading .input-group-btn button {
+    width: 100%;
+    text-align: left;
+  }
+  .panel-group .panel-heading .search-input-group {
+    width: 100%;
+    margin-top: 15px;
+  }
+  .panel-group .panel-heading .search-input-group input {
+    width: 100%;
+  }
+  .panel-group .panel-heading .pull-left {
+    margin: 20px 0;
+  }
+  .plugin-paging {
+    margin-top: 20px;
+    padding: 0;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  }
+  .plugin-paging .xe-btn-more {
+    width: 100%;
+    padding: 5px 16px;
+    border-color: transparent;
+    background-color: transparent;
+    color: #919196;
+  }
+  .admin-tab-list a {
+    padding: 10px 0 9px;
+  }
+  .admin-tab-left, .admin-tab-right {
+    display: block;
+  }
+}
+
 .search-list {
   display: none;
   position: absolute;
@@ -4737,6 +6194,121 @@ aside.open {
   .skin-setting-list li .skin-select-btn .btn.hover {
     border-color: #6F8DFF;
   }
+  .panel-group .panel-heading .pull-left {
+    float: left !important;
+    margin: 65px 0 17px;
+  }
+  .panel-group .panel-heading .pull-right {
+    float: right !important;
+    margin: 17px 0;
+  }
+  .search-btn-group {
+    margin-bottom: 15px;
+    text-align: right;
+  }
+  .search-group .search-group-filter {
+    display: inline-block;
+    width: 33px;
+    height: 33px;
+    margin: 0;
+  }
+  .search-group .search-group-filter button {
+    height: 100%;
+  }
+  .search-group .search-group-filter .text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+  .xe-lypop-plugin {
+    margin-bottom: 5px;
+  }
+  .xe-lypop-plugin-text {
+    line-height: 22px;
+  }
+  .xe-lypop-plugin-check dt {
+    margin: 26px 0 12px;
+  }
+  .xe-lypop-plugin-check dt:first-child {
+    margin-top: 18px;
+  }
+  .xe-lypop-plugin-check dd {
+    color: #777;
+  }
+  .xe-lypop-plugin-check .xe-label-text {
+    line-height: 15px;
+  }
+  .xe-lypop-plugin-check.version .xe-label {
+    margin: 20px 0 15px;
+  }
+  .xe-lypop-plugin-check.version dd {
+    margin-top: 4px;
+  }
+  .admin-choice.panel {
+    padding: 0 20px;
+  }
+  .admin-choice-count {
+    margin: 21px 0;
+    font-size: 18px;
+  }
+  .admin-choice .xe-btn-install {
+    position: absolute;
+    top: 15px;
+    right: 19px;
+    width: auto;
+  }
+  .panel-heading-search {
+    float: right;
+    width: 190px;
+  }
+  .panel-heading-search input {
+    padding-right: 20px;
+  }
+  .list-install {
+    display: block;
+    padding: 0 0 5px;
+  }
+  .list-install li {
+    display: inline-block;
+    width: 160px;
+    margin: 0 15px 15px;
+    padding-left: 0;
+  }
+  .list-install img {
+    width: 100%;
+    height: auto;
+  }
+  .list-install-caption {
+    display: block;
+    width: 100%;
+    margin-top: 14px;
+  }
+  .list-install-caption-bottom {
+    position: static;
+    margin-top: 20px;
+  }
+  .list-install .xe-label > input[type="checkbox"] + .xe-input-helper {
+    position: relative;
+    top: inherit;
+    left: inherit;
+  }
+  .list-install .xe-label-text {
+    display: inline-block;
+    max-width: 135px;
+    height: auto;
+    margin-left: 5px;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+  .plugin-detail .plugin-img img {
+    width: 120px;
+    height: 120px;
+  }
 }
 
 @media (min-width: 1068px) {
@@ -4758,6 +6330,7 @@ aside.open {
     margin-top: -18px;
   }
   .list-plugin li .left-group {
+    display: inline-block;
     width: 80%;
   }
   .sidebar-collapse .dim {

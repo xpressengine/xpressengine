@@ -154,11 +154,29 @@ return [
                 'description' => '',
                 'ordering' => 200
             ],
+            'plugin.list.fetched' => [
+                'title' => 'xe::fetchedPlugin',
+                'display' => false,
+                'description' => '',
+                'ordering' => 200
+            ],
+            'plugin.list.self-installed' => [
+                'title' => 'xe::selfInstalledPlugin',
+                'display' => false,
+                'description' => '',
+                'ordering' => 200
+            ],
             'plugin.list.detail' => [
                 'title' => 'xe::pluginDetails',
                 'display' => false,
                 'description' => '',
                 'ordering' => 100
+            ],
+            'plugin.install' => [
+                'title' => 'xe::installPlugin',
+                'display' => true,
+                'description' => '',
+                'ordering' => 200
             ],
             'plugin.setting' => [
                 'title' => 'xe::settings',
