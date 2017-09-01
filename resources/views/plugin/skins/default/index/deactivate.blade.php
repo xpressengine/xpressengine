@@ -1,4 +1,4 @@
-<form action="{{ route('settings.plugins.manage.deactivate') }}" method="post" onsubmit="return ($('.__xe_update-plugin:checked').length != 0);">
+<form action="{{ route('settings.plugins.manage.deactivate') }}" method="post" onsubmit="return ($('.__xe_select-plugin:checked').length != 0);">
     {{ csrf_field() }}
 
     <div class="xe-modal-header">
@@ -17,7 +17,7 @@
 
                     @if(!$plugin->isActivated())
                         <label class="xe-label">
-                            <input type="checkbox" disabled checked>
+                            <input type="checkbox" class="__xe_select-plugin" disabled checked>
                             <span class="xe-input-helper"></span>
                             <div class="xe-label-text"><span>{{ $plugin->getTitle() }}</span><b>({{ $plugin->getId() }})</b> 이미 비활성화 되어 있음</div>
                         </label>

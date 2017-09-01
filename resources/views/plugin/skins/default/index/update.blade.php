@@ -1,4 +1,4 @@
-<form action="{{ route('settings.plugins.manage.update') }}" method="post" onsubmit="return ($('.__xe_update-plugin:checked').length != 0);">
+<form action="{{ route('settings.plugins.manage.update') }}" method="post" onsubmit="return ($('.__xe_select-plugin:checked').length != 0);">
     {{ csrf_field() }}
 
     <div class="xe-modal-header">
@@ -17,7 +17,7 @@
             <div class="xe-lypop-plugin-check version">
                 @foreach($plugins as $plugin)
                 <label class="xe-label">
-                    <input type="checkbox" class="__xe_update-plugin" name="plugin[{{ $plugin->getId() }}][update]" value="1" checked>
+                    <input type="checkbox" class="__xe_select-plugin" name="plugin[{{ $plugin->getId() }}][update]" value="1" checked>
                     <span class="xe-input-helper"></span>
                     <div class="xe-label-text"><span>{{ $plugin->getTitle() }}</span><b>({{ $plugin->getId() }})</b>
                         <dl>

@@ -1,4 +1,4 @@
-<form action="{{ route('settings.plugins.manage.activate') }}" method="post" onsubmit="return ($('.__xe_update-plugin:checked').length != 0);">
+<form action="{{ route('settings.plugins.manage.activate') }}" method="post" onsubmit="return ($('.__xe_select-plugin:checked').length != 0);">
     {{ csrf_field() }}
     <div class="xe-modal-header">
         <button type="button" class="btn-close" data-dismiss="xe-modal" aria-label="Close"><i class="xi-close"></i></button>
@@ -21,7 +21,7 @@
                     </label>
                     @else
                     <label class="xe-label">
-                        <input type="checkbox" name="pluginId[]" value="{{ $plugin->getId() }}" checked>
+                        <input type="checkbox" class="__xe_select-plugin" name="pluginId[]" value="{{ $plugin->getId() }}" checked>
                         <span class="xe-input-helper"></span>
                         <div class="xe-label-text"><span>{{ $plugin->getTitle() }}</span><b>({{ $plugin->getId() }})</b></div>
                     </label>
