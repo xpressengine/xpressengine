@@ -58,6 +58,12 @@ $(document).ready(function () {
         id = $(this).data('id');
         title = $(this).data('title');
 
+        if ($(this).data('needPurchase')) {
+          alert('유료 플러그인은 미리 구매하셔야 사용가능합니다.');
+          this.checked = false;
+          return false;
+        }
+
         if(this.checked) {
           self.add(id, title);
         } else {
@@ -68,7 +74,9 @@ $(document).ready(function () {
       },
       add: function (id, title) {
         if (self.$list.find('input[value=' + id + ']').length == 0) {
-          self.$list.append('<li><label class="xe-label"><input name="pluginId[]" type="checkbox" data-id="' + id + '" data-title="' + title + '" value="' + id + '" checked><span class="xe-input-helper"></span><span class="xe-label-text">' + title + '</span></label></li>')
+          var li = $('<li style="display: none;"><label class="xe-label"><input name="pluginId[]" type="checkbox" data-id="' + id + '" data-title="' + title + '" value="' + id + '" checked><span class="xe-input-helper"></span><span class="xe-label-text">' + title + '</span></label></li>');
+          self.$list.append(li);
+          li.slideDown();
         }
       },
       remove: function (id, title) {
