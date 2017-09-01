@@ -182,8 +182,6 @@ class RegisterController extends Controller
             'email' => 'required|email'
         ]);
 
-        $this->addEmailRegister();
-
         $email = $request->get('email');
 
         try {
@@ -230,9 +228,7 @@ class RegisterController extends Controller
             return redirect()->back()->with(['alert'=>['type'=>'danger', 'message'=> xe_trans('xe::joinNotAllowed')]]);
         }
 
-        $this->checkCaptcha('join');
-
-        $this->addEmailRegister();
+        $this->checkCaptcha();
 
         $rules = [
             'email' => 'email',
@@ -298,11 +294,10 @@ class RegisterController extends Controller
         return $config->get('joinable') === true;
     }
 
-    protected function checkCaptcha($action)
+    protected function checkCaptcha()
     {
-        $action = ($action === 'login') ? 'common' : $action;
-        $config = app('xe.config')->get('user.'.$action);
-        if ($config->get('useCaptcha', false) === true) {
+        $config = app('xe.config')->get('user.join');
+        if (in_array('captcha', $config->get('forms', []))) {
             if (app('xe.captcha')->verify() !== true) {
                 throw new HttpException(Response::HTTP_FORBIDDEN, '자동인증방지 기능을 통과하지 못하였습니다.');
             }

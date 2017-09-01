@@ -169,7 +169,7 @@ class AuthController extends Controller
             ]
         );
 
-        $this->checkCaptcha('login');
+        $this->checkCaptcha();
 
         $credentials = $request->only('email', 'password');
 
@@ -270,10 +270,9 @@ class AuthController extends Controller
         return property_exists($this, 'loginPath') ? $this->loginPath : '/auth/login';
     }
 
-    protected function checkCaptcha($action)
+    protected function checkCaptcha()
     {
-        $action = ($action === 'login') ? 'common' : $action;
-        $config = app('xe.config')->get('user.'.$action);
+        $config = app('xe.config')->get('user.common');
         if ($config->get('useCaptcha', false) === true) {
             if (app('xe.captcha')->verify() !== true) {
                 throw new HttpException(Response::HTTP_FORBIDDEN, '자동인증방지 기능을 통과하지 못하였습니다.');

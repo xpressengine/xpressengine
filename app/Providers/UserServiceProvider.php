@@ -768,7 +768,7 @@ class UserServiceProvider extends ServiceProvider
             'register.email.validator',
             function ($target, $data, $token = null) {
 
-                if ($token->guard === 'email') {
+                if (data_get($token, 'guard') === 'email') {
                     $code = array_get($data, 'code');
                     $email = app('xe.user')->pendingEmails()->findByAddress($token->email);
 
@@ -782,6 +782,5 @@ class UserServiceProvider extends ServiceProvider
                 return $target($data, $token);
             }
         );
-
     }
 }
