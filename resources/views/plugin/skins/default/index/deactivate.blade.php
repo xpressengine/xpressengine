@@ -1,4 +1,4 @@
-<form action="{{ route('settings.plugins.manage.deactivate') }}" method="post">
+<form action="{{ route('settings.plugins.manage.deactivate') }}" method="post" onsubmit="return ($('.__xe_update-plugin:checked').length != 0);">
     {{ csrf_field() }}
 
     <div class="xe-modal-header">

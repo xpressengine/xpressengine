@@ -113,7 +113,11 @@ class PluginController extends Controller
 
         $handler->getAllPlugins(true);
 
-        $pluginIds = $request->get('pluginId');
+        $pluginIds = $request->get('pluginId', []);
+
+        if (empty($pluginIds)) {
+            throw new HttpException(422, "선택된 플러그인이 없습니다.");
+        }
 
         $collection = $handler->getAllPlugins(true);
 
@@ -124,7 +128,7 @@ class PluginController extends Controller
                 throw new HttpException(422, 'Plugin not found.');
             }
             if ($plugin->isActivated()) {
-                throw new HttpException(422, 'Plugin is not deactivated. Please deactivate the plugin.');
+                $handler->deactivatePlugin($plugin->getId());
             }
         }
 
@@ -142,7 +146,7 @@ class PluginController extends Controller
             }
         }
 
-        $this->reserveOperation($writer, $timeLimit, $packages);
+        $this->reserveOperation($handler, $writer, $timeLimit, $packages);
 
         return redirect()->route('settings.plugins')->with(
             'alert',
@@ -167,6 +171,10 @@ class PluginController extends Controller
         $handler->getAllPlugins(true);
 
         $pluginIds = $request->get('pluginId');
+        if (empty($pluginIds)) {
+            throw new HttpException(422, "선택된 플러그인이 없습니다.");
+        }
+
         $collection = $handler->getAllPlugins(true);
         $plugins = $collection->getList($pluginIds);
 
@@ -205,6 +213,10 @@ class PluginController extends Controller
         $handler->getAllPlugins(true);
 
         $pluginIds = $request->get('pluginId');
+        if (empty($pluginIds)) {
+            throw new HttpException(422, "선택된 플러그인이 없습니다.");
+        }
+
         $collection = $handler->getAllPlugins(true);
         $plugins = $collection->getList($pluginIds);
 
