@@ -75,7 +75,7 @@ class TagHandler
             $tag = $this->repo->create([
                 'word' => $word,
                 'decomposed' => $this->decomposer->execute($word),
-                'instance_id' => $instanceId,
+                'instanceId' => $instanceId,
             ]);
 
             $tags->push($tag);

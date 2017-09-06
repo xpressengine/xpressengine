@@ -247,7 +247,7 @@ class Storage
     public function delete(File $file)
     {
         // 파일이 원본일 경우 동적으로 생성된 파일 모두 삭제 처리 함
-        if ($file->originId === null) {
+        if ($file->origin_id === null) {
             foreach ($file->getRawDerives() as $child) {
                 $this->delete($child);
             }

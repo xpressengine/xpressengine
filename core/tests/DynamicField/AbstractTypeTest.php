@@ -404,7 +404,7 @@ class AbstractTypeTest extends PHPUnit_Framework_TestCase
 
         $args = [
             'id' => 'id',
-            'instanceIdId' => 'value',
+            'instanceId_id' => 'value',
         ];
         $typeInstance->update($args, [
             ['column' => 'id', 'operator' => '=', 'value' => 'id']

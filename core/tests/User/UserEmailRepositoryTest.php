@@ -61,7 +61,7 @@ class UserEmailRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $email = $this->makeEmail();
         $email->shouldReceive('newQuery')->once()->andReturnSelf();
-        $email->shouldReceive('where')->once()->with('userId', $userId)->andReturnSelf();
+        $email->shouldReceive('where')->once()->with('user_id', $userId)->andReturnSelf();
         $email->shouldReceive('get')->once()->withNoArgs()->andReturn($emails);
 
         $repo->shouldReceive('createModel')->andReturn($email);
@@ -137,7 +137,7 @@ class UserEmailRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $email = $this->makeEmail();
         $email->shouldReceive('newQuery')->once()->andReturnSelf();
-        $email->shouldReceive('whereIn')->once()->with('userId', ['123'])->andReturnSelf();
+        $email->shouldReceive('whereIn')->once()->with('user_id', ['123'])->andReturnSelf();
         $email->shouldReceive('delete')->once()->withNoArgs()->andReturn(2);
 
         $repo->shouldReceive('createModel')->andReturn($email);

@@ -181,7 +181,7 @@ class DatabaseRepository implements PermissionRepository
     public function foster(Permission $item, $to)
     {
         $query = $this->conn->table($this->table)
-            ->where('site_key', $item->siteKey)
+            ->where('site_key', $item->site_key)
             ->where(function ($query) use ($item) {
                 $query->where('name', $item->name)
                     ->orWhere('name', 'like', $item->name . '.%');
@@ -210,7 +210,7 @@ class DatabaseRepository implements PermissionRepository
     {
         if ($to !== null) {
             $this->conn->table($this->table)
-                ->where('site_key', $item->siteKey)
+                ->where('site_key', $item->site_key)
                 ->where(function ($query) use ($item) {
                     $query->where('name', $item->name)
                         ->orWhere('name', 'like', $item->name . '.%');

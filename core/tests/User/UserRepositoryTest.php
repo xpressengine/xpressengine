@@ -36,7 +36,7 @@ class UserRepositoryTest extends \PHPUnit_Framework_TestCase
         $data2 = [
             'foo' => 'foo',
             'password' => 'secret',
-            'passwordUpdatedAt' => 'timestamp'
+            'password_updated_at' => 'timestamp'
         ];
 
         $user->shouldReceive('create')->once()->with($data2)->andReturnSelf();
@@ -130,7 +130,7 @@ class UserRepositoryTest extends \PHPUnit_Framework_TestCase
         $data2 = [
             'foo' => 'foo',
             'password' => 'secret',
-            'passwordUpdatedAt' => 'timestamp'
+            'password_updated_at' => 'timestamp'
         ];
         $user->shouldReceive('freshTimestamp')->once()->andReturn('timestamp');
         $user->shouldReceive('update')->once()->with($data2)->andReturnSelf();

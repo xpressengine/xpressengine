@@ -18,12 +18,12 @@ class DatabaseRepositoryTest extends \PHPUnit_Framework_TestCase
         m::close();
     }
 
-    public function testFindByTypeAndNameRetunsRegistered()
+    public function testFindByTypeAndNameReturnsRegistered()
     {
         list($conn, $query) = $this->getMocks();
 
         $conn->shouldReceive('table')->andReturn($query);
-        $query->shouldReceive('where')->once()->with('siteKey', 'default')->andReturn($query);
+        $query->shouldReceive('where')->once()->with('site_key', 'default')->andReturn($query);
         $query->shouldReceive('where')->once()->with('name', 'board.notice')->andReturn($query);
         $query->shouldReceive('first')->once()->withNoArgs()->andReturn((object)[
             'id' => 1,
@@ -126,7 +126,7 @@ class DatabaseRepositoryTest extends \PHPUnit_Framework_TestCase
         list($conn, $query) = $this->getMocks();
 
         $conn->shouldReceive('table')->andReturn($query);
-        $query->shouldReceive('where')->once()->with('siteKey', 'default')->andReturn($query);
+        $query->shouldReceive('where')->once()->with('site_key', 'default')->andReturn($query);
         $query->shouldReceive('whereRaw')->once()->with("'board.notice.b1' like concat(`name`, '.', '%')")->andReturn($query);
         $query->shouldReceive('where')->once()->with('name', '<>', 'board.notice.b1')->andReturn($query);
         $query->shouldReceive('get')->once()->withNoArgs()->andReturn((object)[
@@ -162,11 +162,11 @@ class DatabaseRepositoryTest extends \PHPUnit_Framework_TestCase
         $instance = new DatabaseRepository($conn);
 
         $mockRegistered = m::mock('Xpressengine\Permission\Permission');
-        $mockRegistered->shouldReceive('get')->with('siteKey')->andReturn('default');
+        $mockRegistered->shouldReceive('get')->with('site_key')->andReturn('default');
         $mockRegistered->shouldReceive('get')->with('name')->andReturn('prev.from');
 
         $conn->shouldReceive('table')->andReturn($query);
-        $query->shouldReceive('where')->twice()->with('siteKey', 'default')->andReturnSelf();
+        $query->shouldReceive('where')->twice()->with('site_key', 'default')->andReturnSelf();
         $query->shouldReceive('where')->twice()->with(m::on(function ($closure) use ($query) {
             $query->shouldReceive('where')->once()->with('name', 'prev.from')->andReturnSelf();
             $query->shouldReceive('orWhere')->once()->with('name', 'like', 'prev.from.%')->andReturnSelf();
@@ -194,11 +194,11 @@ class DatabaseRepositoryTest extends \PHPUnit_Framework_TestCase
         $instance = new DatabaseRepository($conn);
 
         $mockRegistered = m::mock('Xpressengine\Permission\Permission');
-        $mockRegistered->shouldReceive('get')->with('siteKey')->andReturn('default');
+        $mockRegistered->shouldReceive('get')->with('site_key')->andReturn('default');
         $mockRegistered->shouldReceive('get')->with('name')->andReturn('prev.from');
 
         $conn->shouldReceive('table')->andReturn($query);
-        $query->shouldReceive('where')->once()->with('siteKey', 'default')->andReturnSelf();
+        $query->shouldReceive('where')->once()->with('site_key', 'default')->andReturnSelf();
         $query->shouldReceive('where')->once()->with(m::on(function ($closure) use ($query) {
             $query->shouldReceive('where')->once()->with('name', 'prev.from')->andReturnSelf();
             $query->shouldReceive('orWhere')->once()->with('name', 'like', 'prev.from.%')->andReturnSelf();

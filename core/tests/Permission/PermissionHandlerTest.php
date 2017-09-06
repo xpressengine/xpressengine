@@ -42,11 +42,11 @@ class PermissionHandlerTest extends \PHPUnit_Framework_TestCase
         $instance = new PermissionHandler($repo);
 
         $mockPermission = m::mock('Xpressengine\Permission\Permission');
-        $mockPermission->shouldReceive('get')->with('siteKey')->andReturn('default');
+        $mockPermission->shouldReceive('get')->with('site_key')->andReturn('default');
         $mockPermission->shouldReceive('get')->with('name')->andReturn('foo.var');
 
         $mockParent = m::mock('Xpressengine\Permission\Permission');
-        $mockParent->shouldReceive('get')->with('siteKey')->andReturn('default');
+        $mockParent->shouldReceive('get')->with('site_key')->andReturn('default');
         $mockParent->shouldReceive('get')->with('name')->andReturn('foo');
 
         $repo->shouldReceive('fetchAncestor')->once()->with('default', 'foo.var')->andReturn([$mockParent]);
@@ -69,7 +69,7 @@ class PermissionHandlerTest extends \PHPUnit_Framework_TestCase
 
         $permission = $instance->getOrNew('plugin.dummy', 'default');
 
-        $this->assertEquals('default', $permission->siteKey);
+        $this->assertEquals('default', $permission->site_key);
         $this->assertEquals('plugin.dummy', $permission->name);
     }
 
@@ -84,7 +84,7 @@ class PermissionHandlerTest extends \PHPUnit_Framework_TestCase
 
         $mockPermission = m::mock('Xpressengine\Permission\Permission');
         $mockParent = m::mock('Xpressengine\Permission\Permission');
-        $mockParent->shouldReceive('get')->with('siteKey')->andReturn('default');
+        $mockParent->shouldReceive('get')->with('site_key')->andReturn('default');
         $mockParent->shouldReceive('get')->with('name')->andReturn('plugin');
 
         $repo->shouldReceive('findByName')->once()->with('default', 'plugin.dummy')->andReturnNull();
@@ -144,7 +144,7 @@ class PermissionHandlerTest extends \PHPUnit_Framework_TestCase
         $instance = new PermissionHandler($repo);
 
         $mockPermission = m::mock('Xpressengine\Permission\Permission');
-        $mockPermission->shouldReceive('get')->with('siteKey')->andReturn('default');
+        $mockPermission->shouldReceive('get')->with('site_key')->andReturn('default');
         $mockPermission->shouldReceive('get')->with('type')->andReturn('instance');
 
         $repo->shouldReceive('findByName')->once()->with('default', 'invalid.to')->andReturnNull();
@@ -184,7 +184,7 @@ class PermissionHandlerTest extends \PHPUnit_Framework_TestCase
         $instance = new PermissionHandler($repo);
 
         $mockPermission = m::mock('Xpressengine\Permission\Permission');
-        $mockPermission->shouldReceive('get')->with('siteKey')->andReturn('default');
+        $mockPermission->shouldReceive('get')->with('site_key')->andReturn('default');
         $mockPermission->shouldReceive('get')->with('type')->andReturn('instance');
         $mockPermission->shouldReceive('getParent')->andReturnNull();
         $mockPermission->shouldReceive('getDepth')->andReturn(1);
@@ -223,7 +223,7 @@ class PermissionHandlerTest extends \PHPUnit_Framework_TestCase
         $mockParent = m::mock('Xpressengine\Permission\Permission');
 
         $mockPermission = m::mock('Xpressengine\Permission\Permission');
-        $mockPermission->shouldReceive('get')->with('siteKey')->andReturn('default');
+        $mockPermission->shouldReceive('get')->with('site_key')->andReturn('default');
         $mockPermission->shouldReceive('get')->with('type')->andReturn('instance');
         $mockPermission->shouldReceive('getParent')->andReturn($mockParent);
 

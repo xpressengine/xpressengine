@@ -42,7 +42,7 @@ class PendingEmailRepositoryTest extends \PHPUnit_Framework_TestCase
         $email = $this->makeEmail();
         $self = $this;
         $email->shouldReceive('create')->with(Mockery::on(function($d) use($self){
-            $self->assertArrayHasKey('confirmationCode', $d);
+            $self->assertArrayHasKey('confirmation_code', $d);
             return true;
         }))->once()->andReturnSelf();
 
@@ -65,7 +65,7 @@ class PendingEmailRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $email = $this->makeEmail();
         $email->shouldReceive('newQuery')->once()->andReturnSelf();
-        $email->shouldReceive('where')->once()->with('userId', $userId)->andReturnSelf();
+        $email->shouldReceive('where')->once()->with('user_id', $userId)->andReturnSelf();
         $email->shouldReceive('first')->once()->withNoArgs()->andReturnSelf();
 
         $repo->shouldReceive('createModel')->andReturn($email);
@@ -100,7 +100,7 @@ class PendingEmailRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $email = $this->makeEmail();
         $email->shouldReceive('newQuery')->once()->andReturnSelf();
-        $email->shouldReceive('whereIn')->once()->with('userId', ['123'])->andReturnSelf();
+        $email->shouldReceive('whereIn')->once()->with('user_id', ['123'])->andReturnSelf();
         $email->shouldReceive('delete')->once()->withNoArgs()->andReturn(2);
 
         $repo->shouldReceive('createModel')->andReturn($email);
