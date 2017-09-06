@@ -128,7 +128,7 @@ class ColumnEntity extends Entity
     public function add(Blueprint $table, $prefix = '')
     {
         // make all names to camel case
-        $this->{'name'} = camel_case($prefix . $this->{'name'});
+        $this->{'name'} = snake_case($prefix . '_' .  $this->{'name'});
 
         if (method_exists($table, $this->{'dataType'}) === false) {
             throw new Exceptions\InvalidColumnEntityException;
@@ -159,6 +159,6 @@ class ColumnEntity extends Entity
      */
     public function drop(Blueprint $table, $prefix = '')
     {
-        $table->dropColumn(camel_case($prefix . $this->{'name'}));
+        $table->dropColumn(snake_case($prefix . '_' .  $this->{'name'}));
     }
 }

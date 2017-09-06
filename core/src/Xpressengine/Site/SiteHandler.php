@@ -86,7 +86,7 @@ class SiteHandler
      */
     public function getCurrentSiteKey()
     {
-        return $this->currentSite->siteKey;
+        return $this->currentSite->site_key;
     }
 
     /**
@@ -99,7 +99,7 @@ class SiteHandler
     public function getSiteConfig($siteKey = null)
     {
         if (is_null($siteKey)) {
-            $siteKey = $this->currentSite->siteKey;
+            $siteKey = $this->currentSite->site_key;
         }
         return $this->config->get(sprintf("site.%s", $siteKey));
     }
@@ -128,7 +128,7 @@ class SiteHandler
     public function getDefaultMenuEntityId($siteKey = null)
     {
         if (is_null($siteKey)) {
-            $siteKey = $this->currentSite->siteKey;
+            $siteKey = $this->currentSite->site_key;
         }
         return $this->config->getVal(sprintf("site.%s.defaultMenu", $siteKey));
     }
@@ -144,7 +144,7 @@ class SiteHandler
     public function setDefaultMenuEntityId($menuId, $siteKey = null)
     {
         if (is_null($siteKey)) {
-            $siteKey = $this->currentSite->siteKey;
+            $siteKey = $this->currentSite->site_key;
         }
 
         $this->config->setVal(sprintf("site.%s.defaultMenu", $siteKey), $menuId);
@@ -160,7 +160,7 @@ class SiteHandler
     public function getHomeInstanceId($siteKey = null)
     {
         if (is_null($siteKey)) {
-            $siteKey = $this->currentSite->siteKey;
+            $siteKey = $this->currentSite->site_key;
         }
         return $this->config->getVal(sprintf("site.%s.homeInstance", $siteKey));
     }
@@ -176,7 +176,7 @@ class SiteHandler
     public function setHomeInstanceId($instanceId, $siteKey = null)
     {
         if (is_null($siteKey)) {
-            $siteKey = $this->currentSite->siteKey;
+            $siteKey = $this->currentSite->site_key;
         }
 
         $this->config->setVal(sprintf("site.%s.homeInstance", $siteKey), $instanceId);
@@ -192,7 +192,7 @@ class SiteHandler
     public function getSiteConfigValue($key, $siteKey = null)
     {
         if (is_null($siteKey)) {
-            $siteKey = $this->currentSite->siteKey;
+            $siteKey = $this->currentSite->site_key;
         }
         return $this->config->getVal(sprintf("site.%s.%s", $siteKey, $key));
     }

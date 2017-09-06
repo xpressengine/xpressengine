@@ -20,12 +20,12 @@ class DraftMigration extends Migration {
             $table->engine = "InnoDB";
 
             $table->string('id', '36')->comment('ID');
-            $table->string('userId', '36')->comment('user ID');
+            $table->string('user_id', '36')->comment('user ID');
             $table->string('key')->comment('key');
             $table->text('val')->comment('val');
             $table->mediumText('etc')->comment('etc');
-            $table->boolean('isAuto')->comment('is auto saved');
-            $table->timestamp('createdAt')->comment('created date');
+            $table->boolean('is_auto')->comment('is auto saved');
+            $table->timestamp('created_at')->comment('created date');
 
             $table->primary('id');
         });

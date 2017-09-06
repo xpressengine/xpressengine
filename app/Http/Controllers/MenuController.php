@@ -117,7 +117,7 @@ class MenuController extends Controller
             $menu = XeMenu::createMenu([
                 'title' => $request->get('menuTitle'),
                 'description' => $request->get('menuDescription'),
-                'siteKey' => $request->get('siteKey')
+                'site_key' => $request->get('siteKey')
             ]);
 
             XeMenu::setMenuTheme($menu, $desktopTheme, $mobileTheme);
@@ -382,7 +382,7 @@ class MenuController extends Controller
                 'type' => $itemInput['selectedType'],
                 'ordering' => $itemInput['itemOrdering'],
                 'activated' => isset($itemInput['itemActivated']) ? $itemInput['itemActivated'] : 0,
-                'parentId' => $itemInput['parent']
+                'parent_id' => $itemInput['parent']
             ], $menuTypeInput);
 
             // link image 등록
@@ -396,7 +396,7 @@ class MenuController extends Controller
             ], $menuTypeInput);
 
             XeMenu::setMenuItemTheme($item, $desktopTheme, $mobileTheme);
-            $this->permissionRegisterGrant(XeMenu::permKeyString($item), null, $menu->siteKey);
+            $this->permissionRegisterGrant(XeMenu::permKeyString($item), null, $menu->site_key);
 
         } catch (Exception $e) {
             XeDB::rollback();
@@ -524,7 +524,7 @@ class MenuController extends Controller
 
     protected function getItemImageKeyName($name)
     {
-        return $name . 'Id';
+        return snake_case($name . 'Id');
     }
 
     protected function registerItemImage(Request $request, MenuItem $item, $name)

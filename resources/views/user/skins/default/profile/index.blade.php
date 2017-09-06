@@ -24,7 +24,7 @@
                                 @endif
                             </dd>
                             <dt class="xe-sr-only"><label for="nick">{{xe_trans('xe::displayName')}}</label></dt>
-                            <dd class="input-nick"><input class="__xe_nameInput" type="text" name="displayName" placeholder="{{xe_trans('xe::enterName')}}" value="{{ $user->getDisplayName() }}" readonly></dd>
+                            <dd class="input-nick"><input class="__xe_nameInput" type="text" name="display_name" placeholder="{{xe_trans('xe::enterName')}}" value="{{ $user->getDisplayName() }}" readonly></dd>
 
                             @if($grant['manage'])
                                 <dt class="xe-sr-only">{{xe_trans('xe::group')}}</dt>

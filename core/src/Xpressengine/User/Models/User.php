@@ -43,20 +43,20 @@ class User extends DynamicModel implements UserInterface
     protected $dynamic = true;
 
     protected $dates = [
-        'passwordUpdatedAt',
-        'loginAt'
+        'password_updated_at',
+        'login_at'
     ];
 
     protected $fillable = [
         'email',
-        'displayName',
+        'display_name',
         'password',
         'rating',
         'status',
-        'passwordUpdatedAt'
+        'password_updated_at'
     ];
 
-    protected $hidden = ['password', 'rememberToken'];
+    protected $hidden = ['password', 'remember_token'];
 
     protected $appends = ['profileImage'];
 
@@ -74,7 +74,7 @@ class User extends DynamicModel implements UserInterface
     /**
      * @var string getDisplayName()메소드가 실행될 때 사용할 필드
      */
-    public static $displayField = 'displayName';
+    public static $displayField = 'display_name';
 
     /**
      * User constructor.
@@ -106,7 +106,7 @@ class User extends DynamicModel implements UserInterface
      */
     public function groups()
     {
-        return $this->belongsToMany(UserGroup::class, 'user_group_user', 'userId', 'groupId');
+        return $this->belongsToMany(UserGroup::class, 'user_group_user', 'user_id', 'group_id');
     }
 
     /**
@@ -116,7 +116,7 @@ class User extends DynamicModel implements UserInterface
      */
     public function accounts()
     {
-        return $this->hasMany(UserAccount::class, 'userId');
+        return $this->hasMany(UserAccount::class, 'user_id');
     }
 
     /**
@@ -126,7 +126,7 @@ class User extends DynamicModel implements UserInterface
      */
     public function emails()
     {
-        return $this->hasMany(UserEmail::class, 'userId');
+        return $this->hasMany(UserEmail::class, 'user_id');
     }
 
     /**
@@ -136,7 +136,7 @@ class User extends DynamicModel implements UserInterface
      */
     public function pendingEmail()
     {
-        return $this->hasOne(PendingEmail::class, 'userId');
+        return $this->hasOne(PendingEmail::class, 'user_id');
     }
 
     /**
@@ -210,7 +210,7 @@ class User extends DynamicModel implements UserInterface
      */
     public function getRememberTokenName()
     {
-        return 'rememberToken';
+        return 'remember_token';
     }
 
     /**
@@ -293,7 +293,7 @@ class User extends DynamicModel implements UserInterface
     public function getProfileImage()
     {
         $resolver = static::$profileImageResolver;
-        return $resolver($this->profileImageId);
+        return $resolver($this->profile_image_id);
     }
 
     /**
@@ -374,7 +374,7 @@ class User extends DynamicModel implements UserInterface
         if ($time === null) {
             $time = new Carbon;
         }
-        $this->loginAt = $time;
+        $this->login_at = $time;
     }
 
     /**

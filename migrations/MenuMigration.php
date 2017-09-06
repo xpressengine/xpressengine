@@ -29,7 +29,7 @@ class MenuMigration extends Migration {
 
             $table->string('id', 8)->comment('ID');
             $table->string('title')->comment('menu title');
-            $table->string('siteKey')->comment('site key. for multi web site support.');
+            $table->string('site_key')->comment('site key. for multi web site support.');
             $table->text('description')->nullable()->comment('description');
             $table->integer('count')->comment('number of menu item');
 
@@ -41,19 +41,19 @@ class MenuMigration extends Migration {
             $table->engine = "InnoDB";
 
             $table->string('id', 8)->comment('ID');
-            $table->string('menuId')->comment('menu ID');
-            $table->string('parentId')->nullable()->comment('parent ID. parent menu item ID.');
+            $table->string('menu_id')->comment('menu ID');
+            $table->string('parent_id')->nullable()->comment('parent ID. parent menu item ID.');
             $table->string('title')->comment('menu title. It can be code of translation information.');
             $table->string('url')->comment('URL');
             $table->text('description')->nullable()->comment('menu description. It can be code of translation information.');
             $table->string('target')->comment('HTML <a> tag target attribute value');
             $table->string('type')->comment('Module Type. Module ID of registered this menu item.');
-            $table->string('basicImageId', 36)->comment('image menu item setting');
-            $table->string('hoverImageId', 36)->comment('image menu item setting');
-            $table->string('selectedImageId', 36)->comment('image menu item setting');
-            $table->string('mBasicImageId', 36)->comment('image menu item setting');
-            $table->string('mHoverImageId', 36)->comment('image menu item setting');
-            $table->string('mSelectedImageId', 36)->comment('image menu item setting');
+            $table->string('basic_image_id', 36)->comment('image menu item setting');
+            $table->string('hover_image_id', 36)->comment('image menu item setting');
+            $table->string('selected_image_id', 36)->comment('image menu item setting');
+            $table->string('m_basic_image_id', 36)->comment('image menu item setting');
+            $table->string('m_hover_image_id', 36)->comment('image menu item setting');
+            $table->string('m_selected_image_id', 36)->comment('image menu item setting');
             $table->integer('ordering')->comment('ordering number for menu item sort.');
             $table->boolean('activated')->comment('value of menu item activating');
             $table->string('options')->comment('options');
@@ -94,7 +94,7 @@ class MenuMigration extends Migration {
         $mainMenu = $menuHandler->createMenu([
             'title' => 'Main Menu',
             'description' => 'Main Menu',
-            'siteKey' => 'default'
+            'site_key' => 'default'
         ]);
         $menuHandler->setMenuTheme($mainMenu, $defaultMenuTheme, $defaultMenuTheme);
         app('xe.permission')->register($mainMenu->getKey(), $menuHandler->getDefaultGrant());
@@ -159,8 +159,8 @@ class MenuMigration extends Migration {
         }
 
         $inputs = [
-            'menuId' => $mainMenu->id,
-            'parentId' => null,
+            'menu_id' => $mainMenu->id,
+            'parent_id' => null,
             'title' => $menuTitle,
             'url' => 'home',
             'description' => 'home',
@@ -208,8 +208,8 @@ class MenuMigration extends Migration {
         }
 
         $inputs = [
-            'menuId' => $mainMenu->id,
-            'parentId' => null,
+            'menu_id' => $mainMenu->id,
+            'parent_id' => null,
             'title' => $menuTitle,
             'url' => 'board1',
             'description' => 'board1',
@@ -219,9 +219,9 @@ class MenuMigration extends Migration {
             'activated' => '1',
         ];
         $menuTypeInput = [
-            'pageTitle' => 'XpressEngine3 Board',
-            'boardName' => 'Board',
-            'siteKey' => 'default',
+            'page_title' => 'XpressEngine3 Board',
+            'board_name' => 'Board',
+            'site_key' => 'default',
             'revision' => 'true',
             'division' => 'false',
         ];

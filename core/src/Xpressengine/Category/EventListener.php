@@ -72,7 +72,7 @@ class EventListener
     protected function categoryItemCreated(CategoryItem $item)
     {
         $handler = $this->container->make('xe.category');
-        $category = $handler->cates()->find($item->categoryId);
+        $category = $handler->cates()->find($item->category_id);
         $handler->cates()->increment($category, $category->getCountName());
     }
 
@@ -85,7 +85,7 @@ class EventListener
     protected function categoryItemDeleted(CategoryItem $item)
     {
         $handler = $this->container->make('xe.category');
-        $category = $handler->cates()->find($item->categoryId);
+        $category = $handler->cates()->find($item->category_id);
         $handler->cates()->decrement($category, $category->getCountName());
     }
 }

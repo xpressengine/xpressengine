@@ -1,6 +1,6 @@
 <?php
 /**
- * DivisionException
+ * NotAllowedTypeException
  *
  * PHP version 5
  *
@@ -17,7 +17,7 @@ namespace Xpressengine\Document\Exceptions;
 use Xpressengine\Document\DocumentException;
 
 /**
- * DivisionException
+ * NotAllowedTypeException
  *
  * @category    Document
  * @package     Xpressengine\Document

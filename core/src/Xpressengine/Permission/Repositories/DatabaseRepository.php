@@ -65,7 +65,7 @@ class DatabaseRepository implements PermissionRepository
     public function findByName($siteKey, $name)
     {
         $row = $this->conn->table($this->table)
-            ->where('siteKey', $siteKey)
+            ->where('site_key', $siteKey)
             ->where('name', $name)
             ->first();
 
@@ -83,8 +83,8 @@ class DatabaseRepository implements PermissionRepository
     {
         $now = $this->getNow();
         $dates = [
-            'createdAt' => $now,
-            'updatedAt' => $now,
+            'created_at' => $now,
+            'updated_at' => $now,
         ];
 
         $id = $this->conn->table($this->table)->insertGetId(
@@ -107,7 +107,7 @@ class DatabaseRepository implements PermissionRepository
 
         $dates = [];
         if (count($diff) > 0) {
-            $dates = ['updatedAt' => $this->getNow()];
+            $dates = ['updated_at' => $this->getNow()];
             $this->conn->table($this->table)->where('id', $item->id)->update(array_merge($diff, $dates));
         }
 
@@ -136,7 +136,7 @@ class DatabaseRepository implements PermissionRepository
     public function fetchAncestor($siteKey, $name)
     {
         $rows = $this->conn->table($this->table)
-            ->where('siteKey', $siteKey)
+            ->where('site_key', $siteKey)
             ->whereRaw("'" . $name . "' like concat(`name`, '.', '%')")
             ->where('name', '<>', $name)->get();
 
@@ -158,7 +158,7 @@ class DatabaseRepository implements PermissionRepository
     public function fetchDescendant($siteKey, $name)
     {
         $rows = $this->conn->table($this->table)
-            ->where('siteKey', $siteKey)
+            ->where('site_key', $siteKey)
             ->where('name', 'like', $name . '.%')
             ->where('name', '<>', $name)->get();
 
@@ -181,7 +181,7 @@ class DatabaseRepository implements PermissionRepository
     public function foster(Permission $item, $to)
     {
         $query = $this->conn->table($this->table)
-            ->where('siteKey', $item->siteKey)
+            ->where('site_key', $item->siteKey)
             ->where(function ($query) use ($item) {
                 $query->where('name', $item->name)
                     ->orWhere('name', 'like', $item->name . '.%');
@@ -210,7 +210,7 @@ class DatabaseRepository implements PermissionRepository
     {
         if ($to !== null) {
             $this->conn->table($this->table)
-                ->where('siteKey', $item->siteKey)
+                ->where('site_key', $item->siteKey)
                 ->where(function ($query) use ($item) {
                     $query->where('name', $item->name)
                         ->orWhere('name', 'like', $item->name . '.%');

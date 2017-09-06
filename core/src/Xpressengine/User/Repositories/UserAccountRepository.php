@@ -65,7 +65,7 @@ class UserAccountRepository implements UserAccountRepositoryInterface
      */
     public function findByUserId($userId)
     {
-        $accounts = $this->query()->where('userId', $userId)->get();
+        $accounts = $this->query()->where('user_id', $userId)->get();
         return $accounts;
     }
 
@@ -78,6 +78,6 @@ class UserAccountRepository implements UserAccountRepositoryInterface
      */
     public function deleteByUserIds($userIds)
     {
-        return $this->query()->whereIn('userId', (array) $userIds)->delete();
+        return $this->query()->whereIn('user_id', (array) $userIds)->delete();
     }
 }

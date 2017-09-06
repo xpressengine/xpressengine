@@ -94,7 +94,7 @@ abstract class AbstractLogger
     {
         return [
             'type' => static::$id,
-            'userId' => $request->user()->getId(),
+            'user_id' => $request->user()->getId(),
             'method' => $request->method(),
             'url' => $request->fullUrl(),
             'parameters' => $request->except('_method', '_token'),

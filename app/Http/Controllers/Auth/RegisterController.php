@@ -148,7 +148,7 @@ class RegisterController extends Controller
 
         $rules = [
             'email' => 'email',
-            'displayName' => 'required',
+            'display_name' => 'required',
             'password' => 'confirmed|password',
             'agree' => 'required|accepted',
             'register_token' => 'required'
@@ -206,7 +206,7 @@ class RegisterController extends Controller
             \DB::commit();
         }
 
-        $token = $tokenRepository->create('email', ['email' => $email, 'userId' => $mail->userId]);
+        $token = $tokenRepository->create('email', ['email' => $email, 'user_id' => $mail->user_id]);
         $this->emailBroker->sendEmailForRegister($mail, $token, 'emails.register', function ($m) {
             $m->subject(xe_trans(app('xe.site')->getSiteConfig()->get('site_title')).' '.xe_trans('xe::emailConfirm'));
         });
@@ -232,7 +232,7 @@ class RegisterController extends Controller
 
         $rules = [
             'email' => 'email',
-            'displayName' => 'required',
+            'display_name' => 'required',
             'password' => 'confirmed|password',
             'agree' => 'required|accepted',
             'register_token' => 'required'

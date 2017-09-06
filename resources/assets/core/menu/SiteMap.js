@@ -83,7 +83,7 @@ var SiteMap = (function () {
       temp +=       "<i class='xi-paper'></i>";
       temp +=       '<dl>';
       temp +=         "<dt class='sr-only'>" + XE.Lang.trans(item.title) + '</dt>';
-      temp +=         "<dd class='ellipsis'><a href='" + _menusUrl + '/' + item.menuId + '/items/' + item.id + "'>" + XE.Lang.trans(item.title) + '</a></dd>';
+      temp +=         "<dd class='ellipsis'><a href='" + _menusUrl + '/' + item.menu_id + '/items/' + item.id + "'>" + XE.Lang.trans(item.title) + '</a></dd>';
       temp +=         "<dt class='sr-only'>" + url + '</dt>';
       temp +=         "<dd class='text-blue ellipsis'><a href='" + url + "'>" + url + '</a><em>[' + item.type + ']</em></dd>';
       temp +=       '</dl>';
@@ -229,7 +229,7 @@ var SiteMap = (function () {
 
           obj.item.find('> .item-content').attr('data-item', JSON.stringify(itemData));
 
-          if (itemData.menuId != currentMenuId) {
+          if (itemData.menu_id != currentMenuId) {
             _this.updateMenuId(obj.item, currentMenuId);
           }
 
@@ -262,7 +262,7 @@ var SiteMap = (function () {
 
       var link = arrLinks[0] + stdParsing + secLinks.join('/');
 
-      itemData.menuId = menuId;
+      itemData.menu_id = menuId;
       $item.find('> .item-content').attr('data-item', JSON.stringify(itemData));
       $link.attr('href', link);
 

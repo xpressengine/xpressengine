@@ -38,12 +38,12 @@ class ImageMeta extends Meta
      *
      * @var array
      */
-    protected $guarded = ['id', 'fileId'];
+    protected $guarded = ['id', 'file_id'];
 
     /**
      * The foreign key name for the model.
      *
      * @var string
      */
-    protected $foreignKey = 'fileId';
+    protected $foreignKey = 'file_id';
 }

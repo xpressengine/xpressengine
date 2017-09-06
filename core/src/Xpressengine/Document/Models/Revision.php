@@ -1,6 +1,6 @@
 <?php
 /**
- * Document
+ * Revision
  *
  * PHP version 5
  *
@@ -18,39 +18,40 @@ use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Database\Eloquent\DynamicModel;
 
 /**
- * Document
+ * Revision
  *
- * @property string revisionId
- * @property string revisionNo
+ * @property string revision_id
+ * @property string revision_no
  * @property string id
- * @property string parentId
- * @property string instanceId
+ * @property string parent_id
+ * @property string instance_id
  * @property string type
- * @property string userId
+ * @property string user_id
  * @property string writer
  * @property string email
- * @property string certifyKey
- * @property string readCount
- * @property string commentCount
- * @property string assentCount
- * @property string dissentCount
- * @property string approved
- * @property string published
- * @property string status
- * @property string display
+ * @property string certify_key
+ * @property integer read_count
+ * @property integer comment_count
+ * @property integer assent_count
+ * @property integer dissent_count
+ * @property integer approved
+ * @property integer published
+ * @property integer status
+ * @property integer display
+ * @property integer format
  * @property string locale
  * @property string title
  * @property string content
- * @property string pureContent
- * @property string createdAt
- * @property string publishedAt
- * @property string updatedAt
- * @property string deletedAt
+ * @property string pure_content
+ * @property string created_at
+ * @property string published_at
+ * @property string updated_at
+ * @property string deleted_at
  * @property string head
  * @property string reply
  * @property string listOrder
  * @property string ipaddress
- * @property string userType
+ * @property string user_type
  *
  *
  * @category    Document
@@ -84,10 +85,10 @@ class Revision extends DynamicModel
      * @var array
      */
     protected $fillable = [
-        'revisionNo', 'id', 'parentId', 'instanceId', 'userId', 'writer', 'approved',
+        'revision_no', 'id', 'parent_id', 'instance_id', 'user_id', 'writer', 'approved',
         'published', 'status', 'display', 'locale', 'title',
-        'content', 'pureContent', 'createdAt', 'publishedAt', 'head', 'reply',
-        'listOrder', 'ipaddress', 'userType', 'certifyKey', 'email',
+        'content', 'pure_content', 'created_at', 'published_at', 'head', 'reply',
+        'list_order', 'ipaddress', 'user_type', 'certify_key', 'email',
     ];
 
     /**
@@ -98,7 +99,7 @@ class Revision extends DynamicModel
     /**
      * @var string
      */
-    protected $primaryKey = 'revisionId';
+    protected $primaryKey = 'revision_id';
 
     /**
      * user relationship
@@ -107,6 +108,6 @@ class Revision extends DynamicModel
      */
     public function user()
     {
-        return $this->belongsTo('Xpressengine\User\Models\User', 'userId');
+        return $this->belongsTo('Xpressengine\User\Models\User', 'user_id');
     }
 }

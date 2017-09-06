@@ -29,7 +29,7 @@ use Xpressengine\Database\Eloquent\DynamicModel;
  * @link        https://xpressengine.io
  *
  * @property string $host           지정된 도메인
- * @property string $siteKey        고유한 식별자
+ * @property string $site_key       고유한 식별자
  */
 
 class Site extends DynamicModel
@@ -46,14 +46,14 @@ class Site extends DynamicModel
      *
      * @var string
      */
-    protected $primaryKey = 'siteKey';
+    protected $primaryKey = 'site_key';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['siteKey', 'host'];
+    protected $fillable = ['site_key', 'host'];
 
     /**
      * Indicates if the IDs are auto-incrementing.

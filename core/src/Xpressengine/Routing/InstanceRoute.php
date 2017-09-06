@@ -29,9 +29,9 @@ use Xpressengine\Site\Site;
  *
  * @property string $url        url
  * @property string $module     module id
- * @property string $instanceId instance Id
- * @property string $menuId     menu id
- * @property string $siteKey    site key
+ * @property string $instance_id instance Id
+ * @property string $menu_id     menu id
+ * @property string $site_key    site key
  */
 class InstanceRoute extends DynamicModel
 {
@@ -61,6 +61,6 @@ class InstanceRoute extends DynamicModel
      */
     public function site()
     {
-        return $this->belongsTo(Site::class, 'siteKey', 'siteKey');
+        return $this->belongsTo(Site::class, 'site_key', 'site_key');
     }
 }

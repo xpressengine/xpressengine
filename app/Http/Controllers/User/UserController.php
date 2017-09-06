@@ -153,7 +153,7 @@ class UserController extends Controller
 
         XeDB::beginTransaction();
         try {
-            $user = $this->handler->update($user, compact('displayName'));
+            $user = $this->handler->update($user, ['display_name' => $displayName]);
         } catch (\Exception $e) {
             XeDB::rollback();
             throw $e;

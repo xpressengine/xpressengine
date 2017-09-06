@@ -20,18 +20,18 @@ class UserMigration extends Migration {
             $table->engine = "InnoDB";
 
             $table->string('id', 36)->comment('user ID');
-            $table->string('displayName', 255)->unique()->comment('display name.');
+            $table->string('display_name', 255)->unique()->comment('display name.');
             $table->string('email', 255)->nullable()->comment('email');
             $table->string('password', 255)->nullable()->comment('password');
             $table->string('rating', 15)->default('member')->comment('user rating. guest/member/manager/super');
             $table->char('status', 20)->comment('account status. activated/deactivated');
             $table->text('introduction')->default(null)->nullable()->comment('user introduction');
-            $table->string('profileImageId', 36)->nullable()->comment('profile image file ID');
-            $table->string('rememberToken', 255)->nullable()->comment('token for keep login');
-            $table->timestamp('loginAt')->comment('login date');
-            $table->timestamp('createdAt')->index()->comment('created date');
-            $table->timestamp('updatedAt')->index()->comment('updated date');
-            $table->timestamp('passwordUpdatedAt')->comment('password updated date');
+            $table->string('profile_image_id', 36)->nullable()->comment('profile image file ID');
+            $table->string('remember_token', 255)->nullable()->comment('token for keep login');
+            $table->timestamp('login_at')->comment('login date');
+            $table->timestamp('created_at')->index()->comment('created date');
+            $table->timestamp('updated_at')->index()->comment('updated date');
+            $table->timestamp('password_updated_at')->comment('password updated date');
 
             $table->primary('id');
         });
@@ -42,8 +42,8 @@ class UserMigration extends Migration {
             $table->string('name')->comment('group name');
             $table->string('description', 1000)->comment('group description');
             $table->integer('order')->default(0)->index()->comment('order number');
-            $table->timestamp('createdAt')->index()->comment('created date');
-            $table->timestamp('updatedAt')->comment('updated date');
+            $table->timestamp('created_at')->index()->comment('created date');
+            $table->timestamp('updated_at')->comment('updated date');
 
             $table->primary('id');
         });
@@ -53,13 +53,13 @@ class UserMigration extends Migration {
             $table->engine = "InnoDB";
 
             $table->increments('id')->comment('ID');
-            $table->string('groupId', 36)->comment('group ID');
-            $table->string('userId', 36)->comment('user ID');
-            $table->timestamp('createdAt')->comment('created date');
+            $table->string('group_id', 36)->comment('group ID');
+            $table->string('user_id', 36)->comment('user ID');
+            $table->timestamp('created_at')->comment('created date');
 
-            $table->unique(['groupId','userId']);
-            $table->index('groupId');
-            $table->index('userId');
+            $table->unique(['group_id','user_id']);
+            $table->index('group_id');
+            $table->index('user_id');
         });
 
         Schema::create('user_account', function (Blueprint $table) {
@@ -67,29 +67,29 @@ class UserMigration extends Migration {
             $table->engine = "InnoDB";
 
             $table->string('id', 36)->comment('ID');
-            $table->string('userId')->comment('user ID');
-            $table->string('accountId')->comment('account Id');
+            $table->string('user_id')->comment('user ID');
+            $table->string('account_id')->comment('account Id');
             $table->string('email')->nullable()->comment('email');
             $table->char('provider', 20)->comment('OAuth provider. naver/twitter/facebook/...');
             $table->string('token', 500)->comment('token');
-            $table->string('tokenSecret', 500)->comment('token secret');
-            $table->timestamp('createdAt')->comment('created date');
-            $table->timestamp('updatedAt')->comment('updated date');
+            $table->string('token_secret', 500)->comment('token secret');
+            $table->timestamp('created_at')->comment('created date');
+            $table->timestamp('updated_at')->comment('updated date');
 
             $table->primary('id');
-            $table->unique(['provider','accountId']);
+            $table->unique(['provider','account_id']);
         });
 
         Schema::create('user_email', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
             $table->increments('id')->comment('ID');
-            $table->string('userId', 36)->comment('user ID');
+            $table->string('user_id', 36)->comment('user ID');
             $table->string('address')->comment('email address');
-            $table->timestamp('createdAt')->index()->comment('created date');
-            $table->timestamp('updatedAt')->comment('updated date');
+            $table->timestamp('created_at')->index()->comment('created date');
+            $table->timestamp('updated_at')->comment('updated date');
 
-            $table->index('userId');
+            $table->index('user_id');
             $table->index('address');
         });
 
@@ -98,13 +98,13 @@ class UserMigration extends Migration {
             $table->engine = "InnoDB";
 
             $table->increments('id')->comment('ID');
-            $table->string('userId', 36)->comment('user ID');
+            $table->string('user_id', 36)->comment('user ID');
             $table->string('address')->comment('email address');
-            $table->string('confirmationCode')->nullable()->comment('confirmation code');
-            $table->timestamp('createdAt')->index()->comment('created date');
-            $table->timestamp('updatedAt')->comment('updated date');
+            $table->string('confirmation_code')->nullable()->comment('confirmation code');
+            $table->timestamp('created_at')->index()->comment('created date');
+            $table->timestamp('updated_at')->comment('updated date');
 
-            $table->index('userId');
+            $table->index('user_id');
             $table->index('address');
         });
 
@@ -125,7 +125,7 @@ class UserMigration extends Migration {
             $table->string('id', 36)->comment('user ID');
             $table->string('guard', 100)->comment('the guard creating token');
             $table->text('data')->comment('token data');
-            $table->timestamp('createdAt')->comment('created date');
+            $table->timestamp('created_at')->comment('created date');
         });
 
     }

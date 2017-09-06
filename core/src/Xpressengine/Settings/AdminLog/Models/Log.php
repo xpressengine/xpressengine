@@ -44,7 +44,7 @@ class Log extends DynamicModel
     protected $appends = [];
 
     protected $fillable = [
-        'type', 'userId', 'method', 'url', 'parameters', 'summary', 'data', 'ipaddress', 'createdAt'
+        'type', 'user_id', 'method', 'url', 'parameters', 'summary', 'data', 'ipaddress', 'created_at'
     ];
 
     /**
@@ -66,7 +66,7 @@ class Log extends DynamicModel
      */
     public function user()
     {
-        return $this->belongsTo(User::class, 'userId');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**

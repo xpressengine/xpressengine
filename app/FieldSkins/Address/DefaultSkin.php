@@ -86,8 +86,8 @@ class DefaultSkin extends AbstractSkin
                     }
 
                     // 우편번호와 주소 정보를 해당 필드에 넣는다.
-                    $(\'[name="\'+fieldId+\'Postcode"]\').val(data.zonecode);
-                    $(\'[name="\'+fieldId+\'Address1"]\').val(fullAddr);
+                    $(\'[name="\'+fieldId+\'_postcode"]\').val(data.zonecode);
+                    $(\'[name="\'+fieldId+\'_address1"]\').val(fullAddr);
 
                     // iframe을 넣은 element를 안보이게 한다.
                     // (autoClose:false 기능을 이용한다면, 아래 코드를 제거해야 화면에서 사라지지 않는다.)

@@ -86,8 +86,8 @@ class Tag extends DynamicModel
         $model = new static;
 
         return $model->newQuery()
-            ->rightJoin($model->getTaggableTable(), $model->getTable().'.id', '=', $model->getTaggableTable().'.tagId')
-            ->where('taggableId', $taggableId)
+            ->rightJoin($model->getTaggableTable(), $model->getTable().'.id', '=', $model->getTaggableTable().'.tag_id')
+            ->where('taggable_id', $taggableId)
             ->orderBy('position')
             ->select([$model->getTable().'.*'])
             ->get();
@@ -109,7 +109,7 @@ class Tag extends DynamicModel
         $query = $model->newQuery()->orderBy('count', 'desc')->orderBy('id', 'desc')->take($take);
 
         if ($instanceId !== null) {
-            $query->where('instanceId', $instanceId);
+            $query->where('instance_id', $instanceId);
         }
 
         return $query->get();
@@ -145,7 +145,7 @@ class Tag extends DynamicModel
         $model = new static;
 
         $query = $model->newQuery()
-            ->rightJoin($model->getTaggableTable(), $model->getTaggableTable().'.tagId', '=', $model->getTable().'.id')
+            ->rightJoin($model->getTaggableTable(), $model->getTaggableTable().'.tag_id', '=', $model->getTable().'.id')
             ->select([$model->getTable().'.*', new Expression('count(*) as cnt')])
             ->groupBy($model->getTable().'.word')
             ->orderBy('cnt', 'desc')
@@ -155,7 +155,7 @@ class Tag extends DynamicModel
         $model->wherePeriod($query, $since, $until);
 
         if ($instanceId !== null) {
-            $query->where($model->getTable().'.instanceId', $instanceId);
+            $query->where($model->getTable().'.instance_id', $instanceId);
         }
 
         return $query->get();
@@ -174,9 +174,9 @@ class Tag extends DynamicModel
     private function wherePeriod(Builder $query, $since, $until = null)
     {
         if ($until !== null) {
-            $query->whereBetween($this->getTaggableTable().'.createdAt', [$since, $until]);
+            $query->whereBetween($this->getTaggableTable().'.created_at', [$since, $until]);
         } else {
-            $query->where($this->getTaggableTable().'.createdAt', '>', $since);
+            $query->where($this->getTaggableTable().'.created_at', '>', $since);
         }
     }
 

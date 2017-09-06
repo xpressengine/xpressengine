@@ -72,7 +72,7 @@ class EventListener
     protected function menuItemCreated(MenuItem $item)
     {
         $handler = $this->container->make('xe.menu');
-        $menu = $handler->menus()->find($item->menuId);
+        $menu = $handler->menus()->find($item->menu_id);
         $handler->menus()->increment($menu, $menu->getCountName());
     }
 
@@ -85,7 +85,7 @@ class EventListener
     protected function menuItemDeleted(MenuItem $item)
     {
         $handler = $this->container->make('xe.menu');
-        $menu = $handler->menus()->find($item->menuId);
+        $menu = $handler->menus()->find($item->menu_id);
         $handler->menus()->decrement($menu, $menu->getCountName());
     }
 }
