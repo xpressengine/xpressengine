@@ -17,7 +17,6 @@ namespace App\Console\Commands;
 use Composer\Console\Application;
 use Composer\Util\Platform;
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Process\Process;
 use Xpressengine\Plugin\Composer\Composer;
 
 trait ComposerRunTrait
@@ -25,6 +24,12 @@ trait ComposerRunTrait
 
     protected function prepareComposer()
     {
+        ini_set('allow_url_fopen', '1');
+        if (!ini_get('allow_url_fopen')) {
+            throw new \Exception(
+                'allow_url_fopen is turned off. allow_url_fopen must be enabled in php.ini for executing this command.'
+            );
+        }
 
         $files = [
             storage_path('app/composer.plugins.json'),
@@ -43,7 +48,9 @@ trait ComposerRunTrait
 
             if (!is_writable($file)) {
                 // [$file] 파일에 쓰기 권한이 없습니다. 플러그인을 설치하기 위해서는 이 파일의 쓰기 권한이 있어야 합니다.
-                throw new \Exception("You have been denied permission to acccess [$file] $type. To install the plugin, you must have write permission to access this this $type.");
+                throw new \Exception(
+                    "You have been denied permission to acccess [$file] $type. To install the plugin, you must have write permission to access this this $type."
+                );
             } else {
                 $this->info("passed");
             }
@@ -106,7 +113,6 @@ trait ComposerRunTrait
     protected function runComposer($inputs, $updateMode = true)
     {
         ignore_user_abort(true);
-        ini_set('allow_url_fopen', '1');
 
         $memoryInBytes = function ($value) {
             $unit = strtolower(substr($value, -1, 1));
