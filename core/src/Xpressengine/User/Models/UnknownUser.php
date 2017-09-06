@@ -60,7 +60,7 @@ class UnknownUser implements UserInterface
      */
     public function getId()
     {
-        return null;
+        return array_get($this->attributes, 'id');
     }
 
     /**

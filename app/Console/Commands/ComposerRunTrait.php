@@ -140,7 +140,11 @@ trait ComposerRunTrait
             define('__XE_PLUGIN_MODE__', true);
         }
 
-        Composer::setPackagistToken(config('xe.plugin.packagist.site_token'));
+        $config = app('xe.config')->get('plugin');
+        $siteToken = $config->get('site_token');
+        if ($siteToken) {
+            Composer::setPackagistToken($siteToken);
+        }
         Composer::setPackagistUrl(config('xe.plugin.packagist.url'));
 
         $code = $application->run($input);

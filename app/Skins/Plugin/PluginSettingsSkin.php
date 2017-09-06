@@ -46,25 +46,42 @@ class PluginSettingsSkin extends GenericSkin
     protected static $viewDir = '';
 
     /**
+     * 스킨을 출력한다.
+     * 만약 view 이름과 동일한 메소드명이 존재하면 그 메소드를 호출한다.
+     *
+     * @return string
+     */
+    public function render()
+    {
+        $this->loadDefault();
+        return parent::render();
+    }
+
+    protected function indexFetched()
+    {
+        return $this->index();
+    }
+
+    protected function indexSelfInstalled()
+    {
+        return $this->index();
+    }
+
+    /**
      * listView
      *
      * @return \Illuminate\View\View
      */
     protected function index()
     {
-        $this->loadDefault();
-
         app('xe.frontend')->js('assets/core/xe-ui-component/js/xe-form.js')->load();
-
-        app('xe.frontend')->html('plugins.updateList')->content("
-        <script>
-            $(function (){
-                $('.__xe_btn-show-update').click(function(){
-                    $(this).toggleClass('btn-primary');
-                    $('ul.list-plugin li.list-group-item.__xe_no-update').toggleClass('hidden');
-                })
-            });
-        </script>")->load();
+        app('xe.frontend')->js('assets/core/xe-ui-component/js/xe-page.js')->load();
+        app('xe.frontend')->js('assets/core/plugin/js/plugin-index.js')->before(
+            [
+                'assets/core/xe-ui-component/js/xe-page.js',
+                'assets/core/xe-ui-component/js/xe-form.js'
+            ]
+        )->load();
 
         return $this->renderBlade();
     }
@@ -76,8 +93,6 @@ class PluginSettingsSkin extends GenericSkin
      */
     protected function show()
     {
-        $this->loadDefault();
-
         app('xe.frontend')->js([
            'assets/vendor/swiper2/idangerous.swiper.js',
            'assets/core/plugin/js/plugin.js'
@@ -85,6 +100,19 @@ class PluginSettingsSkin extends GenericSkin
         app('xe.frontend')->css('assets/vendor/swiper2/idangerous.swiper.css')
             ->before('assets/core/settings/css/admin.css')->load();
 
+        return $this->renderBlade();
+    }
+
+    protected function installIndex()
+    {
+        app('xe.frontend')->js('assets/core/xe-ui-component/js/xe-form.js')->load();
+        app('xe.frontend')->js('assets/core/xe-ui-component/js/xe-page.js')->load();
+        app('xe.frontend')->js('assets/core/plugin/js/plugin-install.js')->before(
+            [
+                'assets/core/xe-ui-component/js/xe-page.js',
+                'assets/core/xe-ui-component/js/xe-form.js'
+            ]
+        )->load();
         return $this->renderBlade();
     }
 
@@ -96,26 +124,6 @@ class PluginSettingsSkin extends GenericSkin
             })
         </script>")->load();
 
-        app('xe.frontend')->html('plugins.updatePlugin')->content("<script>
-            $(function () {
-              $('.__xe_btn-update-plugin').click(function(){
-                var url = $(this).data('url');
-                $.ajax({
-                  type : 'put',
-                  url : url,
-                  dataType: 'json',
-                  success : function (data) {
-                    location.reload();
-                  },
-                  error : function(data) {
-                    XE.toast(data.type, data.message);
-                  }
-                });
-                return false;
-              })
-            })
-        </script>")->load();
-
         array_set($this->data, 'color', [
             'theme' => 'success',
             'skin' => 'info',
@@ -124,8 +132,11 @@ class PluginSettingsSkin extends GenericSkin
             'widget' => 'danger',
             'module' => 'danger',
             'uiobject' => 'primary',
+            'editor' => 'primary',
+            'editortool' => 'primary',
             'FieldType' => 'default',
             'FieldSkin' => 'default',
+            'toggleMenu' => 'default',
         ]);
     }
 

@@ -189,7 +189,6 @@ class PluginMake extends Command
         return $stub;
     }
 
-
     /**
      * makeComposerJson
      *

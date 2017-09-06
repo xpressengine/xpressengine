@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Console\Commands;
 
 use Xpressengine\Interception\InterceptionHandler;

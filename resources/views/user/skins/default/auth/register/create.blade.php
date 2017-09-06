@@ -8,7 +8,9 @@
             <legend>{{xe_trans('xe::signUp')}}</legend>
 
             @foreach($forms as $form)
-                {!! $form($register_token) !!}
+                @if($form['activated'] || array_get($form, 'forced') === true)
+                {!! $form['render']($register_token) !!}
+                @endif
             @endforeach
 
             <button type="submit" class="xe-btn xe-btn-primary xe-btn-block">{{xe_trans('xe::signUp')}}</button>

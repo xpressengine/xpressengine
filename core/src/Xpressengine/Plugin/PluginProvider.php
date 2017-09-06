@@ -56,19 +56,53 @@ class PluginProvider
     /**
      * search plugin by keyword
      *
-     * @param null $keyword keyword for searching
+     * @param null $filters filters for searching
      * @param int  $page    search result page number
      * @param int  $count   limit
      *
      * @return mixed|null
      */
-    public function search($keyword = null, $page = 1, $count = 10)
+    public function search($filters = [], $page = 1, $count = 10)
     {
         $url = 'plugins/search';
-        $q = implode(',', (array) $keyword);
+
+        $query = array_get($filters, 'query');
+        $q = implode(',', (array) $query);
+
+        $collection = array_get($filters, 'collection');
+
+        $order = array_get($filters, 'order');
+        $order_type = array_get($filters, 'order_type');
+
+        $site_token = array_get($filters, 'site_token');
 
         try {
-            $response = $this->request($url, compact('q', 'page', 'count'));
+            $response = $this->request(
+                $url,
+                compact('q', 'page', 'count', 'collection', 'order', 'order_type', 'site_token')
+            );
+        } catch (ClientException $e) {
+            if ($e->getCode() === Response::HTTP_NOT_FOUND) {
+                return null;
+            }
+            throw $e;
+        }
+        return $response;
+    }
+
+    /**
+     * retrieve purchased plugin list
+     *
+     * @param string $site_token site_token
+     *
+     * @return mixed|null
+     */
+    public function purchased($site_token)
+    {
+        $url = 'plugins/purchased';
+
+        try {
+            $response = $this->request($url, compact('site_token'));
         } catch (ClientException $e) {
             if ($e->getCode() === Response::HTTP_NOT_FOUND) {
                 return null;

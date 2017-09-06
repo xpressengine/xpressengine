@@ -11,7 +11,7 @@
                 </div>
                 <div class="panel-body">
                     <div class="form-group">
-                        <label for="item-url">{{xe_trans('xe::permitSignUp')}}</label>
+                        <label>{{xe_trans('xe::permitSignUp')}}</label>
                         <div class="list-group-item">
                             <div class="radio">
                                 <label>
@@ -23,37 +23,25 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="form-group">
-                        <label for="item-url">{{xe_trans('xe::useEmailConfirm')}}</label>
+                        <label>회원가입 인증방식</label>
                         <div class="list-group-item">
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" name="useEmailCertify" value="true" @if($config->get('useEmailCertify')) checked="checked" @endif>  {{xe_trans('xe::use')}}
-                                </label>
-                                <label>
-                                    <input type="radio" name="useEmailCertify" value="false" @if(!$config->get('useEmailCertify')) checked="checked" @endif> {{xe_trans('xe::disuse')}}
-                                </label>
-                            </div>
+                            {{ uio('formSelect', ['name'=>'guard_forced', 'description'=>'"인증없이 가입 불가"를 선택하면 사용자들은 아래 인증절차중 하나를 선택해야 가입할 수 있습니다', 'options'=>[
+                            'false' => '인증없이 가입 허용', 'true' => '인증없이 가입 불가'
+                            ],'value' => ($config->get('guard_forced') ? 'true' : 'false')]) }}
+                            <hr>
+                            @include('user.settings.setting.guards')
                         </div>
                     </div>
+
                     <div class="form-group">
-                        <label for="item-url">{{xe_trans('xe::useSignUpCaptcha')}}</label>
+                        <label>회원가입 폼양식</label>
                         <div class="list-group-item">
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" name="useCaptcha" value="true" @if($config->get('useCaptcha')) checked="checked" @endif> {{xe_trans('xe::use')}}
-                                </label>
-                                <label>
-                                    <input type="radio" name="useCaptcha" value="false" @if(!$config->get('useCaptcha')) checked="checked" @endif> {{xe_trans('xe::disuse')}}
-                                </label>
-                            </div>
+                            @include('user.settings.setting.forms')
                         </div>
-                        @if($captcha->available() !== true)
-                        <div class="alert alert-warning" role="alert" style="margin-top:10px;">
-                            {!! xe_trans('xe::msgAlertCaptchaAtJoin') !!}
-                        </div>
-                        @endif
                     </div>
+
                 </div>
                 <div class="panel-footer">
                     <div class="pull-right">

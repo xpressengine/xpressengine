@@ -279,6 +279,30 @@ class PluginCollection implements Countable, Arrayable, IteratorAggregate, Jsona
     }
 
     /**
+     * 주어진 설치 방식(fetched, self-installed)으로 설치된 플러그인 목록을 조회한다.
+     * 만약 두번째 파라메터에 플러그인 목록이 주어진다면, 주어진 플러그인 목록이 조회대상이 된다.
+     *
+     * @param string         $installType 설치 방식
+     * @param PluginEntity[] $plugins     조회대상 플러그인 목록
+     *
+     * @return PluginEntity[]
+     */
+    public function fetchByInstallType($installType = 'fetched', $plugins = null)
+    {
+        $plugins = $plugins === null ? $this->plugins : $plugins;
+
+        $plugins = array_filter(
+            $plugins,
+            function ($entity) use ($installType) {
+                /** @var PluginEntity $entity */
+                return $entity->isSelfInstalled() === ($installType === 'self-installed');
+            }
+        );
+
+        return $plugins;
+    }
+
+    /**
      * 주어진 아이디를 가진 플러그인이 있는지 조사한다.
      *
      * @param string $id plugin id
