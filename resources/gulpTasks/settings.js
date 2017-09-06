@@ -69,6 +69,7 @@ module.exports = (() => {
          'assets/core/common/js/dynamicLoadManager.js',
          'assets/core/common/js/translator.js',
          'assets/vendor/jquery/jquery.min.js',
+         'assets/vendor/blankshield/blankshield.min.js',
         ])
         .pipe($.plumber())
         .pipe($.uglify())
