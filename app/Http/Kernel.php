@@ -60,11 +60,54 @@ class Kernel extends HttpKernel
      */
     public function bootstrap()
     {
+        if ($this->isSafeMode() === true) {
+            $this->resetForSafeMode();
+        }
+
         if ($this->isInstalled() === false) {
             $this->resetForInstall();
         }
 
+
         parent::bootstrap();
+    }
+
+    /**
+     * is safe mode
+     *
+     * @return bool
+     */
+    protected function isSafeMode()
+    {
+        $isSafe = false;
+
+        $request = app('request');
+        if ($request->segment(1) == '__safe_mode') {
+            $isSafe = true;
+        }
+
+        return $isSafe;
+    }
+
+    /**
+     * Reset for safe mode
+     *
+     * @return void
+     */
+    protected function resetForSafeMode()
+    {
+        $this->middleware = [
+            \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+            \App\Http\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            \App\Http\Middleware\ExceptAppendableVerifyCsrfToken::class,
+        ];
+
+        $this->resetProviders([
+            \App\Providers\SafeModeServiceProvider::class,
+        ]);
     }
 
     /**
@@ -93,7 +136,9 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\ExceptAppendableVerifyCsrfToken::class,
         ];
 
-        $this->resetProviders();
+        $this->resetProviders([
+            \App\Providers\InstallServiceProvider::class
+        ]);
     }
 
     /**
@@ -101,9 +146,9 @@ class Kernel extends HttpKernel
      *
      * @return void
      */
-    protected function resetProviders()
+    protected function resetProviders(array $customs = [])
     {
-        $this->app['events']->listen('bootstrapped: App\Bootstrappers\LoadConfiguration', function ($app) {
+        $this->app['events']->listen('bootstrapped: App\Bootstrappers\LoadConfiguration', function ($app) use ($customs) {
             $config = $app['config'];
 
             $providers = $config['app.providers'];
@@ -111,7 +156,9 @@ class Kernel extends HttpKernel
                 return substr($p, 0, strlen('Illuminate')) == 'Illuminate';
             });
 
-            $providers[] = \App\Providers\InstallServiceProvider::class;
+            foreach ($customs as $custom) {
+                $providers[] = $custom;
+            }
 
             $config->set('app.providers', $providers);
         });
