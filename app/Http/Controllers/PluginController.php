@@ -258,7 +258,10 @@ class PluginController extends Controller
             }
         );
 
-        return apiRender('index.update', compact('plugins'));
+        $available = ini_get('allow_url_fopen') ? true : false;
+
+
+        return apiRender('index.update', compact('plugins', 'available'));
     }
 
     public function download(

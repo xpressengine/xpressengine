@@ -35,6 +35,8 @@ class PluginInstallController extends Controller
 
         $filter = 'top';
 
+        $available = ini_get('allow_url_fopen') ? true : false;
+
         $packages = $provider->search(['collection' => $filter], 1, 10);
 
         $handler->getAllPlugins(true);
@@ -47,7 +49,10 @@ class PluginInstallController extends Controller
 
         $operation = $handler->getOperation($writer);
 
-        return XePresenter::make('install.index', compact('plugins', 'componentTypes', 'handler', 'filter', 'operation'));
+        return XePresenter::make(
+            'install.index',
+            compact('plugins', 'componentTypes', 'handler', 'filter', 'operation', 'available')
+        );
     }
 
     public function items(Request $request, PluginProvider $provider, PluginHandler $handler)
