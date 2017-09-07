@@ -31,7 +31,7 @@ class MenuMigration extends Migration {
             $table->string('title')->comment('menu title');
             $table->string('site_key')->comment('site key. for multi web site support.');
             $table->text('description')->nullable()->comment('description');
-            $table->integer('count')->comment('number of menu item');
+            $table->integer('count')->default(0)->comment('number of menu item');
 
             $table->primary('id');
         });
@@ -48,15 +48,15 @@ class MenuMigration extends Migration {
             $table->text('description')->nullable()->comment('menu description. It can be code of translation information.');
             $table->string('target')->comment('HTML <a> tag target attribute value');
             $table->string('type')->comment('Module Type. Module ID of registered this menu item.');
-            $table->string('basic_image_id', 36)->comment('image menu item setting');
-            $table->string('hover_image_id', 36)->comment('image menu item setting');
-            $table->string('selected_image_id', 36)->comment('image menu item setting');
-            $table->string('m_basic_image_id', 36)->comment('image menu item setting');
-            $table->string('m_hover_image_id', 36)->comment('image menu item setting');
-            $table->string('m_selected_image_id', 36)->comment('image menu item setting');
+            $table->string('basic_image_id', 36)->default('')->comment('image menu item setting');
+            $table->string('hover_image_id', 36)->default('')->comment('image menu item setting');
+            $table->string('selected_image_id', 36)->default('')->comment('image menu item setting');
+            $table->string('m_basic_image_id', 36)->default('')->comment('image menu item setting');
+            $table->string('m_hover_image_id', 36)->default('')->comment('image menu item setting');
+            $table->string('m_selected_image_id', 36)->default('')->comment('image menu item setting');
             $table->integer('ordering')->comment('ordering number for menu item sort.');
             $table->boolean('activated')->comment('value of menu item activating');
-            $table->string('options')->comment('options');
+            $table->string('options')->default('')->comment('options');
 
             $table->primary('id');
         });
@@ -242,7 +242,7 @@ class MenuMigration extends Migration {
 
     /**
      * registerWelcomePageContent
-     *
+     *pageModuleMenuSetup
      * @param MenuItem $item
      *
      * @return void
