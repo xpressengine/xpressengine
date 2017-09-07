@@ -40,18 +40,19 @@
         });
 
         $(document).on('click', 'a[target=_blank]', function (e) {
-            event.preventDefault();
+            e.preventDefault();
 
             var $this = $(this);
             var href = $this.attr('href');
-            var url = href.match(/^http[s]*:\/\//) ? href : 'http://' + href;
-            var protocol = href.split('://')[0];
-            var baseURL = (protocol)? xeBaseURL : xeBaseURL.split('://')[1];
+            var splitHref = href.split('://');
 
-            if(href.indexOf(baseURL) !== -1) {
-                window.open(url);
+            if(splitHref.length === 1
+            || (splitHref.length > 1 && splitHref[1].indexOf(xeBaseURL.split('://')[1]) !== -1)) {
+                window.open(href);
+
             } else {
-                blankshield.open(url);
+                blankshield.open(href);
+
             }
         });
 
