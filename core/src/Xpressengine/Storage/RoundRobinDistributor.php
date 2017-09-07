@@ -84,7 +84,7 @@ class RoundRobinDistributor implements Distributor
      */
     private function lastRecord()
     {
-        $row = $this->conn->table($this->table)->orderBy('createdAt', 'desc')->first();
+        $row = $this->conn->table($this->table)->orderBy('created_at', 'desc')->first();
 
         return $row ? (array)$row : null;
     }

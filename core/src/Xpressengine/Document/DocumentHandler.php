@@ -25,80 +25,6 @@ use Xpressengine\Document\Models\Revision;
 /**
  * DocumentHandler
  *
- * * 문서 등록, 수정, 삭제 할 때 intercept 할 수 있음
- * Document Model 자체적으로 CRUD 할 때 intercept 를 제공할 수 없는 문제 해결
- * * ~Division 처리 및 DynamicQuery 관련 작업을 위해 Document Model 에 config 를 설정해야하고
- * 이 설정을 위해 getModel() setModelConfig() 메소드가 있음~
- * * Division 된 테이블을 사용하기 위해서 Document::division() 메소드에 인스턴스 아이디 주입
- * * Division(테이블 분할)은 Document Model 에서 처리됨.
- * * Document Model 을 이용해 Database CRUD 처리를 직접하는 경우
- * revision 에 대한 처리를 할 수 없으며 intercept 할 수 없음
- *
- * ## app binding
- * * xe.document 로 바인딩 되어 있음
- * * Document facade 제공
- *
- * ## 사용법
- *
- * ### Instance 생성
- * ```php
- * XeDocument::createInstance('newInstanceId');
- * ```
- *
- * ### 문서 등록
- * ```php
- * $inputs = ['id'=>$id', 'instanceId'=>'instance-id', 'title'=>'title', 'content'=>'content' ...];
- * XeDocument::add($inputs);
- * ```
- *
- * ### 문서 수정
- * ```php
- * $doc = Document::find('document-id');
- *
- * $doc->title = 'changed title';
- *
- * XeDocument::update($doc);
- * ```
- *
- * ### 문서 삭제
- * ```php
- * $doc = Document::find('document-id');
- *
- * XeDocument::remove($doc);
- * ```
- *
- * ### 문서 조회
- * ```php
- * $doc = Document::find('document-id');
- *
- * $doc = XeDocument::get('document-id', 'instance-id');
- *
- * // 모델에 division 을 설정하면 분리된 테이블 사용
- * $model = Document::division('instanceId');
- * $doc = $model->get('document-id');
- * ```
- *
- * ### 문서 수 조회
- * ```php
- * // 전체 문서 수 조회회
- * $count = Document::count();
- *
- * // division 된 테이블에서 인스턴스의 전체 문서 수 조회
- * $model = Document::division('instance-id');
- * $count = $model->count('instance-id');
- * ```
- *
- * ### 문서 목록 조회
- * ```php
- * $perPage = 10;
- *
- * $paginate = Document::paginate($perPage);
- *
- * // division 된 테이블에서 조회
- * $model = Document::division('instance-id');
- * $paginate = $model->paginate($perPage);
- * ```
- *
  * @category    Document
  * @package     Xpressengine\Document
  * @author      XE Developers <developers@xpressengine.com>
@@ -205,7 +131,7 @@ class DocumentHandler
         $this->instanceManager->remove($config);
 
         $documentHandler = $this;
-        Document::where('instanceId', $config->get('instanceId'))->chunk(
+        Document::where('instance_id', $config->get('instanceId'))->chunk(
             $chunk,
             function ($docs) use ($documentHandler) {
                 foreach ($docs as $doc) {
@@ -251,7 +177,7 @@ class DocumentHandler
 
         $doc->checkRequired($attributes);
         $doc->fill($attributes);
-        $doc->setProxyOptions($this->proxyOption($this->getConfig($attributes['instanceId'])));
+        $doc->setProxyOptions($this->proxyOption($this->getConfig($attributes['instance_id'])));
         $doc->save();
 
         $this->addRevision($doc);
@@ -271,12 +197,12 @@ class DocumentHandler
     {
         $doc->getConnection()->beginTransaction();
 
-        $doc->pureContent = $doc->getPureContent($doc->content);
+        $doc->pure_content = $doc->getPureContent($doc->content);
         if ($doc->ipaddress == '') {
             $doc->ipaddress = $this->request->ip();
         }
         $doc->checkRequired($doc->getAttributes());
-        $doc->setProxyOptions($this->proxyOption($this->getConfig($doc->instanceId)));
+        $doc->setProxyOptions($this->proxyOption($this->getConfig($doc->instance_id)));
         $doc->save();
 
         $this->addRevision($doc);
@@ -294,7 +220,7 @@ class DocumentHandler
      */
     public function addRevision(Document $doc)
     {
-        $instanceId = $doc->instanceId;
+        $instanceId = $doc->instance_id;
         if ($instanceId === null || $instanceId == '') {
             return false;
         }
@@ -307,7 +233,7 @@ class DocumentHandler
         }
 
         $revisionNo = 0;
-        $lastRevision = $this->newRevisionModel()->where('id', $doc->id)->max('revisionNo');
+        $lastRevision = $this->newRevisionModel()->where('id', $doc->id)->max('revision_no');
         if ($lastRevision !== null) {
             $revisionNo = $lastRevision + 1;
         }
@@ -349,7 +275,7 @@ class DocumentHandler
      */
     public function addDivision(Document $doc)
     {
-        $instanceId = $doc->instanceId;
+        $instanceId = $doc->instance_id;
         if ($instanceId === null || $instanceId == '') {
             return false;
         }
@@ -368,7 +294,7 @@ class DocumentHandler
         $clone->from($this->pivotDivisionTable($doc, $config));
         $params = $doc->toArray();
         $params['email'] = $doc->email;
-        $params['certifyKey'] = $doc->certifyKey !== null ? $doc->certifyKey : '';
+        $params['certify_key'] = $doc->certify_key !== null ? $doc->certify_key : '';
         $params['ipaddress'] = $doc->ipaddress;
         $clone->insert($params);
 
@@ -383,11 +309,11 @@ class DocumentHandler
      */
     public function putDivision(Document $doc)
     {
-        $instanceId = $doc->instanceId;
+        $instanceId = $doc->instance_id;
 
         // 인스턴스를 변경할 경우 이전의 division 테이블 row 삭제
-        if ($instanceId != $doc->getOriginal('instanceId')) {
-            $originConfig = $this->configHandler->getOrDefault($doc->getOriginal('instanceId'));
+        if ($instanceId != $doc->getOriginal('instance_id')) {
+            $originConfig = $this->configHandler->getOrDefault($doc->getOriginal('instance_id'));
             if ($originConfig->get('division') === true) {
                 /** @var DynamicQuery $query */
                 $query = $this->newModel()->getQuery();
@@ -408,7 +334,7 @@ class DocumentHandler
         }
 
         // 인스턴스가 변경되었다면 insert, 그렇지 않으면 update
-        if ($instanceId != $doc->getOriginal('instanceId')) {
+        if ($instanceId != $doc->getOriginal('instance_id')) {
             $this->addDivision($doc);
         } else {
             $query = $doc->newQuery()->getQuery();
@@ -433,7 +359,7 @@ class DocumentHandler
      */
     public function removeDivision(Document $doc)
     {
-        $instanceId = $doc->instanceId;
+        $instanceId = $doc->instance_id;
         if ($instanceId === null || $instanceId == '') {
             return false;
         }
@@ -461,7 +387,7 @@ class DocumentHandler
     public function remove(Document $doc)
     {
         $this->conn->beginTransaction();
-        $doc->setProxyOptions($this->proxyOption($this->getConfig($doc->instanceId)));
+        $doc->setProxyOptions($this->proxyOption($this->getConfig($doc->instance_id)));
         $result = $doc->delete();
 
         $this->conn->commit();
@@ -522,7 +448,7 @@ class DocumentHandler
     {
         $model = $this->newModel();
         if ($instanceId !== null) {
-            $model->where('instanceId', '=', $instanceId);
+            $model->where('instance_id', '=', $instanceId);
         }
         $doc = $model->where('id', '=', $id)->first();
         if ($doc == null) {

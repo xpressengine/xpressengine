@@ -82,7 +82,7 @@ class ConfigManager
         }
 
         $config = new ConfigEntity();
-        $config->siteKey = $siteKey;
+        $config->site_key = $siteKey;
         $config->name = $group;
         foreach ($collection as $item => $value) {
             $config = $this->share($config, $item, $value);
@@ -149,7 +149,7 @@ class ConfigManager
         $config = $config ?: ($create === true ? new ConfigEntity() : null);
 
         if ($config !== null) {
-            $config->siteKey = $siteKey;
+            $config->site_key = $siteKey;
             $config->name = $group;
 
             return $this->build($config);
@@ -265,7 +265,7 @@ class ConfigManager
      */
     public function modify(ConfigEntity $config)
     {
-        if ($this->get($config->name, false, $config->siteKey) === null) {
+        if ($this->get($config->name, false, $config->site_key) === null) {
             throw new NotExistsException(['name' => $config->name]);
         }
 
@@ -283,13 +283,13 @@ class ConfigManager
     protected function share(ConfigEntity $config, $item, $value)
     {
         if ($value instanceof Closure) {
-            if (isset($this->closures[$config->siteKey]) === false) {
-                $this->closures[$config->siteKey] = [];
+            if (isset($this->closures[$config->site_key]) === false) {
+                $this->closures[$config->site_key] = [];
             }
-            if (isset($this->closures[$config->siteKey][$config->name]) === false) {
-                $this->closures[$config->siteKey][$config->name] = [];
+            if (isset($this->closures[$config->site_key][$config->name]) === false) {
+                $this->closures[$config->site_key][$config->name] = [];
             }
-            $this->closures[$config->siteKey][$config->name][$item] = $value;
+            $this->closures[$config->site_key][$config->name][$item] = $value;
         } else {
             $config->set($item, $value);
         }
@@ -318,9 +318,9 @@ class ConfigManager
      */
     protected function bindClosure(ConfigEntity &$config)
     {
-        if (isset($this->closures[$config->siteKey])
-            && isset($this->closures[$config->siteKey][$config->name])) {
-            $closures = $this->closures[$config->siteKey][$config->name];
+        if (isset($this->closures[$config->site_key])
+            && isset($this->closures[$config->site_key][$config->name])) {
+            $closures = $this->closures[$config->site_key][$config->name];
 
             foreach ($closures as $item => $closure) {
                 $config->set($item, $closure);
@@ -338,7 +338,7 @@ class ConfigManager
      */
     protected function convey(ConfigEntity $config, callable $filter = null, array $items = null)
     {
-        $descendants = $this->repo->fetchDescendant($config->siteKey, $config->name);
+        $descendants = $this->repo->fetchDescendant($config->site_key, $config->name);
 
         /** @var ConfigEntity $descendant */
         foreach ($descendants as $descendant) {
@@ -369,7 +369,7 @@ class ConfigManager
      */
     public function remove(ConfigEntity $config)
     {
-        $this->repo->remove($config->siteKey, $config->name);
+        $this->repo->remove($config->site_key, $config->name);
     }
 
     /**
@@ -394,7 +394,7 @@ class ConfigManager
      */
     public function children(ConfigEntity $config)
     {
-        $descendants = $this->repo->fetchDescendant($config->siteKey, $config->name);
+        $descendants = $this->repo->fetchDescendant($config->site_key, $config->name);
 
         $children = [];
 
@@ -436,7 +436,7 @@ class ConfigManager
      */
     private function setAncestors(ConfigEntity $config)
     {
-        $ancestors = $this->repo->fetchAncestor($config->siteKey, $config->name);
+        $ancestors = $this->repo->fetchAncestor($config->site_key, $config->name);
 
         $ancestors = $this->sort($ancestors, 'desc');
 
@@ -503,7 +503,7 @@ class ConfigManager
      */
     public function move(ConfigEntity $config, $to = null)
     {
-        if ($to !== null && $this->repo->find($config->siteKey, $to) === null) {
+        if ($to !== null && $this->repo->find($config->site_key, $to) === null) {
             throw new InvalidArgumentException(['arg' => $to]);
         }
 
@@ -525,6 +525,6 @@ class ConfigManager
             $key = $to . '.' . $key;
         }
 
-        return $this->get($key, false, $config->siteKey);
+        return $this->get($key, false, $config->site_key);
     }
 }

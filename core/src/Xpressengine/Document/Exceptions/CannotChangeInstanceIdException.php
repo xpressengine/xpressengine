@@ -1,6 +1,6 @@
 <?php
 /**
- * Instance ID cannot be changed
+ * CannotChangeInstanceIdException
  *
  * PHP version 5
  *
@@ -17,7 +17,7 @@ namespace Xpressengine\Document\Exceptions;
 use Xpressengine\Document\DocumentException;
 
 /**
- * Instance ID cannot be changed
+ * CannotChangeInstanceIdException
  *
  * @category    Document
  * @package     Xpressengine\Document

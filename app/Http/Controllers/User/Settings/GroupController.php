@@ -37,7 +37,7 @@ class GroupController extends Controller
      */
     public function index()
     {
-        $groups = $this->groups->with('userCountRelation')->orderBy('createdAt')->get();
+        $groups = $this->groups->with('userCountRelation')->orderBy('created_at')->get();
 
         $config = app('xe.config')->get('user.join');
         $joinGroup = $config->get('joinGroup');

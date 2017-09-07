@@ -27,35 +27,6 @@ use Illuminate\View\Factory as ViewFactory;
 /**
  * DynamicFieldHandler
  *
- * * Xpressengine\Database 의 ProxyManager 에 DatabaseProxy 를 등록
- * * ProxyManager 의 인터페이스를 이용해서 DynamicField 데이터 처리
- * * DynamicFieldHandler 를 이용해 인스턴스 관리
- *
- * ## app binding
- * * xe.dynamicField 로 바인딩 되어 있음
- * * DynamicField facade 제공
- *
- * ## 사용법
- * Xpressengine\Database 패키지에서 처리하기 위해 ProxyInterface 를 사용함
- *
- * ### $group
- * * DynamicField 를 생성할 때 사용 한 별칭
- * * DynamicField 는 Table 단위로 관리되지 않음
- * * DynamicField 는 instance 별로 관리될 수 있음
- *
- * ### 관리자 Section
- * * App\Sections\DynamicFieldSection 을 이용해서 설정
- *
- * ### DynamicField 출력
- * * Document 에 추가된 Dynamic field 를 blade 에서 출력
- * ```php
- * @if (($fieldType = XeDynamicField::get($config->get('documentGroup'), $columnName)) != null)
- *   <div class="__xe_{{$columnName}} __xe_section">
- *      {!! $fieldType->getSkin()->show($item->getAttributes()) !!}
- *   </div>
- * @endif
- * ```
- *
  * @category    DynamicField
  * @package     Xpressengine\DynamicField
  * @author      XE Developers <developers@xpressengine.com>
@@ -331,7 +302,7 @@ class DynamicFieldHandler
 
         $rules = [];
         foreach ($type->getRules() as $columnName => $rule) {
-            $key = camel_case($config->get('id') . '_' . $columnName);
+            $key = snake_case($config->get('id')) . '_' . $columnName;
             $rules[$key] = $rule;
         }
 

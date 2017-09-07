@@ -110,7 +110,7 @@ class Address extends AbstractType
     {
         $config = $this->config;
         foreach ($this->getColumns() as $column) {
-            $key = camel_case($config->get('id') . '_' . $column->name);
+            $key = sprintf('%s_%s', $config->get('id'), $column->name);
 
             if (isset($params[$key]) && $params[$key] != '') {
                 $query = $query->where($key, 'like', '%' . $params[$key] . '%');

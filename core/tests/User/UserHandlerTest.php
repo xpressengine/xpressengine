@@ -55,7 +55,7 @@ namespace Xpressengine\Tests\User {
             $handler->shouldReceive('validateForCreate')->withAnyArgs()->andReturn(true);
 
             $data = [
-                'displayName' => 'foo',
+                'display_name' => 'foo',
                 'password' => 'secret',
             ];
 
@@ -64,7 +64,7 @@ namespace Xpressengine\Tests\User {
             $user = $this->makeUser();
             $users->shouldReceive('create')
                 ->once()
-                ->with(['displayName' => 'foo', 'password' => 'encrypted'])
+                ->with(['display_name' => 'foo', 'password' => 'encrypted'])
                 ->andReturn($user);
 
             $this->assertEquals($user, $handler->create($data));
@@ -80,7 +80,7 @@ namespace Xpressengine\Tests\User {
             $handler->shouldReceive('validateForCreate')->withAnyArgs()->andReturn(true);
 
             $data = [
-                'displayName' => 'foo',
+                'display_name' => 'foo',
                 'password' => 'secret',
                 'email' => 'foo@bar.com',
                 'emailConfirmed' => true,
@@ -95,7 +95,7 @@ namespace Xpressengine\Tests\User {
 
             $users->shouldReceive('create')
                 ->once()
-                ->with(['displayName' => 'foo', 'password' => 'encrypted', 'email'=>'foo@bar.com'])
+                ->with(['display_name' => 'foo', 'password' => 'encrypted', 'email'=>'foo@bar.com'])
                 ->andReturn($user);
 
             /** @var Mockery\MockInterface $emails */
@@ -103,7 +103,7 @@ namespace Xpressengine\Tests\User {
             $email = $this->makeEmail();
             $emails->shouldReceive('create')
                 ->once()
-                ->with($user, ['userId' => 'baz', 'address' => 'foo@bar.com'])
+                ->with($user, ['user_id' => 'baz', 'address' => 'foo@bar.com'])
                 ->andReturn($email);
 
             /** @var Mockery\MockInterface $emails */
@@ -127,7 +127,7 @@ namespace Xpressengine\Tests\User {
             $handler->shouldReceive('validateForCreate')->withAnyArgs()->andReturn(true);
 
             $data = [
-                'displayName' => 'foo',
+                'display_name' => 'foo',
                 'password' => 'secret',
                 'email' => 'foo@bar.com',
                 'emailConfirmed' => false,
@@ -142,7 +142,7 @@ namespace Xpressengine\Tests\User {
 
             $users->shouldReceive('create')
                 ->once()
-                ->with(['displayName' => 'foo', 'password' => 'encrypted', 'email'=>'foo@bar.com'])
+                ->with(['display_name' => 'foo', 'password' => 'encrypted', 'email'=>'foo@bar.com'])
                 ->andReturn($user);
 
 
@@ -151,7 +151,7 @@ namespace Xpressengine\Tests\User {
             $email = $this->makeEmail();
             $emails->shouldReceive('create')
                 ->once()
-                ->with($user, ['userId' => 'baz', 'address' => 'foo@bar.com'])
+                ->with($user, ['user_id' => 'baz', 'address' => 'foo@bar.com'])
                 ->andReturn($email);
 
 
@@ -176,7 +176,7 @@ namespace Xpressengine\Tests\User {
             $handler->shouldReceive('validateForCreate')->withAnyArgs()->andReturn(true);
 
             $data = [
-                'displayName' => 'foo',
+                'display_name' => 'foo',
                 'password' => 'secret',
                 'groupId' => ['bar','baz']
             ];
@@ -188,7 +188,7 @@ namespace Xpressengine\Tests\User {
 
             $users->shouldReceive('create')
                 ->once()
-                ->with(['displayName' => 'foo', 'password' => 'encrypted'])
+                ->with(['display_name' => 'foo', 'password' => 'encrypted'])
                 ->andReturn($user);
 
             $this->assertEquals($user, $handler->create($data));
@@ -204,7 +204,7 @@ namespace Xpressengine\Tests\User {
             $handler->shouldReceive('validateForCreate')->withAnyArgs()->andReturn(true);
 
             $data = [
-                'displayName' => 'foo',
+                'display_name' => 'foo',
                 'password' => 'secret',
                 'account' => [
                     'accountId' => 'bar',
@@ -232,17 +232,17 @@ namespace Xpressengine\Tests\User {
             /** @var Mockery\MockInterface $accounts */
             $accounts = $handler->accounts();
             $accounts->shouldReceive('create')->once()->with($user, [
-                'userId' => 'baz',
-                'accountId' => 'bar',
+                'user_id' => 'baz',
+                'account_id' => 'bar',
                 'email' => 'foo@bar.com',
                 'provider' => 'baz',
                 'token' => 'token',
-                'tokenSecret' => 'tokenSecret',
+                'token_secret' => 'tokenSecret',
             ])->andReturn($account);
 
             $users->shouldReceive('create')
                 ->once()
-                ->with(['displayName' => 'foo', 'password' => 'encrypted'])
+                ->with(['display_name' => 'foo', 'password' => 'encrypted'])
                 ->andReturn($user);
 
             $this->assertEquals($user, $handler->create($data));
@@ -255,7 +255,7 @@ namespace Xpressengine\Tests\User {
         {
             $data = [
                 'rating' => Rating::MEMBER,
-                'displayName' => 'foo'
+                'display_name' => 'foo'
             ];
             /** @var UserHandler $handler */
             $handler = $this->getHandler();
@@ -269,7 +269,7 @@ namespace Xpressengine\Tests\User {
         {
             $data = [
                 'rating' => Rating::MEMBER,
-                'displayName' => 'foo',
+                'display_name' => 'foo',
                 'status' => UserHandler::STATUS_ACTIVATED
             ];
             /** @var UserHandler $handler */
@@ -295,7 +295,7 @@ namespace Xpressengine\Tests\User {
 
             $data = [
                 'rating' => Rating::MEMBER,
-                'displayName' => 'foo',
+                'display_name' => 'foo',
                 'status' => UserHandler::STATUS_ACTIVATED,
                 'email' => $email
             ];
@@ -331,7 +331,7 @@ namespace Xpressengine\Tests\User {
 
             $data = [
                 'rating' => Rating::MEMBER,
-                'displayName' => '',
+                'display_name' => '',
                 'status' => UserHandler::STATUS_ACTIVATED,
                 'email' => 'foo@xpressengine.com'
             ];
@@ -366,7 +366,7 @@ namespace Xpressengine\Tests\User {
 
             $data = [
                 'rating' => Rating::MEMBER,
-                'displayName' => 'foo',
+                'display_name' => 'foo',
                 'status' => UserHandler::STATUS_ACTIVATED,
                 'email' => $email
             ];
@@ -397,12 +397,12 @@ namespace Xpressengine\Tests\User {
 
             /** @var Mockery\MockInterface $users */
             $users = $handler->users();
-            $users->shouldReceive('where')->once()->with(['displayName' => 'foo'])->andReturnSelf();
+            $users->shouldReceive('where')->once()->with(['display_name' => 'foo'])->andReturnSelf();
             $users->shouldReceive('first')->once()->andReturn($this->makeUser());
 
             $data = [
                 'rating' => Rating::MEMBER,
-                'displayName' => 'foo',
+                'display_name' => 'foo',
                 'status' => UserHandler::STATUS_ACTIVATED,
                 'email' => $email
             ];
@@ -433,12 +433,12 @@ namespace Xpressengine\Tests\User {
 
             /** @var Mockery\MockInterface $users */
             $users = $handler->users();
-            $users->shouldReceive('where')->once()->with(['displayName' => 'foo'])->andReturnSelf();
+            $users->shouldReceive('where')->once()->with(['display_name' => 'foo'])->andReturnSelf();
             $users->shouldReceive('first')->once()->andReturnNull();
 
             $data = [
                 'rating' => Rating::MEMBER,
-                'displayName' => 'foo',
+                'display_name' => 'foo',
                 'status' => UserHandler::STATUS_ACTIVATED,
                 'email' => 'foo@xpressengine.com',
                 'account' => []
@@ -470,7 +470,7 @@ namespace Xpressengine\Tests\User {
 
             /** @var Mockery\MockInterface $users */
             $users = $handler->users();
-            $users->shouldReceive('where')->once()->with(['displayName' => 'foo'])->andReturnSelf();
+            $users->shouldReceive('where')->once()->with(['display_name' => 'foo'])->andReturnSelf();
             $users->shouldReceive('first')->once()->andReturnNull();
 
             /** @var Mockery\MockInterface $accounts */
@@ -480,7 +480,7 @@ namespace Xpressengine\Tests\User {
 
             $data = [
                 'rating' => Rating::MEMBER,
-                'displayName' => 'foo',
+                'display_name' => 'foo',
                 'status' => UserHandler::STATUS_ACTIVATED,
                 'email' => 'foo@xpressengine.com',
                 'account' => [
@@ -538,8 +538,8 @@ namespace Xpressengine\Tests\User {
         {
             $user = $this->makeUser();
             $user->shouldReceive('hasMacro')->andReturn(false);
-            $user->shouldReceive('getAttribute')->once()->with('displayName')->andReturn('origin name');
-            $user->shouldReceive('setAttribute')->once()->with('displayName', 'origin name')->andReturnSelf();
+            $user->shouldReceive('getAttribute')->once()->with('display_name')->andReturn('origin name');
+            $user->shouldReceive('setAttribute')->once()->with('display_name', 'origin name')->andReturnSelf();
             $user->shouldReceive('setAttribute')->once()->with('password', 'encrypted password')->andReturnSelf();
             $user->shouldReceive('save')->once()->andReturnSelf();
 
@@ -562,7 +562,7 @@ namespace Xpressengine\Tests\User {
 
             $data = [
                 'password' => 'new password',
-                'displayName' => 'origin name'
+                'display_name' => 'origin name'
             ];
 
             $this->assertEquals($user, $handler->update($user, $data));
@@ -573,8 +573,8 @@ namespace Xpressengine\Tests\User {
         {
             $user = $this->makeUser();
             $user->shouldReceive('hasMacro')->andReturn(false);
-            $user->shouldReceive('getAttribute')->once()->with('displayName')->andReturn('origin name');
-            $user->shouldReceive('setAttribute')->once()->with('displayName', 'new name')->andReturnSelf();
+            $user->shouldReceive('getAttribute')->once()->with('display_name')->andReturn('origin name');
+            $user->shouldReceive('setAttribute')->once()->with('display_name', 'new name')->andReturnSelf();
             $user->shouldReceive('setAttribute')->once()->with('password', 'encrypted password')->andReturnSelf();
             $user->shouldReceive('save')->once()->andReturnSelf();
 
@@ -596,14 +596,14 @@ namespace Xpressengine\Tests\User {
             $users = $this->getUsers();
             $query = $this->makeQuery();
             $query->shouldReceive('first')->once()->andReturnNull();
-            $users->shouldReceive('where')->once()->with(['displayName'=>'new name'])->andReturn($query);
+            $users->shouldReceive('where')->once()->with(['display_name'=>'new name'])->andReturn($query);
 
             /** @var Mockery\MockInterface $handler */
             $handler = $this->getHandler($users, null, $groups, null, null, null, $hasher, $validator);
 
             $data = [
                 'password' => 'new password',
-                'displayName' => 'new name'
+                'display_name' => 'new name'
             ];
 
             $this->assertEquals($user, $handler->update($user, $data));

@@ -87,7 +87,7 @@ class UserEmailRepository implements UserEmailRepositoryInterface
      */
     public function findByUserId($userId)
     {
-        $emails = $this->query()->where('userId', $userId)->get();
+        $emails = $this->query()->where('user_id', $userId)->get();
         return $emails;
     }
 
@@ -100,6 +100,6 @@ class UserEmailRepository implements UserEmailRepositoryInterface
      */
     public function deleteByUserIds($userIds)
     {
-        return $this->query()->whereIn('userId', (array) $userIds)->delete();
+        return $this->query()->whereIn('user_id', (array) $userIds)->delete();
     }
 }

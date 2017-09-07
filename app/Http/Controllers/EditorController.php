@@ -304,7 +304,7 @@ class EditorController extends Controller
         $suggestions = [];
 
         $string = $request->get('string');
-        $users = XeUser::where('displayName', 'like', $string . '%')->where('id', '<>', Auth::user()->getId())->get();
+        $users = XeUser::where('display_name', 'like', $string . '%')->where('id', '<>', Auth::user()->getId())->get();
         foreach ($users as $user) {
             $suggestions[] = [
                 'id' => $user->getId(),

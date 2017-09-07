@@ -20,15 +20,15 @@ class PermissionMigration extends Migration {
             $table->engine = "InnoDB";
 
             $table->increments('id')->comment('ID');
-            $table->string('siteKey', 50)->default('default')->comment('site key. for multi web site support.');
+            $table->string('site_key', 50)->default('default')->comment('site key. for multi web site support.');
 //            $table->string('type', 20);
             $table->string('name')->comment('permission name');
             $table->text('grants')->comment('grant information. JSON data type.');
-            $table->timestamp('createdAt')->comment('created date');
-            $table->timestamp('updatedAt')->comment('updated date');
+            $table->timestamp('created_at')->comment('created date');
+            $table->timestamp('updated_at')->comment('updated date');
 
 //            $table->unique(['siteKey', 'type', 'name']);
-            $table->unique(['siteKey', 'name']);
+            $table->unique(['site_key', 'name']);
         });
     }
 }

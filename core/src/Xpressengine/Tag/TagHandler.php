@@ -68,7 +68,7 @@ class TagHandler
     {
         $words = array_unique($words);
         
-        $tags = $this->repo->query()->where('instanceId', $instanceId)->whereIn('word', $words)->get();
+        $tags = $this->repo->query()->where('instance_id', $instanceId)->whereIn('word', $words)->get();
 
         // 등록되지 않은 단어가 있다면 등록 함
         foreach (array_diff($words, $tags->pluck('word')->all()) as $word) {

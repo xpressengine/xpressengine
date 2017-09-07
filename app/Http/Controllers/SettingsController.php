@@ -199,7 +199,7 @@ class SettingsController extends Controller
     public function indexLog(Request $request, LogHandler $handler, UserHandler $userHandler)
     {
         $loggers = $handler->getLoggers();
-        $query = $handler->query()->with('user')->orderBy('createdAt', 'desc');
+        $query = $handler->query()->with('user')->orderBy('created_at', 'desc');
 
         $type = $request->get('type');
         if ($type) {
@@ -208,7 +208,7 @@ class SettingsController extends Controller
 
         $userId = $request->get('user_id');
         if ($userId) {
-            $query->where('userId', $userId);
+            $query->where('user_id', $userId);
         }
 
         // resolve search keyword

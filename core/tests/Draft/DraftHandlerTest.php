@@ -31,7 +31,7 @@ class DraftHandlerTest extends \PHPUnit_Framework_TestCase
 
         $auth->shouldReceive('user')->andReturn($mockUser);
 
-        $repo->shouldReceive('fetch')->once()->with(['userId' => 'userId', 'key' => 'someKey'])
+        $repo->shouldReceive('fetch')->once()->with(['user_id' => 'userId', 'key' => 'someKey'])
             ->andReturn([$mockEntity1, $mockEntity2]);
 
         $drafts = $instance->get('someKey');
@@ -66,7 +66,7 @@ class DraftHandlerTest extends \PHPUnit_Framework_TestCase
 
         $repo->shouldReceive('insert')->once()->with(m::on(function ($entity) {
             return (
-                $entity->userId == 'userId'
+                $entity->user_id == 'userId'
                 && $entity->key == 'someKey'
                 && $entity->val == 'foo'
                 && $entity->etc == serialize(['baz' => 'qux'])
@@ -134,7 +134,7 @@ class DraftHandlerTest extends \PHPUnit_Framework_TestCase
 
         $auth->shouldReceive('user')->andReturn($mockUser);
 
-        $repo->shouldReceive('fetch')->once()->with(['userId' => 'userId', 'key' => 'someKey'])->andReturn([$mockEntity1, $mockEntity2]);
+        $repo->shouldReceive('fetch')->once()->with(['user_id' => 'userId', 'key' => 'someKey'])->andReturn([$mockEntity1, $mockEntity2]);
 
         $this->assertTrue($instance->exists('someKey'));
     }

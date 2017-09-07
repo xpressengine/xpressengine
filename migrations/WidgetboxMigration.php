@@ -29,8 +29,8 @@ class WidgetboxMigration extends Migration {
                     $table->string('title', 200)->comment('widget box title');
                     $table->text('content')->comment('widget information. HTML string');
                     $table->text('options')->comment('options');
-                    $table->timestamp('createdAt')->comment('created date');
-                    $table->timestamp('updatedAt')->comment('updated date');
+                    $table->timestamp('created_at')->comment('created date');
+                    $table->timestamp('updated_at')->comment('updated date');
                     $table->primary('id');
                 }
             );

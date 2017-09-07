@@ -181,7 +181,7 @@ abstract class AbstractSkin implements ComponentInterface
         $data = [];
         $key = [];
         foreach ($this->getType()->getColumns() as $columnName => $columns) {
-            $dataName = $this->config->get('id') . ucfirst(camel_case('_' . $columnName));
+            $dataName = snake_case($this->config->get('id') . '_' . $columnName);
             $key[$columnName] = $dataName;
             if (isset($args[$dataName])) {
                 $data[$columnName] = $args[$dataName];
@@ -307,7 +307,7 @@ abstract class AbstractSkin implements ComponentInterface
     {
         $data = [];
         foreach ($this->getType()->getColumns() as $columnName => $columns) {
-            $dataName = $id . ucfirst(camel_case('_' . $columnName));
+            $dataName = snake_case($id . '_' . $columnName);
             if (isset($args[$dataName])) {
                 $data[$dataName] = $args[$dataName];
             } else {

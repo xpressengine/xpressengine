@@ -30,12 +30,12 @@ use Xpressengine\Routing\InstanceRoute;
  * @link      https://xpressengine.io
  *
  * @property string $id          자동 생성된 고유한 식별자
- * @property string $menuId      소속된 MenuEntity 의 ID
- * @property string $parentId    부모의 ID
+ * @property string $menu_id     소속된 MenuEntity 의 ID
+ * @property string $parent_id    부모의 ID
  * @property string $url         해당 메뉴의 URL
- * @property string $preTitle    UI 에서 출력을 위해서 사용되는 property title 출력전에 추가
+ * @property string $pre_title    UI 에서 출력을 위해서 사용되는 property title 출력전에 추가
  * @property string $title       사용자에게 보여지는 이름
- * @property string $postTitle   UI 에서 출력을 위해서 사용되는 property title 출력후에 추가
+ * @property string $post_title   UI 에서 출력을 위해서 사용되는 property title 출력후에 추가
  * @property string $description 설명
  * @property string $target      링크의 클릭시 옵션
  * @property bool   $activated   활성/비활성 유무
@@ -85,8 +85,8 @@ class MenuItem extends CategoryItem
      * @var array
      */
     protected $fillable = [
-        'menuId', 'parentId', 'title', 'url', 'description', 'target', 'type' , 'ordering', 'activated',
-        'basicImageId', 'hoverImageId', 'selectedImageId', 'mBasicImageId', 'mHoverImageId', 'mSelectedImageId',
+        'menu_id', 'parent_id', 'title', 'url', 'description', 'target', 'type' , 'ordering', 'activated',
+        'basic_image_id', 'hover_image_id', 'selected_image_id', 'm_basic_image_id', 'm_hover_image_id', 'm_selected_image_id',
     ];
 
     /**
@@ -129,7 +129,7 @@ class MenuItem extends CategoryItem
      */
     public function route()
     {
-        return $this->hasOne(InstanceRoute::class, 'instanceId');
+        return $this->hasOne(InstanceRoute::class, 'instance_id');
     }
 
     /**
@@ -139,7 +139,7 @@ class MenuItem extends CategoryItem
      */
     public function basicImage()
     {
-        return $this->belongsTo(Image::class, 'basicImageId');
+        return $this->belongsTo(Image::class, 'basic_image_id');
     }
 
     /**
@@ -149,7 +149,7 @@ class MenuItem extends CategoryItem
      */
     public function hoverImage()
     {
-        return $this->belongsTo(Image::class, 'hoverImageId');
+        return $this->belongsTo(Image::class, 'hover_image_id');
     }
 
     /**
@@ -159,7 +159,7 @@ class MenuItem extends CategoryItem
      */
     public function selectedImage()
     {
-        return $this->belongsTo(Image::class, 'selectedImageId');
+        return $this->belongsTo(Image::class, 'selected_image_id');
     }
 
     /**
@@ -169,7 +169,7 @@ class MenuItem extends CategoryItem
      */
     public function getHoverImage()
     {
-        if (!$this->getAttribute('hoverImageId')) {
+        if (!$this->getAttribute('hover_image_id')) {
             return $this->getRelationValue('basicImage');
         }
 
@@ -183,7 +183,7 @@ class MenuItem extends CategoryItem
      */
     public function getSelectedImage()
     {
-        if (!$this->getAttribute('selectedImageId')) {
+        if (!$this->getAttribute('selected_image_id')) {
             return $this->getHoverImage();
         }
 
@@ -197,7 +197,7 @@ class MenuItem extends CategoryItem
      */
     public function mBasicImage()
     {
-        return $this->belongsTo(Image::class, 'mBasicImageId');
+        return $this->belongsTo(Image::class, 'm_basic_image_id');
     }
 
     /**
@@ -207,7 +207,7 @@ class MenuItem extends CategoryItem
      */
     public function mHoverImage()
     {
-        return $this->belongsTo(Image::class, 'mHoverImageId');
+        return $this->belongsTo(Image::class, 'm_hover_image_id');
     }
 
     /**
@@ -217,7 +217,7 @@ class MenuItem extends CategoryItem
      */
     public function mSelectedImage()
     {
-        return $this->belongsTo(Image::class, 'mSelectedImageId');
+        return $this->belongsTo(Image::class, 'm_selected_image_id');
     }
 
     /**
@@ -227,7 +227,7 @@ class MenuItem extends CategoryItem
      */
     public function getMBasicImage()
     {
-        if (!$this->getAttribute('mBasicImageId')) {
+        if (!$this->getAttribute('m_basic_image_id')) {
             return $this->getRelationValue('basicImage');
         }
 
@@ -241,7 +241,7 @@ class MenuItem extends CategoryItem
      */
     public function getMHoverImage()
     {
-        if (!$this->getAttribute('mHoverImageId')) {
+        if (!$this->getAttribute('m_hover_image_id')) {
             return $this->getMBasicImage();
         }
 
@@ -255,7 +255,7 @@ class MenuItem extends CategoryItem
      */
     public function getMSelectedImage()
     {
-        if (!$this->getAttribute('mSelectedImageId')) {
+        if (!$this->getAttribute('m_selected_image_id')) {
             return $this->getMHoverImage();
         }
 
@@ -282,7 +282,7 @@ class MenuItem extends CategoryItem
      */
     public function getAggregatorKeyName()
     {
-        return 'menuId';
+        return 'menu_id';
     }
 
     /**

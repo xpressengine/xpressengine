@@ -17,8 +17,8 @@ class SettingsMigration extends Migration {
     public function installed()
     {
         \DB::table('config')->insert(['name' => 'settings', 'vars' => '[]']);
-        \DB::table('permissions')->insert(['siteKey'=> 'default', 'name' => 'settings', 'grants' => '[]']);
-        \DB::table('permissions')->insert(['siteKey'=> 'default', 'name' => 'settings.user', 'grants' => '[]']);
+        \DB::table('permissions')->insert(['site_key'=> 'default', 'name' => 'settings', 'grants' => '[]']);
+        \DB::table('permissions')->insert(['site_key'=> 'default', 'name' => 'settings.user', 'grants' => '[]']);
     }
 
     /**
@@ -34,15 +34,15 @@ class SettingsMigration extends Migration {
 
             $table->string('id', 36)->comment('Log ID');
             $table->string('type', 255)->comment('logger type');
-            $table->string('userId', 36)->comment('user id');
+            $table->string('user_id', 36)->comment('user id');
             $table->char('method', 10)->comment('http method of request');
             $table->string('url', 1000)->comment('url of request');
             $table->text('parameters')->comment('parameters of request');
             $table->string('summary', 2000)->comment('summary for request');
             $table->text('data')->comment('extra data for request');
             $table->string('ipaddress', 16)->comment('ip address');
-            $table->timestamp('createdAt')->index()->comment('created date');
-            $table->timestamp('updatedAt')->index()->comment('updated date');
+            $table->timestamp('created_at')->index()->comment('created date');
+            $table->timestamp('updated_at')->index()->comment('updated date');
 
             $table->primary('id');
         });

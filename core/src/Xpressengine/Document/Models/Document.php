@@ -25,21 +25,18 @@ use Xpressengine\Document\Exceptions\ValueRequiredException;
 /**
  * Document
  *
- * Config를 설정할 때 division 을 사용하는 경우에는 이 모델의 table 이름을
- * division table 이름으로 변경합니다.
- *
  * @property string id
- * @property string parentId
- * @property string instanceId
+ * @property string parent_id
+ * @property string instance_id
  * @property string type
- * @property string userId
+ * @property string user_id
  * @property string writer
  * @property string email
- * @property string certifyKey
- * @property integer readCount
- * @property integer commentCount
- * @property integer assentCount
- * @property integer dissentCount
+ * @property string certify_key
+ * @property integer read_count
+ * @property integer comment_count
+ * @property integer assent_count
+ * @property integer dissent_count
  * @property integer approved
  * @property integer published
  * @property integer status
@@ -48,16 +45,16 @@ use Xpressengine\Document\Exceptions\ValueRequiredException;
  * @property string locale
  * @property string title
  * @property string content
- * @property string pureContent
- * @property string createdAt
- * @property string publishedAt
- * @property string updatedAt
- * @property string deletedAt
+ * @property string pure_content
+ * @property string created_at
+ * @property string published_at
+ * @property string updated_at
+ * @property string deleted_at
  * @property string head
  * @property string reply
  * @property string listOrder
  * @property string ipaddress
- * @property string userType
+ * @property string user_type
  *
  * @category    Document
  * @package     Xpressengine\Document
@@ -76,10 +73,10 @@ class Document extends DynamicModel
     public $incrementing = false;
 
     protected $fillable = [
-        'parentId', 'instanceId', 'userId', 'writer', 'approved',
+        'parent_id', 'instance_id', 'user_id', 'writer', 'approved',
         'published', 'status', 'display', 'format', 'locale', 'title',
-        'content', 'pureContent', 'createdAt', 'publishedAt', 'head', 'reply',
-        'listOrder', 'ipaddress', 'userType', 'certifyKey', 'email',
+        'content', 'pure_content', 'created_at', 'published_at', 'head', 'reply',
+        'list_order', 'ipaddress', 'user_type', 'certify_key', 'email',
     ];
 
     protected $casts = [
@@ -90,7 +87,7 @@ class Document extends DynamicModel
         'format' => 'int',
     ];
 
-    protected $hidden = ['email', 'certifyKey', 'ipaddress'];
+    protected $hidden = ['email', 'certify_key', 'ipaddress'];
 
     /**
      * @var bool use dynamic query
@@ -225,7 +222,7 @@ class Document extends DynamicModel
      */
     public function user()
     {
-        return $this->belongsTo('Xpressengine\User\Models\User', 'userId');
+        return $this->belongsTo('Xpressengine\User\Models\User', 'user_id');
     }
 
     /**
@@ -236,16 +233,16 @@ class Document extends DynamicModel
      */
     public function checkRequired(array $attributes)
     {
-        if ($attributes['userId'] === null) {
-            throw new ValueRequiredException(['name' => 'userId']);
+        if ($attributes['user_id'] === null) {
+            throw new ValueRequiredException(['name' => 'user_id']);
         }
 
         if ($attributes['writer'] === null) {
             throw new ValueRequiredException(['name' => 'writer']);
         }
 
-        if ($attributes['instanceId'] === null) {
-            throw new ValueRequiredException(['name' => 'instanceId']);
+        if ($attributes['instance_id'] === null) {
+            throw new ValueRequiredException(['name' => 'instance_id']);
         }
     }
 
@@ -257,10 +254,10 @@ class Document extends DynamicModel
      */
     public function fixedAttributes(array $attributes)
     {
-        $attributes['pureContent'] = $this->getPureContent($attributes['content']);
+        $attributes['pure_content'] = $this->getPureContent($attributes['content']);
 
-        if (empty($attributes['userType']) === true) {
-            $attributes['userType'] = $this::USER_TYPE_USER;
+        if (empty($attributes['user_type']) === true) {
+            $attributes['user_type'] = $this::USER_TYPE_USER;
         }
         if (empty($attributes['approved']) === true) {
             $attributes['approved'] = $this::APPROVED_APPROVED;
@@ -274,8 +271,8 @@ class Document extends DynamicModel
         if (empty($attributes['display']) === true) {
             $attributes['display'] = $this::DISPLAY_VISIBLE;
         }
-        if ($attributes['published'] == 'published' && empty($attributes['publishedAt']) === true) {
-            $attributes['publishedAt'] = $this->freshTimestamp();
+        if ($attributes['published'] == 'published' && empty($attributes['published_at']) === true) {
+            $attributes['published_at'] = $this->freshTimestamp();
         }
         if (empty($attributes['reply']) === true) {
             $attributes['reply'] = '';
@@ -310,17 +307,17 @@ class Document extends DynamicModel
     public function setReply()
     {
         $timestamp = time();
-        if ($this->parentId == null || $this->parentId == '') {
+        if ($this->parent_id == null || $this->parent_id == '') {
             $this->setAttribute('head', $timestamp . '-' . $this->id);
-        } elseif ($this->parentId !== $this->id) {
-            $parent = static::find($this->parentId);
+        } elseif ($this->parent_id !== $this->id) {
+            $parent = static::find($this->parent_id);
             if ($parent === null) {
                 throw new ParentDocumentNotFoundException;
             }
             $this->setAttribute('reply', $this->getReplyChar($parent));
             $this->setAttribute('head', $parent->head);
         }
-        $this->setAttribute('listOrder', $this->head . (isset($this->reply) ? $this->reply : ''));
+        $this->setAttribute('list_order', $this->head . (isset($this->reply) ? $this->reply : ''));
     }
 
     /**

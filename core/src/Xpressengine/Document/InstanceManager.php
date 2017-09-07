@@ -24,23 +24,6 @@ use Xpressengine\Migrations\DocumentMigration;
 /**
  * InstanceManager
  *
- * * Document instance 관리
- * * Instance 생성 시 등록 한 설정에 따라 테이블 분리(division), 변경 이력 관리(revision) 지원
- * * 게시판, 페이지 같은 플러그인에서 문서를 사용하려 할 때
- * 각각의 Config 를 사용하기 위해 instance 를 만들고 사용해야 함
- *
- * ## 사용법
- *
- * ### Instance 생성
- * ```php
- * XeDocument::createInstance('newInstanceId');
- * ```
- *
- * ### Instance 삭제
- * ```php
- * XeDocument::destroyInstance('newInstanceId');
- * ```
- *
  * @category    Document
  * @package     Xpressengine\Document
  * @author      XE Developers <developers@xpressengine.com>

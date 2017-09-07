@@ -62,7 +62,7 @@ class UserAccountRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $account = $this->makeAccount();
         $account->shouldReceive('newQuery')->once()->andReturnSelf();
-        $account->shouldReceive('where')->once()->with('userId', $userId)->andReturnSelf();
+        $account->shouldReceive('where')->once()->with('user_id', $userId)->andReturnSelf();
         $account->shouldReceive('get')->once()->withNoArgs()->andReturn($accounts);
 
         $repo->shouldReceive('createModel')->andReturn($account);
@@ -79,7 +79,7 @@ class UserAccountRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $account = $this->makeAccount();
         $account->shouldReceive('newQuery')->once()->andReturnSelf();
-        $account->shouldReceive('whereIn')->once()->with('userId', ['123'])->andReturnSelf();
+        $account->shouldReceive('whereIn')->once()->with('user_id', ['123'])->andReturnSelf();
         $account->shouldReceive('delete')->once()->withNoArgs()->andReturn(1);
 
         $repo->shouldReceive('createModel')->andReturn($account);

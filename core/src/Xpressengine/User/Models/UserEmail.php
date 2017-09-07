@@ -35,7 +35,7 @@ class UserEmail extends DynamicModel implements EmailInterface
     protected $dynamic = false;
 
     protected $fillable = [
-        'userId',
+        'user_id',
         'address'
     ];
 
@@ -46,7 +46,7 @@ class UserEmail extends DynamicModel implements EmailInterface
      */
     public function user()
     {
-        return $this->belongsTo(User::class, 'userId');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**

@@ -30,14 +30,14 @@ class CategoryMigration extends Migration {
             $table->engine = "InnoDB";
 
             $table->increments('id')->comment('ID');
-            $table->integer('categoryId')->comment('category ID.');
-            $table->integer('parentId')->nullable()->comment('parent ID. parent category item ID.');
+            $table->integer('category_id')->comment('category ID.');
+            $table->integer('parent_id')->nullable()->comment('parent ID. parent category item ID.');
             $table->string('word', 250)->comment('string of category item. It can be code of translation information.');
             $table->text('description')->comment('description of category item. It can be code of translation information.');
             $table->integer('ordering')->comment('ordering number of category item sort.');
 
-            $table->index('categoryId');
-            $table->index('parentId');
+            $table->index('category_id');
+            $table->index('parent_id');
         });
 
         Schema::create('category_closure', function (Blueprint $table) {

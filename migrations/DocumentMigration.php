@@ -37,7 +37,7 @@ class DocumentMigration extends Migration
             $table->string('id', 36)->comment('document ID');
             $table = $this->setColumns($table);
 
-            $table->index('createdAt');
+            $table->index('created_at');
             $table->unique(['head', 'reply']);
             $table->primary(array('id'));
         });
@@ -48,15 +48,15 @@ class DocumentMigration extends Migration
                 // documents update log
                 $table->engine = "InnoDB";
 
-                $table->string('revisionId', 36)->comment('revision ID');
-                $table->integer('revisionNo')->default(0)->comment('revision version number. It starts with 0 and increases when added.');
+                $table->string('revision_id', 36)->comment('revision ID');
+                $table->integer('revision_no')->default(0)->comment('revision version number. It starts with 0 and increases when added.');
 
                 $table->string('id', 36)->comment('document ID');
                 $table = $this->setColumns($table);
 
-                $table->index('createdAt');
-                $table->primary(array('revisionId'));
-                $table->index(array('id', 'revisionNo'));
+                $table->index('created_at');
+                $table->primary(array('revision_id'));
+                $table->index(array('id', 'revision_no'));
             });
         }
     }
@@ -73,7 +73,7 @@ class DocumentMigration extends Migration
             $table->string('id', 36);
             $table = $this->setColumns($table);
 
-            $table->index('createdAt');
+            $table->index('created_at');
             $table->unique(['head', 'reply']);
             $table->primary(array('id'));
         });
@@ -85,23 +85,23 @@ class DocumentMigration extends Migration
      */
     private function setColumns(Blueprint $table)
     {
-        $table->string('parentId', 36)->default('')->comment('parent document ID');
+        $table->string('parent_id', 36)->default('')->comment('parent document ID');
 
-        $table->string('instanceId', 36)->default('')->comment('instance ID. This is associated with area classification as like Menu, Board.');
+        $table->string('instance_id', 36)->default('')->comment('instance ID. This is associated with area classification as like Menu, Board.');
         $table->string('type', 36)->default('')->comment('Module Type. Module ID of registered this document.');
 
         // users
-        $table->string('userType', '16')->default('normal')->comment('User Type. Type of document writer. user/guest/anonymity/normal');
-        $table->string('userId', 36)->comment('User ID. User ID of document writer. If userType is guest or anonymity it can be empty string.');
+        $table->string('user_type', '16')->default('normal')->comment('User Type. Type of document writer. user/guest/anonymity/normal');
+        $table->string('user_id', 36)->comment('User ID. User ID of document writer. If userType is guest or anonymity it can be empty string.');
         $table->string('writer', 200)->comment('document writer name. It is usually a User displayName. It can be differ if userType is guest or anonymity.');
         $table->string('email')->nullable()->comment('Email. It is usually Null. It registered if userType is guest.');
-        $table->string('certifyKey', 200)->comment('Certify key. It is usually empty string. It registered if userType is guest.');
+        $table->string('certify_key', 200)->comment('Certify key. It is usually empty string. It registered if userType is guest.');
 
         // count
-        $table->integer('readCount')->default(0)->comment('document read count');
-        $table->integer('commentCount')->default(0)->comment('commented registered counter');
-        $table->integer('assentCount')->default(0)->comment('assent count. The count for assent type.');
-        $table->integer('dissentCount')->default(0)->comment('dissent count. The count for dissent type.');
+        $table->integer('read_count')->default(0)->comment('document read count');
+        $table->integer('comment_count')->default(0)->comment('commented registered counter');
+        $table->integer('assent_count')->default(0)->comment('assent count. The count for assent type.');
+        $table->integer('dissent_count')->default(0)->comment('dissent count. The count for dissent type.');
 
         // display contents config values
         $table->integer('approved')->default(Document::APPROVED_APPROVED)->comment('approved status. 0:rejected/10:waiting/30:approved');
@@ -115,12 +115,12 @@ class DocumentMigration extends Migration
 
         $table->string('title', 180)->comment('document title');
         $table->text('content')->comment('document content');
-        $table->text('pureContent')->comment('document pure content. There is content for human readable(HTML removed). It using for fulltext search.');
+        $table->text('pure_content')->comment('document pure content. There is content for human readable(HTML removed). It using for fulltext search.');
 
-        $table->timestamp('createdAt')->comment('document created date');
-        $table->timestamp('updatedAt')->comment('document updated date');
-        $table->timestamp('publishedAt')->nullable()->comment('document published date');
-        $table->timestamp('deletedAt')->nullable()->comment('document deleted date. for soft delete.');
+        $table->timestamp('created_at')->comment('document created date');
+        $table->timestamp('updated_at')->comment('document updated date');
+        $table->timestamp('published_at')->nullable()->comment('document published date');
+        $table->timestamp('deleted_at')->nullable()->comment('document deleted date. for soft delete.');
 
         $table->string('head', 50)->comment('document order. It using for document list sorting. Enables sorting of parent-child relationship documents.');
         $table->string('reply', 150)->comment('string for sorting parent-child documents');

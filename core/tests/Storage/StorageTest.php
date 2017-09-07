@@ -181,19 +181,19 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $mockFile = m::mock('Xpressengine\Storage\File');
         $mockFile->shouldReceive('hasMacro')->andReturn(false);
         $mockFile->shouldReceive('getAttribute')->with('id')->andReturn('foo');
-        $mockFile->shouldReceive('getAttribute')->with('originId')->andReturnNull();
+        $mockFile->shouldReceive('getAttribute')->with('origin_id')->andReturnNull();
 
         $mockChild = m::mock('Xpressengine\Storage\File');
         $mockChild->shouldReceive('hasMacro')->andReturn(false);
         $mockChild->shouldReceive('getAttribute')->with('id')->andReturn('bar');
-        $mockChild->shouldReceive('getAttribute')->with('originId')->andReturn('foo');
+        $mockChild->shouldReceive('getAttribute')->with('origin_id')->andReturn('foo');
 
         $mockFile->shouldReceive('getRawDerives')->andReturn([$mockChild]);
 
         $conn = m::mock('stdClass');
         $conn->shouldReceive('table')->andReturnSelf();
-        $conn->shouldReceive('where')->once()->with('fileId', 'foo')->andReturnSelf();
-        $conn->shouldReceive('where')->once()->with('fileId', 'bar')->andReturnSelf();
+        $conn->shouldReceive('where')->once()->with('file_id', 'foo')->andReturnSelf();
+        $conn->shouldReceive('where')->once()->with('file_id', 'bar')->andReturnSelf();
         $conn->shouldReceive('delete')->twice();
 
         $mockFile->shouldReceive('getConnection')->andReturn($conn);
@@ -226,7 +226,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
         $mockConn->shouldReceive('table')->once()->with('fileable_table')->andReturnSelf();
         $mockConn->shouldReceive('insert')->once()->with(m::on(function ($args) {
-            return $args['fileId'] == 'file-id' && $args['fileableId'] == 'fileable-id';
+            return $args['file_id'] == 'file-id' && $args['fileable_id'] == 'fileable-id';
         }))->andReturnSelf();
 
         $repo->shouldReceive('increment')->andReturn(true);
@@ -248,12 +248,12 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $mockFile->shouldReceive('getKey')->andReturn('file-id');
 
         $mockConn->shouldReceive('table')->once()->with('fileable_table')->andReturnSelf();
-        $mockConn->shouldReceive('where')->once()->with('fileId', 'file-id')->andReturnSelf();
-        $mockConn->shouldReceive('where')->once()->with('fileableId', 'fileable-id')->andReturnSelf();
+        $mockConn->shouldReceive('where')->once()->with('file_id', 'file-id')->andReturnSelf();
+        $mockConn->shouldReceive('where')->once()->with('fileable_id', 'fileable-id')->andReturnSelf();
         $mockConn->shouldReceive('delete')->once()->andReturn(1);
 
         $mockFile->shouldReceive('hasMacro')->andReturn(false);
-        $mockFile->shouldReceive('getAttribute')->with('useCount')->andReturn(1);
+        $mockFile->shouldReceive('getAttribute')->with('use_count')->andReturn(1);
         $repo->shouldReceive('decrement')->andReturn(true);
 
         $instance->unBind('fileable-id', $mockFile);
@@ -272,12 +272,12 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $mockFile->shouldReceive('getKey')->andReturn('file-id');
 
         $mockConn->shouldReceive('table')->once()->with('fileable_table')->andReturnSelf();
-        $mockConn->shouldReceive('where')->once()->with('fileId', 'file-id')->andReturnSelf();
-        $mockConn->shouldReceive('where')->once()->with('fileableId', 'fileable-id')->andReturnSelf();
+        $mockConn->shouldReceive('where')->once()->with('file_id', 'file-id')->andReturnSelf();
+        $mockConn->shouldReceive('where')->once()->with('fileable_id', 'fileable-id')->andReturnSelf();
         $mockConn->shouldReceive('delete')->once()->andReturn(1);
 
         $mockFile->shouldReceive('hasMacro')->andReturn(false);
-        $mockFile->shouldReceive('getAttribute')->with('useCount')->andReturn(1);
+        $mockFile->shouldReceive('getAttribute')->with('use_count')->andReturn(1);
 
         $instance->expects($this->once())->method('delete')->with($mockFile)->willReturn(true);
 

@@ -57,7 +57,7 @@ class CategoryItem extends Node
      *
      * @var array
      */
-    protected $fillable = ['categoryId', 'parentId', 'word', 'description'];
+    protected $fillable = ['category_id', 'parent_id', 'word', 'description'];
 
     /**
      * The class name of aggregator
@@ -148,7 +148,7 @@ class CategoryItem extends Node
      */
     public function getParentIdName()
     {
-        return 'parentId';
+        return 'parent_id';
     }
 
     /**
@@ -178,7 +178,7 @@ class CategoryItem extends Node
      */
     public function getAggregatorKeyName()
     {
-        return 'categoryId';
+        return 'category_id';
     }
 
     /**

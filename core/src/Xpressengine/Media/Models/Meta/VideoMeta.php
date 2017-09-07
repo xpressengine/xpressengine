@@ -38,7 +38,7 @@ class VideoMeta extends Meta
      *
      * @var array
      */
-    protected $guarded = ['id', 'fileId'];
+    protected $guarded = ['id', 'file_id'];
 
     /**
      * The attributes that should be cast to native types.
@@ -55,5 +55,5 @@ class VideoMeta extends Meta
      *
      * @var string
      */
-    protected $foreignKey = 'fileId';
+    protected $foreignKey = 'file_id';
 }

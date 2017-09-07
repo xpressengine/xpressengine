@@ -43,7 +43,7 @@
                                 <div class="input-group-btn">
                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                         <span class="__xe_selectedKeyfield">
-                                        @if(Input::get('keyfield')==='displayName')
+                                        @if(Input::get('keyfield')==='display_name')
                                             {{xe_trans('xe::name')}}
                                         @elseif(Input::get('keyfield')==='email')
                                             {{xe_trans('xe::email')}}
@@ -54,7 +54,7 @@
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" role="menu">
-                                        <li><a href="#" class="__xe_selectKeyfield" data-value="displayName">{{xe_trans('xe::name')}}</a></li>
+                                        <li><a href="#" class="__xe_selectKeyfield" data-value="display_name">{{xe_trans('xe::name')}}</a></li>
                                         <li><a href="#" class="__xe_selectKeyfield" data-value="email">{{xe_trans('xe::email')}}</a></li>
                                     </ul>
                                 </div>
@@ -106,10 +106,10 @@
                                 @endif
                             </td>
                             <td>{{ data_get($user, 'email', xe_trans('xe::empty')) }}</td>
-                            <td>{!! $user->createdAt->format('y-m-d') !!}</td>
+                            <td>{!! $user->created_at->format('y-m-d') !!}</td>
                             <td>
-                                @if($user->loginAt !== null)
-                                {!! $user->loginAt->format('y-m-d') !!}
+                                @if($user->login_at !== null)
+                                {!! $user->login_at->format('y-m-d') !!}
                                 @else
                                 -
                                 @endif
