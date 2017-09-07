@@ -26,11 +26,18 @@
 
                     <div class="form-group">
                         <label>회원가입 인증방식</label>
+                        <p>회원가입시 별도의 인증을 거친 사용자만 회원가입을 가능하도록 합니다. 인증을 사용할 경우 사용자는 아래의 인증방식 중 하나를 선택하여 인증한 후에 회원가입을 할 수 있습니다</p>
                         <div class="list-group-item">
-                            {{ uio('formSelect', ['name'=>'guard_forced', 'description'=>'"인증없이 가입 불가"를 선택하면 사용자들은 아래 인증절차중 하나를 선택해야 가입할 수 있습니다', 'options'=>[
-                            'false' => '인증없이 가입 허용', 'true' => '인증없이 가입 불가'
-                            ],'value' => ($config->get('guard_forced') ? 'true' : 'false')]) }}
-                            <hr>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" class="__xe_select_guard_forced" name="guard_forced" value="true" @if($config->get('guard_forced')) checked="checked" @endif> 인증 사용
+                                </label>
+                                <label>
+                                    <input type="radio" class="__xe_select_guard_forced" name="guard_forced" value="false" @if(!$config->get('guard_forced')) checked="checked" @endif> 인증 사용안함
+                                </label>
+                            </div>
+                        </div>
+                        <div class="list-group-item __xe_guard_selector" @if(!$config->get('guard_forced')) style="display: none" @endif >
                             @include('user.settings.setting.guards')
                         </div>
                     </div>
@@ -53,3 +60,19 @@
         </div>
     </div>
 </div>
+
+{!!
+    XeFrontend::html('toggle-guard')->content("
+    <script>
+    $(function($) {
+        $('.__xe_select_guard_forced').change(function(){
+            if(this.value == 'false') {
+                $('.__xe_guard_selector').slideUp();
+            } else {
+                $('.__xe_guard_selector').slideDown();
+            }
+        });
+    });
+    </script>
+    ")->load();
+!!}

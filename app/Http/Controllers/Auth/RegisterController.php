@@ -6,7 +6,6 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Auth\RedirectsUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Fluent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use XeDB;
 use XeDynamicField;
@@ -58,32 +57,26 @@ class RegisterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getRegister(Request $request, UserHandler $handler, RegisterTokenRepository $tokenRepository)
+    public function getRegister(Request $request, RegisterTokenRepository $tokenRepository)
     {
-        if(!$this->checkJoinable()) {
-            return redirect()->back()->with(['alert'=>['type'=>'danger', 'message'=> xe_trans('xe::joinNotAllowed')]]);
+        if (!$this->checkJoinable()) {
+            return redirect()->back()->with(
+                ['alert' => ['type' => 'danger', 'message' => xe_trans('xe::joinNotAllowed')]]
+            );
         }
 
         $config = app('xe.config')->get('user.join');
 
-        // token 검사, token이 존재할 경우 form을 출력
-        $token = $request->get('token');
-
-        if($token === 'free') {
-            if($config->get('guard_forced', false)) {
-                throw new HttpException('400', '잘못된 접근입니다');
-            } else {
-                return $this->getRegisterForm($request);
-            }
-        }
-
-        if ($token !== null) {
+        // 가입 인증을 사용하지 않을 경우, 곧바로 회원가입 폼 출력
+        if (!$config->get('guard_forced', false)) {
             return $this->getRegisterForm($request);
         }
 
-        // guard가 없을 경우 바로 회원가입폼 출력
-        $guards = $handler->getRegisterGuards();
-
+        // token 검사, token이 존재할 경우 form을 출력
+        $token = $request->get('token');
+        if ($token !== null) {
+            return $this->getRegisterForm($request);
+        }
 
         $allGuards = $this->handler->getRegisterGuards();
         $activated = $config->get('guards', []);
@@ -107,7 +100,7 @@ class RegisterController extends Controller
     /**
      * Show the application registration form.
      *
-     * @param Request                 $request
+     * @param Request $request
      *
      * @return Response
      */
@@ -116,16 +109,12 @@ class RegisterController extends Controller
         $config = app('xe.config')->get('user.join');
 
         $tokenId = $request->get('token');
-
         $tokenRepository = app('xe.user.register.tokens');
-        if($tokenId === 'free') {
-            if($config->get('register_forced')) {
-                throw new HttpException(400, '잘못된 접근입니다.');
-            }
-            $register_token = app('xe.user.register.tokens')->create('free', []);
-        } else {
-            $register_token = $token = $tokenRepository->find($tokenId);
-            if ($token === null) {
+
+        $register_token = null;
+        if ($tokenId !== null) {
+            $register_token = $tokenRepository->find($tokenId);
+            if ($register_token === null) {
                 throw new HttpException(400, '유효기간이 만료되었거나 정상적인 토큰이 아닙니다. 다시 인증 받으시기 바랍니다.');
             }
         }
@@ -178,9 +167,12 @@ class RegisterController extends Controller
      */
     public function postRegisterConfirm(Request $request, RegisterTokenRepository $tokenRepository)
     {
-        $this->validate($request, [
-            'email' => 'required|email'
-        ]);
+        $this->validate(
+            $request,
+            [
+                'email' => 'required|email'
+            ]
+        );
 
         $email = $request->get('email');
 
@@ -195,7 +187,7 @@ class RegisterController extends Controller
         if ($mail === null) {
             \DB::beginTransaction();
             try {
-                $mailData = ['address'=>$email, 'userId' => app('xe.keygen')->generate()];
+                $mailData = ['address' => $email, 'userId' => app('xe.keygen')->generate()];
                 $user = new User();
                 $user->id = $mailData['userId'];
                 $mail = $this->handler->createEmail($user, $mailData, false);
@@ -207,11 +199,20 @@ class RegisterController extends Controller
         }
 
         $token = $tokenRepository->create('email', ['email' => $email, 'userId' => $mail->userId]);
-        $this->emailBroker->sendEmailForRegister($mail, $token, 'emails.register', function ($m) {
-            $m->subject(xe_trans(app('xe.site')->getSiteConfig()->get('site_title')).' '.xe_trans('xe::emailConfirm'));
-        });
+        $this->emailBroker->sendEmailForRegister(
+            $mail,
+            $token,
+            'emails.register',
+            function ($m) {
+                $m->subject(
+                    xe_trans(app('xe.site')->getSiteConfig()->get('site_title')).' '.xe_trans('xe::emailConfirm')
+                );
+            }
+        );
 
-        return redirect()->route('auth.register', ['token'=>$token['id']])->with(['alert'=>['type'=>'success', 'message' => '인증 이메일이 전송되었습니다.']]);
+        return redirect()->route('auth.register', ['token' => $token['id']])->with(
+            ['alert' => ['type' => 'success', 'message' => '인증 이메일이 전송되었습니다.']]
+        );
     }
 
     /**
@@ -224,8 +225,10 @@ class RegisterController extends Controller
     public function postRegister(Request $request, RegisterTokenRepository $tokenRepository)
     {
         // validation
-        if(!$this->checkJoinable()) {
-            return redirect()->back()->with(['alert'=>['type'=>'danger', 'message'=> xe_trans('xe::joinNotAllowed')]]);
+        if (!$this->checkJoinable()) {
+            return redirect()->back()->with(
+                ['alert' => ['type' => 'danger', 'message' => xe_trans('xe::joinNotAllowed')]]
+            );
         }
 
         $this->checkCaptcha();
@@ -252,7 +255,7 @@ class RegisterController extends Controller
         $tokenId = $request->get('register_token');
         $token = $tokenRepository->find($tokenId);
 
-        if($token === null) {
+        if ($token === null) {
             throw new HttpException(400, '잘못된 가입 토큰입니다.');
         }
 
