@@ -39,7 +39,7 @@
             @endif
         });
 
-        $(document).on('click', 'a[target=_blank]', function (e) {
+        $(document).on('click', 'a[target]', function (e) {
             e.preventDefault();
 
             var $this = $(this);
