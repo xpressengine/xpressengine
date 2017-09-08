@@ -256,11 +256,11 @@ class UserHandler
                 $user,
                 [
                     'user_id' => $user->id,
-                    'account_id' => array_get($accountData, 'accountId'),
+                    'account_id' => array_get($accountData, 'account_id'),
                     'email' => array_get($accountData, 'email', array_get($data, 'email')),
                     'provider' => array_get($accountData, 'provider'),
                     'token' => array_get($accountData, 'token'),
-                    'token_secret' => array_get($accountData, 'tokenSecret'),
+                    'token_secret' => array_get($accountData, 'token_secret'),
                 ]
             );
             $user->accounts()->save($account);
@@ -387,11 +387,11 @@ class UserHandler
         // account 검사
         if (isset($data['account'])) {
             $account = $data['account'];
-            if (!isset($account['accountId'], $account['provider'], $account['token'])) {
+            if (!isset($account['account_id'], $account['provider'], $account['token'])) {
                 throw new InvalidAccountInfoException();
             }
 
-            if ($this->accounts()->where(array_only($account, ['accountId', 'provider']))->first() !== null) {
+            if ($this->accounts()->where(array_only($account, ['account_id', 'provider']))->first() !== null) {
                 throw new AccountAlreadyExistsException();
             }
         }
