@@ -33,6 +33,19 @@
                             {{-- status --}}
                             {!! uio('formSelect', ['id'=>'__xe_status', 'label'=>xe_trans('xe::status'), 'name'=>'status', 'options'=> $status]) !!}
 
+
+                            {{-- accounts --}}
+                            @if(count($user->accounts))
+                            <div class="form-group">
+                                <label>연결 계정</label>
+                                <ul class="list-group">
+                                    @foreach($user->accounts as $account)
+                                        <li class="list-group-item"><span class="{{ $account->provider }}" title="{{ $account->provider }}"><i class="xi-{{ $account->provider }}"></i></span> {{ $account->provider }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            @endif
+
                         </div>
                         <div class="col-sm-6">
 
