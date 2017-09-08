@@ -207,12 +207,12 @@ namespace Xpressengine\Tests\User {
                 'display_name' => 'foo',
                 'password' => 'secret',
                 'account' => [
-                    'accountId' => 'bar',
+                    'account_id' => 'bar',
                     'email' => 'foo@bar.com',
                     'provider' => 'baz',
                     'data' => [],
                     'token' => 'token',
-                    'tokenSecret' => 'tokenSecret',
+                    'token_secret' => 'tokenSecret',
                 ]
             ];
 
@@ -475,7 +475,7 @@ namespace Xpressengine\Tests\User {
 
             /** @var Mockery\MockInterface $accounts */
             $accounts = $handler->accounts();
-            $accounts->shouldReceive('where')->once()->with(['accountId'=>'foo','provider'=>'foo'])->andReturnSelf();
+            $accounts->shouldReceive('where')->once()->with(['account_id'=>'foo','provider'=>'foo'])->andReturnSelf();
             $accounts->shouldReceive('first')->once()->andReturn(true);
 
             $data = [
@@ -484,11 +484,11 @@ namespace Xpressengine\Tests\User {
                 'status' => UserHandler::STATUS_ACTIVATED,
                 'email' => 'foo@xpressengine.com',
                 'account' => [
-                    'accountId' => 'foo',
+                    'account_id' => 'foo',
                     'provider' => 'foo',
                     'data' => 'foo',
                     'token' => 'foo',
-                    'tokenSecret' => 'foo',
+                    'token_secret' => 'foo',
                 ]
             ];
 
