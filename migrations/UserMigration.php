@@ -24,7 +24,7 @@ class UserMigration extends Migration {
             $table->string('email', 255)->nullable()->comment('email');
             $table->string('password', 255)->nullable()->comment('password');
             $table->string('rating', 15)->default('member')->comment('user rating. guest/member/manager/super');
-            $table->char('status', 20)->comment('account status. activated/deactivated');
+            $table->string('status', 20)->comment('account status. activated/deactivated');
             $table->text('introduction')->default(null)->nullable()->comment('user introduction');
             $table->string('profile_image_id', 36)->nullable()->comment('profile image file ID');
             $table->string('remember_token', 255)->nullable()->comment('token for keep login');
