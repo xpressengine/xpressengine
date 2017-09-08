@@ -41,6 +41,17 @@
         </section>
 
         <section>
+            <form method="post" action="{{route('__safe_mode.do.log-clear')}}">
+                <input type="hidden" name="_token" value="{{csrf_token()}}" />
+                <label>로그 파일 삭제</label>
+                <button type="submit" class="btn btn-primary">실행</button>
+                <small>
+                    에러, 쿼리 로그 파일을 삭제합니다. (storage/logs 디렉토리를 비웁니다)
+                </small>
+            </form>
+        </section>
+
+        <section>
             <form method="post" action="{{route('__safe_mode.do.plugin-off')}}">
                 <input type="hidden" name="_token" value="{{csrf_token()}}" />
                 <label>플러그인 끄기</label>

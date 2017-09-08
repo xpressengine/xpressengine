@@ -12,6 +12,7 @@ function () {
     Route::get('/dashboard', ['as' => '__safe_mode.dashboard', 'uses' => 'SafeModeController@dashboard']);
     Route::post('/do/beta24', ['as' => '__safe_mode.do.beta24', 'uses' => 'SafeModeController@doBeta24']);
     Route::post('/do/cache-clear', ['as' => '__safe_mode.do.cache-clear', 'uses' => 'SafeModeController@doCacheClear']);
+    Route::post('/do/log-clear', ['as' => '__safe_mode.do.log-clear', 'uses' => 'SafeModeController@doLogClear']);
     Route::post('/do/plugin-off', ['as' => '__safe_mode.do.plugin-off', 'uses' => 'SafeModeController@doPluginOff']);
     Route::post('/do/plugin-on', ['as' => '__safe_mode.do.plugin-on', 'uses' => 'SafeModeController@doPluginOn']);
 });

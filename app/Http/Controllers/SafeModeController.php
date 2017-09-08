@@ -102,7 +102,21 @@ class SafeModeController extends Controller
         $cache->store('schema')->flush();
 
         File::cleanDirectory(storage_path('app/interception'));
-        File::cleanDirectory(app('config')->get('view.compiled'));
+
+        $viewPath = app('config')->get('view.compiled');
+        File::move($viewPath . '/.gitignore', $viewPath . '/../.gitignore_back');
+        File::cleanDirectory($viewPath);
+        File::move($viewPath . '/../.gitignore_back', $viewPath . '/.gitignore');
+
+        return redirect()->route('__safe_mode.dashboard')->with('ok', 'complete');
+    }
+
+    public function doLogClear()
+    {
+        $viewPath = storage_path('logs');
+        File::move($viewPath . '/.gitignore', $viewPath . '/../.gitignore_back');
+        File::cleanDirectory($viewPath);
+        File::move($viewPath . '/../.gitignore_back', $viewPath . '/.gitignore');
 
         return redirect()->route('__safe_mode.dashboard')->with('ok', 'complete');
     }
