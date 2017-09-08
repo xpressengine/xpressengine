@@ -29,16 +29,16 @@ use Xpressengine\Database\Eloquent\DynamicModel;
  * @link        http://www.xpressengine.com
  *
  * @property string $id
- * @property string $originId
- * @property string $userId
+ * @property string $origin_id
+ * @property string $user_id
  * @property string $disk
  * @property string $path
  * @property string $filename
  * @property string $clientname
  * @property string $mime
  * @property int $size
- * @property int $useCount
- * @property int $downloadCount
+ * @property int $use_count
+ * @property int $download_count
  */
 class File extends DynamicModel
 {
@@ -61,7 +61,7 @@ class File extends DynamicModel
      *
      * @var array
      */
-    protected $fillable = ['originId', 'userId', 'disk', 'path', 'filename', 'clientname', 'mime', 'size'];
+    protected $fillable = ['origin_id', 'user_id', 'disk', 'path', 'filename', 'clientname', 'mime', 'size'];
 
     /**
      * Indicates if the IDs are auto-incrementing.
@@ -111,7 +111,7 @@ class File extends DynamicModel
      */
     public function getOriginKey()
     {
-        return $this->getAttribute('originId') ?: $this->getKey();
+        return $this->getAttribute('origin_id') ?: $this->getKey();
     }
 
     /**
@@ -157,7 +157,7 @@ class File extends DynamicModel
      */
     public function scopeDerives(Builder $query, File $file)
     {
-        return $query->where('originId', $file->getKey());
+        return $query->where('origin_id', $file->getKey());
     }
 
     /**
@@ -173,8 +173,8 @@ class File extends DynamicModel
         $model = new static;
 
         return $model->newQuery()
-            ->rightJoin($model->getFileableTable(), $model->getTable().'.id', '=', $model->getFileableTable().'.fileId')
-            ->where('fileableId', $fileableId)
+            ->rightJoin($model->getFileableTable(), $model->getTable().'.id', '=', $model->getFileableTable().'.file_id')
+            ->where('fileable_id', $fileableId)
             ->select([$model->getTable().'.*'])
             ->get();
     }

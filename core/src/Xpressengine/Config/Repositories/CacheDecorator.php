@@ -138,7 +138,7 @@ class CacheDecorator implements ConfigRepository
      */
     public function save(ConfigEntity $config)
     {
-        $this->erase($config->siteKey, $config->name);
+        $this->erase($config->site_key, $config->name);
 
         return $this->repo->save($config);
     }
@@ -152,7 +152,7 @@ class CacheDecorator implements ConfigRepository
      */
     public function clearLike(ConfigEntity $config, $excepts = [])
     {
-        $this->erase($config->siteKey, $config->name);
+        $this->erase($config->site_key, $config->name);
 
         $this->repo->clearLike($config, $excepts);
     }
@@ -180,8 +180,8 @@ class CacheDecorator implements ConfigRepository
      */
     public function foster(ConfigEntity $config, $to)
     {
-        $this->erase($config->siteKey, $config->name);
-        $this->erase($config->siteKey, $to);
+        $this->erase($config->site_key, $config->name);
+        $this->erase($config->site_key, $to);
 
         $this->repo->foster($config, $to);
     }
@@ -195,8 +195,8 @@ class CacheDecorator implements ConfigRepository
      */
     public function affiliate(ConfigEntity $config, $to)
     {
-        $this->erase($config->siteKey, $config->name);
-        $this->erase($config->siteKey, $to);
+        $this->erase($config->site_key, $config->name);
+        $this->erase($config->site_key, $to);
 
         $this->repo->affiliate($config, $to);
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Exceptions
+ * RequiredDynamicFieldException
  *
  * PHP version 5
  *
@@ -17,7 +17,7 @@ namespace Xpressengine\DynamicField\Exceptions;
 use Xpressengine\DynamicField\DynamicFieldException;
 
 /**
- * Required Dynamic Field Exception
+ * RequiredDynamicFieldException
  *
  * @category    DynamicField
  * @package     Xpressengine\DynamicField

@@ -20,16 +20,16 @@ class CounterMigration extends Migration {
             $table->engine = "InnoDB";
 
             $table->bigIncrements('id')->comment('ID');
-            $table->string('counterName', 36)->comment('counter name');
-            $table->string('counterOption', 36)->comment('counter option');
-            $table->string('targetId', 36)->comment('target ID');
-            $table->string('userId', 36)->comment('user ID');
+            $table->string('counter_name', 36)->comment('counter name');
+            $table->string('counter_option', 36)->comment('counter option');
+            $table->string('target_id', 36)->comment('target ID');
+            $table->string('user_id', 36)->comment('user ID');
             $table->integer('point')->default(1)->comment('point');
             $table->string('ipaddress', 16)->comment('IP address');
-            $table->timestamp('createdAt')->comment('created date');
+            $table->timestamp('created_at')->comment('created date');
 
-            $table->index(['targetId', 'userId']);
-            $table->index(['targetId', 'counterName']);
+            $table->index(['target_id', 'user_id']);
+            $table->index(['target_id', 'counter_name']);
         });
 
         \DB::table('config')->insert(['name' => 'counter', 'vars' => '{}']);

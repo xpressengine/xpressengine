@@ -70,7 +70,7 @@ class UnknownUser implements UserInterface
      */
     public function getDisplayName()
     {
-        return array_get($this->attributes, 'displayName', self::$name);
+        return array_get($this->attributes, 'display_name', self::$name);
     }
 
     /**

@@ -78,8 +78,8 @@ class FileRepository
         $model = $this->createModel();
 
         return $this->query()
-            ->rightJoin($model->getFileableTable(), $model->getTable().'.id', '=', $model->getFileableTable().'.fileId')
-            ->where('fileableId', $fileableId)
+            ->rightJoin($model->getFileableTable(), $model->getTable().'.id', '=', $model->getFileableTable().'.file_id')
+            ->where('fileable_id', $fileableId)
             ->select(array_map(function ($column) use ($model) {
                 return $model->getTable() . '.' . $column;
             }, $columns))

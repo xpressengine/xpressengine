@@ -29,57 +29,6 @@ use Closure;
 /**
  * Presenter
  *
- * * Response 할 때 View 대체해서 사용
- * * request 에 따라 response 를 컨트롤
- * * 출력할 때 스킨, 테마, 메뉴 사용
- * * Controller 에 출력에 대해서 API 지원에 따라 코드를 다시 작성해야하는 문제에 대응,
- * Presenter 설정에 따라 출력 방식을 결정할 수 있음
- *
- * ## App binding
- * * xe.presenter 로 바인딩 되어 있음
- * * Presenter facade 제공
- *
- * ## 사용법
- *
- * ### 스킨 사용 등록
- * ```php
- * // 사용자 스킨 사용
- * XePresenter::setSkinTargetId('skin-target-id');
- *
- * // 관리자 스킨 사용
- * XePresenter::setSettingsSkinTargetId('skin-target-id');
- * ```
- *
- * ### Html 형식만 지원
- * ```php
- * public controllerMethodName()
- * {
- *      ... 생략 ...
- *      return XePresenter::make('skin.view.name');
- * }
- *
- * ```
- *
- * ### Api(json) 형식만 지원 할 경우
- * ```php
- * public controllerMethodName()
- * {
- *      ... 생략 ...
- *      return XePresenter::makeApi(['data']);
- * }
- *
- * ```
- *
- * ### 모든 형식을 지원 할 경우
- * ```php
- * public controllerMethodName()
- * {
- *      ... 생략 ...
- *      return XePresenter::makeAll('skin.view.name');
- * }
- *
- * ```
- *
  * @category    Presenter
  * @package     Xpressengine\Presenter
  * @author      XE Developers <developers@xpressengine.com>

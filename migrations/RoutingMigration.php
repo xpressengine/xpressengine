@@ -23,11 +23,11 @@ class RoutingMigration extends Migration {
             $table->increments('id')->comment('ID');
             $table->string('url')->comment('URL');
             $table->string('module')->comment('module ID');
-            $table->string('instanceId')->comment('instance ID. menu item ID');
-            $table->string('menuId')->comment('menu ID. menu ID');
-            $table->string('siteKey')->comment('site key. for multi web site support.');
+            $table->string('instance_id')->comment('instance ID. menu item ID');
+            $table->string('menu_id')->comment('menu ID. menu ID');
+            $table->string('site_key')->comment('site key. for multi web site support.');
 
-            $table->unique('instanceId');
+            $table->unique('instance_id');
         });
     }
 }

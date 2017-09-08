@@ -1,6 +1,6 @@
 <?php
 /**
- * NotFoundDocumentException
+ * DocumentNotFoundException
  *
  * PHP version 5
  *
@@ -17,7 +17,7 @@ namespace Xpressengine\Document\Exceptions;
 use Xpressengine\Document\DocumentException;
 
 /**
- * NotFoundDocumentException
+ * DocumentNotFoundException
  *
  * @category    Document
  * @package     Xpressengine\Document

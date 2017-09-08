@@ -25,7 +25,7 @@ use Xpressengine\Site\Site;
  *
  * @property string $id
  * @property string $title
- * @property string $siteKey
+ * @property string $site_key
  * @property string $description
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
@@ -60,7 +60,7 @@ class Menu extends Category
      *
      * @var array
      */
-    protected $fillable = ['title', 'siteKey', 'description'];
+    protected $fillable = ['title', 'site_key', 'description'];
 
     /**
      * Item model class
@@ -78,7 +78,7 @@ class Menu extends Category
      */
     public function site()
     {
-        return $this->belongsTo(Site::class, 'siteKey', 'siteKey');
+        return $this->belongsTo(Site::class, 'site_key', 'site_key');
     }
 
     /**

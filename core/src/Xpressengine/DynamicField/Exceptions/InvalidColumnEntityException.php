@@ -1,6 +1,6 @@
 <?php
 /**
- * Exceptions
+ * InvalidColumnEntityException
  *
  * PHP version 5
  *
@@ -17,7 +17,7 @@ namespace Xpressengine\DynamicField\Exceptions;
 use Xpressengine\DynamicField\DynamicFieldException;
 
 /**
- * Invalid column entity exception
+ * InvalidColumnEntityException
  *
  * @category    DynamicField
  * @package     Xpressengine\DynamicField

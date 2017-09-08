@@ -1,6 +1,6 @@
 <?php
 /**
- * AlreadyExistException
+ * InvalidConfigException
  *
  * PHP version 5
  *
@@ -17,7 +17,7 @@ namespace Xpressengine\DynamicField\Exceptions;
 use Xpressengine\DynamicField\DynamicFieldException;
 
 /**
- * Invalid config exception
+ * InvalidConfigException
  *
  * @category    DynamicField
  * @package     Xpressengine\DynamicField

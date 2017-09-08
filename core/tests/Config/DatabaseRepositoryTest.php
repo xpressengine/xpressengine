@@ -25,7 +25,7 @@ class DatabaseRepositoryTest extends \PHPUnit_Framework_TestCase
         $instance = new DatabaseRepository($conn);
 
         $conn->shouldReceive('table')->once()->withAnyArgs()->andReturn($conn);
-        $conn->shouldReceive('where')->once()->with('siteKey', 'default')->andReturn($conn);
+        $conn->shouldReceive('where')->once()->with('site_key', 'default')->andReturn($conn);
         $conn->shouldReceive('where')->once()->with('name', 'board.instance1')->andReturn($conn);
         $conn->shouldReceive('first')->once()->withNoArgs()->andReturn((object)[
             'name' => 'board.instance1',
@@ -46,7 +46,7 @@ class DatabaseRepositoryTest extends \PHPUnit_Framework_TestCase
         $instance = new DatabaseRepository($conn);
 
         $conn->shouldReceive('table')->once()->withAnyArgs()->andReturn($conn);
-        $conn->shouldReceive('where')->once()->with('siteKey', 'default')->andReturn($conn);
+        $conn->shouldReceive('where')->once()->with('site_key', 'default')->andReturn($conn);
         $conn->shouldReceive('whereRaw')->once()->with("'board.instance1' like concat(`name`, '.', '%')")->andReturn($conn);
         $conn->shouldReceive('where')->once()->with('name', '<>', 'board.instance1')->andReturn($conn);
         $conn->shouldReceive('get')->once()->withNoArgs()->andReturn([
@@ -72,7 +72,7 @@ class DatabaseRepositoryTest extends \PHPUnit_Framework_TestCase
         $instance = new DatabaseRepository($conn);
 
         $conn->shouldReceive('table')->once()->withAnyArgs()->andReturn($conn);
-        $conn->shouldReceive('where')->once()->with('siteKey', 'default')->andReturn($conn);
+        $conn->shouldReceive('where')->once()->with('site_key', 'default')->andReturn($conn);
         $conn->shouldReceive('where')->once()->with('name', 'like', 'board.%')->andReturn($conn);
         $conn->shouldReceive('where')->once()->with('name', '<>', 'board')->andReturn($conn);
         $conn->shouldReceive('get')->once()->withNoArgs()->andReturn([
@@ -98,7 +98,7 @@ class DatabaseRepositoryTest extends \PHPUnit_Framework_TestCase
         $instance = new DatabaseRepository($conn);
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
-        $mockConfig->siteKey = 'default';
+        $mockConfig->site_key = 'default';
         $mockConfig->name = 'board.instance1';
         $mockConfig->shouldReceive('getAttributes')->andReturn([
             'name' => 'board.instance1',
@@ -106,7 +106,7 @@ class DatabaseRepositoryTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $conn->shouldReceive('table')->withAnyArgs()->andReturn($conn);
-        $conn->shouldReceive('where')->once()->with('siteKey', 'default')->andReturn($conn);
+        $conn->shouldReceive('where')->once()->with('site_key', 'default')->andReturn($conn);
         $conn->shouldReceive('where')->once()->with('name', 'board.instance1')->andReturn($conn);
         $conn->shouldReceive('first')->once()->withNoArgs()->andReturnNull();
 
@@ -129,7 +129,7 @@ class DatabaseRepositoryTest extends \PHPUnit_Framework_TestCase
         $instance = new DatabaseRepository($conn);
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
-        $mockConfig->siteKey = 'default';
+        $mockConfig->site_key = 'default';
         $mockConfig->name = 'board.instance1';
         $mockConfig->shouldReceive('getDirty')->andReturn([
             'vars' => '{"limit":25,"perPage":5}'
@@ -140,14 +140,14 @@ class DatabaseRepositoryTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $conn->shouldReceive('table')->withAnyArgs()->andReturn($conn);
-        $conn->shouldReceive('where')->once()->with('siteKey', 'default')->andReturn($conn);
+        $conn->shouldReceive('where')->once()->with('site_key', 'default')->andReturn($conn);
         $conn->shouldReceive('where')->once()->with('name', 'board.instance1')->andReturn($conn);
         $conn->shouldReceive('first')->once()->withNoArgs()->andReturn((object)[
             'name' => 'board.instance1',
             'vars' => '{"limit":20,"perPage":10}'
         ]);
 
-        $conn->shouldReceive('where')->once()->with('siteKey', 'default')->andReturn($conn);
+        $conn->shouldReceive('where')->once()->with('site_key', 'default')->andReturn($conn);
         $conn->shouldReceive('where')->once()->with('name', 'board.instance1')->andReturn($conn);
         $conn->shouldReceive('update')->once()->with([
             'vars' => '{"limit":25,"perPage":5}'
@@ -165,11 +165,11 @@ class DatabaseRepositoryTest extends \PHPUnit_Framework_TestCase
         list($conn) = $this->getMocks();
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
-        $mockConfig->siteKey = 'default';
+        $mockConfig->site_key = 'default';
         $mockConfig->name = 'board.instance1';
 
         $conn->shouldReceive('table')->withAnyArgs()->andReturn($conn);
-        $conn->shouldReceive('where')->once()->with('siteKey', 'default')->andReturn($conn);
+        $conn->shouldReceive('where')->once()->with('site_key', 'default')->andReturn($conn);
         $conn->shouldReceive('where')->once()->with('name', 'like', 'board.instance1%')->andReturn($conn);
         $conn->shouldReceive('where')->once()->with('name', '<>', 'board.instance1')->andReturn($conn);
         $conn->shouldReceive('where')->once()->with('name', 'not like', 'board.instance1.sub2%')->andReturn($conn);
@@ -187,7 +187,7 @@ class DatabaseRepositoryTest extends \PHPUnit_Framework_TestCase
         $query = m::mock('Illuminate\Database\Query\Builder');
 
         $conn->shouldReceive('table')->withAnyArgs()->andReturn($query);
-        $query->shouldReceive('where')->once()->with('siteKey', 'default')->andReturn($query);
+        $query->shouldReceive('where')->once()->with('site_key', 'default')->andReturn($query);
         $query->shouldReceive('where')->once()->with(m::on(function ($closure) use ($query) {
             $query->shouldReceive('where')->once()->with('name', 'like', 'board.instance1.%')->andReturn($query);
             $query->shouldReceive('orWhere')->once()->with('name', 'board.instance1')->andReturn($query);
@@ -210,11 +210,11 @@ class DatabaseRepositoryTest extends \PHPUnit_Framework_TestCase
         $instance = new DatabaseRepository($conn);
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
-        $mockConfig->siteKey = 'default';
+        $mockConfig->site_key = 'default';
         $mockConfig->name = 'board.instance1';
 
         $conn->shouldReceive('table')->andReturn($query);
-        $query->shouldReceive('where')->twice()->with('siteKey', 'default')->andReturnSelf();
+        $query->shouldReceive('where')->twice()->with('site_key', 'default')->andReturnSelf();
         $query->shouldReceive('where')->twice()->with(m::on(function ($closure) use ($query) {
             $query->shouldReceive('where')->once()->with('name', 'board.instance1')->andReturnSelf();
             $query->shouldReceive('orWhere')->once()->with('name', 'like', 'board.instance1.%')->andReturnSelf();
@@ -244,11 +244,11 @@ class DatabaseRepositoryTest extends \PHPUnit_Framework_TestCase
         $instance = new DatabaseRepository($conn);
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
-        $mockConfig->siteKey = 'default';
+        $mockConfig->site_key = 'default';
         $mockConfig->name = 'board.instance1';
 
         $conn->shouldReceive('table')->andReturn($query);
-        $query->shouldReceive('where')->once()->with('siteKey', 'default')->andReturnSelf();
+        $query->shouldReceive('where')->once()->with('site_key', 'default')->andReturnSelf();
         $query->shouldReceive('where')->once()->with(m::on(function ($closure) use ($query) {
             $query->shouldReceive('where')->once()->with('name', 'board.instance1')->andReturnSelf();
             $query->shouldReceive('orWhere')->once()->with('name', 'like', 'board.instance1.%')->andReturnSelf();

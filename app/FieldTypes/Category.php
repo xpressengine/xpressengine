@@ -60,7 +60,7 @@ class Category extends AbstractType
     public function getColumns()
     {
         return [
-            'itemId' => (new ColumnEntity('itemId', ColumnDataType::STRING))->setParams([255]),
+            'item_id' => (new ColumnEntity('item_id', ColumnDataType::STRING))->setParams([255]),
         ];
     }
 
@@ -76,7 +76,7 @@ class Category extends AbstractType
             $required = 'required';
         }
 
-        return ['itemId' => $required];
+        return ['item_id' => $required];
     }
 
     /**
@@ -86,7 +86,7 @@ class Category extends AbstractType
      */
     public function getSettingsRules()
     {
-        return ['categoryId' => 'required'];
+        return ['category_id' => 'required'];
     }
 
     /**
@@ -100,7 +100,7 @@ class Category extends AbstractType
     {
         $category = null;
         if ($config != null) {
-            $category = CategoryModel::find($config->get('categoryId'));
+            $category = CategoryModel::find($config->get('category_id'));
         }
 
         XeFrontend::rule('dynamicFieldSection', $this->getSettingsRules());

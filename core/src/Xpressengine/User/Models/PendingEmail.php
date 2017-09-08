@@ -38,9 +38,9 @@ class PendingEmail extends DynamicModel implements EmailInterface
     protected $dynamic = false;
 
     protected $fillable = [
-        'userId',
+        'user_id',
         'address',
-        'confirmationCode'
+        'confirmation_code'
     ];
 
     /**
@@ -50,7 +50,7 @@ class PendingEmail extends DynamicModel implements EmailInterface
      */
     public function user()
     {
-        return $this->belongsTo(User::class, 'userId');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
@@ -83,7 +83,7 @@ class PendingEmail extends DynamicModel implements EmailInterface
      */
     public function getConfirmationCode()
     {
-        return $this->getAttribute('confirmationCode');
+        return $this->getAttribute('confirmation_code');
     }
 
 

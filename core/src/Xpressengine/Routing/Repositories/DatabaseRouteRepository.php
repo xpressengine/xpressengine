@@ -93,7 +93,7 @@ class DatabaseRouteRepository implements RouteRepository
     {
         $model = $this->createModel();
 
-        return $model->newQuery()->where('url', $url)->where('siteKey', $siteKey)->first();
+        return $model->newQuery()->where('url', $url)->where('site_key', $siteKey)->first();
     }
 
     /**
@@ -106,7 +106,7 @@ class DatabaseRouteRepository implements RouteRepository
     {
         $model = $this->createModel();
 
-        return $model->newQuery()->where('instanceId', $instanceId)->first();
+        return $model->newQuery()->where('instance_id', $instanceId)->first();
     }
 
     /**
@@ -119,7 +119,7 @@ class DatabaseRouteRepository implements RouteRepository
     {
         $model = $this->createModel();
 
-        return $model->newQuery()->where('siteKey', $siteKey)->get();
+        return $model->newQuery()->where('site_key', $siteKey)->get();
     }
 
     /**
@@ -158,7 +158,7 @@ class DatabaseRouteRepository implements RouteRepository
      */
     public function put(InstanceRoute $route)
     {
-        if (!$this->validateUrl($route->siteKey, $route->url, $route->exists === false)) {
+        if (!$this->validateUrl($route->site_key, $route->url, $route->exists === false)) {
             throw new UnusableUrlException(['url' => $route->url]);
         }
 

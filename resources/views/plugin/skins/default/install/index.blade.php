@@ -14,6 +14,16 @@
     </div>
 </div>
 
+@if(!$available)
+<div class="row">
+    <div class="col-sm-12">
+        <div class="alert alert-danger">
+            <code>allow_url_fopen</code> 설정이 꺼져있습니다. 플러그인을 설치하려면 php.ini 파일에서 이 설정을 켜야 합니다.
+        </div>
+    </div>
+</div>
+@endif
+
 <div class="row">
     <div class="col-sm-12">
         <form action="{{ route('settings.plugins.install') }}" method="POST" id="__xe_install_form">
@@ -24,7 +34,17 @@
 
                 <ul class="admin-choice-list">
                 </ul>
+                @if(!$available)
+                    <button type="button"
+                            onclick="alert('allow_url_fopen 설정이 꺼져있습니다. ' +
+                             '플러그인을 설치하려면 php.ini 파일에서 이 설정을 켜야 합니다.');return false;"
+                            class="xe-btn xe-btn-primary-outline xe-btn-install">
+                        <i class="xi-cog"></i>설치하기
+                    </button>
+                @else
                 <button type="submit" class="xe-btn xe-btn-primary-outline xe-btn-install __xe_install_btn" disabled><i class="xi-cog"></i>설치하기</button>
+                @endif
+
             </div>
         </form>
     </div>

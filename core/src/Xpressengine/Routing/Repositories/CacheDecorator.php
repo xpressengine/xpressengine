@@ -123,8 +123,8 @@ class CacheDecorator implements RouteRepository
      */
     protected function cachingItem(InstanceRoute $route)
     {
-        $this->cache->put($this->getCacheKey($route->siteKey . '_' . $route->url), $route, $this->minutes);
-        $this->cache->put($this->getCacheKey($route->instanceId), $route, $this->minutes);
+        $this->cache->put($this->getCacheKey($route->site_key . '_' . $route->url), $route, $this->minutes);
+        $this->cache->put($this->getCacheKey($route->instance_id), $route, $this->minutes);
     }
 
     /**
@@ -228,8 +228,8 @@ class CacheDecorator implements RouteRepository
      */
     public function delete(InstanceRoute $route)
     {
-        $this->cache->forget($this->getCacheKey($route->siteKey . '_' . $route->url));
-        $this->cache->forget($this->getCacheKey($route->instanceId));
+        $this->cache->forget($this->getCacheKey($route->site_key . '_' . $route->url));
+        $this->cache->forget($this->getCacheKey($route->instance_id));
 
         return $this->repo->delete($route);
     }

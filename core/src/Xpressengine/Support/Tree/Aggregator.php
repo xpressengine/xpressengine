@@ -76,7 +76,7 @@ abstract class Aggregator extends DynamicModel
      */
     public function getForeignKey()
     {
-        return Str::camel(class_basename($this)).'Id';
+        return Str::snake(class_basename($this)).'_id';
     }
 
     /**

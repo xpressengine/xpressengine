@@ -38,7 +38,7 @@ class TagHandlerTest extends \PHPUnit_Framework_TestCase
         $mockTagExists2->shouldReceive('offsetGet')->with('word')->andReturn('cms');
 
         $repo->shouldReceive('query')->andReturnSelf();
-        $repo->shouldReceive('where')->once()->with('instanceId', null)->andReturnSelf();
+        $repo->shouldReceive('where')->once()->with('instance_id', null)->andReturnSelf();
         $repo->shouldReceive('whereIn')->once()->with('word', ['laravel', 'cms', 'xpressengine'])->andReturnSelf();
         $repo->shouldReceive('get')->once()->andReturn(new Collection([$mockTagExists1, $mockTagExists2]));
 

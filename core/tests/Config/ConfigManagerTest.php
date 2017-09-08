@@ -23,7 +23,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         list($repo, $validator) = $this->getMocks();
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
-        $mockConfig->siteKey = 'default';
+        $mockConfig->site_key = 'default';
         $mockConfig->name = 'board.notice';
 
         $repo->shouldReceive('find')->once()->with('default', 'board.notice')->andReturnNull();
@@ -195,7 +195,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         list($repo, $validator) = $this->getMocks();
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
-        $mockConfig->siteKey = 'default';
+        $mockConfig->site_key = 'default';
         $mockConfig->name = 'board.notice';
 
         $repo->shouldReceive('find')->twice()->with('default', 'board.notice')->andReturnNull();
@@ -283,7 +283,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         list($repo, $validator) = $this->getMocks();
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
-        $mockConfig->siteKey = 'default';
+        $mockConfig->site_key = 'default';
         $mockConfig->name = 'board.notice';
         $mockConfig->shouldReceive('get')->once()->with('listCount')->andReturn(20);
         $mockConfig->shouldReceive('get')->once()->with('downloadable')->andReturn(true);
@@ -351,7 +351,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         list($repo, $validator) = $this->getMocks();
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
-        $mockConfig->siteKey = 'default';
+        $mockConfig->site_key = 'default';
         $mockConfig->name = 'board.notice';
 
         $repo->shouldReceive('find')->once()->with('default', 'board.notice')->andReturn($mockConfig);
@@ -370,7 +370,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         list($repo, $validator) = $this->getMocks();
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
-        $mockConfig->siteKey = 'default';
+        $mockConfig->site_key = 'default';
         $mockConfig->name = 'board.notice';
 
         $repo->shouldReceive('find')->once()->with('default', 'board.notice')->andReturnNull();
@@ -392,7 +392,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         $instance = new ConfigManager($repo, $validator);
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
-        $mockConfig->siteKey = 'default';
+        $mockConfig->site_key = 'default';
         $mockConfig->name = 'board.notice';
 
         $mockDesc1 = m::mock('Xpressengine\Config\ConfigEntity');
@@ -412,7 +412,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         list($repo, $validator) = $this->getMocks();
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
-        $mockConfig->siteKey = 'default';
+        $mockConfig->site_key = 'default';
         $mockConfig->name = 'board.notice';
 
         $repo->shouldReceive('remove')->once()->with('default', 'board.notice')->andReturnNull();
@@ -443,7 +443,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         list($repo, $validator) = $this->getMocks();
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
-        $mockConfig->siteKey = 'default';
+        $mockConfig->site_key = 'default';
         $mockConfig->name = 'board.notice';
         $mockConfig->shouldReceive('getDepth')->andReturn(2);
 
@@ -528,7 +528,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         $instance = new ConfigManager($repo, $validator);
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
-        $mockConfig->siteKey = 'default';
+        $mockConfig->site_key = 'default';
 
         $repo->shouldReceive('find')->once()->with('default', 'invalid.to')->andReturnNull();
 
@@ -567,7 +567,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
         $mockConfig->shouldReceive('getParent')->andReturnNull();
         $mockConfig->shouldReceive('getDepth')->andReturn(1);
-        $mockConfig->siteKey = 'default';
+        $mockConfig->site_key = 'default';
         $mockConfig->name = 'board.notice';
         $mockConfig->shouldReceive('get')->with('listCount', null)->andReturn(10);
 
@@ -597,7 +597,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
         $mockConfig->shouldReceive('getParent')->andReturn($mockParent);
         $mockConfig->shouldReceive('getDepth')->andReturn(2);
-        $mockConfig->siteKey = 'default';
+        $mockConfig->site_key = 'default';
         $mockConfig->name = 'board.notice';
 
 
@@ -619,7 +619,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
         $mockConfig->shouldReceive('getParent')->andReturn($mockParent);
         $mockConfig->shouldReceive('getDepth')->andReturn(2);
-        $mockConfig->siteKey = 'default';
+        $mockConfig->site_key = 'default';
         $mockConfig->name = 'board.notice';
 
         $mockToConfig = m::mock('Xpressengine\Config\ConfigEntity');

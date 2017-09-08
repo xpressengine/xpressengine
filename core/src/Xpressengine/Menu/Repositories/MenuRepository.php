@@ -117,7 +117,7 @@ class MenuRepository
     public function fetchBySiteKey($siteKey, $with = [])
     {
         return $this->cacheCall(__FUNCTION__, func_get_args(), function () use ($siteKey, $with) {
-            return $this->query()->with($with)->where('siteKey', $siteKey)->get();
+            return $this->query()->with($with)->where('site_key', $siteKey)->get();
         });
     }
 }

@@ -185,7 +185,7 @@ class DocumentHandlerTest extends PHPUnit_Framework_TestCase
 
         $attributes = [
             'id' => $docId,
-            'instanceId' => $instanceId,
+            'instance_id' => $instanceId,
         ];
 
         $docModel = $this->getDocModel();
@@ -246,12 +246,12 @@ class DocumentHandlerTest extends PHPUnit_Framework_TestCase
 
         $attributes = [
             'id' => $docId,
-            'instanceId' => $instanceId,
+            'instance_id' => $instanceId,
         ];
 
         $docModel = $this->getDocModel();
         $docModel->shouldReceive('getAttribute')->with('id')->andReturn($docId);
-        $docModel->shouldReceive('getAttribute')->with('instanceId')->andReturn($instanceId);
+        $docModel->shouldReceive('getAttribute')->with('instance_id')->andReturn($instanceId);
         $docModel->shouldReceive('getAttribute')->with('content')->andReturn($content);
         $docModel->shouldReceive('setConfig');
         $docModel->shouldReceive('fixedAttributes')->with($attributes)->andReturn($attributes);
@@ -305,7 +305,7 @@ class DocumentHandlerTest extends PHPUnit_Framework_TestCase
 
         $attributes = [
             'id' => $docId,
-            'instanceId' => $instanceId,
+            'instance_id' => $instanceId,
         ];
 
         $configEntity = $this->getConfigEntity();
@@ -335,16 +335,16 @@ class DocumentHandlerTest extends PHPUnit_Framework_TestCase
 
         $docModel = $this->getDocModel();
         $docModel->shouldReceive('getAttribute')->with('id')->andReturn($docId);
-        $docModel->shouldReceive('getAttribute')->with('instanceId')->andReturn($instanceId);
+        $docModel->shouldReceive('getAttribute')->with('instance_id')->andReturn($instanceId);
         $docModel->shouldReceive('getAttribute')->with('content')->andReturn($content);
-        $docModel->shouldReceive('setAttribute')->with('pureContent', $content);
+        $docModel->shouldReceive('setAttribute')->with('pure_content', $content);
         $docModel->shouldReceive('getAttribute')->with('ipaddress')->andReturn('127.0.0.1');
         $docModel->shouldReceive('getPureContent')->andReturn($content);
         $docModel->shouldReceive('checkRequired');
         $docModel->shouldReceive('setProxyOptions');
         $docModel->shouldReceive('toArray')->andReturn($attributes);
         $docModel->shouldReceive('save');
-        $docModel->shouldReceive('getOriginal')->with('instanceId')->andReturn($originInstanceId);
+        $docModel->shouldReceive('getOriginal')->with('instance_id')->andReturn($originInstanceId);
         $docModel->shouldReceive('getDynamicAttributes')->andReturn([]);
         $docModel->shouldReceive('hasMacro')->andReturn(false);
         $docModel->shouldReceive('getAttributes')->andReturn($attributes);
@@ -352,7 +352,7 @@ class DocumentHandlerTest extends PHPUnit_Framework_TestCase
         $orgModel = $this->getDocModel();
         $orgModel->shouldReceive('hasMacro')->andReturn(false);
         $orgModel->shouldReceive('getAttribute')->with('id')->andReturn($docId);
-        $orgModel->shouldReceive('getAttribute')->with('instanceId')->andReturn($originInstanceId);
+        $orgModel->shouldReceive('getAttribute')->with('instance_id')->andReturn($originInstanceId);
 
         $newModel = $this->getDocModel();
         $newModel->shouldReceive('setConfig');
@@ -396,7 +396,7 @@ class DocumentHandlerTest extends PHPUnit_Framework_TestCase
 
         $docModel = $this->getDocModel();
         $docModel->shouldReceive('hasMacro')->andReturn(false);
-        $docModel->shouldReceive('getAttribute')->with('instanceId')->andReturn($instanceId);
+        $docModel->shouldReceive('getAttribute')->with('instance_id')->andReturn($instanceId);
         $docModel->shouldReceive('setProxyOptions');
         $docModel->shouldReceive('delete')->andReturn(1);
 

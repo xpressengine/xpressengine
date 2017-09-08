@@ -88,7 +88,7 @@ class RegisterTokenRepository
         // the database so that we can verify the token within the actual reset.
         $id = $this->createNewToken();
 
-        $payload = ['id' => $id, 'guard' => $guard, 'data' => serialize($data), 'createdAt' => new Carbon];
+        $payload = ['id' => $id, 'guard' => $guard, 'data' => serialize($data), 'created_at' => new Carbon];
 
         $result = $this->getTable()->insert($payload);
 
@@ -138,7 +138,7 @@ class RegisterTokenRepository
      */
     private function tokenExpired($token)
     {
-        $expirationTime = strtotime($token['createdAt']) + $this->expires;
+        $expirationTime = strtotime($token['created_at']) + $this->expires;
 
         return $expirationTime < $this->getCurrentTime();
     }
@@ -174,7 +174,7 @@ class RegisterTokenRepository
     {
         $expiredAt = Carbon::now()->subSeconds($this->expires);
 
-        $this->getTable()->where('createdAt', '<', $expiredAt)->delete();
+        $this->getTable()->where('created_at', '<', $expiredAt)->delete();
     }
 
     /**

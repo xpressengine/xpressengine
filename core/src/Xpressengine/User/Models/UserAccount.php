@@ -35,12 +35,12 @@ class UserAccount extends DynamicModel implements AccountInterface
     public $incrementing = false;
 
     protected $fillable = [
-        'userId',
+        'user_id',
         'email',
-        'accountId',
+        'account_id',
         'provider',
         'token',
-        'tokenSecret',
+        'token_secret',
         'data'
     ];
 
@@ -56,7 +56,7 @@ class UserAccount extends DynamicModel implements AccountInterface
      */
     public function user()
     {
-        return $this->belongsTo(User::class, 'userId');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
@@ -66,7 +66,7 @@ class UserAccount extends DynamicModel implements AccountInterface
      */
     public function getUserId()
     {
-        return $this->getAttribute('userId');
+        return $this->getAttribute('user_id');
     }
 
     /**
