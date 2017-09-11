@@ -39,7 +39,7 @@
             @endif
         });
 
-        $(document).on('click', 'a[target]', function (e) {
+        $(document).on('click', 'a[target]:not([target=_self],[target=_top],[target=_parent])', function (e) {
             e.preventDefault();
 
             var $this = $(this);
