@@ -27,13 +27,6 @@ use App\UIObjects\Captcha\CaptchaUIObject;
 class CaptchaServiceProvider extends ServiceProvider
 {
     /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
-
-    /**
      * Bootstrap the application events.
      *
      * @return void
@@ -52,20 +45,11 @@ class CaptchaServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(['xe.captcha' => CaptchaManager::class], function ($app) {
+        $this->app->singleton(CaptchaManager::class, function ($app) {
             $proxyClass = $app['xe.interception']->proxy(CaptchaManager::class, 'Captcha');
             $captchaManager = new $proxyClass($app);
             return $captchaManager;
         });
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return ['xe.captcha'];
+        $this->app->alias(CaptchaManager::class, 'xe.captcha');
     }
 }

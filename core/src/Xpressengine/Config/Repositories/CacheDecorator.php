@@ -93,7 +93,7 @@ class CacheDecorator implements ConfigRepository
     {
         $data = $this->getData($siteKey, $this->getHead($name));
 
-        return Arr::first($data, function ($idx, $item) use ($name) {
+        return Arr::first($data, function ($item, $idx) use ($name) {
             return $item->name === $name;
         });
     }
@@ -109,7 +109,7 @@ class CacheDecorator implements ConfigRepository
     {
         $data = $this->getData($siteKey, $this->getHead($name));
 
-        return Arr::where($data, function ($idx, $item) use ($name) {
+        return Arr::where($data, function ($item, $idx) use ($name) {
             return Str::startsWith($name, $item->name.'.') && $name !== $item->name;
         });
     }
@@ -125,7 +125,7 @@ class CacheDecorator implements ConfigRepository
     {
         $data = $this->getData($siteKey, $this->getHead($name));
 
-        return Arr::where($data, function ($idx, $item) use ($name) {
+        return Arr::where($data, function ($item, $idx) use ($name) {
             return Str::startsWith($item->name, $name.'.') && $name !== $item->name;
         });
     }

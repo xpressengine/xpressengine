@@ -199,4 +199,18 @@ class Permission extends Entity implements IteratorAggregate
     {
         return count(explode('.', $this->name));
     }
+
+    /**
+     * Dynamically set attributes on the object.
+     *
+     * override. Fluent::__set call offsetGet
+     *
+     * @param string $key   key
+     * @param mixed  $value value
+     * @return void
+     */
+    public function __set($key, $value)
+    {
+        $this->attributes[$key] = $value;
+    }
 }

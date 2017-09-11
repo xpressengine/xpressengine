@@ -13,10 +13,10 @@
  */
 namespace Xpressengine\Storage;
 
+use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Xpressengine\User\UserInterface;
-use Xpressengine\User\GuardInterface as Authenticator;
 use Xpressengine\Storage\Exceptions\InvalidFileException;
 use Xpressengine\Storage\Exceptions\FileDoesNotExistException;
 use Xpressengine\Keygen\Keygen;
@@ -50,9 +50,9 @@ class Storage
     protected $files;
 
     /**
-     * Authenticator instance
+     * Guard instance
      *
-     * @var Authenticator
+     * @var Guard
      */
     protected $auth;
 
@@ -89,7 +89,7 @@ class Storage
      *
      * @param FileRepository    $repo        file repository instance
      * @param FilesystemHandler $files       filesystem handler instance
-     * @param Authenticator     $auth        Authenticator instance
+     * @param Guard             $auth        Guard instance
      * @param Keygen            $keygen      key generator instance
      * @param Distributor       $distributor distributor instance
      * @param TempFileCreator   $tempFiles   temporary file creator instance
@@ -98,7 +98,7 @@ class Storage
     public function __construct(
         FileRepository $repo,
         FilesystemHandler $files,
-        Authenticator $auth,
+        Guard $auth,
         Keygen $keygen,
         Distributor $distributor,
         TempFileCreator $tempFiles,

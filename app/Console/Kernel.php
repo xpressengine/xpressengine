@@ -7,31 +7,27 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
+    /**
+     * The bootstrap classes for the application.
+     *
+     * @var array
+     */
+    protected $bootstrappers = [
+        \Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables::class,
+        \App\Bootstrappers\LoadConfiguration::class,
+        \Illuminate\Foundation\Bootstrap\HandleExceptions::class,
+        \Illuminate\Foundation\Bootstrap\RegisterFacades::class,
+        \Illuminate\Foundation\Bootstrap\SetRequestForConsole::class,
+        \Illuminate\Foundation\Bootstrap\RegisterProviders::class,
+        \Illuminate\Foundation\Bootstrap\BootProviders::class,
+    ];
 
-	/**
-	 * The bootstrap classes for the application.
-	 *
-	 * @var array
-	 */
-	protected $bootstrappers = [
-			'Illuminate\Foundation\Bootstrap\DetectEnvironment',
-			'App\Bootstrappers\LoadConfiguration',
-			'Illuminate\Foundation\Bootstrap\ConfigureLogging',
-			'Illuminate\Foundation\Bootstrap\HandleExceptions',
-			'Illuminate\Foundation\Bootstrap\RegisterFacades',
-			'Illuminate\Foundation\Bootstrap\SetRequestForConsole',
-			'Illuminate\Foundation\Bootstrap\RegisterProviders',
-			'Illuminate\Foundation\Bootstrap\BootProviders',
-	];
-
-	/**
-	 * The Artisan commands provided by your application.
-	 *
-	 * @var array
-	 */
-	protected $commands = [
-        Commands\Inspire::class,
-        Commands\XeInstall::class,
+    /**
+     * The Artisan commands provided by your application.
+     *
+     * @var array
+     */
+    protected $commands = [
         Commands\XeUpdate::class,
         Commands\Trash::class,
         Commands\TrashClean::class,
@@ -47,18 +43,31 @@ class Kernel extends ConsoleKernel
         Commands\PluginComposerSync::class,
         Commands\ThemeMake::class,
         Commands\SkinMake::class,
-	];
+    ];
 
-	/**
-	 * Define the application's command schedule.
-	 *
-	 * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
-	 * @return void
-	 */
-	protected function schedule(Schedule $schedule)
-	{
-		$schedule->command('inspire')->hourly();
-	}
+    /**
+     * Define the application's command schedule.
+     *
+     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @return void
+     */
+    protected function schedule(Schedule $schedule)
+    {
+        // $schedule->command('inspire')
+        //          ->hourly();
+    }
+
+    /**
+     * Register the commands for the application.
+     *
+     * @return void
+     */
+    protected function commands()
+    {
+//        $this->load(__DIR__.'/Commands');
+
+        require base_path('routes/console.php');
+    }
 
     /**
      * Bootstrap the application for artisan commands.
@@ -72,8 +81,6 @@ class Kernel extends ConsoleKernel
 
         if (!$this->isInstalled() && $withXE !== true) {
             $this->resetForFramework();
-        } else {
-            $this->setCommandAfterInstall();
         }
 
         parent::bootstrap();
@@ -121,19 +128,6 @@ class Kernel extends ConsoleKernel
      */
     protected function setCommandBeforeInstall()
     {
-        $this->commands = array_intersect($this->commands, [
-            Commands\Inspire::class,
-            Commands\XeInstall::class
-        ]);
-    }
-
-    /**
-     * Define commands for after installation
-     *
-     * @return void
-     */
-    protected function setCommandAfterInstall()
-    {
-        $this->commands = array_diff($this->commands, [Commands\XeInstall::class]);
+        $this->commands = [Commands\XeInstall::class];
     }
 }

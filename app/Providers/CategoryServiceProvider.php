@@ -31,13 +31,6 @@ use Xpressengine\Category\Repositories\CategoryRepository;
 class CategoryServiceProvider extends ServiceProvider
 {
     /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
-
-    /**
      * Bootstrap the application events.
      *
      * @return void
@@ -60,7 +53,7 @@ class CategoryServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(['xe.category' => CategoryHandler::class], function ($app) {
+        $this->app->singleton(CategoryHandler::class, function ($app) {
             $proxyClass = $app['xe.interception']->proxy(CategoryHandler::class, 'XeCategory');
 
             return new $proxyClass(
@@ -68,15 +61,6 @@ class CategoryServiceProvider extends ServiceProvider
                 new CategoryItemRepository($app['events'])
             );
         }, true);
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return ['xe.category'];
+        $this->app->alias(CategoryHandler::class, 'xe.category');
     }
 }

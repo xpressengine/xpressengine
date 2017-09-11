@@ -25,13 +25,6 @@ use Xpressengine\Plugin\PluginScanner;
 class PluginServiceProvider extends ServiceProvider
 {
     /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
-
-    /**
      * Register the service provider.
      *
      * @return void
@@ -83,66 +76,59 @@ class PluginServiceProvider extends ServiceProvider
 
     protected function registerPluginHandler()
     {
-        $this->app->singleton(
-            ['xe.plugin' => PluginHandler::class],
-            function ($app) {
+        $this->app->singleton(PluginHandler::class, function ($app) {
+            $pluginDir = base_path('plugins');
 
-                $pluginDir = base_path('plugins');
+            $app['view']->addLocation($pluginDir);
 
-                $app['view']->addLocation($pluginDir);
+            $pluginStatus = $app['xe.config']->getVal('plugin.list', []);
 
-                $pluginStatus = $app['xe.config']->getVal('plugin.list', []);
-
-                $cachePath = $app['config']->get('cache.stores.plugins.path');
-                if ($app['config']->get('app.debug') === true || !is_writable($cachePath)) {
-                    $cache = new ArrayPluginCache();
-                    $app->terminating(
-                        function () {
-                            app('cache')->driver('plugins')->forget('list');
-                        }
-                    );
-                } else {
-                    $cache = new FilePluginCache($app['cache']->driver('plugins'), 'list');
-                }
-
-                $pluginCollection = new PluginCollection($app[PluginScanner::class], $cache, PluginEntity::class, $pluginStatus);
-
-                /** @var \Xpressengine\Interception\InterceptionHandler $interception */
-                $interception = $app['xe.interception'];
-                $pluginHandler = $interception->proxy(PluginHandler::class, 'XePlugin');
-                $pluginHandler = new $pluginHandler(
-                    $pluginDir, $pluginCollection, $app['xe.plugin.provider'], $app['view'], $app['xe.pluginRegister'], $app
+            $cachePath = $app['config']->get('cache.stores.plugins.path');
+            if ($app['config']->get('app.debug') === true || !is_writable($cachePath)) {
+                $cache = new ArrayPluginCache();
+                $app->terminating(
+                    function () {
+                        app('cache')->driver('plugins')->forget('list');
+                    }
                 );
-
-                $pluginHandler->setConfig($app['xe.config']);
-
-                return $pluginHandler;
+            } else {
+                $cache = new FilePluginCache($app['cache']->driver('plugins'), 'list');
             }
-        );
+
+            $pluginCollection = new PluginCollection($app[PluginScanner::class], $cache, PluginEntity::class, $pluginStatus);
+
+            /** @var \Xpressengine\Interception\InterceptionHandler $interception */
+            $interception = $app['xe.interception'];
+            $pluginHandler = $interception->proxy(PluginHandler::class, 'XePlugin');
+            $pluginHandler = new $pluginHandler(
+                $pluginDir, $pluginCollection, $app['xe.plugin.provider'], $app['view'], $app['xe.pluginRegister'], $app
+            );
+
+            $pluginHandler->setConfig($app['xe.config']);
+
+            return $pluginHandler;
+        });
+        $this->app->alias(PluginHandler::class, 'xe.plugin');
     }
 
     protected function registerPluginProvider()
     {
-        $this->app->singleton(
-            ['xe.plugin.provider' => PluginProvider::class],
-            function ($app) {
-                $url = $app['config']->get('xe.plugin.api.url');
-                $auth = $app['config']->get('xe.plugin.api.auth');
-                $provider = new PluginProvider($url, $auth);
-                return $provider;
-            }
-        );
+        $this->app->singleton(PluginProvider::class, function ($app) {
+            $url = $app['config']->get('xe.plugin.api.url');
+            $auth = $app['config']->get('xe.plugin.api.auth');
+            $provider = new PluginProvider($url, $auth);
+            return $provider;
+        });
+        $this->app->alias(PluginProvider::class, 'xe.plugin.provider');
     }
 
     protected function registerComposerWriter()
     {
-        $this->app->singleton(
-            ['xe.plugin.writer' => ComposerFileWriter::class],
-            function ($app) {
-                $writer = new ComposerFileWriter(storage_path('app/composer.plugins.json'), $app[PluginScanner::class]);
-                return $writer;
-            }
-        );
+        $this->app->singleton(ComposerFileWriter::class, function ($app) {
+            $writer = new ComposerFileWriter(storage_path('app/composer.plugins.json'), $app[PluginScanner::class]);
+            return $writer;
+        });
+        $this->app->alias(ComposerFileWriter::class, 'xe.plugin.writer');
     }
 
     /**
@@ -180,16 +166,5 @@ class PluginServiceProvider extends ServiceProvider
         foreach ($permissions as $id => $permission) {
             $register->push('settings/permission', $id, $permission);
         }
-    }
-
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return ['xe.plugin'];
     }
 }

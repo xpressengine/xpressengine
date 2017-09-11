@@ -15,7 +15,7 @@
 namespace Xpressengine\UIObject;
 
 use Illuminate\Contracts\Support\Renderable;
-use Illuminate\View\Expression;
+use Illuminate\Support\HtmlString;
 use Xpressengine\Plugin\ComponentInterface;
 use Xpressengine\Plugin\ComponentTrait;
 
@@ -73,7 +73,7 @@ abstract class AbstractUIObject implements Renderable, ComponentInterface
      */
     public function render()
     {
-        return new Expression($this->template);
+        return new HtmlString($this->template);
     }
 
     /**

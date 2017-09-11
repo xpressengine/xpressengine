@@ -25,23 +25,6 @@ use Xpressengine\Counter\Factory;
  */
 class CounterServiceProvider extends ServiceProvider
 {
-
-    /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
-
-    /**
-     * Bootstrap the application events.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-    }
-
     /**
      * Register the service provider.
      *
@@ -49,18 +32,9 @@ class CounterServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(['xe.counter' => Factory::class], function ($app) {
+        $this->app->singleton(Factory::class, function ($app) {
             return new Factory($app['xe.interception']);
         });
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return array();
+        $this->app->alias(Factory::class, 'xe.counter');
     }
 }

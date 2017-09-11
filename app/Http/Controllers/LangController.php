@@ -43,7 +43,8 @@ class LangController extends Controller
         $searchList = $pagination->toArray()['data'];
         $this->withLines($searchList);
 
-        $namespaces = $this->search()->groupBy('namespace')->lists('namespace');
+        $namespaces = $this->search()->groupBy('namespace')->get()->toArray();
+        $namespaces = array_pluck($namespaces, 'namespace');
 
         return XePresenter::make('lang.index', [
             'selected_namespace' => $namespace,
@@ -60,7 +61,7 @@ class LangController extends Controller
     public function searchKeyword(Request $request, $locale)
     {
         $term = $request->input('term');
-        $searchList = $this->search(['locale' => $locale, 'value' => $term])->get();
+        $searchList = $this->search(['locale' => $locale, 'value' => $term])->get()->toArray();
         $this->withLines($searchList);
         return XePresenter::makeApi($searchList);
     }
@@ -71,7 +72,7 @@ class LangController extends Controller
     public function getLinesWithKey($key)
     {
         list($namespace, $item) = XeLang::parseKey($key);
-        $lines = $this->search(['namespace' => $namespace, 'item' => $item])->get();
+        $lines = $this->search(['namespace' => $namespace, 'item' => $item])->get()->toArray();
         return XePresenter::makeApi($lines);
     }
 
@@ -88,7 +89,7 @@ class LangController extends Controller
         $fetch = [];
         foreach ($keys as $key) {
             list($namespace, $item) = XeLang::parseKey($key);
-            $fetch[$key] = $this->search(['namespace' => $namespace, 'item' => $item])->get();
+            $fetch[$key] = $this->search(['namespace' => $namespace, 'item' => $item])->get()->toArray();
         }
 
         return XePresenter::makeApi($fetch);
@@ -132,7 +133,7 @@ class LangController extends Controller
         foreach ( $searchList as &$search ) {
             $namespace = $search->namespace;
             $item = $search->item;
-            $search->lines = $this->search(['namespace' => $namespace, 'item' => $item])->get();
+            $search->lines = $this->search(['namespace' => $namespace, 'item' => $item])->get()->toArray();
         }
     }
 }

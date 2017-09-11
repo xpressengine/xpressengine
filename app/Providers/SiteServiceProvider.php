@@ -28,7 +28,6 @@ use Xpressengine\Site\SiteRepository;
  */
 class SiteServiceProvider extends ServiceProvider
 {
-
     /**
      * Service Provider Boot
      *
@@ -57,12 +56,10 @@ class SiteServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(
-            ['xe.site' => SiteHandler::class],
-            function ($app) {
-                $proxyClass = $app['xe.interception']->proxy(SiteHandler::class, 'XeSite');
-                return new $proxyClass(new SiteRepository(), $app['xe.config']);
-            }
-        );
+        $this->app->singleton(SiteHandler::class, function ($app) {
+            $proxyClass = $app['xe.interception']->proxy(SiteHandler::class, 'XeSite');
+            return new $proxyClass(new SiteRepository(), $app['xe.config']);
+        });
+        $this->app->alias(SiteHandler::class, 'xe.site');
     }
 }

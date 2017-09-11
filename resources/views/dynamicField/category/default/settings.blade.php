@@ -7,8 +7,8 @@
     </select>
     @else
     <select type="text" name="colorSet" class="form-control">
-        <option value="default" {{(Input::old('colorSet', $config->get('colorSet')) == 'default') ? 'selected="selected"' : ''}}>Default</option>
-        <option value="red" {{(Input::old('colorSet', $config->get('colorSet')) == 'red') ? 'selected="selected"' : ''}}>Red</option>
+        <option value="default" {{(Request::old('colorSet', $config->get('colorSet')) == 'default') ? 'selected="selected"' : ''}}>Default</option>
+        <option value="red" {{(Request::old('colorSet', $config->get('colorSet')) == 'red') ? 'selected="selected"' : ''}}>Red</option>
     </select>
     @endif
 </div>

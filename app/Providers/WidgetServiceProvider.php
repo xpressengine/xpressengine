@@ -31,14 +31,6 @@ use Xpressengine\Widget\WidgetParser;
  */
 class WidgetServiceProvider extends ServiceProvider
 {
-
-    /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
-
     /**
      * Register the service provider.
      *
@@ -46,29 +38,25 @@ class WidgetServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(
-            ['xe.widget' => WidgetHandler::class],
-            function ($app) {
+        $this->app->singleton(WidgetHandler::class, function ($app) {
+            $proxyClass = $app['xe.interception']->proxy(WidgetHandler::class, 'XeWidget');
+            $widgetHandler = new $proxyClass(
+                $app['xe.pluginRegister'],
+                $app['auth']->guard(),
+                $app['view'],
+                $app['config']->get('app.debug') === true
+            );
 
-                $proxyClass = $app['xe.interception']->proxy(WidgetHandler::class, 'XeWidget');
-                $widgetHandler = new $proxyClass(
-                    $app['xe.pluginRegister'],
-                    $app['xe.auth'],
-                    $app['view'],
-                    $app['config']->get('app.debug') === true
-                );
+            return $widgetHandler;
+        });
+        $this->app->alias(WidgetHandler::class, 'xe.widget');
 
-                return $widgetHandler;
-            }
-        );
 
-        $this->app->singleton(
-            ['xe.widget.parser' => WidgetParser::class],
-            function ($app) {
-                $handler = $app['xe.widget'];
-                return new WidgetParser($handler);
-            }
-        );
+        $this->app->singleton(WidgetParser::class, function ($app) {
+            $handler = $app['xe.widget'];
+            return new WidgetParser($handler);
+        });
+        $this->app->alias(WidgetParser::class, 'xe.widget.parser');
     }
 
     /**
@@ -81,17 +69,6 @@ class WidgetServiceProvider extends ServiceProvider
         $this->registerWidgets();
         $this->registerWidgetSkins();
         $this->registerUIObject();
-    }
-
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return array();
     }
 
     /**

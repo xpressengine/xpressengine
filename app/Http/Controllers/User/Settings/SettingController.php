@@ -18,7 +18,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Sections\DynamicFieldSection;
 use App\Http\Sections\SkinSection;
 use App\Http\Sections\ToggleMenuSection;
-use Input;
 use XePresenter;
 use Xpressengine\Captcha\CaptchaManager;
 use Xpressengine\Captcha\Exceptions\ConfigurationNotExistsException;
@@ -160,9 +159,9 @@ class SettingController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function updateJoin(CaptchaManager $captcha)
+    public function updateJoin(Request $request, CaptchaManager $captcha)
     {
-        $inputs = Input::except('_token');
+        $inputs = $request->except('_token');
 
         $inputs['guards'] = array_keys(array_get($inputs, 'guards', []));
         $inputs['forms'] = array_keys(array_get($inputs, 'forms', []));

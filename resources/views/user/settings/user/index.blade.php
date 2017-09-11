@@ -22,14 +22,14 @@
                             </button>
                             <ul class="dropdown-menu" role="menu">
                                 <li><strong>{{xe_trans('xe::approve')}}/{{xe_trans('xe::deny')}}</strong></li>
-                                <li @if(!Input::get('status')) class="active" @endif><a href="{{ route('settings.user.index', Input::except('status') ) }}">{{xe_trans('xe::all')}}</a></li>
-                                <li @if(Input::get('status') === \XeUser::STATUS_ACTIVATED) class="active" @endif><a href="{{ route('settings.user.index', array_merge(Input::all(), ['status'=> \XeUser::STATUS_ACTIVATED] )) }}">{{xe_trans('xe::permitted')}}</a></li>
-                                <li @if(Input::get('status') === \XeUser::STATUS_DENIED) class="active" @endif><a href="{{ route('settings.user.index', array_merge(Input::all(), ['status'=> \XeUser::STATUS_DENIED] )) }}">{{xe_trans('xe::rejected')}}</a></li>
+                                <li @if(!Request::get('status')) class="active" @endif><a href="{{ route('settings.user.index', Request::except('status') ) }}">{{xe_trans('xe::all')}}</a></li>
+                                <li @if(Request::get('status') === \XeUser::STATUS_ACTIVATED) class="active" @endif><a href="{{ route('settings.user.index', array_merge(Request::all(), ['status'=> \XeUser::STATUS_ACTIVATED] )) }}">{{xe_trans('xe::permitted')}}</a></li>
+                                <li @if(Request::get('status') === \XeUser::STATUS_DENIED) class="active" @endif><a href="{{ route('settings.user.index', array_merge(Request::all(), ['status'=> \XeUser::STATUS_DENIED] )) }}">{{xe_trans('xe::rejected')}}</a></li>
                                 <li class="divider"></li>
                                 <li><strong>{{xe_trans('xe::group')}}</strong></li>
-                                <li @if(!Input::get('group'))class="active"@endif><a href="{{ route('settings.user.index', Input::except(['group'])) }}"><span>{{xe_trans('xe::allGroup')}}</span></a></li>
+                                <li @if(!Request::get('group'))class="active"@endif><a href="{{ route('settings.user.index', Request::except(['group'])) }}"><span>{{xe_trans('xe::allGroup')}}</span></a></li>
                                 @foreach($groups as $key => $group)
-                                <li @if(Input::get('group') === $group->id)class="active"@endif><a href="{{ route('settings.user.index', array_merge( Input::all(), ['group'=> $group->id] )) }}">{{ $group->name }}</a></li>
+                                <li @if(Request::get('group') === $group->id)class="active"@endif><a href="{{ route('settings.user.index', array_merge( Request::all(), ['group'=> $group->id] )) }}">{{ $group->name }}</a></li>
                                 @endforeach
                             </ul>
                         </div>
@@ -43,9 +43,9 @@
                                 <div class="input-group-btn">
                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                         <span class="__xe_selectedKeyfield">
-                                        @if(Input::get('keyfield')==='displayName')
+                                        @if(Request::get('keyfield')==='displayName')
                                             {{xe_trans('xe::name')}}
-                                        @elseif(Input::get('keyfield')==='email')
+                                        @elseif(Request::get('keyfield')==='email')
                                             {{xe_trans('xe::email')}}
                                         @else
                                             {{xe_trans('xe::select')}}
@@ -59,15 +59,15 @@
                                     </ul>
                                 </div>
                                 <div class="search-input-group">
-                                    <input type="text" name="keyword" class="form-control" aria-label="Text input with dropdown button" placeholder="{{xe_trans('xe::enterKeyword')}}" value="{{ Input::get('keyword') }}">
+                                    <input type="text" name="keyword" class="form-control" aria-label="Text input with dropdown button" placeholder="{{xe_trans('xe::enterKeyword')}}" value="{{ Request::get('keyword') }}">
                                     <button type="submit" class="btn-link">
                                         <i class="xi-search"></i><span class="sr-only">{{xe_trans('xe::search')}}</span>
                                     </button>
                                 </div>
-                                @foreach(Input::except(['keyfield','keyword','page']) as $name => $value)
+                                @foreach(Request::except(['keyfield','keyword','page']) as $name => $value)
                                     <input type="hidden" name="{{ $name }}" value="{{ $value }}">
                                 @endforeach
-                                <input type="hidden" class="__xe_keyfield" name="keyfield" value="{{ Input::get('keyfield') }}">
+                                <input type="hidden" class="__xe_keyfield" name="keyfield" value="{{ Request::get('keyfield') }}">
                             </form>
                         </div>
                     </div>

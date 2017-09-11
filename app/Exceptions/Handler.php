@@ -1,11 +1,13 @@
-<?php namespace App\Exceptions;
+<?php
 
+namespace App\Exceptions;
+
+use Exception;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Event;
 use RuntimeException;
 use XePresenter;
-use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Session\TokenMismatchException;
@@ -21,7 +23,7 @@ use Xpressengine\Support\Exceptions\XpressengineException;
 class Handler extends ExceptionHandler
 {
     /**
-     * A list of the exception types that should not be reported.
+     * A list of the exception types that are not reported.
      *
      * @var array
      */
@@ -31,17 +33,73 @@ class Handler extends ExceptionHandler
     ];
 
     /**
+     * A list of the inputs that are never flashed for validation exceptions.
+     *
+     * @var array
+     */
+    protected $dontFlash = [
+        'password',
+        'password_confirmation',
+    ];
+
+    /**
      * Report or log an exception.
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param  \Exception $e
-     *
+     * @param  \Exception  $exception
      * @return void
      */
-    public function report(Exception $e)
+    public function report(Exception $exception)
     {
-        return parent::report($e);
+        parent::report($exception);
+    }
+
+    /**
+     * Render an exception into an HTTP response.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Exception  $exception
+     * @return \Illuminate\Http\Response
+     */
+    public function render($request, Exception $exception)
+    {
+        /** @var HttpXpressengineException|RuntimeException $responseException */
+        $responseException = $this->filter($exception);
+
+        // debugging mode
+        if (config('app.debug') && $exception instanceof AccessDeniedHttpException === false) {
+            return $this->renderDebugMode($request, $exception, $responseException);
+        }
+
+        // post request
+        if ($request->isMethod('post') && !$request->ajax() && !$request->wantsJson()) {
+            return redirect()->back()->with(
+                'alert',
+                [
+                    'type' => 'danger',
+                    'statusCode' => $responseException->getStatusCode(),
+                    'message' => $responseException->getMessage()
+                ]
+            )->withInput();
+        }
+
+        $view = null;
+
+        // ajax request
+        if ($request->ajax() || $request->wantsJson()) {
+            $view = XePresenter::makeApi([
+                'message' => $responseException->getMessage(),
+            ]);
+        } else {
+            XePresenter::setSkinTargetId('error');
+            $view = XePresenter::make(
+                'error',
+                ['type' => 'danger', 'exception' => $responseException, 'message' => $responseException->getMessage()]
+            );
+        }
+
+        return response($view, $responseException->getStatusCode());
     }
 
     /**
@@ -108,54 +166,6 @@ class Handler extends ExceptionHandler
         }
 
         return $responseException;
-    }
-
-    /**
-     * Render an exception into an HTTP response.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Exception               $e
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function render($request, Exception $e)
-    {
-        /** @var HttpXpressengineException|RuntimeException $responseException */
-        $responseException = $this->filter($e);
-
-        // debugging mode
-        if (config('app.debug') && $e instanceof AccessDeniedHttpException === false) {
-            return $this->renderDebugMode($request, $e, $responseException);
-        }
-
-        // post request
-        if ($request->isMethod('post') && !$request->ajax() && !$request->wantsJson()) {
-            return redirect()->back()->with(
-                'alert',
-                [
-                    'type' => 'danger',
-                    'statusCode' => $responseException->getStatusCode(),
-                    'message' => $responseException->getMessage()
-                ]
-            )->withInput();
-        }
-
-        $view = null;
-
-        // ajax request
-        if ($request->ajax() || $request->wantsJson()) {
-            $view = XePresenter::makeApi([
-                'message' => $responseException->getMessage(),
-            ]);
-        } else {
-            XePresenter::setSkinTargetId('error');
-            $view = XePresenter::make(
-                'error',
-                ['type' => 'danger', 'exception' => $responseException, 'message' => $responseException->getMessage()]
-            );
-        }
-
-        return response($view, $responseException->getStatusCode());
     }
 
     /**

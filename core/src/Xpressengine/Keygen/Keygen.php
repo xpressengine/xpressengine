@@ -33,8 +33,8 @@
  */
 namespace Xpressengine\Keygen;
 
-use Rhumsaa\Uuid\Uuid;
-use Rhumsaa\Uuid\Exception\UnsatisfiedDependencyException;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
 use Xpressengine\Keygen\Exceptions\UnknownGeneratorVersionException;
 
 /**

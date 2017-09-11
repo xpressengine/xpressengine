@@ -1,19 +1,13 @@
 <?php
-/**
- * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link        https://xpressengine.io
- */
 
 /*
 |--------------------------------------------------------------------------
-| Application Routes
+| Web Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register all of the routes for an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the controller to call when that URI is requested.
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
 |
 */
 
@@ -66,10 +60,10 @@ Route::settings(
 
 Route::fixed(
     'lang', function() {
-        Route::get('lines/many', ['as' => 'settings.lang.lines.many', 'uses' => 'LangController@getLinesMany']);
-        Route::get('lines/{key}', ['as' => 'settings.lang.lines.key', 'uses' => 'LangController@getLinesWithKey']);
-        Route::get('search/{locale}', ['as' => 'settings.lang.search', 'uses' => 'LangController@searchKeyword']);
-    }
+    Route::get('lines/many', ['as' => 'settings.lang.lines.many', 'uses' => 'LangController@getLinesMany']);
+    Route::get('lines/{key}', ['as' => 'settings.lang.lines.key', 'uses' => 'LangController@getLinesWithKey']);
+    Route::get('search/{locale}', ['as' => 'settings.lang.search', 'uses' => 'LangController@searchKeyword']);
+}
 );
 
 /* user */

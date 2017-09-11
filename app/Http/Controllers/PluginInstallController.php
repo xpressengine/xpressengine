@@ -96,8 +96,8 @@ class PluginInstallController extends Controller
             $items = new Collection($packages->data);
             $plugins = new LengthAwarePaginator($items, $packages->total, $packages->per_page, $packages->current_page);
             $plugins->setPath(route('settings.plugins.install.items'));
-            $plugins->addQuery('filter', $filter);
-            $plugins->addQuery('q', $q);
+            $plugins->appends('filter', $filter);
+            $plugins->appends('q', $q);
         }
 
         if($query) {

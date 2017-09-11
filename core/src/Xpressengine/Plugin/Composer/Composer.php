@@ -55,7 +55,6 @@ class Composer
         'xpressengine-plugin/claim' => '0.9.4',
         'xpressengine-plugin/comment' => '0.9.15',
         'xpressengine-plugin/news_client' => '0.9.5',
-        'xpressengine-plugin/orientator' => '0.9.1',
         'xpressengine-plugin/page' => '0.9.5',
         'xpressengine-plugin/widget_page' => '0.9.0'
     ];
@@ -249,8 +248,8 @@ class Composer
             $laravel = new Application(getcwd());
         }
 
-        if (file_exists($compiledPath = $laravel->getCachedCompilePath())) {
-            @unlink($compiledPath);
+        if (file_exists($packagesPath = $laravel->getCachedPackagesPath())) {
+            @unlink($packagesPath);
         }
 
         if (file_exists($servicesPath = $laravel->getCachedServicesPath())) {

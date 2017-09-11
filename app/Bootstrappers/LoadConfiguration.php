@@ -4,8 +4,6 @@ namespace App\Bootstrappers;
 use Illuminate\Contracts\Config\Repository as RepositoryContract;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Bootstrap\LoadConfiguration as BaseLoadConfiguration;
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Finder\SplFileInfo;
 
 class LoadConfiguration extends BaseLoadConfiguration
 {
@@ -19,7 +17,8 @@ class LoadConfiguration extends BaseLoadConfiguration
      */
     protected function loadConfigurationFiles(Application $app, RepositoryContract $repository)
     {
-        $env = $app->environment();
+        // app 에서 env 값이 설정되기 전이므로 시스템 값을 사용함
+        $env = env('APP_ENV', 'production');
 
         $files = $this->getConfigurationFiles($app);
         $filesByEnv = [];

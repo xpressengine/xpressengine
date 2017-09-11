@@ -1,13 +1,13 @@
 <?php
+
 /**
- * Xpressengine - The PHP CMS Application
+ * Laravel - A PHP Framework For Web Artisans
  *
- * @package     Xpressengine
- * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link        https://xpressengine.io
+ * @package  Laravel
+ * @author   Taylor Otwell <taylor@laravel.com>
  */
+
+define('LARAVEL_START', microtime(true));
 
 /*
 |--------------------------------------------------------------------------
@@ -17,11 +17,11 @@
 | Composer provides a convenient, automatically generated class loader for
 | our application. We just need to utilize it! We'll simply require it
 | into the script here so that we don't have to worry about manual
-| loading any of our classes later on. It feels nice to relax.
+| loading any of our classes later on. It feels great to relax.
 |
 */
 
-require __DIR__.'/bootstrap/autoload.php';
+require __DIR__.'/vendor/autoload.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -52,7 +52,7 @@ $app = require_once __DIR__.'/bootstrap/app.php';
 $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 
 $response = $kernel->handle(
-    $request = \Xpressengine\Http\Request::capture()
+    $request = Xpressengine\Http\Request::capture()
 );
 
 $response->send();

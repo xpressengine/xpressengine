@@ -343,4 +343,9 @@ class MenuItem extends CategoryItem
         $callback = static::$linkResolver;
         return $callback($this);
     }
+
+    public function getChildrenAttribute()
+    {
+        return $this->getChildren();
+    }
 }

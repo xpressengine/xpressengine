@@ -30,14 +30,6 @@ use App\UIObjects\Member\ProfileImage;
 
 class UIObjectServiceProvider extends ServiceProvider
 {
-
-    /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
-
     /**
      * Register the service provider.
      *
@@ -62,17 +54,6 @@ class UIObjectServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerBaseUIObject();
-    }
-
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return array();
     }
 
     /**

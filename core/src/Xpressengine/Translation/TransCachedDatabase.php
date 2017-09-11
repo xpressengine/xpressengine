@@ -72,7 +72,9 @@ class TransCachedDatabase
     public function putLangData($namespace, LangData $langData)
     {
         $langData->each(function ($item, $locale, $value) use ($namespace) {
-            $this->putLine($namespace, $item, $locale, $value);
+            if (is_string($value)) {
+                $this->putLine($namespace, $item, $locale, $value);
+            }
         });
     }
 

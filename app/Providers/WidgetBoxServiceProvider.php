@@ -22,14 +22,6 @@ use Xpressengine\WidgetBox\WidgetBoxRepository;
  */
 class WidgetBoxServiceProvider extends ServiceProvider
 {
-
-    /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
-
     /**
      * Register the service provider.
      *
@@ -37,25 +29,20 @@ class WidgetBoxServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(
-            ['xe.widgetbox' => WidgetBoxHandler::class],
-            function ($app) {
-                $proxyClass = $app['xe.interception']->proxy(WidgetBoxHandler::class, 'XeWidgetBox');
-                $widgetHandler = new $proxyClass(
-                    $app['xe.widgetboxs'],
-                    $app['xe.permission']
-                );
-                return $widgetHandler;
-            }
-        );
+        $this->app->singleton(WidgetBoxHandler::class, function ($app) {
+            $proxyClass = $app['xe.interception']->proxy(WidgetBoxHandler::class, 'XeWidgetBox');
+            $widgetHandler = new $proxyClass(
+                $app['xe.widgetboxs'],
+                $app['xe.permission']
+            );
+            return $widgetHandler;
+        });
+        $this->app->alias(WidgetBoxHandler::class, 'xe.widgetbox');
 
-        $this->app->singleton(
-            ['xe.widgetboxs' => WidgetBoxRepository::class],
-            function ($app) {
-                return new WidgetBoxRepository(WidgetBox::class);
-            }
-        );
-
+        $this->app->singleton(WidgetBoxRepository::class, function ($app) {
+            return new WidgetBoxRepository(WidgetBox::class);
+        });
+        $this->app->alias(WidgetBoxRepository::class, 'xe.widgetboxs');
     }
 
     /**
@@ -67,16 +54,5 @@ class WidgetBoxServiceProvider extends ServiceProvider
     {
         $registryManager = $this->app->make('xe.pluginRegister');
         $registryManager->add(WidgetBoxUIObject::class);
-    }
-
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return array();
     }
 }

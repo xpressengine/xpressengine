@@ -16,6 +16,8 @@ namespace Xpressengine\User\Models;
 
 use Carbon\Carbon;
 use Closure;
+use Xpressengine\User\ResetPassword as ResetPasswordNotification;
+use Illuminate\Notifications\RoutesNotifications;
 use Xpressengine\Database\Eloquent\DynamicModel;
 use Xpressengine\User\Rating;
 use Xpressengine\User\UserInterface;
@@ -30,6 +32,11 @@ use Xpressengine\User\UserInterface;
  */
 class User extends DynamicModel implements UserInterface
 {
+    /**
+     * todo: Illuminate\Notifications\HasDatabaseNotifications 사용여부 검토
+     * 사용시엔 Illuminate\Notifications\Notifiable trait 사용
+     */
+    use RoutesNotifications;
 
     protected $table = 'user';
 
@@ -396,5 +403,26 @@ class User extends DynamicModel implements UserInterface
         }
 
         return $at;
+    }
+
+    /**
+     * Get the name of the unique identifier for the user.
+     *
+     * @return string
+     */
+    public function getAuthIdentifierName()
+    {
+        return 'id';
+    }
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
     }
 }

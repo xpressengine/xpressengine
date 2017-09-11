@@ -19,8 +19,18 @@ use Xpressengine\Translation\Translator;
 
 class TranslationServiceProvider extends ServiceProvider
 {
+    /**
+     * Indicates if loading of the provider is deferred.
+     *
+     * @var bool
+     */
     protected $defer = true;
 
+    /**
+     * Bootstrap the application events.
+     *
+     * @return void
+     */
     public function boot()
     {
         $this->app['events']->listen('locale.changed', function($locale) {
@@ -63,7 +73,7 @@ class TranslationServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->app->singleton(['xe.translator' => Translator::class], function ($app) {
+        $this->app->singleton(Translator::class, function ($app) {
             $debug = $app['config']['app.debug'];
             $keyGen = $app['xe.keygen'];
             $cache = new TransCache($app['cache']->driver(), $debug);
@@ -72,12 +82,12 @@ class TranslationServiceProvider extends ServiceProvider
             $fileLoader = new LangFileLoader($app['files']);
             $urlLoader = new LangURLLoader();
 
-            $trans = new Translator($app['config']['xe.lang'], $keyGen, $db, $fileLoader, $urlLoader);
-            return $trans;
+            return new Translator($app['config']['xe.lang'], $keyGen, $db, $fileLoader, $urlLoader);
         });
+        $this->app->alias(Translator::class, 'xe.translator');
 
         $this->app->resolving('validator', function ($instance, $app) {
-            $instance->resolver(function ($translator, $data, $rules, $messages, $customAttributes) use ($app){
+            $instance->resolver(function ($translator, $data, $rules, $messages, $customAttributes) use ($app) {
                 return new Validator($app['xe.translator'], $data, $rules, $messages, $customAttributes);
             });
         });

@@ -1039,6 +1039,10 @@ return [
         'ko' => '메뉴의 정보를 수정합니다.',
         'en' => 'Please Enter Menu Information'
     ],
+    'editItem' => [
+        'ko' => '아이템 수정하기',
+        'en' => 'Edit Item'
+    ],
     'editItemDescription' => [
         'ko' => '아이템의 기본 정보 수정',
         'en' => 'Edit Item Information',

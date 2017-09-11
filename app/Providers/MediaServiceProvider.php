@@ -42,13 +42,6 @@ use Xpressengine\Media\Thumbnailer;
 class MediaServiceProvider extends ServiceProvider
 {
     /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
-
-    /**
      * Bootstrap the application events.
      *
      * @return void
@@ -60,6 +53,8 @@ class MediaServiceProvider extends ServiceProvider
         ImageRepository::setModel(Image::class);
         VideoRepository::setModel(Video::class);
         AudioRepository::setModel(Audio::class);
+
+        $this->hooks();
     }
 
     /**
@@ -69,7 +64,7 @@ class MediaServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(['xe.media' => MediaManager::class], function ($app) {
+        $this->app->singleton(MediaManager::class, function ($app) {
             $config = $app['config']['xe.media'];
             $proxyClass = $app['xe.interception']->proxy(MediaManager::class, 'XeMedia');
             $mediaManager = new $proxyClass($app['xe.storage'], new CommandFactory(), $config['thumbnail']);
@@ -100,9 +95,7 @@ class MediaServiceProvider extends ServiceProvider
 
             return $mediaManager;
         });
-
-
-        $this->registerEvent();
+        $this->app->alias(MediaManager::class, 'xe.media');
     }
 
     /**
@@ -127,7 +120,7 @@ class MediaServiceProvider extends ServiceProvider
         return new FFMpegExtension(FFMpeg::create($config['videoExtensions']['ffmpeg']), $this->app['xe.storage.temp']);
     }
 
-    private function registerEvent()
+    private function hooks()
     {
         intercept('XeStorage@delete', 'media.delete', function ($target, $file) {
 
@@ -143,15 +136,5 @@ class MediaServiceProvider extends ServiceProvider
 
             return $target($file);
         });
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return ['xe.media'];
     }
 }

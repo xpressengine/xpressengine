@@ -141,7 +141,7 @@ abstract class Node extends DynamicModel implements NodeInterface
     public function getParent()
     {
         if (!$this->parent && $this->ancestors->count() > 0) {
-            $this->parent = $this->ancestors->first(function ($i, $model) {
+            $this->parent = $this->ancestors->first(function ($model, $i) {
                 return $model->pivot->{$this->getDepthName()} == 1;
             });
         }

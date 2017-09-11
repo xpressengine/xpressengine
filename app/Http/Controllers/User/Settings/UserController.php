@@ -10,11 +10,10 @@ namespace App\Http\Controllers\User\Settings;
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
-use Input;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use XeDB;
 use XePresenter;
+use Xpressengine\Http\Request;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
 use Xpressengine\User\Exceptions\EmailAlreadyExistsException;
 use Xpressengine\User\Exceptions\EmailNotFoundException;
@@ -302,9 +301,9 @@ class UserController extends Controller
      *
      * @return \Xpressengine\Presenter\RendererInterface
      */
-    public function getMailList()
+    public function getMailList(Request $request)
     {
-        $id = Input::get('userId');
+        $id = $request->get('userId');
         if ($id === null) {
             $e = new InvalidArgumentHttpException();
             $e->setMessage('회원 번호를 입력해야 합니다.');

@@ -20,13 +20,6 @@ use Xpressengine\Seo\Importers\OpenGraphImporter;
 class SeoServiceProvider extends ServiceProvider
 {
     /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
-
-    /**
      * Bootstrap the application events.
      *
      * @return void
@@ -43,7 +36,7 @@ class SeoServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('xe.seo', function ($app) {
+        $this->app->singleton(SeoHandler::class, function ($app) {
             $setting = new Setting($app['xe.config'], $app['xe.storage'], $app['xe.media'], $app['xe.keygen']);
             return new SeoHandler(
                 [
@@ -55,18 +48,7 @@ class SeoServiceProvider extends ServiceProvider
                 $app['xe.translator'],
                 $app['xe.frontend']
             );
-        }, true);
-
-        $this->app->bind(SeoHandler::class, 'xe.seo');
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return ['xe.seo'];
+        });
+        $this->app->alias(SeoHandler::class, 'xe.seo');
     }
 }

@@ -7,24 +7,6 @@ use Illuminate\Support\ServiceProvider;
 
 class PurifierServiceProvider extends ServiceProvider
 {
-
-    /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
-
-    /**
-     * Boot the service provider.
-     *
-     * @return null
-     */
-    public function boot()
-    {
-        //
-    }
-
     /**
      * Register the service provider.
      *
@@ -50,15 +32,4 @@ class PurifierServiceProvider extends ServiceProvider
 
         $this->app->bind('HTMLPurifier', 'purifier');
     }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return ['purifier'];
-    }
-
 }

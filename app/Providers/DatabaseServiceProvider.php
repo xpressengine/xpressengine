@@ -14,6 +14,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\ServiceProvider;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -41,7 +42,10 @@ class DatabaseServiceProvider extends ServiceProvider
     {
         if ($this->app['config']->get('app.debug') === true) {
 
-            \DB::listen(function ($query, $bindings, $time) {
+            \DB::listen(function (QueryExecuted $executed) {
+                $query = $executed->sql;
+                $bindings = $executed->bindings;
+                $time = $executed->time;
                 $logFile = storage_path('logs/query.log');
                 $monoLog = new Logger('log');
                 $monoLog->pushHandler(new StreamHandler($logFile, Logger::INFO));
@@ -68,7 +72,7 @@ class DatabaseServiceProvider extends ServiceProvider
             return ProxyManager::instance($app['xe.register']);
         });
 
-        $this->app->singleton(['xe.db' => DatabaseHandler::class], function ($app) {
+        $this->app->singleton(DatabaseHandler::class, function ($app) {
 
             $coupler = DatabaseCoupler::instance(
                 $app['db'],
@@ -82,5 +86,6 @@ class DatabaseServiceProvider extends ServiceProvider
                 $app['config']->get('xe.database')
             );
         });
+        $this->app->alias(DatabaseHandler::class, 'xe.db');
     }
 }

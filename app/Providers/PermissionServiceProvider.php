@@ -63,7 +63,7 @@ class PermissionServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(['xe.permission' => PermissionHandler::class], function ($app) {
+        $this->app->singleton(PermissionHandler::class, function ($app) {
             $repo = new DatabaseRepository($app['xe.db']->connection());
 
             if ($app['config']['app.debug'] !== true) {
@@ -72,6 +72,7 @@ class PermissionServiceProvider extends ServiceProvider
 
             return new PermissionHandler($repo);
         });
+        $this->app->alias(PermissionHandler::class, 'xe.permission');
     }
 
     /**

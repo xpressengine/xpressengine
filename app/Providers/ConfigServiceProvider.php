@@ -29,30 +29,13 @@ use Xpressengine\Config\Repositories\CacheDecorator;
 class ConfigServiceProvider extends ServiceProvider
 {
     /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
-
-    /**
-     * executed when application booted
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        //
-    }
-
-    /**
      * Register the service provider.
      *
      * @return void
      */
     public function register()
     {
-        $this->app->singleton(['xe.config' => ConfigManager::class], function ($app) {
+        $this->app->singleton(ConfigManager::class, function ($app) {
             $repo = new DatabaseRepository($app['xe.db']->connection());
             
             if ($app['config']['app.debug'] !== true) {
@@ -66,15 +49,6 @@ class ConfigServiceProvider extends ServiceProvider
             $configManager = new $proxyClass($repo, new Validator($app['validator']));
             return $configManager;
         });
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return array('xe.config');
+        $this->app->alias(ConfigManager::class, 'xe.config');
     }
 }

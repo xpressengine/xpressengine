@@ -22,14 +22,6 @@ use Xpressengine\Settings\SettingsMenuPermission;
 
 class SettingsServiceProvider extends ServiceProvider
 {
-
-    /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
-
     /**
      * Register the service provider.
      *
@@ -37,39 +29,31 @@ class SettingsServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(
-            'xe.settings',
-            function ($app) {
-                $handler = $app['xe.interception']->proxy(SettingsHandler::class, 'XeSettings');
-                $handler = new $handler(
-                    $app['xe.register'],
-                    $app['router'],
-                    $app['xe.config'],
-                    $app['Illuminate\Contracts\Auth\Access\Gate']
-                );
+        $this->app->singleton('xe.settings', function ($app) {
+            $handler = $app['xe.interception']->proxy(SettingsHandler::class, 'XeSettings');
+            $handler = new $handler(
+                $app['xe.register'],
+                $app['router'],
+                $app['xe.config'],
+                $app['Illuminate\Contracts\Auth\Access\Gate']
+            );
 
-                return $handler;
-            }
-        );
+            return $handler;
+        });
 
         // register for admin log
-        $this->app->singleton(
-            'xe.adminlogs',
-            function ($app) {
-                $repo = $app['xe.interception']->proxy(LogRepository::class);
-                $repo = new $repo(Log::class);
-                return $repo;
-            }
-        );
+        $this->app->singleton('xe.adminlogs', function ($app) {
+            $repo = $app['xe.interception']->proxy(LogRepository::class);
+            $repo = new $repo(Log::class);
+            return $repo;
+        });
 
-        $this->app->singleton(
-            ['xe.adminlog' => LogHandler::class],
-            function ($app) {
-                $handler = $app['xe.interception']->proxy(LogHandler::class, 'XeAdminLog');
-                $handler = new $handler($app['xe.register'], $app['xe.adminlogs']);
-                return $handler;
-            }
-        );
+        $this->app->singleton(LogHandler::class, function ($app) {
+            $handler = $app['xe.interception']->proxy(LogHandler::class, 'XeAdminLog');
+            $handler = new $handler($app['xe.register'], $app['xe.adminlogs']);
+            return $handler;
+        });
+        $this->app->alias(LogHandler::class, 'xe.adminlog');
     }
 
     public function boot()
@@ -86,16 +70,6 @@ class SettingsServiceProvider extends ServiceProvider
         $this->registerDefaultLoggers();
 
         $this->setDetailResolverForLog();
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return ['xe.settings'];
     }
 
     private function registerPermissionUIObject()

@@ -17,14 +17,6 @@ use App\UIObjects\Theme\ThemeSelect;
 
 class ThemeServiceProvider extends ServiceProvider
 {
-
-    /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
-
     /**
      * Register the service provider.
      *
@@ -32,24 +24,21 @@ class ThemeServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(
-            ['xe.theme' => ThemeHandler::class],
-            function ($app) {
+        $this->app->singleton(ThemeHandler::class, function ($app) {
+            /** @var PluginRegister $register */
+            $register = $app['xe.pluginRegister'];
 
-                /** @var PluginRegister $register */
-                $register = $app['xe.pluginRegister'];
+            $themeHandler = $app['xe.interception']->proxy(ThemeHandler::class, 'XeTheme');
 
-                $themeHandler = $app['xe.interception']->proxy(ThemeHandler::class, 'XeTheme');
+            $blankThemeClass = $app['config']->get('xe.theme.blank');
 
-                $blankThemeClass = $app['config']->get('xe.theme.blank');
+            /** @var ThemeHandler $themeHandler */
+            $themeHandler = new $themeHandler($register, $app['xe.config'], $app['view'], $blankThemeClass::getId());
+            $themeHandler->setCachePath(storage_path('app/theme/views'));
 
-                /** @var ThemeHandler $themeHandler */
-                $themeHandler = new $themeHandler($register, $app['xe.config'], $app['view'], $blankThemeClass::getId());
-                $themeHandler->setCachePath(storage_path('app/theme/views'));
-
-                return $themeHandler;
-            }
-        );
+            return $themeHandler;
+        });
+        $this->app->alias(ThemeHandler::class, 'xe.theme');
     }
 
     public function boot()
@@ -66,16 +55,6 @@ class ThemeServiceProvider extends ServiceProvider
 
         $this->setThemeHandlerForTheme();
 
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return array();
     }
 
     /**

@@ -3,8 +3,7 @@
 use App\Http\Controllers\Controller;
 use Exception;
 use Xpressengine\User\Guard;
-use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
-use Illuminate\Foundation\Auth\ThrottlesLogins;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\UrlGenerator;
@@ -31,7 +30,7 @@ class AuthController extends Controller
     |
     */
 
-    use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+    use AuthenticatesUsers;
 
     /**
      * The Guard implementation.
@@ -50,6 +49,20 @@ class AuthController extends Controller
      */
     protected $emailBroker;
 
+    /**
+     * Where to redirect users after login.
+     *
+     * @var string
+     */
+    protected $redirectTo = '/home';
+
+    /**
+     * The path to the login route.
+     *
+     * @var string
+     */
+    protected $loginPath = '/auth/login';
+
     public function __construct()
     {
         $this->auth = app('auth');
@@ -63,8 +76,8 @@ class AuthController extends Controller
         $this->middleware('guest', ['except' => ['getConfirm', 'getLogout', 'getAdminAuth', 'postAdminAuth']]);
     }
 
-    public function getAgreement(){
-
+    public function getAgreement()
+    {
         $config = app('xe.config')->get('user.common');
         $agreement = $config->get('agreement');
 
@@ -130,7 +143,7 @@ class AuthController extends Controller
      */
     public function getLogin(UrlGenerator $urlGenerator, Request $request)
     {
-        $redirectUrl = $this->redirectPath = $request->get('redirectUrl', $urlGenerator->previous());
+        $redirectUrl = $this->redirectTo = $request->get('redirectUrl', $urlGenerator->previous());
 
         if(auth()->check()) {
             return redirect($request->get('redirectUrl', '/'));
@@ -178,11 +191,11 @@ class AuthController extends Controller
         $credentials['status'] = \XeUser::STATUS_ACTIVATED;
 
         if ($this->auth->attempt($credentials, $request->has('remember'))) {
-            $this->redirectPath = $request->get('redirectUrl');
+            $this->redirectTo = $request->get('redirectUrl');
             return redirect()->intended($this->redirectPath());
         }
 
-        return redirect($this->loginPath())
+        return redirect($this->loginPath)
             ->withInput($request->only('email', 'remember'))
             ->with('alert', ['type' => 'danger', 'message' => '입력한 정보에 해당하는 계정을 찾을 수 없거나 사용 중지 상태인 계정입니다.']);
     }
@@ -205,11 +218,9 @@ class AuthController extends Controller
      */
     public function getLogout(UrlGenerator $urlGenerator, Request $request)
     {
-        $redirectUrl = $this->redirectAfterLogout = $request->get('redirectUrl', $urlGenerator->previous());
-
         $this->auth->logout();
 
-        return redirect(property_exists($this, 'redirectAfterLogout') ? $this->redirectAfterLogout : '/');
+        return redirect($request->get('redirectUrl', $urlGenerator->previous()));
     }
 
     /**
@@ -244,30 +255,6 @@ class AuthController extends Controller
         }
 
         return redirect()->back()->with('alert', ['type' => 'failed', 'message' => '입력하신 암호가 틀렸습니다.']);
-    }
-
-    /**
-     * Get the post register / login redirect path.
-     *
-     * @return string
-     */
-    public function redirectPath()
-    {
-        if (property_exists($this, 'redirectPath')) {
-            return $this->redirectPath;
-        }
-
-        return property_exists($this, 'redirectTo') ? $this->redirectTo : '/';
-    }
-
-    /**
-     * Get the path to the login route.
-     *
-     * @return string
-     */
-    public function loginPath()
-    {
-        return property_exists($this, 'loginPath') ? $this->loginPath : '/auth/login';
     }
 
     protected function checkCaptcha()

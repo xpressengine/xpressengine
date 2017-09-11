@@ -18,14 +18,6 @@ use Xpressengine\Interception\Proxy\ProxyGenerator;
 
 class InterceptionServiceProvider extends ServiceProvider
 {
-
-    /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
-
     /**
      * Register the service provider.
      *
@@ -33,30 +25,18 @@ class InterceptionServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(
-            ['xe.interception' => InterceptionHandler::class],
-            function ($app) {
-                $advisorCollection = new AdvisorCollection();
+        $this->app->singleton(InterceptionHandler::class, function ($app) {
+            $advisorCollection = new AdvisorCollection();
 
-                $loader = new FileLoader(storage_path('app/interception'), $app['config']->get('app.debug') === true);
-                //$loader = new EvalLoader();
-                $passes = [new ClassPass(), new MethodDefinitionPass()];
+            $loader = new FileLoader(storage_path('app/interception'), $app['config']->get('app.debug') === true);
+            //$loader = new EvalLoader();
+            $passes = [new ClassPass(), new MethodDefinitionPass()];
 
-                $generator = new ProxyGenerator($loader, $passes);
+            $generator = new ProxyGenerator($loader, $passes);
 
-                $interceptionHandler = new InterceptionHandler($advisorCollection, $generator);
-                return $interceptionHandler;
-            }
-        );
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return array();
+            $interceptionHandler = new InterceptionHandler($advisorCollection, $generator);
+            return $interceptionHandler;
+        });
+        $this->app->alias(InterceptionHandler::class, 'xe.interception');
     }
 }

@@ -10,14 +10,6 @@ use Xpressengine\Permission\Grant;
 
 class EditorServiceProvider extends ServiceProvider
 {
-
-    /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
-
     /**
      * Bootstrap the application events.
      *
@@ -64,34 +56,22 @@ class EditorServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(
-            ['xe.editor' => EditorHandler::class],
-            function ($app) {
-                $editorHandler = $app['xe.interception']->proxy(EditorHandler::class, 'XeEditor');
-                /**
-                 * @var EditorHandler $editorHandler
-                 */
-                $editorHandler = new $editorHandler(
-                    $app['xe.pluginRegister'],
-                    $app['xe.config'],
-                    $app,
-                    $app['xe.storage'],
-                    $app['xe.media'],
-                    $app['xe.tag']
-                );
-                $editorHandler->setDefaultEditorId($app['config']->get('xe.editor.default'));
-                return $editorHandler;
-            }
-        );
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return array('xe.editor');
+        $this->app->singleton(EditorHandler::class, function ($app) {
+            $editorHandler = $app['xe.interception']->proxy(EditorHandler::class, 'XeEditor');
+            /**
+             * @var EditorHandler $editorHandler
+             */
+            $editorHandler = new $editorHandler(
+                $app['xe.pluginRegister'],
+                $app['xe.config'],
+                $app,
+                $app['xe.storage'],
+                $app['xe.media'],
+                $app['xe.tag']
+            );
+            $editorHandler->setDefaultEditorId($app['config']->get('xe.editor.default'));
+            return $editorHandler;
+        });
+        $this->app->alias(EditorHandler::class, 'xe.editor');
     }
 }

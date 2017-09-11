@@ -123,7 +123,7 @@ class PresenterServiceProvider extends ServiceProvider
      */
     private function registerFrontend()
     {
-        $this->app->singleton(['xe.frontend' => FrontendHandler::class], function ($app) {
+        $this->app->singleton(FrontendHandler::class, function ($app) {
             $tags = [
                 'title' => \Xpressengine\Presenter\Html\Tags\Title::class,
                 'meta' => \Xpressengine\Presenter\Html\Tags\Meta::class,
@@ -145,6 +145,7 @@ class PresenterServiceProvider extends ServiceProvider
 
             return $frontendHandler;
         });
+        $this->app->alias(FrontendHandler::class, 'xe.frontend');
     }
 
     private function registerRedirector()
@@ -161,16 +162,6 @@ class PresenterServiceProvider extends ServiceProvider
 
             return $redirector;
         });
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return array();
     }
 
     /**

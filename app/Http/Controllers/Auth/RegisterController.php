@@ -6,7 +6,6 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Auth\RedirectsUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Fluent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use XeDB;
 use XeDynamicField;
@@ -58,7 +57,7 @@ class RegisterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getRegister(Request $request, UserHandler $handler, RegisterTokenRepository $tokenRepository)
+    public function getRegister(Request $request, UserHandler $handler)
     {
         if(!$this->checkJoinable()) {
             return redirect()->back()->with(['alert'=>['type'=>'danger', 'message'=> xe_trans('xe::joinNotAllowed')]]);
@@ -80,10 +79,6 @@ class RegisterController extends Controller
         if ($token !== null) {
             return $this->getRegisterForm($request);
         }
-
-        // guard가 없을 경우 바로 회원가입폼 출력
-        $guards = $handler->getRegisterGuards();
-
 
         $allGuards = $this->handler->getRegisterGuards();
         $activated = $config->get('guards', []);

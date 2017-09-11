@@ -62,11 +62,49 @@ use Xpressengine\User\UserProvider;
 class UserServiceProvider extends ServiceProvider
 {
     /**
-     * Indicates if loading of the provider is deferred.
+     * Bootstrap the application events.
      *
-     * @var bool
+     * @return void
      */
-    protected $defer = false;
+    public function boot()
+    {
+        // extend xe auth
+        $this->extendAuth();
+
+        // set guest's display name
+        Guest::setName($this->app['config']['xe.user.guest.name']);
+
+        // set guest's default profile image
+        Guest::setDefaultProfileImage($this->app['config']['xe.user.profileImage.default']);
+
+        // set unknown's display name
+        UnknownUser::setName($this->app['config']['xe.user.unknown.name']);
+
+        // set unknown's default profile image
+        UnknownUser::setDefaultProfileImage($this->app['config']['xe.user.profileImage.default']);
+
+        $this->setProfileImageResolverOfUser();
+
+        // set config for validation of password, displayname
+        $this->configValidation();
+
+        // register validation extension for email prefix
+        $this->extendValidator();
+
+        // register default user skin
+        $this->registerDefaultSkins();
+
+        $this->registerSettingsPermissions();
+
+        // register admin middleware
+        $this->app['router']->aliasMiddleware('admin', Admin::class);
+
+        // register toggle menu
+        $this->registerToggleMenu();
+
+        // add RegisterGuard and RegiserForm
+        $this->addRegisterGuardAndForm();
+    }
 
     /**
      * Register the service provider.
@@ -94,16 +132,14 @@ class UserServiceProvider extends ServiceProvider
      */
     protected function registerAuth()
     {
-        $this->app->singleton(
-            ['xe.auth' => GuardInterface::class],
-            function ($app) {
-                $adminAuth = $app['config']->get('auth.admin');
-                $proxyClass = $app['xe.interception']->proxy(Guard::class, 'Auth');
-                return new $proxyClass(
-                    new UserProvider($app['hash'], User::class), $app['session.store'], $adminAuth, $app['request']
-                );
-            }
-        );
+        $this->app->singleton(GuardInterface::class, function ($app) {
+            $adminAuth = $app['config']->get('auth.admin');
+            $proxyClass = $app['xe.interception']->proxy(Guard::class, 'Auth');
+            return new $proxyClass(
+                'xe', new UserProvider($app['hash'], User::class), $app['session.store'], $adminAuth, $app['request']
+            );
+        });
+        $this->app->alias(GuardInterface::class, 'xe.auth');
     }
 
     /**
@@ -205,69 +241,21 @@ class UserServiceProvider extends ServiceProvider
         );
 
         // register register-token repository
-        $this->app->singleton(
-            ['xe.user.register.tokens' => RegisterTokenRepository::class],
-            function ($app) {
-                $connection = $app['xe.db']->connection('user');
+        $this->app->singleton(RegisterTokenRepository::class, function ($app) {
+            $connection = $app['xe.db']->connection('user');
 
-                // The database token repository is an implementation of the token repository
-                // interface, and is responsible for the actual storing of auth tokens and
-                // their e-mail addresses. We will inject this table and hash key to it.
-                $table = $app['config']['auth.register.table'];
+            // The database token repository is an implementation of the token repository
+            // interface, and is responsible for the actual storing of auth tokens and
+            // their e-mail addresses. We will inject this table and hash key to it.
+            $table = $app['config']['auth.register.table'];
 
-                $keygen = $app['xe.keygen'];
+            $keygen = $app['xe.keygen'];
 
-                $expire = $app['config']->get('auth.register.expire', 60);
+            $expire = $app['config']->get('auth.register.expire', 60);
 
-                return new RegisterTokenRepository($connection, $keygen, $table, $expire);
-            }
-        );
-    }
-
-    /**
-     * Bootstrap the application events.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        // set guest's display name
-        Guest::setName($this->app['config']['xe.user.guest.name']);
-
-        // set guest's default profile image
-        Guest::setDefaultProfileImage($this->app['config']['xe.user.profileImage.default']);
-
-        // set unknown's display name
-        UnknownUser::setName($this->app['config']['xe.user.unknown.name']);
-
-        // set unknown's default profile image
-        UnknownUser::setDefaultProfileImage($this->app['config']['xe.user.profileImage.default']);
-
-        $this->setProfileImageResolverOfUser();
-
-        // extend xe auth
-        $this->extendAuth();
-
-        // set config for validation of password, displayname
-        $this->configValidation();
-
-        // register validation extension for email prefix
-        $this->extendValidator();
-
-        // register default user skin
-        $this->registerDefaultSkins();
-
-        $this->registerSettingsPermissions();
-
-        // register admin middleware
-        $this->app['router']->middleware('admin', Admin::class);
-
-        // register toggle menu
-        $this->registerToggleMenu();
-
-        // add RegisterGuard and RegiserForm
-        $this->addRegisterGuardAndForm();
-
+            return new RegisterTokenRepository($connection, $keygen, $table, $expire);
+        });
+        $this->app->alias(RegisterTokenRepository::class, 'xe.user.register.tokens');
     }
 
     /**
@@ -288,28 +276,26 @@ class UserServiceProvider extends ServiceProvider
      */
     private function registerHandler()
     {
-        $this->app->singleton(
-            ['xe.user' => UserHandler::class],
-            function ($app) {
-                $proxyClass = $app['xe.interception']->proxy(UserHandler::class, 'XeUser');
+        $this->app->singleton(UserHandler::class, function ($app) {
+            $proxyClass = $app['xe.interception']->proxy(UserHandler::class, 'XeUser');
 
-                $joinConfig = app('xe.config')->get('user.join');
+            $joinConfig = app('xe.config')->get('user.join');
 
-                $userHandler = new $proxyClass(
-                    $app['xe.users'],
-                    $app['xe.user.accounts'],
-                    $app['xe.user.groups'],
-                    $app['xe.user.emails'],
-                    $app['xe.user.pendingEmails'],
-                    $app['xe.user.image'],
-                    $app['hash'],
-                    $app['validator'],
-                    $app['xe.register'],
-                    in_array('email', $joinConfig->get('guards', []))
-                );
-                return $userHandler;
-            }
-        );
+            $userHandler = new $proxyClass(
+                $app['xe.users'],
+                $app['xe.user.accounts'],
+                $app['xe.user.groups'],
+                $app['xe.user.emails'],
+                $app['xe.user.pendingEmails'],
+                $app['xe.user.image'],
+                $app['hash'],
+                $app['validator'],
+                $app['xe.register'],
+                in_array('email', $joinConfig->get('guards', []))
+            );
+            return $userHandler;
+        });
+        $this->app->alias(UserHandler::class, 'xe.user');
     }
 
     /**
@@ -328,12 +314,10 @@ class UserServiceProvider extends ServiceProvider
 
     protected function registerUserRepository()
     {
-        $this->app->singleton(
-            ['xe.users' => UserRepositoryInterface::class],
-            function ($app) {
-                return new UserRepository(User::class);
-            }
-        );
+        $this->app->singleton(UserRepositoryInterface::class, function ($app) {
+            return new UserRepository(User::class);
+        });
+        $this->app->alias(UserRepositoryInterface::class, 'xe.users');
     }
 
     /**
@@ -343,12 +327,10 @@ class UserServiceProvider extends ServiceProvider
      */
     private function registerAccoutRepository()
     {
-        $this->app->singleton(
-            ['xe.user.accounts' => UserAccountRepositoryInterface::class],
-            function ($app) {
-                return new UserAccountRepository(UserAccount::class);
-            }
-        );
+        $this->app->singleton(UserAccountRepositoryInterface::class, function ($app) {
+            return new UserAccountRepository(UserAccount::class);
+        });
+        $this->app->alias(UserAccountRepositoryInterface::class, 'xe.user.accounts');
     }
 
     /**
@@ -358,12 +340,10 @@ class UserServiceProvider extends ServiceProvider
      */
     protected function registerGroupRepository()
     {
-        $this->app->singleton(
-            ['xe.user.groups' => UserGroupRepositoryInterface::class],
-            function ($app) {
-                return new UserGroupRepository(UserGroup::class);
-            }
-        );
+        $this->app->singleton(UserGroupRepositoryInterface::class, function ($app) {
+            return new UserGroupRepository(UserGroup::class);
+        });
+        $this->app->alias(UserGroupRepositoryInterface::class, 'xe.user.groups');
     }
 
     /**
@@ -373,56 +353,27 @@ class UserServiceProvider extends ServiceProvider
      */
     protected function registerVirtualGroupRepository()
     {
-        $this->app->singleton(
-            ['xe.user.virtualGroups' => VirtualGroupRepositoryInterface::class],
-            function ($app) {
-                /** @var Closure $vGroups */
-                $vGroups = $app['config']->get('xe.group.virtualGroup.all');
-                /** @var Closure $getter */
-                $getter = $app['config']->get('xe.group.virtualGroup.getByUser');
-                return new VirtualGroupRepository($app['xe.users'], $vGroups(), $getter);
-            }
-        );
+        $this->app->singleton(VirtualGroupRepositoryInterface::class, function ($app) {
+            /** @var Closure $vGroups */
+            $vGroups = $app['config']->get('xe.group.virtualGroup.all');
+            /** @var Closure $getter */
+            $getter = $app['config']->get('xe.group.virtualGroup.getByUser');
+            return new VirtualGroupRepository($app['xe.users'], $vGroups(), $getter);
+        });
+        $this->app->alias(VirtualGroupRepositoryInterface::class, 'xe.user.virtualGroups');
     }
 
     private function registerMailRepository()
     {
-        $this->app->singleton(
-            ['xe.user.emails' => UserEmailRepositoryInterface::class],
-            function ($app) {
-                return new UserEmailRepository(UserEmail::class);
-            }
-        );
+        $this->app->singleton(UserEmailRepositoryInterface::class, function ($app) {
+            return new UserEmailRepository(UserEmail::class);
+        });
+        $this->app->alias(UserEmailRepositoryInterface::class, 'xe.user.emails');
 
-        $this->app->singleton(
-            ['xe.user.pendingEmails' => PendingEmailRepositoryInterface::class],
-            function ($app) {
-                return new PendingEmailRepository(PendingEmail::class);
-            }
-        );
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return [
-            'xe.auth',
-            'xe.auth.password',
-            'xe.auth.email',
-            'xe.auth.tokens',
-            'xe.user.register.tokens',
-            'xe.user',
-            'xe.users',
-            'xe.user.groups',
-            'xe.user.virtualGroups',
-            'xe.user.emails',
-            'xe.user.pendingEmails',
-            'xe.user.accounts'
-        ];
+        $this->app->singleton(PendingEmailRepositoryInterface::class, function ($app) {
+            return new PendingEmailRepository(PendingEmail::class);
+        });
+        $this->app->alias(PendingEmailRepositoryInterface::class, 'xe.user.pendingEmails');
     }
 
     /**

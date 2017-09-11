@@ -26,23 +26,6 @@ use Xpressengine\ToggleMenu\ToggleMenuHandler;
 class ToggleMenuServiceProvider extends ServiceProvider
 {
     /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
-
-    /**
-     * Bootstrap the application events.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        //
-    }
-
-    /**
      * Register the service provider.
      *
      * @return void
@@ -53,15 +36,5 @@ class ToggleMenuServiceProvider extends ServiceProvider
             $proxyClass = $app['xe.interception']->proxy(ToggleMenuHandler::class, 'ToggleMenu');
             return new $proxyClass($app['xe.pluginRegister'], $app['xe.config'], $app);
         }, true);
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return ['xe.toggleMenu'];
     }
 }

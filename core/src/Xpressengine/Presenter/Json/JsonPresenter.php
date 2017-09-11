@@ -19,7 +19,6 @@ use Xpressengine\Presenter\Presentable;
 use Xpressengine\Presenter\Presenter;
 use Illuminate\Contracts\Support\Jsonable;
 use JsonSerializable;
-use Xpressengine\Interception\Proxy as InterceptionProxy;
 
 /**
  * JsonPresenter
@@ -33,7 +32,7 @@ use Xpressengine\Interception\Proxy as InterceptionProxy;
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class JsonPresenter implements Presentable, Jsonable
+class JsonPresenter implements Presentable, Jsonable, Arrayable
 {
     /**
      * @var Presenter
