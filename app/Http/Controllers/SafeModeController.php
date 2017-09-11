@@ -182,14 +182,14 @@ class SafeModeController extends Controller
                 if ($form != $to) {
                     $pos = false;
                     foreach ($queries as $query) {
-                        $query = trim($query);
+                        $query = trim($query, " \t\n\r\0\x0B,");
 
                         $pos = strpos($query, "`{$form}`");
                         if ($pos !== false) {
                             break;
                         }
                     }
-                    $column_definition = trim(substr($query, strlen("`{$form}`"), -1));
+                    $column_definition = trim(substr($query, strlen("`{$form}`")));
 
                     $changes[] = sprintf('CHANGE COLUMN %s %s %s', $form, $to, $column_definition);
                 }
