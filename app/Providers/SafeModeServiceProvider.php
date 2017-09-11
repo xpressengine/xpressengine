@@ -3,8 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
-use Route;
+use Illuminate\Support\Facades\Route;
 
 class SafeModeServiceProvider extends ServiceProvider
 {
@@ -18,11 +17,10 @@ class SafeModeServiceProvider extends ServiceProvider
     {
         app('config')->set('app.debug', true);
 
-        app('config')->set('auth.driver', 'database');
-        app('config')->set('auth.table', 'user');
-        app('config')->set('auth.model', \XpressEngine\User\Models\User::class);
-
-        require_once($this->app->basePath() . '/app/Http/safe_mode_routes.php');
+        Route::prefix('__safe_mode')
+            ->middleware('safe')
+            ->namespace('App\Http\Controllers')
+            ->group(base_path('routes/safe.php'));
     }
 
     /**

@@ -39,6 +39,7 @@ return [
         'xe' => [
             'driver' => 'xe',
         ],
+
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
@@ -48,6 +49,11 @@ return [
             'driver' => 'token',
             'provider' => 'users',
         ],
+
+        'safe' => [
+            'driver' => 'session',
+            'provider' => 'user_db',
+        ]
     ],
 
     /*
@@ -73,10 +79,10 @@ return [
             'model' => Xpressengine\User\Models\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+         'user_db' => [
+             'driver' => 'database',
+             'table' => 'user',
+         ],
     ],
 
     /*
