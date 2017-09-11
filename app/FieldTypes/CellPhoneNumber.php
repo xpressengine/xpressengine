@@ -56,7 +56,7 @@ class CellPhoneNumber extends AbstractType
     public function getColumns()
     {
         return [
-            'cellPhoneNumber' => (new ColumnEntity('cellPhoneNumber', ColumnDataType::STRING, 30)),
+            'cell_phone_number' => (new ColumnEntity('cell_phone_number', ColumnDataType::STRING, 30)),
             'entities' => (new ColumnEntity('entities', ColumnDataType::TEXT)),
         ];
     }
@@ -78,7 +78,7 @@ class CellPhoneNumber extends AbstractType
             $required = 'required|';
         }
 
-        return ['cellPhoneNumber' => $required . 'cell_phone'];
+        return ['cell_phone_number' => $required . 'cell_phone'];
     }
 
     /**

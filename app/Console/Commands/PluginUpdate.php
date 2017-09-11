@@ -66,7 +66,7 @@ class PluginUpdate extends PluginCommand
 
         if(file_exists($plugin->getPath('vendor'))) {
             // 개발모드의 플러그인입니다. 개발모드의 플러그인은 업데이트 할 수 없습니다.
-            throw new \Exception('The plugin is in develop mode. Can\'t update plugin in develop mode.');
+            throw new \Exception("The plugin is in develop mode. Can't update plugin in develop mode.");
         }
 
         // 설치가능 환경인지 검사

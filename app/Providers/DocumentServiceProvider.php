@@ -43,7 +43,7 @@ class DocumentServiceProvider extends ServiceProvider
         });
 
         Document::created(function (Document $model) {
-            $instanceId = $model->getAttribute('instanceId');
+            $instanceId = $model->getAttribute('instance_id');
             if ($instanceId === null || $instanceId == '') {
                 return;
             }
@@ -51,7 +51,7 @@ class DocumentServiceProvider extends ServiceProvider
         });
 
         Document::updated(function (Document $model) {
-            $instanceId = $model->getAttribute('instanceId');
+            $instanceId = $model->getAttribute('instance_id');
             if ($instanceId === null || $instanceId == '') {
                 return;
             }
@@ -59,7 +59,7 @@ class DocumentServiceProvider extends ServiceProvider
         });
 
         Document::deleting(function (Document $model) {
-            $instanceId = $model->getAttribute('instanceId');
+            $instanceId = $model->getAttribute('instance_id');
             if ($instanceId === null || $instanceId == '') {
                 return;
             }

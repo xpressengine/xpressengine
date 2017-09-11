@@ -1,0 +1,28 @@
+{
+  "name": "blankshield",
+  "version": "0.6.0",
+  "description": "Prevent reverse tabnabbing phishing attacks caused by _blank",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Daniel St. Jules",
+      "email": "danielst.jules@gmail.com",
+      "url": "http://danielstjules.com"
+    }
+  ],
+  "keywords": [
+    "prevent",
+    "reverse",
+    "tabnabbing",
+    "target",
+    "_blank",
+    "security"
+  ],
+  "ignore": [
+    ".*",
+    "gulpfile.js",
+    "package.json",
+    "README.md",
+    "demo"
+  ]
+}

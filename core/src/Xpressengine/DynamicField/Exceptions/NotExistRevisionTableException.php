@@ -1,6 +1,6 @@
 <?php
 /**
- * AlreadyExistException
+ * NotExistRevisionTableException
  *
  * PHP version 5
  *
@@ -17,7 +17,7 @@ namespace Xpressengine\DynamicField\Exceptions;
 use Xpressengine\DynamicField\DynamicFieldException;
 
 /**
- * Not exist revision table exception
+ * NotExistRevisionTableException
  *
  * @category    DynamicField
  * @package     Xpressengine\DynamicField

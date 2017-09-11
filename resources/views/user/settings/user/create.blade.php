@@ -15,7 +15,7 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                         {{-- displayName --}}
-                                        {!! XeUI::formText(['id'=>'__xe_displayName', 'label'=>xe_trans('xe::name'), 'placeholder'=>xe_trans('xe::enterName'), 'value'=> old('displayName'), 'name'=>'displayName']) !!}
+                                        {!! XeUI::formText(['id'=>'__xe_displayName', 'label'=>xe_trans('xe::name'), 'placeholder'=>xe_trans('xe::enterName'), 'value'=> old('display_name'), 'name'=>'display_name']) !!}
                                         {{-- email --}}
                                         {!! XeUI::formText(['id'=>'__xe_email', 'label'=>xe_trans('xe::email'), 'placeholder'=>xe_trans('xe::enterEmail'), 'value'=> old('email'), 'name'=>'email']) !!}
                                         {{-- password --}}

@@ -58,7 +58,7 @@ class StorageOptimize extends Command
         $loop = 0;
         try {
             while(true) {
-                $files = $this->storage->paginate(['useCount' => 0, 'parentId' => null], 20);
+                $files = $this->storage->paginate(['use_count' => 0, 'parent_id' => null], 20);
                 if (count($files) < 1) {
                     break;
                 }
@@ -107,12 +107,12 @@ class StorageOptimize extends Command
         foreach ($this->bag as $file) {
             switch ($verbosity) {
                 case 2:
-                    if ($file->parentId === null) {
+                    if ($file->parent_id === null) {
                         $this->info("\t" . $file->clientname);
                     }
                     break;
                 case 3:
-                    if ($file->parentId === null) {
+                    if ($file->parent_id === null) {
                         $this->line("\t" .
                             $file->disk . "\t" .
                             "<info>" . $file->clientname . "</info>\t" .

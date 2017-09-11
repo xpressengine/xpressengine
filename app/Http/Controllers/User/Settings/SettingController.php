@@ -18,6 +18,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Sections\DynamicFieldSection;
 use App\Http\Sections\SkinSection;
 use App\Http\Sections\ToggleMenuSection;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use XePresenter;
 use Xpressengine\Captcha\CaptchaManager;
 use Xpressengine\Captcha\Exceptions\ConfigurationNotExistsException;
@@ -155,24 +156,24 @@ class SettingController extends Controller
     /**
      * update Join setting
      *
-     * @param CaptchaManager $captcha
+     * @param Request $request
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function updateJoin(Request $request, CaptchaManager $captcha)
+    public function updateJoin(Request $request)
     {
         $inputs = $request->except('_token');
 
-        $inputs['guards'] = array_keys(array_get($inputs, 'guards', []));
+        $guards = $inputs['guards'] = array_keys(array_get($inputs, 'guards', []));
         $inputs['forms'] = array_keys(array_get($inputs, 'forms', []));
 
         $config = app('xe.config')->get('user.join');
 
-        $inputs['guard_forced'] = $inputs['guard_forced'] === 'true';
+        $guard_forced = $inputs['guard_forced'] = $inputs['guard_forced'] === 'true';
 
-        //if ($inputs['useCaptcha'] === 'true' && !$captcha->available()) {
-        //    throw new ConfigurationNotExistsException();
-        //}
+        if ($guard_forced && empty($guards)) {
+            throw new HttpException(400, '인증을 사용할 경우 하나 이상의 인증방식을 선택하셔야 합니다.');
+        }
 
         foreach ($inputs as $key => $val) {
             $config->set($key, $val);

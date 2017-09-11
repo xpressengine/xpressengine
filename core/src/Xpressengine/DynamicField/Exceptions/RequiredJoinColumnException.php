@@ -1,6 +1,6 @@
 <?php
 /**
- * Exceptions
+ * RequiredJoinColumnException
  *
  * PHP version 5
  *
@@ -17,7 +17,7 @@ namespace Xpressengine\DynamicField\Exceptions;
 use Xpressengine\DynamicField\DynamicFieldException;
 
 /**
- * Required join column exception
+ * RequiredJoinColumnException
  *
  * @category    DynamicField
  * @package     Xpressengine\DynamicField

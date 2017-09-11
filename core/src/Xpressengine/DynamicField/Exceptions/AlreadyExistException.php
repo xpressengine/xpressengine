@@ -17,7 +17,7 @@ namespace Xpressengine\DynamicField\Exceptions;
 use Xpressengine\DynamicField\DynamicFieldException;
 
 /**
- * Already Dynamic Field exist Exception
+ * AlreadyExistException
  *
  * @category    DynamicField
  * @package     Xpressengine\DynamicField

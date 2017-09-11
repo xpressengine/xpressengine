@@ -104,7 +104,7 @@ class CacheDecorator implements PermissionRepository
      */
     public function insert(Permission $item)
     {
-        $this->erase($item->siteKey, $item->name);
+        $this->erase($item->site_key, $item->name);
 
         return $this->repo->insert($item);
     }
@@ -117,7 +117,7 @@ class CacheDecorator implements PermissionRepository
      */
     public function update(Permission $item)
     {
-        $this->erase($item->siteKey, $item->name);
+        $this->erase($item->site_key, $item->name);
 
         return $this->repo->update($item);
     }
@@ -130,7 +130,7 @@ class CacheDecorator implements PermissionRepository
      */
     public function delete(Permission $item)
     {
-        $this->erase($item->siteKey, $item->name);
+        $this->erase($item->site_key, $item->name);
 
         return $this->repo->delete($item);
     }
@@ -176,8 +176,8 @@ class CacheDecorator implements PermissionRepository
      */
     public function foster(Permission $item, $to)
     {
-        $this->erase($item->siteKey, $item->name);
-        $this->erase($item->siteKey, $to);
+        $this->erase($item->site_key, $item->name);
+        $this->erase($item->site_key, $to);
 
         $this->repo->foster($item, $to);
     }
@@ -191,8 +191,8 @@ class CacheDecorator implements PermissionRepository
      */
     public function affiliate(Permission $item, $to)
     {
-        $this->erase($item->siteKey, $item->name);
-        $this->erase($item->siteKey, $to);
+        $this->erase($item->site_key, $item->name);
+        $this->erase($item->site_key, $to);
 
         $this->repo->affiliate($item, $to);
     }

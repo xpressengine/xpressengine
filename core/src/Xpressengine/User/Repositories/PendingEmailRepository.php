@@ -42,8 +42,8 @@ class PendingEmailRepository implements PendingEmailRepositoryInterface
      */
     public function create(UserInterface $user, array $data)
     {
-        if (empty($data['confirmationCode'])) {
-            $data['confirmationCode'] = str_random();
+        if (empty($data['confirmation_code'])) {
+            $data['confirmation_code'] = str_random();
         }
         $email = $this->createModel()->create($data);
         $user->pendingEmail()->save($email);
@@ -87,7 +87,7 @@ class PendingEmailRepository implements PendingEmailRepositoryInterface
      */
     public function findByUserId($userId)
     {
-        $email = $this->query()->where('userId', $userId)->first();
+        $email = $this->query()->where('user_id', $userId)->first();
         return $email;
     }
 
@@ -100,7 +100,7 @@ class PendingEmailRepository implements PendingEmailRepositoryInterface
      */
     public function deleteByUserIds($userIds)
     {
-        return $this->query()->whereIn('userId', (array) $userIds)->delete();
+        return $this->query()->whereIn('user_id', (array) $userIds)->delete();
     }
 
     /**
@@ -113,7 +113,7 @@ class PendingEmailRepository implements PendingEmailRepositoryInterface
      */
     public function findByConfirmationCode($userId, $code)
     {
-        $email = $this->query()->where('userId', $userId)->where('confirmationCode', $code)->first();
+        $email = $this->query()->where('user_id', $userId)->where('confirmation_code', $code)->first();
         return $email;
     }
 }

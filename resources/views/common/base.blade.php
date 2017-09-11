@@ -39,6 +39,23 @@
             @endif
         });
 
+        $(document).on('click', 'a[target]', function (e) {
+            e.preventDefault();
+
+            var $this = $(this);
+            var href = $this.attr('href');
+            var splitHref = href.split('://');
+
+            if(splitHref.length === 1
+            || (splitHref.length > 1 && splitHref[1].indexOf(xeBaseURL.split('://')[1]) !== -1)) {
+                window.open(href);
+
+            } else {
+                blankshield.open(href);
+
+            }
+        });
+
         <!-- Translation -->
         {!! XeFrontend::output('translation') !!}
     </script>
@@ -48,6 +65,7 @@
 
     <!-- CUSTOM TAGS -->
     {!! XeFrontend::output('html', 'head.append') !!}
+
 </head>
 
 <body class="{{ XeFrontend::output('bodyClass') }}">

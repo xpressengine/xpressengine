@@ -1,6 +1,6 @@
 <?php
 /**
- * Exceptions
+ * InvalidWasteException
  *
  * PHP version 5
  *
@@ -17,7 +17,7 @@ namespace Xpressengine\Trash\Exceptions;
 use Xpressengine\Trash\TrashException;
 
 /**
- * Repository Exception
+ * InvalidWasteException
  *
  * @category    Trash
  * @package     Xpressengine\Trash

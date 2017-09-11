@@ -31,7 +31,7 @@ class RoundRobinDistributorTest extends \PHPUnit_Framework_TestCase
         $file = m::mock('Symfony\Component\HttpFoundation\File\UploadedFile');
 
         $conn->shouldReceive('table')->once()->andReturn($conn);
-        $conn->shouldReceive('orderBy')->once()->with('createdAt', 'desc')->andReturn($conn);
+        $conn->shouldReceive('orderBy')->once()->with('created_at', 'desc')->andReturn($conn);
         $conn->shouldReceive('first')->once()->withNoArgs()->andReturn((object)[
             'disk' => 's3'
         ]);

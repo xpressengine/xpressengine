@@ -71,11 +71,11 @@ class MenuServiceProvider extends ServiceProvider
         // 메뉴아이템의 링크를 편하게 제공하기 위한 resolver 등록
         MenuItem::setLinkResolver(function(MenuItem $item){
             $title = xe_trans($item->getAttributeValue('title'));
-            if($item->getRelationValue('basicImage')) {
+            if($item->getRelationValue('basic_image')) {
                 if($item->isSelected()) {
                     $image = $item->getSelectedImage();
                 } else {
-                    $image = $item->basicImage;
+                    $image = $item->basic_image;
                 }
                 $hoverImage = $item->getHoverImage();
                 return sprintf('<img src="%s" class="__xe_menu_image" data-hover="%s" alt="%s"/>', $image, $hoverImage, $title);

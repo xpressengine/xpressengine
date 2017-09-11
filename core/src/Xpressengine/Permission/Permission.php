@@ -29,7 +29,7 @@ use Xpressengine\Support\Entity;
  * @link        https://xpressengine.io
  *
  * @property int $id
- * @property string $siteKey
+ * @property string $site_key
  * @property string $name
  */
 class Permission extends Entity implements IteratorAggregate

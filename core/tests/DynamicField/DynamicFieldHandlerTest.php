@@ -457,7 +457,7 @@ class DynamicFieldHandlerTest extends PHPUnit_Framework_TestCase
         $registerHandler->shouldReceive('getSkin')->andReturn($skin2);
 
         $result =$handler->getRules($config);
-        $this->assertEquals('required', $result[$id . 'F1']);
+        $this->assertEquals('required', $result[$id . '_f1']);
     }
 }
 

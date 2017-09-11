@@ -318,9 +318,9 @@ class MenuHandler
             $this->routes->create([
                 'url' => $item->url,
                 'module' => $menuTypeObj::getId(),
-                'instanceId' => $item->getKey(),
-                'menuId' => $item->{$item->getAggregatorKeyName()},
-                'siteKey' => $item->menu->siteKey
+                'instance_id' => $item->getKey(),
+                'menu_id' => $item->{$item->getAggregatorKeyName()},
+                'site_key' => $item->menu->site_key
             ]);
         }
     }

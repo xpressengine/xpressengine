@@ -364,9 +364,9 @@ class CounterTest extends PHPUnit_Framework_TestCase
         $returnLogModel->user = $user;
 
         $counterLogModel->shouldReceive('get')->andReturn([$returnLogModel]);
-        $counterLogModel->shouldReceive('where')->once()->with('targetId', $targetId)->andReturnSelf();
-        $counterLogModel->shouldReceive('where')->once()->with('counterName', $counterName)->andReturnSelf();
-        $counterLogModel->shouldReceive('where')->once()->with('counterOption', '')->andReturnSelf();
+        $counterLogModel->shouldReceive('where')->once()->with('target_id', $targetId)->andReturnSelf();
+        $counterLogModel->shouldReceive('where')->once()->with('counter_name', $counterName)->andReturnSelf();
+        $counterLogModel->shouldReceive('where')->once()->with('counter_option', '')->andReturnSelf();
         $counter->shouldReceive('newModel')->andReturn($counterLogModel);
 
         $result = $counter->getUsers($targetId);

@@ -111,7 +111,7 @@ class DraftRepository
     {
         $attributes = array_merge($draft->getAttributes(), [
             'id' => $this->keygen->generate(),
-            'createdAt' => date('Y-m-d H:i:s')
+            'created_at' => date('Y-m-d H:i:s')
         ]);
 
         $this->conn->table($this->table)->insert($attributes);
@@ -127,7 +127,7 @@ class DraftRepository
      */
     public function update(DraftEntity $draft)
     {
-        $diff = array_merge($draft->getDirty(), ['createdAt' => date('Y-m-d H:i:s')]);
+        $diff = array_merge($draft->getDirty(), ['created_at' => date('Y-m-d H:i:s')]);
 
         $this->conn->table($this->table)->where('id', $draft->id)->update($diff);
 

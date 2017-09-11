@@ -52,10 +52,10 @@ class TagRepository
                 // 존재 유무와 상관없이 insert 시도 함
                 // duplicate error 무시
                 $conn->table($tag->getTaggableTable())->insert([
-                    'tagId' => $tag->getKey(),
-                    'taggableId' => $taggableId,
+                    'tag_id' => $tag->getKey(),
+                    'taggable_id' => $taggableId,
                     'position' => $position,
-                    'createdAt' => $this->getNow()
+                    'created_at' => $this->getNow()
                 ]);
 
                 $tag->increment('count');
@@ -65,8 +65,8 @@ class TagRepository
                 }
 
                 $conn->table($tag->getTaggableTable())
-                    ->where('tagId', $tag->getKey())
-                    ->where('taggableId', $taggableId)
+                    ->where('tag_id', $tag->getKey())
+                    ->where('taggable_id', $taggableId)
                     ->update(['position' => $position]);
             }
 
@@ -87,8 +87,8 @@ class TagRepository
         /** @var Tag $tag */
         foreach ($tags as $tag) {
             $conn->table($tag->getTaggableTable())
-                ->where('tagId', $tag->getKey())
-                ->where('taggableId', $taggableId)
+                ->where('tag_id', $tag->getKey())
+                ->where('taggable_id', $taggableId)
                 ->delete();
 
             $tag->decrement('count');
@@ -106,8 +106,8 @@ class TagRepository
         $model = $this->createModel();
 
         return $this->query()
-            ->rightJoin($model->getTaggableTable(), $model->getTable().'.id', '=', $model->getTaggableTable().'.tagId')
-            ->where('taggableId', $taggableId)
+            ->rightJoin($model->getTaggableTable(), $model->getTable().'.id', '=', $model->getTaggableTable().'.tag_id')
+            ->where('taggable_id', $taggableId)
             ->orderBy('position')
             ->select([$model->getTable().'.*'])
             ->get();
@@ -125,7 +125,7 @@ class TagRepository
         $query = $this->query()->orderBy('count', 'desc')->orderBy('id', 'desc')->take($take);
 
         if ($instanceId !== null) {
-            $query->where('instanceId', $instanceId);
+            $query->where('instance_id', $instanceId);
         }
 
         return $query->get();
@@ -156,7 +156,7 @@ class TagRepository
         $model = $this->createModel();
 
         $query = $this->query()
-            ->rightJoin($model->getTaggableTable(), $model->getTaggableTable().'.tagId', '=', $model->getTable().'.id')
+            ->rightJoin($model->getTaggableTable(), $model->getTaggableTable().'.tag_id', '=', $model->getTable().'.id')
             ->select([$model->getTable().'.*', new Expression('count(*) as cnt')])
             ->groupBy($model->getTable().'.word')
             ->orderBy('cnt', 'desc')
@@ -164,13 +164,13 @@ class TagRepository
             ->take($take);
 
         if ($until !== null) {
-            $query->whereBetween($this->getTaggableTable().'.createdAt', [$since, $until]);
+            $query->whereBetween($this->getTaggableTable().'.created_at', [$since, $until]);
         } else {
-            $query->where($this->getTaggableTable().'.createdAt', '>', $since);
+            $query->where($this->getTaggableTable().'.created_at', '>', $since);
         }
 
         if ($instanceId !== null) {
-            $query->where($model->getTable().'.instanceId', $instanceId);
+            $query->where($model->getTable().'.instance_id', $instanceId);
         }
 
         return $query->get();
@@ -205,7 +205,7 @@ class TagRepository
             ->take($take);
 
         if ($instanceId) {
-            $query->where('instanceId', $instanceId);
+            $query->where('instance_id', $instanceId);
         }
 
         return $query->get();

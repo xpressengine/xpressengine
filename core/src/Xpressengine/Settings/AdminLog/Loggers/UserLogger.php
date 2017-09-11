@@ -82,7 +82,7 @@ class UserLogger extends AbstractLogger
                 'settings.user.edit' => function (Request $request) {
                     $data = $this->loadRequest($request);
                     $data['summary'] = '회원상세정보 열람';
-                    array_set($data['data'], 'userId', $request->route()->parameter('id'));
+                    array_set($data['data'], 'user_id', $request->route()->parameter('id'));
                     array_set($data['data'], 'route', $request->route()->getName());
                     $this->log($data);
                 },
@@ -98,21 +98,21 @@ class UserLogger extends AbstractLogger
                 'settings.user.mail.add' => function (Request $request) {
                     $data = $this->loadRequest($request);
                     $data['summary'] = '회원 이메일 추가';
-                    array_set($data['data'], 'userId', $request->route()->parameter('id'));
+                    array_set($data['data'], 'user_id', $request->route()->parameter('id'));
                     array_set($data['data'], 'route', $request->route()->getName());
                     $this->log($data);
                 },
                 'settings.user.mail.delete' => function (Request $request) {
                     $data = $this->loadRequest($request);
                     $data['summary'] = '회원 이메일 삭제';
-                    array_set($data['data'], 'userId', $request->route()->parameter('id'));
+                    array_set($data['data'], 'user_id', $request->route()->parameter('id'));
                     array_set($data['data'], 'route', $request->route()->getName());
                     $this->log($data);
                 },
                 'settings.user.mail.confirm' => function (Request $request) {
                     $data = $this->loadRequest($request);
                     $data['summary'] = '회원 이메일 승인';
-                    array_set($data['data'], 'userId', $request->route()->parameter('id'));
+                    array_set($data['data'], 'user_id', $request->route()->parameter('id'));
                     array_set($data['data'], 'route', $request->route()->getName());
                     $this->log($data);
                 },
@@ -121,7 +121,7 @@ class UserLogger extends AbstractLogger
                 'settings.user.update' => function (Request $request) {
                     $data = $this->loadRequest($request);
                     $data['summary'] = '회원정보 수정';
-                    array_set($data['data'], 'userId', $request->route()->parameter('id'));
+                    array_set($data['data'], 'user_id', $request->route()->parameter('id'));
                     array_forget($data['parameters'], 'password');
                     array_set($data['data'], 'route', $request->route()->getName());
                     $this->log($data);
@@ -131,7 +131,7 @@ class UserLogger extends AbstractLogger
                 'settings.user.destroy' => function (Request $request) {
                     $data = $this->loadRequest($request);
                     $data['summary'] = '회원정보 삭제';
-                    array_set($data['data'], 'userId', $request->route()->parameter('id'));
+                    array_set($data['data'], 'user_id', $request->route()->parameter('id'));
                     array_set($data['data'], 'route', $request->route()->getName());
                     $this->log($data);
                 },

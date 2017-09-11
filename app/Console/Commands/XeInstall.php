@@ -78,7 +78,7 @@ class XeInstall extends Command
         'admin' => [
             'email' => null,
             'password' => null,
-            'displayName' => 'admin',
+            'display_name' => 'admin',
         ],
         'database' => [
             'host' => 'localhost',
@@ -797,7 +797,7 @@ class XeInstall extends Command
         });
 
         // displayName
-        $adminInfo['displayName'] = $this->askValidation('Name', $adminInfo['displayName'], function ($displayName) {
+        $adminInfo['display_name'] = $this->askValidation('Name', $adminInfo['display_name'], function ($displayName) {
             if (strlen(trim($displayName)) === 0) {
                 throw new \Exception('Input Name');
             }
@@ -865,7 +865,7 @@ class XeInstall extends Command
         $info = [
             'from' => [
                 'address' => $config['email'],
-                'name' => $config['displayName']
+                'name' => $config['display_name']
             ],
         ];
         $this->configFileGenerate('mail', $info);

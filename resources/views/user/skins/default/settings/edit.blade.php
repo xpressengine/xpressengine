@@ -114,7 +114,7 @@
                     <p>{{ xe_trans('xe::password') }}</p>
                     <em class="text-gray">
                         @if($user->password)
-                            {!! xe_trans('xe::changedAt', ['time' => '<span title="'.$user->passwordUpdatedAt->format('Y-m-d H:i:s').'" data-xe-timeago="'.$user->passwordUpdatedAt.'">"'.$user->passwordUpdatedAt->format('Y-m-d H:i:s').'"</span>' ]) !!}.
+                            {!! xe_trans('xe::changedAt', ['time' => '<span title="'.$user->password_updated_at->format('Y-m-d H:i:s').'" data-xe-timeago="'.$user->password_updated_at.'">"'.$user->password_updated_at->format('Y-m-d H:i:s').'"</span>' ]) !!}.
                         @else
                             {{ xe_trans('xe::passwordNotRegisterd') }}
                         @endif

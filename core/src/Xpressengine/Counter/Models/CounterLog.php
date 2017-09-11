@@ -20,13 +20,13 @@ use Xpressengine\Database\Eloquent\DynamicModel;
  * CounterLog
  *
  * @property string id
- * @property string counterName
- * @property string counterOption
- * @property string targetId
- * @property string userId
+ * @property string counter_name
+ * @property string counter_option
+ * @property string target_id
+ * @property string user_id
  * @property integer point
  * @property string ipaddress
- * @property string createdAt
+ * @property string created_at
  *
  * @category    Counter
  * @package     Xpressengine\Counter

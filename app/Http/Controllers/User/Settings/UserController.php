@@ -56,7 +56,7 @@ class UserController extends Controller
             $query = $query->whereHas(
                 'groups',
                 function (Builder $q) use ($group) {
-                    $q->where('groupId', $group);
+                    $q->where('group_id', $group);
                 }
             );
         }
@@ -67,9 +67,9 @@ class UserController extends Controller
         }
 
         // resolve search keyword
-        // keyfield가 지정되지 않을 경우 email, displayName를 대상으로 검색함
-        $field = $request->get('keyfield', 'email,displayName');
-        $field = ($field === '') ? 'email,displayName' : $field;
+        // keyfield가 지정되지 않을 경우 email, display_name를 대상으로 검색함
+        $field = $request->get('keyfield', 'email,display_name');
+        $field = ($field === '') ? 'email,display_name' : $field;
 
         if ($keyword = trim($request->get('keyword'))) {
             $query = $query->where(
@@ -81,7 +81,7 @@ class UserController extends Controller
             );
         }
 
-        $users = $query->orderBy('createdAt', 'desc')->paginate();
+        $users = $query->orderBy('created_at', 'desc')->paginate();
 
         // get all groups
         $groups = $this->handler->groups()->all();
@@ -144,7 +144,7 @@ class UserController extends Controller
             $request,
             [
                 'email' => 'email|required',
-                'displayName' => 'required',
+                'display_name' => 'required',
                 'password' => 'required|password',
             ]
         );
@@ -310,7 +310,7 @@ class UserController extends Controller
             throw $e;
         }
 
-        $mails = $this->handler->emails()->where(['userId' => $id])->get();
+        $mails = $this->handler->emails()->where(['user_id' => $id])->get();
 
         return XePresenter::makeApi(['mails' => $mails]);
     }
@@ -478,8 +478,8 @@ class UserController extends Controller
             return XePresenter::makeApi([]);
         }
 
-        $matchedUserList = $users->query()->where('displayName', 'like', '%'.$keyword.'%')->paginate( null,
-            ['id', 'displayName', 'email']
+        $matchedUserList = $users->query()->where('display_name', 'like', '%'.$keyword.'%')->paginate( null,
+            ['id', 'display_name', 'email']
         )->items();
 
         return XePresenter::makeApi($matchedUserList);

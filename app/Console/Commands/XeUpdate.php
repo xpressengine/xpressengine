@@ -55,9 +55,13 @@ class XeUpdate extends Command
 
         // php artisan xe:update [version] [--skip-download]
 
-        // title
         // Xpressengine을 업데이트합니다.
         $this->output->block('Updating Xpressengine.');
+
+        if (!$this->option('skip-composer')) {
+            $this->output->section('Checking environment for Composer...');
+            $this->prepareComposer();
+        }
 
         // check option
         if (!$this->option('skip-download')) {
@@ -74,7 +78,7 @@ class XeUpdate extends Command
         $this->output->text("  $installedVersion -> ".__XE_VERSION__);
 
         // confirm
-        if($this->input->isInteractive() && $this->confirm(
+        if ($this->input->isInteractive() && $this->confirm(
                 // Xpressengine ver.".__XE_VERSION__."을 업데이트합니다. 최대 수분이 소요될 수 있습니다.\r\n 업데이트 하시겠습니까?
                 "The Xpressengine ver.".__XE_VERSION__." will be updated. It may take up to a few minutes. \r\nDo you want to update?"
             ) === false
@@ -88,7 +92,7 @@ class XeUpdate extends Command
         $writer->reset()->write();
 
         // composer update실행(composer update --no-dev)
-        if(!$this->option('skip-composer')) {
+        if (!$this->option('skip-composer')) {
             $this->output->section('Composer update command is running.. It may take up to a few minutes.');
             $this->line(" composer update");
             $result = $this->runComposer(['command' => 'update'], false);

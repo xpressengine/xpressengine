@@ -77,16 +77,6 @@ abstract class DynamicModel extends Model
     protected $dynamicAttributes = [];
 
     /**
-     * column nam of created at
-     */
-    const CREATED_AT = 'createdAt';
-
-    /**
-     * column nam of updated at
-     */
-    const UPDATED_AT = 'updatedAt';
-
-    /**
      * column nam of deleted at
      */
     const DELETED_AT = 'deletedAt';

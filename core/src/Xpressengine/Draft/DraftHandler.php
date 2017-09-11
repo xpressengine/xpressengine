@@ -63,7 +63,7 @@ class DraftHandler
     public function get($key)
     {
         return $this->repo->fetch([
-            'userId' => $this->auth->user()->getId(),
+            'user_id' => $this->auth->user()->getId(),
             'key' => $key,
         ]);
     }
@@ -88,9 +88,9 @@ class DraftHandler
     public function getAuto($key)
     {
         $arr = $this->repo->fetch([
-            'userId' => $this->auth->user()->getId(),
+            'user_id' => $this->auth->user()->getId(),
             'key' => $key,
-            'isAuto' => 1
+            'is_auto' => 1
         ]);
 
         return array_shift($arr);
@@ -113,11 +113,11 @@ class DraftHandler
 
         $draft = new DraftEntity();
         $draft->fill([
-            'userId' => $this->auth->user()->getId(),
+            'user_id' => $this->auth->user()->getId(),
             'key' => $key,
             'val' => $val,
             'etc' => serialize($etc),
-            'isAuto' => $isAuto ? 1 : 0
+            'is_auto' => $isAuto ? 1 : 0
         ]);
 
         return $this->repo->insert($draft);

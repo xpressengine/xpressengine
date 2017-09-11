@@ -24,10 +24,10 @@ class SiteMigration extends Migration {
         Schema::create('site', function (Blueprint $table) {
             $table->engine = "InnoDB";
 
-            $table->string('siteKey')->comment('site key');
+            $table->string('site_key')->comment('site key');
             $table->string('host')->commet('host');
 
-            $table->primary('siteKey');
+            $table->primary('site_key');
         });
     }
 
@@ -35,6 +35,6 @@ class SiteMigration extends Migration {
     {
         $url = \Config::get('app.url');
         $url = preg_replace('#^https?://#', '', $url);
-        \DB::table('site')->insert(['host' => $url, 'siteKey' => 'default']);
+        \DB::table('site')->insert(['host' => $url, 'site_key' => 'default']);
     }
 }

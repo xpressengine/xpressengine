@@ -64,7 +64,7 @@ class InstallController extends Controller
             'admin' => [
                 'email' => $request->get('admin_email'),
                 'password' => $request->get('admin_password'),
-                'displayName' => $request->get('admin_display_name') != '' ? $request->get('admin_display_name') : 'admin',
+                'display_name' => $request->get('admin_display_name') != '' ? $request->get('admin_display_name') : 'admin',
             ],
             'database' => [
                 'host' => $request->get('database_host') != '' ? $request->get('database_host') : 'localhost',

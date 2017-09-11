@@ -5,7 +5,7 @@
 </div>
 <div class="auth-group">
     <label for="name" class="xe-sr-only">{{xe_trans('xe::name')}}</label>
-    <input type="text" id="name" class="xe-form-control" placeholder="{{xe_trans('xe::name')}}" name="displayName" value="{{ old('displayName') }}">
+    <input type="text" id="name" class="xe-form-control" placeholder="{{xe_trans('xe::name')}}" name="display_name" value="{{ old('display_name') }}">
 </div>
 <div class="auth-group">
     <label for="pwd" class="xe-sr-only">{{xe_trans('xe::password')}}</label>

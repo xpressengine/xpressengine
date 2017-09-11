@@ -73,7 +73,7 @@ class PermissionHandler
     {
         if (!$permission = $this->get($name, $siteKey)) {
             $permission = $this->newItem();
-            $permission->siteKey = $siteKey;
+            $permission->site_key = $siteKey;
             $permission->name = $name;
         }
 
@@ -104,7 +104,7 @@ class PermissionHandler
      */
     protected function setAncestor(Permission $permission)
     {
-        $ancestors = $this->repo->fetchAncestor($permission->siteKey, $permission->name);
+        $ancestors = $this->repo->fetchAncestor($permission->site_key, $permission->name);
         usort($ancestors, function (Permission $a, Permission $b) {
             if ($a->getDepth() == $b->getDepth()) {
                 return 0;
@@ -209,7 +209,7 @@ class PermissionHandler
      */
     public function move(Permission $permission, $to = null)
     {
-        $toParent = $to !== null ? $this->repo->findByName($permission->siteKey, $to) : null;
+        $toParent = $to !== null ? $this->repo->findByName($permission->site_key, $to) : null;
 
         if (($to !== null && $toParent === null)
             || ($toParent !== null && $permission->type != $toParent->type)) {

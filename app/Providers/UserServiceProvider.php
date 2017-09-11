@@ -571,7 +571,7 @@ class UserServiceProvider extends ServiceProvider
             'email',
             [
                 'title' => '이메일 인증',
-                'description' => '사용자의 이메일로 인증정보를 전송하여 인증합니다. "인증없이 가입 허용"을 사용할 경우 비활성화됩니다.',
+                'description' => '사용자의 이메일로 인증정보를 전송하여 인증합니다.',
                 'render' => function () {
                     $config = app('xe.config')->get('user.join');
                     if($config->get('guard_forced') === false) {
@@ -593,7 +593,7 @@ class UserServiceProvider extends ServiceProvider
                 'description' => '인증번호를 입력하는 폼입니다. 이메일 인증시에만 출력되며, 상단에 배치하시기 바랍니다.',
                 'forced' => true,
                 'render' => function ($token) {
-                    if ($token->guard !== 'email') {
+                    if ($token === null || $token->guard !== 'email') {
                         return null;
                     }
                     $code = request()->get('code');

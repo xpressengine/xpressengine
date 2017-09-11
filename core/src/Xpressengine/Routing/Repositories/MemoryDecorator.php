@@ -222,11 +222,11 @@ class MemoryDecorator implements RouteRepository
      */
     protected function setToSiteKeyMap(InstanceRoute $route)
     {
-        if (!isset($this->mapBySiteKey[$route->siteKey])) {
-            $this->mapBySiteKey[$route->siteKey] = [];
+        if (!isset($this->mapBySiteKey[$route->site_key])) {
+            $this->mapBySiteKey[$route->site_key] = [];
         }
 
-        $this->mapBySiteKey[$route->siteKey][$route->url] = $route;
+        $this->mapBySiteKey[$route->site_key][$route->url] = $route;
     }
 
     /**
@@ -252,7 +252,7 @@ class MemoryDecorator implements RouteRepository
      */
     protected function setToInstanceIdMap(InstanceRoute $route)
     {
-        $this->mapByInstanceId[$route->instanceId] = $route;
+        $this->mapByInstanceId[$route->instance_id] = $route;
     }
 
     /**
@@ -276,8 +276,8 @@ class MemoryDecorator implements RouteRepository
      */
     protected function unsetFromSiteKeyMap(InstanceRoute $route)
     {
-        if (isset($this->mapBySiteKey[$route->siteKey]) && isset($this->mapBySiteKey[$route->siteKey][$route->url])) {
-            unset($this->mapBySiteKey[$route->siteKey][$route->url]);
+        if (isset($this->mapBySiteKey[$route->site_key]) && isset($this->mapBySiteKey[$route->site_key][$route->url])) {
+            unset($this->mapBySiteKey[$route->site_key][$route->url]);
         }
     }
 
@@ -302,8 +302,8 @@ class MemoryDecorator implements RouteRepository
      */
     protected function unsetFromInstanceIdMap(InstanceRoute $route)
     {
-        if (isset($this->mapByInstanceId[$route->instanceId])) {
-            unset($this->mapByInstanceId[$route->instanceId]);
+        if (isset($this->mapByInstanceId[$route->instance_id])) {
+            unset($this->mapByInstanceId[$route->instance_id]);
         }
     }
 }
