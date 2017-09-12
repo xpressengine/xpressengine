@@ -69,10 +69,6 @@ class Handler extends ExceptionHandler
             Event::fire('cache:cleared', ['plugins']);
         }
 
-        if ($this->isUnauthorizedException($e)) {
-            $e = new HttpException(403, $e->getMessage());
-        }
-
         $converted = $this->converter($e);
 
         // 테마를 이용한 리턴은 어떻게?
