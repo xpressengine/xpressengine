@@ -68,7 +68,6 @@ class Kernel extends HttpKernel
             $this->resetForInstall();
         }
 
-
         parent::bootstrap();
     }
 
@@ -97,7 +96,6 @@ class Kernel extends HttpKernel
     protected function resetForSafeMode()
     {
         $this->middleware = [
-            \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
             \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,

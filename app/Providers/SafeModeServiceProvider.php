@@ -16,7 +16,8 @@ class SafeModeServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        app('config')->set('app.debug', true);
+        // 에러 페이지 출력할 때 문제
+//        app('config')->set('app.debug', true);
 
         app('config')->set('auth.driver', 'database');
         app('config')->set('auth.table', 'user');

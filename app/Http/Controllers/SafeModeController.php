@@ -15,7 +15,6 @@ use View;
 use DB;
 use Schema;
 use Auth;
-use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
 use Illuminate\Cache\CacheManager;
 
 class SafeModeController extends Controller
@@ -30,7 +29,7 @@ class SafeModeController extends Controller
             in_array($segment, ['', 'auth', 'login']) === false &&
             Auth::check() === false
         ) {
-            throw new AccessDeniedHttpException;
+            throw new \Illuminate\Contracts\Validation\UnauthorizedException;
         }
     }
 
