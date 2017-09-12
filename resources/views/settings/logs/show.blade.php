@@ -6,7 +6,7 @@
         <dl>
             <div class="panel panel-default">
                 <div class="panel-heading">요청일시</div>
-                <div class="panel-body"> {{ $log->createdAt->format('y.m.d H:i:s') }} </div>
+                <div class="panel-body"> {{ $log->created_at->format('y.m.d H:i:s') }} </div>
             </div>
             <div class="panel panel-default">
                 <div class="panel-heading">관리회원</div>

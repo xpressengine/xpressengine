@@ -98,7 +98,7 @@
                         <tbody>
                         @foreach($logs as $log)
                         <tr>
-                            <td>{{ $log->createdAt->format('y-m-d H:i:s') }}</td>
+                            <td>{{ $log->created_at->format('y-m-d H:i:s') }}</td>
                             <td>
                                 @if($logger = array_get($loggers, $log->type))
                                 {{  $logger::$title }}
