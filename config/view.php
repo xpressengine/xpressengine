@@ -30,4 +30,13 @@ return [
 
 	'compiled' => realpath(storage_path('framework/views')),
 
+	/*
+	|--------------------------------------------------------------------------
+	| Error View Path
+	|--------------------------------------------------------------------------
+	|
+	| This option using by Exception/Handler
+	|
+	*/
+	'error' => 'errors',
 ];
