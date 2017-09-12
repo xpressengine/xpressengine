@@ -344,8 +344,23 @@ class MenuItem extends CategoryItem
         return $callback($this);
     }
 
+    /**
+     * Get children attribute
+     *
+     * @return \Illuminate\Database\Eloquent\Collection|MenuItem[]
+     */
     public function getChildrenAttribute()
     {
         return $this->getChildren();
+    }
+
+    /**
+     * Get target attribute
+     *
+     * @return string
+     */
+    public function getTargetAttribute()
+    {
+        return $this->getAttributeFromArray('target') ?: '_self';
     }
 }
