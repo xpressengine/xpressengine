@@ -68,6 +68,10 @@ class Kernel extends HttpKernel
             $this->resetForInstall();
         }
 
+        if ($this->isSafeMode() === false && $this->isMaintenanceMode() === true) {
+            $this->resetForMaintenanceMode();
+        }
+
         parent::bootstrap();
     }
 
@@ -137,6 +141,35 @@ class Kernel extends HttpKernel
         $this->resetProviders([
             \App\Providers\InstallServiceProvider::class
         ]);
+    }
+
+    /**
+     * is maintenance mode
+     *
+     * @return bool
+     */
+    protected function isMaintenanceMode()
+    {
+        return $this->app->isDownForMaintenance();
+    }
+
+    /**
+     * Reset for maintenance mode
+     *
+     * @return void
+     */
+    protected function resetForMaintenanceMode()
+    {
+        $this->middleware = [
+            \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+            \App\Http\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            \App\Http\Middleware\ExceptAppendableVerifyCsrfToken::class,
+        ];
+
+        $this->resetProviders([]);
     }
 
     /**
