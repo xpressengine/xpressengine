@@ -1,3 +1,6 @@
+@extends("{$path}._frame")
+
+@section('content')
 <div class="login-header error-{{ $exception->getStatusCode() }}">
     <i class="xi-error-o xi-5x"></i>
     <h1>{{ $exception->getMessage() }}</h1>
@@ -17,3 +20,4 @@
     <a href="{{ route('auth.register') }}"><span>{{xe_trans('xe::signUp')}}</span></a>
     @endif
 </div>
+@stop

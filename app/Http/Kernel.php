@@ -106,7 +106,6 @@ class Kernel extends HttpKernel
             $this->resetForInstall();
         }
 
-
         parent::bootstrap();
     }
 
