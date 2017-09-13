@@ -7,6 +7,6 @@
 </div>
 
 <div class="login-body">
-    <p><a href="{{ URL::previous() }}">{{ xe_trans('xe::back') }}</a></p>
+    <p><a href="{{ URL::previous() }}">뒤로가기</a></p>
 </div>
 @stop

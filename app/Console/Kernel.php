@@ -48,6 +48,15 @@ class Kernel extends ConsoleKernel
         Commands\SkinMake::class,
     ];
 
+    protected $skipXE = false;
+
+    protected $skipXECommands = [
+        'cache:clear',
+        'view:clear',
+        'down',
+        'up',
+    ];
+
     /**
      * Define the application's command schedule.
      *
@@ -71,6 +80,23 @@ class Kernel extends ConsoleKernel
     }
 
     /**
+     * Run the console application.
+     *
+     * @param  \Symfony\Component\Console\Input\InputInterface  $input
+     * @param  \Symfony\Component\Console\Output\OutputInterface  $output
+     * @return int
+     */
+    public function handle($input, $output = null)
+    {
+        $command = $input->getFirstArgument();
+        if (in_array($command, $this->skipXECommands)) {
+            $this->skipXE = true;
+        }
+
+        return parent::handle($input, $output);
+    }
+
+    /**
      * Bootstrap the application for artisan commands.
      *
      * @return void
@@ -82,11 +108,19 @@ class Kernel extends ConsoleKernel
 
         if (!$this->isInstalled() && $withXE !== true) {
             $this->resetForFramework();
+        } elseif ($this->skipXE !== false) {
+            // without xe
+            $this->resetForFramework();
         }
 
         parent::bootstrap();
     }
 
+    /**
+     * check xe installed
+     *
+     * @return bool
+     */
     protected function isInstalled()
     {
         return file_exists($this->app->storagePath() . '/app/installed');

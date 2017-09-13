@@ -207,7 +207,7 @@ class Handler extends ExceptionHandler
             $converted = $e;
         }
         $status = 500;
-        if (method_exists($converted, 'setMessage') == true) {
+        if (method_exists($converted, 'getStatusCode') == true) {
             /** @var HttpException $converted */
             $status = $converted->getStatusCode();
         }

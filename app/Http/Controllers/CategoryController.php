@@ -100,7 +100,7 @@ class CategoryController extends Controller
             throw new InvalidArgumentHttpException;
         }
 
-        $parent = XeCategory::items()->find($request->get('parentId'));
+        $parent = XeCategory::items()->find($request->get('parent_id'));
 
         DB::beginTransaction();
 
