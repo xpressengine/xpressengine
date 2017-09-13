@@ -2,10 +2,13 @@
 
 namespace App\Http;
 
+use App\ResetProvidersTrait;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
 {
+    use ResetProvidersTrait;
+
     /**
      * The bootstrap classes for the application.
      *
@@ -159,28 +162,5 @@ class Kernel extends HttpKernel
         $this->resetProviders([
             \App\Providers\InstallServiceProvider::class
         ]);
-    }
-
-    /**
-     * Define for providers of framework.
-     *
-     * @return void
-     */
-    protected function resetProviders(array $customs = [])
-    {
-        $this->app['events']->listen('bootstrapped: App\Bootstrappers\LoadConfiguration', function ($app) use ($customs) {
-            $config = $app['config'];
-
-            $providers = $config['app.providers'];
-            $providers = array_filter($providers, function ($p) {
-                return substr($p, 0, strlen('Illuminate')) == 'Illuminate';
-            });
-
-            foreach ($customs as $custom) {
-                $providers[] = $custom;
-            }
-
-            $config->set('app.providers', $providers);
-        });
     }
 }

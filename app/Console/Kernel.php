@@ -2,11 +2,14 @@
 
 namespace App\Console;
 
+use App\ResetProvidersTrait;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
+    use ResetProvidersTrait;
+
     /**
      * The bootstrap classes for the application.
      *
@@ -64,8 +67,6 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-//        $this->load(__DIR__.'/Commands');
-
         require base_path('routes/console.php');
     }
 
@@ -100,25 +101,6 @@ class Kernel extends ConsoleKernel
     {
         $this->resetProviders();
         $this->setCommandBeforeInstall();
-    }
-
-    /**
-     * Define for providers of framework.
-     *
-     * @return void
-     */
-    protected function resetProviders()
-    {
-        $this->app['events']->listen('bootstrapped: App\Bootstrappers\LoadConfiguration', function ($app) {
-            $config = $app['config'];
-
-            $providers = $config['app.providers'];
-            $providers = array_filter($providers, function ($p) {
-                return substr($p, 0, strlen('Illuminate')) == 'Illuminate';
-            });
-
-            $config->set('app.providers', $providers);
-        });
     }
 
     /**
