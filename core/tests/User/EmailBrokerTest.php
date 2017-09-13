@@ -14,7 +14,7 @@ use Xpressengine\User\EmailBroker;
 use Xpressengine\User\EmailInterface;
 use Xpressengine\User\UserHandler;
 
-class EmailBrokerTest extends \PHPUnit_Framework_TestCase
+class EmailBrokerTest extends \PHPUnit\Framework\TestCase
 {
     protected function tearDown()
     {

@@ -9,7 +9,7 @@
 namespace Xpressengine\Tests\Document;
 
 use Mockery as M;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Xpressengine\Document\InstanceManager;
 use Xpressengine\Document\Models\Document;
 
@@ -21,7 +21,7 @@ use Xpressengine\Document\Models\Document;
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class InstanceManagerTest extends PHPUnit_Framework_TestCase
+class InstanceManagerTest extends TestCase
 {
     /**
      * @var M\MockInterface|\Xpressengine\Document\ConfigHandler

@@ -11,7 +11,7 @@ namespace Xpressengine\Tests\Media;
 use Mockery as m;
 use Xpressengine\Media\Commands\LetterCommand;
 
-class LetterCommandTest extends \PHPUnit_Framework_TestCase
+class LetterCommandTest extends \PHPUnit\Framework\TestCase
 {
     public function tearDown()
     {

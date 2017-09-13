@@ -9,7 +9,7 @@
 namespace Xpressengine\Tests\Presenter;
 
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Xpressengine\Presenter\Json\JsonPresenter;
 
 /**
@@ -20,7 +20,7 @@ use Xpressengine\Presenter\Json\JsonPresenter;
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class JsonPresenterTest extends PHPUnit_Framework_TestCase
+class JsonPresenterTest extends TestCase
 {
     /**
      * @var m\MockInterface|\Xpressengine\Presenter\Presenter

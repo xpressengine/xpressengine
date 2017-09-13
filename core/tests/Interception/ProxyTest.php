@@ -12,7 +12,7 @@ use Xpressengine\Interception\Advisor;
 use Xpressengine\Interception\InterceptionHandler;
 use Xpressengine\Interception\Proxy;
 
-class ProxyTest /*extends \PHPUnit_Framework_TestCase*/
+class ProxyTest /*extends \PHPUnit\Framework\TestCase*/
 {
 
     /**

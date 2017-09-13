@@ -10,7 +10,7 @@ namespace Xpressengine\Tests\Frontend;
 
 use Xpressengine\Presenter\Html\Tags\Meta;
 
-class MetaTest extends \PHPUnit_Framework_TestCase
+class MetaTest extends \PHPUnit\Framework\TestCase
 {
 
 

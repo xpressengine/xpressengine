@@ -10,7 +10,7 @@ namespace Xpressengine\Tests\Skin;
 
 use Xpressengine\Skin\SkinEntity;
 
-class SkinEntityTest extends \PHPUnit_Framework_TestCase
+class SkinEntityTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstruct()
     {

@@ -12,7 +12,7 @@ namespace Xpressengine\Tests\Interception;
 use ReflectionMethod;
 use Xpressengine\Interception\Proxy\ProxyConfig;
 
-class ProxyConfigTest extends \PHPUnit_Framework_TestCase
+class ProxyConfigTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstruct()
     {

@@ -10,7 +10,7 @@ namespace Xpressengine\Tests\Keygen;
 
 use Xpressengine\Keygen\Keygen;
 
-class KeygenTest extends \PHPUnit_Framework_TestCase
+class KeygenTest extends \PHPUnit\Framework\TestCase
 {
     public function testGenerateReturnString()
     {

@@ -9,7 +9,7 @@
 namespace Xpressengine\Tests\DynamicField;
 
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Xpressengine\DynamicField\RegisterHandler;
 
 /**
@@ -20,7 +20,7 @@ use Xpressengine\DynamicField\RegisterHandler;
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class RegisterHandlerTest extends PHPUnit_Framework_TestCase
+class RegisterHandlerTest extends TestCase
 {
     /**
      * @var m\MockInterface|\Xpressengine\Plugin\PluginRegister

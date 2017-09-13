@@ -13,7 +13,7 @@ use Mockery;
 use ReflectionClass;
 use Xpressengine\Interception\Proxy\Pass\MethodDefinitionPass;
 
-class MethodDefinitionPassTest extends \PHPUnit_Framework_TestCase
+class MethodDefinitionPassTest extends \PHPUnit\Framework\TestCase
 {
     public function testApply()
     {

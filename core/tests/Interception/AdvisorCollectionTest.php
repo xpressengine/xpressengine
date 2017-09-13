@@ -11,7 +11,7 @@ namespace Xpressengine\Tests\Interception;
 use Xpressengine\Interception\Advisor;
 use Xpressengine\Interception\AdvisorCollection;
 
-class AdvisorCollectionTest extends \PHPUnit_Framework_TestCase
+class AdvisorCollectionTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

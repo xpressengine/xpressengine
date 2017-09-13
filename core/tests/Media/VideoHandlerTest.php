@@ -11,7 +11,7 @@ namespace Xpressengine\Tests\Media;
 use Mockery as m;
 use Xpressengine\Media\Handlers\VideoHandler;
 
-class VideoHandlerTest extends \PHPUnit_Framework_TestCase
+class VideoHandlerTest extends \PHPUnit\Framework\TestCase
 {
     public function tearDown()
     {

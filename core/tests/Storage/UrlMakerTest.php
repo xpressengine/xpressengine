@@ -4,7 +4,7 @@ namespace Xpressengine\Tests\Storage;
 use Mockery as m;
 use Xpressengine\Storage\UrlMaker;
 
-class UrlMakerTest extends \PHPUnit_Framework_TestCase
+class UrlMakerTest extends \PHPUnit\Framework\TestCase
 {
     public function tearDown()
     {

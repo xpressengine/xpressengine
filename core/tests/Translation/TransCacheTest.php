@@ -9,20 +9,21 @@
 namespace Xpressengine\Tests\Translation;
 
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Xpressengine\Translation\TransCache;
 
-class TransCacheTest extends PHPUnit_Framework_TestCase
+class TransCacheTest extends TestCase
 {
     public function tearDown()
     {
         m::close();
     }
 
+    /**
+     * @expectedException \Exception
+     */
     public function testExceptionWhenCacheKeyIsNotSet()
     {
-        $this->setExpectedException('\Exception');
-
         $transCache = new TransCache($this->getCache());
         $transCache->get('ns', 'xe', 'en');
     }

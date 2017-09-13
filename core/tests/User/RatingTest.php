@@ -10,7 +10,7 @@ namespace Xpressengine\Tests\User;
 
 use Xpressengine\User\Rating;
 
-class RatingTest extends \PHPUnit_Framework_TestCase
+class RatingTest extends \PHPUnit\Framework\TestCase
 {
     public function testCampare()
     {

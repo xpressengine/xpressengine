@@ -11,7 +11,7 @@ namespace Xpressengine\Tests\Media;
 use Mockery as m;
 use Xpressengine\Media\Commands\WidenCommand;
 
-class WidenCommandTest extends \PHPUnit_Framework_TestCase
+class WidenCommandTest extends \PHPUnit\Framework\TestCase
 {
     public function tearDown()
     {

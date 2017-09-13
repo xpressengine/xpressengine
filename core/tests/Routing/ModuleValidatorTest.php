@@ -8,7 +8,7 @@
 
 namespace Xpressengine\Tests\Routing;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Mockery as m;
 use Xpressengine\Routing\InstanceRoute;
 use Xpressengine\Routing\InstanceRouteHandler;
@@ -26,7 +26,7 @@ use Xpressengine\Routing\RouteCollection;
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class ModuleValidatorTest extends PHPUnit_Framework_TestCase
+class ModuleValidatorTest extends TestCase
 {
     /**
      * tearDown

@@ -17,7 +17,7 @@ namespace Xpressengine\Tests\Skin;
 
 use Xpressengine\Skin\BladeSkin;
 
-class BladeSkinTest extends \PHPUnit_Framework_TestCase
+class BladeSkinTest extends \PHPUnit\Framework\TestCase
 {
     public function testRender()
     {

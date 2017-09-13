@@ -13,7 +13,7 @@ use Xpressengine\Register\Container;
 use Xpressengine\Skin\SkinHandler;
 use Xpressengine\Skin\SkinInstanceStore;
 
-class SkinHandlerTest extends \PHPUnit_Framework_TestCase
+class SkinHandlerTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

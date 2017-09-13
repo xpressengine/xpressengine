@@ -14,7 +14,7 @@ use Mockery as m;
 use Xpressengine\User\UserInterface;
 use Xpressengine\User\UserProvider;
 
-class UserProviderTest extends \PHPUnit_Framework_TestCase
+class UserProviderTest extends \PHPUnit\Framework\TestCase
 {
     public function tearDown()
     {

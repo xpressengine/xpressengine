@@ -10,7 +10,7 @@ namespace Xpressengine\Tests\Register;
 
 use Xpressengine\Register\Container as Container;
 
-class ContainerTest extends \PHPUnit_Framework_TestCase
+class ContainerTest extends \PHPUnit\Framework\TestCase
 {
 
     protected function tearDown()

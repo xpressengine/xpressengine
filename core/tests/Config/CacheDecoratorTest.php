@@ -9,9 +9,10 @@
 namespace Xpressengine\Tests\Config;
 
 use Mockery as m;
+use PHPUnit\Framework\TestCase;
 use Xpressengine\Config\Repositories\CacheDecorator;
 
-class CacheDecoratorTest extends \PHPUnit_Framework_TestCase
+class CacheDecoratorTest extends TestCase
 {
     public function tearDown()
     {
@@ -21,7 +22,9 @@ class CacheDecoratorTest extends \PHPUnit_Framework_TestCase
     public function testFind()
     {
         list($repo, $cache) = $this->getMocks();
-        $instance = $this->getMock(CacheDecorator::class, ['getData'], [$repo, $cache]);
+        $instance = $this->getMockBuilder(CacheDecorator::class)
+            ->setConstructorArgs([$repo, $cache])
+            ->setMethods(['getData'])->getMock();
 
         $mockItem1 = new \stdClass;
         $mockItem1->name = 'foo';
@@ -47,7 +50,9 @@ class CacheDecoratorTest extends \PHPUnit_Framework_TestCase
     public function testFetchAncestor()
     {
         list($repo, $cache) = $this->getMocks();
-        $instance = $this->getMock(CacheDecorator::class, ['getData'], [$repo, $cache]);
+        $instance = $this->getMockBuilder(CacheDecorator::class)
+            ->setConstructorArgs([$repo, $cache])
+            ->setMethods(['getData'])->getMock();
 
         $mockItem1 = new \stdClass;
         $mockItem1->name = 'foo';
@@ -64,7 +69,9 @@ class CacheDecoratorTest extends \PHPUnit_Framework_TestCase
     public function testFetchDescendant()
     {
         list($repo, $cache) = $this->getMocks();
-        $instance = $this->getMock(CacheDecorator::class, ['getData'], [$repo, $cache]);
+        $instance = $this->getMockBuilder(CacheDecorator::class)
+            ->setConstructorArgs([$repo, $cache])
+            ->setMethods(['getData'])->getMock();
 
         $mockItem1 = m::mock('Xpressengine\Config\ConfigEntity');
         $mockItem1->name = 'foo';

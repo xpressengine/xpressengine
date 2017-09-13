@@ -10,7 +10,7 @@ namespace Xpressengine\Tests\Support;
 
 use Xpressengine\Support\Caster;
 
-class CasterTest extends \PHPUnit_Framework_TestCase
+class CasterTest extends \PHPUnit\Framework\TestCase
 {
     public function testVarious()
     {

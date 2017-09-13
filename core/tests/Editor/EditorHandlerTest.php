@@ -4,7 +4,7 @@ namespace Xpressengine\Tests\Frontend;
 use Mockery as m;
 use Xpressengine\Editor\EditorHandler;
 
-class EditorHandlerTest extends \PHPUnit_Framework_TestCase
+class EditorHandlerTest extends \PHPUnit\Framework\TestCase
 {
     public function tearDown()
     {
@@ -74,7 +74,10 @@ class EditorHandlerTest extends \PHPUnit_Framework_TestCase
     public function testGet()
     {
         list($register, $configs, $container, $storage, $medias, $tags) = $this->getMocks();
-        $instance = $this->getMock(EditorHandler::class, ['getEditorId'], [$register, $configs, $container, $storage, $medias, $tags]);
+        $instance = $this->getMockBuilder(EditorHandler::class)
+            ->setMethods(['getEditorId'])
+            ->setConstructorArgs([$register, $configs, $container, $storage, $medias, $tags])
+            ->getMock();
 
         $instance->expects($this->once())->method('getEditorId')->with('someinstanceid')->willReturn(null);
 
@@ -96,7 +99,10 @@ class EditorHandlerTest extends \PHPUnit_Framework_TestCase
     public function testRender()
     {
         list($register, $configs, $container, $storage, $medias, $tags) = $this->getMocks();
-        $instance = $this->getMock(EditorHandler::class, ['get'], [$register, $configs, $container, $storage, $medias, $tags]);
+        $instance = $this->getMockBuilder(EditorHandler::class)
+            ->setMethods(['get'])
+            ->setConstructorArgs([$register, $configs, $container, $storage, $medias, $tags])
+            ->getMock();
 
         $mockEditor = m::mock('Xpressengine\Editor\AbstractEditor');
         $instance->expects($this->once())->method('get')->with('someinstanceid')->willReturn($mockEditor);
@@ -131,7 +137,10 @@ class EditorHandlerTest extends \PHPUnit_Framework_TestCase
     public function testGetTool()
     {
         list($register, $configs, $container, $storage, $medias, $tags) = $this->getMocks();
-        $instance = $this->getMock(EditorHandler::class, ['getToolAll'], [$register, $configs, $container, $storage, $medias, $tags]);
+        $instance = $this->getMockBuilder(EditorHandler::class)
+            ->setMethods(['getToolAll'])
+            ->setConstructorArgs([$register, $configs, $container, $storage, $medias, $tags])
+            ->getMock();
 
         $instance->expects($this->exactly(2))->method('getToolAll')->willReturn([
             'editortool/foo@bar' => 'class1',
@@ -150,7 +159,10 @@ class EditorHandlerTest extends \PHPUnit_Framework_TestCase
     public function testCompile()
     {
         list($register, $configs, $container, $storage, $medias, $tags) = $this->getMocks();
-        $instance = $this->getMock(EditorHandler::class, ['get', 'compileTools'], [$register, $configs, $container, $storage, $medias, $tags]);
+        $instance = $this->getMockBuilder(EditorHandler::class)
+            ->setMethods(['get', 'compileTools'])
+            ->setConstructorArgs([$register, $configs, $container, $storage, $medias, $tags])
+            ->getMock();
 
         $mockEditor = m::mock('Xpressengine\Editor\AbstractEditor');
         $instance->expects($this->once())->method('get')->with('someinstanceid')->willReturn($mockEditor);

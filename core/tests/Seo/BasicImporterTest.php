@@ -11,7 +11,7 @@ namespace Xpressengine\Tests\Seo;
 use Mockery as m;
 use Xpressengine\Seo\Importers\BasicImporter;
 
-class BasicImporterTest extends \PHPUnit_Framework_TestCase
+class BasicImporterTest extends \PHPUnit\Framework\TestCase
 {
     public function tearDown()
     {

@@ -33,7 +33,7 @@ namespace Xpressengine\Tests\User {
     use Xpressengine\User\UserHandler;
     use Xpressengine\User\UserImageHandler;
 
-    class UserHandlerTest extends \PHPUnit_Framework_TestCase
+    class UserHandlerTest extends \PHPUnit\Framework\TestCase
     {
         /**
          * Tears down the fixture, for example, close a network connection.
@@ -772,7 +772,7 @@ namespace Xpressengine\Tests\User {
             return Mockery::mock(UserAccountRepositoryInterface::class);
         }
 
-        protected function getGroups()
+        public function getGroups()
         {
             return Mockery::mock(UserGroupRepositoryInterface::class);
         }

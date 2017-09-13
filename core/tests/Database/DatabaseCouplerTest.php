@@ -9,7 +9,7 @@
 namespace Xpressengine\Tests\Database;
 
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Xpressengine\Database\DatabaseCoupler;
 
 /**
@@ -20,7 +20,7 @@ use Xpressengine\Database\DatabaseCoupler;
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class DatabaseCouplerTest extends PHPUnit_Framework_TestCase
+class DatabaseCouplerTest extends TestCase
 {
     /**
      * tear down

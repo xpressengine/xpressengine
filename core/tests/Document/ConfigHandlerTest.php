@@ -9,7 +9,7 @@
 namespace Xpressengine\Tests\Document;
 
 use Mockery as M;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Xpressengine\Document\ConfigHandler;
 
 /**
@@ -20,7 +20,7 @@ use Xpressengine\Document\ConfigHandler;
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class ConfigHandlerTest extends PHPUnit_Framework_TestCase
+class ConfigHandlerTest extends TestCase
 {
     /**
      * tear down

@@ -14,10 +14,10 @@ namespace Xpressengine\Presenter\Html\Tags {
 }
 
 namespace Xpressengine\Tests\Frontend {
-    use \PHPUnit_Framework_TestCase;
+    use PHPUnit\Framework\TestCase;
     use Xpressengine\Presenter\Html\FrontendHandler;
 
-    class FrontendHandlerTest extends PHPUnit_Framework_TestCase
+    class FrontendHandlerTest extends TestCase
     {
 
         protected function tearDown()

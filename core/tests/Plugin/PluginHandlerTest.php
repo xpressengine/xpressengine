@@ -15,7 +15,7 @@ use Xpressengine\Plugin\PluginCollection;
 use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Plugin\PluginRegister;
 
-class PluginHandlerTest extends \PHPUnit_Framework_TestCase
+class PluginHandlerTest extends \PHPUnit\Framework\TestCase
 {
 
     protected function tearDown()

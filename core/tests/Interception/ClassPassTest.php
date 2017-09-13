@@ -11,7 +11,7 @@ namespace Xpressengine\Tests\Interception;
 use Xpressengine\Interception\Proxy\Pass\ClassPass;
 use Xpressengine\Interception\Proxy\ProxyConfig;
 
-class ClassPassTest extends \PHPUnit_Framework_TestCase
+class ClassPassTest extends \PHPUnit\Framework\TestCase
 {
 
     const CODE = "namespace Xpressengine\\Interception\\Proxy;  class Proxy{ use ProxyTrait; }";

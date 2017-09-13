@@ -13,7 +13,7 @@ use Xpressengine\Permission\PermissionHandler;
 use Xpressengine\Permission\Grant;
 use Xpressengine\Permission\Permission;
 
-class PermissionHandlerTest extends \PHPUnit_Framework_TestCase
+class PermissionHandlerTest extends \PHPUnit\Framework\TestCase
 {
     public function tearDown()
     {

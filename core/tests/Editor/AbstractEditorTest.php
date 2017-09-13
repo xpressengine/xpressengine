@@ -4,7 +4,7 @@ namespace Xpressengine\Tests\Frontend;
 use Mockery as m;
 use Xpressengine\Editor\Textarea;
 
-class AbstractEditorTest extends \PHPUnit_Framework_TestCase
+class AbstractEditorTest extends \PHPUnit\Framework\TestCase
 {
     public function tearDown()
     {
@@ -14,11 +14,10 @@ class AbstractEditorTest extends \PHPUnit_Framework_TestCase
     public function testLoadTools()
     {
         list($editors, $urls, $gate, $skins, $events, $frontend, $instanceId) = $this->getMocks();
-        $instance = $this->getMock(
-            Dummy::class,
-            ['getTools'],
-            [$editors, $urls, $gate, $skins, $events, $frontend, $instanceId]
-        );
+        $instance = $this->getMockBuilder(Dummy::class)
+            ->setMethods(['getTools'])
+            ->setConstructorArgs([$editors, $urls, $gate, $skins, $events, $frontend, $instanceId])
+            ->getMock();
 
         $mockTool1 = m::mock('Xpressengine\Editor\AbstractTool');
         $mockTool1->shouldReceive('initAssets');
@@ -32,11 +31,10 @@ class AbstractEditorTest extends \PHPUnit_Framework_TestCase
     public function testGetTools()
     {
         list($editors, $urls, $gate, $skins, $events, $frontend, $instanceId) = $this->getMocks();
-        $instance = $this->getMock(
-            Dummy::class,
-            ['getActivateToolIds'],
-            [$editors, $urls, $gate, $skins, $events, $frontend, $instanceId]
-        );
+        $instance = $this->getMockBuilder(Dummy::class)
+            ->setMethods(['getActivateToolIds'])
+            ->setConstructorArgs([$editors, $urls, $gate, $skins, $events, $frontend, $instanceId])
+            ->getMock();
 
         $instance->expects($this->once())->method('getActivateToolIds')->willReturn([
             'editortool/foo@bar',
@@ -55,11 +53,10 @@ class AbstractEditorTest extends \PHPUnit_Framework_TestCase
     public function testRender()
     {
         list($editors, $urls, $gate, $skins, $events, $frontend, $instanceId) = $this->getMocks();
-        $instance = $this->getMock(
-            Dummy::class,
-            ['loadTools', 'getOptions', 'getContentHtml', 'getEditorScript'],
-            [$editors, $urls, $gate, $skins, $events, $frontend, $instanceId]
-        );
+        $instance = $this->getMockBuilder(Dummy::class)
+            ->setMethods(['loadTools', 'getOptions', 'getContentHtml', 'getEditorScript'])
+            ->setConstructorArgs([$editors, $urls, $gate, $skins, $events, $frontend, $instanceId])
+            ->getMock();
 
         $instance->expects($this->once())->method('loadTools');
         $instance->expects($this->once())->method('getOptions')

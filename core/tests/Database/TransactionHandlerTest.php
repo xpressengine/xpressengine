@@ -9,7 +9,7 @@
 namespace Xpressengine\Tests\Database;
 
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Xpressengine\Database\TransactionHandler;
 
 /**
@@ -20,7 +20,7 @@ use Xpressengine\Database\TransactionHandler;
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class TransactionHandlerTest extends PHPUnit_Framework_TestCase
+class TransactionHandlerTest extends TestCase
 {
     protected $connector;
 

@@ -10,7 +10,7 @@ namespace Xpressengine\Tests\Frontend;
 
 use Xpressengine\Presenter\Html\Tags\BodyClass;
 
-class BodyClassTest extends \PHPUnit_Framework_TestCase {
+class BodyClassTest extends \PHPUnit\Framework\TestCase {
 
     protected function tearDown()
     {

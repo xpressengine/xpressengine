@@ -25,7 +25,7 @@ namespace Xpressengine\Support\Exceptions {
 
 namespace Xpressengine\Tests\Widget {
 
-    use PHPUnit_Framework_TestCase;
+    use PHPUnit\Framework\TestCase;
     use Mockery as m;
 
     use Xpressengine\Widget\AbstractWidget;
@@ -105,7 +105,7 @@ namespace Xpressengine\Tests\Widget {
      *
      * @package Xpressengine\Tests\Widget
      */
-    class WidgetHandlerTest extends PHPUnit_Framework_TestCase
+    class WidgetHandlerTest extends TestCase
     {
         /**
          * @var \Mockery\MockInterface $guard
@@ -277,11 +277,11 @@ namespace Xpressengine\Tests\Widget {
          * testSetUpFail
          *
          * @return void
+         *
+         * @expectedException \XpressEngine\Widget\Exceptions\NotFoundWidgetException
          */
         public function testSetUpFail()
         {
-            $this->setExpectedException('\XpressEngine\Widget\Exceptions\NotFoundWidgetException');
-
             $widgetHandler = new WidgetHandler($this->register, $this->guard, $this->factory, false);
 
             $register = $this->register;

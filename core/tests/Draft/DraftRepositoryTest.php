@@ -11,7 +11,7 @@ namespace Xpressengine\Tests\Draft;
 use Mockery as m;
 use Xpressengine\Draft\DraftRepository;
 
-class DraftRepositoryTest extends \PHPUnit_Framework_TestCase
+class DraftRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     public function tearDown()
     {

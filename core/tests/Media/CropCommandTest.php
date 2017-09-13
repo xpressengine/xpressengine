@@ -11,7 +11,7 @@ namespace Xpressengine\Tests\Media;
 use Mockery as m;
 use Xpressengine\Media\Commands\CropCommand;
 
-class CropCommandTest extends \PHPUnit_Framework_TestCase
+class CropCommandTest extends \PHPUnit\Framework\TestCase
 {
     public function tearDown()
     {

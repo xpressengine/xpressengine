@@ -10,7 +10,7 @@ namespace Xpressengine\Tests\Document;
 
 use ArrayIterator;
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Xpressengine\Document\DocumentHandler;
 
 /**
@@ -21,7 +21,7 @@ use Xpressengine\Document\DocumentHandler;
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class DocumentHandlerTest extends PHPUnit_Framework_TestCase
+class DocumentHandlerTest extends TestCase
 {
     protected $conn;
     protected $configHandler;

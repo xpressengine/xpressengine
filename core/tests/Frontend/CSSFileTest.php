@@ -10,7 +10,7 @@ namespace Xpressengine\Tests\Frontend;
 
 use Xpressengine\Presenter\Html\Tags\CSSFile;
 
-class CSSFileTest extends \PHPUnit_Framework_TestCase {
+class CSSFileTest extends \PHPUnit\Framework\TestCase {
 
     /**
      * @var CSSFileStub

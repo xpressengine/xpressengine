@@ -15,7 +15,7 @@ namespace Xpressengine\Tests\Menu;
 
 use Mockery as m;
 use Mockery\MockInterface;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Xpressengine\Menu\AbstractModule;
 use Xpressengine\Menu\ModuleHandler;
 
@@ -29,7 +29,7 @@ use Xpressengine\Menu\ModuleHandler;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class ModuleHandlerTest extends PHPUnit_Framework_TestCase
+class ModuleHandlerTest extends TestCase
 {
     /**
      * @var MockInterface $register
@@ -146,11 +146,11 @@ class ModuleHandlerTest extends PHPUnit_Framework_TestCase
      * testGetModuleObjectThrowException
      *
      * @return void
+     *
+     * @expectedException \XpressEngine\Menu\Exceptions\NotFoundModuleException
      */
     public function testGetModuleObjectThrowException()
     {
-        $this->setExpectedException('\XpressEngine\Menu\Exceptions\NotFoundModuleException');
-
         $register = $this->register;
         $register->shouldReceive('get')->andReturn(null);
         $moduleHandler = new ModuleHandler($register);

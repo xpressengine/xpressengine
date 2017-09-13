@@ -4,7 +4,7 @@ namespace Xpressengine\Tests\Storage;
 use Mockery as m;
 use Xpressengine\Storage\Storage;
 
-class StorageTest extends \PHPUnit_Framework_TestCase
+class StorageTest extends \PHPUnit\Framework\TestCase
 {
     public function tearDown()
     {
@@ -262,7 +262,10 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     public function testUnBindWillRemovedFileWhenFlagTrue()
     {
         list($repo, $handler, $auth, $keygen, $distributor, $temps, $response) = $this->getMocks();
-        $instance = $this->getMock(Storage::class, ['delete'], [$repo, $handler, $auth, $keygen, $distributor, $temps, $response]);
+        $instance = $this->getMockBuilder(Storage::class)
+            ->setMethods(['delete'])
+            ->setConstructorArgs([$repo, $handler, $auth, $keygen, $distributor, $temps, $response])
+            ->getMock();
 
         $mockFile = m::mock('Xpressengine\Storage\File');
         $mockConn = m::mock('stdClass');

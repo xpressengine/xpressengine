@@ -11,7 +11,7 @@ namespace Xpressengine\Tests\Permission;
 use Mockery as m;
 use Xpressengine\Permission\Policy;
 
-class PolicyTest extends \PHPUnit_Framework_TestCase
+class PolicyTest extends \PHPUnit\Framework\TestCase
 {
     public function tearDown()
     {

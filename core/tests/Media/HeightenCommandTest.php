@@ -11,7 +11,7 @@ namespace Xpressengine\Tests\Media;
 use Mockery as m;
 use Xpressengine\Media\Commands\HeightenCommand;
 
-class HeightenCommandTest extends \PHPUnit_Framework_TestCase
+class HeightenCommandTest extends \PHPUnit\Framework\TestCase
 {
     public function tearDown()
     {

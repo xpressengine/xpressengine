@@ -14,7 +14,7 @@
 namespace Xpressengine\Tests\Routing;
 
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Xpressengine\Routing\InstanceConfig;
 
 /**
@@ -26,7 +26,7 @@ use Xpressengine\Routing\InstanceConfig;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class InstanceConfigTest extends PHPUnit_Framework_TestCase
+class InstanceConfigTest extends TestCase
 {
 
     /**

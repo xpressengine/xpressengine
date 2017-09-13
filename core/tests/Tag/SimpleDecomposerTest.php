@@ -11,7 +11,7 @@ namespace Xpressengine\Tests\Tag;
 use Mockery as m;
 use Xpressengine\Tag\SimpleDecomposer;
 
-class SimpleDecomposerTest extends \PHPUnit_Framework_TestCase
+class SimpleDecomposerTest extends \PHPUnit\Framework\TestCase
 {
     public function tearDown()
     {

@@ -9,9 +9,10 @@
 namespace Xpressengine\Tests\Captcha;
 
 use Mockery as m;
+use PHPUnit\Framework\TestCase;
 use Xpressengine\Captcha\Services\GoogleRecaptcha as Origin;
 
-class GoogleRecaptchaTest extends \PHPUnit_Framework_TestCase
+class GoogleRecaptchaTest extends TestCase
 {
     public static $captcha;
 
@@ -48,19 +49,9 @@ class GoogleRecaptchaTest extends \PHPUnit_Framework_TestCase
         $mockResponse->shouldReceive('isSuccess')->andReturn(true);
         static::$captcha->shouldReceive('verify')->once()->with('val', '0.0.0.0')->andReturn($mockResponse);
 
-        $instance->verify();
-    }
+        $result = $instance->verify();
 
-    public function testRender()
-    {
-        list($siteKey, $secret, $request, $frontend) = $this->getMocks();
-        $instance = $this->createInstance($siteKey, $secret, $request, $frontend);
-
-        $frontend->shouldReceive('js')->once()->andReturnSelf();
-        $frontend->shouldReceive('appendTo')->once()->andReturnSelf();
-        $frontend->shouldReceive('load')->once();
-
-        $instance->render();
+        $this->assertTrue($result);
     }
 
     private function getMocks()

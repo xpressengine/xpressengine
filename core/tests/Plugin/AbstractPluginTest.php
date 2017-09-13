@@ -9,7 +9,7 @@
 namespace Xpressengine\Tests\Plugin;
 use Xpressengine\Plugin\AbstractPlugin;
 
-class AbstractPluginTest /*extends \PHPUnit_Framework_TestCase*/
+class AbstractPluginTest /*extends \PHPUnit\Framework\TestCase*/
 {
 
     /**

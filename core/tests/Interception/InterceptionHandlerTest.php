@@ -16,7 +16,7 @@ use Xpressengine\Interception\Proxy\Loader\FileLoader;
 use Xpressengine\Interception\Proxy\Loader\Loader;
 use Xpressengine\Interception\Proxy\ProxyGenerator;
 
-class InterceptionHandlerTest extends \PHPUnit_Framework_TestCase
+class InterceptionHandlerTest extends \PHPUnit\Framework\TestCase
 {
 
     protected function tearDown()

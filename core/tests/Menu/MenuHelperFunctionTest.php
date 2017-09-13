@@ -15,7 +15,7 @@
 namespace Xpressengine\Tests\Menu;
 
 use Illuminate\Container\Container;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Mockery as m;
 use Xpressengine\Routing\InstanceConfig;
 
@@ -29,7 +29,7 @@ use Xpressengine\Routing\InstanceConfig;
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class MenuHelperFunctionTest extends PHPUnit_Framework_TestCase
+class MenuHelperFunctionTest extends TestCase
 {
     /**
      * tearDown

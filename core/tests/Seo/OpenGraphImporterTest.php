@@ -11,7 +11,7 @@ namespace Xpressengine\Tests\Seo;
 use Mockery as m;
 use Xpressengine\Seo\Importers\OpenGraphImporter;
 
-class OpenGraphImporterTest extends \PHPUnit_Framework_TestCase
+class OpenGraphImporterTest extends \PHPUnit\Framework\TestCase
 {
     public function tearDown()
     {

@@ -13,7 +13,7 @@ use Xpressengine\Media\Coordinators\Dimension;
 use Xpressengine\Media\MediaManager;
 use Xpressengine\Media\Models\Media;
 
-class MediaManagerTest extends \PHPUnit_Framework_TestCase
+class MediaManagerTest extends \PHPUnit\Framework\TestCase
 {
     private $handler;
 

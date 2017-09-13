@@ -11,7 +11,7 @@ namespace Xpressengine\Tests\Draft;
 use Mockery as m;
 use Xpressengine\Draft\DraftHandler;
 
-class DraftHandlerTest extends \PHPUnit_Framework_TestCase
+class DraftHandlerTest extends \PHPUnit\Framework\TestCase
 {
     public function tearDown()
     {
@@ -103,6 +103,7 @@ class DraftHandlerTest extends \PHPUnit_Framework_TestCase
 
 
         $mockEntity = m::mock('Xpressengine\Draft\DraftEntity');
+        $mockEntity->shouldReceive('offsetSet');
         $repo->shouldReceive('find')->once()->with('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx')->andReturn($mockEntity);
         $repo->shouldReceive('update')->once()->with($mockEntity)->andReturn($mockEntity);
 

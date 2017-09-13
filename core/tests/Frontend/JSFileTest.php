@@ -10,7 +10,7 @@ namespace Xpressengine\Tests\Frontend;
 
 use Xpressengine\Presenter\Html\Tags\JSFile;
 
-class JSFileTest extends \PHPUnit_Framework_TestCase {
+class JSFileTest extends \PHPUnit\Framework\TestCase {
 
     /**
      * @var JSFileStub
