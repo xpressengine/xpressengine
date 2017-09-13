@@ -52,7 +52,7 @@ class TagHandlerTest extends \PHPUnit_Framework_TestCase
         $repo->shouldReceive('create')->once()->with([
             'word' => 'xpressengine',
             'decomposed' => 'xpressengine',
-            'instanceId' => null,
+            'instance_id' => null,
         ])->andReturn($mockTagNew);
 
         $repo->shouldReceive('attach')->once()->with(
