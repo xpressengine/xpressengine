@@ -16,7 +16,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
-use Route;
+use Illuminate\Support\Facades\Route;
 
 /**
  * Install Service Provider
@@ -35,15 +35,20 @@ class InstallServiceProvider extends ServiceProvider
     public function boot()
     {
         Route::get('/', function() {
-            return redirect('/web_installer');
+            return redirect()->route('install.index');
         });
 
-        Route::post('/install/post', '\App\Http\Controllers\InstallController@install');
+        Route::prefix('install')
+            ->middleware('safe')
+            ->namespace('App\Http\Controllers')
+            ->group(base_path('routes/install.php'));
 
-        \App\Http\Middleware\ExceptAppendableVerifyCsrfToken::setExcept('/install/post');
+        app('config')->set('app.debug', true);
 
         // 실제 키 생성전 임시
+        // .env 를 생성하지 않기 때문에 설치 전 encrypt key 값이 존재하지 않음
         app('config')->set('app.key', Str::random(32));
+        \App\Http\Middleware\ExceptAppendableVerifyCsrfToken::setExcept('/install/post');
     }
 
     /**
