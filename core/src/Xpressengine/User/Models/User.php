@@ -418,7 +418,7 @@ class User extends DynamicModel implements UserInterface
     /**
      * Send the password reset notification.
      *
-     * @param  string $token
+     * @param  string $token token for password reset
      * @return void
      */
     public function sendPasswordResetNotification($token)

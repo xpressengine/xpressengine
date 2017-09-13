@@ -43,11 +43,11 @@ class Guard extends SessionGuard implements GuardInterface
     /**
      * Create a new authentication guard.
      *
-     * @param string           $name            gurad name
-     * @param UserProvider     $provider        user provider
-     * @param Session          $session         session store
-     * @param array            $adminAuthConfig adminauth config
-     * @param Request          $request         request
+     * @param string       $name            gurad name
+     * @param UserProvider $provider        user provider
+     * @param Session      $session         session store
+     * @param array        $adminAuthConfig adminauth config
+     * @param Request      $request         request
      *
      * @return void
      */

@@ -86,7 +86,8 @@ class MenuItem extends CategoryItem
      */
     protected $fillable = [
         'menu_id', 'parent_id', 'title', 'url', 'description', 'target', 'type' , 'ordering', 'activated',
-        'basic_image_id', 'hover_image_id', 'selected_image_id', 'm_basic_image_id', 'm_hover_image_id', 'm_selected_image_id',
+        'basic_image_id', 'hover_image_id', 'selected_image_id',
+        'm_basic_image_id', 'm_hover_image_id', 'm_selected_image_id',
     ];
 
     /**

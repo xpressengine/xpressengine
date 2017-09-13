@@ -4,8 +4,8 @@
  *
  * PHP version 5
  *
- * @category
- * @package
+ * @category    User
+ * @package     Xpressengine\User
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -17,6 +17,16 @@ namespace Xpressengine\User;
 use Illuminate\Auth\Notifications\ResetPassword as Notification;
 use Illuminate\Notifications\Messages\MailMessage;
 
+/**
+ * Class ResetPassword
+ *
+ * @category    User
+ * @package     Xpressengine\User
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
 class ResetPassword extends Notification
 {
     /**
