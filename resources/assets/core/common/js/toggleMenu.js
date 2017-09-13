@@ -161,7 +161,10 @@ ToggleMenu.Item = createReactClass({
   }
 
     return (
-      React.DOM.li({ className: this.props.class, onClick: this.itemClick },
+      React.DOM.li({
+        className: this.props.class,
+        onClick: this.itemClick,
+      },
         React.DOM.a(attr, this.props.text)
       )
     );
