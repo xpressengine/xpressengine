@@ -86,8 +86,8 @@ var Category = (function () {
           data.id = $body.find('[name=id]').val();
         }
 
-        if ($body.find('[name=parentId]').length > 0) {
-          data.parentId = $body.find('[name=parentId]').val();
+        if ($body.find('[name=parent_id]').length > 0) {
+          data.parent_id = $body.find('[name=parent_id]').val();
         }
 
         _this.save(data);
@@ -175,7 +175,7 @@ var Category = (function () {
             title: XE.Lang.trans('xe::createChild'), //하위 목록 생성
             saveButton: true,
             type: 'add',
-            parentId: $this.closest('.item-content').data('item').id,
+            parent_id: $this.closest('.item-content').data('item').id,
           };
 
           $content.find('.__xe_content_body').html(_this.getFormTemplate(formData));
@@ -234,7 +234,7 @@ var Category = (function () {
      *   -title
      *   -type
      *   -id
-     *   -parentId
+     *   -parent_id
      * </pre>
      * @return {string} 
      * */
@@ -288,8 +288,8 @@ var Category = (function () {
         template += '<input type="hidden" name="id" value="' + obj.id + '">';
       }
 
-      if (obj.hasOwnProperty('parentId') && obj.parentId) {
-        template += '<input type="hidden" name="parentId" value="' + obj.parentId + '">';
+      if (obj.hasOwnProperty('parent_id') && obj.parent_id) {
+        template += '<input type="hidden" name="parent_id" value="' + obj.parent_id + '">';
       }
 
       return template;
@@ -370,7 +370,7 @@ var Category = (function () {
 
           switch (item.type) {
             case 'add':
-              var $container = (item.hasOwnProperty('parentId')) ? $('#item_' + item.parentId) : $('.__category_body > .item-container');
+              var $container = (item.hasOwnProperty('parent_id')) ? $('#item_' + item.parent_id) : $('.__category_body > .item-container');
 
               if ($container.hasClass('open')) {
                 $container.removeClass('open');
@@ -487,14 +487,14 @@ var Category = (function () {
      * <pre>
      *   item
      *   itemId
-     *   parentId
+     *   parent_id
      *   ordering
      * </pre>
      * */
     move: function (obj) {
       var data = {
         id: obj.itemId,
-        parentId: obj.parentId ? obj.parentId : '',
+        parent_id: obj.parent_id ? obj.parent_id : '',
         ordering: obj.ordering,
       };
 
@@ -509,8 +509,8 @@ var Category = (function () {
 
           Tree.setPrevent(false);
 
-          if ($('#item_' + data.parentId).length > 0) {
-            var $icon = $('#item_' + data.parentId).find('> .item-content .__xe_btn_toggle_children');
+          if ($('#item_' + data.parent_id).length > 0) {
+            var $icon = $('#item_' + data.parent_id).find('> .item-content .__xe_btn_toggle_children');
             var status = $icon.data('status');
 
             if (status !== 'open') {
@@ -520,7 +520,7 @@ var Category = (function () {
           } else {
             var itemData = obj.item.find('> .item-content').data('item');
 
-            itemData.parentId = (obj.parentId) ? obj.parentId : null;
+            itemData.parent_id = (obj.parent_id) ? obj.parent_id : null;
             itemData.ordering = obj.ordering;
 
             obj.item.find('> .item-content').attr('data-item', JSON.stringify(itemData));
