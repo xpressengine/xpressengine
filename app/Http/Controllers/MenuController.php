@@ -357,6 +357,11 @@ class MenuController extends Controller
      */
     public function storeItem(Request $request, $menuId)
     {
+        $this->validate($request, [
+            'itemUrl'=> 'required',
+            'itemTitle' => 'langRequired',
+        ]);
+        
         XeDB::beginTransaction();
 
         $menu = XeMenu::menus()->find($menuId);
@@ -471,6 +476,11 @@ class MenuController extends Controller
      */
     public function updateItem(Request $request, $menuId, $itemId)
     {
+        $this->validate($request, [
+            'itemUrl'=> 'required',
+            'itemTitle' => 'langRequired',
+        ]);
+
         XeDB::beginTransaction();
 
         try {

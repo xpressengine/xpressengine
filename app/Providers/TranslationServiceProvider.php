@@ -69,6 +69,9 @@ class TranslationServiceProvider extends ServiceProvider
 
             return $validator->passes();
         }, 'The :attribute field is required.');
+        $this->app['validator']->replacer('LangRequired', function ($message, $attribute, $rule, $parameters) {
+            return xe_trans('validation.required', ['attribute' => $attribute]);
+        });
     }
 
     public function register()
