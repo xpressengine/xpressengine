@@ -175,7 +175,7 @@ var Category = (function () {
             title: XE.Lang.trans('xe::createChild'), //하위 목록 생성
             saveButton: true,
             type: 'add',
-            parent_id: $this.closest('.item-content').data('item').id,
+            parentId: $this.closest('.item-content').data('item').id,
           };
 
           $content.find('.__xe_content_body').html(_this.getFormTemplate(formData));
@@ -234,7 +234,7 @@ var Category = (function () {
      *   -title
      *   -type
      *   -id
-     *   -parent_id
+     *   -parentId
      * </pre>
      * @return {string} 
      * */
@@ -288,8 +288,8 @@ var Category = (function () {
         template += '<input type="hidden" name="id" value="' + obj.id + '">';
       }
 
-      if (obj.hasOwnProperty('parent_id') && obj.parent_id) {
-        template += '<input type="hidden" name="parent_id" value="' + obj.parent_id + '">';
+      if (obj.hasOwnProperty('parentId') && obj.parentId) {
+        template += '<input type="hidden" name="parent_id" value="' + obj.parentId + '">';
       }
 
       return template;
@@ -487,14 +487,14 @@ var Category = (function () {
      * <pre>
      *   item
      *   itemId
-     *   parent_id
+     *   parentId
      *   ordering
      * </pre>
      * */
     move: function (obj) {
       var data = {
         id: obj.itemId,
-        parent_id: obj.parent_id ? obj.parent_id : '',
+        parent_id: obj.parentId ? obj.parentId : '',
         ordering: obj.ordering,
       };
 
@@ -520,7 +520,7 @@ var Category = (function () {
           } else {
             var itemData = obj.item.find('> .item-content').data('item');
 
-            itemData.parent_id = (obj.parent_id) ? obj.parent_id : null;
+            itemData.parentId = (obj.parentId) ? obj.parentId : null;
             itemData.ordering = obj.ordering;
 
             obj.item.find('> .item-content').attr('data-item', JSON.stringify(itemData));
