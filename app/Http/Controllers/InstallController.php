@@ -11,13 +11,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Artisan;
 use File;
+use Lang;
 use Symfony\Component\Yaml\Yaml;
 use Illuminate\Contracts\Cookie\QueueingFactory as JarContract;
 
 class InstallController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        app()->setLocale($request->get('_l', app()->getLocale()));
+        Lang::getLoader()->addNamespace('xe', resource_path('views/install/lang'));
+
         return view('install.index');
     }
 
@@ -34,6 +38,7 @@ class InstallController extends Controller
                     base_path('storage/'),
                 ];
 
+                $result = true;
                 foreach ($paths as $path) {
                     if (!is_writable($path)) {
                         $result = false;

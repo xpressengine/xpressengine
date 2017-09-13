@@ -8,18 +8,18 @@
 
     <link rel="stylesheet" href="{{ asset('assets/core/common/css/xe-common.css') }}">
     <script>var xeBaseURL = '{{ url()->to(null) }}';</script>
-    <script src="{{ asset('../assets/core/common/js/utils.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('../assets/core/common/js/dynamicLoadManager.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('../assets/vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/core/common/js/utils.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/core/common/js/dynamicLoadManager.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
 
-    <script src="{{ asset('../assets/vendor/vendor.bundle.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('../assets/bundle.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('../assets/core/common/js/xe.bundle.js') }}"></script>
+    <script src="{{ asset('assets/vendor/vendor.bundle.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/bundle.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/core/common/js/xe.bundle.js') }}"></script>
 
-    <link rel="stylesheet" href="{{ asset('../assets/core/xe-ui-component/xe-ui-component.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/core/xe-ui-component/xe-ui-component.css') }}">
 
-    <link rel="stylesheet" href="{{ asset('../assets/core/webinstaller/css/webinstaller.css') }}">
-    <link rel="stylesheet" href="{{ asset('../assets/vendor/XEIcon/xeicon.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/core/webinstaller/css/webinstaller.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/XEIcon/xeicon.min.css') }}">
 </head>
 
 <body>
@@ -52,20 +52,20 @@
                 <span class="text-installer"><span class="xe-sr-only">installer</span></span>
             </h2>
             <div class="xe-dropdown">
-                <button class="xe-btn" type="button" data-toggle="xe-dropdown">English</button>
+                <button class="xe-btn" type="button" data-toggle="xe-dropdown">{{ trans('xe::install.localeExpression') }}</button>
                 <ul class="xe-dropdown-menu">
-                    <li><a href="#" class="__xe_locale_item" data-locale="en"><i class="country-code"></i>English</a></li>
-                    <li><a href="#" class="__xe_locale_item" data-locale="ko"><i class="country-code"></i>한국어</a></li>
+                    <li><a href="{{ route('install.index', ['_l' => 'en']) }}" class="__xe_locale_item" data-locale="en"><i class="country-code"></i>{{ trans('xe::install.localeExpression', [], 'en') }}</a></li>
+                    <li><a href="{{ route('install.index', ['_l' => 'ko']) }}" class="__xe_locale_item" data-locale="ko"><i class="country-code"></i>{{ trans('xe::install.localeExpression', [], 'ko') }}</a></li>
                 </ul>
             </div>
 
-            <p class="text-version-check">Check your server status for XE installation.</p>
+            <p class="text-version-check">{{ trans('xe::install.checkForInstall') }}</p>
             <a href="#" class="btn-start __xe_btn_next"><span class="xe-sr-only">start</span></a>
         </div>
     </div>
 
     <div class="content __xe_step" data-step="1" style="display: none;">
-        <h2>System check</h2>
+        <h2>{{ trans('xe::install.systemCheck') }}</h2>
         <ul class="system-check-list __xe_check_list">
             <!-- 검사 결과에 따라 li.pass, li.false 추가  -->
         </ul>
@@ -77,22 +77,13 @@
     </div>
 
     <div class="content __xe_step" data-step="2" style="display: none;">
-        <h2>Condition</h2>
-        <textarea class="xe-form-control" rows="12" cols="40">이 문서는 정보 제공의 목적으로만 제공됩니다. `NAVER(주)`는 이 문서에 수록된 정보의 완전성과
-정확성을 검증하기 위해 노력하였으나, 발생할 수 있는 내용상의 오류가 있거나 누락되었을 수 있습니다.
-이 문서의 사용이나 사용 결과에 따른 책임은 전적으로 사용자에게 있으며, `NAVER(주)`는 이에 대해
-명시적 혹은 묵시적으로 어떠한 보증도 하지 않습니다.
-
-관련 URL 정보를 포함하여 이 문서에서 언급한 특정 소프트웨어 상품이나 제품은 해당 소유자가 속한
-현지 및 국내외 관련법을 따르며, 해당 법률을 준수하지 않음으로 인해 발생하는 모든 결과에 대한 책임은
-전적으로 사용자 자신에게 있습니다.
-
-`NAVER(주)`는 이 문서의 내용을 예고 없이 변경할 수 있습니다.</textarea>
+        <h2>{{ trans('xe::install.terms') }}</h2>
+        <textarea class="xe-form-control" rows="12" cols="40">{{ trans('xe::install.termsText') }}</textarea>
         <div class="agree-area">
             <label class="xe-label">
                 <input type="checkbox" id="__xe_agree">
                 <span class="xe-input-helper"></span>
-                <span class="xe-label-text">Yes, I read and agree.</span>
+                <span class="xe-label-text">{{ trans('xe::install.termsReadAndAgree') }}</span>
             </label>
         </div>
         <div class="btn-center">
@@ -103,7 +94,7 @@
 
     <div class="content __xe_step" data-step="3" style="display: none;">
         <form action="{{ route('install.post') }}" method="post">
-            <input type="hidden" name="locale" value="en">
+            <input type="hidden" name="locale" value="{{ trans()->getLocale() }}">
             <h2>Database</h2>
             <table>
                 <colgroup>
@@ -112,27 +103,27 @@
                 <tbody>
                 <tr>
                     <th scope="row">Host</th>
-                    <td><input type="text" class="xe-form-control" name="database_host" placeholder="Input database host.(default: localhost)"></td>
+                    <td><input type="text" class="xe-form-control" name="database_host" placeholder="{{ trans('xe::install.inputDBHost') }}(default: localhost)"></td>
                 </tr>
                 <tr>
                     <th scope="row">Port</th>
-                    <td><input type="text" class="xe-form-control" name="database_port" placeholder="Input database port.(default: 3306)"></td>
+                    <td><input type="text" class="xe-form-control" name="database_port" placeholder="{{ trans('xe::install.inputDBPort') }}(default: 3306)"></td>
                 </tr>
                 <tr>
                     <th scope="row">Database Name</th>
-                    <td><input type="text" class="xe-form-control" name="database_name" placeholder="Input database name."></td>
+                    <td><input type="text" class="xe-form-control" name="database_name" placeholder="{{ trans('xe::install.inputDBName') }}"></td>
                 </tr>
                 <tr>
                     <th scope="row">Database User Name</th>
-                    <td><input type="text" class="xe-form-control" name="database_user_name" placeholder="Input database user name.(default: root)"></td>
+                    <td><input type="text" class="xe-form-control" name="database_user_name" placeholder="{{ trans('xe::install.inputDBUser') }}(default: root)"></td>
                 </tr>
                 <tr>
                     <th scope="row">Password</th>
-                    <td><input type="password" class="xe-form-control" name="database_password" placeholder="Input database password"></td>
+                    <td><input type="password" class="xe-form-control" name="database_password" placeholder="{{ trans('xe::install.inputDBPassword') }}"></td>
                 </tr>
                 <tr>
                     <th scope="row">Table Prefix</th>
-                    <td><input type="text" class="xe-form-control" name="database_prefix" placeholder="Input database table prefix.(default: xe)"></td>
+                    <td><input type="text" class="xe-form-control" name="database_prefix" placeholder="{{ trans('xe::install.inputDBPrefix') }}(default: xe)"></td>
                 </tr>
                 </tbody>
             </table>
@@ -165,19 +156,19 @@
                 <tbody>
                 <tr>
                     <th scope="row">Email</th>
-                    <td><input type="text" class="xe-form-control" name="admin_email" placeholder="Input email address."></td>
+                    <td><input type="text" class="xe-form-control" name="admin_email" placeholder="{{ trans('xe::install.inputAdminEmail') }}"></td>
                 </tr>
                 <tr>
                     <th scope="row">Display Name</th>
-                    <td><input type="text" class="xe-form-control" name="admin_display_name" placeholder="Input email address.(default: admin)"></td>
+                    <td><input type="text" class="xe-form-control" name="admin_display_name" placeholder="{{ trans('xe::install.inputAdminName') }}(default: admin)"></td>
                 </tr>
                 <tr>
                     <th scope="row">Password</th>
-                    <td><input type="password" class="xe-form-control" name="admin_password" placeholder="Input password."></td>
+                    <td><input type="password" class="xe-form-control" name="admin_password" placeholder="{{ trans('xe::install.inputAdminPassword') }}"></td>
                 </tr>
                 <tr>
                     <th scope="row">Password Check</th>
-                    <td><input type="password" class="xe-form-control" name="admin_password_confirmation" placeholder="Input password again."></td>
+                    <td><input type="password" class="xe-form-control" name="admin_password_confirmation" placeholder="{{ trans('xe::install.reInputAdminPassword') }}"></td>
                 </tr>
                 </tbody>
             </table>
@@ -197,152 +188,139 @@
 
 
 <script type="text/javascript">
-    function setCookie(cname, cvalue, exdays) {
-        var d = new Date();
-        d.setTime(d.getTime() + (exdays*24*60*60*1000));
-        var expires = "expires="+d.toUTCString();
-        document.cookie = cname + "=" + cvalue + "; " + expires;
-    }
+    $(function () {
 
-    var stepper = {
-        current: 0,
-        checked: false,
-        next: function () {
-            this.goto(this.current + 1);
-        },
-        tabOn: function (index) {
-            $('#__xe_tab').children().removeClass('on');
-            $('#__xe_tab').children().eq(index).addClass('on');
-        },
-        check: function () {
-            $('.__xe_check_list').empty();
-            check('Check PHP version.', 'phpVersion');
-            /*check('<?=trans('checkPHPVersion')?>', 'phpVersion');
-            check('<?=trans('checkDirPermission')?>', 'directoryPermission');
-            check('<?=trans('checkPHPExtPDO')?>', 'pdo');
-            check('<?=trans('checkPHPExtCURL')?>', 'curl');
-            check('<?=trans('checkPHPExtFILEINFO')?>', 'fileinfo');
-            check('<?=trans('checkPHPExtGD')?>', 'gd');
-            check('<?=trans('checkPHPExtMBSTRING')?>', 'mbstring');
-            check('<?=trans('checkPHPExtOPENSSL')?>', 'openssl');
-            check('<?=trans('checkPHPExtZIP')?>', 'zip');*/
+        var stepper = {
+            current: 0,
+            checked: false,
+            next: function () {
+                this.goto(this.current + 1);
+            },
+            tabOn: function (index) {
+                $('#__xe_tab').children().removeClass('on');
+                $('#__xe_tab').children().eq(index).addClass('on');
+            },
+            check: function () {
+                $('.__xe_check_list').empty();
+                check('{{ trans('xe::install.checkPHPVersion') }}', 'phpVersion');
+                check('{{ trans('xe::install.checkDirPermission') }}', 'directoryPermission');
+                check('{{ trans('xe::install.checkPHPExtPDO') }}', 'pdo');
+                check('{{ trans('xe::install.checkPHPExtCURL') }}', 'curl');
+                check('{{ trans('xe::install.checkPHPExtFILEINFO') }}', 'fileinfo');
+                check('{{ trans('xe::install.checkPHPExtGD') }}', 'gd');
+                check('{{ trans('xe::install.checkPHPExtMBSTRING') }}', 'mbstring');
+                check('{{ trans('xe::install.checkPHPExtOPENSSL') }}', 'openssl');
+                check('{{ trans('xe::install.checkPHPExtZIP') }}', 'zip');
 
-            this.checked = true;
-        },
-        goto: function (step) {
-            var self = this;
-            step = parseInt(step);
+                this.checked = true;
+            },
+            goto: function (step) {
+                var self = this;
+                step = parseInt(step);
 
-            if (step == 3 && !$('#__xe_agree').is(':checked')) {
-                //alert('<?=trans('termsMustAgree')?>');
-                alert('You must be agree condition');
-                step = 2;
+                if (step == 3 && !$('#__xe_agree').is(':checked')) {
+                    alert('{{ trans('xe::install.termsMustAgree') }}');
+                    step = 2;
+                }
+
+                $('.__xe_step').each(function (i) {
+                    if (parseInt($(this).data('step')) == step) {
+                        self.current = step;
+                        $('.__xe_step').hide();
+                        $(this).show();
+
+                        self.tabOn(i);
+
+                        if (step == 1 && !self.checked) {
+                            self.check();
+                        }
+
+                        location.hash = '#step' + step;
+
+                        return false;
+                    }
+                });
             }
+        };
 
-            $('.__xe_step').each(function (i) {
-                if (parseInt($(this).data('step')) == step) {
-                    self.current = step;
-                    $('.__xe_step').hide();
-                    $(this).show();
+        var checkSystems = [];
 
-                    self.tabOn(i);
+        function check(msg, checkKey)
+        {
+            checkSystems[checkKey] = false;
 
-                    if (step == 1 && !self.checked) {
-                        self.check();
+            $('.__xe_check_list').append(
+                $('<li>').addClass('__xe_check ' + checkKey).append(
+                    $('<div>').append(
+                        $('<span>').addClass('install-check').append(
+                            $('<strong>').addClass('xe-sr-only').text('ready')
+                        )
+                    ).append(
+                        $('<p>').text(msg)
+                    )
+                )
+            );
+
+            $.ajax({
+                url: '{{ route('install.check') }}',
+                type: 'get',
+                dataType: 'json',
+                data: {'key' : checkKey},
+                success: function(data) {
+                    if (data.result == false) {
+                        $('.__xe_check.'+checkKey).addClass('false').find('> div').append(
+                            $('<strong>').text(data.message)
+                        );
+                    } else {
+                        $('.__xe_check.'+checkKey).addClass('pass')
                     }
 
-                    location.hash = '#step' + step;
+                    checkSystems[checkKey] = data.result;
 
-                    return false;
+                    var result = true;
+                    for (var key in checkSystems) {
+                        if (checkSystems[key] === false) {
+                            result = false;
+                            break;
+                        }
+                    }
+
+                    if (result == true) {
+                        $('.__xe_btn_check').hide().siblings('.__xe_btn_next').show();
+                    }
                 }
             });
         }
-    };
 
-    var checkSystems = [];
-
-    function check(msg, checkKey)
-    {
-        checkSystems[checkKey] = false;
-
-        $('.__xe_check_list').append(
-            $('<li>').addClass('__xe_check ' + checkKey).append(
-                $('<div>').append(
-                    $('<span>').addClass('install-check').append(
-                        $('<strong>').addClass('xe-sr-only').text('ready')
-                    )
-                ).append(
-                    $('<p>').text(msg)
-                )
-            )
-        );
-
-        $.ajax({
-            url: '{{ route('install.check') }}',
-            type: 'get',
-            dataType: 'json',
-            data: {'key' : checkKey},
-            success: function(data) {
-                if (data.result == false) {
-                    $('.__xe_check.'+checkKey).addClass('false').find('> div').append(
-                        $('<strong>').text(data.message)
-                    );
-                } else {
-                    $('.__xe_check.'+checkKey).addClass('pass')
-                }
-
-                checkSystems[checkKey] = data.result;
-
-                var result = true;
-                for (var key in checkSystems) {
-                    if (checkSystems[key] === false) {
-                        result = false;
-                        break;
-                    }
-                }
-
-                if (result == true) {
-                    $('.__xe_btn_check').hide().siblings('.__xe_btn_next').show();
-                }
-            }
-        });
-    }
-
-    function validation(f)
-    {
-        if (!$('#__xe_agree').is(':checked')) {
-            alert('<?=trans('termsMustAgree')?>');
-            stepper.goto(2);
-            return false;
-        }
-
-        var fields = ['database_name', 'database_password', 'admin_email', 'admin_password', 'admin_password_confirmation'];
-        for (var i in fields) {
-            var field = fields[i];
-            if ($.trim($(f[field]).val()) == '') {
-                $(f[field]).focus();
-                $(f[field]).css('backgroundColor', '#F49EA0');
+        function validation(f)
+        {
+            if (!$('#__xe_agree').is(':checked')) {
+                alert('{{ trans('xe::install.termsMustAgree') }}');
+                stepper.goto(2);
                 return false;
             }
+
+            var fields = ['database_name', 'database_password', 'admin_email', 'admin_password', 'admin_password_confirmation'];
+            for (var i in fields) {
+                var field = fields[i];
+                if ($.trim($(f[field]).val()) == '') {
+                    $(f[field]).focus();
+                    $(f[field]).css('backgroundColor', '#F49EA0');
+                    return false;
+                }
+            }
+
+            if ($(f['admin_password']).val() !== $(f['admin_password_confirmation']).val()) {
+                alert('비밀번호가 일치하지 않습니다.');
+                $(f['admin_password_confirmation']).focus();
+                return false;
+            }
+
+            return true;
         }
 
-        if ($(f['admin_password']).val() !== $(f['admin_password_confirmation']).val()) {
-            alert('비밀번호가 일치하지 않습니다.');
-            $(f['admin_password_confirmation']).focus();
-            return false;
-        }
+        {{--var timezones = eval('{{ json_encode(timezone_identifiers_list()) }}');--}}
 
-        return true;
-    }
-
-    var timezones = <?=json_encode(timezone_identifiers_list())?>;
-
-    $(function () {
-        $('.__xe_locale_item').click(function (e) {
-            e.preventDefault();
-            setCookie('install_locale', $(this).data('locale'), 24);
-            location.reload();
-        });
 
         $('.__xe_btn_next').click(function (e) {
             e.preventDefault();
