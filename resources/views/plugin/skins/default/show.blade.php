@@ -78,7 +78,11 @@
                         </form>
 
                         @if($plugin->needUpdateInstall())
-                            <button data-url="{{ route('settings.plugins.update', [$plugin->getId()]) }}" class="btn btn-default __xe_btn-update-plugin">{{ xe_trans('xe::update_plugin') }}</button>
+                            <form method="POST" action="{{ route('settings.plugins.update', [$plugin->getId()]) }}" accept-charset="UTF-8" role="form" style="display: inline;">
+                                {!! csrf_field() !!}
+                                {!! method_field('PUT') !!}
+                                <button class="btn btn-default">{{ xe_trans('xe::update_plugin') }}</button>
+                            </form>
                         @endif
 
                         @if($plugin->getSettingsURI())
