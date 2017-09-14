@@ -52,7 +52,7 @@ class CacheClear extends ClearCommand
      *
      * @return void
      */
-    public function fire()
+    public function handle()
     {
         // xe 에서 관리하는 stores
         $stores = [

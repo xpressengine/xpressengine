@@ -44,7 +44,7 @@ class PluginInstall extends PluginCommand
      * @return bool|null
      * @throws \Exception
      */
-    public function fire(
+    public function handle(
         PluginHandler $handler,
         PluginProvider $provider,
         ComposerFileWriter $writer,

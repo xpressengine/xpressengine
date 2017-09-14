@@ -37,7 +37,7 @@ class PluginComposerSync extends PluginCommand
      * @return bool|null
      * @throws \Exception
      */
-    public function fire(ComposerFileWriter $writer)
+    public function handle(ComposerFileWriter $writer)
     {
         // php artisan plugin:sync-composer
 

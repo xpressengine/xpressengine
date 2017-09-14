@@ -58,7 +58,7 @@ class ThemeMake extends Command
      * @return bool|null
      * @throws \Exception
      */
-    public function fire()
+    public function handle()
     {
         // get plugin info
         $plugin = $this->getPlugin();

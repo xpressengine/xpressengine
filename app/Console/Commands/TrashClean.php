@@ -68,7 +68,7 @@ class TrashClean extends Trash
         parent::__construct();
     }
 
-    public function fire()
+    public function handle()
     {
         $names = $this->input->getArgument('names');
         $bins = $this->bins($names);
