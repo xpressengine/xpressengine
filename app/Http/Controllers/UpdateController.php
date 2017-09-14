@@ -98,7 +98,11 @@ class UpdateController extends Controller
         }
 
         $log = $writer->get('xpressengine-plugin.operation.log');
-        $log = file_get_contents(storage_path($log));
+        if (file_exists(storage_path($log))) {
+            $log = file_get_contents(storage_path($log));
+        } else {
+            $log = sprintf('"%s" file not founded.', storage_path($log));
+        }
 
         return compact('status', 'updateVersion', 'log');
     }

@@ -580,8 +580,7 @@ class PluginController extends Controller
             throw $e;
         }
 
-        app('session.store')->flash('alert', ['type' => 'success', 'message' => '플러그인의 수정사항을 적용했습니다.']);
-        return XePresenter::makeApi(['type' => 'success', 'message' => '플러그인의 수정사항을 적용했습니다.']);
+        return Redirect::back()->withAlert(['type' => 'success', 'message' => '플러그인의 수정사항을 적용했습니다.']);
     }
 
 
