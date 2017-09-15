@@ -11,7 +11,7 @@ namespace Xpressengine\Tests\Media;
 use Mockery as m;
 use Xpressengine\Media\Commands\SpillCommand;
 
-class SpillCommandTest extends \PHPUnit_Framework_TestCase
+class SpillCommandTest extends \PHPUnit\Framework\TestCase
 {
     public function tearDown()
     {

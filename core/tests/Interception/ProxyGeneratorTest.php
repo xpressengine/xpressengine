@@ -16,7 +16,7 @@ use Xpressengine\Interception\Proxy\Pass\Pass;
 use Xpressengine\Interception\Proxy\ProxyConfig;
 use Xpressengine\Interception\Proxy\ProxyGenerator;
 
-class ProxyGeneratorTest extends \PHPUnit_Framework_TestCase
+class ProxyGeneratorTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testConstruct()

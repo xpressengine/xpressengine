@@ -12,7 +12,7 @@ use Mockery as m;
 use Xpressengine\Media\Coordinators\Dimension;
 use Xpressengine\Media\Thumbnailer;
 
-class ThumbnailerTest extends \PHPUnit_Framework_TestCase
+class ThumbnailerTest extends \PHPUnit\Framework\TestCase
 {
     public function tearDown()
     {

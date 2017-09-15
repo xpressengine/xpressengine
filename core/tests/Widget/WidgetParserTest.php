@@ -16,7 +16,7 @@ namespace Xpressengine\Tests\Widget;
 
 use Mockery as m;
 use Mockery\MockInterface;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Xpressengine\Widget\WidgetParser;
 
 /**
@@ -29,7 +29,7 @@ use Xpressengine\Widget\WidgetParser;
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class WidgetParserTest extends PHPUnit_Framework_TestCase
+class WidgetParserTest extends TestCase
 {
     /**
      * @var MockInterface

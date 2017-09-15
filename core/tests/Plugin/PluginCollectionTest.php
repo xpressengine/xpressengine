@@ -11,7 +11,7 @@ namespace Xpressengine\Tests\Plugin;
 use Xpressengine\Plugin\PluginCollection;
 use Xpressengine\Plugin\PluginHandler as Plugin;
 
-class PluginCollectionTest extends \PHPUnit_Framework_TestCase
+class PluginCollectionTest extends \PHPUnit\Framework\TestCase
 {
 
     protected function tearDown()

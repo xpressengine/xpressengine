@@ -1,4 +1,6 @@
-@section('page_title', "<h2><a href='".route('settings.menu.index')."'><i class='xi-arrow-left'></i></a>".xe_trans('xe::newItem')."</h2>")
+@section('page_title')
+    <h2><a href="{{ route('settings.menu.index') }}"><i class='xi-arrow-left'></i></a>{{ xe_trans('xe::newItem') }}</h2>
+@endsection
 
 @extends('menu.layout')
 @section('menuContent')
@@ -158,7 +160,7 @@
         {!! uio('menuType', ['menuType' => $menuType, 'action' => 'createMenuForm','param' => []]) !!}
 
         <div class="pull-right">
-            <a href="{{ route('settings.menu.select.types')}}" class="btn btn-default">{{xe_trans('xe::cancel')}}</a>
+            <a href="{{ route('settings.menu.select.types', '')}}" class="btn btn-default">{{xe_trans('xe::cancel')}}</a>
             <button type="submit" class="btn btn-primary">{{xe_trans('xe::submit')}}</button>
         </div>
     </div>

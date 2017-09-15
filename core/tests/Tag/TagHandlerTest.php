@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Mockery as m;
 use Xpressengine\Tag\TagHandler;
 
-class TagHandlerTest extends \PHPUnit_Framework_TestCase
+class TagHandlerTest extends \PHPUnit\Framework\TestCase
 {
     public function tearDown()
     {
@@ -52,7 +52,7 @@ class TagHandlerTest extends \PHPUnit_Framework_TestCase
         $repo->shouldReceive('create')->once()->with([
             'word' => 'xpressengine',
             'decomposed' => 'xpressengine',
-            'instanceId' => null,
+            'instance_id' => null,
         ])->andReturn($mockTagNew);
 
         $repo->shouldReceive('attach')->once()->with(
@@ -101,7 +101,10 @@ class TagHandlerTest extends \PHPUnit_Framework_TestCase
     {
         list($repo, $decomposer) = $this->getMocks();
 
-        $instance = $this->getMock(TagHandler::class, ['createModel'], [$repo, $decomposer]);
+        $instance = $this->getMockBuilder(TagHandler::class)
+            ->setMethods(['createModel'])
+            ->setConstructorArgs([$repo, $decomposer])
+            ->getMock();
 
         $mockModel = m::mock('Xpressengine\Tag\Tag');
 

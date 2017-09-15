@@ -441,14 +441,14 @@ if (!function_exists('menu_list')) {
 
                     // resolve child menuitems of item
                     $children = new \Illuminate\Support\Collection();
-                    foreach ($item['children'] as $child) {
+                    foreach ($item->getChildren() as $child) {
                         if ($new = removeInvisible($child, $menu)) {
                             if ($new) {
                                 $children[] = $new;
                             }
                         }
                     }
-                    $item['children'] = $children;
+                    $item->setChildren($children);
 
                     return $item;
                 }

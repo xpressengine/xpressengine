@@ -214,13 +214,10 @@ export default createReactClass({
     }
 
     var ratingOption = [
-     { value: 'super', name: XE.Lang.trans('xe::memberRatingAdministrator') }, {
-      value: 'manager',
-      name: XE.Lang.trans('xe::memberRatingManager'),
-    }, { value: 'member', name: XE.Lang.trans('xe::member') }, {
-      value: 'guest',
-      name: XE.Lang.trans('xe::guest'),
-    },
+     { value: 'super', name: XE.Lang.trans('xe::memberRatingAdministrator') },
+     { value: 'manager', name: XE.Lang.trans('xe::memberRatingManager') },
+     { value: 'member', name: XE.Lang.trans('xe::member') },
+     { value: 'guest', name: XE.Lang.trans('xe::guest') },
     ];
 
     var RatingUI =

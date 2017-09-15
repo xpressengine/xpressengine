@@ -9,9 +9,10 @@
 namespace Xpressengine\Tests\Config;
 
 use Mockery as m;
+use PHPUnit\Framework\TestCase;
 use Xpressengine\Config\Validator;
 
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends TestCase
 {
     public function tearDown()
     {

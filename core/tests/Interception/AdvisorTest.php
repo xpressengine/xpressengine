@@ -10,7 +10,7 @@ namespace Xpressengine\Tests\Interception;
 
 use Xpressengine\Interception\Advisor;
 
-class AdvisorTest extends \PHPUnit_Framework_TestCase
+class AdvisorTest extends \PHPUnit\Framework\TestCase
 {
 
     protected function tearDown()

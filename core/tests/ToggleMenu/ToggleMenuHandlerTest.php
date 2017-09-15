@@ -12,7 +12,7 @@ use Mockery as m;
 use Xpressengine\ToggleMenu\AbstractToggleMenu;
 use Xpressengine\ToggleMenu\ToggleMenuHandler;
 
-class ToggleMenuHandlerTest extends \PHPUnit_Framework_TestCase
+class ToggleMenuHandlerTest extends \PHPUnit\Framework\TestCase
 {
     public function tearDown()
     {

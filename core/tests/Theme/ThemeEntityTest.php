@@ -10,7 +10,7 @@ namespace Xpressengine\Tests\Theme;
 
 use Xpressengine\Theme\ThemeEntity;
 
-class ThemeEntityTest extends \PHPUnit_Framework_TestCase
+class ThemeEntityTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstruct()
     {

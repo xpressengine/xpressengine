@@ -9,9 +9,10 @@
 namespace Xpressengine\Tests\Category;
 
 use Mockery as m;
+use PHPUnit\Framework\TestCase;
 use Xpressengine\Category\CategoryHandler;
 
-class CategoryHandlerTest extends \PHPUnit_Framework_TestCase
+class CategoryHandlerTest extends TestCase
 {
     public function tearDown()
     {
@@ -34,7 +35,9 @@ class CategoryHandlerTest extends \PHPUnit_Framework_TestCase
         $instance->shouldReceive('deleteItem')->once()->with($mockItem1)->andReturnNull();
         $instance->shouldReceive('deleteItem')->once()->with($mockItem2)->andReturnNull();
 
-        $instance->deleteCate($mockModel);
+        $result = $instance->deleteCate($mockModel);
+
+        $this->assertTrue($result);
     }
 
     public function testUpdateItem()
@@ -66,13 +69,11 @@ class CategoryHandlerTest extends \PHPUnit_Framework_TestCase
         $mockItem->shouldReceive('getAttribute')->with('descendants')->andReturn([$mockDesc1]);
 
         $itemRepo->shouldReceive('delete')->once()->with($mockDesc1);
-        $itemRepo->shouldReceive('delete')->once()->with($mockItem);
+        $itemRepo->shouldReceive('delete')->once()->with($mockItem)->andReturn(true);
 
-//        $mockModel = m::mock('Xpressengine\Category\Models\Category')->shouldAllowMockingProtectedMethods();
-//
-//        $mockItem->shouldReceive('getAttribute')->with('category')->andReturn($mockModel);
+        $result = $instance->deleteItem($mockItem, true);
 
-        $instance->deleteItem($mockItem, true);
+        $this->assertTrue($result);
     }
 
     public function testDeleteItemForceFalse()
@@ -88,9 +89,11 @@ class CategoryHandlerTest extends \PHPUnit_Framework_TestCase
         $mockItem->shouldReceive('getAttribute')->with('descendants')->andReturn([$mockDesc1]);
 
         $itemRepo->shouldReceive('exclude')->once()->with($mockDesc1, $mockItem);
-        $itemRepo->shouldReceive('delete')->once()->with($mockItem);
+        $itemRepo->shouldReceive('delete')->once()->with($mockItem)->andReturn(true);
 
-        $instance->deleteItem($mockItem, false);
+        $result = $instance->deleteItem($mockItem, false);
+
+        $this->assertTrue($result);
     }
 
     public function testMoveToThorwsExceptionWhenGivenParentIsSelf()
@@ -118,7 +121,10 @@ class CategoryHandlerTest extends \PHPUnit_Framework_TestCase
     public function testMoveTo()
     {
         list($cateRepo, $itemRepo) = $this->getMocks();
-        $instance = $this->getMock(CategoryHandler::class, ['linkHierarchy', 'unlinkHierarchy'], [$cateRepo, $itemRepo]);
+        $instance = $this->getMockBuilder(CategoryHandler::class)
+            ->setConstructorArgs([$cateRepo, $itemRepo])
+            ->setMethods(['linkHierarchy', 'unlinkHierarchy'])
+            ->getMock();
 
         $mockItem = m::mock('Xpressengine\Category\Models\CategoryItem');
         $mockItem->shouldReceive('getParentIdName')->andReturn('parentId');

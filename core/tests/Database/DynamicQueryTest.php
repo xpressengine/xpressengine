@@ -9,7 +9,7 @@
 namespace Xpressengine\Tests\Database;
 
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Xpressengine\Database\DynamicQuery;
 
 /**
@@ -20,7 +20,7 @@ use Xpressengine\Database\DynamicQuery;
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class DynamicQueryTest extends PHPUnit_Framework_TestCase
+class DynamicQueryTest extends TestCase
 {
     protected $processor;
     protected $grammar;
@@ -141,6 +141,7 @@ class DynamicQueryTest extends PHPUnit_Framework_TestCase
         $grammar->shouldReceive('compileUpdate')->andReturn('update table set');
         $grammar->shouldReceive('compileDelete')->andReturn('delete from table');
         $grammar->shouldReceive('compileSelect')->andReturn('select * from table');
+        $grammar->shouldReceive('prepareBindingsForUpdate')->andReturn([]);
 
         $connection = m::mock('Illuminate\Database\Connection');
         $connection->shouldReceive('getPostProcessor')->andReturn($processor);
@@ -163,7 +164,7 @@ class DynamicQueryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $query->insertGetId($params));
         $this->assertEquals(true, $query->update($params));
         $this->assertEquals(true, $query->delete($params));
-        $this->assertEquals([['id'=>1]], $query->get());
+        $this->assertEquals([['id'=>1]], $query->get()->all());
         $this->assertEquals(['id'=>1], $query->first());
         //$this->assertEquals([], $query->paginate(10));    // 쉽지않음
         $this->assertInstanceOf('Xpressengine\Database\DynamicQuery', $query->where([]));
@@ -188,6 +189,7 @@ class DynamicQueryTest extends PHPUnit_Framework_TestCase
         $grammar->shouldReceive('compileUpdate')->andReturn('update table set');
         $grammar->shouldReceive('compileDelete')->andReturn('delete from table');
         $grammar->shouldReceive('compileSelect')->andReturn('select * from table');
+        $grammar->shouldReceive('prepareBindingsForUpdate')->andReturn([]);
 
         $schemaBuilder = m::mock('Illuminate\Database\Schema\Builder');
         $schemaBuilder->shouldReceive('getColumnListing')->andReturn(['some']);
@@ -214,7 +216,7 @@ class DynamicQueryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $query->insertGetId($params));
         $this->assertEquals(true, $query->update($params));
         $this->assertEquals(true, $query->delete($params));
-        $this->assertEquals([['id'=>1]], $query->get());
+        $this->assertEquals([['id'=>1]], $query->get()->all());
         $this->assertEquals(['id'=>1], $query->first());
         //$this->assertEquals([], $query->paginate(10));    // 쉽지않음
         $this->assertInstanceOf('Xpressengine\Database\DynamicQuery', $query->where([]));
@@ -239,6 +241,7 @@ class DynamicQueryTest extends PHPUnit_Framework_TestCase
         $grammar->shouldReceive('compileUpdate')->andReturn('update table set');
         $grammar->shouldReceive('compileDelete')->andReturn('delete from table');
         $grammar->shouldReceive('compileSelect')->andReturn('select * from table');
+        $grammar->shouldReceive('prepareBindingsForUpdate')->andReturn([]);
 
         $schemaBuilder = m::mock('Illuminate\Database\Schema\Builder');
         $schemaBuilder->shouldReceive('getColumnListing')->andReturn(['some']);
@@ -281,7 +284,7 @@ class DynamicQueryTest extends PHPUnit_Framework_TestCase
         $proxyManager->shouldReceive('get');
         $proxyManager->shouldReceive('first');
 
-        $this->assertEquals([['id'=>1]], $query->get());
+        $this->assertEquals([['id'=>1]], $query->get()->all());
         $this->assertEquals(['id'=>1], $query->first());
     }
 }

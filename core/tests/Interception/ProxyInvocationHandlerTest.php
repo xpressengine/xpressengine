@@ -13,7 +13,7 @@ use Xpressengine\Interception\Advisor;
 use Xpressengine\Interception\AdvisorList;
 use Xpressengine\Interception\ProxyInvocationHandler;
 
-class ProxyInvocationHandlerTest extends \PHPUnit_Framework_TestCase
+class ProxyInvocationHandlerTest extends \PHPUnit\Framework\TestCase
 {
 
     protected function tearDown()

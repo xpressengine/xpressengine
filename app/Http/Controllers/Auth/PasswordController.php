@@ -92,12 +92,7 @@ class PasswordController extends Controller {
             ]
         );
 
-        $response = $this->passwords->sendResetLink(
-            $request->only('email'),
-            function ($m) {
-                $m->subject($this->getEmailSubject());
-            }
-        );
+        $response = $this->passwords->sendResetLink($request->only('email'));
 
         $email = $request->get('email');
 
@@ -109,16 +104,6 @@ class PasswordController extends Controller {
             case PasswordBroker::INVALID_USER:
                 return redirect()->back()->with('alert', ['type' => 'danger', 'message' => '등록되지 않았거나 등록대기중인 이메일입니다.']);
         }
-    }
-
-    /**
-     * Get the e-mail subject line to be used for the reset link email.
-     *
-     * @return string
-     */
-    protected function getEmailSubject()
-    {
-        return xe_trans(app('xe.site')->getSiteConfig()->get('site_title')).' '.xe_trans('xe::linkForPasswordReset');
     }
 
     /**
@@ -176,25 +161,8 @@ class PasswordController extends Controller {
                 $passwordConfig = app('config')->get('xe.user.password');
                 $passwordLevel = array_get($passwordConfig['levels'], $passwordConfig['default']);
                 return redirect()->back()
-                                 ->withInput($request->only('email'))
-                                 ->with('alert', ['type' => 'danger', 'message' => xe_trans($passwordLevel['description'])]);
+                    ->withInput($request->only('email'))
+                    ->with('alert', ['type' => 'danger', 'message' => xe_trans($passwordLevel['description'])]);
         }
     }
-
-    /**
-     * Get the post register / login redirect path.
-     *
-     * @return string
-     */
-    public function redirectPath()
-    {
-        if (property_exists($this, 'redirectPath'))
-        {
-            return $this->redirectPath;
-        }
-
-        return property_exists($this, 'redirectTo') ? $this->redirectTo : '/home';
-    }
-
-
 }

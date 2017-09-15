@@ -13,7 +13,7 @@ use Xpressengine\User\Models\PendingEmail;
 use Xpressengine\User\Models\User;
 use Xpressengine\User\Repositories\PendingEmailRepository;
 
-class PendingEmailRepositoryTest extends \PHPUnit_Framework_TestCase
+class PendingEmailRepositoryTest extends \PHPUnit\Framework\TestCase
 {
 
     protected function tearDown()

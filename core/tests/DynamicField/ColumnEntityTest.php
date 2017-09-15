@@ -9,7 +9,7 @@
 namespace Xpressengine\Tests\DynamicField;
 
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Xpressengine\Config\ColumnEntity;
 
 /**
@@ -20,7 +20,7 @@ use Xpressengine\Config\ColumnEntity;
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class ColumnEntityTest extends PHPUnit_Framework_TestCase
+class ColumnEntityTest extends TestCase
 {
     /**
      * tear down

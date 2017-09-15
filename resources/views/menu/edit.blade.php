@@ -1,4 +1,6 @@
-@section('page_title', '<he2>' . xe_trans('xe::editMenu'))
+@section('page_title')
+    <h2><a href="{{ route('settings.menu.index') }}"><i class='xi-arrow-left'></i></a>{{ xe_trans('xe::editMenu') }}</h2>
+@endsection
 @section('page_description', xe_trans('xe::editMenuDescription'))
 @extends('menu.layout')
 @section('menuContent')

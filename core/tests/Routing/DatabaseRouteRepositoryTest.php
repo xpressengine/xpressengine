@@ -11,12 +11,15 @@ namespace Xpressengine\Tests\Routing;
 use Mockery as m;
 use Xpressengine\Routing\Repositories\DatabaseRouteRepository;
 
-class DatabaseRouteRepositoryTest extends \PHPUnit_Framework_TestCase
+class DatabaseRouteRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testAll()
     {
         list($configs, $model) = $this->getMocks();
-        $instance = $this->getMock(DatabaseRouteRepository::class, ['createModel'], [$configs, $model]);
+        $instance = $this->getMockBuilder(DatabaseRouteRepository::class)
+            ->setMethods(['createModel'])
+            ->setConstructorArgs([$configs, $model])
+            ->getMock();
 
         $mockModel = m::mock('stdClass');
         $mockModel->shouldReceive('newQuery')->andReturnSelf();
@@ -32,7 +35,10 @@ class DatabaseRouteRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testFindByUrlAndSiteKey()
     {
         list($configs, $model) = $this->getMocks();
-        $instance = $this->getMock(DatabaseRouteRepository::class, ['createModel'], [$configs, $model]);
+        $instance = $this->getMockBuilder(DatabaseRouteRepository::class)
+            ->setMethods(['createModel'])
+            ->setConstructorArgs([$configs, $model])
+            ->getMock();
 
         $mockModel = m::mock('stdClass');
         $mockModel->shouldReceive('newQuery')->andReturnSelf();
@@ -51,7 +57,10 @@ class DatabaseRouteRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testFindByInstanceId()
     {
         list($configs, $model) = $this->getMocks();
-        $instance = $this->getMock(DatabaseRouteRepository::class, ['createModel'], [$configs, $model]);
+        $instance = $this->getMockBuilder(DatabaseRouteRepository::class)
+            ->setMethods(['createModel'])
+            ->setConstructorArgs([$configs, $model])
+            ->getMock();
 
         $mockModel = m::mock('stdClass');
         $mockModel->shouldReceive('newQuery')->andReturnSelf();
@@ -69,7 +78,10 @@ class DatabaseRouteRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testFetchBySiteKey()
     {
         list($configs, $model) = $this->getMocks();
-        $instance = $this->getMock(DatabaseRouteRepository::class, ['createModel'], [$configs, $model]);
+        $instance = $this->getMockBuilder(DatabaseRouteRepository::class)
+            ->setMethods(['createModel'])
+            ->setConstructorArgs([$configs, $model])
+            ->getMock();
 
         $mockModel = m::mock('stdClass');
         $mockModel->shouldReceive('newQuery')->andReturnSelf();
@@ -87,7 +99,10 @@ class DatabaseRouteRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testFetchByModule()
     {
         list($configs, $model) = $this->getMocks();
-        $instance = $this->getMock(DatabaseRouteRepository::class, ['createModel'], [$configs, $model]);
+        $instance = $this->getMockBuilder(DatabaseRouteRepository::class)
+            ->setMethods(['createModel'])
+            ->setConstructorArgs([$configs, $model])
+            ->getMock();
 
         $mockModel = m::mock('stdClass');
         $mockModel->shouldReceive('newQuery')->andReturnSelf();
@@ -105,7 +120,10 @@ class DatabaseRouteRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testPut()
     {
         list($configs, $model) = $this->getMocks();
-        $instance = $this->getMock(DatabaseRouteRepository::class, ['validateUrl'], [$configs, $model]);
+        $instance = $this->getMockBuilder(DatabaseRouteRepository::class)
+            ->setMethods(['validateUrl'])
+            ->setConstructorArgs([$configs, $model])
+            ->getMock();
 
         $mockRoute = m::mock('Xpressengine\Routing\InstanceRoute');
         $mockRoute->shouldReceive('hasMacro')->andReturn(false);
@@ -122,7 +140,10 @@ class DatabaseRouteRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testPutThrowsExceptionWhenUnusableRouteGiven()
     {
         list($configs, $model) = $this->getMocks();
-        $instance = $this->getMock(DatabaseRouteRepository::class, ['validateUrl'], [$configs, $model]);
+        $instance = $this->getMockBuilder(DatabaseRouteRepository::class)
+            ->setMethods(['validateUrl'])
+            ->setConstructorArgs([$configs, $model])
+            ->getMock();
 
         $mockRoute = m::mock('Xpressengine\Routing\InstanceRoute');
         $mockRoute->shouldReceive('hasMacro')->andReturn(false);
@@ -144,7 +165,10 @@ class DatabaseRouteRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testValidateUrl()
     {
         list($configs, $model) = $this->getMocks();
-        $instance = $this->getMock(DatabaseRouteRepository::class, ['findByUrlAndSiteKey'], [$configs, $model]);
+        $instance = $this->getMockBuilder(DatabaseRouteRepository::class)
+            ->setMethods(['findByUrlAndSiteKey'])
+            ->setConstructorArgs([$configs, $model])
+            ->getMock();
 
         $configs->shouldReceive('get')->once()->with('xe.routing')->andReturn([
             'settingsPrefix' => 'settings',

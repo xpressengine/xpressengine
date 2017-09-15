@@ -9,10 +9,10 @@
 namespace Xpressengine\Tests\Translation;
 
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Xpressengine\Translation\LangData;
 
-class LangDataTest extends PHPUnit_Framework_TestCase
+class LangDataTest extends TestCase
 {
     public function tearDown()
     {

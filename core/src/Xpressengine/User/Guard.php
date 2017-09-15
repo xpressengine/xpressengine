@@ -14,11 +14,11 @@
 
 namespace Xpressengine\User;
 
-use Illuminate\Auth\Guard as LaravelGuard;
+use Illuminate\Auth\SessionGuard;
 use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 use Illuminate\Contracts\Auth\UserProvider;
+use Illuminate\Contracts\Session\Session;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Xpressengine\User\Models\Guest;
 
 /**
@@ -33,7 +33,7 @@ use Xpressengine\User\Models\Guest;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class Guard extends LaravelGuard implements GuardInterface
+class Guard extends SessionGuard implements GuardInterface
 {
     /**
      * @var array admin auth config
@@ -43,21 +43,23 @@ class Guard extends LaravelGuard implements GuardInterface
     /**
      * Create a new authentication guard.
      *
-     * @param  UserProvider     $provider        user provider
-     * @param  SessionInterface $session         session store
-     * @param  array            $adminAuthConfig adminauth config
-     * @param  Request          $request         request
+     * @param string       $name            gurad name
+     * @param UserProvider $provider        user provider
+     * @param Session      $session         session store
+     * @param array        $adminAuthConfig adminauth config
+     * @param Request      $request         request
      *
      * @return void
      */
     public function __construct(
+        $name,
         UserProvider $provider,
-        SessionInterface $session,
+        Session $session,
         $adminAuthConfig,
         Request $request = null
     ) {
         $this->adminAuthConfig = $adminAuthConfig;
-        parent::__construct($provider, $session, $request);
+        parent::__construct($name, $provider, $session, $request);
     }
 
     /**
@@ -117,7 +119,7 @@ class Guard extends LaravelGuard implements GuardInterface
         $key = $this->adminAuthConfig['session'];
         $expire = $this->adminAuthConfig['expire'];
         $time = time() + ($expire * 60);
-        $this->session->set($key, $time);
+        $this->session->put($key, $time);
     }
 
     /**
@@ -175,7 +177,8 @@ class Guard extends LaravelGuard implements GuardInterface
             return null;
         }
 
-        $id = $this->session->get($this->getName(), $this->getRecallerId());
+        $recaller = $this->recaller();
+        $id = $this->session->get($this->getName(), $recaller ? $recaller->id() : null);
 
         if (is_null($id) && $this->check()) {
             $id = $this->user()->getAuthIdentifier();
@@ -218,7 +221,7 @@ class Guard extends LaravelGuard implements GuardInterface
         $this->clearAdminAuth();
 
         if ($this->check()) {
-            $this->refreshRememberToken($user);
+            $this->cycleRememberToken($user);
         }
 
         if (isset($this->events)) {

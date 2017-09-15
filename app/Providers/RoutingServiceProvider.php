@@ -38,7 +38,6 @@ use Xpressengine\Routing\UriValidator;
  */
 class RoutingServiceProvider extends ServiceProvider
 {
-
     /**
      * 주요 역할은 ModuleValidator의 boot를 실행.
      *
@@ -48,10 +47,10 @@ class RoutingServiceProvider extends ServiceProvider
     {
         $routeValidator = Route::getValidators();
         $routeValidator['module']->boot(
-            app('xe.router'),
-            app('xe.menu'),
-            app('xe.theme'),
-            app('xe.site')
+            $this->app['xe.router'],
+            $this->app['xe.menu'],
+            $this->app['xe.theme'],
+            $this->app['xe.site']
         );
     }
 
@@ -62,23 +61,24 @@ class RoutingServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(
-            ['xe.router' => RouteRepository::class],
-            function ($app) {
-                $repo = new DatabaseRouteRepository($app['config'], InstanceRoute::class);
+        $this->app->singleton(RouteRepository::class, function ($app) {
+            $repo = new DatabaseRouteRepository($app['config'], InstanceRoute::class);
 
-                if (env('APP_DEBUG') != true) {
-                    $repo = new CacheDecorator($repo, $app['cache.store']);
-                }
-
-                return new MemoryDecorator($repo);
+            if ($app['config']['app.debug'] !== true) {
+                $repo = new CacheDecorator($repo, $app['cache.store']);
             }
-        );
 
+            return new MemoryDecorator($repo);
+        });
+        $this->app->alias(RouteRepository::class, 'xe.router');
+
+        /*
+         * RouteServiceProvider 가 우선 boot 되기때문에
+         * boot 가 아닌 register 에서 처리
+         */
         $this->setNewRouteValidator();
         $this->registerMacro($this->app['router']);
         $this->registerRouteCollection($this->app['router']);
-
     }
 
     /**
@@ -133,7 +133,7 @@ class RoutingServiceProvider extends ServiceProvider
 
             $attributes = [
                 'prefix' => config('xe.routing.settingsPrefix') . '/' . $key,
-                'middleware' => ['settings']
+                'middleware' => ['web', 'settings']
             ];
 
             if ($routeOptions !== null and is_array($routeOptions)) {
@@ -163,7 +163,8 @@ class RoutingServiceProvider extends ServiceProvider
             $newKey = str_replace('@', '/', $key);
 
             $attributes = [
-                'prefix' => config('xe.routing.fixedPrefix') . '/' . $newKey
+                'prefix' => config('xe.routing.fixedPrefix') . '/' . $newKey,
+                'middleware' => ['web']
             ];
 
             if ($routeOptions !== null and is_array($routeOptions)) {
@@ -195,7 +196,7 @@ class RoutingServiceProvider extends ServiceProvider
             $attributes = [
                 'prefix' => $pattern,
                 'module' => $key,
-                'middleware' => ['access']
+                'middleware' => ['web', 'access']
             ];
 
             if ($routeOptions !== null and is_array($routeOptions)) {
@@ -207,10 +208,8 @@ class RoutingServiceProvider extends ServiceProvider
                 }
             }
 
-            $router = $this;
-            app('events')->listen('router.before', function($request, $response) use ($router, $attributes, $callback) {
-                $router->group($attributes, $callback);
-            });
+            // todo: #364 확인 필요
+            $this->group($attributes, $callback);
         };
 
         $router->macro('instance', $instanceMacro);

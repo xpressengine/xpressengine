@@ -31,7 +31,7 @@
                                 <div class="col-sm-12">
                                     @foreach($fieldTypes as $fieldType)
                                         <div class="form-group has-feedback">
-                                            {!! $fieldType->getSkin()->create(Input::all()) !!}
+                                            {!! $fieldType->getSkin()->create(Request::all()) !!}
                                         </div>
                                     @endforeach
                                 </div>

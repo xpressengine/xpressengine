@@ -334,7 +334,7 @@ class ThemeHandler
         $themes = $this->getAllTheme();
         return array_where(
             $themes,
-            function ($id, $entity) {
+            function ($entity) {
                 /** @var ThemeEntity $entity */
                 return $entity->supportMobile();
             }
@@ -351,7 +351,7 @@ class ThemeHandler
         $themes = $this->getAllTheme();
         return array_where(
             $themes,
-            function ($id, $entity) {
+            function ($entity) {
                 /** @var ThemeEntity $entity */
                 return $entity->supportDesktop();
             }

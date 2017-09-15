@@ -77,13 +77,14 @@ class FileRepository
         /** @var File $model */
         $model = $this->createModel();
 
-        return $this->query()
-            ->rightJoin($model->getFileableTable(), $model->getTable().'.id', '=', $model->getFileableTable().'.file_id')
-            ->where('fileable_id', $fileableId)
-            ->select(array_map(function ($column) use ($model) {
-                return $model->getTable() . '.' . $column;
-            }, $columns))
-            ->get();
+        return $this->query()->rightJoin(
+            $model->getFileableTable(),
+            $model->getTable().'.id',
+            '=',
+            $model->getFileableTable().'.file_id'
+        )->where('fileable_id', $fileableId)->select(array_map(function ($column) use ($model) {
+            return $model->getTable() . '.' . $column;
+        }, $columns))->get();
     }
 
     /**

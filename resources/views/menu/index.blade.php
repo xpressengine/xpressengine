@@ -5,9 +5,6 @@
 {{ XeFrontend::js('/assets/core/menu/Menu.js')->appendTo('body')->load() }}
 {{ XeFrontend::js('/assets/core/menu/SiteMap.js')->appendTo('body')->load() }}
 
-@section('page_title',"<h2>".xe_trans('xe::siteMap')."</h2>")
-@section('page_description',xe_trans('xe::siteMapDescription'))
-
 <div id="menuContainer"
      class="row"
      data-url="{{ route('settings.menu.index') }}"

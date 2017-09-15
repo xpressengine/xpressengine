@@ -86,7 +86,8 @@ class MenuItem extends CategoryItem
      */
     protected $fillable = [
         'menu_id', 'parent_id', 'title', 'url', 'description', 'target', 'type' , 'ordering', 'activated',
-        'basic_image_id', 'hover_image_id', 'selected_image_id', 'm_basic_image_id', 'm_hover_image_id', 'm_selected_image_id',
+        'basic_image_id', 'hover_image_id', 'selected_image_id',
+        'm_basic_image_id', 'm_hover_image_id', 'm_selected_image_id',
     ];
 
     /**
@@ -342,5 +343,25 @@ class MenuItem extends CategoryItem
     {
         $callback = static::$linkResolver;
         return $callback($this);
+    }
+
+    /**
+     * Get children attribute
+     *
+     * @return \Illuminate\Database\Eloquent\Collection|MenuItem[]
+     */
+    public function getChildrenAttribute()
+    {
+        return $this->getChildren();
+    }
+
+    /**
+     * Get target attribute
+     *
+     * @return string
+     */
+    public function getTargetAttribute()
+    {
+        return $this->getAttributeFromArray('target') ?: '_self';
     }
 }

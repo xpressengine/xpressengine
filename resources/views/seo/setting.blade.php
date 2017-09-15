@@ -44,7 +44,7 @@
                         </div>
                         <div class="form-group">
                             <label>{{ xe_trans('xe::metaTag') }} <small>{{ xe_trans('xe::inputSiteKeyword') }}</small></label>
-                            <input type="text" class="form-control" name="keywords" value="{{ $setting->get('keywords') ?: Input::old('keywords') }}">
+                            <input type="text" class="form-control" name="keywords" value="{{ $setting->get('keywords') ?: Request::old('keywords') }}">
                         </div>
                         <div class="form-group">
                             <label>{{ xe_trans('xe::description') }} <small>{{ xe_trans('xe::inputSiteDescription') }}</small></label>
@@ -56,7 +56,7 @@
                                     <label>{{ xe_trans('xe::contents') }} {{ xe_trans('xe::owner') }} {{ xe_trans('xe::info') }} <small>{{ xe_trans('xe::inputSourceAddress', ['name' => 'twitter']) }}</small></label>
                                     <div class="input-group">
                                         <span class="input-group-addon" id="basic-addon1">@</span>
-                                        <input type="text" id="item-url" name="twitterUsername" class="form-control" aria-describedby="basic-addon1" placeholder="Twitter Username" value="{{ $setting->get('twitterUsername') ?: Input::old('twitterUsername') }}">
+                                        <input type="text" id="item-url" name="twitterUsername" class="form-control" aria-describedby="basic-addon1" placeholder="Twitter Username" value="{{ $setting->get('twitterUsername') ?: Request::old('twitterUsername') }}">
                                     </div>
                                 </div>
                             </div>

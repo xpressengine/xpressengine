@@ -14,7 +14,6 @@
 
 namespace Xpressengine\Presenter;
 
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Renderable;
 
 /**
@@ -29,7 +28,7 @@ use Illuminate\Contracts\Support\Renderable;
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-interface Presentable extends Renderable, Arrayable
+interface Presentable extends Renderable
 {
     /**
      * format
@@ -38,11 +37,4 @@ interface Presentable extends Renderable, Arrayable
      * @return string
      */
     public static function format();
-
-    /**
-     * Get the instance as an array.
-     *
-     * @return array
-     */
-    public function toArray();
 }

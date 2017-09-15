@@ -16,7 +16,7 @@
 namespace Xpressengine\Tests\DynamicField;
 
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\DynamicField\AbstractSkin;
 use Xpressengine\DynamicField\AbstractType;
@@ -32,7 +32,7 @@ use Xpressengine\DynamicField\ColumnEntity;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class AbstractTypeTest extends PHPUnit_Framework_TestCase
+class AbstractTypeTest extends TestCase
 {
 
     /**

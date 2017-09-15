@@ -26,13 +26,6 @@ use Xpressengine\Keygen\Keygen;
 class KeygenServiceProvider extends ServiceProvider
 {
     /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
-
-    /**
      * Register the service provider.
      *
      * @return void
@@ -40,18 +33,8 @@ class KeygenServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('xe.keygen', function ($app) {
-            $proxyClass = $app['xe.interception']->proxy(Keygen::class, 'Keygen');
+            $proxyClass = $app['xe.interception']->proxy(Keygen::class, 'XeKeygen');
             return new $proxyClass($app['config']['xe.uid']);
         });
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return ['xe.keygen'];
     }
 }

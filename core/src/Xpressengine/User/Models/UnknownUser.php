@@ -299,4 +299,25 @@ class UnknownUser implements UserInterface
     {
         $this->throwNotSupportedException();
     }
+
+    /**
+     * Get the name of the unique identifier for the user.
+     *
+     * @return string
+     */
+    public function getAuthIdentifierName()
+    {
+        return null;
+    }
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string $token token for password reset
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->throwNotSupportedException();
+    }
 }

@@ -11,7 +11,7 @@
 namespace Xpressengine\Tests\Counter;
 
 use Mockery as M;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Xpressengine\Counter\Counter;
 use Xpressengine\Counter\Factory;
 
@@ -23,7 +23,7 @@ use Xpressengine\Counter\Factory;
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class CounterTest extends PHPUnit_Framework_TestCase
+class CounterTest extends TestCase
 {
     private $request;
 

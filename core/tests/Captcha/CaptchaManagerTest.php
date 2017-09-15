@@ -9,9 +9,10 @@
 namespace Xpressengine\Tests\Captcha;
 
 use Mockery as m;
+use PHPUnit\Framework\TestCase;
 use Xpressengine\Captcha\CaptchaManager;
 
-class CaptchaManagerTest extends \PHPUnit_Framework_TestCase
+class CaptchaManagerTest extends TestCase
 {
     public function tearDown()
     {

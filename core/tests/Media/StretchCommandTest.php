@@ -11,7 +11,7 @@ namespace Xpressengine\Tests\Media;
 use Mockery as m;
 use Xpressengine\Media\Commands\StretchCommand;
 
-class StretchCommandTest extends \PHPUnit_Framework_TestCase
+class StretchCommandTest extends \PHPUnit\Framework\TestCase
 {
     public function tearDown()
     {

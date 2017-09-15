@@ -9,10 +9,10 @@
 namespace Xpressengine\Tests\Translation;
 
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Xpressengine\Translation\Loaders\LangURLLoader;
 
-class LangURLLoaderTest extends PHPUnit_Framework_TestCase
+class LangURLLoaderTest extends TestCase
 {
     public function tearDown()
     {

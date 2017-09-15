@@ -10,7 +10,7 @@ namespace Xpressengine\Tests\Skin;
 
 use Xpressengine\Skin\AbstractSkin;
 
-class AbstractSkinTest extends \PHPUnit_Framework_TestCase {
+class AbstractSkinTest extends \PHPUnit\Framework\TestCase {
 
     protected function tearDown()
     {

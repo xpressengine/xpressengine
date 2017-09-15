@@ -12,19 +12,19 @@
     <form class="__xe_search_form" method="get">
     <div class="searchs form-inline">
         <div class="btn-group __xe_btns_search">
-            <button type="button" class="btn btn-default {{ Input::get('status') == 'trash' ? 'active' : ''}}" data-key="status" data-value="trash">
+            <button type="button" class="btn btn-default {{ Request::get('status') == 'trash' ? 'active' : ''}}" data-key="status" data-value="trash">
                 <i class="fa fa-search"></i>
                 휴지통
             </button>
-            <button type="button" class="btn btn-default {{ Input::get('approved') == 'wait' ? 'active' : ''}}" data-key="approved" data-value="wait">
+            <button type="button" class="btn btn-default {{ Request::get('approved') == 'wait' ? 'active' : ''}}" data-key="approved" data-value="wait">
                 <i class="fa fa-search"></i>
                 승인대기
             </button>
-            <button type="button" class="btn btn-default {{ Input::get('display') == 'hidden' ? 'active' : ''}}" data-key="display" data-value="hidden">
+            <button type="button" class="btn btn-default {{ Request::get('display') == 'hidden' ? 'active' : ''}}" data-key="display" data-value="hidden">
                 <i class="fa fa-search"></i>
                 숨김
             </button>
-            <button type="button" class="btn btn-default {{ Input::get('status') == 'temp' ? 'active' : ''}}" data-key="status" data-value="temp">
+            <button type="button" class="btn btn-default {{ Request::get('status') == 'temp' ? 'active' : ''}}" data-key="status" data-value="temp">
                 <i class="fa fa-search"></i>
                 임시저장
             </button>
@@ -32,15 +32,15 @@
         </div>
 
         <select name="searchTarget" class="form-control">
-            <option value="title_content" {{Input::get('searchTarget') == 'title_content' ? 'selected="selected"' : ''}}>제목+내용</option>
-            <option value="title" {{Input::get('searchTarget') == 'title' ? 'selected="selected"' : ''}}>제목</option>
-            <option value="content" {{Input::get('searchTarget') == 'content' ? 'selected="selected"' : ''}}>내용</option>
-            <option value="writer" {{Input::get('searchTarget') == 'writer' ? 'selected="selected"' : ''}}>글쓴이</option>
+            <option value="title_content" {{Request::get('searchTarget') == 'title_content' ? 'selected="selected"' : ''}}>제목+내용</option>
+            <option value="title" {{Request::get('searchTarget') == 'title' ? 'selected="selected"' : ''}}>제목</option>
+            <option value="content" {{Request::get('searchTarget') == 'content' ? 'selected="selected"' : ''}}>내용</option>
+            <option value="writer" {{Request::get('searchTarget') == 'writer' ? 'selected="selected"' : ''}}>글쓴이</option>
         </select>
-        <input type="text" name="searchKeyword" class="form-control" value="{{Input::get('searchKeyword')}}" placeholder="검색어 입력"/>
+        <input type="text" name="searchKeyword" class="form-control" value="{{Request::get('searchKeyword')}}" placeholder="검색어 입력"/>
 
         <button type="submit" class="btn btn-default"> <i class="fa fa-search"></i> search </button>
-        <a href="{!! route('manage.document.index', Input::except('searchTarget', 'searchKeyword')) !!}" class="btn btn-default">취소</a>
+        <a href="{!! route('manage.document.index', Request::except('searchTarget', 'searchKeyword')) !!}" class="btn btn-default">취소</a>
     </div>
     </form>
 
@@ -181,38 +181,38 @@
         approve: function ($f) {
             $('<input>').attr('type', 'hidden').attr('name', 'appreved').val('appreved').appendTo($f);
 
-            $f.attr('action', '{!! route('manage.document.approve', Input::all()) !!}');
+            $f.attr('action', '{!! route('manage.document.approve', Request::all()) !!}');
             $f.submit();
         },
         reject: function ($f) {
             $('<input>').attr('type', 'hidden').attr('name', 'appreved').val('rejected').appendTo($f);
 
-            $f.attr('action', '{!! route('manage.document.approve', Input::all()) !!}');
+            $f.attr('action', '{!! route('manage.document.approve', Request::all()) !!}');
             $f.submit();
         },
         destroy: function ($f) {
-            $f.attr('action', '{!! route('manage.document.destroy', Input::all()) !!}');
+            $f.attr('action', '{!! route('manage.document.destroy', Request::all()) !!}');
             $f.submit();
         },
         trash: function ($f) {
-            $f.attr('action', '{!! route('manage.document.trash', Input::all()) !!}');
+            $f.attr('action', '{!! route('manage.document.trash', Request::all()) !!}');
             $f.submit();
         },
         move: function ($f) {
 
             $('.__xe_document_move').modal('toggle');
             //moveDocument($f);
-//            $f.attr('action', '{!! route('manage.document.move', Input::all()) !!}');
+//            $f.attr('action', '{!! route('manage.document.move', Request::all()) !!}');
 //            $f.submit();
         },
         restore: function ($f) {
-            $f.attr('action', '{!! route('manage.document.restore', Input::all()) !!}');
+            $f.attr('action', '{!! route('manage.document.restore', Request::all()) !!}');
             $f.submit();
         }
     };
 
     var moveDocument = function($f) {
-            $f.attr('action', '{!! route('manage.document.move', Input::all()) !!}');
+            $f.attr('action', '{!! route('manage.document.move', Request::all()) !!}');
             $f.submit();
     }
 </script>

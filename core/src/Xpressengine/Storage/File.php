@@ -172,11 +172,12 @@ class File extends DynamicModel
     {
         $model = new static;
 
-        return $model->newQuery()
-            ->rightJoin($model->getFileableTable(), $model->getTable().'.id', '=', $model->getFileableTable().'.file_id')
-            ->where('fileable_id', $fileableId)
-            ->select([$model->getTable().'.*'])
-            ->get();
+        return $model->newQuery()->rightJoin(
+            $model->getFileableTable(),
+            $model->getTable().'.id',
+            '=',
+            $model->getFileableTable().'.file_id'
+        )->where('fileable_id', $fileableId)->select([$model->getTable().'.*'])->get();
     }
 
     /**

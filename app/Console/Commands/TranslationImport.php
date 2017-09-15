@@ -72,7 +72,7 @@ class TranslationImport extends Command
      *
      * @return mixed
      */
-    public function fire()
+    public function handle()
     {
         $name = $this->argument('name');
         $path = $this->option('path');

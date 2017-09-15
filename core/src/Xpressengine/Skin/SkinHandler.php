@@ -204,7 +204,7 @@ class SkinHandler
         $skins = $this->getList($target, $isSettings);
         return array_where(
             $skins,
-            function ($id, $entity) {
+            function ($entity) {
                 /** @var SkinEntity $entity */
                 return $entity->supportMobile();
             }
@@ -224,7 +224,7 @@ class SkinHandler
         $skins = $this->getList($target, $isSettings);
         return array_where(
             $skins,
-            function ($id, $entity) {
+            function ($entity) {
                 /** @var SkinEntity $entity */
                 return $entity->supportDesktop();
             }

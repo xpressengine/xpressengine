@@ -26,7 +26,8 @@
         "./**/*.scss",
         "./**/*.css",
         "./resources/assets/core/tree/**",
-        "./resources/assets/core/xe-ui-component/js/**"
+        "./resources/assets/core/xe-ui-component/js/**",
+        "./resources/assets/core/permission/permission.js"
     ],
     "fileExtensions": [".js", ".jsx"],
     "fix": true

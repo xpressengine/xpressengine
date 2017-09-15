@@ -75,7 +75,7 @@ class Trash extends Command
      *
      * @return mixed
      */
-    public function fire()
+    public function handle()
     {
         $names = $this->input->getArgument('names');
 

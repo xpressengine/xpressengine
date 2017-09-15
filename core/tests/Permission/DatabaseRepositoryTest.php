@@ -11,7 +11,7 @@ namespace Xpressengine\Tests\Permission;
 use Mockery as m;
 use Xpressengine\Permission\Repositories\DatabaseRepository;
 
-class DatabaseRepositoryTest extends \PHPUnit_Framework_TestCase
+class DatabaseRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     public function tearDown()
     {

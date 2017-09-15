@@ -10,7 +10,7 @@ namespace Xpressengine\Tests\Frontend;
 
 use Xpressengine\Presenter\Html\Tags\Title;
 
-class TitleTest extends \PHPUnit_Framework_TestCase {
+class TitleTest extends \PHPUnit\Framework\TestCase {
 
     protected function tearDown()
     {

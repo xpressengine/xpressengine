@@ -14,14 +14,6 @@ use Xpressengine\Register\Container;
 
 class RegisterServiceProvider extends ServiceProvider
 {
-
-    /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
-
     /**
      * Register the service provider.
      *
@@ -29,26 +21,10 @@ class RegisterServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(
-            ['xe.register' => Container::class],
-            function ($app) {
-                $container = $app['xe.interception']->proxy(Container::class, 'XeRegister');
-                return new $container(Arr::class);
-            }
-        );
-    }
-
-    public function boot()
-    {
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return array();
+        $this->app->singleton(Container::class, function ($app) {
+            $container = $app['xe.interception']->proxy(Container::class, 'XeRegister');
+            return new $container(Arr::class);
+        });
+        $this->app->alias(Container::class, 'xe.register');
     }
 }

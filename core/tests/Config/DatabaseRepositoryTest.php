@@ -9,9 +9,10 @@
 namespace Xpressengine\Tests\Config;
 
 use Mockery as m;
+use PHPUnit\Framework\TestCase;
 use Xpressengine\Config\Repositories\DatabaseRepository;
 
-class DatabaseRepositoryTest extends \PHPUnit_Framework_TestCase
+class DatabaseRepositoryTest extends TestCase
 {
     public function tearDown()
     {

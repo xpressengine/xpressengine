@@ -14,6 +14,7 @@ use View;
 /**
  * Class DefaultErrorSkin
  * @package App\Skins\Error
+ * @deprecated
  */
 class DefaultErrorSkin extends AbstractSkin
 {

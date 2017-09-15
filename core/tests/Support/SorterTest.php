@@ -10,7 +10,7 @@ namespace Xpressengine\Tests\Support;
 
 use Xpressengine\Support\Sorter;
 
-class SorterTest extends \PHPUnit_Framework_TestCase
+class SorterTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

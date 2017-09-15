@@ -17,7 +17,7 @@ function asset($value)
 
 namespace Xpressengine\Tests\Theme;
 
-class AbstractThemeTest extends \PHPUnit_Framework_TestCase
+class AbstractThemeTest extends \PHPUnit\Framework\TestCase
 {
 
     protected function tearDown()

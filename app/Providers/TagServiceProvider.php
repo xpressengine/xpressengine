@@ -29,13 +29,6 @@ use Xpressengine\Tag\TagRepository;
 class TagServiceProvider extends ServiceProvider
 {
     /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
-
-    /**
      * Bootstrap the application events.
      *
      * @return void
@@ -52,20 +45,11 @@ class TagServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(['xe.tag' => TagHandler::class], function ($app) {
+        $this->app->singleton(TagHandler::class, function ($app) {
             $proxyClass = $app['xe.interception']->proxy(TagHandler::class, 'XeTag');
 
             return new $proxyClass(new TagRepository, new SimpleDecomposer);
         });
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return ['xe.tag'];
+        $this->app->alias(TagHandler::class, 'xe.tag');
     }
 }

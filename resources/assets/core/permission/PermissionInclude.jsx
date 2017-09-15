@@ -355,7 +355,8 @@ export default createReactClass({
 					<div className="ReactTags__selected">
 						{memberTagItems}
 					</div>
-					<div className="ReactTags__tagInput">
+          <div className="ReactTags__tagInput">
+					
 						<input type="text" ref="input" placeholder={placeholder}
             className="form-control" disabled={this.props.disabled}
             value={this.state.query}

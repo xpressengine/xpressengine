@@ -1,4 +1,6 @@
-@section('page_title', "<h2><a href='".route('settings.menu.index')."'><i class='xi-arrow-left'></i></a>Edit Item</h2>")
+@section('page_title')
+    <h2><a href="{{ route('settings.menu.index') }}"><i class='xi-arrow-left'></i></a>{{ xe_trans('xe::editItem') }}</h2>
+@endsection
 @extends('menu.layout')
 @section('menuContent')
 <form action="{{ route('settings.menu.update.item', [$menu->id, $item->id])}}" method="post" enctype="multipart/form-data">

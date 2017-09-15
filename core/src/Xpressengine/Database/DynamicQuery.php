@@ -36,7 +36,7 @@ class DynamicQuery extends Builder
     /**
      * @var VirtualConnectionInterface
      */
-    protected $connection;
+    public $connection;
 
     /**
      * @var string
@@ -413,21 +413,22 @@ class DynamicQuery extends Builder
      *
      * This is more efficient on larger data-sets, etc.
      *
-     * @param int    $perPage  count of list
-     * @param array  $columns  get columns
-     * @param string $pageName page parameter name
+     * @param int      $perPage  count of list
+     * @param array    $columns  get columns
+     * @param string   $pageName page parameter name
+     * @param int|null $page     current page number
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function simplePaginate($perPage = 15, $columns = ['*'], $pageName = 'page')
+    public function simplePaginate($perPage = 15, $columns = ['*'], $pageName = 'page', $page = null)
     {
         if ($this->dynamic === false) {
-            parent::simplePaginate($perPage, $columns);
+            parent::simplePaginate($perPage, $columns, $pageName, $page);
         }
 
         if ($this->proxy === true) {
             $this->getProxyManager()->get($this);
         }
 
-        return parent::simplePaginate($perPage, $columns);
+        return parent::simplePaginate($perPage, $columns, $pageName, $page);
     }
 }

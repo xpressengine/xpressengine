@@ -11,7 +11,7 @@ namespace Xpressengine\Tests\Media;
 use Mockery as m;
 use Xpressengine\Media\Commands\FitCommand;
 
-class FitCommandTest extends \PHPUnit_Framework_TestCase
+class FitCommandTest extends \PHPUnit\Framework\TestCase
 {
     public function tearDown()
     {

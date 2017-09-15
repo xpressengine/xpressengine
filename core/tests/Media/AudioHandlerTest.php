@@ -11,7 +11,7 @@ namespace Xpressengine\Tests\Media;
 use Mockery as m;
 use Xpressengine\Media\Handlers\AudioHandler;
 
-class AudioHandlerTest extends \PHPUnit_Framework_TestCase
+class AudioHandlerTest extends \PHPUnit\Framework\TestCase
 {
     public function tearDown()
     {

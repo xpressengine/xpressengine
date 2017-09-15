@@ -108,8 +108,12 @@
                 @section('page_head')
                 <div class="row">
                     <div class="col-sm-12">
-                        @yield('page_title', '<h2>'.xe_trans(data_get($selectedMenu ? $selectedMenu->getParent() : [], 'title', 'xe::enterTitle')).'</h2>')
-                        @yield('page_description', '<small>'.xe_trans(data_get($selectedMenu ? $selectedMenu->getParent() : [], 'description', '')).'</small>')
+                        @section('page_title')
+                            <h2>{{ xe_trans(data_get($selectedMenu ? $selectedMenu->getParent() : [], 'title', 'xe::enterTitle')) }}</h2>
+                        @show
+                        @section('page_description')
+                            <small>{{ xe_trans(data_get($selectedMenu ? $selectedMenu->getParent() : [], 'description', '')) }}</small>
+                        @show
                     </div>
                 </div>
                 <div class="row locate">

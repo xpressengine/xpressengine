@@ -10,7 +10,7 @@ namespace Xpressengine\Tests\Frontend;
 
 use Xpressengine\Presenter\Html\Tags\IconFile;
 
-class IconFileTest extends \PHPUnit_Framework_TestCase
+class IconFileTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

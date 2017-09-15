@@ -11,7 +11,7 @@ namespace Xpressengine\Tests\Seo;
 use Mockery as m;
 use Xpressengine\Seo\SeoHandler;
 
-class SeoHandlerTest extends \PHPUnit_Framework_TestCase
+class SeoHandlerTest extends \PHPUnit\Framework\TestCase
 {
     public function tearDown()
     {

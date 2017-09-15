@@ -24,7 +24,7 @@ use Illuminate\Cache\Repository;
 use Mockery;
 use Xpressengine\Plugin\Cache\FilePluginCache;
 
-class FilePluginCacheTest extends \PHPUnit_Framework_TestCase
+class FilePluginCacheTest extends \PHPUnit\Framework\TestCase
 {
     protected function tearDown()
     {

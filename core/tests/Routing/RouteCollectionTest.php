@@ -8,7 +8,7 @@
 
 namespace Xpressengine\Tests\Routing;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Mockery as m;
 use Xpressengine\Routing\RouteCollection;
 use Illuminate\Routing\Route;
@@ -23,7 +23,7 @@ use Illuminate\Http\Request;
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class RouteCollectionTest extends PHPUnit_Framework_TestCase
+class RouteCollectionTest extends TestCase
 {
     /**
      * @var
@@ -57,8 +57,8 @@ class RouteCollectionTest extends PHPUnit_Framework_TestCase
          */
         $route = m::mock('Illuminate\Routing\Route');
 
-        $route->shouldReceive('domain')->andReturn('http://xe3.dev');
-        $route->shouldReceive('getUri')->andReturn('/');
+        $route->shouldReceive('getDomain')->andReturn('http://xe3.dev');
+        $route->shouldReceive('uri')->andReturn('/');
         $route->shouldReceive('methods')->andReturn(['get']);
 
         $route->shouldReceive('getAction')->andReturn([
@@ -75,8 +75,8 @@ class RouteCollectionTest extends PHPUnit_Framework_TestCase
         $sourceRoute = $collection->getByModule('module/pluginB@page');
         $settingMenuRoutes = $collection->getSettingsMenuRoutes();
 
-        $this->assertEquals('http://xe3.dev', $sourceRoute->domain());
-        $this->assertEquals('/', $sourceRoute->getUri());
+        $this->assertEquals('http://xe3.dev', $sourceRoute->getDomain());
+        $this->assertEquals('/', $sourceRoute->uri());
         $this->assertEquals(['get'], $sourceRoute->methods());
 
         $this->assertEquals(1, sizeof($settingMenuRoutes));
@@ -97,8 +97,8 @@ class RouteCollectionTest extends PHPUnit_Framework_TestCase
          */
         $route = m::mock('Illuminate\Routing\Route');
 
-        $route->shouldReceive('domain')->andReturn('http://xe3.dev');
-        $route->shouldReceive('getUri')->andReturn('/');
+        $route->shouldReceive('getDomain')->andReturn('http://xe3.dev');
+        $route->shouldReceive('uri')->andReturn('/');
         $route->shouldReceive('methods')->andReturn(['get']);
 
         $route->shouldReceive('getAction')->andReturn([
@@ -112,8 +112,8 @@ class RouteCollectionTest extends PHPUnit_Framework_TestCase
 
         $sourceRoute = $collection->getByName('test.root.match');
 
-        $this->assertEquals('http://xe3.dev', $sourceRoute->domain());
-        $this->assertEquals('/', $sourceRoute->getUri());
+        $this->assertEquals('http://xe3.dev', $sourceRoute->getDomain());
+        $this->assertEquals('/', $sourceRoute->uri());
         $this->assertEquals(['get'], $sourceRoute->methods());
 
         m::close();

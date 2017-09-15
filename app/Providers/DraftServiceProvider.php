@@ -27,48 +27,18 @@ use Xpressengine\Draft\DraftRepository;
 class DraftServiceProvider extends ServiceProvider
 {
     /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
-
-    /**
-     * Bootstrap the application events.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        //
-    }
-
-    /**
      * Register the service provider.
      *
      * @return void
      */
     public function register()
     {
-        $this->app->bind(
-            'xe.draft',
-            function ($app) {
-                $proxyClass = $app['xe.interception']->proxy(DraftHandler::class, 'XeDraft');
-                return new $proxyClass(
-                    new DraftRepository($app['xe.db']->connection(), $app['xe.keygen']), $app['auth']
-                );
-            },
-            true
-        );
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return ['xe.draft'];
+        $this->app->singleton(DraftHandler::class, function ($app) {
+            $proxyClass = $app['xe.interception']->proxy(DraftHandler::class, 'XeDraft');
+            return new $proxyClass(
+                new DraftRepository($app['xe.db']->connection(), $app['xe.keygen']), $app['auth']
+            );
+        });
+        $this->app->alias(DraftHandler::class, 'xe.draft');
     }
 }

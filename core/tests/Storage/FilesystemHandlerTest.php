@@ -4,7 +4,7 @@ namespace Xpressengine\Tests\Storage;
 use Mockery as m;
 use Xpressengine\Storage\FilesystemHandler;
 
-class FilesystemHandlerTest extends \PHPUnit_Framework_TestCase
+class FilesystemHandlerTest extends \PHPUnit\Framework\TestCase
 {
     public function tearDown()
     {

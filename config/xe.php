@@ -44,7 +44,7 @@ return [
             'sitemap' => [
                 'title' => 'xe::siteMap',
                 'display' => true,
-                'description' => '',
+                'description' => 'xe::siteMapDescription',
                 'ordering' => 2000
             ],
             'sitemap.default' => [

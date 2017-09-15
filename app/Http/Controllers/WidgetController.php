@@ -9,11 +9,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Sections\WidgetSection;
-use Illuminate\Http\Request;
-use Input;
 use View;
 use XePresenter;
-use Xpressengine\Skin\SkinEntity;
+use Xpressengine\Http\Request;
 use Xpressengine\Skin\SkinHandler;
 use Xpressengine\Widget\WidgetHandler;
 use Xpressengine\Widget\WidgetParser;
@@ -180,10 +178,10 @@ class WidgetController extends Controller {
      *
      * @return mixed
      */
-    public function render(WidgetHandler $widgetHandler)
+    public function render(Request $request, WidgetHandler $widgetHandler)
     {
-        $id = Input::get('widget');
-        $args = Input::except('widget');
+        $id = $request->get('widget');
+        $args = $request->except('widget');
 
         $render = $widgetHandler->render($id, $args);
 

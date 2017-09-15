@@ -12,7 +12,7 @@ use Mockery as m;
 use Xpressengine\Seo\Setting;
 use Xpressengine\Storage\File;
 
-class SettingTest extends \PHPUnit_Framework_TestCase
+class SettingTest extends \PHPUnit\Framework\TestCase
 {
     public function tearDown()
     {

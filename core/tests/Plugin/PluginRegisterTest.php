@@ -13,7 +13,7 @@ use Xpressengine\Plugin\ComponentInterface;
 use Xpressengine\Plugin\PluginRegister;
 use Xpressengine\Register\Container;
 
-class PluginRegisterTest extends \PHPUnit_Framework_TestCase
+class PluginRegisterTest extends \PHPUnit\Framework\TestCase
 {
 
     protected function tearDown()

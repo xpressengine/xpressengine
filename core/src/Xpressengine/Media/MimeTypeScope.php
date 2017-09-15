@@ -16,7 +16,7 @@ namespace Xpressengine\Media;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\ScopeInterface;
+use Illuminate\Database\Eloquent\Scope;
 
 /**
  * Class MimeTypeScope
@@ -28,7 +28,7 @@ use Illuminate\Database\Eloquent\ScopeInterface;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class MimeTypeScope implements ScopeInterface
+class MimeTypeScope implements Scope
 {
     /**
      * Apply the scope to a given Eloquent query builder.

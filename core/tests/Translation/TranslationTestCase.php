@@ -9,11 +9,11 @@
 namespace Xpressengine\Tests\Translation;
 
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Xpressengine\Translation\LangData;
 use Xpressengine\Translation\Translator;
 
-class TranslationTestCase extends PHPUnit_Framework_TestCase
+class TranslationTestCase extends TestCase
 {
     protected function createTranslator(array $config, array $files)
     {

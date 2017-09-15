@@ -22,6 +22,7 @@ use Xpressengine\Config\ConfigManager;
 use Xpressengine\Permission\Instance;
 use Xpressengine\Register\Container;
 use Xpressengine\Settings\Exceptions\PermissionIDNotFoundException;
+use Xpressengine\Settings\Exceptions\SettingsMenuNotMatchedException;
 use Xpressengine\Support\Tree\Tree;
 
 /**
@@ -245,6 +246,11 @@ class SettingsHandler
             // 메뉴에 route 지정,
             foreach ((array) $menuIds as $menuId) {
                 $menu = $this->menuList[$menuId];
+
+                if ($menu === null) {
+                    throw new SettingsMenuNotMatchedException(['menu' => $menuId]);
+                }
+
                 $menu->route = $route;
                 if ($visible === false) {
                     $menu->display = false;

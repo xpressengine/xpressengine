@@ -51,7 +51,7 @@ class XeUpdate extends Command
      *
      * @return bool|null
      */
-    public function fire(ComposerFileWriter $writer, InterceptionHandler $interceptionHandler) {
+    public function handle(ComposerFileWriter $writer, InterceptionHandler $interceptionHandler) {
 
         // php artisan xe:update [version] [--skip-download]
 

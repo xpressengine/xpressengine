@@ -126,13 +126,6 @@ class VirtualConnection implements VirtualConnectionInterface
     protected $connections;
 
     /**
-     * The default fetch mode of the connection.
-     *
-     * @var int
-     */
-    protected $fetchMode = PDO::FETCH_OBJ;
-
-    /**
      * Cache store instance
      *
      * @var CacheContract
@@ -158,28 +151,6 @@ class VirtualConnection implements VirtualConnectionInterface
         $this->coupler = $coupler;
         $this->name = $name;
         $this->setNames($config);
-    }
-
-    /**
-     * Get the default fetch mode for the connection.
-     *
-     * @return int
-     */
-    public function getFetchMode()
-    {
-        return $this->fetchMode;
-    }
-
-    /**
-     * Set the default fetch mode for the connection.
-     *
-     * @param  int $fetchMode fetch mode
-     * @return int
-     * @see PDO fetch method
-     */
-    public function setFetchMode($fetchMode)
-    {
-        $this->fetchMode = $fetchMode;
     }
 
     /**
@@ -291,7 +262,7 @@ class VirtualConnection implements VirtualConnectionInterface
         $connection = ($this->connections[$type] === null) ?
             $this->coupler->connect($this->{$type}) :
             $this->connections[$type];
-        $connection->setFetchMode($this->fetchMode);
+
         return $connection;
     }
 
@@ -498,11 +469,12 @@ class VirtualConnection implements VirtualConnectionInterface
      * Execute a Closure within a transaction.
      *
      * @param Closure $callback closure
+     * @param int     $attempts attempts todo: 추가됨, 적용검토
      * @return mixed
      * @throws Exception
      * @throws Throwable
      */
-    public function transaction(Closure $callback)
+    public function transaction(Closure $callback, $attempts = 1)
     {
         $this->beginTransaction();
 

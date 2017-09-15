@@ -10,7 +10,7 @@ namespace Xpressengine\Tests\Plugin;
 
 use Xpressengine\Plugin\MetaFileReader;
 
-class MetaFileReaderTest extends \PHPUnit_Framework_TestCase
+class MetaFileReaderTest extends \PHPUnit\Framework\TestCase
 {
 
     protected function tearDown()

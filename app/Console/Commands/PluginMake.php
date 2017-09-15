@@ -56,7 +56,7 @@ class PluginMake extends Command
      *
      * @return bool|null
      */
-    public function fire()
+    public function handle()
     {
         // get plugin name, namespace, path
         $name = $this->getPluginName();

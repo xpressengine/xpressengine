@@ -11,7 +11,7 @@ namespace Xpressengine\Tests\UIObject;
 
 use Xpressengine\UIObject\UIObjectHandler;
 
-class UIObjectHandlerTest extends \PHPUnit_Framework_TestCase
+class UIObjectHandlerTest extends \PHPUnit\Framework\TestCase
 {
     protected function tearDown()
     {

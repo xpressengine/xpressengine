@@ -12,7 +12,7 @@ use Mockery;
 use Xpressengine\Presenter\Html\FrontendHandler;
 use Xpressengine\Presenter\Html\Tags\Package;
 
-class PackageTest extends \PHPUnit_Framework_TestCase
+class PackageTest extends \PHPUnit\Framework\TestCase
 {
 
     protected function tearDown()

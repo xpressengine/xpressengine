@@ -13,7 +13,7 @@ use Mockery\MockInterface;
 use Xpressengine\Plugin\PluginCollection;
 use Xpressengine\Plugin\PluginEntity;
 
-class PluginEntityTest extends \PHPUnit_Framework_TestCase
+class PluginEntityTest extends \PHPUnit\Framework\TestCase
 {
 
     protected function tearDown()

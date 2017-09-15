@@ -1,5 +1,10 @@
-@section('page_title', "<h2><a href='".route('settings.menu.index')."'><i class='xi-arrow-left'></i></a>".xe_trans('xe::newMenu')."</h2>")
-@section('page_description', '<p class="sub-text">'.xe_trans('xe::newMenuDescription').'</p>')
+@section('page_title')
+    <h2><a href="{{ route('settings.menu.index') }}"><i class='xi-arrow-left'></i></a>{{ xe_trans('xe::newMenu') }}</h2>
+@endsection
+@section('page_description')
+    <p class="sub-text">{{ xe_trans('xe::newMenuDescription') }}</p>
+@endsection
+
 @extends('menu.layout')
 
 @section('menuContent')
@@ -24,11 +29,11 @@
                                 <small>{{xe_trans('xe::menuTitleDescription')}}</small>
                             </label>
 
-                            <input type="text" class="form-control" name="menuTitle" value="{{Input::old('menuTitle')}}"placeholder="{{xe_trans('xe::menuTitlePlaceHolder')}}"/>
+                            <input type="text" class="form-control" name="menuTitle" value="{{Request::old('menuTitle')}}"placeholder="{{xe_trans('xe::menuTitlePlaceHolder')}}"/>
                         </div>
                         <div class="form-group">
                             <label>Menu Description</label>
-                                <textarea name="menuDescription" class="form-control" rows="3" placeholder="{{xe_trans('xe::menuDescriptionPlaceHolder')}}">{{Input::old('menuDescription')}}</textarea>
+                                <textarea name="menuDescription" class="form-control" rows="3" placeholder="{{xe_trans('xe::menuDescriptionPlaceHolder')}}">{{Request::old('menuDescription')}}</textarea>
                         </div>
                     </div>
                 </div>

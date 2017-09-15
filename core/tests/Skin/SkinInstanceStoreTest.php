@@ -12,7 +12,7 @@ use Mockery;
 use Xpressengine\Config\ConfigManager;
 use Xpressengine\Skin\SkinInstanceStore as Store;
 
-class SkinInstanceStoreTest extends \PHPUnit_Framework_TestCase
+class SkinInstanceStoreTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Store

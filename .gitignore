@@ -11,3 +11,5 @@ composer.user.json
 /node_modules
 /resources/jsdoc
 *.map
+npm-debug.log
+_ide_helper.php

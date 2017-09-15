@@ -18,7 +18,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Sections\DynamicFieldSection;
 use App\Http\Sections\SkinSection;
 use App\Http\Sections\ToggleMenuSection;
-use Input;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use XePresenter;
 use Xpressengine\Captcha\CaptchaManager;
@@ -157,13 +156,13 @@ class SettingController extends Controller
     /**
      * update Join setting
      *
-     * @param CaptchaManager $captcha
+     * @param Request $request
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function updateJoin()
+    public function updateJoin(Request $request)
     {
-        $inputs = Input::except('_token');
+        $inputs = $request->except('_token');
 
         $guards = $inputs['guards'] = array_keys(array_get($inputs, 'guards', []));
         $inputs['forms'] = array_keys(array_get($inputs, 'forms', []));

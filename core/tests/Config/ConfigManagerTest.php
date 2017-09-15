@@ -9,9 +9,10 @@
 namespace Xpressengine\Tests\Config;
 
 use Mockery as m;
+use PHPUnit\Framework\TestCase;
 use Xpressengine\Config\ConfigManager;
 
-class ConfigManagerTest extends \PHPUnit_Framework_TestCase
+class ConfigManagerTest extends TestCase
 {
     public function tearDown()
     {

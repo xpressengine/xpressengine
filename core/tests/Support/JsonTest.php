@@ -10,7 +10,7 @@ namespace Xpressengine\Tests\Support;
 
 use Xpressengine\Support\Json;
 
-class JsonTest extends \PHPUnit_Framework_TestCase
+class JsonTest extends \PHPUnit\Framework\TestCase
 {
     public function testEncodeReturnsString()
     {

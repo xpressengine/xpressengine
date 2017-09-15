@@ -17,7 +17,7 @@ use Xpressengine\Theme\ThemeEntity;
 use Xpressengine\Theme\ThemeEntityInterface;
 use Xpressengine\Theme\ThemeHandler;
 
-class ThemeHandlerTest extends \PHPUnit_Framework_TestCase
+class ThemeHandlerTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

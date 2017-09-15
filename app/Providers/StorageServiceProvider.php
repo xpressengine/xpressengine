@@ -33,13 +33,6 @@ use Xpressengine\Storage\UrlMaker;
 class StorageServiceProvider extends ServiceProvider
 {
     /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
-
-    /**
      * Bootstrap the application events.
      *
      * @return void
@@ -51,6 +44,8 @@ class StorageServiceProvider extends ServiceProvider
         });
         File::setUrlMaker($this->app['xe.storage.url']);
         FileRepository::setModel(File::class);
+
+        $this->hooks();
     }
 
     /**
@@ -64,7 +59,7 @@ class StorageServiceProvider extends ServiceProvider
             return new TempFileCreator();
         });
 
-        $this->app->singleton(['xe.storage' => Storage::class], function ($app) {
+        $this->app->singleton(Storage::class, function ($app) {
             $distributor = new RoundRobinDistributor($app['config']['filesystems'], $app['xe.db']->connection());
 
             $proxyClass = $app['xe.interception']->proxy(Storage::class, 'XeStorage');
@@ -72,21 +67,26 @@ class StorageServiceProvider extends ServiceProvider
             return new $proxyClass(
                 new FileRepository,
                 new FilesystemHandler($app['filesystem'], $distributor),
-                $app['xe.auth'],
+                $app['auth']->guard(),
                 $app['xe.keygen'],
                 $distributor,
                 $app['xe.storage.temp'],
                 $app[ResponseFactory::class]
             );
         });
+        $this->app->alias(Storage::class, 'xe.storage');
 
-        $this->app->singleton(['xe.storage.url' => UrlMaker::class], function ($app) {
+        $this->app->singleton(UrlMaker::class, function ($app) {
             return new UrlMaker(
                 $app['Illuminate\Contracts\Routing\UrlGenerator'],
                 $app['config']['filesystems.disks']
             );
         });
+        $this->app->alias(UrlMaker::class, 'xe.storage.url');
+    }
 
+    private function hooks()
+    {
         intercept(
             'XeSettings@getManageMenu',
             ['storage.managemenu' => ['before' => 'manage.sort']],
@@ -101,15 +101,5 @@ class StorageServiceProvider extends ServiceProvider
                 return $menu;
             }
         );
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return ['xe.storage', 'xe.storage.temp', 'xe.storage.url'];
     }
 }

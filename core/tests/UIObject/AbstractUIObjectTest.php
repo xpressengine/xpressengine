@@ -10,7 +10,7 @@ namespace Xpressengine\Tests\UIObject;
 
 use Xpressengine\UIObject\AbstractUIObject;
 
-class AbstractUIObjectTest extends \PHPUnit_Framework_TestCase {
+class AbstractUIObjectTest extends \PHPUnit\Framework\TestCase {
 
     public function testSeq()
     {

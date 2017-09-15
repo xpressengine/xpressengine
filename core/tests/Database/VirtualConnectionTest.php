@@ -11,7 +11,7 @@
 namespace Xpressengine\Tests\Database;
 
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Xpressengine\Database\DatabaseCoupler;
 use Xpressengine\Database\VirtualConnection;
 use PDO;
@@ -25,7 +25,7 @@ use Exception;
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class VirtualConnectionTest extends PHPUnit_Framework_TestCase
+class VirtualConnectionTest extends TestCase
 {
     /**
      * connector 설정의 이름
@@ -56,28 +56,6 @@ class VirtualConnectionTest extends PHPUnit_Framework_TestCase
     public function tearDown()
     {
         m::close();
-    }
-
-    /**
-     * test get fetch mode
-     *
-     * @return void
-     */
-    public function testGetFetchMode()
-    {
-        $databaseCoupler = m::mock('Xpressengine\Database\DatabaseCoupler');
-
-        /** @var DatabaseCoupler $databaseCoupler */
-        $connector = new VirtualConnection($databaseCoupler, self::CONN_NAME, $this->databaseConfig);
-
-        $mode = $connector->getFetchMode();
-
-        $this->assertEquals(PDO::FETCH_OBJ, $mode);
-
-        $connector->setFetchMode(PDO::FETCH_NUM);
-
-        $mode = $connector->getFetchMode();
-        $this->assertEquals(PDO::FETCH_NUM, $mode);
     }
 
     /**

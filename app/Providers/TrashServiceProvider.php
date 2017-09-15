@@ -25,13 +25,15 @@ use Xpressengine\Trash\TrashManager;
  */
 class TrashServiceProvider extends ServiceProvider
 {
-
     /**
-     * Indicates if loading of the provider is deferred.
+     * Bootstrap the application events.
      *
-     * @var bool
+     * @return void
      */
-    protected $defer = false;
+    public function boot()
+    {
+        $this->hooks();
+    }
 
     /**
      * Register the service provider.
@@ -54,7 +56,10 @@ class TrashServiceProvider extends ServiceProvider
 //        $this->commands([
 //            Commands\Trash::class,
 //        ]);
+    }
 
+    private function hooks()
+    {
         // manage menu 등록
         intercept(
             'XeSettings@getManageMenu',
@@ -70,15 +75,5 @@ class TrashServiceProvider extends ServiceProvider
                 return $menu;
             }
         );
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return array();
     }
 }

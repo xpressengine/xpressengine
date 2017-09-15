@@ -9,7 +9,7 @@
 namespace Xpressengine\Tests\Presenter;
 
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Xpressengine\Presenter\Presenter;
 use Xpressengine\Presenter\Presentable;
 
@@ -21,7 +21,7 @@ use Xpressengine\Presenter\Presentable;
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class PresenterTest extends PHPUnit_Framework_TestCase
+class PresenterTest extends TestCase
 {
     /**
      * @var m\MockInterface|\Illuminate\Http\Request

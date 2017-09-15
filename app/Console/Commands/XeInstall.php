@@ -49,7 +49,6 @@ class XeInstall extends Command
         'claim',
         'ckeditor',
         'comment',
-        'orientator',
         'page',
         'news_client',
         'widget_page',
@@ -610,6 +609,7 @@ class XeInstall extends Command
     private function setSiteInfo($siteInfo, $debug = true)
     {
         $info = [
+            'name' => 'XE3',
             'debug' => $debug,
             'url' => $siteInfo['url'],
             'timezone' => $siteInfo['timezone'],

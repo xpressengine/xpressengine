@@ -15,10 +15,10 @@
 namespace Xpressengine\Widget;
 
 use Exception;
+use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Contracts\View\Factory;
 use Xpressengine\Plugin\PluginRegister;
-use Xpressengine\User\GuardInterface;
 use Xpressengine\Widget\Exceptions\NotFoundWidgetException;
 
 /**
@@ -43,7 +43,7 @@ class WidgetHandler
      */
     protected $register;
     /**
-     * @var GuardInterface
+     * @var Guard
      */
     protected $guard;
     /**
@@ -59,13 +59,13 @@ class WidgetHandler
      * 생성자
      *
      * @param PluginRegister $register  plugin registry manager
-     * @param GuardInterface $guard     guard instance
+     * @param Guard          $guard     guard instance
      * @param Factory        $view      illuminate view factory
      * @param bool           $debugMode debug mode
      */
     public function __construct(
         PluginRegister $register,
-        GuardInterface $guard,
+        Guard $guard,
         Factory $view,
         $debugMode = false
     ) {

@@ -10,7 +10,7 @@ namespace Xpressengine\Tests\Interception;
 
 use Xpressengine\Interception\InterceptionHandler;
 
-class InterceptionTest /*extends \PHPUnit_Framework_TestCase*/
+class InterceptionTest /*extends \PHPUnit\Framework\TestCase*/
 {
 
     protected function tearDown()

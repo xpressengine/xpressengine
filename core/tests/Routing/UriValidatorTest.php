@@ -8,7 +8,7 @@
 
 namespace Xpressengine\Tests\Routing;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Mockery as m;
 use Xpressengine\Routing\UriValidator;
 use Illuminate\Routing\Route;
@@ -23,7 +23,7 @@ use Illuminate\Http\Request;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class UriValidatorTest extends PHPUnit_Framework_TestCase
+class UriValidatorTest extends TestCase
 {
     /**
      * @var

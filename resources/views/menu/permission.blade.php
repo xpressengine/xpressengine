@@ -1,4 +1,6 @@
-@section('page_title', '<h2>'.xe_trans('xe::menuPermissionSettings').'</h2>')
+@section('page_title')
+    <h2>{{ xe_trans('xe::menuPermissionSettings') }}</h2>
+@endsection
 @extends('menu.layout')
 @section('menuContent')
 <form action="{{ route('settings.menu.update.permission.menu',$menu->id) }}" method="post">

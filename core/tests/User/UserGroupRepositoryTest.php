@@ -10,7 +10,7 @@ namespace Xpressengine\Tests\User;
 
 use Mockery;
 
-class UserGroupRepositoryTest extends \PHPUnit_Framework_TestCase
+class UserGroupRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     protected function tearDown()
     {

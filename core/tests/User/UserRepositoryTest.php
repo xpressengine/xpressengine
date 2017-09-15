@@ -12,7 +12,7 @@ use Mockery;
 use Xpressengine\User\Models\User;
 use Xpressengine\User\Repositories\UserRepository;
 
-class UserRepositoryTest extends \PHPUnit_Framework_TestCase
+class UserRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     protected function tearDown()
     {

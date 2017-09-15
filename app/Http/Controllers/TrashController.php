@@ -9,7 +9,7 @@
 namespace App\Http\Controllers;
 
 use XeTrash;
-use Input;
+use Request;
 use XePresenter;
 
 class TrashController extends Controller
@@ -26,7 +26,7 @@ class TrashController extends Controller
     public function clean()
     {
         // id 는 배열로 넘어옴
-        $ids = Input::get('ids');
+        $ids = Request::get('ids');
         if (count($ids) == 0) {
             // 에러
         }
@@ -41,8 +41,8 @@ class TrashController extends Controller
 
         XeTrash::clean($baskets);
 
-        if (Input::get('redirect') != null) {
-            return redirect(Input::get('redirect'));
+        if (Request::get('redirect') != null) {
+            return redirect(Request::get('redirect'));
         } else {
             return redirect()->route('manage.trash.index');
         }

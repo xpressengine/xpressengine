@@ -16,7 +16,7 @@
                     <tr>
                         <td style="text-align:center">
                             @section('header')
-                            <a href="{{ url() }}" target="_blank" style="text-decoration:none;font-family: NanumBarunGothic,'나눔고딕',NanumGothic,dotum,'돋움',Helvetica;line-height:34px;vertical-align:top;color:#6f8dff;font-size:30px;letter-spacing:-1px">{{ xe_trans(app('xe.site')->getSiteConfig()->get('site_title')) }}</a>
+                            <a href="{{ url()->null() }}" target="_blank" style="text-decoration:none;font-family: NanumBarunGothic,'나눔고딕',NanumGothic,dotum,'돋움',Helvetica;line-height:34px;vertical-align:top;color:#6f8dff;font-size:30px;letter-spacing:-1px">{{ xe_trans(app('xe.site')->getSiteConfig()->get('site_title')) }}</a>
                             @show
                         </td>
                     </tr>
@@ -57,7 +57,7 @@
                         <td style="font-family:NanumBarunGothic,'나눔고딕',NanumGothic,dotum,'돋움',Helvetica;color:#8e8e93;font-size:13px;text-align:center;line-height:13px;">
                             @section('footer')
                             <p>본 메일은 발신전용 입니다.</p>
-                            <p style="font-size: 12px;">CopyLight © <a href="{{ url() }}" target="_blank" style="color:#6f8dff;text-decoration:none">{{ xe_trans(app('xe.site')->getSiteConfig()->get('site_title')) }}</a> All Rights Reserved. Supported by <a href="https://xpressengine.io" target="_blank" style="color:#6f8dff;text-decoration:none">XE</a></p>
+                            <p style="font-size: 12px;">CopyLight © <a href="{{ url()->null() }}" target="_blank" style="color:#6f8dff;text-decoration:none">{{ xe_trans(app('xe.site')->getSiteConfig()->get('site_title')) }}</a> All Rights Reserved. Supported by <a href="https://xpressengine.io" target="_blank" style="color:#6f8dff;text-decoration:none">XE</a></p>
                             @show
                         </td>
                     </tr>

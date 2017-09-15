@@ -9,35 +9,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Artisan;
 use File;
-use View;
 use DB;
-use Schema;
 use Auth;
-use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
 use Illuminate\Cache\CacheManager;
 
 class SafeModeController extends Controller
 {
     public function __construct()
     {
-        // check login
-        $request = app('request');
-        $segment = $request->segment(2);
-
-        if (
-            in_array($segment, ['', 'auth', 'login']) === false &&
-            Auth::check() === false
-        ) {
-            throw new AccessDeniedHttpException;
-        }
+        $this->middleware('auth:safe')->except('auth', 'login');
     }
 
     public function auth()
     {
-        return View::make('safeMode.auth', [
-        ]);
+        return view('safeMode.auth');
     }
 
     public function login(Request $request)
@@ -50,13 +36,15 @@ class SafeModeController extends Controller
             ]
         );
 
-        if (Auth::attempt([
+        if (Auth::guard('safe')->attempt([
             'email' => $request->get('email'),
             'password' => $request->get('password'),
             'rating' => 'super',
         ])) {
             return redirect()->route('__safe_mode.dashboard');
         }
+
+        return redirect()->back();
     }
 
     public function logout()
@@ -87,7 +75,7 @@ class SafeModeController extends Controller
         $sourceVer = __XE_VERSION__;
         $installedVer =  File::get(storage_path('/app/installed'));
 
-        return View::make('safeMode.dashboard', [
+        return view('safeMode.dashboard', [
             'activatedPluginList' => $activatedPluginList,
             'deactivatedPluginList' => $deactivatedPluginList,
             'sourceVer' => $sourceVer,
@@ -194,14 +182,14 @@ class SafeModeController extends Controller
                 if ($form != $to) {
                     $pos = false;
                     foreach ($queries as $query) {
-                        $query = trim($query);
+                        $query = trim($query, " \t\n\r\0\x0B,");
 
                         $pos = strpos($query, "`{$form}`");
                         if ($pos !== false) {
                             break;
                         }
                     }
-                    $column_definition = trim(substr($query, strlen("`{$form}`"), -1));
+                    $column_definition = trim(substr($query, strlen("`{$form}`")));
 
                     $changes[] = sprintf('CHANGE COLUMN %s %s %s', $form, $to, $column_definition);
                 }

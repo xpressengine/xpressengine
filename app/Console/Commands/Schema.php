@@ -70,7 +70,7 @@ class Schema extends Command
      *
      * @return mixed
      */
-    public function fire()
+    public function handle()
     {
         $tables = $this->input->getOption('tables');
         if ($tables == false) {
