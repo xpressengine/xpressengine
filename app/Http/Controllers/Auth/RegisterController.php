@@ -142,7 +142,7 @@ class RegisterController extends Controller
             'display_name' => 'required',
             'password' => 'confirmed|password',
             'agree' => 'required|accepted',
-            'register_token' => 'required'
+//            'register_token' => 'required'
         ];
 
         /** @var \Xpressengine\DynamicField\ConfigHandler $dynamicFieldConfigHandler */
@@ -240,7 +240,7 @@ class RegisterController extends Controller
             'display_name' => 'required',
             'password' => 'confirmed|password',
             'agree' => 'required|accepted',
-            'register_token' => 'required'
+//            'register_token' => 'required'
         ];
 
         /** @var \Xpressengine\DynamicField\ConfigHandler $dynamicFieldConfigHandler */
@@ -255,9 +255,12 @@ class RegisterController extends Controller
         $this->validate($request, $rules);
 
         $tokenId = $request->get('register_token');
-        $token = $tokenRepository->find($tokenId);
+        $token = null;
+        if ($tokenId) {
+            $token = $tokenRepository->find($tokenId);
+        }
 
-        if ($token === null) {
+        if ($tokenId && $token === null) {
             throw new HttpException(400, '잘못된 가입 토큰입니다.');
         }
 
