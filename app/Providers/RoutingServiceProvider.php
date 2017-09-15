@@ -208,8 +208,10 @@ class RoutingServiceProvider extends ServiceProvider
                 }
             }
 
-            // todo: #364 확인 필요
-            $this->group($attributes, $callback);
+            $router = $this;
+            app('events')->listen('booted.plugins', function () use ($router, $attributes, $callback) {
+                $router->group($attributes, $callback);
+            });
         };
 
         $router->macro('instance', $instanceMacro);
