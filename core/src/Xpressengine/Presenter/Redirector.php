@@ -25,7 +25,7 @@ use Illuminate\Routing\Redirector as BaseRedirector;
  * Laravel 에서 제공하는 Redirect 파사드, redirect() 헬퍼 함수를 대신해서
  * 사용할 수 있도록 기능 제공
  *
- * XeRedirect 파사드 xeRedirect() 헬퍼 함수 제공
+ * XeRedirect 파사드 xe_redirect() 헬퍼 함수 제공
  *
  * @category  Presenter
  * @package   Xpressengine\Presenter

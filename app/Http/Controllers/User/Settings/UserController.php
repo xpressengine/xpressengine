@@ -437,7 +437,7 @@ class UserController extends Controller
 
         $users = $this->handler->users()->whereIn('id', $userIds)->where('rating', '<>', Rating::SUPER)->get();
 
-        return apiRender('user.settings.user.delete', compact('users'));
+        return api_render('user.settings.user.delete', compact('users'));
     }
 
     /**

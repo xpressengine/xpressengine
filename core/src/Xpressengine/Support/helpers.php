@@ -123,8 +123,28 @@ if (! function_exists('xeRedirect')) {
      * @param  array       $data    data
      *
      * @return \Xpressengine\Presenter\RedirectResponse|\Xpressengine\Presenter\Redirector
+     *
+     * @deprecated since beta.24. use xe_redirect instead.
      */
     function xeRedirect($to = null, $status = 302, $headers = [], $secure = null, array $data = null)
+    {
+        return xe_redirect($to, $status, $headers, $secure, $data);
+    }
+}
+
+if (! function_exists('xe_redirect')) {
+    /**
+     * Get an instance of the redirector.
+     *
+     * @param  string|null $to      url for redirect
+     * @param  int         $status  status code
+     * @param  array       $headers headers
+     * @param  bool        $secure  secure mode
+     * @param  array       $data    data
+     *
+     * @return \Xpressengine\Presenter\RedirectResponse|\Xpressengine\Presenter\Redirector
+     */
+    function xe_redirect($to = null, $status = 302, $headers = [], $secure = null, array $data = null)
     {
         if (is_null($to)) {
             return app('xe.redirect');
@@ -150,8 +170,28 @@ if (function_exists('apiRender') === false) {
      * @param array  $responseData data
      *
      * @return mixed
+     *
+     * @deprecated since beta.24. use api_render instead.
      */
     function apiRender($id, array $data = [], array $responseData = [])
+    {
+        return api_render($id, $data, $responseData);
+    }
+}
+
+if (function_exists('api_render') === false) {
+    /**
+     * XE.page() 를 사용하여 호출할 경우 render 된 html 반환
+     *
+     * @package Xpressengine\Presenter
+     *
+     * @param string $id           view id
+     * @param array  $data         data
+     * @param array  $responseData data
+     *
+     * @return mixed
+     */
+    function api_render($id, array $data = [], array $responseData = [])
     {
         XePresenter::htmlRenderPartial();
 
@@ -336,8 +376,30 @@ if (!function_exists('instanceRoute')) {
      * @param  Illuminate\Routing\Route $route      illuminate route
      *
      * @return string
+     *
+     * @deprecated since beta.24. use instance_route instead.
      */
     function instanceRoute($name, $parameters = array(), $instanceId = null, $absolute = true, $route = null)
+    {
+        return instance_route($name, $parameters, $instanceId, $absolute, $route);
+    }
+}
+
+if (!function_exists('instance_route')) {
+    /**
+     * Generate a URL to a named route.
+     *
+     * @package Xpressengine\Routing
+     *
+     * @param  string                   $name       route name
+     * @param  array                    $parameters route parameter
+     * @param  string                   $instanceId instance id
+     * @param  bool                     $absolute   absolute bool
+     * @param  Illuminate\Routing\Route $route      illuminate route
+     *
+     * @return string
+     */
+    function instance_route($name, $parameters = array(), $instanceId = null, $absolute = true, $route = null)
     {
         if ($instanceId === null) {
             $instanceConfig = Xpressengine\Routing\InstanceConfig::instance();
@@ -368,8 +430,24 @@ if (!function_exists('getCurrentInstanceId')) {
      * @package Xpressengine\Menu
      *
      * @return string
+     *
+     * @deprecated since beta.24. use current_instance_id instead.
      */
     function getCurrentInstanceId()
+    {
+        return current_instance_id();
+    }
+}
+
+if (!function_exists('current_instance_id')) {
+    /**
+     * Return current Instance Id
+     *
+     * @package Xpressengine\Menu
+     *
+     * @return string
+     */
+    function current_instance_id()
     {
         $instanceConfig = Xpressengine\Routing\InstanceConfig::instance();
         return $instanceConfig->getInstanceId();
@@ -454,7 +532,7 @@ if (!function_exists('menu_list')) {
                 }
             }
 
-            $current = getCurrentInstanceId();
+            $current = current_instance_id();
             if ($current !== null) {
                 $menu->setItemSelected($current);
             }
@@ -484,8 +562,26 @@ if (!function_exists('shortModuleId')) {
      * @param  string $moduleId extract 'module/'
      *
      * @return string
+     *
+     * @deprecated since beta.24. use short_module_id instead.
      */
     function shortModuleId($moduleId)
+    {
+        return short_module_id($moduleId);
+    }
+}
+
+if (!function_exists('short_module_id')) {
+    /**
+     * Generate a short Menu Type Id
+     *
+     * @package Xpressengine\Module
+     *
+     * @param  string $moduleId extract 'module/'
+     *
+     * @return string
+     */
+    function short_module_id($moduleId)
     {
         return str_ireplace('module/', '', $moduleId);
     }
@@ -500,8 +596,26 @@ if (!function_exists('fullModuleId')) {
      * @param  string $moduleId to prepend 'module/'
      *
      * @return string
+     *
+     * @deprecated since beta.24. use full_module_id instead.
      */
     function fullModuleId($moduleId)
+    {
+        return full_module_id($moduleId);
+    }
+}
+
+if (!function_exists('full_module_id')) {
+    /**
+     * Get a full Module Id
+     *
+     * @package Xpressengine\Module
+     *
+     * @param  string $moduleId to prepend 'module/'
+     *
+     * @return string
+     */
+    function full_module_id($moduleId)
     {
         if (stripos($moduleId, 'module/') !== false) {
             return $moduleId;
@@ -520,10 +634,28 @@ if (!function_exists('moduleClass')) {
      * @param  string $moduleId to find menu type class
      *
      * @return string|null
+     *
+     * @deprecated since beta.24. use module_class instead.
      */
     function moduleClass($moduleId)
     {
-        return XeMenu::getModuleHandler()->getModuleClassName(fullModuleId($moduleId));
+        return module_class($moduleId);
+    }
+}
+
+if (!function_exists('module_class')) {
+    /**
+     * Get a Module Id class name
+     *
+     * @package Xpressengine\Module
+     *
+     * @param  string $moduleId to find menu type class
+     *
+     * @return string|null
+     */
+    function module_class($moduleId)
+    {
+        return XeMenu::getModuleHandler()->getModuleClassName(full_module_id($moduleId));
     }
 }
 
@@ -569,8 +701,26 @@ if (function_exists('dfCreate') === false) {
      * @param array  $args       arguments
      *
      * @return string
+     *
+     * @deprecated since beta.24. use df_create instead.
      */
     function dfCreate($group, $columnName, $args)
+    {
+        return df_create($group, $columnName, $args);
+    }
+}
+
+if (function_exists('df_create') === false) {
+    /**
+     * @package Xpressengine\DynamicField
+     *
+     * @param string $group      group name
+     * @param string $columnName dynamic field id
+     * @param array  $args       arguments
+     *
+     * @return string
+     */
+    function df_create($group, $columnName, $args)
     {
         $fieldType = df($group, $columnName);
         if ($fieldType == null) {
@@ -589,8 +739,26 @@ if (function_exists('dfEdit') === false) {
      * @param array  $args       arguments
      *
      * @return string
+     *
+     * @deprecated since beta.24. use df_edit instead.
      */
     function dfEdit($group, $columnName, $args)
+    {
+        return df_edit($group, $columnName, $args);
+    }
+}
+
+if (function_exists('df_edit') === false) {
+    /**
+     * @package Xpressengine\DynamicField
+     *
+     * @param string $group      group name
+     * @param string $columnName dynamic field id
+     * @param array  $args       arguments
+     *
+     * @return string
+     */
+    function df_edit($group, $columnName, $args)
     {
         $fieldType = df($group, $columnName);
         if ($fieldType == null) {

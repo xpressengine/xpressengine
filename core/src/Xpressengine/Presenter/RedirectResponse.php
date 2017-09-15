@@ -25,7 +25,7 @@ use Symfony\Component\HttpFoundation\Request;
  * 컨트롤러를 API로 사용할 때 redirect 하는 컨트롤러를 사용할 수 없는 문 해결
  *
  * ```php
- * xeRedirect()->to(...)->setData(['item' => $item]);
+ * xe_redirect()->to(...)->setData(['item' => $item]);
  * ```
  * > 요청 포멧이 html인 경우는 redirect 처리되고 json일 경우는
  * setData 의 데이터를 json으로 반환

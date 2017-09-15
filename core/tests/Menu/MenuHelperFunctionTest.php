@@ -49,7 +49,7 @@ class MenuHelperFunctionTest extends TestCase
         $instanceConfig = InstanceConfig::instance();
         $instanceConfig->setInstanceId('testInstanceId');
 
-        $instanceId = getCurrentInstanceId();
+        $instanceId = current_instance_id();
 
         $this->assertEquals('testInstanceId', $instanceId);
     }

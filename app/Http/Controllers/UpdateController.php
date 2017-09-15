@@ -126,7 +126,7 @@ class UpdateController extends Controller
     public function showOperation(ComposerFileWriter $writer)
     {
         $operation = $this->getOperation($writer);
-        return apiRender('update.operation', compact('operation'), compact('operation'));
+        return api_render('update.operation', compact('operation'), compact('operation'));
     }
 
     public function deleteOperation(ComposerFileWriter $writer)
