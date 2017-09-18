@@ -278,7 +278,7 @@ class UserController extends Controller
         $userData = $request->except('_token');
 
         if (array_get($userData, 'profileImgFile') === '__delete_file__') {
-            $userData['profileImgFile'] = null;
+            $userData['profileImgFile'] = false;
         }
 
         XeDB::beginTransaction();
