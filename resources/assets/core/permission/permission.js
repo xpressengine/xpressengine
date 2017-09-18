@@ -1,3 +1,5 @@
+//TODO:: mouseover,
+
 const Keys = {
 	ENTER: 13,
 	TAB: 9,
@@ -20,9 +22,6 @@ class Permission {
 		this.query = '';
 		this.suggestion = [];
 		this.placeholder = XE.Lang.trans('xe::explainIncludeUserOrGroup');
-		this.includeSearchCnt = 0;
-		this.excludeSearchCnt = 0;
-		this.searchCnt = 0;
 		this.selectedIndex = '';
 		this.includeSelectedIndex = -1;
 		this.excludeSelectedIndex = -1;
@@ -34,7 +33,6 @@ class Permission {
 
 		this.$wrapper.on('change', '.chkModeAble', function (e) {
 			var $target = $(e.target);
-
 			var checked = $target.is(':checked');
 
 			if(checked) {
@@ -87,6 +85,7 @@ class Permission {
 								var tag = $ul.find('li.active').data('tag');
 								var name = '';
 								var pType = '';
+								var prefix = '';
 
 								//member
 								if($ul.data('target') == 'member') {
@@ -94,35 +93,48 @@ class Permission {
 									if(dataInput == 'include') {
 										name = _this.type + 'User';
 										pType = 'user';
+										prefix = '@';
 									//exclude
 									} else {
 										name = _this.type + 'Except';
 										pType = 'except';
+										prefix = '@';
 									}
 								//group
 								} else {
 									name = _this.type + 'Group';
 									pType = 'group';
+									prefix = '%';
 								}
 
 								var pTypes = _this.permission[pType];
-
+								var bSameWord = false;
+								
 								if(pTypes.length > 0) {
-									pTypes.forEach(function (id, i) {
-										if(id !== tag.id) {
-											_this.permission[pType].push(tag.id);
+									pTypes.forEach(function (type, i) {
+										if(type.id === tag.id) {
+											bSameWord = true;
+											return;
 										}
 									});
+
+									if(!bSameWord) {
+										_this.permission[pType].push(tag);
+									}
 								} else {
-									_this.permission[pType].push(tag.id);
+									_this.permission[pType].push(tag);
 								}
 
-								console.log('_this,permission[pType]', _this.permission[pType], 'name', name);
+								var ids = _this.permission[pType].map(function (tag) {
+									return tag.id;
+								});
 
-								$ul.closest('.ReactTags__tags').find('[name=' + name + ']').val(pTypes.join().trim());
-								$ul.closest('.ReactTags__tags').find('.' + pType + 'Wrap')
-									.append(`<span class="ReactTags__tag">${tag.display_name || tag.name}<a class="ReactTags__remove" data-id="${tag.id}">x</a></span>`);
-								
+								if(!bSameWord) {
+									$ul.closest('.ReactTags__tags').find('[name=' + name + ']').val(ids.join().trim());
+									$ul.closest('.ReactTags__tags').find('.' + pType + 'Wrap')
+										.append(`<span class="ReactTags__tag">${prefix + (tag.display_name || tag.name)}<a class="ReactTags__remove btnRemoveTag" data-id="${tag.id}">x</a></span>`);
+								}
+
 								$ul.remove();
 								$this.val('').data('index', -1).focus();
 
@@ -131,14 +143,19 @@ class Permission {
 							e.preventDefault();	//prevent tab
 
 							break;
-						case Keys.BACKSPACE :
-
-							break;
 						case Keys.ESCAPE :
 							_this[dataInput + 'SelectedIndex'] = 0;
 							$ul.parent().empty();
+							$this.focus();
 							break;
 
+					}
+				}
+			} else {
+				if(Keys.BACKSPACE === keyCode) {
+					var $tag = $this.closest('.ReactTags__tags').find('.ReactTags__selected span');
+					if(!query && $tag.length > 0) {
+						_this.removeTag($tag.eq($tag.length - 1));
 					}
 				}
 			}
@@ -147,9 +164,71 @@ class Permission {
 		this.$wrapper.find('.ReactTags__suggestions').on('mouseenter', 'li', function () {
 			var $this = $(this);
 			var $ul = $this.closest('ul');
-			var size = $ul.find('li').length;
-			
+
 			$this.addClass('active').siblings().removeClass('active');
+		});
+
+		this.$wrapper.find('.ReactTags__suggestions').on('click', 'li', function () {
+			var $this = $(this);
+			var tag = $this.data('tag');
+			var $ul = $this.closest('ul');
+			var $input = $this.closest('.ReactTags__tagInput').find('input:text');
+			var dataInput = $input.data('input');
+			var id = tag.id;
+			var name = '';
+			var pType = '';
+			var prefix = '';
+
+			if($ul.data('target') == 'member') {
+				//include
+				if(dataInput == 'include') {
+					name = _this.type + 'User';
+					pType = 'user';
+					prefix = '@';
+					//exclude
+				} else {
+					name = _this.type + 'Except';
+					pType = 'except';
+					prefix = '@';
+				}
+				//group
+			} else {
+				name = _this.type + 'Group';
+				pType = 'group';
+				prefix = '%';
+			}
+
+			var pTypes = _this.permission[pType];
+			var bSameWord = false;
+
+			if(pTypes.length > 0) {
+				pTypes.forEach(function (type, i) {
+					if(type.id === tag.id) {
+						bSameWord = true;
+						return;
+					}
+				});
+
+				if(!bSameWord) {
+					_this.permission[pType].push(tag);
+				}
+			} else {
+				_this.permission[pType].push(tag);
+			}
+
+			var ids = _this.permission[pType].map(function (tag) {
+				return tag.id;
+			});
+
+			if(!bSameWord) {
+				$ul.closest('.ReactTags__tags').find('[name=' + name + ']').val(ids.join().trim());
+				$ul.closest('.ReactTags__tags').find('.' + pType + 'Wrap')
+					.append(`<span class="ReactTags__tag">${prefix + (tag.display_name || tag.name)}<a class="ReactTags__remove btnRemoveTag" data-id="${tag.id}">x</a></span>`);
+			}
+
+			$ul.remove();
+			$input.val('').data('index', -1).focus();
+
 		});
 
 		this.$wrapper.on('keyup', '.inputMemberGroup', function (e) {
@@ -186,71 +265,14 @@ class Permission {
 			} else {
 				$this.parent().find('.ReactTags__suggestions').empty();
 			}
-		})
-
-		this.$wrapper.on('keydownaa', '.inputInclude', function (e) {
-			// var _state = this.state;
-			var query = _this.query;
-			var selectedIndex = _this.selectedIndex;
-			var suggestions = _this.suggestions;
-
-			// hide suggestions menu on escape
-			if (e.keyCode === Keys.ESCAPE) {
-				e.preventDefault();
-				this.setState({
-					selectedIndex: -1,
-					selectionMode: false,
-					suggestions: [],
-				});
-			}
-
-			// when enter or tab is pressed add query to tags
-			if ((e.keyCode === Keys.ENTER || e.keyCode === Keys.TAB) && query != '') {
-				e.preventDefault();
-				if (this.state.selectionMode) {
-					this.addTag(this.state.suggestions[this.state.selectedIndex]);
-				}
-			}
-
-			// when backspace key is pressed and query is blank, delete tag
-			if (e.keyCode === Keys.BACKSPACE && query == '') {
-				if (this.props.selectedMember.length > 0)
-					this.handleMemberDelete(this.props.selectedMember.length - 1);
-				else
-					this.handleGroupDelete(this.props.selectedGroup.length - 1);
-			}
-
-			// up arrow
-			if (e.keyCode === Keys.UP_ARROW) {
-				e.preventDefault();
-
-				// last item, cycle to the top
-				if (selectedIndex <= 0) {
-					this.setState({
-						selectedIndex: this.state.suggestions.length - 1,
-						selectionMode: true,
-					});
-				} else {
-					this.setState({
-						selectedIndex: selectedIndex - 1,
-						selectionMode: true,
-					});
-				}
-			}
-
-			// down arrow
-			if (e.keyCode === Keys.DOWN_ARROW) {
-				e.preventDefault();
-				this.setState({
-					selectedIndex: (this.state.selectedIndex + 1) % suggestions.length,
-					selectionMode: true,
-				});
-			}
 		});
-	}
 
-	addTag() {
+		this.$wrapper.on('click', '.btnRemoveTag', function (e) {
+			e.preventDefault();
 
+			_this.removeTag($(this).closest('span'));
+
+		});
 	}
 
 	makeIt(item, query) {
@@ -261,16 +283,44 @@ class Permission {
 		return itemName.replace(r, '<mark>$&</mark>');
 	}
 
+	removeTag($target) {
+		var _this = this;
+		var pType = $target.closest('.ReactTags__selected').data('ptype');
+		var id = $target.data('id');
+		var name = '';
+
+		switch(pType) {
+			case 'user' :
+				name = _this.type + 'User';
+				break;
+			case 'except' :
+				name = _this.type + 'Except';
+				break;
+			case 'group' :
+				name = _this.type + 'Group';
+				break;
+		}
+
+		var pTypes = _this.permission[pType];
+
+		pTypes.forEach(function (type, i) {
+			if(type.id !== id) {
+				_this.permission[pType].splice(i, 1);//.push(tag);
+				return;
+			}
+		});
+
+		var ids = _this.permission[pType].map(function (tag) {
+			return tag.id;
+		});
+
+		$target.closest('.ReactTags__tags').find('[name=' + name + ']').val(ids.join().trim());
+		$target.remove();
+	}
+
 	searchMember ($input, keyword) {
 		var _this = this;
 		var searchMemberUrl = _this.memberSearchUrl;
-
-		// var searchingCnt = this.state.searchingCnt + 1;
-		// _this.setState({
-		// 	searchingCnt: searchingCnt,
-		// });
-
-		console.log(keyword);
 
 		$.ajax({
 			url: searchMemberUrl + '/' + keyword,
@@ -284,12 +334,6 @@ class Permission {
 					temp += 	`<ul data-target="member">`;
 
 					data.forEach(function (item, i) {
-						/**
-						 * TODO :: li event
-						 * PermissionTagSuggestion handleClick click
-						 * PermissionTagSuggestion handleHover mouseover
-						 * */
-						// temp += 		`<li class="${i == _this.selectedIndex ? 'active' : '' }">`;
 						temp += 		`<li class="" data-tag='${JSON.stringify(item)}'>`;
 						temp += 			`<span>${_this.makeIt(item, keyword)}</span>`;
 						temp += 		`</li>`;
@@ -304,41 +348,17 @@ class Permission {
 
 				}
 
-				// var searchingCnt = _this.state.searchingCnt;
-				// searchingCnt = searchingCnt - 1;
-				// _this.setState(
-				// 	{
-				// 		suggestions: data,
-				// 		searchingCnt: searchingCnt,
-				// 	}
-				// );
 			},
 			error: function (xhr, status, err) {
-				// var searchingCnt = _this.state.searchingCnt;
-				// searchingCnt = searchingCnt - 1;
-				// _this.setState(
-				// 	{
-				// 		searchingCnt: searchingCnt,
-				// 	}
-				// );
-				// console.error(searchMemberUrl, status, err.toString());
+
 			},
 		});
 
 	}
-	/**
-	 * 그룹 suggestion을 AJAX요청하여 상태를 업데이트한다.
-	 * @memberof PermissionInclude
-	 * @param {string} keyword
-	 * */
+
 	searchGroup ($input, keyword) {
 		var _this = this;
 		var searchGroupUrl = _this.groupSearchUrl;
-		// var _this = this;
-		// var searchingCnt = this.state.searchingCnt + 1;
-		// _this.setState({
-		// 	searchingCnt: searchingCnt,
-		// });
 
 		$.ajax({
 			url: searchGroupUrl + '/' + keyword,
@@ -353,12 +373,6 @@ class Permission {
 					temp += 	`<ul data-target="group">`;
 
 					data.forEach(function (item, i) {
-						/**
-						 * TODO :: li event
-						 * PermissionTagSuggestion handleClick click
-						 * PermissionTagSuggestion handleHover mouseover
-						 * */
-						// temp += 		`<li class="${i == _this.selectedIndex ? 'active' : '' }">`;
 						temp += 		`<li data-tag='${JSON.stringify(item)}'>`;
 						temp += 			`<span>${_this.makeIt(item, keyword)}</span>`;
 						temp += 		`</li>`;
@@ -372,35 +386,16 @@ class Permission {
 					$input.parent().find('.ReactTags__suggestions').empty();
 
 				}
-
-				// var searchingCnt = _this.state.searchingCnt;
-				// searchingCnt = searchingCnt - 1;
-				// _this.setState(
-				// 	{
-				// 		suggestions: data,
-				// 		searchingCnt: searchingCnt,
-				// 	}
-				// );
 			},
-			error: function (xhr, status, err) {
-				// var searchingCnt = _this.state.searchingCnt;
-				// searchingCnt = searchingCnt - 1;
-				// _this.setState(
-				// 	{
-				// 		searchingCnt: searchingCnt,
-				// 	}
-				// );
-				// console.error(searchGroupUrl, status, err.toString());
-			},
+			error: function (xhr, status, err) {},
 		});
 
 	}
 
 	render() {
-
+		var _this = this;
 		var mode = this.permission.mode;
 		var rating = this.permission.rating;
-		var _this = this;
 		var modeEnable = false;
 		var permissionTypes = [
 			{ value: 'super', name: XE.Lang.trans('xe::memberRatingAdministrator') },
@@ -457,33 +452,29 @@ class Permission {
 		temp +=			`<label>${XE.Lang.trans('xe::includeUserOrGroup')}</label>`;
 		temp +=			`<div class="ReactTags__tags">`;
 
-		temp += 			'<div class="ReactTags__selected groupWrap">';
+		temp += 			`<div class="ReactTags__selected groupWrap" data-ptype="group">`;
 		this.permission.group.forEach(function (g) {
 			var tag = g;
-			var label = '%' + (tag.displayName || tag.name);
+			var label = '%' + (tag.display_name || tag.name);
 
-			temp += 			`<span>${label}<a href="#" class="btnDeleteGroup">x</a></span>`;
+			temp += 			`<span class="ReactTags__tag">${label}<a href="#" class="ReactTags__remove btnRemoveTag" data-id="${tag.id}">x</a></span>`;
 		});
 		temp +=				'</div>';
 
-		temp +=				'<div class="ReactTags__selected userWrap">';
-		this.permission.user.forEach(function (m) {
-			var tag = m;
-			var label = '@' + (tag.displayName || tag.name);
+		temp +=				'<div class="ReactTags__selected userWrap" data-ptype="user">';
+		this.permission.user.forEach(function (tag) {
+			var label = '@' + (tag.display_name || tag.name);
 
-			temp += 			`<span>${label}<a href="#" class="btnDeleteMember">x</a></span>`;
+			temp += 			`<span class="ReactTags__tag">${label}<a href="#" class="ReactTags__remove btnRemoveTag" data-id="${tag.id}|">x</a></span>`;
 		});
 		temp +=				`</div>`;
 
 		temp +=				`<div class="ReactTags__tagInput">`;
 		temp += 				`<input type="text" placeholder="${this.placeholder}" class="form-control inputMemberGroup" data-input="include" ${(disabled)? 'disabled="disabled"' : ''} value="${this.query}" data-index="-1" />`;	//TODO:: PermissionInclude handleKeyDown
 		temp += 				`<div class="ReactTags__suggestions" data-input="include"></div>`;
-
-
-
 		temp +=				`</div>`; //ReactTags__tagInput
-		temp += 			`<input type="hidden" name="${this.type + 'Group'}" class="form-control includeGroups" value="${includeGroups}" />`;
-		temp +=				`<input type="hidden" name="${this.type + 'User'}" class="form-control includeMembers" value="${includeMembers}" />`;
+		temp += 			`<input type="hidden" name="${this.type + 'Group'}" class="form-control includeGroups" value="${includeGroups.join().trim()}" />`;
+		temp +=				`<input type="hidden" name="${this.type + 'User'}" class="form-control includeMembers" value="${includeMembers.join().trim()}" />`;
 		temp +=			`</div>`;	//ReactTags__tags
 		temp +=		`</div>`;//form-group
 
@@ -518,13 +509,13 @@ class Permission {
 		temp += `<div class="form-group">`;
 		temp += 	`<label>${XE.Lang.trans('xe::excludeUser')}</label>`;
 		temp +=		`<div class="ReactTags__tags">`;
-		temp +=			`<div class="ReactTags__selected exceptWrap">`;
+		temp +=			`<div class="ReactTags__selected exceptWrap" data-ptype="except">`;
 
-		this.permission.except.forEach(function (tag, i) {
-			var label = tag.displayName || tag.name;
+		this.permission.except.forEach(function (tag) {
+			var label = tag.display_name || tag.name;
 			label = '@' + label;
 
-			temp += `<span>${label}<a href="#" class="btnDeleteExcept">x</a></span>`;
+			temp += `<span class="ReactTags__tag">${label}<a href="#" class="ReactTags__remove btnRemoveTag" data-id="${tag.id}">x</a></span>`;
 		});
 
 		temp +=			`</div>`;
@@ -532,8 +523,8 @@ class Permission {
 		temp +=				`<input type="text" placeholder="${XE.Lang.trans('xe::explainExcludeUser')}" class="form-control inputMemberGroup" data-input="exclude" ${(disabled)? 'disabled="disabled"' : ''} data-index="-1" />`; 	//TODO:: PermissionExclude handleKeyDown
 		temp += 			`<div class="ReactTags__suggestions" data-input="exclude"></div>`;
 		temp += 		`</div>`; //ReactTags__tagInput
-		temp +=		`</div>`; //ReactTags__tags
 		temp +=		`<input type="hidden" name="${this.type + 'Except'}" class="form-control excludeMembers" value="${excludeMembers}" />`;
+		temp +=		`</div>`; //ReactTags__tags
 		temp += `</div>`;//form-group
 
 		temp += `</div>`;
@@ -557,5 +548,3 @@ $('.__xe__uiobject_permission').each(function (i) {
   p.bindEvents();
 
 });
-
-

@@ -29,20 +29,11 @@ class SettingsPermission extends AbstractUIObject
         /** @var Permission $permission */
         $permission = $permissionInfo['permission'];
 
-        // permission is collection of grant
-        // grant is bundle of assigned
-        // $grant = [
-        //    'rating' => $visibleGrant['rating'],
-        //    'group' => UserGroup::whereIn('id', $visibleGrant['group'])->get()->toArray(),
-        //    'user' => User::whereIn('id', $visibleGrant['user'])->get()->toArray(),
-        //    'except' => User::whereIn('id', $visibleGrant['except'])->get()->toArray(),
-        // ];
-
         $groups = app('xe.user.groups')->all();
 
         $settings = [];
         $content = uio('permission', [
-            'mode' => 'manual',
+            'mode' => '',
             'title' => 'access',
             'grant' => $this->getGrant($permission['access']),
             'groups' => $groups
@@ -50,14 +41,6 @@ class SettingsPermission extends AbstractUIObject
         $settings[] = $this->generateBox($title, $content);
         $this->template = implode(PHP_EOL, $settings);
 
-//        XeFrontend::js('/assets/core/permission/Permission.js')->unload();
-
-//        XeFrontend::js([
-//
-//            '/assets/core/permission/SettingsPermission.js',
-//            '/assets/core/permission/PermissionTag.js'
-//
-//        ])->load();
 
         return parent::render();
     }
