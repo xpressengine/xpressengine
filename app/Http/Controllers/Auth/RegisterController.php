@@ -61,6 +61,7 @@ class RegisterController extends Controller
      */
     public function getRegister(Request $request)
     {
+        // 회원 가입 허용 검사
         if (!$this->checkJoinable()) {
             return redirect()->back()->with(
                 ['alert' => ['type' => 'danger', 'message' => xe_trans('xe::joinNotAllowed')]]
@@ -80,6 +81,7 @@ class RegisterController extends Controller
             return $this->getRegisterForm($request);
         }
 
+        // 활성화된 인증방식 가져오기
         $allGuards = $this->handler->getRegisterGuards();
         $activated = $config->get('guards', []);
         $guards = [];
@@ -110,9 +112,9 @@ class RegisterController extends Controller
     {
         $config = app('xe.config')->get('user.join');
 
+        // 인증 토큰 검사
         $tokenId = $request->get('token');
         $tokenRepository = app('xe.user.register.tokens');
-
         $register_token = null;
         if ($tokenId !== null) {
             $register_token = $tokenRepository->find($tokenId);
@@ -121,6 +123,7 @@ class RegisterController extends Controller
             }
         }
 
+        // 활성화된 가입폼 가져오기
         $allForms = $this->handler->getRegisterForms();
         $activated = $config->get('forms', []);
         $forms = [];
@@ -254,20 +257,26 @@ class RegisterController extends Controller
 
         $this->validate($request, $rules);
 
+        // 인증토큰 조회
         $tokenId = $request->get('register_token');
         $token = null;
         if ($tokenId) {
             $token = $tokenRepository->find($tokenId);
         }
-
         if ($tokenId && $token === null) {
             throw new HttpException(400, '잘못된 가입 토큰입니다.');
+        }
+
+        $config = app('xe.config')->get('user.join');
+
+        //  가입인증을 사용하지만 인증토큰이 유효하지 않을 경우 검사
+        if ($config->get('guard_forced', false) && $token === null) {
+            throw new HttpException(400, '가입 토큰이 없거나 잘못된 가입 토큰입니다.');
         }
 
         $userData = $request->all();
 
         // set default join group
-        $config = app('xe.config')->get('user.join');
         $joinGroup = $config->get('joinGroup');
         if ($joinGroup !== null) {
             $userData['groupId'] = [$joinGroup];
@@ -279,7 +288,9 @@ class RegisterController extends Controller
         XeDB::beginTransaction();
         try {
             $user = $this->handler->create($userData, $token);
-            $tokenRepository->delete($tokenId);
+            if ($token !== null) {
+                $tokenRepository->delete($tokenId);
+            }
         } catch (\Exception $e) {
             XeDB::rollback();
             throw $e;
