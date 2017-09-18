@@ -260,37 +260,4 @@ class VirtualConnectionTest extends TestCase
         $level = $connector->transactionLevel();
         $this->assertEquals(0, $level);
     }
-
-    /**
-     * test transaction by closure
-     *
-     * @@expectedException Exception
-     * @return void
-     */
-    public function testTransactionExceptionRollback()
-    {
-        $this->transactionCounter = 0;
-        $transactionHandler = m::mock('Xpressengine\Database\TransactionHandler');
-        $transactionHandler->shouldReceive('beginTransaction')->andReturn();
-        $transactionHandler->shouldReceive('commit')->once()->andReturn();
-        $transactionHandler->shouldReceive('rollBack')->once()->andReturn();
-        $transactionHandler->shouldReceive('transactionLevel')->andReturn(0);
-
-        $databaseCoupler = m::mock('Xpressengine\Database\DatabaseCoupler');
-        $databaseCoupler->shouldReceive('getTransaction')->andReturn(
-            $transactionHandler
-        );
-
-        /** @var DatabaseCoupler $databaseCoupler */
-        $connector = new VirtualConnection($databaseCoupler, self::CONN_NAME, $this->databaseConfig);
-        $result = $connector->transaction(function() {
-            return true;
-        });
-        $this->assertTrue($result);
-
-        $connector->transaction(function() {
-            throw new Exception('Query error');
-        });
-
-    }
 }
