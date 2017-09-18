@@ -263,7 +263,7 @@ function renderLangEditorBox() {
   validator.put('langrequired', function ($dst, parameters) {
     var $input = $dst.closest('.lang-editor-box').find("input[name^='xe_lang_preprocessor']:not(:hidden):first");
     var value = $input.val();
-    var name = $dst.closest('.lang-editor-box').data('valid-name');
+    var name = $dst.closest('.lang-editor-box').data('valid-name') || $dst.closest('.lang-editor-box').data('name');
 
     if (value === '') {
       validator.error($input, XE.Lang.trans('validation.required', { attribute: name }));
