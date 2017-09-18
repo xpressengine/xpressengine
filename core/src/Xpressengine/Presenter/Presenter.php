@@ -410,7 +410,7 @@ class Presenter
     }
 
     /**
-     * xeRedirect() 메소드와 같은 형태의 파라메터 사용
+     * xe_redirect() 메소드와 같은 형태의 파라메터 사용
      *
      * @param null  $to      redirect url
      * @param int   $status  status code
@@ -421,7 +421,7 @@ class Presenter
      */
     public function redirect($to = null, $status = 302, $headers = [], $secure = null, $data = [])
     {
-        return xeRedirect($to, $status, $headers, $secure, $data);
+        return xe_redirect($to, $status, $headers, $secure, $data);
     }
 
     /**

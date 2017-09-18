@@ -40,7 +40,7 @@
                                 </tr>
                                 <tr>
                                     <th width="80" style="height:24px;font-family:NanumBarunGothic,'나눔고딕',NanumGothic,dotum,'돋움',Helvetica;font-size:13px;text-align:left;color:#8e8e93;font-weight:normal;vertical-align:top;line-height:21px;">{{ xe_trans('xe::confirmCode') }}</th>
-                                    <td style="height:24px;font-family:NanumBarunGothic,'나눔고딕',NanumGothic,dotum,'돋움',Helvetica;color:#2c2e37;font-size:13px;text-align:left;word-break: break-all;vertical-align:top;line-height:21px;"><span style="color:#6f8dff;">{{ $mail->confirmationCode }}</span></td>
+                                    <td style="height:24px;font-family:NanumBarunGothic,'나눔고딕',NanumGothic,dotum,'돋움',Helvetica;color:#2c2e37;font-size:13px;text-align:left;word-break: break-all;vertical-align:top;line-height:21px;"><span style="color:#6f8dff;">{{ $mail->confirmation_code }}</span></td>
                                 </tr>
                                 <td height="35">
                                 </td>
@@ -56,7 +56,7 @@
                                                             <tbody>
                                                             <tr>
                                                                 <td height="42" style="text-align:center">
-                                                                    <a href="{{ route('auth.confirm', ['email' => $mail->address, 'code' => $mail->confirmationCode]) }}" target="_blank" style="display:block;height:42px;font-size:15px;color:#fff;text-decoration:none;line-height:42px;font-family:NanumBarunGothic,'나눔고딕',NanumGothic,dotum,'돋움',Helvetica;">{{ xe_trans('xe::confirmation') }}</a>
+                                                                    <a href="{{ route('auth.confirm', ['email' => $mail->address, 'code' => $mail->confirmation_code]) }}" target="_blank" style="display:block;height:42px;font-size:15px;color:#fff;text-decoration:none;line-height:42px;font-family:NanumBarunGothic,'나눔고딕',NanumGothic,dotum,'돋움',Helvetica;">{{ xe_trans('xe::confirmation') }}</a>
                                                                 </td>
                                                             </tr>
                                                             </tbody>

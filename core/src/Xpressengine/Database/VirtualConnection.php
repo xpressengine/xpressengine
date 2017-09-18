@@ -16,6 +16,8 @@ namespace Xpressengine\Database;
 
 use Illuminate\Contracts\Cache\Repository as CacheContract;
 use Illuminate\Database\Connection;
+use Illuminate\Database\DetectsDeadlocks;
+use Illuminate\Database\DetectsLostConnections;
 use PDO;
 use Closure;
 use Exception;
@@ -58,6 +60,8 @@ use Throwable;
  */
 class VirtualConnection implements VirtualConnectionInterface
 {
+    use DetectsDeadlocks,
+        DetectsLostConnections;
 
     /**
      * master type key name
@@ -468,31 +472,15 @@ class VirtualConnection implements VirtualConnectionInterface
     /**
      * Execute a Closure within a transaction.
      *
-     * @param Closure $callback closure
-     * @param int     $attempts attempts todo: 추가됨, 적용검토
+     * @param  \Closure  $callback
+     * @param  int       $attempts
      * @return mixed
-     * @throws Exception
-     * @throws Throwable
+     *
+     * @throws \Exception|\Throwable
      */
     public function transaction(Closure $callback, $attempts = 1)
     {
-        $this->beginTransaction();
-
-        try {
-            $result = $callback($this);
-
-            $this->commit();
-        } catch (Exception $e) {
-            $this->rollBack();
-
-            throw $e;
-        } catch (Throwable $e) {
-            $this->rollBack();
-
-            throw $e;
-        }
-
-        return $result;
+        return $this->transactionHandler()->transaction($this->coupler, $callback, $attempts);
     }
 
     /**

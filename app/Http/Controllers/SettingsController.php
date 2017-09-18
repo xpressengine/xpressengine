@@ -234,7 +234,7 @@ class SettingsController extends Controller
     public function showLog(LogHandler $handler, $id)
     {
         $log = $handler->find($id);
-        return apiRender('settings.logs.show', compact('log'));
+        return api_render('settings.logs.show', compact('log'));
     }
 
 }

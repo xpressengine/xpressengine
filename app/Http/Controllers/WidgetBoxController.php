@@ -42,7 +42,7 @@ class WidgetBoxController extends Controller
 
         $frontend->css('assets/vendor/bootstrap/css/bootstrap.min.css')->loadAsync();
 
-        return apiRender('widgetbox.create', compact('id'));
+        return api_render('widgetbox.create', compact('id'));
     }
 
     public function store(Request $request, WidgetBoxHandler $handler, SessionManager $session)

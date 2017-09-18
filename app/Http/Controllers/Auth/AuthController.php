@@ -81,7 +81,7 @@ class AuthController extends Controller
         $config = app('xe.config')->get('user.common');
         $agreement = $config->get('agreement');
 
-        return apiRender('agreement', compact('agreement'));
+        return api_render('agreement', compact('agreement'));
     }
 
     public function getPrivacy()
@@ -89,7 +89,7 @@ class AuthController extends Controller
         $config = app('xe.config')->get('user.common');
         $privacy = $config->get('privacy');
 
-        return apiRender('privacy', compact('privacy'));
+        return api_render('privacy', compact('privacy'));
     }
 
     /**
