@@ -24,8 +24,8 @@ use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
 use Xpressengine\User\EmailBroker;
 use Xpressengine\User\Exceptions\CannotDeleteMainEmailOfUserException;
 use Xpressengine\User\Exceptions\DisplayNameAlreadyExistsException;
-use Xpressengine\User\Exceptions\InvalidConfirmationCodeException;
 use Xpressengine\User\Exceptions\EmailAlreadyExistsException;
+use Xpressengine\User\Exceptions\InvalidConfirmationCodeException;
 use Xpressengine\User\Exceptions\InvalidDisplayNameException;
 use Xpressengine\User\Exceptions\PendingEmailAlreadyExistsException;
 use Xpressengine\User\Exceptions\PendingEmailNotExistsException;
@@ -59,11 +59,6 @@ class UserController extends Controller
     protected $handler;
 
     /**
-     * @var UserInterface logged user
-     */
-    protected $user;
-
-    /**
      * @var PendingEmailRepositoryInterface
      */
     protected $pendingMails;
@@ -84,8 +79,6 @@ class UserController extends Controller
         $this->emails = app('xe.user.emails');
         $this->pendingMails = app('xe.user.pendingEmails');
         $this->accounts = app('xe.user.accounts');
-
-        $this->user = app('auth')->user();
 
         XeTheme::selectSiteTheme();
         XePresenter::setSkinTargetId('user/settings');
@@ -127,7 +120,7 @@ class UserController extends Controller
         $selectedSection = $menus[$section];
 
         // get current user
-        $user = $this->user;
+        $user = $request->user();
 
         $content = $selectedSection['content'];
         $selectedSection['selected'] = true;
@@ -149,7 +142,7 @@ class UserController extends Controller
         $displayName = $request->get('name');
         $displayName = str_replace('  ', ' ', trim($displayName));
 
-        $user = $this->user;
+        $user = $request->user();
 
         XeDB::beginTransaction();
         try {
@@ -216,10 +209,10 @@ class UserController extends Controller
         $message = 'success';
         $target = null;
 
-        if ($this->user->getAuthPassword() !== "") {
+        if ($request->user()->getAuthPassword() !== "") {
 
             $credentials = [
-                'id' => $this->user->getId(),
+                'id' => $request->user()->getId(),
                 'password' => $request->get('current_password')
             ];
 
@@ -242,7 +235,7 @@ class UserController extends Controller
         try {
             // save password
             $password = \Hash::make($password);
-            $this->users->update($this->user, compact('password'));
+            $this->users->update($request->user(), compact('password'));
         } catch (\Exception $e) {
             XeDB::rollback();
             throw $e;
@@ -299,14 +292,14 @@ class UserController extends Controller
     {
         $address = $request->get('address');
 
-        if ($this->user->email === $address) {
+        if ($request->user()->email === $address) {
             $e = new InvalidArgumentException();
             $e->setMessage('기존 대표 이메일과 동일합니다.');
             throw $e;
         }
 
         $selected = null;
-        foreach ($this->user->emails as $mail) {
+        foreach ($request->user()->emails as $mail) {
             if ($mail->address === $address) {
                 $selected = $mail;
                 break;
@@ -320,11 +313,11 @@ class UserController extends Controller
             throw $e;
         }
 
-        $this->user->email = $address;
+        $request->user()->email = $address;
 
         XeDB::beginTransaction();
         try {
-            $this->users->update($this->user);
+            $this->users->update($request->user());
         } catch (\Exception $e) {
             XeDB::rollback();
         }
@@ -336,7 +329,7 @@ class UserController extends Controller
 
     public function getMailList()
     {
-        $user = $this->user;
+        $user = request()->user();
         $mails = $user->mails;
         if ($mails === null) {
             $mails = $this->emails->findByUserId($user->getId());
@@ -371,9 +364,8 @@ class UserController extends Controller
         // 이미 인증 요청중인 이메일이 있는지 확인한다.
         $useEmailConfirm = $this->handler->usingEmailConfirm();
         if ($useEmailConfirm) {
-            if ($this->user->getPendingEmail() !== null) {
+            if ($request->user()->getPendingEmail() !== null) {
                 $e = new PendingEmailAlreadyExistsException();
-
             }
         }
 
@@ -386,14 +378,22 @@ class UserController extends Controller
 
         XeDB::beginTransaction();
         try {
-            $mail = $this->handler->createEmail($this->user, $input, !$useEmailConfirm);
+            $mail = $this->handler->createEmail($request->user(), $input, !$useEmailConfirm);
 
             if ($useEmailConfirm) {
                 /** @var EmailBroker $broker */
                 $broker = app('xe.auth.email');
-                $broker->sendEmailForAddingEmail($mail, 'emails.add-email', function ($m) {
-                    $m->subject(xe_trans(app('xe.site')->getSiteConfig()->get('site_title')).' '.xe_trans('xe::emailConfirm'));
-                });
+                $broker->sendEmailForAddingEmail(
+                    $mail,
+                    'emails.add-email',
+                    function ($m) {
+                        $m->subject(
+                            xe_trans(app('xe.site')->getSiteConfig()->get('site_title')).' '.xe_trans(
+                                'xe::emailConfirm'
+                            )
+                        );
+                    }
+                );
             }
         } catch (\Exception $e) {
             XeDB::rollback();
@@ -416,7 +416,7 @@ class UserController extends Controller
     public function confirmMail(Request $request)
     {
         $code = $request->get('code');
-        $pendingMail = $this->user->getPendingEmail();
+        $pendingMail = $request->user()->getPendingEmail();
 
         if ($pendingMail === null) {
             throw new PendingEmailNotExistsException();
@@ -448,7 +448,7 @@ class UserController extends Controller
      */
     public function resendPendingMail(Request $request)
     {
-        $pendingMail = $this->user->getPendingEmail();
+        $pendingMail = $request->user()->getPendingEmail();
 
         if ($pendingMail === null) {
             throw new PendingEmailNotExistsException();
@@ -456,9 +456,15 @@ class UserController extends Controller
 
         /** @var EmailBroker $broker */
         $broker = app('xe.auth.email');
-        $broker->sendEmailForAddingEmail($pendingMail, 'emails.add-email', function ($m) {
-            $m->subject(xe_trans(app('xe.site')->getSiteConfig()->get('site_title')).' '.xe_trans('xe::emailConfirm'));
-        });
+        $broker->sendEmailForAddingEmail(
+            $pendingMail,
+            'emails.add-email',
+            function ($m) {
+                $m->subject(
+                    xe_trans(app('xe.site')->getSiteConfig()->get('site_title')).' '.xe_trans('xe::emailConfirm')
+                );
+            }
+        );
 
         return XePresenter::makeApi(['message' => '재전송하였습니다.']);
     }
@@ -478,11 +484,11 @@ class UserController extends Controller
         // 해당회원이 가진 이메일을 찾는다.
         $selected = null;
 
-        $pendingEmail = $this->user->getPendingEmail();
+        $pendingEmail = $request->user()->getPendingEmail();
         if ($pendingEmail !== null && $pendingEmail->getAddress() === $address) {
             $selected = $pendingEmail;
         } else {
-            foreach ($this->user->emails as $mail) {
+            foreach ($request->user()->emails as $mail) {
                 if ($mail->address === $address) {
                     $selected = $mail;
                     break;
@@ -545,7 +551,7 @@ class UserController extends Controller
             throw $e;
         }
 
-        $id = $this->user->getId();
+        $id = $request->user()->getId();
 
         XeDB::beginTransaction();
         try {
@@ -593,7 +599,7 @@ class UserController extends Controller
         $dynamicField = app('xe.dynamicField');
         $fieldType = $dynamicField->get('user', $field);
 
-        $user = $this->user;
+        $user = request()->user();
 
         /** @var SkinHandler $skinHandler */
         $skinHandler = app('xe.skin');
@@ -618,7 +624,7 @@ class UserController extends Controller
         $dynamicField = app('xe.dynamicField');
         $fieldType = $dynamicField->get('user', $field);
 
-        $user = $this->user;
+        $user = request()->user();
 
         /** @var SkinHandler $skinHandler */
         $skinHandler = app('xe.skin');
@@ -641,7 +647,7 @@ class UserController extends Controller
     public function updateAdditionField(Request $request, $field)
     {
         $inputs = $request->except('_token');
-        $user = $this->user;
+        $user = $request->user();
         $user = $this->handler->update($user, $inputs);
         $showUrl = route('user.settings.additions.show', ['field' => $field]);
 
