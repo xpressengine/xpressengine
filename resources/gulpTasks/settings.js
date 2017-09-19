@@ -25,7 +25,6 @@ module.exports = (() => {
    '!resources/assets/core/common/js/storeCategory.js',
    '!resources/assets/core/common/js/dynamicField.js',
    '!resources/assets/core/common/js/xe.js',
-   '!resources/assets/core/common/js/toggleMenu.js',
    '!resources/assets/core/member/settings/edit.js',
    '!resources/assets/core/tree/**.js',
    'resources/assets/core/xe-ui-component/js/*',
