@@ -290,10 +290,10 @@ class UserHandler
         }
 
         // resolve profileImage
-        if (array_get($userData, 'profileImgFile', false) !== false) {
+        if (array_get($userData, 'profileImgFile') !== null) {
             $profileFile = $userData['profileImgFile'];
 
-            if ($profileFile === null) {
+            if ($profileFile === false) {
                 $this->imageHandler->removeUserProfileImage($user);
                 $userData['profile_image_id'] = null;
             } else {

@@ -80,7 +80,7 @@ class PluginController extends Controller
     public function getOperation(PluginHandler $handler, ComposerFileWriter $writer)
     {
         $operation = $handler->getOperation($writer);
-        return apiRender('operation', compact('operation'), compact('operation'));
+        return api_render('operation', compact('operation'), compact('operation'));
     }
 
     public function deleteOperation(ComposerFileWriter $writer)
@@ -97,7 +97,7 @@ class PluginController extends Controller
         $collection = $handler->getAllPlugins(true);
         $plugins = $collection->getList($pluginIds);
 
-        return apiRender('index.delete', compact('plugins'));
+        return api_render('index.delete', compact('plugins'));
     }
 
     public function delete(
@@ -163,7 +163,7 @@ class PluginController extends Controller
         $collection = $handler->getAllPlugins(true);
         $plugins = $collection->getList($pluginIds);
 
-        return apiRender('index.activate', compact('plugins'));
+        return api_render('index.activate', compact('plugins'));
     }
 
     public function activate(Request $request, PluginHandler $handler, InterceptionHandler $interceptionHandler)
@@ -205,7 +205,7 @@ class PluginController extends Controller
         $collection = $handler->getAllPlugins(true);
         $plugins = $collection->getList($pluginIds);
 
-        return apiRender('index.deactivate', compact('plugins'));
+        return api_render('index.deactivate', compact('plugins'));
     }
 
     public function deactivate(Request $request, PluginHandler $handler, InterceptionHandler $interceptionHandler)
@@ -261,7 +261,7 @@ class PluginController extends Controller
         $available = ini_get('allow_url_fopen') ? true : false;
 
 
-        return apiRender('index.update', compact('plugins', 'available'));
+        return api_render('index.update', compact('plugins', 'available'));
     }
 
     public function download(

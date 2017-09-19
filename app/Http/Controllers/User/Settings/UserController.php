@@ -278,7 +278,7 @@ class UserController extends Controller
         $userData = $request->except('_token');
 
         if (array_get($userData, 'profileImgFile') === '__delete_file__') {
-            $userData['profileImgFile'] = null;
+            $userData['profileImgFile'] = false;
         }
 
         XeDB::beginTransaction();
@@ -437,7 +437,7 @@ class UserController extends Controller
 
         $users = $this->handler->users()->whereIn('id', $userIds)->where('rating', '<>', Rating::SUPER)->get();
 
-        return apiRender('user.settings.user.delete', compact('users'));
+        return api_render('user.settings.user.delete', compact('users'));
     }
 
     /**

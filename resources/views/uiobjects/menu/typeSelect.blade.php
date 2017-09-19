@@ -20,9 +20,9 @@
     <div class="menutype_active">
      <p class="active">ACTIVE</p>
 
-     <label class="inpt_chk __xe_radio @if(shortModuleId($selectedTypeId) === shortModuleId($menuType['id'])) on @endif">
-      <input type="radio" class="inpt_hide" name="selectType" value="{{ shortModuleId($menuType['id']) }}"
-             @if(shortModuleId($selectedTypeId) === shortModuleId($menuType['id'])) checked @endif>
+     <label class="inpt_chk __xe_radio @if(short_module_id($selectedTypeId) === short_module_id($menuType['id'])) on @endif">
+      <input type="radio" class="inpt_hide" name="selectType" value="{{ short_module_id($menuType['id']) }}"
+             @if(short_module_id($selectedTypeId) === short_module_id($menuType['id'])) checked @endif>
       <span>{{ $menuType['title'] }}</span>
      </label>
     </div>

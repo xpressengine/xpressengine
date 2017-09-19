@@ -90,7 +90,7 @@ class WidgetController extends Controller {
 
         $skins = $skinHandler->getList($widget);
 
-        return apiRender('widget.skins', compact('widget', 'skins'));
+        return api_render('widget.skins', compact('widget', 'skins'));
     }
 
     /**
@@ -122,7 +122,7 @@ class WidgetController extends Controller {
             $skinForm = $skin->renderSetting();
         }
 
-        return apiRender('widget.form', compact('widget', 'skin', 'widgetForm', 'skinForm'));
+        return api_render('widget.form', compact('widget', 'skin', 'widgetForm', 'skinForm'));
     }
 
     /**
@@ -168,7 +168,7 @@ class WidgetController extends Controller {
         $skin = $skinHandler->get($skin);
         $skinForm = $skin->renderSetting($inputs);
 
-        return apiRender('widget.setup', compact('widgets', 'widget', 'title', 'skins', 'skin', 'widgetSelector', 'skinSelector', 'widgetForm', 'skinForm'));
+        return api_render('widget.setup', compact('widgets', 'widget', 'title', 'skins', 'skin', 'widgetSelector', 'skinSelector', 'widgetForm', 'skinForm'));
     }
 
     /**

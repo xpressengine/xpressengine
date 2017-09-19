@@ -9,6 +9,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Foundation\Events\LocaleUpdated;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Validator;
 use Xpressengine\Translation\Loaders\LangFileLoader;
@@ -33,8 +34,8 @@ class TranslationServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app['events']->listen('locale.changed', function($locale) {
-            $this->app['xe.translator']->setLocale($locale);
+        $this->app['events']->listen(LocaleUpdated::class, function($event) {
+            $this->app['xe.translator']->setLocale($event->locale);
         });
 
         $this->app['validator']->extend('LangRequired', function ($attribute, $value) {

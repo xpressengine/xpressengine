@@ -95,7 +95,7 @@ class ModuleHandler
      */
     public function getModuleObject($moduleId)
     {
-        $moduleId = fullModuleId($moduleId);
+        $moduleId = full_module_id($moduleId);
         $moduleName = $this->register->get($moduleId);
         if ($moduleName === null) {
             throw new NotFoundModuleException;

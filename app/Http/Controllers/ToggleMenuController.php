@@ -64,7 +64,7 @@ class ToggleMenuController extends Controller
 
         }
 
-        return apiRender('toggleMenu.get', ['items' => $items]);
+        return api_render('toggleMenu.get', ['items' => $items]);
     }
 
     public function postSetting(Request $request)

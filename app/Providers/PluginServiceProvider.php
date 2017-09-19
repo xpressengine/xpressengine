@@ -144,7 +144,11 @@ class PluginServiceProvider extends ServiceProvider
                 /** @var PluginHandler $pluginHandler */
                 $pluginHandler = $this->app['xe.plugin'];
 
+                $this->app['events']->fire('booting.plugins', [$pluginHandler]);
+
                 $pluginHandler->bootPlugins();
+
+                $this->app['events']->fire('booted.plugins', [$pluginHandler]);
             }
         );
 

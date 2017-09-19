@@ -135,9 +135,23 @@ class UserServiceProvider extends ServiceProvider
         $this->app->singleton(GuardInterface::class, function ($app) {
             $adminAuth = $app['config']->get('auth.admin');
             $proxyClass = $app['xe.interception']->proxy(Guard::class, 'Auth');
-            return new $proxyClass(
+            $guard = new $proxyClass(
                 'xe', new UserProvider($app['hash'], User::class), $app['session.store'], $adminAuth, $app['request']
             );
+
+            if (method_exists($guard, 'setCookieJar')) {
+                $guard->setCookieJar($app['cookie']);
+            }
+
+            if (method_exists($guard, 'setDispatcher')) {
+                $guard->setDispatcher($app['events']);
+            }
+
+            if (method_exists($guard, 'setRequest')) {
+                $guard->setRequest($app->refresh('request', $guard, 'setRequest'));
+            }
+
+            return $guard;
         });
         $this->app->alias(GuardInterface::class, 'xe.auth');
     }
