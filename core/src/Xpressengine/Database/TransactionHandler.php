@@ -216,12 +216,8 @@ class TransactionHandler
                 return tap($callback($this), function ($result) use ($coupler) {
                     $this->commit($coupler);
                 });
-            }
-
-            catch (Exception $e) {
-                $this->handleTransactionException(
-                    $coupler, $e, $currentAttempt, $attempts
-                );
+            } catch (Exception $e) {
+                $this->handleTransactionException($coupler, $e, $currentAttempt, $attempts);
             } catch (Throwable $e) {
                 $this->rollBack($coupler);
 
