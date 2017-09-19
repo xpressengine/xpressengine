@@ -50,12 +50,12 @@ class Composer
 
     public static $basePlugins = [
         'xpressengine-plugin/alice' => '0.9.13',
-        'xpressengine-plugin/board' => '0.9.21',
-        'xpressengine-plugin/ckeditor' => '0.9.19',
-        'xpressengine-plugin/claim' => '0.9.4',
-        'xpressengine-plugin/comment' => '0.9.15',
-        'xpressengine-plugin/news_client' => '0.9.5',
-        'xpressengine-plugin/page' => '0.9.5',
+        'xpressengine-plugin/board' => '0.9.22',
+        'xpressengine-plugin/ckeditor' => '0.9.20',
+        'xpressengine-plugin/claim' => '0.9.5',
+        'xpressengine-plugin/comment' => '0.9.16',
+        'xpressengine-plugin/news_client' => '0.9.6',
+        'xpressengine-plugin/page' => '0.9.6',
         'xpressengine-plugin/widget_page' => '0.9.0'
     ];
 
