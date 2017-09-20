@@ -673,7 +673,7 @@ if (function_exists('widget') === false) {
      */
     function widget($id, $args = [], $callback = null)
     {
-        return new \Illuminate\View\Expression(app('xe.widget')->render($id, $args, $callback));
+        return new \Illuminate\Support\HtmlString(app('xe.widget')->render($id, $args, $callback));
     }
 }
 
