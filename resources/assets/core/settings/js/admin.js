@@ -58,7 +58,7 @@ $(document).ready(function () {
   });
 
   /* 사이드바 메뉴 */
-  $(document).on('click', '.snb-list', function (event) {
+  $(document).on('click', '.snb-list li', function (event) {
     var $target = $(event.target);
     var $subdepth = $target.closest('.sub-depth');
     var $ul;

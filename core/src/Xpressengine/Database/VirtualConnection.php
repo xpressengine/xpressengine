@@ -472,8 +472,8 @@ class VirtualConnection implements VirtualConnectionInterface
     /**
      * Execute a Closure within a transaction.
      *
-     * @param  \Closure  $callback
-     * @param  int       $attempts
+     * @param \Closure $callback callback
+     * @param int      $attempts number of attempts
      * @return mixed
      *
      * @throws \Exception|\Throwable
