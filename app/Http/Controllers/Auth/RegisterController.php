@@ -40,6 +40,8 @@ class RegisterController extends Controller
      */
     protected $emailBroker;
 
+    protected $redirectTo = '/';
+
     public function __construct()
     {
         $this->auth = app('auth');
