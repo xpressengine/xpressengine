@@ -31,8 +31,10 @@ class CounterMigration extends Migration {
             $table->index(['target_id', 'user_id']);
             $table->index(['target_id', 'counter_name']);
         });
-
-        \DB::table('config')->insert(['name' => 'counter', 'vars' => '{}']);
     }
 
+    public function installed()
+    {
+        \DB::table('config')->insert(['name' => 'counter', 'vars' => '{}']);
+    }
 }

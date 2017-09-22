@@ -45,10 +45,14 @@
         {{-- status info --}}
         {{-- 업데이트가 다운로드 돼 있는 상태 --}}
         @if($plugin->needUpdateInstall() && $plugin->isActivated())
-            <div class="alert alert-danger" role="alert">
-                <i class="xi-info-o txt_red"></i>{{ xe_trans('xe::pluginIsChanged') }}
-                <a href="#" data-url="{{ route('settings.plugins.update', [$plugin->getId()]) }}" class="__xe_btn-update-plugin alert-link">{{ xe_trans('xe::applyUpdateNow') }}</a>
-            </div>
+            <form id="update" method="POST" action="{{ route('settings.plugins.update', [$plugin->getId()]) }}" accept-charset="UTF-8" role="form" style="display: inline;">
+                {!! csrf_field() !!}
+                {!! method_field('PUT') !!}
+                <div class="alert alert-danger" role="alert">
+                    <i class="xi-info-o txt_red"></i>{{ xe_trans('xe::pluginIsChanged') }}
+                    <a href="#" onclick="$(this).closest('form').submit();return false;" class="__xe_btn-update-plugin alert-link">{{ xe_trans('xe::applyUpdateNow') }}</a>
+                </div>
+            </form>
         @endif
     </div>
     <div class="btn-right">
