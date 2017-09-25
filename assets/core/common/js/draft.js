@@ -1,236 +1,429 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+
 (function ($) {
-'use strict'
+  'use strict'
 
-/**
- * @class
- * */
-function Draft(elem, key, callback, withForm, container) {
-  this.key = key;
-  this.elem = elem;
-  this.callback = callback;
-  this.withForm = withForm;
-  this.container = container;
-
-  this.interval = null;
-
-  this.draftId = null;
-  this.component = null;
-
-  this.uid = null;
-
-  if (!$(this.elem).attr('name') || $(this.elem).attr('name') == '') {
-    console.error("Must set 'name' attribute ");
-    return;
-  }
-
-  this.init();
-
-  return this;
-}
-
-/**
- * @lends Draft
- * */
-Draft.prototype = {
   /**
-   * 초기화한다.
-   * @function
+   * @class
    * */
-  init: function () {
-    this.uid = this._getUid();
+  function Draft(elem, key, callback, withForm, container) {
+    this.key = key;
+    this.elem = elem;
+    this.callback = callback;
+    this.withForm = withForm;
+    this.container = container;
 
-    var _this = this;
-    $(this.elem).on('input.draft', function () {
-      _this.saveEventHandler();
+    this.interval = null;
+
+    this.draftId = null;
+    this.component = null;
+    this.$component = $();
+    this.componentName = '';
+    this.uid = null;
+
+    if (!$(this.elem).attr('name') || $(this.elem).attr('name') == '') {
+      console.error("Must set 'name' attribute ");
+      return;
+    }
+
+    this.init();
+    this.bindEvents();
+    this.load({ key }, function (data) {
+
     });
 
-    this.appendComponent();
-  },
+    return this;
+  }
 
-  _getUid: function () {
-    return Math.random().toString(36).substring(2, 15) +
-      Math.random().toString(36).substring(2, 15);
-  },
+  /**
+   * @lends Draft
+   * */
+  Draft.prototype = {
+    /**
+     * 초기화한다.
+     * @function
+     * */
+    init: function () {
+      this.uid = this._getUid();
+      this.appendComponent();
 
-  toggle: function () {
-    this.component.toggle();
-  },
+    },
 
-  appendComponent: function () {
+    _getUid: function () {
+      return Math.random().toString(36).substring(2, 15) +
+        Math.random().toString(36).substring(2, 15);
+    },
 
-    var _this = this;
+    bindEvents: function () {
+      var _this = this;
 
-    var onApply = function (data) {
-      _this.setId(data.id);
+      console.log(_this);
+
+      $(this.elem).on('input.draft', function () {
+        _this.saveEventHandler();
+      });
+
+      _this.$component.on('click', '.draft_title', function (e) {
+        e.preventDefault();
+        var $this = $(this);
+        var type = $this.data('type');
+        var item = $(this).data('item');
+
+        _this.onApply(item);
+
+        switch (type) {
+          case 'modal':
+            _this.$component.xeModal('hide');
+            break;
+          case 'collapse':
+            _this.$component.collapse('hide').find('.panel-body').empty();
+            break;
+        }
+      });
+
+      _this.$component.on('click', '.xe-draftBtnCloseModal', function () {
+        _this.$component.xeModal('hide');
+      });
+
+      _this.$component.on('click', '.btn_draft_delete', function () {
+        var $this = $(this);
+        var id = $this.data('id');
+
+        _this.reqDelete(id, function () {
+          $this.closest('li').remove();
+        });
+
+      });
+    },
+
+    toggle: function () {
+      //this.component.toggle();
+      var _this = this;
+
+      switch (this.componentName) {
+        case 'modal':
+          if (_this.$component.hasClass('in')) {
+            _this.$component.xeModal('hide');
+
+          } else {
+            _this.load({ key: _this.key }, function (data) {
+              //var items = _this.getItems(data);
+              var temp = `<div class="draft_save_list">`;
+              temp +=  `<ul>`;
+
+              data.forEach(function (item, i) {
+                temp +=    `<li>`;
+                temp +=      `<a href='#' class='draft_title' data-item='${JSON.stringify(item)}' data-type="modal">${item.val}</a>`;
+                temp +=      `<div class="draft_info">`;
+
+                if (item.is_auto == 1) {
+                  temp +=        `<span class="draft_state">${XE.Lang.trans('xe::autoSave')}</span>`;
+                } else {
+                  temp +=        `<span class="draft_state v2">${XE.Lang.trans('xe::draftSave')}</span>`;
+                }
+
+                temp +=        `<span class="draft_date">${item.created_at.substr(0, 16).replace(/-/g, ' ')}</span>`;
+                temp +=        `<a href="#" class="btn_draft_delete" data-id="${item.id}"><i class="xi-close"></i></a>`;
+                temp +=      `</div>`;
+                temp +=     `</li>`;
+              });
+
+              temp +=    `</ul>`;
+              temp +=  `</div>`;
+
+              _this.$component.find('.xe-modal-body').html(temp);
+              _this.$component.xeModal('show');
+            });
+          }
+
+          break;
+        case 'collapse':
+
+          if (_this.$component.hasClass('in')) {
+            _this.$component.collapse('hide');
+
+          } else {
+            _this.load({ key: _this.key }, function (data) {
+              var temp = `<div class="draft_save_list">`;
+              temp +=  `<ul>`;
+
+              data.forEach(function (item, i) {
+                temp +=    `<li>`;
+                temp +=      `<a href='#' class='draft_title' data-item='${JSON.stringify(item)}' data-type="collapse">${$($.parseHTML(item.val)).text()}</a>`;
+                temp +=      `<div class="draft_info">`;
+
+                if (item.is_auto == 1) {
+                  temp +=        `<span class="draft_state">${XE.Lang.trans('xe::autoSave')}</span>`;
+                } else {
+                  temp +=        `<span class="draft_state v2">${XE.Lang.trans('xe::draftSave')}</span>`;
+                }
+
+                temp +=        `<span class="draft_date">${item.created_at.substr(0, 16).replace(/-/g, ' ')}</span>`;
+                temp +=        `<a href="#" class="btn_draft_delete" data-id="${item.id}"><i class="xi-close"></i></a>`;
+                temp +=      `</div>`;
+                temp +=     `</li>`;
+              });
+
+              temp +=    `</ul>`;
+              temp +=  `</div>`;
+
+              _this.$component.find('.panel-body').html(temp);
+              _this.$component.collapse('show');
+            });
+          }
+
+          break;
+      }
+    },
+
+    getModalTemplate: function () {
+      return [
+      '<div class="xe-modal fade" id="xe-draftModal">',
+        '<div class="xe-modal-dialog">',
+          '<div class="xe-modal-content">',
+            '<div class="xe-modal-header">',
+              '<button type="button" class="btn-close xe-draftBtnClose" data-dismiss="xe-modal" aria-label="Close"><i class="xi-close"></i></button>',
+              '<strong class="xe-modal-title"></strong>',
+            '</div>',
+            '<div class="xe-modal-body"></div>',
+            '<div class="xe-modal-footer">',
+              '<button type="button" class="xe-btn xe-btn-default" data-dismiss="xe-modal">Close</button>',
+            '</div>',
+          '</div>',
+        '</div>',
+      '</div>',
+      ].join('\n');
+    },
+
+    getCollapseTemplate: function () {
+      return [
+        '<div class="panel panel-default">',
+          '<div class="panel-body"></div>',
+        '</div>',
+      ].join('\n');
+    },
+
+    appendComponent: function () {
+      var _this = this;
+
+      var onApply = function (data) {
+        _this.setId(data.id);
+
+        var values = data.etc;
+        values[$(_this.elem).attr('name')] = data.val;
+
+        dataSetter.init($(_this.elem).closest('form')[0], values);
+        _this.callback(values);
+      };
+
+      var onRemove = function (data) {
+        _this.reqDelete(data.id);
+      };
+
+      var $container = $('<div>');
+      var config = { keyVal: this.key, onApply: onApply, onRemove: onRemove };
+      var callback = function () {
+        _this.component = this;
+      };
+
+      if ($(this.container).length < 1) {
+        $(this.elem).closest('form').after($container.html(this.getModalTemplate())); //$container.xeModal(); //ReactDOM.render(React.createElement(DraftReact.Modal, config), $container[0], callback);
+        this.componentName = 'modal';
+        this.$component = $('#xe-draftModal');
+
+        // _this.load({ key: _this.key }, function (data) {
+        //
+        //   var temp = `<div class="draft_save_list">`;
+        //   temp +=  `<ul>`;
+        //
+        //   data.forEach(function (item, i) {
+        //     temp +=    `<li>`;
+        //     temp +=      `<a href='#' class='draft_title' data-item='${JSON.stringify(item)}' data-type="modal">${$($.parseHTML(item.val)).text()}</a>`;
+        //     temp +=      `<div class="draft_info">`;
+        //
+        //     if (item.is_auto == 1) {
+        //       temp +=        `<span class="draft_state">${XE.Lang.trans('xe::autoSave')}</span>`;
+        //     } else {
+        //       temp +=        `<span class="draft_state v2">${XE.Lang.trans('xe::draftSave')}</span>`;
+        //     }
+        //
+        //     temp +=        `<span class="draft_date">${item.created_at.substr(0, 16).replace(/-/g, ' ')}</span>`;
+        //     temp +=        `<a href="#" class="btn_draft_delete" data-id="${item.id}"><i class="xi-close"></i></a>`;
+        //     temp +=      `</div>`;
+        //     temp +=     `</li>`;
+        //   });
+        //
+        //   temp +=    `</ul>`;
+        //   temp +=  `</div>`;
+        //
+        //   $('#xe-draftModal .xe-modal-body').html(temp);
+        //
+        //   //_this.$component.xeModal('show');
+        // });
+
+      } else {
+
+        this.componentName = 'collapse';
+        this.$component = $(this.container);
+
+        var collapseClass = this._collapseClass();
+        //$container.addClass([collapseClass, 'collapse'].join(' '));
+
+        //$(this.container).addClass([collapseClass, 'collapse', 'in'].join(' ')).after($container);
+        this.$component.addClass([collapseClass, 'collapse', 'in'].join(' ')).html($container.html(_this.getCollapseTemplate()));
+
+        // _this.load({ key: _this.key }, function (data) {
+        //   var temp = `<div class="draft_save_list">`;
+        //   temp +=  `<ul>`;
+        //
+        //   data.forEach(function (item, i) {
+        //     temp +=    `<li>`;
+        //     temp +=      `<a href='#' class='draft_title' data-item='${JSON.stringify(item)}' data-type="collapse">${$($.parseHTML(item.val)).text()}</a>`;
+        //     temp +=      `<div class="draft_info">`;
+        //
+        //     if (item.is_auto == 1) {
+        //       temp +=        `<span class="draft_state">${XE.Lang.trans('xe::autoSave')}</span>`;
+        //     } else {
+        //       temp +=        `<span class="draft_state v2">${XE.Lang.trans('xe::draftSave')}</span>`;
+        //     }
+        //
+        //     temp +=        `<span class="draft_date">${item.created_at.substr(0, 16).replace(/-/g, ' ')}</span>`;
+        //     temp +=        `<a href="#" class="btn_draft_delete" data-id="${item.id}"><i class="xi-close"></i></a>`;
+        //     temp +=      `</div>`;
+        //     temp +=     `</li>`;
+        //   });
+        //
+        //   temp +=    `</ul>`;
+        //   temp +=  `</div>`;
+        //
+        //   $('.' + collapseClass).next().find('.panel-body').html(temp).closest('.' + collapseClass).collapse('show');
+        // });
+
+        //ReactDOM.render(React.createElement(DraftReact.Collapse, $.extend(config, { collapseClass: collapseClass })), $container[0], callback);
+      }
+    },
+
+    onApply: function (data) {
+      var _this = this;
+      this.setId(data.id);
 
       var values = data.etc;
       values[$(_this.elem).attr('name')] = data.val;
 
       dataSetter.init($(_this.elem).closest('form')[0], values);
-      _this.callback(values);
-    };
-
-    var onRemove = function (data) {
-      _this.reqDelete(data.id);
-    };
-
-    var $container = $('<div>');
-    var config = { keyVal: this.key, onApply: onApply, onRemove: onRemove };
-    var callback = function () {
-      _this.component = this;
-    };
-
-    if ($(this.container).length < 1) {
-      $(this.elem).closest('form').after($container);
-      ReactDOM.render(React.createElement(DraftReact.Modal, config), $container[0], callback);
-    } else {
-      var collapseClass = this._collapseClass();
-      $container.addClass([collapseClass, 'collapse'].join(' '));
-      $(this.container).addClass([collapseClass, 'collapse', 'in'].join(' ')).after($container);
-      ReactDOM.render(React.createElement(DraftReact.Collapse, $.extend(config, { collapseClass: collapseClass })), $container[0], callback);
-    }
-  },
-
-  _collapseClass: function () {
-    return '__xe_draft_collapse_' + this.uid;
-  },
-
-  saveEventHandler: function () {
-    var _this = this;
-    this.intervalClear();
-
-    this.interval = setTimeout(function () {
-      _this.setAuto();
-      _this.intervalClear();
-    }, 3000);
-  },
-
-  intervalClear: function () {
-    if (this.interval) {
-      clearTimeout(this.interval);
-    }
-  },
-
-  draftSet: function () {
-    if ($.trim($(this.elem).val()) == '') {
-      return;
-    }
-
-    if (this.draftId == null) {
-      this.reqPost();
-    } else {
-      this.reqPut();
-    }
-  },
-
-  reqPost: function () {
-    $.ajax({
-      url: xeBaseURL + '/draft/store',
-      type: 'post',
-      dataType: 'json',
-      data: this.getReqSerialize() + '&key=' + this.key,
-      success: function (json) {
-        if (json.draftId === null) {
-          this.unsetId();
-        } else {
-          this.setId(json.draftId);
-        }
-      }.bind(this),
-    });
-  },
-
-  reqPut: function () {
-    $.ajax({
-      url: xeBaseURL + '/draft/update/' + this.draftId,
-      type: 'post',
-      dataType: 'json',
-      data: this.getReqSerialize(),
-      success: function (json) {
-        if (json.draftId === null) {
-          this.unsetId();
-        }
-      }.bind(this),
-    });
-  },
-
-  setAuto: function () {
-    $.ajax({
-      url: xeBaseURL + '/draft/setAuto',
-      type: 'post',
-      data: this.getReqSerialize() + '&key=' + this.key,
-    });
-  },
-
-  deleteAuto: function () {
-    $.ajax({
-      url: xeBaseURL + '/draft/destroyAuto',
-      type: 'post',
-      data: 'key=' + this.key,
-    });
-  },
-
-  getReqSerialize: function () {
-    var data;
-    if (this.withForm === true) {
-      data = $(this.elem).closest('form').serialize();
-    } else {
-      data = [$(this.elem).attr('name'), $(this.elem).val()].join('=');
-    }
-
-    return data + '&rep=' + $(this.elem).attr('name');
-  },
-
-  reqDelete: function (id) {
-    id = id || this.draftId;
-
-    if (!id) {
-      return;
-    }
-
-    if (id == this.draftId) {
-      this.draftId = null;
-    }
-
-    $.ajax({
-      url: xeBaseURL + '/draft/destroy/' + id,
-      type: 'post',
-      dataType: 'json',
-    });
-  },
-
-  setId: function (id) {
-    this.draftId = id;
-  },
-
-  unsetId: function () {
-    this.draftId = null;
-  },
-};
-
-var DraftReact = {
-  mixin: {
-    getInitialState: function () {
-      return {
-        loaded: false,
-        items: [],
-      };
+      this.callback(values);
     },
 
-    onRemove: function (data) {
-      this.props.onRemove(data);
+    _collapseClass: function () {
+      return '__xe_draft_collapse_' + this.uid;
     },
 
-    load: function () {
-      this.setState({ loaded: false });
+    saveEventHandler: function () {
+      var _this = this;
+      this.intervalClear();
+
+      this.interval = setTimeout(function () {
+        _this.setAuto();
+        _this.intervalClear();
+      }, 3000);
+    },
+
+    intervalClear: function () {
+      if (this.interval) {
+        clearTimeout(this.interval);
+      }
+    },
+
+    draftSet: function () {
+      if ($.trim($(this.elem).val()) == '') {
+        return;
+      }
+
+      if (this.draftId == null) {
+        this.reqPost();
+      } else {
+        this.reqPut();
+      }
+    },
+
+    reqPost: function () {
+      $.ajax({
+        url: xeBaseURL + '/draft/store',
+        type: 'post',
+        dataType: 'json',
+        data: this.getReqSerialize() + '&key=' + this.key,
+        success: function (json) {
+          if (json.draftId === null) {
+            this.unsetId();
+          } else {
+            this.setId(json.draftId);
+          }
+        }.bind(this),
+      });
+    },
+
+    reqPut: function () {
+      $.ajax({
+        url: xeBaseURL + '/draft/update/' + this.draftId,
+        type: 'post',
+        dataType: 'json',
+        data: this.getReqSerialize(),
+        success: function (json) {
+          var _this = this;
+
+          if (json.draftId === null) {
+            this.$component.find('li > a').each(function () {
+              var $this = $(this);
+              var item = $this.data('item');
+
+              if (item.id === _this.draftId) {
+                var value = $(_this.elem).val();
+
+                item.val = value;
+                item.etc.content = value;
+
+                $this.data('item', item).text($($.parseHTML(value)).text());
+                return;
+              }
+            });
+
+            this.unsetId();
+          }
+        }.bind(this),
+      });
+    },
+
+    setAuto: function () {
+      $.ajax({
+        url: xeBaseURL + '/draft/setAuto',
+        type: 'post',
+        data: this.getReqSerialize() + '&key=' + this.key,
+      });
+    },
+
+    deleteAuto: function () {
+      $.ajax({
+        url: xeBaseURL + '/draft/destroyAuto',
+        type: 'post',
+        data: 'key=' + this.key,
+      });
+    },
+
+    load: function (param, callback) {
+      //this.setState({ loaded: false });
+      var _this = this;
 
       $.ajax({
         url: xeBaseURL + '/draft',
         type: 'get',
         dataType: 'json',
-        data: { key: this.props.keyVal },
-        success: function (json) {
-          this.setState({ loaded: true, items: json });
-        }.bind(this),
+        data: param,
+        success: function (data) {
+          if (callback) {
+            callback(data);
+          }
+        },
       });
     },
 
@@ -244,277 +437,362 @@ var DraftReact = {
         });
       }.bind(this));
     },
-  },
-};
 
-DraftReact.Modal = React.createClass({
+    getReqSerialize: function () {
+      var data;
+      if (this.withForm === true) {
+        data = $(this.elem).closest('form').serialize();
+      } else {
+        data = [$(this.elem).attr('name'), $(this.elem).val()].join('=');
+      }
 
-  mixins: [DraftReact.mixin],
+      return data + '&rep=' + $(this.elem).attr('name');
+    },
 
-  toggle: function () {
-    $(ReactDOM.findDOMNode(this)).modal('toggle');
-  },
+    reqDelete: function (id, callback) {
+      id = id || this.draftId;
 
-  onApply: function (data) {
-    this.props.onApply(data);
-    $(ReactDOM.findDOMNode(this)).modal('hide');
-  },
+      if (!id) {
+        return;
+      }
 
-  componentDidMount: function () {
-    var _this = this;
-    $(ReactDOM.findDOMNode(this)).on('show.bs.modal', function () {
-      _this.load();
-    });
-  },
+      if (id == this.draftId) {
+        this.draftId = null;
+      }
 
-  render: function () {
+      $.ajax({
+        url: xeBaseURL + '/draft/destroy/' + id,
+        type: 'post',
+        dataType: 'json',
+        success: function () {
+          if (callback) {
+            callback();
+          }
+        },
+      });
+    },
 
-    return (
-      React.DOM.div({ className: 'modal fade', role: 'dialog', 'aria-hidden': 'true' },
-        React.DOM.div({ className: 'modal-dialog' },
-          React.DOM.div({ className: 'modal-content' },
-            React.DOM.div({ className: 'modal-header' },
-              React.DOM.button({
-                type: 'button',
-                className: 'close',
-                'data-dismiss': 'modal',
-                'aria-label': 'Close',
-              },
-                React.DOM.span({
-                'aria-hidden': 'true',
-                dangerouslySetInnerHTML: { __html: '&times;' },
-              })
-              ),
-              React.DOM.h4({ className: 'modal-title' }, 'Draft')
-            ),
-            React.DOM.div({ className: 'modal-body' },
-              (function () {
-                if (this.state.loaded !== true) {
-                  return React.DOM.div({ className: 'text-center' },
-                    React.DOM.i({ className: 'xi-spinner-1 xi-spin xi-4x' })
-                  );
-                } else {
-                  return React.createElement(DraftReact.Box, { items: this.getItems() });
-                }
-              }.call(this))
-            ),
-            React.DOM.div({ className: 'modal-footer' },
-              React.DOM.button({
-              type: 'button',
-              className: 'btn btn-default',
-              'data-dismiss': 'modal',
-            }, 'Close')
-            )
-          )
-        )
-      )
-    );
-  },
-});
+    setId: function (id) {
+      this.draftId = id;
+    },
 
-DraftReact.Collapse = React.createClass({
+    unsetId: function () {
+      this.draftId = null;
+    },
+  };
 
-  mixins: [DraftReact.mixin],
+  var DraftReact = {
+    mixin: {
+      getInitialState: function () {
+        return {
+          loaded: false,
+          items: [],
+        };
+      },
 
-  toggle: function () {
-    $('.' + this.props.collapseClass).collapse('toggle');
-  },
+      onRemove: function (data) {
+        this.props.onRemove(data);
+      },
 
-  onApply: function (data) {
-    this.props.onApply(data);
-    this.toggle();
-  },
+      load: function () {
+        this.setState({ loaded: false });
 
-  componentDidMount: function () {
-    var _this = this;
-    $(ReactDOM.findDOMNode(this)).parent().on('show.bs.collapse', function () {
-      _this.load();
-    });
-  },
+        $.ajax({
+          url: xeBaseURL + '/draft',
+          type: 'get',
+          dataType: 'json',
+          data: { key: this.props.keyVal },
+          success: function (json) {
+            this.setState({ loaded: true, items: json });
+          }.bind(this),
+        });
+      },
 
-  render: function () {
-    return (
-      React.DOM.div({ className: '' },
-        React.DOM.div({ className: 'panel panel-default' },
-          React.DOM.div({ className: 'panel-body' },
-            (function () {
-              if (this.state.loaded !== true) {
-                return React.DOM.div({ className: 'text-center' },
-                  React.DOM.i({ className: 'xi-spinner-1 xi-spin xi-4x' })
-                );
-              } else {
-                return React.createElement(DraftReact.Box, { items: this.getItems() });
-              }
-            }.call(this))
-          )
-        )
-      )
-    );
-  },
-});
+      getItems: function () {
+        return this.state.items.map(function (item, i) {
+          return React.createElement(DraftReact.Item, {
+            key: item.id,
+            data: item,
+            onApply: this.onApply,
+            onRemove: this.onRemove,
+          });
+        }.bind(this));
+      },
+    },
+  };
 
-DraftReact.Box = React.createClass({
+  // DraftReact.Modal = React.createClass({
+  //
+  //   mixins: [DraftReact.mixin],
+  //
+  //   toggle: function () {
+  //     $(ReactDOM.findDOMNode(this)).xeModal('toggle');
+  //   },
+  //
+  //   onApply: function (data) {
+  //     this.props.onApply(data);
+  //     $(ReactDOM.findDOMNode(this)).xeModal('hide');
+  //   },
+  //
+  //   componentDidMount: function () {
+  //     var _this = this;
+  //     $(ReactDOM.findDOMNode(this)).on('show.bs.modal', function () {
+  //       _this.load();
+  //     });
+  //   },
+  //
+  //   render: function () {
+  //
+  //     return (
+  //       React.DOM.div({ className: 'modal fade', role: 'dialog', 'aria-hidden': 'true' },
+  //         React.DOM.div({ className: 'modal-dialog' },
+  //           React.DOM.div({ className: 'modal-content' },
+  //             React.DOM.div({ className: 'modal-header' },
+  //               React.DOM.button({
+  //                 type: 'button',
+  //                 className: 'close',
+  //                 'data-dismiss': 'modal',
+  //                 'aria-label': 'Close',
+  //               },
+  //                 React.DOM.span({
+  //                 'aria-hidden': 'true',
+  //                 dangerouslySetInnerHTML: { __html: '&times;' },
+  //               })
+  //               ),
+  //               React.DOM.h4({ className: 'modal-title' }, 'Draft')
+  //             ),
+  //             React.DOM.div({ className: 'modal-body' },
+  //               (function () {
+  //                 if (this.state.loaded !== true) {
+  //                   return React.DOM.div({ className: 'text-center' },
+  //                     React.DOM.i({ className: 'xi-spinner-1 xi-spin xi-4x' })
+  //                   );
+  //                 } else {
+  //                   return React.createElement(DraftReact.Box, { items: this.getItems() });
+  //                 }
+  //               }.call(this))
+  //             ),
+  //             React.DOM.div({ className: 'modal-footer' },
+  //               React.DOM.button({
+  //               type: 'button',
+  //               className: 'btn btn-default',
+  //               'data-dismiss': 'modal',
+  //             }, 'Close')
+  //             )
+  //           )
+  //         )
+  //       )
+  //     );
+  //   },
+  // });
 
-  render: function () {
-    return (
-      React.DOM.div({ className: 'draft_save_list' },
-        React.DOM.ul(null, this.props.items)
-      )
-    );
-  },
-});
+  // DraftReact.Collapse = React.createClass({
+  //
+  //   mixins: [DraftReact.mixin],
+  //
+  //   toggle: function () {
+  //     $('.' + this.props.collapseClass).collapse('toggle');
+  //   },
+  //
+  //   onApply: function (data) {
+  //     this.props.onApply(data);
+  //     this.toggle();
+  //   },
+  //
+  //   componentDidMount: function () {
+  //     var _this = this;
+  //     $(ReactDOM.findDOMNode(this)).parent().on('show.bs.collapse', function () {
+  //       _this.load();
+  //     });
+  //   },
+  //
+  //   render: function () {
+  //     return (
+  //       React.DOM.div({ className: '' },
+  //         React.DOM.div({ className: 'panel panel-default' },
+  //           React.DOM.div({ className: 'panel-body' },
+  //             (function () {
+  //               if (this.state.loaded !== true) {
+  //                 return React.DOM.div({ className: 'text-center' },
+  //                   React.DOM.i({ className: 'xi-spinner-1 xi-spin xi-4x' })
+  //                 );
+  //               } else {
+  //                 return React.createElement(DraftReact.Box, { items: this.getItems() });
+  //               }
+  //             }.call(this))
+  //           )
+  //         )
+  //       )
+  //     );
+  //   },
+  // });
 
-DraftReact.Item = React.createClass({
-  getInitialState: function () {
-    return {
-      removed: false,
+  // DraftReact.Box = React.createClass({
+  //
+  //   render: function () {
+  //     return (
+  //       React.DOM.div({ className: 'draft_save_list' },
+  //         React.DOM.ul(null, this.props.items)
+  //       )
+  //     );
+  //   },
+  // });
+
+  // DraftReact.Item = React.createClass({
+  //   getInitialState: function () {
+  //     return {
+  //       removed: false,
+  //     };
+  //   },
+  //
+  //   onApply: function (e) {
+  //     e.preventDefault();
+  //
+  //     this.props.onApply(this.props.data);
+  //   },
+  //
+  //   onRemove: function (e) {
+  //     e.preventDefault();
+  //
+  //     this.setState({ removed: true });
+  //     this.props.onRemove(this.props.data);
+  //   },
+  //
+  //   getDate: function () {
+  //     return this.props.data.created_at.substr(0, 16).replace(/-/g, ' ');
+  //   },
+  //
+  //   render: function () {
+  //     if (this.state.removed === true) {
+  //       return false;
+  //     }
+  //
+  //     return (
+  //       React.DOM.li(null,
+  //         React.DOM.a({ href: '#', className: 'draft_title', onClick: this.onApply },
+  //           $($.parseHTML(this.props.data.val)).text()
+  //         ),
+  //         React.DOM.div({ className: 'draft_info' },
+  //           (function () {
+  //             if (this.props.data.is_auto == 1) {
+  //               return React.DOM.span({ className: 'draft_state' }, XE.Lang.trans('xe::autoSave'));
+  //             } else {
+  //               return React.DOM.span({ className: 'draft_state v2' }, XE.Lang.trans('xe::draftSave'));
+  //             }
+  //           }.call(this)),
+  //           React.DOM.span({ className: 'draft_date' }, this.getDate()),
+  //           React.DOM.a({ href: '#', className: 'btn_draft_delete', onClick: this.onRemove },
+  //             React.DOM.i({ className: 'xi-close' })
+  //           )
+  //         )
+  //       )
+  //     );
+  //   },
+  // });
+
+  var dataSetter = {
+    init: function (form, data) {
+      for (var i in data) {
+        var name = i;
+        if (data[i] instanceof Array) {
+          name = name + '[]';
+          this.multiple(form[name], data[i]);
+        } else {
+          this.single(form[name], data[i]);
+        }
+      }
+    },
+
+    multiple: function (selector, values) {
+      if ($(selector).is(':checkbox')) {
+        $.each(values, function (i, val) {
+          this.toCheckbox(selector, val);
+        }.bind(this));
+      } else {
+        $.each(values, function (i, val) {
+          this.toInput($(selector).eq(i)[0], val);
+        }.bind(this));
+      }
+    },
+
+    single: function (selector, value) {
+      if ($(selector).is(':checkbox')) {
+        this.toCheckbox(selector, value);
+      } else if ($(selector).is(':radio')) {
+        this.toRadio(selector, value);
+      } else if ($(selector).is('select')) {
+        this.toSelect(selector, value);
+      } else {
+        this.toInput(selector, value);
+      }
+    },
+
+    toCheckbox: function (elem, val) {
+      $(elem).each(function () {
+        if ($(this).attr('value') == val) {
+          $(this).prop('checked', true);
+          return false;
+        }
+      });
+    },
+
+    toRadio: function (elem, val) {
+      $(elem).each(function () {
+        if ($(this).attr('value') == val) {
+          $(this).prop('checked', true);
+          return false;
+        }
+      });
+    },
+
+    toSelect: function (elem, val) {
+      $(elem).children().each(function () {
+        if ($(this).attr('value') == val) {
+          $(this).prop('selected', true);
+          return false;
+        }
+      });
+    },
+
+    toInput: function (elem, val) {
+      if (!$(elem).is('input[type=hidden]')) {
+        $(elem).val(val);
+      }
+    },
+  };
+
+  $.fn.draft = function (args) {
+    var defaultArgs = {
+      container: null,
+      withForm: false,
+      callback: null,
     };
-  },
 
-  onApply: function (e) {
-    e.preventDefault();
+    args = $.extend({}, defaultArgs, args);
 
-    this.props.onApply(this.props.data);
-  },
-
-  onRemove: function (e) {
-    e.preventDefault();
-
-    this.setState({ removed: true });
-    this.props.onRemove(this.props.data);
-  },
-
-  getDate: function () {
-    return this.props.data.createdAt.substr(0, 16).replace(/-/g, ' ');
-  },
-
-  render: function () {
-    if (this.state.removed === true) {
+    if (!args.key || !args.btnLoad || !args.btnSave) {
+      console.error('must need key, btnLoad and btnSave');
       return false;
     }
 
-    return (
-      React.DOM.li(null,
-        React.DOM.a({ href: '#', className: 'draft_title', onClick: this.onApply },
-          $($.parseHTML(this.props.data.val)).text()
-        ),
-        React.DOM.div({ className: 'draft_info' },
-          (function () {
-            if (this.props.data.isAuto == 1) {
-              return React.DOM.span({ className: 'draft_state' }, XE.Lang.trans('xe::autoSave'));
-            } else {
-              return React.DOM.span({ className: 'draft_state v2' }, XE.Lang.trans('xe::draftSave'));
-            }
-          }.call(this)),
-          React.DOM.span({ className: 'draft_date' }, this.getDate()),
-          React.DOM.a({ href: '#', className: 'btn_draft_delete', onClick: this.onRemove },
-            React.DOM.i({ className: 'xi-close' })
-          )
-        )
-      )
-    );
-  },
-});
+    var draft = new Draft(this, args.key, args.callback, args.withForm, args.container);
 
-var dataSetter = {
-  init: function (form, data) {
-    for (var i in data) {
-      var name = i;
-      if (data[i] instanceof Array) {
-        name = name + '[]';
-        this.multiple(form[name], data[i]);
-      } else {
-        this.single(form[name], data[i]);
-      }
-    }
-  },
+    $(args.btnLoad).unbind('click.draft').bind('click.draft', function (e) {
+      e.preventDefault();
 
-  multiple: function (selector, values) {
-    if ($(selector).is(':checkbox')) {
-      $.each(values, function (i, val) {
-        this.toCheckbox(selector, val);
-      }.bind(this));
-    } else {
-      $.each(values, function (i, val) {
-        this.toInput($(selector).eq(i)[0], val);
-      }.bind(this));
-    }
-  },
-
-  single: function (selector, value) {
-    if ($(selector).is(':checkbox')) {
-      this.toCheckbox(selector, value);
-    } else if ($(selector).is(':radio')) {
-      this.toRadio(selector, value);
-    } else if ($(selector).is('select')) {
-      this.toSelect(selector, value);
-    } else {
-      this.toInput(selector, value);
-    }
-  },
-
-  toCheckbox: function (elem, val) {
-    $(elem).each(function () {
-      if ($(this).attr('value') == val) {
-        $(this).prop('checked', true);
-        return false;
-      }
+      draft.toggle();
     });
-  },
 
-  toRadio: function (elem, val) {
-    $(elem).each(function () {
-      if ($(this).attr('value') == val) {
-        $(this).prop('checked', true);
-        return false;
-      }
+    $(args.btnSave).unbind('click.draft').bind('click.draft', function (e) {
+      e.preventDefault();
+
+      draft.draftSet();
     });
-  },
 
-  toSelect: function (elem, val) {
-    $(elem).children().each(function () {
-      if ($(this).attr('value') == val) {
-        $(this).prop('selected', true);
-        return false;
-      }
-    });
-  },
-
-  toInput: function (elem, val) {
-    if (!$(elem).is('input[type=hidden]')) {
-      $(elem).val(val);
-    }
-  },
-};
-
-$.fn.draft = function (args) {
-  var defaultArgs = {
-    container: null,
-    withForm: false,
-    callback: null,
+    return draft;
   };
 
-  args = $.extend({}, defaultArgs, args);
-
-  if (!args.key || !args.btnLoad || !args.btnSave) {
-    console.error('must need key, btnLoad and btnSave');
-    return false;
-  }
-
-  var draft = new Draft(this, args.key, args.callback, args.withForm, args.container);
-
-  $(args.btnLoad).unbind('click.draft').bind('click.draft', function (e) {
-    e.preventDefault();
-
-    draft.toggle();
+  $(document).on('click', '.xe-draftBtnCloseModal', function () {
+    $('#xe-draftModal').modal('hide');
   });
-
-  $(args.btnSave).unbind('click.draft').bind('click.draft', function (e) {
-    e.preventDefault();
-
-    draft.draftSet();
-  });
-
-  return draft;
-};
 })(jQuery);

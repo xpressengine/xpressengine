@@ -46,6 +46,10 @@ var common = {
       pathInfo.common + '/js/xe.component.js',
     ],
 
+    'assets/core/common/js/draft': [
+      pathInfo.common + '/js/draft.js',
+    ],
+
     'assets/core/lang/langEditorBox.bundle': pathInfo.lang + '/LangEditorBox.js',
     'assets/core/common/js/griper': pathInfo.common + '/js/griper',
     'assets/core/common/js/validator': pathInfo.common + '/js/validator',
