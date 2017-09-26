@@ -680,7 +680,7 @@ abstract class AbstractType implements ComponentInterface
 
         $insertParam = [];
         $insertParam['dynamic_field_target_id'] = $args['id'];
-        $insertParam['revision_id'] = $args['revisionId'];
+        $insertParam['revision_id'] = $args['revision_id'];
         $insertParam['revision_no'] = $args['revisionNo'];
         foreach ($this->getColumns() as $column) {
             $key = $this->config->get('id') . '_' . $column->name;

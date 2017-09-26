@@ -229,6 +229,7 @@ abstract class AbstractSkin implements ComponentInterface
         list($data, $key) = $this->filter($args);
 
         return $viewFactory->make($this->getViewPath('create'), [
+            'args' => $args,
             'config' => $this->config,
             'data' => array_merge($data, $this->mergeData),
             'key' => $key,
@@ -248,6 +249,7 @@ abstract class AbstractSkin implements ComponentInterface
 
         $viewFactory = $this->handler->getViewFactory();
         return $viewFactory->make($this->getViewPath('edit'), [
+            'args' => $args,
             'config' => $this->config,
             'data' => array_merge($data, $this->mergeData),
             'key' => $key,
@@ -267,6 +269,7 @@ abstract class AbstractSkin implements ComponentInterface
 
         $viewFactory = $this->handler->getViewFactory();
         return $viewFactory->make($this->getViewPath('show'), [
+            'args' => $args,
             'config' => $this->config,
             'data' => array_merge($data, $this->mergeData),
             'key' => $key,
@@ -290,6 +293,7 @@ abstract class AbstractSkin implements ComponentInterface
 
         $viewFactory = $this->handler->getViewFactory();
         return $viewFactory->make($this->getViewPath('search'), [
+            'args' => $args,
             'config' => $this->config,
             'data' => array_merge($data, $this->mergeData),
             'key' => $key,
