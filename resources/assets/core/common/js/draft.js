@@ -98,7 +98,6 @@ import ReactDOM from 'react-dom';
     },
 
     toggle: function () {
-      //this.component.toggle();
       var _this = this;
 
       switch (this.componentName) {

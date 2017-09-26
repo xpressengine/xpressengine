@@ -28,14 +28,6 @@ var common = {
     'vendor': ['react', 'react-dom', 'moment'],
     'assets/core/permission/permission.bundle': [
       pathInfo.permission + '/permission.js',
-     // pathInfo.permission + '/Permission.jsx',
-     // pathInfo.permission + '/PermissionExclude.jsx',
-     // pathInfo.permission + '/PermissionInclude.jsx',
-     // pathInfo.permission + '/PermissionRadioComp.jsx',
-     // pathInfo.permission + '/PermissionRenderer.jsx',
-     // pathInfo.permission + '/PermissionTag.jsx',
-     // pathInfo.permission + '/PermissionTagSuggestion.jsx',
-     // pathInfo.permission + '/SettingsPermission.jsx',
     ],
 
     'assets/core/common/js/xe.bundle': [
