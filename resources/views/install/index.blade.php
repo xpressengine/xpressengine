@@ -12,7 +12,7 @@
     <script src="{{ asset('assets/core/common/js/dynamicLoadManager.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
 
-    <script src="{{ asset('assets/vendor/vendor.bundle.js') }}" type="text/javascript"></script>
+{{--    <script src="{{ asset('assets/vendor/vendor.bundle.js') }}" type="text/javascript"></script>--}}
     <script src="{{ asset('assets/bundle.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/core/common/js/xe.bundle.js') }}"></script>
 

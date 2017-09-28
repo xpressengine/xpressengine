@@ -1,18 +1,17 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-
 (function ($) {
   'use strict'
 
   /**
    * @class
    * */
-  function Draft(elem, key, callback, withForm, container) {
+  function Draft(elem, key, callback, withForm, container, apiUrl) {
+    var _this = this;
     this.key = key;
     this.elem = elem;
     this.callback = callback;
     this.withForm = withForm;
     this.container = container;
+    this.apiUrl = apiUrl;
 
     this.interval = null;
 
@@ -29,8 +28,14 @@ import ReactDOM from 'react-dom';
 
     this.init();
     this.bindEvents();
-    this.load({ key }, function (data) {
-
+    this.load({ key: key }, function (data) {
+      data.forEach(function (obj, i) {
+        if (obj.is_auto === 1) {
+          $(_this.elem).val(obj.val);
+          _this.callback(obj);
+          return;
+        }
+      });
     });
 
     return this;
@@ -58,8 +63,6 @@ import ReactDOM from 'react-dom';
     bindEvents: function () {
       var _this = this;
 
-      console.log(_this);
-
       $(this.elem).on('input.draft', function () {
         _this.saveEventHandler();
       });
@@ -86,7 +89,9 @@ import ReactDOM from 'react-dom';
         _this.$component.xeModal('hide');
       });
 
-      _this.$component.on('click', '.btn_draft_delete', function () {
+      _this.$component.on('click', '.btn_draft_delete', function (e) {
+        e.preventDefault();
+
         var $this = $(this);
         var id = $this.data('id');
 
@@ -95,19 +100,22 @@ import ReactDOM from 'react-dom';
         });
 
       });
+
+      $(_this.elem).closest('form').on('submit', function (e) {
+        _this.deleteAuto(_this.autoDraftId);
+      });
     },
 
-    toggle: function () {
+    toggle: function (show) {
       var _this = this;
 
       switch (this.componentName) {
         case 'modal':
-          if (_this.$component.hasClass('in')) {
+          if (!show && _this.$component.hasClass('in')) {
             _this.$component.xeModal('hide');
 
           } else {
             _this.load({ key: _this.key }, function (data) {
-              //var items = _this.getItems(data);
               var temp = `<div class="draft_save_list">`;
               temp +=  `<ul>`;
 
@@ -139,7 +147,7 @@ import ReactDOM from 'react-dom';
           break;
         case 'collapse':
 
-          if (_this.$component.hasClass('in')) {
+          if (!show && _this.$component.hasClass('in')) {
             _this.$component.collapse('hide');
 
           } else {
@@ -205,61 +213,12 @@ import ReactDOM from 'react-dom';
 
     appendComponent: function () {
       var _this = this;
-
-      var onApply = function (data) {
-        _this.setId(data.id);
-
-        var values = data.etc;
-        values[$(_this.elem).attr('name')] = data.val;
-
-        dataSetter.init($(_this.elem).closest('form')[0], values);
-        _this.callback(values);
-      };
-
-      var onRemove = function (data) {
-        _this.reqDelete(data.id);
-      };
-
       var $container = $('<div>');
-      var config = { keyVal: this.key, onApply: onApply, onRemove: onRemove };
-      var callback = function () {
-        _this.component = this;
-      };
 
       if ($(this.container).length < 1) {
-        $(this.elem).closest('form').after($container.html(this.getModalTemplate())); //$container.xeModal(); //ReactDOM.render(React.createElement(DraftReact.Modal, config), $container[0], callback);
+        $(this.elem).closest('form').after($container.html(this.getModalTemplate()));
         this.componentName = 'modal';
         this.$component = $('#xe-draftModal');
-
-        // _this.load({ key: _this.key }, function (data) {
-        //
-        //   var temp = `<div class="draft_save_list">`;
-        //   temp +=  `<ul>`;
-        //
-        //   data.forEach(function (item, i) {
-        //     temp +=    `<li>`;
-        //     temp +=      `<a href='#' class='draft_title' data-item='${JSON.stringify(item)}' data-type="modal">${$($.parseHTML(item.val)).text()}</a>`;
-        //     temp +=      `<div class="draft_info">`;
-        //
-        //     if (item.is_auto == 1) {
-        //       temp +=        `<span class="draft_state">${XE.Lang.trans('xe::autoSave')}</span>`;
-        //     } else {
-        //       temp +=        `<span class="draft_state v2">${XE.Lang.trans('xe::draftSave')}</span>`;
-        //     }
-        //
-        //     temp +=        `<span class="draft_date">${item.created_at.substr(0, 16).replace(/-/g, ' ')}</span>`;
-        //     temp +=        `<a href="#" class="btn_draft_delete" data-id="${item.id}"><i class="xi-close"></i></a>`;
-        //     temp +=      `</div>`;
-        //     temp +=     `</li>`;
-        //   });
-        //
-        //   temp +=    `</ul>`;
-        //   temp +=  `</div>`;
-        //
-        //   $('#xe-draftModal .xe-modal-body').html(temp);
-        //
-        //   //_this.$component.xeModal('show');
-        // });
 
       } else {
 
@@ -267,39 +226,8 @@ import ReactDOM from 'react-dom';
         this.$component = $(this.container);
 
         var collapseClass = this._collapseClass();
-        //$container.addClass([collapseClass, 'collapse'].join(' '));
 
-        //$(this.container).addClass([collapseClass, 'collapse', 'in'].join(' ')).after($container);
-        this.$component.addClass([collapseClass, 'collapse', 'in'].join(' ')).html($container.html(_this.getCollapseTemplate()));
-
-        // _this.load({ key: _this.key }, function (data) {
-        //   var temp = `<div class="draft_save_list">`;
-        //   temp +=  `<ul>`;
-        //
-        //   data.forEach(function (item, i) {
-        //     temp +=    `<li>`;
-        //     temp +=      `<a href='#' class='draft_title' data-item='${JSON.stringify(item)}' data-type="collapse">${$($.parseHTML(item.val)).text()}</a>`;
-        //     temp +=      `<div class="draft_info">`;
-        //
-        //     if (item.is_auto == 1) {
-        //       temp +=        `<span class="draft_state">${XE.Lang.trans('xe::autoSave')}</span>`;
-        //     } else {
-        //       temp +=        `<span class="draft_state v2">${XE.Lang.trans('xe::draftSave')}</span>`;
-        //     }
-        //
-        //     temp +=        `<span class="draft_date">${item.created_at.substr(0, 16).replace(/-/g, ' ')}</span>`;
-        //     temp +=        `<a href="#" class="btn_draft_delete" data-id="${item.id}"><i class="xi-close"></i></a>`;
-        //     temp +=      `</div>`;
-        //     temp +=     `</li>`;
-        //   });
-        //
-        //   temp +=    `</ul>`;
-        //   temp +=  `</div>`;
-        //
-        //   $('.' + collapseClass).next().find('.panel-body').html(temp).closest('.' + collapseClass).collapse('show');
-        // });
-
-        //ReactDOM.render(React.createElement(DraftReact.Collapse, $.extend(config, { collapseClass: collapseClass })), $container[0], callback);
+        this.$component.addClass([collapseClass, 'collapse'].join(' ')).html($container.html(_this.getCollapseTemplate()));
       }
     },
 
@@ -348,7 +276,7 @@ import ReactDOM from 'react-dom';
 
     reqPost: function () {
       $.ajax({
-        url: xeBaseURL + '/draft/store',
+        url: this.apiUrl.draft.add,
         type: 'post',
         dataType: 'json',
         data: this.getReqSerialize() + '&key=' + this.key,
@@ -364,7 +292,7 @@ import ReactDOM from 'react-dom';
 
     reqPut: function () {
       $.ajax({
-        url: xeBaseURL + '/draft/update/' + this.draftId,
+        url: this.apiUrl.draft.update + '/' + this.draftId,
         type: 'post',
         dataType: 'json',
         data: this.getReqSerialize(),
@@ -395,46 +323,45 @@ import ReactDOM from 'react-dom';
 
     setAuto: function () {
       $.ajax({
-        url: xeBaseURL + '/draft/setAuto',
+        url: this.apiUrl.auto.set,
         type: 'post',
         data: this.getReqSerialize() + '&key=' + this.key,
       });
     },
 
-    deleteAuto: function () {
-      $.ajax({
-        url: xeBaseURL + '/draft/destroyAuto',
-        type: 'post',
-        data: 'key=' + this.key,
-      });
+    deleteAuto: function (key) {
+      var key = key || this.key;
+
+      if (key) {
+        $.ajax({
+          url: this.apiUrl.auto.unset,
+          type: 'post',
+          data: 'key=' + key,
+        });
+      }
     },
 
     load: function (param, callback) {
-      //this.setState({ loaded: false });
       var _this = this;
 
       $.ajax({
-        url: xeBaseURL + '/draft',
+        url: _this.apiUrl.draft.list,
         type: 'get',
         dataType: 'json',
         data: param,
         success: function (data) {
+          data.forEach(function (obj, i) {
+            if (obj.is_auto === 1) {
+              _this.autoDraftId = obj.id;
+              return;
+            }
+          });
+
           if (callback) {
             callback(data);
           }
         },
       });
-    },
-
-    getItems: function () {
-      return this.state.items.map(function (item, i) {
-        return React.createElement(DraftReact.Item, {
-          key: item.id,
-          data: item,
-          onApply: this.onApply,
-          onRemove: this.onRemove,
-        });
-      }.bind(this));
     },
 
     getReqSerialize: function () {
@@ -449,6 +376,7 @@ import ReactDOM from 'react-dom';
     },
 
     reqDelete: function (id, callback) {
+      var _this = this;
       id = id || this.draftId;
 
       if (!id) {
@@ -460,7 +388,7 @@ import ReactDOM from 'react-dom';
       }
 
       $.ajax({
-        url: xeBaseURL + '/draft/destroy/' + id,
+        url: _this.apiUrl.draft.delete + '/' + id,
         type: 'post',
         dataType: 'json',
         success: function () {
@@ -479,215 +407,6 @@ import ReactDOM from 'react-dom';
       this.draftId = null;
     },
   };
-
-  var DraftReact = {
-    mixin: {
-      getInitialState: function () {
-        return {
-          loaded: false,
-          items: [],
-        };
-      },
-
-      onRemove: function (data) {
-        this.props.onRemove(data);
-      },
-
-      load: function () {
-        this.setState({ loaded: false });
-
-        $.ajax({
-          url: xeBaseURL + '/draft',
-          type: 'get',
-          dataType: 'json',
-          data: { key: this.props.keyVal },
-          success: function (json) {
-            this.setState({ loaded: true, items: json });
-          }.bind(this),
-        });
-      },
-
-      getItems: function () {
-        return this.state.items.map(function (item, i) {
-          return React.createElement(DraftReact.Item, {
-            key: item.id,
-            data: item,
-            onApply: this.onApply,
-            onRemove: this.onRemove,
-          });
-        }.bind(this));
-      },
-    },
-  };
-
-  // DraftReact.Modal = React.createClass({
-  //
-  //   mixins: [DraftReact.mixin],
-  //
-  //   toggle: function () {
-  //     $(ReactDOM.findDOMNode(this)).xeModal('toggle');
-  //   },
-  //
-  //   onApply: function (data) {
-  //     this.props.onApply(data);
-  //     $(ReactDOM.findDOMNode(this)).xeModal('hide');
-  //   },
-  //
-  //   componentDidMount: function () {
-  //     var _this = this;
-  //     $(ReactDOM.findDOMNode(this)).on('show.bs.modal', function () {
-  //       _this.load();
-  //     });
-  //   },
-  //
-  //   render: function () {
-  //
-  //     return (
-  //       React.DOM.div({ className: 'modal fade', role: 'dialog', 'aria-hidden': 'true' },
-  //         React.DOM.div({ className: 'modal-dialog' },
-  //           React.DOM.div({ className: 'modal-content' },
-  //             React.DOM.div({ className: 'modal-header' },
-  //               React.DOM.button({
-  //                 type: 'button',
-  //                 className: 'close',
-  //                 'data-dismiss': 'modal',
-  //                 'aria-label': 'Close',
-  //               },
-  //                 React.DOM.span({
-  //                 'aria-hidden': 'true',
-  //                 dangerouslySetInnerHTML: { __html: '&times;' },
-  //               })
-  //               ),
-  //               React.DOM.h4({ className: 'modal-title' }, 'Draft')
-  //             ),
-  //             React.DOM.div({ className: 'modal-body' },
-  //               (function () {
-  //                 if (this.state.loaded !== true) {
-  //                   return React.DOM.div({ className: 'text-center' },
-  //                     React.DOM.i({ className: 'xi-spinner-1 xi-spin xi-4x' })
-  //                   );
-  //                 } else {
-  //                   return React.createElement(DraftReact.Box, { items: this.getItems() });
-  //                 }
-  //               }.call(this))
-  //             ),
-  //             React.DOM.div({ className: 'modal-footer' },
-  //               React.DOM.button({
-  //               type: 'button',
-  //               className: 'btn btn-default',
-  //               'data-dismiss': 'modal',
-  //             }, 'Close')
-  //             )
-  //           )
-  //         )
-  //       )
-  //     );
-  //   },
-  // });
-
-  // DraftReact.Collapse = React.createClass({
-  //
-  //   mixins: [DraftReact.mixin],
-  //
-  //   toggle: function () {
-  //     $('.' + this.props.collapseClass).collapse('toggle');
-  //   },
-  //
-  //   onApply: function (data) {
-  //     this.props.onApply(data);
-  //     this.toggle();
-  //   },
-  //
-  //   componentDidMount: function () {
-  //     var _this = this;
-  //     $(ReactDOM.findDOMNode(this)).parent().on('show.bs.collapse', function () {
-  //       _this.load();
-  //     });
-  //   },
-  //
-  //   render: function () {
-  //     return (
-  //       React.DOM.div({ className: '' },
-  //         React.DOM.div({ className: 'panel panel-default' },
-  //           React.DOM.div({ className: 'panel-body' },
-  //             (function () {
-  //               if (this.state.loaded !== true) {
-  //                 return React.DOM.div({ className: 'text-center' },
-  //                   React.DOM.i({ className: 'xi-spinner-1 xi-spin xi-4x' })
-  //                 );
-  //               } else {
-  //                 return React.createElement(DraftReact.Box, { items: this.getItems() });
-  //               }
-  //             }.call(this))
-  //           )
-  //         )
-  //       )
-  //     );
-  //   },
-  // });
-
-  // DraftReact.Box = React.createClass({
-  //
-  //   render: function () {
-  //     return (
-  //       React.DOM.div({ className: 'draft_save_list' },
-  //         React.DOM.ul(null, this.props.items)
-  //       )
-  //     );
-  //   },
-  // });
-
-  // DraftReact.Item = React.createClass({
-  //   getInitialState: function () {
-  //     return {
-  //       removed: false,
-  //     };
-  //   },
-  //
-  //   onApply: function (e) {
-  //     e.preventDefault();
-  //
-  //     this.props.onApply(this.props.data);
-  //   },
-  //
-  //   onRemove: function (e) {
-  //     e.preventDefault();
-  //
-  //     this.setState({ removed: true });
-  //     this.props.onRemove(this.props.data);
-  //   },
-  //
-  //   getDate: function () {
-  //     return this.props.data.created_at.substr(0, 16).replace(/-/g, ' ');
-  //   },
-  //
-  //   render: function () {
-  //     if (this.state.removed === true) {
-  //       return false;
-  //     }
-  //
-  //     return (
-  //       React.DOM.li(null,
-  //         React.DOM.a({ href: '#', className: 'draft_title', onClick: this.onApply },
-  //           $($.parseHTML(this.props.data.val)).text()
-  //         ),
-  //         React.DOM.div({ className: 'draft_info' },
-  //           (function () {
-  //             if (this.props.data.is_auto == 1) {
-  //               return React.DOM.span({ className: 'draft_state' }, XE.Lang.trans('xe::autoSave'));
-  //             } else {
-  //               return React.DOM.span({ className: 'draft_state v2' }, XE.Lang.trans('xe::draftSave'));
-  //             }
-  //           }.call(this)),
-  //           React.DOM.span({ className: 'draft_date' }, this.getDate()),
-  //           React.DOM.a({ href: '#', className: 'btn_draft_delete', onClick: this.onRemove },
-  //             React.DOM.i({ className: 'xi-close' })
-  //           )
-  //         )
-  //       )
-  //     );
-  //   },
-  // });
 
   var dataSetter = {
     init: function (form, data) {
@@ -774,12 +493,12 @@ import ReactDOM from 'react-dom';
       return false;
     }
 
-    var draft = new Draft(this, args.key, args.callback, args.withForm, args.container);
+    var draft = new Draft(this, args.key, args.callback, args.withForm, args.container, args.apiUrl);
 
     $(args.btnLoad).unbind('click.draft').bind('click.draft', function (e) {
       e.preventDefault();
 
-      draft.toggle();
+      draft.toggle(true);
     });
 
     $(args.btnSave).unbind('click.draft').bind('click.draft', function (e) {
@@ -791,7 +510,4 @@ import ReactDOM from 'react-dom';
     return draft;
   };
 
-  $(document).on('click', '.xe-draftBtnCloseModal', function () {
-    $('#xe-draftModal').modal('hide');
-  });
 })(jQuery);
