@@ -93,8 +93,13 @@
                         <tr>
                             <td><input name="userId[]" class="__xe_checkbox" type="checkbox" value="{{ $user->getId() }}" @if($user->rating === \Xpressengine\User\Rating::SUPER) disabled @endif></td>
                             <td>
-                                <img data-toggle="xeUserMenu" data-user-id="{{ $user->getId() }}" src="{{ $user->getProfileImage() }}" width="30" height="30" alt="{{xe_trans('xe::profileImage')}}" class="member-profile">
-                                <a href="#" data-toggle="xeUserMenu" data-user-id="{{ $user->getId() }}" data-text="{{ $user->getDisplayName() }}">{{ $user->getDisplayName() }}</a></i>
+                                <img data-toggle="xe-page-toggle-menu"
+                                        data-url="{{ route('toggleMenuPage') }}"
+                                        data-data='{!! json_encode(['id'=>$user->getId(), 'type'=>'user']) !!}' src="{{ $user->getProfileImage() }}" width="30" height="30" alt="{{xe_trans('xe::profileImage')}}" class="member-profile">
+                                <a href="#"
+                                   data-toggle="xe-page-toggle-menu"
+                                   data-url="{{ route('toggleMenuPage') }}"
+                                   data-data='{!! json_encode(['id'=>$user->getId(), 'type'=>'user']) !!}' data-text="{{ $user->getDisplayName() }}">{{ $user->getDisplayName() }}</a></i>
                             </td>
                             <td>
                                 @if(count($user->accounts))
