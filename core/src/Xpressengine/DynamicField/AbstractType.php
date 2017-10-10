@@ -659,7 +659,7 @@ abstract class AbstractType implements ComponentInterface
             $key = $config->get('id') . '_' . $column->name;
 
             if (isset($params[$key])) {
-                $query = $query->orderBy($key, '=', $params[$key]);
+                $query = $query->orderBy($key, $params[$key]);
             }
         }
 
