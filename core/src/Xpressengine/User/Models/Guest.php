@@ -134,7 +134,7 @@ class Guest implements UserInterface
      */
     public function getAuthIdentifier()
     {
-        $this->throwNotSupportedException();
+        return null;
     }
 
     /**
