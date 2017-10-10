@@ -151,6 +151,7 @@ class DocumentHandler
     {
         $options = [];
         if ($config != null) {
+            $options['table'] = Document::TABLE_NAME;
             $options['id'] = $config->get('instanceId');
         }
 
@@ -246,7 +247,7 @@ class DocumentHandler
             'group' => $config->get('group'),
             'revision' => true,
         ]);
-        $revisionDoc->revisionNo = $revisionNo;
+        $revisionDoc->revision_no = $revisionNo;
         $revisionDoc->save();
 
         return true;

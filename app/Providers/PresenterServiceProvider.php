@@ -179,12 +179,9 @@ class PresenterServiceProvider extends ServiceProvider
         ])->load();
 
         $frontendHandler->js([
-            'assets/vendor/vendor.bundle.js',
             'assets/bundle.js',
             'assets/core/common/js/xe.bundle.js',
         ])->prependTo('head')->load();
-
-        $frontendHandler->js('assets/core/common/js/usermenu.js')->load(); // @TODO 제거
     }
 
     /**

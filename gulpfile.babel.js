@@ -17,6 +17,7 @@ gulp.task('default', (callback) => {
     'clean:assets',
     'copy:assets',
     'assets:tree',
+    'assets:draft',
     'assets:sass',
     'assets:image',
     'webpack',
@@ -31,6 +32,7 @@ gulp.task('copy:assets', taskSettings['copy:assets']);
 
 gulp.task('assets:chunk', taskSettings['assets:chunk']);
 gulp.task('assets:tree', taskSettings['assets:tree']);
+gulp.task('assets:draft', taskSettings['assets:draft']);
 
 gulp.task('jsdoc', taskSettings['jsdoc']);
 // e: settings
