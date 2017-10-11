@@ -73,7 +73,7 @@ class LangEditorBox {
     var value = this.getValueFromLinesWithLocale(locale) || '';
     var inputClass = this.multiline ? 'textarea' : 'text';
     var multiline = this.multiline
-      ? `<input type="hidden" name="${resource + '/multiline'}" defaultValue='true' value="true" />`
+      ? `<input type="hidden" name="${resource + '/multiline'}" value="true" />`
       : '';
 
     var editor = this.getEditor(resource, locale, value);
@@ -96,10 +96,10 @@ class LangEditorBox {
     var template = [
       `<div class="${inputClass}">`,
         `<input type="hidden" name="xe_use_request_preprocessor" value="Y"/>`,
-        `<input type="hidden" name="${resource + '/name'}" defaultValue="${this.name}" value="${this.name}" />`,
-        `<input type="hidden" name="${resource + '/key'}" defaultValue="${this.langKey}" value="${this.langKey}" />`,
+        `<input type="hidden" name="${resource + '/name'}" value="${this.name}" />`,
+        `<input type="hidden" name="${resource + '/key'}" value="${this.langKey || ''}" />`,
         `${multiline}`,
-        `<input type="hidden" name="${this.name}" defaultValue="${this.langKey}" value="${this.langKey}" />`,
+        `<input type="hidden" name="${this.name}" value="${this.langKey || ''}" />`,
         `<div key="${locale}" class="input-group">`,
           `${editor}`,
             `<span class="input-group-addon">`,
@@ -114,6 +114,7 @@ class LangEditorBox {
   }
 
   setLines(lines) {
+    var _this = this;
     this.lines = lines;
 
     XE.Lang.locales.map(function (locale) {
@@ -142,9 +143,9 @@ class LangEditorBox {
     var name = (resource + '/locale/' + locale);
 
     if (!this.multiline) {
-      edit = `<input type="text" class="form-control" id="${id}" name="${name}" defaultValue="${value}" value="${value}" />`;
+      edit = `<input type="text" class="form-control" id="${id}" name="${name}" value="${value}" />`;
     } else {
-      edit = `<textarea class="form-control" id="${id}" name="${name}" defaultValue="${value}">${value}</textarea>`;
+      edit = `<textarea class="form-control" id="${id}" name="${name}">${value}</textarea>`;
     }
 
     return edit;
