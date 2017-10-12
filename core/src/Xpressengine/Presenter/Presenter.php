@@ -143,6 +143,8 @@ class Presenter
      */
     protected $presentables = [];
 
+    protected $widgetParsing = true;
+
     /**
      * Create a new instance.
      *
@@ -575,5 +577,26 @@ class Presenter
         }
 
         return true;
+    }
+
+    /**
+     * 위젯코드를 변환할것 인지 설정
+     *
+     * @param bool $parse parse or not
+     * @return void
+     */
+    public function widgetParsing($parse = true)
+    {
+        $this->widgetParsing = $parse;
+    }
+
+    /**
+     * 위젯코드 변환 여부 반환
+     *
+     * @return bool
+     */
+    public function isWidgetParsing()
+    {
+        return $this->widgetParsing;
     }
 }

@@ -145,6 +145,7 @@ class HtmlPresenterTest extends TestCase
         $presenter->shouldReceive('getViewFactory')->andReturn($view);
 
 
+        $presenter->shouldReceive('isWidgetParsing')->andReturn(true);
         $widgetParser->shouldReceive('parseXml');
 
         $renderer->render();

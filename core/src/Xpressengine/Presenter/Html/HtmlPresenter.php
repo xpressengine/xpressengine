@@ -182,7 +182,9 @@ class HtmlPresenter implements Presentable
         }
 
         $baseTheme = $viewFactory->make(self::$commonHtmlWrapper);
-        $viewContent = $this->parser->parseXml($this->renderTheme($skinView)->render());
+        $viewContent = $this->presenter->isWidgetParsing() ?
+            $this->parser->parseXml($this->renderTheme($skinView)->render()) :
+            $this->renderTheme($skinView)->render();
         $baseTheme->content = $viewContent;
 
         return $baseTheme->render();
