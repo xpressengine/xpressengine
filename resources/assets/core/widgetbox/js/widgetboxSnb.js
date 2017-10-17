@@ -112,7 +112,7 @@
           var validType = true;
           var division = '';
 
-          if (/^[1-9 ]+$/g.test(divisionType)) {
+          if (divisionType.split(' ').length > 1) {
             var cells = divisionType.split(' ');
             var sum = 0;
 
@@ -126,9 +126,10 @@
               }
             });
 
-            if (sum !== 12) {
+            if (isNaN(sum) === 'NaN' || sum !== 12) {
               validType = false;
             }
+
           } else {
             validType = false;
           }
@@ -513,7 +514,7 @@
        *     1)줄어들어야 하는 height 수치 필요 (상하 병합 되면서 수치가 늘어날수 있음)
        *     2)상위 dom으로 올라가며 확인
        * </pre>
-       * @return {boolean} 
+       * @return {boolean}
        * */
       checkRowBlock: function ($selected) {
 
