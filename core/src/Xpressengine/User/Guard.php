@@ -19,7 +19,9 @@ use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Contracts\Session\Session;
 use Symfony\Component\HttpFoundation\Request;
+use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
 use Xpressengine\User\Models\Guest;
+use Xpressengine\User\Models\User;
 
 /**
  * 이 클래스는 Xpressengine의 회원 인증 기능을 처리하는 클래스이다.
@@ -131,6 +133,23 @@ class Guard extends SessionGuard implements GuardInterface
     {
         $key = $this->adminAuthConfig['session'];
         $this->session->remove($key);
+    }
+
+    /**
+     * Determine if the current user is authenticated.
+     *
+     * @return \Illuminate\Contracts\Auth\Authenticatable
+     *
+     * @throws AccessDeniedHttpException
+     */
+    public function authenticate()
+    {
+        $user = $this->user();
+        if ($user instanceof User) {
+            return $user;
+        }
+
+        throw new AccessDeniedHttpException();
     }
 
     /**

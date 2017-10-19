@@ -79,8 +79,8 @@ class Permission extends AbstractUIObject
         $userRepo = app('xe.users');
 
         $groups = $groupRepo->findMany($grant['group']);
-        $users = $userRepo->findMany($grant['user'], ['id','displayName']);
-        $excepts = $userRepo->findMany($grant['except'], ['id','displayName']);
+        $users = $userRepo->findMany($grant['user'], ['id','display_name']);
+        $excepts = $userRepo->findMany($grant['except'], ['id','display_name']);
 
         $permissionValueArray['rating'] = $grant['rating'];
         $permissionValueArray['group'] = $groups;

@@ -340,7 +340,7 @@ class AbstractTypeTest extends TestCase
         $typeInstance = new TestType($handler);
 
         $config = m::mock('Xpressengine\Config\ConfigEntity');
-        $config->shouldReceive('get')->with('id')->andReturn('instanceId');
+        $config->shouldReceive('get')->with('id')->andReturn('instance_id');
         $config->shouldReceive('get')->with('required')->andReturn(true);
         $config->shouldReceive('get')->with('joinColumnName')->andReturn('id');
 
@@ -360,7 +360,7 @@ class AbstractTypeTest extends TestCase
 
         $args = [
             'id' => 'id',
-            'instanceIdId' => 'value',
+            'instance_id_id' => 'value',
         ];
         $typeInstance->insert($args);
     }
@@ -381,7 +381,7 @@ class AbstractTypeTest extends TestCase
         $typeInstance = new TestType($handler);
 
         $config = m::mock('Xpressengine\Config\ConfigEntity');
-        $config->shouldReceive('get')->with('id')->andReturn('instanceId');
+        $config->shouldReceive('get')->with('id')->andReturn('instance_id');
         $config->shouldReceive('get')->with('required')->andReturn(true);
         $config->shouldReceive('get')->with('joinColumnName')->andReturn('id');
 
@@ -404,7 +404,7 @@ class AbstractTypeTest extends TestCase
 
         $args = [
             'id' => 'id',
-            'instanceId_id' => 'value',
+            'instance_id_id' => 'value',
         ];
         $typeInstance->update($args, [
             ['column' => 'id', 'operator' => '=', 'value' => 'id']
@@ -428,7 +428,7 @@ class AbstractTypeTest extends TestCase
         $typeInstance = new TestType($handler);
 
         $config = m::mock('Xpressengine\Config\ConfigEntity');
-        $config->shouldReceive('get')->with('id')->andReturn('instanceId');
+        $config->shouldReceive('get')->with('id')->andReturn('instance_id');
         $config->shouldReceive('get')->with('required')->andReturn(true);
         $config->shouldReceive('get')->with('joinColumnName')->andReturn('id');
 
@@ -463,7 +463,7 @@ class AbstractTypeTest extends TestCase
         $typeInstance = new TestType($handler);
 
         $config = m::mock('Xpressengine\Config\ConfigEntity');
-        $config->shouldReceive('get')->with('id')->andReturn('instanceId');
+        $config->shouldReceive('get')->with('id')->andReturn('instance_id');
         $config->shouldReceive('get')->with('use')->andReturn(true);
         $config->shouldReceive('get')->with('required')->andReturn(true);
         $config->shouldReceive('get')->with('sortable')->andReturn(true);
@@ -505,7 +505,7 @@ class AbstractTypeTest extends TestCase
         $typeInstance = new TestType($handler);
 
         $config = m::mock('Xpressengine\Config\ConfigEntity');
-        $config->shouldReceive('get')->with('id')->andReturn('instanceId');
+        $config->shouldReceive('get')->with('id')->andReturn('instance_id');
         $config->shouldReceive('get')->with('required')->andReturn(true);
         $config->shouldReceive('get')->with('joinColumnName')->andReturn('id');
 
@@ -533,7 +533,7 @@ class AbstractTypeTest extends TestCase
         $typeInstance = new TestType($handler);
 
         $config = m::mock('Xpressengine\Config\ConfigEntity');
-        $config->shouldReceive('get')->with('id')->andReturn('instanceId');
+        $config->shouldReceive('get')->with('id')->andReturn('instance_id');
         $config->shouldReceive('get')->with('required')->andReturn(true);
         $config->shouldReceive('get')->with('joinColumnName')->andReturn('id');
 
@@ -543,7 +543,7 @@ class AbstractTypeTest extends TestCase
         $query->shouldReceive('orderBy')->andReturnSelf();
 
         $params = [
-            'instanceIdId' => 'desc',
+            'instance_id_id' => 'desc',
         ];
         $this->assertInstanceOf('Xpressengine\Database\DynamicQuery', $typeInstance->orders($query, $params));
     }
@@ -559,7 +559,7 @@ class AbstractTypeTest extends TestCase
         $typeInstance = new TestType($handler);
 
         $config = m::mock('Xpressengine\Config\ConfigEntity');
-        $config->shouldReceive('get')->with('id')->andReturn('instanceId');
+        $config->shouldReceive('get')->with('id')->andReturn('instance_id');
         $config->shouldReceive('get')->with('required')->andReturn(true);
         $config->shouldReceive('get')->with('joinColumnName')->andReturn('id');
 
@@ -579,9 +579,9 @@ class AbstractTypeTest extends TestCase
 
         $args = [
             'id' => 'id',
-            'revisionId' => 'revisionId',
-            'revisionNo' => 'revisionNo',
-            'instanceIdId' => 'value',
+            'revision_id' => 'revisionId',
+            'revision_no' => 'revisionNo',
+            'instance_id_id' => 'value',
         ];
         $typeInstance->insertRevision($args);
     }
@@ -597,7 +597,7 @@ class AbstractTypeTest extends TestCase
         $typeInstance = new TestType($handler);
 
         $config = m::mock('Xpressengine\Config\ConfigEntity');
-        $config->shouldReceive('get')->with('id')->andReturn('instanceId');
+        $config->shouldReceive('get')->with('id')->andReturn('instance_id');
         $config->shouldReceive('get')->with('required')->andReturn(true);
         $config->shouldReceive('get')->with('sortable')->andReturn(true);
         $config->shouldReceive('get')->with('joinColumnName')->andReturn('id');

@@ -659,7 +659,7 @@ abstract class AbstractType implements ComponentInterface
             $key = $config->get('id') . '_' . $column->name;
 
             if (isset($params[$key])) {
-                $query = $query->orderBy($key, '=', $params[$key]);
+                $query = $query->orderBy($key, $params[$key]);
             }
         }
 
@@ -680,8 +680,8 @@ abstract class AbstractType implements ComponentInterface
 
         $insertParam = [];
         $insertParam['dynamic_field_target_id'] = $args['id'];
-        $insertParam['revision_id'] = $args['revisionId'];
-        $insertParam['revision_no'] = $args['revisionNo'];
+        $insertParam['revision_id'] = $args['revision_id'];
+        $insertParam['revision_no'] = $args['revision_no'];
         foreach ($this->getColumns() as $column) {
             $key = $this->config->get('id') . '_' . $column->name;
 

@@ -7,7 +7,7 @@ return [
     'systemCheck' => '시스템 검사',
     'checkPHPVersion' => 'PHP 버전을 체크합니다.',
     'checkDirPermission' => '디렉토리 사용 권한을 체크합니다.',
-    'checkPHPExtPDO' => 'PDO, pdo_mysql PHP 확장 기능이 필요합니다.',
+    'checkPHPExtPDO' => 'PDO, (pdo_mysql 또는 pdo_cubrid) PHP 확장 기능이 필요합니다.',
     'checkPHPExtCURL' => 'cURL PHP 확장 기능이 필요합니다.',
     'checkPHPExtFILEINFO' => 'FileInfo PHP 확장 기능이 필요합니다.',
     'checkPHPExtGD' => 'GD PHP 확장 기능이 필요합니다.',

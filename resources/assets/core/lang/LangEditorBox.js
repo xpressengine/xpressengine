@@ -1,6 +1,3 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import createReactClass from 'create-react-class';
 import validator from 'validator';
 
 /**
@@ -15,52 +12,120 @@ import validator from 'validator';
  * - 컴포넌트 state에 다국어 정보가 없으면 하나의 컴포넌트에 대한 다국어 정보를 ajax로 요청하여 상태를 갱신한다.
  * </pre>
  * */
-var LangEditorBox = createReactClass({
-  getDefaultProps: function () {
-    return {
-      name: '',
-      langKey: '',
-      multiline: false,
-      lines: [],
-      autocomplete: false,
-    };
-  },
 
-  render: function () {
-    LangEditor.seq++;
-    return (
-      <LangEditor
-        key={LangEditor.seq}
-        seq={LangEditor.seq}
-        name={this.props.name}
-        langKey={this.props.langKey}
-        multiline={this.props.multiline}
-        lines={this.props.lines}
-        autocomplete={this.props.autocomplete}
-      />
-    );
-  },
-});
+class LangEditorBox {
 
-var LangEditor = createReactClass({
-  statics: { seq: 0 },
-  getInitialState: function () {
-    var lines = this.props.lines || [];
-    return { lines: lines };
-  },
+  constructor({ $wrapper, seq, name, langKey, multiline, lines, autocomplete }) {
+    this.$wrapper = $wrapper;
+    this.seq = seq;
+    this.name = name;
+    this.langKey = langKey;
+    this.multiline = multiline;
+    this.lines = lines || [];
+    this.autocomplete = autocomplete;
 
-  setLines: function (lines) {
+    this.init();
+
+  }
+
+  init() {
+    if (this.langKey && this.lines.length == 0) {
+      $.ajax({
+        type: 'get',
+        dataType: 'json',
+        url: xeBaseURL + '/' + XE.options.fixedPrefix + '/lang/lines/' + this.langKey,
+        success: function (result) {
+
+          this.setLines(result);
+          this.render();
+          this.bindEvents();
+
+        }.bind(this),
+      });
+    } else {
+      this.render();
+      this.bindEvents();
+    }
+
+  }
+
+  bindEvents() {
+    if (this.autocomplete) {
+      this.$wrapper.find('input[type=text]:first,textarea:first').autocomplete({
+        source: '/' + XE.options.fixedPrefix + '/lang/search/' + XE.Lang.locales[0],
+        minLength: 1,
+        focus: function (event, ui) {
+          event.preventDefault();
+        },
+
+        select: function (event, ui) {
+          this.setLines(ui.item.lines);
+        },
+      });
+    }
+  }
+
+  render() {
     var _this = this;
-    _this.setState({ lines: lines });
+    var locale = XE.Lang.locales[0];
+    var fallback = XE.Lang.locales.slice(1);
+    var resource = 'xe_lang_preprocessor://lang/seq/' + this.seq;
+    var value = this.getValueFromLinesWithLocale(locale) || '';
+    var inputClass = this.multiline ? 'textarea' : 'text';
+    var multiline = this.multiline
+      ? `<input type="hidden" name="${resource + '/multiline'}" value="true" />`
+      : '';
+
+    var editor = this.getEditor(resource, locale, value);
+    var subTemplate = '';
+
+    fallback.forEach(function (locale, i) {
+      var value = _this.getValueFromLinesWithLocale(locale) || '';
+      var editor = _this.getEditor(resource, locale, value);
+
+      subTemplate += [
+        `<div key="${locale}" class="input-group">`,
+          `${editor}`,
+           `<span class="input-group-addon">`,
+           `<span class="flag-code"><i class="${locale + ' xe-flag'}"></i>${locale}</span>`,
+           `</span>`,
+        `</div>`,
+      ].join('\n');
+    });
+
+    var template = [
+      `<div class="${inputClass}">`,
+        `<input type="hidden" name="xe_use_request_preprocessor" value="Y"/>`,
+        `<input type="hidden" name="${resource + '/name'}" value="${this.name}" />`,
+        `<input type="hidden" name="${resource + '/key'}" value="${this.langKey || ''}" />`,
+        `${multiline}`,
+        `<input type="hidden" name="${this.name}" value="${this.langKey || ''}" />`,
+        `<div key="${locale}" class="input-group">`,
+          `${editor}`,
+            `<span class="input-group-addon">`,
+              `<span class="flag-code"><i class="${locale + ' xe-flag'}"></i>${locale}</span>`,
+            `</span>`,
+        `</div>`,
+        `<div class="sub">${subTemplate}</div>`,
+      `</div>`,
+    ].join('\n');
+
+    this.$wrapper.html(template);
+  }
+
+  setLines(lines) {
+    var _this = this;
+    this.lines = lines;
+
     XE.Lang.locales.map(function (locale) {
-      var selector = '#input-' + _this.props.seq + '-' + locale;
+      var selector = '#input-' + _this.seq + '-' + locale;
       var value = _this.getValueFromLinesWithLocale(locale);
       $(selector).val(value);
     });
-  },
+  }
 
-  getValueFromLinesWithLocale: function (locale) {
-    var lines = this.state.lines;
+  getValueFromLinesWithLocale(locale) {
+    var lines = this.lines;
     var i = lines.length;
     var l = {};
 
@@ -70,105 +135,25 @@ var LangEditor = createReactClass({
         return l.value;
       }
     }
+  }
 
-    return '';
-  },
-
-  componentDidMount: function () {
-    // if (this.isMounted()) {
-    var _this = this;
-    var el = ReactDOM.findDOMNode(this);
-
-    if (this.props.langKey) {
-      if (this.state.lines.length == 0) {
-        $.ajax({
-          type: 'get',
-          dataType: 'json',
-          url: xeBaseURL + '/' + XE.options.fixedPrefix + '/lang/lines/' + this.props.langKey,
-          success: function (result) {
-            // if (this.isMounted()) {
-            _this.setLines(result);
-
-            // }
-          }.bind(this),
-        });
-      }
-    }
-
-    if (this.props.autocomplete) {
-      $(el).find('input[type=text]:first,textarea:first').autocomplete({
-        source: '/' + XE.options.fixedPrefix + '/lang/search/' + XE.Lang.locales[0],
-        minLength: 1,
-        focus: function (event, ui) {
-          event.preventDefault();
-        },
-
-        select: function (event, ui) {
-          _this.setLines(ui.item.lines);
-        },
-      });
-    }
-  },
-
-  getEditor: function (resource, locale, value) {
+  getEditor(resource, locale, value) {
     var edit = null;
-    var id = ('input-' + this.props.seq + '-' + locale);
+    var id = ('input-' + this.seq + '-' + locale);
     var name = (resource + '/locale/' + locale);
 
-    if (!this.props.multiline) {
-      edit = <input type="text" className="form-control" id={id} name={name} defaultValue={value}/>;
+    if (!this.multiline) {
+      edit = `<input type="text" class="form-control" id="${id}" name="${name}" value="${value}" />`;
     } else {
-      edit = <textarea className="form-control" id={id} name={name} defaultValue={value}/>;
+      edit = `<textarea class="form-control" id="${id}" name="${name}">${value}</textarea>`;
     }
 
     return edit;
-  },
+  }
 
-  render: function () {
-    var _this = this;
-    var locale = XE.Lang.locales[0];
-    var fallback = XE.Lang.locales.slice(1);
-    var resource = 'xe_lang_preprocessor://lang/seq/' + this.props.seq;
-    var value = this.getValueFromLinesWithLocale(locale);
-    var inputClass = this.props.multiline ? 'textarea' : 'text';
+}
 
-    var multiline = this.props.multiline
-      ? <input type="hidden" name={resource + '/multiline'} defaultValue='true'/>
-      : null;
-
-    return (
-      <div className={inputClass}>
-        <input type="hidden" name="xe_use_request_preprocessor" value="Y"/>
-        <input type="hidden" name={resource + '/name'} defaultValue={this.props.name}/>
-        <input type="hidden" name={resource + '/key'} defaultValue={this.props.langKey}/>
-        {multiline}
-        <input type="hidden" name={this.props.name} defaultValue={this.props.langKey}/>
-        <div key={locale} className="input-group">
-          {_this.getEditor(resource, locale, value)}
-            <span className="input-group-addon">
-            <span className="flag-code"><i className={locale + ' xe-flag'}></i>{locale}</span>
-            </span>
-        </div>
-        <div className="sub">
-          {
-            fallback.map(function (locale, i) {
-              var value = _this.getValueFromLinesWithLocale(locale);
-              return (
-                <div key={locale} className="input-group">
-                  {_this.getEditor(resource, locale, value)}
-                      <span className="input-group-addon">
-                      <span className="flag-code"><i className={locale + ' xe-flag'}></i>{locale}</span>
-                      </span>
-                </div>
-              );
-            })
-          }
-        </div>
-      </div>
-    );
-  },
-});
-
+var seq = 0;
 /**
  * target element에 LangEditorBox를 랜더링함.
  * @global
@@ -184,7 +169,7 @@ window.langEditorBoxRender = function ($data, type) {
     let autocomplete = $data.autocomplete;
     let target = $data.target;
 
-    ReactDOM.render(<LangEditorBox name={name} langKey={langKey} multiline={multiline} lines={lines} autocomplete={autocomplete}/>, target);
+    new LangEditorBox({ $wrapper: $($data.target), seq, name, langKey, multiline, lines, autocomplete });
 
   } else {
     var name = $data.data('name');
@@ -193,9 +178,10 @@ window.langEditorBoxRender = function ($data, type) {
     var lines = $data.data('lines');
     var autocomplete = $data.data('autocomplete');
 
-    ReactDOM.render(<LangEditorBox name={name} langKey={langKey} multiline={multiline} lines={lines} autocomplete={autocomplete}/>, $data[0]);
+    new LangEditorBox({ $wrapper: $data, seq, name, langKey, multiline, lines, autocomplete });
   }
 
+  seq++;
 };
 
 $(function () {

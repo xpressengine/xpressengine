@@ -14,6 +14,8 @@
  */
 namespace App;
 
+use Illuminate\Support\Str;
+
 trait ResetProvidersTrait
 {
     /**
@@ -31,7 +33,7 @@ trait ResetProvidersTrait
 
                 $providers = $config['app.providers'];
                 $providers = array_filter($providers, function ($p) {
-                    return substr($p, 0, strlen('Illuminate')) == 'Illuminate';
+                    return Str::startsWith($p, 'Illuminate\\');
                 });
 
                 foreach ($customs as $custom) {

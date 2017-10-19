@@ -1,32 +1,103 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+var EmailBox = (function () {
+  var _this;
+  var _$wrapper = $();
+  var _mails = [];
+  var _email = '';
+  var _userId = '';
+  var _url = {};
 
-$(function () {
-  $('.__xe_settingEmail').click(function () {
-    $('.__xe_emailView').slideToggle();
-    $('#__xe_emailSetting').slideToggle();
-  });
-});
+  var _bindEvents = function () {
+    _$wrapper.on('click', '.btnDeleteEmail', function (e) {
+      e.preventDefault();
 
-$(function () {
-  var EmailBox = React.createClass({
-    componentDidMount: function () {
-      this.loadCommentsFromServer();
+      var $this = $(this);
+
+      $this.css({ display: 'none' }).siblings().css({ display: 'inline-block' });
+    });
+
+    _$wrapper.on('click', '.btnDeleteEmailConfirm', function (e) {
+      e.preventDefault();
+
+      var $this = $(this);
+      var email = $this.closest('li.list-group-item').find('[name=email]').val();
+
+      _this.delete(email);
+    });
+
+    _$wrapper.on('click', '.btnDeleteEmailCancle', function (e) {
+      e.preventDefault();
+
+      var $this = $(this);
+
+      $this.siblings().andSelf().css({ display: 'none' }).parent().find('.btnDelete').css({ display: 'inline-block' });
+    });
+
+    _$wrapper.on('click', '#__xe_emailAddBtn', function () {
+      var $input = $('#__xe_addedEmailInput');
+      var email = $input.val();
+      if (!email) {
+        return;
+      }
+
+      $input.val('');
+
+      _this.add(email);
+    });
+
+    _$wrapper.on('change', '[name=email]', function (e) {
+      var $this = $(this);
+      var $liWrapper = $this.closest('li.list-group-item');
+      var $ul = $liWrapper.closest('ul');
+
+      $liWrapper.siblings().each(function () {
+        var $li = $(this);
+
+        if (!$li.find('> span.pull-right').length) {
+          var temp = '<span class="pull-right">';
+          temp +=   '<a href="#" class="btn btn-sm btn-link btnDeleteEmail" style="display: inline-block;">삭제</a>';
+          temp +=   '<a href="#" class="btn btn-sm btn-link btnDeleteEmailConfirm" style="display: none;">삭제확인</a>';
+          temp +=   '<a href="#" class="btn btn-sm btn-link btnDeleteEmailCancle" style="display: none;">취소</a>';
+          temp += '</span>';
+
+          $li.append(temp);
+        }
+      });
+
+      if ($liWrapper.find('> span.pull-right').length > 0) {
+        $liWrapper.find('> span.pull-right').remove();
+      }
+
+      $ul.prepend($liWrapper.detach());
+
+    });
+  };
+
+  return {
+    init: function (opt) {
+      _this = this;
+      _$wrapper = opt.$wrapper;
+      _email = opt.email;
+      _userId = opt.userId;
+      _url = opt.url;
+
+      _bindEvents();
+
+      _this.getEmailList();
+
+      return this;
     },
 
-    getInitialState: function () {
-      return { mails: [], selected: this.props.email };
-    },
-
-    loadCommentsFromServer: function () {
+    getEmailList: function () {
       $.ajax({
-        url: this.props.url.mail.list,
+        url: _url.mail.list,
         type: 'get',
         dataType: 'json',
-        data: { userId: this.props.userId },
+        data: { userId: _userId },
         context: this,
         success: function (result) {
-          this.setState({ mails: result.mails });
+          _mails = result.mails;
+
+          _this.render(result.mails);
         },
 
         error: function (result) {
@@ -35,42 +106,19 @@ $(function () {
       });
     },
 
-    handleChange: function (address) {
-      this.setState($.extend(this.state, { selected: address }));
-    },
-
-    handleAddEmail: function (email) {
+    delete: function (email) {
       $.ajax({
-        url: this.props.url.mail.add,
+        url: _url.mail.delete,
         type: 'post',
         dataType: 'json',
-        data: { userId: this.props.userId, address: email.address },
+        data: { userId: _userId, address: email },
         context: this,
         success: function (result) {
-          var mails = this.state.mails;
-          mails[mails.length] = result.mail;
-          this.setState({ mails: mails });
-          XE.toast('success', '추가되었습니다.', '.__xe_alertEmailModal');
-        },
+          var i = _mails.indexOf(email);
+          _mails.splice(i, 1);
 
-        error: function (result) {
-          XE.toast('danger', result.responseJSON.message, '.__xe_alertEmailModal');
-        },
-      });
-    },
+          _this.render(_mails);
 
-    handleDeleteEmail: function (email) {
-
-      $.ajax({
-        url: this.props.url.mail.delete,
-        type: 'post',
-        dataType: 'json',
-        data: { userId: this.props.userId, address: email.address },
-        context: this,
-        success: function (result) {
-          var i = this.state.mails.indexOf(email);
-          this.state.mails.splice(i, 1);
-          this.setState(this.state.mails);
           XE.toast('success', '삭제하였습니다.', '.__xe_alertEmailModal');
         },
 
@@ -80,181 +128,79 @@ $(function () {
       });
     },
 
-    render: function () {
-      return (
-        React.createElement('div', null,
-          React.createElement(EmailList, {
-          box: this,
-          selected: this.state.selected,
-          selectedOrigin: this.props.email,
-          mails: this.state.mails,
-          onChange: this.handleChange,
-          onDeleteEmail: this.handleDeleteEmail,
-        }),
-          React.createElement(EmailInserter, { onAddEmail: this.handleAddEmail })
-        )
-      );
-    },
-  });
-  var EmailList = React.createClass({
-    handleChange: function (address) {
-      this.props.onChange(address);
-    },
+    add: function (email) {
+      $.ajax({
+        url: _url.mail.add,
+        type: 'post',
+        dataType: 'json',
+        data: { userId: _userId, address: email },
+        context: this,
+        success: function (result) {
+          var email = result.mail;
 
-    render: function () {
-      var mails = this.props.mails;
-      var selected = this.props.selected;
-      var selectedOrigin = this.props.selectedOrigin;
-      var _this = this;
-      var selectedItem = null;
-      var lists = mails.map(function (mail, i) {
-        var item = (
-          React.createElement(EmailItem, {
-          box: _this.props.box,
-          seq: i,
-          isSelected: mail.address == selected,
-          isSelectedOrigin: mail.address == selectedOrigin,
-          mail: mail,
-          onChange: _this.handleChange,
-          onDeleteEmail: _this.props.onDeleteEmail,
-        })
-        );
-        if (mail.address != selected) {
-          return item;
-        } else {
-          selectedItem = item;
-        }
-      });
+          _mails.push(email);
 
-      return (
-        React.createElement('ul', { className: 'list-group' }, selectedItem, lists)
-      );
-    },
-  });
-  var EmailItem = React.createClass({
-    componentDidMount: function () {
-      this.$deleteBtn = $(ReactDOM.findDOMNode(this.refs.deleteBtn));
-      this.$deleteConfirmBtn = $(ReactDOM.findDOMNode(this.refs.deleteConfirmBtn));
-      this.$deleteCancelBtn = $(ReactDOM.findDOMNode(this.refs.deleteCancelBtn));
-    },
+          _this.render(_mails);
 
-    handleChange: function (e) {
-      this.props.onChange(this.props.mail.address);
-    },
-
-    handleDelete: function () {
-      this.$deleteBtn.hide();
-      this.$deleteConfirmBtn.show();
-      this.$deleteCancelBtn.show();
-    },
-
-    handleDeleteConfirm: function () {
-      this.props.onDeleteEmail(this.props.mail);
-    },
-
-    handleDeleteCancel: function () {
-      this.$deleteBtn.show();
-      this.$deleteConfirmBtn.hide();
-      this.$deleteCancelBtn.hide();
-    },
-
-    render: function () {
-      var mail = this.props.mail;
-
-      var deleteBtns = null;
-
-      if (!this.props.isSelectedOrigin) {
-        deleteBtns =
-          React.createElement('span', { className: 'pull-right' },
-            React.createElement('a', {
-            ref: 'deleteBtn',
-            href: '#',
-            className: 'btn btn-sm btn-link',
-            onClick: this.handleDelete,
-          }, '삭제'),
-            React.createElement('a', {
-            ref: 'deleteConfirmBtn',
-            href: '#',
-            style: { display: 'none' },
-            className: 'btn btn-sm btn-link',
-            onClick: this.handleDeleteConfirm,
-          }, '삭제확인'),
-            React.createElement('a', {
-            ref: 'deleteCancelBtn',
-            href: '#',
-            style: { display: 'none' },
-            className: 'btn btn-sm btn-link',
-            onClick: this.handleDeleteCancel,
-          }, '취소')
-          );
-      }
-
-      return (
-        React.createElement('li', { className: 'list-group-item clearfix' },
-          React.createElement('label', null,
-            React.createElement('input', {
-            type: 'radio',
-            ref: 'input',
-            onChange: this.handleChange,
-            name: 'email',
-            value: mail.address,
-            checked: this.props.isSelected,
-          }),
-            ' ' + mail.address
-          ),
-          deleteBtns
-        )
-      );
-    },
-  });
-  var EmailInserter = React.createClass({
-    handleClick: function (e) {
-      e.preventDefault();
-      var $input = $(ReactDOM.findDOMNode(this.refs.input));
-      var email = $input.val();
-      if (!email) {
-        return;
-      }
-
-      $input.val('');
-      this.props.onAddEmail({ address: email });
-    },
-
-    render: function () {
-      return (
-        React.createElement('div', {
-          className: 'input-group input-group-sm',
-          style: { marginBottom: '20px' },
+          XE.toast('success', '추가되었습니다.', '.__xe_alertEmailModal');
         },
-          React.createElement('input', {
-          type: 'text',
-          className: 'form-control',
-          id: '__xe_addedEmailInput',
-          ref: 'input',
-          placeholder: '이메일을 입력하세요',
-        }),
-          React.createElement('span', { className: 'input-group-btn' },
-            React.createElement('buttion', {
-            id: '__xe_emailAddBtn',
-            className: 'btn btn-default',
-            type: 'button',
-            onClick: this.handleClick,
-            ref: 'btn',
-          }, '추가')
-          )
-        )
-      );
+
+        error: function (result) {
+          XE.toast('danger', result.responseJSON.message, '.__xe_alertEmailModal');
+        },
+      });
     },
+
+    render: function (emails) {
+
+      var temp = '';
+
+      temp += '<div>';
+
+      if (emails.length > 0) {
+        temp += '<ul class="list-group">';
+
+        emails.forEach(function (email, i) {
+          var address = email.address;
+          var checked = (address === _email) ? 'checked="checked"' : '';
+
+          temp += '<li class="list-group-item clearfix">';
+          temp +=   '<label><input type="radio" name="email" value="' + address + '" ' + checked + '/> ' + address + '</label>';
+
+          if (email.address !== _email) {
+            temp += '<span class="pull-right">';
+            temp +=   '<a href="#" class="btn btn-sm btn-link btnDeleteEmail" style="display: inline-block;">삭제</a>';
+            temp +=   '<a href="#" class="btn btn-sm btn-link btnDeleteEmailConfirm" style="display: none;">삭제확인</a>';
+            temp +=   '<a href="#" class="btn btn-sm btn-link btnDeleteEmailCancle" style="display: none;">취소</a>';
+            temp += '</span>';
+          }
+
+          temp += '</li>';
+        });
+
+        temp += '</ul>';
+      }
+
+      temp += '<div class="input-group input-group-sm" style="margin-bottom: 20px;">';
+      temp +=   '<input type="text" class="form-control" id="__xe_addedEmailInput" placeholder="이메일을 입력하세요">';
+      temp +=   '<span class="input-group-btn"><buttion id="__xe_emailAddBtn" class="btn btn-default" type="button">추가</buttion></span>';
+      temp += '</div>';
+
+      _$wrapper.html(temp);
+    },
+  };
+})();
+
+$(function () {
+  $('.__xe_settingEmail').click(function () {
+    $('.__xe_emailView').slideToggle();
+    $('#__xe_emailSetting').slideToggle();
   });
 
-  var $box = $('#__xe_emailSetting');
-  ReactDOM.render(
-    React.createElement(EmailBox, {
+  EmailBox.init({
+    $wrapper: $('#__xe_emailSetting'),
     url: url,
-    userId: $box.data('userId'),
-    email: $box.data('email'),
-  }),
-    $box.get(0)
-  );
-
+    userId: $('#__xe_emailSetting').data('user-id'),
+    email: $('#__xe_emailSetting').data('email'),
+  });
 });
