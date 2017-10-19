@@ -7,7 +7,7 @@ return [
     'systemCheck' => 'System check',
     'checkPHPVersion' => 'Check PHP version.',
     'checkDirPermission' => 'Check directory permission.',
-    'checkPHPExtPDO' => 'PDO, pdo_mysql PHP Extension is required.',
+    'checkPHPExtPDO' => 'PDO, (pdo_mysql or pdo_cubrid) PHP Extension is required.',
     'checkPHPExtCURL' => 'cURL PHP Extension is required.',
     'checkPHPExtFILEINFO' => 'FileInfo PHP Extension is required.',
     'checkPHPExtGD' => 'GD PHP Extension is required.',

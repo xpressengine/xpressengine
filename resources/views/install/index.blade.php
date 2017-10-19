@@ -102,6 +102,15 @@
                 </colgroup>
                 <tbody>
                 <tr>
+                    <th scope="row">Driver</th>
+                    <td>
+                        <select class="xe-form-control" name="database_driver">
+                            <option value="mysql">MySQL</option>
+                            <option value="cubrid">CUBRID</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
                     <th scope="row">Host</th>
                     <td><input type="text" class="xe-form-control" name="database_host" placeholder="{{ trans('xe::install.inputDBHost') }}(default: localhost)"></td>
                 </tr>
@@ -300,7 +309,7 @@
                 return false;
             }
 
-            var fields = ['database_name', 'database_password', 'admin_email', 'admin_password', 'admin_password_confirmation'];
+            var fields = ['database_name', 'admin_email', 'admin_password', 'admin_password_confirmation'];
             for (var i in fields) {
                 var field = fields[i];
                 if ($.trim($(f[field]).val()) == '') {
