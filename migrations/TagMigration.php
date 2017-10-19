@@ -23,7 +23,7 @@ class TagMigration extends Migration {
             $table->string('instance_id')->nullable()->comment('instance ID');
             $table->string('word', 100)->comment('tag');
             $table->string('decomposed')->comment('decomposed. for auto complete.');
-            $table->integer('count')->comment('same tag registrations count');
+            $table->integer('count')->default(0)->comment('same tag registrations count');
 
             $table->index('instance_id');
             $table->index('decomposed');
@@ -36,7 +36,7 @@ class TagMigration extends Migration {
             $table->increments('id')->comment('ID');
             $table->integer('tag_id')->comment('tag ID');
             $table->string('taggable_id', 36)->comment('target ID. If Document saved a tag, [taggable_id] is document ID.');
-            $table->integer('position')->comment('position number within same [taggable_id]');
+            $table->integer('position')->default(0)->comment('position number within same [taggable_id]');
             $table->timestamp('created_at')->comment('created date');
 
             $table->unique(['tag_id', 'taggable_id']);
