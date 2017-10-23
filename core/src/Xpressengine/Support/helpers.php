@@ -476,11 +476,12 @@ if (!function_exists('menu_list')) {
      *
      * @package Xpressengine\Menu
      *
-     * @param string $menuId 출력할 메뉴의 ID
+     * @param string               $menuId   출력할 메뉴의 ID
+     * @param string|callable|null $selected 선택된 아이템 지정
      *
      * @return Illuminate\Support\Collection 메뉴아이템 리스트
      */
-    function menu_list($menuId)
+    function menu_list($menuId, $selected = null)
     {
         $menu = null;
         if ($menuId !== null) {
@@ -532,7 +533,7 @@ if (!function_exists('menu_list')) {
                 }
             }
 
-            $current = current_instance_id();
+            $current = $selected ?: current_instance_id();
             if ($current !== null) {
                 $menu->setItemSelected($current);
             }
@@ -673,7 +674,7 @@ if (function_exists('widget') === false) {
      */
     function widget($id, $args = [], $callback = null)
     {
-        return new \Illuminate\View\Expression(app('xe.widget')->render($id, $args, $callback));
+        return new \Illuminate\Support\HtmlString(app('xe.widget')->render($id, $args, $callback));
     }
 }
 

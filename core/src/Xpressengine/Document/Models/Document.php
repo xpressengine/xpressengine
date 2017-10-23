@@ -306,7 +306,12 @@ class Document extends DynamicModel
      */
     public function setReply()
     {
-        $timestamp = time();
+        if ($this->getAttribute('created_at') != null) {
+            $timestamp = $this->getAttribute('created_at')->timestamp;
+        } else {
+            $timestamp = time();
+        }
+
         if ($this->parent_id == null || $this->parent_id == '') {
             $this->setAttribute('head', $timestamp . '-' . $this->id);
         } elseif ($this->parent_id !== $this->id) {

@@ -20,6 +20,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\Request;
 use Xpressengine\Permission\Instance;
 use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
+use Xpressengine\Support\IpMatch;
 use Xpressengine\Theme\ThemeHandler;
 use Xpressengine\User\Models\Guest;
 use Xpressengine\User\Rating;
@@ -37,6 +38,7 @@ use Xpressengine\User\Rating;
  */
 class SettingsMiddleware
 {
+    use IpMatch;
     /**
      * @var Application
      */
@@ -72,6 +74,8 @@ class SettingsMiddleware
     {
         // check permission
         $this->checkPermission($request);
+
+        $this->checkTrustClient($request);
 
         // apply theme
         $this->applySettingsTheme();
@@ -110,6 +114,21 @@ class SettingsMiddleware
         }
 
         if ($this->gate->denies('access', new Instance('settings.'.$permissionId))) {
+            throw new AccessDeniedHttpException();
+        }
+    }
+
+    /**
+     * 클라이언트 주소가 설정페이지에 접근할수 있도록 허가되었는지 확인합니다.
+     *
+     * @param Request $request request
+     * @return void
+     */
+    protected function checkTrustClient(Request $request)
+    {
+        $trusts = $this->app['config']['xe.settings.trusts'];
+
+        if (!$this->match($request->ip(), $trusts)) {
             throw new AccessDeniedHttpException();
         }
     }

@@ -114,7 +114,7 @@ class DocumentMigration extends Migration
         $table->string('locale', 4)->default('')->comment('locale information. Empty string if not set. ko:korean/en:english/...');
 
         $table->string('title', 180)->comment('document title');
-        $table->text('content')->comment('document content');
+        $table->longText('content')->comment('document content');
         $table->text('pure_content')->comment('document pure content. There is content for human readable(HTML removed). It using for fulltext search.');
 
         $table->timestamp('created_at')->comment('document created date');

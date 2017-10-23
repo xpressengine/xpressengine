@@ -18,6 +18,7 @@ use Symfony\Component\Yaml\Yaml;
 use Xpressengine\Support\Migration;
 use Xpressengine\User\UserHandler;
 use Illuminate\Support\Str;
+use Xpressengine\Cubrid\CubridConnection;
 
 class XeInstall extends Command
 {
@@ -81,6 +82,7 @@ class XeInstall extends Command
             'display_name' => 'admin',
         ],
         'database' => [
+            'driver' => 'mysql',
             'host' => 'localhost',
             'dbname' => null,
             'port' => '3306',
@@ -377,6 +379,9 @@ class XeInstall extends Command
 
         $dbInfo = $this->defaultInfos['database'];
 
+        // driver
+        $dbInfo['driver'] = $this->ask("Driver", $dbInfo['driver']);
+
         // host
         $dbInfo['host'] = $this->ask("Host", $dbInfo['host']);
 
@@ -416,7 +421,11 @@ class XeInstall extends Command
         $this->line('Connecting Database using inputted database information..');
 
         try {
-            $dsn = 'mysql:host='.$dbInfo['host'].';dbname='.$dbInfo['dbname'];
+            if($dbInfo['driver'] === 'cubrid'){
+                $dsn = 'cubrid:host='.$dbInfo['host'].';dbname='.$dbInfo['dbname'];
+            }else{
+                $dsn = 'mysql:host='.$dbInfo['host'].';dbname='.$dbInfo['dbname'];
+            }
             if ($dbInfo['port']) {
                 $dsn .= ";port=".$dbInfo['port'];
             }
@@ -425,14 +434,8 @@ class XeInstall extends Command
                 $dsn, $dbInfo['username'], $dbInfo['password'], array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)
             );
 
-            // check table count
-            $stmt = $db->query(
-                "SELECT COUNT(*) as cnt FROM information_schema.tables WHERE table_schema = '{$dbInfo['dbname']}'"
-            );
-            $result = $stmt->fetch();
-            $count = $result['cnt'];
         } catch (\Exception $e) {
-            $this->output->error('Connection failed!! Check Your Database!');
+            $this->output->error('Connection failed!! Check Your Database!' . $e->getMessage());
             throw $e;
         }
 
@@ -453,6 +456,7 @@ class XeInstall extends Command
         $prefix = $this->ask("Table Prefix", $dbInfo['prefix']);
 
         $info = [
+            'default' => $dbInfo['driver'],
             'connections' => [
                 'mysql' => [
                     'driver'    => 'mysql',
@@ -466,6 +470,16 @@ class XeInstall extends Command
                     'prefix' => $prefix . '_',
                     'strict'    => false,
                 ],
+                'cubrid' => [
+                    'driver'   => 'cubrid',
+                    'host'      => $dbInfo['host'],
+                    'database'  => $dbInfo['dbname'],
+                    'username'  => $dbInfo['username'],
+                    'password'  => $dbInfo['password'],
+                    'port'      => $dbInfo['port'],
+                    'charset'  => 'utf8',
+                    'prefix' => $prefix . '_',
+                ]
             ]
         ];
 
@@ -609,7 +623,6 @@ class XeInstall extends Command
     private function setSiteInfo($siteInfo, $debug = true)
     {
         $info = [
-            'name' => 'XE3',
             'debug' => $debug,
             'url' => $siteInfo['url'],
             'timezone' => $siteInfo['timezone'],
@@ -719,6 +732,15 @@ class XeInstall extends Command
         $app = include($appFile);
 
         $kernel = $app->make('Illuminate\Contracts\Console\Kernel');
+
+        // $app->resolving('db', function($db) {
+        //     $db->extend('cubrid', function ($config, $name) {
+        //         $config['name'] = $name;
+        //         return new CubridConnection($config);
+        //     });
+        //
+        // });
+
         if ($withXE) {
             $kernel->bootstrap(true);
         } else {
@@ -738,6 +760,9 @@ class XeInstall extends Command
         /** @var Filesystem $filesystem */
         $filesystem = app('files');
         $files = $filesystem->files(base_path('migrations'));
+
+        $config = app('config');
+        $config['database.default'] = $this->defaultInfos['database']['driver'];
 
         foreach ($files as $file) {
             $class = "\\Xpressengine\\Migrations\\".basename($file, '.php');

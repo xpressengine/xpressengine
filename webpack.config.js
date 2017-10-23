@@ -25,16 +25,8 @@ var target = (process.env.npm_lifecycle_event === 'build')? true : !!$.util.env.
 
 var common = {
   entry: {
-    'vendor': ['react', 'react-dom', 'moment'],
     'assets/core/permission/permission.bundle': [
-     pathInfo.permission + '/Permission.jsx',
-     pathInfo.permission + '/PermissionExclude.jsx',
-     pathInfo.permission + '/PermissionInclude.jsx',
-     pathInfo.permission + '/PermissionRadioComp.jsx',
-     pathInfo.permission + '/PermissionRenderer.jsx',
-     pathInfo.permission + '/PermissionTag.jsx',
-     pathInfo.permission + '/PermissionTagSuggestion.jsx',
-     pathInfo.permission + '/SettingsPermission.jsx',
+      pathInfo.permission + '/permission.js',
     ],
 
     'assets/core/common/js/xe.bundle': [
@@ -58,28 +50,19 @@ var common = {
     path: path.resolve(__dirname, './'),
     filename: '[name].js',
   },
-  plugins: [
-    new CommonsChunkPlugin({
-      name: 'vendor',
-      filename: 'assets/vendor/vendor.bundle.js'
-    }),
-  ],
+  plugins: [],
   module: {
-    rules: [
-     {
-       test: /(\.js|\.jsx)$/,
-       exclude: /node_modules/,
-       use: {
-         loader: 'babel-loader',
-         options: {
-           cacheDirectory: true,
-           presets: ['es2015', 'react'],
-         },
+    rules: [{
+     test: /(\.js|\.jsx)$/,
+     exclude: /node_modules/,
+     use: {
+       loader: 'babel-loader',
+       options: {
+         cacheDirectory: true,
+         presets: ['es2015'],
        },
-
-
-    },
-    ],
+     },
+    }],
   },
   resolve: {
     alias: {

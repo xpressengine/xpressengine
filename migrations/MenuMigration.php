@@ -54,8 +54,8 @@ class MenuMigration extends Migration {
             $table->string('m_basic_image_id', 36)->default('')->comment('image menu item setting');
             $table->string('m_hover_image_id', 36)->default('')->comment('image menu item setting');
             $table->string('m_selected_image_id', 36)->default('')->comment('image menu item setting');
-            $table->integer('ordering')->comment('ordering number for menu item sort.');
-            $table->boolean('activated')->comment('value of menu item activating');
+            $table->integer('ordering')->default(0)->comment('ordering number for menu item sort.');
+            $table->boolean('activated')->default(true)->comment('value of menu item activating');
             $table->string('options')->default('')->comment('options');
 
             $table->primary('id');

@@ -52,6 +52,17 @@ var SiteMap = (function () {
        '</div>',
       ].join('\n');
     },
+    getUrl: function (item) {
+        var url = item.url;
+        if (item.type !== 'xpressengine@directLink') {
+            url = '/' + url;
+            url = Utils.getUri(xeBaseURL + url);
+        } else {
+            url = url;
+        }
+
+        return url;
+    },
     /**
      * Node 템플릿을 리턴한다.
      * @memberof SiteMap
@@ -59,23 +70,11 @@ var SiteMap = (function () {
      * @return {string}
      * */
     getNodeTemplate: function (item) {
-      // var move = (item.items && item.items.length > 0) ? 'move' : '';
-      var url = item.url;
+      var url = _this.getUrl(item);
       var homeOn = '';
-
-      if (item.type !== 'xpressengine@directLink') {
-        if (item.id == _home) {
-          url = '/';
-          homeOn = 'home-on';
-
-        } else {
-          url = '/' + url;
-        }
-
-        url = Utils.getUri(xeBaseURL + url);
-
-      } else {
-        url = url;
+      if (item.id == _home) {
+        url = '/';
+        homeOn = 'home-on';
       }
 
       var temp = '';
@@ -85,7 +84,7 @@ var SiteMap = (function () {
       temp +=         "<dt class='sr-only'>" + XE.Lang.trans(item.title) + '</dt>';
       temp +=         "<dd class='ellipsis'><a href='" + _menusUrl + '/' + item.menu_id + '/items/' + item.id + "'>" + XE.Lang.trans(item.title) + '</a></dd>';
       temp +=         "<dt class='sr-only'>" + url + '</dt>';
-      temp +=         "<dd class='text-blue ellipsis'><a href='" + url + "'>" + url + '</a><em>[' + item.type + ']</em></dd>';
+      temp +=         "<dd class='text-blue ellipsis'><a href='" + url + "' class='item-url'>" + url + '</a><em>[' + item.type + ']</em></dd>';
       temp +=       '</dl>';
       temp +=     '</div>';
       temp +=     '<div class="btn-group pull-right">';
@@ -144,10 +143,11 @@ var SiteMap = (function () {
         if (!$this.hasClass('home-on')) {
 
           var $currentHome = $('.home-on');
-          var selectedItemData = $this.closest('.item-content').data('item');
+          var $currentItem = $currentHome.closest('.item-content');
+          var $thisItem = $this.closest('.item-content');
+          var selectedItemData = $thisItem.data('item');
 
-          $currentHome.removeClass('home-on');
-          $this.addClass('home-on');
+          _this.changeHome($currentItem, $thisItem);
 
           Tree.setPrevent(true);
 
@@ -167,14 +167,22 @@ var SiteMap = (function () {
 
             error: function (data) {
               XE.toast('error', 'home setting was failed!');
-              $currentHome.addClass('home-on');
-              $this.removeClass('home-on');
+              _this.changeHome($thisItem, $currentItem);
             },
           });
         }
 
       });
 
+    },
+    changeHome: function ($current, $selected) {
+        $current.find('.btn-sethome').removeClass('home-on');
+        var currentOriginUrl = _this.getUrl($current.data('item'));
+        $current.find('.item-url').attr('href', currentOriginUrl).text(currentOriginUrl);
+        $selected.find('.btn-sethome').addClass('home-on');
+        $selected.find('.item-url').attr('href', '/').text('/');
+
+        _home = $selected.data('item').id;
     },
     /**
      * Tree를 구성한다.

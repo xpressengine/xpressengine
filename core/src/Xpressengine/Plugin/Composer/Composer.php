@@ -49,14 +49,14 @@ class Composer
     protected static $pluginCacheDirectory = 'storage/framework/plugins';
 
     public static $basePlugins = [
-        'xpressengine-plugin/alice' => '0.9.13',
-        'xpressengine-plugin/board' => '0.9.22',
-        'xpressengine-plugin/ckeditor' => '0.9.20',
-        'xpressengine-plugin/claim' => '0.9.5',
-        'xpressengine-plugin/comment' => '0.9.16',
-        'xpressengine-plugin/news_client' => '0.9.5',
-        'xpressengine-plugin/page' => '0.9.6',
-        'xpressengine-plugin/widget_page' => '0.9.0'
+        'xpressengine-plugin/alice' => '*',
+        'xpressengine-plugin/board' => '*',
+        'xpressengine-plugin/ckeditor' => '*',
+        'xpressengine-plugin/claim' => '*',
+        'xpressengine-plugin/comment' => '*',
+        'xpressengine-plugin/news_client' => '*',
+        'xpressengine-plugin/page' => '*',
+        'xpressengine-plugin/widget_page' => '*'
     ];
 
     /**

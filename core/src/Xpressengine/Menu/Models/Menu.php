@@ -84,14 +84,21 @@ class Menu extends Category
     /**
      * Set selected to item has given key
      *
-     * @param string $itemKey item key
+     * @param string|callable $itemKey item key
      * @return void
      */
     public function setItemSelected($itemKey)
     {
         $tree = $this->getTree();
 
-        if (isset($tree[$itemKey])) {
+        if (is_callable($itemKey)) {
+            foreach ($tree->getNodes() as $item) {
+                if ($itemKey($item)) {
+                    $item->setSelected();
+                    break;
+                }
+            }
+        } elseif (isset($tree[$itemKey])) {
             $tree[$itemKey]->setSelected();
         }
     }

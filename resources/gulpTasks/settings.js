@@ -17,7 +17,6 @@ module.exports = (() => {
    '**/*',
    '!**/*.scss',
    '!resources/assets/core/lang/LangEditorBox.js',
-   '!resources/assets/core/permission/*.jsx',
    '!resources/assets/core/permission/*.js',
    '!resources/assets/core/settings/js/admin.js',
    '!resources/assets/core/xe-ui-component/components',
@@ -25,7 +24,6 @@ module.exports = (() => {
    '!resources/assets/core/common/js/storeCategory.js',
    '!resources/assets/core/common/js/dynamicField.js',
    '!resources/assets/core/common/js/xe.js',
-   '!resources/assets/core/common/js/toggleMenu.js',
    '!resources/assets/core/member/settings/edit.js',
    '!resources/assets/core/tree/**.js',
    'resources/assets/core/xe-ui-component/js/*',
@@ -87,6 +85,18 @@ module.exports = (() => {
         .pipe($.plumber())
         .pipe($.uglify())
         .pipe($.concat('xe.tree.js'))
+        .pipe(gulp.dest('assets/core/common/js'));
+    },
+
+    'assets:draft': () => {
+      return gulp.src([
+          'assets/vendor/bootstrap/js/collapse.js',
+          'assets/core/common/js/draft.js',
+        ])
+        .pipe($.plumber())
+        .pipe($.babel({presets: ['es2015']}))
+        .pipe($.uglify())
+        .pipe($.concat('draft.bundle.js'))
         .pipe(gulp.dest('assets/core/common/js'));
     },
 

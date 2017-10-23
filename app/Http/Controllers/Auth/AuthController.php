@@ -54,7 +54,7 @@ class AuthController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
 
     /**
      * The path to the login route.
@@ -191,7 +191,7 @@ class AuthController extends Controller
         $credentials['status'] = \XeUser::STATUS_ACTIVATED;
 
         if ($this->auth->attempt($credentials, $request->has('remember'))) {
-            $this->redirectTo = $request->get('redirectUrl');
+            $this->redirectTo = $request->get('redirectUrl', $this->redirectTo);
             return redirect()->intended($this->redirectPath());
         }
 
@@ -236,7 +236,7 @@ class AuthController extends Controller
     {
         $themeHandler->selectBlankTheme();
 
-        $redirectUrl = $this->redirectPath = $request->get('redirectUrl', $urlGenerator->previous());
+        $redirectUrl = $request->get('redirectUrl', $urlGenerator->previous());
 
         return \XePresenter::make('admin', compact('redirectUrl'));
     }
