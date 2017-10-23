@@ -42,9 +42,9 @@ class DownloadRank extends AbstractWidget
         $args = $this->config;
         $limit = isset($args['limit']) ? $args['limit'] : 5;
 
-        $files = XeStorage::whereNull('originId')
-            ->orderBy('downloadCount', 'desc')
-            ->orderBy('createdAt', 'desc')
+        $files = XeStorage::whereNull('origin_id')
+            ->orderBy('download_count', 'desc')
+            ->orderBy('created_at', 'desc')
             ->limit($limit)->get();
 
         return $this->renderSkin([
