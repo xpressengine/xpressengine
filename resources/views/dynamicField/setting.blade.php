@@ -66,7 +66,7 @@
             <div class="form-group">
                 <label for="">{{xe_trans('xe::type')}}</label>
                 <select name="typeId" class="form-control __xe_type_id">
-                    <option value="">Select Item</option>
+                    <option value="">{{xe_trans('xe::select')}}</option>
                     @foreach($fieldTypes as $fieldType)
                         <option value="{{ $fieldType::getId() }}">{{ $fieldType->name() }}</option>
                     @endforeach

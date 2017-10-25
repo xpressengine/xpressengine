@@ -63,7 +63,7 @@ class DynamicFieldSection extends Section
     {
         return [
             'typeId' => 'Required',
-            'id' => 'Required|AlphaNum|Between:4,20',
+            'id' => 'Required|AlphaNum|Between:2,10',
             'label' => 'LangRequired',
             'skinId' => 'Required',
         ];

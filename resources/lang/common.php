@@ -2213,8 +2213,8 @@ return [
         'en' => 'Label',
     ],
     'dynamicFieldIdDescription' => [
-        'ko' => '아이디는 데이터 사용 및 저장의 키워드로 사용 됩니다.',
-        'en' => 'IDs are used as keywords for data usage and storage.',
+        'ko' => '아이디는 데이터 사용 및 저장의 키워드로 사용 됩니다.  2~10자 영문, 숫자로 입력합니다.',
+        'en' => 'IDs are used as keywords for data usage and storage. Enter 2 to 10 alphanumeric characters.',
     ],
     'dynamicFieldLabelDescription' => [
         'ko' => '입력 폼, 데이터 출력할 때 사용자에게 어떤 내용인지 알려주기 위해 사용 됩니다.',
