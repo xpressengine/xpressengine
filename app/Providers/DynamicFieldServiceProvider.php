@@ -14,6 +14,7 @@
 
 namespace App\Providers;
 
+use App\FieldTypes\Email;
 use App\FieldTypes\Textarea;
 use Illuminate\Support\ServiceProvider;
 use App;
@@ -36,6 +37,7 @@ use App\FieldSkins\Boolean\DefaultSkin as BooleanDefault;
 use App\FieldSkins\Address\DefaultSkin as AddressDefault;
 use App\FieldSkins\CellPhoneNumber\DefaultSkin as CellPhoneNumberDefault;
 use App\FieldSkins\Textarea\DefaultSkin as TextareaDefault;
+use App\FieldSkins\Email\DefaultSkin as EmailDefault;
 
 /**
  * laravel service provider
@@ -73,6 +75,7 @@ class DynamicFieldServiceProvider extends ServiceProvider
         $registerHandler->add(Address::class);
         $registerHandler->add(CellPhoneNumber::class);
         $registerHandler->add(Textarea::class);
+        $registerHandler->add(Email::class);
     }
 
     private function registerFieldDefaultSkin()
@@ -86,6 +89,7 @@ class DynamicFieldServiceProvider extends ServiceProvider
         $registerHandler->add(AddressDefault::class);
         $registerHandler->add(CellPhoneNumberDefault::class);
         $registerHandler->add(TextareaDefault::class);
+        $registerHandler->add(EmailDefault::class);
     }
 
     /**
