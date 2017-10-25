@@ -1,5 +1,6 @@
 <div class="form-group">
     <label class="__xe_df __xe_df_address __xe_df_address_{{$config->get('id')}}">{{xe_trans($config->get('label'))}}</label>
+    @if ($config->get('skinDescription') !== '')<small>{{$config->get('skinDescription')}}</small>@endif
     <div class="xe-form-inline">
         <input type="text" name="{{$key['postcode']}}" placeholder="{{xe_trans('xe::postCode')}}" readonly="readonly" class="xe-form-control" value="{{$data['postcode']}}">
         <input type="button" class="xe-btn xe-btn-default" onclick="execDaumPostcode('{{$config->get('id')}}')" value="{{xe_trans('xe::findPostCode')}}"><br>
