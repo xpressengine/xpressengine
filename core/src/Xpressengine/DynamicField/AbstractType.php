@@ -220,7 +220,7 @@ abstract class AbstractType implements ComponentInterface
      * @param ColumnEntity $column join column entity
      * @return void
      */
-    private function createTable(ColumnEntity $column)
+    protected function createTable(ColumnEntity $column)
     {
         $self = $this;
         $this->handler->connection()->getSchemaBuilder()->create(
@@ -245,7 +245,7 @@ abstract class AbstractType implements ComponentInterface
      * @param ColumnEntity $column join column entity
      * @return void
      */
-    private function createRevisionTable(ColumnEntity $column)
+    protected function createRevisionTable(ColumnEntity $column)
     {
         // create revision table
         if ($this->config->get('revision') === true) {
@@ -281,7 +281,7 @@ abstract class AbstractType implements ComponentInterface
      *
      * @return void
      */
-    private function createField()
+    protected function createField()
     {
         $self = $this;
         $schema = $this->handler->connection()->getSchemaBuilder();
@@ -317,7 +317,7 @@ abstract class AbstractType implements ComponentInterface
      *
      * @return void
      */
-    private function createFieldRevision()
+    protected function createFieldRevision()
     {
         if ($this->config->get('revision') == true) {
             $self = $this;
@@ -366,7 +366,7 @@ abstract class AbstractType implements ComponentInterface
      *
      * @return void
      */
-    private function dropTable()
+    protected function dropTable()
     {
         /**
          * @param \Illuminate\Database\Schema\Builder $schema
@@ -393,7 +393,7 @@ abstract class AbstractType implements ComponentInterface
      *
      * @return void
      */
-    private function dropField()
+    protected function dropField()
     {
         $self = $this;
         $schema = $this->handler->connection()->getSchemaBuilder();
@@ -481,7 +481,7 @@ abstract class AbstractType implements ComponentInterface
      * @param array $wheres \Illuminate\Database\Query\Builder's wheres attribute
      * @return array
      */
-    private function parseWhere(array $wheres)
+    protected function parseWhere(array $wheres)
     {
         $where = [];
         foreach ($wheres as $arr) {
