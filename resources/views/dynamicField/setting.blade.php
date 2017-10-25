@@ -2,7 +2,7 @@
 
 <div id="__xe_container_DF_setting_{{$group}}" class="table-responsive">
     <div class="pull-right">
-        <button class="btn btn-primary __xe_btn_add" data-toggle="xe-modal">add</button>
+        <button class="btn btn-primary __xe_btn_add" data-toggle="xe-modal">{{xe_trans('xe::add')}}</button>
     </div>
 
     <table class="table">
@@ -10,13 +10,13 @@
         <thead>
         <tr>
             <th>#</th>
-            <th>ID</th>
-            <th>Label</th>
-            <th>Type</th>
-            <th>Skin</th>
-            <th>Use</th>
-            <th>Config</th>
-            <th>Delete</th>
+            <th>{{xe_trans('xe::id')}}</th>
+            <th>{{xe_trans('xe::label')}}</th>
+            <th>{{xe_trans('xe::type')}}</th>
+            <th>{{xe_trans('xe::skin')}}</th>
+            <th>{{xe_trans('xe::use')}}</th>
+            <th>{{xe_trans('xe::config')}}</th>
+            <th>{{xe_trans('xe::delete')}}</th>
         </tr>
         </thead>
         <tbody class="__xe_tbody">
@@ -28,10 +28,10 @@
             <td class="__xe_column_skinName"></td>
             <td class="__xe_column_use"></td>
             <td>
-                <a class="text-light-blue __xe_btn_edit" href="#">Edit</a>
+                <a class="text-light-blue __xe_btn_edit" href="#">{{xe_trans('xe::edit')}}</a>
             </td>
             <td>
-                <a class="text-red __xe_btn_delete" href="#">Delete</a>
+                <a class="text-red __xe_btn_delete" href="#">{{xe_trans('xe::delete')}}</a>
             </td>
         </tr>
         </tbody>
@@ -64,7 +64,7 @@
         @endif
         <div class="step">
             <div class="form-group">
-                <label for="">Type</label>
+                <label for="">{{xe_trans('xe::type')}}</label>
                 <select name="typeId" class="form-control __xe_type_id">
                     <option value="">Select Item</option>
                     @foreach($fieldTypes as $fieldType)
@@ -73,13 +73,15 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="">ID</label>
+                <label for="">{{xe_trans('xe::id')}}</label>
+                <small>{{xe_trans('xe::dynamicFieldIdDescription')}}</small>
                 <input type="text" name="id" class="form-control">
             </div>
         </div>
         <div class="step">
             <div class="form-group">
-                <label for="">Label</label>
+                <label for="">{{xe_trans('xe::label')}}</label>
+                <small>{{xe_trans('xe::dynamicFieldLabelDescription')}}</small>
                 <div class="dynamic-lang-editor-box" data-name="label" data-lang-key="" data-valid-name="Label"></div>
             </div>
             <div class="form-group">
@@ -90,14 +92,16 @@
                 <div class="checkbox mg-reset mg-bottom">
                     <label>
                         <input type="checkbox" class="__xe_checkbox-config" data-name="use" checked="checked"/>
-                        Use
+                        {{xe_trans('xe::use')}}
                     </label>
+                    <small>{{xe_trans('xe::dynamicFieldUseDescription')}}</small>
                 </div>
                 <div class="checkbox mg-reset mg-bottom">
                     <label>
                         <input type="checkbox" class="__xe_checkbox-config" data-name="required" checked="checked"/>
-                        Rquired
+                        {{xe_trans('xe::inputRequired')}}
                     </label>
+                    <small>{{xe_trans('xe::dynamicFieldRequiredDescription')}}</small>
                 </div>
             </div>
             <div class="form-group">

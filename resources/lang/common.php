@@ -2204,4 +2204,32 @@ return [
     'adminLog' => [
         'ko' => '관리자 접근 로그',
     ],
+    'id' => [
+        'ko' => '아이디',
+        'en' => 'ID',
+    ],
+    'label' => [
+        'ko' => '라벨',
+        'en' => 'Label',
+    ],
+    'dynamicFieldIdDescription' => [
+        'ko' => '아이디는 데이터 사용 및 저장의 키워드로 사용 됩니다.',
+        'en' => 'IDs are used as keywords for data usage and storage.',
+    ],
+    'dynamicFieldLabelDescription' => [
+        'ko' => '입력 폼, 데이터 출력할 때 사용자에게 어떤 내용인지 알려주기 위해 사용 됩니다.',
+        'en' => 'Labels are used to tell the user what to expect when typing an input form.',
+    ],
+    'dynamicFieldUseDescription' => [
+        'ko' => '입력을 더이상 사용하지 않을 경우 체크를 해제합니다.',
+        'en' => 'Clear the check box if you no longer want to use the input.',
+    ],
+    'dynamicFieldRequiredDescription' => [
+        'ko' => '사용자 필수 입력을 해야할 경우 체크합니다.',
+        'en' => 'Check if user input is required.',
+    ],
+    'inputRequired' => [
+        'ko' => '입력 필수',
+        'en' => 'Input required',
+    ],
 ];
