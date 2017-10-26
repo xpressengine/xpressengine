@@ -19,9 +19,6 @@ use Illuminate\Database\Query\Builder;
 /**
  * ProxyInterface
  *
- * * DynamicQuery 에서 first, get, insert, update, delete 처리 시 ProxyManager 에 등록된 Proxy 처리
- * * ProxyManager 에 등록하기 위한 interface
- *
  * @category    Database
  * @package     Xpressengine\Database
  * @author      XE Developers <developers@xpressengine.com>

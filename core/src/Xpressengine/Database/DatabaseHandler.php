@@ -20,62 +20,6 @@ use Illuminate\Database\ConnectionResolverInterface;
 /**
  * DatabaseHandler
  *
- * * Illuminate\Database 를 이용해 데이터 연결
- * * 다중 database 연결/Transaction 지원
- * * 각 package, plugin 에서 database connection 을 선택적으로 이용 할 수 있도록 지원
- * * xe.php 의 database config 설정
- *      - laravel database config 를 이용해서 Database 연결
- * * Illuminate\Database 의 인터페이스 지원
- *      - 다중 connection, proxy 처리를 위해 추가 인터페이스 지원
- *
- * ## app binding
- * * xe.db 로 바인딩 되어 있음
- * * XeDB facade 제공
- *
- * ## interception
- * * XeDB
- *
- * ## 사용법
- *
- * ### Database connection
- * * 기본 설정으로 되어 있는 database connect
- * * database.php 의 default 설정으로 연결
- *
- * ```php
- * // VirtualConnectionInterface
- * $connector = XeDB::connection();
- * ```
- * * xe.php 의 database config 'configName' 설정으로 되어 있는 database connect
- *
- * ```php
- * $connector = XeDB::connection('configName');
- * ```
- *
- * ### Transaction
- * * VirtualConnection 통해 TransactionHandler 에서 처리
- * * 모든 Connection 에 transaction 처리됨
- *
- * ```php
- * XeDB::beginTransaction();
- * XeDB::commit();
- * XeDB::rollBack();
- * ```
- *
- * ### Query
- * * Database 에 query 하기 위해서 VirtualConnectionInterface 의 table(), dynamic() 메소드 사용
- * * table(), dynamic() 은 DynamicQuery 반환
- * * DynamicQuery 는 Illuminate\Database\Query\Builder 사용
- * * dynamic() 은 ProxyManager 를 사용하도록 함 (DynamicField 의 DatabaseProxy 참고)
- *
- * ```php
- * $connector = app('xe.db');
- * $query = XeDB::table('user');
- * $result = XeDB::table('user')->first();
- *
- * $proxyConfig = [... config for proxy ...];
- * $query = XeDB::dynamic('tableName', $proxyConfig);
- * ```
- *
  * @category    Database
  * @package     Xpressengine\Database
  * @author      XE Developers <developers@xpressengine.com>

@@ -21,8 +21,6 @@ use Xpressengine\Plugin\ComponentInterface;
 /**
  * AbstractSkin
  *
- * * Type 에서 출력할 때 사용할 스킨 필요
- *
  * @category    DynamicField
  * @package     Xpressengine\DynamicField
  * @author      XE Developers <developers@xpressengine.com>

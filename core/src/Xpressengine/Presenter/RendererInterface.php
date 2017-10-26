@@ -18,7 +18,6 @@ use Illuminate\Contracts\Support\Renderable;
 
 /**
  * RendererInterface
- * * Presenter 에서 사용 될 Renderer들을 위한 interface
  *
  * @category  Presenter
  * @package   Xpressengine\Presenter

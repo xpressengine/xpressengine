@@ -21,8 +21,6 @@ use Xpressengine\Database\ProxyManager;
 /**
  * Builder
  *
- * * DynamicQuery 인터페이스 지원
- *
  * @category    Database
  * @package     Xpressengine\Database
  * @author      XE Developers <developers@xpressengine.com>

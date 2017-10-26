@@ -24,24 +24,6 @@ use Closure;
 /**
  * TransactionHandler
  *
- * * DatabaseHandler 에서 생성된 VirtualConnection 의 여러개의 database connection 을
- * 하나의 transaction 으로 관리
- *      - DatabaseHandler 에 의해 생성된 VirtualConnection 들의 transaction 관리
- *      - 각 VirtualConnection 가 갖는 connection 들은 연관성 없는 transaction 으로 처리됨
- *      - TransactionHandler 로 단일 connection 같이 처리
- *      - 하나 이상의 물리적으로 다른 connection 을 동일한 transaction 으로 처리
- *
- * ## 사용법
- *
- * ### Transaction
- * * VirtualConnection 통해 TransactionHandler 에서 처리
- *
- * ```php
- * XeDB::beginTransaction();
- * XeDB::commit();
- * XeDB::rollBack();
- * ```
- *
  * @category    Database
  * @package     Xpressengine\Database
  * @author      XE Developers <developers@xpressengine.com>

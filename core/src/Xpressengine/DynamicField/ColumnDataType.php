@@ -17,9 +17,6 @@ namespace Xpressengine\DynamicField;
 /**
  * ColumnDataType
  *
- * * Type 에서 table 스키마 를 정의 하기위해 Column Entity 사용
- * * ColumnEntity class 에서 column 의 dataType 을 정의 할 때 사용 가능한 값 정의
- *
  * @category    DynamicField
  * @package     Xpressengine\DynamicField
  * @author      XE Developers <developers@xpressengine.com>

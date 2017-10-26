@@ -25,8 +25,6 @@ use Xpressengine\Plugin\ComponentTrait;
 /**
  * AbstractType
  *
- * * DynamicField 의 타입을 정의할 때 사용되는 추상 클래스
- *
  * @category    DynamicField
  * @package     Xpressengine\DynamicField
  * @author      XE Developers <developers@xpressengine.com>

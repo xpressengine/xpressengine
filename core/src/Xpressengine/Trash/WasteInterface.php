@@ -16,7 +16,6 @@ namespace Xpressengine\Trash;
 
 /**
  * WasteInterface
- * > 휴지통 패키지에 등록하기 위해서 이 인터페이스를 따라야 한다.
  *
  * @category    Trash
  * @package     Xpressengine\Trash

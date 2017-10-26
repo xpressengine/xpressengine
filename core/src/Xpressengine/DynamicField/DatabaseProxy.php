@@ -22,9 +22,6 @@ use Xpressengine\Config\ConfigEntity;
 /**
  * DatabaseProxy
  *
- * * DynamicField 는 XE Database 패키지의 Proxy 기능으로 구현됨
- * * 이 클래스 인스턴스를 XE Database ProxyManager 에 등록 함
- *
  * @category    DynamicField
  * @package     Xpressengine\DynamicField
  * @author      XE Developers <developers@xpressengine.com>

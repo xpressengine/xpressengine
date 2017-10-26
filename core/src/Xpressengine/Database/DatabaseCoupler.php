@@ -19,9 +19,6 @@ use Illuminate\Database\DatabaseManager;
 /**
  * DatabaseCoupler
  *
- * * 생성된 VirtualConnection 관리 및 DatabaseManager 를 이용한 Connection 생성
- * * VirtualConnection 에서 접근해야 할 자원들 모음
- *
  * @category    Database
  * @package     Xpressengine\Database
  * @author      XE Developers <developers@xpressengine.com>

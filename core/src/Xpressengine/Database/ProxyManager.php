@@ -20,15 +20,6 @@ use Xpressengine\Register\Container;
 /**
  * ProxyManager
  *
- * * DynamicQuery 에서 first, get, insert, update, delete 처리 시
- * ProxyManager 에 등록된 Proxy 처리
- *      - DynamicField package 를 Proxy interface 를 이용해서 지원
- *
- * * VirtualConnectionInterface 의 dynamic() 메서드를 통해 획득한
- * DynamicQuery 에서 proxy 를 사용할 수 있음
- *
- * * DynamicQuery 의 setProxy(true)->setProxyOption() 로 proxy 를 지원하도록 설정 할 수 있음
- *
  * @category    Database
  * @package     Xpressengine\Database
  * @author      XE Developers <developers@xpressengine.com>

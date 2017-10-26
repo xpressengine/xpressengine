@@ -20,8 +20,6 @@ use Xpressengine\Database\DynamicQuery;
 /**
  * RevisionManager
  *
- * * DynamicField 에서 revision 지원
- *
  * @category    DynamicField
  * @package     Xpressengine\DynamicField
  * @author      XE Developers <developers@xpressengine.com>

@@ -26,11 +26,6 @@ use Xpressengine\Keygen\Keygen;
 /**
  * DynamicModel
  *
- * * Illuminate\Database\Eloquent\Model extends
- * * DynamicQuery 를 처리하기 위해 proxy, dynamic 관련 설정 요소 추가
- * * XE3 에서 Database column 이름을 Camel case 로 사용함에 따른 날짜 column 이름 수정
- * * 레코드 추가할 때 Xpressengine\Keygen\Keygen 을 이용한 id 자동 생성 기능
- *
  * @category    Database
  * @package     Xpressengine\Database
  * @author      XE Developers <developers@xpressengine.com>

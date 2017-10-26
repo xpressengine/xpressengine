@@ -26,31 +26,6 @@ use Throwable;
 /**
  * VirtualConnection
  *
- * * config/xe.php 의 설정에 따라 Illuminate\Database\Connection 관리
- * * select query 할 경우 slave 설정의 connection 반환
- * * Illuminate\Database\Connection 의 wrapper class
- * * Database 의 Proxy 를 처리하기위해 DynamicQuery 사용
- *
- * ## 사용
- *
- * ### Database Connection
- * ```php
- * $connector = app('xe.db');
- * $connection = $connector->master();
- * $connection = $connector->slave();
- * ```
- *
- * ### Query
- *
- * ```php
- * $connector = app('xe.db');
- * $query = $connector->table('user');
- * $result = $connector->table('user')->first();
- *
- * $proxyConfig = [... config for proxy ...];
- * $query = $connector->dynamic('tableName', $proxyConfig);
- * ```
- *
  * @category    Database
  * @package     Xpressengine\Database
  * @author      XE Developers <developers@xpressengine.com>

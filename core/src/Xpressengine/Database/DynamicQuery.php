@@ -19,11 +19,6 @@ use Illuminate\Database\Query\Builder;
 /**
  * DynamicQuery
  *
- * * Illuminate\Database\Query\Builder 를 extends 하여 기능 추가
- * * insert, update, delete, select 동작할 때 dynamic, proxy 사용여부에 따라 추가 기능 사용
- * * proxy 사용할 때 ProxyManager 에 등록된 Proxy 동작
- * * dynamic 을 사용하지 않으면 Illuminate Builder 직접 사용
- *
  * @category    Database
  * @package     Xpressengine\Database
  * @author      XE Developers <developers@xpressengine.com>

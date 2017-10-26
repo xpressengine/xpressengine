@@ -20,9 +20,6 @@ use Xpressengine\Support\Entity;
 /**
  * ColumnEntity
  *
- * * FieldType 에서 table 스키마 를 정의 하기위해 사용
- * * AbstractFieldType class 의 columns 멤버 변수의 항목들을 ColumnEntity class 로 구성
- *
  * @category    DynamicField
  * @package     Xpressengine\DynamicField
  * @author      XE Developers <developers@xpressengine.com>
