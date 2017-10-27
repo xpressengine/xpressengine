@@ -56,13 +56,6 @@ class AuthController extends Controller
      */
     protected $redirectTo = '/';
 
-    /**
-     * The path to the login route.
-     *
-     * @var string
-     */
-    protected $loginPath = '/auth/login';
-
     public function __construct()
     {
         $this->auth = app('auth');
@@ -143,13 +136,11 @@ class AuthController extends Controller
      */
     public function getLogin(UrlGenerator $urlGenerator, Request $request)
     {
-        $redirectUrl = $this->redirectTo = $request->get('redirectUrl', $urlGenerator->previous());
+        $redirectUrl = $request->get('redirectUrl', $urlGenerator->previous());
 
-        if(auth()->check()) {
-            return redirect($request->get('redirectUrl', '/'));
+        if ($redirectUrl !== $request->url()) {
+            app('session.store')->put('url.intended', $redirectUrl);
         }
-
-        app('session.store')->put('url.intended', $redirectUrl);
 
         // common config
         $config = app('xe.config')->get('user.common');
@@ -195,7 +186,7 @@ class AuthController extends Controller
             return redirect()->intended($this->redirectPath());
         }
 
-        return redirect($this->loginPath)
+        return redirect()->back()
             ->withInput($request->only('email', 'remember'))
             ->with('alert', ['type' => 'danger', 'message' => '입력한 정보에 해당하는 계정을 찾을 수 없거나 사용 중지 상태인 계정입니다.']);
     }
