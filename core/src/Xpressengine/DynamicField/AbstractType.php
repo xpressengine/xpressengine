@@ -634,9 +634,13 @@ abstract class AbstractType implements ComponentInterface
         $config = $this->config;
         foreach ($this->getColumns() as $column) {
             $key = $config->get('id') . '_' . $column->name;
-
             if (isset($params[$key]) && $params[$key] != '') {
-                $query = $query->where($key, '=', $params[$key]);
+                $value = $params[$key];
+                $operator = '=';
+                if (is_array($params[$key])) {
+                    list($value, $operator) = $params[$key];
+                }
+                $query = $query->where($key, $operator, $value);
             }
         }
 
