@@ -257,10 +257,12 @@ $(function () {
       this.ui = {
         settingBox: $this.find('.setting-detail-content'),
         form: $this.find('.__xe_form'),
+
         currentBox: $this.find('.__xe_currentPassword'),
         newBox: $this.find('.__xe_newPassword'),
         confirmBox: $this.find('.__xe_passwordConfirm'),
-        inputCurrent: $this.find('[name=currentPassword]'),
+
+        inputCurrent: $this.find('[name=current_password]'),
         inputNew: $this.find('[name=password]'),
         inputConfirm: $this.find('[name=password_confirmation]'),
       };
