@@ -57,6 +57,7 @@ class DynamicFieldServiceProvider extends ServiceProvider
         app('xe.db.proxy')->register(new DatabaseProxy(App::make('xe.dynamicField')));
         $this->registerFieldType();
         $this->registerFieldDefaultSkin();
+        $this->addValidationRule();
     }
 
     /**
@@ -90,6 +91,20 @@ class DynamicFieldServiceProvider extends ServiceProvider
         $registerHandler->add(CellPhoneNumberDefault::class);
         $registerHandler->add(TextareaDefault::class);
         $registerHandler->add(EmailDefault::class);
+    }
+
+    private function addValidationRule()
+    {
+        $this->app['validator']->extend('df_id', function ($attribute, $value) {
+            if (! is_string($value) && ! is_numeric($value)) {
+                return false;
+            }
+
+            return preg_match('/^[a-zA-Z]+([a-zA-Z0-9_]+)?[a-zA-Z0-9]+$/u', $value) > 0;
+        });
+        $this->app['validator']->replacer('df_id', function ($message, $attribute, $rule, $parameters) {
+            return xe_trans('xe::validation.df_id', ['attribute' => $attribute]);
+        });
     }
 
     /**

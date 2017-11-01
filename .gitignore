@@ -13,3 +13,4 @@ composer.user.json
 *.map
 npm-debug.log
 _ide_helper.php
+package-lock.json
