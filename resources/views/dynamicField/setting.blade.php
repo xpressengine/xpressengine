@@ -129,4 +129,17 @@
             getAdditionalConfigure: "{{ route('manage.dynamicField.getAdditionalConfigure') }}"
         }
     };
+    $(function () {
+        XE.validator.put('df_id', function ($dst, parameters) {
+            var value = $dst.val();
+
+            var pattern = /^[a-zA-Z]+([a-zA-Z0-9_]+)?[a-zA-Z0-9]+$/u;
+            if (value && !value.match(pattern)) {
+                XE.validator.error($dst, XE.Lang.trans('xe::validation.df_id', {attribute: $dst.data('valid-name') || $dst.attr('name')}));
+                return false;
+            }
+
+            return true;
+        });
+    });
 </script>

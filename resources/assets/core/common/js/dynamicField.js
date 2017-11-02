@@ -1,4 +1,3 @@
-import validator from 'validator';
 
 /**
  * @class
@@ -376,9 +375,9 @@ var DynamicField = function () {
    * @param {object} addRules
    * */
   this.setValidateRule = function ($form, addRules) {
-    var ruleName = validator.getRuleName($form);
+    var ruleName = XE.validator.getRuleName($form);
     if (addRules != undefined && ruleName != undefined) {
-      validator.setRules(ruleName, addRules);
+      XE.validator.setRules(ruleName, addRules);
     }
   };
   /**
@@ -386,8 +385,8 @@ var DynamicField = function () {
    * @param {jQuery} $form
    * */
   this.validateCheck = function ($form) {
-    validator.check($form);
-  };
+      XE.validator.check($form);
+    };
 };
 
 export default DynamicField;

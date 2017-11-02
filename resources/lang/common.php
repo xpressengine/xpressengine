@@ -2232,4 +2232,10 @@ return [
         'ko' => '입력 필수',
         'en' => 'Input required',
     ],
+    'validation' => [
+        'df_id' => [
+            'ko' => ':attribute은(는) 영문으로 시작하고 영문, 숫자, 언더스코어(_) 만 포함할 수 있습니다.',
+            'en' => 'The :attribute may begin with letters and only contain letters, numbers, and underscores.',
+        ]
+    ]
 ];

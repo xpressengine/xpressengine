@@ -53,15 +53,15 @@ var SiteMap = (function () {
       ].join('\n');
     },
     getUrl: function (item) {
-        var url = item.url;
-        if (item.type !== 'xpressengine@directLink') {
-            url = '/' + url;
-            url = Utils.getUri(xeBaseURL + url);
-        } else {
-            url = url;
-        }
+      var url = item.url;
+      if (item.type !== 'xpressengine@directLink') {
+        url = '/' + url;
+        url = Utils.getUri(xeBaseURL + url);
+      } else {
+        url = url;
+      }
 
-        return url;
+      return url;
     },
     /**
      * Node 템플릿을 리턴한다.
@@ -176,13 +176,13 @@ var SiteMap = (function () {
 
     },
     changeHome: function ($current, $selected) {
-        $current.find('.btn-sethome').removeClass('home-on');
-        var currentOriginUrl = _this.getUrl($current.data('item'));
-        $current.find('.item-url').attr('href', currentOriginUrl).text(currentOriginUrl);
-        $selected.find('.btn-sethome').addClass('home-on');
-        $selected.find('.item-url').attr('href', '/').text('/');
+      $current.find('.btn-sethome').removeClass('home-on');
+      var currentOriginUrl = _this.getUrl($current.data('item'));
+      $current.find('.item-url').attr('href', currentOriginUrl).text(currentOriginUrl);
+      $selected.find('.btn-sethome').addClass('home-on');
+      $selected.find('.item-url').attr('href', '/').text('/');
 
-        _home = $selected.data('item').id;
+      _home = $selected.data('item').id;
     },
     /**
      * Tree를 구성한다.

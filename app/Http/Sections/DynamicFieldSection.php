@@ -63,7 +63,7 @@ class DynamicFieldSection extends Section
     {
         return [
             'typeId' => 'Required',
-            'id' => 'Required|AlphaNum|Between:2,20',
+            'id' => 'Required|df_id|Between:2,20',
             'label' => 'LangRequired',
             'skinId' => 'Required',
         ];
@@ -104,6 +104,7 @@ class DynamicFieldSection extends Section
         }
 
         XeFrontend::rule('dynamicFieldSection', static::getRules());
+        XeFrontend::translation(['xe::validation.df_id']);
 
         // 다국어 입력 필드
         XeFrontend::js('/assets/vendor/jqueryui/jquery-ui.js')->appendTo('head')->load();
