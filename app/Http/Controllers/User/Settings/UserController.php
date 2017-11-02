@@ -271,7 +271,6 @@ class UserController extends Controller
                 'displayName' => 'required',
                 'rating' => 'required',
                 'status' => 'required',
-                'password' => 'password'
             ]
         );
 
