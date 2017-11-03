@@ -14,6 +14,7 @@
 
 namespace App\Http\Controllers;
 
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Validator;
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -606,6 +607,10 @@ class MenuController extends Controller
         $menu = $item->menu;
         if ($menu->getKey() !== $menuId) {
             throw new InvalidArgumentHttpException(400);
+        }
+
+        if ($item->getKey() === XeSite::getHomeInstanceId()) {
+            throw new HttpException(422, xe_trans('xe::unableDeleteHomeMenuItem'));
         }
 
         XeDB::beginTransaction();

@@ -1831,6 +1831,10 @@ return [
         'ko' => '이 메뉴 아이템 하위에 :count 개의 메뉴 아이템이 존재하고 있어 삭제할 수 없습니다.',
         'en' => 'This menu item has :count different menu items. <br/>After you delete a menu item, and then try to delete it again.',
     ],
+    'unableDeleteHomeMenuItem' => [
+        'ko' => '홈으로 지정된 메뉴 아이템은 삭제할 수 없습니다.',
+        'en' => 'Menu item assigned to Home can not be deleted.',
+    ],
     'moveToPage' => [
         'ko' => '페이지로 이동',
         'en' => 'Move to page',

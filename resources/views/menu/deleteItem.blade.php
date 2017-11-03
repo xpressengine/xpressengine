@@ -15,19 +15,21 @@
                 </div>
                 <div class="panel-body">
                     <div class="form-group">
-                        @if($item->getDescendantCount() == 0)
+                        @if ($item->getKey() === XeSite::getHomeInstanceId())
+                            {{ xe_trans('xe::unableDeleteHomeMenuItem') }}
+                        @elseif($item->getDescendantCount() > 0)
+                            {!! xe_trans('xe::menuItemDeleteCautionHaveItems', ['count' => $item->getDescendantCount()]) !!}
+                        @else
                             {{$menuType->summary($item->getKey())}}
                             <br/>
                             {{xe_trans('xe::menuItemDeleteCaution')}}
-                        @else
-                            {!! xe_trans('xe::menuItemDeleteCautionHaveItems', ['count' => $item->getDescendantCount()]) !!}
                         @endif
                     </div>
                 </div>
                 <div class="panel-footer">
                     <div class="pull-right">
                         <a href="{{ route('settings.menu.index')}}" class="btn btn-default">{{xe_trans('xe::cancel')}}</a>
-                        @if($item->getDescendantCount() == 0)
+                        @if($item->getKey() !== XeSite::getHomeInstanceId() && $item->getDescendantCount() == 0)
                             <button type="submit" class="btn btn-danger">{{xe_trans('xe::delete')}}</button>
                         @endif
                     </div>
