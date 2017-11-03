@@ -40,7 +40,6 @@ var common = {
     'assets/core/lang/langEditorBox.bundle': pathInfo.lang + '/LangEditorBox.js',
     'assets/core/common/js/griper': pathInfo.common + '/js/griper',
     'assets/core/common/js/validator': pathInfo.common + '/js/validator',
-    'assets/core/common/js/toggleMenu': pathInfo.common + '/js/toggleMenu',
     'assets/core/common/js/dynamicField': pathInfo.common + '/js/dynamicField',
     'assets/core/common/js/storeCategory': pathInfo.common + '/js/storeCategory.js',
     'assets/core/member/settings/edit': pathInfo.member + '/settings/edit.js',
