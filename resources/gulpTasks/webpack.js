@@ -1,5 +1,6 @@
+import gulp from 'gulp';
 import plugins from 'gulp-load-plugins';
-import webpack from 'webpack';
+import webpack from 'webpack-stream';
 import webpackConfig from '../../webpack.config.js';
 
 module.exports = (() => {
@@ -9,13 +10,9 @@ module.exports = (() => {
 
   return {
     'webpack': (callback) => {
-      webpack(webpackConfig, (err, stats) => {
-        if (err) {
-          throw new gutil.PluginError('webpack', err);
-        }
-
-        callback();
-      });
+      return gulp.src([])
+        .pipe(webpack(webpackConfig))
+        .pipe(gulp.dest('./'));
     },
   };
 })();
