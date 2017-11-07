@@ -64,7 +64,7 @@ class UserGroup extends DynamicModel implements GroupInterface
     public function userCountRelation()
     {
         return $this->belongsToMany(User::class, 'user_group_user', 'group_id', 'user_id')->selectRaw(
-            'group_id, count(*) as count'
+            '`group_id`, count(*) as `count`'
         )->groupBy('group_id');
     }
 
