@@ -49,7 +49,11 @@ class DatabaseServiceProvider extends ServiceProvider
                 $logFile = storage_path('logs/query.log');
                 $monoLog = new Logger('log');
                 $monoLog->pushHandler(new StreamHandler($logFile, Logger::INFO));
-                $monoLog->info($query, compact('bindings', 'time'));
+                $prep = $query;
+                foreach ($bindings as $binding) {
+                    $prep = preg_replace('#\?#', is_numeric($binding) ? $binding : "'" . $binding . "'", $prep, 1);
+                }
+                $monoLog->info($prep);
             });
         }
         DynamicModel::setKeyGen(app('xe.keygen'));
