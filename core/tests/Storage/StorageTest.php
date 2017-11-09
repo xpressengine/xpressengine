@@ -43,14 +43,14 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
         $repo->shouldReceive('create')->once()->with(m::on(function ($args) {
             $arr = [
-                'userId' => null,
+                'user_id' => null,
                 'clientname' => 'foo.jpg',
                 'mime' => 'image/png',
                 'size' => 123456,
             ];
             $args = array_intersect_key($args, $arr);
 
-            return $args['userId'] === null
+            return $args['user_id'] === null
                 && $args['clientname'] === 'foo.jpg'
                 && $args['mime'] === 'image/png'
                 && $args['size'] === 123456;
@@ -140,13 +140,13 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
         $repo->shouldReceive('create')->once()->with(m::on(function ($args) {
             $arr = [
-                'userId' => null,
+                'user_id' => null,
                 'mime' => 'image/png',
                 'size' => 123456,
             ];
             $args = array_intersect_key($args, $arr);
 
-            return $args['userId'] === null
+            return $args['user_id'] === null
                 && $args['mime'] === 'image/png'
                 && $args['size'] === 123456;
         }), 'made-key')->andReturn($mockFile);
