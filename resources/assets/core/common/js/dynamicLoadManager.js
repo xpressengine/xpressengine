@@ -10,8 +10,8 @@ var DynamicLoadManager = (function (exports) {
     js: {}, css: {},
   };
 
-  _assets.js[xeBaseURL + 'assets/core/common/js/utils.js'];
-  _assets.js[xeBaseURL + 'assets/core/common/js/dynamicLoadManager.js'];
+  _assets.js[xeBaseURL + '/assets/bundle.js'] = '';
+  _assets.js[xeBaseURL + '/assets/core/common/js/xe.bundle.js'] = '';
 
   return {
     init: function () {
