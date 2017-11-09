@@ -25,10 +25,6 @@ var target = (process.env.npm_lifecycle_event === 'build')? true : !!$.util.env.
 
 var common = {
   entry: {
-    'assets/core/permission/permission.bundle': [
-      pathInfo.permission + '/permission.js',
-    ],
-
     'assets/core/common/js/xe.bundle': [
       pathInfo.common + '/js/xe.js',
       pathInfo.common + '/js/xe.lang.js',
@@ -37,9 +33,11 @@ var common = {
       pathInfo.common + '/js/xe.component.js',
     ],
 
+    'assets/core/permission/permission.bundle': [
+      pathInfo.permission + '/permission.js',
+    ],
+
     'assets/core/lang/langEditorBox.bundle': pathInfo.lang + '/LangEditorBox.js',
-    'assets/core/common/js/griper': pathInfo.common + '/js/griper',
-    'assets/core/common/js/validator': pathInfo.common + '/js/validator',
     'assets/core/common/js/dynamicField': pathInfo.common + '/js/dynamicField',
     'assets/core/common/js/storeCategory': pathInfo.common + '/js/storeCategory.js',
     'assets/core/member/settings/edit': pathInfo.member + '/settings/edit.js',
@@ -65,14 +63,14 @@ var common = {
   },
   resolve: {
     alias: {
-      'xe': pathInfo.core + '/common/js/xe.js',
-      'griper': pathInfo.core + '/common/js/griper.js',
-      'validator': pathInfo.core + '/common/js/validator.js',
+      'xe': pathInfo.common + '/js/xe.js',
+      'griper': pathInfo.common + '/js/griper.js',
+      'validator': pathInfo.common + '/js/validator.js',
 
-      'xe-transition': pathInfo.core + '/xe-ui-component/js/xe-transition.js',
-      'xe-dropdown': pathInfo.core + '/xe-ui-component/js/xe-dropdown.js',
-      'xe-modal': pathInfo.core + '/xe-ui-component/js/xe-modal.js',
-      'xe-tooltip': pathInfo.core + '/xe-ui-component/js/xe-tooltip.js',
+      'xe-transition': pathInfo.comp + '/js/xe-transition.js',
+      'xe-dropdown': pathInfo.comp + '/js/xe-dropdown.js',
+      'xe-modal': pathInfo.comp + '/js/xe-modal.js',
+      'xe-tooltip': pathInfo.comp + '/js/xe-tooltip.js',
 
       'vendor': pathInfo.vendor + '/vendor.bundle.js',
     },
