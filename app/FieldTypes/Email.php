@@ -47,7 +47,7 @@ class Email extends AbstractType
     public function getColumns()
     {
         return [
-            'email' => (new ColumnEntity('text', ColumnDataType::STRING)),
+            'email' => (new ColumnEntity('email', ColumnDataType::STRING)),
         ];
     }
 

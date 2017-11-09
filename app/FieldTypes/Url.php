@@ -47,7 +47,7 @@ class Url extends AbstractType
     public function getColumns()
     {
         return [
-            'url' => (new ColumnEntity('text', ColumnDataType::STRING)),
+            'url' => (new ColumnEntity('url', ColumnDataType::STRING)),
         ];
     }
 
@@ -63,7 +63,7 @@ class Url extends AbstractType
             $required = '|required';
         }
 
-        return ['email' => 'url' . $required];
+        return ['url' => 'url' . $required];
     }
 
     /**
@@ -85,7 +85,7 @@ class Url extends AbstractType
      */
     public function getSettingsView(ConfigEntity $config = null)
     {
-        return View::make('dynamicField/email/createType', ['config' => $config])->render();
+        return View::make('dynamicField/url/createType', ['config' => $config])->render();
     }
 
 }
