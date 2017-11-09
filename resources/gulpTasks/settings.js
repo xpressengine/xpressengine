@@ -14,24 +14,33 @@ module.exports = (() => {
   };
 
   const _filter = [
-   '**/*',
-   '!**/*.scss',
-   '!resources/assets/core/lang/LangEditorBox.js',
-   '!resources/assets/core/permission/*.js',
-   '!resources/assets/core/settings/js/admin.js',
-   '!resources/assets/core/xe-ui-component/components',
-   '!resources/assets/core/**/img/*',
-   '!resources/assets/core/common/js/storeCategory.js',
-   '!resources/assets/core/common/js/dynamicField.js',
-   '!resources/assets/core/common/js/xe.js',
-   '!resources/assets/core/member/settings/edit.js',
-   '!resources/assets/core/tree/**.js',
-   'resources/assets/core/xe-ui-component/js/*',
-   'resources/assets/core/category/Category.js',
-   'resources/assets/core/menu/Menu.js',
-   'resources/assets/core/menu/SearchHead.js',
-   'resources/assets/core/menu/SiteMap.js',
-   'resources/assets/core/widgetbox/js/*',
+    '**/*',
+    '!**/*.scss',
+    '!resources/assets/core/**/img/*',
+    '!resources/assets/core/common/js/dynamicField.js',
+    '!resources/assets/core/common/js/dynamicLoadManager.js',
+    '!resources/assets/core/common/js/griper.js',
+    '!resources/assets/core/common/js/storeCategory.js',
+    '!resources/assets/core/common/js/translator.js',
+    '!resources/assets/core/common/js/utils.js',
+    '!resources/assets/core/common/js/validator.js',
+    '!resources/assets/core/common/js/xe.js',
+    '!resources/assets/core/common/js/xe.component.js',
+    '!resources/assets/core/common/js/xe.lang.js',
+    '!resources/assets/core/common/js/xe.progress.js',
+    '!resources/assets/core/common/js/xe.request.js',
+    '!resources/assets/core/lang/LangEditorBox.js',
+    '!resources/assets/core/permission/*.js',
+    '!resources/assets/core/settings/js/admin.js',
+    '!resources/assets/core/xe-ui-component/components',
+    '!resources/assets/core/member/settings/edit.js',
+    '!resources/assets/core/tree/**.js',
+    'resources/assets/core/category/Category.js',
+    'resources/assets/core/menu/Menu.js',
+    'resources/assets/core/menu/SearchHead.js',
+    'resources/assets/core/menu/SiteMap.js',
+    'resources/assets/core/widgetbox/js/*',
+    'resources/assets/core/xe-ui-component/js/*',
   ];
 
   let self = {
@@ -63,9 +72,9 @@ module.exports = (() => {
 
     'assets:chunk': () => {
       return gulp.src([
-         'assets/core/common/js/utils.js',
-         'assets/core/common/js/dynamicLoadManager.js',
-         'assets/core/common/js/translator.js',
+         'resources/assets/core/common/js/utils.js',
+         'resources/assets/core/common/js/dynamicLoadManager.js',
+         'resources/assets/core/common/js/translator.js',
          'assets/vendor/jquery/jquery.min.js',
          'assets/vendor/blankshield/blankshield.min.js',
         ])
@@ -91,7 +100,7 @@ module.exports = (() => {
     'assets:draft': () => {
       return gulp.src([
           'assets/vendor/bootstrap/js/collapse.js',
-          'assets/core/common/js/draft.js',
+          'resources/assets/core/common/js/draft.js',
         ])
         .pipe($.plumber())
         .pipe($.babel({presets: ['es2015']}))

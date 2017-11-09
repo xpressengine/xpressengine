@@ -8,12 +8,8 @@
 
     <link rel="stylesheet" href="{{ asset('assets/core/common/css/xe-common.css') }}">
     <script>var xeBaseURL = '{{ url()->to(null) }}';</script>
-    <script src="{{ asset('assets/core/common/js/utils.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('assets/core/common/js/dynamicLoadManager.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
 
-{{--    <script src="{{ asset('assets/vendor/vendor.bundle.js') }}" type="text/javascript"></script>--}}
-    <script src="{{ asset('assets/bundle.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/bundle.js') }}"></script>
     <script src="{{ asset('assets/core/common/js/xe.bundle.js') }}"></script>
 
     <link rel="stylesheet" href="{{ asset('assets/core/xe-ui-component/xe-ui-component.css') }}">
