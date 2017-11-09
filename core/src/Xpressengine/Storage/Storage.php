@@ -156,7 +156,7 @@ class Storage
         }
 
         return $this->repo->create([
-            'userId' => $user->getId(),
+            'user_id' => $user->getId(),
             'disk' => $disk,
             'path' => $path,
             'filename' => $name,
@@ -191,14 +191,14 @@ class Storage
         }
 
         $file = $this->repo->create([
-            'userId' => $user->getId(),
+            'user_id' => $user->getId(),
             'disk' => $disk,
             'path' => $path,
             'filename' => $name,
             'clientname' => $name,
             'mime' => $tempFile->getMimeType(),
             'size' => $tempFile->getSize(),
-            'originId' => $originId,
+            'origin_id' => $originId,
         ], $id);
 
         $tempFile->destroy();
