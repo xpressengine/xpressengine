@@ -16,6 +16,7 @@ namespace App\Providers;
 
 use App\FieldTypes\Email;
 use App\FieldTypes\Textarea;
+use App\FieldTypes\Url;
 use Illuminate\Support\ServiceProvider;
 use App;
 use XeRegister;
@@ -33,11 +34,14 @@ use App\FieldTypes\CellPhoneNumber;
 use App\FieldSkins\Category\DefaultSkin as CategoryDefault;
 use App\FieldSkins\Number\DefaultSkin as NumberDefault;
 use App\FieldSkins\Text\DefaultSkin as TextDefault;
+use App\FieldSkins\Text\EmailSkin as TextEmail;
+use App\FieldSkins\Text\UrlSkin as TextUrl;
 use App\FieldSkins\Boolean\DefaultSkin as BooleanDefault;
 use App\FieldSkins\Address\DefaultSkin as AddressDefault;
 use App\FieldSkins\CellPhoneNumber\DefaultSkin as CellPhoneNumberDefault;
 use App\FieldSkins\Textarea\DefaultSkin as TextareaDefault;
 use App\FieldSkins\Email\DefaultSkin as EmailDefault;
+use App\FieldSkins\Url\DefaultSkin as UrlDefault;
 
 /**
  * laravel service provider
@@ -77,6 +81,7 @@ class DynamicFieldServiceProvider extends ServiceProvider
         $registerHandler->add(CellPhoneNumber::class);
         $registerHandler->add(Textarea::class);
         $registerHandler->add(Email::class);
+        $registerHandler->add(Url::class);
     }
 
     private function registerFieldDefaultSkin()
@@ -86,11 +91,14 @@ class DynamicFieldServiceProvider extends ServiceProvider
         $registerHandler->add(CategoryDefault::class);
         $registerHandler->add(NumberDefault::class);
         $registerHandler->add(TextDefault::class);
+        $registerHandler->add(TextEmail::class);
+        $registerHandler->add(TextUrl::class);
         $registerHandler->add(BooleanDefault::class);
         $registerHandler->add(AddressDefault::class);
         $registerHandler->add(CellPhoneNumberDefault::class);
         $registerHandler->add(TextareaDefault::class);
         $registerHandler->add(EmailDefault::class);
+        $registerHandler->add(UrlDefault::class);
     }
 
     private function addValidationRule()
