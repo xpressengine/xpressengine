@@ -27,7 +27,7 @@
 @elseif($errors = Session::get('errors'))
     <script type="text/javascript">
         $(function() {
-            XE.toast('danger', '{{xe_trans('xe::wrongInput')}} <ul>@foreach ($errors->all() as $error) <li>{{ $error }}</li>@endforeach</ul>');
+            XE.toast('danger', '<ul>@foreach ($errors->all() as $error) <li>{{ $error }}</li>@endforeach</ul>');
         });
     </script>
 @endif

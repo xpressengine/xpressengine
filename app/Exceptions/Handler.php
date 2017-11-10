@@ -3,8 +3,14 @@
 namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Event;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Routing\Router;
+use Illuminate\Validation\ValidationException;
 use XePresenter;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -12,11 +18,9 @@ use Illuminate\Http\Response;
 use Illuminate\Session\TokenMismatchException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Xpressengine\Plugin\Exceptions\PluginFileNotFoundException;
 use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
 use Xpressengine\Support\Exceptions\HttpXpressengineException;
-use Xpressengine\Support\Exceptions\XpressengineException;
 
 class Handler extends ExceptionHandler
 {
@@ -27,6 +31,7 @@ class Handler extends ExceptionHandler
      */
     protected $dontReport = [
         HttpException::class,
+        HttpXpressengineException::class,
         ModelNotFoundException::class,
     ];
 
@@ -58,7 +63,7 @@ class Handler extends ExceptionHandler
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \Exception               $e
-     * @return \Illuminate\Http\Response
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function render($request, Exception $e)
     {
@@ -69,28 +74,48 @@ class Handler extends ExceptionHandler
             Event::fire('cache:cleared', ['plugins']);
         }
 
-        $converted = $this->converter($e);
+        $e = $this->convert($e);
 
-        // 테마를 이용한 리턴은 어떻게?
-        if ($this->isDebugMode($e) === true) {
-            // debug mode
-            return $this->toDebugModeResponse($e, $converted, $request);
-        } elseif ($this->isPostRequest($request)) {
-            // when post request
-            return $this->toPostBackRedirect($converted);
-        } elseif ($this->isFatalError($e)) {
-            // system fatal error (etc, Laravel framework error)
-            return $this->toIlluminateResponse($this->renderWithoutXE($converted), $converted);
-        } elseif ($this->isHttpXpressengineException($converted)) {
-            // xpressengine http exception, converted exceptions
-            return $this->toIlluminateResponse($this->renderWithTheme($converted, $request), $converted);
-        } elseif ($this->isHttpException($e)) {
-            // laravel default http exception render
-            return $this->toIlluminateResponse($this->renderHttpException($e), $e);
-        } else {
-            // laravel default exception render
-            return $this->toIlluminateResponse($this->convertExceptionToResponse($e), $e);
+        if (method_exists($e, 'render') && $response = $e->render($request)) {
+            return Router::toResponse($request, $response);
+        } elseif ($e instanceof Responsable) {
+            return $e->toResponse($request);
         }
+
+        $e = $this->prepareException($e);
+
+        if ($e instanceof HttpResponseException) {
+            return $e->getResponse();
+        } elseif ($e instanceof AuthenticationException) {
+            return $this->unauthenticated($request, $e);
+        } elseif ($e instanceof ValidationException) {
+            return $this->convertValidationExceptionToResponse($e, $request);
+        }
+
+        return $request->expectsJson()
+            ? $this->prepareJsonResponse($request, $e)
+            : $this->prepareResponse($request, $e);
+    }
+
+    /**
+     * Prepare exception for rendering.
+     *
+     * @param  \Exception  $e
+     * @return \Exception
+     */
+    protected function prepareException(Exception $e)
+    {
+        if ($e instanceof ModelNotFoundException) {
+            $e = new NotFoundHttpException($e->getMessage(), $e);
+        } elseif ($e instanceof NotFoundHttpException) {
+            $e = new NotFoundHttpException('xe::pageNotFound', $e);
+        } elseif ($e instanceof AuthorizationException) {
+            $e = new AccessDeniedHttpException();
+        } elseif ($e instanceof TokenMismatchException) {
+            $e = new HttpException(419, 'xe::tokenMismatch');
+        }
+
+        return $this->convert($e);
     }
 
     /**
@@ -99,24 +124,14 @@ class Handler extends ExceptionHandler
      * @param Exception $e
      * @return HttpXpressengineException|Exception
      */
-    public function converter(Exception $e)
+    protected function convert(Exception $e)
     {
-        $converted = null;
-        $debug = config('app.debug');
+        $converted = $e;
 
-        if ($e instanceof TokenMismatchException) {
-            $converted = new HttpXpressengineException([], Response::HTTP_FORBIDDEN, $e);
-            $converted->setMessage(xe_trans('xe::tokenMismatch'));
-        } elseif ($e instanceof NotFoundHttpException) {
-            $converted = new HttpXpressengineException([], Response::HTTP_NOT_FOUND, $e);
-            $converted->setMessage(xe_trans('xe::pageNotFound'));
-        } elseif ($e instanceof MethodNotAllowedHttpException) {
-            $converted = new HttpXpressengineException([], Response::HTTP_METHOD_NOT_ALLOWED, $e);
-            $converted->setMessage(xe_trans('xe::methodNotAllowed'));
-        } elseif ($e instanceof HttpXpressengineException) {
+        if ($e instanceof HttpXpressengineException) {
             $e->setMessage(xe_trans($e->getMessage(), $e->getArgs()));
             $converted = $e;
-        } elseif ($this->isHttpException($e)) {
+        } elseif ($e instanceof HttpException) {
             /** @var HttpException $e */
             $converted = new HttpXpressengineException([], $e->getStatusCode(), $e);
             $message = xe_trans($e->getMessage());
@@ -124,26 +139,20 @@ class Handler extends ExceptionHandler
                 $message = get_class($e);
             }
             $converted->setMessage($message);
-        } elseif ($e instanceof XpressengineException && $debug !== true) {
-            $converted = new HttpXpressengineException([], Response::HTTP_INTERNAL_SERVER_ERROR, $e);
-            $message = xe_trans($e->getMessage(), $e->getArgs());
-            if ('' === $message) {
-                $message = get_class($e);
-            } elseif ($message == $e->getMessage()) {
-                $message = $e->getMessage();
-            }
-            $converted->setMessage($message);
-        } elseif ($e instanceof XpressengineException && $debug === true) {
-            $converted = $e;
-        }
-
-        // if not debug mode them always render by view file
-        if ($converted == null && $debug !== true) {
-            $converted = new HttpXpressengineException([], Response::HTTP_INTERNAL_SERVER_ERROR, $e);
-            $converted->setMessage(xe_trans('xe::systemErrorFramework'));
         }
 
         return $converted;
+    }
+
+    /**
+     * Determine if the given exception is an HTTP exception.
+     *
+     * @param  \Exception  $e
+     * @return bool
+     */
+    protected function isHttpException(Exception $e)
+    {
+        return $e instanceof HttpException || $this->isHttpXpressengineException($e);
     }
 
     /**
@@ -158,39 +167,6 @@ class Handler extends ExceptionHandler
     }
 
     /**
-     * is post request
-     *
-     * @param Request $request
-     * @return bool
-     */
-    protected function isPostRequest(Request $request)
-    {
-        return $request->isMethod('post') && !$request->ajax() && !$request->wantsJson();
-    }
-
-    /**
-     * is debug mode
-     *
-     * @param Exception $e
-     * @return bool
-     */
-    protected function isDebugMode(Exception $e)
-    {
-        return config('app.debug') && $e instanceof AccessDeniedHttpException === false;
-    }
-
-    /**
-     * is system error
-     *
-     * @param Exception $e
-     * @return bool
-     */
-    protected function isSystemError(Exception $e)
-    {
-        return $this->isHttpException($e) === false && $this->isHttpXpressengineException($e) === false;
-    }
-
-    /**
      * is fatal error
      *
      * @param Exception $e
@@ -201,54 +177,29 @@ class Handler extends ExceptionHandler
         return $e instanceof \Symfony\Component\Debug\Exception\FatalErrorException;
     }
 
-    protected function toDebugModeResponse(Exception $e, Exception $converted = null, Request $request)
+    /**
+     * Prepare a response for the given exception.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Exception $e
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    protected function prepareResponse($request, Exception $e)
     {
-        if ($converted == null) {
-            $converted = $e;
-        }
-        $status = 500;
-        if (method_exists($converted, 'getStatusCode') == true) {
-            /** @var HttpException $converted */
-            $status = $converted->getStatusCode();
-        }
-
-        // return for api
-        if ($request->ajax() || $request->wantsJson()) {
-            return response(
-                [
-                    'exception' => get_class($converted),
-                    'occurredException' => get_class($e),
-                    'message' => $converted->getMessage(),
-                    'trace' => explode('#', $e->getTraceAsString()),
-                ],
-                $status
+        if (!$this->isHttpException($e) && config('app.debug')) {
+            return $this->toIlluminateResponse(
+                $this->convertExceptionToResponse($e), $e
             );
         }
 
-        return $this->toIlluminateResponse($this->convertExceptionToResponse($converted), $converted);
-    }
-
-    /**
-     * exception back redirect
-     *
-     * @param Exception $e
-     * @return $this
-     */
-    protected function toPostBackRedirect(Exception $e)
-    {
-        $statusCode = 500;
-        if (method_exists($e, 'getStatusCode')) {
-            $statusCode = $e->getStatusCode();
+        if (!$this->isHttpException($e)) {
+            $e = new HttpXpressengineException([], 500, $e);
+            $e->setMessage(xe_trans('xe::systemError'));
         }
 
-        return redirect()->back()->with(
-            'alert',
-            [
-                'type' => 'danger',
-                'statusCode' => $statusCode,
-                'message' => $e->getMessage()
-            ]
-        )->withInput();
+        return $this->toIlluminateResponse(
+            $this->isFatalError($e) ? $this->renderWithoutXE($e) : $this->renderWithTheme($e, $request), $e
+        );
     }
 
     /**
@@ -265,13 +216,7 @@ class Handler extends ExceptionHandler
             $status = 500;
         }
 
-        $view = $this->getView($path, $status, $e);
-
-        if (view()->exists("{$path}.{$status}") === false) {
-            return $this->convertExceptionToResponse($e);
-        } else {
-            return $view;
-        }
+        return $this->getView($path, $status, $e);
     }
 
     /**
@@ -285,7 +230,7 @@ class Handler extends ExceptionHandler
         $status = $e->getStatusCode();
 
         // return for api
-        if ($request->ajax() || $request->wantsJson()) {
+        if ($request->expectsJson()) {
             $view = XePresenter::makeApi([
                 'message' => $e->getMessage(),
             ]);
@@ -308,11 +253,7 @@ class Handler extends ExceptionHandler
             $view = $this->getView($path, $status, $e);
         }
 
-        if (view()->exists("{$path}.{$status}") === false) {
-            return $this->convertExceptionToResponse($e);
-        } else {
-            return $view;
-        }
+        return $view;
     }
 
     /**
@@ -342,14 +283,30 @@ class Handler extends ExceptionHandler
      * @param Exception $e
      * @return Response
      */
-    protected function getView($path, $status, Exception $e)
+    protected function getView($path, $status, HttpXpressengineException $e)
     {
         $view = response()->view("{$path}.{$status}", [
             'exception' => $e,
             'path' => $path,
             'xe' => false,
-        ], $status);
+        ], $status, $e->getHeaders());
         return $view;
     }
 
+    /**
+     * Convert the given exception to an array.
+     *
+     * @param  \Exception  $e
+     * @return array
+     */
+    protected function convertExceptionToArray(Exception $e)
+    {
+        $arr = parent::convertExceptionToArray($e);
+
+        if ($arr['message'] === 'Server Error') {
+            $arr['message'] = xe_trans('xe::systemError');
+        }
+
+        return $arr;
+    }
 }

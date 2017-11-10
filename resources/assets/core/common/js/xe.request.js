@@ -91,11 +91,11 @@ export default (function () {
 
       // @TODO dataType 에 따라 메시지 획득 방식을 추가 해야함.
       if (jqxhr.status == 422) {
-        var list = $.parseJSON(jqxhr.responseText);
+        var list = $.parseJSON(jqxhr.responseText).errors || {};
 
         errorMessage = '';
         errorMessage += '<ul>';
-        for (var i = 0, max = list.length; i < max; i += 1) {
+        for (var i in list) {
           errorMessage += '<li>' + list[i] + '</li>';
         }
 
