@@ -31,7 +31,7 @@ class AccessDeniedHttpException extends HttpXpressengineException
     /**
      * @var string
      */
-    protected $message = 'xe::AccessDenied';
+    protected $message = 'xe::accessDenied';
 
     /**
      * @var int
