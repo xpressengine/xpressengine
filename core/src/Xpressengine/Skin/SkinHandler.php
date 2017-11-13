@@ -256,7 +256,7 @@ class SkinHandler
 
         // 지정된 스킨이 없을 경우, 해당 타겟에 지정된 기본 스킨을 선택한다.
         if ($skinId === null || !$this->has($skinId)) {
-            $skinId = array_get($this->defaultSkins, $target, null);
+            $skinId = $target ? array_get($this->defaultSkins, $target) : null;
         }
 
         // 해당 타겟에 지정된 기본 스킨도 없을 경우, 해당 타겟으로 등록된 첫번째 스킨을 선택한다.
