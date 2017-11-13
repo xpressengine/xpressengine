@@ -74,8 +74,6 @@ class Handler extends ExceptionHandler
             Event::fire('cache:cleared', ['plugins']);
         }
 
-        $e = $this->convert($e);
-
         if (method_exists($e, 'render') && $response = $e->render($request)) {
             return Router::toResponse($request, $response);
         } elseif ($e instanceof Responsable) {
