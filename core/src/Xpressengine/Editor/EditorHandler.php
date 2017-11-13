@@ -371,8 +371,8 @@ class EditorHandler
         foreach ($files as $file) {
             $thumbnails = null;
             if ($this->mediaManager->is($file)) {
-                $imgClass = $this->mediaManager->getHandler(Media::TYPE_IMAGE)->getModel();
-                $thumbnails = $imgClass::getThumbnails($this->mediaManager->make($file), static::THUMBNAIL_TYPE);
+                $thumbnails = $this->mediaManager->image()
+                    ->getThumbnails($this->mediaManager->make($file), static::THUMBNAIL_TYPE);
             }
 
             $file->setRelation('thumbnails', $thumbnails);
