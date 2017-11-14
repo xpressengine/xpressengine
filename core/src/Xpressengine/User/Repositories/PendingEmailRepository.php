@@ -45,9 +45,7 @@ class PendingEmailRepository implements PendingEmailRepositoryInterface
         if (empty($data['confirmation_code'])) {
             $data['confirmation_code'] = str_random();
         }
-        $email = $this->createModel()->create($data);
-        $user->pendingEmail()->save($email);
-        return $email;
+        return $user->pendingEmail()->create($data);
     }
 
 

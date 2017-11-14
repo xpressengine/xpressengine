@@ -194,9 +194,9 @@ class RegisterController extends Controller
         if ($mail === null) {
             \DB::beginTransaction();
             try {
-                $mailData = ['address' => $email, 'userId' => app('xe.keygen')->generate()];
+                $mailData = ['address' => $email];
                 $user = new User();
-                $user->id = $mailData['userId'];
+                $user->id = app('xe.keygen')->generate();
                 $mail = $this->handler->createEmail($user, $mailData, false);
             } catch (\Exception $e) {
                 \DB::rollBack();
