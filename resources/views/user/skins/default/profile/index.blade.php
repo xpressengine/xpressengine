@@ -16,8 +16,6 @@
                             <dd class="profile-img">
 
                                 @if($grant['modify'])
-                                    {{--<img src="{{ $user->getProfileImage() }}" width="120" height="120" alt="프로필사진">
-                                    <div class="btn-file __xe_imgUploadBox" style="display: none;"><input type="file" name="profileImgFile"></div>--}}
                                     {!! $profileImageHtml !!}
                                 @else
                                     <img src="{{ $user->getProfileImage() }}" width="120" height="120" alt="{{xe_trans('xe::profileImage')}}">

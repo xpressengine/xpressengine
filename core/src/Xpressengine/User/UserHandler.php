@@ -221,7 +221,7 @@ class UserHandler
         /* 회원가입 절차 */
         $userData = array_except(
             $data,
-            ['emailConfirmed', 'groupId', 'password_confirmation', 'account', '_token']
+            ['group_id', 'password_confirmation', 'account', '_token']
         );
 
         // insert user
@@ -244,7 +244,7 @@ class UserHandler
         }
 
         // join group
-        $groupIds = array_get($data, 'groupId', []);
+        $groupIds = array_get($data, 'group_id', []);
         if (count($groupIds) > 0) {
             $user->joinGroups($groupIds);
         }
@@ -271,7 +271,7 @@ class UserHandler
 
     /**
      * 회원정보를 업데이트 한다.
-     * 필드: email, display_name, password, status, introduction, profileImgFile, group_id
+     * 필드: email, display_name, password, status, introduction, profile_img_file, group_id
      *
      * @param UserInterface $user     user
      * @param array         $userData user data
@@ -290,8 +290,8 @@ class UserHandler
         }
 
         // resolve profileImage
-        if (array_get($userData, 'profileImgFile') !== null) {
-            $profileFile = $userData['profileImgFile'];
+        if (array_get($userData, 'profile_img_file') !== null) {
+            $profileFile = $userData['profile_img_file'];
 
             if ($profileFile === false) {
                 $this->imageHandler->removeUserProfileImage($user);
@@ -302,10 +302,10 @@ class UserHandler
         }
 
         // resolve group
-        $groups = array_get($userData, 'groupId');
+        $groups = array_get($userData, 'group_id');
 
         // email, display_name, introduction, password, status, rating
-        $userData = array_except($userData, ['groupId', 'profileImgFile']);
+        $userData = array_except($userData, ['group_id', 'profile_img_file']);
 
         foreach ($userData as $key => $value) {
             $user->{$key} = $value;

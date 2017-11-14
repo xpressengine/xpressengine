@@ -16,7 +16,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 {{-- displayName --}}
-                                {!! uio('formText', ['id'=>'__xe_displayName', 'label'=>xe_trans('xe::name'), 'placeholder'=>xe_trans('xe::enterName'), 'value'=> $user->display_name, 'name'=>'displayName']) !!}
+                                {!! uio('formText', ['id'=>'__xe_displayName', 'label'=>xe_trans('xe::name'), 'placeholder'=>xe_trans('xe::enterName'), 'value'=> $user->display_name, 'name'=>'display_name']) !!}
                             </div>
                             <div class="form-group">
                                 <label>{{xe_trans('xe::email')}}</label>
@@ -50,7 +50,7 @@
                         <div class="col-sm-6">
 
                             {!!  uio('formImage', [
-                                'name' => 'profileImgFile',
+                                'name' => 'profile_img_file',
                                 'label' => xe_trans('xe::profileImage') . " <small>(Size ".$profileImgSize['width']."x".$profileImgSize['height'].")</small>",
                                 'value' => ['path' => $user->getProfileImage()],
                                 'width' => $profileImgSize['width'],
@@ -64,7 +64,7 @@
 
                             <div class="form-group">
                                 {{-- groups --}}
-                                {!! uio('formCheckbox', ['id'=>'__xe_rating', 'label'=>xe_trans('xe::group'), 'name'=>'groupId', 'checkboxes'=> $groups]) !!}
+                                {!! uio('formCheckbox', ['id'=>'__xe_rating', 'label'=>xe_trans('xe::group'), 'name'=>'group_id', 'checkboxes'=> $groups]) !!}
                             </div>
 
                             @foreach($fieldTypes as $fieldType)

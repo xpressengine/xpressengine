@@ -43,7 +43,7 @@
                                 <div class="input-group-btn">
                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                         <span class="__xe_selectedKeyfield">
-                                        @if(Request::get('keyfield')==='displayName')
+                                        @if(Request::get('keyfield')==='display_name')
                                             {{xe_trans('xe::name')}}
                                         @elseif(Request::get('keyfield')==='email')
                                             {{xe_trans('xe::email')}}

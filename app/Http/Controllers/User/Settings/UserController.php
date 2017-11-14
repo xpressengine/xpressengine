@@ -268,7 +268,7 @@ class UserController extends Controller
             $request,
             [
                 'email' => 'email',
-                'displayName' => 'required',
+                'display_name' => 'required',
                 'rating' => 'required',
                 'status' => 'required',
             ]
@@ -276,9 +276,10 @@ class UserController extends Controller
 
         $userData = $request->except('_token');
 
-        if (array_get($userData, 'profileImgFile') === '__delete_file__') {
-            $userData['profileImgFile'] = false;
+        if (array_get($userData, 'profile_img_file') === '__delete_file__') {
+            $userData['profile_img_file'] = false;
         }
+        $userData['group_id'] = $request->get('group_id') ?: [];
 
         XeDB::beginTransaction();
         try {

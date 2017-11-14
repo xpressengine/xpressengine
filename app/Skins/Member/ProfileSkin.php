@@ -41,12 +41,13 @@ class ProfileSkin extends BladeSkin
             $this->data['profileImageHtml'] = uio(
                 'xpressengine@profileImage',
                 [
-                    'name' => 'profileImgFile',
+                    'name' => 'profile_img_file',
                     'image' => $user->getProfileImage(),
                     'width' => 120,
                     'height' => 120
                 ]
             );
+            // todo: 사용하지 않는것으로 보임 확인 필요
             $this->data['bgImageHtml'] = uio(
                 'xpressengine@profileBgImage',
                 [

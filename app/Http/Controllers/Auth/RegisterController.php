@@ -281,7 +281,7 @@ class RegisterController extends Controller
         // set default join group
         $joinGroup = $config->get('joinGroup');
         if ($joinGroup !== null) {
-            $userData['groupId'] = [$joinGroup];
+            $userData['group_id'] = [$joinGroup];
         }
 
         $userData['rating'] = Rating::MEMBER;

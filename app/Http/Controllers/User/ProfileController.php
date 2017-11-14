@@ -88,7 +88,7 @@ class ProfileController extends Controller
         XeDB::beginTransaction();
         try {
             // resolve profile file
-            if ($profileFile = $request->file('profileImgFile')) {
+            if ($profileFile = $request->file('profile_img_file')) {
                 /** @var UserImageHandler $imageHandler */
                 $imageHandler = app('xe.user.image');
                 $user->profile_image_id = $imageHandler->updateUserProfileImage($user, $profileFile);
