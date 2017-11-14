@@ -41,17 +41,15 @@ class PendingEmailRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $email = $this->makeEmail();
         $self = $this;
-        $email->shouldReceive('create')->with(Mockery::on(function($d) use($self){
-            $self->assertArrayHasKey('confirmation_code', $d);
-            return true;
-        }))->once()->andReturnSelf();
+
 
         $relation = Mockery::mock('\Illuminate\Database\Eloquent\Relations\HasOne');
-        $relation->shouldReceive('save')->with($email)->andReturnNull();
+        $relation->shouldReceive('create')->with(Mockery::on(function($d) use($self){
+            $self->assertArrayHasKey('confirmation_code', $d);
+            return true;
+        }))->once()->andReturn($email);
 
         $user->shouldReceive('pendingEmail')->once()->andReturn($relation);
-
-        $repo->shouldReceive('createModel')->andReturn($email);
 
         /** @var PendingEmailRepository $repo */
         /** @var User $user */

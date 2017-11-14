@@ -83,7 +83,6 @@ namespace Xpressengine\Tests\User {
                 'display_name' => 'foo',
                 'password' => 'secret',
                 'email' => 'foo@bar.com',
-                'emailConfirmed' => true,
             ];
 
             /** @var Mockery\MockInterface $users */
@@ -130,7 +129,6 @@ namespace Xpressengine\Tests\User {
                 'display_name' => 'foo',
                 'password' => 'secret',
                 'email' => 'foo@bar.com',
-                'emailConfirmed' => false,
             ];
 
             /** @var Mockery\MockInterface $users */
@@ -178,7 +176,7 @@ namespace Xpressengine\Tests\User {
             $data = [
                 'display_name' => 'foo',
                 'password' => 'secret',
-                'groupId' => ['bar','baz']
+                'group_id' => ['bar','baz']
             ];
 
             /** @var Mockery\MockInterface $users */
