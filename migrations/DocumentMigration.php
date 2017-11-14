@@ -117,8 +117,8 @@ class DocumentMigration extends Migration
         $table->longText('content')->comment('document content');
         $table->text('pure_content')->comment('document pure content. There is content for human readable(HTML removed). It using for fulltext search.');
 
-        $table->timestamp('created_at')->comment('document created date');
-        $table->timestamp('updated_at')->comment('document updated date');
+        $table->timestamp('created_at')->nullable()->comment('document created date');
+        $table->timestamp('updated_at')->nullable()->comment('document updated date');
         $table->timestamp('published_at')->nullable()->comment('document published date');
         $table->timestamp('deleted_at')->nullable()->comment('document deleted date. for soft delete.');
 

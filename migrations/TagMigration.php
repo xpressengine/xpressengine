@@ -37,7 +37,7 @@ class TagMigration extends Migration {
             $table->integer('tag_id')->comment('tag ID');
             $table->string('taggable_id', 36)->comment('target ID. If Document saved a tag, [taggable_id] is document ID.');
             $table->integer('position')->default(0)->comment('position number within same [taggable_id]');
-            $table->timestamp('created_at')->comment('created date');
+            $table->timestamp('created_at')->nullable()->comment('created date');
 
             $table->unique(['tag_id', 'taggable_id']);
         });

@@ -41,8 +41,8 @@ class SettingsMigration extends Migration {
             $table->string('summary', 2000)->comment('summary for request');
             $table->text('data')->comment('extra data for request');
             $table->string('ipaddress', 16)->comment('ip address');
-            $table->timestamp('created_at')->index()->comment('created date');
-            $table->timestamp('updated_at')->index()->comment('updated date');
+            $table->timestamp('created_at')->nullable()->index()->comment('created date');
+            $table->timestamp('updated_at')->nullable()->index()->comment('updated date');
 
             $table->primary('id');
         });

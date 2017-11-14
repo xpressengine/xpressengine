@@ -26,7 +26,7 @@ class CounterMigration extends Migration {
             $table->string('user_id', 36)->comment('user ID');
             $table->integer('point')->default(1)->comment('point');
             $table->string('ipaddress', 16)->comment('IP address');
-            $table->timestamp('created_at')->comment('created date');
+            $table->timestamp('created_at')->nullable()->comment('created date');
 
             $table->index(['target_id', 'user_id']);
             $table->index(['target_id', 'counter_name']);

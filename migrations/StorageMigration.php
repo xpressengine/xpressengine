@@ -31,8 +31,8 @@ class StorageMigration extends Migration {
             $table->integer('size')->comment('file size');
             $table->integer('use_count')->default(0)->comment('use count. how much used in the system.');
             $table->integer('download_count')->default(0)->comment('download count');
-            $table->timestamp('created_at')->comment('created date');
-            $table->timestamp('updated_at')->comment('updated date');
+            $table->timestamp('created_at')->nullable()->comment('created date');
+            $table->timestamp('updated_at')->nullable()->comment('updated date');
 
             $table->primary('id');
             $table->unique(['disk', 'path', 'filename'], 'findKey');
@@ -44,7 +44,7 @@ class StorageMigration extends Migration {
             $table->increments('id')->comment('ID');
             $table->string('file_id', 36)->comment('file ID');
             $table->string('fileable_id', 36)->comment('target ID. If Document uploaded a file, [fileable_id] is document ID.');
-            $table->timestamp('created_at')->comment('created date');
+            $table->timestamp('created_at')->nullable()->comment('created date');
 
             $table->unique(['file_id', 'fileable_id']);
         });

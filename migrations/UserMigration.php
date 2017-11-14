@@ -28,10 +28,10 @@ class UserMigration extends Migration {
             $table->text('introduction')->default(null)->nullable()->comment('user introduction');
             $table->string('profile_image_id', 36)->nullable()->comment('profile image file ID');
             $table->string('remember_token', 255)->nullable()->comment('token for keep login');
-            $table->timestamp('login_at')->comment('login date');
-            $table->timestamp('created_at')->index()->comment('created date');
-            $table->timestamp('updated_at')->index()->comment('updated date');
-            $table->timestamp('password_updated_at')->comment('password updated date');
+            $table->timestamp('login_at')->nullable()->comment('login date');
+            $table->timestamp('created_at')->nullable()->index()->comment('created date');
+            $table->timestamp('updated_at')->nullable()->index()->comment('updated date');
+            $table->timestamp('password_updated_at')->nullable()->comment('password updated date');
 
             $table->primary('id');
         });
@@ -42,8 +42,8 @@ class UserMigration extends Migration {
             $table->string('name')->comment('group name');
             $table->string('description', 1000)->comment('group description');
             $table->integer('order')->default(0)->index()->comment('order number');
-            $table->timestamp('created_at')->index()->comment('created date');
-            $table->timestamp('updated_at')->comment('updated date');
+            $table->timestamp('created_at')->nullable()->index()->comment('created date');
+            $table->timestamp('updated_at')->nullable()->comment('updated date');
 
             $table->primary('id');
         });
@@ -55,7 +55,7 @@ class UserMigration extends Migration {
             $table->increments('id')->comment('ID');
             $table->string('group_id', 36)->comment('group ID');
             $table->string('user_id', 36)->comment('user ID');
-            $table->timestamp('created_at')->comment('created date');
+            $table->timestamp('created_at')->nullable()->comment('created date');
 
             $table->unique(['group_id','user_id']);
             $table->index('group_id');
@@ -73,8 +73,8 @@ class UserMigration extends Migration {
             $table->char('provider', 20)->comment('OAuth provider. naver/twitter/facebook/...');
             $table->string('token', 500)->comment('token');
             $table->string('token_secret', 500)->comment('token secret');
-            $table->timestamp('created_at')->comment('created date');
-            $table->timestamp('updated_at')->comment('updated date');
+            $table->timestamp('created_at')->nullable()->comment('created date');
+            $table->timestamp('updated_at')->nullable()->comment('updated date');
 
             $table->primary('id');
             $table->unique(['provider','account_id']);
@@ -86,8 +86,8 @@ class UserMigration extends Migration {
             $table->increments('id')->comment('ID');
             $table->string('user_id', 36)->comment('user ID');
             $table->string('address')->comment('email address');
-            $table->timestamp('created_at')->index()->comment('created date');
-            $table->timestamp('updated_at')->comment('updated date');
+            $table->timestamp('created_at')->nullable()->index()->comment('created date');
+            $table->timestamp('updated_at')->nullable()->comment('updated date');
 
             $table->index('user_id');
             $table->index('address');
@@ -101,8 +101,8 @@ class UserMigration extends Migration {
             $table->string('user_id', 36)->comment('user ID');
             $table->string('address')->comment('email address');
             $table->string('confirmation_code')->nullable()->comment('confirmation code');
-            $table->timestamp('created_at')->index()->comment('created date');
-            $table->timestamp('updated_at')->comment('updated date');
+            $table->timestamp('created_at')->nullable()->index()->comment('created date');
+            $table->timestamp('updated_at')->nullable()->comment('updated date');
 
             $table->index('user_id');
             $table->index('address');
@@ -115,7 +115,7 @@ class UserMigration extends Migration {
             $table->increments('id')->comment('ID');
             $table->string('email')->index()->comment('email address');
             $table->string('token')->index()->comment('token');
-            $table->timestamp('created_at')->comment('created date');
+            $table->timestamp('created_at')->nullable()->comment('created date');
         });
 
         Schema::create('user_register_token', function (Blueprint $table) {
@@ -125,7 +125,7 @@ class UserMigration extends Migration {
             $table->string('id', 36)->comment('user ID');
             $table->string('guard', 100)->comment('the guard creating token');
             $table->text('data')->comment('token data');
-            $table->timestamp('created_at')->comment('created date');
+            $table->timestamp('created_at')->nullable()->comment('created date');
         });
 
     }
@@ -202,16 +202,16 @@ class UserMigration extends Migration {
                 $table->dropColumn('count');
             });
         }
-        if (!Schema::hasColumn('user_account', 'tokenSecret')) {
+        if (!Schema::hasColumn('user_account', 'token_secret')) {
             Schema::table('user_account', function ($table) {
-                $table->string('tokenSecret', 500);
+                $table->string('token_secret', 500);
             });
         }
 
         // ver.3.0.0-beta.17
-        if (!Schema::hasColumn('user', 'loginAt')) {
+        if (!Schema::hasColumn('user', 'login_at')) {
             Schema::table('user', function ($table) {
-                $table->timestamp('loginAt');
+                $table->timestamp('login_at')->nullable();
             });
         }
 
@@ -232,7 +232,7 @@ class UserMigration extends Migration {
                 $table->string('id', 36)->comment('user ID');
                 $table->string('guard', 100)->comment('the guard creating token');
                 $table->text('data')->comment('token data');
-                $table->timestamp('createdAt')->comment('created date');
+                $table->timestamp('created_at')->nullable()->comment('created date');
             });
         }
 
