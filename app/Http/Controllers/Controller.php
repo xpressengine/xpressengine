@@ -29,7 +29,7 @@ class Controller extends BaseController
     {
         $transAttributes = [];
         foreach ($rules as $key => $val) {
-            $transAttributes[$key] = xe_trans($this->validateTranslationNamespace. '::' . $key);
+            $transAttributes[$key] = xe_trans($this->validateTranslationNamespace. '::' . camel_case($key));
         }
         return $this->originValidate($request, $rules, $messages, array_merge($transAttributes, $customAttributes));
     }
