@@ -7,7 +7,7 @@
         <hr>
         <div class="widget-controll">
             <p>
-                <a href="{{route('widgetbox.edit', ['id' => $id])}}" target="_blank" onclick="window.open(this.href, 'widgetboxEditor', 'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no');return false"> {{ $link or $widgetbox->title.' 위젯박스 편집' }}</a>
+                <button type="button" onclick="window.open('{{route('widgetbox.edit', ['id' => $id])}}', 'widgetboxEditor', 'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no');return false"> {{ $link or $widgetbox->title.' 위젯박스 편집' }}</button>
             </p>
         </div>
         @endif
