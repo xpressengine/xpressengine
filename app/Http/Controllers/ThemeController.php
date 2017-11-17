@@ -157,6 +157,16 @@ class ThemeController extends Controller
             'theme' => 'required',
         ]);
 
+        // beta.24 에서 laravel 5.5 가 적용된 이후
+        // 공백('')값이 "ConvertEmptyStringsToNull" middleware 에 의해
+        // null 로 변환됨. config 에 "set" 메서드를 통해 값을 갱신하는 경우
+        // null 인 값은 변경사항에서 제외 시키므로 값이 공백상태로 넘겨져야 함.
+        // 파일의 경우 $request->all() 호출시 내부적으로 다시 merge 하며
+        // null 값이 유지됨.
+        $request->merge(array_map(function ($v) {
+            return is_null($v) ? '' : $v;
+        }, $request->all()));
+
         $themeId = $request->get('theme');
         $theme = $themeHandler->getTheme($themeId);
 
