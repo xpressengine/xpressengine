@@ -8,6 +8,7 @@
 
 namespace Xpressengine\Migrations;
 
+use Carbon\Carbon;
 use Illuminate\Database\Schema\Blueprint;
 use Schema;
 use Xpressengine\Support\Migration;
@@ -16,9 +17,16 @@ class SettingsMigration extends Migration {
 
     public function installed()
     {
+        $now = Carbon::now()->format('Y-m-d H:i:s');
         \DB::table('config')->insert(['name' => 'settings', 'vars' => '[]']);
-        \DB::table('permissions')->insert(['site_key'=> 'default', 'name' => 'settings', 'grants' => '[]']);
-        \DB::table('permissions')->insert(['site_key'=> 'default', 'name' => 'settings.user', 'grants' => '[]']);
+        \DB::table('permissions')->insert([
+            'site_key'=> 'default', 'name' => 'settings', 'grants' => '[]',
+            'created_at' => $now, 'updated_at' => $now,
+        ]);
+        \DB::table('permissions')->insert([
+            'site_key'=> 'default', 'name' => 'settings.user', 'grants' => '[]',
+            'created_at' => $now, 'updated_at' => $now,
+        ]);
     }
 
     /**
