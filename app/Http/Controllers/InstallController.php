@@ -126,7 +126,7 @@ class InstallController extends Controller
                 'display_name' => $request->get('admin_display_name') ?: 'admin',
             ],
             'database' => [
-                'driver' => $request->get('database_driver') ?: 'localhost',
+                'driver' => $request->get('database_driver') ?: 'mysql',
                 'host' => $request->get('database_host') ?: 'localhost',
                 'port' => $request->get('database_port') ?: '3306',
                 'dbname' => $request->get('database_name'),
