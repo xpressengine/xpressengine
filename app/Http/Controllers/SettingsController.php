@@ -173,7 +173,7 @@ class SettingsController extends Controller
     {
         $grant = new Grant;
 
-        $rating = $inputs['accessRating'];
+        $rating = array_get($inputs, 'accessRating', Rating::SUPER);
         $group = $this->innerParamParsing($inputs['accessGroup']);
         $user = $this->innerParamParsing($inputs['accessUser']);
         $except = $this->innerParamParsing($inputs['accessExcept']);
