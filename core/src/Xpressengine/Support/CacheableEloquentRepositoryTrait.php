@@ -135,7 +135,7 @@ trait CacheableEloquentRepositoryTrait
     {
         $filesystem = $this->resolveContainer('filesystem.disk');
         if (!$filesystem->exists($this->getKeyfile())) {
-            $filesystem->put($this->getKeyfile(), null);
+            $filesystem->put($this->getKeyfile(), '');
         }
 
         return json_decode($filesystem->get($this->getKeyfile()), true) ?: [];
