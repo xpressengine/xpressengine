@@ -75,15 +75,9 @@ class ProfileController extends Controller
         // member validation
         /** @var UserInterface $user */
         $user = $this->retreiveUser($userId);
-        $userId = $user->getId();
 
         $displayName = $request->get('display_name');
         $introduction = $request->get('introduction');
-
-        // displayName validation
-        if ($user->getDisplayName() !== trim($displayName)) {
-            $this->handler->validateDisplayName($displayName);
-        }
 
         XeDB::beginTransaction();
         try {

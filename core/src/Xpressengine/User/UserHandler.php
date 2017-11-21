@@ -401,11 +401,11 @@ class UserHandler
     /**
      * 표시이름(display_name)에 대한 유효성 검사를 한다. 표시이름이 형식검사와 중복검사를 병행한다.
      *
-     * @param string $name 유효성 검사를 할 표시이름
-     *
+     * @param string             $name 유효성 검사를 할 표시이름
+     * @param UserInterface|null $user user object
      * @return bool  유효성검사 결과, 통과할 경우 true, 실패할 경우 false
      */
-    public function validateDisplayName($name)
+    public function validateDisplayName($name, UserInterface $user = null)
     {
         if (empty($name)) {
             $name = null;
@@ -422,8 +422,10 @@ class UserHandler
             throw new InvalidDisplayNameException(compact('message'));
         }
 
-        if ($this->users()->where(['display_name' => $name])->first() !== null) {
-            throw new DisplayNameAlreadyExistsException();
+        if ($find = $this->users()->where(['display_name' => $name])->first()) {
+            if (!$user || $find->getId() !== $user->getId()) {
+                throw new DisplayNameAlreadyExistsException();
+            }
         }
         return true;
     }
@@ -484,8 +486,8 @@ class UserHandler
         }
 
         if (array_get($data, 'display_name') !== null) {
-            if ($user->display_name !== $data['display_name']) {
-                $this->validateDisplayName($data['display_name']);
+            if (strcmp($user->display_name, $data['display_name']) !== 0) {
+                $this->validateDisplayName($data['display_name'], $user);
             }
         }
 
