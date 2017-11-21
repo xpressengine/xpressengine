@@ -448,30 +448,45 @@ class UserServiceProvider extends ServiceProvider
         app('config')->set('xe.user.password.levels', $passwordLevels);
 
         // set display name validation to config
-        app('config')->set('xe.user.displayName.validate', function ($value) {
-            if (!is_string($value) && !is_numeric($value)) {
-                return false;
-            }
-
-            if (str_contains($value, "  ")) {
-                return false;
-            }
-
-            $byte = strlen($value);
-            $multiByte = mb_strlen($value);
-
-            if ($byte === $multiByte) {
-                if ($byte < 3) {
+        if ($this->isInstalled()) {
+            app('config')->set('xe.user.displayName.validate', function ($value) {
+                if (!is_string($value) && !is_numeric($value)) {
                     return false;
                 }
-            } else {
-                if ($multiByte < 2) {
+
+                if (str_contains($value, "  ")) {
                     return false;
                 }
-            }
-            return preg_match('/^[\pL\pM\pN][. \pL\pM\pN_-]*[\pL\pM\pN]$/u', $value);
-        });
 
+                $byte = strlen($value);
+                $multiByte = mb_strlen($value);
+
+                if ($byte === $multiByte) {
+                    if ($byte < 3) {
+                        return false;
+                    }
+                } else {
+                    if ($multiByte < 2) {
+                        return false;
+                    }
+                }
+                return preg_match('/^[\pL\pM\pN][. \pL\pM\pN_-]*[\pL\pM\pN]$/u', $value);
+            });
+        } else {
+            app('config')->set('xe.user.displayName.validate', function ($value) {
+                return true;
+            });
+        }
+    }
+
+    /**
+     * Is installed
+     *
+     * @return bool
+     */
+    protected function isInstalled()
+    {
+        return file_exists($this->app->storagePath() . '/app/installed');
     }
 
     /**
