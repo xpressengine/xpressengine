@@ -13,6 +13,7 @@ use App\Themes\SettingsTheme;
 use App\UIObjects\Settings\SettingsPermission;
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Register\Container;
+use Xpressengine\Settings\AdminLog\Loggers\AuthLogger;
 use Xpressengine\Settings\AdminLog\Loggers\UserLogger;
 use Xpressengine\Settings\AdminLog\LogHandler;
 use Xpressengine\Settings\AdminLog\Models\Log;
@@ -102,7 +103,8 @@ class SettingsServiceProvider extends ServiceProvider
     {
         /** @var Container $register */
         $register = $this->app['xe.register'];
-        $register->push('admin/logger', UserLogger::$id, UserLogger::class);
+        $register->push('admin/logger', UserLogger::ID, UserLogger::class);
+        $register->push('admin/logger', AuthLogger::ID, AuthLogger::class);
     }
 
     private function setDetailResolverForLog()

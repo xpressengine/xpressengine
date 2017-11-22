@@ -28,10 +28,9 @@ use Xpressengine\Settings\AdminLog\Models\Log;
  */
 class UserLogger extends AbstractLogger
 {
+    const ID = 'user';
 
-    public static $id = 'user';
-
-    public static $title = '회원';
+    const TITLE = '회원';
 
     protected $matched;
 

@@ -18,13 +18,13 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li @if(request()->get('type') === null) class="active" @endif><a href="{{ route('settings.setting.log.index') }}">모든 타입</a></li>
                                 @foreach($loggers as $logger)
-                                    <li @if(request()->get('type') === $logger::$id) class="active" @endif><a href="{{ route('settings.setting.log.index', array_merge(request()->all(), ['type'=> $logger::$id] )) }}">{{ $logger::$title }}</a></li>
-                                    @if(request()->get('type') === $logger::$id) {{-- */ $selectedLogger = $logger/* --}} @endif
+                                    <li @if(request()->get('type') === $logger::ID) class="active" @endif><a href="{{ route('settings.setting.log.index', array_merge(request()->all(), ['type'=> $logger::ID] )) }}">{{ $logger::TITLE }}</a></li>
+                                    @if(request()->get('type') === $logger::ID) {{-- */ $selectedLogger = $logger/* --}} @endif
                                 @endforeach
                             </ul>
                             @show
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                {{ isset($selectedLogger) ? $selectedLogger::$title : '타입' }} <span class="caret"></span>
+                                {{ isset($selectedLogger) ? $selectedLogger::TITLE : '타입' }} <span class="caret"></span>
                             </button>
                             @yield('type-select')
                         </div>
@@ -101,7 +101,7 @@
                             <td>{{ $log->created_at->format('y-m-d H:i:s') }}</td>
                             <td>
                                 @if($logger = array_get($loggers, $log->type))
-                                {{  $logger::$title }}
+                                {{  $logger::TITLE }}
                                 @else
                                 {{ $log->type }}
                                 @endif

@@ -17,6 +17,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Contracts\Foundation\Application;
 use Xpressengine\Settings\AdminLog\LogHandler;
+use Xpressengine\User\Models\Guest;
 
 /**
  * 이 클래스는 Xpressengine에서 middleware로 작동한다.
@@ -61,11 +62,19 @@ class LogMiddleware
      */
     public function handle($request, Closure $next)
     {
+        $user = $request->user();
+
         $result = $next($request);
 
-        if (!$request->user()->isManager()) {
+        $user = $request->user() instanceof Guest ? $user : $request->user();
+
+        if (!$user->isManager()) {
             return $result;
         }
+
+        $request->setUserResolver(function () use ($user) {
+            return $user;
+        });
 
         $loggers = $this->handler->getLoggerIds();
 
