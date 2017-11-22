@@ -682,10 +682,12 @@ class UserServiceProvider extends ServiceProvider
 
                     $html = '';
                     foreach ($fieldTypes as $id => $fieldType) {
-                        $html .= sprintf(
-                            '<div class="control-group">%s</div>',
-                            $fieldType->getSkin()->create(request()->all())
-                        );
+                        if ($fieldType->getConfig()->get('use') == true) {
+                            $html .= sprintf(
+                                '<div class="control-group">%s</div>',
+                                $fieldType->getSkin()->create(request()->all())
+                            );
+                        }
                     }
 
                     $skinHandler = app('xe.skin');
