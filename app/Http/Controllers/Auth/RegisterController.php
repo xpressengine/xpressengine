@@ -155,8 +155,10 @@ class RegisterController extends Controller
         $dynamicFieldConfigs = $dynamicFieldConfigHandler->gets('user');
         /** @var \Xpressengine\Config\ConfigEntity $dynamicFieldConfig */
         foreach ($dynamicFieldConfigs as $dynamicFieldConfig) {
-            /** @var \Xpressengine\DynamicField\AbstractType $type */
-            $rules = array_merge($rules, XeDynamicField::getRules($dynamicFieldConfig));
+            if ($dynamicFieldConfig->get('use') == true) {
+                $rules = array_merge($rules, XeDynamicField::getRules($dynamicFieldConfig));
+            }
+
         }
 
         XeFrontend::rule('join', $rules);
@@ -253,8 +255,9 @@ class RegisterController extends Controller
         $dynamicFieldConfigs = $dynamicFieldConfigHandler->gets('user');
         /** @var \Xpressengine\Config\ConfigEntity $dynamicFieldConfig */
         foreach ($dynamicFieldConfigs as $dynamicFieldConfig) {
-            /** @var \Xpressengine\DynamicField\AbstractType $type */
-            $rules = array_merge($rules, XeDynamicField::getRules($dynamicFieldConfig));
+            if ($dynamicFieldConfig->get('use') == true) {
+                $rules = array_merge($rules, XeDynamicField::getRules($dynamicFieldConfig));
+            }
         }
 
         $this->validate($request, $rules);

@@ -22,7 +22,7 @@ $('#btnCreateCategory').on('click', (e) => {
     url: storeCategoryInfo.url,
     success: function (data) {
       var section = $(_this).closest('.__xe_df_category');
-      section.find('[name="categoryId"]').val(data.id);
+      section.find('[name="category_id"]').val(data.id);
       section.find('button').hide();
       section.append(
         $('<a>').text(storeCategoryInfo.text).prop('target', '_blank').prop('href', '/settings/category/' + data.id)
