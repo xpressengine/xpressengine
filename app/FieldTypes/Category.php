@@ -100,6 +100,10 @@ class Category extends AbstractType
     {
         $category = null;
         if ($config != null) {
+            // for support version beta.26 before
+            if ($config->get('category_id') == null && $config->get('categoryId') != null) {
+                $config->set('category_id', $config->get('categoryId'));
+            }
             $category = CategoryModel::find($config->get('category_id'));
         }
 

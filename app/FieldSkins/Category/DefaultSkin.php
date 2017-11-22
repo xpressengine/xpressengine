@@ -58,7 +58,11 @@ class DefaultSkin extends AbstractSkin
      */
     public function create(array $args)
     {
-        $category = Category::find($this->config->get('categoryId'));
+        if ($this->config->get('category_id') == null && $this->config->get('categoryId') != null) {
+            $this->config->set('category_id', $this->config->get('categoryId'));
+        }
+
+        $category = Category::find($this->config->get('category_id'));
         $this->addMergeData(['categoryItems' => $category->items]);
 
         return parent::create($args);
@@ -73,7 +77,11 @@ class DefaultSkin extends AbstractSkin
      */
     public function edit(array $args)
     {
-        $category = Category::find($this->config->get('categoryId'));
+        if ($this->config->get('category_id') == null && $this->config->get('categoryId') != null) {
+            $this->config->set('category_id', $this->config->get('categoryId'));
+        }
+
+        $category = Category::find($this->config->get('category_id'));
 
         $item = null;
         if (isset($args[$this->config->get('id') . 'ItemId'])) {
@@ -118,7 +126,11 @@ class DefaultSkin extends AbstractSkin
      */
     public function search(array $args)
     {
-        $category = Category::find($this->config->get('categoryId'));
+        if ($this->config->get('category_id') == null && $this->config->get('categoryId') != null) {
+            $this->config->set('category_id', $this->config->get('categoryId'));
+        }
+
+        $category = Category::find($this->config->get('category_id'));
 
         $item = null;
 
