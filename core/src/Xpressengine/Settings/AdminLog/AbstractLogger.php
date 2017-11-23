@@ -27,7 +27,11 @@ use Xpressengine\Settings\AdminLog\Models\Log;
  */
 abstract class AbstractLogger
 {
-    public static $id;
+    const ID = '';
+
+    const TITLE = '';
+
+//    public static $id;
 
     /**
      * @var LogHandler
@@ -93,7 +97,7 @@ abstract class AbstractLogger
     protected function loadRequest(Request $request)
     {
         return [
-            'type' => static::$id,
+            'type' => static::ID,
             'user_id' => $request->user()->getId(),
             'method' => $request->method(),
             'url' => $request->fullUrl(),
