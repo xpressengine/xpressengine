@@ -467,10 +467,20 @@ abstract class AbstractType implements ComponentInterface
             }
         }
 
+        // event fire
+        $this->handler->getRegisterHandler()->fireEvent(
+            sprintf('dynamicField.%s.%s.before_insert', $config->get('group'), $config->get('id'))
+        );
+
         if (count($insertParam) > 1) {
             $this->handler->connection()->table($this->handler->getConfigHandler()->getTableName($config))
                 ->insert($insertParam);
         }
+
+        // event fire
+        $this->handler->getRegisterHandler()->fireEvent(
+            sprintf('dynamicField.%s.%s.after_insert', $config->get('group'), $config->get('id'))
+        );
     }
 
     /**
@@ -526,6 +536,11 @@ abstract class AbstractType implements ComponentInterface
             }
         }
 
+        // event fire
+        $this->handler->getRegisterHandler()->fireEvent(
+            sprintf('dynamicField.%s.%s.before_update', $config->get('group'), $config->get('id'))
+        );
+
         if (count($updateParam) > 0) {
             if ($this->handler->connection()->table($this->handler->getConfigHandler()->getTableName($config))
                     ->where('dynamic_field_target_id', '=', $where['id'])->first() != null
@@ -539,6 +554,11 @@ abstract class AbstractType implements ComponentInterface
                     ->insert($insertParam);
             }
         }
+
+        // event fire
+        $this->handler->getRegisterHandler()->fireEvent(
+            sprintf('dynamicField.%s.%s.after_update', $config->get('group'), $config->get('id'))
+        );
     }
 
     /**
@@ -556,8 +576,18 @@ abstract class AbstractType implements ComponentInterface
             throw new Exceptions\RequiredDynamicFieldException;
         }
 
+        // event fire
+        $this->handler->getRegisterHandler()->fireEvent(
+            sprintf('dynamicField.%s.%s.before_delete', $config->get('group'), $config->get('id'))
+        );
+
         $this->handler->connection()->table($this->handler->getConfigHandler()->getTableName($config))
             ->where('dynamic_field_target_id', '=', $where['id'])->delete();
+
+        // event fire
+        $this->handler->getRegisterHandler()->fireEvent(
+            sprintf('dynamicField.%s.%s.after_delete', $config->get('group'), $config->get('id'))
+        );
     }
 
     /**

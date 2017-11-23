@@ -16,6 +16,7 @@ namespace Xpressengine\DynamicField;
 
 use Xpressengine\DynamicField\DynamicFieldHandler as Handler;
 use Xpressengine\Plugin\PluginRegister;
+use Illuminate\Events\Dispatcher;
 
 /**
  * RegisterHandler
@@ -38,13 +39,20 @@ class RegisterHandler
     protected $register;
 
     /**
+     * @var Dispatcher
+     */
+    protected $dispatcher;
+
+    /**
      * create instance
      *
-     * @param PluginRegister $register register's container
+     * @param PluginRegister $register   register's container
+     * @param Dispatcher     $dispatcher event dispatcher
      */
-    public function __construct(PluginRegister $register)
+    public function __construct(PluginRegister $register, Dispatcher $dispatcher)
     {
         $this->register = $register;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -95,7 +103,7 @@ class RegisterHandler
     protected function get(Handler $handler, $id)
     {
         $class = $this->register->get($id);
-        return new $class($handler);
+        return new $class($handler, $this->dispatcher);
     }
 
     /**
@@ -144,5 +152,29 @@ class RegisterHandler
         foreach ($this->register->get($id . PluginRegister::KEY_DELIMITER . self::FIELD_SKIN) as $skin) {
             yield $this->getSkin($handler, $skin::getId());
         }
+    }
+
+    /**
+     * get event dispatcher
+     *
+     * @return Dispatcher
+     */
+    public function getEventDispatcher()
+    {
+        return $this->dispatcher;
+    }
+
+    /**
+     * Fire an event and call the listeners.
+     *
+     * @param  string|object  $event
+     * @param  mixed  $payload
+     * @param  bool  $halt
+     * @return array|null
+     */
+    public function fireEvent($event, $payload = [], $halt = false)
+    {
+        \Log::info($event);
+        $this->dispatcher->fire($event, $payload, $halt);
     }
 }

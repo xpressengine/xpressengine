@@ -28,6 +28,11 @@ class RegisterHandlerTest extends TestCase
     protected $pluginRegister;
 
     /**
+     * @var m\MockInterface|\Illuminate\Events\Dispatcher
+     */
+    protected $dispatcher;
+
+    /**
      * tear down
      *
      * @return void
@@ -45,8 +50,10 @@ class RegisterHandlerTest extends TestCase
     public function setUp()
     {
         $pluginRegister = m::mock('Xpressengine\Plugin\PluginRegister');
-
         $this->pluginRegister = $pluginRegister;
+
+        $dispatcher = m::mock('Illuminate\Events\Dispatcher');
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -57,8 +64,9 @@ class RegisterHandlerTest extends TestCase
     public function testAdd()
     {
         $pluginRegister = $this->pluginRegister;
+        $dispatcher = $this->dispatcher;
 
-        $handler = new RegisterHandler($pluginRegister);
+        $handler = new RegisterHandler($pluginRegister, $dispatcher);
 
         $class = m::mock('Type', 'Xpressengine\DynamicField\AbstractType');
         $class->shouldReceive('boot');
@@ -76,8 +84,9 @@ class RegisterHandlerTest extends TestCase
     public function testGetType()
     {
         $pluginRegister = $this->pluginRegister;
+        $dispatcher = $this->dispatcher;
 
-        $handler = m::mock('Xpressengine\DynamicField\RegisterHandler', [$pluginRegister])
+        $handler = m::mock('Xpressengine\DynamicField\RegisterHandler', [$pluginRegister, $dispatcher])
             ->shouldAllowMockingProtectedMethods()->makePartial();
 
         $id = 'id';
@@ -103,8 +112,9 @@ class RegisterHandlerTest extends TestCase
     public function testGetSkin()
     {
         $pluginRegister = $this->pluginRegister;
+        $dispatcher = $this->dispatcher;
 
-        $handler = m::mock('Xpressengine\DynamicField\RegisterHandler', [$pluginRegister])
+        $handler = m::mock('Xpressengine\DynamicField\RegisterHandler', [$pluginRegister, $dispatcher])
             ->shouldAllowMockingProtectedMethods()->makePartial();
 
         $id = 'id';
@@ -129,8 +139,9 @@ class RegisterHandlerTest extends TestCase
     public function testGetTypes()
     {
         $pluginRegister = $this->pluginRegister;
+        $dispatcher = $this->dispatcher;
 
-        $handler = new RegisterHandler($pluginRegister);
+        $handler = new RegisterHandler($pluginRegister, $dispatcher);
 
         $dfHandler = m::mock('Xpressengine\DynamicField\DynamicFieldHandler');
 
@@ -154,8 +165,9 @@ class RegisterHandlerTest extends TestCase
     public function testGetSkins()
     {
         $pluginRegister = $this->pluginRegister;
+        $dispatcher = $this->dispatcher;
 
-        $handler = new RegisterHandler($pluginRegister);
+        $handler = new RegisterHandler($pluginRegister, $dispatcher);
 
         $dfHandler = m::mock('Xpressengine\DynamicField\DynamicFieldHandler');
 
@@ -186,8 +198,9 @@ class RegisterHandlerTest extends TestCase
     public function testGetSkinsByType()
     {
         $pluginRegister = $this->pluginRegister;
+        $dispatcher = $this->dispatcher;
 
-        $handler = new RegisterHandler($pluginRegister);
+        $handler = new RegisterHandler($pluginRegister, $dispatcher);
 
         $dfHandler = m::mock('Xpressengine\DynamicField\DynamicFieldHandler');
 

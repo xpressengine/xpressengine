@@ -130,7 +130,7 @@ class DynamicFieldServiceProvider extends ServiceProvider
             return new $proxyClass(
                 $connection,
                 new ConfigHandler($connection, $app['xe.config']),
-                new RegisterHandler($this->app['xe.pluginRegister']),
+                new RegisterHandler($this->app['xe.pluginRegister'], $this->app['events']),
                 $app['view']
             );
         });

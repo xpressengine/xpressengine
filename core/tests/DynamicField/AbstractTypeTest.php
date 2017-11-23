@@ -57,7 +57,11 @@ class AbstractTypeTest extends TestCase
      */
     public function setUp()
     {
+        $registerHandler = m::mock('Xpressengine\DynamicField\RegisterHandler');
+        $registerHandler->shouldReceive('fireEvent');
+
         $handler = m::mock('Xpressengine\DynamicField\DynamicFieldHandler');
+        $handler->shouldReceive('getRegisterHandler')->andReturn($registerHandler);
 
         $this->handler = $handler;
     }
@@ -341,6 +345,7 @@ class AbstractTypeTest extends TestCase
 
         $config = m::mock('Xpressengine\Config\ConfigEntity');
         $config->shouldReceive('get')->with('id')->andReturn('instance_id');
+        $config->shouldReceive('get')->with('group')->andReturn('group');
         $config->shouldReceive('get')->with('required')->andReturn(true);
         $config->shouldReceive('get')->with('joinColumnName')->andReturn('id');
 
@@ -382,6 +387,7 @@ class AbstractTypeTest extends TestCase
 
         $config = m::mock('Xpressengine\Config\ConfigEntity');
         $config->shouldReceive('get')->with('id')->andReturn('instance_id');
+        $config->shouldReceive('get')->with('group')->andReturn('group');
         $config->shouldReceive('get')->with('required')->andReturn(true);
         $config->shouldReceive('get')->with('joinColumnName')->andReturn('id');
 
@@ -429,6 +435,7 @@ class AbstractTypeTest extends TestCase
 
         $config = m::mock('Xpressengine\Config\ConfigEntity');
         $config->shouldReceive('get')->with('id')->andReturn('instance_id');
+        $config->shouldReceive('get')->with('group')->andReturn('group');
         $config->shouldReceive('get')->with('required')->andReturn(true);
         $config->shouldReceive('get')->with('joinColumnName')->andReturn('id');
 
