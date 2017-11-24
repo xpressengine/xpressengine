@@ -10,7 +10,7 @@ import moment from 'moment';
    * */
   var Validator = {};
   Validator.rules = {};
-  Validator.alertType = 'form';
+  Validator.alertTypes = {};
 
   /**
    * 룰을 세팅한다.
@@ -96,13 +96,6 @@ import moment from 'moment';
     var ruleName = this.getRuleName($frm);
     var rules = this.rules[ruleName];
     var _this = this;
-    var alertType = $frm.data('rule-alert-type');
-
-    if (alertType == undefined) {
-      alertType = 'form';
-    }
-
-    _this.alertType = alertType;
 
     $.each(rules, function (name, rule) {
       _this.validate($frm, name, rule);
@@ -138,7 +131,6 @@ import moment from 'moment';
   Validator.formValidate = function ($form) {
     var _this = this;
 
-    Validator.alertType = $form.data('rule-alert-type') || 'toast';
     _this.errorClear($form);
 
     $form.find('[data-valid]').each(function () {
@@ -182,6 +174,10 @@ import moment from 'moment';
     });
   };
 
+  Validator.extendAlertType = function (type, callback) {
+    this.alertTypes[type] = callback;
+  };
+
   /**
    * validator 추가
    * @memberof module:validator
@@ -216,12 +212,14 @@ import moment from 'moment';
       });
     }
 
-    if (this.alertType == 'form') {
+    var alertType = $element.closest('form').data('rule-alert-type') || 'form';
+
+    if (typeof this.alertTypes[alertType] === 'function') {
+      this.alertTypes[alertType]($element, message);
+    } else if (alertType === 'form') {
       griper.form($element, message);
-
-    } else if (this.alertType == 'toast') {
+    } else if (alertType === 'toast') {
       griper.toast($element, message);
-
     }
 
   };
