@@ -30,9 +30,9 @@
                                 <input type="hidden" name="namespace" value="{{ $selected_namespace ?: '' }}">
                                 {{--<div id="namespace" data-namespace="{{ $selected_namespace ?: '' }}">--}}
                                     <div class="input-group-btn" id="__xe_namespace">
-                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{ $selected_namespace ?: XeLang::trans('lang::admin.search.all') }} <span class="caret"></span></button>
+                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{ $selected_namespace ?: xe_trans('xe::all') }} <span class="caret"></span></button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a href="#" data-namespace="">{{ XeLang::trans('lang::admin.search.all') }}</a></li>
+                                            <li><a href="#" data-namespace="">{{ xe_trans('xe::all') }}</a></li>
                                             @foreach ( $namespaces as $namespace )
                                             <li><a href="#" data-namespace="{{ $namespace }}">{{ $namespace }}</a></li>
                                             @endforeach
@@ -41,7 +41,7 @@
                                     <div class="search-input-group">
                                         <input type="text" class="form-control" name="keyword" aria-label="Text input with dropdown button" placeholder="{{xe_trans('xe::enterKeyword')}}" value="{{ $selected_keyword }}">
                                         <button class="btn-link" id="btn-search" type="submit">
-                                            <i class="xi-search"></i><span class="sr-only">{{ XeLang::trans('lang::admin.search-short') }}</span>
+                                            <i class="xi-search"></i><span class="sr-only">{{ xe_trans('xe::search') }}</span>
                                         </button>
                                     </div>
                                 {{--</div>--}}
@@ -63,7 +63,7 @@
                         ])
                         <div class="input-group clearfix">
                             <button type="button" class="btn btn-primary pull-right save" data-line-id="{{ $search->id }}">
-                                {{ XeLang::trans('lang::admin.editor.save') }}
+                                {{ xe_trans('xe::save') }}
                             </button>
                         </div>
                     </div>
@@ -88,10 +88,10 @@
             $.ajax({
                 type: 'PUT', url: url, dataType: 'json', data: data,
                 success: function (data, textStatus) {
-                    XE.toast('success', XE.Lang.trans('lang::admin.editor.saved'));
+                    XE.toast('success', XE.Lang.trans('xe::saved'));
                 },
                 error: function (request, status, error) {
-                    XE.toast('danger', XE.Lang.trans('lang::admin.editor.failed'));
+                    XE.toast('danger', XE.Lang.trans('xe::failed'));
                 }
             });
             return false;

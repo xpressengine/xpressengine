@@ -169,6 +169,14 @@ return [
         'ko' => '저장',
         'en' => 'Save',
     ],
+    'saved' => [
+        'ko' => '저장했습니다',
+        'en' => 'Saved',
+    ],
+    'failed' => [
+        'ko' => '실패했습니다',
+        'en' => 'Failed',
+    ],
     'modify' => [
         'ko' => '수정',
         'en' => 'Modify',
