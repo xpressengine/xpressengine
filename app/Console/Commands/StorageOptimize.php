@@ -58,7 +58,7 @@ class StorageOptimize extends Command
         $loop = 0;
         try {
             while(true) {
-                $files = $this->storage->paginate(['use_count' => 0, 'parent_id' => null], 20);
+                $files = $this->storage->where('use_count', 0)->where('origin_id', null)->paginate(20);
                 if (count($files) < 1) {
                     break;
                 }
