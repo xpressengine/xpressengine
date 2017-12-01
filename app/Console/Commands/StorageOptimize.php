@@ -107,12 +107,12 @@ class StorageOptimize extends Command
         foreach ($this->bag as $file) {
             switch ($verbosity) {
                 case 2:
-                    if ($file->parent_id === null) {
+                    if ($file->origin_id === null) {
                         $this->info("\t" . $file->clientname);
                     }
                     break;
                 case 3:
-                    if ($file->parent_id === null) {
+                    if ($file->origin_id === null) {
                         $this->line("\t" .
                             $file->disk . "\t" .
                             "<info>" . $file->clientname . "</info>\t" .
