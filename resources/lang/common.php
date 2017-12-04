@@ -785,6 +785,10 @@ return [
         'ko' => '요청한 기능을 실행할 수 있는 권한이 없습니다.',
         'en' => 'You do not have permission to perform the requested function.',
     ],
+    'tryAfterLogin' => [
+        'ko' => '로그인이 필요한 서비스입니다. 로그인 후 이용해주세요.',
+        'en' => 'This service requires login. please try again after login.',
+    ],
     'methodNotAllowed' => [
         'ko' => '사용할 수 없는 요청 방식입니다.',
         'en' => 'Request method not allowed.',

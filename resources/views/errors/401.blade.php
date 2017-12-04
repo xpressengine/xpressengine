@@ -3,7 +3,11 @@
 @section('content')
 <div class="login-header error-{{ $exception->getStatusCode() }}">
     <i class="xi-error-o xi-5x"></i>
-    <h1>{{ $exception->getMessage() }}</h1>
+    @if(!Auth::check() && $exception instanceof \Xpressengine\Support\Exceptions\AccessDeniedHttpException)
+        <h1>{{ xe_trans('xe::tryAfterLogin') }}</h1>
+    @else
+        <h1>{{ $exception->getMessage() }}</h1>
+    @endif
 </div>
 <div class="login-body">
     <p>
