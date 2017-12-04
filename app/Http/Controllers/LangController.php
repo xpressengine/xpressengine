@@ -28,7 +28,7 @@ class LangController extends Controller
         $keyword = $request->get('keyword');
         
         XeFrontend::translation([
-            'lang::admin.editor.saved', 'lang::admin.editor.failed'
+            'xe::saved', 'xe::failed'
         ]);
 
         $conditions = [];

@@ -84,6 +84,7 @@ if (typeof define === 'function' && define.amd) {
 
     }
 
+    scrollToElement(type);
     this.toast.fn.add(type, message, position);
   };
 
@@ -255,6 +256,7 @@ if (typeof define === 'function' && define.amd) {
    * */
   exports.form = function ($element, message) {
     exports.form.fn.putByElement($element, message);
+    scrollToElement($element);
   };
 
   exports.form.fn = exports.form.prototype = {
@@ -289,4 +291,12 @@ if (typeof define === 'function' && define.amd) {
       $form.find(this.options.tags.message + this.options.selectors.errorText).remove();
     },
   };
+
+  function scrollToElement($element) {
+    if($element instanceof $) {
+      $('body').animate({
+        scrollTop: $element.offset().top - (window.innerHeight / 3)
+      }, 1000);
+    }
+  }
 }));
