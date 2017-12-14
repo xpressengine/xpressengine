@@ -80,7 +80,9 @@ class Handler extends ExceptionHandler
             return $e->toResponse($request);
         }
 
+        Event::fire('exception.handler:prepare.before', [$e]);
         $e = $this->prepareException($e);
+        Event::fire('exception.handler:prepare.after', [$e]);
 
         if ($e instanceof HttpResponseException) {
             return $e->getResponse();
