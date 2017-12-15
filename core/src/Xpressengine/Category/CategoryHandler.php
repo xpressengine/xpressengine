@@ -258,7 +258,7 @@ class CategoryHandler
             }
 
             if ($oldParent !== null && $oldParent->getKey() == $parent->getKey()) {
-                return;
+                return $item;
             }
         }
 
