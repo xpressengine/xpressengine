@@ -76,6 +76,7 @@ class TranslationImport extends Command
     {
         $name = $this->argument('name');
         $path = $this->option('path');
+        $force = $this->option('force');
 
         if ($path && !file_exists(base_path($path))) {
             $this->error(sprintf('Not exists [%s]', base_path($path)));
@@ -101,11 +102,11 @@ class TranslationImport extends Command
         }
 
         foreach ($files as $file) {
-            $this->translator->putFromLangDataSource($name, $file);
+            $this->translator->putFromLangDataSource($name, $file, $force);
         }
 
         if ($name === 'xe') {
-            $this->translator->importLaravel($this->laravel->langPath());
+            $this->translator->importLaravel($this->laravel->langPath(), $force);
         }
 
         $this->info('Language import complete!');
@@ -148,6 +149,7 @@ class TranslationImport extends Command
     {
         return [
             ['path', null, InputOption::VALUE_OPTIONAL, 'The directory or file path for translation'],
+            ['force', 'f', InputOption::VALUE_NONE, 'Update all translation data'],
         ];
     }
 }

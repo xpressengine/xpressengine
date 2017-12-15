@@ -63,12 +63,12 @@ class TranslationTestCase extends TestCase
 class TransCachedDatabaseMock extends \Xpressengine\Translation\TransCachedDatabase
 {
     private $cache = [];
-    public function putLangData($namespace, LangData $langData) {
-        $langData->each(function ($item, $locale, $value) use ($namespace) {
-            $this->putLine($namespace, $item, $locale, $value);
+    public function putLangData($namespace, LangData $langData, $force = false) {
+        $langData->each(function ($item, $locale, $value) use ($namespace, $force) {
+            $this->putLine($namespace, $item, $locale, $value, false, $force);
         });
     }
-    public function putLine($namespace, $item, $locale, $value, $multiLine = false) {
+    public function putLine($namespace, $item, $locale, $value, $multiLine = false, $force = false) {
         $this->cache[$namespace][$item][$locale] = $value;
     }
     public function getLine($namespace, $item, $locale) {

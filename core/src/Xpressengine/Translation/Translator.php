@@ -359,10 +359,11 @@ class Translator extends NamespacedItemResolver implements TranslatorInterface
      *
      * @param string $namespace Namespace
      * @param string $source    소스
+     * @param bool   $force     force update
      * @param string $type      로더 타입
      * @return void
      */
-    public function putFromLangDataSource($namespace, $source, $type = 'file')
+    public function putFromLangDataSource($namespace, $source, $force = false, $type = 'file')
     {
         $loader = null;
         switch ($type) {
@@ -379,7 +380,7 @@ class Translator extends NamespacedItemResolver implements TranslatorInterface
                 break;
         }
 
-        $this->putLangData($namespace, $loader->load($source));
+        $this->putLangData($namespace, $loader->load($source), $force);
     }
 
     /**
@@ -387,11 +388,12 @@ class Translator extends NamespacedItemResolver implements TranslatorInterface
      *
      * @param string   $namespace namespace
      * @param LangData $langData  LangData instance
+     * @param bool     $force     force update
      * @return void
      */
-    public function putLangData($namespace, LangData $langData)
+    public function putLangData($namespace, LangData $langData, $force = false)
     {
-        $this->cachedDb->putLangData($namespace, $langData);
+        $this->cachedDb->putLangData($namespace, $langData, $force);
     }
 
     /**
@@ -448,7 +450,7 @@ class Translator extends NamespacedItemResolver implements TranslatorInterface
     {
         list($namespace, $item) = $this->parseKey($key);
 
-        $this->cachedDb->putLine($namespace, $item, $locale, $value, $multiLine);
+        $this->cachedDb->putLine($namespace, $item, $locale, $value, $multiLine, true);
     }
 
     /**
@@ -533,10 +535,11 @@ class Translator extends NamespacedItemResolver implements TranslatorInterface
     /**
      * Import laravel language data
      *
-     * @param string $path lang path
+     * @param string $path  lang path
+     * @param bool   $force force update
      * @return void
      */
-    public function importLaravel($path)
+    public function importLaravel($path, $force = false)
     {
         $dir = dir($path);
         $langData = new LaravelLangData();
@@ -563,6 +566,6 @@ class Translator extends NamespacedItemResolver implements TranslatorInterface
             $langData->setData($data);
         }
 
-        $this->putLangData($this->getLaravelNamespace(), $langData);
+        $this->putLangData($this->getLaravelNamespace(), $langData, $force);
     }
 }

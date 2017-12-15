@@ -67,13 +67,14 @@ class TransCachedDatabase
      *
      * @param string   $namespace 네임스페이스
      * @param LangData $langData  추가하려는 LangData
+     * @param bool     $force     force update
      * @return void
      */
-    public function putLangData($namespace, LangData $langData)
+    public function putLangData($namespace, LangData $langData, $force = false)
     {
-        $langData->each(function ($item, $locale, $value) use ($namespace) {
+        $langData->each(function ($item, $locale, $value) use ($namespace, $force) {
             if (is_string($value)) {
-                $this->putLine($namespace, $item, $locale, $value);
+                $this->putLine($namespace, $item, $locale, $value, false, $force);
             }
         });
     }
@@ -86,9 +87,10 @@ class TransCachedDatabase
      * @param string $locale    로케일
      * @param string $value     번역문
      * @param bool   $multiLine 멀티라인 지원 여부
+     * @param bool   $force     force update
      * @return void
      */
-    public function putLine($namespace, $item, $locale, $value, $multiLine = false)
+    public function putLine($namespace, $item, $locale, $value, $multiLine = false, $force = false)
     {
         $line = [
             'namespace' => trim($namespace),
@@ -105,11 +107,13 @@ class TransCachedDatabase
                 ->count() > 0;
 
         if ($exist) {
-            $this->conn->table('translation')
-                ->where('namespace', $namespace)
-                ->where('item', $item)
-                ->where('locale', $locale)
-                ->update($line);
+            if ($force) {
+                $this->conn->table('translation')
+                    ->where('namespace', $namespace)
+                    ->where('item', $item)
+                    ->where('locale', $locale)
+                    ->update($line);
+            }
         } else {
             $this->conn->table('translation')
                 ->insert($line);
