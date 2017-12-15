@@ -257,7 +257,7 @@ class EditorController extends Controller
             throw new InvalidArgumentException;
         }
 
-        if ($file->userId !== Auth::id()) {
+        if ($file->userId !== Auth::id() && Auth::user()->getRating() != 'super') {
             throw new AccessDeniedHttpException;
         }
 
