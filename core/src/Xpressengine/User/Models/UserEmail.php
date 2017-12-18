@@ -30,8 +30,6 @@ class UserEmail extends DynamicModel implements EmailInterface
 {
     protected $table = 'user_email';
 
-    protected $connection = 'user';
-
     protected $dynamic = false;
 
     protected $fillable = [
