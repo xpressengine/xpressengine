@@ -345,7 +345,11 @@ class UserController extends Controller
 
         XeDB::beginTransaction();
         try {
-            $email = $this->handler->createEmail($user, compact('address'));
+            $data = [
+                'user_id' => $user->id,
+                'address' => $address,
+            ];
+            $email = $this->handler->createEmail($user, $data);
         } catch (Exception $e) {
             XeDB::rollBack();
             throw $e;
