@@ -69,7 +69,7 @@ class UserController extends Controller
         // resolve search keyword
         // keyfield가 지정되지 않을 경우 email, display_name를 대상으로 검색함
         $field = $request->get('keyfield', 'email,display_name');
-        $field = ($field === '') ? 'email,display_name' : $field;
+        $field = ($field == false) ? 'email,display_name' : $field;
 
         if ($keyword = trim($request->get('keyword'))) {
             $query = $query->where(
