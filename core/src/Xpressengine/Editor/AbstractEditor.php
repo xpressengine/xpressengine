@@ -498,7 +498,7 @@ abstract class AbstractEditor implements ComponentInterface
         $this->events->fire('xe.editor.compile', $this);
 
         if ($htmlable !== true) {
-            $content = htmlspecialchars($content);
+            $content = nl2br(e($content));
         }
 
         $content = $this->hashTag($content);

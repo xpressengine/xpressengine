@@ -25,8 +25,8 @@ class StorageMigration extends Migration {
             $table->string('user_id', 36)->nullable()->comment('own user ID');
             $table->string('disk', 20)->comment('storage locale.');
             $table->string('path')->comment('registered file path. without name');
-            $table->string('filename', 100)->comment('registered file name. without extension');
-            $table->string('clientname', 100)->comment('original file name');
+            $table->string('filename')->comment('registered file name. without extension');
+            $table->string('clientname')->comment('original file name');
             $table->string('mime', 50)->comment('mime type');
             $table->integer('size')->comment('file size');
             $table->integer('use_count')->default(0)->comment('use count. how much used in the system.');

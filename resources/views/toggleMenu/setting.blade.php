@@ -8,13 +8,13 @@
     <input type="hidden" name="type" value="{{ $type }}">
     @if($instanceId !== null)
         <input type="hidden" name="instanceId" value="{{ $instanceId }}">
-    @endif
 
-    <div class="checkbox" style="margin-bottom: 10px;">
-        <label>
-            <input type="checkbox" name="inherit" value="1" {{ $inherit ? 'checked' : '' }}> {{ xe_trans('xe::inheritMode') }}
-        </label>
-    </div>
+        <div class="checkbox" style="margin-bottom: 10px;">
+            <label>
+                <input type="checkbox" name="inherit" value="1" {{ $inherit ? 'checked' : '' }}> {{ xe_trans('xe::inheritMode') }}
+            </label>
+        </div>
+    @endif
 
     <div class="table-responsive item-setting">
         <table class="table table-sortable">

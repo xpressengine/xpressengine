@@ -98,7 +98,7 @@ XEeditor.define(/** @lends XEtextarea */{
         //tag, mention, files input삭제 후 생성
         $editor.nextAll('.paramWrap').remove();
         $editor.after("<div class='paramWrap'>");
-        $paramWrap = editor.nextAll('.paramWrap');
+        $paramWrap = $editor.nextAll('.paramWrap');
 
         //hashtag
         if (tagLen > 0) {
