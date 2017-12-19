@@ -382,7 +382,7 @@ class MenuController extends Controller
             $itemInput['parent'] = $itemInput['parent'] === $menu->getKey() ? null : $itemInput['parent'];
             $item = XeMenu::createItem($menu, [
                 'title' => $itemInput['itemTitle'],
-                'url' => $itemInput['itemUrl'],
+                'url' => trim($itemInput['itemUrl'], ' \t\n\r\0\x0B/'),
                 'description' => $itemInput['itemDescription'],
                 'target' => $itemInput['itemTarget'],
                 'type' => $itemInput['selectedType'],
@@ -506,7 +506,7 @@ class MenuController extends Controller
 
             XeMenu::updateItem($item, [
                 'title' => $itemInput['itemTitle'],
-                'url' => $itemInput['itemUrl'],
+                'url' => trim($itemInput['itemUrl'], ' \t\n\r\0\x0B/'),
                 'description' => $itemInput['itemDescription'],
                 'target' => $itemInput['itemTarget'],
                 'ordering' => $itemInput['itemOrdering'],
