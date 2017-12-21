@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{app('xe.translator')->getLocale()}}">
 <head>
     <!-- CUSTOM TAGS -->
     {!! XeFrontend::output('html', 'head.prepend') !!}
