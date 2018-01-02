@@ -8,8 +8,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests;
-use Xpressengine\WidgetBox\WidgetBoxHandler;
+use Xpressengine\Widget\WidgetBoxHandler;
 
 class DashboardController extends Controller
 {

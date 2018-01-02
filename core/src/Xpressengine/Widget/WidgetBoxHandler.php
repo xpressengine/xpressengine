@@ -4,29 +4,29 @@
  *
  * PHP version 5
  *
- * @category  WidgetBox
- * @package   Xpressengine\WidgetBox
+ * @category  Widget
+ * @package   Xpressengine\Widget
  * @author    XE Developers <developers@xpressengine.com>
  * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link      https://xpressengine.io
  */
 
-namespace Xpressengine\WidgetBox;
+namespace Xpressengine\Widget;
 
 use Xpressengine\Permission\Grant;
 use Xpressengine\Permission\PermissionHandler;
 use Xpressengine\User\Rating;
-use Xpressengine\WidgetBox\Exceptions\IDAlreadyExistsException;
-use Xpressengine\WidgetBox\Exceptions\IDNotFoundException;
-use Xpressengine\WidgetBox\Exceptions\InvalidIDException;
-use Xpressengine\WidgetBox\Models\WidgetBox;
+use Xpressengine\Widget\Exceptions\IDAlreadyExistsException;
+use Xpressengine\Widget\Exceptions\IDNotFoundException;
+use Xpressengine\Widget\Exceptions\InvalidIDException;
+use Xpressengine\Widget\Models\WidgetBox;
 
 /**
  * WidgetBoxHandler
  *
- * @category    WidgetBox
- * @package     Xpressengine\WidgetBox
+ * @category    Widget
+ * @package     Xpressengine\Widget
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1

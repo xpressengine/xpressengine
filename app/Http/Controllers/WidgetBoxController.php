@@ -17,10 +17,10 @@ use Xpressengine\Permission\PermissionSupport;
 use Xpressengine\Presenter\Html\FrontendHandler;
 use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
 use Xpressengine\Widget\WidgetParser;
-use Xpressengine\WidgetBox\Exceptions\IDAlreadyExistsException;
-use Xpressengine\WidgetBox\Exceptions\NotFoundWidgetBoxException;
-use Xpressengine\WidgetBox\Models\WidgetBox;
-use Xpressengine\WidgetBox\WidgetBoxHandler;
+use Xpressengine\Widget\Exceptions\IDAlreadyExistsException;
+use Xpressengine\Widget\Exceptions\NotFoundWidgetBoxException;
+use Xpressengine\Widget\Models\WidgetBox;
+use Xpressengine\Widget\WidgetBoxHandler;
 
 class WidgetBoxController extends Controller
 {

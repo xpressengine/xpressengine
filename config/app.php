@@ -208,7 +208,6 @@ return [
         App\Providers\CategoryServiceProvider::class,
         App\Providers\CaptchaServiceProvider::class,
         App\Providers\WidgetServiceProvider::class,
-        App\Providers\WidgetBoxServiceProvider::class,
         App\Providers\CounterServiceProvider::class,
         App\Providers\TagServiceProvider::class,
         App\Providers\ToggleMenuServiceProvider::class,

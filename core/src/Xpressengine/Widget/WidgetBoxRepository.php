@@ -1,33 +1,29 @@
 <?php
 /**
- * NotFoundWidgetBoxException
+ * WidgetBoxRepository
  *
  * PHP version 5
  *
- * @category  WidgetBox
- * @package   Xpressengine\WidgetBox
+ * @category  Widget
+ * @package   Xpressengine\Widget
  * @author    XE Developers <developers@xpressengine.com>
  * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link      https://xpressengine.io
  */
+namespace Xpressengine\Widget;
 
-namespace Xpressengine\WidgetBox\Exceptions;
-
-use Xpressengine\WidgetBox\WidgetBoxException;
+use Xpressengine\Support\EloquentRepositoryTrait;
 
 /**
- * NotFoundWidgetBoxException
- *
- * PHP version 5
- *
- * @category    WidgetBox
- * @package     Xpressengine\WidgetBox
+ * @category    Widget
+ * @package     Xpressengine\Widget
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class NotFoundWidgetBoxException extends WidgetBoxException
+class WidgetBoxRepository
 {
+    use EloquentRepositoryTrait;
 }

@@ -14,12 +14,16 @@ use App\Skins\Widget\HtmlWidgetSkin;
 use App\Skins\Widget\StorageSpaceSkin;
 use App\Skins\Widget\SystemInfoSkin;
 use App\UIObjects\Widget\WidgetGenerator;
+use App\UIObjects\WidgetBox\WidgetBox as WidgetBoxUIObject;
 use App\Widgets\ContentInfo;
 use App\Widgets\DownloadRank;
 use App\Widgets\HtmlWidget;
 use App\Widgets\StorageSpace;
 use App\Widgets\SystemInfo;
 use Illuminate\Support\ServiceProvider;
+use Xpressengine\Widget\Models\WidgetBox;
+use Xpressengine\Widget\WidgetBoxHandler;
+use Xpressengine\Widget\WidgetBoxRepository;
 use Xpressengine\Widget\WidgetHandler;
 use Xpressengine\Widget\WidgetParser;
 
@@ -57,6 +61,16 @@ class WidgetServiceProvider extends ServiceProvider
             return new WidgetParser($handler);
         });
         $this->app->alias(WidgetParser::class, 'xe.widget.parser');
+
+        $this->app->singleton(WidgetBoxHandler::class, function ($app) {
+            $proxyClass = $app['xe.interception']->proxy(WidgetBoxHandler::class, 'XeWidgetBox');
+            $widgetHandler = new $proxyClass(
+                new WidgetBoxRepository,
+                $app['xe.permission']
+            );
+            return $widgetHandler;
+        });
+        $this->app->alias(WidgetBoxHandler::class, 'xe.widgetbox');
     }
 
     /**
@@ -69,6 +83,8 @@ class WidgetServiceProvider extends ServiceProvider
         $this->registerWidgets();
         $this->registerWidgetSkins();
         $this->registerUIObject();
+
+        WidgetBoxRepository::setModel(WidgetBox::class);
     }
 
     /**
@@ -100,5 +116,7 @@ class WidgetServiceProvider extends ServiceProvider
     {
         $registryManager = $this->app['xe.pluginRegister'];
         $registryManager->add(WidgetGenerator::class);
+
+        $registryManager->add(WidgetBoxUIObject::class);
     }
 }

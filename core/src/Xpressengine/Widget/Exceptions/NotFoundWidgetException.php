@@ -14,7 +14,6 @@
 
 namespace Xpressengine\Widget\Exceptions;
 
-use Exception;
 use Xpressengine\Widget\WidgetException;
 
 /**
