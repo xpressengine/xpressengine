@@ -68,6 +68,8 @@ class UserServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->setModels();
+
         // extend xe auth
         $this->extendAuth();
 
@@ -329,7 +331,7 @@ class UserServiceProvider extends ServiceProvider
     protected function registerUserRepository()
     {
         $this->app->singleton(UserRepositoryInterface::class, function ($app) {
-            return new UserRepository(User::class);
+            return new UserRepository;
         });
         $this->app->alias(UserRepositoryInterface::class, 'xe.users');
     }
@@ -342,7 +344,7 @@ class UserServiceProvider extends ServiceProvider
     private function registerAccoutRepository()
     {
         $this->app->singleton(UserAccountRepositoryInterface::class, function ($app) {
-            return new UserAccountRepository(UserAccount::class);
+            return new UserAccountRepository;
         });
         $this->app->alias(UserAccountRepositoryInterface::class, 'xe.user.accounts');
     }
@@ -355,7 +357,7 @@ class UserServiceProvider extends ServiceProvider
     protected function registerGroupRepository()
     {
         $this->app->singleton(UserGroupRepositoryInterface::class, function ($app) {
-            return new UserGroupRepository(UserGroup::class);
+            return new UserGroupRepository;
         });
         $this->app->alias(UserGroupRepositoryInterface::class, 'xe.user.groups');
     }
@@ -380,14 +382,23 @@ class UserServiceProvider extends ServiceProvider
     private function registerMailRepository()
     {
         $this->app->singleton(UserEmailRepositoryInterface::class, function ($app) {
-            return new UserEmailRepository(UserEmail::class);
+            return new UserEmailRepository;
         });
         $this->app->alias(UserEmailRepositoryInterface::class, 'xe.user.emails');
 
         $this->app->singleton(PendingEmailRepositoryInterface::class, function ($app) {
-            return new PendingEmailRepository(PendingEmail::class);
+            return new PendingEmailRepository;
         });
         $this->app->alias(PendingEmailRepositoryInterface::class, 'xe.user.pendingEmails');
+    }
+
+    private function setModels()
+    {
+        UserRepository::setModel(User::class);
+        UserAccountRepository::setModel(UserAccount::class);
+        UserGroupRepository::setModel(UserGroup::class);
+        UserEmailRepository::setModel(UserEmail::class);
+        PendingEmailRepository::setModel(PendingEmail::class);
     }
 
     /**

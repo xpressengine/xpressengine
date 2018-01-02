@@ -14,6 +14,7 @@
 
 namespace Xpressengine\User\Repositories;
 
+use Xpressengine\Support\EloquentRepositoryTrait;
 use Xpressengine\User\EmailInterface;
 use Xpressengine\User\Exceptions\CannotDeleteMainEmailOfUserException;
 use Xpressengine\User\UserInterface;
@@ -30,7 +31,7 @@ use Xpressengine\User\UserInterface;
  */
 class PendingEmailRepository implements PendingEmailRepositoryInterface
 {
-    use RepositoryTrait;
+    use EloquentRepositoryTrait;
 
     /**
      * create

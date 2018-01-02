@@ -14,6 +14,7 @@
 
 namespace Xpressengine\User\Repositories;
 
+use Xpressengine\Support\EloquentRepositoryTrait;
 use Xpressengine\User\AccountInterface;
 use Xpressengine\User\UserInterface;
 
@@ -29,17 +30,7 @@ use Xpressengine\User\UserInterface;
  */
 class UserAccountRepository implements UserAccountRepositoryInterface
 {
-    use RepositoryTrait;
-
-    /**
-     * UserAccountRepository constructor.
-     *
-     * @param mixed $model model
-     */
-    public function __construct($model)
-    {
-        $this->setModel($model);
-    }
+    use EloquentRepositoryTrait;
 
     /**
      * create

@@ -14,6 +14,7 @@
 
 namespace Xpressengine\User\Repositories;
 
+use Xpressengine\Support\EloquentRepositoryTrait;
 use Xpressengine\User\GroupInterface;
 use Xpressengine\User\Models\UserGroup;
 use Xpressengine\User\UserInterface;
@@ -30,7 +31,7 @@ use Xpressengine\User\UserInterface;
  */
 class UserGroupRepository implements UserGroupRepositoryInterface
 {
-    use RepositoryTrait;
+    use EloquentRepositoryTrait;
 
     /**
      * delete

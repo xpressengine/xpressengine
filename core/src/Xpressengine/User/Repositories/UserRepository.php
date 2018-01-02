@@ -14,6 +14,7 @@
 
 namespace Xpressengine\User\Repositories;
 
+use Xpressengine\Support\EloquentRepositoryTrait;
 use Xpressengine\User\UserInterface;
 
 /**
@@ -28,7 +29,7 @@ use Xpressengine\User\UserInterface;
  */
 class UserRepository implements UserRepositoryInterface
 {
-    use RepositoryTrait;
+    use EloquentRepositoryTrait;
 
     /**
      * create
