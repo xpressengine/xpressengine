@@ -175,7 +175,9 @@
             }
           }
 
-          this.interfaces.addTools.call(this.editorList[sel], tools, toolInfoListFilter);
+          if (this.interfaces.addTools && typeof this.interfaces.addTools === "function") {
+            this.interfaces.addTools.call(this.editorList[sel], tools, toolInfoListFilter);
+          }
         }
 
         // return this.editorList[sel];
