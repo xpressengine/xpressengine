@@ -112,18 +112,4 @@ class UserProvider extends EloquentUserProvider
 
         return $user;
     }
-
-    /**
-     * update user's login time
-     *
-     * @param Authenticatable $user user
-     * @param mixed           $time login time
-     *
-     * @return void
-     */
-    public function updateLoginTime(Authenticatable $user, $time = null)
-    {
-        $user->setLoginTime($time);
-        $user->save();
-    }
 }

@@ -14,7 +14,6 @@
 
 namespace Xpressengine\User\Models;
 
-use Carbon\Carbon;
 use Closure;
 use Xpressengine\User\ResetPassword as ResetPasswordNotification;
 use Illuminate\Notifications\Notifiable;
@@ -54,6 +53,8 @@ class User extends DynamicModel implements UserInterface
         'password',
         'rating',
         'status',
+        'introduction',
+        'profile_image_id',
         'password_updated_at'
     ];
 
@@ -373,7 +374,7 @@ class User extends DynamicModel implements UserInterface
     public function setLoginTime($time = null)
     {
         if ($time === null) {
-            $time = new Carbon;
+            $time = $this->freshTimestamp();
         }
         $this->login_at = $time;
     }
@@ -383,7 +384,7 @@ class User extends DynamicModel implements UserInterface
      *
      * @param string $value date time string
      *
-     * @return Carbon|null
+     * @return \Carbon\Carbon|null
      */
     public function getLoginAtAttribute($value)
     {

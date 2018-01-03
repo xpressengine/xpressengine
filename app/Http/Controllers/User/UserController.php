@@ -27,6 +27,7 @@ use Xpressengine\User\Exceptions\DisplayNameAlreadyExistsException;
 use Xpressengine\User\Exceptions\EmailAlreadyExistsException;
 use Xpressengine\User\Exceptions\InvalidConfirmationCodeException;
 use Xpressengine\User\Exceptions\InvalidDisplayNameException;
+use Xpressengine\User\Exceptions\InvalidPasswordException;
 use Xpressengine\User\Exceptions\PendingEmailAlreadyExistsException;
 use Xpressengine\User\Exceptions\PendingEmailNotExistsException;
 use Xpressengine\User\HttpUserException;
@@ -225,17 +226,14 @@ class UserController extends Controller
 
         $password = $request->get('password');
 
-        try {
-            $this->handler->validatePassword($password);
-        } catch (Exception $e) {
-            throw new HttpException(Response::HTTP_FORBIDDEN, '비밀번호 보안수준을 만족하지 못했습니다.', $e);
-        }
-
         XeDB::beginTransaction();
         try {
             // save password
             $password = \Hash::make($password);
-            $this->users->update($request->user(), compact('password'));
+            $this->handler->update($request->user(), compact('password'));
+        } catch (InvalidPasswordException $e) {
+            XeDB::rollback();
+            throw new HttpException(422, $e->getMessage(), $e);
         } catch (\Exception $e) {
             XeDB::rollback();
             throw $e;
