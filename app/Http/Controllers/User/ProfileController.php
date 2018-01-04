@@ -22,7 +22,7 @@ use Xpressengine\User\Repositories\UserGroupRepositoryInterface;
 use Xpressengine\User\UserHandler;
 use Xpressengine\User\UserImageHandler;
 use Xpressengine\User\UserInterface;
-use Xpressengine\WidgetBox\WidgetBoxHandler;
+use Xpressengine\Widget\WidgetBoxHandler;
 
 class ProfileController extends Controller
 {

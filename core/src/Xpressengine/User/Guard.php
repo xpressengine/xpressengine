@@ -220,7 +220,7 @@ class Guard extends SessionGuard implements GuardInterface
 
         if ($user instanceof Authenticatable) {
             $user->setLoginTime();
-            $this->provider->updateLoginTime($user);
+            $user->save();
         }
     }
 

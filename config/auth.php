@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'xe',
+        'guard' => 'web',
         'passwords' => 'users',
     ],
 
@@ -36,12 +36,8 @@ return [
     */
 
     'guards' => [
-        'xe' => [
-            'driver' => 'xe',
-        ],
-
         'web' => [
-            'driver' => 'session',
+            'driver' => 'xe',
             'provider' => 'users',
         ],
 
@@ -75,14 +71,15 @@ return [
 
     'providers' => [
         'users' => [
-            'driver' => 'eloquent',
+            'driver' => 'xe',
             'model' => Xpressengine\User\Models\User::class,
         ],
 
-         'user_db' => [
-             'driver' => 'database',
-             'table' => 'user',
-         ],
+        'user_db' => [
+            'driver' => 'database',
+            'table' => 'user',
+        ],
+
     ],
 
     /*

@@ -307,11 +307,7 @@ class UserHandler
         // email, display_name, introduction, password, status, rating
         $userData = array_except($userData, ['group_id', 'profile_img_file']);
 
-        foreach ($userData as $key => $value) {
-            $user->{$key} = $value;
-        }
-
-        $user->save();
+        $user = $this->users()->update($user, $userData);
 
         // join new group
         if ($groups !== null) {

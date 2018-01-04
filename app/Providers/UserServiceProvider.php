@@ -118,84 +118,10 @@ class UserServiceProvider extends ServiceProvider
         $this->registerHandler();
         $this->registerRepositories();
 
-        // user package 제거후 주석 해제
-        $this->registerAuth();
         $this->registerTokenRepository();
         $this->registerEmailBroker();
-        $this->registerPasswordBroker();
 
         $this->registerImageHandler();
-    }
-
-    /**
-     * register Auth
-     *
-     * @return void
-     */
-    protected function registerAuth()
-    {
-        $this->app->singleton(GuardInterface::class, function ($app) {
-            $adminAuth = $app['config']->get('auth.admin');
-            $proxyClass = $app['xe.interception']->proxy(Guard::class, 'Auth');
-            $guard = new $proxyClass(
-                'xe', new UserProvider($app['hash'], User::class), $app['session.store'], $adminAuth, $app['request']
-            );
-
-            if (method_exists($guard, 'setCookieJar')) {
-                $guard->setCookieJar($app['cookie']);
-            }
-
-            if (method_exists($guard, 'setDispatcher')) {
-                $guard->setDispatcher($app['events']);
-            }
-
-            if (method_exists($guard, 'setRequest')) {
-                $guard->setRequest($app->refresh('request', $guard, 'setRequest'));
-            }
-
-            return $guard;
-        });
-        $this->app->alias(GuardInterface::class, 'xe.auth');
-    }
-
-    /**
-     * Register the password broker instance.
-     *
-     * @return void
-     */
-    protected function registerPasswordBroker()
-    {
-        $this->app->singleton(
-            'auth.password',
-            function ($app) {
-                // The password token repository is responsible for storing the email addresses
-                // and password reset tokens. It will be used to verify the tokens are valid
-                // for the given e-mail addresses. We will resolve an implementation here.
-                $tokens = $app['auth.password.tokens'];
-
-                $users = $app['auth']->driver()->getProvider();
-
-                $view = $app['config']['auth.password.email'];
-
-                // The password broker uses a token repository to validate tokens and send user
-                // password e-mails, as well as validating that password reset process as an
-                // aggregate service of sorts providing a convenient interface for resets.
-                $broker = new PasswordBroker($tokens, $users, $app['mailer'], $view);
-
-                // register validator for password
-                $broker->validator(
-                    function ($credentials) {
-                        try {
-                            return app('xe.user')->validatePassword($credentials['password']);
-                        } catch (\Exception $e) {
-                            return false;
-                        }
-                    }
-                );
-
-                return $broker;
-            }
-        );
     }
 
     /**
@@ -237,25 +163,6 @@ class UserServiceProvider extends ServiceProvider
      */
     protected function registerTokenRepository()
     {
-        // register password-token repository
-        $this->app->singleton(
-            'auth.password.tokens',
-            function ($app) {
-                $connection = $app['xe.db']->connection('user');
-
-                // The database token repository is an implementation of the token repository
-                // interface, and is responsible for the actual storing of auth tokens and
-                // their e-mail addresses. We will inject this table and hash key to it.
-                $table = $app['config']['auth.password.table'];
-
-                $key = $app['config']['app.key'];
-
-                $expire = $app['config']->get('auth.password.expire', 60);
-
-                return new DatabaseTokenRepository($connection, $table, $key, $expire);
-            }
-        );
-
         // register register-token repository
         $this->app->singleton(RegisterTokenRepository::class, function ($app) {
             $connection = $app['xe.db']->connection('user');
@@ -408,12 +315,32 @@ class UserServiceProvider extends ServiceProvider
      */
     private function extendAuth()
     {
-        $this->app['auth']->extend(
-            'xe',
-            function ($app) {
-                return $app['xe.auth'];
+        $this->app['auth']->extend('xe', function ($app, $name, $config) {
+            $adminAuth = $app['config']->get('auth.admin');
+            $proxyClass = $app['xe.interception']->proxy(Guard::class, 'Auth'); // todo: 제거
+            $provider = $app['auth']->createUserProvider($config['provider']);
+            $guard = new $proxyClass(
+                $name, $provider, $app['session.store'], $adminAuth, $app['request']
+            );
+
+            if (method_exists($guard, 'setCookieJar')) {
+                $guard->setCookieJar($app['cookie']);
             }
-        );
+
+            if (method_exists($guard, 'setDispatcher')) {
+                $guard->setDispatcher($app['events']);
+            }
+
+            if (method_exists($guard, 'setRequest')) {
+                $guard->setRequest($app->refresh('request', $guard, 'setRequest'));
+            }
+
+            return $guard;
+        });
+
+        $this->app['auth']->provider('xe', function ($app, $config) {
+            return new UserProvider($app['hash'], $config['model']);
+        });
     }
 
     private function configValidation()

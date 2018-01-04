@@ -15,7 +15,7 @@ namespace Xpressengine\User\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Xpressengine\User\GuardInterface as Guard;
+use Illuminate\Contracts\Auth\Guard;
 
 /**
  * 관리자 2단계 인증 미들웨어
