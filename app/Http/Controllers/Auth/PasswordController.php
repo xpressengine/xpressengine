@@ -58,6 +58,14 @@ class PasswordController extends Controller {
         $this->passwords = $passwords;
         $this->handler = app('xe.user');
 
+        $this->passwords->validator(function ($credentials) {
+            try {
+                return app('xe.user')->validatePassword($credentials['password']);
+            } catch (\Exception $e) {
+                return false;
+            }
+        });
+
         XeTheme::selectSiteTheme();
         XePresenter::setSkinTargetId('user/auth');
 
@@ -92,14 +100,14 @@ class PasswordController extends Controller {
             ]
         );
 
-        $response = $this->passwords->sendResetLink($request->only('email'));
+        $result = $this->passwords->sendResetLink($request->only('email'));
 
         $email = $request->get('email');
 
-        switch ($response)
+        switch ($result)
         {
             case PasswordBroker::RESET_LINK_SENT:
-                return redirect()->back()->with('status', $response)->with('email', $email);
+                return redirect()->back()->with('status', PasswordBroker::RESET_LINK_SENT)->with('email', $email);
 
             case PasswordBroker::INVALID_USER:
                 return redirect()->back()->with('alert', ['type' => 'danger', 'message' => '등록되지 않았거나 등록대기중인 이메일입니다.']);
@@ -142,7 +150,7 @@ class PasswordController extends Controller {
             'email', 'password', 'password_confirmation', 'token'
         );
 
-        $response = $this->passwords->reset(
+        $result = $this->passwords->reset(
             $credentials,
             function ($user, $password) {
                 $this->handler->update($user, compact('password'));
@@ -151,10 +159,10 @@ class PasswordController extends Controller {
             }
         );
 
-        switch ($response)
+        switch ($result)
         {
             case PasswordBroker::PASSWORD_RESET:
-                return redirect('/')->with('status', $response);
+                return redirect('/')->with('status', PasswordBroker::PASSWORD_RESET);
 
             default:
                 // password configuration
