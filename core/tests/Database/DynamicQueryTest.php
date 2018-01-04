@@ -142,6 +142,7 @@ class DynamicQueryTest extends TestCase
         $grammar->shouldReceive('compileDelete')->andReturn('delete from table');
         $grammar->shouldReceive('compileSelect')->andReturn('select * from table');
         $grammar->shouldReceive('prepareBindingsForUpdate')->andReturn([]);
+        $grammar->shouldReceive('prepareBindingsForDelete')->andReturn([]);
 
         $connection = m::mock('Illuminate\Database\Connection');
         $connection->shouldReceive('getPostProcessor')->andReturn($processor);
@@ -190,6 +191,7 @@ class DynamicQueryTest extends TestCase
         $grammar->shouldReceive('compileDelete')->andReturn('delete from table');
         $grammar->shouldReceive('compileSelect')->andReturn('select * from table');
         $grammar->shouldReceive('prepareBindingsForUpdate')->andReturn([]);
+        $grammar->shouldReceive('prepareBindingsForDelete')->andReturn([]);
 
         $schemaBuilder = m::mock('Illuminate\Database\Schema\Builder');
         $schemaBuilder->shouldReceive('getColumnListing')->andReturn(['some']);
@@ -242,6 +244,7 @@ class DynamicQueryTest extends TestCase
         $grammar->shouldReceive('compileDelete')->andReturn('delete from table');
         $grammar->shouldReceive('compileSelect')->andReturn('select * from table');
         $grammar->shouldReceive('prepareBindingsForUpdate')->andReturn([]);
+        $grammar->shouldReceive('prepareBindingsForDelete')->andReturn([]);
 
         $schemaBuilder = m::mock('Illuminate\Database\Schema\Builder');
         $schemaBuilder->shouldReceive('getColumnListing')->andReturn(['some']);
