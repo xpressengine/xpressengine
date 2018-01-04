@@ -118,44 +118,11 @@ class UserServiceProvider extends ServiceProvider
         $this->registerHandler();
         $this->registerRepositories();
 
-        // user package 제거후 주석 해제
-        $this->registerAuth();
         $this->registerTokenRepository();
         $this->registerEmailBroker();
         $this->registerPasswordBroker();
 
         $this->registerImageHandler();
-    }
-
-    /**
-     * register Auth
-     *
-     * @return void
-     */
-    protected function registerAuth()
-    {
-        $this->app->singleton(GuardInterface::class, function ($app) {
-            $adminAuth = $app['config']->get('auth.admin');
-            $proxyClass = $app['xe.interception']->proxy(Guard::class, 'Auth');
-            $guard = new $proxyClass(
-                'xe', new UserProvider($app['hash'], User::class), $app['session.store'], $adminAuth, $app['request']
-            );
-
-            if (method_exists($guard, 'setCookieJar')) {
-                $guard->setCookieJar($app['cookie']);
-            }
-
-            if (method_exists($guard, 'setDispatcher')) {
-                $guard->setDispatcher($app['events']);
-            }
-
-            if (method_exists($guard, 'setRequest')) {
-                $guard->setRequest($app->refresh('request', $guard, 'setRequest'));
-            }
-
-            return $guard;
-        });
-        $this->app->alias(GuardInterface::class, 'xe.auth');
     }
 
     /**
@@ -408,12 +375,32 @@ class UserServiceProvider extends ServiceProvider
      */
     private function extendAuth()
     {
-        $this->app['auth']->extend(
-            'xe',
-            function ($app) {
-                return $app['xe.auth'];
+        $this->app['auth']->extend('xe', function ($app, $name, $config) {
+            $adminAuth = $app['config']->get('auth.admin');
+            $proxyClass = $app['xe.interception']->proxy(Guard::class, 'Auth'); // todo: 제거
+            $provider = $app['auth']->createUserProvider($config['provider']);
+            $guard = new $proxyClass(
+                $name, $provider, $app['session.store'], $adminAuth, $app['request']
+            );
+
+            if (method_exists($guard, 'setCookieJar')) {
+                $guard->setCookieJar($app['cookie']);
             }
-        );
+
+            if (method_exists($guard, 'setDispatcher')) {
+                $guard->setDispatcher($app['events']);
+            }
+
+            if (method_exists($guard, 'setRequest')) {
+                $guard->setRequest($app->refresh('request', $guard, 'setRequest'));
+            }
+
+            return $guard;
+        });
+
+        $this->app['auth']->provider('xe', function ($app, $config) {
+            return new UserProvider($app['hash'], $config['model']);
+        });
     }
 
     private function configValidation()
