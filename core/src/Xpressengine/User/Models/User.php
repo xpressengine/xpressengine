@@ -15,7 +15,7 @@
 namespace Xpressengine\User\Models;
 
 use Closure;
-use Xpressengine\User\ResetPassword as ResetPasswordNotification;
+use Xpressengine\User\Notifications\ResetPassword as ResetPasswordNotification;
 use Illuminate\Notifications\Notifiable;
 use Xpressengine\Database\Eloquent\DynamicModel;
 use Xpressengine\User\Rating;

@@ -12,7 +12,7 @@ use XeDB;
 use XePresenter;
 use XeTheme;
 use Xpressengine\Theme\ThemeHandler;
-use Xpressengine\User\EmailBrokerInterface;
+use Xpressengine\User\EmailBroker;
 use Xpressengine\User\Exceptions\InvalidConfirmationCodeException;
 use Xpressengine\User\Exceptions\PendingEmailNotExistsException;
 use Xpressengine\User\UserHandler;
@@ -45,7 +45,7 @@ class AuthController extends Controller
     protected $handler;
 
     /**
-     * @var EmailBrokerInterface
+     * @var EmailBroker
      */
     protected $emailBroker;
 

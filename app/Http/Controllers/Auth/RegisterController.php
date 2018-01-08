@@ -12,7 +12,7 @@ use XeDynamicField;
 use XeFrontend;
 use XePresenter;
 use XeTheme;
-use Xpressengine\User\EmailBrokerInterface;
+use Xpressengine\User\EmailBroker;
 use Xpressengine\User\EmailInterface;
 use Xpressengine\User\Models\User;
 use Xpressengine\User\Rating;
@@ -36,7 +36,7 @@ class RegisterController extends Controller
     protected $handler;
 
     /**
-     * @var EmailBrokerInterface
+     * @var EmailBroker
      */
     protected $emailBroker;
 
@@ -208,16 +208,7 @@ class RegisterController extends Controller
         }
 
         $token = $tokenRepository->create('email', ['email' => $email, 'user_id' => $mail->user_id]);
-        $this->emailBroker->sendEmailForRegister(
-            $mail,
-            $token,
-            'emails.register',
-            function ($m) {
-                $m->subject(
-                    xe_trans(app('xe.site')->getSiteConfig()->get('site_title')).' '.xe_trans('xe::emailConfirm')
-                );
-            }
-        );
+        $this->emailBroker->sendEmailForRegister($mail, $token);
 
         return redirect()->route('auth.register', ['token' => $token['id']])->with(
             ['alert' => ['type' => 'success', 'message' => '인증 이메일이 전송되었습니다.']]

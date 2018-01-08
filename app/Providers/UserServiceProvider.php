@@ -134,7 +134,7 @@ class UserServiceProvider extends ServiceProvider
         $this->app->singleton(
             'xe.auth.email',
             function ($app) {
-                return new EmailBroker($app['xe.user'], $app['mailer']);
+                return new EmailBroker($app['xe.user']);
             }
         );
     }

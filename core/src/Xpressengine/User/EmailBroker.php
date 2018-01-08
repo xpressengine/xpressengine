@@ -14,9 +14,10 @@
 
 namespace Xpressengine\User;
 
-use Closure;
-use Illuminate\Contracts\Mail\Mailer;
+use Illuminate\Notifications\Notifiable;
 use Xpressengine\User\Exceptions\InvalidConfirmationCodeException;
+use Xpressengine\User\Notifications\AddEmail;
+use Xpressengine\User\Notifications\RegisterConfirm;
 
 /**
  * 이 클래스는 Xpressengine에서 이메일 인증 처리를 수행하는 클래스이다.
@@ -28,16 +29,8 @@ use Xpressengine\User\Exceptions\InvalidConfirmationCodeException;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class EmailBroker implements EmailBrokerInterface
+class EmailBroker
 {
-
-    /**
-     * 이메일 전송기
-     *
-     * @var Mailer
-     */
-    protected $mailer;
-
     /**
      * @var UserHandler
      */
@@ -47,63 +40,106 @@ class EmailBroker implements EmailBrokerInterface
      * 생성자.
      *
      * @param UserHandler $handler handler
-     * @param Mailer      $mailer  mail sender
      */
-    public function __construct(
-        UserHandler $handler,
-        Mailer $mailer
-    ) {
-        $this->mailer = $mailer;
+    public function __construct(UserHandler $handler)
+    {
         $this->handler = $handler;
     }
 
     /**
      * 회원가입시 이메일 인증을 위한 이메일을 전송한다.
      *
-     * @param EmailInterface $mail     전송할 이메일 정보
-     * @param string         $token    회원가입 토큰 id
-     * @param string         $view     이메일 전송시 사용할 템플릿
-     * @param null|Closure   $callback 이메일 전송할 때 처리할 로직
+     * @param EmailInterface $mail  전송할 이메일 정보
+     * @param string         $token 회원가입 토큰 id
      *
      * @return void
      */
-    public function sendEmailForRegister(EmailInterface $mail, $token, $view, $callback = null)
+    public function sendEmailForRegister(EmailInterface $mail, $token)
     {
-        $this->mailer->send(
-            $view,
-            compact('mail', 'token'),
-            function ($m) use ($mail, $callback) {
-                $m->to($mail->getAddress());
+        (new class($mail) {
+            use Notifiable;
 
-                if (!is_null($callback)) {
-                    call_user_func($callback, $m, $mail);
-                }
+            protected $mail;
+
+            /**
+             * constructor.
+             *
+             * @param EmailInterface $mail mail instance
+             */
+            public function __construct(EmailInterface $mail)
+            {
+                $this->mail = $mail;
             }
-        );
+
+            /**
+             * Invoke the instance
+             *
+             * @param mixed $token confirm token
+             * @return void
+             */
+            public function __invoke($token)
+            {
+                $this->notify(new RegisterConfirm($this->mail, $token));
+            }
+
+            /**
+             * Get the notification routing information for the given driver.
+             *
+             * @param string $driver driver
+             * @return mixed
+             */
+            public function routeNotificationFor($driver)
+            {
+                return $this->mail->getAddress();
+            }
+        })($token);
     }
 
     /**
      * 기존 회원이 이메일 추가시 이메일 인증을 위한 이메일을 전송한다.
      *
-     * @param EmailInterface $mail     전송할 이메일 정보
-     * @param string         $view     이메일 전송시 사용할 템플릿
-     * @param null|Closure   $callback 이메일 전송할 때 처리할 로직
+     * @param EmailInterface $mail 전송할 이메일 정보
      *
      * @return void
      */
-    public function sendEmailForAddingEmail(EmailInterface $mail, $view, $callback = null)
+    public function sendEmailForAddingEmail(EmailInterface $mail)
     {
-        $this->mailer->send(
-            $view,
-            compact('mail'),
-            function ($m) use ($mail, $callback) {
-                $m->to($mail->getAddress());
+        (new class($mail) {
+            use Notifiable;
 
-                if (!is_null($callback)) {
-                    call_user_func($callback, $m, $mail);
-                }
+            protected $mail;
+
+            /**
+             * constructor.
+             *
+             * @param EmailInterface $mail mail instance
+             */
+            public function __construct(EmailInterface $mail)
+            {
+                $this->mail = $mail;
             }
-        );
+
+            /**
+             * Invoke the instance
+             *
+             * @return void
+             */
+            public function __invoke()
+            {
+                $this->notify(new AddEmail($this->mail));
+            }
+
+            /**
+             * Get the notification routing information for the given driver.
+             *
+             * @param string $driver driver
+             * @return mixed
+             */
+            public function routeNotificationFor($driver)
+            {
+                return $this->mail->getAddress();
+            }
+        })();
     }
 
 

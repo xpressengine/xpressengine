@@ -110,10 +110,6 @@ return [
         'expire' => 60,
     ],
 
-    'confirm' => [
-        'email' => 'emails.confirm'
-    ],
-
     'admin' => [
         'session' => 'auth.admin',
         'expire' => 0,

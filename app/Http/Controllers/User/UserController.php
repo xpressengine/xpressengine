@@ -379,19 +379,7 @@ class UserController extends Controller
             $mail = $this->handler->createEmail($request->user(), $input, !$useEmailConfirm);
 
             if ($useEmailConfirm) {
-                /** @var EmailBroker $broker */
-                $broker = app('xe.auth.email');
-                $broker->sendEmailForAddingEmail(
-                    $mail,
-                    'emails.add-email',
-                    function ($m) {
-                        $m->subject(
-                            xe_trans(app('xe.site')->getSiteConfig()->get('site_title')).' '.xe_trans(
-                                'xe::emailConfirm'
-                            )
-                        );
-                    }
-                );
+                app('xe.auth.email')->sendEmailForAddingEmail($mail);
             }
         } catch (\Exception $e) {
             XeDB::rollback();
@@ -452,17 +440,7 @@ class UserController extends Controller
             throw new PendingEmailNotExistsException();
         }
 
-        /** @var EmailBroker $broker */
-        $broker = app('xe.auth.email');
-        $broker->sendEmailForAddingEmail(
-            $pendingMail,
-            'emails.add-email',
-            function ($m) {
-                $m->subject(
-                    xe_trans(app('xe.site')->getSiteConfig()->get('site_title')).' '.xe_trans('xe::emailConfirm')
-                );
-            }
-        );
+        app('xe.auth.email')->sendEmailForAddingEmail($pendingMail);
 
         return XePresenter::makeApi(['message' => '재전송하였습니다.']);
     }
