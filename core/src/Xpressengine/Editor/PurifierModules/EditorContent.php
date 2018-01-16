@@ -33,6 +33,7 @@ class EditorContent extends HTMLPurifier_HTMLModule
     public $attr_collections = array(
         'Core' => array(
             //  첨부 파일
+            'data-id' => 'Text',
             'xe-file-id' => 'Text',
             // 에디터 툴
             'xe-tool-id' => 'Text',
