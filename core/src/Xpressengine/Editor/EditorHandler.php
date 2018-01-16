@@ -373,6 +373,7 @@ class EditorHandler
             if ($this->mediaManager->is($file)) {
                 $thumbnails = $this->mediaManager->image()
                     ->getThumbnails($this->mediaManager->make($file), static::THUMBNAIL_TYPE);
+                $file->url = $file->url();
             }
 
             $file->setRelation('thumbnails', $thumbnails);
