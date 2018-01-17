@@ -235,7 +235,7 @@ class SkinMake extends Command
     protected function getPlugin()
     {
         $path = $this->argument('path');
-        list($pluginsDir, $plugin, $path) = explode('/', $path, 3);
+        list($plugin, $path) = explode('/', $path, 2);
 
         $plugin = app('xe.plugin')->getPlugin($plugin);
         if ($plugin === null) {
@@ -255,7 +255,7 @@ class SkinMake extends Command
     protected function getPath()
     {
         $path = $this->argument('path');
-        list($pluginsDir, $plugin, $path) = explode('/', $path, 3);
+        list($plugin, $path) = explode('/', $path, 2);
 
         return $path;
     }
