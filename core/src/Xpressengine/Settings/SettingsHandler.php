@@ -271,11 +271,12 @@ class SettingsHandler
     protected function setSelectedMenu(Route $route)
     {
         $selectedMenuIds = array_get($route->getAction(), 'settings_menu', []);
+        $selectedMenuIds = (array) $selectedMenuIds;
 
         if (count($selectedMenuIds) === 0) {
             return;
         }
-        $selectedMenuIds = (array) $selectedMenuIds;
+
         foreach ($selectedMenuIds as $selectedMenuId) {
             $selected = $this->menuList[$selectedMenuId];
             do {
