@@ -86,11 +86,9 @@ class PluginServiceProvider extends ServiceProvider
             $cachePath = $app['config']->get('cache.stores.plugins.path');
             if ($app['config']->get('app.debug') === true || !is_writable($cachePath)) {
                 $cache = new ArrayPluginCache();
-                $app->terminating(
-                    function () {
-                        app('cache')->driver('plugins')->forget('list');
-                    }
-                );
+                $app->terminating(function () use ($app) {
+                    $app['cache']->driver('plugins')->forget('list');
+                });
             } else {
                 $cache = new FilePluginCache($app['cache']->driver('plugins'), 'list');
             }

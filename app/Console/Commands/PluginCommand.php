@@ -65,6 +65,31 @@ class PluginCommand extends Command
         $this->interceptionHandler = $interceptionHandler;
     }
 
+    /**
+     * execute composer update
+     *
+     * @param array $packages specific package name. no need version
+     * @return int
+     */
+    protected function composerUpdate(array $packages)
+    {
+        if (!$this->laravel->runningInConsole()) {
+            ignore_user_abort(true);
+            set_time_limit($this->getTimeLimit());
+        }
+
+        $inputs = [
+            'command' => 'update',
+            "--with-dependencies" => true,
+            //"--quiet" => true,
+            '--working-dir' => base_path(),
+            /*'--verbose' => '3',*/
+            'packages' => $packages
+        ];
+
+        return $this->runComposer($inputs);
+    }
+
     protected function clear()
     {
         $this->handler->refreshPlugins();
@@ -103,56 +128,50 @@ class PluginCommand extends Command
     /**
      * writeResult
      *
-     * @param ComposerFileWriter $writer
-     * @param                    $result
-     *
+     * @param $result
      * @return bool
      */
-    protected function writeResult(ComposerFileWriter $writer, $result)
+    protected function writeResult($result)
     {
         // composer.plugins.json 파일을 다시 읽어들인다.
-        $writer->load();
+        $this->writer->load();
         if (!isset($result) || $result !== 0) {
             $result = false;
-            $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_FAILED);
-            $writer->set('xpressengine-plugin.operation.failed', XpressengineInstaller::$failed);
+            $this->writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_FAILED);
+            $this->writer->set('xpressengine-plugin.operation.failed', XpressengineInstaller::$failed);
         } else {
             $result = true;
-            $writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_SUCCESSED);
+            $this->writer->set('xpressengine-plugin.operation.status', ComposerFileWriter::STATUS_SUCCESSED);
         }
-        $writer->write();
+        $this->writer->write();
         return $result;
     }
 
     /**
      * getChanged
      *
-     * @param ComposerFileWriter $writer
-     *
      * @return array
      */
-    protected function getChangedPlugins(ComposerFileWriter $writer)
+    protected function getChangedPlugins()
     {
         $changed = [];
-        $changed['installed'] = $writer->get('xpressengine-plugin.operation.changed.installed', []);
-        $changed['updated'] = $writer->get('xpressengine-plugin.operation.changed.updated', []);
-        $changed['uninstalled'] = $writer->get('xpressengine-plugin.operation.changed.uninstalled', []);
+        $changed['installed'] = $this->writer->get('xpressengine-plugin.operation.changed.installed', []);
+        $changed['updated'] = $this->writer->get('xpressengine-plugin.operation.changed.updated', []);
+        $changed['uninstalled'] = $this->writer->get('xpressengine-plugin.operation.changed.uninstalled', []);
         return $changed;
     }
 
     /**
      * getChanged
      *
-     * @param ComposerFileWriter $writer
-     *
      * @return array
      */
-    protected function getFailedPlugins(ComposerFileWriter $writer)
+    protected function getFailedPlugins()
     {
         $failed = [];
-        $failed['install'] = $writer->get('xpressengine-plugin.operation.failed.install', []);
-        $failed['update'] = $writer->get('xpressengine-plugin.operation.failed.update', []);
-        $failed['uninstall'] = $writer->get('xpressengine-plugin.operation.failed.uninstall', []);
+        $failed['install'] = $this->writer->get('xpressengine-plugin.operation.failed.install', []);
+        $failed['update'] = $this->writer->get('xpressengine-plugin.operation.failed.update', []);
+        $failed['uninstall'] = $this->writer->get('xpressengine-plugin.operation.failed.uninstall', []);
         return $failed;
     }
 
@@ -223,4 +242,46 @@ class PluginCommand extends Command
         //}
     }
 
+    protected function parse($string)
+    {
+        if (strpos($string, ':') === false) {
+            return [$string, null];
+        }
+
+        return explode(':', $string, 2);
+    }
+
+    protected function getPluginInfo($id, $version = null)
+    {
+        if (!$info = $this->provider->find($id)) {
+            // 설치할 플러그인[$id]을 자료실에서 찾지 못했습니다.
+            throw new \Exception("Can not find the plugin(".$id.") that should be installed from the Market-place.");
+        }
+
+        $title = $info->title;
+        $name = $info->name;
+
+        if ($version) {
+            $releaseData = $this->provider->findRelease($id, $version);
+            if ($releaseData === null) {
+                // 플러그인[$id]의 버전[$version]을 자료실에서 찾지 못했습니다.
+                throw new \Exception("Can not find version(".$version.") of the plugin(".$id.") that should be installed from the Market-place.");
+            }
+        }
+        $version = $version ?: $info->latest_release->version;  // todo: 버전이 제공 되지 않았을땐 마지막 버전이 아니라 "*" 으로 ?
+
+        return compact('id', 'name', 'version', 'title');
+    }
+
+    protected function getExpiredTime()
+    {
+        $datetime = Carbon::now()->addSeconds($this->getTimeLimit())->toDateTimeString();
+
+        return $this->laravel->runningInConsole() ? 0 : $datetime;
+    }
+
+    protected function getTimeLimit()
+    {
+        return config('xe.plugin.operation.time_limit');
+    }
 }

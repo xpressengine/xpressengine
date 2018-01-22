@@ -14,9 +14,12 @@
 
 namespace App\Console\Commands;
 
+use Carbon\Carbon;
 use Composer\Console\Application;
+use Composer\Json\JsonFormatter;
 use Composer\Util\Platform;
 use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\StreamOutput;
 use Xpressengine\Plugin\Composer\Composer;
 
 trait ComposerRunTrait
@@ -112,8 +115,6 @@ trait ComposerRunTrait
      */
     protected function runComposer($inputs, $updateMode = true)
     {
-        ignore_user_abort(true);
-
         $memoryInBytes = function ($value) {
             $unit = strtolower(substr($value, -1, 1));
             $value = (int) $value;
@@ -137,11 +138,6 @@ trait ComposerRunTrait
             ini_set('memory_limit', '1G');
         }
 
-        $input = new ArrayInput($inputs);
-        $application = new Application();
-        $application->setAutoExit(false); // prevent `$application->run` method from exitting the script
-
-
         if ($updateMode && !defined('__XE_PLUGIN_MODE__')) {
             define('__XE_PLUGIN_MODE__', true);
         }
@@ -153,7 +149,21 @@ trait ComposerRunTrait
         }
         Composer::setPackagistUrl(config('xe.plugin.packagist.url'));
 
-        $code = $application->run($input);
-        return $code;
+//        $startTime = Carbon::now()->format('YmdHis');
+//        $logFileName = "logs/plugin-$startTime.log";
+        $logFileName = "logs/plugin-test.log";
+
+        file_put_contents(
+            storage_path($logFileName),
+            JsonFormatter::format(json_encode($inputs), true, true).PHP_EOL
+        );
+
+        $application = new Application();
+        $application->setAutoExit(false); // prevent `$application->run` method from exitting the script
+
+        return $application->run(
+            new ArrayInput($inputs),
+            new StreamOutput(fopen(storage_path($logFileName), 'a', false))
+        );
     }
 }

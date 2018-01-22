@@ -10,13 +10,12 @@ class PluginInstall extends PluginCommand
 {
     /**
      * The console command name.
-     * php artisan plugin:install [--no-activate] <plugin name> [<version>]
      *
      * @var string
      */
     protected $signature = 'plugin:install
-                        {plugin_id : The plugin id for install}
-                        {version? : The version of plugin for install}';
+                        {plugin* : The plugin for install. if you want specify version then use "plugin:version"}
+                        {--no-activate : Do not activate the plugin}';
 
     /**
      * The console command description.
@@ -26,133 +25,92 @@ class PluginInstall extends PluginCommand
     protected $description = 'Install new plugin of XpressEngine';
 
     /**
-     * Create a new controller creator command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
-     * Execute the console command.
+     * Create a new console command instance.
      *
      * @param PluginHandler       $handler
      * @param PluginProvider      $provider
      * @param ComposerFileWriter  $writer
      * @param InterceptionHandler $interceptionHandler
-     *
-     * @return bool|null
-     * @throws \Exception
      */
-    public function handle(
+    public function __construct(
         PluginHandler $handler,
         PluginProvider $provider,
         ComposerFileWriter $writer,
         InterceptionHandler $interceptionHandler
     ) {
+        parent::__construct();
+
         $this->init($handler, $provider, $writer, $interceptionHandler);
+    }
 
-        // php artisan plugin:install <plugin name> [<version>]
-
-        $id = $this->argument('plugin_id');
-        $version = $this->argument('version');
-
-        // 플러그인이 이미 설치돼 있는지 검사
-        if ($handler->getPlugin($id) !== null) {
-            // 이미 설치되어 있는 플러그인입니다.
-            throw new \Exception('The plugin is already installed.');
-        }
-
+    /**
+     * Execute the console command.
+     *
+     * @return void
+     * @throws \Exception
+     */
+    public function handle()
+    {
         // 설치가능 환경인지 검사
         $this->prepareComposer();
 
-        // 자료실에서 플러그인 정보 조회
-        $pluginData = $provider->find($id);
-
-        if ($pluginData === null) {
-            // 설치할 플러그인[$id]을 자료실에서 찾지 못했습니다.
-            throw new \Exception("Can not find the plugin(".$id.") that should be installed from the Market-place.");
-        }
-
-        $title = $pluginData->title;
-        $name = $pluginData->name;
-
-        if ($version) {
-            $releaseData = $provider->findRelease($id, $version);
-            if ($releaseData === null) {
-                // 플러그인[$id]의 버전[$version]을 자료실에서 찾지 못했습니다.
-                throw new \Exception("Can not find version(".$version.") of the plugin(".$id.") that should be installed from the Market-place.");
-            }
-        }
-        $version = $version ?: $pluginData->latest_release->version;
+        $data = $this->getPluginData($this->argument('plugin'));
 
         // 플러그인 정보 출력
         // 설치 플러그인 정보
         $this->warn(PHP_EOL." Information of the plugin that should be installed:");
-        $this->line("  $title - $name:$version".PHP_EOL);
-
+        foreach ($data as $info) {
+            $this->line('  '. $info['title'] .' - '. $info['name'].':'.$info['version'].PHP_EOL);
+        }
         // 안내 멘트 출력
         if ($this->input->isInteractive() && $this->confirm(
-                // 위 플러그인을 다운로드합니다. \r\n 위 플러그인이 의존하는 다른 플러그인이 함께 다운로드 될 수 있으며, 수분이 소요될수 있습니다.\r\n 플러그인을 다운로드 하시겠습니까?
-                "Above plugin will be downloaded. \r\n Dependent plugins can be downloaded together. \r\n It may take up to a few minutes. Do you want to download the plugin?"
+            // 위 플러그인을 다운로드합니다.
+            // 위 플러그인이 의존하는 다른 플러그인이 함께 다운로드 될 수 있으며, 수분이 소요될수 있습니다.
+            // 플러그인을 다운로드 하시겠습니까?
+                "Above plugin will be downloaded. \r\n ".
+                "Dependent plugins can be downloaded together. \r\n ".
+                "It may take up to a few minutes. Do you want to download the plugin?"
             ) === false
         ) {
-            return null;
+            return;
         }
 
-        // - plugins require info 갱신
-        $writer->reset()->cleanOperation();
+        $this->writeRequire($data);
 
-        // composer.plugins.json 업데이트
-        // - require에 설치할 플러그인 추가
-        $writer->install($name, $version, 0)->write();
-
-        $vendorName = PluginHandler::PLUGIN_VENDOR_NAME;
-
-        // composer update실행(composer update --prefer-lowest --with-dependencies xpressengine-plugin/*)
+        $packages = array_pluck($data, 'name');
         // composer update를 실행합니다. 최대 수 분이 소요될 수 있습니다.
         $this->warn(' Composer update command is running.. It may take up to a few minutes.');
-        $this->line(" composer update --with-dependencies $vendorName/* $name");
+        $this->line(" composer update --with-dependencies " . implode(' ', $packages));
 
-        $result = $this->runComposer(
-            [
-                'command' => 'update',
-                "--with-dependencies" => true,
-                //"--quiet" => true,
-                '--working-dir' => base_path(),
-                /*'--verbose' => '3',*/
-                'packages' => [$name]
-            ]
-        );
+        $result = $this->composerUpdate($packages);
 
         // composer 실행을 마쳤습니다.
         $this->warn('Composer update command is finished.'.PHP_EOL);
 
-        $result = $this->writeResult($writer, $result);
+        $result = $this->writeResult($result);
 
         // changed plugin list 정보 출력
-        $changed = $this->getChangedPlugins($writer);
-        $this->printChangedPlugins($changed);
+        $this->printChangedPlugins($changed = $this->getChangedPlugins());
 
         if($result) {
-            if (array_get($changed, 'installed.'.$name) === $version) {
-                // 설치 성공 문구 출력
-                // $title - $name:$version 플러그인을 설치했습니다.
-                $this->output->success("$title - $name:$version plugin is installed");
-            } elseif (array_get($changed, 'installed.'.$name)) {
-                $this->output->success(
-                // $name 플러그인을 설치하였으나 다른 버전(".array_get($changed, 'installed.'.$name).")으로 설치되었습니다. 플러그인 간의 의존관계로 인해 다른 버전으로 설치되었을 가능성이 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다.
-                    "$name plugin is installed, but installed version(".array_get($changed, 'installed.'.$name).") is defferent to requested because the dependencies between plugins. Please check the plugin's dependencies."
+            $installed = array_get($changed, 'installed', []);
+            if (count($installed) < 1) {
+                $this->output->error(
+                // $name:$version 플러그인을 설치하지 못했습니다. 플러그인 간의 의존관계로 인해 설치가 불가능할 수도 있습니다.
+                // 플러그인 간의 의존성을 살펴보시기 바랍니다.
+                    "Installation failed. Because of the dependencies between plugins, ".
+                    "Installation may not be able to success. Please check the plugin's dependencies."
                 );
             } else {
-                $this->output->error(
-                // $name:$version 플러그인을 설치하지 못했습니다. 플러그인 간의 의존관계로 인해 설치가 불가능할 수도 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다.
-                    "Installation failed. Because of the dependencies between plugins, Installation may not be able to success. Please check the plugin's dependencies."
-                );
+                $this->activate(array_pluck($data, 'id'));
+
+                foreach ($installed as $name => $version) {
+                    $this->output->success("$name:$version plugin is installed");
+                }
             }
         } else {
             // 설치 실패한 플러그인을 가져온다.
-            $failed = $this->getFailedPlugins($writer);
+            $failed = $this->getFailedPlugins();
             $this->printFailedPlugins($failed);
 
             if(!empty($failed['install']) || !empty($failed['updated'])) {
@@ -163,5 +121,45 @@ class PluginInstall extends PluginCommand
 
         }
         $this->clear();
+    }
+
+    protected function getPluginData($plugins)
+    {
+        $data = [];
+        foreach ($plugins as $key) {
+            list($id, $version) = $this->parse($key);
+
+            // 플러그인이 이미 설치돼 있는지 검사
+            if ($this->handler->getPlugin($id) !== null) {
+                // 이미 설치되어 있는 플러그인입니다.
+                throw new \Exception('The plugin is already installed.');
+            }
+
+            $data[] = $this->getPluginInfo($id, $version);
+        }
+
+        return $data;
+    }
+
+    protected function writeRequire($data)
+    {
+        // - plugins require info 갱신
+        $this->writer->reset()->cleanOperation();
+
+        foreach ($data as $info) {
+            // composer.plugins.json 업데이트
+            // - require에 설치할 플러그인 추가
+            $this->writer->install($info['name'], $info['version'], $this->getExpiredTime());
+        }
+        $this->writer->write();
+    }
+
+    private function activate($ids)
+    {
+        if (!$this->option('no-activate')) {
+            foreach ($ids as $id) {
+                $this->activatePlugin($id);
+            }
+        }
     }
 }

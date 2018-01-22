@@ -2,9 +2,10 @@
 
 namespace App\Console\Commands;
 
+use Illuminate\Console\Command;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
 
-class PluginComposerSync extends PluginCommand
+class PluginComposerSync extends Command
 {
     /**
      * The console command name.

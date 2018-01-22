@@ -765,11 +765,7 @@ class PluginEntity implements Arrayable, Jsonable
      */
     public function isDevelopMode()
     {
-        $vendorDir = dirname($this->pluginFile).'/vendor';
-        if (file_exists($vendorDir)) {
-            return true;
-        }
-        return false;
+        return $this->isSelfInstalled();
     }
 
     /**

@@ -1,6 +1,8 @@
 <?php
 namespace App\Console\Commands;
 
+use File;
+use Illuminate\Support\Collection;
 use Xpressengine\Interception\InterceptionHandler;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
 use Xpressengine\Plugin\PluginHandler;
@@ -10,12 +12,12 @@ class PluginUninstall extends PluginCommand
 {
     /**
      * The console command name.
-     * php artisan plugin:install [--without-activate] <plugin name> [<version>]
+     *
      * @var string
      */
     protected $signature = 'plugin:uninstall
-                        {plugin_id : The plugin id for install}
-                        {--deactivate : deactivate the plugin if plugin is activated.}';
+                        {plugin* : The plugin for uninstall}
+                        {--f|force : deactivate the plugin if plugin is activated.}';
 
     /**
      * The console command description.
@@ -25,122 +27,185 @@ class PluginUninstall extends PluginCommand
     protected $description = 'Uninstall plugin of XpressEngine';
 
     /**
-     * Execute the console command.
+     * Create a new console command instance.
      *
      * @param PluginHandler       $handler
      * @param PluginProvider      $provider
      * @param ComposerFileWriter  $writer
      * @param InterceptionHandler $interceptionHandler
-     *
-     * @return bool|null
-     * @throws \Exception
      */
-    public function handle(
+    public function __construct(
         PluginHandler $handler,
         PluginProvider $provider,
         ComposerFileWriter $writer,
         InterceptionHandler $interceptionHandler
     ) {
+        parent::__construct();
+
         $this->init($handler, $provider, $writer, $interceptionHandler);
+    }
 
-        // php artisan plugin:uninstall <plugin name>
+    /**
+     * Execute the console command.
+     *
+     * @return void
+     * @throws \Exception
+     */
+    public function handle()
+    {
+        $data = $this->getPluginData($this->argument('plugin'));
 
-        $id = $this->argument('plugin_id');
-
-        // 플러그인이 설치돼 있는지 검사
-        $plugin = $handler->getPlugin($id);
-        if ($plugin === null) {
-            // 설치되어 있지 않은 플러그인입니다
-            throw new \Exception('Plugin not found');
+        foreach ($data as $info) {
+            if (!$info['is_dev']) {
+                $this->prepareComposer();
+                break;
+            }
         }
-
-        $isDevelopMode = file_exists($plugin->getPath('vendor'));
-
-        if (!$isDevelopMode) {
-            // 실행가능 환경인지 검사
-            $this->prepareComposer();
-        }
-
-        $title = $plugin->getTitle();
-        $name = $plugin->getName();
-        $version = $plugin->getVersion();
 
         // 플러그인 정보 출력
         // 삭제 플러그인 정보
         $this->warn(PHP_EOL." Information of the plugin that should be uninstalled:");
-        $this->line("  $title - $name:$version".PHP_EOL);
+        foreach ($data as $info) {
+            $this->line('  '. $info['title'] .' - '. $info['name'].':'.$info['version'].PHP_EOL);
+        }
 
         // 안내 멘트 출력
         // 위 플러그인을 삭제합니다. 플러그인을 삭제하면 사이트가 정상적으로 작동하지 않을 수 있습니다.
         $this->output->warning("Above plugin will be uninstalled. After the plugin is deleted, the site may not work well.");
         if ($this->input->isInteractive() && $this->confirm(
-                "Above plugin will be uninstalled. After the plugin is uninstalled, the site may not work well. \r\n It may take up to a few minutes. \r\n Do you want to remove the plugin?"
+                "Above plugin will be uninstalled.  \r\n ".
+                "After the plugin is uninstalled, the site may not work well. \r\n ".
+                "It may take up to a few minutes. \r\n ".
+                "Do you want to remove the plugin?"
             ) === false
         ) {
-            return null;
+            return;
         }
 
-        if($this->option('deactivate')) {
-            $handler->deactivatePlugin($id);
-        }
-
-        if($plugin->isActivated()) {
-            // 활성화된 플러그인은 삭제할 수 없습니다. 비활성화 한 후 삭제하려면 --deactivate 옵션을 사용하십시오.
-            throw new \Exception('It is not possible to uninstall the active plug-ins. If you want to deactivate plugin before uninstall, please use the --deactivate option.');
-        }
+        $this->checkActivated($data);
 
         // 플러그인 uninstall 실행
-        $handler->uninstallPlugin($id);
+        $this->processUninstall($data);
 
-        if ($isDevelopMode) {
-            // 개발모드의 플러그인입니다. 플러그인 디렉토리를 삭제하려면 직접 플러그인 디렉토리를 삭제하시기 바랍니다.
-            $this->output->block("The plugin is in develop mode. To remove directory of the plugin, After this command is executed, please delete the directory of plug-in manually.", 'WARNING', 'fg=black;bg=yellow', ' ', true);
-            $this->output->success("$title - $name:$version Plugin is uninstalled.");
-        } else {
+        $plugins = Collection::make($data)->partition(function ($info) {
+            return !$info['is_dev'];
+        });
 
-            // - plugins require info 갱신
-            $writer->reset()->cleanOperation();
+        $stables = $plugins->first();
+        $develops = $plugins->last();
 
-            // - require에서 삭제할 플러그인 제거
-            $writer->uninstall($name, 0)->write();
+        if ($stables && count($stables) > 0) {
+            $this->writeRequire($stables);
 
-            $vendorName = PluginHandler::PLUGIN_VENDOR_NAME;
-
+            $packages = array_pluck($stables, 'name');
             // composer update를 실행합니다. 최대 수분이 소요될 수 있습니다.
             $this->warn('Composer update command is running.. It may take up to a few minutes.');
-            $this->line(" composer update --with-dependencies $name");
-            $result = $this->runComposer(
-                [
-                    'command' => 'update',
-                    "--with-dependencies" => true,
-                    //"--quiet" => true,
-                    '--working-dir' => base_path(),
-                    /*'--verbose' => '3',*/
-                    'packages' => [$name]
-                ]
-            );
+            $this->line(" composer update --with-dependencies " . implode(' ', $packages));
+
+            $result = $this->composerUpdate($packages);
 
             // composer 실행을 마쳤습니다.
             $this->warn('Composer update command is finished.'.PHP_EOL);
 
-            $result = $this->writeResult($writer, $result);
+            $result = $this->writeResult($result);
 
-            // changed plugin list 정보 출력
-            $changed = $this->getChangedPlugins($writer);
-            $this->printChangedPlugins($changed);
+            $this->printChangedPlugins($changed = $this->getChangedPlugins());
 
-            if (array_has($changed, 'uninstalled.'.$name)) {
-                // 삭제 성공 문구 출력
-                // $title - $name:$version 플러그인을 삭제하였습니다.
-                $this->output->success("$title - $name:$version Plugin is uninstalled.");
+            if ($result) {
+                $uninstalled = array_get($changed, 'uninstalled', []);
+                if (count($uninstalled) < 1) {
+                    $this->output->error(
+                    // $name:$version 플러그인을 삭제하지 못했습니다. 플러그인 간의 의존관계로 인해 삭제가 불가능할 수도 있습니다.
+                    // 플러그인 간의 의존성을 살펴보시기 바랍니다.
+                        "Uninstall failed. Because of the dependencies between plugins, ".
+                        "Uninstall may not be able to success. Please check the plugin's dependencies."
+                    );
+                }
+
+                foreach ($uninstalled as $name => $version) {
+                    $this->output->success("$name:$version plugin is uninstalled");
+                }
             } else {
-                // $name:$version 플러그인을 삭제하지 못했습니다. 플러그인 간의 의존관계로 인해 삭제가 불가능할 수도 있습니다. 플러그인 간의 의존성을 살펴보시기 바랍니다.
-                $this->output->error("Uninstall failed. Because of the dependencies between plugins, Uninstall may not be able to success. Please check the plugin's dependencies.");
+                $this->output->error("UnInstallation failed.");
             }
         }
 
+        foreach ($develops as $info) {
+            if (!File::deleteDirectory(plugins_path($info['id']))) {
+                $this->output->block(
+                    'Unable to remove plugin. Please delete the directory of plugin manually.',
+                    'WARNING',
+                    'fg=black;bg=yellow',
+                    ' ',
+                    true
+                );
+            } else {
+                $this->output->success($info['name'].":".$info['version']." plugin is uninstalled");
+            }
+        }
         $this->clear();
 
     }
 
+    protected function getPluginData($plugins)
+    {
+        $data = [];
+        foreach ($plugins as $key) {
+            list($id, $version) = $this->parse($key);
+
+            // 플러그인이 이미 설치돼 있는지 검사
+            if (!$plugin = $this->handler->getPlugin($id)) {
+                // 설치되어 있지 않은 플러그인입니다.
+                throw new \Exception('Plugin not found');
+            }
+
+            $isDev = file_exists($plugin->getPath('vendor')) ? true : false;
+
+            $data[] = [
+                'id' => $id,
+                'name' => $plugin->getName(),
+                'version' => $plugin->getVersion(),
+                'title' => $plugin->getTitle(),
+                'plugin' => $plugin,
+                'is_dev' => $isDev
+            ];
+        }
+
+        return $data;
+    }
+
+    protected function checkActivated(array $data)
+    {
+        foreach ($data as $info) {
+            if ($info['plugin']->isActivated()) {
+                if (!$this->option('force')) {
+                    // 활성화된 플러그인은 삭제할 수 없습니다. 비활성화 한 후 삭제하려면 --deactivate 옵션을 사용하십시오.
+                    throw new \Exception('It is not possible to uninstall the active plug-ins. If you want to deactivate plugin before uninstall, please use the --deactivate option.');
+                }
+
+                $this->handler->deactivatePlugin($info['id']);
+            }
+        }
+    }
+
+    protected function processUninstall(array $data)
+    {
+        foreach ($data as $info) {
+            $this->handler->uninstallPlugin($info['id']);
+        }
+    }
+
+    protected function writeRequire($data)
+    {
+        // - plugins require info 갱신
+        $this->writer->reset()->cleanOperation();
+
+        foreach ($data as $info) {
+            // composer.plugins.json 업데이트
+            // - require에 설치할 플러그인 추가
+
+            $this->writer->uninstall($info['name'], $this->getExpiredTime());
+        }
+        $this->writer->write();
+    }
 }

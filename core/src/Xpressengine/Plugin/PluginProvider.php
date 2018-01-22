@@ -205,7 +205,7 @@ class PluginProvider
         foreach ($infos as $data) {
             list($vendor, $id) = explode('/', $data->name);
             $plugin = $plugins[$id];
-            if ($plugin->isDevelopMode() === false) {
+            if ($plugin->isSelfInstalled() === false) {
                 $plugin->setRemoteData($data);
             }
         }
