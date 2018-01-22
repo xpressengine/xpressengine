@@ -13,6 +13,7 @@
  */
 namespace App\Console\Commands;
 
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Xpressengine\Installer\XpressengineInstaller;
 use Xpressengine\Interception\InterceptionHandler;
