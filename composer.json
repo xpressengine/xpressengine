@@ -107,7 +107,7 @@
             "Xpressengine\\Plugin\\Composer\\Composer::postDependenciesSolving"
         ],
         "post-install-cmd": [
-            "Xpressengine\\Plugin\\Composer\\Composer::postUpdate"
+            "Xpressengine\\Plugin\\Composer\\Composer::postInstall"
         ],
         "post-update-cmd": [
             "Xpressengine\\Plugin\\Composer\\Composer::postUpdate"
@@ -115,7 +115,7 @@
         "post-root-package-install": [],
         "post-create-project-cmd": [],
         "post-autoload-dump": [
-            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "Xpressengine\\Plugin\\Composer\\Composer::postAutoloadDump",
             "@php artisan package:discover"
         ]
     },

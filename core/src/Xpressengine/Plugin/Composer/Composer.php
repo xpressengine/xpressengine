@@ -167,14 +167,40 @@ class Composer
     }
 
     /**
-     * composer 실행중 post-install-cmd, post-update-cmd 이벤트가 발생할 경우 실행된다.
-     * composer.plugins.json 파일을 현재 XE 상태에 맞춰 갱신한다.
+     * Handle the post-install Composer event.
      *
-     * @param Event $event composer가 제공하는 event
+     * @param Event $event composer event object
+     * @return void
+     */
+    public static function postInstall(Event $event)
+    {
+        require_once $event->getComposer()->getConfig()->get('vendor-dir').'/autoload.php';
+
+        static::wrapUp();
+        static::clearCompiled();
+    }
+
+    /**
+     * Handle the post-update Composer event.
      *
+     * @param Event $event composer event object
      * @return void
      */
     public static function postUpdate(Event $event)
+    {
+        require_once $event->getComposer()->getConfig()->get('vendor-dir').'/autoload.php';
+
+        static::wrapUp();
+        static::clearCompiled();
+    }
+
+    /**
+     * composer 실행중 post-install-cmd, post-update-cmd 이벤트가 발생할 경우 실행된다.
+     * composer.plugins.json 파일을 현재 XE 상태에 맞춰 갱신한다.
+     *
+     * @return void
+     */
+    protected static function wrapUp()
     {
         $path = static::$pluginComposerFile;
 
@@ -192,9 +218,39 @@ class Composer
 
         // plugin cache 갱신
         static::deleteDirectory(static::$pluginCacheDirectory, true);
+    }
 
+    /**
+     * Handle the post-autoload-dump Composer event.
+     *
+     * @param Event $event composer event object
+     * @return void
+     */
+    public static function postAutoloadDump(Event $event)
+    {
         require_once $event->getComposer()->getConfig()->get('vendor-dir').'/autoload.php';
+
         static::clearCompiled();
+    }
+
+    /**
+     * Clear the cached Laravel bootstrapping files.
+     *
+     * @return void
+     */
+    protected static function clearCompiled()
+    {
+        if (!$laravel = Application::getInstance()) {
+            $laravel = new Application(getcwd());
+        }
+
+        if (file_exists($packagesPath = $laravel->getCachedPackagesPath())) {
+            @unlink($packagesPath);
+        }
+
+        if (file_exists($servicesPath = $laravel->getCachedServicesPath())) {
+            @unlink($servicesPath);
+        }
     }
 
     /**
@@ -234,26 +290,6 @@ class Composer
         $uninstalls = $writer->get('xpressengine-plugin.operation.uninstall', []);
         foreach ($uninstalls as $name) {
             $writer->removeRequire($name);
-        }
-    }
-
-    /**
-     * Clear the cached Laravel bootstrapping files.
-     *
-     * @return void
-     */
-    protected static function clearCompiled()
-    {
-        if (!$laravel = Application::getInstance()) {
-            $laravel = new Application(getcwd());
-        }
-
-        if (file_exists($packagesPath = $laravel->getCachedPackagesPath())) {
-            @unlink($packagesPath);
-        }
-
-        if (file_exists($servicesPath = $laravel->getCachedServicesPath())) {
-            @unlink($servicesPath);
         }
     }
 
