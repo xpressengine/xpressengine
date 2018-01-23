@@ -15,7 +15,7 @@ class PluginInstall extends PluginCommand
      */
     protected $signature = 'plugin:install
                         {plugin* : The plugin for install. if you want specify version then use "plugin:version"}
-                        {--no-activate : Do not activate the plugin}';
+                        {--activate : Activate the plugin after install}';
 
     /**
      * The console command description.
@@ -175,7 +175,7 @@ class PluginInstall extends PluginCommand
      */
     private function activate($ids)
     {
-        if (!$this->option('no-activate')) {
+        if ($this->option('activate')) {
             foreach ($ids as $id) {
                 $this->activatePlugin($id);
             }

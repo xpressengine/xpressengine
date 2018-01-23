@@ -30,7 +30,7 @@
                             @endif
                         @endif
                     @empty
-                        
+                        <p></p>
                     @endforelse
 
                 <label for="">상태</label>
