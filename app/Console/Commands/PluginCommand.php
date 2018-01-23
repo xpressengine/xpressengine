@@ -243,6 +243,12 @@ class PluginCommand extends Command
         //}
     }
 
+    /**
+     * parse plugin string
+     *
+     * @param string $string
+     * @return array
+     */
     protected function parse($string)
     {
         if (strpos($string, ':') === false) {
@@ -252,6 +258,14 @@ class PluginCommand extends Command
         return explode(':', $string, 2);
     }
 
+    /**
+     * Get plugin informatin
+     *
+     * @param string      $id
+     * @param string|null $version
+     * @return array
+     * @throws \Exception
+     */
     protected function getPluginInfo($id, $version = null)
     {
         if (!$info = $this->provider->find($id)) {
@@ -274,6 +288,11 @@ class PluginCommand extends Command
         return compact('id', 'name', 'version', 'title');
     }
 
+    /**
+     * Get expired time
+     *
+     * @return int|string
+     */
     protected function getExpiredTime()
     {
         $datetime = Carbon::now()->addSeconds($this->getTimeLimit())->toDateTimeString();
@@ -281,6 +300,11 @@ class PluginCommand extends Command
         return $this->laravel->runningInConsole() ? 0 : $datetime;
     }
 
+    /**
+     * Get time limit
+     *
+     * @return int
+     */
     protected function getTimeLimit()
     {
         return config('xe.plugin.operation.time_limit');

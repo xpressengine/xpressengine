@@ -123,6 +123,13 @@ class PluginInstall extends PluginCommand
         $this->clear();
     }
 
+    /**
+     * Get plugins data
+     *
+     * @param array $plugins
+     * @return array
+     * @throws \Exception
+     */
     protected function getPluginData($plugins)
     {
         $data = [];
@@ -141,6 +148,12 @@ class PluginInstall extends PluginCommand
         return $data;
     }
 
+    /**
+     * Write require to composer.plugins.json
+     *
+     * @param array $data
+     * @return void
+     */
     protected function writeRequire($data)
     {
         // - plugins require info 갱신
@@ -154,6 +167,12 @@ class PluginInstall extends PluginCommand
         $this->writer->write();
     }
 
+    /**
+     * Activate plugins
+     *
+     * @param array $ids
+     * @return void
+     */
     private function activate($ids)
     {
         if (!$this->option('no-activate')) {

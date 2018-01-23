@@ -25,6 +25,12 @@ use Xpressengine\Plugin\Composer\Composer;
 trait ComposerRunTrait
 {
 
+    /**
+     * prepareComposer
+     *
+     * @return void
+     * @throws \Exception
+     */
     protected function prepareComposer()
     {
         ini_set('allow_url_fopen', '1');

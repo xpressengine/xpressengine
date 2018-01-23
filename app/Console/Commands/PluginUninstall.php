@@ -147,6 +147,13 @@ class PluginUninstall extends PluginCommand
 
     }
 
+    /**
+     * Get plugins data
+     *
+     * @param array $plugins
+     * @return array
+     * @throws \Exception
+     */
     protected function getPluginData($plugins)
     {
         $data = [];
@@ -174,6 +181,13 @@ class PluginUninstall extends PluginCommand
         return $data;
     }
 
+    /**
+     * Check activated
+     *
+     * @param array $data
+     * @return void
+     * @throws \Exception
+     */
     protected function checkActivated(array $data)
     {
         foreach ($data as $info) {
@@ -191,6 +205,12 @@ class PluginUninstall extends PluginCommand
         }
     }
 
+    /**
+     * The process before delete plugin file
+     *
+     * @param array $data
+     * @return void
+     */
     protected function processUninstall(array $data)
     {
         foreach ($data as $info) {
@@ -198,6 +218,12 @@ class PluginUninstall extends PluginCommand
         }
     }
 
+    /**
+     * Write require to composer.plugins.json
+     *
+     * @param array $data
+     * @return void
+     */
     protected function writeRequire($data)
     {
         // - plugins require info 갱신

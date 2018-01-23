@@ -120,6 +120,13 @@ class PluginUpdate extends PluginCommand
         $this->clear();
     }
 
+    /**
+     * Get plugins data
+     *
+     * @param array $plugins
+     * @return array
+     * @throws \Exception
+     */
     protected function getPluginData($plugins)
     {
         $data = [];
@@ -143,6 +150,12 @@ class PluginUpdate extends PluginCommand
         return $data;
     }
 
+    /**
+     * Write require to composer.plugins.json
+     *
+     * @param array $data
+     * @return void
+     */
     protected function writeRequire($data)
     {
         // - plugins require info 갱신
