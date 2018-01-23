@@ -80,7 +80,19 @@ class PluginController extends Controller
 
     public function getOperation(PluginHandler $handler, ComposerFileWriter $writer)
     {
-        $operation = $handler->getOperation($writer);
+        $term = 15;
+        $sleep = 2;
+        $begin = time();
+        while (true) {
+            $current = time();
+            $operation = $handler->getOperation($writer);
+            if ($operation['status'] !== ComposerFileWriter::STATUS_RUNNING || $current - $begin > $term) {
+                break;
+            }
+
+            sleep($sleep);
+        }
+
         return api_render('operation', compact('operation'), compact('operation'));
     }
 
@@ -101,12 +113,8 @@ class PluginController extends Controller
         return api_render('index.delete', compact('plugins'));
     }
 
-    public function delete(
-        Request $request,
-        PluginHandler $handler,
-        ComposerFileWriter $writer
-    ) {
-
+    public function delete(Request $request, PluginHandler $handler, ComposerFileWriter $writer)
+    {
         $operation = $handler->getOperation($writer);
         if ($operation['status'] === ComposerFileWriter::STATUS_RUNNING) {
             throw new HttpException(422, "이미 진행중인 요청이 있습니다.");
@@ -144,7 +152,7 @@ class PluginController extends Controller
         return redirect()->route('settings.plugins')->with(
             'alert',
             ['type' => 'success', 'message' => '플러그인을 삭제중입니다.']
-        );
+        )->with('operation', 'running');
     }
 
     public function getActivate(Request $request, PluginHandler $handler)
@@ -282,7 +290,7 @@ class PluginController extends Controller
         return redirect()->route('settings.plugins')->with(
             'alert',
             ['type' => 'success', 'message' => '플러그인의 새로운 버전을 다운로드하는 중입니다.']
-        );
+        )->with('operation', 'running');
     }
 
     public function install(
@@ -319,7 +327,10 @@ class PluginController extends Controller
             ]);
         });
 
-        return redirect()->back()->with('alert', ['type' => 'success', 'message' => '새로운 플러그인을 설치중입니다.']);
+        return redirect()->back()->with(
+            'alert',
+            ['type' => 'success', 'message' => '새로운 플러그인을 설치중입니다.']
+        )->with('operation', 'running');
     }
 
     protected function prepareComposer(/*$timeLimit*/)
