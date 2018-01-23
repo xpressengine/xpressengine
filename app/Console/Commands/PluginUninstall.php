@@ -179,8 +179,11 @@ class PluginUninstall extends PluginCommand
         foreach ($data as $info) {
             if ($info['plugin']->isActivated()) {
                 if (!$this->option('force')) {
-                    // 활성화된 플러그인은 삭제할 수 없습니다. 비활성화 한 후 삭제하려면 --deactivate 옵션을 사용하십시오.
-                    throw new \Exception('It is not possible to uninstall the active plug-ins. If you want to deactivate plugin before uninstall, please use the --deactivate option.');
+                    // 활성화된 플러그인은 삭제할 수 없습니다. 비활성화 한 후 삭제하려면 -f or --force 옵션을 사용하십시오.
+                    throw new \Exception(
+                        'It is not possible to uninstall the active plug-ins. ".
+                        "If you want to deactivate plugin before uninstall, please use the -f or --force option.'
+                    );
                 }
 
                 $this->handler->deactivatePlugin($info['id']);
