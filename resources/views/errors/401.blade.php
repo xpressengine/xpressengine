@@ -6,7 +6,7 @@
     @if(!Auth::check() && $exception instanceof \Xpressengine\Support\Exceptions\AccessDeniedHttpException)
         <h1>{{ xe_trans('xe::tryAfterLogin') }}</h1>
     @else
-        <h1>{{ $exception->getMessage() }}</h1>
+        <h1>{!! $exception->getMessage() !!}</h1>
     @endif
 </div>
 <div class="login-body">
