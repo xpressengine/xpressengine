@@ -91,7 +91,7 @@ trait EloquentRepositoryTrait
      */
     public static function getModel()
     {
-        return static::$models[get_called_class()];
+        return static::$models[get_called_class()] ?? null;
     }
 
     /**
