@@ -757,6 +757,10 @@ return [
         'ko' => '가입 설정',
         'en' => 'Join settings',
     ],
+    'termsSettings' => [
+        'ko' => '약관 설정',
+        'en' => 'Terms settings',
+    ],
     'skinSettings' => [
         'ko' => '스킨 설정',
         'en' => 'Skin settings',
@@ -1767,13 +1771,9 @@ return [
         'ko' => '아직 회원이 아닙니까?',
         'en' => 'Not a member yet?',
     ],
-    'agreeSiteTermsUseAndSitePrivacyPolicy' => [
-        'ko' => '<a href=":termLink" class="__xe_btn_agreement" target="_blank">이용 약관</a> 및 <a href=":policyLink" class="__xe_btn_privacy" target="_blank">개인정보 보호정책</a>을 읽었으며 이에 동의합니다.',
-        'en' => 'By clicking you agree to our <a href=":termLink" class="__xe_btn_agreement" target="_blank">Site Terms of Use</a>, <a href=":policyLink" class="__xe_btn_privacy" target="_blank">Privacy Policy</a>',
-    ],
-    'agreeSiteTermsUseAndSitePrivacyPolicyDescription' => [
-        'ko' => '계속하려면 이용 약관 및 개인정보 보호정책을 읽었으며 이에 동의한다는 의사 표시로 확인란을 선택해야 합니다.',
-        'en' => 'I have read the Terms of Use and Privacy Policy To continue, you must check the box stating that a doctor agrees.',
+    'msgAcceptTerms' => [
+        'ko' => ':terms 을(를) 읽었으며 이에 동의합니다.',
+        'en' => 'By clicking you agree to our :terms',
     ],
     'alreadyHaveAccount' => [
         'ko' => '이미 계정이 있습니까?',

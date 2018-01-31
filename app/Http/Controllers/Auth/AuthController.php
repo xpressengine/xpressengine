@@ -69,20 +69,13 @@ class AuthController extends Controller
         $this->middleware('guest', ['except' => ['getConfirm', 'getLogout', 'getAdminAuth', 'postAdminAuth']]);
     }
 
-    public function getAgreement()
+    public function terms($id)
     {
-        $config = app('xe.config')->get('user.common');
-        $agreement = $config->get('agreement');
+        if (!$term = app('xe.terms')->find($id)) {
+            abort(404);
+        }
 
-        return api_render('agreement', compact('agreement'));
-    }
-
-    public function getPrivacy()
-    {
-        $config = app('xe.config')->get('user.common');
-        $privacy = $config->get('privacy');
-
-        return api_render('privacy', compact('privacy'));
+        return api_render('terms', compact('term'));
     }
 
     /**

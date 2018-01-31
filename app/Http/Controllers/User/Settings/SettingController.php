@@ -73,7 +73,7 @@ class SettingController extends Controller
      */
     public function updateCommon(Request $request, CaptchaManager $captcha)
     {
-        $inputs = $request->only(['useCaptcha', 'webmasterName', 'webmasterEmail', 'agreement', 'privacy']);
+        $inputs = $request->only(['useCaptcha', 'webmasterName', 'webmasterEmail']);
 
         if ($inputs['useCaptcha'] === 'true' && !$captcha->available()) {
             throw new ConfigurationNotExistsException();
@@ -82,25 +82,6 @@ class SettingController extends Controller
         app('xe.config')->put('user.common', $inputs);
 
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => '저장되었습니다.']);
-    }
-
-    /**
-     * edit Skin setting
-     *
-     * @return \Xpressengine\Presenter\RendererInterface
-     */
-    public function editSkin()
-    {
-        $authSkinSection = new SkinSection('user/auth');
-
-        $settingsSkinSection = new SkinSection('user/settings');
-
-        $profileSkinSection = new SkinSection('user/profile');
-
-        return XePresenter::make(
-            'user.settings.setting.skin',
-            compact('authSkinSection', 'settingsSkinSection', 'profileSkinSection')
-        );
     }
 
     /**
@@ -181,6 +162,25 @@ class SettingController extends Controller
         app('xe.config')->modify($config);
 
         return redirect()->back()->with('alert', ['type' => 'success', 'message' => '저장되었습니다.']);
+    }
+
+    /**
+     * edit Skin setting
+     *
+     * @return \Xpressengine\Presenter\RendererInterface
+     */
+    public function editSkin()
+    {
+        $authSkinSection = new SkinSection('user/auth');
+
+        $settingsSkinSection = new SkinSection('user/settings');
+
+        $profileSkinSection = new SkinSection('user/profile');
+
+        return XePresenter::make(
+            'user.settings.setting.skin',
+            compact('authSkinSection', 'settingsSkinSection', 'profileSkinSection')
+        );
     }
 
     /**

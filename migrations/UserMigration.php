@@ -128,6 +128,17 @@ class UserMigration extends Migration {
             $table->timestamp('created_at')->nullable()->comment('created date');
         });
 
+        Schema::create('user_terms', function (Blueprint $table) {
+            $table->string('id', 36);
+            $table->string('title');
+            $table->string('content')->nullable();
+            $table->integer('order')->default(0);
+            $table->boolean('is_enabled')->default(false);
+
+            $table->primary('id');
+            $table->engine = "InnoDB";
+        });
+
     }
 
     public function installed()
@@ -183,6 +194,11 @@ class UserMigration extends Migration {
         $joinConfig = app('xe.config')->get('user.join');
         $config = $joinConfig->getPureAll();
         if (array_has($config, 'useEmailCertify') || array_has($config, 'useCaptcha')) {
+            return false;
+        }
+
+        // ver.3.0.0-beta.27
+        if (!Schema::hasTable('user_terms')) {
             return false;
         }
     }
@@ -259,6 +275,47 @@ class UserMigration extends Migration {
             app('xe.config')->modify($joinConfig);
         }
 
+        // ver.3.0.0-beta.27
+        if (!Schema::hasTable('user_terms')) {
+            Schema::create('user_terms', function (Blueprint $table) {
+                $table->string('id', 36);
+                $table->string('title');
+                $table->string('content')->nullable();
+                $table->integer('order')->default(0);
+                $table->boolean('is_enabled')->default(false);
+
+                $table->primary('id');
+                $table->engine = "InnoDB";
+            });
+
+            // todo: schema 변경됨 수정 필요
+            $commonConfig = app('xe.config')->get('user.common');
+            $tos = $commonConfig->get('agreement');
+            $tosTitleKey = 'user::'.app('xe.keygen')->generate();
+            \XeLang::save($tosTitleKey, 'ko', '서비스 이용약관');
+            \XeLang::save($tosTitleKey, 'en', 'Terms of Service');
+            $tosContentKey = 'user::'.app('xe.keygen')->generate();
+            \XeLang::save($tosContentKey, 'ko', $tos);
+            app('xe.terms')->create([
+                'title' => $tosTitleKey,
+                'content' => $tosContentKey,
+                'order' => 0,
+                'is_enabled' => true,
+            ]);
+
+            $privacy = $commonConfig->get('privacy');
+            $privacyTitleKey = 'user::'.app('xe.keygen')->generate();
+            \XeLang::save($privacyTitleKey, 'ko', '개인정보 보호정책');
+            \XeLang::save($privacyTitleKey, 'en', 'Privacy Policy');
+            $privacyContentKey = 'user::'.app('xe.keygen')->generate();
+            \XeLang::save($privacyContentKey, 'ko', $privacy);
+            app('xe.terms')->create([
+                'title' => $privacyTitleKey,
+                'content' => $privacyContentKey,
+                'order' => 1,
+                'is_enabled' => true,
+            ]);
+        }
 
     }
 

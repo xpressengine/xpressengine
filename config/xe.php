@@ -129,23 +129,29 @@ return [
                 'display' => true,
                 'ordering' => 200
             ],
+            'user.setting.terms' => [
+                'title' => 'xe::termsSettings',
+                'description' => '',
+                'display' => true,
+                'ordering' => 300
+            ],
             'user.setting.skin' => [
                 'title' => 'xe::skinSettings',
                 'description' => '',
                 'display' => true,
-                'ordering' => 300
+                'ordering' => 400
             ],
             'user.setting.field' => [
                 'title' => 'xe::dynamicFieldSettings',
                 'description' => '',
                 'display' => true,
-                'ordering' => 400
+                'ordering' => 500
             ],
             'user.setting.menu' => [
                 'title' => 'xe::toggleMenuSettings',
                 'description' => '',
                 'display' => true,
-                'ordering' => 500
+                'ordering' => 600
             ],
             'contents' => [
                 'title' => 'xe::contents',

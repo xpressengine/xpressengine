@@ -31,6 +31,7 @@ use Xpressengine\User\GuardInterface;
 use Xpressengine\User\Middleware\Admin;
 use Xpressengine\User\Models\Guest;
 use Xpressengine\User\Models\PendingEmail;
+use Xpressengine\User\Models\Term;
 use Xpressengine\User\Models\UnknownUser;
 use Xpressengine\User\Models\User;
 use Xpressengine\User\Models\UserAccount;
@@ -39,6 +40,7 @@ use Xpressengine\User\Models\UserGroup;
 use Xpressengine\User\Repositories\PendingEmailRepository;
 use Xpressengine\User\Repositories\PendingEmailRepositoryInterface;
 use Xpressengine\User\Repositories\RegisterTokenRepository;
+use Xpressengine\User\Repositories\TermsRepository;
 use Xpressengine\User\Repositories\UserAccountRepository;
 use Xpressengine\User\Repositories\UserAccountRepositoryInterface;
 use Xpressengine\User\Repositories\UserEmailRepository;
@@ -49,6 +51,7 @@ use Xpressengine\User\Repositories\UserRepository;
 use Xpressengine\User\Repositories\UserRepositoryInterface;
 use Xpressengine\User\Repositories\VirtualGroupRepository;
 use Xpressengine\User\Repositories\VirtualGroupRepositoryInterface;
+use Xpressengine\User\TermsHandler;
 use Xpressengine\User\UserHandler;
 use Xpressengine\User\UserImageHandler;
 use Xpressengine\User\UserProvider;
@@ -122,6 +125,8 @@ class UserServiceProvider extends ServiceProvider
         $this->registerEmailBroker();
 
         $this->registerImageHandler();
+
+        $this->registerTerms();
     }
 
     /**
@@ -221,6 +226,14 @@ class UserServiceProvider extends ServiceProvider
         $this->app->alias(UserHandler::class, 'xe.user');
     }
 
+    private function registerTerms()
+    {
+        $this->app->singleton(TermsHandler::class, function ($app) {
+            return new TermsHandler($app[TermsRepository::class]);
+        });
+        $this->app->alias(TermsHandler::class, 'xe.terms');
+    }
+
     /**
      * register Repositories
      *
@@ -233,6 +246,8 @@ class UserServiceProvider extends ServiceProvider
         $this->registerGroupRepository();
         $this->registerVirtualGroupRepository();
         $this->registerMailRepository();
+
+        $this->registerTermsRepository();
     }
 
     protected function registerUserRepository()
@@ -299,6 +314,13 @@ class UserServiceProvider extends ServiceProvider
         $this->app->alias(PendingEmailRepositoryInterface::class, 'xe.user.pendingEmails');
     }
 
+    private function registerTermsRepository()
+    {
+        $this->app->singleton(TermsRepository::class, function ($app) {
+            return new TermsRepository;
+        });
+    }
+
     private function setModels()
     {
         UserRepository::setModel(User::class);
@@ -306,6 +328,7 @@ class UserServiceProvider extends ServiceProvider
         UserGroupRepository::setModel(UserGroup::class);
         UserEmailRepository::setModel(UserEmail::class);
         PendingEmailRepository::setModel(PendingEmail::class);
+        TermsRepository::setModel(Term::class);
     }
 
     /**
@@ -649,22 +672,21 @@ class UserServiceProvider extends ServiceProvider
                         "
                     <script>
                         $(function($) {
-                            $('.__xe_btn_privacy').click(function(){
-                                XE.pageModal('".route('auth.privacy')."');
-                                return false;
+                            $('.__xe_terms').click(function (e) {
+                                e.preventDefault();
+                                
+                                XE.pageModal($(this).attr('href'));
                             });
-                            $('.__xe_btn_agreement').click(function(){
-                                XE.pageModal('".route('auth.agreement')."');
-                                return false;
-                            })
                         });
                     </script>
                 "
                     )->load();
 
+                    $terms = app('xe.terms')->fetchEnabled();
+
                     $skinHandler = app('xe.skin');
                     $skin = $skinHandler->getAssigned('user/auth');
-                    return $skin->setView('register.forms.agreements')->setData(compact('data'))->render();
+                    return $skin->setView('register.forms.agreements')->setData(compact('data', 'terms'))->render();
                 }
             ]
         );

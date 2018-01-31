@@ -36,14 +36,6 @@
                         <label for="webmasterEmail">{{xe_trans('xe::webmasterEmail')}}</label>
                         <input id="webmasterEmail" type="email" name="webmasterEmail" class="form-control" placeholder="Webmaster email" value="{{ $config->get('webmasterEmail') }}">
                     </div>
-                    <div class="form-group">
-                        <label for="agreement">{{xe_trans('xe::siteTermsUse')}}</label>
-                        <textarea id="agreement" class="form-control" name="agreement" cols="30" rows="5">{{ $config->get('agreement') }}</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="privacy">{{xe_trans('xe::sitePrivacyPolicy')}}</label>
-                        <textarea class="form-control" id="privacy" name="privacy" cols="30" rows="5">{{ $config->get('privacy') }}</textarea>
-                    </div>
                 </div>
                 <div class="panel-footer">
                     <div class="pull-right">

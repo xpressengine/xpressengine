@@ -99,9 +99,8 @@ Route::group(
         Route::get('password', ['as' => 'auth.password', 'uses' => 'Auth\PasswordController@getPassword']);
         Route::post('password', ['as' => 'auth.password', 'uses' => 'Auth\PasswordController@postPassword']);
 
-        // agreement, privacy
-        Route::get('agreement', ['as' => 'auth.agreement', 'uses' => 'Auth\AuthController@getAgreement']);
-        Route::get('privacy', ['as' => 'auth.privacy', 'uses' => 'Auth\AuthController@getPrivacy']);
+        // terms
+        Route::get('terms/{id}', ['as' => 'auth.terms', 'uses' => 'Auth\AuthController@terms']);
 
         // admin auth
         Route::get('admin', ['as' => 'auth.admin', 'uses' => 'Auth\AuthController@getAdminAuth']);
@@ -261,26 +260,10 @@ Route::group(
 );
 
 /*
- * policies for site, user
+ * terms
  * */
-Route::group(
-    ['prefix' => 'policies'],
-    function () {
-        // 개인정보 처리 방침
-        Route::get('privacy', ['as' => 'policies.privacy', 'uses' => 'User\PolicyController@privacy']);
+Route::get('terms/{id}', ['as' => 'terms', 'uses' => 'User\TermsController@index']);
 
-        // 약관
-        Route::group(
-            ['prefix' => 'terms'],
-            function() {
-                // 서비스
-                Route::get('service', ['as' => 'policies.terms.service', 'uses' => 'User\PolicyController@service']);
-            }
-        );
-
-
-    }
-);
 /*
  * settings/user
  * */
@@ -363,70 +346,83 @@ Route::settings(
             ['prefix' => 'setting'],
             function () {
 
-                Route::get(
-                    '/',
-                    [
-                        'as' => 'settings.user.setting',
-                        'uses' => 'User\Settings\SettingController@editCommon',
-                        'settings_menu' => 'user.setting.default',
-                    ]
-                );
-                Route::post(
-                    '/',
-                    ['as' => 'settings.user.setting', 'uses' => 'User\Settings\SettingController@updateCommon']
-                );
+                Route::get('/', [
+                    'as' => 'settings.user.setting',
+                    'uses' => 'User\Settings\SettingController@editCommon',
+                    'settings_menu' => 'user.setting.default',
+                ]);
+                Route::post('/', [
+                    'as' => 'settings.user.setting',
+                    'uses' => 'User\Settings\SettingController@updateCommon'
+                ]);
 
-                Route::get(
-                    'join',
-                    [
-                        'as' => 'settings.user.setting.join',
-                        'uses' => 'User\Settings\SettingController@editJoin',
-                        'settings_menu' => 'user.setting.join',
-                    ]
-                );
+                Route::get('join', [
+                    'as' => 'settings.user.setting.join',
+                    'uses' => 'User\Settings\SettingController@editJoin',
+                    'settings_menu' => 'user.setting.join',
+                ]);
+                Route::post('join', [
+                    'as' => 'settings.user.setting.join',
+                    'uses' => 'User\Settings\SettingController@updateJoin'
+                ]);
 
-                Route::post(
-                    'join',
-                    [
-                        'as' => 'settings.user.setting.join',
-                        'uses' => 'User\Settings\SettingController@updateJoin'
-                    ]
-                );
+                Route::group(['prefix' => 'terms', 'settings_menu' => 'user.setting.terms'], function () {
 
-                Route::get(
-                    'skin',
-                    [
-                        'as' => 'settings.user.setting.skin',
-                        'uses' => 'User\Settings\SettingController@editSkin',
-                        'settings_menu' => 'user.setting.skin',
-                    ]
-                );
+                    Route::get('create', [
+                        'as' => 'settings.user.setting.terms.create',
+                        'uses' => 'User\Settings\TermsController@create'
+                    ]);
+                    Route::post('/', [
+                        'as' => 'settings.user.setting.terms.store',
+                        'uses' => 'User\Settings\TermsController@store'
+                    ]);
+                    Route::get('{id}/edit', [
+                        'as' => 'settings.user.setting.terms.edit',
+                        'uses' => 'User\Settings\TermsController@edit'
+                    ]);
+                    Route::put('{id}', [
+                        'as' => 'settings.user.setting.terms.update',
+                        'uses' => 'User\Settings\TermsController@update'
+                    ]);
+                    Route::delete('/', [
+                        'as' => 'settings.user.setting.terms.destroies',
+                        'uses' => 'User\Settings\TermsController@destroies'
+                    ]);
+                    Route::post('enable', [
+                        'as' => 'settings.user.setting.terms.enable',
+                        'uses' => 'User\Settings\TermsController@enable'
+                    ]);
 
-                Route::get(
-                    'field',
-                    [
-                        'as' => 'settings.user.setting.field',
-                        'uses' => 'User\Settings\SettingController@editField',
-                        'settings_menu' => 'user.setting.field',
-                    ]
-                );
+                    Route::get('/', [
+                        'as' => 'settings.user.setting.terms.index',
+                        'uses' => 'User\Settings\TermsController@index',
+                    ]);
+                });
 
-                Route::get(
-                    'togglemenu',
-                    [
-                        'as' => 'settings.user.setting.menu',
-                        'uses' => 'User\Settings\SettingController@editToggleMenu',
-                        'settings_menu' => 'user.setting.menu',
-                    ]
-                );
 
+                Route::get('skin', [
+                    'as' => 'settings.user.setting.skin',
+                    'uses' => 'User\Settings\SettingController@editSkin',
+                    'settings_menu' => 'user.setting.skin',
+                ]);
+
+                Route::get('field', [
+                    'as' => 'settings.user.setting.field',
+                    'uses' => 'User\Settings\SettingController@editField',
+                    'settings_menu' => 'user.setting.field',
+                ]);
+
+                Route::get('togglemenu', [
+                    'as' => 'settings.user.setting.menu',
+                    'uses' => 'User\Settings\SettingController@editToggleMenu',
+                    'settings_menu' => 'user.setting.menu',
+                ]);
             }
         );
 
-        Route::get(
-            'search/{keyword?}',
-            ['as' => 'settings.user.search', 'uses' => 'User\Settings\UserController@search']
-        );
+        Route::get('search/{keyword?}', [
+            'as' => 'settings.user.search', 'uses' => 'User\Settings\UserController@search'
+        ]);
     }
 );
 
