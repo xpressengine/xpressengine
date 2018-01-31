@@ -58,10 +58,10 @@ class TermsHandler
     {
         if (is_array($terms) || $terms instanceof Collection) {
             foreach ($terms as $idx => $term) {
-                $this->repo->update($term, ['is_activate' => true, 'order' => $idx]);
+                $this->repo->update($term, ['is_enabled' => true, 'order' => $idx]);
             }
         } else {
-            $this->repo->update($terms, ['is_activate' => true, 'order' => $order]);
+            $this->repo->update($terms, ['is_enabled' => true, 'order' => $order]);
         }
     }
 
@@ -76,7 +76,7 @@ class TermsHandler
         $terms = is_array($terms) || $terms instanceof Collection ? $terms : [$terms];
 
         foreach ($terms as $term) {
-            $this->repo->update($term, ['is_activate' => false, 'order' => 999]);
+            $this->repo->update($term, ['is_enabled' => false, 'order' => 999]);
         }
     }
 
