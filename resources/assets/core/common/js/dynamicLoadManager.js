@@ -148,4 +148,4 @@ var DynamicLoadManager = (function (exports) {
   }.init();
 })(window);
 
-//# sourceURL=dynamicLoadManager.js
+export default DynamicLoadManager

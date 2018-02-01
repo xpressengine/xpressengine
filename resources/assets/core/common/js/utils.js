@@ -1,7 +1,9 @@
 /**
  * @namespace Utils
  * @global
- * */
+ * @FIXME
+ * @DEPRECATED
+ **/
 var Utils = (function (exports) {
 
   /** @private */
@@ -74,6 +76,8 @@ var Utils = (function (exports) {
      * @return {number}
      * */
     sizeFormatToBytes: function (str) {
+      var bytes = 0;
+
       if (str.indexOf('GB') != -1) {
         bytes = parseFloat(str) * 1024 * 1024 * 1024;
       } else if (str.indexOf('MB') != -1) {
@@ -513,3 +517,5 @@ var Utils = (function (exports) {
 
   }.init();
 })(window);
+
+export default Utils
