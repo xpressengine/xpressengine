@@ -4,8 +4,8 @@ var webpackMerge = require('webpack-merge')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 var $ = require('gulp-load-plugins')()
 
-var prodConfig = require('./webpack.prod.config');
-var devConfig = require('./webpack.dev.config');
+var prodConfig = require('./webpack.prod.config')
+var devConfig = require('./webpack.dev.config')
 
 var pathInfo = {
   vendor: path.join(__dirname, '/assets/vendor'),
@@ -17,10 +17,10 @@ var pathInfo = {
   permission: path.join(__dirname, '/resources/assets/core/permission'),
   menu: path.join(__dirname, '/resources/assets/core/menu'),
   lang: path.join(__dirname, '/resources/assets/core/lang'),
-  comp: path.join(__dirname, '/resources/assets/core/xe-ui-component'),
-};
+  comp: path.join(__dirname, '/resources/assets/core/xe-ui-component')
+}
 
-var target = (process.env.npm_lifecycle_event === 'build')? true : !!$.util.env.production;
+var target = (process.env.npm_lifecycle_event === 'build') ? true : !!$.util.env.production
 
 var common = {
   entry: {
@@ -29,11 +29,11 @@ var common = {
       pathInfo.common + '/js/xe.lang.js',
       pathInfo.common + '/js/xe.progress.js',
       pathInfo.common + '/js/xe.request.js',
-      pathInfo.common + '/js/xe.component.js',
+      pathInfo.common + '/js/xe.component.js'
     ],
 
     'assets/core/permission/permission.bundle': [
-      pathInfo.permission + '/permission.js',
+      pathInfo.permission + '/permission.js'
     ],
 
     'assets/core/lang/langEditorBox.bundle': pathInfo.lang + '/LangEditorBox.js',
@@ -63,7 +63,7 @@ var common = {
   },
   output: {
     path: path.resolve(__dirname, './'),
-    filename: '[name].js',
+    filename: '[name].js'
   },
   plugins: [
     new CopyWebpackPlugin([
@@ -89,7 +89,6 @@ var common = {
           'lang/LangEditorBox.js',
           'permission/*.js',
           'settings/js/admin.js',
-          // 'xe-ui-component/js/*.js',
           'member/settings/edit.js',
           'tree/*.js'
         ]
@@ -159,19 +158,19 @@ var common = {
       'jqueryui-sortable': pathInfo.vendor + '/jqueryui/jquery-ui.sortable.js', // @FIXME
       'jqueryui-nestedsortable': pathInfo.vendor + '/nestedSortable/jquery.mjs.nestedSortable.js' // @FIXME
     },
-    extensions: ['.js', '.jsx'],
+    extensions: ['.js', '.jsx']
   },
   externals: {
-    window: 'window',
-  },
-};
-
-var config;
-
-if (target) {
-  config = webpackMerge(common, prodConfig);
-} else {
-  config = webpackMerge(common, devConfig);
+    window: 'window'
+  }
 }
 
-module.exports = config;
+var config
+
+if (target) {
+  config = webpackMerge(common, prodConfig)
+} else {
+  config = webpackMerge(common, devConfig)
+}
+
+module.exports = config
