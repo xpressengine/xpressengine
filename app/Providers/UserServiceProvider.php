@@ -17,9 +17,9 @@ namespace App\Providers;
 use App\ToggleMenus\User\ManageItem;
 use App\ToggleMenus\User\ProfileItem;
 use Closure;
-use Illuminate\Auth\Passwords\DatabaseTokenRepository;
-use Illuminate\Auth\Passwords\PasswordBroker;
+use Event;
 use Illuminate\Contracts\Validation\Factory as Validator;
+use Illuminate\Mail\Events\MessageSending;
 use Illuminate\Support\ServiceProvider;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Xpressengine\Media\MediaManager;
@@ -27,7 +27,6 @@ use Xpressengine\Media\Thumbnailer;
 use Xpressengine\Storage\Storage;
 use Xpressengine\User\EmailBroker;
 use Xpressengine\User\Guard;
-use Xpressengine\User\GuardInterface;
 use Xpressengine\User\Middleware\Admin;
 use Xpressengine\User\Models\Guest;
 use Xpressengine\User\Models\PendingEmail;
@@ -109,6 +108,13 @@ class UserServiceProvider extends ServiceProvider
 
         // add RegisterGuard and RegiserForm
         $this->addRegisterGuardAndForm();
+
+        Event::listen(MessageSending::class, function ($event) {
+            $config = $this->app['xe.config']->get('user.common');
+            if (!empty($config->get('webmasterEmail'))) {
+                $event->message->setFrom($config->get('webmasterEmail'), $config->get('webmasterName'));
+            }
+        });
     }
 
     /**
