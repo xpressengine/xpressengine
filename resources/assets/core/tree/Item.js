@@ -92,3 +92,5 @@ var Item = (function () {
     },
   }.init();
 })();
+
+export default Item
