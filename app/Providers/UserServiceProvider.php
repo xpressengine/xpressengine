@@ -109,6 +109,13 @@ class UserServiceProvider extends ServiceProvider
 
         // add RegisterGuard and RegiserForm
         $this->addRegisterGuardAndForm();
+
+        $this->app->resolving('mailer', function ($mailer) {
+            $config = $this->app['xe.config']->get('user.common');
+            if (!empty($config->get('webmasterEmail'))) {
+                $mailer->alwaysFrom($config->get('webmasterEmail'), $config->get('webmasterName'));
+            }
+        });
     }
 
     /**
