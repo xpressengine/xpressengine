@@ -196,7 +196,7 @@ class XeInstall extends Command
         $this->stepRequirement();
 
         // set db information
-        $this->info('[Setup Database(MySQL)]');
+        $this->info('[Setup Database]');
         $this->stepDB();
 
         // set site information
