@@ -1,13 +1,12 @@
-var path = require('path')
-var webpack = require('webpack')
-var webpackMerge = require('webpack-merge')
+const path = require('path')
+const webpack = require('webpack')
+const webpackMerge = require('webpack-merge')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-var $ = require('gulp-load-plugins')()
 
-var prodConfig = require('./webpack.prod.config')
-var devConfig = require('./webpack.dev.config')
+const prodConfig = require('./webpack.prod.config')
+const devConfig = require('./webpack.dev.config')
 
-var pathInfo = {
+const pathInfo = {
   vendor: path.join(__dirname, '/assets/vendor'),
   node: path.join(__dirname, '/node_modules'),
   core: path.join(__dirname, '/resources/assets/core'),
@@ -20,9 +19,7 @@ var pathInfo = {
   comp: path.join(__dirname, '/resources/assets/core/xe-ui-component')
 }
 
-var target = (process.env.npm_lifecycle_event === 'build') ? true : !!$.util.env.production
-
-var common = {
+const common = {
   entry: {
     'assets/core/common/js/xe.bundle': [
       pathInfo.common + '/js/xe.js',
@@ -104,7 +101,6 @@ var common = {
           loader: 'babel-loader',
           options: {
             cacheDirectory: true,
-            presets: ['es2015']
           }
         }
       },
@@ -167,7 +163,7 @@ var common = {
 
 var config
 
-if (target) {
+if (process.env) {
   config = webpackMerge(common, prodConfig)
 } else {
   config = webpackMerge(common, devConfig)
