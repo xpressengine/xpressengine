@@ -7,8 +7,6 @@ use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Xpressengine\Editor\EditorHandler;
 use Xpressengine\Http\Request;
-use Xpressengine\Media\Models\Image;
-use Xpressengine\Media\Models\Media;
 use Xpressengine\Permission\Instance;
 use Xpressengine\Permission\PermissionSupport;
 use Xpressengine\Presenter\RendererInterface;
@@ -141,13 +139,14 @@ class EditorController extends Controller
             throw new InvalidArgumentException;
         }
 
-        $config = XeEditor::get($instanceId)->getConfig();
+        $editor = XeEditor::get($instanceId);
+        $config = $editor->getConfig();
 
         if (!$config->get('uploadActive') || Gate::denies('upload', new Instance(XeEditor::getPermKey($instanceId)))) {
             throw new AccessDeniedHttpException;
         }
 
-        if ($config->get('fileMaxSize') * 1024 * 1024 < $uploadedFile->getSize()) {
+        if ($config->get('fileMaxSize') * 1024 * 1024 < $uploadedFile->getSize() && !$editor->isPrivileged()) {
             throw new HttpException(
                 Response::HTTP_REQUEST_ENTITY_TOO_LARGE,
                 xe_trans('xe::msgMaxFileSize', [
