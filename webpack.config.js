@@ -90,7 +90,8 @@ const common = {
           'tree/*.js'
         ]
       }
-    ])
+    ]),
+    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /ko/)
   ],
   module: {
     rules: [
@@ -100,7 +101,7 @@ const common = {
         use: {
           loader: 'babel-loader',
           options: {
-            cacheDirectory: true,
+            cacheDirectory: true
           }
         }
       },
