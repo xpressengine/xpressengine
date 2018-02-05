@@ -138,6 +138,13 @@ abstract class AbstractEditor implements ComponentInterface
     protected static $imageResolver;
 
     /**
+     * The privileged determiner
+     *
+     * @var callable
+     */
+    protected static $privilegedDeterminer;
+
+    /**
      * Default editor arguments
      *
      * @var array
@@ -421,6 +428,11 @@ abstract class AbstractEditor implements ComponentInterface
         $data['stylesheet'] = $this->config->get('stylesheet') ? asset($this->config->get('stylesheet')) : null;
 
         $data['files'] = $this->files;
+
+        if ($this->isPrivileged()) {
+            $data['fileMaxSize'] = 999;
+            $data['attachMaxSize'] = 999;
+        }
 
         return $data;
     }
@@ -745,6 +757,27 @@ abstract class AbstractEditor implements ComponentInterface
         $ids = !is_array($ids) ? [$ids] : $ids;
 
         return call_user_func(static::$imageResolver, $ids);
+    }
+
+    /**
+     * Set the privileged determiner
+     *
+     * @param callable $determiner determiner
+     * @return void
+     */
+    public static function setPrivilegedDeterminer(callable $determiner)
+    {
+        static::$privilegedDeterminer = $determiner;
+    }
+
+    /**
+     * Determine if privileged
+     *
+     * @return bool
+     */
+    public function isPrivileged()
+    {
+        return !!call_user_func(static::$privilegedDeterminer, $this);
     }
 
     /**

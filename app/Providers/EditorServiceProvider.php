@@ -36,6 +36,9 @@ class EditorServiceProvider extends ServiceProvider
 
             return $images;
         });
+        AbstractEditor::setPrivilegedDeterminer(function () {
+            return $this->app['auth']->user()->isManager();
+        });
 
         $this->app['events']->listen('xe.editor.option.building', function ($editor) {
             $key = $this->app['xe.editor']->getPermKey($editor->getInstanceId());
