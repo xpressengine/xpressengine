@@ -1,3 +1,9 @@
+// @FIXME
+// @DEPRECATED
+require('jqueryui-sortable');
+require('jqueryui-nestedsortable');
+import Item from './item';
+
 /**
  * @namespace Tree
  * */
@@ -214,3 +220,7 @@ var Tree = (function () {
     },
   }.init();
 })();
+
+window.Tree = Tree;
+// window.Item = Item;
+export default Tree;

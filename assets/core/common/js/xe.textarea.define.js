@@ -81,42 +81,15 @@ XEeditor.define(/** @lends XEtextarea */{
       }
 
       $editor.parents('form').on('submit', function () {
-        var $contentsTarget = $($editor.val()).clone().wrap('<div>').parent();
-        var tagClass = options.names.tag.class;
-        var tagInput = options.names.tag.input;
-        var $hashTags = $contentsTarget.find('.' + tagClass);
-        var tagLen = $hashTags.length;
-        var mentionClass = options.names.mention.class;
-        var mentionInput = options.names.mention.input;
-        var $mentions = $contentsTarget.find('.' + mentionClass);
-        var mentionIdentifier = options.names.mention.identifier;
-        var mentionLen = $mentions.length;
+        var contents = $editor.val()
         var fileInput = options.names.file.input;
         var files = options.files;
         var $paramWrap = $();
 
-        //tag, mention, files input삭제 후 생성
+        // files input삭제 후 생성
         $editor.nextAll('.paramWrap').remove();
         $editor.after("<div class='paramWrap'>");
         $paramWrap = $editor.nextAll('.paramWrap');
-
-        //hashtag
-        if (tagLen > 0) {
-          $hashTags.each(function () {
-            var val = $(this).text().replace(/#(.+)/g, '$1');
-
-            $paramWrap.append("<input type='hidden' name='" + tagInput + "[]' value='" + val + "' />");
-          });
-        }
-
-        //mention
-        if (mentionLen > 0) {
-          $mentions.each(function () {
-            var val = $(this).attr(mentionIdentifier);
-
-            $paramWrap.append("<input type='hidden' name='" + mentionInput + "[]' value='" + val + "' />");
-          });
-        }
 
         //files
         if (files.length > 0) {
@@ -127,7 +100,6 @@ XEeditor.define(/** @lends XEtextarea */{
           }
         }
       });
-
     },
 
     getContents: function () {

@@ -1,8 +1,9 @@
-import moment from 'moment';
+import 'moment';
 import 'xe-transition';
 import 'xe-modal';
 import 'xe-dropdown';
 import 'xe-tooltip';
+import DynamicLoadManager from 'xe-dynamicLoadManager'
 
 /**
  * @module Component

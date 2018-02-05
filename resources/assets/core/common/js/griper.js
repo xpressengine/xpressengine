@@ -1,3 +1,6 @@
+import DynamicLoadManager from 'xe-dynamicLoadManager';
+import $ from 'jquery'
+
 (function (root, factory) {
 if (typeof define === 'function' && define.amd) {
   define(['exports'], factory);
@@ -8,12 +11,7 @@ if (typeof define === 'function' && define.amd) {
   factory({});
 }
 }(this, function (exports) {
-
   'use strict';
-  /**
-   * @module griper
-   * */
-  var $ = jQuery = window.jQuery;
 
   DynamicLoadManager.cssLoad('/assets/core/common/css/griper.css');
 

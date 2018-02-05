@@ -624,3 +624,5 @@ var Translator = (function (document, undefined) {
     },
   };
 })(document, undefined);
+
+export default Translator

@@ -14,5 +14,8 @@ indent_size = 4
 [*.{css,scss,sass,less,js,jsx,json,yml}]
 indent_size = 2
 
+[.{babelrc}]
+indent_size = 2
+
 [*.md]
 trim_trailing_whitespace = false
