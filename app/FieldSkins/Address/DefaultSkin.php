@@ -53,7 +53,7 @@ class DefaultSkin extends AbstractSkin
     protected function appendScript()
     {
         XeFrontend::html('dynamicField.address')->content('
-            <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+            <script src="https://ssl.daumcdn.net/dmaps/map_js_init/postcode.v2.js"></script>
     <script>
         function foldDaumPostcode(fieldId) {
             $(\'#\'+fieldId+\'-daumPostcodeWrap\').hide();
