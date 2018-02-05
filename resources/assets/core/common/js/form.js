@@ -1,3 +1,4 @@
+// @FIXME ui-component로 이동
 // xe radio button
 (function ($) {
 $('.__xe_radio')

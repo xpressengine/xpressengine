@@ -1,25 +1,5 @@
-// (function (root, factory) {
-// if (typeof define === 'function' && define.amd) {
-//   // AMD
-//   define([
-//    'exports',
-//    'github:twbs/bootstrap-sass@3.3.6/assets/javascripts/bootstrap.js',
-//   ], function (exports) {
-//     factory(exports, jQuery);
-//   });
-// } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
-//   // CommonJS
-//   factory(exports, require('github:twbs/bootstrap-sass@3.3.6/assets/javascripts/bootstrap.js'));
-// } else {
-//   // Browser globals
-//   factory({});
-// }
-// }(this, function (exports) {
-//
-//
-// }));
-
 import 'bootstrap';
+import $ from 'jquery';
 
 $(document).ready(function () {
   var $sidebar = $('.settings-nav-sidebar');

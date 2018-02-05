@@ -1,3 +1,4 @@
+import Utils from 'xe-utils'
 /**
  * @namespace DynamicLoadManager
  * */
@@ -10,7 +11,8 @@ var DynamicLoadManager = (function (exports) {
     js: {}, css: {},
   };
 
-  _assets.js[xeBaseURL + '/assets/bundle.js'] = '';
+  _assets.js[xeBaseURL + '/assets/vendor.js'] = '';
+  _assets.js[xeBaseURL + '/assets/common.js'] = '';
   _assets.js[xeBaseURL + '/assets/core/common/js/xe.bundle.js'] = '';
 
   return {

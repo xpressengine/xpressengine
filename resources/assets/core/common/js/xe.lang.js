@@ -1,3 +1,5 @@
+import Translator from 'xe-translator'
+
 /**
  * Lang module
  * @module Lang

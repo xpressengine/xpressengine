@@ -2,6 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 const webpackMerge = require('webpack-merge')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const prodConfig = require('./webpack.prod.config')
 const devConfig = require('./webpack.dev.config')
@@ -21,7 +22,9 @@ const pathInfo = {
 
 const common = {
   entry: {
-    'assets/core/common/js/xe.bundle': [
+    'vendor': './resources/assets/vendor.js',
+    'common': './resources/assets/common.js',
+    'core/common/js/xe.bundle': [
       pathInfo.common + '/js/xe.js',
       pathInfo.common + '/js/xe.lang.js',
       pathInfo.common + '/js/xe.progress.js',
@@ -29,48 +32,44 @@ const common = {
       pathInfo.common + '/js/xe.component.js'
     ],
 
-    'assets/core/permission/permission.bundle': [
+    'core/permission/permission.bundle': [
       pathInfo.permission + '/permission.js'
     ],
 
-    'assets/core/lang/langEditorBox.bundle': pathInfo.lang + '/LangEditorBox.js',
-    'assets/core/common/js/dynamicField': pathInfo.common + '/js/dynamicField',
-    'assets/core/common/js/storeCategory': pathInfo.common + '/js/storeCategory.js',
-    'assets/core/member/settings/edit': pathInfo.member + '/settings/edit.js',
-    'assets/core/settings/js/admin.bundle': pathInfo.settings + '/js/admin.js',
-
-    // gulp assets:chunk
-    // @FIXME
-    // @DEPRECATED
-    'assets/bundle': path.join(__dirname, '/resources/assets') + '/bundle.js',
+    'core/lang/langEditorBox.bundle': pathInfo.lang + '/LangEditorBox.js',
+    'core/common/js/dynamicField': pathInfo.common + '/js/dynamicField',
+    'core/common/js/storeCategory': pathInfo.common + '/js/storeCategory.js',
+    'core/member/settings/edit': pathInfo.member + '/settings/edit.js',
+    'core/settings/js/admin.bundle': pathInfo.settings + '/js/admin.js',
 
     // gulp assets:tree
     // @FIXME
     // @DEPRECATED
-    'assets/core/common/js/xe.tree': pathInfo.core + '/tree/Tree.js',
+    'core/common/js/xe.tree': pathInfo.core + '/tree/Tree.js',
 
     // gulp assets:draft
     // @FIXME
     // @DEPRECATED
     // 현재 사용 안 됨 https://github.com/xpressengine/plugin-board/commit/7b2ae1a6
-    'assets/core/common/js/draft.bundle': [
+    'core/common/js/draft.bundle': [
       pathInfo.vendor + '/bootstrap/js/collapse.js',
       pathInfo.common + '/js/draft.js'
     ]
   },
   output: {
-    path: path.resolve(__dirname, './'),
-    filename: '[name].js'
+    path: path.resolve(__dirname, '.'),
+    filename: 'assets/[name].js'
   },
   plugins: [
     new CopyWebpackPlugin([
       {
-        context: './resources/assets/core',
+        context: path.resolve(__dirname, 'resources/assets/core'),
         from: '**/*',
-        to: './assets/core',
+        to: path.resolve(__dirname, 'assets/core'),
         ignore: [
           '**/*.scss',
           '**/img/*',
+          'common/js/draft.js',
           'common/js/dynamicField.js',
           'common/js/dynamicLoadManager.js',
           'common/js/griper.js',
@@ -78,25 +77,31 @@ const common = {
           'common/js/translator.js',
           'common/js/utils.js',
           'common/js/validator.js',
-          'common/js/xe.js',
           'common/js/xe.component.js',
+          'common/js/xe.js',
           'common/js/xe.lang.js',
           'common/js/xe.progress.js',
           'common/js/xe.request.js',
           'lang/LangEditorBox.js',
+          'member/settings/edit.js',
           'permission/*.js',
           'settings/js/admin.js',
-          'member/settings/edit.js',
           'tree/*.js'
         ]
       }
     ]),
-    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /ko/)
+    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /ko/),
+    new webpack.optimize.CommonsChunkPlugin({
+      names: ['common', 'vendor']
+    }),
+    new ExtractTextPlugin({
+      filename:  '[name].css'
+    })
   ],
   module: {
     rules: [
       {
-        test: /(\.js|\.jsx)$/,
+        test: /(\.js)$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -106,19 +111,18 @@ const common = {
         }
       },
       {
-        test: /\.scss$/,
-        use: [{
-          loader: 'style-loader' // creates style nodes from JS strings
-        },
-        {
-          loader: 'css-loader' // translates CSS into CommonJS
-        },
-        {
-          loader: 'sass-loader', // compiles Sass to CSS
-          options: {
-            includePaths: ['./resources/assets/core/**/*', './assets/core']
+        test: /\.css$/,
+        loaders: [
+          {
+            loader: "file-loader",
+          },
+          {
+            loader: "extract-loader",
+          },
+          {
+            loader: "css-loader",
           }
-        }]
+        ]
       },
       {
         test: require.resolve('jquery'),
@@ -148,14 +152,13 @@ const common = {
       'xe-modal': pathInfo.comp + '/js/xe-modal.js',
       'xe-tooltip': pathInfo.comp + '/js/xe-tooltip.js',
 
-      // 'vendor': pathInfo.vendor + '/vendor.bundle.js',
       'xe-dynamicLoadManager': pathInfo.common + '/js/dynamicLoadManager.js', // @FIXME
       'xe-utils': pathInfo.common + '/js/utils.js', // @FIXME
       'xe-translator': pathInfo.common + '/js/translator.js', // @FIXME
       'jqueryui-sortable': pathInfo.vendor + '/jqueryui/jquery-ui.sortable.js', // @FIXME
       'jqueryui-nestedsortable': pathInfo.vendor + '/nestedSortable/jquery.mjs.nestedSortable.js' // @FIXME
     },
-    extensions: ['.js', '.jsx']
+    extensions: ['.js']
   },
   externals: {
     window: 'window'

@@ -4,12 +4,23 @@ import runSequence from 'run-sequence'
 import events from 'events'
 import stream from 'merge-stream'
 import jsdoc from 'gulp-jsdoc3'
+import gulpSass from 'gulp-sass'
 
 events.EventEmitter.defaultMaxListeners = Infinity
 
 const $ = plugins()
 
 gulp.task('default', (callback) => {})
+
+gulp.task('assets', ['assets-sass'])
+
+gulp.task('assets-sass', () => {
+  return gulp.src('./resources/assets/core/**/*.scss')
+    .pipe(gulpSass({
+      outputStyle: 'compressed'
+    }))
+    .pipe(gulp.dest('./assets/core'))
+})
 
 gulp.task('jsdoc', () => {
   var merged = stream(

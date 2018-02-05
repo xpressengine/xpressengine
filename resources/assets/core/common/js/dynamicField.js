@@ -1,3 +1,4 @@
+import $ from 'jquery'
 
 /**
  * @class
@@ -247,7 +248,7 @@ var DynamicField = function () {
    * @param {jQuery} o
    * */
   this.destroy = function (o) {
-    if (confirm('이동작은 되돌릴 수 없습니다. 계속하시겠습니까?') === false) {
+    if (confirm('이동작은 되돌릴 수 없습니다. 계속하시겠습니까?') === false) { // @FIXME
       return;
     }
 
@@ -391,6 +392,7 @@ var DynamicField = function () {
 
 export default DynamicField;
 
+// @FIXME
 var instance = new DynamicField();
 instance.init(dynamicFieldData.group, dynamicFieldData.databaseName, dynamicFieldData.routes);
 instance.getList();
