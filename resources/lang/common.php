@@ -2258,4 +2258,16 @@ return [
         'ko' => '부모 설정 페이지로 이동',
         'en' => 'Move to parent setting page',
     ],
+    'allMemberCount' => [
+        'ko' => '전체 회원 수',
+        'en' => 'Number of members',
+    ],
+    'searchMemberCount' => [
+        'ko' => '검색된 회원 수',
+        'en' => 'Number of members found',
+    ],
+    'allRating' => [
+        'ko' => '전체 등급',
+        'en' => 'All Rating',
+    ],
 ];

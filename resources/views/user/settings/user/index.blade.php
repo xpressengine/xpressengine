@@ -7,6 +7,7 @@
                 <div class="panel-heading">
                     <div class="pull-left">
                         <h3 class="panel-title">{{xe_trans('xe::memberList')}}</h3>
+                        ( {{xe_trans('xe::searchMemberCount')}} : {{  $users->total() }} / {{xe_trans('xe::allMemberCount')}} : {{ $allMemberCount }} )
                     </div>
                     <div class="pull-right">
                         <a href="{{ route('settings.user.create') }}" class="btn btn-primary"><i class="xi-plus"></i><span>{{xe_trans('xe::addNewMember')}}</span></a>
@@ -30,6 +31,12 @@
                                 <li @if(!Request::get('group'))class="active"@endif><a href="{{ route('settings.user.index', Request::except(['group'])) }}"><span>{{xe_trans('xe::allGroup')}}</span></a></li>
                                 @foreach($groups as $key => $group)
                                 <li @if(Request::get('group') === $group->id)class="active"@endif><a href="{{ route('settings.user.index', array_merge( Request::all(), ['group'=> $group->id] )) }}">{{ $group->name }}</a></li>
+                                @endforeach
+
+                                <li><strong>{{xe_trans('xe::memberRating')}}</strong></li>
+                                <li @if(!Request::get('rating'))class="active"@endif><a href="{{ route('settings.user.index', Request::except(['rating'])) }}"><span>{{xe_trans('xe::allRating')}}</span></a></li>
+                                @foreach($ratings as $rating)
+                                    <li @if(Request::get('rating') === $rating['value'])class="active"@endif><a href="{{route('settings.user.index', array_merge(Request::all(), ['rating' => $rating['value']]))}}">{{$rating['text']}}</a></li>
                                 @endforeach
                             </ul>
                         </div>
