@@ -1,4 +1,5 @@
 import Translator from 'xe-translator'
+import $ from 'jquery'
 
 /**
  * Lang module

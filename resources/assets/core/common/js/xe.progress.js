@@ -1,6 +1,8 @@
+import DynamicLoadManager from 'xe-dynamicLoadManager'
+
 /**
  * @module Progress
- * */
+ **/
 
 /** @private */
 var instances = []
@@ -12,7 +14,7 @@ var Progress = {
    * css를 로드한다.
    * @memberof module:Progress
    * @deprecated
-   * */
+   **/
   cssLoad: function () {
     if (cssLoaded === false) {
       cssLoaded = true
@@ -23,7 +25,7 @@ var Progress = {
    * progress를 그린다.
    * @memberof module:Progress
    * @param {Element} context
-   * */
+   **/
   start: function (context) {
     if ($('link[href*="assets/core/common/css/progress.css"]').length == 0) {
       DynamicLoadManager.cssLoad('/assets/core/common/css/progress.css') // @TODO
@@ -42,7 +44,7 @@ var Progress = {
    * progress를 종료한다.
    * @memberof module:Progress
    * @param {Element} context
-   * */
+   **/
   done: function (context) {
     var $context = $(context)
     if ($context.context === undefined) {
@@ -151,7 +153,7 @@ function attachInstance ($context) {
  *
  * NProgress 모듈을 instance 화 할 수 있도록 하기위해 수정함
  * @private
- * */
+ **/
 function XeProgress () {
   this.settings = {
     type: 'default', // defautl, cover, nospin
@@ -468,7 +470,7 @@ function next () {
  * callback을 queue에 담는다.
  * @memberof module:Progress
  * @param {function} fn
- * */
+ **/
 Progress.queue = function (fn) {
   pending.push(fn)
   if (pending.length == 1) next()
@@ -522,7 +524,7 @@ function applyCss (element, prop, value) {
  * @memberof module:Progress
  * @param {Element} element
  * @param {object} properties
- * */
+ **/
 Progress.css = function () {
   return function (element, properties) {
     var args = arguments
