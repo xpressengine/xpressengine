@@ -1,11 +1,11 @@
-import window from 'window';
-import griper from './griper';
-import Progress from './xe.progress';
-import Lang from './xe.lang';
-import Component from './xe.component';
-import Request from './xe.request';
-import validator from 'validator';
-import Util from 'xe-utils';
+import window from 'window'
+import griper from './griper'
+import Progress from './xe.progress'
+import Lang from './xe.lang'
+import Component from './xe.component'
+import Request from './xe.request'
+import validator from 'validator'
+import Util from 'xe-utils'
 import DynamicLoadManager from 'xe-dynamicLoadManager'
 import Translator from 'xe-translator'
 import $ from 'jquery'
@@ -52,8 +52,7 @@ var XE = {
    * @borrows Component as Component
    **/
   Component: Component
-};
-
+}
 
 /**
  * Ajax를 요청한다.
@@ -61,16 +60,16 @@ var XE = {
  * @param {string|object} url request url
  * @param {object} options jQuery ajax options
  **/
-function ajax(url, options) {
+function ajax (url, options) {
   if (typeof url === 'object') {
-    options = $.extend({}, XE.Request.options, url);
-    url = undefined;
+    options = $.extend({}, XE.Request.options, url)
+    url = undefined
   } else {
-    options = $.extend({}, options, XE.Request.options, { url: url });
-    url = undefined;
+    options = $.extend({}, options, XE.Request.options, { url: url })
+    url = undefined
   }
 
-  return $.ajax(url, options);
+  return $.ajax(url, options)
 }
 
 /**
@@ -83,15 +82,14 @@ function ajax(url, options) {
  *   - useXESpinner : ajax요청시 UI상에 spinner 사용여부
  * </pre>
  **/
-function setup(options) {
-  XE.options.loginUserId = options.loginUserId;
+function setup (options) {
+  XE.options.loginUserId = options.loginUserId
   XE.Request.setup({
     headers: {
-      'X-CSRF-TOKEN': options['X-CSRF-TOKEN'],
+      'X-CSRF-TOKEN': options['X-CSRF-TOKEN']
     },
-    useXeSpinner: (options.useXeSpinner) ? true : false,
-  });
-
+    useXeSpinner: !!(options.useXeSpinner)
+  })
 }
 
 /**
@@ -104,8 +102,8 @@ function setup(options) {
  *  - managePrefix
  * </pre>
  **/
-function configure(options) {
-  $.extend(XE.options, options);
+function configure (options) {
+  $.extend(XE.options, options)
 }
 
 /**
@@ -113,8 +111,8 @@ function configure(options) {
  * @memberof XE
  * @param {url} url css file path
  **/
-function cssLoad(url) {
-  DynamicLoadManager.cssLoad(url);
+function cssLoad (url) {
+  DynamicLoadManager.cssLoad(url)
 }
 
 /**
@@ -122,8 +120,8 @@ function cssLoad(url) {
  * @memberof XE
  * @param {string} url js file path
  **/
-function jsLoad(url) {
-  DynamicLoadManager.jsLoad(url);
+function jsLoad (url) {
+  DynamicLoadManager.jsLoad(url)
 }
 
 /**
@@ -150,12 +148,12 @@ function jsLoad(url) {
  *   - bottomRight
  * </pre>
  **/
-function toast(type, message, pos) {
+function toast (type, message, pos) {
   if (type == '') {
-    type = 'danger';
+    type = 'danger'
   }
 
-  griper.toast(type, message, pos);
+  griper.toast(type, message, pos)
 }
 
 /**
@@ -168,8 +166,8 @@ function toast(type, message, pos) {
  * </pre>
  * @param {string} 팝업에 출력될 메시지
  **/
-function toastByStatus(status, message) {
-  return griper.toast(griper.toast.fn.statusToType(status), message);
+function toastByStatus (status, message) {
+  return griper.toast(griper.toast.fn.statusToType(status), message)
 }
 
 /**
@@ -178,8 +176,8 @@ function toastByStatus(status, message) {
  * @param {object} form element object
  * @param {string} message 엘리먼트에 출력될 메시지
  **/
-function formError($element, message) {
-  return griper.form($element, message);
+function formError ($element, message) {
+  return griper.form($element, message)
 }
 
 /**
@@ -187,8 +185,8 @@ function formError($element, message) {
  * @memberof XE
  * @param {object} jquery form object
  **/
-function formErrorClear($form) {
-  return griper.form.fn.clear($form);
+function formErrorClear ($form) {
+  return griper.form.fn.clear($form)
 }
 
 /**
@@ -196,8 +194,8 @@ function formErrorClear($form) {
  * @memberof XE
  * @param {object} jquery form object
  **/
-function formValidate($form) {
-  validator.formValidate($form);
+function formValidate ($form) {
+  validator.formValidate($form)
 }
 
 /**
@@ -205,8 +203,8 @@ function formValidate($form) {
  * @memberof XE
  * @return {string} locale
  **/
-function getLocale() {
-  return XE.options.locale;
+function getLocale () {
+  return XE.options.locale
 }
 
 /**
@@ -214,8 +212,8 @@ function getLocale() {
  * @memberof XE
  * @return {string} defaultLocale
  **/
-function getDefaultLocale() {
-  return XE.options.defaultLocale;
+function getDefaultLocale () {
+  return XE.options.defaultLocale
 }
 
-window.XE = XE;
+window.XE = XE

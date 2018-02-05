@@ -1,17 +1,17 @@
 // @FIXME
 // @DEPRECATED
-require('jqueryui-sortable');
-require('jqueryui-nestedsortable');
-import Item from './item';
+require('jqueryui-sortable')
+require('jqueryui-nestedsortable')
+import Item from './item'
 
 /**
  * @namespace Tree
  * */
 var Tree = (function () {
   /** @private */
-  var _this;
+  var _this
   /** @private */
-  var _prevent = false;
+  var _prevent = false
 
   return {
     /**
@@ -19,9 +19,9 @@ var Tree = (function () {
      * @memberof Tree
      * */
     init: function () {
-      _this = this;
+      _this = this
 
-      return this;
+      return this
     },
 
     /**
@@ -36,7 +36,7 @@ var Tree = (function () {
      * @return {string} items html
      */
     getItemsTemplate: function (obj) {
-      return Item.getTemplate(obj);
+      return Item.getTemplate(obj)
     },
 
     /**
@@ -45,7 +45,7 @@ var Tree = (function () {
      * @description Tree 이동 방지
      * */
     setPrevent: function (flag) {
-      _prevent = flag;
+      _prevent = flag
     },
 
     /**
@@ -62,9 +62,9 @@ var Tree = (function () {
      * @description 트리 구성
      * */
     run: function ($target, config, treeOptions) {
-      var parentId;
-      var ordering;
-      var itemId;
+      var parentId
+      var ordering
+      var itemId
 
       var defaultOptions = {
         connectWith: '.item-container',
@@ -77,44 +77,44 @@ var Tree = (function () {
         isTree: true,
         cancel: '',
         tolerance: 'pointer',
-        toleranceElement: '> div',
-      };
-
-      //custom option 추가
-      if (_this.isObject(treeOptions)) {
-        defaultOptions = $.extend({}, defaultOptions, treeOptions);
+        toleranceElement: '> div'
       }
 
-      //start function 추가
+      // custom option 추가
+      if (_this.isObject(treeOptions)) {
+        defaultOptions = $.extend({}, defaultOptions, treeOptions)
+      }
+
+      // start function 추가
       if (_this.isObject(treeOptions) && _this.isFunction(treeOptions.start)) {
-        defaultOptions.start = treeOptions.start;
+        defaultOptions.start = treeOptions.start
       } else {
         defaultOptions.start = function (e, ui) {
-          var $item = $(ui.item);
-          var itemData = $item.find('> .item-content').data('item');
+          var $item = $(ui.item)
+          var itemData = $item.find('> .item-content').data('item')
 
-          parentId = itemData.parentId;
-          ordering = itemData.ordering;
-          itemId = itemData.id;
+          parentId = itemData.parentId
+          ordering = itemData.ordering
+          itemId = itemData.id
 
           if (_this.isObject(config) && _this.isFunction(config.dragStart)) {
-            config.dragStart();
+            config.dragStart()
           }
-        };
+        }
       }
 
-      //stop function 추가
+      // stop function 추가
       if (_this.isObject(treeOptions) && _this.isFunction(treeOptions.stop)) {
-        defaultOptions.stop = treeOptions.stop;
+        defaultOptions.stop = treeOptions.stop
       } else {
         defaultOptions.stop = function (e, ui) {
-          var $item = $(ui.item);
-          var $parentItem = $item.parents('li.item').eq(0);
-          var moveParentId = ($parentItem.length > 0) ? $parentItem.find('> .item-content').data('item').id : $item.parents('.item-container').data('parent');
-          var moveOrdering = $item.closest('ul').addClass('item-container').find('> li.item').index($item);
+          var $item = $(ui.item)
+          var $parentItem = $item.parents('li.item').eq(0)
+          var moveParentId = ($parentItem.length > 0) ? $parentItem.find('> .item-content').data('item').id : $item.parents('.item-container').data('parent')
+          var moveOrdering = $item.closest('ul').addClass('item-container').find('> li.item').index($item)
 
           if (_this.isObject(config) && _this.isFunction(config.dragStop)) {
-            config.dragStop();
+            config.dragStop()
           }
 
           if (parentId !== moveParentId && !_prevent || ordering !== moveOrdering && !_prevent) {
@@ -123,62 +123,60 @@ var Tree = (function () {
                 item: $item,
                 itemId: itemId,
                 parentId: moveParentId,
-                ordering: moveOrdering,
-              });
+                ordering: moveOrdering
+              })
             }
           }
-        };
+        }
       }
 
-      //relocate function 추가 default 사용안함.
+      // relocate function 추가 default 사용안함.
       if (_this.isObject(treeOptions) && _this.isFunction(treeOptions.relocate)) {
-        defaultOptions.relocate = treeOptions.relocate;
+        defaultOptions.relocate = treeOptions.relocate
       }
 
-      //receive function 추가 default 사용안함.
+      // receive function 추가 default 사용안함.
       if (_this.isObject(treeOptions) && _this.isFunction(treeOptions.receive)) {
-        defaultOptions.receive = treeOptions.receive;
+        defaultOptions.receive = treeOptions.receive
       }
 
-      //placeholder 추가
+      // placeholder 추가
       if (_this.isObject(treeOptions) && treeOptions.placeholder) {
-        defaultOptions.placeholder = treeOptions.placeholder;
+        defaultOptions.placeholder = treeOptions.placeholder
       } else {
         defaultOptions.placeholder = {
           element: function ($target) {
-            return $target.clone().addClass('copy').show().wrapAll('<div />').parent().html();
+            return $target.clone().addClass('copy').show().wrapAll('<div />').parent().html()
           },
 
           update: function () {
-            return;
-          },
-        };
+
+          }
+        }
       }
 
       if (_this.isObject(treeOptions) && _this.isFunction(treeOptions.isAllowed)) {
-        defaultOptions.isAllowed = treeOptions.isAllowed;
+        defaultOptions.isAllowed = treeOptions.isAllowed
       } else {
         defaultOptions.isAllowed = function (placeholder, placeholderParent, currentItem) {
           if (_prevent) {
-            return false;
+            return false
           } else {
-            return true;
+            return true
           }
-        };
+        }
       }
 
       if ($target.find('.item-container').length > 0) {
-        $target.find('.item-container').nestedSortable(defaultOptions);
-
+        $target.find('.item-container').nestedSortable(defaultOptions)
       } else {
         var container = [
-          '<ul class="item-container"></ul>',
-        ];
+          '<ul class="item-container"></ul>'
+        ]
 
-        $target.append(container);
-        $target.find('.item-container').nestedSortable(defaultOptions);
+        $target.append(container)
+        $target.find('.item-container').nestedSortable(defaultOptions)
       }
-
     },
 
     /**
@@ -193,15 +191,14 @@ var Tree = (function () {
      * @param {function} fn callback
      * */
     add: function ($container, obj, fn) {
-
       if (obj.nested) {
-        $container.append(Item.getTemplate(obj));
+        $container.append(Item.getTemplate(obj))
       } else {
-        $container.append(Item.makeItem(obj.items, obj.nodeTemplate));
+        $container.append(Item.makeItem(obj.items, obj.nodeTemplate))
       }
 
       if (fn && typeof fn === 'function') {
-        fn();
+        fn()
       }
     },
     /**
@@ -209,18 +206,18 @@ var Tree = (function () {
      * @param {object} obj
      * */
     isObject: function (obj) {
-      return (obj && obj instanceof Object) ? true : false;
+      return !!((obj && obj instanceof Object))
     },
     /**
      * @memberof Tree
      * @param {function} fn
      * */
     isFunction: function (fn) {
-      return (typeof fn === 'function') ? true : false;
-    },
-  }.init();
-})();
+      return (typeof fn === 'function')
+    }
+  }.init()
+})()
 
-window.Tree = Tree;
+window.Tree = Tree
 // window.Item = Item;
-export default Tree;
+export default Tree

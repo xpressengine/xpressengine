@@ -1,19 +1,19 @@
-import DynamicLoadManager from 'xe-dynamicLoadManager';
+import DynamicLoadManager from 'xe-dynamicLoadManager'
 import $ from 'jquery'
 
 (function (root, factory) {
-if (typeof define === 'function' && define.amd) {
-  define(['exports'], factory);
-} else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
+  if (typeof define === 'function' && define.amd) {
+    define(['exports'], factory)
+  } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
   // CommonJS
-  factory(exports);
-} else {
-  factory({});
-}
+    factory(exports)
+  } else {
+    factory({})
+  }
 }(this, function (exports) {
-  'use strict';
+  'use strict'
 
-  DynamicLoadManager.cssLoad('/assets/core/common/css/griper.css');
+  DynamicLoadManager.cssLoad('/assets/core/common/css/griper.css')
 
   /**
    * @memberof module:griper
@@ -23,7 +23,7 @@ if (typeof define === 'function' && define.amd) {
   exports.options = {
     toastContainer: {
       template: '<div class="__xe_toast_container xe-toast-container"></div>',
-      boxTemplate: '<div class="toast_box"></div>',
+      boxTemplate: '<div class="toast_box"></div>'
     },
     toast: {
       classSet: {
@@ -33,32 +33,32 @@ if (typeof define === 'function' && define.amd) {
         success: 'xe-success',
         fail: 'xe-fail',
         error: 'xe-danger',
-        info: 'xe-positive',
+        info: 'xe-positive'
       },
       expireTimes: {
         'xe-danger': 0,
         'xe-positive': 5,
         'xe-warning': 10,
         'xe-success': 2,
-        'xe-fail': 5,
+        'xe-fail': 5
       },
       status: { 500: 'xe-danger', 401: 'xe-warning' },
       template: '<div class="alert-dismissable xe-alert" style="display:none;"><button type="button" class="__xe_close xe-btn-alert-close" aria-label="Close"><i class="xi-close"></i></button>' +
-      '<span class="message"></span></div>',
+      '<span class="message"></span></div>'
     },
     form: {
       selectors: {
         elementGroup: '.form-group',
-        errorText: '.__xe_error_text',
+        errorText: '.__xe_error_text'
       },
       classes: {
-        message: ['error-text', '__xe_error_text'],
+        message: ['error-text', '__xe_error_text']
       },
       tags: {
-        message: 'p',
-      },
-    },
-  };
+        message: 'p'
+      }
+    }
+  }
 
   /**
    * @memberof module:griper
@@ -69,80 +69,79 @@ if (typeof define === 'function' && define.amd) {
    * @param {string} pos
    * */
   exports.toast = function (type, message, pos) {
-    var position = '';
+    var position = ''
 
     if (navigator.userAgent.toLowerCase().indexOf('mobile') != -1) {
       if (pos && pos.indexOf('top') != -1) {
-        position = 'top';
+        position = 'top'
       } else {
-        position = 'bottom';
+        position = 'bottom'
       }
     } else {
-      position = pos || 'bottom';
-
+      position = pos || 'bottom'
     }
 
-    scrollToElement(type);
-    this.toast.fn.add(type, message, position);
-  };
+    scrollToElement(type)
+    this.toast.fn.add(type, message, position)
+  }
 
-  var $toastBox = null;
-  var toastBoxMap = {};
+  var $toastBox = null
+  var toastBoxMap = {}
 
   exports.toast.fn = exports.toast.prototype = {
     constructor: exports.toast,
     options: exports.options.toast,
     statusToType: function (status) {
-      var type = this.options.status[status];
-      return type === undefined ? 'danger' : type.split('-')[1];
+      var type = this.options.status[status]
+      return type === undefined ? 'danger' : type.split('-')[1]
     },
 
     add: function (type, message, pos) {
-      exports.toast.fn.create(type, message, pos);
-      return this;
+      exports.toast.fn.create(type, message, pos)
+      return this
     },
 
     create: function (type, message, pos) {
-      var expireTime = 0;
-      var type = this.options.classSet[type] || 'xe-danger';
+      var expireTime = 0
+      var type = this.options.classSet[type] || 'xe-danger'
 
       if (this.options.expireTimes[type] != 0) {
-        expireTime = parseInt(new Date().getTime() / 1000) + this.options.expireTimes[type];
+        expireTime = parseInt(new Date().getTime() / 1000) + this.options.expireTimes[type]
       }
 
-      var $alert = $(this.options.template);
-      $alert.attr('data-expire-time', expireTime).addClass(type).find('.message').remove();
-      $alert.append(message);
+      var $alert = $(this.options.template)
+      $alert.attr('data-expire-time', expireTime).addClass(type).find('.message').remove()
+      $alert.append(message)
 
       if (pos && pos.indexOf('top') != -1) {
-        exports.toast.fn.container(pos).prepend($alert);
+        exports.toast.fn.container(pos).prepend($alert)
       } else {
-        exports.toast.fn.container(pos).append($alert);
+        exports.toast.fn.container(pos).append($alert)
       }
 
-      this.show($alert);
+      this.show($alert)
     },
 
     show: function (alert) {
-      alert.slideDown('slow');
+      alert.slideDown('slow')
     },
 
     destroy: function (alert) {
       alert.slideUp('slow', function () {
-        alert.remove();
-      });
+        alert.remove()
+      })
     },
 
     container: function (pos) {
       if (toastBoxMap.hasOwnProperty(pos)) {
-        return toastBoxMap[pos];
+        return toastBoxMap[pos]
       }
 
-      var cssJSON = {};
-      var direction = 'up';
+      var cssJSON = {}
+      var direction = 'up'
 
       if (!pos) {
-        pos = 'bottom';
+        pos = 'bottom'
       }
 
       switch (pos) {
@@ -150,9 +149,9 @@ if (typeof define === 'function' && define.amd) {
           $.extend(cssJSON, {
             top: 0,
             bottom: 'initial',
-            margin: '0 auto',
-          });
-          break;
+            margin: '0 auto'
+          })
+          break
 
         case 'topLeft':
           $.extend(cssJSON, {
@@ -161,9 +160,9 @@ if (typeof define === 'function' && define.amd) {
             left: 0,
             right: 'initial',
             bottom: 'initial',
-            minWidth: '50%',
-          });
-          break;
+            minWidth: '50%'
+          })
+          break
 
         case 'topRight':
           $.extend(cssJSON, {
@@ -172,9 +171,9 @@ if (typeof define === 'function' && define.amd) {
             right: 0,
             left: 'initial',
             bottom: 'initial',
-            minWidth: '50%',
-          });
-          break;
+            minWidth: '50%'
+          })
+          break
 
         case 'bottom':
           $.extend(cssJSON, {
@@ -182,9 +181,9 @@ if (typeof define === 'function' && define.amd) {
             left: 0,
             right: 0,
             top: 'initial',
-            margin: '0 auto',
-          });
-          break;
+            margin: '0 auto'
+          })
+          break
 
         case 'bottomLeft':
           $.extend(cssJSON, {
@@ -193,9 +192,9 @@ if (typeof define === 'function' && define.amd) {
             left: 0,
             right: 'initial',
             top: 'initial',
-            minWidth: '50%',
-          });
-          break;
+            minWidth: '50%'
+          })
+          break
 
         case 'bottomRight':
           $.extend(cssJSON, {
@@ -204,46 +203,46 @@ if (typeof define === 'function' && define.amd) {
             left: 'initial',
             right: 0,
             top: 'initial',
-            minWidth: '50%',
-          });
-          break;
+            minWidth: '50%'
+          })
+          break
       }
 
-      $toastBox = $(exports.options.toastContainer.boxTemplate);
+      $toastBox = $(exports.options.toastContainer.boxTemplate)
 
-      var container = $(exports.options.toastContainer.template).append($toastBox).css(cssJSON);
+      var container = $(exports.options.toastContainer.template).append($toastBox).css(cssJSON)
 
-      toastBoxMap[pos] = $toastBox;
+      toastBoxMap[pos] = $toastBox
 
-      $('body').append(container);
+      $('body').append(container)
 
       container.on('click', 'button.__xe_close', function (e) {
-        exports.toast.fn.destroy($(this).parents('.xe-alert'));
-        e.preventDefault();
-      });
+        exports.toast.fn.destroy($(this).parents('.xe-alert'))
+        e.preventDefault()
+      })
 
       var timeChecker = function ($box) {
-        var interval;
+        var interval
         return function () {
           interval = setInterval(function () {
-            var time = parseInt(new Date().getTime() / 1000);
+            var time = parseInt(new Date().getTime() / 1000)
             $box
               .find('div.xe-alert')
               .each(function () {
-                var expireTime = parseInt($(this).data('expire-time'));
+                var expireTime = parseInt($(this).data('expire-time'))
                 if (expireTime != 0 && time > expireTime) {
-                  exports.toast.fn.destroy($(this));
+                  exports.toast.fn.destroy($(this))
                 }
-              });
-          }, 1000);
-        };
-      };
+              })
+          }, 1000)
+        }
+      }
 
-      timeChecker($toastBox)();
+      timeChecker($toastBox)()
 
-      return $toastBox;
-    },
-  };
+      return $toastBox
+    }
+  }
 
   /**
    * @memberof module:griper
@@ -253,19 +252,19 @@ if (typeof define === 'function' && define.amd) {
    * @param {string} message
    * */
   exports.form = function ($element, message) {
-    exports.form.fn.putByElement($element, message);
-    scrollToElement($element);
-  };
+    exports.form.fn.putByElement($element, message)
+    scrollToElement($element)
+  }
 
   exports.form.fn = exports.form.prototype = {
     constructor: exports.form,
     options: exports.options.form,
     getGroup: function ($element) {
-      return $element.closest(this.options.selectors.elementGroup);
+      return $element.closest(this.options.selectors.elementGroup)
     },
 
     putByElement: function ($element, message) {
-      this.put(this.getGroup($element), message, $element);
+      this.put(this.getGroup($element), message, $element)
     },
 
     put: function ($group, message, $element) {
@@ -275,26 +274,26 @@ if (typeof define === 'function' && define.amd) {
           $('<' + this.options.tags.message + '>')
             .addClass(this.options.classes.message.join(' '))
             .text(message)
-        );
+        )
       } else if ($group.length == 0) {
         $element.after(
           $('<' + this.options.tags.message + '>')
             .addClass(this.options.classes.message.join(' '))
             .text(message)
-        );
+        )
       }
     },
 
     clear: function ($form) {
-      $form.find(this.options.tags.message + this.options.selectors.errorText).remove();
-    },
-  };
-
-  function scrollToElement($element) {
-    if($element instanceof $) {
-      $('body').animate({
-        scrollTop: $element.offset().top - (window.innerHeight / 3)
-      }, 1000);
+      $form.find(this.options.tags.message + this.options.selectors.errorText).remove()
     }
   }
-}));
+
+  function scrollToElement ($element) {
+    if ($element instanceof $) {
+      $('body').animate({
+        scrollTop: $element.offset().top - (window.innerHeight / 3)
+      }, 1000)
+    }
+  }
+}))

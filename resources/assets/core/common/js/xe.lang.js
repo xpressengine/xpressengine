@@ -5,7 +5,6 @@ import Translator from 'xe-translator'
  * @module Lang
  * */
 export default (function () {
-
   /** @private */
   var _items = {
     af: 'af-ZA',
@@ -87,11 +86,11 @@ export default (function () {
     vi: 'vi-VN',
     xh: 'xh-ZA',
     zh: 'zh-CN',
-    zu: 'zu-ZA',
-  };
+    zu: 'zu-ZA'
+  }
 
-  Translator.placeHolderPrefix = ':';
-  Translator.placeHolderSuffix = '';
+  Translator.placeHolderPrefix = ':'
+  Translator.placeHolderSuffix = ''
 
   return {
     /**
@@ -106,11 +105,10 @@ export default (function () {
      * @param {object} items
      * */
     set: function (items) {
-      //$.extend(_items, items);
+      // $.extend(_items, items);
       $.each(items, function (key, value) {
-        Translator.add(key, value);
-      });
-
+        Translator.add(key, value)
+      })
     },
 
     /**
@@ -119,8 +117,8 @@ export default (function () {
      * @param {locales} locales
      * */
     setLocales: function (locales) {
-      this.locales = locales;
-      Translator.locale = (locales.length > 0) ? locales[0] : 'en';
+      this.locales = locales
+      Translator.locale = (locales.length > 0) ? locales[0] : 'en'
     },
 
     /**
@@ -130,7 +128,7 @@ export default (function () {
      * @return {string}
      * */
     getLangCode: function (locale) {
-      return locale ? _items[locale] : _items;
+      return locale ? _items[locale] : _items
     },
 
     /**
@@ -139,7 +137,7 @@ export default (function () {
      * @return {string}
      * */
     getCurrentLocale: function () {
-      return this.locales[0];
+      return this.locales[0]
     },
 
     /**
@@ -150,7 +148,7 @@ export default (function () {
      * @return {string}
      * */
     trans: function (id, parameters) {
-      return Translator.trans(id, parameters);
+      return Translator.trans(id, parameters)
     },
 
     /**
@@ -161,7 +159,7 @@ export default (function () {
      * @param {function} callback
      * */
     requestTrans: function (id, parameters, callback) {
-      var _this = this;
+      var _this = this
 
       XE.ajax({
         url: xeBaseURL + '/' + XE.options.fixedPrefix + '/lang/lines/' + id,
@@ -169,21 +167,21 @@ export default (function () {
         type: 'get',
         data: parameters,
         success: function (res) {
-          var message = id.split('::')[1];
-          var data;
+          var message = id.split('::')[1]
+          var data
 
           if (res.length > 0) {
             for (var i = 0, max = res.length; i < max; i += 1) {
               if (res[i].locale == XE.Lang.locales[0]) {
-                data = res[i].value;
-                break;
+                data = res[i].value
+                break
               }
             }
           }
 
-          callback(message, data);
-        },
-      });
+          callback(message, data)
+        }
+      })
     },
 
     /**
@@ -198,31 +196,31 @@ export default (function () {
         dataType: 'json',
         url: xeBaseURL + '/' + XE.options.fixedPrefix + '/lang/lines/many',
         data: {
-          keys: langKeys,
+          keys: langKeys
         },
         useXeSpinner: false,
         success: function (res) {
-          var result = {};
+          var result = {}
 
           $.each(res, (key, arr) => {
             $.each(arr, function () {
               if (this.locale === XE.Lang.locales[0]) {
-                result[key] = this.value;
+                result[key] = this.value
               }
-            });
-          });
+            })
+          })
 
           if (Object.keys(result).length > 0) {
             $.each(result, function (key, value) {
-              Translator.add(key, value);
-            });
+              Translator.add(key, value)
+            })
           }
 
           if (callback) {
-            callback(res, result);
+            callback(res, result)
           }
-        },
-      });
+        }
+      })
     },
 
     /**
@@ -233,8 +231,7 @@ export default (function () {
      * @param {object} parameters
      * */
     transChoice: function (id, number, parameters) {
-      return Translator.transChoice(id, number, parameters);
-    },
-  };
-
-})();
+      return Translator.transChoice(id, number, parameters)
+    }
+  }
+})()

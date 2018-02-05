@@ -9,7 +9,7 @@ XEeditor.define(/** @lends XEtextarea */{
    * */
   editorSettings: {
     name: 'XEtextarea',
-    configs: {},
+    configs: {}
   },
   /**
    * @prop {object} interfaces
@@ -40,91 +40,90 @@ XEeditor.define(/** @lends XEtextarea */{
    * */
   interfaces: {
     initialize: function (selector, options) {
-
       var options = $.extend(true, {
         fileUpload: {},
         suggestion: {},
         names: {
           file: {
-            image: {},
+            image: {}
           },
           tag: {},
-          mention: {},
+          mention: {}
         },
         extensions: [],
         fontFamily: [],
         perms: {},
-        files: [],
-      }, options);
+        files: []
+      }, options)
 
-      var $editor = $('#' + selector);
-      var height = options.height;
-      var fontFamily = options.fontFamily;
-      var fontSize = options.fontSize;
+      var $editor = $('#' + selector)
+      var height = options.height
+      var fontFamily = options.fontFamily
+      var fontSize = options.fontSize
 
       this.addProps({
-        editor: $editor, selector: selector, options: options,
-      });
+        editor: $editor, selector: selector, options: options
+      })
 
       if (height) {
-        $editor.css('height', height + 'px');
+        $editor.css('height', height + 'px')
       }
 
       if (fontFamily || fontSize) {
         if (fontFamily && fontFamily.length > 0) {
-          $editor.css('font-family', fontFamily.join(','));
+          $editor.css('font-family', fontFamily.join(','))
         }
 
         if (fontSize) {
-          $editor.css('font-size', fontSize);
+          $editor.css('font-size', fontSize)
         }
       }
 
       $editor.parents('form').on('submit', function () {
         var contents = $editor.val()
-        var fileInput = options.names.file.input;
-        var files = options.files;
-        var $paramWrap = $();
+        var fileInput = options.names.file.input
+        var files = options.files
+        var $paramWrap = $()
 
         // files input삭제 후 생성
-        $editor.nextAll('.paramWrap').remove();
-        $editor.after("<div class='paramWrap'>");
-        $paramWrap = $editor.nextAll('.paramWrap');
+        $editor.nextAll('.paramWrap').remove()
+        $editor.after("<div class='paramWrap'>")
+        $paramWrap = $editor.nextAll('.paramWrap')
 
-        //files
+        // files
         if (files.length > 0) {
           for (var i = 0, max = files.length; i < max; i += 1) {
-            var file = files[i];
+            var file = files[i]
 
-            $paramWrap.append("<input type='hidden'name='" + fileInput + "[]' value='" + file.id + "' />");
+            $paramWrap.append("<input type='hidden'name='" + fileInput + "[]' value='" + file.id + "' />")
           }
         }
-      });
+      })
     },
 
     getContents: function () {
-      return this.props.editor.val();
+      return this.props.editor.val()
     },
 
     setContents: function (text) {
-      this.props.editor.val(text);
+      this.props.editor.val(text)
     },
 
     addContents: function (text) {
-      var html = this.props.editor.val();
-      this.props.editor.val(html);
+      var html = this.props.editor.val()
+      this.props.editor.val(html)
     },
 
     on: function (eventName, callback) {
-      this.props.editor.on(eventName, callback);
+      this.props.editor.on(eventName, callback)
     },
 
     reset: function () {
-      //contents 삭제
-      this.props.editor.val('').focus();
+      // contents 삭제
+      this.props.editor.val('').focus()
 
-      //input hidden 삭제
-      this.props.editor.nextAll('.paramWrap').remove();
-    },
-  },
-});
+      // input hidden 삭제
+      this.props.editor.nextAll('.paramWrap').remove()
+    }
+  }
+})

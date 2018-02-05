@@ -1,137 +1,132 @@
 /** @name		jQuery widgetGenerator plugin */
 ;(function (exports, $) {
+  'use strict'
 
-    'use strict';
+  var widgetForm = '#widgetForm'
+  var skinForm = '#skinForm'
+  var selectWidget = '.__xe_select_widget'
+  var selectWidgetSkin = '.__xe_select_widgetskin'
+  var widgetCodeSel = '.__xe_widget_code'
+  var widgetInputs = '.widget-inputs'
+  var setupCode = '.__xe_setup_code'
+  var generateCode = '.__xe_generate_code'
+  var _this
 
-    var widgetForm = '#widgetForm';
-    var skinForm = '#skinForm';
-    var selectWidget = '.__xe_select_widget';
-    var selectWidgetSkin = '.__xe_select_widgetskin';
-    var widgetCodeSel = '.__xe_widget_code';
-    var widgetInputs = '.widget-inputs';
-    var setupCode = '.__xe_setup_code';
-    var generateCode = '.__xe_generate_code';
-    var _this;
+  $.fn.serializeObject = function () {
+    var o = {}
+    var a = this.serializeArray()
+    $.each(a, function () {
+      if (o[this.name]) {
+        if (!o[this.name].push) {
+          o[this.name] = [o[this.name]]
+        }
 
-    $.fn.serializeObject = function () {
-        var o = {};
-        var a = this.serializeArray();
-        $.each(a, function () {
-            if (o[this.name]) {
-              if (!o[this.name].push) {
-                o[this.name] = [o[this.name]];
-              }
+        o[this.name].push(this.value || '')
+      } else {
+        o[this.name] = this.value || ''
+      }
+    })
 
-              o[this.name].push(this.value || '');
-            } else {
-              o[this.name] = this.value || '';
-            }
-          });
+    return o
+  }
 
-        return o;
-      };
+  var _applyPlugins = function () {
+    var isBinding = false
+    $.fn.widgetGenerator = function (opt, cb) {
+      var _this = this
 
-    var _applyPlugins = function () {
+      var _bindEvents = function () {
+        _this.on('change', selectWidget, function () {
+          var widget = this.value
+          var url = $('.widget-skins').data('url')
 
-        var isBinding = false;
-        $.fn.widgetGenerator = function (opt, cb) {
+          $('.widget-form').empty()
 
-            var _this = this;
+          if (widget) {
+            XE.page(url + '?widget=' + widget, '.widget-skins')
+          } else {
+            $('.widget-skins').empty()
+            $('.__xe_widget_code').val('')
+          }
+        })
 
-            var _bindEvents = function () {
-                _this.on('change', selectWidget, function () {
-                    var widget = this.value;
-                    var url = $('.widget-skins').data('url');
+        _this.on('change', selectWidgetSkin, function () {
+          var widget = this.value
 
-                    $('.widget-form').empty();
+          if (widget !== 'select-skin') {
+            var url = $(this).find('option:selected').data('url')
+            XE.page(url, '.widget-form')
+          }
+        })
 
-                    if (widget) {
-                      XE.page(url + '?widget=' + widget, '.widget-skins');
-                    } else {
-                      $('.widget-skins').empty();
-                      $('.__xe_widget_code').val('');
-                    }
-                  });
+        _this.on('click', setupCode, function () {
+          var code = $(widgetCodeSel).val()
+          var url = $(widgetInputs).data('url')
 
-                _this.on('change', selectWidgetSkin, function () {
-                    var widget = this.value;
+          WidgetCode.reset({
+            url: url,
+            target: '.widget-inputs',
+            code: code
+          })
+        })
 
-                    if (widget !== 'select-skin') {
-                      var url = $(this).find('option:selected').data('url');
-                      XE.page(url, '.widget-form');
-                    }
-                  });
+        _this.on('click', generateCode, function () {
+          WidgetCode.generate({
+            widgetForm: '#widgetForm',
+            skinForm: '#skinForm'
+          }, cb)
+        })
 
-                _this.on('click', setupCode, function () {
-                    var code = $(widgetCodeSel).val();
-                    var url = $(widgetInputs).data('url');
+        isBinding = true
+      }
 
-                    WidgetCode.reset({
-                        url: url,
-                        target: '.widget-inputs',
-                        code: code,
-                      });
-                  });
+      if (!isBinding) {
+        _bindEvents()
+      }
 
-                _this.on('click', generateCode, function () {
-                    WidgetCode.generate({
-                        widgetForm: '#widgetForm',
-                        skinForm: '#skinForm',
-                      }, cb);
-                  });
+      switch (typeof opt) {
+        case 'string':
 
-                isBinding = true;
-              };
+          // switch
+          switch (opt) {
+            case 'code':
+              return _this.find(widgetCodeSel).val()
+              break
 
-            if (!isBinding) {
-              _bindEvents();
-            }
-
-            switch (typeof opt) {
-            case 'string':
-
-              //switch
-              switch (opt) {
-              case 'code':
-                return _this.find(widgetCodeSel).val();
-              break;
-
-              case 'generate':
-                WidgetCode.generate({
-                    widgetForm: widgetForm,
-                    skinForm: skinForm,
-                  }, cb);
-              break;
-
-            }
-
-            break;
-
+            case 'generate':
+              WidgetCode.generate({
+                widgetForm: widgetForm,
+                skinForm: skinForm
+              }, cb)
+              break
           }
 
-            this.generate = function (cb) {
-                WidgetCode.generate({
-                    widgetForm: widgetForm,
-                    skinForm: skinForm,
-                  }, cb);
-              };
+          break
+      }
 
-            this.reset = function (code, callback) {
-                WidgetCode.reset({
-                    url: $(widgetInputs).data('url'),
-                    code: code,
-                    target: widgetInputs,
-                    callback: callback,
-                  });
-              };
+      this.generate = function (cb) {
+        WidgetCode.generate({
+          widgetForm: widgetForm,
+          skinForm: skinForm
+        }, cb)
+      }
 
-            return this;
-          };
-      };
+      this.reset = function (code, callback) {
+        WidgetCode.reset({
+          url: $(widgetInputs).data('url'),
+          code: code,
+          target: widgetInputs,
+          callback: callback
+        })
+      }
 
-    var WidgetCode = (function () {
-        return {
-            /**
+      return this
+    }
+  }
+
+  var WidgetCode = (function () {
+    return {
+      /**
              * @private
              * @param {object} options
              * <pre>
@@ -140,33 +135,33 @@
              * </pre>
              * @param {function} cb callback
              * */
-            generate: function (options, cb) {
-                var $form = $(options.widgetForm);
-                var data = $form.serialize();
+      generate: function (options, cb) {
+        var $form = $(options.widgetForm)
+        var data = $form.serialize()
 
-                XE.ajax({
-                    url: $form.attr('action'),
-                    type: $form.attr('method'),
-                    cache: false,
-                    data: data,
-                    dataType: 'json',
-                    success: function (data) {
-                        $('.__xe_widget_code').val(data.code);
+        XE.ajax({
+          url: $form.attr('action'),
+          type: $form.attr('method'),
+          cache: false,
+          data: data,
+          dataType: 'json',
+          success: function (data) {
+            $('.__xe_widget_code').val(data.code)
 
-                        if (cb) {
-                          cb(data);
-                        }
+            if (cb) {
+              cb(data)
+            }
 
-                        $('.widget-form').empty();
-                        $(selectWidget).find('option:eq(0)').prop('selected', 'selected').trigger('change');
-                      },
+            $('.widget-form').empty()
+            $(selectWidget).find('option:eq(0)').prop('selected', 'selected').trigger('change')
+          },
 
-                    error: function (data) {
-                        XE.toast(data.type, data.message);
-                      },
-                  });
-              },
-            /**
+          error: function (data) {
+            XE.toast(data.type, data.message)
+          }
+        })
+      },
+      /**
              * @private
              * @param {object} options
              * <pre>
@@ -175,29 +170,28 @@
              *     - {string} code
              * </pre>
              * */
-            reset: function (options) {
-                DynamicLoadManager.jsLoad('/assets/core/xe-ui-component/js/xe-page.js', function () {
-                    var url = options.url;
-                    var code = options.code;
-                    var target = options.target;
+      reset: function (options) {
+        DynamicLoadManager.jsLoad('/assets/core/xe-ui-component/js/xe-page.js', function () {
+          var url = options.url
+          var code = options.code
+          var target = options.target
 
-                    XE.page(url, target, {
-                        type: 'post',
-                        data: {
-                            code: code,
-                          },
-                      }, options.callback);
-                  });
-              },
+          XE.page(url, target, {
+            type: 'post',
+            data: {
+              code: code
+            }
+          }, options.callback)
+        })
+      },
 
-            init: function () {
-                _this = this;
+      init: function () {
+        _this = this
 
-                _applyPlugins();
+        _applyPlugins()
 
-                return this;
-              },
-          };
-      })().init();
-
-  })(window, jQuery);
+        return this
+      }
+    }
+  })().init()
+})(window, jQuery)
