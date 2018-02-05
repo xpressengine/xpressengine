@@ -155,13 +155,14 @@ const common = {
       'xe-dynamicLoadManager': pathInfo.common + '/js/dynamicLoadManager.js', // @FIXME
       'xe-utils': pathInfo.common + '/js/utils.js', // @FIXME
       'xe-translator': pathInfo.common + '/js/translator.js', // @FIXME
-      'jqueryui-sortable': pathInfo.vendor + '/jqueryui/jquery-ui.sortable.js', // @FIXME
+      'jquery-ui/sortable': pathInfo.node + '/jquery-ui/ui/widgets/sortable.js', // @FIXME
       'jqueryui-nestedsortable': pathInfo.vendor + '/nestedSortable/jquery.mjs.nestedSortable.js' // @FIXME
     },
     extensions: ['.js']
   },
   externals: {
-    window: 'window'
+    window: 'window',
+    'window.XE': 'xe'
   }
 }
 
