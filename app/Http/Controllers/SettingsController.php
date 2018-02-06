@@ -272,7 +272,7 @@ class SettingsController extends Controller
         $callback = function () use ($logs, $loggers, $handler) {
             $file = fopen('php://output', 'w');
 
-            fwrite($file, "일시\t타입\t관리자\t요약\t자세히\tIP주소\n");
+            fwrite($file, "일시\t타입\t관리자\t요약\tIP주소\t자세히\n");
 
             foreach ($logs as $log) {
                 fwrite($file, $log->created_at->format('y-m-d H:i:s') . "\t");
@@ -283,6 +283,7 @@ class SettingsController extends Controller
                 }
                 fwrite($file, $log->user->getDisplayName() . "\t");
                 fwrite($file, $log->summary . "\t");
+                fwrite($file, $log->ipaddress . "\t");
 
                 $detail = $handler->find($log->id);
                 fwrite($file, $detail->method . ',');
@@ -296,11 +297,9 @@ class SettingsController extends Controller
                     } else {
                         fwrite($file, $value . ',');
                     }
-
                 }
-                fwrite($file, "\t");
 
-                fwrite($file, $log->ipaddress . "\n");
+                fwrite($file, "\n");
             }
 
             fclose($file);

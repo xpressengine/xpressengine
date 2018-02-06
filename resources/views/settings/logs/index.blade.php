@@ -120,8 +120,8 @@
                             <th scope="col">타입</th>
                             <th scope="col">관리자</th>
                             <th scope="col">요약</th>
-                            <th scope="col">자세히</th>
                             <th scope="col">IP주소</th>
+                            <th scope="col">자세히</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -141,8 +141,8 @@
                                    data-data='{!! json_encode(['id'=>$log->user->getId(), 'type'=>'user']) !!}'
                                    {{--data-user-id="{{ $log->user->getId() }}" --}} >{{ $log->user->getDisplayName() }}</a></td>
                             <td>{{ $log->summary }}</td>
-                            <td><a class="xe-btn xe-btn-link" href="{{ route('settings.setting.log.show', ['id'=>$log->id]) }}" data-toggle="xe-page-modal">보기</a></td>
                             <td>{{ $log->ipaddress }}</td>
+                            <td><a class="xe-btn xe-btn-link" href="{{ route('settings.setting.log.show', ['id'=>$log->id]) }}" data-toggle="xe-page-modal">보기</a></td>
                         </tr>
                         @endforeach
                         </tbody>
