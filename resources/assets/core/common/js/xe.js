@@ -1,9 +1,9 @@
-import griper from './griper'
+import griper from 'griper'
 import Progress from './xe.progress'
 import Lang from './xe.lang'
 import Component from './xe.component'
 import Request from './xe.request'
-import validator from './validator'
+import Validator from 'validator'
 import Utils from 'xe-utils'
 import DynamicLoadManager from 'xe-dynamicLoadManager'
 import $ from 'jquery'
@@ -16,12 +16,13 @@ import $ from 'jquery'
 class XE {
   constructor () {
     this.options = {}
-    this.validator = validator
+    this.validator = Validator
     this.Lang = Lang
     this.Progress = Progress
     this.Request = Request
     this.Component = Component
     this.util = Utils
+
   }
 
   /**
