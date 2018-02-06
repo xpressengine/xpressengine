@@ -1,4 +1,4 @@
-import DynamicLoadManager from 'xe-dynamicLoadManager'
+import DynamicLoadManager from 'xe-common/dynamicLoadManager'
 import $ from 'jquery'
 
 (function (root, factory) {

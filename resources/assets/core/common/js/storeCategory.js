@@ -1,4 +1,4 @@
-import griper from 'griper'
+import griper from 'xe-common/griper'
 
 $('#btnCreateCategory').on('click', (e) => {
   var _this = e.target

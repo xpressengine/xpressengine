@@ -1,4 +1,4 @@
-import Utils from 'xe-utils'
+import Utils from 'xe-common/utils'
 /**
  * @namespace DynamicLoadManager
  * */

@@ -1,4 +1,4 @@
-import Translator from 'xe-translator'
+import Translator from 'xe-common/translator'
 import $ from 'jquery'
 
 /**

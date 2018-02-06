@@ -1,4 +1,5 @@
-import validator from 'validator'
+import validator from 'xe-common/validator'
+import Lang from 'xe-common/lang'
 
 /**
  * @private

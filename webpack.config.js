@@ -26,10 +26,10 @@ const common = {
     'common': './resources/assets/common.js',
     'core/common/js/xe.bundle': [
       pathInfo.common + '/js/xe.js',
-      pathInfo.common + '/js/xe.lang.js',
-      pathInfo.common + '/js/xe.progress.js',
-      pathInfo.common + '/js/xe.request.js',
-      pathInfo.common + '/js/xe.component.js'
+      pathInfo.common + '/js/lang.js',
+      pathInfo.common + '/js/progress.js',
+      pathInfo.common + '/js/request.js',
+      pathInfo.common + '/js/component.js'
     ],
 
     'core/permission/permission.bundle': [
@@ -68,7 +68,6 @@ const common = {
         to: path.resolve(__dirname, 'assets/core'),
         ignore: [
           '**/*.scss',
-          '**/img/*',
           'common/js/draft.js',
           'common/js/dynamicField.js',
           'common/js/dynamicLoadManager.js',
@@ -77,11 +76,11 @@ const common = {
           'common/js/translator.js',
           'common/js/utils.js',
           'common/js/validator.js',
-          'common/js/xe.component.js',
+          'common/js/component.js',
           'common/js/xe.js',
-          'common/js/xe.lang.js',
-          'common/js/xe.progress.js',
-          'common/js/xe.request.js',
+          'common/js/lang.js',
+          'common/js/progress.js',
+          'common/js/request.js',
           'lang/LangEditorBox.js',
           'member/settings/edit.js',
           'permission/*.js',
@@ -143,9 +142,15 @@ const common = {
   },
   resolve: {
     alias: {
-      'xe': pathInfo.common + '/js/xe.js',
-      'griper': pathInfo.common + '/js/griper.js',
-      'validator': pathInfo.common + '/js/validator.js',
+      // directory
+      'xe-assets': path.resolve(__dirname, 'resources/assets/'),
+      'xe-common': path.resolve(__dirname, 'resources/assets/core/common/js/'),
+      'xe-vendor': path.resolve(__dirname, 'assets/vendor/'),
+      'xe-component': path.resolve(__dirname, 'assets/core/xe-ui-component/js/'),
+
+      'xe': pathInfo.common + '/js/xe.js', // @DEPRECATED
+      'griper': pathInfo.common + '/js/griper.js', // @DEPRECATED
+      'validator': pathInfo.common + '/js/validator.js', // @DEPRECATED
 
       'xe-transition': pathInfo.comp + '/js/xe-transition.js',
       'xe-dropdown': pathInfo.comp + '/js/xe-dropdown.js',

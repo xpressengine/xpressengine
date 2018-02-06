@@ -1,8 +1,8 @@
-import griper from 'griper'
+import griper from 'xe-common/griper'
 import moment from 'moment'
-import Translator from 'xe-translator'
-import Utils from 'xe-utils'
-import Lang from './xe.lang'
+import Translator from 'xe-common/translator'
+import Utils from 'xe-common/utils'
+import Lang from 'xe-common/lang'
 import $ from 'jquery'
 
 class Validator {

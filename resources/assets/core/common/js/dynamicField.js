@@ -1,5 +1,5 @@
 import $ from 'jquery'
-import Validator from 'validator'
+import Validator from 'xe-common/validator'
 
 /**
  * @class

@@ -1,4 +1,4 @@
-import Progress from './xe.progress'
+import Progress from 'xe-common/progress'
 
 /**
  * @module Request

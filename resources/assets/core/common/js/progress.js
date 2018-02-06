@@ -1,4 +1,4 @@
-import DynamicLoadManager from 'xe-dynamicLoadManager'
+import DynamicLoadManager from 'xe-common/dynamicLoadManager'
 
 /**
  * @module Progress

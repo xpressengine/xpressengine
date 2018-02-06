@@ -1,8 +1,8 @@
-import 'griper'
-import 'validator'
-import * as Utils from 'xe-utils'
-import DynamicLoadManager from 'xe-dynamicLoadManager'
-import Translator from 'xe-translator'
+import 'xe-common/griper'
+import 'xe-common/validator'
+import * as Utils from 'xe-common/utils'
+import DynamicLoadManager from 'xe-common/dynamicLoadManager'
+import Translator from 'xe-common/translator'
 
 // @FIXME
 // @DEPRECATED
