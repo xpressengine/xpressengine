@@ -527,6 +527,15 @@ Route::settings(
         );
 
         Route::get(
+            'saveLog',
+            [
+                'as' => 'settings.setting.log.save',
+                'uses' => 'SettingsController@saveLog',
+                'middleware' => 'admin'
+            ]
+        );
+
+        Route::get(
             'logs/{id}',
             [
                 'as' => 'settings.setting.log.show',

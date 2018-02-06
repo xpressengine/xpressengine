@@ -2270,4 +2270,12 @@ return [
         'ko' => '전체 등급',
         'en' => 'All Rating',
     ],
+    'enterStartDate' => [
+        'ko' => '시작 날짜 (2018-01-01)',
+        'en' => 'start date (2018-01-01)',
+    ],
+    'enterEndDate' => [
+        'ko' => '종료 날짜 (2018-01-01)',
+        'en' => 'end date (2018-01-01)',
+    ],
 ];

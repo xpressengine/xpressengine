@@ -15,19 +15,20 @@
                     <div class="pull-left">
                         <div class="btn-group btn-fillter" role="group">
                             @section('type-select')
-                            <ul class="dropdown-menu" role="menu">
-                                <li @if(request()->get('type') === null) class="active" @endif><a href="{{ route('settings.setting.log.index') }}">모든 타입</a></li>
-                                @foreach($loggers as $logger)
-                                    <li @if(request()->get('type') === $logger::ID) class="active" @endif><a href="{{ route('settings.setting.log.index', array_merge(request()->all(), ['type'=> $logger::ID] )) }}">{{ $logger::TITLE }}</a></li>
-                                    @if(request()->get('type') === $logger::ID) {{-- */ $selectedLogger = $logger/* --}} @endif
-                                @endforeach
-                            </ul>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li @if(request()->get('type') === null) class="active" @endif><a href="{{ route('settings.setting.log.index') }}">모든 타입</a></li>
+                                    @foreach($loggers as $logger)
+                                        <li @if(request()->get('type') === $logger::ID) class="active" @endif><a href="{{ route('settings.setting.log.index', array_merge(request()->all(), ['type'=> $logger::ID] )) }}">{{ $logger::TITLE }}</a></li>
+                                        @if(request()->get('type') === $logger::ID) {{-- */ $selectedLogger = $logger/* --}} @endif
+                                    @endforeach
+                                </ul>
                             @show
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                 {{ isset($selectedLogger) ? $selectedLogger::TITLE : '타입' }} <span class="caret"></span>
                             </button>
                             @yield('type-select')
                         </div>
+
                         <div class="btn-group btn-fillter" role="group">
                             @section('admin-select')
                                 <ul class="dropdown-menu" role="menu">
@@ -43,10 +44,38 @@
                             </button>
                             @yield('admin-select')
                         </div>
+
+
+                        <div class="btn-group" role="group">
+                            <form method="GET" action="{{ route('settings.setting.log.save') }}" accept-charset="UTF-8" role="form" id="_save-form">
+                                    <input type="hidden" name="type" value={{request()->get('type')}} >
+                                    <input type="hidden" name="user_id" value={{request()->get('user_id')}} >
+                                    <input type="hidden" name="keyword" value={{request()->get('keyword')}} >
+                                    <input type="hidden" name="keyfield" value={{request()->get('keyfield')}} >
+                                    <input type="hidden" name="startDate" value={{$startDate}} >
+                                    <input type="hidden" name="endDate" value={{$endDate}} >
+
+                                    <button type="submit" class="btn btn-default" >{{ xe_trans('xe::download') }}</button>
+
+                            </form>
+                        </div>
                     </div>
+
                     <div class="pull-right">
                         <div class="input-group search-group">
                             <form method="GET" action="{{ route('settings.setting.log.index') }}" accept-charset="UTF-8" role="form" id="_search-form">
+
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">기간</button>
+                                </div>
+
+                                <div class="search-input-group">
+                                    <input type="text" name="startDate" class="form-control" placeholder="{{xe_trans('xe::enterStartDate')}}" value={{$startDate}} >
+                                    <input type="text" name="endDate" class="form-control" placeholder="{{xe_trans('xe::enterEndDate')}}" value={{$endDate}} >
+                                </div>
+
+                                <p></p>
+
                                 <div class="input-group-btn">
                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                         <span class="__xe_selectedKeyfield">
@@ -74,7 +103,7 @@
                                         <i class="xi-search"></i><span class="sr-only">{{xe_trans('xe::search')}}</span>
                                     </button>
                                 </div>
-                                @foreach(request()->except(['keyfield','keyword','page']) as $name => $value)
+                                @foreach(request()->except(['keyfield','keyword','page', 'startDate', 'endDate']) as $name => $value)
                                     <input type="hidden" name="{{ $name }}" value="{{ $value }}">
                                 @endforeach
                                 <input type="hidden" class="__xe_keyfield" name="keyfield" value="{{ request()->get('keyfield') }}">
