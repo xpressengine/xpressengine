@@ -209,14 +209,12 @@ class UserHandler
      * 주어진 정보로 신규회원을 등록한다. 회원정보에 대한 유효성검사도 병행하며, 회원관련 정보(그룹, 이메일, 등록대기 이메일, 계정)도 동시에 추가한다.
      *
      * @param array       $data  신규회원 정보
-     * @param null|Fluent $token register-token
      *
      * @return UserInterface 신규 등록된 회원정보
      */
-    public function create(array $data, $token = null)
+    public function create(array $data)
     {
-
-        $this->validateForCreate($data, $token);
+        $this->validateForCreate($data);
 
         /* 회원가입 절차 */
         $userData = array_except(
@@ -356,11 +354,10 @@ class UserHandler
      * 신규회원의 정보를 유효성 검사한다.
      *
      * @param array       $data  회원의 정보
-     * @param null|Fluent $token register-token
      *
      * @return bool 유효성검사 결과, 통과할 경우 true, 실패할 경우 false
      */
-    public function validateForCreate(array $data, $token = null)
+    public function validateForCreate(array $data)
     {
         // 필수 요소 검사
         if (!isset($data['status'], $data['rating'], $data['display_name'])) {
@@ -660,8 +657,20 @@ class UserHandler
      * 회원가입시 회원가입 정보 입력 페이지에서 사용자에게 출력할 입력폼 목록을 반환한다.
      *
      * @return mixed
+     *
+     * @deprecated
      */
     public function getRegisterForms()
+    {
+        return $this->getRegisterParts();
+    }
+
+    /**
+     * 회원가입시 회원가입 정보 입력 페이지에서 사용자에게 출력할 입력폼 목록을 반환한다.
+     *
+     * @return mixed
+     */
+    public function getRegisterParts()
     {
         return $this->container->get('user/register/form', []);
     }

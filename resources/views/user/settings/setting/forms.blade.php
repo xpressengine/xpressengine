@@ -10,32 +10,34 @@
             <col>
         </colgroup>
         <tbody>
-        @foreach($forms as $key => $form)
+        @foreach($parts as $idx => $arr)
+            @foreach ($arr as $key => $part)
             <tr>
                 <td>
                     <button class="btn handler"><i class="xi-drag-vertical"></i></button>
-                    <em class="item-title">{{ $form['title'] }}</em>
+                    <em class="item-title">{{ $part::getName() }}</em>
                 </td>
                 <td>
-                    <span class="item-subtext">{{ $form['description'] }}</span>
+                    <span class="item-subtext">{{ $part::getDescription() }}</span>
                 </td>
                 <td>
                     <div class="xe-btn-toggle pull-right">
                         <label>
                             <span class="sr-only">toggle</span>
-                            @if(array_get($form, 'forced', false))
+                            @if($part::isImplicit())
                             <input type="checkbox" checked="checked"  disabled />
                             @else
-                                <input type="checkbox" name="forms[{{$key}}]" value="on" @if($form['activated'] || array_get($form, 'forced', false)) checked="checked" @endif />
+                                <input type="checkbox" name="forms[{{$key}}]" value="on" @if($idx === 0) checked="checked" @endif />
                             @endif
                             <span class="toggle"></span>
                         </label>
                     </div>
-                    @if(array_get($form, 'forced', false))
+                    @if($part::isImplicit())
                         <input type="hidden" name="forms[{{$key}}]" value="on" >
                     @endif
                 </td>
             </tr>
+            @endforeach
         @endforeach
         </tbody>
     </table>

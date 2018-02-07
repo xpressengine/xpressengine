@@ -111,25 +111,17 @@ class SettingController extends Controller
             $guards[$id]['activated'] = false;
         }
 
-        $allForms = $handler->getRegisterForms();
-        $activated = $config->get('forms', []);
-        $forms = [];
+        $parts = $handler->getRegisterParts();
+        $activated = array_keys(array_intersect_key(array_flip($config->get('forms', [])), $parts));
 
-        foreach ($activated as $id) {
-            if (array_has($allForms, $id)) {
-                $forms[$id] = $allForms[$id];
-                $forms[$id]['activated'] = true;
-                unset($allForms[$id]);
-            }
-        }
-        foreach ($allForms as $id => $form) {
-            $forms[$id] = $form;
-            $forms[$id]['activated'] = false;
-        }
+        $parts = collect($parts)->partition(function ($part, $key) use ($activated) {
+            return in_array($key, $activated) || $part::isImplicit();
+        });
+        $parts->splice(0, 1, [array_merge(array_flip($activated), $parts->first()->all())]);
 
         return XePresenter::make(
             'user.settings.setting.join',
-            compact('config','captcha', 'forms', 'guards')
+            compact('config','captcha', 'parts', 'guards')
         );
     }
 
