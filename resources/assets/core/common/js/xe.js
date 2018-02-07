@@ -22,7 +22,6 @@ class XE {
     this.Request = Request
     this.Component = Component
     this.util = Utils
-
   }
 
   /**
@@ -154,7 +153,7 @@ class XE {
    * @param {object} jquery form object
    **/
   formValidate ($form) {
-    validator.formValidate($form)
+    Validator.formValidate($form)
   }
 
   /**
