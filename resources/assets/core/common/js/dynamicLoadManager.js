@@ -1,4 +1,6 @@
 import Utils from 'xe-common/utils'
+import $ from 'jquery'
+
 /**
  * @namespace DynamicLoadManager
  * */

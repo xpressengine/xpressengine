@@ -516,4 +516,4 @@
     $.fn.tooltip = old
     return this
   }
-})(jQuery)
+})(window.jQuery)

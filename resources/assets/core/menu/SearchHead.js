@@ -1,7 +1,7 @@
 /**
  * @namespace SearchHead
  * */
-var SearchHead = (function () {
+var SearchHead = (function ($) {
   /** @private */
   var _this
   /** @private */
@@ -268,4 +268,4 @@ var SearchHead = (function () {
       _this.toggleSuggestionByStatus('close')
     }
   }
-})()
+})(window.jQuery)

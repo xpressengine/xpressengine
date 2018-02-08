@@ -297,4 +297,4 @@
       $(this).lightbox()
     })
   })
-})(jQuery)
+})(window.jQuery)

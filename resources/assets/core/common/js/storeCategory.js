@@ -1,3 +1,6 @@
+// @FIXME 적당한 곳으로 이동
+
+import $ from 'jquery'
 import griper from 'xe-common/griper'
 
 $('#btnCreateCategory').on('click', (e) => {
@@ -6,7 +9,7 @@ $('#btnCreateCategory').on('click', (e) => {
   var params = {}
 
   if (!id) {
-    griper.form($(_this), 'You must first create a category ID.')
+    griper.form($(_this), 'You must first create a category ID.') // @FIXME
 
     return
   } else {
@@ -19,7 +22,7 @@ $('#btnCreateCategory').on('click', (e) => {
     type: 'post',
     dataType: 'json',
     data: params,
-    url: storeCategoryInfo.url,
+    url: storeCategoryInfo.url, // @FIXME
     success: function (data) {
       var section = $(_this).closest('.__xe_df_category')
       section.find('[name="category_id"]').val(data.id)

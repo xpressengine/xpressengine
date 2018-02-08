@@ -1,4 +1,4 @@
-$(document).ready(function () {
+window.jQuery(function ($) {
   varswiper = new Swiper('.swiper', {
     pagination: '.swiper-pagination',
     paginationClickable: true,

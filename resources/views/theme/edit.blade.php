@@ -95,19 +95,21 @@
     {!!
         XeFrontend::html('theme.insert-widget')->content("
         <script>
-            $('.__xe_insert_widget').click(function(){
-                $('#widgetGen').widgetGenerator().generate(function(data){
+            jQuery(function($) {
+                $('.__xe_insert_widget').click(function(){
+                    $('#widgetGen').widgetGenerator().generate(function(data){
 
-                    $('#widgetModal').modal('hide');
+                        $('#widgetModal').modal('hide');
 
-                    // add code to textarea
-                    var txt = $('textarea[name=content]');
-                    var caretPos = txt[0].selectionStart;
-                    var textAreaTxt = txt.val();
-                    txt.val(textAreaTxt.substring(0, caretPos) + data.code + textAreaTxt.substring(caretPos) );
+                        // add code to textarea
+                        var txt = $('textarea[name=content]');
+                        var caretPos = txt[0].selectionStart;
+                        var textAreaTxt = txt.val();
+                        txt.val(textAreaTxt.substring(0, caretPos) + data.code + textAreaTxt.substring(caretPos) );
 
-                });
-            })
+                    });
+                })
+            });
         </script>
         ")->load();
     !!}

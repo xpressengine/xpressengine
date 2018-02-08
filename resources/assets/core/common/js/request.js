@@ -1,3 +1,4 @@
+import $ from 'jquery'
 import Progress from 'xe-common/progress'
 
 /**

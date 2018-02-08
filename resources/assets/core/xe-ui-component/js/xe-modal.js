@@ -1,7 +1,7 @@
 /**
  * @name		jQuery xeModal plugin
  * */
-;(function () {
+;(function ($) {
   // MODAL CLASS DEFINITION
   // ======================
 
@@ -325,4 +325,4 @@
 
     Plugin.call($target, option, this)
   })
-})()
+})(window.jQuery)

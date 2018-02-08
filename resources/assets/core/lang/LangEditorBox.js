@@ -1,5 +1,6 @@
 import validator from 'xe-common/validator'
 import Lang from 'xe-common/lang'
+import $ from 'jquery'
 
 /**
  * @private

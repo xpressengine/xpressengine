@@ -1,9 +1,10 @@
-import 'moment'
+import moment from 'moment'
 import 'xe-transition'
 import 'xe-modal'
 import 'xe-dropdown'
 import 'xe-tooltip'
 import DynamicLoadManager from 'xe-dynamicLoadManager'
+import $ from 'jquery'
 
 /**
  * @module Component

@@ -4,7 +4,7 @@ import Lang from 'xe-common/lang'
 import Component from 'xe-common/component'
 import Request from 'xe-common/request'
 import Validator from 'xe-common/validator'
-import Utils from 'xe-common/utils'
+import * as Utils from 'xe-common/utils'
 import DynamicLoadManager from 'xe-common/dynamicLoadManager'
 import $ from 'jquery'
 

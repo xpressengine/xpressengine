@@ -1,7 +1,7 @@
 /**
  * @name		jQuery limitText plugin
  * */
-;(function () {
+;(function ($) {
   var TextLimiter = function (element, options) {
     var limit = options.limit || 30
     var limitBy = options.limitBy || 'count'
@@ -165,4 +165,4 @@
       Component.init()
     })
   }
-})()
+})(window.jQuery)

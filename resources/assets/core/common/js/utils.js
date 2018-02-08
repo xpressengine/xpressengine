@@ -146,6 +146,8 @@ export function getUri (url) {
  * @param {string} text
  * @param {number} now
  * @return {number}
+ * @DEPRECATED
+ * @FIXME moment
  **/
 export function strtotime (text, now) {
   //  discuss at: http://locutus.io/php/strtotime/
@@ -459,6 +461,7 @@ export function strtotime (text, now) {
  * @memberof Utils
  * @param {string} str
  * @return {string}
+ * @DEPRECATED
  **/
 export function addCommas (str) {
   var parts = (str + '').split('.')

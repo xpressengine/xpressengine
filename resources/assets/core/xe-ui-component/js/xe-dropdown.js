@@ -1,7 +1,7 @@
 /**
  * @name		jQuery xeDropdown plugin
  * */
-;(function () {
+;(function ($) {
   // DROPDOWN CLASS DEFINITION
   // =========================
 
@@ -152,4 +152,4 @@
     .on('click.xe.dropdown.data-api', toggle, Dropdown.prototype.toggle)
     .on('keydown.xe.dropdown.data-api', toggle, Dropdown.prototype.keydown)
     .on('keydown.xe.dropdown.data-api', '.xe-dropdown-menu', Dropdown.prototype.keydown)
-})(jQuery)
+})(window.jQuery)

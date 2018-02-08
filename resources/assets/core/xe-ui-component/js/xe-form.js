@@ -1,4 +1,4 @@
-;(function (XE) {
+;(function ($, XE) {
   var _formCommon = (function () {
     return {
       init: function () {
@@ -69,4 +69,4 @@
       }
     }
   })().init()
-})(XE)
+})(window.jQuery, window.XE)

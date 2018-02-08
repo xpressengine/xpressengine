@@ -1,7 +1,7 @@
 /**
  * @namespace XE
  * */
-;(function ($, exports, XE, DynamicLoadManager) {
+;(function ($, XE) {
   var _this = this
 
   var _pageCommon = (function () {
@@ -266,12 +266,12 @@
 
         if (cssLen > 0) {
           for (var i = 0, max = cssLen; i < max; i += 1) {
-            DynamicLoadManager.cssLoad(css[i], loadDone, loadDone)
+            XE.cssLoad(css[i], loadDone, loadDone)
           }
         }
 
         if (jsLen > 0) {
-          DynamicLoadManager.jsLoadMultiple(js, {
+          XE.jsLoadMultiple(js, {
             load: loadDone,
             error: loadDone
           })
@@ -431,4 +431,4 @@
       })
     }
   }
-})(jQuery, window, XE, DynamicLoadManager)
+})(window.jQuery, window.XE)

@@ -1,3 +1,4 @@
+import $ from 'jquery'
 import DynamicLoadManager from 'xe-common/dynamicLoadManager'
 
 /**
