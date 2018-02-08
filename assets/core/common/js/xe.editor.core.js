@@ -1,4 +1,4 @@
-(function (exports) {
+(function ($) {
   'use strict'
 
   var editorSet = {}
@@ -380,5 +380,5 @@
     }
   })()
 
-  exports.XEeditor = XEeditor
-})(window)
+  window.XEeditor = XEeditor
+})(window.jQuery)

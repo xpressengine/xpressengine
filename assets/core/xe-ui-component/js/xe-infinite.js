@@ -2,7 +2,7 @@
  * <ul id='wrapper' data-infinite-url></ul>
  * @namespace XeInfinite
  * */
-var XeInfinite = (function () {
+var XeInfinite = (function ($) {
   /** @priavte */
   var _flag = false
   /** @priavte */
@@ -177,4 +177,4 @@ var XeInfinite = (function () {
       _flag = flag
     }
   }
-})()
+})(window.jQuery)

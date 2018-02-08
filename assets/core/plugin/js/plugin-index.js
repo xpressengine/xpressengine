@@ -1,4 +1,4 @@
-$(document).ready(function () {
+window.jQuery(function ($) {
   var PluginManager = (function () {
     var self
     return {

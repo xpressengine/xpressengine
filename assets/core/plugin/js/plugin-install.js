@@ -1,4 +1,4 @@
-$(document).ready(function () {
+window.jQuery(function ($) {
   window.PluginInstallManager = (function () {
     var self
 

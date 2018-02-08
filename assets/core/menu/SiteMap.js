@@ -1,7 +1,7 @@
 /**
  * @namespace SiteMap
  * */
-var SiteMap = (function () {
+var SiteMap = (function ($) {
   var _this
   var _$wrap = $('#menuContainer')
   var _menus = $('#menuContainer').data('menus')
@@ -56,7 +56,7 @@ var SiteMap = (function () {
       var url = item.url
       if (item.type !== 'xpressengine@directLink') {
         url = '/' + url
-        url = Utils.getUri(xeBaseURL + url)
+        url = XE.util.getUri(xeBaseURL + url)
       } else {
         url = url
       }
@@ -275,4 +275,4 @@ var SiteMap = (function () {
       }
     }
   }.init()
-})()
+})(window.jQuery)

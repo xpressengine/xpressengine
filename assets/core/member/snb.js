@@ -1,4 +1,4 @@
-$(document).ready(function () {
+jQuery(function ($) {
   $(window).resize(function () {
     // 화면 width 값
     var innerWidth2 = $(window).innerWidth()
