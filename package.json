@@ -61,10 +61,7 @@
       "node": true,
       "jquery": true
     },
-    "globals": {
-      "XE": true,
-      "xeBaseURL": true
-    }
+    "globals": {}
   },
   "eslintIgnore": [
     "jsdoc/",
