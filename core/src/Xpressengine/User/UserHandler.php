@@ -647,10 +647,12 @@ class UserHandler
      * 회원가입 인증도구 목록을 반환한다.
      *
      * @return array
+     *
+     * @deprecated
      */
     public function getRegisterGuards()
     {
-        return $this->container->get('user/register/guard', []);
+        return [];
     }
 
     /**

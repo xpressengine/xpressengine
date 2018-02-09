@@ -95,22 +95,6 @@ class SettingController extends Controller
     {
         $config = app('xe.config')->get('user.join');
 
-        $allGuards = $handler->getRegisterGuards();
-        $activated = $config->get('guards', []);
-        $guards = [];
-
-        foreach ($activated as $id) {
-            if (array_has($allGuards, $id)) {
-                $guards[$id] = $allGuards[$id];
-                $guards[$id]['activated'] = true;
-                unset($allGuards[$id]);
-            }
-        }
-        foreach ($allGuards as $id => $guard) {
-            $guards[$id] = $guard;
-            $guards[$id]['activated'] = false;
-        }
-
         $parts = $handler->getRegisterParts();
         $activated = array_keys(array_intersect_key(array_flip($config->get('forms', [])), $parts));
 
@@ -121,7 +105,7 @@ class SettingController extends Controller
 
         return XePresenter::make(
             'user.settings.setting.join',
-            compact('config','captcha', 'parts', 'guards')
+            compact('config','captcha', 'parts')
         );
     }
 
@@ -137,16 +121,11 @@ class SettingController extends Controller
     {
         $inputs = $request->except('_token');
 
-        $guards = $inputs['guards'] = array_keys(array_get($inputs, 'guards', []));
         $inputs['forms'] = array_keys(array_get($inputs, 'forms', []));
 
         $config = app('xe.config')->get('user.join');
 
-        $guard_forced = $inputs['guard_forced'] = $inputs['guard_forced'] === 'true';
-
-        if ($guard_forced && empty($guards)) {
-            throw new HttpException(400, '인증을 사용할 경우 하나 이상의 인증방식을 선택하셔야 합니다.');
-        }
+        $inputs['guard_forced'] = $inputs['guard_forced'] === 'true';
 
         foreach ($inputs as $key => $val) {
             $config->set($key, $val);

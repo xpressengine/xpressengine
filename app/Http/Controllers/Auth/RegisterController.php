@@ -72,34 +72,12 @@ class RegisterController extends Controller
         $config = app('xe.config')->get('user.join');
 
         // 가입 인증을 사용하지 않을 경우, 곧바로 회원가입 폼 출력
-        if (!$config->get('guard_forced', false)) {
+        if (!$config->get('guard_forced', false) || $request->get('token')) {
             return $this->getRegisterForm($request);
         }
 
-        // token 검사, token이 존재할 경우 form을 출력
-        $token = $request->get('token');
-        if ($token !== null) {
-            return $this->getRegisterForm($request);
-        }
+        return \XePresenter::make('register.index');
 
-        // 활성화된 인증방식 가져오기
-        $allGuards = $this->handler->getRegisterGuards();
-        $activated = $config->get('guards', []);
-        $guards = [];
-
-        foreach ($activated as $id) {
-            if (array_has($allGuards, $id)) {
-                $guards[$id] = $allGuards[$id];
-                $guards[$id]['activated'] = true;
-                unset($allGuards[$id]);
-            }
-        }
-        foreach ($allGuards as $id => $guard) {
-            $guards[$id] = $guard;
-            $guards[$id]['activated'] = false;
-        }
-
-        return \XePresenter::make('register.index', compact('config', 'guards'));
     }
 
     /**
@@ -142,12 +120,7 @@ class RegisterController extends Controller
      */
     public function postRegisterConfirm(Request $request, RegisterTokenRepository $tokenRepository)
     {
-        $this->validate(
-            $request,
-            [
-                'email' => 'required|email'
-            ]
-        );
+        $this->validate($request, ['email' => 'required|email']);
 
         $email = $request->get('email');
 
@@ -219,6 +192,7 @@ class RegisterController extends Controller
             $userData['group_id'] = [$joinGroup];
         }
 
+        // todo: create 메서드 내부에서 기본값 설정하도록
         $userData['rating'] = Rating::MEMBER;
         $userData['status'] = \XeUser::STATUS_ACTIVATED;
 
@@ -247,22 +221,4 @@ class RegisterController extends Controller
         $config = app('xe.config')->get('user.join');
         return $config->get('joinable') === true;
     }
-
-//    /**
-//     * checkPendingEmail
-//     *
-//     * @param $email
-//     * @param $code
-//     *
-//     * @return EmailInterface
-//     */
-//    protected function checkPendingEmail($email, $code)
-//    {
-//        $emailEntity = app('xe.user')->pendingEmails()->findByAddress($email);
-//        if ($emailEntity->getConfirmationCode() !== $code) {
-//            throw new HttpException(400, '잘못된 이메일 인증 코드입니다.');
-//        }
-//
-//        return $emailEntity;
-//    }
 }

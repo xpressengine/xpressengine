@@ -29,6 +29,7 @@ use Xpressengine\User\EmailBroker;
 use Xpressengine\User\Guard;
 use Xpressengine\User\GuardInterface;
 use Xpressengine\User\Middleware\Admin;
+use Xpressengine\User\Middleware\RequiredDF;
 use Xpressengine\User\Models\Guest;
 use Xpressengine\User\Models\PendingEmail;
 use Xpressengine\User\Models\Term;
@@ -109,6 +110,7 @@ class UserServiceProvider extends ServiceProvider
 
         // register admin middleware
         $this->app['router']->aliasMiddleware('admin', Admin::class);
+        $this->app['router']->pushMiddlewareToGroup('web', RequiredDF::class);
 
         // register toggle menu
         $this->registerToggleMenu();
@@ -569,24 +571,6 @@ class UserServiceProvider extends ServiceProvider
     {
         RegisterFormParts::setSkinResolver($this->app['xe.skin']);
         RegisterFormParts::setContainer($this->app);
-        // email register guard
-        $this->app['xe.register']->push(
-            'user/register/guard',
-            'email',
-            [
-                'title' => '이메일 인증',
-                'description' => '사용자의 이메일로 인증정보를 전송하여 인증합니다.',
-                'render' => function () {
-                    $config = app('xe.config')->get('user.join');
-                    if($config->get('guard_forced') === false) {
-                        return;
-                    }
-                    $skinHandler = app('xe.skin');
-                    $skin = $skinHandler->getAssigned('user/auth');
-                    return $skin->setView('register.sections.email')->render();
-                }
-            ]
-        );
 
         // email register form
         $this->app['xe.register']->push('user/register/form', 'email', EmailVerifyParts::class);
