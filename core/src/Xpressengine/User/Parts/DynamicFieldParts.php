@@ -14,6 +14,9 @@
 
 namespace Xpressengine\User\Parts;
 
+use Illuminate\Support\Collection;
+use Xpressengine\DynamicField\AbstractType;
+
 class DynamicFieldParts extends RegisterFormParts
 {
     protected static $name = '부가 정보';
@@ -26,28 +29,30 @@ class DynamicFieldParts extends RegisterFormParts
 
     protected function data()
     {
-        $fields = [];
-        foreach ($this->getDF()->gets('user') as $id => $field) {
-            if ($field->getConfig()->get('use') == true) {
-                $fields[] = $field;
-            }
-        }
+        $fields = Collection::make($this->getFields())->filter(function ($field) {
+            return $field->isEnabled();
+        });
 
         return compact('fields');
     }
 
     public function rules()
     {
-        $rules = [];
-        $configs = $this->getDF()->getConfigHandler()->gets('user');
-
-        foreach ($configs as $config) {
-            if ($config->get('use') == true) {
-                $rules = array_merge($rules, $this->getDF()->getRules($config));
-            }
-        }
+        $rules = Collection::make($this->getFields())->filter(function ($field) {
+            return $field->isEnabled();
+        })->map(function ($field) {
+            return $field->getRules();
+        })->collapse();
 
         return $rules;
+    }
+
+    /**
+     * @return AbstractType[]
+     */
+    protected function getFields()
+    {
+        return $this->getDF()->gets('user');
     }
 
     protected function getDF()
