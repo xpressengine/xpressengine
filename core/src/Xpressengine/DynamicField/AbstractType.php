@@ -767,4 +767,14 @@ abstract class AbstractType implements ComponentInterface
     {
         return null;
     }
+
+    /**
+     * Determine if a item is enabled
+     *
+     * @return bool
+     */
+    public function isEnabled()
+    {
+        return $this->getConfig()->get('use') === true;
+    }
 }
