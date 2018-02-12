@@ -17,6 +17,7 @@ namespace Xpressengine\DynamicField;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Str;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Database\DynamicQuery;
 use Xpressengine\Plugin\ComponentInterface;
@@ -113,7 +114,21 @@ abstract class AbstractType implements ComponentInterface
      *
      * @return array
      */
-    abstract public function getRules();
+    public function getRules()
+    {
+        $required = $this->config->get('required') === true;
+
+        $rules = [];
+        $names = array_map(function () {
+            return '';
+        }, $this->getColumns());
+        foreach (array_merge($names, $this->rules) as $name => $rule) {
+            $key = Str::snake($this->config->get('id')) . '_' . $name;
+            $rules[$key] = $required ? ltrim($rule . '|required', '|') : $rule;
+        }
+
+        return array_filter($rules);
+    }
 
     /**
      * 다이나믹필스 생성할 때 타입 설정에 적용될 rule 반환

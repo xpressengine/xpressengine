@@ -19,6 +19,8 @@ class Url extends AbstractType
 {
     protected static $id = 'fieldType/xpressengine@Url';
 
+    protected $rules = ['url' => 'url'];
+
     /**
      * get field type name
      *
@@ -49,21 +51,6 @@ class Url extends AbstractType
         return [
             'url' => (new ColumnEntity('url', ColumnDataType::STRING)),
         ];
-    }
-
-    /**
-     * return rules
-     *
-     * @return array
-     */
-    public function getRules()
-    {
-        $required = '';
-        if ($this->config->get('required') === true) {
-            $required = '|required';
-        }
-
-        return ['url' => 'url' . $required];
     }
 
     /**

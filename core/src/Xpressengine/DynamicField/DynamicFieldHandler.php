@@ -20,6 +20,7 @@
  */
 namespace Xpressengine\DynamicField;
 
+use Illuminate\Support\Str;
 use Xpressengine\Database\VirtualConnectionInterface;
 use Xpressengine\Config\ConfigEntity;
 use Illuminate\View\Factory as ViewFactory;
@@ -295,6 +296,8 @@ class DynamicFieldHandler
      *
      * @param ConfigEntity $config dynamic field config entity
      * @return array
+     *
+     * @deprecated
      */
     public function getRules(ConfigEntity $config)
     {
@@ -302,7 +305,13 @@ class DynamicFieldHandler
 
         $rules = [];
         foreach ($type->getRules() as $columnName => $rule) {
-            $key = snake_case($config->get('id')) . '_' . $columnName;
+            $id = snake_case($config->get('id'));
+            if (Str::startsWith($columnName, $id.'_')) {
+                $key = $columnName;
+            } else {
+                $key = snake_case($config->get('id')) . '_' . $columnName;
+            }
+
             $rules[$key] = $rule;
         }
 
