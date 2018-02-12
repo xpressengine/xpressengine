@@ -1,9 +1,10 @@
-import 'moment';
-import 'xe-transition';
-import 'xe-modal';
-import 'xe-dropdown';
-import 'xe-tooltip';
+import moment from 'moment'
+import 'xe-transition'
+import 'xe-modal'
+import 'xe-dropdown'
+import 'xe-tooltip'
 import DynamicLoadManager from 'xe-dynamicLoadManager'
+import $ from 'jquery'
 
 /**
  * @module Component
@@ -15,23 +16,23 @@ var Component = (function (exports) {
      * @memberof module:Component
      * */
     timeago: function () {
-      $('[data-xe-timeago]').trigger('boot.xe.timeago');
+      $('[data-xe-timeago]').trigger('boot.xe.timeago')
     },
     /**
      * DOM에 지정된 selector가 있을 경우 컴포넌트를 바인딩한다.
      * @memberof module:Component
      * */
     boot: function () {
-      this.timeago();
-      $('[data-toggle=xe-dropdown]').trigger('boot.xe.dropdown');
-      $('[data-toggle=xe-modal]').trigger('boot.xe.modal');
-      $('[data-toggle=xe-tooltip]').trigger('boot.xe.tooltip');
-      $('[data-toggle=dropdown]').trigger('boot.dropdown');
-    },
-  };
-})(window);
+      this.timeago()
+      $('[data-toggle=xe-dropdown]').trigger('boot.xe.dropdown')
+      $('[data-toggle=xe-modal]').trigger('boot.xe.modal')
+      $('[data-toggle=xe-tooltip]').trigger('boot.xe.tooltip')
+      $('[data-toggle=dropdown]').trigger('boot.dropdown')
+    }
+  }
+})(window)
 
-DynamicLoadManager.cssLoad('/assets/core/xe-ui-component/xe-ui-component.css');
+DynamicLoadManager.cssLoad('/assets/core/xe-ui-component/xe-ui-component.css')
 
 $(function () {
   /*
@@ -41,43 +42,41 @@ $(function () {
    * <span data-xe-timeago="{timestmap|ISO8601}" title="2016-04-04 07:05:44" />3 Hours ago</span>
    */
 
-  moment.locale(XE.getLocale());
+  moment.locale(XE.getLocale())
 
   $(document).on('boot.xe.timeago', '[data-xe-timeago]', function () {
-    var $this = $(this);
-    if ($this.data().xeTimeagoCalled === true) false;
+    var $this = $(this)
+    if ($this.data().xeTimeagoCalled === true) false
 
-    var dataDate = $this.data('xe-timeago');
-    var isTimestamp = (parseInt(dataDate) == dataDate);
+    var dataDate = $this.data('xe-timeago')
+    var isTimestamp = (parseInt(dataDate) == dataDate)
 
     if (isTimestamp) {
-      dataDate = moment.unix(dataDate);
+      dataDate = moment.unix(dataDate)
     } else {
-      dataDate = moment(dataDate);
+      dataDate = moment(dataDate)
     }
 
-    $this.text(dataDate.fromNow());
-    $this.data().xeTimeagoCalled = true;
-
-  });
+    $this.text(dataDate.fromNow())
+    $this.data().xeTimeagoCalled = true
+  })
 
   $(document).on('boot.xe.dropdown', '[data-toggle=xe-dropdown]', function () {
-    var $this = $(this);
-    $this.xeDropdown();
-  });
+    var $this = $(this)
+    $this.xeDropdown()
+  })
 
   $(document).on('boot.xe.modal', '[data-toggle=xe-modal]', function () {
-    var $this = $(this);
-
-  });
+    var $this = $(this)
+  })
 
   $(document).on('boot.xe.tooltip', '[data-toggle=xe-tooltip]', function () {
-    var $this = $(this);
-    $this.xeTooltip();
-  });
+    var $this = $(this)
+    $this.xeTooltip()
+  })
 
-  Component.boot();
-});
+  Component.boot()
+})
 
 // // xeModal =========================================================
 // $.fn.xeModal = function (options) {
@@ -103,4 +102,4 @@ $(function () {
 //   DynamicLoadManager.cssLoad('/assets/core/xe-ui-component/xe-ui-component.css');
 // };
 
-export default Component;
+export default Component

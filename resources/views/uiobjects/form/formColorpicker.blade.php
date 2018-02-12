@@ -26,7 +26,7 @@
 </style>
 
 <script>
-    jQuery(function () {
+    jQuery(function ($) {
         $('[data-selector={{ $selector }}]').colorpicker({
             customClass: 'colorpicker-2x',
             align: 'left',

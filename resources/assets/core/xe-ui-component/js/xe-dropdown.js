@@ -1,61 +1,61 @@
 /**
  * @name		jQuery xeDropdown plugin
  * */
-;(function () {
+;(function ($) {
   // DROPDOWN CLASS DEFINITION
   // =========================
 
-  var backdrop = '.xe-dropdown-backdrop';
-  var toggle = '[data-toggle="xe-dropdown"]';
+  var backdrop = '.xe-dropdown-backdrop'
+  var toggle = '[data-toggle="xe-dropdown"]'
   var Dropdown = function (element) {
-    $(element).on('click.xe.dropdown', this.toggle);
-  };
-
-  Dropdown.VERSION = '3.3.6';
-
-  function getParent($this) {
-    var selector = $this.attr('data-target');
-
-    if (!selector) {
-      selector = $this.attr('href');
-      selector = selector && /#[A-Za-z]/.test(selector) && selector.replace(/.*(?=#[^\s]*$)/, ''); // strip for ie7
-    }
-
-    var $parent = selector && $(selector);
-
-    return $parent && $parent.length ? $parent : $this.parent();
+    $(element).on('click.xe.dropdown', this.toggle)
   }
 
-  function clearMenus(e) {
-    if (e && e.which === 3) return;
-    $(backdrop).remove();
+  Dropdown.VERSION = '3.3.6'
+
+  function getParent ($this) {
+    var selector = $this.attr('data-target')
+
+    if (!selector) {
+      selector = $this.attr('href')
+      selector = selector && /#[A-Za-z]/.test(selector) && selector.replace(/.*(?=#[^\s]*$)/, '') // strip for ie7
+    }
+
+    var $parent = selector && $(selector)
+
+    return $parent && $parent.length ? $parent : $this.parent()
+  }
+
+  function clearMenus (e) {
+    if (e && e.which === 3) return
+    $(backdrop).remove()
     $(toggle).each(function () {
-      var $this = $(this);
-      var $parent = getParent($this);
-      var relatedTarget = { relatedTarget: this };
+      var $this = $(this)
+      var $parent = getParent($this)
+      var relatedTarget = { relatedTarget: this }
 
-      if (!$parent.hasClass('open')) return;
+      if (!$parent.hasClass('open')) return
 
-      if (e && e.type == 'click' && /input|textarea/i.test(e.target.tagName) && $.contains($parent[0], e.target)) return;
+      if (e && e.type == 'click' && /input|textarea/i.test(e.target.tagName) && $.contains($parent[0], e.target)) return
 
-      $parent.trigger(e = $.Event('hide.xe.dropdown', relatedTarget));
+      $parent.trigger(e = $.Event('hide.xe.dropdown', relatedTarget))
 
-      if (e.isDefaultPrevented()) return;
+      if (e.isDefaultPrevented()) return
 
-      $this.attr('aria-expanded', 'false');
-      $parent.removeClass('open').trigger($.Event('hidden.xe.dropdown', relatedTarget));
-    });
+      $this.attr('aria-expanded', 'false')
+      $parent.removeClass('open').trigger($.Event('hidden.xe.dropdown', relatedTarget))
+    })
   }
 
   Dropdown.prototype.toggle = function (e) {
-    var $this = $(this);
+    var $this = $(this)
 
-    if ($this.is('.disabled, :disabled')) return;
+    if ($this.is('.disabled, :disabled')) return
 
-    var $parent = getParent($this);
-    var isActive = $parent.hasClass('open');
+    var $parent = getParent($this)
+    var isActive = $parent.hasClass('open')
 
-    clearMenus();
+    clearMenus()
 
     if (!isActive) {
       if ('ontouchstart' in document.documentElement && !$parent.closest('.navbar-nav').length) {
@@ -63,83 +63,83 @@
         $(document.createElement('div'))
           .addClass('xe-dropdown-backdrop')
           .insertAfter($(this))
-          .on('click', clearMenus);
+          .on('click', clearMenus)
       }
 
-      var relatedTarget = { relatedTarget: this };
-      $parent.trigger(e = $.Event('show.xe.dropdown', relatedTarget));
+      var relatedTarget = { relatedTarget: this }
+      $parent.trigger(e = $.Event('show.xe.dropdown', relatedTarget))
 
-      if (e.isDefaultPrevented()) return;
+      if (e.isDefaultPrevented()) return
 
       $this
         .trigger('focus')
-        .attr('aria-expanded', 'true');
+        .attr('aria-expanded', 'true')
 
       $parent
         .toggleClass('open')
-        .trigger($.Event('shown.xe.dropdown', relatedTarget));
+        .trigger($.Event('shown.xe.dropdown', relatedTarget))
     }
 
-    return false;
-  };
+    return false
+  }
 
   Dropdown.prototype.keydown = function (e) {
-    if (!/(38|40|27|32)/.test(e.which) || /input|textarea/i.test(e.target.tagName)) return;
+    if (!/(38|40|27|32)/.test(e.which) || /input|textarea/i.test(e.target.tagName)) return
 
-    var $this = $(this);
+    var $this = $(this)
 
-    e.preventDefault();
-    e.stopPropagation();
+    e.preventDefault()
+    e.stopPropagation()
 
-    if ($this.is('.disabled, :disabled')) return;
+    if ($this.is('.disabled, :disabled')) return
 
-    var $parent = getParent($this);
-    var isActive = $parent.hasClass('open');
+    var $parent = getParent($this)
+    var isActive = $parent.hasClass('open')
 
     if (!isActive && e.which != 27 || isActive && e.which == 27) {
-      if (e.which == 27) $parent.find(toggle).trigger('focus');
-      return $this.trigger('click');
+      if (e.which == 27) $parent.find(toggle).trigger('focus')
+      return $this.trigger('click')
     }
 
-    var desc = ' li:not(.disabled):visible a';
-    var $items = $parent.find('.xe-dropdown-menu' + desc);
+    var desc = ' li:not(.disabled):visible a'
+    var $items = $parent.find('.xe-dropdown-menu' + desc)
 
-    if (!$items.length) return;
+    if (!$items.length) return
 
-    var index = $items.index(e.target);
+    var index = $items.index(e.target)
 
-    if (e.which == 38 && index > 0)                 index--;         // up
-    if (e.which == 40 && index < $items.length - 1) index++;         // down
-    if (!~index)                                    index = 0;
+    if (e.which == 38 && index > 0) index-- // up
+    if (e.which == 40 && index < $items.length - 1) index++ // down
+    if (!~index) index = 0
 
-    $items.eq(index).trigger('focus');
-  };
+    $items.eq(index).trigger('focus')
+  }
 
   // DROPDOWN PLUGIN DEFINITION
   // ==========================
 
-  function Plugin(option) {
+  function Plugin (option) {
     return this.each(function () {
-      var $this = $(this);
-      var data = $this.data('xe.dropdown');
+      var $this = $(this)
+      var data = $this.data('xe.dropdown')
 
-      if (!data) $this.data('xe.dropdown', (data = new Dropdown(this)));
-      if (typeof option == 'string') data[option].call($this);
-    });
+      if (!data) $this.data('xe.dropdown', (data = new Dropdown(this)))
+      if (typeof option === 'string') data[option].call($this)
+    })
   }
 
-  var old = $.fn.dropdown;
+  var old = $.fn.dropdown
 
-  $.fn.xeDropdown = Plugin;
-  $.fn.xeDropdown.Constructor = Dropdown;
+  $.fn.xeDropdown = Plugin
+  $.fn.xeDropdown.Constructor = Dropdown
 
   // DROPDOWN NO CONFLICT
   // ====================
 
   $.fn.xeDropdown.noConflict = function () {
-    $.fn.dropdown = old;
-    return this;
-  };
+    $.fn.dropdown = old
+    return this
+  }
 
   // APPLY TO STANDARD DROPDOWN ELEMENTS
   // ===================================
@@ -147,9 +147,9 @@
   $(document)
     .on('click.xe.dropdown.data-api', clearMenus)
     .on('click.xe.dropdown.data-api', '.xe-dropdown form', function (e) {
-      e.stopPropagation();
+      e.stopPropagation()
     })
     .on('click.xe.dropdown.data-api', toggle, Dropdown.prototype.toggle)
     .on('keydown.xe.dropdown.data-api', toggle, Dropdown.prototype.keydown)
-    .on('keydown.xe.dropdown.data-api', '.xe-dropdown-menu', Dropdown.prototype.keydown);
-})(jQuery);
+    .on('keydown.xe.dropdown.data-api', '.xe-dropdown-menu', Dropdown.prototype.keydown)
+})(window.jQuery)

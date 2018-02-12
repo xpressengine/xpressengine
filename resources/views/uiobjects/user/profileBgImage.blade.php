@@ -6,7 +6,7 @@
 </div>
 
 <script>
-    jQuery(function () {
+    jQuery(function ($) {
         var fileInput = $('.__xe_imagebox_{{ $seq }}');
         fileInput.fileupload({
             fileInput: fileInput,

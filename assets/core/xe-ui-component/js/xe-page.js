@@ -1,139 +1,138 @@
 /**
  * @namespace XE
  * */
-;(function ($, exports, XE, DynamicLoadManager) {
-  var _this = this;
+;(function ($, XE) {
+  var _this = this
 
   var _pageCommon = (function () {
     return {
       init: function () {
-        _this = this;
-        _this.bindEvent();
+        _this = this
+        _this.bindEvent()
 
-        return this;
+        return this
       },
 
       bindEvent: function () {
-        $(document).on('click', '[data-toggle=xe-page]', _this.execPage);
-        $(document).on('click', '[data-toggle=xe-page-modal]', _this.execPageModal);
-        $(document).on('click', '[data-toggle=xe-page-toggle-menu]', _this.execPageToggleMenu);
-        $(document).on('click', _this.execPageCheck);
+        $(document).on('click', '[data-toggle=xe-page]', _this.execPage)
+        $(document).on('click', '[data-toggle=xe-page-modal]', _this.execPageModal)
+        $(document).on('click', '[data-toggle=xe-page-toggle-menu]', _this.execPageToggleMenu)
+        $(document).on('click', _this.execPageCheck)
       },
 
       execPage: function (e) {
-        e.preventDefault();
+        e.preventDefault()
 
-        var $this = $(this);
-        var targetSelector = $this.data('target');
-        var data = $this.data('params');
-        var callback = $this.data('callback');
-        var url = $this.data('url');
+        var $this = $(this)
+        var targetSelector = $this.data('target')
+        var data = $this.data('params')
+        var callback = $this.data('callback')
+        var url = $this.data('url')
 
-        data = data ? (typeof data === 'object') ? data : JSON.parse(data) : {};
+        data = data ? (typeof data === 'object') ? data : JSON.parse(data) : {}
 
-        var objStack = callback ? callback.split('.') : [];
-        var callbackFunc = (objStack.length > 0) ? window : '';
+        var objStack = callback ? callback.split('.') : []
+        var callbackFunc = (objStack.length > 0) ? window : ''
 
         var options = {
-          data: data,
-        };
+          data: data
+        }
 
-        if (!url
-          && $this.get(0).tagName === 'A'
-          && $this.attr('href')) {
-          url = $this.attr('href');
+        if (!url &&
+          $this.get(0).tagName === 'A' &&
+          $this.attr('href')) {
+          url = $this.attr('href')
         }
 
         if (!url) {
-          url = $this.attr('href');
+          url = $this.attr('href')
         }
 
         if (objStack.length > 0) {
           for (var i = 0, max = objStack.length; i < max; i += 1) {
-            callbackFunc = callbackFunc[objStack[i]];
+            callbackFunc = callbackFunc[objStack[i]]
           }
         }
 
-        XE.page(url, targetSelector, options, callbackFunc);
+        XE.page(url, targetSelector, options, callbackFunc)
       },
 
       execPageModal: function (e) {
-        e.preventDefault();
+        e.preventDefault()
 
-        var $this = $(this);
-        var data = $this.data('data');
-        var callback = $this.data('callback');
-        var url = $this.data('url');
+        var $this = $(this)
+        var data = $this.data('data')
+        var callback = $this.data('callback')
+        var url = $this.data('url')
 
-        data = data ? (typeof data === 'object') ? data : JSON.parse(data) : {};
+        data = data ? (typeof data === 'object') ? data : JSON.parse(data) : {}
 
-        var objStack = callback ? callback.split('.') : [];
-        var callbackFunc = (objStack.length > 0) ? window : '';
+        var objStack = callback ? callback.split('.') : []
+        var callbackFunc = (objStack.length > 0) ? window : ''
 
         var options = {
-          data: data,
-        };
+          data: data
+        }
 
-        if (!url
-          && $this.get(0).tagName === 'A'
-          && $this.attr('href')) {
-          url = $this.attr('href');
+        if (!url &&
+          $this.get(0).tagName === 'A' &&
+          $this.attr('href')) {
+          url = $this.attr('href')
         }
 
         if (objStack.length > 0) {
           for (var i = 0, max = objStack.length; i < max; i += 1) {
-            callbackFunc = callbackFunc[objStack[i]];
+            callbackFunc = callbackFunc[objStack[i]]
           }
         }
 
-        XE.pageModal(url, options, callbackFunc);
+        XE.pageModal(url, options, callbackFunc)
       },
 
       execPageToggleMenu: function (e) {
-        e.preventDefault();
+        e.preventDefault()
 
-        var $this = $(this);
-        var data = $this.data('data');
-        var side = $this.data('side');
-        var callback = $this.data('callback');
-        var url = $this.data('url');
+        var $this = $(this)
+        var data = $this.data('data')
+        var side = $this.data('side')
+        var callback = $this.data('callback')
+        var url = $this.data('url')
 
-        data = data ? (typeof data === 'object') ? data : JSON.parse(data) : {};
+        data = data ? (typeof data === 'object') ? data : JSON.parse(data) : {}
 
-        var objStack = callback ? callback.split('.') : [];
-        var callbackFunc = (objStack.length > 0) ? window : '';
+        var objStack = callback ? callback.split('.') : []
+        var callbackFunc = (objStack.length > 0) ? window : ''
 
         var options = {
           data: data,
-          side: side,
-        };
+          side: side
+        }
 
-        if (!url
-          && $this.get(0).tagName === 'A'
-          && $this.attr('href')) {
-          url = $this.attr('href');
+        if (!url &&
+          $this.get(0).tagName === 'A' &&
+          $this.attr('href')) {
+          url = $this.attr('href')
         }
 
         if (objStack.length > 0) {
           for (var i = 0, max = objStack.length; i < max; i += 1) {
-            callbackFunc = callbackFunc[objStack[i]];
+            callbackFunc = callbackFunc[objStack[i]]
           }
         }
 
-        XE.pageToggleMenu(url, $this, options, callbackFunc);
+        XE.pageToggleMenu(url, $this, options, callbackFunc)
       },
 
       loadDone: function (cssLen, jsLen, next) {
-        var loadingCount = 0;
+        var loadingCount = 0
 
         return function (e) {
-
-          loadingCount++;
+          loadingCount++
 
           if ((cssLen + jsLen) === loadingCount && !!next) {
-            next();
+            next()
           }
-        };
+        }
       },
 
       getModalTemplate: function () {
@@ -142,26 +141,26 @@
           '<div class="xe-modal-dialog ">',
           '<div class="xe-modal-content"></div>',
           '</div>',
-          '</div>',
-        ].join('\n');
+          '</div>'
+        ].join('\n')
       },
 
       getLayerPopupTemplate: function () {
         return [
-          '<ul class="xe-dropdown-menu xe-toggle-menu"></ul>',
-        ].join('\n');
+          '<ul class="xe-dropdown-menu xe-toggle-menu"></ul>'
+        ].join('\n')
       },
 
       execPageCheck: function (e) {
-        var $target = $(e.target);
+        var $target = $(e.target)
 
         // close ToggleMenu
         if ($target.closest('.xe-dropdown').length == 0) {
-          $('[data-toggle=xe-page-toggle-menu]').parent('.xe-dropdown').removeClass('open');
+          $('[data-toggle=xe-page-toggle-menu]').parent('.xe-dropdown').removeClass('open')
         }
-      },
-    }.init();
-  })();
+      }
+    }.init()
+  })()
 
   /**
    * @private
@@ -170,36 +169,36 @@
   var _validation = (function () {
     return {
       isValidPage: function (options) {
-        var isValid = true;
+        var isValid = true
 
         if (!options.hasOwnProperty('url') || options.url === '') {
-          console.error('page: 필수 option [url]');
+          console.error('page: 필수 option [url]')
         }
 
-        return isValid;
+        return isValid
       },
 
       isValidPageModal: function (options) {
-        var isValid = true;
+        var isValid = true
 
         if (!options.hasOwnProperty('url') || options.url === '') {
-          console.error('pageModal: 필수 option [url]');
+          console.error('pageModal: 필수 option [url]')
         }
 
-        return isValid;
+        return isValid
       },
 
       isValidPageToggleMenu: function (options) {
-        var isValid = true;
+        var isValid = true
 
         if (!options.hasOwnProperty('url') || options.url === '') {
-          console.error('pageToggleMenu: Require option [url]');
+          console.error('pageToggleMenu: Require option [url]')
         }
 
-        return isValid;
-      },
-    };
-  })();
+        return isValid
+      }
+    }
+  })()
 
   /**
    * @private
@@ -212,80 +211,80 @@
    * @param {function} callback
    * */
   var _page = function (options, callback) {
-    var $target = options.target;
-    var addType = options.hasOwnProperty('addType') ? options.addType : '';
+    var $target = options.target
+    var addType = options.hasOwnProperty('addType') ? options.addType : ''
 
-    if (typeof $target == 'string') {
-      $target = $($target);
+    if (typeof $target === 'string') {
+      $target = $($target)
     }
 
     var defaultOptions = {
       url: options.url,
       type: options.type || 'get',
       dataType: 'json',
-      data: options.data || {},
-    };
+      data: options.data || {}
+    }
 
     var pageOptions = $.extend(defaultOptions, {
       success: function (data) {
-        var assets = data.XE_ASSET_LOAD || {};
-        var css = assets.css || [];
-        var js = assets.js || [];
-        var html = data.result;
-        var cssLen = css.length;
-        var jsLen = js.length;
-        var data = data.data || {};
+        var assets = data.XE_ASSET_LOAD || {}
+        var css = assets.css || []
+        var js = assets.js || []
+        var html = data.result
+        var cssLen = css.length
+        var jsLen = js.length
+        var data = data.data || {}
 
         var next = function () {
           switch (addType) {
             case 'append':
-              $target.append(html);
-            break;
+              $target.append(html)
+              break
 
             case 'prepend':
-              $target.prepend(html);
-            break;
+              $target.prepend(html)
+              break
 
             case 'after':
-              $target.after(html);
-            break;
+              $target.after(html)
+              break
 
             case 'before':
-              $target.before(html);
-            break;
+              $target.before(html)
+              break
 
             default:
-              $target.html(html);
+              $target.html(html)
           }
 
           if (callback) {
-            callback(data);
+            callback(data)
           }
-        };
+        }
 
-        var loadDone = _pageCommon.loadDone(cssLen, jsLen, next);
+        var loadDone = _pageCommon.loadDone(cssLen, jsLen, next)
 
         if (cssLen > 0) {
           for (var i = 0, max = cssLen; i < max; i += 1) {
-            DynamicLoadManager.cssLoad(css[i], loadDone, loadDone);
+            XE.cssLoad(css[i], loadDone, loadDone)
           }
         }
 
         if (jsLen > 0) {
-          DynamicLoadManager.jsLoadMultiple(js, {
+          XE.jsLoadMultiple(js, {
             load: loadDone,
-            error: loadDone,
-          });
+            error: loadDone
+          })
         }
 
         if ((cssLen + jsLen) === 0) {
-          next();
+          next()
         }
-      },
-    });
+      }
+    })
 
-    XE.ajax(pageOptions);
-  };
+    XE.ajax(pageOptions)
+  }
 
   /**
    * selecor영역에 html을 로드하여 보여준다. html 랜더링 전에 assets파일들의 로드가 선행된다.
@@ -309,18 +308,18 @@
    * */
   XE.page = function (url, target, options, callback) {
     var defaultOptions = {
-      type: 'get',
-    };
+      type: 'get'
+    }
 
     var options = $.extend(defaultOptions, options || {}, {
       url: url,
-      target: target,
-    });
+      target: target
+    })
 
     if (_validation.isValidPage(options)) {
-      _page(options, callback);
+      _page(options, callback)
     }
-  };
+  }
 
   /**
    * modal을 실행하여 .xe-modal-content 영역에 html을 로드하여 보여준다. html 랜더링 전에 assets파일들의 로드가 선행된다.
@@ -342,37 +341,35 @@
    * </pre>
    * */
   XE.pageModal = function (url, options, callback) {
-
     var defaultOptions = {
-      type: 'get',
-    };
+      type: 'get'
+    }
 
     var options = $.extend(defaultOptions, options || {}, {
       target: '.xe-modal[data-use=xe-page] .xe-modal-content',
-      url: url,
-    });
+      url: url
+    })
 
     if (_validation.isValidPageModal(options)) {
-      var $modal = $('.xe-modal[data-use=xe-page]');
+      var $modal = $('.xe-modal[data-use=xe-page]')
 
       if ($modal.length > 0) {
-        $modal.find('.xe-modal-content').empty();
+        $modal.find('.xe-modal-content').empty()
       } else {
-        var modalTemplate = _pageCommon.getModalTemplate();
+        var modalTemplate = _pageCommon.getModalTemplate()
 
-        $('body').append(modalTemplate);
+        $('body').append(modalTemplate)
       }
 
       _page(options, function () {
         if (callback) {
-          callback();
+          callback()
         }
 
-        $('.xe-modal[data-use=xe-page]').xeModal();
-      });
-
+        $('.xe-modal[data-use=xe-page]').xeModal()
+      })
     }
-  };
+  }
 
   /**
    * 실행하여 .xe-toggle-menu-items 영역에 html을 로드하고 .xe-toggle-popup 을 보여준다. html 랜더링 전에 assets파일들의 로드가 선행된다.
@@ -396,43 +393,42 @@
    * </pre>
    * */
   XE.pageToggleMenu = function (url, $this, options, callback) {
-    var $container = $this.parent();
+    var $container = $this.parent()
 
     if ($container.hasClass('xe-dropdown') == false) {
-      $container.addClass('xe-dropdown');
+      $container.addClass('xe-dropdown')
     }
 
     if ($container.hasClass('open')) {
-      $container.removeClass('open');
-      return;
+      $container.removeClass('open')
+      return
     }
 
-    var $target = $container.find('.xe-dropdown-menu');
+    var $target = $container.find('.xe-dropdown-menu')
     if ($target.length == 0) {
-      var toggleMenuTemplate = _pageCommon.getLayerPopupTemplate();
-      $container.append(toggleMenuTemplate);
-      $target = $container.find('.xe-dropdown-menu');
+      var toggleMenuTemplate = _pageCommon.getLayerPopupTemplate()
+      $container.append(toggleMenuTemplate)
+      $target = $container.find('.xe-dropdown-menu')
     }
 
     if (options.side) {
-      $target.addClass(options.side);
+      $target.addClass(options.side)
     }
 
     var options = $.extend(options, {
       target: $target,
       url: url,
-      type: options.type || 'get',
-    });
+      type: options.type || 'get'
+    })
 
     if (_validation.isValidPageToggleMenu(options)) {
       _page(options, function () {
         if (callback) {
-          callback();
+          callback()
         }
 
-        $container.addClass('open');
-      });
+        $container.addClass('open')
+      })
     }
-  };
-
-})(jQuery, window, XE, DynamicLoadManager);
+  }
+})(window.jQuery, window.XE)
