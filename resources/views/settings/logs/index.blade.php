@@ -45,18 +45,12 @@
                             @yield('admin-select')
                         </div>
 
-
                         <div class="btn-group" role="group">
                             <form method="GET" action="{{ route('settings.setting.log.save') }}" accept-charset="UTF-8" role="form" id="_save-form">
-                                    <input type="hidden" name="type" value={{request()->get('type')}} >
-                                    <input type="hidden" name="user_id" value={{request()->get('user_id')}} >
-                                    <input type="hidden" name="keyword" value={{request()->get('keyword')}} >
-                                    <input type="hidden" name="keyfield" value={{request()->get('keyfield')}} >
-                                    <input type="hidden" name="startDate" value={{$startDate}} >
-                                    <input type="hidden" name="endDate" value={{$endDate}} >
-
-                                    <button type="submit" class="btn btn-default" >{{ xe_trans('xe::download') }}</button>
-
+                                @foreach(request()->all() as $name => $value)
+                                    <input type="hidden" name="{{ $name }}" value="{{ $value }}">
+                                @endforeach
+                                <button type="submit" class="btn btn-default" >{{ xe_trans('xe::download') }}</button>
                             </form>
                         </div>
                     </div>
@@ -70,8 +64,8 @@
                                 </div>
 
                                 <div class="search-input-group">
-                                    <input type="text" name="startDate" class="form-control" placeholder="{{xe_trans('xe::enterStartDate')}}" value={{$startDate}} >
-                                    <input type="text" name="endDate" class="form-control" placeholder="{{xe_trans('xe::enterEndDate')}}" value={{$endDate}} >
+                                    <input type="text" name="startDate" class="form-control" placeholder="{{xe_trans('xe::enterStartDate')}}" value={{ request()->get('startDate') }} >
+                                    <input type="text" name="endDate" class="form-control" placeholder="{{xe_trans('xe::enterEndDate')}}" value={{ request()->get('endDate') }} >
                                 </div>
 
                                 <p></p>

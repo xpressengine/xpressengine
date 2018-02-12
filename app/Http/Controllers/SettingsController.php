@@ -201,13 +201,12 @@ class SettingsController extends Controller
     {
         $query = $handler->query()->with('user')->orderBy('created_at', 'desc');
 
-        $startDate = trim($request->get('startDate', date('Y-m-d', strtotime('-7 day', time())))) . ' 00:00:00';
-        $endDate = trim($request->get('endDate', date('Y-m-d'))) . ' 23:59:59';
+        $request->query->set('startDate', $request->get('startDate', date('Y-m-d', strtotime('-7 day', time()))));
+        $request->query->set('endDate', $request->get('endDate', date('Y-m-d')));
 
-        $query->whereBetween('created_at', [$startDate, $endDate]);
-
-        $startDate = str_before($startDate, ' ');
-        $endDate = str_before($endDate, ' ');
+        $query->whereBetween('created_at', [
+            $request->get('startDate')  . ' 00:00:00', $request->get('endDate') . ' 23:59:59'
+        ]);
 
         $type = $request->get('type');
         if ($type) {
@@ -234,30 +233,24 @@ class SettingsController extends Controller
             );
         }
 
-        return ['query'=>$query, 'startDate'=>$startDate, 'endDate'=>$endDate];
+        return $query;
     }
 
     public function indexLog(Request $request, LogHandler $handler, UserHandler $userHandler)
     {
         $loggers = $handler->getLoggers();
-        $searchLog = self::searchLog($request, $handler);
-
-        $query = $searchLog['query'];
-        $startDate = $searchLog['startDate'];
-        $endDate = $searchLog['endDate'];
+        $query = self::searchLog($request, $handler);
 
         $logs = $query->paginate(20)->appends(request()->query());
 
         $admins = $userHandler->whereIn('rating', [Rating::MANAGER, Rating::SUPER])->get();
-        return \XePresenter::make('settings.logs.index', compact('loggers', 'logs', 'admins', 'startDate', 'endDate'));
+        return \XePresenter::make('settings.logs.index', compact('loggers', 'logs', 'admins'));
     }
 
     public function saveLog(Request $request, LogHandler $handler, UserHandler $userHandler)
     {
         $loggers = $handler->getLoggers();
-        $searchLog = self::searchLog($request, $handler);
-
-        $query = $searchLog['query'];
+        $query = self::searchLog($request, $handler);
 
         $headers = array(
             "Content-type" => "text/csv; charset=UTF-8;",
