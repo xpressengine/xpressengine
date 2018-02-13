@@ -1,20 +1,12 @@
 <?php
-/**
- * RequiredDF.php
- *
- * PHP version 5
- *
- * @category
- * @package
- * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
- * @link        https://xpressengine.io
- */
 
-namespace Xpressengine\User\Middleware;
+namespace App\Http\Middleware;
 
+use App\Facades\XeDynamicField;
 use Closure;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class RequiredDF
 {
@@ -27,14 +19,18 @@ class RequiredDF
      */
     public function handle($request, Closure $next)
     {
-        if (auth()->check() && !auth()->user()->isAdmin() && !$request->routeIs('auth.register.add')) {
-            $fields = app('xe.dynamicField')->gets('user');
+        if (
+            Auth::check() &&
+            !Auth::user()->isAdmin() &&
+            !$request->routeIs('auth.register.add', 'logout')
+        ) {
+            $fields = XeDynamicField::gets('user');
 
             if (count($fields) < 1) {
                 return $next($request);
             }
 
-            $rules = collect($fields)->filter(function ($field) {
+            $rules = Collection::make($fields)->filter(function ($field) {
                 return $field->isEnabled();
             })->map(function ($field) {
                 return $field->getRules();
@@ -43,7 +39,7 @@ class RequiredDF
                 return in_array('required', $rules);
             })->map(function () {return 'required';});
 
-            if (validator(auth()->user()->getAttributes(), $rules->all())->fails()) {
+            if (Validator::make(Auth::user()->getAttributes(), $rules->all())->fails()) {
                 return redirect()->route('auth.register.add');
             }
         }

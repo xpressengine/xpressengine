@@ -110,7 +110,6 @@ class UserServiceProvider extends ServiceProvider
 
         // register admin middleware
         $this->app['router']->aliasMiddleware('admin', Admin::class);
-        $this->app['router']->pushMiddlewareToGroup('web', RequiredDF::class);
 
         // register toggle menu
         $this->registerToggleMenu();
