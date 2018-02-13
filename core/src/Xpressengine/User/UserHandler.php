@@ -26,6 +26,7 @@ use Xpressengine\User\Exceptions\EmailAlreadyExistsException;
 use Xpressengine\User\Exceptions\InvalidAccountInfoException;
 use Xpressengine\User\Exceptions\InvalidDisplayNameException;
 use Xpressengine\User\Exceptions\InvalidPasswordException;
+use Xpressengine\User\Models\User;
 use Xpressengine\User\Repositories\PendingEmailRepositoryInterface;
 use Xpressengine\User\Repositories\UserAccountRepositoryInterface;
 use Xpressengine\User\Repositories\UserEmailRepositoryInterface;
@@ -45,24 +46,6 @@ use Xpressengine\User\Repositories\UserRepositoryInterface;
  */
 class UserHandler
 {
-    /**
-     * 차단된 회원의 상태
-     */
-    const STATUS_DENIED = 'denied';
-
-    /**
-     * 활성화된 회원의 상태
-     */
-    const STATUS_ACTIVATED = 'activated';
-
-    /**
-     * @var array 회원이 가질 수 있는 상태 목록
-     */
-    public static $status = [
-        self::STATUS_DENIED,
-        self::STATUS_ACTIVATED
-    ];
-
     /**
      * @var UserRepositoryInterface User Repository
      */
@@ -208,7 +191,7 @@ class UserHandler
     /**
      * 주어진 정보로 신규회원을 등록한다. 회원정보에 대한 유효성검사도 병행하며, 회원관련 정보(그룹, 이메일, 등록대기 이메일, 계정)도 동시에 추가한다.
      *
-     * @param array       $data  신규회원 정보
+     * @param array $data 신규회원 정보
      *
      * @return UserInterface 신규 등록된 회원정보
      */
@@ -226,6 +209,10 @@ class UserHandler
         if (array_has($userData, 'password')) {
             $userData['password'] = $this->hasher->make($userData['password']);
         }
+
+        $userData['rating'] = Rating::MEMBER;
+        $userData['status'] = User::STATUS_ACTIVATED;
+
         $user = $this->users()->create($userData);
 
         // insert mail, delete pending mail

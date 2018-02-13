@@ -196,10 +196,6 @@ class RegisterController extends Controller
             $userData['group_id'] = [$joinGroup];
         }
 
-        // todo: create 메서드 내부에서 기본값 설정하도록
-        $userData['rating'] = Rating::MEMBER;
-        $userData['status'] = \XeUser::STATUS_ACTIVATED;
-
         XeDB::beginTransaction();
         try {
             $user = $this->handler->create($userData);

@@ -16,6 +16,7 @@ use Xpressengine\Theme\ThemeHandler;
 use Xpressengine\User\EmailBroker;
 use Xpressengine\User\Exceptions\InvalidConfirmationCodeException;
 use Xpressengine\User\Exceptions\PendingEmailNotExistsException;
+use Xpressengine\User\Models\User;
 use Xpressengine\User\UserHandler;
 
 class AuthController extends Controller
@@ -172,7 +173,7 @@ class AuthController extends Controller
 
         $credentials['email'] = trim($credentials['email']);
 
-        $credentials['status'] = \XeUser::STATUS_ACTIVATED;
+        $credentials['status'] = User::STATUS_ACTIVATED;
 
         if ($this->auth->attempt($credentials, $request->has('remember'))) {
             return redirect()->intended($this->redirectPath());
