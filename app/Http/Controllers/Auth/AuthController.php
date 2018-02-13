@@ -9,6 +9,7 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\UrlGenerator;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use XeDB;
+use XeFrontend;
 use XePresenter;
 use XeTheme;
 use Xpressengine\Theme\ThemeHandler;
@@ -142,12 +143,12 @@ class AuthController extends Controller
 
         $loginRuleName = 'login';
 
-        \XeFrontend::rule($loginRuleName, [
+        XeFrontend::rule($loginRuleName, [
             'email' => 'required|email_prefix',
             'password' => 'required'
         ]);
 
-        return \XePresenter::make('login', compact('config', 'loginRuleName'));
+        return XePresenter::make('login', compact('config', 'loginRuleName'));
     }
 
     /**
@@ -212,7 +213,7 @@ class AuthController extends Controller
 
         $redirectUrl = $request->get('redirectUrl', $urlGenerator->previous());
 
-        return \XePresenter::make('admin', compact('redirectUrl'));
+        return XePresenter::make('admin', compact('redirectUrl'));
     }
 
     public function postAdminAuth(Request $request)
