@@ -297,6 +297,17 @@ abstract class DynamicModel extends Model
     }
 
     /**
+     * Determine if the model or given attribute(s) have been modified.
+     *
+     * @param  array|string|null  $attributes
+     * @return bool
+     */
+    public function isDirty($attributes = null)
+    {
+        return count($this->dynamicAttributes) > 0 ? true : parent::isDirty($attributes);
+    }
+
+    /**
      * Register a custom macro.
      *
      * @param string   $name  macro name
