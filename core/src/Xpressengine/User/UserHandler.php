@@ -197,6 +197,9 @@ class UserHandler
      */
     public function create(array $data)
     {
+        $data['rating'] = $data['rating'] ?? Rating::MEMBER;
+        $data['status'] = $data['status'] ?? User::STATUS_ACTIVATED;
+
         $this->validateForCreate($data);
 
         /* 회원가입 절차 */
@@ -209,9 +212,6 @@ class UserHandler
         if (array_has($userData, 'password')) {
             $userData['password'] = $this->hasher->make($userData['password']);
         }
-
-        $userData['rating'] = Rating::MEMBER;
-        $userData['status'] = User::STATUS_ACTIVATED;
 
         $user = $this->users()->create($userData);
 
