@@ -42,7 +42,7 @@ class DynamicFieldParts extends RegisterFormParts
             return $field->isEnabled();
         })->map(function ($field) {
             return $field->getRules();
-        })->collapse();
+        })->collapse()->all();
 
         return $rules;
     }

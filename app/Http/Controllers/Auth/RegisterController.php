@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\RedirectsUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use XeConfig;
 use XeDB;
 use XeDynamicField;
 use XeFrontend;
@@ -50,7 +51,10 @@ class RegisterController extends Controller
         XeTheme::selectSiteTheme();
         XePresenter::setSkinTargetId('user/auth');
 
-        $this->middleware('guest', ['except' => ['getLogin', 'getLogout', 'getConfirm']]);
+        $this->middleware('auth', ['only' => ['getRegisterAddInfo', 'postRegisterAddInfo']]);
+        $this->middleware('guest', [
+            'except' => ['getLogin', 'getLogout', 'getConfirm', 'getRegisterAddInfo', 'postRegisterAddInfo']
+        ]);
     }
 
     /**
@@ -218,7 +222,45 @@ class RegisterController extends Controller
      */
     protected function checkJoinable()
     {
-        $config = app('xe.config')->get('user.join');
-        return $config->get('joinable') === true;
+        return XeConfig::getVal('user.join.joinable') === true;
+    }
+
+    public function getRegisterAddInfo()
+    {
+        $fields = $this->getAdditionalField();
+
+        XeFrontend::rule('add-info', $fields->map(function ($field) {
+            return $field->getRules();
+        })->collapse());
+
+        return XePresenter::make('register.add-info', compact('fields'));
+    }
+
+    public function postRegisterAddInfo(Request $request)
+    {
+        $fields = $this->getAdditionalField();
+        $rules =$fields->map(function ($field) {
+            return $field->getRules();
+        })->collapse();
+        
+        $inputs = $this->validate($request, $rules->all());
+
+        $this->handler->update(auth()->user(), $inputs);
+
+        return redirect($this->redirectPath());
+    }
+
+    protected function getAdditionalField()
+    {
+        return collect(XeDynamicField::gets('user'))->filter(function ($field) {
+            if (!$field->isEnabled()) {
+                return false;
+            }
+
+            $rules = implode('|', $field->getRules());
+            $rules = array_map('\Illuminate\Support\Str::snake', explode('|', $rules));
+
+            return in_array('required', $rules);
+        });
     }
 }

@@ -27,9 +27,8 @@ class RequiredDF
      */
     public function handle($request, Closure $next)
     {
-        if (auth()->check() && !auth()->user()->isAdmin()) {
-            $DF = app('xe.dynamicField');
-            $fields = $DF->gets('user');
+        if (auth()->check() && !auth()->user()->isAdmin() && !$request->routeIs('auth.register.add')) {
+            $fields = app('xe.dynamicField')->gets('user');
 
             if (count($fields) < 1) {
                 return $next($request);
@@ -45,8 +44,7 @@ class RequiredDF
             })->map(function () {return 'required';});
 
             if (validator(auth()->user()->getAttributes(), $rules->all())->fails()) {
-                // todo: redirect
-                dd('!!!');
+                return redirect()->route('auth.register.add');
             }
         }
 
