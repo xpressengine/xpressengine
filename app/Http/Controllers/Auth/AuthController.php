@@ -125,14 +125,16 @@ class AuthController extends Controller
     /**
      * Show the application login form.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function getLogin(UrlGenerator $urlGenerator, Request $request)
+    public function getLogin(Request $request)
     {
-        $redirectUrl = $request->get('redirectUrl', $urlGenerator->previous());
+        $redirectUrl = $request->get('redirectUrl',
+            $request->session()->pull('url.intended') ?: url()->previous());
 
         if ($redirectUrl !== $request->url()) {
-            app('session.store')->put('url.intended', $redirectUrl);
+            $request->session()->put('url.intended', $redirectUrl);
         }
 
         // common config
@@ -145,7 +147,7 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-        return \XePresenter::make('login', compact('config', 'loginRuleName', 'redirectUrl'));
+        return \XePresenter::make('login', compact('config', 'loginRuleName'));
     }
 
     /**
@@ -158,13 +160,10 @@ class AuthController extends Controller
      */
     public function postLogin(Request $request)
     {
-        $this->validate(
-            $request,
-            [
-                'email' => 'required|email_prefix',
-                'password' => 'required'
-            ]
-        );
+        $this->validate($request, [
+            'email' => 'required|email_prefix',
+            'password' => 'required'
+        ]);
 
         $this->checkCaptcha();
 
@@ -175,7 +174,6 @@ class AuthController extends Controller
         $credentials['status'] = \XeUser::STATUS_ACTIVATED;
 
         if ($this->auth->attempt($credentials, $request->has('remember'))) {
-            $this->redirectTo = $request->get('redirectUrl', $this->redirectTo);
             return redirect()->intended($this->redirectPath());
         }
 
@@ -185,26 +183,18 @@ class AuthController extends Controller
     }
 
     /**
-     * Get the failed login message.
-     *
-     * @return string
-     */
-    protected function getFailedLoginMessage()
-    {
-        return 'These credentials do not match our records.';
-    }
-
-
-    /**
      * Log the user out of the application.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function getLogout(UrlGenerator $urlGenerator, Request $request)
+    public function getLogout(Request $request)
     {
         $this->auth->logout();
 
-        return redirect($request->get('redirectUrl', $urlGenerator->previous()));
+        $request->session()->invalidate();
+
+        return redirect('/');
     }
 
     /**
