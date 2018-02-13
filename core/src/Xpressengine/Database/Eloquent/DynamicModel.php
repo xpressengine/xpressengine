@@ -290,7 +290,7 @@ abstract class DynamicModel extends Model
     public function save(array $options = [])
     {
         if ($this->dynamic === true) {
-            $this->attributes = array_merge($this->dynamicAttributes, $this->attributes);
+            $this->attributes = array_merge($this->attributes, $this->dynamicAttributes);
         }
 
         return parent::save($options);
