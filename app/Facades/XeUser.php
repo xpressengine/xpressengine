@@ -29,8 +29,6 @@ use Illuminate\Support\Facades\Facade;
  */
 class XeUser extends Facade
 {
-    const PROVIDER_DEFAULT = 'default';
-
     /**
      * facade access keyword
      *

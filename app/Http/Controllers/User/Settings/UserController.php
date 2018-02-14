@@ -222,14 +222,6 @@ class UserController extends Controller
         $dynamicField = app('xe.dynamicField');
         $fieldTypes = $dynamicField->gets('user');
 
-        $defaultAccount = null;
-        if (isset($user->accounts)) {
-            foreach ($user->accounts as $account) {
-                if ($account->provider === \XeUser::PROVIDER_DEFAULT) {
-                    $defaultAccount = $account;
-                }
-            }
-        }
         return XePresenter::make(
             'user.settings.user.edit',
             compact(
@@ -237,7 +229,6 @@ class UserController extends Controller
                 'ratings',
                 'groups',
                 'status',
-                'defaultAccount',
                 'fieldTypes',
                 'profileImgSize'
             )
