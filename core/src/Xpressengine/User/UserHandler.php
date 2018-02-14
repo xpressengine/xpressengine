@@ -88,10 +88,6 @@ class UserHandler
     private $validator;
 
     /**
-     * @var bool 이메일 인증의 사용여부
-     */
-    private $useEmailConfirm;
-    /**
      * @var UserImageHandler
      */
     private $imageHandler;
@@ -107,7 +103,6 @@ class UserHandler
      * @param UserImageHandler                $imageHandler    image handler
      * @param Hasher                          $hasher          해시코드 생성기, 비밀번호 해싱을 위해 사용됨
      * @param Validator                       $validator       유효성 검사기. 비밀번호 및 표시이름(dispalyName)의 유효성 검사를 위해 사용됨
-     * @param boolean                         $useEmailConfirm 이메일 인증의 사용여부
      */
     public function __construct(
         UserRepositoryInterface $users,
@@ -117,8 +112,7 @@ class UserHandler
         PendingEmailRepositoryInterface $pendingEmails,
         UserImageHandler $imageHandler,
         Hasher $hasher,
-        Validator $validator,
-        $useEmailConfirm
+        Validator $validator
     ) {
         $this->users = $users;
         $this->accounts = $accounts;
@@ -127,7 +121,6 @@ class UserHandler
         $this->hasher = $hasher;
         $this->validator = $validator;
         $this->pendingEmails = $pendingEmails;
-        $this->useEmailConfirm = $useEmailConfirm;
         $this->imageHandler = $imageHandler;
     }
 
@@ -596,16 +589,6 @@ class UserHandler
     public function deleteAccount($account)
     {
         $this->accounts()->delete($account);
-    }
-
-    /**
-     * 이메일 인증의 사용 여부를 반환한다.
-     *
-     * @return bool 이메일 인증 사용 여부
-     */
-    public function usingEmailConfirm()
-    {
-        return $this->useEmailConfirm;
     }
 
     /**

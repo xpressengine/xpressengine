@@ -360,7 +360,7 @@ class UserController extends Controller
         );
 
         // 이미 인증 요청중인 이메일이 있는지 확인한다.
-        $useEmailConfirm = $this->handler->usingEmailConfirm();
+        $useEmailConfirm = app('xe.config')->getVal('user.join.guard_forced') === true;
         if ($useEmailConfirm) {
             if ($request->user()->getPendingEmail() !== null) {
                 $e = new PendingEmailAlreadyExistsException();

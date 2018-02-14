@@ -217,8 +217,6 @@ class UserServiceProvider extends ServiceProvider
         $this->app->singleton(UserHandler::class, function ($app) {
             $proxyClass = $app['xe.interception']->proxy(UserHandler::class, 'XeUser');
 
-            $joinConfig = app('xe.config')->get('user.join');
-
             $userHandler = new $proxyClass(
                 $app['xe.users'],
                 $app['xe.user.accounts'],
@@ -227,8 +225,7 @@ class UserServiceProvider extends ServiceProvider
                 $app['xe.user.pendingEmails'],
                 $app['xe.user.image'],
                 $app['hash'],
-                $app['validator'],
-                in_array('email', $joinConfig->get('guards', []))
+                $app['validator']
             );
             return $userHandler;
         });
