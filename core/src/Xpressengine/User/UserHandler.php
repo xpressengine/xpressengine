@@ -606,6 +606,18 @@ class UserHandler
     }
 
     /**
+     * Set a menu for user setting page
+     *
+     * @param string $id    id
+     * @param array  $value value
+     * @return void
+     */
+    public static function setSettingsSections($id, $value)
+    {
+        static::$container->push('user/settings/section', $id, $value);
+    }
+
+    /**
      * 회원가입 인증도구 목록을 반환한다.
      *
      * @return array
