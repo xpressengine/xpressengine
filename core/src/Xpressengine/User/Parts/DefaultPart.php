@@ -16,11 +16,13 @@ namespace Xpressengine\User\Parts;
 
 use Illuminate\Support\Arr;
 
-class DefaultParts extends RegisterFormParts
+class DefaultPart extends RegisterFormPart
 {
-    protected static $name = '기본정보';
+    const ID = 'default-info';
 
-    protected static $description = '기본정보(이메일, 이름, 비밀번호) 입력 폼입니다.';
+    const NAME = '기본정보';
+
+    const DESCRIPTION = '기본정보(이메일, 이름, 비밀번호) 입력 폼입니다.';
 
     protected static $implicit = true;
 

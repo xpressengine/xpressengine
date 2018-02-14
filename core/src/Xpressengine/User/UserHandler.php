@@ -27,6 +27,7 @@ use Xpressengine\User\Exceptions\InvalidAccountInfoException;
 use Xpressengine\User\Exceptions\InvalidDisplayNameException;
 use Xpressengine\User\Exceptions\InvalidPasswordException;
 use Xpressengine\User\Models\User;
+use Xpressengine\User\Parts\RegisterFormPart;
 use Xpressengine\User\Repositories\PendingEmailRepositoryInterface;
 use Xpressengine\User\Repositories\UserAccountRepositoryInterface;
 use Xpressengine\User\Repositories\UserEmailRepositoryInterface;
@@ -79,12 +80,7 @@ class UserHandler
     /**
      * @var Container Xpressengine 레지스터
      */
-    protected $container;
-
-    /**
-     * @var array 개인정보 설정 페이지의 섹션 리스트
-     */
-    protected $settingsSections = [];
+    protected static $container;
 
     /**
      * @var Validator 유효성 검사기. 비밀번호 및 표시이름(dispalyName)의 유효성 검사를 위해 사용됨
@@ -111,7 +107,6 @@ class UserHandler
      * @param UserImageHandler                $imageHandler    image handler
      * @param Hasher                          $hasher          해시코드 생성기, 비밀번호 해싱을 위해 사용됨
      * @param Validator                       $validator       유효성 검사기. 비밀번호 및 표시이름(dispalyName)의 유효성 검사를 위해 사용됨
-     * @param Container                       $container       Xpressengine 레지스터
      * @param boolean                         $useEmailConfirm 이메일 인증의 사용여부
      */
     public function __construct(
@@ -123,7 +118,6 @@ class UserHandler
         UserImageHandler $imageHandler,
         Hasher $hasher,
         Validator $validator,
-        Container $container,
         $useEmailConfirm
     ) {
         $this->users = $users;
@@ -132,7 +126,6 @@ class UserHandler
         $this->emails = $mails;
         $this->hasher = $hasher;
         $this->validator = $validator;
-        $this->container = $container;
         $this->pendingEmails = $pendingEmails;
         $this->useEmailConfirm = $useEmailConfirm;
         $this->imageHandler = $imageHandler;
@@ -624,10 +617,9 @@ class UserHandler
      *
      * @return array 등록된 회원정보 설정 페이지 섹션 목록
      */
-    public function getSettingsSections()
+    public static function getSettingsSections()
     {
-        $menus = $this->container->get('user/settings/section');
-        return array_merge($this->settingsSections, $menus ?: []);
+        return static::$container->get('user/settings/section') ?: [];
     }
 
     /**
@@ -659,9 +651,33 @@ class UserHandler
      *
      * @return mixed
      */
-    public function getRegisterParts()
+    public static function getRegisterParts()
     {
-        return $this->container->get('user/register/form', []);
+        return static::$container->get('user/register/form', []);
+    }
+
+    public static function setRegisterParts($parts = [])
+    {
+        $keys = array_map(function ($part) {
+            return $part::ID;
+        }, $parts);
+
+        static::$container->set('user/register/form', array_combine($keys, array_values($parts)));
+    }
+
+    public static function addRegisterPart($class)
+    {
+        static::$container->push('user/register/form', $class::ID, $class);
+    }
+
+    public static function setContainer(Container $container)
+    {
+        static::$container = $container;
+    }
+
+    public static function getContainer()
+    {
+        return static::$container;
     }
 
     /**

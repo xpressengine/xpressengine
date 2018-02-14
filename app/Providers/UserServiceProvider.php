@@ -17,19 +17,14 @@ namespace App\Providers;
 use App\ToggleMenus\User\ManageItem;
 use App\ToggleMenus\User\ProfileItem;
 use Closure;
-use Illuminate\Auth\Passwords\DatabaseTokenRepository;
-use Illuminate\Auth\Passwords\PasswordBroker;
 use Illuminate\Contracts\Validation\Factory as Validator;
 use Illuminate\Support\ServiceProvider;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Xpressengine\Media\MediaManager;
 use Xpressengine\Media\Thumbnailer;
 use Xpressengine\Storage\Storage;
 use Xpressengine\User\EmailBroker;
 use Xpressengine\User\Guard;
-use Xpressengine\User\GuardInterface;
 use Xpressengine\User\Middleware\Admin;
-use Xpressengine\User\Middleware\RequiredDF;
 use Xpressengine\User\Models\Guest;
 use Xpressengine\User\Models\PendingEmail;
 use Xpressengine\User\Models\Term;
@@ -38,12 +33,12 @@ use Xpressengine\User\Models\User;
 use Xpressengine\User\Models\UserAccount;
 use Xpressengine\User\Models\UserEmail;
 use Xpressengine\User\Models\UserGroup;
-use Xpressengine\User\Parts\AgreementParts;
-use Xpressengine\User\Parts\CaptchaParts;
-use Xpressengine\User\Parts\DefaultParts;
-use Xpressengine\User\Parts\DynamicFieldParts;
-use Xpressengine\User\Parts\RegisterFormParts;
-use Xpressengine\User\Parts\EmailVerifyParts;
+use Xpressengine\User\Parts\AgreementPart;
+use Xpressengine\User\Parts\CaptchaPart;
+use Xpressengine\User\Parts\DefaultPart;
+use Xpressengine\User\Parts\DynamicFieldPart;
+use Xpressengine\User\Parts\RegisterFormPart;
+use Xpressengine\User\Parts\EmailVerifyPart;
 use Xpressengine\User\Repositories\PendingEmailRepository;
 use Xpressengine\User\Repositories\PendingEmailRepositoryInterface;
 use Xpressengine\User\Repositories\RegisterTokenRepository;
@@ -114,8 +109,9 @@ class UserServiceProvider extends ServiceProvider
         // register toggle menu
         $this->registerToggleMenu();
 
-        // add RegisterGuard and RegiserForm
-        $this->addRegisterGuardAndForm();
+        UserHandler::setContainer($this->app['xe.register']);
+        // add RegiserForm
+        $this->addRegisterFormParts();
 
         $this->app->resolving('mailer', function ($mailer) {
             $config = $this->app['xe.config']->get('user.common');
@@ -232,7 +228,6 @@ class UserServiceProvider extends ServiceProvider
                 $app['xe.user.image'],
                 $app['hash'],
                 $app['validator'],
-                $app['xe.register'],
                 in_array('email', $joinConfig->get('guards', []))
             );
             return $userHandler;
@@ -566,20 +561,15 @@ class UserServiceProvider extends ServiceProvider
         );
     }
 
-    protected function addRegisterGuardAndForm()
+    protected function addRegisterFormParts()
     {
-        RegisterFormParts::setSkinResolver($this->app['xe.skin']);
-        RegisterFormParts::setContainer($this->app);
+        RegisterFormPart::setSkinResolver($this->app['xe.skin']);
+        RegisterFormPart::setContainer($this->app);
 
-        // email register form
-        $this->app['xe.register']->push('user/register/form', 'email', EmailVerifyParts::class);
-        // 기본정보 form 추가
-        $this->app['xe.register']->push('user/register/form', 'default-info', DefaultParts::class);
-        // dynamic field form 추가
-        $this->app['xe.register']->push('user/register/form', 'dynamic-fields', DynamicFieldParts::class);
-        // agreement form 추가
-        $this->app['xe.register']->push('user/register/form', 'agreements', AgreementParts::class);
-        // captcha form 추가
-        $this->app['xe.register']->push('user/register/form', 'captcha', CaptchaParts::class);
+        UserHandler::addRegisterPart(EmailVerifyPart::class);
+        UserHandler::addRegisterPart(DefaultPart::class);
+        UserHandler::addRegisterPart(DynamicFieldPart::class);
+        UserHandler::addRegisterPart(AgreementPart::class);
+        UserHandler::addRegisterPart(CaptchaPart::class);
     }
 }

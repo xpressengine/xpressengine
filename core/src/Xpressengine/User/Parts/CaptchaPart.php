@@ -14,11 +14,13 @@
 
 namespace Xpressengine\User\Parts;
 
-class CaptchaParts extends RegisterFormParts
+class CaptchaPart extends RegisterFormPart
 {
-    protected static $name = '캡차';
+    const ID = 'captcha';
 
-    protected static $description = '캡차 문자 입력 폼입니다.';
+    const NAME = '캡차';
+
+    const DESCRIPTION = '캡차 문자 입력 폼입니다.';
 
     public function render()
     {

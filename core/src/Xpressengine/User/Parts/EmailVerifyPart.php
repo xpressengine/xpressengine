@@ -17,11 +17,13 @@ namespace Xpressengine\User\Parts;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Xpressengine\Http\Request;
 
-class EmailVerifyParts extends RegisterFormParts
+class EmailVerifyPart extends RegisterFormPart
 {
-    protected static $name = '이메일 인증번호';
+    const ID = 'email';
 
-    protected static $description = '인증번호를 입력하는 폼입니다. 이메일 인증시에만 출력되며, 상단에 배치하시기 바랍니다.';
+    const NAME = '이메일 인증번호';
+
+    const DESCRIPTION = '인증번호를 입력하는 폼입니다. 이메일 인증시에만 출력되며, 상단에 배치하시기 바랍니다.';
 
     protected static $implicit = true;
 

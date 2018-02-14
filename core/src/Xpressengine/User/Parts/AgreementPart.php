@@ -14,11 +14,13 @@
 
 namespace Xpressengine\User\Parts;
 
-class AgreementParts extends RegisterFormParts
+class AgreementPart extends RegisterFormPart
 {
-    protected static $name = '이용약관 동의';
+    const ID = 'agreements';
 
-    protected static $description = '이용약관 동의 체크박스입니다.';
+    const NAME = '이용약관 동의';
+
+    const DESCRIPTION = '이용약관 동의 체크박스입니다.';
 
     protected static $implicit = true;
 

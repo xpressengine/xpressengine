@@ -17,11 +17,13 @@ namespace Xpressengine\User\Parts;
 use Illuminate\Support\Collection;
 use Xpressengine\DynamicField\AbstractType;
 
-class DynamicFieldParts extends RegisterFormParts
+class DynamicFieldPart extends RegisterFormPart
 {
-    protected static $name = '부가 정보';
+    const ID = 'dynamic-fields';
 
-    protected static $description = '추가된 확장필드들의 입력 폼입니다.';
+    const NAME = '부가 정보';
+
+    const DESCRIPTION = '추가된 확장필드들의 입력 폼입니다.';
 
     protected static $implicit = true;
 

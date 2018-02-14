@@ -21,7 +21,7 @@ use Xpressengine\Http\Request;
 use Xpressengine\Skin\SkinEntity;
 use Xpressengine\Support\ValidatesRequestsTrait;
 
-abstract class RegisterFormParts
+abstract class RegisterFormPart
 {
     use ValidatesRequestsTrait {
         ValidatesRequestsTrait::validate as traitValidate;
@@ -29,9 +29,11 @@ abstract class RegisterFormParts
 
     protected $request;
 
-    protected static $name = '';
+    const ID = '';
 
-    protected static $description = '';
+    const NAME = '';
+
+    const DESCRIPTION = '';
 
     protected static $implicit = false;
 
@@ -51,16 +53,6 @@ abstract class RegisterFormParts
     public function render()
     {
         return new HtmlString($this->getSkin()->setView(static::$view)->setData($this->data())->render());
-    }
-
-    public static function getName()
-    {
-        return static::$name;
-    }
-
-    public static function getDescription()
-    {
-        return static::$description;
     }
 
     public static function isImplicit()

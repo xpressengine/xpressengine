@@ -15,17 +15,17 @@
             <tr>
                 <td>
                     <button class="btn handler"><i class="xi-drag-vertical"></i></button>
-                    <em class="item-title">{{ $part::getName() }}</em>
+                    <em class="item-title">{{ $part::NAME }}</em>
                 </td>
                 <td>
-                    <span class="item-subtext">{{ $part::getDescription() }}</span>
+                    <span class="item-subtext">{{ $part::DESCRIPTION }}</span>
                 </td>
                 <td>
                     <div class="xe-btn-toggle pull-right">
                         <label>
                             <span class="sr-only">toggle</span>
                             @if($part::isImplicit())
-                            <input type="checkbox" checked="checked"  disabled />
+                                <input type="checkbox" checked="checked" disabled />
                             @else
                                 <input type="checkbox" name="forms[{{$key}}]" value="on" @if($idx === 0) checked="checked" @endif />
                             @endif
