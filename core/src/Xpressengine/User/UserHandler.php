@@ -95,14 +95,14 @@ class UserHandler
     /**
      * constructor.
      *
-     * @param UserRepositoryInterface         $users           User 회원 저장소
-     * @param UserAccountRepositoryInterface  $accounts        UserAccount 회원계정 저장소
-     * @param UserGroupRepositoryInterface    $groups          UserGroup 그룹 저장소
-     * @param UserEmailRepositoryInterface    $mails           회원 이메일 저장소
-     * @param PendingEmailRepositoryInterface $pendingEmails   회원 등록대기 이메일 저장소
-     * @param UserImageHandler                $imageHandler    image handler
-     * @param Hasher                          $hasher          해시코드 생성기, 비밀번호 해싱을 위해 사용됨
-     * @param Validator                       $validator       유효성 검사기. 비밀번호 및 표시이름(dispalyName)의 유효성 검사를 위해 사용됨
+     * @param UserRepositoryInterface         $users         User 회원 저장소
+     * @param UserAccountRepositoryInterface  $accounts      UserAccount 회원계정 저장소
+     * @param UserGroupRepositoryInterface    $groups        UserGroup 그룹 저장소
+     * @param UserEmailRepositoryInterface    $mails         회원 이메일 저장소
+     * @param PendingEmailRepositoryInterface $pendingEmails 회원 등록대기 이메일 저장소
+     * @param UserImageHandler                $imageHandler  image handler
+     * @param Hasher                          $hasher        해시코드 생성기, 비밀번호 해싱을 위해 사용됨
+     * @param Validator                       $validator     유효성 검사기. 비밀번호 및 표시이름(dispalyName)의 유효성 검사를 위해 사용됨
      */
     public function __construct(
         UserRepositoryInterface $users,
@@ -326,7 +326,7 @@ class UserHandler
     /**
      * 신규회원의 정보를 유효성 검사한다.
      *
-     * @param array       $data  회원의 정보
+     * @param array $data 회원의 정보
      *
      * @return bool 유효성검사 결과, 통과할 경우 true, 실패할 경우 false
      */
@@ -651,6 +651,12 @@ class UserHandler
         return static::$container->get('user/register/form', []);
     }
 
+    /**
+     * Set register form parts
+     *
+     * @param array $parts form parts
+     * @return void
+     */
     public static function setRegisterParts($parts = [])
     {
         $keys = array_map(function ($part) {
@@ -660,16 +666,33 @@ class UserHandler
         static::$container->set('user/register/form', array_combine($keys, array_values($parts)));
     }
 
+    /**
+     * Add register form part
+     *
+     * @param string $class form part class
+     * @return void
+     */
     public static function addRegisterPart($class)
     {
         static::$container->push('user/register/form', $class::ID, $class);
     }
 
+    /**
+     * Set Container instance
+     *
+     * @param Container $container container instance
+     * @return void
+     */
     public static function setContainer(Container $container)
     {
         static::$container = $container;
     }
 
+    /**
+     * Get Container instance
+     *
+     * @return Container
+     */
     public static function getContainer()
     {
         return static::$container;
