@@ -121,7 +121,7 @@ class AuthController extends Controller
         }
         XeDB::commit();
 
-        return redirect('/')->with('alert', ['type' => 'success', 'message' => '인증되었습니다.']);
+        return redirect('/')->with('alert', ['type' => 'success', 'message' => xe_trans('xe::verified')]);
     }
 
     /**
@@ -181,7 +181,7 @@ class AuthController extends Controller
 
         return redirect()->back()
             ->withInput($request->only('email', 'remember'))
-            ->with('alert', ['type' => 'danger', 'message' => '입력한 정보에 해당하는 계정을 찾을 수 없거나 사용 중지 상태인 계정입니다.']);
+            ->with('alert', ['type' => 'danger', 'message' => xe_trans('xe::msgAccountNotFoundOrDisabled')]);
     }
 
     /**
@@ -230,7 +230,7 @@ class AuthController extends Controller
             return redirect()->intended($redirectUrl);
         }
 
-        return redirect()->back()->with('alert', ['type' => 'failed', 'message' => '입력하신 암호가 틀렸습니다.']);
+        return redirect()->back()->with('alert', ['type' => 'failed', 'message' => xe_trans('xe::msgInvalidPassword')]);
     }
 
     protected function checkCaptcha()
@@ -238,7 +238,7 @@ class AuthController extends Controller
         $config = app('xe.config')->get('user.common');
         if ($config->get('useCaptcha', false) === true) {
             if (app('xe.captcha')->verify() !== true) {
-                throw new HttpException(Response::HTTP_FORBIDDEN, '자동인증방지 기능을 통과하지 못하였습니다.');
+                throw new HttpException(Response::HTTP_FORBIDDEN, xe_trans('xe::msgFailToPassCAPTCHA'));
             }
         }
     }

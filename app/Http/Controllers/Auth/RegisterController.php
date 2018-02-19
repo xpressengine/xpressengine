@@ -15,7 +15,6 @@ use XePresenter;
 use XeTheme;
 use Xpressengine\User\EmailBroker;
 use Xpressengine\User\Models\User;
-use Xpressengine\User\Rating;
 use Xpressengine\User\Repositories\RegisterTokenRepository;
 use Xpressengine\User\UserHandler;
 
@@ -131,7 +130,7 @@ class RegisterController extends Controller
         try {
             $this->handler->validateEmail($email);
         } catch (\Exception $e) {
-            throw new HttpException(400, '이미 등록된 이메일입니다.');
+            throw new HttpException(400, xe_trans('xe::emailAlreadyExists'));
         }
 
         $mail = $this->handler->pendingEmails()->findByAddress($email);
@@ -154,7 +153,7 @@ class RegisterController extends Controller
         $this->emailBroker->sendEmailForRegister($mail, $token);
 
         return redirect()->route('auth.register', ['token' => $token['id']])->with(
-            ['alert' => ['type' => 'success', 'message' => '인증 이메일이 전송되었습니다.']]
+            ['alert' => ['type' => 'success', 'message' => xe_trans('xe::msgEmailSendComplete')]]
         );
     }
 

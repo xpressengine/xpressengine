@@ -31,9 +31,9 @@ class EmailVerifyPart extends RegisterFormPart
 {
     const ID = 'email';
 
-    const NAME = 'xe::emailAuthenticationCode';
+    const NAME = 'xe::emailConfirmationCode';
 
-    const DESCRIPTION = 'xe::descEmailAuthenticationCode';
+    const DESCRIPTION = 'xe::descEmailConfirmationCode';
 
     /**
      * Indicates if the form part is implicit
@@ -82,14 +82,7 @@ class EmailVerifyPart extends RegisterFormPart
             throw new HttpException(400, $this->service('xe.translator')->trans('xe::msgTokenIsInvalid'));
         }
 
-        if ($code = $this->request->get('code')) {
-            if (!$this->verify($token->email, $code)) {
-                throw new HttpException(
-                    400,
-                    $this->service('xe.translator')->trans('xe::msgInvalidAuthenticationCode')
-                );
-            }
-        }
+        $code = $this->request->get('code');
 
         return compact('token', 'code');
     }
@@ -122,7 +115,7 @@ class EmailVerifyPart extends RegisterFormPart
 
             $this->getValidationFactory()->extend('email_verify', function ($attr, $value) use ($token) {
                 return $this->verify($token->email, $value);
-            }, $lang->trans('xe::msgInvalidAuthenticationCode'));
+            }, $lang->trans('xe::invalidConfirmationCode'));
             $this->traitValidate($this->request, ['code' => 'required|email_verify']);
 
             $returns['id'] = $this->getEmail($token->email)->user_id;
