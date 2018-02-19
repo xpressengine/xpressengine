@@ -96,21 +96,8 @@ class UserController extends Controller
      */
     public function show(Request $request, $section = 'settings')
     {
-        // remove & move code
-        $settingsSection = [
-            'settings' => [
-                'title' => xe_trans('xe::defaultSettings'),
-                'content' => function ($user) {
-                    return $this->userEditView($user);
-                }
-            ]
-        ];
-
         // get sections
         $menus = $this->handler->getSettingsSections();
-
-        // add default settings section
-        $menus = array_merge($settingsSection, $menus);
 
         // get Selected section
         if (isset($menus[$section]) === false) {
@@ -541,33 +528,6 @@ class UserController extends Controller
         Auth::logout();
 
         return redirect()->to('/');
-    }
-
-    /**
-     * show user info page
-     *
-     * @param UserInterface $user
-     *
-     * @return $this
-     */
-    private function userEditView(UserInterface $user)
-    {
-        // dynamic field
-        $dynamicField = app('xe.dynamicField');
-        $fieldTypes = $dynamicField->gets('user');
-
-        // password configuration
-        $passwordConfig = app('config')->get('xe.user.password');
-        $passwordLevel = array_get($passwordConfig['levels'], $passwordConfig['default']);
-
-        app('xe.frontend')->js(
-            ['assets/core/xe-ui-component/js/xe-form.js', 'assets/core/xe-ui-component/js/xe-page.js']
-        )->load();
-
-        /** @var SkinHandler $skinHandler */
-        $skinHandler = app('xe.skin');
-        $skin = $skinHandler->getAssigned('user/settings');
-        return $skin->setView('edit')->setData(compact('user', 'fieldTypes', 'passwordLevel'));
     }
 
     public function showAdditionField($field)

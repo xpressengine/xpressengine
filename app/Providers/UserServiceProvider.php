@@ -113,6 +113,8 @@ class UserServiceProvider extends ServiceProvider
         // add RegiserForm
         $this->addRegisterFormParts();
 
+        $this->addUserSettingSection();
+
         $this->app->resolving('mailer', function ($mailer) {
             $config = $this->app['xe.config']->get('user.common');
             if (!empty($config->get('webmasterEmail'))) {
@@ -568,5 +570,28 @@ class UserServiceProvider extends ServiceProvider
         UserHandler::addRegisterPart(DynamicFieldPart::class);
         UserHandler::addRegisterPart(AgreementPart::class);
         UserHandler::addRegisterPart(CaptchaPart::class);
+    }
+
+    protected function addUserSettingSection()
+    {
+        UserHandler::setSettingsSections('settings', [
+            'title' => 'xe::defaultSettings',
+            'content' => function ($user) {
+                // dynamic field
+                $fieldTypes = $this->app['xe.dynamicField']->gets('user');
+
+                // password configuration
+                $passwordConfig = $this->app['config']->get('xe.user.password');
+                $passwordLevel = array_get($passwordConfig['levels'], $passwordConfig['default']);
+
+                $this->app['xe.frontend']->js(
+                    ['assets/core/xe-ui-component/js/xe-form.js', 'assets/core/xe-ui-component/js/xe-page.js']
+                )->load();
+
+                $skin = $this->app['xe.skin']->getAssigned('user/settings');
+
+                return $skin->setView('edit')->setData(compact('user', 'fieldTypes', 'passwordLevel'));
+            }
+        ]);
     }
 }

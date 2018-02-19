@@ -16,7 +16,7 @@
                     <ul class="snb-list">
                         @foreach($menus as $id => $menu)
                             <li class="@if(array_get($menu, 'selected', false))on @endif">
-                                <a href="{{ route('user.settings', ['section'=>$id]) }}">{{ $menu['title'] }}</a>
+                                <a href="{{ route('user.settings', ['section'=>$id]) }}">{{ xe_trans($menu['title']) }}</a>
                             </li>
                         @endforeach
                     </ul>
