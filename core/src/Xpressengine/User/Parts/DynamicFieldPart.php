@@ -31,9 +31,9 @@ class DynamicFieldPart extends RegisterFormPart
 {
     const ID = 'dynamic-fields';
 
-    const NAME = '부가 정보';
+    const NAME = 'xe::additionalInfo';
 
-    const DESCRIPTION = '추가된 확장필드들의 입력 폼입니다.';
+    const DESCRIPTION = 'xe::descAdditionalInfo';
 
     /**
      * Indicates if the form part is implicit

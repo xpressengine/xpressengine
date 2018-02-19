@@ -2258,4 +2258,64 @@ return [
         'ko' => '부모 설정 페이지로 이동',
         'en' => 'Move to parent setting page',
     ],
+    'acceptTerms' => [
+        'ko' => '이용약관 동의',
+        'en' => 'Accept terms and conditions',
+    ],
+    'descAcceptTerms' => [
+        'ko' => '이용약관 동의 체크박스입니다.',
+        'en' => 'This is a checkbox for accepting terms and conditions.',
+    ],
+    'captcha' => [
+        'ko' => '캡차',
+        'en' => 'CAPTCHA',
+    ],
+    'descCaptcha' => [
+        'ko' => '캡차 문자 입력 폼입니다.',
+        'en' => 'This is a CAPTCHA.',
+    ],
+    'msgFailToPassCAPTCHA' => [
+        'ko' => '자동등록 방지 기능을 통과하지 못했습니다.',
+        'en' => 'Fail to pass CAPTCHA.',
+    ],
+    'defaultInfo' => [
+        'ko' => '기본정보',
+        'en' => 'Default information',
+    ],
+    'descDefaultInfo' => [
+        'ko' => '기본정보(이메일, 이름, 비밀번호) 입력 폼입니다.',
+        'en' => 'This is a form to enter email, name and password.',
+    ],
+    'descAdditionalInfo' => [
+        'ko' => '추가된 확장필드들의 입력 폼입니다.',
+        'en' => 'This is a form to extended field added.',
+    ],
+    'emailAuthenticationCode' => [
+        'ko' => '이메일 인증번호',
+        'en' => 'Authentication code',
+    ],
+    'descEmailAuthenticationCode' => [
+        'ko' => '인증번호를 입력하는 폼입니다. 이메일 인증시에만 출력됩니다.',
+        'en' => 'This is a form to enter the authentication code. (when authenticating e-mail)',
+    ],
+    'msgTokenIsInvalid' => [
+        'ko' => '유효기간이 만료되었거나 정상적인 토큰이 아닙니다. 다시 인증 받으시기 바랍니다.',
+        'en' => 'Token is invalid. Please re-verify',
+    ],
+    'msgInvalidAuthenticationCode' => [
+        'ko' => '잘못된 이메일 인증 코드입니다.',
+        'en' => 'Invalid authentication code.',
+    ],
+    'msgUnknownTokenForSignUp' => [
+        'ko' => '잘못된 가입 토큰입니다.',
+        'en' => 'Unknown token for Sign up.',
+    ],
+    'enterAdditionalInfo' => [
+        'ko' => '부가 정보 입력',
+        'en' => 'Enter additional information',
+    ],
+    'descEnterAdditionalInfo' => [
+        'ko' => '사이트를 이용하기 위해서 다음 정보를 등록하여야 합니다.',
+        'en' => 'To use the site, you must register the following information.',
+    ],
 ];

@@ -30,10 +30,10 @@
                         <div class="list-group-item">
                             <div class="radio">
                                 <label>
-                                    <input type="radio" name="guard_forced" value="true" @if($config->get('guard_forced')) checked="checked" @endif> 인증 사용
+                                    <input type="radio" name="guard_forced" value="true" @if($config->get('guard_forced')) checked="checked" @endif> {{xe_trans('xe::use')}}
                                 </label>
                                 <label>
-                                    <input type="radio" name="guard_forced" value="false" @if(!$config->get('guard_forced')) checked="checked" @endif> 인증 사용안함
+                                    <input type="radio" name="guard_forced" value="false" @if(!$config->get('guard_forced')) checked="checked" @endif> {{xe_trans('xe::disuse')}}
                                 </label>
                             </div>
                         </div>

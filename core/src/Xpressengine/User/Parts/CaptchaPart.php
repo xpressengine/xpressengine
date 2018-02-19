@@ -28,9 +28,9 @@ class CaptchaPart extends RegisterFormPart
 {
     const ID = 'captcha';
 
-    const NAME = '캡차';
+    const NAME = 'xe::captcha';
 
-    const DESCRIPTION = '캡차 문자 입력 폼입니다.';
+    const DESCRIPTION = 'xe::descCaptcha';
 
     /**
      * Get the html string of the form part
@@ -51,7 +51,7 @@ class CaptchaPart extends RegisterFormPart
     {
         $this->getValidationFactory()->extendImplicit('captcha', function () {
             return $this->service('xe.captcha')->verify() === true;
-        }, '자동인증방지 기능을 통과하지 못하였습니다.');
+        }, $this->service('xe.translator')->trans('xe::msgFailToPassCAPTCHA'));
         $this->traitValidate($this->request, ['CaptchaParts' => 'captcha']);
 
         return [];

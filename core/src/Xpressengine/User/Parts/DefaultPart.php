@@ -30,9 +30,9 @@ class DefaultPart extends RegisterFormPart
 {
     const ID = 'default-info';
 
-    const NAME = '기본정보';
+    const NAME = 'xe::defaultInfo';
 
-    const DESCRIPTION = '기본정보(이메일, 이름, 비밀번호) 입력 폼입니다.';
+    const DESCRIPTION = 'xe::descDefaultInfo';
 
     /**
      * Indicates if the form part is implicit

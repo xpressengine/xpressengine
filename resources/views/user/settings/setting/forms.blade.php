@@ -15,10 +15,10 @@
             <tr>
                 <td>
                     <button class="btn handler"><i class="xi-drag-vertical"></i></button>
-                    <em class="item-title">{{ $part::NAME }}</em>
+                    <em class="item-title">{{ xe_trans($part::NAME) }}</em>
                 </td>
                 <td>
-                    <span class="item-subtext">{{ $part::DESCRIPTION }}</span>
+                    <span class="item-subtext">{{ xe_trans($part::DESCRIPTION) }}</span>
                 </td>
                 <td>
                     <div class="xe-btn-toggle pull-right">

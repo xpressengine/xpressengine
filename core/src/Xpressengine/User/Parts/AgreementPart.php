@@ -28,9 +28,9 @@ class AgreementPart extends RegisterFormPart
 {
     const ID = 'agreements';
 
-    const NAME = '이용약관 동의';
+    const NAME = 'xe::acceptTerms';
 
-    const DESCRIPTION = '이용약관 동의 체크박스입니다.';
+    const DESCRIPTION = 'xe::descAcceptTerms';
 
     /**
      * Indicates if the form part is implicit
