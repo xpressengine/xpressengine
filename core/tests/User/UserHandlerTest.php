@@ -23,6 +23,7 @@ namespace Xpressengine\Tests\User {
     use Illuminate\Support\MessageBag;
     use Mockery;
     use Xpressengine\Register\Container;
+    use Xpressengine\User\Models\User;
     use Xpressengine\User\Rating;
     use Xpressengine\User\Repositories\PendingEmailRepositoryInterface;
     use Xpressengine\User\Repositories\UserAccountRepositoryInterface;
@@ -64,8 +65,12 @@ namespace Xpressengine\Tests\User {
             $user = $this->makeUser();
             $users->shouldReceive('create')
                 ->once()
-                ->with(['display_name' => 'foo', 'password' => 'encrypted'])
-                ->andReturn($user);
+                ->with([
+                    'display_name' => 'foo',
+                    'password' => 'encrypted',
+                    'rating' => Rating::MEMBER,
+                    'status' => User::STATUS_ACTIVATED
+                ])->andReturn($user);
 
             $this->assertEquals($user, $handler->create($data));
         }
@@ -94,8 +99,11 @@ namespace Xpressengine\Tests\User {
 
             $users->shouldReceive('create')
                 ->once()
-                ->with(['display_name' => 'foo', 'password' => 'encrypted', 'email'=>'foo@bar.com'])
-                ->andReturn($user);
+                ->with([
+                    'display_name' => 'foo', 'password' => 'encrypted', 'email'=>'foo@bar.com',
+                    'rating' => Rating::MEMBER,
+                    'status' => User::STATUS_ACTIVATED
+                ])->andReturn($user);
 
             /** @var Mockery\MockInterface $emails */
             $emails = $handler->emails();
@@ -140,8 +148,11 @@ namespace Xpressengine\Tests\User {
 
             $users->shouldReceive('create')
                 ->once()
-                ->with(['display_name' => 'foo', 'password' => 'encrypted', 'email'=>'foo@bar.com'])
-                ->andReturn($user);
+                ->with([
+                    'display_name' => 'foo', 'password' => 'encrypted', 'email'=>'foo@bar.com',
+                    'rating' => Rating::MEMBER,
+                    'status' => User::STATUS_ACTIVATED
+                ])->andReturn($user);
 
 
             /** @var Mockery\MockInterface $emails */
@@ -186,7 +197,11 @@ namespace Xpressengine\Tests\User {
 
             $users->shouldReceive('create')
                 ->once()
-                ->with(['display_name' => 'foo', 'password' => 'encrypted'])
+                ->with([
+                    'display_name' => 'foo', 'password' => 'encrypted',
+                    'rating' => Rating::MEMBER,
+                    'status' => User::STATUS_ACTIVATED
+                ])
                 ->andReturn($user);
 
             $this->assertEquals($user, $handler->create($data));
@@ -240,8 +255,11 @@ namespace Xpressengine\Tests\User {
 
             $users->shouldReceive('create')
                 ->once()
-                ->with(['display_name' => 'foo', 'password' => 'encrypted'])
-                ->andReturn($user);
+                ->with([
+                    'display_name' => 'foo', 'password' => 'encrypted',
+                    'rating' => Rating::MEMBER,
+                    'status' => User::STATUS_ACTIVATED
+                ])->andReturn($user);
 
             $this->assertEquals($user, $handler->create($data));
         }
@@ -268,7 +286,7 @@ namespace Xpressengine\Tests\User {
             $data = [
                 'rating' => Rating::MEMBER,
                 'display_name' => 'foo',
-                'status' => UserHandler::STATUS_ACTIVATED
+                'status' => User::STATUS_ACTIVATED
             ];
             /** @var UserHandler $handler */
             $handler = $this->getHandler();
@@ -294,7 +312,7 @@ namespace Xpressengine\Tests\User {
             $data = [
                 'rating' => Rating::MEMBER,
                 'display_name' => 'foo',
-                'status' => UserHandler::STATUS_ACTIVATED,
+                'status' => User::STATUS_ACTIVATED,
                 'email' => $email
             ];
 
@@ -330,7 +348,7 @@ namespace Xpressengine\Tests\User {
             $data = [
                 'rating' => Rating::MEMBER,
                 'display_name' => '',
-                'status' => UserHandler::STATUS_ACTIVATED,
+                'status' => User::STATUS_ACTIVATED,
                 'email' => 'foo@xpressengine.com'
             ];
 
@@ -365,7 +383,7 @@ namespace Xpressengine\Tests\User {
             $data = [
                 'rating' => Rating::MEMBER,
                 'display_name' => 'foo',
-                'status' => UserHandler::STATUS_ACTIVATED,
+                'status' => User::STATUS_ACTIVATED,
                 'email' => $email
             ];
 
@@ -401,7 +419,7 @@ namespace Xpressengine\Tests\User {
             $data = [
                 'rating' => Rating::MEMBER,
                 'display_name' => 'foo',
-                'status' => UserHandler::STATUS_ACTIVATED,
+                'status' => User::STATUS_ACTIVATED,
                 'email' => $email
             ];
 
@@ -437,7 +455,7 @@ namespace Xpressengine\Tests\User {
             $data = [
                 'rating' => Rating::MEMBER,
                 'display_name' => 'foo',
-                'status' => UserHandler::STATUS_ACTIVATED,
+                'status' => User::STATUS_ACTIVATED,
                 'email' => 'foo@xpressengine.com',
                 'account' => []
             ];
@@ -479,7 +497,7 @@ namespace Xpressengine\Tests\User {
             $data = [
                 'rating' => Rating::MEMBER,
                 'display_name' => 'foo',
-                'status' => UserHandler::STATUS_ACTIVATED,
+                'status' => User::STATUS_ACTIVATED,
                 'email' => 'foo@xpressengine.com',
                 'account' => [
                     'account_id' => 'foo',
