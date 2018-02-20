@@ -236,7 +236,7 @@ class MenuController extends Controller
 
         XeDB::commit();
         return redirect()->route('settings.menu.index')
-            ->with('alert', ['type' => 'success', 'message' => 'Menu deleted']);
+            ->with('alert', ['type' => 'success', 'message' => xe_trans('xe::deleted')]);
 
     }
 
@@ -284,7 +284,7 @@ class MenuController extends Controller
 
         XeDB::commit();
 
-        return redirect()->back()->with('alert', ['type' => 'success', 'message' => 'success']);
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
     }
 
     /**
@@ -412,7 +412,8 @@ class MenuController extends Controller
 
         XeDB::commit();
 
-        return redirect()->route('settings.menu.index');
+        return redirect()->route('settings.menu.index')
+            ->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
     }
 
     /**
@@ -529,7 +530,8 @@ class MenuController extends Controller
 
         XeDB::commit();
 
-        return redirect()->route('settings.menu.index');
+        return redirect()->route('settings.menu.index')
+            ->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
 
     }
 
@@ -553,8 +555,7 @@ class MenuController extends Controller
             return $image->getKey();
         }
 
-        $key = 'remove' . ucfirst($name);
-        if ($request->get($key) && !empty($item->{$columnKeyName})) {
+        if ($request->get($name) === '__delete_file__' && !empty($item->{$columnKeyName})) {
             XeStorage::unBind($item->getKey(), $item->{$name}, true);
 
             return null;
@@ -631,7 +632,7 @@ class MenuController extends Controller
 
         XeDB::commit();
         return redirect()->route('settings.menu.index')
-            ->with('alert', ['type' => 'success', 'message' => 'MenuItem deleted']);
+            ->with('alert', ['type' => 'success', 'message' => xe_trans('xe::deleted')]);
     }
 
     /**
@@ -707,7 +708,7 @@ class MenuController extends Controller
 
         XeDB::commit();
 
-		return redirect()->back()->with('alert', ['type' => 'success', 'message' => 'success']);
+		return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
     }
 
     /**

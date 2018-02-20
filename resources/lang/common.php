@@ -1266,7 +1266,11 @@ return [
     ],
     'msgDelete' => [
         'ko' => '삭제되었습니다.',
-        'en' => 'Delete?'
+        'en' => 'Deleted'
+    ],
+    'deleted' => [
+        'ko' => '삭제되었습니다.',
+        'en' => 'Deleted'
     ],
     'pendingEmail' => [
         'ko' => '등록 대기중인 이메일',
