@@ -4,7 +4,7 @@
 
         <div class="btn-group" role="group" aria-label="...">
             <button type="button" class="btn btn-default __xe_inputBtn fileinput-button">
-                @if($path = array_get($args, 'value.path'))
+                @if($path = array_get($args, 'value.path', array_get($args, 'image')))
                     <span>변경</span>
                 @else
                     <span>{{xe_trans('xe::register')}}</span>
@@ -17,8 +17,8 @@
         </div>
 
         <div class="__xe_file_preview_{{ $seq }}" style="padding: 10px 0">
-            @if($src = array_get($args, 'value.path'))
-                <img class="__thumbnail center-block" src="{{ asset($src) }}"
+            @if($path)
+                <img class="__thumbnail center-block" src="{{ asset($path) }}"
                      style="max-width: 100%; height:auto;">
             @endif
         </div>
@@ -27,7 +27,7 @@
 </div>
 
 <script>
-    jQuery(function () {
+    jQuery(function ($) {
         var fileInput = $('.__xe_imagebox_{{ $seq }}');
         fileInput.fileupload({
             fileInput: $('.__xe_file_{{ $seq }}'),

@@ -4,13 +4,13 @@
  * @namespace Translator
  */
 var Translator = (function (document, undefined) {
-  'use strict';
+  'use strict'
 
-  var _messages = {};
-  var _domains = [];
-  var _sPluralRegex = new RegExp(/^\w+\: +(.+)$/);
-  var _cPluralRegex = new RegExp(/^\s*((\{\s*(\-?\d+[\s*,\s*\-?\d+]*)\s*\})|([\[\]])\s*(-Inf|\-?\d+)\s*,\s*(\+?Inf|\-?\d+)\s*([\[\]]))\s?(.+?)$/);
-  var _iPluralRegex = new RegExp(/^\s*(\{\s*(\-?\d+[\s*,\s*\-?\d+]*)\s*\})|([\[\]])\s*(-Inf|\-?\d+)\s*,\s*(\+?Inf|\-?\d+)\s*([\[\]])/);
+  var _messages = {}
+  var _domains = []
+  var _sPluralRegex = new RegExp(/^\w+\: +(.+)$/)
+  var _cPluralRegex = new RegExp(/^\s*((\{\s*(\-?\d+[\s*,\s*\-?\d+]*)\s*\})|([\[\]])\s*(-Inf|\-?\d+)\s*,\s*(\+?Inf|\-?\d+)\s*([\[\]]))\s?(.+?)$/)
+  var _iPluralRegex = new RegExp(/^\s*(\{\s*(\-?\d+[\s*,\s*\-?\d+]*)\s*\})|([\[\]])\s*(-Inf|\-?\d+)\s*,\s*(\+?Inf|\-?\d+)\s*([\[\]])/)
 
   /**
    * Replace placeholders in given message.
@@ -23,20 +23,20 @@ var Translator = (function (document, undefined) {
    * @return {String}             A human readable message
    * @api private
    */
-  function replacePlaceholders(message, placeholders) {
-    var _i;
-    var _prefix = Translator.placeHolderPrefix;
-    var _suffix = Translator.placeHolderSuffix;
+  function replacePlaceholders (message, placeholders) {
+    var _i
+    var _prefix = Translator.placeHolderPrefix
+    var _suffix = Translator.placeHolderSuffix
 
     for (_i in placeholders) {
-      var _r = new RegExp(_prefix + _i + _suffix, 'g');
+      var _r = new RegExp(_prefix + _i + _suffix, 'g')
 
       if (_r.test(message)) {
-        message = message.replace(_r, placeholders[_i]);
+        message = message.replace(_r, placeholders[_i])
       }
     }
 
-    return message;
+    return message
   }
 
   /**
@@ -52,67 +52,67 @@ var Translator = (function (document, undefined) {
    * @return {String}                 The right message if found, `undefined` otherwise
    * @api private
    */
-  function getMessage(id, domain, locale, currentLocale, localeFallback) {
-    var _locale = locale || currentLocale || localeFallback;
-    var _domain = domain;
+  function getMessage (id, domain, locale, currentLocale, localeFallback) {
+    var _locale = locale || currentLocale || localeFallback
+    var _domain = domain
 
     if (_messages[_locale] == undefined) {
       if (_messages[localeFallback] == undefined) {
         // s::CUSTOM::
-        var returnId = id;
+        var returnId = id
 
         if (id.split('xe::'.toLowerCase()).length > 1) {
-          returnId = id.split('xe::'.toLowerCase())[1];
+          returnId = id.split('xe::'.toLowerCase())[1]
         }
 
-        return returnId;
+        return returnId
       }
 
-      _locale = localeFallback;
+      _locale = localeFallback
     }
 
     if (_domain === undefined || _domain === null) {
       for (var i = 0; i < _domains.length; i++) {
         if (hasMessage(_locale, _domains[i], id) ||
           hasMessage(localeFallback, _domains[i], id)) {
-          _domain = _domains[i];
+          _domain = _domains[i]
 
-          break;
+          break
         }
       }
     }
 
     if (hasMessage(_locale, _domain, id)) {
-      return _messages[_locale][_domain][id];
+      return _messages[_locale][_domain][id]
     }
 
-    var _length;
-    var _parts;
-    var _last;
-    var _lastLength;
+    var _length
+    var _parts
+    var _last
+    var _lastLength
 
     while (_locale.length > 2) {
-      _length = _locale.length;
-      _parts = _locale.split(/[\s_]+/);
-      _last = _parts[_parts.length - 1];
-      _lastLength = _last.length;
+      _length = _locale.length
+      _parts = _locale.split(/[\s_]+/)
+      _last = _parts[_parts.length - 1]
+      _lastLength = _last.length
 
       if (_parts.length === 1) {
-        break;
+        break
       }
 
-      _locale = _locale.substring(0, _length - (_lastLength + 1));
+      _locale = _locale.substring(0, _length - (_lastLength + 1))
 
       if (hasMessage(_locale, _domain, id)) {
-        return _messages[_locale][_domain][id];
+        return _messages[_locale][_domain][id]
       }
     }
 
     if (hasMessage(localeFallback, _domain, id)) {
-      return _messages[localeFallback][_domain][id];
+      return _messages[localeFallback][_domain][id]
     }
 
-    return id;
+    return id
   }
 
   /**
@@ -127,20 +127,20 @@ var Translator = (function (document, undefined) {
    *                      `               false` otherwise
    * @api private
    */
-  function hasMessage(locale, domain, id) {
+  function hasMessage (locale, domain, id) {
     if (_messages[locale] == undefined) {
-      return false;
+      return false
     }
 
     if (_messages[locale][domain] == undefined) {
-      return false;
+      return false
     }
 
     if (_messages[locale][domain][id] == undefined) {
-      return false;
+      return false
     }
 
-    return true;
+    return true
   }
 
   /**
@@ -170,54 +170,54 @@ var Translator = (function (document, undefined) {
    * @return {String}         The message part to use for translation
    * @api private
    */
-  function pluralize(message, number, locale) {
-    var _p;
-    var _e;
-    var _explicitRules = [];
-    var _standardRules = [];
-    var _parts = message.split(Translator.pluralSeparator);
-    var _matches = [];
+  function pluralize (message, number, locale) {
+    var _p
+    var _e
+    var _explicitRules = []
+    var _standardRules = []
+    var _parts = message.split(Translator.pluralSeparator)
+    var _matches = []
 
     for (_p = 0; _p < _parts.length; _p++) {
-      var _part = _parts[_p];
+      var _part = _parts[_p]
 
       if (_cPluralRegex.test(_part)) {
-        _matches = _part.match(_cPluralRegex);
-        _explicitRules[_matches[0]] = _matches[_matches.length - 1];
+        _matches = _part.match(_cPluralRegex)
+        _explicitRules[_matches[0]] = _matches[_matches.length - 1]
       } else if (_sPluralRegex.test(_part)) {
-        _matches = _part.match(_sPluralRegex);
-        _standardRules.push(_matches[1]);
+        _matches = _part.match(_sPluralRegex)
+        _standardRules.push(_matches[1])
       } else {
-        _standardRules.push(_part);
+        _standardRules.push(_part)
       }
     }
 
     for (_e in _explicitRules) {
       if (_iPluralRegex.test(_e)) {
-        _matches = _e.match(_iPluralRegex);
+        _matches = _e.match(_iPluralRegex)
 
         if (_matches[1]) {
-          var _ns = _matches[2].split(',');
-          var _n;
+          var _ns = _matches[2].split(',')
+          var _n
 
           for (_n in _ns) {
             if (number == _ns[_n]) {
-              return _explicitRules[_e];
+              return _explicitRules[_e]
             }
           }
         } else {
-          var _leftNumber = convertNumber(_matches[4]);
-          var _rightNumber = convertNumber(_matches[5]);
+          var _leftNumber = convertNumber(_matches[4])
+          var _rightNumber = convertNumber(_matches[5])
 
           if ((_matches[3] === '[' ? number >= _leftNumber : number > _leftNumber) &&
             (_matches[6] === ']' ? number <= _rightNumber : number < _rightNumber)) {
-            return _explicitRules[_e];
+            return _explicitRules[_e]
           }
         }
       }
     }
 
-    return _standardRules[pluralPosition(number, locale)] || _standardRules[0] || undefined;
+    return _standardRules[pluralPosition(number, locale)] || _standardRules[0] || undefined
   }
 
   /**
@@ -231,14 +231,14 @@ var Translator = (function (document, undefined) {
    * @return {Number}         The int value of the number
    * @api private
    */
-  function convertNumber(number) {
+  function convertNumber (number) {
     if (number === '-Inf') {
-      return Number.NEGATIVE_INFINITY;
+      return Number.NEGATIVE_INFINITY
     } else if (number === '+Inf' || number === 'Inf') {
-      return Number.POSITIVE_INFINITY;
+      return Number.POSITIVE_INFINITY
     }
 
-    return parseInt(number, 10);
+    return parseInt(number, 10)
   }
 
   /**
@@ -252,145 +252,145 @@ var Translator = (function (document, undefined) {
    * @return {Number}        The plural position
    * @api private
    */
-  function pluralPosition(number, locale) {
-    var _locale = locale;
+  function pluralPosition (number, locale) {
+    var _locale = locale
 
     if (_locale === 'pt_BR') {
-      _locale = 'xbr';
+      _locale = 'xbr'
     }
 
     if (_locale.length > 3) {
-      _locale = _locale.split('_')[0];
+      _locale = _locale.split('_')[0]
     }
 
     switch (_locale) {
-    case 'bo':
-    case 'dz':
-    case 'id':
-    case 'ja':
-    case 'jv':
-    case 'ka':
-    case 'km':
-    case 'kn':
-    case 'ko':
-    case 'ms':
-    case 'th':
-    case 'tr':
-    case 'vi':
-    case 'zh':
-      return 0;
-    case 'af':
-    case 'az':
-    case 'bn':
-    case 'bg':
-    case 'ca':
-    case 'da':
-    case 'de':
-    case 'el':
-    case 'en':
-    case 'eo':
-    case 'es':
-    case 'et':
-    case 'eu':
-    case 'fa':
-    case 'fi':
-    case 'fo':
-    case 'fur':
-    case 'fy':
-    case 'gl':
-    case 'gu':
-    case 'ha':
-    case 'he':
-    case 'hu':
-    case 'is':
-    case 'it':
-    case 'ku':
-    case 'lb':
-    case 'ml':
-    case 'mn':
-    case 'mr':
-    case 'nah':
-    case 'nb':
-    case 'ne':
-    case 'nl':
-    case 'nn':
-    case 'no':
-    case 'om':
-    case 'or':
-    case 'pa':
-    case 'pap':
-    case 'ps':
-    case 'pt':
-    case 'so':
-    case 'sq':
-    case 'sv':
-    case 'sw':
-    case 'ta':
-    case 'te':
-    case 'tk':
-    case 'ur':
-    case 'zu':
-      return (number == 1) ? 0 : 1;
+      case 'bo':
+      case 'dz':
+      case 'id':
+      case 'ja':
+      case 'jv':
+      case 'ka':
+      case 'km':
+      case 'kn':
+      case 'ko':
+      case 'ms':
+      case 'th':
+      case 'tr':
+      case 'vi':
+      case 'zh':
+        return 0
+      case 'af':
+      case 'az':
+      case 'bn':
+      case 'bg':
+      case 'ca':
+      case 'da':
+      case 'de':
+      case 'el':
+      case 'en':
+      case 'eo':
+      case 'es':
+      case 'et':
+      case 'eu':
+      case 'fa':
+      case 'fi':
+      case 'fo':
+      case 'fur':
+      case 'fy':
+      case 'gl':
+      case 'gu':
+      case 'ha':
+      case 'he':
+      case 'hu':
+      case 'is':
+      case 'it':
+      case 'ku':
+      case 'lb':
+      case 'ml':
+      case 'mn':
+      case 'mr':
+      case 'nah':
+      case 'nb':
+      case 'ne':
+      case 'nl':
+      case 'nn':
+      case 'no':
+      case 'om':
+      case 'or':
+      case 'pa':
+      case 'pap':
+      case 'ps':
+      case 'pt':
+      case 'so':
+      case 'sq':
+      case 'sv':
+      case 'sw':
+      case 'ta':
+      case 'te':
+      case 'tk':
+      case 'ur':
+      case 'zu':
+        return (number == 1) ? 0 : 1
 
-    case 'am':
-    case 'bh':
-    case 'fil':
-    case 'fr':
-    case 'gun':
-    case 'hi':
-    case 'ln':
-    case 'mg':
-    case 'nso':
-    case 'xbr':
-    case 'ti':
-    case 'wa':
-      return ((number === 0) || (number == 1)) ? 0 : 1;
+      case 'am':
+      case 'bh':
+      case 'fil':
+      case 'fr':
+      case 'gun':
+      case 'hi':
+      case 'ln':
+      case 'mg':
+      case 'nso':
+      case 'xbr':
+      case 'ti':
+      case 'wa':
+        return ((number === 0) || (number == 1)) ? 0 : 1
 
-    case 'be':
-    case 'bs':
-    case 'hr':
-    case 'ru':
-    case 'sr':
-    case 'uk':
-      return ((number % 10 == 1) && (number % 100 != 11)) ? 0 : (((number % 10 >= 2) && (number % 10 <= 4) && ((number % 100 < 10) || (number % 100 >= 20))) ? 1 : 2);
+      case 'be':
+      case 'bs':
+      case 'hr':
+      case 'ru':
+      case 'sr':
+      case 'uk':
+        return ((number % 10 == 1) && (number % 100 != 11)) ? 0 : (((number % 10 >= 2) && (number % 10 <= 4) && ((number % 100 < 10) || (number % 100 >= 20))) ? 1 : 2)
 
-    case 'cs':
-    case 'sk':
-      return (number == 1) ? 0 : (((number >= 2) && (number <= 4)) ? 1 : 2);
+      case 'cs':
+      case 'sk':
+        return (number == 1) ? 0 : (((number >= 2) && (number <= 4)) ? 1 : 2)
 
-    case 'ga':
-      return (number == 1) ? 0 : ((number == 2) ? 1 : 2);
+      case 'ga':
+        return (number == 1) ? 0 : ((number == 2) ? 1 : 2)
 
-    case 'lt':
-      return ((number % 10 == 1) && (number % 100 != 11)) ? 0 : (((number % 10 >= 2) && ((number % 100 < 10) || (number % 100 >= 20))) ? 1 : 2);
+      case 'lt':
+        return ((number % 10 == 1) && (number % 100 != 11)) ? 0 : (((number % 10 >= 2) && ((number % 100 < 10) || (number % 100 >= 20))) ? 1 : 2)
 
-    case 'sl':
-      return (number % 100 == 1) ? 0 : ((number % 100 == 2) ? 1 : (((number % 100 == 3) || (number % 100 == 4)) ? 2 : 3));
+      case 'sl':
+        return (number % 100 == 1) ? 0 : ((number % 100 == 2) ? 1 : (((number % 100 == 3) || (number % 100 == 4)) ? 2 : 3))
 
-    case 'mk':
-      return (number % 10 == 1) ? 0 : 1;
+      case 'mk':
+        return (number % 10 == 1) ? 0 : 1
 
-    case 'mt':
-      return (number == 1) ? 0 : (((number === 0) || ((number % 100 > 1) && (number % 100 < 11))) ? 1 : (((number % 100 > 10) && (number % 100 < 20)) ? 2 : 3));
+      case 'mt':
+        return (number == 1) ? 0 : (((number === 0) || ((number % 100 > 1) && (number % 100 < 11))) ? 1 : (((number % 100 > 10) && (number % 100 < 20)) ? 2 : 3))
 
-    case 'lv':
-      return (number === 0) ? 0 : (((number % 10 == 1) && (number % 100 != 11)) ? 1 : 2);
+      case 'lv':
+        return (number === 0) ? 0 : (((number % 10 == 1) && (number % 100 != 11)) ? 1 : 2)
 
-    case 'pl':
-      return (number == 1) ? 0 : (((number % 10 >= 2) && (number % 10 <= 4) && ((number % 100 < 12) || (number % 100 > 14))) ? 1 : 2);
+      case 'pl':
+        return (number == 1) ? 0 : (((number % 10 >= 2) && (number % 10 <= 4) && ((number % 100 < 12) || (number % 100 > 14))) ? 1 : 2)
 
-    case 'cy':
-      return (number == 1) ? 0 : ((number == 2) ? 1 : (((number == 8) || (number == 11)) ? 2 : 3));
+      case 'cy':
+        return (number == 1) ? 0 : ((number == 2) ? 1 : (((number == 8) || (number == 11)) ? 2 : 3))
 
-    case 'ro':
-      return (number == 1) ? 0 : (((number === 0) || ((number % 100 > 0) && (number % 100 < 20))) ? 1 : 2);
+      case 'ro':
+        return (number == 1) ? 0 : (((number === 0) || ((number % 100 > 0) && (number % 100 < 20))) ? 1 : 2)
 
-    case 'ar':
-      return (number === 0) ? 0 : ((number == 1) ? 1 : ((number == 2) ? 2 : (((number >= 3) && (number <= 10)) ? 3 : (((number >= 11) && (number <= 99)) ? 4 : 5))));
+      case 'ar':
+        return (number === 0) ? 0 : ((number == 1) ? 1 : ((number == 2) ? 2 : (((number >= 3) && (number <= 10)) ? 3 : (((number >= 11) && (number <= 99)) ? 4 : 5))))
 
-    default:
-      return 0;
-  }
+      default:
+        return 0
+    }
   }
 
   /**
@@ -401,14 +401,14 @@ var Translator = (function (document, undefined) {
    *                      `false` otherwise
    * @api private
    */
-  function exists(array, element) {
+  function exists (array, element) {
     for (var i = 0; i < array.length; i++) {
       if (element === array[i]) {
-        return true;
+        return true
       }
     }
 
-    return false;
+    return false
   }
 
   /**
@@ -419,8 +419,8 @@ var Translator = (function (document, undefined) {
    * @return {String}     The current application's locale
    * @api private
    */
-  function getCurrentLocale() {
-    return document.documentElement.lang.replace('-', '_');
+  function getCurrentLocale () {
+    return document.documentElement.lang.replace('-', '_')
   }
 
   return {
@@ -490,24 +490,24 @@ var Translator = (function (document, undefined) {
      * @api public
      */
     add: function (id, message, domain, locale) {
-      var _locale = locale || this.locale || this.fallback;
-      var _domain = domain || this.defaultDomain;
+      var _locale = locale || this.locale || this.fallback
+      var _domain = domain || this.defaultDomain
 
       if (!_messages[_locale]) {
-        _messages[_locale] = {};
+        _messages[_locale] = {}
       }
 
       if (!_messages[_locale][_domain]) {
-        _messages[_locale][_domain] = {};
+        _messages[_locale][_domain] = {}
       }
 
-      _messages[_locale][_domain][id] = message;
+      _messages[_locale][_domain][id] = message
 
       if (exists(_domains, _domain) === false) {
-        _domains.push(_domain);
+        _domains.push(_domain)
       }
 
-      return this;
+      return this
     },
 
     /**
@@ -528,9 +528,9 @@ var Translator = (function (document, undefined) {
         locale,
         this.locale,
         this.fallback
-      );
+      )
 
-      return replacePlaceholders(_message, parameters || {});
+      return replacePlaceholders(_message, parameters || {})
     },
 
     /**
@@ -552,19 +552,19 @@ var Translator = (function (document, undefined) {
         locale,
         this.locale,
         this.fallback
-      );
+      )
 
-      var _number = parseInt(number, 10);
+      var _number = parseInt(number, 10)
 
       if (_message && !isNaN(_number) != undefined) {
         _message = pluralize(
           _message,
           _number,
           locale || this.locale || this.fallback
-        );
+        )
       }
 
-      return replacePlaceholders(_message, parameters || {});
+      return replacePlaceholders(_message, parameters || {})
     },
 
     /**
@@ -577,32 +577,32 @@ var Translator = (function (document, undefined) {
      */
     fromJSON: function (data) {
       if (typeof data === 'string') {
-        data = JSON.parse(data);
+        data = JSON.parse(data)
       }
 
       if (data.locale) {
-        this.locale = data.locale;
+        this.locale = data.locale
       }
 
       if (data.fallback) {
-        this.fallback = data.fallback;
+        this.fallback = data.fallback
       }
 
       if (data.defaultDomain) {
-        this.defaultDomain = data.defaultDomain;
+        this.defaultDomain = data.defaultDomain
       }
 
       if (data.translations) {
         for (var locale in data.translations) {
           for (var domain in data.translations[locale]) {
             for (var id in data.translations[locale][domain]) {
-              this.add(id, data.translations[locale][domain][id], domain, locale);
+              this.add(id, data.translations[locale][domain][id], domain, locale)
             }
           }
         }
       }
 
-      return this;
+      return this
     },
 
     /**
@@ -610,9 +610,9 @@ var Translator = (function (document, undefined) {
      * @api public
      */
     reset: function () {
-      _messages = {};
-      _domains = [];
-      this.locale = getCurrentLocale();
+      _messages = {}
+      _domains = []
+      this.locale = getCurrentLocale()
     },
     /**
      * @memberof Translator
@@ -620,7 +620,9 @@ var Translator = (function (document, undefined) {
      * @return {string}
      * */
     hasMessage: function (id) {
-      return hasMessage(this.locale, 'messages', id);
-    },
-  };
-})(document, undefined);
+      return hasMessage(this.locale, 'messages', id)
+    }
+  }
+})(document, undefined)
+
+export default Translator

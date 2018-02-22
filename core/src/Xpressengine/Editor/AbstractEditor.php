@@ -576,7 +576,7 @@ abstract class AbstractEditor implements ComponentInterface
     {
         $editorScript = '
         <script>
-            $(function() {
+            jQuery(function($) {
                 XEeditor.getEditor(\'%s\').create(\'%s\', %s, %s, %s);
             });
         </script>';
@@ -677,7 +677,7 @@ abstract class AbstractEditor implements ComponentInterface
         }
         $images = $temp;
         unset($temp);
-        
+
         foreach ($list as $data) {
             if (!isset($images[$data['data-id']])) {
                 continue;

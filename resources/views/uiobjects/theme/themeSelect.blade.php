@@ -66,7 +66,7 @@
 ')->load() }}
 {{ XeFrontend::html('theme.selector')->content("
 <script>
-    $(document).ready(function () {
+    jQuery(function ($) {
         function deselectTheme(type) {
             if(type == 'mobile') {
                 $('.__xe_theme-selector .__xe_mobile-theme-btn').removeClass('on');

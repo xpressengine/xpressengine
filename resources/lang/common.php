@@ -1266,7 +1266,11 @@ return [
     ],
     'msgDelete' => [
         'ko' => '삭제되었습니다.',
-        'en' => 'Delete?'
+        'en' => 'Deleted'
+    ],
+    'deleted' => [
+        'ko' => '삭제되었습니다.',
+        'en' => 'Deleted'
     ],
     'pendingEmail' => [
         'ko' => '등록 대기중인 이메일',
@@ -2325,5 +2329,25 @@ return [
     'msgInvalidPassword' => [
         'ko' => '입력한 암호가 틀렸습니다.',
         'en' => 'Password is invalid.',
+    ],
+    'allMemberCount' => [
+        'ko' => '전체 회원 수',
+        'en' => 'Number of members',
+    ],
+    'searchMemberCount' => [
+        'ko' => '검색된 회원 수',
+        'en' => 'Number of members found',
+    ],
+    'allRating' => [
+        'ko' => '전체 등급',
+        'en' => 'All Rating',
+    ],
+    'enterStartDate' => [
+        'ko' => '시작 날짜 (2018-01-01)',
+        'en' => 'start date (2018-01-01)',
+    ],
+    'enterEndDate' => [
+        'ko' => '종료 날짜 (2018-01-01)',
+        'en' => 'end date (2018-01-01)',
     ],
 ];

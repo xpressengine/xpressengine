@@ -36,6 +36,6 @@ class ProfileItem extends UserToggleMenu
 
     public function getScript()
     {
-        return asset('assets/core/sample.js');
+        return null;
     }
 }

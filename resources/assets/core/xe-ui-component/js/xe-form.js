@@ -1,34 +1,32 @@
-;(function (XE) {
-
+;(function ($, XE) {
   var _formCommon = (function () {
     return {
       init: function () {
+        this.bindEvents()
 
-        this.bindEvents();
-
-        return this;
+        return this
       },
 
       bindEvents: function () {
         $(document).on('submit', 'form[data-submit=xe-ajax]', function (e) {
-          e.preventDefault();
+          e.preventDefault()
 
-          var $this = $(this);
-          var callback = $this.data('callback');
-          var validate = $this.data('validate');
+          var $this = $(this)
+          var callback = $this.data('callback')
+          var validate = $this.data('validate')
 
-          var objStack = callback ? callback.split('.') : [];
-          var callbackFunc = (objStack.length > 0) ? window : '';
-          var callbackObj = null;
+          var objStack = callback ? callback.split('.') : []
+          var callbackFunc = (objStack.length > 0) ? window : ''
+          var callbackObj = null
 
           if (objStack.length > 0) {
             for (var i = 0, max = objStack.length; i < max; i += 1) {
-              callbackObj = callbackFunc;
-              callbackFunc = callbackFunc[objStack[i]];
+              callbackObj = callbackFunc
+              callbackFunc = callbackFunc[objStack[i]]
             }
           }
 
-          var formData = new FormData($this[0]);
+          var formData = new FormData($this[0])
 
           var options = {
             url: $this.attr('action'),
@@ -38,40 +36,37 @@
             contentType: false,
             processData: false,
             success: function (data, textStatus, jqXHR) {
-              callbackFunc.call(callbackObj, data, textStatus, jqXHR);
-            },
-          };
+              callbackFunc.call(callbackObj, data, textStatus, jqXHR)
+            }
+          }
 
           if (callbackFunc === '') {
-            delete options.success;
+            delete options.success
           }
 
           if (_formCommon.isValidForm(options)) {
-
             if (validate == true) {
-              XE.formValidate($this);
+              XE.formValidate($this)
             }
 
-            XE.ajax(options);
+            XE.ajax(options)
           }
-
-        });
+        })
       },
 
       isValidForm: function (options) {
         if (!options.url) {
-          console.error('form action값이 없음');
-          return false;
+          console.error('form action값이 없음')
+          return false
         }
 
         if (!options.type) {
-          console.error('form method값이 없음');
-          return false;
+          console.error('form method값이 없음')
+          return false
         }
 
-        return true;
-      },
-    };
-  })().init();
-
-})(XE);
+        return true
+      }
+    }
+  })().init()
+})(window.jQuery, window.XE)

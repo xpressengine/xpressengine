@@ -144,11 +144,11 @@ class UserMigration extends Migration {
     public function installed()
     {
         \DB::table('config')->insert([
-                                         ['name' => 'user', 'vars' => '[]'],
-                                         ['name' => 'user.common', 'vars' => '{"secureLevel":"low","useCaptcha":false,"webmasterName":"webmaster","webmasterEmail":"webmaster@domain.com"}'],
-                                         ['name' => 'user.join', 'vars' => '{"joinable":true}'],
-                                         ['name' => 'toggleMenu@user', 'vars' => '{"activate":["user/toggleMenu/xpressengine@raw"]}']
-                                     ]);
+            ['name' => 'user', 'vars' => '[]'],
+            ['name' => 'user.common', 'vars' => '{"secureLevel":"low","useCaptcha":false,"webmasterName":"webmaster","webmasterEmail":"webmaster@domain.com"}'],
+            ['name' => 'user.join', 'vars' => '{"joinable":true}'],
+            ['name' => 'toggleMenu@user', 'vars' => '{"activate":["user\/toggleMenu\/xpressengine@profile","user\/toggleMenu\/xpressengine@manage"]}']
+        ]);
     }
 
     public function init()

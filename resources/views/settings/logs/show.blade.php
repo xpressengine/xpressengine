@@ -23,6 +23,10 @@
             </div>
             @endif
             <div class="panel panel-default">
+                <div class="panel-heading">IP주소</div>
+                <div class="panel-body"> {{ $log->ipaddress }} </div>
+            </div>
+            <div class="panel panel-default">
                 <div class="panel-heading">HTTP 메소드</div>
                 <div class="panel-body"> {{ $log->method }} </div>
             </div>
@@ -52,10 +56,6 @@
                         </table>
                     @endif
                 </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">IP주소</div>
-                <div class="panel-body"> {{ $log->ipaddress }} </div>
             </div>
         </dl>
     </div>

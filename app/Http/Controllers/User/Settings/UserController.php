@@ -51,6 +51,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $query = $this->handler->users()->query();
+        $allMemberCount = count($query->get());
 
         // resolve group
         if ($group = $request->get('group')) {
@@ -65,6 +66,11 @@ class UserController extends Controller
         // resolve status
         if ($status = $request->get('status')) {
             $query = $query->where('status', $status);
+        }
+
+        // resolve rating
+        if ($rating = $request->get('rating')) {
+            $query = $query->where('rating', $rating);
         }
 
         // resolve search keyword
@@ -82,16 +88,31 @@ class UserController extends Controller
             );
         }
 
-        $users = $query->orderBy('created_at', 'desc')->paginate();
+        $users = $query->orderBy('created_at', 'desc')->paginate()->appends(request()->query());
 
         // get all groups
         $groups = $this->handler->groups()->all();
+
+        // get all ratings
+        $ratings = Rating::getUsableAll();
+        $ratingNames = [
+            'member' => xe_trans('xe::memberRatingNormal'),
+            'manager' => xe_trans('xe::memberRatingManager'),
+            'super' => xe_trans('xe::memberRatingAdministrator'),
+        ];
+
+        foreach ($ratings as $key => $rating) {
+            $ratings[$key] = [
+                'value' => $rating,
+                'text' => $ratingNames[$rating],
+            ];
+        }
 
         $selectedGroup = null;
         if ($group !== null) {
             $selectedGroup = $this->handler->groups()->find($group);
         }
-        return XePresenter::make('user.settings.user.index', compact('users', 'groups', 'selectedGroup'));
+        return XePresenter::make('user.settings.user.index', compact('users', 'groups', 'selectedGroup', 'allMemberCount', 'ratings'));
     }
 
     /**

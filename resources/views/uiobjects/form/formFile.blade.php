@@ -31,7 +31,7 @@
 </div>
 
 <script>
-    jQuery(function () {
+    jQuery(function ($) {
         var fileInput = $('.__xe_filebox_{{ $seq }}');
         var options = {!! json_encode($args['fileuploadOptions']) !!};
         options['acceptFileTypes'] = new RegExp(options.acceptFileTypes, 'i');

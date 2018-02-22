@@ -167,8 +167,10 @@
 
 </form>
 <script>
-    $('#parentTheme').change(function () {
-        $('#themeSelect').toggle();
+    jQuery(function($) {
+        $('#parentTheme').change(function () {
+            $('#themeSelect').toggle();
+        });
     });
 </script>
 @endsection
