@@ -29,6 +29,7 @@
   function clearMenus (e) {
     if (e && e.which === 3) return
     $(backdrop).remove()
+    toggle += ',[data-toggle="xe-page-toggle-menu"]'
     $(toggle).each(function () {
       var $this = $(this)
       var $parent = getParent($this)
