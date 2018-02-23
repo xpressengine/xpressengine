@@ -6,6 +6,7 @@ import Request from 'xe-common/request'
 import Validator from 'xe-common/validator'
 import * as Utils from 'xe-common/utils'
 import DynamicLoadManager from 'xe-common/dynamicLoadManager'
+import Translator from 'xe-common/translator'
 import $ from 'jquery'
 
 /**
@@ -22,6 +23,10 @@ class XE {
     this.Request = Request
     this.Component = Component
     this.util = Utils
+
+    window.Utils = Utils
+    window.DynamicLoadManager = DynamicLoadManager
+    window.Translator = Translator
   }
 
   /**
