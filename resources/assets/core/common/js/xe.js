@@ -8,6 +8,7 @@ import * as Utils from 'xe-common/utils'
 import DynamicLoadManager from 'xe-common/dynamicLoadManager'
 import Translator from 'xe-common/translator'
 import $ from 'jquery'
+import blankshield from 'blankshield'
 
 /**
  * @global
@@ -27,6 +28,7 @@ class XE {
     window.Utils = Utils
     window.DynamicLoadManager = DynamicLoadManager
     window.Translator = Translator
+    window.blankshield = blankshield
   }
 
   /**
