@@ -142,7 +142,7 @@ class LangEditorBox {
     if (!this.multiline) {
       edit = $(`<input type="text" class="form-control" id="${id}" name="${name}" />`).attr('value', value)
     } else {
-      edit = $(`<textarea class="form-control" id="${id}" name="${name}"></textarea>`).val(value)
+      edit = $(`<textarea class="form-control" id="${id}" name="${name}"></textarea>`).text(value)
     }
 
     return edit.prop('outerHTML')
