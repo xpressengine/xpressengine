@@ -274,7 +274,7 @@ class SettingsController extends Controller
                 } else {
                     fwrite($file, $log->type . "\t");
                 }
-                fwrite($file, $log->user->getDisplayName() . "\t");
+                fwrite($file, $log->getUser()->getDisplayName() . "\t");
                 fwrite($file, $log->summary . "\t");
                 fwrite($file, $log->ipaddress . "\t");
 

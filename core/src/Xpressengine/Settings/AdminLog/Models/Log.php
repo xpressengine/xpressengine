@@ -15,6 +15,7 @@ namespace Xpressengine\Settings\AdminLog\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Xpressengine\Database\Eloquent\DynamicModel;
+use Xpressengine\User\Models\UnknownUser;
 use Xpressengine\User\Models\User;
 
 /**
@@ -67,6 +68,17 @@ class Log extends DynamicModel
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function getUser()
+    {
+        $user = $this->user;
+
+        if ($user == null) {
+            $user = new UnknownUser();
+        }
+
+        return $user;
     }
 
     /**
