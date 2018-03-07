@@ -13,6 +13,7 @@
  */
 namespace Xpressengine\Settings\AdminLog\Loggers;
 
+use Illuminate\Contracts\Foundation\Application;
 use Xpressengine\Http\Request;
 use Xpressengine\Settings\AdminLog\AbstractLogger;
 use Xpressengine\Settings\AdminLog\Models\Log;
@@ -31,67 +32,46 @@ class AuthLogger extends AbstractLogger
 
     const TITLE = '로그인';
 
-    protected $matched;
-    /**
-     * run logging request
-     *
-     * @param Request $request incoming request
-     *
-     * @return void
-     */
-    public function run(Request $request)
+    const LOGIN = 0;
+    const LOGOUT = 1;
+
+    protected $app;
+
+    public function initLogger(Application $app)
     {
-        $run = $this->matched;
-        if ($run !== null) {
-            $data = $this->loadRequest($request);
-            array_set($data['data'], 'route', $request->route()->getName());
-            $run($data);
-            $this->log($data);
-        }
+        $this->app = $app;
+
+        $app['events']->listen('Illuminate\Auth\Events\Login', function() {
+            self::writeLog(request(), static::LOGIN);
+        });
+
+        $app['events']->listen('auth.logout', function () {
+            self::writeLog(request(), static::LOGOUT);
+        });
     }
 
-    /**
-     * matches
-     *
-     * @param Request $request incoming request
-     *
-     * @return boolean
-     */
-    public function matches(Request $request)
+    public function writeLog(Request $request, $type)
     {
-        if (!$route = $request->route()) {
-            return false;
-        }
-        if (!$name = $route->getName()) {
-            return false;
+        if (!$this->isAdmin($request)) {
+            return;
         }
 
-        $method = strtoupper($request->method());
-        $this->matched = $matched = array_get(array_get($this->getMatchList(), $method, []), $name);
-
-        return $matched ? true : false;
+        self::storeLog($request, $type);
     }
 
-    /**
-     * match target list
-     *
-     * @return array
-     */
-    protected function getMatchList()
+    public function storeLog($request, $type)
     {
-        return [
-            'GET' => [
-                'logout' => function (array &$data) {
-                    $data['summary'] = '로그아웃';
-                },
-            ],
-            'POST' => [
-                'login' => function (array &$data) {
-                    $data['summary'] = '로그인';
-                    array_forget($data['parameters'], 'password');
-                },
-            ]
-        ];
+        $data = $this->loadRequest($request);
+        array_set($data['data'], 'route', $request->route()->getName());
+
+        if ($type == static::LOGIN) {
+            $data['summary'] = '로그인';
+            array_forget($data['parameters'], 'password');
+        } else {
+            $data['summary'] = '로그아웃';
+        }
+
+        $this->log($data);
     }
 
     /**

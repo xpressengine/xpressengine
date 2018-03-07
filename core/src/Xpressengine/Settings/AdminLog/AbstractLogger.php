@@ -14,6 +14,7 @@
 
 namespace Xpressengine\Settings\AdminLog;
 
+use Illuminate\Contracts\Foundation\Application;
 use Xpressengine\Http\Request;
 use Xpressengine\Settings\AdminLog\Models\Log;
 
@@ -31,8 +32,6 @@ abstract class AbstractLogger
 
     const TITLE = '';
 
-//    public static $id;
-
     /**
      * @var LogHandler
      */
@@ -49,22 +48,9 @@ abstract class AbstractLogger
     }
 
     /**
-     * run logging request
-     *
-     * @param Request $request incoming request
-     *
-     * @return void
+     * @param Application $app
      */
-    abstract public function run(Request $request);
-
-    /**
-     * matches
-     *
-     * @param Request $request incoming request
-     *
-     * @return boolean
-     */
-    abstract public function matches(Request $request);
+    abstract public function initLogger(Application $app);
 
     /**
      * render log entity to html
@@ -74,6 +60,17 @@ abstract class AbstractLogger
      * @return string|null
      */
     abstract public function renderDetail(Log $log);
+
+    /**
+     * @param Request $request
+     * @return bool
+     */
+    protected function isAdmin(Request $request)
+    {
+        $user = $request->user();
+
+        return $user->isManager();
+    }
 
     /**
      * store log to database

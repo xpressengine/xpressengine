@@ -57,7 +57,6 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\LangPreprocessor::class,
             \App\Http\Middleware\Purifying::class,
             \App\Http\Middleware\FreezeSEO::class,
-            \App\Http\Middleware\LogMiddleware::class,
         ],
 
         'api' => [

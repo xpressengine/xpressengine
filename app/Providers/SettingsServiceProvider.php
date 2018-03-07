@@ -13,11 +13,8 @@ use App\Themes\SettingsTheme;
 use App\UIObjects\Settings\SettingsPermission;
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Register\Container;
-use Xpressengine\Settings\AdminLog\Loggers\AuthLogger;
 use Xpressengine\Settings\AdminLog\Loggers\UserLogger;
 use Xpressengine\Settings\AdminLog\LogHandler;
-use Xpressengine\Settings\AdminLog\Models\Log;
-use Xpressengine\Settings\AdminLog\Repositories\LogRepository;
 use Xpressengine\Settings\SettingsHandler;
 use Xpressengine\Settings\SettingsMenuPermission;
 
@@ -41,20 +38,6 @@ class SettingsServiceProvider extends ServiceProvider
 
             return $handler;
         });
-
-        // register for admin log
-        $this->app->singleton('xe.adminlogs', function ($app) {
-            $repo = $app['xe.interception']->proxy(LogRepository::class);
-            $repo = new $repo(Log::class);
-            return $repo;
-        });
-
-        $this->app->singleton(LogHandler::class, function ($app) {
-            $handler = $app['xe.interception']->proxy(LogHandler::class, 'XeAdminLog');
-            $handler = new $handler($app['xe.register'], $app['xe.adminlogs']);
-            return $handler;
-        });
-        $this->app->alias(LogHandler::class, 'xe.adminlog');
     }
 
     public function boot()
@@ -68,9 +51,7 @@ class SettingsServiceProvider extends ServiceProvider
         // register settings permission uiobject
         $this->registerPermissionUIObject();
 
-        $this->registerDefaultLoggers();
-
-        $this->setDetailResolverForLog();
+        $this->registerLoggers();
     }
 
     private function registerPermissionUIObject()
@@ -99,23 +80,10 @@ class SettingsServiceProvider extends ServiceProvider
         }
     }
 
-    private function registerDefaultLoggers()
+    private function registerLoggers()
     {
         /** @var Container $register */
         $register = $this->app['xe.register'];
-        $register->push('admin/logger', UserLogger::ID, UserLogger::class);
-        $register->push('admin/logger', AuthLogger::ID, AuthLogger::class);
-    }
-
-    private function setDetailResolverForLog()
-    {
-        /** @var LogHandler $handler */
-        $handler = $this->app['xe.adminlog'];
-        Log::setDetailResolver(
-            function ($log) use ($handler) {
-                $logger = $handler->getLogger($log->type);
-                return $logger->renderDetail($log);
-            }
-        );
+        $register->push(LogHandler::ADMIN_LOGGER_KEY, UserLogger::ID, UserLogger::class);
     }
 }

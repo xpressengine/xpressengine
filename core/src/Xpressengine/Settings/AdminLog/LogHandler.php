@@ -31,6 +31,18 @@ use Xpressengine\Settings\AdminLog\Repositories\LogRepository;
 class LogHandler
 {
     /**
+     * admin logger register key
+     */
+    const ADMIN_LOGGER_KEY = 'admin/logger';
+
+    /**
+     * plugin logger register key
+     */
+    const PLUGIN_LOGGER_KEY = 'plugin/logger';
+
+    protected $loggerKeys = [LogHandler::ADMIN_LOGGER_KEY, LogHandler::PLUGIN_LOGGER_KEY];
+
+    /**
      * @var LogRepository
      */
     protected $repository;
@@ -67,14 +79,34 @@ class LogHandler
         return $this->repository;
     }
 
+    public function getLoggerKeys()
+    {
+        return $this->loggerKeys;
+    }
+
+    public function initLoggers($app)
+    {
+        foreach (self::getLoggerKeys() as $loggerKey) {
+            $loggers = $this->getLoggerIds($loggerKey);
+
+            foreach ($loggers as $logger) {
+                $logger = $this->getLogger($logger, $loggerKey);
+
+                $logger->initLogger($app);
+            }
+        }
+    }
+
     /**
      * get list of registered logger's id
      *
+     * @param string $loggerKey
+     *
      * @return string[] logger id list
      */
-    public function getLoggerIds()
+    public function getLoggerIds($loggerKey = LogHandler::ADMIN_LOGGER_KEY)
     {
-        $loggers = array_keys($this->register->get('admin/logger', []));
+        $loggers = array_keys($this->register->get($loggerKey, []));
         return $loggers;
     }
 
@@ -85,23 +117,30 @@ class LogHandler
      */
     public function getLoggers()
     {
-        return $this->register->get('admin/logger', []);
+        $loggers = [];
+
+        foreach (self::getLoggerKeys() as $loggerKey) {
+            $loggers = array_merge($loggers, $this->register->get($loggerKey, []));
+        }
+
+        return $loggers;
     }
 
     /**
      * get Logger instance
      *
      * @param string $id logger id
+     * @param string $loggerKey
      *
      * @return AbstractLogger
      */
-    public function getLogger($id)
+    public function getLogger($id, $loggerKey = LogHandler::ADMIN_LOGGER_KEY)
     {
         if (array_has($this->loggers, $id)) {
             return $this->loggers[$id];
         }
 
-        $class = array_get($this->register->get('admin/logger'), $id);
+        $class = array_get($this->register->get($loggerKey), $id);
 
         if ($class) {
             $logger = $this->loggers[$id] = new $class($this);

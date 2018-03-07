@@ -14,7 +14,7 @@
 
 namespace Xpressengine\Settings\AdminLog\Loggers;
 
-use Xpressengine\Http\Request;
+use Illuminate\Contracts\Foundation\Application;
 use Xpressengine\Settings\AdminLog\AbstractLogger;
 use Xpressengine\Settings\AdminLog\Models\Log;
 
@@ -32,122 +32,89 @@ class UserLogger extends AbstractLogger
 
     const TITLE = '회원';
 
-    protected $matched;
+    protected $app;
 
-    /**
-     * run logging request
-     *
-     * @param Request $request incoming request
-     *
-     * @return void
-     */
-    public function run(Request $request)
+    public function initLogger(Application $app)
     {
-        $run = $this->matched;
-        if ($run !== null) {
-            $run($request);
-        }
+        $this->app = $app;
+
+        $app['events']->listen('Illuminate\Foundation\Http\Events\RequestHandled', function($result) {
+           $summary = self::getSummary($result->request);
+
+           self::writeLog($result->request, $summary);
+        });
+
+        self::registerIntercept();
     }
 
-    /**
-     * matches
-     *
-     * @param Request $request incoming request
-     *
-     * @return boolean
-     */
-    public function matches(Request $request)
+    protected function getSummary($request)
     {
-        /*
-         * logging target list
-         * 회원목록열람 GET: as(settings.user.index)
-         * 회원상세열람 GET: as(settings.user.edit)
-         * 회원수정 PUT: as(settings.user.update)
-         * 회원추가 POST: as(settings.user.create)
-         * 회원 이메일 추가, 삭제 POST: as(settings.user.mail.add)
-         * 회원 이메일 추가, 삭제 POST: as(settings.user.mail.delete)
-         * 회원 이메일 추가, 삭제 POST: as(settings.user.mail.confirm)
-         * 회원삭제: DELETE: as(settings.user.destroy)
-         * 로그인:
-         * */
         $list = [
-            'GET' => [
-                'settings.user.index' => function (Request $request) {
-                    $data = $this->loadRequest($request);
-                    $data['summary'] = '회원목록 열람';
-                    array_set($data['data'], 'route', $request->route()->getName());
-                    $this->log($data);
-                },
-                'settings.user.edit' => function (Request $request) {
-                    $data = $this->loadRequest($request);
-                    $data['summary'] = '회원상세정보 열람';
-                    array_set($data['data'], 'user_id', $request->route()->parameter('id'));
-                    array_set($data['data'], 'route', $request->route()->getName());
-                    $this->log($data);
-                },
-            ],
-            'POST' => [
-                'settings.user.create' => function (Request $request) {
-                    $data = $this->loadRequest($request);
-                    $data['summary'] = '회원 추가';
-                    array_forget($data['parameters'], 'password');
-                    array_set($data['data'], 'route', $request->route()->getName());
-                    $this->log($data);
-                },
-                'settings.user.mail.add' => function (Request $request) {
-                    $data = $this->loadRequest($request);
-                    $data['summary'] = '회원 이메일 추가';
-                    array_set($data['data'], 'user_id', $request->route()->parameter('id'));
-                    array_set($data['data'], 'route', $request->route()->getName());
-                    $this->log($data);
-                },
-                'settings.user.mail.delete' => function (Request $request) {
-                    $data = $this->loadRequest($request);
-                    $data['summary'] = '회원 이메일 삭제';
-                    array_set($data['data'], 'user_id', $request->route()->parameter('id'));
-                    array_set($data['data'], 'route', $request->route()->getName());
-                    $this->log($data);
-                },
-                'settings.user.mail.confirm' => function (Request $request) {
-                    $data = $this->loadRequest($request);
-                    $data['summary'] = '회원 이메일 승인';
-                    array_set($data['data'], 'user_id', $request->route()->parameter('id'));
-                    array_set($data['data'], 'route', $request->route()->getName());
-                    $this->log($data);
-                },
-            ],
-            'PUT' => [
-                'settings.user.update' => function (Request $request) {
-                    $data = $this->loadRequest($request);
-                    $data['summary'] = '회원정보 수정';
-                    array_set($data['data'], 'user_id', $request->route()->parameter('id'));
-                    array_forget($data['parameters'], 'password');
-                    array_set($data['data'], 'route', $request->route()->getName());
-                    $this->log($data);
-                },
-            ],
-            'DELETE' => [
-                'settings.user.destroy' => function (Request $request) {
-                    $data = $this->loadRequest($request);
-                    $data['summary'] = '회원정보 삭제';
-                    array_set($data['data'], 'user_id', $request->route()->parameter('id'));
-                    array_set($data['data'], 'route', $request->route()->getName());
-                    $this->log($data);
-                },
-            ]
-        ];
+                'settings.user.index' => '회원목록 열람',
+                'settings.user.edit' => '회원상세정보 열람',
+                'settings.user.create' => '회원 추가',
+                'settings.user.mail.add' => '회원 이메일 추가',
+                'settings.user.mail.delete' => '회원 이메일 삭제',
+                'settings.user.mail.confirm' => '회원 이메일 승인',
+                'settings.user.update' => '회원정보 수정',
+                'settings.user.destroy' => '회원정보 삭제',
+            ];
 
-        $method = strtoupper($request->method());
-        $route = $request->route();
+        return array_get($list, $request->route()->getName(), []);
+    }
 
-        $matched = false;
-        if ($route !== null) {
-            $name = $request->route()->getName();
-            if ($name !== null) {
-                $this->matched = $matched = array_get(array_get($list, $method, []), $name);
+    protected function registerIntercept()
+    {
+        intercept(
+            'Xpressengine\User\UserHandler@update',
+            'UserLogger::user.update',
+            function ($target, $user, $userData) {
+                $updateUser['beforeRating'] = $user['rating'];
+                $target($user, $userData);
+                $updateUser['afterRating'] = $user['rating'];
+                $updateUser['userDisplayName'] = $user['display_name'];
+
+                if ($updateUser['beforeRating'] != $updateUser['afterRating']) {
+                    $request = request();
+
+                    $ratingNames = [
+                        'member' => xe_trans('xe::memberRatingNormal'),
+                        'manager' => xe_trans('xe::memberRatingManager'),
+                        'super' => xe_trans('xe::memberRatingAdministrator'),
+                    ];
+
+                    $summary = '회원 권한 수정 (' . $updateUser['userDisplayName'] . ' : '
+                        . $ratingNames[$updateUser['beforeRating']] . '=>'
+                        . $ratingNames[$updateUser['afterRating']] . ')';
+
+                    self::writeLog($request, $summary);
+                }
             }
+        );
+    }
+
+    protected function writeLog($request, $summary)
+    {
+        if ($summary == null) {
+            return;
         }
-        return $matched ? true : false;
+
+        if (!$this->isAdmin($request)) {
+            return;
+        }
+
+        self::storeLog($request, $summary);
+    }
+
+    protected function storeLog($request, $summary)
+    {
+        $data = $this->loadRequest($request);
+        array_set($data['data'], 'route', $request->route()->getName());
+        array_forget($data['parameters'], 'password');
+        array_set($data['data'], 'user_id', $request->route()->parameter('id'));
+        $data['summary'] = $summary;
+
+        $this->log($data);
     }
 
     /**
