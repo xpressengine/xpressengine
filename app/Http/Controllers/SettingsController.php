@@ -279,17 +279,24 @@ class SettingsController extends Controller
                 fwrite($file, $log->ipaddress . "\t");
 
                 $detail = $handler->find($log->id);
-                fwrite($file, $detail->method . ',');
-                fwrite($file, $detail->url . ',');
+                fwrite($file, $detail->method . ', ');
+                fwrite($file, $detail->url);
 
                 foreach($detail->parameters as $key => $value) {
+                    fwrite($file, ', ');
+
                     fwrite($file, $key . ":");
 
-                    if (is_array($value)) {
-                        fwrite($file, json_encode($value) . ',');
-                    } else {
-                        fwrite($file, $value . ',');
+                    $str = $value;
+
+                    if (is_array($str)) {
+                        $str = json_encode($str);
                     }
+
+                    $str = str_replace("\n", " ", $str);
+                    $str = str_replace("\t", " ", $str);
+
+                    fwrite($file, $str);
                 }
 
                 fwrite($file, "\n");
