@@ -70,6 +70,11 @@ class Log extends DynamicModel
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    /**
+     * user를 확인해서 삭제된 user이면 UnknownUser를 반환
+     *
+     * @return User|UnknownUser
+     */
     public function getUser()
     {
         $user = $this->user;
