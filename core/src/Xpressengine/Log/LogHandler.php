@@ -1,28 +1,29 @@
 <?php
 /**
- * SettingsHandler class.
+ * LogHandler class.
  *
  * PHP version 5
  *
- * @category    Settings
- * @package     Xpressengine\Settings
+ * @category    Log
+ * @package     Xpressengine\Log
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
 
-namespace Xpressengine\Settings\AdminLog;
+namespace Xpressengine\Log;
 
+use Illuminate\Foundation\Application;
+use Xpressengine\Log\Models\Log;
+use Xpressengine\Log\Repositories\LogRepository;
 use Xpressengine\Register\Container;
-use Xpressengine\Settings\AdminLog\Models\Log;
-use Xpressengine\Settings\AdminLog\Repositories\LogRepository;
 
 /**
  * LogHandler는 XpressEngine에서 관리자의 요청을 로깅합니다.
  *
  * @category    Log
- * @package     Xpressengine\Settings\Log
+ * @package     Xpressengine\Log
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
@@ -37,6 +38,7 @@ class LogHandler
 
     /**
      * plugin logger register key
+     * plugin에 logger를 추가할 경우 사용
      */
     const PLUGIN_LOGGER_KEY = 'plugin/logger';
 
@@ -79,11 +81,23 @@ class LogHandler
         return $this->repository;
     }
 
+    /**
+     * get LoggerKeys
+     *
+     * @return array
+     */
     public function getLoggerKeys()
     {
         return $this->loggerKeys;
     }
 
+    /**
+     * 등록된 logger들의 initLogger 호출
+     *
+     * @param Application $app app
+     *
+     * @return void
+     */
     public function initLoggers($app)
     {
         foreach (self::getLoggerKeys() as $loggerKey) {
@@ -100,7 +114,7 @@ class LogHandler
     /**
      * get list of registered logger's id
      *
-     * @param string $loggerKey
+     * @param string $loggerKey logger key
      *
      * @return string[] logger id list
      */
@@ -129,8 +143,8 @@ class LogHandler
     /**
      * get Logger instance
      *
-     * @param string $id logger id
-     * @param string $loggerKey
+     * @param string $id        logger id
+     * @param string $loggerKey logger key
      *
      * @return AbstractLogger
      */

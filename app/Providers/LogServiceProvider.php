@@ -3,12 +3,18 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Xpressengine\Log\Loggers\AuthLogger;
+use Xpressengine\Log\LogHandler;
+use Xpressengine\Log\Models\Log;
+use Xpressengine\Log\Repositories\LogRepository;
 use Xpressengine\Register\Container;
-use Xpressengine\Settings\AdminLog\Loggers\AuthLogger;
-use Xpressengine\Settings\AdminLog\LogHandler;
-use Xpressengine\Settings\AdminLog\Models\Log;
-use Xpressengine\Settings\AdminLog\Repositories\LogRepository;
 
+/**
+ * Log Service Provider
+ *
+ * @category Log
+ * @package  Xpressengine\Log
+ */
 class LogServiceProvider extends ServiceProvider
 {
     /**
@@ -19,18 +25,18 @@ class LogServiceProvider extends ServiceProvider
     public function register()
     {
         // register for admin log
-        $this->app->singleton('xe.adminlogs', function ($app) {
+        $this->app->singleton('xe.logs', function ($app) {
             $repo = $app['xe.interception']->proxy(LogRepository::class);
             $repo = new $repo(Log::class);
             return $repo;
         });
 
         $this->app->singleton(LogHandler::class, function ($app) {
-            $handler = $app['xe.interception']->proxy(LogHandler::class, 'XeAdminLog');
-            $handler = new $handler($app['xe.register'], $app['xe.adminlogs']);
+            $handler = $app['xe.interception']->proxy(LogHandler::class, 'XeLog');
+            $handler = new $handler($app['xe.register'], $app['xe.logs']);
             return $handler;
         });
-        $this->app->alias(LogHandler::class, 'xe.adminlog');
+        $this->app->alias(LogHandler::class, 'xe.log');
     }
 
     /**
@@ -44,13 +50,18 @@ class LogServiceProvider extends ServiceProvider
 
         $this->setDetailResolverForLog();
 
-        $this->app->booted( function () {
-            $handler = $this->app['xe.adminlog'];
+        $this->app->booted(function () {
+            $handler = $this->app['xe.log'];
 
             $handler->initLoggers($this->app);
         });
     }
 
+    /**
+     * AuthLogger register에 등록
+     *
+     * @return void
+     */
     private function registerLoggers()
     {
         /** @var Container $register */
@@ -61,7 +72,7 @@ class LogServiceProvider extends ServiceProvider
     private function setDetailResolverForLog()
     {
         /** @var LogHandler $handler */
-        $handler = $this->app['xe.adminlog'];
+        $handler = $this->app['xe.log'];
         Log::setDetailResolver(
             function ($log) use ($handler) {
                 $logger = $handler->getLogger($log->type);

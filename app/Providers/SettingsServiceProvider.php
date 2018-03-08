@@ -12,9 +12,9 @@ use App\Themes\DefaultSettings;
 use App\Themes\SettingsTheme;
 use App\UIObjects\Settings\SettingsPermission;
 use Illuminate\Support\ServiceProvider;
+use Xpressengine\Log\Loggers\UserLogger;
+use Xpressengine\Log\LogHandler;
 use Xpressengine\Register\Container;
-use Xpressengine\Settings\AdminLog\Loggers\UserLogger;
-use Xpressengine\Settings\AdminLog\LogHandler;
 use Xpressengine\Settings\SettingsHandler;
 use Xpressengine\Settings\SettingsMenuPermission;
 

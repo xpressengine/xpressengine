@@ -4,22 +4,22 @@
  *
  * PHP version 5
  *
- * @category    AdminLog
- * @package     Xpressengine\Settings\AdminLog
+ * @category    Log
+ * @package     Xpressengine\Log
  * @author      XE Team (khongchi) <khongchi@xpressengine.com>
  * @copyright   2000-2014 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-namespace Xpressengine\Settings\AdminLog\Models;
+namespace Xpressengine\Log\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Xpressengine\Database\Eloquent\DynamicModel;
 use Xpressengine\User\Models\User;
 
 /**
- * @category    AdminLog
- * @package     Xpressengine\Settings\AdminLog
+ * @category    Log
+ * @package     Xpressengine\Log
  * @author      XE Team (khongchi) <khongchi@xpressengine.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com

@@ -4,23 +4,23 @@
  *
  * PHP version 5
  *
- * @category    AdminLog
- * @package     Xpressengine\Settings\AdminLog
+ * @category    Log
+ * @package     Xpressengine\Log
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
-
-namespace Xpressengine\Settings\AdminLog\Loggers;
+namespace Xpressengine\Log\Loggers;
 
 use Illuminate\Contracts\Foundation\Application;
-use Xpressengine\Settings\AdminLog\AbstractLogger;
-use Xpressengine\Settings\AdminLog\Models\Log;
+use Xpressengine\Http\Request;
+use Xpressengine\Log\AbstractLogger;
+use Xpressengine\Log\Models\Log;
 
 /**
- * @category    AdminLog
- * @package     Xpressengine\Settings\AdminLog
+ * @category    Log
+ * @package     Xpressengine\Log
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
@@ -34,20 +34,34 @@ class UserLogger extends AbstractLogger
 
     protected $app;
 
+    /**
+     * Logger Init 세팅
+     *
+     * @param Application $app app
+     *
+     * @return void
+     */
     public function initLogger(Application $app)
     {
         $this->app = $app;
 
-        $app['events']->listen('Illuminate\Foundation\Http\Events\RequestHandled', function($result) {
-           $summary = self::getSummary($result->request);
+        $app['events']->listen('Illuminate\Foundation\Http\Events\RequestHandled', function ($result) {
+            $summary = self::getSummary($result->request);
 
-           self::writeLog($result->request, $summary);
+            self::writeLog($result->request, $summary);
         });
 
         self::registerIntercept();
     }
 
-    protected function getSummary($request)
+    /**
+     * route name 확인해서 로그 종류 검색
+     *
+     * @param Request $request request
+     *
+     * @return string|null
+     */
+    protected function getSummary(Request $request)
     {
         $list = [
                 'settings.user.index' => '회원목록 열람',
@@ -63,6 +77,11 @@ class UserLogger extends AbstractLogger
         return array_get($list, $request->route()->getName(), []);
     }
 
+    /**
+     * 회원 권한 변경 로그 작성 인터셉트 등록
+     *
+     * @return void
+     */
     protected function registerIntercept()
     {
         intercept(
@@ -93,7 +112,16 @@ class UserLogger extends AbstractLogger
         );
     }
 
-    protected function writeLog($request, $summary)
+    /**
+     * 로그 작성 대상 route가 맞는지 확인
+     * 로그 작성 전 관리자 확인
+     *
+     * @param Request $request request
+     * @param string  $summary log 요약
+     *
+     * @return void
+     */
+    protected function writeLog(Request $request, $summary)
     {
         if ($summary == null) {
             return;
@@ -106,7 +134,15 @@ class UserLogger extends AbstractLogger
         self::storeLog($request, $summary);
     }
 
-    protected function storeLog($request, $summary)
+    /**
+     * 로그 작성
+     *
+     * @param Request $request request
+     * @param string  $summary log 요약
+     *
+     * @return void
+     */
+    protected function storeLog(Request $request, $summary)
     {
         $data = $this->loadRequest($request);
         array_set($data['data'], 'route', $request->route()->getName());
