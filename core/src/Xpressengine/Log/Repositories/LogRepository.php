@@ -4,23 +4,23 @@
  *
  * PHP version 5
  *
- * @category    AdminLog
- * @package     Xpressengine\Settings\AdminLog
+ * @category    Log
+ * @package     Xpressengine\Log
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
 
-namespace Xpressengine\Settings\AdminLog\Repositories;
+namespace Xpressengine\Log\Repositories;
 
-use Xpressengine\Settings\AdminLog\Models\Log;
+use Xpressengine\Log\Models\Log;
 
 /**
  * 어드민 접속 로그를 저장하는 Repository
  *
- * @category    AdminLog
- * @package     Xpressengine\Settings\AdminLog
+ * @category    Log
+ * @package     Xpressengine\Log
  * @author      XE Developers <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1

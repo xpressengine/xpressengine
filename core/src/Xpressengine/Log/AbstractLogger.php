@@ -4,22 +4,23 @@
  *
  * PHP version 5
  *
- * @category    AdminLog
- * @package     Xpressengine\Settings\AdminLog
+ * @category    Log
+ * @package     Xpressengine\Log
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        http://www.xpressengine.com
  */
 
-namespace Xpressengine\Settings\AdminLog;
+namespace Xpressengine\Log;
 
+use Illuminate\Contracts\Foundation\Application;
 use Xpressengine\Http\Request;
-use Xpressengine\Settings\AdminLog\Models\Log;
+use Xpressengine\Log\Models\Log;
 
 /**
- * @category    AdminLog
- * @package     Xpressengine\Settings\AdminLog
+ * @category    Log
+ * @package     Xpressengine\Log
  * @author      XE Team (developers) <developers@xpressengine.com>
  * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
@@ -30,8 +31,6 @@ abstract class AbstractLogger
     const ID = '';
 
     const TITLE = '';
-
-//    public static $id;
 
     /**
      * @var LogHandler
@@ -49,22 +48,13 @@ abstract class AbstractLogger
     }
 
     /**
-     * run logging request
+     * logger가 등록될 때 해야될 작업 작성
      *
-     * @param Request $request incoming request
+     * @param Application $app app
      *
      * @return void
      */
-    abstract public function run(Request $request);
-
-    /**
-     * matches
-     *
-     * @param Request $request incoming request
-     *
-     * @return boolean
-     */
-    abstract public function matches(Request $request);
+    abstract public function initLogger(Application $app);
 
     /**
      * render log entity to html
@@ -74,6 +64,20 @@ abstract class AbstractLogger
      * @return string|null
      */
     abstract public function renderDetail(Log $log);
+
+    /**
+     * 관리자 여부 확인
+     *
+     * @param Request $request request
+     *
+     * @return bool
+     */
+    protected function isAdmin(Request $request)
+    {
+        $user = $request->user();
+
+        return $user->isManager();
+    }
 
     /**
      * store log to database

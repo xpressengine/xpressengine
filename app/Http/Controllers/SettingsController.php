@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Xpressengine\Http\Request;
 use Xpressengine\Permission\Grant;
 use Xpressengine\Permission\PermissionHandler;
-use Xpressengine\Settings\AdminLog\LogHandler;
+use Xpressengine\Log\LogHandler;
 use Xpressengine\Settings\SettingsHandler;
 use Xpressengine\Site\SiteHandler;
 use Xpressengine\Theme\ThemeHandler;
@@ -284,7 +284,7 @@ class SettingsController extends Controller
                 fwrite($file, $detail->method . ', ');
                 fwrite($file, $detail->url);
 
-                foreach($detail->parameters as $key => $value) {
+                foreach ($detail->parameters as $key => $value) {
                     fwrite($file, ', ');
 
                     fwrite($file, $key . ":");
