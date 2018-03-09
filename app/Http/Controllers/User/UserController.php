@@ -229,7 +229,6 @@ class UserController extends Controller
         XeDB::beginTransaction();
         try {
             // save password
-            $password = \Hash::make($password);
             $this->handler->update($request->user(), compact('password'));
         } catch (InvalidPasswordException $e) {
             XeDB::rollback();

@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Xpressengine\Http\Request;
 use Xpressengine\Permission\Grant;
 use Xpressengine\Permission\PermissionHandler;
-use Xpressengine\Settings\AdminLog\LogHandler;
+use Xpressengine\Log\LogHandler;
 use Xpressengine\Settings\SettingsHandler;
 use Xpressengine\Site\SiteHandler;
 use Xpressengine\Theme\ThemeHandler;
@@ -265,6 +265,8 @@ class SettingsController extends Controller
         $callback = function () use ($logs, $loggers, $handler) {
             $file = fopen('php://output', 'w');
 
+            fputs($file, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
+
             fwrite($file, "일시\t타입\t관리자\t요약\tIP주소\t자세히\n");
 
             foreach ($logs as $log) {
@@ -274,22 +276,29 @@ class SettingsController extends Controller
                 } else {
                     fwrite($file, $log->type . "\t");
                 }
-                fwrite($file, $log->user->getDisplayName() . "\t");
+                fwrite($file, $log->getUser()->getDisplayName() . "\t");
                 fwrite($file, $log->summary . "\t");
                 fwrite($file, $log->ipaddress . "\t");
 
                 $detail = $handler->find($log->id);
-                fwrite($file, $detail->method . ',');
-                fwrite($file, $detail->url . ',');
+                fwrite($file, $detail->method . ', ');
+                fwrite($file, $detail->url);
 
-                foreach($detail->parameters as $key => $value) {
+                foreach ($detail->parameters as $key => $value) {
+                    fwrite($file, ', ');
+
                     fwrite($file, $key . ":");
 
-                    if (is_array($value)) {
-                        fwrite($file, json_encode($value) . ',');
-                    } else {
-                        fwrite($file, $value . ',');
+                    $str = $value;
+
+                    if (is_array($str)) {
+                        $str = json_encode($str);
                     }
+
+                    $str = str_replace("\n", " ", $str);
+                    $str = str_replace("\t", " ", $str);
+
+                    fwrite($file, $str);
                 }
 
                 fwrite($file, "\n");
