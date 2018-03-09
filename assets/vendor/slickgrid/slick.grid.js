@@ -1174,8 +1174,8 @@ if (typeof Slick === "undefined") {
 
         if (!stylesheet) {
           return {
-            "left": {},
-            "right": {}
+            "left": { style: {} },
+            "right": { style: {} }
           };
           // throw new Error("Cannot find stylesheet.");
         }
