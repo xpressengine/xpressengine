@@ -76,6 +76,10 @@ abstract class AbstractLogger
     {
         $user = $request->user();
 
+        if ($user == null) {
+            return false;
+        }
+
         return $user->isManager();
     }
 
