@@ -111,14 +111,18 @@ class RegisterHandler
      * AbstractType class instance
      *
      * @param Handler $handler dynamic field handler
-     * @return \Generator
+     * @return array
      */
     public function getTypes(Handler $handler)
     {
+        $returnArr = [];
+
         /** @var \Xpressengine\DynamicField\AbstractType $type */
         foreach ($this->register->get(self::FIELD_TYPE) as $type) {
-            yield $this->getType($handler, $type::getId());
+            $returnArr[] =  $this->getType($handler, $type::getId());
         }
+
+        return $returnArr;
     }
 
     /**
@@ -126,16 +130,20 @@ class RegisterHandler
      * AbstractSkin class instance
      *
      * @param Handler $handler dynamic field handler
-     * @return \Generator
+     * @return array
      */
     public function getSkins(Handler $handler)
     {
+        $returnArr = [];
+
         foreach ($this->register->get(self::FIELD_TYPE) as $id => $type) {
             /** @var \Xpressengine\DynamicField\AbstractSkin $skin */
             foreach ($this->register->get($id . PluginRegister::KEY_DELIMITER . self::FIELD_SKIN) as $skin) {
-                yield $this->getType($handler, $skin::getId());
+                $returnArr[] = $this->getType($handler, $skin::getId());
             }
         }
+
+        return $returnArr;
     }
 
     /**
@@ -144,14 +152,18 @@ class RegisterHandler
      *
      * @param Handler $handler dynamic field handler
      * @param string  $id      field type id
-     * @return \Generator
+     * @return array
      */
     public function getSkinsByType(Handler $handler, $id)
     {
+        $returnArr = [];
+
         /** @var \Xpressengine\DynamicField\AbstractSkin $skin */
         foreach ($this->register->get($id . PluginRegister::KEY_DELIMITER . self::FIELD_SKIN) as $skin) {
-            yield $this->getSkin($handler, $skin::getId());
+            $returnArr[] = $this->getSkin($handler, $skin::getId());
         }
+
+        return $returnArr;
     }
 
     /**
