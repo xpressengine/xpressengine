@@ -46,6 +46,10 @@ class UserLogger extends AbstractLogger
         $this->app = $app;
 
         $app['events']->listen('Illuminate\Foundation\Http\Events\RequestHandled', function ($result) {
+            if ($result->request->route() == null) {
+                return;
+            }
+
             $summary = self::getSummary($result->request);
 
             self::writeLog($result->request, $summary);
