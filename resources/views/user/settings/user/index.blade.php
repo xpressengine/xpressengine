@@ -106,7 +106,7 @@
                                     <a href="#"
                                        data-toggle="xe-page-toggle-menu"
                                        data-url="{{ route('toggleMenuPage') }}"
-                                       data-data='{!! json_encode(['id'=>$user->getId(), 'type'=>'user']) !!}' data-text="{{ $user->getDisplayName() }}">{{ $user->getDisplayName() }}</a></i>
+                                       data-data='{!! json_encode(['id'=>$user->getId(), 'type'=>'user']) !!}' data-text="{{ $user->getDisplayName() }}">{{ $user->getDisplayName() }}</a>
                                </span>
                             </td>
                             <td>
