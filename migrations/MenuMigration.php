@@ -302,7 +302,7 @@ class MenuMigration extends Migration {
 					</div>
 				</div>
 				<div class="owl-wrap">
-					<div id="owl-color" class="owl-color xe-hidden-xs">
+					<div id="owl-color" class="owl-color xe-hidden-xs owl-carousel owl-theme">
 						<div class="item">
 							<div class="theme-color">
 								<div class="diagonal-area"></div>
@@ -320,7 +320,7 @@ class MenuMigration extends Migration {
 						</div>
 					</div>
 					<div class="owl-inner">
-						<div id="owl-mobile" class="owl-mobile">
+						<div id="owl-mobile" class="owl-mobile owl-carousel owl-theme">
 							<div class="item">
 								<div class="bg-img brown"></div>
 							</div>
@@ -331,7 +331,7 @@ class MenuMigration extends Migration {
 								<div class="bg-img red"></div>
 							</div>
 						</div>
-						<div id="owl-tablet" class="owl-tablet xe-hidden-xs">
+						<div id="owl-tablet" class="owl-tablet xe-hidden-xs owl-carousel owl-theme">
 							<div class="item">
 								<div class="bg-img brown"></div>
 							</div>
@@ -342,7 +342,7 @@ class MenuMigration extends Migration {
 								<div class="bg-img red"></div>
 							</div>
 						</div>
-						<div id="owl-pc" class="owl-pc xe-visible-lg">
+						<div id="owl-pc" class="owl-pc xe-visible-lg owl-carousel owl-theme">
 							<div class="item">
 								<div class="bg-img brown"></div>
 							</div>
@@ -520,7 +520,7 @@ class MenuMigration extends Migration {
 					</div>
 				</div>
 				<div class="owl-wrap">
-					<div id="owl-color" class="owl-color xe-hidden-xs">
+					<div id="owl-color" class="owl-color owl-carousel owl-theme xe-hidden-xs">
 						<div class="item">
 							<div class="theme-color">
 								<div class="diagonal-area"></div>
