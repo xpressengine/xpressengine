@@ -39,20 +39,20 @@ class XE {
         let target = $this.attr('target')
 
         if (!href) return
+        if (target === '_top' || target === '_self' || target === '_parent') return
         if (!href.match(/^(https?:\/\/)/)) return
+        if (that.isSameHost(href)) return
 
-        if (!blankshield.safeTarget(target) && !that.isSameHost(href)) {
-          let rel = $this.attr('rel')
+        let rel = $this.attr('rel')
 
-          if (typeof rel === 'string') {
-            $this.attr('rel', rel + ' noopener')
-          } else {
-            $this.attr('rel', 'noopener')
-          }
-
-          blankshield.open(href)
-          e.preventDefault()
+        if (typeof rel === 'string') {
+          $this.attr('rel', rel + ' noopener')
+        } else {
+          $this.attr('rel', 'noopener')
         }
+
+        blankshield.open(href)
+        e.preventDefault()
       })
     })
   }
