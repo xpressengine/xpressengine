@@ -34,14 +34,15 @@ class XE {
 
     $(function () {
       $('body').on('click', 'a[target]', function (e) {
-        var $this = $(this)
-        var href = $this.attr('href').trim()
+        let $this = $(this)
+        let href = $this.attr('href').trim()
+        let target = $this.attr('target')
 
         if (!href) return
         if (!href.match(/^(https?:\/\/)/)) return
 
-        if (!that.isSameHost(href)) {
-          var rel = $this.attr('rel')
+        if (!blankshield.safeTarget(target) && !that.isSameHost(href)) {
+          let rel = $this.attr('rel')
 
           if (typeof rel === 'string') {
             $this.attr('rel', rel + ' noopener')
