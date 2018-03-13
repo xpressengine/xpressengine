@@ -10,33 +10,7 @@
     '/assets/vendor/bootstrap/css/bootstrap.css',
     '/assets/core/widgetbox/css/widgetbox.css',
 ])->load() }}
-<style>
-    .editor .widget-config-btn .xe-btn {padding: 3px; color:#656973; font-size: 15px;}
-    .editor .xe-well {margin: 5px; padding:7px 15px; background-color: #fff; border:1px solid #C8C9CC;}
-    .editor .xe-well strong {font-weight: normal; font-size: 14px; line-height: 33px;}
-    .editor .widgetarea {min-height: 140px; background: #e6e6e6; padding-top: 5px; padding-bottom: 15px;}
-    .editor .wb-row-header {height: 25px; background: #fff; border-bottom: 1px solid #C8C9CC; padding: 2px 2px;}
-    .editor .wb-row-header button {font-size: 12px; padding: 1px 5px;}
-    .editor .wb-col-header {height: 25px; background: #fff; border-bottom: 1px solid #C8C9CC; padding: 2px 2px;}
-    .editor .wb-col-header button {font-size: 12px; padding: 1px 5px;}
 
-    .editor .wb-row {width: 100%; border: 1px solid #c9c9c9; min-height: 140px; margin-bottom: 5px;}
-    .editor .wb-col {display: inline-block; padding: 2px 2px; min-height: 140px; vertical-align: top;}
-    .editor .wb-row.selected {background-color: #FFB0B6;}
-    .editor .wb-row.selected>.wb-row-header {background-color: #FFB0B6;}
-    .editor .wb-col.selected {background-color: #B8DBFD;}
-    .editor .wb-col.selected>.wb-col-header {background-color: #B8DBFD;}
-    .editor .wb-col .wb-row-header {display: none;}
-    .editor .drop-placeholder {height: 49px; margin:5px; background: #F7F999}
-
-    /* style by bootstrap tags (https://github.com/maxwells/bootstrap-tags) */
-    .tag {font-size: 10px; padding: .3em .4em .4em; margin: 0 .1em;}
-    .tag a {color: #bbb; cursor: pointer; opacity: 0.6; font-size: 12px;}
-    .tag a:hover {opacity: 1.0}
-    .tag .remove {vertical-align: bottom; top: 0;}
-    .tag a {margin: 0 0 0 .3em;}
-    .tag a .glyphicon-white {color: #fff; margin-bottom: 2px;}
-</style>
 <div class="widget-wrap">
     <header>
         <h1><a href="#"><i class="xi-xpressengine"></i><span class="brand-title"><span

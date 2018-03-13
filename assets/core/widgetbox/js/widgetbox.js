@@ -434,22 +434,22 @@
 
         // save
         _this.$btnSave.click(function () {
-            XE.ajax({
-              url: $(this).data('url'),
-              type: 'put',
-              dataType: 'json',
-              data: {
-                data: _this.toJSON(),
-                presenter: _this.$presenter.val()
-              },
-              success: function (json) {
-                XE.toast(json.type, json.message)
+          XE.ajax({
+            url: $(this).data('url'),
+            type: 'put',
+            dataType: 'json',
+            data: {
+              data: _this.toJSON(),
+              presenter: _this.$presenter.val()
+            },
+            success: function (json) {
+              XE.toast(json.type, json.message)
 
-                if (window.opener) {
-                  window.opener.location.reload()
-                }
+              if (window.opener) {
+                window.opener.location.reload()
               }
-            });
+            }
+          });
         });
 
       },
