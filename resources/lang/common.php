@@ -2282,4 +2282,76 @@ return [
         'ko' => '종료 날짜 (2018-01-01)',
         'en' => 'end date (2018-01-01)',
     ],
+    'editWidgetBox' => [
+        'ko' => '위젯박스 편집',
+        'en' => 'Edit Widget Box',
+    ],
+    'doEditWidgetBox' => [
+        'ko' => '위젯박스를 편집합니다.',
+        'en' => 'Edit the Widget Box',
+    ],
+    'notFoundWidgetBox' => [
+        'ko' => '위젯박스[:id]를 찾을 수 없습니다.',
+        'en' => 'Could not find widget box [:id]',
+    ],
+    'createNow' => [
+        'ko' => '바로생성',
+        'en' => 'Create Now',
+    ],
+    'wasCreated' => [
+        'ko' => '생성되었습니다.',
+        'en' => 'Was created',
+    ],
+    'addRow' => [
+        'ko' => '열 추가',
+        'en' => 'Add Row',
+    ],
+    'addCell' => [
+        'ko' => '셀 추가',
+        'en' => 'Add Cell',
+    ],
+    'addOption' => [
+        'ko' => '옵션 추가',
+        'en' => 'Add option',
+    ],
+    'addWidget' => [
+        'ko' => '위젯 추가',
+        'en' => 'Add Widget',
+    ],
+    'cellManagement' => [
+        'ko' => '셀 관리',
+        'en' => 'Cell Management',
+    ],
+    'widgetManagement' => [
+        'ko' => '위젯 관리',
+        'en' => 'Widget Management',
+    ],
+    'editArea' => [
+        'ko' => '편집 영역',
+        'en' => 'Edit Area',
+    ],
+    'specWhoCanEditWidgetBox' => [
+        'ko' => '위젯박스를 편집할 수 있는 사용자를 지정합니다.',
+        'en' => 'Specifies who can edit the widget box.',
+    ],
+    'descPresenter' => [
+        'ko' => '설정된 레아아웃을 표현할 프리젠터를 선택합니다. 프리젠터에 따라 지원되는 셀 분할 제한이 다를 수 있습니다.',
+        'en' => 'Select the presenter to represent the set layout. Supported cell partitioning limits may vary depending on the presenter.',
+    ],
+    'descDeviceMode' => [
+        'ko' => '각각의 디바이스에서 표현될 레이아웃을 확인할 수 있습니다.',
+        'en' => 'You can see the layout to be represented on each device.',
+    ],
+    'descCellManagement' => [
+        'ko' => '편집영역에 열 또는 셀 레이아웃을 추가하거나 디바이스에 따른 셀의 레이아웃 옵션을 추가할 수 있습니다.',
+        'en' => 'You can add a row or cell layout to the edit area, or you can add cell layout options to the device mode.',
+    ],
+    'descWidgetManagement' => [
+        'ko' => '위젯을 추가할 셀을 선택한 후 위젯 추가 버튼을 클릭하여 설정을 등록하면 위젯이 추가됩니다.',
+        'en' => 'Select a cell to add the widget and click the Add Widget button to register the setting and the widget will be added.',
+    ],
+    'descEditArea' => [
+        'ko' => '생성된 위젯은 drag & drop 으로 순서를 변경하거나  다른셀로 이동이 가능합니다. 셀을 클릭하여 선택하거나 삭제가 가능합니다.',
+        'en' => 'The created widget can be reordered by drag & drop or moved to another cell. You can click the cell to select it or delete it.',
+    ],
 ];

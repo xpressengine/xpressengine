@@ -97,9 +97,6 @@ class WidgetParser
     public function parseCode($code)
     {
         $simpleXmlObj = simplexml_load_string($code);
-
-        $widgetId = (string) $simpleXmlObj->attributes()->id;
-
         $inputs = $this->xml2array($simpleXmlObj);
 
         return $inputs;
