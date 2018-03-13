@@ -472,10 +472,10 @@ class MenuMigration extends Migration {
 								<div class="table-txt">
 									<div>
 										<dl>
-											<dt>XE Town</dt>
-											<dd>XpressEngine 사용자들에게 가장 인기있는 커뮤니티입니다.</dd>
+											<dt>XE Community</dt>
+											<dd>XpressEngine 공식 커뮤니티입니다.</dd>
 										</dl>
-										<a href="https://www.xetown.com/" target="_blank">XE Town 바로가기</a>
+										<a href="https://www.xpressengine.io/" target="_blank">XE Community 바로가기</a>
 									</div>
 								</div>
 							</div>
@@ -690,10 +690,10 @@ class MenuMigration extends Migration {
 								<div class="table-txt">
 									<div>
 										<dl>
-											<dt>XE Town</dt>
-											<dd>Is the most popular community on XpressEngine users.</dd>
+											<dt>XE Community</dt>
+											<dd>The official community of XpressEngine.</dd>
 										</dl>
-										<a href="https://www.xetown.com/" target="_blank">Go to XE Town</a>
+										<a href="https://www.xpressengine.io/" target="_blank">Go to XE Community</a>
 									</div>
 								</div>
 							</div>
