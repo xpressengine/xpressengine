@@ -153,6 +153,10 @@ class NaverCaptcha implements CaptchaInterface
      */
     public function available()
     {
+        if ($this->clientId == null || $this->clientSecret == null) {
+            return false;
+        }
+
         return true;
     }
 
