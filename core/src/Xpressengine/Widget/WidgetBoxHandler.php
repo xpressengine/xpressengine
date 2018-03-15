@@ -93,7 +93,8 @@ class WidgetBoxHandler
 
         $options = array_get($data, 'options', ['presenter' => XEUIPresenter::class]);
         $title = array_get($data, 'title', $id);
-        $content = array_get($data, 'content', '');
+        $content = array_get($data, 'content');
+        $content = empty($content) ? [] : $content;
 
         $widgetbox = $this->repository->create(compact('id', 'title', 'content', 'options'));
 
