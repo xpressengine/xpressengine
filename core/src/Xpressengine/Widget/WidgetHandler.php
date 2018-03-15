@@ -186,7 +186,7 @@ class WidgetHandler
 
         $inputs = $widget->resolveSetting($inputs);
 
-        return $this->generateXml('xewidget', $inputs);
+        return $this->generateXml('xe-widget', $inputs);
     }
 
     /**

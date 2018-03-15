@@ -133,7 +133,7 @@
 
         <div class="btn-center">
             <input type="hidden" id="widgetCode"
-                   value="{{ "<xewidget id='widget/banner' title='상단배너'><banner_count>2</banner_count><banner_size>2</banner_size></xewidget>" }}"/>
+                   value="{{ "<xe-widget id='widget/banner' title='상단배너'><banner_count>2</banner_count><banner_size>2</banner_size></xe-widget>" }}"/>
             <button type="button" class="xe-btn xe-btn-secondary btnCloseLayer">취소</button>
             <button type="button" class="xe-btn xe-btn-primary btnPlaceWidget">확인</button>
         </div>

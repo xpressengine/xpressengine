@@ -59,10 +59,10 @@ class WidgetboxMigration extends Migration {
 <div class="widgetarea" data-height="140">
 
 <div class="xe-row">
-<div class="xe-col-md-12"><xewidget id="widget/xpressengine@systemInfo" title="System Info" skin-id="widget/xpressengine@systemInfo/skin/xpressengine@default">
+<div class="xe-col-md-12"><xe-widget id="widget/xpressengine@systemInfo" title="System Info" skin-id="widget/xpressengine@systemInfo/skin/xpressengine@default">
   <skin>
   </skin>
-</xewidget>
+</xe-widget>
 </div>
 </div></div>
 </div>
@@ -73,11 +73,11 @@ class WidgetboxMigration extends Migration {
 <div class="widgetarea" data-height="140">
 
 <div class="xe-row">
-<div class="xe-col-md-12"><xewidget id="widget/xpressengine@storageSpace" title="Storage 사용량" skin-id="widget/xpressengine@storageSpace/skin/xpressengine@default">
+<div class="xe-col-md-12"><xe-widget id="widget/xpressengine@storageSpace" title="Storage 사용량" skin-id="widget/xpressengine@storageSpace/skin/xpressengine@default">
   <limit>5</limit>
   <skin>
   </skin>
-</xewidget>
+</xe-widget>
 </div>
 </div></div>
 </div>
@@ -88,10 +88,10 @@ class WidgetboxMigration extends Migration {
 <div class="widgetarea" data-height="140">
 
 <div class="xe-row">
-<div class="xe-col-md-12"><xewidget id="widget/xpressengine@contentInfo" title="Content Info" skin-id="widget/xpressengine@contentInfo/skin/xpressengine@default">
+<div class="xe-col-md-12"><xe-widget id="widget/xpressengine@contentInfo" title="Content Info" skin-id="widget/xpressengine@contentInfo/skin/xpressengine@default">
   <skin>
   </skin>
-</xewidget>
+</xe-widget>
 </div>
 </div></div>
 </div>
@@ -102,10 +102,10 @@ class WidgetboxMigration extends Migration {
 <div class="widgetarea" data-height="140">
 
 <div class="xe-row">
-<div class="xe-col-md-12"><xewidget id="widget/news_client@news" title="News" skin-id="widget/news_client@news/skin/news_client@default">
+<div class="xe-col-md-12"><xe-widget id="widget/news_client@news" title="News" skin-id="widget/news_client@news/skin/news_client@default">
   <skin>
   </skin>
-</xewidget>
+</xe-widget>
 </div>
 </div></div>
 </div>
@@ -141,6 +141,15 @@ class WidgetboxMigration extends Migration {
             return false;
         }
 
+        // @see https://github.com/xpressengine/xpressengine/issues/708
+        // 위젯박스 태그 이름 변경
+        $widgetBox = app('xe.widgetbox')->all();
+        foreach ($widgetBox as $item) {
+            if(str_contains($item->content, 'xewidget')) {
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -149,6 +158,16 @@ class WidgetboxMigration extends Migration {
         $this->install();
         $this->init();
         $this->initialized();
+
+        // @see https://github.com/xpressengine/xpressengine/issues/708
+        // 위젯박스 태그 이름 변경
+        $widgetBox = app('xe.widgetbox')->all();
+        foreach ($widgetBox as $item) {
+            if(str_contains($item->content, 'xewidget')) {
+                $item->content = preg_replace('/(<\/?)xewidget/', '$1xe-widget', $item->content);
+                $item->save();
+            }
+        }
     }
 
     public function checkUpdated($installedVersion = null)

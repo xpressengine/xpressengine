@@ -144,7 +144,8 @@
 
             if (code) {
               var $content = $(code)
-              var $xeWidgets = $content.find('xewidget')
+              // @TODO xewidget제거 @see https://github.com/xpressengine/xpressengine/issues/708
+              var $xeWidgets = $content.find('xe-widget, xewidget')
 
               $content.find('[data-height]').each(function () {
                 var $this = $(this)

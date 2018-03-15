@@ -348,10 +348,9 @@ namespace Xpressengine\Tests\Widget {
             $this->register->shouldReceive('get')->with('widget/'.$id)->andReturn($this->fakeWidgetClassName);
             $resultString = $widgetHandler->generateCode($id, $inputs);
 
-            $expected = '<xewidget><args1>value1</args1><args2>value2</args2><args3>value3</args3></xewidget>';
+            $expected = '<xe-widget><args1>value1</args1><args2>value2</args2><args3>value3</args3></xe-widget>';
 
-            $this->assertEquals($expected,
-                $resultString);
+            $this->assertEquals($expected, $resultString);
         }
 
         /**
