@@ -21,6 +21,8 @@ class Number extends AbstractType
 {
     protected static $id = 'fieldType/xpressengine@Number';
 
+    protected $rules = ['num' => 'numeric'];
+
     /**
      * get field type name
      *
@@ -51,21 +53,6 @@ class Number extends AbstractType
         return [
             'num' => (new ColumnEntity('num', ColumnDataType::INTEGER)),
         ];
-    }
-
-    /**
-     * return rules
-     *
-     * @return array
-     */
-    public function getRules()
-    {
-        $required = '';
-        if ($this->config->get('required') === true) {
-            $required = 'required|';
-        }
-
-        return ['num' => $required . 'numeric'];
     }
 
     /**

@@ -17,6 +17,7 @@ use Xpressengine\Http\Request;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
 use Xpressengine\User\Exceptions\EmailAlreadyExistsException;
 use Xpressengine\User\Exceptions\EmailNotFoundException;
+use Xpressengine\User\Models\User;
 use Xpressengine\User\Rating;
 use Xpressengine\User\Repositories\UserRepository;
 use Xpressengine\User\UserException;
@@ -139,8 +140,8 @@ class UserController extends Controller
         $groups = $this->getGroupInfo($groupList);
 
         $status = [
-            ['value' => \XeUser::STATUS_ACTIVATED, 'text' => xe_trans('xe::permitted')],
-            ['value' => \XeUser::STATUS_DENIED, 'text' => xe_trans('xe::rejected')],
+            ['value' => User::STATUS_ACTIVATED, 'text' => xe_trans('xe::permitted')],
+            ['value' => User::STATUS_DENIED, 'text' => xe_trans('xe::rejected')],
         ];
 
         // dynamic field
@@ -229,8 +230,8 @@ class UserController extends Controller
         }
 
         $status = [
-            \XeUser::STATUS_ACTIVATED => ['value' => \XeUser::STATUS_ACTIVATED, 'text' => xe_trans('xe::permitted')],
-            \XeUser::STATUS_DENIED => ['value' => \XeUser::STATUS_DENIED, 'text' => xe_trans('xe::rejected')],
+            User::STATUS_ACTIVATED => ['value' => User::STATUS_ACTIVATED, 'text' => xe_trans('xe::permitted')],
+            User::STATUS_DENIED => ['value' => User::STATUS_DENIED, 'text' => xe_trans('xe::rejected')],
         ];
 
         $status[$user->status]['selected'] = 'selected';
@@ -242,14 +243,6 @@ class UserController extends Controller
         $dynamicField = app('xe.dynamicField');
         $fieldTypes = $dynamicField->gets('user');
 
-        $defaultAccount = null;
-        if (isset($user->accounts)) {
-            foreach ($user->accounts as $account) {
-                if ($account->provider === \XeUser::PROVIDER_DEFAULT) {
-                    $defaultAccount = $account;
-                }
-            }
-        }
         return XePresenter::make(
             'user.settings.user.edit',
             compact(
@@ -257,7 +250,6 @@ class UserController extends Controller
                 'ratings',
                 'groups',
                 'status',
-                'defaultAccount',
                 'fieldTypes',
                 'profileImgSize'
             )

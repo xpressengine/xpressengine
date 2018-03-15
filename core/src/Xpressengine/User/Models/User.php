@@ -78,6 +78,19 @@ class User extends DynamicModel implements UserInterface
      */
     public static $displayField = 'display_name';
 
+
+    const STATUS_DENIED = 'denied';
+
+    const STATUS_ACTIVATED = 'activated';
+
+    /**
+     * @var array
+     */
+    public static $status = [
+        self::STATUS_DENIED,
+        self::STATUS_ACTIVATED
+    ];
+
     /**
      * User constructor.
      *

@@ -9,13 +9,13 @@ return [
         'ko' => '사용 안함',
         'en' => 'Not in Use',
     ],
-    'inUse' => [
+    'inUsed' => [
         'ko' => '사용중',
-        'en' => 'Not Use',
+        'en' => 'In Used',
     ],
-    'notInUse' => [
+    'notInUsed' => [
         'ko' => '사용안함',
-        'en' => 'Not in Use',
+        'en' => 'Not in Used',
     ],
     'config' => [
         'ko' => '설정',
@@ -2261,6 +2261,74 @@ return [
     'moveToParentSettingPage' => [
         'ko' => '부모 설정 페이지로 이동',
         'en' => 'Move to parent setting page',
+    ],
+    'acceptTerms' => [
+        'ko' => '이용약관 동의',
+        'en' => 'Accept terms and conditions',
+    ],
+    'descAcceptTerms' => [
+        'ko' => '이용약관 동의 체크박스입니다.',
+        'en' => 'This is a checkbox for accepting terms and conditions.',
+    ],
+    'captcha' => [
+        'ko' => '캡차',
+        'en' => 'CAPTCHA',
+    ],
+    'descCaptcha' => [
+        'ko' => '캡차 문자 입력 폼입니다.',
+        'en' => 'This is a CAPTCHA.',
+    ],
+    'msgFailToPassCAPTCHA' => [
+        'ko' => '자동입력 방지 기능을 통과하지 못했습니다.',
+        'en' => 'Fail to pass CAPTCHA.',
+    ],
+    'defaultInfo' => [
+        'ko' => '기본정보',
+        'en' => 'Default information',
+    ],
+    'descDefaultInfo' => [
+        'ko' => '기본정보(이메일, 이름, 비밀번호) 입력 폼입니다.',
+        'en' => 'This is a form to enter email, name and password.',
+    ],
+    'descAdditionalInfo' => [
+        'ko' => '추가된 확장필드들의 입력 폼입니다.',
+        'en' => 'This is a form to extended field added.',
+    ],
+    'emailConfirmationCode' => [
+        'ko' => '이메일 인증번호',
+        'en' => 'Confirmation code',
+    ],
+    'descEmailConfirmationCode' => [
+        'ko' => '인증번호를 입력하는 폼입니다. 이메일 인증시에만 출력됩니다.',
+        'en' => 'This is a form to enter the confirmation code. (when authenticating e-mail)',
+    ],
+    'msgTokenIsInvalid' => [
+        'ko' => '유효기간이 만료되었거나 정상적인 토큰이 아닙니다. 다시 인증 받으시기 바랍니다.',
+        'en' => 'Token is invalid. Please re-verify',
+    ],
+    'msgUnknownTokenForSignUp' => [
+        'ko' => '잘못된 가입 토큰입니다.',
+        'en' => 'Unknown token for Sign up.',
+    ],
+    'enterAdditionalInfo' => [
+        'ko' => '부가 정보 입력',
+        'en' => 'Enter additional information',
+    ],
+    'descEnterAdditionalInfo' => [
+        'ko' => '사이트를 이용하기 위해서 다음 정보를 등록하여야 합니다.',
+        'en' => 'To use the site, you must register the following information.',
+    ],
+    'verified' => [
+        'ko' => '인증되었습니다.',
+        'en' => 'Verified.',
+    ],
+    'msgAccountNotFoundOrDisabled' => [
+        'ko' => '입력한 정보에 해당하는 계정을 찾을 수 없거나 사용 중지 상태인 계정입니다.',
+        'en' => 'Account is either not found or is disabled.',
+    ],
+    'msgInvalidPassword' => [
+        'ko' => '입력한 암호가 틀렸습니다.',
+        'en' => 'Password is invalid.',
     ],
     'allMemberCount' => [
         'ko' => '전체 회원 수',

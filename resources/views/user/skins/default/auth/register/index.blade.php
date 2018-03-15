@@ -2,15 +2,20 @@
 <div class="member">
     <h1>{{xe_trans('xe::signUp')}}</h1>
 
-    @if($config->get('guard_forced') === false)
-        <a href="{{ route('auth.register', ['token'=>'free']) }}">이메일 주소로 회원 가입</a>
-    @endif
+    <h4>{{ xe_trans('xe::registerByEmailConfirm') }}</h4>
 
-    @foreach($guards as $guard)
-        @if($guard['activated'])
-        {!! value($guard['render']) !!}
-        @endif
-    @endforeach
+    <form action="{{ route('auth.register.confirm') }}" method="post">
+        <div class="auth-group">
+
+            {{ csrf_field() }}
+
+            <label for="email" class="xe-sr-only">{{xe_trans('xe::email')}}</label>
+            <input type="text" id="email" class="xe-form-control" placeholder="{{xe_trans('xe::email')}}" name="email" value="{{ old('email') }}">
+            <em class="text-message">{{ xe_trans('xe::registerByEmailConfirmDescription') }}</em>
+
+        </div>
+        <button type="submit" class="xe-btn xe-btn-primary xe-btn-block">{{ xe_trans('xe::sendConfirmationEmail') }}</button>
+    </form>
 
     <p class="auth-text">{{xe_trans('xe::alreadyHaveAccount')}} <a href="{{ route('login') }}">{{xe_trans('xe::login')}}</a></p>
 </div>

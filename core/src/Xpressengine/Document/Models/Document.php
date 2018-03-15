@@ -295,7 +295,12 @@ class Document extends DynamicModel
     public function getPureContent($content)
     {
         $content = strip_tags($content);
-        $content = str_replace(['&nbsp;'], [' '], $content);
+        $content = str_replace(['&nbsp;', PHP_EOL], ' ', $content);
+        // remove Extended ASCII character number of 160
+        $content = str_replace(mb_chr(160), '', $content);
+        // remove duplicates Spaces
+        $content = preg_replace('/\s+/', ' ', $content);
+
         return $content;
     }
 

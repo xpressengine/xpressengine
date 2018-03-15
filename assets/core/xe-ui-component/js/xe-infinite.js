@@ -116,7 +116,7 @@ var XeInfinite = (function ($) {
     loadResources: function (cb) {
       DynamicLoadManager.cssLoad('/assets/vendor/slickgrid/slick.grid.css')
       DynamicLoadManager.jsLoadMultiple([
-        '/assets/vendor/jqueryui/jquery.event.drag-2.2.js',
+        '/assets/vendor/jqueryui/jquery.event.drag-2.3.0.js',
         '/assets/vendor/slickgrid/slick.core.js',
         '/assets/vendor/slickgrid/slick.formatters.js',
         '/assets/vendor/slickgrid/slick.grid.js',

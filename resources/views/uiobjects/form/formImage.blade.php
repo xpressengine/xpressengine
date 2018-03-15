@@ -37,7 +37,7 @@
             previewCanvas: false,
             autoUpload: false,
             acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-            maxFileSize: 5000000, // 5 MB
+            maxFileSize: 5000000, // 5 MB @FIXME
             replaceFileInput: false,
             disableImageResize: true,
             imageCrop: false

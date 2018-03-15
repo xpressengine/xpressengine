@@ -1,7 +1,7 @@
 /**
  * @namespace XE
  * */
-;(function ($, XE) {
+;(function ($, XE, DynamicLoadManager) {
   var _this = this
 
   var _pageCommon = (function () {
@@ -271,7 +271,7 @@
         }
 
         if (jsLen > 0) {
-          XE.jsLoadMultiple(js, {
+          DynamicLoadManager.jsLoadMultiple(js, {
             load: loadDone,
             error: loadDone
           })
@@ -431,4 +431,4 @@
       })
     }
   }
-})(window.jQuery, window.XE)
+})(window.jQuery, window.XE, window.DynamicLoadManager)

@@ -563,7 +563,7 @@ class Presenter
     }
 
     /**
-     * render 할 수 있도록 허용된 요청 fotmat인가?
+     * render 할 수 있도록 허용된 요청 format인가?
      *
      * @param string $format request format
      * @return bool

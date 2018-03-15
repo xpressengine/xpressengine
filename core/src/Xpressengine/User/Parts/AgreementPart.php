@@ -1,0 +1,70 @@
+<?php
+/**
+ * AgreementPart.php
+ *
+ * PHP version 5
+ *
+ * @category    User
+ * @package     Xpressengine\User
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
+
+namespace Xpressengine\User\Parts;
+
+/**
+ * Class AgreementPart
+ *
+ * @category    User
+ * @package     Xpressengine\User
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
+ * @link        https://xpressengine.io
+ */
+class AgreementPart extends RegisterFormPart
+{
+    const ID = 'agreements';
+
+    const NAME = 'xe::acceptTerms';
+
+    const DESCRIPTION = 'xe::descAcceptTerms';
+
+    /**
+     * Indicates if the form part is implicit
+     *
+     * @var bool
+     */
+    protected static $implicit = true;
+
+    /**
+     * The view for the form part
+     *
+     * @var string
+     */
+    protected static $view = 'register.forms.agreements';
+
+    /**
+     * Get data for form part view
+     *
+     * @return array
+     */
+    protected function data()
+    {
+        $terms = $this->service('xe.terms')->fetchEnabled();
+
+        return compact('terms');
+    }
+
+    /**
+     * Get validation rules of the form part
+     *
+     * @return array
+     */
+    public function rules()
+    {
+        return ['agree' => 'accepted'];
+    }
+}

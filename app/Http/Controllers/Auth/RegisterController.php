@@ -7,15 +7,14 @@ use Illuminate\Foundation\Auth\RedirectsUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use XeConfig;
 use XeDB;
 use XeDynamicField;
 use XeFrontend;
 use XePresenter;
 use XeTheme;
 use Xpressengine\User\EmailBroker;
-use Xpressengine\User\EmailInterface;
 use Xpressengine\User\Models\User;
-use Xpressengine\User\Rating;
 use Xpressengine\User\Repositories\RegisterTokenRepository;
 use Xpressengine\User\UserHandler;
 
@@ -51,7 +50,10 @@ class RegisterController extends Controller
         XeTheme::selectSiteTheme();
         XePresenter::setSkinTargetId('user/auth');
 
-        $this->middleware('guest', ['except' => ['getLogin', 'getLogout', 'getConfirm']]);
+        $this->middleware('auth', ['only' => ['getRegisterAddInfo', 'postRegisterAddInfo']]);
+        $this->middleware('guest', [
+            'except' => ['getLogin', 'getLogout', 'getConfirm', 'getRegisterAddInfo', 'postRegisterAddInfo']
+        ]);
     }
 
     /**
@@ -73,34 +75,12 @@ class RegisterController extends Controller
         $config = app('xe.config')->get('user.join');
 
         // 가입 인증을 사용하지 않을 경우, 곧바로 회원가입 폼 출력
-        if (!$config->get('guard_forced', false)) {
+        if (!$config->get('guard_forced', false) || $request->get('token')) {
             return $this->getRegisterForm($request);
         }
 
-        // token 검사, token이 존재할 경우 form을 출력
-        $token = $request->get('token');
-        if ($token !== null) {
-            return $this->getRegisterForm($request);
-        }
+        return \XePresenter::make('register.index');
 
-        // 활성화된 인증방식 가져오기
-        $allGuards = $this->handler->getRegisterGuards();
-        $activated = $config->get('guards', []);
-        $guards = [];
-
-        foreach ($activated as $id) {
-            if (array_has($allGuards, $id)) {
-                $guards[$id] = $allGuards[$id];
-                $guards[$id]['activated'] = true;
-                unset($allGuards[$id]);
-            }
-        }
-        foreach ($allGuards as $id => $guard) {
-            $guards[$id] = $guard;
-            $guards[$id]['activated'] = false;
-        }
-
-        return \XePresenter::make('register.index', compact('config', 'guards'));
     }
 
     /**
@@ -114,56 +94,23 @@ class RegisterController extends Controller
     {
         $config = app('xe.config')->get('user.join');
 
-        // 인증 토큰 검사
-        $tokenId = $request->get('token');
-        $tokenRepository = app('xe.user.register.tokens');
-        $register_token = null;
-        if ($tokenId !== null) {
-            $register_token = $tokenRepository->find($tokenId);
-            if ($register_token === null) {
-                throw new HttpException(400, '유효기간이 만료되었거나 정상적인 토큰이 아닙니다. 다시 인증 받으시기 바랍니다.');
-            }
-        }
-
         // 활성화된 가입폼 가져오기
-        $allForms = $this->handler->getRegisterForms();
-        $activated = $config->get('forms', []);
-        $forms = [];
+        $parts = $this->handler->getRegisterParts();
+        $activated = array_keys(array_intersect_key(array_flip($config->get('forms', [])), $parts));
 
-        foreach ($activated as $id) {
-            if (array_has($allForms, $id)) {
-                $forms[$id] = $allForms[$id];
-                $forms[$id]['activated'] = true;
-                unset($allForms[$id]);
-            }
-        }
-        foreach ($allForms as $id => $form) {
-            $forms[$id] = $form;
-            $forms[$id]['activated'] = false;
-        }
+        $parts = collect($parts)->filter(function ($part, $key) use ($activated) {
+            return in_array($key, $activated) || $part::isImplicit();
+        })->map(function ($part) use ($request) {
+            return new $part($request);
+        });
 
-        $rules = [
-            'email' => 'email',
-            'display_name' => 'required',
-            'password' => 'confirmed|password',
-            'agree' => 'required|accepted',
-//            'register_token' => 'required'
-        ];
-
-        /** @var \Xpressengine\DynamicField\ConfigHandler $dynamicFieldConfigHandler */
-        $dynamicFieldConfigHandler = XeDynamicField::getConfigHandler();
-        $dynamicFieldConfigs = $dynamicFieldConfigHandler->gets('user');
-        /** @var \Xpressengine\Config\ConfigEntity $dynamicFieldConfig */
-        foreach ($dynamicFieldConfigs as $dynamicFieldConfig) {
-            if ($dynamicFieldConfig->get('use') == true) {
-                $rules = array_merge($rules, XeDynamicField::getRules($dynamicFieldConfig));
-            }
-
-        }
+        $rules = $parts->map(function ($part) {
+            return $part->rules();
+        })->collapse();
 
         XeFrontend::rule('join', $rules);
 
-        return \XePresenter::make('register.create', compact('config', 'forms', 'register_token'));
+        return \XePresenter::make('register.create', compact('config', 'parts', 'register_token'));
     }
 
     /**
@@ -176,19 +123,14 @@ class RegisterController extends Controller
      */
     public function postRegisterConfirm(Request $request, RegisterTokenRepository $tokenRepository)
     {
-        $this->validate(
-            $request,
-            [
-                'email' => 'required|email'
-            ]
-        );
+        $this->validate($request, ['email' => 'required|email']);
 
         $email = $request->get('email');
 
         try {
             $this->handler->validateEmail($email);
         } catch (\Exception $e) {
-            throw new HttpException(400, '이미 등록된 이메일입니다.');
+            throw new HttpException(400, xe_trans('xe::emailAlreadyExists'));
         }
 
         $mail = $this->handler->pendingEmails()->findByAddress($email);
@@ -211,7 +153,7 @@ class RegisterController extends Controller
         $this->emailBroker->sendEmailForRegister($mail, $token);
 
         return redirect()->route('auth.register', ['token' => $token['id']])->with(
-            ['alert' => ['type' => 'success', 'message' => '인증 이메일이 전송되었습니다.']]
+            ['alert' => ['type' => 'success', 'message' => xe_trans('xe::msgEmailSendComplete')]]
         );
     }
 
@@ -222,7 +164,7 @@ class RegisterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function postRegister(Request $request, RegisterTokenRepository $tokenRepository)
+    public function postRegister(Request $request)
     {
         // validation
         if (!$this->checkJoinable()) {
@@ -231,46 +173,21 @@ class RegisterController extends Controller
             );
         }
 
-        $this->checkCaptcha();
-
-        $rules = [
-            'email' => 'email',
-            'display_name' => 'required',
-            'password' => 'confirmed|password',
-            'agree' => 'required|accepted',
-//            'register_token' => 'required'
-        ];
-
-        /** @var \Xpressengine\DynamicField\ConfigHandler $dynamicFieldConfigHandler */
-        $dynamicFieldConfigHandler = XeDynamicField::getConfigHandler();
-        $dynamicFieldConfigs = $dynamicFieldConfigHandler->gets('user');
-        /** @var \Xpressengine\Config\ConfigEntity $dynamicFieldConfig */
-        foreach ($dynamicFieldConfigs as $dynamicFieldConfig) {
-            if ($dynamicFieldConfig->get('use') == true) {
-                $rules = array_merge($rules, XeDynamicField::getRules($dynamicFieldConfig));
-            }
-        }
-
-        $this->validate($request, $rules);
-
-        // 인증토큰 조회
-        $tokenId = $request->get('register_token');
-        $token = null;
-        if ($tokenId) {
-            $token = $tokenRepository->find($tokenId);
-        }
-        if ($tokenId && $token === null) {
-            throw new HttpException(400, '잘못된 가입 토큰입니다.');
-        }
-
         $config = app('xe.config')->get('user.join');
 
-        //  가입인증을 사용하지만 인증토큰이 유효하지 않을 경우 검사
-        if ($config->get('guard_forced', false) && $token === null) {
-            throw new HttpException(400, '가입 토큰이 없거나 잘못된 가입 토큰입니다.');
-        }
+        // 활성화된 가입폼 가져오기
+        $parts = $this->handler->getRegisterParts();
+        $activated = array_keys(array_intersect_key(array_flip($config->get('forms', [])), $parts));
 
-        $userData = $request->all();
+        $parts = collect($parts)->filter(function ($part, $key) use ($activated) {
+            return in_array($key, $activated) || $part::isImplicit();
+        })->map(function ($part) use ($request) {
+            return new $part($request);
+        });
+
+        $userData = $parts->map(function ($part) {
+            return $part->validate();
+        })->collapse()->all();
 
         // set default join group
         $joinGroup = $config->get('joinGroup');
@@ -278,15 +195,9 @@ class RegisterController extends Controller
             $userData['group_id'] = [$joinGroup];
         }
 
-        $userData['rating'] = Rating::MEMBER;
-        $userData['status'] = \XeUser::STATUS_ACTIVATED;
-
         XeDB::beginTransaction();
         try {
-            $user = $this->handler->create($userData, $token);
-            if ($token !== null) {
-                $tokenRepository->delete($tokenId);
-            }
+            $user = $this->handler->create($userData);
         } catch (\Exception $e) {
             XeDB::rollback();
             throw $e;
@@ -295,6 +206,7 @@ class RegisterController extends Controller
 
         // login and redirect
         $this->auth->login($user);
+
         return redirect($this->redirectPath());
     }
 
@@ -305,35 +217,45 @@ class RegisterController extends Controller
      */
     protected function checkJoinable()
     {
-        $config = app('xe.config')->get('user.join');
-        return $config->get('joinable') === true;
+        return XeConfig::getVal('user.join.joinable') === true;
     }
 
-    protected function checkCaptcha()
+    public function getRegisterAddInfo()
     {
-        $config = app('xe.config')->get('user.join');
-        if (in_array('captcha', $config->get('forms', []))) {
-            if (app('xe.captcha')->verify() !== true) {
-                throw new HttpException(Response::HTTP_FORBIDDEN, '자동인증방지 기능을 통과하지 못하였습니다.');
+        $fields = $this->getAdditionalField();
+
+        XeFrontend::rule('add-info', $fields->map(function ($field) {
+            return $field->getRules();
+        })->collapse());
+
+        return XePresenter::make('register.add-info', compact('fields'));
+    }
+
+    public function postRegisterAddInfo(Request $request)
+    {
+        $fields = $this->getAdditionalField();
+        $rules =$fields->map(function ($field) {
+            return $field->getRules();
+        })->collapse();
+        
+        $inputs = $this->validate($request, $rules->all());
+
+        $this->handler->update(auth()->user(), $inputs);
+
+        return redirect($this->redirectPath());
+    }
+
+    protected function getAdditionalField()
+    {
+        return collect(XeDynamicField::gets('user'))->filter(function ($field) {
+            if (!$field->isEnabled()) {
+                return false;
             }
-        }
-    }
 
-    /**
-     * checkPendingEmail
-     *
-     * @param $email
-     * @param $code
-     *
-     * @return EmailInterface
-     */
-    protected function checkPendingEmail($email, $code)
-    {
-        $emailEntity = app('xe.user')->pendingEmails()->findByAddress($email);
-        if ($emailEntity->getConfirmationCode() !== $code) {
-            throw new HttpException(400, '잘못된 이메일 인증 코드입니다.');
-        }
+            $rules = implode('|', $field->getRules());
+            $rules = array_map('\Illuminate\Support\Str::snake', explode('|', $rules));
 
-        return $emailEntity;
+            return in_array('required', $rules);
+        });
     }
 }

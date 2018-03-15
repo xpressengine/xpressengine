@@ -52,21 +52,6 @@ class Textarea extends AbstractType
     }
 
     /**
-     * return rules
-     *
-     * @return array
-     */
-    public function getRules()
-    {
-        $required = '';
-        if ($this->config->get('required') === true) {
-            $required = 'required';
-        }
-
-        return ['text' => $required];
-    }
-
-    /**
      * 다이나믹필스 생성할 때 타입 설정에 적용될 rule 반환
      *
      * @return array

@@ -217,6 +217,7 @@ return [
         App\Providers\SeoServiceProvider::class,
         App\Providers\SiteServiceProvider::class,
         App\Providers\PurifierServiceProvider::class,
+        App\Providers\LogServiceProvider::class,
     ],
 
     /*

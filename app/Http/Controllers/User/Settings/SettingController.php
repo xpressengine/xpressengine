@@ -95,41 +95,17 @@ class SettingController extends Controller
     {
         $config = app('xe.config')->get('user.join');
 
-        $allGuards = $handler->getRegisterGuards();
-        $activated = $config->get('guards', []);
-        $guards = [];
+        $parts = $handler->getRegisterParts();
+        $activated = array_keys(array_intersect_key(array_flip($config->get('forms', [])), $parts));
 
-        foreach ($activated as $id) {
-            if (array_has($allGuards, $id)) {
-                $guards[$id] = $allGuards[$id];
-                $guards[$id]['activated'] = true;
-                unset($allGuards[$id]);
-            }
-        }
-        foreach ($allGuards as $id => $guard) {
-            $guards[$id] = $guard;
-            $guards[$id]['activated'] = false;
-        }
-
-        $allForms = $handler->getRegisterForms();
-        $activated = $config->get('forms', []);
-        $forms = [];
-
-        foreach ($activated as $id) {
-            if (array_has($allForms, $id)) {
-                $forms[$id] = $allForms[$id];
-                $forms[$id]['activated'] = true;
-                unset($allForms[$id]);
-            }
-        }
-        foreach ($allForms as $id => $form) {
-            $forms[$id] = $form;
-            $forms[$id]['activated'] = false;
-        }
+        $parts = collect($parts)->partition(function ($part, $key) use ($activated) {
+            return in_array($key, $activated) || $part::isImplicit();
+        });
+        $parts->splice(0, 1, [array_merge(array_flip($activated), $parts->first()->all())]);
 
         return XePresenter::make(
             'user.settings.setting.join',
-            compact('config','captcha', 'forms', 'guards')
+            compact('config','captcha', 'parts')
         );
     }
 
@@ -145,16 +121,11 @@ class SettingController extends Controller
     {
         $inputs = $request->except('_token');
 
-        $guards = $inputs['guards'] = array_keys(array_get($inputs, 'guards', []));
         $inputs['forms'] = array_keys(array_get($inputs, 'forms', []));
 
         $config = app('xe.config')->get('user.join');
 
-        $guard_forced = $inputs['guard_forced'] = $inputs['guard_forced'] === 'true';
-
-        if ($guard_forced && empty($guards)) {
-            throw new HttpException(400, '인증을 사용할 경우 하나 이상의 인증방식을 선택하셔야 합니다.');
-        }
+        $inputs['guard_forced'] = $inputs['guard_forced'] === 'true';
 
         foreach ($inputs as $key => $val) {
             $config->set($key, $val);

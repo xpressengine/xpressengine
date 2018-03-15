@@ -90,7 +90,7 @@ class DynamicFieldController extends Controller
             $request->get('id') != null &&
             $config = $configHandler->get($request->get('group'), $request->get('id'))
         ) {
-            $skinId = $config->skinId;
+            $skinId = $config->get('skinId');
         }
 
         /**

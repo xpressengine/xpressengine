@@ -10,7 +10,7 @@
             </div>
             <div class="panel panel-default">
                 <div class="panel-heading">관리회원</div>
-                <div class="panel-body"> {{ $log->user->getDisplayName() }} </div>
+                <div class="panel-body"> {{ $log->getUser()->getDisplayName() }} </div>
             </div>
             <div class="panel panel-default">
                 <div class="panel-heading">요약</div>
