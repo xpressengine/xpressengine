@@ -54,7 +54,8 @@ class WidgetParser
      */
     public function parseXml($content)
     {
-        $content = preg_replace_callback('/<xewidget[^>]*>.*?<\/xewidget>/s', [$this, 'parseWidget'], $content);
+        // @TODO xewidget제거 @see https://github.com/xpressengine/xpressengine/issues/708
+        $content = preg_replace_callback('/<xe-?widget[^>]*>.*?<\/xe-?widget>/s', [$this, 'parseWidget'], $content);
 
         return $content;
     }

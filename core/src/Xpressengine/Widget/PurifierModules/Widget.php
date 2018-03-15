@@ -38,6 +38,12 @@ class Widget extends HTMLPurifier_HTMLModule
      */
     public function setup($config)
     {
+        $this->addElement('xe-widget', 'Block', 'Empty', 'Common', array(
+            'id' => 'ID',
+            'skin-id' => 'ID',
+            'title' => 'Text'
+        ));
+        // @TODO xewidget제거 @see https://github.com/xpressengine/xpressengine/issues/708
         $this->addElement('xewidget', 'Block', 'Empty', 'Common', array(
             'id' => 'ID',
             'skin-id' => 'ID',

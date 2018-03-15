@@ -50,6 +50,7 @@ class WidgetboxMigration extends Migration {
         $handler = app('xe.widgetbox');
         $dashboard = $handler->find('dashboard');
         if($dashboard === null) {
+
             $handler->create([
                 'id'=>'dashboard',
                 'title'=>'dashboard',
