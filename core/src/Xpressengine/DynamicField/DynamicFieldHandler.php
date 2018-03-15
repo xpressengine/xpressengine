@@ -224,7 +224,7 @@ class DynamicFieldHandler
          * @var \Xpressengine\Config\ConfigEntity $config
          */
         foreach ($configs as $config) {
-            $returnArr[] = [$config->get('id') => $this->getByConfig($config)];
+            $returnArr[$config->get('id')] = $this->getByConfig($config);
         }
 
         return $returnArr;
