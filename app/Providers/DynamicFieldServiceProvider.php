@@ -108,7 +108,7 @@ class DynamicFieldServiceProvider extends ServiceProvider
                 return false;
             }
 
-            return preg_match('/^[a-zA-Z]+([a-zA-Z0-9_]+)?[a-zA-Z0-9]+$/u', $value) > 0;
+            return preg_match('/^[a-zA-Z]+([a-zA-Z0-9_]+)?[a-zA-Z0-9]+$/', $value) > 0;
         });
         $this->app['validator']->replacer('df_id', function ($message, $attribute, $rule, $parameters) {
             return xe_trans('xe::validation.df_id', ['attribute' => $attribute]);

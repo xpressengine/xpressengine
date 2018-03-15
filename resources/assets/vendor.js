@@ -2,12 +2,11 @@ import jQuery from 'jquery'
 import 'jquery-migrate'
 import blankshield from 'blankshield'
 import moment from 'moment'
-
-window.blankshield = blankshield
-window.moment = moment
+import URI from 'urijs'
 
 export {
   jQuery,
   blankshield,
-  moment
+  moment,
+  URI
 }

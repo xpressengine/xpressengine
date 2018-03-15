@@ -211,18 +211,22 @@ class DynamicFieldHandler
      * get dynamic fields by group name
      *
      * @param string $group config group name
-     * @return \Generator
+     * @return array
      */
     public function gets($group)
     {
+        $returnArr = [];
+
         $configs = $this->configHandler->gets($group);
 
         /**
          * @var \Xpressengine\Config\ConfigEntity $config
          */
         foreach ($configs as $config) {
-            yield $config->get('id') => $this->getByConfig($config);
+            $returnArr[] = [$config->get('id') => $this->getByConfig($config)];
         }
+
+        return $returnArr;
     }
 
     /**

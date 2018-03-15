@@ -6,7 +6,10 @@ import Request from 'xe-common/request'
 import Validator from 'xe-common/validator'
 import * as Utils from 'xe-common/utils'
 import DynamicLoadManager from 'xe-common/dynamicLoadManager'
+import Translator from 'xe-common/translator'
 import $ from 'jquery'
+import blankshield from 'blankshield'
+import URI from 'urijs'
 
 /**
  * @global
@@ -15,6 +18,7 @@ import $ from 'jquery'
  **/
 class XE {
   constructor () {
+    let that = this
     this.options = {}
     this.validator = Validator
     this.Lang = Lang
@@ -22,6 +26,35 @@ class XE {
     this.Request = Request
     this.Component = Component
     this.util = Utils
+
+    window.Utils = Utils
+    window.DynamicLoadManager = DynamicLoadManager
+    window.Translator = Translator
+    window.blankshield = blankshield
+
+    $(function () {
+      $('body').on('click', 'a[target]', function (e) {
+        let $this = $(this)
+        let href = $this.attr('href').trim()
+        let target = $this.attr('target')
+
+        if (!href) return
+        if (target === '_top' || target === '_self' || target === '_parent') return
+        if (!href.match(/^(https?:\/\/)/)) return
+        if (that.isSameHost(href)) return
+
+        let rel = $this.attr('rel')
+
+        if (typeof rel === 'string') {
+          $this.attr('rel', rel + ' noopener')
+        } else {
+          $this.attr('rel', 'noopener')
+        }
+
+        blankshield.open(href)
+        e.preventDefault()
+      })
+    })
   }
 
   /**
@@ -84,6 +117,39 @@ class XE {
     }
 
     return $.ajax(url, options)
+  }
+
+  isSameHost (url) {
+    if (typeof url !== 'string') return false
+
+    let baseUrl
+    let targetUrl = URI(url).normalizePathname()
+    let _xeBaseURL = URI(window.xeBaseURL).normalizePathname()
+
+    if (targetUrl.is('urn')) return false
+
+    let port = _xeBaseURL.port() || (_xeBaseURL.protocol() === 'http') ? 80 : 443
+
+    if (!targetUrl.hostname()) {
+      targetUrl = targetUrl.absoluteTo(window.xeBaseURL)
+    }
+
+    let targetPort = targetUrl.port()
+    if (!targetPort) {
+      targetPort = (targetUrl.protocol() === 'http') ? 80 : 443
+    }
+
+    if ($.inArray(Number(targetPort), port) === -1) {
+      return false
+    }
+
+    if (!baseUrl) {
+      baseUrl = URI(window.xeBaseURL).normalizePathname()
+      baseUrl = baseUrl.hostname() + baseUrl.directory()
+    }
+    targetUrl = targetUrl.hostname() + targetUrl.directory()
+
+    return targetUrl.indexOf(baseUrl) === 0
   }
 
   /**

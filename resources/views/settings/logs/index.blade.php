@@ -132,8 +132,8 @@
                             <td><a href="#"
                                    data-toggle="xe-page-toggle-menu"
                                    data-url="{{ route('toggleMenuPage') }}"
-                                   data-data='{!! json_encode(['id'=>$log->user->getId(), 'type'=>'user']) !!}'
-                                   {{--data-user-id="{{ $log->user->getId() }}" --}} >{{ $log->user->getDisplayName() }}</a></td>
+                                   data-data='{!! json_encode(['id'=>$log->getUser()->getId(), 'type'=>'user']) !!}'
+                                   {{--data-user-id="{{ $log->getUser()->getId() }}" --}} >{{ $log->getUser()->getDisplayName() }}</a></td>
                             <td>{{ $log->summary }}</td>
                             <td>{{ $log->ipaddress }}</td>
                             <td><a class="xe-btn xe-btn-link" href="{{ route('settings.setting.log.show', ['id'=>$log->id]) }}" data-toggle="xe-page-modal">보기</a></td>
