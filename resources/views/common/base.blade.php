@@ -39,23 +39,6 @@
             @endif
         });
 
-        jQuery(document).on('click', 'a[target]:not([target=_self],[target=_top],[target=_parent])', function (e) {
-            e.preventDefault();
-
-            var $this = jQuery(this);
-            var href = $this.attr('href');
-            var splitHref = href.split('://');
-
-            if(splitHref.length === 1
-            || (splitHref.length > 1 && splitHref[1].indexOf(xeBaseURL.split('://')[1]) !== -1)) {
-                window.open(href);
-
-            } else {
-                blankshield.open(href);
-
-            }
-        });
-
         <!-- Translation -->
         {!! XeFrontend::output('translation') !!}
     </script>

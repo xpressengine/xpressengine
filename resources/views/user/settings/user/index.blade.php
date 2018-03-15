@@ -81,10 +81,9 @@ use Xpressengine\User\Models\User;
                             </form>
                         </div>
                     </div>
-
                 </div>
-                <div class="table-responsive">
-                    <table class="table">
+                <div>
+                    <table class="table table-hover">
                         <thead>
                         <tr>
                             <th scope="col"><input type="checkbox" class="__xe_check-all"></th>
@@ -106,10 +105,12 @@ use Xpressengine\User\Models\User;
                                 <img data-toggle="xe-page-toggle-menu"
                                         data-url="{{ route('toggleMenuPage') }}"
                                         data-data='{!! json_encode(['id'=>$user->getId(), 'type'=>'user']) !!}' src="{{ $user->getProfileImage() }}" width="30" height="30" alt="{{xe_trans('xe::profileImage')}}" class="member-profile">
-                                <a href="#"
-                                   data-toggle="xe-page-toggle-menu"
-                                   data-url="{{ route('toggleMenuPage') }}"
-                                   data-data='{!! json_encode(['id'=>$user->getId(), 'type'=>'user']) !!}' data-text="{{ $user->getDisplayName() }}">{{ $user->getDisplayName() }}</a></i>
+                                <span>
+                                    <a href="#"
+                                       data-toggle="xe-page-toggle-menu"
+                                       data-url="{{ route('toggleMenuPage') }}"
+                                       data-data='{!! json_encode(['id'=>$user->getId(), 'type'=>'user']) !!}' data-text="{{ $user->getDisplayName() }}">{{ $user->getDisplayName() }}</a>
+                               </span>
                             </td>
                             <td>
                                 @if(count($user->accounts))

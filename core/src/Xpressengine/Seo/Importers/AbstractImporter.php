@@ -145,7 +145,7 @@ abstract class AbstractImporter
             $content = array_key_exists($key, $this->cuts) ? $this->substr($content, $this->cuts[$key]) : $content;
             $content = in_array($key, $this->needHost) ? $this->prependHost($content) : $content;
 
-            $this->frontend->meta()
+            $this->frontend->meta($this->metaItems[$key])
                 ->property($this->metaItems[$key])
                 ->content($content)
                 ->load();

@@ -24,7 +24,7 @@ class Item {
   getItemsTemplate (items, rootId, isRoot) {
     let temp = ''
 
-    if ((items && items.length) || isRoot) {
+    if (items && items.length != 0 || isRoot) {
       if (isRoot && rootId) {
         temp += '<ul class="item-container" data-parent="' + rootId + '">'
       } else {
