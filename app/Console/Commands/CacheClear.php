@@ -15,6 +15,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Cache\Console\ClearCommand;
+use Xpressengine\Interception\InterceptionHandler;
 
 /**
  * command
@@ -75,6 +76,7 @@ class CacheClear extends ClearCommand
             $this->laravel['events']->fire('cache:cleared', [$storeName]);
         }
 
+        app(InterceptionHandler::class)->clearProxies();
 
         $this->info('Application cache cleared!');
     }
