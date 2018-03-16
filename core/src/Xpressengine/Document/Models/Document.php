@@ -96,14 +96,6 @@ class Document extends DynamicModel
     protected $division = false;
     protected $config;
 
-    /**
-     * The connection name for the model.
-     * Virtual connection name.
-     *
-     * @var string
-     */
-    protected $connection = 'document';
-
     protected static $replyCharLen = 3;
 
     // status
