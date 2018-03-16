@@ -8,6 +8,7 @@
 
 namespace App\FieldTypes;
 
+use Illuminate\Support\Str;
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\DynamicField\AbstractType;
 use Xpressengine\DynamicField\ColumnDataType;
@@ -49,21 +50,6 @@ class Text extends AbstractType
         return [
             'text' => (new ColumnEntity('text', ColumnDataType::STRING)),
         ];
-    }
-
-    /**
-     * return rules
-     *
-     * @return array
-     */
-    public function getRules()
-    {
-        $required = '';
-        if ($this->config->get('required') === true) {
-            $required = 'required';
-        }
-
-        return ['text' => $required];
     }
 
     /**

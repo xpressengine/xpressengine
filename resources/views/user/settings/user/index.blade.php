@@ -1,3 +1,6 @@
+<?php
+use Xpressengine\User\Models\User;
+?>
 {{ app('xe.frontend')->js('assets/core/xe-ui-component/js/xe-page.js')->load() }}
 
 <div class="row">
@@ -24,8 +27,8 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li><strong>{{xe_trans('xe::approve')}}/{{xe_trans('xe::deny')}}</strong></li>
                                 <li @if(!Request::get('status')) class="active" @endif><a href="{{ route('settings.user.index', Request::except('status') ) }}">{{xe_trans('xe::all')}}</a></li>
-                                <li @if(Request::get('status') === \XeUser::STATUS_ACTIVATED) class="active" @endif><a href="{{ route('settings.user.index', array_merge(Request::all(), ['status'=> \XeUser::STATUS_ACTIVATED] )) }}">{{xe_trans('xe::permitted')}}</a></li>
-                                <li @if(Request::get('status') === \XeUser::STATUS_DENIED) class="active" @endif><a href="{{ route('settings.user.index', array_merge(Request::all(), ['status'=> \XeUser::STATUS_DENIED] )) }}">{{xe_trans('xe::rejected')}}</a></li>
+                                <li @if(Request::get('status') === User::STATUS_ACTIVATED) class="active" @endif><a href="{{ route('settings.user.index', array_merge(Request::all(), ['status'=> User::STATUS_ACTIVATED] )) }}">{{xe_trans('xe::permitted')}}</a></li>
+                                <li @if(Request::get('status') === User::STATUS_DENIED) class="active" @endif><a href="{{ route('settings.user.index', array_merge(Request::all(), ['status'=> User::STATUS_DENIED] )) }}">{{xe_trans('xe::rejected')}}</a></li>
                                 <li class="divider"></li>
                                 <li><strong>{{xe_trans('xe::group')}}</strong></li>
                                 <li @if(!Request::get('group'))class="active"@endif><a href="{{ route('settings.user.index', Request::except(['group'])) }}"><span>{{xe_trans('xe::allGroup')}}</span></a></li>
@@ -133,7 +136,7 @@
                                 @endif
                             </td>
                             <td>
-                                @if($user->status===\XeUser::STATUS_DENIED)
+                                @if($user->status === User::STATUS_DENIED)
                                 <label class="label label-danger">{{xe_trans('xe::rejected')}}</label>
                                 @else
                                 <label class="label label-green">{{xe_trans('xe::permitted')}}</label>

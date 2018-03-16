@@ -6,9 +6,10 @@
  * @link        https://xpressengine.io
  */
 
-namespace App\UIObjects\WidgetBox;
+namespace App\UIObjects\Widget;
 
 use Xpressengine\UIObject\AbstractUIObject;
+use Xpressengine\Widget\Presenters\HTMLPresenter;
 
 class WidgetBox extends AbstractUIObject
 {
@@ -28,45 +29,29 @@ class WidgetBox extends AbstractUIObject
         }
 
         $handler = app('xe.widgetbox');
-        $parser = app('xe.widget.parser');
 
         if($widgetbox === null) {
             $widgetbox = $handler->find($id);
         }
 
-        $content = null;
         if($widgetbox) {
-            $content = $widgetbox->content;
-            $this->loadFiles();
+            if ($data = $widgetbox->getAttributeValue('content')) {
+                $class = $widgetbox->getPresenter();
+                $presenter = new $class($data, $widgetbox->options);
+            } else {
+                /**
+                 * @deprecated since beta.27
+                 */
+                $content = $widgetbox->getOriginal('content');
+                $presenter = new HTMLPresenter($content);
+            }
+        } else {
+            $presenter = new HTMLPresenter('');
         }
 
         $link = array_get($args, 'link');
 
-        $this->template = view($this->view, compact('widgetbox', 'id', 'content', 'link'))->render();
+        $this->template = view($this->view, compact('widgetbox', 'id', 'presenter', 'link'))->render();
         return parent::render();
-    }
-
-    /**
-     * loadFiles
-     *
-     * @return void
-     */
-    protected function loadFiles()
-    {
-        $frontend = \app('xe.frontend');
-        /*$frontend->js(
-            [
-                'assets/core/xe-ui-component/js/xe-page.js',
-                'assets/core/uiobject/widget/generator.js'
-            ]
-        )->load();*/
-
-        $frontend->html('widgetbox.preview')->content("
-        <script>
-        function previewWidgetBox(id, html) {
-            $('#widgetbox-'+id).find('.widgetbox-content').html(html);
-        }
-        </script>
-        ")->load();
     }
 }

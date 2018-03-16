@@ -10,6 +10,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Session\SessionManager;
+use Symfony\Component\DomCrawler\Crawler;
 use XeDB;
 use XePresenter;
 use Xpressengine\Permission\Instance;
@@ -45,7 +46,7 @@ class WidgetBoxController extends Controller
         return api_render('widgetbox.create', compact('id'));
     }
 
-    public function store(Request $request, WidgetBoxHandler $handler, SessionManager $session)
+    public function store(Request $request, WidgetBoxHandler $handler)
     {
 
         if (!$request->user()->isAdmin()) {
@@ -64,12 +65,9 @@ class WidgetBoxController extends Controller
             throw new IDAlreadyExistsException();
         }
 
-        $widgetbox = $handler->create($inputs);
+        $handler->create($inputs);
 
-        $session->flash('alert', ['type' => 'success', 'message' => '위젯박스가 생성되었습니다.']);
-
-        return XePresenter::makeApi(['type' => 'success', 'message' => '생성했습니다.']);
-
+        return XePresenter::makeApi(['type' => 'success', 'message' => xe_trans('xe::wasCreated')]);
     }
 
     public function edit(Request $request, WidgetBoxHandler $handler, $id)
@@ -87,12 +85,13 @@ class WidgetBoxController extends Controller
 
         app('xe.theme')->selectBlankTheme();
 
-
-        $permission = null;
-        if ($request->user()->isAdmin()) {
-            $permission = array_merge($this->getPermArguments('widgetbox.'.$id, ['edit'])['edit'], ['mode' => null]);
-        }
-        return XePresenter::make('widgetbox.edit', compact('widgetbox', 'permission'));
+        return XePresenter::make('widgetbox.edit', [
+            'widgetbox' => $widgetbox,
+            'permission' => $request->user()->isAdmin() ?
+                array_merge($this->getPermArguments('widgetbox.'.$id, ['edit'])['edit'], ['mode' => null]) :
+                null,
+            'presenters' => $handler->getPresenters(),
+        ]);
     }
 
     public function update(Request $request, WidgetBoxHandler $handler, $id)
@@ -101,41 +100,31 @@ class WidgetBoxController extends Controller
             throw new AccessDeniedHttpException();
         }
 
-        $this->validate(
-            $request,
-            [
-                'content' => 'required'
-            ]
-        );
-
-        $data = [];
-        $data['content'] = $request->originInput('content');
-
-        if ($request->has('options')) {
-            $data['options'] = $request->get('options');
-        }
+        $inputs = $this->validate($request, ['data' => 'required', 'presenter' => 'required']);
         XeDB::beginTransaction();
         try {
-            $handler->update($id, $data);
+            $handler->update($id, [
+                'content' => json_dec($inputs['data'], true),
+                'options' => array_merge($request->get('options', []), ['presenter' => $inputs['presenter']]),
+            ]);
         } catch (\Exception $e) {
             XeDB::rollback();
             throw $e;
         }
         XeDB::commit();
 
-        return XePresenter::makeApi(['type' => 'success', 'message' => '위젯박스를 저장했습니다.']);
+        return XePresenter::makeApi(['type' => 'success', 'message' => xe_trans('xe::saved')]);
     }
 
     /**
      * 주어진 id의 widgetbox의 code(content)를 반환한다.
      *
-     * @param Request          $request
      * @param WidgetBoxHandler $handler
      * @param string           $id
      *
      * @return \Xpressengine\Presenter\RendererInterface
      */
-    public function code(Request $request, WidgetBoxHandler $handler, $id)
+    public function code(WidgetBoxHandler $handler, $id)
     {
         if (\Gate::denies('edit', new Instance('widgetbox.'.$id))) {
             throw new AccessDeniedHttpException();
@@ -148,7 +137,20 @@ class WidgetBoxController extends Controller
             throw new NotFoundWidgetBoxException();
         }
 
-        return XePresenter::makeApi(['code' => $widgetbox->content]);
+        if ($widgetbox->content) {
+            $data = array_merge(
+                ['presenter' => $widgetbox->getPresenter()],
+                ['data' => $widgetbox->content]
+            );
+        } else {
+            $data = array_merge(
+                ['presenter' => \Xpressengine\Widget\Presenters\XEUIPresenter::class],
+                ['data' => $this->extract($widgetbox->getOriginal('content'))->all()]
+            );
+        }
+
+        return XePresenter::makeApi(array_merge($data, ['options' => $widgetbox->options]));
+
     }
 
     /**
@@ -166,28 +168,140 @@ class WidgetBoxController extends Controller
             throw new AccessDeniedHttpException();
         }
 
-        $this->validate(
-            $request,
-            [
-                'code' => 'required'
-            ]
-        );
+        $inputs = $this->validate($request, ['data' => 'required', 'presenter' => 'required']);
+        $class = $inputs['presenter'];
+        $presenter = new $class(json_dec($inputs['data'], true), $request->get('options', []));
 
-        // widgetbox code
-        $code = $request->originInput('code');
-
-        $content = $parser->parseXml($code);
+        $content = $parser->parseXml($presenter->render());
 
         return XePresenter::makeApi(compact('content'));
     }
 
-    public function storePermission(Request $request, WidgetBoxHandler $handler, $id)
+    public function storePermission(Request $request, $id)
     {
         if (\Gate::denies('edit', new Instance('widgetbox.'.$id))) {
             throw new AccessDeniedHttpException();
         }
 
         $this->permissionRegister($request, 'widgetbox.'.$id, ['edit']);
-        return XePresenter::makeApi(['type' => 'success', 'message' => '권한을 저장했습니다.']);
+        return XePresenter::makeApi(['type' => 'success', 'message' => xe_trans('xe::saved')]);
+    }
+
+    /**
+     * @param string $code
+     * @return \Illuminate\Support\Collection
+     * @deprecated since beta.27
+     */
+    private function extract($code)
+    {
+        $doc = new Crawler($code);
+
+        $rows = $doc->children()->first()->children();
+
+        return $this->row2data($rows);
+    }
+
+    /**
+     * @param Crawler $nodes
+     * @return \Illuminate\Support\Collection
+     * @deprecated since beta.27
+     */
+    private function row2data(Crawler $nodes)
+    {
+        $data = $nodes->each(function (Crawler $node) {
+            $classNames = collect(explode(' ', $node->attr('class')));
+            if ($classNames->contains('xe-row') && !$classNames->contains('widgetarea-row')) {
+                return $this->col2data($node->children());
+            }
+
+            return null;
+        });
+
+        return collect($data)->filter();
+    }
+
+    /**
+     * @param Crawler $nodes
+     * @return \Illuminate\Support\Collection
+     * @deprecated since beta.27
+     */
+    private function col2data(Crawler $nodes)
+    {
+        $data = $nodes->each(function (Crawler $node) {
+            $classNames = collect(explode(' ', $node->attr('class')));
+            if ($classNames->filter([$this, 'isColumn'])->count() < 1) {
+                return null;
+            }
+            $grid = $classNames->reduce(function ($carry, $name) {
+                if (!$this->isColumn($name)) {
+                    return null;
+                }
+
+                list($m, $s) = explode('-', substr($name, strlen('xe-col-')));
+                $carry[$m] = (int)$s;
+
+                return $carry;
+            }, []);
+
+            $rows = $this->row2data($node->children());
+            $widgets = $this->widget2data($node->children());
+
+            return ['grid' => array_filter($grid), 'rows' => $rows, 'widgets' => $widgets];
+        });
+
+        return collect($data)->filter();
+    }
+
+    /**
+     * @param Crawler $nodes
+     * @return \Illuminate\Support\Collection
+     * @deprecated since beta.27
+     */
+    private function widget2data(Crawler $nodes)
+    {
+        $data = $nodes->each(function (Crawler $node) {
+            $cssClasses = collect(explode(' ', $node->attr('class')));
+            if ($cssClasses->filter([$this, 'isWidget'])->count() < 1) {
+                return null;
+            }
+
+            $data = $node->filter('xewidget')->each(function (Crawler $widget) {
+                $dom = $widget->getNode(0);
+                return $this->getWidgetParser()->parseCode($dom->ownerDocument->saveHTML($dom));
+            });
+
+            return $data;
+        });
+
+        return collect($data)->filter()->flatten(1);
+    }
+
+    /**
+     * @return WidgetParser
+     * @deprecated since beta.27
+     */
+    private function getWidgetParser()
+    {
+        return app('xe.widget.parser');
+    }
+
+    /**
+     * @param string $className
+     * @return bool
+     * @deprecated since beta.27
+     */
+    public function isColumn($className)
+    {
+        return starts_with($className, 'xe-col-');
+    }
+
+    /**
+     * @param string $className
+     * @return bool
+     * @deprecated since beta.27
+     */
+    public function isWidget($className)
+    {
+        return $className === 'widgetarea-row';
     }
 }

@@ -99,6 +99,10 @@
                 skinForm: skinForm
               }, cb)
               break
+
+            case 'data':
+              return $(widgetForm).serializeObject();
+              break;
           }
 
           break
@@ -127,14 +131,14 @@
   var WidgetCode = (function () {
     return {
       /**
-             * @private
-             * @param {object} options
-             * <pre>
-             *     - {string} widgetForm selector
-             *     - {string} skinForm selector
-             * </pre>
-             * @param {function} cb callback
-             * */
+       * @private
+       * @param {object} options
+       * <pre>
+       *     - {string} widgetForm selector
+       *     - {string} skinForm selector
+       * </pre>
+       * @param {function} cb callback
+       * */
       generate: function (options, cb) {
         var $form = $(options.widgetForm)
         var data = $form.serialize()
@@ -162,27 +166,25 @@
         })
       },
       /**
-             * @private
-             * @param {object} options
-             * <pre>
-             *     - {string} url
-             *     - {string} target selector
-             *     - {string} code
-             * </pre>
-             * */
+       * @private
+       * @param {object} options
+       * <pre>
+       *     - {string} url
+       *     - {string} target selector
+       *     - {string} code
+       * </pre>
+       * */
       reset: function (options) {
-        DynamicLoadManager.jsLoad('/assets/core/xe-ui-component/js/xe-page.js', function () {
-          var url = options.url
-          var code = options.code
-          var target = options.target
+        var url = options.url
+        var code = options.code
+        var target = options.target
 
-          XE.page(url, target, {
-            type: 'post',
-            data: {
-              code: code
-            }
-          }, options.callback)
-        })
+        XE.page(url, target, {
+          type: 'post',
+          data: {
+            code: code
+          }
+        }, options.callback)
       },
 
       init: function () {

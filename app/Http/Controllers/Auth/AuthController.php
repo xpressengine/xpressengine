@@ -9,12 +9,14 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\UrlGenerator;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use XeDB;
+use XeFrontend;
 use XePresenter;
 use XeTheme;
 use Xpressengine\Theme\ThemeHandler;
 use Xpressengine\User\EmailBroker;
 use Xpressengine\User\Exceptions\InvalidConfirmationCodeException;
 use Xpressengine\User\Exceptions\PendingEmailNotExistsException;
+use Xpressengine\User\Models\User;
 use Xpressengine\User\UserHandler;
 
 class AuthController extends Controller
@@ -119,20 +121,22 @@ class AuthController extends Controller
         }
         XeDB::commit();
 
-        return redirect('/')->with('alert', ['type' => 'success', 'message' => '인증되었습니다.']);
+        return redirect('/')->with('alert', ['type' => 'success', 'message' => xe_trans('xe::verified')]);
     }
 
     /**
      * Show the application login form.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function getLogin(UrlGenerator $urlGenerator, Request $request)
+    public function getLogin(Request $request)
     {
-        $redirectUrl = $request->get('redirectUrl', $urlGenerator->previous());
+        $redirectUrl = $request->get('redirectUrl',
+            $request->session()->pull('url.intended') ?: url()->previous());
 
         if ($redirectUrl !== $request->url()) {
-            app('session.store')->put('url.intended', $redirectUrl);
+            $request->session()->put('url.intended', $redirectUrl);
         }
 
         // common config
@@ -140,12 +144,12 @@ class AuthController extends Controller
 
         $loginRuleName = 'login';
 
-        \XeFrontend::rule($loginRuleName, [
+        XeFrontend::rule($loginRuleName, [
             'email' => 'required|email_prefix',
             'password' => 'required'
         ]);
 
-        return \XePresenter::make('login', compact('config', 'loginRuleName', 'redirectUrl'));
+        return XePresenter::make('login', compact('config', 'loginRuleName'));
     }
 
     /**
@@ -158,13 +162,10 @@ class AuthController extends Controller
      */
     public function postLogin(Request $request)
     {
-        $this->validate(
-            $request,
-            [
-                'email' => 'required|email_prefix',
-                'password' => 'required'
-            ]
-        );
+        $this->validate($request, [
+            'email' => 'required|email_prefix',
+            'password' => 'required'
+        ]);
 
         $this->checkCaptcha();
 
@@ -172,39 +173,30 @@ class AuthController extends Controller
 
         $credentials['email'] = trim($credentials['email']);
 
-        $credentials['status'] = \XeUser::STATUS_ACTIVATED;
+        $credentials['status'] = User::STATUS_ACTIVATED;
 
         if ($this->auth->attempt($credentials, $request->has('remember'))) {
-            $this->redirectTo = $request->get('redirectUrl', $this->redirectTo);
             return redirect()->intended($this->redirectPath());
         }
 
         return redirect()->back()
             ->withInput($request->only('email', 'remember'))
-            ->with('alert', ['type' => 'danger', 'message' => '입력한 정보에 해당하는 계정을 찾을 수 없거나 사용 중지 상태인 계정입니다.']);
+            ->with('alert', ['type' => 'danger', 'message' => xe_trans('xe::msgAccountNotFoundOrDisabled')]);
     }
-
-    /**
-     * Get the failed login message.
-     *
-     * @return string
-     */
-    protected function getFailedLoginMessage()
-    {
-        return 'These credentials do not match our records.';
-    }
-
 
     /**
      * Log the user out of the application.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function getLogout(UrlGenerator $urlGenerator, Request $request)
+    public function getLogout(Request $request)
     {
         $this->auth->logout();
 
-        return redirect($request->get('redirectUrl', $urlGenerator->previous()));
+        $request->session()->invalidate();
+
+        return redirect('/');
     }
 
     /**
@@ -222,7 +214,7 @@ class AuthController extends Controller
 
         $redirectUrl = $request->get('redirectUrl', $urlGenerator->previous());
 
-        return \XePresenter::make('admin', compact('redirectUrl'));
+        return XePresenter::make('admin', compact('redirectUrl'));
     }
 
     public function postAdminAuth(Request $request)
@@ -238,7 +230,7 @@ class AuthController extends Controller
             return redirect()->intended($redirectUrl);
         }
 
-        return redirect()->back()->with('alert', ['type' => 'failed', 'message' => '입력하신 암호가 틀렸습니다.']);
+        return redirect()->back()->with('alert', ['type' => 'failed', 'message' => xe_trans('xe::msgInvalidPassword')]);
     }
 
     protected function checkCaptcha()
@@ -246,7 +238,7 @@ class AuthController extends Controller
         $config = app('xe.config')->get('user.common');
         if ($config->get('useCaptcha', false) === true) {
             if (app('xe.captcha')->verify() !== true) {
-                throw new HttpException(Response::HTTP_FORBIDDEN, '자동인증방지 기능을 통과하지 못하였습니다.');
+                throw new HttpException(Response::HTTP_FORBIDDEN, xe_trans('xe::msgFailToPassCAPTCHA'));
             }
         }
     }

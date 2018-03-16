@@ -45,72 +45,18 @@ class WidgetboxMigration extends Migration {
         if($permission->get('widgetbox') === null) {
             $permission->register('widgetbox', new Grant());
         }
-    }
 
-    public function initialized()
-    {
         // dashboard setting
         $handler = app('xe.widgetbox');
         $dashboard = $handler->find('dashboard');
         if($dashboard === null) {
-            $handler->create(['id'=>'dashboard', 'title'=>'dashboard', 'content'=>'<div class="xe-row"><div class="xe-col-md-6">
-<div class="xe-row widgetarea-row">
-<div class="xe-col-md-12">
-<div class="widgetarea" data-height="140">
 
-<div class="xe-row">
-<div class="xe-col-md-12"><xe-widget id="widget/xpressengine@systemInfo" title="System Info" skin-id="widget/xpressengine@systemInfo/skin/xpressengine@default">
-  <skin>
-  </skin>
-</xe-widget>
-</div>
-</div></div>
-</div>
-</div>
-</div><div class="xe-col-md-6">
-<div class="xe-row widgetarea-row">
-<div class="xe-col-md-12">
-<div class="widgetarea" data-height="140">
-
-<div class="xe-row">
-<div class="xe-col-md-12"><xe-widget id="widget/xpressengine@storageSpace" title="Storage 사용량" skin-id="widget/xpressengine@storageSpace/skin/xpressengine@default">
-  <limit>5</limit>
-  <skin>
-  </skin>
-</xe-widget>
-</div>
-</div></div>
-</div>
-</div>
-</div></div><div class="xe-row"><div class="xe-col-md-6">
-<div class="xe-row widgetarea-row">
-<div class="xe-col-md-12">
-<div class="widgetarea" data-height="140">
-
-<div class="xe-row">
-<div class="xe-col-md-12"><xe-widget id="widget/xpressengine@contentInfo" title="Content Info" skin-id="widget/xpressengine@contentInfo/skin/xpressengine@default">
-  <skin>
-  </skin>
-</xe-widget>
-</div>
-</div></div>
-</div>
-</div>
-</div><div class="xe-col-md-6">
-<div class="xe-row widgetarea-row">
-<div class="xe-col-md-12 selected">
-<div class="widgetarea" data-height="140">
-
-<div class="xe-row">
-<div class="xe-col-md-12"><xe-widget id="widget/news_client@news" title="News" skin-id="widget/news_client@news/skin/news_client@default">
-  <skin>
-  </skin>
-</xe-widget>
-</div>
-</div></div>
-</div>
-</div>
-</div></div>']);
+            $handler->create([
+                'id'=>'dashboard',
+                'title'=>'dashboard',
+                'content'=> $this->getDefaultDashboard(),
+                'options' => ['presenter' => \Xpressengine\Widget\Presenters\XEUIPresenter::class]
+            ]);
         }
 
         $userProfile = $handler->find('user-profile');
@@ -141,13 +87,9 @@ class WidgetboxMigration extends Migration {
             return false;
         }
 
-        // @see https://github.com/xpressengine/xpressengine/issues/708
-        // 위젯박스 태그 이름 변경
-        $widgetBox = app('xe.widgetbox')->all();
-        foreach ($widgetBox as $item) {
-            if(str_contains($item->content, 'xewidget')) {
-                return false;
-            }
+        // beta.27 later
+        if(!app('xe.widgetbox')->find('dashboard')->content) {
+            return false;
         }
 
         return true;
@@ -157,21 +99,23 @@ class WidgetboxMigration extends Migration {
     {
         $this->install();
         $this->init();
-        $this->initialized();
 
-        // @see https://github.com/xpressengine/xpressengine/issues/708
-        // 위젯박스 태그 이름 변경
-        $widgetBox = app('xe.widgetbox')->all();
-        foreach ($widgetBox as $item) {
-            if(str_contains($item->content, 'xewidget')) {
-                $item->content = preg_replace('/(<\/?)xewidget/', '$1xe-widget', $item->content);
-                $item->save();
-            }
+        // beta.27 later
+        if(!app('xe.widgetbox')->find('dashboard')->content) {
+            app('xe.widgetbox')->update('dashboard', [
+                'content'=> $this->getDefaultDashboard(),
+                'options' => ['presenter' => \Xpressengine\Widget\Presenters\XEUIPresenter::class]
+            ]);
         }
     }
 
     public function checkUpdated($installedVersion = null)
     {
         return $this->check();
+    }
+
+    private function getDefaultDashboard()
+    {
+        return json_decode('[[{"grid":{"md":6,"xs":"12"},"rows":[],"widgets":[{"@attributes":{"id":"widget\/xpressengine@systemInfo","title":"System Info","skin-id":"widget\/xpressengine@systemInfo\/skin\/xpressengine@default"},"skin":""}]},{"grid":{"md":6,"xs":"12"},"rows":[],"widgets":[{"@attributes":{"id":"widget\/xpressengine@storageSpace","title":"Storage \uc0ac\uc6a9\ub7c9","skin-id":"widget\/xpressengine@storageSpace\/skin\/xpressengine@default"},"limit":"5","skin":""}]}],[{"grid":{"md":"6","xs":"12"},"rows":[],"widgets":[{"@attributes":{"id":"widget\/xpressengine@contentInfo","title":"Content Info","skin-id":"widget\/xpressengine@contentInfo\/skin\/xpressengine@default"}}]},{"grid":{"md":"6","xs":"12"},"rows":[],"widgets":[{"@attributes":{"id":"widget\/news_client@news","title":"News","skin-id":"widget\/news_client@news\/skin\/news_client@default"}}]}]]', true);
     }
 }

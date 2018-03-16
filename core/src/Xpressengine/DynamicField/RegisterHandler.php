@@ -179,9 +179,9 @@ class RegisterHandler
     /**
      * Fire an event and call the listeners.
      *
-     * @param  string|object  $event
-     * @param  mixed  $payload
-     * @param  bool  $halt
+     * @param string|object $event   event
+     * @param mixed         $payload payload
+     * @param bool          $halt    stop event firing when response is not null
      * @return array|null
      */
     public function fireEvent($event, $payload = [], $halt = false)

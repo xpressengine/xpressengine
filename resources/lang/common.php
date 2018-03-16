@@ -9,13 +9,13 @@ return [
         'ko' => '사용 안함',
         'en' => 'Not in Use',
     ],
-    'inUse' => [
+    'inUsed' => [
         'ko' => '사용중',
-        'en' => 'Not Use',
+        'en' => 'In Used',
     ],
-    'notInUse' => [
+    'notInUsed' => [
         'ko' => '사용안함',
-        'en' => 'Not in Use',
+        'en' => 'Not in Used',
     ],
     'config' => [
         'ko' => '설정',
@@ -2262,6 +2262,74 @@ return [
         'ko' => '부모 설정 페이지로 이동',
         'en' => 'Move to parent setting page',
     ],
+    'acceptTerms' => [
+        'ko' => '이용약관 동의',
+        'en' => 'Accept terms and conditions',
+    ],
+    'descAcceptTerms' => [
+        'ko' => '이용약관 동의 체크박스입니다.',
+        'en' => 'This is a checkbox for accepting terms and conditions.',
+    ],
+    'captcha' => [
+        'ko' => '캡차',
+        'en' => 'CAPTCHA',
+    ],
+    'descCaptcha' => [
+        'ko' => '캡차 문자 입력 폼입니다.',
+        'en' => 'This is a CAPTCHA.',
+    ],
+    'msgFailToPassCAPTCHA' => [
+        'ko' => '자동입력 방지 기능을 통과하지 못했습니다.',
+        'en' => 'Fail to pass CAPTCHA.',
+    ],
+    'defaultInfo' => [
+        'ko' => '기본정보',
+        'en' => 'Default information',
+    ],
+    'descDefaultInfo' => [
+        'ko' => '기본정보(이메일, 이름, 비밀번호) 입력 폼입니다.',
+        'en' => 'This is a form to enter email, name and password.',
+    ],
+    'descAdditionalInfo' => [
+        'ko' => '추가된 확장필드들의 입력 폼입니다.',
+        'en' => 'This is a form to extended field added.',
+    ],
+    'emailConfirmationCode' => [
+        'ko' => '이메일 인증번호',
+        'en' => 'Confirmation code',
+    ],
+    'descEmailConfirmationCode' => [
+        'ko' => '인증번호를 입력하는 폼입니다. 이메일 인증시에만 출력됩니다.',
+        'en' => 'This is a form to enter the confirmation code. (when authenticating e-mail)',
+    ],
+    'msgTokenIsInvalid' => [
+        'ko' => '유효기간이 만료되었거나 정상적인 토큰이 아닙니다. 다시 인증 받으시기 바랍니다.',
+        'en' => 'Token is invalid. Please re-verify',
+    ],
+    'msgUnknownTokenForSignUp' => [
+        'ko' => '잘못된 가입 토큰입니다.',
+        'en' => 'Unknown token for Sign up.',
+    ],
+    'enterAdditionalInfo' => [
+        'ko' => '부가 정보 입력',
+        'en' => 'Enter additional information',
+    ],
+    'descEnterAdditionalInfo' => [
+        'ko' => '사이트를 이용하기 위해서 다음 정보를 등록하여야 합니다.',
+        'en' => 'To use the site, you must register the following information.',
+    ],
+    'verified' => [
+        'ko' => '인증되었습니다.',
+        'en' => 'Verified.',
+    ],
+    'msgAccountNotFoundOrDisabled' => [
+        'ko' => '입력한 정보에 해당하는 계정을 찾을 수 없거나 사용 중지 상태인 계정입니다.',
+        'en' => 'Account is either not found or is disabled.',
+    ],
+    'msgInvalidPassword' => [
+        'ko' => '입력한 암호가 틀렸습니다.',
+        'en' => 'Password is invalid.',
+    ],
     'allMemberCount' => [
         'ko' => '전체 회원 수',
         'en' => 'Number of members',
@@ -2281,5 +2349,77 @@ return [
     'enterEndDate' => [
         'ko' => '종료 날짜 (2018-01-01)',
         'en' => 'end date (2018-01-01)',
+    ],
+    'editWidgetBox' => [
+        'ko' => '위젯박스 편집',
+        'en' => 'Edit Widget Box',
+    ],
+    'doEditWidgetBox' => [
+        'ko' => '위젯박스를 편집합니다.',
+        'en' => 'Edit the Widget Box',
+    ],
+    'notFoundWidgetBox' => [
+        'ko' => '위젯박스[:id]를 찾을 수 없습니다.',
+        'en' => 'Could not find widget box [:id]',
+    ],
+    'createNow' => [
+        'ko' => '바로생성',
+        'en' => 'Create Now',
+    ],
+    'wasCreated' => [
+        'ko' => '생성되었습니다.',
+        'en' => 'Was created',
+    ],
+    'addRow' => [
+        'ko' => '열 추가',
+        'en' => 'Add Row',
+    ],
+    'addCell' => [
+        'ko' => '셀 추가',
+        'en' => 'Add Cell',
+    ],
+    'addOption' => [
+        'ko' => '옵션 추가',
+        'en' => 'Add option',
+    ],
+    'addWidget' => [
+        'ko' => '위젯 추가',
+        'en' => 'Add Widget',
+    ],
+    'cellManagement' => [
+        'ko' => '셀 관리',
+        'en' => 'Cell Management',
+    ],
+    'widgetManagement' => [
+        'ko' => '위젯 관리',
+        'en' => 'Widget Management',
+    ],
+    'editArea' => [
+        'ko' => '편집 영역',
+        'en' => 'Edit Area',
+    ],
+    'specWhoCanEditWidgetBox' => [
+        'ko' => '위젯박스를 편집할 수 있는 사용자를 지정합니다.',
+        'en' => 'Specifies who can edit the widget box.',
+    ],
+    'descPresenter' => [
+        'ko' => '설정된 레아아웃을 표현할 프리젠터를 선택합니다. 프리젠터에 따라 지원되는 셀 분할 제한이 다를 수 있습니다.',
+        'en' => 'Select the presenter to represent the set layout. Supported cell partitioning limits may vary depending on the presenter.',
+    ],
+    'descDeviceMode' => [
+        'ko' => '각각의 디바이스에서 표현될 레이아웃을 확인할 수 있습니다.',
+        'en' => 'You can see the layout to be represented on each device.',
+    ],
+    'descCellManagement' => [
+        'ko' => '편집영역에 열 또는 셀 레이아웃을 추가하거나 디바이스에 따른 셀의 레이아웃 옵션을 추가할 수 있습니다.',
+        'en' => 'You can add a row or cell layout to the edit area, or you can add cell layout options to the device mode.',
+    ],
+    'descWidgetManagement' => [
+        'ko' => '위젯을 추가할 셀을 선택한 후 위젯 추가 버튼을 클릭하여 설정을 등록하면 위젯이 추가됩니다.',
+        'en' => 'Select a cell to add the widget and click the Add Widget button to register the setting and the widget will be added.',
+    ],
+    'descEditArea' => [
+        'ko' => '생성된 위젯은 drag & drop 으로 순서를 변경하거나  다른셀로 이동이 가능합니다. 셀을 클릭하여 선택하거나 삭제가 가능합니다.',
+        'en' => 'The created widget can be reordered by drag & drop or moved to another cell. You can click the cell to select it or delete it.',
     ],
 ];

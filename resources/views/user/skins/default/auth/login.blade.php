@@ -3,7 +3,6 @@
     <h1>{{xe_trans('xe::doLogin')}}</h1>
     <form action="{{ route('login') }}" method="post" {{--data-rule="{{ $loginRuleName }}"--}}>
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
-        <input type="hidden" name="redirectUrl" value="{{ $redirectUrl or '' }}">
         <fieldset>
             <legend>{{xe_trans('xe::doLogin')}}</legend>
             <div class="auth-group {{--wrong--}}">

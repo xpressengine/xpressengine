@@ -290,10 +290,21 @@ abstract class DynamicModel extends Model
     public function save(array $options = [])
     {
         if ($this->dynamic === true) {
-            $this->attributes = array_merge($this->dynamicAttributes, $this->attributes);
+            $this->attributes = array_merge($this->attributes, $this->dynamicAttributes);
         }
 
         return parent::save($options);
+    }
+
+    /**
+     * Determine if the model or given attribute(s) have been modified.
+     *
+     * @param array|string|null $attributes attributes
+     * @return bool
+     */
+    public function isDirty($attributes = null)
+    {
+        return count($this->dynamicAttributes) > 0 ? true : parent::isDirty($attributes);
     }
 
     /**

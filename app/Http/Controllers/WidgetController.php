@@ -13,12 +13,12 @@ use View;
 use XePresenter;
 use Xpressengine\Http\Request;
 use Xpressengine\Skin\SkinHandler;
+use Xpressengine\Support\JsonException;
 use Xpressengine\Widget\WidgetHandler;
 use Xpressengine\Widget\WidgetParser;
 
-class WidgetController extends Controller {
-
-
+class WidgetController extends Controller
+{
     /**
      * index
      *
@@ -35,31 +35,6 @@ class WidgetController extends Controller {
 
     public function generate(Request $request, WidgetHandler $widgetHandler)
     {
-        //$data = $request->getContent();
-        //$data = json_decode($data);
-
-        //$inputs = [];
-        //foreach ($data as $item) {
-        //    if (is_array($item->value)) {
-        //        $value = [];
-        //        foreach ($item->value as $sub) {
-        //            $value[$sub->name] = e($sub->value);
-        //        }
-        //        $inputs[$item->name] = $value;
-        //    } else {
-        //        if (substr($item->name, -2) == '[]') {
-        //            $name = substr($item->name, 0, -2);
-        //            if (isset($inputs[$name]) === false) {
-        //                $inputs[$name] = [];
-        //            }
-        //            $len = count($inputs[$name]);
-        //            $inputs[$name][$len] = $item->value;
-        //        } else {
-        //            $inputs[$item->name] = e($item->value);
-        //        }
-        //    }
-        //}
-
         $inputs = $request->except('_token');
         $widget = array_get($inputs, '@id');
 
@@ -80,7 +55,7 @@ class WidgetController extends Controller {
      *
      * @return void
      */
-    public function skin(Request $request, WidgetHandler $widgetHandler, SkinHandler $skinHandler)
+    public function skin(Request $request, SkinHandler $skinHandler)
     {
         $this->validate($request, [
             'widget' => 'required'
@@ -137,13 +112,15 @@ class WidgetController extends Controller {
      */
     public function setup(Request $request, WidgetParser $widgetParser, WidgetHandler $widgetHandler, SkinHandler $skinHandler)
     {
-        $this->validate($request, [
-            'code' => 'required',
-        ]);
+        $this->validate($request, ['code' => 'required']);
 
         $code = $request->get('code');
 
-        $inputs = $widgetParser->parseCode($code);
+        try {
+            $inputs = json_dec($code, true);
+        } catch (JsonException $e) {
+            $inputs = $widgetParser->parseCode($code);
+        }
 
         $widget = array_get($inputs, '@attributes.id');
 

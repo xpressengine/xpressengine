@@ -14,6 +14,7 @@
 
 namespace Xpressengine\Widget\Models;
 
+use Illuminate\Support\Arr;
 use Xpressengine\Database\Eloquent\DynamicModel;
 
 /**
@@ -45,4 +46,34 @@ class WidgetBox extends DynamicModel
         'content',
         'options'
     ];
+
+    protected $casts = [
+        'content' => 'array',
+        'options' => 'array'
+    ];
+
+    /**
+     * Get widget box content
+     *
+     * @return string
+     * @deprecated since beta.27. for old content
+     */
+    public function getContent()
+    {
+        if (!$data = $this->getAttributeValue('content')) {
+            return $this->getOriginal('content');
+        }
+
+        return $data;
+    }
+
+    /**
+     * Get presenter class
+     *
+     * @return string
+     */
+    public function getPresenter()
+    {
+        return Arr::get($this->getAttributeValue('options'), 'presenter');
+    }
 }
