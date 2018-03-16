@@ -1,3 +1,5 @@
+{{ XeFrontend::js('/assets/vendor/jqueryui/jquery-ui.js')->appendTo('head')->load() }}
+
 @include('editor._title')
 
 @include('editor._tab', ['_active' => 'tool', 'instanceId' => $instanceId])
@@ -50,3 +52,12 @@
     </div>
 
 </div>
+
+<script>
+    $(function () {
+        $(".item-setting").sortable({
+            handle: '.handler',
+            cancel: ''
+        }).disableSelection();
+    });
+</script>

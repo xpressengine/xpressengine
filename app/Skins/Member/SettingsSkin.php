@@ -61,7 +61,7 @@ class SettingsSkin extends GenericSkin
 
     public function edit($view)
     {
-        $useEmailConfirm = app('xe.user')->usingEmailConfirm();
+        $useEmailConfirm = app('xe.config')->getVal('user.join.guard_forced') === true;
 
         app('xe.frontend')->html('user.settings.loadScript')->content(
             "<script>

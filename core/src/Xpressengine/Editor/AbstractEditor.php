@@ -138,6 +138,13 @@ abstract class AbstractEditor implements ComponentInterface
     protected static $imageResolver;
 
     /**
+     * The privileged determiner
+     *
+     * @var callable
+     */
+    protected static $privilegedDeterminer;
+
+    /**
      * Default editor arguments
      *
      * @var array
@@ -422,6 +429,11 @@ abstract class AbstractEditor implements ComponentInterface
 
         $data['files'] = $this->files;
 
+        if ($this->isPrivileged()) {
+            $data['fileMaxSize'] = 999;
+            $data['attachMaxSize'] = 999;
+        }
+
         return $data;
     }
 
@@ -564,7 +576,7 @@ abstract class AbstractEditor implements ComponentInterface
     {
         $editorScript = '
         <script>
-            $(function() {
+            jQuery(function($) {
                 XEeditor.getEditor(\'%s\').create(\'%s\', %s, %s, %s);
             });
         </script>';
@@ -665,7 +677,7 @@ abstract class AbstractEditor implements ComponentInterface
         }
         $images = $temp;
         unset($temp);
-        
+
         foreach ($list as $data) {
             if (!isset($images[$data['data-id']])) {
                 continue;
@@ -745,6 +757,27 @@ abstract class AbstractEditor implements ComponentInterface
         $ids = !is_array($ids) ? [$ids] : $ids;
 
         return call_user_func(static::$imageResolver, $ids);
+    }
+
+    /**
+     * Set the privileged determiner
+     *
+     * @param callable $determiner determiner
+     * @return void
+     */
+    public static function setPrivilegedDeterminer(callable $determiner)
+    {
+        static::$privilegedDeterminer = $determiner;
+    }
+
+    /**
+     * Determine if privileged
+     *
+     * @return bool
+     */
+    public function isPrivileged()
+    {
+        return !!call_user_func(static::$privilegedDeterminer, $this);
     }
 
     /**

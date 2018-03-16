@@ -17,17 +17,13 @@ namespace App\Providers;
 use App\ToggleMenus\User\ManageItem;
 use App\ToggleMenus\User\ProfileItem;
 use Closure;
-use Illuminate\Auth\Passwords\DatabaseTokenRepository;
-use Illuminate\Auth\Passwords\PasswordBroker;
 use Illuminate\Contracts\Validation\Factory as Validator;
 use Illuminate\Support\ServiceProvider;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Xpressengine\Media\MediaManager;
 use Xpressengine\Media\Thumbnailer;
 use Xpressengine\Storage\Storage;
 use Xpressengine\User\EmailBroker;
 use Xpressengine\User\Guard;
-use Xpressengine\User\GuardInterface;
 use Xpressengine\User\Middleware\Admin;
 use Xpressengine\User\Models\Guest;
 use Xpressengine\User\Models\PendingEmail;
@@ -37,6 +33,12 @@ use Xpressengine\User\Models\User;
 use Xpressengine\User\Models\UserAccount;
 use Xpressengine\User\Models\UserEmail;
 use Xpressengine\User\Models\UserGroup;
+use Xpressengine\User\Parts\AgreementPart;
+use Xpressengine\User\Parts\CaptchaPart;
+use Xpressengine\User\Parts\DefaultPart;
+use Xpressengine\User\Parts\DynamicFieldPart;
+use Xpressengine\User\Parts\RegisterFormPart;
+use Xpressengine\User\Parts\EmailVerifyPart;
 use Xpressengine\User\Repositories\PendingEmailRepository;
 use Xpressengine\User\Repositories\PendingEmailRepositoryInterface;
 use Xpressengine\User\Repositories\RegisterTokenRepository;
@@ -107,8 +109,18 @@ class UserServiceProvider extends ServiceProvider
         // register toggle menu
         $this->registerToggleMenu();
 
-        // add RegisterGuard and RegiserForm
-        $this->addRegisterGuardAndForm();
+        UserHandler::setContainer($this->app['xe.register']);
+        // add RegiserForm
+        $this->addRegisterFormParts();
+
+        $this->addUserSettingSection();
+
+        $this->app->resolving('mailer', function ($mailer) {
+            $config = $this->app['xe.config']->get('user.common');
+            if (!empty($config->get('webmasterEmail'))) {
+                $mailer->alwaysFrom($config->get('webmasterEmail'), $config->get('webmasterName'));
+            }
+        });
     }
 
     /**
@@ -207,8 +219,6 @@ class UserServiceProvider extends ServiceProvider
         $this->app->singleton(UserHandler::class, function ($app) {
             $proxyClass = $app['xe.interception']->proxy(UserHandler::class, 'XeUser');
 
-            $joinConfig = app('xe.config')->get('user.join');
-
             $userHandler = new $proxyClass(
                 $app['xe.users'],
                 $app['xe.user.accounts'],
@@ -217,9 +227,7 @@ class UserServiceProvider extends ServiceProvider
                 $app['xe.user.pendingEmails'],
                 $app['xe.user.image'],
                 $app['hash'],
-                $app['validator'],
-                $app['xe.register'],
-                in_array('email', $joinConfig->get('guards', []))
+                $app['validator']
             );
             return $userHandler;
         });
@@ -552,177 +560,38 @@ class UserServiceProvider extends ServiceProvider
         );
     }
 
-    protected function addRegisterGuardAndForm()
+    protected function addRegisterFormParts()
     {
+        RegisterFormPart::setSkinResolver($this->app['xe.skin']);
+        RegisterFormPart::setContainer($this->app);
 
-        // email register guard
-        $this->app['xe.register']->push(
-            'user/register/guard',
-            'email',
-            [
-                'title' => '이메일 인증',
-                'description' => '사용자의 이메일로 인증정보를 전송하여 인증합니다.',
-                'render' => function () {
-                    $config = app('xe.config')->get('user.join');
-                    if($config->get('guard_forced') === false) {
-                        return;
-                    }
-                    $skinHandler = app('xe.skin');
-                    $skin = $skinHandler->getAssigned('user/auth');
-                    return $skin->setView('register.sections.email')->render();
-                }
-            ]
-        );
+        UserHandler::addRegisterPart(EmailVerifyPart::class);
+        UserHandler::addRegisterPart(DefaultPart::class);
+        UserHandler::addRegisterPart(DynamicFieldPart::class);
+        UserHandler::addRegisterPart(AgreementPart::class);
+        UserHandler::addRegisterPart(CaptchaPart::class);
+    }
 
-        // email register form
-        $this->app['xe.register']->push(
-            'user/register/form',
-            'email',
-            [
-                'title' => '이메일 인증번호',
-                'description' => '인증번호를 입력하는 폼입니다. 이메일 인증시에만 출력되며, 상단에 배치하시기 바랍니다.',
-                'forced' => true,
-                'render' => function ($token) {
-                    if ($token === null || $token->guard !== 'email') {
-                        return null;
-                    }
-                    $code = request()->get('code');
+    protected function addUserSettingSection()
+    {
+        UserHandler::setSettingsSections('settings', [
+            'title' => 'xe::defaultSettings',
+            'content' => function ($user) {
+                // dynamic field
+                $fieldTypes = $this->app['xe.dynamicField']->gets('user');
 
-                    if ($code !== null) {
-                        $email = app('xe.user')->pendingEmails()->findByAddress($token->email);
+                // password configuration
+                $passwordConfig = $this->app['config']->get('xe.user.password');
+                $passwordLevel = array_get($passwordConfig['levels'], $passwordConfig['default']);
 
-                        if ($email->getConfirmationCode() !== $code) {
-                            throw new HttpException(400, '잘못된 이메일 인증 코드입니다.');
-                        }
-                    }
+                $this->app['xe.frontend']->js(
+                    ['assets/core/xe-ui-component/js/xe-form.js', 'assets/core/xe-ui-component/js/xe-page.js']
+                )->load();
 
-                    app('xe.frontend')->html('email.setter')->content("
-                        <script>
-                            $('input[name=email]').attr('readonly','readonly').val('{$token->email}');
-                        </script>
-                    ")->load();
+                $skin = $this->app['xe.skin']->getAssigned('user/settings');
 
-                    $skinHandler = app('xe.skin');
-                    $skin = $skinHandler->getAssigned('user/auth');
-                    return $skin->setView('register.forms.confirm')->setData(compact('token', 'code'))->render();
-                }
-            ]
-        );
-
-        // 기본정보 form 추가
-        $this->app['xe.register']->push(
-            'user/register/form',
-            'default-info',
-            [
-                'title' => '기본정보',
-                'description' => '기본정보(이메일, 이름, 비밀번호) 입력 폼입니다.',
-                'forced' => true,
-                'render' => function ($data) {
-                    $skinHandler = app('xe.skin');
-                    $skin = $skinHandler->getAssigned('user/auth');
-                    // password configuration
-                    $passwordConfig = app('config')->get('xe.user.password');
-                    $passwordLevel = array_get($passwordConfig['levels'], $passwordConfig['default']);
-                    return $skin->setView('register.forms.default')->setData(compact('data', 'passwordLevel'))->render(
-                    );
-                }
-            ]
-        );
-
-        // dynamic field form 추가
-        $this->app['xe.register']->push(
-            'user/register/form',
-            'dynamic-fields',
-            [
-                'title' => '부가 정보',
-                'description' => '추가된 확장필드들의 입력 폼입니다.',
-                'forced' => true,
-                'render' => function ($data) {
-                    $dynamicField = app('xe.dynamicField');
-                    $fieldTypes = $dynamicField->gets('user');
-
-                    $html = '';
-                    foreach ($fieldTypes as $id => $fieldType) {
-                        if ($fieldType->getConfig()->get('use') == true) {
-                            $html .= sprintf(
-                                '<div class="control-group">%s</div>',
-                                $fieldType->getSkin()->create(request()->all())
-                            );
-                        }
-                    }
-
-                    $skinHandler = app('xe.skin');
-                    $skin = $skinHandler->getAssigned('user/auth');
-                    return $skin->setView('register.forms.dfields')->setData(compact('data', 'html'))->render();
-                }
-            ]
-        );
-
-        // agreement form 추가
-        $this->app['xe.register']->push(
-            'user/register/form',
-            'agreements',
-            [
-                'title' => '이용약관 동의',
-                'description' => '이용약관 동의 체크박스입니다.',
-                'forced' => true,
-                'render' => function ($data) {
-
-                    app('xe.frontend')->html('auth.register')->content(
-                        "
-                    <script>
-                        $(function($) {
-                            $('.__xe_terms').click(function (e) {
-                                e.preventDefault();
-                                
-                                XE.pageModal($(this).attr('href'));
-                            });
-                        });
-                    </script>
-                "
-                    )->load();
-
-                    $terms = app('xe.terms')->fetchEnabled();
-
-                    $skinHandler = app('xe.skin');
-                    $skin = $skinHandler->getAssigned('user/auth');
-                    return $skin->setView('register.forms.agreements')->setData(compact('data', 'terms'))->render();
-                }
-            ]
-        );
-
-        // captcha form 추가
-        $this->app['xe.register']->push(
-            'user/register/form',
-            'captcha',
-            [
-                'title' => '캡차',
-                'description' => '캡차 문자 입력 폼입니다.',
-                'render' => function ($data) {
-                    return uio('captcha');
-                }
-            ]
-        );
-
-        // email validation
-        intercept(
-            'XeUser@validateForCreate',
-            'register.email.validator',
-            function ($target, $data, $token = null) {
-
-                if (data_get($token, 'guard') === 'email') {
-                    $code = array_get($data, 'code');
-                    $email = app('xe.user')->pendingEmails()->findByAddress($token->email);
-
-                    if ($email->getConfirmationCode() !== $code) {
-                        throw new HttpException(400, '잘못된 이메일 인증 코드입니다.');
-                    }
-
-                    $data['id'] = $email->userId;
-                }
-
-                return $target($data, $token);
+                return $skin->setView('edit')->setData(compact('user', 'fieldTypes', 'passwordLevel'));
             }
-        );
+        ]);
     }
 }

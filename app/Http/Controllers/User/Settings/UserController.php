@@ -17,6 +17,7 @@ use Xpressengine\Http\Request;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
 use Xpressengine\User\Exceptions\EmailAlreadyExistsException;
 use Xpressengine\User\Exceptions\EmailNotFoundException;
+use Xpressengine\User\Models\User;
 use Xpressengine\User\Rating;
 use Xpressengine\User\Repositories\UserRepository;
 use Xpressengine\User\UserException;
@@ -50,6 +51,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $query = $this->handler->users()->query();
+        $allMemberCount = count($query->get());
 
         // resolve group
         if ($group = $request->get('group')) {
@@ -64,6 +66,11 @@ class UserController extends Controller
         // resolve status
         if ($status = $request->get('status')) {
             $query = $query->where('status', $status);
+        }
+
+        // resolve rating
+        if ($rating = $request->get('rating')) {
+            $query = $query->where('rating', $rating);
         }
 
         // resolve search keyword
@@ -81,16 +88,31 @@ class UserController extends Controller
             );
         }
 
-        $users = $query->orderBy('created_at', 'desc')->paginate();
+        $users = $query->orderBy('created_at', 'desc')->paginate()->appends(request()->query());
 
         // get all groups
         $groups = $this->handler->groups()->all();
+
+        // get all ratings
+        $ratings = Rating::getUsableAll();
+        $ratingNames = [
+            'member' => xe_trans('xe::memberRatingNormal'),
+            'manager' => xe_trans('xe::memberRatingManager'),
+            'super' => xe_trans('xe::memberRatingAdministrator'),
+        ];
+
+        foreach ($ratings as $key => $rating) {
+            $ratings[$key] = [
+                'value' => $rating,
+                'text' => $ratingNames[$rating],
+            ];
+        }
 
         $selectedGroup = null;
         if ($group !== null) {
             $selectedGroup = $this->handler->groups()->find($group);
         }
-        return XePresenter::make('user.settings.user.index', compact('users', 'groups', 'selectedGroup'));
+        return XePresenter::make('user.settings.user.index', compact('users', 'groups', 'selectedGroup', 'allMemberCount', 'ratings'));
     }
 
     /**
@@ -118,8 +140,8 @@ class UserController extends Controller
         $groups = $this->getGroupInfo($groupList);
 
         $status = [
-            ['value' => \XeUser::STATUS_ACTIVATED, 'text' => xe_trans('xe::permitted')],
-            ['value' => \XeUser::STATUS_DENIED, 'text' => xe_trans('xe::rejected')],
+            ['value' => User::STATUS_ACTIVATED, 'text' => xe_trans('xe::permitted')],
+            ['value' => User::STATUS_DENIED, 'text' => xe_trans('xe::rejected')],
         ];
 
         // dynamic field
@@ -208,8 +230,8 @@ class UserController extends Controller
         }
 
         $status = [
-            \XeUser::STATUS_ACTIVATED => ['value' => \XeUser::STATUS_ACTIVATED, 'text' => xe_trans('xe::permitted')],
-            \XeUser::STATUS_DENIED => ['value' => \XeUser::STATUS_DENIED, 'text' => xe_trans('xe::rejected')],
+            User::STATUS_ACTIVATED => ['value' => User::STATUS_ACTIVATED, 'text' => xe_trans('xe::permitted')],
+            User::STATUS_DENIED => ['value' => User::STATUS_DENIED, 'text' => xe_trans('xe::rejected')],
         ];
 
         $status[$user->status]['selected'] = 'selected';
@@ -221,14 +243,6 @@ class UserController extends Controller
         $dynamicField = app('xe.dynamicField');
         $fieldTypes = $dynamicField->gets('user');
 
-        $defaultAccount = null;
-        if (isset($user->accounts)) {
-            foreach ($user->accounts as $account) {
-                if ($account->provider === \XeUser::PROVIDER_DEFAULT) {
-                    $defaultAccount = $account;
-                }
-            }
-        }
         return XePresenter::make(
             'user.settings.user.edit',
             compact(
@@ -236,7 +250,6 @@ class UserController extends Controller
                 'ratings',
                 'groups',
                 'status',
-                'defaultAccount',
                 'fieldTypes',
                 'profileImgSize'
             )

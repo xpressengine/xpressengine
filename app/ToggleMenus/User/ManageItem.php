@@ -36,7 +36,7 @@ class ManageItem extends UserToggleMenu
 
     public function getScript()
     {
-        return asset('assets/core/sample.js');
+        return null;
     }
 
     public function allows()

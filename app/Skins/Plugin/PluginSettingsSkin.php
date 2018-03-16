@@ -119,7 +119,7 @@ class PluginSettingsSkin extends GenericSkin
     protected function loadDefault()
     {
         app('xe.frontend')->html('plugins.loadTooltip')->content("<script>
-            $(function () {
+            jQuery(function ($) {
               $('[data-toggle=tooltip]').tooltip()
             })
         </script>")->load();

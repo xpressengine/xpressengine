@@ -23,6 +23,8 @@ class CellPhoneNumber extends AbstractType
      */
     protected static $id = 'fieldType/xpressengine@CellPhoneNumber';
 
+    protected $rules = ['cell_phone_number' => 'cell_phone'];
+
     /**
      * @var bool
      */
@@ -73,12 +75,7 @@ class CellPhoneNumber extends AbstractType
             $this->registerValidator();
         }
 
-        $required = '';
-        if ($this->config->get('required') === true) {
-            $required = 'required|';
-        }
-
-        return ['cell_phone_number' => $required . 'cell_phone'];
+        return parent::getRules();
     }
 
     /**

@@ -23,7 +23,12 @@ class DashboardController extends Controller
         $widgetbox = $handler->find($id);
         if($widgetbox === null) {
             $dashboard = $handler->find('dashboard');
-            $widgetbox = $handler->create(['id'=>$id, 'title'=>'Dashboard', 'content'=> $dashboard->content]);
+            $widgetbox = $handler->create([
+                'id' => $id,
+                'title' => 'Dashboard',
+                'content' => $dashboard->content,
+                'options' => $dashboard->options,
+            ]);
         }
 
         \XeFrontend::title('XpressEngine3 Settings');

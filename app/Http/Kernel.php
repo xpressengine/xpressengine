@@ -53,11 +53,11 @@ class Kernel extends HttpKernel
 //            \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
 
+            \App\Http\Middleware\RequiredDF::class,
             \App\Http\Middleware\ExceptAppendableVerifyCsrfToken::class,
             \App\Http\Middleware\LangPreprocessor::class,
             \App\Http\Middleware\Purifying::class,
             \App\Http\Middleware\FreezeSEO::class,
-            \App\Http\Middleware\LogMiddleware::class,
         ],
 
         'api' => [

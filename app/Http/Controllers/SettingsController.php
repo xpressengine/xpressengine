@@ -9,11 +9,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Xpressengine\Http\Request;
 use Xpressengine\Permission\Grant;
 use Xpressengine\Permission\PermissionHandler;
-use Xpressengine\Settings\AdminLog\LogHandler;
+use Xpressengine\Log\LogHandler;
 use Xpressengine\Settings\SettingsHandler;
 use Xpressengine\Site\SiteHandler;
 use Xpressengine\Theme\ThemeHandler;
@@ -196,10 +197,16 @@ class SettingsController extends Controller
         return array_filter($ret);
     }
 
-    public function indexLog(Request $request, LogHandler $handler, UserHandler $userHandler)
+    public function searchLog(Request $request, LogHandler $handler)
     {
-        $loggers = $handler->getLoggers();
         $query = $handler->query()->with('user')->orderBy('created_at', 'desc');
+
+        $request->query->set('startDate', $request->get('startDate', date('Y-m-d', strtotime('-7 day', time()))));
+        $request->query->set('endDate', $request->get('endDate', date('Y-m-d')));
+
+        $query->whereBetween('created_at', [
+            $request->get('startDate')  . ' 00:00:00', $request->get('endDate') . ' 23:59:59'
+        ]);
 
         $type = $request->get('type');
         if ($type) {
@@ -225,10 +232,82 @@ class SettingsController extends Controller
                 }
             );
         }
-        $logs = $query->paginate(20);
+
+        return $query;
+    }
+
+    public function indexLog(Request $request, LogHandler $handler, UserHandler $userHandler)
+    {
+        $loggers = $handler->getLoggers();
+        $query = self::searchLog($request, $handler);
+
+        $logs = $query->paginate(20)->appends(request()->query());
 
         $admins = $userHandler->whereIn('rating', [Rating::MANAGER, Rating::SUPER])->get();
         return \XePresenter::make('settings.logs.index', compact('loggers', 'logs', 'admins'));
+    }
+
+    public function saveLog(Request $request, LogHandler $handler, UserHandler $userHandler)
+    {
+        $loggers = $handler->getLoggers();
+        $query = self::searchLog($request, $handler);
+
+        $headers = array(
+            "Content-type" => "text/csv; charset=UTF-8;",
+            "Content-Disposition" => 'attachment; filename=' . date('Y-m-d H:i:s') . '.csv',
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
+        );
+
+        $logs = $query->get();
+
+        $callback = function () use ($logs, $loggers, $handler) {
+            $file = fopen('php://output', 'w');
+
+            fputs($file, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
+
+            fwrite($file, "일시\t타입\t관리자\t요약\tIP주소\t자세히\n");
+
+            foreach ($logs as $log) {
+                fwrite($file, $log->created_at->format('y-m-d H:i:s') . "\t");
+                if ($logger = array_get($loggers, $log->type)) {
+                    fwrite($file, $logger::TITLE . "\t");
+                } else {
+                    fwrite($file, $log->type . "\t");
+                }
+                fwrite($file, $log->getUser()->getDisplayName() . "\t");
+                fwrite($file, $log->summary . "\t");
+                fwrite($file, $log->ipaddress . "\t");
+
+                $detail = $handler->find($log->id);
+                fwrite($file, $detail->method . ', ');
+                fwrite($file, $detail->url);
+
+                foreach ($detail->parameters as $key => $value) {
+                    fwrite($file, ', ');
+
+                    fwrite($file, $key . ":");
+
+                    $str = $value;
+
+                    if (is_array($str)) {
+                        $str = json_encode($str);
+                    }
+
+                    $str = str_replace("\n", " ", $str);
+                    $str = str_replace("\t", " ", $str);
+
+                    fwrite($file, $str);
+                }
+
+                fwrite($file, "\n");
+            }
+
+            fclose($file);
+        };
+
+        return Response::stream($callback, 200, $headers);
     }
 
     public function showLog(LogHandler $handler, $id)
@@ -236,5 +315,4 @@ class SettingsController extends Controller
         $log = $handler->find($id);
         return api_render('settings.logs.show', compact('log'));
     }
-
 }

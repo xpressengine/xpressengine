@@ -16,11 +16,13 @@ namespace Xpressengine\Widget;
 
 use Xpressengine\Permission\Grant;
 use Xpressengine\Permission\PermissionHandler;
+use Xpressengine\Register\Container;
 use Xpressengine\User\Rating;
 use Xpressengine\Widget\Exceptions\IDAlreadyExistsException;
 use Xpressengine\Widget\Exceptions\IDNotFoundException;
 use Xpressengine\Widget\Exceptions\InvalidIDException;
 use Xpressengine\Widget\Models\WidgetBox;
+use Xpressengine\Widget\Presenters\XEUIPresenter;
 
 /**
  * WidgetBoxHandler
@@ -45,6 +47,16 @@ class WidgetBoxHandler
     private $permissionHandler;
 
     /**
+     * @var Container
+     */
+    protected static $container;
+
+    /**
+     * @var string
+     */
+    const REGISTER_KEY = 'widget/presenter';
+
+    /**
      * WidgetBoxHandler constructor.
      *
      * @param WidgetBoxRepository $repository        widgetbox repository
@@ -61,7 +73,7 @@ class WidgetBoxHandler
      *
      * @param array $data 생성할 위젯박스의 데이터
      *
-     * @return void
+     * @return WidgetBox
      */
     public function create($data)
     {
@@ -79,14 +91,10 @@ class WidgetBoxHandler
             throw new IDAlreadyExistsException();
         }
 
-        $options = array_get($data, 'options', []);
-        if (is_array($options)) {
-            $options = json_encode($options);
-        }
-
+        $options = array_get($data, 'options', ['presenter' => XEUIPresenter::class]);
         $title = array_get($data, 'title', $id);
-
-        $content = array_get($data, 'content', '');
+        $content = array_get($data, 'content');
+        $content = empty($content) ? [] : $content;
 
         $widgetbox = $this->repository->create(compact('id', 'title', 'content', 'options'));
 
@@ -137,6 +145,38 @@ class WidgetBoxHandler
         }
         $this->permissionHandler->destroy('widgetbox.'.$widgetbox->id);
         $widgetbox->delete();
+    }
+
+    /**
+     * Add presenter class to container
+     *
+     * @param string $presenter presenter class name
+     * @return void
+     */
+    public static function addPresenter($presenter)
+    {
+        static::$container->push(static::REGISTER_KEY, $presenter);
+    }
+
+    /**
+     * Get presenter class list
+     *
+     * @return array
+     */
+    public static function getPresenters()
+    {
+        return static::$container->get(static::REGISTER_KEY, []);
+    }
+
+    /**
+     * Set container instance
+     *
+     * @param Container $container container instance
+     * @return void
+     */
+    public static function setContainer(Container $container)
+    {
+        static::$container = $container;
     }
 
     /**

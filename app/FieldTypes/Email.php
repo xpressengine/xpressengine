@@ -19,6 +19,8 @@ class Email extends AbstractType
 {
     protected static $id = 'fieldType/xpressengine@Email';
 
+    protected $rules = ['email' => 'email'];
+
     /**
      * get field type name
      *
@@ -49,21 +51,6 @@ class Email extends AbstractType
         return [
             'email' => (new ColumnEntity('email', ColumnDataType::STRING)),
         ];
-    }
-
-    /**
-     * return rules
-     *
-     * @return array
-     */
-    public function getRules()
-    {
-        $required = '';
-        if ($this->config->get('required') === true) {
-            $required = '|required';
-        }
-
-        return ['email' => 'email' . $required];
     }
 
     /**

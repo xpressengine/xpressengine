@@ -89,7 +89,7 @@ header{
   left:0;
   top:59px;
   bottom:0;
-  width:315px;
+  width:335px;
   background-color: #fff;
   border-right: 1px solid #e5e5e5;
   color: #656973;
@@ -251,7 +251,7 @@ header{
 }
 
 .widget-container{
-  margin-left: 315px;
+  margin-left: 335px;
   padding:20px 15px 100px;
   background-color: #FAFAFA;
   .widget-content{
@@ -362,158 +362,90 @@ header{
   }
 }
 
-
-//http://khongchi.test.dev1.xpressengine.com/assets/css/style.css 에서 갖고 와서 수정
-
-.editor .widgetarea-row {
-  > div {
-    border: 5px solid #FAFAFA;
-    background: #e6e6e6;
-    border-radius: 4px;
-    padding-top: 15px;
+.editor {
+  .widget-config-btn .xe-btn {
+    padding: 3px;
+    color:#656973;
+    font-size: 15px;
   }
-  .widgetarea {
-    border: none;
-    background: none;
-    min-height: 140px;
-  }
-  .selected {
-    background-color: #B8DBFD;
-  }
-  
-  .widget-config-btn{
-    .xe-btn{
-      padding: 3px;
-      color:#656973;
-      font-size: 18px;
-    }
-  }
-  .xe-well{
-    margin-bottom: 10px;
+  .xe-well {
+    margin: 5px;
     padding:7px 15px;
     background-color: #fff;
     border:1px solid #C8C9CC;
-    strong{
+    strong {
       font-weight: normal;
-      font-size: 18px;
+      font-size: 14px;
       line-height: 33px;
     }
   }
-}
-.layout-controller .btn-group {
-  margin-bottom: 10px;
-}
-.order {
-  display: none;
-}
-.editor .order {
-  display: block;
-  position: absolute;
-  left: 5px;
-  top: 3px;
-  color: #656973;
-}
-/*0727 blueng 추가건*/
-.editor.layout-mobile {
-   max-width: 450px;
-   margin-left: auto;
-   margin-right: auto;
- }
-.editor.layout-mobile .xe-col-md-1,
-.editor.layout-mobile .xe-col-md-2,
-.editor.layout-mobile .xe-col-md-3,
-.editor.layout-mobile .xe-col-md-4,
-.editor.layout-mobile .xe-col-md-5,
-.editor.layout-mobile .xe-col-md-6,
-.editor.layout-mobile .xe-col-md-7,
-.editor.layout-mobile .xe-col-md-8,
-.editor.layout-mobile .xe-col-md-9,
-.editor.layout-mobile .xe-col-md-10,
-.editor.layout-mobile .xe-col-md-11,
-.editor.layout-mobile .xe-col-md-12 {
-   width: 100%;
+  .widgetarea {
+    min-height: 140px;
+    background: #e6e6e6;
+    padding-top: 5px;
+    padding-bottom: 15px;
+  }
+  .wb-row {
+    width: 100%;
+    border: 1px solid #c9c9c9;
+    min-height: 140px;
+    margin-bottom: 5px;
+  }
+  .wb-col {
+    display: inline-block;
+    padding: 2px 2px;
+    min-height: 140px;
+    vertical-align: top;
+    .wb-row-header {display: none;}
+  }
+  .wb-row.selected {
+    background-color: #FFB0B6;
+    >.wb-row-header {
+      background-color: #FFB0B6;
+    }
+  }
+  .wb-col.selected {
+    background-color: #B8DBFD;
+    >.wb-col-header {
+      background-color: #B8DBFD;
+    }
+  }
+  .wb-row-header, .wb-col-header {
+    height: 25px;
+    background: #fff;
+    border-bottom: 1px solid #C8C9CC;
+    padding: 2px 2px;
+    button {
+      font-size: 12px;
+      padding: 1px 5px;
+    }
+  }
+  .drop-placeholder {
+    height: 49px;
+    margin:5px;
+    background: #F7F999;
+  }
 }
 
-.editor .dropzone {
-  background-color: #336699 !important;
-}
-.editor .dropzone .order{
-  color: #FFF !important;
-}
-.widget-margin {
-  position: relative;
-  width: 160px;
-  &:after {
-    content: "px";
-    position: absolute;
-    top: 9px;
-    right: 10px;
+/* style by bootstrap tags (https://github.com/maxwells/bootstrap-tags) */
+.tag {
+  font-size: 10px; padding: .3em .4em .4em; margin: 0 .1em;
+  a {
+    color: #bbb;
+    cursor: pointer;
+    opacity: 0.6;
     font-size: 12px;
-    z-index: 3;
-  }
-  .widget-margin-type {
-    display: inline-block;
-    padding: 6px 10px;
-    margin: 0 -1px 0 0;
-    border: 1px solid #bbbcbf;
-    font-weight: normal;
-    text-align: center;
-    vertical-align: middle;
-    white-space: nowrap;
-    font-size: 14px;
-    line-height: 1.42857;
-    border-radius: 2px;
-    color: #333;
-  }
-  .inner-box {
-    position: relative;
-    display: inline-block;
-    width: 13px;
-    height: 13px;
-    margin-right: 6px;
-    padding: 2px 0 0 2px;
-    border: 1px solid #999;
-    transform: translateY(2px);
-    i {
-      display: block;
-      width: 7px;
-      height: 7px;
-      border: 1px solid #999;
+    margin: 0 0 0 .3em;
+    &:hover {
+      opacity: 1.0;
     }
-    &:before, &:after {
-      position: absolute;
-      content: "";
-      background-color: #999;
-    }
-    &.top:before {
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 3px;
-    }
-    &.bottom:before {
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 3px;
-    }
-    &.left:before {
-      top: 0;
-      left: 0;
-      width: 3px;
-      height: 100%;
-    }
-    &.left:after {
-      top: 0;
-      right: 0;
-      width: 3px;
-      height: 100%;
+    .glyphicon-white {
+      color: #fff;
+      margin-bottom: 2px;
     }
   }
-  .xe-form-control {
-    height: 33px;
-    padding: 6px 32px 10px 6px;
-    border-color: #bbbcbf;
-    text-align: right;
+  .remove {
+    vertical-align: bottom;
+    top: 0;
   }
 }

@@ -14,7 +14,7 @@ use App\Skins\Widget\HtmlWidgetSkin;
 use App\Skins\Widget\StorageSpaceSkin;
 use App\Skins\Widget\SystemInfoSkin;
 use App\UIObjects\Widget\WidgetGenerator;
-use App\UIObjects\WidgetBox\WidgetBox as WidgetBoxUIObject;
+use App\UIObjects\Widget\WidgetBox as WidgetBoxUIObject;
 use App\Widgets\ContentInfo;
 use App\Widgets\DownloadRank;
 use App\Widgets\HtmlWidget;
@@ -22,6 +22,9 @@ use App\Widgets\StorageSpace;
 use App\Widgets\SystemInfo;
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Widget\Models\WidgetBox;
+use Xpressengine\Widget\Presenters\AbstractPresenter;
+use Xpressengine\Widget\Presenters\BootstrapPresenter;
+use Xpressengine\Widget\Presenters\XEUIPresenter;
 use Xpressengine\Widget\WidgetBoxHandler;
 use Xpressengine\Widget\WidgetBoxRepository;
 use Xpressengine\Widget\WidgetHandler;
@@ -85,6 +88,14 @@ class WidgetServiceProvider extends ServiceProvider
         $this->registerUIObject();
 
         WidgetBoxRepository::setModel(WidgetBox::class);
+
+        AbstractPresenter::setWidgetCodeGenerator(function ($widgetId, array $inputs) {
+            return $this->app['xe.widget']->generateCode($widgetId, $inputs);
+        });
+
+        WidgetBoxHandler::setContainer($this->app['xe.register']);
+        WidgetBoxHandler::addPresenter(BootstrapPresenter::class);
+        WidgetBoxHandler::addPresenter(XEUIPresenter::class);
     }
 
     /**

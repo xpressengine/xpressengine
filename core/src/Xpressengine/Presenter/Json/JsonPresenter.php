@@ -127,7 +127,7 @@ class JsonPresenter implements Presentable, Jsonable, Arrayable
     public function toJson($options = 0)
     {
         $this->data = $this->convert($this->toArray());
-        return json_encode($this->data);
+        return json_encode($this->data, $options);
     }
 
     /**

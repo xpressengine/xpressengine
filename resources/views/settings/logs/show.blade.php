@@ -10,7 +10,7 @@
             </div>
             <div class="panel panel-default">
                 <div class="panel-heading">관리회원</div>
-                <div class="panel-body"> {{ $log->user->getDisplayName() }} </div>
+                <div class="panel-body"> {{ $log->getUser()->getDisplayName() }} </div>
             </div>
             <div class="panel panel-default">
                 <div class="panel-heading">요약</div>
@@ -22,6 +22,10 @@
                 <div class="panel-body"> {{ $log->detail }} </div>
             </div>
             @endif
+            <div class="panel panel-default">
+                <div class="panel-heading">IP주소</div>
+                <div class="panel-body"> {{ $log->ipaddress }} </div>
+            </div>
             <div class="panel panel-default">
                 <div class="panel-heading">HTTP 메소드</div>
                 <div class="panel-body"> {{ $log->method }} </div>
@@ -52,10 +56,6 @@
                         </table>
                     @endif
                 </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">IP주소</div>
-                <div class="panel-body"> {{ $log->ipaddress }} </div>
             </div>
         </dl>
     </div>

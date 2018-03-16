@@ -15,7 +15,7 @@
             "role": "Developer"
         }
     ],
-    "license": "LGPL-2.1",
+    "license": "LGPL-2.1-or-later",
     "type": "project",
     "require": {
         "php": ">=7.0.0",

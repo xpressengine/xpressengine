@@ -54,7 +54,8 @@ class WidgetParser
      */
     public function parseXml($content)
     {
-        $content = preg_replace_callback('/<xewidget[^>]*>.*?<\/xewidget>/s', [$this, 'parseWidget'], $content);
+        // @TODO xewidget제거 @see https://github.com/xpressengine/xpressengine/issues/708
+        $content = preg_replace_callback('/<xe-?widget[^>]*>.*?<\/xe-?widget>/s', [$this, 'parseWidget'], $content);
 
         return $content;
     }
@@ -97,9 +98,6 @@ class WidgetParser
     public function parseCode($code)
     {
         $simpleXmlObj = simplexml_load_string($code);
-
-        $widgetId = (string) $simpleXmlObj->attributes()->id;
-
         $inputs = $this->xml2array($simpleXmlObj);
 
         return $inputs;

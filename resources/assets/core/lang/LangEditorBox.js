@@ -1,4 +1,6 @@
-import validator from 'validator';
+import validator from 'xe-common/validator'
+import Lang from 'xe-common/lang'
+import $ from 'jquery'
 
 /**
  * @private
@@ -14,146 +16,140 @@ import validator from 'validator';
  * */
 
 class LangEditorBox {
+  constructor ({ $wrapper, seq, name, langKey, multiline, lines, autocomplete }) {
+    this.$wrapper = $wrapper
+    this.seq = seq
+    this.name = name
+    this.langKey = langKey
+    this.multiline = multiline
+    this.lines = lines || []
+    this.autocomplete = autocomplete
 
-  constructor({ $wrapper, seq, name, langKey, multiline, lines, autocomplete }) {
-    this.$wrapper = $wrapper;
-    this.seq = seq;
-    this.name = name;
-    this.langKey = langKey;
-    this.multiline = multiline;
-    this.lines = lines || [];
-    this.autocomplete = autocomplete;
-
-    this.init();
-
+    this.init()
   }
 
-  init() {
+  init () {
     if (this.langKey && this.lines.length == 0) {
       $.ajax({
         type: 'get',
         dataType: 'json',
         url: xeBaseURL + '/' + XE.options.fixedPrefix + '/lang/lines/' + this.langKey,
         success: function (result) {
-
-          this.setLines(result);
-          this.render();
-          this.bindEvents();
-
-        }.bind(this),
-      });
+          this.setLines(result)
+          this.render()
+          this.bindEvents()
+        }.bind(this)
+      })
     } else {
-      this.render();
-      this.bindEvents();
+      this.render()
+      this.bindEvents()
     }
-
   }
 
-  bindEvents() {
+  bindEvents () {
     if (this.autocomplete) {
       this.$wrapper.find('input[type=text]:first,textarea:first').autocomplete({
         source: '/' + XE.options.fixedPrefix + '/lang/search/' + XE.Lang.locales[0],
         minLength: 1,
         focus: function (event, ui) {
-          event.preventDefault();
+          event.preventDefault()
         },
 
         select: function (event, ui) {
-          this.setLines(ui.item.lines);
-        },
-      });
+          this.setLines(ui.item.lines)
+        }
+      })
     }
   }
 
-  render() {
-    var _this = this;
-    var locale = XE.Lang.locales[0];
-    var fallback = XE.Lang.locales.slice(1);
-    var resource = 'xe_lang_preprocessor://lang/seq/' + this.seq;
-    var value = this.getValueFromLinesWithLocale(locale) || '';
-    var inputClass = this.multiline ? 'textarea' : 'text';
+  render () {
+    var _this = this
+    var locale = XE.Lang.locales[0]
+    var fallback = XE.Lang.locales.slice(1)
+    var resource = 'xe_lang_preprocessor://lang/seq/' + this.seq
+    var value = this.getValueFromLinesWithLocale(locale) || ''
+    var inputClass = this.multiline ? 'textarea' : 'text'
     var multiline = this.multiline
       ? `<input type="hidden" name="${resource + '/multiline'}" value="true" />`
-      : '';
+      : ''
 
-    var editor = this.getEditor(resource, locale, value);
-    var subTemplate = '';
+    var editor = this.getEditor(resource, locale, value)
+    var subTemplate = ''
 
     fallback.forEach(function (locale, i) {
-      var value = _this.getValueFromLinesWithLocale(locale) || '';
-      var editor = _this.getEditor(resource, locale, value);
+      var value = _this.getValueFromLinesWithLocale(locale) || ''
+      var editor = _this.getEditor(resource, locale, value)
 
       subTemplate += [
         `<div key="${locale}" class="input-group">`,
-          `${editor}`,
-           `<span class="input-group-addon">`,
-           `<span class="flag-code"><i class="${locale + ' xe-flag'}"></i>${locale}</span>`,
-           `</span>`,
-        `</div>`,
-      ].join('\n');
-    });
+        `${editor}`,
+        `<span class="input-group-addon">`,
+        `<span class="flag-code"><i class="${locale + ' xe-flag'}"></i>${locale}</span>`,
+        `</span>`,
+        `</div>`
+      ].join('\n')
+    })
 
     var template = [
       `<div class="${inputClass}">`,
-        `<input type="hidden" name="xe_use_request_preprocessor" value="Y"/>`,
-        `<input type="hidden" name="${resource + '/name'}" value="${this.name}" />`,
-        `<input type="hidden" name="${resource + '/key'}" value="${this.langKey || ''}" />`,
-        `${multiline}`,
-        `<input type="hidden" name="${this.name}" value="${this.langKey || ''}" />`,
-        `<div key="${locale}" class="input-group">`,
-          `${editor}`,
-            `<span class="input-group-addon">`,
-              `<span class="flag-code"><i class="${locale + ' xe-flag'}"></i>${locale}</span>`,
-            `</span>`,
-        `</div>`,
-        `<div class="sub">${subTemplate}</div>`,
+      `<input type="hidden" name="xe_use_request_preprocessor" value="Y"/>`,
+      `<input type="hidden" name="${resource + '/name'}" value="${this.name}" />`,
+      `<input type="hidden" name="${resource + '/key'}" value="${this.langKey || ''}" />`,
+      `${multiline}`,
+      `<input type="hidden" name="${this.name}" value="${this.langKey || ''}" />`,
+      `<div key="${locale}" class="input-group">`,
+      `${editor}`,
+      `<span class="input-group-addon">`,
+      `<span class="flag-code"><i class="${locale + ' xe-flag'}"></i>${locale}</span>`,
+      `</span>`,
       `</div>`,
-    ].join('\n');
+      `<div class="sub">${subTemplate}</div>`,
+      `</div>`
+    ].join('\n')
 
-    this.$wrapper.html(template);
+    this.$wrapper.html(template)
   }
 
-  setLines(lines) {
-    var _this = this;
-    this.lines = lines;
+  setLines (lines) {
+    var _this = this
+    this.lines = lines
 
     XE.Lang.locales.map(function (locale) {
-      var selector = '#input-' + _this.seq + '-' + locale;
-      var value = _this.getValueFromLinesWithLocale(locale);
-      $(selector).val(value);
-    });
+      var selector = '#input-' + _this.seq + '-' + locale
+      var value = _this.getValueFromLinesWithLocale(locale)
+      $(selector).val(value)
+    })
   }
 
-  getValueFromLinesWithLocale(locale) {
-    var lines = this.lines;
-    var i = lines.length;
-    var l = {};
+  getValueFromLinesWithLocale (locale) {
+    var lines = this.lines
+    var i = lines.length
+    var l = {}
 
     while (i--) {
-      l = lines[i];
+      l = lines[i]
       if (l.locale == locale) {
-        return l.value;
+        return l.value
       }
     }
   }
 
-  getEditor(resource, locale, value) {
-    var edit = null;
-    var id = ('input-' + this.seq + '-' + locale);
-    var name = (resource + '/locale/' + locale);
+  getEditor (resource, locale, value) {
+    var edit = null
+    var id = ('input-' + this.seq + '-' + locale)
+    var name = (resource + '/locale/' + locale)
 
     if (!this.multiline) {
-      edit = `<input type="text" class="form-control" id="${id}" name="${name}" value="${value}" />`;
+      edit = $(`<input type="text" class="form-control" id="${id}" name="${name}" />`).attr('value', value)
     } else {
-      edit = `<textarea class="form-control" id="${id}" name="${name}">${value}</textarea>`;
+      edit = $(`<textarea class="form-control" id="${id}" name="${name}"></textarea>`).text(value)
     }
 
-    return edit;
+    return edit.prop('outerHTML')
   }
-
 }
 
-var seq = 0;
+var seq = 0
 /**
  * target element에 LangEditorBox를 랜더링함.
  * @global
@@ -161,50 +157,47 @@ var seq = 0;
  * */
 window.langEditorBoxRender = function ($data, type) {
   if (type === 'obj') {
-    //{ name, langKey, multiline, lines, autocomplete, target }
-    let name = $data.name;
-    let langKey = $data.langKey;
-    let multiline = $data.multiline;
-    let lines = $data.lines;
-    let autocomplete = $data.autocomplete;
-    let target = $data.target;
+    // { name, langKey, multiline, lines, autocomplete, target }
+    let name = $data.name
+    let langKey = $data.langKey
+    let multiline = $data.multiline
+    let lines = $data.lines
+    let autocomplete = $data.autocomplete
+    let target = $data.target
 
-    new LangEditorBox({ $wrapper: $($data.target), seq, name, langKey, multiline, lines, autocomplete });
-
+    new LangEditorBox({ $wrapper: $($data.target), seq, name, langKey, multiline, lines, autocomplete })
   } else {
-    var name = $data.data('name');
-    var langKey = $data.data('lang-key');
-    var multiline = $data.data('multiline');
-    var lines = $data.data('lines');
-    var autocomplete = $data.data('autocomplete');
+    var name = $data.data('name')
+    var langKey = $data.data('lang-key')
+    var multiline = $data.data('multiline')
+    var lines = $data.data('lines')
+    var autocomplete = $data.data('autocomplete')
 
-    new LangEditorBox({ $wrapper: $data, seq, name, langKey, multiline, lines, autocomplete });
+    new LangEditorBox({ $wrapper: $data, seq, name, langKey, multiline, lines, autocomplete })
   }
 
-  seq++;
-};
+  seq++
+}
 
 $(function () {
-  renderLangEditorBox();
-});
+  renderLangEditorBox()
+})
 
-function renderLangEditorBox() {
-
-  let langKeys = [];
-  let langObj = {};
-  let langs = [];
-  let idx = 0;
+function renderLangEditorBox () {
+  let langKeys = []
+  let langObj = {}
+  let langs = []
+  let idx = 0
 
   if ($('.lang-editor-box').length > 0) {
-
     $('.lang-editor-box').each(function (key, i) {
-      let $this = $(this);
+      let $this = $(this)
 
-      let name = $this.data('name');
-      let langKey = $this.data('lang-key');
-      let multiline = $this.data('multiline');
-      let lines = $this.data('lines');
-      let autocomplete = $this.data('autocomplete');
+      let name = $this.data('name')
+      let langKey = $this.data('lang-key')
+      let multiline = $this.data('multiline')
+      let lines = $this.data('lines')
+      let autocomplete = $this.data('autocomplete')
 
       // langObj[langKey] = {
       //   name,
@@ -217,7 +210,7 @@ function renderLangEditorBox() {
       //
 
       if (langKey) {
-        langKeys.push(langKey);
+        langKeys.push(langKey)
       }
 
       langs.push({
@@ -226,11 +219,11 @@ function renderLangEditorBox() {
         multiline,
         lines,
         autocomplete,
-        target: $this[0],
-      });
+        target: $this[0]
+      })
 
-      idx++;
-    });
+      idx++
+    })
 
     if (langKeys.length > 0) {
       XE.ajax({
@@ -238,51 +231,50 @@ function renderLangEditorBox() {
         dataType: 'json',
         url: xeBaseURL + '/' + XE.options.fixedPrefix + '/lang/lines/many',
         data: {
-          keys: langKeys,
+          keys: langKeys
         },
         success: function (result) {
           $.each(result, (key, arr) => {
             $.each(langs, function () {
               if (key === this.langKey) {
-                this.lines = arr;
+                this.lines = arr
               }
-            });
-          });
+            })
+          })
 
           $.each(langs, function () {
-            langEditorBoxRender(this, 'obj');
-          });
-        },
-      });
+            langEditorBoxRender(this, 'obj')
+          })
+        }
+      })
     } else {
       $.each(langs, function () {
-        langEditorBoxRender(this, 'obj');
-      });
+        langEditorBoxRender(this, 'obj')
+      })
     }
   }
 
   validator.put('langrequired', function ($dst, parameters) {
-    var $input = $dst.closest('.lang-editor-box').find("input[name^='xe_lang_preprocessor']:not(:hidden):first");
-    var value = $input.val();
-    var name = $dst.closest('.lang-editor-box').data('valid-name') || $dst.closest('.lang-editor-box').data('name');
+    var $input = $dst.closest('.lang-editor-box').find("input[name^='xe_lang_preprocessor']:not(:hidden):first")
+    var value = $input.val()
+    var name = $dst.closest('.lang-editor-box').data('valid-name') || $dst.closest('.lang-editor-box').data('name')
 
     if (value === '') {
-      validator.error($input, XE.Lang.trans('validation.required', { attribute: name }));
-      return false;
+      validator.error($input, XE.Lang.trans('validation.required', { attribute: name }))
+      return false
     }
 
-    return true;
-  });
+    return true
+  })
 }
 
 $(document).on('focus', '.lang-editor-box input, textarea', function () {
-  var box = $(this).closest('.lang-editor-box');
-  var el = box.find('.sub');
+  var box = $(this).closest('.lang-editor-box')
+  var el = box.find('.sub')
   if ($(el).is(':hidden')) {
-    $(el).slideDown('fast');
+    $(el).slideDown('fast')
 
     // todo: 기능 점검
     // $(box).find('textarea').expanding();
   }
-});
-
+})

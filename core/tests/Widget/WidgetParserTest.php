@@ -78,10 +78,13 @@ class WidgetParserTest extends TestCase
 
         $handler->shouldReceive('create')->andThrow(new \Exception);
 
+        $testString = '<xe-widget id="xpressengine@iconBar"></xe-widget>';
+        $resultString = $parser->parseXml($testString);
+        $this->assertEquals('', $resultString);
+
+        // @TODO xewidget제거 @see https://github.com/xpressengine/xpressengine/issues/708
         $testString = '<xewidget id="xpressengine@iconBar"></xewidget>';
         $resultString = $parser->parseXml($testString);
-
-
         $this->assertEquals('', $resultString);
     }
 
@@ -103,7 +106,7 @@ class WidgetParserTest extends TestCase
 
         $handler->shouldReceive('render')->with('xpressengine@iconBar', $inputs)->andReturn("<p>widget</p>");
 
-        $testString = '<xewidget id="xpressengine@iconBar"></xewidget>';
+        $testString = '<xe-widget id="xpressengine@iconBar"></xe-widget>';
         $resultString = $parser->parseXml($testString);
 
 
@@ -128,9 +131,8 @@ class WidgetParserTest extends TestCase
         ];
         $handler->shouldReceive('render')->with('xpressengine@iconBar', $inputs)->andReturn("<p>widget</p>");
 
-        $testString = '<xewidget id="xpressengine@iconBar"><title>최근 가입회원</title></xewidget>';
+        $testString = '<xe-widget id="xpressengine@iconBar"><title>최근 가입회원</title></xe-widget>';
         $resultString = $parser->parseXml($testString);
-
 
         $this->assertEquals("<p>widget</p>", $resultString);
     }
@@ -147,7 +149,7 @@ class WidgetParserTest extends TestCase
 
         $handler->shouldReceive('create')->andReturnNull();
 
-        $testString = '<xewidget id="xpressengine@iconBar"></xewidget>';
+        $testString = '<xe-widget id="xpressengine@iconBar"></xe-widget>';
         $resultString = $parser->parseXml($testString);
 
         $this->assertEquals('', $resultString);

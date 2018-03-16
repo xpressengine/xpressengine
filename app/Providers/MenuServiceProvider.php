@@ -15,6 +15,7 @@
 namespace App\Providers;
 
 use App\UIObjects\Menu\MenuSelect;
+use Illuminate\Support\HtmlString;
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Menu\EventListener;
 use Xpressengine\Menu\MenuHandler;
@@ -71,14 +72,15 @@ class MenuServiceProvider extends ServiceProvider
         // 메뉴아이템의 링크를 편하게 제공하기 위한 resolver 등록
         MenuItem::setLinkResolver(function(MenuItem $item){
             $title = xe_trans($item->getAttributeValue('title'));
-            if($item->getRelationValue('basic_image')) {
-                if($item->isSelected()) {
-                    $image = $item->getSelectedImage();
-                } else {
-                    $image = $item->basic_image;
-                }
+            if($image = $item->getRelationValue('basicImage')) {
+                $image = $item->isSelected() ? $item->getSelectedImage() : $image;
                 $hoverImage = $item->getHoverImage();
-                return sprintf('<img src="%s" class="__xe_menu_image" data-hover="%s" alt="%s"/>', $image, $hoverImage, $title);
+                return new HtmlString(sprintf(
+                    '<img src="%s" class="__xe_menu_image" data-hover="%s" alt="%s"/>',
+                    $image,
+                    $hoverImage,
+                    $title
+                ));
             }
             return $title;
         });

@@ -179,7 +179,8 @@ class PresenterServiceProvider extends ServiceProvider
         ])->load();
 
         $frontendHandler->js([
-            'assets/bundle.js',
+            'assets/vendor.js',
+            'assets/common.js',
             'assets/core/common/js/xe.bundle.js',
         ])->prependTo('head')->load();
     }

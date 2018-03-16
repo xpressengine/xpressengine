@@ -59,19 +59,24 @@ class ModuleHandler
     /**
      * getAllModuleInfo
      *
-     * @return \Generator
+     * @return array
      */
     public function getAllModuleInfo()
     {
         $modules = $this->getAll();
+
+        $returnArr = [];
+
         foreach ($modules as $index => $module) {
-            yield [
+            $returnArr[] = [
                 'id' => $module::getId(),
                 'title' => $module::getComponentInfo('name'),
                 'description' => $module::getComponentInfo('description'),
                 'screenshot' => $module::getComponentInfo('screenshot')
             ];
         }
+
+        return $returnArr;
     }
 
     /**

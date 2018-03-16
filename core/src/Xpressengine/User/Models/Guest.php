@@ -16,7 +16,6 @@ namespace Xpressengine\User\Models;
 
 use Xpressengine\User\Exceptions\UnsupportedOperationForGuestOrUnknownException;
 use Xpressengine\User\Rating;
-use Xpressengine\User\UserHandler;
 use Xpressengine\User\UserInterface;
 
 /**
@@ -124,7 +123,7 @@ class Guest implements UserInterface
      */
     public function getStatus()
     {
-        return UserHandler::STATUS_ACTIVATED;
+        return User::STATUS_ACTIVATED;
     }
 
     /**

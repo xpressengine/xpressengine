@@ -96,7 +96,7 @@ class TermsController extends Controller
     public function enable(Request $request)
     {
         XeDB::transaction(function () use ($request) {
-            $enables = $request->get('enable');
+            $enables = $request->get('enable') ?: [];
             $terms = app('xe.terms')->all();
             $terms = $terms->partition(function ($term) use ($enables) {
                 return in_array($term->id, $enables);
