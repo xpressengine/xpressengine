@@ -304,7 +304,11 @@ abstract class DynamicModel extends Model
      */
     public function isDirty($attributes = null)
     {
-        return count($this->dynamicAttributes) > 0 ? true : parent::isDirty($attributes);
+        if ($attributes) {
+            return parent::isDirty($attributes);
+        }
+
+        return count($this->dynamicAttributes) > 0 ? true : parent::isDirty();
     }
 
     /**

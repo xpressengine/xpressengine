@@ -14,6 +14,8 @@
 
 namespace Xpressengine\User\Parts;
 
+use Xpressengine\User\Models\Term;
+
 /**
  * Class AgreementPart
  *
@@ -31,6 +33,8 @@ class AgreementPart extends RegisterFormPart
     const NAME = 'xe::acceptTerms';
 
     const DESCRIPTION = 'xe::descAcceptTerms';
+
+    private $enabled;
 
     /**
      * Indicates if the form part is implicit
@@ -53,9 +57,7 @@ class AgreementPart extends RegisterFormPart
      */
     protected function data()
     {
-        $terms = $this->service('xe.terms')->fetchEnabled();
-
-        return compact('terms');
+        return ['terms' => $this->getEnabled()];
     }
 
     /**
@@ -65,6 +67,24 @@ class AgreementPart extends RegisterFormPart
      */
     public function rules()
     {
-        return ['agree' => 'accepted'];
+        if (count($this->getEnabled()) > 0) {
+            return ['agree' => 'accepted'];
+        }
+
+        return [];
+    }
+
+    /**
+     * Get the terms of enabled
+     *
+     * @return Term[]
+     */
+    protected function getEnabled()
+    {
+        if (!$this->enabled) {
+            $this->enabled = $this->service('xe.terms')->fetchEnabled();
+        }
+
+        return $this->enabled;
     }
 }
