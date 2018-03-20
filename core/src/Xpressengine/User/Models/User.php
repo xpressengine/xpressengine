@@ -15,8 +15,13 @@
 namespace Xpressengine\User\Models;
 
 use Closure;
-use Xpressengine\User\Notifications\ResetPassword as ResetPasswordNotification;
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
+use Xpressengine\User\Contracts\CanResetPassword as CanResetPasswordContract;
+use Xpressengine\User\Notifications\ResetPassword as ResetPasswordNotification;
 use Xpressengine\Database\Eloquent\DynamicModel;
 use Xpressengine\User\Rating;
 use Xpressengine\User\UserInterface;
@@ -29,9 +34,13 @@ use Xpressengine\User\UserInterface;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class User extends DynamicModel implements UserInterface
+class User extends DynamicModel implements
+    UserInterface,
+    AuthenticatableContract,
+    CanResetPasswordContract,
+    AuthorizableContract
 {
-    use Notifiable;
+    use Notifiable, Authenticatable, Authorizable;
 
     protected $table = 'user';
 
@@ -125,7 +134,7 @@ class User extends DynamicModel implements UserInterface
     }
 
     /**
-     * set relationship with user accounts
+     * set relationship with us er accounts
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -165,33 +174,25 @@ class User extends DynamicModel implements UserInterface
     }
 
     /**
-     * Get the unique identifier for the user.
-     *
-     * @return mixed
-     */
-    public function getAuthIdentifier()
-    {
-        return $this->getAttribute('id');
-    }
-
-    /**
-     * Get the password for the user.
+     * Get the e-mail address where password reset links are sent.
      *
      * @return string
      */
-    public function getAuthPassword()
+    public function getEmailForPasswordReset()
     {
-        return $this->getAttribute('password');
+        // 만약 로그인시 사용된 이메일이 따로 지정돼 있을 경우 그 이메일을 사용한다.
+        return isset($this->emailForPasswordReset) ? $this->emailForPasswordReset : $this->email;
     }
 
     /**
-     * Get the token value for the "remember me" session.
+     * Send the password reset notification.
      *
-     * @return string
+     * @param  string $token token for password reset
+     * @return void
      */
-    public function getRememberToken()
+    public function sendPasswordResetNotification($token)
     {
-        return $this->getAttribute($this->getRememberTokenName());
+        $this->notify(new ResetPasswordNotification($token));
     }
 
     /**
@@ -204,39 +205,6 @@ class User extends DynamicModel implements UserInterface
     public function setEmailForPasswordReset($email)
     {
         $this->emailForPasswordReset = $email;
-    }
-
-    /**
-     * Set the token value for the "remember me" session.
-     *
-     * @param string $value value
-     *
-     * @return void
-     */
-    public function setRememberToken($value)
-    {
-        $this->setAttribute($this->getRememberTokenName(), $value);
-    }
-
-    /**
-     * Get the column name for the "remember me" token.
-     *
-     * @return string
-     */
-    public function getRememberTokenName()
-    {
-        return 'remember_token';
-    }
-
-    /**
-     * Get the e-mail address where password reset links are sent.
-     *
-     * @return string
-     */
-    public function getEmailForPasswordReset()
-    {
-        // 만약 로그인시 사용된 이메일이 따로 지정돼 있을 경우 그 이메일을 사용한다.
-        return isset($this->emailForPasswordReset) ? $this->emailForPasswordReset : $this->email;
     }
 
     /**
@@ -411,26 +379,5 @@ class User extends DynamicModel implements UserInterface
         }
 
         return $at;
-    }
-
-    /**
-     * Get the name of the unique identifier for the user.
-     *
-     * @return string
-     */
-    public function getAuthIdentifierName()
-    {
-        return 'id';
-    }
-
-    /**
-     * Send the password reset notification.
-     *
-     * @param  string $token token for password reset
-     * @return void
-     */
-    public function sendPasswordResetNotification($token)
-    {
-        $this->notify(new ResetPasswordNotification($token));
     }
 }

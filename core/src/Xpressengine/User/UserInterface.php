@@ -14,8 +14,6 @@
 
 namespace Xpressengine\User;
 
-use Illuminate\Contracts\Auth\CanResetPassword;
-
 /**
  * 회원 정보를 저장하는 클래스가 구현해야 하는 인터페이스
  *
@@ -26,7 +24,7 @@ use Illuminate\Contracts\Auth\CanResetPassword;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-interface UserInterface extends Authenticatable, CanResetPassword
+interface UserInterface
 {
     /**
      * Get the unique identifier
