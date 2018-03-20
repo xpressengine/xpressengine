@@ -528,7 +528,7 @@ var Category = (function () {
         success: function () {
           $('#item_' + item.id).remove()
           var $parent = $('.__category_body');
-          var isRoot = !!item.parent_id;
+          var isRoot = !item.parent_id;
           if(!isRoot) $parent = $('.__category_body').find('#item_' + item.parent_id);
 
           that.load({
