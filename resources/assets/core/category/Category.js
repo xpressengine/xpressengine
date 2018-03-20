@@ -93,9 +93,7 @@ var Category = (function () {
       })
 
       _$wrap.on('click', '.btnRemoveCategory', function () {
-        var id = $(this).closest('.item-content').data('item').id
-
-        _this.remove(id)
+        _this.remove($(this).closest('.item-content').data('item'))
       })
 
       _$wrap.on('click', '.__xe_btn_toggle_children', function () {
@@ -449,15 +447,7 @@ var Category = (function () {
           if (nodes.length > 0) {
             var filterNodes = {}
 
-            if ($parent.find('.item').length > 0) {
-              $parent.find('.item').each(function () {
-                filterNodes[$(this).find('.item-content').data('item').id] = true
-              })
-            }
-
-            nodes = nodes.filter(function (v, k) {
-              return !filterNodes.hasOwnProperty(v.id)
-            })
+            $parent.find('.item').remove();
 
             $parent.append(Tree.getItemsTemplate({
               items: nodes,
@@ -527,14 +517,24 @@ var Category = (function () {
      * @memberof Category
      * @param {string} id
      * */
-    remove: function (id) {
+    remove: function (item) {
+      var that = this;
+
       XE.ajax({
         url: _config.remove,
         type: 'post',
         dataType: 'html',
-        data: { id: id },
+        data: { id: item.id },
         success: function () {
-          $('#item_' + id).remove()
+          $('#item_' + item.id).remove()
+          var $parent = $('.__category_body');
+          var isRoot = !!item.parent_id;
+          if(!isRoot) $parent = $('.__category_body').find('#item_' + item.parent_id);
+
+          that.load({
+            $parent: $parent,
+            isRoot: isRoot
+          })
         }
       })
     },
