@@ -14,17 +14,10 @@
 Route::settings(
     '/',
     function () {
-        Route::get(
-            '/',
-            [
-                'as' => 'settings',
-                'uses' => function () {
-                    return redirect()->route('settings.dashboard');
-                }
-            ]
-        );
+        Route::get('/', ['as' => 'settings', 'uses' => 'DashboardController@redirect']);
     }
 );
+
 Route::settings(
     'dashboard',
     function () {
