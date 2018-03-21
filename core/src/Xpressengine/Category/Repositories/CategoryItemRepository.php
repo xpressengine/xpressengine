@@ -111,6 +111,49 @@ class CategoryItemRepository
     }
 
     /**
+     * 카테고리를 삭제할 때 자식 카테고리의 부모 카테고리id 재설정
+     *
+     * @param CategoryItem $desc    삭제할 카테고리의 자식 카테고리
+     * @param CategoryItem $delItem 삭제할 카테고리
+     *
+     * @return void
+     */
+    public function setNewParent(CategoryItem $desc, CategoryItem $delItem)
+    {
+        $newParentId = ($newParent = $delItem->getParent()) ? $newParent->getKey() : null;
+        $delItemOrdering = $delItem[$delItem->getOrderKeyName()];
+
+        $this->update($desc, [$desc->getParentIdName() => $newParentId, $desc->getOrderKeyName() => $delItemOrdering]);
+    }
+
+    /**
+     * 삭제할 카테고리의 자식 카테고리들 depth를 감소
+     *
+     * @param CategoryItem $desc    삭제할 카테고리의 자식 카테고리
+     * @param CategoryItem $delItem 삭제할 카테고리
+     *
+     * @return void
+     */
+    public function decrementDepth(CategoryItem $desc, CategoryItem $delItem)
+    {
+        $delItemDepth = $desc->descendants()->newPivotStatement()
+            ->where($desc->getDescendantName(), $desc->getKey())
+            ->where($desc->getAncestorName(), '=', $delItem->getKey())
+            ->get()->first()->depth;
+
+        $desc->descendants()->newPivotStatement()
+            ->where($desc->getDescendantName(), $desc->getKey())
+            ->where($desc->getAncestorName(), '!=', $delItem->getKey())
+            ->where($desc->getDepthName(), '>=', $delItemDepth)
+            ->decrement($desc->getDepthName());
+
+        $desc->descendants()->newPivotStatement()
+            ->where($desc->getDescendantName(), $desc->getKey())
+            ->where($desc->getAncestorName(), '=', $delItem->getKey())
+            ->delete();
+    }
+
+    /**
      * The name of Category model class
      *
      * @return string

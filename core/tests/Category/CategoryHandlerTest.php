@@ -88,7 +88,12 @@ class CategoryHandlerTest extends TestCase
         $mockItem->shouldReceive('hasMacro')->andReturn(false);
         $mockItem->shouldReceive('getAttribute')->with('descendants')->andReturn([$mockDesc1]);
 
-        $itemRepo->shouldReceive('exclude')->once()->with($mockDesc1, $mockItem);
+        $mockItem->shouldReceive('getDepth')->withNoArgs()->andReturn(0);
+        $mockDesc1->shouldReceive('getDepth')->withNoArgs()->andReturn(1);
+
+        $itemRepo->shouldReceive('setNewParent')->once()->with($mockDesc1, $mockItem);
+        $itemRepo->shouldReceive('decrementDepth')->once()->with($mockDesc1, $mockItem);
+
         $itemRepo->shouldReceive('delete')->once()->with($mockItem)->andReturn(true);
 
         $result = $instance->deleteItem($mockItem, false);

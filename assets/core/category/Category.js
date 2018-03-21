@@ -96,6 +96,10 @@ var Category = (function () {
         _this.remove($(this).closest('.item-content').data('item'))
       })
 
+      _$wrap.on('click', '.btnRemoveAllCategory', function () {
+          _this.removeAll($(this).closest('.item-content').data('item'))
+      })
+
       _$wrap.on('click', '.__xe_btn_toggle_children', function () {
         var $this = $(this)
         var item = $this.closest('.item').find('> .item-content').data('item')
@@ -137,6 +141,7 @@ var Category = (function () {
             wordLangKey: item.word,
             descriptionLangKey: item.description,
             removeButton: true,
+            removeAllButton: true,
             saveButton: true,
             type: 'modify',
             id: $this.closest('.item-content').data('item').id
@@ -262,6 +267,10 @@ var Category = (function () {
 
       if (obj.removeButton) {
         template += '<button type="button" class="btn btn-default btnRemoveCategory">' + XE.Lang.trans('xe::delete') + '</button>'
+      }
+
+      if (obj.removeAllButton) {
+        template += '<button type="button" class="btn btn-default btnRemoveAllCategory">' + XE.Lang.trans('xe::subCategoryDestroy') + '</button>'
       }
 
       if (obj.saveButton) {
@@ -526,9 +535,9 @@ var Category = (function () {
         dataType: 'html',
         data: { id: item.id },
         success: function () {
-          $('#item_' + item.id).remove()
           var $parent = $('.__category_body');
           var isRoot = true;
+          $('.item-container', $parent).remove()
 
           that.load({
             $parent: $parent,
@@ -536,6 +545,31 @@ var Category = (function () {
           })
         }
       })
+    },
+    /**
+     * 아이템을 하위 카테고리까지 삭제한다.
+     * @memberof Category
+     * @param {string} id
+     * */
+    removeAll: function (item) {
+        var that = this;
+
+        XE.ajax({
+            url: _config.removeAll,
+            type: 'post',
+            dataType: 'html',
+            data: { id: item.id },
+            success: function () {
+                var $parent = $('.__category_body');
+                var isRoot = true;
+                $('.item-container', $parent).remove()
+
+                that.load({
+                    $parent: $parent,
+                    isRoot: isRoot
+                })
+            }
+        })
     },
     /**
      * Form요소를 JSON형태로 리턴한다.
