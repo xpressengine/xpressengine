@@ -535,9 +535,9 @@ var Category = (function () {
         dataType: 'html',
         data: { id: item.id },
         success: function () {
-          $('#item_' + item.id).remove()
           var $parent = $('.__category_body');
           var isRoot = true;
+          $('.item-container', $parent).remove()
 
           that.load({
             $parent: $parent,
@@ -560,9 +560,9 @@ var Category = (function () {
             dataType: 'html',
             data: { id: item.id },
             success: function () {
-                $('#item_' + item.id).remove()
                 var $parent = $('.__category_body');
                 var isRoot = true;
+                $('.item-container', $parent).remove()
 
                 that.load({
                     $parent: $parent,
