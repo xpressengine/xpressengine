@@ -2282,4 +2282,8 @@ return [
         'ko' => '종료 날짜 (2018-01-01)',
         'en' => 'end date (2018-01-01)',
     ],
+    'subCategoryDestroy' => [
+        'ko' => '하위 카테고리까지 삭제',
+        'en' => 'Delete to sub category',
+    ],
 ];

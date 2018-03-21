@@ -71,7 +71,18 @@ class CategoryController extends Controller
         return XePresenter::makeApi($item->toArray());
     }
 
-    public function destroyItem(Request $request, $id)
+    /**
+     * 카테고리를 삭제
+     *
+     * @param Request $request request
+     * @param integer $id      해당 게시판 id
+     * @param bool    $force   하위카테고리 삭제 유무(true=>하위카테고리까지 삭제)
+     *
+     * @throws Exception
+     *
+     * @return void
+     */
+    public function destroyItem(Request $request, $id, $force = false)
     {
         /** @var CategoryItem $item */
         $item = XeCategory::items()->find($request->get('id'));
@@ -82,8 +93,7 @@ class CategoryController extends Controller
         DB::beginTransaction();
 
         try {
-            XeCategory::deleteItem($item);
-
+            XeCategory::deleteItem($item, $force);
         } catch (Exception $e) {
             DB::rollBack();
 
