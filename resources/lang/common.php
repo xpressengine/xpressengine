@@ -2422,4 +2422,8 @@ return [
         'ko' => '생성된 위젯은 drag & drop 으로 순서를 변경하거나  다른셀로 이동이 가능합니다. 셀을 클릭하여 선택하거나 삭제가 가능합니다.',
         'en' => 'The created widget can be reordered by drag & drop or moved to another cell. You can click the cell to select it or delete it.',
     ],
+    'subCategoryDestroy' => [
+        'ko' => '하위 카테고리까지 삭제',
+        'en' => 'Delete to sub category',
+    ],
 ];

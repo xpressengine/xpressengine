@@ -911,7 +911,7 @@ Route::settings('category', function () {
             'as' => 'manage.category.edit.item.update',
             'uses' => 'CategoryController@updateItem'
         ]);
-        Route::post('item/destroy', [
+        Route::post('item/destroy/{force?}', [
             'as' => 'manage.category.edit.item.destroy',
             'uses' => 'CategoryController@destroyItem'
         ]);
