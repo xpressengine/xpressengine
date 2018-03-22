@@ -532,7 +532,7 @@ var Category = (function () {
       XE.ajax({
         url: _config.remove,
         type: 'post',
-        dataType: 'html',
+        dataType: 'json',
         data: { id: item.id },
         success: function () {
           var $parent = $('.__category_body');
@@ -557,7 +557,7 @@ var Category = (function () {
         XE.ajax({
             url: _config.removeAll,
             type: 'post',
-            dataType: 'html',
+            dataType: 'json',
             data: { id: item.id },
             success: function () {
                 var $parent = $('.__category_body');
