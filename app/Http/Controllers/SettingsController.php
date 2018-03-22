@@ -85,6 +85,7 @@ class SettingsController extends Controller
         $file = app('xe.storage')->upload(
             $file,
             $path,
+            null,
             $disk
         );
         $saved = [
