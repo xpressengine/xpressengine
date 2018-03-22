@@ -28,26 +28,9 @@ class DummyClass extends AbstractPlugin
         Route::fixed(
             $this->getId(),
             function () {
-                Route::get(
-                    '/',
-                    [
-                        'as' => 'DummyPluginName::index',
-                        'uses' => function (Request $request) {
-
-                            $title = 'DummyPluginTitle';
-
-                            // set browser title
-                            XeFrontend::title($title);
-
-                            // load css file
-                            XeFrontend::css($this->asset('assets/style.css'))->load();
-
-                            // output
-                            return XePresenter::make('DummyPluginName::views.index', ['title' => $title]);
-
-                        }
-                    ]
-                );
+                Route::get('/', [
+                    'as' => 'DummyPluginName::index','uses' => 'DummyNamespace\Controller@index'
+                ]);
             }
         );
 

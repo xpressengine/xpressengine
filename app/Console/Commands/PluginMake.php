@@ -69,6 +69,8 @@ class PluginMake extends Command
         }
 
         try {
+            $this->makeDirectory($path);
+
             // plugin.php 파일 생성
             $this->makePluginClass($path, $name, $namespace, $title);
 
@@ -77,6 +79,9 @@ class PluginMake extends Command
 
             // directory structure 생성
             $this->makeDirectoryStructure($path);
+
+            // Controller.php
+            $this->makeControllerClass($path, $name, $namespace, $title);
 
             // composer update
             $this->runComposerDump($path);
@@ -127,18 +132,22 @@ class PluginMake extends Command
      * @param $path
      * @param $name
      * @param $namespace
+     * @param $title
      *
      * @return void
      */
     protected function makePluginClass($path, $name, $namespace, $title)
     {
-        $filename = 'plugin.php';
+        $code = $this->buildCode($this->getStub('plugin.stub'), $name, $namespace, $title);
 
-        $code = $this->buildPluginCode($name, $namespace, $title);
+        $this->files->put($path.'/plugin.php', $code);
+    }
 
-        $this->makeDirectory($path);
+    protected function makeControllerClass($path, $name, $namespace, $title)
+    {
+        $code = $this->buildCode($this->getStub('Controller.stub'), $name, $namespace, $title);
 
-        $this->files->put($path.'/'.$filename, $code);
+        $this->files->put($path.'/src/Controller.php', $code);
     }
 
     /**
@@ -174,9 +183,9 @@ class PluginMake extends Command
      *
      * @return string
      */
-    protected function buildPluginCode($pluginName, $namespace, $title)
+    protected function buildCode($stubPath, $pluginName, $namespace, $title)
     {
-        $stub = $this->files->get($this->getStub('plugin.stub'));
+        $stub = $this->files->get($stubPath);
 
         $this->replaceNamespace($stub, $namespace)->replaceClass($stub, 'Plugin')->replacePluginName(
             $stub,
