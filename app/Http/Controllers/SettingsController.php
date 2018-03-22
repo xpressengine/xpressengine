@@ -76,7 +76,8 @@ class SettingsController extends Controller
         // remove old file
         if ($oldFileId !== null) {
             $oldFile = app('xe.storage')->find($oldFileId);
-            if ($oldFile && file_exists($oldFile->getPathname())) {
+
+            if ($oldFile && file_exists(app()->storagePath() . '/app/' . $oldFile->getPathname())) {
                 app('xe.storage')->remove($oldFile);
             }
         }
