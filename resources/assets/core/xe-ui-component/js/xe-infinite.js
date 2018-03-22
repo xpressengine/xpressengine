@@ -114,13 +114,13 @@ var XeInfinite = (function ($) {
      * @param {function} cb resources를 로드한 이후 실행될 callback
      * */
     loadResources: function (cb) {
-      DynamicLoadManager.cssLoad('/assets/vendor/slickgrid/slick.grid.css')
+      DynamicLoadManager.cssLoad('/assets/core/xe-ui-component/slickgrid/slick.grid.css')
       DynamicLoadManager.jsLoadMultiple([
         '/assets/vendor/jqueryui/jquery.event.drag-2.3.0.js',
-        '/assets/vendor/slickgrid/slick.core.js',
-        '/assets/vendor/slickgrid/slick.formatters.js',
-        '/assets/vendor/slickgrid/slick.grid.js',
-        '/assets/vendor/slickgrid/slick.dataview.js'
+        '/assets/core/xe-ui-component/slickgrid/slick.core.js',
+        '/assets/core/xe-ui-component/slickgrid/slick.formatters.js',
+        '/assets/core/xe-ui-component/slickgrid/slick.grid.js',
+        '/assets/core/xe-ui-component/slickgrid/slick.dataview.js'
       ], {
         complete: cb
       })
