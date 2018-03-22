@@ -1,7 +1,7 @@
 {{ XeFrontend::css(
 [
-'/assets/core/lang/langEditorBox.css',
-'/assets/core/xe-ui-component/xe-ui-component.css'
+    '/assets/core/lang/langEditorBox.css',
+    '/assets/core/xe-ui-component/xe-ui-component.css'
 ]
 )->load() }}
 
@@ -10,14 +10,12 @@
 
 {{ XeFrontend::js(
 [
-'/assets/vendor/expanding/expanding.js',
-'/assets/core/lang/langEditorBox.bundle.js'
+    '/assets/core/lang/langEditorBox.bundle.js'
 ]
 )->appendTo('head')->load() }}
 
 {{ XeFrontend::js('/assets/core/common/js/xe.tree.js')->appendTo('body')->load() }}
 {{ XeFrontend::js('/assets/core/category/Category.js')->appendTo('body')->load() }}
-{{--{{ XeFrontend::js('/assets/core/category/tree.js')->appendTo('head')->load() }}--}}
 
 {{ XeFrontend::translation([
     'xe::required',
