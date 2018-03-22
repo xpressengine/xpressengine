@@ -94,10 +94,10 @@ class PluginSettingsSkin extends GenericSkin
     protected function show()
     {
         app('xe.frontend')->js([
-           'assets/vendor/swiper2/idangerous.swiper.js',
+           'assets/core/plugin/swiper2/idangerous.swiper.min.js',
            'assets/core/plugin/js/plugin.js'
         ])->appendTo('head')->load();
-        app('xe.frontend')->css('assets/vendor/swiper2/idangerous.swiper.css')
+        app('xe.frontend')->css('assets/core/plugin/swiper2/idangerous.swiper.css')
             ->before('assets/core/settings/css/admin.css')->load();
 
         return $this->renderBlade();
