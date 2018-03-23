@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="{{ asset('assets/core/xe-ui-component/xe-ui-component.css') }}">
 
     <link rel="stylesheet" href="{{ asset('assets/core/webinstaller/css/webinstaller.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/vendor/XEIcon/xeicon.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('https://cdn.jsdelivr.net/npm/xeicon@2.3/xeicon.min.css') }}">
 </head>
 
 <body>

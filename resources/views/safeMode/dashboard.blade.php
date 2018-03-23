@@ -6,7 +6,7 @@ use Xpressengine\Plugin\Composer\ComposerFileWriter;
         <link href="{{asset('/assets/core/common/css/xe-common.css')}}" type="text/css" rel="stylesheet" media="all">
         <link href="{{asset('/assets/vendor/bootstrap/css/bootstrap.min.css')}}" type="text/css" rel="stylesheet" media="all">
         <link href="{{asset('/assets/vendor/bootstrap/css/bootstrap-theme.min.css')}}" type="text/css" rel="stylesheet" media="all">
-        <link href="{{asset('/assets/vendor/XEIcon/xeicon.css')}}" type="text/css" rel="stylesheet" media="all">
+        <link href="{{asset('https://cdn.jsdelivr.net/npm/xeicon@2.3/xeicon.min.css')}}" type="text/css" rel="stylesheet" media="all">
         <style>
             .container {padding-top:10px;}
             input, button {margin: 10px 0;}
