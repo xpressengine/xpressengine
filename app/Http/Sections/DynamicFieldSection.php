@@ -107,8 +107,8 @@ class DynamicFieldSection extends Section
         XeFrontend::translation(['xe::validation.df_id']);
 
         // 다국어 입력 필드
-        XeFrontend::js('/assets/vendor/jqueryui/jquery-ui.js')->appendTo('head')->load();
-        XeFrontend::css('/assets/vendor/jqueryui/jquery-ui.css')->load();
+        XeFrontend::js('/assets/vendor/jqueryui/jquery-ui.min.js')->appendTo('head')->load();
+        XeFrontend::css('/assets/vendor/jqueryui/jquery-ui.min.css')->load();
         XeFrontend::js('/assets/core/lang/langEditorBox.bundle.js')->appendTo('head')->load();
         XeFrontend::css('/assets/core/lang/langEditorBox.css')->load();
         XeFrontend::css('/assets/core/xe-ui-component/xe-ui-component.css')->load();
