@@ -97,7 +97,7 @@ var Category = (function () {
       })
 
       _$wrap.on('click', '.btnRemoveAllCategory', function () {
-          _this.removeAll($(this).closest('.item-content').data('item'))
+        _this.removeAll($(this).closest('.item-content').data('item'))
       })
 
       _$wrap.on('click', '.__xe_btn_toggle_children', function () {
@@ -270,7 +270,7 @@ var Category = (function () {
       }
 
       if (obj.removeAllButton) {
-        template += '<button type="button" class="btn btn-default btnRemoveAllCategory">' + XE.Lang.trans('xe::subCategoryDestroy') + '</button>'
+          template += '<button type="button" class="btn btn-default btnRemoveAllCategory">' + XE.Lang.trans('xe::subCategoryDestroy') + '</button>'
       }
 
       if (obj.saveButton) {
@@ -547,29 +547,29 @@ var Category = (function () {
       })
     },
     /**
-     * 아이템을 하위 카테고리까지 삭제한다.
-     * @memberof Category
-     * @param {string} id
-     * */
+    * 아이템을 하위 카테고리까지 삭제한다.
+    * @memberof Category
+    * @param {string} id
+    * */
     removeAll: function (item) {
-        var that = this;
+      var that = this;
 
-        XE.ajax({
-            url: _config.removeAll,
-            type: 'post',
-            dataType: 'json',
-            data: { id: item.id },
-            success: function () {
-                var $parent = $('.__category_body');
-                var isRoot = true;
-                $('.item-container', $parent).remove()
+      XE.ajax({
+          url: _config.removeAll,
+          type: 'post',
+          dataType: 'json',
+          data: { id: item.id },
+          success: function () {
+              var $parent = $('.__category_body');
+              var isRoot = true;
+              $('.item-container', $parent).remove()
 
-                that.load({
-                    $parent: $parent,
-                    isRoot: isRoot
-                })
-            }
-        })
+              that.load({
+                  $parent: $parent,
+                  isRoot: isRoot
+              })
+          }
+      })
     },
     /**
      * Form요소를 JSON형태로 리턴한다.
