@@ -503,7 +503,9 @@ export function addCommas (str) {
   return output
 }
 
-import { debounce, throttle, curry } from 'lodash'
+import debounce from 'lodash/debounce'
+import throttle from 'lodash/throttle'
+import curry from 'lodash/curry'
 
 export default {
   isImage,

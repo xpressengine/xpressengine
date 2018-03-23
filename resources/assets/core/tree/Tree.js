@@ -1,6 +1,7 @@
 import 'nestedSortable'
 import $ from 'jquery'
-import { isObject, isFunction } from 'lodash'
+import isObject from 'lodash/isObject'
+import isFunction from 'lodash/isFunction'
 import Item from './item'
 
 let _prevent = false
