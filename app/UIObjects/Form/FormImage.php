@@ -43,8 +43,8 @@ class FormImage extends AbstractUIObject
     {
 
         $scripts = [
-            // 'assets/vendor/JavaScript-Canvas-to-Blob-master/js/canvas-to-blob.min.js',
-            'assets/vendor/JavaScript-Load-Image/js/load-image.all.min.js',
+            // 'assets/vendor/jQuery-File-Upload/js/canvas-to-blob.min.js',
+            'assets/vendor/jQuery-File-Upload/js/load-image.all.min.js',
             // 'assets/vendor/jQuery-File-Upload/js/vendor/jquery.ui.widget.js',
             'assets/vendor/jQuery-File-Upload/js/jquery.iframe-transport.js',
             'assets/vendor/jQuery-File-Upload/js/jquery.fileupload.js',
