@@ -119,15 +119,6 @@ const config = [
       // @FIXME
       // @DEPRECATED
       'core/common/js/xe.tree': [pathInfo.core + '/tree/Tree.js'],
-
-      // gulp assets:draft
-      // @FIXME
-      // @DEPRECATED
-      // 현재 사용 안 됨 https://github.com/xpressengine/plugin-board/commit/7b2ae1a6
-      'core/common/js/draft.bundle': [
-        pathInfo.vendor + '/bootstrap/js/collapse.js',
-        pathInfo.common + '/js/draft.js'
-      ]
     },
     output: {
       path: path.resolve(__dirname, '.'),
