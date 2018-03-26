@@ -16,7 +16,6 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Config\ConfigManager;
-use Xpressengine\Config\Validator;
 use Xpressengine\Config\Repositories\DatabaseRepository;
 use Xpressengine\Config\Repositories\CacheDecorator;
 
@@ -46,7 +45,7 @@ class ConfigServiceProvider extends ServiceProvider
             }
 
             $proxyClass = $app['xe.interception']->proxy(ConfigManager::class, 'XeConfig');
-            $configManager = new $proxyClass($repo, new Validator($app['validator']));
+            $configManager = new $proxyClass($repo);
             return $configManager;
         });
         $this->app->alias(ConfigManager::class, 'xe.config');

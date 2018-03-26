@@ -28,5 +28,5 @@ use Xpressengine\Config\ConfigException;
  */
 class ValidationException extends ConfigException
 {
-    protected $message = '유효성 검사 실패 [:message]';
+    protected $message = 'Validation failed [:message]';
 }

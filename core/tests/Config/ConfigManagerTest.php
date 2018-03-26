@@ -21,37 +21,32 @@ class ConfigManagerTest extends TestCase
 
     public function testAddCreateNewAndReturnsConfig()
     {
-        list($repo, $validator) = $this->getMocks();
+        list($repo) = $this->getMocks();
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
         $mockConfig->site_key = 'default';
-        $mockConfig->name = 'board.notice';
+        $mockConfig->name = 'board';
 
-        $repo->shouldReceive('find')->once()->with('default', 'board.notice')->andReturnNull();
-        $repo->shouldReceive('fetchAncestor')->with('default', 'board.notice')->andReturn([]);
+        $repo->shouldReceive('find')->once()->with('default', 'board')->andReturnNull();
+        $repo->shouldReceive('fetchAncestor')->with('default', 'board')->andReturn([]);
         $repo->shouldReceive('save')->once()->withAnyArgs()->andReturn($mockConfig);
 
-        $validate = m::mock('Illuminate\Validation\Validator');
-        $validate->shouldReceive('fails')->andReturn(false);
+        $instance = new ConfigManager($repo);
 
-        $validator->shouldReceive('validate')->once()->withAnyArgs()->andReturn($validate);
-
-        $instance = new ConfigManager($repo, $validator);
-
-        $config = $instance->add('board.notice', ['commentable' => false, 'downloadable' => true]);
+        $config = $instance->add('board', ['commentable' => false, 'downloadable' => true]);
 
         $this->assertInstanceOf('Xpressengine\Config\ConfigEntity', $config);
     }
 
     public function testAddThrowsExceptionWhenExists()
     {
-        list($repo, $validator) = $this->getMocks();
+        list($repo) = $this->getMocks();
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
 
         $repo->shouldReceive('find')->once()->with('default', 'board.notice')->andReturn($mockConfig);
 
-        $instance = new ConfigManager($repo, $validator);
+        $instance = new ConfigManager($repo);
 
         try {
             $config = $instance->add('board.notice', ['commentable' => false, 'downloadable' => true]);
@@ -65,10 +60,10 @@ class ConfigManagerTest extends TestCase
 
     public function testGetReturnsDefaultWhenNotExists()
     {
-        list($repo, $validator) = $this->getMocks();
+        list($repo) = $this->getMocks();
 
         $repo->shouldReceive('find')->once()->with('default', 'board.notice')->andReturnNull();
-        $instance = new ConfigManager($repo, $validator);
+        $instance = new ConfigManager($repo);
 
         $val = $instance->getVal('board.notice.listCount', 10);
 
@@ -77,7 +72,7 @@ class ConfigManagerTest extends TestCase
 
     public function testGetValReturnsValueWhenExists()
     {
-        list($repo, $validator) = $this->getMocks();
+        list($repo) = $this->getMocks();
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
         $mockConfig->name = 'board.notice';
@@ -91,7 +86,7 @@ class ConfigManagerTest extends TestCase
         $repo->shouldReceive('find')->once()->with('default', 'board.notice')->andReturn($mockConfig);
         $repo->shouldReceive('fetchAncestor')->with('default', 'board.notice')->andReturn([$ancestor]);
 
-        $instance = new ConfigManager($repo, $validator);
+        $instance = new ConfigManager($repo);
 
         $val = $instance->getVal('board.notice.listCount');
 
@@ -100,7 +95,7 @@ class ConfigManagerTest extends TestCase
 
     public function testGetPureValReturnsPureValue()
     {
-        list($repo, $validator) = $this->getMocks();
+        list($repo) = $this->getMocks();
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
         $mockConfig->name = 'board.notice';
@@ -114,7 +109,7 @@ class ConfigManagerTest extends TestCase
         $repo->shouldReceive('find')->once()->with('default', 'board.notice')->andReturn($mockConfig);
         $repo->shouldReceive('fetchAncestor')->with('default', 'board.notice')->andReturn([$ancestor]);
 
-        $instance = new ConfigManager($repo, $validator);
+        $instance = new ConfigManager($repo);
 
         $val = $instance->getPureVal('board.notice.listCount');
 
@@ -123,7 +118,7 @@ class ConfigManagerTest extends TestCase
 
     public function testGetsRetunsEntityObject()
     {
-        list($repo, $validator) = $this->getMocks();
+        list($repo) = $this->getMocks();
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
         $mockConfig->name = 'board.notice';
@@ -136,7 +131,7 @@ class ConfigManagerTest extends TestCase
         $repo->shouldReceive('find')->once()->with('default', 'board.notice')->andReturn($mockConfig);
         $repo->shouldReceive('fetchAncestor')->with('default', 'board.notice')->andReturn([$ancestor]);
 
-        $instance = new ConfigManager($repo, $validator);
+        $instance = new ConfigManager($repo);
         $config = $instance->get('board.notice');
 
         $this->assertInstanceOf('Xpressengine\Config\ConfigEntity', $config);
@@ -144,7 +139,7 @@ class ConfigManagerTest extends TestCase
 
     public function testGetsOrNewRetunsEntityObjectEvenIfNotExists()
     {
-        list($repo, $validator) = $this->getMocks();
+        list($repo) = $this->getMocks();
 
         $ancestor = m::mock('Xpressengine\Config\ConfigEntity');
         $ancestor->name = 'board';
@@ -152,7 +147,7 @@ class ConfigManagerTest extends TestCase
         $repo->shouldReceive('find')->once()->with('default', 'board.notice')->andReturnNull();
         $repo->shouldReceive('fetchAncestor')->with('default', 'board.notice')->andReturn([$ancestor]);
 
-        $instance = new ConfigManager($repo, $validator);
+        $instance = new ConfigManager($repo);
         $config = $instance->getOrNew('board.notice');
 
         $this->assertInstanceOf('Xpressengine\Config\ConfigEntity', $config);
@@ -161,9 +156,9 @@ class ConfigManagerTest extends TestCase
 
     public function testParserThrowsExceptionWhenGivenInvalidKey()
     {
-        list($repo, $validator) = $this->getMocks();
+        list($repo) = $this->getMocks();
 
-        $instance = new ConfigManager($repo, $validator);
+        $instance = new ConfigManager($repo);
 
         try {
             $instance->setVal('listCount', 20);
@@ -176,7 +171,7 @@ class ConfigManagerTest extends TestCase
 
     public function testSet()
     {
-        list($repo, $validator) = $this->getMocks();
+        list($repo) = $this->getMocks();
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
         $mockConfig->name = 'board.notice';
@@ -186,38 +181,32 @@ class ConfigManagerTest extends TestCase
         $repo->shouldReceive('fetchAncestor')->with('default', 'board.notice')->andReturn([]);
         $repo->shouldReceive('save')->once()->with($mockConfig)->andReturn($mockConfig);
 
-        $instance = new ConfigManager($repo, $validator);
+        $instance = new ConfigManager($repo);
 
         $instance->setVal('board.notice.listCount', 20);
     }
 
     public function testSetCreateNewConfigWhenNotExists()
     {
-        list($repo, $validator) = $this->getMocks();
+        list($repo) = $this->getMocks();
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
         $mockConfig->site_key = 'default';
-        $mockConfig->name = 'board.notice';
+        $mockConfig->name = 'board';
 
-        $repo->shouldReceive('find')->twice()->with('default', 'board.notice')->andReturnNull();
+        $repo->shouldReceive('find')->twice()->with('default', 'board')->andReturnNull();
 
-        $repo->shouldReceive('fetchAncestor')->with('default', 'board.notice')->andReturn([]);
+        $repo->shouldReceive('fetchAncestor')->with('default', 'board')->andReturn([]);
         $repo->shouldReceive('save')->once()->withAnyArgs()->andReturn($mockConfig);
 
-        $validate = m::mock('Illuminate\Validation\Validator');
-        $validate->shouldReceive('fails')->andReturn(false);
+        $instance = new ConfigManager($repo);
 
-        $validator->shouldReceive('validate')->once()->withAnyArgs()->andReturn($validate);
-
-
-        $instance = new ConfigManager($repo, $validator);
-
-        $instance->setVal('board.notice.manage', 'me');
+        $instance->setVal('board.manage', 'me');
     }
 
     public function testSetToDesc()
     {
-        list($repo, $validator) = $this->getMocks();
+        list($repo) = $this->getMocks();
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
         $mockConfig->name = 'board.notice';
@@ -241,14 +230,14 @@ class ConfigManagerTest extends TestCase
         $repo->shouldReceive('save')->once()->with($mockDesc2)->andReturnNull();
         $repo->shouldReceive('save')->once()->with($mockDesc3)->andReturnNull();
 
-        $instance = new ConfigManager($repo, $validator);
+        $instance = new ConfigManager($repo);
 
         $instance->setVal('board.notice.listCount', 20, true);
     }
 
     public function testSetsChangeValueAndReturns()
     {
-        list($repo, $validator) = $this->getMocks();
+        list($repo) = $this->getMocks();
 
         $func = function () {
             return 'called';
@@ -267,7 +256,7 @@ class ConfigManagerTest extends TestCase
         $repo->shouldReceive('fetchAncestor')->with('default', 'board.notice')->andReturn([]);
         $repo->shouldReceive('save')->once()->with($mockConfig)->andReturn($mockConfig);
 
-        $instance = new ConfigManager($repo, $validator);
+        $instance = new ConfigManager($repo);
 
         $config = $instance->set(
             'board.notice',
@@ -281,27 +270,22 @@ class ConfigManagerTest extends TestCase
 
     public function testSetsCreateNewConfigWhenNotExists()
     {
-        list($repo, $validator) = $this->getMocks();
+        list($repo) = $this->getMocks();
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
         $mockConfig->site_key = 'default';
-        $mockConfig->name = 'board.notice';
+        $mockConfig->name = 'board';
         $mockConfig->shouldReceive('get')->once()->with('listCount')->andReturn(20);
         $mockConfig->shouldReceive('get')->once()->with('downloadable')->andReturn(true);
 
-        $repo->shouldReceive('find')->twice()->with('default', 'board.notice')->andReturnNull();
-        $repo->shouldReceive('fetchAncestor')->with('default', 'board.notice')->andReturn([]);
+        $repo->shouldReceive('find')->twice()->with('default', 'board')->andReturnNull();
+        $repo->shouldReceive('fetchAncestor')->with('default', 'board')->andReturn([]);
         $repo->shouldReceive('save')->once()->withAnyArgs()->andReturn($mockConfig);
-        $repo->shouldReceive('fetchDescendant')->with('default', 'board.notice')->andReturn([]);
+        $repo->shouldReceive('fetchDescendant')->with('default', 'board')->andReturn([]);
 
-        $validate = m::mock('Illuminate\Validation\Validator');
-        $validate->shouldReceive('fails')->andReturn(false);
+        $instance = new ConfigManager($repo);
 
-        $validator->shouldReceive('validate')->once()->withAnyArgs()->andReturn($validate);
-
-        $instance = new ConfigManager($repo, $validator);
-
-        $config = $instance->set('board.notice', ['listCount' => 20, 'downloadable' => true], true);
+        $config = $instance->set('board', ['listCount' => 20, 'downloadable' => true], true);
 
         $this->assertEquals(20, $config->get('listCount'));
         $this->assertEquals(true, $config->get('downloadable'));
@@ -309,11 +293,11 @@ class ConfigManagerTest extends TestCase
 
     public function testPutThrowExceptionWhenNotExists()
     {
-        list($repo, $validator) = $this->getMocks();
+        list($repo) = $this->getMocks();
 
         $repo->shouldReceive('find')->once()->with('default', 'board.notice')->andReturnNull();
 
-        $instance = new ConfigManager($repo, $validator);
+        $instance = new ConfigManager($repo);
 
         try {
             $instance->put('board.notice', ['listCount' => 20, 'downloadable' => true]);
@@ -326,7 +310,7 @@ class ConfigManagerTest extends TestCase
 
     public function testPutChangeAllAndReturns()
     {
-        list($repo, $validator) = $this->getMocks();
+        list($repo) = $this->getMocks();
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
         $mockConfig->name = 'board.notice';
@@ -339,7 +323,7 @@ class ConfigManagerTest extends TestCase
         $repo->shouldReceive('save')->once()->with($mockConfig)->andReturn($mockConfig);
         $repo->shouldReceive('fetchDescendant')->with('default', 'board.notice')->andReturn([]);
 
-        $instance = new ConfigManager($repo, $validator);
+        $instance = new ConfigManager($repo);
 
         $config = $instance->put('board.notice', ['listCount' => 20, 'downloadable' => true], true);
 
@@ -349,7 +333,7 @@ class ConfigManagerTest extends TestCase
 
     public function testModify()
     {
-        list($repo, $validator) = $this->getMocks();
+        list($repo) = $this->getMocks();
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
         $mockConfig->site_key = 'default';
@@ -359,7 +343,7 @@ class ConfigManagerTest extends TestCase
         $repo->shouldReceive('fetchAncestor')->with('default', 'board.notice')->andReturn([]);
         $repo->shouldReceive('save')->once()->with($mockConfig)->andReturn($mockConfig);
 
-        $instance = new ConfigManager($repo, $validator);
+        $instance = new ConfigManager($repo);
 
         $config = $instance->modify($mockConfig);
 
@@ -368,7 +352,7 @@ class ConfigManagerTest extends TestCase
 
     public function testModifyThrowsExceptionWhenNotExists()
     {
-        list($repo, $validator) = $this->getMocks();
+        list($repo) = $this->getMocks();
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
         $mockConfig->site_key = 'default';
@@ -376,7 +360,7 @@ class ConfigManagerTest extends TestCase
 
         $repo->shouldReceive('find')->once()->with('default', 'board.notice')->andReturnNull();
 
-        $instance = new ConfigManager($repo, $validator);
+        $instance = new ConfigManager($repo);
 
         try {
             $instance->modify($mockConfig);
@@ -389,8 +373,8 @@ class ConfigManagerTest extends TestCase
 
     public function testConveyNotExceptedItemCallClear()
     {
-        list($repo, $validator) = $this->getMocks();
-        $instance = new ConfigManager($repo, $validator);
+        list($repo) = $this->getMocks();
+        $instance = new ConfigManager($repo);
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
         $mockConfig->site_key = 'default';
@@ -410,7 +394,7 @@ class ConfigManagerTest extends TestCase
 
     public function testRemove()
     {
-        list($repo, $validator) = $this->getMocks();
+        list($repo) = $this->getMocks();
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
         $mockConfig->site_key = 'default';
@@ -418,14 +402,14 @@ class ConfigManagerTest extends TestCase
 
         $repo->shouldReceive('remove')->once()->with('default', 'board.notice')->andReturnNull();
 
-        $instance = new ConfigManager($repo, $validator);
+        $instance = new ConfigManager($repo);
 
         $instance->remove($mockConfig);
     }
 
     public function testRemoveByName()
     {
-        list($repo, $validator) = $this->getMocks();
+        list($repo) = $this->getMocks();
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
         $mockConfig->name = 'board.notice';
@@ -434,14 +418,14 @@ class ConfigManagerTest extends TestCase
         $repo->shouldReceive('fetchAncestor')->with('default', 'board.notice')->andReturn([]);
         $repo->shouldReceive('remove')->once()->with('default', 'board.notice')->andReturnNull();
 
-        $instance = new ConfigManager($repo, $validator);
+        $instance = new ConfigManager($repo);
 
         $instance->removeByName('board.notice');
     }
 
     public function testChildrenReturnsAdjacencyConfigs()
     {
-        list($repo, $validator) = $this->getMocks();
+        list($repo) = $this->getMocks();
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
         $mockConfig->site_key = 'default';
@@ -463,7 +447,7 @@ class ConfigManagerTest extends TestCase
         $repo->shouldReceive('fetchDescendant')->once()->with('default', 'board.notice')->andReturn([$mockBD1, $mockBD2, $mockBD3]);
         $repo->shouldReceive('fetchAncestor')->andReturn([]);
 
-        $instance = new ConfigManager($repo, $validator);
+        $instance = new ConfigManager($repo);
 
         $children = $instance->children($mockConfig);
 
@@ -475,8 +459,8 @@ class ConfigManagerTest extends TestCase
 
     public function testValidatingThrowsExceptionWhenFail()
     {
-        list($repo, $validator) = $this->getMocks();
-        $instance = new ConfigManager($repo, $validator);
+        list($repo) = $this->getMocks();
+        $instance = new ConfigManager($repo);
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
         $mockValidator = m::mock('Illuminate\Validation\Validator');
@@ -485,7 +469,7 @@ class ConfigManagerTest extends TestCase
         $mockValidator->shouldReceive('first')->andReturn('Exception!!');
 
 
-        $validator->shouldReceive('validate')->once()->with($mockConfig)->andReturn($mockValidator);
+//        $validator->shouldReceive('validate')->once()->with($mockConfig)->andReturn($mockValidator);
 
         try {
             $this->invokeMethod($instance, 'validating', [$mockConfig]);
@@ -498,8 +482,8 @@ class ConfigManagerTest extends TestCase
 
     public function testSort()
     {
-        list($repo, $validator) = $this->getMocks();
-        $instance = new ConfigManager($repo, $validator);
+        list($repo) = $this->getMocks();
+        $instance = new ConfigManager($repo);
 
         $mockConfig1 = m::mock('Xpressengine\Config\ConfigEntity');
         $mockConfig1->shouldReceive('getDepth')->andReturn(2);
@@ -525,8 +509,8 @@ class ConfigManagerTest extends TestCase
 
     public function testMoveThrowsExceptionWhenGivenUnknownTo()
     {
-        list($repo, $validator) = $this->getMocks();
-        $instance = new ConfigManager($repo, $validator);
+        list($repo) = $this->getMocks();
+        $instance = new ConfigManager($repo);
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
         $mockConfig->site_key = 'default';
@@ -544,8 +528,8 @@ class ConfigManagerTest extends TestCase
 
     public function testMoveThrowsExceptionWhenNotTopLevelAndNotHasParent()
     {
-        list($repo, $validator) = $this->getMocks();
-        $instance = new ConfigManager($repo, $validator);
+        list($repo) = $this->getMocks();
+        $instance = new ConfigManager($repo);
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
         $mockConfig->shouldReceive('getParent')->andReturnNull();
@@ -562,8 +546,8 @@ class ConfigManagerTest extends TestCase
 
     public function testMoveFromTopToAnotherChild()
     {
-        list($repo, $validator) = $this->getMocks();
-        $instance = new ConfigManager($repo, $validator);
+        list($repo) = $this->getMocks();
+        $instance = new ConfigManager($repo);
 
         $mockConfig = m::mock('Xpressengine\Config\ConfigEntity');
         $mockConfig->shouldReceive('getParent')->andReturnNull();
@@ -590,8 +574,8 @@ class ConfigManagerTest extends TestCase
 
     public function testMoveFromChildToTop()
     {
-        list($repo, $validator) = $this->getMocks();
-        $instance = new ConfigManager($repo, $validator);
+        list($repo) = $this->getMocks();
+        $instance = new ConfigManager($repo);
 
         $mockParent = m::mock('Xpressengine\Config\ConfigEntity');
 
@@ -612,8 +596,8 @@ class ConfigManagerTest extends TestCase
 
     public function testMoveFromChildToAnotherChild()
     {
-        list($repo, $validator) = $this->getMocks();
-        $instance = new ConfigManager($repo, $validator);
+        list($repo) = $this->getMocks();
+        $instance = new ConfigManager($repo);
 
         $mockParent = m::mock('Xpressengine\Config\ConfigEntity');
 
@@ -640,7 +624,6 @@ class ConfigManagerTest extends TestCase
     {
         return [
             m::mock('Xpressengine\Config\ConfigRepository'),
-            m::mock('Xpressengine\Config\Validator'),
         ];
     }
 

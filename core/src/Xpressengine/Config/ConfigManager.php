@@ -41,13 +41,6 @@ class ConfigManager
     protected $repo;
 
     /**
-     * validator instance
-     *
-     * @var Validator
-     */
-    protected $validator;
-
-    /**
      * closure list
      *
      * @var array
@@ -55,15 +48,27 @@ class ConfigManager
     protected $closures = [];
 
     /**
+     * minimum name length
+     *
+     * @var int
+     */
+    protected $minNameLength = 3;
+
+    /**
+     * maximum name length
+     *
+     * @var int
+     */
+    protected $maxNameLength = 255;
+
+    /**
      * constructor
      *
      * @param ConfigRepository $repo      repository instance
-     * @param Validator        $validator validator instance
      */
-    public function __construct(ConfigRepository $repo, Validator $validator)
+    public function __construct(ConfigRepository $repo)
     {
         $this->repo = $repo;
-        $this->validator = $validator;
     }
 
     /**
@@ -458,10 +463,19 @@ class ConfigManager
      */
     protected function validating(ConfigEntity $config)
     {
-        $validator = $this->validator->validate($config);
+        $len = strlen($config->name);
+        if ($len < $this->minNameLength || $len > $this->maxNameLength) {
+            throw new ValidationException([
+                'message' => sprintf(
+                    'The config group name must be between %s and $s.',
+                    $this->minNameLength,
+                    $this->maxNameLength
+                )
+            ]);
+        }
 
-        if ($validator->fails()) {
-            throw new ValidationException(['message' => $validator->messages()->first()]);
+        if ($config->getDepth() > 1 && $config->getParent() === null) {
+            throw new ValidationException(['message' => 'The config must be has parent']);
         }
     }
 
