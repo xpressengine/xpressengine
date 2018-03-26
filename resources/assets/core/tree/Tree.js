@@ -3,6 +3,7 @@ import $ from 'jquery'
 import isObject from 'lodash/isObject'
 import isFunction from 'lodash/isFunction'
 import Item from './item'
+import Item from './Item'
 
 let _prevent = false
 

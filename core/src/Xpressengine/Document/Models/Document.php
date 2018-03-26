@@ -533,7 +533,6 @@ class Document extends DynamicModel
     {
         $this->setStatus(self::STATUS_TRASH);
         $this->setDisplay(self::DISPLAY_HIDDEN);
-        $this->setAttribute(self::DELETED_AT, $this->freshTimestamp());
         return $this;
     }
 

@@ -260,37 +260,38 @@ class DynamicFieldHandlerTest extends TestCase
      *
      * @return void
      */
-//    public function testGets()
-//    {
-//        $conn = $this->conn;
-//        $configHandler = $this->configHandler;
-//        $registerHandler = $this->registerHandler;
-//        $view = $this->view;
-//
-//        $handler = m::mock('Xpressengine\DynamicField\DynamicFieldHandler', [
-//            $conn, $configHandler, $registerHandler, $view
-//        ])->shouldAllowMockingProtectedMethods()->makePartial();
-//
-//        $group = 'group';
-//
-//        $type = m::mock('Type', 'Xpressengine\DynamicField\AbstractType');
-//        $handler->shouldReceive('getByConfig')->andReturn($type);
-//
-//        $config1 = $this->getConfigEntity();
-//        $config1->shouldReceive('get')->with('id')->andReturn('id');
-//
-//        $configs = [
-//            $config1
-//        ];
-//        $configHandler->shouldReceive('gets')->andReturn($configs);
-//
-//        $result = $handler->gets($group);
-//
-//        $this->assertInstanceOf('Generator', $result);
-//        foreach ($result as $instance) {
-//            $this->assertInstanceOf('Xpressengine\DynamicField\AbstractType', $instance);
-//        }
-//    }
+    public function testGets()
+    {
+        $conn = $this->conn;
+        $configHandler = $this->configHandler;
+        $registerHandler = $this->registerHandler;
+        $view = $this->view;
+
+        $handler = m::mock('Xpressengine\DynamicField\DynamicFieldHandler', [
+            $conn, $configHandler, $registerHandler, $view
+        ])->shouldAllowMockingProtectedMethods()->makePartial();
+
+        $group = 'group';
+
+        $type = m::mock('Type', 'Xpressengine\DynamicField\AbstractType');
+        $handler->shouldReceive('getByConfig')->andReturn($type);
+
+        $config1 = $this->getConfigEntity();
+        $config1->shouldReceive('get')->with('id')->andReturn('id');
+
+        $configs = [
+            $config1
+        ];
+        $configHandler->shouldReceive('gets')->andReturn($configs);
+
+        $result = $handler->gets($group);
+
+        $this->assertEquals([$config1->get('id') => $type], $result);
+
+        foreach ($result as $instance) {
+            $this->assertInstanceOf('Xpressengine\DynamicField\AbstractType', $instance);
+        }
+    }
 
     /**
      * test get

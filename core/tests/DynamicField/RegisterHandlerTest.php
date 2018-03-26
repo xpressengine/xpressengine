@@ -10,7 +10,10 @@ namespace Xpressengine\Tests\DynamicField;
 
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
+use Xpressengine\DynamicField\AbstractSkin;
+use Xpressengine\DynamicField\AbstractType;
 use Xpressengine\DynamicField\RegisterHandler;
+use Xpressengine\Plugin\PluginRegister;
 
 /**
  * Class RegisterHandlerTest
@@ -136,85 +139,104 @@ class RegisterHandlerTest extends TestCase
      *
      * @return void
      */
-//    public function testGetTypes()
-//    {
-//        $pluginRegister = $this->pluginRegister;
-//        $dispatcher = $this->dispatcher;
-//
-//        $handler = new RegisterHandler($pluginRegister, $dispatcher);
-//
-//        $dfHandler = m::mock('Xpressengine\DynamicField\DynamicFieldHandler');
-//
-//        $type = m::mock('TypeClass');
-//        $type->shouldReceive('__construct');
-//
-//        $types = [
-//            $type
-//        ];
-//        $pluginRegister->shouldReceive('get')->andReturn($types);
-//
-//        $result = $handler->getTypes($dfHandler);
-//        $this->assertInstanceOf('Generator', $result);
-//    }
+    public function testGetTypes()
+    {
+        $pluginRegister = $this->pluginRegister;
+        $dispatcher = $this->dispatcher;
+
+        $handler = m::mock('Xpressengine\DynamicField\RegisterHandler', [$pluginRegister, $dispatcher])
+            ->shouldAllowMockingProtectedMethods()->makePartial();
+
+        $dfHandler = m::mock('Xpressengine\DynamicField\DynamicFieldHandler');
+
+        $type = m::mock(AbstractType::class);
+        $type->shouldReceive('__construct');
+
+        $types = [
+            $type
+        ];
+
+        $pluginRegister->shouldReceive('get')->andReturn($types);
+
+        $type->shouldReceive('getId')->andReturn('id');
+        $handler->shouldReceive('getType')->with($dfHandler, 'id')->andReturn($type);
+
+        $result = $handler->getTypes($dfHandler);
+
+        $this->assertInstanceOf(AbstractType::class, $result[0]);
+    }
 
     /**
      * test get skins
      *
      * @return void
      */
-//    public function testGetSkins()
-//    {
-//        $pluginRegister = $this->pluginRegister;
-//        $dispatcher = $this->dispatcher;
-//
-//        $handler = new RegisterHandler($pluginRegister, $dispatcher);
-//
-//        $dfHandler = m::mock('Xpressengine\DynamicField\DynamicFieldHandler');
-//
-//        $skin = m::mock('SkinClass');
-//        $skin->shouldReceive('__construct');
-//
-//        $types = [
-//            'type' => 'notuse',
-//        ];
-//
-//        $skins = [
-//            $skin
-//        ];
-//        $pluginRegister->shouldReceive('get')->with(RegisterHandler::FIELD_TYPE)->andReturn($types);
-//        $pluginRegister->shouldReceive('get')->with(
-//            'type|' . RegisterHandler::FIELD_TYPE
-//        )->andReturn($skins);
-//
-//        $result = $handler->getSkins($dfHandler);
-//        $this->assertInstanceOf('Generator', $result);
-//    }
+    public function testGetSkins()
+    {
+        $pluginRegister = $this->pluginRegister;
+        $dispatcher = $this->dispatcher;
 
+        $handler = m::mock('Xpressengine\DynamicField\RegisterHandler', [$pluginRegister, $dispatcher])
+            ->shouldAllowMockingProtectedMethods()->makePartial();
+
+        $dfHandler = m::mock('Xpressengine\DynamicField\DynamicFieldHandler');
+
+        $skin = m::mock(AbstractSkin::class);
+        $skin->shouldReceive('__construct');
+
+        $types = [
+            'type' => 'notuse',
+        ];
+
+        $skins = [
+            $skin
+        ];
+
+        $pluginRegister->shouldReceive('get')->with(RegisterHandler::FIELD_TYPE)->andReturn($types);
+
+        $pluginRegister->shouldReceive('get')->with(
+            'type'  . PluginRegister::KEY_DELIMITER. RegisterHandler::FIELD_SKIN
+        )->andReturn($skins);
+
+        $skin->shouldReceive('getId')->andReturn('id');
+        $handler->shouldReceive('getType')->with($dfHandler, 'id')->andReturn($skin);
+
+        $result = $handler->getSkins($dfHandler);
+        $this->assertInstanceOf(AbstractSkin::class, $result[0]);
+    }
     /**
      * test get skins by type
      *
      * @return void
      */
-//    public function testGetSkinsByType()
-//    {
-//        $pluginRegister = $this->pluginRegister;
-//        $dispatcher = $this->dispatcher;
-//
-//        $handler = new RegisterHandler($pluginRegister, $dispatcher);
-//
-//        $dfHandler = m::mock('Xpressengine\DynamicField\DynamicFieldHandler');
-//
-//        $id = 'id';
-//
-//        $skin = m::mock('SkinClass');
-//        $skin->shouldReceive('__construct');
-//
-//        $skins = [
-//            $skin
-//        ];
-//        $pluginRegister->shouldReceive('get')->andReturn($skins);
-//
-//        $result = $handler->getSkinsByType($dfHandler, $id);
-//        $this->assertInstanceOf('Generator', $result);
-//    }
+    public function testGetSkinsByType()
+    {
+        $pluginRegister = $this->pluginRegister;
+        $dispatcher = $this->dispatcher;
+
+        $handler = m::mock('Xpressengine\DynamicField\RegisterHandler', [$pluginRegister, $dispatcher])
+            ->shouldAllowMockingProtectedMethods()->makePartial();
+
+        $dfHandler = m::mock('Xpressengine\DynamicField\DynamicFieldHandler');
+
+        $id = 'id';
+        $skinId = 'skin_id';
+
+        $skin = m::mock(AbstractSkin::class);
+        $skin->shouldReceive('__construct');
+        $skin->shouldReceive('getId')->andReturn($skinId);
+
+        $skins = [
+            $skin
+        ];
+
+        $pluginRegister->shouldReceive('get')->with($id . PluginRegister::KEY_DELIMITER . RegisterHandler::FIELD_SKIN)
+            ->andReturn($skins);
+
+        $handler->shouldReceive('getSkin')->with($dfHandler, $skinId)->andReturn($skin);
+
+        $result = $handler->getSkinsByType($dfHandler, $id);
+
+        $this->assertInstanceOf(AbstractSkin::class, $result[0]);
+    }
 }
