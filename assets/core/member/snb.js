@@ -9,35 +9,4 @@ jQuery(function ($) {
       $('.snb').removeClass('open').css('left', '')
     }
   })
-
-  $('.xo-navbar-sub-toggle').on('click', function (e) {
-    if ($('.snb').hasClass('open')) {
-      $('.snb').animate({
-        left: '-255px'
-      }, 300, function () {
-        $('body').css('overflow', '')
-        $('.snb').removeClass('open').css('left', '')
-      })
-    } else {
-      $('.snb').addClass('open')
-      $('.snb').addClass('open')
-      $('body').css('overflow', 'hidden')
-      $('.snb').animate({
-        left: '0px'
-      }, 300)
-
-      $('.dim').on('click', function () {
-        $('.snb').animate({
-          left: '-255px'
-        }, 300, function () {
-          $('.snb').removeClass('open').css('left', '')
-          $('body').css('overflow', '')
-        })
-
-        $(this).off('click')
-      })
-
-      e.stopPropagation()
-    }
-  })
 })

@@ -13,8 +13,6 @@ import $ from 'jquery'
 }(this, function (exports) {
   'use strict'
 
-  DynamicLoadManager.cssLoad('/assets/core/common/css/griper.css')
-
   /**
    * @memberof module:griper
    * @name options
