@@ -5,6 +5,7 @@ import CopyWebpackPlugin from 'copy-webpack-plugin'
 const pathInfo = {
   vendor: path.resolve(__dirname, 'assets/vendor'),
   node: path.resolve(__dirname, 'node_modules'),
+  source: path.resolve(__dirname, 'resources/assets'),
   core: path.resolve(__dirname, 'resources/assets/core'),
   user: path.resolve(__dirname, 'resources/assets/core/user'),
   settings: path.resolve(__dirname, 'resources/assets/core/settings'),
@@ -105,6 +106,11 @@ const config = [
         pathInfo.common + '/js/component.js'
       ],
 
+      'core/editor/editor.bundle': [
+        pathInfo.core + '/editor/editor.core.js',
+        pathInfo.core + '/editor/textarea.define.js'
+      ],
+
       'core/permission/permission.bundle': [
         pathInfo.permission + '/permission.js'
       ],
@@ -145,6 +151,7 @@ const config = [
             'common/js/lang.js',
             'common/js/progress.js',
             'common/js/request.js',
+            'editor/*.js',
             'lang/LangEditorBox.js',
             'user/settings/edit.js',
             'permission/*.js',
