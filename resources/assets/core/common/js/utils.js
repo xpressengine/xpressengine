@@ -30,7 +30,7 @@ export function eventify (target) {
 
   target.$once = (eventName, listener) => {
     target.$on(eventName, function handler (...args) {
-      target.removeListener(eventName, handler)
+      target.$off(eventName, handler)
       listener.apply(target, args)
     })
   }
