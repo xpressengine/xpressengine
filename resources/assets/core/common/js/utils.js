@@ -1,4 +1,40 @@
 import $ from 'jquery'
+import isNil from 'lodash/isNil'
+import pull from 'lodash/pull'
+
+export function eventify (target) {
+  let _events = {}
+
+  target.$on = (eventName, listener) => {
+    if (isNil(_events[eventName])) {
+      _events[eventName] = []
+    }
+    _events[eventName].push(listener)
+  }
+
+  target.$emit = (eventName, ...args) => {
+    if (isNil(_events[eventName])) {
+      return
+    }
+    _events[eventName].forEach((listener) => {
+      listener.apply(target, [eventName, ...args])
+    })
+  }
+
+  target.$off = (eventName, listener) => {
+    if (isNil(_events[eventName])) {
+      return
+    }
+    pull(_events[eventName], listener)
+  }
+
+  target.$once = (eventName, listener) => {
+    target.$on(eventName, function handler (...args) {
+      target.removeListener(eventName, handler)
+      listener.apply(target, args)
+    })
+  }
+}
 
 /**
  * image mime type의 결과를 리턴한다.

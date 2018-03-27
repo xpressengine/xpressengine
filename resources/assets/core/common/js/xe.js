@@ -19,13 +19,17 @@ import URI from 'urijs'
 class XE {
   constructor () {
     let that = this
+
     this.options = {}
+    this.util = Utils
+
+    Utils.eventify(this)
+
     this.validator = Validator
     this.Lang = Lang
     this.Progress = Progress
     this.Request = Request
     this.Component = Component
-    this.util = Utils
 
     window.Utils = Utils
     window.DynamicLoadManager = DynamicLoadManager
