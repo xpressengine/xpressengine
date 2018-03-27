@@ -179,7 +179,7 @@ var SearchHead = (function ($) {
       var value = e.target.value
       var list = ''
 
-      if (value.length > 1) {
+      if (value.length >= 1) {
         var suggestion = []
 
         $.each(_searchData, function (idx, obj) {
