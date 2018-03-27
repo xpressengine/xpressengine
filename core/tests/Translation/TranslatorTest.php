@@ -98,8 +98,8 @@ class TranslatorTest extends TranslationTestCase
         $this->assertEquals('msg! message!', $this->t->trans('test::replacements', ['long' => 'msg', 'longer' => 'message']));
 
         $this->assertEquals('monday', $this->t->trans('namespace::week.mon'));
-        $this->assertEquals('monday', $this->t->trans('namespace::week.mon', [], null, 'en'));
-        $this->assertEquals('월', $this->t->trans('namespace::week.mon', [], null, 'ko'));
+        $this->assertEquals('monday', $this->t->trans('namespace::week.mon', [], 'en'));
+        $this->assertEquals('월', $this->t->trans('namespace::week.mon', [], 'ko'));
 
         $this->assertEquals('There is none', $this->t->transChoice('test::choice', 0));
         $this->assertEquals('There are some', $this->t->transChoice('test::choice', 1));
