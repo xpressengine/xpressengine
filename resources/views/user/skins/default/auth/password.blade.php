@@ -1,6 +1,6 @@
 @if(Session::get('status') !== 'passwords.reset')
     <!-- 비밀번호 찾기 3step-->
-<div class="member find-password">
+<div class="user find-password">
     <h1>{{xe_trans('xe::changePassword')}}</h1>
 
     <p class="sub-text">{{xe_trans('xe::changePasswordDescription')}}</p>
@@ -37,7 +37,7 @@
 @else
 
 <!-- 비밀번호 찾기 4step-->
-<div class="member find-password">
+<div class="user find-password">
     <h1>{{xe_trans('xe::passwordChangeComplete')}}</h1>
     {{--<div class="info">
         <p>보안상의 목적으로 해당 변경에 대한 확인용 이메일이 귀하의 계정으로 전송되었습니다.</p>

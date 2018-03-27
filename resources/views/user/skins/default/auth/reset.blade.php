@@ -1,6 +1,6 @@
 @if(Session::get('status') !== 'passwords.sent')
     <!-- 비밀번호 찾기 1step, 비밀번호 찾기 시 find-password 클래스 추가 인풋간 간격 넓어짐(제외가능)-->
-<div class="member find-password">
+<div class="user find-password">
     <h1>{{xe_trans('xe::forgotPassword')}}</h1>
 
     <p class="sub-text">{{xe_trans('xe::forgotPasswordDescription')}}</p>
@@ -24,7 +24,7 @@
 @else
 
 <!-- 비밀번호 찾기 2step-->
-<div class="member find-password">
+<div class="user find-password">
     <h1>{{xe_trans('xe::msgEmailSendComplete')}}</h1>
     <div class="info">
         <p>{!! xe_trans('xe::checkFindPasswordEmailDescription', ['email' => sprintf('<em>%s</em>', $email)]) !!}</p>

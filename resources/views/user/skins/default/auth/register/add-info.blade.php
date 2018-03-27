@@ -1,4 +1,4 @@
-<div class="member">
+<div class="user">
     <h1>{{ xe_trans('xe::enterAdditionalInfo') }}</h1>
     <form action="{{ route('auth.register.add') }}" method="post" data-rule="add-info" data-rule-alert-type="toast">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">

@@ -10,10 +10,10 @@ const Keys = {
 }
 
 class Permission {
-  constructor ({ $wrapper, key, memberSearchUrl, groupSearchUrl, permission, type, vgroupAll }) {
+  constructor ({ $wrapper, key, userSearchUrl, groupSearchUrl, permission, type, vgroupAll }) {
     this.$wrapper = $wrapper
     this.key = key
-    this.memberSearchUrl = memberSearchUrl
+    this.userSearchUrl = userSearchUrl
     this.groupSearchUrl = groupSearchUrl
     this.permission = permission
     this.type = type
@@ -41,7 +41,7 @@ class Permission {
       }
     })
 
-    this.$wrapper.on('keydown', '.inputMemberGroup', function (e) {
+    this.$wrapper.on('keydown', '.inputUserGroup', function (e) {
       var query = e.target.value.trim()
       var $this = $(this)
       var keyCode = e.keyCode
@@ -86,8 +86,8 @@ class Permission {
                 var pType = ''
                 var prefix = ''
 
-                // member
-                if ($ul.data('target') == 'member') {
+                // user
+                if ($ul.data('target') == 'user') {
                   // include
                   if (dataInput == 'include') {
                     name = _this.type + 'User'
@@ -175,7 +175,7 @@ class Permission {
       var pType = ''
       var prefix = ''
 
-      if ($ul.data('target') == 'member') {
+      if ($ul.data('target') == 'user') {
         // include
         if (dataInput == 'include') {
           name = _this.type + 'User'
@@ -225,7 +225,7 @@ class Permission {
       $input.val('').data('index', -1).focus()
     })
 
-    this.$wrapper.on('keyup', '.inputMemberGroup', function (e) {
+    this.$wrapper.on('keyup', '.inputUserGroup', function (e) {
       var query = e.target.value.trim()
       var $this = $(this)
       var keyCode = e.keyCode
@@ -243,7 +243,7 @@ class Permission {
           switch (identifier) {
             case '@':
               query = query.substr(1, query.length)
-              _this.searchMember($this, query)
+              _this.searchUser($this, query)
               break
 
             case '%':
@@ -309,19 +309,19 @@ class Permission {
     $target.remove()
   }
 
-  searchMember ($input, keyword) {
+  searchUser ($input, keyword) {
     var _this = this
-    var searchMemberUrl = _this.memberSearchUrl
+    var searchUserUrl = _this.userSearchUrl
 
     $.ajax({
-      url: searchMemberUrl + '/' + keyword,
+      url: searchUserUrl + '/' + keyword,
       method: 'get',
       dataType: 'json',
       cache: false,
       success: function (data) {
         if (data.length > 0) {
           var temp = ''
-          temp += 	`<ul data-target="member">`
+          temp += 	`<ul data-target="user">`
 
           data.forEach(function (item, i) {
             temp += 		`<li class="" data-tag='${JSON.stringify(item)}'>`
@@ -381,9 +381,9 @@ class Permission {
     var rating = this.permission.rating
     var modeEnable = false
     var permissionTypes = [
-      { value: 'super', name: XE.Lang.trans('xe::memberRatingAdministrator') },
-      { value: 'manager', name: XE.Lang.trans('xe::memberRatingManager') },
-      { value: 'member', name: XE.Lang.trans('xe::member') },
+      { value: 'super', name: XE.Lang.trans('xe::userRatingAdministrator') },
+      { value: 'manager', name: XE.Lang.trans('xe::userRatingManager') },
+      { value: 'user', name: XE.Lang.trans('xe::user') },
       { value: 'guest', name: XE.Lang.trans('xe::guest') }
     ]
 
@@ -400,12 +400,12 @@ class Permission {
       return group.id
     })
 
-    var includeMembers = this.permission.user.map(function (member) {
-      return member.id
+    var includeUsers = this.permission.user.map(function (user) {
+      return user.id
     })
 
-    var excludeMembers = this.permission.except.map(function (member) {
-      return member.id
+    var excludeUsers = this.permission.except.map(function (user) {
+      return user.id
     })
 
     var temp = ''
@@ -453,11 +453,11 @@ class Permission {
     temp +=				`</div>`
 
     temp +=				`<div class="ReactTags__tagInput">`
-    temp += 				`<input type="text" placeholder="${this.placeholder}" class="form-control inputMemberGroup" data-input="include" ${(disabled) ? 'disabled="disabled"' : ''} value="${this.query}" data-index="-1" />`	// TODO:: PermissionInclude handleKeyDown
+    temp += 				`<input type="text" placeholder="${this.placeholder}" class="form-control inputUserGroup" data-input="include" ${(disabled) ? 'disabled="disabled"' : ''} value="${this.query}" data-index="-1" />`	// TODO:: PermissionInclude handleKeyDown
     temp += 				`<div class="ReactTags__suggestions" data-input="include"></div>`
     temp +=				`</div>` // ReactTags__tagInput
     temp += 			`<input type="hidden" name="${this.type + 'Group'}" class="form-control includeGroups" value="${includeGroups.join().trim()}" />`
-    temp +=				`<input type="hidden" name="${this.type + 'User'}" class="form-control includeMembers" value="${includeMembers.join().trim()}" />`
+    temp +=				`<input type="hidden" name="${this.type + 'User'}" class="form-control includeUsers" value="${includeUsers.join().trim()}" />`
     temp +=			`</div>`	// ReactTags__tags
     temp +=		`</div>`// form-group
 
@@ -502,10 +502,10 @@ class Permission {
 
     temp +=			`</div>`
     temp += 		`<div class="ReactTags__tagInput">`
-    temp +=				`<input type="text" placeholder="${XE.Lang.trans('xe::explainExcludeUser')}" class="form-control inputMemberGroup" data-input="exclude" ${(disabled) ? 'disabled="disabled"' : ''} data-index="-1" />` 	// TODO:: PermissionExclude handleKeyDown
+    temp +=				`<input type="text" placeholder="${XE.Lang.trans('xe::explainExcludeUser')}" class="form-control inputUserGroup" data-input="exclude" ${(disabled) ? 'disabled="disabled"' : ''} data-index="-1" />` 	// TODO:: PermissionExclude handleKeyDown
     temp += 			`<div class="ReactTags__suggestions" data-input="exclude"></div>`
     temp += 		`</div>` // ReactTags__tagInput
-    temp +=		`<input type="hidden" name="${this.type + 'Except'}" class="form-control excludeMembers" value="${excludeMembers}" />`
+    temp +=		`<input type="hidden" name="${this.type + 'Except'}" class="form-control excludeUsers" value="${excludeUsers}" />`
     temp +=		`</div>` // ReactTags__tags
     temp += `</div>`// form-group
 
@@ -521,11 +521,11 @@ $('.__xe__uiobject_permission').each(function (i) {
 
   var key = $this.data('key')
   var type = $this.data('type')
-  var memberSearchUrl = $this.data('memberUrl')
+  var userSearchUrl = $this.data('userUrl')
   var groupSearchUrl = $this.data('groupUrl')
   var vgroupAll = $this.data('vgroupAll')
 
-  var p = new Permission({ $wrapper: $this, key, memberSearchUrl, groupSearchUrl, permission, type, vgroupAll })
+  var p = new Permission({ $wrapper: $this, key, userSearchUrl, groupSearchUrl, permission, type, vgroupAll })
   p.render()
   p.bindEvents()
 })
