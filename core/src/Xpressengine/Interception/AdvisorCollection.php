@@ -49,6 +49,8 @@ class AdvisorCollection
      */
     protected $aliases;
 
+    protected $sorted = [];
+
     /**
      * 생성자.
      *
@@ -126,9 +128,11 @@ class AdvisorCollection
 
         $box = $this->getPointCutBox($class, $method);
 
-        $sortedAdvisorList = $this->sorter->sort($box->advisorArr);
+        if (!isset($this->sorted[$pointCutStr])) {
+            $this->sorted[$pointCutStr] = $this->sorter->sort($box->advisorArr);
+        }
 
-        return new AdvisorList($sortedAdvisorList, $this->advisorArr);
+        return new AdvisorList($this->sorted[$pointCutStr], $this->advisorArr);
     }
 
     /**
