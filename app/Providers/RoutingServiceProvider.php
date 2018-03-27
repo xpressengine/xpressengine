@@ -46,12 +46,31 @@ class RoutingServiceProvider extends ServiceProvider
     public function boot()
     {
         $routeValidator = Route::getValidators();
-        $routeValidator['module']->boot(
-            $this->app['xe.router'],
-            $this->app['xe.menu'],
-            $this->app['xe.theme'],
-            $this->app['xe.site']
-        );
+        $routeValidator['module']->boot($this->app['xe.router'], $this->app['xe.site']);
+
+        $this->app['events']->listen('Illuminate\Routing\Events\RouteMatched', function ($event) {
+            if ($module = $event->route->getAction('module')) {
+                $routes = $this->app['xe.router']->fetchByModule($module);
+                $instanceRoute = collect($routes)->filter(function ($route) use ($event) {
+                    $segment = $event->request->segment(1);
+                    return $route->url === $segment ||
+                        (!$segment && $this->app['xe.site']->getHomeInstanceId() === $route->instance_id);
+                })->first();
+
+                $item = $this->app['xe.menu']->items()->find($instanceRoute->instance_id);
+                $menuConfig = $this->app['xe.menu']->getMenuItemTheme($item);
+                $theme = $menuConfig->get($event->request->isMobile() ? 'mobileTheme' : 'desktopTheme');
+
+                $instanceConfig = \Xpressengine\Routing\InstanceConfig::instance();
+                $instanceConfig->setTheme($theme);
+                $instanceConfig->setInstanceId($instanceRoute->instance_id);
+                $instanceConfig->setModule($module);
+                $instanceConfig->setUrl($instanceRoute->url);
+                $instanceConfig->setMenuItem($item);
+
+                $this->app['xe.theme']->selectTheme($theme);
+            }
+        });
     }
 
     /**

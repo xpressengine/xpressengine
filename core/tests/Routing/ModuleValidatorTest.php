@@ -45,9 +45,9 @@ class ModuleValidatorTest extends TestCase
      */
     public function testHomeStaticRouteUri()
     {
-        list($routeRepo, $menuHandler, $themeHandler, $siteHandler, $route, $request) = $this->getMocks();
+        list($routeRepo, $siteHandler, $route, $request) = $this->getMocks();
         $moduleValidator = new ModuleValidator();
-        $moduleValidator->boot($routeRepo, $menuHandler, $themeHandler, $siteHandler);
+        $moduleValidator->boot($routeRepo, $siteHandler);
 
         $route->shouldReceive('getCompiled')->andReturnSelf();
         $route->shouldReceive('getHostRegex')->andReturnNull();
@@ -69,9 +69,9 @@ class ModuleValidatorTest extends TestCase
      */
     public function testRootNotMatchUri()
     {
-        list($routeRepo, $menuHandler, $themeHandler, $siteHandler, $route, $request) = $this->getMocks();
+        list($routeRepo, $siteHandler, $route, $request) = $this->getMocks();
         $moduleValidator = new ModuleValidator();
-        $moduleValidator->boot($routeRepo, $menuHandler, $themeHandler, $siteHandler);
+        $moduleValidator->boot($routeRepo, $siteHandler);
 
         $route->shouldReceive('getCompiled')->andReturnSelf();
         $route->shouldReceive('getHostRegex')->andReturnNull();
@@ -94,9 +94,9 @@ class ModuleValidatorTest extends TestCase
      */
     public function testRootMatchUri()
     {
-        list($routeRepo, $menuHandler, $themeHandler, $siteHandler, $route, $request) = $this->getMocks();
+        list($routeRepo, $siteHandler, $route, $request) = $this->getMocks();
         $moduleValidator = new ModuleValidator();
-        $moduleValidator->boot($routeRepo, $menuHandler, $themeHandler, $siteHandler);
+        $moduleValidator->boot($routeRepo, $siteHandler);
 
         $route->shouldReceive('getCompiled')->andReturnSelf();
         $route->shouldReceive('getHostRegex')->andReturnNull();
@@ -108,14 +108,7 @@ class ModuleValidatorTest extends TestCase
             'module' => 'module/xpressengine@board'
         ]);
 
-        $dummyItem = m::mock('Xpressengine\Menu\MenuItem');
-
         $route->shouldReceive('setAction')->andReturn($route);
-
-        $menuHandler->shouldReceive('getItem')->andReturn($dummyItem);
-        $menuHandler->shouldReceive('getMenuItemTheme')->andReturn('defaultTheme');
-
-        $themeHandler->shouldReceive('selectTheme')->andReturn(null);
 
         $result = $moduleValidator->matches($route, $request);
 
@@ -129,9 +122,9 @@ class ModuleValidatorTest extends TestCase
      */
     public function testAboutUsNotMatchUri()
     {
-        list($routeRepo, $menuHandler, $themeHandler, $siteHandler, $route, $request) = $this->getMocks();
+        list($routeRepo, $siteHandler, $route, $request) = $this->getMocks();
         $moduleValidator = new ModuleValidator();
-        $moduleValidator->boot($routeRepo, $menuHandler, $themeHandler, $siteHandler);
+        $moduleValidator->boot($routeRepo, $siteHandler);
 
         $route->shouldReceive('getCompiled')->andReturnSelf();
         $route->shouldReceive('getHostRegex')->andReturnNull();
@@ -155,9 +148,9 @@ class ModuleValidatorTest extends TestCase
      */
     public function testAboutUsNotMatchUriNoModuleAttr()
     {
-        list($routeRepo, $menuHandler, $themeHandler, $siteHandler, $route, $request) = $this->getMocks();
+        list($routeRepo, $siteHandler, $route, $request) = $this->getMocks();
         $moduleValidator = new ModuleValidator();
-        $moduleValidator->boot($routeRepo, $menuHandler, $themeHandler, $siteHandler);
+        $moduleValidator->boot($routeRepo, $siteHandler);
 
         $route->shouldReceive('getCompiled')->andReturnSelf();
         $route->shouldReceive('getHostRegex')->andReturnNull();
@@ -181,9 +174,9 @@ class ModuleValidatorTest extends TestCase
      */
     public function testBoardMatchUri()
     {
-        list($routeRepo, $menuHandler, $themeHandler, $siteHandler, $route, $request) = $this->getMocks();
+        list($routeRepo, $siteHandler, $route, $request) = $this->getMocks();
         $moduleValidator = new ModuleValidator();
-        $moduleValidator->boot($routeRepo, $menuHandler, $themeHandler, $siteHandler);
+        $moduleValidator->boot($routeRepo, $siteHandler);
 
         $route->shouldReceive('getCompiled')->andReturnSelf();
         $route->shouldReceive('getHostRegex')->andReturnNull();
@@ -194,13 +187,8 @@ class ModuleValidatorTest extends TestCase
             'module' => 'module/pluginB@page'
         ]);
 
-        $dummyItem = m::mock('Xpressengine\Menu\MenuItem');
-
         $route->shouldReceive('uri')->andReturn('freeboard');
         $route->shouldReceive('setAction')->andReturn($route);
-
-        $menuHandler->shouldReceive('getItem')->andReturn($dummyItem);
-        $menuHandler->shouldReceive('getMenuItemTheme')->andReturn('defaultTheme');
 
         $result = $moduleValidator->matches($route, $request);
 
@@ -211,8 +199,6 @@ class ModuleValidatorTest extends TestCase
     {
         return [
             m::mock('Xpressengine\Routing\RouteRepository'),
-            m::mock('Xpressengine\Menu\MenuHandler'),
-            m::mock('Xpressengine\Theme\ThemeHandler'),
             m::mock('Xpressengine\Site\SiteHandler'),
             m::mock('Illuminate\Routing\Route'),
             m::mock('Illuminate\Http\Request'),

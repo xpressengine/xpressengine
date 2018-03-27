@@ -17,10 +17,7 @@ namespace Xpressengine\Routing;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Matching\ValidatorInterface;
 use Illuminate\Routing\Route;
-use Xpressengine\Http\Request as XeRequest;
-use Xpressengine\Menu\MenuHandler;
 use Xpressengine\Site\SiteHandler;
-use Xpressengine\Theme\ThemeHandler;
 
 /**
  * Class ModuleValidator
@@ -45,16 +42,6 @@ class ModuleValidator implements ValidatorInterface
     private $routeRepo;
 
     /**
-     * @var MenuHandler
-     */
-    private $menuHandler;
-
-    /**
-     * @var ThemeHandler
-     */
-    private $themeHandler;
-
-    /**
      * @var SiteHandler
      */
     private $siteHandler;
@@ -75,22 +62,14 @@ class ModuleValidator implements ValidatorInterface
     /**
      * boot
      *
-     * @param RouteRepository $routeRepo    route handler
-     * @param MenuHandler     $menuHandler  menu handler
-     * @param ThemeHandler    $themeHandler theme handler
-     * @param SiteHandler     $siteHandler  site handler
+     * @param RouteRepository $routeRepo   route handler
+     * @param SiteHandler     $siteHandler site handler
      *
      * @return void
      */
-    public function boot(
-        RouteRepository $routeRepo,
-        MenuHandler $menuHandler,
-        ThemeHandler $themeHandler,
-        SiteHandler $siteHandler
-    ) {
+    public function boot(RouteRepository $routeRepo, SiteHandler $siteHandler)
+    {
         $this->routeRepo = $routeRepo;
-        $this->menuHandler = $menuHandler;
-        $this->themeHandler = $themeHandler;
         $this->siteHandler = $siteHandler;
     }
 
@@ -104,7 +83,7 @@ class ModuleValidator implements ValidatorInterface
      */
     public function matches(Route $route, Request $request)
     {
-        if (!$this->canReview($route, $request)) {
+        if (!$this->canReview($route)) {
             return static::THIS_IS_NOT_INSTANCE_ROUTE;
         }
         try {
@@ -115,11 +94,6 @@ class ModuleValidator implements ValidatorInterface
             if ($instanceSource !== $routeSource) {
                 return static::NOT_MATCH_INSTANCE_ROUTE_SOURCE;
             } else {
-                /**
-                 * @var XeRequest $request
-                 */
-                $this->setInstanceConfig($instanceRoute, $request);
-
                 return static::INSTANCE_ROUTE_MATCHED;
             }
         } catch (\Exception $e) {
@@ -130,12 +104,11 @@ class ModuleValidator implements ValidatorInterface
     /**
      * canReview
      *
-     * @param Route   $route   laravel route
-     * @param Request $request laravel request
+     * @param Route $route laravel route
      *
      * @return bool
      */
-    private function canReview(Route $route, Request $request)
+    private function canReview(Route $route)
     {
         if (!is_null($route->getCompiled()->getHostRegex())) {
             return false;
@@ -187,38 +160,6 @@ class ModuleValidator implements ValidatorInterface
         $actions = $route->getAction();
 
         return $actions['module'];
-    }
-
-    /**
-     * setInstanceConfig
-     *
-     * @param InstanceRoute $instanceRoute instance route
-     * @param XeRequest     $request       xpressengine request
-     *
-     * @return void
-     */
-    private function setInstanceConfig(InstanceRoute $instanceRoute, XeRequest $request)
-    {
-        $item = $this->menuHandler->items()->find($instanceRoute->instance_id);
-        $menuConfig = $this->menuHandler->getMenuItemTheme($item);
-        if ($request->isMobile()) {
-            $theme = $menuConfig->get('mobileTheme');
-        } else {
-            $theme = $menuConfig->get('desktopTheme');
-        }
-        $instanceId = $instanceRoute->instance_id;
-        $module = $instanceRoute->module;
-        $url = $instanceRoute->url;
-
-        $instanceConfig = InstanceConfig::instance();
-        $instanceConfig->setTheme($theme);
-        $instanceConfig->setInstanceId($instanceId);
-        $instanceConfig->setModule($module);
-        $instanceConfig->setUrl($url);
-        $instanceConfig->setMenuItem($item);
-
-        $themeHandler = $this->themeHandler;
-        $themeHandler->selectTheme($theme);
     }
 
     /**
