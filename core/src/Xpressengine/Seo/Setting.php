@@ -84,6 +84,13 @@ class Setting
     protected $image;
 
     /**
+     * Indicates if the config exists.
+     *
+     * @var bool|null
+     */
+    protected $exists;
+
+    /**
      * Constructor
      *
      * @param ConfigManager $cfg     ConfigManager instance
@@ -128,7 +135,11 @@ class Setting
      */
     public function get($name, $default = null)
     {
-        $val = $this->exists() ? $this->config->get($name) : $default;
+        if ($this->exists === null) {
+            $this->exists = $this->exists();
+        }
+
+        $val = $this->exists ? $this->config->get($name) : $default;
 
         return !empty($val) ? $val : $default;
     }
@@ -148,6 +159,8 @@ class Setting
 
             $this->cfg->modify($this->config);
         }
+
+        $this->exists = true;
     }
 
     /**
