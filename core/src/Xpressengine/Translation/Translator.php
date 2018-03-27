@@ -14,8 +14,8 @@
 
 namespace Xpressengine\Translation;
 
+use Illuminate\Contracts\Translation\Translator as TranslatorContract;
 use Illuminate\Support\Collection;
-use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Translation\MessageSelector;
 use Xpressengine\Keygen\Keygen;
 use Xpressengine\Translation\Exceptions\EmptyLocaleException;
@@ -30,7 +30,7 @@ use Xpressengine\Translation\Loaders\LoaderInterface;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class Translator extends NamespacedItemResolver implements TranslatorInterface
+class Translator extends NamespacedItemResolver implements TranslatorContract
 {
     /**
      * @var array
@@ -196,11 +196,10 @@ class Translator extends NamespacedItemResolver implements TranslatorInterface
      *
      * @param string $id         다국어 key
      * @param array  $parameters 인자
-     * @param null   $domain     domain
      * @param null   $locale     locale
      * @return mixed
      */
-    public function trans($id, array $parameters = array(), $domain = null, $locale = null)
+    public function trans($id, array $parameters = array(), $locale = null)
     {
         $sentence = $this->get($id, $parameters, $locale);
 
@@ -241,11 +240,10 @@ class Translator extends NamespacedItemResolver implements TranslatorInterface
      * @param string $id         다국어 key
      * @param int    $number     숫자
      * @param array  $parameters 인자
-     * @param null   $domain     domain
      * @param null   $locale     locale
      * @return mixed
      */
-    public function transChoice($id, $number, array $parameters = array(), $domain = null, $locale = null)
+    public function transChoice($id, $number, array $parameters = array(), $locale = null)
     {
         $sentence = $this->choice($id, $number, $parameters, $locale);
 
