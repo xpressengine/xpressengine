@@ -47,13 +47,13 @@ class SettingsSkin extends GenericSkin
         app('xe.frontend')->css(
             [
                 'assets/core/xe-ui-component/xe-ui-component.css',
-                'assets/core/member/setting.css'
+                'assets/core/user/setting.css'
             ]
         )->load();
         app('xe.frontend')->js(
             [
-                'assets/core/member/snb.js',
-                'assets/core/member/settings.js'
+                'assets/core/user/snb.js',
+                'assets/core/user/settings.js'
             ]
         )->load();
         return parent::render();

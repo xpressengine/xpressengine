@@ -73,7 +73,7 @@ class AuthSkin extends BladeSkin
         app('xe.frontend')->css(
             [
                 'assets/core/xe-ui-component/xe-ui-component.css',
-                'assets/core/member/auth.css'
+                'assets/core/user/auth.css'
             ]
         )->load();
     }

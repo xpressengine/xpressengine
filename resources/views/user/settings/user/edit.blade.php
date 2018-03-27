@@ -97,5 +97,5 @@ var url = {
 };
 </script>
 {{ XeFrontend::js([
-    'assets/core/member/settings/edit.js'
+    'assets/core/user/settings/edit.js'
 ])->load() }}
