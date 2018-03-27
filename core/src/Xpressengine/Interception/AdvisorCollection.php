@@ -49,6 +49,11 @@ class AdvisorCollection
      */
     protected $aliases;
 
+    /**
+     * Sorted advisor list
+     *
+     * @var array
+     */
     protected $sorted = [];
 
     /**
