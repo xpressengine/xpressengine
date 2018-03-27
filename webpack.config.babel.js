@@ -6,7 +6,7 @@ const pathInfo = {
   vendor: path.resolve(__dirname, 'assets/vendor'),
   node: path.resolve(__dirname, 'node_modules'),
   core: path.resolve(__dirname, 'resources/assets/core'),
-  member: path.resolve(__dirname, 'resources/assets/core/member'),
+  user: path.resolve(__dirname, 'resources/assets/core/user'),
   settings: path.resolve(__dirname, 'resources/assets/core/settings'),
   common: path.resolve(__dirname, 'resources/assets/core/common'),
   permission: path.resolve(__dirname, 'resources/assets/core/permission'),
@@ -112,22 +112,13 @@ const config = [
       'core/lang/langEditorBox.bundle': [pathInfo.lang + '/LangEditorBox.js'],
       'core/common/js/dynamicField': [pathInfo.common + '/js/dynamicField'],
       'core/common/js/storeCategory': [pathInfo.common + '/js/storeCategory.js'],
-      'core/member/settings/edit': [pathInfo.member + '/settings/edit.js'],
+      'core/user/settings/edit': [pathInfo.user + '/settings/edit.js'],
       'core/settings/js/admin.bundle': [pathInfo.settings + '/js/admin.js'],
 
       // gulp assets:tree
       // @FIXME
       // @DEPRECATED
       'core/common/js/xe.tree': [pathInfo.core + '/tree/Tree.js'],
-
-      // gulp assets:draft
-      // @FIXME
-      // @DEPRECATED
-      // 현재 사용 안 됨 https://github.com/xpressengine/plugin-board/commit/7b2ae1a6
-      'core/common/js/draft.bundle': [
-        pathInfo.vendor + '/bootstrap/js/collapse.js',
-        pathInfo.common + '/js/draft.js'
-      ]
     },
     output: {
       path: path.resolve(__dirname, '.'),
@@ -155,7 +146,7 @@ const config = [
             'common/js/progress.js',
             'common/js/request.js',
             'lang/LangEditorBox.js',
-            'member/settings/edit.js',
+            'user/settings/edit.js',
             'permission/*.js',
             'settings/js/admin.js',
             'tree/*.js'

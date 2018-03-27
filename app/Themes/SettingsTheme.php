@@ -60,7 +60,7 @@ class SettingsTheme extends AbstractTheme
         )->load();
 
         $frontendHandler->css([
-            'assets/vendor/bootstrap/css/bootstrap.css',
+            'assets/vendor/bootstrap/css/bootstrap.min.css',
             'assets/core/xe-ui-component/xe-ui-component.css',
             'assets/core/settings/css/admin.css',
         ])->load();

@@ -229,12 +229,19 @@ class CategoryHandler
      */
     public function deleteItem(CategoryItem $item, $force = true)
     {
-        /** @var CategoryItem $desc */
-        foreach ($item->descendants as $desc) {
-            if ($force === true) {
+        if ($force == true) {
+            /** @var CategoryItem $desc */
+            foreach ($item->descendants as $desc) {
                 $this->items->delete($desc);
-            } else {
-                $this->items->exclude($desc, $item);
+            }
+        } else {
+            foreach ($item->descendants as $desc) {
+                if ($item->getDepth() + 1 == $desc->getDepth()) {
+                    $this->items->setNewParent($desc, $item);
+                    $this->items->decrementDepth($desc, $item);
+                } else {
+                    $this->items->decrementDepth($desc, $item);
+                }
             }
         }
 

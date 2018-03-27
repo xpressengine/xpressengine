@@ -1,24 +1,24 @@
 /*
- * jQuery File Upload Plugin 5.42.3
+ * jQuery File Upload Plugin
  * https://github.com/blueimp/jQuery-File-Upload
  *
  * Copyright 2010, Sebastian Tschan
  * https://blueimp.net
  *
  * Licensed under the MIT license:
- * http://www.opensource.org/licenses/MIT
+ * https://opensource.org/licenses/MIT
  */
 
 /* jshint nomen:false */
 /* global define, require, window, document, location, Blob, FormData */
 
-(function (factory) {
+;(function (factory) {
     'use strict';
     if (typeof define === 'function' && define.amd) {
         // Register as an anonymous AMD module:
         define([
             'jquery',
-            'jquery.ui.widget'
+            'jquery-ui/ui/widget'
         ], factory);
     } else if (typeof exports === 'object') {
         // Node/CommonJS:
@@ -43,7 +43,7 @@
             '|(Kindle/(1\\.0|2\\.[05]|3\\.0))'
     ).test(window.navigator.userAgent) ||
         // Feature detection for all other devices:
-        $('<input type="file">').prop('disabled'));
+        $('<input type="file"/>').prop('disabled'));
 
     // The FileReader API is not actually used, but works as feature detection,
     // as some Safari versions (5?) support XHR file uploads via the FormData API,
@@ -277,7 +277,8 @@
             // The following are jQuery ajax settings required for the file uploads:
             processData: false,
             contentType: false,
-            cache: false
+            cache: false,
+            timeout: 0
         },
 
         // A list of options that require reinitializing event listeners and/or
@@ -452,7 +453,7 @@
             }
             if (!multipart || options.blob || !this._isInstanceOf('File', file)) {
                 options.headers['Content-Disposition'] = 'attachment; filename="' +
-                    encodeURI(file.name) + '"';
+                    encodeURI(file.uploadName || file.name) + '"';
             }
             if (!multipart) {
                 options.contentType = file.type || 'application/octet-stream';
@@ -488,7 +489,11 @@
                         });
                     }
                     if (options.blob) {
-                        formData.append(paramName, options.blob, file.name);
+                        formData.append(
+                            paramName,
+                            options.blob,
+                            file.uploadName || file.name
+                        );
                     } else {
                         $.each(options.files, function (index, file) {
                             // This check allows the tests to run with
@@ -651,7 +656,7 @@
             data.process = function (resolveFunc, rejectFunc) {
                 if (resolveFunc || rejectFunc) {
                     data._processQueue = this._processQueue =
-                        (this._processQueue || getPromise([this])).pipe(
+                        (this._processQueue || getPromise([this])).then(
                             function () {
                                 if (data.errorThrown) {
                                     return $.Deferred()
@@ -659,7 +664,7 @@
                                 }
                                 return getPromise(arguments);
                             }
-                        ).pipe(resolveFunc, rejectFunc);
+                        ).then(resolveFunc, rejectFunc);
                 }
                 return this._processQueue || getPromise([this]);
             };
@@ -729,7 +734,7 @@
                 promise = dfd.promise(),
                 jqXHR,
                 upload;
-            if (!(this._isXHRUpload(options) && slice && (ub || mcs < fs)) ||
+            if (!(this._isXHRUpload(options) && slice && (ub || ($.type(mcs) === 'function' ? mcs(options) : mcs) < fs)) ||
                     options.data) {
                 return false;
             }
@@ -752,7 +757,7 @@
                 o.blob = slice.call(
                     file,
                     ub,
-                    ub + mcs,
+                    ub + ($.type(mcs) === 'function' ? mcs(o) : mcs),
                     file.type
                 );
                 // Store the current chunk size, as the blob itself
@@ -944,9 +949,9 @@
                 if (this.options.limitConcurrentUploads > 1) {
                     slot = $.Deferred();
                     this._slots.push(slot);
-                    pipe = slot.pipe(send);
+                    pipe = slot.then(send);
                 } else {
-                    this._sequence = this._sequence.pipe(send, send);
+                    this._sequence = this._sequence.then(send, send);
                     pipe = this._sequence;
                 }
                 // Return the piped Promise object, enhanced with an abort method,
@@ -983,7 +988,10 @@
                 fileSet,
                 i,
                 j = 0;
-            if (limitSize && (!filesLength || files[0].size === undefined)) {
+            if (!filesLength) {
+                return false;
+            }
+            if (limitSize && files[0].size === undefined) {
                 limitSize = undefined;
             }
             if (!(options.singleFileUploads || limit || limitSize) ||
@@ -1042,13 +1050,19 @@
 
         _replaceFileInput: function (data) {
             var input = data.fileInput,
-                inputClone = input.clone(true);
+                inputClone = input.clone(true),
+                restoreFocus = input.is(document.activeElement);
             // Add a reference for the new cloned file input to the data argument:
             data.fileInputClone = inputClone;
             $('<form></form>').append(inputClone)[0].reset();
             // Detaching allows to insert the fileInput on another form
             // without loosing the file input value:
             input.after(inputClone).detach();
+            // If the fileInput had focus before it was detached,
+            // restore focus to the inputClone.
+            if (restoreFocus) {
+                inputClone.focus();
+            }
             // Avoid memory leaks with the detached file input:
             $.cleanData(input.unbind('remove'));
             // Replace the original file input element in the fileInput
@@ -1070,6 +1084,8 @@
         _handleFileTreeEntry: function (entry, path) {
             var that = this,
                 dfd = $.Deferred(),
+                entries = [],
+                dirReader,
                 errorHandler = function (e) {
                     if (e && !e.entry) {
                         e.entry = entry;
@@ -1097,8 +1113,7 @@
                             readEntries();
                         }
                     }, errorHandler);
-                },
-                dirReader, entries = [];
+                };
             path = path || '';
             if (entry.isFile) {
                 if (entry._file) {
@@ -1129,7 +1144,7 @@
                 $.map(entries, function (entry) {
                     return that._handleFileTreeEntry(entry, path);
                 })
-            ).pipe(function () {
+            ).then(function () {
                 return Array.prototype.concat.apply(
                     [],
                     arguments
@@ -1198,7 +1213,7 @@
             return $.when.apply(
                 $,
                 $.map(fileInput, this._getSingleFileInputFiles)
-            ).pipe(function () {
+            ).then(function () {
                 return Array.prototype.concat.apply(
                     [],
                     arguments
@@ -1299,6 +1314,10 @@
             this._off(this.options.dropZone, 'dragenter dragleave dragover drop');
             this._off(this.options.pasteZone, 'paste');
             this._off(this.options.fileInput, 'change');
+        },
+
+        _destroy: function () {
+            this._destroyEventHandlers();
         },
 
         _setOption: function (key, value) {

@@ -113,7 +113,7 @@ class Permission extends AbstractUIObject
         $jsonVGroups = json_enc($vgroups);
         $htmlString = [];
         $htmlString[] = "<div class='{$container}' data-data='{$jsonRet}' data-title='{$title}'
-                    data-key='{$uibojectKey}' data-member-url='{$memberSearchUrl}' data-group-url='{$groupSearchUrl}'
+                    data-key='{$uibojectKey}' data-user-url='{$memberSearchUrl}' data-group-url='{$groupSearchUrl}'
                     data-type='{$title}' data-vgroup-all='{$jsonVGroups}'></div>";
 
 

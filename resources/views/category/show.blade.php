@@ -1,7 +1,7 @@
 {{ XeFrontend::css(
 [
-'/assets/core/lang/langEditorBox.css',
-'/assets/core/xe-ui-component/xe-ui-component.css'
+    '/assets/core/lang/langEditorBox.css',
+    '/assets/core/xe-ui-component/xe-ui-component.css'
 ]
 )->load() }}
 
@@ -10,14 +10,12 @@
 
 {{ XeFrontend::js(
 [
-'/assets/vendor/expanding/expanding.js',
-'/assets/core/lang/langEditorBox.bundle.js'
+    '/assets/core/lang/langEditorBox.bundle.js'
 ]
 )->appendTo('head')->load() }}
 
 {{ XeFrontend::js('/assets/core/common/js/xe.tree.js')->appendTo('body')->load() }}
 {{ XeFrontend::js('/assets/core/category/Category.js')->appendTo('body')->load() }}
-{{--{{ XeFrontend::js('/assets/core/category/tree.js')->appendTo('head')->load() }}--}}
 
 {{ XeFrontend::translation([
     'xe::required',
@@ -31,6 +29,7 @@
     'xe::save',
     'xe::delete',
     'xe::close',
+    'xe::subCategoryDestroy',
 ]) }}
 
 @section('page_title')
@@ -50,7 +49,8 @@
             load: '{{ route('manage.category.edit.item.children', ['id' => $category->id]) }}',
             add: '{{ route('manage.category.edit.item.store', ['id' => $category->id]) }}',
             modify: '{{ route('manage.category.edit.item.update', ['id' => $category->id]) }}',
-            remove: '{{ route('manage.category.edit.item.destroy', ['id' => $category->id]) }}',
+            remove: '{{ route('manage.category.edit.item.destroy', ['id' => $category->id, 'force' => false]) }}',
+            removeAll: '{{ route('manage.category.edit.item.destroy', ['id' => $category->id, 'force' => true]) }}',
             move: '{{ route('manage.category.edit.item.move', ['id' => $category->id]) }}'
         });
     });

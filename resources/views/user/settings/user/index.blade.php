@@ -104,7 +104,7 @@ use Xpressengine\User\Models\User;
                             <td>
                                 <img data-toggle="xe-page-toggle-menu"
                                         data-url="{{ route('toggleMenuPage') }}"
-                                        data-data='{!! json_encode(['id'=>$user->getId(), 'type'=>'user']) !!}' src="{{ $user->getProfileImage() }}" width="30" height="30" alt="{{xe_trans('xe::profileImage')}}" class="member-profile">
+                                        data-data='{!! json_encode(['id'=>$user->getId(), 'type'=>'user']) !!}' src="{{ $user->getProfileImage() }}" width="30" height="30" alt="{{xe_trans('xe::profileImage')}}" class="user-profile">
                                 <span>
                                     <a href="#"
                                        data-toggle="xe-page-toggle-menu"

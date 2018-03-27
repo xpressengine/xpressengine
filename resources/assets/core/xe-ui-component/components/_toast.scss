@@ -14,7 +14,7 @@
   .xe-alert {
     position: relative;
     padding: 14px 40px 14px 20px;
-    background-color: $brand-black;    
+    background-color: $brand-black;
     color: #fff;
     font-size: 14px;
     line-height: 20px;
@@ -22,20 +22,20 @@
     border-radius: 2px;
     margin: 4px 0;
     &.xe-warning {
-      background-color: $brand-warning;      
+      background-color: $brand-warning;
     }
     &.xe-success {
-      background-color: $brand-success;  
+      background-color: $brand-success;
     }
     &.xe-danger {
-      background-color: $brand-danger;  
+      background-color: $brand-danger;
     }
     &.xe-positive {
-      background-color: $brand-positive;  
-    }    
+      background-color: $brand-positive;
+    }
     &.xe-fail {
-      background-color: $brand-fail;  
-    }        
+      background-color: $brand-fail;
+    }
     a {
       color: #ffea00;
       &:hover {
@@ -55,7 +55,7 @@
   line-height: 1;
   -webkit-appearance: none;
   padding: 0;
-  cursor: pointer;  
+  cursor: pointer;
   border: 0;
   outline: none;
   background-color: transparent;
@@ -68,7 +68,7 @@
   &:hover i{
     background-color: #fff;
     border-radius:50%;
-    color:#000;    
+    color:#000;
     line-height: 20px;
   }
 }

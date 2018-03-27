@@ -35,4 +35,12 @@ class DashboardController extends Controller
 
         return \XePresenter::make('settings.dashboard', compact('widgetbox'));
     }
+
+    /**
+     * dashboard 로 redirection
+     */
+    public function redirect()
+    {
+        return redirect()->route('settings.dashboard');
+    }
 }

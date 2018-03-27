@@ -1,5 +1,5 @@
 <!-- 로그인 폼  -->
-<div class="member">
+<div class="user">
     <h1>{{xe_trans('xe::doLogin')}}</h1>
     <form action="{{ route('login') }}" method="post" {{--data-rule="{{ $loginRuleName }}"--}}>
         <input type="hidden" name="_token" value="{{ csrf_token() }}">

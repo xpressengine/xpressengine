@@ -93,9 +93,11 @@ var Category = (function () {
       })
 
       _$wrap.on('click', '.btnRemoveCategory', function () {
-        var id = $(this).closest('.item-content').data('item').id
+        _this.remove($(this).closest('.item-content').data('item'))
+      })
 
-        _this.remove(id)
+      _$wrap.on('click', '.btnRemoveAllCategory', function () {
+        _this.removeAll($(this).closest('.item-content').data('item'))
       })
 
       _$wrap.on('click', '.__xe_btn_toggle_children', function () {
@@ -139,6 +141,7 @@ var Category = (function () {
             wordLangKey: item.word,
             descriptionLangKey: item.description,
             removeButton: true,
+            removeAllButton: true,
             saveButton: true,
             type: 'modify',
             id: $this.closest('.item-content').data('item').id
@@ -264,6 +267,10 @@ var Category = (function () {
 
       if (obj.removeButton) {
         template += '<button type="button" class="btn btn-default btnRemoveCategory">' + XE.Lang.trans('xe::delete') + '</button>'
+      }
+
+      if (obj.removeAllButton) {
+          template += '<button type="button" class="btn btn-default btnRemoveAllCategory">' + XE.Lang.trans('xe::subCategoryDestroy') + '</button>'
       }
 
       if (obj.saveButton) {
@@ -449,15 +456,7 @@ var Category = (function () {
           if (nodes.length > 0) {
             var filterNodes = {}
 
-            if ($parent.find('.item').length > 0) {
-              $parent.find('.item').each(function () {
-                filterNodes[$(this).find('.item-content').data('item').id] = true
-              })
-            }
-
-            nodes = nodes.filter(function (v, k) {
-              return !filterNodes.hasOwnProperty(v.id)
-            })
+            $parent.find('.item').remove();
 
             $parent.append(Tree.getItemsTemplate({
               items: nodes,
@@ -527,15 +526,49 @@ var Category = (function () {
      * @memberof Category
      * @param {string} id
      * */
-    remove: function (id) {
+    remove: function (item) {
+      var that = this;
+
       XE.ajax({
         url: _config.remove,
         type: 'post',
-        dataType: 'html',
-        data: { id: id },
+        dataType: 'json',
+        data: { id: item.id },
         success: function () {
-          $('#item_' + id).remove()
+          var $parent = $('.__category_body');
+          var isRoot = true;
+          $('.item-container', $parent).remove()
+
+          that.load({
+            $parent: $parent,
+            isRoot: isRoot
+          })
         }
+      })
+    },
+    /**
+    * 아이템을 하위 카테고리까지 삭제한다.
+    * @memberof Category
+    * @param {string} id
+    * */
+    removeAll: function (item) {
+      var that = this;
+
+      XE.ajax({
+          url: _config.removeAll,
+          type: 'post',
+          dataType: 'json',
+          data: { id: item.id },
+          success: function () {
+              var $parent = $('.__category_body');
+              var isRoot = true;
+              $('.item-container', $parent).remove()
+
+              that.load({
+                  $parent: $parent,
+                  isRoot: isRoot
+              })
+          }
       })
     },
     /**

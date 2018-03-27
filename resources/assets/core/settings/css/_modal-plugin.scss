@@ -9,7 +9,7 @@
   border-color: #323232;
 }
 .xe-modal-plugin-detail {
-  
+
   .plugin-detail .plugin-summary h2 ,
   .plugin-detail .second-info > li h3 ,
   .plugin-detail .plugin-document h3 ,
@@ -17,13 +17,13 @@
     padding: 0;
     margin: 0;
   }
-  
+
   .plugin-detail .plugin-title {
     margin: 0 0 20px;
     padding-bottom: 20px;
     border-bottom: 1px solid #DBDADF;
   }
-  
+
   .plugin-detail .plugin-img {
     float: left;
     margin-bottom: 15px;
@@ -57,20 +57,20 @@
     vertical-align: middle;
     font-size: 11px;
   }
-  
+
   .plugin-detail .plugin-title h3{
     margin : 25px 0 17px;
     font-size: 18px;
     color: #434a53;
     font-weight: normal;
   }
-  
+
   .plugin-detail .plugin-summary dl {
     overflow: hidden;
     margin: 0;
     padding: 0;
   }
-  
+
   .plugin-detail .plugin-summary .plugin-install {
     margin: 6px 0 8px;
   }
@@ -95,7 +95,7 @@
   .plugin-detail .plugin-summary .plugin-count dd .btn-like{
     color: #696e7a;
   }
-  
+
   .plugin-detail .plugin-summary .plugin-count dd .btn-like.on .xi-heart-o,
   .plugin-detail .plugin-summary .plugin-count dd .btn-like:not(.on) .xi-heart{
     display: none;
@@ -129,14 +129,14 @@
   .plugin-detail .plugin-summary .text-gray{
     font-size: 11px;
   }
-  
+
   .plugin-detail .plugin-summary .desc{
     margin: 0 0 35px;
     color: #696e7a;
     font-size: 14px;
     line-height: 23px;
   }
-  
+
   .plugin-tabs {
     position: relative;
   }
@@ -174,7 +174,7 @@
     -webkit-overflow-scrolling: touch;
     margin-bottom: 35px;
   }
-  
+
   .plugin-tabs-navigation {
     width: 100%;
     display: table;
@@ -217,12 +217,12 @@
     height: 20px;
     width: 20px;
   }
-  
+
   .plugin-tabs-content {
     height: auto !important;
     padding: 0;
   }
-  
+
   .plugin-tabs-content li.plugin-tabs-content-item {
     display: none;
   }
@@ -231,7 +231,7 @@
     -webkit-animation: plugin-fade-in .5s;
     animation: plugin-fade-in .5s;
   }
-  
+
   .plugin-detail .plugin-document {
     font-size: 14px;
     color: #696e7a;
@@ -271,7 +271,7 @@
     font-style: normal;
     color: #323335;
   }
-  
+
   .plugin-detail .screenshot {
     width: 100%;
     overflow-y: hidden;
@@ -312,7 +312,7 @@
     clear: both;
     overflow: auto;
   }
-  
+
   .plugin-detail .second-info {
     margin-top: 20px;
     padding: 0;
@@ -361,7 +361,7 @@
   .plugin-detail .xe-select-box.xe-btn:after{
     border-color: #fff transparent transparent transparent;
   }
-  
+
   .plugin-detail .plugin-dev .xe-select-box {
     float: right;
     margin-top: 25px;
@@ -395,7 +395,7 @@
     margin-bottom: 10px;
     white-space: nowrap;
   }
-  
+
   .plugin-manage .dev-list li{
     margin-top:10px;
   }
@@ -493,12 +493,12 @@
     font-size: 13px;
     color: #434a53;
   }
-  
+
   .plugin-manage .plugin-info td{
     font-size: 13px;
     color: #878b93;
   }
-  
+
   .plugin-manage .plugin-info.v2{
     padding: 40px 0;
     border-top: 0;
@@ -514,19 +514,19 @@
     border: 1px solid #ddd;
     white-space: nowrap;
   }
-  
+
   .plugin-manage .xe-table > thead > tr > th:after{
     background-color: transparent;
   }
-  
+
   .plugin-manage .xe-table > thead > tr > th{
     border-bottom: 2px solid #ddd;
   }
-  
+
   .plugin-manage .xe-table > thead:first-child > tr:first-child > th{
     border-top-color:transparent;
   }
-  
+
   .plugin-manage .xe-table th,
   .plugin-manage .xe-table td,
   .plugin-manage .report-table .xe-table .text-left{
@@ -537,32 +537,32 @@
     padding: 6px;
     font-size: 12px;
   }
-  
+
   .plugin-manage .report-table .xe-table th,
   .plugin-manage .report-table .xe-table td{
     text-align: center;
   }
-  
+
   .plugin-manage .xe-table .report-result{
     display: none;
   }
-  
+
   .plugin-manage .xe-table .report-result > td{
     padding-top:0;
     border-top-color:transparent;
   }
-  
+
   .plugin-manage .xe-table .report-result .report-result-content{
     padding: 15px;
     background-color: #E9F3FD;
     border: 1px solid #D5E8FB;
     border-radius: 4px;
   }
-  
+
   .plugin-manage .xe-table .report-result .report-result-content ul{
     padding-left:  25px;
   }
-  
+
   .plugin-manage .xe-table .report-result .report-result-content ul li{
     color: #878b93;
   }
@@ -576,16 +576,16 @@
     border-bottom: 1px solid #2c8beb;
     outline:none;
   }
-  
+
   .plugin-manage .xe-table .result-toggle span+span,
   .plugin-manage .xe-table .result-toggle.open span{
     display: none;
   }
-  
+
   .plugin-manage .xe-table .result-toggle.open span+span{
     display: block;
   }
-  
+
   .plugin-manage .xe-table .result-toggle:after{
     position: absolute;
     right: 0;
@@ -599,16 +599,13 @@
     transform: rotate(45deg);
     content: "";
   }
-  
+
   .plugin-manage .xe-table .result-toggle.open:after{
     margin-top: -3px;
     -webkit-transform: rotate(-135deg);
     transform: rotate(-135deg);
   }
-  .xo-text-blue {
-    color: #2c8beb !important;
-  }
-  
+
   .comment-write-title {
     display: inline-block;
     font-size: 14px;
@@ -671,7 +668,7 @@
     background-color: #fff;
     color: #2c8beb;
   }
-  
+
   .markdown-editor .markdown-preview,
   .markdown-editor .markdown-input {
     display: none;
@@ -844,7 +841,7 @@
     padding: 5px 10px;
     color: #2c8beb;
   }
-  
+
 } //.xe-modal-plugin-detail {
 
 
@@ -885,7 +882,7 @@
       margin-left: 135px;
     }
   } //.xe-modal-plugin-detail
-  
+
 }
 @media (min-width: 992px) {
   .xe-modal-plugin-detail {
@@ -924,7 +921,7 @@
       padding: 0;
       border: none;
     }
-    
+
   } //.xe-modal-plugin-detail
 
 }

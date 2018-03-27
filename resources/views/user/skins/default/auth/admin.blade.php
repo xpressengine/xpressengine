@@ -1,4 +1,4 @@
-    <div class="member">
+    <div class="user">
         <h1>관리자 인증</h1>
         <div class="info">
             <em class="info-title">{{ xe_trans('xe::msgAdminAuth') }}</em><br>

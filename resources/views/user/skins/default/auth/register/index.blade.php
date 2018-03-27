@@ -1,5 +1,5 @@
 <!--회원가입하기 기본폼 -->
-<div class="member">
+<div class="user">
     <h1>{{xe_trans('xe::signUp')}}</h1>
 
     <h4>{{ xe_trans('xe::registerByEmailConfirm') }}</h4>

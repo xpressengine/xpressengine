@@ -1,6 +1,6 @@
 
 <div class="row">
-    <form class="form" name="fMemberEdit" method="post" action="{{ route('settings.user.update', [$user->id]) }}" enctype="multipart/form-data">
+    <form class="form" name="fUserEdit" method="post" action="{{ route('settings.user.update', [$user->id]) }}" enctype="multipart/form-data">
         {{ method_field('put') }}
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
     <div class="col-sm-12">
@@ -97,5 +97,5 @@ var url = {
 };
 </script>
 {{ XeFrontend::js([
-    'assets/core/member/settings/edit.js'
+    'assets/core/user/settings/edit.js'
 ])->load() }}
