@@ -2286,6 +2286,10 @@ return [
         'ko' => '기본정보',
         'en' => 'Default information',
     ],
+    'enterDefaultInfo' => [
+        'ko' => '기본 정보 입력',
+        'en' => 'Enter required information',
+    ],
     'descDefaultInfo' => [
         'ko' => '기본정보(이메일, 이름, 비밀번호) 입력 폼입니다.',
         'en' => 'This is a form to enter email, name and password.',
