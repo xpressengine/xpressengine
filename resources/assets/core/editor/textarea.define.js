@@ -1,12 +1,14 @@
 import $ from 'jquery'
+import XEeditor from './editor.core'
 
 /**
  * @class XEtextarea
- * */
-window.XEeditor.define({
-  name: 'XEtextarea',
-  configs: {}
-}, {
+ **/
+XEeditor.define({
+  editorSettings: {
+    name: 'XEtextarea',
+    configs: {}
+  },
   /**
    * @prop {object} interfaces
    * @prop {function(selector,options)} interfaces.initialize
@@ -33,90 +35,92 @@ window.XEeditor.define({
    *   - callback : function
    * </pre>
    * @prop {function} interfaces.reset 에디터 컨텐츠를 초기화한다.
-   * */
-  initialize: function (selector, options) {
-    options = $.extend(true, {
-      fileUpload: {},
-      suggestion: {},
-      names: {
-        file: {
-          image: {}
+   **/
+  interfaces: {
+    initialize: function (selector, options) {
+      options = $.extend(true, {
+        fileUpload: {},
+        suggestion: {},
+        names: {
+          file: {
+            image: {}
+          },
+          tag: {},
+          mention: {}
         },
-        tag: {},
-        mention: {}
-      },
-      extensions: [],
-      fontFamily: [],
-      perms: {},
-      files: []
-    }, options)
+        extensions: [],
+        fontFamily: [],
+        perms: {},
+        files: []
+      }, options)
 
-    let $editor = $('#' + selector)
-    let height = options.height
-    let fontFamily = options.fontFamily
-    let fontSize = options.fontSize
+      let $editor = $('#' + selector)
+      let height = options.height
+      let fontFamily = options.fontFamily
+      let fontSize = options.fontSize
 
-    this.addProps({
-      editor: $editor, selector: selector, options: options
-    })
+      this.addProps({
+        editor: $editor, selector: selector, options: options
+      })
 
-    if (height) {
-      $editor.css('height', height + 'px')
-    }
-
-    if (fontFamily || fontSize) {
-      if (fontFamily && fontFamily.length > 0) {
-        $editor.css('font-family', fontFamily.join(','))
+      if (height) {
+        $editor.css('height', height + 'px')
       }
 
-      if (fontSize) {
-        $editor.css('font-size', fontSize)
-      }
-    }
+      if (fontFamily || fontSize) {
+        if (fontFamily && fontFamily.length > 0) {
+          $editor.css('font-family', fontFamily.join(','))
+        }
 
-    $editor.parents('form').on('submit', function () {
-      let fileInput = options.names.file.input
-      let files = options.files
-      let $paramWrap = $()
-
-      // files input삭제 후 생성
-      $editor.nextAll('.paramWrap').remove()
-      $editor.after("<div class='paramWrap'>")
-      $paramWrap = $editor.nextAll('.paramWrap')
-
-      // files
-      if (files.length > 0) {
-        for (let i = 0, max = files.length; i < max; i += 1) {
-          let file = files[i]
-
-          $paramWrap.append("<input type='hidden'name='" + fileInput + "[]' value='" + file.id + "' />")
+        if (fontSize) {
+          $editor.css('font-size', fontSize)
         }
       }
-    })
-  },
 
-  getContents: function () {
-    return this.props.editor.val()
-  },
+      $editor.parents('form').on('submit', function () {
+        let fileInput = options.names.file.input
+        let files = options.files
+        let $paramWrap = $()
 
-  setContents: function (text) {
-    this.props.editor.val(text)
-  },
+        // files input삭제 후 생성
+        $editor.nextAll('.paramWrap').remove()
+        $editor.after("<div class='paramWrap'>")
+        $paramWrap = $editor.nextAll('.paramWrap')
 
-  addContents: function (text) {
-    var html = this.props.editor.val()
-    this.props.editor.val(html)
-  },
+        // files
+        if (files.length > 0) {
+          for (let i = 0, max = files.length; i < max; i += 1) {
+            let file = files[i]
 
-  on: function (eventName, callback) {
-    this.props.editor.on(eventName, callback)
-  },
+            $paramWrap.append("<input type='hidden'name='" + fileInput + "[]' value='" + file.id + "' />")
+          }
+        }
+      })
+    },
 
-  reset: function () {
-    // contents 삭제
-    this.props.editor.val('').focus()
+    getContents: function () {
+      return this.props.editor.val()
+    },
 
-    // input hidden 삭제
-    this.props.editor.nextAll('.paramWrap').remove()
+    setContents: function (text) {
+      this.props.editor.val(text)
+    },
+
+    addContents: function (text) {
+      var html = this.props.editor.val()
+      this.props.editor.val(html)
+    },
+
+    on: function (eventName, callback) {
+      this.props.editor.on(eventName, callback)
+    },
+
+    reset: function () {
+      // contents 삭제
+      this.props.editor.val('').focus()
+
+      // input hidden 삭제
+      this.props.editor.nextAll('.paramWrap').remove()
+    }
   }
 })
