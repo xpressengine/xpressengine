@@ -44,7 +44,10 @@ const config = [
   // common, vendor
   {
     entry: {
-      'vendor': [path.resolve(__dirname, 'resources/assets/vendor.js')],
+      'vendor': [
+        'babel-polyfill',
+        path.resolve(__dirname, 'resources/assets/vendor.js')
+      ],
       'common': [path.resolve(__dirname, 'resources/assets/common.js')]
     },
     output: {
@@ -67,7 +70,13 @@ const config = [
         {
           test: /(\.js)$/,
           exclude: /node_modules/,
-          use: { loader: 'babel-loader', options: { cacheDirectory: true } }
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: ['env'],
+              cacheDirectory: true
+            }
+          }
         },
         {
           test: require.resolve('jquery'),
@@ -99,6 +108,7 @@ const config = [
   {
     entry: {
       'core/common/js/xe.bundle': [
+        'babel-polyfill',
         pathInfo.common + '/js/xe.js',
         pathInfo.common + '/js/lang.js',
         pathInfo.common + '/js/progress.js',
@@ -177,7 +187,10 @@ const config = [
           exclude: /node_modules/,
           use: {
             loader: 'babel-loader',
-            options: {cacheDirectory: true}
+            options: {
+              presets: ['env'],
+              cacheDirectory: true
+            }
           }
         },
         {
