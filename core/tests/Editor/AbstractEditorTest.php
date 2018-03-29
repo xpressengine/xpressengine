@@ -67,7 +67,6 @@ class AbstractEditorTest extends \PHPUnit\Framework\TestCase
 
         $events->shouldReceive('fire')->once();
         $frontend->shouldReceive('js')->once()->andReturnSelf();
-        $frontend->shouldReceive('before')->once()->andReturnSelf();
         $frontend->shouldReceive('load')->once();
 
         $content = $instance->render();
