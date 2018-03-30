@@ -12,41 +12,34 @@ class EditorCore {
     eventify(this)
 
     /**
-     * @memberof XEeditor
-     * @prop {object} tools
-     * @prop {function} define
-     * <pre>
-     *   tool을 정의한다.
-     *
-     *   arguments
-     *   - obj : object
-     * </pre>
-     * @prop {function} get
-     * <pre>
-     *   tool을 리턴한다.
-     *
-     *   arguments
-     *   - id : string
-     * </pre>
+     * @DEPRECATED
      **/
     this.tools = {}
-    this.tools.define = obj => this.addTool.call(this, obj)
-    this.tools.get = id => this.getTool.call(this, id)
-  }
-
-  addTool (obj) {
-    if (Validation.isValidToolsObject(obj)) {
-      this.toolsSet[obj.id] = new Tools(obj)
+    /**
+     * @DEPRECATED
+     **/
+    this.tools.define = obj => {
+      if ($.isFunction(console.warn) && $.isFunction(console.trace)) {
+        console.warn('DEPRECATED: XEeditor.tools.define() is deprecated. use XEeditor.defineTool')
+        console.trace()
+      }
+      this.defineTool.call(this, obj)
     }
-  }
-
-  getTool (id) {
-    return this.toolsSet[id]
+    /**
+     * @DEPRECATED
+     **/
+    this.tools.get = id => {
+      if ($.isFunction(console.warn) && $.isFunction(console.trace)) {
+        console.warn('DEPRECATED: XEeditor.tools.get() is deprecated. use XEeditor.getTool')
+        console.trace()
+      }
+      return this.getTool.call(this, id)
+    }
   }
 
   /**
    * 에디터를 정의한다.
-   * @memberof XEeditor
+   * @memberof EditorCore
    * @param {object} obj
    * <pre>
    *   - editorSettings : 에디터 설정 정보
@@ -59,16 +52,37 @@ class EditorCore {
 
     if (Validation.isValidEditorOptions(editorSettings, interfaces)) {
       const editor = new Editor(editorSettings, interfaces)
-      editor._core = this
-
       this.editorSet[editorSettings.name] = editor
       this.editorOptionSet[editorSettings.name] = editorSettings
     }
   }
 
   /**
+   * EditorTool 정의
+   *
+   * @memberof EditorCore
+   * @param {<type>} obj
+   */
+  defineTool (obj) {
+    if (Validation.isValidToolsObject(obj)) {
+      this.toolsSet[obj.id] = new Tools(obj)
+    }
+  }
+
+  /**
+   * EditorTool 반환
+   *
+   * @memberof EditorCore
+   * @param {<type>} id
+   * @return {<type>}
+   */
+  getTool (id) {
+    return this.toolsSet[id]
+  }
+
+  /**
    * 에디터를 반환한다.
-   * @memberof XEeditor
+   * @memberof EditorCore
    * @param {string} name
    * @return {object}
    **/
@@ -78,7 +92,7 @@ class EditorCore {
 
   /**
    * 컨텐츠에 tool id를 xe-tool-id attribute에 할당하여 반환한다.
-   * @memberof XEeditor
+   * @memberof EditorCore
    * @param {string} content
    * @param {string} id
    * @return {string} HTML markup string
@@ -88,10 +102,10 @@ class EditorCore {
   }
 
   /**
-   * @memberof XEeditor
+   * @DEPRECATED
+   * @memberof EditorCore
    * @param {string} id
    * @return {string} HTML selector string
-   * @DEPRECATED
    **/
   getDomSelector (id) {
     return '[xe-tool-id="' + id + '"]'

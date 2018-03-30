@@ -85,14 +85,14 @@ class Validation {
 
     for (let i = 0, max = requireOptions.tools.property.length; i < max; i += 1) {
       if (!obj.hasOwnProperty(requireOptions.tools.property[i])) {
-        console.error('구현 필요 [XEeditor.tools.define => fn:' + requireOptions.tools.property[i] + ']')
+        console.error('구현 필요 [XEeditor.addTool => fn:' + requireOptions.tools.property[i] + ']')
         valid = false
       }
     }
 
     for (let i = 0, max = requireOptions.tools.events.length; i < max; i += 1) {
       if (!obj.events.hasOwnProperty(requireOptions.tools.events[i])) {
-        console.error('구현 필요[XEeditor.tools.define => event' + requireOptions.tools.events[i] + ']')
+        console.error('구현 필요[XEeditor.addTool => event' + requireOptions.tools.events[i] + ']')
         valid = false
       }
     }

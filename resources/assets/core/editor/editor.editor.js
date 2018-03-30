@@ -53,8 +53,8 @@ Editor.prototype = {
         let toolInfoListFilter = []
 
         for (let i = 0, max = toolInfoList.length; i < max; i += 1) {
-          if (XEeditor.tools.get(toolInfoList[i].id)) {
-            tools[toolInfoList[i].id] = XEeditor.tools.get(toolInfoList[i].id)
+          if (XEeditor.getTool(toolInfoList[i].id)) {
+            tools[toolInfoList[i].id] = XEeditor.getTool(toolInfoList[i].id)
             toolInfoListFilter.push(toolInfoList[i])
           } else {
             console.error('define된 tool이 존재하지 않음. [' + toolInfoList[i].id + ']')
