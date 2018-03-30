@@ -1,31 +1,35 @@
 import $ from 'jquery'
 import isNil from 'lodash/isNil'
 import pull from 'lodash/pull'
+import debounce from 'lodash/debounce'
+import throttle from 'lodash/throttle'
+import curry from 'lodash/curry'
+import mapValues from 'lodash/mapValues'
 
 export function eventify (target) {
-  let _events = {}
+  target._events = {}
 
   target.$on = (eventName, listener) => {
-    if (isNil(_events[eventName])) {
-      _events[eventName] = []
+    if (isNil(target._events[eventName])) {
+      target._events[eventName] = []
     }
-    _events[eventName].push(listener)
+    target._events[eventName].push(listener)
   }
 
   target.$emit = (eventName, ...args) => {
-    if (isNil(_events[eventName])) {
+    if (isNil(target._events[eventName])) {
       return
     }
-    _events[eventName].forEach((listener) => {
+    target._events[eventName].forEach((listener) => {
       listener.apply(target, [eventName, ...args])
     })
   }
 
   target.$off = (eventName, listener) => {
-    if (isNil(_events[eventName])) {
+    if (isNil(target._events[eventName])) {
       return
     }
-    pull(_events[eventName], listener)
+    pull(target._events[eventName], listener)
   }
 
   target.$once = (eventName, listener) => {
@@ -539,11 +543,50 @@ export function addCommas (str) {
   return output
 }
 
-import debounce from 'lodash/debounce'
-import throttle from 'lodash/throttle'
-import curry from 'lodash/curry'
+const windowObjectReference = {}
+const defaultWindowFeatures = {
+  // position and dimension
+  width: 450,
+  height: 500,
+  // Toolbar and chrome features
+  menubar: false,
+  toolbar: false,
+  location: false,
+  status: false,
+  // Window functionality features
+  noopener: false,
+  resizable: true,
+  scrollbars: true,
+  // Features requiring privileges
+  titlebar: false
+}
+
+/**
+ * { function_description }
+ *
+ * @param      {<type>}  url       The url
+ * @param      {<type>}  name      The name
+ * @param      {<type>}  features  The features
+ */
+export function openWindow (url, name = null, options = {}) {
+  let features = []
+  options = Object.assign({}, defaultWindowFeatures, options)
+
+  if(windowObjectReference[name] == null || windowObjectReference[name].closed) {
+    mapValues(options, (value, key) => {
+      value = (value === false) ? 'no' : (value === true) ? 'yes' : value
+      features.push(key + '=' + value)
+    })
+    features = features.join(',')
+
+    return windowObjectReference[name] = window.open(url, name, features)
+  } else {
+    return windowObjectReference[name].foucs()
+  }
+}
 
 export default {
+  eventify,
   isImage,
   isVideo,
   isAudio,
@@ -554,7 +597,7 @@ export default {
   getUri,
   strtotime,
   addCommas,
-  // lodash
+  openWindow,
   debounce,
   throttle,
   curry
