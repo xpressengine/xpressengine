@@ -5,12 +5,11 @@ import Validation from './editor.validation'
 
 class EditorCore {
   constructor () {
-    let toolsSet = {}
-
-    eventify(this)
-
+    this.toolsSet = {}
     this.editorSet = {}
     this.editorOptionSet = {}
+
+    eventify(this)
 
     /**
      * @memberof XEeditor
@@ -31,14 +30,18 @@ class EditorCore {
      * </pre>
      **/
     this.tools = {}
-    this.tools.define = obj => {
-      if (Validation.isValidToolsObject(obj)) {
-        toolsSet[obj.id] = new Tools(obj)
-      }
+    this.tools.define = obj => this.addTool.call(this, obj)
+    this.tools.get = id => this.getTool.call(this, id)
+  }
+
+  addTool (obj) {
+    if (Validation.isValidToolsObject(obj)) {
+      this.toolsSet[obj.id] = new Tools(obj)
     }
-    this.tools.get = id => {
-      return toolsSet[id]
-    }
+  }
+
+  getTool (id) {
+    return this.toolsSet[id]
   }
 
   /**
@@ -55,8 +58,11 @@ class EditorCore {
     const interfaces = obj.interfaces
 
     if (Validation.isValidEditorOptions(editorSettings, interfaces)) {
+      const editor = new Editor(editorSettings, interfaces)
+      editor._core = this
+
+      this.editorSet[editorSettings.name] = editor
       this.editorOptionSet[editorSettings.name] = editorSettings
-      this.editorSet[editorSettings.name] = new Editor(editorSettings, interfaces)
     }
   }
 
@@ -71,22 +77,22 @@ class EditorCore {
   }
 
   /**
-     * 컨텐츠에 tool id를 xe-tool-id attribute에 할당하여 반환한다.
-     * @memberof XEeditor
-     * @param {string} content
-     * @param {string} id
-     * @return {string} HTML markup string
-     **/
+   * 컨텐츠에 tool id를 xe-tool-id attribute에 할당하여 반환한다.
+   * @memberof XEeditor
+   * @param {string} content
+   * @param {string} id
+   * @return {string} HTML markup string
+   **/
   attachDomId (content, id) {
     return $(content).attr('xe-tool-id', id).clone().wrapAll('<div/>').parent().html()
   }
 
   /**
-     *
-     * @memberof XEeditor
-     * @param {string} id
-     * @return {string} HTML selector string
-     **/
+   * @memberof XEeditor
+   * @param {string} id
+   * @return {string} HTML selector string
+   * @DEPRECATED
+   **/
   getDomSelector (id) {
     return '[xe-tool-id="' + id + '"]'
   }

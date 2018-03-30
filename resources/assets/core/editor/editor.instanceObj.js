@@ -1,4 +1,5 @@
 import XEeditor from './editor.core'
+import { eventify } from 'xe-utils'
 
 /**
  * @private
@@ -16,6 +17,8 @@ class InstanceObj {
       editorOptions: editorOptions,
       toolInfoList: toolInfoList
     }
+
+    eventify(this)
 
     /** @public */
     this.editorName = editorName
@@ -106,6 +109,13 @@ class InstanceObj {
    **/
   renderFileUploader (customOptions) {
     XEeditor.editorSet[this.editorName].renderFileUploader.call(this, customOptions)
+  }
+
+  getContentDom () {
+    if(typeof XEeditor.editorSet[this.editorName].getContentDom === 'function') {
+      return XEeditor.editorSet[this.editorName].getContentDom.call(this)
+    }
+    return false
   }
 
   /**

@@ -8,7 +8,8 @@ const requireOptions = {
     'initialize',
     'addContents',
     'getContents',
-    'setContents'
+    'setContents',
+    'getContentDom'
   ],
   tools: {
     property: [

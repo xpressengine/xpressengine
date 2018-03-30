@@ -1,6 +1,7 @@
 import XEeditor from './editor.core.js'
 import Validation from './editor.validation.js'
 import InstanceObj from './editor.instanceObj.js'
+import { eventify } from 'xe-utils'
 
 /**
  * @private
@@ -13,6 +14,8 @@ let Editor = function (editorSettings, interfaces) {
   this.configs = editorSettings.configs
   this.editorList = []
   this.interfaces = {}
+
+  eventify(this)
 
   if (editorSettings.hasOwnProperty('plugins') &&
     editorSettings.plugins instanceof Array &&
@@ -40,7 +43,9 @@ Editor.prototype = {
     editorOptions = $.extend(this.configs || {}, editorOptions || {})
 
     if (Validation.isValidBeforeCreateInstance(sel, toolInfoList, this)) {
-      this.editorList[sel] = new InstanceObj(this.name, sel, editorOptions, toolInfoList)
+      const editorIntance = new InstanceObj(this.name, sel, editorOptions, toolInfoList)
+      editorIntance._editor = this
+      this.editorList[sel] = editorIntance
       this.initialize.call(this.editorList[sel], sel, options, editorOptions)
 
       if (!!toolInfoList && toolInfoList.length > 0) {
