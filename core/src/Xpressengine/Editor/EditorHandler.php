@@ -73,13 +73,6 @@ class EditorHandler
     protected $mediaManager;
 
     /**
-     * TagHandler instance
-     *
-     * @var TagHandler
-     */
-    protected $tagHandler;
-
-    /**
      * Default editor identifier
      *
      * @var string
@@ -136,22 +129,19 @@ class EditorHandler
      * @param Container      $container     Container instance
      * @param Storage        $storage       Storage instance
      * @param MediaManager   $mediaManager  MediaManager instance
-     * @param TagHandler     $tagHandler    TagHandler instance
      */
     public function __construct(
         PluginRegister $register,
         ConfigManager $configManager,
         Container $container,
         Storage $storage,
-        MediaManager $mediaManager,
-        TagHandler $tagHandler
+        MediaManager $mediaManager
     ) {
         $this->register = $register;
         $this->configManager = $configManager;
         $this->container = $container;
         $this->storage = $storage;
         $this->mediaManager = $mediaManager;
-        $this->tagHandler = $tagHandler;
     }
 
     /**
