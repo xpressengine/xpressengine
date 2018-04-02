@@ -14,7 +14,6 @@
 
 namespace App\UIObjects\Captcha;
 
-use Xpressengine\Captcha\CaptchaManager;
 use Xpressengine\UIObject\AbstractUIObject;
 
 /**
@@ -33,33 +32,15 @@ class CaptchaUIObject extends AbstractUIObject
     protected static $id = 'uiobject/xpressengine@captcha';
 
     /**
-     * CaptchaManager instance
-     *
-     * @var CaptchaManager
-     */
-    protected static $manager;
-
-    /**
      * Rendered current object
      *
      * @return string
      */
     public function render()
     {
-        $driver = isset($this->arguments['driver']) ? $this->arguments['driver'] : static::$manager->getDefaultDriver();
-        $this->template = static::$manager->driver($driver)->render();
+        $driver = $this->arguments['driver'] ?? null;
+        $this->template = app('xe.captcha')->driver($driver)->render();
 
         return parent::render();
-    }
-
-    /**
-     * Set manager instance
-     *
-     * @param CaptchaManager $manager CaptchaManager instance
-     * @return void
-     */
-    public static function setManager(CaptchaManager $manager)
-    {
-        static::$manager = $manager;
     }
 }
