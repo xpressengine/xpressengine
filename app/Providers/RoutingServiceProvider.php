@@ -209,7 +209,7 @@ class RoutingServiceProvider extends ServiceProvider
     protected function registerInstanceMacro(Router $router)
     {
         static $seq = 1;
-        $instanceMacro = function ($key, Closure $callback, $routeOptions = null) use (&$seq) {
+        $instanceMacro = function ($key, Closure $callback, array $routeOptions = null) use (&$seq) {
 
             $pattern = '{instanceGroup'.$seq++.'}';
             $attributes = [
@@ -218,12 +218,14 @@ class RoutingServiceProvider extends ServiceProvider
                 'middleware' => ['web', 'access']
             ];
 
-            if ($routeOptions !== null and is_array($routeOptions)) {
-                $routeOptions = array_except($routeOptions, ['prefix', 'middleware']);
-                $attributes = array_merge($attributes, $routeOptions);
+            if ($routeOptions) {
+                $attributes = array_merge(array_except($routeOptions, ['prefix', 'middleware']), $attributes);
 
                 if (isset($routeOptions['middleware'])) {
-                    $attributes['middleware'] .= '|' . $routeOptions['middleware'];
+                    $attributes['middleware'] = array_merge(
+                        (array)$routeOptions['middleware'],
+                        $attributes['middleware']
+                    );
                 }
             }
 
