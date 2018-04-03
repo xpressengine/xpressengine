@@ -14,6 +14,8 @@
 
 namespace Xpressengine\User\Models;
 
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Foundation\Auth\Access\Authorizable;
 use Xpressengine\User\Exceptions\UnsupportedOperationForGuestOrUnknownException;
 use Xpressengine\User\Rating;
 use Xpressengine\User\UserInterface;
@@ -28,8 +30,10 @@ use Xpressengine\User\UserInterface;
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
  */
-class Guest implements UserInterface
+class Guest implements UserInterface, AuthorizableContract
 {
+    use Authorizable;
+
     /**
      * getDisplayName()메소드가 호출될 때, 반환될 이름
      *
@@ -38,9 +42,18 @@ class Guest implements UserInterface
     protected static $name = '';
 
     /**
-     * @var string getProfileImage() 메소드가 호출될 때, 반환될 프로필이미지의 주소
+     * getProfileImage() 메소드가 호출될 때, 반환될 프로필이미지의 주소
+     *
+     * @var string
      */
     protected static $profileImage = '';
+
+    /**
+     * laravel-debugbar 에서 id property 를 직접 호출하는 문제로 작성됨
+     *
+     * @var null
+     */
+    public $id = null;
 
     /**
      * Get the unique identifier
@@ -127,90 +140,6 @@ class Guest implements UserInterface
     }
 
     /**
-     * Get the unique identifier for the user.
-     *
-     * @return mixed
-     */
-    public function getAuthIdentifier()
-    {
-        return null;
-    }
-
-    /**
-     * Get the password for the user.
-     *
-     * @return string
-     */
-    public function getAuthPassword()
-    {
-        $this->throwNotSupportedException();
-    }
-
-    /**
-     * Get the token value for the "remember me" session.
-     *
-     * @return string
-     */
-    public function getRememberToken()
-    {
-        $this->throwNotSupportedException();
-    }
-
-    /**
-     * Set the token value for the "remember me" session.
-     *
-     * @param  string $value token value
-     *
-     * @return void
-     */
-    public function setRememberToken($value)
-    {
-        $this->throwNotSupportedException();
-    }
-
-    /**
-     * Get the column name for the "remember me" token.
-     *
-     * @return string
-     */
-    public function getRememberTokenName()
-    {
-        $this->throwNotSupportedException();
-    }
-
-    /**
-     * setEmailForPasswordReset() 메소드에서 반환할 email 정보를 지정한다.
-     *
-     * @param string $email 지정할 email주소
-     *
-     * @return void
-     */
-    public function setEmailForPasswordReset($email)
-    {
-        $this->throwNotSupportedException();
-    }
-
-    /**
-     * Get the e-mail address where password reset links are sent.
-     *
-     * @return string
-     */
-    public function getEmailForPasswordReset()
-    {
-        $this->throwNotSupportedException();
-    }
-
-    /**
-     * throw NotSupportedException
-     *
-     * @return void
-     */
-    private function throwNotSupportedException()
-    {
-        throw new UnsupportedOperationForGuestOrUnknownException();
-    }
-
-    /**
      * Get pending email
      *
      * @return null
@@ -277,35 +206,25 @@ class Guest implements UserInterface
     }
 
     /**
-     * 최종 로그인 시간을 기록한다.
-     *
-     * @param mixed $time 로그인 시간
+     * throw NotSupportedException
      *
      * @return void
      */
-    public function setLoginTime($time = null)
+    private function throwNotSupportedException()
     {
-        $this->throwNotSupportedException();
+        throw new UnsupportedOperationForGuestOrUnknownException();
     }
 
     /**
-     * Get the name of the unique identifier for the user.
+     * Get the unique identifier for the user.
      *
-     * @return string
+     * \Illuminate\Contracts\Auth\Authenticatable 이지만
+     * laravel-debugbar 에서 사용자 정보를 처리할때 오류를 발생시켜 구현 됨
+     *
+     * @return mixed
      */
-    public function getAuthIdentifierName()
+    public function getAuthIdentifier()
     {
         return null;
-    }
-
-    /**
-     * Send the password reset notification.
-     *
-     * @param  string $token token for password reset
-     * @return void
-     */
-    public function sendPasswordResetNotification($token)
-    {
-        $this->throwNotSupportedException();
     }
 }

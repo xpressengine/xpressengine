@@ -137,90 +137,6 @@ class UnknownUser implements UserInterface
     }
 
     /**
-     * Get the unique identifier for the user.
-     *
-     * @return mixed
-     */
-    public function getAuthIdentifier()
-    {
-        return null;
-    }
-
-    /**
-     * Get the password for the user.
-     *
-     * @return string
-     */
-    public function getAuthPassword()
-    {
-        $this->throwNotSupportedException();
-    }
-
-    /**
-     * Get the token value for the "remember me" session.
-     *
-     * @return string
-     */
-    public function getRememberToken()
-    {
-        $this->throwNotSupportedException();
-    }
-
-    /**
-     * Set the token value for the "remember me" session.
-     *
-     * @param  string $value token value
-     *
-     * @return void
-     */
-    public function setRememberToken($value)
-    {
-        $this->throwNotSupportedException();
-    }
-
-    /**
-     * Get the column name for the "remember me" token.
-     *
-     * @return string
-     */
-    public function getRememberTokenName()
-    {
-        $this->throwNotSupportedException();
-    }
-
-    /**
-     * setEmailForPasswordReset() 메소드에서 반환할 email 정보를 지정한다.
-     *
-     * @param string $email 지정할 email주소
-     *
-     * @return void
-     */
-    public function setEmailForPasswordReset($email)
-    {
-        $this->throwNotSupportedException();
-    }
-
-    /**
-     * Get the e-mail address where password reset links are sent.
-     *
-     * @return string
-     */
-    public function getEmailForPasswordReset()
-    {
-        $this->throwNotSupportedException();
-    }
-
-    /**
-     * throw NotSupportedException
-     *
-     * @return void
-     */
-    private function throwNotSupportedException()
-    {
-        throw new UnsupportedOperationForGuestOrUnknownException();
-    }
-
-    /**
      * Get pending email
      *
      * @return null
@@ -288,35 +204,12 @@ class UnknownUser implements UserInterface
     }
 
     /**
-     * 최종 로그인 시간을 기록한다.
-     *
-     * @param mixed $time 로그인 시간
+     * throw NotSupportedException
      *
      * @return void
      */
-    public function setLoginTime($time = null)
+    private function throwNotSupportedException()
     {
-        $this->throwNotSupportedException();
-    }
-
-    /**
-     * Get the name of the unique identifier for the user.
-     *
-     * @return string
-     */
-    public function getAuthIdentifierName()
-    {
-        return null;
-    }
-
-    /**
-     * Send the password reset notification.
-     *
-     * @param  string $token token for password reset
-     * @return void
-     */
-    public function sendPasswordResetNotification($token)
-    {
-        $this->throwNotSupportedException();
+        throw new UnsupportedOperationForGuestOrUnknownException();
     }
 }

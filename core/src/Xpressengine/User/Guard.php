@@ -14,8 +14,8 @@
 
 namespace Xpressengine\User;
 
+use Illuminate\Auth\Events\Logout;
 use Illuminate\Auth\SessionGuard;
-use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Contracts\Session\Session;
 use Symfony\Component\HttpFoundation\Request;
@@ -159,8 +159,6 @@ class Guard extends SessionGuard implements GuardInterface
      */
     public function check()
     {
-        $this->checkSession();
-
         return !is_null(parent::user());
     }
 
@@ -172,15 +170,7 @@ class Guard extends SessionGuard implements GuardInterface
      */
     public function user()
     {
-        $this->checkSession();
-
-        /** @var UserInterface $user */
-        $user = parent::user();
-        if ($user === null) {
-            return $this->makeGuest();
-        }
-
-        return $user;
+        return parent::user() ?: $this->makeGuest();
     }
 
     /**
@@ -190,8 +180,6 @@ class Guard extends SessionGuard implements GuardInterface
      */
     public function id()
     {
-        $this->checkSession();
-
         if ($this->loggedOut) {
             return null;
         }
@@ -204,24 +192,6 @@ class Guard extends SessionGuard implements GuardInterface
         }
 
         return $id;
-    }
-
-    /**
-     * Log a user into the application.
-     *
-     * @param  UserContract $user     user entity
-     * @param  bool         $remember remember flag
-     *
-     * @return void
-     */
-    public function login(UserContract $user, $remember = false)
-    {
-        parent::login($user, $remember);
-
-        if ($user instanceof Authenticatable) {
-            $user->setLoginTime();
-            $user->save();
-        }
     }
 
     /**
@@ -244,7 +214,7 @@ class Guard extends SessionGuard implements GuardInterface
         }
 
         if (isset($this->events)) {
-            $this->events->fire('auth.logout', [$user]);
+            $this->events->dispatch(new Logout($user));
         }
 
         // Once we have fired the logout event we will clear the users out of memory
@@ -264,20 +234,5 @@ class Guard extends SessionGuard implements GuardInterface
     public function makeGuest()
     {
         return new Guest();
-    }
-
-    /**
-     * 세션이 준비되었는지 체크한다.
-     *
-     * @return void
-     */
-    protected function checkSession()
-    {
-        // disable checking session
-        return;
-
-        //if ($this->session->isStarted() === false) {
-        //    throw new AuthIsUnavailableException();
-        //}
     }
 }

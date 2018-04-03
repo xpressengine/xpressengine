@@ -121,6 +121,13 @@ class UserServiceProvider extends ServiceProvider
                 $mailer->alwaysFrom($config->get('webmasterEmail'), $config->get('webmasterName'));
             }
         });
+
+        $this->app['events']->listen('Illuminate\Auth\Events\Login', function ($event) {
+            if (method_exists($event->user, 'setLoginTime')) {
+                $event->user->setLoginTime();
+                $event->user->save();
+            }
+        });
     }
 
     /**
