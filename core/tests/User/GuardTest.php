@@ -24,7 +24,7 @@ class GuardTest extends \PHPUnit\Framework\TestCase {
 
     public function testIsAuthedReturnsTrueWhenUserIsNotNull()
     {
-        $user = m::mock(\Xpressengine\User\Authenticatable::class);
+        $user = m::mock(\Xpressengine\User\Models\User::class);
         $mock = $this->getGuard();
         $mock->setUser($user);
         $this->assertTrue($mock->check());
@@ -33,7 +33,7 @@ class GuardTest extends \PHPUnit\Framework\TestCase {
 
     public function testUserMethodReturnsCachedUser()
     {
-        $user = m::mock(\Xpressengine\User\Authenticatable::class);
+        $user = m::mock(\Xpressengine\User\Models\User::class);
         $mock = $this->getGuard();
         $mock->setUser($user);
         $this->assertEquals($user, $mock->user());
@@ -48,7 +48,7 @@ class GuardTest extends \PHPUnit\Framework\TestCase {
     {
         $mock = $this->getGuard();
         $mock->getSession()->shouldReceive('get')->once()->andReturn(1);
-        $user = m::mock(\Xpressengine\User\Authenticatable::class);
+        $user = m::mock(\Xpressengine\User\Models\User::class);
         $mock->getProvider()->shouldReceive('retrieveById')->once()->with(1)->andReturn($user);
         $this->assertEquals($user, $mock->user());
         $this->assertEquals($user, $mock->getUser());
@@ -56,7 +56,7 @@ class GuardTest extends \PHPUnit\Framework\TestCase {
 
     public function testIdIfUserGiven()
     {
-        $user = m::mock(\Xpressengine\User\Authenticatable::class);
+        $user = m::mock(\Xpressengine\User\Models\User::class);
         $user->shouldReceive('getAuthIdentifier')->once()->andReturn(1);
 
         $mock = $this->getGuard();

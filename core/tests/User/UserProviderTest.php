@@ -61,7 +61,6 @@ class UserProviderTest extends \PHPUnit\Framework\TestCase
 
         $user->shouldReceive('newQuery')->once()->andReturn($query);
         $user->id = 1;
-        $user->shouldReceive('setEmailForPasswordReset')->once()->with($email)->andReturnSelf();
 
         $credentials = [
         'email' => $email,
