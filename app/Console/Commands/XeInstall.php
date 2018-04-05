@@ -234,7 +234,7 @@ class XeInstall extends Command
             define('PHP_VERSION_ID', ($version[0] * 10000 + $version[1] * 100 + $version[2]));
         }
 
-        $versionCheck = constant('PHP_VERSION_ID') < 50509 ? false : true;
+        $versionCheck = constant('PHP_VERSION_ID') < 70000 ? false : true;
 
         if (!$versionCheck) {
             throw new \Exception('PHP version is not available');

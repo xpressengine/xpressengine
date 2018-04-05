@@ -16,18 +16,21 @@ Laravel 은 가장 모던한 php 프레임워크중 하나로 전세계 php 프�
 * [Laravel Documentation (Korean)](https://laravel.kr/docs/)
 
 ## 서버 필요사항
-* PHP version 5.5.9 이상 
-* OpenSSL PHP Extension
+* PHP version 7.0.0 이상 
 * PDO PHP Extension
+* cURL PHP Extension
+* FileInfo PHP Extension
+* GD PHP Extension
 * Mbstring PHP Extension
-* Tokenizer PHP Extension
+* OpenSSL PHP Extension
+* Zip PHP Extension
 
 ## 시작하기
 
 XE3을 설치하기 위해서는 다음의 가이드를 참고하십시오. [인스톨 가이드](https://xpressengine.gitbooks.io/xpressengine-manual/content/ko/installation.html)
 
 ## Xehub 커뮤니티 개발자
-@akasima @bnu @jhyeon1010
+@akasima @bnu @jhyeon1010 @woongbin
 
 ## 기여자
 http://xpressengine.io/contributors

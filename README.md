@@ -16,18 +16,21 @@ Laravel is one of the most modern PHP frameworks and the most popular among them
 * [Laravel Documentation (Korean)](http://xpressengine.github.io/laravel-korean-docs/)
 
 ## Server Requirements
-* PHP version 5.5.9 greater 
-* OpenSSL PHP Extension
+* PHP version 7.0.0 greater 
 * PDO PHP Extension
+* cURL PHP Extension
+* FileInfo PHP Extension
+* GD PHP Extension
 * Mbstring PHP Extension
-* Tokenizer PHP Extension
+* OpenSSL PHP Extension
+* Zip PHP Extension
 
 ## Getting Started
 
 To install XE3, refer to the following guide. [Install guide](https://xpressengine.gitbooks.io/xpressengine-manual/content/ko/installation.html)
 
 ## Maintainers
-@akasima @bnu @jhyeon1010
+@akasima @bnu @jhyeon1010 @woongbin
 
 ## Documentation
 * Documentation Site (Korean) : https://xpressengine.gitbooks.io/xpressengine-manual/content/ko/
