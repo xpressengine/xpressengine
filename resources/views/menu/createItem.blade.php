@@ -160,7 +160,7 @@
         {!! uio('menuType', ['menuType' => $menuType, 'action' => 'createMenuForm','param' => []]) !!}
 
         <div class="pull-right">
-            <a href="{{ route('settings.menu.select.types', '')}}" class="btn btn-default">{{xe_trans('xe::cancel')}}</a>
+            <a href="{{ url()->previous(route('settings.menu.index')) }}" class="btn btn-default">{{xe_trans('xe::cancel')}}</a>
             <button type="submit" class="btn btn-primary">{{xe_trans('xe::submit')}}</button>
         </div>
     </div>
