@@ -1,4 +1,4 @@
-<h4>기본 정보 입력</h4>
+<h4>{{xe_trans('xe::enterDefaultInfo')}}</h4>
 <div class="auth-group">
     <label for="email" class="xe-sr-only">{{xe_trans('xe::email')}}</label>
     <input type="text" id="email" class="xe-form-control" placeholder="{{xe_trans('xe::email')}}" name="email" value="{{ old('email') }}" data-valid-name="{{xe_trans('xe::email')}}">
