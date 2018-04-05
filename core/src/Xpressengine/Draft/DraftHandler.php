@@ -2,7 +2,7 @@
 /**
  * This file is draft handler class
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Draft
  * @package     Xpressengine\Draft

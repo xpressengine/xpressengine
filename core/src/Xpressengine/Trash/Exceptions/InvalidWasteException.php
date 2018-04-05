@@ -2,7 +2,7 @@
 /**
  * InvalidWasteException
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Trash
  * @package     Xpressengine\Trash

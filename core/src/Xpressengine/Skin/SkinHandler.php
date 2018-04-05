@@ -2,7 +2,7 @@
 /**
  * SkinHandler class. This file is part of the Xpressengine package.
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Skin
  * @package     Xpressengine\Skin

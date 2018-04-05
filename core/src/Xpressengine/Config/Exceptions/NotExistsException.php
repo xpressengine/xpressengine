@@ -2,7 +2,7 @@
 /**
  * This file is the exception of not exists item.
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Config
  * @package     Xpressengine\Config

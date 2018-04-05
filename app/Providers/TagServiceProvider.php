@@ -2,7 +2,7 @@
 /**
  * This file is tag package service provider class.
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Tag
  * @package     Xpressengine\Tag

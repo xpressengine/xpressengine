@@ -2,7 +2,7 @@
 /**
  * TransactionHandler
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Database
  * @package     Xpressengine\Database

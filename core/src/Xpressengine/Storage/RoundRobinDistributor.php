@@ -2,7 +2,7 @@
 /**
  * This file is storage division in a round robin schema
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Storage
  * @package     Xpressengine\Storage

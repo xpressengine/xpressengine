@@ -2,7 +2,7 @@
 /**
  *  Package
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Presenter\Html|Tags
  * @package     Xpressengine\Presenter\Html|Tags

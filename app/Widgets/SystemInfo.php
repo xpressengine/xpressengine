@@ -15,7 +15,7 @@ use Xpressengine\Widget\AbstractWidget;
 /**
  * SystemInfo.php
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category
  */

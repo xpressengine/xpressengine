@@ -2,7 +2,7 @@
 /**
  * This file is Draft package service provider.
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Draft
  * @package     Xpressengine\Draft

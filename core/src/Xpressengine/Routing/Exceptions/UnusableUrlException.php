@@ -2,7 +2,7 @@
 /**
  * Class UnusableUrlException
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category  Routing
  * @package   Xpressengine\Routing

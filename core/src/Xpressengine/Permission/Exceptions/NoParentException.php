@@ -2,7 +2,7 @@
 /**
  * This file is exception of no parent.
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Permission
  * @package     Xpressengine\Permission
@@ -19,7 +19,7 @@ use Xpressengine\Permission\PermissionException;
 /**
  * This file is exception of invalid argument.
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Permission
  * @package     Xpressengine\Permission

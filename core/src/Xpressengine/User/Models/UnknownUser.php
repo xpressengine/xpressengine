@@ -1,6 +1,6 @@
 <?php
 /**
- * PHP Version 5
+ * PHP version 7
  *
  * @category    User
  * @package     Xpressengine\User

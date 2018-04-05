@@ -2,7 +2,7 @@
 /**
  * This file is config management class
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Config
  * @package     Xpressengine\Config

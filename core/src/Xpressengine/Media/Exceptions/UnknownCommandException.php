@@ -2,7 +2,7 @@
 /**
  * This file is unknown command exception
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Media
  * @package     Xpressengine\Media

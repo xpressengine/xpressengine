@@ -2,7 +2,7 @@
 /**
  * ValueRequiredException
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Document
  * @package     Xpressengine\Document

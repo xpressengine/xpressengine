@@ -2,7 +2,7 @@
 /**
  * This file is package main exception.
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Storage
  * @package     Xpressengine\Storage

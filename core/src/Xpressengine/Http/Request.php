@@ -2,7 +2,7 @@
 /**
  *  This file is part of the Xpressengine package.
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Http
  * @package     Xpressengine\Http
@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 /**
  * Request 클래스
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Http
  * @package     Xpressengine\Http

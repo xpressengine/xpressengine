@@ -2,7 +2,7 @@
 /**
  * This file is the abstract policy for permission.
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Permission
  * @package     Xpressengine\Permission

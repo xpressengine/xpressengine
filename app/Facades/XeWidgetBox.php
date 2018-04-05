@@ -2,7 +2,7 @@
 /**
  * XeWidgetBox
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    WidgetBox
  * @package     Xpressengine\WidgetBox

@@ -2,7 +2,7 @@
 /**
  * This file is registered for use with this package at Laravel
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Storage
  * @package     Xpressengine\Storage

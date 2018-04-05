@@ -2,7 +2,7 @@
 /**
  * This file is register this package for laravel
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    User
  * @package     Xpressengine\User

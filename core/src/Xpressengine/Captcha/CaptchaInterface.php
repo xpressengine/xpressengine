@@ -2,7 +2,7 @@
 /**
  * This file is captcha interface.
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Captcha
  * @package     Xpressengine\Captcha

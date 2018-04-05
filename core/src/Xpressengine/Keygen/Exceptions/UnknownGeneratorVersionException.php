@@ -2,7 +2,7 @@
 /**
  * This file is exception for unknown generator call.
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Keygen
  * @package     Xpressengine\Keygen

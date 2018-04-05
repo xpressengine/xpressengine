@@ -2,7 +2,7 @@
 /**
  * This file is generate file url.
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Storage
  * @package     Xpressengine\Storage

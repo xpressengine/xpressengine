@@ -2,7 +2,7 @@
 /**
  * This file is property not exists exception
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Media
  * @package     Xpressengine\Media

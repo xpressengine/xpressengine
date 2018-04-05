@@ -2,7 +2,7 @@
 /**
  * Menu
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category  Menu
  * @package   Xpressengine\Menu

@@ -2,7 +2,7 @@
 /**
  * This file is open graph importer.
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Seo
  * @package     Xpressengine\Seo

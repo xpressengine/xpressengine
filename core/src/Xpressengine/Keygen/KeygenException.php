@@ -2,7 +2,7 @@
 /**
  * This file is Keygen main exception.
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Keygen
  * @package     Xpressengine\Keygen

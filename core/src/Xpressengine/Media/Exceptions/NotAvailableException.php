@@ -2,7 +2,7 @@
 /**
  * This file is not available exception
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Media
  * @package     Xpressengine\Media

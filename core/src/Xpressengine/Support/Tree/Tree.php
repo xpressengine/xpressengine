@@ -2,7 +2,7 @@
 /**
  * This file is tree structure class.
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Support
  * @package     Xpressengine\Support

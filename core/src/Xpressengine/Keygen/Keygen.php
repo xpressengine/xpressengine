@@ -2,7 +2,7 @@
 /**
  * This file is unique key generate class
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Keygen
  * @package     Xpressengine\Keygen

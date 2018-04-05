@@ -2,7 +2,7 @@
 /**
  * This file is a registered information.
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Permission
  * @package     Xpressengine\Permission

@@ -2,7 +2,7 @@
 /**
  * This file is the handler for permission.
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Permission
  * @package     Xpressengine\Permission

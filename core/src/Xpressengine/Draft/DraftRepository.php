@@ -2,7 +2,7 @@
 /**
  * This file is draft repository class
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Draft
  * @package     Xpressengine\Draft

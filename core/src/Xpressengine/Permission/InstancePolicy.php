@@ -2,7 +2,7 @@
 /**
  * This file is a policy for instance class.
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Permission
  * @package     Xpressengine\Permission

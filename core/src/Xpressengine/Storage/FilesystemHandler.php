@@ -2,7 +2,7 @@
 /**
  * This file is file content I/O handling from disk
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Storage
  * @package     Xpressengine\Storage

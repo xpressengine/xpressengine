@@ -2,7 +2,7 @@
 /**
  * DynamicFieldHandler
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    DynamicField
  * @package     Xpressengine\DynamicField

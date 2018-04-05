@@ -2,7 +2,7 @@
 /**
  * Site
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Site
  * @package     Xpressengine\Site
@@ -19,7 +19,7 @@ use Xpressengine\Database\Eloquent\DynamicModel;
 /**
  * Site
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Site
  * @package     Xpressengine\Site

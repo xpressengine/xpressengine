@@ -2,7 +2,7 @@
 /**
  * This file is support helper functions
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Support
  * @package     Xpressengine\Support

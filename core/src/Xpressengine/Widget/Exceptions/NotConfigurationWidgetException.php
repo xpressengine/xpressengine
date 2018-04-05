@@ -2,7 +2,7 @@
 /**
  * NotConfigurationWidgetException
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category  Widget
  * @package   Xpressengine\Widget
@@ -20,7 +20,7 @@ use Xpressengine\Widget\WidgetException;
 /**
  * NotConfigurationWidgetException
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Widget
  * @package     Xpressengine\Widget

@@ -2,7 +2,7 @@
 /**
  * This file is ToggleMenu package exception.
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    ToggleMenu
  * @package     Xpressengine\ToggleMenu

@@ -2,7 +2,7 @@
 /**
  * This file is search engine optimizer usable interface.
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Seo
  * @package     Xpressengine\Seo

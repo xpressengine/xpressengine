@@ -2,7 +2,7 @@
 /**
  * XeLang
  *
- * PHP version 5
+ * PHP version 7
  *
  * @category    Translation
  * @package     Xpressengine\Translation
