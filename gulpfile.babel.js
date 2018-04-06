@@ -26,8 +26,16 @@ gulp.task('jsdoc', () => {
   var merged = stream(
     gulp.src('./resources/jsdoc')
       .pipe($.clean({ force: true })),
-    gulp.src(['./resources/assets/core/**/*.js'])
-      .pipe(jsdoc({'opts': {'destination': './resources/jsdoc'}}))
+    gulp.src([
+      './resources/assets/core/**/*.js',
+      '!./resources/assets/core/xe-ui-component/slickgrid/*'
+    ])
+      .pipe(jsdoc({
+        'opts': {
+          'destination': './resources/jsdoc',
+          'template': 'node_modules/docdash'
+        }
+      }))
   )
   return merged
 })
