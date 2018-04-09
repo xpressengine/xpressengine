@@ -6,6 +6,12 @@ import throttle from 'lodash/throttle'
 import curry from 'lodash/curry'
 import mapValues from 'lodash/mapValues'
 
+/**
+ * object에 EventEmmiter 추가
+ * @memberof Utils
+ * @param {object}
+ * @return {avoid}
+ **/
 export function eventify (target) {
   target._events = {}
 
@@ -75,6 +81,7 @@ export function isAudio (mime) {
  * @memberof Utils
  * @param {number} bytes
  * @return {string}
+ * @FIXME
  **/
 export function formatSizeUnits (bytes) {
   if (bytes >= 1073741824) {
@@ -99,6 +106,7 @@ export function formatSizeUnits (bytes) {
  * @memberof Utils
  * @param {string} str
  * @return {number}
+ * @FIXME
  **/
 export function sizeFormatToBytes (str) {
   var bytes = 0
@@ -121,11 +129,11 @@ export function sizeFormatToBytes (str) {
 /**
  * URL문자열인지의 결과를 리턴한다.
  * @memberof Utils
- * @param {string} s
+ * @param {string} url
  * @return {boolean}
  **/
-export function isURL (s) {
-  return /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(s)
+export function isURL (url) {
+  return /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(url)
 }
 
 /**
@@ -166,6 +174,7 @@ export function asset (url) {
  * @memberof Utils
  * @param {string} url
  * @return {string}
+ * @DEPRECATED
  **/
 export function getUri (url) {
   var path = url.split(window.location.protocol + '//')[1]
@@ -400,8 +409,9 @@ export function strtotime (text, now) {
     '([\\+-][0-9]{2}(:[0-9]{2})?|z)'
   ].join(''))
   match = text.match(pattern)
+
   if (match) {
-    // @todo: time zone information
+    // @TODO: time zone information
     if (match[4] === 'z') {
       match[4] = 'Z'
     } else if (match[4].match(/^([+-][0-9]{2})$/)) {
@@ -431,6 +441,7 @@ export function strtotime (text, now) {
     min: 'Minutes',
     sec: 'Seconds'
   }
+
   function lastNext (type, range, modifier) {
     var diff
     var day = days[range]
@@ -564,9 +575,9 @@ const defaultWindowFeatures = {
 /**
  * { function_description }
  *
- * @param      {<type>}  url       The url
- * @param      {<type>}  name      The name
- * @param      {<type>}  features  The features
+ * @param      {string}  url       The url
+ * @param      {string}  name      The name
+ * @param      {object}  features  The features
  */
 export function openWindow (url, name = null, options = {}) {
   let features = []

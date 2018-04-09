@@ -114,7 +114,9 @@ XEeditor.define({
     on: function (eventName, callback) {
       this.props.editor.on(eventName, callback)
     },
-    getContentDom: function() {},
+    getContentDom: function () {
+      return false
+    },
     reset: function () {
       // contents 삭제
       this.props.editor.val('').focus()

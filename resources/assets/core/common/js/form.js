@@ -14,4 +14,4 @@
         $this.parent('.__xe_radio').removeClass('on')
       }
     })
-}($))
+}(window.jQuery))

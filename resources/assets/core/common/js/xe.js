@@ -12,35 +12,37 @@ import blankshield from 'blankshield'
 import URI from 'urijs'
 
 /**
+ * @class XE
  * @global
  * @namespace XE
  * @type {object}
  **/
 class XE {
   constructor () {
-    let that = this
-
-    this.options = {}
-    this.util = Utils
+    const that = this
 
     Utils.eventify(this)
 
-    this.validator = Validator
+    this.options = {}
+    this.util = Utils // @DEPRECATED
+    this.Utils = Utils
+    this.validator = Validator // @DEPRECATED
+    this.Validator = Validator
     this.Lang = Lang
     this.Progress = Progress
     this.Request = Request
     this.Component = Component
 
-    window.Utils = Utils
-    window.DynamicLoadManager = DynamicLoadManager
-    window.Translator = Translator
-    window.blankshield = blankshield
+    window.Utils = Utils // @DEPRECATED
+    window.DynamicLoadManager = DynamicLoadManager // @DEPRECATED
+    window.Translator = Translator // @DEPRECATED
+    window.blankshield = blankshield // @DEPRECATED
 
     $(function () {
       $('body').on('click', 'a[target]', function (e) {
-        let $this = $(this)
-        let href = $this.attr('href').trim()
-        let target = $this.attr('target')
+        const $this = $(this)
+        const href = $this.attr('href').trim()
+        const target = $this.attr('target')
 
         if (!href) return
         if (target === '_top' || target === '_self' || target === '_parent') return
@@ -63,7 +65,6 @@ class XE {
 
   /**
    * XE 기본설정을 세팅한다.
-   * @memberof XE
    * @param {object} options
    * <pre>
    *   - loginUserId
@@ -87,7 +88,6 @@ class XE {
 
   /**
    * css 파일을 로드한다.
-   * @memberof XE
    * @param {url} url css file path
    * @DEPRECATED
    **/
@@ -97,7 +97,6 @@ class XE {
 
   /**
    * js 파일을 로드한다.
-   * @memberof XE
    * @param {string} url js file path
    * @DEPRECATED
    **/
@@ -107,7 +106,6 @@ class XE {
 
   /**
    * Ajax를 요청한다.
-   * @memberof XE
    * @param {string|object} url request url
    * @param {object} options jQuery ajax options
    **/
@@ -123,27 +121,34 @@ class XE {
     return $.ajax(url, options)
   }
 
+  /**
+   * 주어진 URL이 현재 호스트와 동일 호스트인지 확인
+   * @param {string|object} url request url
+   * @param {object} options jQuery ajax options
+   * @return {boolean}
+   **/
   isSameHost (url) {
     if (typeof url !== 'string') return false
-
     let baseUrl
     let targetUrl = URI(url).normalizePathname()
-    let _xeBaseURL = URI(window.xeBaseURL).normalizePathname()
+    const baseURL = URI(window.xeBaseURL).normalizePathname()
 
     if (targetUrl.is('urn')) return false
-
-    let port = _xeBaseURL.port() || (_xeBaseURL.protocol() === 'http') ? 80 : 443
 
     if (!targetUrl.hostname()) {
       targetUrl = targetUrl.absoluteTo(window.xeBaseURL)
     }
 
-    let targetPort = targetUrl.port()
+    let port = Number(baseURL.port())
+    let targetPort = Number(targetUrl.port())
+    if (!port) {
+      port = (baseURL.protocol() === 'http') ? 80 : 443
+    }
     if (!targetPort) {
       targetPort = (targetUrl.protocol() === 'http') ? 80 : 443
     }
 
-    if ($.inArray(Number(targetPort), port) === -1) {
+    if (targetPort !== port) {
       return false
     }
 
@@ -158,7 +163,6 @@ class XE {
 
   /**
    * type에 따른 토스트 팝업을 출력한다.
-   * @memberof XE
    * @param {string} type
    * <pre>
    *   - danger
@@ -186,7 +190,6 @@ class XE {
 
   /**
    * status에 따른 토스트 팝업을 출력한다.
-   * @memberof XE
    * @param {number}
    * <pre>
    *   - 500 : danger
@@ -200,7 +203,6 @@ class XE {
 
   /**
    * 폼 요소 엘리먼트에 메시지를 출력한다.
-   * @memberof XE
    * @param {object} form element object
    * @param {string} message 엘리먼트에 출력될 메시지
    **/
@@ -210,7 +212,6 @@ class XE {
 
   /**
    * 폼 요소의 메시지를 모두 제거한다.
-   * @memberof XE
    * @param {object} jquery form object
    **/
   formErrorClear ($form) {
@@ -219,7 +220,6 @@ class XE {
 
   /**
    * 설정된 폼의 유효성 체크를 한다.
-   * @memberof XE
    * @param {object} jquery form object
    **/
   formValidate ($form) {
@@ -227,21 +227,41 @@ class XE {
   }
 
   /**
-   * locale 정보를 반환한다.
-   * @memberof XE
+   * locale 정보를 반환
    * @return {string} locale
    **/
-  getLocale () {
+  get locale () {
     return this.options.locale
   }
 
   /**
+   * locale 지정
+   * @param {string} 변경할 locale
+   **/
+  set locale (locale) {
+    this.options.locale = locale
+  }
+
+  /**
+   * @DEPRECATED
+   **/
+  getLocale () {
+    return this.locale
+  }
+
+  /**
    * default locale 정보를 반환한다.
-   * @memberof XE
    * @return {string} defaultLocale
    **/
-  getDefaultLocale () {
+  get defaultLocale () {
     return this.options.defaultLocale
+  }
+
+  /**
+   * @DEPRECATED
+   **/
+  getDefaultLocale () {
+    return this.defaultLocale
   }
 }
 

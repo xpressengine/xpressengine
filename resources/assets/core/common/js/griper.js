@@ -1,4 +1,3 @@
-import DynamicLoadManager from 'xe-common/dynamicLoadManager'
 import $ from 'jquery'
 
 (function (root, factory) {
@@ -17,7 +16,7 @@ import $ from 'jquery'
    * @memberof module:griper
    * @name options
    * @prop {object} options
-    * */
+   **/
   exports.options = {
     toastContainer: {
       template: '<div class="__xe_toast_container xe-toast-container"></div>',
@@ -65,7 +64,7 @@ import $ from 'jquery'
    * @param {string} type
    * @param {string} messagge
    * @param {string} pos
-   * */
+   **/
   exports.toast = function (type, message, pos) {
     var position = ''
 
@@ -248,7 +247,7 @@ import $ from 'jquery'
    * @function
    * @param {jQuery} $element
    * @param {string} message
-   * */
+   **/
   exports.form = function ($element, message) {
     exports.form.fn.putByElement($element, message)
     scrollToElement($element)

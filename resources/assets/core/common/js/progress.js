@@ -11,17 +11,20 @@ var instances = []
 var cssLoaded = false
 
 var Progress = {
+
   /**
    * css를 로드한다.
    * @memberof module:Progress
-   * @deprecated
+   * @DEPRECATED
+   * @FIXME
    **/
   cssLoad: function () {
     if (cssLoaded === false) {
       cssLoaded = true
-      DynamicLoadManager.cssLoad('/assets/core/common/css/progress.css') // @TODO
+      DynamicLoadManager.cssLoad('/assets/core/common/css/progress.css') // @FIXME
     }
   },
+
   /**
    * progress를 그린다.
    * @memberof module:Progress
@@ -29,7 +32,7 @@ var Progress = {
    **/
   start: function (context) {
     if ($('link[href*="assets/core/common/css/progress.css"]').length == 0) {
-      DynamicLoadManager.cssLoad('/assets/core/common/css/progress.css') // @TODO
+      DynamicLoadManager.cssLoad('/assets/core/common/css/progress.css') // @FIXME
     }
 
     var $context = $(context)
@@ -41,6 +44,7 @@ var Progress = {
 
     $context.trigger('progressStart')
   },
+
   /**
    * progress를 종료한다.
    * @memberof module:Progress

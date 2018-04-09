@@ -7,7 +7,7 @@ import $ from 'jquery'
 var DynamicLoadManager = (function (exports) {
   'use strict'
 
-  var _this
+  var that
   var _assets = {
     js: {}, css: {}
   }
@@ -18,7 +18,7 @@ var DynamicLoadManager = (function (exports) {
 
   return {
     init: function () {
-      _this = this
+      that = this
 
       return this
     },

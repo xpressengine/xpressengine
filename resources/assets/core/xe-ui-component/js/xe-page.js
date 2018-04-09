@@ -1,7 +1,4 @@
-/**
- * @namespace XE
- * */
-;(function ($, XE, DynamicLoadManager) {
+(function ($, XE, DynamicLoadManager) {
   var _this = this
 
   var _pageCommon = (function () {
@@ -165,7 +162,7 @@
   /**
    * @private
    * @description validtion
-   * */
+   **/
   var _validation = (function () {
     return {
       isValidPage: function (options) {
@@ -209,7 +206,7 @@
    *     - type       : {string} method
    * </pre>
    * @param {function} callback
-   * */
+   **/
   var _page = function (options, callback) {
     var $target = options.target
     var addType = options.hasOwnProperty('addType') ? options.addType : ''
@@ -305,7 +302,7 @@
    *     2)html string append
    *     3)callback 실행
    * </pre>
-   * */
+   **/
   XE.page = function (url, target, options, callback) {
     var defaultOptions = {
       type: 'get'
@@ -339,7 +336,7 @@
    *     3)callback 실행
    *     4)modal show
    * </pre>
-   * */
+   **/
   XE.pageModal = function (url, options, callback) {
     var defaultOptions = {
       type: 'get'
@@ -391,7 +388,7 @@
    *     3)callback 실행
    *     4)modal show
    * </pre>
-   * */
+   **/
   XE.pageToggleMenu = function (url, $this, options, callback) {
     var $container = $this.parent()
 

@@ -3,10 +3,10 @@ import Progress from 'xe-common/progress'
 
 /**
  * @module Request
- * */
+ **/
 export default (function () {
   /** @private */
-  var _this
+  var that
 
   /** @private */
   var _options = {
@@ -30,7 +30,7 @@ export default (function () {
     }
 
     if (!settings.hasOwnProperty('error')) {
-      _this.error(jqxhr, settings, thrownError)
+      that.error(jqxhr, settings, thrownError)
     }
   })
 
@@ -39,20 +39,20 @@ export default (function () {
      * Request module 초기화한다.
      * @method
      * @return this
-     * */
+     **/
     init: function () {
-      _this = this
+      that = this
       return this
     },
 
     /**
      * @public
-     * */
+     **/
     options: _options,
     /**
      * ajax 옵션을 세팅한다.
      * @param {object} options jQuery ajax options
-     * */
+     **/
     setup: function (options) {
       $.extend(_options, options)
       $.ajaxSetup(_options)
@@ -64,7 +64,7 @@ export default (function () {
      * @param {object} data
      * @param {function} callback
      * @param {string} type
-     * */
+     **/
     get: function (url, data, callback, type) {
       return $.get(url, data, callback, type)
     },
@@ -75,7 +75,7 @@ export default (function () {
      * @param {object} data
      * @param {function} callback
      * @param {string} type
-     * */
+     **/
     post: function (url, data, callback, type) {
       return $.post(url, data, callback, type)
     },
@@ -85,7 +85,7 @@ export default (function () {
      * @param {object} jqxhr
      * @param {object} settings
      * @params {object} thrownError
-     * */
+     **/
     error: function (jqxhr, settings, thrownError) {
       var status = jqxhr.status
       var errorMessage = 'Not defined error message (' + status + ')'

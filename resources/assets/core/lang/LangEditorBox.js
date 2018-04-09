@@ -4,6 +4,7 @@ import $ from 'jquery'
 
 /**
  * @private
+ * @FIXME
  * @description
  * <pre>
  * 다국어 입력 컴포넌트를 만드는 방식 2가지
@@ -14,7 +15,6 @@ import $ from 'jquery'
  * - 컴포넌트 state에 다국어 정보가 없으면 하나의 컴포넌트에 대한 다국어 정보를 ajax로 요청하여 상태를 갱신한다.
  * </pre>
  * */
-
 class LangEditorBox {
   constructor ({ $wrapper, seq, name, langKey, multiline, lines, autocomplete }) {
     this.$wrapper = $wrapper
@@ -152,6 +152,7 @@ class LangEditorBox {
 var seq = 0
 /**
  * target element에 LangEditorBox를 랜더링함.
+ * @FIXME
  * @global
  * @function langEditorBoxRender
  * */
@@ -179,10 +180,12 @@ window.langEditorBoxRender = function ($data, type) {
   seq++
 }
 
+// @FIXME
 $(function () {
   renderLangEditorBox()
 })
 
+// @FIXME
 function renderLangEditorBox () {
   let langKeys = []
   let langObj = {}
@@ -268,6 +271,7 @@ function renderLangEditorBox () {
   })
 }
 
+// @FIXME
 $(document).on('focus', '.lang-editor-box input, textarea', function () {
   var box = $(this).closest('.lang-editor-box')
   var el = box.find('.sub')
