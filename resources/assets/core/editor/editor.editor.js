@@ -1,35 +1,35 @@
 import XEeditor from './editor.core.js'
-import Validation from './editor.validation.js'
+import EditorValidation from './editor.validation.js'
 import InstanceObj from './editor.instanceObj.js'
 import { eventify } from 'xe-utils'
+import $ from 'jquery'
 
 /**
- * @private
- * @class Editor
+ * @class
  * @param {object} editorSettings
  * @param {object}interfaces
  **/
-let Editor = function (editorSettings, interfaces) {
-  this.name = editorSettings.name
-  this.configs = editorSettings.configs
-  this.editorList = []
-  this.interfaces = {}
+class Editor {
+  constructor (editorSettings, interfaces) {
+    this.name = editorSettings.name
+    this.configs = editorSettings.configs
+    this.editorList = []
+    this.interfaces = {}
 
-  eventify(this)
+    eventify(this)
 
-  if (editorSettings.hasOwnProperty('plugins') &&
-    editorSettings.plugins instanceof Array &&
-    editorSettings.plugins.length > 0 &&
-    editorSettings.hasOwnProperty('addPlugins')) {
-    editorSettings.addPlugins(editorSettings.plugins)
+    if (editorSettings.hasOwnProperty('plugins') &&
+      editorSettings.plugins instanceof Array &&
+      editorSettings.plugins.length > 0 &&
+      editorSettings.hasOwnProperty('addPlugins')) {
+      editorSettings.addPlugins(editorSettings.plugins)
+    }
+
+    for (var o in interfaces) {
+      this[o] = interfaces[o]
+    }
   }
 
-  for (var o in interfaces) {
-    this[o] = interfaces[o]
-  }
-}
-
-Editor.prototype = {
   /**
    * 에디터를 생성 및 툴을 추가한다.
    * @memberof Editor
@@ -38,11 +38,11 @@ Editor.prototype = {
    * @param {object} editorOptions
    * @param {array} toolInfoList
    **/
-  create: function (sel, options, editorOptions, toolInfoList) {
+  create (sel, options, editorOptions, toolInfoList) {
     toolInfoList = toolInfoList || []
     editorOptions = $.extend(this.configs || {}, editorOptions || {})
 
-    if (Validation.isValidBeforeCreateInstance(sel, toolInfoList, this)) {
+    if (EditorValidation.isValidBeforeCreateInstance(sel, toolInfoList, this)) {
       const editorIntance = new InstanceObj(this.name, sel, editorOptions, toolInfoList)
       editorIntance._editor = this
       this.editorList[sel] = editorIntance
@@ -66,7 +66,6 @@ Editor.prototype = {
         }
       }
 
-      // return this.editorList[sel];
       return this.editorList[sel]
     }
   }

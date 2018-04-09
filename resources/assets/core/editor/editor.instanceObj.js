@@ -2,7 +2,6 @@ import XEeditor from './editor.core'
 import { eventify } from 'xe-utils'
 
 /**
- * @private
  * @class
  * @param {string} editorName
  * @param {string} sel selector
@@ -112,7 +111,7 @@ class InstanceObj {
   }
 
   getContentDom () {
-    if(typeof XEeditor.editorSet[this.editorName].getContentDom === 'function') {
+    if (typeof XEeditor.editorSet[this.editorName].getContentDom === 'function') {
       return XEeditor.editorSet[this.editorName].getContentDom.call(this)
     }
     return false

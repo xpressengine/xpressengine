@@ -1,5 +1,8 @@
 import XEeditor from './editor.core'
 
+/**
+ * @private
+ */
 const requireOptions = {
   editorSettings: [
     'name'
@@ -23,7 +26,10 @@ const requireOptions = {
   }
 }
 
-class Validation {
+/**
+ * @class
+ */
+class EditorValidation {
   static isValidBeforeCreateInstance (sel, toolIdList, editorParent) {
     if (!sel) {
       console.error('error: 중복 editor id. (' + sel + ')')
@@ -101,4 +107,4 @@ class Validation {
   }
 }
 
-export default Validation
+export default EditorValidation
