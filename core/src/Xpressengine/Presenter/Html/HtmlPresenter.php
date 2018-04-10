@@ -170,13 +170,19 @@ class HtmlPresenter implements Presentable
 
         // return only content(Skin)
         if ($this->presenter->getRenderType() == Presenter::RENDER_CONTENT) {
-            return $skinView;
+            $viewContent = $this->presenter->isWidgetParsing() ?
+                $this->parser->parseXml($skinView) :
+                $skinView;
+            return $viewContent;
         }
 
         // return popup type, without theme
         if ($this->presenter->getRenderType() == Presenter::RENDER_POPUP) {
             $baseTheme = $viewFactory->make(self::$popupHtmlWrapper);
-            $baseTheme->content = $skinView;
+            $viewContent = $this->presenter->isWidgetParsing() ?
+                $this->parser->parseXml($skinView) :
+                $skinView;
+            $baseTheme->content = $viewContent;
 
             return $baseTheme->render();
         }
