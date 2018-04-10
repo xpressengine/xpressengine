@@ -182,10 +182,7 @@ class HtmlPresenter implements Presentable
         }
 
         $baseTheme = $viewFactory->make(self::$commonHtmlWrapper);
-        $viewContent = $this->presenter->isWidgetParsing() ?
-            $this->parser->parseXml($this->renderTheme($skinView)->render()) :
-            $this->renderTheme($skinView)->render();
-        $baseTheme->content = $viewContent;
+        $baseTheme->content = $skinView;
 
         return $baseTheme->render();
     }
@@ -228,7 +225,11 @@ class HtmlPresenter implements Presentable
             $skinView = $viewFactory->make($id, $this->data);
         }
 
-        return $skinView;
+        $viewContent = $this->presenter->isWidgetParsing() ?
+            $this->parser->parseXml($this->renderTheme($skinView)->render()) :
+            $this->renderTheme($skinView)->render();
+
+        return $viewContent;
     }
 
     /**
