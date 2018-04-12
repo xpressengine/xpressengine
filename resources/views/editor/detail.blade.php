@@ -30,7 +30,10 @@
                                                 <small> {{ xe_trans('xe::unit') }}: px</small>
                                             </label>
                                         </div>
-                                        <input type="text" class="form-control" name="height" value="{{ $config->get('height') }}">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="height" value="{{ $config->get('height') }}">
+                                            <span class="input-group-addon">px</span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
@@ -120,13 +123,9 @@
                                                 <small>{{ xe_trans('xe::descMaxFileSize') }}</small>
                                             </label>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control" name="fileMaxSize" value="{{ $config->get('fileMaxSize') }}">
-                                            </div>
-                                            <div class="col-sm-3">
-                                                <input type="text" class="form-control" value="{{ xe_trans('xe::unit') }}: MB" disabled>
-                                            </div>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="fileMaxSize" value="{{ $config->get('fileMaxSize') }}">
+                                            <span class="input-group-addon">MB</span>
                                         </div>
                                     </div>
                                 </div>
@@ -138,12 +137,9 @@
                                                 <small>{{ xe_trans('xe::descAttachMaxSize') }}</small>
                                             </label>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-sm-9">
+                                        <div class="input-group">
                                                 <input type="text" class="form-control" name="attachMaxSize" value="{{ $config->get('attachMaxSize') }}">
-                                            </div>
-                                            <div class="col-sm-3">
-                                                <input type="text" class="form-control" value="{{ xe_trans('xe::unit') }}: MB" disabled>
+                                                <span class="input-group-addon">MB</span>
                                             </div>
                                         </div>
                                     </div>
