@@ -138,14 +138,12 @@
                                             </label>
                                         </div>
                                         <div class="input-group">
-                                                <input type="text" class="form-control" name="attachMaxSize" value="{{ $config->get('attachMaxSize') }}">
-                                                <span class="input-group-addon">MB</span>
-                                            </div>
+                                            <input type="text" class="form-control" name="attachMaxSize" value="{{ $config->get('attachMaxSize') }}">
+                                            <span class="input-group-addon">MB</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
 
