@@ -37,6 +37,7 @@ class Kernel extends ConsoleKernel
         Commands\Schema::class,
         Commands\TranslationImport::class,
         Commands\CacheClear::class,
+        Commands\CacheClearPlus::class,
         Commands\StorageOptimize::class,
         Commands\Site::class,
         Commands\PluginMake::class,
@@ -51,7 +52,6 @@ class Kernel extends ConsoleKernel
     protected $skipXE = false;
 
     protected $skipXECommands = [
-        'cache:clear',
         'view:clear',
         'down',
         'up',

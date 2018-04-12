@@ -18,12 +18,7 @@ use Illuminate\Cache\Console\ClearCommand;
 use Xpressengine\Interception\InterceptionHandler;
 
 /**
- * command
- *
- * ## 명령어 사용
- * ```
- * php artisan cache --tables=tableName1,tableName2...
- * ```
+ * laravel cache:clear 를 확장합니다.
  *
  * @category    Commands
  * @package     App\Console\Commands
@@ -31,23 +26,22 @@ use Xpressengine\Interception\InterceptionHandler;
  * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
  * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPL-2.1
  * @link        https://xpressengine.io
- * @deprecated
  */
-class CacheClear extends ClearCommand
+class CacheClearPlus extends ClearCommand
 {
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $name = 'cache:clear-xe';
+    protected $name = 'cache:clear';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = '! deprecated ! ! instead use cache:clear! Remove XE cache files.';
+    protected $description = 'Flush the application cache and XE cache';
 
     /**
      * Execute the console command.
@@ -56,7 +50,31 @@ class CacheClear extends ClearCommand
      */
     public function handle()
     {
-        // xe 에서 관리하는 stores
+        $this->laravel['events']->fire(
+            'cache:clearing', [$this->argument('store'), $this->tags()]
+        );
+
+        $this->cache()->flush();
+
+        $this->flushFacades();
+
+        $this->flushXeCaches();
+
+        $this->laravel['events']->fire(
+            'cache:cleared', [$this->argument('store'), $this->tags()]
+        );
+
+        $this->info('Cache cleared successfully. XE cache has also been cleared.');
+    }
+
+    /**
+     * this command basically flush few stores.
+     */
+    protected function flushXeCaches()
+    {
+        /**
+         * default flush stores
+         */
         $stores = [
             'file',
             'plugins',
@@ -70,15 +88,14 @@ class CacheClear extends ClearCommand
         }
 
         foreach ($stores as $storeName) {
-            $this->laravel['events']->fire('cache:clearing', [$storeName]);
+            $this->laravel['events']->fire('cache:clearing', [$storeName, $this->tags()]);
 
             $this->cache->store($storeName)->flush();
 
-            $this->laravel['events']->fire('cache:cleared', [$storeName]);
+            $this->laravel['events']->fire('cache:cleared', [$storeName, $this->tags()]);
         }
 
+        /** flush interception proxy store */
         app(InterceptionHandler::class)->clearProxies();
-
-        $this->info('Application cache cleared!');
     }
 }
