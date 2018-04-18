@@ -1,6 +1,6 @@
 class EventEmitter {
   constructor () {
-    this.eventMaps = new Set()
+    this.eventMaps = {}
     this.target = null
   }
 
