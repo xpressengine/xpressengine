@@ -155,6 +155,7 @@ const config = [
             'common/js/storeCategory.js',
             'common/js/translator.js',
             'common/js/utils.js',
+            'common/js/utils/*.js',
             'common/js/validator.js',
             'common/js/component.js',
             'common/js/xe.js',
