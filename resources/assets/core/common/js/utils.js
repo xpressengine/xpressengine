@@ -101,6 +101,7 @@ export function sizeFormatToBytes (str) {
  * @memberof Utils
  * @param {string} url
  * @return {boolean}
+ * @FIXME
  */
 export function isURL (url) {
   return /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(url)
@@ -560,7 +561,9 @@ export function openWindow (url, name = null, options = {}) {
     })
     features = features.join(',')
 
-    return windowObjectReference[name] = window.open(url, name, features)
+    windowObjectReference[name] = window.open(url, name, features)
+
+    return windowObjectReference[name]
   } else {
     return windowObjectReference[name].foucs()
   }
