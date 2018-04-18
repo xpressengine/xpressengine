@@ -1,49 +1,19 @@
 import $ from 'jquery'
-import isNil from 'lodash/isNil'
-import pull from 'lodash/pull'
 import debounce from 'lodash/debounce'
 import throttle from 'lodash/throttle'
 import curry from 'lodash/curry'
 import mapValues from 'lodash/mapValues'
+import EventEmitter from './utils/EventEmitter'
 
 /**
- * object에 EventEmmiter 추가
+ * object, function에 EventEmmiter 확장
+ *
  * @memberof Utils
- * @param {object}
+ * @param {object|function}
  * @return {avoid}
- **/
+ */
 export function eventify (target) {
-  target._events = {}
-
-  target.$on = (eventName, listener) => {
-    if (isNil(target._events[eventName])) {
-      target._events[eventName] = []
-    }
-    target._events[eventName].push(listener)
-  }
-
-  target.$emit = (eventName, ...args) => {
-    if (isNil(target._events[eventName])) {
-      return
-    }
-    target._events[eventName].forEach((listener) => {
-      listener.apply(target, [eventName, ...args])
-    })
-  }
-
-  target.$off = (eventName, listener) => {
-    if (isNil(target._events[eventName])) {
-      return
-    }
-    pull(target._events[eventName], listener)
-  }
-
-  target.$once = (eventName, listener) => {
-    target.$on(eventName, function handler (...args) {
-      target.$off(eventName, handler)
-      listener.apply(target, args)
-    })
-  }
+  EventEmitter.eventify(target)
 }
 
 /**
@@ -51,7 +21,7 @@ export function eventify (target) {
  * @memberof Utils
  * @param {string} mime
  * @return {boolean}
- **/
+ */
 export function isImage (mime) {
   return $.inArray(mime, ['image/jpg', 'image/jpeg', 'image/png', 'image/gif']) !== -1
 }
@@ -61,7 +31,7 @@ export function isImage (mime) {
  * @memberof Utils
  * @param {string} mime
  * @return {boolean}
- **/
+ */
 export function isVideo (mime) {
   return $.inArray(mime, ['video/mp4', 'video/webm', 'video/ogg']) !== -1
 }
@@ -71,7 +41,7 @@ export function isVideo (mime) {
  * @memberof Utils
  * @param {string} mime
  * @return {boolean}
- **/
+ */
 export function isAudio (mime) {
   return $.inArray(mime, ['audio/mpeg', 'audio/ogg', 'audio/wav']) !== -1
 }
@@ -82,7 +52,7 @@ export function isAudio (mime) {
  * @param {number} bytes
  * @return {string}
  * @FIXME
- **/
+ */
 export function formatSizeUnits (bytes) {
   if (bytes >= 1073741824) {
     bytes = (bytes / 1073741824).toFixed(2) + 'GB'
@@ -107,7 +77,7 @@ export function formatSizeUnits (bytes) {
  * @param {string} str
  * @return {number}
  * @FIXME
- **/
+ */
 export function sizeFormatToBytes (str) {
   var bytes = 0
 
@@ -131,7 +101,7 @@ export function sizeFormatToBytes (str) {
  * @memberof Utils
  * @param {string} url
  * @return {boolean}
- **/
+ */
 export function isURL (url) {
   return /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(url)
 }
@@ -141,7 +111,7 @@ export function isURL (url) {
  * @memberof Utils
  * @param {string} url
  * @return {string}
- **/
+ */
 export function asset (url) {
   var loc = window.location
   var retURL = ''
@@ -175,7 +145,7 @@ export function asset (url) {
  * @param {string} url
  * @return {string}
  * @DEPRECATED
- **/
+ */
 export function getUri (url) {
   var path = url.split(window.location.protocol + '//')[1]
   var returnUri
@@ -197,7 +167,7 @@ export function getUri (url) {
  * @return {number}
  * @DEPRECATED
  * @FIXME moment
- **/
+ */
 export function strtotime (text, now) {
   //  discuss at: http://locutus.io/php/strtotime/
   // original by: Caio Ariede (http://caioariede.com)
@@ -513,7 +483,7 @@ export function strtotime (text, now) {
  * @param {string} str
  * @return {string}
  * @DEPRECATED
- **/
+ */
 export function addCommas (str) {
   var parts = (str + '').split('.')
   var main = parts[0]
@@ -583,7 +553,7 @@ export function openWindow (url, name = null, options = {}) {
   let features = []
   options = Object.assign({}, defaultWindowFeatures, options)
 
-  if(windowObjectReference[name] == null || windowObjectReference[name].closed) {
+  if (windowObjectReference[name] == null || windowObjectReference[name].closed) {
     mapValues(options, (value, key) => {
       value = (value === false) ? 'no' : (value === true) ? 'yes' : value
       features.push(key + '=' + value)
@@ -596,7 +566,18 @@ export function openWindow (url, name = null, options = {}) {
   }
 }
 
+export {
+  EventEmitter,
+  debounce,
+  throttle,
+  curry
+}
+
 export default {
+  EventEmitter,
+  debounce,
+  throttle,
+  curry,
   eventify,
   isImage,
   isVideo,
@@ -608,8 +589,5 @@ export default {
   getUri,
   strtotime,
   addCommas,
-  openWindow,
-  debounce,
-  throttle,
-  curry
+  openWindow
 }
