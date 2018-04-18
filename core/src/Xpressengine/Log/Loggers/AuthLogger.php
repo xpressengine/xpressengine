@@ -52,7 +52,7 @@ class AuthLogger extends AbstractLogger
             self::writeLog(request(), static::LOGIN);
         });
 
-        $app['events']->listen('auth.logout', function () {
+        $app['events']->listen('Illuminate\Auth\Events\Logout', function () {
             self::writeLog(request(), static::LOGOUT);
         });
     }
