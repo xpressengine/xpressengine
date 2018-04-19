@@ -1,4 +1,5 @@
-(function ($) {
+// @TODO 재작성. 사용되지 않음
+(function (XE, $) {
   'use strict'
 
   /**
@@ -500,4 +501,4 @@
 
     return draft
   }
-})(jQuery)
+})(window.XE, window.jQuery)

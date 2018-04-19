@@ -1,5 +1,5 @@
-$(function ($) {
-  Setting = function (element, options) {
+window.jQuery(function ($) {
+  var Setting = function (element, options) {
     this.options = null
     this.$element = null
     this.init(element, options)
@@ -93,11 +93,11 @@ $(function ($) {
     return Plugin
   }
 
-  XE.Setting = Setting
+  window.XE.Setting = Setting
 })
 
-$(function () {
-  var DisplayNameSetting = XE.Setting.extend(
+window.jQuery(function ($) {
+  var DisplayNameSetting = window.XE.Setting.extend(
     function (element, options) {
       this.init(element, options)
     }, {
@@ -107,7 +107,7 @@ $(function () {
         saveUrl: false
       },
       init: function (element, options) {
-        XE.Setting.prototype.init.call(this, element, options)
+        window.XE.Setting.prototype.init.call(this, element, options)
 
         this.validated = false
 
@@ -137,7 +137,7 @@ $(function () {
         }
 
         this.check()
-        XE.Setting.prototype.edit.call(this)
+        window.XE.Setting.prototype.edit.call(this)
         return false
       },
 
@@ -156,7 +156,7 @@ $(function () {
           data: { name: input },
           success: function (data, textStatus, jqXHR) {
           // save에 성공하면 새로고침
-            location.reload()
+            window.location.reload()
           },
 
           error: function (jqXHR, textStatus, errorThrown) {
@@ -229,11 +229,11 @@ $(function () {
       }
     }
   )
-  $.fn.xeDisplayNameSetting = XE.Setting.generate(DisplayNameSetting)
+  $.fn.xeDisplayNameSetting = window.XE.Setting.generate(DisplayNameSetting)
 })
 
-$(function () {
-  var PasswordSetting = XE.Setting.extend(
+window.jQuery(function ($) {
+  var PasswordSetting = window.XE.Setting.extend(
     function (element, options) {
       this.init(element, options)
     }, {
@@ -243,7 +243,7 @@ $(function () {
         saveUrl: false
       },
       init: function (element, options) {
-        XE.Setting.prototype.init.call(this, element, options)
+        window.XE.Setting.prototype.init.call(this, element, options)
 
         var $this = this.$element
 
@@ -274,7 +274,7 @@ $(function () {
         this.setStatus(this.ui.confirmBox, true)
         this.setSecureLevel()
 
-        XE.Setting.prototype.edit.call(this)
+        window.XE.Setting.prototype.edit.call(this)
         return false
       },
 
@@ -298,7 +298,7 @@ $(function () {
           success: function (data, textStatus, jqXHR) {
           // save에 성공하면 새로고침
             if (data.result) {
-              location.reload()
+              window.location.reload()
             } else {
               if (data.target == 'password') {
                 _this.setStatus(_this.ui.newBox, false, data.message)
@@ -388,8 +388,8 @@ $(function () {
   $.fn.xePasswordSetting = XE.Setting.generate(PasswordSetting)
 })
 
-$(function () {
-  var EmailSetting = XE.Setting.extend(
+window.jQuery(function ($) {
+  var EmailSetting = window.XE.Setting.extend(
     function (element, options) {
       this.init(element, options)
     }, {
@@ -399,7 +399,7 @@ $(function () {
         saveUrl: false
       },
       init: function (element, options) {
-        XE.Setting.prototype.init.call(this, element, options)
+        window.XE.Setting.prototype.init.call(this, element, options)
 
         var $this = this.$element
         var _this = this
@@ -475,7 +475,7 @@ $(function () {
           dataType: 'json',
           data: { address: input },
           success: function (data, textStatus, jqXHR) {
-            location.reload()
+            window.location.reload()
           },
 
           error: function (jqXHR, textStatus, errorThrown) {
@@ -506,7 +506,7 @@ $(function () {
           dataType: 'json',
           data: { code: input },
           success: function (data, textStatus, jqXHR) {
-            location.reload()
+            window.location.reload()
           },
 
           error: function (jqXHR, textStatus, errorThrown) {
@@ -527,12 +527,12 @@ $(function () {
           data: { address: email },
           success: function (data, textStatus, jqXHR) {
             box.remove()
-            XE.toast('success', data.message)
+            window.XE.toast('success', data.message)
           },
 
           error: function (jqXHR, textStatus, errorThrown) {
           // delete에 실패하면 오류 출력
-            XE.toast('danger', jqXHR.responseJSON.message)
+            window.XE.toast('danger', jqXHR.responseJSON.message)
           }
         })
       },
@@ -548,12 +548,12 @@ $(function () {
           success: function (data, textStatus, jqXHR) {
             _this.ui.addEmailBox.show()
             _this.ui.confirmEmailBox.hide()
-            XE.toast('success', data.message)
+            window.XE.toast('success', data.message)
           },
 
           error: function (jqXHR, textStatus, errorThrown) {
           // delete에 실패하면 오류 출력
-            XE.toast('danger', jqXHR.responseJSON.message)
+            window.XE.toast('danger', jqXHR.responseJSON.message)
           }
         })
       },
@@ -567,12 +567,12 @@ $(function () {
           dataType: 'json',
           data: { address: email },
           success: function (data, textStatus, jqXHR) {
-            XE.toast('success', data.message)
+            window.XE.toast('success', data.message)
           },
 
           error: function (jqXHR, textStatus, errorThrown) {
           // resend에 실패하면 오류 출력
-            XE.toast('danger', jqXHR.responseJSON.message)
+            window.XE.toast('danger', jqXHR.responseJSON.message)
           }
         })
       },
@@ -591,7 +591,7 @@ $(function () {
           data: { address: input },
           success: function (data, textStatus, jqXHR) {
           // save에 성공하면 새로고침
-            location.reload()
+            window.location.reload()
           },
 
           error: function (jqXHR, textStatus, errorThrown) {
@@ -611,11 +611,11 @@ $(function () {
       }
     }
   )
-  $.fn.xeEmailSetting = XE.Setting.generate(EmailSetting)
+  $.fn.xeEmailSetting = window.XE.Setting.generate(EmailSetting)
 })
 
-$(function () {
-  var LeaveSetting = XE.Setting.extend(
+window.jQuery(function ($) {
+  var LeaveSetting = window.XE.Setting.extend(
     function (element, options) {
       this.init(element, options)
     }, {
@@ -625,7 +625,7 @@ $(function () {
         saveUrl: false
       },
       init: function (element, options) {
-        XE.Setting.prototype.init.call(this, element, options)
+        window.XE.Setting.prototype.init.call(this, element, options)
 
         var $this = this.$element
 
@@ -652,21 +652,21 @@ $(function () {
       }
     }
   )
-  $.fn.xeLeaveSetting = XE.Setting.generate(LeaveSetting)
+  $.fn.xeLeaveSetting = window.XE.Setting.generate(LeaveSetting)
 })
 
-$(function () {
+window.jQuery(function ($) {
   // menu toggle
   $('.xe-menu-toggle').click(function () {
     $('.snb-list').toggle()
   })
 
-  XE.Component.timeago()
-})
+  window.XE.Component.timeago()
 
-$(window).resize(function () {
-  // 모바일 메뉴 노출 상태에서 화면이 커졌을 경우 snb_lst가 정상 노출을 위해 적용
-  if ($(window).innerWidth() > 768) {
-    $('.snb-list').css('display', '')
-  }
+  $(window).resize(function () {
+    // 모바일 메뉴 노출 상태에서 화면이 커졌을 경우 snb_lst가 정상 노출을 위해 적용
+    if ($(window).innerWidth() > 768) {
+      $('.snb-list').css('display', '')
+    }
+  })
 })

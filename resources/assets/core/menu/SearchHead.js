@@ -1,7 +1,7 @@
 /**
  * @namespace SearchHead
  * */
-var SearchHead = (function ($) {
+var SearchHead = (function (XE, $) {
   /** @private */
   var _this
   /** @private */
@@ -100,7 +100,6 @@ var SearchHead = (function ($) {
       })
 
       _$parent.on('mouseenter', '.search-list li', function (e) {
-        var $target = $(e.target)
         var index = _$parent.find('.search-list li').index($(this))
 
         _this.setFocus(index)
@@ -268,4 +267,4 @@ var SearchHead = (function ($) {
       _this.toggleSuggestionByStatus('close')
     }
   }
-})(window.jQuery)
+})(window.XE, window.jQuery)

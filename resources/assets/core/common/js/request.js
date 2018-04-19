@@ -108,7 +108,7 @@ export default (function () {
       }
 
       // @FIXME 의존성
-      XE.toastByStatus(status, errorMessage)
+      window.XE.toastByStatus(status, errorMessage)
     }
   }.init()
 })()

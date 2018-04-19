@@ -14,7 +14,7 @@ var Menu = (function () {
         '<a href="' + url + '/' + data.id + '"><h3><i class="xi-folder"></i>' + data.title + '</h3></a>',
         '</div>',
         '<div class="pull-right">',
-        '<a href="' + url + '/' + data.id + '/types' + '" class="btn btn-primary"><i class="xi-plus"></i><span>' + XE.Lang.trans('xe::addItem') + '</span></a>',
+        '<a href="' + url + '/' + data.id + '/types' + '" class="btn btn-primary"><i class="xi-plus"></i><span>' + window.XE.Lang.trans('xe::addItem') + '</span></a>',
         '</div>',
         '</div>'
       ].join('\n')

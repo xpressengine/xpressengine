@@ -84,14 +84,6 @@ const config = [
             {loader: 'expose-loader', options: 'jQuery'},
             {loader: 'expose-loader', options: '$'}
           ]
-        },
-        {
-          test: require.resolve('blankshield'),
-          use: {loader: 'expose-loader', options: 'blankshield'}
-        },
-        {
-          test: require.resolve('moment'),
-          use: {loader: 'expose-loader', options: 'moment'}
         }
       ]
     },
@@ -134,7 +126,7 @@ const config = [
       // gulp assets:tree
       // @FIXME
       // @DEPRECATED
-      'core/common/js/xe.tree': [pathInfo.core + '/tree/Tree.js'],
+      'core/common/js/xe.tree': [pathInfo.core + '/tree/Tree.js']
     },
     output: {
       path: path.resolve(__dirname, '.'),

@@ -1,5 +1,6 @@
 import $ from 'jquery'
 
+// @FIXME
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
     define(['exports'], factory)
