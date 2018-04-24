@@ -233,6 +233,7 @@ class EditorHandler
      * @param string      $instanceId instance id
      * @param array|false $args       argument for editor
      * @param string|null $targetId   target id
+     * @param string|null $coverId    cover id
      * @return string
      */
     public function render($instanceId, $args, $targetId = null, $coverId = null)

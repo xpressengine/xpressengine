@@ -158,6 +158,7 @@ abstract class AbstractEditor implements ComponentInterface
      */
     protected $defaultArguments = [
         'content' => '',
+        'cover' => false,
         'contentDomName' => 'content',
         'contentDomId' => 'xeContentEditor',
         'contentDomOptions' => [
