@@ -117,6 +117,13 @@ abstract class AbstractEditor implements ComponentInterface
     protected $files = [];
 
     /**
+     * Cover file id
+     *
+     * @var null|string
+     */
+    protected $coverId = null;
+
+    /**
      * Indicates if used only javascript.
      *
      * @var bool
@@ -178,6 +185,13 @@ abstract class AbstractEditor implements ComponentInterface
      * @var string
      */
     protected $mentionInputName = '_mentions';
+
+    /**
+     * The cover input name
+     *
+     * @var string
+     */
+    protected $coverInputName = '_coverId';
 
     /**
      * The file class name
@@ -316,6 +330,17 @@ abstract class AbstractEditor implements ComponentInterface
     public function setFiles($files = [])
     {
         $this->files = $files;
+    }
+
+    /**
+     * Set cover fild id
+     *
+     * @param $coverId
+     * @return void
+     */
+    public function setCover($coverId)
+    {
+        $this->coverId = $coverId;
     }
 
     /**
@@ -840,6 +865,16 @@ abstract class AbstractEditor implements ComponentInterface
     public function getMentionInputName()
     {
         return $this->mentionInputName;
+    }
+
+    /**
+     * Get the cover input name
+     *
+     * @return string
+     */
+    public function getCoverInputName()
+    {
+        return $this->coverInputName;
     }
 
     /**
