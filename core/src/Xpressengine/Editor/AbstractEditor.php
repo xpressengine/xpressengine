@@ -426,6 +426,9 @@ abstract class AbstractEditor implements ComponentInterface
                     'class' => $this->getMentionClassName(),
                     'identifier' => $this->getMentionIdentifierAttrName(),
                 ],
+                'cover' => [
+                    'input' => $this->getCoverInputName(),
+                ],
             ]
         ];
     }
