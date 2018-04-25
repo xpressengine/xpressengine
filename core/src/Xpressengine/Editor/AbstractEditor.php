@@ -345,6 +345,16 @@ abstract class AbstractEditor implements ComponentInterface
     }
 
     /**
+     * Get cover fild id
+     *
+     * @return string
+     */
+    public function getCover()
+    {
+        return $this->coverId;
+    }
+
+    /**
      * Get a editor name
      *
      * @return string
@@ -429,6 +439,10 @@ abstract class AbstractEditor implements ComponentInterface
                 'cover' => [
                     'input' => $this->getCoverInputName(),
                 ],
+            ],
+            'cover' => [
+                'use' => true, // @FIXME
+                'coverId' => $this->getCover()
             ]
         ];
     }
