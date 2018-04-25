@@ -308,6 +308,27 @@ class EditorHandler
     {
         $editor = $this->get($instanceId);
 
+        // 콘텐츠 폰트 설정 적용
+        $config = $this->getConfig($instanceId);
+        $fontSize = $config->get('fontSize');
+        $fontFamily = $config->get('fontFamily');
+
+        $contentStyle = [];
+        if ($fontSize) {
+            $contentStyle[] = 'font-size: ' . $fontSize . ';';
+        }
+        if ($fontFamily) {
+            $contentStyle[] = 'font-family: ' . $fontFamily . ';';
+        }
+
+        if ($contentStyle) {
+            app('xe.frontend')->html('content.style')->content('
+                <style>
+                    .xe-content, .xe_content {' . implode($contentStyle) . '}
+                </style>
+            ')->load();
+        }
+
         return $this->compileTools($instanceId, $editor->compile($content, $htmlable));
     }
 
