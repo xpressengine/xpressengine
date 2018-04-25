@@ -34,7 +34,7 @@ class Item {
 
     temp += this.makeItem(items, _nodeTemplate)
 
-    if ((items && items.length) || isRoot) {
+    if (items && items.length != 0 || isRoot) {
       temp += '</ul>'
     }
 
