@@ -50,6 +50,29 @@ class EditorServiceProvider extends ServiceProvider
         $this->app['events']->listen('xe.editor.render', function ($editor) {
             $this->app['xe.frontend']->js('assets/core/editor/editor.bundle.js')->load();
         });
+
+        $this->app['events']->listen('xe.editor.compile', function ($editor) {
+            // 콘텐츠 폰트 설정 적용
+            $config = $editor->getConfig();
+            $fontSize = $config->get('fontSize');
+            $fontFamily = $config->get('fontFamily');
+
+            $contentStyle = [];
+            if ($fontSize) {
+                $contentStyle[] = 'font-size: ' . $fontSize . ';';
+            }
+            if ($fontFamily) {
+                $contentStyle[] = 'font-family: ' . $fontFamily . ';';
+            }
+
+            if ($contentStyle) {
+                $this->app['xe.frontend']->html('content.style')->content('
+                    <style>
+                        .xe-content, .xe_content {' . implode($contentStyle) . '}
+                    </style>
+                ')->load();
+            }
+        });
     }
 
     /**
