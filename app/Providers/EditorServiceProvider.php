@@ -56,6 +56,7 @@ class EditorServiceProvider extends ServiceProvider
             $config = $editor->getConfig();
             $fontSize = $config->get('fontSize');
             $fontFamily = $config->get('fontFamily');
+            $instanceId = $editor->getInstanceId();
 
             $contentStyle = [];
             if ($fontSize) {
@@ -64,13 +65,12 @@ class EditorServiceProvider extends ServiceProvider
             if ($fontFamily) {
                 $contentStyle[] = 'font-family: ' . $fontFamily . ';';
             }
-
             if ($contentStyle) {
-                $this->app['xe.frontend']->html('content.style')->content('
+                $this->app['xe.frontend']->html('xe.content.style.' . $instanceId)->content('
                     <style>
-                        .xe-content, .xe_content {' . implode($contentStyle) . '}
+                        .xe-content-' . $instanceId . ' {' . implode($contentStyle) . '}
                     </style>
-                ')->load();
+                ')->appendTo('head')->load();
             }
         });
     }
