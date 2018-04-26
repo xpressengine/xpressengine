@@ -34,7 +34,7 @@ class LangEditorBox {
       $.ajax({
         type: 'get',
         dataType: 'json',
-        url: XE.xeBaseURL + '/' + XE.options.fixedPrefix + '/lang/lines/' + this.langKey,
+        url: window.xeBaseURL + '/' + XE.options.fixedPrefix + '/lang/lines/' + this.langKey,
         success: function (result) {
           this.setLines(result)
           this.render()
@@ -223,7 +223,7 @@ function renderLangEditorBox () {
       XE.ajax({
         type: 'get',
         dataType: 'json',
-        url: XE.xeBaseURL + '/' + XE.options.fixedPrefix + '/lang/lines/many',
+        url: window.xeBaseURL + '/' + XE.options.fixedPrefix + '/lang/lines/many',
         data: {
           keys: langKeys
         },
