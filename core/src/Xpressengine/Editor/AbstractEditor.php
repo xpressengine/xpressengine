@@ -117,6 +117,13 @@ abstract class AbstractEditor implements ComponentInterface
     protected $files = [];
 
     /**
+     * Cover file id
+     *
+     * @var null|string
+     */
+    protected $coverId = null;
+
+    /**
      * Indicates if used only javascript.
      *
      * @var bool
@@ -151,6 +158,7 @@ abstract class AbstractEditor implements ComponentInterface
      */
     protected $defaultArguments = [
         'content' => '',
+        'cover' => false,
         'contentDomName' => 'content',
         'contentDomId' => 'xeContentEditor',
         'contentDomOptions' => [
@@ -178,6 +186,13 @@ abstract class AbstractEditor implements ComponentInterface
      * @var string
      */
     protected $mentionInputName = '_mentions';
+
+    /**
+     * The cover input name
+     *
+     * @var string
+     */
+    protected $coverInputName = '_coverId';
 
     /**
      * The file class name
@@ -319,6 +334,27 @@ abstract class AbstractEditor implements ComponentInterface
     }
 
     /**
+     * Set cover fild id
+     *
+     * @param $coverId
+     * @return void
+     */
+    public function setCover($coverId)
+    {
+        $this->coverId = $coverId;
+    }
+
+    /**
+     * Get cover fild id
+     *
+     * @return string
+     */
+    public function getCover()
+    {
+        return $this->coverId;
+    }
+
+    /**
      * Get a editor name
      *
      * @return string
@@ -400,6 +436,13 @@ abstract class AbstractEditor implements ComponentInterface
                     'class' => $this->getMentionClassName(),
                     'identifier' => $this->getMentionIdentifierAttrName(),
                 ],
+                'cover' => [
+                    'input' => $this->getCoverInputName(),
+                ],
+            ],
+            'cover' => [
+                'use' => true, // @FIXME
+                'coverId' => $this->getCover()
             ]
         ];
     }
@@ -840,6 +883,16 @@ abstract class AbstractEditor implements ComponentInterface
     public function getMentionInputName()
     {
         return $this->mentionInputName;
+    }
+
+    /**
+     * Get the cover input name
+     *
+     * @return string
+     */
+    public function getCoverInputName()
+    {
+        return $this->coverInputName;
     }
 
     /**
