@@ -34,7 +34,7 @@ class LangEditorBox {
       $.ajax({
         type: 'get',
         dataType: 'json',
-        url: window.xeBaseURL + '/' + XE.options.fixedPrefix + '/lang/lines/' + this.langKey,
+        url: window.xeBaseURL + '/lang/lines/' + this.langKey,
         success: function (result) {
           this.setLines(result)
           this.render()
@@ -50,7 +50,7 @@ class LangEditorBox {
   bindEvents () {
     if (this.autocomplete) {
       this.$wrapper.find('input[type=text]:first,textarea:first').autocomplete({
-        source: '/' + XE.options.fixedPrefix + '/lang/search/' + XE.Lang.locales[0],
+        source: '/lang/search/' + XE.Lang.locales[0],
         minLength: 1,
         focus: function (event, ui) {
           event.preventDefault()
@@ -223,7 +223,7 @@ function renderLangEditorBox () {
       XE.ajax({
         type: 'get',
         dataType: 'json',
-        url: window.xeBaseURL + '/' + XE.options.fixedPrefix + '/lang/lines/many',
+        url: window.xeBaseURL + '/lang/lines/many',
         data: {
           keys: langKeys
         },

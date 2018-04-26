@@ -162,7 +162,7 @@ export default (function () {
      * */
     requestTrans: function (id, parameters, callback) {
       XE.ajax({
-        url: window.xeBaseURL + '/' + XE.options.fixedPrefix + '/lang/lines/' + id,
+        url: window.xeBaseURL + '/lang/lines/' + id,
         method: 'get',
         dataType: 'json',
         data: parameters,
@@ -194,7 +194,7 @@ export default (function () {
       XE.ajax({
         type: 'get',
         dataType: 'json',
-        url: window.xeBaseURL + '/' + XE.options.fixedPrefix + '/lang/lines/many',
+        url: window.xeBaseURL + '/lang/lines/many',
         data: {
           keys: langKeys
         },

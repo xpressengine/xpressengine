@@ -38,12 +38,12 @@ class LangText extends AbstractUIObject
         $locale = app('xe.translator')->getLocale();
         XeFrontend::html('lang.set-url')->content("
             <script>
-                var langSearchUrl = '".route('settings.lang.search', ['locale'=>$locale])."';
+                var langSearchUrl = '".route('lang.search', ['locale'=>$locale])."';
             </script>
         ")->appendTo('head')->load();
 
         $langKey = htmlspecialchars(array_get($args, 'langKey', array_get($args, 'value')), ENT_QUOTES, 'UTF-8');
-        $url = route('settings.lang.lines.key', ['key'=>$langKey]);
+        $url = route('lang.lines.key', ['key'=>$langKey]);
         $autocomplete = Config::get('xe.lang.autocomplete');
 
         return "<div class=\"lang-editor-box\""
