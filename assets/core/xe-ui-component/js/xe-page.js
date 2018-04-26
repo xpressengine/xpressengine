@@ -1,4 +1,4 @@
-(function ($, XE, DynamicLoadManager) {
+(function (XE, $) {
   var _this = this
 
   var _pageCommon = (function () {
@@ -268,7 +268,7 @@
         }
 
         if (jsLen > 0) {
-          DynamicLoadManager.jsLoadMultiple(js, {
+          XE.DynamicLoadManager.jsLoadMultiple(js, {
             load: loadDone,
             error: loadDone
           })
@@ -308,6 +308,7 @@
       type: 'get'
     }
 
+    // @FIXME redeclare
     var options = $.extend(defaultOptions, options || {}, {
       url: url,
       target: target
@@ -342,6 +343,7 @@
       type: 'get'
     }
 
+    // @FIXME redeclare
     var options = $.extend(defaultOptions, options || {}, {
       target: '.xe-modal[data-use=xe-page] .xe-modal-content',
       url: url
@@ -412,6 +414,7 @@
       $target.addClass(options.side)
     }
 
+    // @FIXME redeclare
     var options = $.extend(options, {
       target: $target,
       url: url,
@@ -428,4 +431,4 @@
       })
     }
   }
-})(window.jQuery, window.XE, window.DynamicLoadManager)
+})(window.XE, window.jQuery)

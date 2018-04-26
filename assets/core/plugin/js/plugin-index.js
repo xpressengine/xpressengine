@@ -1,5 +1,5 @@
 window.jQuery(function ($) {
-  var PluginManager = (function () {
+  var PluginManager = (function (XE) {
     var self
     return {
       init: function () {
@@ -28,7 +28,7 @@ window.jQuery(function ($) {
         self.$update.on('click', self.update)
       },
       reset: function () {
-        $checked = $('.__xe_checkbox:checked')
+        var $checked = $('.__xe_checkbox:checked')
         if ($checked.length) {
           $('.__xe_controll_btn .btn').removeAttr('disabled')
         } else {
@@ -105,5 +105,5 @@ window.jQuery(function ($) {
         return false
       }
     }
-  })().init()
+  })(window.XE).init()
 })

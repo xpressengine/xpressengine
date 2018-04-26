@@ -1,5 +1,5 @@
 /** @name		jQuery widgetGenerator plugin */
-;(function (exports, $) {
+;(function (exports, XE, $) {
   'use strict'
 
   var widgetForm = '#widgetForm'
@@ -101,8 +101,8 @@
               break
 
             case 'data':
-              return $(widgetForm).serializeObject();
-              break;
+              return $(widgetForm).serializeObject()
+              break
           }
 
           break
@@ -196,4 +196,4 @@
       }
     }
   })().init()
-})(window, jQuery)
+})(window, window.XE, window.jQuery)
