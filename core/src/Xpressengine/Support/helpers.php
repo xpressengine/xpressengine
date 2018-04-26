@@ -804,12 +804,13 @@ if (!function_exists('editor')) {
      * @param string      $instanceId instance id
      * @param array|false $arguments  argument for editor
      * @param string|null $targetId   target id
+     * @param string|null $coverId    cover id
      *
      * @return string
      */
-    function editor($instanceId, $arguments, $targetId = null)
+    function editor($instanceId, $arguments, $targetId = null, $coverId = null)
     {
-        return app('xe.editor')->render($instanceId, $arguments, $targetId);
+        return app('xe.editor')->render($instanceId, $arguments, $targetId, $coverId);
     }
 }
 

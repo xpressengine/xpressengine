@@ -233,13 +233,18 @@ class EditorHandler
      * @param string      $instanceId instance id
      * @param array|false $args       argument for editor
      * @param string|null $targetId   target id
+     * @param string|null $coverId    cover id
      * @return string
      */
-    public function render($instanceId, $args, $targetId = null)
+    public function render($instanceId, $args, $targetId = null, $coverId = null)
     {
         $editor = $this->get($instanceId)->setArguments($args);
         if ($targetId) {
             $editor->setFiles($this->getFiles($targetId));
+        }
+
+        if ($coverId) {
+            $editor->setCover($coverId);
         }
 
         return $editor->render();
