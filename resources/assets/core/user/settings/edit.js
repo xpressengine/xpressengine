@@ -1,4 +1,4 @@
-var EmailBox = (function () {
+var EmailBox = (function (XE, $) {
   var _this
   var _$wrapper = $()
   var _mails = []
@@ -187,9 +187,9 @@ var EmailBox = (function () {
       _$wrapper.html(temp)
     }
   }
-})()
+})(window.XE, window.jQuery)
 
-$(function () {
+window.jQuery(function ($) {
   $('.__xe_settingEmail').click(function () {
     $('.__xe_emailView').slideToggle()
     $('#__xe_emailSetting').slideToggle()
@@ -197,7 +197,7 @@ $(function () {
 
   EmailBox.init({
     $wrapper: $('#__xe_emailSetting'),
-    url: url,
+    url: window.url, // @FIXME @FIXME @FIXME @FIXME @FIXME @FIXME @FIXME WTF
     userId: $('#__xe_emailSetting').data('user-id'),
     email: $('#__xe_emailSetting').data('email')
   })

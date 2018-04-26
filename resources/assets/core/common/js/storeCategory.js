@@ -2,6 +2,7 @@
 
 import $ from 'jquery'
 import griper from 'xe-common/griper'
+import XE from 'xe-common/xe'
 
 $('#btnCreateCategory').on('click', (e) => {
   var _this = e.target
@@ -22,13 +23,13 @@ $('#btnCreateCategory').on('click', (e) => {
     type: 'post',
     dataType: 'json',
     data: params,
-    url: storeCategoryInfo.url, // @FIXME
+    url: window.storeCategoryInfo.url, // @FIXME
     success: function (data) {
       var section = $(_this).closest('.__xe_df_category')
       section.find('[name="category_id"]').val(data.id)
       section.find('button').hide()
       section.append(
-        $('<a>').text(storeCategoryInfo.text).prop('target', '_blank').prop('href', '/settings/category/' + data.id)
+        $('<a>').text(window.storeCategoryInfo.text).prop('target', '_blank').prop('href', '/settings/category/' + data.id)
       )
     }
   })

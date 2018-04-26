@@ -1,3 +1,5 @@
+import XE from 'xe-common/xe'
+import 'xe-common/griper'
 import moment from 'moment'
 import 'xe-transition'
 import 'xe-modal'
@@ -45,11 +47,11 @@ $(function () {
   moment.locale(XE.getLocale())
 
   $(document).on('boot.xe.timeago', '[data-xe-timeago]', function () {
-    var $this = $(this)
-    if ($this.data().xeTimeagoCalled === true) false
+    let $this = $(this)
+    if ($this.data().xeTimeagoCalled === true) return false
 
-    var dataDate = $this.data('xe-timeago')
-    var isTimestamp = (parseInt(dataDate) == dataDate)
+    let dataDate = $this.data('xe-timeago')
+    let isTimestamp = (parseInt(dataDate) == dataDate)
 
     if (isTimestamp) {
       dataDate = moment.unix(dataDate)
@@ -62,17 +64,14 @@ $(function () {
   })
 
   $(document).on('boot.xe.dropdown', '[data-toggle=xe-dropdown]', function () {
-    var $this = $(this)
-    $this.xeDropdown()
+    $(this).xeDropdown()
   })
 
   $(document).on('boot.xe.modal', '[data-toggle=xe-modal]', function () {
-    var $this = $(this)
   })
 
   $(document).on('boot.xe.tooltip', '[data-toggle=xe-tooltip]', function () {
-    var $this = $(this)
-    $this.xeTooltip()
+    $(this).xeTooltip()
   })
 
   Component.boot()

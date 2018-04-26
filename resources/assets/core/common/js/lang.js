@@ -1,5 +1,6 @@
 import Translator from 'xe-common/translator'
 import $ from 'jquery'
+import XE from 'xe-common/xe'
 
 /**
  * Lang module
@@ -160,12 +161,10 @@ export default (function () {
      * @param {function} callback
      * */
     requestTrans: function (id, parameters, callback) {
-      var _this = this
-
       XE.ajax({
-        url: xeBaseURL + '/' + XE.options.fixedPrefix + '/lang/lines/' + id,
-        type: 'json',
-        type: 'get',
+        url: window.xeBaseURL + '/' + XE.options.fixedPrefix + '/lang/lines/' + id,
+        method: 'get',
+        dataType: 'json',
         data: parameters,
         success: function (res) {
           var message = id.split('::')[1]
@@ -195,7 +194,7 @@ export default (function () {
       XE.ajax({
         type: 'get',
         dataType: 'json',
-        url: xeBaseURL + '/' + XE.options.fixedPrefix + '/lang/lines/many',
+        url: window.xeBaseURL + '/' + XE.options.fixedPrefix + '/lang/lines/many',
         data: {
           keys: langKeys
         },

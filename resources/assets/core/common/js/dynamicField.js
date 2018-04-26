@@ -1,5 +1,6 @@
 import $ from 'jquery'
 import Validator from 'xe-common/validator'
+import XE from 'xe-common/xe'
 
 /**
  * @class
@@ -12,7 +13,6 @@ var DynamicField = function () {
   this.urls = {
     base: null
   }
-
 
   /**
    * DynamicField를 초기화 한다.
@@ -50,7 +50,7 @@ var DynamicField = function () {
       var $langBox = that.$container.$modal.find('.dynamic-lang-editor-box')
 
       $langBox.addClass('lang-editor-box')
-      langEditorBoxRender($langBox)
+      window.langEditorBoxRender($langBox) // @FIXME
     })
 
     this.$container.on('click', '.__xe_btn_submit', function () {
@@ -217,8 +217,7 @@ var DynamicField = function () {
         var $langBox = form.find('.dynamic-lang-editor-box')
         $langBox.data('lang-key', response.config.label)
         $langBox.addClass('lang-editor-box')
-        // @FIXME
-        langEditorBoxRender($langBox)
+        window.langEditorBoxRender($langBox) // FIXME
 
         // @FIXME
         form.find('[name="use"]').val(that.checkBox(response.config.use) ? 'true' : 'false')
@@ -412,5 +411,5 @@ export default DynamicField
 
 // @FIXME
 var instance = new DynamicField()
-instance.init(dynamicFieldData.group, dynamicFieldData.databaseName, dynamicFieldData.routes)
+instance.init(window.dynamicFieldData.group, window.dynamicFieldData.databaseName, window.dynamicFieldData.routes)
 instance.getList()

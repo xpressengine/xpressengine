@@ -1,5 +1,5 @@
 window.jQuery(function ($) {
-  window.PluginInstallManager = (function () {
+  window.PluginInstallManager = (function (XE) {
     var self
 
     return {
@@ -109,5 +109,5 @@ window.jQuery(function ($) {
         return false
       }
     }
-  })().init()
+  })(window.XE).init()
 })

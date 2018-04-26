@@ -1,4 +1,4 @@
-;(function ($, XE) {
+(function ($, XE) {
   var _formCommon = (function () {
     return {
       init: function () {

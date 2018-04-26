@@ -1,6 +1,7 @@
 import validator from 'xe-common/validator'
-import Lang from 'xe-common/lang'
+import 'xe-common/lang'
 import $ from 'jquery'
+import XE from 'xe-common/xe'
 
 /**
  * @private
@@ -33,7 +34,7 @@ class LangEditorBox {
       $.ajax({
         type: 'get',
         dataType: 'json',
-        url: xeBaseURL + '/' + XE.options.fixedPrefix + '/lang/lines/' + this.langKey,
+        url: XE.xeBaseURL + '/' + XE.options.fixedPrefix + '/lang/lines/' + this.langKey,
         success: function (result) {
           this.setLines(result)
           this.render()
@@ -202,16 +203,6 @@ function renderLangEditorBox () {
       let lines = $this.data('lines')
       let autocomplete = $this.data('autocomplete')
 
-      // langObj[langKey] = {
-      //   name,
-      //   langKey,
-      //   multiline,
-      //   lines,
-      //   autocomplete,
-      //   target: $this[0],
-      // };
-      //
-
       if (langKey) {
         langKeys.push(langKey)
       }
@@ -232,7 +223,7 @@ function renderLangEditorBox () {
       XE.ajax({
         type: 'get',
         dataType: 'json',
-        url: xeBaseURL + '/' + XE.options.fixedPrefix + '/lang/lines/many',
+        url: XE.xeBaseURL + '/' + XE.options.fixedPrefix + '/lang/lines/many',
         data: {
           keys: langKeys
         },
@@ -246,13 +237,13 @@ function renderLangEditorBox () {
           })
 
           $.each(langs, function () {
-            langEditorBoxRender(this, 'obj')
+            window.langEditorBoxRender(this, 'obj') // @FIXME
           })
         }
       })
     } else {
       $.each(langs, function () {
-        langEditorBoxRender(this, 'obj')
+        window.langEditorBoxRender(this, 'obj') // @FIXME
       })
     }
   }

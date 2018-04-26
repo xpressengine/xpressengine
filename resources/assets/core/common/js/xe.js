@@ -1,15 +1,19 @@
-import griper from 'xe-common/griper'
-import Progress from 'xe-common/progress'
-import Lang from 'xe-common/lang'
-import Component from 'xe-common/component'
-import Request from 'xe-common/request'
-import Validator from 'xe-common/validator'
-import * as Utils from 'xe-common/utils'
-import DynamicLoadManager from 'xe-common/dynamicLoadManager'
-import Translator from 'xe-common/translator'
+// external libraries
 import $ from 'jquery'
 import blankshield from 'blankshield'
+import moment from 'moment'
 import URI from 'urijs'
+
+// internal libraries
+import Component from 'xe-common/component'
+import DynamicLoadManager from 'xe-common/dynamicLoadManager'
+import griper from 'xe-common/griper'
+import Lang from 'xe-common/lang'
+import Progress from 'xe-common/progress'
+import Request from 'xe-common/request'
+import * as Utils from 'xe-common/utils'
+import Translator from 'xe-common/translator'
+import Validator from 'xe-common/validator'
 
 /**
  * @class XE
@@ -24,19 +28,25 @@ class XE {
     Utils.eventify(this)
 
     this.options = {}
-    this.util = Utils // @DEPRECATED
+
+    // internal libraries
+    // this.util = Utils // @DEPRECATED
     this.Utils = Utils
-    this.validator = Validator // @DEPRECATED
+    // this.validator = Validator // @DEPRECATED
     this.Validator = Validator
     this.Lang = Lang
     this.Progress = Progress
     this.Request = Request
     this.Component = Component
 
-    window.Utils = Utils // @DEPRECATED
-    window.DynamicLoadManager = DynamicLoadManager // @DEPRECATED
-    window.Translator = Translator // @DEPRECATED
-    window.blankshield = blankshield // @DEPRECATED
+    // external libraries
+    this.moment = moment
+    this.Translator = Translator
+
+    // window.Utils = Utils // @DEPRECATED
+    // window.DynamicLoadManager = DynamicLoadManager // @DEPRECATED
+    // window.Translator = Translator // @DEPRECATED
+    // window.blankshield = blankshield // @DEPRECATED
 
     $(function () {
       $('body').on('click', 'a[target]', function (e) {
