@@ -50,9 +50,7 @@ class UserLogger extends AbstractLogger
                 return;
             }
 
-            $summary = self::getSummary($result->request);
-
-            self::writeLog($result->request, $summary);
+            self::writeLog($result->request, self::getSummary($result->request));
         });
 
         self::registerIntercept();
@@ -78,7 +76,7 @@ class UserLogger extends AbstractLogger
                 'settings.user.destroy' => '회원정보 삭제',
             ];
 
-        return array_get($list, $request->route()->getName(), []);
+        return $list[$request->route()->getName()] ?? null;
     }
 
     /**
@@ -127,7 +125,7 @@ class UserLogger extends AbstractLogger
      */
     protected function writeLog(Request $request, $summary)
     {
-        if ($summary == null) {
+        if ($summary === null) {
             return;
         }
 
