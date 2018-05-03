@@ -364,4 +364,14 @@ class MenuItem extends CategoryItem
     {
         return $this->getAttributeFromArray('target') ?: '_self';
     }
+
+    /**
+     * Get selected property
+     *
+     * @return string
+     */
+    public function getSelectedAttribute()
+    {
+        return $this->isSelected();
+    }
 }
