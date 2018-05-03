@@ -447,7 +447,7 @@ class Permission {
     })
     temp +=				'</div>'
 
-    temp +=				'<div class="ReactTags__selected userWrap" data-ptype="user">'
+    temp +=				'<div class="ReactTags__selected userWrap" data-ptype="member">'
     this.permission.user.forEach(function (tag) {
       var label = '@' + (tag.display_name || tag.name)
 
