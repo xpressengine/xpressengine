@@ -7,19 +7,16 @@ import $ from 'jquery'
 var DynamicLoadManager = (function (exports) {
   'use strict'
 
-  var that
   var _assets = {
     js: {}, css: {}
   }
 
-  _assets.js[xeBaseURL + '/assets/vendor.js'] = ''
-  _assets.js[xeBaseURL + '/assets/common.js'] = ''
-  _assets.js[xeBaseURL + '/assets/core/common/js/xe.bundle.js'] = ''
+  _assets.js[window.xeBaseURL + '/assets/vendor.js'] = ''
+  _assets.js[window.xeBaseURL + '/assets/common.js'] = ''
+  _assets.js[window.xeBaseURL + '/assets/core/common/js/xe.bundle.js'] = ''
 
   return {
     init: function () {
-      that = this
-
       return this
     },
     /**
@@ -35,7 +32,7 @@ var DynamicLoadManager = (function (exports) {
      * */
     jsLoadMultiple: function (arrjs, callbackObj) {
       var count = 0
-      var callbackObj = callbackObj || {}
+      callbackObj = callbackObj || {}
 
       for (var i = 0, max = arrjs.length; i < max; i += 1) {
         var src = Utils.asset(arrjs[i])

@@ -1,4 +1,4 @@
-$(function ($) {
+window.jQuery(function ($) {
   $('.skin-setting-list .__xe_assign-btn').click(function () {
     var $btn = $(this)
     var url = $btn.data('skinAssignLink')
@@ -7,7 +7,7 @@ $(function ($) {
       url: url,
       dataType: 'json',
       success: function (data) {
-        XE.toast(data.type, data.message)
+        window.XE.toast(data.type, data.message)
         var type = $btn.data('skinType')
         if (type == 'desktop') {
           $btn.parents('.skin-setting-list').find('.__xe_skin-desktop').removeClass('on')
@@ -19,7 +19,7 @@ $(function ($) {
       },
 
       error: function (data) {
-        XE.toast(data.type, data.message)
+        window.XE.toast(data.type, data.message)
       }
     })
   })
@@ -41,11 +41,11 @@ $(function ($) {
       dataType: 'json',
       success: function (data) {
         $modal.xeModal('hide')
-        XE.toast(data.type, data.message)
+        window.XE.toast(data.type, data.message)
       },
 
       error: function (data) {
-        XE.toast(data.type, data.message)
+        window.XE.toast(data.type, data.message)
       }
     })
     return false

@@ -1,5 +1,5 @@
 window.jQuery(function ($) {
-  varswiper = new Swiper('.swiper', {
+  var swiper = new Swiper('.swiper', {
     pagination: '.swiper-pagination',
     paginationClickable: true,
     spaceBetween: 30,

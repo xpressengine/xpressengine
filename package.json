@@ -19,7 +19,9 @@
   "eslintIgnore": [
     "jsdoc/",
     "markup/",
-    "tests/"
+    "tests/",
+    "slickgrid/",
+    "**/*.min.js"
   ],
   "dependencies": {
     "blankshield": "^0.6.1",

@@ -2,7 +2,7 @@
  * <ul id='wrapper' data-infinite-url></ul>
  * @namespace XeInfinite
  * */
-var XeInfinite = (function ($) {
+var XeInfinite = (function (XE, $) {
   /** @priavte */
   var _flag = false
   /** @priavte */
@@ -25,13 +25,13 @@ var XeInfinite = (function ($) {
      * @param {object} options
      * <pre>
      *   - wrapper {string} selector
-		 *   - template {string}
+     *   - template {string}
      *   - data {array}
-		 *   - loadRowCount {number} onGetRows를 호출하기전 체크. 스크롤시 남아있는 row의 갯수. loadRowCount갯수만큼 스크롤이 남을 경우 onGetRows를 호출한다.
-		 *   - rowHeight {number} row height
-		 *   - onGetRows {function} 스크롤중 데이터를 요청해야 할 경우 호출될 메소드.
+     *   - loadRowCount {number} onGetRows를 호출하기전 체크. 스크롤시 남아있는 row의 갯수. loadRowCount갯수만큼 스크롤이 남을 경우 onGetRows를 호출한다.
+     *   - rowHeight {number} row height
+     *   - onGetRows {function} 스크롤중 데이터를 요청해야 할 경우 호출될 메소드.
      * </pre>
-		 * @param {object} customOptions slickgrid custom options
+     * @param {object} customOptions slickgrid custom options
      * */
     init: function (options, customOptions) {
       _this = this
@@ -114,8 +114,8 @@ var XeInfinite = (function ($) {
      * @param {function} cb resources를 로드한 이후 실행될 callback
      * */
     loadResources: function (cb) {
-      DynamicLoadManager.cssLoad('/assets/core/xe-ui-component/slickgrid/slick.grid.css')
-      DynamicLoadManager.jsLoadMultiple([
+      XE.DynamicLoadManager.cssLoad('/assets/core/xe-ui-component/slickgrid/slick.grid.css')
+      XE.DynamicLoadManager.jsLoadMultiple([
         '/assets/vendor/jqueryui/jquery.event.drag-2.3.0.js',
         '/assets/core/xe-ui-component/slickgrid/slick.core.js',
         '/assets/core/xe-ui-component/slickgrid/slick.formatters.js',
@@ -177,4 +177,4 @@ var XeInfinite = (function ($) {
       _flag = flag
     }
   }
-})(window.jQuery)
+})(window.XE, window.jQuery)

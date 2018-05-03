@@ -1,3 +1,6 @@
+import $ from 'jquery'
+import XE from 'xe-common/xe'
+
 // TODO:: mouseover,
 
 const Keys = {

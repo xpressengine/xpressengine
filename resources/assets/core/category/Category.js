@@ -2,7 +2,7 @@
  * @namespace Category
  * @type {object}
  * */
-var Category = (function () {
+var Category = (function (XE, $, Tree) {
   /**
    * @private
    * */
@@ -36,7 +36,7 @@ var Category = (function () {
       })
 
       _$wrap.find('.lang-editor-box').each(function () {
-        langEditorBoxRender($(this))
+        window.langEditorBoxRender($(this)) // @FIXME
       })
 
       return this
@@ -66,7 +66,7 @@ var Category = (function () {
 
         $this.closest('.__xe_item_wrap').removeClass('open')
         $this.closest('.panel').find('.lang-editor-box').each(function () {
-          langEditorBoxRender($(this))
+          window.langEditorBoxRender($(this)) // @FIXME
         })
       })
 
@@ -149,7 +149,7 @@ var Category = (function () {
 
           $content.find('.__xe_content_body').html(_this.getFormTemplate(formData))
           $content.find('.lang-editor-box').each(function () {
-            langEditorBoxRender($(this))
+            window.langEditorBoxRender($(this)) // @FIXME
           })
 
           $this.data({ open: true })
@@ -180,7 +180,7 @@ var Category = (function () {
 
           $content.find('.__xe_content_body').html(_this.getFormTemplate(formData))
           $content.find('.lang-editor-box').each(function () {
-            langEditorBoxRender($(this))
+            window.langEditorBoxRender($(this)) // @FIXME
           })
 
           $this.data({ open: true })
@@ -270,7 +270,7 @@ var Category = (function () {
       }
 
       if (obj.removeAllButton) {
-          template += '<button type="button" class="btn btn-default btnRemoveAllCategory">' + XE.Lang.trans('xe::subCategoryDestroy') + '</button>'
+        template += '<button type="button" class="btn btn-default btnRemoveAllCategory">' + XE.Lang.trans('xe::subCategoryDestroy') + '</button>'
       }
 
       if (obj.saveButton) {
@@ -456,7 +456,7 @@ var Category = (function () {
           if (nodes.length > 0) {
             var filterNodes = {}
 
-            $parent.find('.item').remove();
+            $parent.find('.item').remove()
 
             $parent.append(Tree.getItemsTemplate({
               items: nodes,
@@ -527,7 +527,7 @@ var Category = (function () {
      * @param {string} id
      * */
     remove: function (item) {
-      var that = this;
+      var that = this
 
       XE.ajax({
         url: _config.remove,
@@ -535,8 +535,8 @@ var Category = (function () {
         dataType: 'json',
         data: { id: item.id },
         success: function () {
-          var $parent = $('.__category_body');
-          var isRoot = true;
+          var $parent = $('.__category_body')
+          var isRoot = true
           $('.item-container', $parent).remove()
 
           that.load({
@@ -552,23 +552,23 @@ var Category = (function () {
     * @param {string} id
     * */
     removeAll: function (item) {
-      var that = this;
+      var that = this
 
       XE.ajax({
-          url: _config.removeAll,
-          type: 'post',
-          dataType: 'json',
-          data: { id: item.id },
-          success: function () {
-              var $parent = $('.__category_body');
-              var isRoot = true;
-              $('.item-container', $parent).remove()
+        url: _config.removeAll,
+        type: 'post',
+        dataType: 'json',
+        data: { id: item.id },
+        success: function () {
+          var $parent = $('.__category_body')
+          var isRoot = true
+          $('.item-container', $parent).remove()
 
-              that.load({
-                  $parent: $parent,
-                  isRoot: isRoot
-              })
-          }
+          that.load({
+            $parent: $parent,
+            isRoot: isRoot
+          })
+        }
       })
     },
     /**
@@ -588,4 +588,5 @@ var Category = (function () {
       return obj
     }
   }
-})()
+})(window.XE, window.jQuery, window.Tree)
+// @FIXME window.Tree

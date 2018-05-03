@@ -1,7 +1,7 @@
 /**
- * @name		jQuery xeTooltip plugin
- * */
-;(function ($) {
+ * @name jQuery xeTooltip plugin
+ */
+(function ($) {
   // TOOLTIP PUBLIC CLASS DEFINITION
   // ===============================
 
@@ -346,7 +346,7 @@
     $element = $element || this.$element
 
     var el = $element[0]
-    var isBody = el.tagName == 'BODY'
+    var isBody = (el.tagName == 'BODY')
 
     var elRect = el.getBoundingClientRect()
     if (elRect.width == null) {

@@ -1,6 +1,7 @@
 import validator from 'xe-common/validator'
-import Lang from 'xe-common/lang'
+import 'xe-common/lang'
 import $ from 'jquery'
+import XE from 'xe-common/xe'
 
 /**
  * @private
@@ -33,7 +34,7 @@ class LangEditorBox {
       $.ajax({
         type: 'get',
         dataType: 'json',
-        url: xeBaseURL + '/' + XE.options.fixedPrefix + '/lang/lines/' + this.langKey,
+        url: window.xeBaseURL + '/lang/lines/' + this.langKey,
         success: function (result) {
           this.setLines(result)
           this.render()
@@ -49,7 +50,7 @@ class LangEditorBox {
   bindEvents () {
     if (this.autocomplete) {
       this.$wrapper.find('input[type=text]:first,textarea:first').autocomplete({
-        source: '/' + XE.options.fixedPrefix + '/lang/search/' + XE.Lang.locales[0],
+        source: '/lang/search/' + XE.Lang.locales[0],
         minLength: 1,
         focus: function (event, ui) {
           event.preventDefault()
@@ -202,16 +203,6 @@ function renderLangEditorBox () {
       let lines = $this.data('lines')
       let autocomplete = $this.data('autocomplete')
 
-      // langObj[langKey] = {
-      //   name,
-      //   langKey,
-      //   multiline,
-      //   lines,
-      //   autocomplete,
-      //   target: $this[0],
-      // };
-      //
-
       if (langKey) {
         langKeys.push(langKey)
       }
@@ -232,7 +223,7 @@ function renderLangEditorBox () {
       XE.ajax({
         type: 'get',
         dataType: 'json',
-        url: xeBaseURL + '/' + XE.options.fixedPrefix + '/lang/lines/many',
+        url: window.xeBaseURL + '/lang/lines/many',
         data: {
           keys: langKeys
         },
@@ -246,13 +237,13 @@ function renderLangEditorBox () {
           })
 
           $.each(langs, function () {
-            langEditorBoxRender(this, 'obj')
+            window.langEditorBoxRender(this, 'obj') // @FIXME
           })
         }
       })
     } else {
       $.each(langs, function () {
-        langEditorBoxRender(this, 'obj')
+        window.langEditorBoxRender(this, 'obj') // @FIXME
       })
     }
   }
