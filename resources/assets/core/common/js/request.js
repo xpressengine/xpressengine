@@ -55,29 +55,44 @@ export default (function () {
      **/
     setup: function (options) {
       $.extend(_options, options)
-      $.ajaxSetup(_options)
     },
 
     /**
      * ajax를 method get 방식으로 호출한다.
      * @param {string} url
      * @param {object} data
-     * @param {function} callback
-     * @param {string} type
+     * @param {function} success
+     * @param {string} dataType
      **/
-    get: function (url, data, callback, type) {
-      return $.get(url, data, callback, type)
+    get: function (url, data, success, dataType) {
+      let settings = $.extend({}, this.options, {
+        method: 'GET',
+        url,
+        data,
+        success,
+        dataType
+      })
+
+      return $.ajax(settings)
     },
 
     /**
      * ajax를 method post 방식으로 호출한다.
      * @param {string} url
      * @param {object} data
-     * @param {function} callback
-     * @param {string} type
+     * @param {function} success
+     * @param {string} dataType
      **/
-    post: function (url, data, callback, type) {
-      return $.post(url, data, callback, type)
+    post: function (url, data, success, dataType) {
+      let settings = $.extend({}, this.options, {
+        method: 'POST',
+        url,
+        data,
+        success,
+        dataType
+      })
+
+      return $.ajax(settings)
     },
 
     /**
