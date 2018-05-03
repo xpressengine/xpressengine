@@ -386,7 +386,7 @@ class Permission {
     var permissionTypes = [
       { value: 'super', name: XE.Lang.trans('xe::memberRatingAdministrator') },
       { value: 'manager', name: XE.Lang.trans('xe::memberRatingManager') },
-      { value: 'user', name: XE.Lang.trans('xe::member') },
+      { value: 'member', name: XE.Lang.trans('xe::member') },
       { value: 'guest', name: XE.Lang.trans('xe::guest') }
     ]
 
@@ -447,7 +447,7 @@ class Permission {
     })
     temp +=				'</div>'
 
-    temp +=				'<div class="ReactTags__selected userWrap" data-ptype="member">'
+    temp +=				'<div class="ReactTags__selected userWrap" data-ptype="user">'
     this.permission.user.forEach(function (tag) {
       var label = '@' + (tag.display_name || tag.name)
 
