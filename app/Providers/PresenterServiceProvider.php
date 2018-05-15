@@ -132,6 +132,7 @@ class PresenterServiceProvider extends ServiceProvider
                 'js' => \Xpressengine\Presenter\Html\Tags\JSFile::class,
                 'bodyClass' => \Xpressengine\Presenter\Html\Tags\BodyClass::class,
                 'html' => \Xpressengine\Presenter\Html\Tags\Html::class,
+                'route' => \Xpressengine\Presenter\Html\Tags\Route::class,
                 'rule' => \Xpressengine\Presenter\Html\Tags\Rule::class,
                 'translation' => \Xpressengine\Presenter\Html\Tags\Translation::class,
                 'package' => \Xpressengine\Presenter\Html\Tags\Package::class

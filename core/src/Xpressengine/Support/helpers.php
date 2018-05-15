@@ -421,6 +421,81 @@ if (!function_exists('instance_route')) {
     }
 }
 
+if (!function_exists('expose_route')) {
+    /**
+     * front-end에서 사용할 수 있도록 지정한 Route 정보를 노출
+     *
+     * @package Xpressengine\Routing
+     *
+     * @param string    $routeName   Route name
+     * @param array     $params      route parameter
+     */
+    function expose_route($routeName, $params = []) {
+        $route = app('router')->getRoutes()->getByName($routeName);
+
+        if (in_array('settings', $route->middleware()) && !in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER])) {
+            return;
+        }
+
+        XeFrontend::route($routeName, array(
+            'uri' => $route->uri(),
+            'methods' => $route->methods(),
+            'params' => $params
+        ));
+    }
+}
+
+if (!function_exists('expose_instance_route')) {
+    /**
+     * front-end에서 사용할 수 있도록 지정한 instance 포함한 Route 정보를 노출
+     *
+     * @package Xpressengine\Routing
+     *
+     * @param string    $routeName   Route name
+     * @param array     $params      route parameter
+     * @param string    $instanceId  instance ID
+     */
+    function expose_instance_route($routeName, $params = [], $instanceId = null)
+    {
+        if ($instanceId === null) {
+            $instanceConfig = Xpressengine\Routing\InstanceConfig::instance();
+            $url = $instanceConfig->getUrl();
+            $module = $instanceConfig->getModule();
+            $instanceId = $instanceConfig->getInstanceId();
+        } else {
+            /**
+             * @var Xpressengine\Routing\RouteRepository $instanceRouter
+             */
+            $instanceRouter = app('xe.router');
+            $instanceRoute = $instanceRouter->findByInstanceId($instanceId);
+            $url = $instanceRoute->url;
+            $module = $instanceRoute->module;
+        }
+
+        $routeName = $module . '.' . $routeName;
+
+        $route = app('router')->getRoutes()->getByName($routeName);
+        if (in_array('settings', $route->middleware()) && !in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER])) {
+            return;
+        }
+
+        $uri = $route->uri();
+
+        if (starts_with($route->getPrefix(), '{instanceGroup')) {
+            $uri = str_replace_first($route->getPrefix(), '{url}', $uri);
+        }
+
+        $parameters['url'] = $url;
+        $parameters['instanceId'] = $instanceId;
+
+        XeFrontend::route($routeName, array(
+            'uri' => $uri,
+            'methods' => $route->methods(),
+            'params' => $parameters
+        ));
+    }
+}
+
 if (!function_exists('getCurrentInstanceId')) {
     /**
      * Return current Instance Id

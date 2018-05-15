@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -26,6 +27,7 @@ class RouteServiceProvider extends ServiceProvider
         //
 
         parent::boot();
+        $this->extendBlade();
     }
 
     /**
@@ -69,5 +71,26 @@ class RouteServiceProvider extends ServiceProvider
              ->middleware('api')
              ->namespace($this->namespace)
              ->group(base_path('routes/api.php'));
+    }
+
+    /**
+     * extendBlade
+     *
+     * @return void
+     */
+    protected function extendBlade()
+    {
+        Blade::directive(
+            'expose_route',
+            function ($expression) {
+                return "<?php expose_route($expression); ?>";
+            }
+        );
+        Blade::directive(
+            'expose_instance_route',
+            function ($expression) {
+                return "<?php expose_instance_route($expression); ?>";
+            }
+        );
     }
 }
