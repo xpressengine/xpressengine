@@ -29,7 +29,7 @@ class LangPreprocessor
             $locale = $request->cookie('locale') ?: app('xe.translator')->getLocale();
         }
         app()->setLocale($locale);
-        app('cookie')->queue(cookie()->forever('locale', $locale));
+        app('cookie')->queue(cookie()->forever('locale', $locale, null, null, false, false));
 
         app('router')->matched(function($route, $request) use ($locale) {
             $key = self::class.'://'.$request->method().'/'.$route->getPath().'/'.$locale;
