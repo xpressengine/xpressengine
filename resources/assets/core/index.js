@@ -100,6 +100,10 @@ class XE {
     $.extend(this.options, options)
   }
 
+  route (routeName, params = {}) {
+    return this.Router.get(routeName).url(params)
+  }
+
   /**
    * css 파일을 로드한다.
    * @param {url} url css file path
