@@ -1,5 +1,5 @@
 import $ from 'jquery'
-import XE from 'xe-common/xe'
+import XE from 'xe'
 
 // TODO:: mouseover,
 

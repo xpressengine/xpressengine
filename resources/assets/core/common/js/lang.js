@@ -1,6 +1,6 @@
-import Translator from 'xe-common/translator'
+import Translator from 'xe-common/translator' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 import $ from 'jquery'
-import XE from 'xe-common/xe'
+import XE from 'xe'
 
 /**
  * Lang module

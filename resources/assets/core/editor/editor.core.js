@@ -1,5 +1,5 @@
 import $ from 'jquery'
-import { eventify } from 'xe-utils'
+import { eventify } from 'xe-utils' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 import Editor from './editor.editor'
 import EditorValidation from './editor.validation'
 

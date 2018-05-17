@@ -790,6 +790,8 @@ class MenuController extends Controller
      */
     public function setHome(Request $request)
     {
+        $this->validate($request, ['itemId' => 'required']);
+
         $itemId = $request->get('itemId');
 
         XeSite::setHomeInstanceId($itemId);

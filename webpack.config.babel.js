@@ -3,35 +3,37 @@ import webpack from 'webpack'
 import CopyWebpackPlugin from 'copy-webpack-plugin'
 
 const pathInfo = {
+  core: path.resolve(__dirname, 'resources/assets/core'),
   vendor: path.resolve(__dirname, 'assets/vendor'),
   node: path.resolve(__dirname, 'node_modules'),
-  source: path.resolve(__dirname, 'resources/assets'),
-  core: path.resolve(__dirname, 'resources/assets/core'),
-  user: path.resolve(__dirname, 'resources/assets/core/user'),
-  settings: path.resolve(__dirname, 'resources/assets/core/settings'),
-  common: path.resolve(__dirname, 'resources/assets/core/common'),
-  permission: path.resolve(__dirname, 'resources/assets/core/permission'),
-  menu: path.resolve(__dirname, 'resources/assets/core/menu'),
-  lang: path.resolve(__dirname, 'resources/assets/core/lang'),
-  comp: path.resolve(__dirname, 'resources/assets/core/xe-ui-component')
+
+  source: path.resolve(__dirname, 'resources/assets'), // @DEPRECATED
+  user: path.resolve(__dirname, 'resources/assets/core/user'), // @DEPRECATED
+  settings: path.resolve(__dirname, 'resources/assets/core/settings'), // @DEPRECATED
+  common: path.resolve(__dirname, 'resources/assets/core/common'), // @DEPRECATED
+  permission: path.resolve(__dirname, 'resources/assets/core/permission'), // @DEPRECATED
+  menu: path.resolve(__dirname, 'resources/assets/core/menu'), // @DEPRECATED
+  lang: path.resolve(__dirname, 'resources/assets/core/lang'), // @DEPRECATED
+  comp: path.resolve(__dirname, 'resources/assets/core/xe-ui-component') // @DEPRECATED
 }
 
 const resolveAlias = {
   // directory
-  'xeAssets': path.resolve(__dirname, 'assets/'),
-  'xe-assets': path.resolve(__dirname, 'resources/assets/'),
-  'xe-common': path.resolve(__dirname, 'resources/assets/core/common/js/'),
-  'xe-vendor': path.resolve(__dirname, 'assets/vendor/'),
-  'xe-component': path.resolve(__dirname, 'assets/core/xe-ui-component/js/'),
+  'xe': pathInfo.core,
 
-  'xe': pathInfo.common + '/js/xe.js', // @DEPRECATED
+  'xeAssets': path.resolve(__dirname, 'assets/'), // @DEPRECATED
+  'xe-assets': path.resolve(__dirname, 'resources/assets/'), // @DEPRECATED
+  'xe-common': path.resolve(__dirname, 'resources/assets/core/common/js/'), // @DEPRECATED
+  'xe-vendor': path.resolve(__dirname, 'assets/vendor/'), // @DEPRECATED
+  'xe-component': path.resolve(__dirname, 'assets/core/xe-ui-component/js/'), // @DEPRECATED
+
   'griper': pathInfo.common + '/js/griper.js', // @DEPRECATED
   'validator': pathInfo.common + '/js/validator.js', // @DEPRECATED
 
-  'xe-transition': pathInfo.comp + '/js/xe-transition.js',
-  'xe-dropdown': pathInfo.comp + '/js/xe-dropdown.js',
-  'xe-modal': pathInfo.comp + '/js/xe-modal.js',
-  'xe-tooltip': pathInfo.comp + '/js/xe-tooltip.js',
+  'xe-transition': pathInfo.comp + '/js/xe-transition.js', // @DEPRECATED
+  'xe-dropdown': pathInfo.comp + '/js/xe-dropdown.js', // @DEPRECATED
+  'xe-modal': pathInfo.comp + '/js/xe-modal.js', // @DEPRECATED
+  'xe-tooltip': pathInfo.comp + '/js/xe-tooltip.js', // @DEPRECATED
 
   'xe-dynamicLoadManager': pathInfo.common + '/js/dynamicLoadManager.js', // @DEPRECATED
   'xe-utils': pathInfo.common + '/js/utils.js', // @DEPRECATED
@@ -140,6 +142,7 @@ const config = [
           to: path.resolve(__dirname, 'assets/core'),
           ignore: [
             '**/*.scss',
+            'index.js',
             'common/js/draft.js',
             'common/js/dynamicField.js',
             'common/js/dynamicLoadManager.js',

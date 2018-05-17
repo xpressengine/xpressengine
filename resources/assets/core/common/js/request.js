@@ -1,5 +1,5 @@
 import $ from 'jquery'
-import Progress from 'xe-common/progress'
+import Progress from 'xe-common/progress' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 
 /**
  * @module Request

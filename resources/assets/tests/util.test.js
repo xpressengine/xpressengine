@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { eventify, EventEmitter } from 'xe-common/utils'
+import { eventify, EventEmitter } from 'xe-common/utils' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 
 describe('EventEmitter', function () {
   it('shortcut', function () {

@@ -1,8 +1,8 @@
 // @FIXME 적당한 곳으로 이동
 
 import $ from 'jquery'
-import griper from 'xe-common/griper'
-import XE from 'xe-common/xe'
+import griper from 'xe-common/griper' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
+import XE from 'xe'
 
 $('#btnCreateCategory').on('click', (e) => {
   var _this = e.target

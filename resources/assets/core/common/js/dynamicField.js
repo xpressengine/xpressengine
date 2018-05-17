@@ -1,6 +1,6 @@
 import $ from 'jquery'
-import Validator from 'xe-common/validator'
-import XE from 'xe-common/xe'
+import Validator from 'xe-common/validator' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
+import XE from 'xe'
 
 /**
  * @class

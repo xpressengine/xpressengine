@@ -1,8 +1,8 @@
-import griper from 'xe-common/griper'
+import griper from 'xe-common/griper' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 import moment from 'moment'
-import Translator from 'xe-common/translator'
-import Utils from 'xe-common/utils'
-import Lang from 'xe-common/lang'
+import Translator from 'xe-common/translator' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
+import Utils from 'xe-common/utils' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
+import Lang from 'xe-common/lang' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 import $ from 'jquery'
 
 class Validator {

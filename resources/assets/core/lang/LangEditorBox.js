@@ -1,7 +1,7 @@
-import validator from 'xe-common/validator'
-import 'xe-common/lang'
+import validator from 'xe-common/validator' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
+import 'xe-common/lang' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 import $ from 'jquery'
-import XE from 'xe-common/xe'
+import XE from 'xe'
 
 /**
  * @private
