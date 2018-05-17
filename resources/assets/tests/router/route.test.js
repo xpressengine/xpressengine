@@ -1,6 +1,6 @@
 import { expect } from 'chai'
-import Router from 'xe-common/router'
-import Route from 'xe-common/router/route'
+import Router from 'xe/router'
+import Route from 'xe/router/route'
 
 describe('Route', function () {
   describe('Router의 baseURL을 참조하여 URL을 반환 함', function () {

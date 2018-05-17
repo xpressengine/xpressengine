@@ -1,6 +1,6 @@
 import { expect } from 'chai'
-import Router from 'xe-common/router'
-import Route from 'xe-common/router/route'
+import Router from 'xe/router'
+import Route from 'xe/router/route'
 
 describe('Router', function () {
   describe('setup(baseURL, fixed, settings)', function () {
