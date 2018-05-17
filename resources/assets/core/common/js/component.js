@@ -1,11 +1,11 @@
-import XE from 'xe-common/xe'
-import 'xe-common/griper'
+import XE from 'xe'
+import 'xe-common/griper' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 import moment from 'moment'
-import 'xe-transition'
-import 'xe-modal'
-import 'xe-dropdown'
-import 'xe-tooltip'
-import DynamicLoadManager from 'xe-dynamicLoadManager'
+import 'xe-transition' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
+import 'xe-modal' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
+import 'xe-dropdown' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
+import 'xe-tooltip' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
+import DynamicLoadManager from 'xe-dynamicLoadManager' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 import $ from 'jquery'
 
 /**

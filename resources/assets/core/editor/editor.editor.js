@@ -1,7 +1,7 @@
 import XEeditor from './editor.core.js'
 import EditorValidation from './editor.validation.js'
 import InstanceObj from './editor.instanceObj.js'
-import { eventify } from 'xe-utils'
+import { eventify } from 'xe-utils' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 import $ from 'jquery'
 
 /**
