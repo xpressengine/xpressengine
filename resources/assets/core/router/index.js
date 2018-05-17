@@ -1,4 +1,4 @@
-import Route from './router/route'
+import Route from './route'
 
 class Router {
   constructor (base = '/', fixed = 'plugin', settings = '') {

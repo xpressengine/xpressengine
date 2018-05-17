@@ -1,5 +1,5 @@
 import {trimEnd} from 'lodash'
-import Router from '../router'
+import Router from 'xe/router'
 
 export default class Route {
   constructor (name, route) {

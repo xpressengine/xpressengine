@@ -11,6 +11,7 @@ import griper from 'xe/common/js/griper'
 import Lang from 'xe/common/js/lang'
 import Progress from 'xe/common/js/progress'
 import Request from 'xe/common/js/request'
+import Router from 'xe/router'
 import * as Utils from 'xe/common/js/utils'
 import Translator from 'xe/common/js/translator'
 import Validator from 'xe/common/js/validator'
@@ -32,6 +33,7 @@ class XE {
     // internal libraries
     // this.util = Utils // @DEPRECATED
     this.Utils = Utils
+    this.Router = Router
     // this.validator = Validator // @DEPRECATED
     this.Validator = Validator
     this.Lang = Lang
@@ -83,7 +85,9 @@ class XE {
    * </pre>
    **/
   setup (options) {
-    this.options.loginUserId = options.loginUserId
+    this.configure(options)
+
+    this.Router.setup(this.options.baseURL, this.options.fixedPrefix || null, this.options.settingsPrefix || null)
     this.Request.setup({
       headers: {
         'X-CSRF-TOKEN': options['X-CSRF-TOKEN']
