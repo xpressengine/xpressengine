@@ -89,10 +89,6 @@ class Route
      */
     public static function output()
     {
-        $output = sprintf(
-            'XE.Router.addRoutes(%s);',
-            json_enc(static::$routes)
-        );
-        return $output;
+        return json_enc(static::$routes);
     }
 }

@@ -20,23 +20,24 @@
     {!! XeFrontend::output('css') !!}
 
     <!-- JS at head.prepend -->
-    <script>var xeBaseURL = '{{  url()->to(null) }}';</script>
+    <script>
+        var xeBaseURL = '{{  url()->to(null) }}'; // @DEPRECATED
+    </script>
     {!! XeFrontend::output('js', 'head.prepend') !!}
 
-    <script type="text/javascript">
+    <script>
         XE.setup({
-            'X-CSRF-TOKEN': '{!! csrf_token() !!}',
-            loginUserId: '{{ Auth::check() ? Auth::user()->getId() : ''}}',
-            useXeSpinner: true
-        });
-
-        XE.configure({
+            baseURL: '{{  url()->to(null) }}',
+            userToken: '{!! csrf_token() !!}',
+            loginUserId: '{{ Auth::check() ? Auth::user()->getId() : ''}}', // @DEPRECATED
+            useXeSpinner: true, // @DEPRECATED
             locale: '{{ Request::cookie('locale') ?: app('xe.translator')->getLocale() }}',
             defaultLocale: '{{ app('xe.translator')->getLocale() }}',
             fixedPrefix: '{{ app('config')['xe.routing.fixedPrefix'] }}',
             @if (in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER]))
-            managePrefix: '{{ app('config')['xe.routing.settingsPrefix'] }}'
+                settingsPrefix: '{{ app('config')['xe.routing.settingsPrefix'] }}',
             @endif
+            routes: {!! XeFrontend::output('route') !!}
         });
 
         <!-- Translation -->
