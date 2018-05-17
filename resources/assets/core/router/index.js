@@ -1,4 +1,5 @@
 import Route from './route'
+import RouteNotFoundError from './errors/route.notfound.error'
 
 class Router {
   constructor (base = '/', fixed = 'plugin', settings = '') {
@@ -30,6 +31,10 @@ class Router {
   }
 
   get (routeName) {
+    if (!this.routes.has(routeName)) {
+      throw new RouteNotFoundError(routeName)
+    }
+
     return this.routes.get(routeName)
   }
 }
