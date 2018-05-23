@@ -87,7 +87,7 @@ var EmailBox = (function (XE, $) {
     },
 
     getEmailList: function () {
-      $.ajax({
+      XE.ajax({
         url: _url.mail.list,
         type: 'get',
         dataType: 'json',
@@ -106,7 +106,7 @@ var EmailBox = (function (XE, $) {
     },
 
     delete: function (email) {
-      $.ajax({
+      XE.ajax({
         url: _url.mail.delete,
         type: 'post',
         dataType: 'json',
@@ -128,7 +128,7 @@ var EmailBox = (function (XE, $) {
     },
 
     add: function (email) {
-      $.ajax({
+      XE.ajax({
         url: _url.mail.add,
         type: 'post',
         dataType: 'json',

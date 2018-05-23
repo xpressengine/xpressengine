@@ -85,7 +85,7 @@
         $('button.save').click(function (e) {
             var url = xeBaseURL + '/' + XE.options.managePrefix + '/lang/save',
                     data = $(this).closest('form').serializeArray();
-            $.ajax({
+            XE.ajax({
                 type: 'PUT', url: url, dataType: 'json', data: data,
                 success: function (data, textStatus) {
                     XE.toast('success', XE.Lang.trans('xe::saved'));

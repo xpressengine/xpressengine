@@ -57,7 +57,7 @@
 
         $('.__xe_check_join_group').change(function () {
             var join_group = $(this).val();
-            $.ajax({
+            XE.ajax({
                 type: 'post',
                 url: '{{ route('manage.group.update.join') }}',
                 cache: false,

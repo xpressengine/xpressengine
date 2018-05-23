@@ -269,7 +269,7 @@
     },
 
     reqPost: function () {
-      $.ajax({
+      XE.ajax({
         url: this.apiUrl.draft.add,
         type: 'post',
         dataType: 'json',
@@ -285,7 +285,7 @@
     },
 
     reqPut: function () {
-      $.ajax({
+      XE.ajax({
         url: this.apiUrl.draft.update + '/' + this.draftId,
         type: 'post',
         dataType: 'json',
@@ -315,7 +315,7 @@
     },
 
     setAuto: function () {
-      $.ajax({
+      XE.ajax({
         url: this.apiUrl.auto.set,
         type: 'post',
         data: this.getReqSerialize() + '&key=' + this.key
@@ -326,7 +326,7 @@
       var key = key || this.key
 
       if (key) {
-        $.ajax({
+        XE.ajax({
           url: this.apiUrl.auto.unset,
           type: 'post',
           data: 'key=' + key
@@ -337,7 +337,7 @@
     load: function (param, callback) {
       var _this = this
 
-      $.ajax({
+      XE.ajax({
         url: _this.apiUrl.draft.list,
         type: 'get',
         dataType: 'json',
@@ -379,7 +379,7 @@
         this.draftId = null
       }
 
-      $.ajax({
+      XE.ajax({
         url: _this.apiUrl.draft.delete + '/' + id,
         type: 'post',
         dataType: 'json',

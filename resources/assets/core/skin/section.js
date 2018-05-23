@@ -2,7 +2,7 @@ window.jQuery(function ($) {
   $('.skin-setting-list .__xe_assign-btn').click(function () {
     var $btn = $(this)
     var url = $btn.data('skinAssignLink')
-    $.ajax({
+    XE.ajax({
       type: 'put',
       url: url,
       dataType: 'json',
@@ -33,7 +33,7 @@ window.jQuery(function ($) {
     var $form = $(this)
     var $modal = $('#skinModal')
 
-    $.ajax({
+    XE.ajax({
       type: $form.attr('method'),
       url: $form.attr('action'),
       cache: false,
@@ -53,7 +53,7 @@ window.jQuery(function ($) {
 
   function modalPage (url, callback) {
     var $modal = $('#skinModal')
-    $.ajax({
+    XE.ajax({
       url: url,
       type: 'get',
       dataType: 'json',

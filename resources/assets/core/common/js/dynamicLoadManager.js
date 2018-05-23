@@ -1,5 +1,6 @@
 import Utils from 'xe-common/utils' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 import $ from 'jquery'
+import XE from 'xe-common/xe'
 
 /**
  * @namespace DynamicLoadManager
@@ -40,7 +41,7 @@ var DynamicLoadManager = (function (exports) {
         if (!_assets.js.hasOwnProperty(src)) {
           _assets.js[src] = ''
 
-          $.ajax({
+          XE.ajax({
             url: src,
             async: false,
             dataType: 'script',
