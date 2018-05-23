@@ -1,15 +1,21 @@
+import Singleton from 'xe/singleton'
 import Route from './route'
 import RouteNotFoundError from './errors/route.notfound.error'
 
-class Router {
+export default class Router extends Singleton {
   constructor (base = '/', fixed = 'plugin', settings = '') {
+    super()
+
     this.routes = new Map()
-
-    if (base === '/' && window.location) {
-      base = window.location.origin
-    }
-
     this.setup(base, fixed, settings)
+  }
+
+  boot (XE) {
+    if (super.boot()) return
+
+    XE.$on('setup', (eventName, options) => {
+      this.setup(options.baseURL, options.fixedPrefix, options.settingsPrefix)
+    })
   }
 
   setup (base, fixed = 'plugin', settings = '') {
@@ -39,6 +45,4 @@ class Router {
   }
 }
 
-const router = new Router()
-
-export default router
+export const routerInstance = new Router()

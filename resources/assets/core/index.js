@@ -10,7 +10,7 @@ import DynamicLoadManager from 'xe/common/js/dynamicLoadManager'
 import griper from 'xe/common/js/griper'
 import Lang from 'xe/common/js/lang'
 import Progress from 'xe/common/js/progress'
-import Request from 'xe/common/js/request'
+import Request from 'xe/request'
 import Router from 'xe/router'
 import * as Utils from 'xe/common/js/utils'
 import Translator from 'xe/common/js/translator'
@@ -24,31 +24,26 @@ import Validator from 'xe/common/js/validator'
  **/
 class XE {
   constructor () {
-    const that = this
-
     Utils.eventify(this)
-
     this.options = {}
 
     // internal libraries
-    // this.util = Utils // @DEPRECATED
     this.Utils = Utils
-    this.Router = Router
-    // this.validator = Validator // @DEPRECATED
     this.Validator = Validator
     this.Lang = Lang
+    this.Router = Router.instance
+    this.Request = Request.instance
     this.Progress = Progress
-    this.Request = Request
     this.Component = Component
 
     // external libraries
-    this.moment = moment
-    this.Translator = Translator
+    this.moment = moment // @DEPRECATED
+    this.Translator = Translator // @DEPRECATED
+  }
 
-    // window.Utils = Utils // @DEPRECATED
-    // window.DynamicLoadManager = DynamicLoadManager // @DEPRECATED
-    // window.Translator = Translator // @DEPRECATED
-    // window.blankshield = blankshield // @DEPRECATED
+  boot () {
+    this.Router.boot(this)
+    this.Request.boot(this)
 
     $(function () {
       $('body').on('click', 'a[target]', function (e) {
@@ -85,15 +80,10 @@ class XE {
    * </pre>
    **/
   setup (options) {
+    this.boot()
     this.configure(options)
 
-    this.Router.setup(this.options.baseURL, this.options.fixedPrefix || null, this.options.settingsPrefix || null)
-    this.Request.setup({
-      headers: {
-        'X-CSRF-TOKEN': options['X-CSRF-TOKEN']
-      },
-      useXeSpinner: options.useXeSpinner
-    })
+    this.$emit('setup', this.options)
   }
 
   configure (options) {
@@ -129,14 +119,42 @@ class XE {
    **/
   ajax (url, options) {
     if (typeof url === 'object') {
-      options = $.extend({}, this.Request.options, url)
+      options = $.extend({}, this.Request.config, {headers: {'X-CSRF-TOKEN':this.Request.config.userToken}}, url)
       url = undefined
     } else {
-      options = $.extend({}, options, this.Request.options, { url: url })
+      options = $.extend({}, options, this.Request.config, {headers: {'X-CSRF-TOKEN':this.Request.config.userToken}}, { url: url })
       url = undefined
     }
 
     return $.ajax(url, options)
+  }
+
+    /**
+   * @alias Request.get
+   */
+  get (...args) {
+    return this.Request.get(...args)
+  }
+
+  /**
+   * @alias Request.post
+   */
+  post (...args) {
+    return this.Request.post(...args)
+  }
+
+  /**
+   * @alias Request.put
+   */
+  put (...args) {
+    return this.Request.put(...args)
+  }
+
+  /**
+   * @alias Request.delete
+   */
+  delete (...args) {
+    return this.Request.delete(...args)
   }
 
   /**

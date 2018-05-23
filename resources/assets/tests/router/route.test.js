@@ -3,15 +3,17 @@ import Router from 'xe/router'
 import Route from 'xe/router/route'
 
 describe('Route', function () {
+  let routerinstance = Router.instance
+
   describe('Router의 baseURL을 참조하여 URL을 반환 함', function () {
-    Router.setup('http://localhost')
+    routerinstance.setup('http://localhost')
     const route = new Route('route.name', { uri: 'user/profile' })
     expect(route.url()).to.be.equal('http://localhost/user/profile')
-    Router.setup('')
+    routerinstance.setup('')
     expect(route.url()).to.be.equal('/user/profile')
   })
 
-  Router.setup('', 'p', 's')
+  routerinstance.setup('', 'p', 's')
 
   describe('isAllow(method)는 method 허용여부를 반환 함', function () {
     it('route에 methods가 없으면 항상 true를 반환해야 함', function () {

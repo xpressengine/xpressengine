@@ -5,5 +5,11 @@
         "browsers": ["last 2 versions", "ie >= 10"]
       }
     }]
+  ],
+  "plugins": [
+    ["babel-plugin-transform-builtin-extend", {
+      "globals": ["Error", "Array"],
+      "approximate": true
+    }]
   ]
 }
