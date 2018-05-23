@@ -102,8 +102,8 @@ class XE {
    * @param {url} url css file path
    * @DEPRECATED
    **/
-  cssLoad (url) {
-    DynamicLoadManager.cssLoad(url)
+  cssLoad (url, load, error) {
+    DynamicLoadManager.cssLoad(url, load, error)
   }
 
   /**
@@ -111,7 +111,7 @@ class XE {
    * @param {string} url js file path
    * @DEPRECATED
    **/
-  jsLoad (url) {
+  jsLoad (url, load, error) {
     DynamicLoadManager.jsLoad(url)
   }
 
