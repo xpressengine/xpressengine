@@ -38,6 +38,7 @@ class XE {
     this.Progress = Progress
     this.Request = Request
     this.Component = Component
+    this.DynamicLoadManager = DynamicLoadManager
 
     // external libraries
     this.moment = moment
