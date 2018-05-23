@@ -37,14 +37,10 @@ class UserEmailRepositoryTest extends \PHPUnit\Framework\TestCase
         $repo = $this->makeRepository();
 
         $user = $this->makeUser();
+        $user->shouldReceive('getId')->andReturn('identifier');
 
         $email = $this->makeEmail();
-        $email->shouldReceive('create')->withArgs([$data])->once()->andReturnSelf();
-
-        $emails = Mockery::mock('\Illuminate\Database\Eloquent\Relations\HasOne');
-        $emails->shouldReceive('save')->with($email)->andReturnNull();
-
-        $user->shouldReceive('emails')->once()->andReturn($emails);
+        $email->shouldReceive('create')->with(['foo' => 'foo', 'user_id' => 'identifier'])->once()->andReturnSelf();
 
         $repo->shouldReceive('createModel')->andReturn($email);
 
