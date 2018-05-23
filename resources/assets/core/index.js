@@ -167,12 +167,12 @@ class XE {
     if (typeof url !== 'string') return false
     let baseUrl
     let targetUrl = URI(url).normalizePathname()
-    const baseURL = URI(window.xeBaseURL).normalizePathname()
+    const baseURL = URI(this.Router.baseURL).normalizePathname()
 
     if (targetUrl.is('urn')) return false
 
     if (!targetUrl.hostname()) {
-      targetUrl = targetUrl.absoluteTo(window.xeBaseURL)
+      targetUrl = targetUrl.absoluteTo(this.Router.baseURL)
     }
 
     let port = Number(baseURL.port())
@@ -189,7 +189,7 @@ class XE {
     }
 
     if (!baseUrl) {
-      baseUrl = URI(window.xeBaseURL).normalizePathname()
+      baseUrl = URI(this.Router.baseURL).normalizePathname()
       baseUrl = baseUrl.hostname() + baseUrl.directory()
     }
     targetUrl = targetUrl.hostname() + targetUrl.directory()
