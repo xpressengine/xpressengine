@@ -1,10 +1,10 @@
-import $ from 'jquery'
 import debounce from 'lodash/debounce'
 import throttle from 'lodash/throttle'
 import curry from 'lodash/curry'
 import find from 'lodash/find'
 import forEach from 'lodash/forEach'
 import mapValues from 'lodash/mapValues'
+import includes from 'lodash/includes'
 import EventEmitter from './utils/EventEmitter'
 
 /**
@@ -25,7 +25,7 @@ export function eventify (target) {
  * @return {boolean}
  */
 export function isImage (mime) {
-  return $.inArray(mime, ['image/jpg', 'image/jpeg', 'image/png', 'image/gif']) !== -1
+  return includes(['image/jpg', 'image/jpeg', 'image/png', 'image/gif'], mime)
 }
 
 /**
@@ -35,7 +35,7 @@ export function isImage (mime) {
  * @return {boolean}
  */
 export function isVideo (mime) {
-  return $.inArray(mime, ['video/mp4', 'video/webm', 'video/ogg']) !== -1
+  return includes(['video/mp4', 'video/webm', 'video/ogg'], mime)
 }
 
 /**
@@ -45,7 +45,7 @@ export function isVideo (mime) {
  * @return {boolean}
  */
 export function isAudio (mime) {
-  return $.inArray(mime, ['audio/mpeg', 'audio/ogg', 'audio/wav']) !== -1
+  return includes(['audio/mpeg', 'audio/ogg', 'audio/wav'], mime)
 }
 
 /**
@@ -596,5 +596,6 @@ export default {
   addCommas,
   openWindow,
   find,
-  forEach
+  forEach,
+  includes
 }
