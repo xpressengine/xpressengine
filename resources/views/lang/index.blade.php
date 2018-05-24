@@ -81,20 +81,16 @@
 </div>
 
 <script type="text/javascript">
-    $(function () {
+    window.jQuery(function ($) {
         $('button.save').click(function (e) {
-            var url = xeBaseURL + '/' + XE.options.managePrefix + '/lang/save',
-                    data = $(this).closest('form').serializeArray();
-            XE.ajax({
-                type: 'PUT', url: url, dataType: 'json', data: data,
-                success: function (data, textStatus) {
-                    XE.toast('success', XE.Lang.trans('xe::saved'));
-                },
-                error: function (request, status, error) {
-                    XE.toast('danger', XE.Lang.trans('xe::failed'));
-                }
-            });
-            return false;
+            var url = XE.Router.baseURL + '/' + XE.Router.settingsPrefix + '/lang/save'
+            var data = $(this).closest('form').serializeArray();
+
+            window.XE.put(url, data).then(function (response) {
+                XE.toast('success', XE.Lang.trans('xe::saved'));
+            }).catch(function (error) {
+                XE.toast('danger', XE.Lang.trans('xe::failed'));
+            })
         });
 
         $("#__xe_namespace .dropdown-menu li a").click(function () {

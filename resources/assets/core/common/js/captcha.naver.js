@@ -1,8 +1,8 @@
 // @FIXME 이동
 // @FIXME i? k?
 var naverReissue = function (i, k) {
-  window.jQuery.ajax({
-    url: window.xeBaseURL + '/captcha/naver/reissue',
+  window.XE.ajax({
+    url: window.XE.Router.baseURL + '/captcha/naver/reissue',
     type: 'get',
     dataType: 'json',
     success: function (json) {

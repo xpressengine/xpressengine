@@ -1,11 +1,12 @@
 import Translator from 'xe-common/translator' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 import $ from 'jquery'
 import XE from 'xe'
+import $$ from 'xe/common/js/utils'
 
 /**
  * Lang module
  * @module Lang
- * */
+ */
 export default (function () {
   /** @private */
   var _items = {
@@ -98,14 +99,14 @@ export default (function () {
     /**
      * @memberof module:Lang
      * @type {array}
-     * */
+     */
     locales: [],
 
     /**
      * 번역리스트를 Translator 객체에 담는다.
      * @memberof module:Lang
      * @param {object} items
-     * */
+     */
     set: function (items) {
       // $.extend(_items, items);
       $.each(items, function (key, value) {
@@ -117,7 +118,7 @@ export default (function () {
      * Locale을 세팅한다.
      * @memberof module:Lang
      * @param {locales} locales
-     * */
+     */
     setLocales: function (locales) {
       this.locales = locales
       Translator.locale = (locales.length > 0) ? locales[0] : 'en'
@@ -128,7 +129,7 @@ export default (function () {
      * @memberof module:Lang
      * @param {string} locale
      * @return {string}
-     * */
+     */
     getLangCode: function (locale) {
       return locale ? _items[locale] : _items
     },
@@ -137,7 +138,7 @@ export default (function () {
      * 현재 선택된 locale 정보를 반환한다.
      * @memberof module:Lang
      * @return {string}
-     * */
+     */
     getCurrentLocale: function () {
       return this.locales[0]
     },
@@ -148,7 +149,7 @@ export default (function () {
      * @param {string} id
      * @param {object} parameters
      * @return {string}
-     * */
+     */
     trans: function (id, parameters) {
       return Translator.trans(id, parameters)
     },
@@ -158,29 +159,25 @@ export default (function () {
      * @memberof module:Lang
      * @param {string} id
      * @param {object} parameters
-     * @param {function} callback
-     * */
+     * @param {function} callback @deprecated
+     * @return {Promise}
+     */
     requestTrans: function (id, parameters, callback) {
-      XE.ajax({
-        url: window.xeBaseURL + '/lang/lines/' + id,
-        method: 'get',
-        dataType: 'json',
-        data: parameters,
-        success: function (res) {
-          var message = id.split('::')[1]
-          var data
+      const item = id.split('::')[1]
+      let message = ''
 
-          if (res.length > 0) {
-            for (var i = 0, max = res.length; i < max; i += 1) {
-              if (res[i].locale == XE.Lang.locales[0]) {
-                data = res[i].value
-                break
-              }
-            }
+      return new Promise((resolve, reject) => {
+        XE.get(XE.Router.baseUrl + '/lang/lines/' + id).then((response) => {
+          if (Array.isArray(response.data)) {
+            message = $$.find(response.data, { 'locale': XE.Lang.locales[0] }).value
+            Translator.add(id, message)
           }
 
-          callback(message, data)
-        }
+          resolve(message)
+          if (typeof callback === 'function') {
+            callback(item, message) // @deprecated
+          }
+        })
       })
     },
 
@@ -188,38 +185,24 @@ export default (function () {
      * id list로 번역리스트를 요청한다.
      * @memberof module:Lang
      * @param {array} langKeys
-     * @param {function} callback
-     * */
+     * @param {function} callback @deprecated
+     * @return {Promise}
+     */
     requestTransAll: function (langKeys, callback) {
-      XE.ajax({
-        type: 'get',
-        dataType: 'json',
-        url: window.xeBaseURL + '/lang/lines/many',
-        data: {
-          keys: langKeys
-        },
-        useXeSpinner: false,
-        success: function (res) {
-          var result = {}
+      const result = {}
 
-          $.each(res, (key, arr) => {
-            $.each(arr, function () {
-              if (this.locale === XE.Lang.locales[0]) {
-                result[key] = this.value
-              }
-            })
+      return new Promise((resolve, reject) => {
+        XE.get(XE.Router.baseUrl + '/lang/lines/many', {keys: langKeys}).then(response => {
+          $$.forEach(response.data, (key, val) => {
+            result[key] = $$.find(response.data, { 'locale': XE.Lang.locales[0] }).value
+            Translator.add(key, result[key])
           })
 
-          if (Object.keys(result).length > 0) {
-            $.each(result, function (key, value) {
-              Translator.add(key, value)
-            })
+          resolve(result)
+          if (typeof callback === 'function') {
+            callback(response.data, result) // @deprecated
           }
-
-          if (callback) {
-            callback(res, result)
-          }
-        }
+        })
       })
     },
 
@@ -229,7 +212,7 @@ export default (function () {
      * @param {string} id
      * @param {number} number
      * @param {object} parameters
-     * */
+     */
     transChoice: function (id, number, parameters) {
       return Translator.transChoice(id, number, parameters)
     }
