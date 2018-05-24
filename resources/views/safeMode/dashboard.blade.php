@@ -142,7 +142,7 @@ use Xpressengine\Plugin\Composer\ComposerFileWriter;
                 $(function () {
                     var currentStatus = '{{ $pluginUpdateStatus }}';
                     var check = function () {
-                        $.ajax({
+                        XE.ajax({
                             url: '{{ route('__safe_mode.do.plugin-check') }}',
                             type: 'get',
                             dataType: 'json',

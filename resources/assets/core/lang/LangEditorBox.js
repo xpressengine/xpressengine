@@ -31,7 +31,7 @@ class LangEditorBox {
 
   init () {
     if (this.langKey && this.lines.length == 0) {
-      $.ajax({
+      XE.ajax({
         type: 'get',
         dataType: 'json',
         url: window.xeBaseURL + '/lang/lines/' + this.langKey,

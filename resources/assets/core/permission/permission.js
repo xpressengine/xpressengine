@@ -316,7 +316,7 @@ class Permission {
     var _this = this
     var searchUserUrl = _this.userSearchUrl
 
-    $.ajax({
+    XE.ajax({
       url: searchUserUrl + '/' + keyword,
       method: 'get',
       dataType: 'json',
@@ -349,7 +349,7 @@ class Permission {
     var _this = this
     var searchGroupUrl = _this.groupSearchUrl
 
-    $.ajax({
+    XE.ajax({
       url: searchGroupUrl + '/' + keyword,
       method: 'get',
       dataType: 'json',

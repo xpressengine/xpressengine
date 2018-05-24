@@ -43,8 +43,8 @@ class UserEmailRepository implements UserEmailRepositoryInterface
      */
     public function create(UserInterface $user, array $data)
     {
-        $email = $this->createModel()->create($data);
-        $user->emails()->save($email);
+        $email = $this->createModel()->create(array_merge($data, ['user_id' => $user->getId()]));
+
         return $email;
     }
 

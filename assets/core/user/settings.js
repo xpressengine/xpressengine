@@ -149,7 +149,7 @@ window.jQuery(function ($) {
 
         var _this = this
 
-        $.ajax({
+        XE.ajax({
           url: this.options.saveUrl,
           type: 'POST',
           dataType: 'json',
@@ -202,7 +202,7 @@ window.jQuery(function ($) {
         }
 
         var _this = this
-        $.ajax(
+        XE.ajax(
           {
             url: this.options.checkUrl,
             type: 'POST',
@@ -286,7 +286,7 @@ window.jQuery(function ($) {
           return
         }
 
-        $.ajax({
+        XE.ajax({
           url: this.options.saveUrl,
           type: 'POST',
           dataType: 'json',
@@ -352,7 +352,7 @@ window.jQuery(function ($) {
         }
 
         _this = this
-        $.ajax(
+        XE.ajax(
           {
             url: this.options.checkUrl,
             type: 'POST',
@@ -469,7 +469,7 @@ window.jQuery(function ($) {
         var _this = this
 
         // 이메일 추가 요청
-        $.ajax({
+        XE.ajax({
           url: this.options.addUrl,
           type: 'POST',
           dataType: 'json',
@@ -500,7 +500,7 @@ window.jQuery(function ($) {
         var _this = this
 
         // 이메일 인증 요청
-        $.ajax({
+        XE.ajax({
           url: this.options.confirmUrl,
           type: 'POST',
           dataType: 'json',
@@ -520,7 +520,7 @@ window.jQuery(function ($) {
         var email = btn.data('email')
         var box = btn.parents('.__xe_mailItem')
         var _this = this
-        $.ajax({
+        XE.ajax({
           url: this.options.deleteUrl,
           type: 'POST',
           dataType: 'json',
@@ -540,7 +540,7 @@ window.jQuery(function ($) {
       deletePending: function (btn) {
         var email = btn.data('email')
         var _this = this
-        $.ajax({
+        XE.ajax({
           url: this.options.deletePendingUrl,
           type: 'POST',
           dataType: 'json',
@@ -561,7 +561,7 @@ window.jQuery(function ($) {
       resendPending: function (btn) {
         var email = btn.data('email')
         var _this = this
-        $.ajax({
+        XE.ajax({
           url: this.options.resendPendingUrl,
           type: 'POST',
           dataType: 'json',
@@ -584,7 +584,7 @@ window.jQuery(function ($) {
           return
         }
 
-        $.ajax({
+        XE.ajax({
           url: this.options.saveUrl,
           type: 'POST',
           dataType: 'json',

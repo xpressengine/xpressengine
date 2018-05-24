@@ -27,8 +27,10 @@
 </div>
 
 <script>
+    "use strict"
     jQuery(function ($) {
         var fileInput = $('.__xe_imagebox_{{ $seq }}');
+        var context = $('.__xe_file_preview_{{ $seq }}')
         fileInput.fileupload({
             fileInput: $('.__xe_file_{{ $seq }}'),
             previewMaxWidth: {{ $args['width'] }},
@@ -43,11 +45,11 @@
             imageCrop: false
         }).on('fileuploadadd', function (e, data) {
             $('.fileinput-button span', this).text('변경');
-            data.context = $('.__xe_file_preview_{{ $seq }}');
+            context = $('.__xe_file_preview_{{ $seq }}');
         }).on('fileuploadprocessalways', function (e, data) {
             var index = data.index, file = data.files[index];
             if (file.error) {
-                data.context.empty().append($('<span class="text-danger"/>').text(file.error));
+                context.empty().append($('<span class="text-danger"/>').text(file.error));
                 return;
             }
 
@@ -58,7 +60,7 @@
                     'max-width': '100%',
                     'height': 'auto',
                 });
-                data.context.empty().prepend($preview);
+                context.empty().prepend($preview);
                 $('input.__xe_delete_file_{{ $seq }}').parent('label').show();
             }
         });

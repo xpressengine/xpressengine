@@ -267,7 +267,7 @@
                 )
             );
 
-            $.ajax({
+            XE.ajax({
                 url: '{{ route('install.check') }}',
                 type: 'get',
                 dataType: 'json',

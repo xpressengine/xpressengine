@@ -11,6 +11,7 @@
 <script>
     jQuery(function ($) {
         var fileInput = $('.__xe_imagebox_{{ $seq }}');
+        var context = $('.__xe_file_preview_{{ $seq }}')
         fileInput.fileupload({
             fileInput: fileInput,
             previewMaxWidth: {{ $args['width'] }},
@@ -23,18 +24,18 @@
             disableImageResize: true,
             imageCrop: false
         }).on('fileuploadadd', function (e, data) {
-            data.context = $('.__xe_file_preview_{{ $seq }}').empty();
+            context.empty();
 
         }).on('fileuploadprocessalways', function (e, data) {
             var index = data.index, file = data.files[index];
             if (file.preview) {
-                data.context.empty().prepend(file.preview);
+                context.empty().prepend(file.preview);
             }
             if (file.error) {
-                data.context.empty().append($('<span class="text-danger"/>').text(file.error));
+                context.empty().append($('<span class="text-danger"/>').text(file.error));
             }
             if (index + 1 === data.files.length) {
-                data.context.find('button')
+                context.find('button')
                         .text('Upload')
                         .prop('disabled', !!data.files.error);
             }

@@ -166,7 +166,7 @@
             $('#__xe_widgetboxPermission').submit(function(){
                 var form = $(this);
 
-                $.ajax({
+                XE.ajax({
                     url: form.attr('action'),
                     type: 'POST',
                     data: form.serialize(),

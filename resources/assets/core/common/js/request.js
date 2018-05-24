@@ -73,7 +73,7 @@ export default (function () {
         dataType
       })
 
-      return $.ajax(settings)
+      return XE.ajax(settings)
     },
 
     /**
@@ -92,7 +92,7 @@ export default (function () {
         dataType
       })
 
-      return $.ajax(settings)
+      return XE.ajax(settings)
     },
 
     /**
