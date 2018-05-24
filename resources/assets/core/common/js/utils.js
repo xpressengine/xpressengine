@@ -2,6 +2,8 @@ import $ from 'jquery'
 import debounce from 'lodash/debounce'
 import throttle from 'lodash/throttle'
 import curry from 'lodash/curry'
+import find from 'lodash/find'
+import forEach from 'lodash/forEach'
 import mapValues from 'lodash/mapValues'
 import EventEmitter from './utils/EventEmitter'
 
@@ -592,5 +594,7 @@ export default {
   getUri,
   strtotime,
   addCommas,
-  openWindow
+  openWindow,
+  find,
+  forEach
 }
