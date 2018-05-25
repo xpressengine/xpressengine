@@ -4,12 +4,12 @@
    <!--[D] active 시 클래스 on 추가-->
    <div class="menutype_con">
 
-    @if(sizeof($menuType['screenshot']) === 0)
+    @if(empty($menuType['screenshot']) === true)
      <div class="thumbnail-box" style="background: url({{asset('/assets/core/common/img/no_image_632x654.jpg')}}) ; height:228px; background-size: cover; " title="{{xe_trans('xe::noScreenshot')}}">
      </div>
     @else
      <div class="thumbnail-box"
-          style="height:228px; background: url('{{ (sizeof($menuType['screenshot'])>0)?asset($menuType['screenshot'][0]):'' }}') no-repeat top center; background-size: cover; ">
+          style="height:228px; background: url('{{ (empty($menuType['screenshot']) === false)?asset($menuType['screenshot'][0]):'' }}') no-repeat top center; background-size: cover; ">
      </div>
     @endif
 

@@ -118,7 +118,7 @@ abstract class AbstractImporter
      */
     protected function extractUrl(array $data)
     {
-        return isset($data['url']) ? $data['url'] : call_user_func(
+        $url = isset($data['url']) ? $data['url'] : call_user_func(
             function (UrlGenerator $urlGenerator, Request $request) {
                 $url = $urlGenerator->to($request->getBaseUrl().$request->getPathInfo());
                 $query = $request->getQueryString();
@@ -128,6 +128,8 @@ abstract class AbstractImporter
             static::$urlGenerator,
             $this->request
         );
+
+        return htmlspecialchars($url, ENT_QUOTES, 'UTF-8', false);
     }
 
     /**
