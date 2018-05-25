@@ -10,20 +10,15 @@ var DynamicField = function () {
   this.databaseName = ''
   this.containerName = ''
   this.$container = ''
-  this.urls = {
-    base: null
-  }
 
   /**
    * DynamicField를 초기화 한다.
    * @param {string} group
    * @param {string} databaseName
-   * @param {object} urls
    **/
-  this.init = function (group, databaseName, urls) {
+  this.init = function (group, databaseName) {
     this.group = group
     this.databaseName = databaseName
-    $.extend(this.urls, urls)
     this.containerName = '__xe_container_DF_setting_' + group
     this.$container = $('#' + this.containerName)
     this.$container.$form = this.$container.find('.__xe_add_form')
@@ -128,7 +123,7 @@ var DynamicField = function () {
       type: 'get',
       dataType: 'json',
       data: params,
-      url: this.urls.base
+      url: XE.route('manage.dynamicField.index')
     })
 
     jqxhr.done(function (data, textStatus, jqxhr) {
@@ -192,7 +187,7 @@ var DynamicField = function () {
     var form = this.formClone()
 
     form.data('isEdit', '1')
-    form.attr('action', this.urls.update)
+    form.attr('action', XE.route('manage.dynamicField.update'))
     this.$container.$modal.$body.html(form)
     this.$container.$modal.xeModal('show')
 
@@ -204,7 +199,7 @@ var DynamicField = function () {
       type: 'get',
       dataType: 'json',
       data: params,
-      url: this.urls.getEditInfo,
+      url: XE.route('manage.dynamicField.getEditInfo'),
       success: function (response) {
         form.find('[name="id"]').val(response.config.id).prop('readonly', true)
         form.find('[name="typeId"] option').each(function () {
@@ -255,7 +250,7 @@ var DynamicField = function () {
 
   /**
    * row 삭제 요청을 한다.
-   * @param {jQuery} o
+   * @param {jQuery} target
    **/
   this.destroy = function (target) {
     if (confirm('이동작은 되돌릴 수 없습니다. 계속하시겠습니까?') === false) { // @FIXME
@@ -272,7 +267,7 @@ var DynamicField = function () {
       type: 'post',
       dataType: 'json',
       data: params,
-      url: this.urls.destroy,
+      url: XE.route('manage.dynamicField.destroy'),
       success: function (response) {
         var id = response.id
 
@@ -303,7 +298,7 @@ var DynamicField = function () {
       type: 'get',
       dataType: 'json',
       data: params,
-      url: this.urls.getSkinOption,
+      url: XE.route('manage.dynamicField.getSkinOption'),
       success: function (response) {
         that.skinOptions(form, response.skins, response.skinId)
       }
@@ -347,7 +342,7 @@ var DynamicField = function () {
       type: 'get',
       dataType: 'json',
       data: params,
-      url: this.urls.getAdditionalConfigure,
+      url: XE.route('manage.dynamicField.getAdditionalConfigure'),
       success: function (response) {
         that.setValidateRule($form, response.rules)
 
@@ -411,5 +406,5 @@ export default DynamicField
 
 // @FIXME
 var instance = new DynamicField()
-instance.init(window.dynamicFieldData.group, window.dynamicFieldData.databaseName, window.dynamicFieldData.routes)
+instance.init(window.dynamicFieldData.group, window.dynamicFieldData.databaseName)
 instance.getList()
