@@ -48,7 +48,6 @@ class XE {
 
     $(() => {
       $('body').on('click', 'a[target]', (e) => {
-        console.debug(e)
         const $this = $(e.target)
         const href = $this.attr('href').trim()
         const target = $this.attr('target')
@@ -167,7 +166,7 @@ class XE {
    */
   isSameHost (url) {
     if (typeof url !== 'string') return false
-console.log(this.baseURL)
+
     const base = {
       url: URI(this.baseURL).normalizePathname()
     }

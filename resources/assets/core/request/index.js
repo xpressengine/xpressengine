@@ -61,7 +61,7 @@ export default class Request extends Singleton {
       context: config.context
     }))
 
-    url = this.resolveUri(url)
+    url = this.resolveRoute(url)
 
     return this.axiosInstance.get(url, { params })
   }
@@ -80,7 +80,7 @@ export default class Request extends Singleton {
       context: config.context
     }))
 
-    url = this.resolveUri(url)
+    url = this.resolveRoute(url)
 
     return this.axiosInstance.post(url, this.prepareData(data), config)
   }
@@ -99,9 +99,9 @@ export default class Request extends Singleton {
     }))
     data._method = 'delete' // @see https://laravel.com/docs/5.5/routing#form-method-spoofing
 
-    url = this.resolveUri(url)
+    url = this.resolveRoute(url)
 
-    return this.axiosInstance.post(url, { data: this.prepareData(data) })
+    return this.axiosInstance.post(url, this.prepareData(data))
   }
 
   /**
@@ -117,7 +117,7 @@ export default class Request extends Singleton {
       context: config.context
     }))
 
-    url = this.resolveUri(url)
+    url = this.resolveRoute(url)
 
     return this.axiosInstance.put(url, this.prepareData(data), config)
   }
@@ -136,7 +136,7 @@ export default class Request extends Singleton {
       context: config.context
     }))
 
-    url = this.resolveUri(url)
+    url = this.resolveRoute(url)
 
     return this.axiosInstance.head(url, { data: this.prepareData(data), headers })
   }
@@ -149,7 +149,7 @@ export default class Request extends Singleton {
     }
   }
 
-  resolveUri (uri) {
+  resolveRoute (uri) {
     let routeName
     let params = {}
     let url

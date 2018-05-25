@@ -1,5 +1,6 @@
 import Singleton from 'xe/singleton'
 import Route from './route'
+import { requestInstance } from 'xe/request'
 import RouteNotFoundError from './errors/route.notfound.error'
 
 export default class Router extends Singleton {
@@ -15,6 +16,7 @@ export default class Router extends Singleton {
 
     XE.$on('setup', (eventName, options) => {
       this.setup(options.baseURL, options.fixedPrefix, options.settingsPrefix)
+      if (options.routes) this.addRoutes(options.routes)
     })
   }
 
@@ -37,7 +39,7 @@ export default class Router extends Singleton {
   }
 
   get (routeName) {
-    if (!this.routes.has(routeName)) {
+    if (!this.has(routeName)) {
       throw new RouteNotFoundError(routeName)
     }
 
