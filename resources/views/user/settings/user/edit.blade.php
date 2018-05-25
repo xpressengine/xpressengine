@@ -87,15 +87,10 @@
     </form>
 </div>
 
-<script>
-var url = {
-    'mail': {
-        'list': "{{ route('settings.user.mail.list') }}",
-        'add': "{{ route('settings.user.mail.add') }}",
-        'delete': "{{ route('settings.user.mail.delete') }}"
-    }
-};
-</script>
+@expose_route('settings.user.mail.list')
+@expose_route('settings.user.mail.add')
+@expose_route('settings.user.mail.delete')
+
 {{ XeFrontend::js([
     'assets/core/user/settings/edit.js'
 ])->load() }}

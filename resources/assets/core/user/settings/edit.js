@@ -4,7 +4,6 @@ var EmailBox = (function (XE, $) {
   var _mails = []
   var _email = ''
   var _userId = ''
-  var _url = {}
 
   var _bindEvents = function () {
     _$wrapper.on('click', '.btnDeleteEmail', function (e) {
@@ -77,7 +76,6 @@ var EmailBox = (function (XE, $) {
       _$wrapper = opt.$wrapper
       _email = opt.email
       _userId = opt.userId
-      _url = opt.url
 
       _bindEvents()
 
@@ -87,67 +85,41 @@ var EmailBox = (function (XE, $) {
     },
 
     getEmailList: function () {
-      XE.ajax({
-        url: _url.mail.list,
-        type: 'get',
-        dataType: 'json',
-        data: { userId: _userId },
-        context: this,
-        success: function (result) {
-          _mails = result.mails
-
-          _this.render(result.mails)
-        },
-
-        error: function (result) {
-          XE.toast('danger', '오류!.', '.__xe_alertEmailModal')
-        }
+      XE.get('settings.user.mail.list', { userId: _userId }).then((response) => {
+        _mails = response.data.mails
+        _this.render(response.data.mails)
+      }).catch((error) => {
+        XE.toast('danger', error, '.__xe_alertEmailModal')
       })
     },
 
     delete: function (email) {
-      XE.ajax({
-        url: _url.mail.delete,
-        type: 'post',
-        dataType: 'json',
-        data: { userId: _userId, address: email },
-        context: this,
-        success: function (result) {
+      XE.post('settings.user.mail.delete', {userId: _userId, address: email})
+        .then(response => {
           var i = _mails.indexOf(email)
           _mails.splice(i, 1)
-
           _this.render(_mails)
-
           XE.toast('success', '삭제하였습니다.', '.__xe_alertEmailModal')
-        },
-
-        error: function (result) {
-          XE.toast('danger', result.responseJSON.message, '.__xe_alertEmailModal')
-        }
-      })
+        })
+        .catch(error => {
+          XE.toast('danger', error, '.__xe_alertEmailModal')
+        })
     },
 
     add: function (email) {
-      XE.ajax({
-        url: _url.mail.add,
-        type: 'post',
-        dataType: 'json',
-        data: { userId: _userId, address: email },
-        context: this,
-        success: function (result) {
-          var email = result.mail
+      XE.post('settings.user.mail.add', { userId: _userId, address: email })
+        .then(response => {
+          var email = response.data.mail
 
           _mails.push(email)
 
           _this.render(_mails)
 
           XE.toast('success', '추가되었습니다.', '.__xe_alertEmailModal')
-        },
-
-        error: function (result) {
-          XE.toast('danger', result.responseJSON.message, '.__xe_alertEmailModal')
-        }
-      })
+        })
+        .catch(error => {
+          XE.toast('danger', error, '.__xe_alertEmailModal')
+        })
     },
 
     render: function (emails) {
@@ -197,7 +169,6 @@ window.jQuery(function ($) {
 
   EmailBox.init({
     $wrapper: $('#__xe_emailSetting'),
-    url: window.url, // @FIXME @FIXME @FIXME @FIXME @FIXME @FIXME @FIXME WTF
     userId: $('#__xe_emailSetting').data('user-id'),
     email: $('#__xe_emailSetting').data('email')
   })
