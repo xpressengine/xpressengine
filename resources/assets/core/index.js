@@ -21,7 +21,7 @@ import Validator from 'xe/common/js/validator'
  * @global
  * @namespace XE
  * @type {object}
- **/
+ */
 class XE {
   constructor () {
     Utils.eventify(this)
@@ -46,16 +46,17 @@ class XE {
     this.Router.boot(this)
     this.Request.boot(this)
 
-    $(function () {
-      $('body').on('click', 'a[target]', function (e) {
-        const $this = $(this)
+    $(() => {
+      $('body').on('click', 'a[target]', (e) => {
+        console.debug(e)
+        const $this = $(e.target)
         const href = $this.attr('href').trim()
         const target = $this.attr('target')
 
         if (!href) return
         if (target === '_top' || target === '_self' || target === '_parent') return
         if (!href.match(/^(https?:\/\/)/)) return
-        if (that.isSameHost(href)) return
+        if (this.isSameHost(href)) return
 
         let rel = $this.attr('rel')
 
@@ -79,7 +80,7 @@ class XE {
    *   - X-CSRF-TOKEN : CSRF Token 값 세팅
    *   - useXESpinner : ajax요청시 UI상에 spinner 사용여부
    * </pre>
-   **/
+   */
   setup (options) {
     this.boot()
     this.configure(options)
@@ -99,7 +100,7 @@ class XE {
    * css 파일을 로드한다.
    * @param {url} url css file path
    * @DEPRECATED
-   **/
+   */
   cssLoad (url, load, error) {
     DynamicLoadManager.cssLoad(url, load, error)
   }
@@ -108,7 +109,7 @@ class XE {
    * js 파일을 로드한다.
    * @param {string} url js file path
    * @DEPRECATED
-   **/
+   */
   jsLoad (url, load, error) {
     DynamicLoadManager.jsLoad(url)
   }
@@ -117,7 +118,7 @@ class XE {
    * Ajax를 요청한다.
    * @param {string|object} url request url
    * @param {object} options jQuery ajax options
-   **/
+   */
   ajax (url, options) {
     if (typeof url === 'object') {
       options = $.extend({}, this.Request.config, {headers: {'X-CSRF-TOKEN':this.Request.config.userToken}}, url)
@@ -163,39 +164,51 @@ class XE {
    * @param {string|object} url request url
    * @param {object} options jQuery ajax options
    * @return {boolean}
-   **/
+   */
   isSameHost (url) {
     if (typeof url !== 'string') return false
-    let baseUrl
-    let targetUrl = URI(url).normalizePathname()
-    const baseURL = URI(this.Router.baseURL).normalizePathname()
-
-    if (targetUrl.is('urn')) return false
-
-    if (!targetUrl.hostname()) {
-      targetUrl = targetUrl.absoluteTo(this.Router.baseURL)
+console.log(this.baseURL)
+    const base = {
+      url: URI(this.baseURL).normalizePathname()
+    }
+    const target = {
+      url: URI(url).normalizePathname()
     }
 
-    let port = Number(baseURL.port())
-    let targetPort = Number(targetUrl.port())
-    if (!port) {
-      port = (baseURL.protocol() === 'http') ? 80 : 443
-    }
-    if (!targetPort) {
-      targetPort = (targetUrl.protocol() === 'http') ? 80 : 443
+    if (target.url.is('urn')) return false
+
+    if (!target.url.hostname()) {
+      target.url = target.url.absoluteTo(this.baseURL)
     }
 
-    if (targetPort !== port) {
+    base.port = Number(base.url.port())
+    target.port = Number(target.url.port())
+    base.protocol = base.url.protocol()
+    target.protocol = target.url.protocol() || base.protocol
+
+    // port
+    if (!base.port) {
+      base.port = (base.protocol === 'http') ? 80 : 443
+    }
+    if (!target.port) {
+      target.port = (target.protocol === 'http') ? 80 : 443
+    }
+
+    if (base.port !== target.port) {
       return false
     }
 
-    if (!baseUrl) {
-      baseUrl = URI(this.Router.baseURL).normalizePathname()
-      baseUrl = baseUrl.hostname() + baseUrl.directory()
+    // protocol
+    if (![80, 443].includes(base.port)) {
+      if (base.protocol !== target.protocol) {
+        return false
+      }
     }
-    targetUrl = targetUrl.hostname() + targetUrl.directory()
 
-    return targetUrl.indexOf(baseUrl) === 0
+    base.url = base.url.hostname() + base.url.directory()
+    target.url = target.url.hostname() + target.url.directory()
+
+    return target.url.indexOf(base.url) === 0
   }
 
   /**
@@ -220,7 +233,7 @@ class XE {
    *   - bottomLeft
    *   - bottomRight
    * </pre>
-   **/
+   */
   toast (type = 'danger', message, pos) {
     griper.toast(type, message, pos)
   }
@@ -233,7 +246,7 @@ class XE {
    *   - 401 : warning
    * </pre>
    * @param {string} 팝업에 출력될 메시지
-   **/
+   */
   toastByStatus (status, message) {
     return griper.toast(griper.toast.fn.statusToType(status), message)
   }
@@ -242,7 +255,7 @@ class XE {
    * 폼 요소 엘리먼트에 메시지를 출력한다.
    * @param {object} form element object
    * @param {string} message 엘리먼트에 출력될 메시지
-   **/
+   */
   formError ($element, message) {
     return griper.form($element, message)
   }
@@ -250,7 +263,7 @@ class XE {
   /**
    * 폼 요소의 메시지를 모두 제거한다.
    * @param {object} jquery form object
-   **/
+   */
   formErrorClear ($form) {
     return griper.form.fn.clear($form)
   }
@@ -258,15 +271,23 @@ class XE {
   /**
    * 설정된 폼의 유효성 체크를 한다.
    * @param {object} jquery form object
-   **/
+   */
   formValidate ($form) {
     Validator.formValidate($form)
   }
 
   /**
+   * baseURL 반환
+   * @return {string} baseURL
+   */
+  get baseURL () {
+    return this.options.baseURL
+  }
+
+  /**
    * locale 정보를 반환
    * @return {string} locale
-   **/
+   */
   get locale () {
     return this.options.locale
   }
@@ -274,14 +295,14 @@ class XE {
   /**
    * locale 지정
    * @param {string} 변경할 locale
-   **/
+   */
   set locale (locale) {
     this.options.locale = locale
   }
 
   /**
    * @DEPRECATED
-   **/
+   */
   getLocale () {
     return this.locale
   }
@@ -289,14 +310,14 @@ class XE {
   /**
    * default locale 정보를 반환한다.
    * @return {string} defaultLocale
-   **/
+   */
   get defaultLocale () {
     return this.options.defaultLocale
   }
 
   /**
    * @DEPRECATED
-   **/
+   */
   getDefaultLocale () {
     return this.defaultLocale
   }
