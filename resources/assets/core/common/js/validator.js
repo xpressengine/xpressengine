@@ -1,12 +1,15 @@
 import griper from 'xe-common/griper' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 import moment from 'moment'
 import Translator from 'xe-common/translator' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
-import Utils from 'xe-common/utils' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
+import { eventify, default as Utils } from 'xe/utils' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 import Lang from 'xe-common/lang' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 import $ from 'jquery'
 
+const originalRules = {}
+
 class Validator {
   constructor () {
+    eventify(this)
     let that = this
 
     this.rules = {}
@@ -540,7 +543,23 @@ class Validator {
     }
 
     if (this.rules[ruleName] !== undefined) {
-      this.rules[ruleName] = $.extend(rules, this.rules[ruleName])
+      if (!originalRules[ruleName]) {
+        originalRules[ruleName] = Object.assign({}, this.rules[ruleName])
+      }
+
+      this.rules[ruleName] = $.extend(this.rules[ruleName], rules)
+
+      /*
+       * eventName
+       * ruleName
+       * rules : 누적
+       * additional : 새로 추가된 룰
+       * origin : 처음 설정된 룰
+       * reassign : 룰을 다시 설정
+      */
+      this.$emit('setRules', ruleName, this.rules[ruleName], rules, originalRules[ruleName], (rules) => {
+        this.rules[ruleName] = rules
+      })
     } else {
       this.rules[ruleName] = rules
 
