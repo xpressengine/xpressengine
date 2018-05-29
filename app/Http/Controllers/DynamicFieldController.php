@@ -139,7 +139,10 @@ class DynamicFieldController extends Controller
 
         XeFrontend::rule('dynamicFieldSection', $rules);
 
-        return api_render('dynamicField.category.createType', [ 'config' => $config ]);
+        return XePresenter::makeApi([
+            'result' => $fieldType->getSettingsView($config) . $fieldSkin->settings($config),
+        ]);
+
     }
 
     /**
