@@ -103,6 +103,25 @@ class Translation
     {
     }
 
+
+    /**
+     * translations
+     *
+     * @return array
+     */
+    public static function getTransList()
+    {
+        $newKeys = [];
+        foreach (self::$keys as $key => $null) {
+            $line = XeLang::getOriginalLine($key);
+            if ($line) {
+                $newKeys[$key] = $line;
+            }
+        }
+
+        return $newKeys;
+    }
+
     /**
      * create instance
      *

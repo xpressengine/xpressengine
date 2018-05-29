@@ -211,10 +211,6 @@ if (function_exists('api_render') === false) {
             [
                 'result' => (string) $result,
                 'data' => $responseData,
-                'XE_ASSET_LOAD' => [
-                    'css' => \Xpressengine\Presenter\Html\Tags\CSSFile::getFileList(),
-                    'js' => \Xpressengine\Presenter\Html\Tags\JSFile::getFileList(),
-                ],
             ]
         );
     }
@@ -493,6 +489,17 @@ if (!function_exists('expose_instance_route')) {
             'methods' => $route->methods(),
             'params' => $parameters
         ));
+    }
+}
+
+if (!function_exists('expose_trans')) {
+    /**
+     * front-end에서 사용할 수 있도록 지정한 Translation 정보를 노출
+     *
+     * @param string    $keys   trans ID
+     */
+    function expose_trans($keys) {
+        XeFrontend::translation($keys);
     }
 }
 

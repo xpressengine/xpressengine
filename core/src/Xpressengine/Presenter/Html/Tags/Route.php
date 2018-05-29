@@ -83,6 +83,16 @@ class Route
     }
 
     /**
+     * route 반환
+     *
+     * @return array
+     */
+    public static function getRoutes ()
+    {
+        return json_dec(json_enc(self::$routes));
+    }
+
+    /**
      * route 출력
      *
      * @return string

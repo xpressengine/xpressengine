@@ -50,7 +50,7 @@ class Kernel extends HttpKernel
             \Illuminate\Session\Middleware\StartSession::class,
             // \Illuminate\Session\Middleware\AuthenticateSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-//            \App\Http\Middleware\VerifyCsrfToken::class,
+            // \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
 
             \App\Http\Middleware\RequiredDF::class,
@@ -58,6 +58,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\LangPreprocessor::class,
             \App\Http\Middleware\Purifying::class,
             \App\Http\Middleware\FreezeSEO::class,
+            \App\Http\Middleware\ExposeAsyncPresenter::class,
         ],
 
         'api' => [
@@ -70,7 +71,7 @@ class Kernel extends HttpKernel
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-//            \App\Http\Middleware\VerifyCsrfToken::class,
+            // \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\ExceptAppendableVerifyCsrfToken::class,
         ]

@@ -138,4 +138,18 @@ class Rule
 
         return $rule;
     }
+
+    /**
+     * rule 목록
+     *
+     * @return array
+     */
+    public static function getRuleList()
+    {
+        $rules = [];
+        foreach(self::$ruleList as $name => $rule) {
+            $rules[$name] = $rule->getRules();
+        }
+        return $rules;
+    }
 }

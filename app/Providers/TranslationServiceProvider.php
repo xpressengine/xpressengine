@@ -106,4 +106,19 @@ class TranslationServiceProvider extends ServiceProvider
     {
         return ['xe.translator'];
     }
+
+    /**
+     * extendBlade
+     *
+     * @return void
+     */
+    protected function extendBlade()
+    {
+        Blade::directive(
+            'expose_trans',
+            function ($expression) {
+                return "<?php expose_trans($expression); ?>";
+            }
+        );
+    }
 }
