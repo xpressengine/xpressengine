@@ -190,12 +190,15 @@ export default (function () {
      */
     requestTransAll: function (langKeys, callback) {
       const result = {}
+      const that = this
 
       return new Promise((resolve, reject) => {
-        XE.get(XE.Router.baseUrl + '/lang/lines/many', {keys: langKeys}).then(response => {
-          $$.forEach(response.data, (key, val) => {
-            result[key] = $$.find(response.data, { 'locale': XE.Lang.locales[0] }).value
-            Translator.add(key, result[key])
+        XE.get(XE.baseURL + '/lang/lines/many', {keys: langKeys}).then(response => {
+          $$.forEach(response.data, (val, key) => {
+            if (val.length) {
+              result[key] = $$.find(val, { 'locale': that.locales[0] }).value
+              Translator.add(key, result[key])
+            }
           })
 
           resolve(result)

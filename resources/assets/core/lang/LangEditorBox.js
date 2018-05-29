@@ -223,7 +223,7 @@ function renderLangEditorBox () {
       XE.ajax({
         type: 'get',
         dataType: 'json',
-        url: window.xeBaseURL + '/lang/lines/many',
+        url: XE.baseURL + '/lang/lines/many',
         data: {
           keys: langKeys
         },
