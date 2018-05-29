@@ -31,6 +31,11 @@ export default class Request extends Singleton {
    */
   setup (options) {
     this.config.set(options)
+    this.options = {
+      headers: {
+        'X-XSRF-TOKEM': options.userToken
+      }
+    }
 
     this.axiosInstance = Axios.create({
       baseURL: this.config.baseURL
