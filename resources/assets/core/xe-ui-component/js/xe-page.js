@@ -225,7 +225,7 @@
 
     XE.get(options.url, defaultOptions.data)
       .then(function success (response) {
-        var exposed = response.data._XE_
+        var exposed = response.data._XE_ || {}
         var assets = exposed.assets || {}
         var css = assets.css || []
         var js = assets.js || []
