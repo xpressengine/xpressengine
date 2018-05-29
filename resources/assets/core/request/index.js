@@ -39,6 +39,12 @@ export default class Request extends Singleton {
     this.axiosInstance.interceptors.response.use(response => {
       const res = new ResponseEntity(response)
       this.$emit('sucess', res)
+
+      if (res.exposed) {
+        this.$emit('exposed', res.exposed)
+        res.removeExposed()
+      }
+
       return res
     }, error => {
       const errorObj = new RequestError(error, error.response.request, error.response.data, error.response.headers)

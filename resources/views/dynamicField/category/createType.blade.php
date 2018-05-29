@@ -1,12 +1,7 @@
 @if ($config == null)
-	<script>
-		var storeCategoryInfo = {
-			url: "{{route('fieldType.storeCategory')}}",
-			text: "{{xe_trans('xe::categoryManagement')}}"
-		};
-
-		DynamicLoadManager.jsLoad('/assets/core/common/js/storeCategory.js');
-	</script>
+    @expose_route('fieldType.storeCategory')
+    @expose_trans('xe::categoryManagement')
+    {{ XeFrontend::js('/assets/core/common/js/storeCategory.js')->loadAsync() }}
 @endif
 
 <div class="form-group __xe_df_category">

@@ -1,6 +1,11 @@
-import Utils from 'xe-common/utils' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
+import { eventify, default as Utils } from 'xe-common/utils' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 import $ from 'jquery'
 import XE from 'xe-common/xe'
+
+const assets = {
+  css: new Set(),
+  js: new Set()
+}
 
 /**
  * @namespace DynamicLoadManager
@@ -8,17 +13,16 @@ import XE from 'xe-common/xe'
 var DynamicLoadManager = (function (exports) {
   'use strict'
 
-  var _assets = {
-    js: {}, css: {}
-  }
-
-  _assets.js[window.xeBaseURL + '/assets/vendor.js'] = ''
-  _assets.js[window.xeBaseURL + '/assets/common.js'] = ''
-  _assets.js[window.xeBaseURL + '/assets/core/common/js/xe.bundle.js'] = ''
-
   return {
     init: function () {
+      eventify(this)
+
       return this
+    },
+    boot: function () {
+      assets.js.add(XE.baseURL + '/assets/vendor.js')
+      assets.js.add(XE.baseURL + '/assets/common.js')
+      assets.js.add(XE.baseURL + '/assets/core/common/js/xe.bundle.js')
     },
     /**
      * 여러개의 js 파일을 동적으로 로드합니다.
@@ -38,12 +42,11 @@ var DynamicLoadManager = (function (exports) {
       for (var i = 0, max = arrjs.length; i < max; i += 1) {
         var src = Utils.asset(arrjs[i])
 
-        if (!_assets.js.hasOwnProperty(src)) {
-          _assets.js[src] = ''
+        if (!assets.js.has(src)) {
+          assets.js.add(src)
 
           XE.ajax({
             url: src,
-            async: false,
             dataType: 'script',
             success: function () {
               count++
@@ -82,7 +85,7 @@ var DynamicLoadManager = (function (exports) {
     jsLoad: function (url, load, error) {
       var src = Utils.asset(url)
 
-      if (!_assets.js.hasOwnProperty(src) && !$('script[src*="' + src + '"]').length) {
+      if (!assets.js.has(src) && !$('script[src*="' + src + '"]').length) {
         var el = document.createElement('script')
 
         el.src = src
@@ -98,7 +101,7 @@ var DynamicLoadManager = (function (exports) {
 
         document.head.appendChild(el)
 
-        _assets.js[src] = ''
+        assets.js.add(src)
       } else {
         if (load) {
           load()
@@ -116,7 +119,7 @@ var DynamicLoadManager = (function (exports) {
     cssLoad: function (url, load, error) {
       var src = Utils.asset(url)
 
-      if (!_assets.css.hasOwnProperty(src) && !$('link[href*="' + src + '"]').length) {
+      if (!assets.css.has(src) && !$('link[href*="' + src + '"]').length) {
         var $css = $('<link>', { rel: 'stylesheet', type: 'text/css', href: src })
 
         if (load) {
@@ -129,7 +132,7 @@ var DynamicLoadManager = (function (exports) {
 
         $('head').append($css)
 
-        _assets.css[src] = ''
+        assets.css.add(src)
       } else {
         if (load) {
           load()

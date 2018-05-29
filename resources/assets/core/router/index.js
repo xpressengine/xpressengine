@@ -18,6 +18,10 @@ export default class Router extends Singleton {
       this.setup(options.baseURL, options.fixedPrefix, options.settingsPrefix)
       if (options.routes) this.addRoutes(options.routes)
     })
+
+    requestInstance.$on('exposed', (eventName, exposed) => {
+      if (exposed.routes) this.addRoutes(exposed.routes)
+    })
   }
 
   setup (base, fixed = 'plugin', settings = '') {

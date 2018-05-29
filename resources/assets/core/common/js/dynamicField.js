@@ -334,22 +334,18 @@ var DynamicField = function () {
    * @param {jQuery} $form
    **/
   this.getAdditionalConfigure = function ($form) {
-    var params = $form.serialize()
-    var that = this
-    params = params + '&_xe_expose=true'
-
-    XE.ajax({
-      context: this.$container.$modal.$body[0],
-      type: 'get',
-      dataType: 'json',
-      data: params,
-      url: XE.route('manage.dynamicField.getAdditionalConfigure'),
-      success: function (response) {
-        that.setValidateRule($form, response.rules)
-
-        $form.find('.__xe_additional_configure').html(response.result)
-      }
+    const params = {}
+    $form.serializeArray().forEach((item) => {
+      params[item.name] = item.value
     })
+
+    params['_xe_expose'] = 'true'
+    console.debug(params)
+
+    XE.get('manage.dynamicField.getAdditionalConfigure', params)
+      .then(response => {
+        $form.find('.__xe_additional_configure').html(response.data.result)
+      })
   }
 
   /**

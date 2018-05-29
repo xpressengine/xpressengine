@@ -167,9 +167,9 @@ export default (function () {
       let message = ''
 
       return new Promise((resolve, reject) => {
-        XE.get(XE.Router.baseUrl + '/lang/lines/' + id).then((response) => {
+        XE.get(XE.baseUrl + '/lang/lines/' + id).then((response) => {
           if (Array.isArray(response.data)) {
-            message = $$.find(response.data, { 'locale': XE.Lang.locales[0] }).value
+            message = $$.find(response.data, { 'locale': this.locales[0] }).value
             Translator.add(id, message)
           }
 

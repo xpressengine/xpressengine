@@ -25,4 +25,12 @@ export default class ResponseEntity {
   get method () {
     return this[symbolRawResponse].config.method
   }
+
+  get exposed () {
+    return this[symbolRawResponse].data._XE_ || false
+  }
+
+  removeExposed () {
+    delete this[symbolRawResponse].data._XE_
+  }
 }

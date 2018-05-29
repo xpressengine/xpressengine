@@ -29,8 +29,8 @@ class XE {
 
     // internal libraries
     this.Utils = Utils
-    this.Validator = Validator
     this.Lang = Lang
+    this.Validator = Validator
     this.Router = Router.instance
     this.Request = Request.instance
     this.Progress = Progress
@@ -45,6 +45,24 @@ class XE {
   boot () {
     this.Router.boot(this)
     this.Request.boot(this)
+    this.DynamicLoadManager.boot(this)
+
+    this.Request.$on('exposed', (eventName, exposed) => {
+      this.DynamicLoadManager.jsLoadMultiple(exposed.assets.js)
+      exposed.assets.css.forEach((src) => {
+        this.DynamicLoadManager.cssLoad(src)
+      })
+
+      this.Router.addRoutes(exposed.routes)
+
+      this.Lang.set(exposed.translations)
+
+      Object.entries(exposed.rules).forEach((rule) => {
+        if (rule[1]) {
+          this.Validator.setRules(rule[0], rule[1])
+        }
+      })
+    })
 
     $(() => {
       $('body').on('click', 'a[target]', (e) => {

@@ -128,6 +128,14 @@
         group: "{{$group}}",
         databaseName: "{{$databaseName}}"
     };
+
+    // 누적된 룰을 제거하고, 새로운 룰만 추가
+    XE.Validator.$on('setRules', (eventName, ruleName, rules, additional, origin, reassign) => {
+        if (ruleName === 'dynamicFieldSection') {
+            reassign($.extend({}, origin, additional))
+        }
+    })
+
     $(function () {
         XE.Validator.put('df_id', function ($dst, parameters) {
             var value = $dst.val();
