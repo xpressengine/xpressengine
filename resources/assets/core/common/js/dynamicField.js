@@ -336,6 +336,7 @@ var DynamicField = function () {
   this.getAdditionalConfigure = function ($form) {
     var params = $form.serialize()
     var that = this
+    params = params + '&_xe_expose=true'
 
     XE.ajax({
       context: this.$container.$modal.$body[0],

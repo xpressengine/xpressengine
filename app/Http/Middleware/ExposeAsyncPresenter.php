@@ -21,7 +21,7 @@ class ExposeAsyncPresenter
         /** @var Response $response */
         $response = $next($request);
 
-        if($request->wantsJson()) {
+        if($request->wantsJson() && $request->input('_xe_expose') === 'true') {
             $content = json_decode($response->getContent(), true);
 
             $assetCss = \Xpressengine\Presenter\Html\Tags\CSSFile::getFileList();
