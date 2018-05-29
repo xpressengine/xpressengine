@@ -40,7 +40,7 @@ class ExposeAsyncPresenter
                     ],
                     "routes" => \Xpressengine\Presenter\Html\Tags\Route::getRoutes(),
                     "rules" => \Xpressengine\Presenter\Html\Tags\Rule::getRuleList(),
-                    "translations" => \Xpressengine\Presenter\Html\Tags\Translation::getTrans(),
+                    "translations" => \Xpressengine\Presenter\Html\Tags\Translation::getTransList(),
                 ]
             ]);
             $response = response()->json($data);
