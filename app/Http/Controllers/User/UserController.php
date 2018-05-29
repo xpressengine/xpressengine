@@ -535,23 +535,9 @@ class UserController extends Controller
         $fieldType = $dynamicField->get('user', $field);
 
         $user = request()->user();
-
-        /** @var SkinHandler $skinHandler */
-        $skinHandler = app('xe.skin');
-        $skin = $skinHandler->getAssigned('user/settings');
         $id = $field;
-        $view = $skin->setView('show-field')->setData(compact('user', 'fieldType', 'id'))->render();
 
-        return XePresenter::makeApi(
-            [
-                'result' => (string) $view,
-                'data' => compact('id'),
-                'XE_ASSET_LOAD' => [
-                    'css' => \Xpressengine\Presenter\Html\Tags\CSSFile::getFileList(),
-                    'js' => \Xpressengine\Presenter\Html\Tags\JSFile::getFileList(),
-                ],
-            ]
-        );
+        return api_render('show-field', compact('user', 'fieldType', 'id'), compact('id'));
     }
 
     public function editAdditionField($field)
@@ -560,23 +546,9 @@ class UserController extends Controller
         $fieldType = $dynamicField->get('user', $field);
 
         $user = request()->user();
-
-        /** @var SkinHandler $skinHandler */
-        $skinHandler = app('xe.skin');
-        $skin = $skinHandler->getAssigned('user/settings');
         $id = $field;
-        $view = $skin->setView('edit-field')->setData(compact('user', 'fieldType', 'id'))->render();
 
-        return XePresenter::makeApi(
-            [
-                'result' => (string) $view,
-                'data' => compact('id'),
-                'XE_ASSET_LOAD' => [
-                    'css' => \Xpressengine\Presenter\Html\Tags\CSSFile::getFileList('head.append'),
-                    'js' => \Xpressengine\Presenter\Html\Tags\JSFile::getFileList('body.append'),
-                ],
-            ]
-        );
+        return api_render('edit-field', compact('user', 'fieldType', 'id'), ['id' => $id]);
     }
 
     public function updateAdditionField(Request $request, $field)

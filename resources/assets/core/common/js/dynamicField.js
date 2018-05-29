@@ -346,7 +346,7 @@ var DynamicField = function () {
       success: function (response) {
         that.setValidateRule($form, response.rules)
 
-        $form.find('.__xe_additional_configure').html(response.configure)
+        $form.find('.__xe_additional_configure').html(response.result)
       }
     })
   }
