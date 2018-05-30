@@ -12,7 +12,7 @@ import Lang from 'xe/common/js/lang'
 import Progress from 'xe/common/js/progress'
 import Request from 'xe/request'
 import Router from 'xe/router'
-import * as Utils from 'xe/common/js/utils'
+import * as $$ from 'xe/utils'
 import Translator from 'xe/common/js/translator'
 import Validator from 'xe/common/js/validator'
 
@@ -24,11 +24,11 @@ import Validator from 'xe/common/js/validator'
  */
 class XE {
   constructor () {
-    Utils.eventify(this)
+    $$.eventify(this)
     this.options = {}
 
     // internal libraries
-    this.Utils = Utils
+    this.Utils = $$
     this.Lang = Lang
     this.Validator = Validator
     this.Router = Router.instance
@@ -99,6 +99,10 @@ class XE {
    * </pre>
    */
   setup (options) {
+    options.baseURL = $$.trimEnd(options.baseURL, '/')
+
+    $$.setBaseURL(options.baseURL)
+
     this.boot()
     this.configure(options)
 

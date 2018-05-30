@@ -1,7 +1,7 @@
 import griper from 'xe-common/griper' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 import moment from 'moment'
 import Translator from 'xe-common/translator' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
-import { eventify, default as Utils } from 'xe/utils' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
+import * as $$ from 'xe/utils'
 import Lang from 'xe-common/lang' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 import $ from 'jquery'
 
@@ -9,7 +9,7 @@ const originalRules = {}
 
 class Validator {
   constructor () {
-    eventify(this)
+    $$.eventify(this)
     let that = this
 
     this.rules = {}
@@ -153,7 +153,7 @@ class Validator {
       },
 
       date: function ($dst, parameters) {
-        if (!Utils.strtotime(that.getValue($dst))) {
+        if (!$$.strtotime(that.getValue($dst))) {
           that.error($dst, Lang.trans('validation.date', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
@@ -182,7 +182,7 @@ class Validator {
         if (pattern.test(value) || $dst.val().toString().length !== size) {
           that.error($dst, Lang.trans('validation.digits', {
             attribute: $dst.data('valid-name') || $dst.attr('name'),
-            digits: Utils.addCommas(size)
+            digits: $$.addCommas(size)
           }))
           return false
         }
@@ -198,8 +198,8 @@ class Validator {
         if (range[0] > size && size < range[1]) {
           that.error($dst, Lang.trans('validation.digits_between', {
             attribute: $dst.data('valid-name') || $dst.attr('name'),
-            min: Utils.addCommas(range[0]),
-            max: Utils.addCommas(range[1])
+            min: $$.addCommas(range[0]),
+            max: $$.addCommas(range[1])
           }))
           return false
         }
@@ -299,7 +299,7 @@ class Validator {
             if (parseInt(value) <= parseInt(parameters)) {
               that.error($dst, Lang.trans('validation.min.numeric', {
                 attribute: $dst.data('valid-name') || $dst.attr('name'),
-                min: Utils.addCommas(parameters)
+                min: $$.addCommas(parameters)
               }))
 
               return false
@@ -311,7 +311,7 @@ class Validator {
             if ($dst[0].files[0] && ($dst[0].files[0].size / 1024) <= parseInt(parameters)) {
               that.error($dst, Lang.trans('validation.min.file', {
                 attribute: $dst.data('valid-name') || $dst.attr('name'),
-                min: Utils.addCommas(parameters)
+                min: $$.addCommas(parameters)
               }))
 
               return false
@@ -323,7 +323,7 @@ class Validator {
             if (value.length <= parseInt(parameters)) {
               that.error($dst, Lang.trans('validation.min.string', {
                 attribute: $dst.data('valid-name') || $dst.attr('name'),
-                min: Utils.addCommas(parameters)
+                min: $$.addCommas(parameters)
               }))
 
               return false
@@ -333,7 +333,7 @@ class Validator {
 
           default:
             if (value.length <= parseInt(parameters)) {
-              that.error($dst, Lang.transChoice('xe::validatorMin', parameters, { charCount: Utils.addCommas(parameters) }))
+              that.error($dst, Lang.transChoice('xe::validatorMin', parameters, { charCount: $$.addCommas(parameters) }))
               return false
             }
         }
@@ -350,7 +350,7 @@ class Validator {
             if (parseInt(value) >= parseInt(parameters)) {
               that.error($dst, Lang.trans('validation.max.numeric', {
                 attribute: $dst.data('valid-name') || $dst.attr('name'),
-                max: Utils.addCommas(parameters)
+                max: $$.addCommas(parameters)
               }))
 
               return false
@@ -362,7 +362,7 @@ class Validator {
             if ($dst[0].files[0] && ($dst[0].files[0].size / 1024) >= parseInt(parameters)) {
               that.error($dst, Lang.trans('validation.max.file', {
                 attribute: $dst.data('valid-name') || $dst.attr('name'),
-                max: Utils.addCommas(parameters)
+                max: $$.addCommas(parameters)
               }))
 
               return false
@@ -374,7 +374,7 @@ class Validator {
             if (value.length >= parseInt(parameters)) {
               that.error($dst, Lang.trans('validation.max.string', {
                 attribute: $dst.data('valid-name') || $dst.attr('name'),
-                max: Utils.addCommas(parameters)
+                max: $$.addCommas(parameters)
               }))
 
               return false
@@ -432,8 +432,8 @@ class Validator {
             if (!$.isNumeric(value) || parseInt(value) < parseInt(range[0]) || parseInt(value) > parseInt(range[1])) {
               that.error($dst, Lang.trans('validation.between.numeric', {
                 attribute: $dst.data('valid-name') || $dst.attr('name'),
-                min: Utils.addCommas(range[0]),
-                max: Utils.addCommas(range[1])
+                min: $$.addCommas(range[0]),
+                max: $$.addCommas(range[1])
               }))
 
               return false
@@ -445,8 +445,8 @@ class Validator {
             if ($dst[0].files[0] && ((($dst[0].files[0].size / 1024) < range[0]) || (($dst[0].files[0].size / 1024) > range[1]))) {
               that.error($dst, Lang.trans('validation.between.file', {
                 attribute: $dst.data('valid-name') || $dst.attr('name'),
-                min: Utils.addCommas(range[0]),
-                max: Utils.addCommas(range[1])
+                min: $$.addCommas(range[0]),
+                max: $$.addCommas(range[1])
               }))
 
               return false
@@ -458,8 +458,8 @@ class Validator {
             if (value.length < range[0] || value.length > range[1]) {
               that.error($dst, Lang.trans('validation.between.string', {
                 attribute: $dst.data('valid-name') || $dst.attr('name'),
-                min: Utils.addCommas(range[0]),
-                max: Utils.addCommas(range[1])
+                min: $$.addCommas(range[0]),
+                max: $$.addCommas(range[1])
               }))
 
               return false

@@ -1,4 +1,4 @@
-import { eventify, default as Utils } from 'xe-common/utils' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
+import * as $$ from 'xe/utils'
 import $ from 'jquery'
 import XE from 'xe-common/xe'
 
@@ -15,7 +15,7 @@ var DynamicLoadManager = (function (exports) {
 
   return {
     init: function () {
-      eventify(this)
+      $$.eventify(this)
 
       return this
     },
@@ -40,7 +40,7 @@ var DynamicLoadManager = (function (exports) {
       callbackObj = callbackObj || {}
 
       for (var i = 0, max = arrjs.length; i < max; i += 1) {
-        var src = Utils.asset(arrjs[i])
+        var src = $$.asset(arrjs[i])
 
         if (!assets.js.has(src)) {
           assets.js.add(src)
@@ -83,7 +83,7 @@ var DynamicLoadManager = (function (exports) {
      * @param {function} error
      * */
     jsLoad: function (url, load, error) {
-      var src = Utils.asset(url)
+      var src = $$.asset(url)
 
       if (!assets.js.has(src) && !$('script[src*="' + src + '"]').length) {
         var el = document.createElement('script')
@@ -117,10 +117,10 @@ var DynamicLoadManager = (function (exports) {
      * @param {function} error
      * */
     cssLoad: function (url, load, error) {
-      var src = Utils.asset(url)
+      const src = $$.asset(url)
 
       if (!assets.css.has(src) && !$('link[href*="' + src + '"]').length) {
-        var $css = $('<link>', { rel: 'stylesheet', type: 'text/css', href: src })
+        const $css = $('<link>', { rel: 'stylesheet', type: 'text/css', href: src })
 
         if (load) {
           $css.on('load', load)
