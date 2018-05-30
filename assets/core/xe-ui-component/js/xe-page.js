@@ -162,7 +162,7 @@
   /**
    * @private
    * @description validtion
-   **/
+   */
   var _validation = (function () {
     return {
       isValidPage: function (options) {
@@ -206,7 +206,7 @@
    *     - type       : {string} method
    * </pre>
    * @param {function} callback
-   **/
+   */
   var _page = function (options, callback) {
     var $target = options.target
     var addType = options.hasOwnProperty('addType') ? options.addType : ''
@@ -219,18 +219,20 @@
       url: options.url,
       type: options.type || 'get',
       dataType: 'json',
-      data: options.data || {}
+      data: options.data || {},
+      _xe_expose: 'true'
     }
 
-    var pageOptions = $.extend(defaultOptions, {
-      success: function (data) {
-        var assets = data.XE_ASSET_LOAD || {}
+    XE.get(options.url, defaultOptions.data)
+      .then(function success (response) {
+        var exposed = response.data._XE_ || {}
+        var assets = exposed.assets || {}
         var css = assets.css || []
         var js = assets.js || []
-        var html = data.result
+        var html = response.data.result || ''
         var cssLen = css.length
         var jsLen = js.length
-        var data = data.data || {}
+        var data = response.data.data || {}
 
         var next = function () {
           switch (addType) {
@@ -277,10 +279,7 @@
         if ((cssLen + jsLen) === 0) {
           next()
         }
-      }
-    })
-
-    XE.ajax(pageOptions)
+      })
   }
 
   /**
@@ -302,7 +301,7 @@
    *     2)html string append
    *     3)callback 실행
    * </pre>
-   **/
+   */
   XE.page = function (url, target, options, callback) {
     var defaultOptions = {
       type: 'get'
@@ -337,7 +336,7 @@
    *     3)callback 실행
    *     4)modal show
    * </pre>
-   **/
+   */
   XE.pageModal = function (url, options, callback) {
     var defaultOptions = {
       type: 'get'
@@ -390,7 +389,7 @@
    *     3)callback 실행
    *     4)modal show
    * </pre>
-   **/
+   */
   XE.pageToggleMenu = function (url, $this, options, callback) {
     var $container = $this.parent()
 

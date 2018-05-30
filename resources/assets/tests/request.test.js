@@ -41,7 +41,8 @@ describe('Request', function () {
       moxios.wait(function () {
         let mox = moxios.requests.mostRecent()
         mox.respondWith({
-          status: 200
+          status: 200,
+          response: {}
         }).then(function () {
           it('onFulfilled 호출되고 ResponseEntity instance를 반환해야 함', function () {
             expect(onFulfilled.called).to.be.true
@@ -60,7 +61,8 @@ describe('Request', function () {
       moxios.wait(function () {
         let mox = moxios.requests.mostRecent()
         mox.respondWith({
-          status: 404
+          status: 404,
+          response: {}
         }).then(function () {
           it('onFulfilled는 호출하지 않음', function () {
             expect(onFulfilled.called).to.be.false
@@ -88,22 +90,23 @@ describe('Request', function () {
       routerInstance.addRoutes({'module/board@board.slug':
         {
           'uri': '{url}/{slug}',
-          'methods': ['GET', 'HEAD'],
-          'params': {'url': 'freeboard', 'instanceId': '7975edc8'}
+          'methods': [],
+          'params': {'url': 'freeboard'}
         }
       })
 
       moxios.stubRequest('http://localhost/freeboard/slug-string', {
-        status: 200
+        status: 200,
+        response: {}
       })
 
-      requestInstance.get(['module/board@board.slug', {slug: 'slug-string'}]).then(onFulfilled, onRejected)
+      requestInstance.get(['module/board@board.slug', {slug: 'slug-string'}]).then(onFulfilled)
 
       moxios.wait(function () {
         expect(onFulfilled.called).to.be.true
-        expect(onRejected.called).to.be.false
         done()
       })
+
     })
   })
 })

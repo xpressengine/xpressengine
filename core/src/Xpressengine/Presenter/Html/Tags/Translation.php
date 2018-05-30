@@ -18,11 +18,11 @@ use XeLang;
 
 /**
  * Translation
- * > Translation 은 다른 tag 들과 달리 instance 가 필요 없음
+ * > Translation은 instance가 없음
  *
  * ## 사용법
  *
- * ### front 에 다국어 설정
+ * ### front에 다국어 설정
  * * XeFrontend::translation([]);
  * * XeFrontend::output('translation');
  *
@@ -52,22 +52,18 @@ class Translation
      */
     public static function output()
     {
-        $newKeys = [];
+        $locales = XeLang::getLocales();
+        $terms = [];
+
         foreach (self::$keys as $key => $null) {
             $line = XeLang::getOriginalLine($key);
             if ($line) {
-                $newKeys[$key] = $line;
+                $terms[$key] = $line;
             }
         }
-        self::$keys = $newKeys;
+        self::$keys = $terms;
 
-        $output = sprintf(
-            'XE.Lang.setLocales(%s);'.'XE.Lang.set(%s);',
-            json_enc(XeLang::getLocales()),
-            json_enc(self::$keys)
-        );
-
-        return $output;
+        return json_enc(compact('locales', 'terms'));
     }
 
     /**

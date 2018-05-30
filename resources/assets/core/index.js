@@ -5,16 +5,16 @@ import moment from 'moment'
 import URI from 'urijs'
 
 // internal libraries
-import Component from 'xe/common/js/component'
-import DynamicLoadManager from 'xe/common/js/dynamicLoadManager'
+import * as $$ from 'xe/utils'
+import Component from 'xe/component'
+import DynamicLoadManager from 'xe/dynamic-load-manager'
 import griper from 'xe/common/js/griper'
-import Lang from 'xe/common/js/lang'
+import Lang from 'xe/lang'
 import Progress from 'xe/common/js/progress'
 import Request from 'xe/request'
 import Router from 'xe/router'
-import * as $$ from 'xe/utils'
 import Translator from 'xe/common/js/translator'
-import Validator from 'xe/common/js/validator'
+import Validator from 'xe/validator'
 
 /**
  * @class XE
@@ -29,13 +29,13 @@ class XE {
 
     // internal libraries
     this.Utils = $$
-    this.Lang = Lang
-    this.Validator = Validator
-    this.Router = Router.instance
-    this.Request = Request.instance
+    this.Component = Component.instance
+    this.DynamicLoadManager = DynamicLoadManager.instance
+    this.Lang = Lang.instance
     this.Progress = Progress
-    this.Component = Component
-    this.DynamicLoadManager = DynamicLoadManager
+    this.Request = Request.instance
+    this.Router = Router.instance
+    this.Validator = Validator.instance
 
     // external libraries
     this.moment = moment // @DEPRECATED
@@ -45,7 +45,10 @@ class XE {
   boot () {
     this.Router.boot(this)
     this.Request.boot(this)
+    this.Lang.boot(this)
     this.DynamicLoadManager.boot(this)
+    this.Validator.boot(this)
+    this.Component.boot(this)
 
     this.Request.$on('exposed', (eventName, exposed) => {
       this.DynamicLoadManager.jsLoadMultiple(exposed.assets.js)
@@ -123,7 +126,7 @@ class XE {
    * @DEPRECATED
    */
   cssLoad (url, load, error) {
-    DynamicLoadManager.cssLoad(url, load, error)
+    this.DynamicLoadManager.cssLoad(url, load, error)
   }
 
   /**
@@ -132,7 +135,7 @@ class XE {
    * @DEPRECATED
    */
   jsLoad (url, load, error) {
-    DynamicLoadManager.jsLoad(url)
+    this.DynamicLoadManager.jsLoad(url)
   }
 
   /**
@@ -142,17 +145,17 @@ class XE {
    */
   ajax (url, options) {
     if (typeof url === 'object') {
-      options = $.extend({}, this.Request.config, {headers: {'X-CSRF-TOKEN':this.Request.config.userToken}}, url)
+      options = $.extend({}, this.Request.config, {headers: {'X-CSRF-TOKEN': this.Request.config.userToken}}, url)
       url = undefined
     } else {
-      options = $.extend({}, options, this.Request.config, {headers: {'X-CSRF-TOKEN':this.Request.config.userToken}}, { url: url })
+      options = $.extend({}, options, this.Request.config, {headers: {'X-CSRF-TOKEN': this.Request.config.userToken}}, { url: url })
       url = undefined
     }
 
     return $.ajax(url, options)
   }
 
-    /**
+  /**
    * @alias Request.get
    */
   get (...args) {

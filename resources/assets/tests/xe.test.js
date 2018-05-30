@@ -1,4 +1,4 @@
-import {assert, should, expect} from 'chai'
+import {assert, expect} from 'chai'
 import XE from 'xe'
 
 describe('XE', function () {

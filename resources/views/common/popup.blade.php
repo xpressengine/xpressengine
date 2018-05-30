@@ -37,11 +37,9 @@
             @if (in_array(Auth::user()->getRating(), [\Xpressengine\User\Rating::SUPER, \Xpressengine\User\Rating::MANAGER]))
                 settingsPrefix: '{{ app('config')['xe.routing.settingsPrefix'] }}',
             @endif
-            routes: {!! XeFrontend::output('route') !!}
+            routes: {!! XeFrontend::output('route') !!},
+            translation: {!! XeFrontend::output('translation') !!}
         });
-
-        <!-- Translation -->
-        {!! XeFrontend::output('translation') !!}
     </script>
 
     <!-- JS at head.append -->

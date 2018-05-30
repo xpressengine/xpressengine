@@ -1,4 +1,4 @@
-class EventEmitter {
+export default class EventEmitter {
   constructor () {
     this.eventMaps = {}
     this.target = null
@@ -108,5 +108,3 @@ class EventEmitter {
     this.eventMaps[eventName] = new Map()
   }
 }
-
-export default EventEmitter
