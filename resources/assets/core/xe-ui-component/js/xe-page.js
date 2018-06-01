@@ -219,9 +219,10 @@
       url: options.url,
       type: options.type || 'get',
       dataType: 'json',
-      data: options.data || {},
-      _xe_expose: 'true'
+      data: options.data || {}
     }
+
+    defaultOptions.data._xe_expose = 'true'
 
     XE.get(options.url, defaultOptions.data)
       .then(function success (response) {
