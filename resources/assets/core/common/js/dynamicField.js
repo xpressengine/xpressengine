@@ -4,7 +4,7 @@ import XE from 'xe'
 
 /**
  * @class
- **/
+ */
 var DynamicField = function () {
   this.group = ''
   this.databaseName = ''
@@ -15,7 +15,7 @@ var DynamicField = function () {
    * DynamicField를 초기화 한다.
    * @param {string} group
    * @param {string} databaseName
-   **/
+   */
   this.init = function (group, databaseName) {
     this.group = group
     this.databaseName = databaseName
@@ -34,7 +34,7 @@ var DynamicField = function () {
 
   /**
    * 이벤트 핸들러를 등록한다.
-   **/
+   */
   this.attachEvent = function () {
     var that = this
 
@@ -94,7 +94,7 @@ var DynamicField = function () {
    * container를 리턴한다.
    * @param {jQuery} form
    * @return {jQuery}
-   **/
+   */
   this.getFormContainer = function (form) {
     return form.closest('.__xe_form_container')
   }
@@ -102,7 +102,7 @@ var DynamicField = function () {
   /**
    * modal을 close한다.
    * @param {jQuery} target
-   **/
+   */
   this.close = function (target) {
     var form = $(target).closest('form')
 
@@ -113,7 +113,7 @@ var DynamicField = function () {
 
   /**
    * group 리스트를 요청한다.
-   **/
+   */
   this.getList = function () {
     var params = { group: this.group }
     var that = this
@@ -138,7 +138,7 @@ var DynamicField = function () {
   /**
    * form을 복사하여 리턴한다.
    * @return {jQuery} $form
-   **/
+   */
   this.formClone = function () {
     var $form = this.$container.$form.clone().removeClass('__xe_add_form')
     $form.show()
@@ -148,7 +148,7 @@ var DynamicField = function () {
   /**
    * 리스트 테이블에 row를 추가한다.
    * @param {object} data
-   **/
+   */
   this.addrow = function (data) {
     var row = this.$container.find('.__xe_row').clone()
     row.removeClass('__xe_row')
@@ -172,7 +172,7 @@ var DynamicField = function () {
   /**
    * row를 삭제한다.
    * @param {string} id
-   **/
+   */
   this.removeRow = function (id) {
     this.$container.find('.__xe_tbody').find('.__xe_row_' + id).remove()
   }
@@ -180,7 +180,7 @@ var DynamicField = function () {
   /**
    * row를 수정한다.
    * @param {jQuery} o
-   **/
+   */
   this.edit = function (o) {
     var tr = $(o).closest('tr')
     var id = tr.data('id')
@@ -231,7 +231,7 @@ var DynamicField = function () {
   /**
    * 파라미터 boolean값이 true일 경우 true, false일 경우 false를 리턴한다
    * @param {string|boolean} data
-   **/
+   */
   this.checkBox = function (data) {
     // @FIXME
     var checked = false
@@ -251,7 +251,7 @@ var DynamicField = function () {
   /**
    * row 삭제 요청을 한다.
    * @param {jQuery} target
-   **/
+   */
   this.destroy = function (target) {
     if (confirm('이동작은 되돌릴 수 없습니다. 계속하시겠습니까?') === false) { // @FIXME
       return
@@ -283,7 +283,7 @@ var DynamicField = function () {
   /**
    * 스킨 옵션을 요청한다.
    * @param {jQuery} form
-   **/
+   */
   this.getSkinOption = function (form) {
     var params = form.serialize()
     var that = this
@@ -310,7 +310,7 @@ var DynamicField = function () {
    * @param {jQuery} form
    * @param {object} skins
    * @param {string} selected
-   **/
+   */
   this.skinOptions = function (form, skins, selected) {
     var select = form.find('[name="skinId"]')
     select.find('option').remove()
@@ -332,7 +332,7 @@ var DynamicField = function () {
   /**
    * 필드마다 추가설정을 로드한다.
    * @param {jQuery} $form
-   **/
+   */
   this.getAdditionalConfigure = function ($form) {
     const params = {}
     $form.serializeArray().forEach((item) => {
@@ -340,7 +340,6 @@ var DynamicField = function () {
     })
 
     params['_xe_expose'] = 'true'
-    console.debug(params)
 
     XE.get('manage.dynamicField.getAdditionalConfigure', params)
       .then(response => {
@@ -351,7 +350,7 @@ var DynamicField = function () {
   /**
    * 확장필드를 등록한다.
    * @param {jQuery} target
-   **/
+   */
   this.store = function (target) {
     var $form = this.$container.$modal.$body.find('form')
     var that = this
@@ -381,7 +380,7 @@ var DynamicField = function () {
    * 폼 요소에 validation rule을 등록한다.
    * @param {jQuery} $form
    * @param {object} addRules
-   **/
+   */
   this.setValidateRule = function ($form, addRules) {
     var ruleName = Validator.getRuleName($form)
     if (addRules != undefined && ruleName != undefined) {
@@ -393,7 +392,7 @@ var DynamicField = function () {
   /**
    * 폼 요소에 validation을 체크한다.
    * @param {jQuery} $form
-   **/
+   */
   this.validateCheck = function ($form) {
     Validator.check($form)
   }
