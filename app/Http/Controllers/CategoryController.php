@@ -100,6 +100,8 @@ class CategoryController extends Controller
             throw $e;
         }
         DB::commit();
+
+        return XePresenter::makeApi([]);
     }
 
     public function moveItem(Request $request, $id)
