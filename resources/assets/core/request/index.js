@@ -33,7 +33,7 @@ export default class Request extends Singleton {
     this.config.set(options)
     this.options = {
       headers: {
-        'X-XSRF-TOKEM': options.userToken
+        'X-XSRF-TOKEN': options.userToken
       }
     }
 
