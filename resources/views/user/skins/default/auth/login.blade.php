@@ -12,7 +12,7 @@
             </div>
             <div class="auth-group">
                 <label for="pwd" class="xe-sr-only">{{xe_trans('xe::password')}}</label>
-                <input name="password" type="password" id="pwd" class="xe-form-control" placeholder="{{xe_trans('xe::password')}}">
+                <input name="password" type="password" id="pwd" class="xe-form-control" placeholder="{{xe_trans('xe::password')}}" autocomplete="off">
                 <p><a href="{{ route('auth.reset') }}" class="xe-pull-right">{{xe_trans('xe::forgotPassword')}}</a></p>
             </div>
             <label class="xe-label xe-input-group">
