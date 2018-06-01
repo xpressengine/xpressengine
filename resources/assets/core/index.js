@@ -70,8 +70,8 @@ class XE {
     $(() => {
       $('body').on('click', 'a[target]', (e) => {
         const $this = $(e.target)
-        const href = $this.attr('href').trim()
-        const target = $this.attr('target')
+        const href = String($this.attr('href')).trim()
+        const target = String($this.attr('target'))
 
         if (!href) return
         if (target === '_top' || target === '_self' || target === '_parent') return
