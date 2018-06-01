@@ -102,7 +102,7 @@
               break
 
             case 'data':
-              return $(widgetForm).serializeArray()
+              return $(widgetForm).serializeObject()
               break
           }
 
