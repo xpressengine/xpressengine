@@ -532,6 +532,7 @@ var Category = (function (XE, $, Tree) {
       XE.ajax({
         url: _config.remove,
         type: 'post',
+        dataType: 'json',
         data: { id: item.id },
         success: function () {
           var $parent = $('.__category_body')
@@ -556,6 +557,7 @@ var Category = (function (XE, $, Tree) {
       XE.ajax({
         url: _config.removeAll,
         type: 'post',
+        dataType: 'json',
         data: { id: item.id },
         success: function () {
           var $parent = $('.__category_body')
