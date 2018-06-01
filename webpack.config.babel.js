@@ -142,7 +142,10 @@ const config = [
           to: path.resolve(__dirname, 'assets/core'),
           ignore: [
             '**/*.scss',
+            'component.js',
             'index.js',
+            'dynamic-load-manager.js',
+            'lang.js',
             'singleton.js',
             'common/js/component.js',
             'common/js/draft.js',

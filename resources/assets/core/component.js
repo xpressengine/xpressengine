@@ -24,7 +24,6 @@ export default class Component extends Singleton {
       XE.DynamicLoadManager.cssLoad('/assets/core/xe-ui-component/xe-ui-component.css')
 
       $(document).on('boot.xe.timeago', '[data-xe-timeago]', function () {
-        console.debug('boot.xe.timeago')
         let $this = $(this)
         if ($this.data().xeTimeagoCalled === true) return false
 

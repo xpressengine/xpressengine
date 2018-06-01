@@ -1,3 +1,3 @@
 // @deprecated
 import Component from '../../component'
-export default new Component()
+export default Component.instance

@@ -1,2 +1,2 @@
 import Validator from '../../validator'
-export default new Validator()
+export default Validator.instance
