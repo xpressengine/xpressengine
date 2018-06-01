@@ -1,4 +1,6 @@
 (function (XE, $) {
+  if (!XE) return
+
   var _this = this
 
   var _pageCommon = (function () {

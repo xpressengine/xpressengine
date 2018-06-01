@@ -83,7 +83,7 @@
 <script type="text/javascript">
     window.jQuery(function ($) {
         $('button.save').click(function (e) {
-            var url = XE.Router.baseURL + '/' + XE.Router.settingsPrefix + '/lang/save'
+            var url = XE.baseURL + '/' + XE.Router.settingsPrefix + '/lang/save'
             var data = $(this).closest('form').serializeArray();
 
             window.XE.put(url, data).then(function (response) {

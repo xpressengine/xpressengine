@@ -106,8 +106,8 @@ class XE {
 
     $$.setBaseURL(options.baseURL)
 
-    this.boot()
     this.configure(options)
+    this.boot()
 
     this.$emit('setup', this.options)
   }

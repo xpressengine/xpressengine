@@ -505,17 +505,17 @@ export default class Validator extends Singleton {
           langMap[langKey] = ''
 
           if (['min', 'max', 'between'].indexOf(langKey) !== -1) {
-            lang.instance.push('validation.' + langKey + '.numeric')
-            lang.instance.push('validation.' + langKey + '.string')
-            lang.instance.push('validation.' + langKey + '.file')
+            lang.push('validation.' + langKey + '.numeric')
+            lang.push('validation.' + langKey + '.string')
+            lang.push('validation.' + langKey + '.file')
           } else {
-            lang.instance.push('validation.' + langKey)
+            lang.push('validation.' + langKey)
           }
         }
       })
     })
 
-    if (lang.instance.length > 0) {
+    if (lang.length > 0) {
       Lang.instance.requestTransAll(lang)
     }
 
