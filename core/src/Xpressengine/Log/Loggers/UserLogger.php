@@ -91,7 +91,9 @@ class UserLogger extends AbstractLogger
             'UserLogger::user.update',
             function ($target, $user, $userData) {
                 $updateUser['beforeRating'] = $user['rating'];
-                $target($user, $userData);
+
+                $afterUpdateUser = $target($user, $userData);
+
                 $updateUser['afterRating'] = $user['rating'];
                 $updateUser['userDisplayName'] = $user['display_name'];
 
@@ -110,6 +112,8 @@ class UserLogger extends AbstractLogger
 
                     self::writeLog($request, $summary);
                 }
+
+                return $afterUpdateUser;
             }
         );
     }
