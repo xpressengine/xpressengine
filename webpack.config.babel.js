@@ -36,7 +36,7 @@ const resolveAlias = {
   'xe-tooltip': pathInfo.comp + '/js/xe-tooltip.js', // @DEPRECATED
 
   'xe-dynamicLoadManager': pathInfo.common + '/js/dynamicLoadManager.js', // @DEPRECATED
-  'xe-utils': pathInfo.common + '/js/utils.js', // @DEPRECATED
+  'xe-utils': pathInfo.core + '/utils/index.js', // @DEPRECATED
   'xe-translator': pathInfo.common + '/js/translator.js', // @DEPRECATED
   'jquery-ui/sortable': pathInfo.node + '/jquery-ui/ui/widgets/sortable.js', // @DEPRECATED
   'jqueryui-nestedsortable': pathInfo.vendor + '/nestedSortable/jquery.mjs.nestedSortable.js' // @DEPRECATED
@@ -142,27 +142,33 @@ const config = [
           to: path.resolve(__dirname, 'assets/core'),
           ignore: [
             '**/*.scss',
+            'component.js',
             'index.js',
+            'dynamic-load-manager.js',
+            'lang.js',
+            'singleton.js',
+            'common/js/component.js',
             'common/js/draft.js',
             'common/js/dynamicField.js',
             'common/js/dynamicLoadManager.js',
             'common/js/griper.js',
-            'common/js/storeCategory.js',
-            'common/js/translator.js',
-            'common/js/utils.js',
-            'common/js/utils/*.js',
-            'common/js/validator.js',
-            'common/js/component.js',
-            'common/js/xe.js',
             'common/js/lang.js',
             'common/js/progress.js',
             'common/js/request.js',
-            'editor/*.js',
+            'common/js/storeCategory.js',
+            'common/js/translator.js',
+            'common/js/utils.js',
+            'common/js/validator.js',
+            'common/js/xe.js',
+            'editor/**/*.js',
             'lang/LangEditorBox.js',
-            'user/settings/edit.js',
             'permission/*.js',
+            'request/**/*.js',
+            'router/**/*.js',
             'settings/js/admin.js',
-            'tree/*.js'
+            'tree/**/*.js',
+            'user/settings/edit.js',
+            'utils/**/*.js'
           ]
         }
       ]),

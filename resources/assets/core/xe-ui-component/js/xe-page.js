@@ -1,4 +1,6 @@
 (function (XE, $) {
+  if (!XE) return
+
   var _this = this
 
   var _pageCommon = (function () {
@@ -162,7 +164,7 @@
   /**
    * @private
    * @description validtion
-   **/
+   */
   var _validation = (function () {
     return {
       isValidPage: function (options) {
@@ -206,7 +208,7 @@
    *     - type       : {string} method
    * </pre>
    * @param {function} callback
-   **/
+   */
   var _page = function (options, callback) {
     var $target = options.target
     var addType = options.hasOwnProperty('addType') ? options.addType : ''
@@ -222,15 +224,16 @@
       data: options.data || {}
     }
 
+    defaultOptions.data._xe_expose = 'true'
+
     var pageOptions = $.extend(defaultOptions, {
       success: function (data) {
         var assets = data.XE_ASSET_LOAD || {}
         var css = assets.css || []
         var js = assets.js || []
-        var html = data.result
+        var html = data.result || ''
         var cssLen = css.length
         var jsLen = js.length
-        var data = data.data || {}
 
         var next = function () {
           switch (addType) {
@@ -279,7 +282,6 @@
         }
       }
     })
-
     XE.ajax(pageOptions)
   }
 
@@ -302,7 +304,7 @@
    *     2)html string append
    *     3)callback 실행
    * </pre>
-   **/
+   */
   XE.page = function (url, target, options, callback) {
     var defaultOptions = {
       type: 'get'
@@ -337,7 +339,7 @@
    *     3)callback 실행
    *     4)modal show
    * </pre>
-   **/
+   */
   XE.pageModal = function (url, options, callback) {
     var defaultOptions = {
       type: 'get'
@@ -390,7 +392,7 @@
    *     3)callback 실행
    *     4)modal show
    * </pre>
-   **/
+   */
   XE.pageToggleMenu = function (url, $this, options, callback) {
     var $container = $this.parent()
 

@@ -1,4 +1,4 @@
-/** @name		jQuery widgetGenerator plugin */
+/** @name jQuery widgetGenerator plugin */
 ;(function (exports, XE, $) {
   'use strict'
 
@@ -12,6 +12,7 @@
   var generateCode = '.__xe_generate_code'
   var _this
 
+  // @deprecated ???
   $.fn.serializeObject = function () {
     var o = {}
     var a = this.serializeArray()

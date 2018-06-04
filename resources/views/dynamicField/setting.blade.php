@@ -116,19 +116,26 @@
     </form>
 </div>
 
+@expose_route('manage.dynamicField.index')
+@expose_route('manage.dynamicField.update')
+@expose_route('manage.dynamicField.getEditInfo')
+@expose_route('manage.dynamicField.destroy')
+@expose_route('manage.dynamicField.getSkinOption')
+@expose_route('manage.dynamicField.getAdditionalConfigure')
+
 <script>
     var dynamicFieldData = {
         group: "{{$group}}",
-        databaseName: "{{$databaseName}}",
-        routes: {
-            base: "{{ route('manage.dynamicField.index') }}",
-            update: "{{ route('manage.dynamicField.update') }}",
-            getEditInfo: "{{ route('manage.dynamicField.getEditInfo') }}",
-            destroy: "{{ route('manage.dynamicField.destroy') }}",
-            getSkinOption: "{{ route('manage.dynamicField.getSkinOption') }}",
-            getAdditionalConfigure: "{{ route('manage.dynamicField.getAdditionalConfigure') }}"
-        }
+        databaseName: "{{$databaseName}}"
     };
+
+    // 누적된 룰을 제거하고, 새로운 룰만 추가
+    XE.Validator.$on('setRules', (eventName, ruleName, rules, additional, origin, reassign) => {
+        if (ruleName === 'dynamicFieldSection') {
+            reassign($.extend({}, origin, additional))
+        }
+    })
+
     $(function () {
         XE.Validator.put('df_id', function ($dst, parameters) {
             var value = $dst.val();

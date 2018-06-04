@@ -9,6 +9,7 @@
 
 namespace App\Providers;
 
+use Blade;
 use Illuminate\Foundation\Events\LocaleUpdated;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Validator;
@@ -34,6 +35,8 @@ class TranslationServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->extendBlade();
+
         $this->app['events']->listen(LocaleUpdated::class, function($event) {
             $this->app['xe.translator']->setLocale($event->locale);
         });
@@ -105,5 +108,20 @@ class TranslationServiceProvider extends ServiceProvider
     public function provides()
     {
         return ['xe.translator'];
+    }
+
+    /**
+     * extendBlade
+     *
+     * @return void
+     */
+    protected function extendBlade()
+    {
+        Blade::directive(
+            'expose_trans',
+            function ($expression) {
+                return "<?php expose_trans($expression); ?>";
+            }
+        );
     }
 }

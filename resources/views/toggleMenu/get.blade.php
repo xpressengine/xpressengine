@@ -1,6 +1,3 @@
-<script type="text/javascript">
-    {!! XeFrontend::output('translation') !!}
-</script>
 @foreach($items as $item)
     @if($item['script'] != null){{ XeFrontend::js($item['script'])->loadAsync() }}@endif
     @if($item['type'] === Xpressengine\ToggleMenu\AbstractToggleMenu::MENUTYPE_LINK)

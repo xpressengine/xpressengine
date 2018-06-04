@@ -177,8 +177,6 @@ class NaverCaptcha implements CaptchaInterface
      */
     public function render()
     {
-        $this->frontend->js('assets/core/common/js/captcha.naver.js')->load();
-
         $key = $this->issue();
 
         return $this->view->make('captcha.naver', [

@@ -5,15 +5,16 @@ import moment from 'moment'
 import URI from 'urijs'
 
 // internal libraries
-import Component from 'xe/common/js/component'
-import DynamicLoadManager from 'xe/common/js/dynamicLoadManager'
+import * as $$ from 'xe/utils'
+import Component from 'xe/component'
+import DynamicLoadManager from 'xe/dynamic-load-manager'
 import griper from 'xe/common/js/griper'
-import Lang from 'xe/common/js/lang'
+import Lang from 'xe/lang'
 import Progress from 'xe/common/js/progress'
-import Request from 'xe/common/js/request'
-import * as Utils from 'xe/common/js/utils'
+import Request from 'xe/request'
+import Router from 'xe/router'
 import Translator from 'xe/common/js/translator'
-import Validator from 'xe/common/js/validator'
+import Validator from 'xe/validator'
 
 /**
  * @class XE
@@ -23,42 +24,59 @@ import Validator from 'xe/common/js/validator'
  */
 class XE {
   constructor () {
-    const that = this
-
-    Utils.eventify(this)
-
+    $$.eventify(this)
     this.options = {}
 
     // internal libraries
-    // this.util = Utils // @DEPRECATED
-    this.Utils = Utils
-    // this.validator = Validator // @DEPRECATED
-    this.Validator = Validator
-    this.Lang = Lang
+    this.Utils = $$
+    this.Component = Component.instance
+    this.DynamicLoadManager = DynamicLoadManager.instance
+    this.Lang = Lang.instance
     this.Progress = Progress
-    this.Request = Request
-    this.Component = Component
-    this.DynamicLoadManager = DynamicLoadManager
+    this.Request = Request.instance
+    this.Router = Router.instance
+    this.Validator = Validator.instance
 
     // external libraries
-    this.moment = moment
-    this.Translator = Translator
+    this.moment = moment // @DEPRECATED
+    this.Translator = Translator // @DEPRECATED
+  }
 
-    // window.Utils = Utils // @DEPRECATED
-    // window.DynamicLoadManager = DynamicLoadManager // @DEPRECATED
-    // window.Translator = Translator // @DEPRECATED
-    // window.blankshield = blankshield // @DEPRECATED
+  boot () {
+    this.Router.boot(this)
+    this.Request.boot(this)
+    this.Lang.boot(this)
+    this.DynamicLoadManager.boot(this)
+    this.Validator.boot(this)
+    this.Component.boot(this)
 
-    $(function () {
-      $('body').on('click', 'a[target]', function (e) {
-        const $this = $(this)
-        const href = $this.attr('href').trim()
-        const target = $this.attr('target')
+    this.Request.$on('exposed', (eventName, exposed) => {
+      this.DynamicLoadManager.jsLoadMultiple(exposed.assets.js)
+      exposed.assets.css.forEach((src) => {
+        this.DynamicLoadManager.cssLoad(src)
+      })
+
+      this.Router.addRoutes(exposed.routes)
+
+      this.Lang.set(exposed.translations)
+
+      Object.entries(exposed.rules).forEach((rule) => {
+        if (rule[1]) {
+          this.Validator.setRules(rule[0], rule[1])
+        }
+      })
+    })
+
+    $(() => {
+      $('body').on('click', 'a[target]', (e) => {
+        const $this = $(e.target)
+        const href = String($this.attr('href')).trim()
+        const target = String($this.attr('target'))
 
         if (!href) return
         if (target === '_top' || target === '_self' || target === '_parent') return
         if (!href.match(/^(https?:\/\/)/)) return
-        if (that.isSameHost(href)) return
+        if (this.isSameHost(href)) return
 
         let rel = $this.attr('rel')
 
@@ -84,13 +102,12 @@ class XE {
    * </pre>
    */
   setup (options) {
-    this.options.loginUserId = options.loginUserId || null
-    this.Request.setup({
-      headers: {
-        'X-CSRF-TOKEN': options['X-CSRF-TOKEN']
-      },
-      useXeSpinner: options.useXeSpinner || true
-    })
+    options.baseURL = $$.trimEnd(options.baseURL, '/')
+
+    $$.setBaseURL(options.baseURL)
+
+    this.configure(options)
+    this.boot()
 
     this.$emit('setup', this.options)
   }
@@ -99,13 +116,17 @@ class XE {
     $.extend(this.options, options)
   }
 
+  route (routeName, params = {}) {
+    return this.Router.get(routeName).url(params)
+  }
+
   /**
    * css 파일을 로드한다.
    * @param {url} url css file path
    * @DEPRECATED
    */
   cssLoad (url, load, error) {
-    DynamicLoadManager.cssLoad(url, load, error)
+    this.DynamicLoadManager.cssLoad(url, load, error)
   }
 
   /**
@@ -114,7 +135,7 @@ class XE {
    * @DEPRECATED
    */
   jsLoad (url, load, error) {
-    DynamicLoadManager.jsLoad(url)
+    this.DynamicLoadManager.jsLoad(url)
   }
 
   /**
@@ -124,14 +145,42 @@ class XE {
    */
   ajax (url, options) {
     if (typeof url === 'object') {
-      options = $.extend({}, this.Request.options, url)
+      options = $.extend({}, this.Request.config, {headers: {'X-CSRF-TOKEN': this.Request.config.userToken}}, url)
       url = undefined
     } else {
-      options = $.extend({}, options, this.Request.options, { url: url })
+      options = $.extend({}, options, this.Request.config, {headers: {'X-CSRF-TOKEN': this.Request.config.userToken}}, { url: url })
       url = undefined
     }
 
     return $.ajax(url, options)
+  }
+
+  /**
+   * @alias Request.get
+   */
+  get (...args) {
+    return this.Request.get(...args)
+  }
+
+  /**
+   * @alias Request.post
+   */
+  post (...args) {
+    return this.Request.post(...args)
+  }
+
+  /**
+   * @alias Request.put
+   */
+  put (...args) {
+    return this.Request.put(...args)
+  }
+
+  /**
+   * @alias Request.delete
+   */
+  delete (...args) {
+    return this.Request.delete(...args)
   }
 
   /**
@@ -144,7 +193,7 @@ class XE {
     if (typeof url !== 'string') return false
 
     const base = {
-      url: URI(window.xeBaseURL).normalizePathname()
+      url: URI(this.baseURL).normalizePathname()
     }
     const target = {
       url: URI(url).normalizePathname()
@@ -153,7 +202,7 @@ class XE {
     if (target.url.is('urn')) return false
 
     if (!target.url.hostname()) {
-      target.url = target.url.absoluteTo(window.xeBaseURL)
+      target.url = target.url.absoluteTo(this.baseURL)
     }
 
     base.port = Number(base.url.port())

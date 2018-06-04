@@ -1,19 +1,19 @@
 /**
  * @namespace Category
  * @type {object}
- * */
+ */
 var Category = (function (XE, $, Tree) {
   /**
    * @private
-   * */
+   */
   var _this
   /**
    * @private
-   * */
+   */
   var _$wrap = $('#__xe_category-tree-container')
   /**
    * @private
-   * */
+   */
   var _config = {}
 
   return {
@@ -22,7 +22,7 @@ var Category = (function (XE, $, Tree) {
      * @memberof Category
      * @param {object} config
      * @return {object}
-     * */
+     */
     init: function (config) {
       _this = this
 
@@ -45,7 +45,7 @@ var Category = (function (XE, $, Tree) {
     /**
      * 카테고리 템플릿을 화면에 그린다.
      * @memberof Category
-     * */
+     */
     render: function () {
       _$wrap.html(this.getHeadTemplate())
     },
@@ -53,7 +53,7 @@ var Category = (function (XE, $, Tree) {
     /**
      * Category에서 사용되는 이벤트를 정의한다.
      * @memberof Category
-     * */
+     */
     bindEvents: function () {
       _$wrap.on('click', '.btnOpenForm', function () {
         $('.__xe_content_body').closest('.item, .__xe_item_wrap').removeClass('open')
@@ -201,7 +201,7 @@ var Category = (function (XE, $, Tree) {
      * Category 템플릿을 리턴한다.
      * @memberof Category
      * @return {array}
-     * */
+     */
     getHeadTemplate: function () {
       return [
         '<div class="__xe_sortable-new panel-heading __xe_item_wrap">',
@@ -233,7 +233,7 @@ var Category = (function (XE, $, Tree) {
      *   -parentId
      * </pre>
      * @return {string}
-     * */
+     */
     getFormTemplate: function (obj) {
       var wordKeyProp = obj.hasOwnProperty('wordLangKey') ? 'data-lang-key="' + obj.wordLangKey + '"' : ''
       var descriptionKeyProp = obj.hasOwnProperty('descriptionLangKey') ? 'data-lang-key="' + obj.descriptionLangKey + '"' : ''
@@ -298,7 +298,7 @@ var Category = (function (XE, $, Tree) {
      * nested Item을 닫는다.
      * @memberof Category
      * @param {object} params
-     * */
+     */
     closeNestedItem: function (params) {
       var $parent = params.$parent
 
@@ -309,7 +309,7 @@ var Category = (function (XE, $, Tree) {
      * @memberof Category
      * @param {object} $target icon target
      * @param {string} status loading, open, close
-     * */
+     */
     setIconByStatus: function ($target, status) {
       $target.removeClass('xi-angle-right xi-angle-down xi-refresh xi-spin')
 
@@ -330,7 +330,7 @@ var Category = (function (XE, $, Tree) {
      * @memberof Category
      * @param {object} item
      * @return {string}
-     * */
+     */
     getNodeTemplate: function (item) {
       return [
         '<div class="item-info">',
@@ -347,7 +347,7 @@ var Category = (function (XE, $, Tree) {
     /**
      * sortable tree를 실행한다.
      * @memberof Category
-     * */
+     */
     runSortable: function () {
       Tree.run($('.__category_body'), {
         update: _this.move
@@ -356,7 +356,7 @@ var Category = (function (XE, $, Tree) {
     /**
      * item상태를 저장한다.
      * @memberof Category
-     * */
+     */
     save: function (item) {
       $('button').prop('disabled', true)
 
@@ -432,7 +432,7 @@ var Category = (function (XE, $, Tree) {
      * 아이템 정보를 로드한다.
      * @memberof Category
      * @param {object} params
-     * */
+     */
     load: function (params) {
       var data = {}
       var $parent = params.$parent
@@ -481,7 +481,7 @@ var Category = (function (XE, $, Tree) {
      *   parentId
      *   ordering
      * </pre>
-     * */
+     */
     move: function (obj) {
       var data = {
         id: obj.itemId,
@@ -525,7 +525,7 @@ var Category = (function (XE, $, Tree) {
      * 아이템을 삭제한다.
      * @memberof Category
      * @param {string} id
-     * */
+     */
     remove: function (item) {
       var that = this
 
@@ -550,7 +550,7 @@ var Category = (function (XE, $, Tree) {
     * 아이템을 하위 카테고리까지 삭제한다.
     * @memberof Category
     * @param {string} id
-    * */
+    */
     removeAll: function (item) {
       var that = this
 
@@ -576,16 +576,14 @@ var Category = (function (XE, $, Tree) {
      * @memberof Category
      * @param {element} $form
      * @return {object}
-     * */
+     */
     formToJson: function ($form) {
-      var formArrayData = $form.serializeArray()
-      var obj = {}
-
-      $.each(formArrayData, function (i, v) {
-        obj[v.name] = v.value
+      var params = {}
+      $form.serializeArray().forEach((item) => {
+        params[item.name] = item.value
       })
 
-      return obj
+      return params
     }
   }
 })(window.XE, window.jQuery, window.Tree)

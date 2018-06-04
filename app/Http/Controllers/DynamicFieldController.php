@@ -20,6 +20,7 @@ use App\Http\Sections\DynamicFieldSection;
 use XeDB;
 use XeLang;
 use XeDynamicField;
+use XeFrontend;
 use Xpressengine\Translation\Translator;
 
 class DynamicFieldController extends Controller
@@ -134,9 +135,14 @@ class DynamicFieldController extends Controller
         $fieldType = $registerHandler->getType($dynamicField, $request->get('typeId'));
         $fieldSkin = $registerHandler->getSkin($dynamicField, $request->get('skinId'));
 
+        $rules = array_merge($fieldType->getSettingsRules(), $fieldSkin->getSettingsRules());
+
+        XeFrontend::rule('dynamicFieldSection', $rules);
+
         return XePresenter::makeApi([
-            'configure' => $fieldType->getSettingsView($config) . $fieldSkin->settings($config),
+            'result' => $fieldType->getSettingsView($config) . $fieldSkin->settings($config),
         ]);
+
     }
 
     /**

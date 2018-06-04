@@ -66,18 +66,7 @@ class SkinController extends Controller
 
         $view = $skin->renderSetting($skinConfig);
 
-        $section = view('skin.setting', compact('skinId', 'skinInstanceId', 'view'));
-
-        //return XePresenter::makeApi(['view' => (string) $section]);
-        return XePresenter::makeApi(
-            [
-                'result' => (string) $section,
-                'XE_ASSET_LOAD' => [
-                    'css' => \Xpressengine\Presenter\Html\Tags\CSSFile::getFileList(),
-                    'js' => \Xpressengine\Presenter\Html\Tags\JSFile::getFileList(),
-                ],
-            ]
-        );
+        return api_render('skin.setting', compact('skinId', 'skinInstanceId', 'view'));
     }
 
     public function postSetting(Request $request, SkinHandler $skinHandler)

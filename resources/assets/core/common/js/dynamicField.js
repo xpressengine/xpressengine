@@ -4,26 +4,21 @@ import XE from 'xe'
 
 /**
  * @class
- **/
+ */
 var DynamicField = function () {
   this.group = ''
   this.databaseName = ''
   this.containerName = ''
   this.$container = ''
-  this.urls = {
-    base: null
-  }
 
   /**
    * DynamicField를 초기화 한다.
    * @param {string} group
    * @param {string} databaseName
-   * @param {object} urls
-   **/
-  this.init = function (group, databaseName, urls) {
+   */
+  this.init = function (group, databaseName) {
     this.group = group
     this.databaseName = databaseName
-    $.extend(this.urls, urls)
     this.containerName = '__xe_container_DF_setting_' + group
     this.$container = $('#' + this.containerName)
     this.$container.$form = this.$container.find('.__xe_add_form')
@@ -39,7 +34,7 @@ var DynamicField = function () {
 
   /**
    * 이벤트 핸들러를 등록한다.
-   **/
+   */
   this.attachEvent = function () {
     var that = this
 
@@ -99,7 +94,7 @@ var DynamicField = function () {
    * container를 리턴한다.
    * @param {jQuery} form
    * @return {jQuery}
-   **/
+   */
   this.getFormContainer = function (form) {
     return form.closest('.__xe_form_container')
   }
@@ -107,7 +102,7 @@ var DynamicField = function () {
   /**
    * modal을 close한다.
    * @param {jQuery} target
-   **/
+   */
   this.close = function (target) {
     var form = $(target).closest('form')
 
@@ -118,7 +113,7 @@ var DynamicField = function () {
 
   /**
    * group 리스트를 요청한다.
-   **/
+   */
   this.getList = function () {
     var params = { group: this.group }
     var that = this
@@ -128,7 +123,7 @@ var DynamicField = function () {
       type: 'get',
       dataType: 'json',
       data: params,
-      url: this.urls.base
+      url: XE.route('manage.dynamicField.index')
     })
 
     jqxhr.done(function (data, textStatus, jqxhr) {
@@ -143,7 +138,7 @@ var DynamicField = function () {
   /**
    * form을 복사하여 리턴한다.
    * @return {jQuery} $form
-   **/
+   */
   this.formClone = function () {
     var $form = this.$container.$form.clone().removeClass('__xe_add_form')
     $form.show()
@@ -153,7 +148,7 @@ var DynamicField = function () {
   /**
    * 리스트 테이블에 row를 추가한다.
    * @param {object} data
-   **/
+   */
   this.addrow = function (data) {
     var row = this.$container.find('.__xe_row').clone()
     row.removeClass('__xe_row')
@@ -177,7 +172,7 @@ var DynamicField = function () {
   /**
    * row를 삭제한다.
    * @param {string} id
-   **/
+   */
   this.removeRow = function (id) {
     this.$container.find('.__xe_tbody').find('.__xe_row_' + id).remove()
   }
@@ -185,14 +180,14 @@ var DynamicField = function () {
   /**
    * row를 수정한다.
    * @param {jQuery} o
-   **/
+   */
   this.edit = function (o) {
     var tr = $(o).closest('tr')
     var id = tr.data('id')
     var form = this.formClone()
 
     form.data('isEdit', '1')
-    form.attr('action', this.urls.update)
+    form.attr('action', XE.route('manage.dynamicField.update'))
     this.$container.$modal.$body.html(form)
     this.$container.$modal.xeModal('show')
 
@@ -204,7 +199,7 @@ var DynamicField = function () {
       type: 'get',
       dataType: 'json',
       data: params,
-      url: this.urls.getEditInfo,
+      url: XE.route('manage.dynamicField.getEditInfo'),
       success: function (response) {
         form.find('[name="id"]').val(response.config.id).prop('readonly', true)
         form.find('[name="typeId"] option').each(function () {
@@ -236,7 +231,7 @@ var DynamicField = function () {
   /**
    * 파라미터 boolean값이 true일 경우 true, false일 경우 false를 리턴한다
    * @param {string|boolean} data
-   **/
+   */
   this.checkBox = function (data) {
     // @FIXME
     var checked = false
@@ -255,8 +250,8 @@ var DynamicField = function () {
 
   /**
    * row 삭제 요청을 한다.
-   * @param {jQuery} o
-   **/
+   * @param {jQuery} target
+   */
   this.destroy = function (target) {
     if (confirm('이동작은 되돌릴 수 없습니다. 계속하시겠습니까?') === false) { // @FIXME
       return
@@ -272,7 +267,7 @@ var DynamicField = function () {
       type: 'post',
       dataType: 'json',
       data: params,
-      url: this.urls.destroy,
+      url: XE.route('manage.dynamicField.destroy'),
       success: function (response) {
         var id = response.id
 
@@ -288,7 +283,7 @@ var DynamicField = function () {
   /**
    * 스킨 옵션을 요청한다.
    * @param {jQuery} form
-   **/
+   */
   this.getSkinOption = function (form) {
     var params = form.serialize()
     var that = this
@@ -303,7 +298,7 @@ var DynamicField = function () {
       type: 'get',
       dataType: 'json',
       data: params,
-      url: this.urls.getSkinOption,
+      url: XE.route('manage.dynamicField.getSkinOption'),
       success: function (response) {
         that.skinOptions(form, response.skins, response.skinId)
       }
@@ -315,7 +310,7 @@ var DynamicField = function () {
    * @param {jQuery} form
    * @param {object} skins
    * @param {string} selected
-   **/
+   */
   this.skinOptions = function (form, skins, selected) {
     var select = form.find('[name="skinId"]')
     select.find('option').remove()
@@ -337,29 +332,25 @@ var DynamicField = function () {
   /**
    * 필드마다 추가설정을 로드한다.
    * @param {jQuery} $form
-   **/
+   */
   this.getAdditionalConfigure = function ($form) {
-    var params = $form.serialize()
-    var that = this
-
-    XE.ajax({
-      context: this.$container.$modal.$body[0],
-      type: 'get',
-      dataType: 'json',
-      data: params,
-      url: this.urls.getAdditionalConfigure,
-      success: function (response) {
-        that.setValidateRule($form, response.rules)
-
-        $form.find('.__xe_additional_configure').html(response.configure)
-      }
+    const params = {}
+    $form.serializeArray().forEach((item) => {
+      params[item.name] = item.value
     })
+
+    params['_xe_expose'] = 'true'
+
+    XE.get('manage.dynamicField.getAdditionalConfigure', params)
+      .then(response => {
+        $form.find('.__xe_additional_configure').html(response.data.result)
+      })
   }
 
   /**
    * 확장필드를 등록한다.
    * @param {jQuery} target
-   **/
+   */
   this.store = function (target) {
     var $form = this.$container.$modal.$body.find('form')
     var that = this
@@ -389,7 +380,7 @@ var DynamicField = function () {
    * 폼 요소에 validation rule을 등록한다.
    * @param {jQuery} $form
    * @param {object} addRules
-   **/
+   */
   this.setValidateRule = function ($form, addRules) {
     var ruleName = Validator.getRuleName($form)
     if (addRules != undefined && ruleName != undefined) {
@@ -401,7 +392,7 @@ var DynamicField = function () {
   /**
    * 폼 요소에 validation을 체크한다.
    * @param {jQuery} $form
-   **/
+   */
   this.validateCheck = function ($form) {
     Validator.check($form)
   }
@@ -411,5 +402,5 @@ export default DynamicField
 
 // @FIXME
 var instance = new DynamicField()
-instance.init(window.dynamicFieldData.group, window.dynamicFieldData.databaseName, window.dynamicFieldData.routes)
+instance.init(window.dynamicFieldData.group, window.dynamicFieldData.databaseName)
 instance.getList()
