@@ -1,4 +1,6 @@
 (function (XE, $) {
+  if (!XE) return
+
   var _this = this
 
   var _pageCommon = (function () {
@@ -219,20 +221,19 @@
       url: options.url,
       type: options.type || 'get',
       dataType: 'json',
-      data: options.data || {},
-      _xe_expose: 'true'
+      data: options.data || {}
     }
 
-    XE.get(options.url, defaultOptions.data)
-      .then(function success (response) {
-        var exposed = response.data._XE_ || {}
-        var assets = exposed.assets || {}
+    defaultOptions.data._xe_expose = 'true'
+
+    var pageOptions = $.extend(defaultOptions, {
+      success: function (data) {
+        var assets = data.XE_ASSET_LOAD || {}
         var css = assets.css || []
         var js = assets.js || []
-        var html = response.data.result || ''
+        var html = data.result || ''
         var cssLen = css.length
         var jsLen = js.length
-        var data = response.data.data || {}
 
         var next = function () {
           switch (addType) {
@@ -279,7 +280,9 @@
         if ((cssLen + jsLen) === 0) {
           next()
         }
-      })
+      }
+    })
+    XE.ajax(pageOptions)
   }
 
   /**
