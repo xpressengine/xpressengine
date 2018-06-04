@@ -67,7 +67,7 @@ class GroupController extends Controller
     {
         $input = $request->only(['name', 'description']);
 
-        $this->validate($request, ['name' => 'Required']);
+        $this->validate($request, ['name' => 'Required', 'description' => 'Required']);
 
         XeDB::beginTransaction();
         try {
