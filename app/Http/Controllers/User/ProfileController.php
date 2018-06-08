@@ -96,13 +96,10 @@ class ProfileController extends Controller
         }
         XeDB::commit();
 
-        return redirect()->route('user.profile', [$user->getId()])->with(
-            'alert',
-            [
-                'type' => 'success',
-                'message' => '변경되었습니다.'
-            ]
-        );
+        return redirect()->route('user.profile', [$user->getId()])->with('alert', [
+            'type' => 'success',
+            'message' => xe_trans('xe::saved')
+        ]);
     }
 
     /**

@@ -28,5 +28,5 @@ use Xpressengine\Plugin\PluginException;
  */
 class CannotDeleteActivatedPluginException extends PluginException
 {
-    protected $message = '활성화된 플러그인은 삭제할 수 없습니다.';
+    protected $message = 'Activated plugins can not be deleted.';
 }

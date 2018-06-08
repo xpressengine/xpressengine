@@ -21,7 +21,6 @@ use Xpressengine\Installer\XpressengineInstaller;
 use Xpressengine\Interception\InterceptionHandler;
 use Xpressengine\Plugin\Composer\Composer;
 use Xpressengine\Plugin\Composer\ComposerFileWriter;
-use Xpressengine\Plugin\PluginHandler;
 use Xpressengine\Support\Migration;
 
 class UpdateController extends Controller
@@ -50,7 +49,7 @@ class UpdateController extends Controller
         if($skipComposer !== 'Y') {
             $operation = $this->getOperation($writer);
             if($operation['status'] === ComposerFileWriter::STATUS_RUNNING) {
-                throw new HttpException(422, "이미 XE 코어 또는 플러그인의 업데이트 작업이 진행중입니다.");
+                throw new HttpException(422, xe_trans('xe::alreadyProceeding'));
             }
 
             // 플러그인 업데이트 잠금
@@ -72,7 +71,7 @@ class UpdateController extends Controller
 
             return redirect()->back()->with(
                 'alert',
-                ['type' => 'success', 'message' => '업데이트를 시작합니다.']
+                ['type' => 'success', 'message' => xe_trans('xe::startUpdate')]
             );
 
         } else {
@@ -82,7 +81,7 @@ class UpdateController extends Controller
 
             return redirect()->back()->with(
                 'alert',
-                ['type' => 'success', 'message' => '업데이트하였습니다.']
+                ['type' => 'success', 'message' => xe_trans('xe::updated')]
             );
 
         }
@@ -132,7 +131,7 @@ class UpdateController extends Controller
     public function deleteOperation(ComposerFileWriter $writer)
     {
         $writer->reset()->cleanOperation()->write();
-        return XePresenter::makeApi(['type' => 'success', 'message' => '삭제되었습니다.']);
+        return XePresenter::makeApi(['type' => 'success', 'message' => xe_trans('xe::deleted')]);
     }
 
     /**
@@ -210,10 +209,8 @@ class UpdateController extends Controller
         // file permission check
 
         foreach ($files as $file) {
-            $type = is_dir($file) ? '디렉토리' : '파일';
-
             if (!is_writable($file)) {
-                throw new HttpException(500, "[$file] {$type}의 쓰기 권한이 없습니다. 플러그인을 설치하기 위해서는 이 {$type}의 쓰기 권한이 있어야 합니다");
+                throw new HttpException(500, xe_trans('xe::notHaveWritePermissionForInstallPlugin', ['file' => $file]));
             }
         }
 
@@ -266,21 +263,23 @@ class UpdateController extends Controller
 
         if (Platform::isWindows()) {
             if (!getenv('APPDATA')) {
-                throw new HttpException(500,
-                    'COMPOSER_HOME 환경변수가 설정되어 있지 않습니다. <a href="'.route('settings.plugins.setting.show').'">플러그인 설정</a>에서 설정할 수 있습니다.'
-                );
+                $this->throwComposerHomeEnv();
             }
         }
 
         if (!$home) {
             $home = getenv('HOME');
             if (!$home) {
-                throw new HttpException(500,
-                    'COMPOSER_HOME 환경변수가 설정되어 있지 않습니다. <a href="'.route('settings.plugins.setting.show').'">플러그인 설정</a>에서 설정할 수 있습니다.'
-                );
+                $this->throwComposerHomeEnv();
             }
         }
     }
 
+    protected function throwComposerHomeEnv()
+    {
+        throw new HttpException(500, xe_trans('xe::composerEnvNotSet', [
+            'link' => sprintf('<a href="%s">%s</a>', route('settings.plugins.setting.show'), xe_trans('xe::pluginSettings'))
+        ]));
+    }
 }
 

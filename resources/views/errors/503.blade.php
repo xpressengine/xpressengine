@@ -3,10 +3,10 @@
 @section('content')
 <div class="login-header error-{{ $exception->getStatusCode() }}">
     <i class="xi-error-o xi-5x"></i>
-    <h1>공사중!</h1>
+    <h1>{{ xe_trans('xe::msgMaintenanceMode') }}</h1>
 </div>
 
 <div class="login-body">
-    <p><a href="{{ URL::previous() }}">뒤로가기</a></p>
+    <p><a href="{{ URL::previous() }}">{{ xe_trans('xe::back') }}</a></p>
 </div>
 @stop

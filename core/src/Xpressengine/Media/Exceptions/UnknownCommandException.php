@@ -28,5 +28,5 @@ use Xpressengine\Media\MediaException;
  */
 class UnknownCommandException extends MediaException
 {
-    protected $message = '":name" 은 알 수 없는 command 입니다.';
+    protected $message = '":name" is unknown command.';
 }

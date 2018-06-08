@@ -19,15 +19,15 @@
                 @endif
             <p class="list-install-text">
                 @if($handler->getPlugin(data_get($plugin, 'plugin_id')))
-                    설치 완료
+                    {{ xe_trans('xe::installed') }}
                 @else
-                    미설치
+                    {{ xe_trans('xe::notInstalledYet') }}
                 @endif
 
                 @if(data_get($plugin, 'is_purchased'))
-                    (구매한 플러그인)
+                    ({{ xe_trans('xe::purchasedPlugins') }})
                 @elseif(data_get($plugin, 'is_free') === false)
-                    <a href="{{ data_get($plugin, 'link') }}" class="btn-link" target="_blank">구매하러 가기</a>
+                    <a href="{{ data_get($plugin, 'link') }}" class="btn-link" target="_blank">{{ xe_trans('xe::goToBuy') }}</a>
                 @endif
             </p>
         </div>

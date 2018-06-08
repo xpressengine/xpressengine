@@ -27,5 +27,5 @@ use Xpressengine\Storage\StorageException;
  */
 class FileDoesNotExistException extends StorageException
 {
-    protected $message = '파일이 존재하지 않습니다.';
+    protected $message = 'File does not exist.';
 }

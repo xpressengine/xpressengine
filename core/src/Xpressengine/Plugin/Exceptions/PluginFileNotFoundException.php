@@ -28,5 +28,5 @@ use Xpressengine\Plugin\PluginException;
  */
 class PluginFileNotFoundException extends PluginException
 {
-    protected $message = 'xe::pluginNotFound';
+    protected $message = 'Not found plugin file. File path(:path)';
 }

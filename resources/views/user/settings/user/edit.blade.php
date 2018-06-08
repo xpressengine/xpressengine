@@ -37,7 +37,7 @@
                             {{-- accounts --}}
                             @if(count($user->accounts))
                             <div class="form-group">
-                                <label>연결 계정</label>
+                                <label>{{ xe_trans('xe::connectedAccount') }}</label>
                                 <ul class="list-group">
                                     @foreach($user->accounts as $account)
                                         <li class="list-group-item"><span class="{{ $account->provider }}" title="{{ $account->provider }}"><i class="xi-{{ $account->provider }}"></i></span> {{ $account->provider }}</li>

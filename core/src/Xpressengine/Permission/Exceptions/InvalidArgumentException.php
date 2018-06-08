@@ -28,5 +28,5 @@ use Xpressengine\Permission\PermissionException;
  */
 class InvalidArgumentException extends PermissionException
 {
-    protected $message = '":arg" 는 유효한 값이 아닙니다.';
+    protected $message = '":arg" is not a valid value.';
 }

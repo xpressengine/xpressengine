@@ -28,5 +28,5 @@ use Xpressengine\Config\ConfigException;
  */
 class InvalidArgumentException extends ConfigException
 {
-    protected $message = '":arg" 는 유효한 값이 아닙니다.';
+    protected $message = '":arg" is invalid.';
 }

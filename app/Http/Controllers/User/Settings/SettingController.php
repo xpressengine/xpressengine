@@ -81,7 +81,7 @@ class SettingController extends Controller
 
         app('xe.config')->put('user.common', $inputs);
 
-        return redirect()->back()->with('alert', ['type' => 'success', 'message' => '저장되었습니다.']);
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
     }
 
     /**
@@ -132,7 +132,7 @@ class SettingController extends Controller
         }
         app('xe.config')->modify($config);
 
-        return redirect()->back()->with('alert', ['type' => 'success', 'message' => '저장되었습니다.']);
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
     }
 
     /**

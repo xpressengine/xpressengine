@@ -28,5 +28,5 @@ use Xpressengine\Config\ConfigException;
  */
 class NotExistsException extends ConfigException
 {
-    protected $message = '":name" 은 존재하지 않습니다.';
+    protected $message = '":name" does not exist.';
 }

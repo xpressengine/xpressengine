@@ -28,5 +28,5 @@ use Xpressengine\Category\CategoryException;
  */
 class UnableMoveToSelfException extends CategoryException
 {
-    protected $message = '자기 자신으로 이동할 수 없습니다.';
+    protected $message = 'Can not move to itself.';
 }

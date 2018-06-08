@@ -29,5 +29,5 @@ use Xpressengine\Site\SiteException;
 
 class CanNotUseDomainException extends SiteException
 {
-    protected $message = '":host" 은 사용할 수 없습니다.';
+    protected $message = '":host" is not allowed.';
 }

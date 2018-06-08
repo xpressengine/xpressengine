@@ -26,5 +26,5 @@ use Xpressengine\Plugin\PluginException;
  */
 class PluginAlreadyActivatedException extends PluginException
 {
-    protected $message = '이미 활성화 되어있는 플러그인입니다.';
+    protected $message = 'Plugin is already active.';
 }

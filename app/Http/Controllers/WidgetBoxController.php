@@ -9,7 +9,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Session\SessionManager;
 use Symfony\Component\DomCrawler\Crawler;
 use XeDB;
 use XePresenter;

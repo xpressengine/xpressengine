@@ -28,5 +28,5 @@ use Xpressengine\Routing\RoutingException;
  */
 class NotFoundInstanceRouteException extends RoutingException
 {
-    protected $message = 'InstanceRoute 를 찾을 수 없습니다.';
+    protected $message = 'InstanceRoute not found.';
 }

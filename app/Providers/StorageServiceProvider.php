@@ -93,8 +93,8 @@ class StorageServiceProvider extends ServiceProvider
             function ($target) {
                 $menu          = $target();
                 $menu['contents']['submenu']['file'] = [
-                    'title' => '파일',
-                    'description' => 'blur blur~',
+                    'title' => xe_trans('xe::file'),
+                    'description' => '',
                     'link' => '/manage/storage'
 
                 ];

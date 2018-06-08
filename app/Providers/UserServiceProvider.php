@@ -527,12 +527,12 @@ class UserServiceProvider extends ServiceProvider
     {
         $permissions = [
             'user.list' => [
-                'title' => '회원정보 보기',
-                'tab' => '회원'
+                'title' => xe_trans('xe::accessUserList'),
+                'tab' => xe_trans('xe::user')
             ],
             'user.edit' => [
-                'title' => '회원정보 수정',
-                'tab' => '회원'
+                'title' => xe_trans('xe::editUserInfo'),
+                'tab' => xe_trans('xe::user')
             ]
         ];
         $register = $this->app->make('xe.register');

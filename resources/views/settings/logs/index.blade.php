@@ -6,7 +6,7 @@
             <div class="panel">
                 <div class="panel-heading">
                     <div class="pull-left">
-                        <h3 class="panel-title">관리자 접속 로그</h3>
+                        <h3 class="panel-title">{{ xe_trans('xe::accessLog') }}</h3>
                     </div>
                 </div>
 
@@ -16,7 +16,7 @@
                         <div class="btn-group btn-fillter" role="group">
                             @section('type-select')
                                 <ul class="dropdown-menu" role="menu">
-                                    <li @if(request()->get('type') === null) class="active" @endif><a href="{{ route('settings.setting.log.index') }}">모든 타입</a></li>
+                                    <li @if(request()->get('type') === null) class="active" @endif><a href="{{ route('settings.setting.log.index') }}">{{ xe_trans('xe::all') }}</a></li>
                                     @foreach($loggers as $logger)
                                         <li @if(request()->get('type') === $logger::ID) class="active" @endif><a href="{{ route('settings.setting.log.index', array_merge(request()->all(), ['type'=> $logger::ID] )) }}">{{ $logger::TITLE }}</a></li>
                                         @if(request()->get('type') === $logger::ID) {{-- */ $selectedLogger = $logger/* --}} @endif
@@ -24,7 +24,7 @@
                                 </ul>
                             @show
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                {{ isset($selectedLogger) ? $selectedLogger::TITLE : '타입' }} <span class="caret"></span>
+                                {{ isset($selectedLogger) ? $selectedLogger::TITLE : xe_trans('xe::types') }} <span class="caret"></span>
                             </button>
                             @yield('type-select')
                         </div>
@@ -32,7 +32,7 @@
                         <div class="btn-group btn-fillter" role="group">
                             @section('admin-select')
                                 <ul class="dropdown-menu" role="menu">
-                                    <li @if(request()->get('user_id') === null) class="active" @endif><a href="{{ route('settings.setting.log.index') }}">모든 관리자</a></li>
+                                    <li @if(request()->get('user_id') === null) class="active" @endif><a href="{{ route('settings.setting.log.index') }}">{{ xe_trans('xe::all') }}</a></li>
                                     @foreach($admins as $admin)
                                         <li @if(request()->get('user_id') === $admin->getId()) class="active" @endif><a href="{{ route('settings.setting.log.index', array_merge(request()->all(), ['user_id'=> $admin->getId()] )) }}">{{ $admin->getDisplayName() }}</a></li>
                                         @if(request()->get('user_id') === $admin->getId()) {{-- */ $selectedAdmin = $admin /* --}} @endif
@@ -40,7 +40,7 @@
                                 </ul>
                             @show
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                {{ isset($selectedAdmin) ? $selectedAdmin->getDisplayName() : '관리자' }} <span class="caret"></span>
+                                {{ isset($selectedAdmin) ? $selectedAdmin->getDisplayName() : xe_trans('xe::memberRatingManager') }} <span class="caret"></span>
                             </button>
                             @yield('admin-select')
                         </div>
@@ -60,7 +60,7 @@
                             <form method="GET" action="{{ route('settings.setting.log.index') }}" accept-charset="UTF-8" role="form" id="_search-form">
 
                                 <div class="input-group-btn">
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">기간</button>
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="xi-calendar-check"></i></button>
                                 </div>
 
                                 <div class="search-input-group">
@@ -76,19 +76,19 @@
                                         @if(request()->get('keyfield')==='url')
                                             URL
                                         @elseif(request()->get('keyfield')==='summary')
-                                            요약
+                                            {{ xe_trans('xe::summary') }}
                                         @elseif(request()->get('keyfield')==='ipaddress')
-                                            IP주소
+                                            {{ xe_trans('xe::ipAddress') }}
                                         @else
-                                            선택
+                                            {{ xe_trans('xe::select') }}
                                         @endif
                                         </span>
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" role="menu">
                                         <li><a href="#" class="__xe_selectKeyfield" data-value="url">URL</a></li>
-                                        <li><a href="#" class="__xe_selectKeyfield" data-value="summary">요약</a></li>
-                                        <li><a href="#" class="__xe_selectKeyfield" data-value="ipaddress">IP주소</a></li>
+                                        <li><a href="#" class="__xe_selectKeyfield" data-value="summary">{{ xe_trans('xe::summary') }}</a></li>
+                                        <li><a href="#" class="__xe_selectKeyfield" data-value="ipaddress">{{ xe_trans('xe::ipAddress') }}</a></li>
                                     </ul>
                                 </div>
                                 <div class="search-input-group">
@@ -110,12 +110,12 @@
                     <table class="table">
                         <thead>
                         <tr>
-                            <th scope="col">일시</th>
-                            <th scope="col">타입</th>
-                            <th scope="col">관리자</th>
-                            <th scope="col">요약</th>
-                            <th scope="col">IP주소</th>
-                            <th scope="col">자세히</th>
+                            <th scope="col">{{ xe_trans('xe::date') }}</th>
+                            <th scope="col">{{ xe_trans('xe::types') }}</th>
+                            <th scope="col">{{ xe_trans('xe::memberRatingManager') }}</th>
+                            <th scope="col">{{ xe_trans('xe::summary') }}</th>
+                            <th scope="col">{{ xe_trans('xe::ipAddress') }}</th>
+                            <th scope="col">{{ xe_trans('xe::showDetails') }}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -136,7 +136,7 @@
                                    {{--data-user-id="{{ $log->getUser()->getId() }}" --}} >{{ $log->getUser()->getDisplayName() }}</a></td>
                             <td>{{ $log->summary }}</td>
                             <td>{{ $log->ipaddress }}</td>
-                            <td><a class="xe-btn xe-btn-link" href="{{ route('settings.setting.log.show', ['id'=>$log->id]) }}" data-toggle="xe-page-modal">보기</a></td>
+                            <td><a class="xe-btn xe-btn-link" href="{{ route('settings.setting.log.show', ['id'=>$log->id]) }}" data-toggle="xe-page-modal">{{ xe_trans('xe::view') }}</a></td>
                         </tr>
                         @endforeach
                         </tbody>

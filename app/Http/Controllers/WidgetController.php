@@ -129,7 +129,7 @@ class WidgetController extends Controller
         // widget list
         $widgetList = $widgetHandler->getAll();
         $widgets = [];
-        $widgets[''] = '위젯을 선택하세요';
+        $widgets[''] = xe_trans('xe::selectWidget');
         foreach ($widgetList as $id => $class) {
             $widgets[$id] = $class::getTitle();
         }

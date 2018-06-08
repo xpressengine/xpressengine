@@ -28,5 +28,5 @@ use Xpressengine\Plugin\PluginException;
  */
 class InvalidComponentIdException extends PluginException
 {
-    protected $message = 'xe::invalidRegistrableId';
+    protected $message = 'Component ID is not valid.';
 }

@@ -27,7 +27,7 @@
                             <th scope="col"><input type="checkbox" id="__xe_check-all"></th>
                             <th scope="col">{{xe_trans('xe::groupName')}}</th>
                             <th scope="col">{{xe_trans('xe::description')}}</th>
-                            <th scope="col">기본그룹</th>
+                            <th scope="col">{{xe_trans('xe::defaultGroup')}}</th>
                             <th scope="col">{{xe_trans('xe::groupMemberCount')}}</th>
                             <th scope="col">{{xe_trans('xe::management')}}</th>
                         </tr>

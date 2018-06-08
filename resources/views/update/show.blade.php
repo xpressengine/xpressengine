@@ -50,7 +50,7 @@
             <div class="panel">
                 <div class="panel-heading">
                     <div class="pull-left">
-                        <h3 class="panel-title">XE3 코어 업데이트</h3>
+                        <h3 class="panel-title">{{ xe_trans('xe::coreUpdate') }}</h3>
                     </div>
                     <div class="pull-right">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="btn-link panel-toggle pull-right"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">{{xe_trans('xe::fold')}}</span></a>
@@ -59,11 +59,11 @@
 
                 <div class="panel-body">
                     @if($installedVersion === __XE_VERSION__)
-                        <p>현재 XE3 {{ __XE_VERSION__ }} 버전이 정상적으로 설치되어 있습니다.</p>
+                        <p>{{ xe_trans('xe::msgCoreInstalled', ['version' => __XE_VERSION__]) }}</p>
                     @else
                         @if($operation && $operation['updateVersion'] && $operation['status'] === 'running')
                             <p>
-                                {{ $operation['updateVersion'] }} 으로 업데이트 중입니다.
+                                {{ xe_trans('xe::updatingTo', ['version' => $operation['updateVersion']]) }}
                             </p>
 
                         @else
@@ -71,31 +71,31 @@
                                 {{ csrf_field() }}
                                 {{ method_field('put') }}
                                 <p>
-                                    새로운 버전의 XE가 다운로드 되었습니다. <br>
-                                    XE를 {{ __XE_VERSION__ }} 버전으로 업데이트합니다. 최대 수분이 소요될 수 있습니다. 업데이트 하시겠습니까?
+                                    {{ xe_trans('xe::newCoreDownloaded') }} <br>
+                                    {{ xe_trans('xe::alertUpdateCore', ['version' => __XE_VERSION__]) }} {{ xe_trans('xe::confirmUpdate') }}
                                 </p>
                                 <br>
                                 <div class="well">
                                     <p>
-                                        현재 설치된 버전: {{ $installedVersion }}
+                                        {{ xe_trans('xe::currentInstalledVersion') }}: {{ $installedVersion }}
                                     </p>
                                     <p>
-                                        새로 다운로드된 버전: {{ __XE_VERSION__ }}
+                                        {{ xe_trans('xe::downloadedVersion') }}: {{ __XE_VERSION__ }}
                                     </p>
                                 </div>
 
                                 <div class="checkbox">
                                     <label>
                                         <input type="checkbox" name="skip-composer" value="Y"> <code>composer
-                                            update</code> 실행 안 함
+                                            update</code> {{ xe_trans('xe::doNotRun') }}
                                     </label>
-                                    <p class="help-block">- 이미 직접 composer update를 실행한 경우 체크하십시오.</p>
+                                    <p class="help-block">- {{ xe_trans('xe::checkIfAlreadyRunComposer') }}</p>
                                 </div>
                             </form>
                             @section('submit_button')
                                 <div class="panel-footer">
                                     <div class="pull-right">
-                                        <button type="button" class="xe-btn xe-btn-primary" onclick="$('#updateForm').submit();return false">{{ xe_trans('xe::update_plugin') }}</button>
+                                        <button type="button" class="xe-btn xe-btn-primary" onclick="$('#updateForm').submit();return false">{{ xe_trans('xe::updates') }}</button>
                                     </div>
                                 </div>
                             @endsection

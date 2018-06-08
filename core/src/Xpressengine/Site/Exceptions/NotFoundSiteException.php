@@ -28,5 +28,5 @@ use Xpressengine\Site\SiteException;
  */
 class NotFoundSiteException extends SiteException
 {
-    protected $message = 'Site 를 찾을 수 없습니다.';
+    protected $message = 'Site not found.';
 }

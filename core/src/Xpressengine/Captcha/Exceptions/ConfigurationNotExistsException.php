@@ -28,5 +28,5 @@ use Xpressengine\Captcha\CaptchaException;
  */
 class ConfigurationNotExistsException extends CaptchaException
 {
-    protected $message = '캡차 설정이 되어있지 않습니다. 설정파일(config/captcha.php)을 확인하십시오.';
+    protected $message = 'Captcha setting is not set. Check the configuration file (config / captcha.php).';
 }

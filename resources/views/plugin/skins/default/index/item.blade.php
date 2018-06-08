@@ -33,7 +33,7 @@
         @if(array_has($unresolvedComponents, $plugin->getId()))
             <hr>
             <div class="alert alert-warning" role="alert" style="margin-top:10px;">
-                <p><i class="xi-info-o txt_red"></i> 정상적으로 등록되지 않은 컴포넌트가 있습니다. XE가 정상적으로 작동하지 않을 수 있습니다.</p>
+                <p><i class="xi-info-o txt_red"></i> {{ xe_trans('xe::componentNotRegisteredProperly') }}</p>
                 <ul class="list-unstyled">
                     @foreach(array_get($unresolvedComponents, $plugin->getId()) as $cId => $info)
                         {{ $cId }}

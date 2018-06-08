@@ -28,5 +28,5 @@ use Xpressengine\Plugin\PluginException;
  */
 class PluginAlreadyDeactivatedException extends PluginException
 {
-    protected $message = '이미 비활성화 되어있는 플러그인입니다.';
+    protected $message = 'Plugin is already deactivate.';
 }

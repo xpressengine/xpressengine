@@ -52,7 +52,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">위젯 추가</h4>
+                    <h4 class="modal-title" id="myModalLabel">{{ xe_trans('xe::addWidget') }}</h4>
                 </div>
                 <div class="modal-body">
                     {{ uio('widget', ['id'=>'widgetGen', 'show_code'=>false]) }}
@@ -75,10 +75,10 @@
                         <input type="hidden" name="file" value="{{ $editFile['fileName'] }}">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="myModalLabel">파일의 내용을 원본으로 되돌립니다</h4>
+                            <h4 class="modal-title" id="myModalLabel">{{ xe_trans('xe::revertContents') }}</h4>
                         </div>
                         <div class="modal-body">
-                            편집했던 내용을 모두 잃습니다. 원본으로 되돌리시겠습니까?
+                            {{ xe_trans('xe::confirmRevertContents') }}
                         </div>
                         <div class="xe-modal-footer">
                             <button type="button" class="xe-btn xe-btn-secondary" data-dismiss="modal">{{ xe_trans('xe::cancel') }}</button>

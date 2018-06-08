@@ -7,7 +7,7 @@
     <div class="xe-modal-body">
         <div class="xe-lypop-plugin">
             <p class="xe-lypop-plugin-text">
-                아래 플러그인을 활성화하시겠습니까?
+                {{ xe_trans('xe::confirmActivatePlugin') }}
             </p>
             <div class="xe-lypop-plugin-check version">
 
@@ -17,7 +17,7 @@
                     <label class="xe-label">
                         <input type="checkbox" disabled checked>
                         <span class="xe-input-helper"></span>
-                        <div class="xe-label-text"><span>{{ $plugin->getTitle() }}</span><b>({{ $plugin->getId() }})</b> 이미 활성화 되어 있음</div>
+                        <div class="xe-label-text"><span>{{ $plugin->getTitle() }}</span><b>({{ $plugin->getId() }})</b> {{ xe_trans('xe::alreadyActivated') }}</div>
                     </label>
                     @else
                     <label class="xe-label">

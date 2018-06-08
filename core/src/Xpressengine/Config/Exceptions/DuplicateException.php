@@ -28,5 +28,5 @@ use Xpressengine\Config\ConfigException;
  */
 class DuplicateException extends ConfigException
 {
-    protected $message = '":name" 은 중복된 값입니다.';
+    protected $message = '":name" is duplicate.';
 }

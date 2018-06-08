@@ -318,16 +318,13 @@ class MenuController extends Controller
      */
     public function createItem(Request $request, $menuId)
     {
+        $this->validate($request, ['selectType' => 'required']);
+
         $menu = XeMenu::menus()->find($menuId);
         $menuConfig = XeMenu::getMenuTheme($menu);
 
         $parent = $request->get('parent');
-
         $selectedMenuType = $request->get('selectType');
-        if ($selectedMenuType === null) {
-            return redirect()->route('settings.menu.select.types', [$menu->id])
-                ->with('alert', ['type' => 'warning', 'message' => 'type 을 선택하십시오']);
-        }
 
         $siteKey = XeSite::getCurrentSiteKey();
         $menuTypeObj = XeMenu::getModuleHandler()->getModuleObject($selectedMenuType);
