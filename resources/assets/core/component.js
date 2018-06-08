@@ -16,7 +16,7 @@ export default class Component extends Singleton {
   }
 
   boot (XE) {
-    XE.$on('setup', (eventName, options) => {
+    XE.$$on('setup', (eventName, options) => {
       moment.locale(XE.locale)
     })
 

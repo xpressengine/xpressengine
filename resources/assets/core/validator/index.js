@@ -453,7 +453,7 @@ export default class Validator extends Singleton {
   }
 
   boot () {
-    // XE.$on('setup', (eventName, options) => {
+    // XE.$$on('setup', (eventName, options) => {
     //   this.setup(options)
     // })
 
@@ -534,7 +534,7 @@ export default class Validator extends Singleton {
        * origin : 처음 설정된 룰
        * reassign : 룰을 다시 설정
       */
-      this.$emit('setRules', ruleName, this.rules[ruleName], rules, originalRules[ruleName], (rules) => {
+      this.$$emit('setRules', ruleName, this.rules[ruleName], rules, originalRules[ruleName], (rules) => {
         this.rules[ruleName] = rules
       })
     } else {

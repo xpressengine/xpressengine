@@ -20,7 +20,7 @@ export default class Request extends Singleton {
   boot (XE) {
     if (super.boot()) return
 
-    XE.$on('setup', (eventName, options) => {
+    XE.$$on('setup', (eventName, options) => {
       this.setup(options)
     })
   }
@@ -43,10 +43,10 @@ export default class Request extends Singleton {
 
     this.axiosInstance.interceptors.response.use(response => {
       const res = new ResponseEntity(response)
-      this.$emit('sucess', res)
+      this.$$emit('sucess', res)
 
       if (res.exposed) {
-        this.$emit('exposed', res.exposed)
+        this.$$emit('exposed', res.exposed)
         res.removeExposed()
       }
 
@@ -54,7 +54,7 @@ export default class Request extends Singleton {
     }, error => {
       const errorObj = new RequestError(error, error.response.request, error.response.data, error.response.headers)
       errorObj._axiosConfig = error.config
-      this.$emit('error', errorObj)
+      this.$$emit('error', errorObj)
       return Promise.reject(errorObj)
     })
   }
@@ -67,7 +67,7 @@ export default class Request extends Singleton {
    * @return {Promise}
    */
   get (url, params = null, config = {}) {
-    this.$emit('start', new RequestEntity({
+    this.$$emit('start', new RequestEntity({
       method: 'get',
       context: config.context
     }))
@@ -86,7 +86,7 @@ export default class Request extends Singleton {
    * @return {Promise}
    */
   post (url, data, config = {}) {
-    this.$emit('start', new RequestEntity({
+    this.$$emit('start', new RequestEntity({
       method: 'post',
       context: config.context
     }))
@@ -104,7 +104,7 @@ export default class Request extends Singleton {
    * @return {Promise}
    */
   delete (url, data = null, config = {}) {
-    this.$emit('start', new RequestEntity({
+    this.$$emit('start', new RequestEntity({
       method: 'delete',
       context: config.context
     }))
@@ -123,7 +123,7 @@ export default class Request extends Singleton {
    * @return {Promise}
    */
   put (url, data, config = {}) {
-    this.$emit('start', new RequestEntity({
+    this.$$emit('start', new RequestEntity({
       method: 'put',
       context: config.context
     }))
@@ -142,7 +142,7 @@ export default class Request extends Singleton {
    * @return {Promise}
    */
   head (url, data = null, headers = null, config = {}) {
-    this.$emit('start', new RequestEntity({
+    this.$$emit('start', new RequestEntity({
       method: 'head',
       context: config.context
     }))

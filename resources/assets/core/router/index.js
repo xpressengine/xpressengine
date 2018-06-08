@@ -14,12 +14,12 @@ export default class Router extends Singleton {
   boot (XE) {
     if (super.boot()) return
 
-    XE.$on('setup', (eventName, options) => {
+    XE.$$on('setup', (eventName, options) => {
       this.setup(options.baseURL, options.fixedPrefix, options.settingsPrefix)
       if (options.routes) this.addRoutes(options.routes)
     })
 
-    requestInstance.$on('exposed', (eventName, exposed) => {
+    requestInstance.$$on('exposed', (eventName, exposed) => {
       if (exposed.routes) this.addRoutes(exposed.routes)
     })
   }

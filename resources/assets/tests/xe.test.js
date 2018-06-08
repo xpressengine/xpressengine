@@ -4,11 +4,11 @@ import XE from 'xe'
 describe('XE', function () {
   describe('EventEmitter', function () {
     it('eventify', function () {
-      expect(XE).to.have.property('$emit').that.is.a('function')
-      expect(XE).to.have.property('$on').that.is.a('function')
-      expect(XE).to.have.property('$once').that.is.a('function')
-      expect(XE).to.have.property('$off').that.is.a('function')
-      expect(XE).to.have.property('$offAll').that.is.a('function')
+      expect(XE).to.have.property('$$emit').that.is.a('function')
+      expect(XE).to.have.property('$$on').that.is.a('function')
+      expect(XE).to.have.property('$$once').that.is.a('function')
+      expect(XE).to.have.property('$$off').that.is.a('function')
+      expect(XE).to.have.property('$$offAll').that.is.a('function')
     })
   })
 
@@ -53,7 +53,7 @@ describe('XE', function () {
 
   describe('setup', function () {
     it('event emitting', function (done) {
-      XE.$on('setup', function () {
+      XE.$$on('setup', function () {
         done()
       })
       XE.setup({})

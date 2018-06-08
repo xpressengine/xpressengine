@@ -50,7 +50,7 @@ class XE {
     this.Validator.boot(this)
     this.Component.boot(this)
 
-    this.Request.$on('exposed', (eventName, exposed) => {
+    this.Request.$$on('exposed', (eventName, exposed) => {
       this.DynamicLoadManager.jsLoadMultiple(exposed.assets.js)
       exposed.assets.css.forEach((src) => {
         this.DynamicLoadManager.cssLoad(src)
@@ -109,7 +109,7 @@ class XE {
     this.configure(options)
     this.boot()
 
-    this.$emit('setup', this.options)
+    this.$$emit('setup', this.options)
   }
 
   configure (options) {

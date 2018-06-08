@@ -16,7 +16,7 @@ export default class DynamicLoadManager extends Singleton {
   }
 
   boot (XE) {
-    XE.$on('setup', (eventName, options) => {
+    XE.$$on('setup', (eventName, options) => {
     })
 
     assets.js.add(XE.baseURL + '/assets/vendor.js')

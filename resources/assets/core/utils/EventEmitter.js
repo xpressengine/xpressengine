@@ -22,24 +22,24 @@ export default class EventEmitter {
   static extend (target) {
     const emitter = new EventEmitter(target)
 
-    target.$on = (eventName, listener, context = null) => {
-      return emitter.$on(eventName, listener, context)
+    target.$$on = (eventName, listener, context = null) => {
+      return emitter.$$on(eventName, listener, context)
     }
 
-    target.$once = (eventName, listener, context = null) => {
-      return emitter.$once(eventName, listener, context)
+    target.$$once = (eventName, listener, context = null) => {
+      return emitter.$$once(eventName, listener, context)
     }
 
-    target.$emit = (eventName, ...args) => {
-      return emitter.$emit(eventName, ...args)
+    target.$$emit = (eventName, ...args) => {
+      return emitter.$$emit(eventName, ...args)
     }
 
-    target.$off = (eventName, symbolKey) => {
-      return emitter.$off(eventName, symbolKey)
+    target.$$off = (eventName, symbolKey) => {
+      return emitter.$$off(eventName, symbolKey)
     }
 
-    target.$offAll = (eventName) => {
-      return emitter.$offAll(eventName)
+    target.$$offAll = (eventName) => {
+      return emitter.$$offAll(eventName)
     }
 
     emitter.target = target
@@ -53,7 +53,7 @@ export default class EventEmitter {
     }
   }
 
-  $on (eventName, listener, context = null, options = {}) {
+  $$on (eventName, listener, context = null, options = {}) {
     if (typeof eventName !== 'string') return
     if (typeof listener !== 'function') return
 
@@ -75,11 +75,11 @@ export default class EventEmitter {
     return symbolKey
   }
 
-  $once (eventName, listener, context = null) {
-    return this.$on(eventName, listener, context, { 'once': true })
+  $$once (eventName, listener, context = null) {
+    return this.$$on(eventName, listener, context, { 'once': true })
   }
 
-  $emit (eventName, ...args) {
+  $$emit (eventName, ...args) {
     if (typeof eventName !== 'string') return
     if (!(this.eventMaps[eventName] instanceof Map)) return
 
@@ -94,7 +94,7 @@ export default class EventEmitter {
     })
   }
 
-  $off (eventName, symbolKey) {
+  $$off (eventName, symbolKey) {
     if (typeof eventName !== 'string') return
     if (typeof symbolKey !== 'symbol') return
     if (!(this.eventMaps[eventName] instanceof Map)) return
@@ -102,7 +102,7 @@ export default class EventEmitter {
     this.eventMaps[eventName].delete(symbolKey)
   }
 
-  $offAll (eventName) {
+  $$offAll (eventName) {
     if (typeof eventName !== 'string') return
 
     this.eventMaps[eventName] = new Map()
