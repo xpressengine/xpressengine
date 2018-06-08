@@ -1,31 +1,31 @@
     <div class="panel">
         <div class="panel-body">
-            <strong>최근작업</strong>
+            <strong>{{ xe_trans('xe::recentOperation') }}</strong>
 
             @if($operation['status'] !== 'running')
                 <div class="pull-right">
                     <form action="{{ route('settings.coreupdate.operation.delete') }}" method="delete" data-submit="xe-ajax" data-callback="deletePluginOperation">
-                        <button class="btn-link" type="submit">내역 삭제</button>
+                        <button class="btn-link" type="submit">{{ xe_trans('xe::deleteHistory') }}</button>
                     </form>
                 </div>
             @endif
             <hr>
-            <label for="">작업</label>
-            <p>{{ $operation['updateVersion'] }} 으로 업데이트</p>
-            <label for="">상태</label>
+            <label for="">{{ xe_trans('xe::operation') }}</label>
+            <p>Update ver.{{ $operation['updateVersion'] }}</p>
+            <label for="">{{ xe_trans('xe::status') }}</label>
             <p>
                 @if($operation['status'] === 'successed')
-                    성공
+                    {{ xe_trans('xe::success') }}
                 @elseif($operation['status'] === 'failed')
-                    실패
+                    {{ xe_trans('xe::fail') }}
                 @elseif($operation['status'] === 'expired')
-                    실패(제한시간 초과)
+                    {{ xe_trans('xe::fail') }}({{ xe_trans('xe::timeoutExceeded') }})
                 @else
-                    진행중
+                    {{ xe_trans('xe::inProgress') }}
                 @endif
 
                 @if($operation['log'])
-                <button type="button" class="xe-btn btn-link" data-toggle="collapse" aria-expanded="false" data-target=".operation-log">콘솔보기</button>
+                <button type="button" class="xe-btn btn-link" data-toggle="collapse" aria-expanded="false" data-target=".operation-log">{{ xe_trans('xe::showDetails') }}</button>
                 @endif
             </p>
 

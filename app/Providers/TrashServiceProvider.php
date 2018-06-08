@@ -67,8 +67,8 @@ class TrashServiceProvider extends ServiceProvider
             function ($target) {
                 $menu          = $target();
                 $menu['contents']['submenu']['trash'] = [
-                    'title' => '휴지통 관리',
-                    'description' => 'blur blur~',
+                    'title' => xe_trans('xe::trash').' '.xe_trans('xe::manage'),
+                    'description' => '',
                     'link' => route('manage.trash.index')
 
                 ];

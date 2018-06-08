@@ -26,5 +26,5 @@ use Xpressengine\Plugin\PluginException;
  */
 class PluginDependencyException extends PluginException
 {
-    protected $message = '의존관계에 있는 플러그인이 먼저 활성화되거나 비활성화되어야 합니다.';
+    protected $message = 'Dependencies must be enabled or disabled first.';
 }

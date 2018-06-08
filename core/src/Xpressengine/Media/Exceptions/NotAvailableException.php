@@ -28,5 +28,5 @@ use Xpressengine\Media\MediaException;
  */
 class NotAvailableException extends MediaException
 {
-    protected $message = '사용할 수 없는 파일입니다.';
+    protected $message = 'The file is not available.';
 }

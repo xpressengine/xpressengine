@@ -26,6 +26,5 @@ use Xpressengine\Plugin\PluginException;
  */
 class PluginNotFoundException extends PluginException
 {
-    //protected $message = '플러그인(:plugin)을 찾을 수 없습니다.';
-    protected $message = 'xe::pluginNotFoundException';
+    protected $message = 'Not found plugin.[:plugin]';
 }

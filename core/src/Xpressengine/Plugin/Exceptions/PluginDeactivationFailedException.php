@@ -26,5 +26,5 @@ use Xpressengine\Plugin\PluginException;
  */
 class PluginDeactivationFailedException extends PluginException
 {
-    protected $message = '플러그인을 비활성화하는데에 실패하였습니다.';
+    protected $message = 'Failed to deactivate plugin.';
 }

@@ -28,5 +28,5 @@ use Xpressengine\Support\Exceptions\XpressengineException;
  */
 class ValueMustBeArrayException extends XpressengineException
 {
-    protected $message = '지정된 키의 값이 배열형식이 아닙니다.';
+    protected $message = 'The value of the specified key is not an array type.';
 }

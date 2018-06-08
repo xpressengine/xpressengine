@@ -1,60 +1,64 @@
+@php
+    $operations = ['install' => xe_trans('xe::install'), 'update' => xe_trans('xe::updates')];
+@endphp
+
     <div class="panel">
         <div class="panel-body">
             @if ($operation['status'] !== 'running' && Session::get('operation') === 'running')
-                <strong>진행상태를 불러오고 있습니다.</strong>
+                <strong>{{ xe_trans('xe::loadingForStatus') }}</strong>
             @else
-                <strong>최근작업</strong>
+                <strong>{{ xe_trans('xe::recentOperation') }}</strong>
 
                 @if($operation['status'] !== 'running')
                     <div class="pull-right">
                         <form action="{{ route('settings.plugins.operation.delete') }}" method="DELETE" data-submit="xe-ajax" data-callback="deletePluginOperation">
-                            <button class="btn-link" type="submit">내역 삭제</button>
+                            <button class="btn-link" type="submit">{{ xe_trans('xe::deleteHistory') }}</button>
                         </form>
                     </div>
                 @endif
                 <hr>
-                <label for="">작업</label>
+                <label for="">{{ xe_trans('xe::operation') }}</label>
                     @forelse($operation['targets'] as $name => $package)
 
                         @if($package['operation'] === 'uninstall')
                             @if(data_get($operation['infos'], $name))
-                            <p>{{ data_get($operation['infos'], $name.'.title') }}({{ $package['id'] }}) 삭제</p>
+                            <p>{{ data_get($operation['infos'], $name.'.title') }}({{ $package['id'] }}) {{ xe_trans('xe::destroy') }}</p>
                             @else
-                            <p>{{ $name }} 삭제</p>
+                            <p>{{ $name }} {{ xe_trans('xe::destroy') }}</p>
                             @endif
                         @else
                             @if(data_get($operation['infos'], $name))
-                                <p>{{ data_get($operation['infos'], $name.'.title') }}({{ $package['id'] }}) ver.{{ $package['version'] }} {{ array_get(['install'=>'설치','update'=>'업데이트'], $package['operation']) }}</p>
+                                <p>{{ data_get($operation['infos'], $name.'.title') }}({{ $package['id'] }}) ver.{{ $package['version'] }} {{ array_get($operations, $package['operation']) }}</p>
                             @else
-                                <p>{{ $name }} ver.{{ $package['version'] }} {{ array_get(['install'=>'설치','update'=>'업데이트'], $package['operation']) }}</p>
+                                <p>{{ $name }} ver.{{ $package['version'] }} {{ array_get($operations, $package['operation']) }}</p>
                             @endif
                         @endif
                     @empty
                         <p></p>
                     @endforelse
 
-                <label for="">상태</label>
+                <label for="">{{ xe_trans('xe::status') }}</label>
                 <p>
                     @if($operation['status'] === 'successed')
-                        <span class="label label-success">성공</span>
+                        <span class="label label-success">{{ xe_trans('xe::success') }}</span>
                     @elseif($operation['status'] === 'failed')
-                        <span class="label label-danger">실패</span>
+                        <span class="label label-danger">{{ xe_trans('xe::fail') }}</span>
                     @elseif($operation['status'] === 'expired')
-                        <span class="label label-danger">실패(제한시간 초과)</span>
+                        <span class="label label-danger">{{ xe_trans('xe::fail') }}({{ xe_trans('xe::timeoutExceeded') }})</span>
                     @else
-                        <span class="label label-warning">진행중</span>
+                        <span class="label label-warning">{{ xe_trans('xe::inProgress') }}</span>
                     @endif
                 </p>
 
                 @if($operation['status'] === 'successed')
-                    <label for="">변경 내역</label>
+                    <label for="">{{ xe_trans('xe::changeHistory') }}</label>
                     @foreach($operation['changed'] as $mode => $plugins)
                         @foreach($plugins as $plugin => $version)
                         <p>{{ $plugin }} ver.{{ $version }} {{ $mode }}</p>
                         @endforeach
                     @endforeach
                 @elseif($operation['status'] === 'failed')
-                    <label for="">실패 내역</label>
+                    <label for="">{{ xe_trans('xe::failureHistory') }}</label>
                     @foreach($operation['failed'] as $mode => $plugins)
                         @foreach($plugins as $plugin => $code)
                             <p>{{ $plugin }} {{ $mode.' failed: ' }} {{ array_get([

@@ -28,5 +28,5 @@ use Xpressengine\Media\MediaException;
  */
 class PropertyNotSetException extends MediaException
 {
-    protected $message = 'property 가 설정되지 않았습니다.';
+    protected $message = 'property does not set.';
 }

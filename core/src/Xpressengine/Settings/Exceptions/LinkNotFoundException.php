@@ -28,5 +28,6 @@ use Xpressengine\Settings\SettingsException;
  */
 class LinkNotFoundException extends SettingsException
 {
-    protected $message = '설정페이지 메뉴가 지정된 route는 name(as)이 지정되어 있거나 Controller action이어야 합니다.';
+    protected $message = 'Routes for which the configuration page menu is specified must have name(as) specified 
+    or Controller action.';
 }

@@ -28,5 +28,5 @@ use Xpressengine\Skin\SkinException;
  */
 class SkinNotFoundException extends SkinException
 {
-    protected $message = 'Skin을 찾을 수 없습니다';
+    protected $message = 'Skin not found.';
 }

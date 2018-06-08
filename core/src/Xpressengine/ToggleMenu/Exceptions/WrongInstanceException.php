@@ -28,5 +28,5 @@ use Xpressengine\ToggleMenu\ToggleMenuException;
  */
 class WrongInstanceException extends ToggleMenuException
 {
-    protected $message = '잘못된 instance 입니다.';
+    protected $message = 'Wrong instance.';
 }

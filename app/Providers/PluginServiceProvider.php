@@ -160,8 +160,8 @@ class PluginServiceProvider extends ServiceProvider
     {
         $permissions = [
             'plugin' => [
-                'title' => '플러그인 관리',
-                'tab' => '플러그인'
+                'title' => xe_trans('xe::plugin').' '.xe_trans('xe::manage'),
+                'tab' => xe_trans('xe::plugin')
             ]
         ];
         $register = $this->app->make('xe.register');

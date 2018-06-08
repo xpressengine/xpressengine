@@ -29,7 +29,7 @@ class FileAccessDeniedHttpException extends HttpXpressengineException
     /**
      * @var string $message exception message
      */
-    protected $message = '파일을 수정할 권한이 없습니다.';
+    protected $message = 'xe::notHavePermissionToEditFile';
 
     /**
      * @var int $statusCode exception http code

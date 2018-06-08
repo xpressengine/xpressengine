@@ -54,7 +54,7 @@ class SettingsController extends Controller
 
         $siteHandler->putSiteConfig($oldConfig);
 
-        return \Redirect::back()->with('alert', ['type' => 'success', 'message' => '저장되었습니다.']);
+        return \Redirect::back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
     }
 
     /**
@@ -122,7 +122,7 @@ class SettingsController extends Controller
         $theme = ['desktop' => $theme['theme_desktop'], 'mobile' => $theme['theme_mobile']];
         $themeHandler->setSiteTheme($theme);
 
-        return \Redirect::back()->with('alert', ['type' => 'success', 'message' => '저장되었습니다.']);
+        return \Redirect::back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
     }
 
     public function editPermissions(PermissionHandler $permissionHandler)
@@ -161,7 +161,7 @@ class SettingsController extends Controller
             )
         );
 
-        return redirect()->back()->with('alert', ['type' => 'success', 'message' => '저장되었습니다.']);
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
     }
 
     /**

@@ -29,5 +29,5 @@ use Xpressengine\Menu\MenuException;
 
 class CanNotDeleteMenuEntityHaveChildException extends MenuException
 {
-    protected $message = 'MenuItem 을 가지고 있는 MenuEntity 는 삭제할 수 없습니다.';
+    protected $message = 'Can not delete a MenuEntity that has a MenuItem';
 }

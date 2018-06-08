@@ -10,26 +10,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use XePresenter;
-use XeSkin;
-use Validator;
 use Xpressengine\Skin\SkinHandler;
-use Xpressengine\Support\Exceptions\InvalidArgumentException;
 
 class SkinController extends Controller
 {
     // 기본정보 보기
     public function putAssign(Request $request, SkinHandler $skinHandler)
     {
-        $validation = Validator::make(
-            $request->all(),
-            [
-                'skinId' => 'required',
-                'instanceId' => 'required'
-            ]
-        );
-        if ($validation->fails()) {
-            throw new InvalidArgumentException();
-        }
+        $this->validate($request, [
+            'skinId' => 'required',
+            'instanceId' => 'required'
+        ]);
+
         $skinInstanceId = $request->get('instanceId');
         $skinId = $request->get('skinId');
         $mode = $request->get('mode', 'desktop');
@@ -38,24 +30,16 @@ class SkinController extends Controller
         $skinHandler->assign($skinInstanceId, $skin, $mode);
 
         return XePresenter::makeApi(
-            ['type' => 'success', 'message' => '저장되었습니다.', 'skinId' => $skinId, 'skinTitle' => $skin->getTitle()]
+            ['type' => 'success', 'message' => xe_trans('xe::saved'), 'skinId' => $skinId, 'skinTitle' => $skin->getTitle()]
         );
     }
 
     public function getSetting(Request $request, SkinHandler $skinHandler)
     {
-
-        $validation = Validator::make(
-            $request->all(),
-            [
-                'skinId' => 'required',
-                'instanceId' => 'required'
-            ]
-        );
-
-        if ($validation->fails()) {
-            throw new InvalidArgumentException();
-        }
+        $this->validate($request, [
+            'skinId' => 'required',
+            'instanceId' => 'required'
+        ]);
 
         $skinInstanceId = $request->get('instanceId');
         $skinId = $request->get('skinId');
@@ -71,16 +55,11 @@ class SkinController extends Controller
 
     public function postSetting(Request $request, SkinHandler $skinHandler)
     {
-        $validation = Validator::make(
-            $request->all(),
-            [
-                'skinId' => 'required',
-                'instanceId' => 'required'
-            ]
-        );
-        if ($validation->fails()) {
-            throw new InvalidArgumentException();
-        }
+        $this->validate($request, [
+            'skinId' => 'required',
+            'instanceId' => 'required'
+        ]);
+
         $skinInstanceId = $request->get('instanceId');
         $skinId = $request->get('skinId');
 
@@ -96,7 +75,7 @@ class SkinController extends Controller
         $skinHandler->saveConfig($skinInstanceId, $skin);
 
         return XePresenter::makeApi(
-            ['type' => 'success', 'message' => '저장되었습니다.', 'skinId' => $skinId, 'skinTitle' => $skin->getTitle()]
+            ['type' => 'success', 'message' => xe_trans('xe::saved'), 'skinId' => $skinId, 'skinTitle' => $skin->getTitle()]
         );
     }
 }

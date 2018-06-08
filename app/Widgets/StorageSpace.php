@@ -98,7 +98,7 @@ class StorageSpace extends AbstractWidget
                 'limit' => [
                     '_type' => 'text',
                     'label' => '목록수',
-                    'description' => '파일수가 많은 파일형식(확장자) 순으로 출력됩니다. 출력할 파일형식의 목록수를 지정하십시오.'
+                    'description' => xe_trans('xe::descStorageSpaceLimit')
                 ]
             ],
             'value' => $args,

@@ -117,6 +117,14 @@ return [
         'ko' => '그룹 회원 수',
         'en' => 'Group member count',
     ],
+    'defaultGroupHasChanged' => [
+        'ko' => '기본 가입 그룹이 변경되었습니다.',
+        'en' => 'The default group has changed.',
+    ],
+    'defaultGroup' => [
+        'ko' => '기본 그룹',
+        'en' => 'Default group',
+    ],
     'comment' => [
         'ko' => '댓글',
         'en' => 'Comment',
@@ -177,6 +185,22 @@ return [
         'ko' => '실패했습니다',
         'en' => 'Failed',
     ],
+    'success' => [
+        'ko' => '성공',
+        'en' => 'Success',
+    ],
+    'fail' => [
+        'ko' => '실패',
+        'en' => 'Fail',
+    ],
+    'inProgress' => [
+        'ko' => '진행중',
+        'en' => 'In progress',
+    ],
+    'timeoutExceeded' => [
+        'ko' => '제한 시간 초과',
+        'en' => 'Timeout exceeded',
+    ],
     'modify' => [
         'ko' => '수정',
         'en' => 'Modify',
@@ -220,6 +244,10 @@ return [
     'cancel' => [
         'ko' => '취소',
         'en' => 'Cancel',
+    ],
+    'check' => [
+        'ko' => '확인',
+        'en' => 'Check',
     ],
     'done' => [
         'ko' => '완료',
@@ -673,6 +701,10 @@ return [
         'ko' => '정렬 방식',
         'en' => 'Order Type',
     ],
+    'filter' => [
+        'ko' => '필터',
+        'en' => 'Filter',
+    ],
     'file' => [
         'ko' => '파일',
         'en' => 'File',
@@ -685,6 +717,10 @@ return [
         'ko' => 'URL',
         'en' => 'URL',
     ],
+    'module' => [
+        'ko' => '모듈',
+        'en' => 'Module',
+    ],
     'widget' => [
         'ko' => '위젯',
         'en' => 'Widget',
@@ -692,6 +728,22 @@ return [
     'skin' => [
         'ko' => '스킨',
         'en' => 'Skin',
+    ],
+    'settingsSkin' => [
+        'ko' => '설정스킨',
+        'en' => 'Settings Skin',
+    ],
+    'uiobject' => [
+        'ko' => 'UI오브젝트',
+        'en' => 'UI Object',
+    ],
+    'dynamicField' => [
+        'ko' => '다이나믹필드',
+        'en' => 'Dynamic Field',
+    ],
+    'dynamicFieldSkin' => [
+        'ko' => '다이나믹필드스킨',
+        'en' => 'Dynamic Field Skin',
     ],
     'plugin' => [
         'ko' => '플러그인',
@@ -1153,31 +1205,47 @@ return [
     ],
     'activate' => [
         'ko' => '켜기',
-        'en' => 'activate'
+        'en' => 'Activate'
     ],
     'deactivate' => [
         'ko' => '끄기',
-        'en' => 'deactivate'
+        'en' => 'Deactivate'
     ],
-    'update_plugin' => [
+    'updates' => [
         'ko' => '업데이트',
-        'en' => 'update'
+        'en' => 'Updates'
     ],
     'applyUpdateNow' => [
         'ko' => '지금 수정사항 적용하기.',
         'en' => 'Apply downloaded update now.'
     ],
+    'appliedUpdatePlugin' => [
+        'ko' => '플러그인의 수정사항을 적용했습니다.',
+        'en' => 'Applied an update to the plugin.',
+    ],
     'hasNewUpdate' => [
         'ko' => '새로운 업데이트가 있습니다.',
-        'en' => ''
+        'en' => 'There is a new update.'
     ],
     'downloadUpdateNow' => [
         'ko' => '지금 업데이트 다운로드하기',
-        'en' => ''
+        'en' => 'Download the update now'
+    ],
+    'startUpdate' => [
+        'ko' => '업데이트를 시작합니다.',
+        'en' => 'Start the update.'
+    ],
+    'updated' => [
+        'ko' => '업데이트 하였습니다.',
+        'en' => 'Updated.'
+    ],
+    'checkToRemove' => [
+        'ko' => '삭제하시려면 체크하십시오.',
+        'en' => 'Check to remove.'
     ],
     'details' => [
         'ko' => '세부 사항',
-        'en' => ''
+        'en' => 'Details'
     ],
     'showDetails' => [
         'ko' => '자세히보기',
@@ -1276,6 +1344,10 @@ return [
         'ko' => '등록 대기중인 이메일',
         'en' => 'Pending Email'
     ],
+    'emailNotRegisteredOrPendingRegistration' => [
+        'ko' => '등록되지 않았거나 등록대기중인 이메일입니다.',
+        'en' => 'Email not registered or pending registration.',
+    ],
     'checkEmailForConfirmCode' => [
         'ko' => '인증코드를 확인하려면 <span class="text_gray">:email</span>에서 이메일을 확인해 주세요.',
         'en' => 'Check your confirm code in <span class="text_gray">:email</span>.'
@@ -1322,6 +1394,10 @@ return [
     'resendEmail' => [
         'ko' => '이메일 재전송',
         'en' => 'Resend Email'
+    ],
+    'resended' => [
+        'ko' => '재전송하였습니다.',
+        'en' => 'Resended.'
     ],
     'addMail' => [
         'ko' => '메일 추가하기',
@@ -1408,6 +1484,10 @@ return [
         'ko' => '비밀번호 변경이 완료되었습니다.',
         'en' => 'Password change complete.',
     ],
+    'currentPasswordIncorrect' => [
+        'ko' => '현재 비밀번호가 틀렸습니다.',
+        'en' => 'The current password is incorrect.',
+    ],
     'weak' => [
         'ko' => '약함',
         'en' => 'weak'
@@ -1436,8 +1516,17 @@ return [
         'ko' => '회원 수정',
         'en' => 'Edit member'
     ],
+    'accessUserList' => [
+        'ko' => '회원목록 접근',
+        'en' => 'Access User List'
+    ],
+    'editUserInfo' => [
+        'ko' => '회원정보 수정',
+        'en' => 'Edit User Information'
+    ],
     'confirmDeleteUsers' => [
-        'ko' => '아래의 회원을 삭제합니다. 삭제된 회원은 복구할 수 없습니다. 삭제하시겠습니까?',
+        'ko' => '회원을 삭제합니다. 삭제된 회원은 복구할 수 없습니다. 삭제하시겠습니까?',
+        'en' => 'Delete the users. Deleted users can not be recovered. Are you sure you want to delete?',
     ],
     'toggleMenu' => [
         'ko' => '토글 메뉴',
@@ -1480,8 +1569,8 @@ return [
         'en' => 'There is no posts.',
     ],
     'pluginNotFound' => [
-        'ko' => '플러그인 파일 찾을 수 없습니다. 찾는 파일 경로(:path)',
-        'en' => 'Not found plugin file. File path(:path)',
+        'ko' => '플러그인을 찾을 수 없습니다.[:plugin]',
+        'en' => 'Not found plugin.[:plugin]',
     ],
     'supportComponents' => [
         'ko' => '지원 컴포넌트',
@@ -1630,6 +1719,10 @@ return [
     'editor' => [
         'ko' => '에디터',
         'en' => 'Editor',
+    ],
+    'editorTool' => [
+        'ko' => '에디터툴',
+        'en' => 'Editor Tool',
     ],
     'editorEdit' => [
         'ko' => '에디터 변경',
@@ -1815,6 +1908,10 @@ return [
         'ko' => '약관에 동의하며 내 계정을 영구적으로 삭제하겠습니다.',
         'en' => 'I agree to the terms and conditions and we will permanently delete my account.',
     ],
+    'AgreementIsRequired' => [
+        'ko' => '약관의 동의가 필요합니다.',
+        'en' => 'Agreement is required.',
+    ],
     'activation' => [
         'ko' => '활성화',
         'en' => 'Activation',
@@ -1830,6 +1927,66 @@ return [
     'deactivatedPlugin' => [
         'ko' => '비활성화된 플러그인',
         'en' => 'Deactivated Plugin',
+    ],
+    'pluginActivated' => [
+        'ko' => '플러그인을 켰습니다.',
+        'en' => 'Plugin activated.',
+    ],
+    'pluginDeactivated' => [
+        'ko' => '플러그인을 껐습니다.',
+        'en' => 'Plugin deactivated.',
+    ],
+    'confirmActivatePlugin' => [
+        'ko' => '플러그인을 활성화하시겠습니까?',
+        'en' => 'Do you want to activate the plugin?',
+    ],
+    'alreadyActivated' => [
+        'ko' => '이미 활성화 되어 있음',
+        'en' => 'Already activated',
+    ],
+    'confirmDeactivatePlugin' => [
+        'ko' => '플러그인을 비활성화하시겠습니까?',
+        'en' => 'Do you want to deactivate the plugin?',
+    ],
+    'alreadyDeactivated' => [
+        'ko' => '이미 비활성화 되어 있음',
+        'en' => 'Already deactivated',
+    ],
+    'cautionDeactivatePlugin' => [
+        'ko' => '플러그인을 비활성화할 경우, 사이트가 정상적으로 작동하지 않을수도 있습니다.',
+        'en' => 'If you disable the plugin, the site may not function properly.',
+    ],
+    'descDeletePlugin' => [
+        'ko' => '플러그인을 삭제합니다. 각 플러그인이 정의된 삭제작업을 실행한 후, 플러그인의 소스코드 및 디렉토리를 삭제합니다.',
+        'en' => 'Delete the plugin. After each plugin executes a defined delete operation, it deletes the plugin\'s source code and directory.',
+    ],
+    'descDeleteActivatedPlugin' => [
+        'ko' => '활성화되어 있는 플러그인은 비활성화된 후 삭제됩니다.',
+        'en' => 'Activated plugins are disabled and then deleted.',
+    ],
+    'downloadingNewVersionPlugin' => [
+        'ko' => '플러그인의 새로운 버전을 다운로드하는 중입니다.',
+        'en' => 'Downloading a new version of the plugin.',
+    ],
+    'notFoundPluginFromMarket' => [
+        'ko' => '설치할 플러그인을 자료실에서 찾을 수 없습니다.',
+        'en' => 'Can not find the plugin that should be installed from the Market-place.',
+    ],
+    'notHaveWritePermissionForInstallPlugin' => [
+        'ko' => '[:file] 에 쓰기 권한이 없습니다. 플러그인을 설치하기 위해서는 쓰기 권한이 있어야 합니다.',
+        'en' => 'You do not have permission to write to [:file]. You must have write permission to install the plugin.',
+    ],
+    'composerEnvNotSet' => [
+        'ko' => 'COMPOSER_HOME 환경변수가 설정되어 있지 않습니다. :link 에서 설정할 수 있습니다.',
+        'en' => 'The COMPOSER_HOME environment variable is not set. You can set it in :link ',
+    ],
+    'composerHomeDir' => [
+        'ko' => 'COMPOSER 홈 디렉토리',
+        'en' => 'Composer home directory',
+    ],
+    'descComposerHomeDir' => [
+        'ko' => '플러그인을 설치할 때 컴포저를 사용합니다. 서버에 설치한 컴포저의 홈디렉토리를 지정하셔야 정상적으로 설치됩니다.',
+        'en' => 'Use the composer when installing the plugin. You need to specify the home directory of the Composer installed on the server.',
     ],
     'menuDeleteCaution' => [
         'ko' => '메뉴 삭제하면 다시 복구할 수 없습니다.',
@@ -1891,6 +2048,10 @@ return [
         'ko' => '테마',
         'en' => 'Theme',
     ],
+    'settingsTheme' => [
+        'ko' => '관리페이지테마',
+        'en' => 'Settings page Theme',
+    ],
     'themeSettingsDescription' => [
         'ko' => '테마를 설정합니다.',
         'en' => 'Set the theme.',
@@ -1925,6 +2086,15 @@ return [
     ],
     'confirmThemeDelete' => [
         'ko' => '삭제한 테마 설정은 되돌릴 수 없습니다. 이 테마 설정을 삭제하시겠습니까? ',
+        'en' => 'You can not revert theme settings you\'ve deleted. Are you sure you want to delete this theme setting?',
+    ],
+    'revertContents' => [
+        'ko' => '내용을 원본으로 되돌립니다.',
+        'en' => 'Revert contents to original.',
+    ],
+    'confirmRevertContents' => [
+        'ko' => '편집했던 내용을 모두 잃습니다. 원본으로 되돌리시겠습니까?',
+        'en' => 'All edits are lost. Revert to original?',
     ],
     'emptyTrash' => [
         'ko' => '휴지통 비우기',
@@ -1941,6 +2111,14 @@ return [
     'selectWidgetDescription' => [
         'ko' => '원하시는 위젯을 선택하여 주십시오.',
         'en' => 'Please select the widget you want.',
+    ],
+    'selectWidgetSkin' => [
+        'ko' => '위젯 스킨 선택',
+        'en' => 'Select widget skin',
+    ],
+    'alertNoWidgetSkins' => [
+        'ko' => '선택된 위젯에 등록된 위젯스킨이 없습니다. 위젯을 사용하려면 반드시 한개이상의 스킨이 필요합니다.',
+        'en' => 'No widget skins are registered for the selected widget. One or more skins are required to use the widget.',
     ],
     'addNewInstance' => [
         'ko' => '새 설정 추가',
@@ -2094,43 +2272,91 @@ return [
     ],
     'skinNotSupportSetting' => [
         'ko' => '설정을 지원하지 않는 스킨입니다.',
-        'en' => ''
+        'en' => 'This skin does not support settings.'
     ],
     'newVersion' => [
         'ko' => '새버전',
+        'en' => 'New version',
     ],
     'confirmDeletePlugin' => [
         'ko' => '플러그인을 삭제하시겠습니까?',
+        'en' => 'Do you want to delete the plugin?',
     ],
     'alertDeleteDevelopModePlugin' => [
         'ko' => '주의: 개발모드 플러그인의 경우, 플러그인 디렉토리는 삭제되지 않습니다. 플러그인 삭제후, 터미널이나 FTP에서 직접 플러그인 디렉토리를 삭제하시기 바랍니다.',
+        'en' => 'Note: For development mode plugins, the plugin directory is not deleted. After deleting the plugin, please delete the plugin directory directly from the terminal or FTP.',
     ],
     'alertDeletePlugin' => [
         'ko' => '플러그인 삭제 과정은 최대 수 분이 걸릴 수 있습니다.',
+        'en' => 'The plugin removal process can take up to a few minutes.',
     ],
     'alertUpdatePlugin' => [
         'ko' => '플러그인을 업데이트할 경우 의존관계에 있는 다른 플러그인이 같이 설치되거나 업데이트 될 수 있으며, 플러그인 업데이트 과정은 최대 수 분이 걸릴 수 있습니다.',
+        'en' => 'If you update a plugin, other dependencies may be installed or updated together, and the plugin update process can take up to several minutes.',
     ],
     'confirmUpdatePlugin' => [
         'ko' => '플러그인을 업데이트하시겠습니까?',
+        'en' => 'Do you want to update the plugin?',
     ],
     'currentInstalledVersion' => [
         'ko' => '현재 설치된 버전',
+        'en' => 'Current installed version',
     ],
     'installNewPlugin' => [
         'ko' => '새 플러그인 설치',
+        'en' => 'Install new Plugin',
     ],
     'installPlugin' => [
         'ko' => '플러그인 설치',
+        'en' => 'Install Plugin',
     ],
     'inputNewPluginId' => [
-        'ko' => '새로 설치할 플러그인의 아이디를 입력하세요',
+        'ko' => '새로 설치할 플러그인의 아이디를 입력하세요.',
+        'en' => 'Enter the ID of the plugin to be newly installed.',
     ],
     'install' => [
         'ko' => '설치하기',
+        'en' => 'Install',
+    ],
+    'installed' => [
+        'ko' => '설치됨',
+        'en' => 'Installed',
+    ],
+    'notInstalledYet' => [
+        'ko' => '미설치',
+        'en' => 'Not installed yet',
+    ],
+    'goToBuy' => [
+        'ko' => '구매하러 가기',
+        'en' => 'Go to buy',
+    ],
+    'noPlugins' => [
+        'ko' => '플러그인이 없습니다.',
+        'en' => 'No plugins.',
+    ],
+    'installingPlugin' => [
+        'ko' => '플러그인을 설치 중입니다.',
+        'en' => 'Installing plugin.'
     ],
     'pluginId' => [
         'ko' => '플러그인 아이디',
+        'en' => 'Plugin ID',
+    ],
+    'alreadyProceeding' => [
+        'ko' => '이미 진행중인 요청이 있습니다.',
+        'en' => 'There are already proceeding requests.'
+    ],
+    'noPluginsSelected' => [
+        'ko' => '선택된 플러그인이 없습니다.',
+        'en' => 'No plugins selected.'
+    ],
+    'deletingPlugin' => [
+        'ko' => '플러그인을 삭제중입니다.',
+        'en' => 'Deleting plugin.',
+    ],
+    'pluginSettings' => [
+        'ko' => '플러그인 설정',
+        'en' => 'Plugin settings'
     ],
     'mngCellPhoneNumberValidate' => [
         'ko' => '[:attribute] 는 핸드폰 번호 형식이 아닙니다.',
@@ -2176,6 +2402,10 @@ return [
         'ko' => '대표이메일은 삭제할 수 없습니다.',
         'en' => 'Cannot delete main email of user'
     ],
+    'SameAsMainEmail' => [
+        'ko' => '기존 대표 이메일과 동일합니다.',
+        'en' => 'Same as main email.',
+    ],
     'emailAlreadyExists' => [
         'ko' => '이미 존재하는 이메일입니다.',
         'en' => 'Email already exists'
@@ -2186,6 +2416,11 @@ return [
     ],
     'invalidDisplayName' => [
         'ko' => '회원이름 형식이 잘못되었습니다.',
+        'en' => 'The name format is invalid.',
+    ],
+    'usableDisplayName' => [
+        'ko' => '사용 가능한 이름입니다.',
+        'en' => 'This is a usable name.',
     ],
     'cannotDeleteSuperUser' => [
         'ko' => '최고 권한을 가진 회원은 삭제할 수 없습니다.',
@@ -2195,9 +2430,21 @@ return [
         'ko' => '존재하지 않는 이메일입니다.',
         'en' => 'Email not Found.'
     ],
+    'EmailNotExistOrAlreadyConfirmed' => [
+        'ko' => '존재하지 않거나 이미 승인된 이메일입니다.',
+        'en' => 'Email does not exist or has already been Confirmed.',
+    ],
     'invalidConfirmationCode' => [
         'ko' => '인증코드가 틀렸습니다.',
         'en' => 'Invalid confirmation code.'
+    ],
+    'confirmed' => [
+        'ko' => '인증되었습니다.',
+        'en' => 'Confirmed.'
+    ],
+    'invalidConfirmationCodeCheckAndRetry' => [
+        'ko' => '인증코드가 틀렸습니다. 인증 코드를 확인하시고 다시 입력해주세요.',
+        'en' => 'Invalid confirmation code. Please check the confirmation code and retry it.'
     ],
     'joinNotAllowed' => [
         'ko' => '관리자가 회원가입을 허용하지 않습니다.',
@@ -2215,14 +2462,25 @@ return [
         'ko' => '해당 회원을 찾을 수 없습니다.',
         'en' => 'User not found.',
     ],
+    'adminAuth' => [
+        'ko' => '관리자 인증',
+        'en' => 'Administrator authentication',
+    ],
     'msgAdminAuth' => [
         'ko' => '요청하신 페이지에 접근하기 위해서는 별도의 관리자 암호를 입력하셔야 합니다.',
+        'en' => 'You will need to enter a separate administrator password to access the requested page.',
     ],
     'msgAdminAuthDetail' => [
         'ko' => '권한을 가진 관리자일지라도 보안상 중요한 페이지에 접근하기 위해서는 별도의 관리자 암호를 입력하셔야 합니다. 관리자 암호는 사이트 최고 관리자에게 문의하십시오.',
+        'en' => 'Even if you are an authorized administrator, you will need to enter a separate administrator password in order to access pages that are sensitive to security. Contact your site administrator for an administrator password.',
     ],
     'adminLog' => [
         'ko' => '관리자 접근 로그',
+        'en' => 'Administrator access log',
+    ],
+    'authenticate' => [
+        'ko' => '인증하기',
+        'en' => 'Authenticate',
     ],
     'id' => [
         'ko' => '아이디',
@@ -2354,6 +2612,10 @@ return [
         'ko' => '종료 날짜 (2018-01-01)',
         'en' => 'end date (2018-01-01)',
     ],
+    'createWidgetBox' => [
+        'ko' => '위젯박스 생성',
+        'en' => 'Create Widget Box',
+    ],
     'editWidgetBox' => [
         'ko' => '위젯박스 편집',
         'en' => 'Edit Widget Box',
@@ -2365,6 +2627,10 @@ return [
     'notFoundWidgetBox' => [
         'ko' => '위젯박스[:id]를 찾을 수 없습니다.',
         'en' => 'Could not find widget box [:id]',
+    ],
+    'widgetBoxName' => [
+        'ko' => '박스명',
+        'en' => 'Box name',
     ],
     'createNow' => [
         'ko' => '바로생성',
@@ -2398,6 +2664,14 @@ return [
         'ko' => '위젯 관리',
         'en' => 'Widget Management',
     ],
+    'widgetSettings' => [
+        'ko' => '위젯 설정',
+        'en' => 'Widget settings',
+    ],
+    'widgetTitle' => [
+        'ko' => '위젯 제목',
+        'en' => 'Widget title',
+    ],
     'editArea' => [
         'ko' => '편집 영역',
         'en' => 'Edit Area',
@@ -2430,4 +2704,145 @@ return [
         'ko' => '하위 카테고리까지 삭제',
         'en' => 'Delete to sub category',
     ],
+    'needSiteTokenToViewListOfPurchased' => [
+        'ko' => '자료실에서 구매시 사용한 사이트토큰 정보를 저장해야 구매한 플러그인 목록을 볼 수 있습니다. :link',
+        'en' => 'you need site token to view the list of purchased. :link',
+    ],
+    'moveToSetting' => [
+        'ko' => '설정하러 가기',
+        'en' => 'Move to setting',
+    ],
+    'siteToken' => [
+        'ko' => '사이트 토큰',
+        'en' => 'Site token',
+    ],
+    'InvalidSiteTokenInformation' => [
+        'ko' => '사이트 토큰 정보가 잘못되었습니다.',
+        'en' => 'Invalid site token information.',
+    ],
+    'descSiteToken' => [
+        'ko' => '<a href="https://store.xpressengine.io" target="_blank">XE3 공식 자료실</a>에 등록하신 사이트의 토큰을 입력하세요. 자료실에서 구매한 유료 플러그인을 설치할 때 필요합니다.',
+        'en' => 'Please enter the token of the site registered in the <a href="https://store.xpressengine.io" target="_blank">XE3 official store</a>. Required when installing paid plugins purchased from the store.',
+    ],
+    'descStorageSpaceLimit' => [
+        'ko' => '파일수가 많은 파일형식(확장자) 순으로 출력됩니다. 출력할 파일형식의 목록수를 지정하십시오.',
+        'en' => 'Files are output in order of file type (extension) with a large number of files. Specify the number of lists of file types to output.',
+    ],
+    'descDownloadRankLimit' => [
+        'ko' => '다운로드수가 많은 파일 순으로 출력됩니다. 출력할 파일의 목록수를 지정하십시오.',
+        'en' => 'Files are output in order of the number of downloads. Specify the number of lists of files to output.',
+    ],
+    'notHavePermissionToEditFile' => [
+        'ko' => '파일을 수정할 권한이 없습니다.',
+        'en' => 'Do not have permission to edit the file.',
+    ],
+    'msgMaintenanceMode' => [
+        'ko' => '공사중!',
+        'en' => 'We will back soon!',
+    ],
+    'componentNotRegisteredProperly' => [
+        'ko' => '정상적으로 등록되지 않은 컴포넌트가 있습니다. XE가 정상적으로 작동하지 않을 수 있습니다.',
+        'en' => 'Some components are not registered properly. XE may not operate normally.',
+    ],
+    'iniOptionOff' => [
+        'ko' => ':option 설정이 꺼져있습니다.',
+        'en' => 'The :option setting is off.',
+    ],
+    'turnOnIniOptionForPluginUpdate' => [
+        'ko' => '플러그인을 업데이트하려면 php.ini 파일에서 :option 설정을 켜야 합니다.',
+        'en' => 'To update the plugin, you must turn on the :option setting in the php.ini file.',
+    ],
+    'descUpdatePlugins' => [
+        'ko' => '플러그인을 업데이트합니다. 업데이트하는 플러그인에서 의존하는 다른 플러그인이 같이 설치될 수 있습니다. 업데이트 과정은 수분이상 소요될 수 있습니다.',
+        'en' => 'Update the plugin. Other plugins that depend on the plugin you are updating may be installed together. The update process may take more than a few minutes.',
+    ],
+    'noPluginsToUpdate' => [
+        'ko' => '업데이트할 플러그인이 없습니다.',
+        'en' => 'No plugins to update.',
+    ],
+    'selectedPlugins' => [
+        'ko' => '선택한 플러그인',
+        'en' => 'Selected plugins',
+    ],
+    'popular' => [
+        'ko' => '인기',
+        'en' => 'Popular',
+    ],
+    'purchasedPlugins' => [
+        'ko' => '구매한 플러그인',
+        'en' => 'Purchased plugins',
+    ],
+    'loadingForStatus' => [
+        'ko' => '진행상태를 불러오고 있습니다.',
+        'en' => 'Loading for status',
+    ],
+    'operation' => [
+        'ko' => '작업',
+        'en' => 'Operation',
+    ],
+    'recentOperation' => [
+        'ko' => '최근 작업',
+        'en' => 'Recent operation',
+    ],
+    'changeHistory' => [
+        'ko' => '변경 내역',
+        'en' => 'Change history',
+    ],
+    'failureHistory' => [
+        'ko' => '실패 내역',
+        'en' => 'Failure history',
+    ],
+    'deleteHistory' => [
+        'ko' => '내역 삭제',
+        'en' => 'Delete history',
+    ],
+    'accessLog' => [
+        'ko' => '액세스 로그',
+        'en' => 'Access log',
+    ],
+    'types' => [
+        'ko' => '유형',
+        'en' => 'Types',
+    ],
+    'msgCoreInstalled' => [
+        'ko' => '현재 XE3 :version 버전이 정상적으로 설치되어 있습니다.',
+        'en' => 'XE3 :version is installed correctly.',
+    ],
+    'updatingTo' => [
+        'ko' => ':version 으로 업데이트 중입니다.',
+        'en' => 'Updating to :version',
+    ],
+    'newCoreDownloaded' => [
+        'ko' => '새로운 버전의 XE가 다운로드 되었습니다.',
+        'en' => 'A new version of XE has been downloaded.',
+    ],
+    'alertUpdateCore' => [
+        'ko' => 'XE를 :version 버전으로 업데이트합니다. 최대 수분이 소요될 수 있습니다.',
+        'en' => 'Update XE to version :version . It may take up to several minutes.',
+    ],
+    'confirmUpdate' => [
+        'ko' => '업데이트하시겠습니까?',
+        'en' => 'Do you want to update?',
+    ],
+    'downloadedVersion' => [
+        'ko' => '다운로드된 버전',
+        'en' => 'Downloaded Version',
+    ],
+    'doNotRun' => [
+        'ko' => '실행 안 함',
+        'en' => 'Do not run',
+    ],
+    'checkIfAlreadyRunComposer' => [
+        'ko' => '이미 직접 composer update를 실행한 경우 체크하십시오.',
+        'en' => 'Check if you have already run the composer update yourself.',
+    ],
+    'connectedAccount' => [
+        'ko' => '연결 계정',
+        'en' => 'Connected Account',
+    ],
+    'choose' => [
+        'ko' => '선택하세요.',
+        'en' => 'Choose.',
+    ],
+    ''
 ];

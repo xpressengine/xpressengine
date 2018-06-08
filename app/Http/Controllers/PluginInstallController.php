@@ -74,7 +74,9 @@ class PluginInstallController extends Controller
                 $link = route('settings.plugins.setting.show');
                 throw new HttpException(
                     Response::HTTP_BAD_REQUEST,
-                    '자료실에서 구매시 사용한 사이트토큰 정보를 저장해야 구매한 플러그인 목록을 볼 수 있습니다. <a href="'.$link.'">설정하러 가기</a>'
+                    xe_trans('xe::needSiteTokenToViewListOfPurchased', [
+                        'link' => sprintf('<a href="%s">%s</a>', $link, xe_trans('xe::moveToSetting'))
+                    ])
                 );
             }
             try {
@@ -82,7 +84,7 @@ class PluginInstallController extends Controller
             } catch (\Exception $e) {
                 throw new HttpException(
                     Response::HTTP_BAD_REQUEST,
-                    '사이트 토큰 정보가 잘못되었습니다.'
+                    xe_trans('xe::InvalidSiteTokenInformation')
                 );
             }
             $plugins = new Collection($packages);
@@ -123,15 +125,17 @@ class PluginInstallController extends Controller
     protected function getComponentTypes()
     {
         $componentTypes = [
-            'theme' => '테마',
-            'skin' => '스킨',
-            'settingsSkin' => '설정스킨',
-            'settingsTheme' => '관리페이지테마',
-            'widget' => '위젯',
-            'module' => '모듈',
-            'uiobject' => 'UI오브젝트',
-            'FieldType' => '다이나믹필드',
-            'FieldSkin' => '다이나믹필드스킨',
+            'theme' => xe_trans('xe::theme'),
+            'skin' => xe_trans('xe::skin'),
+            'settingsSkin' => xe_trans('xe::settingsSkin'),
+            'settingsTheme' => xe_trans('xe::settingsTheme'),
+            'widget' => xe_trans('xe::widget'),
+            'module' => xe_trans('xe::module'),
+            'editor' => xe_trans('xe::editor'),
+            'editortool' => xe_trans('xe::editorTool'),
+            'uiobject' => xe_trans('xe::uiobject'),
+            'FieldType' => xe_trans('xe::dynamicField'),
+            'FieldSkin' => xe_trans('xe::dynamicFieldSkin'),
         ];
         return $componentTypes;
     }

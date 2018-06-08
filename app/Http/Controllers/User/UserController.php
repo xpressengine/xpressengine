@@ -162,7 +162,7 @@ class UserController extends Controller
         $valid = true;
         try {
             $this->handler->validateDisplayName($name);
-            $message = '사용 가능한 이름입니다.';
+            $message = xe_trans('xe::usableDisplayName');
         } catch (DisplayNameAlreadyExistsException $e) {
             $valid = false;
             $message = $e->getMessage();
@@ -205,7 +205,7 @@ class UserController extends Controller
             ];
 
             if (Auth::validate($credentials) === false) {
-                $message = '현재 비밀번호가 틀렸습니다.';
+                $message = xe_trans('xe::currentPasswordIncorrect');
                 $target = 'current_password';
                 $result = false;
             }
@@ -278,7 +278,7 @@ class UserController extends Controller
 
         if ($request->user()->email === $address) {
             $e = new InvalidArgumentException();
-            $e->setMessage('기존 대표 이메일과 동일합니다.');
+            $e->setMessage(xe_trans('xe::SameAsMainEmail'));
             throw $e;
         }
 
@@ -293,7 +293,7 @@ class UserController extends Controller
         // 해당회원이 가진 이메일이 아닐 경우 예외처리한다.
         if ($selected === null) {
             $e = new InvalidArgumentException();
-            $e->setMessage('존재하지 않는 이메일입니다.');
+            $e->setMessage(xe_trans('xe::emailNotFound'));
             throw $e;
         }
 
@@ -307,8 +307,7 @@ class UserController extends Controller
         }
         XeDB::commit();
 
-        \Session::flash('alert', ['type' => 'success', 'message' => '수정되었습니다.']);
-        return XePresenter::makeApi(['message' => '수정되었습니다']);
+        return XePresenter::makeApi(['message' => xe_trans('xe::saved')]);
     }
 
     public function getMailList()
@@ -373,8 +372,7 @@ class UserController extends Controller
         }
         XeDB::commit();
 
-        \Session::flash('alert', ['type' => 'success', 'message' => '추가되었습니다.']);
-        return XePresenter::makeApi(['message' => '추가되었습니다']);
+        return XePresenter::makeApi(['message' => xe_trans('xe::saved')]);
     }
 
     /**
@@ -399,7 +397,7 @@ class UserController extends Controller
             app('xe.auth.email')->confirmEmail($pendingMail, $code);
         } catch (InvalidConfirmationCodeException $e) {
             $e = new InvalidArgumentHttpException();
-            $e->setMessage('잘못된 인증 코드입니다. 인증 코드를 확인하시고 다시 입력해주세요.');
+            $e->setMessage(xe_trans('xe::invalidConfirmationCodeCheckAndRetry'));
             throw $e;
         } catch (\Exception $e) {
             XeDB::rollback();
@@ -407,8 +405,7 @@ class UserController extends Controller
         }
         XeDB::commit();
 
-        \Session::flash('alert', ['type' => 'success', 'message' => '인증되었습니다.']);
-        return XePresenter::makeApi(['message' => '인증되었습니다.']);
+        return XePresenter::makeApi(['message' => xe_trans('xe::confirmed')]);
     }
 
     /**
@@ -428,7 +425,7 @@ class UserController extends Controller
 
         app('xe.auth.email')->sendEmailForAddingEmail($pendingMail);
 
-        return XePresenter::makeApi(['message' => '재전송하였습니다.']);
+        return XePresenter::makeApi(['message' => xe_trans('xe::resended')]);
     }
 
     /**
@@ -461,7 +458,7 @@ class UserController extends Controller
         // 해당회원이 가진 이메일이 아닐 경우 예외처리한다.
         if ($selected === null) {
             $e = new InvalidArgumentException();
-            $e->setMessage('존재하지 않는 이메일입니다.');
+            $e->setMessage(xe_trans('xe::emailNotFound'));
             throw $e;
         }
 
@@ -479,7 +476,7 @@ class UserController extends Controller
         }
         XeDB::commit();
 
-        return XePresenter::makeApi(['message' => '삭제되었습니다.']);
+        return XePresenter::makeApi(['message' => xe_trans('xe::deleted')]);
     }
 
     /**
@@ -509,7 +506,7 @@ class UserController extends Controller
 
         if ($confirm !== 'Y') {
             $e = new InvalidArgumentException();
-            $e->setMessage('약관의 동의가 필요합니다.');
+            $e->setMessage(xe_trans('xe::AgreementIsRequired'));
             throw $e;
         }
 

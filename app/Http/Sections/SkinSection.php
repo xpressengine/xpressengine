@@ -52,14 +52,14 @@ class SkinSection extends Section
 
         $skins = function ($skinList, $selectedSkin) {
             yield [
-                'text' => '선택하세요',
+                'text' => xe_trans('xe::select'),
                 'selected' => false
             ];
 
             foreach ($skinList as $id => $skin) {
                 $support = [];
-                $support[] = $skin->supportDesktop() ? '데스크탑' : '';
-                $support[] = $skin->supportMobile() ? '모바일' : '';
+                $support[] = $skin->supportDesktop() ? xe_trans('xe::desktop') : '';
+                $support[] = $skin->supportMobile() ? xe_trans('xe::mobile') : '';
                 $support = '['.implode('|', $support).']';
 
                 yield [

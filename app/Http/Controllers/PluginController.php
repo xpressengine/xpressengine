@@ -99,7 +99,7 @@ class PluginController extends Controller
     public function deleteOperation(ComposerFileWriter $writer)
     {
         $writer->reset()->cleanOperation()->write();
-        return XePresenter::makeApi(['type' => 'success', 'message' => '삭제되었습니다.']);
+        return XePresenter::makeApi(['type' => 'success', 'message' => xe_trans('xe::deleted')]);
     }
 
     public function getDelete(Request $request, PluginHandler $handler)
@@ -117,7 +117,7 @@ class PluginController extends Controller
     {
         $operation = $handler->getOperation($writer);
         if ($operation['status'] === ComposerFileWriter::STATUS_RUNNING) {
-            throw new HttpException(422, "이미 진행중인 요청이 있습니다.");
+            throw new HttpException(422, xe_trans('xe::alreadyProceeding'));
         }
 
         $handler->getAllPlugins(true);
@@ -126,16 +126,16 @@ class PluginController extends Controller
         $force = $request->get('force');
 
         if (empty($pluginIds)) {
-            throw new HttpException(422, "선택된 플러그인이 없습니다.");
+            throw new HttpException(422, xe_trans('xe::noPluginsSelected'));
         }
 
         $collection = $handler->getAllPlugins(true);
 
         $plugins = $collection->getList($pluginIds);
 
-        foreach ($plugins as $plugin) {
+        foreach ($plugins as $id => $plugin) {
             if ($plugin === null) {
-                throw new HttpException(422, 'Plugin not found.');
+                throw new HttpException(422, xe_trans('xe::pluginNotFound', ['plugin' => $id]));
             }
         }
 
@@ -151,7 +151,7 @@ class PluginController extends Controller
 
         return redirect()->route('settings.plugins')->with(
             'alert',
-            ['type' => 'success', 'message' => '플러그인을 삭제중입니다.']
+            ['type' => 'success', 'message' => xe_trans('xe::deletingPlugin')]
         )->with('operation', 'running');
     }
 
@@ -172,16 +172,16 @@ class PluginController extends Controller
 
         $pluginIds = $request->get('pluginId');
         if (empty($pluginIds)) {
-            throw new HttpException(422, "선택된 플러그인이 없습니다.");
+            throw new HttpException(422, xe_trans('xe::noPluginsSelected'));
         }
 
         $collection = $handler->getAllPlugins(true);
         $plugins = $collection->getList($pluginIds);
 
         try {
-            foreach ($plugins as $plugin) {
+            foreach ($plugins as $id => $plugin) {
                 if ($plugin === null) {
-                    throw new HttpException(422, 'Plugin not found.');
+                    throw new HttpException(422, xe_trans('xe::pluginNotFound', ['plugin' => $id]));
                 }
                 if (!$plugin->isActivated()) {
                     $handler->activatePlugin($plugin->getId());
@@ -194,7 +194,7 @@ class PluginController extends Controller
             throw $e;
         }
 
-        return Redirect::back()->withAlert(['type' => 'success', 'message' => '플러그인을 켰습니다.']);
+        return Redirect::back()->withAlert(['type' => 'success', 'message' => xe_trans('xe::pluginActivated')]);
     }
 
     public function getDeactivate(Request $request, PluginHandler $handler)
@@ -214,16 +214,16 @@ class PluginController extends Controller
 
         $pluginIds = $request->get('pluginId');
         if (empty($pluginIds)) {
-            throw new HttpException(422, "선택된 플러그인이 없습니다.");
+            throw new HttpException(422, xe_trans('xe::noPluginsSelected'));
         }
 
         $collection = $handler->getAllPlugins(true);
         $plugins = $collection->getList($pluginIds);
 
         try {
-            foreach ($plugins as $plugin) {
+            foreach ($plugins as $id => $plugin) {
                 if ($plugin === null) {
-                    throw new HttpException(422, 'Plugin not found.');
+                    throw new HttpException(422, xe_trans('xe::pluginNotFound', ['plugin' => $id]));
                 }
                 if ($plugin->isActivated()) {
                     $handler->deactivatePlugin($plugin->getId());
@@ -236,7 +236,7 @@ class PluginController extends Controller
             throw $e;
         }
 
-        return Redirect::back()->withAlert(['type' => 'success', 'message' => '플러그인을 껐습니다.']);
+        return Redirect::back()->withAlert(['type' => 'success', 'message' => xe_trans('xe::pluginDeactivated')]);
     }
 
     public function getDownload(PluginHandler $handler, PluginProvider $provider)
@@ -263,7 +263,7 @@ class PluginController extends Controller
     {
         $operation = $handler->getOperation($writer);
         if ($operation['status'] === ComposerFileWriter::STATUS_RUNNING) {
-            throw new HttpException(422, "이미 진행중인 요청이 있습니다.");
+            throw new HttpException(422, xe_trans('xe::alreadyProceeding'));
         }
 
         $plugins = $request->get('plugin');
@@ -275,7 +275,7 @@ class PluginController extends Controller
         }
 
         if (empty($plugins)) {
-            throw new HttpException(422, "선택된 플러그인이 없습니다.");
+            throw new HttpException(422, xe_trans('xe::noPluginsSelected'));
         }
 
         $this->prepareComposer();
@@ -289,7 +289,7 @@ class PluginController extends Controller
 
         return redirect()->route('settings.plugins')->with(
             'alert',
-            ['type' => 'success', 'message' => '플러그인의 새로운 버전을 다운로드하는 중입니다.']
+            ['type' => 'success', 'message' => xe_trans('xe::downloadingNewVersionPlugin')]
         )->with('operation', 'running');
     }
 
@@ -302,7 +302,7 @@ class PluginController extends Controller
         $operation = $handler->getOperation($writer);
 
         if ($operation['status'] === ComposerFileWriter::STATUS_RUNNING) {
-            throw new HttpException(422, "이미 진행중인 요청이 있습니다.");
+            throw new HttpException(422, xe_trans('xe::alreadyProceeding'));
         }
 
         $pluginIds = $request->get('pluginId');
@@ -314,7 +314,7 @@ class PluginController extends Controller
 
         if ($pluginsData === null) {
             throw new HttpException(
-                422, "Can not find the plugin that should be installed from the Market-place."
+                422, xe_trans('xe::notFoundPluginFromMarket')
             );
         }
 
@@ -329,7 +329,7 @@ class PluginController extends Controller
 
         return redirect()->back()->with(
             'alert',
-            ['type' => 'success', 'message' => '새로운 플러그인을 설치중입니다.']
+            ['type' => 'success', 'message' => xe_trans('xe::installingPlugin')]
         )->with('operation', 'running');
     }
 
@@ -346,10 +346,8 @@ class PluginController extends Controller
 
         // file permission check
         foreach ($files as $file) {
-            $type = is_dir($file) ? '디렉토리' : '파일';
-
             if (!is_writable($file)) {
-                throw new HttpException(500, "[$file] {$type}의 쓰기 권한이 없습니다. 플러그인을 설치하기 위해서는 이 {$type}의 쓰기 권한이 있어야 합니다");
+                throw new HttpException(500, xe_trans('xe::notHaveWritePermissionForInstallPlugin', ['file' => $file]));
             }
         }
 
@@ -376,20 +374,23 @@ class PluginController extends Controller
 
         if (Platform::isWindows()) {
             if (!getenv('APPDATA')) {
-                throw new HttpException(500,
-                    'COMPOSER_HOME 환경변수가 설정되어 있지 않습니다. <a href="'.route('settings.plugins.setting.show').'">플러그인 설정</a>에서 설정할 수 있습니다.'
-                );
+                $this->throwComposerHomeEnv();
             }
         }
 
         if (!$home) {
             $home = getenv('HOME');
             if (!$home) {
-                throw new HttpException(500,
-                    'COMPOSER_HOME 환경변수가 설정되어 있지 않습니다. <a href="'.route('settings.plugins.setting.show').'">플러그인 설정</a>에서 설정할 수 있습니다.'
-                );
+                $this->throwComposerHomeEnv();
             }
         }
+    }
+
+    protected function throwComposerHomeEnv()
+    {
+        throw new HttpException(500, xe_trans('xe::composerEnvNotSet', [
+            'link' => sprintf('<a href="%s">%s</a>', route('settings.plugins.setting.show'), xe_trans('xe::pluginSettings'))
+        ]));
     }
 
     public function show($pluginId, PluginHandler $handler, PluginProvider $provider)
@@ -419,7 +420,7 @@ class PluginController extends Controller
             throw $e;
         }
 
-        return Redirect::back()->withAlert(['type' => 'success', 'message' => '플러그인을 켰습니다.']);
+        return Redirect::back()->withAlert(['type' => 'success', 'message' => xe_trans('xe::pluginActivated')]);
     }
 
     public function putDeactivatePlugin($pluginId, PluginHandler $handler, InterceptionHandler $interceptionHandler)
@@ -433,7 +434,7 @@ class PluginController extends Controller
             throw $e;
         }
 
-        return Redirect::back()->withAlert(['type' => 'success', 'message' => '플러그인을 껐습니다.']);
+        return Redirect::back()->withAlert(['type' => 'success', 'message' => xe_trans('xe::pluginDeactivated')]);
     }
 
     public function putUpdatePlugin($pluginId, PluginHandler $handler, InterceptionHandler $interceptionHandler)
@@ -447,7 +448,7 @@ class PluginController extends Controller
             throw $e;
         }
 
-        return Redirect::back()->withAlert(['type' => 'success', 'message' => '플러그인의 수정사항을 적용했습니다.']);
+        return Redirect::back()->withAlert(['type' => 'success', 'message' => xe_trans('xe::appliedUpdatePlugin')]);
     }
 
 
@@ -459,17 +460,17 @@ class PluginController extends Controller
     protected function getComponentTypes()
     {
         $componentTypes = [
-            'theme' => '테마',
-            'skin' => '스킨',
-            'settingsSkin' => '설정스킨',
-            'settingsTheme' => '관리페이지테마',
-            'widget' => '위젯',
-            'module' => '모듈',
-            'editor' => '에디터',
-            'editortool' => '에디터툴',
-            'uiobject' => 'UI오브젝트',
-            'FieldType' => '다이나믹필드',
-            'FieldSkin' => '다이나믹필드스킨',
+            'theme' => xe_trans('xe::theme'),
+            'skin' => xe_trans('xe::skin'),
+            'settingsSkin' => xe_trans('xe::settingsSkin'),
+            'settingsTheme' => xe_trans('xe::settingsTheme'),
+            'widget' => xe_trans('xe::widget'),
+            'module' => xe_trans('xe::module'),
+            'editor' => xe_trans('xe::editor'),
+            'editortool' => xe_trans('xe::editorTool'),
+            'uiobject' => xe_trans('xe::uiobject'),
+            'FieldType' => xe_trans('xe::dynamicField'),
+            'FieldSkin' => xe_trans('xe::dynamicFieldSkin'),
         ];
         return $componentTypes;
     }

@@ -28,5 +28,5 @@ use Xpressengine\Menu\MenuException;
  */
 class CanNotCreateItemException extends MenuException
 {
-    protected $message = 'MenuItem 을 생성할 수 없습니다';
+    protected $message = 'Unable to create MenuItem.';
 }

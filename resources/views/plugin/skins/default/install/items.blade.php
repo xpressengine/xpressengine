@@ -2,7 +2,7 @@
     <div class="panel-heading">
         <div class="panel-heading-search">
             <form action="{{ route('settings.plugins.install.items') }}" data-submit="xe-plugin-items" method="GET">
-                <input type="text" class="xe-form-control" placeholder="검색어를 입력하세요" name="q" value="{{ $q or ''}}">
+                <input type="text" class="xe-form-control" placeholder="{{ xe_trans('xe::enterKeyword') }}" name="q" value="{{ $q or ''}}">
                 <button class="panel-heading-search-btn" type="button"><i class="xi-search"></i><span class="xe-sr-only">검색</span></button>
             </form>
         </div>
@@ -17,7 +17,7 @@
         </ul>
     @else
         <div class="panel-body">
-            <p>조회된 플러그인이 없습니다.</p>
+            <p>{{ xe_trans('xe::noPlugins') }}</p>
         </div>
     @endif
 

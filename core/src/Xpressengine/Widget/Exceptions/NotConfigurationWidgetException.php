@@ -31,5 +31,5 @@ use Xpressengine\Widget\WidgetException;
  */
 class NotConfigurationWidgetException extends WidgetException
 {
-    protected $message = '위젯이 설정되지 않았습니다 ';
+    protected $message = 'Widget configuration is not set.';
 }

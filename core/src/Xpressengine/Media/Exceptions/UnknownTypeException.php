@@ -28,5 +28,5 @@ use Xpressengine\Media\MediaException;
  */
 class UnknownTypeException extends MediaException
 {
-    protected $message = 'type 을 알 수 없습니다.';
+    protected $message = 'type is unknown.';
 }

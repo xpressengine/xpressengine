@@ -11,25 +11,18 @@ namespace App\Http\Controllers;
 use File;
 use Xpressengine\Http\Request;
 use Xpressengine\Support\Exceptions\FileAccessDeniedHttpException;
-use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
 use Xpressengine\Theme\Exceptions\NotSupportSettingException;
 use Xpressengine\Theme\ThemeEntityInterface;
 use Xpressengine\Theme\ThemeHandler;
 
 class ThemeController extends Controller
 {
-
     public function edit(Request $request, ThemeHandler $themeHandler)
     {
+        $this->validate($request, ['theme' => 'required']);
+
         $themeId = $request->get('theme');
         $fileName = $request->get('file');
-
-        // TODO: validate themeid, fileName
-        if ($themeId === null) {
-            $e = new InvalidArgumentHttpException();
-            $e->setMessage('잘못된 요청입니다.');
-            throw $e;
-        }
 
         $theme = \XeTheme::getTheme($themeId);
 
@@ -37,13 +30,10 @@ class ThemeController extends Controller
         $files = $theme->getEditFiles();
 
         if (empty($files)) {
-            return \XePresenter::make(
-                'theme.edit',
-                [
-                    'theme' => $theme,
-                    'files' => $files,
-                ]
-            );
+            return \XePresenter::make('theme.edit', [
+                'theme' => $theme,
+                'files' => $files,
+            ]);
         }
 
         if ($fileName === null) {
@@ -105,7 +95,7 @@ class ThemeController extends Controller
             throw new FileAccessDeniedHttpException();
         }
 
-        return redirect()->back()->with('alert', ['type' => 'success', 'message' => '저장되었습니다.']);
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
     }
 
     public function createSetting(Request $request, ThemeHandler $themeHandler)
@@ -130,7 +120,7 @@ class ThemeController extends Controller
 
         $themeHandler->setThemeConfig($newId, '_configTitle', $title);
 
-        return redirect()->back()->with('alert', ['type' => 'success', 'message' => '생성되었습니다.']);;
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::wasCreated')]);
     }
 
     public function editSetting(Request $request, ThemeHandler $themeHandler)
@@ -186,7 +176,7 @@ class ThemeController extends Controller
 
         $themeHandler->setThemeConfig($config['_configId'], $config);
 
-        return redirect()->back()->with('alert', ['type' => 'success', 'message' => '저장되었습니다.']);
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
     }
 
     public function deleteSetting(Request $request, ThemeHandler $themeHandler) {
@@ -198,7 +188,7 @@ class ThemeController extends Controller
 
         $themeHandler->deleteThemeConfig($themeId);
 
-        return redirect()->route('settings.setting.theme')->with('alert', ['type' => 'success', 'message' => '삭제되었습니다.']);
+        return redirect()->route('settings.setting.theme')->with('alert', ['type' => 'success', 'message' => xe_trans('xe::deleted')]);
 
     }
 

@@ -1,7 +1,7 @@
         {{-- select widget --}}
         <div class="widget-selector">
             {{ uio('formSelect',
-                ['label'=>'위젯', 'class'=>'__xe_select_widget', 'name'=>'widget', 'options'=>$widgets, 'selected'=>isset($widget)?$widget:null] )
+                ['label'=>xe_trans('xe::widget'), 'class'=>'__xe_select_widget', 'name'=>'widget', 'options'=>$widgets, 'selected'=>isset($widget)?$widget:null] )
             }}
         </div>
 

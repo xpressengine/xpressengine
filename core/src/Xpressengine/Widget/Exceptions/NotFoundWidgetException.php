@@ -28,5 +28,5 @@ use Xpressengine\Widget\WidgetException;
  */
 class NotFoundWidgetException extends WidgetException
 {
-    protected $message = '위젯을 찾을 수 없습니다.';
+    protected $message = 'Widget not found.';
 }

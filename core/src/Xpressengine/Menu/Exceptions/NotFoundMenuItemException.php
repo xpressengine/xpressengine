@@ -29,5 +29,5 @@ use Xpressengine\Menu\MenuException;
 
 class NotFoundMenuItemException extends MenuException
 {
-    protected $message = 'MenuItem 을 찾을 수 없습니다.';
+    protected $message = 'MenuItem not found.';
 }

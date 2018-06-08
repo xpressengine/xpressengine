@@ -11,7 +11,7 @@
             <div class="panel">
                 <div class="panel-heading">
                     <div class="pull-left">
-                        <h3 class="panel-title">메뉴 삭제<small>{{xe_trans('xe::deleteMenuConfig', ['title' => $menu->title])}}</small></h3>
+                        <h3 class="panel-title">{{ xe_trans('xe::deleteMenu') }}<small>{{xe_trans('xe::deleteMenuConfig', ['title' => $menu->title])}}</small></h3>
                     </div>
                 </div>
                 <div class="panel-body">

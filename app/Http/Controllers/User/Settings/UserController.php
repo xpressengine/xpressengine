@@ -185,7 +185,7 @@ class UserController extends Controller
 
         return redirect()->route('settings.user.index')->with(
             'alert',
-            ['type' => 'success', 'message' => '추가되었습니다.']
+            ['type' => 'success', 'message' => xe_trans('xe::saved')]
         );
     }
 
@@ -202,7 +202,7 @@ class UserController extends Controller
 
         if ($user === null) {
             $e = new InvalidArgumentHttpException();
-            $e->setMessage('존재하지 않는 회원입니다.');
+            $e->setMessage(xe_trans('xe::userNotFound'));
             throw $e;
         }
 
@@ -272,7 +272,7 @@ class UserController extends Controller
 
         if ($user === null) {
             $e = new InvalidArgumentHttpException();
-            $e->setMessage('존재하지 않는 회원입니다.');
+            $e->setMessage(xe_trans('xe::userNotFound'));
             throw $e;
         }
 
@@ -306,7 +306,7 @@ class UserController extends Controller
         }
         XeDB::commit();
 
-        return redirect()->back()->with('alert', ['type' => 'success', 'message' => '수정되었습니다.']);
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::saved')]);
     }
 
     /**
@@ -316,12 +316,8 @@ class UserController extends Controller
      */
     public function getMailList(Request $request)
     {
+        $this->validate($request, ['userId' => 'required']);
         $id = $request->get('userId');
-        if ($id === null) {
-            $e = new InvalidArgumentHttpException();
-            $e->setMessage('회원 번호를 입력해야 합니다.');
-            throw $e;
-        }
 
         $mails = $this->handler->emails()->where(['user_id' => $id])->get();
 
@@ -386,7 +382,7 @@ class UserController extends Controller
 
         if ($pendingEmail === null) {
             $e = new InvalidArgumentHttpException();
-            $e->setMessage('존재하지 않거나 이미 승인된 이메일입니다.');
+            $e->setMessage(xe_trans('xe::EmailNotExistOrAlreadyConfirmed'));
             throw $e;
         }
 
@@ -476,7 +472,7 @@ class UserController extends Controller
         }
         XeDB::commit();
 
-        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::msgDelete')]);
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::deleted')]);
     }
 
     /**

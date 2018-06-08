@@ -78,7 +78,9 @@ class GroupController extends Controller
         }
         XeDB::commit();
 
-        return redirect()->route('manage.group.index')->with('alert', ['type' => 'success', 'message' => '추가되었습니다.']);
+        return redirect()->route('manage.group.index')->with('alert', [
+            'type' => 'success', 'message' => xe_trans('xe::saved')
+        ]);
     }
 
     /**
@@ -120,7 +122,9 @@ class GroupController extends Controller
         }
         XeDB::commit();
 
-        return redirect()->route('manage.group.index')->with('alert', ['type' => 'success', 'message' => '수정되었습니다.']);
+        return redirect()->route('manage.group.index')->with('alert', [
+            'type' => 'success', 'message' => xe_trans('xe::saved')
+        ]);
     }
 
     public function updateJoinGroup(Request $request)
@@ -134,7 +138,11 @@ class GroupController extends Controller
         $joinConfig->set('joinGroup', $groupId);
         \app('xe.config')->modify($joinConfig);
 
-        return XePresenter::makeApi(['type' => 'success', 'message' => '기본 가입 그룹이 변경되었습니다.', 'groupId' => $groupId]);
+        return XePresenter::makeApi([
+            'type' => 'success',
+            'message' => xe_trans('xe::defaultGroupHasChanged'),
+            'groupId' => $groupId
+        ]);
     }
 
     /**
@@ -169,7 +177,7 @@ class GroupController extends Controller
         }
         XeDB::commit();
 
-        return redirect()->back()->with('alert', ['type' => 'success', 'message' => '삭제되었습니다.']);
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::deleted')]);
     }
 
     /**

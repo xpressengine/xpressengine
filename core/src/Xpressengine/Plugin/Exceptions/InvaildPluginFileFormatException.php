@@ -28,5 +28,5 @@ use Xpressengine\Plugin\PluginException;
  */
 class InvaildPluginFileFormatException extends PluginException
 {
-    protected $message = '플러그인 파일(:path) 형식이 잘못되었습니다.';
+    protected $message = 'Plugin file(:path) format is invalid.';
 }

@@ -20,7 +20,7 @@
                         <div class="input-group search-group">
                         <form>
                             <div class="search-group-filter">
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="text">정렬 필터</span> <span class="caret"></span></button>
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="text">{{ xe_trans('xe::order') }} {{ xe_trans('xe::filter') }}</span> <span class="caret"></span></button>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="{{ route('settings.plugins', Request::except('status')) }}">{{ xe_trans('xe::all') }}</a></li>
                                     <li><a href="{{ route('settings.plugins', array_merge(Request::all(), ['status'=> XePlugin::STATUS_ACTIVATED] )) }}">{{ xe_trans('xe::activatedPlugin') }}</a></li>
@@ -59,7 +59,7 @@
 
                     <div class="pull-left">
                         <div class="btn-group">
-                            <button class="btn btn-default __xe_check_all">전체 선택</button>
+                            <button class="btn btn-default __xe_check_all">{{xe_trans('xe::selectAll')}}</button>
                         </div>
                         <div class="btn-group __xe_controll_btn">
                             <a href="{{ route('settings.plugins.manage.activate') }}" class="btn btn-default on __xe_activate_plugin"><span>켜기</span></a>

@@ -110,7 +110,10 @@ class PasswordController extends Controller {
                 return redirect()->back()->with('status', PasswordBroker::RESET_LINK_SENT)->with('email', $email);
 
             case PasswordBroker::INVALID_USER:
-                return redirect()->back()->with('alert', ['type' => 'danger', 'message' => '등록되지 않았거나 등록대기중인 이메일입니다.']);
+                return redirect()->back()->with('alert', [
+                    'type' => 'danger',
+                    'message' => xe_trans('xe::emailNotRegisteredOrPendingRegistration')
+                ]);
         }
     }
 

@@ -40,7 +40,7 @@ class PluginSettingsController extends Controller
         }
         app('xe.config')->modify($config);
 
-        return redirect()->back()->with('alert', ['message'=>'저장되었습니다.', 'type'=>'success']);
+        return redirect()->back()->with('alert', ['message' => xe_trans('xe::saved'), 'type' => 'success']);
     }
 }
 

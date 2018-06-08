@@ -89,7 +89,7 @@ class TermsController extends Controller
         });
 
         return redirect()->route('settings.user.setting.terms.index')->with('alert', [
-            'type' => 'success', 'message' => xe_trans('xe::msgDelete')
+            'type' => 'success', 'message' => xe_trans('xe::deleted')
         ]);
     }
 

@@ -28,5 +28,5 @@ use Xpressengine\Permission\PermissionException;
  */
 class NotSupportedException extends PermissionException
 {
-    protected $message = '":name" 은 지원되지 않습니다.';
+    protected $message = '":name" is not supported.';
 }

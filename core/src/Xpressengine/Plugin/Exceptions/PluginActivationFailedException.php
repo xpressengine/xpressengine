@@ -26,5 +26,5 @@ use Xpressengine\Plugin\PluginException;
  */
 class PluginActivationFailedException extends PluginException
 {
-    protected $message = '플러그인을 활성화하는데에 실패하였습니다.';
+    protected $message = 'Failed to activate plugin.';
 }
