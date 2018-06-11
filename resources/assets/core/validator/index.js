@@ -467,7 +467,7 @@ export default class Validator extends Singleton {
 
       $('body').on('submit', 'form[data-rule]', (event) => {
         try {
-          this.check($(this))
+          this.check($(event.target))
         } catch (e) {
           // validation 체크하면서 에러가 발생한 경우 다른 이벤트는 처리하지 않음
           event.preventDefault()
