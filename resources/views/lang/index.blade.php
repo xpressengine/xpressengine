@@ -84,7 +84,7 @@
     window.jQuery(function ($) {
         $('button.save').click(function (e) {
             var url = XE.baseURL + '/' + XE.Router.settingsPrefix + '/lang/save'
-            var data = $(this).closest('form').serializeArray();
+            var data = $(this).closest('form').serialize();
 
             window.XE.put(url, data).then(function (response) {
                 XE.toast('success', XE.Lang.trans('xe::saved'));
