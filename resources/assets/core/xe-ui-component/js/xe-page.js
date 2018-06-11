@@ -288,7 +288,7 @@
           XE.Router.addRoutes(exposed.routes)
         }
 
-        Object.entries(exposed.rules || {}).forEach((rule) => {
+        Object.entries(exposed.rules || {}).forEach(function (rule) {
           if (rule[1]) {
             XE.Validator.setRules(rule[0], rule[1])
           }
