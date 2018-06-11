@@ -28,7 +28,8 @@ var EmailBox = (function (XE, $) {
 
       var $this = $(this)
 
-      $this.siblings().andSelf().css({ display: 'none' }).parent().find('.btnDelete').css({ display: 'inline-block' })
+      $this.siblings().addBack().hide()
+      $this.parent().find('.btnDeleteEmail').show()
     })
 
     _$wrapper.on('click', '#__xe_emailAddBtn', function () {
