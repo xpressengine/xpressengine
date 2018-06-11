@@ -51,12 +51,17 @@ class XE {
     this.Component.boot(this)
 
     this.Request.$$on('exposed', (eventName, exposed) => {
-      this.DynamicLoadManager.jsLoadMultiple(exposed.assets.js)
 
-      if (exposed.assets.css) {
-        exposed.assets.css.forEach((src) => {
-          this.DynamicLoadManager.cssLoad(src)
-        })
+      if(exposed.assets) {
+        if (exposed.assets.js) {
+          this.DynamicLoadManager.jsLoadMultiple(exposed.assets.js)
+        }
+
+        if (exposed.assets.css) {
+          exposed.assets.css.forEach((src) => {
+            this.DynamicLoadManager.cssLoad(src)
+          })
+        }
       }
 
       this.Router.addRoutes(exposed.routes)
