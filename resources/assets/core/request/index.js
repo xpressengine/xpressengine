@@ -74,7 +74,7 @@ export default class Request extends Singleton {
 
     url = this.resolveRoute(url)
 
-    return this.axiosInstance.get(url, { params })
+    return this.axiosInstance.get(url, Object.assign({}, config, { params }))
   }
 
   /**
@@ -112,7 +112,7 @@ export default class Request extends Singleton {
 
     url = this.resolveRoute(url)
 
-    return this.axiosInstance.post(url, this.prepareData(data))
+    return this.axiosInstance.post(url, this.prepareData(data), config)
   }
 
   /**
@@ -149,7 +149,7 @@ export default class Request extends Singleton {
 
     url = this.resolveRoute(url)
 
-    return this.axiosInstance.head(url, { data: this.prepareData(data), headers })
+    return this.axiosInstance.head(url, Object.assign({}, config, { data: this.prepareData(data), headers }))
   }
 
   prepareData (data) {

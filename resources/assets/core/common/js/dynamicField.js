@@ -339,9 +339,7 @@ var DynamicField = function () {
       params[item.name] = item.value
     })
 
-    params['_xe_expose'] = 'true'
-
-    XE.get('manage.dynamicField.getAdditionalConfigure', params)
+    XE.get('manage.dynamicField.getAdditionalConfigure', params, {headers: {'X-XE-Async-Expose': true}})
       .then(response => {
         $form.find('.__xe_additional_configure').html(response.data.result)
       })
