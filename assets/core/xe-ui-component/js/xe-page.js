@@ -221,13 +221,16 @@
       url: options.url,
       type: options.type || 'get',
       dataType: 'json',
-      data: options.data || {}
+      data: options.data || {},
+      headers: {
+        'X-CSRF-TOKEN': XE.Request.config.userToken,
+        'X-XE-Async-Expose': true
+      }
     }
-
-    defaultOptions.data._xe_expose = 'true'
 
     var pageOptions = $.extend(defaultOptions, {
       success: function (data) {
+        var exposed = data._XE_ || {}
         var assets = data.XE_ASSET_LOAD || {}
         var css = assets.css || []
         var js = assets.js || []
@@ -276,6 +279,20 @@
             error: loadDone
           })
         }
+
+        if (exposed.translations) {
+          XE.Lang.set(exposed.translations)
+        }
+
+        if (exposed.routes) {
+          XE.Router.addRoutes(exposed.routes)
+        }
+
+        Object.entries(exposed.rules || {}).forEach(function (rule) {
+          if (rule[1]) {
+            XE.Validator.setRules(rule[0], rule[1])
+          }
+        })
 
         if ((cssLen + jsLen) === 0) {
           next()
