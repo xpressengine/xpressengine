@@ -51,8 +51,7 @@ class XE {
     this.Component.boot(this)
 
     this.Request.$$on('exposed', (eventName, exposed) => {
-
-      if(exposed.assets) {
+      if (exposed.assets) {
         if (exposed.assets.js) {
           this.DynamicLoadManager.jsLoadMultiple(exposed.assets.js)
         }
@@ -97,6 +96,43 @@ class XE {
         blankshield.open(href)
         e.preventDefault()
       })
+    })
+
+    // @FIXME
+    $(document).ajaxSend((event, jqxhr, settings) => {
+      if (settings.useXeSpinner) {
+        Progress.start((typeof settings.context === 'undefined') ? $('body') : settings.context)
+      }
+    }).ajaxComplete((event, jqxhr, settings) => {
+      if (settings.useXeSpinner) {
+        Progress.done((typeof settings.context === 'undefined') ? $('body') : settings.context)
+      }
+    }).ajaxError((event, jqxhr, settings, thrownError) => {
+      if (settings.useXeSpinner) {
+        Progress.done()
+      }
+
+      const status = jqxhr.status
+      let errorMessage = 'Not defined error message (' + status + ')'
+
+      // @TODO dataType 에 따라 메시지 획득 방식을 추가 해야함.
+      if (jqxhr.status === 422) {
+        var list = JSON.parse(jqxhr.responseText).errors || {}
+
+        errorMessage = ''
+        errorMessage += '<ul>'
+        for (var i in list) {
+          errorMessage += '<li>' + list[i] + '</li>'
+        }
+
+        errorMessage += '</ul>'
+      } else if (settings.dataType === 'json') {
+        errorMessage = JSON.parse(jqxhr.responseText).message
+      } else {
+        errorMessage = jqxhr.statusText
+      }
+
+      this.toastByStatus(status, errorMessage)
     })
   }
 
