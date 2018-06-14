@@ -80,6 +80,7 @@ class TagRepository
      * @param string $taggableId taggable id
      * @param Tag[]  $tags       tag instances
      * @return void
+     * @throws \Exception
      */
     public function detach($taggableId, $tags)
     {
@@ -92,6 +93,10 @@ class TagRepository
                 ->delete();
 
             $tag->decrement('count');
+
+            if ($tag->count <= 0) {
+                $tag->delete();
+            }
         }
     }
 
