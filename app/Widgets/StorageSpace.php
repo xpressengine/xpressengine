@@ -43,7 +43,11 @@ class StorageSpace extends AbstractWidget
     public function render()
     {
         $args = $this->config;
-        $limit = isset($args['limit']) ? $args['limit'] : 5;
+
+        $limit = (int)array_get($args, 'limit');
+        if ($limit < 1) {
+            $limit = 5;
+        }
 
         $disks = Config::get('filesystems.disks');
         $list = [];
