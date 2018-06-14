@@ -287,6 +287,19 @@ class UserController extends Controller
             ]
         );
 
+        if (
+            $user->isAdmin() &&
+            ($request->get('status') === User::STATUS_DENIED || $request->get('rating') !== Rating::SUPER)
+        ) {
+            $cnt = $this->handler->users()
+                ->where('rating', Rating::SUPER)
+                ->where('status', User::STATUS_ACTIVATED)
+                ->count();
+            if ($cnt === 1) {
+                throw new HttpException(422, xe_trans('xe::msgUnableToChangeStatusForSuperUser'));
+            }
+        }
+
         $userData = $request->except('_token');
 
         if (array_get($userData, 'profile_img_file') === '__delete_file__') {
