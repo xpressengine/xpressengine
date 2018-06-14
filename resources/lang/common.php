@@ -2844,5 +2844,8 @@ return [
         'ko' => '선택하세요.',
         'en' => 'Choose.',
     ],
-    ''
+    'msgUnableToChangeStatusForSuperUser' => [
+        'ko' => '하나의 최고 관리계정은 등급 또는 상태 변경이 불가합니다.',
+        'en' => 'You can not change a rating or status for one super management account.',
+    ],
 ];
