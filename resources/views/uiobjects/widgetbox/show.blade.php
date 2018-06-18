@@ -3,14 +3,14 @@
         <div class="widgetbox-content">
         {!! $presenter->render() !!}
         </div>
-        @if(auth()->user()->isAdmin())
+        @can('edit', new Xpressengine\Permission\Instance('widgetbox.'.$id))
         <hr>
         <div class="widget-controll">
             <p>
                 <button type="button" onclick="window.open('{{route('widgetbox.edit', ['id' => $id])}}', 'widgetboxEditor', 'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no');return false"> {{ $link or $widgetbox->title.' '.xe_trans('xe::editWidgetBox') }}</button>
             </p>
         </div>
-        @endif
+        @endcan
     @else
         @if(auth()->user()->isAdmin())
 

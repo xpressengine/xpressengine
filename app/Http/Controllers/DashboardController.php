@@ -8,6 +8,8 @@
 
 namespace App\Http\Controllers;
 
+use Xpressengine\Permission\Grant;
+use Xpressengine\User\Rating;
 use Xpressengine\Widget\WidgetBoxHandler;
 
 class DashboardController extends Controller
@@ -29,6 +31,18 @@ class DashboardController extends Controller
                 'content' => $dashboard->content,
                 'options' => $dashboard->options,
             ]);
+        }
+
+        if (!app('xe.permission')->get('widgetbox.' . $id)) {
+            $grant = new Grant();
+            $grant->set('edit', [
+                Grant::RATING_TYPE => Rating::SUPER,
+                Grant::GROUP_TYPE => [],
+                Grant::USER_TYPE => [$userId],
+                Grant::EXCEPT_TYPE => [],
+                Grant::VGROUP_TYPE => []
+            ]);
+            app('xe.permission')->register('widgetbox.' . $id, $grant);
         }
 
         \XeFrontend::title('XpressEngine3 Settings');
