@@ -877,6 +877,10 @@ return [
         'ko' => ':charCount 이상의 글자를 입력하세요.',
         'en' => 'Please enter at least :charCount character.|Please enter at least :charCount characters.',
     ],
+    'validationDisplayName' => [
+        'ko' => ':attribute은(는) 영문, 숫자, 대쉬(-), 언더스코어(_), 닷(.)만 포함할 수 있습니다.',
+        'en' => 'The :attribute may only contain letters, numbers, dashes, underscores and dots.',
+    ],
     'interfaceNotImplemented' => [
         'ko' => '":className" 클래스는 반드시 \Xpressengine\Plugin\ComponentInterface를 구현해야 합니다',
         'en' => '":className" class must implements \Xpressengine\Plugin\ComponentInterface.',

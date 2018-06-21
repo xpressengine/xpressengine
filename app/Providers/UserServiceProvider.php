@@ -493,7 +493,8 @@ class UserServiceProvider extends ServiceProvider
             'display_name',
             function ($attribute, $value, $parameters) use ($displayNameValidate) {
                 return $displayNameValidate($value);
-            }
+            },
+            xe_trans('xe::validationDisplayName')
         );
 
         $passwordConfig = app('config')->get('xe.user.password');

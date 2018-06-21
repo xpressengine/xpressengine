@@ -17,6 +17,7 @@ namespace Xpressengine\User;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Validation\Factory as Validator;
 use Illuminate\Support\Fluent;
+use Illuminate\Validation\Rule;
 use Xpressengine\Register\Container;
 use Xpressengine\Support\Exceptions\InvalidArgumentException;
 use Xpressengine\User\Exceptions\AccountAlreadyExistsException;
@@ -377,22 +378,19 @@ class UserHandler
             $name = null;
         }
 
-        $validate = $this->validator->make(
-            ['name' => $name],
-            ['name' => ['display_name', 'required']]
-        );
+        $this->validator->make(
+            ['display_name' => $name],
+            ['display_name' => [
+                'display_name',
+                'required',
+                Rule::unique('user')->where(function ($query) use ($user) {
+                    if ($user) {
+                        $query->where('id', '!=', $user->getId());
+                    }
+                })
+            ]]
+        )->validate();
 
-        if ($validate->fails()) {
-            $messages = $validate->messages();
-            $message = current($messages->get('name'));
-            throw new InvalidDisplayNameException(compact('message'));
-        }
-
-        if ($find = $this->users()->where(['display_name' => $name])->first()) {
-            if (!$user || $find->getId() !== $user->getId()) {
-                throw new DisplayNameAlreadyExistsException();
-            }
-        }
         return true;
     }
 
@@ -419,20 +417,10 @@ class UserHandler
      */
     public function validatePassword($password)
     {
-        $validate = $this->validator->make(
+        $this->validator->make(
             ['password' => $password],
-            [
-                'password' => ['password']
-            ]
-        );
-
-        if ($validate->fails()) {
-            $messages = $validate->messages();
-            $message = current($messages->get('password'));
-            $e = new InvalidPasswordException(compact('message'));
-            $e->setMessage($message);
-            throw $e;
-        }
+            ['password' => ['password']]
+        )->validate();
 
         return true;
     }
