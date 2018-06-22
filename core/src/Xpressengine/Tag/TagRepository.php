@@ -119,6 +119,22 @@ class TagRepository
     }
 
     /**
+     * Returns taggables of the tag
+     *
+     * @param string $tagId tagId
+     * @return \Illuminate\Support\Collection
+     */
+    public function fetchByTag($tagId)
+    {
+        $model = $this->createModel();
+        $conn = $model->getConnection();
+
+        return $conn->table($model->getTaggableTable())
+            ->where('tag_id', $tagId)
+            ->get();
+    }
+
+    /**
      * Returns most popular tags
      *
      * @param string|null $instanceId instance id
