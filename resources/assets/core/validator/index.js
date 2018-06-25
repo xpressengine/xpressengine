@@ -452,10 +452,8 @@ export default class Validator extends Singleton {
     }
   }
 
-  boot () {
-    // XE.$$on('setup', (eventName, options) => {
-    //   this.setup(options)
-    // })
+  boot (XE) {
+    this.locale = XE.locale
 
     $(() => {
       // @FIXME window.ruleSet
@@ -669,13 +667,18 @@ export default class Validator extends Singleton {
    * @param {object} replaceStrMap
    */
   error ($element, message, replaceStrMap) {
+    const inlineMessage = $element.data('valid-message-' + this.locale) || $element.data('valid-message')
+    const alertType = $element.closest('form').data('rule-alert-type') || 'form'
+
+    if (inlineMessage) {
+      message = inlineMessage
+    }
+
     if (replaceStrMap && Object.keys(replaceStrMap).length > 0) {
       $.each(replaceStrMap, function (key, val) {
         message = message.replace(':' + key, val)
       })
     }
-
-    var alertType = $element.closest('form').data('rule-alert-type') || 'form'
 
     if (typeof this.alertTypes[alertType] === 'function') {
       this.alertTypes[alertType]($element, message)
