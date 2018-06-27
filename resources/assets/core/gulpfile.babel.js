@@ -15,24 +15,24 @@ gulp.task('default', (callback) => {})
 gulp.task('assets', ['assets-sass'])
 
 gulp.task('assets-sass', () => {
-  return gulp.src('./resources/assets/core/**/*.scss')
+  return gulp.src(['./**/*.scss', '!node_modules/**/*'])
     .pipe(gulpSass({
       outputStyle: 'compressed'
     }))
-    .pipe(gulp.dest('./assets/core'))
+    .pipe(gulp.dest('../../../assets/core'))
 })
 
 gulp.task('jsdoc', () => {
   var merged = stream(
-    gulp.src('./resources/jsdoc')
+    gulp.src('../jsdoc')
       .pipe($.clean({ force: true })),
     gulp.src([
-      './resources/assets/core/**/*.js',
-      '!./resources/assets/core/xe-ui-component/slickgrid/*'
+      '**/*.js',
+      '!xe-ui-component/slickgrid/*'
     ])
       .pipe(jsdoc({
         'opts': {
-          'destination': './resources/jsdoc',
+          'destination': '../jsdoc',
           'template': 'node_modules/docdash'
         }
       }))

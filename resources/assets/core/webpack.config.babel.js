@@ -3,29 +3,29 @@ import webpack from 'webpack'
 import CopyWebpackPlugin from 'copy-webpack-plugin'
 
 const pathInfo = {
-  core: path.resolve(__dirname, 'resources/assets/core'),
-  vendor: path.resolve(__dirname, 'assets/vendor'),
+  root: path.resolve(__dirname, '../../../'),
+  core: path.resolve(__dirname, '.'),
+  vendor: path.resolve(__dirname, '../../../assets/vendor'),
   node: path.resolve(__dirname, 'node_modules'),
 
-  source: path.resolve(__dirname, 'resources/assets'), // @DEPRECATED
-  user: path.resolve(__dirname, 'resources/assets/core/user'), // @DEPRECATED
-  settings: path.resolve(__dirname, 'resources/assets/core/settings'), // @DEPRECATED
-  common: path.resolve(__dirname, 'resources/assets/core/common'), // @DEPRECATED
-  permission: path.resolve(__dirname, 'resources/assets/core/permission'), // @DEPRECATED
-  menu: path.resolve(__dirname, 'resources/assets/core/menu'), // @DEPRECATED
-  lang: path.resolve(__dirname, 'resources/assets/core/lang'), // @DEPRECATED
-  comp: path.resolve(__dirname, 'resources/assets/core/xe-ui-component') // @DEPRECATED
+  user: path.resolve(__dirname, 'user'), // @DEPRECATED
+  settings: path.resolve(__dirname, 'settings'), // @DEPRECATED
+  common: path.resolve(__dirname, 'common'), // @DEPRECATED
+  permission: path.resolve(__dirname, 'permission'), // @DEPRECATED
+  menu: path.resolve(__dirname, 'menu'), // @DEPRECATED
+  lang: path.resolve(__dirname, 'lang'), // @DEPRECATED
+  comp: path.resolve(__dirname, 'xe-ui-component') // @DEPRECATED
 }
 
 const resolveAlias = {
   // directory
   'xe': pathInfo.core,
 
-  'xeAssets': path.resolve(__dirname, 'assets/'), // @DEPRECATED
-  'xe-assets': path.resolve(__dirname, 'resources/assets/'), // @DEPRECATED
-  'xe-common': path.resolve(__dirname, 'resources/assets/core/common/js/'), // @DEPRECATED
-  'xe-vendor': path.resolve(__dirname, 'assets/vendor/'), // @DEPRECATED
-  'xe-component': path.resolve(__dirname, 'assets/core/xe-ui-component/js/'), // @DEPRECATED
+  'xeAssets': path.resolve(__dirname, '../../../assets/'), // @DEPRECATED
+  'xe-assets': path.resolve(__dirname, '../assets/'), // @DEPRECATED
+  'xe-common': path.resolve(__dirname, 'common/js/'), // @DEPRECATED
+  'xe-vendor': path.resolve(__dirname, '../../../assets/vendor/'), // @DEPRECATED
+  'xe-component': path.resolve(__dirname, 'xe-ui-component/js/'), // @DEPRECATED
 
   'griper': pathInfo.common + '/js/griper.js', // @DEPRECATED
   'validator': pathInfo.common + '/js/validator.js', // @DEPRECATED
@@ -48,19 +48,19 @@ const config = [
     entry: {
       'vendor': [
         'babel-polyfill',
-        path.resolve(__dirname, 'resources/assets/vendor.js')
+        path.resolve(__dirname, 'vendor.js')
       ],
-      'common': [path.resolve(__dirname, 'resources/assets/common.js')]
+      'common': [path.resolve(__dirname, 'common.js')]
     },
     output: {
-      path: path.resolve(__dirname, '.'),
+      path: pathInfo.root,
       filename: 'assets/[name].js',
       library: '_xe_bundle_[name]'
     },
     plugins: [
       new webpack.DllPlugin({
         name: '_xe_bundle_[name]',
-        path: path.resolve(__dirname, 'resources/assets/[name]-manifest.json')
+        path: path.resolve(__dirname, '../[name]-manifest.json')
       }),
       new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /ko/), // eslint-disable-line
       new webpack.optimize.CommonsChunkPlugin({
@@ -131,22 +131,18 @@ const config = [
       'core/common/js/xe.tree': [pathInfo.core + '/tree/Tree.js']
     },
     output: {
-      path: path.resolve(__dirname, '.'),
+      path: pathInfo.root,
       filename: 'assets/[name].js'
     },
     plugins: [
       new CopyWebpackPlugin([
         {
-          context: path.resolve(__dirname, 'resources/assets/core'),
+          context: path.core,
           from: '**/*',
-          to: path.resolve(__dirname, 'assets/core'),
+          to: path.resolve(__dirname, '../../../assets/core'),
           ignore: [
             '**/*.scss',
-            'component.js',
-            'index.js',
-            'dynamic-load-manager.js',
-            'lang.js',
-            'singleton.js',
+            'common.js',
             'common/js/component.js',
             'common/js/draft.js',
             'common/js/dynamicField.js',
@@ -160,26 +156,37 @@ const config = [
             'common/js/utils.js',
             'common/js/validator.js',
             'common/js/xe.js',
+            'component.js',
+            'dynamic-load-manager.js',
             'editor/**/*.js',
+            'gulpfile.babel.js',
+            'index.js',
+            'karma.conf.js',
+            'lang.js',
             'lang/LangEditorBox.js',
+            'node_modules/**/*',
+            'package.json',
             'permission/*.js',
             'request/**/*.js',
             'router/**/*.js',
             'settings/js/admin.js',
+            'singleton.js',
             'tree/**/*.js',
             'user/settings/edit.js',
-            'utils/**/*.js'
+            'utils/**/*.js',
+            'vendor.js',
+            'webpack.config.babel.js'
           ]
         }
       ]),
       new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /ko/), // eslint-disable-line
       new webpack.DllReferencePlugin({
         context: '.',
-        manifest: path.resolve(__dirname, 'resources/assets/vendor-manifest.json')
+        manifest: path.resolve(__dirname, '../vendor-manifest.json')
       }),
       new webpack.DllReferencePlugin({
         context: '.',
-        manifest: path.resolve(__dirname, 'resources/assets/common-manifest.json')
+        manifest: path.resolve(__dirname, '../common-manifest.json')
       })
     ],
     module: {

@@ -8,7 +8,7 @@ composer.user.json
 *.iml
 .DS_Store
 /plugins
-/node_modules
+node_modules
 /resources/jsdoc
 *.map
 npm-debug.log
