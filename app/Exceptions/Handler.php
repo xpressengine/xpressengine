@@ -197,9 +197,17 @@ class Handler extends ExceptionHandler
             $e->setMessage(xe_trans('xe::systemError'));
         }
 
-        return $this->toIlluminateResponse(
-            $this->isFatalError($e) ? $this->renderWithoutXE($e) : $this->renderWithTheme($e, $request), $e
-        );
+        return (new \Illuminate\Pipeline\Pipeline($this->container))
+            ->send($request)
+            ->through([
+                \App\Http\Middleware\EncryptCookies::class,
+                \Illuminate\Session\Middleware\StartSession::class,
+            ])
+            ->then(function ($request) use ($e) {
+                return $this->toIlluminateResponse(
+                    $this->isFatalError($e) ? $this->renderWithoutXE($e) : $this->renderWithTheme($e, $request), $e
+                );
+            });
     }
 
     /**
