@@ -56,14 +56,7 @@ class Purifier
         $this->config->loadArray(array_merge(
             $app['config']['purifier.settings.default'],
             [
-                'Core.Encoding' => $app['config']['purifier.encoding'],
-                'Cache.SerializerPath' => $app['config']['purifier.cachePath'],
-                'HTML.AllowedModules' => 'CommonAttributes,Hypertext,Image,List,Nofollow'.
-                    ',StyleAttribute,Tables,Text,Legacy,Presentation,Structure,NonXMLCommonAttributes'.
-                    ',XMLCommonAttributes',
-                'AutoFormat.AutoParagraph' => false,
-                'AutoFormat.RemoveEmpty' => false,
-                'Attr.EnableID' => true
+                'Cache.SerializerPath' => $app['config']['purifier.cachePath']
             ]
         ));
     }
