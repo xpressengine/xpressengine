@@ -10,7 +10,8 @@ return [
             'HTML.AllowedModules' => 'CommonAttributes,Hypertext,Image,List,StyleAttribute,Tables'.
                 ',Text,Structure,Legacy,NonXMLCommonAttributes,XMLCommonAttributes,TargetBlank,Presentation',
             'AutoFormat.AutoParagraph' => true,
-            'AutoFormat.RemoveEmpty' => true
+            'AutoFormat.RemoveEmpty' => true,
+            'HTML.TargetBlank' => true
         ]
     ],
 ];
