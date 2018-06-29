@@ -353,11 +353,7 @@ class UserController extends Controller
         }
 
         // 이미 존재하는 이메일이 있는지 확인한다.
-        try {
-            $this->handler->validateEmail($input['address']);
-        } catch (EmailAlreadyExistsException $e) {
-            throw new HttpException(400, xe_trans('xe::emailAlreadyExists'), $e);
-        }
+        $this->handler->validateEmail($input['address']);
 
         XeDB::beginTransaction();
         try {
