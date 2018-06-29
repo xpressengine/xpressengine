@@ -399,13 +399,24 @@ class UserHandler
      *
      * @param string $address email address
      *
-     * @return void
+     * @return bool
      */
     public function validateEmail($address)
     {
-        if ($this->emails()->findByAddress($address) !== null) {
-            throw new EmailAlreadyExistsException();
+        if (empty($address)) {
+            $address = null;
         }
+
+        $this->validator->make(
+            ['email' => $address],
+            ['email' => [
+                'email',
+                'required',
+                Rule::unique('user', 'email'),
+            ]]
+        )->validate();
+
+        return true;
     }
 
     /**

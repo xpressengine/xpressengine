@@ -480,11 +480,7 @@ window.jQuery(function ($) {
 
           error: function (jqXHR, textStatus, errorThrown) {
           // add에 실패하면 오류 출력
-            if (jqXHR.status == 422) {
-              _this.setStatus(_this.ui.addEmailBox, false, jqXHR.responseJSON.address[0])
-            } else {
-              _this.setStatus(_this.ui.addEmailBox, false, jqXHR.responseJSON.message)
-            }
+            _this.setStatus(_this.ui.addEmailBox, false, jqXHR.responseJSON.message)
           }
         })
       },

@@ -293,32 +293,6 @@ namespace Xpressengine\Tests\User {
             $handler->validateForCreate($data);
         }
 
-        /**
-         * @expectedException \Xpressengine\User\Exceptions\EmailAlreadyExistsException
-         */
-        public function testValidateForCreateWithExistingEmail()
-        {
-            /** @var UserHandler $handler */
-            $handler = $this->getHandler();
-
-            $email = 'foo@xpressengine.com';
-
-            $emailObj = $this->makeEmail();
-
-            /** @var Mockery\MockInterface $emails */
-            $emails = $handler->emails();
-            $emails->shouldReceive('findByAddress')->once()->with($email)->andReturn($emailObj);
-
-            $data = [
-                'rating' => Rating::MEMBER,
-                'display_name' => 'foo',
-                'status' => User::STATUS_ACTIVATED,
-                'email' => $email
-            ];
-
-            $handler->validateForCreate($data);
-        }
-
         public function testCallMagicMethod()
         {
             $handler = $this->getHandler();
