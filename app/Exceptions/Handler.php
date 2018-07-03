@@ -139,6 +139,8 @@ class Handler extends ExceptionHandler
                 $message = get_class($e);
             }
             $converted->setMessage($message);
+        } elseif ($e->getPrevious() && $this->isHttpException($e->getPrevious())) {
+            $converted = $this->convert($e->getPrevious());
         }
 
         return $converted;
