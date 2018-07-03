@@ -377,7 +377,7 @@ class UserServiceProvider extends ServiceProvider
         });
 
         $this->app['auth']->provider('xe', function ($app, $config) {
-            return new UserProvider($app['hash'], $config['model']);
+            return new UserProvider($app['hash'], $config['model'], $app['events']);
         });
     }
 

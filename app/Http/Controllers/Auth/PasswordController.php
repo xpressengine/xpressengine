@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers\Auth;
 
+use App\Events\PreResetUserPasswordEvent;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\PasswordBroker;
@@ -152,6 +153,8 @@ class PasswordController extends Controller {
         $credentials = $request->only(
             'email', 'password', 'password_confirmation', 'token'
         );
+
+        \Event::dispatch(new PreResetUserPasswordEvent($credentials));
 
         $result = $this->passwords->reset(
             $credentials,
