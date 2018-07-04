@@ -15,7 +15,10 @@
 namespace Xpressengine\User;
 
 use Illuminate\Auth\EloquentUserProvider;
+use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Contracts\Hashing\Hasher as HasherContract;
 use Xpressengine\User\Contracts\CanResetPassword;
+use Xpressengine\User\Events\UserRetrievedEvent;
 
 /**
  * 이 클래스는 Auth(Guard)에 회원정보를 제공하는 역할을 한다.
@@ -29,6 +32,21 @@ use Xpressengine\User\Contracts\CanResetPassword;
  */
 class UserProvider extends EloquentUserProvider
 {
+    public $dispatcher;
+    /**
+     * Create a new database user provider.
+     *
+     * @param \Illuminate\Contracts\Hashing\Hasher    $hasher     hasher
+     * @param string                                  $model      model
+     * @param \Illuminate\Contracts\Events\Dispatcher $dispatcher dispatcher
+     * @return void
+     */
+    public function __construct(HasherContract $hasher, $model, Dispatcher $dispatcher)
+    {
+        parent::__construct($hasher, $model);
+        $this->dispatcher = $dispatcher;
+    }
+
     /**
      * Retrieve a user by the given credentials.
      *
@@ -53,6 +71,7 @@ class UserProvider extends EloquentUserProvider
         // retrieve by email
         if (isset($where['email'])) {
             $email = $where['email'];
+            unset($where['email']);
 
             // only prefix given
             if (!str_contains($email, '@')) {
@@ -67,8 +86,6 @@ class UserProvider extends EloquentUserProvider
 
                 if (count($query) === 1) {
                     $user = $query->first();
-                } else {
-                    return null;
                 }
             } else {
                 $user = $query->whereHas(
@@ -79,17 +96,12 @@ class UserProvider extends EloquentUserProvider
                 )->first();
             }
 
-            unset($where['email']);
-
-            // when no user having email
-            if ($user === null) {
-                return null;
-            }
-
-            // check other fields
-            foreach ($where as $key => $value) {
-                if ($user->$key !== $value) {
-                    return null;
+            if ($user !== null) {
+                // check other fields
+                foreach ($where as $key => $value) {
+                    if ($user->$key !== $value) {
+                        $user = null;
+                    }
                 }
             }
 
@@ -99,9 +111,7 @@ class UserProvider extends EloquentUserProvider
                     $user->setEmailForPasswordReset($credentials['email']);
                 }
             }
-        }
-
-        if ($user === null) {
+        } else {
             // retrieve user without email
             foreach ($where as $key => $value) {
                 if (strpos($key, 'password') === false) {
@@ -110,6 +120,8 @@ class UserProvider extends EloquentUserProvider
             }
             $user = $query->first();
         }
+
+        $this->dispatcher->dispatch(new UserRetrievedEvent($user, $credentials));
 
         return $user;
     }

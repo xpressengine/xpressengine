@@ -41,6 +41,7 @@ class UserProviderTest extends \PHPUnit\Framework\TestCase
         $provider = $this->getProvider();
         $provider->shouldReceive('createModel')->andReturn($user);
 
+        $provider->dispatcher->shouldReceive('dispatch')->once();
         $this->assertEquals($user, $provider->retrieveByCredentials($credentials));
     }
 
@@ -71,6 +72,7 @@ class UserProviderTest extends \PHPUnit\Framework\TestCase
         $provider = $this->getProvider();
         $provider->shouldReceive('createModel')->andReturn($user);
 
+        $provider->dispatcher->shouldReceive('dispatch')->once();
         $this->assertEquals($user, $provider->retrieveByCredentials($credentials));
     }
 
@@ -100,16 +102,22 @@ class UserProviderTest extends \PHPUnit\Framework\TestCase
         $provider = $this->getProvider();
         $provider->shouldReceive('createModel')->andReturn($user);
 
+        $provider->dispatcher->shouldReceive('dispatch')->once();
         $this->assertEquals($user, $provider->retrieveByCredentials($credentials));
     }
 
-    protected function getProvider($model = 'UserModel', $hasher = null)
+    protected function getProvider($model = 'UserModel', $hasher = null, $dispatcher = null)
     {
         if ($hasher === null) {
             $hasher = $this->getHasher();
         }
+
+        if ($dispatcher === null) {
+            $dispatcher = m::mock('Illuminate\Contracts\Events\Dispatcher');
+        }
+
         /** @var Hasher $hasher */
-        return m::mock(UserProvider::class, [$hasher, $model])->makePartial();
+        return m::mock(UserProvider::class, [$hasher, $model, $dispatcher])->makePartial();
     }
 
     /**
