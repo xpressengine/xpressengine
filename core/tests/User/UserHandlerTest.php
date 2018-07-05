@@ -68,7 +68,7 @@ namespace Xpressengine\Tests\User {
                 ->with([
                     'display_name' => 'foo',
                     'password' => 'encrypted',
-                    'rating' => Rating::MEMBER,
+                    'rating' => Rating::USER,
                     'status' => User::STATUS_ACTIVATED
                 ])->andReturn($user);
 
@@ -101,7 +101,7 @@ namespace Xpressengine\Tests\User {
                 ->once()
                 ->with([
                     'display_name' => 'foo', 'password' => 'encrypted', 'email'=>'foo@bar.com',
-                    'rating' => Rating::MEMBER,
+                    'rating' => Rating::USER,
                     'status' => User::STATUS_ACTIVATED
                 ])->andReturn($user);
 
@@ -150,7 +150,7 @@ namespace Xpressengine\Tests\User {
                 ->once()
                 ->with([
                     'display_name' => 'foo', 'password' => 'encrypted', 'email'=>'foo@bar.com',
-                    'rating' => Rating::MEMBER,
+                    'rating' => Rating::USER,
                     'status' => User::STATUS_ACTIVATED
                 ])->andReturn($user);
 
@@ -199,7 +199,7 @@ namespace Xpressengine\Tests\User {
                 ->once()
                 ->with([
                     'display_name' => 'foo', 'password' => 'encrypted',
-                    'rating' => Rating::MEMBER,
+                    'rating' => Rating::USER,
                     'status' => User::STATUS_ACTIVATED
                 ])
                 ->andReturn($user);
@@ -257,7 +257,7 @@ namespace Xpressengine\Tests\User {
                 ->once()
                 ->with([
                     'display_name' => 'foo', 'password' => 'encrypted',
-                    'rating' => Rating::MEMBER,
+                    'rating' => Rating::USER,
                     'status' => User::STATUS_ACTIVATED
                 ])->andReturn($user);
 
@@ -270,7 +270,7 @@ namespace Xpressengine\Tests\User {
         public function testValidateForCreateFail()
         {
             $data = [
-                'rating' => Rating::MEMBER,
+                'rating' => Rating::USER,
                 'display_name' => 'foo'
             ];
             /** @var UserHandler $handler */
@@ -284,7 +284,7 @@ namespace Xpressengine\Tests\User {
         public function testValidateForCreateWithoutEmailAndAccount()
         {
             $data = [
-                'rating' => Rating::MEMBER,
+                'rating' => Rating::USER,
                 'display_name' => 'foo',
                 'status' => User::STATUS_ACTIVATED
             ];
@@ -310,7 +310,7 @@ namespace Xpressengine\Tests\User {
             $emails->shouldReceive('findByAddress')->once()->with($email)->andReturn($emailObj);
 
             $data = [
-                'rating' => Rating::MEMBER,
+                'rating' => Rating::USER,
                 'display_name' => 'foo',
                 'status' => User::STATUS_ACTIVATED,
                 'email' => $email

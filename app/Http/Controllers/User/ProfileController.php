@@ -54,7 +54,7 @@ class ProfileController extends Controller
     // 기본정보 보기
     public function index($user, WidgetBoxHandler $handler)
     {
-        $user = $this->retreiveUser($user);
+        $user = $this->retrieveUser($user);
         $grant = $this->getGrant($user);
 
         $widgetbox = $handler->find('user-profile');
@@ -72,9 +72,9 @@ class ProfileController extends Controller
             ]
         );
 
-        // member validation
+        // user validation
         /** @var UserInterface $user */
-        $user = $this->retreiveUser($userId);
+        $user = $this->retrieveUser($userId);
 
         $displayName = $request->get('display_name');
         $introduction = $request->get('introduction');
@@ -103,13 +103,13 @@ class ProfileController extends Controller
     }
 
     /**
-     * retreiveMember
+     * retrieveUser
      *
      * @param $id
      *
      * @return mixed
      */
-    protected function retreiveUser($id)
+    protected function retrieveUser($id)
     {
         $user = $this->handler->users()->find($id);
         if ($user === null) {

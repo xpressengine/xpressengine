@@ -38,7 +38,7 @@ abstract class AbstractWidget implements ComponentInterface, Renderable
     /**
      * @var array
      */
-    public static $ratingWhiteList = ['super', 'manager', 'member', 'guest'];
+    public static $ratingWhiteList = ['super', 'manager', 'user', 'guest'];
 
     protected $config;
 

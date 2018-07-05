@@ -77,21 +77,21 @@ return [
         'ko' => '비회원',
         'en' => 'Guest',
     ],
-    'member' => [
+    'user' => [
         'ko' => '회원',
-        'en' => 'Member',
+        'en' => 'User',
     ],
-    'memberGroup' => [
+    'userGroup' => [
         'ko' => '회원 그룹',
-        'en' => 'Member group',
+        'en' => 'User group',
     ],
     'group' => [
         'ko' => '그룹',
         'en' => 'Group',
     ],
-    'addNewMember' => [
+    'addNewUser' => [
         'ko' => '새 회원 추가',
-        'en' => 'Add new member',
+        'en' => 'Add new user',
     ],
     'groupName' => [
         'ko' => '그룹명',
@@ -113,9 +113,9 @@ return [
         'ko' => ':count 개의 그룹이 존재합니다.',
         'en' => 'There is :count groups.',
     ],
-    'groupMemberCount' => [
+    'groupUserCount' => [
         'ko' => '그룹 회원 수',
-        'en' => 'Group member count',
+        'en' => 'Group user count',
     ],
     'defaultGroupHasChanged' => [
         'ko' => '기본 가입 그룹이 변경되었습니다.',
@@ -797,13 +797,13 @@ return [
         'ko' => '댓글 수',
         'en' => 'Comment Count',
     ],
-    'memberCount' => [
+    'userCount' => [
         'ko' => '회원 수',
-        'en' => 'Member Count',
+        'en' => 'User Count',
     ],
-    'memberList' => [
+    'userList' => [
         'ko' => '회원 목록',
-        'en' => 'Member list',
+        'en' => 'User list',
     ],
     'joinSettings' => [
         'ko' => '가입 설정',
@@ -1407,15 +1407,15 @@ return [
         'ko' => '메일 추가하기',
         'en' => 'Add Mail'
     ],
-    'memberName' => [
+    'userName' => [
         'ko' => '회원 이름',
         'en' => 'User name'
     ],
-    'changeMemberName' => [
+    'changeUserName' => [
         'ko' => '회원 이름 변경',
         'en' => 'Change user name'
     ],
-    'canChangeMemberName' => [
+    'canChangeUserName' => [
         'ko' => '회원 이름을 변경할 수 있습니다. (2자이상의 한글 또는 3자이상의 영문, 숫자만 가능합니다.)',
         'en' => 'You can change user name.'
     ],
@@ -1512,13 +1512,13 @@ return [
         'ko' => '이 링크로 이동하여 비밀번호를 재설정하세요.',
         'en' => 'Go to this link to reset your password.'
     ],
-    'addMember' => [
+    'addUser' => [
         'ko' => '새회원 추가',
-        'en' => 'New member'
+        'en' => 'New user'
     ],
-    'editMember' => [
+    'editUser' => [
         'ko' => '회원 수정',
-        'en' => 'Edit member'
+        'en' => 'Edit user'
     ],
     'accessUserList' => [
         'ko' => '회원목록 접근',
@@ -1748,19 +1748,19 @@ return [
         'ko' => '소개를 작성해 주세요.',
         'en' => 'Please enter introduction.',
     ],
-    'memberRating' => [
+    'userRating' => [
         'ko' => '회원 등급',
-        'en' => 'Member grade',
+        'en' => 'User grade',
     ],
-    'memberRatingNormal' => [
+    'userRatingNormal' => [
         'ko' => '일반',
         'en' => 'Normal',
     ],
-    'memberRatingManager' => [
+    'userRatingManager' => [
         'ko' => '관리자',
         'en' => 'Manager',
     ],
-    'memberRatingAdministrator' => [
+    'userRatingAdministrator' => [
         'ko' => '최고 관리자',
         'en' => 'Administrator',
     ],
@@ -1772,9 +1772,9 @@ return [
         'ko' => '비었음',
         'en' => 'empty',
     ],
-    'memberDefaultSetting' => [
+    'userDefaultSetting' => [
         'ko' => '회원 기본 설정',
-        'en' => 'Member default setting',
+        'en' => 'User default setting',
     ],
     'useLoginCaptcha' => [
         'ko' => '로그인 시 CAPTCHA 사용',
@@ -1800,9 +1800,9 @@ return [
         'ko' => '사이트 개인정보 보호 정책',
         'en' => 'Site Privacy Policy',
     ],
-    'memberDynamicFieldDescription' => [
+    'userDynamicFieldDescription' => [
         'ko' => '회원정보에 추가할 필드를 설정합니다.',
-        'en' => 'Set dynamic field for member information.',
+        'en' => 'Set dynamic field for user information.',
     ],
     'useEmailConfirm' => [
         'ko' => '이메일 인증 사용',
@@ -1812,7 +1812,7 @@ return [
         'ko' => '회원 가입 허용',
         'en' => 'Permit to sign up'
     ],
-    'memberSingUpLoginSkin' => [
+    'userSingUpLoginSkin' => [
         'ko' => '회원 가입/로그인 스킨',
         'en' => 'Skin for sing up and login skin',
     ],
@@ -1824,13 +1824,13 @@ return [
         'ko' => '프로필 스킨',
         'en' => 'Skin for profile page',
     ],
-    'memberToggleMenu' => [
+    'userToggleMenu' => [
         'ko' => '회원 팝업 메뉴',
-        'en' => 'Member toggle menu',
+        'en' => 'User toggle menu',
     ],
-    'memberToggleMenuDescription' => [
+    'userToggleMenuDescription' => [
         'ko' => '회원 이름을 클릭했을 때 표시될 메뉴를 설정합니다.',
-        'en' => 'Set the menu that appears when you click on the member name.',
+        'en' => 'Set the menu that appears when you click on the user name.',
     ],
     'emailOrUserName' => [
         'ko' => '이메일 주소 / 사용자 이름',
@@ -1870,7 +1870,7 @@ return [
     ],
     'signUpSite' => [
         'ko' => '아직 회원이 아닙니까?',
-        'en' => 'Not a member yet?',
+        'en' => 'Not a user yet?',
     ],
     'msgAcceptTerms' => [
         'ko' => ':terms 을(를) 읽었으며 이에 동의합니다.',
@@ -2596,13 +2596,13 @@ return [
         'ko' => '입력한 암호가 틀렸습니다.',
         'en' => 'Password is invalid.',
     ],
-    'allMemberCount' => [
+    'allUserCount' => [
         'ko' => '전체 회원 수',
-        'en' => 'Number of members',
+        'en' => 'Number of users',
     ],
-    'searchMemberCount' => [
+    'searchUserCount' => [
         'ko' => '검색된 회원 수',
-        'en' => 'Number of members found',
+        'en' => 'Number of users found',
     ],
     'allRating' => [
         'ko' => '전체 등급',

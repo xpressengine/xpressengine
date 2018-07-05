@@ -6,7 +6,7 @@
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <div class="panel-heading">
                     <div class="pull-left">
-                        <h3 class="panel-title">{{xe_trans('xe::memberDefaultSetting')}}</h3>
+                        <h3 class="panel-title">{{xe_trans('xe::userDefaultSetting')}}</h3>
                     </div>
                 </div>
                 <div class="panel-body">

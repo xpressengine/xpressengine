@@ -221,7 +221,7 @@ class SettingsHandler
             /** @var Route $route */
             $menuIds = array_get($route->getAction(), 'settings_menu', []);
 
-            // 만약 route에 permission 정보가 있고, 그 permission을 현재 member가 통과하지 못하면 display=false로 지정한다.
+            // 만약 route에 permission 정보가 있고, 그 permission을 현재 user가 통과하지 못하면 display=false로 지정한다.
             $permissions = array_get($route->getAction(), 'permission', []);
             $visible = false;
             if (false && !$isSuper) {

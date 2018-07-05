@@ -384,9 +384,9 @@ class Permission {
     var rating = this.permission.rating
     var modeEnable = false
     var permissionTypes = [
-      { value: 'super', name: XE.Lang.trans('xe::memberRatingAdministrator') },
-      { value: 'manager', name: XE.Lang.trans('xe::memberRatingManager') },
-      { value: 'member', name: XE.Lang.trans('xe::member') },
+      { value: 'super', name: XE.Lang.trans('xe::userRatingAdministrator') },
+      { value: 'manager', name: XE.Lang.trans('xe::userRatingManager') },
+      { value: 'user', name: XE.Lang.trans('xe::user') },
       { value: 'guest', name: XE.Lang.trans('xe::guest') }
     ]
 

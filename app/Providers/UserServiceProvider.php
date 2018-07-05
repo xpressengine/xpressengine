@@ -206,7 +206,7 @@ class UserServiceProvider extends ServiceProvider
     }
 
     /**
-     * registerMemberMenu
+     * registerToggleMenu
      *
      * @return void
      */
@@ -519,9 +519,9 @@ class UserServiceProvider extends ServiceProvider
     private function registerDefaultSkins()
     {
         $pluginRegister = $this->app['xe.pluginRegister'];
-        $pluginRegister->add(\App\Skins\Member\AuthSkin::class);
-        $pluginRegister->add(\App\Skins\Member\SettingsSkin::class);
-        $pluginRegister->add(\App\Skins\Member\ProfileSkin::class);
+        $pluginRegister->add(\App\Skins\User\AuthSkin::class);
+        $pluginRegister->add(\App\Skins\User\SettingsSkin::class);
+        $pluginRegister->add(\App\Skins\User\ProfileSkin::class);
     }
 
     private function registerSettingsPermissions()

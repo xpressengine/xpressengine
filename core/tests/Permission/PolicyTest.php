@@ -21,7 +21,7 @@ class PolicyTest extends \PHPUnit\Framework\TestCase
     public function testCheck()
     {
         $updateGrant = [
-            'rating' => 'member',
+            'rating' => 'user',
             'group' => [],
             'user' => [],
             'except' => [],

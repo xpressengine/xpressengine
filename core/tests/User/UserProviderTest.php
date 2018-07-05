@@ -129,7 +129,7 @@ class UserProviderTest extends \PHPUnit\Framework\TestCase
      */
     protected function getRepo()
     {
-        return m::mock('\Xpressengine\Member\Repositories\MemberRepositoryInterface');
+        return m::mock('\Xpressengine\User\Repositories\UserRepositoryInterface');
     }
 
     private function getUser()

@@ -25,8 +25,8 @@ use App\UIObjects\Form\FormTextArea;
 use App\UIObjects\Form\FormColorpicker;
 use App\UIObjects\Lang\LangText;
 use App\UIObjects\Lang\LangTextArea;
-use App\UIObjects\Member\ProfileBgImage;
-use App\UIObjects\Member\ProfileImage;
+use App\UIObjects\User\ProfileBgImage;
+use App\UIObjects\User\ProfileImage;
 
 class UIObjectServiceProvider extends ServiceProvider
 {

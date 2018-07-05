@@ -87,15 +87,15 @@
         <div class="setting-group">
             <a href="#" class="__xe_editBtn">
                 <div class="setting-left">
-                    <p>{{ xe_trans('xe::memberName') }}</p>
+                    <p>{{ xe_trans('xe::userName') }}</p>
                     <em class="__xe_displayName text-gray">{{ $user->getDisplayName() }}</em>
                 </div>
             </a>
         </div>
         <div class="setting-detail" style="display: none;">
             <div class="setting-detail-content">
-                <p>{{ xe_trans('xe::changeMemberName') }}</p>
-                <em class="text-gray2">{{ xe_trans('xe::canChangeMemberName') }}</em>
+                <p>{{ xe_trans('xe::changeUserName') }}</p>
+                <em class="text-gray2">{{ xe_trans('xe::canChangeUserName') }}</em>
                 <input type="text" class="__xe_nameInput xe-form-control" name="name" value="{{ $user->getDisplayName() }}">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <em class="__xe_message text-message"></em>

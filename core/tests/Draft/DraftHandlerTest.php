@@ -26,7 +26,7 @@ class DraftHandlerTest extends \PHPUnit\Framework\TestCase
         $mockEntity1 = m::mock('Xpressengine\Draft\DraftEntity');
         $mockEntity2 = m::mock('Xpressengine\Draft\DraftEntity');
 
-        $mockUser = m::mock('Xpressengine\Member\Entities\MemberEntityInterface');
+        $mockUser = m::mock('Xpressengine\User\UserInterface');
         $mockUser->shouldReceive('getId')->andReturn('userId');
 
         $auth->shouldReceive('user')->andReturn($mockUser);
@@ -58,7 +58,7 @@ class DraftHandlerTest extends \PHPUnit\Framework\TestCase
         list($repo, $auth) = $this->getMocks();
         $instance = new DraftHandler($repo, $auth);
 
-        $mockUser = m::mock('Xpressengine\Member\Entities\MemberEntityInterface');
+        $mockUser = m::mock('Xpressengine\User\UserInterface');
         $mockUser->shouldReceive('getId')->andReturn('userId');
 
         $auth->shouldReceive('guest')->andReturn(false);
@@ -81,7 +81,7 @@ class DraftHandlerTest extends \PHPUnit\Framework\TestCase
         list($repo, $auth) = $this->getMocks();
         $instance = new DraftHandler($repo, $auth);
 
-        $mockUser = m::mock('Xpressengine\Member\Entities\MemberEntityInterface');
+        $mockUser = m::mock('Xpressengine\User\UserInterface');
         $mockUser->shouldReceive('getId')->andReturn('userId');
 
         $auth->shouldReceive('guest')->andReturn(true);
@@ -130,7 +130,7 @@ class DraftHandlerTest extends \PHPUnit\Framework\TestCase
         $mockEntity1 = m::mock('Xpressengine\Draft\DraftEntity');
         $mockEntity2 = m::mock('Xpressengine\Draft\DraftEntity');
 
-        $mockUser = m::mock('Xpressengine\Member\Entities\MemberEntityInterface');
+        $mockUser = m::mock('Xpressengine\User\UserInterface');
         $mockUser->shouldReceive('getId')->andReturn('userId');
 
         $auth->shouldReceive('user')->andReturn($mockUser);

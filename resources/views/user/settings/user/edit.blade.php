@@ -8,7 +8,7 @@
             <div class="panel">
                 <div class="panel-heading">
                     <div class="pull-left">
-                        <h3 class="panel-title">{{xe_trans('xe::editMember')}} - {{ $user->getDisplayName() }}</h3>
+                        <h3 class="panel-title">{{xe_trans('xe::editUser')}} - {{ $user->getDisplayName() }}</h3>
                     </div>
                 </div>
                 <div class="panel-body">
@@ -59,7 +59,7 @@
 
                             <div class="form-group">
                                 {{-- rating --}}
-                                {!! uio('formSelect', ['id'=>'__xe_rating', 'label'=>xe_trans('xe::memberRating'), 'name'=>'rating', 'options'=> $ratings]) !!}
+                                {!! uio('formSelect', ['id'=>'__xe_rating', 'label'=>xe_trans('xe::userRating'), 'name'=>'rating', 'options'=> $ratings]) !!}
                             </div>
 
                             <div class="form-group">

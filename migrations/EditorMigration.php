@@ -30,7 +30,7 @@ class EditorMigration extends Migration
         ]);
 
         $data = [
-            Grant::RATING_TYPE => Rating::MEMBER,
+            Grant::RATING_TYPE => Rating::USER,
             Grant::GROUP_TYPE => [],
             Grant::USER_TYPE => [],
             Grant::EXCEPT_TYPE => [],
