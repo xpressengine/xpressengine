@@ -59,7 +59,6 @@ class CellPhoneNumber extends AbstractType
     {
         return [
             'cell_phone_number' => (new ColumnEntity('cell_phone_number', ColumnDataType::STRING, 30)),
-            'entities' => (new ColumnEntity('entities', ColumnDataType::TEXT)),
         ];
     }
 
