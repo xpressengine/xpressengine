@@ -40,6 +40,8 @@ class StorageMigration extends Migration {
         });
 
         Schema::create('fileables', function (Blueprint $table) {
+            $table->engine = "InnoDB";
+
             // mapping a file to target. If Document uploaded a file, [fileableId] is document ID.
             $table->increments('id')->comment('ID');
             $table->string('file_id', 36)->comment('file ID');
