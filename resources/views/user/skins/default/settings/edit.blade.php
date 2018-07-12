@@ -214,7 +214,7 @@
     $(function($) {
 
         window.openSetting = function(data) {
-            var id = data.id;
+            var id = data.data.id;
             $('.__xe_settingAddition-'+id+' .setting-group').hide();
             $('.__xe_settingAddition-'+id+' .setting-detail').show();
         }
@@ -231,7 +231,7 @@
         $('.__xe_settingAddition').on('click', '.__xe_setting-close', function(){
             var id = $(this).data('field');
             var url = $(this).parents('form').attr('action');
-            closeSetting({field: id, url: url});
+            closeSetting({field: id, showUrl: url});
         });
     });
 </script>
