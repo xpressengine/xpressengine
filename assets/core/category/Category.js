@@ -579,9 +579,11 @@ var Category = (function (XE, $, Tree) {
      */
     formToJson: function ($form) {
       var params = {}
-      $form.serializeArray().forEach((item) => {
-        params[item.name] = item.value
-      })
+      var items = $form.serializeArray()
+
+      for (var i in items) {
+        params[items[i].name] = items[i].value
+      }
 
       return params
     }

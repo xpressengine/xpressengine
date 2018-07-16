@@ -3,14 +3,14 @@
     <div class="__xe_imagebox_{{ $seq }} clearfix list-group-item">
 
         <div class="btn-group" role="group" aria-label="...">
-            <button type="button" class="btn btn-default __xe_inputBtn fileinput-button">
+            <span type="button" class="btn btn-default __xe_inputBtn fileinput-button">
                 @if($path = array_get($args, 'value.path', array_get($args, 'image')))
                     <span>변경</span>
                 @else
                     <span>{{xe_trans('xe::register')}}</span>
                 @endif
                 <input class="__xe_file_{{ $seq }}" type="file" name="{{ $name = array_get($args, 'name', 'image') }}"/>
-            </button>
+            </span>
             <label @if($path === null) disabled @endif class="btn btn-default">
                 <input type="checkbox" class="__xe_delete_file_{{ $seq }}" value="__delete_file__">
                 삭제</label>
