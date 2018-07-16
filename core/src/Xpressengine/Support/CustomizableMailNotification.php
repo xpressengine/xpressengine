@@ -46,9 +46,9 @@ abstract class CustomizableMailNotification extends Notification
     /**
      * The view name for message
      *
-     * @var string
+     * @var array
      */
-    protected static $view;
+    protected static $views = [];
 
     /**
      * Get the notification's channels.
@@ -129,7 +129,7 @@ abstract class CustomizableMailNotification extends Notification
      */
     public static function setView($view)
     {
-        static::$view = $view;
+        static::$views[get_called_class()] = $view;
     }
 
     /**
@@ -139,7 +139,7 @@ abstract class CustomizableMailNotification extends Notification
      */
     public static function getView()
     {
-        return static::$view;
+        return static::$views[get_called_class()] ?? null;
     }
 
     /**
