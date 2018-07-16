@@ -38,32 +38,34 @@ export default class DynamicLoadManager extends Singleton {
   jsLoadMultiple (arrjs, callbackObj) {
     var count = 0
     callbackObj = callbackObj || {}
+    let result = Promise.resolve()
 
-    for (var i = 0, max = arrjs.length; i < max; i += 1) {
-      var src = $$.asset(arrjs[i])
-
+    for (let idx in arrjs) {
+      let src = $$.asset(arrjs[idx])
       if (!assets.js.has(src)) {
-        assets.js.add(src)
+        result = result.then(() => new Promise((resolve, reject) => {
+          XE.ajax({
+            url: src,
+            dataType: 'script',
+            success: function () {
+              count++
 
-        XE.ajax({
-          url: src,
-          dataType: 'script',
-          success: function () {
-            count++
+              if (callbackObj.load) {
+                callbackObj.load()
+              }
 
-            if (callbackObj.load) {
-              callbackObj.load()
-            }
+              if (count === arrjs.length && !!callbackObj.complete) {
+                callbackObj.complete()
+              }
 
-            if (count === arrjs.length && !!callbackObj.complete) {
-              callbackObj.complete()
-            }
-          },
-
-          error: callbackObj.error
-        })
+              resolve()
+            },
+            error: callbackObj.error
+          })
+        }))
       } else {
         count++
+
         if (callbackObj.load) {
           callbackObj.load()
         }
