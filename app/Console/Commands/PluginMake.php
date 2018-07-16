@@ -8,20 +8,21 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Process\Process;
 use Xpressengine\Plugin\PluginHandler;
 
-class PluginMake extends Command
+class PluginMake extends MakeCommand
 {
     /**
-     * The console command name.
+     * The name and signature of the console command.
      *
      * @var string
      */
-    protected $name = 'make:plugin';
+    protected $signature = 'make:plugin 
+        {name : The name of the plugin}
+        {vendor : The vendor name. like your name}
+        {--namespace= : The namespace of the plugin. use double backslash(\\\\) as delimiter. default "<Vendor>\\\\XePlugin\\\\\<Name>"}
+        {--title= : The title of plugin}';
+
 
     /**
      * The console command description.
@@ -31,57 +32,23 @@ class PluginMake extends Command
     protected $description = 'Create a new plugin of XpressEngine';
 
     /**
-     * The filesystem instance.
-     *
-     * @var \Illuminate\Filesystem\Filesystem
-     */
-    protected $files;
-
-    /**
-     * Create a new controller creator command instance.
-     *
-     * @param  \Illuminate\Filesystem\Filesystem $files
-     *
-     * @return void
-     */
-    public function __construct(Filesystem $files)
-    {
-        parent::__construct();
-
-        $this->files = $files;
-    }
-
-    /**
      * Execute the console command.
      *
      * @return bool|null
+     * @throws \Exception
      */
     public function handle()
     {
-        // get plugin name, namespace, path
-        $name = $this->getPluginName();
-        $namespace = $this->getNamespace();
-        $title = $this->getTitleInput();
-        $path = app('xe.plugin')->getPluginsDir().'/'.$name;
+        $name = $this->argument('name');
+        $namespace = $this->getNamespace($name, $this->argument('vendor'));
 
-        if($this->checkEnv($path, $name, $namespace, $title) === false) {
-            return false;
-        }
+        $title = $this->getTitleInput($name);
+
+        $this->copyStubDirectory($path = plugins_path($name));
 
         try {
-            $this->makeDirectory($path);
 
-            // plugin.php 파일 생성
-            $this->makePluginClass($path, $name, $namespace, $title);
-
-            // composer.json 파일 생성
-            $this->makeComposerJson($path, $name, $namespace, $title);
-
-            // directory structure 생성
-            $this->makeDirectoryStructure($path);
-
-            // Controller.php
-            $this->makeControllerClass($path, $name, $namespace, $title);
+            $this->makeUsable($path, $name, $namespace, $title);
 
             // composer update
             $this->runComposerDump($path);
@@ -104,341 +71,78 @@ class PluginMake extends Command
         $this->info("Input and modify your plugin information in ./plugins/$name/composer.json file.");
     }
 
-    protected function checkEnv($path, $name, $namespace, $title)
+    protected function getNamespace($name, $vendor)
     {
-        // check directory exists
-        if ($this->files->exists($path)) {
-            $this->error('Plugin already exists!');
-            return false;
+        if (!$namespace = $this->option('namespace')) {
+            $namespace = studly_case($vendor) . '\\XePlugin\\' . studly_case($name);
         }
 
         // check namespace
         if(!str_contains($namespace, '\\')) {
-            $this->error('The namespace must have at least 1 delimiter(\\), use double backslash(\\\\) as delimiter');
-            return false;
+            throw new \Exception('The namespace must have at least 1 delimiter(\\), use double backslash(\\\\) as delimiter');
         }
 
-        // check permission
-        $pluginsDir = app('xe.plugin')->getPluginsDir();
-        if (!$this->files->isWritable($pluginsDir)) {
-            $this->error("Permission denied. Can not create plugin directory($path).");
-            return false;
-        }
+        return $namespace;
     }
 
     /**
-     * makePluginClass
+     * get title
      *
-     * @param $path
-     * @param $name
-     * @param $namespace
-     * @param $title
-     *
-     * @return void
+     * @return string
      */
-    protected function makePluginClass($path, $name, $namespace, $title)
+    protected function getTitleInput($name)
     {
-        $code = $this->buildCode($this->getStub('plugin.stub'), $name, $namespace, $title);
+        return $this->option('title') ?: studly_case($name) . ' plugin';
+    }
 
-        $this->files->put($path.'/plugin.php', $code);
+    /**
+     * get stub path
+     *
+     * @return string
+     */
+    protected function getStubPath()
+    {
+        return __DIR__ . '/stubs/plugin';
+    }
+
+    protected function makeUsable($path, $name, $namespace, $title)
+    {
+        // plugin.php 파일 생성
+        $this->makePluginClass($path, $name, $namespace);
+
+        // composer.json 파일 생성
+        $this->makeComposerJson($path, $name, $namespace, $title);
+
+        // Controller.php
+        $this->makeControllerClass($path, $name, $namespace, $title);
+
+        $this->files->move($path . '/views/index.blade.stub', $path . '/views/index.blade.php');
+    }
+
+    protected function makePluginClass($path, $name, $namespace)
+    {
+        $search = ['DummyNamespace', 'DummyPluginName'];
+        $replace = [$namespace, $name];
+
+        $this->buildFile($path.'/plugin.stub', $search, $replace, $path.'/plugin.php');
+    }
+    
+    protected function makeComposerJson($path, $name, $namespace, $title)
+    {
+        $namespace = str_replace('\\', '\\\\', $namespace);
+        
+        $search = ['DummyNamespace', 'DummyPluginName', 'DummyPluginTitle'];
+        $replace = [$namespace, $name, $title];
+
+        $this->buildFile($path.'/composer.json.stub', $search, $replace, $path.'/composer.json');
     }
 
     protected function makeControllerClass($path, $name, $namespace, $title)
     {
-        $code = $this->buildCode($this->getStub('Controller.stub'), $name, $namespace, $title);
+        $search = ['DummyNamespace', 'DummyPluginName', 'DummyPluginTitle'];
+        $replace = [$namespace, $name, $title];
 
-        $this->files->put($path.'/src/Controller.php', $code);
-    }
-
-    /**
-     * makeDirectory
-     *
-     * @param $path
-     *
-     * @return void
-     */
-    protected function makeDirectory($path)
-    {
-        if (!$this->files->isDirectory($path)) {
-            $this->files->makeDirectory($path, 0777, true, true);
-        }
-    }
-
-    /**
-     * findComposer
-     *
-     * @return string
-     */
-    protected function findComposer()
-    {
-        if (file_exists(getcwd().'/composer.phar')) {
-            return '"'.PHP_BINARY.'" composer.phar';
-        }
-
-        return 'composer';
-    }
-
-    /**
-     * Build the class with the given name.
-     *
-     * @return string
-     */
-    protected function buildCode($stubPath, $pluginName, $namespace, $title)
-    {
-        $stub = $this->files->get($stubPath);
-
-        $this->replaceNamespace($stub, $namespace)->replaceClass($stub, 'Plugin')->replacePluginName(
-            $stub,
-            $pluginName
-        )->replacePluginTitle(
-            $stub,
-            $title
-        );
-
-        return $stub;
-    }
-
-    /**
-     * makeComposerJson
-     *
-     * @param $path
-     * @param $pluginName
-     * @param $namespace
-     *
-     * @return void
-     */
-    protected function makeComposerJson($path, $pluginName, $namespace, $title)
-    {
-        $filename = 'composer.json';
-
-        $code = $this->buildComposerCode($pluginName, $namespace, $title);
-
-        $this->makeDirectory($path);
-
-        $this->files->put($path.'/'.$filename, $code);
-    }
-
-    /**
-     * buildComposerCode
-     *
-     * @param $pluginName
-     * @param $namespace
-     *
-     * @return string
-     */
-    protected function buildComposerCode($pluginName, $namespace, $title)
-    {
-        $stub = $this->files->get($this->getStub('composer.json.stub'));
-
-        $namespace = str_replace('\\', '\\\\', $namespace);
-
-        $this->replaceNamespace($stub, $namespace)->replacePluginName($stub, $pluginName)->replacePackageName(
-            $stub,
-            PluginHandler::PLUGIN_VENDOR_NAME
-        )->replacePluginTitle(
-            $stub,
-            $title
-        );
-
-        return $stub;
-    }
-
-    /**
-     * Replace the class name for the given stub.
-     *
-     * @param  string $stub
-     * @param  string $name
-     *
-     * @return static
-     */
-    protected function replaceClass(&$stub, $name)
-    {
-        $stub = str_replace('DummyClass', $name, $stub);
-
-        return $this;
-    }
-
-    /**
-     * replaceNamespace
-     *
-     * @param string $stub
-     *
-     * @return $this
-     */
-    protected function replaceNamespace(&$stub, $namespace)
-    {
-        $stub = str_replace(
-            'DummyNamespace',
-            $namespace,
-            $stub
-        );
-
-        return $this;
-    }
-
-
-    /**
-     * replacePackageName
-     *
-     * @param string $stub
-     *
-     * @return $this
-     */
-    protected function replacePackageName(&$stub, $packageName)
-    {
-        $stub = str_replace(
-            'DummyPluginPackage',
-            $packageName,
-            $stub
-        );
-
-        return $this;
-    }
-
-
-    /**
-     * replacePluginTitle
-     *
-     * @param string $stub
-     *
-     * @return $this
-     */
-    protected function replacePluginTitle(&$stub, $title)
-    {
-        $stub = str_replace(
-            'DummyPluginTitle',
-            $title,
-            $stub
-        );
-
-        return $this;
-    }
-
-    /**
-     * Replace the class name for the given stub.
-     *
-     * @param  string $stub
-     * @param  string $pluginName
-     *
-     * @return static
-     */
-    protected function replacePluginName(&$stub, $pluginName)
-    {
-        $stub = str_replace('DummyPluginName', $pluginName, $stub);
-
-        return $this;
-    }
-
-    /**
-     * Get the full namespace name for a given class.
-     *
-     * @param  string $name
-     *
-     * @return string
-     */
-    protected function getNamespace()
-    {
-        $namespace = $this->getNamespaceInput();
-        $namespace = str_replace('\\\\', '\\', $namespace);
-        return trim($namespace, '\\');
-    }
-
-    /**
-     * getPluginName
-     *
-     * @return string
-     */
-    protected function getPluginName()
-    {
-        return $this->argument('name');
-    }
-
-    /**
-     * Get the stub file for the generator.
-     *
-     * @return string
-     */
-    protected function getStub($filename)
-    {
-        return __DIR__.'/stubs/'.$filename;
-    }
-
-    /**
-     * Get the console command arguments.
-     *
-     * name, namespace, title
-     *
-     * @return array
-     */
-    protected function getArguments()
-    {
-        return [
-            ['name', InputArgument::REQUIRED, 'The name of the plugin'],
-            [
-                'namespace',
-                InputArgument::REQUIRED,
-                'The namespace of the plugin. use double backslash(\\\\) as delimiter'
-            ],
-            ['title', InputArgument::REQUIRED, 'The title of the plugin'],
-        ];
-    }
-
-    /**
-     * Get the desired class namespace from the input.
-     *
-     * @return string
-     */
-    protected function getNamespaceInput()
-    {
-        return $this->argument('namespace');
-    }
-
-    /**
-     * Get the desired class title from the input.
-     *
-     * @return string
-     */
-    protected function getTitleInput()
-    {
-        return $this->argument('title');
-    }
-
-    protected function makeDirectoryStructure($path)
-    {
-        $defaultDirectories = [
-            'src',
-            'views',
-            'assets'
-        ];
-        foreach ($defaultDirectories as $dir) {
-            $this->makeDirectory($path.'/'.$dir);
-        }
-
-        // index.blade.php
-        $stub = $this->files->get($this->getStub('index.blade.stub'));
-        $this->files->put($path.'/views/index.blade.php', $stub);
-
-        // style.css
-        $stub = $this->files->get($this->getStub('style.css.stub'));
-        $this->files->put($path.'/assets/style.css', $stub);
-    }
-
-    protected function runComposerDump($path)
-    {
-        $composer = $this->findComposer();
-        $commands = [
-            $composer.' dump-autoload -d '.$path
-        ];
-
-        $process = new Process(implode(' && ', $commands), null, null, null, null);
-
-        $output = $this->output;
-
-        $process->run(
-            function ($type, $line) use ($output) {
-                $output->write($line);
-            }
-        );
+        $this->buildFile($path.'/src/Controller.stub', $search, $replace, $path.'/src/Controller.php');
     }
 
     protected function activatePlugin($name)
