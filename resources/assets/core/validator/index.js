@@ -53,7 +53,7 @@ export default class Validator extends Singleton {
       accepted: function ($dst, parameters) {
         var value = that.getValue($dst)
 
-        if (['yes', 'on', 1, true].indexOf(value) === -1) {
+        if (['yes', 'ok', 'accept', 'accepted', 'on', '1', 'true'].indexOf(String(value).toLowerCase()) === -1) {
           that.error($dst, Lang.instance.trans('validation.accepted', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
