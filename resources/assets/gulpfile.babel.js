@@ -15,16 +15,16 @@ gulp.task('default', (callback) => {})
 gulp.task('assets', ['assets-sass'])
 
 gulp.task('assets-sass', () => {
-  return gulp.src(['./**/*.scss', '!node_modules/**/*'])
+  return gulp.src(['./core/**/*.scss', '!node_modules/**/*'])
     .pipe(gulpSass({
       outputStyle: 'compressed'
     }))
-    .pipe(gulp.dest('../../../assets/core'))
+    .pipe(gulp.dest('../../assets/core'))
 })
 
 gulp.task('jsdoc', () => {
   var merged = stream(
-    gulp.src('../jsdoc')
+    gulp.src('./jsdoc')
       .pipe($.clean({ force: true })),
     gulp.src([
       '**/*.js',
@@ -32,7 +32,7 @@ gulp.task('jsdoc', () => {
     ])
       .pipe(jsdoc({
         'opts': {
-          'destination': '../jsdoc',
+          'destination': './jsdoc',
           'template': 'node_modules/docdash'
         }
       }))

@@ -9,4 +9,8 @@ export default class RequestEntity {
   get method () {
     return this[symbolRawResponse].method
   }
+
+  get container () {
+    return this[symbolRawResponse].container
+  }
 }

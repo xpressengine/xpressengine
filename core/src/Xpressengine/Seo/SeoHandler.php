@@ -194,7 +194,9 @@ class SeoHandler
 
         if ($item) {
             $title = $item->getTitle() . ' - ' . $this->translator->trans($siteTitle);
+            $title = strip_tags(html_entity_decode($title));
             $this->frontend->title($title);
+
             return $title;
         }
 
