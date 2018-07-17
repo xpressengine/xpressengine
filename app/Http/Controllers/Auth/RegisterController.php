@@ -207,7 +207,7 @@ class RegisterController extends Controller
         // login and redirect
         $this->auth->login($user);
 
-        return redirect($this->redirectPath());
+        return redirect()->intended(($this->redirectPath()));
     }
 
     /**
