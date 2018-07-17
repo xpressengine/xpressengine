@@ -146,6 +146,7 @@ abstract class AbstractImporter
         foreach ($contents as $content) {
             $content = array_key_exists($key, $this->cuts) ? $this->substr($content, $this->cuts[$key]) : $content;
             $content = in_array($key, $this->needHost) ? $this->prependHost($content) : $content;
+            $content = strip_tags(html_entity_decode($content));
 
             $this->frontend->meta($this->metaItems[$key])
                 ->property($this->metaItems[$key])
