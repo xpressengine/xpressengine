@@ -36,7 +36,7 @@ var Progress = {
     }
 
     var $context = $(context)
-    if ($context.context === undefined) {
+    if (!$context.length) {
       $context = $('body')
     }
 
@@ -52,7 +52,7 @@ var Progress = {
    **/
   done: function (context) {
     var $context = $(context)
-    if ($context.context === undefined) {
+    if (!$context.length) {
       $context = $('body')
     }
 
@@ -96,21 +96,10 @@ function setCount ($context, count) {
 function setInstance ($context, instance) {
   if (getInstance($context) === null) {
     var progress = new XeProgress()
-    var parent = 'body'
+    var parent = $context
     var type = $context.data('progress-type') === undefined ? 'default' : $context.data('progress-type')
     var bgcolor = $context.data('progress-bgcolor')
     var showSpinner = type !== 'nospin'
-
-    if ($context.attr('id') !== undefined) {
-      parent = '#' + $context.attr('id')
-    } else if ($context.selector) {
-      parent = $context.selector
-    } else {
-      var cnt = getCount($context) || 0
-
-      $context.attr('data-progress-idx', cnt)
-      parent = '[data-progress-idx=' + cnt + ']'
-    }
 
     progress.configure({
       parent: parent,
@@ -352,7 +341,7 @@ function XeProgress () {
 
     var $bar = $progress.find(this.settings.barSelector)
     var perc = fromStart ? '-100' : toBarPerc(this.status || 0)
-    var $parent = $(this.settings.parent)
+    var $parent = this.settings.parent
     var $spinner
 
     $bar.attr('title-name', this.instanceId)
@@ -369,7 +358,8 @@ function XeProgress () {
     }
 
     $parent.addClass('xe-progress-' + this.settings.type)
-    if ($parent.is('body') === false) {
+
+    if (!$parent.is('body')) {
       $parent.addClass('xe-progress-custom-parent')
     }
 

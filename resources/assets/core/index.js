@@ -134,6 +134,37 @@ class XE {
 
       this.toastByStatus(status, errorMessage)
     })
+
+    // @FIXME 분리
+    this.Request.$$on('start', (eventName, options) => {
+      Progress.start((typeof options.container === 'undefined') ? 'body' : options.container)
+    })
+    this.Request.$$on('sucess', (eventName, options) => {
+      Progress.done((typeof options.container === 'undefined') ? 'body' : options.container)
+    })
+    this.Request.$$on('error', (eventName, error) => {
+      Progress.done((typeof error._axiosConfig.container === 'undefined') ? 'body' : error._axiosConfig.container)
+
+      let errorMessage = ''
+
+      if (error.status === 422) {
+        var list = error.data.errors || {}
+
+        errorMessage = error.data.message
+        errorMessage += '<ul>'
+        for (var i in list) {
+          errorMessage += '<li>' + list[i] + '</li>'
+        }
+
+        errorMessage += '</ul>'
+      } else if (error.request.responseType === 'json') {
+        errorMessage = JSON.parse(error.request.responseText).message
+      } else {
+        errorMessage = error.statusText
+      }
+
+      this.toastByStatus(error.status, errorMessage)
+    })
   }
 
   /**

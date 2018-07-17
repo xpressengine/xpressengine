@@ -3,6 +3,7 @@ import Axios from 'axios'
 import Qs from 'qs'
 import { eventify } from 'xe/common/js/utils'
 import Router from 'xe/router'
+import $ from 'jquery'
 
 import Config from './config'
 import RequestEntity from './request_entity'
@@ -59,6 +60,22 @@ export default class Request extends Singleton {
     })
   }
 
+  request (url, options, axiosConfig = {}) {
+    this.$$emit('start', new RequestEntity({
+      method: (options.method === 'delete') ? 'post' : options.method,
+      container: (options.container) ? options.container : $('body')
+    }))
+
+    axiosConfig = Object.assign({}, axiosConfig)
+    axiosConfig.url = this.resolveRoute(url)
+    axiosConfig.method = options.method
+    axiosConfig.data = options.data
+    axiosConfig.params = options.params
+    axiosConfig.container = (options.container) ? options.container : $('body')
+
+    return this.axiosInstance.request(axiosConfig)
+  }
+
   /**
    *
    * @param {string} url
@@ -67,14 +84,8 @@ export default class Request extends Singleton {
    * @return {Promise}
    */
   get (url, params = null, config = {}) {
-    this.$$emit('start', new RequestEntity({
-      method: 'get',
-      context: config.context
-    }))
-
-    url = this.resolveRoute(url)
-
-    return this.axiosInstance.get(url, Object.assign({}, config, { params }))
+    config.method = 'get'
+    return this.request(url, Object.assign({}, { params }, config))
   }
 
   /**
@@ -86,14 +97,8 @@ export default class Request extends Singleton {
    * @return {Promise}
    */
   post (url, data, config = {}) {
-    this.$$emit('start', new RequestEntity({
-      method: 'post',
-      context: config.context
-    }))
-
-    url = this.resolveRoute(url)
-
-    return this.axiosInstance.post(url, this.prepareData(data), config)
+    config.method = 'post'
+    return this.request(url, Object.assign({}, { method: 'post', data: this.prepareData(data) }, config))
   }
 
   /**
@@ -104,15 +109,8 @@ export default class Request extends Singleton {
    * @return {Promise}
    */
   delete (url, data = null, config = {}) {
-    this.$$emit('start', new RequestEntity({
-      method: 'delete',
-      context: config.context
-    }))
-    data._method = 'delete' // @see https://laravel.com/docs/5.5/routing#form-method-spoofing
-
-    url = this.resolveRoute(url)
-
-    return this.axiosInstance.post(url, this.prepareData(data), config)
+    config.method = 'delete'
+    return this.request(url, this.prepareData(data), config)
   }
 
   /**
@@ -123,14 +121,8 @@ export default class Request extends Singleton {
    * @return {Promise}
    */
   put (url, data, config = {}) {
-    this.$$emit('start', new RequestEntity({
-      method: 'put',
-      context: config.context
-    }))
-
-    url = this.resolveRoute(url)
-
-    return this.axiosInstance.put(url, this.prepareData(data), config)
+    config.method = 'put'
+    return this.request(url, this.prepareData(data), config)
   }
 
   /**
@@ -142,14 +134,8 @@ export default class Request extends Singleton {
    * @return {Promise}
    */
   head (url, data = null, headers = null, config = {}) {
-    this.$$emit('start', new RequestEntity({
-      method: 'head',
-      context: config.context
-    }))
-
-    url = this.resolveRoute(url)
-
-    return this.axiosInstance.head(url, Object.assign({}, config, { data: this.prepareData(data), headers }))
+    config.method = 'head'
+    return this.request(url, Object.assign({}, { data: this.prepareData(data), headers }, config))
   }
 
   prepareData (data) {
