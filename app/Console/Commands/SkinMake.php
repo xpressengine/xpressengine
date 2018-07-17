@@ -78,7 +78,7 @@ class SkinMake extends ComponentMakeCommand
             $this->makeUsable($attr);
 
             // composer.json 파일 수정
-            if ($this->registerComponent($plugin, $id, $namespace.'\\'.$className, $file, compact('title', 'description')) === false) {
+            if ($this->registerComponent($plugin, $id, $namespace.'\\'.$className, $file, ['name' => $title, 'description' => $description]) === false) {
                 throw new \Exception('Writing to composer.json file was failed.');
             }
 
