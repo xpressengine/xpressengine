@@ -28,7 +28,7 @@
                             <th scope="col">{{xe_trans('xe::groupName')}}</th>
                             <th scope="col">{{xe_trans('xe::description')}}</th>
                             <th scope="col">{{xe_trans('xe::defaultGroup')}}</th>
-                            <th scope="col">{{xe_trans('xe::groupMemberCount')}}</th>
+                            <th scope="col">{{xe_trans('xe::groupUserCount')}}</th>
                             <th scope="col">{{xe_trans('xe::management')}}</th>
                         </tr>
                         </thead>

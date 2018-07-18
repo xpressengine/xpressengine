@@ -71,25 +71,25 @@ return [
                 'ordering' => 100
             ],
             'user' => [
-                'title' => 'xe::member',
+                'title' => 'xe::user',
                 'description' => '',
                 'display' => true,
                 'ordering' => 3000
             ],
             'user.list' => [
-                'title' => 'xe::memberList',
+                'title' => 'xe::userList',
                 'description' => '',
                 'display' => true,
                 'ordering' => 100
             ],
             'user.create' => [
-                'title' => 'xe::addMember',
+                'title' => 'xe::addUser',
                 'description' => '신규회원을 추가합니다.',
                 'display' => false,
                 'ordering' => 200
             ],
             'user.edit' => [
-                'title' => 'xe::editMember',
+                'title' => 'xe::editUser',
                 'description' => '회원정보를 수정합니다',
                 'display' => false,
                 'ordering' => 200
@@ -329,7 +329,7 @@ return [
             //
             //    return $groupInfos;
             //},
-            //'getByUser' => function (Xpressengine\Member\Entities\MemberEntityInterface $user) {
+            //'getByUser' => function ($user) {
             //
             //    $providers = [];
             //    if ($user->getAccountByProvider('facebook')) {

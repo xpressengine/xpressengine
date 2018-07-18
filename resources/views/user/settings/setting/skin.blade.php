@@ -4,7 +4,7 @@
             <div class="panel">
                 <div class="panel-heading">
                     <div class="pull-left">
-                        <h3 class="panel-title">{{xe_trans('xe::memberSingUpLoginSkin')}}</h3>
+                        <h3 class="panel-title">{{xe_trans('xe::userSingUpLoginSkin')}}</h3>
                     </div>
                     <div class="pull-right">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="btn-link panel-toggle pull-right"><i class="xi-angle-down"></i><i class="xi-angle-up"></i><span class="sr-only">{{xe_trans('fold')}}</span></a>

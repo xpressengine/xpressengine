@@ -41,7 +41,7 @@ namespace Xpressengine\Tests\Widget {
         /**
          * @var array
          */
-        public static $ratingWhiteList = ['super', 'manager', 'member'];
+        public static $ratingWhiteList = ['super', 'manager', 'user'];
 
         /**
          * init

@@ -28,7 +28,7 @@ class DatabaseRepositoryTest extends \PHPUnit\Framework\TestCase
         $query->shouldReceive('first')->once()->withNoArgs()->andReturn((object)[
             'id' => 1,
             'name' => 'board.notice',
-            'grants' => '{"access":{"type":"power","value":"guest"},"create":{"type":"power","value":"member"},"read":{"type":"power","value":"guest"},"update":{"type":"group","value":["group_id_1","group_id_2"]},"delete":{"type":"group","value":["group_id_1","group_id_2"]}}',
+            'grants' => '{"access":{"type":"power","value":"guest"},"create":{"type":"power","value":"user"},"read":{"type":"power","value":"guest"},"update":{"type":"group","value":["group_id_1","group_id_2"]},"delete":{"type":"group","value":["group_id_1","group_id_2"]}}',
         ]);
 
         $instance = new DatabaseRepository($conn);
@@ -57,13 +57,13 @@ class DatabaseRepositoryTest extends \PHPUnit\Framework\TestCase
         $mockRegistered->shouldReceive('getOriginal')->andReturn([]);
         $mockRegistered->shouldReceive('getAttributes')->andReturn([
             'name' => 'board.notice',
-            'grants' => '{"access":{"type":"power","value":"guest"},"create":{"type":"power","value":"member"}}',
+            'grants' => '{"access":{"type":"power","value":"guest"},"create":{"type":"power","value":"user"}}',
         ]);
 
         $conn->shouldReceive('table')->andReturn($query);
         $query->shouldReceive('insertGetId')->once()->with(m::on(function ($array) {
             return $array['name'] === 'board.notice'
-            && $array['grants'] === '{"access":{"type":"power","value":"guest"},"create":{"type":"power","value":"member"}}';
+            && $array['grants'] === '{"access":{"type":"power","value":"guest"},"create":{"type":"power","value":"user"}}';
         }))->andReturn(1);
 
         $instance = new DatabaseRepository($conn);
@@ -87,21 +87,21 @@ class DatabaseRepositoryTest extends \PHPUnit\Framework\TestCase
             'grants' => '{"access":{"type":"power","value":"guest"},"create":{"type":"power","value":"super"}}',
         ]);
         $mockRegistered->shouldReceive('getDirty')->andReturn([
-            'grants' => '{"access":{"type":"power","value":"guest"},"create":{"type":"power","value":"member"}}',
+            'grants' => '{"access":{"type":"power","value":"guest"},"create":{"type":"power","value":"user"}}',
         ]);
 
         $conn->shouldReceive('table')->andReturn($query);
         $query->shouldReceive('where')->once()->with('id', 1)->andReturn($query);
 
         $query->shouldReceive('update')->once()->with(m::on(function ($array) {
-            return $array['grants'] === '{"access":{"type":"power","value":"guest"},"create":{"type":"power","value":"member"}}';
+            return $array['grants'] === '{"access":{"type":"power","value":"guest"},"create":{"type":"power","value":"user"}}';
         }))->andReturnNull();
 
         $instance = new DatabaseRepository($conn);
         $registered = $instance->update($mockRegistered);
 
         $this->assertEquals(1, $registered->id);
-        $this->assertEquals(['type' => 'power', 'value' => 'member'], $registered['create']);
+        $this->assertEquals(['type' => 'power', 'value' => 'user'], $registered['create']);
         $this->assertEquals('board.notice', $registered->name);
         $this->assertEquals('instance', $registered->type);
     }
@@ -134,7 +134,7 @@ class DatabaseRepositoryTest extends \PHPUnit\Framework\TestCase
                 'id' => 1,
                 'type' => 'instance',
                 'name' => 'board',
-                'grants' => '{"access":{"type":"power","value":"guest"},"create":{"type":"power","value":"member"}}',
+                'grants' => '{"access":{"type":"power","value":"guest"},"create":{"type":"power","value":"user"}}',
             ],
             [
                 'id' => 2,
@@ -149,7 +149,7 @@ class DatabaseRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(2, count($registereds));
 
-        $this->assertEquals(['type' => 'power', 'value' => 'member'], $registereds[0]['create']);
+        $this->assertEquals(['type' => 'power', 'value' => 'user'], $registereds[0]['create']);
         $this->assertEquals('board', $registereds[0]->name);
 
         $this->assertEquals(['type' => 'power', 'value' => 'super'], $registereds[1]['create']);

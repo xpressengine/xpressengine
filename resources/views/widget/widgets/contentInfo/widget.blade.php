@@ -5,7 +5,7 @@
     <div class="panel-body">
         <ul>
             <li>Total Document : {{ $viewData['totalDocument'] }}</li>
-            <li>Total Member : {{ $viewData['totalMember'] }}</li>
+            <li>Total User : {{ $viewData['totalUser'] }}</li>
         </ul>
     </div>
 </div>

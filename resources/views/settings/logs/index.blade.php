@@ -40,7 +40,7 @@
                                 </ul>
                             @show
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                {{ isset($selectedAdmin) ? $selectedAdmin->getDisplayName() : xe_trans('xe::memberRatingManager') }} <span class="caret"></span>
+                                {{ isset($selectedAdmin) ? $selectedAdmin->getDisplayName() : xe_trans('xe::userRatingManager') }} <span class="caret"></span>
                             </button>
                             @yield('admin-select')
                         </div>
@@ -112,7 +112,7 @@
                         <tr>
                             <th scope="col">{{ xe_trans('xe::date') }}</th>
                             <th scope="col">{{ xe_trans('xe::types') }}</th>
-                            <th scope="col">{{ xe_trans('xe::memberRatingManager') }}</th>
+                            <th scope="col">{{ xe_trans('xe::userRatingManager') }}</th>
                             <th scope="col">{{ xe_trans('xe::summary') }}</th>
                             <th scope="col">{{ xe_trans('xe::ipAddress') }}</th>
                             <th scope="col">{{ xe_trans('xe::showDetails') }}</th>

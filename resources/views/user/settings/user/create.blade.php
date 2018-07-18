@@ -1,5 +1,5 @@
 
-    <form class="form" name="fMemberCreate" method="post" action="{{ route('settings.user.store') }}" enctype="multipart/form-data">
+    <form class="form" name="fUserCreate" method="post" action="{{ route('settings.user.store') }}" enctype="multipart/form-data">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
         <div class="row">
@@ -8,7 +8,7 @@
                     <div class="panel">
                         <div class="panel-heading">
                             <div class="pull-left">
-                                <h3 class="panel-title">{{xe_trans('xe::addMember')}}</h3>
+                                <h3 class="panel-title">{{xe_trans('xe::addUser')}}</h3>
                             </div>
                         </div>
                         <div class="panel-body">
@@ -25,7 +25,7 @@
                                         {{-- status --}}
                                         {!! XeUI::formSelect(['id'=>'__xe_status', 'label'=>xe_trans('xe::status'), 'name'=>'status', 'options'=> $status]) !!}
                                         {{-- rating --}}
-                                        {!! XeUI::formSelect(['id'=>'__xe_rating', 'label'=>xe_trans('xe::memberRating'), 'name'=>'rating', 'options'=> $ratings]) !!}
+                                        {!! XeUI::formSelect(['id'=>'__xe_rating', 'label'=>xe_trans('xe::userRating'), 'name'=>'rating', 'options'=> $ratings]) !!}
                                         {!! XeUI::formCheckbox(['id'=>'__xe_rating', 'label'=>xe_trans('xe::group'), 'name'=>'group_id', 'checkboxes'=> $groups]) !!}
                                 </div>
                                 <div class="col-sm-12">

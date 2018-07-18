@@ -155,9 +155,8 @@ trait ComposerRunTrait
         }
         Composer::setPackagistUrl(config('xe.plugin.packagist.url'));
 
-//        $startTime = Carbon::now()->format('YmdHis');
-//        $logFileName = "logs/plugin-$startTime.log";
-        $logFileName = "logs/plugin-test.log";
+        $startTime = Carbon::now()->format('YmdHis');
+        $logFileName = "logs/plugin-$startTime.log";
 
         file_put_contents(
             storage_path($logFileName),

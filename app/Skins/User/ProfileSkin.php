@@ -12,7 +12,7 @@
  * @link        https://xpressengine.io
  */
 
-namespace App\Skins\Member;
+namespace App\Skins\User;
 
 use Xpressengine\Skin\BladeSkin;
 
