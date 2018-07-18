@@ -14,7 +14,7 @@
             </div>
             <div class="input-group">
                 <label>{{ xe_trans('xe::vendor') }} {{ xe_trans('xe::name') }}</label>
-                <input type="text" class="form-control" name="vendor" placeholder="ex) my name">
+                <input type="text" class="form-control" name="vendor" placeholder="ex) my_name">
                 <p class="help-block"></p>
             </div>
 

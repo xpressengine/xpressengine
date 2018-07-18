@@ -10,6 +10,7 @@ namespace App\Http\Controllers;
 
 use Artisan;
 use Composer\Util\Platform;
+use Illuminate\Auth\Access\AuthorizationException;
 use Redirect;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -30,6 +31,13 @@ class PluginController extends Controller
     public function __construct()
     {
         XePresenter::setSettingsSkinTargetId('plugins');
+
+        $this->middleware(function ($request, $next) {
+            if (!$request->user()->isAdmin()) {
+                throw new AuthorizationException(xe_trans('xe::accessDenied'));
+            }
+            return $next($request);
+        }, ['only' => ['makePlugin', 'makeTheme', 'makeSkin']]);
     }
 
     protected function index(
