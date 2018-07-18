@@ -628,6 +628,13 @@ export default class Validator extends Singleton {
         let $dst = $frm.find('[name="' + name + '"]')
 
         that.errorClear($frm)
+
+        if (command === 'required') {
+          $dst.data('valid-required', true)
+        } else if (!$dst.data('valid-required') && !that.getValue($dst)) {
+          return
+        }
+
         if (that.validators[command]($dst, parameters) === false) {
           $frm.data('valid-result', false)
           throw Error('Validation error.')
