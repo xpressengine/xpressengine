@@ -75,7 +75,7 @@ export function addCommas (str) {
  * @DEPRECATED
  * @FIXME moment
  */
-export default function strtotime (text, now) {
+export function strtotime (text, now) {
   //  discuss at: http://locutus.io/php/strtotime/
   // original by: Caio Ariede (http://caioariede.com)
   // improved by: Kevin van Zonneveld (http://kvz.io)
