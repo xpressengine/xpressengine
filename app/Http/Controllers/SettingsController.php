@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers;
 
+use Artisan;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -316,5 +317,12 @@ class SettingsController extends Controller
     {
         $log = $handler->find($id);
         return api_render('settings.logs.show', compact('log'));
+    }
+
+    public function cacheClear()
+    {
+        Artisan::call('cache:clear');
+        
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::wasRecreateCache')]);
     }
 }

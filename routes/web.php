@@ -462,77 +462,57 @@ Route::settings(
 );
 
 /* setting */
-Route::settings(
-    'setting',
-    function () {
-        Route::get(
-            '/',
-            [
-                'as' => 'settings.setting.edit',
-                'uses' => 'SettingsController@editSetting',
-                'settings_menu' => ['setting.default']
-            ]
-        );
-        Route::post('store', ['as' => 'settings.setting.update', 'uses' => 'SettingsController@updateSetting']);
+Route::settings('setting', function () {
+    Route::get('/', [
+        'as' => 'settings.setting.edit',
+        'uses' => 'SettingsController@editSetting',
+        'settings_menu' => ['setting.default']
+    ]);
+    Route::post('store', ['as' => 'settings.setting.update', 'uses' => 'SettingsController@updateSetting']);
 
-        Route::get(
-            'theme',
-            [
-                'as' => 'settings.setting.theme',
-                'uses' => 'SettingsController@editTheme',
-                'settings_menu' => ['setting.theme']
-            ]
-        );
-        Route::post('theme', ['as' => 'settings.setting.theme', 'uses' => 'SettingsController@updateTheme']);
+    Route::get('theme', [
+        'as' => 'settings.setting.theme',
+        'uses' => 'SettingsController@editTheme',
+        'settings_menu' => ['setting.theme']
+    ]);
+    Route::post('theme', ['as' => 'settings.setting.theme', 'uses' => 'SettingsController@updateTheme']);
 
-        Route::get(
-            'permissions',
-            [
-                'as' => 'settings.setting.permissions',
-                'uses' => 'SettingsController@editPermissions',
-                'settings_menu' => ['setting.permission']
-            ]
-        );
+    Route::get('permissions', [
+        'as' => 'settings.setting.permissions',
+        'uses' => 'SettingsController@editPermissions',
+        'settings_menu' => ['setting.permission']
+    ]);
 
-        Route::post(
-            'permissions/{permissionId}',
-            [
-                'as' => 'settings.setting.update.permission',
-                'uses' => 'SettingsController@updatePermission'
-            ]
-        );
+    Route::post('permissions/{permissionId}', [
+        'as' => 'settings.setting.update.permission',
+        'uses' => 'SettingsController@updatePermission'
+    ]);
 
-        Route::get(
-            'logs',
-            [
-                'as' => 'settings.setting.log.index',
-                'uses' => 'SettingsController@indexLog',
-                'settings_menu' => 'setting.admin-log',
-                'middleware' => 'admin'
-            ]
-        );
+    Route::get('logs', [
+        'as' => 'settings.setting.log.index',
+        'uses' => 'SettingsController@indexLog',
+        'settings_menu' => 'setting.admin-log',
+        'middleware' => 'admin'
+    ]);
 
-        Route::get(
-            'saveLog',
-            [
-                'as' => 'settings.setting.log.save',
-                'uses' => 'SettingsController@saveLog',
-                'middleware' => 'admin'
-            ]
-        );
+    Route::get('saveLog', [
+        'as' => 'settings.setting.log.save',
+        'uses' => 'SettingsController@saveLog',
+        'middleware' => 'admin'
+    ]);
 
-        Route::get(
-            'logs/{id}',
-            [
-                'as' => 'settings.setting.log.show',
-                'uses' => 'SettingsController@showLog',
-                'middleware' => 'admin'
-            ]
-        );
+    Route::get('logs/{id}', [
+        'as' => 'settings.setting.log.show',
+        'uses' => 'SettingsController@showLog',
+        'middleware' => 'admin'
+    ]);
 
-
-    }
-);
+    Route::get('cache/clear', [
+        'as' => 'settings.setting.cache.clear',
+        'uses' => 'SettingsController@cacheClear',
+        'middleware' => 'admin'
+    ]);
+});
 
 Route::settings(
     'menu',

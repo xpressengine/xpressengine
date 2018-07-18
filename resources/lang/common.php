@@ -421,6 +421,10 @@ return [
         'ko' => '캐시 재생성 ',
         'en' => 'Re-create Cache',
     ],
+    'wasRecreateCache' => [
+        'ko' => '캐시가 재생성 되었습니다.',
+        'en' => 'Was re-created cache',
+    ],
     'layout' => [
         'ko' => '레이아웃',
         'en' => 'Layout',

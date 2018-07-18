@@ -29,6 +29,9 @@
                         <div class="pull-right">
                             <button type="submit" class="btn btn-primary btn-lg">{{xe_trans('xe::save')}}</button>
                         </div>
+                        <div class="pull-left">
+                            <a href="{{ route('settings.setting.cache.clear') }}" class="btn btn-link">{{xe_trans('xe::recreateCache')}}</a>
+                        </div>
                     </div>
                 </div>
             </form>
