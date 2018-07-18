@@ -2852,4 +2852,28 @@ return [
         'ko' => '하나의 최고 관리계정은 등급 또는 상태 변경이 불가합니다.',
         'en' => 'You can not change a rating or status for one super management account.',
     ],
+    'vendor' => [
+        'ko' => '공급자',
+        'en' => 'Vendor',
+    ],
+    'namespace' => [
+        'ko' => '네임스페이스',
+        'en' => 'Namespace',
+    ],
+    'class' => [
+        'ko' => '클래스',
+        'en' => 'Class',
+    ],
+    'directInput' => [
+        'ko' => '직접입력',
+        'en' => 'direct input',
+    ],
+    'selectPluginWillLocated' => [
+        'ko' => ':name이(가) 위치할 플러그인을 선택하세요.',
+        'en' => 'Select the plugin where :name will be located.'
+    ],
+    'selectTargetIDToCreateSkin' => [
+        'ko' => '스킨을 생성할 대상의 ID를 선택하세요.',
+        'en' => 'Select the ID of the target to create the skin.'
+    ],
 ];

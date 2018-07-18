@@ -18,6 +18,10 @@ window.jQuery(function ($) {
         self.$deactivate = $('.__xe_deactivate_plugin')
         self.$checkAll = $('.__xe_check_all')
         self.$checkboxes = $('.__xe_checkbox')
+
+        self.$makePlugin = $('.__xe_make_plugin')
+        self.$makeTheme = $('.__xe_make_theme')
+        self.$makeSkin = $('.__xe_make_skin')
       },
       bindEvents: function () {
         self.$checkAll.on('click', self.checkAll)
@@ -26,6 +30,10 @@ window.jQuery(function ($) {
         self.$activate.on('click', self.activate)
         self.$deactivate.on('click', self.deactivate)
         self.$update.on('click', self.update)
+
+        self.$makePlugin.on('click', self.makePlugin)
+        self.$makeTheme.on('click', self.makeTheme)
+        self.$makeSkin.on('click', self.makeSkin)
       },
       reset: function () {
         var $checked = $('.__xe_checkbox:checked')
@@ -100,6 +108,25 @@ window.jQuery(function ($) {
       },
       update: function () {
         var url = self.$update.attr('href')
+        XE.pageModal(url)
+
+        return false
+      },
+
+      makePlugin: function () {
+        var url = self.$makePlugin.attr('href')
+        XE.pageModal(url)
+
+        return false
+      },
+      makeTheme: function () {
+        var url = self.$makeTheme.attr('href')
+        XE.pageModal(url)
+
+        return false
+      },
+      makeSkin: function () {
+        var url = self.$makeSkin.attr('href')
         XE.pageModal(url)
 
         return false
