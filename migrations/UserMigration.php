@@ -9,6 +9,7 @@
 namespace Xpressengine\Migrations;
 
 use Illuminate\Database\Schema\Blueprint;
+use DB;
 use Schema;
 use Xpressengine\Support\Migration;
 
@@ -23,7 +24,7 @@ class UserMigration extends Migration {
             $table->string('display_name', 255)->unique()->comment('display name.');
             $table->string('email', 255)->nullable()->comment('email');
             $table->string('password', 255)->nullable()->comment('password');
-            $table->string('rating', 15)->default('member')->comment('user rating. guest/member/manager/super');
+            $table->string('rating', 15)->default('user')->comment('user rating. guest/user/manager/super');
             $table->string('status', 20)->comment('account status. activated/deactivated');
             $table->text('introduction')->default(null)->nullable()->comment('user introduction');
             $table->string('profile_image_id', 36)->nullable()->comment('profile image file ID');
@@ -143,7 +144,7 @@ class UserMigration extends Migration {
 
     public function installed()
     {
-        \DB::table('config')->insert([
+        DB::table('config')->insert([
             ['name' => 'user', 'vars' => '[]'],
             ['name' => 'user.common', 'vars' => '{"secureLevel":"low","useCaptcha":false,"webmasterName":"webmaster","webmasterEmail":"webmaster@domain.com"}'],
             ['name' => 'user.join', 'vars' => '{"joinable":true}'],
@@ -199,6 +200,11 @@ class UserMigration extends Migration {
 
         // ver.3.0.0-beta.27
         if (!Schema::hasTable('user_terms')) {
+            return false;
+        }
+
+        // ver.3.0.0-rc.1
+        if (DB::table('user')->where('rating', 'member')->count() > 0) {
             return false;
         }
     }
@@ -315,6 +321,28 @@ class UserMigration extends Migration {
                 'order' => 1,
                 'is_enabled' => true,
             ]);
+        }
+
+        // ver.3.0.0-rc.1
+        if (DB::table('user')->where('rating', 'member')->count() > 0) {
+
+            $rows = DB::table('permissions')->get();
+            foreach ($rows as $row) {
+                $grants = json_decode($row->grants, true);
+                $update = false;
+                foreach ($grants as $action => $grant) {
+                    if (isset($grant['rating']) && $grant['rating'] === 'member') {
+                        $grant['rating'] = 'user';
+                        $update = true;
+                    }
+                    $grants[$action] = $grant;
+                }
+                if ($update) {
+                    DB::table('permissions')->where('id', $row->id)->update(['grants' => json_encode($grants)]);
+                }
+            }
+
+            DB::table('user')->where('rating', 'member')->update(['rating' => 'user']);
         }
 
     }

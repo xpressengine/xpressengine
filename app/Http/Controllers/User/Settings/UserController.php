@@ -51,7 +51,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $query = $this->handler->users()->query();
-        $allMemberCount = count($query->get());
+        $allUserCount = count($query->get());
 
         // resolve group
         if ($group = $request->get('group')) {
@@ -96,9 +96,9 @@ class UserController extends Controller
         // get all ratings
         $ratings = Rating::getUsableAll();
         $ratingNames = [
-            'member' => xe_trans('xe::memberRatingNormal'),
-            'manager' => xe_trans('xe::memberRatingManager'),
-            'super' => xe_trans('xe::memberRatingAdministrator'),
+            'user' => xe_trans('xe::userRatingNormal'),
+            'manager' => xe_trans('xe::userRatingManager'),
+            'super' => xe_trans('xe::userRatingAdministrator'),
         ];
 
         foreach ($ratings as $key => $rating) {
@@ -112,7 +112,7 @@ class UserController extends Controller
         if ($group !== null) {
             $selectedGroup = $this->handler->groups()->find($group);
         }
-        return XePresenter::make('user.settings.user.index', compact('users', 'groups', 'selectedGroup', 'allMemberCount', 'ratings'));
+        return XePresenter::make('user.settings.user.index', compact('users', 'groups', 'selectedGroup', 'allUserCount', 'ratings'));
     }
 
     /**
@@ -124,9 +124,9 @@ class UserController extends Controller
     {
         $ratings = Rating::getUsableAll();
         $ratingNames = [
-            'member' => xe_trans('xe::memberRatingNormal'),
-            'manager' => xe_trans('xe::memberRatingManager'),
-            'super' => xe_trans('xe::memberRatingAdministrator'),
+            'user' => xe_trans('xe::userRatingNormal'),
+            'manager' => xe_trans('xe::userRatingManager'),
+            'super' => xe_trans('xe::userRatingAdministrator'),
         ];
 
         foreach ($ratings as $key => $rating) {
@@ -208,9 +208,9 @@ class UserController extends Controller
 
         $ratings = Rating::getUsableAll();
         $ratingNames = [
-            'member' => xe_trans('xe::memberRatingNormal'),
-            'manager' => xe_trans('xe::memberRatingManager'),
-            'super' => xe_trans('xe::memberRatingAdministrator'),
+            'user' => xe_trans('xe::userRatingNormal'),
+            'manager' => xe_trans('xe::userRatingManager'),
+            'super' => xe_trans('xe::userRatingAdministrator'),
         ];
         foreach ($ratings as $key => $rating) {
             $ratings[$key] = [

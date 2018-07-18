@@ -20,7 +20,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
         $resource = file_get_contents(__DIR__ . '/sample.png');
 
-        $mockGuest = m::mock('Xpressengine\Member\Entities\Guest');
+        $mockGuest = m::mock('Xpressengine\User\Models\Guest');
         $mockGuest->shouldReceive('getId')->andReturnNull();
         $auth->shouldReceive('user')->andReturn($mockGuest);
 
@@ -87,7 +87,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
         $resource = file_get_contents(__DIR__ . '/sample.png');
 
-        $mockGuest = m::mock('Xpressengine\Member\Entities\Guest');
+        $mockGuest = m::mock('Xpressengine\User\Models\Guest');
         $mockGuest->shouldReceive('getId')->andReturnNull();
         $auth->shouldReceive('user')->andReturn($mockGuest);
 
@@ -121,7 +121,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
         $mockFile = m::mock('Xpressengine\Storage\File');
 
-        $mockGuest = m::mock('Xpressengine\Member\Entities\Guest');
+        $mockGuest = m::mock('Xpressengine\User\Models\Guest');
         $mockGuest->shouldReceive('getId')->andReturnNull();
         $auth->shouldReceive('user')->andReturn($mockGuest);
 

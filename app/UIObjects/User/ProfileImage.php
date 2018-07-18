@@ -6,15 +6,16 @@
  * @link        https://xpressengine.io
  */
 
-namespace App\UIObjects\Member;
+namespace App\UIObjects\User;
 
 use XeFrontend;
+use App\UIObjects\Form\FormImage;
 
-class ProfileBgImage extends ProfileImage
+class ProfileImage extends FormImage
 {
-    protected static $id = 'uiobject/xpressengine@profileBgImage';
+    protected static $id = 'uiobject/xpressengine@profileImage';
 
-    protected $view = 'uiobjects.user.profileBgImage';
+    protected $view = 'uiobjects.user.profileImage';
 
     /**
      * loadFiles

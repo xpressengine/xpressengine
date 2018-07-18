@@ -46,7 +46,7 @@ class ContentInfo extends AbstractWidget
     {
         $viewData = [
             'totalDocument' => Document::count(),
-            'totalMember' => XeUser::users()->count(),
+            'totalUser' => XeUser::users()->count(),
         ];
 
         return $this->renderSkin(

@@ -184,7 +184,7 @@ class UserHandler
      */
     public function create(array $data)
     {
-        $data['rating'] = $data['rating'] ?? Rating::MEMBER;
+        $data['rating'] = $data['rating'] ?? Rating::USER;
         $data['status'] = $data['status'] ?? User::STATUS_ACTIVATED;
 
         $this->validateForCreate($data);

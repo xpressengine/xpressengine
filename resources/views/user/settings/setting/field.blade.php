@@ -5,7 +5,7 @@
                 <div class="panel-heading">
                     <div class="pull-left">
                         <h3 class="panel-title">{{xe_trans('xe::dynamicField')}}</h3>
-                        <p class="help-block">{{xe_trans('xe::memberDynamicFieldDescription')}}</p>
+                        <p class="help-block">{{xe_trans('xe::userDynamicFieldDescription')}}</p>
                     </div>
                 </div>
                 <div class="panel-body">

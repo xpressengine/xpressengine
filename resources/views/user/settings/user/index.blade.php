@@ -9,11 +9,11 @@ use Xpressengine\User\Models\User;
             <div class="panel">
                 <div class="panel-heading">
                     <div class="pull-left">
-                        <h3 class="panel-title">{{xe_trans('xe::memberList')}}</h3>
-                        ( {{xe_trans('xe::searchMemberCount')}} : {{  $users->total() }} / {{xe_trans('xe::allMemberCount')}} : {{ $allMemberCount }} )
+                        <h3 class="panel-title">{{xe_trans('xe::userList')}}</h3>
+                        ( {{xe_trans('xe::searchUserCount')}} : {{  $users->total() }} / {{xe_trans('xe::allUserCount')}} : {{ $allUserCount }} )
                     </div>
                     <div class="pull-right">
-                        <a href="{{ route('settings.user.create') }}" class="btn btn-primary"><i class="xi-plus"></i><span>{{xe_trans('xe::addNewMember')}}</span></a>
+                        <a href="{{ route('settings.user.create') }}" class="btn btn-primary"><i class="xi-plus"></i><span>{{xe_trans('xe::addNewUser')}}</span></a>
                     </div>
                 </div>
 
@@ -36,7 +36,7 @@ use Xpressengine\User\Models\User;
                                 <li @if(Request::get('group') === $group->id)class="active"@endif><a href="{{ route('settings.user.index', array_merge( Request::all(), ['group'=> $group->id] )) }}">{{ $group->name }}</a></li>
                                 @endforeach
 
-                                <li><strong>{{xe_trans('xe::memberRating')}}</strong></li>
+                                <li><strong>{{xe_trans('xe::userRating')}}</strong></li>
                                 <li @if(!Request::get('rating'))class="active"@endif><a href="{{ route('settings.user.index', Request::except(['rating'])) }}"><span>{{xe_trans('xe::allRating')}}</span></a></li>
                                 @foreach($ratings as $rating)
                                     <li @if(Request::get('rating') === $rating['value'])class="active"@endif><a href="{{route('settings.user.index', array_merge(Request::all(), ['rating' => $rating['value']]))}}">{{$rating['text']}}</a></li>
@@ -92,7 +92,7 @@ use Xpressengine\User\Models\User;
                             <th scope="col">{{xe_trans('xe::email')}}</th>
                             <th scope="col">{{xe_trans('xe::signUpDate')}}</th>
                             <th scope="col">{{xe_trans('xe::latestLogin')}}</th>
-                            <th scope="col">{{xe_trans('xe::memberGroup')}}</th>
+                            <th scope="col">{{xe_trans('xe::userGroup')}}</th>
                             <th scope="col">{{xe_trans('xe::status')}}</th>
                             <th scope="col">{{xe_trans('xe::management')}}</th>
                         </tr>
@@ -164,7 +164,7 @@ use Xpressengine\User\Models\User;
 
 <script type="text/javascript">
 
-    var MemberList = (function() {
+    var UserList = (function() {
         var self;
 
         return {

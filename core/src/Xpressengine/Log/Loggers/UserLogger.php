@@ -101,9 +101,9 @@ class UserLogger extends AbstractLogger
                     $request = request();
 
                     $ratingNames = [
-                        'member' => xe_trans('xe::memberRatingNormal'),
-                        'manager' => xe_trans('xe::memberRatingManager'),
-                        'super' => xe_trans('xe::memberRatingAdministrator'),
+                        'user' => xe_trans('xe::userRatingNormal'),
+                        'manager' => xe_trans('xe::userRatingManager'),
+                        'super' => xe_trans('xe::userRatingAdministrator'),
                     ];
 
                     $summary = '회원 권한 수정 (' . $updateUser['userDisplayName'] . ' : '

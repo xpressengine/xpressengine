@@ -14,9 +14,9 @@ class RatingTest extends \PHPUnit\Framework\TestCase
 {
     public function testCampare()
     {
-        $this->assertEquals(-1, Rating::compare(Rating::GUEST, Rating::MEMBER));
-        $this->assertEquals(1, Rating::compare(Rating::MEMBER, Rating::GUEST));
-        $this->assertEquals(0, Rating::compare(Rating::MEMBER, Rating::MEMBER));
+        $this->assertEquals(-1, Rating::compare(Rating::GUEST, Rating::USER));
+        $this->assertEquals(1, Rating::compare(Rating::USER, Rating::GUEST));
+        $this->assertEquals(0, Rating::compare(Rating::USER, Rating::USER));
     }
 
     /**
@@ -24,7 +24,7 @@ class RatingTest extends \PHPUnit\Framework\TestCase
      */
     public function testCampareThrowException()
     {
-        Rating::compare(Rating::MEMBER, 'foo');
+        Rating::compare(Rating::USER, 'foo');
     }
 
 }

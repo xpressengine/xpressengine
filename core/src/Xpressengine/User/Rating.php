@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is a rating of member
+ * This file is a rating of user
  *
  * PHP version 7
  *
@@ -36,8 +36,15 @@ class Rating
 
     /**
      * 일반 회원 등급
+     *
+     * @deprecated
      */
     const MEMBER = 'member';
+
+    /**
+     * 일반 회원 등급
+     */
+    const USER = 'user';
 
     /**
      * 관리자 회원등급
@@ -54,7 +61,7 @@ class Rating
      *
      * @var array
      */
-    protected static $ratings = [self::GUEST, self::MEMBER, self::MANAGER, self::SUPER];
+    protected static $ratings = [self::GUEST, self::USER, self::MANAGER, self::SUPER];
 
     /**
      * 주어진 키워드와 기준이 되는 키워드의 등급의 높낮이 비교

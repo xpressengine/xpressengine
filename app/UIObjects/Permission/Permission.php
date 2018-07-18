@@ -41,8 +41,8 @@ class Permission extends AbstractUIObject
         XeFrontend::css('/assets/core/permission/permission.css')->load();
 
         XeFrontend::translation([
-            'xe::inheritMode', 'xe::memberRatingAdministrator', 'xe::memberRatingManager',
-            'xe::member', 'xe::guest', 'xe::memberRating', 'xe::includeUserOrGroup', 'xe::excludeUser',
+            'xe::inheritMode', 'xe::userRatingAdministrator', 'xe::userRatingManager',
+            'xe::user', 'xe::guest', 'xe::userRating', 'xe::includeUserOrGroup', 'xe::excludeUser',
             'xe::includeVGroup', 'xe::explainIncludeUserOrGroup', 'xe::explainExcludeUser'
         ]);
 
@@ -96,7 +96,7 @@ class Permission extends AbstractUIObject
     protected function loadReactComponent($container, $title, $jsonRet)
     {
 
-        $memberSearchUrl = route('settings.user.search');
+        $userSearchUrl = route('settings.user.search');
         $groupSearchUrl = route('manage.group.search');
         $vgroupAll = app('xe.user.virtualGroups')->all();
 
@@ -111,7 +111,7 @@ class Permission extends AbstractUIObject
         $jsonVGroups = json_enc($vgroups);
         $htmlString = [];
         $htmlString[] = "<div class='{$container}' data-data='{$jsonRet}' data-title='{$title}'
-                    data-key='{$uibojectKey}' data-user-url='{$memberSearchUrl}' data-group-url='{$groupSearchUrl}'
+                    data-key='{$uibojectKey}' data-user-url='{$userSearchUrl}' data-group-url='{$groupSearchUrl}'
                     data-type='{$title}' data-vgroup-all='{$jsonVGroups}'></div>";
 
 
