@@ -51,7 +51,8 @@ export default class Validator extends Singleton {
      */
     this.validators = {
       accepted: function ($dst, parameters) {
-        var value = that.getValue($dst)
+        const value = that.getValue($dst)
+        if (!value) return
 
         if (['yes', 'ok', 'accept', 'accepted', 'on', '1', 'true'].indexOf(String(value).toLowerCase()) === -1) {
           that.error($dst, Lang.instance.trans('validation.accepted', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
@@ -91,6 +92,8 @@ export default class Validator extends Singleton {
       },
       alpha: function ($dst, parameters) {
         const value = that.getValue($dst)
+        if (!value) return
+
         const pattern = /[a-zA-Z]/
 
         if (!pattern.test(value)) {
@@ -105,6 +108,8 @@ export default class Validator extends Singleton {
       },
       alpha_num: function ($dst, parameters, alias) {
         const value = that.getValue($dst)
+        if (!value) return
+
         const pattern = /[^a-zA-Z0-9]/
 
         if (pattern.test(value) === true) {
@@ -119,6 +124,8 @@ export default class Validator extends Singleton {
       },
       alpha_dash: function ($dst, parameters) {
         const value = that.getValue($dst)
+        if (!value) return
+
         const pattern = /[^a-zA-Z0-9\-_]/
 
         if (pattern.test(value)) {
@@ -138,8 +145,9 @@ export default class Validator extends Singleton {
       },
       boolean: function ($dst, parameters) {
         const value = that.getValue($dst)
+        if (!value) return
 
-        if ([1, 0, '1', '0', true, false, 'true', 'false'].indexOf(value) === -1) {
+        if (['1', '0', 'true', 'false'].indexOf(String(value).toLowerCase()) === -1) {
           that.error($dst, Lang.instance.trans('validation.boolean', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
@@ -147,7 +155,10 @@ export default class Validator extends Singleton {
         return true
       },
       date: function ($dst, parameters) {
-        if (!$$.strtotime(that.getValue($dst))) {
+        const value = that.getValue($dst)
+        if (!value) return
+
+        if (!$$.strtotime(value)) {
           that.error($dst, Lang.instance.trans('validation.date', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
@@ -155,7 +166,10 @@ export default class Validator extends Singleton {
         return true
       },
       date_format: function ($dst, parameters) {
-        if (!moment(that.getValue($dst), parameters).isValid()) {
+        const value = that.getValue($dst)
+        if (!value) return
+
+        if (!moment(value, parameters).isValid()) {
           that.error($dst, Lang.instance.trans('validation.date_format', {
             attribute: $dst.data('valid-name') || $dst.attr('name'),
             format: parameters
@@ -167,6 +181,8 @@ export default class Validator extends Singleton {
       },
       digits: function ($dst, parameters) {
         const value = that.getValue($dst)
+        if (!value) return
+
         const pattern = /[^0-9]/
         const size = parseInt(parameters)
 
@@ -181,6 +197,8 @@ export default class Validator extends Singleton {
       },
       digits_between: function ($dst, parameters) {
         const value = that.getValue($dst)
+        if (!value) return
+
         const range = parameters.split(',')
         const size = value.toString().length
 
@@ -212,6 +230,8 @@ export default class Validator extends Singleton {
       },
       ip: function ($dst) {
         const value = that.getValue($dst)
+        if (!value) return
+
         const pattern = /^(1|2)?\d?\d([.](1|2)?\d?\d){3}$/
 
         if (!pattern.test(value)) {
@@ -223,9 +243,11 @@ export default class Validator extends Singleton {
       },
       mimes: function ($dst, parameters) {
         const value = that.getValue($dst)
+        if (!value) return
+
         const exts = parameters.split(',')
 
-        if (value === '' || exts.indexOf(value.split('.').pop()) === -1) {
+        if (exts.indexOf(value.split('.').pop()) === -1) {
           that.error($dst, Lang.instance.trans('validation.mimes', {
             attribute: $dst.data('valid-name') || $dst.attr('name'),
             values: '[' + parameters + ']'
@@ -246,7 +268,10 @@ export default class Validator extends Singleton {
       //   return true
       // },
       regex: function ($dst, pattern) {
-        if (!pattern.text(that.getValue($dst))) {
+        const value = that.getValue($dst)
+        if (!value) return
+
+        if (!pattern.text(value)) {
           that.error($dst, Lang.instance.trans('validation.regex', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
@@ -254,8 +279,11 @@ export default class Validator extends Singleton {
         return true
       },
       json: function ($dst) {
+        const value = that.getValue($dst)
+        if (!value) return
+
         try {
-          JSON.parse(that.getValue($dst))
+          JSON.parse(value)
           return true
         } catch (e) {
           that.error($dst, Lang.instance.trans('validation.json', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
@@ -263,7 +291,10 @@ export default class Validator extends Singleton {
         }
       },
       string: function ($dst) {
-        if (typeof that.getValue($dst) !== 'string') {
+        const value = that.getValue($dst)
+        if (!value) return
+
+        if (typeof value !== 'string') {
           that.error($dst, Lang.instance.trans('validation.string', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
@@ -272,6 +303,8 @@ export default class Validator extends Singleton {
       },
       min: function ($dst, parameters) {
         const value = that.getValue($dst)
+        if (!value) return
+
         const type = $dst.data('valid-type')
 
         switch (type) {
@@ -322,6 +355,8 @@ export default class Validator extends Singleton {
       },
       max: function ($dst, parameters) {
         const value = that.getValue($dst)
+        if (!value) return
+
         const type = $dst.data('valid-type')
 
         switch (type) {
@@ -365,7 +400,9 @@ export default class Validator extends Singleton {
         return true
       },
       email: function ($dst, parameters) {
-        const val = that.getValue($dst)
+        const value = that.getValue($dst)
+        if (!value) return
+
         const pattern = /\w+@\w{2,}\.\w{2,}/
 
         if (!val.match(pattern)) {
@@ -376,7 +413,9 @@ export default class Validator extends Singleton {
         return true
       },
       url: function ($dst, parameters) {
-        const val = that.getValue($dst)
+        const value = that.getValue($dst)
+        if (!value) return
+
         const pattern = /^https?:\/\/\S+/
 
         if (!val.match(pattern)) {
@@ -387,7 +426,9 @@ export default class Validator extends Singleton {
         return true
       },
       numeric: function ($dst, parameters) {
-        const val = that.getValue($dst)
+        const value = that.getValue($dst)
+        if (!value) return
+
         const num = Number(val)
 
         if (typeof num === 'number' && !isNaN(num) && typeof val !== 'boolean') {
@@ -398,8 +439,10 @@ export default class Validator extends Singleton {
         }
       },
       between: function ($dst, parameters) {
-        const range = parameters.split(',')
         const value = that.getValue($dst)
+        if (!value) returnw
+
+        const range = parameters.split(',')
         const type = $dst.data('valid-type')
 
         switch (type) {
@@ -628,13 +671,6 @@ export default class Validator extends Singleton {
         let $dst = $frm.find('[name="' + name + '"]')
 
         that.errorClear($frm)
-
-        if (command === 'required') {
-          $dst.data('valid-required', true)
-        } else if (!$dst.data('valid-required') && !that.getValue($dst)) {
-          return
-        }
-
         if (that.validators[command]($dst, parameters) === false) {
           $frm.data('valid-result', false)
           throw Error('Validation error.')
