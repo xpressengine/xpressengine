@@ -161,7 +161,6 @@ class SkinMake extends ComponentMakeCommand
      */
     protected function getSkinTarget()
     {
-        // @todo 대상 존재유무 검사 해야하나? 'user/auth' 같은건 어쩔?
         return $this->argument('target');
     }
 

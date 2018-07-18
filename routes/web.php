@@ -870,12 +870,16 @@ Route::settings(
                     'uses' => 'PluginController@deactivate'
                 ]);
 
+                Route::group(['prefix' => 'make'], function () {
+                    Route::get('plugin', ['as' => 'settings.plugins.manage.make.plugin', 'uses' => 'PluginController@getMakePlugin']);
+                    Route::post('plugin', ['as' => 'settings.plugins.manage.make.plugin', 'uses' => 'PluginController@makePlugin']);
+                    Route::get('theme', ['as' => 'settings.plugins.manage.make.theme', 'uses' => 'PluginController@getMakeTheme']);
+                    Route::post('theme', ['as' => 'settings.plugins.manage.make.theme', 'uses' => 'PluginController@makeTheme']);
+                    Route::get('skin', ['as' => 'settings.plugins.manage.make.skin', 'uses' => 'PluginController@getMakeSkin']);
+                    Route::post('skin', ['as' => 'settings.plugins.manage.make.skin', 'uses' => 'PluginController@makeSkin']);
+                });
+
             });
-
-
-
-
-
 
         });
     }

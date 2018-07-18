@@ -14,10 +14,11 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
-use Symfony\Component\Process\Process;
 
 abstract class MakeCommand extends Command
 {
+    use ComposerRunTrait;
+
     /**
      * The filesystem instance.
      *
@@ -61,6 +62,15 @@ abstract class MakeCommand extends Command
      */
     abstract protected function getStubPath();
 
+    /**
+     * build the file with given parameters
+     *
+     * @param string $file
+     * @param array $search
+     * @param array $replace
+     * @param null $to
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
     protected function buildFile($file, array $search, array $replace, $to = null)
     {
         $code = str_replace($search, $replace, $this->files->get($file));
@@ -71,42 +81,18 @@ abstract class MakeCommand extends Command
     }
 
     /**
-     * do composer dump-autoload
+     * run composer dump
      *
-     * @param $path
-     * @return void
+     * @param string $path
+     * @return int
      */
     protected function runComposerDump($path)
     {
-        $composer = $this->findComposer();
-        $commands = [
-            $composer.' dump-autoload -d '.$path
+        $inputs = [
+            'command' => 'dump-autoload',
+            '--working-dir' => $path,
         ];
 
-        $process = new Process(implode(' && ', $commands));
-
-        $output = $this->output;
-
-        $process->run(
-            function ($type, $line) use ($output) {
-                $output->write($line);
-            }
-        );
-    }
-
-    /**
-     * findComposer
-     *
-     * @return string
-     */
-    protected function findComposer()
-    {
-        if (file_exists(getcwd().'/composer.phar')) {
-            return '"'.PHP_BINARY.'" composer.phar';
-        } elseif (file_exists(base_path().'/composer.phar')) {
-            return '"'.PHP_BINARY.'" '.base_path().'/composer.phar';
-        }
-
-        return 'composer';
+        return $this->runComposer($inputs, false);
     }
 }
