@@ -323,6 +323,7 @@ class SettingsController extends Controller
     {
         Artisan::call('cache:clear');
         
-        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::wasRecreateCache')]);
+        return redirect()->route('settings.setting.edit')
+            ->with('alert', ['type' => 'success', 'message' => xe_trans('xe::wasRecreateCache')]);
     }
 }
