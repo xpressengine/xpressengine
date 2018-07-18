@@ -405,7 +405,7 @@ export default class Validator extends Singleton {
 
         const pattern = /\w+@\w{2,}\.\w{2,}/
 
-        if (!val.match(pattern)) {
+        if (!value.match(pattern)) {
           that.error($dst, Lang.instance.trans('validation.email', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
