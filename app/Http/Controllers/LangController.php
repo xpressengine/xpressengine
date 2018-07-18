@@ -9,13 +9,14 @@
 
 namespace App\Http\Controllers;
 
+use Artisan;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
+use XePlugin;
 use XePresenter;
 use XeLang;
 use XeDB;
 use XeFrontend;
-use Illuminate\Contracts\Cookie\QueueingFactory as JarContract;
 
 class LangController extends Controller
 {
@@ -135,5 +136,34 @@ class LangController extends Controller
             $item = $search->item;
             $search->lines = $this->search(['namespace' => $namespace, 'item' => $item])->get()->toArray();
         }
+    }
+
+    public function getImport()
+    {
+        return api_render('lang.import', ['plugins' => XePlugin::getAllPlugins()]);
+    }
+
+    public function import(Request $request)
+    {
+        if (!$request->user()->isAdmin()) {
+            throw new AuthorizationException(xe_trans('xe::accessDenied'));
+        }
+
+        $this->validate($request, ['name' => 'required']);
+
+        $parameters = [
+            'name' => $request->get('name'),
+            '--no-interaction' => true,
+        ];
+        if ($request->get('force')) {
+            $parameters['--force'] = true;
+        }
+        if ($path = $request->get('path')) {
+            $parameters['--path'] = $path;
+        }
+
+        Artisan::call('translation:import', $parameters);
+
+        return redirect()->back()->with('alert', ['type' => 'success', 'message' => xe_trans('xe::processed')]);
     }
 }

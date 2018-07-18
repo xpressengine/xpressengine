@@ -28,17 +28,17 @@ Route::settings(
     }
 );
 
-Route::settings(
-    'lang',
-    function () {
-        Route::put('save', ['as' => 'settings.lang.save', 'uses' => 'LangController@save']);
-        Route::get('/', [
-            'as' => 'settings.lang.index',
-            'uses' => 'LangController@index',
-            'settings_menu' => ['lang.default']
-        ]);
-    }
-);
+Route::settings('lang', function () {
+    Route::put('save', ['as' => 'settings.lang.save', 'uses' => 'LangController@save']);
+    Route::get('/', [
+        'as' => 'settings.lang.index',
+        'uses' => 'LangController@index',
+        'settings_menu' => ['lang.default']
+    ]);
+
+    Route::get('import', ['as' => 'settings.lang.import', 'uses' => 'LangController@getImport']);
+    Route::post('import', ['as' => 'settings.lang.import', 'uses' => 'LangController@import']);
+});
 
 Route::group(
     ['prefix' => 'lang'],

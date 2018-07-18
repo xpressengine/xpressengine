@@ -1,4 +1,7 @@
-
+@php
+XeFrontend::js('assets/core/xe-ui-component/js/xe-page.js')->load();
+XeFrontend::js('assets/core/xe-ui-component/js/xe-modal.js')->load();
+@endphp
 <div class="row">
     <div class="col-sm-12">
         <div class="panel-group">
@@ -74,6 +77,9 @@
                     <div class="pull-left">
                         {!! $pagination->render() !!}
                     </div>
+                    <div class="pull-right">
+                        <button type="button" class="btn btn-default" id="__xe_lang-import">{{ xe_trans('xe::import') }}</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -102,7 +108,12 @@
             return false;
         });
 
+      $('#__xe_lang-import').click(function () {
+        var url = '{{ route('settings.lang.import') }}';
+        window.XE.pageModal(url);
 
+        return false
+      });
     });
 </script>
 

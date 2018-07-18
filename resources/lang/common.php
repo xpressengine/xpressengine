@@ -1195,7 +1195,7 @@ return [
         'ko' => '컴포넌트',
         'en' => 'Component'
     ],
-    'Path' => [
+    'installPath' => [
         'ko' => '설치경로',
         'en' => 'Install path'
     ],
@@ -2879,5 +2879,21 @@ return [
     'selectTargetIDToCreateSkin' => [
         'ko' => '스킨을 생성할 대상의 ID를 선택하세요.',
         'en' => 'Select the ID of the target to create the skin.'
+    ],
+    'import' => [
+        'ko' => '가져오기',
+        'en' => 'Import',
+    ],
+    'applyMultiLangInFileToSystem' => [
+        'ko' => '코어, 플러그인에 파일로 정의된 다국어를 시스템에 적용시킵니다.',
+        'en' => 'Multi-language defined in the Core or Plugin file to the system.'
+    ],
+    'ifCheckOverwriteLangContents' => [
+        'ko' => '옵션을 체크하면 기존에 등록된 내용을 모두 덮어씁니다.',
+        'en' => 'If checked, overwrites all existing registered contents.',
+    ],
+    'enterPathFromRootWhenFileInSpecificPath' => [
+        'ko' => '파일이 특별한 곳에 있다면 프로젝트 루트로 부터의 경로를 입력해야 합니다.',
+        'en' => 'If the file is in a specific path, you must enter the path from the project root.',
     ],
 ];
