@@ -204,8 +204,10 @@ class RegisterController extends Controller
         }
         XeDB::commit();
 
-        // login and redirect
-        $this->auth->login($user);
+        // login
+        if (app('config')->get('xe.user.registrationAutoLogin') == true) {
+            $this->auth->login($user);
+        }
 
         return redirect()->intended(($this->redirectPath()));
     }
