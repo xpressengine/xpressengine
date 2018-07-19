@@ -1,7 +1,6 @@
 import Singleton from 'xe/singleton'
 import Translator from 'xe-common/translator' // @FIXME https://github.com/xpressengine/xpressengine/issues/765
 import $ from 'jquery'
-import XE from 'xe'
 import $$ from 'xe/common/js/utils'
 
 export default class Lang extends Singleton {
@@ -14,7 +13,8 @@ export default class Lang extends Singleton {
     this.locales = []
   }
 
-  boot () {
+  boot (XE) {
+    this.XE = XE
     XE.$$on('setup', (eventName, options) => {
       if (options.translation) {
         this.set(options.translation.terms)
@@ -84,11 +84,12 @@ export default class Lang extends Singleton {
   * @return {Promise}
   */
   requestTrans (id, parameters, callback) {
+    const that = this
     const item = id.split('::')[1]
     let message = ''
 
     return new Promise((resolve, reject) => {
-      XE.get('/lang/lines/' + item).then((response) => {
+      that.XE.get('/lang/lines/' + item).then((response) => {
         if (Array.isArray(response.data)) {
           message = $$.find(response.data, { 'locale': this.locales[0] }).value
           Translator.add(id, message)
@@ -114,7 +115,7 @@ export default class Lang extends Singleton {
     const that = this
 
     return new Promise((resolve, reject) => {
-      XE.get(XE.baseURL + '/lang/lines/many', {keys: langKeys}).then(response => {
+      that.XE.get(that.XE.baseURL + '/lang/lines/many', {keys: langKeys}).then(response => {
         $$.forEach(response.data, (val, key) => {
           if (val.length) {
             result[key] = $$.find(val, { 'locale': that.locales[0] }).value
