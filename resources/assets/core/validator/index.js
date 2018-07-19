@@ -418,7 +418,7 @@ export default class Validator extends Singleton {
 
         const pattern = /^https?:\/\/\S+/
 
-        if (!val.match(pattern)) {
+        if (!value.match(pattern)) {
           that.error($dst, Lang.instance.trans('validation.url', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
@@ -429,7 +429,7 @@ export default class Validator extends Singleton {
         const value = that.getValue($dst)
         if (!value) return
 
-        const num = Number(val)
+        const num = Number(value)
 
         if (typeof num === 'number' && !isNaN(num) && typeof val !== 'boolean') {
           return true
@@ -440,7 +440,7 @@ export default class Validator extends Singleton {
       },
       between: function ($dst, parameters) {
         const value = that.getValue($dst)
-        if (!value) returnw
+        if (!value) return
 
         const range = parameters.split(',')
         const type = $dst.data('valid-type')
