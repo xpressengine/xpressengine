@@ -88,7 +88,7 @@ export default class Lang extends Singleton {
     let message = ''
 
     return new Promise((resolve, reject) => {
-      XE.get(XE.baseUrl + '/lang/lines/' + id).then((response) => {
+      XE.get('/lang/lines/' + item).then((response) => {
         if (Array.isArray(response.data)) {
           message = $$.find(response.data, { 'locale': this.locales[0] }).value
           Translator.add(id, message)
