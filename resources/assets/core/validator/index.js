@@ -778,9 +778,9 @@ export default class Validator extends Singleton {
 
     if ($ele[0].tagName === 'SELECT') {
       value = $ele.find('option:selected').val()
-    } else if ($ele.is('input[type=checkbox]')) {
+    } else if ($ele.is('input[type=checkbox]') || $ele.is('input[type=radio]')) {
       if ($ele.is(':checked')) {
-        value = $ele.val()
+        value = $ele.filter(':checked').val()
       }
     } else {
       value = $ele.val()
