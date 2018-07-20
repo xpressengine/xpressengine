@@ -14,15 +14,14 @@
 
 namespace App\Skins\User;
 
-use Xpressengine\Skin\BladeSkin;
+use Xpressengine\Skin\GenericSkin;
 
 /**
  * @category
  * @package     ${NAMESPACE}
  */
-class AuthSkin extends BladeSkin
+class AuthSkin extends GenericSkin
 {
-
     protected static $id = 'user/auth/skin/xpressengine@default';
 
     protected static $componentInfo = [
@@ -30,7 +29,11 @@ class AuthSkin extends BladeSkin
         'description' => 'Xpressengine의 기본 회원인증페이지 스킨입니다'
     ];
 
-    protected $path = 'user.skins.default.auth';
+    protected static $path = 'user.skins.default.auth';
+
+    protected static $info = [];
+
+    protected static $viewDir = '';
 
     /**
      * @inheritdoc

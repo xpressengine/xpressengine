@@ -61,9 +61,8 @@ class SkinHandlerTest extends \PHPUnit\Framework\TestCase
         $target = 'module/pluginA@real';
         $skins = $this->handler->getListSupportingDesktop($target, true);
 
-        $this->assertCount(2, $skins);
+        $this->assertCount(1, $skins);
         $this->assertEquals(TestSkin::class, reset($skins)->getClass());
-        $this->assertEquals(TestBladeSkin::class, end($skins)->getClass());
     }
 
     public function testSetDefaultSkin()
@@ -224,23 +223,15 @@ class SkinHandlerTest extends \PHPUnit\Framework\TestCase
         $container->shouldReceive('get')->withArgs(['module/pluginA@real/settingsSkin/test'])->andReturn(
             TestSkin::class
         );
-        $container->shouldReceive('get')->withArgs(['module/pluginA@real/settingsSkin/test_blade'])->andReturn(
-            TestBladeSkin::class
-        );
         $container->shouldReceive('get')->withArgs(['module/pluginA@real/settingsSkin'])->andReturn(
             [
                 'module/pluginA@real/settingsSkin/test' => TestSkin::class,
-                'module/pluginA@real/settingsSkin/test_blade' => TestBladeSkin::class
             ]
         );
         $container->shouldReceive('get')->withArgs(['module/pluginA@real/skin/test'])->andReturn(TestSkin::class);
-        $container->shouldReceive('get')->withArgs(['module/pluginA@real/skin/test_blade'])->andReturn(
-            TestBladeSkin::class
-        );
         $container->shouldReceive('get')->withArgs(['module/pluginA@real/skin'])->andReturn(
             [
                 'module/pluginA@real/skin/test' => TestSkin::class,
-                'module/pluginA@real/skin/test_blade' => TestBladeSkin::class
             ]
         );
 

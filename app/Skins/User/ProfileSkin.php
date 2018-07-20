@@ -14,13 +14,13 @@
 
 namespace App\Skins\User;
 
-use Xpressengine\Skin\BladeSkin;
+use Xpressengine\Skin\GenericSkin;
 
 /**
  * @category
  * @package     ${NAMESPACE}
  */
-class ProfileSkin extends BladeSkin
+class ProfileSkin extends GenericSkin
 {
     protected static $id = 'user/profile/skin/xpressengine@default';
 
@@ -29,7 +29,11 @@ class ProfileSkin extends BladeSkin
         'description' => 'Xpressengine의 기본 프로필페이지 스킨입니다'
     ];
 
-    protected $path = 'user.skins.default.profile';
+    protected static $path = 'user.skins.default.profile';
+
+    protected static $info = [];
+
+    protected static $viewDir = '';
 
     public function render()
     {

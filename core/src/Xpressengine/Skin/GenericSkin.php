@@ -16,7 +16,7 @@ namespace Xpressengine\Skin;
 
 use Illuminate\Contracts\Support\Renderable;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Xpressengine\Storage\File;
+use Xpressengine\Plugin\SupportInfoTrait;
 
 /**
  * 편의를 위해 AbstractSkin을 확장한 클래스. 특정 디렉토리에 지정된 형식에 맞게 테마에 필요한 파일들을 구성한 후,
@@ -32,6 +32,11 @@ use Xpressengine\Storage\File;
 abstract class GenericSkin extends AbstractSkin
 {
     /**
+     * @deprecated not here, use it in the component in the plugin.
+     */
+    use SupportInfoTrait;
+
+    /**
      * @var string 스킨 디렉토리 경로
      */
     protected static $path = '';
@@ -42,59 +47,9 @@ abstract class GenericSkin extends AbstractSkin
     protected static $viewDir = 'views';
 
     /**
-     * @var array
+     * @var string
      */
-    protected static $info = null;
-
-    /**
-     * desktop 버전 지원 여부를 조사한다.
-     *
-     * @return bool
-     */
-    public static function supportDesktop()
-    {
-        return static::info('support.desktop');
-    }
-
-    /**
-     * mobile 버전 지원 여부를 조사한다.
-     *
-     * @return bool
-     */
-    public static function supportMobile()
-    {
-        return static::info('support.mobile');
-    }
-
-    /**
-     * get path, example: 'plugins/myplugin/skin'
-     *
-     * @return mixed
-     */
-    public static function getPath()
-    {
-        return trim(str_replace(base_path(), '', plugins_path(static::$path)), DIRECTORY_SEPARATOR);
-    }
-
-    /**
-     * retrieve theme info from info.php file
-     *
-     * @param string $key     info field
-     * @param mixed  $default default value
-     *
-     * @return array
-     */
-    public static function info($key = null, $default = null)
-    {
-        if (static::$info === null) {
-            static::$info = include(base_path(static::getPath().'/'.'info.php'));
-        }
-
-        if ($key !== null) {
-            return array_get(static::$info, $key, $default);
-        }
-        return static::$info;
-    }
+    protected $file;
 
     /**
      * 스킨을 출력한다.
@@ -129,18 +84,32 @@ abstract class GenericSkin extends AbstractSkin
      */
     protected function renderBlade($view = null)
     {
+        $mergeData = [
+            '_skin' => static::class,
+            '_config' => $this->config
+        ];
+
+        if (!$view && $this->file) {
+            return view()->file($this->file, $this->data, $mergeData);
+        }
+
         if ($view === null) {
             $view = $this->view;
         }
 
-        return view(
-            $this->view($view),
-            $this->data,
-            [
-                '_skin' => static::class,
-                '_config' => $this->config
-            ]
-        );
+        return view($this->view($view), $this->data, $mergeData);
+    }
+
+    /**
+     * set view file path
+     *
+     * @param string $file view file path
+     * @return $this
+     */
+    public function setFile($file)
+    {
+        $this->file = $file;
+        return $this;
     }
 
 
@@ -282,7 +251,10 @@ abstract class GenericSkin extends AbstractSkin
      */
     public static function asset($path, $secure = null)
     {
-        $path = static::getPath().'/assets/'.$path;
+        if (method_exists(static::class, 'getPath')) {
+            $path = static::getPath().'/assets/'.$path;
+        }
+
         return asset($path, $secure);
     }
 
