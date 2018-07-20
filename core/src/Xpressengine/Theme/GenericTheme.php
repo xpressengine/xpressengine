@@ -16,6 +16,7 @@ namespace Xpressengine\Theme;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Xpressengine\Config\ConfigEntity;
+use Xpressengine\Plugin\SupportInfoTrait;
 
 /**
  * 이 클래스는 Xpressengine에서 테마를 간편하게 구현할 수 있도록 제공하는 클래스이다. 특정 디렉토리에 지정된 형식에 맞게 테마에 필요한 파일들을 구성한 후,
@@ -30,6 +31,8 @@ use Xpressengine\Config\ConfigEntity;
  */
 abstract class GenericTheme extends AbstractTheme
 {
+    use SupportInfoTrait;
+
     /**
      * @var string 테마를 정의한 디렉토리 경로, 플러그인디렉토리명을 포함한 디렉토리 경로를 지정해야 한다. ex) 'myplugin/theme'
      */
@@ -39,61 +42,6 @@ abstract class GenericTheme extends AbstractTheme
      * @var string 템플릿 파일을 저장하고 있는 디렉토리의 경로, 테마 디렉토리내 상대경로를 지정해야 한다.
      */
     protected static $viewsDir = "views";
-
-    /**
-     * @var array
-     */
-    protected static $info = null;
-
-    /**
-     * 테마가 desktop 버전을 지원하는지 조사한다.
-     *
-     * @return bool desktop 버전을 지원할 경우 true
-     */
-    public static function supportDesktop()
-    {
-        return static::info('support.desktop');
-    }
-
-    /**
-     * 테마가 mobile 버전을 지원하는지 조사한다.
-     *
-     * @return bool mobile 버전을 지원할 경우 true
-     */
-    public static function supportMobile()
-    {
-        return static::info('support.mobile');
-    }
-
-    /**
-     * get path, example: 'plugins/myplugin/theme'
-     *
-     * @return mixed
-     */
-    public static function getPath()
-    {
-        return trim(str_replace(base_path(), '', plugins_path(static::$path)), DIRECTORY_SEPARATOR);
-    }
-
-    /**
-     * retrieve theme info from info.php file
-     *
-     * @param string $key     info field
-     * @param mixed  $default default value
-     *
-     * @return array
-     */
-    public static function info($key = null, $default = null)
-    {
-        if (static::$info === null) {
-            static::$info = include(base_path(static::getPath().'/'.'info.php'));
-        }
-
-        if ($key !== null) {
-            return array_get(static::$info, $key, $default);
-        }
-        return static::$info;
-    }
 
     /**
      * 이 테마가 설정페이지를 제공하는 테마인지 조회한다.
