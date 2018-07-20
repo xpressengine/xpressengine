@@ -102,7 +102,26 @@ abstract class RegisterFormPart
      */
     public function render()
     {
-        return new HtmlString($this->getSkin()->setView(static::$view)->setData($this->data())->render());
+        try {
+            $content = $this->getSkin()->setView(static::$view)->setData($this->data())->render();
+        } catch (\InvalidArgumentException $e) {
+            if (!$file = $this->getDefaultFile()) {
+                throw $e;
+            }
+            $content = $this->getSkin()->setFile($file)->setData($this->data())->render();
+        }
+
+        return new HtmlString($content);
+    }
+
+    /**
+     * Get default view file path
+     *
+     * @return string|null
+     */
+    public function getDefaultFile()
+    {
+        return null;
     }
 
     /**
