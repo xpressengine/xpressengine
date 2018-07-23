@@ -300,7 +300,8 @@ return [
                 'disk' => 'local',
                 'path' => 'public/user/profile_image'
             ]
-        ]
+        ],
+        'registrationAutoLogin' => true,
     ],
 
     'group' => [

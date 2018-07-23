@@ -79,7 +79,6 @@ import $ from 'jquery'
       position = pos || 'bottom'
     }
 
-    scrollToElement(type)
     this.toast.fn.add(type, message, position)
   }
 

@@ -49,7 +49,7 @@ export default class Validator extends Singleton {
      * @property {function} validator.numeric
      * @property {function} validator.between
      */
-    this.validators = {
+    this.evaluator = {
       accepted: function ($dst, parameters) {
         const value = that.getValue($dst)
         if (!value) return
@@ -104,7 +104,7 @@ export default class Validator extends Singleton {
         return true
       },
       alphanum: function ($dst, parameters) {
-        return that.validators.alpha_num($dst, parameters, true)
+        return that.evaluator.alpha_num($dst, parameters, true)
       },
       alpha_num: function ($dst, parameters, alias) {
         const value = that.getValue($dst)
@@ -418,7 +418,7 @@ export default class Validator extends Singleton {
 
         const pattern = /^https?:\/\/\S+/
 
-        if (!val.match(pattern)) {
+        if (!value.match(pattern)) {
           that.error($dst, Lang.instance.trans('validation.url', { attribute: $dst.data('valid-name') || $dst.attr('name') }))
           return false
         }
@@ -429,7 +429,7 @@ export default class Validator extends Singleton {
         const value = that.getValue($dst)
         if (!value) return
 
-        const num = Number(val)
+        const num = Number(value)
 
         if (typeof num === 'number' && !isNaN(num) && typeof val !== 'boolean') {
           return true
@@ -440,7 +440,7 @@ export default class Validator extends Singleton {
       },
       between: function ($dst, parameters) {
         const value = that.getValue($dst)
-        if (!value) returnw
+        if (!value) return
 
         const range = parameters.split(',')
         const type = $dst.data('valid-type')
@@ -667,11 +667,11 @@ export default class Validator extends Singleton {
       let command = res[0].toLowerCase()
       let parameters = res[1]
 
-      if (typeof that.validators[command] === 'function') {
+      if (typeof that.evaluator[command] === 'function') {
         let $dst = $frm.find('[name="' + name + '"]')
 
         that.errorClear($frm)
-        if (that.validators[command]($dst, parameters) === false) {
+        if (that.evaluator[command]($dst, parameters) === false) {
           $frm.data('valid-result', false)
           throw Error('Validation error.')
         }
@@ -683,14 +683,49 @@ export default class Validator extends Singleton {
     this.alertTypes[type] = callback
   }
 
+  getAlertType (type) {
+    return this.alertTypes[type] || null
+  }
+
   /**
-   * validator 추가
+   * evaluator 추가
+   * @deprecated
    * @memberof module:validator
-   * @param {string} name validatior name
+   * @param {string} name evaluator name
    * @param {function} callback validation 실패시 호출
    */
   put (name, callback) {
-    this.validators[name] = callback
+    this.putEvaluator(name, callback)
+  }
+
+  /**
+   * evaluator 추가
+   * @memberof module:validator
+   * @param {string} name evaluator name
+   * @param {function} callback validation 실패시 호출
+   */
+  putEvaluator (name, callback) {
+    this.evaluator[name] = callback
+  }
+
+  /**
+   * evaluator 존재 확인
+   * @memberof module:validator
+   * @param {string} name evaluator name
+   * @return {boolean}
+   */
+  hasEvaluator (name) {
+    return !!this.evaluator[name]
+  }
+
+  /**
+   * evaluator 반환
+   * @memberof module:validator
+   * @param {string} name evaluator name
+   * @return {mixed}
+   */
+  getEvaluator (name) {
+    return this.evaluator[name] || null
   }
 
   /**
@@ -743,9 +778,9 @@ export default class Validator extends Singleton {
 
     if ($ele[0].tagName === 'SELECT') {
       value = $ele.find('option:selected').val()
-    } else if ($ele.is('input[type=checkbox]')) {
+    } else if ($ele.is('input[type=checkbox]') || $ele.is('input[type=radio]')) {
       if ($ele.is(':checked')) {
-        value = $ele.val()
+        value = $ele.filter(':checked').val()
       }
     } else {
       value = $ele.val()

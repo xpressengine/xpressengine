@@ -97,6 +97,8 @@ class Notice extends CustomizableMailNotification
 
     /**
      * Set subject resolver to null
+     *
+     * @return void
      */
     public static function setSubjectResolverToNull()
     {
