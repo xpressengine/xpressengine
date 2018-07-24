@@ -3,6 +3,7 @@
 return [
     'routing' => [
         'settingsPrefix' => 'settings',
+        'safeModePrefix' => '__safe_mode',
         'fixedPrefix' => 'plugin'
     ],
 

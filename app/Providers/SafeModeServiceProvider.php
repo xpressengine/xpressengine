@@ -18,7 +18,9 @@ class SafeModeServiceProvider extends ServiceProvider
         // 에러 페이지 출력할 때 문제
 //        app('config')->set('app.debug', true);
 
-        Route::prefix('__safe_mode')
+        $safeModePrefix = app('config')->get('xe.routing.safeModePrefix');
+
+        Route::prefix($safeModePrefix)
             ->middleware('safe')
             ->namespace('App\Http\Controllers')
             ->group(base_path('routes/safe.php'));

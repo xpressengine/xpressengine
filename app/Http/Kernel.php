@@ -2,12 +2,13 @@
 
 namespace App\Http;
 
+use App\ModeCheckTrait;
 use App\ResetProvidersTrait;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
 {
-    use ResetProvidersTrait;
+    use ResetProvidersTrait, ModeCheckTrait;
 
     /**
      * The bootstrap classes for the application.
@@ -103,48 +104,17 @@ class Kernel extends HttpKernel
      */
     public function bootstrap()
     {
-        if ($this->isSafeMode() === true) {
-            $this->resetForSafeMode();
-        }
+        $this->checkSafeMode();
 
         if ($this->isInstalled() === false) {
             $this->resetForInstall();
         }
 
-        if ($this->isSafeMode() === false && $this->isMaintenanceMode() === true) {
+        if ($this->isMaintenanceMode() === true) {
             $this->resetForMaintenanceMode();
         }
 
         parent::bootstrap();
-    }
-
-    /**
-     * is safe mode
-     *
-     * @return bool
-     */
-    protected function isSafeMode()
-    {
-        $isSafe = false;
-
-        $request = app('request');
-        if ($request->segment(1) == '__safe_mode') {
-            $isSafe = true;
-        }
-
-        return $isSafe;
-    }
-
-    /**
-     * Reset for safe mode
-     *
-     * @return void
-     */
-    protected function resetForSafeMode()
-    {
-        $this->resetProviders([
-            \App\Providers\SafeModeServiceProvider::class,
-        ]);
     }
 
     /**
