@@ -185,9 +185,11 @@ class RegisterController extends Controller
             return new $part($request);
         });
 
-        $userData = $parts->map(function ($part) {
-            return $part->validate();
-        })->collapse()->all();
+        $parts->each(function ($part) {
+            $part->validate();
+        });
+
+        $userData = $request->except(['_token']);
 
         // set default join group
         $joinGroup = $config->get('joinGroup');
