@@ -6,10 +6,6 @@
     <h1>{!! $exception->getMessage() !!}</h1>
 </div>
 <div class="login-body">
-    @if ( URL::current() != URL::previous() )
-        <p><a href="{{ URL::previous() }}">{{ xe_trans('xe::back') }}</a></p>
-    @else
-        <p><a href="{{ URL::to('/') }}">{{ xe_trans('xe::back') }}</a></p>
-    @endif
+    <p><a href="{{ url()->previous() === url()->current() ? url('/') : url()->previous() }}">{{ xe_trans('xe::back') }}</a></p>
 </div>
 @stop

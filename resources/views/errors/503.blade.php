@@ -7,6 +7,6 @@
 </div>
 
 <div class="login-body">
-    <p><a href="{{ URL::previous() }}">{{ xe_trans('xe::back') }}</a></p>
+    <p><a href="{{ url()->previous() === url()->current() ? url('/') : url()->previous() }}">{{ xe_trans('xe::back') }}</a></p>
 </div>
 @stop

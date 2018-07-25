@@ -12,7 +12,7 @@
 <div class="login-body">
     <p>
         @if(!Auth::check())<a href="{{ route('login') }}">{{ xe_trans('xe::login') }}</a>@endif
-        @if(Auth::check())<a href="{{ URL::previous() }}">{{ xe_trans('xe::back') }}</a>@endif
+        @if(Auth::check())<a href="{{ url()->previous() === url()->current() ? url('/') : url()->previous() }}">{{ xe_trans('xe::back') }}</a>@endif
     </p>
 </div>
 <div class="login-footer">
