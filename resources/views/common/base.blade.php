@@ -71,7 +71,7 @@
 <!-- Rule -->
 {!! XeFrontend::output('rule') !!}
 
-@include('common.alert')
+@include(app('config')['xe.HtmlWrapper.alert'])
 
 </body>
 </html>

@@ -452,5 +452,6 @@ return [
     'HtmlWrapper' => [
         'common' => 'common.base',
         'popup' => 'common.popup',
+        'alert' => 'common.alert',
     ]
 ];
