@@ -170,6 +170,11 @@ class PasswordController extends Controller {
             case PasswordBroker::PASSWORD_RESET:
                 return redirect('/')->with('status', PasswordBroker::PASSWORD_RESET);
 
+            case 'passwords.token':
+                return redirect()->back()
+                    ->withInput($request->only('email'))
+                    ->with('alert', ['type' => 'danger', 'message' => xe_trans('xe::msgTokenIsInvalid')]);
+                
             default:
                 // password configuration
                 $passwordConfig = app('config')->get('xe.user.password');
