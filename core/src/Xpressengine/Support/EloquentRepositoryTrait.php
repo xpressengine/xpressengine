@@ -85,7 +85,7 @@ trait EloquentRepositoryTrait
     }
 
     /**
-     * The name of Category model class
+     * The name of model class
      *
      * @return string
      */
@@ -95,7 +95,7 @@ trait EloquentRepositoryTrait
     }
 
     /**
-     * Set the name of Category model
+     * Set the name of model
      *
      * @param string $model model class
      * @return void
