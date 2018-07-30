@@ -14,7 +14,6 @@
 
 namespace Xpressengine\Document\Models;
 
-use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Database\Eloquent\DynamicModel;
 
 /**
@@ -67,14 +66,6 @@ class Revision extends DynamicModel
      * @var string
      */
     public $table = 'documents_revision';
-
-    /**
-     * The connection name for the model.
-     * Virtual connection name.
-     *
-     * @var string
-     */
-    protected $connection = 'document';
 
     /**
      * @var bool

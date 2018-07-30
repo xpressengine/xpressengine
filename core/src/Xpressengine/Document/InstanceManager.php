@@ -93,8 +93,6 @@ class InstanceManager
             throw new DivisionTableAlreadyExistsException;
         }
 
-        $schema->setConnection($this->connection->master());
-
         $migration = new DocumentMigration();
         $migration->createDivision($schema, $table);
     }

@@ -264,17 +264,6 @@ return [
         ]
 
     ],
-    'database' => [
-        'default' => [
-            'slave' => ['default'],
-        ],
-        'document' => [
-            'slave' => ['default'],
-        ],
-        'user' => [
-            'slave' => ['default'],
-        ],
-    ],
     'uid' => [
         'version' => 4,
         'namespace' => 'xe',

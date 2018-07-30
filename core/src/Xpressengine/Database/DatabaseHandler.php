@@ -16,6 +16,7 @@
 namespace Xpressengine\Database;
 
 use Illuminate\Database\ConnectionResolverInterface;
+use Illuminate\Database\DatabaseManager;
 
 /**
  * DatabaseHandler
@@ -29,95 +30,81 @@ use Illuminate\Database\ConnectionResolverInterface;
  */
 class DatabaseHandler implements ConnectionResolverInterface
 {
-    const DEFAULT_CONNECTOR_NAME = 'default';
+    /**
+     * @var DatabaseManager
+     */
+    protected $manager;
 
     /**
-     * @var DatabaseCoupler
+     * @var ProxyManager
      */
-    protected $coupler;
-
-    /**
-     * ## config/xe.php database 설정
-     * ```php
-     *      'database' => [
-     *          'connectorName' => [
-     *              'master' => ['connectionName', 'connectionName', ...],
-     *              'slave' => ['connectionName', 'connectionName', ...],
-     *          ],
-     *          ...
-     *      ]
-     * ```
-     *
-     * @var array
-     */
-    protected $config;
+    protected $proxy;
 
     /**
      * create instance
      *
-     * @param DatabaseCoupler $coupler database coupler
-     * @param array           $config  config/xe.php database 설정
+     * @param DatabaseManager $manager database manager instance
+     * @param ProxyManager    $proxy   proxy manager instance
      */
-    public function __construct(DatabaseCoupler $coupler, array $config)
+    public function __construct(DatabaseManager $manager, ProxyManager $proxy)
     {
-        $this->coupler = $coupler;
-        $this->config = $config;
+        $this->manager = $manager;
+        $this->proxy = $proxy;
     }
 
     /**
-     * get connector
-     * 실제 connection 을 만들지 않고 connector 에서 config 에 따라
-     * master, slave 가 어떤 connection 이름을 사용할지 결정 후 connector 를 반환.
+     * Get a database connection instance.
      *
-     * @param null|string $name config/xe.php database connector name
+     * @param null|string $name connection name
      * @return VirtualConnectionInterface
      */
     public function connection($name = null)
     {
-        if ($name === null) {
-            $name = self::DEFAULT_CONNECTOR_NAME;
-        }
-
-        return $this->makeConnector($name);
+        return $this->wrap($this->manager->connection($name));
     }
 
     /**
-     * get config
+     * Wrap connection instance
      *
-     * @return array
+     * @param \Illuminate\Database\Connection $connection connection instance
+     * @return VirtualConnection
      */
-    public function getConfig()
+    protected function wrap($connection)
     {
-        return $this->config;
+        return new VirtualConnection($connection, $this->proxy);
     }
 
     /**
-     * get connector from DatabaseCoupler
+     * Disconnect from the given database and remove from local cache.
      *
-     * @param string $name config/xe.php database connector name
-     * @return VirtualConnectionInterface
+     * @param string $name connection name
+     * @return void
      */
-    private function makeConnector($name)
+    public function purge($name = null)
     {
-        if (($connector = $this->coupler->getConnector($name)) === null) {
-            $connector = $this->coupler->addConnector(
-                $name,
-                new VirtualConnection($this->coupler, $name, $this->config($name))
-            );
-        }
-
-        return $connector;
+        $this->manager->purge($name);
     }
 
     /**
-     * get config
+     * Disconnect from the given database.
      *
-     * @param string $connectorName config/xe.php database connector name
-     * @return array
+     * @param string $name connection name
+     * @return void
      */
-    private function config($connectorName)
+    public function disconnect($name = null)
     {
-        return $this->config[$connectorName];
+        $this->manager->disconnect($name);
+    }
+
+    /**
+     * Reconnect to the given database.
+     *
+     * @param string $name connection name
+     * @return VirtualConnection
+     */
+    public function reconnect($name = null)
+    {
+        return $this->wrap($this->manager->reconnect($name));
     }
 
     /**
@@ -127,7 +114,7 @@ class DatabaseHandler implements ConnectionResolverInterface
      */
     public function getDefaultConnection()
     {
-        return $this->coupler->databaseManager()->getDefaultConnection();
+        return $this->manager->getDefaultConnection();
     }
 
     /**
@@ -138,7 +125,49 @@ class DatabaseHandler implements ConnectionResolverInterface
      */
     public function setDefaultConnection($connectionName)
     {
-        $this->coupler->databaseManager()->setDefaultConnection($connectionName);
+        $this->manager->setDefaultConnection($connectionName);
+    }
+
+    /**
+     * Get all of the support drivers.
+     *
+     * @return array
+     */
+    public function supportedDrivers()
+    {
+        return $this->manager->supportedDrivers();
+    }
+
+    /**
+     * Get all of the drivers that are actually available.
+     *
+     * @return array
+     */
+    public function availableDrivers()
+    {
+        return $this->manager->availableDrivers();
+    }
+
+    /**
+     * Register an extension connection resolver.
+     *
+     * @param string   $name     connection name
+     * @param callable $resolver connection resolver
+     * @return void
+     */
+    public function extend($name, callable $resolver)
+    {
+        $this->manager->extend($name, $resolver);
+    }
+
+    /**
+     * Return all of the created connections.
+     *
+     * @return array
+     */
+    public function getConnections()
+    {
+        return $this->manager->getConnections();
     }
 
     /**
@@ -151,6 +180,6 @@ class DatabaseHandler implements ConnectionResolverInterface
      */
     public function __call($method, $parameters)
     {
-        return call_user_func_array(array($this->connection(), $method), $parameters);
+        return call_user_func_array([$this->connection(), $method], $parameters);
     }
 }

@@ -18,10 +18,8 @@ use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\ServiceProvider;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
-use Xpressengine\Database\DatabaseCoupler;
 use Xpressengine\Database\DatabaseHandler;
 use Xpressengine\Database\ProxyManager;
-use Xpressengine\Database\TransactionHandler;
 use Xpressengine\Database\Eloquent\DynamicModel;
 use Xpressengine\Database\VirtualConnection;
 
@@ -77,18 +75,9 @@ class DatabaseServiceProvider extends ServiceProvider
         });
 
         $this->app->singleton(DatabaseHandler::class, function ($app) {
-
-            $coupler = DatabaseCoupler::instance(
-                $app['db'],
-                TransactionHandler::instance(),
-                $app['xe.db.proxy']
-            );
-
             $proxyClass = $app['xe.interception']->proxy(DatabaseHandler::class, 'XeDB');
-            return new $proxyClass(
-                $coupler,
-                $app['config']->get('xe.database')
-            );
+
+            return new $proxyClass($app['db'], $app['xe.db.proxy']);
         });
         $this->app->alias(DatabaseHandler::class, 'xe.db');
     }

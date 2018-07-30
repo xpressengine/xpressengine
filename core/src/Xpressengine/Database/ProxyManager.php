@@ -84,7 +84,9 @@ class ProxyManager
      */
     public static function instance(Container $container)
     {
-        self::$instance = new static($container);
+        if (!self::$instance) {
+            self::$instance = new static($container);
+        }
 
         return self::$instance;
     }

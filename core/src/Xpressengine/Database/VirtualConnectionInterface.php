@@ -41,20 +41,6 @@ interface VirtualConnectionInterface extends ConnectionInterface
     public function dynamic($table, array $options = [], $proxy = true);
 
     /**
-     * get default connection
-     *
-     * @return \Illuminate\Database\Connection
-     */
-    public function getDefaultConnection();
-
-    /**
-     * Get a schema builder instance for the connection.
-     *
-     * @return \Illuminate\Database\Schema\Builder
-     */
-    public function getSchemaBuilder();
-
-    /**
      * return database table schema
      *
      * @param string $table table name
@@ -70,23 +56,6 @@ interface VirtualConnectionInterface extends ConnectionInterface
      * @return bool
      */
     public function setSchemaCache($table, $force = false);
-
-    /**
-     * Get table prefix name.
-     *
-     * @return string
-     */
-    public function getTablePrefix();
-
-    /**
-     * get connection by $queryType.
-     * 'select' 쿼리일 경우 $slaveConnection 을 넘겨주고 그렇지 않을 경우 $masterConnection 을 반환.
-     * database 를 쿼리 실행 시 연결.
-     *
-     * @param string $type query type
-     * @return \Illuminate\Database\ConnectionInterface
-     */
-    public function getConnection($type);
 
     /**
      * get ProxyManager.

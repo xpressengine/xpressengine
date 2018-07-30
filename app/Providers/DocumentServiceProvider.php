@@ -16,7 +16,6 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Xpressengine\Document\ConfigHandler;
-use Xpressengine\Document\DatabaseProxy;
 use Xpressengine\Document\DocumentHandler;
 use Xpressengine\Document\InstanceManager;
 use Xpressengine\Document\Models\Document;
@@ -85,14 +84,14 @@ class DocumentServiceProvider extends ServiceProvider
         $app->singleton('xe.document.instance', function ($app) {
             $instanceManagerClass = $app['xe.interception']->proxy(InstanceManager::class, 'DocumentInstanceManager');
             return new $instanceManagerClass(
-                $app['xe.db']->connection('document'),
+                $app['xe.db']->connection(),
                 $app['xe.document.config']
             );
         });
         $app->singleton(DocumentHandler::class, function ($app) {
             $documentHandlerClass = $app['xe.interception']->proxy(DocumentHandler::class, 'Document');
             $document = new $documentHandlerClass(
-                $app['xe.db']->connection('document'),
+                $app['xe.db']->connection(),
                 $app['xe.document.config'],
                 $app['xe.document.instance'],
                 $app['request']
