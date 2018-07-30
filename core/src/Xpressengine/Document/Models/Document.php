@@ -452,7 +452,7 @@ class Document extends DynamicModel
      * change documents publish condition
      *
      * @param string $published condition value.
-     * 'published':발행됨, 'waiting':대기중, 'reserved':발행예약됨, 'rejected':거절됨
+     *                          'published':발행됨, 'waiting':대기중, 'reserved':발행예약됨, 'rejected':거절됨
      * @return void
      */
     public function setPublished($published)
