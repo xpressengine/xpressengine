@@ -152,7 +152,7 @@
 
 </div>
 
-
+@if($fieldTypes)
 <div class="setting-card">
     <h2>{{ xe_trans('xe::additionalInfo') }}</h2>
     @foreach($fieldTypes as $id => $fieldType)
@@ -167,6 +167,7 @@
 
     @endforeach
 </div>
+@endif
 
 <div class="setting-card">
     <h2>{{ xe_trans('xe::deleteAccount') }}</h2>

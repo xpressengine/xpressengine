@@ -8,7 +8,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Xpressengine\Http\Request;
 use Symfony\Component\DomCrawler\Crawler;
 use XeDB;
 use XePresenter;
@@ -99,12 +99,12 @@ class WidgetBoxController extends Controller
             throw new AccessDeniedHttpException();
         }
 
-        $inputs = $this->validate($request, ['data' => 'required', 'presenter' => 'required']);
+        $this->validate($request, ['data' => 'required', 'presenter' => 'required']);
         XeDB::beginTransaction();
         try {
             $handler->update($id, [
-                'content' => json_dec($inputs['data'], true),
-                'options' => array_merge($request->get('options', []), ['presenter' => $inputs['presenter']]),
+                'content' => json_dec($request->originInput('data'), true),
+                'options' => array_merge($request->get('options', []), ['presenter' => $request->get('presenter')]),
             ]);
         } catch (\Exception $e) {
             XeDB::rollback();

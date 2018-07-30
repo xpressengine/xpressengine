@@ -43,7 +43,7 @@ class WidgetBox extends AbstractUIObject
                  * @deprecated since beta.27
                  */
                 $content = $widgetbox->getOriginal('content');
-                $presenter = new HTMLPresenter($content);
+                $presenter = new HTMLPresenter($content === '[]' ? '' : $content);
             }
         } else {
             $presenter = new HTMLPresenter('');

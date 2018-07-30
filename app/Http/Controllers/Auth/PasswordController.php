@@ -161,14 +161,25 @@ class PasswordController extends Controller {
             function ($user, $password) {
                 $this->handler->update($user, compact('password'));
 
-                $this->auth->login($user);
+                if (app('config')->get('xe.user.registrationAutoLogin') == true) {
+                    $this->auth->login($user);
+                }
             }
         );
 
         switch ($result)
         {
             case PasswordBroker::PASSWORD_RESET:
-                return redirect('/')->with('status', PasswordBroker::PASSWORD_RESET);
+                if (app('config')->get('xe.user.registrationAutoLogin') == true) {
+                    return redirect('/')->with('status', PasswordBroker::PASSWORD_RESET);
+                } else {
+                    return redirect(route('login'))->with('status', PasswordBroker::PASSWORD_RESET);
+                }
+
+            case 'passwords.token':
+                return redirect()->back()
+                    ->withInput($request->only('email'))
+                    ->with('alert', ['type' => 'danger', 'message' => xe_trans('xe::msgTokenIsInvalid')]);
 
             default:
                 // password configuration
