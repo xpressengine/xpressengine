@@ -594,26 +594,50 @@ export default class Validator extends Singleton {
   }
 
   /**
-   * 폼에 정의 된 룰을 실행한다.
+   * 폼에서 element가 출력되는 순서로 정렬하여 반환
+   *
    * @memberof module:validator
-   * @param {jQuery} $frm jQuery form element
+   * @param {jQuery} $form jQuery form element
    */
-  check ($frm) {
-    let that = this
-    let ruleName = this.getRuleName($frm)
-    let rules = this.rules[ruleName]
+  getTargetElements ($form) {
+    if (!$($form).is('form')) return
 
-    $.each(rules, function (name, rule) {
-      that.validate($frm, name, rule)
+    const ruleName = this.getRuleName($form)
+    const rules = this.rules[ruleName]
+
+    const selector = []
+    Object.entries(rules).forEach((item) => {
+      selector.push(`[name=${item[0]}]`)
     })
 
-    this.checkRuleContainers($frm)
+    return $(selector.join(','))
+  }
+
+  /**
+   * 폼에 정의 된 룰을 실행한다.
+   * @memberof module:validator
+   * @param {jQuery} $form jQuery form element
+   */
+  check ($form) {
+    if (!$($form).is('form')) return
+
+    const that = this
+    const ruleName = this.getRuleName($form)
+    const rules = this.rules[ruleName]
+    const elements = this.getTargetElements($form)
+
+    elements.each(function () {
+      const name = $(this).attr('name')
+      const rule = rules[name]
+      that.validate($form, $(this).attr('name'), rule)
+    })
   }
 
   /**
    * 폼에 정의 된 룰을 실행한다.
    * @memberof module:validator
    * @param {jQuery} $frm jQuery form element
+   * @deprecated
    */
   checkRuleContainers ($frm) {
     let that = this
@@ -633,6 +657,7 @@ export default class Validator extends Singleton {
    * 폼안의 요소에 정의된 룰을 실행한다.
    * @memberof module:validator
    * @param {jQuery} $frm jQuery form element
+   * @deprecated
    */
   formValidate ($form) {
     let that = this
