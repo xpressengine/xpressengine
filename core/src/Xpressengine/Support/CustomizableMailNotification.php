@@ -162,7 +162,7 @@ abstract class CustomizableMailNotification extends Notification
     /**
      * Set the subject resolver for message
      *
-     * @param callable $resolver
+     * @param callable $resolver subject resolver
      * @return void
      */
     public static function setSubjectResolver(callable $resolver)

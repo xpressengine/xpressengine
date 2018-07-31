@@ -43,14 +43,13 @@ trait ValidatesRequestsTrait
     /**
      * Validate the given request with the given rules.
      *
-     * @param  Request  $request          request
-     * @param  array    $rules            validation rules
-     * @param  array    $messages         messages
-     * @param  array    $customAttributes custom attributes
+     * @param Request $request          request
+     * @param array   $rules            validation rules
+     * @param array   $messages         messages
+     * @param array   $customAttributes custom attributes
      * @return array
      */
-    public function validate(Request $request, array $rules,
-                             array $messages = [], array $customAttributes = [])
+    public function validate(Request $request, array $rules, array $messages = [], array $customAttributes = [])
     {
         $transAttributes = [];
         foreach ($rules as $key => $val) {
